@@ -3,7 +3,8 @@
 
 $l['active']='actief';
 $l['standardvacation']='Standaard vakantieregel';
-$l['standardvacationmessage']='Ik ben op vakantie';$l["name"]= 'Naam';
+$l['standardvacationmessage']='Ik ben op vakantie';
+$l["name"]= 'Sieve';
 $l["scriptname"]= 'Scriptnaam';
 $l["index"]= 'Index';
 $l["test"]= 'Test';
