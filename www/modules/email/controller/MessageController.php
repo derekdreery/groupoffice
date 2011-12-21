@@ -91,8 +91,14 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);		
 		$account = GO_Email_Model_Account::model()->findByPk($alias->account_id);
-
+//		
+//		if(empty($params['sign_smime']) && empty($params['encrypt_smime']))
+//			$message = new GO_Base_Mail_Message();
+//		else
+//			$message = new GO_Base_Mail_SmimeMessage();
+		
 		$message = new GO_Base_Mail_Message();
+		
 		$message->handleEmailFormInput($params);
 		
 		$message->setFrom($alias->email, $alias->name);
