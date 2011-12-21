@@ -543,13 +543,13 @@ class GO{
 	/**
 	 * Generate a controller URL.
 	 * 
-	 * @param type $path
-	 * @param type $params
-	 * @param type $relative
-	 * @param type $htmlspecialchars
+	 * @param string $path To controller. eg. addressbook/contact/submit
+	 * @param array $params eg. array('id'=>1,'someVar'=>'someValue')
+	 * @param boolean $relative Defaults to true. Set to false to return an absolute URL.
+	 * @param boolean $htmlspecialchars Set to true to escape special html characters. eg. & becomes &amp.
 	 * @return string 
 	 */
-	public static function url($path='', $params='', $relative=true, $htmlspecialchars=false){
+	public static function url($path='', $params=array(), $relative=true, $htmlspecialchars=false){
 		$url = $relative ? GO::config()->host : GO::config()->full_url;
 		
 		if(empty($path) && empty($params)){
