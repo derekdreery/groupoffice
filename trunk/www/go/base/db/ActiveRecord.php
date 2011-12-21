@@ -2314,7 +2314,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				
 				if($result instanceof GO_Base_Db_ActiveStatement){	
 					//has_many relations result in a statement.
-					while($child = $stmt->fetch()){				
+					while($child = $result->fetch()){				
 						$child->delete();
 					}
 				}elseif($result)
