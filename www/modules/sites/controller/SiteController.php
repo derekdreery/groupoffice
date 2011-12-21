@@ -22,6 +22,9 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	protected $site;
 	protected $page;
 	
+	protected $rootTemplatePath;
+	protected $rootTemplateUrl;
+	
 	protected $templateUrl;
 	protected $templateFolder;
 	
@@ -36,30 +39,68 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	
 	protected function init() {
 
+		if(!isset(GO::session()->values['sites']))
+						GO::session()->values['sites'] = array();
+					
 		$this->setSite($_REQUEST);
 		
 		if(isset(GO::session()->values['sites']['lastPath']))
 			$this->lastPath=GO::session()->values['sites']['lastPath'];
 		
+		
+		$this->rootTemplatePath = GO::config()->root_path.'modules/sites/templates/'.$this->site->template.'/';
+		$this->rootTemplateUrl = GO::config()->host.'modules/sites/templates/'.$this->site->template.'/';
+		
 		return parent::init();
 	}
+	
+	public function getRootTemplatePath(){
+		return $this->rootTemplatePath;
+	}
+	
+	public function getRootTemplateUrl(){
+		return $this->rootTemplateUrl;
+	}
+	
 	
 	protected function setSite($params){
 		if(!empty($params['site_id']))
 			$this->site=GO_Sites_Model_Site::model()->findByPk($params['site_id']);		
 		
 		$this->site=GO_Sites_Model_Site::model()->find(GO_Base_Db_FindParams::newInstance()->single());
-		
 
-		$this->templateUrl = GO::config()->host.'modules/sites/templates/'.$this->site->template.'/';
-		$this->templateFolder = new GO_Base_Fs_Folder(GO::config()->root_path.'modules/sites/templates/'.$this->site->template);
+		$this->templateUrl = $this->_getTemplateFolderUrl();
+		$this->templateFolder = new GO_Base_Fs_Folder($this->_getTemplateFolderPath());
 	}
+	
+	private function _getTemplateFolderPath(){
+		$path = '';
+		$moduleName = $this->getModule()->id;
+		
+		$path .= GO::config()->root_path.'modules/'.$moduleName;
+		if($moduleName != 'sites')
+			$path .= '/sites';
+		$path .= '/templates/'.$this->site->template.'/';
+		return $path;
+	}
+	
+	private function _getTemplateFolderUrl(){
+		$url = '';
+		$moduleName = $this->getModule()->id;
+		
+		$url .= GO::config()->host.'modules/'.$moduleName;
+		if($moduleName != 'sites')
+			$url .= '/sites';
+		$url .= '/templates/'.$this->site->template.'/';
+		return $url;
+	}
+	
+	
 	
 	/**
 	 * This default action should be overrriden
 	 */
 	public function actionIndex($params){		
-		GO::$ignoreAclPermissions=true;
 		$this->renderPage($params['p'],$params);		
 	}
 	protected function beforeRenderPage($path, $params){
@@ -74,7 +115,7 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 		//echo $path.':'.$this->site->id;
 		
 		if($path == $this->site->getLoginPath()){
-			if(GO::session()->values['sites']['lastPath'] == $this->site->getLoginPath())
+			if(!empty(GO::session()->values['sites']['lastPath']) && GO::session()->values['sites']['lastPath'] == $this->site->getLoginPath())
 					GO::session()->values['sites']['beforeLoginPath']='products'; // TODO: This path needs to be the path to the homepage when that is working
 				else
 					GO::session()->values['sites']['beforeLoginPath']=GO::session()->values['sites']['lastPath'];

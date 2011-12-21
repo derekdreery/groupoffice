@@ -11,10 +11,10 @@
 					Download your purchased products immediately
 					Download product updates at any..." />
 		<title><?php echo $this->page->title; ?> - <?php echo $this->site->name; ?></title>
-		<link href="<?php echo $this->templateUrl; ?>css/stylesheet.css" rel="stylesheet" type="text/css" />
-		<link href="<?php echo $this->templateUrl; ?>css/buttons.css" rel="stylesheet" type="text/css" />
-		<link href="<?php echo $this->templateUrl; ?>css/tabs.css" rel="stylesheet" type="text/css" />
-		<link href="<?php echo $this->templateUrl; ?>css/webshop.css" rel="stylesheet" type="text/css" />
+		<link href="<?php echo $this->getRootTemplateUrl(); ?>css/stylesheet.css" rel="stylesheet" type="text/css" />
+		<link href="<?php echo $this->getRootTemplateUrl(); ?>css/buttons.css" rel="stylesheet" type="text/css" />
+		<link href="<?php echo $this->getRootTemplateUrl(); ?>css/tabs.css" rel="stylesheet" type="text/css" />
+		<link href="<?php echo $this->getRootTemplateUrl(); ?>css/webshop.css" rel="stylesheet" type="text/css" />
 	</head>
 
 	<body>

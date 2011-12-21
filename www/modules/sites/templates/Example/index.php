@@ -4,9 +4,7 @@ require('header.php');
 					<div class="subkader-small-top">
 						<div class="subkader-small-bottom">
 							<div class="subkader-small-center">						
-
 								<?php echo $this->page->content; ?>
-								
 							</div>
 						</div>
 
