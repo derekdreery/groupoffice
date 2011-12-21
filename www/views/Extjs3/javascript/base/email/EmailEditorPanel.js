@@ -48,10 +48,11 @@ GO.base.email.EmailEditorPanel = function(config){
 	this.buildForm(config);
 	
 	config.layout='form';
-	config.border=false;
+	config.border=false;	
 	
-	config.listeners = {
-		render:function(){
+	GO.base.email.EmailEditorPanel.superclass.constructor.call(this,config);
+	
+	this.on("render", function(){
 			var formPanel = this.findParentByType(Ext.form.FormPanel);
 			formPanel.form.on('actioncomplete', function(form, action){
 				if(action.type=='load'){
@@ -59,14 +60,10 @@ GO.base.email.EmailEditorPanel = function(config){
 				}
 			}, this);		
 			
-		},
-		scope:this
-	}
-	
-	GO.base.email.EmailEditorPanel.superclass.constructor.call(this,config);
+		}, this);
 	
 	this.addEvents({
-		submit : true
+		submitshortcut : true
 	});
 };
 
@@ -219,10 +216,9 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 		this.htmlEditor.setValue(v);		
 	},
 
-	fireSubmit : function(e) {
+	fireSubmit : function(e) {		
 		if (e.ctrlKey && Ext.EventObject.ENTER == e.getKey()) {
-			//e.stopEvent();
-			this.fireEvent('submit',this);
+			this.fireEvent('submitshortcut',this);
 		}
 	},
 	

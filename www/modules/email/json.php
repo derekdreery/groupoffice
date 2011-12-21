@@ -994,6 +994,8 @@ try {
 						$response['body']='<div class="em-autolink-message">'.sprintf($lang['email']['autolinked'],'<span class="em-autolink-link" onclick="GO.linkHandlers['.$link_type.'].call(this, '.$link_id.');">'.$result['links'][0]['name'].'</div>').$response['body'];
 					}
 				}
+				$response['htmlbody']=$response['body'];
+				unset($response['body']);
 
 				break;
 

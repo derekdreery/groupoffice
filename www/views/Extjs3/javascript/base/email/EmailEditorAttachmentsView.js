@@ -71,6 +71,7 @@ Ext.extend(GO.base.email.EmailEditorAttachmentsView, Ext.DataView, {
 			this.menu = new Ext.menu.Menu({
 				items: [
 				{
+					iconCls:'btn-delete',
 					text:GO.lang.cmdDelete,
 					scope:this,
 					handler: function()

@@ -2,6 +2,85 @@
 
 class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController {
 
+	private function _findUnknownRecipients($params){
+		
+		$unknown = array();
+		
+		if(GO::modules()->addressbook && !GO::config()->get_setting('email_skip_unknown_recipients', GO::user()->id)){
+		
+			$recipients = new GO_Base_Mail_EmailRecipients($params['to']);
+			$recipients->addString($params['cc']);
+			$recipients->addString($params['bcc']);
+
+			foreach($recipients->getAddresses() as $email=>$personal){
+				$contact = GO_Addressbook_Model_Contact::model()->findSingleByAttribute('email', $email);
+				if($contact)
+					continue;
+
+				$company = GO_Addressbook_Model_Company::model()->findSingleByAttribute('email', $email);
+				if($company)
+					continue;
+				
+				$recipient = GO_Base_Util_String::split_name($personal);
+				if($recipient['first'] == '' && $recipient['last'] == '') {
+					$recipient['first'] = $email;
+				}
+				$recipient['email']=$email;
+				$recipient['name']=(string) GO_Base_Mail_EmailRecipients::createSingle($email, $personal);
+				
+				$unknown[]=$recipient;
+			}
+		}
+		
+		return $unknown;
+	}
+	
+	private function _link($params, GO_Base_Mail_Message $message){
+		
+		if(!empty($params['link'])){
+			$linkProps = explode(':', $params['link']);			
+			$model = GO::getModel($linkProps[0])->findByPk($linkProps[1]);
+
+			if ($model) {
+
+				$path = 'email/'.date('mY').'/sent_'.time().'.eml';
+				
+				$file = new GO_Base_Fs_File(GO::config()->file_storage_path.$path);
+				$file->parent()->create();
+
+				$fbs = new Swift_ByteStream_FileByteStream($file->path(), true);		
+				$message->toByteStream($fbs);
+
+				if($file->exists()){
+
+					$linkedEmail = new GO_Savemailas_Model_LinkedEmail();
+
+					$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);	
+
+					$linkedEmail->from = (string) GO_Base_Mail_EmailRecipients::createSingle($alias->email, $alias->name);
+					if(isset($params['to']))
+						$linkedEmail->to = $params['to'];
+
+					if(isset($params['cc']))
+						$linkedEmail->cc = $params['cc'];
+
+					if(isset($params['bcc']))
+						$linkedEmail->to = $params['bcc'];
+
+					$linkedEmail->subject = !empty($params['subject']) ? $params['subject'] : GO::t('no_subject', 'email');
+					$linkedEmail->acl_id = $model->findAclId();
+
+
+					$linkedEmail->path=$path;
+
+					$linkedEmail->save();
+
+					$linkedEmail->link($model);
+				}
+			}
+		}
+	}
+	
 	/**
 	 *
 	 * @todo Save to sent items should be implemented as a Swift outputstream for better memory management
@@ -45,6 +124,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			throw new Exception("Failed to send the message");
 		}		
 		$response['success']=true;
+		
+		$this->_link($params, $message);		
+						
+		$response['unknown_recipients']=$this->_findUnknownRecipients($params);
 		
 		return $response;
 	}

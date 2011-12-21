@@ -325,7 +325,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 			$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);	
 			$this->setFrom($alias->email, $alias->name);
 			
-			if(isset($params['notification']))
+			if(!empty($params['notification']))
 				$this->setReadReceiptTo(array($alias->email=>$alias->name));
 		}
 		
