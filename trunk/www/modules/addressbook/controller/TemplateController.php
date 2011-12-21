@@ -60,6 +60,7 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 		$html = empty($params['content_type']) || $params['content_type']=='html';
 		
 		$response['data'] = array_merge($response['data'], $message->toOutputArray($html));
+		unset($response['data']['content']);
 
 		return parent::afterLoad($response, $model, $params);
 	}

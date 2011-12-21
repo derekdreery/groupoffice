@@ -254,10 +254,10 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 	initHtmlEditorPlugins : function(htmlEditorConfig) {		
 		// optional image attachment
 		var imageInsertPlugin = new GO.plugins.HtmlEditorImageInsert();
-		imageInsertPlugin.on('insert', function(plugin, path, url) {
+		imageInsertPlugin.on('insert', function(plugin, path, isTempFile) {
 			this.inlineAttachments.push({
 				tmp_file : path,
-				url : url
+				from_file_storage : !isTempFile
 			});				
 			this.setInlineAttachments(this.inlineAttachments);	
 		}, this);	
