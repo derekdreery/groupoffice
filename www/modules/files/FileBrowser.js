@@ -1806,6 +1806,7 @@ GO.files.openFile = function(record, store,e)
 //				}
 //				break;
 
+			case 'mht':
 			case 'eml':
 				if(GO.savemailas)
 				{
