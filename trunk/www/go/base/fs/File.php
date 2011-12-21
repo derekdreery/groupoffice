@@ -23,12 +23,18 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	/**
 	 * Get a unique temporary file.
 	 * 
+	 * @param string $filename
 	 * @param string $extension
 	 * @return GO_Base_Fs_File 
 	 */
-	public static function tempFile($extension=''){
+	public static function tempFile($filename='',$extension=''){
 		$folder = GO::config()->getTempFolder();
-		$p=$folder->path().'/'.uniqid(time());
+		
+		if(!empty($filename))
+			$p=$folder->path().'/'.$filename;
+		else
+			$p=$folder->path().'/'.uniqid(time());
+		
 		if(!empty($extension))
 			$p.='.'.$extension;
 		
