@@ -141,7 +141,9 @@ views/Extjs3/javascript/base/Form.js
 
 views/Extjs3/javascript/base/model/ImportPanel.js
 
+views/Extjs3/javascript/base/upload/PluploadPanel.js
 views/Extjs3/javascript/base/upload/PluploadButton.js
+views/Extjs3/javascript/base/upload/PluploadMenuItem.js
 
 views/Extjs3/javascript/base/model/multiselect/AddDialog.js
 views/Extjs3/javascript/base/model/multiselect/Dialog.js

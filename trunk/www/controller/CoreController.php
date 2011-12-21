@@ -575,6 +575,12 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	
 	public function actionPluploads($params){
 		
+		if(isset($params['addFileStorageFiles'])){
+			$files = json_decode($params['addFileStorageFiles'],true);
+			foreach($files as $filepath)
+				GO::session()->values['files']['uploadqueue'][]=GO::config()->file_storage_path.$filepath;
+		}
+		
 		$response['results']=array();
 		
 		if(!empty(GO::session()->values['files']['uploadqueue'])){
@@ -582,14 +588,24 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 				
 				$file = new GO_Base_Fs_File($path);
 				
-				$response['results'][]=array(
-						'tmp_file'=>$file->stripTempPath(),
+				$result = array(						
 						'human_size'=>$file->humanSize(),
 						'extension'=>$file->extension(),
 						'size'=>$file->size(),
 						'type'=>$file->mimeType(),
 						'name'=>$file->name()
 				);
+				if($file->isTempFile())
+				{
+					$result['from_file_storage']=false;
+					$result['tmp_file']=$file->stripTempPath();
+				}else
+				{
+					$result['from_file_storage']=true;
+					$result['tmp_file']=$file->stripFileStoragePath();
+				}
+				
+				$response['results'][]=$result;
 			}
 		}
 		$response['total']=count($response['results']);

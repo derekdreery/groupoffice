@@ -1,6 +1,6 @@
 Ext.namespace('GO.base.upload');
 
-GO.base.upload.PluploadButton = Ext.extend(Ext.Button, {
+GO.base.upload.PluploadMenuItem = Ext.extend(Ext.menu.Item, {
 	constructor: function(config) {
 			
 		Ext.applyIf(config, {
@@ -37,6 +37,6 @@ GO.base.upload.PluploadButton = Ext.extend(Ext.Button, {
 			this.uploadpanel.doLayout();
 		};
         
-		GO.base.upload.PluploadButton.superclass.constructor.apply(this, arguments);
+		GO.base.upload.PluploadMenuItem.superclass.constructor.apply(this, arguments);
 	}
 });
