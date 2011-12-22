@@ -248,11 +248,11 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			}
 			
 			$allowGuests = in_array($action, $this->allowGuests());
-			if($allowGuests){		
-				$oldIgnore = GO::$ignoreAclPermissions;
-				//ignore all permissions when guest access is allowed
-				GO::$ignoreAclPermissions=true;
-			}
+//			if($allowGuests){		
+//				$oldIgnore = GO::$ignoreAclPermissions;
+//				//ignore all permissions when guest access is allowed
+//				GO::$ignoreAclPermissions=true;
+//			}
 			
 
 			$methodName='action'.$action;
@@ -283,8 +283,8 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 				$this->render($action, $response);
 			
 			//restore old value for acl permissions if this method was allowed for guests.
-			if(isset($oldIgnore))
-				GO::$ignoreAclPermissions=$oldIgnore;
+//			if(isset($oldIgnore))
+//				GO::$ignoreAclPermissions=$oldIgnore;
 
 			return $response;
 			
