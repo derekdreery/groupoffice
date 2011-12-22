@@ -467,8 +467,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		this.autoSaveTask={
 			run: this.autoSave,
 			scope:this,
-		//	interval:120000
-		interval:5000
+			interval:120000
+		//interval:5000
 		};
 		
 		this.on('hide', this.stopAutoSave, this);
