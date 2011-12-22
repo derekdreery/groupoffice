@@ -31,7 +31,7 @@
  * @property GO_Email_Model_Account $account
  * @property String $mailbox
  */
-class GO_Email_Model_ImapMessage extends GO_Email_Model_Message {
+class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	
 	/**
 	 * By default the message will be marked as read when fetched.
@@ -296,9 +296,6 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_Message {
 			mkdir($this->_tmpDir, 0755, true);
 		return $this->_tmpDir;
 	}
-	
-	
-	private $_attachments;
 
 	 /*
 	 * @return array
@@ -309,20 +306,23 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_Message {
 			$a['content_id']=$content_id;
 			$a['mime']=$mime_type;
 			$a['tmp_file']=false;
-			$a['index']=count($this->_attachments);
+			$a['index']=count($this->attachments);
 			$a['size']=isset($part->body) ? strlen($part->body) : 0;
 			$a['human_size']= GO_Base_Util_Number::formatSize($a['size']);
 			$a['extension']=  $f->extension();
 			$a['encoding'] = isset($part->headers['content-transfer-encoding']) ? $part->headers['content-transfer-encoding'] : '';
 			$a['disposition'] = isset($part->disposition) ? $part->disposition : ''; 
 	 */
+	
+	private $_imapAttachmentsLoaded=false;
+	
 	public function getAttachments() {
-		if(!isset($this->_attachments)){			
+		if(!$this->_imapAttachmentsLoaded){			
+			
+			$this->_imapAttachmentsLoaded=true;
 			
 			$imap = $this->getImapConnection();
 			$this->_loadBodyParts();
-			
-			$this->_attachments=array();
 			
 			$parts = $imap->find_message_attachments($this->_getStruct(), $this->_bodyPartNumbers);
 			
@@ -374,7 +374,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_Message {
 							
 				$a['mime']=$part['type'] . '/' . $part['subtype'];
 				
-				$a['index']=count($this->_attachments);
+				$a['index']=count($this->attachments);
 				$a['size']=$part['size'];
 				$a['human_size']= GO_Base_Util_Number::formatSize($a['size']);
 				$a['extension']=  $f->extension();
@@ -382,11 +382,11 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_Message {
 				$a['disposition'] = $part['disposition'];
 				$a['url']=$this->getAttachmentUrl($a);
 				
-				$this->_attachments[$a['number']]=$a;
+				$this->attachments[$a['number']]=$a;
 			}			
 		}	
 		
-		return $this->_attachments;
+		return $this->attachments;
 	}
 	
 	

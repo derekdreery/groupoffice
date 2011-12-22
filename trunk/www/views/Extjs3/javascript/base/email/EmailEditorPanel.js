@@ -351,7 +351,7 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 								paths.push(selections[i].data.path);
 							
 							this.attachmentsView.afterUpload({addFileStorageFiles:Ext.encode(paths)});
-							
+							GO.selectFileBrowserWindow.hide();
 						}, this);
 
 						GO.selectFileBrowser.setFilesFilter('');

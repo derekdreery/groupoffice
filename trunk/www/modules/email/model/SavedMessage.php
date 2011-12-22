@@ -1,8 +1,8 @@
 <?php
-class GO_Email_Model_SavedMessage extends GO_Email_Model_Message {
+class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 	
 	private $_loadedBody;
-	private $_attachments=array();
+	
 	private $_tmpDir;
 	/**
 	 * Returns the static model of the specified AR class.
@@ -100,16 +100,14 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_Message {
 	}
 	
 	public function getPlainBody() {
-		return "";
+		return GO_Base_Util_String::html_to_text($this->_loadedBody);
 	}
 	
 	public function getSource(){
 		return '';
 	}
 	
-	public function getAttachments(){
-		return $this->_attachments;
-	}
+	
 	
 	protected function getAttachmentUrl($attachment) {
 		return GO::url('core/downloadTempFile', array('path'=>$attachment['tmp_file']));
@@ -181,7 +179,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_Message {
 					$a['content_id']=$content_id;
 					$a['mime']=$mime_type;
 					$a['tmp_file']=$tmp_file ? $tmp_file->stripTempPath() : false;
-					$a['index']=count($this->_attachments);
+					$a['index']=count($this->attachments);
 					$a['size']=isset($part->body) ? strlen($part->body) : 0;
 					$a['human_size']= GO_Base_Util_Number::formatSize($a['size']);
 					$a['extension']=  $f->extension();
@@ -189,7 +187,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_Message {
 					$a['disposition'] = isset($part->disposition) ? $part->disposition : '';
 					$a['url']=$this->getAttachmentUrl($a);
 					
-					$this->_attachments[$a['number']]=$a;
+					$this->attachments[$a['number']]=$a;
 					
 				}
 
