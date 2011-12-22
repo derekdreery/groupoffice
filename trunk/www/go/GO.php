@@ -245,14 +245,19 @@ class GO{
 			}
 		}
 	}
+	
+	private static $initialized=false;
 
 	/**
 	 * This function inititalizes Group-Office.
 	 * 
-	 * @global type $lang 
 	 */
 	public static function init() {
-		global $lang;
+		
+		if(self::$initialized){
+			throw new Exception("Group-Office was already initialized");
+		}
+		self::$initialized=true;
 
 		spl_autoload_register(array('GO', 'autoload'));	
 		

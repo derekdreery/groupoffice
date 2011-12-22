@@ -240,6 +240,6 @@ umask(0);
 
 //todo this would be the new code:
 
-$root = dirname(__FILE__).'/';
-require_once($root.'go/GO.php');
-GO::init();
+//$root = dirname(__FILE__).'/';
+//require_once($root.'go/GO.php');
+//GO::init();
