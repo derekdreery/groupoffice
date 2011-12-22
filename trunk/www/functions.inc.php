@@ -25,6 +25,7 @@ if ( !function_exists( 'get_called_class' ) ) {
 
 
 function get_model_by_type_id($model_type_id){
+	require_once('GO.php');
 	$db = new db();
 	$sql = "SELECT model_name FROM go_model_types WHERE id=$model_type_id";
 		$db->query($sql);
