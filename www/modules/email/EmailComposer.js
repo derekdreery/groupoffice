@@ -746,8 +746,9 @@ GO.email.EmailComposer = function(config) {
 		store:this.attachmentsStore,
 		tpl: new Ext.XTemplate(
 			GO.email.lang.attachments+':'+
-			'<tpl for=".">',
 			'<div style="overflow-x:hidden" id="'+this.attachmentsId+'" tabindex="0" class="em-attachments-container" >'+
+			'<tpl for=".">',
+			
 			'<span class="filetype-link filetype-{extension} attachment-wrap x-unselectable" unselectable="on" style="float:left" id="'+'{tmp_name}'+'">{name} ({human_size})</span>'+
 			'</tpl>'+
 			'</div>',
