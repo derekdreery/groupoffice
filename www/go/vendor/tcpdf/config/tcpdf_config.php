@@ -82,7 +82,7 @@ if (!defined('K_TCPDF_EXTERNAL_CONFIG')) {
 	 * cache directory for temporary files (full path)
 	 */
 	
-	require_once(dirname(__FILE__).'/../../../../GO.php');
+	//require_once(dirname(__FILE__).'/../../../../GO.php');
 	define ('K_PATH_CACHE', GO::config()->file_storage_path.'tcpdfcache/');
 	
 	$f = new GO_Base_Fs_Folder(K_PATH_CACHE);
