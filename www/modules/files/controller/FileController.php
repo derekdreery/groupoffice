@@ -66,9 +66,13 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 	public function actionDownload($params) {
 		GO::session()->closeWriting();
 		
-		
-		
-		$file = GO_Files_Model_File::model()->findByPk($params['id'], false, true);
+		if(isset($params['path'])){
+			$folder = GO_Files_Model_Folder::model()->findByPath(dirname($params['path']));
+			$file = $folder->hasFile(GO_Base_Fs_File::utf8Basename($params['path']));
+		}else
+		{
+			$file = GO_Files_Model_File::model()->findByPk($params['id'], false, true);
+		}
 		
 		if(!empty($params['random_code'])){
 			if($file->random_code!=$params['random_code'])
