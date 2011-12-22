@@ -445,11 +445,11 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	},
 	
 	autoSave : function(){
-		if(GO.util.empty(this.sendParams.addresslist_id) && this.lastAutoSave && this.lastAutoSave!=this.editor.getValue())
+		if(GO.util.empty(this.sendParams.addresslist_id) && this.lastAutoSave && this.lastAutoSave!=this.emailEditor.getActiveEditor().getValue())
 		{
 			this.sendMail(true,true);
 		}
-		this.lastAutoSave=this.editor.getValue();
+		this.lastAutoSave=this.emailEditor.getActiveEditor().getValue();
 	},
 	
 	startAutoSave : function(){
@@ -467,8 +467,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		this.autoSaveTask={
 			run: this.autoSave,
 			scope:this,
-			interval:120000
-		//interval:5000
+		//	interval:120000
+		interval:5000
 		};
 		
 		this.on('hide', this.stopAutoSave, this);
@@ -822,7 +822,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	
 	afterShowAndLoad : function(config){
 
-		//this.startAutoSave();
+		this.startAutoSave();
 
 
 		this.ccFieldCheck.setChecked(this.ccCombo.getValue()!='');
@@ -867,13 +867,6 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		if(this.sendButton.disabled){
 			return false;
 		}		
-
-		/*if (this.isHTML() && this.htmlEditor.SpellCheck == false && !draft){
-			//Ask if they want to run a spell check
-			Ext.MessageBox.confirm(GO.lang.strConfirm, GO.lang.spellcheckAsk, function (btn){self.HandleResult(btn,self);});
-			return false;
-		}*/
-		
 		
 		if(!draft && !autoSave && !this.fireEvent('beforesendmail', this))
 			return false;
@@ -884,7 +877,6 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		if (autoSave || this.subjectField.getValue() != ''
 			|| confirm(GO.email.lang.confirmEmptySubject)) {
 			
-			this.sendParams.draft = draft;
 
 			// extra sync to make sure all is in there.
 			//this.htmlEditor.syncValue();
@@ -894,12 +886,12 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				waitMsg = draft ? GO.lang.waitMsgSave : GO.email.lang.sending;
 			}
 			
-			if(!autoSave && !draft){
+			//make sure autosave doesn't trigger at the same time we're sending it.
+			if(!autoSave && !draft)
 				this.stopAutoSave();
-			}
 
 			this.formPanel.form.submit({
-				url : this.sendURL,
+				url : draft || autoSave ? GO.url("email/message/save") : this.sendURL,
 				params : this.sendParams,
 				waitMsg : waitMsg,
 				waitMsgTarget : autoSave ? null : this.formPanel.body,
@@ -911,8 +903,11 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 					if (action.result.account_id) {
 						this.account_id = action.result.account_id;
 					}
+					
+					if(action.result.sendParams)
+						Ext.apply(this.sendParams, action.result.sendParams);
 
-					if(!draft)
+					if(!draft && !autoSave)
 					{
 						if (this.callback) {
 							if (!this.scope) {
@@ -922,7 +917,6 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 							var callback = this.callback.createDelegate(this.scope);
 							callback.call();
 						}
-						// this.reset();
 	
 						if (GO.addressbook && action.result.unknown_recipients
 							&& action.result.unknown_recipients.length) {
@@ -944,9 +938,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 					
 						this.hide();
 					}else
-					{
-						this.sendParams.draft_uid = action.result.draft_uid;
-						
+					{	
 						this.fireEvent('save', this);
 					}
 				},

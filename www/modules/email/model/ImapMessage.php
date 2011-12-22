@@ -44,7 +44,8 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	
 	/**
 	 * Set this to true to get temporary files when using toOutputArray() or
-	 * getAttachments.
+	 * getAttachments. This is necessary when the output is prepared for sending 
+	 * with the composer.
 	 * 
 	 * @var boolean 
 	 */
@@ -52,7 +53,8 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	
 	/**
 	 * Set this to true to get temporary files when using toOutputArray() or
-	 * getAttachments.
+	 * getAttachments. This is necessary when the output is prepared for sending 
+	 * with the composer.
 	 * 
 	 * @var boolean 
 	 */

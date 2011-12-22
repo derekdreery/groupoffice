@@ -184,37 +184,37 @@ class cached_imap extends imap{
 			$this->get_unseen();
 		}
 
-		if ($filter != 'ALL' && !empty($filter)) {
+//		if ($filter != 'ALL' && !empty($filter)) {
 			return parent::sort_mailbox($sort_type, $reverse, $filter);
-		} else {
-			
-			if($this->folder['msgcount']!=$this->selected_mailbox['messages'] || $this->folder['unseen']!=$this->selected_mailbox['unseen'])
-			{
-				go_debug('Cleared sort cache');
-				$this->folder_sort_cache=array();
-			}
-			
-			if(isset($this->folder_sort_cache[$sort_type.'_'.$reverse]))
-			{
-				go_debug('Used cached sort info');
-				$this->sort_count=$this->selected_mailbox['messages'];
-				return $this->folder_sort_cache[$sort_type.'_'.$reverse];
-			}else
-			{
-				go_debug('Got sort from IMAP server: '.$this->folder['msgcount'].' = '.$this->selected_mailbox['messages'].' && '.$this->folder['unseen'].' = '.$this->selected_mailbox['unseen']);
-				$sort = parent::sort_mailbox($sort_type, $reverse, $filter);
-				$this->folder_sort_cache[$sort_type.'_'.$reverse]=$sort;
-
-				$up_folder['id'] = $this->folder['id'];
-				$up_folder['sort']=serialize($this->folder_sort_cache);
-				$up_folder['unseen']=$this->selected_mailbox['unseen'];
-				$up_folder['msgcount']=$this->selected_mailbox['messages'];
-
-				$this->email->update_folder($up_folder);
-
-				return $sort;
-			}
-		}
+//		} else {
+//			
+//			if($this->folder['msgcount']!=$this->selected_mailbox['messages'] || $this->folder['unseen']!=$this->selected_mailbox['unseen'])
+//			{
+//				go_debug('Cleared sort cache');
+//				$this->folder_sort_cache=array();
+//			}
+//			
+//			if(isset($this->folder_sort_cache[$sort_type.'_'.$reverse]))
+//			{
+//				go_debug('Used cached sort info');
+//				$this->sort_count=$this->selected_mailbox['messages'];
+//				return $this->folder_sort_cache[$sort_type.'_'.$reverse];
+//			}else
+//			{
+//				go_debug('Got sort from IMAP server: '.$this->folder['msgcount'].' = '.$this->selected_mailbox['messages'].' && '.$this->folder['unseen'].' = '.$this->selected_mailbox['unseen']);
+//				$sort = parent::sort_mailbox($sort_type, $reverse, $filter);
+//				$this->folder_sort_cache[$sort_type.'_'.$reverse]=$sort;
+//
+//				$up_folder['id'] = $this->folder['id'];
+//				$up_folder['sort']=serialize($this->folder_sort_cache);
+//				$up_folder['unseen']=$this->selected_mailbox['unseen'];
+//				$up_folder['msgcount']=$this->selected_mailbox['messages'];
+//
+//				$this->email->update_folder($up_folder);
+//
+//				return $sort;
+//			}
+//		}
 	} 
 
 
