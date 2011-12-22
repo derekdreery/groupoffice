@@ -60,3 +60,13 @@ $updates["201110211041"][]="ALTER TABLE `fs_files` CHANGE `extension` `extension
 
 $updates["201111180948"][]="DROP TABLE IF EXISTS `cf_folder_content_cf_categories`;";
 $updates["201111180948"][]="DROP TABLE IF EXISTS `cf_folder_limits`;";
+
+$updates["201112221547"][]="CREATE TABLE IF NOT EXISTS `cf_fs_files` (
+  `model_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`model_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates["201112221547"][]="CREATE TABLE IF NOT EXISTS `cf_fs_folders` (
+  `model_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`model_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
