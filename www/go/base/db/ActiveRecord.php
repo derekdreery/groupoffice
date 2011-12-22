@@ -1402,6 +1402,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				if(method_exists($this, $method))
 					throw new Exception("Relation $name conflicts with getter function $method in ".$this->className());
 				
+				if($attr['type']==self::BELONGS_TO && !empty($attr['delete'])){
+					throw new Exception("BELONGS_TO Relation $name may not have a delete flag in ".$this->className());
+				}				
 			}
 		}
 	}
@@ -2297,7 +2300,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		foreach($r as $name => $attr){
 			
-			if(!empty($attr['delete'])){
+			if(!empty($attr['delete']) && $attr['type']!=self::BELONGS_TO){
 
 				$result = $this->$name;
 				
