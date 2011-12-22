@@ -55,7 +55,7 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 		return true;
 	}
 	public function customfieldsModel(){
-		return "GO_Notes_Model_CustomFieldsRecord";
+		return "GO_Notes_Customfields_Model_Note";
 	}
 
 	public function relations(){

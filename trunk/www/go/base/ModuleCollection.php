@@ -76,6 +76,15 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 		}
 	}
 	
+	public function __get($name) {
+		$model = parent::__get($name);
+		
+		if(!is_dir($model->path))
+						return false;
+		
+		return $model;
+	}
+	
 	/**
 	 * Check if a module is installed.
 	 * 
@@ -83,6 +92,11 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	 * @return GO_Base_Model_Module 
 	 */
 	public function isInstalled($moduleId){
-		return $this->model->findByPk($moduleId, false, true);
+		$model = $this->model->findByPk($moduleId, false, true);
+		
+		if(!is_dir($model->path))
+						return false;
+		
+		return $model;
 	}
 }

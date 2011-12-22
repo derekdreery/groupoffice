@@ -67,7 +67,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function customfieldsModel() {
-		return "GO_Files_Model_FileCustomFieldsRecord";
+		return "GO_Files_Customfields_Model_File";
 	}
 
 	public function hasLinks() {

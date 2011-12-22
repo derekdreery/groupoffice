@@ -101,7 +101,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	}
 
 	public function customfieldsModel() {
-		return 'GO_Users_Model_CustomFieldsRecord';
+		return 'GO_Users_Customfields_Model_User';
 	}
 	
 	public function hasFiles(){
