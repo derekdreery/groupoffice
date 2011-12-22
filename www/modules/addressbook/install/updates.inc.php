@@ -200,3 +200,13 @@ $updates["201112221547"][]="CREATE TABLE IF NOT EXISTS `ab_addresslist_contacts`
   PRIMARY KEY (`addresslist_id`,`contact_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
+
+$updates["201112221547"][]="CREATE TABLE IF NOT EXISTS `cf_ab_contacts` (
+  `model_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`model_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates["201112221547"][]="CREATE TABLE IF NOT EXISTS `cf_ab_companies` (
+  `model_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`model_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
