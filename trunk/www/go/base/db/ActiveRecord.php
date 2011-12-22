@@ -118,6 +118,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * If you have a "user_id" field, an automatic relation model->user() is created that 
 	 * returns a GO_Base_Model_User.
 	 * 
+	 * "delete"=>true will automatically delete the relation along with the model. delete flags on BELONGS_TO relations are invalid and will be ignored.
+	 * 
 	 * @return array relational rules.
 	 */
 	public function relations(){
