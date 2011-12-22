@@ -132,3 +132,8 @@ $updates["201111112300"][]="DROP TABLE IF EXISTS `go_iso_address_format`;";
 $updates["201111112300"][]="ALTER TABLE `go_groups` CHANGE `name` `name` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
 $updates["201111112300"][]="ALTER TABLE `go_groups` CHANGE `admin_only` `admin_only` TINYINT( 1 ) NOT NULL DEFAULT '0'";
 $updates["201112021417"][]="UPDATE `go_users` SET `date_separator` = '/' WHERE `date_format` = 'mdY';";
+
+$updates["201112021417"][]="CREATE TABLE IF NOT EXISTS `cf_go_users` (
+  `model_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`model_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
