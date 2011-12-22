@@ -24,3 +24,8 @@ $updates["201109230000"][]="ALTER TABLE `no_categories` ADD `files_folder_id` IN
 $updates["201109280000"][]="ALTER TABLE `no_notes` CHANGE `files_folder_id` `files_folder_id` INT( 11 ) NOT NULL DEFAULT '0'";
 
 $updates["201110181438"][]="ALTER TABLE `no_categories` DROP `acl_write`";
+
+$updates["201112221547"][]="CREATE TABLE IF NOT EXISTS `cf_no_notes` (
+  `model_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`model_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
