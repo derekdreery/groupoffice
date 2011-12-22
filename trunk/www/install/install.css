@@ -105,7 +105,7 @@ input, textarea, select, file{
 
 .formlabel{
 	float:left;
-	width:250px;
+	width:270px;
 	margin-right:6px;
 }
 
@@ -125,16 +125,16 @@ td{
 }
 
 
-div.error, p.error{
+div.errortext, p.errortext{
 	border:1px solid red;
 	padding:8px;
 	background-color:#f1f1f1;
 }
 
-label div.error{
-	border:0;
-	padding:0;
-	background-color:transparent;
+.formrow .errortext{
+	border:0 !important;
+	padding:0 !important;
+	background-color:transparent !important;
 	color: red;
 	display: inline;
 	margin-left:10px;
