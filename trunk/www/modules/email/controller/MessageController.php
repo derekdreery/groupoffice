@@ -81,6 +81,45 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		}
 	}
 	
+	public function actionSave($params){
+		$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);		
+		$account = GO_Email_Model_Account::model()->findByPk($alias->account_id);
+		
+		if(empty($account->drafts))
+			throw new Exception(GO::t('draftsDisabled','email'));
+		
+		$message = new GO_Base_Mail_Message();
+		
+		$message->handleEmailFormInput($params);
+		
+		$message->setFrom($alias->email, $alias->name);
+		
+		$imap = $account->openImapConnection($account->drafts);
+		
+		$nextUid = $imap->get_uidnext();
+		
+		if($nextUid && $imap->append_message($account->drafts, $message->toString(),"\Seen")) {
+			$response['sendParams']['draft_uid']=$nextUid;
+			$response['success']=$response['sendParams']['draft_uid']>0;
+		}
+		
+		if(!empty($params['draft_uid']))
+		{
+			//remove older draft version
+			$imap = $account->openImapConnection($account->drafts);
+			$imap->delete(array($params['draft_uid']));
+		}
+
+		if(!$response['success']) {
+			$account->drafts='';
+			$account->save();
+
+			$response['feedback']=GO::t('noUidNext','email');
+		}
+		
+		return $response;
+	}
+	
 	/**
 	 *
 	 * @todo Save to sent items should be implemented as a Swift outputstream for better memory management
@@ -124,6 +163,13 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				//if a sent items folder is set in the account then save it to the imap folder
 				$imap = $account->openImapConnection($account->sent);
 				$imap->append_message($account->sent, $message->toString(),"\Seen");
+			}
+			
+			if(!empty($params['draft_uid']))
+			{
+				//remove drafts on send
+				$imap = $account->openImapConnection($account->drafts);
+				$imap->delete(array($params['draft_uid']));
 			}
 		}else
 		{
@@ -232,6 +278,17 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$text = GO_Base_Util_String::normalizeCrlf($text, "\n");
 			
 		return '> '.str_replace("\n","\n> ",$text);
+	}
+	
+	public function actionOpenDraft($params){
+		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+		$imapMessage = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
+		$imapMessage->createTempFilesForInlineAttachments=true;
+		$imapMessage->createTempFilesForAttachments=true;
+		$response['data'] = $imapMessage->toOutputArray($params['content_type']=='html', true);
+		$response['sendParams']['draft_uid']=$imapMessage->uid;
+		$response['success']=true;
+		return $response;
 	}
 	
 	
