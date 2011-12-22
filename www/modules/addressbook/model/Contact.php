@@ -75,7 +75,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	
 	public function customfieldsModel() {
 		
-		return "GO_Addressbook_Model_ContactCustomFieldsRecord";
+		return "GO_Addressbook_Customfields_Model_Contact";
 	}
 
 	public function relations(){

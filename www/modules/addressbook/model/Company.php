@@ -48,7 +48,7 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 	
 	public function customfieldsModel() {
 		
-		return "GO_Addressbook_Model_CompanyCustomFieldsRecord";
+		return "GO_Addressbook_Customfields_Model_Company";
 	}
 	
 	public function defaultAttributes() {

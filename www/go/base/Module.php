@@ -274,6 +274,12 @@ class GO_Base_Module extends GO_Base_Observable {
 		return $models;
 	}
 	
+	/**
+	 * Find all classes in a folder.
+	 * 
+	 * @param string $subfolder
+	 * @return ReflectionClass array
+	 */
 	public function findClasses($subfolder){
 		
 		$classes=array();
@@ -284,6 +290,7 @@ class GO_Base_Module extends GO_Base_Observable {
 			
 			foreach($items as $item){
 				if($item instanceof GO_Base_Fs_File){
+					
 					$className = 'GO_'.ucfirst($this->id()).'_'.ucfirst($subfolder).'_'.$item->nameWithoutExtension();					
 					$classes[] = new ReflectionClass($className);					
 				}

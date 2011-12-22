@@ -904,7 +904,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$sql .= $params['fields'].$aclJoin['fields'].' ';
 		
 
-		$joinCf = !empty($params['joinCustomFields']) && $this->customfieldsModel() && isset(GO::modules()->customfields) && GO::modules()->customfields->permissionLevel;
+		$joinCf = !empty($params['joinCustomFields']) && $this->customfieldsModel() && GO::modules()->customfields && GO::modules()->customfields->permissionLevel;
 		
 		if($joinCf){
 			
