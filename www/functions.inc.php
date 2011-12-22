@@ -13,15 +13,15 @@
  */
 
 
-if ( !function_exists( 'get_called_class' ) ) {
-    function get_called_class ()
-    {
-        $t = debug_backtrace(); $t = $t[0];
-        if ( isset( $t['object'] ) && $t['object'] instanceof $t['class'] )
-            return get_class( $t['object'] );
-        return false;
-    }
-} 
+//if ( !function_exists( 'get_called_class' ) ) {
+//    function get_called_class ()
+//    {
+//        $t = debug_backtrace(); $t = $t[0];
+//        if ( isset( $t['object'] ) && $t['object'] instanceof $t['class'] )
+//            return get_class( $t['object'] );
+//        return false;
+//    }
+//} 
 
 
 function get_model_by_type_id($model_type_id){
