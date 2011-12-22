@@ -46,7 +46,7 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	}
 	
 	public function customfieldsModel() {
-		return "GO_Calendar_Model_CalendarCustomFieldsRecord";
+		return "GO_Calendar_Customfields_Model_Calendar";
 	}
 
 	public function relations() {
