@@ -80,7 +80,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 
 	public function customfieldsModel() {
-		return "GO_Calendar_Model_EventCustomFieldsRecord";
+		return "GO_Calendar_Customfields_Model_Event";
 	}
 
 
