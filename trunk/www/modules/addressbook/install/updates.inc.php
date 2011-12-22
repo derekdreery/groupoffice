@@ -186,3 +186,17 @@ $updates["201112141253"][]="RENAME TABLE `ab_sendmailing_companies` TO `ab_sent_
 
 $updates["201112141253"][]="ALTER TABLE `ab_sendmailing_contacts` CHANGE `addresslist_id` `sent_mailing_id` INT( 11 ) NOT NULL DEFAULT '0'";
 $updates["201112141253"][]="RENAME TABLE `ab_sendmailing_contacts` TO `ab_sent_mailing_contacts` ;";
+
+$updates["201112221547"][]="CREATE TABLE IF NOT EXISTS `ab_addresslist_companies` (
+  `addresslist_id` int(11) NOT NULL,
+  `company_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`addresslist_id`,`company_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+
+$updates["201112221547"][]="CREATE TABLE IF NOT EXISTS `ab_addresslist_contacts` (
+  `addresslist_id` int(11) NOT NULL,
+  `contact_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`addresslist_id`,`contact_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
