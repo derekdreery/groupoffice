@@ -291,7 +291,10 @@ class GO_Base_Module extends GO_Base_Observable {
 			foreach($items as $item){
 				if($item instanceof GO_Base_Fs_File){
 					
-					$className = 'GO_'.ucfirst($this->id()).'_'.ucfirst($subfolder).'_'.$item->nameWithoutExtension();					
+					$subParts = explode('/', $subfolder);
+					$subParts=array_map("ucfirst", $subParts);
+					
+					$className = 'GO_'.ucfirst($this->id()).'_'.implode('_',$subParts).'_'.$item->nameWithoutExtension();					
 					$classes[] = new ReflectionClass($className);					
 				}
 			}
