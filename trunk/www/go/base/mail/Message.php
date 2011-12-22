@@ -373,7 +373,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 			$this->setHtmlAlternateBody($params['htmlbody']);
 		}else
 		{
-			$this->setBody($params['textbody'], 'text/plain');
+			$this->setBody($params['plainbody'], 'text/plain');
 		}		
 		
 		if (!empty($params['attachments'])) {
