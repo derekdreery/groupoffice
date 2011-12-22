@@ -138,7 +138,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		return $response;
 	}
 	
-	private function loadTemplate($params){
+	public function loadTemplate($params){
 		if(!empty($params['template_id'])){
 			$template = GO_Addressbook_Model_Template::model()->findByPk($params['template_id']);
 

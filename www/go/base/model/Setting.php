@@ -19,5 +19,9 @@ class GO_Base_Model_Setting extends GO_Base_Db_ActiveRecord {
 	public function defaultAttributes() {
 		return array('user_id'=>0);
 	}
+	
+	public function primaryKey() {
+		return array('name','user_id');
+	}
 }
 

@@ -1175,8 +1175,10 @@ class GO_Base_Config {
 		$attributes['user_id']=$user_id;
 		
 		$setting = GO_Base_Model_Setting::model()->findSingleByAttributes($attributes);
-		if(!$setting)
+		if(!$setting){
 			$setting = new GO_Base_Model_Setting();
+			$setting->setAttributes($attributes);
+		}
 		
 		$setting->value=$value;
 		$setting->save();
