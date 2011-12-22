@@ -1,3 +1,6 @@
+22-12-2011 3.7.41
+- Small bug fixes
+
 16-12-2011 3.7.40
 - Bug with mail headers on some servers
 
