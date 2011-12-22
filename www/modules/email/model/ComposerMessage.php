@@ -2,11 +2,6 @@
 
 class GO_Email_Model_ComposerMessage extends GO_Email_Model_Message {
 	
-	private $_attachments=array();
-	
-	public function getAttachments() {
-		return $this->_attachments;
-	}
 
 	public function addAttachment(GO_Base_Fs_File $file) {
 		
@@ -17,7 +12,7 @@ class GO_Email_Model_ComposerMessage extends GO_Email_Model_Message {
 		$a['content_id'] = "";
 		$a['mime'] = $file->mimeType();
 		//TODO composer should use tmp_file too.
-		$a['tmp_name'] = $file->path();
+//		$a['tmp_name'] = $file->path();
 		$a['tmp_file'] = $file->stripTempPath();
 		$a['index'] = count($this->_attachments);
 		$a['size'] = $file->size();
@@ -27,7 +22,7 @@ class GO_Email_Model_ComposerMessage extends GO_Email_Model_Message {
 		$a['disposition'] = '';
 		$a['url'] = GO::url('core/downloadTempFile',array('path'=>$file->name()));
 		
-		$this->_attachments[] = $a;
+		$this->attachments[] = $a;
 	}
 	
 	public function addTo($email){
@@ -55,11 +50,11 @@ class GO_Email_Model_ComposerMessage extends GO_Email_Model_Message {
 	}
 
 	public function getHtmlBody() {
-		
+		return '';
 	}
 	
 	public function getPlainBody() {
-		
+		return '';
 	}
 	
 	public function getSource() {

@@ -61,6 +61,8 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 			'smime_signed'=>false
 	);
 	
+	protected $attachments=array();
+	
 	protected $defaultCharset='UTF-8';
 	
 	public function __construct() {
@@ -156,7 +158,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	 */
 	
 	public function getAttachments() {
-		return array();
+		return $this->attachments;
 	}
 	
 	/**

@@ -18,8 +18,8 @@ GO.base.email.EmailEditorAttachmentsView = function(config){
 		Ext.apply(config, {
 			tpl: new Ext.XTemplate(
 				GO.email.lang.attachments+':'+
-				'<tpl for=".">',
 				'<div style="overflow-x:hidden" id="'+this.attachmentsId+'" tabindex="0" class="em-attachments-container" >'+
+				'<tpl for=".">',				
 				'<span class="filetype-link filetype-{extension} attachment-wrap x-unselectable" unselectable="on" style="float:left" id="'+'{tmp_name}'+'">{name} ({human_size})</span>'+
 				'</tpl>'+
 				'</div>',
@@ -38,6 +38,7 @@ GO.base.email.EmailEditorAttachmentsView = function(config){
 		this.addEvents({attachmentschanged:true});
 		
 		this.on('contextmenu',this.onAttachmentContextMenu, this);
+		this.on('dblclick',this.onAttachmentDblClick, this);
 		this.on('render',function(){
 					this.getEl().tabIndex=0;
 					var map = new Ext.KeyMap(this.getEl(),{
@@ -65,6 +66,17 @@ Ext.extend(GO.base.email.EmailEditorAttachmentsView, Ext.DataView, {
 		this.fireEvent('attachmentschanged', this);
 		
 	},
+	onAttachmentDblClick : function(view, index, node, e){
+		
+		var record = this.store.getAt(index);	
+		if(record.data.from_file_storage){
+			document.location=GO.url("files/file/download",{path:record.data.tmp_file});
+		}else
+		{
+			document.location=GO.url("core/downloadTempFile",{path:record.data.tmp_file});
+		}		
+	},
+	
 	onAttachmentContextMenu : function(dv, index, node, e)
 	{
 		if(!this.menu)
