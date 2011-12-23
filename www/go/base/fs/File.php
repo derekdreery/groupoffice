@@ -271,19 +271,28 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 * @param GO_Base_Fs_Folder $destinationFolder 
 	 * @return boolean
 	 */
-	public function move($destinationFolder){
+	public function move($destinationFolder, $newFileName=false, $isUploadedFile=false){
 		
-		$newPath = $destinationFolder->path().'/'.$this->name();
+		if(!$newFileName)
+			$newFileName=$this->name();
 		
-		if(rename($this->path, $newPath))
-		{
-			$this->path = $newPath;
-			return true;
+		$newPath = $destinationFolder->path().'/'.$newFileName;
+		
+		if($isUploadedFile){
+			if(move_uploaded_file($this->path(), $newPath)){
+				$this->path = $newPath;
+				return true;
+			}
 		}else
-		{
-			return false;
+		{		
+			if(rename($this->path, $newPath))
+			{
+				$this->path = $newPath;
+				return true;
+			}
 		}
-						
+		
+		return false;						
 	}
 	
 	/**
