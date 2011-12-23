@@ -19,8 +19,19 @@
 
 class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	
-	protected $site;
-	protected $page;
+	/**
+	 * The current site model
+	 * 
+	 * @var GO_Sites_Model_Site 
+	 */
+	private $site;
+	
+	/**
+	 * The current page model
+	 * 
+	 * @var GO_Sites_Model_Page 
+	 */
+	private $page;
 	
 	protected $rootTemplatePath;
 	protected $rootTemplateUrl;
@@ -32,6 +43,21 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	
 	protected $notification;
 	
+	public function __construct($site, $page) {
+		
+		$this->site=$site;
+		$this->page=$page;
+		
+		parent::__construct();
+	}
+	
+	public function getSite(){
+		return $this->site;
+	}
+	
+	public function getPage(){
+		return $this->page;
+	}
 	
 	protected function allowGuests() {
 		return array('index');
@@ -40,12 +66,14 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	protected function init() {
 
 		if(!isset(GO::session()->values['sites']))
-						GO::session()->values['sites'] = array();
+			GO::session()->values['sites'] = array();
 					
-		$this->setSite($_REQUEST);
+		$this->_setSite();
 		
 		if(isset(GO::session()->values['sites']['lastPath']))
 			$this->lastPath=GO::session()->values['sites']['lastPath'];
+		else
+			$this->lastPath = 'products';
 		
 		
 		$this->rootTemplatePath = GO::config()->root_path.'modules/sites/templates/'.$this->site->template.'/';
@@ -63,11 +91,11 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	}
 	
 	
-	protected function setSite($params){
-		if(!empty($params['site_id']))
-			$this->site=GO_Sites_Model_Site::model()->findByPk($params['site_id']);		
-		
-		$this->site=GO_Sites_Model_Site::model()->find(GO_Base_Db_FindParams::newInstance()->single());
+	private function _setSite(){
+//		if(!empty($params['site_id']))
+//			$this->site=GO_Sites_Model_Site::model()->findByPk($params['site_id']);		
+//		
+//		$this->site=GO_Sites_Model_Site::model()->find(GO_Base_Db_FindParams::newInstance()->single());
 
 		$this->templateUrl = $this->_getTemplateFolderUrl();
 		$this->templateFolder = new GO_Base_Fs_Folder($this->_getTemplateFolderPath());
@@ -101,15 +129,18 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 * This default action should be overrriden
 	 */
 	public function actionIndex($params){		
-		$this->renderPage($params['p'],$params);		
+		$this->renderPage($params);		
 	}
-	protected function beforeRenderPage($path, $params){
+	
+	protected function beforeRenderPage($params){
 		
 	}
 	
-	protected function renderPage($path, $params=array()){
+	
+	
+	protected function renderPage($params=array()){
 		
-		$this->beforeRenderPage($path, $params);
+		$this->beforeRenderPage($params);
 		extract($params);
 		
 		//echo $path.':'.$this->site->id;
@@ -118,27 +149,23 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 			if(!empty(GO::session()->values['sites']['lastPath']) && GO::session()->values['sites']['lastPath'] == $this->site->getLoginPath())
 					GO::session()->values['sites']['beforeLoginPath']='products'; // TODO: This path needs to be the path to the homepage when that is working
 				else
-					GO::session()->values['sites']['beforeLoginPath']=GO::session()->values['sites']['lastPath'];
+					GO::session()->values['sites']['beforeLoginPath']='products';
 		}
 		
-		GO::session()->values['sites']['lastPath']=$path;
-		
-		$this->page = GO_Sites_Model_Page::model()->findSingleByAttributes(array('site_id'=>$this->site->id, 'path'=>$path));
+		GO::session()->values['sites']['lastPath']=$path;		
 			
-		if(!$this->page){
-			$this->notFound();
-		}else{
-			
-			$this->_checkAuth();
-		
-			$this->_handleForm($params);
-		
-			//var_dump($this->page);
+				$this->_checkAuth();
 
-			$template = empty($this->page->template) ? 'index.php' : $this->page->template.'.php';
+//				$this->_handleForm($params);
 
-			require($this->templateFolder->path().'/'.$template);
-		}
+				//var_dump($this->page);
+
+				$template = empty($this->page->template) ? 'index.php' : $this->page->template.'.php';
+
+				require($this->getRootTemplatePath().'header.php');
+				require($this->templateFolder->path().'/'.$template);
+				require($this->getRootTemplatePath().'footer.php');
+		
 	}
 	
 	private function _checkAuth() {
@@ -147,37 +174,82 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 		}
 	}
 	
-	private function _handleForm($params){
-		if(isset($params['formRoute'])){
-			$params['r']=$params['formRoute'];
-			if(GO_Base_Html_Input::checkRequired()){
-				$router = new GO_Base_Router();
-				$router->runController($params);
-			}
-		}
-	}
+//	private function _handleForm($params){
+//		if(isset($params['formRoute'])){
+//			$params['r']=$params['formRoute'];
+//			if(GO_Base_Html_Input::checkRequired()){
+//				$router = new GO_Base_Router();
+//				$router->runController($params);
+//			}
+//		}
+//	}
 	
 	protected function notFound(){
 		echo '<h1>Not found</h1>';
 	}
 	
+//	/**
+//	 * Generate a URL to a page.
+//	 * 
+//	 * @param string $path
+//	 * @param array $params
+//	 * @param boolean $relative
+//	 * @return string 
+//	 */
+//	public static function pageUrl($path, $params=array(), $relative=true){
+//		$params['p']=$path;	
+//		
+//		$page = GO_Sites_Model_Page::model()->findSingleByAttribute('path', $path);
+//		
+//		if(!$page)
+//			throw new Exception('NOT FOUND');
+//		return $page->getUrl($params, $relative);
+//	}
+	
+	
 	/**
-	 * Generate a URL to a page.
+	 * Generate a controller URL.
 	 * 
-	 * @param string $path
-	 * @param array $params
-	 * @param boolean $relative
+	 * @param string $path To controller. eg. addressbook/contact/submit
+	 * @param array $params eg. array('id'=>1,'someVar'=>'someValue')
+	 * @param boolean $relative Defaults to true. Set to false to return an absolute URL.
+	 * @param boolean $htmlspecialchars Set to true to escape special html characters. eg. & becomes &amp.
 	 * @return string 
 	 */
-	public static function pageUrl($path, $params=array(), $relative=true){
-		$params['p']=$path;	
+	public static function pageUrl($path='', $params=array(), $relative=true, $htmlspecialchars=false){
+		$url = $relative ? GO::config()->host : GO::config()->full_url;
 		
-		$page = GO_Sites_Model_Page::model()->findSingleByAttribute('path', $path);
+		$url .= 'modules/sites/index.php';
 		
-		if(!$page)
-			throw new Exception('NOT FOUND');
-		return $page->getUrl($params, $relative);
+		if(empty($path) && empty($params)){
+			return $url;
+		}
+		
+		if(empty($path)){
+			$amp = '?';
+		}else
+		{
+			$url .= '?path='.$path;
+			
+			$amp = $htmlspecialchars ? '&amp;' : '&';
+		}
+		
+		if(!empty($params)){			
+			if(is_array($params)){				
+				foreach($params as $name=>$value){
+					$url .= $amp.$name.'='.urlencode($value);
+					
+					$amp = $htmlspecialchars ? '&amp;' : '&';
+				}
+			}else
+			{
+				$url .= $amp.$params;			
+			}			
+		}
+		
+		return $url;
 	}
+	
 	
 	/**
 	 * Redirect to a page.

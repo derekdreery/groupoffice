@@ -1,6 +1,8 @@
 <h1>Shopping cart</h1>
 <?php
-$cart = new GO_Webshop_Util_Cart();
+
+$cart = GO_Webshop_Model_Webshop::getByController($this)->getCart();
+
 
 if (!$cart->hasProducts()) {
 	?>	

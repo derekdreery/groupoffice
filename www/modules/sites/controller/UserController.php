@@ -30,45 +30,50 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site{
 	}
 	
 	public function actionLogin($params){
-		$user = GO::session()->login($params['username'], $params['password']);
-				
-		$response['success'] = $user != false;
+		
+		if(GO_Base_Util_Http::isPostRequest()){
+		
+			$user = GO::session()->login($params['username'], $params['password']);
 
-		if (empty($response['success'])) {
-			GO_Base_Html_Error::setError("Login failed!"); // set the correct login failure message
-			
-			GO::infolog("LOGIN TO WEBSITE FAILED for user: \"" . $params['username'] . "\" from IP: " . $_SERVER['REMOTE_ADDR']);
+			$response['success'] = $user != false;
 
-			//sleep 3 seconds for slowing down brute force attacks
-			sleep(1);
-		} else {
-			GO::infolog("LOGIN TO WEBSITE WAS A SUCCESS for user: \"" . $params['username'] . "\" from IP: " . $_SERVER['REMOTE_ADDR']);
+			if (empty($response['success'])) {
+				GO_Base_Html_Error::setError("Login failed!"); // set the correct login failure message
 
-			if (!empty($params['remind'])) {
+				GO::infolog("LOGIN TO WEBSITE FAILED for user: \"" . $params['username'] . "\" from IP: " . $_SERVER['REMOTE_ADDR']);
 
-				$encUsername = GO_Base_Util_Crypt::encrypt($params['username']);
-				if ($encUsername)
-					$encUsername = $params['username'];
+				//sleep 3 seconds for slowing down brute force attacks
+				sleep(1);
+			} else {
+				GO::infolog("LOGIN TO WEBSITE WAS A SUCCESS for user: \"" . $params['username'] . "\" from IP: " . $_SERVER['REMOTE_ADDR']);
 
-				$encPassword = GO_Base_Util_Crypt::encrypt($params['password']);
-				if ($encPassword)
-					$encPassword = $params['password'];
+				if (!empty($params['remind'])) {
 
-				$this->setCookie('GO_UN', $encUsername, 3600 * 24 * 30);
-				$this->setCookie('GO_PW', $encPassword, 3600 * 24 * 30);
+					$encUsername = GO_Base_Util_Crypt::encrypt($params['username']);
+					if ($encUsername)
+						$encUsername = $params['username'];
+
+					$encPassword = GO_Base_Util_Crypt::encrypt($params['password']);
+					if ($encPassword)
+						$encPassword = $params['password'];
+
+					$this->setCookie('GO_UN', $encUsername, 3600 * 24 * 30);
+					$this->setCookie('GO_PW', $encPassword, 3600 * 24 * 30);
+				}
 			}
-			
-			if ($this->isAjax())
-				return $response;
-			else
-				$this->pageRedirect(GO::session()->values['sites']['beforeLoginPath']);		
-		}	
+		}
+		
+		if ($this->isAjax())
+			return $response;
+		else
+			$this->pageRedirect(GO::session()->values['sites']['beforeLoginPath']);		
+
 	}
 	
 	public function actionLogout($params){
 		GO::session()->logout();
 		GO::session()->start();
-		GO::session()->values['sites']['lastPath'] = 'products'; // TODO: This path needs to be the path to the homepage when that is working
+		GO::session()->values['sites']['lastPath'] = $this->getSite()->getHomepagePath();
 		
 		$this->pageRedirect($this->site->getLoginPath());	
 	}
