@@ -57,20 +57,20 @@ if(!defined('GO_NO_SESSION') && session_id()==''){
 	{
 		session_id($_REQUEST['session_id']);
 	}
-  session_set_cookie_params(0,'/');
+  //session_set_cookie_params(0,'/');
 	session_start();
-	if(isset($_REQUEST['auth_token'])){
-		if($_REQUEST['auth_token']!=$_SESSION['GO_SESSION']['auth_token']){
-			session_destroy();
-			die('Invalid auth_token supplied');
-		}else
-		{
-			$_SESSION['GO_SESSION']['auth_token']=String::random_password('a-z,1-9', '', 30);
-			//redirect to URL without session_id
-			header('Location: '.$_SERVER['PHP_SELF']);
-			exit();
-		}
-	}
+//	if(isset($_REQUEST['auth_token'])){
+//		if($_REQUEST['auth_token']!=$_SESSION['GO_SESSION']['auth_token']){
+//			session_destroy();
+//			die('Invalid auth_token supplied');
+//		}else
+//		{
+//			$_SESSION['GO_SESSION']['auth_token']=String::random_password('a-z,1-9', '', 30);
+//			//redirect to URL without session_id
+//			header('Location: '.$_SERVER['PHP_SELF']);
+//			exit();
+//		}
+//	}
 }
 
 if(!isset($GO_CONFIG))
