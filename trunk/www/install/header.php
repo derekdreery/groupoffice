@@ -27,7 +27,7 @@ function printFoot()
 }
 
 function errorMessage($msg){
-	echo '<p class="error">'.$msg.'</p>';
+	echo '<p class="errortext">'.$msg.'</p>';
 }
 
 function continueButton(){

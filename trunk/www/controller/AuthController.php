@@ -89,7 +89,7 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 			}
 		}
 
-		if (GO_Base_Util_Http::isAjax())
+		if (GO_Base_Util_Http::isAjaxRequest())
 			return $response;
 		else
 			$this->redirect();

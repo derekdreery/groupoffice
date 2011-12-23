@@ -13,7 +13,7 @@ printHead();
 <p>The following license applies to this product:</p>
 <div class="cmd">
 <?php
-echo GO_Base_Util_String::text_to_html(file_get_contents(GO::config()->root_path.'LICENSE.TXT'));
+echo GO_Base_Util_String::text_to_html(file_get_contents('../LICENSE.TXT'));
 ?>
 </div>
 

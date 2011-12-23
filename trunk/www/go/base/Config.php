@@ -917,12 +917,10 @@ class GO_Base_Config {
 			
 			$lc = localeconv();
 			
-			$this->default_currency=$lc['currency_symbol'];
-			$this->default_decimal_separator=$lc['decimal_point'];
-			$this->default_thousands_separator=$lc['thousands_sep'];
+			$this->default_currency=empty($lc['currency_symbol']) ? '€' : $lc['currency_symbol'];
+			$this->default_decimal_separator=empty($lc['decimal_point']) ? '.' : $lc['decimal_point'];
+			$this->default_thousands_separator=$this->default_decimal_separator == '.' ? ',' : '.';//$lc['thousands_sep'];
 		}
-
-
 
 		// path to classes
 		$this->class_path = $this->root_path.$this->class_path.'/';
