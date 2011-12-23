@@ -60,22 +60,23 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site{
 					$this->setCookie('GO_UN', $encUsername, 3600 * 24 * 30);
 					$this->setCookie('GO_PW', $encPassword, 3600 * 24 * 30);
 				}
+				
+				$this->pageRedirect($this->getSite()->getLastPath());
+				
 			}
 		}
 		
-		if ($this->isAjax())
-			return $response;
-		else
-			$this->pageRedirect(GO::session()->values['sites']['beforeLoginPath']);		
-
+//		if ($this->isAjax())
+//			return $response;
+//		else
+//			$this->pageRedirect(GO::session()->values['sites']['beforeLoginPath']);		
+		$this->renderPage($params);	
 	}
 	
 	public function actionLogout($params){
 		GO::session()->logout();
-		GO::session()->start();
-		GO::session()->values['sites']['lastPath'] = $this->getSite()->getHomepagePath();
-		
-		$this->pageRedirect($this->site->getLoginPath());	
+		GO::session()->start();		
+		$this->pageRedirect($this->getSite()->getLoginPath());	
 	}
 	
 }

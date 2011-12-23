@@ -26,7 +26,7 @@
 				<?php if(!GO::user()) : ?>
 					<a href="<?php echo self::pageUrl("login"); ?>">Login</a> | <a href="<?php echo self::pageUrl("register"); ?>">Register</a>
 				<?php else: ?>
-					Welcome <?php echo GO::user()->name; ?> | <a href="<?php echo self::pageUrl('sites/user/logout'); ?>">Logout</a>
+					Welcome <?php echo GO::user()->name; ?> | <a href="<?php echo self::pageUrl('logout'); ?>">Logout</a>
 				<?php endif; ?>
 			</div>
 
