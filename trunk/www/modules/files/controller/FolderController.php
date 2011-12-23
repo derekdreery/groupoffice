@@ -493,11 +493,27 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			
 			$fsFolder = new GO_Base_Fs_Folder($newPath);
 			$fsFolder->appendNumberToNameIfExists();
-
-			$folder->name = $fsFolder->name();			
-			$folder->parent_id = $destinationFolder->id;
-			$folder->systemSave = true;
-			$folder->save();
+			
+			if($existingFolder = $destinationFolder->hasFolder($fsFolder->name())){
+				//a folder with the required name already exists. We'll use that.
+				if (!$folder->acl_id && isset($model->acl_id)) {
+					$existingFolder->acl_id = $model->acl_id;
+				}
+				$existingFolder->visible = 0;
+				$existingFolder->readonly = 1;
+				$existingFolder->save();
+				return $existingFolder->id;
+				
+				//What should we do with the other folder???
+			}else
+			{
+				$folder->name = $fsFolder->name();			
+				$folder->parent_id = $destinationFolder->id;
+				$folder->systemSave = true;
+				$folder->visible = 0;
+				$folder->readonly = 1;
+				$folder->save();
+			}
 		}
 
 		return $folder->id;
