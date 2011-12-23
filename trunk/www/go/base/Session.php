@@ -193,6 +193,9 @@ class GO_Base_Session extends GO_Base_Observable{
 	 * TODO: REMOVE IF SYSTEM IS FULLY REBUILDED
 	 */
 	private function _setCompatibilitySessionVars(){
+		if(!defined("CONFIG_FILE"))
+			define("CONFIG_FILE", GO::config()->get_config_file());
+		
 		require(GO::config()->root_path.'Group-Office.php');
 		require(GO::config()->root_path.'classes/base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
