@@ -615,15 +615,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		//$dtstamp->offsetUnset('VALUE');
 		$e->add($dtstamp);
 		
-		$mtimeDateTime = new DateTime();
-		$mtimeDateTime->setTimestamp($this->mtime);
+		$mtimeDateTime = new DateTime('@'.$this->mtime);
 		$lm = new Sabre_VObject_Element_DateTime('LAST-MODIFIED');
 		$lm->setDateTime($mtimeDateTime, Sabre_VObject_Element_DateTime::UTC);		
 		//$lm->offsetUnset('VALUE');
 		$e->add($lm);
 		
-		$ctimeDateTime = new DateTime();
-		$ctimeDateTime->setTimestamp($this->mtime);
+		$ctimeDateTime = new DateTime('@'.$this->mtime);
 		$ct = new Sabre_VObject_Element_DateTime('created');
 		$ct->setDateTime($ctimeDateTime, Sabre_VObject_Element_DateTime::UTC);		
 		//$ct->offsetUnset('VALUE');

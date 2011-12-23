@@ -464,8 +464,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$e->note=$this->comment;
 		}
 		
-		$mtimeDateTime = new DateTime();
-		$mtimeDateTime->setTimestamp($this->mtime);
+		$mtimeDateTime = new DateTime('@'.$this->mtime);
 		$rev = new Sabre_VObject_Element_DateTime('LAST-MODIFIED');
 		$rev->setDateTime($mtimeDateTime, Sabre_VObject_Element_DateTime::UTC);		
 		$e->add($rev);
