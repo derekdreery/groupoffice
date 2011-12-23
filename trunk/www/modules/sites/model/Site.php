@@ -20,6 +20,8 @@
 
 class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 
+	private $_lastPath;
+	
 	/**
 	 * Returns a static model of itself
 	 * 
@@ -39,6 +41,19 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 				'pages' => array('type' => self::HAS_MANY, 'model' => 'GO_Sites_Model_Page', 'field' => 'site_id', 'findParams'=>  GO_Base_Db_FindParams::newInstance()->order('sort')->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('parent_id', 0)->addCondition('hidden',0)), 'delete' => true),
 				);
 	}	
+	
+	public function setLastPath($path){
+		$this->_lastPath = $path;
+	}
+	
+	public function getLastPath(){
+		if(empty($this->_lastPath))
+			$this->_lastPath = $this->getHomePagePath();
+		
+		return $this->_lastPath;
+	}
+		
+	
 	
 	public function getLoginPath(){
 		return $this->login_page;
