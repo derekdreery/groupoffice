@@ -24,6 +24,9 @@ class GO_Core_Controller_Settings extends GO_Base_Controller_AbstractController 
 //			if (!empty($params["passwordConfirm"])) {
 //				$user->setAttribute('password', $_POST['passwordConfirm']);
 //			}
+		}else
+		{
+			unset($params['password']);
 		}
 		$user->setAttributes($params);
 		

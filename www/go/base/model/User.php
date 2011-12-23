@@ -132,6 +132,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		$this->columns['email']['regex'] = GO_Base_Util_String::get_email_validation_regex();
 		$this->columns['email']['required'] = true;
 
+		$this->columns['password']['required'] = true;
 		$this->columns['username']['required'] = true;
 		$this->columns['username']['regex'] = '/^[A-Za-z0-9_\-\.\@]*$/';
 
@@ -166,7 +167,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		if (($this->isNew && $existing) || $existing && $existing->id != $this->id )
 			$this->setValidationError('username', GO::t('error_username_exists', 'users'));
 
-		if (empty($this->password)) {
+		if (empty($this->password) && $this->isNew) {
 			$this->password = GO_Base_Util_String::randomPassword();
 			$this->generatedRandomPassword = true;
 		}
