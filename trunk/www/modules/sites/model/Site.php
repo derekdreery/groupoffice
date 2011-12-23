@@ -44,4 +44,12 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 		return $this->login_page;
 	}
 	
+	public function getLogoutPath(){
+		return 'logout'; // TODO: get the right path name here
+	}
+	
+	public function getHomePagePath(){
+		return 'products'; // TODO: get the right path name here
+	}
+	
 }

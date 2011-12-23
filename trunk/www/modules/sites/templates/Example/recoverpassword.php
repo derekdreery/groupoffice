@@ -1,6 +1,3 @@
-<?php
-require('header.php');
-?>
 					<div class="subkader-small-top">
 						<div class="subkader-small-bottom">
 							<div class="subkader-small-center">						
@@ -44,7 +41,3 @@ require('header.php');
 						<h1>Secure login</h1>
 						<p>SSL secured connection verified by Equifax Secure Inc. </p>
 					</div>
-
-<?php
-require('footer.php');
-?>
