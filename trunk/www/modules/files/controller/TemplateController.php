@@ -48,7 +48,7 @@ class GO_files_Controller_Template extends GO_Base_Controller_AbstractModelContr
 	public function actionDownload($params){
 		$template = GO_Files_Model_Template::model()->findByPk($params['id']);
 		
-	  GO_Base_Util_Common::outputDownloadHeaders(new GO_Base_Fs_File($template->name.'.'.$template->extension));
+	  GO_Base_Util_Http::outputDownloadHeaders(new GO_Base_Fs_File($template->name.'.'.$template->extension));
 		
 		echo $template->content;
 	}
