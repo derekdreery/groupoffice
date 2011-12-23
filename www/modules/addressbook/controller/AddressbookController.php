@@ -63,7 +63,7 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 		$addressbook = GO_Addressbook_Model_Addressbook::model()->findByPk($params['addressbook_id']);
 		
 		$filename = $addressbook->name.'.vcf';
-		GO_Base_Util_Common::outputDownloadHeaders(new GO_Base_FS_File($filename));		
+		GO_Base_Util_Http::outputDownloadHeaders(new GO_Base_FS_File($filename));		
 	
 		foreach ($addressbook->contacts as $contact)
 			echo $contact->toVObject()->serialize();
