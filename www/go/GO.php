@@ -617,3 +617,5 @@ class GO{
 	}
 
 }	
+
+require_once('compat.php');
