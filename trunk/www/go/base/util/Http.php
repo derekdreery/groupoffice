@@ -106,6 +106,13 @@ class GO_Base_Util_Http {
 	}
 	
 	/**
+	 * Reset the post array
+	 */
+	public static function resetPostRequest(){
+		unset($_POST);
+	}
+	
+	/**
 	 * Check if the request was made with ajax.
 	 * 
 	 * @return boolean 
