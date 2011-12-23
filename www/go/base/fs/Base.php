@@ -110,6 +110,15 @@ abstract class GO_Base_Fs_Base{
 	}
 	
 	/**
+	 * Check if the file or folder is writable for the webserver user.
+	 * 
+	 * @return boolean 
+	 */
+	public function isWritable(){
+		return is_writable($this->path);
+	}
+	
+	/**
 	 *
 	 * @param int $permissionsMode <p>
 	 * Note that mode is not automatically

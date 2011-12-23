@@ -371,7 +371,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			return strtolower($arr[3]);				
 	}	
 	
-	protected function isAjax(){
-		return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH']==='XMLHttpRequest';
-	}
+//	protected function isAjax(){
+//		return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH']==='XMLHttpRequest';
+//	}
 }
