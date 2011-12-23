@@ -217,7 +217,7 @@ CREATE TABLE IF NOT EXISTS `ab_sent_mailings` (
 --
 
 DROP TABLE IF EXISTS `ab_search_queries`;
-CREATE TABLE IF NOT EXISTS `ab_sql` (
+CREATE TABLE IF NOT EXISTS `ab_search_queries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `companies` tinyint(1) NOT NULL,
