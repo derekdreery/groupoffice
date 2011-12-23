@@ -35,15 +35,12 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	
 	protected $rootTemplatePath;
 	protected $rootTemplateUrl;
-	
 	protected $templateUrl;
 	protected $templateFolder;
+		
+//	protected $notification;
 	
-	protected $lastPath;
-	
-	protected $notification;
-	
-	public function __construct($site, $page) {
+	public function __construct($site, $page) {	
 		
 		$this->site=$site;
 		$this->page=$page;
@@ -64,20 +61,15 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	}
 	
 	protected function init() {
-
-		if(!isset(GO::session()->values['sites']))
-			GO::session()->values['sites'] = array();
-					
-		$this->_setSite();
 		
-		if(isset(GO::session()->values['sites']['lastPath']))
-			$this->lastPath=GO::session()->values['sites']['lastPath'];
-		else
-			$this->lastPath = 'products';
-		
+		$this->_checkSessionVars();
 		
 		$this->rootTemplatePath = GO::config()->root_path.'modules/sites/templates/'.$this->site->template.'/';
 		$this->rootTemplateUrl = GO::config()->host.'modules/sites/templates/'.$this->site->template.'/';
+		$this->templateUrl = $this->_getTemplateFolderUrl();
+		$this->templateFolder = new GO_Base_Fs_Folder($this->_getTemplateFolderPath());
+		
+		$this->_checkAuth();
 		
 		return parent::init();
 	}
@@ -89,18 +81,7 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	public function getRootTemplateUrl(){
 		return $this->rootTemplateUrl;
 	}
-	
-	
-	private function _setSite(){
-//		if(!empty($params['site_id']))
-//			$this->site=GO_Sites_Model_Site::model()->findByPk($params['site_id']);		
-//		
-//		$this->site=GO_Sites_Model_Site::model()->find(GO_Base_Db_FindParams::newInstance()->single());
-
-		$this->templateUrl = $this->_getTemplateFolderUrl();
-		$this->templateFolder = new GO_Base_Fs_Folder($this->_getTemplateFolderPath());
-	}
-	
+		
 	private function _getTemplateFolderPath(){
 		$path = '';
 		$moduleName = $this->getModule()->id;
@@ -135,37 +116,34 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	protected function beforeRenderPage($params){
 		
 	}
-	
-	
-	
+
 	protected function renderPage($params=array()){
 		
 		$this->beforeRenderPage($params);
 		extract($params);
+
+		$template = empty($this->page->template) ? 'index.php' : $this->page->template.'.php';
+
+		require($this->getRootTemplatePath().'header.php');
+		require($this->templateFolder->path().'/'.$template);
+		require($this->getRootTemplatePath().'footer.php');
 		
-		//echo $path.':'.$this->site->id;
+	}
+
+	private function _checkSessionVars(){
 		
-		if($path == $this->site->getLoginPath()){
-			if(!empty(GO::session()->values['sites']['lastPath']) && GO::session()->values['sites']['lastPath'] == $this->site->getLoginPath())
-					GO::session()->values['sites']['beforeLoginPath']='products'; // TODO: This path needs to be the path to the homepage when that is working
-				else
-					GO::session()->values['sites']['beforeLoginPath']='products';
+		if(!isset(GO::session()->values['sites']))
+			GO::session()->values['sites'] = array();
+		
+		if(isset(GO::session()->values['sites']['lastPath']))
+			$this->site->setLastPath(GO::session()->values['sites']['lastPath']);
+
+		if($this->page->path == $this->site->getLoginPath()){
+			if($this->site->getLastPath() == $this->site->getLoginPath())
+				$this->site->setLastPath($this->site->getHomePagePath());
+		} else {
+			GO::session()->values['sites']['lastPath'] = $this->page->path;
 		}
-		
-		GO::session()->values['sites']['lastPath']=$path;		
-			
-				$this->_checkAuth();
-
-//				$this->_handleForm($params);
-
-				//var_dump($this->page);
-
-				$template = empty($this->page->template) ? 'index.php' : $this->page->template.'.php';
-
-				require($this->getRootTemplatePath().'header.php');
-				require($this->templateFolder->path().'/'.$template);
-				require($this->getRootTemplatePath().'footer.php');
-		
 	}
 	
 	private function _checkAuth() {
@@ -260,14 +238,14 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 		header('Location: ' .self::pageUrl($path, $params));
 		exit();
 	}
-	
-	protected function setNotification($type, $string){
-		
-	}
-	
-	protected function getNotification(){
-		
-	}
+//	
+//	protected function setNotification($type, $string){
+//		
+//	}
+//	
+//	protected function getNotification(){
+//		
+//	}
 	
 	/**
 	 * Get the webshop for this website if it has one.
