@@ -14,7 +14,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		GO::$ignoreAclPermissions=true; //allow this script access to all
 		GO::$disableModelCache=true; //for less memory usage
-		ini_set('max_execution_time', '300');
+		ini_set('max_execution_time', '600');
 		session_write_close();		
 	}
 	
@@ -102,10 +102,11 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	 * Calls buildSearchIndex on each Module class.
 	 * @return array 
 	 */
-	public function actionBuildSearchCache() {
+	public function actionBuildSearchCache($params) {
 		$response = array();
 		
-		GO::getDbConnection()->query('TRUNCATE TABLE go_search_cache');
+		if(empty($params['keepexisting']))
+			GO::getDbConnection()->query('TRUNCATE TABLE go_search_cache');
 		
 		echo '<pre>';
 		GO::modules()->callModuleMethod('buildSearchCache', array(&$response));
