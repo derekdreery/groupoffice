@@ -37,7 +37,7 @@ class GO_Base_Fs_CsvFile extends GO_Base_Fs_File{
 	private function _setCSV($mode){
 		if(!isset($this->_csv)){
 			if ($mode='w') {
-				$this->_csv = new GO_Base_Csv_Writer();
+				$this->_csv = new GO_Base_Csv_Writer($this->name());
 			} elseif ($mode='r') {
 				$this->_csv = new GO_Base_Csv_Reader($this->name());
 			}
