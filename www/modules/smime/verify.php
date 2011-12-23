@@ -41,6 +41,9 @@ if(!empty($_REQUEST['account_id'])){
 
 	$tmpdir = $GO_CONFIG->tmpdir . 'smime/verify/';
 	File::mkdir($tmpdir);
+	
+	if(!empty($_REQUEST['filepath']) && File::path_leads_to_parent($_REQUEST['filepath']))
+		die("Invalid request");
 
 	//$src_filename = !empty($_REQUEST['filepath']) ? $GO_CONFIG->file_storage_path.$_REQUEST['filepath'] : $tmpdir . $uid . '_' . File::strip_invalid_chars($mailbox) . '_' . $account_id . '.eml';
 	$src_filename = !empty($_REQUEST['filepath']) && empty($uid) ? $GO_CONFIG->file_storage_path.$_REQUEST['filepath'] : $tmpdir . $uid . '_' . File::strip_invalid_chars($mailbox) . '_' . $account_id . '.eml';
