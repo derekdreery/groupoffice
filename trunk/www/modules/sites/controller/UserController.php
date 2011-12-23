@@ -57,8 +57,8 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site{
 					if ($encPassword)
 						$encPassword = $params['password'];
 
-					$this->setCookie('GO_UN', $encUsername, 3600 * 24 * 30);
-					$this->setCookie('GO_PW', $encPassword, 3600 * 24 * 30);
+					GO_Base_Util_Http::setCookie('GO_UN', $encUsername);
+					GO_Base_Util_Http::setCookie('GO_PW', $encPassword);
 				}
 				
 				$this->pageRedirect($this->getSite()->getLastPath());
@@ -66,10 +66,6 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site{
 			}
 		}
 		
-//		if ($this->isAjax())
-//			return $response;
-//		else
-//			$this->pageRedirect(GO::session()->values['sites']['beforeLoginPath']);		
 		$this->renderPage($params);	
 	}
 	

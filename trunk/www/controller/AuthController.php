@@ -84,12 +84,12 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 				if ($encPassword)
 					$encPassword = $params['password'];
 
-				$this->setCookie('GO_UN', $encUsername, 3600 * 24 * 30);
-				$this->setCookie('GO_PW', $encPassword, 3600 * 24 * 30);
+				GO_Base_Util_Http::setCookie('GO_UN', $encUsername);
+				GO_Base_Util_Http::setCookie('GO_PW', $encPassword);
 			}
 		}
 
-		if ($this->isAjax())
+		if (GO_Base_Util_Http::isAjax())
 			return $response;
 		else
 			$this->redirect();

@@ -133,8 +133,8 @@ class GO_Base_Session extends GO_Base_Observable{
 
 
 		if(!headers_sent()){
-			SetCookie("GO_UN","",time()-3600,"/","",!empty($_SERVER['HTTPS']),true);
-			SetCookie("GO_PW","",time()-3600,"/","",!empty($_SERVER['HTTPS']),true);
+			SetCookie("GO_UN","",time()-3600,GO::config()->host,"",!empty($_SERVER['HTTPS']),true);
+			SetCookie("GO_PW","",time()-3600,GO::config()->host,"",!empty($_SERVER['HTTPS']),true);
 		}
 
 		$old_session = $_SESSION;
