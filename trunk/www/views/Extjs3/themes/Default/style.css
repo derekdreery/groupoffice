@@ -5,6 +5,15 @@
 * modules/<modulename>/themes/Default/style.css instead.
 */
 
+#beta {
+    
+    font-size: 9px;
+    font-weight: bold;
+    left: 119px;
+    position: absolute;
+    top: 27px;
+}
+
 
 #msg-div {
     position:absolute;    
