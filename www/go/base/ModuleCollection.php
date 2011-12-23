@@ -79,7 +79,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	public function __get($name) {
 		$model = parent::__get($name);
 		
-		if(!is_dir($model->path))
+		if(!$model || !is_dir($model->path))
 						return false;
 		
 		return $model;
@@ -94,8 +94,8 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	public function isInstalled($moduleId){
 		$model = $this->model->findByPk($moduleId, false, true);
 		
-		if(!is_dir($model->path))
-						return false;
+		if(!$model || !is_dir($model->path))
+				return false;
 		
 		return $model;
 	}
