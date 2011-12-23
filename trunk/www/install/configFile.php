@@ -29,6 +29,8 @@ if (!$configFile) {
 
 	try {
 		if (!empty($_POST['submitted'])) {
+			
+			GO::config()->title='Group-Office';
 
 			$f = new GO_Base_Fs_Folder($_POST['file_storage_path']);
 			if (!$f->exists())
