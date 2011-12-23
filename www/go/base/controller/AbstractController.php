@@ -369,20 +369,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			return strtolower($arr[1].'/'.$arr[3]);				
 		else 
 			return strtolower($arr[3]);				
-	}
-	
-	/**
-	 * Set a cookie
-	 * 
-	 * @param string $name 
-	 * @param string $value [optional] 
-	 * @param int $expire [optional] 
-	 * @return type 
-	 */
-	protected function setCookie($name, $value, $expires=0){
-		return SetCookie($name,$value,$expires,GO::config()->host,$_SERVER['HTTP_HOST'],!empty($_SERVER['HTTPS']),true);
-	}
-	
+	}	
 	
 	protected function isAjax(){
 		return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH']==='XMLHttpRequest';

@@ -113,6 +113,26 @@ class GO_Base_Util_Http {
 	public static function isAjaxRequest(){
 		return isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest";  
 	}
+	
+	/**
+	 * Unset a cookie
+	 * 
+	 * @param string $name 
+	 */
+	public static function unsetCookie($name){
+		SetCookie($name,"",time()-3600,GO::config()->host,"",!empty($_SERVER['HTTPS']),true);
+	}
+	
+	/**
+	 * Set a cookie
+	 * 
+	 * @param string $name
+	 * @param string $value
+	 * @param string $expireTime Defaults to one month
+	 */
+	public static function setCookie($name, $value, $expireTime=2592000){
+		SetCookie($name,$value,$expireTime,GO::config()->host,"",!empty($_SERVER['HTTPS']),true);
+	}
 
 	
 }

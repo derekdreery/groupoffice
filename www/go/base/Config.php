@@ -1115,8 +1115,11 @@ class GO_Base_Config {
 		//full_url may be configured permanent in config.php. If not then 
 		//autodetect it and put it in the session. It can be used by wordpress for
 		//example.
-		if(isset($_SERVER["HTTP_HOST"])) {
-			if(!isset($_SESSION['GO_SESSION']['full_url']) && isset($_SERVER["HTTP_HOST"])) {
+		
+		//this used to use HTTP_HOST but that is a client controlled value which can be manipulated and is unsafe.
+		
+		if(isset($_SERVER["SERVER_NAME"])) {
+			if(!isset($_SESSION['GO_SESSION']['full_url']) && isset($_SERVER["SERVER_NAME"])) {
 				$https = (isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == "1")) || !empty($_SERVER["HTTP_X_SSL_REQUEST"]);
 				$_SESSION['GO_SESSION']['full_url'] = 'http';
 				if ($https) {
@@ -1129,7 +1132,7 @@ class GO_Base_Config {
 					$url .= $_SERVER["HTTP_HOST"].$this->host;
 				}*/
 
-				$_SESSION['GO_SESSION']['full_url'] .= '://'.$_SERVER["HTTP_HOST"].$this->host;
+				$_SESSION['GO_SESSION']['full_url'] .= '://'.$_SERVER["SERVER_NAME"].$this->host;
 			}
 			$this->full_url=$_SESSION['GO_SESSION']['full_url'];
 		}else
