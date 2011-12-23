@@ -128,7 +128,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		header('Cache-Control: cache');
 		header('Pragma: cache');
 
-		if (GO_Base_Util_Common::isInternetExplorer()) {
+		if (GO_Base_Util_Http::isInternetExplorer()) {
 			header('Content-Type: application/download');
 			header('Content-Disposition: inline; filename="'.$file->name().'"');
 		}else {
@@ -438,7 +438,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$contact = GO_Addressbook_Model_Contact::model()->findByPk($params['id']);
 		
 		$filename = $contact->name.'.vcf';
-		GO_Base_Util_Common::outputDownloadHeaders(new GO_Base_FS_File($filename));		
+		GO_Base_Util_Http::outputDownloadHeaders(new GO_Base_FS_File($filename));		
 		
 		echo $contact->toVObject()->serialize();
 	}

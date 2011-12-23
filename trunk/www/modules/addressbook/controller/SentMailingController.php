@@ -273,7 +273,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			throw new GO_Base_Exception_AccessDenied();				
 		
 		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'log/mailings/'.$mailing->id.'.log');		
-		GO_Base_Util_Common::outputDownloadHeaders($file);
+		GO_Base_Util_Http::outputDownloadHeaders($file);
 		$file->output();
 	}
 
