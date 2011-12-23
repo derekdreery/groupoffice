@@ -12,7 +12,13 @@ Ioncube loaders. Download them from:
 http://www.ioncube.com/loaders.php
 
 
-UPGRADE FROM VERSION 3.0 AND HIGHER:
+UPGRADE FROM VERSION 3.x AND HIGHER:
+To upgrade to 4.0 you must upgrade your previous version to at least 3.7.41 first
+
+Then you can run the install script in /install
+
+Also read:
+
 http://www.group-office.com/wiki/Upgrading
  
 
