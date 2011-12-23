@@ -72,6 +72,8 @@ class GO{
 			//todo needed for foundRows
 			self::$db->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY,true); 
 			
+			self::$db->query("SET NAMES utf8");
+			
 			if(GO::config()->debug){
 				//GO::debug("Setting MySQL sql_mode to TRADITIONAL");
 				self::$db->query("SET sql_mode='TRADITIONAL'");
