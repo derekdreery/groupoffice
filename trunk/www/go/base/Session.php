@@ -42,7 +42,7 @@ class GO_Base_Session extends GO_Base_Observable{
 		$this->values = &$_SESSION['GO_SESSION'];
 		
 		if(!isset($this->values['security_token']))
-			$this->values['security_token']=GO_Base_Util_String::randomPassword(10);
+			$this->values['security_token']=GO_Base_Util_String::randomPassword(20);
 		
 		//$this->setDefaults();
 		
