@@ -36,6 +36,9 @@ class GO_Base_Mail_EmailRecipients{
 	 */
 	public function addRecipient($email, $personal=''){
 		//echo $email.' '.$personal.'<br />';
+		if(empty($email))
+			return false;
+		
 		$this->_addresses[trim($email)]=trim($personal);
 	}
 
@@ -146,6 +149,8 @@ class GO_Base_Mail_EmailRecipients{
 	{
 		//initiate addresses array
 		//$this->_addresses = array();
+
+		$recipientListString = trim($recipientListString,',; ');
 		
 		
 		
