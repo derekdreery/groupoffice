@@ -196,8 +196,9 @@ class GO_Base_Session extends GO_Base_Observable{
 		if(!defined("CONFIG_FILE"))
 			define("CONFIG_FILE", GO::config()->get_config_file());
 		
-		require(GO::config()->root_path.'Group-Office.php');
-		require(GO::config()->root_path.'classes/base/users.class.inc.php');
+		require_once(GO::config()->root_path.'Group-Office.php');
+		
+		require_once(GO::config()->root_path.'classes/base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 		$GO_USERS->update_session(GO::user()->getAttributes());
 	}

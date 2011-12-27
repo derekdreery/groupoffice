@@ -33,7 +33,7 @@ global $GO_CONFIG, $GO_INCLUDES, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $GO_EV
 
 $root = dirname(__FILE__).'/';
 require_once($root.'functions.inc.php');
-require($root.'classes/base/config.class.inc.php');
+require_once($root.'classes/base/config.class.inc.php');
 
 //preload classes before session so they can be stored in the session
 if ( isset( $GO_INCLUDES ) ) {
