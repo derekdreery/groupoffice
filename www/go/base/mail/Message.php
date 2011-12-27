@@ -347,6 +347,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 				/* inline attachments must of course exist as a file, and also be used in
 				 * the message body
 				 */
+				 if(count($inlineAttachments)){
 				foreach ($inlineAttachments as $ia) {
 
 					//$tmpFile = new GO_Base_Fs_File(GO::config()->tmpdir.$ia['tmp_file']);
@@ -368,6 +369,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 							$params['htmlbody'] = str_replace($matches[1], $contentId, $params['htmlbody']);
 						}
 					}
+				}
 				}
 			}
 			$this->setHtmlAlternateBody($params['htmlbody']);
