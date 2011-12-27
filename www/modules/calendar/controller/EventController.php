@@ -571,7 +571,14 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				//Update participant status.
 				$participant = GO_Calendar_Model_Participant::model()
 								->findSingleByAttributes(array('event_id'=>$event->id, 'user_id'=>$event->calendar->user_id));
-
+				
+				if(!$participant)
+				{
+					$participant = new GO_Calendar_Model_Participant();
+					$participant->event_id=$event->id;
+					$participant->user_id=$event->calendar->user_id;
+					$participant->email=$event->calendar->user->email;
+				}
 				$participant->status=$params['status'];
 				$participant->save();
 
