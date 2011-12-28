@@ -81,6 +81,10 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 //				$model->setAttribute('password', $_POST['password2']);
 //			}
 //		}
+		
+		if(empty($params['password'])){
+			unset($params['password']);
+		}
 
 		return parent::beforeSubmit($response, $model, $params);
 	}

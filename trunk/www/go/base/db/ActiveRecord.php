@@ -1330,7 +1330,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if($this->_debugSql)
 				GO::debug($sql);
 		
-		try{
+		//try{
 			$result = $this->getDbConnection()->query($sql);
 			$result->model=$this;
 			$result->findParams=$findParams;
@@ -1348,12 +1348,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				GO::modelCache()->add($this->className(), $model);
 
 			return $model;
-		}
-		catch(Exception $e){
-			$msg = $e->getMessage()."\n\nFull SQL Query: ".$sql;			
-		
-			throw new Exception($msg);
-		}
+//		}
+//		Can't do this because an access denied exception must remain an accessdenied exception.
+//		catch(Exception $e){
+//			$msg = $e->getMessage()."\n\nFull SQL Query: ".$sql;			
+//		
+//			throw new Exception($msg);
+//		}
 		
 		/**
 		 * Useful event for modules. For example custom fields can be loaded or a files folder.
