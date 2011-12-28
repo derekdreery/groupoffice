@@ -524,7 +524,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			}
 		}
 
-		if (isset(GO::modules()->comments)){
+		if (GO::modules()->comments){
 
 			$stmt = GO_Comments_Model_Comment::model()->find(GO_Base_Db_FindParams::newInstance()
 							->limit(5)
