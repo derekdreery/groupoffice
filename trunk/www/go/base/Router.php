@@ -1,18 +1,26 @@
 <?php
-/*
- * Copyright Intermesh BV.
- *
+/**
+ * Group-Office
+ * 
+ * Copyright Intermesh BV. 
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
  *
  * If you have questions write an e-mail to info@intermesh.nl
- *
+ * 
+ * @license AGPL/Proprietary http://www.group-office.com/LICENSE.TXT
+ * @link http://www.group-office.com
+ * @copyright Copyright Intermesh BV
+ * @version $Id: Number.php 7962 2011-08-24 14:48:45Z mschering $
+ * @author Merijn Schering <mschering@intermesh.nl>
+ * @package GO.base
  */
 
 
 /**
- * The Router class which looks up the controller by the request URL.
+ * Router
  * 
+ * The Router class which looks up the controller by the request URL. 
  * URL Should be like index.php?r=module/controller/method&param=value
  * 
  * @author Merijn Schering <mschering@intermesh.nl>
