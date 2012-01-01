@@ -1,4 +1,34 @@
 <?php
+/**
+ * Group-Office
+ * 
+ * Copyright Intermesh BV. 
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ * 
+ * @license AGPL/Proprietary http://www.group-office.com/LICENSE.TXT
+ * @link http://www.group-office.com
+ * @copyright Copyright Intermesh BV
+ * @version $Id: Number.php 7962 2011-08-24 14:48:45Z mschering $
+ * @author Merijn Schering <mschering@intermesh.nl>
+ * @package GO.base
+ */
+
+/**
+ * Base model class
+ * 
+ * All data models extend this class.
+ * 
+ * @license AGPL/Proprietary http://www.group-office.com/LICENSE.TXT
+ * @link http://www.group-office.com
+ * @copyright Copyright Intermesh BV
+ * @version $Id: Number.php 7962 2011-08-24 14:48:45Z mschering $
+ * @author Merijn Schering <mschering@intermesh.nl>
+ * @package GO.base
+ * @abstract
+ */
 abstract class GO_Base_Model extends GO_Base_Observable{
 	
 	

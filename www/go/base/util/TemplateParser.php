@@ -10,6 +10,7 @@
  * @copyright Copyright Intermesh
  * @version $Id: go_template_parser.class.inc.php 4966 2010-06-03 13:31:46Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
+ * @package GO.utils
  */
 
 /**
@@ -19,8 +20,7 @@
  * @version $Id: go_template_parser.class.inc.php 4966 2010-06-03 13:31:46Z mschering $
  * @copyright Copyright Intermesh
  * @license AGPL Affero General Public License
- * @package go.utils
- * @uses db
+ * @package GO.utils
  * @since Group-Office 3.0
  */
 class GO_Base_Util_TemplateParser

@@ -1,11 +1,16 @@
 <?php
-/*
+/**
  * Copyright Intermesh
  *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
  *
  * If you have questions write an e-mail to info@intermesh.nl
+ * 
+ * @author Merijn Schering <mschering@intermesh.nl>
+ * @version $Id: config.class.inc.php 7687 2011-06-23 12:00:34Z mschering $
+ * @copyright Copyright Intermesh BV.
+ * @package GO.base.util 
  */
 
 /**
