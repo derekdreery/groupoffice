@@ -15,29 +15,20 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 	protected $model = 'GO_Addressbook_Model_Addressbook';
 	
 	public function actionSearchSender($params) {
-		$addressbooks = GO_Addressbook_Model_Addressbook::model()->find(
-			GO_Base_Db_FindCriteria::newInstance()
-				->addCondition('email',$params['email'])
-		);
 		
-		$ab_ids = array();
-		foreach ($addressbooks as $ab)
-			$ab_ids[] = $ab->id;
-
 		$criteria = GO_Base_Db_FindCriteria::newInstance()
-			->addCondition('email',$params['email']);
-		if (!empty($ab_ids))
-			$criteria->addInCondition('addressbook_id', $ab_ids);
-		
-		$contacts = GO_Addressbook_Model_Contact::model()->find($criteria);		
-		$response['total'] = count($contacts);
+			->addCondition('email',$params['email'])
+			->addCondition('email2', $params['email'],'=','t',false)
+			->addCondition('email3', $params['email'],'=','t',false);
+
+		$contacts = GO_Addressbook_Model_Contact::model()->find(GO_Base_Db_FindParams::newInstance()->criteria($criteria));		
+		$response['success']=true;
 		$response['results']=array();
 
 		foreach($contacts as $contact)
 		{
-			$addressbook = GO_Addressbook_Model_Addressbook::model()->findByPk($contact->addressbook_id);
 			$res_contact['id']=$contact->id;
-			$res_contact['name']=$contact->name.' ('.$addressbook->name.')';
+			$res_contact['name']=$contact->name.' ('.$contact->addressbook->name.')';
 
 			$response['results'][]=$res_contact;
 		}
