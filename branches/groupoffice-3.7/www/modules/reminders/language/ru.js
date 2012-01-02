@@ -1,5 +1,5 @@
 Ext.namespace('GO.reminders');
-/GO.reminders.lang={};
+GO.reminders.lang={};
 GO.reminders.lang.reminders='Всплывающие напоминания';
 
 /* table: go_reminders */
