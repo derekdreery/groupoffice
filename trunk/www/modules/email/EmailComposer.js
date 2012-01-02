@@ -786,7 +786,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				this.afterShowAndLoad(config);
 				
 			}
-			if (config.link_config) {
+			if (config.link_config && this.selectLinkField) {
 				this.link_config = config.link_config;
 				if (config.link_config.modelNameAndId) {
 					this.selectLinkField.setValue(config.link_config.modelNameAndId);

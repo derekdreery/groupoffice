@@ -18,7 +18,7 @@ GO.files.FileBrowserButton = Ext.extend(Ext.Button, {
 
 					GO.request({
 						url:'files/folder/checkModelFolder',
-						maskEl:this.ownerCt.getEl(),
+						maskEl:this.ownerCt.ownerCt.getEl(),
 						params:{								
 							mustExist:true,
 							model:this.model_name,
@@ -26,7 +26,9 @@ GO.files.FileBrowserButton = Ext.extend(Ext.Button, {
 						},
 						success:function(response, options, result){														
 							GO.files.openFolder(result.files_folder_id);
-							GO.files.fileBrowserWin.on('hide', this.reload, this, {single:true});
+							
+							//reload display panel on close
+							GO.files.fileBrowserWin.on('hide', this.ownerCt.ownerCt.reload, this.ownerCt.ownerCt, {single:true});
 						},
 						scope:this
 
