@@ -1177,7 +1177,17 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(isset($findParams['permissionLevel']) && $findParams['permissionLevel']>GO_Base_Model_Acl::READ_PERMISSION){
 			$sql .= " AND go_acl.level>=".intval($findParams['permissionLevel']);
 		}
-		$sql .= " AND (go_acl.user_id=".intval($findParams['userId'])." OR go_acl.group_id IN (".implode(',',GO_Base_Model_User::getGroupIds($findParams['userId']))."))) ";		
+		
+		$groupIds = GO_Base_Model_User::getGroupIds($findParams['userId']);
+		
+		if(!empty($findParams['ignoreAdminGroup'])){
+			$key = array_search(GO::config()->group_root, $groupIds);
+			if($key!==false)
+				unset($groupIds[$key]);
+		}
+		
+		
+		$sql .= " AND (go_acl.user_id=".intval($findParams['userId'])." OR go_acl.group_id IN (".implode(',',$groupIds)."))) ";		
 		
 		return $sql;
 	}
