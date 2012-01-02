@@ -83,6 +83,20 @@ class GO_Base_Db_FindParams{
 	}
 	
 	/**
+	 * Set to true if you want to ignore permissions by admin group. This is used
+	 * for e-mail accounts for example. The admin has access to all accounts but
+	 * for display will only show them when an admin has access by user to prevent
+	 * too much info on screen.
+	 * 
+	 * @param boolean $value
+	 * @return GO_Base_Db_FindParams 
+	 */
+	public function ignoreAdminGroup($value=true){
+		$this->_params['ignoreAdminGroup']=$value;
+		return $this;
+	}
+	
+	/**
 	 * Select other fields in combination with 'join'. 
 	 * Remember the model table is aliased with 't'.  
 	 * if you supply this and the fields do not contain t.* then 
