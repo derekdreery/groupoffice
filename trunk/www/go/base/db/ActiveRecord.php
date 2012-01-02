@@ -847,6 +847,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 		if(!is_array($params))
 		{
+			if(!($params instanceof GO_Base_Db_FindParams))
+				throw new Exception('$params parameter for find() must be instance of GO_Base_Db_FindParams');
 			//it must be a GO_Base_Db_FindParams object
 			$params = $params->getParams();
 		}
