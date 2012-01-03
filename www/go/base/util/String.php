@@ -138,6 +138,18 @@ class GO_Base_Util_String {
 		if(!empty($c))
 		{
 			$str=$c;
+		}else{
+			if(function_exists('mb_detect_encoding'))
+			{
+				$from_charset = mb_detect_encoding($str, "auto");
+			}else
+			{
+				$from_charset = "iso-8859-1";
+			}
+			if($from_charset!=$source_charset)
+				return self::clean_utf8($str, $from_charset);
+			else
+				return $str;
 		}
 		//Check if preg validates it as UTF8
 		if(preg_match('/^.{1}/us', $str)){
