@@ -237,7 +237,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 */
 	public function run($action='', $params){
 
-		//try {
+		try {
 			if(empty($action))
 				$action=strtolower($this->defaultAction);
 			else
@@ -285,28 +285,30 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			//restore old value for acl permissions if this method was allowed for guests.
 //			if(isset($oldIgnore))
 //				GO::$ignoreAclPermissions=$oldIgnore;
+			
+			//GO::exportBaseClasses();
 
 			return $response;
 			
-//		} catch (Exception $e) {
-//			
-//			GO::debug("EXCEPTION: ".$e->getMessage());
-//			
-//					
-//			$response['success'] = false;
-//			
-//			$response['feedback'] = !empty($response['feedback']) ? $response['feedback'] : '';
-//			$response['feedback'] .= "\r\n\r\n".$e->getMessage();
-//
-//			if(GO::config()->debug){
-//				//$response['trace']=$e->getTraceAsString();
-//				$response['exception']=(string) $e;
-//			}
-//
-//			$this->render('Exception', $response);
-//
-//			//exit();
-//		}
+		} catch (Exception $e) {
+			
+			GO::debug("EXCEPTION: ".$e->getMessage());
+			
+					
+			$response['success'] = false;
+			
+			$response['feedback'] = !empty($response['feedback']) ? $response['feedback'] : '';
+			$response['feedback'] .= "\r\n\r\n".$e->getMessage();
+
+			if(GO::config()->debug){
+				//$response['trace']=$e->getTraceAsString();
+				$response['exception']=(string) $e;
+			}
+
+			$this->render('Exception', $response);
+
+			//exit();
+		}
 	}
 	
 	/**

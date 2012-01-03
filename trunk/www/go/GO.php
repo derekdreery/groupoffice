@@ -47,9 +47,39 @@ class GO{
 	 */
 	public static $disableModelCache=false;
 
-	private static $_classes = array(
-		
+	private static $_classes = array (
+		'GO_Base_Observable' => 'go/base/Observable.php',
+		'GO_Base_Session' => 'go/base/Session.php',
+		'GO_Base_Config' => 'go/base/Config.php',
+		'GO_Base_Model' => 'go/base/Model.php',
+		'GO_Base_Db_ActiveRecord' => 'go/base/db/ActiveRecord.php',
+		'GO_Base_Model_User' => 'go/base/model/User.php',
+		'GO_Base_Cache_Interface' => 'go/base/cache/Interface.php',
+		'GO_Base_Cache_Disk' => 'go/base/cache/Disk.php',
+		'GO_Base_Db_ActiveStatement' => 'go/base/db/ActiveStatement.php',
+		'GO_Base_Util_String' => 'go/base/util/String.php',
+		'GO_Base_Model_ModelCache' => 'go/base/model/ModelCache.php',
+		'GO_Base_Router' => 'go/base/Router.php',
+		'GO_Base_Controller_AbstractController' => 'go/base/controller/AbstractController.php',
+		'GO_Base_Model_Module' => 'go/base/model/Module.php',
+		'GO_Base_Controller_AbstractModelController' => 'go/base/controller/AbstractModelController.php',
+		'GO_Base_Model_Acl' => 'go/base/model/Acl.php',
+		'GO_Base_Model_AclUsersGroups' => 'go/base/model/AclUsersGroups.php',
+		'GO_Base_Data_AbstractStore' => 'go/base/data/AbstractStore.php',
+		'GO_Base_Data_Store' => 'go/base/data/Store.php',
+		'GO_Base_Data_ColumnModel' => 'go/base/data/ColumnModel.php',
+		'GO_Base_Module' => 'go/base/Module.php',
+		'GO_Base_Model_AbstractUserDefaultModel' => 'go/base/model/AbstractUserDefaultModel.php',
+		'GO_Base_Db_FindParams' => 'go/base/db/FindParams.php',
+		'GO_Base_Db_FindCriteria' => 'go/base/db/FindCriteria.php',
+		'GO_Base_Util_Date' => 'go/base/util/Date.php',
+		'GO_Base_Data_Column' => 'go/base/data/Column.php',
+		'GO_Base_Language' => 'go/base/Language.php',
+		'GO_Base_Model_ModelCollection' => 'go/base/model/ModelCollection.php',
+		'GO_Base_ModuleCollection' => 'go/base/ModuleCollection.php',
+		'GO_Base_Model_Setting' => 'go/base/model/Setting.php',
 	);
+			
 	private static $_config;
 	private static $_session;
 	private static $_modules;
@@ -196,64 +226,78 @@ class GO{
 	}
 
 
+	public static function exportBaseClasses(){
+		var_export(self::$_classes);
+	}
+	
+	public static function getBaseClasses(){
+		return self::$_classes;
+	}
 	
 	/**
 	 * The automatic class loader for Group-Office.
 	 * 
 	 * @param string $className 
 	 */
-	public static function autoload($className) {
+	public static function autoload($className) {		
 		
-
-		$orgClassName = $className;
-
-		$forGO = substr($className,0,3)=='GO_';
-
-		if(substr($className,0,7)=='GO_Base'){
-			$arr = explode('_', $className);		
-			$file = array_pop($arr).'.php';		
+		if(isset(self::$_classes[$className])){
+			require_once(dirname(dirname(__FILE__)) . '/'.self::$_classes[$className]);
+		}else
+		{
 			
-			$path = strtolower(implode('/', $arr));
-			$baseClassFile = dirname(dirname(__FILE__)) . '/'.$path.'/'.$file;
-			require($baseClassFile);
-		}  else {
-			if(isset(self::$_classes[$className])){
-				require_once(dirname(dirname(__FILE__)) . '/'.self::$_classes[$className]);
-			}elseif ($forGO)
-			{
-				$arr = explode('_', $className);
-				
-				//remove GO_
-				array_shift($arr);
+			if(substr($className,0,7)=='GO_Base'){
+				$arr = explode('_', $className);		
+				$file = array_pop($arr).'.php';		
 
-				$module = strtolower(array_shift($arr));			
+				$path = strtolower(implode('/', $arr));
+				$location =$path.'/'.$file;
+				$baseClassFile = dirname(dirname(__FILE__)) . '/'.$location;
+				require($baseClassFile);
 
-				if($module!='core'){					
-					//$file = self::modules()->$module->path; //doesn't play nice with objects in the session and autoloading
-					$file = self::config()->root_path.'modules/'.$module.'/';
-				}else
+				//for exportBaseClasses so we can optimize
+				self::$_classes[$className]=$location;
+
+			}  else {
+				$orgClassName = $className;
+				$forGO = substr($className,0,3)=='GO_';
+
+				if ($forGO)
 				{
-					$file = self::config()->root_path;
-				}
-				for($i=0,$c=count($arr);$i<$c;$i++){
-					if($i==$c-1){
-						$file .= ucfirst($arr[$i]);
-						if(isset($arr[$c-2]) && $arr[$c-2]=='Controller')
-							$file .= 'Controller';
-						$file .='.php';
+					$arr = explode('_', $className);
+
+					//remove GO_
+					array_shift($arr);
+
+					$module = strtolower(array_shift($arr));			
+
+					if($module!='core'){					
+						//$file = self::modules()->$module->path; //doesn't play nice with objects in the session and autoloading
+						$file = self::config()->root_path.'modules/'.$module.'/';
 					}else
 					{
-						$file .= strtolower($arr[$i]).'/';
+						$file = self::config()->root_path;
 					}
-					
+					for($i=0,$c=count($arr);$i<$c;$i++){
+						if($i==$c-1){
+							$file .= ucfirst($arr[$i]);
+							if(isset($arr[$c-2]) && $arr[$c-2]=='Controller')
+								$file .= 'Controller';
+							$file .='.php';
+						}else
+						{
+							$file .= strtolower($arr[$i]).'/';
+						}
+
+					}
+
+					if(!file_exists($file) || is_dir($file)){
+						//throw new Exception('Class '.$orgClassName.' not found! ('.$file.')');
+						return false;
+					}
+
+					require($file);
 				}
-				
-				if(!file_exists($file) || is_dir($file)){
-					//throw new Exception('Class '.$orgClassName.' not found! ('.$file.')');
-					return false;
-				}
-				
-				require($file);
 			}
 		}
 	}
@@ -271,6 +315,7 @@ class GO{
 		}
 		self::$initialized=true;
 
+		
 		spl_autoload_register(array('GO', 'autoload'));	
 		
 		GO::session();
