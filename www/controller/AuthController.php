@@ -61,19 +61,22 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 	}
 
 	public function actionLogin($params) {
-
+		
+		if(!empty($params['domain']))
+			$params['username'].=$params['domain'];	
+		
+		$response = array();
+		
+		if(!$this->fireEvent('beforelogin', array($params, &$response)))
+			return $response;		
+		
 		$user = GO::session()->login($params['username'], $params['password']);
 
 		$response['success'] = $user != false;
 
-		if (!$response['success']) {
-			GO::infolog("LOGIN FAILED for user: \"" . $params['username'] . "\" from IP: " . $_SERVER['REMOTE_ADDR']);
-
-			//sleep 3 seconds for slowing down brute force attacks
-			sleep(3);
-		} else {
-			GO::infolog("LOGIN SUCCESS for user: \"" . $params['username'] . "\" from IP: " . $_SERVER['REMOTE_ADDR']);
-
+		if (!$response['success']) {		
+			$response['feedback']=GO::t('badLogin');			
+		} else {			
 			if (!empty($params['remind'])) {
 
 				$encUsername = GO_Base_Util_Crypt::encrypt($params['username']);
@@ -87,6 +90,8 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 				GO_Base_Util_Http::setCookie('GO_UN', $encUsername);
 				GO_Base_Util_Http::setCookie('GO_PW', $encPassword);
 			}
+			
+			$response['user_id']=$user->id;
 		}
 
 		if (GO_Base_Util_Http::isAjaxRequest())

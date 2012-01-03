@@ -71,7 +71,6 @@ GO.dialog.LoginDialog = function(config){
 
 	this.formPanel = new Ext.FormPanel({
 		labelWidth: 120, // label settings here cascade unless overridden
-		url:'action.php',
 		defaultType: 'textfield',
 		//autoHeight:true,
 		waitMsgTarget:true,        
@@ -195,7 +194,11 @@ Ext.extend(GO.dialog.LoginDialog, GO.Window, {
 	hideDialog : true,
 
 	focus: function(){
-		this.formPanel.form.findField('username').focus(true);
+		var f= this.formPanel.form.findField('first_name');
+		if(!f){
+			f = this.formPanel.form.findField('username');
+		}
+		f.focus(true);
 	},
 	
 	addCallback : function(callback, scope)
@@ -208,10 +211,10 @@ Ext.extend(GO.dialog.LoginDialog, GO.Window, {
 	
 	doLogin : function(){							
 		this.formPanel.form.submit({
-			url:BaseHref+'action.php',
-			params: {
-				'task' : 'login'
-			},
+			url:GO.url('auth/login'),
+//			params: {
+//				'task' : 'login'
+//			},
 			waitMsg:GO.lang.waitMsgLoad,
 			success:function(form, action){
 
@@ -224,14 +227,9 @@ Ext.extend(GO.dialog.LoginDialog, GO.Window, {
 
 				Ext.apply(GO.settings, action.result.settings);
 				
-				if(action.result.name=='')
-				{
-					this.completeProfileDialog();
-					this.profileFormPanel.form.setValues({email:action.result.email});
-				}else
-				{					
-					this.handleCallbacks();
-				}
+							
+				this.handleCallbacks();
+				
 				
 				if(this.hideDialog)
 					this.hide();
@@ -239,11 +237,17 @@ Ext.extend(GO.dialog.LoginDialog, GO.Window, {
 			},
 
 			failure: function(form, action) {
+				
 				if(action.result)
 				{
 					Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback, function(){
 						this.formPanel.form.findField('username').focus(true);
 					},this);
+					
+					if(!GO.util.empty(action.result.needCompleteProfile))
+					{
+						this.addRequiredUserFields();
+					}
 				}
 			},
 			scope: this
@@ -266,101 +270,28 @@ Ext.extend(GO.dialog.LoginDialog, GO.Window, {
 		this.fireEvent('callbackshandled', this);
 	},
 	
-	completeProfileDialog : function(){
+	addRequiredUserFields : function(){
+		this.formPanel.add({
+			fieldLabel: GO.lang['strFirstName'], 
+			name: 'first_name', 
+			allowBlank: false});
 		
-		/*var formPanel = new Ext.form.FormPanel({
-			waitMsgTarget:true,
-			url: BaseHref+'action.php',
-			border: false,
-			autoHeight: true,
-			cls:'go-form-panel',
-			baseParams: {
-				task: 'complete_profile'
-			},
-			defaults:{
-				xtype:'textfield',
-				anchor:'100%'
-			},
-			items:[{
-				fieldLabel: GO.lang['strFirstName'], 
-				name: 'first_name', 
-				allowBlank: false
-			},
-			{
-				fieldLabel: GO.lang['strMiddleName'], 
-				name: 'middle_name'
-			},
-			{
-				fieldLabel: GO.lang['strLastName'], 
-				name: 'last_name', 
-				allowBlank: false
-			}]				
-		});
-		*/
-		var focusFirstField = function(){
-			this.profileFormPanel.form.findField('first_name').focus();
-		};
-
-		this.profileFormPanel = new Ext.form.FormPanel({
-			items: new GO.users.ProfilePanel({
-				header:false
-				}),
-			baseParams:{
-				task:'complete_profile'
-			},
-			url:BaseHref+'action.php',
-			waitMsgTarget:true,
-			border:false
-		});
-
-		this.completeProfileDialog = new GO.Window({
-			width: 900,
-			height:560,
-			title:GO.lang.completeProfile,
-			autoScroll:true,
-			resizable:true,
-			items: this.profileFormPanel,
-			closable:false,
-			layout:'fit',
-			focus:focusFirstField.createDelegate(this),
-			buttons:[{
-				text: GO.lang['cmdOk'],
-				handler: function(){
-					this.profileFormPanel.form.submit(
-					{
-						waitMsg:GO.lang['waitMsgSave'],
-						success:function(form, action){
-							this.fireEvent('save', this);
-							if(this.profileFormPanel.onSaveSettings)
-							{
-								var func = this.profileFormPanel.onSaveSettings.createDelegate(this.profileFormPanel, [action]);
-								func.call();
-							}
-
-							if(this.reload)
-							{
-								document.location=GO.settings.config.host;
-							}
-							this.hide();
-							this.handleCallbacks();
-						},		
-						failure: function(form, action) {
-							if(action.failureType == 'client')
-							{					
-								Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strErrorsInForm']);			
-							} else {
-								Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
-							}
-						},
-						scope: this
-					});
-				},
-				scope: this
-			}]		 
-		});
+		this.formPanel.add({
+			fieldLabel: GO.lang['strMiddleName'], 
+			name: 'middle_name', 
+			allowBlank: false});
 		
-		this.completeProfileDialog.show();		
+		this.formPanel.add({
+			fieldLabel: GO.lang['strLastName'], 
+			name: 'last_name', 
+			allowBlank: false});		
+		
+		this.doLayout();
+		
+		this.focus();
 	}
+	
+	
 	
 });
 

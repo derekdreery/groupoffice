@@ -56,10 +56,15 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	
 	protected function beforeSave() {		
 		if($this->isModified('password'))
-			$this->password = GO_Base_Util_Crypt::encrypt($this->password);		
+			$encrypted = GO_Base_Util_Crypt::encrypt($this->password);
+			if($encrypted){
+				$this->password_encrypted=2;
+				$this->password = $encrypted;		
+			}
 		
-		if($this->isModified('smtp_password'))
-			$this->smtp_password = GO_Base_Util_Crypt::encrypt($this->smtp_password);
+		//todo
+//		if($this->isModified('smtp_password'))
+//			$this->smtp_password = GO_Base_Util_Crypt::encrypt($this->smtp_password);
 		
 		return parent::beforeSave();
 	}
@@ -103,5 +108,17 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 						->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('email', $email,'=','a'));
 		
 		return $this->find($findParams);
+	}
+	
+	
+	public function addAlias($email, $name, $default=1){
+		$a = new GO_Email_Model_Alias();
+		$a->account_id=$this->id;
+		$a->email=$email;
+		$a->name=$name;
+		$a->default=$default;
+		$a->save();
+		
+		return $a;
 	}
 }

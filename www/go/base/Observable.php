@@ -66,7 +66,7 @@ class GO_Base_Observable{
 		$line = '$listeners["'.$eventName.'"][]=array("'.$listenerClass.'", "'.$listenerFunction.'");'."\n";
 		
 		$dir = GO::config()->file_storage_path.'cache/listeners/';
-		$file = $dir.$this->className().'.php';
+		$file = $dir.get_class($this).'.php';
 		
 		if(!file_exists($file))
 			file_put_contents($file, "<?php\n", FILE_APPEND);	
@@ -84,7 +84,7 @@ class GO_Base_Observable{
 	 * @param String $listenerClass Object class name where the static listener function is in.
 	 * @param type $listenerFunction Static listener function name.
 	 */
-	public static function removeListener($eventName,$listenerClass,$listenerFunction){
+	public function removeListener($eventName,$listenerClass,$listenerFunction){
 		return false;
 	}
 	
@@ -121,9 +121,15 @@ class GO_Base_Observable{
 				GO::debug('Firing listener: '.$listener[0].'::'.$listener[1]);
 
 				$method = !empty($listener[0]) ? array($listener[0], $listener[1]) : $listener[1];
-				call_user_func_array($method, $params);
+				$return = call_user_func_array($method, $params);
+				if($return===false){
+					GO::debug("Event '$eventName' cancelled by ".$listener[0].'::'.$listener[1]);
+					return false;
+				}
 			}
 		}
+		
+		return true;
 		
 		//recurse up.
 		//parent::fireEvent($eventName, $params);
