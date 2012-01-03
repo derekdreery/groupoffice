@@ -94,7 +94,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			echo '<p>Found '.$count.' duplicates</p>';
 		}
 		
-		echo '<br /><br /><a href="'.GO::url('maintenance/remoteDuplicates', array('delete'=>true)).'">Click here to delete the newest duplicates marked in red.</a>';
+		echo '<br /><br /><a href="'.GO::url('maintenance/removeDuplicates', array('delete'=>true)).'">Click here to delete the newest duplicates marked in red.</a>';
 
 	}
 	
