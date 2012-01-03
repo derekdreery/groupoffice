@@ -528,6 +528,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 			$stmt = GO_Comments_Model_Comment::model()->find(GO_Base_Db_FindParams::newInstance()
 							->limit(5)
+							->select('t.*')
 							->order('id','DESC')
 							->criteria(GO_Base_Db_FindCriteria::newInstance()
 							        ->addModel(GO_Comments_Model_Comment::model())

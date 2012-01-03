@@ -97,7 +97,9 @@ class GO_Base_Db_FindParams{
 	}
 	
 	/**
-	 * Select other fields in combination with 'join'. 
+	 * Set the selected fields for the select query.
+	 * Defaults to all fields except for TEXT and BLOB fields.
+	 * 
 	 * Remember the model table is aliased with 't'.  
 	 * if you supply this and the fields do not contain t.* then 
 	 * the system can't return full objects. Arrays will be fetched instead.
