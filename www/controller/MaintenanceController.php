@@ -17,7 +17,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		ini_set('max_execution_time', '600');
 		session_write_close();		
 	}
-	
+
 	
 	public function actionRemoveDuplicates($params){
 		$checkModels = array(
