@@ -277,10 +277,22 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		}
 	}
 
+	/**
+	 * Check if the user is member of the admin group
+	 * 
+	 * @return boolean 
+	 */
 	public function isAdmin() {
 		return in_array(GO::config()->group_root, GO_Base_Model_User::getGroupIds($this->id));
 	}
 
+	
+	/**
+	 * Get the user's permission level for a given module.
+	 * 
+	 * @param string $moduleId
+	 * @return int 
+	 */
 	public function getModulePermissionLevel($moduleId) {
 		if (GO::modules()->$moduleId)
 			return GO::modules()->$moduleId->permissionLevel;
@@ -375,6 +387,19 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		}else
 		{
 			return false;
+		}
+	}
+	
+	/**
+	 * Add the user to user groups.
+	 * 
+	 * @param string[] $groupNames 
+	 */
+	public function addToGroups(array $groupNames){
+		foreach($groupNames as $groupName){
+			$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', $groupName);
+			if($group)
+				$group->addUser($this->id);
 		}
 	}
 }

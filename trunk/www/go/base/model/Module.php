@@ -72,7 +72,8 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 	
 	protected function afterSave($wasNew) {
 		
-		$this->acl->addGroup(GO::config()->group_internal);
+		if(!$this->admin_menu)
+			$this->acl->addGroup(GO::config()->group_internal);
 		
 		if($wasNew){			
 			if($this->moduleManager)

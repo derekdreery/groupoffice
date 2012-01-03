@@ -179,7 +179,7 @@ class GO_Base_Util_Crypt {
 			$key = file_get_contents($key_file);
 		} else {
 
-			$key = GO_Base_Util_String::random_password('a-z,A-Z,1-9', 'i,o', 20);
+			$key = GO_Base_Util_String::randomPassword(20);
 			if (file_put_contents($key_file, $key)) {
 				chmod($key_file, 0400);
 			} else {

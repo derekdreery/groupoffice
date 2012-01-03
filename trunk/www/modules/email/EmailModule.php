@@ -25,4 +25,12 @@ class GO_Email_EmailModule extends GO_Base_Module{
 		return true;
 	}
 	
+	
+	public static function deleteUser($user) {
+		
+		GO_Email_Model_Account::model()->deleteByAttribute('user_id', $user->id);
+		
+		return parent::deleteUser($user);
+	}
+	
 }

@@ -198,6 +198,8 @@ class GO_Base_Module extends GO_Base_Observable {
 	/**
 	 * This class can be overriden by a module class to add listeners to objects
 	 * that extend the GO_Base_Observable class.
+	 * 
+	 * eg. GO_Base_Model_User::model()->addListener('save','SomeClass','someStaticFunction');
 	 * 	 
 	 */
 	public static function initListeners() {

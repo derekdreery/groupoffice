@@ -168,32 +168,49 @@ class GO_Base_Session extends GO_Base_Observable{
 	 */
 	public function login($username, $password, $countLogin=true) {
 		
-		$this->fireEvent('beforelogin', array($username, $password));
+		if(!$this->fireEvent('beforelogin', array($username, $password)))
+			return false;			
 		
 		$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $username);
 		
+		$success=true;
+		
 		if (!$user)
+			$success=false;
+		elseif(!$user->enabled)
+			$success=false;
+		elseif(!$user->checkPassword($password))
+			$success=false;
+		
+		$str = "LOGIN ";		
+		$str .= $success ? "SUCCESS" : "FAILED" ;		
+		$str .= " for user: \"" . $username . "\" from IP: ";
+		if(isset($_SERVER['REMOTE_ADDR']))
+			$str .= $_SERVER['REMOTE_ADDR'];
+		else
+			$str .= 'unknown';
+		GO::infolog($str);
+		
+		if(!$success){	
+			//sleep 1 second for slowing down brute force attacks
+			sleep(1);
 			return false;
+		}else
+		{			
+			$this->setCurrentUser($user->id);
+
+			if($countLogin){
+				$user->last_login=time();
+				$user->logins++;
+				$user->save();
+			}
+
+			$this->_setCompatibilitySessionVars(); // TODO: REMOVE IF SYSTEM IS FULLY REBUILT
+
+			$this->fireEvent('login', array($username, $password, $user));
 		
-		if(!$user->enabled)
-			return false;
-		
-		if(!$user->checkPassword($password))
-			return false;
-		
-		$this->setCurrentUser($user->id);
-		
-		if($countLogin){
-			$user->last_login=time();
-			$user->logins++;
-			$user->save();
-		}
-		
-		$this->_setCompatibilitySessionVars(); // TODO: REMOVE IF SYSTEM IS FULLY REBUILDED
-		
-		$this->fireEvent('login', array($username, $password, $user));
-		
-		return $user;
+			return $user;
+		}		
 	}
 	
 	/**
