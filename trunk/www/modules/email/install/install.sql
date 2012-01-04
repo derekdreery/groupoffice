@@ -19,37 +19,30 @@ CREATE TABLE IF NOT EXISTS `emp_folders` (
 
 DROP TABLE IF EXISTS `em_accounts`;
 CREATE TABLE IF NOT EXISTS `em_accounts` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL DEFAULT '0',
   `acl_id` int(11) NOT NULL DEFAULT '0',
   `type` varchar(4) DEFAULT NULL,
   `host` varchar(100) DEFAULT NULL,
   `port` int(11) NOT NULL DEFAULT '0',
-  `use_ssl` enum('0','1') NOT NULL DEFAULT '0',
-  `novalidate_cert` enum('0','1') NOT NULL DEFAULT '0',
+  `use_ssl` tinyint(1) NOT NULL DEFAULT '0',
+  `novalidate_cert` tinyint(1) NOT NULL DEFAULT '0',
   `username` varchar(50) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
-  `signature` text,
-  `mbroot` varchar(30) DEFAULT NULL,
-  `sent` varchar(100) DEFAULT NULL,
-  `drafts` varchar(100) DEFAULT NULL,
-  `trash` varchar(100) DEFAULT NULL,
-  `spam` varchar(100) DEFAULT NULL,
-  `spamtag` varchar(20) DEFAULT NULL,
-  `examine_headers` enum('0','1') NOT NULL DEFAULT '0',
-  `auto_check` enum('0','1') NOT NULL DEFAULT '0',
-  `forward_enabled` enum('0','1') NOT NULL,
-  `forward_to` varchar(255) DEFAULT NULL,
-  `forward_local_copy` enum('0','1') NOT NULL,
+  `mbroot` varchar(30) NOT NULL DEFAULT '',
+  `sent` varchar(100) DEFAULT 'Sent',
+  `drafts` varchar(100) DEFAULT 'Drafts',
+  `trash` varchar(100) NOT NULL DEFAULT 'Trash',
+  `spam` varchar(100) NOT NULL DEFAULT 'Spam',
   `smtp_host` varchar(100) DEFAULT NULL,
   `smtp_port` int(11) NOT NULL,
   `smtp_encryption` char(3) NOT NULL,
   `smtp_username` varchar(50) DEFAULT NULL,
   `smtp_password` varchar(50) DEFAULT NULL,
-  `password_encrypted` tinyint(4) NOT NULL,
+  `password_encrypted` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -86,15 +79,15 @@ CREATE TABLE IF NOT EXISTS `em_accounts_sort` (
 
 DROP TABLE IF EXISTS `em_aliases`;
 CREATE TABLE IF NOT EXISTS `em_aliases` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `signature` text NOT NULL,
+  `signature` text,
   `default` enum('0','1') NOT NULL,
   PRIMARY KEY (`id`),
   KEY `account_id` (`account_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 

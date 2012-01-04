@@ -21,17 +21,18 @@ class GO_Base_Ldap_Record{
 	 * 
 	 * @return array 
 	 */
-	public function getAttributes(){
+	public function getAttributes($keyToLowerCase=true){
 		if(!isset($_attributes)){
 			$attributes = ldap_get_attributes($this->_ldapConn->getLink(), $this->_entryId);
 			//var_dump($attributes);
 			for($i=0;$i<$attributes['count'];$i++){
 				//echo $attributes[$i]." : ".$attributes[$attributes[$i]][0]."\n";
-				$this->_attributes[$attributes[$i]]=$attributes[$attributes[$i]];
+				$key = $keyToLowerCase ? strtolower($attributes[$i]) : $attributes[$i];
+				$this->_attributes[$key]=$attributes[$attributes[$i]];
 			}
 		}
 		
-		return $attributes;
+		return $this->_attributes;
 	}
 	
 	/**

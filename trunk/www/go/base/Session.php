@@ -155,6 +155,10 @@ class GO_Base_Session extends GO_Base_Observable{
 		
 		if(session_id()!='')
 			session_destroy();
+		
+		if(!headers_sent() && !defined("GO_NO_SESSION")){
+			session_start();
+		}
 
 		$this->fireEvent('logout', array($old_session));
 	}

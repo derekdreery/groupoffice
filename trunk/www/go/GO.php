@@ -39,6 +39,23 @@ class GO{
 	 */
 	public static $ignoreAclPermissions=false;
 	
+	
+	/**
+	 * If you set this to true then all acl's will allow all actions. Useful
+	 * for maintenance scripts.
+	 * 
+	 * It returns the old value.
+	 * 
+	 * @param string $ignore
+	 * @return boolean Old value
+	 */
+	public static function setIgnoreAclPermissions($ignore=true){
+		$oldValue = GO::$ignoreAclPermissions;
+		GO::$ignoreAclPermissions=$ignore;
+		
+		return $oldValue;
+	}
+	
 	/**
 	 * This GO_Base_Model_ModelCache.php mechanism can consume a lot of memory 
 	 * when running large batch scripts. That's why it can be disabled.

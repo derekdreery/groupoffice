@@ -19,7 +19,7 @@ class GO_Base_Ldap_Result{
 	}
 	
 	/**
-	 * Fetch the next record
+	 * Fetch the next record or return false if there's none.
 	 * 
 	 * @return GO_Base_Ldap_Record 
 	 */
@@ -32,6 +32,9 @@ class GO_Base_Ldap_Result{
 			$this->_numEntry++;
 			$this->_entryId = ldap_next_entry( $this->_ldapConn->getLink(),$this->_entryId);
 		}
+		
+		if(!$this->_entryId)
+			return false;
 		
 		return new GO_Base_Ldap_Record($this->_ldapConn, $this->_entryId);
 	}
