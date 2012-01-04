@@ -85,7 +85,7 @@ class GO_Imapauth_ImapauthModule extends GO_Base_Module {
 			if ($user) {
 				GO::debug("IMAPAUTH: Group-Office user already exists.");
 				if (!$user->checkPassword($this->imapPassword)) {
-					GO::debug('IMAPAUTH: IMAP password has changed. Updating Group-Office database');
+					GO::debug('IMAPAUTH: IMAP password has been changed. Updating Group-Office database');
 
 					$user->password = $this->imapPassword;
 					$user->save();
@@ -165,7 +165,7 @@ class GO_Imapauth_ImapauthModule extends GO_Base_Module {
 						} catch (Exception $e) {
 							GO::debug('IMAPAUTH: Failed creating user ' .
 											$ia->goUsername . ' and e-mail ' . $ia->email .
-											' with imapauth. Exception: ' .
+											'Exception: ' .
 											$e->getMessage(), E_USER_WARNING);
 						}
 					}
