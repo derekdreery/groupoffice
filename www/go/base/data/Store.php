@@ -217,7 +217,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 		if(!empty($requestParams['query']))
 			$findParams->searchQuery ('%'.preg_replace ('/[\s]+/','%', $requestParams['query']).'%');
 		
-		if(!empty($requestParams['limit']))
+		if(isset($requestParams['limit']))
 			$findParams->limit ($requestParams['limit']);
 		else
 			$findParams->limit (GO::user()->max_rows_list);
