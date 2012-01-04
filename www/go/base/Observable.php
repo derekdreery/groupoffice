@@ -55,15 +55,15 @@ class GO_Base_Observable{
 	/**
 	 * Add a listener function to this object
 	 * 
-	 * @param String $eventName
-	 * @param String $listenerClass Object class name where the static listener function is in.
-	 * @param type $listenerFunction Static listener function name.
+	 * @param string $eventName
+	 * @param string $listenerClass Object class name where the static listener function is in.
+	 * @param string $staticListenerFunction Static listener function name.
 	 */
-	public function addListener($eventName,$listenerClass, $listenerFunction){
+	public function addListener($eventName,$listenerClass, $staticListenerFunction){
 		
-		GO::debug("addListener($eventName,$listenerClass, $listenerFunction)");
+		GO::debug("addListener($eventName,$listenerClass, $staticListenerFunction)");
 		
-		$line = '$listeners["'.$eventName.'"][]=array("'.$listenerClass.'", "'.$listenerFunction.'");'."\n";
+		$line = '$listeners["'.$eventName.'"][]=array("'.$listenerClass.'", "'.$staticListenerFunction.'");'."\n";
 		
 		$dir = GO::config()->file_storage_path.'cache/listeners/';
 		$file = $dir.get_class($this).'.php';
