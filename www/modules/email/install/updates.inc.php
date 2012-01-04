@@ -27,3 +27,9 @@ $updates["201201031630"][]="UPDATE em_accounts SET `default`=1 where `default`=2
 $updates["201201031630"][]="ALTER TABLE `em_aliases` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
 
 $updates["201201031630"][]="ALTER TABLE `em_aliases` CHANGE `signature` `signature` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL ";
+
+$updates["201201031630"][]="ALTER TABLE `em_accounts` CHANGE `mbroot` `mbroot` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+$updates["201201031630"][]="ALTER TABLE `em_accounts` CHANGE `sent` `sent` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'Sent'";
+$updates["201201031630"][]="ALTER TABLE `em_accounts` CHANGE `drafts` `drafts` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'Drafts'";
+$updates["201201031630"][]="ALTER TABLE `em_accounts` CHANGE `trash` `trash` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'Trash'";
+$updates["201201031630"][]="ALTER TABLE `em_accounts` CHANGE `spam` `spam` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'Spam'";

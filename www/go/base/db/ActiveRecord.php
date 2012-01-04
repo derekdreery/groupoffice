@@ -1500,11 +1500,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					->ignoreAcl()
 					->relation($name);
 					
-			$findParams->getCriteria()
+			$findParams->getCriteria()							
 							->addModel(GO::getModel($model))
 							->addCondition($remoteFieldThatHoldsMyPk, $this->pk);
-			
-			
 			
 //			$findParams = array_merge($extraFindParams,$r[$name]['findParams'],array(
 //					"by"=>array(array($remoteFieldThatHoldsMyPk,$this->pk,'=')),

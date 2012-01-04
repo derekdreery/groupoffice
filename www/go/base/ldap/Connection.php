@@ -87,6 +87,11 @@ class GO_Base_Ldap_Connection{
 		return new GO_Base_Ldap_Result($this, $searchId);
 	}
 	
+	/**
+	 * Get the connection resource identifier.
+	 * 
+	 * @return resource 
+	 */
 	public function getLink(){
 		return $this->_link;
 	}
