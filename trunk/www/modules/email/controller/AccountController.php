@@ -1,6 +1,60 @@
 <?php
 
-class GO_Email_Controller_Account extends GO_Base_Controller_AbstractController {
+class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelController {
+	
+	protected $model = "GO_Email_Model_Account";
+	
+	
+	protected function afterLoad(&$response, &$model, &$params) {
+		
+		$response['data']['password']=$model->decryptPassword();
+		
+		$alias = $model->getDefaultAlias();
+		
+		$response['data']['mbroot']=trim($response['data']['mbroot'],'./');
+		
+		$response['data']['email']=$alias->email;
+		$response['data']['name']=$alias->name;
+		$response['data']['signature']=$alias->signature;
+		
+		return parent::afterLoad($response, $model, $params);
+	}
+	
+	
+
+	
+	
+	protected function beforeSubmit(&$response, &$model, &$params) {
+		
+		
+		
+		return parent::beforeSubmit($response, $model, $params);
+	}
+	
+	
+	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
+		
+		if(empty($params['id'])){
+			$model->addAlias($params['name'], $params['email']);
+		}else
+		{
+			$alias=$model->getDefaultAlias();
+			$alias->name=$params['name'];
+			$alias->email=$params['email'];
+			$alias->signature=$params['signature'];
+			$alias->save();
+		}
+		
+		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
+	}
+	
+	
+	
+	
+	protected function remoteComboFields() {
+		return array('user_id'=>'$model->user->name');
+	}
+	
 
 	public function actionCheckUnseen($params) {
 		

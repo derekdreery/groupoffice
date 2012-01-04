@@ -15,124 +15,7 @@ GO.email.AccountDialog = function(config) {
 	Ext.apply(this, config);
 
 	var sslCb;
-
 	
-	// the column model has information about grid columns
-	// dataIndex maps the column to the specific data field in
-	// the data store (created below)
-	var cm = new Ext.grid.ColumnModel([{
-		header : GO.email.lang.field,
-		dataIndex : 'field'
-	}, {
-		header : GO.email.lang.contains,
-		dataIndex : 'keyword'
-	}, {
-		header : GO.email.lang.moveToFolder,
-		dataIndex : 'folder'
-	}, {
-		header : GO.email.lang.markAsRead,
-		dataIndex : 'mark_as_read',
-		renderer : function (value) {
-			return value == "1" ? GO.lang.cmdYes : GO.lang.cmdNo;
-		}
-	}]);
-
-
-	// create the Data Store
-	this.filtersDS = new GO.data.JsonStore({
-
-		url : GO.settings.modules.email.url + 'json.php',
-		baseParams : {
-			type : 'filters',
-			account_id : this.account_id
-		},
-		root : 'results',
-		id : 'id',
-		fields : ['id', 'field', 'keyword', 'folder', 'mark_as_read'],
-		remoteSort : false
-	});
-
-	var tbar = [{
-		iconCls : 'btn-add',
-		text : GO.lang.cmdAdd,
-		cls : 'x-btn-text-icon',
-		handler : function() {
-			filter.showDialog(0, this.account_id,
-				this.filtersDS);
-		},
-		scope : this
-	}, {
-		iconCls : 'btn-delete',
-		text : GO.lang.cmdDelete,
-		cls : 'x-btn-text-icon',
-		handler : function() {
-			this.filtersGrid.deleteSelected();
-		},
-		scope : this
-	}];
-	
-	this.filtersGrid = new GO.grid.GridPanel({
-		layout : 'fit',
-		region:'center',
-		border : false,
-		loadMask : true,
-		enableDragDrop:true,
-		ddGroup:'EmailFiltersDD',
-		ds : this.filtersDS,
-		cm : cm,
-		view : new Ext.grid.GridView({
-			autoFill : true,
-			forceFit : true,
-			emptyText : GO.lang.strNoItems
-		}),
-		sm : new Ext.grid.RowSelectionModel()
-        
-	});
-
-	this.filtersGrid.on('render', function(){
-		//enable row sorting
-		var DDtarget = new Ext.dd.DropTarget(this.filtersGrid.getView().mainBody,
-		{
-			ddGroup : 'EmailFiltersDD',
-			copy:false,
-			notifyDrop : this.onNotifyDrop.createDelegate(this)
-		});
-	}, this);
-
-	this.filtersGrid.on('rowdblclick', function() {
-		var selectionModel = this.filtersGrid.getSelectionModel();
-		var record = selectionModel.getSelected();
-		filter.showDialog(record.data.id, this.account_id,
-			this.filtersDS, GO.email.subscribedFoldersStore);
-	}, this);
-
-
-	this.filtersTab = new Ext.Panel({
-		title : GO.email.lang.filters,
-		layout:'border',
-		border:false,
-		tbar:tbar,
-		items:[{
-			xtype:'panel',
-			region:'north',
-			height:25,
-			border:true,
-			html:GO.email.lang.orderFilters,
-			bodyStyle:'padding:5px'
-		}, this.filtersGrid]
-	})
-
-	this.filtersTab.on('show', function() {
-		// trigger the data store load
-
-		if (this.filtersDS.baseParams['account_id'] != this.account_id) {
-			this.filtersDS.baseParams = {
-				task : 'filters',
-				account_id : this.account_id
-			};
-			this.filtersDS.load();
-		}
-	}, this);
 
 	var incomingTab = {
 		title : GO.email.lang.incomingMail,
@@ -376,6 +259,7 @@ GO.email.AccountDialog = function(config) {
 			store : GO.email.subscribedFoldersStore,
 			valueField : 'name',
 			displayField : 'name',
+			value:'Sent',
 			typeAhead : true,
 			mode : 'local',
 			triggerAction : 'all',
@@ -386,6 +270,7 @@ GO.email.AccountDialog = function(config) {
 		}), new GO.form.ComboBoxReset({
 			fieldLabel : GO.email.lang.trashFolder,
 			hiddenName : 'trash',
+			value:'Trash',
 			store : GO.email.subscribedFoldersStore,
 			valueField : 'name',
 			displayField : 'name',
@@ -399,6 +284,7 @@ GO.email.AccountDialog = function(config) {
 		}), new GO.form.ComboBoxReset({
 			fieldLabel : GO.email.lang.draftsFolder,
 			hiddenName : 'drafts',
+			value:'Drafts',
 			store : GO.email.subscribedFoldersStore,
 			valueField : 'name',
 			displayField : 'name',
@@ -413,38 +299,7 @@ GO.email.AccountDialog = function(config) {
 
 	});
 
-	this.vacationPanel = new Ext.Panel({
-		disabled : true,
-		title : GO.email.lang.vacation,
-		cls : 'go-form-panel',
-		layout : 'form',
-		autoScroll : true,
-		items : [{
-			xtype : 'checkbox',
-			name : 'vacation_active',
-			anchor : '-20',
-			boxLabel : GO.email.lang.vacationActive,
-			hideLabel : true
-
-		}, {
-			xtype : 'textfield',
-			name : 'vacation_subject',
-			anchor : '-20',
-			fieldLabel : GO.email.lang.vacationSubject
-		}, {
-			xtype : 'textarea',
-			name : 'vacation_body',
-			anchor : '-20',
-			fieldLabel : GO.email.lang.vacationBody,
-			height : 160
-		},{
-			xtype: 'textfield',
-			name:'forward_to',
-			anchor:'-20',
-			fieldLabel:GO.email.lang.forwardTo
-		}]
-
-	});
+	
 
 	this.permissionsTab = new GO.grid.PermissionsPanel({hideLevel:true});
 
@@ -452,7 +307,7 @@ GO.email.AccountDialog = function(config) {
 
 	var items = [propertiesTab,
 
-	this.foldersTab, this.filtersTab, this.vacationPanel, this.permissionsTab];
+	this.foldersTab, this.permissionsTab];
 
 	if (GO.settings.modules.email.write_permission) {
 		items.splice(1, 0, incomingTab, outgoingTab);
@@ -558,21 +413,19 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 	save : function(hide) {
 		this.propertiesPanel.form.submit({
 
-			url : GO.settings.modules.email.url + 'action.php',
+			url : GO.url("email/account/submit"),
 			params : {
-				'task' : 'save_account_properties',
-				type:'imap',
-				'account_id' : this.account_id
+				'id' : this.account_id
 			},
 			waitMsg : GO.lang['waitMsgSave'],
 			success : function(form, action) {
 
 				action.result.refreshNeeded = this.refreshNeeded
 				|| this.account_id == 0;
-				if (action.result.account_id) {
+				if (action.result.id) {
 					//this.account_id = action.result.account_id;
 					// this.foldersTab.setDisabled(false);
-					this.loadAccount(action.result.account_id);
+					this.loadAccount(action.result.id);
 				}
 
 				this.refreshNeeded = false;
@@ -616,8 +469,7 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 			this.propertiesPanel.form.reset();
 			this.setAccountId(0);
 			this.foldersTab.setDisabled(true);
-			this.filtersTab.setDisabled(true);
-			this.vacationPanel.setDisabled(true);
+
 			// default values
 
 			// this.selectUser.setValue(GO.settings['user_id']);
@@ -636,10 +488,9 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 
 	loadAccount : function(account_id) {
 		this.propertiesPanel.form.load({
-			url : GO.settings.modules.email.url + 'json.php',
+			url : GO.url("email/account/load"),
 			params : {
-				account_id : account_id,
-				task : 'account'
+				id : account_id				
 			},
 			waitMsg : GO.lang.waitMsgLoad,
 			success : function(form, action) {
@@ -647,18 +498,13 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 
 				this.setAccountId(account_id);
 				
-				this.selectUser.setRemoteValue(action.result.data.user_id,
-					action.result.data.user_name);
+				this.selectUser.setRemoteText(action.result.remoteComboTexts.user_id);
 						
 				this.aliasesButton.setDisabled(false);
 
-				this.foldersTab.setDisabled(action.result.data.type == 'pop3');
-				this.filtersTab.setDisabled(action.result.data.type == 'pop3');
-
+				this.foldersTab.setDisabled(false);
+	
 				this.permissionsTab.setAcl(action.result.data.acl_id);
-
-				var serverclient = (typeof(action.result.data.vacation_subject) != 'undefined');
-				this.vacationPanel.setDisabled((!serverclient && !GO.systemusers) || action.result.data.hidetab);
 			},
 			scope : this
 		});
@@ -666,196 +512,5 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 
 	setAccountId : function(account_id){
 		this.account_id = account_id;
-	},
-
-	onNotifyDrop : function(dd, e, data)
-	{
-		var rows=this.filtersGrid.selModel.getSelections();
-		var dragData = dd.getDragData(e);
-		var cindex=dragData.rowIndex;
-		if(cindex=='undefined')
-		{
-			cindex=this.filtersGrid.store.data.length-1;
-		}
-
-		for(i = 0; i < rows.length; i++)
-		{
-			var rowData=this.filtersGrid.store.getById(rows[i].id);
-
-			if(!this.copy){
-				this.filtersGrid.store.remove(this.filtersGrid.store.getById(rows[i].id));
-			}
-
-			this.filtersGrid.store.insert(cindex,rowData);
-		}
-
-		//save sort order
-		var filters = {};
-
-		for (var i = 0; i < this.filtersGrid.store.data.items.length;  i++)
-		{
-			filters[this.filtersGrid.store.data.items[i].get('id')] = i;
-		}
-
-		Ext.Ajax.request({
-			url: GO.settings.modules.email.url+'action.php',
-			params: {
-				task: 'save_filters_sort_order',
-				sort_order: Ext.encode(filters)
-			}
-		});
-
-	}
-	
+	}	
 });
-
-var filter = function() {
-	return {
-		showDialog : function(filter_id, account_id, ds) {
-
-			this.account_id=account_id;
-						
-			if (!this.win) {
-
-				this.formPanel = new Ext.form.FormPanel({
-					layout : 'form',
-					defaults : {
-						anchor : '100%'
-					},
-					defaultType : 'textfield',
-					labelWidth : 125,
-					autoHeight : true,
-					cls : 'go-form-panel',
-					waitMsgTarget : true,
-					items : [new Ext.form.ComboBox({
-						fieldLabel : GO.email.lang.field,
-						hiddenName : 'field',
-						store : new Ext.data.SimpleStore({
-							fields : ['value', 'text'],
-							data : [
-							[
-							'from',
-							GO.email.lang.sender],
-							[
-							'subject',
-							GO.email.lang.subject],
-							['to', GO.email.lang.sendTo],
-							[
-							'cc',
-							GO.email.lang.ccField]]
-						}),
-						value : 'from',
-						valueField : 'value',
-						displayField : 'text',
-						typeAhead : true,
-						mode : 'local',
-						triggerAction : 'all',
-						editable : false,
-						selectOnFocus : true,
-						forceSelection : true
-					}), {
-						fieldLabel : GO.email.lang.keyword,
-						name : 'keyword',
-						allowBlank : false
-					}, new Ext.form.ComboBox({
-						fieldLabel : GO.email.lang.moveToFolder,
-						hiddenName : 'folder',
-						store : GO.email.subscribedFoldersStore,
-						valueField : 'name',
-						displayField : 'name',
-						typeAhead : true,
-						mode : 'local',
-						triggerAction : 'all',
-						editable : false,
-						selectOnFocus : true,
-						forceSelection : true,
-						allowBlank : false
-					}), new Ext.form.Checkbox({
-						boxLabel : GO.email.lang.markAsRead,
-						name : 'mark_as_read',
-						checked : false,
-						hideLabel : true
-					})]
-				}
-
-				);
-
-				this.win = new Ext.Window({
-					title : GO.email.lang.filter,
-					layout : 'fit',
-					modal : false,
-					shadow : false,
-					autoHeight : true,
-					width : 400,
-					plain : false,
-					closeAction : 'hide',
-					items : this.formPanel,
-					buttons : [{
-						text : GO.lang.cmdOk,
-						handler : function() {
-
-							this.formPanel.form.submit({
-								url : GO.settings.modules.email.url
-								+ 'action.php',
-								params : {
-									'task' : 'save_filter',
-									'filter_id' : this.filter_id,
-									'account_id' : this.account_id
-								},
-								waitMsg : GO.lang.waitMsgSave,
-								success : function(form, action) {
-
-									if (action.result.filter_id) {
-										this.filter_id = action.result.filter_id;
-									}
-									ds.reload();
-
-									this.win.hide();
-
-								},
-								failure : function(form, action) {
-									var error = '';
-									if (action.failureType == 'client') {
-										error = GO.lang.strErrorsInForm;
-									} else {
-										error = action.result.feedback;
-									}
-
-									Ext.MessageBox.alert(GO.lang.strError,
-										error);
-								},
-								scope : this
-							});
-						},
-						scope : this
-					}, {
-						text : GO.lang.cmdClose,
-						handler : function() {
-							this.win.hide();
-						},
-						scope : this
-					}]
-				});
-			}
-
-			if (this.filter_id != filter_id) {
-				this.filter_id = filter_id;
-								
-
-				if (this.filter_id > 0) {
-					this.formPanel.load({
-						url : GO.settings.modules.email.url
-						+ 'json.php',
-						params : {
-							filter_id : filter_id,
-							task : 'filter'
-						}
-					});
-				} else {
-					this.formPanel.form.reset();
-				}
-			}
-			this.win.show();
-		}
-	}
-}();

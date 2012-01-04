@@ -187,7 +187,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				$this->state = 'authed';
 			}else
 			{
-				throw new Exception($response);
+				throw new GO_Base_Mail_ImapAuthenticationFailedException($response);
 				//$this->errors[]=$response;
 			}
 		}
@@ -1163,7 +1163,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				}
 			}
 		}
-		return false;
+		return '';
 	}
 
 
