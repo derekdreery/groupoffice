@@ -55,21 +55,76 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	
 	
 	protected function beforeSave() {		
-		if($this->isModified('password'))
+		if($this->isModified('password')){
 			$encrypted = GO_Base_Util_Crypt::encrypt($this->password);
 			if($encrypted){
 				$this->password_encrypted=2;
-				$this->password = $encrypted;		
+				$this->password = $encrypted;					
 			}
+		}
 		
 		//todo
 //		if($this->isModified('smtp_password'))
 //			$this->smtp_password = GO_Base_Util_Crypt::encrypt($this->smtp_password);
 		
+		
+		$imap = $this->openImapConnection();
+		$this->mbroot=$imap->check_mbroot($this->mbroot);
+		
+	
+		$this->_createDefaultFolder('sent');
+		$this->_createDefaultFolder('trash');
+		$this->_createDefaultFolder('spam');
+		$this->_createDefaultFolder('drafts');	
+		
 		return parent::beforeSave();
 	}
 	
+	private $_mailboxes;
+	
+	public function getMailboxes(){
+		if(!isset($_mailboxes)){
+			$this->_mailboxes= $this->openImapConnection()->get_folders($this->mbroot);
+		}
+		return $this->_mailboxes;
+	}
+	
+	private $_subscribed;
+	
+	public function getSubscribed(){
+		if(!isset($_subscribed)){
+			$this->_subscribed= $this->openImapConnection()->get_folders($this->mbroot, true);
+		}
+		return $this->_subscribed;
+	}
+	
+	
+	private function _createDefaultFolder($name){
+		
+		if(empty($this->$name))
+			return false;
+		
+		$mailboxes = $this->getMailboxes();
+		if(!in_array($this->$name, $mailboxes)){
+			if(! $this->openImapConnection()->create_folder($this->$name)){
+				if(isset($mailboxes[0])){
+					$this->mbroot= $this->openImapConnection()->check_mbroot($mailboxes[0]);
+
+					$this->$name = $this->mboot.$this->$name;
+
+					if(!in_array($this->$name, $mailboxes)){
+						 $this->openImapConnection()->create_folder($this->$name);
+					}
+				}
+			}
+		}
+	}
+	
 	private $_imap;
+	
+	public function decryptPassword(){
+		return $this->password_encrypted==2 ? GO_Base_Util_Crypt::decrypt($this->password) : $this->password;
+	}
 	
 	/**
 	 * Open a connection to the imap server.
@@ -79,16 +134,20 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	 */
 	public function openImapConnection($mailbox='INBOX'){
 		if(!isset($this->_imap)){
-			$this->_imap = new GO_Base_Mail_Imap();
-			$password = GO_Base_Util_Crypt::decrypt($this->password);
-			if(!$this->_imap->connect($this->host, $this->port, $this->username, $password, $this->use_ssl))
-				throw new Exception ("Could not connect to IMAP account on ".$this->host.' for user '.$this->username);
+			$this->_imap = new GO_Base_Mail_Imap();			
+			
+			try{
+				$this->_imap->connect($this->host, $this->port, $this->username, $this->decryptPassword(), $this->use_ssl);
+			}catch(GO_Base_Mail_ImapAuthenticationFailedException $e){
+				throw new Exception('Authententication failed for user '.$this->username.' on IMAP server ".$this->host.');
+			}		
 		}
 		if(!$this->_imap->select_mailbox($mailbox))
 			throw new Exception ("Could not open IMAP mailbox $mailbox");
 		
 		return $this->_imap;		
 	}
+
 	
 	/**
 	 * Find an account by e-mail address.
@@ -110,12 +169,25 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		return $this->find($findParams);
 	}
 	
+	/**
+	 * Get the default alias for this account.
+	 * 
+	 * @return GO_Email_Model_Alias 
+	 */
+	public function getDefaultAlias(){
+		return GO_Email_Model_Alias::model()->findSingleByAttributes(array(
+				'default'=>1,
+				'account_id'=>$this->id
+		));
+	}
 	
-	public function addAlias($email, $name, $default=1){
+	
+	public function addAlias($email, $name, $signature='', $default=1){
 		$a = new GO_Email_Model_Alias();
 		$a->account_id=$this->id;
 		$a->email=$email;
 		$a->name=$name;
+		$a->signature=$signature;
 		$a->default=$default;
 		$a->save();
 		

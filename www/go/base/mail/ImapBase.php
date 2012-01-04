@@ -70,8 +70,7 @@ abstract class GO_Base_Mail_ImapBase {
 	}
 	function clean($val, $type) {
 		if (!$this->input_validate($val, $type)) {
-			GO::debug("INVALID IMAP INPUT DETECTED: ".$type.': '.$val);
-			exit;
+			throw new Exception("INVALID IMAP INPUT DETECTED: ".$type.': '.$val);
 		}
 	}
 

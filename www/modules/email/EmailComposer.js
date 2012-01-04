@@ -319,12 +319,10 @@ GO.email.EmailComposer = function(config) {
 		text : GO.email.lang.extraOptions,
 		iconCls : 'btn-settings',
 		menu : this.optionsMenu
-	// assign menu by instance
 	}	, this.showMenuButton = new Ext.Button({
 		text : GO.email.lang.show,
 		iconCls : 'btn-show',
 		menu : this.showMenu
-	// assign menu by instance
 	})];
 
 	tbar.push(this.emailEditor.getAttachmentsButton());
@@ -472,13 +470,6 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		};
 		
 		this.on('hide', this.stopAutoSave, this);
-
-	/*this[this.collapseEl].hideMode='offsets';
-
-		this.on('beforecollapse', function(){
-			console.log(this[this.collapseEl]);
-			this[this.collapseEl].hideMode='offsets';
-		}, this);		*/
 	},
 
 	toComboVisible : true,
@@ -543,12 +534,6 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			this.bccFieldCheck.setChecked(true);
 		}
 	},
-//
-//	setRecipients : function(fieldName,selections) {
-//		var field = this.formPanel.form.findField(fieldName);
-//		field.setValue(selections);
-//		field.store.load();
-//	},
 
 	initTemplateMenu :  function(config){
 		if (typeof(config.template_id) == 'undefined' && this.templatesStore){
@@ -593,7 +578,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	show : function(config) {
 
 		//TODO enable after testing
-		//Ext.getBody().mask(GO.lang.waitMsgLoad);
+		Ext.getBody().mask(GO.lang.waitMsgLoad);
 
 		delete this.link_config;
 
