@@ -272,9 +272,11 @@ class ldapauth extends imapauth {
 
 				//create e-mail account if it's missing
 				if ($mail_username) {
-					if (!$email_client->get_account_by_username($username, $gouser['id'], $config['host'])) {
+					if (!$email_client->get_account_by_username($mail_username, $gouser['id'], $config['host'])) {
 						go_debug('LDAPAUTH: E-mail account missing from account. Creating the default account now.');
 						$la->create_email_account($config, $gouser['id'], $mail_username, $password, $gouser['email']);
+					}else {
+						go_debug('LDAPAUTH: E-mail account already associated with user: '.$mail_username.'. Skipping create account step.');
 					}
 				}
 
