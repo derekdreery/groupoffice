@@ -148,3 +148,4 @@ views/Extjs3/javascript/base/upload/PluploadMenuItem.js
 views/Extjs3/javascript/base/model/multiselect/AddDialog.js
 views/Extjs3/javascript/base/model/multiselect/Dialog.js
 views/Extjs3/javascript/base/model/multiselect/Panel.js
+views/Extjs3/javascript/base/ContextMenu.js
