@@ -250,7 +250,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * 
 	 * @var array() $params The request parameters of actionStore
 	 * 
-	 * @return array parameters for the GO_Base_Db_ActiveRecord->find() function 
+	 * @return GO_Base_Db_FindParams parameters for the GO_Base_Db_ActiveRecord->find() function 
 	 */
 	protected function getStoreParams($params) {
 		return array();
