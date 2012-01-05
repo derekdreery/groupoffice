@@ -477,3 +477,5 @@ $l["strUsersInGroup"]= 'Gebruikers in groep';
 $l["matchDuplicates"]='Zoek naar duplicaten';
 $l["showFirstDuplicateOnly"]='Toon alleen het eerste duplicaat';
 $l["advancedSearch"]='Geavanceerd zoeken';
+
+$l['attachFiles']='Bijlagen toevoegen';
