@@ -63,14 +63,14 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 				throw new GO_Base_Exception_Save();			
 		}
 		
-		$defaultModels = GO_Base_Model_AbstractUserDefaultModel::getAllUserDefaultModels();
-		
-		$stmt = GO_Base_Model_User::model()->find(GO_Base_Db_FindParams::newInstance()->ignoreAcl());		
-		while($user = $stmt->fetch()){
-			foreach($defaultModels as $model){
-				$model->getDefault($user);
-			}
-		}
+//		$defaultModels = GO_Base_Model_AbstractUserDefaultModel::getAllUserDefaultModels();
+//		
+//		$stmt = GO_Base_Model_User::model()->find(GO_Base_Db_FindParams::newInstance()->ignoreAcl());		
+//		while($user = $stmt->fetch()){
+//			foreach($defaultModels as $model){
+//				$model->getDefault($user);
+//			}
+//		}
 		
 		//todo make this irrelevant
 		//backwards compat
