@@ -24,6 +24,10 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	loadOnNewModel : true,
 	
 	remoteModelId : 0,
+	
+	submitAction : 'submit',
+	
+	loadAction : 'load',
 
 	/**
 	 * The controller will be called with this post parameter.
@@ -184,11 +188,12 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	submitForm : function(hide){
 		
 		var params=this.getSubmitParams();
-		this.beforeSubmit(params);
+		if(this.beforeSubmit(params)===false)
+			return false;
 		
 		this.formPanel.form.submit(
 		{
-			url:GO.url(this.formControllerUrl+'/submit'),
+			url:GO.url(this.formControllerUrl+'/'+this.submitAction),
 			params: params,
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){		
@@ -272,7 +277,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			
 			this.formPanel.load({
 				params:config.loadParams,
-				url:GO.url(this.formControllerUrl+'/load'),
+				url:GO.url(this.formControllerUrl+'/'+this.loadAction),
 				success:function(form, action)
 				{					
 					if(action.result.remoteComboTexts){
