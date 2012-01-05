@@ -61,9 +61,11 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			$f = new GO_Base_Fs_Folder(GO::config()->tmpdir);
 			$f->create();
 			
-			move_uploaded_file($_FILES['image']['tmp_name'][0], GO::config()->tmpdir . $_FILES['image']['name'][0]);
+			$destinationFile = new GO_Base_Fs_File(GO::config()->tmpdir . $_FILES['image']['name'][0]);
 			
-			$model->photo = GO::config()->tmpdir . $_FILES['image']['name'][0];
+			move_uploaded_file($_FILES['image']['tmp_name'][0], $destinationFile->path());
+			
+			$model->photo = $destinationFile->path();
 
 			$response['photo_url'] = $model->photoURL;
 		}
