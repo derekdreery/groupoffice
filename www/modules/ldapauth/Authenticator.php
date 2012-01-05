@@ -120,6 +120,8 @@ class GO_Ldapauth_Authenticator {
 					
 					GO::debug('LDAPAUTH: updating user profile');
 					GO::debug($attr);
+					
+					$this->_updateContact($user, $attr);
 				}else
 				{
 					GO::debug('LDAPAUTH: Profile updating from LDAP is disabled');
@@ -142,9 +144,8 @@ class GO_Ldapauth_Authenticator {
 					if (!empty(GO::config()->ldap_groups))
 						$user->addToGroups(explode(',',GO::config()->ldap_groups));	
 					
-					$contact = $user->createContact();
-					$contact->setAttributes($attr);
-					$contact->save();
+					$this->_updateContact($user, $attr);
+					
 					
 				} catch (Exception $e) {
 					GO::debug('LDAPAUTH: Failed creating user ' .
@@ -159,6 +160,36 @@ class GO_Ldapauth_Authenticator {
 			//}
 				
 			GO::setIgnoreAclPermissions($oldIgnoreAcl);
+		}
+	}
+	
+	private function _updateContact($user, $attributes){
+		$contact = $user->createContact();
+		if($contact){
+			GO::debug('LDAPAUTH: updating user contact');
+			$contact->setAttributes($attributes);
+
+			if(!empty($attributes['company'])){
+				$company = GO_Addressbook_Model_Company::model()->findSingleByAttributes(array(
+					'addressbook_id'=>$contact->addressbook_id,
+					'name'=>$attributes['company']
+				));
+
+				if(!$company)
+				{
+					GO::debug('LDAPAUTH: creating company for contact');
+					$company = new GO_Addressbook_Model_Company();
+					$company->name=$attributes['company'];
+					$company->addressbook_id=$contact->addressbook_id;			
+					$company->save();
+				}else
+				{
+					GO::debug('LDAPAUTH: found existing company for contact');
+				}
+				$contact->company_id=$company->id;
+			}
+
+			$contact->save();
 		}
 	}
 	
