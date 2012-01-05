@@ -35,7 +35,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
 		
 		if(empty($params['id'])){
-			$model->addAlias($params['name'], $params['email']);
+			$model->addAlias($params['email'], $params['name']);
 		}else
 		{
 			$alias=$model->getDefaultAlias();
