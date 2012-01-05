@@ -48,12 +48,21 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 	
 	public function actionModelTypes($params){
 		
-		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_ModelType::model());			
-		$store->getColumnModel()->formatColumn('name', 'GO::getModel($model->model_name)->localizedName');
-
-		$store->setStatement (GO_Base_Model_ModelType::model()->find($store->getDefaultParams($params)));
+		$stmt = GO_Base_Model_ModelType::model()->find();
 		
-		return $store->getData();		
+		$types=array();
+		while($modelType = $stmt->fetch()){
+			$model = GO::getModel($modelType->model_name);
+			$types[$model->localizedName]=array('id'=>$modelType->id, 'model_name'=>$modelType->model_name, 'name'=>$model->localizedName);
+		}
+		
+		ksort($types);
+		
+		$response['total']=count($types);
+		$response['results']=array_values($types);
+	
+		
+		return $response;		
 	}
 	
 	
