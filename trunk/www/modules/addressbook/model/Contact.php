@@ -138,7 +138,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	
 	public function beforeDelete() {
 		
-		if($this->goUser()>0)			
+		if($this->goUser())			
 			throw new Exception("This contact belongs to a user account. Please delete this account first.");
 		
 		return parent::beforeDelete();
