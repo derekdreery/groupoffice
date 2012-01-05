@@ -783,6 +783,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		else
 			$params['exclude']=explode(',', $params['exclude']);
 		
+		array_push($params['exclude'], 'id','acl_id','files_folder_id');
+		
 		$response['results']=array();
 		
 		$model = GO::getModel($this->model);
@@ -792,25 +794,31 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		$columns = $model->getColumns();
 		foreach($columns as $name=>$attr){
-			if($name!='id' && $name!='user_id' && $name!='acl_id' && !in_array($name, $params['exclude']))
-				$attributes['t.'.$name]=$model->getAttributeLabel($name);				
+			if(!in_array($name, $params['exclude']))
+				$attributes['t.'.$name]=array('name'=>'t.'.$name,'label'=>$model->getAttributeLabel($name),'gotype'=>$attr['gotype']);				
 		}
 		
+		asort($attributes);
+		
 		if($model->customfieldsRecord){
+			$customAttributes = array();
 			$columns = $model->customfieldsRecord->getColumns();
 			foreach($columns as $name=>$attr){
 				if($name != 'model_id' && !in_array($name, $params['exclude'])){					
-					$attributes['cf.'.$name]=$model->customfieldsRecord->getAttributeLabel($name);					
+					$customAttributes['cf.'.$name]=array('name'=>'cf.'.$name, 'label'=>$model->customfieldsRecord->getAttributeLabel($name),'gotype'=>'customfield');					
 				}
 			}
+			asort($attributes);
+			
+			$attributes=array_merge($attributes, $customAttributes);
 		}
 		
 		$this->afterAttributes($attributes, $response, $params, $model);
 		
-		asort($attributes);
 		
-		foreach($attributes as $field=>$label)
-			$response['results'][]=array('name'=>$field,'label'=>$label);
+		
+		foreach($attributes as $field=>$attr)
+			$response['results'][]=$attr;
 		
 		return $response;		
 	}
