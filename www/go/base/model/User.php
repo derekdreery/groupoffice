@@ -389,6 +389,12 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			return false;
 		}
 	}
+
+	protected function remoteComboFields() {
+		return array(
+				'user_id' => '$model->name'
+		);
+	}
 	
 	/**
 	 * Add the user to user groups.
@@ -402,5 +408,6 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 				$group->addUser($this->id);
 		}
 	}
+
 }
 
