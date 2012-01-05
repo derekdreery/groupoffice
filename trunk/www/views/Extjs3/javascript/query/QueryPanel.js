@@ -210,10 +210,10 @@ GO.query.QueryPanel = function(config){
 		render:function(){
 			this.typesStore.load();
 		},
-		beforeedit:function(e){			
-			if(e.column==this.valueCol)
+		beforeedit:function(e){
+			if(e.column==this.valueCol) {
 				this.setEditor(e.record.get('gotype'), e.record.get('field'));
-			
+			}
 			return true;
 		}
 	}
@@ -243,8 +243,11 @@ Ext.extend(GO.query.QueryPanel, GO.grid.EditorGridPanel,{
 		
 		var col = this.getColumnModel().getColumnAt(this.valueCol);
 		
-		var editor = GO.base.form.getFormFieldByType(gotype, colName);
-		
+		if(this.editors[colName])
+			editor = new this.editors[colName];
+		else {
+			var editor = GO.base.form.getFormFieldByType(gotype, colName);
+		}
 		col.setEditor(editor);
 	}
 });
