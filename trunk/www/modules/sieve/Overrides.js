@@ -49,7 +49,7 @@ GO.moduleManager.onModuleReady('email',function(){
 						if(sieve_supported.sieve_supported)
 						{
 							// Hide the 'normal' panel and show this panel
-							this.tabPanel.hideTabStripItem(this.filtersTab);
+//							this.tabPanel.hideTabStripItem(this.filtersTab);
 							this.tabPanel.unhideTabStripItem(this.sieveGrid);
 							this.sieveGrid.show();
 						}
@@ -57,8 +57,8 @@ GO.moduleManager.onModuleReady('email',function(){
 						{
 							// Hide this panel and show the 'normal' panel
 							this.tabPanel.hideTabStripItem(this.sieveGrid);
-							this.tabPanel.unhideTabStripItem(this.filtersTab);
-							this.filtersTab.show();
+//							this.tabPanel.unhideTabStripItem(this.filtersTab);
+//							this.filtersTab.show();
 						}
 						this.getEl().unmask();
 					},
