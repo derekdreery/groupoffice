@@ -212,6 +212,22 @@ class GO_Base_Session extends GO_Base_Observable{
 			$this->_setCompatibilitySessionVars(); // TODO: REMOVE IF SYSTEM IS FULLY REBUILT
 
 			$this->fireEvent('login', array($username, $password, $user));
+			
+			//A PHP variable named “session.use_only_cookies” controls the behaviour
+			//of session_start(). When this variable is enabled (true) then session_start() on-
+			//ly uses the cookies of a request for retrieving the session ID. If this variable is disa-
+			//bled, then GET or POST requests can contain the session ID and can be used for
+			//session fixation. This PHP variable was added in PHP 4.3.0 but is enabled by default
+			//only since PHP 5.3.0. Environments with previous PHP versions, as well as non-
+			//default PHP configurations are vulnerable to the session fixation attack described in
+			//this finding if further measures are not taken.
+			//In addition to only accepting session IDs in the form of cookies, the application
+			//should force the re-generation of session IDs upon successful user authentication.
+			//This way, an attacker would not be able to create a session ID that will be reused by
+			//the application to identify a valid authenticated session. This is possible in PHP by
+			//using the session_regenerate_id() function.
+
+			session_regenerate_id();
 		
 			return $user;
 		}		
