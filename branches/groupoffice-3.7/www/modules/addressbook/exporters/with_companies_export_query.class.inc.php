@@ -7,7 +7,7 @@ class with_companies_export_query extends csv_export_query{
 		$this->company_columns=array();
 		if(isset($_REQUEST['companyColumns']))
 		{
-			$indexesAndHeaders = explode(',', $_REQUEST['companyColumns']);
+			$indexesAndHeaders = $_REQUEST['companyColumns'];// explode(',', $_REQUEST['companyColumns']);
 
 			foreach($indexesAndHeaders as $i)
 			{
@@ -41,14 +41,14 @@ class with_companies_export_query extends csv_export_query{
 		if(count($this->headers))
 			$this->fputcsv($fp, $this->headers, $this->list_separator, $this->text_separator);
 
-		$books = isset($_REQUEST['books']) ? $_REQUEST['books'] : array();
-		if(count($books))
-		{
+//		$books = isset($_REQUEST['books']) ? $_REQUEST['books'] : array();
+//		if(count($books))
+//		{
 			require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
-			$ab = new addressbook();
+			//$ab = new addressbook();
 			$ab2 = new addressbook();
 
-			$ab->search_contacts($GO_SECURITY->user_id,  '', $books);
+			//$ab->search_contacts($GO_SECURITY->user_id,  '', $books);
 		
 			while($record = $this->db->next_record())
 			{
@@ -83,7 +83,7 @@ class with_companies_export_query extends csv_export_query{
 				$this->fputcsv($fp, $values,$this->list_separator, $this->text_separator);
 			}
 
-		}
+	//	}
 
 		
 		
