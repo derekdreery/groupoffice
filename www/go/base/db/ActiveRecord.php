@@ -781,10 +781,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * 
 	 * @param string $attributeName
 	 * @param mixed $value
-	 * @param array $findParams Extra parameters to send to the find function.
+	 * @param GO_Base_Db_FindParams $findParams Extra parameters to send to the find function.
 	 * @return GO_Base_Db_ActiveRecord 
 	 */
 	public function findSingle($findParams=array()){
+		
+		if(!is_array($findParams))
+			$findParams = $findParams->getParams();
 		
 		$defaultParams=array('limit'=>1,'ignoreAcl'=>true);
 		$params = array_merge($defaultParams, $findParams);
