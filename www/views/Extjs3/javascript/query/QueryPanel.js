@@ -19,12 +19,15 @@ GO.query.QueryPanel = function(config){
 		config = {};
 	}
 	
+	
+	
 	this.typesStore = new GO.data.JsonStore({
 		//url: GO.url("core/modelAttributes"),
 		url:config.modelAttributesUrl,
 		id:'name',
 		baseParams:{
-			modelName:config.modelName
+			modelName:config.modelName,
+			exclude: config.modelExcludeAttributes
 		},
 		fields: ['name','label','gotype'],
 		remoteSort: true
@@ -41,7 +44,7 @@ GO.query.QueryPanel = function(config){
 //	});
 
 	var fields ={
-		fields:['andor','field','comparator', 'value','start_group','gotype'],
+		fields:['andor','field','comparator', 'value','start_group','gotype','rawValue','rawFieldLabel'],
 		columns:[	{
 			width: 40,
 			header: 'AND / OR',
@@ -67,10 +70,16 @@ GO.query.QueryPanel = function(config){
 				forceSelection:true
 			})
 		},{
+			id:'field',
 			width:150,
 			header: 'Field',
 			dataIndex: 'field',
-			renderer : this.renderSelect.createDelegate(this),
+			renderer:function(v, meta, record){
+			
+				if(!GO.util.empty(record.data.rawFieldLabel)){
+					return record.data.rawFieldLabel;
+				}
+			},
 			editor: new GO.form.ComboBox({
 					store: this.typesStore,
 					valueField:'name',
@@ -86,6 +95,7 @@ GO.query.QueryPanel = function(config){
 							var gridRecord = this.store.getAt(this.lastEdit.row);
 							
 							gridRecord.set('gotype',record.get('gotype'));							
+							gridRecord.set('rawFieldLabel',record.get('label'));
 							
 						}
 					}
@@ -121,6 +131,12 @@ GO.query.QueryPanel = function(config){
 			width:100,
 			header: 'Value',
 			dataIndex: 'value',
+			renderer:function(v, meta, record){
+			
+				if(!GO.util.empty(record.data.rawValue)){
+					return record.data.rawValue;
+				}
+			},
 			editor: new Ext.form.TextField({
 				
 			})
@@ -147,6 +163,7 @@ GO.query.QueryPanel = function(config){
 	config.cm=columnModel;
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
+	config.autoExpandColumn='field';
 
 	config.clicksToEdit=1;
 
@@ -215,6 +232,9 @@ GO.query.QueryPanel = function(config){
 				this.setEditor(e.record.get('gotype'), e.record.get('field'));
 			}
 			return true;
+		},
+		afteredit:function(e){
+			e.record.set('rawValue',this.lastActiveEditor.field.getRawValue())
 		}
 	}
 
