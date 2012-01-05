@@ -265,18 +265,20 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 
 	getGridData : function(){
 
-		var data = {};
+		var data = [];
+		var record;
 
 		for (var i = 0; i < this.store.data.items.length;  i++)
 		{
 			var r = this.store.data.items[i].data;
 
-			data[i]={};
+			record={};
 
 			for(var key in r)
 			{
-				data[i][key]=r[key];
+				record[key]=r[key];
 			}
+			data.push(record);
 		}
 
 		return data;
