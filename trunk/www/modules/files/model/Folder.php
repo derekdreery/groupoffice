@@ -16,6 +16,12 @@
 /**
  * The GO_Files_Model_Folder model
  * 
+ * Top level folders with parent_id=0 are readable to everyone with access to 
+ * the files module automatically. This is done in the validate() function of this model.
+ * 
+ * A shared folder has an acl_id set. When the system checks permissions it will
+ * recursively search up the tree until it finds a folder that has an acl_id.
+ * 
  * @property int $user_id
  * @property int $id
  * @property int $parent_id
