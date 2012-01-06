@@ -979,8 +979,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				else
 					$jm['tableAlias']=$joinModel->tableName();
 
-				$sql .= " ON (`".$jm['tableAlias']."`.`".$jm['foreignField']."`=".
-								"t.`".$jm['localField']."`) ";
+//				$sql .= " ON (`".$jm['tableAlias']."`.`".$jm['foreignField']."`=".
+//								"t.`".$jm['localField']."`) ";
+				
+				if(!isset($jm['criteria'])){
+					$jm['criteria'] = new GO_Base_Db_FindCriteria();
+				}
+				
+				$jm['criteria']->addRawCondition("`".$jm['tableAlias']."`.`".$jm['foreignField']."`", "t.`".$jm['localField']."`");
+				
+				$sql .= ' ON ('.$jm['criteria']->getCondition().')';
 			}
 		}
 

@@ -298,7 +298,8 @@ class GO_Base_Db_FindParams{
 	 *			'foreignField'=>'status_id', //defaults to primary key of the remote model
 	 *			'localField'=>'id', //defaults to primary key of the model
 	 *			'tableAlias'=>'l', //Optional table alias
-	 *			'type'=>'INNER' //defaults to INNER
+	 *			'type'=>'INNER' //defaults to INNER,
+	 *			'criteria'=>GO_Base_Db_FindCriteria // Optional extra join parameters
 	 *			)
 	 * 
 	 * @todo Maybe add separate parameters for each config value?? public function joinModel($model,$foreignField,$localField,tableAlias='t',$type='INNER'){}
@@ -310,6 +311,11 @@ class GO_Base_Db_FindParams{
 			$this->_params['joinModel']=array();
 		
 		$this->_params['joinModel'][]=$config;
+		
+		//add the bind params to the main criteria object.
+		if(isset($config['criteria']))
+			$this->getCriteria()->addParams($config['criteria']->getParams());
+		
 		return $this;
 	}
 	
