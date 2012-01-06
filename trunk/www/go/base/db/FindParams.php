@@ -325,7 +325,10 @@ class GO_Base_Db_FindParams{
 		if(!isset($params['criteria'])){
 			$params['criteria'] = new GO_Base_Db_FindCriteria();
 		}				
-		$params['criteria']->addRawCondition("`".$params['tableAlias']."`.`".$params['foreignField']."`", "t.`".$params['localField']."`");
+		
+		$table = $params['tableAlias'] ? $params['tableAlias'] : $joinModel->tableName();
+		
+		$params['criteria']->addRawCondition("`".$table."`.`".$params['foreignField']."`", "t.`".$params['localField']."`");
 
 		return $this->join($joinModel->tableName(), $params['criteria'], $params['tableAlias'],$params['type']);
 	}
