@@ -1,3 +1,8 @@
+06-01-2012 3.7.42
+- Bug fix in Russian reminders.
+- Small adjustments for customer customization module.
+- Some other small bugs where fixed.
+
 22-12-2011 3.7.41
 - Small bug fixes
 
