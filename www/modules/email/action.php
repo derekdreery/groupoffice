@@ -1087,39 +1087,6 @@ try {
 							}
 						}
 					}
-
-					if(isset($GO_MODULES->modules['systemusers']) && $use_systemusers) {
-						exec('whereis vacation', $return);
-						if(isset($return[0])) {
-							$params = explode(' ', $return[0]);
-						}
-
-						$vacation_exec = (isset($params[1])) ? $params[1] : false;
-						if(!is_executable($vacation_exec)) {
-							require_once ($GO_LANGUAGE->get_language_file('systemusers'));
-							//throw new Exception($lang['systemusers']['vacation_not_executable_error']);
-						}
-
-
-						require_once($GO_MODULES->modules['systemusers']['class_path'].'systemusers.class.inc.php');
-						$su = new systemusers();
-
-						$vacation['vacation_active'] = isset($_POST['vacation_active']) ? '1' : '0';
-						$vacation['vacation_subject'] = isset($_POST['vacation_subject']) ? ($_POST['vacation_subject']) : '';
-						$vacation['vacation_body'] = isset($_POST['vacation_body']) ? ($_POST['vacation_body']) : '';
-						$vacation['forward_to'] = isset($_POST['forward_to']) ? ($_POST['forward_to']) : '';
-						$vacation['account_id'] = $account['id'];
-
-						if($su->get_vacation($vacation['account_id'])) {
-							$su->update_vacation($vacation);
-						}else {
-							$su->add_vacation($vacation);
-						}
-
-						$cmd = $GO_CONFIG->cmd_sudo.' '.$GO_MODULES->modules['systemusers']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' set_vacation '.$vacation['account_id'];
-						//go_debug($cmd);
-						exec($cmd);
-					}
 				}else {
 					$account['user_id']=isset($_REQUEST['user_id']) ? ($_REQUEST['user_id']) : $GO_SECURITY->user_id;
 
