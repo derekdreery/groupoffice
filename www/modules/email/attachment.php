@@ -27,13 +27,19 @@ $imap = new cached_imap();
 $email = new email();
 
 
+if(File::path_leads_to_parent($_REQUEST['filename']))
+			die("Invalid request");
+
+if(File::path_leads_to_parent($_REQUEST['filepath']))
+			die("Invalid request");
+
 if(!empty($_REQUEST['filepath'])){
 	//message is cached on disk
 	$path = $GLOBALS['GO_CONFIG']->file_storage_path.$_REQUEST['filepath'];
 
-	if(File::path_leads_to_parent($path) || !file_exists($path)){
-		die('Invalid request');
-	}
+//	if(File::path_leads_to_parent($path) || !file_exists($path)){
+//		die('Invalid request');
+//	}
 	$params['input'] = file_get_contents($path);
 	$params['include_bodies'] = true;
 	$params['decode_bodies'] = true;
@@ -81,6 +87,9 @@ if(!empty($_REQUEST['filepath'])){
 		$tmpfile = $GLOBALS['GO_CONFIG']->tmpdir.$_REQUEST['filename'];
 
 		$_REQUEST['filename']=File::strip_extension($_REQUEST['filename']);
+		
+		
+		
 		$file=$GLOBALS['GO_CONFIG']->tmpdir.$_REQUEST['filename'];
 		$fp = fopen($tmpfile, 'w+');
 
