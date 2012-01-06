@@ -108,9 +108,9 @@ class GO_Base_Html_Input {
 				$key2 = substr($this->attributes['name'], $pos + 1, -1);
 
 				$this->isPosted = isset($_POST[$key1][$key2]);
-				$this->attributes['value'] = isset($_POST[$key1][$key2]) ? ($_POST[$key1][$key2]) : $this->attributes['value'];
+				$this->attributes['value'] = isset($_POST[$key1][$key2]) ? htmlentities($_POST[$key1][$key2], ENT_COMPAT, 'UTF-8') : $this->attributes['value'];
 			} else {
-				$this->attributes['value'] = isset($_POST[$this->attributes['name']]) ? ($_POST[$this->attributes['name']]) : $this->attributes['value'];
+				$this->attributes['value'] = isset($_POST[$this->attributes['name']]) ? htmlentities($_POST[$this->attributes['name']], ENT_COMPAT, 'UTF-8') : $this->attributes['value'];
 				$this->isPosted = isset($_POST[$this->attributes['name']]);
 			}
 		}
