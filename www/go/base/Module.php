@@ -158,10 +158,10 @@ class GO_Base_Module extends GO_Base_Observable {
 		
 		
 		//call saveUser for each user
-		$stmt = GO_Base_Model_User::model()->find(array('ignoreAcl'=>true));		
-		while($user = $stmt->fetch()){
-			call_user_func(array(get_class($this),'saveUser'), $user, true);
-		}
+//		$stmt = GO_Base_Model_User::model()->find(array('ignoreAcl'=>true));		
+//		while($user = $stmt->fetch()){
+//			call_user_func(array(get_class($this),'saveUser'), $user, true);
+//		}
 		
 		return true;
 	}
