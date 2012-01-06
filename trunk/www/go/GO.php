@@ -140,7 +140,9 @@ class GO{
 		return self::$db;
 	}
 	
-	
+	/**
+	 * Clears the GO::config()->file_storage_path/cache folder. This folder contains mainly cached javascripts. 
+	 */	
 	public static function clearCache(){
 		$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'cache');
 		
@@ -150,8 +152,6 @@ class GO{
 		$items = $folder->ls();
 		foreach($items as $item)
 			$item->delete();
-		
-		
 	}
 	
 	/**
