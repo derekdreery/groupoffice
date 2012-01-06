@@ -1050,7 +1050,7 @@ class GO_CONFIG {
 			$_SESSION['GO_SESSION']['sort_name'] = 'last_name';
 			$_SESSION['GO_SESSION']['auth_token']=String::random_password('a-z,1-9', '', 30);
 			//some url's require this token to be appended
-			$_SESSION['GO_SESSION']['security_token']=String::random_password('a-z,1-9', '', 10);
+			$_SESSION['GO_SESSION']['security_token']=String::random_password('a-z,1-9', '', 20);
 
 			go_debug('Setup new session '.$_SESSION['GO_SESSION']['security_token']);
 		}
