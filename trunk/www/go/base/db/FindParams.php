@@ -296,7 +296,7 @@ class GO_Base_Db_FindParams{
 	 * array(
 	 *			'model'=>'GO_Billing_Model_OrderStatusLanguage',					
 	 *			'foreignField'=>'status_id', //defaults to primary key of the remote model
-	 *			'localField'=>'id', //defaults to primary key of the model
+	 *			'localField'=>'id', //defaults to "id"
 	 *			'tableAlias'=>'l', //Optional table alias
 	 *			'type'=>'INNER' //defaults to INNER,
 	 *			'criteria'=>GO_Base_Db_FindCriteria // Optional extra join parameters
@@ -306,17 +306,28 @@ class GO_Base_Db_FindParams{
 	 * 
 	 * @return GO_Base_Db_FindParams 
 	 */
-	public function joinModel($config){
-		if(!isset($this->_params['joinModel']))
-			$this->_params['joinModel']=array();
-		
-		$this->_params['joinModel'][]=$config;
-		
-		//add the bind params to the main criteria object.
-		if(isset($config['criteria']))
-			$this->getCriteria()->addParams($config['criteria']->getParams());
-		
-		return $this;
+	public function joinModel($params){	
+			
+		$joinModel = GO::getModel($params['model']);
+
+		if(!isset($params['foreignField']))
+			$params['foreignField']=$joinModel->primaryKey();
+
+		if(!isset($params['localField']))
+			$params['localField']="id";
+
+		if(!isset($params['type']))
+			$params['type']='INNER';
+
+		if(!isset($params['tableAlias']))
+			$params['tableAlias']=false;
+
+		if(!isset($params['criteria'])){
+			$params['criteria'] = new GO_Base_Db_FindCriteria();
+		}				
+		$params['criteria']->addRawCondition("`".$params['tableAlias']."`.`".$params['foreignField']."`", "t.`".$params['localField']."`");
+
+		return $this->join($joinModel->tableName(), $params['criteria'], $params['tableAlias'],$params['type']);
 	}
 	
 	
