@@ -953,45 +953,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(isset($params['join']))
 			$sql .= "\n".$params['join'];
 		
-		if(isset($params['joinModel'])){
-			
-			if(!is_array($params['joinModel']))
-				$params['joinModel']=array($params['joinModel']);
-			
-			foreach($params['joinModel'] as $jm){
-			
-				$joinModel = GO::getModel($jm['model']);
-
-				if(!isset($jm['foreignField']))
-					$jm['foreignField']=$joinModel->primaryKey();
-
-				if(!isset($jm['localField']))
-					$jm['localField']=$this->primaryKey();
-
-				if(!isset($jm['type']))
-					$jm['type']='INNER';
-
-
-
-				$sql .= "\n".$jm['type']." JOIN `".$joinModel->tableName()."`";
-				if(isset($jm['tableAlias']))
-					$sql .= " `".$jm['tableAlias']."`";
-				else
-					$jm['tableAlias']=$joinModel->tableName();
-
-//				$sql .= " ON (`".$jm['tableAlias']."`.`".$jm['foreignField']."`=".
-//								"t.`".$jm['localField']."`) ";
-				
-				if(!isset($jm['criteria'])){
-					$jm['criteria'] = new GO_Base_Db_FindCriteria();
-				}
-				
-				$jm['criteria']->addRawCondition("`".$jm['tableAlias']."`.`".$jm['foreignField']."`", "t.`".$jm['localField']."`");
-				
-				$sql .= ' ON ('.$jm['criteria']->getCondition().')';
-			}
-		}
-
 		//quick and dirty way to use and in next sql build blocks
 		$sql .= "\nWHERE 1 ";
 
