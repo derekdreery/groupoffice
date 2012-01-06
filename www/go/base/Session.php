@@ -40,6 +40,16 @@ class GO_Base_Session extends GO_Base_Observable{
 		//not capable. (WebDAV for example).
 		if(!defined("GO_NO_SESSION")){
 			if(!isset($_SESSION)) {
+				
+				//without cookie_httponly the cookie can be accessed by malicious scripts 
+				//injected to the site and its value can be stolen. Any information stored in 
+				//session tokens may be stolen and used later for identity theft or
+				//user impersonation.
+				ini_set("session.cookie_httponly",1);
+				
+				//Avoid session id in url's to prevent session hijacking.
+				ini_set('session.use_only_cookies',1);
+								
 				session_name('groupoffice');
 				session_start();
 			}
