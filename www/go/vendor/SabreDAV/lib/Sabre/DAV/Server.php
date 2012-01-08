@@ -5,7 +5,7 @@
  * 
  * @package Sabre
  * @subpackage DAV
- * @copyright Copyright (C) 2007-2011 Rooftop Solutions. All rights reserved.
+ * @copyright Copyright (C) 2007-2012 Rooftop Solutions. All rights reserved.
  * @author Evert Pot (http://www.rooftopsolutions.nl/) 
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
@@ -127,7 +127,7 @@ class Sabre_DAV_Server {
      *
      * @var bool 
      */
-    public $debugExceptions = true;
+    public $debugExceptions = false;
 
     /**
      * This property allows you to automatically add the 'resourcetype' value 
@@ -237,9 +237,6 @@ class Sabre_DAV_Server {
             $this->httpResponse->sendStatus($httpCode);
             $this->httpResponse->setHeaders($headers);
             $this->httpResponse->sendBody($DOM->saveXML());
-						
-						GO::debug($e->getMessage());
-						GO::debug($e->getTraceAsString());
 
         }
 

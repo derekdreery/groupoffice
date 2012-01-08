@@ -8,7 +8,7 @@
  *
  * @package Sabre
  * @subpackage CalDAV
- * @copyright Copyright (C) 2007-2011 Rooftop Solutions. All rights reserved.
+ * @copyright Copyright (C) 2007-2012 Rooftop Solutions. All rights reserved.
  * @author Evert Pot (http://www.rooftopsolutions.nl/) 
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
@@ -611,7 +611,7 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
         $rrule = $xml->xpath($currentXPath.'/c:rrule');
         $hasRrule = (count($rrule))>0; 
        
-        if (!is_null($currentFilter['time-range']['start']) && $currentFilter['time-range']['start'] >= $dtend)  return false;
+        if (!is_null($currentFilter['time-range']['start']) && $currentFilter['time-range']['start'] >= $dtend   && !$hasRrule) return false;
         if (!is_null($currentFilter['time-range']['end'])   && $currentFilter['time-range']['end']   <= $dtstart && !$hasRrule) return false;
         return true;
     
