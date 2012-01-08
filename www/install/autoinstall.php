@@ -1,6 +1,6 @@
 #!/usr/bin/php
 <?php
-/** 
+/**
  * Copyright Intermesh
  * 
  * This file is part of Group-Office. You should have received a copy of the
@@ -12,114 +12,98 @@
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-if(isset($argv[1]))
-{
-	define('CONFIG_FILE', $argv[1]);
-	define('NOTINSTALLED', true);
+$root = dirname(dirname(__FILE__)).'/';
+
+if(PHP_SAPI=='cli'){	
+	//on the command line you can pass -c=/path/to/config.php to set the config file.
+	
+	require_once($root.'go/base/util/Cli.php');
+	
+	$args = GO_Base_Util_Cli::parseArgs();
+
+	if(isset($args['c'])){
+		define("GO_CONFIG_FILE", $args['c']);
+	}
+}
+
+
+$exampleUsage = 'sudo -u www-data php /var/www/trunk/www/install/autoinstall.php --adminusername=admin --adminpassword=admin --adminemail=admin@intermesh.dev --modules="email,addressbook,files"';
+$requiredArgs = array('adminusername','adminpassword','adminemail');
+
+foreach($requiredArgs as $ra){
+	if(empty($args[$ra])){
+		trigger_error("adminusername must be supplied.\n\nExample usage:\n\n".$exampleUsage."\n\n", E_USER_ERROR);
+	}
 }
 
 chdir(dirname(__FILE__));
+require('../GO.php');
 
-require('../Group-Office.php');
+GO::setIgnoreAclPermissions();
 
-require_once(dirname(dirname(__FILE__)).'/classes/filesystem.class.inc');
+$stmt = GO::getDbConnection()->query("SHOW TABLES");
+if ($stmt->rowCount())
+	trigger_error("Automatic installation of Group-Office aborted because database is not empty", E_USER_ERROR);
+else
+	echo "Database connection established. Database is empty\n";
 
-$db = new db();
 
-$db->query("SHOW TABLES");
-if($db->num_rows()>0)
-exit("Automatic installation of Group-Office aborted because database is not empty");
 
-$queries = String::get_sql_queries($GLOBALS['GO_CONFIG']->root_path."install/sql/groupoffice.sql");
-//$queries = get_sql_queries($GLOBALS['GO_CONFIG']->root_path."lib/sql/groupoffice.sql");
-while ($query = array_shift($queries))
-{
-	$db->query($query);
+GO_Base_Util_SQL::executeSqlFile('install.sql');
+
+$dbVersion = GO_Base_Util_Common::countUpgradeQueries("updates.php");
+
+GO::config()->save_setting('version', $dbVersion);
+GO::config()->save_setting('upgrade_mtime', GO::config()->mtime);
+
+$adminGroup = new GO_Base_Model_Group();
+$adminGroup->id = 1;
+$adminGroup->name = GO::t('group_admins');
+$adminGroup->save();
+
+$everyoneGroup = new GO_Base_Model_Group();
+$everyoneGroup->id = 2;
+$everyoneGroup->name = GO::t('group_everyone');
+$everyoneGroup->save();
+
+$internalGroup = new GO_Base_Model_Group();
+$internalGroup->id = 3;
+$internalGroup->name = GO::t('group_internal');
+$internalGroup->save();
+
+//GO::config()->register_user_groups = GO::t('group_internal');
+//GO::config()->register_visible_user_groups = GO::t('group_internal');
+
+$modules = GO::modules()->getAvailableModules();
+
+if(isset($args['modules'])){
+	$installModules = explode(',', $args['modules']);
 }
+$installModules[]="modules";
+$installModules[]="users";
+$installModules[]="groups";
 
-require($GLOBALS['GO_CONFIG']->root_path."install/sql/updates.inc.php");
-//store the version number for future upgrades
-$GLOBALS['GO_CONFIG']->save_setting('version', count($updates));
-
-$GLOBALS['GO_LANGUAGE']->set_language($GLOBALS['GO_CONFIG']->language);
-
-require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-$GO_USERS = new GO_USERS();
-
-$user['id'] = $GO_USERS->nextid("go_users");
-
-require_once($GLOBALS['GO_CONFIG']->class_path.'base/groups.class.inc.php');
-$GO_GROUPS = new GO_GROUPS();
-
-$GO_GROUPS->query("DELETE FROM go_db_sequence WHERE seq_name='groups'");
-$GO_GROUPS->query("DELETE FROM go_groups");
-
-$admin_group_id = $GO_GROUPS->add_group($user['id'], $lang['common']['group_admins']);
-$everyone_group_id = $GO_GROUPS->add_group($user['id'], $lang['common']['group_everyone']);
-$internal_group_id = $GO_GROUPS->add_group($user['id'], $lang['common']['group_internal']);
-
-$user_groups = array($admin_group_id, $everyone_group_id, $internal_group_id);
-
-
-
-$fs = new filesystem();
-
-//install all modules
-if(isset($argv[2]))
-{
-	$modules = explode(',', $argv[2]);
-}else
-{
-	$modules = array();
-	$module_folders = $fs->get_folders($GLOBALS['GO_CONFIG']->root_path.'modules/');
-
-	$available_modules=array();
-	foreach($module_folders as $folder)
-	{
-		if(!file_exists($folder['path'].'/install/noautoinstall'))
-		{
-			$available_modules[]=$folder['name'];
-		}
-	}
-	$priority_modules=array('summary','email','calendar','tasks','addressbook','files', 'notes', 'projects');
-
-	for($i=0;$i<count($priority_modules);$i++)
-	{
-		if(in_array($priority_modules[$i], $available_modules))
-		{
-			$modules[]=$priority_modules[$i];
-		}
-	}
-	for($i=0;$i<count($available_modules);$i++)
-	{
-		if(!in_array($available_modules[$i], $priority_modules))
-		{
-			$modules[]=$available_modules[$i];
-		}
+foreach ($modules as $moduleClass) {
+	$moduleController = new $moduleClass;
+	if ((!isset($installModules) && $moduleController->autoInstall()) || in_array($moduleController->id(), $installModules)) {
+		$module = new GO_Base_Model_Module();
+		$module->id = $moduleController->id();
+		$module->save();
 	}
 }
 
-foreach($modules as $module)
-{
-	$GLOBALS['GO_MODULES']->add_module($module);
-}
+$admin = new GO_Base_Model_User();
+$admin->first_name = GO::t('system');
+$admin->last_name = GO::t('admin');
+$admin->username = $args['adminusername'];
+$admin->password = $args['adminpassword'];
+$admin->email = GO::config()->webmaster_email = $args['adminemail'];
+
+GO::config()->save();
+
+$admin->save();
+
+$adminGroup->addUser($admin->id);
 
 
-$GLOBALS['GO_MODULES']->load_modules();
-
-$user['language'] = $GLOBALS['GO_LANGUAGE']->language;
-$user['first_name']=$lang['common']['system'];
-$user['middle_name']='';
-$user['last_name']=$lang['common']['admin'];
-$user['username'] = 'admin';
-$user['password'] = 'admin';
-$user['email'] = $GLOBALS['GO_CONFIG']->webmaster_email;
-$user['sex'] = 'M';
-$user['country']=$GLOBALS['GO_CONFIG']->default_country;
-$user['work_country']=$GLOBALS['GO_CONFIG']->default_country;
-$user['enabled']='1';
-
-$GO_USERS->add_user($user,$user_groups,array($GLOBALS['GO_CONFIG']->group_everyone));
-
-
-$GLOBALS['GO_CONFIG']->save_setting('upgrade_mtime', $GLOBALS['GO_CONFIG']->mtime);
+echo "Database created successfully\n";
