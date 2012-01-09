@@ -4,22 +4,34 @@ remove cal_events_declined
 invitation.php
 alarm import
 
-Project report custom fields and advanced search panel...!?
-
-E-mail files functie
 
 e-mail mvc
-ldapauth, imapauth
 
-Betaalmodule billing
-webshop integratie (event bij mail template parsen)
 
 Files versioning
 
 serverclient
 overige modules mvc
+
 Freebusy support in sabredav 1.6
 
-Autoload cachen
 
 sticky user group that is shared with all items members create
+E-mail files functie
+
+
+* Default models:
+Button to create default models for user
+Button to create default models for module
+Select allowed modules in group dialog
+
+
+
+Projects facturatie
+tickets tarieven opslaan en facturatie testen
+Export projecten en billing
+
+
+Module icons
+
+

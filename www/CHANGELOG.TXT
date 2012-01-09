@@ -1,9 +1,9 @@
 23-12-2011 3.9.00
 - Complete new MVC PHP framework
+- Extensive security audit by Cigitel.
 - Users are stored in the addressbook too.
 - Ticket groups for better permission management.
 - plupload used for file uploads
-- Security tested and several security enhancements.
 - gnupg support dropped. smime still supported.
 - filesearch module.
 - workflow module.
