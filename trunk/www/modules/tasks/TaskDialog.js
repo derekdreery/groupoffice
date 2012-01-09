@@ -240,8 +240,8 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			waitMsg : GO.lang['waitMsgSave'],
 			success : function(form, action) {
 
-				if (action.result.task_id) {
-					this.setTaskId(action.result.task_id);
+				if (action.result.id) {
+					this.setTaskId(action.result.id);
 				}
 
 				if (this.link_config && this.link_config.callback) {
