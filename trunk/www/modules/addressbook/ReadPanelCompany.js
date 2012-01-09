@@ -430,9 +430,6 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 	setData : function(data)
 	{
 		GO.addressbook.CompanyReadPanel.superclass.setData.call(this, data);
-		
-		if(GO.documenttemplates && !GO.documenttemplates.ooTemplatesStore.loaded)
-			GO.documenttemplates.ooTemplatesStore.load();
 					
 		if(data.write_permission)
 		{

@@ -158,13 +158,10 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			'submit' : true
 		});
 	},
-	focus : function(){
-		var firstTab = this._tabPanel ? this._tabPanel.items.items[0] : this.formPanel;
-		if(firstTab){
-			var firstField = firstTab.items.items[0];
-			if(firstField)
-				firstField.focus();
-		}
+	focus : function(){		
+		var firstField = this.formPanel.form.items.first();
+		if(firstField)
+			firstField.focus();		
 	},
 
 	addCustomFields : function(){
