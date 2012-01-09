@@ -96,10 +96,15 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 	}
 
 	protected function remoteComboFields(){
-		return array(
+		$combos= array(
 				'category_id'=>'$model->category->name',
-				'tasklist_id'=>'$model->tasklist->name'
+				'tasklist_id'=>'$model->tasklist->name'				
 				);
+		
+		if(GO::modules()->projects)
+			$combos['project_id']='$model->project->path';
+		
+		return $combos;
 	}
 
 	protected function getStoreMultiSelectProperties(){

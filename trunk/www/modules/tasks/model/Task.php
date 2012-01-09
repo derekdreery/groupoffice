@@ -100,7 +100,8 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	public function relations() {
 		return array(
 				'tasklist' => array('type' => self::BELONGS_TO, 'model' => 'GO_Tasks_Model_Tasklist', 'field' => 'tasklist_id', 'delete' => false),
-				'category' => array('type' => self::BELONGS_TO, 'model' => 'GO_Tasks_Model_Category', 'field' => 'category_id', 'delete' => false)
+				'category' => array('type' => self::BELONGS_TO, 'model' => 'GO_Tasks_Model_Category', 'field' => 'category_id', 'delete' => false),
+				'project' => array('type' => self::BELONGS_TO, 'model' => 'GO_Projects_Model_Project', 'field' => 'project_id', 'delete' => false)
 				);
 	}
 	
@@ -153,8 +154,9 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		if($complete) {
 			$this->completion_time = time();
 			$this->status=GO_Tasks_Model_Task::STATUS_COMPLETED;
+			$this->percentage_complete=100;
 			$this->_recur();
-			$this->rrule='';
+			$this->rrule='';			
 		} else {
 			$this->completion_time = 0;
 			$this->status=GO_Tasks_Model_Task::STATUS_NEEDS_ACTION;

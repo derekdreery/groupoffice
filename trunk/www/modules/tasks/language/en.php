@@ -82,3 +82,5 @@ $l["taskDue_time"]='Due';
 $l["taskStatus"]='Status';
 $l["taskCompletion_time"]='Completed at';
 $l["taskProject_name"]='Project';
+
+$l['taskPercentage_complete']='Percentage complete';

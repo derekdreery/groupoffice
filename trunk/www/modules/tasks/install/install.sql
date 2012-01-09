@@ -119,6 +119,8 @@ CREATE TABLE IF NOT EXISTS `ta_tasks` (
   `category_id` int(11) NOT NULL DEFAULT '0',
   `priority` int(11) NOT NULL DEFAULT '1',
   `project_name` varchar(50) NOT NULL DEFAULT '',
+	`percentage_complete` TINYINT NOT NULL DEFAULT '0',
+	`project_id` INT NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `list_id` (`tasklist_id`),
   KEY `rrule` (`rrule`),

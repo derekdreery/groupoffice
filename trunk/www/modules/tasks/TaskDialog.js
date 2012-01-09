@@ -90,9 +90,9 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		delete this.link_config;
 		this.formPanel.form.reset();
 
-//		this.formPanel.form.findField('remind').setValue(!GO.util.empty(GO.tasks.remind));
-//		this.formPanel.form.findField('remind_date').setDisabled(GO.util.empty(GO.tasks.remind));
-//		this.formPanel.form.findField('remind_time').setDisabled(GO.util.empty(GO.tasks.remind));
+		//		this.formPanel.form.findField('remind').setValue(!GO.util.empty(GO.tasks.remind));
+		//		this.formPanel.form.findField('remind_date').setDisabled(GO.util.empty(GO.tasks.remind));
+		//		this.formPanel.form.findField('remind_time').setDisabled(GO.util.empty(GO.tasks.remind));
 
 		this.tabPanel.setActiveTab(0);
 
@@ -108,74 +108,90 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		
 		// this.selectTaskList.container.up('div.x-form-item').setDisplayed(false);
 
-//		if (config.task_id > 0) {
+		//		if (config.task_id > 0) {
 
-			this.formPanel.load({
-				url : GO.url('tasks/task/load'),
-				params:params,
-				success : function(form, action) {
-					this.win.show();
-					this.changeRepeat(action.result.data.freq);
-					this.setValues(config.values);
+		this.formPanel.load({
+			url : GO.url('tasks/task/load'),
+			params:params,
+			success : function(form, action) {
+				this.win.show();
+				this.changeRepeat(action.result.data.freq);
+				this.setValues(config.values);
 					
-					this.remind_before = action.result.data.remind_before;
+				this.remind_before = action.result.data.remind_before;
 
 				//	this.selectTaskList.setRemoteText(action.result.data.tasklist_name);
-					this.selectTaskList.setRemoteText(action.result.remoteComboTexts.tasklist_id);
-					this.setWritePermission(action.result.data.write_permission);
-
-					if(action.result.data.category_id == 0)
-					{
-						//this.selectCategory.setRemoteText();
-						this.selectCategory.setValue("");
+				this.selectTaskList.setRemoteText(action.result.remoteComboTexts.tasklist_id);
+				
+				if(this.selectProject){
+					if(config.link_config && config.link_config.model_name=="GO_Projects_Model_Project"){					
+						this.selectProject.setValue(config.link_config.model_id);
+						this.selectProject.setRemoteText(config.link_config.text);
 					}else
 					{
-						this.selectCategory.setRemoteText(action.result.data.category_name);
+						this.selectProject.setRemoteText(action.result.remoteComboTexts.project_id);
 					}
-					
-					this.formPanel.form.clearInvalid();
-					
-				},
-				failure : function(form, action) {
-					Ext.Msg.alert(GO.lang['strError'], action.result.feedback)
-				},
-				scope : this
+				}
+				
+				this.setWritePermission(action.result.data.write_permission);
 
-			});
-//		} else {
-//			delete this.formPanel.form.baseParams['exception_task_id'];
-//			delete this.formPanel.form.baseParams['exceptionDate'];
-//
-//			this.lastTaskListId = this.selectTaskList.getValue();
-//
-//			this.selectTaskList.setValue(this.lastTaskListId);
-//
-//			this.setWritePermission(true);
-//
-//			this.win.show();
-//			this.setValues(config.values);
-//
-//			if (GO.util.empty(config.tasklist_id)) {
-//				config.tasklist_id = GO.tasks.defaultTasklist.id;
-//				config.tasklist_name = GO.tasks.defaultTasklist.name;
-//			}
-//			this.selectTaskList.setValue(config.tasklist_id);
-//			if (config.tasklist_name) {
-//				this.selectTaskList.setRemoteText(config.tasklist_name);
-//				this.selectTaskList.container.up('div.x-form-item').setDisplayed(true);
-//			}else
-//			{
-//				this.selectTaskList.container.up('div.x-form-item').setDisplayed(false);
-//			}
-//		}
+				if(action.result.data.category_id == 0)
+				{
+					//this.selectCategory.setRemoteText();
+					this.selectCategory.setValue("");
+				}else
+				{
+					this.selectCategory.setRemoteText(action.result.data.category_name);
+				}
+					
+				this.formPanel.form.clearInvalid();
+					
+			},
+			failure : function(form, action) {
+				Ext.Msg.alert(GO.lang['strError'], action.result.feedback)
+			},
+			scope : this
+
+		});
+		//		} else {
+		//			delete this.formPanel.form.baseParams['exception_task_id'];
+		//			delete this.formPanel.form.baseParams['exceptionDate'];
+		//
+		//			this.lastTaskListId = this.selectTaskList.getValue();
+		//
+		//			this.selectTaskList.setValue(this.lastTaskListId);
+		//
+		//			this.setWritePermission(true);
+		//
+		//			this.win.show();
+		//			this.setValues(config.values);
+		//
+		//			if (GO.util.empty(config.tasklist_id)) {
+		//				config.tasklist_id = GO.tasks.defaultTasklist.id;
+		//				config.tasklist_name = GO.tasks.defaultTasklist.name;
+		//			}
+		//			this.selectTaskList.setValue(config.tasklist_id);
+		//			if (config.tasklist_name) {
+		//				this.selectTaskList.setRemoteText(config.tasklist_name);
+		//				this.selectTaskList.container.up('div.x-form-item').setDisplayed(true);
+		//			}else
+		//			{
+		//				this.selectTaskList.container.up('div.x-form-item').setDisplayed(false);
+		//			}
+		//		}
 
 		// if the newMenuButton from another passed a linkTypeId then set this
 		// value in the select link field
 		if (config.link_config) {
 			this.link_config = config.link_config;
 			if (config.link_config.modelNameAndId) {
-				this.selectLinkField.setValue(config.link_config.modelNameAndId);
-				this.selectLinkField.setRemoteText(config.link_config.text);
+				
+				//project links are handled in afterload.
+				if(config.link_config.model_name!="GO_Projects_Model_Project"){					
+					
+					this.selectLinkField.setValue(config.link_config.modelNameAndId);
+					this.selectLinkField.setRemoteText(config.link_config.text);
+				}
 			}
 		}
 	},
@@ -321,10 +337,19 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			}
 		});
 
-		var taskStatus = new GO.tasks.SelectTaskStatus();
+		var taskStatus = new GO.tasks.SelectTaskStatus({
+			flex:3,
+			listeners:{
+				scope:this,
+				select:function(combo, record){
+					if(record.data.value=='COMPLETED')
+						this.formPanel.form.findField('percentage_complete').setValue(100);
+				}
+			}
+		});
 
 		this.selectTaskList = new GO.tasks.SelectTasklist({
-			fieldLabel : GO.tasks.lang.tasklist
+			fieldLabel : GO.tasks.lang.tasklist		
 		});
 
 		this.selectCategory = new GO.form.ComboBoxReset({
@@ -342,6 +367,13 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		});
 
 		this.selectPriority = new GO.form.SelectPriority();
+		
+		var percentages = [];
+		for(var i=0;i<101;i+=10){
+			percentages.push([i,i+"%"]);
+		}
+		
+		var descAnchor = -220;
 
 		var propertiesPanel = new Ext.Panel({
 			hideMode : 'offsets',
@@ -355,16 +387,54 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			autoScroll : true,
 			items : [this.nameField, this.selectLinkField,
 			startDate,
-			dueDate,
-			taskStatus,
-			this.selectTaskList,this.selectCategory,this.selectPriority,{
+			dueDate,{
+				fieldLabel:GO.tasks.lang.taskStatus,
+				xtype:'compositefield',
+				items:[
+					taskStatus,{
+						flex:1,
+						xtype:'combo',
+						fieldLabel : GO.tasks.lang.taskPercentage_complete,
+						hiddenName : 'percentage_complete',
+						store : new Ext.data.SimpleStore({
+							fields : ['value', 'text'],
+							data : percentages
+						}),
+						value : '0',
+						valueField : 'value',
+						displayField : 'text',
+						mode : 'local',
+						triggerAction : 'all',
+						editable : false,
+						selectOnFocus : true,
+						listeners:{
+							scope:this,
+							select:function(combo, record){
+								if(record.data.value==100)
+									this.formPanel.form.findField('status').setValue("COMPLETED");
+							}
+						}
+					}
+				]
+			}		,this.selectTaskList,
+					this.selectCategory,
+					this.selectPriority	
+			]
+
+		});
+		
+		if(GO.projects){
+			descAnchor-=20;
+			this.selectProject = new GO.projects.SelectProject();
+			propertiesPanel.add(this.selectProject);
+		}
+		
+		propertiesPanel.add({
 				xtype:'textarea',
 				fieldLabel:GO.lang.strDescription,
 				name : 'description',
-				anchor:'-20 -220'
-			}]
-
-		});
+				anchor:'-20 '+descAnchor
+			});
 				
 
 		// Start of recurrence tab

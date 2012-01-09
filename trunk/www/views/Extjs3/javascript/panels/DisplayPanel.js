@@ -73,6 +73,16 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 
 		tbar.push(this.newMenuButton);
 		
+		if(GO.documenttemplates)
+		{
+			this.newOODoc = new GO.documenttemplates.NewOODocumentMenuItem();
+			this.newOODoc.on('create', function(){
+				this.reload();
+			}, this);
+
+			this.newMenuButton.menu.add(this.newOODoc);		
+		}
+		
 		tbar.push(this.linkBrowseButton = new Ext.Button({
 			iconCls: 'btn-link', 
 			cls: 'x-btn-text-icon', 

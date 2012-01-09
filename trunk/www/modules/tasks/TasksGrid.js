@@ -29,7 +29,7 @@ GO.tasks.TasksPanel = function(config)
 		}, this);
 
 		var fields ={
-			fields:['id', 'icon', 'name','completed','due_time', 'late', 'description', 'status', 'ctime', 'mtime', 'start_time', 'completion_time','disabled','tasklist_name','category_name','priority','project_name'],
+			fields:['id', 'icon', 'name','completed','due_time', 'late', 'description', 'status', 'ctime', 'mtime', 'start_time', 'completion_time','disabled','tasklist_name','category_name','priority','project_name','percentage_complete'],
 			columns:[this.checkColumn,{
 				header:"&nbsp;",
 				width:23,
@@ -101,6 +101,13 @@ GO.tasks.TasksPanel = function(config)
 				width:110,
 				renderer:function(value, p, record){
 					return GO.tasks.lang.statuses[value];
+				}
+			},{
+				header: GO.tasks.lang.taskPercentage_complete,
+				dataIndex: 'percentage_complete',
+				width:60,
+				renderer:function(value, p, record){
+					return value+"%";
 				}
 			},{
 				header: GO.lang.strCtime,
