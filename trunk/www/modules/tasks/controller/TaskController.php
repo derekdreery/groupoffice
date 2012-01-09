@@ -62,6 +62,17 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 			$response['data']['remind_date']=date(GO::user()->completeDateFormat, $model->getDefaultReminder($model->start_time));
 			$response['data']['remind_time']=date(GO::user()->time_format, $model->getDefaultReminder($model->start_time));
 		}
+		
+		if(!empty($params['project_id']) && empty($params['id'])){
+			$findParams = GO_Base_Db_FindParams::newInstance()
+							->select('count(*) AS count')
+							->single();
+			
+			$findParams->getCriteria()->addCondition('project_id', $params['project_id']);										
+			$record = GO_Tasks_Model_Task::model()->find($findParams);
+			
+			$response['data']['name']='['.$record["count"]++.'] ';
+		}
 			
 		//$response['data']['remind_time']=date(GO::user()->time_format, strtotime($response['data']['reminder']));
 		
