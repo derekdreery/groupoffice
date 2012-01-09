@@ -408,9 +408,6 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 	{
 		GO.addressbook.ContactReadPanel.superclass.setData.call(this, data);
 		
-		if(GO.documenttemplates && !GO.documenttemplates.ooTemplatesStore.loaded)
-			GO.documenttemplates.ooTemplatesStore.load();
-		
 		if(this.createUserButton){
 			this.createUserButton.setDisabled(false);
 			if(GO.util.empty(this.data.go_user_id))
