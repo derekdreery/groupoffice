@@ -1,6 +1,5 @@
---
--- Tabelstructuur voor tabel `cf_go_users`
---
+ALTER DATABASE CHARACTER SET utf8 COLLATE utf8_general_ci;
+
 
 DROP TABLE IF EXISTS `cf_go_users`;
 CREATE TABLE IF NOT EXISTS `cf_go_users` (

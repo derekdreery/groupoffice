@@ -137,3 +137,5 @@ $updates["201112021417"][]="CREATE TABLE IF NOT EXISTS `cf_go_users` (
   `model_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`model_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates["201201091109"][]="ALTER DATABASE CHARACTER SET utf8 COLLATE utf8_general_ci;";
