@@ -182,12 +182,12 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 
 		this.body.on('click', this.onBodyClick, this);
 
-//		if(this.editGoDialogId){
-//			GO.dialogListeners.add(this.editGoDialogId,{
-//				scope:this,
-//				save:this.onSave
-//			});
-//		}
+		if(this.editGoDialogId){
+			GO.dialogListeners.add(this.editGoDialogId,{
+				scope:this,
+				save:this.onSave
+			});
+		}
 	},
 	
 	getLinkName : function(){
@@ -200,7 +200,9 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		{
 			this.reload();
 		}*/
-		if(saved_id > 0 && (this.model_id == saved_id || this.model_id==0)){
+		//if(saved_id > 0 && (this.model_id == saved_id || this.model_id==0)){
+		
+		if(saved_id > 0 &&  this.model_id==0){
 			this.load(saved_id, true);
 		}
 	},

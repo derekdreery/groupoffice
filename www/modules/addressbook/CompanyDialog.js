@@ -357,10 +357,10 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 			},
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){
-				if(action.result.company_id)
+				if(action.result.id)
 				{
-					this.company_id = action.result.company_id;				
-					this.employeePanel.setCompanyId(action.result.company_id);
+					this.company_id = action.result.id;				
+					this.employeePanel.setCompanyId(action.result.id);
 					this.moveEmployeesButton.setDisabled(false);
 				}				
 				this.fireEvent('save', this, this.company_id);

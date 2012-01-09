@@ -370,9 +370,9 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 				company: company
 			},
 			success:function(form, action){
-				if(action.result.contact_id)
+				if(action.result.id)
 				{
-					this.contact_id = action.result.contact_id;
+					this.contact_id = action.result.id;
 				}
 				this.uploadFile.clearQueue();
 				this.fireEvent('save', this, this.contact_id);
