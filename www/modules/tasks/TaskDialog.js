@@ -106,6 +106,9 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		if (!GO.util.empty(config.tasklist_id))
 			params.tasklist_id=config.tasklist_id;
 		
+		if (config.link_config && config.link_config.model_name=="GO_Projects_Model_Project")
+			params.project_id=config.link_config.model_id;	
+		
 		// this.selectTaskList.container.up('div.x-form-item').setDisplayed(false);
 
 		//		if (config.task_id > 0) {
