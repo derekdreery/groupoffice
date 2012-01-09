@@ -5,7 +5,7 @@ $site_id=isset($_REQUEST['site_id']) ? $_REQUEST['site_id'] : '1';
 
 $site = GO_Sites_Model_Site::model()->findByPk($site_id);
 
-$path = isset($_REQUEST['path']) ? $_REQUEST['path'] : '';
+$path = ltrim($_SERVER['REDIRECT_URL'],'/');
 
 $page = GO_Sites_Model_Page::model()->findSingleByAttributes(array('site_id'=>$site_id, 'path'=>$path));
 
