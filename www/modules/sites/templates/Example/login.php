@@ -3,7 +3,7 @@
 							<div class="subkader-small-center">						
 
 								<h1>Are you here for the first time?</h1>								
-								<a href="<?php echo self::pageUrl("register"); ?>">Click here to register once</a>
+								<a href="<?php echo $this->pageUrl("register"); ?>">Click here to register once</a>
 								<h1>Login if you are already registered</h1>
 								
 									<?php 
@@ -40,7 +40,7 @@
 									
 									GO_Base_Html_Form::renderEnd();
 									?>
-									<a href="<?php echo self::pageUrl("lostpass"); ?>">Lost password?</a>
+									<a href="<?php echo $this->pageUrl("lostpass"); ?>">Lost password?</a>
 							</div>
 						</div>
 
