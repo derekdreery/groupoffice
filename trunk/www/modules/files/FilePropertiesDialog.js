@@ -290,6 +290,8 @@ Ext.extend(GO.files.FilePropertiesDialog, GO.Window, {
 				}
 				
 				this.fireEvent('save', this, this.file_id, this.folder_id);
+				
+				GO.dialog.TabbedFormDialog.prototype.refreshActiveDisplayPanels.call(this);
 
 				if(hide)
 				{

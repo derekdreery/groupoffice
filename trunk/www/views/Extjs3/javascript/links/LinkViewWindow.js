@@ -45,6 +45,6 @@ GO.LinkViewWindow = function(config){
 	this.render(Ext.getBody());
 };
 
-Ext.extend(GO.LinkViewWindow, Ext.Window);
+Ext.extend(GO.LinkViewWindow, GO.Window);
 
 

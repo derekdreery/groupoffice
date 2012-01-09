@@ -396,4 +396,13 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		
 		return $this;
 	}	
+	
+	/**
+	 * Check is this task is over due.
+	 * 
+	 * @return boolean 
+	 */
+	public function isLate(){
+		return $this->status!='COMPLETED' && $this->due_time<time();
+	}
 }

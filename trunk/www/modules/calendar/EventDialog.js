@@ -647,6 +647,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 
 				this.fireEvent('save', newEvent, this.oldDomId);
+				
+				GO.dialog.TabbedFormDialog.prototype.refreshActiveDisplayPanels.call(this);
 
 				if (this.link_config && this.link_config.callback) {
 					this.link_config.callback.call(this);

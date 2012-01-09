@@ -16,6 +16,7 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 	
 	stateId : 'no-note-panel',
 
+	//deprecated. tabbedformdialog refreshes active displaypanel automatically.
 	editGoDialogId : 'note',
 	
 	editHandler : function(){

@@ -103,14 +103,13 @@ class GO_Base_Data_ColumnModel {
 	 * 
 	 * The extraVars param is optional an can include extra params that are needed for the $format.
 	 * The sortfield param is optional an can be set if you want to set the default field for Sorting the columns
-	 *  
-	 * @todo column object
-	 * @deprecated
-	 * 
+	 *
 	 * @param String $column
 	 * @param String $format
 	 * @param Array $extraVars
 	 * @param String $sortfield 
+	 * 
+	 * @return GO_Base_Data_ColumnModel
 	 */
 	public function formatColumn($column, $format, $extraVars=array(), $sortfield='', $label='') {
 		
@@ -128,6 +127,8 @@ class GO_Base_Data_ColumnModel {
 //		if (!empty($sortfield)) {
 //			$this->_sortFieldsAliases[$column] = $sortfield;
 //		}
+		
+		return $this;
 	}
 	
 	/**

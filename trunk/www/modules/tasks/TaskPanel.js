@@ -45,7 +45,7 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 					'</tr>'+
 					'<tr>'+
 						'<td>'+GO.tasks.lang.dueAt+':</td>'+
-						'<td>{due_time}</td>'+
+						'<td<tpl if="late"> class="tasks-late"</tpl>>{due_time}</td>'+
 					'</tr>'+
 					'<tr>'+
 						'<td>'+GO.lang.createdBy+':</td>'+
@@ -55,6 +55,12 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 						'<td>'+GO.lang.strStatus+':</td>'+
 						'<td>{status_text}</td>'+
 					'</tr>'+
+					'<tpl if="project_name">'+
+						'<tr>'+
+							'<td>'+GO.projects.lang.project+':</td>'+
+							'<td><a href="#" onclick="GO.linkHandlers[\'GO_Projects_Model_Project\'].call(this, {project_id});">{project_name}</a></td>'+
+						'</tr>'+
+					'</tpl>'+
 					'<tpl if="!GO.util.empty(description)">'+
 						'<tr>'+
 							'<td colspan="2" class="display-panel-heading">'+GO.lang.strDescription+'</td>'+
