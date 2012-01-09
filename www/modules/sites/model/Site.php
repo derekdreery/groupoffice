@@ -67,4 +67,55 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 		return 'products'; // TODO: get the right path name here
 	}
 	
+	public function getBaseUrl($relative=true){
+		
+		
+		if($this->mod_rewrite){
+			
+			if($relative){
+				return $this->mod_rewrite_base_path;
+			}else
+			{
+				if($this->ssl)
+					return "https://".$this->domain.$this->mod_rewrite_base_path;
+				else
+					return "http://".$this->domain.$this->mod_rewrite_base_path;
+			}		
+			
+		}else{	
+			
+			$url = $relative ? GO::config()->host : GO::config()->full_url;
+
+			$url .= 'modules/sites/index.php?site_id='.$this->id;
+		}
+	}
+	
+	public function pageUrl($path='', $params=array(), $relative=true, $htmlspecialchars=true){
+		
+		$url = $this->getBaseUrl($relative);
+		
+		if(empty($path) && empty($params)){
+			return $url;
+		}
+		
+		if(!empty($path)){
+			if($this->mod_rewrite){
+				$url .= $path;
+			}else
+			{
+				$params['path']=$path;
+			}
+		}
+		
+		$amp = $htmlspecialchars ? '&amp;' : '&';
+		$amp = $this->mod_rewrite ? '?' : $amp;
+		
+		foreach($params as $name=>$value){
+			$url .= $amp.$name.'='.urlencode($value);
+			$amp = $htmlspecialchars ? '&amp;' : '&';
+		}
+
+		return $url;
+	}
+	
 }
