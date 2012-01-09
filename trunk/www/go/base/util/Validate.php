@@ -70,8 +70,93 @@ class GO_Base_Util_Validate {
 		return $isIpV4;
 	}	
 	
+	/**
+	 * TODO: CREATE THE HOSTNAME FUNCTION
+	 * @return boolean 
+	 */
 	public static function hostname(){
 		return true;
+	}
+	
+	/**
+	 * Check for the given country if it is an EU country or not.
+	 * 
+	 * @param string $country eg. "NL" or "BE"
+	 * @return boolean  
+	 */
+	public static function isEUCountry($country){
+		return in_array(strtoupper($country), array(
+			'AT',
+			'BE',
+			'BG',
+			'CY',
+			'CZ',
+			'DK',
+			'EE',
+			'FI',
+			'FR',
+			//'FX', ??
+			'DE',
+			'GR',
+			'HU',
+			'IE',
+			'IT',
+			'LV',
+			'LT',
+			'LU',
+			'MT',
+			'NL',
+			'PL',
+			'PT',
+			'RO',
+			'SK',
+			'SI',
+			'ES',
+			'SE',
+			'GB'
+		));
+	}
+	
+	/**
+	 * Check if a vat number is correct.
+	 * 
+	 * @param string $countryCode The country code: eg. "NL" or "BE"
+	 * @param string $vat The vat number
+	 * @return boolean true
+	 */
+	public static function checkVat($countryCode, $vat) {
+		$wsdl = 'http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
+
+		$vies = new SoapClient($wsdl);
+
+		/**
+			var_dump($vies->__getFunctions());
+			var_dump($vies->__getTypes());
+		*/
+		
+		$message = new stdClass();
+		$message->countryCode = $countryCode;
+		$message->vatNumber = $vat;
+
+		try {
+			$ret = $vies->checkVat($message);
+		} catch (SoapFault $e) {
+			echo $ret = $e->faultstring;
+			$regex = '/\{ \'([A-Z_]*)\' \}/';
+			$n = preg_match($regex, $ret, $matches);
+			$ret = $matches[1];
+			$faults = array
+					(
+					'INVALID_INPUT' => 'The provided CountryCode is invalid or the VAT number is empty',
+					'SERVICE_UNAVAILABLE' => 'The SOAP service is unavailable, try again later',
+					'MS_UNAVAILABLE' => 'The VAT Member State service is unavailable, try again later or with another Member State',
+					'TIMEOUT' => 'The Member State service could not be reached in time, try again later or with another Member State',
+					'SERVER_BUSY' => 'The service cannot process your request. Try again later.'
+			);
+			throw new Exception("Could not check VAT number: ".$faults[$ret]);
+		}
+
+		return $ret->valid;
 	}
 	
 }
