@@ -194,38 +194,8 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 * @param boolean $htmlspecialchars Set to true to escape special html characters. eg. & becomes &amp.
 	 * @return string 
 	 */
-	public static function pageUrl($path='', $params=array(), $relative=true, $htmlspecialchars=false){
-		$url = $relative ? GO::config()->host : GO::config()->full_url;
-		
-		$url .= 'modules/sites/index.php';
-		
-		if(empty($path) && empty($params)){
-			return $url;
-		}
-		
-		if(empty($path)){
-			$amp = '?';
-		}else
-		{
-			$url .= '?path='.$path;
-			
-			$amp = $htmlspecialchars ? '&amp;' : '&';
-		}
-		
-		if(!empty($params)){			
-			if(is_array($params)){				
-				foreach($params as $name=>$value){
-					$url .= $amp.$name.'='.urlencode($value);
-					
-					$amp = $htmlspecialchars ? '&amp;' : '&';
-				}
-			}else
-			{
-				$url .= $amp.$params;			
-			}			
-		}
-		
-		return $url;
+	public function pageUrl($path='', $params=array(), $relative=true, $htmlspecialchars=false){
+		return $this->site->pageUrl($path, $params, $relative);
 	}
 	
 	
@@ -235,7 +205,7 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 * @param string $path 
 	 */
 	protected function pageRedirect($path = '', $params=array()) {
-		header('Location: ' .self::pageUrl($path, $params));
+		header('Location: ' .$this->site->pageUrl($path, $params, true, false));
 		exit();
 	}
 //	
