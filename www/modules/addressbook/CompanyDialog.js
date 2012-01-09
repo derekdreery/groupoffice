@@ -365,6 +365,8 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 				}				
 				this.fireEvent('save', this, this.company_id);
 				
+				GO.dialog.TabbedFormDialog.prototype.refreshActiveDisplayPanels.call(this);
+				
 				if (hide)
 				{
 					this.hide();

@@ -163,6 +163,30 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		if(firstField)
 			firstField.focus();		
 	},
+	
+	refreshActiveDisplayPanels : function(){
+		var activeTab = GO.mainLayout.tabPanel.getActiveTab();			
+		var dp = activeTab.findBy(function(comp){
+			if(comp.isDisplayPanel)
+				return true;
+		});
+						
+		if(dp.length)
+			dp[0].reload();		
+		
+		Ext.WindowMgr.each(function(win){
+			if(win.isVisible()){
+				var dp = win.findBy(function(comp){
+					if(comp.isDisplayPanel)
+						return true;
+				});
+				
+				if(dp.length)
+					dp[0].reload();	
+			}
+		});
+		
+	},
 
 	addCustomFields : function(){
 		if(this.customFieldType && GO.customfields && GO.customfields.types[this.customFieldType])
@@ -210,6 +234,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 				
 				this.fireEvent('submit', this, this.remoteModelId);
 				this.fireEvent('save', this, this.remoteModelId);
+				
+				this.refreshActiveDisplayPanels();
 				
 				if(this.link_config && this.link_config.callback)
 				{	

@@ -376,6 +376,9 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 				}
 				this.uploadFile.clearQueue();
 				this.fireEvent('save', this, this.contact_id);
+				
+				GO.dialog.TabbedFormDialog.prototype.refreshActiveDisplayPanels.call(this);
+				
 				//this.personalPanel.setContactID(this.contact_id);
 				if(!GO.util.empty(action.result.photo_url))
 					this.setPhoto(action.result.photo_url);

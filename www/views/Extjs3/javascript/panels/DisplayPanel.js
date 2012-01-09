@@ -27,6 +27,8 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 	model_id: 0,
 	model_name : "",
 	
+	isDisplayPanel : true,
+	
 	newMenuButton : false,
 	
 	template : '',
@@ -180,12 +182,12 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 
 		this.body.on('click', this.onBodyClick, this);
 
-		if(this.editGoDialogId){
-			GO.dialogListeners.add(this.editGoDialogId,{
-				scope:this,
-				save:this.onSave
-			});
-		}
+//		if(this.editGoDialogId){
+//			GO.dialogListeners.add(this.editGoDialogId,{
+//				scope:this,
+//				save:this.onSave
+//			});
+//		}
 	},
 	
 	getLinkName : function(){
@@ -521,3 +523,5 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		
 	}
 });
+
+Ext.reg('displaypanel',GO.DisplayPanel);

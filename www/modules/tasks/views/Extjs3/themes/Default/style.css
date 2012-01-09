@@ -44,12 +44,12 @@
 }
 
 .tasks-completed{
-	text-decoration:line-through;
-	color: black !important;
+	text-decoration:line-through !important;
+/*	color: black !important;*/
 }
 
-.tasks-late td{
-	color: red;
+.tasks-late td, a.tasks-late, td.tasks-late{
+	color: red !important;
 }
 
 .tasks-call{

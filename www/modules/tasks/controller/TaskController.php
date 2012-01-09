@@ -27,6 +27,17 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		$statuses = GO::t('statuses','tasks');
 		$response['data']['status_text']=$statuses[$model->status];
 		
+		
+		$response['data']['late']=$model->isLate();
+		
+		if($model->percentage_complete>0 && $model->status!='COMPLETED')
+			$response['data']['status_text'].= ' ('.$model->percentage_complete.'%)';
+		
+		$response['data']['project_name']='';
+		if(GO::modules()->projects && $model->project){
+			$response['data']['project_name']=$model->project->name;
+		}
+		
 		return parent::afterDisplay($response, $model, $params);
 	}
 	
@@ -134,7 +145,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 //		$columnModel->formatColumn('status', '$l["statuses[\'".$model->status."\']"');
 		$columnModel->formatColumn('category_name','$model->category->name',array(),'category_id');
 		$columnModel->formatColumn('tasklist_name','$model->tasklist_name');
-		$columnModel->formatColumn('late','$model->due_time<time() ? 1 : 0;');
+		$columnModel->formatColumn('late','$model->isLate();');
 		//$colModel->formatColumn('project_name','$model->project->name'); TODO: Implement the project from the ID and not from the name
 		return parent::formatColumns($columnModel);
 	}
