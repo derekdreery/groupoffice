@@ -22,7 +22,7 @@ $updates["201201031630"][]="ALTER TABLE `em_accounts` DROP `signature`;";
 
 $updates["201201031630"][]="ALTER TABLE `em_aliases` CHANGE `default` `default` BOOLEAN NOT NULL DEFAULT '0'";
 $updates["201201031630"][]="UPDATE em_aliases SET `default`=0 where `default`=1";
-$updates["201201031630"][]="UPDATE em_accounts SET `default`=1 where `default`=2";
+$updates["201201031630"][]="UPDATE em_aliases SET `default`=1 where `default`=2";
 
 $updates["201201031630"][]="ALTER TABLE `em_aliases` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
 
