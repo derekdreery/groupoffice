@@ -15,8 +15,6 @@ $funcParams = isset($p) ? $p : '';
 <script type="text/javascript">
 function launchGO(){
 	var win = window.open('', "groupoffice");
-	
-	console.log(win);
 
 	if(win.GO && win.GO.<?php echo $module; ?>)
 	{
