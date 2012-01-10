@@ -121,7 +121,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		
 		if($this->reminder>0){
 			$this->deleteReminders();
-			$this->addReminder($this->name, $this->reminder, $this->user_id);
+			$this->addReminder($this->name, $this->reminder, $this->tasklist->user_id);
 		}	
 		
 		return parent::afterSave($wasNew);
