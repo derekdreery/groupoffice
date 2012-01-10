@@ -169,7 +169,7 @@ GO.form.ColorField =  Ext.extend(function(config){
 				}
 			}
 
-			if(this.menu)
+			if(this.menu && !GO.util.empty(this.curColor ) && this.colors.indexOf(this.curColor)>-1)
 				this.menu.palette.select(this.curColor);
 		}
 	},
