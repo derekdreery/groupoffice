@@ -659,7 +659,7 @@ class GO{
 		
 		$amp = $htmlspecialchars ? '&amp;' : '&';
 		
-		if($relative && isset(GO::session()->values['security_token']))
+		if(isset(GO::session()->values['security_token']))
 			$url .= $amp.'security_token='.GO::session()->values['security_token'];
 		
 		return $url;
