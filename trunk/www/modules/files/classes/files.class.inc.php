@@ -633,7 +633,7 @@ class files extends db {
 
 
 	function add_file($file) {
-		global $GO_CONFIG, $GO_EVENTS;
+		global $GO_CONFIG, $GO_EVENTS, $GO_MODULES;
 
 		$file['id']=$this->nextid('fs_files');
 		$file['user_id']=$GLOBALS['GO_SECURITY']->user_id;
@@ -642,7 +642,13 @@ class files extends db {
 
 		$this->cache_file($file);
 
-		//$this->add_new_filelink($file);
+		if(isset($GO_MODULES->modules['newfiles'])
+				&& (!empty($GO_MODULES->modules['newfiles']['read_permission'])
+						|| !empty($GO_MODULES->modules['newfiles']['write_permission'])
+					)
+			) {
+			$this->add_new_filelink($file);
+		}
 
 		$GLOBALS['GO_EVENTS']->fire_event('add_file', $params=array($file));
 
@@ -1175,27 +1181,29 @@ class files extends db {
 	// Default timeout: 30 days
 
 		if($count_login){
-			global $GO_CONFIG;
+			global $GO_CONFIG, $GO_MODULES;
 
 			//this will rebuild the cached shares folder
 			//disabled this because of slowdown with lots of users
 			//$GLOBALS['GO_CONFIG']->save_setting('fs_shared_cache', 0, $user['id']);
 
-//			$timeout = 60*60*24*30;
-//			$deltime = time() - $timeout;
-//
-//			$fs = new files();
-//
-//			$fs->query("SELECT ff.id FROM fs_new_files AS fn, fs_files AS ff
-//				WHERE fn.file_id = ff.id AND ctime < ? AND fn.user_id = ?", 'ii', array($deltime, $user['id']));
-//
-//			$files = array();
-//			if($fs->num_rows() > 0) {
-//				while($file = $fs->next_record()) {
-//					$files[] = $file['id'];
-//				}
-//				$fs->query("DELETE FROM fs_new_files WHERE file_id IN (".implode(',', $files).") ");
-//			}
+			$timeout = 60*60*24*30;
+			$deltime = time() - $timeout;
+
+			$fs = new files();
+
+			$fs->query("SELECT ff.id FROM fs_new_files AS fn, fs_files AS ff
+				WHERE fn.file_id = ff.id AND ctime < ? AND fn.user_id = ?", 'ii', array($deltime, $user['id']));
+
+			if(isset($GO_MODULES->modules['newfiles']) && !empty($GO_MODULES->modules['newfiles']['write_permission'])) {
+				$files = array();
+				if($fs->num_rows() > 0) {
+					while($file = $fs->next_record()) {
+						$files[] = $file['id'];
+					}
+					$fs->query("DELETE FROM fs_new_files WHERE file_id IN (".implode(',', $files).") ");
+				}
+			}
 		}
 	}
 

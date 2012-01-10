@@ -34,6 +34,44 @@ $task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 try {
 
 	switch($task) {
+		
+		case 'load_calendar_colors':
+		
+			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : 0;
+			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : 0;
+			
+			$response['results']=array();
+			$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id,$start,$limit);
+			if(!$response['total']) {
+				$cal->get_calendar();
+				$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id,$start,$limit);
+			}
+
+			$default_colors = array('F0AE67','FFCC00','FFFF00','CCFF00','66FF00',
+							'00FFCC','00CCFF','0066FF','95C5D3','6704FB',
+							'CC00FF','FF00CC','CC99FF','FB0404','FF6600',
+							'C43B3B','996600','66FF99','999999','00FFFF');
+
+			$default_colors_count = count($default_colors);
+			$i = 0;
+			
+			while($record = $cal->next_record()) {
+				$color = $cal2->getCalendarColor($record['id'],$GO_SECURITY->user_id);
+				
+				if(!$color){
+					$color = $default_colors[$i];
+					$i++;
+					if($i > $default_colors_count)
+						$i = 0;
+				}
+				
+				$record['color'] = $color;
+				
+				$response['results'][] = $record;
+			}
+			
+			break;
+		
 
 		case 'startup':
 
@@ -482,25 +520,27 @@ try {
 
 			$owncolor = isset($_REQUEST['owncolor']) && count($calendars)>1 ? $_REQUEST['owncolor'] : 0;
 
-			/* Default colors for merged calendars */
+			$default_bg = array();
 			$default_colors = array('F0AE67','FFCC00','FFFF00','CCFF00','66FF00',
 							'00FFCC','00CCFF','0066FF','95C5D3','6704FB',
 							'CC00FF','FF00CC','CC99FF','FB0404','FF6600',
 							'C43B3B','996600','66FF99','999999','00FFFF');
 
 			$default_colors_count = count($default_colors);
+			$i = 0;
 
-			$default_bg = array();
-			$index = 0;
 			foreach($calendars as $key=>$cal_id)
 			{
-				if($index == $default_colors_count)
-				{
-					$index = 0;
+				$color = $cal->getCalendarColor($cal_id, $GO_SECURITY->user_id);
+				
+				if(!$color){
+					$color = $default_colors[$i];
+					$i++;
+					if($i > $default_colors_count)
+					$i = 0;
 				}
 
-				$default_bg[$cal_id] = $default_colors[$index];
-				$index++;
+				$default_bg[$cal_id] = $color;
 			}
 			
 			if(count($calendars)>1)
@@ -519,26 +559,29 @@ try {
 
 			foreach($check_calendars as $calendar_id){
 				$calendar = $calendar_props[] = $cal->get_calendar($calendar_id);
-				$permission_levels[$calendar_id]=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
-				
-				if (!isset($response['permission_level']) || $response['permission_level']<GO_SECURITY::WRITE_PERMISSION) {
 
-					$response['comment']=$calendar['comment'];
-					$response['calendar_id']=$calendar['id'];
-					$response['calendar_name']=$calendar['name'];
-					$response['permission_level']=$permission_levels[$calendar_id];
+				$permissionLevel = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
+				if($permissionLevel>=GO_SECURITY::READ_PERMISSION){
+					if ($GO_SECURITY->user_id==$calendar['user_id']
+							|| ( !isset($response['calendar_id']) && (!isset($response['permission_level']) || $response['permission_level']<GO_SECURITY::WRITE_PERMISSION) )
+						) {
+							$response['comment']=$calendar['comment'];
+							$response['calendar_id']=$calendar['id'];
+							$response['calendar_name']=$calendar['name'];
 
-					if($response['permission_level']>1){
-						$response['write_permission']=true;
+						$response['permission_level']=$permissionLevel;
+						if($response['permission_level']>1){
+							$response['write_permission']=true;
+						}					
 					}
-				}
-				if($response['permission_level']) {
 					$calendars[]=$calendar_id;
 					$calendar_names[$calendar_id]=$calendar['name'];
+
+					$permission_levels[$calendar_id]=$permissionLevel;
 				}
 			}
 
-
+	
 			$response['title']=implode(' & ', $calendar_names);
 
 
@@ -869,12 +912,13 @@ try {
 
 
 			$cal2 = new calendar();
+			$user_cal_settings = $cal2->get_settings($GO_SECURITY->user_id);
 			$response['results']=array();
 			$count=0;
 			$cal->get_view_calendars($view_id);
 			while($view_calendar = $cal->next_record()) {
 
-				if(!isset($response['calendar_id'])){
+				if($user_cal_settings['calendar_id']==$view_calendar['id'] || !isset($response['calendar_id'])){
 					$response['calendar_id']=$view_calendar['id'];
 					$response['calendar_name']=$view_calendar['name'];
 				}

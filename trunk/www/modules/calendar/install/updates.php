@@ -113,3 +113,10 @@ $updates["201112221547"][]="CREATE TABLE IF NOT EXISTS `cf_cal_events` (
   `model_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`model_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates["201201100902"][]="CREATE TABLE IF NOT EXISTS `cal_calendar_user_colors` (
+  `user_id` int(11) NOT NULL,
+  `calendar_id` int(11) NOT NULL,
+  `color` varchar(6) NOT NULL,
+  PRIMARY KEY (`user_id`,`calendar_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";

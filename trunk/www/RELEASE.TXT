@@ -1,6 +1,10 @@
-2011/12/23 3.9.00
+2012/01/10 3.9.00
 A beta release for the upcoming 4.0 version. We completely rewrote the PHP 
-framework using the MVC approach. Developer documentation will follow on the wiki.
+framework using the MVC approach. On the interface it may seem like there are 
+not so many changes but under the hood there's a shiny new engine! This get's us
+ready for the future. It will enable us to create a mobile interface for example.
+It's also a much more organized and more secure framework. Extensive security 
+testing has been performed by Cigitel.
 
 10/03/2011 3.7.1
 This release has a lot of enhancements under the hood. Everything has been

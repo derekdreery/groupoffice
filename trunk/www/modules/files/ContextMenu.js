@@ -193,6 +193,20 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 		 		break;
 		 		
 		 		case '':
+					if (records[0].data.type=='Map') {
+						this.downloadButton.hide();
+						this.gotaButton.hide();
+						this.decompressButton.hide();
+						this.compressButton.show();
+						this.downloadLinkButton.hide();
+					} else {
+						this.downloadButton.show();
+						this.gotaButton.show();
+						this.decompressButton.show();
+						this.compressButton.hide();
+						this.downloadLinkButton.show();
+					}
+					break;
 				case 'folder':
 		 			this.downloadButton.hide();
 		 			this.gotaButton.hide();

@@ -238,6 +238,13 @@ CREATE TABLE IF NOT EXISTS `cal_visible_tasklists` (
 
 -- --------------------------------------------------------
 
+DROP TABLE IF EXISTS `cal_calendar_user_colors`;
+CREATE TABLE IF NOT EXISTS `cal_calendar_user_colors` (
+  `user_id` int(11) NOT NULL,
+  `calendar_id` int(11) NOT NULL,
+  `color` varchar(6) NOT NULL,
+  PRIMARY KEY (`user_id`,`calendar_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Tabelstructuur voor tabel `cf_cal_calendars`

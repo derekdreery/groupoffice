@@ -560,7 +560,7 @@ class email extends db {
 			$account['password'],
 			$account['use_ssl'])) {
 
-				if (!$mbroot = $this->mail->check_mbroot($account['mbroot'])) {
+				if (!$account['mbroot'] = $this->mail->check_mbroot($account['mbroot'])) {
 					$account['mbroot'] = '';
 				}
 

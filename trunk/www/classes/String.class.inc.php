@@ -113,9 +113,9 @@ class String {
 		if(empty($str))
 			return $str;
 		
-		
-		if(function_exists('mb_check_encoding') && mb_check_encoding($str,'UTF-8'))
-			return $str;
+//		Went wrong on some servers maybe php 5.2 related?
+//		if(function_exists('mb_check_encoding') && mb_check_encoding($str,'UTF-8'))
+//			return $str;
 		
 		
 		if($from_charset=='UTF-8'){
@@ -137,7 +137,7 @@ class String {
 	}
 
 	public static function clean_utf8($str, $source_charset='UTF-8') {
-		
+		//echo $source_charset;
 		//must use html_entity_decode here other wise some weird utf8 might be decoded later
 		//Commented out to prevent XML parse errors on ampersands when used in syncml.
 		//    if(strtolower($source_charset)!='ascii')
@@ -148,10 +148,24 @@ class String {
 		$old_lvl = error_reporting (E_ALL ^ E_NOTICE);
 		$c = iconv($source_charset, 'UTF-8//IGNORE', $str);
 		error_reporting ($old_lvl);
+		
 		if(!empty($c))
 		{
 			$str=$c;
+		}else{
+			if(function_exists('mb_detect_encoding'))
+			{
+				$from_charset = mb_detect_encoding($str, "auto");
+			}else
+			{
+				$from_charset = "iso-8859-1";
+			}
+			if($from_charset!=$source_charset)
+				return String::clean_utf8($str, $from_charset);
+			else
+				return $str;
 		}
+		
 		//Check if preg validates it as UTF8
 		if(preg_match('/^.{1}/us', $str)){
 			return $str;
