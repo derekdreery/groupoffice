@@ -54,13 +54,19 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 					'<tr>'+
 						'<td>'+GO.lang.strStatus+':</td>'+
 						'<td>{status_text}</td>'+
-					'</tr>'+
+					'</tr>';
+				
+				if(GO.projects){
+					this.template +=
 					'<tpl if="project_name">'+
 						'<tr>'+
 							'<td>'+GO.projects.lang.project+':</td>'+
 							'<td><a href="#" onclick="GO.linkHandlers[\'GO_Projects_Model_Project\'].call(this, {project_id});">{project_name}</a></td>'+
 						'</tr>'+
-					'</tpl>'+
+					'</tpl>';
+				}
+					
+				this.template +=
 					'<tpl if="!GO.util.empty(description)">'+
 						'<tr>'+
 							'<td colspan="2" class="display-panel-heading">'+GO.lang.strDescription+'</td>'+
