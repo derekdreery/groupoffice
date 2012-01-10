@@ -22,7 +22,7 @@ else
 
 
 function generateLangKeys($className){
-	require('../../www/Group-Office.php');
+	require('../../www/GO.php');
 	
 	$model = new $className();
 	
