@@ -26,17 +26,21 @@ GO.grid.MultiSelectGrid = function (config){
 
 	if(config.allowNoSelection)
 		this.allowNoSelection = true;
-
-	Ext.apply(config, {
-		plugins: [checkColumn],
-		tools : [
+	
+	if(!config.tools)
+		config.tools=[];
+	
+	config.tools.push(
 		{
 			text:GO.lang.selectAll,
 			id:'plus',
 			qtip:GO.lang.selectAll,
 			handler:function(){this.selectAll();},
 			scope: this
-		}],
+		});
+
+	Ext.apply(config, {
+		plugins: [checkColumn],		
 		layout:'fit',
 		cls: 'go-grid3-hide-headers',
 		autoScroll:true,

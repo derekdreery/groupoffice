@@ -135,10 +135,10 @@ Ext.extend(GO.calendar.ColorPickerDialog, Ext.Window, {
 			},
 			editor: 
 				new GO.form.ColorField({
-					fieldLabel : GO.lang.color,
-					value : GO.calendar.defaultBackground,
-					anchor:'50%',
-					name : 'color',
+//					fieldLabel : GO.lang.color,
+//					value : GO.calendar.defaultBackground,
+//					anchor:'50%',
+//					name : 'color',
 					colors : [
 					'EBF1E2',
 					'95C5D3',
