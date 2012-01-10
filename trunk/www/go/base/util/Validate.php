@@ -141,7 +141,7 @@ class GO_Base_Util_Validate {
 		try {
 			$ret = $vies->checkVat($message);
 		} catch (SoapFault $e) {
-			echo $ret = $e->faultstring;
+			$ret = $e->faultstring;
 			$regex = '/\{ \'([A-Z_]*)\' \}/';
 			$n = preg_match($regex, $ret, $matches);
 			$ret = $matches[1];
