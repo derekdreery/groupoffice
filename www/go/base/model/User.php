@@ -154,7 +154,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			$this->setValidationError('passwordConfirm', GO::t('passwordMatchError'));
 		}
 
-		if ($this->_maxUsersReached())				
+		if ($this->isNew && $this->_maxUsersReached())				
 			throw new Exception(GO::t('max_users_reached', 'users'));
 
 		if (!GO::config()->allow_duplicate_email) {
