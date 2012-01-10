@@ -335,9 +335,15 @@ GO.email.EmailClient = function(config){
 								var responseParams = Ext.decode(response.responseText);
 								if(responseParams.success)
 								{
-									//remove preloaded children otherwise it won't request the server
-									delete node.attributes.children;
-									node.reload();
+									//TODO: Check for mb mode
+									if(responseParams.is_mbroot){
+										delete node.parentNode.attributes.children;
+										node.parentNode.reload();
+									} else {									
+										//remove preloaded children otherwise it won't request the server
+										delete node.attributes.children;
+										node.reload();
+									}
 								}else
 								{
 									Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);

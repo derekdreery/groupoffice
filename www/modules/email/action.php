@@ -77,7 +77,8 @@ try {
 
 			$response['success']=true;
 
-			$dir = $GO_CONFIG->tmpdir.'attachments/'.uniqid(date('is'),true).'/';
+			$last_dir = uniqid(date('is'),true);
+			$dir = $GO_CONFIG->tmpdir.'attachments/'.$last_dir.'/';
 			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 			filesystem::mkdir_recursive($dir);
 
@@ -99,12 +100,12 @@ try {
 				move_uploaded_file($file['tmp_name'], $tmp_file);
 				if (substr($dir,0,1)=='/')
 					$dir = substr($dir,1,strlen($dir)-2);
-				$dir_arr = explode('/',$dir);
+
 				$extension = File::get_extension($file['name']);
 				$response['file'] = array(
 					'tmp_name'=>$tmp_file,
 					'name'=>$file['name'],
-					'last_dir'=>$dir_arr[count($dir_arr)-1],
+					'last_dir'=>$last_dir,
 					'size'=>$file['size'],
 					'type'=>File::get_filetype_description($extension),
 					'extension'=>$extension,
@@ -332,7 +333,8 @@ try {
 			$response['files']=array();		
 
 			//$response['debug']=$_FILES['attachments'];
-			$dir = $GO_CONFIG->tmpdir.'attachments/'.uniqid(date('is'),true).'/';
+			$last_dir=uniqid(date('is'),true);
+			$dir = $GO_CONFIG->tmpdir.'attachments/'.$last_dir.'/';
 
 			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 			filesystem::mkdir_recursive($dir);
@@ -349,8 +351,9 @@ try {
 						'size'=>$_FILES['attachments']['size'][$n],
 						'type'=>File::get_filetype_description($extension),
 						'extension'=>$extension,
-						'human_size'=>Number::format_size($_FILES['attachments']['size'][$n])
-					);
+						'human_size'=>Number::format_size($_FILES['attachments']['size'][$n]),
+						'last_dir'=>$last_dir
+					);					
 				}
 			}
 			echo json_encode($response);
@@ -747,17 +750,21 @@ try {
 				if($folder = $email->get_folder_by_id($parent_id)) {
 					if($email->is_mbroot($folder['name'],$delimiter, $account['mbroot'])) {
 						$parent_id=0;
+						$response['is_mbroot'] = true;
 					}
 					$new_folder_name=$folder['name'].$delimiter.$new_folder_name;
 				}else {
 					$response['success']=false;
-					$response['feedback']=$lang['comon']['selectError'];
+					$response['feedback']=$lang['common']['selectError'];
 					echo json_encode($response);
 					exit();
 				}
 
 			}else {
-				$new_folder_name=$account['mbroot'].$_POST['new_folder_name'];
+				if(!empty($account['mbroot']))
+					$new_folder_name=trim($account['mbroot'],$delimiter).$delimiter.$_POST['new_folder_name'];
+				else
+					$new_folder_name=$_POST['new_folder_name'];
 			}
 
 			if($imap->create_folder($new_folder_name)) {

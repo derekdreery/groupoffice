@@ -214,7 +214,37 @@ class calendar extends db {
 		}
 	}
 
-
+	/**
+	 * Get the color for a calendar for a user.
+	 * Each user can define an own color for each calendar.
+	 * 
+	 * @param int $cal_id
+	 * @param int $user_id
+	 * @return mixed (boolean or string) 
+	 */
+	function getCalendarColor($cal_id, $user_id){
+		// TODO: De kleur ophalen en returnen
+		$this->query("SELECT color FROM cal_calendar_user_colors WHERE user_id='".intval($user_id)."' AND calendar_id='".intval($cal_id)."';");
+		if($record=$this->next_record()) {
+			return $record['color'];
+		}
+		return false;
+	}
+		
+	/**
+	 * Set the correct color for the calendars in the multi calendar view.
+	 * Each user can define an own color for each calendar.
+	 * 
+	 * @param int $cal_id
+	 * @param int $user_id
+	 * @param string $color
+	 * @return boolean 
+	 */
+	function setCalendarColor($cal_id, $user_id, $color){
+		$this->query("REPLACE INTO cal_calendar_user_colors (user_id, calendar_id, color) VALUES ('".intval($user_id)."','".intval($cal_id)."', '".$this->escape($color)."')");
+		return true;
+	}
+	
 	function reminder_seconds_to_form_input($reminder) {
 		$multipliers[] = 604800;
 		$multipliers[] = 86400;
@@ -800,7 +830,11 @@ class calendar extends db {
 		while ($this->next_record()) {
 			$delete->delete_event($this->f('id'));
 		}
+		
 		$sql = "DELETE FROM cal_views_calendars WHERE calendar_id='".$this->escape($calendar_id)."'";
+		$this->query($sql);
+		
+		$sql = "DELETE FROM cal_calendar_user_colors WHERE calendar_id='".$this->escape($calendar_id)."'";
 		$this->query($sql);
 
 		$sql= "DELETE FROM cal_calendars WHERE id='".$this->escape($calendar_id)."'";
@@ -2435,6 +2469,9 @@ class calendar extends db {
 		while($cal->next_record()) {
 			$delete->delete_calendar($cal->f('id'));
 		}
+		
+		$sql = "DELETE FROM cal_calendar_user_colors WHERE user_id=".$cal->escape($user['id']);
+		$cal->query($sql);
 
 		$sql = "DELETE FROM cal_settings WHERE user_id=".$cal->escape($user['id']);
 		$cal->query($sql);

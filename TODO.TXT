@@ -5,33 +5,33 @@ invitation.php
 alarm import
 
 
-e-mail mvc
-
-
 Files versioning
 
 serverclient
-overige modules mvc
-
-Freebusy support in sabredav 1.6
-
-
-sticky user group that is shared with all items members create
-E-mail files functie
-
 
 * Default models:
 Button to create default models for user
 Button to create default models for module
 Select allowed modules in group dialog
 
-
-
 Projects facturatie
 tickets tarieven opslaan en facturatie testen
 Export projecten en billing
 
-
 Module icons
 
 
+
+Licentie checks per module
+Servermanager bestelfunctie
+
+Lage prio:
+
+e-mail mvc
+overige modules mvc
+sticky user group that is shared with all items members create
+E-mail files functie
+
+Freebusy support in sabredav 1.6
+
+Feature requests

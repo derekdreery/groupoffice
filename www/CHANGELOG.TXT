@@ -1,4 +1,4 @@
-23-12-2011 3.9.00
+10-01-2012 3.9.00
 - Complete new MVC PHP framework
 - Extensive security audit by Cigitel.
 - Users are stored in the addressbook too.
@@ -8,11 +8,38 @@
 - filesearch module.
 - workflow module.
 - WARNING: batch report queries will not work anymore. They need to be reconfigured.
-- SabreDAV upgraded to 1.5.4
+- SabreDAV upgraded to 1.5.6
+- Swift Mailer upgraded to 4.1.5
+- Project tasks have a relation now and have a percentage complete field.
 
+06-01-2012 3.7.42
+- Bug fix in Russian reminders.
+- Small adjustments for customer customization module.
+- Some other small bugs where fixed.
 
+22-12-2011 3.7.41
+- Small bug fixes
 
-17-10-2011 3.7.35
+16-12-2011 3.7.40
+- Bug with mail headers on some servers
+
+07-12-2011 3.7.39
+- Create mail folders was broken
+- Download of email attachments bug
+
+01-12-2011 3.7.38
+- Bug in calendar events display with multiselect
+
+30-11-2011 3.7.37
+- Missing table on calendar bug.
+
+29-11-2011 3.7.36
+- GOTA was broken in latest releases.
+- Calendar colors with multiple selection can be defined by the user.
+- UID of calendar items got lost when syncing with ActiveSync. This caused problems with CalDAV.
+- Forwarding inline images that came from Apple imail failed sometimes.
+
+17-11-2011 3.7.35
 - Several small bug fixes
 - Added Vietnamese
 

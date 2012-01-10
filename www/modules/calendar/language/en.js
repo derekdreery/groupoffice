@@ -148,3 +148,7 @@ GO.calendar.lang.addTimeRegistration='Import into timeregistration';
 GO.calendar.lang.showNotBusy='Don\'t show new reservations as busy';
 
 GO.calendar.lang.sendEmailParticipants = 'Create email for participants';
+
+GO.calendar.lang.calendarColor = 'Calendar Color';
+GO.calendar.lang.colors = 'Colors';
+GO.calendar.lang.setColors = 'Set colors for each calendar';

@@ -100,6 +100,26 @@ $response =array('success'=>false);
 try {
 
 	switch($_REQUEST['task']) {
+		
+		case 'save_calendar_colors':
+			
+			$data = json_decode($_POST['griddata']);
+			
+			foreach($data as $d) {
+				$cal->setCalendarColor($d->id, $GO_SECURITY->user_id, $d->color);
+			}
+			
+//			var_dump($data);
+			
+			$response['success'] = true;
+
+//			while($record =$cal->next_record()) {
+//				$color = $cal->getCalendarColor($record->id,$GO_SECURITY->user_id);
+//				
+//				$response['results'][] = $record;
+//			}
+//			
+			break;
 
 		case 'import':
 
