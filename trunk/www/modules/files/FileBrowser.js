@@ -1837,9 +1837,10 @@ GO.files.editFile = function (fileId){
 		{
 			//window.location.href=GO.settings.modules.gota.url+'jnlp.php?id='+this.link_id;
 			window.open(GO.url('gota/file/edit&id='+fileId));
+			return;
 		}
-	}
-	
+	}	
+	window.open(GO.url("files/file/download",{id:fileId}));	
 }
 
 
@@ -1922,7 +1923,7 @@ GO.files.createSelectFileBrowser = function(){
 }
 
 
-GO.linkHandlers[6]=function(id, record){
+GO.linkHandlers["GO_Files_Model_File"]=function(id, record){
 	//GO.files.showFilePropertiesDialog(id+"");
 	if(!GO.files.linkFileWindow){
 		var filePanel = new GO.files.FilePanel();
@@ -1936,13 +1937,13 @@ GO.linkHandlers[6]=function(id, record){
 	GO.files.linkFileWindow.filePanel.load(id);
 	GO.files.linkFileWindow.show();
 }
-GO.linkPreviewPanels[6]=function(config){
+GO.linkPreviewPanels["GO_Files_Model_File"]=function(config){
 	config = config || {};
 	return new GO.files.FilePanel(config);
 }
 
 
-GO.linkHandlers[17]=function(id, record){
+GO.linkHandlers["GO_Files_Model_Folder"]=function(id, record){
 	//GO.files.showFilePropertiesDialog(id+"");
 	if(!GO.files.linkFolderWindow){
 		var filePanel = new GO.files.FolderPanel();
@@ -1956,7 +1957,7 @@ GO.linkHandlers[17]=function(id, record){
 	GO.files.linkFolderWindow.filePanel.load(id);
 	GO.files.linkFolderWindow.show();
 }
-GO.linkPreviewPanels[17]=function(config){
+GO.linkPreviewPanels["GO_Files_Model_Folder"]=function(config){
 	config = config || {};
 	return new GO.files.FolderPanel(config);
 }
