@@ -196,7 +196,6 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		$settings = GO_Tasks_Model_Settings::model()->getDefault(GO::user());
 		
 		$defaults = array(
-				//'description'=>'DIT IS DE BESCHRIJVING DIE STANDAARD WORDT INGEVULD',
 				'status' => GO_Tasks_Model_Task::STATUS_NEEDS_ACTION,
 				'remind' => $settings->remind,
 				'start_time'=> time(),
