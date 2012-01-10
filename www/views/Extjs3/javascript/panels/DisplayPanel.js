@@ -404,10 +404,11 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 						GO.files.openFolder(this.data.files_folder_id, file.id);
 					}else
 					{
+						
 						if(GO.files){
-							var record = new GO.files.FileRecord(file);
+							//var record = new GO.files.FileRecord(file);
 							//GO.files.showFilePropertiesDialog(record.get('id'));
-							GO.files.openFile(record);
+							GO.files.editFile(file.id);
 						}else
 						{
 							window.open(GO.settings.modules.files.url+'download.php?id='+file.id);
