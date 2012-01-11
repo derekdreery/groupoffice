@@ -119,7 +119,8 @@ Ext.extend(GO.calendar.ContextMenu, Ext.menu.Menu, {
 		this.actionDelete.setDisabled(this.event.read_only);
 		
 		this.actionInfo.setDisabled(!event.event_id);
-		this.actionAddTimeRegistration.setDisabled(!event.event_id);
+		if(this.actionAddTimeRegistration)
+			this.actionAddTimeRegistration.setDisabled(!event.event_id);
 		
 
 		if (GO.email)
