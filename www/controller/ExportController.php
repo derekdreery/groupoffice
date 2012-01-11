@@ -73,7 +73,15 @@ class GO_Core_Controller_Export extends GO_Base_Controller_AbstractController {
 				if($classname != 'GO_Base_Export_ExportInterface')
 				{
 					//$export = new $classname('temp');
-					if($classname::$showInView)
+					
+					//this is only compatible with php 5.3:
+					//$classname::$showInView
+					//so we use ReflectionClass
+					
+					$class = new ReflectionClass($classname);
+					$showInView=$class->getStaticPropertyValue('showInView');
+					
+					if($showInView)
 						$defaultTypes[$classname] = array('name'=>$classname::$name,'useOrientation'=>$classname::$useOrientation);
 				}
 			}
