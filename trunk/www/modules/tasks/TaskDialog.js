@@ -350,7 +350,8 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		});
 
 		this.selectTaskList = new GO.tasks.SelectTasklist({
-			fieldLabel : GO.tasks.lang.tasklist		
+			fieldLabel : GO.tasks.lang.tasklist,
+			allowBlank:false
 		});
 
 		this.selectCategory = new GO.form.ComboBoxReset({
