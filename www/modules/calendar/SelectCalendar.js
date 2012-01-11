@@ -61,6 +61,6 @@ GO.calendar.SelectCalendar = function(config){
 	});
 
 }
-Ext.extend(GO.calendar.SelectCalendar, GO.form.ComboBox, {
+Ext.extend(GO.calendar.SelectCalendar, GO.form.ComboBoxReset, {
 
 });

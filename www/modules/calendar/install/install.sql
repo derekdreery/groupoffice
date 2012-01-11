@@ -130,11 +130,11 @@ CREATE TABLE IF NOT EXISTS `cal_exceptions` (
 
 DROP TABLE IF EXISTS `cal_groups`;
 CREATE TABLE IF NOT EXISTS `cal_groups` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(50) DEFAULT NULL,
-  `fields` varchar(255) NOT NULL,
-  `show_not_as_busy` tinyint(1) NOT NULL,
+  `fields` varchar(255) NOT NULL DEFAULT '',
+  `show_not_as_busy` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

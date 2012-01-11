@@ -473,10 +473,15 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		}
 
 		if($model->hasLinks()){
-			$stmt = GO_Base_Model_SearchCacheRecord::model()->findLinks($model, array(
-					'limit'=>15
-			));
-
+			$findParams = GO_Base_Db_FindParams::newInstance()
+							->limit(15);
+			
+			$findParams->getCriteria()->addInCondition('model_type_id', array(
+					GO_Calendar_Model_Event::model()->modelTypeId(),GO_Tasks_Model_Task::model()->modelTypeId()
+			), 't', true, true);
+			
+			$stmt = GO_Base_Model_SearchCacheRecord::model()->findLinks($model, $findParams);
+					
 			$store = GO_Base_Data_Store::newInstance(GO_Base_Model_SearchCacheRecord::model());		
 			$store->setStatement($stmt);
 
@@ -488,15 +493,14 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$response['data']['links']=$data['results'];		
 		}
 
-		if (GO::modules()->calendar){
+		if (!isset($response['data']['events']) && GO::modules()->calendar){
 
-			$startOfDay = GO_Base_Util_Date::clear_time(time());
+			//$startOfDay = GO_Base_Util_Date::clear_time(time());
 			
-			$stmt = GO_Calendar_Model_Event::model()->findLinks($model, array(
-					//'limit'=>15
-					'where'=>'start_time>=:start_time',
-					'bindParams'=>array(':start_time'=>$startOfDay)
-			));		
+			$findParams = GO_Base_Db_FindParams::newInstance()->order('start_time','DESC');
+			//$findParams->getCriteria()->addCondition('start_time', $startOfDay, '>=');						
+			
+			$stmt = GO_Calendar_Model_Event::model()->findLinks($model, $findParams);		
 
 			$store = GO_Base_Data_Store::newInstance(GO_Calendar_Model_Event::model());
 			$store->setStatement($stmt);
@@ -508,20 +512,40 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			
 			$data = $store->getData();
 			$response['data']['events']=$data['results'];
-		}		
-
-		if (/* !in_array('files', $hidden_sections) && */!isset($response['data']['files'])) {
-			if (isset(GO::modules()->files) && $model->hasFiles() && $response['data']['files_folder_id']>0) {
-				
-				$fc = new GO_Files_Controller_Folder();
-				$listResponse = $fc->actionList(array('folder_id'=>$response['data']['files_folder_id']));
-				$response['data']['files'] = $listResponse['results'];
-
-				//$response['data']['files'] = $files->get_content_json($response['data']['files_folder_id']);
-			} else {
-				$response['data']['files'] = array();
-			}
 		}
+		
+		if (!isset($response['data']['tasks']) && GO::modules()->tasks){
+
+			//$startOfDay = GO_Base_Util_Date::clear_time(time());
+			
+			$findParams = GO_Base_Db_FindParams::newInstance()->order('due_time','DESC');
+			//$findParams->getCriteria()->addCondition('start_time', $startOfDay, '>=');						
+			
+			$stmt = GO_Tasks_Model_Task::model()->findLinks($model, $findParams);		
+
+			$store = GO_Base_Data_Store::newInstance(GO_Tasks_Model_Task::model());
+			$store->setStatement($stmt);
+			
+			$store->getColumnModel()
+							->setFormatRecordFunction(array($this, 'formatTaskLinkRecord'))
+							->formatColumn('late','$model->due_time<time() ? 1 : 0;')
+							->formatColumn('tasklist_name', '$model->tasklist->name')
+							->formatColumn('link_count','$model->countLinks()')
+							->formatColumn('link_description','$model->link_description');		
+			
+			$data = $store->getData();
+			$response['data']['tasks']=$data['results'];
+		}
+		
+		if (!isset($response['data']['files']) && isset(GO::modules()->files) && $model->hasFiles() && $response['data']['files_folder_id']>0) {
+
+			$fc = new GO_Files_Controller_Folder();
+			$listResponse = $fc->actionList(array('folder_id'=>$response['data']['files_folder_id']));
+			$response['data']['files'] = $listResponse['results'];
+		} else {
+			$response['data']['files'] = array();
+		}
+		
 
 		if (GO::modules()->comments){
 
@@ -548,6 +572,19 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$response = $this->afterDisplay($response, $model, $params);
 
 		return $response;
+	}
+	
+	
+	public function formatTaskLinkRecord($record, $model, $cm){
+		
+		$statuses = GO::t('statuses','tasks');
+		
+		$record['status']=$statuses[$model->status];
+		
+		if($model->percentage_complete>0 && $model->status!='COMPLETED')
+			$record['status'].= ' ('.$model->percentage_complete.'%)';
+		
+		return $record;
 	}
 
 	

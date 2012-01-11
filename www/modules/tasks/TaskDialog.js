@@ -188,13 +188,8 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		if (config.link_config) {
 			this.link_config = config.link_config;
 			if (config.link_config.modelNameAndId) {
-				
-				//project links are handled in afterload.
-				if(config.link_config.model_name!="GO_Projects_Model_Project"){					
-					
-					this.selectLinkField.setValue(config.link_config.modelNameAndId);
-					this.selectLinkField.setRemoteText(config.link_config.text);
-				}
+				this.selectLinkField.setValue(config.link_config.modelNameAndId);
+				this.selectLinkField.setRemoteText(config.link_config.text);				
 			}
 		}
 	},
