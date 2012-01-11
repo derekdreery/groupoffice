@@ -232,10 +232,6 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		ob_start("ob_upgrade_log");
 		
-		echo "Removing cached javascripts...\n";
-		
-		GO::clearCache();
-		
 		
 		echo "Updating Group-Office database\n";
 		
@@ -358,6 +354,12 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		} else {
 			echo "Ran in test mode\n";
 		}
+		
+		echo "Removing cached javascripts...\n";
+		
+		GO::clearCache();
+		
+		echo "Done!\n";
 
 		//return $response;
 	}
