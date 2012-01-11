@@ -20,7 +20,7 @@ GO.files.SelectFilesDialog = function(config){
                 id:'fs_select_files_grid'
 	});
 
-        this.treeLoader = new Ext.tree.TreeLoader(
+        this.treeLoader = new GO.base.tree.TreeLoader(
 	{
 		dataUrl:GO.settings.modules.files.url+'json.php',
 		baseParams:{
