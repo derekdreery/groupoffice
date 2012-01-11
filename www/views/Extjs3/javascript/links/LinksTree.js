@@ -22,7 +22,7 @@ GO.LinksTree = function(config){
 	config.autoScroll=true;
 	
 	config.animate=true;
-	config.loader=new Ext.tree.TreeLoader(
+	config.loader=new GO.base.tree.TreeLoader(
 	{
 		dataUrl:BaseHref+'json.php',
 		baseParams:{task: 'link_folders_tree', link_type: 0, link_id: 0},

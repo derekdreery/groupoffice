@@ -149,3 +149,4 @@ views/Extjs3/javascript/base/model/multiselect/AddDialog.js
 views/Extjs3/javascript/base/model/multiselect/Dialog.js
 views/Extjs3/javascript/base/model/multiselect/Panel.js
 views/Extjs3/javascript/base/ContextMenu.js
+views/Extjs3/javascript/base/tree/TreeLoader.js
