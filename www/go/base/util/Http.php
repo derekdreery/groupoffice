@@ -63,7 +63,7 @@ class GO_Base_Util_Http {
 	
 	
 	
-	public static function outputDownloadHeaders(GO_Base_Fs_File $file, $inline=false, $cache=false) {
+	public static function outputDownloadHeaders(GO_Base_Fs_File $file, $inline=true, $cache=false) {
 		if($file->exists()){
 			header('Content-Length: ' . $file->size());
 			header("Last-Modified: " . gmdate("D, d M Y H:i:s", $file->mtime())." GMT");

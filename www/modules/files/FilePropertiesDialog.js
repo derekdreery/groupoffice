@@ -133,8 +133,8 @@ GO.files.FilePropertiesDialog = function(config){
 			}
 				
 			GO.linkBrowser.show({
-				link_id : this.file_id,
-				link_type : "6",
+				model_id : this.file_id,
+				model_name : "GO_Files_Model_File",
 				folder_id : "0"
 			});
 		},
@@ -144,7 +144,7 @@ GO.files.FilePropertiesDialog = function(config){
 		text: GO.lang.download,
 		cls: 'x-btn-text-icon',
 		handler: function(){
-			window.location.href=GO.settings.modules.files.url+'download.php?mode=download&id='+this.file_id;
+			GO.files.downloadFile(this.file_id);
 		},
 		scope: this
 	}];
@@ -153,16 +153,10 @@ GO.files.FilePropertiesDialog = function(config){
 	{
 		tbar.push({
 			iconCls: 'btn-edit',
-			text: GO.files.lang.downloadGOTA,
+			text: GO.files.lang.cmdEdit,
 			cls: 'x-btn-text-icon',
 			handler: function(){
-				if(!deployJava.isWebStartInstalled('1.6.0'))
-				{
-					Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);
-				}else
-				{
-					window.location.href=GO.settings.modules.gota.url+'jnlp.php?id='+this.file_id;
-				}
+				GO.files.editFile(this.file_id);
 			},
 			scope: this
 		});

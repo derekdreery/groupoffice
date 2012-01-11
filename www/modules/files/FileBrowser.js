@@ -1825,6 +1825,10 @@ GO.files.openFile = function(record, store,e)
 }
 
 
+GO.files.downloadFile = function (fileId){
+	window.open(GO.url("files/file/download",{id:fileId}));	
+}
+
 GO.files.editFile = function (fileId){
 	
 	if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission)
@@ -1836,11 +1840,11 @@ GO.files.editFile = function (fileId){
 		}else
 		{
 			//window.location.href=GO.settings.modules.gota.url+'jnlp.php?id='+this.link_id;
-			window.open(GO.url('gota/file/edit&id='+fileId));
+			window.location.href=GO.url('gota/file/edit&id='+fileId);
 			return;
 		}
 	}	
-	window.open(GO.url("files/file/download",{id:fileId}));	
+	GO.files.downloadFile(fileId);	
 }
 
 

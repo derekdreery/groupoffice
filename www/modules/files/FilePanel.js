@@ -42,11 +42,19 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 		var tbar = GO.files.FilePanel.superclass.createTopToolbar.call(this);
 
 		tbar.splice(1,0,{
+			iconCls: 'btn-save',
+			text: GO.lang.download,
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				GO.files.downloadFile(this.model_id);
+			},
+			scope: this
+		},{
 			iconCls: 'btn-settings',
 			text: GO.lang.strProperties,
 			cls: 'x-btn-text-icon',
 			handler: function(){
-				GO.files.showFilePropertiesDialog(this.link_id+"");
+				GO.files.showFilePropertiesDialog(this.model_id+"");
 				//this.addSaveHandler(GO.files.filePropertiesDialog);
 			},
 			scope: this
