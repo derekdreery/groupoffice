@@ -2,7 +2,7 @@ GO.files.TreePanel = function (config){
 	config = config || {};
 	
 	
-	config.loader =  new Ext.tree.TreeLoader(
+	config.loader =  new GO.base.tree.TreeLoader(
 	{
 		dataUrl:GO.url('files/folder/tree'),
 		baseParams:{
@@ -11,6 +11,7 @@ GO.files.TreePanel = function (config){
 		},
 		preloadChildren:true
 	});
+
 
 	config.loader.on('beforeload', function(){
 		var el =this.getEl();

@@ -376,6 +376,10 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * folder if necessary.
 	 */
 	public function checkFsSync(){
+		
+		if(!$this->fsFolder->exists())
+			throw new Exception("Folder ".$this->path." doesn't exist on the filesystem! Please run a database check.");
+		
 		if($this->mtime < $this->fsFolder->mtime()){
 			$this->syncFilesystem ();
 			$this->mtime=time();
