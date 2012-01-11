@@ -16,6 +16,7 @@
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  *
+ * @property GO_Sites_Model_Site $site
  */
 
 class GO_Sites_Model_Page extends GO_Base_Db_ActiveRecord {

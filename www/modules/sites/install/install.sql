@@ -84,16 +84,21 @@ CREATE TABLE IF NOT EXISTS `si_sites` (
   `ctime` int(11) NOT NULL,
   `domain` varchar(100) NOT NULL,
   `template` varchar(100) NOT NULL,
+  `login_page` varchar(255) NOT NULL DEFAULT 'login',
+  `ssl` tinyint(1) NOT NULL DEFAULT '0',
+  `mod_rewrite` tinyint(1) NOT NULL DEFAULT '0',
+  `mod_rewrite_base_path` varchar(50) NOT NULL DEFAULT '/',
   PRIMARY KEY (`id`),
   KEY `domain` (`domain`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;# MySQL gaf een lege resultaat set terug (0 rijen).
+
 
 --
 -- Gegevens worden uitgevoerd voor tabel `si_sites`
 --
 
-INSERT INTO `si_sites` (`id`, `name`, `user_id`, `mtime`, `ctime`, `domain`, `template`) VALUES
-(1, 'Intermesh software shop', 1, 1320058048, 1320058048, 'shop.group-office.com', 'Example');
+INSERT INTO `si_sites` (`id`, `name`, `user_id`, `mtime`, `ctime`, `domain`, `template`, `login_page`, `ssl`, `mod_rewrite`, `mod_rewrite_base_path`) VALUES
+(1, 'Intermesh software shop', 1, 1320058048, 1320058048, 'testshop.group-office.com', 'Example', 'login', 0, 1, '/');# 1 rij bijgewerkt.
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
