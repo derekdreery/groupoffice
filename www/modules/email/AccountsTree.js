@@ -22,7 +22,7 @@ GO.email.AccountsTree = function(config){
 	config.width=200;
 	
 	config.animate=true;
-	config.loader=new Ext.tree.TreeLoader(
+	config.loader=new GO.base.tree.TreeLoader(
 	{
 		dataUrl:GO.settings.modules.email.url+'json.php',
 		baseParams:{task: 'tree'},

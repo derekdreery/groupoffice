@@ -19,7 +19,7 @@ GO.email.FoldersDialog = function(config) {
 				border : false,
 				autoScroll : true,
 				height : 200,
-				loader : new Ext.tree.TreeLoader({
+				loader : new GO.base.tree.TreeLoader({
 							dataUrl : GO.settings.modules.email.url
 									+ 'json.php',
 							baseParams : {
