@@ -63,24 +63,8 @@ GO.form.SelectUser = function(config){
 Ext.extend(GO.form.SelectUser, GO.form.ComboBoxReset,{
 	setRemoteValue : function(user_id, name)
 	{
-		var r = this.findRecord('id', user_id);
-		if(!r)
-		{
-			var UserRecord = Ext.data.Record.create([
-			{
-				name: 'id'
-			},{
-				name: 'name'
-			}
-			]);
-			var loggedInUserRecord = new UserRecord({
-				id: user_id,
-				name: name
-			});
-			this.store.add(loggedInUserRecord);
-		}
-		
 		this.setValue(user_id);
+		this.setRemoteText(name);
 	}	
 });
 
