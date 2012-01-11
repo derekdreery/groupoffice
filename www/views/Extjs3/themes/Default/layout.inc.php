@@ -50,7 +50,7 @@ if($GLOBALS['GO_SECURITY']->logged_in() && !isset($popup_groupoffice))
 			<span id="notification-area">				
 			</span>			
 			
-			<img id="reminder-icon" src="<?php echo $GLOBALS['GO_CONFIG']->host; ?>themes/Default/images/16x16/reminders.png" style="border:0;vertical-align:middle;cursor:pointer" />
+			<img id="reminder-icon" src="<?php echo $GLOBALS['GO_CONFIG']->host; ?>views/Extjs3/themes/Default/images/16x16/reminders.png" style="border:0;vertical-align:middle;cursor:pointer" />
 			<!-- <img id="checker-icon" src="<?php echo $GLOBALS['GO_CONFIG']->host; ?>ext/resources/images/default/grid/loading.gif" style="border:0;vertical-align:middle" /> -->
 			
 			<?php if (isset($GLOBALS['GO_MODULES']->modules['search']) && $GLOBALS['GO_MODULES']->modules['search']['read_permission']) {
