@@ -84,4 +84,12 @@ class GO_Calendar_CalendarModule extends GO_Base_Module{
 		
 		return parent::loadSettings($settingsController, $params, $response);
 	}
+	
+	public function install() {
+		parent::install();
+		
+		$group = GO_Calendar_Model_Group();
+		$group->name=GO::t('calendars','calendar');
+		$group->save();
+	}
 }

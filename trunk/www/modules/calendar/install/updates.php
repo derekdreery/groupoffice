@@ -120,3 +120,7 @@ $updates["201201100902"][]="CREATE TABLE IF NOT EXISTS `cal_calendar_user_colors
   `color` varchar(6) NOT NULL,
   PRIMARY KEY (`user_id`,`calendar_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates["201201100902"][]="ALTER TABLE `cal_groups` CHANGE `fields` `fields` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+$updates["201201100902"][]="ALTER TABLE `cal_groups` CHANGE `show_not_as_busy` `show_not_as_busy` TINYINT( 1 ) NOT NULL DEFAULT '0'";
+$updates["201201100902"][]="ALTER TABLE `cal_groups` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";

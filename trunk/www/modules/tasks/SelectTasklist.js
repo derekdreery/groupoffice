@@ -52,7 +52,7 @@ GO.tasks.SelectTasklist = function(config){
 	});
 	
 }
-Ext.extend(GO.tasks.SelectTasklist, GO.form.ComboBox, {
+Ext.extend(GO.tasks.SelectTasklist, GO.form.ComboBoxReset, {
 	
 	/*afterRender : function(){
 		

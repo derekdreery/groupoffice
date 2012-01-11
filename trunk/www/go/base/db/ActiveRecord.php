@@ -2645,15 +2645,24 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * 
 	 * selects all contacts linked to the $noteModel
 	 * 
-	 * @param type $model
-	 * @param type $findParams
-	 * @return type 
+	 * @param GO_Base_Db_ActiveRecord $model
+	 * @param GO_Base_Db_FindParams $findParams
+	 * @return GO_Base_Db_ActiveStatement 
 	 */
-	public function findLinks($model, $findParams=array()){
+	public function findLinks($model, $findParams=false){
 		
-		$findParams['fields']='t.*,l.description AS link_description';
-		$findParams['join']="INNER JOIN `go_links_{$model->tableName()}` l ON ".
-			"(l.id=".intval($model->id)." AND t.id=l.model_id AND l.model_type_id=".intval($this->modelTypeId()).")";
+		if(!$findParams)
+			$findParams = GO_Base_Db_FindParams::newInstance ();
+		
+		$findParams->select('t.*,l.description AS link_description');
+		
+		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
+						->addCondition('id', $model->id,'=','l')
+						->addRawCondition("t.id", "l.model_id")
+						->addCondition('model_type_id', $this->modelTypeId(),'=','l');
+		
+		$findParams->join("go_links_{$model->tableName()}", $joinCriteria, 'l');
+		
 		return $this->find($findParams);
 	}
 	
