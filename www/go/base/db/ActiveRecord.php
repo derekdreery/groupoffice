@@ -1780,7 +1780,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$errors = $this->getValidationErrors();
 		if(!empty($errors)){
-			throw new Exception(GO::t('validationErrorsFound')."\n".implode("\n", $errors));
+			return false;
 		}
 		
 		return true;
@@ -1812,7 +1812,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	/**
 	 * Set a validation error for the given field.
 	 * 
-	 * @param string $attribute
+	 * @param string $attribute Set to 'form' for a general form error.
 	 * @param string $message 
 	 */
 	protected function setValidationError($attribute,$message) {
@@ -1846,8 +1846,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			throw new GO_Base_Exception_AccessDenied();
 		
 		if(!$this->validate()){
-			GO::debug("WARNING: GO_Base_Db_Active::validate returned false or no value");
-			return false;
+			$errors = $this->getValidationErrors();
+			throw new Exception(GO::t('validationErrorsFound')."\n".implode("\n", $errors));			
 		}
 		
 		//Don't do anything if nothing has been modified.
