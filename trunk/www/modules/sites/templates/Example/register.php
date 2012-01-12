@@ -57,7 +57,7 @@
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => "Number of house",
-										"name" => "address_nr",
+										"name" => "address_no",
 										"value" => ''
 									));
 									
