@@ -1,9 +1,27 @@
 <?php
+/**
+ * Group-Office
+ * 
+ * Copyright Intermesh BV. 
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ * 
+ * @license AGPL/Proprietary http://www.group-office.com/LICENSE.TXT
+ * @link http://www.group-office.com
+ * @copyright Copyright Intermesh BV
+ * @version $Id: Number.php 7962 2011-08-24 14:48:45Z mschering $
+ * @author Merijn Schering <mschering@intermesh.nl>
+ * @package GO.base.model
+ */
 
 /**
  * Models that extends this must have a 'user_id'. If it has a name attribute it
  * will be copied from the user They will be automatically created and deleted 
  * along with a user.
+ * 
+ * @package GO.base.model
  */
 abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveRecord {
 
