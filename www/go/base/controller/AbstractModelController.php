@@ -476,9 +476,13 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$findParams = GO_Base_Db_FindParams::newInstance()
 							->limit(15);
 			
-			$findParams->getCriteria()->addInCondition('model_type_id', array(
-					GO_Calendar_Model_Event::model()->modelTypeId(),GO_Tasks_Model_Task::model()->modelTypeId()
-			), 't', true, true);
+			$ignoreModelTypes = array();
+			if(GO::modules()->calendar)
+				$ignoreModelTypes[]=GO_Calendar_Model_Event::model()->modelTypeId();
+			if(GO::modules()->tasks)
+				$ignoreModelTypes[]=GO_Tasks_Model_Task::model()->modelTypeId();
+			
+			$findParams->getCriteria()->addInCondition('model_type_id', $ignoreModelTypes, 't', true, true);
 			
 			$stmt = GO_Base_Model_SearchCacheRecord::model()->findLinks($model, $findParams);
 					
