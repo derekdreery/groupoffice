@@ -17,6 +17,24 @@
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  *
  * @property GO_Sites_Model_Site $site
+ * @property string $controller_action
+ * @property string $controller
+ * @property boolean $login_required
+ * @property int $sort
+ * @property boolean $hidden
+ * @property string $content
+ * @property string $template
+ * @property string $path
+ * @property string $keywords
+ * @property string $description
+ * @property string $title
+ * @property string $name
+ * @property int $mtime
+ * @property int $ctime
+ * @property int $user_id
+ * @property int $site_id
+ * @property int $parent_id
+ * @property int $id
  */
 
 class GO_Sites_Model_Page extends GO_Base_Db_ActiveRecord {
