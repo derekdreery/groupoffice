@@ -44,7 +44,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	/**
 	 * The default action when the form in an edit dialog is submitted.
 	 */
-	public function actionSubmit($params) {
+	protected function actionSubmit($params) {
 
 		$modelName = $this->model;
 		if (!empty($params['id'])){
@@ -136,7 +136,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	/**
 	 * Action to load a single record.
 	 */
-	public function actionLoad($params) {
+	protected function actionLoad($params) {
 		$modelName = $this->model;
 		//$modelName::model() does not work on php 5.2!
 		if(!empty($params['id'])){
@@ -316,7 +316,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * GO_Addressbook_Controller_Contact::beforeIntegrateRegularSql.
 	 * 3. Deleting models
    */
-  public function actionStore($params){	
+  protected function actionStore($params){	
     $modelName = $this->model;  
 
     $store = new GO_Base_Data_Store($this->getStoreColumnModel());	
@@ -418,7 +418,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	/**
 	 * The default action for displaying a model in a DisplayPanel.
 	 */
-	public function actionDisplay($params) {
+	protected function actionDisplay($params) {
 
 		$response = array();
 				
@@ -658,7 +658,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * 
 	 * @param Array $params 
 	 */
-	public function actionExport($params) {
+	protected function actionExport($params) {
 	
 		$showHeader = false;
 		$orientation = false;
@@ -712,7 +712,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * 
 	 * @param array $params 
 	 */
-	public function actionImport($params) {
+	protected function actionImport($params) {
 
 		$importFile = new GO_Base_Fs_CsvFile($params['file']);
 		
@@ -812,7 +812,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	}
 	
 	
-	public function actionAttributes($params){
+	protected function actionAttributes($params){
 		
 		if(!isset($params['exclude']))
 			$params['exclude']=array();

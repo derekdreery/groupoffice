@@ -63,7 +63,7 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 	 * @param Array $params
 	 * @return type 
 	 */
-	public function actionSelectNewStore($params){
+	protected function actionSelectNewStore($params){
 		
 		$model = GO::getModel($this->modelName());
 		$linkModel = GO::getModel($this->linkModelName());
@@ -108,7 +108,7 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 	 * @param Array $params
 	 * @return type 
 	 */
-	public function actionSelectedStore($params){
+	protected function actionSelectedStore($params){
 		
 		if(!empty($params['add'])) {
 			$ids = json_decode($params['add'],true);
