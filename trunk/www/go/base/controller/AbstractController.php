@@ -355,7 +355,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	/**
 	 * This default action should be overrriden
 	 */
-	public function actionIndex($params){
+	protected function actionIndex($params){
 		
 	}
 	
