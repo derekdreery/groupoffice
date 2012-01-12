@@ -1,4 +1,34 @@
 <?php
+/**
+ * Group-Office
+ * 
+ * Copyright Intermesh BV. 
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ * 
+ * @license AGPL/Proprietary http://www.group-office.com/LICENSE.TXT
+ * @link http://www.group-office.com
+ * @package GO.modules.addressbook.model
+ * @version $Id: example.php 7607 20120101Z <<USERNAME>> $
+ * @copyright Copyright Intermesh BV.
+ * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
+ */
+ 
+/**
+ * The GO_Addressbook_Model_Template model
+ *
+ * @package GO.modules.addressbook.model
+ * @property string $extension
+ * @property string $content
+ * @property int $acl_id
+ * @property string $name
+ * @property int $type
+ * @property int $user_id
+ * @property int $id
+ */
+
 class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	
 	const TYPE_EMAIL=0;

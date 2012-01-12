@@ -35,6 +35,8 @@
  * @property int $category_id
  * @property int $priority
  * @property String $project_name
+ * @property int $project_id
+ * @property int $percentage_complete
  */
 
 class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {

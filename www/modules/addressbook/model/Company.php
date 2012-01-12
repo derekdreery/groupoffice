@@ -11,6 +11,36 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  * @author Wilmar van Beusekom <wilmar@intermesh.nl>
+ * @property int $files_folder_id
+ * @property boolean $email_allowed
+ * @property int $mtime
+ * @property int $ctime
+ * @property string $crn
+ * @property string $iban
+ * @property string $vat_no
+ * @property string $bank_no
+ * @property string $comment
+ * @property string $homepage
+ * @property string $email
+ * @property string $fax
+ * @property string $phone
+ * @property string $post_zip
+ * @property string $post_country
+ * @property string $post_state
+ * @property string $post_city
+ * @property string $post_address_no
+ * @property string $post_address
+ * @property string $country
+ * @property string $state
+ * @property string $city
+ * @property string $zip
+ * @property string $address_no
+ * @property string $name2
+ * @property string $name
+ * @property int $addressbook_id
+ * @property int $user_id
+ * @property int $link_id
+ * @property int $id
  */
 
 class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {

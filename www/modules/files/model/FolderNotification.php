@@ -17,6 +17,8 @@
  * The GO_Files_Model_Folder model
  * 
 
+ * @property int $user_id
+ * @property int $folder_id
  */
 class GO_Files_Model_FolderNotification extends GO_Base_Db_ActiveRecord {
 

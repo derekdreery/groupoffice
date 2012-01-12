@@ -16,6 +16,16 @@
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.model 
+ * @property int $acl_id
+ * @property int $mtime
+ * @property string $keywords
+ * @property string $model_name
+ * @property int $model_type_id
+ * @property string $description
+ * @property string $name
+ * @property string $module
+ * @property int $model_id
+ * @property int $user_id
  */
 
 class GO_Base_Model_SearchCacheRecord extends GO_Base_Db_ActiveRecord {

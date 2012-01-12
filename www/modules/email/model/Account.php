@@ -16,6 +16,27 @@
 /**
  * The GO_Email_Model_LinkedEmail model
 
+ * @property int $password_encrypted
+ * @property string $smtp_password
+ * @property string $smtp_username
+ * @property string $smtp_encryption
+ * @property int $smtp_port
+ * @property string $smtp_host
+ * @property string $spam
+ * @property string $trash
+ * @property string $drafts
+ * @property string $sent
+ * @property string $mbroot
+ * @property string $password
+ * @property string $username
+ * @property boolean $novalidate_cert
+ * @property boolean $use_ssl
+ * @property int $port
+ * @property string $host
+ * @property string $type
+ * @property int $acl_id
+ * @property int $user_id
+ * @property int $id
  */
 class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 

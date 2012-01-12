@@ -16,6 +16,9 @@
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.model
+ * @property string $description
+ * @property int $user_id
+ * @property int $id
  */
 class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	

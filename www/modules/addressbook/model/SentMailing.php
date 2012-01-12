@@ -10,6 +10,17 @@
  *
  * @copyright Copyright Intermesh
  * @author Wilmar van Beusekom <wilmar@intermesh.nl>
+ * @property int $errors
+ * @property int $sent
+ * @property int $total
+ * @property int $status
+ * @property int $alias_id
+ * @property int $addresslist_id
+ * @property int $ctime
+ * @property string $message_path
+ * @property string $subject
+ * @property int $user_id
+ * @property int $id
  */
 class GO_Addressbook_Model_SentMailing extends GO_Base_Db_ActiveRecord {
 	const STATUS_RUNNING=1;

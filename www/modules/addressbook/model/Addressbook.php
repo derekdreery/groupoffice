@@ -19,6 +19,10 @@
  * @property String $name The name of the Addressbook
  * @property int $files_folder_id
  * @property bool $users true if this addressbook is the special addressbook that holds the Group-Office users.
+ * @property string $default_salutation
+ * @property boolean $shared_acl
+ * @property int $acl_id
+ * @property int $user_id
  */
 
  class GO_Addressbook_Model_Addressbook extends GO_Base_Model_AbstractUserDefaultModel{

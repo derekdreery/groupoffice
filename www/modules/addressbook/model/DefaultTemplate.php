@@ -11,6 +11,8 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  * @author Wilmar van Beusekom <wilmar@intermesh.nl>
+ * @property int $template_id
+ * @property int $user_id
  */
 
 class GO_Addressbook_Model_DefaultTemplate extends GO_Base_Db_ActiveRecord {

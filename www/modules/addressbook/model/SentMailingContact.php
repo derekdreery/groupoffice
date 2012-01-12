@@ -10,6 +10,8 @@
  *
  * @copyright Copyright Intermesh
  * @author Wilmar van Beusekom <wilmar@intermesh.nl>
+ * @property int $contact_id
+ * @property int $sent_mailing_id
  */
 
 class GO_Addressbook_Model_SentMailingContact extends GO_Base_Db_ActiveRecord {

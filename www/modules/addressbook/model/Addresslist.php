@@ -10,6 +10,11 @@
  *
  * @copyright Copyright Intermesh
  * @author Wilmar van Beusekom <wilmar@intermesh.nl>
+ * @property string $default_salutation
+ * @property string $name
+ * @property int $acl_id
+ * @property int $user_id
+ * @property int $id
  */
 
 class GO_Addressbook_Model_Addresslist extends GO_Base_Db_ActiveRecord {

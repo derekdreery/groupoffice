@@ -18,6 +18,10 @@
  * 
  * @property string $name
  * @property string $email
+ * @property boolean $default
+ * @property string $signature
+ * @property int $account_id
+ * @property int $id
  */
 class GO_Email_Model_Alias extends GO_Base_Db_ActiveRecord {
 
