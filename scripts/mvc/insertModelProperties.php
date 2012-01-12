@@ -3,6 +3,9 @@ require('../../www/GO.php');
 
 GO::session()->setCurrentUser(1);
 
+if(PHP_SAPI!='cli')
+	echo "<pre>";
+
 function insertString($string, $insert, $pos){
 	
 	$firstPart= substr($string,0, $pos);
@@ -33,14 +36,18 @@ function classNameToPackage($className){
 $classes=GO::findClasses('model');
 $stmt = GO::modules()->getAll();
 while($module = $stmt->fetch()){
-	$models = $module->moduleManager->getModels();
-	
-	$classes = array_merge($classes, $models);
+	if($module->moduleManager){
+		$models = $module->moduleManager->getModels();
+
+		$classes = array_merge($classes, $models);
+	}
 }
 
 
 foreach($classes as $model){
 	if($model->isSubclassOf('GO_Base_Db_ActiveRecord') && !$model->isAbstract()){
+		
+		$changed = false;
 
 		echo "Processing ".$model->getName()."\n";
 		
@@ -52,6 +59,9 @@ foreach($classes as $model){
 		$lastProperty = strrpos($contents, '@property');
 		
 		if($lastProperty===false){
+			
+			$changed=true;
+			
 			//no property in this model yet. Find comment block			
 			preg_match('/class[ ]+'.$model->getName().'/', $contents, $matches, PREG_OFFSET_CAPTURE);
 			
@@ -104,12 +114,12 @@ foreach($classes as $model){
 			$insertPos = strpos($contents, "\n",$lastProperty);
 		}
 		
-		echo "Insert pos: ".$insertPos."\n";
+//		echo "Insert pos: ".$insertPos."\n";
 		
 		foreach ($columns as $name => $attr) {
-			if (preg_match('/@property .*' . $name . '/', $contents)) {
-				echo "Property $name found in file\n";
-			} else {
+			if (!preg_match('/@property .*' . $name . '/', $contents)) {
+
+				$changed=true;
 				echo "Property $name NOT found in file\n";
 
 				switch ($attr['dbtype']) {
@@ -134,7 +144,10 @@ foreach($classes as $model){
 		
 //		echo "\n\n----\n\n";
 //		echo $contents;
-		file_put_contents($model->getFileName(), $contents);
+		if($changed){
+			echo "Writing file ".$model->getFileName()."\n";
+			file_put_contents($model->getFileName(), $contents);
+		}
 		echo "\n\n----\n\n";		
 		
 	}
