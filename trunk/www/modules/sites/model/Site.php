@@ -16,6 +16,17 @@
  * @copyright Copyright Intermesh BV.
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  *
+ * @property string $mod_rewrite_base_path
+ * @property boolean $mod_rewrite
+ * @property boolean $ssl
+ * @property string $login_page
+ * @property string $template
+ * @property string $domain
+ * @property int $ctime
+ * @property int $mtime
+ * @property int $user_id
+ * @property string $name
+ * @property int $id
  */
 
 class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
