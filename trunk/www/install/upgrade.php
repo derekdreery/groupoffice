@@ -11,7 +11,7 @@ printHead();
 <?php
 
 $mc = new GO_Core_Controller_Maintenance();
-$mc->actionUpgrade(array());
+$mc->run("upgrade",array(),false);
 
 continueButton();
 
