@@ -7,8 +7,7 @@
 								
 								<?php 
 									GO_Base_Html_Form::renderBegin('sites/user/register','register',true);
-								//	echo GO_Base_Html_Error::getError();
-									
+																		
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => "First Name",
@@ -77,7 +76,7 @@
 									));
 									
 									GO_Base_Html_Input::render(array(
-										"required" => true,
+										"required" => false,
 										"label" => "State/Province",
 										"name" => "state",
 										"value" => ''
@@ -106,7 +105,7 @@
 									));
 									
 									GO_Base_Html_Input::render(array(
-										"required" => false,
+										"required" => true,
 										"label" => "Company",
 										"name" => "company",
 										"value" => ''
@@ -133,14 +132,14 @@
 										"value" => ''
 									));
 									
-									GO_Base_Html_Input::render(array(
+									GO_Base_Html_Password::render(array(
 										"required" => true,
 										"label" => "Password",
 										"name" => "password",
 										"value" => ''
 									));
 									
-									GO_Base_Html_Input::render(array(
+									GO_Base_Html_Password::render(array(
 										"required" => true,
 										"label" => "Confirm",
 										"name" => "passwordConfirm",
