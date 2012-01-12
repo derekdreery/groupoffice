@@ -14,10 +14,6 @@
  */
 
 /**
- * 
- * @todo delete files folder, delete custom fields
- * 
- * 
  * The Note model
  * 
  * @property int $id
