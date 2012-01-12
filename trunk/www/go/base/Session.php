@@ -130,12 +130,15 @@ class GO_Base_Session extends GO_Base_Observable{
 	public function clearUserTempFiles(){
 		if(GO::user()){
 	
-			$length = -strlen(GO::user()->id)-1;
-
-			if(substr(GO::config()->tmpdir,$length)==GO::user()->id.'/' && is_dir(GO::config()->tmpdir)){
-				$folder = new GO_Base_Fs_Folder(GO::config()->tmpdir);
-				$folder->delete();
-			}
+//			$length = -strlen(GO::user()->id)-1;
+			
+			GO::config()->getTempFolder()->delete();
+			GO::config()->getTempFolder();
+//
+//			if(substr(GO::config()->tmpdir,$length)==GO::user()->id.'/' && is_dir(GO::config()->tmpdir)){
+//				$folder = new GO_Base_Fs_Folder(GO::config()->tmpdir);
+//				$folder->delete();
+//			}
 		}
 	}
 	

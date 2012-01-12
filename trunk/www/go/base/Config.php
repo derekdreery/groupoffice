@@ -993,7 +993,7 @@ class GO_Base_Config {
 	 * @return GO_Base_Fs_Folder 
 	 */
 	public function getTempFolder(){
-		$folder = new GO_Base_Fs_Folder($this->tmpdir);
+		$folder = new GO_Base_Fs_Folder($this->orig_tmpdir.GO::user()->id);
 		$folder->create();
 		return $folder;
 	}
