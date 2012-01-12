@@ -67,9 +67,11 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	}
 	
 	/**
+	 * Allow guest access
+	 * 
 	 * Return array with actions (in lowercase and without "action" prefix!) that 
 	 * may be accessed by a guest that is not logged in.
-	 * 
+	 * Return array('*') to allow access to all controller actions.
 	 * 
 	 * @return array
 	 */
@@ -78,7 +80,10 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	}
 	
 	/**
+	 * Allow access 
+	 * 
 	 * Return array with actions (in lowercase and without "action" prefix!) that may be accessed without the user having access to the module.
+	 * Return array('*') to allow access to all controller actions.
 	 * 
 	 * @return array
 	 */
@@ -200,7 +205,10 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * @return boolean boolean
 	 */
 	private function _checkPermission($action){
-		if(!in_array($action, $this->allowGuests())){			
+		
+		$allowGuests = $this->allowGuests();
+		
+		if(!in_array($action, $allowGuests) && !in_array('*', $allowGuests)){			
 			//check for logged in user
 			if(!GO::user())
 				return false;			
@@ -208,7 +216,8 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			$this->_checkSecurityToken();
 			
 			//check module permission
-			if(!in_array($action, $this->allowWithoutModuleAccess()))
+			$allowWithoutModuleAccess = $this->allowWithoutModuleAccess();
+			if(!in_array($action, $allowWithoutModuleAccess) && !in_array('*', $allowWithoutModuleAccess))		
 			{
 				$module = $this->getModule();		
 				if($module && !$module->permissionLevel)
