@@ -1,6 +1,6 @@
 <?php
 
-﻿GO.tasks.lang.task = 'Feladat';
+$l["task"] = 'Feladat';
 $l["noTask"]= 'Nincs feladat';
 $l["tasks"]= 'Feladatok';
 $l["addTask"]= 'Új feladat...';
@@ -34,7 +34,7 @@ $l["daysBeforeStart"]='Napok a kezdetig';
 $l["defaultTasklist"]='Alapértelmezett feladatlista';
 $l['name']='Feladatok';
 $l['description']='Put a description here';
-$lang['link_type'][12]=$l['task']='Feladat';
+$l['task']='Feladat';
 $l['status']='Állapot';
 $l['scheduled_call']='Scheduled call at %s';
 $l['statuses']['NEEDS-ACTION'] = 'Needs action';

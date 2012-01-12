@@ -14,4 +14,4 @@ $l["cmdModuleName"]= 'Modulenavn';
 $l["cmdModuleDescription"]= 'Beskrivelse';
 $l["cmdGridColumnModuleName"]= 'Modulenavn';
 $l["cmdUninstallMessage"]= 'ADVARSEL! Alle lagrede data i denne modulen vil bli slettet! Er du sikker på at du vil avinstallere modulen "{0}" ?';
-$l["cmdModulesCannotBeDeleted"]= 'Du kan ikke slette modulen "Moduler" !'
+$l["cmdModulesCannotBeDeleted"]= 'Du kan ikke slette modulen "Moduler" !';
