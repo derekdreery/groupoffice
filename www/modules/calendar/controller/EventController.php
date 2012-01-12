@@ -417,13 +417,13 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 //				);
 //	}	
 
-	public function actionStore($params) {
+	protected function actionStore($params) {
 		$events = GO_Calendar_Model_Event::model()->findCalculatedForPeriod(false, strtotime("2011-10-03"), strtotime("2011-10-10"));
 
 		var_dump($events);
 	}
 
-	public function actionIcs($params) {
+	protected function actionIcs($params) {
 		$event = GO_Calendar_Model_Event::model()->findByPk($params['id']);
 		//header('Content-Type: text/plain');
 		GO_Base_Util_Http::outputDownloadHeaders(new GO_Base_FS_File('calendar.ics'));
@@ -431,7 +431,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	}
 	
 	
-	public function actionDelete($params){
+	protected function actionDelete($params){
 		
 		$event = GO_Calendar_Model_Event::model()->findByPk($params['id']);
 		
@@ -488,7 +488,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	}
 	
 	
-	public function actionAcceptInvitation($params){
+	protected function actionAcceptInvitation($params){
 		
 		$response['success']=false;
 		
@@ -593,7 +593,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	
 	
 	
-	public function actionImportIcs($params){
+	protected function actionImportIcs($params){
 		
 		$file = new GO_Base_Fs_File($params['file']);
 		
@@ -608,7 +608,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$event->importVObject($vevent);
 	}
 	
-	public function actionImportVcs($params){
+	protected function actionImportVcs($params){
 		
 		$file = new GO_Base_Fs_File($params['file']);
 		

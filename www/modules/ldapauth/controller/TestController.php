@@ -1,7 +1,7 @@
 <?php
 class GO_Ldapauth_Controller_Test extends GO_Base_Controller_AbstractController{
 	
-	public function actionTest(){
+	protected function actionTest(){
 		
 	
 		$ldapConn = new GO_Base_Ldap_Connection(GO::config()->ldap_host, GO::config()->ldap_port);

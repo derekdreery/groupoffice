@@ -7,7 +7,7 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site{
 	}
 	
 	
-	public function actionRegister($params){
+	protected function actionRegister($params){
 		GO::$ignoreAclPermissions=true; // To tell no permissions are required to save a new user.
 
 		$model = new GO_Base_Model_User();
@@ -24,12 +24,12 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site{
 		}
 	}
 	
-	public function actionRecover($params){
+	protected function actionRecover($params){
 		
 		
 	}
 	
-	public function actionLogin($params){
+	protected function actionLogin($params){
 		
 		if(GO_Base_Util_Http::isPostRequest()){
 		
@@ -69,7 +69,7 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site{
 		$this->renderPage($params);	
 	}
 	
-	public function actionLogout($params){
+	protected function actionLogout($params){
 		GO::session()->logout();
 		GO::session()->start();		
 		$this->pageRedirect($this->getSite()->getLoginPath());	

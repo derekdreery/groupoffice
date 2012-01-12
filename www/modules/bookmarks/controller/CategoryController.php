@@ -3,7 +3,7 @@ class GO_Bookmarks_Controller_Category extends GO_Base_Controller_AbstractModelC
 
 	protected $model ='GO_Bookmarks_Model_Category';
 	
-	public function actionTest($params)
+	protected function actionTest($params)
 	{
 		echo 'test';
 	}

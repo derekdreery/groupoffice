@@ -166,7 +166,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		return $storeParams;
 	}
 
-	public function actionChangeAddressbook($params) {
+	protected function actionChangeAddressbook($params) {
 		$ids = json_decode($params['items']);
 
 		$response['success'] = true;
@@ -186,7 +186,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		return $response;
 	}
 
-	public function actionMoveEmployees($params) {
+	protected function actionMoveEmployees($params) {
 		$to_company = GO_Addressbook_Model_Company::model()->findByPk($params['to_company_id']);
 //		$to_company = $ab->get_company($_POST['to_company_id']);
 //		$ab2 = new addressbook();

@@ -63,7 +63,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		return parent::afterLoad($response, $model, $params);
 	}
 
-	public function actionDownload($params) {
+	protected function actionDownload($params) {
 		GO::session()->closeWriting();
 		
 		if(isset($params['path'])){
@@ -97,7 +97,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 	 * @param type $params 
 	 * @todo
 	 */
-	public function actionEmailDownloadLink($params){
+	protected function actionEmailDownloadLink($params){
 		
 		$file = GO_Files_Model_File::model()->findByPk($params['id']);
 		$file->random_code=GO_Base_Util_String::randomPassword(11);

@@ -14,7 +14,7 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 	
 	protected $model = 'GO_Addressbook_Model_Addressbook';
 	
-	public function actionSearchSender($params) {
+	protected function actionSearchSender($params) {
 		
 		$criteria = GO_Base_Db_FindCriteria::newInstance()
 			->addCondition('email',$params['email'])
@@ -97,7 +97,7 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 	 * Example command line call: /path/to/groupoffice/groupoffice addressbook/addressbook/importVcf --file=filename.txt --addressbook_id=1
 	 * @param Array $params Parameters. MUST contain string $params['file'].
 	 */
-	public function actionImportVcf($params){
+	protected function actionImportVcf($params){
 		$file = new GO_Base_Fs_File($params['file']);
 		$data = $file->getContents();
 		$contact = new GO_Addressbook_Model_Contact();

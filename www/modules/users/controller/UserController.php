@@ -186,7 +186,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		}
 	}
 
-	public function actionSyncContacts($params) {
+	protected function actionSyncContacts($params) {
 		
 		GO::$ignoreAclPermissions=true; //allow this script access to all
 		GO::$disableModelCache=true; //for less memory usage

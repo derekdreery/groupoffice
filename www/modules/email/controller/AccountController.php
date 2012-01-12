@@ -56,7 +56,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 	}
 	
 
-	public function actionCheckUnseen($params) {
+	protected function actionCheckUnseen($params) {
 		
 		require_once(GO::config()->root_path.'Group-Office.php');
 		global $GO_SECURITY, $GO_MODULES;
