@@ -241,7 +241,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * 'validator'=><a function to call to validate the value>,
 	 * 'gotype'=>'number|text|unixtimestamp', //Autodetected from db as far as possible. See loadColumns()
 	 * 'decimals'=>2//only for gotype=number)
-	 * 'regex'=>'A preg_match expression for validation'
+	 * 'regex'=>'A preg_match expression for validation',
+	 * 'dbtype'=>'varchar' //mysql database type
 	 * 
 	 * The validator looks like this:
 	 * 
@@ -443,7 +444,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 							'required'=>$required,
 							'length'=>$length,
 							'gotype'=>$gotype,
-							'default'=>$default
+							'default'=>$default,
+							'dbtype'=>$type
 					);
 					
 				}
@@ -1714,15 +1716,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	/**
-	 * Returns all column attribute values.
-	 * Note, related objects are not returned.
-	 * @param string $outputType Can be 
+	 * Returns all columns 
 	 * 
-	 * raw: return values as they are stored in the db
-	 * formatted: return the values formatted for an input form
-	 * html: Return the values formatted for HTML display
-	 * 
-	 * @return array attribute values indexed by attribute names.
+	 * @see GO_Base_Db_ActiveRecord::$columns	
+	 * @return array
 	 */
 	public function getColumns()
 	{
