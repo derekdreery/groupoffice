@@ -669,7 +669,7 @@ class GO{
 	 * Find classes in a folder
 	 * 
 	 * @param string $path Relative from go/base
-	 * @return ReflectionClass 
+	 * @return ReflectionClass[] 
 	 */
 	public static function findClasses($subfolder){
 		

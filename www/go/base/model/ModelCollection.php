@@ -48,7 +48,11 @@ class GO_Base_Model_ModelCollection{
 			return false;
 		}
 	}
-	
+	/**
+	 * Query all modules.
+	 * 
+	 * @return GO_Base_Db_ActiveStatement 
+	 */
 	public function getAll(){
 		return $this->model->find();
 	}
