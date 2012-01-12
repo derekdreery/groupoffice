@@ -125,6 +125,21 @@ class GO_Base_Session extends GO_Base_Observable{
 //	}
 	
 	/**
+	 * Erases the temporary files directory for the currently logged on user. 
+	 */
+	public function clearUserTempFiles(){
+		if(GO::user()){
+	
+			$length = -strlen(GO::user()->id)-1;
+
+			if(substr(GO::config()->tmpdir,$length)==GO::user()->id.'/' && is_dir(GO::config()->tmpdir)){
+				$folder = new GO_Base_Fs_Folder(GO::config()->tmpdir);
+				$folder->delete();
+			}
+		}
+	}
+	
+	/**
 	 * Log the current user out.
 	 *
 	 * @access public
@@ -135,19 +150,6 @@ class GO_Base_Session extends GO_Base_Observable{
 		$username = isset(self::$username) ? self::$username : 'notloggedin';
 		//go_log(LOG_DEBUG, 'LOGOUT Username: '.$username.'; IP: '.$_SERVER['REMOTE_ADDR']);
 		GO::infolog("LOGOUT for user: \"".$username."\" from IP: ".$_SERVER['REMOTE_ADDR']);
-
-		if(GO::user()){
-	
-			$length = -strlen(GO::user()->id)-1;
-
-			//GO::debug(substr($GO_CONFIG->tmpdir,$length));
-
-			if(substr(GO::config()->tmpdir,$length)==GO::user()->id.'/' && is_dir(GO::config()->tmpdir)){
-				$folder = new GO_Base_Fs_Folder(GO::config()->tmpdir);
-				$folder->delete();
-			}
-		}
-
 
 		if(!headers_sent()){
 			SetCookie("GO_UN","",time()-3600,GO::config()->host,"",!empty($_SERVER['HTTPS']),true);
@@ -217,6 +219,8 @@ class GO_Base_Session extends GO_Base_Observable{
 				$user->last_login=time();
 				$user->logins++;
 				$user->save();
+				
+				$this->clearUserTempFiles();
 			}
 
 			$this->_setCompatibilitySessionVars(); // TODO: REMOVE IF SYSTEM IS FULLY REBUILT
