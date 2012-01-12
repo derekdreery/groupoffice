@@ -288,6 +288,12 @@ class GO_Base_Mail_Message extends Swift_Message{
 		return false;
 	}
 	
+	
+//	private function _fixRelativeUrls($body){
+//		$regex = preg_quote(GO::config()->host);
+//		preg_match();
+//	}
+	
 	/**
 	 * handleEmailFormInput
 	 * 
@@ -348,28 +354,31 @@ class GO_Base_Mail_Message extends Swift_Message{
 				 * the message body
 				 */
 				 if(count($inlineAttachments)){
-				foreach ($inlineAttachments as $ia) {
+					foreach ($inlineAttachments as $ia) {
 
-					//$tmpFile = new GO_Base_Fs_File(GO::config()->tmpdir.$ia['tmp_file']);
-					
-					$path = empty($ia->from_file_storage) ? GO::config()->tmpdir.$ia->tmp_file : GO::config()->file_storage_path.$ia->tmp_file;
-					$tmpFile = new GO_Base_Fs_File($path);
+						//$tmpFile = new GO_Base_Fs_File(GO::config()->tmpdir.$ia['tmp_file']);
 
-					if ($tmpFile->exists()) {				
-						//Different browsers reformat URL's to absolute or relative. So a pattern match on the filename.
-						$filename = urlencode($tmpFile->name());
-						$result = preg_match('/="([^"]*'.preg_quote($filename).'[^"]*)"/',$params['htmlbody'],$matches);
-						if($result){
-							$img = Swift_EmbeddedFile::fromPath($tmpFile->path());
-							$img->setContentType($tmpFile->mimeType());
-							$contentId = $this->embed($img);
+						$path = empty($ia->from_file_storage) ? GO::config()->tmpdir.$ia->tmp_file : GO::config()->file_storage_path.$ia->tmp_file;
+						$tmpFile = new GO_Base_Fs_File($path);
 
-							//$tmpFile->delete();
+						if ($tmpFile->exists()) {				
+							//Different browsers reformat URL's to absolute or relative. So a pattern match on the filename.
+							$filename = urlencode($tmpFile->name());
+							$result = preg_match('/="([^"]*'.preg_quote($filename).'[^"]*)"/',$params['htmlbody'],$matches);
+							if($result){
+								$img = Swift_EmbeddedFile::fromPath($tmpFile->path());
+								$img->setContentType($tmpFile->mimeType());
+								$contentId = $this->embed($img);
 
-							$params['htmlbody'] = str_replace($matches[1], $contentId, $params['htmlbody']);
+								//$tmpFile->delete();
+
+								$params['htmlbody'] = str_replace($matches[1], $contentId, $params['htmlbody']);
+							}
+						}else
+						{
+							throw new Exception("Error: inline attachment missing on server.".$tmpFile->stripTempPath());
 						}
 					}
-				}
 				}
 			}
 			$this->setHtmlAlternateBody($params['htmlbody']);
@@ -389,6 +398,9 @@ class GO_Base_Mail_Message extends Swift_Message{
 					$this->attach($file);
 					
 					//$tmpFile->delete();
+				}else
+				{
+					throw new Exception("Error: attachment missing on server.".$tmpFile->stripTempPath());
 				}
 			}
 		}

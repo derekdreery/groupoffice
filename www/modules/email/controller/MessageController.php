@@ -144,6 +144,9 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		$mailer = GO_Base_Mail_Mailer::newGoInstance(GO_Email_Transport::newGoInstance($account));
 		
+		$logger = new Swift_Plugins_Loggers_ArrayLogger();
+		$mailer->registerPlugin(new Swift_Plugins_LoggerPlugin($logger));
+		
 		$success = $mailer->send($message);		
 		
 		if($success){
@@ -173,7 +176,15 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			}
 		}else
 		{
-			throw new Exception("Failed to send the message");
+			$logStr = $logger->dump();
+			
+			preg_match('/<< 550.*>>/s', $logStr,$matches);
+
+			if(isset($matches[0])){
+				$logStr=trim(substr($matches[0],2,-2));
+			}
+
+			throw new Exception("Failed to send the message:<br /><br />".nl2br($logStr));
 		}		
 		$response['success']=true;
 		
