@@ -516,7 +516,7 @@ try {
 				if(!$color){
 					$color = $default_colors[$i];
 					$i++;
-					if($i > $default_colors_count)
+					if($i >= $default_colors_count)
 					$i = 0;
 				}
 
