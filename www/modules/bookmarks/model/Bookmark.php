@@ -2,6 +2,16 @@
 
 /**
  * @property String thumbURL the url to the thumbnail of the bookmark
+ * @property boolean $behave_as_module
+ * @property boolean $open_extern
+ * @property boolean $public_icon
+ * @property string $logo
+ * @property string $description
+ * @property string $content
+ * @property string $name
+ * @property int $user_id
+ * @property int $category_id
+ * @property int $id
  */
 class GO_Bookmarks_Model_Bookmark extends GO_Base_Db_ActiveRecord {
 
