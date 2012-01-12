@@ -5,7 +5,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	protected $model = 'GO_Files_Model_Folder';
 	
 	
-	public function actionSyncFilesystem($params){
+	protected function actionSyncFilesystem($params){
 		
 		
 		GO::$ignoreAclPermissions=true; //allow this script access to all
@@ -40,7 +40,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	}
 	
 
-	public function actionTree($params) {
+	protected function actionTree($params) {
 		//GO::$ignoreAclPermissions=true;
 //		if(empty($params['node']) || $params['node']=='root'){
 //			$folder = GO_Files_Model_Folder::model()->findByPath('users/'.GO::user()->username, true);
@@ -214,7 +214,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		return parent::afterDisplay($response, $model, $params);
 	}
 
-	public function actionPaste($params) {
+	protected function actionPaste($params) {
 
 		$response['success'] = true;
 
@@ -340,7 +340,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		return $store->getData();
 	}
 
-	public function actionList($params) {
+	protected function actionList($params) {
 
 		if ($params['folder_id'] == 'shared')
 			return $this->_listShares($params);
@@ -555,7 +555,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	 * @param type $params
 	 * @return type 
 	 */
-	public function actionCheckModelFolder($params) {
+	protected function actionCheckModelFolder($params) {
 		$model = GO::getModel($params['model'])->findByPk($params['id']);
 
 		$response['success'] = true;
@@ -591,7 +591,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		return $model->files_folder_id;
 	}
 
-	public function actionProcessUploadQueue($params) {
+	protected function actionProcessUploadQueue($params) {
 		$response['success'] = true;
 
 		if (!isset($params['overwrite']))
@@ -644,7 +644,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		return $response;
 	}
 
-	public function actionCompress($params) {
+	protected function actionCompress($params) {
 	
 		if (!GO_Base_Util_Common::isWindows())
 			putenv('LANG=en_US.UTF-8');
@@ -681,7 +681,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	}
 	
 	
-	public function actionDecompress($params){
+	protected function actionDecompress($params){
 		if (!GO_Base_Util_Common::isWindows())
 			putenv('LANG=en_US.UTF-8');
 		

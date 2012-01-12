@@ -38,7 +38,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 	}
 
 
-	public function actionSend($params) {
+	protected function actionSend($params) {
 		if (empty($params['addresslist_id'])) {
 			throw new Exception(GO::t('feedbackNoReciepent', 'email'));
 		} else {
@@ -111,7 +111,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			exec($cmd);
 	}
 
-	public function actionBatchSend($params) {
+	protected function actionBatchSend($params) {
 
 		if (PHP_SAPI != 'cli')
 			throw new Exception("This action may only be executed on the command line interace");
@@ -266,7 +266,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		return parent::formatStoreRecord($record, $model, $store);
 	}
 	
-	public function actionViewLog($params){
+	protected function actionViewLog($params){
 		$mailing = GO_Addressbook_Model_SentMailing::model()->findByPk($params['mailing_id']);
 		
 		if($mailing->user_id != GO::user()->id && !GO::user()->isAdmin())

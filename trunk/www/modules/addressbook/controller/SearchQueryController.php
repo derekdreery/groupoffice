@@ -9,7 +9,7 @@ class GO_Addressbook_Controller_SearchQuery extends GO_Base_Controller_AbstractM
 		parent::beforeSubmit($response, $model, $params);
 	}
 	
-	public function actionAddressbookFields($params) {
+	protected function actionAddressbookFields($params) {
 		$contact_columns = GO_Addressbook_Model_Contact::model()->getColumns();
 		$company_columns = GO_Addressbook_Model_Company::model()->getColumns();
 

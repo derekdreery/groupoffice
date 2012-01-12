@@ -29,7 +29,7 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
    * @param int $id
    * @return array Users
    */
-  public function actionGetUsers($params)
+  protected function actionGetUsers($params)
   { 
 		//don't check ACL here because this method may be called by anyone.
     $group = GO_Base_Model_Group::model()->findByPk($params['id'], false, true);
@@ -86,7 +86,7 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
    * @param int $user_id
    * @return bool $success 
    */
-  public function actionAddUserToGroup($group_id, $user_id)
+  protected function actionAddUserToGroup($group_id, $user_id)
   {
     $group = new GO_Base_Model_Group();
     $group->addUser($user_id);
@@ -101,7 +101,7 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
    * @param bool $admin_only
    * @return bool $success 
    */
-  public function actionUpdateGroup($id, $name, $admin_only=-1)
+  protected function actionUpdateGroup($id, $name, $admin_only=-1)
   {
     $group = $this->model->findByPk($id);
     
@@ -120,7 +120,7 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
    * @param bool $admin_only
    * @return bool $success 
    */
-  public function actionSaveGroup()
+  protected function actionSaveGroup()
   {
     $group = new GO_Base_Model_Group();
     $group->setAttributes($_POST);

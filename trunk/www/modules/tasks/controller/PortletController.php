@@ -49,7 +49,7 @@ class GO_Tasks_Controller_Portlet extends GO_Base_Controller_AbstractMultiSelect
 	 * @param Array $params
 	 * @return Array The array with the data for the grid. 
 	 */
-	public function actionPortletGrid($params) {
+	protected function actionPortletGrid($params) {
 
 		// Find out the sort for the grid
 		$sort = !empty($params['sort']) ? $params['sort'] : 'due_time';

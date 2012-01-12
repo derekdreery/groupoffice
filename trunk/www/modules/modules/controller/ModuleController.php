@@ -30,7 +30,7 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 	}
 	
 	
-	public function actionAvailableModulesStore($params){
+	protected function actionAvailableModulesStore($params){
 		
 		$response['results']=array();
 		
@@ -53,7 +53,7 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 	}
 	
 	
-	public function actionInstall($params){
+	protected function actionInstall($params){
 		$modules = json_decode($params['modules'], true);
 		foreach($modules as $moduleId)
 		{

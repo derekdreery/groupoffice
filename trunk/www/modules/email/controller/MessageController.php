@@ -81,7 +81,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		}
 	}
 	
-	public function actionSave($params){
+	protected function actionSave($params){
 		$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);		
 		$account = GO_Email_Model_Account::model()->findByPk($alias->account_id);
 		
@@ -126,7 +126,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	 * @param type $params
 	 * @return boolean 
 	 */
-	public function actionSend($params) {
+	protected function actionSend($params) {
 		
 		$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);		
 		$account = GO_Email_Model_Account::model()->findByPk($alias->account_id);
@@ -262,7 +262,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		}
 	}
 
-	public function actionTemplate($params) {
+	protected function actionTemplate($params) {
 		$response = $this->loadTemplate ($params);		
 		$this->_keepHeaders($response, $params);
 		return $response;
@@ -280,7 +280,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		return '> '.str_replace("\n","\n> ",$text);
 	}
 	
-	public function actionOpenDraft($params){
+	protected function actionOpenDraft($params){
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		$imapMessage = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
 		$imapMessage->createTempFilesForInlineAttachments=true;
@@ -292,7 +292,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	}
 	
 	
-	public function actionReply($params){
+	protected function actionReply($params){
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		$imapMessage = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
 
@@ -370,7 +370,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		return $response;		
 	}
 	
-	public function actionForward($params){
+	protected function actionForward($params){
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		$imapMessage = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
 		

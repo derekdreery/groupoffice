@@ -27,7 +27,7 @@
 		return $response;
 	}
 
-	public function actionContacts($params) {
+	protected function actionContacts($params) {
 
 		$store = GO_Base_Data_Store::newInstance(GO_Addressbook_Model_Contact::model());
 
@@ -59,7 +59,7 @@
 		return array_merge($response, $store->getData());
 	}
 
-	public function actionCompanies($params) {
+	protected function actionCompanies($params) {
 
 		$store = GO_Base_Data_Store::newInstance(GO_Addressbook_Model_Company::model());
 

@@ -110,7 +110,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	}
 	
 	
-	public function actionPhoto($params){
+	protected function actionPhoto($params){
 
 		$contact = GO::getModel($this->model)->findByPk($params['id']);
 		
@@ -349,7 +349,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		return array_merge($response, $store->getData());
 	}
 	
-	public function actionChangeAddressbook($params) {
+	protected function actionChangeAddressbook($params) {
 		$ids = json_decode($params['items']);
 		
 		$response['success'] = true;
@@ -436,7 +436,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	 * Function exporting addressbook contents to VCFs. Must be called from export.php.
 	 * @param type $params 
 	 */
-	public function actionVCard($params) {
+	protected function actionVCard($params) {
 		$contact = GO_Addressbook_Model_Contact::model()->findByPk($params['id']);
 		
 		$filename = $contact->name.'.vcf';
@@ -446,7 +446,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	}
 	
 	
-	public function actionImportVCard($params){
+	protected function actionImportVCard($params){
 		$contact = new GO_Addressbook_Model_Contact();
 		
 		$file = new GO_Base_Fs_File($params['file']);

@@ -4,7 +4,7 @@ class GO_Calendar_Controller_Group extends GO_Base_Controller_AbstractModelContr
 	protected $model = 'GO_Calendar_Model_Group';
 	
 	
-	public function actionGroupsWithResources($params){
+	protected function actionGroupsWithResources($params){
 		
 		$stmt = GO_Calendar_Model_Group::model()->find(GO_Base_Db_FindParams::newInstance()
 						->criteria(GO_Base_Db_FindCriteria::newInstance()

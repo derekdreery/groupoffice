@@ -109,7 +109,7 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	/**
 	 * This default action should be overrriden
 	 */
-	public function actionIndex($params){		
+	protected function actionIndex($params){		
 		$this->renderPage($params);		
 	}
 	

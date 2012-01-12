@@ -320,7 +320,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 	
 	
 	
-	public function actionImportIcs($params){
+	protected function actionImportIcs($params){
 		
 		$file = new GO_Base_Fs_File($params['file']);
 		
@@ -334,7 +334,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 			$task->importVObject($vtodo);
 	}
 	
-	public function actionIcs($params) {
+	protected function actionIcs($params) {
 		$task = GO_Tasks_Model_Task::model()->findByPk($params['id']);
 		header('Content-Type: text/plain');
 		echo $task->toICS();

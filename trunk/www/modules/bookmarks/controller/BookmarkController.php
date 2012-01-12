@@ -4,7 +4,7 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 
 	protected $model = 'GO_Bookmarks_Model_Bookmark';
 
-	public function actionDescription($params) {
+	protected function actionDescription($params) {
 
 		$response = array();
 
@@ -118,7 +118,7 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 		return array('category_id' => '$model->category->name');
 	}
 
-	public function actionThumbs() {
+	protected function actionThumbs() {
 
 		
 		$response['results'] = array();

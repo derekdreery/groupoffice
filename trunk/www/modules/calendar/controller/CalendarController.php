@@ -44,7 +44,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		);
 	}
 	
-	public function actionCalendarsWithGroup($params){
+	protected function actionCalendarsWithGroup($params){
 		
 		$store = GO_Base_Data_Store::newInstance(GO_Calendar_Model_Calendar::model());
 		
