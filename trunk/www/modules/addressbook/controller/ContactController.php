@@ -22,10 +22,10 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	protected function beforeSubmit(&$response, &$model, &$params) {
 		
 		if (!empty($model->id) && !empty($model->addressbook) && $model->addressbook->id != $params['addressbook_id']) {
-			$this->actionChangeAddressbook(array(
+			$this->run("changeAddressbook",array(
 				'items'	=> '["'.$model->id.'"]',
 				'book_id' => $params['addressbook_id']
-			));
+			),false);
 		}
 		
 		if(!empty($params['company_id']) && $params['company_id']==$params['company']){			
@@ -359,10 +359,10 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			$model = GO_Addressbook_Model_Contact::model()->findByPk($id);
 			if (!empty($model->company)) {
 				$companyContr = new GO_Addressbook_Controller_Company();
-				$resp = $companyContr->actionChangeAddressbook(array(
+				$resp = $companyContr->run("changeAddressbook",array(
 					'items' => '["'.$model->company->id.'"]',
 					'book_id' => $params['book_id']
-				));
+				),false);
 				array_merge($response['failedToMove'],$resp['failedToMove']);
 			} else {
 				$failed_id = !($model->setAttribute( 'addressbook_id' , $params['book_id'] ) && $model->save()) ? $id : null;

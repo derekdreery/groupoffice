@@ -86,7 +86,7 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 			case 'vcf':
 				ini_set('max_execution_time', 360);
 				ini_set('memory_limit', '256M');
-				$response = array_merge($response,$this->actionImportVcf($params));
+				$response = array_merge($response,$this->run("importVcf",$params,false));
 				break;
 	  }		
 		return $response;

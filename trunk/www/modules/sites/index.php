@@ -15,10 +15,11 @@ if(!$page){
 }
 
 $controller = new $page->controller($site, $page);
+$controller->run($page->controller_action, $_REQUEST);
 
-$action = 'action'.$page->controller_action;
-
-$controller->$action($_REQUEST);
+//$action = 'action'.$page->controller_action;
+//
+//$controller->$action($_REQUEST);
 
 /**
  * EXAMPLE MOD_REWRITE RULE FOR A SITE
