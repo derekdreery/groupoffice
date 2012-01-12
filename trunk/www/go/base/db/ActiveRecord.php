@@ -2845,7 +2845,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		return true;	
 	}
 	
-	
+	/**
+	 * Duplicate related items to another model.
+	 * 
+	 * @param string $relationName
+	 * @param GO_Base_Db_ActiveRecord $duplicate
+	 * @return boolean
+	 * @throws Exception 
+	 */
 	public function duplicateRelation($relationName, $duplicate){
 		
 		$r= $this->relations();
