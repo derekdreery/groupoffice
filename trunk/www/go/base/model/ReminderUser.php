@@ -17,6 +17,10 @@
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.model
+ * @property boolean $mail_sent
+ * @property int $time
+ * @property int $user_id
+ * @property int $reminder_id
  */
 class GO_Base_Model_ReminderUser extends GO_Base_Db_ActiveRecord {
 

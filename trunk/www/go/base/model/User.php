@@ -57,6 +57,9 @@
  * @property String $cache
  * 
  * @property $completeDateFormat
+ * @property string $date_separator
+ * @property string $date_format
+ * @property string $email
  */
 
 class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {

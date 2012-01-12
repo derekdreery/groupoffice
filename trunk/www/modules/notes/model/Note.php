@@ -22,6 +22,12 @@
  * 
  * @property int $id
  * @property int $category_id
+ * @property int $files_folder_id
+ * @property string $content
+ * @property string $name
+ * @property int $mtime
+ * @property int $ctime
+ * @property int $user_id
  */
 class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 	

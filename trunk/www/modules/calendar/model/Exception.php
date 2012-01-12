@@ -18,6 +18,7 @@
  * @property int $id
  * @property int $event_id
  * @property int $time
+ * @property int $exception_event_id
  */
 
 class GO_Calendar_Model_Exception extends GO_Base_Db_ActiveRecord{

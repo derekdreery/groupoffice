@@ -14,6 +14,28 @@
  * @property int $recurrence_id If this event is an exception it holds the date (not the time) of the original recurring instance. It can be used to identity it with an vcalendar file.
  * @property boolean $is_organizer True if the owner of this event is also the organizer.
  * @property string $owner_status The status of the owner of this event if this was an invitation
+ * @property int $exception_for_event_id
+ * @property int $sequence
+ * @property int $category_id
+ * @property boolean $read_only
+ * @property int $files_folder_id
+ * @property string $background
+ * @property string $rrule
+ * @property boolean $private
+ * @property int $resource_event_id
+ * @property boolean $busy
+ * @property int $mtime
+ * @property int $ctime
+ * @property int $repeat_end_time
+ * @property string $location
+ * @property string $description
+ * @property string $name
+ * @property boolean $all_day_event
+ * @property int $end_time
+ * @property int $start_time
+ * @property int $user_id
+ * @property int $calendar_id
+ * @property string $uuid
  * 
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>

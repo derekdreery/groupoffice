@@ -9,6 +9,11 @@
  *
  * @copyright Copyright Intermesh
  * @author Wilmar van Beusekom <wilmar@intermesh.nl>
+ * @property string $sql
+ * @property string $name
+ * @property boolean $companies
+ * @property int $user_id
+ * @property int $id
  */
 
  class GO_Addressbook_Model_SearchQuery extends GO_Base_Db_ActiveRecord{

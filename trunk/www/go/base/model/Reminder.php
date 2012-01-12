@@ -19,6 +19,16 @@
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.model
+ * @property string $text
+ * @property boolean $manual
+ * @property int $snooze_time
+ * @property int $vtime
+ * @property int $time
+ * @property string $name
+ * @property int $user_id
+ * @property int $model_type_id
+ * @property int $model_id
+ * @property int $id
  */
 class GO_Base_Model_Reminder extends GO_Base_Db_ActiveRecord {
 

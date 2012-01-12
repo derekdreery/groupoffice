@@ -18,6 +18,40 @@
  * @property String $photoURL URL to photo
  * 
  * @property String $name Full name of the contact
+ * @property int $go_user_id
+ * @property int $files_folder_id
+ * @property boolean $email_allowed
+ * @property string $salutation
+ * @property int $mtime
+ * @property int $ctime
+ * @property string $comment
+ * @property string $address_no
+ * @property string $zip
+ * @property string $city
+ * @property string $state
+ * @property string $country
+ * @property string $cellular
+ * @property string $work_fax
+ * @property string $fax
+ * @property string $work_phone
+ * @property string $home_phone
+ * @property string $function
+ * @property string $department
+ * @property int $company_id
+ * @property string $email3
+ * @property string $email2
+ * @property string $email
+ * @property string $birthday
+ * @property string $sex
+ * @property string $suffix
+ * @property string $title
+ * @property string $initials
+ * @property string $last_name
+ * @property string $middle_name
+ * @property string $first_name
+ * @property int $addressbook_id
+ * @property int $user_id
+ * @property int $id
  */
 class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	

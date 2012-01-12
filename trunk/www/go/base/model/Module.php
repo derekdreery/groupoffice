@@ -20,6 +20,10 @@
  * @property string $id The id of the module which is identical to the folder name inside the "modules" folder.
  * @property String $path The absolute filesystem path to module.
  * @property GO_Base_Module $moduleManager The module class to install, initialize etc the module.
+ * @property int $acl_id
+ * @property boolean $admin_menu
+ * @property int $sort_order
+ * @property int $version
  */
 class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 
