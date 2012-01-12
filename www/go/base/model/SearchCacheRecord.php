@@ -26,6 +26,8 @@
  * @property string $module
  * @property int $model_id
  * @property int $user_id
+ * @property string $url
+ * @property string $table
  */
 
 class GO_Base_Model_SearchCacheRecord extends GO_Base_Db_ActiveRecord {
