@@ -32,7 +32,7 @@ class GO_Core_Controller_BatchEdit extends GO_Base_Controller_AbstractController
 	 * $params['model_name']= The model classname of the records that need to be updated
 	 * </code>
 	 */
-	public function actionSubmit($params) {
+	protected function actionSubmit($params) {
 		if(empty($params['data']) || empty($params['keys']) || empty($params['model_name']))
 			return false;
 		
@@ -84,7 +84,7 @@ class GO_Core_Controller_BatchEdit extends GO_Base_Controller_AbstractController
 	 * $params['model_name']= The model classname of the records that need to be updated
 	 * </code>
 	 */
-	public function actionAttributesStore($params) {
+	protected function actionAttributesStore($params) {
 		if(empty($params['model_name']))
 			return false;
 		

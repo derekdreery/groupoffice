@@ -1,7 +1,7 @@
 <?php
 class GO_Core_Controller_Reminder extends GO_Base_Controller_AbstractController {
 	
-	public function actionSnooze($params){
+	protected function actionSnooze($params){
 		$reminderIds = json_decode($params['reminders'], true);
 		
 		foreach($reminderIds as $id){
@@ -13,7 +13,7 @@ class GO_Core_Controller_Reminder extends GO_Base_Controller_AbstractController 
 		return $response;
 	}
 	
-	public function actionDismiss($params){
+	protected function actionDismiss($params){
 		$reminderIds = json_decode($params['reminders'], true);
 		
 		foreach($reminderIds as $id){
@@ -25,7 +25,7 @@ class GO_Core_Controller_Reminder extends GO_Base_Controller_AbstractController 
 		return $response;
 	}
 	
-	public function actionStore($params){
+	protected function actionStore($params){
 		GO::session()->closeWriting();
 		
 		$params = GO_Base_Db_FindParams::newInstance()

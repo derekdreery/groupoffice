@@ -19,7 +19,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	}
 
 	
-	public function actionRemoveDuplicates($params){
+	protected function actionRemoveDuplicates($params){
 		$checkModels = array(
 				"GO_Calendar_Model_Event"=>array('name', 'start_time', 'end_time', 'calendar_id', 'rrule', 'user_id'),
 				"GO_Tasks_Model_Task"=>array('name', 'start_time', 'due_time', 'tasklist_id', 'rrule', 'user_id'),
@@ -102,7 +102,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	 * Calls buildSearchIndex on each Module class.
 	 * @return array 
 	 */
-	public function actionBuildSearchCache($params) {
+	protected function actionBuildSearchCache($params) {
 		$response = array();
 		
 		if(empty($params['keepexisting']))
@@ -117,7 +117,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	 * Calls checkDatabase on each Module class.
 	 * @return array 
 	 */
-	public function actionCheckDatabase($params) {
+	protected function actionCheckDatabase($params) {
 		$response = array();
 				
 		echo '<pre>';		
@@ -199,7 +199,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		}
 	}
 	
-	public function actionUpgrade($params) {
+	protected function actionUpgrade($params) {
 		
 		//don't be strict in upgrade process
 		GO::getDbConnection()->query("SET sql_mode=''");

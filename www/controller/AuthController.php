@@ -31,19 +31,19 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 			$this->fireEvent('loadapplication', array(&$this));
 	}
 
-	public function actionInit() {
+	protected function actionInit() {
 
 		$this->loadInit();
 		$this->render('index');
 	}
 
-	public function actionSetView($params) {
+	protected function actionSetView($params) {
 		GO::setView($params['view']);
 
 		$this->redirect();
 	}
 
-	public function actionLogout() {
+	protected function actionLogout() {
 
 		GO::session()->logout();
 
@@ -60,7 +60,7 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 		}
 	}
 
-	public function actionLogin($params) {
+	protected function actionLogin($params) {
 		
 		if(!empty($params['domain']))
 			$params['username'].=$params['domain'];	

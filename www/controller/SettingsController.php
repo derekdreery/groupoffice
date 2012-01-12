@@ -2,7 +2,7 @@
 
 class GO_Core_Controller_Settings extends GO_Base_Controller_AbstractController {
 	
-	public function actionSubmit($params){
+	protected function actionSubmit($params){
 			
 		if(!empty($params["dateformat"])){
 			$dateparts = explode(':',$params["dateformat"]);
@@ -39,7 +39,7 @@ class GO_Core_Controller_Settings extends GO_Base_Controller_AbstractController 
 		return $response;
 	}
 	
-	public function actionLoad($params){
+	protected function actionLoad($params){
 		
 		$user = GO_Base_Model_User::model()->findByPk($params['id']);
 		

@@ -9,7 +9,7 @@
  */
 class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	
-	public function actionGetNewAcl($params){
+	protected function actionGetNewAcl($params){
 		$acl = new GO_Base_Model_Acl();
 		$acl->user_id=isset($params['user_id']) ? $params['user_id'] : GO::user()->id;
 		$acl->description=$params['description'];
@@ -18,7 +18,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		echo $acl->id;
 	}
 
-	public function actionLink($params) {
+	protected function actionLink($params) {
 
 		$fromLinks = json_decode($_POST['fromLinks'], true);
 		$toLinks = json_decode($_POST['toLinks'], true);
@@ -45,7 +45,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	 * @param array $params @see GO_Base_Data_Store::getDefaultParams()
 	 * @return  
 	 */
-	public function actionUsers($params) {
+	protected function actionUsers($params) {
 
 		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_User::model());
 		$store->setDefaultSortOrder('name', 'ASC');
@@ -62,7 +62,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	 * Get user groups
 	 * 
 	 */
-	public function actionGroups($params) {
+	protected function actionGroups($params) {
 		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_Group::model());
 		$store->setDefaultSortOrder('name', 'ASC');
 		$store->setStatement (GO_Base_Model_Group::model()->find($store->getDefaultParams($params)));
@@ -72,7 +72,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	/**
 	 * Todo replace compress.php with this action
 	 */
-	public function actionCompress() {
+	protected function actionCompress() {
 		
 	}
 
@@ -171,7 +171,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 //	}
 
 
-	public function actionThumb($params) {
+	protected function actionThumb($params) {
 
 		GO::session()->closeWriting();
 
@@ -397,7 +397,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	 * 
 	 * 
 	 */
-	public function actionDownloadTempfile($params){		
+	protected function actionDownloadTempfile($params){		
 		$file = new GO_Base_Fs_File(GO::config()->tmpdir.$params['path']);
 		GO_Base_Util_Http::outputDownloadHeaders($file, false, !empty($params['cache']));
 		$file->output();		
@@ -410,14 +410,14 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	 * 
 	 * @param String $path 
 	 */
-	public function actionDownloadPublicFile($params){
+	protected function actionDownloadPublicFile($params){
 		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'public/'.$params['path']);
 		GO_Base_Util_Http::outputDownloadHeaders($file,false,!empty($params['cache']));
 		$file->output();		
 	}
 	
 	
-	public function actionMultiRequest($params){		
+	protected function actionMultiRequest($params){		
 			echo "{\n";
 			
 			$router = new GO_Base_Router();
@@ -432,7 +432,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	}
 	
 	
-//	public function actionModelAttributes($params){
+//	protected function actionModelAttributes($params){
 //		
 //		$response['results']=array();
 //		
@@ -462,7 +462,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 //		return $response;		
 //	}
 	
-	public function actionUpload($params) {
+	protected function actionUpload($params) {
 
 		$tmpFolder = new GO_Base_Fs_Folder(GO::config()->tmpdir . 'uploadqueue');
 //		$tmpFolder->delete();
@@ -479,7 +479,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	}
 	
 	
-	public function actionPlupload($params) {
+	protected function actionPlupload($params) {
 		$tmpFolder = new GO_Base_Fs_Folder(GO::config()->tmpdir . 'uploadqueue');
 		//$tmpFolder->delete();
 		$tmpFolder->create();
@@ -573,7 +573,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		//return array('success' => true);
 	}
 	
-	public function actionPluploads($params){
+	protected function actionPluploads($params){
 		
 		if(isset($params['addFileStorageFiles'])){
 			$files = json_decode($params['addFileStorageFiles'],true);

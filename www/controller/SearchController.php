@@ -46,7 +46,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		return parent::formatColumns($columnModel);
 	}
 	
-	public function actionModelTypes($params){
+	protected function actionModelTypes($params){
 		
 		$stmt = GO_Base_Model_ModelType::model()->find();
 		
@@ -67,7 +67,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 	
 	
 	
-	public function actionLinks($params){
+	protected function actionLinks($params){
 		
 		$model = GO::getModel($params['model_name'])->findByPk($params['model_id']);
 	
