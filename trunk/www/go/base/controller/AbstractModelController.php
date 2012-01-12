@@ -97,7 +97,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 						$controller = new $params['importController'];
 
-						$controller->actionImport($params);
+						$controller->run("import",$params,false);
 					}
 				}
 			}
@@ -540,7 +540,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		if (!isset($response['data']['files']) && isset(GO::modules()->files) && $model->hasFiles() && $response['data']['files_folder_id']>0) {
 
 			$fc = new GO_Files_Controller_Folder();
-			$listResponse = $fc->actionList(array('folder_id'=>$response['data']['files_folder_id']));
+			$listResponse = $fc->run("list",array('folder_id'=>$response['data']['files_folder_id']),false);
 			$response['data']['files'] = $listResponse['results'];
 		} else {
 			$response['data']['files'] = array();
