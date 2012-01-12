@@ -101,7 +101,7 @@ foreach($classes as $model){
 			
 		}else
 		{
-			$insertPos = strpos(substr($contents,0,$lastProperty), "\n");
+			$insertPos = strpos($contents, "\n",$lastProperty);
 		}
 		
 		echo "Insert pos: ".$insertPos."\n";
@@ -132,8 +132,9 @@ foreach($classes as $model){
 			}			
 		}
 		
-		echo "\n\n----\n\n";
-		echo $contents;
+//		echo "\n\n----\n\n";
+//		echo $contents;
+		file_put_contents($model->getFileName(), $contents);
 		echo "\n\n----\n\n";		
 		
 	}
