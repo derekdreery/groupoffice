@@ -60,6 +60,7 @@
  * @property string $date_separator
  * @property string $date_format
  * @property string $email
+ * @property GO_Addressbook_Controller_Contact $contact
  */
 
 class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
@@ -158,8 +159,8 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		}
 
 		if ($this->isNew && $this->_maxUsersReached())				
-			throw new Exception(GO::t('max_users_reached', 'users'));
-
+			$this->setValidationError('form', GO::t('max_users_reached', 'users'));
+			
 		if (!GO::config()->allow_duplicate_email) {
 			$existing = $this->findSingleByAttribute('email', $this->email);
 			if (($this->isNew && $existing) || $existing && $existing->id != $this->id )
