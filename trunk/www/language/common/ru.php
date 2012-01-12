@@ -248,7 +248,7 @@ $l["strWorkAddressNo"]= 'Номер дома (рабочий)';
 $l["strWorkZip"]= 'Почтовый индекс (рабочий)';
 $l["strWorkCity"]= 'Город (рабочий)';
 $l["strWorkState"]= 'Область (рабочий)';
-$l["strWorkCountry"]= 'Страна (рабочий)',	;
+$l["strWorkCountry"]= 'Страна (рабочий)';
 $l["strWorkPhone"]= 'Телефон (рабочий)';
 $l["strWorkFax"]= 'Факс (рабочий)';
 $l["strPostAddress"]= 'Адрес (почтовый адрес)';
@@ -360,7 +360,7 @@ $l["strYear"]="Год";
 $l["strYears"]="Лет";
 $l["strTime"]='Время';
 $l["selectWeek"]='Выберите неделю';
-$l["shortDays"]= ['Вск', 'Пон', 'Вт', 'Ср', 'Чтв', 'Птн','Суб'];
+$l["shortDays"]= array('Вск', 'Пон', 'Вт', 'Ср', 'Чтв', 'Птн','Суб');
 $l["noRecurrence"]= 'Нет повторений';
 $l["monthsByDate"]= 'Ежемесячно по дате';
 $l["monthsByDay"]= 'Ежемесячно по дню';
@@ -441,7 +441,7 @@ $l["thankyou"]='Спасибо';
 $l["applyMultiselect"]='Применить выбранное';
 $l["createdBy"]='Создано';
 $l["debugModeDetected"]="Предупреждение: включен режим отладки!";
-$l["debugModeWarning"]="Испеользуйте $config['debug']=true; только для отладки или решения проблем. Этот режим замедляет работу Group-Office.";
+$l["debugModeWarning"]="Испеользуйте \$config['debug']=true; только для отладки или решения проблем. Этот режим замедляет работу Group-Office.";
 $l["userGroup"]='Группа пользователеей';
 $l["noItemSelectedWarning"]='Выберите хотя бы одно значение.';
 $l["deselectAll"]='Очистить все';
@@ -456,36 +456,6 @@ $l["priority_normal"]='Нормальный';
 $l["priority_high"]='Высокий';
 $l["none"]= 'Нет';
 $l["userSelectedLanguage"]= 'Мой язык';
-$l["swfUploadPanelStrings"]= {
-		text_add: 'Добавить файл(ы)',
-		text_upload: 'Прикрепить файл(ы)',
-		text_cancel: 'Отменить загрузку',
-		text_clear: 'Очистить очередь',
-		text_progressbar: 'Выполнено',
-		text_remove: 'Удалить файлы',
-		text_remove_sure: 'Вы уверены что хотите удалить эти файлы из очереди?',
-		text_error: 'Ошибка',
-		text_uploading: 'Загрудено файлов: {0} ({1} of {2})',
-		header_filename: 'Имя файла',
-		header_size: 'Размер',
-		header_status: 'Статус',
-		status: {
-			0: 'В очереди',
-			1: 'Загружается...',
-			2: 'Выполнено',
-			3: 'Ошибка',
-			4: 'Отменено'
-		},
-		error_queue_exceeded: 'Количество выбранных фалов превышает максимальное количество ({0}) файлов в очереди.',
-		error_queue_slots_0: 'Нет места в очереди',
-		error_queue_slots_1: 'Остальсь одно место',
-		error_queue_slots_2: 'Осталось {0} места',
-		error_size_exceeded: 'Размер выбранных файлов превышает разрешенный предел в 1 MB.',
-		error_zero_byte_file: 'Выбран файл с размером в 0 байт.',
-		error_invalid_filetype: 'Выбран файл неверного типа.',
-		error_file_not_found: 'Файл не найден 404.',
-		error_security_error: 'Ошибка безопасности. Не разрешено отправлять через разные url.';
-	};
 $l["orientation"]='Ориентация';
 $l["portrait"]='Портретная';
 $l["landscape"]='Ландшафтная';

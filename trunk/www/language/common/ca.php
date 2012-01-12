@@ -349,7 +349,7 @@ $l["strMonths"]="Mesos";
 $l["strYear"]="Any";
 $l["strYears"]="Anys";
 $l["strTime"]='Hora';
-$l["shortDays"]= ['Dg', 'Dl', 'Dt', 'Dc', 'Dj', 'Dv','Ds'];
+$l["shortDays"]= array('Dg', 'Dl', 'Dt', 'Dc', 'Dj', 'Dv','Ds');
 $l["noRecurrence"]= 'No es repeteixen';
 $l["monthsByDate"]= 'Mesos per data';
 $l["monthsByDay"]= 'Mesos per dia';
@@ -431,7 +431,7 @@ $l["width"]='Amplada';
 $l["thankyou"]='Gràcies';
 $l["applyMultiselect"]='Aplicar sel·lecció múltiple';
 $l["debugModeDetected"]="Atenció! Mode debug activat";
-$l["debugModeWarning"]="Utilitzeu $config['debug']=true; només en desenvolupament i per solucionar problemes. Això fa Group-Office molt lent";
+$l["debugModeWarning"]="Utilitzeu \$config['debug']=true; només en desenvolupament i per solucionar problemes. Això fa Group-Office molt lent";
 $l["noItemSelectedWarning"]='Seleccioneu almenys un ítem si us plau';
 $l["strName2"]= 'Nom 2';
 $l["on"]='Actiu';
@@ -454,36 +454,6 @@ $l["priority_normal"]='Normal';
 $l["priority_high"]='Alta';
 $l["none"]= 'Cap';
 $l["userSelectedLanguage"]= 'El meu idioma seleccionat';
-$l["swfUploadPanelStrings"]= {
-		text_add: 'Afegir Arxiu(s)',
-		text_upload: 'Pujar Arxiu(s)',
-		text_cancel: 'Cancel·lar Pujada',
-		text_clear: 'Netejar Cua',
-		text_progressbar: 'Barra de progrés',
-		text_remove: 'Eliminar Arxiu',
-		text_remove_sure: 'Segur que voleu eliminar aquest arxiu de la cua?',
-		text_error: 'Error',
-		text_uploading: 'Pujant arxiu: {0} ({1} de {2})',
-		header_filename: 'Nom d\'arxiu',
-		header_size: 'Mida',
-		header_status: 'Estat',
-		status: {
-			0: 'En cua',
-			1: 'Pujant...',
-			2: 'Completat',
-			3: 'Error',
-			4: 'Cancel·lat'
-		},
-		error_queue_exceeded: 'El(s) arxiu(s) seleccionat(s) excedeix(en) el màxim nombre de {0} arxius en cua.',
-		error_queue_slots_0: 'No queda cap ranura',
-		error_queue_slots_1: 'Només queda una ranura',
-		error_queue_slots_2: 'Només queden {0} ranures',
-		error_size_exceeded: 'La mida de l\'arxiu seleccionat excedeix el límit permés de 1 MB.',
-		error_zero_byte_file: 'Arxiu seleccionat de zero Bytes.',
-		error_invalid_filetype: 'Tipus d\'arxiu seleccionat invàlid.',
-		error_file_not_found: 'Arxiu no trobat 404.',
-		error_security_error: 'Error de seguretat. No es permet postejar en una url diferent.';
-	};
 $l["orientation"]='Orientació';
 $l["portrait"]='Vertical';
 $l["landscape"]='Apaisada';
