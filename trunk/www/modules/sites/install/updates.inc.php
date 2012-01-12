@@ -1,5 +1,9 @@
 <?php
-$updates["201112081020"][]="ALTER TABLE `si_sites` ADD `login_page` VARCHAR( 255 ) NOT NULL DEFAULT 'login'";
+$updates["201112081020"][]="ALTER TABLE `si_sites` ADD `login_path` VARCHAR( 255 ) NOT NULL DEFAULT 'login'";
+$updates["201112081020"][]="ALTER TABLE `si_sites` ADD `logout_path` VARCHAR( 255 ) NOT NULL DEFAULT 'logout'";
+$updates["201112081020"][]="ALTER TABLE `si_sites` ADD `register_path` VARCHAR( 255 ) NOT NULL DEFAULT 'register'";
+$updates["201112081020"][]="ALTER TABLE `si_sites` ADD `reset_password_path` VARCHAR( 255 ) NOT NULL DEFAULT 'resetpassword'";
+$updates["201112081020"][]="ALTER TABLE `si_sites` ADD `lost_password_path` VARCHAR( 255 ) NOT NULL DEFAULT 'lostpassword'";
 $updates["201112081020"][]="ALTER TABLE `si_pages` ADD `login_required` BOOLEAN NOT NULL DEFAULT '0'";
 
 
