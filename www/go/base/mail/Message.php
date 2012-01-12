@@ -288,11 +288,39 @@ class GO_Base_Mail_Message extends Swift_Message{
 		return false;
 	}
 	
+	/**
+	 * Sometimes the browser changes absolute URL's into relative URL's when using
+	 * wysiwyg html editors.
+	 * 
+	 * In outgoing messages we don't want them so we make them absolute again.
+	 * 
+	 * @param string $body
+	 * @return type 
+	 */
+	private function _fixRelativeUrls($body){		
+		return str_replace('href="?r=','href="'.GO::config()->full_url, $body);
+	}
 	
-//	private function _fixRelativeUrls($body){
-//		$regex = preg_quote(GO::config()->host);
-//		preg_match();
-//	}
+	private function _embedPastedImages($body){
+		$regex = '/src="data:image\/([^;]+);([^,]+),([^"]+)/';
+			
+		preg_match_all($regex, $body, $allMatches,PREG_SET_ORDER);
+		foreach($allMatches as $matches){
+			if($matches[2]=='base64'){
+				$extension = $matches[1];
+				$tmpFile = GO_Base_Fs_File::tempFile('', $extension);
+				$tmpFile->putContents(base64_decode($matches[3]));
+
+				$img = Swift_EmbeddedFile::fromPath($tmpFile->path());
+				$img->setContentType($tmpFile->mimeType());
+				$contentId = $this->embed($img);
+
+				$body = str_replace($matches[0],'src="'.$contentId, $body);
+			}
+		}
+		
+		return $body;
+	}
 	
 	/**
 	 * handleEmailFormInput
@@ -346,6 +374,9 @@ class GO_Base_Mail_Message extends Swift_Message{
 		}	
 
 		if($params['content_type']=='html'){
+			
+			$params['htmlbody'] = $this->_embedPastedImages($params['htmlbody']);
+			
 			//inlineAttachments is an array(array('url'=>'',tmp_file=>'relative/path/');
 			if(!empty($params['inlineAttachments'])){
 				$inlineAttachments = json_decode($params['inlineAttachments']);
@@ -381,6 +412,8 @@ class GO_Base_Mail_Message extends Swift_Message{
 					}
 				}
 			}
+			$params['htmlbody']=$this->_fixRelativeUrls($params['htmlbody']);
+			
 			$this->setHtmlAlternateBody($params['htmlbody']);
 		}else
 		{
