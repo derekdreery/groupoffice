@@ -27,7 +27,7 @@ class GO_Core_Controller_Export extends GO_Base_Controller_AbstractController {
 	 * @param array $params
 	 * @return array 
 	 */
-	public function actionTypes($params=false) {
+	protected function actionTypes($params=false) {
 		$types = array();
 		
 		$defaultExports = $this->_getDefaultExportTypes();
