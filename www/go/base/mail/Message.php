@@ -376,7 +376,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 							}
 						}else
 						{
-							throw new Exception("Error: inline attachment missing on server.".$tmpFile->stripTempPath());
+							throw new Exception("Error: inline attachment missing on server: ".$tmpFile->stripTempPath().".<br /><br />The temporary files folder is cleared on each login. Did you relogin?");
 						}
 					}
 				}
@@ -400,7 +400,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 					//$tmpFile->delete();
 				}else
 				{
-					throw new Exception("Error: attachment missing on server.".$tmpFile->stripTempPath());
+					throw new Exception("Error: attachment missing on server: ".$tmpFile->stripTempPath().".<br /><br />The temporary files folder is cleared on each login. Did you relogin?");
 				}
 			}
 		}
