@@ -103,8 +103,9 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		$file->random_code=GO_Base_Util_String::randomPassword(11);
 		$file->expire_time = $params['expire_time'];
 		$file->save();
-		
-		$html = $params['content_type']=='html';
+				
+		$html=$params['content_type']=='html';
+		$bodyindex = $html ? 'htmlbody' : 'plainbody';
 		
 		$url = GO::url('files/file/download',array('id'=>$file->id,'random_code'=>$file->random_code),false, $html);
 		
@@ -123,20 +124,17 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 			$message = GO_Email_Model_SavedMessage::model()->createFromMimeData($template->content);
 	
 			$response['data']=$message->toOutputArray($html, true);
-			$response['data']['body'] = GO_Addressbook_Model_Template::model()->replaceCustomTags($response['data']['body'], array('body'=>$text));
+			if(strpos($response['data'][$bodyindex],'{body}'))
+				$response['data'][$bodyindex] = GO_Addressbook_Model_Template::model()->replaceCustomTags($response['data'][$bodyindex], array('body'=>$text));			
+			else
+				$response['data'][$bodyindex] = $text.$response['data'][$bodyindex];
+			
 		}else
 		{
-			$response['data']['body']=$text;	
+			$response['data'][$bodyindex]=$text;	
 		}
-		
-		if(!$html){
-			$response['data']['textbody']=$response['data']['body'];
-			unset($response['data']['body']);
-		}
-		
-		if (empty($response['data']['subject']))
-			$response['data']['subject'] = GO::t('downloadLink','files').' '.$file->name;
-
+				
+		$response['data']['subject'] = GO::t('downloadLink','files').' '.$file->name;
 		$response['success']=true;
 		
 		return $response;
