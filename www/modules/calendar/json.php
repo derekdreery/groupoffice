@@ -84,7 +84,7 @@ try {
 			
 //			require_once('../../GO.php');
 //			$calCon=new GO_Calendar_Controller_Calendar();
-//			$response['resources']=$calCon->actionCalendarsWithGroup(array());
+//			$response['resources']=$calCon->run("calendarsWithGroup",array(),false);
 
 			$cal->get_calendars_json($response['project_calendars'], false,true);
 
