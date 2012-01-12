@@ -14,4 +14,4 @@ $l["cmdModuleName"]= 'Mooduli nimi';
 $l["cmdModuleDescription"]= 'Kirjeldus';
 $l["cmdGridColumnModuleName"]= 'Mooduli nimi';
 $l["cmdUninstallMessage"]= 'Hoiatus! Kõik selle mooduli andmed kustutatakse! Oled kindel, et soovid moodulit "{0}" eemaldada?';
-$l["cmdModulesCannotBeDeleted"]= 'Moodulit "Mooodulit" ei saa kustutada!'
+$l["cmdModulesCannotBeDeleted"]= 'Moodulit "Mooodulit" ei saa kustutada!';

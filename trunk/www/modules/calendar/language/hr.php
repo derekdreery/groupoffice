@@ -1,9 +1,7 @@
 <?php
 
-﻿;
 $l['name'] = 'Kalendar';
 $l['description'] = 'Kalendar modul; Svi korisnici mogu dodati, urediti ili obrisati sastanak. Sastanci drugih korisnika se mogu vidjeti i ako je potrebno promijeniti.';
-$lang['link_type'][1]='Sastanak';
 $l['groupView'] = 'Grupni pogled';
 $l['event']='Događaj';
 $l['startsAt']='Počinje u';
@@ -165,14 +163,13 @@ $l["resourceConflictMsg"]= 'Jedan ili više resursa u ovom događaju se već kor
 $l["view"]= 'Pogled';
 $l["calendarsPermissions"]='Dozvole kalendara';
 $l["resourcesPermissions"]='Dozvole resursa';
-$l["daynames"]={};
-GO.calendar.lang.daynames[0]='Nedjelja';
-GO.calendar.lang.daynames[1]='Ponedjeljak';
-GO.calendar.lang.daynames[2]='Utorak';
-GO.calendar.lang.daynames[3]='Srijeda';
-GO.calendar.lang.daynames[4]='Četvrtak';
-GO.calendar.lang.daynames[5]='Petak';
-GO.calendar.lang.daynames[6]='Subota';
+$l["daynames"][0]='Nedjelja';
+$l["daynames"][1]='Ponedjeljak';
+$l["daynames"][2]='Utorak';
+$l["daynames"][3]='Srijeda';
+$l["daynames"][4]='Četvrtak';
+$l["daynames"][5]='Petak';
+$l["daynames"][6]='Subota';
 $l["categories"]='Kategorije';
 $l["category"]='Kategorija';
 $l["globalCategory"]='Globalna kategorija';
