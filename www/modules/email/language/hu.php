@@ -1,6 +1,4 @@
 <?php
-
-﻿;
 $l["messages"]='Levelek';
 $l["message"]='Levél';
 $l["inbox"]='Bejövő levelek';
@@ -110,8 +108,8 @@ $l["searchGO"]='Search through Group-Office';
 $l["toggleWindowPosition"]= 'Toggle message window position';
 $l["closeUploadDialog"]='Close the upload dialog first or wait for the upload to finish';
 $l["signature"]='Aláírás';
-GO.email.defaultProgram='Alapértelmezett e-mail program';
-GO.email.defaultProgramInstructions ='<p>To set Group-Office as your default e-mail program please <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">read the instructions</a>.</p><p>Then if you are using Windows you must download and run <a class="normal-link" href="{url}">this register file</a></p>';
+$l["defaultProgram"]='Alapértelmezett e-mail program';
+$l["defaultProgramInstructions"] ='<p>To set Group-Office as your default e-mail program please <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">read the instructions</a>.</p><p>Then if you are using Windows you must download and run <a class="normal-link" href="{url}">this register file</a></p>';
 $l["htmlMarkup"]= 'Use HTML markup';
 $l["confirmLostChanges"]= 'Changes will be lost. Are you sure?';
 $l["alias"]="Alias";

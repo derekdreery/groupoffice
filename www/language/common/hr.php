@@ -1,6 +1,4 @@
 <?php
-
-﻿
 $l['about']='Verzija: %s
 Autorska prava (c) 2003-%s, Intermesh
 Sva prava pridržana.
@@ -366,7 +364,7 @@ $l["strYear"]="Godina";
 $l["strYears"]="Godine";
 $l["strTime"]='Vrijeme';
 $l["selectWeek"]='Izaberi tjedan';
-$l["shortDays"]= ['Ned', 'Pon', 'Uto', 'Sri', 'Čet', 'Pet','Sub'];
+$l["shortDays"]= array('Ned', 'Pon', 'Uto', 'Sri', 'Čet', 'Pet','Sub');
 $l["noRecurrence"]= 'Bez ponavljanja';
 $l["monthsByDate"]= 'Mjeseci po datumu';
 $l["monthsByDay"]= 'Mjeseci po danu';
@@ -448,7 +446,7 @@ $l["thankyou"]='Hvala';
 $l["applyMultiselect"]='Primjeni višestruki izbor';
 $l["createdBy"]='Kreirao';
 $l["debugModeDetected"]="Upozorenje! Ispravljanje nepravilnosti uključeno";
-$l["debugModeWarning"]="Koristite $config['debug']=true; samo za razvoj i rješavanje problema. Usporava rad programa.";
+$l["debugModeWarning"]="Koristite \$config['debug']=true; samo za razvoj i rješavanje problema. Usporava rad programa.";
 $l["userGroup"]='Korisnička grupa';
 $l["noItemSelectedWarning"]='Molimo izaberite barem jednu stavku.';
 $l["deselectAll"]='Odznači sve';
@@ -463,37 +461,6 @@ $l["priority_normal"]='Normalan';
 $l["priority_high"]='Visok';
 $l["none"]= 'Nijedan';
 $l["userSelectedLanguage"]= 'Odabrani jezik';
-$l["swfUploadPanelStrings"]= {;
-		text_add: 'Dodaj Datoteku(e)';
-		text_upload: 'Prenesi Datoteku(e)';
-		text_cancel: 'Prekini Prijenos';
-		text_clear: 'Izprazni red čekanja';
-		text_progressbar: 'Pokazatelj napretka';
-		text_remove: 'Ukloni Datoteku';
-		text_remove_sure: 'Da li ste sigurni da želite ukloniti ovu datoteku iz reda čekanja?';
-		text_error: 'Greška';
-		text_uploading: 'Prenosim datoteku: {0} ({1} od {2})';
-		header_filename: 'Ime datoteke';
-		header_size: 'Veličina';
-		header_status: 'Status';
-		header_progress: "Napredak";
-		status: {;
-			0: 'U redu čekanja';
-			1: 'Prenosim...';
-			2: 'Završeno';
-			3: 'Greška';
-			4: 'Otkazano';
-		},;
-		error_queue_exceeded: 'Odabrane datoteke prelaze maksimalni broj od {0} datoteka u redu čekanja.';
-		error_queue_slots_0: 'Nema više slobodnog mjesta';
-		error_queue_slots_1: 'Ostalo je samo jedno slobodno mjesto';
-		error_queue_slots_2: 'Ostalo je samo {0} slobodna mjesta';
-		error_size_exceeded: 'Veličina odabranih datoteka prelazi dozvoljenu veličinu od 1 MB.';
-		error_zero_byte_file: 'Odabrana datoteka od 0 byte.';
-		error_invalid_filetype: 'Odabrana neispravna vrsta datoteke.';
-		error_file_not_found: 'Datoteka nije pronađena - greška 404.';
-		error_security_error: 'Sigurnosna greška. Nije dozvoljeno postavljanje na druge web adrese.';
-	};
 $l["orientation"]='Orijentacija';
 $l["portrait"]='Portret';
 $l["landscape"]='Pejzaž';

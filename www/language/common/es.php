@@ -173,7 +173,7 @@ $l["strMonths"]="Meses";
 $l["strYear"]="Año";
 $l["strYears"]="Años";
 $l["strTime"]='Hora';
-$l["shortDays"]= ['Dom', 'Lun', 'Mar', 'Mie', 'Juv', 'Vie','Sab'];
+$l["shortDays"]= array('Dom', 'Lun', 'Mar', 'Mie', 'Juv', 'Vie','Sab');
 $l["noRecurrence"]= 'No se repiten';
 $l["monthsByDate"]= 'Meses por fecha';
 $l["monthsByDay"]= 'Meses por dia';
@@ -255,7 +255,7 @@ $l["width"]='Ancho';
 $l["thankyou"]='Gracias';
 $l["applyMultiselect"]='Aplicar selección multipel';
 $l["debugModeDetected"]="Atención! Modo debug activado";
-$l["debugModeWarning"]="Use $config['debug']=true; solamente en desarrollo y para solucionar problemas. Esto hace Group-Office muy lento";
+$l["debugModeWarning"]="Use \$config['debug']=true; solamente en desarrollo y para solucionar problemas. Esto hace Group-Office muy lento";
 $l["noItemSelectedWarning"]='Seleccione al menos un ítem por favor';
 
 $l['htmldirection']= 'ltr';

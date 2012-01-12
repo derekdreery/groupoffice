@@ -165,7 +165,7 @@ $l['no']='Nej';
 $l['system']='System';
 $l['goAlreadyStarted']='Group-Office har redan startats. Fönstret som skapats av {FUNCTION} har laddats i Group-Office. Du kan nu stänga det här fönstret och fortsätta jobba i Group-Office.';
 $l['no']='Nej';
-$lang['commmon']['logFiles']='Loggfiler';
+$l['logFiles']='Loggfiler';
 $l['reminder']='Påminnelse';
 $l['unknown']='Okänd';
 $l['time']='Tid';
@@ -253,7 +253,7 @@ $l["strWorkAddressNo"]= 'Husnummer (arbete)';
 $l["strWorkZip"]= 'Postnummer (arbete)';
 $l["strWorkCity"]= 'Stad (arbete)';
 $l["strWorkState"]= 'Län/stat (arbete)';
-$l["strWorkCountry"]= 'Land (arbete)',	;
+$l["strWorkCountry"]= 'Land (arbete)';
 $l["strWorkPhone"]= 'Telefon (arbete)';
 $l["strWorkFax"]= 'Fax (arbete)';
 $l["strPostAddress"]= 'Adress (post)';
@@ -366,7 +366,7 @@ $l["strYear"]= 'År';
 $l["strYears"]= 'År';
 $l["strTime"]= 'Tid';
 $l["selectWeek"]='Välj vecka';
-$l["shortDays"]= ['Sön', 'Mån', 'Tis', 'Ons', 'Tor', 'Fre','Lör'];
+$l["shortDays"]= array('Sön', 'Mån', 'Tis', 'Ons', 'Tor', 'Fre','Lör');
 $l["noRecurrence"]= 'Ingen upprepning';
 $l["monthsByDate"]= 'Månader efter datum';
 $l["monthsByDay"]= 'Månader efter veckodag';
@@ -448,7 +448,7 @@ $l["thankyou"]='Tack';
 $l["applyMultiselect"]='Tillämpa flerval';
 $l["createdBy"]='Skapad av';
 $l["debugModeDetected"]="Varning! Debug-läge aktiverat";
-$l["debugModeWarning"]="Använd $config['debug']=true; endast vid utveckling och felsökning. Group-Office blir långsammare i debug-läge.";
+$l["debugModeWarning"]="Använd \$config['debug']=true; endast vid utveckling och felsökning. Group-Office blir långsammare i debug-läge.";
 $l["userGroup"]='Användargrupp';
 $l["noItemSelectedWarning"]='Välj minst ett objekt.';
 $l["deselectAll"]='Deselektera alla';
@@ -463,36 +463,6 @@ $l["priority_normal"]='Normal';
 $l["priority_high"]='Hög';
 $l["none"]= 'Inga';
 $l["userSelectedLanguage"]= 'Mitt valda språk';
-$l["swfUploadPanelStrings"]= {
-		text_add: 'Lägg till fil(er)',
-		text_upload: 'Ladda upp fil(er)',
-		text_cancel: 'Avbryt uppladdning',
-		text_clear: 'Rensa kön',
-		text_progressbar: 'Progress Bar',
-		text_remove: 'Radera fil',
-		text_remove_sure: 'Är du säker på att du vill radera denna fil från kön?',
-		text_error: 'Fel',
-		text_uploading: 'Laddar upp fil: {0} ({1} av {2})',
-		header_filename: 'Filnamn',
-		header_size: 'Storlek',
-		header_status: 'Status',
-		status: {
-			0: 'Köad',
-			1: 'Laddar upp...',
-			2: 'Slutförd',
-			3: 'Fel',
-			4: 'Avbruten'
-		},
-		error_queue_exceeded: 'De valda filerna är större än det maximala antalet {0} köade filer.',
-		error_queue_slots_0: 'Det finns inga platser kvar',
-		error_queue_slots_1: 'Det finns bara en plats kvar',
-		error_queue_slots_2: 'Det finns bara {0} platser kvar',
-		error_size_exceeded: 'Den valda filen är större än den maximalt tillåtna storleken: 1 MB.',
-		error_zero_byte_file: 'Tom fil vald.',
-		error_invalid_filetype: 'Ogiltig filtyp vald.',
-		error_file_not_found: 'Filen hittas inte 404.',
-		error_security_error: 'Säkerhetsfel. Ej tillåtet att posta till en annan url.';
-	};
 $l["orientation"]='Orientering';
 $l["portrait"]='Porträtt';
 $l["landscape"]='Landskap';
