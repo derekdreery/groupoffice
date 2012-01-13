@@ -17,3 +17,7 @@ $l["adminOnly"]= 'Alleen admin';
 $l["adminOnlyLabel"]= 'Alleen beheerders mogen deze groep gebruiken om toegang te geven aan bv. agenda\'s';
 $l["groupMembers"]='Groepsleden';
 $l["managePermissions"]= 'Beheerrechten';
+$l['modulePermissions'] = 'Toegangsrechten Modules';
+$l['permissionNone'] = 'Geen rechten';
+$l['permissionUse'] = 'Gebruiken';
+$l['permissionManage'] = 'Beheren';
