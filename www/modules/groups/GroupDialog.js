@@ -21,15 +21,20 @@ GO.groups.GroupDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			formControllerUrl: 'groups/group'
 		});
 		
-		GO.groups.GroupDialog.superclass.initComponent.call(this);	
+		GO.groups.GroupDialog.superclass.initComponent.call(this);
 	},
 
 	beforeLoad : function(remoteModelId, config){
 		this.userGrid.setGroupId(remoteModelId);
+		this.modulePermissionsGrid.setGroupId(remoteModelId);
     if(remoteModelId <= 0)
       this.userGrid.setDisabled(true);
     else
       this.userGrid.setDisabled(false);
+	},
+	
+	beforeSubmit : function(params) {
+		this.formPanel.form.baseParams['permissions'] = Ext.encode(this.modulePermissionsGrid.getGridData());
 	},
 	
 	buildForm : function () {
@@ -78,7 +83,10 @@ GO.groups.GroupDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
       hideLevel:true
     });
 
+		this.modulePermissionsGrid = new GO.groups.ModulePermissionsGrid();
+
 		this.addPanel(this.borderPanel);
     this.addPanel(this.permissionsPanel);
+		this.addPanel(this.modulePermissionsGrid);
 	}
 });
