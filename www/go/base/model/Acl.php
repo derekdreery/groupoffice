@@ -157,9 +157,15 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 		$usersGroup = $this->hasGroup($groupId);
 		
 		if($usersGroup){
-			$usersGroup->level=$level;			
+			if($level>0)
+				$usersGroup->level=$level;			
+			else
+				return $usersGroup->delete();
 		}else
 		{	
+			if($level==0)
+				return true;
+			
 			$usersGroup = new GO_Base_Model_AclUsersGroups();
 			$usersGroup->acl_id = $this->id;
 			$usersGroup->group_id = $groupId;
