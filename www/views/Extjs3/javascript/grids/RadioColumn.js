@@ -28,6 +28,9 @@ GO.grid.RadioColumn = function(config){
 };
 
 GO.grid.RadioColumn.prototype = {
+	value : false,
+	
+	horizontal : false,
 	/**
 	 * @param {} grid passes Ext.grid.GridPanel.
 	 */
@@ -45,27 +48,31 @@ GO.grid.RadioColumn.prototype = {
 	 */
 	onMouseDown : function(e, t){
 		if(t.className && t.className.indexOf('x-grid3-cc-'+this.id) != -1){
-			e.stopEvent();
-			var index = this.grid.getView().findRowIndex(t);
-			var record = this.grid.store.getAt(index);
-			var disabled = this.isDisabled(record);
+			
+				e.stopEvent();
+				var index = this.grid.getView().findRowIndex(t);
+				var record = this.grid.store.getAt(index);
+				var disabled = this.isDisabled(record);
 
-			if (!disabled)
-			{
-				if(!GO.util.empty(record.get(this.dataIndex))) {
-					return;
-				}
+				if (!disabled)
+				{
+					if(!this.horizontal){
+						if(!GO.util.empty(record.get(this.dataIndex))) {
+							return;
+						}
 
-				for(var i = 0, max = this.grid.store.getCount();i < max; i++) {
-					var rec = this.grid.store.getAt(i);
-					if(rec.get(this.dataIndex)) {
-						rec.set(this.dataIndex, false);
+						for(var i = 0, max = this.grid.store.getCount();i < max; i++) {
+							var rec = this.grid.store.getAt(i);
+							if(rec.get(this.dataIndex)) {
+								rec.set(this.dataIndex, false);
+							}
+
+						}
+						record.set(this.dataIndex, true);
+					}else{
+						record.set(this.dataIndex, this.value);
 					}
-
 				}
-				record.set(this.dataIndex, true);
-			}
-
 		}
 	},
 
@@ -87,21 +94,18 @@ GO.grid.RadioColumn.prototype = {
 		p.css += ' x-grid3-radio-col-td';
 		var disabled = this.isDisabled(record);
 		var on;
-		if (!GO.util.empty(v))
+		
+		if (disabled)
 		{
-			if (disabled)
-			{
-				on = '-on x-item-disabled';
-			} else {
-				on = '-on';
-			}
-		} else {
-			if (disabled)
-			{
 				on = ' x-item-disabled';
-			} else {
-				on = '';
-			}
+		}else
+		{
+			if(this.horizontal){
+				on = v==this.value ? '-on' : '';		
+			}else
+			{
+				on = !GO.util.empty(v) ? '-on' : '';				
+			}			
 		}
 
 		return '<div class="x-grid3-radio-col'+ on +' x-grid3-cc-'+this.id+'">&#160;</div>';
