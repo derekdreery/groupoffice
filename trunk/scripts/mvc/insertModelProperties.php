@@ -115,6 +115,7 @@ foreach($classes as $model){
 		}
 		
 //		echo "Insert pos: ".$insertPos."\n";
+		$columns= array_reverse($columns, true);
 		
 		foreach ($columns as $name => $attr) {
 			if (!preg_match('/@property .*' . $name . '/', $contents)) {
