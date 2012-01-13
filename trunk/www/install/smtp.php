@@ -2,7 +2,7 @@
 
 require('header.php');
 
-if($_SERVER['REQUEST_METHOD']=='POST' && GO_Base_Html_Input::checkRequired()){
+if($_SERVER['REQUEST_METHOD']=='POST' && GO_Base_Html_Error::checkRequired()){
 
 	foreach($_POST as $key=>$value){
 		GO::config()->$key=$value;
