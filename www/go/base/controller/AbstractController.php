@@ -267,7 +267,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 				throw new GO_Base_Exception_AccessDenied();
 			}
 			$ignoreactions = $this->ignoreAclPermissions();
-			$ignoreAcl = in_array($action, $this->ignoreAclPermissions());
+			$ignoreAcl = in_array($action, $this->ignoreAclPermissions()) || in_array('*', $this->ignoreAclPermissions());
 			if($ignoreAcl){		
 				$oldIgnore = GO::setIgnoreAclPermissions(true);				
 			}
