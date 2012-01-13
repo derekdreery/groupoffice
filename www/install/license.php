@@ -1,7 +1,7 @@
 <?php
 require('header.php');
 if($_SERVER['REQUEST_METHOD']=='POST'){
-	if(GO_Base_Html_Input::checkRequired())
+	if(GO_Base_Html_Error::checkRequired())
 		redirect("configFile.php");
 }
 
