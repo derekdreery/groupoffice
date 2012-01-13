@@ -10,7 +10,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 	if($_POST['password1']!=$_POST['password2'])
 		GO_Base_Html_Input::setError ('password1', "The passwords didn't match");
 	
-	GO_Base_Html_Input::checkRequired();
+	GO_Base_Html_Error::checkRequired();
 	
 	if(!GO_Base_Html_Input::hasErrors()){
 		GO::$ignoreAclPermissions=true;
