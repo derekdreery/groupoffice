@@ -148,8 +148,10 @@ class GO_Base_Util_TemplateParser
 		
 			//echo $tag .' -> '.$value."\n\n";
 			
-			$content = str_replace('{'.$tag.'}', $value, $content);
-			$content = str_replace('%'.$tag.'%', $value, $content);
+			if(!is_array($value) && !is_object($value)){		
+				$content = str_replace('{'.$tag.'}', $value, $content);
+				$content = str_replace('%'.$tag.'%', $value, $content);
+			}
 		}
 	
 		return $content;
