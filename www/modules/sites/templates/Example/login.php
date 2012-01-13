@@ -17,7 +17,7 @@
 										"value" => ''
 									));
 						
-									GO_Base_Html_Input::render(array(
+									GO_Base_Html_Password::render(array(
 										"required" => true,
 										"label" => "Password",
 										"name" => "password",
@@ -40,7 +40,7 @@
 									
 									GO_Base_Html_Form::renderEnd();
 									?>
-									<a href="<?php echo $this->pageUrl("lostpass"); ?>">Lost password?</a>
+									<a href="<?php echo $this->pageUrl($this->site->getLostPasswordPath()); ?>">Lost password?</a>
 							</div>
 						</div>
 
