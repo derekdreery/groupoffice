@@ -161,23 +161,29 @@ Ext.extend(GO.calendar.PermissionsDialog, GO.Window, {
 			return false;
 		}
 
-		var group_id = this.selectGroup.store.data.items[0].id;
+		var group_id = this.selectGroup.store.data.items[0] ? this.selectGroup.store.data.items[0].id : "";
+		
+		if(!group_id){
+			alert("You don't have permission to edit groups");			
+		}else
+		{
+			this.resources = resources;
 
-		this.resources = resources;
+			this.selectGroup.setValue(group_id);
+			this.permissionsGrid.store.baseParams.group_id = group_id;
 
-		this.selectGroup.setValue(group_id);
-		this.permissionsGrid.store.baseParams.group_id = group_id;
+			this.selectLevel.setValue(1);
+			this.permissionsGrid.store.baseParams.level_id = 1;
 
-		this.selectLevel.setValue(1);
-		this.permissionsGrid.store.baseParams.level_id = 1;
-				
-		var title = (resources) ? GO.calendar.lang.resourcesPermissions : GO.calendar.lang.calendarsPermissions;
-		this.setTitle(title);
+			var title = (resources) ? GO.calendar.lang.resourcesPermissions : GO.calendar.lang.calendarsPermissions;
+			this.setTitle(title);
 
-		this.permissionsGrid.store.baseParams.resources = resources;
-		this.permissionsGrid.store.reload();
+			this.permissionsGrid.store.baseParams.resources = resources;
 
-		GO.calendar.GroupDialog.superclass.show.call(this);
+
+			this.permissionsGrid.store.reload();
+			GO.calendar.GroupDialog.superclass.show.call(this);
+		}		
 	},
 	
 	submitForm : function(hide)
