@@ -14,7 +14,16 @@
  * one panel to this dialog. A tabPanel is automatically created if and only if
  * more than one panel is added to the dialog in this way.
  */
- 
+
+//GO.dialog.TabbedFormDialog = function(config) {
+//	
+//	config = config | {};
+//	
+//	if (config.title)
+//		this.baseTitle = config.title;
+//	
+//	GO.dialog.TabbedFormDialog.superclass.constructor(this,config);
+//}
 GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	
 	/**
@@ -24,6 +33,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	loadOnNewModel : true,
 	
 	remoteModelId : 0,
+	
+	titleField : false,
 	
 	submitAction : 'submit',
 	
@@ -224,7 +235,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 				
 				if(this.permissionsPanel && action.result[this.permissionsPanel.fieldName])
 					this.permissionsPanel.setAcl(action.result[this.permissionsPanel.fieldName]);
-				
+								
 				this.afterSubmit(action);
 				
 				if(hide)
@@ -242,9 +253,9 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 					if(!this.link_config.scope)
 						this.link_config.scope = this;
 					
-					this.link_config.callback.call(this.link_config.scope);
-						
-				}	
+					this.link_config.callback.call(this.link_config.scope);						
+				}
+				this.updateTitle();
 			},		
 			failure: function(form, action) {
 				if(action.failureType == 'client')
@@ -323,6 +334,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 					this.afterLoad(remoteModelId, config, action);
 					
 					this.formPanel.form.clearInvalid();
+					
+					this.updateTitle();
 				},
 				failure:function(form, action)
 				{
@@ -349,10 +362,25 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		}
 	},
 
+	updateTitle : function() {
+		
+		if(this.titleField)
+		{
+			var f=this.formPanel.form.findField(this.titleField);
+			
+			if(!this.origTitle)
+				this.origTitle=this.title;
+					
+			var titleSuffix = this.remoteModelId > 0 ? f.getValue() : GO.lang.cmdNew;
+
+			this.setTitle(this.origTitle+": "+titleSuffix);
+		}
+	},
+
 	setRemoteModelId : function(remoteModelId)
 	{
 		this.formPanel.form.baseParams[this.remoteModelIdName]=remoteModelId;
-		this.remoteModelId=remoteModelId;
+		this.remoteModelId=remoteModelId;		
 	},
 
 	/**
