@@ -12,7 +12,7 @@ class GO_Base_Html_Form {
 	
 	public static function getHtmlBegin($targetRoute=false,$formName='form',$showErrors=false){
 		$html = '<form method="post" name="'.$formName.'" >';
-		$html .= '<input type="hidden" name="formRoute" value="'.$targetRoute.'" />';
+	//	$html .= '<input type="hidden" name="formRoute" value="'.$targetRoute.'" />';
 		if($showErrors){
 			$error = GO_Base_Html_Error::getError();
 			$html .= $error;
