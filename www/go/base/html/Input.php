@@ -26,26 +26,7 @@ class GO_Base_Html_Input {
 		return !empty(GO::session()->values['formErrors']);
 	}
 	
-	public static function checkRequired(){
-		
-		
-		if(isset($_POST['required'])){
-			foreach($_POST['required'] as $inputName){
-				if ($pos = strpos($inputName, '[')) {
-					$key1 = substr($inputName, 0, $pos);
-					$key2 = substr($inputName, $pos + 1, -1);
-					if(empty($_POST[$key1][$key2]))
-						self::setError($inputName, 'This field is required');
-				}else
-				{
-					if(empty($_POST[$inputName]))
-						self::setError($inputName, 'This field is required');
-				}
-			}
-		}
-		
-		return !self::hasErrors();
-	}
+	
 	
 	/**
 	 *
