@@ -16,6 +16,7 @@
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  *
+ * @property string register_user_groups Comma separated string with Group ids.
  * @property string $mod_rewrite_base_path
  * @property boolean $mod_rewrite
  * @property boolean $ssl

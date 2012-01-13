@@ -10,3 +10,5 @@ $updates["201112081020"][]="ALTER TABLE `si_pages` ADD `login_required` BOOLEAN 
 $updates["201112081020"][]="ALTER TABLE `si_sites` ADD `ssl` BOOLEAN NOT NULL DEFAULT '0',
 ADD `mod_rewrite` BOOLEAN NOT NULL DEFAULT '0',
 ADD `mod_rewrite_base_path` VARCHAR( 50 ) NOT NULL DEFAULT '/'";
+
+$updates["201201111000"][]="ALTER TABLE `si_sites` ADD `register_user_groups` VARCHAR( 50 ) NULL DEFAULT ''";
