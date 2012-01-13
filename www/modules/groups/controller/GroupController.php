@@ -122,18 +122,15 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 	}
 
 	protected function beforeSubmit(&$response, &$model, &$params) {
-		if (isset($params['permissions']) && isset(GO::modules()->modules)) {
+		if (!empty($params['permissions'])) {
 			$permArr = json_decode($params['permissions']);
 			foreach ($permArr as $modPermissions) {
-				$modModel = GO_Modules_Model_Module::model()->findByPk($modPermissions->name);
-				if ($modPermissions->groupPermissionManage) {
-					$level = GO_Base_Model_Acl::MANAGE_PERMISSION;
-				} elseif ($modPermissions->groupPermissionUse) {
-					$level = GO_Base_Model_Acl::READ_PERMISSION;
-				} else {
-					$level = 0;
-				}
-				$modModel->acl->addGroup($params['id'],$level);
+				$modModel = GO_Modules_Model_Module::model()->findByPk($modPermissions->id);	
+				$modModel->acl->addGroup(
+						$params['id'],
+						$modPermissions->permissionLevel
+					);
+				
 			}
 		}
 		return parent::beforeSubmit($response, $model, $params);
@@ -147,19 +144,32 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 			'results' => array(),
 			'total' => 0
 		);
+		$modules = array();
 		while ($module = $modStmt->fetch()) {			
 			$aclUsersGroup = $module->acl->hasGroup($groupId);
-			$groupPermissionLevel = !empty($aclUsersGroup->level) ? $aclUsersGroup->level : 0;
-			$response['results'][] =
+			$translated = $module->moduleManager ? $module->moduleManager->name() : $module->id;
+			
+			// ExtJs view was not built to handle Write / Write And Delete permissions,
+			// but only no read permission, and read and manage permission:
+			if (empty($aclUsersGroup->level))
+				$level = 0;
+			elseif ($aclUsersGroup->level > GO_Base_Model_Acl::READ_PERMISSION)
+				$level = GO_Base_Model_Acl::MANAGE_PERMISSION;
+			else
+				$level = $aclUsersGroup->level;
+			
+			$modules[$translated]=
 				array(
-					'name' => $module->id,
-					'groupPermissionNone' => $groupPermissionLevel < GO_Base_Model_Acl::READ_PERMISSION,
-					'groupPermissionUse' => $groupPermissionLevel == GO_Base_Model_Acl::READ_PERMISSION,
-					'groupPermissionManage' => $groupPermissionLevel > GO_Base_Model_Acl::READ_PERMISSION
+					'id' => $module->id,
+					'name' => $translated,
+					'permissionLevel' => $level
 			);
 			$response['total'] += 1;
 		}
+		ksort($modules);
 
+		$response['results'] = array_values($modules);
+		
 		return $response;
 	}
 

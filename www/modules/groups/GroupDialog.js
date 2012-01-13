@@ -18,7 +18,8 @@ GO.groups.GroupDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		Ext.apply(this, {
 			goDialogId:'group',
 			title:GO.groups.lang.group,
-			formControllerUrl: 'groups/group'
+			formControllerUrl: 'groups/group',
+			titleField:'name'
 		});
 		
 		GO.groups.GroupDialog.superclass.initComponent.call(this);
@@ -34,7 +35,7 @@ GO.groups.GroupDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	},
 	
 	beforeSubmit : function(params) {
-		this.formPanel.form.baseParams['permissions'] = Ext.encode(this.modulePermissionsGrid.getGridData());
+		this.formPanel.form.baseParams['permissions'] = this.modulePermissionsGrid.getPermissionData();		
 	},
 	
 	buildForm : function () {
