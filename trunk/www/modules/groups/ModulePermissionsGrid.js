@@ -22,26 +22,30 @@ GO.groups.ModulePermissionsGrid = function(config)
 
 		config.width = '100%';
 		config.height = '100%';
+		config.loadMask=true;
 
     var radioPermissionNoneColumn = new GO.grid.RadioColumn({
+			horizontal:true,
+			value:0,
 			header: GO.groups.lang['permissionNone'],
-			dataIndex: 'groupPermissionNone',
-			width: 50,
-			onMouseDown: function(e,t) {}
+			dataIndex: 'permissionLevel',
+			width: 50
     });
 		
 		var radioPermissionUseColumn = new GO.grid.RadioColumn({
+			horizontal:true,
+			value:GO.permissionLevels.read,
 			header: GO.groups.lang['permissionUse'],
-			dataIndex: 'groupPermissionUse',
-			width: 50,
-			onMouseDown: function(e,t) {}
+			dataIndex: 'permissionLevel',
+			width: 50
     });
 		
 		var radioPermissionManageColumn = new GO.grid.RadioColumn({
+			horizontal:true,
+			value:GO.permissionLevels.manage,
 			header: GO.groups.lang['permissionManage'],
-			dataIndex: 'groupPermissionManage',
-			width: 50,
-			onMouseDown: function(e,t) {}
+			dataIndex: 'permissionLevel',
+			width: 50
     });
 	
     config.store = new GO.data.JsonStore({
@@ -49,7 +53,7 @@ GO.groups.ModulePermissionsGrid = function(config)
 			baseParams: {
 				groupId : -1
 			},
-			fields: ['name', 'groupPermissionNone', 'groupPermissionUse', 'groupPermissionManage'],
+			fields: ['id','name', 'permissionLevel'],
 			root: 'results',
 			menuDisabled:true
     });
@@ -91,34 +95,25 @@ GO.groups.ModulePermissionsGrid = function(config)
 			this.store.load();
 		},this);
 		
-		this.on('cellclick',function( grid, rowIndex, columnIndex, e ) {
-			switch(columnIndex) {
-				case 1:
-					this.setRecordPermission(rowIndex,'groupPermissionNone');
-					break;
-				case 2:
-					this.setRecordPermission(rowIndex,'groupPermissionUse');
-					break;
-				case 3:
-					this.setRecordPermission(rowIndex,'groupPermissionManage');
-					break;
-				default:
-					break;
-			}
-		},this);
-		
 }
 
 
 Ext.extend(GO.groups.ModulePermissionsGrid, GO.grid.GridPanel,{
+		
 	setGroupId : function(groupId) {
 		this._groupId = groupId;
 		this.store.baseParams['groupId'] = groupId;
+		this.store.commitChanges();
 	},
 	
-	setRecordPermission : function(rowIndex,permissionType) {
-		this.store.getAt(rowIndex).set('groupPermissionNone',permissionType=='groupPermissionNone');
-		this.store.getAt(rowIndex).set('groupPermissionUse',permissionType=='groupPermissionUse');
-		this.store.getAt(rowIndex).set('groupPermissionManage',permissionType=='groupPermissionManage');
+	getPermissionData : function(){
+		if(this.store.getModifiedRecords().length){
+			this.store.commitChanges();
+			return Ext.encode(this.getGridData());			
+		}else
+		{
+			return null;
+		}
 	}
+	
 });
