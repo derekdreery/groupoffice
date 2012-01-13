@@ -139,5 +139,17 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 		}		
 		return parent::afterSave($wasNew);
 	}
+	
+	/**
+	 * 
+	 */
+	public function setPostAddressFromVisitAddress(){
+		$this->post_address=$this->address;
+		$this->post_address_no=$this->address_no;
+		$this->post_zip=$this->zip;
+		$this->post_city=$this->city;
+		$this->post_country=$this->country;
+		$this->post_state=$this->state;
+	}
 
 }
