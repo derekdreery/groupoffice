@@ -52,6 +52,8 @@
  * @property int $addressbook_id
  * @property int $user_id
  * @property int $id
+ * 
+ * @property GO_Addressbook_Model_Addressbook $addressbook
  */
 class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	
@@ -183,6 +185,30 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			unlink($this->photo);
 		
 		return parent::afterDelete();
+	}
+	
+	protected function beforeSave() {
+		
+		$this->_autoSalutation();
+		
+		return parent::beforeSave();
+	}
+	
+	private function _autoSalutation(){
+		if(empty($this->salutation)){
+			$tpl = GO_Addressbook_Model_Template::model()->replaceContactTags($this->addressbook->default_salutation, $this);
+			
+			preg_match('/\[([^\/]+)\/([^\]]+)]/',$tpl, $matches);
+			
+			if(isset($matches[0])){
+				$index = $this->sex=='M' ? 1 : 2;			
+				$replaceText = isset($matches[$index]) ? $matches[$index] : "";
+				
+				$tpl = str_replace($matches[0], $replaceText, $tpl);
+			}
+			
+			$this->salutation=$tpl;
+		}
 	}
 	
 	protected function afterSave($wasNew) {
