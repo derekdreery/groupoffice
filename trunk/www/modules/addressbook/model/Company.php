@@ -141,6 +141,9 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 	}
 	
 	/**
+	 * Function to let this model copy the visit address to the post address.
+	 * After this function is called, you need to call the save() function to 
+	 * actually save this model. 
 	 * 
 	 */
 	public function setPostAddressFromVisitAddress(){
