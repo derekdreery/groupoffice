@@ -412,6 +412,53 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 				$group->addUser($this->id);
 		}
 	}
+	
+	/**
+	 *
+	 * @param boolean $internal Use go to reset the password(internal) or use a website/webpage to reset the password
+	 */
+	public function sendResetPasswordMail($siteTitle=false,$url=false,$fromName=false,$fromEmail=false){
+		$message = GO_Base_Mail_Message::newInstance();
+		$message->setSubject(GO::t('lost_password_subject','base','lostpassword'));
+		
+		if(!$siteTitle)
+			$siteTitle=GO::config()->title;
+		
+		if(!$url){
+			$url=GO::url("auth/resetPassword", array("email"=>$this->email, "usertoken"=>$this->getSecurityToken()));
+			$url = GO::config()->full_url."index.php".$url;
+		}else{
+			$url=GO_Base_Util_Http::addParamsToUrl($url, array("email"=>$this->email, "usertoken"=>$this->getSecurityToken()));
+		}
+		$url="<a href='".$url."'>".$url."</a>";
+		
+		if(!$fromName)
+			$fromName = GO::config()->title;
+		
+		if(!$fromEmail){
+			$parts = explode('@', GO::config()->webmaster_email);
+			$fromEmail = 'noreply@'.$parts[1];
+		}
+
+		$emailBody = GO::t('lost_password_body','base','lostpassword');
+		$emailBody = sprintf($emailBody,$this->contact->salutation, $siteTitle, $this->username, $url);
+		$message->setHtmlAlternateBody($emailBody);
+		$message->addFrom($fromEmail,$fromName);
+		$message->addTo($this->email,$this->getName());
+
+		GO_Base_Mail_Mailer::newGoInstance()->send($message);
+	}
+	
+	/**
+	 * Get a security hash that can be used for verification. For example with 
+	 * reset password function. The token will change when the user's password or
+	 * email address changes.
+	 * 
+	 * @return string 
+	 */
+	public function getSecurityToken(){
+		return md5($this->password.$this->email.$this->ctime);
+	}
 
 }
 
