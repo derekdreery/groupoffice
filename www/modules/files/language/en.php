@@ -78,3 +78,6 @@ $l['no_folder_id'] = 'Invalid folder id has been passed with the request to the 
 $l['path']='Path';
 
 $l['selectFolder']='Select folder...';
+$l['notifyRecursiveTitle']='Set notification on subfolders?';
+$l['removeNotifyRecursiveTitle']='Remove notification from subfolders?';
+$l['notifyRecursiveQuestion']='Do you want to apply this to all the subfolders?';

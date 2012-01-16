@@ -392,17 +392,19 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * folder.
 	 * 
 	 * @param int $user_id
-	 * @return boolean
+	 * @param boolean $recursively If true, apply this to all subfolders.
 	 */
-	public function addNotifyUser($user_id){
+	public function addNotifyUser($user_id,$recursively=false){
 		if(!$this->hasNotifyUser($user_id)){
 			$m = new GO_Files_Model_FolderNotification();
 			$m->folder_id = $this->id;
 			$m->user_id = $user_id;
-			return $m->save();
-		}else
-		{
-			return true;
+			$m->save();
+		}
+		if ($recursively) {
+			$childFolderStmt = GO_Files_Model_Folder::model()->findByAttribute('parent_id',$this->id);
+			while ($childFolder = $childFolderStmt->fetch())
+				$childFolder->addNotifyUser($user_id,true);
 		}
   }
 	
@@ -411,14 +413,18 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * folder.
 	 * 
 	 * @param int $user_id
-	 * @return boolean
+	 * @param boolean $recursively If true, apply this to all subfolders.
 	 */
-	public function removeNotifyUser($user_id){
+	public function removeNotifyUser($user_id, $recursively=false){
 		$model = GO_Files_Model_FolderNotification::model()->findByPk(array('user_id'=>$user_id, 'folder_id'=>$this->pk));
 		if($model)
-			return $model->delete();
-		else
-			return true;
+			$model->delete();
+		
+		if ($recursively) {
+			$childFolderStmt = GO_Files_Model_Folder::model()->findByAttribute('parent_id',$this->id);
+			while ($childFolder = $childFolderStmt->fetch())
+				$childFolder->removeNotifyUser($user_id,true);
+		}
 	}
   
   /**

@@ -74,3 +74,7 @@ $l["applyRecursivelyRUSure"]= 'Weet u het zeker dat u de gekozen instellingen wi
 $l["pleaseConfirm"]= 'A.u.b. bevestigen';
 $l["applyLimits"]= 'Niet alle extra veld categorieën tonen';
 $l["undef"]= '-';
+
+$l['notifyRecursiveTitle']='Notificatie aanzetten voor submappen?';
+$l['removeNotifyRecursiveTitle']='Notificatie uitzetten voor submappen?';
+$l['notifyRecursiveQuestion']='Wilt u dit toepassen op alle submappen?';
