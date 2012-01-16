@@ -18,7 +18,7 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 	 * @return array. 
 	 */
 	protected function allowGuests() {
-		return array('init', 'setview','logout','login');
+		return array('init', 'setview','logout','login','resetpassword','sendresetpasswordmail');
 	}
 
 	private function loadInit() {
@@ -41,6 +41,31 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 		GO::setView($params['view']);
 
 		$this->redirect();
+	}
+	
+	protected function actionResetPassword($params){
+		
+		
+		$this->render('resetpassword');
+	}
+	
+	protected function actionSendResetPasswordMail($params){
+		
+		// DOE VANALLES (EMAIL STUREN ENZ..)
+		$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $params['email']);
+
+		if(!$user){
+			$response['success']=false;
+			$response['feedback']=GO::t('lost_password_error','base','lostpassword');
+		}else{
+			
+			$user->sendResetPasswordMail();
+			
+			$response['success']=true;
+			$response['feedback']=GO::t('lost_password_success','base','lostpassword');
+		}
+		
+		return $response;
 	}
 
 	protected function actionLogout() {
