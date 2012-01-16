@@ -12,7 +12,6 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 	 * @param array $params The params that are passed through to this page
 	 */
 	protected function actionRegister($params) {
-
 		if (GO_Base_Util_Http::isPostRequest()) {
 
 			GO_Base_Html_Error::checkRequired();
