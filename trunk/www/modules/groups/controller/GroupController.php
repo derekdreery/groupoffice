@@ -135,42 +135,5 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 		}
 		return parent::beforeSubmit($response, $model, $params);
 	}
-
-	public function actionModulePermissionsStore($params) {
-		$groupId = intval($params['id']);
-		$modStmt = GO::modules()->getAll();
-		$response = array(
-			'success' => true,
-			'results' => array(),
-			'total' => 0
-		);
-		$modules = array();
-		while ($module = $modStmt->fetch()) {			
-			$aclUsersGroup = $module->acl->hasGroup($groupId);
-			$translated = $module->moduleManager ? $module->moduleManager->name() : $module->id;
-			
-			// ExtJs view was not built to handle Write / Write And Delete permissions,
-			// but only no read permission, and read and manage permission:
-			if (empty($aclUsersGroup->level))
-				$level = 0;
-			elseif ($aclUsersGroup->level > GO_Base_Model_Acl::READ_PERMISSION)
-				$level = GO_Base_Model_Acl::MANAGE_PERMISSION;
-			else
-				$level = $aclUsersGroup->level;
-			
-			$modules[$translated]=
-				array(
-					'id' => $module->id,
-					'name' => $translated,
-					'permissionLevel' => $level
-			);
-			$response['total'] += 1;
-		}
-		ksort($modules);
-
-		$response['results'] = array_values($modules);
-		
-		return $response;
-	}
-
+	
 }
