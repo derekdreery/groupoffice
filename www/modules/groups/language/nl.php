@@ -18,6 +18,3 @@ $l["adminOnlyLabel"]= 'Alleen beheerders mogen deze groep gebruiken om toegang t
 $l["groupMembers"]='Groepsleden';
 $l["managePermissions"]= 'Beheerrechten';
 $l['modulePermissions'] = 'Toegangsrechten Modules';
-$l['permissionNone'] = 'Geen rechten';
-$l['permissionUse'] = 'Gebruiken';
-$l['permissionManage'] = 'Beheren';

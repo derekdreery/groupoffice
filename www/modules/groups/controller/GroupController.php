@@ -137,7 +137,7 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 	}
 
 	public function actionModulePermissionsStore($params) {
-		$groupId = intval($params['groupId']);
+		$groupId = intval($params['id']);
 		$modStmt = GO::modules()->getAll();
 		$response = array(
 			'success' => true,
