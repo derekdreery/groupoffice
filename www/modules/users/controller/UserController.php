@@ -86,19 +86,19 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			unset($params['password']);
 		}
 
-		if (!empty($params['mute_sound'])) {
-			$params['mute_sound'] = 1;
-			$params['mute_reminder_sound'] = 1;
-			$params['mute_new_mail_sound'] = 1;
-		} else {
-			$params['mute_sound'] = false;
-			$params['mute_reminder_sound'] = $model->mute_reminder_sound = !empty($params['mute_reminder_sound']) ? 1 : 0;
-			$params['mute_new_mail_sound'] = $model->mute_new_mail_sound = !empty($params['mute_new_mail_sound']) ? 1 : 0;
-		}
-		
-		$params['show_smilies'] = $model->show_smilies = !empty($params['show_smilies']) ? 1 : 0;
-		$params['mail_reminders'] = $model->mail_reminders = !empty($params['mail_reminders']) ? 1 : 0;
-		$params['popup_reminders'] = $model->popup_reminders = !empty($params['popup_reminders']) ? 1 : 0;
+//		if (!empty($params['mute_sound'])) {
+//			$params['mute_sound'] = 1;
+//			$params['mute_reminder_sound'] = 1;
+//			$params['mute_new_mail_sound'] = 1;
+//		} else {
+//			$params['mute_sound'] = false;
+//			$params['mute_reminder_sound'] = $model->mute_reminder_sound = !empty($params['mute_reminder_sound']) ? 1 : 0;
+//			$params['mute_new_mail_sound'] = $model->mute_new_mail_sound = !empty($params['mute_new_mail_sound']) ? 1 : 0;
+//		}
+//		
+//		$params['show_smilies'] = $model->show_smilies = !empty($params['show_smilies']) ? 1 : 0;
+//		$params['mail_reminders'] = $model->mail_reminders = !empty($params['mail_reminders']) ? 1 : 0;
+//		$params['popup_reminders'] = $model->popup_reminders = !empty($params['popup_reminders']) ? 1 : 0;
 		
 		return parent::beforeSubmit($response, $model, $params);
 	}
