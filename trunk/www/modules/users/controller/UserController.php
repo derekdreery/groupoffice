@@ -86,12 +86,27 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			unset($params['password']);
 		}
 
+		if (!empty($params['mute_sound'])) {
+			$params['mute_sound'] = 1;
+			$params['mute_reminder_sound'] = 1;
+			$params['mute_new_mail_sound'] = 1;
+		} else {
+			$params['mute_sound'] = false;
+			$params['mute_reminder_sound'] = $model->mute_reminder_sound = !empty($params['mute_reminder_sound']) ? 1 : 0;
+			$params['mute_new_mail_sound'] = $model->mute_new_mail_sound = !empty($params['mute_new_mail_sound']) ? 1 : 0;
+		}
+		
+		$params['show_smilies'] = $model->show_smilies = !empty($params['show_smilies']) ? 1 : 0;
+		$params['mail_reminders'] = $model->mail_reminders = !empty($params['mail_reminders']) ? 1 : 0;
+		$params['popup_reminders'] = $model->popup_reminders = !empty($params['popup_reminders']) ? 1 : 0;
+		
 		return parent::beforeSubmit($response, $model, $params);
 	}
 
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
 
 
+		$id = $params['id'];
 		//Save the contact fields to the contact.
 		
 		$contact = $model->createContact();
@@ -103,30 +118,37 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 
 
 		if (isset($_POST['modules'])) {
-			$modules = json_decode($_POST['modules'], true);
+			$modules = !empty($_POST['modules']) ? json_decode($_POST['modules']) : array();
 			$groupsMember = json_decode($_POST['group_member'], true);
 			$groupsVisible = json_decode($_POST['groups_visible'], true);
 
 			/**
 			 * Process selected module permissions
 			 */
-			foreach ($modules as $module) {
-
-				$mod = GO_Base_Model_Module::model()->findByPk($module['id']);
-
-
-				$level = 0;
-				if ($module['write_permission']) {
-					$level = GO_Base_Model_Acl::WRITE_PERMISSION;
-				} elseif ($module['read_permission']) {
-					$level = GO_Base_Model_Acl::READ_PERMISSION;
-				}
-
-				if ($level) {
-					$mod->acl->addUser($model->id, $level);
-				} else {
-					$mod->acl->removeUser($model->id);
-				}
+			foreach ($modules as $modPermissions) {
+				$modModel = GO_Modules_Model_Module::model()->findByPk(
+					$modPermissions->id
+				);	
+				$modModel->acl->addUser(
+					$id,
+					$modPermissions->permissionLevel
+				);
+				
+//				$mod = GO_Base_Model_Module::model()->findByPk($module['id']);
+//
+//
+//				$level = 0;
+//				if ($module['write_permission']) {
+//					$level = GO_Base_Model_Acl::WRITE_PERMISSION;
+//				} elseif ($module['read_permission']) {
+//					$level = GO_Base_Model_Acl::READ_PERMISSION;
+//				}
+//
+//				if ($level) {
+//					$mod->acl->addUser($model->id, $level);
+//				} else {
+//					$mod->acl->removeUser($model->id);
+//				}
 			}
 
 
@@ -228,5 +250,5 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 
 		//return array('success' => true);
 	}
-
+	
 }
