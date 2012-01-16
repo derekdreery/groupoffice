@@ -132,20 +132,20 @@ GO.users.LookAndFeelPanel = function(config)
 			value: GO.settings.sort_name
 		});
 
-    this.cbMuteReminderSound = new Ext.form.Checkbox({
+    this.cbMuteReminderSound = new Ext.ux.form.XCheckbox({
       hideLabel:true,
       boxLabel: GO.users.lang.muteReminderSound,
 			name: 'mute_reminder_sound'
     });
 
-    this.cbMuteNewMailSound = new Ext.form.Checkbox({
+    this.cbMuteNewMailSound = new Ext.ux.form.XCheckbox({
       hideLabel: true,
 			boxLabel: GO.users.lang.muteNewMailSound,
 			name: 'mute_new_mail_sound'
     });
 
 		config.items.push({
-			xtype:'checkbox',
+			xtype:'xcheckbox',
 			hideLabel: true,
 			boxLabel: GO.users.lang.muteSound,
 			name: 'mute_sound',
@@ -180,17 +180,17 @@ GO.users.LookAndFeelPanel = function(config)
 
     this.cbMuteNewMailSound,
     {
-			xtype:'checkbox',
+			xtype:'xcheckbox',
 			hideLabel: true,
 			boxLabel: GO.users.lang.popupNotification,
 			name: 'popup_reminders'
 		},{
-			xtype:'checkbox',
+			xtype:'xcheckbox',
 			hideLabel: true,
 			boxLabel: GO.users.lang.mailReminders,
 			name: 'mail_reminders'
 		},{
-			xtype:'checkbox',
+			xtype:'xcheckbox',
 			hideLabel: true,
 			boxLabel: GO.users.lang.showSmilies,
 			name: 'show_smilies'
