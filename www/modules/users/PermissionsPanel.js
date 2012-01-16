@@ -33,54 +33,61 @@ GO.users.PermissionsPanel = function(config)
 	
     /* module permissions grid */
 	
-    var moduleReadPermissionColumn = new GO.grid.CheckColumn({
-        header: GO.users.lang.useModule,
-        dataIndex: 'read_permission',
-        width: 55,
-        disabled_field:'read_disabled',
-        menuDisabled:true
-    });
-
-    var moduleWritePermissionColumn = new GO.grid.CheckColumn({
-        header: GO.users.lang.manageModule,
-        dataIndex: 'write_permission',
-        width: 55,
-        disabled_field:'write_disabled',
-        menuDisabled:true
-    });
+//    var moduleReadPermissionColumn = new GO.grid.CheckColumn({
+//        header: GO.users.lang.useModule,
+//        dataIndex: 'read_permission',
+//        width: 55,
+//        disabled_field:'read_disabled',
+//        menuDisabled:true
+//    });
+//
+//    var moduleWritePermissionColumn = new GO.grid.CheckColumn({
+//        header: GO.users.lang.manageModule,
+//        dataIndex: 'write_permission',
+//        width: 55,
+//        disabled_field:'write_disabled',
+//        menuDisabled:true
+//    });
+//	
+//    this.modulePermissionsStore = new GO.data.JsonStore({
+//        url:GO.settings.modules.users.url+'json.php',
+//        baseParams: {
+//            user_id: -1,
+//            task: 'modules'
+//        },
+//        fields: ['id', 'name', 'read_disabled', 'write_disabled', 'read_permission', 'write_permission'],
+//        root: 'results',
+//        menuDisabled:true
+//    });
+//	
+//    var moduleAccessGrid = new GO.grid.GridPanel({
+//        columnWidth: .34,
+//        title: GO.users.lang.moduleAccess,
+//        layout:'fit',
+//        columns: [
+//        {
+//            id:'name',
+//            header: GO.users.lang['cmdHeaderColumnName'],
+//            dataIndex: 'name',
+//            renderer: this.iconRenderer,
+//            menuDisabled:true
+//        },
+//        moduleReadPermissionColumn,
+//        moduleWritePermissionColumn
+//        ],
+//        ds: this.modulePermissionsStore,
+//        plugins: [moduleReadPermissionColumn, moduleWritePermissionColumn],
+//        autoExpandColumn:'name'
+//    });
 	
-    this.modulePermissionsStore = new GO.data.JsonStore({
-        url:GO.settings.modules.users.url+'json.php',
-        baseParams: {
-            user_id: -1,
-            task: 'modules'
-        },
-        fields: ['id', 'name', 'read_disabled', 'write_disabled', 'read_permission', 'write_permission'],
-        root: 'results',
-        menuDisabled:true
-    });
-	
-    var moduleAccessGrid = new GO.grid.GridPanel({
-        columnWidth: .34,
-        title: GO.users.lang.moduleAccess,
-        layout:'fit',
-        columns: [
-        {
-            id:'name',
-            header: GO.users.lang['cmdHeaderColumnName'],
-            dataIndex: 'name',
-            renderer: this.iconRenderer,
-            menuDisabled:true
-        },
-        moduleReadPermissionColumn,
-        moduleWritePermissionColumn
-        ],
-        ds: this.modulePermissionsStore,
-        //sm: new Ext.grid.RowSelectionModel({singleSelect:singleSelect}),
-        plugins: [moduleReadPermissionColumn, moduleWritePermissionColumn],
-        autoExpandColumn:'name'
-    });
-	
+		this.moduleAccessGrid = new GO.grid.ModulePermissionsGrid({
+			title: GO.users.lang.moduleAccess,
+			storeUrl: GO.url('modules/module/permissionsStore'),
+			columnWidth: .4,
+			title: GO.users.lang.moduleAccess,
+			layout:'fit',
+			paramIdType: 'userId'
+		});
 	
     /* end module permissions grid */
 	
@@ -106,7 +113,7 @@ GO.users.PermissionsPanel = function(config)
     });
 	
     var groupMemberGrid = new GO.grid.GridPanel({
-        columnWidth: .33,
+        columnWidth: .3,
         layout:'fit',
         title: GO.users.lang.userIsMemberOf,
         columns: [
@@ -152,7 +159,7 @@ GO.users.PermissionsPanel = function(config)
     });
 	
     var groupVisibleGrid = new GO.grid.GridPanel({
-        columnWidth: .33,
+        columnWidth: .3,
         layout:'fit',
         title: GO.users.lang.userVisibleTo,
         columns: [
@@ -173,7 +180,7 @@ GO.users.PermissionsPanel = function(config)
     /* end group visible grid */
 
     config.items=[
-    moduleAccessGrid,
+    this.moduleAccessGrid,
     groupMemberGrid,
     groupVisibleGrid];
 	
@@ -183,24 +190,23 @@ GO.users.PermissionsPanel = function(config)
 
 
 Ext.extend(GO.users.PermissionsPanel, Ext.Panel,{
-    iconRenderer : function(name, cell, reader)
-    {
-        return '<div class="go-module-icon-'+reader.data.id+'" style="height:16px;padding-left:22px;background-repeat:no-repeat;">'+name+'</div>';
-    },
 	
     setUserId : function(user_id, reset)
     {
         if(!this.isVisible() && user_id!=this.user_id)
         {
             this.groupMemberStore.removeAll();
-            this.modulePermissionsStore.removeAll();
+            //this.modulePermissionsStore.removeAll();
             this.groupVisibleStore.removeAll();
 			
-            this.modulePermissionsStore.baseParams.user_id=-1;
+            //this.modulePermissionsStore.baseParams.user_id=-1;
+						this.moduleAccessGrid.setIdParam(-1);
             this.groupMemberStore.baseParams.user_id=-1;
             this.groupVisibleStore.baseParams.user_id=-1;
         }
         this.user_id=user_id;
+				
+				this.moduleAccessGrid.setIdParam(user_id);
     //this.setDisabled(this.user_id==0);
     },
 	
@@ -209,18 +215,19 @@ Ext.extend(GO.users.PermissionsPanel, Ext.Panel,{
 				
         if(this.groupMemberStore.baseParams.user_id!=this.user_id)
         {
-            this.modulePermissionsStore.baseParams.user_id=this.user_id;
-            this.groupMemberStore.baseParams.user_id=this.user_id;
-            this.groupVisibleStore.baseParams.user_id=this.user_id;
-			
-            this.groupMemberStore.load();
-            this.modulePermissionsStore.load();
-            this.groupVisibleStore.load();
+					this.moduleAccessGrid.setIdParam(this.user_id);
+          //this.modulePermissionsStore.baseParams.user_id=this.user_id;
+					this.groupMemberStore.baseParams.user_id=this.user_id;
+					this.groupVisibleStore.baseParams.user_id=this.user_id;
+
+          this.groupMemberStore.load();
+          this.moduleAccessGrid.store.load();
+					this.groupVisibleStore.load();
         }
     },
 
 		commit : function(){
-			this.modulePermissionsStore.commitChanges();
+			this.moduleAccessGrid.store.commitChanges();
 			this.groupMemberStore.commitChanges();
 			this.groupVisibleStore.commitChanges();
 		},
@@ -228,20 +235,20 @@ Ext.extend(GO.users.PermissionsPanel, Ext.Panel,{
     getPermissionParameters : function(){
 
 		
-        var modulePermissions = new Array();
+//        var modulePermissions = new Array();
         var memberGroups = new Array();
         var visibleGroups = new Array();
 		 
-        for (var i = 0; i < this.modulePermissionsStore.data.items.length;  i++)
-        {
-            modulePermissions[i] =
-            {
-                id: this.modulePermissionsStore.data.items[i].get('id'),
-                name: this.modulePermissionsStore.data.items[i].get('name'),
-                read_permission: this.modulePermissionsStore.data.items[i].get('read_permission'),
-                write_permission: this.modulePermissionsStore.data.items[i].get('write_permission')
-            };
-        }
+//        for (var i = 0; i < this.modulePermissionsStore.data.items.length;  i++)
+//        {
+//            modulePermissions[i] =
+//            {
+//                id: this.modulePermissionsStore.data.items[i].get('id'),
+//                name: this.modulePermissionsStore.data.items[i].get('name'),
+//                read_permission: this.modulePermissionsStore.data.items[i].get('read_permission'),
+//                write_permission: this.modulePermissionsStore.data.items[i].get('write_permission')
+//            };
+//        }
 		 
         for (var i = 0; i < this.groupMemberStore.data.items.length;  i++)
         {
@@ -265,7 +272,7 @@ Ext.extend(GO.users.PermissionsPanel, Ext.Panel,{
 	
 	
         return {
-            modules : Ext.encode(modulePermissions),
+            modules : this.moduleAccessGrid.getPermissionData(),
             groups_visible : Ext.encode(visibleGroups),
             group_member : Ext.encode(memberGroups)
         };
