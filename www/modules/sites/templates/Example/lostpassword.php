@@ -1,13 +1,16 @@
 					<div class="subkader-small-top">
 						<div class="subkader-small-bottom">
 							<div class="subkader-small-center">						
-
+								<?php if($this->formok): ?>
+									<h1>Recover password</h1>
+									<p><?php echo $this->message; ?></p>
+								<?php else: ?>
 								<h1>Recover password</h1>								
 								<p>Enter your e-mail address. If a valid user account with that e-mail address is found, your username and a new password will be sent to your e-mail address.</p>
 								
 								<?php 
 									GO_Base_Html_Form::renderBegin('sites/user/recover','recover',true);
-									
+								
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => "Email",
@@ -31,6 +34,8 @@
 
 									GO_Base_Html_Form::renderEnd();
 								?>
+								
+								<?php endif; ?>
 							</div>
 						</div>
 
