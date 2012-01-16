@@ -746,6 +746,20 @@ try {
 				$response['results'][]=$file;
 			}
 
+			$sortBy = $_POST['sort'];
+			$dir = $_POST['dir']=='ASC' ? 1 : -1;
+			global $sortBy, $dir;
+			
+			function sortResults($a,$b) {
+				global $sortBy, $dir;					
+				if ($sortBy!='grid_display')
+					return $dir*($b[$sortBy]-$a[$sortBy]);
+				else
+					return $dir*(strcmp($a['name'],$b['name']));
+			}
+			
+			usort($response['results'],'sortResults');
+			$response['total'] = 3;
 
 			break;
 
