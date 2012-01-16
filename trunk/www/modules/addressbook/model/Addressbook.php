@@ -59,7 +59,7 @@
 	protected function beforeSave() {
 		
 		if(!isset($this->default_salutation))
-			$this->default_salutation=GO::t("defaultSalutation","addressbook");
+			$this->default_salutation=GO::t("defaultSalutationTpl","addressbook");
 		
 		//TODO deprecated.
 		$this->default_iso_address_format='NL';

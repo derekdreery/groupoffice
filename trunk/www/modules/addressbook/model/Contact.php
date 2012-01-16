@@ -196,7 +196,12 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	
 	private function _autoSalutation(){
 		if(empty($this->salutation)){
-			$tpl = GO_Addressbook_Model_Template::model()->replaceContactTags($this->addressbook->default_salutation, $this);
+			$tpl = $this->addressbook->default_salutation;
+			$a = $this->getAttributes();
+			foreach($a as $key=>$value){
+				$tpl = str_replace('{'.$key.'}', $value, $tpl);
+			}			
+			$tpl = preg_replace('/[ ]+/',' ',$tpl);
 			
 			preg_match('/\[([^\/]+)\/([^\]]+)]/',$tpl, $matches);
 			
