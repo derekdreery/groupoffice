@@ -685,11 +685,11 @@ class GO_SECURITY extends db {
 		$security = new GO_SECURITY();
 		$this->query($sql);
 		while($this->next_record()) {
-			if ($this->f("group_id") != 0 && $this->f('group_id') != $GO_CONFIG->group_root && !$security->group_in_acl($this->f("group_id"), $dAcl)) {
+			if ($this->f("group_id")) {
 				$security->add_group_to_acl($this->f("group_id"), $dAcl, $this->f('level'));
 			}
 
-			if ($this->f("user_id") != 0 && !$security->user_in_acl($this->f("user_id"), $dAcl))// && ($security->user_is_visible($this->f("user_id")) || $this->f("user_id") == $this->user_id))
+			if ($this->f("user_id") != 0)// && ($security->user_is_visible($this->f("user_id")) || $this->f("user_id") == $this->user_id))
 			{
 				$security->add_user_to_acl($this->f("user_id"), $dAcl, $this->f('level'));
 			}
