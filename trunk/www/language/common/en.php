@@ -484,3 +484,8 @@ $l["label"]="Label";
 
 $l["validationErrorsFound"]="There are validation errors:";
 $l['attachFiles']='Attach files';
+
+$l['gridMissingParams'] = 'Please let the Group-Office administrator that the window you just attempted to use contains a grid that expected the following paramaters, but did not receive them';
+$l['permissionNone'] = 'No permissions';
+$l['permissionUse'] = 'Use';
+$l['permissionManage'] = 'Manage';

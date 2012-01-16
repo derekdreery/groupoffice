@@ -479,3 +479,8 @@ $l["showFirstDuplicateOnly"]='Toon alleen het eerste duplicaat';
 $l["advancedSearch"]='Geavanceerd zoeken';
 
 $l['attachFiles']='Bijlagen toevoegen';
+
+$l['gridMissingParams'] = 'Laat u a.u.b. de Group-Office beheerder weten dat het scherm wat u zojuist probeerde te gebruiken, een "grid" bevat die de volgende parameters nodig heeft, maar ze niet heeft ontvangen';
+$l['permissionNone'] = 'Geen rechten';
+$l['permissionUse'] = 'Gebruiken';
+$l['permissionManage'] = 'Beheren';
