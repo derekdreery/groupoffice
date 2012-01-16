@@ -140,6 +140,35 @@ class GO_Base_Util_Http {
 	public static function setCookie($name, $value, $expireTime=2592000){
 		SetCookie($name,$value,$expireTime,GO::config()->host,"",!empty($_SERVER['HTTPS']),true);
 	}
+	
+	
+	/**
+	 * Add GET parameters to a URL
+	 *
+	 * @param string $url
+	 * @param array $params
+	 * @param boolean $htmlspecialchars
+	 * @return string 
+	 */
+	public static function addParamsToUrl($url,array $params, $htmlspecialchars=true) {
+		$amp = $htmlspecialchars ? '&amp;' : '&';
+		if (strpos($url, '?') === false) {
+			$url .= '?';
+		} else {
+			$url .= $amp;
+		}
+		$first=true;
+		foreach($params as $key=>$value){
+			if($first)
+				$first=false;
+			else			
+				$url .=$amp;
+			
+			$url .= urlencode($key).'='.urlencode($value);
+		}
+		
+		return $url;
+	}
 
 	
 }

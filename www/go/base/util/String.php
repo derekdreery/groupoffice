@@ -403,6 +403,8 @@ class GO_Base_Util_String {
 	/**
 	 * Adds paramaters to an URL
 	 *
+	 * @deprecated THIS FUNCTION IS MOVED TO GO_Base_Utils_Http
+	 * 
 	 * @param	string $url
 	 * @param	string $params
 	 * @access public
