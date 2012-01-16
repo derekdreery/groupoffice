@@ -37,6 +37,7 @@ views/Extjs3/javascript/grids/SimpleSelectList.js
 views/Extjs3/javascript/grids/CheckColumn.js
 views/Extjs3/javascript/grids/RowAction.js
 views/Extjs3/javascript/grids/RadioColumn.js
+views/Extjs3/javascript/grids/ModulePermissionsGrid.js
 
 views/Extjs3/javascript/common.js
 views/Extjs3/javascript/blinkTitle.js
