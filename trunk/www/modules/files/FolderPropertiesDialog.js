@@ -62,7 +62,7 @@ GO.files.FolderPropertiesDialog = function(config){
 			checked: false,
 			hideLabel:true
 		}),
-		new Ext.form.Checkbox({
+		this.notifyCheckBox = new Ext.form.Checkbox({
 			boxLabel: GO.files.lang.notifyChanges,
 			name: 'notify',
 			checked: false,
@@ -76,7 +76,7 @@ GO.files.FolderPropertiesDialog = function(config){
 		})
 		]
 	});
-	
+
 	this.readPermissionsTab = new GO.grid.PermissionsPanel({
 							
 		});
@@ -120,7 +120,10 @@ GO.files.FolderPropertiesDialog = function(config){
 		waitMsgTarget:true,
 		border:false,
 		defaultType: 'textfield',
-		items:this.tabPanel
+		items:this.tabPanel,
+		baseParams:{
+			notifyRecursive:false
+		}
 	});
 	GO.files.FolderPropertiesDialog.superclass.constructor.call(this,{
 		title:GO.lang['strProperties'],
@@ -157,7 +160,8 @@ GO.files.FolderPropertiesDialog = function(config){
 
 
 	this.addEvents({
-		'rename' : true
+		'rename' : true,
+		'onNotifyChecked' : true
 	});
 }
 
@@ -166,6 +170,10 @@ Ext.extend(GO.files.FolderPropertiesDialog, GO.Window, {
 	show : function(folder_id)
 	{
 		this.folder_id = folder_id;
+		
+		this.notifyCheckBox.removeListener('check',this.onNotifyChecked,this);
+		
+		this.formPanel.baseParams.notifyRecursive=false;
 		
 		if(!this.rendered)
 			this.render(Ext.getBody());
@@ -190,6 +198,8 @@ Ext.extend(GO.files.FolderPropertiesDialog, GO.Window, {
 				if(GO.customfields)
 					this.disableCategoriesPanel.setModel(folder_id,"GO_Files_model_File");
 				
+				this.notifyCheckBox.addListener('check',this.onNotifyChecked,this);
+				
 				GO.files.FolderPropertiesDialog.superclass.show.call(this);
 			},
 			failure: function(form, action) {
@@ -199,6 +209,18 @@ Ext.extend(GO.files.FolderPropertiesDialog, GO.Window, {
 		});
 		
 		
+	},
+	
+	onNotifyChecked : function(checkbox,checked) {
+		Ext.Msg.show({
+			title: checked  ? GO.files.lang.notifyRecursiveTitle :  GO.files.lang.removeNotifyRecursiveTitle,
+			msg: GO.files.lang.notifyRecursiveQuestion,
+			buttons: Ext.Msg.YESNO,
+			fn: function (btn){
+				this.formPanel.baseParams['notifyRecursive'] = btn=='yes';
+			},
+			scope: this
+		});
 	},
 	
 	setPermission : function(is_someones_home_dir, permission_level)

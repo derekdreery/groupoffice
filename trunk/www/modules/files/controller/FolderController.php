@@ -189,11 +189,15 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		if (isset($modifiedAttributes['name']))
 			$response['new_path'] = $model->path;
 
-		if (isset($params['notify']) && !$model->hasNotifyUser(GO::user()->id))
-			$model->addNotifyUser(GO::user()->id);
+		$notifyRecursive = !empty($params['notifyRecursive']) && $params['notifyRecursive']=='true' ? true : false;
+		
+		if (isset($params['notify'])) {
+			$model->addNotifyUser(GO::user()->id,$notifyRecursive);
+		}
 
-		if (!isset($params['notify']) && $model->hasNotifyUser(GO::user()->id))
-			$model->removeNotifyUser(GO::user()->id);
+		if (!isset($params['notify'])){
+			$model->removeNotifyUser(GO::user()->id,$notifyRecursive);			
+		}
 
 		parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}
