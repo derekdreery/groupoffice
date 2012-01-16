@@ -24,6 +24,9 @@ GO.grid.ModulePermissionsGrid = function(config)
 			missingParams = missingParams + '- title<br />';
 		if (GO.util.empty(config.storeUrl))
 			missingParams = missingParams + '- storeUrl<br />';
+		if (GO.util.empty(config.paramIdType))
+			missingParams = missingParams + '- paramIdType<br />';
+
 		if (!GO.util.empty(missingParams))
 			Ext.alert('',GO.lang['gridMissingParams']+'<br />');
 
@@ -37,7 +40,7 @@ GO.grid.ModulePermissionsGrid = function(config)
 			value:0,
 			header: GO.lang['permissionNone'],
 			dataIndex: 'permissionLevel',
-			width: 50
+			width: 40
     });
 		
 		var radioPermissionUseColumn = new GO.grid.RadioColumn({
@@ -45,7 +48,7 @@ GO.grid.ModulePermissionsGrid = function(config)
 			value:GO.permissionLevels.read,
 			header: GO.lang['permissionUse'],
 			dataIndex: 'permissionLevel',
-			width: 50
+			width: 40
     });
 		
 		var radioPermissionManageColumn = new GO.grid.RadioColumn({
@@ -53,7 +56,7 @@ GO.grid.ModulePermissionsGrid = function(config)
 			value:GO.permissionLevels.manage,
 			header: GO.lang['permissionManage'],
 			dataIndex: 'permissionLevel',
-			width: 50
+			width: 40
     });
 	
     config.store = new GO.data.JsonStore({
@@ -74,9 +77,10 @@ GO.grid.ModulePermissionsGrid = function(config)
 				{
 						id:'name',
 						header: GO.modules.lang['module'],
-						dataIndex: 'name'
-	//					,
-	//					menuDisabled:true
+						dataIndex: 'name',
+						renderer: function(name, cell, reader) {
+							return '<div class="go-module-icon-'+reader.data.id+'" style="height:16px;padding-left:22px;background-repeat:no-repeat;">'+name+'</div>';
+						}
 				},
 				radioPermissionNoneColumn,
 				radioPermissionUseColumn,
@@ -110,6 +114,7 @@ Ext.extend(GO.grid.ModulePermissionsGrid, GO.grid.GridPanel,{
 		
 	setIdParam : function(id) {
 		this.store.baseParams['id'] = id;
+		this.store.baseParams['paramIdType'] = this.paramIdType;
 		this.store.commitChanges();
 	},
 	
