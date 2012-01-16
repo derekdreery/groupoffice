@@ -86,7 +86,8 @@ GO.groups.GroupDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 
 		this.modulePermissionsGrid = new GO.grid.ModulePermissionsGrid({
 			title: GO.groups.lang['modulePermissions'],
-			storeUrl: GO.url('groups/group/modulePermissionsStore')
+			storeUrl: GO.url('modules/module/permissionsStore'),
+			paramIdType: 'groupId'
 		});
 
 		this.addPanel(this.borderPanel);
