@@ -3,7 +3,7 @@
 class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 
 	protected function ignoreAclPermissions() {
-		return array('register');
+		return array('register','resetpassword');
 	}
 
 	/**
@@ -51,9 +51,75 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 	 * @param array $params The params that are passed through to this page
 	 */
 	protected function actionRecover($params) {
+		$this->formok=false;
+		if (GO_Base_Util_Http::isPostRequest()) {
+			
+			GO_Base_Html_Error::checkRequired();
+
+			$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $params['email']);
+			
+			if(!$user){
+				GO_Base_Html_Error::setError("There is no user found with this email.","email");
+			}else{
+
+				$siteTitle = $this->getSite()->title;
+				$url = $this->pageUrl('resetpassword',array(),false);
+
+				$fromName = $this->getSite()->title;
+				$fromEmail = 'noreply@intermesh.nl';
+				
+				$user->sendResetPasswordMail($siteTitle,$url,$fromName,$fromEmail);
+				
+				$this->message = "An email with recover instructions is send to the following email address: ".$user->email;
+				$this->formok=true;
+			}
+		}
 		
+		$this->renderPage($params);
 	}
 
+	protected function actionResetPassword($params) {
+
+		$this->formok=false;
+		
+		if(empty($params['email'])){
+			throw new Exception("No email given!");
+		}else{
+			$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $params['email']);
+			
+			if($user){
+			
+				if(!empty($params['usertoken']) && $params['usertoken'] == $user->getSecurityToken()){
+
+					if (GO_Base_Util_Http::isPostRequest()) {
+						GO_Base_Html_Error::checkRequired();
+						
+						$user->password = $params['password'];
+						$user->passwordConfirm = $params['confirm'];
+						
+						GO_Base_Html_Error::validateModel($user);
+						
+						if(!GO_Base_Html_Error::hasErrors()){
+							$user->save();
+							$this->formok=true;
+						} else {
+							
+						}
+						
+					}
+				}else{
+					throw new Exception("No valid usertoken given!");
+				}				
+			}else{
+				throw new Exception("No user found with the given email address!");
+			}
+		}
+		
+		$this->renderPage($params);
+	}
+	
+	
+	
 	/**
 	 * The login function for the site.
 	 * 
