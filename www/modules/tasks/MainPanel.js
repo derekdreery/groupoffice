@@ -13,7 +13,7 @@ GO.tasks.MainPanel = function(config){
 		root: 'results',
 		totalProperty: 'total',
 		id: 'id',
-		fields:['id','name','checked']
+		fields:['id','name','checked']		
 	});
 
 	this.gridPanel = new GO.tasks.TasksPanel( {		
@@ -28,7 +28,8 @@ GO.tasks.MainPanel = function(config){
 		loadMask:true,
 		store: this.taskListsStore,
 		title: GO.tasks.lang.tasklists,	
-		relatedStore: this.gridPanel.store
+		relatedStore: this.gridPanel.store,
+		autoLoadRelatedStore:false
 	});
 
 	this.taskListsPanel.on('drop', function(type)
