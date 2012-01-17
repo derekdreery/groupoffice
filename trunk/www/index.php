@@ -65,7 +65,4 @@ if(empty($_REQUEST['r']) && PHP_SAPI!='cli'){
 	}
 }
 
-
-//run controller.
-$router = new GO_Base_Router();
-$router->runController();
+GO::router()->runController();

@@ -40,7 +40,33 @@ class GO_Base_Router{
 	 * 
 	 */
 	
+	private $_controller;
 	
+	private $_action;
+	
+	/**
+	 * Get the currently active controller for this request.
+	 * 
+	 * @return GO_Base_Controller_AbstractController 
+	 */
+	public function getController(){
+		return $this->_controller;
+	}
+	
+	/**
+	 * Get the currently processing controller action.
+	 * 
+	 * @return string
+	 */
+	public function getControllerAction(){
+		return $this->_action;
+	}	
+	
+	/**
+	 * Runs a controller action with the given params
+	 * 
+	 * @param array $params 
+	 */
 	public function runController($params=false){
 		
 		if(!$params){
@@ -93,7 +119,8 @@ class GO_Base_Router{
 		
 		$controllerClass.='Controller_'.$controller;
 		
-		$controller = new $controllerClass;
-		$controller->run($action, $params);		
+		$this->_action=$action;		
+		$this->_controller = new $controllerClass;
+		$this->_controller->run($action, $params);		
 	}
 }
