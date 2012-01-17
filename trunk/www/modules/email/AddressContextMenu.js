@@ -23,52 +23,56 @@ GO.email.AddressContextMenu = function(config)
 	
 				
 	this.composeButton = new Ext.menu.Item({
-					iconCls: 'btn-compose',
-					text: GO.email.lang.compose,
-					cls: 'x-btn-text-icon',
-					handler: function(){
+		iconCls: 'btn-compose',
+		text: GO.email.lang.compose,
+		cls: 'x-btn-text-icon',
+		handler: function(){
 
-						var values = {to: this.address};
-						this.queryString = decodeURI(this.queryString);
-						var pairs = this.queryString.split('&');
-						var pair;
-						for(var i=0;i<pairs.length;i++){
-							pair = pairs[i].split('=');
+			var values = {
+				to: this.address
+				};
+			this.queryString = decodeURI(this.queryString);
+			var pairs = this.queryString.split('&');
+			var pair;
+			for(var i=0;i<pairs.length;i++){
+				pair = pairs[i].split('=');
 							
-							if(pair.length==2){
-								values[pair[0]]=pair[1];
-							}
-						}
+				if(pair.length==2){
+					values[pair[0]]=pair[1];
+				}
+			}
 
-						GO.email.showComposer({
-							values : values
-						});
-					},
-					scope: this
-				});
+			GO.email.showComposer({
+				values : values
+			});
+		},
+		scope: this
+	});
 	this.searchButton = new Ext.menu.Item({
-					iconCls: 'btn-search',
-					text: GO.email.lang.searchGO.replace('{product_name}', GO.settings.config.product_name),
-					cls: 'x-btn-text-icon',
-					handler: function(){
-						var searchPanel = new GO.grid.SearchPanel(
-							{query: this.address}
-						);
-						GO.mainLayout.tabPanel.add(searchPanel);
-						searchPanel.show();
-					},
-					scope: this
-				});
+		iconCls: 'btn-search',
+		text: GO.email.lang.searchGO.replace('{product_name}', GO.settings.config.product_name),
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			var searchPanel = new GO.grid.SearchPanel(
+			{
+				query: this.address
+				}
+			);
+			GO.mainLayout.tabPanel.add(searchPanel);
+			searchPanel.show();
+		},
+		scope: this
+	});
 				
 	this.searchMessagesButton = new Ext.menu.Item({
-					iconCls: 'btn-search',
-					text: GO.email.lang.searchOnSender,
-					cls: 'x-btn-text-icon',
-					handler: function(){
-						GO.email.searchSender(this.address);
-					},
-					scope: this
-				});
+		iconCls: 'btn-search',
+		text: GO.email.lang.searchOnSender,
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			GO.email.searchSender(this.address);
+		},
+		scope: this
+	});
 				
 	config.items=[this.composeButton,
 	this.searchButton,
@@ -77,14 +81,14 @@ GO.email.AddressContextMenu = function(config)
 	if(GO.addressbook)
 	{
 		this.lookUpButton = new Ext.menu.Item({
-					iconCls: 'btn-addressbook',
-					text: GO.addressbook.lang.searchOnSender,
-					cls: 'x-btn-text-icon',
-					handler: function(){
-						GO.addressbook.searchSender(this.address, this.personal);
-					},
-					scope: this
-				});
+			iconCls: 'btn-addressbook',
+			text: GO.addressbook.lang.searchOnSender,
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				GO.addressbook.searchSender(this.address, this.personal);
+			},
+			scope: this
+		});
 	
 		config.items.push(this.lookUpButton);
 	}

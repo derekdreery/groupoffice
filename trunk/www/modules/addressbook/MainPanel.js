@@ -676,8 +676,7 @@ GO.addressbook.searchSender = function(sender, name){
 							buttons:[{
 								text: GO.lang.cmdAdd,
 								handler: function(){
-									GO.addressbook.showContactDialog();
-									GO.addressbook.contactDialog.formPanel.form.setValues(GO.addressbook.unknownEmailWin.params);
+									GO.addressbook.showContactDialog(0, {values:GO.addressbook.unknownEmailWin.params});
 									GO.addressbook.unknownEmailWin.hide();
 								}
 							},{
