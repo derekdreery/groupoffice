@@ -43,11 +43,6 @@ GO.form.SelectUser = function(config){
 	if(!this.hiddenName)
 		this.hiddenName='user_id';
 
-	if(!config.startBlank){
-		this.setRemoteValue(GO.settings.user_id, GO.settings.name);
-		this.value=GO.settings.user_id;
-	}
-
 	if(!this.valueField)
 		this.valueField='id';
 	
@@ -58,6 +53,11 @@ GO.form.SelectUser = function(config){
 		forceSelection: true,
 		pageSize: parseInt(GO.settings['max_rows_list'])
 	});
+	
+	if(!config.startBlank){
+		this.setRemoteValue(GO.settings.user_id, GO.settings.name);
+		this.value=GO.settings.user_id;
+	}
 }
 
 Ext.extend(GO.form.SelectUser, GO.form.ComboBoxReset,{
