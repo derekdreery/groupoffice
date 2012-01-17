@@ -60,10 +60,11 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 		return 'ab_email_templates';
 	}
 	
-	private function _addTagPrefix($attributes, $tagPrefix){
+	private function _addTagPrefixAndRemoveEmptyValues($attributes, $tagPrefix){
 		if(!empty($tagPrefix)){
 			foreach($attributes as $key=>$value){
-				$newAttributes[$tagPrefix.$key]=$value;
+				if(!empty($value))
+					$newAttributes[$tagPrefix.$key]=$value;
 			}
 			$attributes=$newAttributes;
 		}
@@ -72,7 +73,7 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	
 	private function _getModelAttributes($model, $tagPrefix=''){
 		$attributes = $model->getAttributes('formatted');		
-		$attributes = $this->_addTagPrefix($attributes, $tagPrefix);
+		$attributes = $this->_addTagPrefixAndRemoveEmptyValues($attributes, $tagPrefix);
 		
 		if($model->customfieldsRecord){
 			$attributes = array_merge($attributes, $model->customfieldsRecord->getAttributes('formatted'));
