@@ -119,23 +119,23 @@ class GO_AUTH extends db
 		// security framework takes care on setting the userid as active.
 		$GLOBALS['GO_SECURITY']->logged_in($user);
 
-		require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
-		$fs = new filesystem();
-
-		// Increment the number of logins of the given user.
-		if($count_login){
-			$GO_USERS->increment_logins($user['id']);
-
-			//clean temp dir only when counting the login
-			//logins are not counted for example when a synchronization is done.
-			//We also don't want to clear the temp dir in that case because that can
-			//screw up an active session in the browser.			
-			if(is_dir($GLOBALS['GO_CONFIG']->tmpdir.$user['id'].'/'))
-			{
-				$fs->delete($GLOBALS['GO_CONFIG']->tmpdir.$user['id'].'/');
-			}
-		}
-		$fs->mkdir_recursive($GLOBALS['GO_CONFIG']->tmpdir.$user['id'].'/');
+//		require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
+//		$fs = new filesystem();
+//
+//		// Increment the number of logins of the given user.
+//		if($count_login){
+//			$GO_USERS->increment_logins($user['id']);
+//
+//			//clean temp dir only when counting the login
+//			//logins are not counted for example when a synchronization is done.
+//			//We also don't want to clear the temp dir in that case because that can
+//			//screw up an active session in the browser.			
+//			if(is_dir($GLOBALS['GO_CONFIG']->tmpdir.$user['id'].'/'))
+//			{
+//				$fs->delete($GLOBALS['GO_CONFIG']->tmpdir.$user['id'].'/');
+//			}
+//		}
+//		$fs->mkdir_recursive($GLOBALS['GO_CONFIG']->tmpdir.$user['id'].'/');
 		
 		//count_login is false when sync or dav logs in. We want to use the 
 		//cache in that case because webdav makes lots of logins.
