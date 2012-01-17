@@ -232,8 +232,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				} else {
 					$response['data']['htmlbody'] = GO_Addressbook_Model_Template::model()->replaceUserTags($response['data']['htmlbody']);
 				}
-			}
-		
+			}		
 
 			if ($params['content_type'] == 'plain') {
 				$response['data']['plainbody'] = GO_Base_Util_String::html_to_text($response['data']['htmlbody'], false);
@@ -245,8 +244,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			if ($params['content_type'] == 'plain') {
 				$response['data']['plainbody']='';
 			}else
-			{
-				
+			{				
 				$response['data']['htmlbody']='';
 			}
 		}		
