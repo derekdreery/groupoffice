@@ -30,13 +30,13 @@
 //	set_multiselectgrid_selections('tasklists',$tasklist['id'], $GLOBALS['GO_SECURITY']->user_id);
 //}
 //
-//$show = $GLOBALS['GO_CONFIG']->get_setting("tasks_filter", $GLOBALS['GO_SECURITY']->user_id);
-//
-//if(!$show)
-//	$show='active';
-//
+$show = GO::config()->get_setting("tasks_filter", GO::user()->id);
+
+if(!$show)
+	$show='active';
+
 //$GO_SCRIPTS_JS .='GO.tasks.defaultTasklist = {id: '.$tasklist['id'].', name: "'.$tasklist['name'].'"};
-//GO.tasks.show="'.$show.'";';
+$GO_SCRIPTS_JS .='GO.tasks.show="'.$show.'";';
 //
 //$GO_SCRIPTS_JS .= ';GO.tasks.remind="'.$settings['remind'].'";
 //GO.tasks.reminderDaysBefore=parseInt('.$settings['reminder_days'].');
