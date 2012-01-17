@@ -110,16 +110,7 @@ $updates["201111211405"][]="ALTER TABLE `ab_sendmailing_companies` CHANGE `maili
 
 $updates["201111211405"][]="ALTER TABLE `ab_sendmailing_companies` CHANGE `mailing_id` `addresslist_id` INT(11) NOT NULL DEFAULT '0' ";
 
-$updates["201111211405"][]="CREATE TABLE IF NOT EXISTS `ab_email_templates` (
-  `id` int(11) NOT NULL DEFAULT '0',
-  `user_id` int(11) NOT NULL DEFAULT '0',
-  `type` tinyint(4) NOT NULL DEFAULT '0',
-  `name` varchar(100) DEFAULT NULL,
-  `acl_id` int(11) NOT NULL DEFAULT '0',
-  `content` longblob NOT NULL,
-  `extension` varchar(4) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+$updates["201111211405"][]="RENAME TABLE `ml_templates` TO `ab_email_templates` ;";
 
 
 $updates["201111211405"][]="CREATE TABLE IF NOT EXISTS `ab_sent_mailings` (
@@ -219,3 +210,18 @@ $updates["201112221547"][]="CREATE TABLE IF NOT EXISTS `ab_addresslists` (
   `default_salutation` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+
+$updates["201201170902"][]="CREATE TABLE IF NOT EXISTS `ab_email_templates` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  `type` tinyint(4) NOT NULL DEFAULT '0',
+  `name` varchar(100) DEFAULT NULL,
+  `acl_id` int(11) NOT NULL DEFAULT '0',
+  `content` longblob NOT NULL,
+  `extension` varchar(4) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates["201201170902"][]="update ab_email_templates set content=replace(content, '{salutation}','{contact:salutation}');";
+$updates["201201170902"][]="update ab_email_templates set content=replace(content, '{my_','{user:');";
