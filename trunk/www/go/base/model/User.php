@@ -54,7 +54,6 @@
  * @property int $mail_reminders
  * @property int $popup_reminders
  * @property int $contact_id
- * @property String $cache
  * 
  * @property $completeDateFormat
  * @property string $date_separator
@@ -459,6 +458,12 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	public function getSecurityToken(){
 		return md5($this->password.$this->email.$this->ctime);
 	}
-
+	
+	
+	protected function getCacheAttributes() {
+		return array(
+				'name' => $this->name
+		);
+	}
 }
 
