@@ -170,51 +170,34 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		
 	protected function getStoreParams($params) {
 		
-		//TODO store in settings
-		if(!isset($params['show']))
-			$params['show']='active';
-
-//		$storeParams =  array(
-//				'ignoreAcl'=>true,
-//				'export'=>'tasks',
-//				'joinCustomFields'=>true,
-//				'by'=>array(array('tasklist_id', $this->multiselectIds, 'IN')),
-//				'fields'=>'t.*t, tl.name AS tasklist_name',
-//				'joinModel'=>array(
-//					'model'=>'GO_Tasks_Model_Tasklist',					
-//					'localField'=>'tasklist_id',
-//					'tableAlias'=>'tl', //Optional table alias
-//					)
-//		);
+		if(!isset($params['show'])){
+			$from_setting = GO::config()->get_setting("tasks_filter", GO::user()->id);
+			if(empty($from_setting))
+				$params['show']='active';
+			else
+				$params['show'] = $from_setting;
+		}
+		GO::config()->save_setting('tasks_filter', $params['show'],GO::user()->id);
 		
 		$storeParams = GO_Base_Db_FindParams::newInstance()
-						
-						->export("tasks")
-						->joinCustomFields()
-						->criteria(GO_Base_Db_FindCriteria::newInstance()
-										->addModel(GO_Tasks_Model_Task::model(),'t')
-										->addInCondition('tasklist_id', $this->multiselectIds))										
-										
-						->select('t.*, tl.name AS tasklist_name')
-						->joinModel(array(
-							'model'=>'GO_Tasks_Model_Tasklist',					
-							'localField'=>'tasklist_id',
-							'tableAlias'=>'tl', //Optional table alias
-							));
+			->export("tasks")
+			->joinCustomFields()
+			->criteria(GO_Base_Db_FindCriteria::newInstance()
+				->addModel(GO_Tasks_Model_Task::model(),'t')
+				->addInCondition('tasklist_id', $this->multiselectIds))										
+				->select('t.*, tl.name AS tasklist_name')
+				->joinModel(array(
+					'model'=>'GO_Tasks_Model_Tasklist',					
+					'localField'=>'tasklist_id',
+					'tableAlias'=>'tl', //Optional table alias
+			));
 		
-		if(!empty($this->multiselectIds)){
+		if(!empty($this->multiselectIds))
 			$storeParams->ignoreAcl();
-		}
 		
-		
-		if(isset($params['categories'])) {
-			$categories = json_decode($params['categories'], true);
-			
-			$storeParams->getCriteria()->addInCondition('category_id', $categories,'t');
-		}
-		
-		$storeParams->debugSql();
-		
+		if(isset($params['categories'])) 
+			$storeParams->getCriteria()->addInCondition('category_id', json_decode($params['categories'], true),'t');
+
 		$storeParams = $this->checkFilterParams($params['show'],$storeParams);
 		
 		return $storeParams;
