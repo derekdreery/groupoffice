@@ -144,14 +144,13 @@ GO.tasks.TasksPanel = function(config)
 		});
 
 		config.store = new Ext.data.GroupingStore({
-		url: GO.url('tasks/task/store'),
-			//url: GO.settings.modules.tasks.url+'json.php',
-			baseParams: {
-				'show': 'all'
-			},
+			url: GO.url('tasks/task/store'),
+//			baseParams: {
+//				'show': 'all'
+//			},
 			reader: reader,
 			sortInfo: {
-				field: 'name',
+				field: 'due_time',
 				direction: 'ASC'
 			},
 			groupField: 'tasklist_name',
