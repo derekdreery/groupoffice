@@ -57,6 +57,8 @@ GO.tasks.MainPanel = function(config){
 	var filterPanel = new Ext.form.FormPanel({
 		//title:GO.tasks.lang.filter,
 		height:142,
+//		id:'ta-filter-form',
+//		stateId:'ta-filter-form',
 		cls:'go-form-panel',
 		waitMsgTarget:true,
 		region:'north',
@@ -79,8 +81,7 @@ GO.tasks.MainPanel = function(config){
 				items: [{
 					boxLabel:  GO.tasks.lang.active,
 					name: 'show',
-					inputValue: 'active',
-					checked:true
+					inputValue: 'active'
 				},{
 					boxLabel: GO.tasks.lang.dueInSevenDays,
 					name: 'show',
