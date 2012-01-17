@@ -129,19 +129,19 @@ $updates["201201091109"][]="ALTER DATABASE CHARACTER SET utf8 COLLATE utf8_gener
 
 $updates["201201091109"][]="script:12_users_to_companies.php";
 
-//$updates["201201091109"][]="ALTER TABLE `go_users`
-//	DROP `company`,
-//	DROP `country`,
-//  DROP `state`,
-//  DROP `city`,
-//  DROP `zip`,
-//  DROP `address`,
-//  DROP `address_no`,
-//  
-//  DROP `work_address`,
-//  DROP `work_address_no`,
-//  DROP `work_zip`,
-//  DROP `work_country`,
-//  DROP `work_state`,
-//  DROP `work_city`,
-//  DROP `work_fax`;";
+$updates["201201091109"][]="ALTER TABLE `go_users`
+	DROP `company`,
+	DROP `country`,
+  DROP `state`,
+  DROP `city`,
+  DROP `zip`,
+  DROP `address`,
+  DROP `address_no`,
+  
+  DROP `work_address`,
+  DROP `work_address_no`,
+  DROP `work_zip`,
+  DROP `work_country`,
+  DROP `work_state`,
+  DROP `work_city`,
+  DROP `work_fax`;";
