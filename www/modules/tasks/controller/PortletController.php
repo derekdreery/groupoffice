@@ -79,6 +79,7 @@ class GO_Tasks_Controller_Portlet extends GO_Base_Controller_AbstractMultiSelect
 		
 		$store->setStatement($stmt);
 		$store->getColumnModel()->formatColumn('tasklist_name', '$model->tasklist_name');
+		$store->getColumnModel()->formatColumn('late','$model->isLate();');
 		
 		return $store->getData();
 		
