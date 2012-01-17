@@ -5,10 +5,10 @@ $l['success']='<h1>Password changed</h1><p>Your password has been changed succes
 $l['send']='Send';
 $l['login']='Login';
 $l['lost_password_subject']='New password request';
-$l['lost_password_body']='%s,<br />
-You requested a new password for %s. Your username is "%s".<br />
-Click at the link below (or paste it in a browser) to change your password:<br />
-%s;<br />
+$l['lost_password_body']='%s,
+You requested a new password for %s. Your username is "%s".
+Click at the link below (or paste it in a browser) to change your password:
+%s;
 If you did not request a new password please delete this mail.';
 $l['lost_password_error']='Could not find the supplied e-mail address.';
 $l['lost_password_success']='An e-mail with instructions has been sent to your e-mail address.';
