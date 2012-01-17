@@ -100,6 +100,7 @@ class GO{
 	private static $_config;
 	private static $_session;
 	private static $_modules;
+	private static $_router;
 
 	/**
 	 *
@@ -179,11 +180,22 @@ class GO{
 		else
 			return GO_Base_Model_User::model()->findByPk(GO::session()->values['user_id'], array(), true);
 	}
+	
+	/**
+	 * Returns the router that routes requests to controller actions.
+	 * 
+	 * @return GO_Base_Router	
+	 */
+	public static function router() {
+		if (!isset(self::$_router)) {			
+			self::$_router=new GO_Base_Router();
+		}
+		return self::$_router;
+	}
 
 	/**
 	 * Returns a collection of Group-Office Module objects
 	 * 
-	 * @deprecated
 	 * @return GO_Base_ModuleCollection
 	 * 
 	 */
