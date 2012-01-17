@@ -96,11 +96,13 @@ GO.grid.MultiSelectGrid = function (config){
 			}
 		}, this);
 
-		this.store.on('load', function()
-		{
-			this.relatedStore.baseParams[this.id] = Ext.encode(this.getSelected());
-			this.relatedStore.load();		
-		}, this);
+		if(this.autoLoadRelatedStore){
+			this.store.on('load', function()
+			{
+				this.relatedStore.baseParams[this.id] = Ext.encode(this.getSelected());
+				this.relatedStore.load();		
+			}, this);
+		}
 
 	}
 
@@ -110,6 +112,11 @@ GO.grid.MultiSelectGrid = function (config){
 }
 
 Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
+	
+	relatedStore : false,
+	
+	autoLoadRelatedStore : true,
+	
 	timeoutNumber : false,
 	
 	allowNoSelection : false,
