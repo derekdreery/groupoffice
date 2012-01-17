@@ -24,27 +24,13 @@ $updates["201108181012"][]="ALTER TABLE `go_users`
   DROP `title`,
   DROP `sex`,
   DROP `birthday`,
-  DROP `company`,
   DROP `department`,
   DROP `function`,
   DROP `home_phone`,
   DROP `work_phone`,
   DROP `fax`,
   DROP `cellular`,
-  DROP `country`,
-  DROP `state`,
-  DROP `city`,
-  DROP `zip`,
-  DROP `address`,
-  DROP `address_no`,
   DROP `homepage`,
-  DROP `work_address`,
-  DROP `work_address_no`,
-  DROP `work_zip`,
-  DROP `work_country`,
-  DROP `work_state`,
-  DROP `work_city`,
-  DROP `work_fax`,
   DROP `contact_id`;";
 
 
@@ -139,3 +125,23 @@ $updates["201112021417"][]="CREATE TABLE IF NOT EXISTS `cf_go_users` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
 $updates["201201091109"][]="ALTER DATABASE CHARACTER SET utf8 COLLATE utf8_general_ci;";
+
+
+$updates["201201091109"][]="script:12_users_to_companies.php";
+
+//$updates["201201091109"][]="ALTER TABLE `go_users`
+//	DROP `company`,
+//	DROP `country`,
+//  DROP `state`,
+//  DROP `city`,
+//  DROP `zip`,
+//  DROP `address`,
+//  DROP `address_no`,
+//  
+//  DROP `work_address`,
+//  DROP `work_address_no`,
+//  DROP `work_zip`,
+//  DROP `work_country`,
+//  DROP `work_state`,
+//  DROP `work_city`,
+//  DROP `work_fax`;";
