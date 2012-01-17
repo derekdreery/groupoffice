@@ -133,10 +133,9 @@ GO.dialog.LoginDialog = function(config){
 
 						Ext.getBody().mask(GO.lang.waitMsgLoad);
 						Ext.Ajax.request({
-							url:BaseHref+'action.php',
+							url:GO.url('auth/sendResetPasswordMail'),
 							scope:this,
 							params:{
-								task:'lost_password',
 								email:text
 							},
 							callback: function(options, success, response)
