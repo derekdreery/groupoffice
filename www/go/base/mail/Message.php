@@ -336,21 +336,21 @@ class GO_Base_Mail_Message extends Swift_Message{
 	 */
 	public function handleEmailFormInput($params){
 		
-		if(isset($params['subject']))
+		if(!empty($params['subject']))
 			$this->setSubject($params['subject']);		
 		
-		if(isset($params['to'])){		
+		if(!empty($params['to'])){		
 			$to = new GO_Base_Mail_EmailRecipients($params['to']);
 			foreach($to->getAddresses() as $email=>$personal)
 				$this->addTo($email,$personal);
 		}
-		if(isset($params['cc'])){		
+		if(!empty($params['cc'])){		
 			$cc = new GO_Base_Mail_EmailRecipients($params['cc']);
 			foreach($cc->getAddresses() as $email=>$personal)
 				$this->addCc($email,$personal);
 		}
-		if(isset($params['bcc'])){		
-			$bcc = new GO_Base_Mail_EmailRecipients($params['cc']);
+		if(!empty($params['bcc'])){		
+			$bcc = new GO_Base_Mail_EmailRecipients($params['bcc']);
 			foreach($bcc->getAddresses() as $email=>$personal)
 				$this->addBcc($email,$personal);
 		}
