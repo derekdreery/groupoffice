@@ -319,6 +319,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 								date(GO::user()->time_format,$imapMessage->udate),
 								$from['personal']);
 		
+				
+		//for template loading so we can fill the template tags
+		$params['to']=$from['email'];		
+		
 		$response = $this->loadTemplate($params);		
 		
 		if($html)
@@ -348,7 +352,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		}
 		
 		
-		$to = $imapMessage->to->getAddress();		
+			$to = $imapMessage->to->getAddress();		
 //		$alias = GO_Email_Model_Alias::model()->findSingleByAttribute('email', $to['email']);
 //		if(!$alias)
 //			$alias = GO_Email_Model_Alias::model()->findSingle();
