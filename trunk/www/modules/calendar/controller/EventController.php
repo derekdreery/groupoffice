@@ -20,6 +20,10 @@
 class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelController {
 
 	protected $model = 'GO_Calendar_Model_Event';
+	
+	protected function allowGuests() {
+		return array('invitation');
+	}
 
 	function beforeSubmit(&$response, &$model, &$params) {
 
@@ -256,6 +260,10 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 					if ($participant->user_id != GO::user()->id) {
 						$subject = $isNewEvent ? GO::t('invitation', 'calendar') : GO::t('invitation_update', 'calendar');
+						
+						
+						$acceptUrl = GO::url("",array("id"=>$event->id,'accept'=>1,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()));
+						
 
 						$body = '<p>' . GO::t('invited', 'calendar') . '</p>' .
 										$event->toHtml() .
@@ -603,9 +611,10 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 		$vcalendar = GO_Base_VObject_Reader::read($data);
 		
-		foreach($vcalendar->vevent as $vevent)
+		foreach($vcalendar->vevent as $vevent){
 			$event = new GO_Calendar_Model_Event();
 			$event->importVObject($vevent);
+		}
 	}
 	
 	protected function actionImportVcs($params){
@@ -618,11 +627,14 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		GO_Base_VObject_Reader::convertICalendarToVCalendar($vcalendar);
 		
-		foreach($vcalendar->vevent as $vevent)
+		foreach($vcalendar->vevent as $vevent){
 			$event = new GO_Calendar_Model_Event();
 			$event->importVObject($vevent);		
+		}
 	}
 	
 	
-
+	public function actionInvitation($params){
+		$this->render('invitation');
+	}
 }

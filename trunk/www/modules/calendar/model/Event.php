@@ -957,6 +957,4 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 		return isset($statuses[$status]) ? $statuses[$status] : 'NEEDS-ACTION';
 	}
-	
-
 }

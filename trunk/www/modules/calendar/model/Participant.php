@@ -140,5 +140,11 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 		return $attr;
 	}
 	
+	
+	
+	public function getSecurityToken (){
+		return md5($this->event_id.$this->email.$this->event->ctime);
+	}
+	
 
 }
