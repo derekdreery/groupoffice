@@ -2791,6 +2791,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		//$copy = new GO_Base_Db_ActiveRecord(true);
 		$copy = clone $this;
 		
+		unset($copy->ctime);
+		
 		//unset the files folder
 		if($this->hasFiles())
 			unset($copy->files_folder_id);

@@ -289,9 +289,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 		if($this->reminder>0){
 			$remindTime = $this->start_time-$this->reminder;
-			
-			$this->deleteReminders();
-			$this->addReminder($this->name, $remindTime, $this->user_id);
+			if($remindTime>time()){
+				$this->deleteReminders();
+				$this->addReminder($this->name, $remindTime, $this->user_id);
+			}
 		}	
 
 		return parent::afterSave($wasNew);
@@ -962,13 +963,22 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		$this->duplicateRelation('participants', $duplicate);
 		
+		if($duplicate->isRecurring())
+			$this->duplicateRelation('exceptions', $duplicate);		
+		
 		return parent::afterDuplicate($duplicate);
 	}
 	
+	/**
+	 * 
+	 * @param GO_Base_Model_User $user
+	 * @return type 
+	 */
 	public function getCopyForParticipant(GO_Base_Model_User $user){
 		$calendar = GO_Calendar_Model_Calendar::model()->getDefault($user);
 		
-		$event = $this->duplicate(array(
+		return $this->duplicate(array(
+			'user_id'=>$user->id,
 			'calendar_id'=>$calendar->id,
 			'is_organizer'=>false
 		));
