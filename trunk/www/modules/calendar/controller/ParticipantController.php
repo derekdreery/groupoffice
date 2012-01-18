@@ -44,6 +44,22 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 		return $record;
 	}
 	
+	
+	public function actionLoadOrganizer($params){
+		
+		$calendar = GO_Calendar_Model_Calendar::model()->findByPk($params['calendar_id']);
+		
+		$response['user_id']=$calendar->user_id;
+		$response['name']=$calendar->user->name;
+		$response['email']=$calendar->user->email;
+		$response['status']=  GO_Calendar_Model_Participant::STATUS_ACCEPTED."";
+		$response['is_organizer']="1";
+		$response['available']= GO_Calendar_Model_Participant::userIsAvailable($params['start_time'],$params['end_time'],$calendar->user_id);
+		$response['success']=true;
+		
+		return $response;
+	}
+	
 
 
 }

@@ -124,7 +124,7 @@ Ext.extend(GO.calendar.ContextMenu, Ext.menu.Menu, {
 		
 
 		if (GO.email)
-			this.actionCreateMail.setDisabled(event.num_participants==0);
+			this.actionCreateMail.setDisabled(event.has_other_participants==0);
 
 		this.newMenuItem.setLinkConfig({
 			model_name:"GO_Calendar_Model_Event",

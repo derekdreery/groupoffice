@@ -41,7 +41,7 @@ GO.calendar.ListGrid = function(config)
 			'link_count',
 			'calendar_id',
 			'calendar_name',
-			'num_participants',
+			'has_other_participants',
 			'participant_ids',
 			'ctime'
 			]

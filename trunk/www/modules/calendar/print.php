@@ -116,7 +116,7 @@ function insert_events($calendars, $start_time, $end_time) {
 				'read_only' => $event['read_only'] ? true : false,
 				'username' => $username,
 				//'duration' => $duration,
-				'num_participants' => 1
+				'has_other_participants' => 1
 		);
 	}
 	$pdf->addCalendar($output_events);

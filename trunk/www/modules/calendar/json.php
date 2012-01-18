@@ -412,23 +412,23 @@ try {
 				throw new AccessDeniedException();
 			}
 
-			$num_participants = 0;
+			$has_other_participants = 0;
 			$continue = true;
-			//$num_participants=$cal->get_participants($event['id']);
-			$num_participants = $cal->count_participants($event['id']) > 0 ? 1 : 0;
+			//$has_other_participants=$cal->get_participants($event['id']);
+			$has_other_participants = $cal->count_participants($event['id'], $GLOBALS['GO_SECURITY']->user_id) > 0 ? 1 : 0;
 			/*while($cal->next_record() && $continue)
 			{
 				if($cal->f('user_id') != $GLOBALS['GO_SECURITY']->user_id)
 				{
-					$num_participants++;
+					$has_other_participants++;
 				}else
 				if(!$cal->f('is_organizer'))
 				{
-					$num_participants = 0;
+					$has_other_participants = 0;
 					$continue = false;
 				}
 			}*/
-			$response['data']['num_participants'] = $num_participants;
+			$response['data']['has_other_participants'] = $has_other_participants;
 
 			$response['data']=array_merge($response['data'], $cal->event_to_json_response($event));
 
@@ -647,7 +647,7 @@ try {
 				$username = $GO_USERS->get_user_realname($event['user_id']);
 
 				//TODO could be more efficient by doing these queries only when deleting or updating
-				$num_participants = $cal->count_participants($event['id']) > 1 ? 1 : 0;
+				$has_other_participants = $cal->count_participants($event['id'], $GO_SECURITY->user_id) > 0 ? 1 : 0;
 	
 				$response['results'][] = array(
 								'id'=>$response['count']++,
@@ -671,7 +671,7 @@ try {
 								'read_only'=> $event['read_only'] || ($event['private']=='1' && $GLOBALS['GO_SECURITY']->user_id != $event['user_id']) || $permission_levels[$event['calendar_id']]<GO_SECURITY::WRITE_PERMISSION ? true : false,
 								'username' => $username,
 								'duration' => $duration,
-								'num_participants' => $num_participants
+								'has_other_participants' => $has_other_participants
 				);
 				
 				if($event['mtime'] > $response['mtime'])
@@ -1254,28 +1254,28 @@ try {
 
 			}
 			break;
-		case 'get_default_participant':
-
-			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
-
-			$calendar = $cal->get_calendar($_REQUEST['calendar_id']);
-
-			if($calendar)
-			{
-				$calendar_user = $GO_USERS->get_user($calendar['user_id']);
-				if($calendar_user)
-				{
-					$response['user_id']=$calendar['user_id'];
-					$response['name']=$GO_USERS->get_user_realname($calendar['user_id']);
-					$response['email']=$calendar_user['email'];
-					$response['status']="1";
-					$response['is_organizer']="1";
-					$response['available']=$cal->is_available($response['user_id'], $_REQUEST['start_time'], $_REQUEST['end_time'], false) ? '1' : '0';
-				}
-			}
-			
-			break;
+//		case 'get_default_participant':
+//
+//			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
+//			$GO_USERS = new GO_USERS();
+//
+//			$calendar = $cal->get_calendar($_REQUEST['calendar_id']);
+//
+//			if($calendar)
+//			{
+//				$calendar_user = $GO_USERS->get_user($calendar['user_id']);
+//				if($calendar_user)
+//				{
+//					$response['user_id']=$calendar['user_id'];
+//					$response['name']=$GO_USERS->get_user_realname($calendar['user_id']);
+//					$response['email']=$calendar_user['email'];
+//					$response['status']="1";
+//					$response['is_organizer']="1";
+//					$response['available']=$cal->is_available($response['user_id'], $_REQUEST['start_time'], $_REQUEST['end_time'], false) ? '1' : '0';
+//				}
+//			}
+//			
+//			break;
 
 
 		case 'check_availability':
