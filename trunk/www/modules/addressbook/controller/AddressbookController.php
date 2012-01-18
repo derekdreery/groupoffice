@@ -15,13 +15,8 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 	protected $model = 'GO_Addressbook_Model_Addressbook';
 	
 	protected function actionSearchSender($params) {
-		
-		$criteria = GO_Base_Db_FindCriteria::newInstance()
-			->addCondition('email',$params['email'])
-			->addCondition('email2', $params['email'],'=','t',false)
-			->addCondition('email3', $params['email'],'=','t',false);
 
-		$contacts = GO_Addressbook_Model_Contact::model()->find(GO_Base_Db_FindParams::newInstance()->criteria($criteria));		
+		$contacts = GO_Addressbook_Model_Contact::model()->findByEmail($params['email']);
 		$response['success']=true;
 		$response['results']=array();
 
