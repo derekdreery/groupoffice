@@ -3,6 +3,11 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 	
 	protected $model = 'GO_Base_Model_Module';
 	
+	
+	protected function allowWithoutModuleAccess() {
+		return array('permissionsstore');
+	}
+	
 	protected function prepareStore(GO_Base_Data_Store $store){		
 			
 		$store->getColumnModel()->setFormatRecordFunction(array('GO_Modules_Controller_Module', 'formatRecord'));
@@ -81,6 +86,18 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 	}
 	
 	public function actionPermissionsStore($params) {
+		
+		
+		//check access to users or groups module. Because we allow this action without
+		//access to the modules module		
+		if ($params['paramIdType']=='groupId'){
+			if(!GO::modules()->groups)
+				throw new GO_Base_Exception_AccessDenied();
+		}else{
+			if(!GO::modules()->users)
+				throw new GO_Base_Exception_AccessDenied();
+		}
+			
 		$paramId = intval($params['id']);
 		$modStmt = GO::modules()->getAll();
 		$response = array(

@@ -262,16 +262,16 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 						$subject = $isNewEvent ? GO::t('invitation', 'calendar') : GO::t('invitation_update', 'calendar');
 						
 						
-						$acceptUrl = GO::url("",array("id"=>$event->id,'accept'=>1,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()));
-						
+						$acceptUrl = GO::url("calendar/invitation",array("id"=>$event->id,'accept'=>1,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
+						$declineUrl = GO::url("calendar/invitation",array("id"=>$event->id,'accept'=>0,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
 
 						$body = '<p>' . GO::t('invited', 'calendar') . '</p>' .
 										$event->toHtml() .
 										'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
 										'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
-										'<a href="' . GO::modules()->calendar->full_url . 'invitation.php?event_id=' . $event->id . '&task=accept&email=' . urlencode($participant->email) . '">' . GO::t('accept', 'calendar') . '</a>' .
+										'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
 										'&nbsp;|&nbsp;' .
-										'<a href="' . GO::modules()->calendar->full_url . 'invitation.php?event_id=' . $event->id . '&task=decline&email=' . urlencode($participant->email) . '">' . GO::t('decline', 'calendar') . '</a>';
+										'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
 
 						$message = GO_Base_Mail_Message::newInstance(
 														$subject
@@ -635,6 +635,32 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	
 	
 	public function actionInvitation($params){
+		
+		$participant = GO_Calendar_Model_Participant::model()->findByAttributes(array(
+				'event_id'=>$params['event_id'],
+				'email'=>$params['email']
+		));
+		
+		if(!$participant){
+			throw new Exception("Could not find the event");
+		}
+		
+		if($participant->getSecurityToken()!=$params['participantToken']){
+			throw new Exception("Invalid request");
+		}
+		
+		if(empty($params['accept']))		
+			$participant->status=GO_Calendar_Model_Participant::STATUS_DECLINED;
+		else
+			$participant->status=GO_Calendar_Model_Participant::STATUS_ACCEPTED;
+		
+		$participant->save();
+		
+		if($participant->user){
+			//if it's a GO user then put the event in it's default calendar.
+			
+		}
+		
 		$this->render('invitation');
 	}
 }

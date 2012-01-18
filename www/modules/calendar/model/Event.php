@@ -957,4 +957,21 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 		return isset($statuses[$status]) ? $statuses[$status] : 'NEEDS-ACTION';
 	}
+	
+	protected function afterDuplicate(&$duplicate) {
+		
+		$this->duplicateRelation('participants', $duplicate);
+		
+		return parent::afterDuplicate($duplicate);
+	}
+	
+	public function getCopyForParticipant(GO_Base_Model_User $user){
+		$calendar = GO_Calendar_Model_Calendar::model()->getDefault($user);
+		
+		$event = $this->duplicate(array(
+			'calendar_id'=>$calendar->id,
+			'is_organizer'=>false
+		));
+		
+	}
 }
