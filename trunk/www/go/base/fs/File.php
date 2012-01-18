@@ -332,13 +332,13 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		$files = array();
 		for($i=0;$i<count($uploadedFileArray['tmp_name']);$i++){
 			if (is_uploaded_file($uploadedFileArray['tmp_name'][$i])) {
-				$destinationPath = $destinationFolder->path().'/'.$uploadedFileArray['name'][$i];
+				$destinationFile = new GO_Base_Fs_File($destinationFolder->path().'/'.$uploadedFileArray['name'][$i]);
+				$destinationFile->appendNumberToNameIfExists();
 
-				if(move_uploaded_file($uploadedFileArray['tmp_name'][$i], $destinationPath)){		
-					$file = new GO_Base_Fs_File($destinationPath);
-					$file->setDefaultPermissions();
+				if(move_uploaded_file($uploadedFileArray['tmp_name'][$i], $destinationFile->path())){		
+					$destinationFile->setDefaultPermissions();
 
-					$files[]=$file;
+					$files[]=$destinationFile;
 				}
 			}
 		}
