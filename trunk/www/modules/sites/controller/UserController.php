@@ -58,7 +58,7 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 			$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $params['email']);
 			
 			if(!$user){
-				GO_Base_Html_Error::setError("There is no user found with this email.","email");
+				GO_Base_Html_Error::setError(GO::t("invaliduser","sites"),"email");
 			}else{
 
 				$siteTitle = $this->getSite()->title;
@@ -82,7 +82,7 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 		$this->formok=false;
 		
 		if(empty($params['email'])){
-			throw new Exception("No email given!");
+			throw new Exception(GO::t("noemail","sites"));
 		}else{
 			$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $params['email']);
 			
@@ -106,10 +106,10 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 						}
 					}
 				}else{
-					throw new Exception("No valid usertoken given!");
+					throw new Exception(GO::t("invalidusertoken","sites"));
 				}				
 			}else{
-				throw new Exception("No user found with the given email address!");
+				throw new Exception(GO::t("invaliduser","sites"));
 			}
 		}
 		
