@@ -26,6 +26,8 @@
  * @property string $last_modified
  * @property int $is_organizer
  * @property string $role
+ * @property GO_Calendar_Model_Event $event
+ * 
  */
 class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	

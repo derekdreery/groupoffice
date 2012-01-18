@@ -93,6 +93,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	
 	/**
 	 * Return array with actions (in lowercase and without "action" prefix!) that will be run as admin. All ACL permissions are ignored.
+	 * Return array('*') to allow access to all controller actions.
 	 * 
 	 * PLEASE BE CAREFUL! GO::$ignoreAclPermissions is set to true.
 	 * 

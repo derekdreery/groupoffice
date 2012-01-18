@@ -600,7 +600,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 		//don't request invitation if import is enabled. TODO import is a bad name.
 		//it's for direct scheduling.
-		if(this.numParticipants>1 && !this.participantsPanel.importCheckbox.getValue())
+		if(this.numParticipants>0 && !this.participantsPanel.importCheckbox.getValue())
 		{
 			var invitationMessage = (this.event_id) ? GO.calendar.lang.sendInvitationUpdate : GO.calendar.lang.sendInvitationInitial;
 		

@@ -11,11 +11,13 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	}
 
 	protected function init() {
-		
-		GO::$ignoreAclPermissions=true; //allow this script access to all
 		GO::$disableModelCache=true; //for less memory usage
 		ini_set('max_execution_time', '600');
 		session_write_close();		
+	}
+	
+	protected function ignoreAclPermissions() {
+		return array('*');
 	}
 
 	

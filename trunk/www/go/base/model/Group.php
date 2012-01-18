@@ -99,5 +99,20 @@ class GO_Base_Model_Group extends GO_Base_Db_ActiveRecord {
   public function hasUser($user_id){
     return GO_Base_Model_UserGroup::model()->findByPk(array('user_id'=>$user_id, 'group_id'=>$this->pk));
   }
+	
+	public function checkDatabase() {
+		
+		if($this->id==GO::config()->group_everyone){
+			$stmt = GO_Base_Model_User::model()->find(GO_Base_Db_FindParams::newInstance()->ignoreAcl());
+			while($user = $stmt->fetch())
+				$this->addUser ($user->id);
+		}
+		
+		if($this->id==GO::config()->group_root){
+			$this->addUser(1);
+		}
+		
+		return parent::checkDatabase();
+	}
   
 }

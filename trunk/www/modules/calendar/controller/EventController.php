@@ -24,6 +24,10 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	protected function allowGuests() {
 		return array('invitation');
 	}
+	
+	protected function ignoreAclPermissions() {
+		return array('invitation');
+	}
 
 	function beforeSubmit(&$response, &$model, &$params) {
 
@@ -262,8 +266,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 						$subject = $isNewEvent ? GO::t('invitation', 'calendar') : GO::t('invitation_update', 'calendar');
 						
 						
-						$acceptUrl = GO::url("calendar/invitation",array("id"=>$event->id,'accept'=>1,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
-						$declineUrl = GO::url("calendar/invitation",array("id"=>$event->id,'accept'=>0,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
+						$acceptUrl = GO::url("calendar/event/invitation",array("id"=>$event->id,'accept'=>1,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
+						$declineUrl = GO::url("calendar/event/invitation",array("id"=>$event->id,'accept'=>0,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
 
 						$body = '<p>' . GO::t('invited', 'calendar') . '</p>' .
 										$event->toHtml() .
@@ -636,8 +640,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	
 	public function actionInvitation($params){
 		
-		$participant = GO_Calendar_Model_Participant::model()->findByAttributes(array(
-				'event_id'=>$params['event_id'],
+		$participant = GO_Calendar_Model_Participant::model()->findSingleByAttributes(array(
+				'event_id'=>$params['id'],
 				'email'=>$params['email']
 		));
 		
@@ -656,11 +660,17 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		$participant->save();
 		
+		
 		if($participant->user){
 			//if it's a GO user then put the event in it's default calendar.
-			
+			$event = $participant->event->getCopyForParticipant($participant->user);
+		}else
+		{
+			$event = false;
 		}
+		//notify organizer
+		$this->_sendInvitation(array(), $participant->event, false, array(), 'REPLY');
 		
-		$this->render('invitation');
+		$this->render('invitation', array('participant'=>$participant, 'event'=>$event));
 	}
 }

@@ -3,10 +3,9 @@
 class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelController {
 
 	protected $model = 'GO_Base_Model_User';
-	
-	protected function init() {
-		GO::$ignoreAclPermissions=true;
-		return parent::init();
+
+	protected function ignoreAclPermissions() {
+		return array('*');
 	}
 
 	protected function remoteComboFields() {
@@ -18,12 +17,10 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		}
 	}
 
-	//GRID
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
 		$columnModel->formatColumn('name', '$model->name', array(), 'first_name');
 		return parent::formatColumns($columnModel);
 	}
-	//LOAD	
 
 	protected function afterLoad(&$response, &$model, &$params) {
 
@@ -52,8 +49,6 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		return parent::afterLoad($response, $model, $params);
 	}
 
-	//START OF SUBMIT
-
 	private function _getRegisterEmail() {
 		$r = array(
 				'register_email_subject' => GO::config()->get_setting('register_email_subject'),
@@ -71,42 +66,15 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 
 	protected function beforeSubmit(&$response, &$model, &$params) {
 
-		
-		
-//		if (!empty($params["password1"]) || !empty($params["password2"])) {
-//			if ($params["password1"] != $params["password2"]) {
-//				throw new Exception(GO::t('error_match_pass', 'users'));
-//			}
-//			if (!empty($params["password2"])) {
-//				$model->setAttribute('password', $_POST['password2']);
-//			}
-//		}
-		
 		if(empty($params['password'])){
 			unset($params['password']);
 		}
-
-//		if (!empty($params['mute_sound'])) {
-//			$params['mute_sound'] = 1;
-//			$params['mute_reminder_sound'] = 1;
-//			$params['mute_new_mail_sound'] = 1;
-//		} else {
-//			$params['mute_sound'] = false;
-//			$params['mute_reminder_sound'] = $model->mute_reminder_sound = !empty($params['mute_reminder_sound']) ? 1 : 0;
-//			$params['mute_new_mail_sound'] = $model->mute_new_mail_sound = !empty($params['mute_new_mail_sound']) ? 1 : 0;
-//		}
-//		
-//		$params['show_smilies'] = $model->show_smilies = !empty($params['show_smilies']) ? 1 : 0;
-//		$params['mail_reminders'] = $model->mail_reminders = !empty($params['mail_reminders']) ? 1 : 0;
-//		$params['popup_reminders'] = $model->popup_reminders = !empty($params['popup_reminders']) ? 1 : 0;
 		
 		return parent::beforeSubmit($response, $model, $params);
 	}
 
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
 
-
-		$id = $params['id'];
 		//Save the contact fields to the contact.
 		
 		$contact = $model->createContact();
@@ -130,27 +98,10 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 					$modPermissions->id
 				);	
 				$modModel->acl->addUser(
-					$id,
+					$model->id,
 					$modPermissions->permissionLevel
 				);
-				
-//				$mod = GO_Base_Model_Module::model()->findByPk($module['id']);
-//
-//
-//				$level = 0;
-//				if ($module['write_permission']) {
-//					$level = GO_Base_Model_Acl::WRITE_PERMISSION;
-//				} elseif ($module['read_permission']) {
-//					$level = GO_Base_Model_Acl::READ_PERMISSION;
-//				}
-//
-//				if ($level) {
-//					$mod->acl->addUser($model->id, $level);
-//				} else {
-//					$mod->acl->removeUser($model->id);
-//				}
 			}
-
 
 			/**
 			 * User will be member of the selected groups
