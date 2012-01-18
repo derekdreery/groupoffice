@@ -425,7 +425,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		
 		if(!$url){
 			$url=GO::url("auth/resetPassword", array("email"=>$this->email, "usertoken"=>$this->getSecurityToken()),false);
-			$url = GO::config()->full_url."index.php".$url;
+//			$url = GO::config()->full_url."index.php".$url;		
 		}else{
 			$url=GO_Base_Util_Http::addParamsToUrl($url, array("email"=>$this->email, "usertoken"=>$this->getSecurityToken()),false);
 		}
