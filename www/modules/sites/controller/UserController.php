@@ -104,7 +104,6 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 						} else {
 							
 						}
-						
 					}
 				}else{
 					throw new Exception("No valid usertoken given!");
