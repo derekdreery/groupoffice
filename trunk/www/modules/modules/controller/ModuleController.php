@@ -90,27 +90,35 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 		);
 		$modules = array();
 		while ($module = $modStmt->fetch()) {
-			if ($params['paramIdType']=='groupId')
-				$aclUsersGroup = $module->acl->hasGroup($paramId);
-			else
-				$aclUsersGroup = $module->acl->hasUser($paramId);
+			$permissionLevel = 0;
+			$usersGroupPermissionLevel = false;
+			if (empty($paramId)) {				
+				$aclUsersGroup = $module->acl->hasGroup(GO::config()->group_everyone); // everybody group
+				$permissionLevel=$aclUsersGroup->level;
+			} else {
+				if ($params['paramIdType']=='groupId') {
+				
+					$aclUsersGroup = $module->acl->hasGroup($paramId);
+					$permissionLevel=$aclUsersGroup ? $aclUsersGroup->level : 0;
+				} else {
+					$permissionLevel = GO_Base_Model_Acl::getUserPermissionLevel($module->acl_id, $paramId);					
+					$usersGroupPermissionLevel= GO_Base_Model_Acl::getUserPermissionLevel($module->acl_id, $paramId, true);
+				}
+			}
 			
 			$translated = $module->moduleManager ? $module->moduleManager->name() : $module->id;
 			
 			// ExtJs view was not built to handle Write / Write And Delete permissions,
 			// but only no read permission, and read and manage permission:
-			if (empty($aclUsersGroup->level))
-				$level = 0;
-			elseif ($aclUsersGroup->level > GO_Base_Model_Acl::READ_PERMISSION)
-				$level = GO_Base_Model_Acl::MANAGE_PERMISSION;
-			else
-				$level = $aclUsersGroup->level;
+			if ($permissionLevel > GO_Base_Model_Acl::READ_PERMISSION)
+				$permissionLevel = GO_Base_Model_Acl::MANAGE_PERMISSION;			
 			
-			$modules[$translated]=
-				array(
-					'id' => $module->id,
-					'name' => $translated,
-					'permissionLevel' => $level
+			$modules[$translated]= array(
+				'id' => $module->id,
+				'name' => $translated,
+				'permissionLevel' => $permissionLevel,
+				'disable_none' => $usersGroupPermissionLevel!==false && $usersGroupPermissionLevel >= GO_Base_Model_Acl::READ_PERMISSION,
+				'disable_use' => $usersGroupPermissionLevel!==false && $usersGroupPermissionLevel > GO_Base_Model_Acl::READ_PERMISSION
 			);
 			$response['total'] += 1;
 		}
