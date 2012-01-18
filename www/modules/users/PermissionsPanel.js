@@ -228,6 +228,7 @@ Ext.extend(GO.users.PermissionsPanel, Ext.Panel,{
 
 		commit : function(){
 			this.moduleAccessGrid.store.commitChanges();
+			this.moduleAccessGrid.show();
 			this.groupMemberStore.commitChanges();
 			this.groupVisibleStore.commitChanges();
 		},
