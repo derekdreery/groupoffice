@@ -40,6 +40,7 @@ GO.grid.ModulePermissionsGrid = function(config)
 			value:0,
 			header: GO.lang['permissionNone'],
 			dataIndex: 'permissionLevel',
+			disabled_field: 'disable_none',
 			width: 40
     });
 		
@@ -48,6 +49,7 @@ GO.grid.ModulePermissionsGrid = function(config)
 			value:GO.permissionLevels.read,
 			header: GO.lang['permissionUse'],
 			dataIndex: 'permissionLevel',
+			disabled_field: 'disable_use',
 			width: 40
     });
 		
@@ -56,6 +58,7 @@ GO.grid.ModulePermissionsGrid = function(config)
 			value:GO.permissionLevels.manage,
 			header: GO.lang['permissionManage'],
 			dataIndex: 'permissionLevel',
+			disabled_field: 'never',
 			width: 40
     });
 	
@@ -64,7 +67,7 @@ GO.grid.ModulePermissionsGrid = function(config)
 			baseParams: {
 				groupId : -1
 			},
-			fields: ['id','name', 'permissionLevel'],
+			fields: ['id','name', 'permissionLevel','disable_none','disable_use'],
 			root: 'results',
 			menuDisabled:true
     });

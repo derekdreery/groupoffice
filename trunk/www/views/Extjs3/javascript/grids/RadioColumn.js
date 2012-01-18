@@ -81,7 +81,7 @@ GO.grid.RadioColumn.prototype = {
 	 * @param {} record
 	 */
 	isDisabled : function(record){
-		return false;
+		return record.data[this.disabled_field];
 	},
 
 	/**
@@ -93,20 +93,15 @@ GO.grid.RadioColumn.prototype = {
 	renderer : function(v, p, record){
 		p.css += ' x-grid3-radio-col-td';
 		var disabled = this.isDisabled(record);
-		var on;
+		var on='';
+		
+		if(this.horizontal)
+			on = v==this.value ? '-on' : '';		
+		else
+			on = !GO.util.empty(v) ? '-on' : '';				
 		
 		if (disabled)
-		{
-				on = ' x-item-disabled';
-		}else
-		{
-			if(this.horizontal){
-				on = v==this.value ? '-on' : '';		
-			}else
-			{
-				on = !GO.util.empty(v) ? '-on' : '';				
-			}			
-		}
+			on += ' x-item-disabled';
 
 		return '<div class="x-grid3-radio-col'+ on +' x-grid3-cc-'+this.id+'">&#160;</div>';
 	}
