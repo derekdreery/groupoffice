@@ -545,4 +545,34 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		return $e;
 	}
 	
+	/**
+	 * Find contacts by e-mail address
+	 * 
+	 * @param string $email
+	 * @return GO_Base_Db_ActiveStatement 
+	 */
+	public function findByEmail($email){
+		$criteria = GO_Base_Db_FindCriteria::newInstance()
+			->addCondition('email',$email)
+			->addCondition('email2', $email,'=','t',false)
+			->addCondition('email3', $email,'=','t',false);
+
+		return GO_Addressbook_Model_Contact::model()->find(GO_Base_Db_FindParams::newInstance()->criteria($criteria));		
+	}
+	
+	/**
+	 * Find contacts by e-mail address
+	 * 
+	 * @param string $email
+	 * @return GO_Base_Db_ActiveStatement 
+	 */
+	public function findSingleByEmail($email){
+		$criteria = GO_Base_Db_FindCriteria::newInstance()
+			->addCondition('email',$email)
+			->addCondition('email2', $email,'=','t',false)
+			->addCondition('email3', $email,'=','t',false);
+
+		return GO_Addressbook_Model_Contact::model()->find(GO_Base_Db_FindParams::newInstance()->single()->criteria($criteria));		
+	}
+	
 }

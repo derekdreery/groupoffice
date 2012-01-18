@@ -13,11 +13,11 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$recipients->addString($params['bcc']);
 
 			foreach($recipients->getAddresses() as $email=>$personal){
-				$contact = GO_Addressbook_Model_Contact::model()->findSingleByAttribute('email', $email);
+				$contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($email);
 				if($contact)
 					continue;
 
-				$company = GO_Addressbook_Model_Company::model()->findSingleByAttribute('email', $email);
+				$company = GO_Addressbook_Model_Company::model()->findSingleByEmail($email);
 				if($company)
 					continue;
 				
@@ -361,7 +361,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$toList = new GO_Base_Mail_EmailRecipients();
 			$toList->mergeWith($imapMessage->from)
 					->mergeWith($imapMessage->to);
-			
+
 			$toList->removeRecipient($to['email']);
 			
 			$response['data']['to']=(string) $toList;	

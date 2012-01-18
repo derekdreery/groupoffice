@@ -69,8 +69,8 @@ class GO_Base_Mail_EmailRecipients{
 	 * @return array  
 	 */
 	public function getAddress(){
+		reset($this->_addresses);
 		$each = each($this->_addresses);
-		
 		return array('email'=>$each['key'], 'personal'=>$each['value']);
 	}
 	
