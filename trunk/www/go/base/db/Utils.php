@@ -40,4 +40,14 @@ class GO_Base_Db_Utils{
 		
 		return false;
 	}
+	
+	public static function fieldExists($tableName, $fieldName){
+		$sql = "SHOW FIELDS FROM `".$tableName."`";
+		$stmt = GO::getDbConnection()->query($sql);
+		while($record = $stmt->fetch(PDO::FETCH_ASSOC)){
+			if($record['Field']==$fieldName)
+				return true;
+		}
+		return false;
+	}
 }

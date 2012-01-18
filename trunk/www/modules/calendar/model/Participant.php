@@ -19,13 +19,13 @@
  *
  * @property int $id
  * @property int $event_id
- * @property String $name
- * @property String $email
+ * @property string $name
+ * @property string $email
  * @property int $user_id
- * @property enum('0','1','2','3') $status
- * @property String $last_modified
+ * @property int $status
+ * @property string $last_modified
  * @property int $is_organizer
- * @property String $role
+ * @property string $role
  */
 class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	

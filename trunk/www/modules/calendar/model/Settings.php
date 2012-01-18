@@ -49,4 +49,10 @@ class GO_Calendar_Model_Settings extends GO_Base_Model_AbstractUserDefaultModel{
 		return 'user_id';
 	}
 	
+	public function relations() {
+		return array(
+				'calendar' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Calendar_Model_Calendar', 'field'=>'calendar_id')
+		);
+	}
+	
 }
