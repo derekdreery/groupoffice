@@ -236,6 +236,9 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 		} else if($this->page->path == $this->site->getRegisterPath()){
 			if($this->site->getLastPath() == $this->site->getRegisterPath())
 				$this->site->setLastPath($this->site->getHomePagePath());
+		} else if($this->page->path == $this->site->getPasswordResetPath()){
+			if($this->site->getLastPath() == $this->site->getPasswordResetPath())
+				$this->site->setLastPath($this->site->getHomePagePath());
 		}else {
 			GO::session()->values['sites']['lastPath'] = $this->page->path;
 		}
