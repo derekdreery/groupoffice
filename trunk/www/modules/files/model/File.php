@@ -180,7 +180,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	 * @param GO_Base_Fs_File $fsFile
 	 * @return GO_Files_Model_File 
 	 */
-	public static function importFromFilesystem($fsFile){
+	public static function importFromFilesystem(GO_Base_Fs_File $fsFile){
 		
 		$folderPath = str_replace(GO::config()->file_storage_path,"",$fsFile->parent()->path());
 		
