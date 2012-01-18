@@ -111,7 +111,7 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 			$usersGroupPermissionLevel = false;
 			if (empty($paramId)) {				
 				$aclUsersGroup = $module->acl->hasGroup(GO::config()->group_everyone); // everybody group
-				$permissionLevel=$aclUsersGroup->level;
+				$permissionLevel=$aclUsersGroup ? $aclUsersGroup->level : 0;
 			} else {
 				if ($params['paramIdType']=='groupId') {
 				
