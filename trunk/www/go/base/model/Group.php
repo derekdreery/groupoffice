@@ -45,6 +45,16 @@ class GO_Base_Model_Group extends GO_Base_Db_ActiveRecord {
 	public function tableName() {
 		return 'go_groups';
 	}
+	
+	protected function beforeDelete() {
+		if($this->id==GO::config()->group_root){
+			throw new Exception(GO::t('noDeleteAdmins','groups'));
+		}	
+		if($this->id==GO::config()->group_everyone){
+			throw new Exception(GO::t('noDeleteEveryone','groups'));
+		}
+		return parent::beforeDelete();
+	}
   
 //  public function searchFields() {
 //    return array(
