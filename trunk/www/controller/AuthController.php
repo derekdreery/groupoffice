@@ -18,7 +18,11 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 	 * @return array. 
 	 */
 	protected function allowGuests() {
-		return array('init', 'setview','logout','login','resetpassword','sendresetpasswordmail');
+		return array('init', 'setview','logout','login','resetpassword','setnewpassword','sendresetpasswordmail');
+	}
+	
+	protected function ignoreAclPermissions() {
+		return array('setnewpassword');
 	}
 
 	private function loadInit() {
@@ -44,9 +48,41 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 	}
 	
 	protected function actionResetPassword($params){
-		
-		
 		$this->render('resetpassword');
+	}
+	
+	protected function actionSetNewPassword($params){
+		
+		$response = array();
+	
+		if(!GO_Base_Util_Http::isPostRequest() || empty($params['email']) || empty($params['usertoken'])){
+			$response['success']=false;
+			$response['feedback']="Invalid request!";
+			return $response;
+		}
+
+		$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $params['email']);
+		if($user){
+			if($params['usertoken'] == $user->getSecurityToken()){
+				
+				$user->password = $_REQUEST['password'];
+				$user->passwordConfirm = $_REQUEST['confirm'];
+
+				if($user->save()){				
+					$response['success']=true;
+				}else{
+					$response['success']=false;
+					$response['feedback']="Something went wrong with changing the users password";
+				}
+			}else{
+				$response['success']=false;
+				$response['feedback']="Usertoken did not match!";
+			}
+		}else{
+			$response['success']=false;
+			$response['feedback']="No user found!";
+		}
+		return $response;
 	}
 	
 	protected function actionSendResetPasswordMail($params){
