@@ -16,14 +16,14 @@ require_once(GO::config()->root_path . "classes/base/theme.class.inc.php");
 $GO_THEME = new GO_THEME();
 
 if (empty($_REQUEST['email'])) {
-	die("No email given!");
+	die(GO::t("noEmailGiven"));
 } else {
 	$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $_REQUEST['email']);
 	if ($user) {
 		if (empty($_REQUEST['usertoken']) || $_REQUEST['usertoken'] != $user->getSecurityToken()) 
-			die("No valid usertoken given!");
+			die(GO::t("usertokenInvalid"));
 	} else {
-		die("No user found with the given email address!");
+		die(GO::t("noUserFoundWithEmail"));
 	}
 }
 	?>
