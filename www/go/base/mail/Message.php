@@ -243,13 +243,13 @@ class GO_Base_Mail_Message extends Swift_Message{
 							$content_id = substr($part->headers['content-id'], 1,strlen($part->headers['content-id'])-2);
 						}
 						$img = Swift_EmbeddedFile::fromPath($tmp_file);
-						$img->setContentType(File::get_mime($mime_type));
+						$img->setContentType($mime_type);
 						$img->setId($content_id);
 						$this->embed($img);
 					}else
 					{
 					//echo $tmp_file."\n";
-						$attachment = Swift_Attachment::fromPath($tmp_file,File::get_mime($tmp_file));
+						$attachment = Swift_Attachment::fromPath($tmp_file,$mime_type);
 						$this->attach($attachment);
 					}
 				}
