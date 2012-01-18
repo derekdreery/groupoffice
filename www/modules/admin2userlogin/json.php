@@ -45,7 +45,7 @@ try{
 		{
 			$user['name'] = String::format_name($GO_USERS->f('last_name'),$GO_USERS->f('first_name'),$GO_USERS->f('middle_name'));
 			$user['lastlogin']=Date::get_timestamp($user['lastlogin']);
-			$user['registration_time']=Date::get_timestamp($user['registration_time']);
+			$user['registration_time']=Date::get_timestamp($user['ctime']);
 			$user['cf']=$user['id'].':'.$user['name'];//special field used by custom fields. They need an id an value in one.
 
 			if(isset($cf)){

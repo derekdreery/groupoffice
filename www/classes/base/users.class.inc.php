@@ -210,8 +210,6 @@ class GO_USERS extends db
 					$fields[]='u.username';
 					$fields[]='name';
 					$fields[]='email';
-					$fields[]='company';
-					$fields[]='city';
 					
 					
 				}else {
