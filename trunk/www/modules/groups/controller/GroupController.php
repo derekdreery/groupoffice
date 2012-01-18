@@ -18,7 +18,7 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 	protected function allowWithoutModuleAccess() {
 		return array('getusers');
 	}
-
+	
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
 		$columnModel->formatColumn('user_name', '$model->user->name');
 		return parent::formatColumns($columnModel);
