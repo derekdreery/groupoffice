@@ -489,3 +489,12 @@ $l['gridMissingParams'] = 'Please let the Group-Office administrator that the wi
 $l['permissionNone'] = 'No permissions';
 $l['permissionUse'] = 'Use';
 $l['permissionManage'] = 'Manage';
+
+$l["changePassword"]= 'Change password';
+$l["changePasswordText"]= 'Please fill in the form below to reset your password.';
+$l["changePasswordSuccess"]= 'Your password is changed successfully!';
+$l["changePasswordSuccessTitle"]= 'Password is changed';
+
+$l["noEmailGiven"]= 'No email given';
+$l["usertokenInvalid"]= 'No valid usertoken given!';
+$l["noUserFoundWithEmail"]="No user found with the given email address!";
