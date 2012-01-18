@@ -380,8 +380,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					if(action.result.data.category_name)
 						this.selectCategory.setRemoteText(action.result.data.category_name);
 
-					this.numParticipants=action.result.data.num_participants;
-					
+					this.has_other_participants=action.result.data.has_other_participants;					
 					
 					if(this.resourceGroupsStore.data.items.length == 0 || action.result.group_id != '1')
 						this.tabPanel.hideTabStripItem('resources-panel');
@@ -567,7 +566,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		this.formPanel.form.setValues(formValues);
 	},
 
-	numParticipants:0,
+	has_other_participants:0,
 	submitForm : function(hide, config) {
 
 		if(!config)
@@ -588,19 +587,12 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			var gridData = this.participantsPanel.getGridData();
 			params.participants=Ext.encode(gridData);
 
-			this.numParticipants = this.participantsPanel.store.getCount();
-//			for(var i=0; i<this.participantsPanel.store.data.items.length; i++)
-//			{
-//				if(this.participantsPanel.store.data.items[i].data.user_id != GO.settings.user_id)
-//				{
-//					this.numParticipants++;
-//				}
-//			}
+			this.has_other_participants = this.participantsPanel.invitationRequired();
 		}
 
 		//don't request invitation if import is enabled. TODO import is a bad name.
 		//it's for direct scheduling.
-		if(this.numParticipants>0 && !this.participantsPanel.importCheckbox.getValue())
+		if(this.has_other_participants>0 && !this.participantsPanel.importCheckbox.getValue())
 		{
 			var invitationMessage = (this.event_id) ? GO.calendar.lang.sendInvitationUpdate : GO.calendar.lang.sendInvitationInitial;
 		
@@ -642,7 +634,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					.getValue() !="",
 					'private' : false,
 					exception_event_id : this.formPanel.form.baseParams['exception_event_id'],
-					num_participants: this.numParticipants
+					has_other_participants: this.participantsPanel.invitationRequired()
 				};
 
 

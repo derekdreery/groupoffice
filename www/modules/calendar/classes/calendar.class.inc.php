@@ -747,8 +747,8 @@ class calendar extends db {
 		return $this->num_rows();
 	}
 	
-	function count_participants($event_id){
-		$sql = "SELECT count(*) AS c FROM cal_participants WHERE event_id='".$this->escape($event_id)."'";
+	function count_participants($event_id, $user_id){
+		$sql = "SELECT count(*) AS c FROM cal_participants WHERE event_id='".$this->escape($event_id)."' AND user_id!=".intval($user_id);
 		$this->query($sql);
 		$r = $this->next_record();
 		return intval($r['c']);

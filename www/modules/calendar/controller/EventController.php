@@ -353,6 +353,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		if(!$model->isResource() && $model->id>0)
 			$this->_loadResourceEvents($model, $response);
+		
+		$response['data']['has_other_participants']=$model->hasOtherParticipants(GO::user()->id);
 
 		return parent::afterLoad($response, $model, $params);
 	}

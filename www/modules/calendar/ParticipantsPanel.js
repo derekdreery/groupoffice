@@ -95,6 +95,12 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 			var selectedRows = this.gridPanel.selModel.getSelections();
 			for (var i = 0; i < selectedRows.length; i++) {
 				selectedRows[i].commit();
+				
+				if(selectedRows[i].data.is_organizer){
+					alert("You can't remove the organizer");
+					return;
+				}
+				
 				this.store.remove(selectedRows[i]);
 			}
 		},
@@ -147,16 +153,13 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 		region:'center',
 		columns : [{
 			header : GO.lang.strName,
-			dataIndex : 'name',
-			sortable : true
+			dataIndex : 'name'
 		}, {
 			header : GO.lang.strEmail,
-			dataIndex : 'email',
-			sortable : true
+			dataIndex : 'email'
 		}, {
 			header : GO.lang.strStatus,
 			dataIndex : 'status',
-			sortable : true,
 			renderer : function(v) {
 				switch (v) {
 					case '3' :
@@ -179,7 +182,6 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 		}, {
 			header : GO.lang.strAvailable,
 			dataIndex : 'available',
-			sortable : false,
 			renderer : function(v) {
 
 				var className = 'img-unknown';
@@ -191,7 +193,6 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 		}, {
 			header : GO.calendar.lang.isOrganizer,
 			dataIndex : 'is_organizer',
-			sortable : false,
 			renderer : function(v) {
 
 				var className = 'img-unknown';
@@ -280,6 +281,23 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 			}			
 		}
 		GO.calendar.ParticipantsPanel.superclass.onShow.call(this);
+	},
+	
+	invitationRequired : function(){
+		//invitation is required if there's a participant that is not the current user.
+		
+		if(this.store.getCount()>1)
+			return true;
+		
+		var records = this.store.getRange();
+		for(var i=0;i<records.length;i++)
+		{
+			if(records[i].data.user_id!=GO.settings.user_id)
+				return true;
+		}
+	
+		return false;
+		
 	},
 
 	showAddParticipantsDialog : function() {
@@ -422,34 +440,29 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 	},
 	
 	addDefaultParticipant : function(){
-//		this.body.mask(GO.lang.waitMsgLoad);
-//		Ext.Ajax.request({
-//			url : GO.settings.modules.calendar.url + 'json.php',
-//			params : {
-//				task : 'get_default_participant',
-//				calendar_id : this.eventDialog.selectCalendar.getValue(),
-//				start_time : this.eventDialog.getStartDate().format('U'),
-//				end_time : this.eventDialog.getEndDate().format('U')
-//			},
-//			callback : function(options, success, response) {
-//				this.body.unmask();
-//				if (!success) {
-//					Ext.MessageBox.alert(GO.lang['strError'],
-//						GO.lang['strRequestError']);
-//				} else {
-//					var responseParams = Ext.decode(response.responseText);							
-//					this.addParticipant({
-//						name : responseParams.name,
-//						email : responseParams.email,
-//						status :  responseParams.status,
-//						user_id : responseParams.user_id,
-//						available : responseParams.available,
-//						is_organizer : responseParams.is_organizer
-//					});
-//				}
-//			},
-//			scope : this
-//		});
+				
+		GO.request({
+			maskEl:this.body,
+			url :'calendar/participant/loadOrganizer',
+			params : {
+				calendar_id : this.eventDialog.selectCalendar.getValue(),
+				start_time : this.eventDialog.getStartDate().format('U'),
+				end_time : this.eventDialog.getEndDate().format('U')
+			},
+			success : function(options, response, result) {
+			
+				this.addParticipant({
+					name : result.name,
+					email : result.email,
+					status :  result.status,
+					user_id : result.user_id,
+					available : result.available,
+					is_organizer : result.is_organizer
+				});
+				
+			},
+			scope : this
+		});
 	},
 	
 	addParticipant : function(config)

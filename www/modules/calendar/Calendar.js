@@ -373,7 +373,7 @@ GO.calendar.MainPanel = function(config){
 		},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','all_day_event','username','duration', 'link_count', 'num_participants','participant_ids','ctime']
+		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','all_day_event','username','duration', 'link_count', 'has_other_participants','participant_ids','ctime']
 	});
 	
 	this.daysGridStore.on('load', this.setCalendarBackgroundColors, this);
@@ -385,7 +385,7 @@ GO.calendar.MainPanel = function(config){
 		},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','username','duration','link_count', 'num_participants','participant_ids','ctime']
+		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','username','duration','link_count', 'has_other_participants','participant_ids','ctime']
 	});
 	
 	this.monthGridStore.on('load', this.setCalendarBackgroundColors, this);
@@ -1115,7 +1115,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 						id: this.currentDeleteEvent.event_id
 					};
 
-					if(event.num_participants)
+					if(event.has_other_participants)
 					{
 						params.send_cancellation = (confirm(GO.calendar.lang.sendCancellation)) ? 1 : 0;
 					}
@@ -1131,7 +1131,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 						id: this.currentDeleteEvent.event_id
 					};
 
-					if(event.num_participants)
+					if(event.has_other_participants)
 					{
 						params.send_cancellation = (confirm(GO.calendar.lang.sendCancellation)) ? 1 : 0;
 					}
@@ -1158,7 +1158,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 						id: event.event_id
 					};
 					
-					if(event.num_participants)
+					if(event.has_other_participants)
 					{
 						params.send_cancellation = (confirm(GO.calendar.lang.sendCancellation)) ? 1 : 0;
 					}
@@ -1507,7 +1507,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				duration_end_time : actionData.end_time
 			};
 
-			if(event.num_participants)
+			if(event.has_other_participants)
 				params.send_invitation=confirm(GO.calendar.lang.sendInvitationUpdate);
 			
 			if(actionData.singleInstance)
@@ -1598,7 +1598,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				id : event['event_id']
 			};
 
-			if(event.num_participants)
+			if(event.has_other_participants)
 				params.send_invitation=confirm(GO.calendar.lang.sendInvitationUpdate);
 			
 			if(actionData.offset)
@@ -1705,7 +1705,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			params['calendar_id']=actionData.calendar_id;
 		}
 
-		if(event.num_participants)
+		if(event.has_other_participants)
 			params.send_invitation=confirm(GO.calendar.lang.sendInvitationUpdate);
 
 		Ext.Ajax.request({

@@ -984,4 +984,20 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		));
 		
 	}
+	
+	
+	public function hasOtherParticipants($user_id){
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->single();
+		
+		$findParams->getCriteria()
+						->addCondition('user_id', $user_id,'!=')
+						->addCondition('event_id', $this->id);
+						
+		
+		$p = GO_Calendar_Model_Participant::model()->find($findParams);
+		
+		return $p ? true : false;
+	}
 }
