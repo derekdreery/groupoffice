@@ -17,7 +17,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				if($contact)
 					continue;
 
-				$company = GO_Addressbook_Model_Company::model()->findSingleByEmail($email);
+				$company = GO_Addressbook_Model_Company::model()->findSingleByAttribute('email',$email);
 				if($company)
 					continue;
 				
