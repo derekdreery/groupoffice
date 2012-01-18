@@ -606,7 +606,11 @@ class imap extends imap_bodystruct {
 			}
 		}
 		elseif (stristr($this->capability, 'SORT')) {
-			$uids=$this->server_side_sort($sort, $reverse, $filter);
+			$uids=$this->server_side_sort($sort, $reverse, $filter);			
+			if($uids===false){
+				go_debug("WARNING: server side sort failed!");
+				return $this->client_side_sort ($sort, $reverse, $filter);
+			}
 			$this->sort_count = count($uids);
 			return $uids;
 		}
