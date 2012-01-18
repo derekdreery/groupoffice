@@ -424,10 +424,10 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			$siteTitle=GO::config()->title;
 		
 		if(!$url){
-			$url=GO::url("auth/resetPassword", array("email"=>$this->email, "usertoken"=>$this->getSecurityToken()));
+			$url=GO::url("auth/resetPassword", array("email"=>$this->email, "usertoken"=>$this->getSecurityToken()),false);
 			$url = GO::config()->full_url."index.php".$url;
 		}else{
-			$url=GO_Base_Util_Http::addParamsToUrl($url, array("email"=>$this->email, "usertoken"=>$this->getSecurityToken()));
+			$url=GO_Base_Util_Http::addParamsToUrl($url, array("email"=>$this->email, "usertoken"=>$this->getSecurityToken()),false);
 		}
 		//$url="<a href='".$url."'>".$url."</a>";
 		
@@ -441,6 +441,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 
 		$emailBody = GO::t('lost_password_body','base','lostpassword');
 		$emailBody = sprintf($emailBody,$this->contact->salutation, $siteTitle, $this->username, $url);
+		
 		$message->setBody($emailBody);
 		$message->addFrom($fromEmail,$fromName);
 		$message->addTo($this->email,$this->getName());
