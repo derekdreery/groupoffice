@@ -25,7 +25,7 @@ try{
 				if(isset($GLOBALS['GO_MODULES']->modules['files']))
 				{
 					//$response['results'][]=array('name'=>'Remove duplicate folders and files', 'script'=>$GLOBALS['GO_MODULES']->modules['files']['url'].'scripts/removeduplicatefolders.php');
-					//$response['results'][]=array('name'=>'Sync filesystem with files database', 'script'=>$GLOBALS['GO_MODULES']->modules['files']['url'].'scripts/sync_filesystem.php');
+					$response['results'][]=array('name'=>'Sync filesystem with files database', 'script'=>GO::url('files/folder/syncFilesystem'));
 				}
 
 				if(!empty($GLOBALS['GO_CONFIG']->phpMyAdminUrl))
