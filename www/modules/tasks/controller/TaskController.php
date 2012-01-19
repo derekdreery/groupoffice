@@ -200,6 +200,11 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 
 		$storeParams = $this->checkFilterParams($params['show'],$storeParams);
 		
+		if(GO::modules()->projects){
+			$storeParams->select("t.*, tl.name AS tasklist_name,p.name AS project_name");
+			$storeParams->joinModel(array('model'=>'GO_Projects_Model_Project', 'foreignField'=>'id', 'localField'=>'project_id', 'tableAlias'=>'p',  'type'=>'LEFT' ));
+		}
+		
 		return $storeParams;
 	}
 	
