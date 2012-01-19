@@ -1018,6 +1018,15 @@ class GO_Base_Config {
 		}
 		return $this->zlib_compress;
 	}
+	
+	
+	public function getCompleteDateFormat(){
+		return $this->default_date_format[0].
+						$this->default_date_separator.
+						$this->default_date_format[1].
+						$this->default_date_separator.
+						$this->default_date_format[2];
+	}
 
 	/**
 	 * Get's the location of a configuration file.
