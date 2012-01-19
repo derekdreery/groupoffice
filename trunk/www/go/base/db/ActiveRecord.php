@@ -2558,11 +2558,26 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	public function link($model, $description='', $this_folder_id=0, $model_folder_id=0, $linkBack=true){
 		
-		if(!$this->hasLinks())
+		$isSearchCacheModel = ($this instanceof GO_Base_Model_SearchCacheRecord);
+		
+		if(!$this->hasLinks() && !$isSearchCacheModel)
 			throw new Exception("Links not supported by ".$this->className ());
 		
 		if($this->_linkExists($model))
 			return true;
+		
+		if($model instanceof GO_Base_Model_SearchCacheRecord){
+			$model_id = $model->model_id;
+			$model_type_id = $model->model_type_id;			
+		}else
+		{
+			$model_id = $model->id;
+			$model_type_id = $model->modelTypeId();			
+		}
+		
+		$table = $isSearchCacheModel ? GO::getModel($this->model_name)->model()->tableName() : $this->tableName();
+		
+		$id = $isSearchCacheModel ? $this->model_id : $this->id;
 		
 		$fieldNames = array(
 				'id',
@@ -2572,15 +2587,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				'description',
 				'ctime');
 		
-		$sql = "INSERT INTO `go_links_{$this->tableName()}` ".
+		$sql = "INSERT INTO `go_links_$table` ".
 					"(`".implode('`,`', $fieldNames)."`) VALUES ".
 					"(:".implode(',:', $fieldNames).")";
 		
 		$values = array(
-				':id'=>$this->id,
+				':id'=>$id,
 				':folder_id'=>$this_folder_id,
-				':model_type_id'=>$model->modelTypeId(),
-				':model_id'=>$model->id,
+				':model_type_id'=>$model_type_id,
+				':model_id'=>$model_id,
 				':description'=>$description,
 				':ctime'=>time()
 		);
@@ -2597,9 +2612,20 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			return !$linkBack || $model->link($this, $description, $model_folder_id, $this_folder_id, false);
 	}
 	
-	private function _linkExists($model){
-		$sql = "SELECT count(*)FROM `go_links_{$this->tableName()}` WHERE ".
-			"`id`=".intval($this->id)." AND model_type_id=".intval($model->modelTypeId())." AND `model_id`=".intval($model->id);
+	private function _linkExists($model){		
+		if($model instanceof GO_Base_Model_SearchCacheRecord){
+			$model_id = $model->model_id;
+			$model_type_id = $model->model_type_id;
+		}else
+		{
+			$model_id = $model->id;
+			$model_type_id = $model->modelTypeId();
+		}
+		
+		$table = $this instanceof GO_Base_Model_SearchCacheRecord ? GO::getModel($this->model_name)->model()->tableName() : $this->tableName();
+		
+		$sql = "SELECT count(*) FROM `go_links_$table` WHERE ".
+			"`id`=".intval($this->id)." AND model_type_id=".$model_type_id." AND `model_id`=".$model_id;
 		$stmt = $this->getDbConnection()->query($sql);
 		return $stmt->fetchColumn(0) > 0;		
 	}
@@ -2673,7 +2699,17 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	
-	
+	/**
+	 * Copy links from this model to the target model.
+	 * 
+	 * @param GO_Base_Db_ActiveRecord $targetModel 
+	 */
+	public function copyLinks(GO_Base_Db_ActiveRecord $targetModel){
+		$stmt = GO_Base_Model_SearchCacheRecord::model()->findLinks($this);
+		while($searchCacheModel = $stmt->fetch()){
+			$targetModel->link($searchCacheModel, $searchCacheModel->link_description);
+		}
+	}	
 	
 	private $_customfieldsRecord;
 	
