@@ -544,7 +544,7 @@ class GO_Base_Mail_MimeDecode
                     foreach($matches[1] as $value)
                         $text = str_replace('='.$value, chr(hexdec($value)), $text);
                     */
-                  	$text = imap::mime_header_decode($encoded);
+                  	$text = GO_Base_Mail_Utils::mimeHeaderDecode($encoded);
                      
                     break;
             }
