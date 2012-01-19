@@ -41,8 +41,12 @@ class GO_Base_Language{
 	 * Set the language to translate into. Clears the cached language strings too.
 	 * 
 	 * @param string $isoCode Leave empty to set the default user language.
+	 * @return string Old ISO code that was set.
 	 */
 	public function setLanguage($isoCode=false){
+		
+		$oldIso = $this->_langIso;
+		
 		if(!$isoCode){
 			$this->_langIso=GO::user() ? GO::user()->language : GO::config()->language;
 		}else
@@ -50,6 +54,8 @@ class GO_Base_Language{
 			$this->_langIso=$isoCode;
 		}
 		$this->_lang=array();
+		
+		return $oldIso;
 	}
 	
 	/**
