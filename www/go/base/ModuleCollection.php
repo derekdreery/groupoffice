@@ -62,6 +62,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	 */
 	public function callModuleMethod($method, $params=array()){
 		
+		$oldIgnore = GO::setIgnoreAclPermissions();
 		$stmt = $this->getAll();
 		$modules = $stmt->fetchAll();
 		
@@ -81,6 +82,8 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 				}
 			}
 		}
+		
+		GO::setIgnoreAclPermissions($oldIgnore);
 	}
 	
 	public function __get($name) {
