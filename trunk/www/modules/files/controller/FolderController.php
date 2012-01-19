@@ -27,16 +27,16 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		echo "Done\n";
 		
 		
-		$folders = array('billing','email');	
-		
-		foreach($folders as $name){
-			
-			echo "Deleting ".$name."\n";
-			
-			$folder = GO_Files_Model_Folder::model()->findByPath($name);
-			if($folder)
-				$folder->delete();
-		}
+//		$folders = array('billing','email');	
+//		
+//		foreach($folders as $name){
+//			
+//			echo "Deleting ".$name."\n";
+//			
+//			$folder = GO_Files_Model_Folder::model()->findByPath($name);
+//			if($folder)
+//				$folder->delete();
+//		}
 	}
 	
 
