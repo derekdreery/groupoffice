@@ -102,14 +102,14 @@ class GO_Base_Util_String {
 
 		if(empty($str))
 			return $str;
-		
-		//Some mail clients send a different charset while the string is already utf-8 :(
-		if(function_exists('mb_check_encoding') && mb_check_encoding($str,'UTF-8'))
-			return $str;
-		
+				
 		if($from_charset=='UTF-8'){
 			return $str;
 		}else{
+			
+			//Some mail clients send a different charset while the string is already utf-8 :(
+			if(function_exists('mb_check_encoding') && mb_check_encoding($str,'UTF-8'))
+				return $str;
 
 			if(empty($from_charset)){
 

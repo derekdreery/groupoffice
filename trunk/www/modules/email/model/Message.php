@@ -89,6 +89,10 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	public function __set($name, $value){
 		$this->attributes[$name]=$value;
 	}
+	
+	public function __isset($name) {
+		return isset($this->attributes['name']);
+	}
 
 	/**
 	 * Returns a static model of itself

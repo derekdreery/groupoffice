@@ -82,7 +82,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		$imap = $account->openImapConnection($mailbox);
 
 		$attributes = $imap->get_message_header($uid, true);
-		
+
 		if (!$attributes)
 			return false;
 
@@ -332,7 +332,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 
 				if (empty($part['name']) || $part['name'] == 'false') {
 					if (!empty($part['subject'])) {
-						$a['name'] = GO_Base_Fs_File::stripInvalidChars($this->mime_header_decode($part['subject'])) . '.eml';
+						$a['name'] = GO_Base_Fs_File::stripInvalidChars(GO_Base_Mail_Utils::mimeHeaderDecode($part['subject'])) . '.eml';
 					} elseif ($part['type'] == 'message') {
 						$a['name'] = isset($part['description']) ? GO_Base_Fs_File::stripInvalidChars($part['description']) . '.eml' : 'message.eml';
 					} elseif ($part['subtype'] == 'calendar') {
