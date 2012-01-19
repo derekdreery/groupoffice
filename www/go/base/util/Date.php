@@ -712,8 +712,11 @@ class GO_Base_Util_Date {
 				$d->setTimezone($tz);
 			}
 		}*/
+		
+		$completeDateFormat = GO::user() ? GO::user()->completeDateFormat : GO::config()->getCompleteDateFormat();
+		$timeFormat = GO::user() ? GO::user()->time_format : GO::config()->default_time_format;
 
-		$date_format = $with_time ?  GO::user()->completeDateFormat.' '.GO::user()->time_format : GO::user()->completeDateFormat;
+		$date_format = $with_time ?  $completeDateFormat.' '.$timeFormat : $completeDateFormat;
 
 		return date($date_format, strtotime($time));
 	}
