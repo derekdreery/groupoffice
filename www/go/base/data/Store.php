@@ -186,7 +186,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
     if (empty($columns))
       throw new Exception('No columns given for this grid.');   
     			
-
+		$this->response['results']=array();
 		while ($record = $this->nextRecord()) {
 			$this->response['results'][] = $record;
 		}
