@@ -171,7 +171,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	
 	
-	private $_attributes=array();
+	protected $_attributes=array();
 	
 	private $_modifiedAttributes=array();
 	
@@ -1571,8 +1571,17 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	public function formatAttribute($attributeName, $value, $html=false){
-		if(!isset($this->columns[$attributeName]['gotype'])){
-			return $value;
+		if(!isset($this->columns[$attributeName]['gotype'])){			
+
+			if($this->customfieldsModel() && substr($attributeName,0,4)=='col_'){
+				//if it's a custom field then we create a dummy customfields model.
+				$cfModel = GO::getModel($this->customfieldsModel());
+				$cfModel->setAttributes($this->_attributes, false);
+				
+				return $cfModel->formatAttribute($attributeName, $value);
+			}else	{
+				return $value;
+			}
 		}
 
 		switch($this->columns[$attributeName]['gotype']){
@@ -2676,10 +2685,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function getCustomfieldsRecord(){
 		
-		if($this->customfieldsModel() && GO::modules()->customfields){
-			$customFieldModelName=$this->customfieldsModel();
-
+		if($this->customfieldsModel() && GO::modules()->customfields){			
 			if(!isset($this->_customfieldsRecord)){// && !empty($this->pk)){
+				$customFieldModelName=$this->customfieldsModel();
 				$this->_customfieldsRecord = GO::getModel($customFieldModelName)->findByPk($this->pk);
 				if(!$this->_customfieldsRecord){
 					//doesn't exist yet. Return a new one
