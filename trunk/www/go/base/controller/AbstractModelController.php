@@ -420,7 +420,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 */
 	protected function actionDisplay($params) {
 
-		$response = array();
+		$response = array('data'=>array(),'success'=>true);
 				
 		$modelName = $this->model;
 		$model = GO::getModel($modelName)->findByPk($params['id']);
@@ -430,9 +430,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		//todo build in new style. Now it's necessary for old library functions
 		//require_once(GO::config()->root_path.'Group-Office.php');
 
-		$response['data'] = $model->getAttributes('html');
+		$response['data'] = array_merge($response['data'], $model->getAttributes('html'));
 		$response['data']['model']=$model->className();
-		$response['success'] = true;
 		$response['data']['permission_level']=$model->getPermissionLevel();
 		$response['data']['write_permission']=$response['data']['permission_level']>GO_Base_Model_Acl::READ_PERMISSION;
 
@@ -540,14 +539,16 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$data = $store->getData();
 			$response['data']['tasks']=$data['results'];
 		}
-		
-		if (!isset($response['data']['files']) && isset(GO::modules()->files) && $model->hasFiles() && $response['data']['files_folder_id']>0) {
 
-			$fc = new GO_Files_Controller_Folder();
-			$listResponse = $fc->run("list",array('folder_id'=>$response['data']['files_folder_id']),false);
-			$response['data']['files'] = $listResponse['results'];
-		} else {
-			$response['data']['files'] = array();
+		if(!isset($response['data']['files'])){
+			if (isset(GO::modules()->files) && $model->hasFiles() && $response['data']['files_folder_id']>0) {
+
+				$fc = new GO_Files_Controller_Folder();
+				$listResponse = $fc->run("list",array('folder_id'=>$response['data']['files_folder_id']),false);
+				$response['data']['files'] = $listResponse['results'];
+			} else {
+				$response['data']['files'] = array();
+			}
 		}
 		
 
