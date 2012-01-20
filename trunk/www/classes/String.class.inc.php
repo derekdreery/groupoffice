@@ -887,7 +887,7 @@ class String {
       foreach($emoticons as $emoticon=>$img)
       {
 
-        $imgpath = $GO_CONFIG->full_url.'themes/'.$GO_CONFIG->theme.'/images/emoticons/normal/'.$img;
+        $imgpath = $GO_CONFIG->full_url.'views/Extjs3/themes/'.$GO_CONFIG->theme.'/images/emoticons/normal/'.$img;
         $imgstring = '<img src="'.$imgpath.'" alt="'.$emoticon.'" />';
         if($html)
           $string = String::html_replace($emoticon, $imgstring, $string);
