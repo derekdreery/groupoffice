@@ -810,6 +810,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		$this->all_day_event = isset($vobject->dtstart['VALUE']) && $vobject->dtstart['VALUE']=='DATE';
 		
+		//funambol sends this special parameter
+		if($vobject->{"X-FUNAMBOL-ALLDAY"}=="1"){
+			$this->all_day_event=1;
+			$this->end_time-=60;
+		}
+		
 		if($vobject->valarm){
 			
 		}else

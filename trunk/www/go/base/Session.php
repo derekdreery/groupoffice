@@ -256,6 +256,9 @@ class GO_Base_Session extends GO_Base_Observable{
 	 * TODO: REMOVE IF SYSTEM IS FULLY REBUILDED
 	 */
 	private function _setCompatibilitySessionVars(){
+		
+		define('NO_EVENTS',true);
+		
 		if(!defined("CONFIG_FILE"))
 			define("CONFIG_FILE", GO::config()->get_config_file());
 		
