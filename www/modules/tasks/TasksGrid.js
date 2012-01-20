@@ -25,6 +25,9 @@ GO.tasks.TasksPanel = function(config)
 				},
 				scope:this
 			});
+			
+			delete this.store.baseParams['completed_task_id'];
+			delete this.store.baseParams['checked'];
 
 		}, this);
 
