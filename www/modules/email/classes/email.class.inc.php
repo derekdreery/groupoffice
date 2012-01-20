@@ -1380,10 +1380,9 @@ class email extends db {
 	}
 
 	function user_delete($user) {
-		go_debug($user);
 		$email = new email();
 		$del = new email();
-		$email->query("SELECT id FROM em_accounts WHERE id=?", "i", $user['id']);
+		$email->query("SELECT id FROM em_accounts WHERE user_id=?", "i", $user['id']);
 		while ($email->next_record()) {
 			$del->delete_account($email->f("id"));
 		}
