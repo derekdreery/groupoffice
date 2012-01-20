@@ -111,11 +111,10 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		return array('name'=>$this->name, 'description'=>$this->description);
 	}
 		
-	public function beforeSave() {
+	public function beforeSave() {		
+		if($this->isModified('status'))
+			$this->setCompleted($this->status==GO_Tasks_Model_Task::STATUS_COMPLETED, false);
 		
-		if($this->status==GO_Tasks_Model_Task::STATUS_COMPLETED && empty($this->completion_time))
-			$this->setCompleted(true, false);
-
 		return parent::beforeSave();
 	}
 	
@@ -160,8 +159,14 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 			$this->_recur();
 			$this->rrule='';			
 		} else {
+			
+			if($this->percentage_complete==100)
+				$this->percentage_complete=0;
+			
 			$this->completion_time = 0;
-			$this->status=GO_Tasks_Model_Task::STATUS_NEEDS_ACTION;
+			
+			if($this->status==GO_Tasks_Model_Task::STATUS_COMPLETED)
+				$this->status=GO_Tasks_Model_Task::STATUS_NEEDS_ACTION;
 		}
 		
 		if($save)
