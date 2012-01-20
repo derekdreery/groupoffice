@@ -127,6 +127,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * 
 	 * "delete"=>true will automatically delete the relation along with the model. delete flags on BELONGS_TO relations are invalid and will be ignored.
 	 * 
+	 * 
+	 * You can also select find parameters that will be applied to the relational query. eg.:
+	 * 
+	 * findParams=>GO_Base_Db_FindParams::newInstance()->order('sort_index');
+	 * 
 	 * @return array relational rules.
 	 */
 	public function relations(){
