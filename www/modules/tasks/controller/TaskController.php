@@ -86,7 +86,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 			$rRule->readJsonArray($params);		
 			$model->rrule = $rRule->createRrule();
 		}
-				
+			
 		if(isset($params['remind'])) // Check for a setted reminder
 			$model->reminder= GO_Base_Util_Date::to_unixtime($params['remind_date'].' '.$params['remind_time']);
 		else 
@@ -96,13 +96,13 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 	}
 	
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {		
-		if(isset($params['comment']) && GO::modules()->comments){
+		if(!empty($params['comment']) && GO::modules()->comments){
 				
 			$comment = new GO_Comments_Model_Comment();
 			// $comment->id 	
 			$comment->model_id = $model->id;
 			$comment->model_type_id = $model->modelTypeId();
-			$comment->user_id = $model->user_id;
+			$comment->user_id = GO::user()->id;
 			// $comment->ctime 
 			// $comment->mtime 
 			$comment->comments = $params['comment'];
@@ -141,10 +141,9 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		
 		if(isset($params['completed_task_id'])) {
 			$updateTask = GO_Tasks_Model_Task::model()->findByPk($params['completed_task_id']);
-			if(!empty($params['checked']))
-				$updateTask->setCompleted(true);
-			else
-				$updateTask->setCompleted(false);
+			
+			if(isset($params['checked']))
+				$updateTask->setCompleted($params['checked']=="true");
 		}
 		
 		return parent::beforeStore($response, $params, $store);
