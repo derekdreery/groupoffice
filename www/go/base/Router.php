@@ -93,7 +93,7 @@ class GO_Base_Router{
 				$params=$_REQUEST;				
 			}
 		}
-		
+				
 		$r = !empty($params['r']) ?  explode('/', $params['r']): array();		
 		
 		$first = isset($r[0]) ? ucfirst($r[0]) : 'Auth';
