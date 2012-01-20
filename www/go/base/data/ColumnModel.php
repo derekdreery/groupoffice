@@ -178,8 +178,35 @@ class GO_Base_Data_ColumnModel {
 		}
 	}
 
+	/**
+	 * Turn a sort alias into the real column name. 
+	 * 
+	 * @param string $alias
+	 * @return mixed String or array of columns 
+	 */
 	public function getSortColumn($alias) {		
 		return isset($this->_columns[$alias]) ? $this->_columns[$alias]->getSortColumn() : $alias;
+	}
+	
+	/**
+	 * Turn an array of sort aliases into an array of the real column names.
+	 * 
+	 * @param array $aliases
+	 * @return array 
+	 */
+	public function getSortColumns($aliases){
+		$columns = array();
+			for($i=0;$i<count($aliases);$i++){
+				 $column = $this->getSortColumn($aliases[$i]);
+				 if(is_array($column))
+				 {					 
+					 $columns = array_merge($columns, $column);
+				 }else
+				 {
+					 $columns[]=$column;
+				 }
+			}
+			return $columns;
 	}
 
 	public function removeColumn($columnName) {
