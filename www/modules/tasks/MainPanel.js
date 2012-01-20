@@ -355,7 +355,7 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
                                              
 		},this);
 
-		
+		var groupState = this.gridPanel.store.multiSortInfo.sorters[0];//this.gridPanel.store.getSortState();
 
 		GO.request({
 			maskEl:this.getEl(),
@@ -364,7 +364,11 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 				requests:Ext.encode({
 					tasklists:{r:"tasks/tasklist/store"},				
 					categories:{r:"tasks/category/store"},
-					tasks:{r:"tasks/task/store"}
+					tasks:{
+                                            r:"tasks/task/store",
+                                            groupBy: groupState.field,
+                                            groupDir: groupState.dir
+                                        }
 				})
 			},
 			success: function(options, response, result)
