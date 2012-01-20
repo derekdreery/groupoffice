@@ -1028,7 +1028,7 @@ class String {
 //		$data = preg_replace('#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu', '$1=$2novbscript...', $data);
 //		$data = preg_replace('#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*-moz-binding[\x00-\x20]*:#u', '$1=$2nomozbinding...', $data);
 		
-		$dangerousWords = array('script','expression','behaviour');
+		$dangerousWords = array('script','expression','behavior');
 		foreach($dangerousWords as $word)
 			$data = str_ireplace($word,substr($word,0,2).'<b></b>'.substr($word,2),$data);
 			
