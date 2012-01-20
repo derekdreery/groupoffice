@@ -52,4 +52,4 @@ $updates[]="ALTER TABLE `ta_tasks` ADD `priority` int(11) NOT NULL DEFAULT '1'";
 
 $updates[]="ALTER TABLE `ta_tasks` ADD `project_name` VARCHAR( 50 ) NOT NULL";
 
-?>
+$updates[]="ALTER TABLE `ta_categories` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
