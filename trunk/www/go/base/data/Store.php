@@ -207,13 +207,36 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
   public function getDefaultParams($requestParams, $extraFindParams=false) {
 		
 		$sort = !empty($requestParams['sort']) ? $requestParams['sort'] : $this->_defaultSortOrder;
+		$dir = !empty($requestParams['dir']) ? $requestParams['dir'] : $this->_defaultSortDirection;
 		
-		$sort = $this->getColumnModel()->getSortColumn($sort);
+		if (!is_array($sort))
+			$sort=empty($sort) ? array() : array($sort);
+		
+		if(isset($requestParams['groupBy']))
+			array_unshift ($sort, $requestParams['groupBy']);
+
+		if (!is_array($dir))
+			$dir=count($sort) ? array($dir) : array();
+		
+		if(isset($requestParams['groupDir']))
+			array_unshift ($dir, $requestParams['groupDir']);
+
+		$sort = $this->getColumnModel()->getSortColumns($sort);
+		
+		$sortCount = count($sort);
+		$dirCount = count($dir);
+		for($i=0;$i<$sortCount-$dirCount;$i++){
+			$dir[]=$dir[0];
+		}
+		
+//		for($i=0;$i<count($sort);$i++){
+//			$sort[$i] = $this->getColumnModel()->getSortColumn($sort[$i]);
+//		}
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()
 						->calcFoundRows()
 						->joinCustomFields()
-						->order($sort, !empty($requestParams['dir']) ? $requestParams['dir'] : $this->_defaultSortDirection);
+						->order($sort, $dir);
 		if(!empty($requestParams['query']))
 			$findParams->searchQuery ('%'.preg_replace ('/[\s]+/','%', $requestParams['query']).'%');
 		

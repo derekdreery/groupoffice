@@ -172,8 +172,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
 		$columnModel->formatColumn('name','$model->name', array(),array('first_name','last_name'));
-		$columnModel->formatColumn('company_name','$model->company->name');
-		$columnModel->formatColumn('ab_name','$model->addressbook->name');
+		$columnModel->formatColumn('company_name','$model->company_name');
+		$columnModel->formatColumn('ab_name','$model->ab_name');
 		
 		$columnModel->formatColumn('cf', '$model->id.":".$model->name');//special field used by custom fields. They need an id an value in one.)
 		return parent::formatColumns($columnModel);
@@ -261,8 +261,16 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	
 		$storeParams = GO_Base_Db_FindParams::newInstance()
 			->export("contact")
-			->criteria($criteria)						
-			->select('t.*t, addressbook.name AS addressbook_name, CONCAT_WS(\' \',`t`.`first_name`,`t`.`middle_name`,`t`.`last_name`) AS name');
+			->criteria($criteria)		
+			->joinModel(array(
+				'model'=>'GO_Addressbook_Model_Company',					
+	 			'foreignField'=>'id', //defaults to primary key of the remote model
+	 			'localField'=>'company_id', //defaults to "id"
+	 			'tableAlias'=>'c', //Optional table alias
+	 			'type'=>'LEFT' //defaults to INNER,
+	 			
+			))
+			->select('t.*,c.name AS company_name, addressbook.name AS ab_name, CONCAT_WS(\' \',`t`.`first_name`,`t`.`middle_name`,`t`.`last_name`) AS name');
 		
 		//if(empty($params['enable_addresslist_filter'])){
 		
