@@ -2328,6 +2328,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 						$model->{$attr['field']}=0;
 						$model->save();
 					}
+				}elseif($attr['type']==self::HAS_MANY){
+					//set the foreign field to 0 because it doesn't exist anymore.
+					$stmt = $this->$name;
+					while($model = $stmt->fetch()){
+						$model->{$attr['field']}=0;
+						$model->save();
+					}
 				}
 			}
 			
@@ -2364,6 +2371,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				$model->delete();
 		}
 		
+		if($this->hasFiles() && $this->files_folder_id > 0 && GO::modules()->isInstalled('files')){
+			$folder = GO_Files_Model_Folder::model()->findByPk($this->files_folder_id);
+			$folder->delete();
+		}		
 		
 		if($this->aclField() && !$this->joinAclField){			
 			//echo 'Deleting acl '.$this->{$this->aclField()}.' '.$this->aclField().'<br />';
@@ -2371,13 +2382,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$acl = GO_Base_Model_Acl::model()->findByPk($this->{$this->aclField()});			
 			$acl->delete();
 		}	
-		
-		
-		if($this->hasFiles() && $this->files_folder_id > 0 && GO::modules()->isInstalled('files')){
-			$folder = GO_Files_Model_Folder::model()->findByPk($this->files_folder_id);
-			$folder->delete();
-		}
-			
 		
 		$this->_deleteLinks();
 
