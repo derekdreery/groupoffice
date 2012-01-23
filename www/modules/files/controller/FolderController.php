@@ -13,7 +13,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		ini_set('max_execution_time', '300');
 		session_write_close();		
 		
-		$folders = array('users','projects','addressbook');	
+		$folders = array('users','projects','addressbook','billing','notes','tickets');	
 		
 		echo "<pre>";
 		foreach($folders as $name){
