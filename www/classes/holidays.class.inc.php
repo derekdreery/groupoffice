@@ -121,6 +121,9 @@ class holidays extends db {
 	}*/
 
 	public function get_holidays_for_period($region, $start, $end) {
+		
+		if(empty($start) || empty($end))
+			return false;
 
 		if(!$this->holidays_for_region_exist($region)){
 			return false;
