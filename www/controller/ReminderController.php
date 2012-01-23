@@ -26,8 +26,6 @@ class GO_Core_Controller_Reminder extends GO_Base_Controller_AbstractController 
 	}
 	
 	protected function actionStore($params){
-		GO::session()->closeWriting();
-		
 		$params = GO_Base_Db_FindParams::newInstance()
 						->join(GO_Base_Model_ReminderUser::model()->tableName(),
 									GO_Base_Db_FindCriteria::newInstance()
