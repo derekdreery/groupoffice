@@ -417,7 +417,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	}
 	
 	
-	protected function actionMultiRequest($params){		
+	protected function actionMultiRequest($params){	  
 			echo "{\n";
 			
 			$router = new GO_Base_Router();
