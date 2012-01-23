@@ -841,7 +841,7 @@ class email extends db {
 	}
 
 	function get_folders($account_id, $folder_id=-1) {
-		$sql = "SELECT id,account_id,name,subscribed,parent_id,delimiter,can_have_children,sort_order,msgcount,unseen FROM em_folders";
+		$sql = "SELECT id,account_id,name,subscribed,parent_id,delimiter,can_have_children,sort_order,msgcount,unseen,no_select FROM em_folders";
 
 		if($account_id>0) {
 			$sql .= " WHERE account_id='".$this->escape($account_id)."'";

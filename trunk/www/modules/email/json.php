@@ -74,7 +74,8 @@ function get_all_mailbox_nodes($account_id, $folder_id) {
 						'expanded'=>true,
 						'canHaveChildren'=>$email->f('can_have_children'),
 						'children'=>get_all_mailbox_nodes($account_id, $email->f('id')),
-						'checked'=>$email->f('subscribed')=='1'
+						'checked'=>$email->f('subscribed')=='1',
+						'disabled'=>$email->f('no_select')=='1'
 		);
 	}
 	return $response;
