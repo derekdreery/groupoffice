@@ -154,7 +154,32 @@ GO.email.EmailComposer = function(config) {
 		forceSelection : true,
 		triggerAction : 'all',
 		mode : 'local',
-		tpl: '<tpl for="."><div class="x-combo-list-item">{name:htmlEncode}</div></tpl>'
+		tpl: '<tpl for="."><div class="x-combo-list-item">{name:htmlEncode}</div></tpl>',
+		listeners:{
+			beforeselect: function(cb, newAccountRecord){
+				var oldAccountRecord = cb.store.getById(cb.getValue());
+											
+				var oldSig = oldAccountRecord.get(this.emailEditor.getContentType()+"_signature");
+				var newSig = newAccountRecord.get(this.emailEditor.getContentType()+"_signature");
+
+				var editorValue = this.emailEditor.getActiveEditor().getValue();
+
+				/*
+				 *GO returns <br /> but the browse turns this into <br> so replace those
+				 */
+				if(this.emailEditor.getContentType()=='html'){
+					editorValue = editorValue.replace(/<br>/g, '<br />');
+				}
+				if(GO.util.empty(oldSig))
+				{
+					this.addSignature(newAccountRecord);
+				}else
+				{
+					this.emailEditor.getActiveEditor().setValue(editorValue.replace(oldSig,newSig));
+				}
+			},
+			scope:this
+		}
 	}),
 
 	this.toCombo = new GO.form.ComboBoxMulti({
@@ -431,6 +456,26 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	},
 	
 	sendParams : {},
+	
+	
+	addSignature : function(accountRecord){
+		accountRecord = accountRecord || this.fromCombo.store.getById(this.fromCombo.getValue());
+			
+		var sig = accountRecord.get(this.emailEditor.getContentType()+"_signature");
+		
+		if(!GO.util.empty(sig))
+		{
+			if(this.emailEditor.getContentType()=='plain')
+			{
+				sig = "\n"+sig+"\n";
+			}else
+			{
+				sig = '<br /><div id="EmailSignature">'+sig+'</div><br />';
+			}
+		}
+		
+		this.emailEditor.getActiveEditor().setValue(sig+this.emailEditor.getActiveEditor().getValue());
+	},
 
 	/*
 	 *handles ctrl+enter from html editor
@@ -796,6 +841,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 						Ext.Msg.alert(GO.lang['strError'], action.result.feedback)
 					},
 					success : function(form, action) {
+						
+						this.addSignature();
 
 						if(action.result.sendParams)
 							Ext.apply(this.sendParams, action.result.sendParams);
@@ -806,9 +853,11 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 	
 	afterShowAndLoad : function(config){
+		
+		if(config.task!='opendraft')
+			this.addSignature();
 
 		this.startAutoSave();
-
 
 		this.ccFieldCheck.setChecked(this.ccCombo.getValue()!='');
 		this.bccFieldCheck.setChecked(this.bccCombo.getValue()!='');
