@@ -1619,6 +1619,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				return GO_Base_Util_Number::localize($value, $decimals);
 				break;
 			
+			case 'boolean':
+					return !empty($value);				
+				break;
+			
 			case 'html':
 				return $value;
 				break;
