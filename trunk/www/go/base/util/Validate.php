@@ -144,16 +144,22 @@ class GO_Base_Util_Validate {
 			$ret = $e->faultstring;
 			$regex = '/\{ \'([A-Z_]*)\' \}/';
 			$n = preg_match($regex, $ret, $matches);
-			$ret = $matches[1];
-			$faults = array
-					(
-					'INVALID_INPUT' => 'The provided CountryCode is invalid or the VAT number is empty',
-					'SERVICE_UNAVAILABLE' => 'The SOAP service is unavailable, try again later',
-					'MS_UNAVAILABLE' => 'The VAT Member State service is unavailable, try again later or with another Member State',
-					'TIMEOUT' => 'The Member State service could not be reached in time, try again later or with another Member State',
-					'SERVER_BUSY' => 'The service cannot process your request. Try again later.'
-			);
-			throw new Exception("Could not check VAT number: ".$faults[$ret]);
+			if(isset($matches[1])){
+				$ret = $matches[1];
+				$faults = array
+						(
+						'INVALID_INPUT' => 'The provided CountryCode is invalid or the VAT number is empty',
+						'SERVICE_UNAVAILABLE' => 'The SOAP service is unavailable, try again later',
+						'MS_UNAVAILABLE' => 'The VAT Member State service is unavailable, try again later or with another Member State',
+						'TIMEOUT' => 'The Member State service could not be reached in time, try again later or with another Member State',
+						'SERVER_BUSY' => 'The service cannot process your request. Try again later.'
+				);
+				$msg=$faults[$ret];
+			}else
+			{
+				$msg=$ret;
+			}
+			throw new Exception("Could not check VAT number: ".$msg);
 		}
 
 		return $ret->valid;
