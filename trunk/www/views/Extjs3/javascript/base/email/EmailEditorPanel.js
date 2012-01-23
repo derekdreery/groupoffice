@@ -59,6 +59,18 @@ GO.base.email.EmailEditorPanel = function(config){
 				this.afterLoad(action);
 			}
 		}, this);		
+		
+		formPanel.form.on('beforeaction', function(form, action){
+			if(action.type=='submit'){
+				//make sure we are in wysiwyg mode.
+				//won't toggle if not done twice...
+				this.htmlEditor.toggleSourceEdit(false);
+				this.htmlEditor.toggleSourceEdit(false);
+				
+				//extra syncvalue because we disable it on every keypress.
+				this.htmlEditor.syncValue();				
+			}
+		}, this);		
 			
 	}, this);
 	

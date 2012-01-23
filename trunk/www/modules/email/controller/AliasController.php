@@ -13,6 +13,7 @@ class GO_Email_Controller_Alias extends GO_Base_Controller_AbstractModelControll
 
 	protected function getStoreParams($params) {
 		$findParams = GO_Base_Db_FindParams::newInstance()
+						->select('t.*')
 						->joinModel(array(
 				'model' => 'GO_Email_Model_AccountSort',
 				'foreignField' => 'account_id', //defaults to primary key of the remote model
