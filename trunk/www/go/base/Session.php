@@ -131,9 +131,7 @@ class GO_Base_Session extends GO_Base_Observable{
 		if(GO::user()){
 	
 //			$length = -strlen(GO::user()->id)-1;
-			
-			GO::debug(debug_backtrace());
-			
+						
 			GO::config()->getTempFolder()->delete();
 			GO::config()->getTempFolder();
 //
