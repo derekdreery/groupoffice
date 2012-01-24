@@ -7,14 +7,14 @@ class GO_Base_Mail_AdminNotifier {
 	 * @param string $subject
 	 * @param string $message 
 	 */
-	public static function sendMail($subject, $message){
-		$subject = "NOTICE from ".GO::config()->title.": ".$subject;
+	public static function sendMail($subject, $body){
+		$subject = "ALERT: ".$subject;
 		
 		$message = GO_Base_Mail_Message::newInstance();
 		$message->setSubject($subject);
 
-		$message->setBody($message);
-		$message->addFrom(GO::config()->webmaster_email,GO::config()->title);
+		$message->setBody($body,'text/plain');
+		$message->setFrom(GO::config()->webmaster_email,GO::config()->title);
 		$message->addTo(GO::config()->webmaster_email,'Webmaster');
 
 		GO_Base_Mail_Mailer::newGoInstance()->send($message);
