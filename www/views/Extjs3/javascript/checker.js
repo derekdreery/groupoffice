@@ -428,7 +428,7 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 		  for(var id in result){
 			if(id=="reminders"){
 			  this.handleReminderResponse(result[id]);
-			}else
+			}else if (id!='success')
 			{				
 			  this.callbacks[id].callback.call(this.callbacks[id].scope, this, result[id])
 			}
