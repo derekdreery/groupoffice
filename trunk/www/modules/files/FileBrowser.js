@@ -1835,11 +1835,9 @@ GO.files.editFile = function (fileId){
 	{
 		if(!deployJava.isWebStartInstalled('1.6.0'))
 		{
-			Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);
-			//window.location.href=GO.settings.modules.files.url+'download.php?mode=download&id='+this.link_id;
+			Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);			
 		}else
 		{
-			//window.location.href=GO.settings.modules.gota.url+'jnlp.php?id='+this.link_id;
 			window.location.href=GO.url('gota/file/edit&id='+fileId);
 			return;
 		}
