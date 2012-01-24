@@ -290,7 +290,7 @@ if(count($load_modules)) {
 		fwrite($fp,'GO.'.$module.'.lang='.json_encode($langVars).';');
 	}
 	fclose($fp);
-	$scripts[]=$GLOBALS['GO_CONFIG']->file_storage_path.'cache/module-languages.js';
+	//$scripts[]=$GLOBALS['GO_CONFIG']->file_storage_path.'cache/module-languages.js';
 	
 	if(!$GLOBALS['GO_CONFIG']->debug){
 		$scripts[]=$GLOBALS['GO_CONFIG']->file_storage_path.'cache/module-languages.js';
