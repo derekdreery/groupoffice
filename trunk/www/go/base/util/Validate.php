@@ -118,6 +118,18 @@ class GO_Base_Util_Validate {
 	}
 	
 	/**
+	 * Check if a customer needs to pay VAT.
+	 * 
+	 * @param string $customerCountry eg. NL Country 
+	 * @param boolean $hasVatNo Customer has a valid vat number
+	 * @param string $merchantCountry eg. NL This is the country the merchant lives in. If the customer comes from the same country he should always pay VAT.
+	 */
+	public static function vatApplicable($customerCountry, $hasVatNo, $merchantCountry){
+		return strtolower($customerCountry)==strtolower($merchantCountry) || 
+						(GO_Base_Util_Validate::isEUCountry($customerCountry) && !$hasVatNo);
+	}
+	
+	/**
 	 * Check if a vat number is correct.
 	 * 
 	 * @param string $countryCode The country code: eg. "NL" or "BE"
@@ -125,6 +137,14 @@ class GO_Base_Util_Validate {
 	 * @return boolean true
 	 */
 	public static function checkVat($countryCode, $vat) {
+		
+		//remove unwanted characters
+		$vat = preg_replace('/[^a-z0-9]/i','',$vat);
+		
+		//strip country if included
+		if(substr($vat,0,2)==$countryCode)
+			$vat = trim(substr($vat,2));
+		
 		$wsdl = 'http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
 
 		$vies = new SoapClient($wsdl);
@@ -159,9 +179,13 @@ class GO_Base_Util_Validate {
 			{
 				$msg=$ret;
 			}
-			throw new Exception("Could not check VAT number: ".$msg);
+			
+			//if($ret!="INVALID_INPUT")
+				throw new GO_Base_Exception_ViesDown();
+			
+			//throw new Exception("Could not check VAT number: ".$msg);
 		}
-
+throw new GO_Base_Exception_ViesDown();
 		return $ret->valid;
 	}
 	
