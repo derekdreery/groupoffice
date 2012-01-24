@@ -344,6 +344,11 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 				scope: this				
 			});
 		} else {
+			if(config && config.values)
+				this.formPanel.form.setValues(config.values);
+			
+			this.updateTitle();
+			
 			GO.dialog.TabbedFormDialog.superclass.show.call(this);
 		}
 		
