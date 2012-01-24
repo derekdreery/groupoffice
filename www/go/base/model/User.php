@@ -63,7 +63,7 @@
  */
 
 class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
-
+  
 	public $generatedRandomPassword = false;
 	public $passwordConfirm;
 	
@@ -83,6 +83,35 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	public static function model($className=__CLASS__)
 	{	
 		return parent::model($className);
+	}
+	
+	
+	/**
+	 * Create a new user 
+	 * 
+	 * When creating a user we also need to create a lot of default models and
+	 * set permissions for this user. This function creates the user with permissions
+	 * and the right models in one go.
+	 * 
+	 * @param array $attributes
+	 * @param array $groups array of group names array('Internal','Some group');
+	 * @param array $modulePermissionLevels array('calendar'=>1,'projects'=>4)
+	 * @return GO_Base_Model_User 
+	 */
+	public static function newInstance($attributes, $groups=array(), $modulePermissionLevels=array()){
+		$user = new GO_Base_Model_User();
+		$user->setAttributes($attributes);
+		$user->save();
+
+		$user->addToGroups($groups);	
+		
+		foreach($modulePermissionLevels as $module=>$permissionLevel){
+			GO::modules()->$module->acl->addUser($user->id, $permissionLevel);
+		}
+		
+		$user->checkDefaultModels();
+		
+		return $user;
 	}
 
 	public function aclField() {
@@ -205,12 +234,6 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			
 			$this->acl->user_id=$this->id;
 			$this->acl->save();
-			
-			$defaultModels = GO_Base_Model_AbstractUserDefaultModel::getAllUserDefaultModels();
-		
-			foreach($defaultModels as $model){
-				$model->getDefault($this);
-			}
 		}	
 		
 		$this->createContact();
@@ -218,6 +241,16 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		GO::modules()->callModuleMethod('saveUser', array(&$this, $wasNew));
 
 		return parent::afterSave($wasNew);
+	}
+	
+	/**
+	 * Makes shure that this model's user has all the default models it should have.
+	 */
+	public function checkDefaultModels(){
+	  $defaultModels = GO_Base_Model_AbstractUserDefaultModel::getAllUserDefaultModels($this->id);	
+		foreach($defaultModels as $model){
+			$model->getDefault($this);
+		}
 	}
 	
 	protected function afterDelete() {
@@ -404,7 +437,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @param string[] $groupNames 
 	 */
-	public function addToGroups(array $groupNames){
+	public function addToGroups(array $groupNames){		
 		foreach($groupNames as $groupName){
 			$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', $groupName);
 			if($group)

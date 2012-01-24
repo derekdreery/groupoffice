@@ -258,7 +258,7 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @param int $aclId
 	 * @param int $level 
-	 * @return GO_Base_Db_ActiveStatement 
+	 * @return Array of GO_Base_Model_User 
 	 */
 	public static function getAuthorizedUsers($aclId, $level){
 		$stmt =  GO_Base_Model_User::model()->find(GO_Base_Db_FindParams::newInstance()		
