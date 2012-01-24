@@ -27,26 +27,35 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 
 	private static $_allUserDefaultModels;
 
-	public static function getAllUserDefaultModels() {
+	/**
+	 * Get all models that should exist by default for a user.
+	 * 
+	 * @param int $user_id
+	 * @return GO_Base_Db_ActiveRecord 
+	 */
+	public static function getAllUserDefaultModels($user_id=0) {
 
 		if (!isset(self::$_allUserDefaultModels)) {
 			self::$_allUserDefaultModels = array();
 			$stmt = GO::modules()->getAll();
-		
+			
 			while ($module=$stmt->fetch()) {
-				if($module->moduleManager){
-					$classes = $module->moduleManager->findClasses('model');
-					foreach($classes as $class){
-						if($class->isSubclassOf('GO_Base_Model_AbstractUserDefaultModel')){
-							self::$_allUserDefaultModels[] = GO::getModel($class->getName());
-						}					
-					}
+			  $permissionLevel=$user_id ? GO_Base_Model_Acl::getUserPermissionLevel($module->acl_id, $user_id) : 1;
+				if($permissionLevel){
+				  if($module->moduleManager){
+					  $classes = $module->moduleManager->findClasses('model');
+					  foreach($classes as $class){
+						  if($class->isSubclassOf('GO_Base_Model_AbstractUserDefaultModel')){							
+							  self::$_allUserDefaultModels[] = GO::getModel($class->getName());
+						  }					
+					  }
+				  }
 				}
 			}
 		}
 		return self::$_allUserDefaultModels;
 	}
-
+	
 	/**
 	 * Return a model to store the default in. Eg. The default tasklist created by
 	 * getDefault should be stored in GO_Tasks_Model_Settings->default_taskkist_id
