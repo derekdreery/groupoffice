@@ -180,12 +180,12 @@ class GO_Base_Util_Validate {
 				$msg=$ret;
 			}
 			
-			//if($ret!="INVALID_INPUT")
+			if($ret!="INVALID_INPUT")
 				throw new GO_Base_Exception_ViesDown();
 			
-			//throw new Exception("Could not check VAT number: ".$msg);
+			throw new Exception("Could not check VAT number: ".$msg);
 		}
-throw new GO_Base_Exception_ViesDown();
+
 		return $ret->valid;
 	}
 	
