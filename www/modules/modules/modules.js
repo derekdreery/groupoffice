@@ -51,7 +51,10 @@ GO.modules.MainPanel = function(config) {
 			iconCls : 'btn-permissions',
 			text : GO.lang.strPermissions,
 			cls : 'x-btn-text-icon',
-			handler : this.showPermissions,
+			handler : function() {
+				var moduleRecord = this.getSelectionModel().getSelected();
+				this.showPermissions(moduleRecord.data.moduleId,moduleRecord.data.name,moduleRecord.data.acl_id);
+			},
 			scope : this
 		}]
 	});
@@ -91,7 +94,10 @@ GO.modules.MainPanel = function(config) {
 
 	GO.modules.MainPanel.superclass.constructor.call(this, config);
 
-	this.on("rowdblclick", this.showPermissions, this);
+	this.on("rowdblclick", function(grid,rowIndex,event){ 
+		var moduleRecord = grid.store.getAt(rowIndex);
+		this.showPermissions(moduleRecord.data.id,moduleRecord.data.name,moduleRecord.data.acl_id);
+	}, this);
 
 };
 
@@ -167,10 +173,9 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
                 
 			});
 
-			this.availableModulesWin = new Ext.Window({
+			this.availableModulesWin = new GO.Window({
 				layout : 'fit',
-				modal : false,
-				shadow : false,
+				modal : true,
 				minWidth : 300,
 				minHeight : 300,
 				height : 400,
@@ -242,16 +247,24 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 				params:{
 					modules:Ext.encode(keys)
 				},
-				success: function(options, success, response) {
+				success: function(options, response, result) {
 					grid.container.unmask();
 					grid.store.reload();
 					this.store.reload();
 					this.availableModulesWin.hide();
+
+					this.installedModules=result.results;
+
+					var r = this.installedModules.shift();
+
+					this.showPermissions(r.id,r.name,r.acl_id);
 				},
 				scope : this
 			});
 		}
 	},
+	
+	
 
 	uninstallModule : function() {
 
@@ -301,42 +314,19 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 
 	},
 
-	showPermissions : function() {
-		var selectionModel = this.getSelectionModel();
-		var record = selectionModel.getSelections();
-
-		if (record.length > 0) {
-			if (!this.permissionsWin) {
-				this.readPermissionsTab = new GO.grid.PermissionsPanel({
-					title : GO.users.lang.useModule
-				});
-
-                
-
-				this.permissionsWin = new Ext.Window({
-					title : GO.lang['strPermissions'],
-					layout : 'fit',
-					modal : false,
-					height : 500,
-					width : 400,
-					closeAction:'hide',
-					items : [this.readPermissionsTab],
-					buttons : [{
-						text : GO.lang['cmdClose'],
-						handler : function() {
-							this.permissionsWin.hide()
-						},
-						scope : this
-					}]
-				});
-			}
-
-			this.permissionsWin.show();
-			this.permissionsWin.setTitle(GO.lang['strPermissions'] + ' '
-				+ record[0].data.name);
-							
-			this.readPermissionsTab.setAcl(record[0].data.acl_id);
+	showPermissions : function(moduleId, name, acl_id) {
+		if(!this.permissionsWin){
+			this.permissionsWin = new GO.modules.ModulePermissionsWindow();		
+			this.permissionsWin.on('hide',function(){
+				// Loop through the recently installed modules, allowing the user to
+				// set the permissions, module by module.
+				if(this.installedModules.length){
+					var r = this.installedModules.shift();
+					this.permissionsWin.show(r.id,r.name,r.acl_id);
+				}
+			}, this);
 		}
+		this.permissionsWin.show(moduleId, name, acl_id);
 	},
 
 	iconRenderer : function(name, cell, record) {

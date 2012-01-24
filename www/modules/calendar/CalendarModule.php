@@ -27,16 +27,6 @@ class GO_Calendar_CalendarModule extends GO_Base_Module{
 
 	}
 	
-	public static function saveUser($user, $wasNew){
-		if($wasNew)
-			self::getDefaultCalendar($user->id);	
-	}
-	
-	public static function deleteUser($user){
-		GO_Calendar_Model_Category::model()->deleteByAttribute('user_id', $user->id);		
-	}
-	
-	
 	public static function getDefaultCalendar($userId){
 		$user = GO_Base_Model_User::model()->findByPk($userId);
 		$calendar = GO_Calendar_Model_Calendar::model()->getDefault($user);		
