@@ -40,8 +40,8 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 		if (isset($params['add_users']) && !empty($group->id)) {
 			$users = json_decode($params['add_users']);
 			foreach ($users as $usr_id) {
-				if (!$group->addUser($usr_id))
-					var_dump($usr_id); // TODO: create error messages
+				if ($group->addUser($usr_id))
+					GO_Base_Model_User::model()->findByPk($usr_id)->checkDefaultModels();
 			}
 		}
 
@@ -73,19 +73,19 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 
 		return $response;
 	}
-
-	/**
-	 * Add the given user to the given group.
-	 * 
-	 * @param int $group_id
-	 * @param int $user_id
-	 * @return bool $success 
-	 */
-	protected function actionAddUserToGroup($group_id, $user_id) {
-		$group = new GO_Base_Model_Group();
-		$group->addUser($user_id);
-		return $userGroup->save();
-	}
+//
+//	/**
+//	 * Add the given user to the given group.
+//	 * 
+//	 * @param int $group_id
+//	 * @param int $user_id
+//	 * @return bool $success 
+//	 */
+//	protected function actionAddUserToGroup($group_id, $user_id) {
+//		$group = new GO_Base_Model_Group();
+//		$group->addUser($user_id);
+//		return $userGroup->save();
+//	}
 
 	/**
 	 * Update the params of a given Group
@@ -125,7 +125,7 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 		if (!empty($params['permissions'])) {
 			$permArr = json_decode($params['permissions']);
 			foreach ($permArr as $modPermissions) {
-				$modModel = GO_Modules_Model_Module::model()->findByPk($modPermissions->id);	
+				$modModel = GO_Base_Model_Module::model()->findByPk($modPermissions->id);	
 				$modModel->acl->addGroup(
 						$params['id'],
 						$modPermissions->permissionLevel

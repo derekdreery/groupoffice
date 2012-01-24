@@ -59,13 +59,18 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 	
 	
 	protected function actionInstall($params){
+		
+		$response = array('success'=>true,'results'=>array());
 		$modules = json_decode($params['modules'], true);
 		foreach($modules as $moduleId)
 		{
 			$module = new GO_Base_Model_Module();
 			$module->id=$moduleId;
+			$module->setAttribute('name',$module->moduleManager->name());
 			if(!$module->save())
-				throw new GO_Base_Exception_Save();			
+				throw new GO_Base_Exception_Save();
+			
+			$response['results'][]=$module->getAttributes();
 		}
 		
 //		$defaultModels = GO_Base_Model_AbstractUserDefaultModel::getAllUserDefaultModels();
@@ -82,7 +87,7 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 		require_once(GO::config()->root_path.'Group-Office.php');
 		$GLOBALS['GO_MODULES']->load_modules();
 		
-		return array('success'=>true);
+		return $response;
 	}
 	
 	public function actionPermissionsStore($params) {
@@ -146,5 +151,35 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 		return $response;
 	}
 	
+	
+	/**
+	 * Checks default models for this module for each user.
+	 * 
+	 * @param array $params 
+	 */
+	public function actionCheckDefaultModels($params) {
+		$response = array('success' => true);
+		$module = GO_Base_Model_Module::model()->findByPk($params['moduleId']);
+		$users = $module->acl->getAuthorizedUsers($module->acl_id, GO_Base_Model_Acl::READ_PERMISSION);
+		
+		$models = array();
+		$modMan = $module->moduleManager;
+		if ($modMan) {
+			$classes = $modMan->findClasses('model');
+			foreach ($classes as $class) {
+				if ($class->isSubclassOf('GO_Base_Model_AbstractUserDefaultModel')) {
+					$models[] = GO::getModel($class->getName());
+				}
+			}
+		}
+		
+		foreach ($users as $user) {
+			foreach ($models as $model)
+				$model->getDefault($user);
+		}
+
+		return $response;
+	}
+
 }
 

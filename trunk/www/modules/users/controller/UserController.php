@@ -4,9 +4,9 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 
 	protected $model = 'GO_Base_Model_User';
 
-	protected function ignoreAclPermissions() {
-		return array('*');
-	}
+//	protected function ignoreAclPermissions() {
+//		return array('*');
+//	}
 
 	protected function remoteComboFields() {
 		if(GO::modules()->isInstalled('addressbook')){
@@ -94,7 +94,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			 * Process selected module permissions
 			 */
 			foreach ($modules as $modPermissions) {
-				$modModel = GO_Modules_Model_Module::model()->findByPk(
+				$modModel = GO_Base_Model_Module::model()->findByPk(
 					$modPermissions->id
 				);	
 				$modModel->acl->addUser(
@@ -129,7 +129,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			}
 		}
 
-
+		$model->checkDefaultModels();
 
 		if (!empty($params['send_invitation'])) {
 
