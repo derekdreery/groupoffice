@@ -498,3 +498,5 @@ $l["changePasswordSuccessTitle"]= 'Password is changed';
 $l["noEmailGiven"]= 'No email given';
 $l["usertokenInvalid"]= 'No valid usertoken given!';
 $l["noUserFoundWithEmail"]="No user found with the given email address!";
+
+$l["viesDownException"]='The VIES service is down. You can complete your order but you can only pay when we have manually checked your Vies number.';
