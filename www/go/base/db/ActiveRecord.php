@@ -3117,6 +3117,25 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$stmt = $this->find(GO_Base_Db_FindParams::newInstance()->ignoreAcl()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition($name, $value)));		
 		$stmt->callOnEach('delete');	
 	}
+	
+	/**
+	 * Add a comment to the model. If the comments module is not installed this
+	 * function will return false.
+	 * 
+	 * @param string $text
+	 * @return boolean 
+	 */
+	public function addComment($text){
+		if(!GO::modules()->isInstalled('comments') || !GO::modules()->isInstalled('comments') && !$this->hasLinks())
+			return false;
+		
+		$comment = new GO_Comments_Model_Comment();
+		$comment->model_id=$this->id;
+		$comment->model_type_id=$this->modelTypeId();
+		$comment->comments=$text;
+		return $comment->save();
+		
+	}
 
 }
 
