@@ -46,6 +46,13 @@
 class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 	
 	/**
+	 * Check the VAT number with the VIES service.
+	 * 
+	 * @var boolean
+	 */
+	public $checkVatNumber=false;
+	
+	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
@@ -86,6 +93,19 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 				'country'=>GO::config()->default_country,
 				'post_country'=>GO::config()->default_country
 		);
+	}
+	
+	public function validate() {
+		if(!empty($this->vat_no) && GO_Base_Util_Validate::isEuCountry($this->post_country)){
+			
+			if(substr($this->vat_no,0,2)!=$this->post_country)			
+				$this->vat_no = $this->post_country.' '.$this->vat_no;
+			
+			if($this->checkVatNumber && !GO_Base_Util_Validate::checkVat($this->post_country, $this->vat_no))
+				$this->setValidationError('vat_no', 'European VAT (Country:'.$this->post_country.', No.:'.$this->vat_no.') number is invalid according to VIES. Please check <a target="_blank" href="http://ec.europa.eu/taxation_customs/vies/" target="_blank">here</a> to check it on their website.');
+		}
+		
+		return parent::validate();
 	}
 	
 	protected function init() {
