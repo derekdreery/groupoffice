@@ -87,7 +87,7 @@ class GO_Base_Db_FindCriteria {
 		else{
 			$type= PDO::PARAM_STR;
 			if(!$this->_ignoreUnknownColumns){
-				GO::debug("WARNING: Could not find column type for $tableAlias. $field in GO_Base_Db_FindCriteria. Using PDO::PARAM_STR. Do you need to use addModel?");
+				//GO::debug("WARNING: Could not find column type for $tableAlias. $field in GO_Base_Db_FindCriteria. Using PDO::PARAM_STR. Do you need to use addModel?");
 //				$trace = debug_backtrace();
 //				for($i=0;$i<count($trace);$i++){
 //					GO::debug($trace[$i]['class'].'::'.$trace[$i]['function']);

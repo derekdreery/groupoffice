@@ -147,7 +147,6 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()->addRawCondition('t.id', 'a.account_id');
 		$findParams = GO_Base_Db_FindParams::newInstance()
 						->single()
-						->debugSql()
 						->join(GO_Email_Model_Alias::model()->tableName(), $joinCriteria, 'a')
 						->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('id', $mailing->alias_id, '=', 'a')
 		);

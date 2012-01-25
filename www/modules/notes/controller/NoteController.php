@@ -15,8 +15,7 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()					
 //						->export('notes')
-						->joinCustomFields()
-						->debugSql();
+						->joinCustomFields();
 		
 		if(count($this->multiselectIds)){
 			$findParams->ignoreAcl();
