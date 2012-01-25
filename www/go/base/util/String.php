@@ -129,9 +129,12 @@ class GO_Base_Util_String {
 		
 		//must use html_entity_decode here other wise some weird utf8 might be decoded later
 		//$str = html_entity_decode($str, ENT_COMPAT, $source_charset);			
+		
+		//fix for euro signs in windows-1252 encoding. We convert it to iso-8859-15.
+		$str = str_replace("\x80","€", $str);
 
 		//Does not always work. We suppress the:
-		//Notice:  iconv() [function.iconv]: Detected an illegal character in input string in /var/www/community/trunk/www/classes/String.class.inc.php on line 31
+		//Notice:  iconv() [function.iconv]: Detected an illegal character in input string in /var/www/community/trunk/www/classes/String.class.inc.php on line 31		
 		$old_lvl = error_reporting (E_ALL ^ E_NOTICE);
 		$c = iconv($source_charset, 'UTF-8//IGNORE', $str);
 		error_reporting ($old_lvl);
@@ -146,6 +149,7 @@ class GO_Base_Util_String {
 			{
 				$from_charset = "iso-8859-1";
 			}
+			
 			if($from_charset!=$source_charset)
 				return self::clean_utf8($str, $from_charset);
 			else
