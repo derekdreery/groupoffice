@@ -84,6 +84,9 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 		
 		$this->_getParts($structure);
 		
+		//$this->_loadedBody=  GO_Base_Util_String::clean_utf8($this->_loadedBody);
+		//
+		//$this->_loadedBody = str_replace("\x80","€", $this->_loadedBody);
 		//TODO make style rules valid in the container.
 		$this->_loadedBody=GO_Base_Util_String::sanitizeHtml($this->_loadedBody);
 	}
@@ -129,10 +132,13 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 
 
 				if ($part->ctype_primary == 'text' && ($part->ctype_secondary == 'plain' || $part->ctype_secondary == 'html') && (!isset($part->disposition) || $part->disposition != 'attachment') && empty($part->d_parameters['filename'])) {
+					
+					$body = GO_Base_Util_String::clean_utf8($part->body);
+					
 					if (stripos($part->ctype_secondary, 'plain') !== false) {
-						$content_part = nl2br($part->body);
+						$content_part = nl2br($body);
 					} else {
-						$content_part = $part->body;
+						$content_part = $body;
 					}
 					$this->_loadedBody .= $content_part;
 				} elseif ($part->ctype_primary == 'multipart') {
@@ -203,6 +209,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 			} else {
 				$text_part = $structure->body;
 			}
+			$text_part = GO_Base_Util_String::clean_utf8($text_part);
 			$this->_loadedBody .= $text_part;
 		}
 	}
