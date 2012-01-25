@@ -1,5 +1,3 @@
-@CHARSET "UTF-8";
-
 .fs-img-viewer{
 border:1px solid #d0d0d0;
 display:block;
@@ -15,7 +13,7 @@ cursor:pointer;
 	background-image: none !important;
 }
 
-.go-link-icon-6 {
+.go-model-icon-GO_Files_Model_File {
 	background-image: url('images/filenew.png') !important;
 }
 
