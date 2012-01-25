@@ -69,6 +69,10 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		while ($addresslist = $stmt->fetch()) {
 			$response['data']['addresslist_' . $addresslist->id] = 1;
 		}
+		
+		$response['data']['name_and_name2'] = $model->name;
+		if (!empty($model->name2))
+			$response['data']['name_and_name2'] .= ' - ' . $model->name2;
 
 
 		return parent::afterLoad($response, $model, $params);
