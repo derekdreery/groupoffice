@@ -939,8 +939,6 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		}
 			
 		$findCriteria->mergeWith($criteriaGroup,$criteriaGroupAnd);
-		
-		$storeParams->debugSql();
 	}
 	
 	/**

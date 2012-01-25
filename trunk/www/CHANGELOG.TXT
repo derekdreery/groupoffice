@@ -7,7 +7,6 @@
 - gnupg support dropped. smime still supported.
 - filesearch module for deep searching files content.
 - Document workflow module.
-- WARNING: batch report queries will not work anymore. They need to be reconfigured.
 - SabreDAV upgraded to 1.5.6
 - Swift Mailer upgraded to 4.1.5
 - Project tasks have a relation now and have a percentage complete field
@@ -16,6 +15,13 @@
 E-mail
 - Embed pasted images from firefox into mime mail for better memory management
 - Links in messages become relative links when cut & pasted. We make them absolute again on when the message is sent.
+- Automatic linking of e-mail replies when sent from a projects, contact, company etc.
+
+WARNINGS: 
+- Projects: batch report queries will not work anymore. They need to be reconfigured.
+- Billing: Custom fields in templates used to be %Name of customfield% This should be replaced by {col_1}
+
+
 
 06-01-2012 3.7.42
 - Bug fix in Russian reminders.

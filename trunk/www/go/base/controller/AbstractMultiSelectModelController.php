@@ -137,7 +137,7 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 			->addCondition($model->primaryKey(), 'lt.'.$this->linkModelField(), '=', 't', true, true)
 			->addCondition($this->_getRemoteKey(), $params['model_id'],'=','lt');			
 		
-		$findParams = $store->getDefaultParams($params)->ignoreAcl()->debugSql();
+		$findParams = $store->getDefaultParams($params)->ignoreAcl();
 		$findParams->join($linkModel->tableName(), $joinCriteria, 'lt', 'INNER');
 
 		$selectedModels = $model->find($findParams);

@@ -34,7 +34,6 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			
 			$checkFieldsStr = 't.'.implode(', t.',$checkFields);
 			$findParams = GO_Base_Db_FindParams::newInstance()
-							->debugSql()
 							->ignoreAcl()
 							->select('t.id, count(*) AS n, '.$checkFieldsStr)
 							->group($checkFields)
