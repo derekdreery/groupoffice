@@ -2188,18 +2188,18 @@ GO.calendar.showEventDialog = function(config){
 }
 
 GO.linkHandlers["GO_Calendar_Model_Event"]=function(id){
-	GO.calendar.showEventDialog({event_id:id});
-//	if(!GO.calendar.eventLinkWindow){
-//		var eventPanel = new GO.calendar.EventPanel();
-//		GO.calendar.eventLinkWindow = new GO.LinkViewWindow({
-//			title: GO.calendar.lang.appointment,
-//			closeAction:'hide',
-//			items: eventPanel,
-//			eventPanel: eventPanel
-//		});
-//	}
-//	GO.calendar.eventLinkWindow.eventPanel.load(id);
-//	GO.calendar.eventLinkWindow.show();
+	//GO.calendar.showEventDialog({event_id:id});
+	if(!GO.calendar.eventLinkWindow){
+		var eventPanel = new GO.calendar.EventPanel();
+		GO.calendar.eventLinkWindow = new GO.LinkViewWindow({
+			title: GO.calendar.lang.appointment,
+			closeAction:'hide',
+			items: eventPanel,
+			eventPanel: eventPanel
+		});
+	}
+	GO.calendar.eventLinkWindow.eventPanel.load(id);
+	GO.calendar.eventLinkWindow.show();
 };
 GO.linkPreviewPanels["GO_Calendar_Model_Event"]=function(config){
 	var config = config || {};

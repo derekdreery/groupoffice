@@ -174,7 +174,6 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	 */
 	public function getAttachment($number){
 		$att = $this->getAttachments();
-		GO::debug($att);
 		return $att[$number];
 	}
 
@@ -200,8 +199,9 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	 * Returns MIME fields contained in this class's instance as an associative
 	 * array.
 	 * 
-	 * @param boolean $html Whether or not to return HTML body. The alternative is
+	 * @param boolean $html Whether or not to return the HTML body. The alternative is
 	 * plain text. Defaults to true.
+	 * 
 	 * @return Array
 	 */
 	public function toOutputArray($html=true, $recipientsAsString=false) {
@@ -236,8 +236,10 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 
 		$response['inlineAttachments'] = array();
 
-		$response['htmlbody'] = $this->getHtmlBody();
-		$response['plainbody'] =$this->getPlainBody();
+		if($html)
+			$response['htmlbody'] = $this->getHtmlBody();
+		else			
+			$response['plainbody'] = $this->getPlainBody();
 
 		$response['smime_signed'] = false;
 

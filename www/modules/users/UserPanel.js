@@ -1,12 +1,12 @@
 GO.users.UserPanel = Ext.extend(GO.DisplayPanel,{
 
-	link_type : 8,
+	model_name : "GO_Base_Model_User",
 
 	loadParams : {task: 'user_with_items'},
 
-	idParam : 'user_id',
+	idParam : 'id',
 
-	loadUrl : GO.settings.modules.users.url+'json.php',
+	loadUrl : GO.url("users/user/display"),
 
 	editGoDialogId : 'user',
 
@@ -33,167 +33,19 @@ GO.users.UserPanel = Ext.extend(GO.DisplayPanel,{
 								'<tr>'+
 									'<td>' + GO.lang['strName'] + ':</td><td> {name}</td>'+
 								'</tr>'+
-
 								'<tr>'+
-									'<td>' + GO.lang['strAddress'] + ':</td>'+
-									'<td>' +										
-										'<tpl if="!GO.util.empty(google_maps_link)">'+
-											'<a href="{google_maps_link}" target="_blank">'+
-										'</tpl>'+
-										'{formatted_address}'+
-										'<tpl if="!GO.util.empty(google_maps_link)">'+
-											'</a>'+
-										'</tpl>'+
-									'</td>'+
+									'<td>' + GO.lang['strUsername'] + ':</td><td> {username}</td>'+
 								'</tr>'+
-							
-
-								//INITIALS
-								'<tpl if="!GO.util.empty(initials)">'+
-									'<tr>'+
-										'<td>' + GO.lang['strInitials'] + ':</td><td> {initials}</td>'+
-									'</tr>'+
-								'</tpl>'+
-
-								//BIRTHDAY
-								'<tpl if="!GO.util.empty(birthday)">'+
-									'<tr>'+
-										'<td>' + GO.lang['strBirthday'] + ':</td><td> {birthday}</td>'+
-									'</tr>'+
-								'</tpl>'+
+								'<tr>'+
+									'<td>' + GO.lang['strEmail'] + ':</td><td> {email}</td>'+
+								'</tr>'+
+								
+								
+								
 							'</table>'+
+							'<tpl if="contact_id"><a href="javascript:GO.linkHandlers[\'GO_Addressbook_Model_Contact\'].call(this, {contact_id}};">Open contact</a>'+
 						'</td>'+
 					'</tr>'+
-
-
-				'<tpl if="this.isuserFieldset(values)">'+
-
-						//user DETAILS
-						'<tr>'+
-							'<td colspan="2" class="display-panel-heading">'+GO.users.lang.contactInfo+'</td>'+
-						'</tr>'+
-
-						'<tr>'+
-							// user DETAILS+ 1e KOLOM
-							'<td valign="top" class="userCompanyDetailsPanelKolom60">'+
-								'<table cellpadding="0" cellspacing="0" border="0">'+
-
-									//EMAIL
-									'<tpl if="!GO.util.empty(email)">'+
-										'<tr>'+
-											'<td class="userCompanyLabelWidth">' + GO.lang['strEmail'] + ':</td><td>{[this.mailTo(values.email, values.full_name)]}</td>'+
-										'</tr>'+
-									'</tpl>'+
-
-									'<tpl if="this.isPhoneFieldset(values)">'+
-										'<tr><td colspan="2">&nbsp;</td></tr>'+
-
-										//PHONE
-										'<tpl if="!GO.util.empty(home_phone)">'+
-											'<tr>'+
-												'<td class="userCompanyLabelWidth">' + GO.lang['strPhone'] + ':</td><td><a href="{[GO.util.callToHref(values.home_phone)]}">{home_phone}</a></td>'+
-											'</tr>'+
-										'</tpl>'+
-
-										//CELLULAR
-										'<tpl if="!GO.util.empty(cellular)">'+
-											'<tr>'+
-												'<td class="userCompanyLabelWidth">' + GO.lang['strCellular'] + ':</td><td><a href="{[GO.util.callToHref(values.cellular)]}">{cellular}</a></td>'+
-											'</tr>'+
-										'</tpl>'+
-
-										//FAX
-										'<tpl if="!GO.util.empty(fax)">'+
-											'<tr>'+
-												'<td class="userCompanyLabelWidth">' + GO.lang['strFax'] + ':</td><td>{fax}</td>'+
-											'</tr>'+
-										'</tpl>'+
-
-									'</tpl>'+ //end this.isPhoneFieldset()
-								'</table>'+
-							'</td>'+
-
-							'<tpl if="this.isWorkPhoneFieldset(values)">'+
-
-								// user DETAILS+ 2e KOLOM
-								'<td valign="top" class="userCompanyDetailsPanelKolom40">'+
-									'<table cellpadding="0" cellspacing="0" border="0">'+
-
-										//PHONE WORK
-										'<tpl if="!GO.util.empty(work_phone)">'+
-											'<tr>'+
-												'<td class="userCompanyLabelWidth">' + GO.lang['strWorkPhone'] + ':</td><td><a href="{[GO.util.callToHref(values.work_phone)]}">{work_phone}</a></td>'+
-											'</tr>'+
-										'</tpl>'+
-
-										//FAX WORK
-										'<tpl if="!GO.util.empty(work_fax)">'+
-											'<tr>'+
-												'<td class="userCompanyLabelWidth">' + GO.lang['strWorkFax'] + ':</td><td>{work_fax}</td>'+
-											'</tr>'+
-										'</tpl>'+
-
-									'</table>'+
-								'</td>'+
-
-							'</tpl>'+ //end this.isPhoneFieldset()
-
-						'</tr>'+
-
-				'</tpl>'+
-
-
-				'<tpl if="this.isWorkFieldset(values)">'+
-
-
-						//WORK DETAILS
-						'<tr>'+
-							'<td colspan="2" class="display-panel-heading">Work</td>'+
-						'</tr>'+
-
-						'<tr>'+
-							// user DETAILS+ 1e KOLOM
-							'<td colspan="2" valign="top" class="userCompanyDetailsPanelKolom60">'+
-								'<table cellpadding="0" cellspacing="0" border="0">'+
-
-									//COMPANY
-									'<tpl if="!GO.util.empty(company)">'+
-										'<tr>'+
-											'<td class="userCompanyLabelWidth">' + GO.lang['strCompany'] + ':</td><td>{company}</a></td>'+
-										'</tr>'+
-									'</tpl>'+
-
-									//FUNCTION
-									'<tpl if="!GO.util.empty(values[\'function\'])">'+
-										'<tr>'+
-											'<td class="userCompanyLabelWidth">' + GO.lang['strFunction'] + ':</td><td>{function}</td>'+
-										'</tr>'+
-									'</tpl>'+
-
-									//DEPARTMENT
-									'<tpl if="!GO.util.empty(department)">'+
-										'<tr>'+
-											'<td class="userCompanyLabelWidth">' + GO.lang['strDepartment'] + ':</td><td>{department}</td>'+
-										'</tr>'+
-									'</tpl>'+
-
-								'</table>'+
-							'</td>'+
-						'</tr>'+
-
-				'</tpl>'+
-
-				'<tpl if="!GO.util.empty(values[\'comment\'])">'+
-
-				//WORK DETAILS
-				'<tr>'+
-					'<td class="display-panel-heading" colspan="2">' + GO.users.lang['cmdFormLabelComment'] + '</td>'+
-				'</tr>'+
-				'<tr>'+
-					'<td colspan="2">{comment}</td>'+
-				'</tr>'+
-
-				'</tpl>'+
 				'</table>'+
 				GO.linksTemplate;
 

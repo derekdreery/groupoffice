@@ -23,7 +23,6 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 	
 	protected function getStoreParams($params) {
 		$c = GO_Base_Db_FindParams::newInstance()
-						//->debugSql()
 						->criteria(GO_Base_Db_FindCriteria::newInstance()
 										->addModel(GO_Calendar_Model_Participant::model())
 										->addCondition('event_id', $params['event_id'])

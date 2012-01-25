@@ -515,9 +515,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 		$params = GO_Base_Db_FindParams::newInstance()
 						->ignoreAcl()
-						->debugSql()
-						->single();		
-						
+						->single();							
 		
 		if(!$calendar_id){
 			$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
@@ -569,6 +567,17 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public function findResourceForEvent($event_id, $resource_calendar_id){
 		return $this->findSingleByAttributes(array('resource_event_id' => $event_id, 'calendar_id' => $resource_calendar_id));
 	}
+	
+	/**
+	 * Get the status translated into the current language setting
+	 * @return string 
+	 */
+	public function getLocalizedStatus(){
+		$statuses = GO::t('statuses','calendar');
+		
+		return isset($statuses[$this->status]) ? $statuses[$this->status] : $this->status;
+						
+	}
 
 	/**
 	 * Get the event in HTML markup
@@ -582,7 +591,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 						'<td>' . $this->name . '</td></tr>';
 
 		$html .= '<tr><td>' . GO::t('status', 'calendar') . ':</td>' .
-						'<td>' . $this->status . '</td></tr>';
+						'<td>' . $this->getLocalizedStatus() . '</td></tr>';
 
 
 		if (!empty($this->location)) {
@@ -613,8 +622,24 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 						'<td>' . date($event_datetime_format, $this->start_time) . '</td></tr>' .
 						'<tr><td>' . GO::t('endsAt', 'calendar') . ':</td>' .
 						'<td>' . date($event_datetime_format, $this->end_time) . '</td></tr>';
-
+		
 		$html .= '</table>';
+		
+		$stmt = $this->participants();
+		
+		if($stmt->rowCount()){
+			
+			$html .= '<table>';
+			
+			$html .= '<tr><td colspan="2"><br /><b>Participants</b></td></tr>';
+			while($participant = $stmt->fetch()){
+				$html .= '<tr><td colspan="2">'.$participant->name.'</td></tr>';
+			}
+		}
+		
+		
+
+		
 
 		return $html;
 	}
@@ -875,8 +900,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$exception->exception_event_id=$this->id;
 			$exception->save();
 		}		
+		
+		GO::debug((string) $vobject->organizer);
 	
 		if($vobject->organizer){
+			GO::debug("Importing organizer");
 			$this->importVObjectAttendee($this, $vobject->organizer, true);
 		}
 		
@@ -907,6 +935,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public function importVObjectAttendee(GO_Calendar_Model_Event $event, Sabre_VObject_Property $vattendee, $isOrganizer=false){
 			
 		$attributes = $this->_vobjectAttendeeToParticipantAttributes($vattendee);
+		$attributes['is_organizer']=$isOrganizer;
+		
+		GO::debug($attributes);
 		
 		$p= GO_Calendar_Model_Participant::model()
 						->findSingleByAttributes(array('event_id'=>$event->id, 'email'=>$attributes['email']));

@@ -183,7 +183,6 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()
 						->single()
-						->debugSql()
 						->join(GO_Email_Model_Alias::model()->tableName(), $joinCriteria,'a')
 						->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('email', $email,'=','a'));
 		

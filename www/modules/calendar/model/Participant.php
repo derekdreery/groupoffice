@@ -113,7 +113,6 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	public static function userIsAvailable($periodStartTime, $periodEndTime, $userId, $ignoreEvent=false) {
 			
 		$findParams = GO_Base_Db_FindParams::newInstance()
-						->debugSql()
 						->ignoreAcl();
 		
 		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
