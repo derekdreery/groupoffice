@@ -238,8 +238,8 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 
 		if($html)
 			$response['htmlbody'] = $this->getHtmlBody();
-		else			
-			$response['plainbody'] = $this->getPlainBody();
+		else
+			$response['plainbody'] =$this->getPlainBody();
 
 		$response['smime_signed'] = false;
 
@@ -265,9 +265,6 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		}
 		
 		$response['blocked_images']=0;
-
-		//for compatibility with IMAP get_message_with_body
-		//$response['url_replacements']=$response['inline_attachments'];
 
 		return $response;
 	}
