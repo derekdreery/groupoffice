@@ -238,7 +238,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 						->joinCustomFields()
 						->order($sort, $dir);
 		if(!empty($requestParams['query']))
-			$findParams->searchQuery ('%'.preg_replace ('/[\s]+/','%', $requestParams['query']).'%');
+			$findParams->searchQuery ('%'.preg_replace ('/[\s*]+/','%', $requestParams['query']).'%');
 		
 		if(isset($requestParams['limit']))
 			$findParams->limit ($requestParams['limit']);
