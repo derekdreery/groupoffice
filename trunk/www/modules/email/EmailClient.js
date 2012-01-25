@@ -1270,7 +1270,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 			account_id: this.account_id,
 			mailbox: this.mailbox,
 			uid: this.messagePanel.uid,
-			imap_id: attachment.imap_id,
+			imap_id: attachment.number,
 			uuencoded_partnumber: attachment.uuencoded_partnumber,
 			encoding: attachment.encoding,
 			type: attachment.type,

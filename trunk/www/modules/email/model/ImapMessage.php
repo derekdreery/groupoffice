@@ -381,7 +381,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 				$a['human_size']= GO_Base_Util_Number::formatSize($a['size']);
 				$a['extension']=  $f->extension();
 				$a['encoding'] = $part['encoding'];
-				$a['disposition'] = $part['disposition'];
+				$a['disposition'] = isset($part['disposition']) ? $part['disposition'] : '';
 				$a['url']=$this->getAttachmentUrl($a);
 				
 				$this->attachments[$a['number']]=$a;

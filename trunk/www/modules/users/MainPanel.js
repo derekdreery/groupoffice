@@ -178,7 +178,7 @@ GO.users.showUserDialog = function(user_id, config){
 }
 
 
-GO.linkHandlers[8]=function(id){
+GO.linkHandlers["GO_Base_Model_User"]=function(id){
 	//GO.users.showUserDialog(id);
 	if(!GO.users.userLinkWindow){
 		var userPanel = new GO.users.UserPanel();
@@ -193,7 +193,7 @@ GO.linkHandlers[8]=function(id){
 	GO.users.userLinkWindow.show();
 };
 
-GO.linkPreviewPanels[8]=function(config){
+GO.linkPreviewPanels["GO_Base_Model_User"]=function(config){
 	config = config || {};
 	return new GO.users.UserPanel(config);
 }

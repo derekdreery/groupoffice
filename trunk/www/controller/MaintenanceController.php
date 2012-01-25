@@ -110,6 +110,15 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			GO::getDbConnection()->query('TRUNCATE TABLE go_search_cache');
 		
 		echo '<pre>';
+		
+		$models=GO::findClasses('model');
+		foreach($models as $model){
+			if($model->isSubclassOf("GO_Base_Db_ActiveRecord") && !$model->isAbstract()){
+				echo $response[] = "Processing ".$model->getName()."\n";
+				$stmt = GO::getModel($model->getName())->rebuildSearchCache();			
+			}
+		}
+		
 		GO::modules()->callModuleMethod('buildSearchCache', array(&$response));
 		return $response;
 	}

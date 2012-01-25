@@ -194,17 +194,7 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 			header : GO.calendar.lang.isOrganizer,
 			dataIndex : 'is_organizer',
 			renderer : function(v) {
-
-				var className = 'img-unknown';
-				switch (v) {
-					case '1' :
-						className = 'img-available';
-						break;
-
-					case '0' :
-						className = 'img-unavailable';
-						break;
-				}
+				var className = v ? 'img-available' : 'img-unavailable';		
 
 				return '<div class="' + className + '"></div>';
 			}

@@ -269,13 +269,19 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 						$acceptUrl = GO::url("calendar/event/invitation",array("id"=>$event->id,'accept'=>1,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
 						$declineUrl = GO::url("calendar/event/invitation",array("id"=>$event->id,'accept'=>0,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
 
-						$body = '<p>' . GO::t('invited', 'calendar') . '</p>' .
-										$event->toHtml() .
-										'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
-										'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
-										'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
-										'&nbsp;|&nbsp;' .
-										'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
+						if($method=='REQUEST'){
+							$body = '<p>' . GO::t('invited', 'calendar') . '</p>' .
+											$event->toHtml() .
+											'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
+											'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
+											'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
+											'&nbsp;|&nbsp;' .
+											'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
+						}else
+						{
+							$body = '<p>' . GO::t('invitation_update', 'calendar') . '</p>' .
+											$event->toHtml();
+						}
 
 						$message = GO_Base_Mail_Message::newInstance(
 														$subject
@@ -419,6 +425,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	protected function afterDisplay(&$response, &$model, &$params) {
 
 		$response['data']['event_html'] = $model->toHtml();
+		$response['data']['calendar_name'] = $model->calendar->name;
 
 		return parent::afterDisplay($response, $model, $params);
 	}
