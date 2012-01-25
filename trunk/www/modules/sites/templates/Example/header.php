@@ -15,6 +15,7 @@
 		<link href="<?php echo $this->getRootTemplateUrl(); ?>css/buttons.css" rel="stylesheet" type="text/css" />
 		<link href="<?php echo $this->getRootTemplateUrl(); ?>css/tabs.css" rel="stylesheet" type="text/css" />
 		<link href="<?php echo $this->getRootTemplateUrl(); ?>css/webshop.css" rel="stylesheet" type="text/css" />
+		<link href="<?php echo $this->getRootTemplateUrl(); ?>css/pager.css" rel="stylesheet" type="text/css" />
 	</head>
 
 	<body>
