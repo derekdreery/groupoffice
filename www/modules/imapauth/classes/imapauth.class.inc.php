@@ -165,6 +165,9 @@ class imapauth
 					
 					$args = array(&$username, &$password, $count_login);
 					$GO_EVENTS->fire_event('bad_login', $args);
+					
+					go_infolog("LOGIN FAILED for user: \"".$username."\" from IP: ".$_SERVER['REMOTE_ADDR']);
+			
 				
 					throw new Exception($GLOBALS['lang']['common']['badLogin']);
 				}
@@ -176,7 +179,9 @@ class imapauth
 				$GO_EVENTS->fire_event('bad_login', $args);
 				
 				$GLOBALS['GO_SECURITY']->logout(); //for clearing remembered password cookies
-
+				
+				go_infolog("LOGIN FAILED for user: \"".$username."\" from IP: ".$_SERVER['REMOTE_ADDR']);
+			
 				throw new Exception($GLOBALS['lang']['common']['badLogin']);
 			}
 		}
