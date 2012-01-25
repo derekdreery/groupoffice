@@ -40,10 +40,13 @@ GO.users.UserPanel = Ext.extend(GO.DisplayPanel,{
 									'<td>' + GO.lang['strEmail'] + ':</td><td> {email}</td>'+
 								'</tr>'+
 								
-								
+								'<tpl if="contact_id"><tr>'+
+									'<td colspan="2"><a href="javascript:GO.linkHandlers[\'GO_Addressbook_Model_Contact\'].call(this, {contact_id});">'+GO.users.lang.openContact+'</a></td></tr></tpl>'+
 								
 							'</table>'+
-							'<tpl if="contact_id"><a href="javascript:GO.linkHandlers[\'GO_Addressbook_Model_Contact\'].call(this, {contact_id}};">Open contact</a>'+
+							
+							
+							
 						'</td>'+
 					'</tr>'+
 				'</table>'+
