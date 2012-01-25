@@ -1,0 +1,26 @@
+.pager-table {
+	
+}
+
+.pager-block {
+	border:1px solid #000; 
+	width:20px; 
+	height:20px; 
+	text-align:center;
+}
+
+.pager-inactive {
+	
+}
+
+.pager-active {
+	background-color:#ccc;
+}
+
+.pager-totalfound-table {
+	
+}
+
+.pager-totalpages-table {
+	
+}
