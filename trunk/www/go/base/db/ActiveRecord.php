@@ -2097,6 +2097,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				'type'=>$this->localizedName, //deprecated, for backwards compatibilty
 				'keywords'=>$this->getSearchCacheKeywords($this->localizedName),
 				'mtime'=>$this->mtime,
+				'ctime'=>$this->ctime,
 				'acl_id'=>$this->findAclId()
 			);
 			
