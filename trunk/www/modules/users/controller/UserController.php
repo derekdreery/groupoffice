@@ -7,6 +7,15 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 //	protected function ignoreAclPermissions() {
 //		return array('*');
 //	}
+	
+	protected function afterDisplay(&$response, &$model, &$params) {
+		
+		$contact = $model->createContact();
+		
+		$response['data']['contact_id']=$contact->id;
+		
+		return parent::afterDisplay($response, $model, $params);
+	}
 
 	protected function remoteComboFields() {
 		if(GO::modules()->isInstalled('addressbook')){
