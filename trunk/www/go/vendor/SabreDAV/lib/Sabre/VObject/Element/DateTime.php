@@ -226,8 +226,12 @@ class Sabre_VObject_Element_DateTime extends Sabre_VObject_Property {
                     }
                 }
             }
-
-            $tz = new DateTimeZone($tzid);
+						try{
+							$tz = new DateTimeZone($tzid);
+						}
+						catch(Exception $e){
+							$tz = new DateTimeZone(date_default_timezone_get());
+						}
             
         }
         $dt = new DateTime($dateStr, $tz);

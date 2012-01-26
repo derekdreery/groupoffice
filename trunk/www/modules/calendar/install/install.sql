@@ -161,7 +161,7 @@ DROP TABLE IF EXISTS `cal_participants`;
 CREATE TABLE IF NOT EXISTS `cal_participants` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `event_id` int(11) NOT NULL,
-  `name` varchar(50) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `user_id` int(11) NOT NULL DEFAULT '0',
   `status` enum('0','1','2','3') NOT NULL DEFAULT '0',
