@@ -192,7 +192,11 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 							scope:this
 						});							
 					}
-					this.passwordDialog.data=data;
+					this.passwordDialog.data={
+						uid:this.uid,
+						mailbox:this.mailbox,
+						account_id:this.account_id
+					};
 					this.passwordDialog.show();
 				}else
 				{						
