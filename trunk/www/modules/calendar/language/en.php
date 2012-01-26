@@ -27,6 +27,7 @@ $l["administration"]= 'Administration';
 $l["needsAction"]= 'Needs action';
 $l["accepted"]= 'Accepted';
 $l["declined"]= 'Declined';
+$l["confirmed"]= 'Confirmed';
 $l["tentative"]= 'Tentative';
 $l["delegated"]= 'Delegated';
 $l["noRecurrence"]= 'No recurrence';
