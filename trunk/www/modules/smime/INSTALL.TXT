@@ -3,6 +3,4 @@ the root CA's. This may be a file or directory. eg.:
 
 $config['smime_root_cert_location']='/etc/ssl/certs';
 
-$config['smime_sign_extra_certs']='/file/to/extra/sign/cert';
-
 See http://php.net/manual/en/function.openssl-pkcs7-sign.php
