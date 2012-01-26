@@ -144,6 +144,7 @@ application/x-ns-proxy-autoconfig pac
 application/x-nwc nwc
 application/x-object o
 application/x-oz-application oza
+application/x-pkcs12 p12
 application/x-pkcs7-certreqresp p7r
 application/x-pkcs7-crl crl
 application/x-python-code pyc pyo

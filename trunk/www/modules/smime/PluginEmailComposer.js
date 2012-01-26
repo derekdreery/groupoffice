@@ -81,12 +81,10 @@ GO.moduleManager.onModuleReady('email',function(){
 							if(btn=="cancel")
 								return false;
 
-							Ext.Ajax.request({
-								url: GO.settings.modules.smime.url+ 'checkpassword.php',
-								success: function(response){
-									var res = Ext.decode(response.responseText);
-
-									if(res.success)
+							GO.request({
+								url: 'smime/certificate/checkPassword',
+								success: function(response, options, result){							
+									if(result.passwordCorrect)
 									{
 										var record = this.fromCombo.store.getById(this.fromCombo.getValue());
 										GO.smime.passwordsInSession[record.data.account_id]=true;

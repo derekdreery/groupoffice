@@ -18,19 +18,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		$response['data']['signature']=$alias->signature;
 		
 		return parent::afterLoad($response, $model, $params);
-	}
-	
-	
-
-	
-	
-	protected function beforeSubmit(&$response, &$model, &$params) {
-		
-		
-		
-		return parent::beforeSubmit($response, $model, $params);
-	}
-	
+	}	
 	
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
 		

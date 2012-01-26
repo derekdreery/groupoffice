@@ -70,18 +70,19 @@ class GO_Base_Mail_SmimeMessage extends GO_Base_Mail_Message
 		$this->recipcerts=$recipcerts;	
 	}
 	
-	private function save_headers(){	
+	private function _saveHeaders(){	
 		if(!$this->saved_headers){		
-
-			$this->tempin = GO::config()->tmpdir."smime_tempin.txt";
-			$this->tempout=GO::config()->tmpdir."smime_tempout.txt";
-			if(file_exists($this->tempin))
-				unlink($this->tempin);
-
-			if(file_exists($this->tempout))
-				unlink($this->tempout);
-
-			File::mkdir(GO::config()->tmpdir);
+			
+			$tempInFile = new GO_Base_Fs_File(GO::config()->tmpdir."smime_tempin.txt");
+			$tempInFile->parent()->create();
+			$tempInFile->delete();
+			
+			$tempOutFile = new GO_Base_Fs_File(GO::config()->tmpdir."smime_tempout.txt");
+			$tempOutFile->delete();			
+			
+			$this->tempin = $tempInFile->path();
+			$this->tempout=$tempOutFile->path();
+			
 
 			/*
 			 * Store the headers of the current message because the PHP function
@@ -120,7 +121,7 @@ class GO_Base_Mail_SmimeMessage extends GO_Base_Mail_Message
 		}	
 	}
 	
-	private function do_sign(){		
+	private function _doSign(){		
 		
 		if(!$this->signed){					
 			openssl_pkcs12_read ($this->pkcs12_data, $certs, $this->passphrase);
@@ -141,9 +142,7 @@ class GO_Base_Mail_SmimeMessage extends GO_Base_Mail_Message
 		}
 	}
 	
-	private function do_encrypt(){		
-		go_debug('do_encrypt');		
-		
+	private function _doEncrypt(){						
 		if(!$this->encrypted){
 			if(file_exists($this->tempout)){
 				//message was signed. Create new input file.
@@ -177,14 +176,14 @@ class GO_Base_Mail_SmimeMessage extends GO_Base_Mail_Message
 			return parent::toString();
 		}
 		
-		$this->save_headers();
+		$this->_saveHeaders();
 		
 		if(!empty($this->pkcs12_data)){
-			$this->do_sign();
+			$this->_doSign();
 		}
 		
 		if(!empty($this->recipcerts)){
-			$this->do_encrypt();
+			$this->_doEncrypt();
 		}
 
 		return file_get_contents($this->tempout);
@@ -195,23 +194,20 @@ class GO_Base_Mail_SmimeMessage extends GO_Base_Mail_Message
 * @param Swift_InputByteStream $is
 */
   public function toByteStream(Swift_InputByteStream $is)
-  {
-		
-		go_debug('toByteStream');
-		
+  {		
 		if(empty($this->pkcs12_data) && empty($this->recipcerts)){
 			//no sign or encrypt parameters. Do parent method.
 			return parent::toByteStream($is);
 		}
 		
-		$this->save_headers();
+		$this->_saveHeaders();
 		
 		if(!empty($this->pkcs12_data)){
-			$this->do_sign();
+			$this->_doSign();
 		}
 		
 		if(!empty($this->recipcerts)){
-			$this->do_encrypt();
+			$this->_doEncrypt();
 		}
 		
 		//$is->write($this->saved_headers);
