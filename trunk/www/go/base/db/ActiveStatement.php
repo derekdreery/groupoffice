@@ -110,5 +110,26 @@ class GO_Base_Db_ActiveStatement extends PDOStatement {
 //		
 //		return $foundRows;
 //	}
+	
+	/**
+	 * Get the result as a key->value array.
+	 * 
+	 * You need to specify which column needs to be used as key column and which 
+	 * culumn needs to be used as value column
+	 * 
+	 * @param string $keyColumn
+	 * @param string $valueColumn
+	 * @return array 
+	 */
+	public function fetchKeyValueArray($keyColumn, $valueColumn){
+		$array = array();
+		
+		while($m = $this->fetch()){	
+			$array[$m->$keyColumn] = $m->$valueColumn;
+		}
+		
+		return $array;
+	}
+	
 
 }
