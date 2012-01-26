@@ -241,7 +241,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		else
 			$response['plainbody'] =$this->getPlainBody();
 
-		$response['smime_signed'] = false;
+		$response['smime_signed'] = isset($this->content_type_attributes['smime-type']) && $this->content_type_attributes['smime-type']=='signed-data';	
 
 		$attachments = $this->getAttachments();
 

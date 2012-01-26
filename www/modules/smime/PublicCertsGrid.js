@@ -73,7 +73,7 @@ GO.smime.PublicCertsGrid = function(config){
 			this.certWin.show();
 			
 			GO.request({
-				maskEl:this.certWin.getEl(),
+				maskEl:this.certPanel.getEl(),
 				url: "smime/certificate/verify",
 				params:{
 					cert_id:record.id

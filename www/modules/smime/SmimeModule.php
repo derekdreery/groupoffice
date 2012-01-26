@@ -7,6 +7,7 @@ class GO_Smime_SmimeModule extends GO_Base_Module{
 		
 		$messageController = new GO_Email_Controller_Message();
 		$messageController->addListener('beforesend', "GO_Smime_EventHandlers", "beforeSend");
+		$messageController->addListener('view', "GO_Smime_EventHandlers", "viewMessage");
 		
 		$aliasController = new GO_Email_Controller_Alias();
 		$aliasController->addListener('store', "GO_Smime_EventHandlers", "aliasesStore");
