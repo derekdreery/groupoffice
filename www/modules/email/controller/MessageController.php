@@ -127,15 +127,12 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	 */
 	protected function actionSend($params) {
 
+		$response['success'] = true;
+		
 		$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);
 		$account = GO_Email_Model_Account::model()->findByPk($alias->account_id);
-//		
-//		if(empty($params['sign_smime']) && empty($params['encrypt_smime']))
-//			$message = new GO_Base_Mail_Message();
-//		else
-//			$message = new GO_Base_Mail_SmimeMessage();
-
-		$message = new GO_Base_Mail_Message();
+			
+		$message = new GO_Base_Mail_SmimeMessage();
 
 		$message->handleEmailFormInput($params);
 
@@ -145,6 +142,17 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		$logger = new Swift_Plugins_Loggers_ArrayLogger();
 		$mailer->registerPlugin(new Swift_Plugins_LoggerPlugin($logger));
+		
+		
+		$this->fireEvent('beforesend', array(
+				&$this,
+				&$response,
+				&$message,
+				&$mailer,
+				$account,
+				$alias,
+				$params
+				));
 
 		$success = $mailer->send($message);
 
@@ -183,7 +191,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 			throw new Exception("Failed to send the message:<br /><br />" . nl2br($logStr));
 		}
-		$response['success'] = true;
+		
 
 		$this->_link($params, $message);
 

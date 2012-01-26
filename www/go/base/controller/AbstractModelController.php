@@ -104,11 +104,20 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 
 			$this->afterSubmit($response, $model, $params, $modifiedAttributes);
+			
+			$this->fireEvent('submit', array(
+				&$this,
+				&$response,
+				&$model,
+				&$params,
+				$modifiedAttributes
+		));
+			
 		}catch(Exception $e){
 			$response['success']=false;
 			$response['feedback']=nl2br($e->getMessage());
 			$response['validationErrors']=$model->getValidationErrors();
-		}
+		}	
 
 		return $response;
 	}
@@ -165,6 +174,13 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$response = $this->_loadComboTexts($response, $model);
 
 		$response = $this->afterLoad($response, $model, $params);
+		
+		$this->fireEvent('load', array(
+				&$this,
+				&$response,
+				&$model,
+				&$params
+		));
 
 		return $response;
 	}
@@ -403,6 +419,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$response=array_merge($response, $params['firstRun']);
 		}
 		
+		$this->fireEvent('store', array(
+				&$this,
+				&$response,
+				&$store,
+				&$params));		
 		
 		return $response;
   }	
@@ -575,6 +596,13 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		}		
 
 		$response = $this->afterDisplay($response, $model, $params);
+		
+		$this->fireEvent('display', array(
+				&$this,
+				&$response,
+				&$model,
+				&$params
+		));
 
 		return $response;
 	}

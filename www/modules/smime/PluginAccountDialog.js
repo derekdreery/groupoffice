@@ -60,7 +60,7 @@ GO.moduleManager.onModuleReady('email',function(){
 						}),
 						this.downloadButton = new Ext.Button({
 							handler:function(){
-								window.open(GO.settings.modules.smime.url+'download_pkcs12.php?account_id='+this.account_id);
+								window.open(GO.url("smime/certificate/download",{account_id:this.account_id}));
 							},
 							text:GO.smime.lang.downloadCert,
 							disabled:true,
