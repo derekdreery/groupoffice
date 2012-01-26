@@ -145,7 +145,8 @@ class GO_Base_Util_Validate {
 		if(substr($vat,0,2)==$countryCode)
 			$vat = trim(substr($vat,2));
 		
-		$wsdl = 'http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
+		//$wsdl = 'http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
+		$wsdl = GO::config()->root_path.'go/vendor/wsdl/checkVatService.wsdl';
 
 		$vies = new SoapClient($wsdl);
 
