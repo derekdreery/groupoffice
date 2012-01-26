@@ -78,30 +78,34 @@ GO.moduleManager.onModuleReady('email',function(){
 			}	
 			if(!this.data.path)
 				this.data.path="";
-						
-			GO.request({
-				maskEl:this.certWin.getEl(),
-				url: "smime/certificate/verify",
-				params:{
-					uid:this.uid,
-					account_id:this.account_id,
-					mailbox:this.mailbox,
-					filepath:this.data.path,
-					email:this.data.sender					
-				},
-				scope: this,
-				success: function(options, response, result)
-				{	
-					if(!hideDialog)
-						this.certPanel.update(result.html);
+			
+			if(!this.smimeChecked){
+				GO.request({
+					maskEl:this.certPanel.getEl(),
+					url: "smime/certificate/verify",
+					params:{
+						uid:this.uid,
+						account_id:this.account_id,
+						mailbox:this.mailbox,
+						filepath:this.data.path,
+						email:this.data.sender					
+					},
+					scope: this,
+					success: function(options, response, result)
+					{	
+						if(!hideDialog)
+							this.certPanel.update(result.html);
 
-					this.smimeLink.update(result.text);
-					this.smimeLink.addClass(result.cls);
+						this.smimeLink.update(result.text);
+						this.smimeLink.addClass(result.cls);
 
-					if(callback && scope)
-						callback.call(scope, this);
-				}							
-			});
+						this.smimeChecked=true;
+
+						if(callback && scope)
+							callback.call(scope, this);
+					}							
+				});
+			}
 		}	
 	})
 });

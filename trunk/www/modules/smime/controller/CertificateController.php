@@ -45,20 +45,20 @@ class GO_Smime_Controller_Certificate extends GO_Base_Controller_AbstractControl
 		if(!empty($params['cert_id'])){
 			$cert = GO_Smime_Model_PublicCertificate::model()->findByPk($params['cert_id']);
 			$certData=$cert->cert;
-		}else if (!empty($params['filepath'])) {
-			//$srcFile = new GO_Base_Fs_File(GO::config()->tmpdir)
-			
-			$certData = $pubCertFile->getContents();
-		
-		} else if(!empty($params['account_id'])){
-			$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
-			$imapMessage = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
+		}else 
+		{
+			if (!empty($params['filepath'])) {
+				$srcFile = new GO_Base_Fs_File(GO::config()->tmpdir.$params['filepath']);
+			}elseif(!empty($params['account_id'])){
+				$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+				$imapMessage = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
 
-			$srcFile = GO_Base_Fs_File::tempFile();
-			if (!$imapMessage->saveToFile($srcFile->path()))
-				throw new Exception("Could not fetch message from IMAP server");
+				$srcFile = GO_Base_Fs_File::tempFile();
+				if (!$imapMessage->saveToFile($srcFile->path()))
+					throw new Exception("Could not fetch message from IMAP server");
 
-			$this->_decryptFile($srcFile, $account);
+				$this->_decryptFile($srcFile, $account);
+			}
 
 			$pubCertFile = GO_Base_Fs_File::tempFile();
 			//Command line:
@@ -76,15 +76,15 @@ class GO_Smime_Controller_Certificate extends GO_Base_Controller_AbstractControl
 					$pubCertFile->delete();
 
 					$this->_savePublicCertificate($certData, $email);
-				} else {
-					$response['html'] .= openssl_error_string();
-					throw new Exception('Certificate appears to be valid but could not get certificate from signature.');
+				} else {					
+					throw new Exception('Certificate appears to be valid but could not get certificate from signature. SSL Error: '.openssl_error_string());
 				}
 
 				if (empty($certData))
 					throw new Exception('Certificate appears to be valid but could not get certificate from signature.');
 			}
 		}
+	
 		
 		if(!isset($arr)){
 			$arr = openssl_x509_parse($certData);

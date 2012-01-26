@@ -451,9 +451,16 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$response = $imapMessage->toOutputArray(true);
 		$response = $this->_blockImages($params, $response);
 		$response = $this->_parseAutoLinkTag($params, $response);
-		$response = $this->_handleInvitations($imapMessage, $params, $response);
-		$response = $this->_handleSmime($imapMessage, $params, $response);
-		$response = $this->_checkXSS( $params, $response);				
+		$response = $this->_handleInvitations($imapMessage, $params, $response);		
+		$response = $this->_checkXSS( $params, $response);		
+		
+		$this->fireEvent('view', array(
+				&$this,
+				&$response,
+				$imapMessage,
+				$account,
+				$params
+		));
 		
 		$response['success'] = true;
 
@@ -471,11 +478,6 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		{
 			$response['xssDetected']=false;
 		}
-		return $response;
-	}
-	
-	private function _handleSmime(GO_Email_Model_ImapMessage $imapMessage, $params, $response) {
-		
 		return $response;
 	}
 
