@@ -427,8 +427,10 @@ class GO_Base_Util_Html2Text
 		
 		if($link_list)
 		{
-			$this->search[]='/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/ie';
-			$this->replace[]='$this->_build_link_list("\\1", "\\2")';
+//			$this->search[]='/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/ie';
+//			$this->replace[]='$this->_build_link_list("\\1", "\\2")';
+			
+			$text = preg_replace_callback('/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/i',array($this, '_build_link_list'));
 		}
 
 		// Run our defined search-and-replace
@@ -471,10 +473,10 @@ class GO_Base_Util_Html2Text
 	 *  @access private
 	 *  @return string
 	 */
-	private function _build_link_list( $link, $display )
+	private function _build_link_list( $matches )
 	{
-		$link = trim($link);
-		$display=trim(strip_tags($display));
+		$link = trim($matches[1]);
+		$display=trim(strip_tags($matches[2]));
 		
 		if($link==$display || $link=='mailto:'.$display)
 		{
