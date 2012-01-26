@@ -210,9 +210,7 @@ class GO_Base_Session extends GO_Base_Observable{
 			$str .= 'unknown';
 		GO::infolog($str);
 		
-		if(!$success){	
-			//sleep 1 second for slowing down brute force attacks
-			sleep(1);
+		if(!$success){
 			return false;
 		}else
 		{			
