@@ -430,7 +430,7 @@ class GO_Base_Util_Html2Text
 //			$this->search[]='/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/ie';
 //			$this->replace[]='$this->_build_link_list("\\1", "\\2")';
 			
-			$text = preg_replace_callback('/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/i',array($this, '_build_link_list'));
+			$text = preg_replace_callback('/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/i',array($this, '_build_link_list'), $text);
 		}
 
 		// Run our defined search-and-replace
