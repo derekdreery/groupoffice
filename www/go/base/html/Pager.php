@@ -115,7 +115,7 @@ class GO_Base_Html_Pager extends GO_Base_Html_Component {
 		$previous = $this->_currentPageNumber-1;
 		$next = $this->_currentPageNumber+1;
 	
-
+		echo '<div class="pager-container">';
 		echo '<table class="pager-table">';
 			echo '<tr>';
 			
@@ -176,6 +176,7 @@ class GO_Base_Html_Pager extends GO_Base_Html_Component {
 				
 			echo '</tr>';
 		echo '</table>';
+		echo '</div>';
 
 		
 	}
