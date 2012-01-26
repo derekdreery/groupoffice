@@ -68,8 +68,7 @@ class GO_Smime_EventHandlers {
 			$password = GO::session()->values['smime']['passwords'][$account->id];
 			
 			$cert = GO_Smime_Model_Certificate::model()->findByPk($account->id);
-
-			$message->setSignParams($cert->cert, $password, isset(GO::config()->smime_sign_extra_certs) ? GO::config()->smime_sign_extra_certs : "");
+			$message->setSignParams($cert->cert, $password);
 		}		
 		
 		if(!empty($params['encrypt_smime'])){		

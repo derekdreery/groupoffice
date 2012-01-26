@@ -71,8 +71,19 @@ GO.smime.PublicCertsGrid = function(config){
 			}
 												
 			this.certWin.show();
-												
-			this.certPanel.load(GO.settings.modules.smime.url+'verify.php?cert_id='+record.id);
+			
+			GO.request({
+				maskEl:this.certWin.getEl(),
+				url: "smime/certificate/verify",
+				params:{
+					cert_id:record.id
+				},
+				scope: this,
+				success: function(options, response, result)
+				{
+					this.certPanel.update(result.html);				
+				}							
+			});
 		}
 	}
 	

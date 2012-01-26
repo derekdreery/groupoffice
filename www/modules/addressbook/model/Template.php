@@ -27,6 +27,7 @@
  * @property int $type
  * @property int $user_id
  * @property int $id
+ * @property int $acl_write
  */
 
 class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
