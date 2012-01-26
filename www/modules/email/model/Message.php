@@ -265,6 +265,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		}
 		
 		$response['blocked_images']=0;
+		$response['xssDetected']=false;
 
 		return $response;
 	}

@@ -79,6 +79,9 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		'<tpl if="blocked_images&gt;0">'+
 		'<div class="go-warning-msg em-blocked">'+GO.email.lang.blocked+' <a id="em-unblock" href="#" class="normal-link">'+GO.email.lang.unblock+'</a></div>'+
 		'</tpl>'+			
+		'<tpl if="xssDetected">'+
+		'<div class="go-warning-msg em-blocked"><a id="em-filterxss" href="#" class="normal-link">'+GO.email.lang.xssDetected+'</a></div>'+
+		'</tpl>'+	
 		'</div>'+
 		'<tpl if="!GO.util.empty(values.iCalendar)">'+
 		'<tpl if="iCalendar.feedback">'+
@@ -257,6 +260,16 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		if(this.unblockEl)
 		{
 			this.unblockEl.on('click', function(){
+				this.params.unblock='true';
+				this.loadMessage();
+			}, this);
+		}
+		
+		this.filterXssEl = Ext.get('em-filterxss');
+		if(this.filterXssEl)
+		{
+			this.filterXssEl.on('click', function(){
+				this.params.filterXSS='true';
 				this.params.unblock='true';
 				this.loadMessage();
 			}, this);

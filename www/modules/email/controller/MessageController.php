@@ -445,8 +445,24 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$response = $this->_parseAutoLinkTag($params, $response);
 		$response = $this->_handleInvitations($imapMessage, $params, $response);
 		$response = $this->_handleSmime($imapMessage, $params, $response);
+		$response = $this->_checkXSS( $params, $response);				
+		
 		$response['success'] = true;
 
+		return $response;
+	}
+	
+	private function _checkXSS($params, $response) {		
+		
+		if(!empty($params['filterXSS'])){
+			$response['htmlbody']=GO_Base_Util_String::filterXSS($response['htmlbody']);
+		}elseif(GO_Base_Util_String::detectXSS($response['htmlbody'])){
+			$response['htmlbody']=GO::t('xssMessageHidden', 'email');
+			$response['xssDetected']=true;
+		}else
+		{
+			$response['xssDetected']=false;
+		}
 		return $response;
 	}
 	
