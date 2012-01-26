@@ -937,7 +937,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$attributes = $this->_vobjectAttendeeToParticipantAttributes($vattendee);
 		$attributes['is_organizer']=$isOrganizer;
 		
-		GO::debug($attributes);
+		if($isOrganizer)
+			$attributes['status']= GO_Calendar_Model_Participant::STATUS_ACCEPTED;
 		
 		$p= GO_Calendar_Model_Participant::model()
 						->findSingleByAttributes(array('event_id'=>$event->id, 'email'=>$attributes['email']));

@@ -124,3 +124,5 @@ $updates["201201100902"][]="CREATE TABLE IF NOT EXISTS `cal_calendar_user_colors
 $updates["201201100902"][]="ALTER TABLE `cal_groups` CHANGE `fields` `fields` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 $updates["201201100902"][]="ALTER TABLE `cal_groups` CHANGE `show_not_as_busy` `show_not_as_busy` TINYINT( 1 ) NOT NULL DEFAULT '0'";
 $updates["201201100902"][]="ALTER TABLE `cal_groups` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
+
+$updates["201201260928"][]="ALTER TABLE `cal_participants` CHANGE `name` `name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ";
