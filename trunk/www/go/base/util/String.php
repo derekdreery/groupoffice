@@ -841,7 +841,7 @@ class GO_Base_Util_String {
 		);
 
 		$html = preg_replace($to_removed_array, '', $html);
-		$html = GO_Base_Util_String::xss_clean($html);
+		//$html = GO_Base_Util_String::xss_clean($html);
 
 		//remove high z-indexes
 		$matched_tags = array();
@@ -854,8 +854,71 @@ class GO_Base_Util_String {
 
 		return $html;
 	}
+	
+	/**
+	 * Detect known XSS attacks.
+	 * 
+	 * @param boolean $string
+	 * @return boolean
+	 * @throws Exception 
+	 */
+	public static function detectXSS($string) {
+		$contains_xss = FALSE;
 
-	public static function xss_clean($data)
+		if (!is_string($string)) {
+			throw new Exception(__('Passed parameter is not a string.'));
+		}
+
+// Keep a copy of the original string before cleaning up
+		$orig = $string;
+
+// URL decode
+		$string = urldecode($string);
+
+// Convert Hexadecimals
+		$string = preg_replace('!(&#|\\\)[xX]([0-9a-fA-F]+);?!e', 'chr(hexdec("$2"))', $string);
+
+// Clean up entities
+		$string = preg_replace('!(&#0+[0-9]+)!', '$1;', $string);
+
+// Decode entities
+		$string = html_entity_decode($string, ENT_NOQUOTES, 'UTF-8');
+
+// Strip whitespace characters
+		$string = preg_replace('!\s!', '', $string);
+
+// Set the patterns we'll test against
+		$patterns = array(
+// Match any attribute starting with "on" or xmlns
+				'#(<[^>]+[\x00-\x20\"\'\/])(on|xmlns)[^>]*>?#iUu',
+// Match javascript:, livescript:, vbscript: and mocha: protocols
+				'!((java|live|vb)script|mocha):(\w)*!iUu',
+				'#-moz-binding[\x00-\x20]*:#u',
+// Match style attributes
+				'#(<[^>]*+[\x00-\x20\"\'\/])*style=[^>]*(expression|behavior)[^>]*>?#iUu',
+// Match unneeded tags
+				'#</*(applet|meta|xml|blink|link|style|script|embed|object|iframe|frame|frameset|ilayer|layer|bgsound|title|base)[^>]*>?#i'
+		);
+
+		foreach ($patterns as $pattern) {
+// Test both the original string and clean string
+			if (preg_match($pattern, $string, $matches) || preg_match($pattern, $orig, $matches)){
+				GO::debug("XSS pattern matched: ".$pattern);
+				GO::debug($matches);
+				return true;			
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Filter possible XSS attacks
+	 * 
+	 * @param string $data;
+	 * @return string
+	 */
+	public static function filterXSS($data)
 	{
 		// Fix &entity\n;
 		$data = str_replace(array('&amp;','&lt;','&gt;'), array('&amp;amp;','&amp;lt;','&amp;gt;'), $data);
@@ -866,24 +929,20 @@ class GO_Base_Util_String {
 		// Remove any attribute starting with "on" or xmlns
 		$data = preg_replace('#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*+>#iu', '$1>', $data);
 		// Remove javascript: and vbscript: protocols
-//		$data = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([`\'"]*)[\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu', '$1=$2nojavascript...', $data);
-//		$data = preg_replace('#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu', '$1=$2novbscript...', $data);
-//		$data = preg_replace('#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*-moz-binding[\x00-\x20]*:#u', '$1=$2nomozbinding...', $data);
-		
-		$dangerousWords = array('script','expression','behavior');
-		foreach($dangerousWords as $word)
-			$data = str_ireplace($word,substr($word,0,2).'<b></b>'.substr($word,2),$data);
-			
+		$data = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([`\'"]*)[\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu', '$1=$2nojavascript...', $data);
+		$data = preg_replace('#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu', '$1=$2novbscript...', $data);
+		$data = preg_replace('#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*-moz-binding[\x00-\x20]*:#u', '$1=$2nomozbinding...', $data);
+				
 //
 //		// Only works in IE: <span style="width: expression(alert('Ping!'));"></span>
-//		$data = preg_replace('#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?expression[\x00-\x20]*\([^>]*+>#i', '$1>', $data);
-//		$data = preg_replace('#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?behaviour[\x00-\x20]*\([^>]*+>#i', '$1>', $data);
+		$data = preg_replace('#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?expression[\x00-\x20]*\([^>]*+>#i', '$1>', $data);
+		$data = preg_replace('#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?behaviour[\x00-\x20]*\([^>]*+>#i', '$1>', $data);
 
 		//the next line removed valid stuff from the body
 		//$data = preg_replace('#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*+>#iu', '$1>', $data);
 
 		// Remove namespaced elements (we do not need them)
-		//$data = preg_replace('#</*\w+:\w[^>]*+>#i', '', $data);
+		$data = preg_replace('#</*\w+:\w[^>]*+>#i', '', $data);
 
 		return $data;
 	}
