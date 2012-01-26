@@ -86,8 +86,6 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 	}
 	
 	protected function actionSendResetPasswordMail($params){
-		
-		// DOE VANALLES (EMAIL STUREN ENZ..)
 		$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $params['email']);
 
 		if(!$user){
