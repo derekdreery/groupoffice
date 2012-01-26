@@ -1,9 +1,15 @@
+.pager-container {
+	width:100%;
+	display:block;
+}
+
 .pager-table {
-	
+	margin-left: auto;
+	margin-right:auto;
 }
 
 .pager-block {
-	border:1px solid #000; 
+/*	border:1px solid #000; */
 	width:20px; 
 	height:20px; 
 	text-align:center;
@@ -13,8 +19,10 @@
 	
 }
 
-.pager-active {
-	background-color:#ccc;
+.pager-active a {
+/*	background-color:#ccc;*/
+	font-weight: bold;
+	color:#E67802 !important;
 }
 
 .pager-totalfound-table {
@@ -22,5 +30,5 @@
 }
 
 .pager-totalpages-table {
-	
+	float:right;
 }
