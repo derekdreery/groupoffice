@@ -149,6 +149,24 @@ class GO_Base_Html_Input {
 		return $html;
 	}
 	
+	protected function renderTextarea(){
+		$html = '<textarea id="'.$this->attributes['id'].'" class="'.$this->attributes['class'].'" name="'.$this->attributes['name'].'" '.$this->attributes['extra'].'>';
+
+		$html .=  htmlspecialchars($this->attributes['value'],ENT_COMPAT,'UTF-8');
+		
+		if (!empty($this->attributes['empty_text']) && empty($this->attributes['value'])) {
+			$html .= $this->attributes['empty_text'];
+		}
+
+		$html .= ' </textarea>';
+		
+		if (!empty($this->attributes['empty_text'])) {
+			$html .= '<input type="hidden" name="empty_texts[]" value="' . $this->attributes['name'] . ':' . $this->attributes['empty_text'] . '" />';
+		}
+		
+		return $html;
+	}
+	
 	protected function renderMultiInput(){
 		
 		if(!empty($this->attributes['options']) && (!isset($this->attributes['options'][0]) || !is_array($this->attributes['options'][0]))){
@@ -247,6 +265,8 @@ class GO_Base_Html_Input {
 		// Check for multiple input fields or not
 		if(!empty($this->attributes['options'])){
 			$html .= $this->renderMultiInput();
+		} elseif($this->attributes['type'] == 'textarea'){
+			$html .= $this->renderTextarea();
 		} else {
 			$html .= $this->renderNormalInput();
 		}
