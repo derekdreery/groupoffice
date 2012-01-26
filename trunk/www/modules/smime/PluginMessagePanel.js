@@ -79,27 +79,28 @@ GO.moduleManager.onModuleReady('email',function(){
 			if(!this.data.path)
 				this.data.path="";
 						
-			Ext.Ajax.request({
-				url: GO.settings.modules.smime.url+'verify.php?uid='+this.uid+'&account_id='+this.account_id+'&mailbox='+encodeURIComponent(this.mailbox)+'&filepath='+this.data.path+'&email='+encodeURIComponent(this.data.sender),
+			GO.request({
+				maskEl:this.certWin.getEl(),
+				url: "smime/certificate/verify",
+				params:{
+					uid:this.uid,
+					account_id:this.account_id,
+					mailbox:this.mailbox,
+					filepath:this.data.path,
+					email:this.data.sender					
+				},
 				scope: this,
-				callback: function(options, success, response)
+				success: function(options, response, result)
 				{	
-					if(!success)
-					{
-						Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
-					}else
-					{
-						var json = Ext.decode(response.responseText);
-						if(!hideDialog)
-							this.certPanel.update(json.html);
-						
-						this.smimeLink.update(json.text);
-						this.smimeLink.addClass(json.cls);
-						
-						if(callback && scope)
-							callback.call(scope, this);
-					}
-				}				
+					if(!hideDialog)
+						this.certPanel.update(result.html);
+
+					this.smimeLink.update(result.text);
+					this.smimeLink.addClass(result.cls);
+
+					if(callback && scope)
+						callback.call(scope, this);
+				}							
 			});
 		}	
 	})

@@ -27,7 +27,7 @@ class GO_Base_Mail_SmimeMessage extends GO_Base_Mail_Message
 	protected $tempin;
 	protected $pkcs12_data;
 	protected $passphrase;
-	protected $extra_certs=array();
+	//protected $extra_certs=array();
 	
 	protected $recipcerts;
 	
@@ -57,12 +57,10 @@ class GO_Base_Mail_SmimeMessage extends GO_Base_Mail_Message
 	 * @param type $passphrase 
 	 */
 	
-	public function setSignParams($pkcs12_data, $passphrase, $extra_certs=array()){
-	
-		
+	public function setSignParams($pkcs12_data, $passphrase){		
 		$this->pkcs12_data=$pkcs12_data;
 		$this->passphrase=$passphrase;
-		$this->extra_certs=$extra_certs;
+		//$this->extra_certs=$extra_certs;
 	}
 	
 	public function setEncryptParams($recipcerts){
@@ -129,14 +127,24 @@ class GO_Base_Mail_SmimeMessage extends GO_Base_Mail_Message
 				throw new Exception("Could not decrypt key");
 			}
 			
+
+			if(!empty($certs['extracerts'])){
+				$extraCertsFile = GO_Base_Fs_File::tempFile();
+				foreach($certs['extracerts'] as $certData){
+					$extraCertsFile->putContents($certData, FILE_APPEND);
+				}
+			}
+				//$this->extra_certs=array_merge($this->extra_certs,$certs['extracerts']);
+			
 			if(!file_exists($this->tempin))
 				throw new Exception('Failed to sign. Temp file disappeared');
 
-			if(empty($this->extra_certs)){
+			if(!isset($extraCertsFile)){
 				openssl_pkcs7_sign($this->tempin, $this->tempout,$certs['cert'], array($certs['pkey'], $this->passphrase), $this->saved_headers, PKCS7_DETACHED);
 			}else
 			{
-				openssl_pkcs7_sign($this->tempin, $this->tempout,$certs['cert'], array($certs['pkey'], $this->passphrase), $this->saved_headers, PKCS7_DETACHED, $this->extra_certs);
+				openssl_pkcs7_sign($this->tempin, $this->tempout,$certs['cert'], array($certs['pkey'], $this->passphrase), $this->saved_headers, PKCS7_DETACHED, $extraCertsFile->path());
+				$extraCertsFile->delete();
 			}
 			$this->signed=true;
 		}
