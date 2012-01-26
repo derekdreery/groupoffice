@@ -485,12 +485,12 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Get a security hash that can be used for verification. For example with 
 	 * reset password function. The token will change when the user's password or
-	 * email address changes.
+	 * email address changes and when the user logs in.
 	 * 
 	 * @return string 
 	 */
 	public function getSecurityToken(){
-		return md5($this->password.$this->email.$this->ctime);
+		return md5($this->password.$this->email.$this->ctime.$this->lastlogin);
 	}
 	
 	
