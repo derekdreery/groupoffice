@@ -195,8 +195,10 @@ class GO_Smime_EventHandlers {
 				$pubCert = GO_Smime_Model_PublicCertificate::model()->findSingleByAttributes(array('user_id' => GO::user()->id, 'email' => $email));
 				if (!$pubCert) {
 					$failed[] = $email;
+				}else
+				{
+					$publicCerts[] = $pubCert->cert;
 				}
-				$publicCerts[] = $pubCert->cert;
 			}
 
 			if (count($failed))
