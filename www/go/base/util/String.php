@@ -131,8 +131,8 @@ class GO_Base_Util_String {
 		//$str = html_entity_decode($str, ENT_COMPAT, $source_charset);			
 		
 		//fix for euro signs in windows-1252 encoding. We convert it to iso-8859-15.
-		$source_charset=strtolower($source_charset);
-		if($source_charset=='iso-8859-1' || $source_charset=='iso-8859-15' || $source_charset=='windows-1252')
+		$source_charset=strtoupper($source_charset);
+		if($source_charset=='ISO-8859-1' || $source_charset=='ISO-8859-15' || $source_charset=='WINDOWS-1252')
 			$str = str_replace("\x80","€", $str);
 
 		//Does not always work. We suppress the:
@@ -149,7 +149,7 @@ class GO_Base_Util_String {
 				$from_charset = mb_detect_encoding($str, "auto");
 			}else
 			{
-				$from_charset = "iso-8859-1";
+				$from_charset = "ISO-8859-1";
 			}
 			
 			if($from_charset!=$source_charset)
