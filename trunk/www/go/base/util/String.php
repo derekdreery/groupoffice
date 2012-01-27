@@ -819,6 +819,7 @@ class GO_Base_Util_String {
 		"'<title>.*?</title>'usi",
 		"'<head[^>]*>.*?</head>'usi",
 		"'<head[^>]*>'usi",
+		"'<bgsound[^>]*>'usi",
 		
 		/* MS Word junk */
 		"'<xml[^>]*>.*?</xml>'usi",
@@ -841,8 +842,11 @@ class GO_Base_Util_String {
 		);
 
 		$html = preg_replace($to_removed_array, '', $html);
-		//$html = GO_Base_Util_String::xss_clean($html);
-
+		
+		//Remove any attribute starting with "on" or xmlns. Had to do this always becuase many mails contain weird tags like online="1". 
+		//These were detected as xss attacks by detectXSS().
+		$html = preg_replace('#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*+>#iu', '$1>', $html);
+	
 		//remove high z-indexes
 		$matched_tags = array();
 		preg_match_all( "/(z-index)[\s]*:[\s]*([0-9]+)[\s]*;/u", $html, $matched_tags, PREG_SET_ORDER );
