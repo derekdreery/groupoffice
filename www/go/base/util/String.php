@@ -131,7 +131,9 @@ class GO_Base_Util_String {
 		//$str = html_entity_decode($str, ENT_COMPAT, $source_charset);			
 		
 		//fix for euro signs in windows-1252 encoding. We convert it to iso-8859-15.
-		$str = str_replace("\x80","€", $str);
+		$source_charset=strtolower($source_charset);
+		if($source_charset=='iso-8859-1' || $source_charset=='iso-8859-15' || $source_charset=='windows-1252')
+			$str = str_replace("\x80","€", $str);
 
 		//Does not always work. We suppress the:
 		//Notice:  iconv() [function.iconv]: Detected an illegal character in input string in /var/www/community/trunk/www/classes/String.class.inc.php on line 31		
