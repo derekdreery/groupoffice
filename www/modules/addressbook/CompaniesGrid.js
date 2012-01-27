@@ -14,133 +14,159 @@ GO.addressbook.CompaniesGrid = function(config){
 			header: GO.addressbook.lang.id,
 			dataIndex: 'id',
 			width:20,
-			hidden:true
+			hidden:true,
+			id: 'id'
 		},{
 			header: GO.lang['strName'],
 			dataIndex: 'name',
-			width:200
+			width:200,
+			id: 'name'
 		},{
 			header: GO.lang['strName2'],
 			dataIndex: 'name2',
-			width:200
+			width:200,
+			id: 'name2'
 		},
 		{
 			header: GO.lang['strEmail'],
 			dataIndex: 'email',
 			width: 150,
-			hidden:true
+			hidden:true,
+			id: 'email'
 		},
 		{
 			header: GO.lang['strHomepage'],
 			dataIndex: 'homepage',
 			width: 100,
-			hidden:true
+			hidden:true,
+			id: 'homepage'
 		},
 		{
 			header: GO.lang['strPhone'],
 			dataIndex: 'phone',
-			width: 100
+			width: 100,
+			id: 'phone'
 		},
 		{
 			header: GO.lang['strFax'],
 			dataIndex: 'fax',
 			width: 80,
-			hidden:true
+			hidden:true,
+			id: 'fax'
 		},
 		{
 			header: GO.lang['strAddress'],
 			dataIndex: 'address',
-			hidden:true
+			hidden:true,
+			id: 'address'
 		},
 		{
 			header: GO.lang['strAddressNo'],
 			dataIndex: 'address_no',
-			hidden:true
+			hidden:true,
+			id: 'address_no'
 		},
 		{
 			header: GO.lang['strZip'],
 			dataIndex: 'zip',
-			hidden:true
+			hidden:true,
+			id: 'zip'
 		},
 		{
 			header: GO.lang['strCity'],
 			dataIndex: 'city',
-			width:150
+			width:150,
+			id: 'city'
 		},
 		{
 			header: GO.lang['strState'],
 			dataIndex: 'state',
 			width: 80,
-			hidden:true
+			hidden:true,
+			id: 'state'
 		},
 		{
 			header: GO.lang['strCountry'],
 			dataIndex: 'country',
-			hidden:true
+			hidden:true,
+			id: 'country'
 		},
 		{
 			header: GO.lang['strPostAddress'],
 			dataIndex: 'post_address',
-			hidden:true
+			hidden:true,
+			id: 'post_address'
 		},
 		{
 			header: GO.lang['strPostAddressNo'],
 			dataIndex: 'post_address_no',
-			hidden:true
+			hidden:true,
+			id: 'post_address_no'
 		},
 		{
 			header: GO.lang['strPostZip'],
 			dataIndex: 'post_zip',
-			hidden:true
+			hidden:true,
+			id: 'post_zip'
 		},
 		{
 			header: GO.lang['strPostCity'],
 			dataIndex: 'post_city',
-			hidden:true
+			hidden:true,
+			id: 'post_city'
 		},
 		{
 			header: GO.lang['strPostState'],
 			dataIndex: 'post_state',
 			width: 80,
-			hidden:true
+			hidden:true,
+			id: 'post_state'
 		},
 		{
 			header: GO.lang['strPostCountry'],
 			dataIndex: 'post_country',
-			hidden:true
+			hidden:true,
+			id: 'post_country'
 		},
 		{
 			header: GO.addressbook.lang['cmdFormLabelBankNo'],
 			dataIndex: 'bank_no',
-			hidden:true
+			hidden:true,
+			id: 'bank_no'
 		},{
 			header: GO.addressbook.lang.iban,
 			dataIndex: 'iban',
-			hidden:true
+			hidden:true,
+			id: 'iban'
 		},{
 			header: GO.addressbook.lang.crn,
 			dataIndex: 'crn',
-			hidden:true
+			hidden:true,
+			id: 'crn'
 		},
 		{
 			header: GO.addressbook.lang['cmdFormLabelVatNo'],
 			dataIndex: 'vat_no',
-			hidden:true
+			hidden:true,
+			id: 'vat_no'
 		},
 		{
 			header: GO.lang.strMtime,
 			dataIndex:'mtime',
 			hidden:true,
-			width:80
+			width:80,
+			id: 'mtime'
 		},{
 			header: GO.lang.strCtime,
 			dataIndex:'ctime',
 			hidden:true,
-			width:80
+			width:80,
+			id: 'ctime'
 		},{
 			header: GO.addressbook.lang.addressbook,
 			dataIndex: 'ab_name',
-			hidden:true
+			hidden:true,
+			id: 'ab_name'
 		}
 		]
 	};
