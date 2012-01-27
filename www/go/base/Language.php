@@ -53,7 +53,9 @@ class GO_Base_Language{
 		{
 			$this->_langIso=$isoCode;
 		}
-		$this->_lang=array();
+		
+		if($oldIso!=$this->_langIso)
+			$this->_lang=array();
 		
 		return $oldIso;
 	}
