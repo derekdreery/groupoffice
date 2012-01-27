@@ -303,7 +303,7 @@ DROP TABLE IF EXISTS `go_users`;
 CREATE TABLE IF NOT EXISTS `go_users` (
   `id` int(11) NOT NULL default '0',
   `username` varchar(50) default NULL,
-  `password` varchar(64) default NULL,
+  `password` varchar(255) default NULL,
   `password_type` VARCHAR( 20 ) default NULL,
   `enabled` enum('0','1') NOT NULL default '1',
   `first_name` varchar(50) NOT NULL,

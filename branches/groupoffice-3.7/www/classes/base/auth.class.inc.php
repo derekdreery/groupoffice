@@ -65,7 +65,7 @@ class GO_AUTH extends db
 		}
 
 		//We used to use MD5 but we changed it to crypt 
-		if($user['password_type']=='crypt'){
+		if($user['password_type']=='crypt'){			
 			if(crypt($password, $user['password']) != $user['password']){
 				return false;
 			}
@@ -198,7 +198,7 @@ class GO_AUTH extends db
 			go_debug('Wrong password entered for '.$username);
 		}
 
-		if($user['enabled']!=1){
+		if($user &&	$user['enabled']!=1){
 			go_debug('Login attempt for disabled user '.$username);
 			$user=false;
 		}
