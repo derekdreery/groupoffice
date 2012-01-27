@@ -80,6 +80,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 	 */
 	public function setStatement(GO_Base_Db_ActiveStatement $stmt){
 		$this->_stmt = $stmt;
+		$this->response['results']=array();
 		
 //		if(!$this->_columnModelProvided)
 //			$this->_columns = array_merge(array_keys($stmt->model->columns), $this->_columns);
@@ -184,9 +185,8 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 
 		$columns = $this->_columnModel->getColumns();
     if (empty($columns))
-      throw new Exception('No columns given for this grid.');   
-    			
-		$this->response['results']=array();
+      throw new Exception('No columns given for this grid.');   		
+		
 		while ($record = $this->nextRecord()) {
 			$this->response['results'][] = $record;
 		}

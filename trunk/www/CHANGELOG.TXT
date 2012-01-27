@@ -5,12 +5,14 @@
 - Ticket groups for better permission management.
 - plupload used for file uploads
 - gnupg support dropped. smime still supported.
-- filesearch module for deep searching files content.
+- Filesearch module for deep searching files content.
 - Document workflow module.
 - SabreDAV upgraded to 1.5.6
 - Swift Mailer upgraded to 4.1.5
 - Project tasks have a relation now and have a percentage complete field
 - Photo support in sync.
+- Billing module can create MS word and open-office invoices, quotes and orders.
+- Billing module can handle purchase orders and stock.
 
 E-mail
 - Embed pasted images from firefox into mime mail for better memory management

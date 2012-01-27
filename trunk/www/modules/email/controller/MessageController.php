@@ -13,7 +13,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$recipients->addString($params['bcc']);
 
 			foreach ($recipients->getAddresses() as $email => $personal) {
-				$contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($email);
+				$contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($email);				
 				if ($contact)
 					continue;
 
@@ -225,8 +225,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 					if (!empty($params['contact_id'])) {
 						$contact = GO_Addressbook_Model_Contact::model()->findByPk($params['contact_id']);
 					} else {
-						$email = GO_Base_Util_String::get_email_from_string($params['to']);
-						$contact = GO_Addressbook_Model_Contact::model()->findSingleByAttribute('email', $email);
+						$email = GO_Base_Util_String::get_email_from_string($params['to']);						
+						$contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($email);	
 					}
 
 					if ($contact) {
