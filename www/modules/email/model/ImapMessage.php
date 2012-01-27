@@ -399,32 +399,26 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		if(!empty($attachment['tmp_file']))
 			return GO::url('core/downloadTempFile', array('path'=>$attachment['tmp_file']));
 		
-		$mime = explode('/',$attachment['mime']);
+//		$mime = explode('/',$attachment['mime']);
+//		
+//		return  GO::config()->host."modules/email/attachment.php?".
+//			"account_id=".$this->account->id.
+//			"&amp;mailbox=".urlencode($this->mailbox).
+//			"&amp;uid=".$this->uid.
+//			"&amp;imap_id=".$attachment["number"].
+//			"&amp;encoding=".$attachment["encoding"].
+//			"&amp;type=".$mime[0].
+//			"&amp;subtype=".$mime[1].
+//			"&amp;filename=".urlencode($attachment["name"]);
 		
-		return  GO::config()->host."modules/email/attachment.php?".
-			"account_id=".$this->account->id.
-			"&amp;mailbox=".urlencode($this->mailbox).
-			"&amp;uid=".$this->uid.
-			"&amp;imap_id=".$attachment["number"].
-			"&amp;encoding=".$attachment["encoding"].
-			"&amp;type=".$mime[0].
-			"&amp;subtype=".$mime[1].
-			"&amp;filename=".urlencode($attachment["name"]);
-		
-		
-		if(!empty($attachment['tmp_file']))
-			return GO::url('core/downloadTempFile', array('path',$attachment['tmp_file']));
-		
-		$mime = explode('/', $attachment['mime']);
 		
 		$params = array(
 				"account_id"=>$this->account->id,
 				"mailbox"=>$this->mailbox,
 				"uid"=>$this->uid,
-				"encoding"=>$attachment['encoding'],
-				"mime"=>$attachment['mime'],
-				"filename"=>$attachment['name'],
-
+				"number"=>$attachment['number'],				
+				"encoding"=>$attachment['encoding'],				
+				"filename"=>$attachment['name']
 		);
 		
 		return GO::url('email/message/attachment', $params);

@@ -13,7 +13,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$recipients->addString($params['bcc']);
 
 			foreach ($recipients->getAddresses() as $email => $personal) {
-				$contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($email);				
+				$contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($email);
 				if ($contact)
 					continue;
 
@@ -128,10 +128,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	protected function actionSend($params) {
 
 		$response['success'] = true;
-		
+
 		$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);
 		$account = GO_Email_Model_Account::model()->findByPk($alias->account_id);
-			
+
 		$message = new GO_Base_Mail_SmimeMessage();
 
 		$message->handleEmailFormInput($params);
@@ -142,8 +142,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		$logger = new Swift_Plugins_Loggers_ArrayLogger();
 		$mailer->registerPlugin(new Swift_Plugins_LoggerPlugin($logger));
-		
-		
+
+
 		$this->fireEvent('beforesend', array(
 				&$this,
 				&$response,
@@ -152,7 +152,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				$account,
 				$alias,
 				$params
-				));
+		));
 
 		$success = $mailer->send($message);
 
@@ -191,7 +191,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 			throw new Exception("Failed to send the message:<br /><br />" . nl2br($logStr));
 		}
-		
+
 
 		$this->_link($params, $message);
 
@@ -225,8 +225,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 					if (!empty($params['contact_id'])) {
 						$contact = GO_Addressbook_Model_Contact::model()->findByPk($params['contact_id']);
 					} else {
-						$email = GO_Base_Util_String::get_email_from_string($params['to']);						
-						$contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($email);	
+						$email = GO_Base_Util_String::get_email_from_string($params['to']);
+						$contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($email);
 					}
 
 					if ($contact) {
@@ -443,17 +443,17 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		$imapMessage = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
-		
+
 		//workaround for gmail. It doesn't flag messages as seen automatically.
-		if(!$imapMessage->seen && !stripos($account->host,'gmail')!==false)						
+		if (!$imapMessage->seen && !stripos($account->host, 'gmail') !== false)
 			$imapMessage->getImapConnection()->set_message_flag(array($imapMessage->uid), "\Seen");
-				
+
 		$response = $imapMessage->toOutputArray(true);
 		$response = $this->_blockImages($params, $response);
 		$response = $this->_parseAutoLinkTag($params, $response);
-		$response = $this->_handleInvitations($imapMessage, $params, $response);		
-		$response = $this->_checkXSS( $params, $response);		
-		
+		$response = $this->_handleInvitations($imapMessage, $params, $response);
+		$response = $this->_checkXSS($params, $response);
+
 		$this->fireEvent('view', array(
 				&$this,
 				&$response,
@@ -461,30 +461,29 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				$account,
 				$params
 		));
-		
+
 		$response['success'] = true;
 
 		return $response;
 	}
-	
-	private function _checkXSS($params, $response) {		
-		
-		if(!empty($params['filterXSS'])){
-			$response['htmlbody']=GO_Base_Util_String::filterXSS($response['htmlbody']);
-		}elseif(GO_Base_Util_String::detectXSS($response['htmlbody'])){
-			$response['htmlbody']=GO::t('xssMessageHidden', 'email');
-			$response['xssDetected']=true;
-		}else
-		{
-			$response['xssDetected']=false;
+
+	private function _checkXSS($params, $response) {
+
+		if (!empty($params['filterXSS'])) {
+			$response['htmlbody'] = GO_Base_Util_String::filterXSS($response['htmlbody']);
+		} elseif (GO_Base_Util_String::detectXSS($response['htmlbody'])) {
+			$response['htmlbody'] = GO::t('xssMessageHidden', 'email');
+			$response['xssDetected'] = true;
+		} else {
+			$response['xssDetected'] = false;
 		}
 		return $response;
 	}
 
 	private function _handleInvitations(GO_Email_Model_ImapMessage $imapMessage, $params, $response) {
 		$atts = $imapMessage->getAttachments();
-		
-		foreach($atts as $a){
+
+		foreach ($atts as $a) {
 //		$a['url'] = '';
 //		$a['name'] = $filename;
 //		$a['number'] = $part_number_prefix . $part_number;
@@ -497,45 +496,42 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 //		$a['extension'] = $f->extension();
 //		$a['encoding'] = isset($part->headers['content-transfer-encoding']) ? $part->headers['content-transfer-encoding'] : '';
 //		$a['disposition'] = isset($part->disposition);
-			
-			if($a['mime']=='text/calendar' || $a['extension']=='ics'){
+
+			if ($a['mime'] == 'text/calendar' || $a['extension'] == 'ics') {
 				$imap = $imapMessage->getImapConnection();
-				
+
 				$data = $imap->get_message_part_decoded($imapMessage->uid, $a['number'], $a['encoding']);
 				$vcalendar = GO_Base_VObject_Reader::read($data);
 				$vevent = $vcalendar->vevent[0];
-				
+
 				//is this an update for a specific recurrence?
 				$recurrenceDate = isset($vevent->{"recurrence-id"}) ? $vevent->{"recurrence-id"}->getDateTime()->format('U') : 0;
-				
+
 				//find existing event
-				$event = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id, 0, $recurrenceDate);
-				
+				$event = GO_Calendar_Model_Event::model()->findByUuid((string) $vevent->uid, GO::user()->id, 0, $recurrenceDate);
+
 				// invitation to a new event										
-				$response['iCalendar']['feedback'] = GO::t('iCalendar_event_invitation','email');
+				$response['iCalendar']['feedback'] = GO::t('iCalendar_event_invitation', 'email');
 				$response['iCalendar']['invitation'] = array(
-					'uuid' => (string)$vevent->uid,
-					'email_sender' => $response['sender'],
-					'email' => $imapMessage->account->email,
-					'event_declined' => $event && $event->status=='DECLINED',
-					'event_id'=>$event ? $event->id : 0,
-					'is_update'=>$vcalendar->method == 'REPLY',
-					'is_invitation'=>$vcalendar->method == 'REQUEST',
-					'is_cancellation'=>$vcalendar->method == 'CANCEL'
-								);
-				
-				switch($vcalendar->method){
+						'uuid' => (string) $vevent->uid,
+						'email_sender' => $response['sender'],
+						'email' => $imapMessage->account->email,
+						'event_declined' => $event && $event->status == 'DECLINED',
+						'event_id' => $event ? $event->id : 0,
+						'is_update' => $vcalendar->method == 'REPLY',
+						'is_invitation' => $vcalendar->method == 'REQUEST',
+						'is_cancellation' => $vcalendar->method == 'CANCEL'
+				);
+
+				switch ($vcalendar->method) {
 					case 'REPLY':
-						
+
 						break;
 				}
-				
 			}
 		}
-		
+
 		return $response;
-
-
 	}
 
 	private function _parseAutoLinkTag($params, $response) {
@@ -556,6 +552,30 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		}
 
 		return $response;
+	}
+
+	public function actionAttachment($params) {
+		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+		$imapMessage = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
+
+		$file = new GO_Base_Fs_File($params['filename']);
+		GO_Base_Util_Http::outputDownloadHeaders($file,true,true);
+
+		$imapMessage->getImapConnection()->get_message_part_start($imapMessage->uid, $params['number']);
+		while ($line = $imapMessage->getImapConnection()->get_message_part_line()) {
+			switch (strtolower($params['encoding'])) {
+				case 'base64':
+					echo base64_decode($line);
+					break;
+				case 'quoted-printable':
+					echo quoted_printable_decode($line);
+					break;
+				default:
+					echo $line;
+					break;
+			}
+		}
+		$imapMessage->getImapConnection()->disconnect();
 	}
 
 }

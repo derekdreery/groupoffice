@@ -1297,55 +1297,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 				case 'dat':
 					document.location.href=GO.settings.modules.email.url+
 					'tnef.php'+url_params;
-					break;
-				
-				case 'asc':
-				
-					if(!forceDownload && GO.gnupg)
-					{
-						params.task = 'check_public_key_attachment';
-						Ext.Ajax.request({
-							url: GO.settings.modules.gnupg.url+'action.php',
-							params: params,
-							callback: function(options, success, response)
-							{
-								if(success)
-								{
-									var rParams = Ext.decode(response.responseText);
-									
-									if(!rParams.is_public_key)
-									{
-										document.location.href=GO.settings.modules.email.url+
-										'attachment.php'+url_params;
-									}else
-									{
-										if(confirm(GO.gnupg.lang.importPublicKeyAttachment))
-										{
-											Ext.Ajax.request({
-												url: GO.settings.modules.gnupg.url+'action.php',
-												params: {
-													task: 'import_public_key_attachment'
-												},
-												callback: function(options, success, response){
-													if(success)
-													{
-														var rParams = Ext.decode(response.responseText);
-														alert(rParams.feedback);
-													}else
-													{
-														alert(GO.lang.strRequestError);
-													}
-												}
-											});
-										}
-									}
-								}
-							},
-							scope: this
-						});
-						
-						break;
-					}
+					break;			
 				
 //				case 'vcs':
 //				case 'ics':
@@ -1407,32 +1359,9 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 							
 								if(ext=='jpg' || ext=='png' || ext=='gif' || ext=='bmp' || ext=='jpeg')
 								{
-									url_params.imap_id=r.imap_id;
-
-									params = {
-										account_id: this.account_id,
-										mailbox: this.mailbox,
-										uid: this.messagePanel.uid,
-										imap_id: r.imap_id,
-										uuencoded_partnumber: r.uuencoded_partnumber,
-										encoding: r.encoding,
-										type: r.type,
-										subtype: r.subtype,
-										filename:r.name,
-										charset:r.charset,
-										filepath:this.messagePanel.data.path ? this.messagePanel.data.path : ''
-									}
-
-									url_params = '?';
-									for(var name in params){
-										url_params+= name+'='+encodeURIComponent(params[name])+'&';
-									}
-									url_params = url_params.substring(0,url_params.length-1);
-
-									
 									images.push({
 										name: r.name,
-										src: GO.settings.modules.email.url+'attachment.php'+url_params
+										src: r.url
 									});
 								}
 								if(r.name==attachment.name)
@@ -1443,11 +1372,10 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 							this.imageViewer.show(images, index);
 							break;
 						}
-					}
-				
+					}	
 				
 				default:
-					document.location.href=GO.settings.modules.email.url+'attachment.php'+url_params
+					document.location.href=attachment.url;
 					break;
 			}
 		}
