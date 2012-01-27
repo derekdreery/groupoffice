@@ -113,12 +113,15 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 				},scope:this,
 				afteredit:function(e){
 					var t = e.record.get('gotype');
+
+					e.record.set('edit',true);
+					
 					if(t=='date' || t=='unixtimestamp' || t=='unixdate')
 						e.record.set(e.field,e.value.format(GO.settings.date_format));
 				}
 			}
 		});	
-		
+			
 		this.addPanel(this.editGrid);
 	}
 });
