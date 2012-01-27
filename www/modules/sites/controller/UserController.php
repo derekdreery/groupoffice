@@ -60,6 +60,8 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 			if(!$user){
 				GO_Base_Html_Error::setError(GO::t("invaliduser","sites"),"email");
 			}else{
+				
+				GO::language()->setLanguage($user->language);
 
 				$siteTitle = $this->getSite()->title;
 				$url = $this->pageUrl('resetpassword',array(),false);
@@ -86,7 +88,9 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 		}else{
 			$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $params['email']);
 			
+			
 			if($user){
+				GO::language()->setLanguage($user->language);
 			
 				if(!empty($params['usertoken']) && $params['usertoken'] == $user->getSecurityToken()){
 
