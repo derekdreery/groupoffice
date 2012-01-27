@@ -215,6 +215,8 @@ class GO_Base_Session extends GO_Base_Observable{
 		}else
 		{			
 			$this->setCurrentUser($user->id);
+			
+			GO::language()->setLanguage($user->language);
 
 			if($countLogin){
 				$user->last_login=time();
