@@ -99,6 +99,8 @@ $admin->username = $args['adminusername'];
 $admin->password = $args['adminpassword'];
 $admin->email = GO::config()->webmaster_email = $args['adminemail'];
 
+$admin->checkDefaultModels();
+
 GO::config()->save();
 
 $admin->save();
