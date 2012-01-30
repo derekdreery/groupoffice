@@ -77,7 +77,7 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 		
 		parent::__construct();
 	}
-	
+
 	/**
 	 * Returns the current site object
 	 * 
@@ -112,17 +112,29 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 * @return mixed 
 	 */
 	protected function init() {
-		
-		$this->_checkSessionVars();
-		
+
 		$this->rootTemplatePath = GO::config()->root_path.'modules/sites/templates/'.$this->site->template.'/';
 		$this->rootTemplateUrl = GO::config()->host.'modules/sites/templates/'.$this->site->template.'/';
 		$this->templateUrl = $this->_getTemplateFolderUrl();
 		$this->templateFolder = new GO_Base_Fs_Folder($this->_getTemplateFolderPath());
-		
-		$this->_checkAuth();
-		
+
 		return parent::init();
+	}
+	
+	/**
+	 * Run function of this controller. This will override the run function of the parent class.
+	 * 
+	 * @param string $action
+	 * @param array $params
+	 * @param boolean $render
+	 * @param boolean $checkPermissions
+	 * 
+	 */
+	public function run($action = '', $params, $render = true, $checkPermissions = true) {
+		
+		$this->_checkSessionVars($params);
+		$this->_checkAuth();
+		parent::run($action, $params, $render, $checkPermissions);
 	}
 	
 	/**
@@ -222,25 +234,25 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 * Checks if the last path needs to be changed and sets the right last path 
 	 * in the session. 
 	 */
-	private function _checkSessionVars(){
+	private function _checkSessionVars($params=array()){
 		
 		if(!isset(GO::session()->values['sites']))
 			GO::session()->values['sites'] = array();
 		
-		if(isset(GO::session()->values['sites']['lastPath']))
-			$this->site->setLastPath(GO::session()->values['sites']['lastPath']);
+		if(isset(GO::session()->values['sites']['lastPath'])){
+			$lastParams = isset(GO::session()->values['sites']['lastParams']) ? GO::session()->values['sites']['lastParams'] : array();
+			$this->site->setLastPath(GO::session()->values['sites']['lastPath'],$lastParams);
+		}
+		
+		$noReturnPages = array(
+				$this->site->getLoginPath(),
+				$this->site->getRegisterPath(),
+				$this->site->getPasswordResetPath()
+		);
 
-		if($this->page->path == $this->site->getLoginPath()){
-			if($this->site->getLastPath() == $this->site->getLoginPath())
-				$this->site->setLastPath($this->site->getHomePagePath());
-		} else if($this->page->path == $this->site->getRegisterPath()){
-			if($this->site->getLastPath() == $this->site->getRegisterPath())
-				$this->site->setLastPath($this->site->getHomePagePath());
-		} else if($this->page->path == $this->site->getPasswordResetPath()){
-			if($this->site->getLastPath() == $this->site->getPasswordResetPath())
-				$this->site->setLastPath($this->site->getHomePagePath());
-		}else {
+		if(!in_array($this->page->path, $noReturnPages)){
 			GO::session()->values['sites']['lastPath'] = $this->page->path;
+			GO::session()->values['sites']['lastParams'] = $params;
 		}
 	}
 	
