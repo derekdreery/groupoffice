@@ -501,8 +501,8 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		$fileName = isset($params["name"]) ? $params["name"] : '';
 
 // Clean the fileName for security reasons
-		$fileName = preg_replace('/[^\w\._]+/', '', $fileName);
-
+		$fileName = GO_Base_Fs_File::stripInvalidChars($fileName);
+		
 // Make sure the fileName is unique but only if chunking is disabled
 		if ($chunks < 2 && file_exists($targetDir . DIRECTORY_SEPARATOR . $fileName)) {
 			$ext = strrpos($fileName, '.');
