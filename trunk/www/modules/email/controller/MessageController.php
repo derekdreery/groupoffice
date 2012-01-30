@@ -34,49 +34,52 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		return $unknown;
 	}
+	
 
-	private function _link($params, GO_Base_Mail_Message $message) {
+	private function _link($params, GO_Base_Mail_Message $message, $model=false) {
+		
+		if(!$model){
+			if (!empty($params['link'])) {
+				$linkProps = explode(':', $params['link']);
+				$model = GO::getModel($linkProps[0])->findByPk($linkProps[1]);
+			}
+		}
+	
+		if ($model) {
 
-		if (!empty($params['link'])) {
-			$linkProps = explode(':', $params['link']);
-			$model = GO::getModel($linkProps[0])->findByPk($linkProps[1]);
+			$path = 'email/' . date('mY') . '/sent_' . time() . '.eml';
 
-			if ($model) {
+			$file = new GO_Base_Fs_File(GO::config()->file_storage_path . $path);
+			$file->parent()->create();
 
-				$path = 'email/' . date('mY') . '/sent_' . time() . '.eml';
+			$fbs = new Swift_ByteStream_FileByteStream($file->path(), true);
+			$message->toByteStream($fbs);
 
-				$file = new GO_Base_Fs_File(GO::config()->file_storage_path . $path);
-				$file->parent()->create();
+			if ($file->exists()) {
 
-				$fbs = new Swift_ByteStream_FileByteStream($file->path(), true);
-				$message->toByteStream($fbs);
+				$linkedEmail = new GO_Savemailas_Model_LinkedEmail();
 
-				if ($file->exists()) {
+				$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);
 
-					$linkedEmail = new GO_Savemailas_Model_LinkedEmail();
+				$linkedEmail->from = (string) GO_Base_Mail_EmailRecipients::createSingle($alias->email, $alias->name);
+				if (isset($params['to']))
+					$linkedEmail->to = $params['to'];
 
-					$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);
+				if (isset($params['cc']))
+					$linkedEmail->cc = $params['cc'];
 
-					$linkedEmail->from = (string) GO_Base_Mail_EmailRecipients::createSingle($alias->email, $alias->name);
-					if (isset($params['to']))
-						$linkedEmail->to = $params['to'];
+				if (isset($params['bcc']))
+					$linkedEmail->to = $params['bcc'];
 
-					if (isset($params['cc']))
-						$linkedEmail->cc = $params['cc'];
-
-					if (isset($params['bcc']))
-						$linkedEmail->to = $params['bcc'];
-
-					$linkedEmail->subject = !empty($params['subject']) ? $params['subject'] : GO::t('no_subject', 'email');
-					$linkedEmail->acl_id = $model->findAclId();
+				$linkedEmail->subject = !empty($params['subject']) ? $params['subject'] : GO::t('no_subject', 'email');
+				$linkedEmail->acl_id = $model->findAclId();
 
 
-					$linkedEmail->path = $path;
+				$linkedEmail->path = $path;
 
-					$linkedEmail->save();
+				$linkedEmail->save();
 
-					$linkedEmail->link($model);
-				}
+				$linkedEmail->link($model);
 			}
 		}
 	}
@@ -118,6 +121,17 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		return $response;
 	}
+	
+	private function _createAutoLinkTag($params){
+		$tag = '';
+		if (!empty($params['link'])) {
+			$linkProps = explode(':', $params['link']);
+			$model = GO::getModel($linkProps[0])->findByPk($linkProps[1]);
+			
+			$tag = "[link:".base64_encode($_SERVER['SERVER_NAME'].','.$linkProps[0].','.$linkProps[1])."]";
+		}
+		return $tag;
+	}
 
 	/**
 	 *
@@ -133,6 +147,15 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$account = GO_Email_Model_Account::model()->findByPk($alias->account_id);
 
 		$message = new GO_Base_Mail_SmimeMessage();
+		
+		$tag = $this->_createAutoLinkTag($params);
+		
+		if(!empty($tag)){
+			if($params['content_type']=='html')
+				$params['htmlbody'].= '<p>'.$tag.'</p>';
+			else
+				$params['plainbody'].= "\n\n".$tag."\n\n";
+		}
 
 		$message->handleEmailFormInput($params);
 
@@ -191,9 +214,15 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 			throw new Exception("Failed to send the message:<br /><br />" . nl2br($logStr));
 		}
-
-
+		
 		$this->_link($params, $message);
+		
+		//if there's an autolink tag in the message we want to link outgoing messages too.
+		if($tag = $this->_findAutoLinkTag(($params['content_type']=='html') ? $params['htmlbody'] : $params['plainbody'])){
+			$linkModel = GO::getModel($tag['model'])->findByPk($tag['model_id']);				
+			if($linkModel)
+				$this->_link($params,$message, $linkModel);
+		}
 
 		$response['unknown_recipients'] = $this->_findUnknownRecipients($params);
 
@@ -450,9 +479,11 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		$response = $imapMessage->toOutputArray(true);
 		$response = $this->_blockImages($params, $response);
-		$response = $this->_parseAutoLinkTag($params, $response);
-		$response = $this->_handleInvitations($imapMessage, $params, $response);
 		$response = $this->_checkXSS($params, $response);
+		
+		$response = $this->_handleAutoLinkTag($imapMessage, $params, $response);
+		$response = $this->_handleInvitations($imapMessage, $params, $response);
+		
 
 		$this->fireEvent('view', array(
 				&$this,
@@ -533,8 +564,49 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		return $response;
 	}
+	
+	private function _findAutoLinkTag($data){
+		preg_match_all('/\[link:([^]]+)\]/',$data, $matches, PREG_SET_ORDER);
+		
+		if($match=array_shift($matches)){
+			$props = explode(',',base64_decode($match[1]));
+			
+			$tag=array();
+			$tag['server'] = $props[0];
+			$tag['model'] = $props[1];
+			$tag['model_id'] = $props[2];
+			
+			return $tag;
+		}
+		return false;
+	}
 
-	private function _parseAutoLinkTag($params, $response) {
+	/**
+	 * Finds an autolink tag inserted by Group-Office and links the message to the model
+	 * 
+	 * @param GO_Email_Model_ImapMessage $imapMessage
+	 * @param type $params
+	 * @param string $response
+	 * @return string 
+	 */
+	private function _handleAutoLinkTag(GO_Email_Model_ImapMessage $imapMessage, $params, $response) {		
+		if(!$imapMessage->seen && $tag = $this->_findAutoLinkTag($response['htmlbody'])){
+			if($tag['server']==$_SERVER['SERVER_NAME']){								
+				$linkModel = GO::getModel($tag['model'])->findByPk($tag['model_id']);				
+				if($linkModel){
+					GO_Savemailas_Model_LinkedEmail::model()->createFromImapMessage($imapMessage, $linkModel);		
+					
+					//we need this just to display a unified name
+					$searchCacheModel = $linkModel->getCachedSearchRecord();
+					
+					$response['htmlbody']='<div class="em-autolink-message">'.
+									sprintf(GO::t('autolinked','email'),'<span class="em-autolink-link" onclick="GO.linkHandlers[\''.$tag['model'].'\'].call(this, '.
+													$tag['model_id'].');">'.$searchCacheModel->name.'</div>').
+									$response['htmlbody'];
+				}
+			}
+		}
+		
 		return $response;
 	}
 

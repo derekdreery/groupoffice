@@ -2115,10 +2115,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			//GO::debug($attr);
 
 			$model->setAttributes($attr, false);
-			return $model->save();
+			return $model;
 			
 		}
-		return true;
+		return false;
+	}
+	
+	public function getCachedSearchRecord(){
+		$model = GO_Base_Model_SearchCacheRecord::model()->findByPk(array('model_id'=>$this->pk, 'model_type_id'=>$this->modelTypeId()));
+		if($model)
+			return $model;
+		else
+			return $this->cacheSearchRecord ();
 	}
 	
 	/**
