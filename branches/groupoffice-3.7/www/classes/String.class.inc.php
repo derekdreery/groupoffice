@@ -1181,7 +1181,7 @@ class String {
 			$value_part = str_replace("\r",'', $value_part);
 			$value_part = str_replace("\n",'\n', $value_part);
 			$value_part = wordwrap($value_part, 74, "\n ");
-			$name_part .= ';CHARSET=UTF-8:';
+			$name_part .= ':';
 			return array($name_part.$value_part);
 		}
 
