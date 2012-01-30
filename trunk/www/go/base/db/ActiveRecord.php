@@ -2115,6 +2115,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			//GO::debug($attr);
 
 			$model->setAttributes($attr, false);
+			$model->save();
 			return $model;
 			
 		}

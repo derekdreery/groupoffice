@@ -69,7 +69,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 					$linkedEmail->cc = $params['cc'];
 
 				if (isset($params['bcc']))
-					$linkedEmail->to = $params['bcc'];
+					$linkedEmail->bcc = $params['bcc'];
 
 				$linkedEmail->subject = !empty($params['subject']) ? $params['subject'] : GO::t('no_subject', 'email');
 				$linkedEmail->acl_id = $model->findAclId();
@@ -218,7 +218,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$this->_link($params, $message);
 		
 		//if there's an autolink tag in the message we want to link outgoing messages too.
-		if($tag = $this->_findAutoLinkTag(($params['content_type']=='html') ? $params['htmlbody'] : $params['plainbody'])){
+		if(($tag = $this->_findAutoLinkTag($params['content_type']=='html' ? $params['htmlbody'] : $params['plainbody']))){
 			$linkModel = GO::getModel($tag['model'])->findByPk($tag['model_id']);				
 			if($linkModel)
 				$this->_link($params,$message, $linkModel);
@@ -575,7 +575,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$tag['server'] = $props[0];
 			$tag['model'] = $props[1];
 			$tag['model_id'] = $props[2];
-			
+		
 			return $tag;
 		}
 		return false;
