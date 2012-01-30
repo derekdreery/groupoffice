@@ -44,6 +44,13 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 	private $_lastPath;
 	
 	/**
+	 * The params that need to be passed to the last path.
+	 * 
+	 * @var array 
+	 */
+	private $_lastParams = array();
+	
+	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
@@ -78,11 +85,31 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 	 * Set the last path property. This path is used to figure out what the last 
 	 * page was before the current page.
 	 * 
-	 * @param string $path 
+	 * @param string $path
+	 * @param array $params
 	 */
-	public function setLastPath($path){
+	public function setLastPath($path,$params=array()){
 		$this->_lastPath = $path;
+		$params = $this->_removeParams($params);
+		$this->_lastParams = $params;
 	}
+	
+	/**
+	 * This provate function checks for the path and site_id parameters in the params array.
+	 * If they exists then it will remove it.
+	 * 
+	 * @param array $params
+	 * @return array 
+	 */
+	private function _removeParams($params){
+		if(!empty($params['path']))
+			unset($params['path']);
+		if(!empty($params['site_id']))
+			unset($params['site_id']);
+		
+		return $params;
+	}
+	
 	
 	/**
 	 * Get the last path property. This is usually the path of the page that you 
@@ -94,6 +121,15 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 		if(empty($this->_lastPath))
 			$this->_lastPath = $this->getHomePagePath();
 		return $this->_lastPath;
+	}
+	
+	/**
+	 * Get the parameters that belongs to the last path
+	 * 
+	 * @return array 
+	 */
+	public function getLastParams(){
+		return $this->_lastParams;
 	}
 	
 	/**
