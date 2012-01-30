@@ -37,7 +37,7 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 				$contact->save();
 
 				GO::session()->login($params['username'], $params['password']); // Automatically log the newly created user in.
-				$this->pageRedirect($this->getSite()->getLastPath());
+				$this->pageRedirect($this->getSite()->getLastPath(),$this->getSite()->getLastParams());
 			}
 		}
 		$this->renderPage($params);
@@ -157,7 +157,7 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 					GO_Base_Util_Http::setCookie('GO_PW', $encPassword);
 				}
 
-				$this->pageRedirect($this->getSite()->getLastPath());
+				$this->pageRedirect($this->getSite()->getLastPath(),$this->getSite()->getLastParams());
 			}
 		}
 
