@@ -1476,10 +1476,11 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		}
 
 		foreach ($struct as $id => $vals) {
-			if(!is_array($vals) || in_array($id, $skip_ids))
+			//if(!is_array($vals) || in_array($id, $skip_ids))
+			if(!is_array($vals))
 				continue;
 
-			if(isset($vals['type'])){
+			if(isset($vals['type']) && !in_array($id, $skip_ids)){
 				$vals['number'] = $id;
 				
 				//sometimes NIL is returned from Dovecot?!?

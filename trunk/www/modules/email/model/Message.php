@@ -161,8 +161,13 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 			$a['disposition'] = isset($part->disposition) ? $part->disposition : ''; 
 	 */
 	
-	public function getAttachments() {
+	public function &getAttachments() {
 		return $this->attachments;
+	}
+	
+	public function isAttachment($number){
+		$att = $this->getAttachments();		
+		return isset($att[$number]);
 	}
 	
 	/**
@@ -172,9 +177,13 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	 * @param string $number
 	 * @return array See getAttachments 
 	 */
-	public function getAttachment($number){
-		$att = $this->getAttachments();
-		return $att[$number];
+	public function &getAttachment($number){
+		$att =& $this->getAttachments();
+		if(isset($att[$number])){
+			return $att[$number];
+		}else{
+			throw new Exception("Attachment number $number not found");
+		}
 	}
 
 	/** 

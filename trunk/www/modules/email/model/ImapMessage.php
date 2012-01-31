@@ -171,6 +171,8 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		
 			$imap = $this->getImapConnection();
 			$struct = $this->_getStruct();
+			
+			//GO::debug($struct);
 
 			$hasAlternative = $imap->has_alternative_body($struct);
 
@@ -190,18 +192,20 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 
 
 			for($i=0,$max=count($this->_plainParts['parts']);$i<$max;$i++)
-			{
+			{				
 				if(empty($this->_plainParts['parts'][$i]['charset']))
 					$this->_plainParts['parts'][$i]['charset']=$this->defaultCharset;
 
-				$this->_bodyPartNumbers[]=$this->_plainParts['parts'][$i]['number'];
+				if($this->_plainParts['parts'][$i]['type']=='text')
+					$this->_bodyPartNumbers[]=$this->_plainParts['parts'][$i]['number'];
 			}
 			for($i=0,$max=count($this->_htmlParts['parts']);$i<$max;$i++)
 			{
 				if(empty($this->_htmlParts['parts'][$i]['charset']))
 					$this->_htmlParts['parts'][$i]['charset']=$this->defaultCharset;
 
-				$this->_bodyPartNumbers[]=$this->_htmlParts['parts'][$i]['number'];
+				if($this->_htmlParts['parts'][$i]['type']=='text')
+					$this->_bodyPartNumbers[]=$this->_htmlParts['parts'][$i]['number'];
 			}
 		}
 	}
@@ -213,22 +217,26 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 			
 			$this->_htmlBody='';
 			if($this->_htmlParts['text_found']){ //check if we found a html body
-
+				//GO::debug($this->_htmlParts);
 				foreach($this->_htmlParts['parts'] as $htmlPart){
 					if($htmlPart['type']=='text'){
 
 						if(!empty($this->_htmlBody))
 							$this->_htmlBody.= '<br />';
 
-						$this->_htmlBody .= $imap->get_message_part_decoded($this->uid, $htmlPart['number'],$htmlPart['encoding'], $htmlPart['charset'],$this->peek,512000);
-					}else
+						$this->_htmlBody .= GO_Base_Util_String::sanitizeHtml($imap->get_message_part_decoded($this->uid, $htmlPart['number'],$htmlPart['encoding'], $htmlPart['charset'],$this->peek,512000));
+					}else //if($this->isAttachment($htmlPart['number']))
 					{
-						$attachment = $this->getAttachment($htmlPart['number']);
-						
-						$this->_htmlBody .= '<img alt="'.$htmlPart['name'].'" src="'.$this->getAttachmentUrl($attachment).'" style="display:block;margin:10px 0;" />';
+						$attachment =& $this->getAttachment($htmlPart['number']);
+						$attachment['content_id']='go-autogen-'.$htmlPart['number'];
+						$this->_htmlBody .= '<img alt="'.$htmlPart['name'].'" src="cid:'.$attachment['content_id'].'" style="display:block;margin:10px 0;" />';
 					}
+//					else
+//					{
+//						GO::debug("Missing from attachments: ".$htmlPart['number']);	
+//					}
 				}
-				$this->_htmlBody = GO_Base_Util_String::sanitizeHtml($this->_htmlBody);			
+				//$this->_htmlBody = GO_Base_Util_String::sanitizeHtml($this->_htmlBody);			
 			}
 
 			if(empty($this->_htmlBody) && !$asText){
@@ -250,7 +258,6 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 			$imap = $this->getImapConnection();		
 			$this->_loadBodyParts();
 
-
 			$inlineImages=array();
 			$this->_plainBody='';
 			if($this->_plainParts['text_found']){ //check if we found a plain body
@@ -259,16 +266,18 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 					if($plainPart['type']=='text'){
 
 						if(!empty($this->_plainBody))
-							$this->_plainBody.= '<br />';
+							$this->_plainBody.= "\n";
 
 						$this->_plainBody .= $imap->get_message_part_decoded($this->uid, $plainPart['number'],$plainPart['encoding'], $plainPart['charset'],$this->peek,512000);
 					}else
 					{
 						if($asHtml){
+							//we have to put in this tag and replace it after we convert the text to html. Otherwise this html get's convert into htmlspecialchars.
 							$this->_plainBody.='{inline_'.count($inlineImages).'}';
 							
-							$attachment = $this->getAttachment($plainPart['number']);
-							$inlineImages[]='<img alt="'.$plainPart['name'].'" src="'.$attachment['url'].'" style="display:block;margin:10px 0;" />';
+							$attachment =& $this->getAttachment($plainPart['number']);
+							$attachment['content_id']='go-autogen-'.$plainPart['number'];
+							$inlineImages[]='<img alt="'.$plainPart['name'].'" src="cid:'.$attachment['content_id'].'" style="display:block;margin:10px 0;" />';
 						}
 					}
 				}			
@@ -276,11 +285,14 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		}
 		
 		if($asHtml){
-			$body = $this->_plainBody;
+			$body = $this->_plainBody;			
+			$body = GO_Base_Util_String::text_to_html($body);
+			
 			for($i=0,$max=count($inlineImages);$i<$max;$i++){
 				$body=str_replace('{inline_'.$i.'}', $inlineImages[$i], $body);
 			}
-			return GO_Base_Util_String::text_to_html($body);
+			
+			return $body;
 		}else
 		{
 			if(empty($this->_plainBody)){
@@ -318,7 +330,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	
 	private $_imapAttachmentsLoaded=false;
 	
-	public function getAttachments() {
+	public function &getAttachments() {
 		if(!$this->_imapAttachmentsLoaded){			
 			
 			$this->_imapAttachmentsLoaded=true;
@@ -327,8 +339,12 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 			$this->_loadBodyParts();
 			
 			$parts = $imap->find_message_attachments($this->_getStruct(), $this->_bodyPartNumbers);
+			//$parts = $imap->find_message_attachments($this->_getStruct());
 			
 			foreach ($parts as $part) {
+				//ignore applefile's
+				if($part['subtype']=='applefile')
+					continue;
 
 				if (empty($part['name']) || $part['name'] == 'false') {
 					if (!empty($part['subject'])) {
@@ -348,6 +364,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 					$a['name'] = $imap->mime_header_decode($part['name']);
 				}
 				
+				$a['disposition'] = isset($part['disposition']) ? $part['disposition'] : '';
 				$a['number'] = $part['number'];
 				$a['content_id']='';
 				if (!empty($part["id"])) {
@@ -363,7 +380,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 				}
 				
 				$f = new GO_Base_Fs_File($a['name']);
-				if(($this->createTempFilesForInlineAttachments && !empty($a['content_id'])) || ($this->createTempFilesForAttachments && empty($a['content_id']))){
+				if(($this->createTempFilesForInlineAttachments && (!empty($a['content_id']) || $a['disposition']=='inline')) || ($this->createTempFilesForAttachments && empty($a['content_id']))){
 					$tmpFile = new GO_Base_Fs_File($this->_getTempDir().$a['name']);				
 					if(!$tmpFile->exists())
 						$imap->save_to_file($this->uid, $tmpFile->path(),  $part['number'], $part['encoding'], true);
@@ -381,7 +398,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 				$a['human_size']= GO_Base_Util_Number::formatSize($a['size']);
 				$a['extension']=  $f->extension();
 				$a['encoding'] = $part['encoding'];
-				$a['disposition'] = isset($part['disposition']) ? $part['disposition'] : '';
+				
 				$a['url']=$this->getAttachmentUrl($a);
 				
 				$this->attachments[$a['number']]=$a;
