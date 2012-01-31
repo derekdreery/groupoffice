@@ -15,12 +15,11 @@
 		<link href="<?php echo $this->getRootTemplateUrl(); ?>css/buttons.css" rel="stylesheet" type="text/css" />
 		<link href="<?php echo $this->getRootTemplateUrl(); ?>css/tabs.css" rel="stylesheet" type="text/css" />
 		<link href="<?php echo $this->getRootTemplateUrl(); ?>css/webshop.css" rel="stylesheet" type="text/css" />
-		<link href="<?php echo $this->getRootTemplateUrl(); ?>css/pager.css" rel="stylesheet" type="text/css" />
+		<?php	echo $this->page->renderHeaderIncludes(); ?>
+
 	</head>
 
 	<body>
-		
-
 		<div class="main-container">
 
 			<div id="login">
@@ -65,5 +64,3 @@
 				<div class="hoofd-kader-top"></div>
 
 				<div class="hoofd-kader-center">
-
-				
