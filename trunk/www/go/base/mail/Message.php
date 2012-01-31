@@ -45,14 +45,12 @@ class GO_Base_Mail_Message extends Swift_Message{
 	private $_loadedBody;
 	
 	public function __construct($subject = null, $body = null, $contentType = null, $charset = null) {
-		$ret = parent::__construct($subject, $body, $contentType, $charset);
+		parent::__construct($subject, $body, $contentType, $charset);
 		
-		if($ret){
-			$headers = $this->getHeaders();
+		$headers = $this->getHeaders();
 
-			$headers->addTextHeader("X-Mailer", "Group-Office ".GO::config()->version);
-			$headers->addTextHeader("X-MimeOLE", "Produced by Group-Office ".GO::config()->version);
-		}
+		$headers->addTextHeader("X-Mailer", "Group-Office ".GO::config()->version);
+		$headers->addTextHeader("X-MimeOLE", "Produced by Group-Office ".GO::config()->version);
 	}
 	
 	/**
