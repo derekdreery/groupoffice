@@ -1,32 +1,37 @@
 Calendar:
 Distinguish declined and canceled events in grid.
-remove cal_events_declined
-invitation.php
 alarm import
 test invitation sending with moving in grid
 
+
+email attachment.php vervangen
+Autolinks
+
+file locking
+
+adreslijsten verloren bij upgrade.
 
 Files versioning
 
 serverclient
 
-* Default models:
-Button to create default models for user
-Button to create default models for module
-Select allowed modules in group dialog
+CMS compatible
 
 Projects facturatie
-tickets tarieven opslaan en facturatie testen
+
 Export projecten en billing
 
 Module icons
 
 
 
-Licentie checks per module
-Servermanager bestelfunctie
+
 
 Lage prio:
+
+Licentie checks per module
+
+Servermanager bestelfunctie
 
 e-mail mvc
 overige modules mvc

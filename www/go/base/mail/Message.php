@@ -388,6 +388,9 @@ class GO_Base_Mail_Message extends Swift_Message{
 					foreach ($inlineAttachments as $ia) {
 
 						//$tmpFile = new GO_Base_Fs_File(GO::config()->tmpdir.$ia['tmp_file']);
+						if(empty($ia->tmp_file)){
+							throw new Exception("No temp file for inline attachment ".$ia->name);
+						}
 
 						$path = empty($ia->from_file_storage) ? GO::config()->tmpdir.$ia->tmp_file : GO::config()->file_storage_path.$ia->tmp_file;
 						$tmpFile = new GO_Base_Fs_File($path);
