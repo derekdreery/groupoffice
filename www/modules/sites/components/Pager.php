@@ -69,7 +69,7 @@ class GO_Sites_Components_Pager extends GO_Sites_Components_Component {
 	 * Constructor for the pagination
 	 * 
 	 * @param int $id The identifier for this pagination component. (This is a string e.g." paginationOne)
-	 * @param GO_Sites_Model_Page $page The page model on where this pagination component is used
+	 * @param GO_Sites_Controller_Site $controller the page model on where this pagination component is used
 	 * @param mixed $model The model to create this pagination for.
 	 * @param GO_Base_Db_FindParams $findParams Findparams to find the correct models.
 	 * @param int $limit The limiter for how many models will be showed on each page
@@ -77,15 +77,17 @@ class GO_Sites_Components_Pager extends GO_Sites_Components_Component {
 	 *	Number 2 will create [2][3][4=current][5][6]
 	 *  Number 3 will create [1][2][3][4=current][5][6][7]
 	 */
-	public function __construct($id, GO_Sites_Model_Page $page, $model, GO_Base_Db_FindParams $findParams, $limit=10, $offset=0){		
-		
+	public function __construct($id, GO_Sites_Controller_Site $controller, $model, GO_Base_Db_FindParams $findParams, $limit=10, $offset=0){		
+
 		$this->_currentPageNumber = isset($_REQUEST[$this->getRequestParam()]) ? $_REQUEST[$this->getRequestParam()] : 1;
 		$this->limit = $limit;
 		$this->offset = $offset;
 		$this->_findParams = $findParams;
 		$this->_model = $model;
+
+		parent::__construct($id, $controller);
 		
-		parent::__construct($id, $page);
+		$this->_page->attachHeaderInclude('css',$this->_controller->getRootTemplateUrl().'css/pager.css'); // Include the right css file in the header
 	}
 	
 	protected function _init() {

@@ -8,21 +8,29 @@ class GO_Sites_Components_Component {
 	protected $_id;
 	
 	/**
-	 * 
+	 * The page to show this component on
 	 * 
 	 * @var GO_Sites_Model_Page 
 	 */
 	protected $_page;
 	
 	/**
+	 * The controller that is used
+	 * 
+	 * @var GO_Sites_Controller_Site 
+	 */
+	protected $_controller;
+	
+	
+	/**
 	 * Default constructor for Html_Components
 	 * 
 	 * @param string $id 
 	 */
-	protected function __construct($id,GO_Sites_Model_Page $page){
+	protected function __construct($id,GO_Sites_Controller_Site $controller){
 		$this->_id = $id;
-		$this->_page = $page;
-		
+		$this->_page = $controller->getPage();
+		$this->_controller = $controller;
 		$this->_init();
 	}
 	
