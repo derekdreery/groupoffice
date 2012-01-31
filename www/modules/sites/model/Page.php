@@ -39,6 +39,11 @@
 
 class GO_Sites_Model_Page extends GO_Base_Db_ActiveRecord {
 
+		
+	private $_attachedJS = array();
+	private $_attachedCSS = array();
+	private $_attachedCustom = array();
+	
 	/**
 	 * Returns a static model of itself
 	 * 
@@ -72,5 +77,38 @@ class GO_Sites_Model_Page extends GO_Base_Db_ActiveRecord {
 	
 	public function getUrl($params=array(),$relative=true){		
 		return $this->site->pageUrl($this->path, $params, $relative);
+	}
+	
+		
+	public function renderHeaderIncludes(){
+		
+		$output = '';
+		
+		foreach($this->_attachedCSS as $cssFile){
+			///<link href="/groupoffice/modules/sites/templates/Example/css/tabs.css" rel="stylesheet" type="text/css" />
+			$output .= '<link href="'.$cssFile.'" rel="stylesheet" type="text/css" />'."\n";
+		}
+		
+		foreach($this->_attachedJS as $jsFile){
+			//<script type="text/javascript" src="myscript.js"></script>
+			$output .= '<script type="text/javascript" src="'.$jsFile.'"></script>'."\n";
+		}
+		
+		foreach($this->_attachedCustom as $jsCustom){
+			$output .= $jsCustom."\n";
+		}
+		
+		echo $output;
+	}
+	
+	public function attachCustomHeaderScript($script){
+		$this->_attachedCustom[] = $script;
+	}
+	
+	public function attachHeaderInclude($type='css', $url){
+		if($type=='js')
+			$this->_attachedJS[] = $url;
+		else
+			$this->_attachedCSS[] = $url;
 	}
 }
