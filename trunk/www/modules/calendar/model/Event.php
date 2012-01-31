@@ -156,7 +156,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public function addException($date, $exception_event_id=0) {
 		$exception = new GO_Calendar_Model_Exception();
 		$exception->event_id = $this->id;
-		$exception->time = $date; // Needs to be a unix timestamp
+		$exception->time = mktime(date('G',$this->start_time),date('i',$this->start_time),0,date('n',$date),date('j',$date),date('Y',$date)); // Needs to be a unix timestamp
 		$exception->exception_event_id=$exception_event_id;
 		$exception->save();
 	}
