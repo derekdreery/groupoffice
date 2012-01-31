@@ -43,6 +43,13 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				$linkProps = explode(':', $params['link']);
 				$model = GO::getModel($linkProps[0])->findByPk($linkProps[1]);
 			}
+		}else
+		{
+			//don't link the same model twice on sent. It parses the new autolink tag
+			//and handles the link to field.
+			$linkProps = explode(':', $params['link']);
+			if($linkProps[0]==$model->className() && $linkProps[1]==$model->id)
+				return false;
 		}
 	
 		if ($model) {
@@ -206,7 +213,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		} else {
 			$logStr = $logger->dump();
 
-			preg_match('/<< 550.*>>/s', $logStr, $matches);
+			preg_match('/<< 55[0-9] .*>>/s', $logStr, $matches);
 
 			if (isset($matches[0])) {
 				$logStr = trim(substr($matches[0], 2, -2));
