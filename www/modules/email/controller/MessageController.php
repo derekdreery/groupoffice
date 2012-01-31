@@ -625,6 +625,21 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		return $response;
 	}
+	
+	public function actionMessageAttachment($params){
+		
+		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+		
+		$data = $account->openImapConnection($params['mailbox'])->get_message_part_decoded($params['uid'], $params['number'], $params['encoding']);
+		
+		$message = GO_Email_Model_SavedMessage::model()->createFromMimeData($data);
+		
+		$response = $message->toOutputArray();
+		$response = $this->_checkXSS($params, $response);
+		
+		return $response;
+		
+	}
 
 	public function actionAttachment($params) {
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);

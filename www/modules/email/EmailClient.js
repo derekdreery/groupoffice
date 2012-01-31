@@ -1270,14 +1270,14 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 			account_id: this.account_id,
 			mailbox: this.mailbox,
 			uid: this.messagePanel.uid,
-			imap_id: attachment.number,
+			number: attachment.number,
 			uuencoded_partnumber: attachment.uuencoded_partnumber,
 			encoding: attachment.encoding,
 			type: attachment.type,
 			subtype: attachment.subtype,
 			filename:attachment.name,
 			charset:attachment.charset,
-			sender:this.messagePanel.data.sender, //for gnupg,
+			sender:this.messagePanel.data.sender, //for gnupg and smime,
 			filepath:this.messagePanel.data.path ? this.messagePanel.data.path : '' //In some cases encrypted messages are temporary stored on disk so the handlers must use that to fetch the data.
 		}
 
@@ -1287,9 +1287,9 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		}
 		url_params = url_params.substring(0,url_params.length-1);
 		
-		if(!forceDownload && attachment.type=='message')
+		if(!forceDownload && attachment.mime=='message/rfc822')
 		{
-			GO.linkHandlers["GO_Savemailas_Model_LinkedEmail"].call(this, 0, params);
+			GO.email.showMessageAttachment(0, params);
 		}else
 		{
 			switch(attachment.extension)
@@ -1889,6 +1889,32 @@ GO.newMenuItems.push({
 	}
 });
 
+
+GO.email.showMessageAttachment = function(id, remoteMessage){
+
+	if(!GO.email.linkedMessagePanel){
+		GO.email.linkedMessagePanel = new GO.email.LinkedMessagePanel();
+
+		GO.email.linkedMessageWin = new GO.Window({
+			maximizable:true,
+			collapsible:true,
+			stateId:'em-linked-message-panel',
+			title: GO.email.lang.emailMessage,
+			height: 500,
+			width: 800,
+			closeAction:'hide',
+			layout:'fit',
+			items: GO.email.linkedMessagePanel
+		});
+	}
+	
+	if(!remoteMessage)
+		remoteMessage={};
+	
+	GO.email.linkedMessagePanel.remoteMessage=remoteMessage;
+	GO.email.linkedMessageWin.show();
+	GO.email.linkedMessagePanel.load(id, remoteMessage);
+}
 
 //GO.newMenuItems.push({
 //	text: GO.email.lang.emailFiles,

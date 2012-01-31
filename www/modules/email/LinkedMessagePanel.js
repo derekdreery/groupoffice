@@ -94,8 +94,7 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 			break;
 			
 			case 'attachment':
-				this.remoteMessage.task='message_attachment';
-				url = GO.settings.modules.email.url+'json.php';
+				url = GO.url("email/message/messageAttachment");
 				break;
 				
 			case 'file':
