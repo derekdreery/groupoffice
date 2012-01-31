@@ -22,15 +22,19 @@ class GO_Sites_Components_Component {
 	protected $_controller;
 	
 	
+	protected $_params;
+	
+	
 	/**
 	 * Default constructor for Html_Components
 	 * 
 	 * @param string $id 
 	 */
-	protected function __construct($id,GO_Sites_Controller_Site $controller){
+	protected function __construct($id,GO_Sites_Controller_Site $controller,$params){
 		$this->_id = $id;
 		$this->_page = $controller->getPage();
 		$this->_controller = $controller;
+		$this->_params = $params;
 		$this->_init();
 	}
 	
@@ -85,5 +89,19 @@ class GO_Sites_Components_Component {
 		$this->_page = $page;
 	}
 	
-	
+	/**
+	 * Get the key=>value array of the requestparams that where given to the page.
+	 * This function filters out the site_id and the path parameter.
+	 * 
+	 * @return array 
+	 */
+	public function getAdditionalParams(){
+		if(!empty($this->_params['path']))
+			unset($this->_params['path']);
+		
+		if(!empty($this->_params['site_id']))
+			unset($this->_params['site_id']);
+		
+		return $this->_params;
+	}
 }
