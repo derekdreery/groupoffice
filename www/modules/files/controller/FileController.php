@@ -17,7 +17,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 
 		if (!empty($model->random_code) && time() < $model->expire_time) {
 			$response['data']['expire_time'] = $model->getAttribute('expire_time', 'formatted');
-			$response['data']['download_link'] = $model->downloadURL;
+			$response['data']['download_link'] = $model->emailDownloadURL;
 		} else {
 			$response['data']['expire_time'] = "";
 			$response['data']['download_link'] = "";
