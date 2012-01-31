@@ -102,6 +102,10 @@ class GO_Sites_Components_Component {
 		if(!empty($this->_params['site_id']))
 			unset($this->_params['site_id']);
 		
+		// This one is filtered out because of an error in the usage of it. (The required parameter is an array and is not supposed to be an array)
+		if(!empty($this->_params['required']))
+			unset($this->_params['required']);
+				
 		return $this->_params;
 	}
 }
