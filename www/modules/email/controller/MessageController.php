@@ -159,7 +159,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		if(!empty($tag)){
 			if($params['content_type']=='html')
-				$params['htmlbody'].= '<p>'.$tag.'</p>';
+				$params['htmlbody'].= '<div style="display:none">'.$tag.'</div>';
 			else
 				$params['plainbody'].= "\n\n".$tag."\n\n";
 		}
