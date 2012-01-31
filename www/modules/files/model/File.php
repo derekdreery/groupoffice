@@ -141,12 +141,29 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		return parent::afterDelete();
 	}
 
-	protected function getDownloadURL() {
+	/**
+	 * The link that can be send in an e-mail as download link.
+	 * 
+	 * @return string 
+	 */
+	protected function getEmailDownloadURL() {
 		if (!empty($this->expire_time) && !empty($this->random_code)) {
-			return GO::url('files/file/download', 'id=' . $this->id . '&random_code=' . $this->random_code, false);
+			return GO::url('files/file/download', array('id'=>$this->id,'random_code'=>$this->random_code), false);
 		}
 	}
+	
+	
+	/**
+	 * The link to download the file.
+	 * This function does not check the file download expire time and the random code
+	 * 
+	 * @return string 
+	 */
+	protected function getDownloadURL() {
+		return GO::url('files/file/download', array('id'=>$this->id), false);		
+	}
 
+	
 	protected function getThumbURL() {
 		return GO::url('core/thumb', 'src=' . urlencode($this->path) . '&lw=100&ph=100&zc=1&filemtime=' . $this->fsFile->mtime());
 	}
