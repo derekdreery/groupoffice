@@ -77,32 +77,29 @@ class GO_Sites_Components_Pager extends GO_Sites_Components_Component {
 	 *	Number 2 will create [2][3][4=current][5][6]
 	 *  Number 3 will create [1][2][3][4=current][5][6][7]
 	 */
-	public function __construct($id, GO_Sites_Controller_Site $controller, $model, GO_Base_Db_FindParams $findParams, $limit=10, $offset=0){		
+	public function __construct($id, GO_Sites_Controller_Site $controller,$params, $model, GO_Base_Db_FindParams $findParams, $limit=10, $offset=0){		
 
-		$this->_currentPageNumber = isset($_REQUEST[$this->getRequestParam()]) ? $_REQUEST[$this->getRequestParam()] : 1;
 		$this->limit = $limit;
 		$this->offset = $offset;
 		$this->_findParams = $findParams;
 		$this->_model = $model;
 
-		parent::__construct($id, $controller);
+		parent::__construct($id, $controller,$params);
 		
+		$this->_currentPageNumber = isset($params[$this->getRequestParam()]) ? $params[$this->getRequestParam()] : 1;
 		$this->_page->attachHeaderInclude('css',$this->_controller->getRootTemplateUrl().'css/pager.css'); // Include the right css file in the header
+		$this->_initialize();
 	}
 	
-	protected function _init() {
-		
+	private function _initialize() {
 		$this->_findParams->limit($this->limit);
 		$this->_findParams->calcFoundRows();
 		$this->_findParams->start(($this->_currentPageNumber-1)*$this->limit);
 		
 		$this->_stmt=$this->_model->find($this->_findParams);
 		while($model = $this->_stmt->fetch()){
-
 			$this->models[] = $model;
-		}	
-		
-		return parent::_init();
+		}
 	}
 	
 	/**
@@ -149,14 +146,14 @@ class GO_Sites_Components_Pager extends GO_Sites_Components_Component {
 					if($this->_currentPageNumber == 1)
 						echo '<<';
 					else
-						echo '<a href="'.$this->_page->getUrl(array($this->getRequestParam()=>1)).'"><<</a>';
+						echo '<a href="'.$this->_page->getUrl(array_merge($this->getAdditionalParams(),array($this->getRequestParam()=>1))).'"><<</a>';
 				echo '</td>';
 				
 				echo '<td class="pager-block pager-inactive">';
 					if($this->_currentPageNumber == 1)
 						echo '<';
 					else
-						echo '<a href="'.$this->_page->getUrl(array($this->getRequestParam()=>$previous)).'"><</a>';
+						echo '<a href="'.$this->_page->getUrl(array_merge($this->getAdditionalParams(),array($this->getRequestParam()=>$previous))).'"><</a>';
 				echo '</td>';
 				// END: RENDER THE PAGER PREVIOUS ARROWS
 				
@@ -176,9 +173,9 @@ class GO_Sites_Components_Pager extends GO_Sites_Components_Component {
 
 				for($page=$offsetStart;$page<=$offsetEnd;$page++){
 					if($page == $this->_currentPageNumber)
-						echo '<td class="pager-block pager-active"><a href="'.$this->_page->getUrl(array($this->getRequestParam()=>$page)).'">'.$page.'</a></td>';
+						echo '<td class="pager-block pager-active"><a href="'.$this->_page->getUrl(array_merge($this->getAdditionalParams(),array($this->getRequestParam()=>$page))).'">'.$page.'</a></td>';
 					else
-						echo '<td class="pager-block pager-inactive"><a href="'.$this->_page->getUrl(array($this->getRequestParam()=>$page)).'">'.$page.'</a></td>';
+						echo '<td class="pager-block pager-inactive"><a href="'.$this->_page->getUrl(array_merge($this->getAdditionalParams(),array($this->getRequestParam()=>$page))).'">'.$page.'</a></td>';
 				}	
 				// END: RENDER THE PAGE NUMBER BLOCKS
 				
@@ -187,14 +184,14 @@ class GO_Sites_Components_Pager extends GO_Sites_Components_Component {
 					if($this->_currentPageNumber == $this->_totalPages)
 						echo '>';
 					else
-						echo '<a href="'.$this->_page->getUrl(array($this->getRequestParam()=>$next)).'">></a>';
+						echo '<a href="'.$this->_page->getUrl(array_merge($this->getAdditionalParams(),array($this->getRequestParam()=>$next))).'">></a>';
 				echo '</td>';
 				
 				echo '<td class="pager-block pager-inactive">';
 					if($this->_currentPageNumber == $this->_totalPages)
 						echo '>>';
 					else
-						echo '<a href="'.$this->_page->getUrl(array($this->getRequestParam()=>$this->_totalPages)).'">>></a>';
+						echo '<a href="'.$this->_page->getUrl(array_merge($this->getAdditionalParams(),array($this->getRequestParam()=>$this->_totalPages))).'">>></a>';
 				echo '</td>';
 				// END: RENDER THE PAGER NEXT ARROWS
 				
