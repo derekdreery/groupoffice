@@ -12,8 +12,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 
 	protected function init() {
 		GO::$disableModelCache=true; //for less memory usage
-		ini_set('max_execution_time', '600');
-		session_write_close();		
+		ini_set('max_execution_time', '0'); //allow long runs
+		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
 	}
 	
 	protected function ignoreAclPermissions() {
@@ -355,7 +355,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 								$moduleModel->version=$counts[$module];
 								$moduleModel->save();
 							}
-							flush();
+							ob_flush();
 						}
 					}
 				}
@@ -378,12 +378,12 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			echo "Checking database after version 3.7 upgrade.\n";
 			$this->actionCheckDatabase($params);
 			echo "Done\n\n";
-			flush();
+			ob_slush();
 			
 			echo "Building search cache after version 3.7 upgrade.\n";
 			$this->actionBuildSearchCache($params);
 			echo "Done\n\n";
-			flush();
+			ob_flush();
 		}		
 		
 		echo "All Done!\n";		

@@ -56,43 +56,7 @@ class GO_Base_Util_String {
 		return $s;
 	}
 
-	/*
-	 * Check if parenthesis are closed properly.
-	 */
-	public static function check_parentheses($str){
-
-		//remove escaped slashes
-		$str = str_replace("\'", "", $str);
-		$str = str_replace('\"', "", $str);
-
-		//remove slashed strings
-		$str = preg_replace('/"[^"]*"/', '', $str);
-		$str = preg_replace("/'[^']*'/", '', $str);
-
-		$opened=0;
-
-		for($i=0,$max=strlen($str);$i<$max;$i++){
-			switch($str[$i]){
-				case '(':
-					$opened++;
-				break;
-
-				case ')':
-					if($opened>0){
-						$opened--;
-					}else
-					{
-						//closing bracket and it wasn't opened. This is invalid
-						return false;
-					}
-					break;
-			}
-		}
-
-		//opened should be 0 if number of ( matches ).
-		return $opened==0;
-	}
-
+	
 	public static function escape_javascript($str){
 		return strtr($str, array('\\'=>'\\\\',"'"=>"\\'",'"'=>'\\"',"\r"=>'\\r',"\n"=>'\\n','</'=>'<\/'));
 	}
@@ -999,117 +963,7 @@ class GO_Base_Util_String {
 		return ($text);
 	}
 
-
 	/**
-	 * Used by icalendar convertor
-	 *
-	 * @param unknown_type $sText
-	 * @param unknown_type $bEmulate_imap_8bit
-	 * @return unknown
-	 */
-
-	public static function quoted_printable_encode($sLine,$bEmulate_imap_8bit=false) {
-
-		if(empty($sLine)){
-			return $sLine;
-		}
-	
-		$sLine = str_replace("\r", '', $sLine);
-		$sLine = str_replace("\n", "\r\n", $sLine);
-		
-		// split text into lines
-
-			$sRegExp = '/[^\x09\x20\x21-\x3C\x3E-\x7E]/e';
-
-			// imap_8bit encodes x09 everywhere, not only at lineends,
-			// for EBCDIC safeness encode !"#$@[\]^`{|}~,
-			// for complete safeness encode every character :)
-			if ($bEmulate_imap_8bit)
-				$sRegExp = '/[^\x20\x21-\x3C\x3E-\x7E]/e';
-
-			$sReplmt = 'sprintf( "=%02X", ord ( "$0" ) ) ;';
-			$sLine = preg_replace( $sRegExp, $sReplmt, $sLine );
-
-			// encode x09,x20 at lineends
-			{
-				$iLength = strlen($sLine);
-				$iLastChar = ord($sLine{$iLength-1});
-
-				//              !!!!!!!!
-				// imap_8_bit does not encode x20 at the very end of a text,
-				// here is, where I don't agree with imap_8_bit,
-				// please correct me, if I'm wrong,
-				// or comment next line for RFC2045 conformance, if you like
-				if (!($bEmulate_imap_8bit && ($i==count($aLines)-1)))
-
-				if (($iLastChar==0x09)||($iLastChar==0x20)) {
-					$sLine{$iLength-1}='=';
-					$sLine .= ($iLastChar==0x09)?'09':'20';
-				}
-			}    // imap_8bit encodes x20 before chr(13), too
-			// although IMHO not requested by RFC2045, why not do it safer :)
-			// and why not encode any x20 around chr(10) or chr(13)
-			if ($bEmulate_imap_8bit) {
-				$sLine=str_replace(' =0D','=20=0D',$sLine);
-				//$sLine=str_replace(' =0A','=20=0A',$sLine);
-				//$sLine=str_replace('=0D ','=0D=20',$sLine);
-				//$sLine=str_replace('=0A ','=0A=20',$sLine);
-			}
-
-			// finally split into softlines no longer than 76 chars,
-			// for even more safeness one could encode x09,x20
-			// at the very first character of the line
-			// and after soft linebreaks, as well,
-			// but this wouldn't be caught by such an easy RegExp
-			//preg_match_all( '/.{1,73}([^=]{0,2})?/', $sLine, $aMatch );
-			//$sLine = implode( '=' . chr(13).chr(10), $aMatch[0] ); // add soft crlf's
-		//}
-		return $sLine;
-		// join lines into text
-		//return implode(chr(13).chr(10),$aLines);
-	}
-
-	public static function wrap_quoted_printable_encoded_string($sText, $add_leading_space=false){
-		$lb = '='.chr(13).chr(10);
-
-		//funambol clients need this to parse the vcard correctly.
-		if($add_leading_space)
-			$lb .= ' ';
-
-		preg_match_all( '/.{1,73}([^=]{0,2})?/', $sText, $aMatch );
-		return implode($lb, $aMatch[0]); // add soft crlf's
-		
-	}
-
-	public static function format_vcard_line($name_part, $value_part, $add_leading_space=false, $dont_use_quoted_printable=false)
-	{
-		//$value_part = str_replace("\r\n","\n", $value_part);
-
-		if($dont_use_quoted_printable){
-			//just wrap texts
-			$value_part = str_replace("\r",'', $value_part);
-			$value_part = str_replace("\n",'\n', $value_part);
-			$value_part = wordwrap($value_part, 74, "\n ");
-			$name_part .= ';CHARSET=UTF-8:';
-			return array($name_part.$value_part);
-		}
-
-		$qp_value_part = GO_Base_Util_String::quoted_printable_encode($value_part);
-
-		if($value_part != $qp_value_part || strlen($name_part.$value_part)>=73)
-		{
-			$name_part .= ";ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:";
-			//disable wrapping for funambol
-			$str = $add_leading_space ? $name_part.$qp_value_part : GO_Base_Util_String::wrap_quoted_printable_encoded_string($name_part.$qp_value_part, $add_leading_space);
-			return array($str);
-		}else
-		{
-			$name_part .= ';CHARSET=UTF-8:';
-		}
-		return array($name_part.$value_part);
-	}
-
-		/**
 	 * This function generates a randomized password.
 	 *
 	 * @access static
@@ -1287,6 +1141,16 @@ class GO_Base_Util_String {
 	function _addAccolades($string)
 	{
 		return '{'.$string.'}';
+	}
+	
+	/**
+	 * Check the length of a string. Works with UTF8 too.
+	 * 
+	 * @param string $str
+	 * @return int 
+	 */
+	public static function length($str){
+		return function_exists("mb_strlen") ? mb_strlen($str, 'UTF-8') : strlen($str);
 	}
 
 }

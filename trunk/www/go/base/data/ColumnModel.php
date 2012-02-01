@@ -63,7 +63,7 @@ class GO_Base_Data_ColumnModel {
 	 */
 	public function setColumnsFromModel(GO_Base_Db_ActiveRecord $model, $excludeColumns=array(), $includeColumns=array()) {
 
-			$attributes = $model->getAttributes();
+			$attributes = $model->getColumns();
 
 			foreach (array_keys($attributes) as $colName) {					
 				if(!in_array($colName, $excludeColumns)){					

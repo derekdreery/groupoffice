@@ -1097,16 +1097,23 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				$result = $this->getDbConnection()->query($sql);
 			}
 		}catch(Exception $e){
-			$msg = $e->getMessage()."\n\nFull SQL Query: ".$sql;
-			
-			if(isset($params['bindParams'])){	
-				$msg .= "\nbBind params: ".var_export($params['bindParams'], true);
+			$msg = $e->getMessage();
+						
+			if(GO::config()->debug){
+				$msg .= "\n\nFull SQL Query: ".$sql;
+
+				if(isset($params['bindParams'])){	
+					$msg .= "\nbBind params: ".var_export($params['bindParams'], true);
+				}
+
+				if(isset($criteriaObjectParams)){
+					$msg .= "\nbBind params: ".var_export($criteriaObjectParams, true);
+				}
+
+				$msg .= "\n\n".$e->getTraceAsString();
+
+				GO::debug($msg);
 			}
-			
-			if(isset($criteriaObjectParams)){
-				$msg .= "\nbBind params: ".var_export($criteriaObjectParams, true);
-			}
-			GO::debug($msg);
 			throw new Exception($msg);
 		}
 
@@ -1775,7 +1782,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 			if(!empty($attributes['required']) && empty($this->_attributes[$field])){				
 				$this->setValidationError($field, $this->getAttributeLabel($field).' is required');				
-			}elseif(!empty($attributes['length']) && !empty($this->_attributes[$field]) && strlen($this->_attributes[$field])>$attributes['length'])
+			}elseif(!empty($attributes['length']) && !empty($this->_attributes[$field]) && GO_Base_Util_String::length($this->_attributes[$field])>$attributes['length'])
 			{
 				$this->setValidationError($field, $this->getAttributeLabel($field).' was longer then the maximum allowed size of '.$attributes['length']);
 			}elseif(!empty($attributes['regex']) && !empty($this->_attributes[$field]) && !preg_match($attributes['regex'], $this->_attributes[$field]))
@@ -1856,7 +1863,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		if(!$this->validate()){
 			$errors = $this->getValidationErrors();
-			throw new Exception(GO::t('validationErrorsFound')."\n".implode("\n", $errors));			
+			throw new Exception(GO::t('validationErrorsFound')."\n".implode("\n", $errors)."\n");			
 		}
 		
 		//Don't do anything if nothing has been modified.
@@ -2097,10 +2104,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$attr = array_merge($autoAttr, $attr);
 			
 			//make sure these attributes are not too long
-			if(strlen($attr['description'])>100)
+			if(GO_Base_Util_String::length($attr['description'])>100)
 				$attr['name']=substr($attr['name'], 0, 100);
 			
-			if(strlen($attr['description'])>255)
+			if(GO_Base_Util_String::length($attr['description'])>255)
 				$attr['description']=substr($attr['description'], 0, 255);
 			
 			//GO::debug($attr);
@@ -2209,9 +2216,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}
 			$ret =  $stmt->execute();
 		}catch(Exception $e){
-			$msg = $e->getMessage()."\n\nFull SQL Query: ".$sql."\n\nParams:\n".var_export($this->_attributes, true);
 			
-			GO::debug($msg);
+			$msg = $e->getMessage();
+						
+			if(GO::config()->debug){
+				$msg .= "\n\nFull SQL Query: ".$sql."\n\nParams:\n".var_export($this->_attributes, true);
+
+				$msg .= "\n\n".$e->getTraceAsString();
+
+				GO::debug($msg);
+			}
 			throw new Exception($msg);
 		}
 		
@@ -2273,15 +2287,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}
 			$ret = $stmt->execute();
 		}catch(Exception $e){
-			$msg = $e->getMessage()."\n\nFull SQL Query: ".$sql."\n\nParams:\n".var_export($this->_attributes, true);
-			
-			GO::debug($msg);
-			throw new Exception($msg);
-		}
+			$msg = $e->getMessage();
+						
+			if(GO::config()->debug){
+				$msg .= "\n\nFull SQL Query: ".$sql."\n\nParams:\n".var_export($this->_attributes, true);
 
-		
-		return $ret;
-		
+				$msg .= "\n\n".$e->getTraceAsString();
+
+				GO::debug($msg);
+			}
+			throw new Exception($msg);			
+		}	
+		return $ret;		
 	}
 	
 	protected function beforeDelete(){

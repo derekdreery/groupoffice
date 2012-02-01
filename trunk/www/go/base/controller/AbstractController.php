@@ -144,6 +144,13 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	}
 	
 	/**
+	 * Default headers to send. 
+	 */
+	protected function headers(){
+		header('Content-Type: text/html; charset=UTF-8');
+	}
+	
+	/**
 	 * Includes the file from the views folder
 	 * 
 	 * @param string $viewName 
@@ -155,7 +162,11 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * @param array $data 
 	 * An associative array of which the keys become available variables in the view file.
 	 */
-	protected function render($viewName, $data=array()){				
+	protected function render($viewName, $data=array()){
+		
+		if(!headers_sent())
+			$this->headers();
+		
 		$module = $this->getModule();
 		
 		if(!$module){
