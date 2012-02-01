@@ -689,7 +689,8 @@ class GO_Base_Util_Date {
 
 	public static function get_timestamp($utime, $with_time=true)
 	{
-		if(empty($utime))
+		$utime = intval($utime);
+		if($utime<1)
 			return '';
 			
 		return GO_Base_Util_Date::format('@'.$utime, $with_time);
