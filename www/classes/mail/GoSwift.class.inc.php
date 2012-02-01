@@ -338,7 +338,10 @@ class GoSwift extends Swift_Mailer{
 			$send_success = parent::send($this->message,$this->failed_recipients);
 		}
 
-		if(!$send_success){
+		if(!$send_success || count($this->failed_recipients)){
+			
+			$msg = "Failed recipients: ".implode(', ', $this->failed_recipients)."\n\n";
+			
 			$log_str = $this->log->dump();
 
 			$error = preg_match('/<< 550.*>>/s', $log_str,$matches);
@@ -346,7 +349,8 @@ class GoSwift extends Swift_Mailer{
 			if(isset($matches[0])){
 				$log_str=trim(substr($matches[0],2,-2));
 			}
-			throw new Exception($log_str);
+			
+			throw new Exception($msg.$log_str);
 		}
 
 		if(!$dont_save_in_sent_items && $send_success && $this->account && $this->account['type']=='imap' && !empty($this->account['sent']))
