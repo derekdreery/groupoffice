@@ -441,28 +441,29 @@ class GO{
 		
 		if (GO::config()->debug) {
 
-			$_SESSION['connect_count'] = 0;
-			$_SESSION['query_count'] = 0;
+//			$_SESSION['connect_count'] = 0;
+//			$_SESSION['query_count'] = 0;
 			
 			//Don't do this for old lib
-			if(!isset($GLOBALS['GO_CONFIG']))
-				error_reporting(E_ALL | E_STRICT);
+//			if(!isset($GLOBALS['GO_CONFIG']))
+//				error_reporting(E_ALL | E_STRICT);
 
 			ini_set('display_errors','on');
-			ini_set('log_errors','on');
+//			ini_set('log_errors','on');
 			//ini_set('memory_limit','32M');
 			//ini_set('max_execution_time',10);
+			set_error_handler(array('GO','errorHandler'), E_ALL | E_STRICT);
 		}
 
-		//set_error_handler(array('GO','errorHandler'), E_ALL | E_STRICT);
+		
 	}
 	
 	
 	public static function errorHandler($errno, $errstr, $errfile, $errline, $errcontext) {
 
 		$err_str = "PHP error: $errfile:$errline $errstr ($errno)";
-		if(GO::config()->debug)
-			echo $err_str."\n";
+//		if(GO::config()->debug)
+//			echo $err_str."\n";
 		
     GO::debug($err_str);
 	}
