@@ -21,7 +21,8 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 			GO_Base_Html_Error::validateModel($model);
 
 			if (!GO_Base_Html_Error::hasErrors()) {
-				$model->save();
+				$model->save();				
+				$model->checkDefaultModels();
 
 				$contact = $model->createContact();
 				$contact->setAttributes($params);

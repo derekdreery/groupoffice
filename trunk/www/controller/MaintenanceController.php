@@ -109,7 +109,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		if(empty($params['keepexisting']))
 			GO::getDbConnection()->query('TRUNCATE TABLE go_search_cache');
 		
-		echo '<pre>';
+		header('Content-Type: text/plain; charset=UTF-8');
 		
 		$models=GO::findClasses('model');
 		foreach($models as $model){
@@ -130,7 +130,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	protected function actionCheckDatabase($params) {
 		$response = array();
 				
-		echo '<pre>';		
+		header('Content-Type: text/plain; charset=UTF-8');
 		
 		if(!empty($params['module'])){
 			if($params['module']=='base'){
@@ -206,11 +206,16 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			}
 			
 			echo "Done.\n";
+			return true;
+		}else
+		{
+			return false;
 		}
+		
 	}
 	
 	protected function actionUpgrade($params) {
-		
+				
 		//don't be strict in upgrade process
 		GO::getDbConnection()->query("SET sql_mode=''");
 		
@@ -218,7 +223,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			echo '<pre>';
 		}
 		
-		$this->_checkV3();
+		$v3 = $this->_checkV3();
 		
 		$logDir = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'log/upgrade/');
 		$logDir->create();
@@ -365,11 +370,23 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			echo "Ran in test mode\n";
 		}
 		
-		echo "Removing cached javascripts...\n";
-		
+		echo "Removing cached javascripts...\n\n";		
 		GO::clearCache();
 		
-		echo "Done!\n";
+		if($v3){
+			
+			echo "Checking database after version 3.7 upgrade.\n";
+			$this->actionCheckDatabase($params);
+			echo "Done\n\n";
+			flush();
+			
+			echo "Building search cache after version 3.7 upgrade.\n";
+			$this->actionBuildSearchCache($params);
+			echo "Done\n\n";
+			flush();
+		}		
+		
+		echo "All Done!\n";		
 
 		//return $response;
 	}

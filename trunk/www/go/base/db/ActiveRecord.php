@@ -1773,21 +1773,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				
 		foreach($this->columns as $field=>$attributes){
 			
-			if(!empty($attributes['required']) && empty($this->_attributes[$field])){
-				
-				$this->setValidationError($field, $this->getAttributeLabel($field).' is required');
-				
-				//throw new Exception($field.' is required for '.$this->localizedName);
+			if(!empty($attributes['required']) && empty($this->_attributes[$field])){				
+				$this->setValidationError($field, $this->getAttributeLabel($field).' is required');				
 			}elseif(!empty($attributes['length']) && !empty($this->_attributes[$field]) && strlen($this->_attributes[$field])>$attributes['length'])
 			{
-				//throw new Exception($field.' too long '.strlen($this->_attributes[$field]).' > '.$attributes['length']);
-				
 				$this->setValidationError($field, $this->getAttributeLabel($field).' was longer then the maximum allowed size of '.$attributes['length']);
-			}
-//			}elseif(!empty($this->_attributes[$field]) && preg_match('/[<>]+/',$this->_attributes[$field])){
-//				throw new Exception($this->className().' '.$field.' contains invalid characters < or > : '.$this->_attributes[$field]);
-//			}
-			elseif(!empty($attributes['regex']) && !empty($this->_attributes[$field]) && !preg_match($attributes['regex'], $this->_attributes[$field]))
+			}elseif(!empty($attributes['regex']) && !empty($this->_attributes[$field]) && !preg_match($attributes['regex'], $this->_attributes[$field]))
 			{
 				$this->setValidationError($field, $this->getAttributeLabel($field).' was not correctly formatted');
 			}elseif(!empty($attributes['validator']) && !empty($this->_attributes[$field]) && !call_user_func($attributes['validator'], $this->_attributes[$field]))

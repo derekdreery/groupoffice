@@ -136,7 +136,7 @@ $updates["201111211405"][]="CREATE TABLE IF NOT EXISTS `ab_default_email_templat
   KEY `addresslist_id` (`template_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
-$updates["201111211405"][]="CREATE TABLE IF NOT EXISTS `ml_sendmailing_companies` (
+$updates["201111211405"][]="CREATE TABLE IF NOT EXISTS `ab_sendmailing_companies` (
   `addresslist_id` int(11) NOT NULL DEFAULT '0',
   `company_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`addresslist_id`,`company_id`)
@@ -178,18 +178,10 @@ $updates["201112141253"][]="RENAME TABLE `ab_sendmailing_companies` TO `ab_sent_
 $updates["201112141253"][]="ALTER TABLE `ab_sendmailing_contacts` CHANGE `addresslist_id` `sent_mailing_id` INT( 11 ) NOT NULL DEFAULT '0'";
 $updates["201112141253"][]="RENAME TABLE `ab_sendmailing_contacts` TO `ab_sent_mailing_contacts` ;";
 
-$updates["201112221547"][]="CREATE TABLE IF NOT EXISTS `ab_addresslist_companies` (
-  `addresslist_id` int(11) NOT NULL,
-  `company_id` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`addresslist_id`,`company_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+$updates["201112221547"][]="RENAME TABLE `ml_mailing_companies` TO `ab_addresslists_companies` ;";
 
 
-$updates["201112221547"][]="CREATE TABLE IF NOT EXISTS `ab_addresslist_contacts` (
-  `addresslist_id` int(11) NOT NULL,
-  `contact_id` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`addresslist_id`,`contact_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+$updates["201112221547"][]="RENAME TABLE `ml_mailing_contacts` TO `ab_addresslists_contacts` ;";
 
 
 $updates["201112221547"][]="CREATE TABLE IF NOT EXISTS `cf_ab_contacts` (
@@ -202,14 +194,7 @@ $updates["201112221547"][]="CREATE TABLE IF NOT EXISTS `cf_ab_companies` (
   PRIMARY KEY (`model_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
-$updates["201112221547"][]="CREATE TABLE IF NOT EXISTS `ab_addresslists` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL DEFAULT '0',
-  `acl_id` int(11) NOT NULL DEFAULT '0',
-  `name` varchar(255) DEFAULT NULL,
-  `default_salutation` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+$updates["201112221547"][]="RENAME TABLE `ml_mailing_groups` TO `ab_addresslists` ;";
 
 
 $updates["201201170902"][]="CREATE TABLE IF NOT EXISTS `ab_email_templates` (
@@ -225,3 +210,29 @@ $updates["201201170902"][]="CREATE TABLE IF NOT EXISTS `ab_email_templates` (
 
 $updates["201201170902"][]="update ab_email_templates set content=replace(content, '{salutation}','{contact:salutation}');";
 $updates["201201170902"][]="update ab_email_templates set content=replace(content, '{my_','{user:');";
+
+
+$updates["201202011207"][]="CREATE TABLE IF NOT EXISTS `ab_addresslists` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  `acl_id` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(255) DEFAULT NULL,
+  `default_salutation` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates["201202011207"][]="CREATE TABLE IF NOT EXISTS `ab_addresslist_companies` (
+  `addresslist_id` int(11) NOT NULL,
+  `company_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`addresslist_id`,`company_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+
+$updates["201202011207"][]="CREATE TABLE IF NOT EXISTS `ab_addresslist_contacts` (
+  `addresslist_id` int(11) NOT NULL,
+  `contact_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`addresslist_id`,`contact_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates["201202011207"][]="ALTER TABLE `ab_addresslists` DROP `acl_write`";
+$updates["201202011207"][]="ALTER TABLE `ab_addresslists` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT";

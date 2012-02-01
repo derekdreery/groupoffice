@@ -234,13 +234,25 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			
 			$this->acl->user_id=$this->id;
 			$this->acl->save();
-		}	
+			
+			$this->_setVisibility();
+		}		
 		
 		$this->createContact();
 		
 		GO::modules()->callModuleMethod('saveUser', array(&$this, $wasNew));
 
 		return parent::afterSave($wasNew);
+	}
+	
+	private function _setVisibility(){
+		if(!empty(GO::config()->register_visible_user_groups)){
+			$groups = explode(',',GO::config()->register_visible_user_groups);
+			foreach($groups as $groupName){
+				$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', $groupName);
+				$this->acl->addGroup($group->id);
+			}
+		}
 	}
 	
 	/**

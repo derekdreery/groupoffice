@@ -153,6 +153,9 @@ class GO{
 		$items = $folder->ls();
 		foreach($items as $item)
 			$item->delete();
+		GO::cache()->flush();
+		
+		GO_Base_Model::clearCache();
 	}
 	
 	/**
