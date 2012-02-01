@@ -7,7 +7,7 @@
 class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractController {
 	
 	protected function allowGuests() {
-		return array('upgrade','checkdatabase','test');
+		return array('upgrade','checkdatabase');
 	}
 
 	protected function init() {
@@ -18,11 +18,6 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	
 	protected function ignoreAclPermissions() {
 		return array('*');
-	}
-
-	protected function actionTest(){
-		$stmt = GO_Addressbook_Model_Company::model()->find(array('limit'=>100));
-		$stmt->callOnEach('checkDatabase');
 	}
 	
 	protected function actionRemoveDuplicates($params){
