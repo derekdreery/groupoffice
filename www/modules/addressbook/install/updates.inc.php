@@ -178,10 +178,10 @@ $updates["201112141253"][]="RENAME TABLE `ab_sendmailing_companies` TO `ab_sent_
 $updates["201112141253"][]="ALTER TABLE `ab_sendmailing_contacts` CHANGE `addresslist_id` `sent_mailing_id` INT( 11 ) NOT NULL DEFAULT '0'";
 $updates["201112141253"][]="RENAME TABLE `ab_sendmailing_contacts` TO `ab_sent_mailing_contacts` ;";
 
-$updates["201112221547"][]="RENAME TABLE `ml_mailing_companies` TO `ab_addresslists_companies` ;";
+$updates["201112221547"][]="RENAME TABLE `ml_mailing_companies` TO `ab_addresslist_companies` ;";
 
 
-$updates["201112221547"][]="RENAME TABLE `ml_mailing_contacts` TO `ab_addresslists_contacts` ;";
+$updates["201112221547"][]="RENAME TABLE `ml_mailing_contacts` TO `ab_addresslist_contacts` ;";
 
 
 $updates["201112221547"][]="CREATE TABLE IF NOT EXISTS `cf_ab_contacts` (
@@ -236,3 +236,5 @@ $updates["201202011207"][]="CREATE TABLE IF NOT EXISTS `ab_addresslist_contacts`
 
 $updates["201202011207"][]="ALTER TABLE `ab_addresslists` DROP `acl_write`";
 $updates["201202011207"][]="ALTER TABLE `ab_addresslists` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT";
+$updates["201202011207"][]="ALTER TABLE `ab_addresslist_companies` CHANGE `group_id` `addresslist_id` INT( 11 ) NOT NULL DEFAULT '0'";
+$updates["201202011207"][]="ALTER TABLE `ab_addresslist_contacts` CHANGE `group_id` `addresslist_id` INT( 11 ) NOT NULL DEFAULT '0'";

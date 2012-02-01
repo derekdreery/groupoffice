@@ -85,7 +85,10 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 	 * @param GO_Base_Model_User $user
 	 * @return GO_Base_Model_AbstractUserDefaultModel 
 	 */
-	public function getDefault(GO_Base_Model_User $user) {		
+	public function getDefault(GO_Base_Model_User $user) {	
+		
+		if(!$user)
+			return false;
 		
 		$settingsModelName = $this->settingsModelName();
 		if ($settingsModelName) {
