@@ -1,7 +1,7 @@
 					<div class="subkader-small-top">
 						<div class="subkader-small-bottom">
 							<div class="subkader-small-center">						
-								<?php echo $this->page->content; ?>
+								<?php echo $this->getPage()->content; ?>
 							</div>
 						</div>
 

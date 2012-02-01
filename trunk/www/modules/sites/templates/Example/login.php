@@ -40,7 +40,7 @@
 									
 									GO_Base_Html_Form::renderEnd();
 									?>
-									<a href="<?php echo $this->pageUrl($this->site->getLostPasswordPath()); ?>">Lost password?</a>
+									<a href="<?php echo $this->pageUrl($this->getSite()->getLostPasswordPath()); ?>">Lost password?</a>
 							</div>
 						</div>
 

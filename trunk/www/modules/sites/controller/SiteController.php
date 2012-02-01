@@ -24,14 +24,14 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 * 
 	 * @var GO_Sites_Model_Site 
 	 */
-	private $site;
+	private $_site;
 	
 	/**
 	 * The current page model
 	 * 
 	 * @var GO_Sites_Model_Page 
 	 */
-	private $page;
+	private $_page;
 	
 	/**
 	 * The path to the template folder in the sites module.
@@ -72,8 +72,8 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 */
 	public function __construct($site, $page) {	
 		
-		$this->site=$site;
-		$this->page=$page;
+		$this->_site=$site;
+		$this->_page=$page;
 		
 		parent::__construct();
 	}
@@ -84,7 +84,7 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 * @return GO_Sites_Model_Site The current site
 	 */
 	public function getSite(){
-		return $this->site;
+		return $this->_site;
 	}
 	
 	/**
@@ -93,7 +93,7 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 * @return GO_Sites_Model_Page The current page 
 	 */
 	public function getPage(){
-		return $this->page;
+		return $this->_page;
 	}
 	
 	/**
@@ -113,8 +113,8 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 */
 	protected function init() {
 
-		$this->rootTemplatePath = GO::config()->root_path.'modules/sites/templates/'.$this->site->template.'/';
-		$this->rootTemplateUrl = GO::config()->host.'modules/sites/templates/'.$this->site->template.'/';
+		$this->rootTemplatePath = GO::config()->root_path.'modules/sites/templates/'.$this->_site->template.'/';
+		$this->rootTemplateUrl = GO::config()->host.'modules/sites/templates/'.$this->_site->template.'/';
 		$this->templateUrl = $this->_getTemplateFolderUrl();
 		$this->templateFolder = new GO_Base_Fs_Folder($this->_getTemplateFolderPath());
 
@@ -167,7 +167,7 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 		$path .= GO::config()->root_path.'modules/'.$moduleName;
 		if($moduleName != 'sites')
 			$path .= '/sites';
-		$path .= '/templates/'.$this->site->template.'/';
+		$path .= '/templates/'.$this->_site->template.'/';
 		return $path;
 	}
 	
@@ -183,7 +183,7 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 		$url .= GO::config()->host.'modules/'.$moduleName;
 		if($moduleName != 'sites')
 			$url .= '/sites';
-		$url .= '/templates/'.$this->site->template.'/';
+		$url .= '/templates/'.$this->_site->template.'/';
 		return $url;
 	}
 	
@@ -222,7 +222,7 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 		$this->beforeRenderPage($params);
 		extract($params);
 
-		$template = empty($this->page->template) ? 'index.php' : $this->page->template.'.php';
+		$template = empty($this->_page->template) ? 'index.php' : $this->_page->template.'.php';
 
 		require($this->getRootTemplatePath().'header.php');
 		require($this->templateFolder->path().'/'.$template);
@@ -241,17 +241,17 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 		
 		if(isset(GO::session()->values['sites']['lastPath'])){
 			$lastParams = isset(GO::session()->values['sites']['lastParams']) ? GO::session()->values['sites']['lastParams'] : array();
-			$this->site->setLastPath(GO::session()->values['sites']['lastPath'],$lastParams);
+			$this->_site->setLastPath(GO::session()->values['sites']['lastPath'],$lastParams);
 		}
 		
 		$noReturnPages = array(
-				$this->site->getLoginPath(),
-				$this->site->getRegisterPath(),
-				$this->site->getPasswordResetPath()
+				$this->_site->getLoginPath(),
+				$this->_site->getRegisterPath(),
+				$this->_site->getPasswordResetPath()
 		);
 
-		if(!in_array($this->page->path, $noReturnPages)){
-			GO::session()->values['sites']['lastPath'] = $this->page->path;
+		if(!in_array($this->_page->path, $noReturnPages)){
+			GO::session()->values['sites']['lastPath'] = $this->_page->path;
 			GO::session()->values['sites']['lastParams'] = $params;
 		}
 	}
@@ -261,8 +261,8 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 * logged in also. 
 	 */
 	private function _checkAuth() {
-		if($this->page->login_required && !GO::user()){
-			$this->pageRedirect($this->site->getLoginPath());
+		if($this->_page->login_required && !GO::user()){
+			$this->pageRedirect($this->_site->getLoginPath());
 		}
 	}
 
@@ -283,7 +283,7 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 * @return string 
 	 */
 	public function pageUrl($path='', $params=array(), $relative=true, $htmlspecialchars=false){
-		return $this->site->pageUrl($path, $params, $relative);
+		return $this->_site->pageUrl($path, $params, $relative);
 	}
 	
 	
@@ -295,7 +295,7 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 * redirect page
 	 */
 	protected function pageRedirect($path = '', $params=array()) {
-		header('Location: ' .$this->site->pageUrl($path, $params, true, false));
+		header('Location: ' .$this->_site->pageUrl($path, $params, true, false));
 		exit();
 	}
 //	
@@ -313,7 +313,7 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 * @return GO_Webshop_Model_Webshop 
 	 */
 	protected function getWebshop(){
-		return GO_Webshop_Model_Webshop::model()->findSingleByAttribute('site_id',$this->site->id);
+		return GO_Webshop_Model_Webshop::model()->findSingleByAttribute('site_id',$this->_site->id);
 	}
 	
 }
