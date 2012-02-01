@@ -111,6 +111,8 @@ class GO_Base_Router{
 			$controller=isset($r[1]) ? ucfirst($r[1]) : 'Default';
 			$action = isset($r[2]) ? $r[2] : '';
 		}
+		
+		$action = strtolower($action);
 				
 		$controllerClass='GO_';
 		

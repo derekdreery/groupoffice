@@ -2071,6 +2071,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function cacheSearchRecord(){
 		
+		//don't do this on datbase checks.
+		if(GO::router()->getControllerAction()=='checkdatabase')
+			return;
+		
 		$attr = $this->getCacheAttributes();
 		
 		//GO::debug($attr);
@@ -2544,10 +2548,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @see hasAttribute
 	 */
 	public function setAttribute($name,$value)
-	{
-		if(property_exists($this,$name)){
-			$this->$name=$value;
-		}elseif(isset($this->columns[$name])){
+	{		
+//		Should be set directly
+//		if(property_exists($this,$name)){
+//			$this->$name=$value;
+//		}else
+			
+		if(isset($this->columns[$name])){
 			
 			if(GO::config()->debug){
 				if(is_object($value) || is_array($value))
@@ -2570,8 +2577,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				if(count($arr)>1)
 					$this->_relatedCache[$arr[0]][$arr[1]]=$value;				
 				else		{
-					//GO::debug('UNSAFE ATTRIBUTE: '.$name.' -> '.$value);
-					$this->_attributes[$name]=$value; //this attribute is unsafe but we may want to use it in the contructor anyway. For example the customfield record doesn't know the columns until after the constructor.
+					//this attribute is unsafe or does not belong to this model but we may 
+					//want to use it in the contructor anyway. For example the customfield 
+					//record doesn't know the columns until after the constructor.
+					$this->_attributes[$name]=$value;
 				}
 			}
 		}
