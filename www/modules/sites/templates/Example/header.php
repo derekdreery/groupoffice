@@ -10,12 +10,12 @@
 
 					Download your purchased products immediately
 					Download product updates at any..." />
-		<title><?php echo $this->page->title; ?> - <?php echo $this->site->name; ?></title>
+		<title><?php echo $this->getPage()->title; ?> - <?php echo $this->getSite()->name; ?></title>
 		<link href="<?php echo $this->getRootTemplateUrl(); ?>css/stylesheet.css" rel="stylesheet" type="text/css" />
 		<link href="<?php echo $this->getRootTemplateUrl(); ?>css/buttons.css" rel="stylesheet" type="text/css" />
 		<link href="<?php echo $this->getRootTemplateUrl(); ?>css/tabs.css" rel="stylesheet" type="text/css" />
 		<link href="<?php echo $this->getRootTemplateUrl(); ?>css/webshop.css" rel="stylesheet" type="text/css" />
-		<?php	echo $this->page->renderHeaderIncludes(); ?>
+		<?php	echo $this->getPage()->renderHeaderIncludes(); ?>
 
 	</head>
 
@@ -35,10 +35,10 @@
 				<div class="topmenu-container">
 					<div id="topmenu-item-center_43" class="topmenu-item-center topmenu-item-center_0">						
 					<?php
-					$stmt = $this->site->pages();
+					$stmt = $this->getSite()->pages();
 					while ($page = $stmt->fetch()) {
 						?>					
-						<div class="topmenu-item-left <?php if($page->id==$this->page->id)echo 'selected'; ?> ">
+						<div class="topmenu-item-left <?php if($page->id==$this->getPage()->id)echo 'selected'; ?> ">
 							<div class="topmenu-item-right">
 								<a class="topmenu-item-center" href="<?php echo $page->url; ?>"><?php echo $page->name; ?></a>
 							</div>
@@ -55,7 +55,7 @@
 					<div class="hoofd-tab-left">
 						<div class="hoofd-tab-right">
 							<a class="hoofd-tab-center" href="#">
-								<?php echo $this->page->name; ?>
+								<?php echo $this->getPage()->name; ?>
 							</a>
 						</div>
 					</div>

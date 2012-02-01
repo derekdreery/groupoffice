@@ -16,7 +16,7 @@
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits wsmits@intermesh.nl
  *
- * @property string register_user_groups Comma separated string with Group names.
+ * @property string $register_user_groups Comma separated string with Group names.
  * @property string $mod_rewrite_base_path
  * @property boolean $mod_rewrite
  * @property boolean $ssl
@@ -80,6 +80,18 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 				'pages' => array('type' => self::HAS_MANY, 'model' => 'GO_Sites_Model_Page', 'field' => 'site_id', 'findParams'=>  GO_Base_Db_FindParams::newInstance()->order('sort')->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('parent_id', 0)->addCondition('hidden',0)), 'delete' => true),
 				);
 	}	
+	
+	public function getDefaultGroupNames(){
+		$groups = array();
+		if(!empty($this->register_user_groups)){
+			$groupNames = explode(',',$this->register_user_groups);
+			foreach($groupNames as $name){
+				$groups[] = $name;
+			}			
+		}
+		return $groups;
+	}
+	
 	
 	/**
 	 * Set the last path property. This path is used to figure out what the last 

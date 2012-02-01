@@ -16,6 +16,20 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 
 			GO_Base_Html_Error::checkRequired();
 
+			GO_Base_Html_Error::getError('vat_no');
+			try{
+				if(!empty($params['vat_no']) && !empty($params['country'])){
+					$isValid = GO_Base_Util_Validate::checkVat ($params['country'], $params['vat_no']);
+					if(!$isValid)
+						GO_Base_Html_Error::setError ("The specified VAT number is not correct!", 'vat_no');
+				}
+			}
+			catch(GO_Base_Exception_ViesDown $e){
+					//GO_Base_Html_Error::setError ("The Vies service is down!", 'vat_no');
+			}
+				
+			
+
 			$model = new GO_Base_Model_User();
 			$model->setAttributes($params);
 			GO_Base_Html_Error::validateModel($model);
@@ -23,7 +37,8 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 			if (!GO_Base_Html_Error::hasErrors()) {
 				$model->save();				
 				$model->checkDefaultModels();
-
+				$model->addToGroups($this->getSite()->getDefaultGroupNames());
+				
 				$contact = $model->createContact();
 				$contact->setAttributes($params);
 

@@ -124,6 +124,13 @@
 										"name" => "function",
 										"value" => ''
 									));
+																
+									GO_Base_Html_Input::render(array(
+										"required" => false,
+										"label" => "EU VAT No.",
+										"name" => "vat_no",
+										"value" =>''
+									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
