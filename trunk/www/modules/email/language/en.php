@@ -234,3 +234,4 @@ $l['untilDateError']='I tried to process the following "Until Date", but the pro
 $l['defaultProgramInstructions'] ='<p>To set {product_name} as your default e-mail program please <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">read the instructions</a>.</p><p>Then if you are using Windows you must download and run <a class="normal-link" href="{url}">this register file</a></p>';
 $l['xssDetected']="This message may contain malicious content. Click here to view the filtered message anyway.";
 $l['xssMessageHidden']='Message hidden for security reasons';
+$l['failedRecipients']='Failed to send to';

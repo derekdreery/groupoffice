@@ -184,7 +184,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				$params
 		));
 
-		$success = $mailer->send($message);
+		$failedRecipients=array();
+		$success = $mailer->send($message, $failedRecipients);
 
 		if ($success) {
 			if (!empty($params['reply_uid'])) {
@@ -210,7 +211,12 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				$imap = $account->openImapConnection($account->drafts);
 				$imap->delete(array($params['draft_uid']));
 			}
-		} else {
+		} 
+		
+		if(count($failedRecipients)){
+			
+			$msg = GO::t('failedRecipients','email').': '.implode(', ',$failedRecipients).'<br /><br />';
+			
 			$logStr = $logger->dump();
 
 			preg_match('/<< 55[0-9] .*>>/s', $logStr, $matches);
@@ -219,7 +225,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				$logStr = trim(substr($matches[0], 2, -2));
 			}
 
-			throw new Exception("Failed to send the message:<br /><br />" . nl2br($logStr));
+			throw new Exception($msg.nl2br($logStr));
 		}
 		
 		$this->_link($params, $message);
