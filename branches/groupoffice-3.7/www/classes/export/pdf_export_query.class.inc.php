@@ -84,8 +84,12 @@ class pdf_export_query extends base_export_query{
 	}*/
 
 	function init_pdf(){
-		global $GO_CONFIG;
+		global $GO_CONFIG;	
 		$this->pdf = new export_pdf();
+		
+		if(!empty($GO_CONFIG->tcpdf_ttf_font)){
+			$this->pdf->addTTFfont($GO_CONFIG->tcpdf_ttf_font);
+		}
 		//green border
 		$this->pdf->SetDrawColor(125,165, 65);
 		$this->pdf->SetFillColor(248, 248, 248);
