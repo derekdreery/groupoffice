@@ -51,5 +51,12 @@ abstract class GO_Base_Model extends GO_Base_Observable{
 		}
 	}
 	
+	/**
+	 * Clears the model cache. Useful when upgrading. 
+	 */
+	public static function clearCache(){
+		self::$_models=array();
+	}
+	
 	
 }

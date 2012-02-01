@@ -83,7 +83,7 @@ if($stmt->rowCount()){
 	{
 		?>
 		<p><?php echo GO::config()->product_name; ?> successfully connected to your database!<br />
-		A previous version has been detected. Press continue to perform an upgrade.</p>
+		A previous version has been detected. Press continue to perform an upgrade. <b>Warning:</b> This can take a long time! Make sure you press continue only once and check the browser loading status.</p>
 		<input type="hidden" name="upgrade" value="1" />
 		<?php
 		continueButton();
