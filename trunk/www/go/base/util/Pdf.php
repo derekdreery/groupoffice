@@ -18,7 +18,7 @@ class GO_Base_Util_Pdf extends TCPDF {
 	
 	
 	protected function init() {
-
+		
 		//set image scale factor
 		$this->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
@@ -30,6 +30,10 @@ class GO_Base_Util_Pdf extends TCPDF {
 
 		$this->setJPEGQuality(100);
 		$this->SetMargins(30,60,30);
+		
+		if(!empty(GO::config()->tcpdf_ttf_font)){
+			$this->addTTFfont(GO::config()->tcpdf_ttf_font);
+		}		
 		
 		if (!empty(GO::config()->tcpdf_font)) {
 			$this->font = GO::config()->tcpdf_font;
