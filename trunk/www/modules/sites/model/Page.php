@@ -54,6 +54,30 @@ class GO_Sites_Model_Page extends GO_Base_Db_ActiveRecord {
 	{	
 		return parent::model($className);
 	}
+	
+	protected function init() {
+		
+		$this->columns['path']['unique']=true;
+		
+		return parent::init();
+	}
+	
+		
+	public function defaultAttributes() {
+		return array(
+				'parent_id'=>0,
+				'user_id'=>GO::user()->id,
+				'name'=>GO::t('newPage', 'sites'),
+				'title'=>GO::t('newPage', 'sites'),
+				'template'=>'Example',
+				'content'=>GO::t('yourContent', 'sites'),
+				'hidden'=>true,
+				'sort'=>0,
+				'controller_action'=>'index',
+				'controller'=>'GO_Sites_Controller_Site',
+				'login_required'=>false
+		);
+	}
 
 	public function tableName() {
 		return 'si_pages';
@@ -110,5 +134,26 @@ class GO_Sites_Model_Page extends GO_Base_Db_ActiveRecord {
 			$this->_attachedJS[] = $url;
 		else
 			$this->_attachedCSS[] = $url;
+	}
+	
+	public static function createDefaultPages($site_id){
+		
+		$defaultPages = array(
+				'login'=>array('controller'=>'GO_Sites_Controller_User','template'=>'login','action'=>'login'),
+				'logout'=>array('controller'=>'GO_Sites_Controller_User','template'=>'logout','action'=>'logout'),
+				'register'=>array('controller'=>'GO_Sites_Controller_User','template'=>'register','action'=>'register'),
+				'resetpassword'=>array('controller'=>'GO_Sites_Controller_User','template'=>'resetpassword','action'=>'resetpassword'),
+				'lostpassword'=>array('controller'=>'GO_Sites_Controller_User','template'=>'lostpassword','action'=>'recover')
+				);
+		
+		foreach($defaultPages as $p=>$c){
+			$page = new GO_Sites_Model_Page();
+			$page->site_id = $site_id;
+			$page->path = $p;
+			$page->controller = $c['controller'];
+			$page->controller_action = $c['action'];
+			$page->template = $c['template'];
+			$page->save();
+		}
 	}
 }
