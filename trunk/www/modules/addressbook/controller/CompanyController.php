@@ -237,7 +237,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 
 	protected function afterAttributes(&$attributes, &$response, &$params, GO_Base_Db_ActiveRecord $model) {
 		//unset($attributes['t.company_id']);
-		$attributes['employees.name'] = GO::t('cmdPanelEmployee', 'addressbook');
+		$attributes['employees.name'] = array('name'=>'employees.name','label'=>GO::t('cmdPanelEmployee', 'addressbook'));
 		return parent::afterAttributes($attributes, $response, $params, $model);
 	}
 

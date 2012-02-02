@@ -867,6 +867,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				$attributes['t.'.$name]=array('name'=>'t.'.$name,'label'=>$model->getAttributeLabel($name),'gotype'=>$attr['gotype']);				
 		}
 		
+		$this->afterAttributes($attributes, $response, $params, $model);
+		
 		asort($attributes);
 		
 		if($model->customfieldsRecord){
@@ -881,10 +883,6 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			
 			$attributes=array_merge($attributes, $customAttributes);
 		}
-		
-		$this->afterAttributes($attributes, $response, $params, $model);
-		
-		
 		
 		foreach($attributes as $field=>$attr)
 			$response['results'][]=$attr;
@@ -931,6 +929,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			
 			$advQueryRecord=$advancedQueryData[$i];
 			
+			//change * into % wildcard
+			$advQueryRecord['value']=str_replace('*','%', $advQueryRecord['value']);
+			
 			if($i==0 || $advQueryRecord['start_group']){
 				$findCriteria->mergeWith($criteriaGroup,$criteriaGroupAnd);
 				$criteriaGroupAnd=$advQueryRecord['andor']=='AND';
@@ -957,11 +958,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 						$tableAlias=false;
 					}
 
-					if($tableAlias=='t'){
-						$advQueryRecord['value']=GO::getModel($this->model)->formatInput($field, $advQueryRecord['value']);
-					}
-					$criteriaGroup->addCondition($field, $advQueryRecord['value'], $advQueryRecord['comparator'],$tableAlias,$advQueryRecord['andor']=='AND');
+					if($tableAlias=='t')
+						$advQueryRecord['value']=GO::getModel($this->model)->formatInput($field, $advQueryRecord['value']);						
 					
+					$criteriaGroup->addCondition($field, $advQueryRecord['value'], $advQueryRecord['comparator'],$tableAlias,$advQueryRecord['andor']=='AND');
 				}
 			}
 		}

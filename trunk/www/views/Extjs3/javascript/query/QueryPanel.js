@@ -46,7 +46,7 @@ GO.query.QueryPanel = function(config){
 	var fields ={
 		fields:['andor','field','comparator', 'value','start_group','gotype','rawValue','rawFieldLabel'],
 		columns:[	{
-			width: 40,
+			width: 60,
 			header: 'AND / OR',
 			dataIndex: 'andor',
 			editor:new GO.form.ComboBox({
@@ -132,9 +132,11 @@ GO.query.QueryPanel = function(config){
 			header: 'Value',
 			dataIndex: 'value',
 			renderer:function(v, meta, record){
-			
 				if(!GO.util.empty(record.data.rawValue)){
 					return record.data.rawValue;
+				}else
+				{
+					return "";
 				}
 			},
 			editor: new Ext.form.TextField({
@@ -167,7 +169,7 @@ GO.query.QueryPanel = function(config){
 
 	config.clicksToEdit=1;
 
-	var Criteria = Ext.data.Record.create([
+	this.criteriaRecord = Ext.data.Record.create([
 	{
 		name: 'andor',
 		type: 'string'
@@ -197,15 +199,7 @@ GO.query.QueryPanel = function(config){
 		text: GO.lang['cmdAdd'],
 		cls: 'x-btn-text-icon',
 		handler: function(){
-			var e = new Criteria({
-				andor:'AND',
-				comparator:'LIKE',
-				start_group:false
-			});
-			this.stopEditing();
-			var count = this.store.getCount();
-			this.store.insert(count, e);
-			this.startEditing(count, 0);
+			this.insertRow();
 		},
 		scope: this
 	},{
@@ -226,6 +220,7 @@ GO.query.QueryPanel = function(config){
 	config.listeners={
 		render:function(){
 			this.typesStore.load();
+			this.insertRow();
 		},
 		beforeedit:function(e){
 			if(e.column==this.valueCol) {
@@ -234,7 +229,8 @@ GO.query.QueryPanel = function(config){
 			return true;
 		},
 		afteredit:function(e){
-			e.record.set('rawValue',this.lastActiveEditor.field.getRawValue())
+			if(e.column==this.valueCol) 
+				e.record.set('rawValue',this.lastActiveEditor.field.getRawValue())
 		}
 	}
 
@@ -247,6 +243,18 @@ Ext.extend(GO.query.QueryPanel, GO.grid.EditorGridPanel,{
 	valueCol : 3,
 	
 	editors : {},
+	
+	insertRow : function(){
+		var e = new this.criteriaRecord({
+			andor:'AND',
+			comparator:'LIKE',
+			start_group:false
+		});
+		this.stopEditing();
+		var count = this.store.getCount();
+		this.store.insert(count, e);
+		this.startEditing(count, 1);
+	},
 	
 	renderSelect : function(value, p, record, rowIndex, colIndex, ds) {
 		var cm = this.getColumnModel();

@@ -420,8 +420,9 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	protected function afterAttributes(&$attributes, &$response, &$params, GO_Base_Db_ActiveRecord $model) {
 		unset($attributes['t.company_id']);
 		//$attributes['name']=GO::t('strName');
-		$attributes['companies.name']=GO::t('company','addressbook');
-		$attributes['contact_name']=GO::t('name');
+		$attributes['companies.name']=array('name'=>'companies.name','label'=>GO::t('company','addressbook'));
+		$attributes['contact_name']=array('name'=>'contact_name','label'=>GO::t('name'));
+		
 		return parent::afterAttributes($attributes, $response, $params, $model);
 	}
 	
