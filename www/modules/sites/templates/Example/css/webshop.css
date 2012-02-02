@@ -80,6 +80,7 @@ tr.late td{
 
 .ticketmodel-row td {
 	padding: 3px;
+	white-space: nowrap;
 }
 
 .greytable-odd {
