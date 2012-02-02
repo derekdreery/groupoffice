@@ -18,6 +18,10 @@
 class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModelController{
 	
 	protected $model = 'GO_Addressbook_Model_Contact';	
+	
+	protected function allowGuests() {
+		return array('photo');
+	}
 		
 	protected function beforeSubmit(&$response, &$model, &$params) {
 		
@@ -111,33 +115,10 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	
 	
 	protected function actionPhoto($params){
-
-		$contact = GO::getModel($this->model)->findByPk($params['id']);
-		
-		if(empty($contact->photo))
-			exit("No photo set");
-		
-		$file = new GO_Base_Fs_File($contact->photo);	
-
-		header('Content-Length: '.$file->size());
-		header('Content-Transfer-Encoding: binary');
-
-		header("Last-Modified: ".gmdate("D, d M Y H:i:s", $file->mtime())." GMT");
-		header("ETag: ".md5_file($file->path()));
-
-
-		header("Expires: " . date("D, j M Y G:i:s ", time()+86400) . 'GMT');//expires in 1 day
-		header('Cache-Control: cache');
-		header('Pragma: cache');
-
-		if (GO_Base_Util_Http::isInternetExplorer()) {
-			header('Content-Type: application/download');
-			header('Content-Disposition: inline; filename="'.$file->name().'"');
-		}else {
-			header('Content-Type: '.$file->mimeType());
-			header('Content-Disposition: inline; filename="'.$file->name().'"');
-		}
-
+		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'contacts/contact_photos/'.$params['id'].'.jpg');
+		if(!$file->exists())
+			exit("No photo set");		
+		GO_Base_Util_Http::outputDownloadHeaders($file, true, true);
 		$file->output();
 	}
 	
