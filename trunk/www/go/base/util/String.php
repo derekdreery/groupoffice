@@ -821,9 +821,99 @@ class GO_Base_Util_String {
 				$html = str_replace($tag[0],'z-index:8000;',$html);
 			}
 		}
+		
+		// Check for smilies to be enabled by the user (settings->Look & Feel-> Show Smilies)
+		if(GO::user()->show_smilies)
+			$html = GO_Base_Util_String::replaceEmoticons($html,true);
 
 		return $html;
 	}
+	
+	/**
+	 * Convert text to emoticons
+	 *
+	 * @param string $string String without emoticons
+	 * @return string String with emoticons
+	 */
+	public static function replaceEmoticons($string, $html = false) {		
+		$emoticons = array(
+				":@" => "angry.gif",
+				":d" => "bigsmile.gif",
+				"(brb)" => "brb.gif",
+				//"(o)"=>"clock.gif",
+				//"(c)"=>"coffee.gif", //conflicts with copyright
+				"(co)" => "computer.gif",
+				":s" => "confused.gif",
+				":'(" => "cry.gif",
+				":'|" => "dissapointed.gif",
+				":^)" => "dontknow.gif",
+				//"(e)"=>"email.gif",
+				"+o(" => "ill.gif",
+				"(k)" => "kiss.gif",
+				"(l)" => "love.gif",
+				"(mp)" => "mobile.gif",
+				"(mo)" => "money.gif",
+				"(n)" => "notok.gif",
+				"(y)" => "ok.gif",
+				"<o)" => "party.gif",
+				"(g)" => "present.gif",
+				":(" => "sad.gif",
+				":-(" => "sad.gif",
+				"^o)" => "sarcasm.gif",
+				"^-o)" => "sarcasm.gif",
+				":$" => "shy.gif",
+				"|-)" => "sleepy.gif",
+				":)" => "smile.gif",
+				":-)" => "smile.gif",
+				"(*)" => "star.gif",
+				"(h)" => "sunglasses.gif",
+				":o" => "surprised.gif",
+				":-o" => "surprised.gif",
+				"(ph)" => "telephone.gif",
+				"*-)" => "thinking.gif",
+				":p" => "tongue.gif",
+				":-p" => "tongue.gif",
+				";)" => "wink.gif",
+				";-)" => "wink.gif",
+		);
+
+		foreach ($emoticons as $emoticon => $img) {
+			$imgpath = GO::config()->full_url . 'views/Extjs3/themes/' . GO::user()->theme . '/images/emoticons/normal/' . $img;
+			$imgstring = '<img src="' . $imgpath . '" alt="' . $emoticon . '" />';
+			if ($html)
+				$string = GO_Base_Util_String::htmlReplace($emoticon, $imgstring, $string);
+			else
+				$string = preg_replace('/([^a-z0-9])' . preg_quote($emoticon) . '([^a-z0-9])/i', "\\1" . $imgstring . "\\2", $string);
+		}
+		return $string;
+	}
+	
+	/**
+	 * Replace string in html. It will leave strings inside html tags alone.
+	 * 
+	 * @param string $search
+	 * @param string $replacement
+	 * @param string $html
+	 * @return string 
+	 */
+	public static function htmlReplace($search, $replacement, $html){
+    $html = preg_replace_callback('/<[^>]*('.preg_quote($search).')[^>]*>/uis',array('GO_Base_Util_String', '_replaceInTags'), $html);
+    $html = preg_replace('/([^a-z0-9])'.preg_quote($search).'([^a-z0-9])/i',"\\1".$replacement."\\2", $html);
+    
+    //$html = str_ireplace($search, $replacement, $html);
+    return str_replace('{TEMP}', $search, $html);
+  }
+
+	/**
+	 * Private callback function for htmlReplace.
+	 * 
+	 * @param type $matches
+	 * @return type 
+	 */
+  public static function _replaceInTags($matches)
+  {
+    return stripslashes(str_replace($matches[1], '{TEMP}', $matches[0]));
+  }
 	
 	/**
 	 * Detect known XSS attacks.
