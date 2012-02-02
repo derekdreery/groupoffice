@@ -51,4 +51,9 @@ class GO_Notes_Model_Category extends GO_Base_Model_AbstractUserDefaultModel {
 		return array(
 				'notes' => array('type' => self::HAS_MANY, 'model' => 'GO_Notes_Model_Note', 'field' => 'category_id', 'delete' => true)		);
 	}
+	
+	protected function init() {
+		$this->columns['name']['unique']=true;
+		return parent::init();
+	}
 }
