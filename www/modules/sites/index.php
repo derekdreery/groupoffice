@@ -10,7 +10,10 @@ $path = isset($_REQUEST['path']) ? $_REQUEST['path'] : '';
 $page = GO_Sites_Model_Page::model()->findSingleByAttributes(array('site_id'=>$site_id, 'path'=>$path));
 
 if(!$page){
-	echo 'Not found';
+	header("HTTP/1.0 404 Not Found");
+  header("Status: 404 Not Found");
+	echo '<h1>Page not found</p>';
+	echo '<a href="'.$_SERVER['SERVER_NAME'].'">Visit '.$_SERVER['SERVER_NAME'].'</a>';
 	exit();
 }
 
