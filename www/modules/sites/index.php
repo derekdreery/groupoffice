@@ -13,7 +13,7 @@ if(!$page){
 	header("HTTP/1.0 404 Not Found");
   header("Status: 404 Not Found");
 	echo '<h1>Page not found</h1>';
-	echo '<a href="'.$_SERVER['SERVER_NAME'].'">Visit '.$_SERVER['SERVER_NAME'].'</a>';
+	echo '<a href="/">Visit '.$_SERVER['SERVER_NAME'].'</a>';
 	exit();
 }
 
