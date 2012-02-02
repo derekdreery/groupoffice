@@ -9,6 +9,12 @@ class GO_Smime_EventHandlers {
 			$response['data']['always_sign'] = $cert->always_sign;
 		}
 	}
+	
+	public static function deleteAccount(GO_Email_Model_Account $account){
+		$cert = GO_Smime_Model_Certificate::model()->findByPk($account->id);
+		if($cert)
+			$cert->delete();		
+	}
 
 	public static function submitAccount(GO_Email_Controller_Account $controller, &$response, GO_Email_Model_Account $account, $params, $modifiedAttributes) {
 

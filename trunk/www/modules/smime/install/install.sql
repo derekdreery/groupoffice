@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `smi_certs` (
 DROP TABLE IF EXISTS `smi_pkcs12`;
 CREATE TABLE IF NOT EXISTS `smi_pkcs12` (
   `account_id` int(11) NOT NULL,
-  `cert` blob NOT NULL,
+  `cert` blob,
   `always_sign` tinyint(1) NOT NULL,
   PRIMARY KEY (`account_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
