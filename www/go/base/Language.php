@@ -61,7 +61,9 @@ class GO_Base_Language{
 	}
 	
 	/**
-	 * Translates a language variable name into the local language
+	 * Translates a language variable name into the local language.
+	 * 
+	 * Note: You can use GO::t() instead. It's a shorter alias.
 	 * 
 	 * @param String $name Name of the translation variable
 	 * @param String $module Name of the module to find the translation
