@@ -36,6 +36,7 @@
 
 class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 
+	const REGISTER_USER_GROUP="Site users";
 	/**
 	 * The path of the latest page that you have visited before the current page.
 	 * 
@@ -68,6 +69,24 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 	 */
 	public function tableName() {
 		return 'si_sites';
+	}
+
+	function defaultAttributes() {
+		return array(
+				'name'=>GO::t('newSite', 'sites'),
+				'domain'=>$_SERVER['SERVER_NAME'],
+				'template'=>'Example',
+				'ssl'=>false,
+				'mod_rewrite'=>false,
+				'mod_rewrite_base_path'=>'',
+				'login_path'=>'login',
+				'lost_password_path'=>'lostpassword',
+				'reset_password_path'=>'resetpassword',
+				'register_path '=>'register',
+				'logout_path '=>'logout',
+				'register_user_groups '=>self::REGISTER_USER_GROUP,
+				'user_id'=>GO::user()->id
+				);
 	}
 	
 	/**
@@ -262,4 +281,28 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 		return $url;
 	}
 	
+	/**
+	 * Function to create the default site users group.
+	 * 
+	 * @return GO_Base_Model_Group 
+	 */
+	public function checkDefaultSiteUsersGroup(){
+		$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', self::REGISTER_USER_GROUP);
+		
+		if(!$group){
+			$group = new GO_Base_Model_Group();
+			$group->name = self::REGISTER_USER_GROUP;
+			$group->admin_only = true;
+			$group->save();
+		}
+		
+		return $group;
+	}
+	
+	protected function afterSave($wasNew) {
+		if($wasNew){
+			GO_Sites_Model_Page::createDefaultPages($this->id);
+		}
+		return parent::afterSave($wasNew);
+	}
 }
