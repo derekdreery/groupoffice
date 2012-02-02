@@ -360,37 +360,6 @@ class GO_Base_Util_String {
 		}
 	}
 
-	/*
-	 function get_name_from_string($string) {
-		if (preg_match('/([\D]*|[\D]*[\040][\D]*)/i', $string, $matches)) {
-		$matches[0] = str_replace('"', '', $matches[0]);
-		return $matches[0];
-		} else {
-		return $string;
-		}
-		}*/
-
-	/**
-	 * Adds paramaters to an URL
-	 *
-	 * @deprecated THIS FUNCTION IS MOVED TO GO_Base_Utils_Http
-	 * 
-	 * @param	string $url
-	 * @param	string $params
-	 * @access public
-	 * @return string
-	 */
-
-	public static function add_params_to_url($url, $params) {
-		if (strpos($url, '?') === false) {
-			$url .= '?'.$params;
-		} else {
-			$url .= '&amp;'.$params;
-		}
-		return $url;
-	}
-
-
 	/**
 	 * Return only the contents of the body tag from a HTML page
 	 *
