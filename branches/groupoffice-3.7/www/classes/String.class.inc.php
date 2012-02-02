@@ -1070,8 +1070,6 @@ class String {
 		foreach ($patterns as $pattern) {
 // Test both the original string and clean string
 			if (preg_match($pattern, $string, $matches) || preg_match($pattern, $orig, $matches)){
-				GO::debug("XSS pattern matched: ".$pattern);
-				GO::debug($matches);
 				return true;			
 			}
 		}
