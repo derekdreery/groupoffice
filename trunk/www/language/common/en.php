@@ -482,7 +482,7 @@ $l["batchSelectOne"]="Select at least one item!";
 $l["batchSelectionError"]="Nothing selected!";
 $l["label"]="Label";
 
-$l["validationErrorsFound"]="There are validation errors:";
+$l["validationErrorsFound"]="Couldn't save %s:";//eg. Couldn't save project
 $l['attachFiles']='Attach files';
 
 $l['gridMissingParams'] = 'Please let the Group-Office administrator that the window you just attempted to use contains a grid that expected the following paramaters, but did not receive them';
@@ -500,3 +500,5 @@ $l["usertokenInvalid"]= 'No valid usertoken given!';
 $l["noUserFoundWithEmail"]="No user found with the given email address!";
 
 $l["viesDownException"]='The VIES service is down. You can complete your order but you can only pay when we have manually checked your Vies number.';
+
+$l['alreadyExists']='%s "%s" already exists'; //eg. Project "Some name" already exists.

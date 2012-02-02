@@ -99,7 +99,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @return String 
 	 */
 	protected function getLocalizedName(){
-		return $this->className();
+		
+		$parts = explode('_',$this->className());
+		$lastPart = array_pop($parts);
+		
+		$module = strtolower($parts[1]);
+		
+		return GO::t($lastPart, $module);
 	}
 	
 	
@@ -248,6 +254,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * 'decimals'=>2//only for gotype=number)
 	 * 'regex'=>'A preg_match expression for validation',
 	 * 'dbtype'=>'varchar' //mysql database type
+	 * 'unique'=>false //true to enforce a unique value
 	 * 
 	 * The validator looks like this:
 	 * 
@@ -1778,7 +1785,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 	public function validate(){
 				
-		foreach($this->columns as $field=>$attributes){
+		//foreach($this->columns as $field=>$attributes){
+		foreach($this->getModifiedAttributes() as $field=>$oldValue){
+			
+			$attributes=$this->columns[$field];
 			
 			if(!empty($attributes['required']) && empty($this->_attributes[$field])){				
 				$this->setValidationError($field, $this->getAttributeLabel($field).' is required');				
@@ -1791,6 +1801,21 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}elseif(!empty($attributes['validator']) && !empty($this->_attributes[$field]) && !call_user_func($attributes['validator'], $this->_attributes[$field]))
 			{
 				$this->setValidationError($field, $this->getAttributeLabel($field).' did not validate');
+			}elseif(!empty($attributes['unique'])){
+				
+				$criteria = GO_Base_Db_FindCriteria::newInstance()
+							->addModel(GO::getModel($this->className()))
+							->addCondition($field, $this->_attributes[$field]);
+				if(!$this->isNew)
+					$criteria->addCondition($this->primaryKey(), $this->pk, '!=');
+				
+				$existing = $this->findSingle(GO_Base_Db_FindParams::newInstance()
+								->ignoreAcl()
+								->criteria($criteria)
+				);
+				
+				if($existing)
+					$this->setValidationError($field, sprintf(GO::t('alreadyExists'),$this->localizedName, $this->_attributes[$field]));
 			}
 		}
 		
@@ -1863,7 +1888,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		if(!$this->validate()){
 			$errors = $this->getValidationErrors();
-			throw new Exception(GO::t('validationErrorsFound')."\n".implode("\n", $errors)."\n");			
+			throw new Exception(sprintf(GO::t('validationErrorsFound'),strtolower($this->localizedName))."\n\n".implode("\n", $errors)."\n");			
 		}
 		
 		//Don't do anything if nothing has been modified.
@@ -1993,7 +2018,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	
 	/**
-	 * Get an array of modified attribute names that are not saved to the database.
+	 * Get a key value array of modified attribute names with their old values 
+	 * that are not saved to the database yet.
+	 * 
+	 * e. array('attributeName'=>'Old value')
 	 * 
 	 * @return array 
 	 */

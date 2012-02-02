@@ -38,6 +38,15 @@ class GO_Base_Model_Group extends GO_Base_Db_ActiveRecord {
 		return parent::model($className);
 	}
 	
+	protected function init() {		
+		$this->columns['name']['unique']=true;
+		return parent::init();
+	}
+	
+	protected function getLocalizedName() {
+		return GO::t('userGroup');
+	}
+	
   public function aclField(){
 		return 'acl_id';	
 	}

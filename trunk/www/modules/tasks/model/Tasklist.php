@@ -58,6 +58,11 @@ class GO_Tasks_Model_Tasklist extends GO_Base_Model_AbstractUserDefaultModel {
 				);
 	}
 	
+	protected function init() {
+		$this->columns['name']['unique']=true;
+		return parent::init();
+	}
+	
 	public function hasFiles(){
 		return true;
 	}
