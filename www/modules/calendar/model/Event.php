@@ -687,8 +687,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$exception = $this->recurringEventException();
 			if($exception){
 				$recurrenceId =new Sabre_VObject_Element_DateTime("recurrence-id",$dateType);
-				$dt = new DateTime();
-				$dt->setTimestamp($exception->time);
+				$dt = GO_Base_Util_Date_DateTime::fromUnixtime($exception->time);
 				$recurrenceId->setDateTime($dt);
 				$e->add($recurrenceId);
 			}

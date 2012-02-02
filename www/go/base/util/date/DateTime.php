@@ -21,7 +21,7 @@
 class GO_Base_Util_Date_DateTime extends DateTime{
 	
 	public static function fromUnixtime($time){
-		return new self(date('Y-m-d H:i:s',$time));//, new DateTimeZone(date_default_timezone_get()));
+		return new self("@$time");//, new DateTimeZone(date_default_timezone_get()));
 	}
 	
 	/**
@@ -62,8 +62,12 @@ class GO_Base_Util_Date_DateTime extends DateTime{
 	public function addDiffCompat($diff){
 		$unixtime = GO_Base_Util_Date::date_add($this->format('U'), $diff['days']);
 		$unixtime += (($diff['hours']*60)+$diff['mins'])*60;
+				
+		if($diff['days']>0)
+			$this->setDate($this->format('Y'),$this->format('n'),$this->format('j')+$diff['days']);
 		
-		$this->setTimestamp($unixtime);
+		if($diff['hours']>0 || $diff['mins']>0)
+			$this->setTime($this->format('G')+$diff['hours'], $this->format('i'), $this->format('s'));
 		
 		return $this;
 	}
