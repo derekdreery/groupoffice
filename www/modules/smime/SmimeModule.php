@@ -12,5 +12,14 @@ class GO_Smime_SmimeModule extends GO_Base_Module{
 		$aliasController = new GO_Email_Controller_Alias();
 		$aliasController->addListener('store', "GO_Smime_EventHandlers", "aliasesStore");
 		
+		GO_Email_Model_Account::model()->addListener('delete', "GO_Smime_EventHandlers", "deleteAccount");
+		
+	}
+	
+	public static function deleteUser($user) {
+		
+		GO_Smime_Model_PublicCertificate::model()->deleteByAttribute('user_id', GO::user()->id);
+		
+		return parent::deleteUser($user);
 	}
 }
