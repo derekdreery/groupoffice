@@ -889,7 +889,7 @@ class String {
 
         $imgpath = $GO_CONFIG->full_url.'themes/'.$GO_CONFIG->theme.'/images/emoticons/normal/'.$img;
         $imgstring = '<img src="'.$imgpath.'" alt="'.$emoticon.'" />';
-        if($html)
+				if($html)
           $string = String::html_replace($emoticon, $imgstring, $string);
         else
           $string = preg_replace('/([^a-z0-9])'.preg_quote($emoticon).'([^a-z0-9])/i',"\\1".$imgstring."\\2", $string);
@@ -903,8 +903,11 @@ class String {
 
 
   public static function html_replace($search, $replacement, $html){
+				
     $html = preg_replace_callback('/<[^>]*('.preg_quote($search).')[^>]*>/uis',array('String', '_replace_in_tags'), $html);
     $html = preg_replace('/([^a-z0-9])'.preg_quote($search).'([^a-z0-9])/i',"\\1".$replacement."\\2", $html);
+		
+		
     
     //$html = str_ireplace($search, $replacement, $html);
     return str_replace('{TEMP}', $search, $html);
@@ -996,8 +999,14 @@ class String {
 		//go_debug($html);
 
 		$html = preg_replace($to_removed_array, '', $html);
-		$html = String::xss_clean($html);
-
+		
+		//Remove any attribute starting with "on" or xmlns. Had to do this always becuase many mails contain weird tags like online="1". 
+		//These were detected as xss attacks by detectXSS().
+		$html = preg_replace('#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*+>#iu', '$1>', $html);
+		
+		if(self::detectXSS($html))
+			$html = self::xss_clean($html);
+	
 		//remove high z-indexes
 		$matched_tags = array();
 		preg_match_all( "/(z-index)[\s]*:[\s]*([0-9]+)[\s]*;/u", $html, $matched_tags, PREG_SET_ORDER );
@@ -1012,8 +1021,65 @@ class String {
 
 		return $html;
 	}
+	
+	/**
+	 * Detect known XSS attacks.
+	 * 
+	 * @param boolean $string
+	 * @return boolean
+	 * @throws Exception 
+	 */
+	public static function detectXSS($string) {
+		$contains_xss = FALSE;
 
-	function xss_clean($data)
+		if (!is_string($string)) {
+			throw new Exception(__('Passed parameter is not a string.'));
+		}
+
+// Keep a copy of the original string before cleaning up
+		$orig = $string;
+
+// URL decode
+		$string = urldecode($string);
+
+// Convert Hexadecimals
+		$string = preg_replace('!(&#|\\\)[xX]([0-9a-fA-F]+);?!e', 'chr(hexdec("$2"))', $string);
+
+// Clean up entities
+		$string = preg_replace('!(&#0+[0-9]+)!', '$1;', $string);
+
+// Decode entities
+		$string = html_entity_decode($string, ENT_NOQUOTES, 'UTF-8');
+
+// Strip whitespace characters
+		$string = preg_replace('!\s!', '', $string);
+
+// Set the patterns we'll test against
+		$patterns = array(
+// Match any attribute starting with "on" or xmlns
+				'#(<[^>]+[\x00-\x20\"\'\/])(on|xmlns)[^>]*>?#iUu',
+// Match javascript:, livescript:, vbscript: and mocha: protocols
+				'!((java|live|vb)script|mocha):(\w)*!iUu',
+				'#-moz-binding[\x00-\x20]*:#u',
+// Match style attributes
+				'#(<[^>]*+[\x00-\x20\"\'\/])*style=[^>]*(expression|behavior)[^>]*>?#iUu',
+// Match unneeded tags
+				'#</*(applet|meta|xml|blink|link|style|script|embed|object|iframe|frame|frameset|ilayer|layer|bgsound|title|base)[^>]*>?#i'
+		);
+
+		foreach ($patterns as $pattern) {
+// Test both the original string and clean string
+			if (preg_match($pattern, $string, $matches) || preg_match($pattern, $orig, $matches)){
+				GO::debug("XSS pattern matched: ".$pattern);
+				GO::debug($matches);
+				return true;			
+			}
+		}
+
+		return false;
+	}
+
+	public static function xss_clean($data)
 	{
 		// Fix &entity\n;
 		$data = str_replace(array('&amp;','&lt;','&gt;'), array('&amp;amp;','&amp;lt;','&amp;gt;'), $data);
