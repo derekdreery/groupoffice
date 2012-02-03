@@ -1488,8 +1488,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$remoteFieldThatHoldsMyPk = $r[$name]['field'];
 			
 			$findParams = GO_Base_Db_FindParams::newInstance()
-					->mergeWith($extraFindParams)
 					->mergeWith($r[$name]['findParams'])
+					->mergeWith($extraFindParams)					
 					->ignoreAcl()
 					->relation($name);
 					
