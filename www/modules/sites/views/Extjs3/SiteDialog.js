@@ -25,7 +25,8 @@ GO.sites.SiteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		
 		GO.sites.SiteDialog.superclass.initComponent.call(this);	
 	},
-	//id 	name 	user_id 	mtime 	ctime 	domain 	template 	login_path 	ssl 	mod_rewrite 	mod_rewrite_base_path 	lost_password_path 	reset_password_path 	register_path 	logout_path 	register_user_groups 
+//	ssl 	mod_rewrite:)
+
 	buildForm : function () {
 		this.propertiesPanel = new Ext.Panel({
 			title:GO.lang['strProperties'],			
@@ -50,12 +51,84 @@ GO.sites.SiteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 				fieldLabel: GO.sites.lang.siteLoginPath
 			},{
 				xtype: 'textfield',
+				name: 'user_id',
+				width:300,
+				anchor: '100%',
+				maxLength: 100,
+				allowBlank:false,
+				fieldLabel: GO.sites.lang.siteUserId
+			},{
+				xtype: 'textfield',
+				name: 'domain',
+				width:300,
+				anchor: '100%',
+				maxLength: 100,
+				allowBlank:false,
+				fieldLabel: GO.sites.lang.siteDomain
+			},{
+				xtype: 'textfield',
+				name: 'template',
+				width:300,
+				anchor: '100%',
+				maxLength: 100,
+				allowBlank:false,
+				fieldLabel: GO.sites.lang.siteTemplate
+			},{
+				xtype: 'textfield',
 				name: 'lost_password_path',
 				width:300,
 				anchor: '100%',
 				maxLength: 100,
 				allowBlank:false,
 				fieldLabel: GO.sites.lang.siteLostPasswordPath
+			},{
+				xtype: 'textfield',
+				name: 'reset_password_path',
+				width:300,
+				anchor: '100%',
+				maxLength: 100,
+				allowBlank:false,
+				fieldLabel: GO.sites.lang.siteResetPasswordPath
+			},{
+				xtype: 'textfield',
+				name: 'logout_path',
+				width:300,
+				anchor: '100%',
+				maxLength: 100,
+				allowBlank:false,
+				fieldLabel: GO.sites.lang.siteLogoutPath
+			},{
+				xtype: 'textfield',
+				name: 'login_path',
+				width:300,
+				anchor: '100%',
+				maxLength: 100,
+				allowBlank:false,
+				fieldLabel: GO.sites.lang.siteLoginPath
+			},{
+				xtype: 'textfield',
+				name: 'register_path',
+				width:300,
+				anchor: '100%',
+				maxLength: 100,
+				allowBlank:false,
+				fieldLabel: GO.sites.lang.siteRegisterPath
+			},{
+				xtype: 'textfield',
+				name: 'register_user_groups',
+				width:300,
+				anchor: '100%',
+				maxLength: 100,
+				allowBlank:false,
+				fieldLabel: GO.sites.lang.siteRegisterUserGroups
+			},{
+				xtype: 'textfield',
+				name: 'mod_rewrite_base_path',
+				width:300,
+				anchor: '100%',
+				maxLength: 100,
+				allowBlank:false,
+				fieldLabel: GO.sites.lang.siteModRewriteBasePath
 			}]
 		});
 

@@ -65,24 +65,6 @@ tr.late td{
 	color:red;
 }
 
-.ticket-models-table {
-	width:100%;
-	border-collapse: collapse;
-}
-
-.ticket-models-table th {
-	text-align:left;
-}
-
-.ticketmodel-row {
-	
-}
-
-.ticketmodel-row td {
-	padding: 3px;
-	white-space: nowrap;
-}
-
 .greytable-odd {
 	
 }
