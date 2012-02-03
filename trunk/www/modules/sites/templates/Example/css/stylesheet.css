@@ -71,6 +71,16 @@ hr{
 	
 }
 
+.feature-large{
+	padding:5px;
+	float:left;
+	width:256px;
+	height:190px;
+	background-image:url('../images/kader-feature-large.gif');
+	margin:7px;
+	
+}
+
 .feature-text{
 	font:12px georgia;
 	width:190px;
