@@ -166,6 +166,11 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		}
 	}
 	
+	/**
+	 * Get the contents of this file.
+	 * 
+	 * @return String  
+	 */
 	public function getContents(){
 		return file_get_contents($this->path());
 	}
@@ -179,11 +184,16 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		return file_get_contents($this->path);
 	}
 	
-	
+	/**
+	 * Get human friendly file type description. eg. Text document.
+	 * 
+	 * @param string $extension
+	 * @return string 
+	 */
 	public static function getFileTypeDescription($extension) {		
 		$lang = GO::t($extension,'base','filetypes');
 		
-		if($lang==$extention)
+		if($lang==$extension)
 			$lang = GO::t('unknown','base','filetypes');
 		
 		return $lang;
