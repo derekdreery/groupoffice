@@ -38,9 +38,9 @@ class GO_Calendar_CalendarModule extends GO_Base_Module{
 	}
 	
 	
-	public static function submitSettings(&$settingsController, &$params, &$response) {
+	public static function submitSettings(&$settingsController, &$params, &$response, $user) {
 		
-		$settings = GO_Calendar_Model_Settings::model()->findByPk($params['id']);
+		$settings = GO_Calendar_Model_Settings::model()->getDefault($user);
 		if(!$settings){
 			$settings = new GO_Calendar_Model_Settings();
 			$settings->user_id=$params['id'];
@@ -56,9 +56,9 @@ class GO_Calendar_CalendarModule extends GO_Base_Module{
 		return parent::submitSettings($settingsController, $params, $response);
 	}
 	
-	public static function loadSettings(&$settingsController, &$params, &$response) {
+	public static function loadSettings(&$settingsController, &$params, &$response, $user) {
 		
-		$settings = GO_Calendar_Model_Settings::model()->findByPk($params['id']);
+		$settings = GO_Calendar_Model_Settings::model()->getDefault($user);
 		$response['data']=array_merge($response['data'], $settings->getAttributes());
 		
 		$calendar = GO_Calendar_Model_Calendar::model()->findByPk($settings->calendar_id);
