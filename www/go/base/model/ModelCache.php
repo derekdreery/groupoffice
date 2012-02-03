@@ -36,7 +36,7 @@ class GO_Base_Model_ModelCache{
 		 * This cache mechanism can consume a lot of memory when running large
 		 * batch scripts. That's why it can be disabled.
 		 */
-		if(GO::$disableModelCache && substr($modelClassName,0,8) != 'GO_Base_')
+		if(GO::$disableModelCache && $modelClassName != 'GO_Base_Model_Acl')
 			return;
 		
 		if(!$cacheKey)
