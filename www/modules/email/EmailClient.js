@@ -1375,7 +1375,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 					}	
 				
 				default:
-					document.location.href=attachment.url;
+					window.open(attachment.url);
 					break;
 			}
 		}
