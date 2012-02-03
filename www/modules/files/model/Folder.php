@@ -356,6 +356,9 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 						$folder->syncFilesystem($recurseAll, false);				
 				}
 			}
+		}else
+		{
+			$this->fsFolder->create();
 		}
 		
 		$stmt= $this->folders();
