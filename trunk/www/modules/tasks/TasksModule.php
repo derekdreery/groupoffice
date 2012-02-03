@@ -9,14 +9,9 @@ class GO_Tasks_TasksModule extends GO_Base_Module{
 		return true;
 	}
 	
-	public static function submitSettings(&$settingsController, &$params, &$response) {
+	public static function submitSettings(&$settingsController, &$params, &$response, $user) {
 		
-		$settings = GO_Tasks_Model_Settings::model()->findByPk($params['id']);
-		if(!$settings){
-			$settings = new GO_Tasks_Model_Settings();
-			$settings->user_id=$params['id'];
-		}
-		
+		$settings = GO_Tasks_Model_Settings::model()->getDefault($user);		
 		if($settings->remind = isset($params['remind'])) {
 			$settings->reminder_days = $params['reminder_days'];
 			$settings->reminder_time = $params['reminder_time'];
@@ -29,9 +24,9 @@ class GO_Tasks_TasksModule extends GO_Base_Module{
 		return parent::submitSettings($settingsController, $params, $response);
 	}
 	
-	public static function loadSettings(&$settingsController, &$params, &$response) {
+	public static function loadSettings(&$settingsController, &$params, &$response, $user) {
 		
-		$settings = GO_Tasks_Model_Settings::model()->findByPk($params['id']);
+		$settings = GO_Tasks_Model_Settings::model()->getDefault($user);
 		$response['data']=array_merge($response['data'], $settings->getAttributes());
 		
 		$tasklist = $settings->tasklist;
