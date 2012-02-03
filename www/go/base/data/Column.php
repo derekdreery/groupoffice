@@ -89,10 +89,13 @@ class GO_Base_Data_Column {
 	 * @param string $label
 	 * @param int $sortIndex 
 	 */
-	public function __construct($dataindex, $label='', $sortIndex=0){
+	public function __construct($dataindex, $label='', $sortIndex=0, $sortAlias=false){
 		$this->_dataindex = $dataindex;
 		$this->_label = !empty($label) ? $label : $dataindex;
 		$this->_sortIndex = $sortIndex;
+		
+		if($sortAlias)
+			$this->_sortAlias=$sortAlias;
 	}
 	
 	/**

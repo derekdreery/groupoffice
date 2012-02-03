@@ -364,7 +364,10 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		$store = GO_Base_Data_Store::newInstance(GO_Files_Model_Folder::model());
 
-
+		//set sort aliases
+		$store->getColumnModel()->formatColumn('type', '$model->type',array(),'name');
+		$store->getColumnModel()->formatColumn('size', '-',array(),'name');
+		
 		//handle delete request for both files and folder
 		if (isset($params['delete_keys'])) {
 
@@ -411,11 +414,13 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		}
 
 		if ($fileStart >= 0) {
+			$store->getColumnModel()->formatColumn('type', '$model->type',array(),'extension');
+			
 			$findParams = $store->getDefaultParams($params)
 							->limit($fileLimit)
 							->start($fileStart);
 
-			$stmt = $folder->files($findParams);
+			$stmt = $folder->files($findParams);			
 			$store->setStatement($stmt);
 
 			$filesResponse = $store->getData();

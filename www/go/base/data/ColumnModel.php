@@ -156,6 +156,17 @@ class GO_Base_Data_ColumnModel {
 	}
 	
 	/**
+	 * Get a column by data index
+	 * 
+	 * @param string $dataindex
+	 * @return GO_Base_Data_Column 
+	 */
+	public function getColumn($dataindex){
+		return $this->_columns[$dataindex];
+	}
+	
+	
+	/**
 	 * Give an array with the columnheaders in the order that you want.
 	 * The existing columns will be ordered to the given columnheaders array.
 	 * 
@@ -166,7 +177,7 @@ class GO_Base_Data_ColumnModel {
 	 */
 	private function _sortColumns(){
 		
-		if(isset($this->_columnSort)){
+		if(!isset($this->_columnsSorted)){
 			asort($this->_columnSort);	
 
 			$sorted = array();
@@ -175,6 +186,8 @@ class GO_Base_Data_ColumnModel {
 			}
 			$this->_columns = $sorted;
 			unset($this->_columnSort);
+			
+			$this->_columnsSorted=true;
 		}
 	}
 
