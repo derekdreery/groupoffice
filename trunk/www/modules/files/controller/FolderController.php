@@ -366,7 +366,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		//set sort aliases
 		$store->getColumnModel()->formatColumn('type', '$model->type',array(),'name');
-		$store->getColumnModel()->formatColumn('size', '-',array(),'name');
+		$store->getColumnModel()->formatColumn('size', '"-"',array(),'name');
 		
 		//handle delete request for both files and folder
 		if (isset($params['delete_keys'])) {
@@ -451,7 +451,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		} else {
 			$record['type_id'] = 'f:' . $model->id;
 			$record['type'] = $model->fsFile->typeDescription();
-			$record['extension'] = $model->fsFile->extension();
+			$record['extension'] = $model->extension;
 			$record['size']=$model->size;
 		}
 		$record['thumb_url'] = $model->thumbURL;
