@@ -325,7 +325,7 @@ class GO_Base_Module extends GO_Base_Observable {
 	 * 
 	 * @param array $response 
 	 */
-	public static function loadSettings(&$settingsController, &$params, &$response){		
+	public static function loadSettings(&$settingsController, &$params, &$response, $user){		
 	}
 	
 	/**
@@ -338,7 +338,7 @@ class GO_Base_Module extends GO_Base_Observable {
 	 * 
 	 * @param array $response 
 	 */
-	public static function submitSettings(&$settingsController, &$params, &$response){		
+	public static function submitSettings(&$settingsController, &$params, &$response, $user){		
 	}
 	
 	/**
