@@ -531,6 +531,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	/**
 	 * Set if this model is new and not stored in the database yet.
+	 * Note: this function is generally only used by the framework internally.
+	 * You don't need to set this boolean. The framework takes care of that.
 	 * 
 	 * @param bool $new 
 	 */
