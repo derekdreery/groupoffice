@@ -70,10 +70,10 @@ Ext.extend(GO.base.email.EmailEditorAttachmentsView, Ext.DataView, {
 		
 		var record = this.store.getAt(index);	
 		if(record.data.from_file_storage){
-			document.location=GO.url("files/file/download",{path:record.data.tmp_file});
+			window.open(GO.url("files/file/download",{path:record.data.tmp_file}));
 		}else
 		{
-			document.location=GO.url("core/downloadTempFile",{path:record.data.tmp_file});
+			window.open(GO.url("core/downloadTempFile",{path:record.data.tmp_file}));
 		}		
 	},
 	
