@@ -53,7 +53,7 @@ class GO_Calendar_CalendarModule extends GO_Base_Module{
 
 		$settings->save();
 		
-		return parent::submitSettings($settingsController, $params, $response);
+		return parent::submitSettings($settingsController, $params, $response, $user);
 	}
 	
 	public static function loadSettings(&$settingsController, &$params, &$response, $user) {
@@ -72,7 +72,7 @@ class GO_Calendar_CalendarModule extends GO_Base_Module{
 		
 		
 		
-		return parent::loadSettings($settingsController, $params, $response);
+		return parent::loadSettings($settingsController, $params, $response, $user);
 	}
 	
 	public function install() {
