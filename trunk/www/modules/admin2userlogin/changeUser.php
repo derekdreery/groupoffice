@@ -4,7 +4,7 @@
 	require($GO_CONFIG->class_path.'base/users.class.inc.php');
 	$GO_USERS = new GO_USERS();
 
-	if($GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+	if($GO_MODULES->modules['admin2userlogin']['read_permission'])
 	{
 		$_SESSION=array();
 		$user = $GO_USERS->get_user($_GET['id']);
