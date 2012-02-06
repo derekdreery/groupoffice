@@ -336,9 +336,10 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 *
 	 * @param array $uploadedFileArray
 	 * @param GO_Base_Fs_Folder  $destinationFolder
+	 * @param boolean $overwrite If false this function will append a number. eg. Filename (1).jpg
 	 * @return GO_Base_Fs_File 
 	 */
-	public static function moveUploadedFiles($uploadedFileArray, $destinationFolder){
+	public static function moveUploadedFiles($uploadedFileArray, $destinationFolder, $overwrite=false){
 		
 		if(!is_array($uploadedFileArray['tmp_name'])){
 			$uploadedFileArray['tmp_name']=array($uploadedFileArray['tmp_name']);
@@ -349,7 +350,8 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		for($i=0;$i<count($uploadedFileArray['tmp_name']);$i++){
 			if (is_uploaded_file($uploadedFileArray['tmp_name'][$i])) {
 				$destinationFile = new GO_Base_Fs_File($destinationFolder->path().'/'.$uploadedFileArray['name'][$i]);
-				$destinationFile->appendNumberToNameIfExists();
+				if(!$overwrite)
+					$destinationFile->appendNumberToNameIfExists();
 
 				if(move_uploaded_file($uploadedFileArray['tmp_name'][$i], $destinationFile->path())){		
 					$destinationFile->setDefaultPermissions();
