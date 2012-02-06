@@ -204,3 +204,15 @@ CREATE TABLE IF NOT EXISTS `go_links_fs_folders` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
+
+DROP TABLE IF EXISTS `fs_versions`;
+CREATE TABLE IF NOT EXISTS `fs_versions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `file_id` int(11) NOT NULL,
+  `mtime` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `path` varchar(255) NOT NULL,
+  `version` int(11) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  KEY `file_id` (`file_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;

@@ -9,3 +9,4 @@ DROP TABLE IF EXISTS `go_links_6`;
 DROP TABLE IF EXISTS `go_links_17`;
 DROP TABLE IF EXISTS `cf_6`;
 DROP TABLE IF EXISTS `fs_shared_cache`;
+DROP TABLE IF EXISTS `fs_versions`;

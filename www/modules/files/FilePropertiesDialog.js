@@ -83,7 +83,7 @@ GO.files.FilePropertiesDialog = function(config){
 	
 	this.versionsGrid = new GO.files.VersionsGrid();
 	
-	var items = [this.propertiesPanel, this.commentsPanel/*, this.versionsGrid*/];
+	var items = [this.propertiesPanel, this.commentsPanel, this.versionsGrid];
 
 	
 	if(GO.workflow)

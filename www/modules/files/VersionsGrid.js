@@ -22,72 +22,64 @@ GO.files.VersionsGrid = function(config) {
 	config.autoScroll = true;
 	config.split = true;
 	config.store = new GO.data.JsonStore({
-				url : GO.settings.modules.files.url + 'json.php',
-				baseParams : {
-					'task' : 'versions'
-				},
-				root : 'results',
-				totalProperty : 'total',
-				id : 'path',
-				fields : ['path', 'name', 'type', 'size', 'mtime',
-						'grid_display', 'extension', 'timestamp', 'thumb_url'],
-				remoteSort : true
-			});
-			
-	var nameId = Ext.id();
-
+		url : GO.url("files/version/store"),
+		fields : ['id', 'mtime','user_name','version'],
+		remoteSort : true,
+		id:'id'
+	});
+	config.store.setDefaultSort('mtime', 'desc');
+		
 	config.paging = true;
 	var columnModel = new Ext.grid.ColumnModel({
 		defaults:{
 			sortable:true
 		},
 		columns:[{
-				header : GO.lang['strName'],
-				dataIndex : 'grid_display',
-				sortable : true,
-				id: nameId
-			}, {
-				header : GO.lang.strSize,
-				dataIndex : 'size',
-				width:80,
-				sortable : true
-			}, {
-				header : GO.lang.strMtime,
-				dataIndex : 'mtime',
-				sortable : true,
-				width:100
-			}]
-});
+				header:GO.files.lang.version,
+				dataIndex : 'version',
+				width:30,
+				align:'right'
+		},{
+			header : GO.lang['strOwner'],
+			dataIndex : 'user_name',
+			sortable : false,
+			id:'name'
+		}, {
+			header : GO.lang.strMtime,
+			dataIndex : 'mtime',
+			width:100
+		}]
+	});
 	
 	config.cm = columnModel;
 	
-	config.autoExpandColumn=nameId;
+	config.autoExpandColumn='name';
 
 	config.view = new Ext.grid.GridView({
-				emptyText : GO.lang['strNoItems']
-			});
+		emptyText : GO.lang['strNoItems']
+	});
 	config.sm = new Ext.grid.RowSelectionModel();
 	config.loadMask = true;
 
 	GO.files.VersionsGrid.superclass.constructor.call(this, config);
 
 	this.on('rowdblclick', function(grid, rowIndex) {
-				var record = grid.getStore().getAt(rowIndex);
-				GO.files.openFile(record);
-			}, this);
+		var record = grid.getStore().getAt(rowIndex);
+		window.open(GO.url("files/version/download",{id:record.id}));
+	}, this);
 
 };
 
 Ext.extend(GO.files.VersionsGrid, GO.grid.GridPanel, {
 
-			onShow : function() {
-				GO.files.VersionsGrid.superclass.onShow.call(this);
-				this.store.load();
-			},
+	onShow : function() {
+		GO.files.VersionsGrid.superclass.onShow.call(this);
+		this.store.load();
+	},
 
-			setFileID : function(file_id) {
-				this.store.baseParams.file_id = file_id
-				this.store.loaded = false;
-			}
+	setFileID : function(file_id) {
+		this.store.baseParams.file_id = file_id
+		this.store.loaded = false;
+	}
 
-		});
+});

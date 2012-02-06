@@ -51,6 +51,9 @@ class GO_Dav_Fs_File extends Sabre_DAV_FS_Node implements Sabre_DAV_IFile {
 	 */
 	public function put($data) {
 		$this->checkWritePermission();
+		
+		$file = GO_Files_Model_File::model()->findByPath($this->relpath);
+		$file->saveVersion();
 
 		file_put_contents($this->path, $data);
 

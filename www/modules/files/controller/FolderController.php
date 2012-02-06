@@ -626,8 +626,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 							break;
 
 						case 'yestoall':
-						case 'yes':
-							$existingFile->delete();
+						case 'yes':							
 
 							if ($params['overwrite'] == 'yes')
 								$params['overwrite'] = 'ask';
@@ -644,10 +643,14 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 					}
 				}
 
-				$file->move(new GO_Base_Fs_Folder(GO::config()->file_storage_path . $destinationFolder->path));
-
-				if (!GO_Files_Model_File::importFromFilesystem($file))
-					$response['success'] = false;
+				if($existingFile){
+					$existingFile->replace($file);
+				}else
+				{
+					$destinationFolder->addFileSystemFile($file);
+				}
+				
+				$response['success'] = true;
 			}
 		}
 
