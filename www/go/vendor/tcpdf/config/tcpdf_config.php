@@ -91,8 +91,12 @@ if (!defined('K_TCPDF_EXTERNAL_CONFIG')) {
 	/**
 	 * cache directory for temporary files (full path)
 	 */
-	define ('K_PATH_CACHE', K_PATH_MAIN.'cache/');
-
+	//define ('K_PATH_CACHE', K_PATH_MAIN.'cache/');
+	define ('K_PATH_CACHE', GO::config()->file_storage_path.'tcpdfcache/');
+	
+	$f = new GO_Base_Fs_Folder(K_PATH_CACHE);
+	$f->create();
+	
 	/**
 	 * cache directory for temporary files (url path)
 	 */
