@@ -312,6 +312,18 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	}
 	
 	/**
+	 * Add a filesystem file to this folder. The file will be moved to this folder
+	 * and added to the database.
+	 * 
+	 * @param GO_Base_Fs_File $file
+	 * @return GO_Files_Model_File 
+	 */
+	public function addFilesystemFile(GO_Base_Fs_File $file){
+		$file->move($this->fsFolder);
+		return $this->addFile($file->name());
+	}
+	
+	/**
 	 * Add a subfolder.
 	 * 
 	 * @param String $name

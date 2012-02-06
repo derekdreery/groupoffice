@@ -625,15 +625,22 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			return false;
 		
 		if(!isset($this->_acl_id)){
+			//ACL is mapped to a relation. eg. $contact->addressbook->acl_id is defined as "addressbook.acl_id" in the contact model.
 			$arr = explode('.', $this->aclField());
-			if (count($arr) == 2) {
+			if (count($arr) > 1) {
 				$relation = $arr[0];
-				$aclField = $arr[1];
 				
-				if(!$this->$relation)
-					throw new Exception("Could not find relation: ".$relation." in ".$this->className()." with pk: ".$this->pk);
+				//not really used. We use findAclId() of the model.
+				$aclField = array_pop($arr);
 				
-				$this->_acl_id = $this->$relation->findAclId();
+				$modelWithAcl=$this;
+				while($relation = array_shift($arr)){
+					if(!$modelWithAcl->$relation)
+						throw new Exception("Could not find relational ACL: ".$this->aclField()." ($relation) in ".$this->className()." with pk: ".$this->pk);
+					else
+						$modelWithAcl=$modelWithAcl->$relation;
+				}							
+				$this->_acl_id = $modelWithAcl->findAclId();
 			} else {
 				$this->_acl_id = $this->{$this->aclField()};
 			}
@@ -3201,4 +3208,3 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 
 }
-

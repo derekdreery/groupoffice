@@ -35,6 +35,7 @@
  * 
  * @property String $path
  * @property GO_Base_Fs_File $fsFile
+ * @property GO_Files_Model_Folder $folder
  */
 class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 
@@ -83,7 +84,8 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	 */
 	public function relations() {
 		return array(
-				'folder' => array('type' => self::BELONGS_TO, 'model' => 'GO_Files_Model_Folder', 'field' => 'folder_id')
+				'folder' => array('type' => self::BELONGS_TO, 'model' => 'GO_Files_Model_Folder', 'field' => 'folder_id'),
+				'versions' => array('type'=>self::HAS_MANY, 'model'=>'GO_Files_Model_Version', 'field'=>'file_id', 'delete'=>true),
 		);
 	}
 
@@ -137,6 +139,9 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 
 	protected function afterDelete() {
 		$this->fsFile->delete();
+		
+		$versioningFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'versioning/'.$this->id);
+		$versioningFolder->delete();
 
 		return parent::afterDelete();
 	}
@@ -209,6 +214,35 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		return $folder->addFile($fsFile->name());	
 	}
 	
+	/**
+	 * Replace filesystem file with given file.
+	 * 
+	 * @param GO_Base_Fs_File $fsFile 
+	 */
+	public function replace(GO_Base_Fs_File $fsFile, $isUploadedFile=false){
+		
+		$this->saveVersion();
+				
+		$fsFile->move($this->folder->fsFolder,$this->name, $isUploadedFile);
+		
+		$this->mtime=$fsFile->mtime();
+	
+		$this->save();
+	}	
+	
+	/**
+	 * Copy current file to the versioning system. 
+	 */
+	public function saveVersion(){
+		if(empty(GO::config()->max_file_versions))
+			GO::config()->max_file_versions=3;
+		
+		if(GO::config()->max_file_versions>1){
+			$version = new GO_files_Model_Version();
+			$version->file_id=$this->id;
+			$version->save();
+		}
+	}
 	
 	/**
 	 * Find the file model by relative path.
