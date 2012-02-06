@@ -153,7 +153,7 @@ GO.files.FilePropertiesDialog = function(config){
 	{
 		tbar.push({
 			iconCls: 'btn-edit',
-			text: GO.files.lang.cmdEdit,
+			text: GO.lang.cmdEdit,
 			cls: 'x-btn-text-icon',
 			handler: function(){
 				GO.files.editFile(this.file_id);
