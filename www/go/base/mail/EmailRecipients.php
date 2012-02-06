@@ -55,7 +55,7 @@ class GO_Base_Mail_EmailRecipients{
 		unset($this->_addresses[trim($email)]);
 	}
 	/**
-	 * Get the addresses in an array(array('email'=>'email@address.com','personal'=>'Personal'))
+	 * Get the addresses in an array('email@address.com'=>'Personal name'))
 	 * 
 	 * @return array  
 	 */
