@@ -157,6 +157,16 @@ class GO_Base_Util_TemplateParser
 		return $content;
 	}
 	
+	/**
+	 * Finds all tags in the string $content and replaces them with the given values.
+	 * 
+	 * Tags are formatted like this: {attribute_name} or {contact:name}.
+	 * 
+	 * @param string $content
+	 * @param array $attributes eg. array('attributeName'=>'value')
+	 * @param boolean $leaveEmptyTags Leave other tags in the document or keep them for further processing.
+	 * @return string 
+	 */
 	public function parse($content, $attributes, $leaveEmptyTags=false)
 	{
 		$this->_attributes=$attributes;
