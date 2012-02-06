@@ -21,7 +21,7 @@ class GO_Tasks_TasksModule extends GO_Base_Module{
 
 		$settings->save();
 		
-		return parent::submitSettings($settingsController, $params, $response);
+		return parent::submitSettings($settingsController, $params, $response, $user);
 	}
 	
 	public static function loadSettings(&$settingsController, &$params, &$response, $user) {
@@ -38,7 +38,7 @@ class GO_Tasks_TasksModule extends GO_Base_Module{
 				
 		//$response = GO_Tasks_Controller_Task::reminderSecondsToForm($response);
 		
-		return parent::loadSettings($settingsController, $params, $response);
+		return parent::loadSettings($settingsController, $params, $response, $user);
 	}
 	
 	public static function deleteUser($user) {
