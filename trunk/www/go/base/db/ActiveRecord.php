@@ -1804,10 +1804,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			{
 				$this->setValidationError($field, $this->getAttributeLabel($field).' did not validate');
 			}elseif(!empty($attributes['unique'])){
-				
+							
 				$criteria = GO_Base_Db_FindCriteria::newInstance()
 							->addModel(GO::getModel($this->className()))
 							->addCondition($field, $this->_attributes[$field]);
+				
+				if(is_array($attributes['unique'])){
+					foreach($attributes['unique'] as $f)
+						$criteria->addCondition($f, $this->_attributes[$f]);
+				}
+				
 				if(!$this->isNew)
 					$criteria->addCondition($this->primaryKey(), $this->pk, '!=');
 				
