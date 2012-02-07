@@ -79,7 +79,7 @@ GO.grid.ModulePermissionsGrid = function(config)
 			columns:[
 				{
 						id:'name',
-						header: GO.modules.lang['module'],
+						header: GO.lang.strName,
 						dataIndex: 'name',
 						renderer: function(name, cell, reader) {
 							return '<div class="go-module-icon-'+reader.data.id+'" style="height:16px;padding-left:22px;background-repeat:no-repeat;">'+name+'</div>';
