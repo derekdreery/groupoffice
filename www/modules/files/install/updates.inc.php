@@ -81,3 +81,5 @@ $updates["201202061513"][]="CREATE TABLE IF NOT EXISTS `fs_versions` (
   PRIMARY KEY (`id`),
   KEY `file_id` (`file_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;";
+
+$updates["201202071144"][]="ALTER TABLE `fs_files` DROP `status_id`";
