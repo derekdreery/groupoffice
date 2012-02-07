@@ -118,7 +118,7 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 			this.addPanel(this.disableContactsCategoriesPanel);
 			
 			this.disableCompaniesCategoriesPanel = new GO.customfields.DisableCategoriesPanel({
-				title:GO.addressbook.lang.contactCustomFields
+				title:GO.addressbook.lang.companyCustomFields
 			});
 			this.addPanel(this.disableCompaniesCategoriesPanel);
 		}
