@@ -226,7 +226,7 @@ class GO_Base_Session extends GO_Base_Observable{
 				$this->clearUserTempFiles();
 			}
 
-			$this->_setCompatibilitySessionVars(); // TODO: REMOVE IF SYSTEM IS FULLY REBUILT
+			self::setCompatibilitySessionVars(); // TODO: REMOVE IF SYSTEM IS FULLY REBUILT
 
 			$this->fireEvent('login', array($username, $password, $user));
 			
@@ -253,7 +253,7 @@ class GO_Base_Session extends GO_Base_Observable{
 	/**
 	 * TODO: REMOVE IF SYSTEM IS FULLY REBUILDED
 	 */
-	private function _setCompatibilitySessionVars(){
+	public static function setCompatibilitySessionVars(){
 		
 		define('NO_EVENTS',true);
 		
