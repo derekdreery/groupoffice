@@ -27,16 +27,16 @@ GO.sites.MainPanel = function(config){
 		this.showSiteDialog(0); // The parameter 0 will generate a new site object.
 	},this);
 	
-	this.settingsButton = new Ext.Button({
-		iconCls: 'btn-settings',
-		itemId:'settings',
-		text: GO.sites.lang.moduleSettings,
-		cls: 'x-btn-text-icon'
-	});
-	
-	this.settingsButton.on("click", function(){
-		this.showModuleSettingsDialog();
-	},this);
+//	this.settingsButton = new Ext.Button({
+//		iconCls: 'btn-settings',
+//		itemId:'settings',
+//		text: GO.sites.lang.moduleSettings,
+//		cls: 'x-btn-text-icon'
+//	});
+//	
+//	this.settingsButton.on("click", function(){
+//		this.showModuleSettingsDialog();
+//	},this);
 	
 	config.layout='border';
 	
@@ -48,9 +48,9 @@ GO.sites.MainPanel = function(config){
 	config.tbar=new Ext.Toolbar({
 			cls:'go-head-tb',
 			items: [
-				this.newSiteButton,
-				"-",
-				this.settingsButton
+				this.newSiteButton
+//				"-",
+//				this.settingsButton
 			]
 	});
 	
@@ -79,12 +79,12 @@ Ext.extend(GO.sites.MainPanel, Ext.Panel,{
 		
 		this.pageDialog.show(page_id);
 	},
-	showModuleSettingsDialog: function(){
-		if(!this.moduleSettingsDialog)
-			this.moduleSettingsDialog = new GO.sites.ModuleSettingsDialog();
-		
-		this.moduleSettingsDialog.show();
-	},
+//	showModuleSettingsDialog: function(){
+//		if(!this.moduleSettingsDialog)
+//			this.moduleSettingsDialog = new GO.sites.ModuleSettingsDialog();
+//		
+//		this.moduleSettingsDialog.show();
+//	},
 	rebuildTree: function(){
 		this.treePanel.getLoader().load(this.treePanel.getRootNode());
 	}
