@@ -1,3 +1,11 @@
+.editorgrid-editablecell {
+	background:url('images/16x16/celledit.png') no-repeat top right !important;
+}
+
+.x-grid3-row-selected .editorgrid-editablecell {
+	background:url('images/16x16/celledit.png') no-repeat top right !important;
+}
+
 #mainNorthPanel{
 	font:bold 12px tahoma,arial,helvetica;
 }
