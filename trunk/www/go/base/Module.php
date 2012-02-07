@@ -257,13 +257,15 @@ class GO_Base_Module extends GO_Base_Observable {
 			if($model->isSubclassOf("GO_Base_Db_ActiveRecord")){
 				echo "Processing ".$model->getName()."\n";
 				flush();
+					
 
 				$m = GO::getModel($model->getName());
-
-				$stmt = $m->find(array(
-						'ignoreAcl'=>true
-				));
-				$stmt->callOnEach('checkDatabase');
+				if($m->hasFiles()){
+					$stmt = $m->find(array(
+							'ignoreAcl'=>true
+					));
+					$stmt->callOnEach('checkDatabase');
+				}
 			}
 		}
 	}
