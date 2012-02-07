@@ -1650,7 +1650,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				return $value;
 				break;
 			default:
-				return $html ? htmlentities($value, ENT_COMPAT,'UTF-8') : $value;
+				return $html ? htmlspecialchars($value, ENT_COMPAT,'UTF-8') : $value;
 				break;
 		}		
 	}
