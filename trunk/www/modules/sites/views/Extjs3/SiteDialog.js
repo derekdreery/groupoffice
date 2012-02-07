@@ -26,6 +26,13 @@ GO.sites.SiteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		
 		GO.sites.SiteDialog.superclass.initComponent.call(this);	
 	},
+	afterLoad : function(remoteModelId, config, action){
+		if(this.remoteModelId == 0)
+			this.createDefaultPagesButton.setDisabled(true);
+		else
+			this.createDefaultPagesButton.setDisabled(false);
+		
+	},
 	buildForm : function () {
 		
 		this.createDefaultPagesButton = new Ext.Button({
@@ -34,11 +41,6 @@ GO.sites.SiteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			text: GO.sites.lang.createDefaultPages,
 			cls: 'x-btn-text-icon'
 		});
-		
-		if(this.remoteModelId == 0)
-			this.createDefaultPagesButton.setDisabled(true);
-		else
-			this.createDefaultPagesButton.setDisabled(false);
 		
 		this.createDefaultPagesButton.on("click", function(){
 			Ext.MessageBox.confirm(GO.sites.lang.createDefaultPages, GO.sites.lang.reallyCreateDefaultPages, function(btn){
