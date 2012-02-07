@@ -45,16 +45,13 @@ GO.sites.SiteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		this.createDefaultPagesButton.on("click", function(){
 			Ext.MessageBox.confirm(GO.sites.lang.createDefaultPages, GO.sites.lang.reallyCreateDefaultPages, function(btn){
 				if(btn == 'yes'){
-					Ext.Ajax.request({
+					GO.request({
 						url: GO.url('sites/site/createDefaultPages'),
 						params: {
 							site_id: this.remoteModelId
 						},
-						success: function(){
+						success: function(response, options, results){
 							GO.mainLayout.getModulePanel('sites').rebuildTree();
-						},
-						failure: function(){
-
 						},
 						scope: this
 					});
