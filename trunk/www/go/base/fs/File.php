@@ -317,9 +317,12 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 * @param GO_Base_Fs_Folder $destinationFolder 
 	 * @return boolean
 	 */
-	public function copy($destinationFolder){
+	public function copy($destinationFolder, $newFileName=false){
 		
-		$newPath = $destinationFolder->path().'/'.$this->name();
+		if(!$newFileName)
+			$newFileName=$this->name();
+			
+		$newPath = $destinationFolder->path().'/'.$newFileName;
 		GO::debug('copy: '.$this->path.' > '.$newPath);
 		
 		if(!copy($this->path, $newPath))
