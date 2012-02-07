@@ -100,7 +100,8 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 			if($this->isModified('name')){				
 				//rename filesystem file.
 				$oldFsFile = new GO_Base_Fs_File(dirname($this->fsFile->path()).'/'.$this->getOldAttributeValue('name'));				
-				$oldFsFile->rename($this->name);
+				if($oldFsFile->exists())
+					$oldFsFile->rename($this->name);				
 			}
 
 			if($this->isModified('folder_id')){
@@ -189,12 +190,15 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	 * Copy a file to another folder.
 	 * 
 	 * @param GO_Files_Model_Folder $destinationFolder
+	 * @param string $newFileName. Leave blank to use the same name.
 	 * @return GO_Files_Model_File 
 	 */
-	public function copy($destinationFolder){
+	public function copy($destinationFolder, $newFileName=false){
 		
 		$copy = $this->duplicate(array('folder_id'=>$destinationFolder->id), false);
-		$this->fsFile->copy($copy->fsFile->parent());
+		$this->fsFile->copy($copy->fsFile->parent(), $newFileName);
+		if($newFileName)
+			$copy->name=$newFileName;
 		$copy->save();
 		
 		return $copy;

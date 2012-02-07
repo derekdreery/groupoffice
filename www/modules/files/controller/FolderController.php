@@ -237,7 +237,23 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		while ($file_id = array_shift(GO::session()->values['files']['pasteIds']['files'])) {
 			$file = GO_Files_Model_File::model()->findByPk($file_id);
 
+			$newFileName=$file->name;
+			
 			$existingFile = $destinationFolder->hasFile($file->name);
+			
+			//if it's a copy-paste in the same folder then append a number.
+			if($existingFile && $existingFile->id==$file->id){
+				if($params['paste_mode'] == 'cut')
+					continue;
+				else
+				{
+					$fsFile = $existingFile->fsFile;
+					$fsFile->appendNumberToNameIfExists();
+					$newFileName = $fsFile->name();
+					$existingFile=false;
+				}
+			}
+			
 			if ($existingFile) {
 				switch ($params['overwrite']) {
 					case 'ask':
@@ -269,7 +285,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				if (!$file->move($destinationFolder))
 					throw new Exception("Could not move " . $file->name);
 			}else {
-				if (!$file->copy($destinationFolder))
+				if (!$file->copy($destinationFolder,$newFileName))
 					throw new Exception("Could not copy " . $file->name);
 			}
 		}
