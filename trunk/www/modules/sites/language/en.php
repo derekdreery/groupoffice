@@ -12,7 +12,7 @@ $l['pageProperties']='Page Properties';
 
 $l['globalProperties']='Global Properties';
 
-$l['createDefaultPages']='Create Default Pages';
+$l['createDefaultPagesTitle']='Create Default Pages';
 
 
 $l['deleteSite']='Delete Site';
