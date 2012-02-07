@@ -314,15 +314,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 				url:GO.url(this.formControllerUrl+'/'+this.loadAction),
 				success:function(form, action)
 				{					
-					if(action.result.remoteComboTexts){
-						var t = action.result.remoteComboTexts;
-						for(var fieldName in t){
-
-							var f = this.formPanel.form.findField(fieldName);
-							if(f)
-								f.setRemoteText(t[fieldName]);
-						}
-					}
+					this.setRemoteComboTexts(action);
 					
 					if(this.permissionsPanel && action.result.data[this.permissionsPanel.fieldName])
 						this.permissionsPanel.setAcl(action.result.data[this.permissionsPanel.fieldName]);
@@ -363,6 +355,17 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 					this.selectLinkField.setValue(config.link_config.modelNameAndId);
 					this.selectLinkField.setRemoteText(config.link_config.text);
 				}
+			}
+		}
+	},
+	
+	setRemoteComboTexts : function(loadAction){
+		if(loadAction.result.remoteComboTexts){
+			var t = loadAction.result.remoteComboTexts;
+			for(var fieldName in t){
+				var f = this.formPanel.form.findField(fieldName);				
+				if(f)
+					f.setRemoteText(t[fieldName]);
 			}
 		}
 	},

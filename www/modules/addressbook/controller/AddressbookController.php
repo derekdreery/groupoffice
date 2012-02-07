@@ -14,6 +14,10 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 	
 	protected $model = 'GO_Addressbook_Model_Addressbook';
 	
+	protected function remoteComboFields() {
+		return array('user_id'=>'$model->user->name');
+	}
+	
 	protected function actionSearchSender($params) {
 
 		$contacts = GO_Addressbook_Model_Contact::model()->findByEmail($params['email']);

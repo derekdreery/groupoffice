@@ -219,7 +219,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		$oldLevel = error_reporting(E_ERROR);	//suppress errors in the eval'd code
 			
-		foreach ($this->remoteComboFields() as $property => $map) {
+		foreach ($this->remoteComboFields() as $property => $map) {			
+			if(is_numeric($property))
+				throw new Exception("remoteComboFields() must return a key=>value array.");			
+			
 			$value='';
 			$eval = '$value = '.$map.';';
 			eval($eval);
