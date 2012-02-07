@@ -5,6 +5,14 @@
 * modules/<modulename>/themes/Default/style.css instead.
 */
 
+.editorgrid-editablecell {
+	background:url('images/16x16/celledit.png') no-repeat top right !important;
+}
+
+.x-grid3-row-selected .editorgrid-editablecell {
+	background:url('images/16x16/celledit.png') no-repeat top right !important;
+}
+
 #beta {
     
     font-size: 9px;
