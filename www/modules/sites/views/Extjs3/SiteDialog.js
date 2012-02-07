@@ -20,7 +20,8 @@ GO.sites.SiteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		Ext.apply(this, {
 			goDialogId:'site',
 			title:GO.sites.lang.site,
-			formControllerUrl: 'sites/siteBackend'
+			formControllerUrl: 'sites/siteBackend',
+			height:550
 		});
 		
 		GO.sites.SiteDialog.superclass.initComponent.call(this);	
@@ -33,15 +34,19 @@ GO.sites.SiteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			text: GO.sites.lang.createDefaultPages,
 			cls: 'x-btn-text-icon'
 		});
-
+		
+		if(this.remoteModelId == 0)
+			this.createDefaultPagesButton.setDisabled(true);
+		else
+			this.createDefaultPagesButton.setDisabled(false);
+		
 		this.createDefaultPagesButton.on("click", function(){
 			Ext.MessageBox.confirm(GO.sites.lang.createDefaultPages, GO.sites.lang.reallyCreateDefaultPages, function(btn){
 				if(btn == 'yes'){
 					Ext.Ajax.request({
 						url: GO.url('sites/site/createDefaultPages'),
 						params: {
-							site_id: this.site_id,
-							page_id: 0
+							site_id: this.remoteModelId
 						},
 						success: function(){
 							GO.mainLayout.getModulePanel('sites').rebuildTree();
@@ -55,126 +60,138 @@ GO.sites.SiteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			});
 		},this);
 		
-		
 		this.propertiesPanel = new Ext.Panel({
 			title:GO.lang['strProperties'],			
 			cls:'go-form-panel',
 			layout:'form',
-			labelWidth: 200,
-			items:[
-				this.createDefaultPagesButton,
-			{
-				xtype: 'hidden',
-				name: 'site_id',
-				width:300,
-				anchor: '100%',
-				maxLength: 100,
-				allowBlank:false,
-				fieldLabel: GO.sites.lang.siteId
+			labelWidth: 170,
+			items:[{
+	  		xtype: 'fieldset',
+	  		title: GO.sites.lang.siteProperties,
+	  		autoHeight: true,
+	  		border: true,
+	  		collapsed: false,
+				items:[
+					{
+						xtype: 'hidden',
+						name: 'site_id',
+						width:300,
+						anchor: '100%',
+						maxLength: 100,
+						allowBlank:false,
+						fieldLabel: GO.sites.lang.siteId
+					},{
+						xtype: 'textfield',
+						name: 'name',
+						width:300,
+						anchor: '100%',
+						maxLength: 100,
+						allowBlank:false,
+						fieldLabel: GO.sites.lang.siteName
+					},{
+						xtype: 'textfield',
+						name: 'user_id',
+						width:300,
+						anchor: '100%',
+						maxLength: 100,
+						allowBlank:false,
+						fieldLabel: GO.sites.lang.siteUserId
+					},{
+						xtype: 'textfield',
+						name: 'domain',
+						width:300,
+						anchor: '100%',
+						maxLength: 100,
+						allowBlank:false,
+						fieldLabel: GO.sites.lang.siteDomain
+					},{
+						xtype: 'textfield',
+						name: 'template',
+						width:300,
+						anchor: '100%',
+						maxLength: 100,
+						allowBlank:false,
+						fieldLabel: GO.sites.lang.siteTemplate
+					},{
+						xtype: 'textfield',
+						name: 'lost_password_path',
+						width:300,
+						anchor: '100%',
+						maxLength: 100,
+						allowBlank:false,
+						fieldLabel: GO.sites.lang.siteLostPasswordPath
+					},{
+						xtype: 'textfield',
+						name: 'reset_password_path',
+						width:300,
+						anchor: '100%',
+						maxLength: 100,
+						allowBlank:false,
+						fieldLabel: GO.sites.lang.siteResetPasswordPath
+					},{
+						xtype: 'textfield',
+						name: 'logout_path',
+						width:300,
+						anchor: '100%',
+						maxLength: 100,
+						allowBlank:false,
+						fieldLabel: GO.sites.lang.siteLogoutPath
+					},{
+						xtype: 'textfield',
+						name: 'login_path',
+						width:300,
+						anchor: '100%',
+						maxLength: 100,
+						allowBlank:false,
+						fieldLabel: GO.sites.lang.siteLoginPath
+					},{
+						xtype: 'textfield',
+						name: 'register_path',
+						width:300,
+						anchor: '100%',
+						maxLength: 100,
+						allowBlank:false,
+						fieldLabel: GO.sites.lang.siteRegisterPath
+					},{
+						xtype: 'textfield',
+						name: 'register_user_groups',
+						width:300,
+						anchor: '100%',
+						maxLength: 100,
+						allowBlank:true,
+						fieldLabel: GO.sites.lang.siteRegisterUserGroups
+					},{
+						xtype: 'textfield',
+						name: 'mod_rewrite_base_path',
+						width:300,
+						anchor: '100%',
+						maxLength: 100,
+						allowBlank:true,
+						fieldLabel: GO.sites.lang.siteModRewriteBasePath
+					},{
+						xtype: 'xcheckbox',
+						name: 'ssl',
+						width:300,
+						anchor: '100%',
+						maxLength: 100,
+						allowBlank:false,
+						fieldLabel: GO.sites.lang.siteSsl
+					},{
+						xtype: 'xcheckbox',
+						name: 'mod_rewrite',
+						width:300,
+						anchor: '100%',
+						maxLength: 100,
+						allowBlank:false,
+						fieldLabel: GO.sites.lang.siteModRewrite
+					}]		
 			},{
-				xtype: 'textfield',
-				name: 'name',
-				width:300,
-				anchor: '100%',
-				maxLength: 100,
-				allowBlank:false,
-				fieldLabel: GO.sites.lang.siteName
-			},{
-				xtype: 'textfield',
-				name: 'user_id',
-				width:300,
-				anchor: '100%',
-				maxLength: 100,
-				allowBlank:false,
-				fieldLabel: GO.sites.lang.siteUserId
-			},{
-				xtype: 'textfield',
-				name: 'domain',
-				width:300,
-				anchor: '100%',
-				maxLength: 100,
-				allowBlank:false,
-				fieldLabel: GO.sites.lang.siteDomain
-			},{
-				xtype: 'textfield',
-				name: 'template',
-				width:300,
-				anchor: '100%',
-				maxLength: 100,
-				allowBlank:false,
-				fieldLabel: GO.sites.lang.siteTemplate
-			},{
-				xtype: 'textfield',
-				name: 'lost_password_path',
-				width:300,
-				anchor: '100%',
-				maxLength: 100,
-				allowBlank:false,
-				fieldLabel: GO.sites.lang.siteLostPasswordPath
-			},{
-				xtype: 'textfield',
-				name: 'reset_password_path',
-				width:300,
-				anchor: '100%',
-				maxLength: 100,
-				allowBlank:false,
-				fieldLabel: GO.sites.lang.siteResetPasswordPath
-			},{
-				xtype: 'textfield',
-				name: 'logout_path',
-				width:300,
-				anchor: '100%',
-				maxLength: 100,
-				allowBlank:false,
-				fieldLabel: GO.sites.lang.siteLogoutPath
-			},{
-				xtype: 'textfield',
-				name: 'login_path',
-				width:300,
-				anchor: '100%',
-				maxLength: 100,
-				allowBlank:false,
-				fieldLabel: GO.sites.lang.siteLoginPath
-			},{
-				xtype: 'textfield',
-				name: 'register_path',
-				width:300,
-				anchor: '100%',
-				maxLength: 100,
-				allowBlank:false,
-				fieldLabel: GO.sites.lang.siteRegisterPath
-			},{
-				xtype: 'textfield',
-				name: 'register_user_groups',
-				width:300,
-				anchor: '100%',
-				maxLength: 100,
-				allowBlank:true,
-				fieldLabel: GO.sites.lang.siteRegisterUserGroups
-			},{
-				xtype: 'textfield',
-				name: 'mod_rewrite_base_path',
-				width:300,
-				anchor: '100%',
-				maxLength: 100,
-				allowBlank:true,
-				fieldLabel: GO.sites.lang.siteModRewriteBasePath
-			},{
-				xtype: 'xcheckbox',
-				name: 'ssl',
-				width:300,
-				anchor: '100%',
-				maxLength: 100,
-				allowBlank:false,
-				fieldLabel: GO.sites.lang.siteSsl
-			},{
-				xtype: 'xcheckbox',
-				name: 'mod_rewrite',
-				width:300,
-				anchor: '100%',
-				maxLength: 100,
-				allowBlank:false,
-				fieldLabel: GO.sites.lang.siteModRewrite
+	  		xtype: 'fieldset',
+	  		title: GO.sites.lang.createDefaultPagesTitle,
+	  		autoHeight: true,
+	  		border: true,
+	  		collapsed: false,
+				items:this.createDefaultPagesButton
 			}]
 		});
 
