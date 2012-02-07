@@ -55,14 +55,14 @@ GO.sites.SitesTreePanel = function (config){
 	GO.sites.SitesTreePanel.superclass.constructor.call(this, config);
 	
 	// set the root node
-	var rootNode = new Ext.tree.AsyncTreeNode({
+	this.rootNode = new Ext.tree.AsyncTreeNode({
 		text: '',
 		draggable:false,
 		id: 'root',
 		iconCls : 'folder-default'
 	});
 
-	this.setRootNode(rootNode);
+	this.setRootNode(this.rootNode);
 }
 	
 	
@@ -78,6 +78,9 @@ Ext.extend(GO.sites.SitesTreePanel, Ext.tree.TreePanel,{
 		else{
 			return false;
 		}
+	},
+	getRootNode: function(){
+		return this.rootNode;
 	}
 });
 	

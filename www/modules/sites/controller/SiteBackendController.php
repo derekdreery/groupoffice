@@ -3,9 +3,6 @@
 class GO_Sites_Controller_SiteBackend extends GO_Base_Controller_AbstractModelController {
 
 	protected $model = 'GO_Sites_Model_Site';
-
-	
-	
 	
 	protected function actionSiteTree($params) {
 
@@ -41,12 +38,23 @@ class GO_Sites_Controller_SiteBackend extends GO_Base_Controller_AbstractModelCo
 		$stmt = GO_Sites_Model_Page::model()->findByAttributes($attr);
 
 		while ($page = $stmt->fetch()) {
-			$pageNode = array('id'=>$page->id, 'iconCls' => 'go-model-icon-GO_Sites_Model_Page', 'text' => $page->name, 'expanded' => false);
+			// Check the leaf parameter (Needed to show no [+] before th node if this page has no children
+			
+			$pageNode = array('id'=>$page->id, 'iconCls' => 'go-model-icon-GO_Sites_Model_Page', 'text' => $page->name, 'expanded' => false, 'leaf'=>true);
 
 			$response[] = $pageNode;
 		}
 
 		return $response;
 	}
-
+	
+	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
+		
+		if(empty($params['id'])){
+			$controller = new GO_Sites_Controller_SiteModule();
+			$controller->run('createdefaultpages',array('site_id'=>$model->id));
+		}
+		
+		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
+	}
 }

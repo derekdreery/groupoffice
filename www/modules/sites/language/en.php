@@ -10,9 +10,20 @@ $l['invaliduser']='No user found with the given email address!';
 $l['siteProperties']='Site Properties';
 $l['pageProperties']='Page Properties';
 
+$l['globalProperties']='Global Properties';
+
+$l['createDefaultPages']='Create Default Pages';
+
+
+$l['deleteSite']='Delete Site';
+$l['deletePage']='Delete Page';
+$l['deleteSiteText']='Are you sure that you want to delete this site?';
+$l['deletePageText']='Are you sure that you want to delete this page?';
+
 $l['newSite']='New Site';
 $l['newPage']='New Page';
 $l['yourContent']='Put your content here!';
+$l['moduleSettings']='Module Settings';
 
 $l['site']='Site';
 $l['siteId']='Site ID';
@@ -34,3 +45,6 @@ $l['siteRegisterUserGroups']='Site Register User Groups';
 
 $l['page']='Page';
 $l['pageName']='Page Name';
+
+$l["createDefaultPages"] = 'Create the default webpages for this module';
+$l["reallyCreateDefaultPages"] = 'Are you sure you want to create the default webpages for this module?';

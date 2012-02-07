@@ -96,7 +96,8 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 	 */
 	public function relations() {
 		return array(
-				'pages' => array('type' => self::HAS_MANY, 'model' => 'GO_Sites_Model_Page', 'field' => 'site_id', 'findParams'=>  GO_Base_Db_FindParams::newInstance()->order('sort')->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('parent_id', 0)->addCondition('hidden',0)), 'delete' => true),
+				'pages' => array('type' => self::HAS_MANY, 'model' => 'GO_Sites_Model_Page', 'field' => 'site_id', 'findParams'=>  GO_Base_Db_FindParams::newInstance()->order('sort')->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('parent_id', 0)->addCondition('hidden',0)), 'delete' => false),
+				'allpages' => array('type' => self::HAS_MANY, 'model' => 'GO_Sites_Model_Page', 'field' => 'site_id', 'delete' => true)
 				);
 	}	
 	
@@ -281,28 +282,34 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 		return $url;
 	}
 	
+	public function getRegisterGroupNames(){
+		if(!empty($this->register_user_groups))
+			return explode(',', $this->register_user_groups);
+		else
+			return array();
+	}
+	
 	/**
 	 * Function to create the default site users group.
 	 * 
 	 * @return GO_Base_Model_Group 
 	 */
-	public function checkDefaultSiteUsersGroup(){
-		$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', self::REGISTER_USER_GROUP);
+	private function _checkDefaultSiteUsersGroups(){
 		
-		if(!$group){
-			$group = new GO_Base_Model_Group();
-			$group->name = self::REGISTER_USER_GROUP;
-			$group->admin_only = true;
-			$group->save();
+		foreach($this->getRegisterGroupNames() as $groupName){		
+			$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', $groupName);
+
+			if(!$group){
+				$group = new GO_Base_Model_Group();
+				$group->name = $groupName;
+				$group->admin_only = true;
+				$group->save();
+			}
 		}
-		
-		return $group;
 	}
 	
-	protected function afterSave($wasNew) {
-		if($wasNew){
-			GO_Sites_Model_Page::createDefaultPages($this->id);
-		}
+	protected function afterSave($wasNew) {		
+		$this->_checkDefaultSiteUsersGroups();		
 		return parent::afterSave($wasNew);
 	}
 }

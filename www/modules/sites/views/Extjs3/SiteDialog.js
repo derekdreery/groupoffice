@@ -25,15 +25,53 @@ GO.sites.SiteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		
 		GO.sites.SiteDialog.superclass.initComponent.call(this);	
 	},
-//	ssl 	mod_rewrite:)
-
 	buildForm : function () {
+		
+		this.createDefaultPagesButton = new Ext.Button({
+			iconCls: 'btn-add',
+			itemId:'createPages',
+			text: GO.sites.lang.createDefaultPages,
+			cls: 'x-btn-text-icon'
+		});
+
+		this.createDefaultPagesButton.on("click", function(){
+			Ext.MessageBox.confirm(GO.sites.lang.createDefaultPages, GO.sites.lang.reallyCreateDefaultPages, function(btn){
+				if(btn == 'yes'){
+					Ext.Ajax.request({
+						url: GO.url('sites/site/createDefaultPages'),
+						params: {
+							site_id: this.site_id,
+							page_id: 0
+						},
+						success: function(){
+							GO.mainLayout.getModulePanel('sites').rebuildTree();
+						},
+						failure: function(){
+
+						},
+						scope: this
+					});
+				}
+			});
+		},this);
+		
+		
 		this.propertiesPanel = new Ext.Panel({
 			title:GO.lang['strProperties'],			
 			cls:'go-form-panel',
 			layout:'form',
 			labelWidth: 200,
-			items:[{
+			items:[
+				this.createDefaultPagesButton,
+			{
+				xtype: 'hidden',
+				name: 'site_id',
+				width:300,
+				anchor: '100%',
+				maxLength: 100,
+				allowBlank:false,
+				fieldLabel: GO.sites.lang.siteId
+			},{
 				xtype: 'textfield',
 				name: 'name',
 				width:300,
@@ -41,14 +79,6 @@ GO.sites.SiteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 				maxLength: 100,
 				allowBlank:false,
 				fieldLabel: GO.sites.lang.siteName
-			},{
-				xtype: 'textfield',
-				name: 'login_path',
-				width:300,
-				anchor: '100%',
-				maxLength: 100,
-				allowBlank:false,
-				fieldLabel: GO.sites.lang.siteLoginPath
 			},{
 				xtype: 'textfield',
 				name: 'user_id',
@@ -119,7 +149,7 @@ GO.sites.SiteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 				width:300,
 				anchor: '100%',
 				maxLength: 100,
-				allowBlank:false,
+				allowBlank:true,
 				fieldLabel: GO.sites.lang.siteRegisterUserGroups
 			},{
 				xtype: 'textfield',
@@ -127,8 +157,24 @@ GO.sites.SiteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 				width:300,
 				anchor: '100%',
 				maxLength: 100,
-				allowBlank:false,
+				allowBlank:true,
 				fieldLabel: GO.sites.lang.siteModRewriteBasePath
+			},{
+				xtype: 'xcheckbox',
+				name: 'ssl',
+				width:300,
+				anchor: '100%',
+				maxLength: 100,
+				allowBlank:false,
+				fieldLabel: GO.sites.lang.siteSsl
+			},{
+				xtype: 'xcheckbox',
+				name: 'mod_rewrite',
+				width:300,
+				anchor: '100%',
+				maxLength: 100,
+				allowBlank:false,
+				fieldLabel: GO.sites.lang.siteModRewrite
 			}]
 		});
 

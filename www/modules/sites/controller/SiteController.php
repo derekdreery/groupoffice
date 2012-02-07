@@ -316,22 +316,22 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 		return GO_Webshop_Model_Webshop::model()->findSingleByAttribute('site_id',$this->_site->id);
 	}
 	
-	/**
-	 * Static install function for a site.
-	 * 
-	 * @param int $site_id
-	 * @return GO_Sites_Model_Site 
-	 */
-	public static function install($site_id=0){
-		if(!empty($site_id))
-			$site = GO_Sites_Model_Site::model()->findByPk($site_id);
-		else
-			$site = new GO_Sites_Model_Site();
-		
-		$site->save();
-		$site->checkDefaultSiteUsersGroup();
-		
-		return $site;
-	}
+//	/**
+//	 * Static install function for a site.
+//	 * 
+//	 * @param int $site_id
+//	 * @return GO_Sites_Model_Site 
+//	 */
+//	public static function install($site_id=0){
+//		if(!empty($site_id))
+//			$site = GO_Sites_Model_Site::model()->findByPk($site_id);
+//		else
+//			$site = new GO_Sites_Model_Site();
+//		
+//		$site->save();
+//		
+//		
+//		return $site;
+//	}
 	
 }

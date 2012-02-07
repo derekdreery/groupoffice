@@ -9,7 +9,7 @@ class GO_Sites_SitesModule extends GO_Base_Module{
 	}	
 	
 	public function autoInstall() {
-		return true;
+		return false;
 	}
 	
 	public function author() {
@@ -30,4 +30,5 @@ class GO_Sites_SitesModule extends GO_Base_Module{
 	public static function firstRun(){
 		parent::firstRun();
 	}
+	
 }
