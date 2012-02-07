@@ -1175,12 +1175,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$criteriaObjectParams = $params['criteriaObject']->getParams();	
 				
 			foreach($criteriaObjectParams as $param=>$value)
-				$sql = str_replace($param, $value[0], $sql);									
+				$sql = str_replace($param, '"'.$value[0].'"', $sql);									
 		}
 		
 		if(isset($params['bindParams'])){			
 			foreach($params['bindParams'] as $key=>$value)
-				$sql = str_replace($param, $value[0], $sql);
+				$sql = str_replace(':'.$key, '"'.$value.'"', $sql);
 		}
 		
 		GO::debug($sql);				
@@ -2257,10 +2257,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$sql = "INSERT INTO `{$this->tableName()}` (`".implode('`,`', $fieldNames)."`) VALUES ".
 					"(:".implode(',:', $fieldNames).")";
 
-		if($this->_debugSql){
-			GO::debug($sql);
-			GO::debug($this->_attributes);
-		}
+		if($this->_debugSql)			
+			$this->_debugSql(array('bindParams'=>$this->_attributes), $sql);		
 		
 		try{
 			$stmt = $this->getDbConnection()->prepare($sql);
@@ -2327,10 +2325,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}else
 			$sql .= "`".$this->primaryKey()."`=:".$this->primaryKey();
 		
-		if($this->_debugSql){
-			GO::debug($sql);
-			GO::debug($this->_attributes);
-		}
+		//if($this->_debugSql)
+			$this->_debugSql(array('bindParams'=>$this->_attributes), $sql);
 
 		try{
 			$stmt = $this->getDbConnection()->prepare($sql);
