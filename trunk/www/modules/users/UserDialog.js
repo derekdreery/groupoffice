@@ -60,12 +60,12 @@
 	
 	files_folder_id : '',
 	
-	afterLoad : function(remoteModelId, config, action){
+	setRemoteModelId : function(remoteModelId){
+		
+		GO.users.UserDialog.superclass.setRemoteModelId.call(this, remoteModelId);	
 		
 		this.permissionsTab.setUserId(remoteModelId);
 		this.accountTab.setUserId(remoteModelId);
-		
-		this.formPanel.baseParams.contact_id=action.result.data.contact_id;
 		
 		if(this.serverclientFieldSet)
 		{
@@ -75,15 +75,12 @@
 
 		this.loginTab.setVisible(remoteModelId>0);
 		
-//		this.linkBrowseButton.setDisabled(!remoteModelId);
-//		if(GO.files)
-//		{
-//			this.fileBrowseButton.setDisabled(!remoteModelId);
-//		}
-
 		this.lookAndFeelTab.startModuleField.clearLastSearch();
-		this.lookAndFeelTab.modulesStore.baseParams.user_id=remoteModelId;
-
+		this.lookAndFeelTab.modulesStore.baseParams.user_id=remoteModelId;		
+	},
+	
+	afterLoad : function(remoteModelId, config, action){		
+		this.formPanel.baseParams.contact_id=action.result.data.contact_id;
 		this.fireEvent('set_id', this);
 	},
 	

@@ -30,61 +30,10 @@ GO.users.PermissionsPanel = function(config)
         autoScroll:true
     };
 	
-	
-    /* module permissions grid */
-	
-//    var moduleReadPermissionColumn = new GO.grid.CheckColumn({
-//        header: GO.users.lang.useModule,
-//        dataIndex: 'read_permission',
-//        width: 55,
-//        disabled_field:'read_disabled',
-//        menuDisabled:true
-//    });
-//
-//    var moduleWritePermissionColumn = new GO.grid.CheckColumn({
-//        header: GO.users.lang.manageModule,
-//        dataIndex: 'write_permission',
-//        width: 55,
-//        disabled_field:'write_disabled',
-//        menuDisabled:true
-//    });
-//	
-//    this.modulePermissionsStore = new GO.data.JsonStore({
-//        url:GO.settings.modules.users.url+'json.php',
-//        baseParams: {
-//            user_id: -1,
-//            task: 'modules'
-//        },
-//        fields: ['id', 'name', 'read_disabled', 'write_disabled', 'read_permission', 'write_permission'],
-//        root: 'results',
-//        menuDisabled:true
-//    });
-//	
-//    var moduleAccessGrid = new GO.grid.GridPanel({
-//        columnWidth: .34,
-//        title: GO.users.lang.moduleAccess,
-//        layout:'fit',
-//        columns: [
-//        {
-//            id:'name',
-//            header: GO.users.lang['cmdHeaderColumnName'],
-//            dataIndex: 'name',
-//            renderer: this.iconRenderer,
-//            menuDisabled:true
-//        },
-//        moduleReadPermissionColumn,
-//        moduleWritePermissionColumn
-//        ],
-//        ds: this.modulePermissionsStore,
-//        plugins: [moduleReadPermissionColumn, moduleWritePermissionColumn],
-//        autoExpandColumn:'name'
-//    });
-	
 		this.moduleAccessGrid = new GO.grid.ModulePermissionsGrid({
 			title: GO.users.lang.moduleAccess,
 			storeUrl: GO.url('modules/module/permissionsStore'),
 			columnWidth: .4,
-			title: GO.users.lang.moduleAccess,
 			layout:'fit',
 			paramIdType: 'userId'
 		});

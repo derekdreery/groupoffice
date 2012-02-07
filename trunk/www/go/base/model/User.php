@@ -250,7 +250,8 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			$groups = explode(',',GO::config()->register_visible_user_groups);
 			foreach($groups as $groupName){
 				$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', $groupName);
-				$this->acl->addGroup($group->id);
+				if($group)
+					$this->acl->addGroup($group->id);
 			}
 		}
 	}
