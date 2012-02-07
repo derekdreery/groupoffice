@@ -18,6 +18,18 @@ GO.sites.PagesContextMenu = function(config){
 		}
 	});
 	config.items.push(this.actionPageProperties);
+	
+	this.actionDeletePage = new Ext.menu.Item({
+		iconCls: 'btn-delete',
+		text: GO.sites.lang.deletePage,
+		cls: 'x-btn-text-icon',
+		scope:this,
+		handler: function()
+		{
+			this.deletePage();
+		}
+	});
+	config.items.push(this.actionDeletePage);
 
 	GO.sites.PagesContextMenu.superclass.constructor.call(this,config);
 
@@ -44,6 +56,27 @@ Ext.extend(GO.sites.PagesContextMenu, Ext.menu.Menu, {
 	showPagePropertiesDialog : function() {
 		//console.log(this.selected[0].id);
 		GO.mainLayout.getModulePanel('sites').showPageDialog(this.selected[0].id);
+	},
+	deletePage : function() {
+		var page_id = this.selected[0].id;
+		
+		Ext.MessageBox.confirm(GO.sites.lang.deletePage, GO.sites.lang.deletePageText, function(btn){
+			if(btn == 'yes'){
+				Ext.Ajax.request({
+					url: GO.url('sites/pageBackend/delete'),
+					params: {
+						id: page_id
+					},
+					success: function(){
+						GO.mainLayout.getModulePanel('sites').rebuildTree();
+					},
+					failure: function(){
+						
+					},
+					scope: this
+				});
+			}
+		});
 	}
 	
 });

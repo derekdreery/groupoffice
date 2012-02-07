@@ -16,6 +16,28 @@ GO.sites.MainPanel = function(config){
 		border:true
 	});
 	
+	this.newSiteButton = new Ext.Button({
+		iconCls: 'btn-add',
+		itemId:'add',
+		text: GO.sites.lang.newSite,
+		cls: 'x-btn-text-icon'
+	});
+	
+	this.newSiteButton.on("click", function(){
+		this.showSiteDialog(0); // The parameter 0 will generate a new site object.
+	},this);
+	
+	this.settingsButton = new Ext.Button({
+		iconCls: 'btn-settings',
+		itemId:'settings',
+		text: GO.sites.lang.moduleSettings,
+		cls: 'x-btn-text-icon'
+	});
+	
+	this.settingsButton.on("click", function(){
+		this.showModuleSettingsDialog();
+	},this);
+	
 	config.layout='border';
 	
 	config.items=[
@@ -25,7 +47,11 @@ GO.sites.MainPanel = function(config){
 	
 	config.tbar=new Ext.Toolbar({
 			cls:'go-head-tb',
-			items: []
+			items: [
+				this.newSiteButton,
+				"-",
+				this.settingsButton
+			]
 	});
 	
 	GO.sites.MainPanel.superclass.constructor.call(this, config);
@@ -34,16 +60,33 @@ GO.sites.MainPanel = function(config){
 Ext.extend(GO.sites.MainPanel, Ext.Panel,{
 
 	showSiteDialog: function(site_id){
-		if(!this.siteDialog)
+		if(!this.siteDialog){
 			this.siteDialog = new GO.sites.SiteDialog();
+			this.siteDialog.on('hide', function(){
+				this.rebuildTree();
+			},this);
+		}
 		
 		this.siteDialog.show(site_id);
 	},
 	showPageDialog: function(page_id){
-		if(!this.pageDialog)
+		if(!this.pageDialog){
 			this.pageDialog = new GO.sites.PageDialog();
+			this.pageDialog.on('hide', function(){
+				this.rebuildTree();
+			},this);
+		}
 		
 		this.pageDialog.show(page_id);
+	},
+	showModuleSettingsDialog: function(){
+		if(!this.moduleSettingsDialog)
+			this.moduleSettingsDialog = new GO.sites.ModuleSettingsDialog();
+		
+		this.moduleSettingsDialog.show();
+	},
+	rebuildTree: function(){
+		this.treePanel.getLoader().load(this.treePanel.getRootNode());
 	}
 });
 

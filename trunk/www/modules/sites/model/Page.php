@@ -57,7 +57,7 @@ class GO_Sites_Model_Page extends GO_Base_Db_ActiveRecord {
 	
 	protected function init() {
 		
-		$this->columns['path']['unique']=true;
+		$this->columns['path']['unique']=array('site_id');
 		
 		return parent::init();
 	}
@@ -136,24 +136,26 @@ class GO_Sites_Model_Page extends GO_Base_Db_ActiveRecord {
 			$this->_attachedCSS[] = $url;
 	}
 	
-	public static function createDefaultPages($site_id){
-		
-		$defaultPages = array(
-				'login'=>array('controller'=>'GO_Sites_Controller_User','template'=>'login','action'=>'login'),
-				'logout'=>array('controller'=>'GO_Sites_Controller_User','template'=>'logout','action'=>'logout'),
-				'register'=>array('controller'=>'GO_Sites_Controller_User','template'=>'register','action'=>'register'),
-				'resetpassword'=>array('controller'=>'GO_Sites_Controller_User','template'=>'resetpassword','action'=>'resetpassword'),
-				'lostpassword'=>array('controller'=>'GO_Sites_Controller_User','template'=>'lostpassword','action'=>'recover')
-				);
-		
-		foreach($defaultPages as $p=>$c){
-			$page = new GO_Sites_Model_Page();
-			$page->site_id = $site_id;
-			$page->path = $p;
-			$page->controller = $c['controller'];
-			$page->controller_action = $c['action'];
-			$page->template = $c['template'];
-			$page->save();
-		}
-	}
+//	public static function createDefaultPages($site_id){
+//
+//		$defaultPages = array(
+//				'login'=>array('controller'=>'GO_Sites_Controller_User','template'=>'login','action'=>'login','title'=>'Login'),
+//				'logout'=>array('controller'=>'GO_Sites_Controller_User','template'=>'logout','action'=>'logout','title'=>'Logout'),
+//				'register'=>array('controller'=>'GO_Sites_Controller_User','template'=>'register','action'=>'register','title'=>'Register'),
+//				'resetpassword'=>array('controller'=>'GO_Sites_Controller_User','template'=>'resetpassword','action'=>'resetpassword','title'=>'Reset Password'),
+//				'lostpassword'=>array('controller'=>'GO_Sites_Controller_User','template'=>'lostpassword','action'=>'recover','title'=>'Lost Password')
+//				);
+//		
+//		foreach($defaultPages as $p=>$c){
+//			$page = new GO_Sites_Model_Page();
+//			$page->site_id = $site_id;
+//			$page->path = $p;
+//			$page->name = $c['title'];
+//			$page->title = $c['title'];
+//			$page->controller = $c['controller'];
+//			$page->controller_action = $c['action'];
+//			$page->template = $c['template'];
+//			$page->save();
+//		}
+//	}
 }
