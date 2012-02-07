@@ -352,3 +352,6 @@ $l['unsubscription']='Click here to unsubscribe from this mailing.';
 $l['r_u_sure'] = 'Are you sure you want to unsubscribe from the mailing?';
 $l['delete_success'] = 'You have been successfully unsubscribed from the mailing.';
 $l['setCurrentTemplateAsDefault']='Set current template as default';
+
+$l['contactCustomFields']='Contacts custom fields';
+$l['companyCustomFields']='Company custom fields';
