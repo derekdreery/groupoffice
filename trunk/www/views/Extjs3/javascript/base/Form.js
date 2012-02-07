@@ -16,6 +16,13 @@ GO.base.form.getFormFieldByType = function(gotype, colName, config){
 			break;
 			
 		case 'customfield':
+			//colName might be cf.col_4. Change it into col_4.
+			var dotIndex = colName.indexOf('.');
+			if(dotIndex){
+				dotIndex++;
+				colName = colName.substr(dotIndex,colName.length-dotIndex);
+			}
+			
 			editor = new GO.customfields.getFormField(GO.customfields.columnMap[colName], config);
 			//editor = new Ext.form.Checkbox();
 			break;

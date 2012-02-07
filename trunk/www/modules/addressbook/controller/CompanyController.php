@@ -218,6 +218,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 	}
 
 	protected function beforeHandleAdvancedQuery($advQueryRecord, GO_Base_Db_FindCriteria &$criteriaGroup, GO_Base_Db_FindParams &$storeParams) {
+		$storeParams->debugSql();
 		switch ($advQueryRecord['field']) {
 			case 'employees.name':
 				$storeParams->join(
