@@ -1085,7 +1085,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 		
 		if($this->_debugSql)
-				GO::debug($sql);
+			$this->_debugSql($params, $sql);
+		
 
 		try{
 			
@@ -1094,18 +1095,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			if(isset($params['criteriaObject'])){
 				$criteriaObjectParams = $params['criteriaObject']->getParams();
 				
-				if($this->_debugSql)
-					GO::debug($criteriaObjectParams);
-				
 				foreach($criteriaObjectParams as $param=>$value)
 					$result->bindValue($param, $value[0], $value[1]);
 				
 				$result->execute();
 			}elseif(isset($params['bindParams'])){			
-
-				if($this->_debugSql)
-					GO::debug($params['bindParams']);
-
 				$result = $this->getDbConnection()->prepare($sql);				
 				$result->execute($params['bindParams']);
 			}else
@@ -1175,6 +1169,22 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
     return $result;		
 	}
 	
+	private function _debugSql($params, $sql){
+		
+		if(isset($params['criteriaObject'])){
+			$criteriaObjectParams = $params['criteriaObject']->getParams();	
+				
+			foreach($criteriaObjectParams as $param=>$value)
+				$sql = str_replace($param, $value[0], $sql);									
+		}
+		
+		if(isset($params['bindParams'])){			
+			foreach($params['bindParams'] as $key=>$value)
+				$sql = str_replace($param, $value[0], $sql);
+		}
+		
+		GO::debug($sql);				
+	}
 	
 	private function _appendAclJoin($findParams, $aclJoin){		
 		
