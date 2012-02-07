@@ -101,8 +101,8 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 				['vcf','VCF (vCard)']
 			],
 			controllers:[
-				['GO_Addressbook_Controller_Contact','Contacten'],
-				['GO_Addressbook_Controller_Company','Bedrijven']
+				['GO_Addressbook_Controller_Contact',GO.addressbook.lang.contacts],
+				['GO_Addressbook_Controller_Company',GO.addressbook.lang.companies]
 			],
 			importBaseParams:[
 				{'addressbook_id':this.remoteModelId}
@@ -113,14 +113,21 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 		
 		if(GO.customfields){
 			this.disableContactsCategoriesPanel = new GO.customfields.DisableCategoriesPanel({
-				title:'Contacts custom fields'
+				title:GO.addressbook.lang.contactCustomFields
 			});
 			this.addPanel(this.disableContactsCategoriesPanel);
 			
 			this.disableCompaniesCategoriesPanel = new GO.customfields.DisableCategoriesPanel({
-				title:'Company custom fields'
+				title:GO.addressbook.lang.contactCustomFields
 			});
 			this.addPanel(this.disableCompaniesCategoriesPanel);
+		}
+	},
+	
+	afterLoad : function(remoteModelId, config, action){
+		if(GO.customfields){
+			this.disableContactsCategoriesPanel.setModel(remoteModelId, "GO_Addressbook_Model_Contact");
+			this.disableCompaniesCategoriesPanel.setModel(remoteModelId, "GO_Addressbook_Model_Company");
 		}
 	}
 });
