@@ -181,9 +181,10 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			if(comp.isDisplayPanel)
 				return true;
 		});
-						
-		if(dp.length)
-			dp[0].reload();		
+					
+		//TODO inefficient? Contact display panel reloaded when company is saved.
+		for(var i=0;i<dp.length;i++)
+			dp[i].reload();				
 		
 		Ext.WindowMgr.each(function(win){
 			if(win.isVisible()){
