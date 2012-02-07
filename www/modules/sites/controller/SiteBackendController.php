@@ -52,7 +52,7 @@ class GO_Sites_Controller_SiteBackend extends GO_Base_Controller_AbstractModelCo
 		
 		if(empty($params['id'])){
 			$controller = new GO_Sites_Controller_SiteModule();
-			$controller->run('createdefaultpages',array('site_id'=>$model->id));
+			$controller->run('createdefaultpages',array('site_id'=>$model->id),false);
 		}
 		
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
