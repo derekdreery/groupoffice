@@ -1709,6 +1709,10 @@ GO.files.openFile = function(record, store,e)
 
 	if(GO.files.filesObservable.fireEvent('beforeopenfile', record, store,e)){
 		var index = record.data.id ? 'id' : 'path';
+		
+		var params = {};
+		params[index]=record.data[index];
+		var url = GO.url('files/file/download',params);
 
 		switch(record.data.extension)
 		{
@@ -1764,7 +1768,7 @@ GO.files.openFile = function(record, store,e)
 					} else {
 						images.push({
 							name: record.data['name'],
-							src: GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index]
+							src: url
 						})
 					}
 				}
@@ -1800,8 +1804,8 @@ GO.files.openFile = function(record, store,e)
 					break;
 				}
 
-			default:
-				window.open(GO.url('files/file/download&'+index+'='+record.data[index]));
+			default:				
+				window.open(url);
 				break;
 		}
 	}
