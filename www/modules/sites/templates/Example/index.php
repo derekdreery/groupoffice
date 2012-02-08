@@ -1,13 +1,13 @@
-					<div class="subkader-small-top">
-						<div class="subkader-small-bottom">
-							<div class="subkader-small-center">						
+					<div class="subkader-big-top">
+						<div class="subkader-big-bottom">
+							<div class="subkader-big-center">						
 								<?php echo $this->getPage()->content; ?>
 							</div>
 						</div>
 
 					</div>
 
-
+<!--
 					<div class="subkader-right">
-						<?php require('sidebar.php'); ?>
-					</div>
+						<?php // require('sidebar.php'); ?>
+					</div>-->
