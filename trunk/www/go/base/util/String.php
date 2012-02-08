@@ -391,27 +391,27 @@ class GO_Base_Util_String {
 	public static function split_name($full_name) {
 		$name_arr = explode(' ', $full_name);
 
-		$name['first'] = $full_name;
-		$name['middle'] = '';
-		$name['last'] = '';
+		$name['first_name'] = $full_name;
+		$name['middle_name'] = '';
+		$name['last_name'] = '';
 		$count = count($name_arr);
 		$last_index = $count -1;
 		for ($i = 0; $i < $count; $i ++) {
 			switch ($i) {
 				case 0 :
-					$name['first'] = $name_arr[$i];
+					$name['first_name'] = $name_arr[$i];
 					break;
 
 				case $last_index :
-					$name['last'] = $name_arr[$i];
+					$name['last_name'] = $name_arr[$i];
 					break;
 
 				default :
-					$name['middle'] .= $name_arr[$i].' ';
+					$name['middle_name'] .= $name_arr[$i].' ';
 					break;
 			}
 		}
-		$name['middle'] = trim($name['middle']);
+		$name['middle_name'] = trim($name['middle_name']);
 		return $name;
 	}
 
