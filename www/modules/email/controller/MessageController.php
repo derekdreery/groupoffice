@@ -22,8 +22,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 					continue;
 
 				$recipient = GO_Base_Util_String::split_name($personal);
-				if ($recipient['first'] == '' && $recipient['last'] == '') {
-					$recipient['first'] = $email;
+				if ($recipient['first_name'] == '' && $recipient['last_name'] == '') {
+					$recipient['first_name'] = $email;
 				}
 				$recipient['email'] = $email;
 				$recipient['name'] = (string) GO_Base_Mail_EmailRecipients::createSingle($email, $personal);
