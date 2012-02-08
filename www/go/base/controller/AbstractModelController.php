@@ -113,9 +113,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				$modifiedAttributes
 		));
 			
-		}catch(Exception $e){
+		}catch(GO_Base_Exception_Validation $e){
 			$response['success']=false;
-			$response['feedback']=nl2br($e->getMessage());
+			$response['feedback']=nl2br($e->getMessage());			
 			$response['validationErrors']=$model->getValidationErrors();
 		}	
 
