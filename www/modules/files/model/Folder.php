@@ -71,9 +71,9 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	public function findAclId() {
 		//folder may have an acl ID if they don't have one we must recurse up the tree
 		//to find the acl.		
-		if ($this->acl_id > 0)
-			return parent::findAclId();
-		elseif($this->parent)
+		if ($this->acl_id > 0){			
+			return $this->acl_id;
+		}elseif($this->parent)
 			return $this->parent->findAclId();
 		else
 			return false;

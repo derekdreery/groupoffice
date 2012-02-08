@@ -88,6 +88,43 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 				'versions' => array('type'=>self::HAS_MANY, 'model'=>'GO_Files_Model_Version', 'field'=>'file_id', 'delete'=>true),
 		);
 	}
+	
+	public function getPermissionLevel(){
+		
+		if(GO::$ignoreAclPermissions)
+			return GO_Base_Model_Acl::MANAGE_PERMISSION;
+		
+		if(!$this->aclField())
+			return -1;	
+		
+		if(!GO::user())
+			return false;
+		
+		//if($this->isNew && !$this->joinAclField){
+		if(empty($this->{$this->aclField()}) && !$this->joinAclField){
+			//the new model has it's own ACL but it's not created yet.
+			//In this case we will check the module permissions.
+			$module = $this->getModule();
+			if($module=='base'){
+				return GO::user()->isAdmin() ? GO_Base_Model_Acl::MANAGE_PERMISSION : false;
+			}else
+				return GO::modules()->$module->permissionLevel;
+			 
+		}else
+		{		
+			if(!isset($this->_permissionLevel)){
+
+				$acl_id = $this->findAclId();
+				if(!$acl_id){
+					throw new Exception("Could not find ACL for ".$this->className()." with pk: ".$this->pk);
+				}
+
+				$this->_permissionLevel=GO_Base_Model_Acl::getUserPermissionLevel($acl_id);// model()->findByPk($acl_id)->getUserPermissionLevel();
+			}
+			return $this->_permissionLevel;
+		}
+		
+	}
 
 	protected function init() {
 		$this->columns['expire_time']['gotype'] = 'unixdate';
