@@ -158,7 +158,7 @@ class GO_Base_Html_Input {
 			$html .= $this->attributes['empty_text'];
 		}
 
-		$html .= ' </textarea>';
+		$html .= '</textarea>';
 		
 		if (!empty($this->attributes['empty_text'])) {
 			$html .= '<input type="hidden" name="empty_texts[]" value="' . $this->attributes['name'] . ':' . $this->attributes['empty_text'] . '" />';
