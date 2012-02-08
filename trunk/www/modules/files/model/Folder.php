@@ -25,17 +25,17 @@
  * @property int $user_id
  * @property int $id
  * @property int $parent_id
- * @property String $name
- * @property String $path
- * @property Boolean $visible When this folder is shared it only shows up in the tree when visible is set to true
+ * @property string $name
+ * @property string $path
+ * @property boolean $visible When this folder is shared it only shows up in the tree when visible is set to true
  * @property int $acl_id
- * @property String $comments
- * @property Boolean $thumbs Show this folder in thumbnails
+ * @property string $comments
+ * @property boolean $thumbs Show this folder in thumbnails
  * @property int $ctime
  * @property int $mtime
- * @property Boolean $readonly Means this folder is readonly even to the administrator! eg. Home folders may never be edited.
- * @property String $cm_state
- * @property int $apply_state
+ * @property boolean $readonly Means this folder is readonly even to the administrator! eg. Home folders may never be edited.
+ * @property string $cm_state The stored state of the column model whebn apply state is true
+ * @property boolean $apply_state Apply the configured state of the column model to everybody.
  * @property GO_Base_Fs_Folder $fsFolder
  */
 class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
