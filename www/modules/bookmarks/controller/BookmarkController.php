@@ -100,14 +100,13 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 		
 		if(!empty($params['category'])){
 			// Do something
-			$storeParams['where'] = 'category_id = ' . $params['category'];
+			$storeParams['where'] = 'category_id = ' . intval($params['category']);
 		}
 		
 		return $storeParams;
 	}
 
-	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
-		
+	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {		
 		
 		$columnModel->formatColumn('category_name', '$model->category_name');
 		$columnModel->formatColumn('thumb', '$model->thumbURL');
@@ -118,45 +117,17 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 		return array('category_id' => '$model->category->name');
 	}
 
-	protected function actionThumbs() {
-
-		
+	protected function actionThumbs() {		
 		$response['results'] = array();
 		
 		$folder = new GO_Base_Fs_Folder(GO::modules()->bookmarks->path."icons");
 		
 		$filesystemObjects = $folder->ls();
-		foreach($filesystemObjects as $imgObject) {
-			
-			$response['results'][] = array('filename' => $imgObject->name());
-			
-		}
-		//var_dump($filesystemObjects);
-		
-		
-		
-		
-		// relative path, URL 
-		
-//
-//		while ($file = readdir($handler)) {
-//			if ($file != '.' && $file != '..') {
-//				$response['results'][] = array('filename' => $file);
-//			}
-//		}
-//		closedir($handler);
-//		
+		foreach($filesystemObjects as $imgObject) {			
+			$response['results'][] = array('filename' => $imgObject->name());			
+		}	
 		$response['success']=true;
 
 		return $response;
 	}
-	
-	
-	protected function afterLoad(&$response, &$model, &$params) {
-		
-		return parent::afterLoad($response, $model, $params);
-	}
-	
-	
-
 }

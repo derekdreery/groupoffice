@@ -212,14 +212,14 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 				fieldLabel: GO.bookmarks.lang.title, 
 				anchor: '100%',
 				allowBlank: false
-			},this.externCheck = new Ext.form.Checkbox({
+			},this.externCheck = new Ext.ux.form.XCheckbox({
 				name: 'open_extern',
 				xtype: 'checkbox',
 				boxLabel: GO.bookmarks.lang.extern,
 				hideLabel:true,
 				anchor: '100%',
 				checked:true
-			}),this.moduleCheck = new Ext.form.Checkbox({
+			}),this.moduleCheck = new Ext.ux.form.XCheckbox({
 				name: 'behave_as_module',
 				xtype: 'checkbox',
 				boxLabel: GO.bookmarks.lang.behaveAsModule,
