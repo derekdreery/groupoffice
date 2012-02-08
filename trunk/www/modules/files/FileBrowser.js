@@ -1526,8 +1526,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 					this.onGridDoubleClick.defer(200, this, [grid, rowClicked, e]);
 				}else
 				{
-					//GO.files.openFile(record, this.getActiveGridStore(), e);
-					GO.files.editFile(record.data.id);
+					GO.files.openFile(record, this.getActiveGridStore(), e);
+					//GO.files.editFile(record.data.id);
 				}
 			}
 		}
@@ -1773,35 +1773,21 @@ GO.files.openFile = function(record, store,e)
 
 				break;
 
-//			case 'php':
-//			case 'js':
-//			case 'docx':
-//			case 'xlsx':
-//			case 'pptx':
-//			case 'dwg':
-//			case 'doc':
-//			case 'odt':
-//			case 'ods':
-//			case 'xls':
-//			case 'ppt':
-//			case 'odp':
-//			case 'txt':
-//				if(index == 'id' && GO.settings.modules.gota && GO.settings.modules.gota.read_permission)
-//				{
-//					if(!GO.files.noJavaNotified && !deployJava.isWebStartInstalled('1.6.0'))
-//					{
-//						GO.files.noJavaNotified=true;
-//						Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);
-//						window.open(GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index]);
-//					}else
-//					{
-//						document.location=GO.settings.modules.gota.url+'jnlp.php?'+index+'='+record.data['id'];
-//					}
-//				}else
-//				{
-//					window.open(GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index]);
-//				}
-//				break;
+			case 'php':
+			case 'js':
+			case 'docx':
+			case 'xlsx':
+			case 'pptx':
+			case 'dwg':
+			case 'doc':
+			case 'odt':
+			case 'ods':
+			case 'xls':
+			case 'ppt':
+			case 'odp':
+			case 'txt':
+				GO.files.editFile(record.data.id);
+				break;
 
 			case 'mht':
 			case 'eml':
@@ -1835,7 +1821,7 @@ GO.files.editFile = function (fileId){
 			Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);			
 		}else
 		{
-			window.open(GO.url('gota/file/edit&id='+fileId));
+			document.location.href=GO.url('gota/file/edit&id='+fileId);
 			return;
 		}
 	}	
