@@ -173,6 +173,15 @@ class GO_Base_Module extends GO_Base_Observable {
 	 */
 	public function uninstall() {
 		
+		//delete all models from the GO_Base_Model_ModelType table.
+		//They are used for faster linking and search cache. Each linkable model is mapped to an id in this table.
+		$models = $this->getModels();
+		foreach($models as $model){			
+			$modelType = GO_Base_Model_ModelType::model()->findSingleByAttribute('model_name', $model->getName());
+			if($modelType)
+				$modelType->delete();
+		}
+		
 		
 		//call deleteUser for each user
 		$stmt = GO_Base_Model_User::model()->find(array('ignoreAcl'=>true));		
@@ -273,7 +282,7 @@ class GO_Base_Module extends GO_Base_Observable {
 	/**
 	 * Get all model class names.
 	 * 
-	 * @return Array Names of all model classes 
+	 * @return ReflectionClass[] Names of all model classes 
 	 */
 	public function getModels(){		
 	
