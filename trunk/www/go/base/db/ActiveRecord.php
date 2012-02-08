@@ -716,6 +716,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	/**
 	 * Finds a single model by an attribute name and value.
+	 * This function does NOT check permissions! Use find() if you need that.
 	 * 
 	 * @param string $attributeName
 	 * @param mixed $value
@@ -728,6 +729,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	/**
 	 * Finds models by an attribute=>value array.
+	 * This function does NOT check permissions! Use find() if you need that.
 	 * 
 	 * @param array $attributes
 	 * @param GO_Base_Db_FindParams $findParams
