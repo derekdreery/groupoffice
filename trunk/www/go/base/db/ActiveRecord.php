@@ -2367,13 +2367,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * Delete's the model from the database
 	 * @return PDOStatement 
 	 */
-	public function delete(){
+	public function delete($ignorePermissions=false){
 		
 		if($this->isNew)
 			return true;
 		
-		if(!$this->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION))
-						throw new GO_Base_Exception_AccessDenied ();
+		if(!$ignorePermissions && !$this->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION))
+			throw new GO_Base_Exception_AccessDenied ();
 		
 		
 		if(!$this->beforeDelete())
@@ -2443,14 +2443,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$attr = $this->getCacheAttributes();
 		
 		if($attr){
-			$model = GO_Base_Model_SearchCacheRecord::model()->findByPk(array('model_id'=>$this->pk, 'model_type_id'=>$this->modelTypeId()));
+			$model = GO_Base_Model_SearchCacheRecord::model()->findByPk(array('model_id'=>$this->pk, 'model_type_id'=>$this->modelTypeId()),false,true);
 			if($model)
-				$model->delete();
+				$model->delete(true);
 		}
 		
 		if($this->hasFiles() && $this->files_folder_id > 0 && GO::modules()->isInstalled('files')){
-			$folder = GO_Files_Model_Folder::model()->findByPk($this->files_folder_id);
-			$folder->delete();
+			$folder = GO_Files_Model_Folder::model()->findByPk($this->files_folder_id,false,true);
+			$folder->delete(true);
 		}		
 		
 		if($this->aclField() && !$this->joinAclField){			
