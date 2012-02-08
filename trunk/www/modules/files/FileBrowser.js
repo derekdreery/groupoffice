@@ -1526,7 +1526,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 					this.onGridDoubleClick.defer(200, this, [grid, rowClicked, e]);
 				}else
 				{
-					GO.files.openFile(record, this.getActiveGridStore(), e);
+					//GO.files.openFile(record, this.getActiveGridStore(), e);
+					GO.files.editFile(record.data.id);
 				}
 			}
 		}
@@ -1834,7 +1835,7 @@ GO.files.editFile = function (fileId){
 			Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);			
 		}else
 		{
-			window.location.href=GO.url('gota/file/edit&id='+fileId);
+			window.open(GO.url('gota/file/edit&id='+fileId));
 			return;
 		}
 	}	
