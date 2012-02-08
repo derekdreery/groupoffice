@@ -352,6 +352,11 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	private function _listShares($params) {
 
 		$store = GO_Base_Data_Store::newInstance(GO_Files_Model_Folder::model());
+		
+		//set sort aliases
+		$store->getColumnModel()->formatColumn('type', '$model->type',array(),'name');
+		$store->getColumnModel()->formatColumn('size', '"-"',array(),'name');
+		
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatListRecord'));
 		$findParams = $store->getDefaultParams($params);
 		$stmt = GO_Files_Model_Folder::model()->findShares($findParams);
@@ -376,6 +381,11 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$response['path'] = $folder->path;
 		$response['thumbs'] = $folder->thumbs; //Show this page in thumbnails or list
 		$response['parent_id'] = $folder->parent_id;
+		
+		//locked state
+		$response['lock_state']=!empty($folder->apply_state);
+		$response['cm_state']=$folder->cm_state;
+		$response['may_apply_state']=$folder->getPermissionLevel()==  GO_Base_Model_Acl::MANAGE_PERMISSION;
 
 
 		$store = GO_Base_Data_Store::newInstance(GO_Files_Model_Folder::model());

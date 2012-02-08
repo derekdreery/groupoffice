@@ -682,21 +682,17 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	path : '',
 
 	saveCMState: function(state) {
-		Ext.Ajax.request({
-			url: GO.settings.modules.files.url + 'action.php',
-			params : {
-				'task' : 'save_state',
-				'folder_id' : this.folder_id,
-				'state' : Ext.encode(state)
+		GO.request({
+			url: "files/folder/submit",
+			params : {				
+				'id' : this.folder_id,
+				'cm_state' : Ext.encode(state)
 			},
 			scope: this
 		})
 	},
 
 	onStoreLoad : function(store){
-
-	
-
 		var state;
 
 		if (store.reader.jsonData.lock_state && store.reader.jsonData.cm_state!='') {
