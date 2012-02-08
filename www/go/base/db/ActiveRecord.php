@@ -2136,7 +2136,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		if($attr){
 
-			$model = GO_Base_Model_SearchCacheRecord::model()->findByPk(array('model_id'=>$this->pk, 'model_type_id'=>$this->modelTypeId()));
+			$model = GO_Base_Model_SearchCacheRecord::model()->findByPk(array('model_id'=>$this->pk, 'model_type_id'=>$this->modelTypeId()),false,true);
 			
 			if(!$model)
 				$model = new GO_Base_Model_SearchCacheRecord();
@@ -2367,12 +2367,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * Delete's the model from the database
 	 * @return PDOStatement 
 	 */
-	public function delete($ignorePermissions=false){
+	public function delete($ignoreAcl=false){
 		
 		if($this->isNew)
 			return true;
 		
-		if(!$ignorePermissions && !$this->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION))
+		if(!$ignoreAcl && !$this->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION))
 			throw new GO_Base_Exception_AccessDenied ();
 		
 		
