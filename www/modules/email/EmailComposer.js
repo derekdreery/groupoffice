@@ -747,6 +747,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				var params = config.loadParams ? config.loadParams : {
 					uid : config.uid,
 					account_id : fromRecord.get('account_id'),
+					alias_id: fromRecord.get('id'),
 					task : config.task,
 					mailbox : config.mailbox
 				};
