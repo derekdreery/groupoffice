@@ -19,7 +19,7 @@ class GO_Bookmarks_Model_Bookmark extends GO_Base_Db_ActiveRecord {
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Presidents_Model_President 
+	 * @return GO_Bookmarks_Model_Bookmark
 	 */
 	public static function model($className=__CLASS__) {
 		return parent::model($className);
