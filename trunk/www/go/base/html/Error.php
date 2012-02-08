@@ -17,13 +17,13 @@ class GO_Base_Html_Error extends GO_Base_Html_Input {
 				if ($pos = strpos($inputName, '[')) {
 					$key1 = substr($inputName, 0, $pos);
 					$key2 = substr($inputName, $pos + 1, -1);
-					if(empty($_POST[$key1][$key2]))
-						parent::setError($inputName, 'This field is required');
+					$v=trim($_POST[$key1][$key2]);					
 				}else
 				{
-					if(empty($_POST[$inputName]))
-						parent::setError($inputName, 'This field is required');
+					$v=trim($_POST[$inputName]);						
 				}
+				if(empty($v))
+					parent::setError($inputName, 'This field is required');
 			}
 		}
 		
