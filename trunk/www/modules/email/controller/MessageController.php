@@ -384,7 +384,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		}
 
 
-		$to = $imapMessage->to->getAddress();
+		//$to = $imapMessage->to->getAddress();
 //		$alias = GO_Email_Model_Alias::model()->findSingleByAttribute('email', $to['email']);
 //		if(!$alias)
 //			$alias = GO_Email_Model_Alias::model()->findSingle();
@@ -394,12 +394,13 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$toList = new GO_Base_Mail_EmailRecipients();
 			$toList->mergeWith($imapMessage->from)
 							->mergeWith($imapMessage->to);
-
-			$toList->removeRecipient($to['email']);
-
-			$response['data']['to'] = (string) $toList;
-
-			$imapMessage->cc->removeRecipient($to['email']);
+			
+			//remove our own alias from the recipients.
+			$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);
+			$toList->removeRecipient($alias->email);
+			$imapMessage->cc->removeRecipient($alias->email);
+				
+			$response['data']['to'] = (string) $toList;		
 			$response['data']['cc'] = (string) $imapMessage->cc;
 		} else {
 			$response['data']['to'] = (string) $imapMessage->from;
