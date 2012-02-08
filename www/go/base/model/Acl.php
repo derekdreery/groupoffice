@@ -65,19 +65,15 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 
 	/**
 	 * Return the permission level that a user has for this ACL.
-	 * 
-	 * @todo this query should be handled by GO_Base_Db_ActiveRecord::find()
-	 * 
+	 *  
 	 * @param int $userId
 	 * @param bool $checkGroupPermissionOnly
 	 * @return int Permission level. See constants in GO_Base_Model_Acl for values. 
 	 */
 	public static function getUserPermissionLevel($aclId, $userId=0, $checkGroupPermissionOnly=false) {
 		
-//		Disabled this because admin tools that ignore stuff must use this too.
-//		if(GO::$ignoreAclPermissions){
-//			return self::MANAGE_PERMISSION;
-//		}
+		if(GO::$ignoreAclPermissions)
+			return self::MANAGE_PERMISSION;
 		
 		if($userId==0){
 			if(GO::user())
