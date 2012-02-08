@@ -35,7 +35,13 @@ class GO_Bookmarks_Model_Bookmark extends GO_Base_Db_ActiveRecord {
 
 	public function relations() {
 		return array(
-				'category' => array('type' => self::BELONGS_TO, 'model' => 'GO_Bookmarks_Model_Category', 'field' => 'category_id'),);
+					'category' => array('type' => self::BELONGS_TO, 'model' => 'GO_Bookmarks_Model_Category', 'field' => 'category_id')
+				);
+	}
+	
+	protected function init() {
+		$this->columns['content']['gotype']='text';
+		return parent::init();
 	}
 
 	protected function getThumbURL() {
@@ -50,7 +56,4 @@ class GO_Bookmarks_Model_Bookmark extends GO_Base_Db_ActiveRecord {
 			return false;
 		}
 	}
-	
-	
-
 }
