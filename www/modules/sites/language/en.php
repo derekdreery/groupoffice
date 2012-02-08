@@ -14,6 +14,11 @@ $l['globalProperties']='Global Properties';
 
 $l['createDefaultPagesTitle']='Create Default Pages';
 
+$l['pagePageContent']='Page Content';
+$l['pagePageMetaData']='Page Metadata';
+$l['pageMetaData']='Metadata';
+$l['timeStamps']='TimeStamps';
+
 
 $l['deleteSite']='Delete Site';
 $l['deletePage']='Delete Page';
@@ -44,7 +49,24 @@ $l['siteLogoutPath']='Site Logout Path';
 $l['siteRegisterUserGroups']='Site Register User Groups';
 
 $l['page']='Page';
-$l['pageName']='Page Name';
+$l['pageId']='Page ID';
+$l['pageParentId']='Parent ID';
+$l['pageSiteId']='Site ID';
+$l['pageUserId']='User ID';
+$l['pageMtime']='Modified at';
+$l['pageCtime']='Created at';
+$l['pageName']='Name';
+$l['pageTitle']='Title';
+$l['pageDescription']='Description';
+$l['pageContent']='Content';
+$l['pageKeywords']='Keywords';
+$l['pagePath']='Path';
+$l['pageTemplate']='Template';
+$l['pageHidden']='Show in menu';
+$l['pageSort']='Sort order';
+$l['pageLoginRequired']='Login Required';
+$l['pageController']='Controller';
+$l['pageControllerAction']='Controller Action';
 
 $l["createDefaultPages"] = 'Create the default webpages for this module';
 $l["reallyCreateDefaultPages"] = 'Are you sure you want to create the default webpages for this module?';
