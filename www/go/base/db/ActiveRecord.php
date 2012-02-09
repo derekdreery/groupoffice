@@ -41,6 +41,14 @@
 abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	/**
+	 * The mode for this model on how to output the attribute data.
+	 * Can be "raw", "formatted" or "html";
+	 * 
+	 * @var string 
+	 */
+	public static $attributeOutputMode='raw';
+	
+	/**
 	 * This relation is used when the remote model's primary key is stored in a 
 	 * local attribute.
 	 * 
@@ -2519,7 +2527,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	public function __get($name)
 	{
 		if(isset($this->_attributes[$name])){
-			return $this->_attributes[$name];
+			return $this->getAttribute($name, GO_Base_Db_ActiveRecord::$attributeOutputMode);
 		}else{
 			
 			$getter = 'get'.ucfirst($name);
