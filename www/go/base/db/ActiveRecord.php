@@ -2397,7 +2397,34 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					//single relations return a model.
 					$result->delete();
 				}
-			}  else {
+			}
+			
+			//clean up link models for many_many relations
+			if($attr['type']==self::MANY_MANY){
+				$stmt = GO::getModel($attr['linkModel'])->find(
+				 GO_Base_Db_FindParams::newInstance()							
+								->criteria(GO_Base_Db_FindCriteria::newInstance()
+												->addModel(GO::getModel($attr['linkModel']))
+												->addCondition($attr['field'], $this->pk)
+												)											
+								);
+				$stmt->callOnEach('delete');
+			}
+		}
+		
+		//Set the foreign fields of the deleted relations to 0 because the relation doesn't exist anymore.
+		//We do this in a separate loop because relations that should be deleted should be processed first.
+		//Consider these relation definitions:
+		//
+		// 'messagesCustomer' => array('type'=>self::HAS_MANY, 'model'=>'GO_Tickets_Model_Message', 'field'=>'ticket_id', 'findParams'=>GO_Base_Db_FindParams::newInstance()->order('id','DESC')->select('t.*')->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('is_note', 0))),
+		// 'messagesNotes' => array('type'=>self::HAS_MANY, 'model'=>'GO_Tickets_Model_Message', 'field'=>'ticket_id', 'findParams'=>GO_Base_Db_FindParams::newInstance()->order('id','DESC')->select('t.*')->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('is_note', 0))),
+		// 'messages' => array('type'=>self::HAS_MANY, 'model'=>'GO_Tickets_Model_Message', 'field'=>'ticket_id','delete'=>true, 'findParams'=>GO_Base_Db_FindParams::newInstance()->order('id','DESC')->select('t.*')),
+		//
+		// messagesCustomer and messagesNotes are just subsets of the messages 
+		// relation that must all be deleted anyway. We don't want to clear foreign keys first and then fail to delete them.
+	
+		foreach($r as $name => $attr){
+			if(empty($attr['delete'])){
 				if($attr['type']==self::HAS_ONE){
 					//set the foreign field to 0. Because it doesn't exist anymore.
 					$model = $this->$name;
@@ -2413,18 +2440,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 						$model->save();
 					}
 				}
-			}
-			
-			//clean up link models for many_many relations
-			if($attr['type']==self::MANY_MANY){
-				$stmt = GO::getModel($attr['linkModel'])->find(
-				 GO_Base_Db_FindParams::newInstance()							
-								->criteria(GO_Base_Db_FindCriteria::newInstance()
-												->addModel(GO::getModel($attr['linkModel']))
-												->addCondition($attr['field'], $this->pk)
-												)											
-								);
-				$stmt->callOnEach('delete');
 			}
 		}
 		
