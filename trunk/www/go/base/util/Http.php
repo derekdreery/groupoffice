@@ -62,7 +62,13 @@ class GO_Base_Util_Http {
 	}
 	
 	
-	
+	/**
+	 * Output the right headers for outputting file data to a browser.
+	 * 
+	 * @param GO_Base_Fs_File $file
+	 * @param boolean $inline
+	 * @param boolean $cache Cache the file for one day in the browser.
+	 */
 	public static function outputDownloadHeaders(GO_Base_Fs_File $file, $inline=true, $cache=false) {
 		if($file->exists()){
 			header('Content-Length: ' . $file->size());
@@ -169,7 +175,5 @@ class GO_Base_Util_Http {
 		}
 		
 		return $url;
-	}
-
-	
+	}	
 }
