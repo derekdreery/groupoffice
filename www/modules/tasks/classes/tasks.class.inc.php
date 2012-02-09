@@ -64,7 +64,7 @@ class tasks extends db
 			$tsk = new tasks();
 			$db = new db();
 
-			$sql = 'SELECT tal.id AS tasklist_id, usr.* FROM ta_lists AS tal INNER JOIN ta_settings AS sett ON sett.default_tasklist_id = tal.id INNER JOIN go_users AS usr ON sett.user_id = usr.id';
+			$sql = 'SELECT tal.id AS tasklist_id, usr.* FROM ta_lists AS tal INNER JOIN ta_settings AS sett ON (sett.default_tasklist_id = tal.id AND sett.user_id=tal.user_id) INNER JOIN go_users AS usr ON sett.user_id = usr.id WHERE usr.id!=1';
 			$db->query($sql);
 
 			while($tasklist = $db->next_record())
