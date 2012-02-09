@@ -56,7 +56,7 @@ class GO_Sites_Model_Page extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function init() {
-		
+		$this->columns['content']['gotype']='html';
 		$this->columns['path']['unique']=array('site_id');
 		
 		return parent::init();
