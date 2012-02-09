@@ -15,6 +15,7 @@ GO.notes.CategoryDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	initComponent : function(){
 		
 		Ext.apply(this, {
+			titleField:'name',
 			title:GO.notes.lang.category,
 			formControllerUrl: 'notes/category'
 		});
