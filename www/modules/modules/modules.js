@@ -214,17 +214,13 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 				admin_menu : this.installedModulesDS.data.items[i].get('admin_menu')
 			};
 		}
-
-		this.container.mask(GO.lang.waitMsgLoad, 'x-mask-loading');
-		Ext.Ajax.request({
-			url : GO.settings.modules.modules.url + 'action.php',
+		
+		GO.request({
+			maskEl:this.container,
+			url : 'modules/module/saveSortOrder',
 			params : {
-				task : 'update',
 				modules : Ext.encode(modules)
-			},
-			callback : function(options, success, response) {
-				this.container.unmask();
-			},
+			},			
 			scope : this
 		});
 	},
