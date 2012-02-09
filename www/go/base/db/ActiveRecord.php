@@ -906,7 +906,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$params['ignoreAcl']=true;
 		
 		if(empty($params['userId'])){			
-			$params['userId']=GO::user() ? GO::user()->id : 1;
+			$params['userId']=!empty(GO::session()->values['user_id']) ? GO::session()->values['user_id'] : 1;
 		}
 		
 		$aclJoin['relation']='';

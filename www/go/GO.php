@@ -178,9 +178,9 @@ class GO{
 	 * @return GO_Base_Model_User The logged in user model
 	 */
 	public static function user(){
-		if(empty(GO::session()->values['user_id']))
+		if(empty(GO::session()->values['user_id'])){
 			return false;
-		else
+		}else
 			return GO_Base_Model_User::model()->findByPk(GO::session()->values['user_id'], array(), true);
 	}
 	
