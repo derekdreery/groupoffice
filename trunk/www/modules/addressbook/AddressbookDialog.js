@@ -3,6 +3,7 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 	initComponent : function(){
 		
 		Ext.apply(this, {
+			titleField:'name',
 			title:GO.addressbook.lang.addressbook,
 			formControllerUrl: 'addressbook/addressbook',
 			width:700
