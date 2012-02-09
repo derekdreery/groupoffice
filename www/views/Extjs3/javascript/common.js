@@ -552,6 +552,9 @@ GO.util.popup = function (c)
 	if(config.closeOnFocus)
 		GO.mainLayout.on('focus', function(){popup.close();}, {single:true});
 	
+	if(config.allwaysOnTop) // Not working??
+		GO.mainLayout.on('focus', function(){popup.focus();}, {single:true});
+	
 	return popup;
 }
 
