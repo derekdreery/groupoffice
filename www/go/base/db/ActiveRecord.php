@@ -2149,6 +2149,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			if(!$model)
 				$model = new GO_Base_Model_SearchCacheRecord();
 			
+			$acl_id =$this->findAclId();
+			
+			//if model doesn't have an acl we use the acl of the module it belongs to.
+			if(!$acl_id)
+				$acl_id = GO::modules()->{$this->getModule ()}->acl_id;
+			
 			//GO::debug($model);
 			$autoAttr = array(
 				'model_id'=>$this->pk,
@@ -2163,7 +2169,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				'keywords'=>$this->getSearchCacheKeywords($this->localizedName),
 				'mtime'=>$this->mtime,
 				'ctime'=>$this->ctime,
-				'acl_id'=>$this->findAclId()
+				'acl_id'=>$acl_id
 			);
 			
 			
