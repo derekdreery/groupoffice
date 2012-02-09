@@ -11,7 +11,7 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 	protected function prepareStore(GO_Base_Data_Store $store){		
 			
 		$store->getColumnModel()->setFormatRecordFunction(array('GO_Modules_Controller_Module', 'formatRecord'));
-		
+		$store->setDefaultSortOrder('sort_order');
     return parent::prepareStore($store);
 	}
 	
@@ -179,6 +179,23 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 		}
 
 		return $response;
+	}
+	
+	public function actionSaveSortOrder($params){
+		$modules = json_decode($params['modules']);
+		
+		$i=0;
+		foreach($modules as $module){
+			$moduleModel = GO_Base_Model_Module::model()->findByPk($module->id);
+			$moduleModel->sort_order=$i++;
+			$moduleModel->save();
+		}
+		
+		//todo make this irrelevant
+		//backwards compat
+		require_once(GO::config()->root_path.'Group-Office.php');
+		$GLOBALS['GO_MODULES']->load_modules();
+		return array('success'=>true);
 	}
 
 }
