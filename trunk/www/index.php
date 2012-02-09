@@ -30,8 +30,11 @@ if(PHP_SAPI=='cli'){
 require_once($root.'go/GO.php');
 GO::init();
 
+if(!GO::user())
+	GO::session()->loginWithCookies();	
+
 //check if GO is installed
-if(empty($_REQUEST['r']) && PHP_SAPI!='cli'){
+if(empty($_REQUEST['r']) && PHP_SAPI!='cli'){	
 	
 	if(GO::user() && isset($_SESSION['GO_SESSION']['after_login_url'])){
 		$url = GO::session()->values['after_login_url'];

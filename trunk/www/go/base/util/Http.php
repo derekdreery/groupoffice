@@ -128,6 +128,7 @@ class GO_Base_Util_Http {
 	 */
 	public static function unsetCookie($name){
 		SetCookie($name,"",time()-3600,GO::config()->host,"",!empty($_SERVER['HTTPS']),true);
+		unset($_COOKIE[$name]);
 	}
 	
 	/**
@@ -138,7 +139,7 @@ class GO_Base_Util_Http {
 	 * @param string $expireTime Defaults to one month
 	 */
 	public static function setCookie($name, $value, $expireTime=2592000){
-		SetCookie($name,$value,$expireTime,GO::config()->host,"",!empty($_SERVER['HTTPS']),true);
+		SetCookie($name,$value,time()+$expireTime,GO::config()->host,"",!empty($_SERVER['HTTPS']),true);
 	}
 	
 	

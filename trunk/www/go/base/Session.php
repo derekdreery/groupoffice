@@ -59,11 +59,7 @@ class GO_Base_Session extends GO_Base_Observable{
 		$this->values = &$_SESSION['GO_SESSION'];
 		
 		if(!isset($this->values['security_token']))
-			$this->values['security_token']=GO_Base_Util_String::randomPassword(20);
-		
-		//$this->setDefaults();
-		
-		
+			$this->values['security_token']=GO_Base_Util_String::randomPassword(20);				
 		
 //		if (GO::config()->session_inactivity_timeout > 0) {
 //			$now = time();
@@ -76,70 +72,46 @@ class GO_Base_Session extends GO_Base_Observable{
 
 	}
 	
-	
 	/**
-	 * This function sets some default session variables. When a user logs in
-	 * they are overridden by the user settings.
+	 * Attemts to login with stored cookies on the client.
+	 * This function is called in index.php
+	 * 
+	 * @return GO_Base_Model_User 
 	 */
-//	public function setDefaults(){
-//
-//		if(!isset(self::$values['security_token']))
-//		{
-//			self::$values['decimal_separator'] = GO::config()->default_decimal_separator;
-//			self::$values['thousands_separator'] = GO::config()->default_thousands_separator;
-//			self::$values['date_separator'] = GO::config()->default_date_separator;
-//			self::$values['date_format'] = GO_Base_Util_Date::get_dateformat( GO::config()->default_date_format, self::$values['date_separator']);
-//			self::$values['time_format'] = GO::config()->default_time_format;
-//			self::$values['currency'] = GO::config()->default_currency;
-//			self::$values['timezone'] = GO::config()->default_timezone;
-//			self::$values['country'] = GO::config()->default_country;
-//			self::$values['sort_name'] = 'last_name';
-//			self::$values['auth_token']=GO_Base_Util_String::random_password('a-z,1-9', '', 30);
-//			//some url's require this token to be appended
-//			self::$values['security_token']=GO_Base_Util_String::random_password('a-z,1-9', '', 10);
-//			
-//			if (!is_int($this->values['timezone'])) {
-//				//set user timezone setting after user class is loaded
-//				date_default_timezone_set(self::$values['timezone']);
-//			}
-//
-//			GO::debug('Setup new session '.self::$values['security_token']);
-//		}
-//
-//		
-//	}
-	
-	
-// Doesn't work well because you can't change magic properties directly.
-// 
-//		public function __get($name){
-//		return self::$values[$name];
-//	}
-//	
-//	public function __set($name, $value){
-//		self::$values[$name]=$value;
-//	}
-//	
-//	public function __isset($name){
-//		return isset(self::$values[$name]);
-//	}
+	public function loginWithCookies(){
+		if(empty(GO::session()->values['user_id']) && !empty($_COOKIE['GO_UN']) && !empty($_COOKIE['GO_UN'])){
+			$username = GO_Base_Util_Crypt::decrypt($_COOKIE['GO_UN']);
+			$password = GO_Base_Util_Crypt::decrypt($_COOKIE['GO_PW']);
+
+			//decryption might fail if mcrypt is not installed
+			if(!$username){
+				$username = $_COOKIE['GO_UN'];
+				$password = $_COOKIE['GO_PW'];
+			}
+			
+			GO::debug("Attempting login with cookies for ".$username);
+			
+			$user = $this->login($username, $password, false);
+			if(!$user)
+				$this->_unsetRemindLoginCookies ();
+			else
+				return $user;
+		}
+	}
 	
 	/**
 	 * Erases the temporary files directory for the currently logged on user. 
 	 */
 	public function clearUserTempFiles(){
-		if(GO::user()){
-	
-//			$length = -strlen(GO::user()->id)-1;
-						
+		if(GO::user()){					
 			GO::config()->getTempFolder()->delete();
 			GO::config()->getTempFolder();
-//
-//			if(substr(GO::config()->tmpdir,$length)==GO::user()->id.'/' && is_dir(GO::config()->tmpdir)){
-//				$folder = new GO_Base_Fs_Folder(GO::config()->tmpdir);
-//				$folder->delete();
-//			}
 		}
+	}
+	
+	private function _unsetRemindLoginCookies(){
+		GO_Base_Util_Http::unsetCookie('GO_UN');
+		GO_Base_Util_Http::unsetCookie('GO_PW');		
 	}
 	
 	/**
@@ -154,22 +126,21 @@ class GO_Base_Session extends GO_Base_Observable{
 		//go_log(LOG_DEBUG, 'LOGOUT Username: '.$username.'; IP: '.$_SERVER['REMOTE_ADDR']);
 		GO::infolog("LOGOUT for user: \"".$username."\" from IP: ".$_SERVER['REMOTE_ADDR']);
 
-		if(!headers_sent()){
-			SetCookie("GO_UN","",time()-3600,GO::config()->host,"",!empty($_SERVER['HTTPS']),true);
-			SetCookie("GO_PW","",time()-3600,GO::config()->host,"",!empty($_SERVER['HTTPS']),true);
-		}
-
 		$old_session = $_SESSION;
-
-		unset($_SESSION, $_COOKIE['GO_UN'], $_COOKIE['GO_PW']);
+		unset($_SESSION);
 		
 		if (ini_get("session.use_cookies") && !headers_sent()) {
+			//rRemove session cookie. PHP does not remove this automatically.
 			$params = session_get_cookie_params();
 			setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
 		}
 		
 		if(session_id()!='')
 			session_destroy();
+		
+		if(!headers_sent()){
+			$this->_unsetRemindLoginCookies();
+		}
 		
 		if(!headers_sent() && !defined("GO_NO_SESSION")){
 			session_start();
@@ -270,8 +241,7 @@ class GO_Base_Session extends GO_Base_Observable{
 	/**
 	 * Close writing to session so other concurrent requests won't be locked out.
 	 */
-	public function closeWriting(){
-		
+	public function closeWriting(){		
 		session_write_close();
 	}
 	
@@ -283,5 +253,4 @@ class GO_Base_Session extends GO_Base_Observable{
 		//remember user id in session
 		$this->values['user_id']=$user_id;
 	}
-
 }
