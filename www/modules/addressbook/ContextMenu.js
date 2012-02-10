@@ -32,7 +32,7 @@ GO.addressbook.ContextMenu = function(config){
 		}
 	});
 	config.items.push(this.actionBatchEdit);
-
+	
 	GO.addressbook.ContextMenu.superclass.constructor.call(this,config);
 
 }

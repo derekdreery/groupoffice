@@ -39,7 +39,6 @@
  * @property string $name
  * @property int $addressbook_id
  * @property int $user_id
- * @property int $link_id
  * @property int $id
  */
 
@@ -164,6 +163,21 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 			}
 		}		
 		return parent::afterSave($wasNew);
+	}
+	
+	protected function afterMergeWith(GO_Base_Db_ActiveRecord $model) {
+		
+		//move company employees to this model too.
+		if($model->className()==$this->className()){
+			$stmt = $model->contacts();
+			while($contact = $stmt->fetch())
+			{
+				$contact->company_id=$this->id;
+				$contact->save();
+			}
+		}
+		
+		return parent::afterMergeWith($model);
 	}
 	
 	/**

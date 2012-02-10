@@ -14,6 +14,11 @@
 - Billing module can create MS word and open-office invoices, quotes and orders.
 - Billing module can handle purchase orders and stock.
 
+Addressbook
+- Batch edit in addressbook.
+- Merge companies and contacts
+- Easier and more secure advanced search.
+
 E-mail
 - Embed pasted images from firefox into mime mail for better memory management
 - Links in messages become relative links when cut & pasted. We make them absolute again on when the message is sent.

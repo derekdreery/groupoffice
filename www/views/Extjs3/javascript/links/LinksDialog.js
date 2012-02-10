@@ -19,6 +19,7 @@ GO.dialog.LinksDialog = function(config){
 	this.grid = new GO.grid.SearchPanel({
 			noTitle:true,
 			noOpenLinks:true,
+			hideDescription:config.hideDescription,
 			dontLoadOnRender:true,
 			singleSelect:config.singleSelect
 		});

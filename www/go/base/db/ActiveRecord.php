@@ -215,19 +215,26 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	public function hasLinks(){return false;}
 	
 	
+	private $_filesFolder;
+	
 	/**
 	 * Get the folder model belonging to this model if it supports it.
+	 * If the folder doesn't exist yet it will create it.
 	 * 
 	 * @return GO_Files_Model_Folder
 	 */
 	public function getFilesFolder(){
+	
 		if(!$this->hasFiles())
 			return false;
 		
-		$c = new GO_Files_Controller_Folder();
-		$folder_id = $c->checkModelFolder($this, true, true);
-		
-		return GO_Files_Model_Folder::model()->findByPk($folder_id);
+		if(!isset($this->_filesFolder)){		
+			$c = new GO_Files_Controller_Folder();
+			$folder_id = $c->checkModelFolder($this, true, true);
+
+			$this->_filesFolder=GO_Files_Model_Folder::model()->findByPk($folder_id);
+		}
+		return $this->_filesFolder;
 		
 	}
 	
@@ -2825,10 +2832,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @param GO_Base_Db_ActiveRecord $targetModel 
 	 */
 	public function copyLinks(GO_Base_Db_ActiveRecord $targetModel){
+		if(!$this->hasLinks() || !$targetModel->hasLinks())
+			return false;
+			
 		$stmt = GO_Base_Model_SearchCacheRecord::model()->findLinks($this);
 		while($searchCacheModel = $stmt->fetch()){
 			$targetModel->link($searchCacheModel, $searchCacheModel->link_description);
 		}
+		return true;
 	}	
 	
 	private $_customfieldsRecord;
@@ -3243,5 +3254,104 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		return $comment->save();
 		
 	}
+	
+	/**
+	 * Merge this model with another one of the same type.
+	 * 
+	 * All attributes of the given model will be applied to this model if they are empty. Textarea's will be concatenated.
+	 * All links will be moved to this model.
+	 * Finally the given model will be deleted.
+	 * 
+	 * @param GO_Base_Db_ActiveRecord $model 
+	 */
+	public function mergeWith(GO_Base_Db_ActiveRecord $model, $mergeAttributes=true, $deleteModel=true){
+				
+		//copy attributes if models are of the same type.
+		if($mergeAttributes){
+			$attributes = $model->getAttributes('raw');
+
+			//don't copy primary key
+			if(is_array($this->primaryKey())){
+				foreach($this->primaryKey() as $field)
+					unset($attributes[$field]);			
+			}else			
+				unset($attributes[$this->primaryKey()]);
+
+			unset($attributes['files_folder_id']);
+
+			foreach($attributes as $name=>$value){
+				$isset = isset($this->columns[$name]);
+
+				if($isset && !empty($value)){
+					if($this->columns[$name]['gotype']=='textarea'){
+						$this->$name .= "\n\n-- merge --\n\n".$value;
+					}elseif(empty($this->$name))
+						$this->$name=$value;
+				}
+			}		
+			$this->save();				
+		
+			//copy custom fields
+			if($model->customfieldsRecord)
+				$this->customfieldsRecord->mergeWith($model->customfieldsRecord);
+		}
+		
+		$model->copyLinks($this);
+		
+		//move files.
+		$this->_moveFiles($model);
+		
+		$this->_moveComments($model);
+		
+		$this->afterMergeWith($model);
+		
+		if($deleteModel)
+			$model->delete();				
+	}
+	
+	private function _moveComments(GO_Base_Db_ActiveRecord $sourceModel){
+		if(GO::modules()->isInstalled('comments') && $this->hasLinks()){
+			$findParams = GO_Base_Db_FindParams::newInstance()
+						->ignoreAcl()	
+						->order('id','DESC')
+						->criteria(
+										GO_Base_Db_FindCriteria::newInstance()
+											->addCondition('model_id', $sourceModel->id)
+											->addCondition('model_type_id', $sourceModel->modelTypeId())										
+										);
+			
+			$stmt = GO_Comments_Model_Comment::model()->find($findParams);
+			while($comment = $stmt->fetch()){
+				$comment->model_type_id=$this->modelTypeId();
+				$comment->model_id=$this->id;
+				$comment->save();
+			}
+		}
+	}
+	
+	private function _moveFiles(GO_Base_Db_ActiveRecord $sourceModel){
+		if(!$this->hasFiles())
+			return false;
+		
+		$sourceFolder = GO_Files_Model_Folder::model()->findByPk($sourceModel->files_folder_id);
+		if(!$sourceFolder)
+			return false;
+		
+		$stmt = $sourceFolder->folders();
+		while($folder = $stmt->fetch()){
+			$folder->move($this->filesFolder);
+		}
+		
+		$stmt = $sourceFolder->files();
+		while($file = $stmt->fetch()){
+			$file->move($this->filesFolder);
+		}
+	}
+	
+	/**
+	 * Override this if you need to do extra stuff after merging.
+	 * Move relations for example.
+	 */
+	protected function afterMergeWith(GO_Base_Db_ActiveRecord $model){}
 
 }

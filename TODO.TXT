@@ -3,12 +3,9 @@ Distinguish declined and cancel	led events in grid.
 alarm import
 test invitation sending with moving in grid
 
+Workflow
 
 file locking
-
-adreslijsten verloren bij upgrade.
-
-Files versioning
 
 serverclient
 
@@ -20,11 +17,12 @@ Export projecten en billing
 
 Module icons
 
+TLS email
+Full date column
 
 
 
-
-Lage prio:
+*** Lage prio:
 
 Licentie checks per module
 
@@ -38,3 +36,7 @@ E-mail files functie
 Freebusy support in sabredav 1.6
 
 Feature requests voting system
+
+Bij bedrijf -> displaypanel -> New -> Contact
+
+Save advanced searches
