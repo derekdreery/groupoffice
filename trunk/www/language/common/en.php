@@ -502,3 +502,5 @@ $l["noUserFoundWithEmail"]="No user found with the given email address!";
 $l["viesDownException"]='The VIES service is down. You can complete your order but you can only pay when we have manually checked your Vies number.';
 
 $l['alreadyExists']='%s "%s" already exists'; //eg. Project "Some name" already exists.
+
+$l['merge']='Merge';

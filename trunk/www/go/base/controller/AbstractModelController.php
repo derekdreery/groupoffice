@@ -1045,4 +1045,24 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		}		
 	}
 	
+	/**
+	 * Merge models. The supplied "merge_models" array of primary keys will be merged to the given target_model_id.
+	 * 
+	 * All merge_models will be deleted!
+	 * 
+	 * @param type $params 
+	 */
+	public function actionMerge($params){
+		$mergeModels = json_decode($params['merge_models']);
+		
+		$targetModel = GO::getModel($params['model_name'])->findByPk($params['target_model_id']);
+		
+		foreach($mergeModels as $mergeModelProps){
+			$mergeModel = GO::getModel($mergeModelProps->model_name)->findByPk($mergeModelProps->model_id);
+			$targetModel->mergeWith($mergeModel, !empty($params['merge_attributes']), !empty($params['delete_merge_models']));			
+		}
+		
+		return array('success'=>true);
+	}
+	
 }

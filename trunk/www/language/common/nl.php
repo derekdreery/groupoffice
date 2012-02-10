@@ -488,3 +488,4 @@ $l['permissionUse'] = 'Gebruiken';
 $l['permissionManage'] = 'Beheren';
 
 $l['alreadyExists']='%s "%s" bestaat al'; //eg. Project "Some name" already exists.
+$l['merge']='Samenvoegen';

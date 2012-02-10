@@ -179,7 +179,7 @@ GO.grid.SearchPanel = function(config){
 	}
 	
 
-	if(config.noOpenLinks)
+	if(config.noOpenLinks && !config.hideDescription)
 	{
 		config.items.push({
 			region:'south',
