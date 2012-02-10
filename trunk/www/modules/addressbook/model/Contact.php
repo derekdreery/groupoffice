@@ -151,7 +151,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		$name .= ' ('.$this->addressbook->name.')';
 			
 		return array(
-				'name' => $this->name
+				'name' => $name
 		);
 	}
 	
