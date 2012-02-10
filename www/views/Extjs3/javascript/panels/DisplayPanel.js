@@ -106,27 +106,6 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 			}));
 		}
 		
-		
-		this.mergeButton = new Ext.Button({
-			iconCls: 'btn-add',
-			text: GO.lang.merge,
-			scope:this,
-			disabled:true,
-			handler: function()
-			{
-				if(!this.selectMergeLinksWindow)
-				{
-					this.selectMergeLinksWindow = new GO.dialog.MergeWindow({
-						displayPanel:this
-					});
-				}			
-			
-				this.selectMergeLinksWindow.show();
-			}
-		});
-		tbar.push(this.mergeButton);	
-		
-		
 		tbar.push('-');
 		tbar.push({            
 	      iconCls: "btn-refresh",
@@ -270,8 +249,6 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		if(this.editButton)
 			this.editButton.setDisabled(!data.write_permission);
 		
-		if(this.mergeButton)
-			this.mergeButton.setDisabled(!data.write_permission)
 		
 		if(this.newMenuButton){
 			if(data.write_permission)
