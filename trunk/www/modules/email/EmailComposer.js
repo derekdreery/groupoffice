@@ -736,8 +736,9 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 //				this.ccFieldCheck.setChecked(GO.email.showCCfield == '1');
 //				this.bccFieldCheck.setChecked(GO.email.showBCCfield == '1');
 			}
+			
 
-			if (config.uid || config.template_id || config.loadUrl) {
+			if (config.uid || config.template_id || config.loadUrl || config.loadParams) {
 		
 //				if(config.task=='opendraft')
 //					this.sendParams.draft_uid = config.uid;
@@ -745,12 +746,13 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				var fromRecord = this.fromCombo.store.getById(this.fromCombo.getValue());
 
 				var params = config.loadParams ? config.loadParams : {
-					uid : config.uid,
-					account_id : fromRecord.get('account_id'),
-					alias_id: fromRecord.get('id'),
+					uid : config.uid,					
 					task : config.task,
 					mailbox : config.mailbox
 				};
+				
+				params.account_id =fromRecord.get('account_id');
+				params.alias_id=fromRecord.get('id');	
 
 				//for directly loading a contact in a template
 				if(config.contact_id)
@@ -924,9 +926,15 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			//make sure autosave doesn't trigger at the same time we're sending it.
 			if(!autoSave && !draft)
 				this.stopAutoSave();
+			
+			var sendUrl = this.sendURL;
+			if(this.sendParams.save_to_path)
+				sendUrl = GO.url("email/message/saveToFile");
+			else if(draft || autoSave)
+				sendUrl = GO.url("email/message/save")
 
 			this.formPanel.form.submit({
-				url : draft || autoSave ? GO.url("email/message/save") : this.sendURL,
+				url : sendUrl,
 				params : this.sendParams,
 				waitMsg : waitMsg,
 				waitMsgTarget : autoSave ? null : this.formPanel.body,

@@ -15,10 +15,11 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 					text: GO.email.lang.reply,
 					cls: 'x-btn-text-icon',
 					handler: function(){
-						this.remoteMessage.task='reply';
 						GO.email.showComposer({
-							loadUrl : GO.settings.modules.email.url + 'json.php',
-							loadParams : this.remoteMessage
+							task:'reply',
+							loadParams : {
+								path:this.data.path
+							}
 						});
 					},
 					scope: this
@@ -28,10 +29,11 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 					text: GO.email.lang.replyAll,
 					cls: 'x-btn-text-icon',
 					handler: function(){
-						this.remoteMessage.task='reply_all';
 						GO.email.showComposer({
-							loadUrl : GO.settings.modules.email.url + 'json.php',
-							loadParams : this.remoteMessage
+							task:'reply_all',
+							loadParams : {
+								path:this.data.path
+							}
 						});
 					},
 					scope: this
@@ -40,13 +42,12 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 					iconCls: 'btn-forward',
 					text: GO.email.lang.forward,
 					cls: 'x-btn-text-icon',
-					handler: function(){
-
-						this.remoteMessage.task='forward';
-
+					handler: function(){						
 						GO.email.showComposer({
-							loadUrl : GO.settings.modules.email.url + 'json.php',
-							loadParams : this.remoteMessage
+							task:'forward',
+							loadParams : {
+								path:this.data.path
+							}
 						});
 					},
 					scope: this
@@ -54,14 +55,15 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 					iconCls: 'btn-edit',
 					text: GO.lang.cmdEdit,
 					handler: function(){
-						this.remoteMessage.task='opendraft';
-						GO.email.showComposer({
-							loadUrl : GO.settings.modules.email.url + 'json.php',
-							loadParams : this.remoteMessage,
-							saveToPath:this.remoteMessage.path
+						var composer = GO.email.showComposer({
+							task:'opendraft',
+							loadParams : {
+								path:this.data.path
+							},
+							saveToPath:this.data.path
 						});
-
-						//this.ownerCt.hide();
+						
+						composer.on('hide', this.reload, this, {single:true});
 					},
 					scope: this
 				}];
@@ -73,9 +75,16 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 	editHandler : function(){
 		//needed because it needs to be compatible with javascript/DisplayPanel.js
 	},
+	loadUrl: '',
+	reload : function (){
+		this.load(this.lastId, this.lastConfig);	
+	},
 	load : function(id, config){
 
 	 config = config || {};
+	 
+	 this.lastConfig=config;
+	 this.lastId=id;
 	 
 		this.el.mask(GO.lang.strWaitMsgLoad);
 
@@ -86,30 +95,30 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 		this.messageId=id;		
 		this.remoteMessage.id=this.messageId;
 
-		var url = '';
+		this.loadUrl = '';
 		switch(config.action){
 			
 			case 'path':
-				url=GO.url("savemailas/linkedEmail/loadPath");
+				this.loadUrl=GO.url("savemailas/linkedEmail/loadPath");
 			break;
 			
 			case 'attachment':
-				url = GO.url("email/message/messageAttachment");
+				this.loadUrl = GO.url("email/message/messageAttachment");
 				break;
 				
 			case 'file':
-				url=GO.url("savemailas/linkedEmail/loadFile");
+				this.loadUrl=GO.url("savemailas/linkedEmail/loadFile");
 				break;
 				
 			default:
-				url=GO.url("savemailas/linkedEmail/loadLink");
+				this.loadUrl=GO.url("savemailas/linkedEmail/loadLink");
 				
 				break;
 			
 		}
 
 		Ext.Ajax.request({
-			url: url,
+			url: this.loadUrl,
 			params: this.remoteMessage,
 			scope: this,
 			callback: function(options, success, response)
