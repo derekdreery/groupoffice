@@ -124,8 +124,7 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 
 	protected function getCacheAttributes() {
 		return array(
-				'name' => $this->name,
-				'type' => GO::t('company','addressbook')
+				'name' => $this->name.' ('.$this->addressbook->name.')'
 		);
 	}
 	/**
