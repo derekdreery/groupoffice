@@ -401,6 +401,25 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 					scope:this
 				}));
 		}
+		
+		tbar.splice(tbar.length-2,0,
+			this.mergeButton = new Ext.Button({
+			iconCls: 'btn-add',
+			text: GO.lang.merge,
+			scope:this,
+			disabled:true,
+			handler: function()
+			{
+				if(!this.selectMergeLinksWindow)
+				{
+					this.selectMergeLinksWindow = new GO.dialog.MergeWindow({
+						displayPanel:this
+					});
+				}			
+
+				this.selectMergeLinksWindow.show();
+			}
+		}));
 		return tbar;
 	},
 	
@@ -415,6 +434,8 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 			else
 				this.createUserButton.setText(GO.addressbook.lang.editUser);
 		}
+		
+		this.mergeButton.setDisabled(!data.write_permission)
 		
 		if(data.write_permission)
 		{
