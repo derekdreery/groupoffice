@@ -29,6 +29,8 @@
  */
 class GO_Base_Observable{
 	
+	public static $listeners;
+	
 	/**
 	 * Will check if the event listeners have been cached and will 
 	 * cache them when necessary.
@@ -95,7 +97,10 @@ class GO_Base_Observable{
 	 * @param Array $params Paramters for the listener function
 	 */
 	protected function fireEvent($eventName, $params){
-		if(!isset($this->_listeners)){
+		
+		$className = get_class($this);		
+		
+		if(!isset(self::$listeners[$className])){
 			
 			//listeners array will be loaded from a file. Because addListener is only called once when there is no cache.
 			$listeners=array();
@@ -104,19 +109,11 @@ class GO_Base_Observable{
 			if(file_exists($cacheFile))
 				require($cacheFile);
 			
-			$this->_listeners=$listeners;
-			
-//			$cacheFile = GO::config()->file_storage_path.'cache/listeners/'.get_parent_class($this).'.php';
-//			if(file_exists($cacheFile)){
-//				require($cacheFile);
-//				$this->_listeners=array_merge($this->_listeners,$listeners);
-//			}
+			self::$listeners[$className]=$listeners;			
 		}
 		
-		GO::debug("fireEvent($eventName) class:".get_class($this));
-		
-		if(isset($this->_listeners[$eventName])){
-			foreach($this->_listeners[$eventName] as $listener)
+		if(isset(self::$listeners[$className][$eventName])){
+			foreach(self::$listeners[$className][$eventName] as $listener)
 			{
 				GO::debug('Firing listener: '.$listener[0].'::'.$listener[1]);
 
@@ -130,11 +127,6 @@ class GO_Base_Observable{
 		}
 		
 		return true;
-		
-		//recurse up.
-		//parent::fireEvent($eventName, $params);
 	}
-	
-	
-	private $_listeners;
+
 }

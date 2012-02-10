@@ -2179,12 +2179,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				'acl_id'=>$acl_id
 			);
 			
-			
-			
 			$attr = array_merge($autoAttr, $attr);
 			
 			//make sure these attributes are not too long
-			if(GO_Base_Util_String::length($attr['description'])>100)
+			if(GO_Base_Util_String::length($attr['name'])>100)
 				$attr['name']=substr($attr['name'], 0, 100);
 			
 			if(GO_Base_Util_String::length($attr['description'])>255)
