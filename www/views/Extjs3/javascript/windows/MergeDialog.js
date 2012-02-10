@@ -85,13 +85,13 @@ GO.dialog.MergeWindow = Ext.extend(GO.Window,{
 				hideLabel:true,
 				xtype:'checkbox',
 				name:'delete_merge_models',
-				boxLabel:'Delete the selected models after merging',
+				boxLabel:GO.lang.mergeDeleteItems,
 				checked:true
 			},{
 				hideLabel:true,
 				xtype:'checkbox',
 				name:'merge_attributes',
-				boxLabel:'Merge attributes if they are empty in the target',
+				boxLabel:GO.lang.mergeAttributes,
 				checked:true
 			}]
 		}),this.searchGrid];
