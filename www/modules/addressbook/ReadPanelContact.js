@@ -369,7 +369,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 		
 		if(GO.settings.modules.users.read_permission){
 			tbar.splice(tbar.length-2,0,this.createUserButton = new Ext.Button({
-					iconCls:'btn-save',
+					iconCls:'btn-add',
 					text:GO.addressbook.lang.createUser,
 					disabled:true,
 					handler:function(){

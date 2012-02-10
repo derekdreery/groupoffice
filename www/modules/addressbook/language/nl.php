@@ -210,3 +210,4 @@ $l["addDocumentTemplate"]='Documentsjabloon toevoegen';
 $l["documentTemplate"]='Documentsjabloon';
 
 $l["copyingMessages"]='Bezig met kopiëren van berichten...';
+$l['editUser']='Bewerk gebruiker';

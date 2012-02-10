@@ -115,5 +115,6 @@ $l['dotdmy']='Day.Month.Year';
 $l['slashdmy']='Day/Month/Year';
 
 $l['generatePassword']='Generate password';
+$l['generatedPasswordIs']='The generated password is';
 
 $l['openContact']='Open contact';
