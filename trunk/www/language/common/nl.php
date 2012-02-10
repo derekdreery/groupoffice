@@ -489,3 +489,5 @@ $l['permissionManage'] = 'Beheren';
 
 $l['alreadyExists']='%s "%s" bestaat al'; //eg. Project "Some name" already exists.
 $l['merge']='Samenvoegen';
+$l['mergeDeleteItems']='Verwijder de geselecteerde items na samenvoegen.';
+$l['mergeAttributes']='Kopieer velden van de geselecteerde items als ze bij het doel leeg zijn.';

@@ -504,3 +504,5 @@ $l["viesDownException"]='The VIES service is down. You can complete your order b
 $l['alreadyExists']='%s "%s" already exists'; //eg. Project "Some name" already exists.
 
 $l['merge']='Merge';
+$l['mergeDeleteItems']='Delete the selected items after merging';
+$l['mergeAttributes']='Merge data fields if they are empty in the target item.';
