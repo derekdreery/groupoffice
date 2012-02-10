@@ -2929,22 +2929,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	public function rebuildSearchCache(){
 		$attr = $this->getCacheAttributes();
 		
-		if($attr){
-			
-//			GO_Base_Model_SearchCacheRecord::model()->deleteBy(array(
-//					'by'=>array(
-//							array('model_name',$this->className())
-//							)
-//						)
-//					);
-			
-			
+		if($attr){			
 			$stmt = $this->find(array(
 					'ignoreAcl'=>true
-			));
-			
-			$stmt->callOnEach('cacheSearchRecord');
-			
+			));			
+			$stmt->callOnEach('cacheSearchRecord', true);			
 		}
 	}
 

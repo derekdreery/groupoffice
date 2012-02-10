@@ -68,11 +68,16 @@ class GO_Base_Db_ActiveStatement extends PDOStatement {
 	 * 
 	 * @param String $function 
 	 */
-	public function callOnEach($function){
+	public function callOnEach($function, $verbose=false){
 		//$models = $this->fetchAll();
+		$i=0;
 		while($m = $this->fetch()){		
 			if(method_exists($m, $function))
 				try{
+					if($verbose){
+						echo ($i++)." ".$m->className()."\n";
+						flush();
+					}
 					$m->$function();
 				}catch(Exception $e){
 					echo $e->getMessage();

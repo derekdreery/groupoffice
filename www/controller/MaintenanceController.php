@@ -7,7 +7,7 @@
 class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractController {
 	
 	protected function allowGuests() {
-		return array('upgrade','checkdatabase');
+		return array('upgrade');
 	}
 
 	protected function init() {
@@ -113,13 +113,13 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		$models=GO::findClasses('model');
 		foreach($models as $model){
 			if($model->isSubclassOf("GO_Base_Db_ActiveRecord") && !$model->isAbstract()){
-				echo $response[] = "Processing ".$model->getName()."\n";
+				echo "Processing ".$model->getName()."\n";
+				flush();
 				$stmt = GO::getModel($model->getName())->rebuildSearchCache();			
 			}
 		}
 		
 		GO::modules()->callModuleMethod('buildSearchCache', array(&$response));
-		return $response;
 	}
 
 	/**
