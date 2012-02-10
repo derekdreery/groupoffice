@@ -3255,6 +3255,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @param GO_Base_Db_ActiveRecord $model 
 	 */
 	public function mergeWith(GO_Base_Db_ActiveRecord $model, $mergeAttributes=true, $deleteModel=true){
+		
+		if($model->id==$this->id && $this->className()==$model->className())
+			return false;
 				
 		//copy attributes if models are of the same type.
 		if($mergeAttributes){
