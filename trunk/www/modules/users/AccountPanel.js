@@ -43,6 +43,8 @@ GO.users.AccountPanel = function(config)
 			var pass = this.panel.randomPassword(6);
 			this.panel.passwordField1.setValue(pass);
 			this.panel.passwordField2.setValue(pass);
+			
+			Ext.MessageBox.alert(GO.users.lang['cmdFormLabelPassword'],GO.users.lang.generatedPasswordIs+": "+pass);
 		}
 		});
 	this.passwordField2 = new Ext.form.TextField({

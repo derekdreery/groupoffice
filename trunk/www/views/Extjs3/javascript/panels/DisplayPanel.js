@@ -108,7 +108,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		
 		
 		this.mergeButton = new Ext.Button({
-			iconCls: 'btn-save',
+			iconCls: 'btn-add',
 			text: GO.lang.merge,
 			scope:this,
 			disabled:true,
