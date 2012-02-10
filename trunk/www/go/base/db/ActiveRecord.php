@@ -2901,6 +2901,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function checkDatabase(){		
 		//$this->save();		
+		
+		echo "Checking ".$this->id." ".$this->className()."\n";
+		flush();
 
 		if($this->aclField() && !$this->joinAclField){
 
