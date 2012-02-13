@@ -747,6 +747,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * 
 	 * eg. name,attribute,cf\Test\Textfield
 	 * 
+	 * Command line:
+	 * 
+	 * ./groupoffice biling/order/import --file=/path/to/file.csv --delimiter=, --enclosure="
+	 * 
 	 * @param array $params 
 	 */
 	protected function actionImport($params) {
@@ -758,8 +762,13 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		if(!empty($params['enclosure']))
 			$importFile->enclosure = $params['enclosure'];
+		
+		echo "Delimiter: ".$importFile->delimiter."\n";
+		echo "Enclosure: ".$importFile->enclosure."\n";
+		echo "File: ".$importFile->path()."\n\n";
 			
-		$importFile->convertToUtf8();
+		if(!$importFile->convertToUtf8())
+			exit("ERROR: Could not convert to UTF8. Is the file writable?\n\n");
 
 		$headers = $importFile->getRecord();
 		
@@ -780,22 +789,30 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		while ($record = $importFile->getRecord()) {
 			$attributes = array();
 			foreach($attributeIndexMap as $index=>$attributeName){
-				$attributes[$attributeName]=$record[$index];
+				$attributes[trim($attributeName)]=$record[$index];
 			}
 
-			$model = new $this->model;
+			$model = new $this->model;			
 			
 			if($this->beforeImport($model, $attributes, $record)){			
-				
 				$columns = $model->getColumns();
+				//var_dump($columns);
 				foreach($columns as $col=>$attr){
-					if(isset($attributes[$col]) && ($attr['gotype']=='unixtimestamp' || $attr['gotype']=='unixdate')){
-						$attributes[$col]=strtotime($attributes[$col]);
+					if(isset($attributes[$col])){
+//						if($attr['gotype']=='unixtimestamp' || $attr['gotype']=='unixdate'){
+//							$attributes[$col]=strtotime($attributes[$col]);
+//							
+						if($attr['gotype']=='number')
+						{						
+							$attributes[$col]=preg_replace('/[^.,\s0-9]+/','',$attributes[$col]);
+						}
 					}
 				}
+				
 				// True is set because import needs to be checked by the model.
 				$model->setAttributes($attributes, true);
 				
+
 				// If there are given baseparams to the importer
 				if(isset($params['importBaseParams'])) {
 					$baseParams = json_decode($params['importBaseParams'],true);
