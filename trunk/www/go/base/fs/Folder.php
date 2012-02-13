@@ -164,6 +164,8 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 			return true;
 		}else
 		{
+			GO::debug("Failed to create ".$this->path);
+			
 			return false;
 		}
 	}
