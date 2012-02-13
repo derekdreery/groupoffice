@@ -754,6 +754,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * @param array $params 
 	 */
 	protected function actionImport($params) {
+		
+		GO::$disableModelCache=true; //for less memory usage
+		ini_set('max_execution_time', '0'); //allow long runs
+		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
 
 		$importFile = new GO_Base_Fs_CsvFile($params['file']);
 		
