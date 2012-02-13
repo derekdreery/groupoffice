@@ -340,7 +340,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 * @param array $uploadedFileArray
 	 * @param GO_Base_Fs_Folder  $destinationFolder
 	 * @param boolean $overwrite If false this function will append a number. eg. Filename (1).jpg
-	 * @return GO_Base_Fs_File 
+	 * @return GO_Base_Fs_File[]
 	 */
 	public static function moveUploadedFiles($uploadedFileArray, $destinationFolder, $overwrite=false){
 		
