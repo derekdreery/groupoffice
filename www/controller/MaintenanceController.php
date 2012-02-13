@@ -12,7 +12,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 
 	protected function init() {
 		GO::$disableModelCache=true; //for less memory usage
-		ini_set('max_execution_time', '0'); //allow long runs
+		ini_set('max_execution_time', '0'); //allow long runs		
 		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
 	}
 	
@@ -24,7 +24,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		$checkModels = array(
 				"GO_Calendar_Model_Event"=>array('name', 'start_time', 'end_time', 'calendar_id', 'rrule', 'user_id'),
 				"GO_Tasks_Model_Task"=>array('name', 'start_time', 'due_time', 'tasklist_id', 'rrule', 'user_id'),
-				"GO_Addressbook_Model_Contact"=>array('first_name', 'middle_name', 'last_name', 'addressbook_id', 'company_id', 'email')
+				"GO_Addressbook_Model_Contact"=>array('first_name', 'middle_name', 'last_name', 'addressbook_id', 'company_id', 'email'),
+				"GO_Billing_Model_Order"=>array('order_id','book_id','btime')
 			);
 		
 		foreach($checkModels as $modelName=>$checkFields){
