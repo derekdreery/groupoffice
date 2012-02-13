@@ -757,6 +757,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		GO::$disableModelCache=true; //for less memory usage
 		ini_set('max_execution_time', '0'); //allow long runs
+		ini_set('memory_limit','512MB');
 		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
 
 		$importFile = new GO_Base_Fs_CsvFile($params['file']);
