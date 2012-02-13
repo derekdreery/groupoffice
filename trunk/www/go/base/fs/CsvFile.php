@@ -37,17 +37,12 @@ class GO_Base_Fs_CsvFile extends GO_Base_Fs_File{
 	private function _setCSV($mode){
 		if(!isset($this->_csv)){
 			if ($mode='w') {
-				$this->_csv = new GO_Base_Csv_Writer($this->name());
+				$this->_csv = new GO_Base_Csv_Writer($this->path());
 			} elseif ($mode='r') {
-				$this->_csv = new GO_Base_Csv_Reader($this->name());
+				$this->_csv = new GO_Base_Csv_Reader($this->path());
 			}
 			$this->_csv->delimiter=$this->delimiter;
 			$this->_csv->enclosure=$this->enclosure;
-		} else if (
-				($mode=='w' && get_class($this->_csv)!='GO_Base_Csv_Writer')
-				|| ($mode=='r' && get_class($this->_csv)!='GO_Base_Csv_Reader')
-			) {
-			throw new Exception(__CLASS__." cannot be used for alternately writing and reading CSV files.");
 		}
 	}
 		

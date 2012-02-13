@@ -156,9 +156,9 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 */
 	public function putContents($data, $flags=null, $context=null){
 		if(file_put_contents($this->path, $data, $flags, $context)){
-			chmod($this->path, GO::config()->file_create_mode);
+			@chmod($this->path, GO::config()->file_create_mode);
 			if(GO::config()->file_change_group)
-				chgrp ($this->path, GO::config()->file_change_group);
+				@chgrp ($this->path, GO::config()->file_change_group);
 			return true;
 		}else
 		{
