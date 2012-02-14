@@ -36,6 +36,7 @@
  * @property String $path
  * @property GO_Base_Fs_File $fsFile
  * @property GO_Files_Model_Folder $folder
+ * @property GO_Base_Model_User $lockedByUser
  */
 class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 
@@ -84,6 +85,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	 */
 	public function relations() {
 		return array(
+				'lockedByUser' => array('type' => self::BELONGS_TO, 'model' => 'GO_Base_Model_User', 'field' => 'locked_user_id'),
 				'folder' => array('type' => self::BELONGS_TO, 'model' => 'GO_Files_Model_Folder', 'field' => 'folder_id'),
 				'versions' => array('type'=>self::HAS_MANY, 'model'=>'GO_Files_Model_Version', 'field'=>'file_id', 'delete'=>true),
 		);
@@ -131,8 +133,16 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		parent::init();
 	}
 	
-	protected function beforeSave() {
-		
+	/**
+	 * Check if a file is locked by another user.
+	 * 
+	 * @return boolean 
+	 */
+	public function isLocked(){
+		return $this->locked_user_id && $this->locked_user_id!=GO::user()->id;
+	}
+	
+	protected function beforeSave() {		
 		if(!$this->isNew){
 			if($this->isModified('name')){				
 				//rename filesystem file.
@@ -154,6 +164,12 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 					throw new Exception("Could not rename folder on the filesystem");
 			}
 		}
+		
+		if($this->isModified('locked_user_id')){
+			if($this->getOldAttributeValue('locked_user_id') != GO::user()->id && !GO::user()->isAdmin())
+				throw new GO_Files_Exception_FileLocked();
+		}
+		
 
 		$this->extension = $this->fsFile->extension();
 		$this->size = $this->fsFile->size();
@@ -261,6 +277,9 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	 * @param GO_Base_Fs_File $fsFile 
 	 */
 	public function replace(GO_Base_Fs_File $fsFile, $isUploadedFile=false){
+		
+		if($this->isLocked())
+			throw new GO_Files_Exception_FileLocked();
 		
 		$this->saveVersion();
 				

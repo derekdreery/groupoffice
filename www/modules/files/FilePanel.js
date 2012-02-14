@@ -70,11 +70,33 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 
 	setData : function(data)
 	{
-		this.setTitle(data.name);
 		GO.files.FilePanel.superclass.setData.call(this, data);
+		this.setTitle(data.name);		
+		this.editButton.setDisabled(data.locked);		
 	},
 
 	initComponent : function(){
+		
+		this.on('bodyclick',function(panel,target, e){
+			
+			target = Ext.get(target);
+			
+			if(target.hasClass("fs-unlock")){
+				GO.request({
+					url:'files/file/submit',
+					params:{
+						id:this.data.id,
+						locked_user_id:0
+					},
+					success:function(action, response, result){
+						this.reload();
+						if(GO.mainLayout.getModulePanel('files'))
+							GO.mainLayout.getModulePanel('files').getActiveGridStore().load();
+					},
+					scope:this
+				})
+			}
+		}, this);
 		
 		this.loadUrl=GO.url('files/file/display');
 		
@@ -106,6 +128,18 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 						'<td>'+GO.lang.strMtime+':</td>'+
 						'<td>{mtime}</td>'+						
 					'</tr>'+
+					
+					'<tpl if="!GO.util.empty(locked_user_name)">'+
+						'<tr>'+
+            '<td>'+GO.files.lang.lockedBy+':</td>'+
+            '<td><div class="go-grid-icon btn-lock">{locked_user_name}'+
+						'<tpl if="GO.util.empty(locked) && write_permission">'+
+							' <span class="fs-unlock" style="cursor:pointer;text-decoration:underline;">['+GO.files.lang.unlock+']</span>'+
+						'</tpl>'+
+						'</div></td>'+
+						'</tr>'+
+          '</tpl>'+
+					
 
           '<tpl if="!GO.util.empty(expire_time)">'+
 						'<tr>'+
@@ -120,8 +154,6 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
             '<td>'+GO.files.lang.downloadUrl+':</td>'+
             '<td><a href="{download_link}" target="_blank">{download_link}</a></td>'+
 						'</tr>'+
-	
-					
           '</tpl>'+
 
 					'<tpl if="!GO.util.empty(thumbnail_url)"><tr><td colspan="2">'+
@@ -146,6 +178,7 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 				'</table>';
 
 
+	
 
 		if(GO.customfields)
 		{

@@ -81,3 +81,5 @@ $l['selectFolder']='Select folder...';
 $l['notifyRecursiveTitle']='Set notification on subfolders?';
 $l['removeNotifyRecursiveTitle']='Remove notification from subfolders?';
 $l['notifyRecursiveQuestion']='Do you want to apply this to all the subfolders?';
+$l['unlock']='Unlock';
+$l['lockedBy']='Locked by';
