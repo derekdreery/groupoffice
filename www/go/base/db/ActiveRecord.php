@@ -1598,7 +1598,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					break;				
 				case 'date':
 					return  GO_Base_Util_Date::to_db_date($value);
-					break;				
+					break;		
+				case 'textfield':
+					return trim($value);
+					break;
 				default:
 					if($this->columns[$column]['type']==PDO::PARAM_INT)
 						$value = intval($value);
@@ -2473,6 +2476,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			GO::debug($sql);
 
 		$success = $this->getDbConnection()->query($sql);		
+		if(!$success)
+			throw new Exception("Could not delete from database");
 		
 		$attr = $this->getCacheAttributes();
 		
@@ -2484,7 +2489,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		if($this->hasFiles() && $this->files_folder_id > 0 && GO::modules()->isInstalled('files')){
 			$folder = GO_Files_Model_Folder::model()->findByPk($this->files_folder_id,false,true);
-			$folder->delete(true);
+			if($folder)
+				$folder->delete(true);
 		}		
 		
 		if($this->aclField() && !$this->joinAclField){			
