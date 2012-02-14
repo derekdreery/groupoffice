@@ -234,24 +234,17 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		return Ext.apply(GO.DisplayPanel.superclass.getState.call(this) || {}, {hiddenSections:this.hiddenSections});
 	},
 	
-	setData : function(data)
-	{
-		//this.body.removeAllListeners();
-		
-		data.model_name=data.model_name=this.model_name;
-		data.panelId=this.getId();
-		this.data=data;
-		
+	updateToolbar : function(){
 		var tbar = this.getTopToolbar();
 		if(tbar)
 			tbar.setDisabled(false);
 
 		if(this.editButton)
-			this.editButton.setDisabled(!data.write_permission);
+			this.editButton.setDisabled(!this.data.write_permission);
 		
 		
 		if(this.newMenuButton){
-			if(data.write_permission)
+			if(this.data.write_permission)
 			{
 				this.newMenuButton.setLinkConfig({
 					model_id:this.data.id,
@@ -268,8 +261,19 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		
 		if(this.fileBrowseButton)
 		{
-			this.fileBrowseButton.setId(data.id);
+			this.fileBrowseButton.setId(this.data.id);
 		}
+	},
+	
+	setData : function(data)
+	{
+		//this.body.removeAllListeners();
+		
+		data.model_name=data.model_name=this.model_name;
+		data.panelId=this.getId();
+		this.data=data;
+		
+		this.updateToolbar();
 		
 		this.xtemplate.overwrite(this.body, data);
 
