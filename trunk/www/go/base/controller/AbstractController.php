@@ -327,8 +327,8 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 					
 			$response['success'] = false;
 			
-			$response['feedback'] = !empty($response['feedback']) ? $response['feedback'] : '';
-			$response['feedback'] .= "\r\n\r\n".$e->getMessage();
+			$response['feedback'] = !empty($response['feedback']) ? $response['feedback']."\r\n\r\n" : '';
+			$response['feedback'] .= $e->getMessage();
 
 			if(GO::config()->debug){
 				//$response['trace']=$e->getTraceAsString();
