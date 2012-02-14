@@ -140,7 +140,7 @@ cursor:pointer;
 
 .fs-view-over{
   border:1px solid #dddddd;
-  background: #efefef url(../../../../themes/Default/images/extjs/grid/row-over.gif) repeat-x left top;
+  background: #efefef url(../../../../views/Extjs3/themes/Default/images/extjs/grid/row-over.gif) repeat-x left top;
 	padding: 4px;
 }
 .fs-view-selected{
@@ -154,7 +154,7 @@ cursor:pointer;
 
 .fs-loading-indicator {
 	font-size:11px;
-	background-image:url('../../../../themes/Default/images/extjs/grid/loading.gif');
+	background-image:url('../../../../views/Extjs3/themes/Default/images/extjs/grid/loading.gif');
 	background-repeat: no-repeat;
 	background-position: left;
 	padding-left:20px;
@@ -167,4 +167,14 @@ cursor:pointer;
 
 .fs-btn-fit-image {
 	background-image:url('images/fit_image.png') !important;
+}
+
+
+.fs-grid-locked{
+	background-repeat:no-repeat;
+	padding-right:20px;
+	height:16px;	
+	background: url(../../../../views/Extjs3/themes/Default/images/16x16/lock.png) no-repeat;
+	background-position: right;
+	float:left;
 }

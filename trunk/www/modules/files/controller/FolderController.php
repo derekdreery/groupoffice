@@ -394,6 +394,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$store->getColumnModel()->formatColumn('type', '$model->type',array(),'name');
 		$store->getColumnModel()->formatColumn('size', '"-"',array(),'name');
 		
+		
+		
 		//handle delete request for both files and folder
 		if (isset($params['delete_keys'])) {
 
@@ -441,6 +443,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		if ($fileStart >= 0) {
 			$store->getColumnModel()->formatColumn('type', '$model->type',array(),'extension');
+			$store->getColumnModel()->formatColumn('locked', '$model->isLocked()');
+			$store->getColumnModel()->formatColumn('locked_user_id', '$model->locked_user_id');
 			
 			$findParams = $store->getDefaultParams($params)
 							->limit($fileLimit)

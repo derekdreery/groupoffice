@@ -171,14 +171,17 @@ GO.files.FileBrowser = function(config){
 
 
 	var fields ={
-		fields:['type_id', 'id','name','type', 'size', 'mtime', 'extension', 'timestamp', 'thumb_url','path','acl_id'],
+		fields:['type_id', 'id','name','type', 'size', 'mtime', 'extension', 'timestamp', 'thumb_url','path','acl_id','locked_user_id','locked'],
 		columns:[{
 			id:'name',
 			header:GO.lang['strName'],
 			dataIndex: 'name',
 			renderer:function(v, meta, r){
 				var cls = r.get('acl_id')>0 ? 'folder-shared' : 'filetype filetype-'+r.get('extension');
-				return '<div class="go-grid-icon '+cls+'">'+v+'</div>';
+				if(r.get('locked_user_id')>0)
+					v = '<div class="fs-grid-locked">'+v+'</div>';
+				
+				return '<div class="go-grid-icon '+cls+'" style="float:left;">'+v+'</div>';
 			}
 		},{
 			id:'type',
@@ -1316,6 +1319,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 		if(syncFilesystemWithDatabase)
 			delete this.treePanel.getLoader().baseParams.sync_folder_id;
+		
+		this.filePanel.reload();
 	},
 	
 	sendOverwrite : function(params){
@@ -1790,9 +1795,14 @@ GO.files.openFile = function(record, store,e)
 			case 'ppt':
 			case 'odp':
 			case 'txt':
-				GO.files.editFile(record.data.id);
+				if(GO.util.empty(record.get('locked'))){
+					GO.files.editFile(record.data.id);
+				}else
+				{
+					window.open(url);
+				}
+					
 				break;
-
 			case 'mht':
 			case 'eml':
 				if(GO.savemailas)

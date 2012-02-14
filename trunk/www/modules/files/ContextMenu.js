@@ -102,7 +102,6 @@ GO.files.FilesContextMenu = function(config)
 				scope: this
 			});
 	
-	
 	config['items']=[this.downloadButton];
 				
 	if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission)

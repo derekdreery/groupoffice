@@ -14,6 +14,9 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		$response['data']['size'] = GO_Base_Util_Number::formatSize($model->fsFile->size());
 		$response['data']['extension'] = $model->fsFile->extension();
 		$response['data']['type'] = GO::t($model->fsFile->extension(), 'base', 'filetypes');
+		
+		$response['data']['locked_user_name']=$model->lockedByUser ? $model->lockedByUser->name : '';
+		$response['data']['locked']=$model->isLocked();
 
 		if (!empty($model->random_code) && time() < $model->expire_time) {
 			$response['data']['expire_time'] = $model->getAttribute('expire_time', 'formatted');
@@ -139,7 +142,5 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		
 		return $response;
 	}
-	
-
 }
 
