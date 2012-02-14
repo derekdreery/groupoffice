@@ -32,7 +32,7 @@ class GO_Core_Controller_Settings extends GO_Base_Controller_AbstractController 
 		
 		$response['success']=$user->save();
 		
-		GO::modules()->callModuleMethod('submitSettings', array(&$this, &$params, &$response, $user));
+		GO::modules()->callModuleMethod('submitSettings', array(&$this, &$params, &$response, $user), false);
 		
 		
 		GO_Base_Session::setCompatibilitySessionVars();
