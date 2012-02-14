@@ -60,9 +60,9 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	 * @param string $method
 	 * @param array $params 
 	 */
-	public function callModuleMethod($method, $params=array()){
+	public function callModuleMethod($method, $params=array(), $ignoreAclPermissions=true){
 		
-		$oldIgnore = GO::setIgnoreAclPermissions();
+		$oldIgnore = GO::setIgnoreAclPermissions($ignoreAclPermissions);
 		$stmt = $this->getAll();
 		$modules = $stmt->fetchAll();
 		
