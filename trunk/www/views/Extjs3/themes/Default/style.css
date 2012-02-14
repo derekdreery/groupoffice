@@ -536,6 +536,14 @@ a.normal-link:hover{
 	background-image:url('images/favicon.gif') !important;
 }
 
+
+.btn-lock {
+	background-image:url('images/16x16/lock.png') !important;
+}
+.btn-unlock {
+	background-image:url('images/16x16/unlock.png') !important;
+}
+
 .go-upload-pc-form{
 	top:8px !important;
 	left:7px !important;
