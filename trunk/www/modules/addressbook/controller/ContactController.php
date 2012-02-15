@@ -431,7 +431,12 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$filename = $contact->name.'.vcf';
 		GO_Base_Util_Http::outputDownloadHeaders(new GO_Base_FS_File($filename));		
 		
-		echo $contact->toVObject()->serialize();
+		$vobject = $contact->toVObject();
+		
+		if(!empty($params['vcard21']))
+			GO_Base_VObject_Reader::convertVCard30toVCard21($vobject);
+		
+		echo $vobject->serialize();
 	}
 	
 	
@@ -439,7 +444,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$contact = new GO_Addressbook_Model_Contact();
 		
 		$file = new GO_Base_Fs_File($params['file']);
-		$data = $file->getContents();
+		$data = $file->getContents();		
 		$vobject = GO_Base_VObject_Reader::read($data);
 		unset($params['file']);
 		
