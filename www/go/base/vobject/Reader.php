@@ -93,7 +93,6 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 	public static function convertICalendarToVCalendar(Sabre_VObject_Component $vobject){
 		
 		$qpProperies = array('location', 'summary', 'description');
-		GO::debug("Vobject version:".$vobject->version);
 		if($vobject->version=='2.0'){
 			$vobject->version='1.0';
 			foreach($vobject->children() as $child)
@@ -130,7 +129,22 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 
 					$property->setValue($value);				
 					unset($property['ENCODING']);
-				}							
+				}
+				
+				//vcard 2.1 is read as EMAIL;INTERNET=;HOME=:mschering@intermesh.nl
+				//We must correct that into EMAIL;TYPE=INTERNET,HOME:mschering@intermesh.nl
+				//$param = new Sabre_VObject_Parameter();
+				if($property->name=='EMAIL' || $property->name=='TEL' || $property->name=='ADR'){
+					$types = array();
+					foreach ($property->parameters as $param){
+						if(empty($param->value)){
+							$types[]=$param->name;
+							unset($property[$param->name]);
+						}
+					}
+					if(count($types))
+						$property->add(new GO_Base_VObject_Parameter('TYPE', implode(',', $types)));					
+				}
 			}
 		}	
 	}
@@ -138,8 +152,14 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 	private static function _quotedPrintableEncode($vobject, $propName){
 		if(isset($vobject->$propName) && $vobject->$propName!=''){			
 			$oldValue = (string) $vobject->$propName;
-			$value =  str_replace(array("\r","=\n","\n"), '', quoted_printable_encode($oldValue));
+
+			$value = quoted_printable_encode($oldValue);	
+			
+			//put the quoted printable lines in one big line otherwise funambol won't work.
+			$value =  str_replace(array("\r","=\n"), '', $value);
 			$value=str_replace('=0A','=0D=0A',$value); //crlf newlines. Didn't work with \r\n before quoted_printable_encode somehow.
+			$value=str_replace("\n",'=0D=0A',$value);			
+		
 			if($value != $oldValue){
 				$newProp = new GO_Base_VObject_VCalendar_Property($propName, $value);							
 				$vobject->$propName->add('ENCODING','QUOTED-PRINTABLE');
@@ -170,20 +190,18 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 			foreach($qpProperies as $propName){
 				self::_quotedPrintableEncode($vobject, $propName);
 			}
+			
+			//vcard 3.0 uses EMAIL;TYPE=INTERNET,HOME:mschering@intermesh.nl
+			//We must convert that into EMAIL;INTERNET;HOME:mschering@intermesh.nl for 2.1
+			foreach($vobject->children() as $property)
+			{
+				if(!empty($property['TYPE'])){										
+					$types =explode(',',$property['TYPE']);					
+					$property->name.=';'.implode(';',$types);								
+					unset($property['TYPE']);
+				}							
+			}
 		}	
 	}
-	
-//	/**
-//	 * Parses the file and returns the top component. Additionally a version 1.0 
-//	 * vcalendar object will be converted to a version 2.0 object.
-//	 * 
-//	 * @param string $data 
-//	 * @return Sabre_VObject_Element 
-//	 */
-//	public static function read($data) {
-//		$vobject = parent::read($data);		
-//		self::convertVCalendarToICalendar($vobject);
-//		return $vobject;
-//	}
 	
 }
