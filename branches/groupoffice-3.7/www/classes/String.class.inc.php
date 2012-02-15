@@ -1253,13 +1253,13 @@ class String {
 
 		if($value_part != $qp_value_part || strlen($name_part.$value_part)>=73)
 		{
-			$name_part .= ";ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:";
+			$name_part .= ";ENCODING=QUOTED-PRINTABLE:";
 			//disable wrapping for funambol
 			$str = $add_leading_space ? $name_part.$qp_value_part : String::wrap_quoted_printable_encoded_string($name_part.$qp_value_part, $add_leading_space);
 			return array($str);
 		}else
 		{
-			$name_part .= ';CHARSET=UTF-8:';
+			$name_part .= ':';
 		}
 		return array($name_part.$value_part);
 	}
