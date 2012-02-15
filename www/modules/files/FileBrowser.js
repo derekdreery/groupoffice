@@ -416,8 +416,8 @@ GO.files.FileBrowser = function(config){
 
 	tbar.push(this.newButton);
 
-	
-	this.uploadButton = new GO.base.upload.PluploadButton({
+	this.uploadItem = new GO.base.upload.PluploadMenuItem({
+		text: GO.lang.smallUpload,
 		upload_config: {
 			listeners: {
 				scope:this,
@@ -430,9 +430,8 @@ GO.files.FileBrowser = function(config){
 				uploadcomplete: function(uploadpanel, success, failures) {
 					if ( success.length ) {
 						this.sendOverwrite({
-							upload:true,
-							destination_folder_id : this.folder_id,
-							task: 'overwrite'
+							upload:true
+							
 						});
 						if(!failures.length){
 							uploadpanel.onDeleteAll();
@@ -444,7 +443,41 @@ GO.files.FileBrowser = function(config){
 		}
 	});
 	
-	
+	this.jUploadItem = new Ext.menu.Item({
+		iconCls: 'btn-upload',
+		text : GO.lang.largeUpload,
+		handler : function() {
+			GO.currentFilesStore=this.gridStore;
+
+			if (!deployJava.isWebStartInstalled('1.5.0')) {
+				Ext.MessageBox.alert(GO.lang.strError,
+				GO.lang.noJava);
+			} else {
+				GO.util.popup({
+					url: GO.url('files/jupload/renderJupload'),
+					//GO.settings.modules.files.url+'jupload/index.php?id='+encodeURIComponent(this.folder_id),
+					width : 660, 
+					height: 500, 
+					target: 'jupload',
+					allwaysOnTop:true // Not working!!
+				});
+			}
+		},
+		scope : this
+	});
+
+	this.uploadMenu = new Ext.menu.Menu({
+		items: [
+			this.uploadItem,
+			this.jUploadItem
+		]
+	});
+		
+	this.uploadButton = new Ext.Button({
+		text:GO.lang.upload,
+		iconCls: 'btn-upload',
+		menu: this.uploadMenu
+	});
 		
 	if(!config.hideActionButtons)
 	{				
@@ -1284,7 +1317,6 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		}
 		
 		var params = {
-			//task : 'paste',
 			ids : Ext.encode(paste_sources),
 			destination_folder_id : destination,
 			paste_mode : pasteMode,
@@ -1325,11 +1357,12 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	
 	sendOverwrite : function(params){
 		
-		if(!params.command)
-		{
+		if(!params.command)		
 			params.command='ask';
-		}
 		
+		if(!params.destination_folder_id)
+			params.destination_folder_id=this.folder_id;
+				
 		this.overwriteParams = params;
 
 		this.getEl().mask(GO.lang.waitMsgSave);
