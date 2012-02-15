@@ -26,7 +26,7 @@
  * @property int $id
  * @property int $parent_id
  * @property string $name
- * @property string $path
+ * @property string $path Relative path from GO::config()->file_storage_path
  * @property boolean $visible When this folder is shared it only shows up in the tree when visible is set to true
  * @property int $acl_id
  * @property string $comments
@@ -324,16 +324,31 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	}
 	
 	/**
+	 * Add a filesystem file to this folder. The file will be moved to this folder
+	 * and added to the database.
+	 * 
+	 * @param GO_Base_Fs_File $file
+	 * @return GO_Files_Model_File 
+	 */
+	public function addFilesystemFolder(GO_Base_Fs_Folder $folder){
+		$folder->move($this->fsFolder);
+		return $this->addFolder($folder->name(), true);
+	}
+	
+	/**
 	 * Add a subfolder.
 	 * 
 	 * @param String $name
 	 * @return GO_Files_Model_Folder 
 	 */
-	public function addFolder($name){
+	public function addFolder($name, $syncFileSystem=false){
 		$folder = new GO_Files_Model_Folder();
 		$folder->parent_id = $this->id;
 		$folder->name = $name;
 		$folder->save();
+		
+		if($syncFileSystem)
+			$folder->syncFilesystem();
 
 		return $folder;
 	}
