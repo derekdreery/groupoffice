@@ -17,12 +17,14 @@ Export projecten en billing
 
 Module icons
 
-TLS email
-Full date column
+
 
 
 
 *** Lage prio:
+LIST-STATUS gebruiken bij email
+TLS email
+Full date column
 
 Licentie checks per module
 
