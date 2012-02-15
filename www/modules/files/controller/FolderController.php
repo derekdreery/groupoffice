@@ -632,6 +632,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	}
 
 	protected function actionProcessUploadQueue($params) {
+
 		$response['success'] = true;
 
 		if (!isset($params['overwrite']))
@@ -641,46 +642,59 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		if (!$destinationFolder->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
 			throw new GO_Base_Exception_AccessDenied();
+		
+		GO::debug(GO::session()->values['files']['uploadqueue']);
 
 		while ($tmpfile = array_shift(GO::session()->values['files']['uploadqueue'])) {
-			$file = new GO_Base_Fs_File($tmpfile);
-			if($file->exists()){
+			
+			
+			if(is_dir($tmpfile)){				
+				$folder = new GO_Base_Fs_Folder($tmpfile);				
+				if($folder->exists()){				
+					$folder->move($destinationFolder->fsFolder,false, true);						
+					$destinationFolder->addFileSystemFolder($folder);
+				}				
+			} else {
+			
+				$file = new GO_Base_Fs_File($tmpfile);
+				if($file->exists()){
 
-				$existingFile = $destinationFolder->hasFile($file->name());
-				if ($existingFile) {
-					switch ($params['overwrite']) {
-						case 'ask':
-							array_unshift(GO::session()->values['files']['uploadqueue'], $tmpfile);
-							$response['fileExists'] = $file->name();
-							return $response;
-							break;
+					$existingFile = $destinationFolder->hasFile($file->name());
+					if ($existingFile) {
+						switch ($params['overwrite']) {
+							case 'ask':
+								array_unshift(GO::session()->values['files']['uploadqueue'], $tmpfile);
+								$response['fileExists'] = $file->name();
+								return $response;
+								break;
 
-						case 'yestoall':
-						case 'yes':							
+							case 'yestoall':
+							case 'yes':							
 
-							if ($params['overwrite'] == 'yes')
-								$params['overwrite'] = 'ask';
-							break;
+								if ($params['overwrite'] == 'yes')
+									$params['overwrite'] = 'ask';
+								break;
 
-						case 'notoall':
-						case 'no':
-							if ($params['overwrite'] == 'no')
-								$params['overwrite'] = 'ask';
+							case 'notoall':
+							case 'no':
+								if ($params['overwrite'] == 'no')
+									$params['overwrite'] = 'ask';
 
-							continue;
+								continue;
 
-							break;
+								break;
+						}
 					}
-				}
 
-				if($existingFile){
-					$existingFile->replace($file);
-				}else
-				{
-					$destinationFolder->addFileSystemFile($file);
+					if($existingFile){
+						$existingFile->replace($file);
+					}else
+					{
+						$destinationFolder->addFileSystemFile($file);
+					}
+
+					$response['success'] = true;
 				}
-				
-				$response['success'] = true;
 			}
 		}
 
