@@ -54,12 +54,14 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 */
 	public function delete(){
 		
+		GO::debug("DELETE: ".$this->path());
+		
 		if(!$this->exists())
 			return true;
 		
 		$items = $this->ls(true);
 		
-		foreach($items as $item){
+		foreach($items as $item){			
 			if(!$item->delete())
 				return false;
 		}
@@ -76,29 +78,38 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	
 	
 	/**
-	 *
+	 * Move the folder to another folder.
+	 * 
 	 * @param GO_Base_Fs_Folder $destinationFolder 
+	 * @param string $newFolderName Optionally rename the folder too.
+	 * @param boolean $appendNumberToNameIfDestinationExists Rename the folder like "folder (1)" if it already exists.	 * 
 	 * @return GO_Base_Fs_Folder $destinationFolder
 	 */
-	public function move($destinationFolder){
-
+	public function move($destinationFolder,$newFolderName=false,$appendNumberToNameIfDestinationExists=false){
 		$this->_validateSrcAndDestPath($destinationFolder->path(), $this->path());
+				
+		if(!$newFolderName)
+			$newFolderName=$this->name();
 		
+		$newPath = $destinationFolder->path().'/'.$newFolderName;		
+		
+		if($appendNumberToNameIfDestinationExists){
+			$folder = new GO_Base_Fs_Folder($newPath);
+			$folder->appendNumberToNameIfExists();
+			$newPath = $folder->path();
+		}		
+		
+		//do nothing if path is the same.
+		if($newPath==$this->path())
+			return true;
 			
-		$movedFolder = new GO_Base_Fs_Folder($destinationFolder->path().'/'.$this->name());
+		$movedFolder = new GO_Base_Fs_Folder($newPath);
 		if(!$movedFolder->create())
-			throw new Exception ("Could not create ".$destinationFolder->path());
-		
+			throw new Exception ("Could not create ".$destinationFolder->path());		
 		
 		$ls = $this->ls(true);
 		foreach($ls as $fsObject){
-			if($fsObject->isFolder()){				
-				$newDestinationFolder= new GO_Base_Fs_Folder($destinationFolder->path().'/'.$this->name());				
-				$fsObject->move($newDestinationFolder);
-			}else
-			{
-				$fsObject->move($movedFolder);
-			}
+			$fsObject->move($movedFolder);
 		}
 		
 		$this->delete();

@@ -279,6 +279,9 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 * Move a file to another folder.
 	 * 
 	 * @param GO_Base_Fs_Folder $destinationFolder 
+	 * @param string $newFileName Optionally rename the file too.
+	 * @param boolean $isUploadedFile Check if this file was upload for security reasons.
+	 * @param boolean $appendNumberToNameIfDestinationExists Rename the file like "File (1)" if it already exists. 
 	 * @return boolean
 	 */
 	public function move($destinationFolder, $newFileName=false, $isUploadedFile=false,$appendNumberToNameIfDestinationExists=false){
