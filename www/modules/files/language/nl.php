@@ -79,5 +79,5 @@ $l['notifyRecursiveTitle']='Notificatie aanzetten voor submappen?';
 $l['removeNotifyRecursiveTitle']='Notificatie uitzetten voor submappen?';
 $l['notifyRecursiveQuestion']='Wilt u dit toepassen op alle submappen?';
 
-$l['unlock']='Vergrendelen';
+$l['unlock']='Vrijgeven';
 $l['lockedBy']='Vergrendeld door';
