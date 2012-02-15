@@ -300,6 +300,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$companyAttributes['addressbook_id'] = $attributes['addressbook_id'];
 		} 
 		
+		$emails = array();
+		
 		foreach ($vobject->children as $vobjProp) {
 			switch ($vobjProp->name) {
 				case 'PHOTO':					
@@ -315,6 +317,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 					$attributes['first_name'] = $nameArr[1];
 					$attributes['middle_name'] = !empty($nameArr[2]) ? $nameArr[2] : '' ;
 					$attributes['suffix'] = !empty($nameArr[4]) ? $nameArr[4] : '' ;
+					$attributes['title'] = !empty($nameArr[3]) ? $nameArr[3] : '' ;
 					break;
 				case 'ORG':
 					$companyAttributes['name'] =  null;
@@ -328,9 +331,9 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 							$companyAttributes['name2'] = $compNameArr[2];
 					}
 					break;
-				case 'TITLE':
-					$attributes['title'] = !empty($vobjProp->value) ? $vobjProp->value : null;
-					break;
+//				case 'TITLE':
+//					$attributes['title'] = !empty($vobjProp->value) ? $vobjProp->value : null;
+//					break;
 				case 'TEL':
 					foreach ($vobjProp->parameters as $param) {
 						if ($param->name=='TYPE')
@@ -392,23 +395,24 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 					}
 					break;
 				case 'EMAIL':
-					foreach ($vobjProp->parameters as $param) {
-						if ($param->name=='TYPE')
-							$types = explode(',',strtolower($param->value));
-						else
-							$types = array();
-					}
-					if(in_array('pref',$types)) {
-						$attributes['email'] = $vobjProp->value;
-					} elseif(in_array('home',$types)) {
-						$attributes['email2'] = $vobjProp->value;
-					} elseif(in_array('work',$types)) {
-						$attributes['email3'] = $vobjProp->value;
-					} else {
-						$attributes['email'] = $vobjProp->value;
-					}
+//					foreach ($vobjProp->parameters as $param) {
+//						if ($param->name=='TYPE')
+//							$types = explode(',',strtolower($param->value));
+//						else
+//							$types = array();
+//					}
+//					if(in_array('pref',$types)) {
+//						$attributes['email'] = $vobjProp->value;
+//					} elseif(in_array('home',$types)) {
+//						$attributes['email2'] = $vobjProp->value;
+//					} elseif(in_array('work',$types)) {
+//						$attributes['email3'] = $vobjProp->value;
+//					} else {
+//						$attributes['email'] = $vobjProp->value;
+//					}
+					$emails[]=$vobjProp->value;
 					break;
-				case 'ROLE':
+				case 'TITLE':
 					$attributes['function'] = $vobjProp->value;
 					break;
 				case 'BDAY':
@@ -422,6 +426,21 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 					break;
 			}
 		}
+
+		foreach($emails as $email){
+			if(!isset($attributes['email']))
+				$attributes['email']=$email;
+			elseif(!isset($attributes['email2']))
+				$attributes['email2']=$email;
+			elseif(!isset($attributes['email3']))
+				$attributes['email3']=$email;
+		}
+		
+		$attributes=array_map('trim',$attributes);
+		
+		$attributes = $this->_splitAddress($attributes);
+		
+		GO::debug($attributes);
 
 		$this->setAttributes($attributes, false);		
 		
@@ -441,6 +460,54 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		
 		return $this;
 	}
+	
+	private function _splitAddress($attributes){
+		if(isset($attributes['address'])){
+			$attributes['address_no']='';
+			$attributes['address']=  GO_Base_Util_String::normalizeCrlf($attributes['address'], "\n");
+			$lines = explode("\n", $attributes['address']);
+			if(count($lines)>1){
+				$attributes['address']=$lines[0];
+				$attributes['address_no']=$lines[1];
+			}else
+			{
+				$attributes['address']=$this->_getAddress($lines[0]);
+				$attributes['address_no']=$this->_getAddressNo($lines[0]);
+			}
+		}
+		
+		return $attributes;
+	}
+	
+	/**
+	* Gets the street name from address.
+	*
+	* @param  string	$address Contains the address (street-name and house-number)
+	* @access private
+	* @return string
+	*/
+	function _getAddress($address) {
+		if (!$address = substr($address, 0, strrpos($address, " "))) {
+			return '';
+		}
+
+		return trim($address);
+	}
+
+	/**
+	* Gets the house-number from address.
+	*
+	* @param  string	$address Contains the address (street-name and house-number)
+	* @access private
+	* @return string
+	*/
+	function _getAddressNo($address) {
+		if (!$address_no = strrchr($address, " ")) {
+			return '';
+		}
+
+		return trim($address_no);
+	}
 
 		/**
 	 * Get this task as a VObject. This can be turned into a vcard file data.
@@ -454,12 +521,12 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		$e=new Sabre_VObject_Component('vcard');
 		
 		$e->add('VERSION','3.0');
-		$e->add('N',$this->last_name.";".$this->first_name.";".$this->middle_name.';;'.$this->suffix);
+		$e->add('N',$this->last_name.";".$this->first_name.";".$this->middle_name.';'.$this->title.';'.$this->suffix);
 		$e->add('FN',$this->name);
 		
 		if (!empty($this->email)) {
 			$p = new Sabre_VObject_Property('EMAIL',$this->email);
-			$p->add(new GO_Base_VObject_Parameter('TYPE','PREF,INTERNET'));
+			$p->add(new GO_Base_VObject_Parameter('TYPE','INTERNET'));
 			$e->add($p);
 		}
 		if (!empty($this->email2)) {
@@ -473,12 +540,9 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$e->add($p);
 		}
 		
-		if (!empty($this->function)) {
-			$e->add('ROLE',$this->function);
-		}
+		if (!empty($this->function))
+			$e->add('TITLE',$this->function);
 		
-		if (!empty($this->title))
-			$e->add('TITLE',$this->title);
 		if (!empty($this->home_phone)) {
 			$p = new Sabre_VObject_Property('TEL',$this->home_phone);
 			$p->add(new GO_Base_VObject_Parameter('TYPE','HOME,VOICE'));
@@ -514,11 +578,6 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 				$this->company->city.';'.$this->company->state.';'.$this->company->zip.';'.$this->company->country);
 			$p->add('TYPE','WORK');
 			$e->add($p);
-//			$p = new Sabre_VObject_Property('LABEL',GO_Base_Util_Common::formatAddress(
-//				$this->company->country, $this->company->address, $this->company->address_no,
-//				$this->company->zip, $this->company->city, $this->company->state));
-//			$p->add('TYPE','WORK');
-//			$e->add($p);
 		}
 		
 		if ($this->address) {
@@ -526,11 +585,6 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 				$this->city.';'.$this->state.';'.$this->zip.';'.$this->country);
 			$p->add('TYPE','HOME');
 			$e->add($p);
-//			$p = new Sabre_VObject_Property('LABEL',GO_Base_Util_Common::formatAddress(
-//				$this->country, $this->address, $this->address_no,
-//				$this->zip, $this->city, $this->state));
-//			$p->add('TYPE','HOME');
-//			$e->add($p);
 		}
 		
 		if(!empty($this->comment)){
