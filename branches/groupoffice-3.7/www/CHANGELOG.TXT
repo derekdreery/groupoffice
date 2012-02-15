@@ -1,3 +1,7 @@
+15-02-2012 3.7.43
+- Problem with password on Latest Ubuntu
+- Small bug fixes.
+
 06-01-2012 3.7.42
 - Bug fix in Russian reminders.
 - Small adjustments for customer customization module.
