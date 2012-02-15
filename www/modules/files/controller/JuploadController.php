@@ -58,12 +58,12 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 				<!--<param name="lookAndFeel" value="system" />-->
 				<param name="postURL" value="' . GO::url('files/jupload/handleUploads') . '" />
 				<param name="afterUploadURL" value="javascript:afterUpload(%success%);" />
-				<param name="showLogWindow" value="true" />
+				<param name="showLogWindow" value="false" />
 				<param name="maxChunkSize" value="1048576" />    
 				<param name="specificHeaders" value="' . $sessionCookie . '" />
 				<param name="maxFileSize" value="' . intval(GO::config()->max_file_size) . '" />
 				<param name="nbFilesPerRequest" value="5" />
-				<param name="debugLevel" value="99" />
+				<!--<param name="debugLevel" value="99" />-->
 				Java 1.5 or higher plugin required. 
 			</applet>';
 
