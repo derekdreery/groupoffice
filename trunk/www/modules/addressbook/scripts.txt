@@ -35,3 +35,5 @@ modules/addressbook/MailingStatusWindow.js
 modules/addressbook/SelectAddressbookDialog.js
 modules/addressbook/SelectMailingsPanel.js
 modules/addressbook/AddresslistsFilterPanel.js
+
+modules/addressbook/SexCombobox.js
