@@ -181,6 +181,13 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 		return parent::afterMergeWith($model);
 	}
 	
+	protected function beforeSave() {
+		if(!empty($this->homepage))
+			$this->homepage = GO_Base_Util_Http::checkUrlForHttp($this->homepage);
+		
+		return parent::beforeSave();
+	}
+	
 	/**
 	 * Function to let this model copy the visit address to the post address.
 	 * After this function is called, you need to call the save() function to 
