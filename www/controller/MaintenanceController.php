@@ -147,6 +147,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			GO::modules()->callModuleMethod('checkDatabase', array(&$response));
 		}
 		
+		ob_flush();
+		echo "All Done!\n";
 		
 		return $response;
 	}
@@ -378,7 +380,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			echo "Checking database after version 3.7 upgrade.\n";
 			$this->actionCheckDatabase($params);
 			echo "Done\n\n";
-			ob_slush();
+			ob_flush();
 			
 			echo "Building search cache after version 3.7 upgrade.\n";
 			$this->actionBuildSearchCache($params);
