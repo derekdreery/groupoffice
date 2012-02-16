@@ -369,8 +369,11 @@ try {
 					$response['addFeedback']=$e->getMessage();
 				}
 			}
+			
+			$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : '0';
+			$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : '50';
 
-			$response['total'] = $GO_SECURITY->get_users_in_acl($acl_id);
+			$response['total'] = $GO_SECURITY->get_users_in_acl($acl_id,0,$start, $limit);
 			$response['results']=array();
 			while($GO_SECURITY->next_record(DB_ASSOC)) {
 				$result['id']=$GO_SECURITY->f('id');

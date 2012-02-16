@@ -242,6 +242,7 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 			anchor : '100% 50%',
 			title : GO.lang['strAuthorizedUsers'],
 			store : this.aclUsersStore,
+			paging:true,
 			border : false,
 			columns : userColumns,
 			view : new Ext.grid.GridView({
