@@ -1,0 +1,17 @@
+DROP TABLE IF EXISTS `cal_backgrounds`;
+DROP TABLE IF EXISTS `cal_calendars`;
+DROP TABLE IF EXISTS `cal_events`;
+DROP TABLE IF EXISTS `cal_participants`;
+DROP TABLE IF EXISTS `cal_views`;
+DROP TABLE IF EXISTS `cal_exceptions`;
+DROP TABLE IF EXISTS `cal_views_calendars`;
+DROP TABLE IF EXISTS `go_links_1`;
+DROP TABLE IF EXISTS `cal_settings`;
+DROP TABLE IF EXISTS `cal_groups`;
+DROP TABLE IF EXISTS `cal_group_admins`;
+DROP TABLE IF EXISTS `cf_1`;
+DROP TABLE IF EXISTS `cal_visible_tasklists`;
+DROP TABLE IF EXISTS `cal_holidays`;
+DROP TABLE IF EXISTS `cal_categories`;
+DROP TABLE IF EXISTS `cal_events_declined`;
+DROP TABLE IF EXISTS `cal_calendar_user_colors`;
