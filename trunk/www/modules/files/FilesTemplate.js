@@ -16,7 +16,9 @@ GO.files.filesTemplate =
 		'</tpl>'+
 		'<tpl for="files">'+
 			'<tr>'+											
-				'<td><a class="go-grid-icon filetype filetype-{extension}" href="#" onclick="'+
+				'<td>'+
+				'<tpl if="locked_user_id&gt;0"><div class="fs-grid-locked"></tpl>'+
+				'<a class="go-grid-icon filetype filetype-{extension}" href="#" onclick="'+
 
 				'<tpl if="extension!=\'folder\'">'+
 				'GO.linkHandlers[\'GO_Files_Model_File\'].call(this, {id});'+
@@ -26,15 +28,23 @@ GO.files.filesTemplate =
 				//'GO.files.openFolder({[this.panel.data.files_folder_id]}, {id});'+
 				'</tpl>'+
 
-				'">{name}</a></td>'+
+				'">{name}</a>'+
+				'<tpl if="locked_user_id&gt;0"></div></tpl>'+
+				'</td>'+
 
 				'<td style="white-space:nowrap">{mtime}</td>'+
 
 				'<tpl if="extension!=\'folder\'">'+
-				'<td style="white-space:nowrap"><a style="display:block" class="go-icon btn-edit" href="#files_{[xindex-1]}">&nbsp;</a></td>'+
+					'<td style="white-space:nowrap">'+
+					
+						'<a style="display:block" class="go-icon btn-edit" href="#files_{[xindex-1]}">&nbsp;</a>'+
+					
+					'</td>'+
 				'</tpl>'+
 				'<tpl if="extension==\'folder\'">'+
-				'<td style="white-space:nowrap"><a style="display:block" class="go-icon btn-files" href="#files_{[xindex-1]}">&nbsp;</a></td>'+
+					'<td style="white-space:nowrap">'+					
+						'<a style="display:block" class="go-icon btn-files" href="#files_{[xindex-1]}">&nbsp;</a>'+					
+					'</td>'+
 				'</tpl>'+
 			'</tr>'+
 		'</tpl>'+

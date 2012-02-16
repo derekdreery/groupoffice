@@ -90,8 +90,9 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 					},
 					success:function(action, response, result){
 						this.reload();
-						if(GO.mainLayout.getModulePanel('files'))
-							GO.mainLayout.getModulePanel('files').getActiveGridStore().load();
+						var filesModulePanel = GO.mainLayout.getModulePanel('files');
+						if(filesModulePanel && filesModulePanel.folder_id==this.data.folder_id)
+							filesModulePanel.getActiveGridStore().load();
 					},
 					scope:this
 				})
@@ -133,7 +134,7 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 						'<tr>'+
             '<td>'+GO.files.lang.lockedBy+':</td>'+
             '<td><div class="go-grid-icon btn-lock">{locked_user_name}'+
-						'<tpl if="GO.util.empty(locked) && write_permission">'+
+						'<tpl if="unlock_allowed">'+
 							' <span class="fs-unlock" style="cursor:pointer;text-decoration:underline;">['+GO.files.lang.unlock+']</span>'+
 						'</tpl>'+
 						'</div></td>'+
