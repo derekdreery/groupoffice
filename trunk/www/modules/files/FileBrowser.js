@@ -171,7 +171,7 @@ GO.files.FileBrowser = function(config){
 
 
 	var fields ={
-		fields:['type_id', 'id','name','type', 'size', 'mtime', 'extension', 'timestamp', 'thumb_url','path','acl_id','locked_user_id','locked'],
+		fields:['type_id', 'id','name','type', 'size', 'mtime', 'extension', 'timestamp', 'thumb_url','path','acl_id','locked_user_id','locked','folder_id'],
 		columns:[{
 			id:'name',
 			header:GO.lang['strName'],
@@ -1828,6 +1828,10 @@ GO.files.openFile = function(record, store,e)
 			case 'ppt':
 			case 'odp':
 			case 'txt':
+				
+			case 'sxw':
+			case 'sxc':
+				
 				if(GO.util.empty(record.get('locked'))){
 					GO.files.editFile(record.data.id);
 				}else
