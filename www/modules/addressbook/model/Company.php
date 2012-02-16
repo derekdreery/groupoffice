@@ -137,8 +137,10 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 		
 		if(empty($new_folder_name))
 			$new_folder_name='unnamed';
+		
+		$char = GO_Addressbook_Utils::getIndexChar($new_folder_name);
 			
-		$new_path .= '/'.$new_folder_name;
+		$new_path .= '/'.$char.'/'.$new_folder_name;
 		return $new_path;
 	}
 	
