@@ -768,9 +768,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		if(!empty($params['enclosure']))
 			$importFile->enclosure = $params['enclosure'];
 		
-		echo "Delimiter: ".$importFile->delimiter."\n";
-		echo "Enclosure: ".$importFile->enclosure."\n";
-		echo "File: ".$importFile->path()."\n\n";
+		if(php_sapi_name()=='cli'){
+			echo "Delimiter: ".$importFile->delimiter."\n";
+			echo "Enclosure: ".$importFile->enclosure."\n";
+			echo "File: ".$importFile->path()."\n\n";
+		}
 			
 		if(!$importFile->convertToUtf8())
 			exit("ERROR: Could not convert to UTF8. Is the file writable?\n\n");
