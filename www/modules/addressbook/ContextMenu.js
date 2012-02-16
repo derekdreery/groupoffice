@@ -86,6 +86,8 @@ Ext.extend(GO.addressbook.ContextMenu, Ext.menu.Menu, {
 				ids.push(selected[i].data.id);
 		}
 		
-		GO.base.model.showBatchEditModelDialog(this.model_name, ids, this.grid);
+		GO.base.model.showBatchEditModelDialog(this.model_name, ids, this.grid, {
+			sex:GO.addressbook.SexCombobox
+		});
 	}
 });
