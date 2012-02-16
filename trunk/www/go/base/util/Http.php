@@ -18,6 +18,21 @@
  */
 class GO_Base_Util_Http {
 
+	public static function checkUrlForHttp($url,$https=false){
+		
+		$hasHttp = preg_match('|^http(s)?://.*|i', $url);
+		
+		if(!$hasHttp){
+			$tmpUrl = 'http';
+			if($https)
+				$tmpUrl .= 's';
+			$tmpUrl .= '://'.$url;
+			$url = $tmpUrl;
+		}
+		
+		return $url;
+	}
+		
 	/**
 	 * Get information about the browser currently using Group-Office.
 	 * 
