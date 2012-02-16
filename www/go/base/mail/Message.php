@@ -395,7 +395,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 
 						if ($tmpFile->exists()) {				
 							//Different browsers reformat URL's to absolute or relative. So a pattern match on the filename.
-							$filename = urlencode($tmpFile->name());
+							$filename = rawurlencode($tmpFile->name());
 							$result = preg_match('/="([^"]*'.preg_quote($filename).'[^"]*)"/',$params['htmlbody'],$matches);
 							if($result){
 								$img = Swift_EmbeddedFile::fromPath($tmpFile->path());
