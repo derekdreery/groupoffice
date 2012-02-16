@@ -25,17 +25,14 @@ GO.files.FilesContextMenu = function(config)
 					text: GO.lang.download,
 					cls: 'x-btn-text-icon',
 					handler: function(){
-						//this.fireEvent('download', this, this.records);
-						
-						//window.location.href=GO.settings.modules.files.url+'download.php?mode=download&id='+this.records[0].data.id;
-						GO.files.openFile(this.records[0]);
+						window.open(GO.url("files/file/download",{id:this.records[0].data.id}));						
 					},
 					scope: this
 				});
 				
 	this.gotaButton = new Ext.menu.Item({
 					iconCls: 'btn-edit',
-					text: GO.files.lang.downloadGOTA,
+					text: GO.lang.cmdEdit,
 					cls: 'x-btn-text-icon',
 					handler: function(){
 						GO.files.editFile(this.records[0].data.id);
