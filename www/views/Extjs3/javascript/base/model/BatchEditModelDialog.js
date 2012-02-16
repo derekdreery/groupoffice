@@ -1,5 +1,6 @@
 GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 	grid: false,
+	editors : [],
 	
 	initComponent : function(){
 		
@@ -12,11 +13,12 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 		GO.base.model.BatchEditModelDialog.superclass.initComponent.call(this);	
 	},
 
-	setModels : function(model_name, keys, grid){
+	setModels : function(model_name, keys, grid, editors){
 		this.formPanel.baseParams.model_name=model_name;
 		this.store.baseParams.model_name=model_name;
 		this.formPanel.baseParams.keys=Ext.encode(keys);
 		this.grid = grid;
+		this.editors = editors;
 	},
 	
 	show : function(){
@@ -30,7 +32,14 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 		if(!GO.util.empty(record.get('regex')))
 			config = {regex: new RegExp(record.get('regex'),record.get('regex_flags'))};
 		
-		var editor = GO.base.form.getFormFieldByType(record.get('gotype'), record.get('name'), config);
+		var colName = record.get('name');
+		console.log(colName);
+		console.log(this.editors);
+		if(this.editors[colName])
+			var editor = new this.editors[colName];
+		else 
+			var editor = GO.base.form.getFormFieldByType(record.get('gotype'), record.get('name'), config);
+		
 		col.setEditor(editor);
 	},
 	
@@ -126,7 +135,7 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 	}
 });
 
-GO.base.model.showBatchEditModelDialog=function(model_name, keys, grid){
+GO.base.model.showBatchEditModelDialog=function(model_name, keys, grid, editors){
 	
 	if (keys.length<=0) {
 			Ext.Msg.alert(GO.lang.batchSelectionError, GO.lang.batchSelectOne);
@@ -136,6 +145,6 @@ GO.base.model.showBatchEditModelDialog=function(model_name, keys, grid){
 	if(!GO.base.model.batchEditModelDialog){
 		GO.base.model.batchEditModelDialog = new GO.base.model.BatchEditModelDialog();
 	}
-	GO.base.model.batchEditModelDialog.setModels(model_name, keys, grid);
+	GO.base.model.batchEditModelDialog.setModels(model_name, keys, grid, editors);
 	GO.base.model.batchEditModelDialog.show();
 }
