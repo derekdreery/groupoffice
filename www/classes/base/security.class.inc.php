@@ -536,8 +536,12 @@ class GO_SECURITY extends db {
 	 * @access public
 	 * @return int			Number of users in the acl
 	 */
-	function get_users_in_acl($acl_id, $level=0) {
-		$sql = "SELECT u.id, u.first_name, u.middle_name, u.last_name, a.level ".
+	function get_users_in_acl($acl_id, $level=0, $start=0, $offset=0) {
+		$sql = "SELECT ";
+		if ($offset > 0) {
+			$sql .= "SQL_CALC_FOUND_ROWS ";
+		}
+		$sql .= "u.id, u.first_name, u.middle_name, u.last_name, a.level ".
 				"FROM go_acl a INNER JOIN go_users u ON u.id=a.user_id WHERE ".
 				"a.acl_id='".$this->escape($acl_id)."'";
 
@@ -546,7 +550,11 @@ class GO_SECURITY extends db {
 		}
 
 		$this->query($sql);
-		return $this->num_rows();
+		if ($offset > 0) {
+			$sql .= " LIMIT " . intval($start) . "," . intval($offset);
+		}
+		$this->query($sql);
+		return $offset > 0 ? $this->found_rows() : $this->num_rows();
 	}
 
 	/**
