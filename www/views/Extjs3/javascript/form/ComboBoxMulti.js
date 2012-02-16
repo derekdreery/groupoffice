@@ -86,7 +86,7 @@ Ext.extend(GO.form.ComboBoxMulti, GO.form.ComboBox, {
     
     getActiveEntry: function(){
         var r = this.getActiveRange();
-        return this.getRawValue().substring(r.left, r.right).replace(/^s+|s+$/g, '');
+        return this.getRawValue().substring(r.left, r.right).trim();//.replace(/^s+|s+$/g, '');
     },
     
     replaceActiveEntry: function(value){
