@@ -81,3 +81,4 @@ $l['notifyRecursiveQuestion']='Wilt u dit toepassen op alle submappen?';
 
 $l['unlock']='Vrijgeven';
 $l['lockedBy']='Vergrendeld door';
+$l['lock']='Vergrendelen';
