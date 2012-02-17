@@ -31,7 +31,7 @@ function generateLangKeys($className){
 	$columns = $model->getColumns();
 	
 	echo '<pre>';
-	echo 'LanguageVars for the model: '.$className;
+	echo '// Language for model: '.$className;
 	echo '<br />';
 	foreach($columns as $column=>$value) {
 		echo htmlspecialchars('$l["'.$modelName.ucfirst($column).'"] = "";');
