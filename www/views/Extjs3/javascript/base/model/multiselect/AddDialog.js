@@ -11,7 +11,7 @@ GO.base.model.multiselect.addDialog = function(config){
 		remoteSort: true
 	});
 	
-	this.grid = new GO.grid.GridPanel({
+	this.grid = new GO.grid.EditorGridPanel({
 		paging:true,
 		border:false,
 		store: this.store,
@@ -34,7 +34,7 @@ GO.base.model.multiselect.addDialog = function(config){
 		height:300,
 		width:500,
 		closeAction:'hide',
-		title:'Selecteren', // TODO: De juiste titel in een vertaalbestand zetten
+		title: GO.lang.strPleaseSelect,
 		items: this.grid,
 		buttons: [
 		{

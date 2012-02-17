@@ -9,7 +9,7 @@ GO.base.model.multiselect.panel = function(config){
 		remoteSort: true
 	});
 	
-	this.grid = new GO.grid.GridPanel({
+	this.grid = new GO.grid.EditorGridPanel({
 		paging:true,
 		border:false,
 		store: this.store,
