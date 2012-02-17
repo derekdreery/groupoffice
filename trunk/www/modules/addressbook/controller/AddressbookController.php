@@ -18,6 +18,14 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 		return array('user_id'=>'$model->user->name');
 	}
 	
+	protected function getStoreParams($params) {
+		
+		if(empty($params['sort']))
+			return array('order' => array('name'));
+		else
+			return parent::getStoreParams($params);
+	}
+	
 	protected function actionSearchSender($params) {
 
 		$contacts = GO_Addressbook_Model_Contact::model()->findByEmail($params['email']);
