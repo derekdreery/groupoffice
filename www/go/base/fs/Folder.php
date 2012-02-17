@@ -54,7 +54,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 */
 	public function delete(){
 		
-		GO::debug("DELETE: ".$this->path());
+		//GO::debug("DELETE: ".$this->path());
 		
 		if(!$this->exists())
 			return true;
@@ -72,7 +72,10 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	private function _validateSrcAndDestPath($srcPath, $destPath){
 		if(strpos($srcPath.'/', $destPath.'/')===0)
 		{
-			throw new Exception('The destination is located inside the source directory');
+			$msg = 'The destination is located inside the source directory.';
+			if(GO::config()->debug)
+				$msg .= "\n\n".$srcPath.' -> '.$destPath;
+			throw new Exception($msg);
 		}
 	}
 	

@@ -321,4 +321,27 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		}
 		
 	}
+	
+	
+	
+	/**
+	 * Checks if a filename exists and renames it.
+	 *
+	 * @param	string $filepath The complete path to the file
+	 * @access public
+	 * @return string  New filename
+	 */
+	public function appendNumberToNameIfExists()
+	{
+		$dir = $this->parent()->path();		
+		$origName = $this->fsFile->nameWithoutExtension();
+		$extension = $this->fsFile->extension();
+		$x=1;
+		while($this->folder->hasFile($this->name))
+		{			
+			$this->name=$origName.' ('.$x.').'.$extension;
+			$x++;
+		}
+		return $this->name;
+	}
 }

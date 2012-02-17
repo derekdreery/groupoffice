@@ -82,19 +82,6 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	public function hasLinks() {
 		return true;
 	}
-	
-//	protected function appendAclJoin($findParams, $aclJoin){		
-//			
-//		$sql .= "\nLEFT JOIN go_acl ON (`".$aclJoin['table']."`.`".$aclJoin['aclField']."` = go_acl.acl_id";
-//		if(isset($params['permissionLevel']) && $findParams['permissionLevel']>GO_Base_Model_Acl::READ_PERMISSION){
-//			$sql .= " AND go_acl.level>=".intval($findParams['permissionLevel']);
-//		}
-//		$sql .= " AND (go_acl.user_id=".intval($findParams['userId'])." OR go_acl.group_id IN (".implode(',',GO_Base_Model_User::getGroupIds($findParams['userId']))."))) ";		
-//		
-//		$sql .= "OR ISNULL(a.acl_id) OR a.acl_id=0";
-//		
-//		return $sql;
-//	}
 
 	/**
 	 * Returns the table name
@@ -170,31 +157,39 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			$this->fsFolder->create();
 		} else {
 			
-			if($this->isModified('name')){
-				
-				$oldFsFolder = new GO_Base_Fs_Folder(dirname($this->fsFolder->path()).'/'.$this->getOldAttributeValue('name'));
-				
-				$oldFsFolder->rename($this->name);
-			}
+			unset($this->_path);
 			
-			if($this->isModified('parent_id')){
-				//file will be moved so we need the old folder path.
-				$oldFolderId = $this->getOldAttributeValue('parent_id');
-				$oldFolder = GO_Files_Model_Folder::model()->findByPk($oldFolderId);				
-				$oldRelPath = $oldFolder->path;				
+			if(!$this->fsFolder->exists()){				
+
+				if($this->isModified('parent_id')){
+					//file will be moved so we need the old folder path.
+					$oldFolderId = $this->getOldAttributeValue('parent_id');
+					$oldFolder = GO_Files_Model_Folder::model()->findByPk($oldFolderId);				
+					$oldRelPath = $oldFolder->path;
+					
+					$oldName = $this->isModified('name') ? $this->getOldAttributeValue('name') : $this->name;
+
+					$oldPath = GO::config()->file_storage_path . $oldRelPath . '/' . $oldName;
+
+					$fsFolder = new GO_Base_Fs_Folder($oldPath);
+
+					$newRelPath = $this->getPath(true);
+
+					$newFsFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path . dirname($newRelPath));
+
+					if (!$fsFolder->move($newFsFolder))
+						throw new Exception("Could not rename folder on the filesystem");
+				}
 				
-				$oldPath = GO::config()->file_storage_path . $oldRelPath . '/' . $this->name;
-							
-				$fsFolder = new GO_Base_Fs_Folder($oldPath);
-				
-				//unset($this->_path);
-				
-				$newRelPath = $this->getPath(true);
-				
-				$newFsFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path . dirname($newRelPath));
-				
-				if (!$fsFolder->move($newFsFolder))
-					throw new Exception("Could not rename folder on the filesystem");
+				//if the filesystem folder is missing check if we need to move it when the name or parent folder changes.
+				if($this->isModified('name')){
+					GO::debug("Renaming from ".$this->getOldAttributeValue('name')." to ".$this->name);
+
+					$oldFsFolder = new GO_Base_Fs_Folder(dirname($this->fsFolder->path()).'/'.$this->getOldAttributeValue('name'));
+
+					$oldFsFolder->rename($this->name);
+					
+				}
 			}
 		}
 
@@ -202,7 +197,9 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	}
 	
 
-	protected function afterDelete() {		
+	protected function afterDelete() {
+		
+		GO::debug("after delete ".$this->path." ".$this->fsFolder->path());
 		$this->fsFolder->delete();		
 		
 		//Read only flag is set for addressbooks, tasklists etc. They share the same acl so deleting it would make addressbooks inaccessible.
@@ -496,6 +493,25 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 						->addCondition('name', $filename),
 				'single'=>true
 		));
+	}
+	
+	
+	/**
+	 * Checks if a filename exists and renames it.
+	 *
+	 * @access public
+	 * @return string  New filename
+	 */
+	public function appendNumberToNameIfExists()
+	{
+		$origName= $this->name;
+		$x=1;
+		while($this->parent->hasFolder($this->name))
+		{			
+			$this->name=$origName.' ('.$x.')';
+			$x++;
+		}
+		return $this->name;
 	}
 	
 	/**

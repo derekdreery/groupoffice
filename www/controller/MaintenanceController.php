@@ -7,12 +7,16 @@
 class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractController {
 	
 	protected function allowGuests() {
-		return array('upgrade');
+		return array('upgrade','checkdatabase');
 	}
 
 	protected function init() {
 		GO::$disableModelCache=true; //for less memory usage
 		ini_set('max_execution_time', '0'); //allow long runs		
+		
+		ini_set('display_errors','on');
+		error_reporting(E_ALL);
+		
 		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
 	}
 	
@@ -108,8 +112,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		if(empty($params['keepexisting']))
 			GO::getDbConnection()->query('TRUNCATE TABLE go_search_cache');
-		
-		header('Content-Type: text/plain; charset=UTF-8');
+		if(!headers_sent())
+			header('Content-Type: text/plain; charset=UTF-8');
 		
 		$models=GO::findClasses('model');
 		foreach($models as $model){
@@ -121,6 +125,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		}
 		
 		GO::modules()->callModuleMethod('buildSearchCache', array(&$response));
+		
+		
+		echo "\n\nAll done!\n\n";
 	}
 
 	/**
@@ -130,7 +137,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	protected function actionCheckDatabase($params) {
 		$response = array();
 				
-		header('Content-Type: text/plain; charset=UTF-8');
+		if(!headers_sent())
+			header('Content-Type: text/plain; charset=UTF-8');
 		
 		if(!empty($params['module'])){
 			if($params['module']=='base'){
@@ -366,6 +374,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 
 		if (empty($params['test'])) {
 			echo "Database updated to version " . GO::config()->mtime, "\n";
+			ob_flush();
 			
 			GO::config()->save_setting('upgrade_mtime', GO::config()->mtime);
 		} else {
@@ -376,6 +385,15 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		GO::clearCache();
 		
 		if($v3){
+			
+			if(GO::modules()->isInstalled('projects') && GO::modules()->isInstalled('files')){
+				echo "Renaming projects folder temporarily for new project paths\n";
+				$folder = GO_Files_Model_Folder::model()->findByPath('projects');
+				$folder->name='oldprojects';
+				$folder->systemSave=true;
+				$folder->save();
+			}
+			
 			
 			echo "Checking database after version 3.7 upgrade.\n";
 			$this->actionCheckDatabase($params);
@@ -389,7 +407,6 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		}		
 		
 		echo "All Done!\n";		
-
 		//return $response;
 	}
 }
