@@ -22,6 +22,7 @@ Module icons
 
 
 *** Lage prio:
+Delete in lijst op dezelfde plek terugscrollen.
 LIST-STATUS gebruiken bij email
 TLS email
 Full date column

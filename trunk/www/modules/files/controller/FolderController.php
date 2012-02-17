@@ -491,12 +491,12 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	}
 
 	private function _checkExistingModelFolder($model, $folder, $mustExist=false) {
+		
+		GO::debug("Check existing model folder ".$model->className()."(ID:".$model->id." Folder ID: ".$folder->id.")");
 
-		
-		$files_folder_id = 0;
-		
 		if(!$folder->fsFolder->exists())
 		{
+			GO::debug("Deleting it because filesystem folder doesn't exist");
 			$folder->delete();
 			if($mustExist || $model->acl_id)
 				return $this->_createNewModelFolder($model);
@@ -513,45 +513,100 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 //				$folder->delete();
 //				$response['files_folder_id']=$model->files_folder_id=0;
 //				$model->save();
-//				return $response;
+//				return $response['files_folder_id'];
 //			}
 //		}
 
 
 
 		$currentPath = $folder->path;
-		//strip the (n) part at the end of the path that is added when a duplicate
-		//is found.
-		$currentPath = preg_replace('/ \([0-9]+\)$/', '', $currentPath);
-		$newPath = $model->buildFilesPath();
-
+		$newPath = $model->buildFilesPath();		
 
 		if ($currentPath != $newPath) {
+			
+			GO::debug("Moving folder ".$currentPath." to ".$newPath);
 
 			//model has a new path. We must move the current folder					
 			$destinationFolder = GO_Files_Model_Folder::model()->findByPath(
 							dirname($newPath), true);
 			
-			$fsFolder = new GO_Base_Fs_Folder($newPath);
-			$fsFolder->appendNumberToNameIfExists();
 			
-			if($existingFolder = $destinationFolder->hasFolder($fsFolder->name())){
-				//a folder with the required name already exists. We'll use that.
-				if (!$folder->acl_id && isset($model->acl_id)) {
+			//sometimes the folder must be moved into a folder with the same. name
+			//for example:
+			//projects/Name must be moved into projects/Name/Name		
+			//then we temporarily move it to a temp name
+			if($destinationFolder->id==$folder->id){
+				GO::debug("Destination folder is the same!");
+				$folder->name=uniqid();
+				$folder->systemSave=true;
+				$folder->save();
+				
+				GO::debug("Moved folder to temp:".$folder->fsFolder->path());
+				
+				GO::modelCache()->remove("GO_Files_Model_Folder");
+				
+				$destinationFolder = GO_Files_Model_Folder::model()->findByPath(
+							dirname($newPath), true);
+				
+				GO::debug("Now moving to:".$destinationFolder->fsFolder->path());
+				
+			}
+			
+			if($destinationFolder->id==$folder->id){
+				throw new Exception("Same ID's!");
+			}
+			
+			$fsFolder = new GO_Base_Fs_Folder($newPath);
+//			$fsFolder->appendNumberToNameIfExists();
+			
+			if(($existingFolder = $destinationFolder->hasFolder($fsFolder->name()))){
+				GO::debug("Merging into existing folder.");
+				if (!empty($model->acl_id))
 					$existingFolder->acl_id = $model->acl_id;
-				}
-				$existingFolder->visible = 0;
+	
+				$existingFolder->visible = !empty($model->acl_id) ? 1 : 0;
 				$existingFolder->readonly = 1;
 				$existingFolder->save();
-				return $existingFolder->id;
 				
-				//What should we do with the other folder???
+				
+				$stmt = $folder->folders();
+				while($subfolder = $stmt->fetch()){
+					$subfolder->parent_id=$existingFolder->id;
+					$subfolder->appendNumberToNameIfExists();
+					$subfolder->save();
+				}
+				
+				$stmt = $folder->files();
+				while($file = $stmt->fetch()){
+					$file->folder_id=$existingFolder->id;
+					$file->appendNumberToNameIfExists();
+					$file->save();
+				}
+				
+				//delete empty folder.
+				$folder->delete();				
+				
+				return $existingFolder->id;
+
 			}else
 			{
+				if (!empty($model->acl_id))
+					$folder->acl_id = $model->acl_id;
+				
 				$folder->name = $fsFolder->name();			
 				$folder->parent_id = $destinationFolder->id;
 				$folder->systemSave = true;
-				$folder->visible = 0;
+				$folder->visible = !empty($model->acl_id) ? 1 : 0;
+				$folder->readonly = 1;
+				$folder->save();
+			}
+		}else
+		{
+			GO::debug("No change needed");
+			if (!empty($model->acl_id)) {
+				$folder->acl_id = $model->acl_id;
+				$folder->systemSave = true;
+				$folder->visible = !empty($model->acl_id) ? 1 : 0;
 				$folder->readonly = 1;
 				$folder->save();
 			}
@@ -560,29 +615,20 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		return $folder->id;
 	}
 
-	private function _createNewModelFolder($model) {
-
-		$f = new GO_Base_Fs_Folder(GO::config()->file_storage_path . $model->buildFilesPath());
-		//$fullPath = $f->appendNumberToNameIfExists();
-		$relPath = $f->stripFileStoragePath();
-
-		$parentFolder = GO_Files_Model_Folder::model()->findByPath(dirname($relPath), true);
-		$name = $f->name();
-		$i=1;
-		while($parentFolder->hasFolder($name)){
-			$name = $f->name().' ('.$i.')';
-			$i++;
-		}
+	private function _createNewModelFolder(GO_Base_Db_ActiveRecord $model) {
 		
-		$folder = new GO_Files_Model_Folder();
-		$folder->name=$name;
-		$folder->parent_id=$parentFolder->id;
-		
-		if (!$folder->acl_id && isset($model->acl_id)) {
+		GO::debug("Create new model folder ".$model->className()."(ID:".$model->id.")");
+
+//		$f = new GO_Base_Fs_Folder(GO::config()->file_storage_path . $model->buildFilesPath());
+//		//$fullPath = $f->appendNumberToNameIfExists();
+//		$relPath = $f->stripFileStoragePath();
+
+		$folder = GO_Files_Model_Folder::model()->findByPath($model->buildFilesPath(),true);
+				
+		if (!empty($model->acl_id))
 			$folder->acl_id = $model->acl_id;
-		}
-
-		$folder->visible = 0;
+		
+		$folder->visible = !empty($model->acl_id) ? 1 : 0;
 		$folder->readonly = 1;
 		$folder->systemSave = true;
 		$folder->save();
@@ -604,11 +650,11 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		return $response;
 	}
 
-	public function checkModelFolder($model, $saveModel=false, $mustExist=false) {
+	public function checkModelFolder(GO_Base_Db_ActiveRecord $model, $saveModel=false, $mustExist=false) {
+		
 		$folder = false;
-		if ($model->files_folder_id > 0) {
+		if ($model->files_folder_id > 0)
 			$folder = GO_Files_Model_Folder::model()->findByPk($model->files_folder_id);
-		}
 
 		if ($folder) {
 			$model->files_folder_id = $this->_checkExistingModelFolder($model, $folder, $mustExist);

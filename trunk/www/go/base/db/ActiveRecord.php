@@ -631,6 +631,40 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	private $_acl_id;
 	
 	/**
+	 * Find the model that controls permissions for this model.
+	 * 
+	 * @return GO_Base_Db_ActiveRecord
+	 * @throws Exception 
+	 */
+	public function findRelatedAclModel(){
+		
+		if (!$this->aclField())
+			return false;
+	
+		
+	
+		$arr = explode('.', $this->aclField());
+		if (count($arr) > 1) {
+			$relation = $arr[0];
+
+			//not really used. We use findAclId() of the model.
+			$aclField = array_pop($arr);
+			$modelWithAcl=$this;
+			
+			while($relation = array_shift($arr)){
+				if(!$modelWithAcl->$relation)
+					throw new Exception("Could not find relational ACL: ".$this->aclField()." ($relation) in ".$this->className()." with pk: ".$this->pk);
+				else
+					$modelWithAcl=$modelWithAcl->$relation;
+			}	
+			return $modelWithAcl;
+		}else
+		{
+			return false;
+		}
+	}
+	
+	/**
 	 * Find the acl_id integer value that applies to this model.
 	 * 
 	 * @return int ACL id from go_acl_items table. 
@@ -641,20 +675,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		if(!isset($this->_acl_id)){
 			//ACL is mapped to a relation. eg. $contact->addressbook->acl_id is defined as "addressbook.acl_id" in the contact model.
-			$arr = explode('.', $this->aclField());
-			if (count($arr) > 1) {
-				$relation = $arr[0];
-				
-				//not really used. We use findAclId() of the model.
-				$aclField = array_pop($arr);
-				
-				$modelWithAcl=$this;
-				while($relation = array_shift($arr)){
-					if(!$modelWithAcl->$relation)
-						throw new Exception("Could not find relational ACL: ".$this->aclField()." ($relation) in ".$this->className()." with pk: ".$this->pk);
-					else
-						$modelWithAcl=$modelWithAcl->$relation;
-				}							
+			$modelWithAcl = $this->findRelatedAclModel();
+			if($modelWithAcl){
 				$this->_acl_id = $modelWithAcl->findAclId();
 			} else {
 				$this->_acl_id = $this->{$this->aclField()};
@@ -1496,7 +1518,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			 */
 			
 			//append join attribute so cache is void automatically when this attribute changes.
-			$cacheKey = $name.':'.$this->_attributes[$joinAttribute];
+			$cacheKey = $name.':'.(isset($this->_attributes[$joinAttribute]) ? $this->_attributes[$joinAttribute] : 0);
 				
 			if(isset($this->_relatedCache[$cacheKey])){			
 
@@ -1510,7 +1532,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}else
 			{	
 				//In a belongs to relationship the primary key of the remote model is stored in this model in the attribute "field".
-				$this->_relatedCache[$cacheKey] = GO::getModel($model)->findByPk($this->_attributes[$joinAttribute], array('relation'=>$name), true);
+				$this->_relatedCache[$cacheKey] = !empty($this->_attributes[$joinAttribute]) ? GO::getModel($model)->findByPk($this->_attributes[$joinAttribute], array('relation'=>$name), true) : false;
 			}
 			return $this->_relatedCache[$cacheKey];
 			
@@ -1983,7 +2005,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}
 
 			if(!$this->beforeSave()){
-				GO::debug("WARNING: GO_Base_Db_Active::afterSave returned false or no value");
+				GO::debug("WARNING: ".$this->className()."::beforeSave returned false or no value");
 				return false;				
 			}
 
@@ -2012,7 +2034,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}
 
 			if(!$this->beforeSave()){
-				GO::debug("WARNING: GO_Base_Db_Active::afterSave returned false or no value");
+				GO::debug("WARNING: ".$this->className()."::beforeSave returned false or no value");
 				return false;				
 			}
 
@@ -2031,7 +2053,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 
 		if(!$this->afterSave($wasNew)){
-			GO::debug("WARNING: GO_Base_Db_Active::afterSave returned false or no value");
+			GO::debug("WARNING: ".$this->className()."::afterSave returned false or no value");
 			return false;
 		}
 
@@ -2117,7 +2139,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	/**
 	 * The files module will use this function. To create a files folder.
-	 * Override it if you don't like the default path.
+	 * Override it if you don't like the default path. Make sure this path is unique! Appending the (<id>) would be wise.
 	 */
 	public function buildFilesPath() {
 
@@ -2390,6 +2412,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @return PDOStatement 
 	 */
 	public function delete($ignoreAcl=false){
+		
+		//GO::debug("Delete ".$this->className()." pk: ".$this->pk);
 		
 		if($this->isNew)
 			return true;
