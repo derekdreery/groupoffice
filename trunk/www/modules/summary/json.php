@@ -121,6 +121,10 @@ try{
 			while($summary->next_record())
 			{
 				$webfeed = $summary->record;
+				
+				if(empty($webfeed['summary']))
+					unset($webfeed['summary']);
+				
 				$webfeed['feedId'] = $webfeed['id'];
 				$response['results'][] = $webfeed;
 			}
