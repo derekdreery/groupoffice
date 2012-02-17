@@ -393,7 +393,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		//set sort aliases
 		$store->getColumnModel()->formatColumn('type', '$model->type',array(),'name');
 		$store->getColumnModel()->formatColumn('size', '"-"',array(),'name');
-		
+		$store->getColumnModel()->formatColumn('locked_user_id', '"0"');
 		
 		
 		//handle delete request for both files and folder
