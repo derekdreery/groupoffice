@@ -28,6 +28,7 @@ class GO_Sites_SitesModule extends GO_Base_Module{
 	 * 
 	 */
 	public static function firstRun(){
+		//TODO: DE EERSTE STANDAARD SITE AANMAKEN		
 		parent::firstRun();
 	}
 	
