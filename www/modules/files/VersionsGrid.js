@@ -35,9 +35,9 @@ GO.files.VersionsGrid = function(config) {
 			sortable:true
 		},
 		columns:[{
-				header:GO.files.lang.version,
+				header:GO.files.lang.shortVersion,
 				dataIndex : 'version',
-				width:30,
+				width:50,
 				align:'right'
 		},{
 			header : GO.lang['strOwner'],

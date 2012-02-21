@@ -45,8 +45,7 @@ $l["applyLimits"]= 'Do not show all custom field categories';
 $l["undef"]= '-';
 $l['name'] = 'Files';
 $l['description'] = 'Files module; Module for sharing files.';
-$lang['link_type'][6]='File';
-$lang['link_type'][17]='Folder';
+
 $l['fileNotFound'] = 'File not found';
 $l['folderExists'] = 'The folder already exists';
 $l['filenameExists'] = 'Filename already exists';
@@ -84,3 +83,5 @@ $l['notifyRecursiveQuestion']='Do you want to apply this to all the subfolders?'
 $l['unlock']='Unlock';
 $l['lockedBy']='Locked by';
 $l['lock']='Lock';
+
+$l['shortVersion']='Ver.';
