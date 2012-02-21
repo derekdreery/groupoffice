@@ -126,3 +126,5 @@ $updates["201201100902"][]="ALTER TABLE `cal_groups` CHANGE `show_not_as_busy` `
 $updates["201201100902"][]="ALTER TABLE `cal_groups` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
 
 $updates["201201260928"][]="ALTER TABLE `cal_participants` CHANGE `name` `name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ";
+
+$updates["201202211344"][]="update cal_calendars set project_id=0;";
