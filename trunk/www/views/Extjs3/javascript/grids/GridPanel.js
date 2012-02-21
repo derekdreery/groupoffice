@@ -104,6 +104,8 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 		}
 		
 		this.store.on('load', function(){
+			this.changed=false;
+			
 			if(this.store.reader.jsonData && this.store.reader.jsonData.title)
 				this.setTitle(this.store.reader.jsonData.title);
 		}, this);
@@ -261,6 +263,8 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 
 
 		GO.deleteItems(deleteItemsConfig);
+		
+		this.changed=true;
 	},
 
 	getGridData : function(){
@@ -289,10 +293,32 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 		return GO.util.numberFormat(v);
 	},
 	
-	btnAdd : function(){},
+	btnAdd : function(){
+		if(this.editDialogClass){
+			this.showEditDialog();
+		}
+	},
 	
 	dblClick : function(grid, record, rowIndex){
+		if(this.editDialogClass){
+			this.showEditDialog(record.id);
+		}
+	},
 	
+	showEditDialog : function(id){
+		if(!this.editDialog){
+			this.editDialog = new this.editDialogClass;
+
+			this.editDialog.on('save', function(){   
+				this.store.load();   
+				this.changed=true;
+			}, this);	
+		}
+	
+		if(this.relatedGridParamName)
+			this.editDialog.formPanel.baseParams[this.relatedGridParamName]=this.store.baseParams[this.relatedGridParamName];
+		
+		this.editDialog.show(id);	  
 	}
 	
 });
