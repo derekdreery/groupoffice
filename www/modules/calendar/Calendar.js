@@ -1508,7 +1508,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			};
 
 			if(event.has_other_participants)
-				params.send_invitation=confirm(GO.calendar.lang.sendInvitationUpdate);
+				params.send_invitation=confirm(GO.calendar.lang.sendInvitationUpdate) ? 1 : 0;
 			
 			if(actionData.singleInstance)
 			{				
@@ -1599,7 +1599,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			};
 
 			if(event.has_other_participants)
-				params.send_invitation=confirm(GO.calendar.lang.sendInvitationUpdate);
+				params.send_invitation=confirm(GO.calendar.lang.sendInvitationUpdate) ? 1 : 0;
 			
 			if(actionData.offset)
 				params['offset']=actionData.offset;
@@ -1706,7 +1706,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		}
 
 		if(event.has_other_participants)
-			params.send_invitation=confirm(GO.calendar.lang.sendInvitationUpdate);
+			params.send_invitation=confirm(GO.calendar.lang.sendInvitationUpdate) ? 1 : 0;
 
 		Ext.Ajax.request({
 			url: GO.url('calendar/event/submit'),

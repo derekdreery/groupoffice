@@ -248,9 +248,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$stmt->callOnEach('delete');
 		}
 
-		if (isset($params['send_invitation']) && $params['send_invitation'] != 'false') {
+		if (!empty($params['send_invitation']))
 			$this->_sendInvitation($newParticipantIds, $event, $isNewEvent, $modifiedAttributes);
-		}
 	}
 
 	private function _sendInvitation($newParticipantIds, $event, $isNewEvent, $modifiedAttributes, $method='REQUEST') {
