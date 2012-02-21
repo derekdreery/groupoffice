@@ -20,8 +20,13 @@
 
 class GO_Base_Util_Date_DateTime extends DateTime{
 	
-	public static function fromUnixtime($time){
-		return new self(date('Y-m-d H:i:s',$time), new DateTimeZone(date_default_timezone_get()));
+	/**
+	 * Create a date time object with timezone information with a unixtime stamp
+	 * @param int $unixtime
+	 * @return GO_Base_Util_Date_DateTime 
+	 */
+	public static function fromUnixtime($unixtime){
+		return new self(date('Y-m-d H:i:s',$unixtime), new DateTimeZone(date_default_timezone_get()));
 	}
 	
 	/**
