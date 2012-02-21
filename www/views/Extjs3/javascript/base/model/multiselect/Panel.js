@@ -9,8 +9,11 @@ GO.base.model.multiselect.panel = function(config){
 		remoteSort: true
 	});
 	
+	if(typeof(config.paging)=='undefined')
+		config.paging=true;
+	
 	this.grid = new GO.grid.EditorGridPanel({
-		paging:true,
+		paging:config.paging,
 		border:false,
 		store: this.store,
 		view: new Ext.grid.GridView({
@@ -20,6 +23,8 @@ GO.base.model.multiselect.panel = function(config){
 		columns: config.cm,
 		sm: new Ext.grid.RowSelectionModel()	
 	});
+	
+	
 
 	GO.base.model.multiselect.panel.superclass.constructor.call(this, {
 		layout: 'fit',
