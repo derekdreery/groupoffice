@@ -21,7 +21,7 @@
 class GO_Base_Util_Date_DateTime extends DateTime{
 	
 	public static function fromUnixtime($time){
-		return new self("@$time");//, new DateTimeZone(date_default_timezone_get()));
+		return new self(date('Y-m-d H:i:s',$time), new DateTimeZone(date_default_timezone_get()));
 	}
 	
 	/**
