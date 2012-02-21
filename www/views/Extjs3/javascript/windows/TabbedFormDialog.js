@@ -81,6 +81,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 
 	_panels : false,
 	
+	_relatedGrids : false,
+	
 	initComponent : function(){
 		
 		Ext.applyIf(this, {
@@ -115,6 +117,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		});
 		
 		this._panels=[];
+		
+		this._relatedGrids=[];
 
 		this.buildForm();
 
@@ -390,13 +394,34 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	{
 		this.formPanel.form.baseParams[this.remoteModelIdName]=remoteModelId;
 		this.remoteModelId=remoteModelId;		
+		
+		this.setRelatedGridParams(remoteModelId);
+	},
+	
+	setRelatedGridParams : function(remoteModelId){
+		for(var i=0;i<this._relatedGrids.length;i++){
+			var relGrid = this._relatedGrids[i];
+			relGrid.gridPanel.setDisabled(GO.util.empty(remoteModelId));
+			relGrid.gridPanel.store.baseParams[relGrid.paramName]=remoteModelId;
+			if(remoteModelId<1)				
+				relGrid.gridPanel.store.removeAll();
+		}
 	},
 
 	/**
 	 * Use this function to add panels to the window.
 	 */
-	addPanel : function(panel){
+	addPanel : function(panel, relatedGridParamName){
 		this._panels.push(panel);
+		
+		if(relatedGridParamName){		
+			panel.relatedGridParamName=relatedGridParamName;
+			this._relatedGrids.push({gridPanel: panel, paramName:relatedGridParamName});
+			panel.on('show', function(grid){
+				if(grid.store.baseParams[grid.relatedGridParamName]>0)
+					grid.store.load();
+			}, this);
+		}
 	},
 	
 	/**
