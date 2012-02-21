@@ -564,7 +564,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				if (!empty($model->acl_id))
 					$existingFolder->acl_id = $model->acl_id;
 	
-				$existingFolder->visible = !empty($model->acl_id) ? 1 : 0;
+				$existingFolder->visible = 0;
 				$existingFolder->readonly = 1;
 				$existingFolder->save();
 				
@@ -596,20 +596,18 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				$folder->name = $fsFolder->name();			
 				$folder->parent_id = $destinationFolder->id;
 				$folder->systemSave = true;
-				$folder->visible = !empty($model->acl_id) ? 1 : 0;
+				$folder->visible = 0;
 				$folder->readonly = 1;
 				$folder->save();
 			}
 		}else
 		{
 			GO::debug("No change needed");
-			if (!empty($model->acl_id)) {
-				$folder->acl_id = $model->acl_id;
-				$folder->systemSave = true;
-				$folder->visible = !empty($model->acl_id) ? 1 : 0;
-				$folder->readonly = 1;
-				$folder->save();
-			}
+			$folder->acl_id = $model->acl_id;
+			$folder->systemSave = true;
+			$folder->visible = 0;
+			$folder->readonly = 1;
+			$folder->save();
 		}
 
 		return $folder->id;
@@ -628,7 +626,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		if (!empty($model->acl_id))
 			$folder->acl_id = $model->acl_id;
 		
-		$folder->visible = !empty($model->acl_id) ? 1 : 0;
+		$folder->visible = 0;
 		$folder->readonly = 1;
 		$folder->systemSave = true;
 		$folder->save();
