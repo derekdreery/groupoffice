@@ -2577,6 +2577,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	/**
+	 *Get the current attributeOutputmode
+	 * 
+	 * @return string 
+	 */
+	public function getAttributeOutputMode(){
+		
+		return $this->_attributeOutputMode;
+	}
+	/**
 	 * PHP getter magic method.
 	 * This method is overridden so that AR attributes can be accessed like properties.
 	 * @param string $name property name
