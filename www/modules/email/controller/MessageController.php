@@ -147,13 +147,13 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		return $response;
 	}
 	
-	private function _createAutoLinkTag($params){
+	private function _createAutoLinkTag($params, $account){
 		$tag = '';
 		if (!empty($params['link'])) {
 			$linkProps = explode(':', $params['link']);
 			$model = GO::getModel($linkProps[0])->findByPk($linkProps[1]);
 			
-			$tag = "[link:".base64_encode($_SERVER['SERVER_NAME'].','.$linkProps[0].','.$linkProps[1])."]";
+			$tag = "[link:".base64_encode($_SERVER['SERVER_NAME'].','.$account->id.','.$linkProps[0].','.$linkProps[1])."]";
 		}
 		return $tag;
 	}
@@ -173,7 +173,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		$message = new GO_Base_Mail_SmimeMessage();
 		
-		$tag = $this->_createAutoLinkTag($params);
+		$tag = $this->_createAutoLinkTag($params, $account);
 		
 		if(!empty($tag)){
 			if($params['content_type']=='html')
@@ -644,8 +644,9 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			
 			$tag=array();
 			$tag['server'] = $props[0];
-			$tag['model'] = $props[1];
-			$tag['model_id'] = $props[2];
+			$tag['account_id'] = $props[1];
+			$tag['model'] = $props[2];
+			$tag['model_id'] = $props[3];
 		
 			return $tag;
 		}
@@ -662,18 +663,18 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	 */
 	private function _handleAutoLinkTag(GO_Email_Model_ImapMessage $imapMessage, $params, $response) {		
 		if(!$imapMessage->seen && $tag = $this->_findAutoLinkTag($response['htmlbody'])){
-			if($tag['server']==$_SERVER['SERVER_NAME']){								
+			if($tag['server']==$_SERVER['SERVER_NAME'] && $imapMessage->account->id == $tag['account_id']){								
 				$linkModel = GO::getModel($tag['model'])->findByPk($tag['model_id']);				
-				if($linkModel){
+				if($linkModel){				
 					GO_Savemailas_Model_LinkedEmail::model()->createFromImapMessage($imapMessage, $linkModel);		
-					
+
 					//we need this just to display a unified name
 					$searchCacheModel = $linkModel->getCachedSearchRecord();
-					
+
 					$response['htmlbody']='<div class="em-autolink-message">'.
 									sprintf(GO::t('autolinked','email'),'<span class="em-autolink-link" onclick="GO.linkHandlers[\''.$tag['model'].'\'].call(this, '.
 													$tag['model_id'].');">'.$searchCacheModel->name.'</div>').
-									$response['htmlbody'];
+									$response['htmlbody'];					
 				}
 			}
 		}
