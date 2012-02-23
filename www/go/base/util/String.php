@@ -60,6 +60,33 @@ class GO_Base_Util_String {
 	public static function escape_javascript($str){
 		return strtr($str, array('\\'=>'\\\\',"'"=>"\\'",'"'=>'\\"',"\r"=>'\\r',"\n"=>'\\n','</'=>'<\/'));
 	}
+	
+	/**
+	 * Tests if string contains 8bit symbols.
+	 *
+	 * If charset is not set, function defaults to default_charset.
+	 * $default_charset global must be set correctly if $charset is
+	 * not used.
+	 * @param string $string tested string
+	 * @param string $charset charset used in a string
+	 * @return bool true if 8bit symbols are detected
+	 */
+	public static function is8bit($string, $charset = 'UTF-8') {
+		
+		/**
+		 * Don't use \240 in ranges. Sometimes RH 7.2 doesn't like it.
+		 * Don't use \200-\237 for iso-8859-x charsets. This ranges
+		 * stores control symbols in those charsets.
+		 * Use preg_match instead of ereg in order to avoid problems
+		 * with mbstring overloading
+		 */
+		if (preg_match("/^iso-8859/i", $charset)) {
+			$needle = '/\240|[\241-\377]/';
+		} else {
+			$needle = '/[\200-\237]|\240|[\241-\377]/';
+		}
+		return preg_match("$needle", $string);
+	}
 
 
 	public static function to_utf8($str, $from_charset=''){
@@ -84,6 +111,10 @@ class GO_Base_Util_String {
 				if(empty($from_charset))*/
 				$from_charset='windows-1252';
 			}
+			
+			if(substr($from_charset,0,5)=='x-mac')
+				return GO_Base_Util_Charset_Xmac::toUtf8($str, $from_charset);
+			
 
 			return iconv($from_charset, 'UTF-8//IGNORE', $str);
 		}

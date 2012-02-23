@@ -131,6 +131,14 @@ class String {
 				if(empty($from_charset))*/
 				$from_charset='windows-1252';
 			}
+			
+			if(substr($from_charset,0,5)=='x-mac'){
+				
+				global $GO_CONFIG;
+				require_once($GO_CONFIG->root_path.'go/base/util/String.php');
+				require_once($GO_CONFIG->root_path.'go/base/util/charset/Xmac.php');
+				return GO_Base_Util_Charset_Xmac::toUtf8($str, $from_charset);
+			}
 
 			return iconv($from_charset, 'UTF-8//IGNORE', $str);
 		}
