@@ -115,10 +115,11 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		$url = GO::url('files/file/download',array('id'=>$file->id,'random_code'=>$file->random_code),false, $html);
 		
 		if($html){
-			$url = '<a href="'.$url.'">'.$file->name.'</a>';
+			$url = GO::t('clickHereToDownload', "files").' <a href="'.$url.'">'.$file->name.'</a>';
 			$lb='<br />';
 		}else
 		{
+			$url = GO::t('copyPasteToDownload', "files")."\n\n".$url;
 			$lb = "\n";
 		}
 		
@@ -129,6 +130,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 			$message = GO_Email_Model_SavedMessage::model()->createFromMimeData($template->content);
 	
 			$response['data']=$message->toOutputArray($html, true);
+			$response['data'][$bodyindex] = GO_Addressbook_Model_Template::model()->replaceUserTags($response['data'][$bodyindex], true);
 			if(strpos($response['data'][$bodyindex],'{body}'))
 				$response['data'][$bodyindex] = GO_Addressbook_Model_Template::model()->replaceCustomTags($response['data'][$bodyindex], array('body'=>$text));			
 			else
