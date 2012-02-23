@@ -115,6 +115,7 @@ $l["cmdExport"]='Export';
 $l["cmdPrint"]='Print';
 $l["cmdImport"]='Import';
 $l["cmdInsert"]='Insert';
+$l["cmdContinue"]='Continue';
 $l["cmdActions"]= 'Actions';
 $l["cmdNext"]='Next';
 $l["cmdPrevious"]='Previous';

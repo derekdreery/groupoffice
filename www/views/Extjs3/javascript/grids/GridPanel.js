@@ -261,7 +261,7 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 			deleteItemsConfig['scope']=config.scope;
 		}
 
-
+		this.getView().scrollToTopOnLoad=false;
 		GO.deleteItems(deleteItemsConfig);
 		
 		this.changed=true;
