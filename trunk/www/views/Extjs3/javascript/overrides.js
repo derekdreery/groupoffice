@@ -49,6 +49,23 @@ Ext.override(Ext.FormPanel,{
 	})
 });
 
+Ext.override(Ext.grid.GridView, {
+    scrollToTopOnLoad: true,
+    onLoad : function(){
+        if (this.scrollToTopOnLoad){
+					if (Ext.isGecko) {
+							if (!this.scrollToTopTask) {
+									this.scrollToTopTask = new Ext.util.DelayedTask(this.scrollToTop, this);
+							}
+							this.scrollToTopTask.delay(1);
+					} else {
+							this.scrollToTop();
+					}
+				}
+				this.scrollToTopOnLoad=true;
+    }
+});
+
 
 /*
  * Scroll menu when higher then the screen is

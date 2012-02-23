@@ -407,6 +407,11 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		}		
 		
 		echo "All Done!\n";		
+		
+		if(php_sapi_name() != 'cli'){
+			echo '</pre><br /><br />';
+			echo '<a href="'.GO::config()->host.'">'.GO::t('cmdContinue').'</a>';
+		}
 		//return $response;
 	}
 }
