@@ -586,6 +586,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	}
 
 	private function _handleInvitations(GO_Email_Model_ImapMessage $imapMessage, $params, $response) {
+		
+		if(!GO::modules()->isInstalled('calendar'))
+			return $response;
+		
 		$atts = $imapMessage->getAttachments();
 
 		foreach ($atts as $a) {
