@@ -885,7 +885,6 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$response['results']=array();
 		
 		$model = GO::getModel($this->model);
-		$labels = $model->attributeLabels();
 		
 		$attributes = array();
 		
