@@ -183,6 +183,9 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		}
 
 		$message->handleEmailFormInput($params);
+		
+		if(!$message->hasRecipients())
+			throw new Exception(GO::t('feedbackNoReciepent','email'));
 
 		$message->setFrom($alias->email, $alias->name);
 
