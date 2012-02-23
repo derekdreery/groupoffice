@@ -321,6 +321,15 @@ class GO_Base_Mail_Message extends Swift_Message{
 	}
 	
 	/**
+	 * Check if either to,cc and bcc has at least one recipient.
+	 * 
+	 * @return boolean 
+	 */
+	public function hasRecipients(){
+		return count($this->getTo()) || count($this->getCc()) || count($this->getBcc());
+	}
+	
+	/**
 	 * handleEmailFormInput
 	 * 
 
