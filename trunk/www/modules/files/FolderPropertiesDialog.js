@@ -192,7 +192,7 @@ Ext.extend(GO.files.FolderPropertiesDialog, GO.Window, {
 								
 				this.readPermissionsTab.setAcl(action.result.data.acl_id);
 				
-				this.setPermission(action.result.data.is_someones_home_dir, action.result.data.permission_level);
+				this.setPermission(action.result.data.is_someones_home_dir, action.result.data.permission_level, action.result.data.readonly);
 
 				this.tabPanel.setActiveTab(0);
 				if(GO.customfields)
@@ -223,13 +223,15 @@ Ext.extend(GO.files.FolderPropertiesDialog, GO.Window, {
 		});
 	},
 	
-	setPermission : function(is_someones_home_dir, permission_level)
+	setPermission : function(is_someones_home_dir, permission_level, readonly)
 	{
+		//readonly flag is set for project, contact, company etc. folders.
+			
 		var form = this.formPanel.form;
-		form.findField('name').setDisabled(is_someones_home_dir || permission_level<GO.permissionLevels.write);
-		form.findField('share').setDisabled(is_someones_home_dir || permission_level<GO.permissionLevels.manage);
+		form.findField('name').setDisabled(is_someones_home_dir || readonly || permission_level<GO.permissionLevels.write);
+		form.findField('share').setDisabled(is_someones_home_dir || readonly || permission_level<GO.permissionLevels.manage);
 		form.findField('apply_state').setDisabled(permission_level<GO.permissionLevels.manage && !GO.settings.has_admin_permission);
-		this.readPermissionsTab.setDisabled(this.readPermissionsTab.acl_id==0);
+		this.readPermissionsTab.setDisabled(readonly);
 	},
 	
 	save : function(hide)
