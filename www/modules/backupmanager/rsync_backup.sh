@@ -67,7 +67,6 @@ if [ $QUIET -eq 0 ]
 fi
 
 # backup mysql databases
-#mysqldump --all-databases -u root --password=mks14785 > /root/mysql_backup/mysql.sql
 perl mysql_backup.pl $MYSQL_USER $MYSQL_PASS
 
 if [ ! -f $RKEY ]; then
