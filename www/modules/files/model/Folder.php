@@ -584,6 +584,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			return GO_Files_Model_Folder::model()->find(
 							GO_Base_Db_FindParams::newInstance()
 							->limit(100)//not so nice hardcoded limit
+							->order('name','ASC')
 							->criteria(GO_Base_Db_FindCriteria::newInstance()
 									->addModel(GO_Files_Model_Folder::model())
 									->addCondition('parent_id', $this->id))
