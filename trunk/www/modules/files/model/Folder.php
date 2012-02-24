@@ -120,6 +120,15 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			}
 		}
 		return $this->_path;
+	}	
+	
+	public function getFolderIdsInPath($folder_id){
+		$ids=array();
+		$currentFolder = GO_Files_Model_Folder::model()->findByPk($folder_id);
+		while ($currentFolder = $currentFolder->parent) {
+			$ids[] = $currentFolder->id;
+		}	
+		return $ids;
 	}
 
 	protected function getFsFolder() {
