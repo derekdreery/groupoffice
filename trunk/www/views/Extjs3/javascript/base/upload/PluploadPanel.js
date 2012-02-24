@@ -27,11 +27,11 @@ GO.base.upload.PluploadPanel = function(config){
 			
 		max_file_size: maxFileSize,
 
-		resize: {
-			width: 640, 
-			height: 480, 
-			quality: 60
-		},
+//		resize: {
+//			width: 640, 
+//			height: 480, 
+//			quality: 60
+//		},
 
 		flash_swf_url: BaseHref+'views/Extjs3/javascript/plupload/plupload/js/plupload.flash.swf',
 		silverlight_xap_url: BaseHref+'views/Extjs3/javascript/plupload/plupload/js/plupload.silverlight.xap',
