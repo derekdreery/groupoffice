@@ -152,7 +152,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 			this.panel.collapsibleSections[id]=dataKey;
 			return '<div class="collapsible-display-panel-header"><div style="float:left">'+title+'</div><div class="x-tool x-tool-toggle" style="float:right;margin:0px;padding:0px;cursor:pointer" id="toggle-'+id+'">&nbsp;</div></div>';
 		}
-		
+				
 		this.xtemplate = new Ext.XTemplate(this.template, this.templateConfig);
 		this.xtemplate.compile();
 		
@@ -461,7 +461,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		if(this.expandListenObject.collapsed || !this.rendered){
 			//model_id is needed for editHandlers
 			this.collapsedLinkId=this.model_id=id;
-		}else if(this.model_id!=id || reload)
+		}else//else if(this.model_id!=id || reload)
 		{
 			this.loading=true;
 
@@ -529,3 +529,38 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 });
 
 Ext.reg('displaypanel',GO.DisplayPanel);
+
+// TODO: Idea for a kind of displaymanager that keeps track of the panels by a specific model.
+// 
+// Maybe this must be generated through PHP???
+// 		
+//GO.DisplayManager = function(){
+//	var templateBlocks = [];
+//	var newMenuItems = [];
+//
+//	return {
+//		/**
+//		 * Registers a component.
+//		 * @param {Ext.Component} c The component
+//		 */
+//		addTemplateBlock : function(title, template){
+//			templateBlocks.add({title:title, template: template});
+//		},
+//		
+//		getTemplateBlocks : function(){
+//			return this.templateBlocks;
+//		},
+//		
+//		/**
+//		 * Registers a component.
+//		 * @param {Ext.Component} c The component
+//		 */
+//		addNewMenuItem : function(item){
+//			newMenuItems.add(item);
+//		},
+//		
+//		getNewMenuItems : function(){
+//			return this.newMenuItems;
+//		}
+//	}
+//}
