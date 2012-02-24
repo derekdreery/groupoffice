@@ -128,7 +128,8 @@ Ext.extend(GO.calendar.ContextMenu, Ext.menu.Menu, {
 
 		this.newMenuItem.setLinkConfig({
 			model_name:"GO_Calendar_Model_Event",
-			model_id:event.event_id
+			model_id:event.event_id,
+			text:event.name
 		});
 	},
 	
