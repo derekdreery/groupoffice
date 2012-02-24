@@ -155,7 +155,6 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			GO::modules()->callModuleMethod('checkDatabase', array(&$response));
 		}
 		
-		ob_flush();
 		echo "All Done!\n";
 		
 		return $response;
