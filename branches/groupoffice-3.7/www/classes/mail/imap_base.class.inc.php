@@ -526,7 +526,7 @@ class imap_base {
 	}
 
 
-	public static function mime_header_decode($string) {
+	public function mime_header_decode($string) {
 
 		/*
 		 * (=?ISO-8859-1?Q?a?= =?ISO-8859-1?Q?b?=)     (ab)
