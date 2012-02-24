@@ -1,4 +1,31 @@
 <?php
+/**
+ * Group-Office
+ * 
+ * Copyright Intermesh BV. 
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ * 
+ * @license AGPL/Proprietary http://www.group-office.com/LICENSE.TXT
+ * @link http://www.group-office.com
+ * @copyright Copyright Intermesh BV
+ * @version $Id: Number.php 7962 2011-08-24 14:48:45Z mschering $
+ * @author Merijn Schering <mschering@intermesh.nl>
+ * @package GO.base.util.charset
+ */
+
+/**
+ * Charset mapping taken from:
+ * 
+ * ftp://ftp.unicode.org/Public/MAPPINGS/VENDORS/APPLE/THAI.TXT 
+ *
+ * @package GO.base.util.charset
+ * @version $Id: File.class.inc.php 7607 2011-06-15 09:17:42Z mschering $
+ * @copyright Copyright Intermesh BV.
+ * @author Merijn Schering <mschering@intermesh.nl> 
+ */
 
 class GO_Base_Util_Charset_Xmac {
 
