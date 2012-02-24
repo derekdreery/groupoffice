@@ -239,7 +239,7 @@ class GO_Base_Data_ColumnModel {
 
 		$oldLevel = error_reporting(E_ERROR); //suppress errors in the eval'd code
 		
-		$formattedRecord = array();
+		$formattedRecord = $model->getAttributes('html');
 		$columns = $this->getColumns();
 
 		foreach($columns as $column){	
