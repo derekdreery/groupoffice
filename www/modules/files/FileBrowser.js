@@ -1480,36 +1480,30 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 										break;
 									}
 								}
+							}							
+								
+							var destinationNode = this.treePanel.getNodeById(pasteDestination);
+							if(destinationNode)
+							{
+								//delete destinationNode.attributes.children;
+								destinationNode.attributes.children=[];
+								destinationNode.attributes.childrenRendered=false;
+								destinationNode.reload();
 							}
-							
-							this.treePanel.getRootNode().reload();
 								
-								
-//							var destinationNode = this.treePanel.getNodeById(pasteDestination);
-//							if(destinationNode)
-//							{
-//								//delete destinationNode.attributes.children;
-//								destinationNode.attributes.children=[];
-//								destinationNode.attributes.childrenRendered=false;
-//								destinationNode.reload();
-//							}
-//								
-//							if(pasteSources)
-//							{
-//								for(var i=0;i<pasteSources.length;i++)
-//								{
-//									var node = this.treePanel.getNodeById(pasteSources[i]);
-//									if(node)
-//									{
-//										node.remove();
-//									}
-//								}
-//							}
+							if(pasteSources)
+							{
+								for(var i=0;i<pasteSources.length;i++)
+								{
+									var arr = pasteSources[i].split(':');
+									var node = this.treePanel.getNodeById(arr[1]);
+									if(node)
+										node.remove();
+								}
+							}
 								
 							if(this.overwriteDialog)
-							{
 								this.overwriteDialog.hide();
-							}
 						}
 					}
 				}

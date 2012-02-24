@@ -39,6 +39,14 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 //		}
 	}
 	
+	private function _getExpandFolderIds($params){
+		$expandFolderIds=array();
+		if(!empty($params['expand_folder_id'])) {
+			$expandFolderIds=  GO_Files_Model_Folder::model()->getFolderIdsInPath($params['expand_folder_id']);
+		}
+		return $expandFolderIds;
+	}
+	
 
 	protected function actionTree($params) {
 		//GO::$ignoreAclPermissions=true;
@@ -49,27 +57,29 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 //		}
 //		
 		$response = array();
-
+		
+		$expandFolderIds = $this->_getExpandFolderIds($params);
+		
 
 		switch ($params['node']) {
 			case 'shared':
 				$stmt = GO_Files_Model_Folder::model()->findShares(GO_Base_Db_FindParams::newInstance()->limit(100));
 				while ($folder = $stmt->fetch()) {
-					$response[] = $this->_folderToNode($folder, false);
+					$response[] = $this->_folderToNode($folder, $expandFolderIds, false);
 				}
 				break;
 			case 'root':
 				if (!empty($params['root_folder_id'])) {
 					$folder = GO_Files_Model_Folder::model()->findByPk($params['root_folder_id']);
 					$folder->checkFsSync();
-					$node = $this->_folderToNode($folder);
+					$node = $this->_folderToNode($folder, $expandFolderIds);
 					$response[] = $node;
 				} else {
 					$folder = GO_Files_Model_Folder::model()->findHomeFolder(GO::user());
 
 					$folder->checkFsSync();
 
-					$node = $this->_folderToNode($folder);
+					$node = $this->_folderToNode($folder, $expandFolderIds);
 					$node['text'] = GO::t('personal', 'files');
 					$node['iconCls'] = 'folder-home';
 					$node['path'] = $folder->path;
@@ -94,7 +104,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 						$contactsFolder = GO_Files_Model_Folder::model()->findByPath('addressbook');
 
 						if ($contactsFolder) {
-							$node = $this->_folderToNode($contactsFolder, false);
+							$node = $this->_folderToNode($contactsFolder, $expandFolderIds, false);
 							$node['text'] = GO::t('addressbook', 'addressbook');
 							$response[] = $node;
 						}
@@ -104,7 +114,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 						$projectsFolder = GO_Files_Model_Folder::model()->findByPath('projects');
 
 						if ($projectsFolder) {
-							$node = $this->_folderToNode($projectsFolder, false);
+							$node = $this->_folderToNode($projectsFolder, $expandFolderIds, false);
 							$node['text'] = GO::t('projects', 'projects');
 							$response[] = $node;
 						}
@@ -122,7 +132,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				$stmt = $folder->getSubFolders();
 
 				while ($subfolder = $stmt->fetch()) {
-					$response[] = $this->_folderToNode($subfolder, false);
+					$response[] = $this->_folderToNode($subfolder, $expandFolderIds, false);
 				}
 
 				break;
@@ -131,21 +141,22 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		return $response;
 	}
 
-	private function _folderToNode($folder, $withChildren=true) {
+	private function _folderToNode($folder, $expandFolderIds=array(), $withChildren=true) {
+		$expanded = $withChildren || in_array($folder->id, $expandFolderIds);
 		$node = array(
 				'text' => $folder->name,
 				'id' => $folder->id,
 				'draggable' => false,
 				'iconCls' => 'folder-default',
-				'expanded' => $withChildren,
+				'expanded' => $expanded,
 				'parent_id'=>$folder->parent_id,
 				'path'=>$folder->path
 		);
 
-		if ($withChildren) {
+		if ($expanded) {
 			$stmt = $folder->folders();
 			while ($subfolder = $stmt->fetch()) {
-				$node['children'][] = $this->_folderToNode($subfolder, false);
+				$node['children'][] = $this->_folderToNode($subfolder, $expandFolderIds, false);
 			}
 		} else {
 			//check if folder has subfolders
