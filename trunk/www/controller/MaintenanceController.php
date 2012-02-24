@@ -410,7 +410,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		if(php_sapi_name() != 'cli'){
 			echo '</pre><br /><br />';
-			echo '<a href="'.GO::config()->host.'">'.GO::t('cmdContinue').'</a>';
+			echo '<a href="'.GO::config()->host.'">'.GO::t('loginToGo').'</a>';
 		}
 		//return $response;
 	}
