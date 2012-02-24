@@ -123,7 +123,8 @@ Ext.extend(GO.calendar.ContextMenu, Ext.menu.Menu, {
 
 		this.newMenuItem.setLinkConfig({
 			type:1,
-			id:event.event_id
+			id:event.event_id,
+			text:event.name
 		});
 	},
 	
