@@ -131,11 +131,15 @@ class String {
 				if(empty($from_charset))*/
 				$from_charset='windows-1252';
 			}
-
-			return iconv($from_charset, 'UTF-8//IGNORE', $str);
+			
+			if($from_charset=='x-mac-thai'){
+				require_once($GLOBALS['GO_CONFIG']->root_path.'classes/charset/Xmacthai.php');
+				return GO_Base_Util_Charset_Xmac::toUtf8($str, $from_charset);
+			}else
+				return iconv($from_charset, 'UTF-8//IGNORE', $str);
 		}
 	}
-
+		
 	public static function clean_utf8($str, $source_charset='UTF-8') {
 		//echo $source_charset;
 		//must use html_entity_decode here other wise some weird utf8 might be decoded later
