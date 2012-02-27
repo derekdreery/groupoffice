@@ -352,6 +352,7 @@ GO.addressbook.MainPanel = function(config)
 				cls: 'x-btn-text-icon',
 				handler:function(){
 					var activetab = this.tabPanel.getActiveTab();
+					
 //					var config = {};
 					var url;
 					var name;
@@ -362,18 +363,15 @@ GO.addressbook.MainPanel = function(config)
 						case 'ab-contacts-grid':
 							url = 'addressbook/contact/export';
 							name = 'contact';
-							title = 'ExportContact';
-							colmodel = this.contactsGrid.getColumnModel();
-							
-							
+							documentTitle = 'ExportContact';
+							colmodel = this.contactsGrid.getColumnModel();							
 //							config.query='search_contacts';
 //							config.colModel = this.contactsGrid.getColumnModel();
-
 							break;
 						case 'ab-company-grid':
 							url = 'addressbook/company/export';
 							name = 'company';
-							title = 'ExportCompany';
+							documentTitle = 'ExportCompany';
 							colmodel = this.companiesGrid.getColumnModel();
 //							config.query='search_companies';
 //							config.colModel = this.companiesGrid.getColumnModel();
@@ -389,6 +387,8 @@ GO.addressbook.MainPanel = function(config)
 						colModel: colmodel
 					});
 				}
+				else
+					this.exportDialog.setParams(documentTitle, name, url);
 				
 				this.exportDialog.show();
 
