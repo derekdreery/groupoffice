@@ -523,10 +523,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		if (!isset($response['data']['events']) && GO::modules()->calendar){
 
-			//$startOfDay = GO_Base_Util_Date::clear_time(time());
+			$startOfDay = GO_Base_Util_Date::clear_time(time());
 			
 			$findParams = GO_Base_Db_FindParams::newInstance()->order('start_time','DESC');
-			//$findParams->getCriteria()->addCondition('start_time', $startOfDay, '>=');						
+			$findParams->getCriteria()->addCondition('start_time', $startOfDay, '>=');						
 			
 			$stmt = GO_Calendar_Model_Event::model()->findLinks($model, $findParams);		
 
@@ -544,10 +544,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		if (!isset($response['data']['tasks']) && GO::modules()->tasks){
 
-			//$startOfDay = GO_Base_Util_Date::clear_time(time());
+			$startOfDay = GO_Base_Util_Date::clear_time(time());
 			
 			$findParams = GO_Base_Db_FindParams::newInstance()->order('due_time','DESC');
-			//$findParams->getCriteria()->addCondition('start_time', $startOfDay, '>=');						
+			$findParams->getCriteria()->addCondition('start_time', $startOfDay, '>=')->addCondition('status', GO_Tasks_Model_Task::STATUS_COMPLETED, '!=');						
 			
 			$stmt = GO_Tasks_Model_Task::model()->findLinks($model, $findParams);		
 
