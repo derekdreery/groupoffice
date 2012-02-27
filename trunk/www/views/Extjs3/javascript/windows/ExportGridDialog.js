@@ -36,7 +36,6 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 			name:'headers'
 		});
 	
-	
 		this.radioGroup = new Ext.form.RadioGroup({
 			fieldLabel : 'Type',
 			name       : 'exportFormat',
@@ -193,6 +192,14 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 	insertFormElement : function(targetIndex, elementToAdd){
 		this.formPanel.insert(targetIndex, elementToAdd);
 	},
+	setParams : function(title,name,url){
+		this.documentTitle = title;
+		this.name = name;
+		this.url = url;
+		this.hiddenDocumentTitle.setValue(this.documentTitle);
+		this.hiddenName.setValue(this.name);
+		this.hiddenUrl.setValue(this.url);
+	},
 	submitForm : function(hide) {
 		this.formPanel.form.getEl().dom.target='_blank';
 		this.formPanel.form.el.dom.target='_blank';
@@ -225,9 +232,7 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 			},
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action) {		
-				console.log("SUCCESSFULL");
-//				if(hide)
-//					this.hide();	
+				//console.log("SUCCESSFULL");
 			},		
 			failure: function(form, action) {
 				if(action.failureType == 'client')			
