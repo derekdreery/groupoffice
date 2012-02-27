@@ -1866,29 +1866,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}elseif(!empty($attributes['validator']) && !empty($this->_attributes[$field]) && !call_user_func($attributes['validator'], $this->_attributes[$field]))
 			{
 				$this->setValidationError($field, $this->getAttributeLabel($field).' did not validate');
-			}elseif(!empty($attributes['unique'])){
-							
-				$criteria = GO_Base_Db_FindCriteria::newInstance()
-							->addModel(GO::getModel($this->className()))
-							->addCondition($field, $this->_attributes[$field]);
-				
-				if(is_array($attributes['unique'])){
-					foreach($attributes['unique'] as $f)
-						$criteria->addCondition($f, $this->_attributes[$f]);
-				}
-				
-				if(!$this->isNew)
-					$criteria->addCondition($this->primaryKey(), $this->pk, '!=');
-				
-				$existing = $this->findSingle(GO_Base_Db_FindParams::newInstance()
-								->ignoreAcl()
-								->criteria($criteria)
-				);
-				
-				if($existing)
-					$this->setValidationError($field, sprintf(GO::t('alreadyExists'),$this->localizedName, $this->_attributes[$field]));
 			}
 		}
+		
+		$this->_validateUniqueColumns();
 		
 		$errors = $this->getValidationErrors();
 		if(!empty($errors)){
@@ -1896,6 +1877,46 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 		
 		return true;
+	}
+	
+	private function _validateUniqueColumns(){
+		foreach($this->columns as $field=>$attributes){
+		
+			if(!empty($attributes['unique'])){
+				
+				$relatedAttributes = array($field);
+				if(is_array($attributes['unique']))
+					$relatedAttributes = array_merge($relatedAttributes,$attributes['unique']);
+				
+				$modified = false;
+				foreach($relatedAttributes as $relatedAttribute){
+					if($this->isModified($relatedAttribute))
+						$modified=true;
+				}
+				
+				if($modified){
+					$criteria = GO_Base_Db_FindCriteria::newInstance()
+								->addModel(GO::getModel($this->className()))
+								->addCondition($field, $this->_attributes[$field]);
+
+					if(is_array($attributes['unique'])){
+						foreach($attributes['unique'] as $f)
+							$criteria->addCondition($f, $this->_attributes[$f]);
+					}
+
+					if(!$this->isNew)
+						$criteria->addCondition($this->primaryKey(), $this->pk, '!=');
+
+					$existing = $this->findSingle(GO_Base_Db_FindParams::newInstance()
+									->ignoreAcl()
+									->criteria($criteria)
+					);
+
+					if($existing)
+						$this->setValidationError($field, sprintf(GO::t('alreadyExists'),$this->localizedName, $this->_attributes[$field]));
+				}
+			}
+		}
 	}
 	
 	/**
