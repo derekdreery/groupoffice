@@ -440,5 +440,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	 */
 	buildForm : function () {
 
+	},
+	addBaseParam : function(param,value){
+		this.formPanel.baseParams[param] = value;
 	}
 });
