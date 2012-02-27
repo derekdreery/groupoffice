@@ -388,9 +388,11 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			if(GO::modules()->isInstalled('projects') && GO::modules()->isInstalled('files')){
 				echo "Renaming projects folder temporarily for new project paths\n";
 				$folder = GO_Files_Model_Folder::model()->findByPath('projects');
-				$folder->name='oldprojects';
-				$folder->systemSave=true;
-				$folder->save();
+				if($folder){
+					$folder->name='oldprojects';
+					$folder->systemSave=true;
+					$folder->save();
+				}
 			}
 			
 			
