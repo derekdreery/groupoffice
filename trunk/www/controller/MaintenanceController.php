@@ -183,13 +183,13 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 
 				$m = GO::getModel($model->getName());
 
-				$stmt = $m->find(array(
-						'ignoreAcl'=>true
-				));
-				$stmt->callOnEach('checkDatabase');
+					$stmt = $m->find(array(
+							'ignoreAcl'=>true
+					));
+					$stmt->callOnEach('checkDatabase');
+				}
 			}
 		}
-	}
 	
 	private function _checkV3(){
 		
