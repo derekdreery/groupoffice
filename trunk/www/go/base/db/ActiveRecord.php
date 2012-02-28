@@ -299,9 +299,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		if($this->isNew) 
 			$this->setAttributes($this->_getDefaultAttributes(),false);
-		
-		$this->setAttributeOutputMode(GO_Base_Db_ActiveRecord::$attributeOutputMode);
-		
+				
 		$this->init();
 		
 		$this->_modifiedAttributes=array();
@@ -2583,29 +2581,29 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 	}
 	
-	/**
-	 * Set the output mode for this model. The default value can be set globally 
-	 * too with GO_Base_Db_ActiveRecord::$attributeOutputMode.
-	 * It can be 'raw', 'formatted' or 'html'.
-	 * 
-	 * @param type $mode 
-	 */
-	public function setAttributeOutputMode($mode){
-		if($mode!='raw' && $mode!='formatted' && $mode!='html')
-			throw new Exception("Invalid mode ".$mode." supplied to setAttributeOutputMode in ".$this->className());
-
-		$this->_attributeOutputMode=$mode;
-	}
+//	/**
+//	 * Set the output mode for this model. The default value can be set globally 
+//	 * too with GO_Base_Db_ActiveRecord::$attributeOutputMode.
+//	 * It can be 'raw', 'formatted' or 'html'.
+//	 * 
+//	 * @param type $mode 
+//	 */
+//	public function setAttributeOutputMode($mode){
+//		if($mode!='raw' && $mode!='formatted' && $mode!='html')
+//			throw new Exception("Invalid mode ".$mode." supplied to setAttributeOutputMode in ".$this->className());
+//
+//		$this->_attributeOutputMode=$mode;
+//	}
 	
-	/**
-	 *Get the current attributeOutputmode
-	 * 
-	 * @return string 
-	 */
-	public function getAttributeOutputMode(){
-		
-		return $this->_attributeOutputMode;
-	}
+//	/**
+//	 *Get the current attributeOutputmode
+//	 * 
+//	 * @return string 
+//	 */
+//	public function getAttributeOutputMode(){
+//		
+//		return $this->_attributeOutputMode;
+//	}
 	/**
 	 * PHP getter magic method.
 	 * This method is overridden so that AR attributes can be accessed like properties.
@@ -2616,7 +2614,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	public function __get($name)
 	{
 		if(isset($this->_attributes[$name])){
-			return $this->getAttribute($name, $this->_attributeOutputMode);
+			return $this->getAttribute($name, self::$attributeOutputMode);
 		}else{
 			
 			$getter = 'get'.ucfirst($name);
