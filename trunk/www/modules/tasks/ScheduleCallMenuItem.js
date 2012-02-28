@@ -21,7 +21,6 @@ GO.tasks.ScheduleCallMenuItem = Ext.extend(Ext.menu.Item,{
 	setLinkConfig : function(config){
 		
 		this.linkConfig = config;
-		
 		this.setDisabled(false);
 	}
 });

@@ -28,7 +28,7 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	},
 	beforeSubmit: function(params){
 		params.name = GO.tasks.lang.call+': '+this.showConfig.link_config.name;
-		params.link = this.showConfig.link_config.link.model_name + ':' + this.showConfig.link_config.link.model_id;
+		params.link = this.showConfig.link_config.model_name + ':' + this.showConfig.link_config.model_id;
 		params.remind = 'on';
 	},
 //	afterSubmit: function(action){
