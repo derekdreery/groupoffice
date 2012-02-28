@@ -15,7 +15,7 @@
  * @property boolean $email_allowed
  * @property int $mtime
  * @property int $ctime
- * @property string $crn
+ * @property string $crn Company registration number
  * @property string $iban
  * @property string $vat_no
  * @property string $bank_no
@@ -34,6 +34,7 @@
  * @property string $state
  * @property string $city
  * @property string $zip
+ * @property string $address
  * @property string $address_no
  * @property string $name2
  * @property string $name
