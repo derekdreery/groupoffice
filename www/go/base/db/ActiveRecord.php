@@ -1175,7 +1175,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				$queryUid = $this->_getFindQueryUid($params);
 				
 				//Total numbers are cached in session when browsing through pages.
-				if(empty($params['start'])){
+				if(empty($params['start']) || !isset(GO::session()->values[$queryUid])){
 					//TODO: This is MySQL only code
 					$sql = "SELECT FOUND_ROWS() as found;";			
 					$r2 = $this->getDbConnection()->query($sql);
