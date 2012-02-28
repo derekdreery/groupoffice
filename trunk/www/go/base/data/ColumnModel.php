@@ -100,24 +100,22 @@ class GO_Base_Data_ColumnModel {
 	 * 
 	 * Eg. '$model->user->name' or '$model->task->name'
 	 * The user and task are related models of the given $model.
-	 * 
-	 * The extraVars param is optional an can include extra params that are needed for the $format.
-	 * The sortfield param is optional an can be set if you want to set the default field for Sorting the columns
+	 *
 	 *
 	 * @param String $column
 	 * @param String $format
-	 * @param Array $extraVars
-	 * @param String $sortfield 
+	 * @param Array $extraVars Optional and can include extra params that are needed for the $format.
+	 * @param String $sortAlias A string or array of columns to sort on if this column is sorted on.
+	 * @param string $label Label to use on exports.
 	 * 
 	 * @return GO_Base_Data_ColumnModel
 	 */
-	public function formatColumn($column, $format, $extraVars=array(), $sortfield='', $label='') {
-		
+	public function formatColumn($column, $format, $extraVars=array(), $sortAlias='', $label='') {		
 		
 		$column = new GO_Base_Data_Column($column, $label);
 		$column->setFormat($format, $extraVars);
-		if(!empty($sortfield))
-			$column->setSortAlias($sortfield);
+		if(!empty($sortAlias))
+			$column->setSortAlias($sortAlias);
 		
 		$this->addColumn($column);
 //		$this->_columns[$column]['format'] = $format;
