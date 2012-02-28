@@ -253,9 +253,16 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		//if there's an autolink tag in the message we want to link outgoing messages too.
 		if(($tag = $this->_findAutoLinkTag($params['content_type']=='html' ? $params['htmlbody'] : $params['plainbody']))){
-			$linkModel = GO::getModel($tag['model'])->findByPk($tag['model_id']);				
-			if($linkModel)
-				$this->_link($params,$message, $linkModel);
+			if($tag['account_id']==$account->id){
+				try{
+					$linkModel = GO::getModel($tag['model'])->findByPk($tag['model_id']);				
+					if($linkModel)
+						$this->_link($params,$message, $linkModel);
+				}
+				catch(GO_Base_Exception_AccessDenied $e){
+					
+				}
+			}
 		}
 
 		$response['unknown_recipients'] = $this->_findUnknownRecipients($params);
