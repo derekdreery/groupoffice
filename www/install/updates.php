@@ -145,3 +145,12 @@ $updates["201201091109"][]="ALTER TABLE `go_users`
   DROP `work_state`,
   DROP `work_city`,
   DROP `work_fax`;";
+
+$updates["201202131145"][]= "CREATE TABLE IF NOT EXISTS `go_advanced_searches` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(255) NOT NULL DEFAULT '',
+	`user_id` int(11) NOT NULL DEFAULT '0',
+	`acl_id` int(11) NOT NULL DEFAULT '0',
+	`data` TEXT NOT NULL DEFAULT '',
+	`model_name` VARCHAR(32) NOT NULL DEFAULT ''
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";

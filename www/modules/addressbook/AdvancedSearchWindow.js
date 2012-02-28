@@ -8,18 +8,11 @@
  *
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
- * @author Wilmar van Beusekom <wilmar@intermesh.nl>
- */
-
-/**
- * Wilmar: adapted from Merijn's modules/filesearch/MainPanel.js
  */
 
 GO.addressbook.AdvancedSearchWindow = function(config){
 
 	config = config || {};
-
-	this.buildForm();
 
 	config.title = GO.addressbook.lang.advancedSearch;
 	//config.closable=true;
@@ -27,34 +20,87 @@ GO.addressbook.AdvancedSearchWindow = function(config){
 //	config.height=600;
 	config.border=false;
 	config.collapsible=true;
-	config.layout='fit';
+	config.layout='card';
+		config.layoutConfig={
+			deferredRender:false,
+			layoutOnCardChange:true
+		};
 	config.modal=false;
 	config.resizable=true;
-	config.width=600;
+	config.width=850;
 	config.height=350;
 	config.closeAction='hide';
-	config.items = [this.formPanel];
-	config.buttons=[{
-		text: GO.addressbook.lang.executeQuery,
-		handler: function(){
-			this.search();
-//			this.hide();
-		},
-		scope: this
-	},{
-		text: GO.lang['cmdClose'],
-		handler: function(){
-			this.hide();
-		},
-		scope:this
-	}
-	];
+	config.items = [{
+			layout:'border',
+			items:[this._contactsQueryPanel = new GO.query.QueryPanel({
+					region:'center',
+					modelName:'GO_Addressbook_Model_Contact',
+					modelAttributesUrl:GO.url('addressbook/contact/attributes')
+				}), this._contactsQueriesGrid = new GO.query.SavedQueryGrid({
+					region: 'west',
+					width:200,
+					split:true,
+					queryPanel: this._contactsQueryPanel,
+					modelName:'GO_Addressbook_Model_Contact'
+				})]
+		},{
+			layout:'border',
+			items:[this._companiesQueryPanel = new GO.query.QueryPanel({			
+					region:'center',
+					layout:'fit',
+					modelName:'GO_Addressbook_Model_Company',
+					modelAttributesUrl:GO.url('addressbook/company/attributes')
+				}), this._companiesQueriesGrid = new GO.query.SavedQueryGrid({
+					region: 'west',
+					width:200,
+					split:true,
+					queryPanel: this._companiesQueryPanel,
+					modelName:'GO_Addressbook_Model_Company'
+				})
+			]
+		}];
+		
+		this._contactsQueriesGrid.on('rowdblclick',function(grid,rowId,e){
+			var record = grid.store.getAt(rowId);
+			this.queryId = record.data.id;
+			this._contactsQueryPanel.setCriteriaStore(record);
+			this._contactsQueryPanel.titleField.setValue('<b>'+record.data.name+'</b>');
+		},this);
+		
+		this._companiesQueriesGrid.on('rowdblclick',function(grid,rowId,e){
+			var record = grid.store.getAt(rowId);
+			this.queryId = record.data.id;
+			this._companiesQueryPanel.setCriteriaStore(record);
+			this._companiesQueryPanel.titleField.setValue('<b>'+record.data.name+'</b>');
+		},this);
+		
+		config.buttons=[{
+			text: GO.lang['cmdSave'],
+			handler: function(){
+				this.showSavedQueryDialog(this.queryId,this._getModelName());
+			},
+			scope: this
+		},{
+			text: GO.lang.executeQuery,
+			handler: function(){
+				this.search();
+			},
+			scope: this
+		},{
+			text: GO.lang['cmdClose'],
+			handler: function(){
+				this.hide();
+			},
+			scope:this
+		}];
 
 	GO.addressbook.AdvancedSearchWindow.superclass.constructor.call(this,config);
 
 }
 
-Ext.extend(GO.addressbook.AdvancedSearchWindow, Ext.Window, {
+Ext.extend(GO.addressbook.AdvancedSearchWindow, GO.Window, {
+	
+	queryId : 0,
 	
 	/*
 	 * Sets whether, during the time of use of this window, the data type is
@@ -65,33 +111,32 @@ Ext.extend(GO.addressbook.AdvancedSearchWindow, Ext.Window, {
 		if (type!='companies' && type!='contacts')
 			Ext.MessageBox.alert(GO.lang.strWarning,"AdvancedSearchWindow.updateDataType() parameter must be either 'contacts' or 'companies'.");
 		
-		this._dataType = type;
-		this.queryPanels.items.itemAt(0).setDisabled(type!='contacts'); // item 0 is the contactsQueryPanel
-		this.queryPanels.items.itemAt(0).setVisible(type=='contacts')
-		this.queryPanels.items.itemAt(1).setDisabled(type!='companies'); // item 1 is the companiesQueryPanel
-		this.queryPanels.items.itemAt(1).setVisible(type=='companies');
-		
-		if (this._dataType=='contacts') {
+		if (type=='contacts')
+			this.getLayout().setActiveItem(0);
+		else
+			this.getLayout().setActiveItem(1);
+
+		this._datatype = type;
+	
+		if (this._datatype=='contacts') {
 			this.externalTargetGrid = masterPanel.contactsGrid;
-			this.activeQueryPanel = this.queryPanels.items.itemAt(0);
 		} else {
 			this.externalTargetGrid = masterPanel.companiesGrid;
-			this.activeQueryPanel = this.queryPanels.items.itemAt(1);
 		}
 	},
 
 	getDatatype : function() {
 		if (typeof(this._datatype)=='undefined')
-			return false;
+			return false;		
 		return this._datatype;
 	},
 	
 	_getModelName : function() {
-		switch (this.getDataType) {
-			case 'contact':
+		switch (this.getDatatype()) {
+			case 'contacts':
 				return 'GO_Addressbook_Model_Contact';
 				break;
-			case 'company':
+			case 'companies':
 				return 'GO_Addressbook_Model_Company';
 				break;
 			default:
@@ -100,65 +145,41 @@ Ext.extend(GO.addressbook.AdvancedSearchWindow, Ext.Window, {
 		}
 	},
 	
-	buildForm : function() {
-		this.queryPanels = new Ext.Panel({
-			border: false,
-			width: '100%',
-			height: '100%',
-			items: [
-				this._contactsQueryPanel = new GO.query.QueryPanel({
-					region:'center',
-					modelName:'GO_Addressbook_Model_Contact',
-					modelAttributesUrl:GO.url('addressbook/contact/attributes'),
-					disabled: true,
-					width: 600,
-					height: 350
-				}),
-				this._companiesQueryPanel = new GO.query.QueryPanel({
-					region:'center',
-					modelName:'GO_Addressbook_Model_Company',
-					modelAttributesUrl:GO.url('addressbook/company/attributes'),
-					disabled: true,
-					width: 600,
-					height: 350
-				})
-			]
-		});
-		
-		this.formPanel = new Ext.form.FormPanel({
-			split:true,
-			width: '100%',
-			height: '100%',
-			border: false,
-			items: [{
-				layout:'form',
-//				title: GO.adressbook.lang.advancedSearch,
-				items:[this.queryPanels]
-				}
-			]
-		})
-	},
-	
 	show : function(config) {
-		this.updateDataType(config.dataType,config.masterPanel);
 		GO.addressbook.AdvancedSearchWindow.superclass.show.call(this,config);
+		this.updateDataType(config.dataType,config.masterPanel);
 	},
 	
 	search : function(){
 		//checkbox values are only returned when ticked
 		delete this.externalTargetGrid.store.baseParams.search_current_folder;
-		this.externalTargetGrid.store.baseParams['advancedQueryData'] = Ext.encode(this.activeQueryPanel.getGridData());
+		
+		if (this.getDatatype()=='contacts')
+			this.externalTargetGrid.store.baseParams['advancedQueryData'] = Ext.encode(this._contactsQueryPanel.getGridData());
+		else
+			this.externalTargetGrid.store.baseParams['advancedQueryData'] = Ext.encode(this._companiesQueryPanel.getGridData());
+		
 		this.externalTargetGrid.store.load();
 		this.externalTargetGrid.setDisabled(false);
 		this.fireEvent('ok', this);
 	},
 	
 	reset : function(){
-		this.externalTargetGrid.setDocumentBundle(false);
 		this.externalTargetGrid.store.removeAll();
 		this.externalTargetGrid.setDisabled(true);
 //		this.setTitle(GO.filesearch.lang.filesearch);
 		this.externalTargetGrid.exportTitle=GO.lang.strSearch;
+	},
+	
+	showSavedQueryDialog : function(modelId,modelName) {
+		if (GO.util.empty(GO.query.savedQueryDialog))
+			GO.query.savedQueryDialog = new GO.query.SavedQueryDialog();
+		
+		GO.query.savedQueryDialog.show(
+			modelId, {
+				'model_name' : modelName
+			}
+		);
 	}
 	
 });
