@@ -382,7 +382,7 @@ GO.email.EmailComposer = function(config) {
 					scope:this,
 					itemclick : function(item, e ) {
 						if(item.template_id=='default'){
-							this.templatesStore.baseParams.default_template_id=this.showConfig.template_id;
+							this.templatesStore.baseParams.default_template_id=this.lastLoadParams.template_id;
 							this.templatesStore.load();
 							delete this.templatesStore.baseParams.default_template_id;
 						}else if(!this.emailEditor.isDirty() || confirm(GO.email.lang.confirmLostChanges))
@@ -816,6 +816,9 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 			}else
 			{
+				//in case users selects new default template.
+				this.lastLoadUrl = GO.url("email/message/template");
+				this.lastLoadParams = {};
 				this.afterShowAndLoad(config);
 				
 			}
