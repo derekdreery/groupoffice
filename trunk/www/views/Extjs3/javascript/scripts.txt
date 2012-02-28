@@ -154,3 +154,6 @@ views/Extjs3/javascript/base/ContextMenu.js
 views/Extjs3/javascript/base/tree/TreeLoader.js
 
 views/Extjs3/javascript/windows/ResetPasswordDialog.js
+views/Extjs3/javascript/query/SavedQueryGrid.js
+views/Extjs3/javascript/query/SavedQueryDialog.js
+views/Extjs3/javascript/query/QueryContextMenu.js

@@ -194,7 +194,10 @@ GO.query.QueryPanel = function(config){
 		type:'string'
 	}]);
 
-	config.tbar=[{
+	config.tbar=[this.titleField = new GO.form.PlainField({
+		style: 'marginLeft:3px;marginRight:10px;',
+		value: '<b>'+GO.lang['strNew']+'</b>'
+	}),{
 		iconCls: 'btn-add',
 		text: GO.lang['cmdAdd'],
 		cls: 'x-btn-text-icon',
@@ -202,17 +205,29 @@ GO.query.QueryPanel = function(config){
 			this.insertRow();
 		},
 		scope: this
-	},{
+	},
+//	{
+//		iconCls: 'btn-delete',
+//		text: GO.lang['cmdDelete'],
+//		cls: 'x-btn-text-icon',
+//		handler: function(){
+//			var selectedRows = this.selModel.getSelections();
+//			for(var i=0;i<selectedRows.length;i++)
+//			{
+//				selectedRows[i].commit();
+//				this.store.remove(selectedRows[i]);
+//			}
+//		},
+//		scope: this
+//	},
+	{
 		iconCls: 'btn-delete',
-		text: GO.lang['cmdDelete'],
+		text: GO.lang['cmdReset'],
 		cls: 'x-btn-text-icon',
 		handler: function(){
-			var selectedRows = this.selModel.getSelections();
-			for(var i=0;i<selectedRows.length;i++)
-			{
-				selectedRows[i].commit();
-				this.store.remove(selectedRows[i]);
-			}
+			this.titleField.setValue('<b>'+GO.lang['strNew']+'</b>');
+			GO.addressbook.advancedSearchWindow.queryId = 0;
+			this.setCriteriaStore(null);
 		},
 		scope: this
 	}];
@@ -277,5 +292,14 @@ Ext.extend(GO.query.QueryPanel, GO.grid.EditorGridPanel,{
 			var editor = GO.base.form.getFormFieldByType(gotype, colName);
 		}
 		col.setEditor(editor);
+	},
+	
+	setCriteriaStore : function(queryRecord) {
+		if (!GO.util.empty(queryRecord)) {
+			var data = Ext.decode(queryRecord.data.data);
+			this.store.loadData({results: data});
+		} else {
+			this.store.removeAll();
+		}
 	}
 });

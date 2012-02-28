@@ -687,6 +687,24 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		return $this->_acl_id;		
 	}
+	
+	/**
+	 * Returns the permission level for the current user when this model is new 
+	 * and does not have an ACL yet. This function can be overridden if you don't 
+	 * like the default action.
+	 * By default it only allows new models by module admins.
+	 * 
+	 * @return int 
+	 */
+	protected function getPermissionLevelForNewModel(){
+		//the new model has it's own ACL but it's not created yet.
+		//In this case we will check the module permissions.
+		$module = $this->getModule();
+		if ($module == 'base') {
+			return GO::user()->isAdmin() ? GO_Base_Model_Acl::MANAGE_PERMISSION : false;
+		}else
+			return GO::modules()->$module->permissionLevel;
+	}
 
 	/**
 	 * Returns the permission level if an aclField is defined in the model. Otherwise
@@ -708,14 +726,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		//if($this->isNew && !$this->joinAclField){
 		if(empty($this->{$this->aclField()}) && !$this->joinAclField){
-			//the new model has it's own ACL but it's not created yet.
-			//In this case we will check the module permissions.
-			$module = $this->getModule();
-			if($module=='base'){
-				return GO::user()->isAdmin() ? GO_Base_Model_Acl::MANAGE_PERMISSION : false;
-			}else
-				return GO::modules()->$module->permissionLevel;
-			 
+			return $this->getPermissionLevelForNewModel();
 		}else
 		{		
 			if(!isset($this->_permissionLevel)){

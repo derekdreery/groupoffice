@@ -487,7 +487,13 @@ $l['permissionNone'] = 'Geen rechten';
 $l['permissionUse'] = 'Gebruiken';
 $l['permissionManage'] = 'Beheren';
 
+$l['advSearch']='Geavanceerd zoeken';
 $l['alreadyExists']='%s "%s" bestaat al'; //eg. Project "Some name" already exists.
 $l['merge']='Samenvoegen';
 $l['mergeDeleteItems']='Verwijder de geselecteerde items na samenvoegen.';
 $l['mergeAttributes']='Kopieer velden van de geselecteerde items als ze bij het doel leeg zijn.';
+
+$l['missingRemoteModelId'] = 'Naam model niet doorgegeven aan dialoog.';
+$l['executeQuery'] = 'Zoekopdracht uitvoeren';
+$l['savedQuery'] = 'Opgeslagen zoekopdracht';
+$l['strNew'] = 'Nieuw';

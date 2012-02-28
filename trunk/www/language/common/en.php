@@ -502,8 +502,13 @@ $l["noUserFoundWithEmail"]="No user found with the given email address!";
 
 $l["viesDownException"]='The VIES service is down. You can complete your order but you can only pay when we have manually checked your Vies number.';
 
+$l['advSearch']='Advanced search';
 $l['alreadyExists']='%s "%s" already exists'; //eg. Project "Some name" already exists.
-
 $l['merge']='Merge';
 $l['mergeDeleteItems']='Delete the selected items after merging';
 $l['mergeAttributes']='Merge data fields if they are empty in the target item.';
+
+$l['missingRemoteModelId'] = 'Model name not passed to the dialog.';
+$l['executeQuery'] = 'Execute query';
+$l['savedQuery'] = 'Saved query';
+$l['strNew'] = 'New';
