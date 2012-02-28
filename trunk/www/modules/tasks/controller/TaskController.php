@@ -137,6 +137,8 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 				);
 	}	
 	
+	
+	
 	protected function beforeStore(&$response, &$params, &$store) {
 		
 		if(isset($params['completed_task_id'])) {
@@ -146,6 +148,12 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 				$updateTask->setCompleted($params['checked']=="true");
 		}
 		
+//		$c = new GO_Base_Component_MultiSelect('ta-tasklists');
+//		$c->setTitleAttribute('name');
+//		$c->checkPermissionModel('GO_Tasks_Model_Tasklist');
+//		
+//		$this->addMultiSelectComponent($c);
+//		
 		return parent::beforeStore($response, $params, $store);
 	}
 	
