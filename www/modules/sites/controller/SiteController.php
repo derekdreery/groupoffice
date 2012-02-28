@@ -218,9 +218,9 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 * the page.
 	 */
 	protected function renderPage($params=array()){
-		
+
 		GO_Base_Db_ActiveRecord::$attributeOutputMode='html';
-		
+
 		$this->beforeRenderPage($params);
 		extract($params);
 
