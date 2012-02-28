@@ -1,5 +1,5 @@
 <?php
-class GO_Base_Component_MultiSelectGrid{
+class GO_Base_Component_MultiSelectGrid {
 	private $_name;
 	
 	public function __construct($name){
