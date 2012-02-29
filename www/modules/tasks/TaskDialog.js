@@ -136,8 +136,6 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 					}
 				}
 				
-				this.setWritePermission(action.result.data.write_permission);
-
 				if(action.result.data.category_id == 0)
 				{
 					//this.selectCategory.setRemoteText();
@@ -194,10 +192,6 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		}
 	},
 
-	setWritePermission : function(writePermission) {
-		this.win.buttons[0].setDisabled(!writePermission);
-		this.win.buttons[1].setDisabled(!writePermission);
-	},
 
 	setValues : function(values) {
 		if (values) {
