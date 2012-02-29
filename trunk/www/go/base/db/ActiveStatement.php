@@ -73,15 +73,15 @@ class GO_Base_Db_ActiveStatement extends PDOStatement {
 		$i=0;
 		while($m = $this->fetch()){		
 			if(method_exists($m, $function))
-				try{
+//				try{
 					if($verbose){
 						echo ($i++)." $function ".$m->className()."\n";
 						flush();
 					}
 					$m->$function();
-				}catch(Exception $e){
-					echo $e->getMessage();
-				}
+//				}catch(Exception $e){
+//					echo (string) $e;
+//				}
 			}
 	}
 	
