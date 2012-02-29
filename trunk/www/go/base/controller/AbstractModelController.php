@@ -378,7 +378,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 					
 					$model = GO::getModel($multiSelectProperties['permissionsModel'])->findByPk($id);
 					
-					if(!isset($response['buttonParams']) && $model->getPermissionLevel()>GO_Base_Model_Acl::READ_PERMISSION){
+					if(!isset($response['buttonParams']) && $model && $model->getPermissionLevel()>GO_Base_Model_Acl::READ_PERMISSION){
 
 						//instruct the view for the add action.
 						$response['buttonParams']=array('id'=>$model->id,'name'=>$model->name, 'permissionLevel'=>$model->getPermissionLevel());
