@@ -349,13 +349,12 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			return false;
 	}
 	
+	private $_completeDateFormat;
 	
 	protected function getCompleteDateFormat(){
-		return $this->date_format[0].
-						$this->date_separator.
-						$this->date_format[1].
-						$this->date_separator.
-						$this->date_format[2];
+		if(!isset($this->_completeDateFormat))
+			$this->_completeDateFormat=$this->date_format[0].$this->date_separator.$this->date_format[1].$this->date_separator.$this->date_format[2];
+		return $this->_completeDateFormat;
 	}
 	
 	

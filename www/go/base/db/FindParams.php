@@ -137,6 +137,7 @@ class GO_Base_Db_FindParams{
 	 * @return GO_Base_Db_FindParams 
 	 */
 	public function join($tableName, $criteria, $tableAlias = false, $type='INNER'){
+				
 		if(!isset($this->_params['join']))
 			$this->_params['join']='';
 		else
@@ -151,9 +152,24 @@ class GO_Base_Db_FindParams{
 		
 		//add the bind params to the main criteria object.
 		$this->getCriteria()->addParams($criteria->getParams());
+				
+		//register join so activerecord can check if it needs to join the acl table
+		if(!isset($this->_params['joinedTables']))
+			$this->_params['joinedTables']=array();
 		
+		$this->_params['joinedTables'][$tableName]=$tableAlias;		
 		
 		return $this;
+	}
+	
+	/**
+	 * Check if a table has been joined
+	 * 
+	 * @param string $tableName
+	 * @return mixed false or table alias used for join 
+	 */
+	public function tableIsJoined($tableName){
+		return isset($this->_params['joinedTables'][$tableName]) ? $this->_params['joinedTables'][$tableName] : false;
 	}
 	
 	
