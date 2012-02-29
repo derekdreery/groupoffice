@@ -65,7 +65,7 @@ class GO_Ldapauth_Authenticator {
 
 		$mapping = $this->_getMapping();
 
-		$ldapConn = new GO_Base_Ldap_Connection(GO::config()->ldap_host, GO::config()->ldap_port);
+		$ldapConn = new GO_Base_Ldap_Connection(GO::config()->ldap_host, GO::config()->ldap_port, GO::config()->ldap_tls);
 
 		//support old deprecated config.
 		if(!empty(GO::config()->ldap_user))
