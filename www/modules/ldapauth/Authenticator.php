@@ -64,8 +64,15 @@ class GO_Ldapauth_Authenticator {
 		$oldIgnoreAcl = GO::setIgnoreAclPermissions(true);
 
 		$mapping = $this->_getMapping();
+		
+		if(empty(GO::config()->ldap_host) || empty(GO::config()->ldap_port) || empty(GO::config()->ldap_basedn))
+		{
+			GO::debug("LDAPAUTH: Aborting because one or more of the following ".
+				"required values is not set: \$config['ldap_host'], \$config['ldap_port'] and \$config['ldap_basedn'].");
+			return false;
+		}
 
-		$ldapConn = new GO_Base_Ldap_Connection(GO::config()->ldap_host, GO::config()->ldap_port, GO::config()->ldap_tls);
+		$ldapConn = new GO_Base_Ldap_Connection(GO::config()->ldap_host, GO::config()->ldap_port, !empty(GO::config()->ldap_tls));
 
 		//support old deprecated config.
 		if(!empty(GO::config()->ldap_user))
@@ -146,6 +153,7 @@ class GO_Ldapauth_Authenticator {
 					
 					$this->_updateContact($user, $attr);
 					
+					$user->checkDefaultModels();					
 					
 				} catch (Exception $e) {
 					GO::debug('LDAPAUTH: Failed creating user ' .
