@@ -25,7 +25,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		$response['data']['user_name']=$model->user->name;
 		$response['data']['tasklist_name']=$model->tasklist->name;
 		$statuses = GO::t('statuses','tasks');
-		$response['data']['status_text']=$statuses[$model->status];
+		$response['data']['status_text']=isset($statuses[$model->status]) ? $statuses[$model->status] : $model->status;
 		
 		
 		$response['data']['late']=$model->isLate();
