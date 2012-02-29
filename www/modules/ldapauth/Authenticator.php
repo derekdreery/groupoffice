@@ -157,7 +157,7 @@ class GO_Ldapauth_Authenticator {
 					
 				} catch (Exception $e) {
 					GO::debug('LDAPAUTH: Failed creating user ' .
-									$attr['username'] . ' and e-mail ' . $attr['email'] .
+									$attr['username'] .
 									' Exception: ' .
 									$e->getMessage(), E_USER_WARNING);
 				}				
@@ -213,7 +213,7 @@ class GO_Ldapauth_Authenticator {
 			
 			if (!$config)
 			{
-				GO::debug('LDAPAUTH: No E-mail configuration found.');
+				GO::debug('LDAPAUTH: No E-mail configuration found for domain: '.$domain);
 				return false;
 			}
 			
