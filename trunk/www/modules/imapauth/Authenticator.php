@@ -126,7 +126,7 @@ class GO_Imapauth_Authenticator {
 			}
 
 			$account['port'] = $config['port'];
-			$account['use_ssl'] = $config['ssl'];
+			$account['use_ssl'] = empty($config['ssl']) ? 0 : 1;
 			$account['mbroot'] = $config['mbroot'];
 			$account['username'] = $username;
 			$account['password'] = $password;
