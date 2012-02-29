@@ -5,7 +5,7 @@
 GO.grid.MultiSelectGrid = function (config){
 	config = config || {};
 
-	var checkColumn = new GO.grid.CheckColumn({
+	this.checkColumn = new GO.grid.CheckColumn({
 		header: '&nbsp;',
 		dataIndex: 'checked',
 		width: 20,
@@ -18,7 +18,7 @@ GO.grid.MultiSelectGrid = function (config){
 
 				if(this.timeoutNumber)
 					clearTimeout(this.timeoutNumber);			
-				
+
 				this.timeoutNumber=this.applyFilter.defer(750, this,[]);
 			}
 		}
@@ -40,22 +40,16 @@ GO.grid.MultiSelectGrid = function (config){
 		});
 
 	Ext.apply(config, {
-		plugins: [checkColumn],		
+		plugins: [this.checkColumn],		
 		layout:'fit',
 		cls: 'go-grid3-hide-headers',
 		autoScroll:true,
-		columns:[checkColumn,{
-			header:GO.lang.strName,
-			dataIndex: 'name',
-			id:'name'
-		}],		
+		columns:this.getColumns(),		
 		autoExpandColumn:'name',
 		view:new Ext.grid.GridView({
 			emptyText: GO.lang['strNoItems']
 		})
 	});
-
-
 
 	GO.grid.MultiSelectGrid.superclass.constructor.call(this, config);
 
@@ -90,10 +84,10 @@ GO.grid.MultiSelectGrid = function (config){
 	if(this.relatedStore){
 		this.on('change', function(grid, categories, records)
 		{
-			if(records.length){
+			//if(records.length){
 				this.relatedStore.baseParams[this.id] = Ext.encode(categories);
 				this.relatedStore.reload();
-			}
+			//}
 		}, this);
 
 		if(this.autoLoadRelatedStore){
@@ -103,7 +97,6 @@ GO.grid.MultiSelectGrid = function (config){
 				this.relatedStore.load();		
 			}, this);
 		}
-
 	}
 
 	this.addEvents({
@@ -126,6 +119,14 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 	lastSelectedIndex : -1,
 
 	selectedAll : false,
+	
+	getColumns : function (){
+		return [this.checkColumn,{
+			header:GO.lang.strName,
+			dataIndex: 'name',
+			id:'name'
+		}];
+	},
 
 	selectAll : function()
 	{	
