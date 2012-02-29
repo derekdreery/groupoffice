@@ -295,7 +295,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 */
 	protected function getStoreColumnModel() {
 		$cm =  new GO_Base_Data_ColumnModel();
-		//$cm->setColumnsFromModel(GO::getModel($this->model), $this->getStoreExcludeColumns());	
+		$cm->setColumnsFromModel(GO::getModel($this->model), $this->getStoreExcludeColumns());	
 		return $cm;
 	}
 	
