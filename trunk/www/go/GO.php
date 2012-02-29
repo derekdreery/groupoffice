@@ -172,6 +172,8 @@ class GO{
 		GO::session()->values['view']=$viewName;
 	}
 	
+	private static $_user;
+	
 	/**
 	 * Get the logged in user
 	 * 
@@ -180,8 +182,12 @@ class GO{
 	public static function user(){
 		if(empty(GO::session()->values['user_id'])){
 			return false;
-		}else
-			return GO_Base_Model_User::model()->findByPk(GO::session()->values['user_id'], array(), true);
+		}else{
+			if(!isset(self::$_user))
+				self::$_user = GO_Base_Model_User::model()->findByPk(GO::session()->values['user_id'], array(), true);	
+							
+			return self::$_user;
+		}
 	}
 	
 	/**

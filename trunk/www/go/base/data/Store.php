@@ -165,6 +165,8 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 		
 		$model = $this->_stmt->fetch();
 		
+		//return $model ? $model->getAttributes('formatted') : false;
+		
 		return $model ? $this->getColumnModel()->formatModel($model) : false;
 	}
 	

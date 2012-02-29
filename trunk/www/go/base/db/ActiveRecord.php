@@ -299,12 +299,26 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		if($this->isNew) 
 			$this->setAttributes($this->_getDefaultAttributes(),false);
+//		else
+//			$this->_cacheRelatedAttributes();
 				
 		$this->init();
 		
 		$this->_modifiedAttributes=array();
 	}
 	
+	/**
+	 * When a model is joined on a find action and we need it for permissions, We 
+	 * select all the model attributes so we don't have to query it seperately later.
+	 * eg. $contact->addressbook will work from the cache when it was already joined. 
+	 */
+	private function _cacheRelatedAttributes(){
+		foreach($this->_attributes as $name=>$value){
+			$arr = explode('@',$name);
+			if(count($arr)>1)
+				$this->_relatedCache[$arr[0]][$arr[1]]=$value;							
+		}
+	}
 	
 	/**
 	 * Returns localized attribute labels for each column.
@@ -588,11 +602,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$ret['join']="\nINNER JOIN `".$model->tableName().'` '.$ret['relation'].' ON ('.$ret['relation'].'.`'.$model->primaryKey().'`=t.`'.$r[$arr[0]]['field'].'`) ';
 			$ret['fields']='';
 			
-			$cols = $model->getColumns();
+//			$cols = $model->getColumns();
 			
-			foreach($cols as $field=>$props){
-				$ret['fields'].=', '.$ret['relation'].'.`'.$field.'` AS `'.$ret['relation'].'@'.$field.'`';
-			}
+//			foreach($cols as $field=>$props){
+//				$ret['fields'].=', '.$ret['relation'].'.`'.$field.'` AS `'.$ret['relation'].'@'.$field.'`';
+//			}
 			$ret['table']=$ret['relation'];
 			
 		}else
@@ -1484,6 +1498,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	private function _checkRelations($r){
 		if(GO::config()->debug){
 			foreach($r as $name => $attr){
+				if(!isset($attr['model']))
+					throw new Exception('model not set in relation '.$name.' '.var_export($attr, true));
+		
 				if(isset($this->columns[$name]))
 					throw new Exception("Relation $name conflicts with column attribute in ".$this->className());
 				
@@ -1506,12 +1523,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		if(!isset($r[$name]))
 			return false;
-		
-		if(!isset($r[$name]['model']))
-		{
-			throw new Exception('model not set in relation '.$name.' '.var_export($r[$name], true));
-		}
-		
+				
 		$model = $r[$name]['model'];
 		
 		if(!isset($r[$name]['findParams']))
@@ -1661,16 +1673,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 		
 		return $formatted;
-	}
+	}	
 	
 	public function formatAttribute($attributeName, $value, $html=false){
 		if(!isset($this->columns[$attributeName]['gotype'])){			
 
-			if($this->customfieldsModel() && substr($attributeName,0,4)=='col_'){
+			if(false && $this->customfieldsModel() && substr($attributeName,0,4)=='col_'){
 				//if it's a custom field then we create a dummy customfields model.
-				$cfModel = GO::getModel($this->customfieldsModel());
-				$cfModel->setAttributes($this->_attributes, false);
-				
+				$cfModel = $this->_createCustomFieldsRecordFromAttributes();				
 				return $cfModel->formatAttribute($attributeName, $value);
 			}else	{
 				return $value;
@@ -1747,6 +1757,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	
 	public function setAttributes($attributes, $format=true){		
+		
+		GO::debug($this->className().'::setAttributes(); '.$this->pk);
 		
 		if($this->_hasCustomfieldValue($attributes) && $this->customfieldsRecord)
 			$this->customfieldsRecord->setAttributes($attributes, $format);
@@ -2635,10 +2647,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}else
 			{
 				$r = $this->relations();
-				if(isset($r[$name]))			
-				{
-					return $this->_getRelated($name);
-				}
+				if(isset($r[$name]))	
+					return $this->_getRelated($name);				
 			}
 		}
 			
@@ -2721,11 +2731,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function setAttribute($name,$value)
 	{		
-//		Should be set directly
-//		if(property_exists($this,$name)){
-//			$this->$name=$value;
-//		}else
-			
 		if(isset($this->columns[$name])){
 			
 			if(GO::config()->debug){
@@ -2733,27 +2738,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					throw new Exception($this->className()."::setAttribute : Invalid attribute value for ".$name.". Type was: ".gettype($value));
 			}
 			if((!isset($this->_attributes[$name]) || $this->_attributes[$name]!=$value) && !$this->isModified($name))
-			{
 				$this->_modifiedAttributes[$name]=isset($this->_attributes[$name]) ? $this->_attributes[$name] : false;
-			}	
+			
 			$this->_attributes[$name]=$value;
 
 		}else{			
-			$setter = 'set'.ucfirst($name);
+			$setter = 'set'.$name;
 			
 			if(method_exists($this,$setter)){
 				return $this->$setter($value);
 			}else
-			{
-				$arr = explode('@',$name);
-				if(count($arr)>1)
-					$this->_relatedCache[$arr[0]][$arr[1]]=$value;				
-				else		{
-					//this attribute is unsafe or does not belong to this model but we may 
-					//want to use it in the contructor anyway. For example the customfield 
-					//record doesn't know the columns until after the constructor.
-					$this->_attributes[$name]=$value;
-				}
+			{				
+				$this->_attributes[$name]=$value;				
 			}
 		}
 
@@ -2928,6 +2924,26 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}	
 	
 	private $_customfieldsRecord;
+	
+	/**
+	 *
+	 * @return GO_Customfields_Model_AbstractCustomFieldsRecord 
+	 */
+	private function _createCustomFieldsRecordFromAttributes(){
+		$model = $this->customfieldsModel();
+		
+		if(!isset($this->_customfieldsRecord)){
+			
+			$customattr = $this->attributes;
+			$customattr['model_id']=$this->id;
+
+			$this->_customfieldsRecord = new $model;
+			$this->_customfieldsRecord->setAttributes($customattr,false);
+		}
+		
+		
+		return $this->_customfieldsRecord;		
+	}
 	
 	/**
 	 * Returns the customfields record if module is installed and this model

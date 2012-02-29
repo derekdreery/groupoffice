@@ -241,6 +241,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		}
 	
 		$storeParams = GO_Base_Db_FindParams::newInstance()
+			->debugSql()
 			->export("contact")
 			->criteria($criteria)		
 			->joinModel(array(
@@ -252,6 +253,18 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	 			
 			))
 			->select('t.*,c.name AS company_name, addressbook.name AS ab_name, CONCAT_WS(\' \',`t`.`first_name`,`t`.`middle_name`,`t`.`last_name`) AS name');
+		
+//		if(count($this->multiselectIds)){
+//			$storeParams->ignoreAcl ()
+//							->joinModel(array(
+//				'model'=>'GO_Addressbook_Model_Addressbook',					
+//	 			'foreignField'=>'id', //defaults to primary key of the remote model
+//	 			'localField'=>'addressbook_id', //defaults to "id"
+//	 			'tableAlias'=>'addressbook', //Optional table alias
+//	 			'type'=>'INNER' //defaults to INNER,
+//	 			
+//			));
+//		}
 		
 		//if(empty($params['enable_addresslist_filter'])){
 		
