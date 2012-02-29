@@ -155,3 +155,5 @@ $updates["201202131145"][]= "CREATE TABLE IF NOT EXISTS `go_advanced_searches` (
 	`model_name` VARCHAR(32) NOT NULL DEFAULT '',
 	PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates["201202131153"][]= "ALTER TABLE `go_users` CHANGE `middle_name` `middle_name` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";

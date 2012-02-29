@@ -373,7 +373,7 @@ CREATE TABLE IF NOT EXISTS `go_users` (
   `password_type` varchar(20) DEFAULT NULL,
   `enabled` tinyint(1) NOT NULL DEFAULT '1',
   `first_name` varchar(50) NOT NULL,
-  `middle_name` varchar(50) DEFAULT NULL,
+  `middle_name` varchar(50) NOT NULL DEFAULT '',
   `last_name` varchar(100) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `acl_id` int(11) NOT NULL DEFAULT '0',

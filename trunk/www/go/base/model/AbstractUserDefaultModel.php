@@ -34,6 +34,8 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 	 * @return GO_Base_Db_ActiveRecord 
 	 */
 	public static function getAllUserDefaultModels($user_id=0) {
+		
+		$oldIgnoreAcl = GO::setIgnoreAclPermissions(true);
 
 		if (!isset(self::$_allUserDefaultModels)) {
 			self::$_allUserDefaultModels = array();
@@ -53,6 +55,7 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 				}
 			}
 		}
+		GO::setIgnoreAclPermissions($oldIgnoreAcl);
 		return self::$_allUserDefaultModels;
 	}
 	
