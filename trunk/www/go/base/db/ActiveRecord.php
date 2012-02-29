@@ -1872,7 +1872,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	public function validate(){
 				
 		//foreach($this->columns as $field=>$attributes){
-		foreach($this->getModifiedAttributes() as $field=>$oldValue){
+		
+		$fieldsToCheck = $this->isNew ? array_keys($this->columns) : array_keys($this->getModifiedAttributes());
+		
+		foreach($fieldsToCheck as $field){
 			
 			$attributes=$this->columns[$field];
 			
