@@ -361,7 +361,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					
 					this.changeRepeat(action.result.data.freq);
 					this.setValues(config.values);
-					this.setWritePermission(action.result.data.write_permission);
+					//this.setWritePermission(action.result.data.write_permission);
 					//this.selectCalendar.setValue(action.result.data.calendar_id);
 					this.selectCalendar.setRemoteText(action.result.remoteComboTexts.calendar_id);
 					this.files_folder_id = action.result.data.files_folder_id;
@@ -519,10 +519,10 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			}
 		}
 	},
-	setWritePermission : function(writePermission) {
-		this.win.buttons[0].setDisabled(!writePermission);
-		this.win.buttons[1].setDisabled(!writePermission);
-	},
+//	setWritePermission : function(writePermission) {
+//		this.win.buttons[0].setDisabled(!writePermission);
+//		this.win.buttons[1].setDisabled(!writePermission);
+//	},
 
 	setValues : function(values) {
 		if (values) {
