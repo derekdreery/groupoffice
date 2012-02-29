@@ -152,5 +152,6 @@ $updates["201202131145"][]= "CREATE TABLE IF NOT EXISTS `go_advanced_searches` (
 	`user_id` int(11) NOT NULL DEFAULT '0',
 	`acl_id` int(11) NOT NULL DEFAULT '0',
 	`data` TEXT NOT NULL DEFAULT '',
-	`model_name` VARCHAR(32) NOT NULL DEFAULT ''
+	`model_name` VARCHAR(32) NOT NULL DEFAULT '',
+	PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
