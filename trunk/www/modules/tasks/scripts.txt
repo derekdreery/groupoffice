@@ -10,7 +10,6 @@ modules/tasks/SelectTasklist.js
 modules/tasks/MainPanel.js
 modules/tasks/Portlet.js
 modules/tasks/Settings.js
-modules/tasks/PortletSettings.js
 modules/tasks/CategoryDialog.js
 modules/tasks/TaskListsGrid.js
 modules/tasks/TasksTemplate.js

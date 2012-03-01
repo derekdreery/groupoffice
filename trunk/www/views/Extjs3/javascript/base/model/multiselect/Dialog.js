@@ -3,13 +3,13 @@ GO.base.model.multiselect.dialog = function(config){
 	
 	this.multiselectPanel = new GO.base.model.multiselect.panel({
 			url:config.url,
-			cm:config.cm,
+			columns:config.columns,
 			fields:config.fields,
 			model_id:config.model_id
 		});
 		
 	delete config.url;
-	delete config.cm;
+	delete config.columns;
 	delete config.fields;
 	delete config.model_id;
 	
