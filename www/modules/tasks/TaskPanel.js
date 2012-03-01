@@ -83,12 +83,16 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 		{
 			this.template +=GO.customfields.displayPanelTemplate;
 		}
-
+	
 		if(GO.tasks)
 			this.template +=GO.tasks.TaskTemplate;
 
 		if(GO.calendar)
 			this.template += GO.calendar.EventTemplate;
+
+		if(GO.workflow){
+			this.template +=GO.workflow.WorkflowTemplate;
+		}
 
 
 		this.template += GO.linksTemplate;	
