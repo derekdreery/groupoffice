@@ -30,10 +30,10 @@ GO.base.model.multiselect.panel = function(config){
 	if(typeof(config.paging)=='undefined')
 		config.paging=true;
 
-//	config.view=new Ext.grid.GridView({
-//		autoFill: true,
-//		forceFit: true
-//	});
+	config.view=new Ext.grid.GridView({
+		autoFill: true,
+		forceFit: true
+	});
 	
 
 	config.sm=new Ext.grid.RowSelectionModel();

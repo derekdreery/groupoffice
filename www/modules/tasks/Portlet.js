@@ -156,7 +156,7 @@ GO.mainLayout.onReady(function(){
 					{
 						this.selectTasklistsWin = new GO.base.model.multiselect.dialog({
 							url:'tasks/portlet',
-							cm:[{ header: GO.lang['strName'], dataIndex: 'name', sortable: true }],
+							columns:[{ header: GO.lang['strName'], dataIndex: 'name', sortable: true }],
 							fields:['id','name'],
 							title:GO.tasks.lang.visibleTasklists,
 							model_id:GO.settings.user_id,
