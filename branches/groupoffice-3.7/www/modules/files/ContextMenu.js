@@ -27,20 +27,27 @@ GO.files.FilesContextMenu = function(config)
 					handler: function(){
 						//this.fireEvent('download', this, this.records);
 						
-						GO.files.downloadFile(this.records[0].data.id);
+						window.location.href=GO.settings.modules.files.url+'download.php?mode=download&id='+this.records[0].data.id;
 					},
 					scope: this
 				});
 				
 	this.gotaButton = new Ext.menu.Item({
 					iconCls: 'btn-edit',
-					text: GO.files.lang.cmdEdit,
+					text: GO.files.lang.downloadGOTA,
 					cls: 'x-btn-text-icon',
 					handler: function(){
-						GO.files.editFile(this.records[0].data.id);
+						if(!deployJava.isWebStartInstalled('1.6.0'))
+						{
+							Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);
+						}else
+						{		
+							window.location.href=GO.settings.modules.gota.url+'jnlp.php?id='+this.records[0].data.id;
+						}
 					},
 					scope: this
 				});
+	
 	
 	/*this.pasteButton = new Ext.menu.Item({
 					iconCls: 'btn-paste',
