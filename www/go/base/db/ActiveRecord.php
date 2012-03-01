@@ -3436,15 +3436,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(!$sourceFolder)
 			return false;
 		
-		$stmt = $sourceFolder->folders();
-		while($folder = $stmt->fetch()){
-			$folder->move($this->filesFolder);
-		}
-		
-		$stmt = $sourceFolder->files();
-		while($file = $stmt->fetch()){
-			$file->move($this->filesFolder);
-		}
+		$this->filesFolder->moveContentsFrom($sourceFolder);		
 	}
 	
 	/**

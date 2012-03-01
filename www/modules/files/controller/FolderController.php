@@ -56,6 +56,12 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 //			$folder->syncFilesystem();			
 //		}
 //		
+		
+		if(!empty($params['sync_folder_id'])){
+			$syncFolder = GO_Files_Model_Folder::model()->findByPk($params['sync_folder_id']);
+			$syncFolder->syncFilesystem();
+		}
+		
 		$response = array();
 		
 		$expandFolderIds = $this->_getExpandFolderIds($params);
@@ -580,21 +586,23 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				$existingFolder->readonly = 1;
 				$existingFolder->save();
 				
-				$folder->syncFileSystem();				
+				$existingFolder->moveContentsFrom($folder);
 				
-				$stmt = $folder->folders();
-				while($subfolder = $stmt->fetch()){
-					$subfolder->parent_id=$existingFolder->id;
-					$subfolder->appendNumberToNameIfExists();
-					$subfolder->save();
-				}
-				
-				$stmt = $folder->files();
-				while($file = $stmt->fetch()){
-					$file->folder_id=$existingFolder->id;
-					$file->appendNumberToNameIfExists();
-					$file->save();
-				}
+//				$folder->syncFileSystem();				
+//				
+//				$stmt = $folder->folders();
+//				while($subfolder = $stmt->fetch()){
+//					$subfolder->parent_id=$existingFolder->id;
+//					$subfolder->appendNumberToNameIfExists();
+//					$subfolder->save();
+//				}
+//				
+//				$stmt = $folder->files();
+//				while($file = $stmt->fetch()){
+//					$file->folder_id=$existingFolder->id;
+//					$file->appendNumberToNameIfExists();
+//					$file->save();
+//				}
 				
 				//delete empty folder.
 				$folder->delete();				

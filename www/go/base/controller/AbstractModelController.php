@@ -156,13 +156,15 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		}
 		
 		$response = array();
-		$response['data']['permission_level']=$model->getPermissionLevel();
+		
 		if(!$model->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
 			throw new GO_Base_Exception_AccessDenied();
 		
 		$response = $this->beforeLoad($response, $model, $params);
 
 		$response['data'] = $model->getAttributes();
+		$response['data']['permission_level']=$model->getPermissionLevel();
+		$response['data']['write_permission']=true;
 			
 		
 		//todo custom fields should be in a subarray.
