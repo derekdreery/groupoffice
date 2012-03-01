@@ -166,12 +166,7 @@ Ext.extend(GO.bookmarks.CategoryDialog, Ext.Window,{
 	
 	buildForm : function () {
 
-		var items=[this.selectUser = new GO.form.SelectUser({
-			fieldLabel: GO.lang['strUser'],
-			disabled: !GO.settings.modules['bookmarks']['write_permission'],
-			value: GO.settings.user_id,
-			anchor: '100%'
-		}),{
+		var items=[{
 			xtype: 'textfield',
 			name: 'name',
 			anchor: '100%',
@@ -179,13 +174,6 @@ Ext.extend(GO.bookmarks.CategoryDialog, Ext.Window,{
 			fieldLabel: GO.lang.strName
 		}
 		]
-
-		if (GO.settings.modules.bookmarks.write_permission) items.push({ // niet 1 maar 'admin-rights''
-			name: 'public',
-			xtype: 'checkbox',
-			boxLabel: GO.bookmarks.lang.sharedCategory,
-			hideLabel:true
-		});
 
 		this.propertiesPanel = new Ext.Panel({
 			border: false,			
