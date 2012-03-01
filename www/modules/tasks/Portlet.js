@@ -158,7 +158,7 @@ GO.mainLayout.onReady(function(){
 							url:'tasks/portlet',
 							cm:[{ header: GO.lang['strName'], dataIndex: 'name', sortable: true }],
 							fields:['id','name'],
-							title:'Select',
+							title:GO.tasks.lang.visibleTasklists,
 							model_id:GO.settings.user_id,
 							listeners:{
 								hide:function(){
