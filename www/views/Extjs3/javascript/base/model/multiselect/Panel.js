@@ -1,54 +1,45 @@
 GO.base.model.multiselect.panel = function(config){
 	
-	Ext.apply(this, config);
+	config = config || {};
 	
-	this.store = new GO.data.JsonStore({
+	config.store = new GO.data.JsonStore({
 		url: GO.url(config.url+'/selectedStore'),
-		baseParams:{model_id: config.model_id},
+		baseParams:{
+			model_id: config.model_id
+			},
 		fields: config.fields,
-		remoteSort: true
+		remoteSort: true,
+		listeners:{
+			update:function(store, record){
+				GO.request({
+					url: this.url+'/updateRecord',
+					params: {
+						model_id: this.model_id,
+						record: Ext.encode(record.data)
+					},
+					success:function(){
+					//record.commit();
+					},
+					scope: this
+				});
+			},
+			scope:this
+		}
 	});
 	
 	if(typeof(config.paging)=='undefined')
 		config.paging=true;
-	
-	this.grid = new GO.grid.EditorGridPanel({
-		paging:config.paging,
-		border:false,
-		store: this.store,
-		view: new Ext.grid.GridView({
-			autoFill: true,
-			forceFit: true
-		}),
-		columns: config.cm,
-		sm: new Ext.grid.RowSelectionModel()	
-	});
-	
+
+//	config.view=new Ext.grid.GridView({
+//		autoFill: true,
+//		forceFit: true
+//	});
 	
 
-	GO.base.model.multiselect.panel.superclass.constructor.call(this, {
+	config.sm=new Ext.grid.RowSelectionModel();
+	Ext.apply(config,{
 		layout: 'fit',
-		modal:false,
-		height:400,
-		width:600,
-		closeAction:'hide',
 		title:config.title,
-		items: this.grid,
-//		buttons: [
-//		{
-//			text: GO.lang['cmdOk'],
-//			handler: function (){
-//				this.callHandler(true);
-//			},
-//			scope:this
-//		},
-//		{
-//			text: GO.lang['cmdClose'],
-//			handler: function(){
-//				this.hide();
-//			},
-//			scope: this
-//		}],
 		tbar : [
 		{
 			iconCls: 'btn-add',
@@ -56,13 +47,16 @@ GO.base.model.multiselect.panel = function(config){
 			cls: 'add-btn-text-icon',
 			handler: function(){
 				if(!this.addDialog){
+					if(!config.selectColumns)
+						config.selectColumns = config.columns;
+					
 					this.addDialog = new GO.base.model.multiselect.addDialog({
 						multiSelectPanel:this,
 						url: config.url,
 						fields: config.fields,
-						cm: config.cm,
+						cm: config.selectColumns,
 						handler: function(grid, selected){ 
-							this.grid.store.load({
+							this.store.load({
 								params: {
 									add:Ext.encode(selected)
 								}
@@ -71,9 +65,9 @@ GO.base.model.multiselect.panel = function(config){
 						scope: this
 						
 					});
-//					this.addDialog.on('hide', function(){
-//						this.store.reload();
-//					}, this);
+				//					this.addDialog.on('hide', function(){
+				//						this.store.reload();
+				//					}, this);
 				}
 				this.addDialog.show();
 
@@ -85,26 +79,27 @@ GO.base.model.multiselect.panel = function(config){
 			cls: 'x-btn-text-icon',
 			handler: function()
 			{
-				this.grid.deleteSelected();
+				this.deleteSelected();
 			},
 			scope: this
 		}]
-	});
+	});	
+
+	GO.base.model.multiselect.panel.superclass.constructor.call(this, config);
 };
 
-Ext.extend(GO.base.model.multiselect.panel, Ext.Panel, {
+Ext.extend(GO.base.model.multiselect.panel, GO.grid.EditorGridPanel, {
 
 	model_id: 0,
 
-	show : function(){
-		if(!this.grid.store.loaded)
-		{
-			this.grid.store.load();
-		}
-		GO.base.model.multiselect.panel.superclass.show.call(this);
+	afterRender : function(){
+		
+		GO.base.model.multiselect.panel.superclass.afterRender.call(this);
+		if(!this.store.loaded)		
+			this.store.load();
 	},
 	setModelId : function(model_id){
-		this.grid.store.loaded=false;
+		this.store.loaded=false;
 		this.model_id=this.store.baseParams.model_id=model_id;
 		this.setDisabled(!model_id);
 	},
@@ -117,7 +112,7 @@ Ext.extend(GO.base.model.multiselect.panel, Ext.Panel, {
 				this.scope=this;
 			}
 			
-			var selectedIds = this.grid.getSelectionModel().getSelections().keys;
+			var selectedIds = this.getSelectionModel().getSelections().keys;
 			
 			var handler = this.handler.createDelegate(this.scope, [this.grid, selectedIds]);
 			handler.call();

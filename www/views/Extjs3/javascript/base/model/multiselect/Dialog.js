@@ -45,11 +45,4 @@ GO.base.model.multiselect.dialog = function(config){
 
 Ext.extend(GO.base.model.multiselect.dialog, GO.Window, {
 
-	show : function(){
-		if(!this.multiselectPanel.grid.store.loaded)
-		{
-			this.multiselectPanel.grid.store.load();
-		}
-		GO.base.model.multiselect.dialog.superclass.show.call(this);
-	}	
 });
