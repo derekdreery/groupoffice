@@ -137,7 +137,10 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 			->addCondition($model->primaryKey(), 'lt.'.$this->linkModelField(), '=', 't', true, true)
 			->addCondition($this->_getRemoteKey(), $params['model_id'],'=','lt');			
 		
-		$findParams = $store->getDefaultParams($params)->ignoreAcl();
+		$findParams = $store->getDefaultParams($params)
+						->ignoreAcl()
+						->select('t.*,lt.*');
+		
 		$findParams->join($linkModel->tableName(), $joinCriteria, 'lt', 'INNER');
 
 		$selectedModels = $model->find($findParams);
@@ -151,6 +154,7 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 	
 	/**
 	 * Find the remote key in the combined key of the linkModel.
+	 * Remote key is for example the user_id when editing settings of a user with a link model with primary keys: user_id and calendar_id
 	 * 
 	 * @return String The remote key 
 	 */
@@ -159,6 +163,24 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 		$key = $linkModel->primaryKey();
 		
 		return $key[0]==$this->linkModelField() ? $key[1] : $key[0];
+	}
+	
+	
+	public function actionUpdateRecord($params) {
+		$response = array('success'=>true);
+		
+		$record = json_decode($params['record'], true);
+		
+		$primaryKeys = array(
+				$this->_getRemoteKey()=>$params['model_id'], //eg. user_id
+				$this->linkModelField()=>$record['id'] //eg. calendar_id
+						);
+		
+		$linkModel = GO::getModel($this->linkModelName())->findByPk($primaryKeys);
+		$linkModel->setAttributes($record);
+		$linkModel->save();
+		
+		return $response;
 	}
 
 }
