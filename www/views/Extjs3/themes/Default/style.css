@@ -864,6 +864,31 @@ table.display-panel a:active
 	padding:2px;
 }
 
+.collapsible-display-panel-subheader {
+	border:1px solid #acbbc0;
+	
+	background-color: #eff3f4;
+	margin: 2px;
+}
+
+.display-subpanel{
+	border:1px solid #acbbc0;
+	width:99%;
+	margin: 2px;
+}
+
+.display-subpanel td{
+	margin:0px !important;
+}
+
+.display-subpanel-header{
+	background-color: #eff3f4;
+	width:100%;
+	padding: 3px !important;
+	margin:0px;
+	
+}
+
 .display-panel-heading-collapsed{
 	line-height: 16px;
 	font-size: 11px;
