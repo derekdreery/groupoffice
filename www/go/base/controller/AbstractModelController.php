@@ -461,145 +461,30 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$response['data']['write_permission']=$response['data']['permission_level']>GO_Base_Model_Acl::READ_PERMISSION;
 
 		$response['data']['customfields']=array();
-		if($model->customfieldsRecord){
-			$customAttributes = $model->customfieldsRecord->getAttributes('html');
-
-			//Get all field models and build an array of categories with their
-			//fields for display.
-			
-			$findParams = GO_Base_Db_FindParams::newInstance()
-							->order(array('category.sort_index','t.sort_index'),array('ASC','ASC'));
-			$findParams->getCriteria()
-							->addCondition('extends_model', $model->customfieldsRecord->extendsModel(),'=','category');
-			
-			$stmt = GO_Customfields_Model_Field::model()->find($findParams);			
-
-			$categories=array();
-			
-			while($field = $stmt->fetch()){
-				if(!isset($categories[$field->category_id])){
-					$categories[$field->category->id]['id']=$field->category->id;
-					$categories[$field->category->id]['name']=$field->category->name;
-					$categories[$field->category->id]['fields']=array();
-				}
-				if(!empty($customAttributes[$field->columnName()])){
-					$categories[$field->category->id]['fields'][]=array(
-							'name'=>$field->name,
-							'value'=>$customAttributes[$field->columnName()]
-					);				
-				}
-			}
-			
-			foreach($categories as $category){
-				if(count($category['fields']))
-					$response['data']['customfields'][]=$category;
-			}
-			
-		}
-
-		if($model->hasLinks()){
-			$findParams = GO_Base_Db_FindParams::newInstance()
-							->limit(15);
-			
-			$ignoreModelTypes = array();
-			if(GO::modules()->calendar)
-				$ignoreModelTypes[]=GO_Calendar_Model_Event::model()->modelTypeId();
-			if(GO::modules()->tasks)
-				$ignoreModelTypes[]=GO_Tasks_Model_Task::model()->modelTypeId();
-			
-			$findParams->getCriteria()->addInCondition('model_type_id', $ignoreModelTypes, 't', true, true);
-			
-			$stmt = GO_Base_Model_SearchCacheRecord::model()->findLinks($model, $findParams);
-					
-			$store = GO_Base_Data_Store::newInstance(GO_Base_Model_SearchCacheRecord::model());		
-			$store->setStatement($stmt);
-
-			$columnModel = $store->getColumnModel();		
-			$columnModel->formatColumn('link_count','GO::getModel($model->model_name)->countLinks($model->model_id)');
-			$columnModel->formatColumn('link_description','$model->link_description');
-
-			$data = $store->getData();
-			$response['data']['links']=$data['results'];		
-		}
-
-		if (!isset($response['data']['events']) && GO::modules()->calendar){
-
-			$startOfDay = GO_Base_Util_Date::clear_time(time());
-			
-			$findParams = GO_Base_Db_FindParams::newInstance()->order('start_time','DESC');
-			$findParams->getCriteria()->addCondition('start_time', $startOfDay, '>=');						
-			
-			$stmt = GO_Calendar_Model_Event::model()->findLinks($model, $findParams);		
-
-			$store = GO_Base_Data_Store::newInstance(GO_Calendar_Model_Event::model());
-			$store->setStatement($stmt);
-			
-			$columnModel = $store->getColumnModel();			
-			$columnModel->formatColumn('calendar_name','$model->calendar->name');
-			$columnModel->formatColumn('link_count','$model->countLinks()');
-			$columnModel->formatColumn('link_description','$model->link_description');
-			
-			$data = $store->getData();
-			$response['data']['events']=$data['results'];
-		}
 		
-		if (!isset($response['data']['tasks']) && GO::modules()->tasks){
-
-			$startOfDay = GO_Base_Util_Date::clear_time(time());
-			
-			$findParams = GO_Base_Db_FindParams::newInstance()->order('due_time','DESC');
-			$findParams->getCriteria()->addCondition('start_time', $startOfDay, '>=')->addCondition('status', GO_Tasks_Model_Task::STATUS_COMPLETED, '!=');						
-			
-			$stmt = GO_Tasks_Model_Task::model()->findLinks($model, $findParams);		
-
-			$store = GO_Base_Data_Store::newInstance(GO_Tasks_Model_Task::model());
-			$store->setStatement($stmt);
-			
-			$store->getColumnModel()
-							->setFormatRecordFunction(array($this, 'formatTaskLinkRecord'))
-							->formatColumn('late','$model->due_time<time() ? 1 : 0;')
-							->formatColumn('tasklist_name', '$model->tasklist->name')
-							->formatColumn('link_count','$model->countLinks()')
-							->formatColumn('link_description','$model->link_description');		
-			
-			$data = $store->getData();
-			$response['data']['tasks']=$data['results'];
-		}
-
-		if(!isset($response['data']['files'])){
-			if (isset(GO::modules()->files) && $model->hasFiles() && $response['data']['files_folder_id']>0) {
-
-				$fc = new GO_Files_Controller_Folder();
-				$listResponse = $fc->run("list",array('folder_id'=>$response['data']['files_folder_id']),false);
-				$response['data']['files'] = $listResponse['results'];
-			} else {
-				$response['data']['files'] = array();
-			}
-		}
 		
+		if(!isset($response['data']['workflow']) && GO::modules()->workflow)
+			$response = $this->_processWorkflowDisplay($model,$response);
+		
+		if($model->customfieldsRecord)
+			$response = $this->_processCustomFieldsDisplay($model,$response);
 
-		if (GO::modules()->comments){
+		if($model->hasLinks())
+			$response = $this->_processLinksDisplay($model,$response);
 
-			$stmt = GO_Comments_Model_Comment::model()->find(GO_Base_Db_FindParams::newInstance()
-							->limit(5)
-							->select('t.*')
-							->order('id','DESC')
-							->criteria(GO_Base_Db_FindCriteria::newInstance()
-							        ->addModel(GO_Comments_Model_Comment::model())
-											->addCondition('model_id', $model->id)
-											->addCondition('model_type_id',$model->modelTypeId())
-							));
-
-			$store = GO_Base_Data_Store::newInstance(GO_Comments_Model_Comment::model());			
-			$store->setStatement($stmt);
+		if(!isset($response['data']['events']) && GO::modules()->calendar)
+			$response = $this->_processEventsDisplay($model,$response);
 			
-			$columnModel = $store->getColumnModel();			
-			$columnModel->formatColumn('user_name','$model->user->name');
-			
-			$data = $store->getData();
-			$response['data']['comments']=$data['results'];
-		}		
+		if (!isset($response['data']['tasks']) && GO::modules()->tasks)
+			$response = $this->_processTasksDisplay($model,$response);
 
+		if(!isset($response['data']['files']))
+			$response = $this->_processFilesDisplay($model,$response);
+		
+		if (GO::modules()->comments)
+			$response = $this->_processCommentsDisplay($model,$response);
+			
+		
 		$response = $this->afterDisplay($response, $model, $params);
 		
 		$this->fireEvent('display', array(
@@ -611,6 +496,226 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		return $response;
 	}
+	
+	private function _processWorkflowDisplay($model,$response){
+
+		$response['data']['workflow']=array();
+			
+		$workflowModelstmnt = GO_Workflow_Model_Model::model()->findByAttributes(array("model_id"=>$model->id,"model_type_id"=>$model->modelTypeId()));
+		
+		while($workflowModel = $workflowModelstmnt->fetch()){
+			
+			$currentStep = $workflowModel->step(GO_Base_Db_FindParams::newInstance()->debugSql());
+			
+			$workflowResponse = array();
+			
+			$is_approver = GO_Workflow_Model_RequiredApprover::model()->findByPk(array("user_id"=>GO::user()->id,"step_id"=>$workflowModel->step_id));
+
+			if($is_approver)
+				$workflowResponse['is_approver']=true;
+			else
+				$workflowResponse['is_approver']=false;
+			
+			$workflowResponse['id'] = $workflowModel->id;
+			$workflowResponse['process_name'] = $workflowModel->process->name;
+			$workflowResponse['due_time'] = $workflowModel->due_time;
+			$workflowResponse['shift_due_time'] = $workflowModel->shift_due_time;			
+			
+			if($workflowModel->step_id != '-1')
+				$workflowResponse['step_name'] = $currentStep->name;
+			else
+				$workflowResponse['step_name'] = GO::t('complete','workflow');
+			
+			// Add the approvers of the current step to the response
+			$workflowResponse['approvers'] = array();
+			$approversStmnt = $currentStep->requiredApprovers;
+			
+			//GO::debug($approversStmnt);
+			
+			while($approver = $approversStmnt->fetch()){
+				$workflowResponse['approvers'][] = array('name'=>$approver->name);
+			}
+			
+			// Add the approver groups of the current step to the response
+			$workflowResponse['approver_groups'] = array();
+			$approverGroupsStmnt = $currentStep->approverGroups;
+			while($approverGroup = $approverGroupsStmnt->fetch()){
+				$workflowResponse['approver_groups'][] = array('name'=>$approverGroup->name);
+			}
+
+			//TODO: Check for history steps
+			$workflowResponse['history'] = array();
+			$historiesStmnt = GO_Workflow_Model_StepHistory::model()->findByAttribute('process_model_id',$workflowModel->id, GO_Base_Db_FindParams::newInstance()->select('t.*'));
+			while($history = $historiesStmnt->fetch()){
+				GO_Base_Db_ActiveRecord::$attributeOutputMode = 'html';
+				
+				$workflowResponse['history'][] = array(
+						'history_id'=>$history->id,
+						'step_name'=>$history->step->name,
+						'approver'=>$history->user->name,
+						'ctime'=>$history->ctime,
+						'comment'=>$history->comment,
+						'status'=>$history->status?GO::t('approved','workflow'):GO::t('declined','workflow')
+				);
+				
+				GO_Base_Db_ActiveRecord::$attributeOutputMode = 'raw';
+				
+			}
+			
+			$response['data']['workflow'][] = $workflowResponse;
+		}
+		
+		return $response;
+	}
+	
+	
+	private function _processCustomFieldsDisplay($model,$response){
+		$customAttributes = $model->customfieldsRecord->getAttributes('html');
+
+		//Get all field models and build an array of categories with their
+		//fields for display.
+
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->order(array('category.sort_index','t.sort_index'),array('ASC','ASC'));
+		$findParams->getCriteria()
+						->addCondition('extends_model', $model->customfieldsRecord->extendsModel(),'=','category');
+
+		$stmt = GO_Customfields_Model_Field::model()->find($findParams);			
+
+		$categories=array();
+
+		while($field = $stmt->fetch()){
+			if(!isset($categories[$field->category_id])){
+				$categories[$field->category->id]['id']=$field->category->id;
+				$categories[$field->category->id]['name']=$field->category->name;
+				$categories[$field->category->id]['fields']=array();
+			}
+			if(!empty($customAttributes[$field->columnName()])){
+				$categories[$field->category->id]['fields'][]=array(
+						'name'=>$field->name,
+						'value'=>$customAttributes[$field->columnName()]
+				);				
+			}
+		}
+
+		foreach($categories as $category){
+			if(count($category['fields']))
+				$response['data']['customfields'][]=$category;
+		}
+			
+		return $response;
+	}
+	
+	private function _processFilesDisplay($model,$response){
+		if (isset(GO::modules()->files) && $model->hasFiles() && $response['data']['files_folder_id']>0) {
+
+			$fc = new GO_Files_Controller_Folder();
+			$listResponse = $fc->run("list",array('folder_id'=>$response['data']['files_folder_id']),false);
+			$response['data']['files'] = $listResponse['results'];
+		} else {
+			$response['data']['files'] = array();
+		}
+		return $response;
+	}
+	
+	private function _processLinksDisplay($model,$response){
+		$findParams = GO_Base_Db_FindParams::newInstance()
+							->limit(15);
+			
+		$ignoreModelTypes = array();
+		if(GO::modules()->calendar)
+			$ignoreModelTypes[]=GO_Calendar_Model_Event::model()->modelTypeId();
+		if(GO::modules()->tasks)
+			$ignoreModelTypes[]=GO_Tasks_Model_Task::model()->modelTypeId();
+
+		$findParams->getCriteria()->addInCondition('model_type_id', $ignoreModelTypes, 't', true, true);
+
+		$stmt = GO_Base_Model_SearchCacheRecord::model()->findLinks($model, $findParams);
+
+		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_SearchCacheRecord::model());		
+		$store->setStatement($stmt);
+
+		$columnModel = $store->getColumnModel();		
+		$columnModel->formatColumn('link_count','GO::getModel($model->model_name)->countLinks($model->model_id)');
+		$columnModel->formatColumn('link_description','$model->link_description');
+
+		$data = $store->getData();
+		$response['data']['links']=$data['results'];	
+		
+		return $response;
+	}
+	
+	
+	private function _processEventsDisplay($model,$response){
+		$startOfDay = GO_Base_Util_Date::clear_time(time());
+			
+		$findParams = GO_Base_Db_FindParams::newInstance()->order('start_time','DESC');
+		$findParams->getCriteria()->addCondition('start_time', $startOfDay, '>=');						
+
+		$stmt = GO_Calendar_Model_Event::model()->findLinks($model, $findParams);		
+
+		$store = GO_Base_Data_Store::newInstance(GO_Calendar_Model_Event::model());
+		$store->setStatement($stmt);
+
+		$columnModel = $store->getColumnModel();			
+		$columnModel->formatColumn('calendar_name','$model->calendar->name');
+		$columnModel->formatColumn('link_count','$model->countLinks()');
+		$columnModel->formatColumn('link_description','$model->link_description');
+
+		$data = $store->getData();
+		$response['data']['events']=$data['results'];
+		
+		return $response;
+	}
+	
+	private function _processCommentsDisplay($model,$response){
+		$stmt = GO_Comments_Model_Comment::model()->find(GO_Base_Db_FindParams::newInstance()
+							->limit(5)
+							->select('t.*')
+							->order('id','DESC')
+							->criteria(GO_Base_Db_FindCriteria::newInstance()
+							        ->addModel(GO_Comments_Model_Comment::model())
+											->addCondition('model_id', $model->id)
+											->addCondition('model_type_id',$model->modelTypeId())
+							));
+
+		$store = GO_Base_Data_Store::newInstance(GO_Comments_Model_Comment::model());			
+		$store->setStatement($stmt);
+
+		$columnModel = $store->getColumnModel();			
+		$columnModel->formatColumn('user_name','$model->user->name');
+
+		$data = $store->getData();
+		$response['data']['comments']=$data['results'];
+		
+		return $response;
+	}
+	
+	private function _processTasksDisplay($model,$response){
+		$startOfDay = GO_Base_Util_Date::clear_time(time());
+
+		$findParams = GO_Base_Db_FindParams::newInstance()->order('due_time','DESC');
+		$findParams->getCriteria()->addCondition('start_time', $startOfDay, '>=')->addCondition('status', GO_Tasks_Model_Task::STATUS_COMPLETED, '!=');						
+
+		$stmt = GO_Tasks_Model_Task::model()->findLinks($model, $findParams);		
+
+		$store = GO_Base_Data_Store::newInstance(GO_Tasks_Model_Task::model());
+		$store->setStatement($stmt);
+
+		$store->getColumnModel()
+						->setFormatRecordFunction(array($this, 'formatTaskLinkRecord'))
+						->formatColumn('late','$model->due_time<time() ? 1 : 0;')
+						->formatColumn('tasklist_name', '$model->tasklist->name')
+						->formatColumn('link_count','$model->countLinks()')
+						->formatColumn('link_description','$model->link_description');		
+
+		$data = $store->getData();
+		$response['data']['tasks']=$data['results'];
+		
+		return $response;
+	}
+	
+	
 	
 	
 	public function formatTaskLinkRecord($record, $model, $cm){
