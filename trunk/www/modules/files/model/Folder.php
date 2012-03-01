@@ -605,6 +605,31 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			return $this->folders();
 		}
 	}
+	
+	/**
+	 * Move all the files and folders from a given source folder into this folder.
+	 * 
+	 * @param GO_Files_Model_Folder $sourceFolder 
+	 */
+	public function moveContentsFrom(GO_Files_Model_Folder $sourceFolder){
+		
+		//make sure database is in sync with filesystem.
+		$sourceFolder->syncFilesystem();
+		
+		$stmt = $sourceFolder->folders();
+		while($subfolder = $stmt->fetch()){
+			$subfolder->parent_id=$this->id;
+			$subfolder->appendNumberToNameIfExists();
+			$subfolder->save();
+		}
+		
+		$stmt = $sourceFolder->files();
+		while($file = $stmt->fetch()){
+			$file->folder_id=$this->id;
+			$file->appendNumberToNameIfExists();
+			$file->save();
+		}
+	}
 
 	/**
 	 * Find all shared folders for the current user

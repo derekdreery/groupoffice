@@ -142,25 +142,45 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		return !empty($this->locked_user_id) && $this->locked_user_id!=GO::user()->id;
 	}
 	
+	private function _getOldFsFile(){
+		$filename = $this->isModified('name') ? $this->getOldAttributeValue('name') : $this->name;
+		if($this->isModified('folder_id')){
+			//file will be moved so we need the old folder path.
+			$oldFolderId = $this->getOldAttributeValue('folder_id');
+			$oldFolder = GO_Files_Model_Folder::model()->findByPk($oldFolderId);				
+			$oldRelPath = $oldFolder->path;				
+			$oldPath = GO::config()->file_storage_path . $oldRelPath . '/' . $filename;
+
+		}else{
+			$oldPath = GO::config()->file_storage_path . $this->folder->path.'/'.$filename;
+		}
+		return new GO_Base_Fs_File($oldPath);
+	}
+	
 	protected function beforeSave() {		
 		if(!$this->isNew){
 			if($this->isModified('name')){				
 				//rename filesystem file.
-				$oldFsFile = new GO_Base_Fs_File(dirname($this->fsFile->path()).'/'.$this->getOldAttributeValue('name'));				
+				//throw new Exception($this->getOldAttributeValue('name'));
+				$oldFsFile = $this->_getOldFsFile();		
 				if($oldFsFile->exists())
 					$oldFsFile->rename($this->name);				
 			}
 
 			if($this->isModified('folder_id')){
-				//file will be moved so we need the old folder path.
-				$oldFolderId = $this->getOldAttributeValue('folder_id');
-				$oldFolder = GO_Files_Model_Folder::model()->findByPk($oldFolderId);				
-				$oldRelPath = $oldFolder->path;				
-				$oldPath = GO::config()->file_storage_path . $oldRelPath . '/' . $this->name;
+//				//file will be moved so we need the old folder path.
+//				$oldFolderId = $this->getOldAttributeValue('folder_id');
+//				$oldFolder = GO_Files_Model_Folder::model()->findByPk($oldFolderId);				
+//				$oldRelPath = $oldFolder->path;				
+//				$oldPath = GO::config()->file_storage_path . $oldRelPath . '/' . $this->name;
+//			
+//
+//				$fsFile= new GO_Base_Fs_File($oldPath);
+				
+				if(!isset($oldFsFile))
+					$oldFsFile = $this->_getOldFsFile();
 
-				$fsFile= new GO_Base_Fs_File($oldPath);
-
-				if (!$fsFile->move(new GO_Base_Fs_Folder(GO::config()->file_storage_path . dirname($this->path))))
+				if (!$oldFsFile->move(new GO_Base_Fs_Folder(GO::config()->file_storage_path . dirname($this->path))))
 					throw new Exception("Could not rename folder on the filesystem");
 			}
 		}
@@ -333,15 +353,17 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	 */
 	public function appendNumberToNameIfExists()
 	{
-		$dir = $this->parent()->path();		
+		$dir = $this->folder->path;		
 		$origName = $this->fsFile->nameWithoutExtension();
 		$extension = $this->fsFile->extension();
 		$x=1;
-		while($this->folder->hasFile($this->name))
+		$newName=$this->name;
+		while($this->folder->hasFile($newName))
 		{			
-			$this->name=$origName.' ('.$x.').'.$extension;
+			$newName=$origName.' ('.$x.').'.$extension;
 			$x++;
 		}
+		$this->name=$newName;
 		return $this->name;
 	}
 }
