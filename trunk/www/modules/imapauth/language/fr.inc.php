@@ -3,8 +3,8 @@
 //
 // Copyright Intermesh
 // 
-// This file is part of Group-Office. You should have received a copy of the
-// Group-Office license along with Group-Office. See the file /LICENSE.TXT
+// This file is part of {product_name}. You should have received a copy of the
+// {product_name} license along with {product_name}. See the file /LICENSE.TXT
 // 
 // If you have questions write an e-mail to info@intermesh.nl
 //
@@ -23,5 +23,5 @@
 require($GO_LANGUAGE->get_fallback_language_file('imapauth'));
 
 $lang['imapauth']['name']='Authentification IMAP';
-$lang['imapauth']['description']='Ce module permet d\'utiliser un serveur IMAP pour authentifier et automatiquement configurer un nouvel utilisateur dans Group-Office. Très utile si vous utilisez déjà un serveur email.';
+$lang['imapauth']['description']='Ce module permet d\'utiliser un serveur IMAP pour authentifier et automatiquement configurer un nouvel utilisateur dans {product_name}. Très utile si vous utilisez déjà un serveur email.';
 ?>
