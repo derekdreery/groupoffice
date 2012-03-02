@@ -77,7 +77,7 @@ class GO_Base_Language{
 		if($module=='base'){
 			if(isset($this->_lang[$module][$basesection][$name])){
 				$found=true;
-				return $this->_lang[$module][$basesection][$name];
+				$translation=$this->_lang[$module][$basesection][$name];
 			}else
 			{
 				$found = false;
@@ -87,13 +87,15 @@ class GO_Base_Language{
 		{
 			if(isset($this->_lang[$module][$name])){
 				$found=true;
-				return $this->_lang[$module][$name];
+				$translation=$this->_lang[$module][$name];
 			}else
 			{
 				$found = false;
-				return $name;
+				$translation=$name;
 			}
 		}
+		
+		return str_replace('{product_name}',GO::config()->product_name,$translation);
 	}
 	
 	private function _loadSection($module='base',$basesection='common'){
