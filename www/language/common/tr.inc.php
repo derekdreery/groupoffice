@@ -5,15 +5,15 @@ $lang['common']['about']='Version: %s
 
 Copyright (c) 2003-%s, Intermesh
 All rights reserved.
-This program is protected by copyright law and the Group-Office license.
+This program is protected by copyright law and the {product_name} license.
 
 For support questions contact your webmaster:
 %s
 
-For more information about Group-Office visit:
-http://www.group-office.com
+For more information about {product_name} visit:
+http://www.{product_name}.com
 
-Group-Office is created by Intermesh. For more information about Intermesh visit:
+{product_name} is created by Intermesh. For more information about Intermesh visit:
 http://www.intermesh.nl/en/';
 
 $lang['common']['htmldirection']= 'ltr';
@@ -160,7 +160,7 @@ $lang['common']['beginning']='Selamlama';
 
 $lang['common']['max_emails_reached']= "%s SMTP sunucusu için maksimum %s (günlük) E-posta sınırına ulaşılmıştır.";
 $lang['common']['usage_stats']='DiskAlanı kullanımı %s başına';
-$lang['common']['usage_text']='Group-Office kurulumu tarafından kullanılan';
+$lang['common']['usage_text']='{product_name} kurulumu tarafından kullanılan';
 
 $lang['common']['database']='Veritabanı';
 $lang['common']['files']='Dosyalar';
@@ -180,7 +180,7 @@ Kullanıcı Adı: %s<br />
 $lang['common']['lost_password_error']='Verilen E-posta adresi bulunamıyor.';
 $lang['common']['lost_password_success']='E-posta adresinize yeni bir şifre gönderilmiştir.';
 
-$lang['common']['confirm_leave']='Group-Office ten ayrılırsanız kaydetmediklerinizi kaybedeceksiniz';
+$lang['common']['confirm_leave']='{product_name} ten ayrılırsanız kaydetmediklerinizi kaybedeceksiniz';
 $lang['common']['dataSaved']='Veri başarılı şekilde kaydedilmiştir';
 
-$lang['common']['uploadMultipleFiles'] = 'Bilgisayarınızdan dosya ve/veya klasör seçmek için \'Göz At\' tıklayınız. Dosyaları Group-Office içersine yüklemek için \'Yükle\' tıklayınız. Veri transferi bittiğinde bu ekran otomatik olarak kapanacaktır.';
+$lang['common']['uploadMultipleFiles'] = 'Bilgisayarınızdan dosya ve/veya klasör seçmek için \'Göz At\' tıklayınız. Dosyaları {product_name} içersine yüklemek için \'Yükle\' tıklayınız. Veri transferi bittiğinde bu ekran otomatik olarak kapanacaktır.';

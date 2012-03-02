@@ -2,12 +2,12 @@
 $l['about']='Verzija: %s
 Autorska prava (c) 2003-%s, Intermesh
 Sva prava pridržana.
-Ovaj program je zaštićen zakonom o autorskim pravim i Group-Office licencom.
+Ovaj program je zaštićen zakonom o autorskim pravim i {product_name} licencom.
 Za pitanja oko podrške kontaktirajte vašeg administratora:
 %s
-Za više informacija o Group-Office posjetite:
-http://www.group-office.com
-Group-Office je kreiran od strane Intermesh. Za više informacija o Intermesh posjetite:;
+Za više informacija o {product_name} posjetite:
+http://www.{product_name}.com
+{product_name} je kreiran od strane Intermesh. Za više informacija o Intermesh posjetite:;
 http://www.intermesh.nl/en/';
 $l['totals']='Ukupno';
 $l['printPage']='Stranica %s od %s';
@@ -146,22 +146,22 @@ $l['admin']='Administrator';
 $l['beginning']='Pozdrav';
 $l['max_emails_reached']= "Maksimalni broj e-mail poruka za SMTP poslužitelj %s od %s na dan je dostignut.";
 $l['usage_stats']='Korištenje diskovnog prostora po %s';
-$l['usage_text']='Ova instalacija Group-Office koristi';
+$l['usage_text']='Ova instalacija {product_name} koristi';
 $l['database']='Baza podataka';
 $l['files']='Datoteke';
 $l['email']='E-mail';
 $l['total']='Ukupno';
-$l['confirm_leave']='Ako napustite Group-Office izgubit ćete ne sačuvane promjene';
+$l['confirm_leave']='Ako napustite {product_name} izgubit ćete ne sačuvane promjene';
 $l['dataSaved']='Podaci su uspješno sačuvani';
-$l['uploadMultipleFiles'] = 'Kliknite na \'Pregled\' kako bi izabrali datoteke i/ili direktorije sa vašeg kompjutera. Kliknite na \'Prijenos\' kako bi prenijeli datoteke u Group-Office. Ovaj prozor će se automatski zatvoriti kada prijenos datoteka bude završen.';
-$l['loginToGO']='Kliknite ovdje kako bi ste se prijavili u Group-Office';
+$l['uploadMultipleFiles'] = 'Kliknite na \'Pregled\' kako bi izabrali datoteke i/ili direktorije sa vašeg kompjutera. Kliknite na \'Prijenos\' kako bi prenijeli datoteke u {product_name}. Ovaj prozor će se automatski zatvoriti kada prijenos datoteka bude završen.';
+$l['loginToGO']='Kliknite ovdje kako bi ste se prijavili u {product_name}';
 $l['links']='Linkovi';
-$l['GOwebsite']='Group-Office stranica';
-$l['GOisAProductOf']='<i>Group-Office</i> je <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a> proizvod.';
+$l['GOwebsite']='{product_name} stranica';
+$l['GOisAProductOf']='<i>{product_name}</i> je <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a> proizvod.';
 $l['yes']='Da';
 $l['no']='Ne';
 $l['system']='Sistem';
-$l['goAlreadyStarted']='Group-Office je već pokrenut. Traženi ekran je pokrenut u Group-Office. Možete zatvoriti ovaj prozor/karticu i nastaviti raditi u Group-Office.';
+$l['goAlreadyStarted']='{product_name} je već pokrenut. Traženi ekran je pokrenut u {product_name}. Možete zatvoriti ovaj prozor/karticu i nastaviti raditi u {product_name}.';
 $l['no']='Ne';
 $lang['commmon']['logFiles']='Log datoteke';
 $l['reminder']='Podsjetnik';
@@ -196,7 +196,7 @@ $l["strCommunityForum"]='Forum zajednice';
 $l["moduleRequired"]='Ovo svojstvo zahtjeva \'{module}\' modul. Ovaj modul trenutno nije dostupan.';
 $l["completeProfile"]= 'Molimo dovršite svoj profil';
 $l["fullscreen"]='Cijeli ekran';
-$l["popupBlocker"]= 'Vaš preglednik interneta blokira nove Group-Office prozore. Molimo isključite blokiranje novih prozora za ovu stranicu';
+$l["popupBlocker"]= 'Vaš preglednik interneta blokira nove {product_name} prozore. Molimo isključite blokiranje novih prozora za ovu stranicu';
 $l["color"]='Boja';
 $l["browse"]='Pregled...';
 $l["largeUpload"]='Velike datoteke/direktoriji (Java obavezna)';

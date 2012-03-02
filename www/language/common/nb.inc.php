@@ -7,15 +7,15 @@ $lang['common']['about']='Versjon: %s
 
 Copyright (c) 2003-%s, Intermesh
 Alle rettigheter forbeholdt.
-Dette programmet er beskyttet av opphavsretten og en egen Group-Office lisens.
+Dette programmet er beskyttet av opphavsretten og en egen {product_name} lisens.
 
 For brukerstøtte kontakt installasjonsansvarlig:
 %s
 
-Besøk Group-office for mer informasjon på:
-http://www.group-office.com
+Besøk {product_name} for mer informasjon på:
+http://www.{product_name}.com
 
-Group-Office er laget av Intermesh. Du finner mer informasjon om Intermesh på:
+{product_name} er laget av Intermesh. Du finner mer informasjon om Intermesh på:
 http://www.intermesh.nl/en/';
 
 $lang['common']['totals']='Totaler';
@@ -167,7 +167,7 @@ $lang['common']['beginning']='Hilsning';
 
 $lang['common']['max_emails_reached']= "Du har nådd maksimalt antall e-poster for SMTP server %s på %s per dag.";
 $lang['common']['usage_stats']='Diskforbruk for %s';
-$lang['common']['usage_text']='Denne Group-Office installasjonen bruker';
+$lang['common']['usage_text']='Denne {product_name} installasjonen bruker';
 
 $lang['common']['database']='Database';
 $lang['common']['files']='Filer';
@@ -175,16 +175,16 @@ $lang['common']['email']='E-post';
 $lang['common']['total']='Totalt';
 
 
-$lang['common']['confirm_leave']='Hvis du går ut av Group-Office vil du miste ikke lagrede endringer';
+$lang['common']['confirm_leave']='Hvis du går ut av {product_name} vil du miste ikke lagrede endringer';
 $lang['common']['dataSaved']='Data er lagret!';
 
-$lang['common']['uploadMultipleFiles'] = 'Trykk på \'Bla gjennom\' ( eller \'Browse\' ) for å velge filer og/eller mapper fra din egen datamaskin. Trykk \'Last opp\' ( eller \'Upload\' ) for å overføre filene til Group-Office. Dette vinduet vil lukkes automatisk når overføringen er ferdig.';
+$lang['common']['uploadMultipleFiles'] = 'Trykk på \'Bla gjennom\' ( eller \'Browse\' ) for å velge filer og/eller mapper fra din egen datamaskin. Trykk \'Last opp\' ( eller \'Upload\' ) for å overføre filene til {product_name}. Dette vinduet vil lukkes automatisk når overføringen er ferdig.';
 
 
-$lang['common']['loginToGO']='Trykk her for å logge inn i Group-Office';
+$lang['common']['loginToGO']='Trykk her for å logge inn i {product_name}';
 $lang['common']['links']='Lenker';
-$lang['common']['GOwebsite']='Group-Office nettsted';
-$lang['common']['GOisAProductOf']='<i>Group-Office</i> er et produkt fra <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+$lang['common']['GOwebsite']='{product_name} nettsted';
+$lang['common']['GOisAProductOf']='<i>{product_name}</i> er et produkt fra <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 $lang['common']['yes']='Ja';
 $lang['common']['no']='Nei';
 $lang['common']['startMenu']='Startmeny';
@@ -195,7 +195,7 @@ $lang['commmon']['logFiles']='Loggfiler';
 $lang['common']['fileCreateError']='Feil ved oppretting av fil';
 $lang['common']['illegalCharsError']='Navnet inneholdt ett av følgende ugyldige tegn %s';
 $lang['common']['system']='System';
-$lang['common']['goAlreadyStarted']='Group-Office kjører allerede. Dialogvinduet laget av {FUNCTION} er åpnet i Group-Office. Du kan nå lukke dette vinduet, og forsette å arbeide i Group-Office.';
+$lang['common']['goAlreadyStarted']='{product_name} kjører allerede. Dialogvinduet laget av {FUNCTION} er åpnet i {product_name}. Du kan nå lukke dette vinduet, og forsette å arbeide i {product_name}.';
 $lang['common']['reminder']='Påminnelse';
 $lang['common']['unknown']='Ukjent';
 $lang['common']['time']='Tidspunkt';
@@ -208,7 +208,7 @@ $lang['common']['month']= 'måned';
 $lang['common']['strMonths']= 'måneder';
 $lang['common']['parentheses_invalid_error']='Ugyldige paranteser i spørringen. Du må endre disse.';
 
-$lang['common']['goAlreadyStarted']='Group-Office kjører allerede. Siden du ber om er lastet i Group-Office. Du kan nå lukke dette vinduet eller denne fanen og fortsette å arbeide i Group-Office.';
+$lang['common']['goAlreadyStarted']='{product_name} kjører allerede. Siden du ber om er lastet i {product_name}. Du kan nå lukke dette vinduet eller denne fanen og fortsette å arbeide i {product_name}.';
 $lang['common']['nReminders']='%s påminnelser';
 $lang['common']['oneReminder']='1 påminnelse';
 $lang['common']['youHaveReminders']='Du har %s i %s.';

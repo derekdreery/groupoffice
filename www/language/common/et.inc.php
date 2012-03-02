@@ -6,15 +6,15 @@ $lang['common']['about']='Versioon: %s
 
 Copyright (c) 2003-%s, Intermesh
 All rights reserved.
-This program is protected by copyright law and the Group-Office license.
+This program is protected by copyright law and the {product_name} license.
 
 For support questions contact your webmaster:
 %s
 
-For more information about Group-Office visit:
-http://www.group-office.com
+For more information about {product_name} visit:
+http://www.{product_name}.com
 
-Group-Office is created by Intermesh. For more information about Intermesh visit:
+{product_name} is created by Intermesh. For more information about Intermesh visit:
 http://www.intermesh.nl/en/';
 
 $lang['common']['totals']='Kokku';
@@ -189,15 +189,15 @@ $lang['common']['uploadMultipleFiles'] = 'Failide arvutist valimiseks vajuta \'B
 
 $lang['common']['loginToGO']='Sisse logimiseks vajuta siia';
 $lang['common']['links']='Lingid';
-$lang['common']['GOwebsite']='Group-Office veebileht';
-$lang['common']['GOisAProductOf']='<i>Group-Office</i> on <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+$lang['common']['GOwebsite']='{product_name} veebileht';
+$lang['common']['GOisAProductOf']='<i>{product_name}</i> on <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 
 $lang['common']['yes']='Jah';
 $lang['common']['no']='Ei';
 
 $lang['common']['system']='Süsteem';
 
-$lang['common']['goAlreadyStarted']='Group-Office on käivitatud. Võid selle aknda sulgeda ja töötamist jätkata.';
+$lang['common']['goAlreadyStarted']='{product_name} on käivitatud. Võid selle aknda sulgeda ja töötamist jätkata.';
 $lang['common']['no']='Ei';
 
 $lang['commmon']['logFiles']='Logi failid';

@@ -11,15 +11,15 @@ $lang['common']['about']='Verzija: %s
 
 Autorska prava (c) 2003-%s, Intermesh
 Sva prava pridržana.
-Ovaj program je zaštićen zakonom o autorskim pravim i Group-Office licencom.
+Ovaj program je zaštićen zakonom o autorskim pravim i {product_name} licencom.
 
 Za pitanja oko podrške kontaktirajte vašeg administratora:
 %s
 
-Za više informacija o Group-Office posjetite:
-http://www.group-office.com
+Za više informacija o {product_name} posjetite:
+http://www.{product_name}.com
 
-Group-Office je kreiran od strane Intermesh. Za više informacija o Intermesh posjetite:
+{product_name} je kreiran od strane Intermesh. Za više informacija o Intermesh posjetite:
 http://www.intermesh.nl/en/';
 
 $lang['common']['totals']='Ukupno';
@@ -179,7 +179,7 @@ $lang['common']['beginning']='Pozdrav';
 
 $lang['common']['max_emails_reached']= "Maksimalni broj e-mail poruka za SMTP poslužitelj %s od %s na dan je dostignut.";
 $lang['common']['usage_stats']='Korištenje diskovnog prostora po %s';
-$lang['common']['usage_text']='Ova instalacija Group-Office koristi';
+$lang['common']['usage_text']='Ova instalacija {product_name} koristi';
 
 $lang['common']['database']='Baza podataka';
 $lang['common']['files']='Datoteke';
@@ -187,23 +187,23 @@ $lang['common']['email']='E-mail';
 $lang['common']['total']='Ukupno';
 
 
-$lang['common']['confirm_leave']='Ako napustite Group-Office izgubit ćete ne sačuvane promjene';
+$lang['common']['confirm_leave']='Ako napustite {product_name} izgubit ćete ne sačuvane promjene';
 $lang['common']['dataSaved']='Podaci su uspješno sačuvani';
 
-$lang['common']['uploadMultipleFiles'] = 'Kliknite na \'Pregled\' kako bi izabrali datoteke i/ili direktorije sa vašeg kompjutera. Kliknite na \'Prijenos\' kako bi prenijeli datoteke u Group-Office. Ovaj prozor će se automatski zatvoriti kada prijenos datoteka bude završen.';
+$lang['common']['uploadMultipleFiles'] = 'Kliknite na \'Pregled\' kako bi izabrali datoteke i/ili direktorije sa vašeg kompjutera. Kliknite na \'Prijenos\' kako bi prenijeli datoteke u {product_name}. Ovaj prozor će se automatski zatvoriti kada prijenos datoteka bude završen.';
 
 
-$lang['common']['loginToGO']='Kliknite ovdje kako bi ste se prijavili u Group-Office';
+$lang['common']['loginToGO']='Kliknite ovdje kako bi ste se prijavili u {product_name}';
 $lang['common']['links']='Linkovi';
-$lang['common']['GOwebsite']='Group-Office stranica';
-$lang['common']['GOisAProductOf']='<i>Group-Office</i> je <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a> proizvod.';
+$lang['common']['GOwebsite']='{product_name} stranica';
+$lang['common']['GOisAProductOf']='<i>{product_name}</i> je <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a> proizvod.';
 
 $lang['common']['yes']='Da';
 $lang['common']['no']='Ne';
 
 $lang['common']['system']='Sistem';
 
-$lang['common']['goAlreadyStarted']='Group-Office je već pokrenut. Traženi ekran je pokrenut u Group-Office. Možete zatvoriti ovaj prozor/karticu i nastaviti raditi u Group-Office.';
+$lang['common']['goAlreadyStarted']='{product_name} je već pokrenut. Traženi ekran je pokrenut u {product_name}. Možete zatvoriti ovaj prozor/karticu i nastaviti raditi u {product_name}.';
 $lang['common']['no']='Ne';
 
 $lang['commmon']['logFiles']='Log datoteke';
@@ -225,7 +225,7 @@ $lang['common']['parentheses_invalid_error']='Zagrade u vašem upitu su pogrešn
 $lang['common']['nReminders']='%s podsjetnika';
 $lang['common']['oneReminder']='1 podsjetnik';
 
-//Example: you have 1 reminders in Group-Office.
+//Example: you have 1 reminders in {product_name}.
 $lang['common']['youHaveReminders']='Imate %s u %s.';
 
 $lang['common']['createdBy']='Kreirao';

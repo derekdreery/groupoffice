@@ -2,8 +2,8 @@
 /** 
  * Copyright Intermesh
  * 
- * This file is part of Group-Office. You should have received a copy of the
- * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ * This file is part of {product_name}. You should have received a copy of the
+ * {product_name} license along with {product_name}. See the file /LICENSE.TXT
  * 
  * If you have questions write an e-mail to info@intermesh.nl
  * 
@@ -19,15 +19,15 @@ $lang['common']['about']= 'Version: %s
 
 Copyright (c) 2003-%s, Intermesh
 All rights reserved.
-Det här programmet omfattas av copyright-lagar och Group-Office-licensen.
+Det här programmet omfattas av copyright-lagar och {product_name}-licensen.
 
 För support-frågor, kontakta din webmaster:
 %s
 
-För mer information om Group-Office besök:
-http://www.group-office.com
+För mer information om {product_name} besök:
+http://www.{product_name}.com
 
-Group-Office tillverkas av Intermesh. För mer information om Intermesh besök:
+{product_name} tillverkas av Intermesh. För mer information om Intermesh besök:
 http://www.intermesh.nl/en/';
 
 $lang['common']['totals']='Totalt';
@@ -187,7 +187,7 @@ $lang['common']['beginning']= 'Hälsning';
 
 $lang['common']['max_emails_reached']= "Max antal meddelanden per dag till e-postservern %s har uppnåtts (%s).";
 $lang['common']['usage_stats']= 'Diskutrymmesanvändning per %s';
-$lang['common']['usage_text']= 'Den här Group-Office-installationen använder';
+$lang['common']['usage_text']= 'Den här {product_name}-installationen använder';
 
 $lang['common']['database']= 'Databas';
 $lang['common']['files']= 'Filer';
@@ -195,23 +195,23 @@ $lang['common']['email']= 'E-post';
 $lang['common']['total']= 'Totalt';
 
 
-$lang['common']['confirm_leave']= 'Om du lämnar Group-Office förlorar du osparade ändringar';
+$lang['common']['confirm_leave']= 'Om du lämnar {product_name} förlorar du osparade ändringar';
 $lang['common']['dataSaved']='All data sparades';
 
-$lang['common']['uploadMultipleFiles'] = 'Klicka på \'Browse\' för att välja filer och/eller mappar från din dator. Klicka på \'Upload\' för att överföra filerna till Group-Office. Det här fönstret kommer stängas automatiskt när överföringen är klar.';
+$lang['common']['uploadMultipleFiles'] = 'Klicka på \'Browse\' för att välja filer och/eller mappar från din dator. Klicka på \'Upload\' för att överföra filerna till {product_name}. Det här fönstret kommer stängas automatiskt när överföringen är klar.';
 
 
-$lang['common']['loginToGO']='Klicka här för att logga in i Group-Office';
+$lang['common']['loginToGO']='Klicka här för att logga in i {product_name}';
 $lang['common']['links']='Länkar';
-$lang['common']['GOwebsite']='Group-Office webbplats';
-$lang['common']['GOisAProductOf']='<i>Group-Office</i> är en produkt från <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+$lang['common']['GOwebsite']='{product_name} webbplats';
+$lang['common']['GOisAProductOf']='<i>{product_name}</i> är en produkt från <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 
 $lang['common']['yes']='Ja';
 $lang['common']['no']='Nej';
 
 $lang['common']['system']='System';
 
-$lang['common']['goAlreadyStarted']='Group-Office har redan startats. Fönstret som skapats av {FUNCTION} har laddats i Group-Office. Du kan nu stänga det här fönstret och fortsätta jobba i Group-Office.';
+$lang['common']['goAlreadyStarted']='{product_name} har redan startats. Fönstret som skapats av {FUNCTION} har laddats i {product_name}. Du kan nu stänga det här fönstret och fortsätta jobba i {product_name}.';
 $lang['common']['no']='Nej';
 
 $lang['commmon']['logFiles']='Loggfiler';
@@ -233,7 +233,7 @@ $lang['common']['parentheses_invalid_error']='Parenteserna i din fråga är ogil
 $lang['common']['nReminders']='%s påminnelser';
 $lang['common']['oneReminder']='1 påminnelse';
 
-//Example: you have 1 reminders in Group-Office.
+//Example: you have 1 reminders in {product_name}.
 $lang['common']['youHaveReminders']='Du har %s i %s.';
 
 $lang['common']['createdBy']='Skapad av';

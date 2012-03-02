@@ -20,11 +20,11 @@ $l["browse"]='Tallózás...';
 $l["largeUpload"]='Nagy fájlok/mappák (Java szükséges)';
 $l["smallUpload"]='Kis fájlok';
 $l["lostPassword"]='Elfelejtett jelszó';
-$l["lostPasswordText"]='A jelszavad visszaállításához hozzá kell férned az e-mailjeidhez a Group-Office nélkül. Ha beírod az e-mail címed, a jelszó visszaállításához szükséges további információkat erre az e-mail címre küldöm el.<br /><br />Az e-mail címed:';
+$l["lostPasswordText"]='A jelszavad visszaállításához hozzá kell férned az e-mailjeidhez a {product_name} nélkül. Ha beírod az e-mail címed, a jelszó visszaállításához szükséges további információkat erre az e-mail címre küldöm el.<br /><br />Az e-mail címed:';
 $l["noJava"]='Java Webstart nincs telepítve. A Java megkönnyíti a fájlok szerkesztését és feltöltését. Látogasd meg a <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a> weboldalt, innen telepítheted.';
 $l["strHelpContents"]='Segítség';
 $l["strReportBug"]='Hibajelentés';
-$l["strAbout"]='Információk a Group-Officeról';
+$l["strAbout"]='Információk a {product_name}ról';
 $l["strUsage"]='Használati statisztikák';
 $l["strName"]= 'Név';
 $l["strDescription"]= 'Meghatározás';
@@ -231,8 +231,8 @@ Minden jog fenntartva.
 Ha támogatásra van szüksége, kérdezze az Administratort:
 %s
 Több információért kérjük, látogasd meg:
-http://www.group-office.com
-A Group-Office-t az Intermesh készítette. Több információért kérjük, látogassa meg:;
+http://www.{product_name}.com
+A {product_name}-t az Intermesh készítette. Több információért kérjük, látogassa meg:;
 http://www.intermesh.nl/en/';
 $l['totals']='Összes';
 $l['printPage']='Oldal %s az %s-ból';
@@ -363,7 +363,7 @@ $l['admin']='Administrator';
 $l['beginning']='Megszólítás';
 $l['max_emails_reached']= "The maximum number of e-mail for SMTP host %s of %s per day have been reached.";
 $l['usage_stats']='Hely van felhasználva %s-ból';
-$l['usage_text']='This Group-Office installation is using';
+$l['usage_text']='This {product_name} installation is using';
 $l['database']='Adatbázis';
 $l['files']='Fájlok';
 $l['email']='E-mail';
@@ -371,9 +371,9 @@ $l['total']='Összes';
 $l['confirm_leave']='Ha elhagyod a webhelyet, elvesznek a mentetlen változtatásaid';
 $l['dataSaved']='Az adatok mentése sikeres volt';
 $l['uploadMultipleFiles'] = 'Kattincs a \'Tallózás\' gombra, hogy kiválaszd a feltöltendő fájlokat vagy mappákat a számítógépedről. Kattincs a \'Feltöltés\' gombra, ha fel akarsz tölteni fájlokat. Az ablak automatikusan be fog csukódni, ha végzett a feltöltéssel.';
-$l['loginToGO']='Kattincs ide, ha be akarsz jelentkezni a Group-Office-ba';
+$l['loginToGO']='Kattincs ide, ha be akarsz jelentkezni a {product_name}-ba';
 $l['links']='Linkek';
-$l['GOwebsite']='Group-Office weboldala';
-$l['GOisAProductOf']='<i>Group-Office</i> gyártója a <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+$l['GOwebsite']='{product_name} weboldala';
+$l['GOisAProductOf']='<i>{product_name}</i> gyártója a <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 $l['yes']='Igen';
 $l['no']='Nem';

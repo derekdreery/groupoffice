@@ -7,15 +7,15 @@ $lang['common']['about']='เวอร์ชั่น: %s
 
 Copyright (c) 2003-%s, Intermesh
 All rights reserved.
-This program is protected by copyright law and the Group-Office license.
+This program is protected by copyright law and the {product_name} license.
 
 For support questions contact your webmaster:
 %s
 
-For more information about Group-Office visit:
-http://www.group-office.com
+For more information about {product_name} visit:
+http://www.{product_name}.com
 
-Group-Office is created by Intermesh. For more information about Intermesh visit:
+{product_name} is created by Intermesh. For more information about Intermesh visit:
 http://www.intermesh.nl/en/';
 
 $lang['common']['htmldirection']= 'ltr';
@@ -27,7 +27,7 @@ $lang['common']['moduleRequired']='เมนู %s มีการเรีย�
 
 $lang['common']['loadingCore']= 'กำลังตรวจสอบระบบ..';
 $lang['common']['loadingLogin'] = 'กำลังตรวจสอบการเข้าใช้งาน..';
-$lang['common']['renderInterface']='กำลังเข้าสู่ระบบ Group-office..';//Rendering interface
+$lang['common']['renderInterface']='กำลังเข้าสู่ระบบ {product_name}..';//Rendering interface
 $lang['common']['loadingModule'] = 'เข้าสู่ระบบ..';
 
 $lang['common']['loggedInAs'] = 'เข้าสู่ระบบ ';
@@ -160,14 +160,14 @@ $lang['common']['beginning']='Salutation';
 
 $lang['common']['max_emails_reached']= 'จำนวนสูงสุดของอีเมลจากโฮสต์  SMTP  %s รายการ จาก %s ในหนึ่งวัน.';//The maximum number of e-mail for SMTP host %s of %s per day have been reached
 $lang['common']['usage_stats']='พื้นที่การใช้งาน %s';
-$lang['common']['usage_text']='การติดตั้งใช้งาน Group-office';//This Group-Office installation is using
+$lang['common']['usage_text']='การติดตั้งใช้งาน {product_name}';//This {product_name} installation is using
 
 $lang['common']['database']='ฐานข้อมูล';
 $lang['common']['files']='ไฟล์';
 $lang['common']['email']='อีเมล';
 $lang['common']['total']='รายการรวม';
 
-$lang['common']['confirm_leave']='เมื่อออกจากระบบ Group-Office ข้อมูลอาจสูญหายหากไม่ทำการบันทึกการเปลี่ยนแปลง. ';
+$lang['common']['confirm_leave']='เมื่อออกจากระบบ {product_name} ข้อมูลอาจสูญหายหากไม่ทำการบันทึกการเปลี่ยนแปลง. ';
 //* Top แก้ 22-07-2009
 $lang['common']['totals']='รวม';
 $lang['common']['printPage']='หน้า %s จาก %s';
@@ -176,11 +176,11 @@ $lang['common']['invalidEmailError']='ที่อยู่อีเมล์ไ
 $lang['common']['invalidDateError']='คุณระบุวันที่ผิด';
 $lang['common']['error']='พบข้อผิดพลาด';
 $lang['common']['dataSaved']='ข้อมูลถูกบันทึกเรียบร้อยแล้ว';
-$lang['common']['uploadMultipleFiles']= 'คลิ๊กปุ่ม \'Browse\' เพื่อเลือกไฟล์หรือโพลเดอร์จากเครื่องคอมพิวเตอร์. คลิ๊กที่ \'อับโหลด\' เพื่อส่งไฟล์ไปยัง Group-Office. หน้าต่างนี้จะปิดอัตโนมัติเมื่อการทำงานเสร็จสิ้น';
-$lang['common']['loginToGO']='คลิ๊กที่นี่เพื่อล็อคอินเข้าสู่ Group-Office';
+$lang['common']['uploadMultipleFiles']= 'คลิ๊กปุ่ม \'Browse\' เพื่อเลือกไฟล์หรือโพลเดอร์จากเครื่องคอมพิวเตอร์. คลิ๊กที่ \'อับโหลด\' เพื่อส่งไฟล์ไปยัง {product_name}. หน้าต่างนี้จะปิดอัตโนมัติเมื่อการทำงานเสร็จสิ้น';
+$lang['common']['loginToGO']='คลิ๊กที่นี่เพื่อล็อคอินเข้าสู่ {product_name}';
 $lang['common']['links']='เชื่อมโยง';
-$lang['common']['GOwebsite']='Group-Office เว็บไซต์';
-$lang['common']['GOisAProductOf']='<i>Group-Office</i> is a product of <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+$lang['common']['GOwebsite']='{product_name} เว็บไซต์';
+$lang['common']['GOisAProductOf']='<i>{product_name}</i> is a product of <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 $lang['common']['startMenu']='เมนูเริ่มต้น';
 $lang['common']['address_format']='รูปแบบที่อยู่';
 $lang['common']['dear']='ถึง';
@@ -193,7 +193,7 @@ $lang['common']['illegalCharsError']='ชื่อมีข้อความห
 $lang['common']['month']= 'เดือน';
 $lang['common']['strMonths']= 'เดือน';
 $lang['common']['system']='ระบบ';
-$lang['common']['goAlreadyStarted']='Group-Office ทำงานอยู่แล้ว ต้องการโหลดการทำงานของ Group-Office สามารถปิดหน้าต่างหรือแท็ปนี้ ระบบจะทำงานต่อไปตามปกติ';
+$lang['common']['goAlreadyStarted']='{product_name} ทำงานอยู่แล้ว ต้องการโหลดการทำงานของ {product_name} สามารถปิดหน้าต่างหรือแท็ปนี้ ระบบจะทำงานต่อไปตามปกติ';
 $lang['common']['reminder']='เตือนความจำ';
 $lang['common']['unknown']='ไม่ทราบ';
 $lang['common']['time']='เวลา';

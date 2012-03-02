@@ -6,15 +6,15 @@ $lang['common']['about']='Verze: %s
 
 Copyright (c) 2003-%s, Intermesh
 Všechna práva vyhrazena.
-Tento program je chráněn autorským zákonem a Group-Office licencí.
+Tento program je chráněn autorským zákonem a {product_name} licencí.
 
 Pro Vaše dotazy kontaktujte správce systému:
 %s
 
-Pro více informací o Group-Office navštivte:
-http://www.group-office.com
+Pro více informací o {product_name} navštivte:
+http://www.{product_name}.com
 
-Group-Office je vytvořen společností Intermesh. Pro více informací navštivte:
+{product_name} je vytvořen společností Intermesh. Pro více informací navštivte:
 http://www.intermesh.nl/en';
 
 $lang['common']['totals']='Součty';
@@ -175,28 +175,28 @@ $lang['common']['beginning']='Oslovení';
 
 $lang['common']['max_emails_reached']= "Byl překročen maximální počet emailů pro SMTP hosta %s z %s den.";
 $lang['common']['usage_stats']='Použité místo na disku %s';
-$lang['common']['usage_text']='Tato instalace sady Group-Office používá';
+$lang['common']['usage_text']='Tato instalace sady {product_name} používá';
 
 $lang['common']['database']='Databáze';
 $lang['common']['files']='Soubory';
 $lang['common']['email']='E-mail';
 $lang['common']['total']='Celkem';
 
-$lang['common']['confirm_leave']='Pokud opustíte Group-Office, neuložené změny budou ztraceny';
+$lang['common']['confirm_leave']='Pokud opustíte {product_name}, neuložené změny budou ztraceny';
 $lang['common']['dataSaved']='Data byla v pořádku uložena';
 
-$lang['common']['uploadMultipleFiles'] = 'Klikněte na \'Přidat z počítače\' pro výběr souboru a/nebo složky z Vašeho počítače. Klikněte na \'Přidat z pošty\' pro přenos souborů z Group-Office. Okno bude automaticky zavřeno po kompletním přenosu.';
+$lang['common']['uploadMultipleFiles'] = 'Klikněte na \'Přidat z počítače\' pro výběr souboru a/nebo složky z Vašeho počítače. Klikněte na \'Přidat z pošty\' pro přenos souborů z {product_name}. Okno bude automaticky zavřeno po kompletním přenosu.';
 
-$lang['common']['loginToGO']='Klikněte zde pro přihlášení do Group-Office';
+$lang['common']['loginToGO']='Klikněte zde pro přihlášení do {product_name}';
 $lang['common']['links']='Odkazy';
-$lang['common']['GOwebsite']='Group-Office stránky';
-$lang['common']['GOisAProductOf']='<i>Group-Office</i> je produkt od <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+$lang['common']['GOwebsite']='{product_name} stránky';
+$lang['common']['GOisAProductOf']='<i>{product_name}</i> je produkt od <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 
 $lang['common']['yes']='Ano';
 $lang['common']['no']='Ne';
 
 $lang['common']['system']='Systém';
-$lang['common']['goAlreadyStarted']='Group-Office byl úspěšně nastartován. Požadovaná obrazovka byla nahrána v Group-Office. Nyní můžete zavřít toto okno nebo záložku a pokračovat v práci v Group-Office.';
+$lang['common']['goAlreadyStarted']='{product_name} byl úspěšně nastartován. Požadovaná obrazovka byla nahrána v {product_name}. Nyní můžete zavřít toto okno nebo záložku a pokračovat v práci v {product_name}.';
 
 
 $lang['commmon']['logFiles']='Logovací soubory';
@@ -217,7 +217,7 @@ $lang['common']['parentheses_invalid_error']='Závorky ve Vašem dotazu jsou nep
 $lang['common']['nReminders']='%s připomínek';
 $lang['common']['oneReminder']='1 připomínka';
 
-//Example: you have 1 reminders in Group-Office.
+//Example: you have 1 reminders in {product_name}.
 $lang['common']['youHaveReminders']='Máte %s v %s.';
 
 $lang['common']['createdBy']='Vytvořil';

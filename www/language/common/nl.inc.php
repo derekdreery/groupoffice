@@ -6,15 +6,15 @@ $lang['common']['about']='Versie: %s
 
 Copyright (c) 2003-%s, Intermesh
 Alle rechten voorbehouden
-Dit programma is beschermd door de auteurswet en de Group-Office licentie.
+Dit programma is beschermd door de auteurswet en de {product_name} licentie.
 
 Neem voor ondersteuning contact op met de helpdesk:
 %s
 
-Voor meer informatie over Group-Office ga naar:
-http://www.group-office.com
+Voor meer informatie over {product_name} ga naar:
+http://www.{product_name}.com
 
-Group-Office is gemaakt door Intermesh. Voor meer informatie over Intermesh ga naar:
+{product_name} is gemaakt door Intermesh. Voor meer informatie over Intermesh ga naar:
 http://www.intermesh.nl/';
 
 $lang['common']['totals']='Totalen';
@@ -163,30 +163,30 @@ $lang['common']['strMonths'] = 'maanden';
 
 $lang['common']['max_emails_reached']= "Het maximale aantal e-mails voor SMTP host %s van %s per dag is bereikt.";
 $lang['common']['usage_stats']='Schijfruimtegebruik per %s';
-$lang['common']['usage_text']='Deze Group-Office installatie gebruikt';
+$lang['common']['usage_text']='Deze {product_name} installatie gebruikt';
 
 $lang['common']['database']='Database';
 $lang['common']['files']='Bestanden';
 $lang['common']['email']='E-mail';
 $lang['common']['total']='Totaal';
 
-$lang['common']['confirm_leave']='Wanneer u Group-Office verlaat gaat onopgeslagen werk verloren.';
+$lang['common']['confirm_leave']='Wanneer u {product_name} verlaat gaat onopgeslagen werk verloren.';
 
 $lang['common']['dataSaved']='De gegevens zijn succesvol opgeslagen';
-$lang['common']['uploadMultipleFiles'] = 'Klik op \'Bladeren\' om bestanden en/of mappen van uw PC te selecteren. Klik daarna op \'Upload\' om de bestanden naar Group-Office te verzenden. Dit venster zal automatisch sluiten als de upload voltooid is.';
+$lang['common']['uploadMultipleFiles'] = 'Klik op \'Bladeren\' om bestanden en/of mappen van uw PC te selecteren. Klik daarna op \'Upload\' om de bestanden naar {product_name} te verzenden. Dit venster zal automatisch sluiten als de upload voltooid is.';
 
 
-$lang['common']['loginToGO']='Klik hier om in te loggen bij Group-Office';
+$lang['common']['loginToGO']='Klik hier om in te loggen bij {product_name}';
 $lang['common']['links']='Links';
-$lang['common']['GOwebsite']='Group-Office website';
-$lang['common']['GOisAProductOf']='<i>Group-Office</i> is een product van <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+$lang['common']['GOwebsite']='{product_name} website';
+$lang['common']['GOisAProductOf']='<i>{product_name}</i> is een product van <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 
 $lang['common']['yes']='Ja';
 $lang['common']['no']='Nee';
 
 $lang['common']['system']='Systeem';
 
-$lang['common']['goAlreadyStarted']='Group-Office is al gestart. Het opgevraagde scherm is in Group-Office geladen. U kunt dit venster of tabblad sluiten.';
+$lang['common']['goAlreadyStarted']='{product_name} is al gestart. Het opgevraagde scherm is in {product_name} geladen. U kunt dit venster of tabblad sluiten.';
 
 $lang['commmon']['logFiles']='Logbestanden';
 
@@ -211,7 +211,7 @@ $lang['common']['parentheses_invalid_error']='De haakjes in uw zoekopdracht zijn
 $lang['common']['nReminders']='%s herinneringen';
 $lang['common']['oneReminder']='1 herinnering';
 
-//Example: you have 1 reminders in Group-Office.
+//Example: you have 1 reminders in {product_name}.
 $lang['common']['youHaveReminders']='U heeft %s in %s.';
 
 $lang['common']['createdBy']='Gemaakt door';

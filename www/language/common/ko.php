@@ -14,7 +14,7 @@ $l["strCommunityForum"]='커뮤니티 포럼';
 $l["moduleRequired"]='This feature requires the \'{module}\' module. This module is not available.';
 $l["completeProfile"]= '프로필을 완성하세요';
 $l["fullscreen"]='전체 화면 모드';
-$l["popupBlocker"]= '브라우져가 Group-Office가 팝업을 띄우는 것을 막고 있습니다. 이 사이트에 대한 팝업을 허용해주세요';
+$l["popupBlocker"]= '브라우져가 {product_name}가 팝업을 띄우는 것을 막고 있습니다. 이 사이트에 대한 팝업을 허용해주세요';
 $l["color"]='색상';
 $l["browse"]='찾아보기...';
 $l["largeUpload"]='큰 파일/디렉토리 (Java 필요함)';
@@ -264,11 +264,11 @@ $l["thankyou"]='Thank you';
 $l["applyMultiselect"]='Apply multiselect';
 $l["createdBy"]='생성자';
 $l["debugModeDetected"]="Warning! Debug mode enabled";
-$l["debugModeWarning"]="Use \$config['debug']=true; only with development and problem solving. It slows Group-Office down.";
+$l["debugModeWarning"]="Use \$config['debug']=true; only with development and problem solving. It slows {product_name} down.";
 $l["userGroup"]='유저 그룹';
 $l["noItemSelectedWarning"]='Select at least one item please.';
 $l["deselectAll"]='모두 해제';
-$l["confirmSelectLotsOfItems"]='This action will select {count} items and might cause Group-Office to become slow. Are you sure you want continue?';
+$l["confirmSelectLotsOfItems"]='This action will select {count} items and might cause {product_name} to become slow. Are you sure you want continue?';
 $l["captcha"]='Security code';
 $l["captchaEmpty"]='Security code is empty';
 $l["multiselectComboMaxItemsReachedWarning"]='You may select a maximum of {max} options';
@@ -291,12 +291,12 @@ $l["strUsersInGroup"]= 'Users in group';
 $l['about']='버전: %s
 Copyright (c) 2003-%s, Intermesh
 All rights reserved.
-This program is protected by copyright law and the Group-Office license.
+This program is protected by copyright law and the {product_name} license.
 For support questions contact your webmaster:
 %s
-For more information about Group-Office visit:
-http://www.group-office.com
-Group-Office is created by Intermesh. For more information about Intermesh visit:;
+For more information about {product_name} visit:
+http://www.{product_name}.com
+{product_name} is created by Intermesh. For more information about Intermesh visit:;
 http://www.intermesh.nl/en/';
 $l['totals']='전체';
 $l['printPage']='페이지 %s / %s';
@@ -435,22 +435,22 @@ $l['admin']='관리자';
 $l['beginning']='Salutation';
 $l['max_emails_reached']= "The maximum number of e-mail for SMTP host %s of %s per day have been reached.";
 $l['usage_stats']='Diskspace usage per %s';
-$l['usage_text']='This Group-Office installation is using';
+$l['usage_text']='This {product_name} installation is using';
 $l['database']='데이타베이스';
 $l['files']='파일';
 $l['email']='메일';
 $l['total']='전체';
-$l['confirm_leave']='Group-Office를 떠나면 저장되지 않은 변경점을 잃어버립니다';
+$l['confirm_leave']='{product_name}를 떠나면 저장되지 않은 변경점을 잃어버립니다';
 $l['dataSaved']='데이터가 성공적으로 저장되었습니다';
-$l['uploadMultipleFiles'] = 'Click at \'Browse\' to select files and/or folders from your computer. Click at \'Upload\' to transfer the files to Group-Office. This window will automatically close when the transfer is completed.';
-$l['loginToGO']='여기를 눌러서 Group-Office에 로그인 하세요';
+$l['uploadMultipleFiles'] = 'Click at \'Browse\' to select files and/or folders from your computer. Click at \'Upload\' to transfer the files to {product_name}. This window will automatically close when the transfer is completed.';
+$l['loginToGO']='여기를 눌러서 {product_name}에 로그인 하세요';
 $l['links']='링크';
-$l['GOwebsite']='Group-Office 웹사이트';
-$l['GOisAProductOf']='<i>Group-Office</i> is a product of <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+$l['GOwebsite']='{product_name} 웹사이트';
+$l['GOisAProductOf']='<i>{product_name}</i> is a product of <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 $l['yes']='예';
 $l['no']='아니오';
 $l['system']='시스템';
-$l['goAlreadyStarted']='Group-Office was already started. The requested screen is loaded in Group-Office. You can close this window or tab now and continue working in Group-Office.';
+$l['goAlreadyStarted']='{product_name} was already started. The requested screen is loaded in {product_name}. You can close this window or tab now and continue working in {product_name}.';
 $l['no']='아니오';
 $lang['commmon']['logFiles']='로그 파일';
 $l['reminder']='알리미';

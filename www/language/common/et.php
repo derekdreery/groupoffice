@@ -4,12 +4,12 @@
 $l['about']='Versioon: %s
 Copyright (c) 2003-%s, Intermesh
 All rights reserved.
-This program is protected by copyright law and the Group-Office license.
+This program is protected by copyright law and the {product_name} license.
 For support questions contact your webmaster:
 %s
-For more information about Group-Office visit:
-http://www.group-office.com
-Group-Office is created by Intermesh. For more information about Intermesh visit:;
+For more information about {product_name} visit:
+http://www.{product_name}.com
+{product_name} is created by Intermesh. For more information about Intermesh visit:;
 http://www.intermesh.nl/en/';
 $l['totals']='Kokku';
 $l['printPage']='Lehekülg %s  %s-st';
@@ -157,12 +157,12 @@ $l['dataSaved']='Andmed salvestatud';
 $l['uploadMultipleFiles'] = 'Failide arvutist valimiseks vajuta \'Browse\'. Failide üles laadimiseks vajuta \'UPLOAD\'. Peale üles laadimist sulgub aken automaatselt.';
 $l['loginToGO']='Sisse logimiseks vajuta siia';
 $l['links']='Lingid';
-$l['GOwebsite']='Group-Office veebileht';
-$l['GOisAProductOf']='<i>Group-Office</i> on <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+$l['GOwebsite']='{product_name} veebileht';
+$l['GOisAProductOf']='<i>{product_name}</i> on <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 $l['yes']='Jah';
 $l['no']='Ei';
 $l['system']='Süsteem';
-$l['goAlreadyStarted']='Group-Office on käivitatud. Võid selle aknda sulgeda ja töötamist jätkata.';
+$l['goAlreadyStarted']='{product_name} on käivitatud. Võid selle aknda sulgeda ja töötamist jätkata.';
 $l['no']='Ei';
 $lang['commmon']['logFiles']='Logi failid';
 $l['reminder']='Meeldetuletus';
@@ -444,11 +444,11 @@ $l["keywords"]='Võtmesõnad';
 $l["thankyou"]='Tänan';
 $l["createdBy"]='Autor';
 $l["debugModeDetected"]="Hoiatus! Debugimine on aktiveeritud";
-$l["debugModeWarning"]="Use \$config['debug']=true; only with development and problem solving. It slows Group-Office down.";
+$l["debugModeWarning"]="Use \$config['debug']=true; only with development and problem solving. It slows {product_name} down.";
 $l["userGroup"]='Kasutajagrupp';
 $l["noItemSelectedWarning"]='Vali vähemalt üks kirje';
 $l["deselectAll"]='Tühista kõik';
-$l["confirmSelectLotsOfItems"]='This action will select {count} items and might cause Group-Office to become slow. Are you sure you want continue?';
+$l["confirmSelectLotsOfItems"]='This action will select {count} items and might cause {product_name} to become slow. Are you sure you want continue?';
 $l["captcha"]='Turvaline tööreziim';
 $l["captchaEmpty"]='Turvakood on tühi';
 $l["multiselectComboMaxItemsReachedWarning"]='Võid teha maksimaalselt {max} valikut';

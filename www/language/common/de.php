@@ -275,7 +275,7 @@ $l["landscape"]='Querformat';
 $l["totals"]='Summe';
 $l["userGroup"]='Benutzergruppe';
 $l["deselectAll"]='Alles abwählen';
-$l["confirmSelectLotsOfItems"]='Diese Aktion wählt {count} Einträge aus und könnte Group-Office langsam werden lassen. Möchten Sie fortsetzen?';
+$l["confirmSelectLotsOfItems"]='Diese Aktion wählt {count} Einträge aus und könnte {product_name} langsam werden lassen. Möchten Sie fortsetzen?';
 $l["captcha"]='Sicherheitscode';
 $l["captchaEmpty"]='Sicherheitscode ist leer';
 $l["multiselectComboMaxItemsReachedWarning"]='Sie können maximal {max} Einträge auswählen';
@@ -284,12 +284,12 @@ $l["toScreen"]='Auf den Bildschirm';
 $l['about']='Version: %s
 Copyright (c) 2003-%s, Intermesh
 All rights reserved.
-This program is protected by copyright law and the Group-Office license.
+This program is protected by copyright law and the {product_name} license.
 For support questions contact your webmaster:
 %s
-For more information about Group-Office visit:
-http://www.group-office.com
-Group-Office is created by Intermesh. For more information about Intermesh visit:;
+For more information about {product_name} visit:
+http://www.{product_name}.com
+{product_name} is created by Intermesh. For more information about Intermesh visit:;
 http://www.intermesh.nl/en/';
 $l['totals']='Gesamt';
 $l['printPage']='Seite %s von %s';

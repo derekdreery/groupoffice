@@ -6,15 +6,15 @@ $lang['common']['about']='Version: %s
 
 Copyright (c) 2003-%s, Intermesh
 All rights reserved.
-This program is protected by copyright law and the Group-Office license.
+This program is protected by copyright law and the {product_name} license.
 
 For support questions contact your webmaster:
 %s
 
-For more information about Group-Office visit:
-http://www.group-office.com
+For more information about {product_name} visit:
+http://www.{product_name}.com
 
-Group-Office is created by Intermesh. For more information about Intermesh visit:
+{product_name} is created by Intermesh. For more information about Intermesh visit:
 http://www.intermesh.nl/en/';
 
 $lang['common']['totals']='Totals';
@@ -174,7 +174,7 @@ $lang['common']['beginning']='Salutation';
 
 $lang['common']['max_emails_reached']= "The maximum number of e-mail for SMTP host %s of %s per day have been reached.";
 $lang['common']['usage_stats']='Diskspace usage per %s';
-$lang['common']['usage_text']='This Group-Office installation is using';
+$lang['common']['usage_text']='This {product_name} installation is using';
 
 $lang['common']['database']='Database';
 $lang['common']['files']='Files';
@@ -182,23 +182,23 @@ $lang['common']['email']='E-mail';
 $lang['common']['total']='Total';
 
 
-$lang['common']['confirm_leave']='If you leave Group-Office you will loose unsaved changes';
+$lang['common']['confirm_leave']='If you leave {product_name} you will loose unsaved changes';
 $lang['common']['dataSaved']='The data was saved succesfully';
 
-$lang['common']['uploadMultipleFiles'] = 'Click at \'Browse\' to select files and/or folders from your computer. Click at \'Upload\' to transfer the files to Group-Office. This window will automatically close when the transfer is completed.';
+$lang['common']['uploadMultipleFiles'] = 'Click at \'Browse\' to select files and/or folders from your computer. Click at \'Upload\' to transfer the files to {product_name}. This window will automatically close when the transfer is completed.';
 
 
-$lang['common']['loginToGO']='Click here to login to Group-Office';
+$lang['common']['loginToGO']='Click here to login to {product_name}';
 $lang['common']['links']='Links';
-$lang['common']['GOwebsite']='Group-Office website';
-$lang['common']['GOisAProductOf']='<i>Group-Office</i> is a product of <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+$lang['common']['GOwebsite']='{product_name} website';
+$lang['common']['GOisAProductOf']='<i>{product_name}</i> is a product of <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 
 $lang['common']['yes']='Yes';
 $lang['common']['no']='No';
 
 $lang['common']['system']='System';
 
-$lang['common']['goAlreadyStarted']='Group-Office was already started. The requested screen is loaded in Group-Office. You can close this window or tab now and continue working in Group-Office.';
+$lang['common']['goAlreadyStarted']='{product_name} was already started. The requested screen is loaded in {product_name}. You can close this window or tab now and continue working in {product_name}.';
 $lang['common']['no']='No';
 
 $lang['commmon']['logFiles']='Log files';
@@ -220,7 +220,7 @@ $lang['common']['parentheses_invalid_error']='Parentheses in your query are inva
 $lang['common']['nReminders']='%s reminders';
 $lang['common']['oneReminder']='1 reminder';
 
-//Example: you have 1 reminders in Group-Office.
+//Example: you have 1 reminders in {product_name}.
 $lang['common']['youHaveReminders']='You have %s in %s.';
 
 $lang['common']['createdBy']='Created by';

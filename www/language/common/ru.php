@@ -4,12 +4,12 @@
 $l['about']='Версия: %s
 Copyright (c) 2003-%s, Intermesh
 All rights reserved.
-This program is protected by copyright law and the Group-Office license.
+This program is protected by copyright law and the {product_name} license.
 For support questions contact your webmaster:
 %s
-For more information about Group-Office visit:
-http://www.group-office.com
-Group-Office is created by Intermesh. For more information about Intermesh visit:;
+For more information about {product_name} visit:
+http://www.{product_name}.com
+{product_name} is created by Intermesh. For more information about Intermesh visit:;
 http://www.intermesh.nl/en/';
 $l['totals']='Всего';
 $l['printPage']='Стр. %s из %s';
@@ -147,22 +147,22 @@ $l['admin']='Администратор';
 $l['beginning']='Приветствие';
 $l['max_emails_reached']= "Достигнуто максимальное количество e-mail за день для SMTP %s %s.";
 $l['usage_stats']='Использование дискового пространства %s';
-$l['usage_text']='Установленный Group-Office занимает';
+$l['usage_text']='Установленный {product_name} занимает';
 $l['database']='База данных';
 $l['files']='Файлы';
 $l['email']='E-mail';
 $l['total']='Итого';
-$l['confirm_leave']='Вы потеряете несозраненные данные если выйдете из Group-Office';
+$l['confirm_leave']='Вы потеряете несозраненные данные если выйдете из {product_name}';
 $l['dataSaved']='Сохранено...';
-$l['uploadMultipleFiles'] = 'Нажмите на  \'Обзор\' для выбора файлов и/или папок на Вашем компьютере. Нажмите \'Выгрузить\' для отправки этих файлов в Group-Office. Это окно закроется автоматически когда закончится передача фалов.';
-$l['loginToGO']='Нажмите здесь чтобы войти в Group-Office';
+$l['uploadMultipleFiles'] = 'Нажмите на  \'Обзор\' для выбора файлов и/или папок на Вашем компьютере. Нажмите \'Выгрузить\' для отправки этих файлов в {product_name}. Это окно закроется автоматически когда закончится передача фалов.';
+$l['loginToGO']='Нажмите здесь чтобы войти в {product_name}';
 $l['links']='Ссылки';
-$l['GOwebsite']='Официальный сайт Group-Office';
-$l['GOisAProductOf']='<i>Group-Office</i> - это продукт коипании <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+$l['GOwebsite']='Официальный сайт {product_name}';
+$l['GOisAProductOf']='<i>{product_name}</i> - это продукт коипании <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 $l['yes']='Да';
 $l['no']='Нет';
 $lang['commmon']['logFiles']='Журналы';
-$l['goAlreadyStarted']='Group-Office уже был запущен.  Вы можете закрыть это окно или вкладку и продолжить работать в Group-Office.';
+$l['goAlreadyStarted']='{product_name} уже был запущен.  Вы можете закрыть это окно или вкладку и продолжить работать в {product_name}.';
 $l['reminder']='Напоминание';
 $l['unknown']='Неизвестно';
 $l['time']='Время';
@@ -194,17 +194,17 @@ $l["strCommunityForum"]='Форум поддержки:';
 $l["moduleRequired"]='Необходимо наличие модуля: \'{module}\'. Данный модуль недоступен.';
 $l["completeProfile"]= 'Пожалуйста заполните Ваш профиль';
 $l["fullscreen"]='Полноэкранный режим';
-$l["popupBlocker"]= 'Ваш браузер блокирует всплывающие окна Group-Office. Пожалуйста отключите блокировку всплывающих окон для этого сайта';
+$l["popupBlocker"]= 'Ваш браузер блокирует всплывающие окна {product_name}. Пожалуйста отключите блокировку всплывающих окон для этого сайта';
 $l["color"]='Цвет';
 $l["browse"]='Выбрать...';
 $l["largeUpload"]='Большие файлы/папки (необходимо наличие Java)';
 $l["smallUpload"]='Маленькие файлы';
 $l["lostPassword"]='Забыли пароль?';
-$l["lostPasswordText"]='Чтобы восстановить Ваш пароль у Вас должна быть возможность читать Ваши электронные письма без доступа к Group-Office. Если вы введете Ваш e-mail адрес новый пароль будет выслан Вам на Ваш e-mail.<br /><br />Введите Ваш e-mail:';
+$l["lostPasswordText"]='Чтобы восстановить Ваш пароль у Вас должна быть возможность читать Ваши электронные письма без доступа к {product_name}. Если вы введете Ваш e-mail адрес новый пароль будет выслан Вам на Ваш e-mail.<br /><br />Введите Ваш e-mail:';
 $l["noJava"]='Java Webstart не установлен. Java позволяет Вам проще редактировать и загружать файлы. Посетите сайт <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a> и установите ее.';
 $l["strHelpContents"]='Содержание.';
 $l["strReportBug"]='Отчет об ошибке';
-$l["strAbout"]='О Group-Office';
+$l["strAbout"]='О {product_name}';
 $l["strUsage"]='Статистика использования';
 $l["strName"]= 'Имя';
 $l["strDescription"]= 'Описание';
@@ -441,11 +441,11 @@ $l["thankyou"]='Спасибо';
 $l["applyMultiselect"]='Применить выбранное';
 $l["createdBy"]='Создано';
 $l["debugModeDetected"]="Предупреждение: включен режим отладки!";
-$l["debugModeWarning"]="Испеользуйте \$config['debug']=true; только для отладки или решения проблем. Этот режим замедляет работу Group-Office.";
+$l["debugModeWarning"]="Испеользуйте \$config['debug']=true; только для отладки или решения проблем. Этот режим замедляет работу {product_name}.";
 $l["userGroup"]='Группа пользователеей';
 $l["noItemSelectedWarning"]='Выберите хотя бы одно значение.';
 $l["deselectAll"]='Очистить все';
-$l["confirmSelectLotsOfItems"]='Вы выбираете {count} пунктов и это может замедлить работу Group-Office. Вы уверены что хотите продолжить?';
+$l["confirmSelectLotsOfItems"]='Вы выбираете {count} пунктов и это может замедлить работу {product_name}. Вы уверены что хотите продолжить?';
 $l["captcha"]='Защитный код';
 $l["captchaEmpty"]='Защитный код пустой';
 $l["multiselectComboMaxItemsReachedWarning"]='Вы можете выбрать максимум {max}';

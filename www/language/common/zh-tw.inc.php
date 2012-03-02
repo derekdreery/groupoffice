@@ -141,7 +141,7 @@ $lang['common']['beginning']='稱呼';
 
 $lang['common']['max_emails_reached']= "The maximum number of e-mail for SMTP host %s of %s per day have been reached.";
 $lang['common']['usage_stats']='Diskspace usage per %s';
-$lang['common']['usage_text']='This Group-Office installation is using';
+$lang['common']['usage_text']='This {product_name} installation is using';
 
 $lang['common']['database']='資料庫';
 $lang['common']['files']='文件';
