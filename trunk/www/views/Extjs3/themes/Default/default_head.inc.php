@@ -16,5 +16,8 @@ $GLOBALS['GO_THEME']->add_stylesheet($root_path.'themes/Default/style.css', $roo
 $GLOBALS['GO_THEME']->load_module_stylesheets();
 $GLOBALS['GO_THEME']->get_cached_css();
 
+if(!empty($GLOBALS['GO_CONFIG']->custom_css_url))
+	echo '<link href="'.$GLOBALS['GO_CONFIG']->custom_css_url.'" type="text/css" rel="stylesheet" />';
+
 $GLOBALS['GO_EVENTS']->fire_event('head');
 ?>
