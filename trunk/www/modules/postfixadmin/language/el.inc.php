@@ -2,7 +2,7 @@
 /* Translator for the Greek Language: Konstantinos Georgakopoulos (kgeorga@uom.gr)*/
 require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('postfixadmin'));
 $lang['postfixadmin']['name']='Διαχείριση Postfix';
-$lang['postfixadmin']['description']='Άρθρωμα για την διαχείριση των εικονικών χρηστών του postfix στην βάση δεδομένων του Group-Office';
+$lang['postfixadmin']['description']='Άρθρωμα για την διαχείριση των εικονικών χρηστών του postfix στην βάση δεδομένων του {product_name}';
 $lang['postfixadmin']['alias']='Ψευδώνυμο';
 $lang['postfixadmin']['aliases']='Ψευδώνυμα';
 $lang['postfixadmin']['domain']='Τομέας';

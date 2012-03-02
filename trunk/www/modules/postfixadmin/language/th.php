@@ -2,7 +2,7 @@
 
 
 $l['name']='Postfix admin';
-$l['description']='postfix เป็นการจัดการ  postfix เสมือนสำหรับผู้ใช้งานเพื่อใช้งานฐานข้อมูลบน Group-Office';//A module to manage virtual postfix users in the Group-Office database;
+$l['description']='postfix เป็นการจัดการ  postfix เสมือนสำหรับผู้ใช้งานเพื่อใช้งานฐานข้อมูลบน {product_name}';//A module to manage virtual postfix users in the {product_name} database;
 $l['alias']='นามสมมุติ';//Alias;
 $l['aliases']='นามสมมุติ';//Aliases;
 $l['domain']='โดเมน';//Domain;

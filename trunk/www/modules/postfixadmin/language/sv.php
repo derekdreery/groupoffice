@@ -2,7 +2,7 @@
 
 
 $l['name']='Postfixadmin';
-$l['description']='Modul för att hantera virtuella postfix-användare i Group-Office databas.';
+$l['description']='Modul för att hantera virtuella postfix-användare i {product_name} databas.';
 $l['alias']='Alias';
 $l['aliases']='Alias';
 $l['domain']='Domän';

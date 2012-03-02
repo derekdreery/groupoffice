@@ -49,7 +49,7 @@ $l["usage"]="Usage";
 $l["defaultQuota"]='Default quota (MB)';
 
 $l['name']='Postfix admin';
-$l['description']='A module to manage virtual postfix users in the Group-Office database';
+$l['description']='A module to manage virtual postfix users in the {product_name} database';
 $l['alias']='Alias';
 $l['aliases']='Aliases';
 $l['domain']='Domain';
