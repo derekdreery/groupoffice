@@ -367,7 +367,11 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	    				win.focus();
 	    			},
 	    			scope:this	    			
-	    		},{
+	    		}]    		
+    	});
+			
+			if (GO.settings.config.product_name=='Group-Office') {
+				helpMenu.addItem({
 	    			iconCls:'btn-forum',
 	    			text:GO.lang.strCommunityForum,
 	    			handler:function(){	    				
@@ -376,7 +380,9 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	    			},
 	    			scope:this
 	    			
-	    		},'-',{
+	    		});
+				helpMenu.addItem('-');
+				helpMenu.addItem({
 	    			iconCls: 'btn-support',
 	    			text: GO.lang.contactSupportDesk,
 	    			handler: function(){
@@ -399,7 +405,8 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	    			},
 	    			scope:this
 	    		
-	    		},{
+	    		});
+				helpMenu.addItem({
 	    			iconCls:'btn-report-bug',
 	    			text:GO.lang.strReportBug,
 	    			handler:function(){
@@ -407,21 +414,22 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	    				win.focus();			
 	    			},
 	    			scope:this
-	    			
-	    		},    		
-	    		'-',{
-    			iconCls:'btn-info',
-    			text:GO.lang.strAbout.replace('{product_name}', GO.settings.config.product_name),
-    			handler:function(){
-    				if(!this.aboutDialog)
-    				{
-    					this.aboutDialog = new GO.dialog.AboutDialog();
-    				} 
-    				this.aboutDialog.show();   				
-    			},
-    			scope:this    			
-    		}]    		
-    	});
+	    		});
+			}
+			
+			helpMenu.addItem('-');
+			helpMenu.addItem({
+					iconCls:'btn-info',
+					text:GO.lang.strAbout.replace('{product_name}', GO.settings.config.product_name),
+					handler:function(){
+						if(!this.aboutDialog)
+						{
+							this.aboutDialog = new GO.dialog.AboutDialog();
+						} 
+						this.aboutDialog.show();   				
+					},
+					scope:this    			
+				});
 			
 			helpLink.on("click", function(){
 				var x = helpLink.getX();
