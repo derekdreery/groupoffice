@@ -1,7 +1,7 @@
 GO.base.model.multiselect.panel = function(config){
 	
 	config = config || {};
-	
+
 	config.store = new GO.data.JsonStore({
 		url: GO.url(config.url+'/selectedStore'),
 		baseParams:{
@@ -28,6 +28,12 @@ GO.base.model.multiselect.panel = function(config){
 		}
 	});
 	
+		
+	this.searchField = new GO.form.SearchField({
+		store: config.store,
+		width:320
+	});
+	
 	if(typeof(config.paging)=='undefined')
 		config.paging=true;
 
@@ -39,6 +45,7 @@ GO.base.model.multiselect.panel = function(config){
 
 	config.sm=new Ext.grid.RowSelectionModel();
 	Ext.apply(config,{
+		loadMask:true,
 		layout: 'fit',
 		title:config.title,
 		tbar : [
@@ -83,10 +90,16 @@ GO.base.model.multiselect.panel = function(config){
 				this.deleteSelected();
 			},
 			scope: this
-		}]
+		},
+		GO.lang['strSearch'] + ':', this.searchField
+	]
 	});	
 
 	GO.base.model.multiselect.panel.superclass.constructor.call(this, config);
+	
+	this.on('show',function(){	
+			this.store.load();
+	}, this);
 };
 
 Ext.extend(GO.base.model.multiselect.panel, GO.grid.EditorGridPanel, {
