@@ -17,7 +17,7 @@ $lang['files']['shared']='Condiviso';
 $lang['files']['general']='Generale';
 
 
-$lang['files']['folder_modified_subject']='Modifiche alla cartella Group-Office';
+$lang['files']['folder_modified_subject']='Modifiche alla cartella {product_name}';
 $lang['files']['folder_modified_body']='Hai richiesto di essere informato quando vengono apportate modifiche al:
 
 %s

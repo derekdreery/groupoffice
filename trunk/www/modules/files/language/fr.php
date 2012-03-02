@@ -31,7 +31,7 @@ $l["imageViewer"]='Visualiseur d\'images';
 $l["emailDownloadLink"]= 'Envoyer un lien de téléchargement';
 $l["expireTime"]= 'Date d\'expiration du lien';
 $l['name'] = 'Fichiers';
-$l['description'] = 'Module gestion des fichiers. Module pour partager des fichiers entre utilisateurs de Group-Office.';
+$l['description'] = 'Module gestion des fichiers. Module pour partager des fichiers entre utilisateurs de {product_name}.';
 $lang['link_type'][6]='Fichier';
 $l['fileNotFound'] = 'Fichier introuvable';
 $l['folderExists'] = 'Le dossier existe déjà';
@@ -42,7 +42,7 @@ $l['wordtextdoc']='Document Microsoft Word';
 $l['personal']='Personnel';
 $l['shared']='Partagé';
 $l['general']='Général';
-$l['folder_modified_subject']='Changer en dossier Group-Office';
+$l['folder_modified_subject']='Changer en dossier {product_name}';
 $l['folder_modified_body']='Vous avez demandé à être avisé lorsque des changements sont apportés à :
 %s
 Les changements suivants ont été effectués par %s :

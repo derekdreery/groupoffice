@@ -13,7 +13,7 @@ $l['wordtextdoc']='Microsoft Word-dokument';
 $l['personal']='Personlig';
 $l['shared']='Delt';
 $l['general']='Generell';
-$l['folder_modified_subject']='Endringer i Group-Office mappen';
+$l['folder_modified_subject']='Endringer i {product_name} mappen';
 $l['folder_modified_body']='Du har bedt om å få beskjed når det er endringer i:
 %s
 Følgende endringer er foretatt av %s:

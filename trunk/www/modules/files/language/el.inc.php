@@ -19,7 +19,7 @@ $lang['files']['shared']='Διαμοιραζόμενα';
 $lang['files']['general']='Γενικά';
 
 
-$lang['files']['folder_modified_subject']='Αλλαγές στο φάκελο του Group-Office';
+$lang['files']['folder_modified_subject']='Αλλαγές στο φάκελο του {product_name}';
 $lang['files']['folder_modified_body']='Έχετε ζητήσει να ειδοποιείστε όταν γίνονται αλλαγές στο:
 
 %s

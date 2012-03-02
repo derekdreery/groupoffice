@@ -35,7 +35,7 @@ $l['wordtextdoc']='Microsoft Word dokumentum';
 $l['personal']='Személyes';
 $l['shared']='Megosztott';
 $l['general']='Általános';
-$l['folder_modified_subject']='Módosítva a Group-Office mappára';
+$l['folder_modified_subject']='Módosítva a {product_name} mappára';
 $l['folder_modified_body']='You requested to be notified when changes are made to:
 %s
 A következő változásokat végrehajtotta: %s:

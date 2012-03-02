@@ -12,7 +12,7 @@ $l['wordtextdoc']='Document Microsoft Word';
 $l['personal']='Personal';
 $l['shared']='Compartit';
 $l['general']='General';
-$l['folder_modified_subject']='Canvis en la vostra carpeta de Group-Office';
+$l['folder_modified_subject']='Canvis en la vostra carpeta de {product_name}';
 $l['folder_modified_body']='Vàreu sol·licitar ser notificat quan es realitzin canvis a:
 %s
 Els següents canvis han estat realitzats per %s:

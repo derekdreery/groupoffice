@@ -42,7 +42,7 @@ $l['wordtextdoc']='Microsoft Word document';
 $l['personal']='osobiste';
 $l['shared']='Współdzielone';
 $l['general']='ogólne';
-$l['folder_modified_subject']='Zmiany w folderze Group-Office';
+$l['folder_modified_subject']='Zmiany w folderze {product_name}';
 $l['folder_modified_body']='Zażądano powiadomienia, gdy nastąpią zmiany w:
 %s
 Następujące zmiany zostały wykonane przez %s:

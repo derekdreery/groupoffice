@@ -12,7 +12,7 @@ $l['wordtextdoc']='Document Microsoft Word';
 $l['personal']='Personal';
 $l['shared']='Partajat';
 $l['general']='General';
-$l['folder_modified_subject']='Modificari la fişierul Group-Office';
+$l['folder_modified_subject']='Modificari la fişierul {product_name}';
 $l['folder_modified_body']='Ai cerut notificarea schimbărilor de la:
 %s
 Modificările a fost făcute de %s:

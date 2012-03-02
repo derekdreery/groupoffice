@@ -55,7 +55,7 @@ $l['wordtextdoc']='Microsoft Word document';
 $l['personal']='Personal';
 $l['shared']='Shared';
 $l['general']='General';
-$l['folder_modified_subject']='Changes to Group-Office folder';
+$l['folder_modified_subject']='Changes to {product_name} folder';
 $l['folder_modified_body']='You requested to be notified when changes are made to:
 %s
 The following changes were made by %s:

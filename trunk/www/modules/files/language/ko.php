@@ -47,7 +47,7 @@ $l['wordtextdoc']='MS Word 문서';
 $l['personal']='개인';
 $l['shared']='공유';
 $l['general']='일반';
-$l['folder_modified_subject']='Changes to Group-Office folder';
+$l['folder_modified_subject']='Changes to {product_name} folder';
 $l['folder_modified_body']='You requested to be notified when changes are made to:
 %s
 The following changes were made by %s:

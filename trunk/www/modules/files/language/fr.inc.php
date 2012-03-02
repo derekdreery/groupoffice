@@ -3,8 +3,8 @@
 //
 // Copyright Intermesh
 // 
-// This file is part of Group-Office. You should have received a copy of the
-// Group-Office license along with Group-Office. See the file /LICENSE.TXT
+// This file is part of {product_name}. You should have received a copy of the
+// {product_name} license along with {product_name}. See the file /LICENSE.TXT
 // 
 // If you have questions write an e-mail to info@intermesh.nl
 //
@@ -23,7 +23,7 @@
 require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('files'));
 
 $lang['files']['name'] = 'Fichiers';
-$lang['files']['description'] = 'Module gestion des fichiers. Module pour partager des fichiers entre utilisateurs de Group-Office.';
+$lang['files']['description'] = 'Module gestion des fichiers. Module pour partager des fichiers entre utilisateurs de {product_name}.';
 $lang['link_type'][6]='Fichier';
 $lang['files']['fileNotFound'] = 'Fichier introuvable';
 $lang['files']['folderExists'] = 'Le dossier existe déjà';
@@ -34,7 +34,7 @@ $lang['files']['wordtextdoc']='Document Microsoft Word';
 $lang['files']['personal']='Personnel';
 $lang['files']['shared']='Partagé';
 $lang['files']['general']='Général';
-$lang['files']['folder_modified_subject']='Changer en dossier Group-Office';
+$lang['files']['folder_modified_subject']='Changer en dossier {product_name}';
 $lang['files']['folder_modified_body']='Vous avez demandé à être avisé lorsque des changements sont apportés à :
 
 %s

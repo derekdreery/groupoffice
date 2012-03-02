@@ -2,7 +2,7 @@
 
 
 $l['name'] = 'Filer';
-$l['description'] = 'Modul för att hantera filer i Group-Office. Filer kan delas mellan användare och grupper. Använd GOTA för att redigera filer från Group-Office lokalt och spara ändringarna till servern.';
+$l['description'] = 'Modul för att hantera filer i {product_name}. Filer kan delas mellan användare och grupper. Använd GOTA för att redigera filer från {product_name} lokalt och spara ändringarna till servern.';
 $lang['link_type'][6]= 'Fil';
 $lang['link_type'][17]='Mapp';
 $l['fileNotFound'] = 'Filen hittades inte';
@@ -14,7 +14,7 @@ $l['wordtextdoc']= 'Microsoft Word-dokument';
 $l['personal']= 'Personlig';
 $l['shared']= 'Delad';
 $l['general']= 'Allmänt';
-$l['folder_modified_subject']= 'Ändringar i Group-Office-mapp';
+$l['folder_modified_subject']= 'Ändringar i {product_name}-mapp';
 $l['folder_modified_body']= 'Du har begärt att bli meddelad när ändringar gjorts i:
 %s
 Följande ändringar gjordes av %s:

@@ -26,7 +26,7 @@ $lang['files']['shared']='Общие';
 $lang['files']['general']='Основные';
 
 
-$lang['files']['folder_modified_subject']='Изменения в папке Group-Office';
+$lang['files']['folder_modified_subject']='Изменения в папке {product_name}';
 $lang['files']['folder_modified_body']='Вы запрашивали уведомление о изменениях в:
 
 %s

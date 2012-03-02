@@ -33,7 +33,7 @@ $l['wordtextdoc']='Κείμενο Microsoft Word';
 $l['personal']='Προσωπικά';
 $l['shared']='Διαμοιραζόμενα';
 $l['general']='Γενικά';
-$l['folder_modified_subject']='Αλλαγές στο φάκελο του Group-Office';
+$l['folder_modified_subject']='Αλλαγές στο φάκελο του {product_name}';
 $l['folder_modified_body']='Έχετε ζητήσει να ειδοποιείστε όταν γίνονται αλλαγές στο:
 %s
 Οι ακόλουθες αλλαγές έγιναν από %s:

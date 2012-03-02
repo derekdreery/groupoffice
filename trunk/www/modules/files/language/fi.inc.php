@@ -19,7 +19,7 @@ $lang['files']['shared']='Jaettu';
 $lang['files']['general']='Yleinen';
 
 
-$lang['files']['folder_modified_subject']='Muutokset Group-Office-hakemistoon';
+$lang['files']['folder_modified_subject']='Muutokset {product_name}-hakemistoon';
 $lang['files']['folder_modified_body']='Pyysitte saada tiedoksi tehdyt muutokset:
 
 %s

@@ -28,7 +28,7 @@ $lang['files']['shared']='Współdzielone';
 $lang['files']['general']='ogólne';
 
 
-$lang['files']['folder_modified_subject']='Zmiany w folderze Group-Office';
+$lang['files']['folder_modified_subject']='Zmiany w folderze {product_name}';
 $lang['files']['folder_modified_body']='Zażądano powiadomienia, gdy nastąpią zmiany w:
 
 %s

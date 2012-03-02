@@ -17,7 +17,7 @@ $lang['files']['shared']='Partajat';
 $lang['files']['general']='General';
 
 
-$lang['files']['folder_modified_subject']='Modificari la fişierul Group-Office';
+$lang['files']['folder_modified_subject']='Modificari la fişierul {product_name}';
 $lang['files']['folder_modified_body']='Ai cerut notificarea schimbărilor de la:
 
 %s

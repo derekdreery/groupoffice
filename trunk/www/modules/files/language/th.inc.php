@@ -19,7 +19,7 @@ $lang['files']['shared']='ใช้งานร่วมกัน';
 $lang['files']['general']='ปรกติ';
 
 
-$lang['files']['folder_modified_subject']='แก้ไขโฟลเดอร์ Group-Office';
+$lang['files']['folder_modified_subject']='แก้ไขโฟลเดอร์ {product_name}';
 $lang['files']['folder_modified_body']='กรุณาแจ้งเตือนเมื่อมีการเปลียนแปลงใดๆจาก : %s โดยได้รับการเปลียนแปลงโดย %s:%s';//You requested to be notified when changes are made to  The following changes were made by
 
 $lang['files']['modified']='แก้ไข';

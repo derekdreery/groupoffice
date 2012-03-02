@@ -40,7 +40,7 @@ $l['wordtextdoc']='Documento Microsoft Word';
 $l['personal']='Personal';
 $l['shared']='Compartido';
 $l['general']='General';
-$l['folder_modified_subject']='Cambios a su carpeta de Group-Office';
+$l['folder_modified_subject']='Cambios a su carpeta de {product_name}';
 $l['folder_modified_body']='Ud. pidió ser notificado cuando se realicen cambioes a:
 %s
 Los siguientes cambios fueron realizados por %s:

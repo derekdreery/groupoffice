@@ -20,7 +20,7 @@ $lang['files']['shared']='Gedeeld';
 
 $lang['files']['general']='Algemeen';
 
-$lang['files']['folder_modified_subject']='Wijzigingen aan Group-Office map';
+$lang['files']['folder_modified_subject']='Wijzigingen aan {product_name} map';
 $lang['files']['folder_modified_body']='U heeft verzocht om op de hoogte gehouden te worden over wijzigingen in de map:
 
 %s
