@@ -8,7 +8,7 @@
 //Uncomment this line in new translations!
 require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('postfixadmin'));
 $lang['postfixadmin']['name']='Администрирование Postfix';
-$lang['postfixadmin']['description']='Модуль для управления виртуальными пользователями postfix в базе данных Group-Office';
+$lang['postfixadmin']['description']='Модуль для управления виртуальными пользователями postfix в базе данных {product_name}';
 $lang['postfixadmin']['alias']='Псевдоним';
 $lang['postfixadmin']['aliases']='Псевдонимы';
 $lang['postfixadmin']['domain']='Домен';

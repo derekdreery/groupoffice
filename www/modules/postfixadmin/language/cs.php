@@ -2,7 +2,7 @@
 
 
 $l['name']='Postfix administrace';
-$l['description']='Modul k úpravě virtuálních postfix uživatelů v Group-Office databázi';
+$l['description']='Modul k úpravě virtuálních postfix uživatelů v {product_name} databázi';
 $l['alias']='Přezdívka';
 $l['aliases']='Přezdívky';
 $l['domain']='Doména';

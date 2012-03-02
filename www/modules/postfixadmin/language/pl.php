@@ -50,7 +50,7 @@ $l["usage"]="Usage";
 $l["defaultQuota"]='Domyślna pojemność skrzynki (MB)';
 
 $l['name']='Postfix admin';
-$l['description']='Moduł do zarządzania wirtualnymi użytkownikami Postfix\'a w bazie danych Group-Office';
+$l['description']='Moduł do zarządzania wirtualnymi użytkownikami Postfix\'a w bazie danych {product_name}';
 $l['alias']='Alias';
 $l['aliases']='Aliasy';
 $l['domain']='Domena';

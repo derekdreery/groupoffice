@@ -49,7 +49,7 @@ $l["domain"]= "AlanAdı";
 $l["defaultQuota"]= 'Varsayılan Kota (MB)';
 
 $l['name']='Postfix Yöneticisi';
-$l['description']='Sanal postfix kullanıcılarını Group-Office veritabanında yönetmek için bir modül';
+$l['description']='Sanal postfix kullanıcılarını {product_name} veritabanında yönetmek için bir modül';
 $l['alias']='Alias';
 $l['aliases']='Aliases';
 $l['domain']='Domain';
