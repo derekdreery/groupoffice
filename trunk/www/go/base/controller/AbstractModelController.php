@@ -509,7 +509,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			
 			$workflowResponse = array();
 			
-			$is_approver = GO_Workflow_Model_RequiredApprover::model()->findByPk(array("user_id"=>GO::user()->id,"step_id"=>$workflowModel->step_id));
+			$is_approver = GO_Workflow_Model_RequiredApprover::model()->findByPk(array("user_id"=>GO::user()->id,"process_model_id"=>$workflowModel->id));
 
 			if($is_approver)
 				$workflowResponse['is_approver']=true;
@@ -528,12 +528,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			
 			// Add the approvers of the current step to the response
 			$workflowResponse['approvers'] = array();
-			$approversStmnt = $currentStep->requiredApprovers;
+			$approversStmnt = $workflowModel->requiredApprovers;
 			
-			//GO::debug($approversStmnt);
 			
 			while($approver = $approversStmnt->fetch()){
-				$workflowResponse['approvers'][] = array('name'=>$approver->name);
+				$workflowResponse['approvers'][] = array('name'=>$approver->name,'approved'=>$currentStep->hasApproved($workflowModel->id,$approver->id));
 			}
 			
 			// Add the approver groups of the current step to the response
