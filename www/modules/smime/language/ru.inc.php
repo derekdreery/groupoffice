@@ -7,8 +7,8 @@ $lang['smime']['description']='Расширение модуля Почта ши
 $lang['smime']['noPublicCertForEncrypt']="Не могу заширвать сообщение потому что нет публичного сертификата для %s. Откройте подписанное жти отправителем сообщение и проверьте ЭЦП чтобы импортировать его сертификат.";
 $lang['smime']['noPrivateKeyForDecrypt']="Это сообщение зашифровано и у Вас нет личного сертификата чтобы расшифровать его.";
 
-$lang['smime']['badGoLogin']="Некоррктный  Group-Office пароль.";
-$lang['smime']['smime_pass_matches_go']="Пароль вашего SMIME сертификата сопадает с паролем Group-Office. Это запрещено в целях безопасности!";
+$lang['smime']['badGoLogin']="Некоррктный  {product_name} пароль.";
+$lang['smime']['smime_pass_matches_go']="Пароль вашего SMIME сертификата сопадает с паролем {product_name}. Это запрещено в целях безопасности!";
 $lang['smime']['smime_pass_empty']="Ваш SMIME сертификат не имеет пароля. Это запрещено в целях безопасности!";
 
 $lang['smime']['invalidCert']="Неверный сертификат!";
