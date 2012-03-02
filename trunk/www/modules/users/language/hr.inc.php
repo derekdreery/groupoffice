@@ -27,8 +27,8 @@ $lang['users']['failed']='Nije uspjelo';
 
 $lang['users']['incorrectFormat']='Datoteka nije u ispravnom CSV formatu';
 
-$lang['users']['register_email_subject']='Detalji o vašem Group-Office računu';
-$lang['users']['register_email_body']='Group-Office račun je kreiran za vas na {url}
+$lang['users']['register_email_subject']='Detalji o vašem {product_name} računu';
+$lang['users']['register_email_body']='{product_name} račun je kreiran za vas na {url}
 Podaci za prijavu su:
 
 Korisničko ime: {username}

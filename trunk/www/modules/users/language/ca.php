@@ -15,7 +15,7 @@ $l['imported']='%s importats d\'usuari';
 $l['failed']='Error';
 $l['incorrectFormat']='L\'arxiu no conté un format CSV correcte';
 $l['register_email_subject']='Detalls del vostre nou compte';
-$l['register_email_body']='S\'ha creat un nou compte Group-Office a {url}
+$l['register_email_body']='S\'ha creat un nou compte {product_name} a {url}
 Les vostres dades de logueig són:
 Usuari: {username};
 Contrasenya: {password}';

@@ -3,8 +3,8 @@
 //
 // Copyright Intermesh
 // 
-// This file is part of Group-Office. You should have received a copy of the
-// Group-Office license along with Group-Office. See the file /LICENSE.TXT
+// This file is part of {product_name}. You should have received a copy of the
+// {product_name} license along with {product_name}. See the file /LICENSE.TXT
 // 
 // If you have questions write an e-mail to info@intermesh.nl
 //
@@ -23,7 +23,7 @@
 require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('users'));
 
 $lang['users']['name'] = 'Utilisateurs';
-$lang['users']['description'] = 'Module Admin. Gérer les utilisateurs de Group-Office.';
+$lang['users']['description'] = 'Module Admin. Gérer les utilisateurs de {product_name}.';
 $lang['users']['deletePrimaryAdmin'] = 'Vous ne pouvez pas supprimer l\'administrateur principal';
 $lang['users']['deleteYourself'] = 'Vous ne pouvez pas vous supprimer !';
 $lang['link_type'][8]=$us_user = 'Utilisateur';
@@ -36,8 +36,8 @@ $lang['users']['error_user']='L\'utilisateur ne peut pas être créé';
 $lang['users']['imported']='%s utilisateurs importés';
 $lang['users']['failed']='Echec';
 $lang['users']['incorrectFormat']='Le fichier n\'est pas dans le bon format CSV';
-$lang['users']['register_email_subject']='Details de votre compte Group-Office';
-$lang['users']['register_email_body']='Un compte Group-Office vient d\'être créé pour vous à l\'adresse suivante {url}
+$lang['users']['register_email_subject']='Details de votre compte {product_name}';
+$lang['users']['register_email_body']='Un compte {product_name} vient d\'être créé pour vous à l\'adresse suivante {url}
 Vos identifiants sont :
 
 Nom d\'utilisateur : {username}

@@ -15,8 +15,8 @@ $l['error_user']='Uživatel nemůže být vytvořen';
 $l['imported']='Importováno %s uživatelů';
 $l['failed']='Selhání';
 $l['incorrectFormat']='Soubor nemá správný CSV formát';
-$l['register_email_subject']='Podrobnosti o Vašem Group-Office účtu';
-$l['register_email_body']='Group-Office účet byl pro Vás vytvořen z {url}
+$l['register_email_subject']='Podrobnosti o Vašem {product_name} účtu';
+$l['register_email_body']='{product_name} účet byl pro Vás vytvořen z {url}
 Vaše přihlašovací údaje:
 Uživatelské jméno: {username};
 Heslo: {password}';

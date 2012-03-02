@@ -99,7 +99,7 @@ $l['imported']='%s importados de usuario';
 $l['failed']='Error';
 $l['incorrectFormat']='Archivo no era correcta en formato CSV';
 $l['register_email_subject']='Detalles de su nueva cuenta';
-$l['register_email_body']='Se ha creado una cuenta Group-Office para Ud. en {url}
+$l['register_email_body']='Se ha creado una cuenta {product_name} para Ud. en {url}
 Sus datos de logueo son:
 Usuario: {username};
 Contraseña: {password}';

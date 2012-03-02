@@ -99,8 +99,8 @@ $l['failed']='Podczas importu wystąpił błąd';
 $l['incorrectFormat']='Format pliku był niepoprawny';
 $lang['link_type'][8]=$us_user = 'Użytkownik';
 $l['error_user']='Użytkownik nie został utworzony';
-$l['register_email_subject']='Szczegóły Twojego konta w Group-Office';
-$l['register_email_body']='Utworzono dla Ciebie konto do Group-Office {url}
+$l['register_email_subject']='Szczegóły Twojego konta w {product_name}';
+$l['register_email_body']='Utworzono dla Ciebie konto do {product_name} {url}
 Informacje do zalogowania:
 Użytkownik: {username};
 Hasło: {password}';

@@ -86,7 +86,7 @@ $l["contactInfo"]='Informations de contact';
 $l["popupNotification"]='Afficher une fenêtre popup quand un rappel est actif ou quand un email est reçu';
 $l["profile"]='Profil';
 $l['name'] = 'Utilisateurs';
-$l['description'] = 'Module Admin. Gérer les utilisateurs de Group-Office.';
+$l['description'] = 'Module Admin. Gérer les utilisateurs de {product_name}.';
 $l['deletePrimaryAdmin'] = 'Vous ne pouvez pas supprimer l\'administrateur principal';
 $l['deleteYourself'] = 'Vous ne pouvez pas vous supprimer !';
 $lang['link_type'][8]=$us_user = 'Utilisateur';
@@ -99,8 +99,8 @@ $l['error_user']='L\'utilisateur ne peut pas être créé';
 $l['imported']='%s utilisateurs importés';
 $l['failed']='Echec';
 $l['incorrectFormat']='Le fichier n\'est pas dans le bon format CSV';
-$l['register_email_subject']='Details de votre compte Group-Office';
-$l['register_email_body']='Un compte Group-Office vient d\'être créé pour vous à l\'adresse suivante {url}
+$l['register_email_subject']='Details de votre compte {product_name}';
+$l['register_email_body']='Un compte {product_name} vient d\'être créé pour vous à l\'adresse suivante {url}
 Vos identifiants sont :
 Nom d\'utilisateur : {username};
 Mot de passe : {password}';

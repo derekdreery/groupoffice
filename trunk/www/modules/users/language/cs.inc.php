@@ -21,8 +21,8 @@ $lang['users']['failed']='Selhání';
 
 $lang['users']['incorrectFormat']='Soubor nemá správný CSV formát';
 
-$lang['users']['register_email_subject']='Podrobnosti o Vašem Group-Office účtu';
-$lang['users']['register_email_body']='Group-Office účet byl pro Vás vytvořen z {url}
+$lang['users']['register_email_subject']='Podrobnosti o Vašem {product_name} účtu';
+$lang['users']['register_email_body']='{product_name} účet byl pro Vás vytvořen z {url}
 Vaše přihlašovací údaje:
 
 Uživatelské jméno: {username}

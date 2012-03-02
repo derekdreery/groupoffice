@@ -21,6 +21,6 @@ $lang['users']['failed']='การดำเนินการล้มเหล
 $lang['users']['incorrectFormat']='รูปแบบไฟล์ไม่ถูกต้อง.ไฟล์ต้องอยู่ในรูปแบบนามสกุล CSV';//File was not in correct CSV format
 
 $lang['users']['error_user']='ไม่สามารถเพิ่มผู้ใช้นี้ได้';
-$lang['users']['register_email_subject']='ข้อมูลบัญชีผู้ใช้ Group-Office ของคุณ';
-$lang['users']['register_email_body']='Group-Office บัญชีของคุณถูกสร้างที่ {url}';
+$lang['users']['register_email_subject']='ข้อมูลบัญชีผู้ใช้ {product_name} ของคุณ';
+$lang['users']['register_email_body']='{product_name} บัญชีของคุณถูกสร้างที่ {url}';
 $lang['users']['max_users_reached']='จำนวนผู้ใช้สูงสุดที่ระบบนี้รองรับได้';

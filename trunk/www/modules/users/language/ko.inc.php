@@ -21,8 +21,8 @@ $lang['users']['failed']='Failed';
 
 $lang['users']['incorrectFormat']='File was not in correct CSV format';
 
-$lang['users']['register_email_subject']='Your Group-Office account details';
-$lang['users']['register_email_body']='A Group-Office account has been created for you at {url}
+$lang['users']['register_email_subject']='Your {product_name} account details';
+$lang['users']['register_email_body']='A {product_name} account has been created for you at {url}
 Your login details are:
 
 Username: {username}
