@@ -114,7 +114,7 @@ $l["toggleWindowPosition"]='Nachrichtenansicht umschalten';
 $l["closeUploadDialog"]='Schließen Sie zuerst den Upload-Dialog oder warten Sie, bis der Upload beendet ist';
 $l["signature"]='Signatur';
 $l['defaultProgram']='Standard E-Mail-Programm';
-$l['defaultProgramInstructions'] ='<p>Um {product_name} als Ihr Standard E-Mail-Programm einzurichten, lesen Sie bitte <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">diese Anweisungen</a>.</p><p>Unter Windows müssen Sie dann noch <a class="normal-link" href="{url}">diese Regdatei</a> herunterladen und ausführen/importieren</p>';
+$l['defaultProgramInstructions'] ='<p>Um {product_name} als Ihr Standard E-Mail-Programm einzurichten, lesen Sie bitte <a class="normal-link" href="http://www.{product_name}.com/wiki/E-mail#Set_{product_name}_as_your_default_e-mail_client" target="_blank">diese Anweisungen</a>.</p><p>Unter Windows müssen Sie dann noch <a class="normal-link" href="{url}">diese Regdatei</a> herunterladen und ausführen/importieren</p>';
 $l["htmlMarkup"]='HTML-Formatierung verwenden';
 $l["confirmLostChanges"]='Änderungen werden verloren gehen. Sind Sie sicher?';
 $l["alias"]='Alias';
