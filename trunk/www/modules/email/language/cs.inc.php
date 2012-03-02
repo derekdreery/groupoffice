@@ -45,9 +45,9 @@ $lang['email']['quotaError']="Vaše schránka je plná. Nejdříve vyprázdněte
 $lang['email']['draftsDisabled']="Zpráve nemůže být uložena, protože složka 'Koncept' je zakázaná.<br /><br />Jděte do Nastavení -> Účty -> Váš účet -> Složky a nakonfigurujte ji.";
 $lang['email']['noSaveWithPop3']='Zpráva nemůže být uložena, protože Váš POP3 účet tuto funkci nepodporuje.';
 
-$lang['email']['goAlreadyStarted']='Group-Office byl spuštěn a zpráva byla vytvořena. Nyní můžete toto okno zavřít a přejít do Group-office k úpravě zprávy.';
+$lang['email']['goAlreadyStarted']='{product_name} byl spuštěn a zpráva byla vytvořena. Nyní můžete toto okno zavřít a přejít do {product_name} k úpravě zprávy.';
 
-//At Tuesday, 07-04-2009 on 8:58 Group-Office Administrator <test@intermeshdev.nl> wrote:
+//At Tuesday, 07-04-2009 on 8:58 {product_name} Administrator <test@intermeshdev.nl> wrote:
 $lang['email']['replyHeader']='Dne %s, %s v %s %s napsal:';
 $lang['email']['alias']='Přezdívka';
 $lang['email']['aliases']='Přezdívky';
