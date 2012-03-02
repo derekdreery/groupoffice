@@ -2,8 +2,8 @@
 /** 
  * Copyright Intermesh
  * 
- * This file is part of Group-Office. You should have received a copy of the
- * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ * This file is part of {product_name}. You should have received a copy of the
+ * {product_name} license along with {product_name}. See the file /LICENSE.TXT
  * 
  * If you have questions write an e-mail to info@intermesh.nl
  * 
@@ -19,7 +19,7 @@ $lang['backupmanager']['description']='Cấu hình việc sao lưu';
 $lang['backupmanager']['save_error']='Lỗi khi ghi thiết lập';
 $lang['backupmanager']['empty_key']='Khóa đang chưa có';
 $lang['backupmanager']['connection_error']='Không kết nối được với máy chủ';
-$lang['backupmanager']['no_mysql_config']='Group-Office was not able to find a mysql config file. This file is used to create a backup of the complete database. You can create this yourself by adding a file named backupmanager.inc.php in /etc/groupoffice/ with the following contents:
+$lang['backupmanager']['no_mysql_config']='{product_name} was not able to find a mysql config file. This file is used to create a backup of the complete database. You can create this yourself by adding a file named backupmanager.inc.php in /etc/groupoffice/ with the following contents:
     <br /><br />&lt;?php<br />
     $bm_config[\'mysql_user\'] = \'\';<br />
     $bm_config[\'mysql_pass\'] = \'\';<br />
