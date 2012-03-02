@@ -19,7 +19,7 @@ $lang['files']['shared']='Delt';
 $lang['files']['general']='Generell';
 
 
-$lang['files']['folder_modified_subject']='Endringer i Group-Office mappen';
+$lang['files']['folder_modified_subject']='Endringer i {product_name} mappen';
 $lang['files']['folder_modified_body']='Du har bedt om å få beskjed når det er endringer i:
 
 %s

@@ -2,7 +2,7 @@
 //Uncomment this line in new translations!
 require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('files'));
 $lang['files']['name'] = 'Filer';
-$lang['files']['description'] = 'Modul för att hantera filer i Group-Office. Filer kan delas mellan användare och grupper. Använd GOTA för att redigera filer från Group-Office lokalt och spara ändringarna till servern.';
+$lang['files']['description'] = 'Modul för att hantera filer i {product_name}. Filer kan delas mellan användare och grupper. Använd GOTA för att redigera filer från {product_name} lokalt och spara ändringarna till servern.';
 
 $lang['link_type'][6]= 'Fil';
 $lang['link_type'][17]='Mapp';
@@ -20,7 +20,7 @@ $lang['files']['shared']= 'Delad';
 $lang['files']['general']= 'Allmänt';
 
 
-$lang['files']['folder_modified_subject']= 'Ändringar i Group-Office-mapp';
+$lang['files']['folder_modified_subject']= 'Ändringar i {product_name}-mapp';
 $lang['files']['folder_modified_body']= 'Du har begärt att bli meddelad när ändringar gjorts i:
 
 %s

@@ -41,7 +41,7 @@ $l['wordtextdoc']='Documento do Microsoft Word';
 $l['personal']='Pessoal';
 $l['shared']='Compartilhado';
 $l['general']='Geral';
-$l['folder_modified_subject']='Mudar para pasta do Group-Office';
+$l['folder_modified_subject']='Mudar para pasta do {product_name}';
 $l['folder_modified_body']='Você solicitou para ser notificado quando alterações fossem feitas para:
 %s
 As seguintes mudanças foram feitas por %s:

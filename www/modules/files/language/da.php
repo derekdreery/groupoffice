@@ -31,7 +31,7 @@ $l['wordtextdoc']='Microsoft Word dokument';
 $l['personal']='Personlig';
 $l['shared']='Delt';
 $l['general']='Generelt';
-$l['folder_modified_subject']='Ændringer i Group-Office folder';
+$l['folder_modified_subject']='Ændringer i {product_name} folder';
 $l['folder_modified_body']='Du har anmodet om orientering ved ændringer i:
 %s
 Følgende ændringer blev foretaget af %s:

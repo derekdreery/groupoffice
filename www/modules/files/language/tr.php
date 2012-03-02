@@ -34,7 +34,7 @@ $l['wordtextdoc']='Microsoft Word belgesi';
 $l['personal']='Kişisel';
 $l['shared']='Paylaşım';
 $l['general']='Genel';
-$l['folder_modified_subject']='Group-Office klasöründe değişiklik';
+$l['folder_modified_subject']='{product_name} klasöründe değişiklik';
 $l['folder_modified_body']='Aşşağıda belirtilen dosyada değişiklik olduğunda bilgilendirme istediniz:
 %s
 %s tarafından belirtilen değişiklikler yapılmıştır:

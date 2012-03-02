@@ -17,7 +17,7 @@ $lang['files']['shared']='共享';
 $lang['files']['general']='普通';
 
 
-$lang['files']['folder_modified_subject']='Changes to Group-Office folder';
+$lang['files']['folder_modified_subject']='Changes to {product_name} folder';
 $lang['files']['folder_modified_body']='You requested to be notified when changes are made to:
 
 %s

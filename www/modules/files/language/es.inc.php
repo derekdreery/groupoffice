@@ -17,7 +17,7 @@ $lang['files']['shared']='Compartido';
 $lang['files']['general']='General';
 
 
-$lang['files']['folder_modified_subject']='Cambios a su carpeta de Group-Office';
+$lang['files']['folder_modified_subject']='Cambios a su carpeta de {product_name}';
 $lang['files']['folder_modified_body']='Ud. pidió ser notificado cuando se realicen cambioes a:
 
 %s

@@ -14,7 +14,7 @@ $lang['files']['wordtextdoc']='Microsoft Word dokumentum';
 $lang['files']['personal']='Személyes';
 $lang['files']['shared']='Megosztott';
 $lang['files']['general']='Általános';
-$lang['files']['folder_modified_subject']='Módosítva a Group-Office mappára';
+$lang['files']['folder_modified_subject']='Módosítva a {product_name} mappára';
 $lang['files']['folder_modified_body']='You requested to be notified when changes are made to:
 
 %s

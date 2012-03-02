@@ -18,7 +18,7 @@ $lang['files']['shared']='Paylaşım';
 $lang['files']['general']='Genel';
 
 
-$lang['files']['folder_modified_subject']='Group-Office klasöründe değişiklik';
+$lang['files']['folder_modified_subject']='{product_name} klasöründe değişiklik';
 $lang['files']['folder_modified_body']='Aşşağıda belirtilen dosyada değişiklik olduğunda bilgilendirme istediniz:
 
 %s

@@ -28,7 +28,7 @@ $l['wordtextdoc']='Documento Microsoft Word';
 $l['personal']='Personale';
 $l['shared']='Condiviso';
 $l['general']='Generale';
-$l['folder_modified_subject']='Modifiche alla cartella Group-Office';
+$l['folder_modified_subject']='Modifiche alla cartella {product_name}';
 $l['folder_modified_body']='Hai richiesto di essere informato quando vengono apportate modifiche al:
 %s
 Le seguenti modifiche sono state effettuate da %s:

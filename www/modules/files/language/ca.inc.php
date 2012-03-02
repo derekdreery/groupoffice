@@ -17,7 +17,7 @@ $lang['files']['shared']='Compartit';
 $lang['files']['general']='General';
 
 
-$lang['files']['folder_modified_subject']='Canvis en la vostra carpeta de Group-Office';
+$lang['files']['folder_modified_subject']='Canvis en la vostra carpeta de {product_name}';
 $lang['files']['folder_modified_body']='Vàreu sol·licitar ser notificat quan es realitzin canvis a:
 
 %s

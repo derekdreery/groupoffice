@@ -19,7 +19,7 @@ $lang['files']['shared']='Delt';
 $lang['files']['general']='Generelt';
 
 
-$lang['files']['folder_modified_subject']='Ændringer i Group-Office folder';
+$lang['files']['folder_modified_subject']='Ændringer i {product_name} folder';
 $lang['files']['folder_modified_body']='Du har anmodet om orientering ved ændringer i:
 
 %s

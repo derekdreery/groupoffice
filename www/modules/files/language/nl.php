@@ -15,7 +15,7 @@ $l['wordtextdoc']='Microsoft Word document';
 $l['personal']='Persoonlijk';
 $l['shared']='Gedeeld';
 $l['general']='Algemeen';
-$l['folder_modified_subject']='Wijzigingen aan Group-Office map';
+$l['folder_modified_subject']='Wijzigingen aan {product_name} map';
 $l['folder_modified_body']='U heeft verzocht om op de hoogte gehouden te worden over wijzigingen in de map:
 %s
 De volgende wijzigingen zijn aangebracht door %s:

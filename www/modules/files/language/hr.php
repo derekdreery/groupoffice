@@ -14,7 +14,7 @@ $l['wordtextdoc']='Microsoft Word dokument';
 $l['personal']='Osobno';
 $l['shared']='Dijeljeno';
 $l['general']='Opće';
-$l['folder_modified_subject']='Promjene na Group-Office direktoriju';
+$l['folder_modified_subject']='Promjene na {product_name} direktoriju';
 $l['folder_modified_body']='Tražili ste da budete obavješteni o promjenama na:
 %s
 Slijedeće promjene su napravljene od strane %s:

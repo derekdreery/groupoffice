@@ -14,7 +14,7 @@ $l['wordtextdoc']='Microsoft Word документ';
 $l['personal']='Личные';
 $l['shared']='Общие';
 $l['general']='Основные';
-$l['folder_modified_subject']='Изменения в папке Group-Office';
+$l['folder_modified_subject']='Изменения в папке {product_name}';
 $l['folder_modified_body']='Вы запрашивали уведомление о изменениях в:
 %s
 Следующие изменения были сделаны %s:

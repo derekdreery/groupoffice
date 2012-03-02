@@ -20,7 +20,7 @@ $lang['files']['shared']='공유';
 $lang['files']['general']='일반';
 
 
-$lang['files']['folder_modified_subject']='Changes to Group-Office folder';
+$lang['files']['folder_modified_subject']='Changes to {product_name} folder';
 $lang['files']['folder_modified_body']='You requested to be notified when changes are made to:
 
 %s

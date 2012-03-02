@@ -19,7 +19,7 @@ $lang['files']['shared']='Compartilhado';
 $lang['files']['general']='Geral';
 
 
-$lang['files']['folder_modified_subject']='Mudar para pasta do Group-Office';
+$lang['files']['folder_modified_subject']='Mudar para pasta do {product_name}';
 $lang['files']['folder_modified_body']='Você solicitou para ser notificado quando alterações fossem feitas para:
 
 %s

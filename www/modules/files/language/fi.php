@@ -31,7 +31,7 @@ $l['wordtextdoc']='Microsoft Word-tiedosto';
 $l['personal']='Henkilökohtainen';
 $l['shared']='Jaettu';
 $l['general']='Yleinen';
-$l['folder_modified_subject']='Muutokset Group-Office-hakemistoon';
+$l['folder_modified_subject']='Muutokset {product_name}-hakemistoon';
 $l['folder_modified_body']='Pyysitte saada tiedoksi tehdyt muutokset:
 %s
 Seuraavat muutokset tehtiin käyttäjän %s toimesta:

@@ -26,7 +26,7 @@ $lang['files']['shared']='Dijeljeno';
 $lang['files']['general']='Opće';
 
 
-$lang['files']['folder_modified_subject']='Promjene na Group-Office direktoriju';
+$lang['files']['folder_modified_subject']='Promjene na {product_name} direktoriju';
 $lang['files']['folder_modified_body']='Tražili ste da budete obavješteni o promjenama na:
 
 %s
