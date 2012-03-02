@@ -3,8 +3,8 @@
 //
 // Copyright Intermesh
 // 
-// This file is part of Group-Office. You should have received a copy of the
-// Group-Office license along with Group-Office. See the file /LICENSE.TXT
+// This file is part of {product_name}. You should have received a copy of the
+// {product_name} license along with {product_name}. See the file /LICENSE.TXT
 // 
 // If you have questions write an e-mail to info@intermesh.nl
 //
@@ -23,5 +23,5 @@
 require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('serverclient'));
 
 $lang['serverclient']['name']='Serverclient';
-$lang['serverclient']['description']='Permet de créer automatiquement les boites de messagerie si Group-Office gère le serveur e-mail avec le module postfixadmin';
+$lang['serverclient']['description']='Permet de créer automatiquement les boites de messagerie si {product_name} gère le serveur e-mail avec le module postfixadmin';
 $lang['serverclient']['connect_error']='Impossible de se connecter à %s';
