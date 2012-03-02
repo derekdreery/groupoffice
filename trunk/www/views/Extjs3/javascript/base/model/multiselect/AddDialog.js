@@ -11,6 +11,11 @@ GO.base.model.multiselect.addDialog = function(config){
 		remoteSort: true
 	});
 	
+	this.searchField = new GO.form.SearchField({
+		store: this.store,
+		width:320
+	});
+	
 	this.grid = new GO.grid.EditorGridPanel({
 		paging:true,
 		border:false,
@@ -32,7 +37,9 @@ GO.base.model.multiselect.addDialog = function(config){
 		layout: 'fit',
 		modal:false,
 		height:300,
+		tbar: [GO.lang['strSearch'] + ':', this.searchField],
 		width:500,
+		loadMask:true,
 		closeAction:'hide',
 		title: GO.lang.strPleaseSelect,
 		items: this.grid,
@@ -52,6 +59,8 @@ GO.base.model.multiselect.addDialog = function(config){
 			scope: this
 		}]
 	});
+	
+	this.grid.on('rowdblclick',function(){this.callHandler(true);},this);
 };
 
 Ext.extend(GO.base.model.multiselect.addDialog, GO.Window, {
@@ -59,6 +68,7 @@ Ext.extend(GO.base.model.multiselect.addDialog, GO.Window, {
 	
 	show : function(){
 		GO.base.model.multiselect.addDialog.superclass.show.call(this);
+		this.grid.store.removeAll();
 		this.grid.store.baseParams.model_id=this.multiSelectPanel.model_id;
 		this.grid.store.load();
 	},
