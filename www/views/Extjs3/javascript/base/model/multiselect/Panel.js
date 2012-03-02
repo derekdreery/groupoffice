@@ -11,6 +11,7 @@ GO.base.model.multiselect.panel = function(config){
 		remoteSort: true,
 		listeners:{
 			update:function(store, record){
+				this.updateMask.show();
 				GO.request({
 					url: this.url+'/updateRecord',
 					params: {
@@ -18,7 +19,7 @@ GO.base.model.multiselect.panel = function(config){
 						record: Ext.encode(record.data)
 					},
 					success:function(){
-					//record.commit();
+						this.updateMask.hide();
 					},
 					scope: this
 				});
@@ -92,9 +93,17 @@ Ext.extend(GO.base.model.multiselect.panel, GO.grid.EditorGridPanel, {
 
 	model_id: 0,
 
+	updateMask: null,
+
 	afterRender : function(){
-		
+
 		GO.base.model.multiselect.panel.superclass.afterRender.call(this);
+		
+		this.updateMask = new Ext.LoadMask(
+			this.getEl(),
+			{'msg':GO.lang["waitMsgLoad"]}
+		);
+		
 		if(!this.store.loaded)		
 			this.store.load();
 	},
