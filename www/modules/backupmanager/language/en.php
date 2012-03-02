@@ -24,7 +24,7 @@ $l['description']='Configure your backup cronjob';
 $l['save_error']='Error while saving settings';
 $l['empty_key']='Key is empty';
 $l['connection_error']='Couldn\'t connect to the server';
-$l['no_mysql_config']='Group-Office was not able to find a mysql config file. This file is used to create a backup of the complete database. You can create this yourself by adding a file named backupmanager.inc.php in /etc/groupoffice/ with the following contents:;
+$l['no_mysql_config']='{product_name} was not able to find a mysql config file. This file is used to create a backup of the complete database. You can create this yourself by adding a file named backupmanager.inc.php in /etc/groupoffice/ with the following contents:;
     <br /><br />&lt;?php<br />;
     $bm_config[\'mysql_user\'] = \'\';<br />;
     $bm_config[\'mysql_pass\'] = \'\';<br />

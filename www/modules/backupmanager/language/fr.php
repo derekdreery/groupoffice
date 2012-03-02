@@ -23,7 +23,7 @@ $l['description']='Configurer vos tâches de sauvegardes planifiées';
 $l['save_error']='Erreur lors de la sauvegarde des paramètres';
 $l['empty_key']='La clé est vide';
 $l['connection_error']='Impossible de se connecter au serveur';
-$l['no_mysql_config']='Group-Office n\'a pas trouvé de fichier de configuration pour MySQL. Ce fichier est nécessaire pour créer une sauvegarde de la base de données complète. Vous pouvez créer ce fichier vous même en ajoutant un fichier nommé backupmanager.inc.php dans /etc/groupoffice/ contenant les lignes suivantes :;
+$l['no_mysql_config']='{product_name} n\'a pas trouvé de fichier de configuration pour MySQL. Ce fichier est nécessaire pour créer une sauvegarde de la base de données complète. Vous pouvez créer ce fichier vous même en ajoutant un fichier nommé backupmanager.inc.php dans /etc/groupoffice/ contenant les lignes suivantes :;
     <br /><br />&lt;?php<br />;
     $bm_config[\'mysql_user\'] = \'\';<br />;
     $bm_config[\'mysql_pass\'] = \'\';<br />

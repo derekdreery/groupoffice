@@ -6,7 +6,7 @@ $l['description']='Sette opp din backup cronjobb';
 $l['save_error']='Feil ved lagring av instillinger';
 $l['empty_key']='Nøkkelen er tom';
 $l['connection_error']='Kan ikke koble til serveren';
-$l['no_mysql_config']='Group-Office kunne ikke finne en mysql config fil. Denne filen brukes for å lage en backup av den totale databasen. Du kan lage denne filen selv ved å opprette filen backupmanager.inc.php i /etc/groupoffice/ med følgende innhold:;
+$l['no_mysql_config']='{product_name} kunne ikke finne en mysql config fil. Denne filen brukes for å lage en backup av den totale databasen. Du kan lage denne filen selv ved å opprette filen backupmanager.inc.php i /etc/groupoffice/ med følgende innhold:;
     <br /><br />&lt;?php<br />;
     $bm_config[\'mysql_user\'] = \'\';<br />;
     $bm_config[\'mysql_pass\'] = \'\';<br />
