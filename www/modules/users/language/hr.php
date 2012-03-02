@@ -15,8 +15,8 @@ $l['error_user']='Korisnika nije moguće napraviti';
 $l['imported']='Uvezeno %s korisnika';
 $l['failed']='Nije uspjelo';
 $l['incorrectFormat']='Datoteka nije u ispravnom CSV formatu';
-$l['register_email_subject']='Detalji vašeg Group-Office računa';
-$l['register_email_body']='Group-Office račun je kreiran za vas na {url}
+$l['register_email_subject']='Detalji vašeg {product_name} računa';
+$l['register_email_body']='{product_name} račun je kreiran za vas na {url}
 Podaci za prijavu su:
 Korisničko ime: {username};
 Lozinka: {password}';

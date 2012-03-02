@@ -15,8 +15,8 @@ $l['error_user']='Gebruiker kon niet worden aangemaakt';
 $l['imported']='%s gebruikers geïmporteerd';
 $l['failed']='Mislukt';
 $l['incorrectFormat']='Bestand was niet in het jusite CSV formaat';
-$l['register_email_subject']='Uw Group-Office account gegevens';
-$l['register_email_body']='Er is een Group-Office account voor u aangemaakt op {url}
+$l['register_email_subject']='Uw {product_name} account gegevens';
+$l['register_email_body']='Er is een {product_name} account voor u aangemaakt op {url}
 Uw inloggegevens zijn:
 Gebruikersnaam: {username};
 Wachtwoord: {password}';$l["cmdCheckColumnRead"]= 'Lezen';

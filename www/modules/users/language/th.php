@@ -15,8 +15,8 @@ $l['imported']='นำเข้าผู้ใช้งาน  %s คน';
 $l['failed']='การดำเนินการล้มเหลว';
 $l['incorrectFormat']='รูปแบบไฟล์ไม่ถูกต้อง.ไฟล์ต้องอยู่ในรูปแบบนามสกุล CSV';//File was not in correct CSV format;
 $l['error_user']='ไม่สามารถเพิ่มผู้ใช้นี้ได้';
-$l['register_email_subject']='ข้อมูลบัญชีผู้ใช้ Group-Office ของคุณ';
-$l['register_email_body']='Group-Office บัญชีของคุณถูกสร้างที่ {url}';
+$l['register_email_subject']='ข้อมูลบัญชีผู้ใช้ {product_name} ของคุณ';
+$l['register_email_body']='{product_name} บัญชีของคุณถูกสร้างที่ {url}';
 $l['max_users_reached']='จำนวนผู้ใช้สูงสุดที่ระบบนี้รองรับได้';
 
 $l["cmdCheckColumnRead"]= 'อ่าน';

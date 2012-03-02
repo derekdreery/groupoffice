@@ -2,7 +2,7 @@
 
 
 $l['name'] = 'Användare';
-$l['description'] = 'Adminmodul för att hantera användarkonton i Group-Office.';
+$l['description'] = 'Adminmodul för att hantera användarkonton i {product_name}.';
 $l['deletePrimaryAdmin'] = 'Du kan inte ta bort huvudadministratören';
 $l['deleteYourself'] = 'Du kan inte ta bort dig själv';
 $lang['link_type'][8]=$us_user = 'Användare';
@@ -15,8 +15,8 @@ $l['error_user']='Användare kunde inte skapas';
 $l['imported']= 'Importerade %s användare';
 $l['failed']= 'Misslyckades';
 $l['incorrectFormat']= 'Filen var inte i korrekt CSV-format';
-$l['register_email_subject']='Detaljer för ditt konto i Group-Office';
-$l['register_email_body']='Ett konto har skapats åt dig i Group-Office på {url}
+$l['register_email_subject']='Detaljer för ditt konto i {product_name}';
+$l['register_email_body']='Ett konto har skapats åt dig i {product_name} på {url}
 Dina inloggningsuppgifter är:
 Användarnamn: {username};
 Lösenord: {password}';

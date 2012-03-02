@@ -15,8 +15,8 @@ $l['imported']='Importerte %s brukere';
 $l['failed']='Feilet!';
 $l['incorrectFormat']='Filen er ikke i riktig CSV format';
 $l['error_user']='Kunne ikke opprette brukeren';
-$l['register_email_subject']='Opplysninger om din Group-Office brukerkonto';
-$l['register_email_body']='En Group-Office brukerkonto er opprettet for deg på {url}
+$l['register_email_subject']='Opplysninger om din {product_name} brukerkonto';
+$l['register_email_body']='En {product_name} brukerkonto er opprettet for deg på {url}
 Din innloggingsinformasjon er:
 Brukernavn: {username};
 Passord: {password}';

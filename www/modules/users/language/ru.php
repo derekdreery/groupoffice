@@ -14,8 +14,8 @@ $l['error_email']='Вы ввели неверный e-mail адрес';
 $l['imported']='Импортировано %s пользователей';
 $l['failed']='Ошибка';
 $l['incorrectFormat']='Формат CSV Файла некоректен';
-$l['register_email_subject']='Ваша учетная запись в Group-Office';
-$l['register_email_body']='Для Вас была создана учетная запись в Group-Office на {url}
+$l['register_email_subject']='Ваша учетная запись в {product_name}';
+$l['register_email_body']='Для Вас была создана учетная запись в {product_name} на {url}
 Ваши данные для входа в систему:
 Имя пользователя: {username};
 Пороль: {password}';

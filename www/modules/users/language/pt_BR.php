@@ -100,8 +100,8 @@ $l['error_user']='Usuário não pode ser criado';
 $l['imported']='Importados %s usuários';
 $l['failed']='Falhou';
 $l['incorrectFormat']='Arquivo não tem o formato CSV correto';
-$l['register_email_subject']='Detalhes de sua conta no Group-Office';
-$l['register_email_body']='Uma conta Group-Office foi criada para você em {url}
+$l['register_email_subject']='Detalhes de sua conta no {product_name}';
+$l['register_email_body']='Uma conta {product_name} foi criada para você em {url}
 Os deatalhes de seu login:
 Usuário: {username};
 Senha: {password}';

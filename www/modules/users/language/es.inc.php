@@ -19,7 +19,7 @@ $lang['users']['imported']='%s importados de usuario';
 $lang['users']['failed']='Error';
 $lang['users']['incorrectFormat']='Archivo no era correcta en formato CSV';
 $lang['users']['register_email_subject']='Detalles de su nueva cuenta';
-$lang['users']['register_email_body']='Se ha creado una cuenta Group-Office para Ud. en {url}
+$lang['users']['register_email_body']='Se ha creado una cuenta {product_name} para Ud. en {url}
 Sus datos de logueo son:
 
 Usuario: {username}
