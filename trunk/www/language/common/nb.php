@@ -5,12 +5,12 @@ $l['extjs_lang']='no_NB';
 $l['about']='Versjon: %s
 Copyright (c) 2003-%s, Intermesh
 Alle rettigheter forbeholdt.
-Dette programmet er beskyttet av opphavsretten og en egen Group-Office lisens.
+Dette programmet er beskyttet av opphavsretten og en egen {product_name} lisens.
 For brukerstøtte kontakt installasjonsansvarlig:
 %s
-Besøk Group-office for mer informasjon på:
-http://www.group-office.com
-Group-Office er laget av Intermesh. Du finner mer informasjon om Intermesh på:;
+Besøk {product_name} for mer informasjon på:
+http://www.{product_name}.com
+{product_name} er laget av Intermesh. Du finner mer informasjon om Intermesh på:;
 http://www.intermesh.nl/en/';
 $l['totals']='Totaler';
 $l['printPage']='Side %s av %s';
@@ -141,18 +141,18 @@ $l['admin']='Administrator';
 $l['beginning']='Hilsning';
 $l['max_emails_reached']= "Du har nådd maksimalt antall e-poster for SMTP server %s på %s per dag.";
 $l['usage_stats']='Diskforbruk for %s';
-$l['usage_text']='Denne Group-Office installasjonen bruker';
+$l['usage_text']='Denne {product_name} installasjonen bruker';
 $l['database']='Database';
 $l['files']='Filer';
 $l['email']='E-post';
 $l['total']='Totalt';
-$l['confirm_leave']='Hvis du går ut av Group-Office vil du miste ikke lagrede endringer';
+$l['confirm_leave']='Hvis du går ut av {product_name} vil du miste ikke lagrede endringer';
 $l['dataSaved']='Data er lagret!';
-$l['uploadMultipleFiles'] = 'Trykk på \'Bla gjennom\' ( eller \'Browse\' ) for å velge filer og/eller mapper fra din egen datamaskin. Trykk \'Last opp\' ( eller \'Upload\' ) for å overføre filene til Group-Office. Dette vinduet vil lukkes automatisk når overføringen er ferdig.';
-$l['loginToGO']='Trykk her for å logge inn i Group-Office';
+$l['uploadMultipleFiles'] = 'Trykk på \'Bla gjennom\' ( eller \'Browse\' ) for å velge filer og/eller mapper fra din egen datamaskin. Trykk \'Last opp\' ( eller \'Upload\' ) for å overføre filene til {product_name}. Dette vinduet vil lukkes automatisk når overføringen er ferdig.';
+$l['loginToGO']='Trykk her for å logge inn i {product_name}';
 $l['links']='Lenker';
-$l['GOwebsite']='Group-Office nettsted';
-$l['GOisAProductOf']='<i>Group-Office</i> er et produkt fra <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+$l['GOwebsite']='{product_name} nettsted';
+$l['GOisAProductOf']='<i>{product_name}</i> er et produkt fra <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 $l['yes']='Ja';
 $l['no']='Nei';
 $l['startMenu']='Startmeny';
@@ -162,7 +162,7 @@ $lang['commmon']['logFiles']='Loggfiler';
 $l['fileCreateError']='Feil ved oppretting av fil';
 $l['illegalCharsError']='Navnet inneholdt ett av følgende ugyldige tegn %s';
 $l['system']='System';
-$l['goAlreadyStarted']='Group-Office kjører allerede. Dialogvinduet laget av {FUNCTION} er åpnet i Group-Office. Du kan nå lukke dette vinduet, og forsette å arbeide i Group-Office.';
+$l['goAlreadyStarted']='{product_name} kjører allerede. Dialogvinduet laget av {FUNCTION} er åpnet i {product_name}. Du kan nå lukke dette vinduet, og forsette å arbeide i {product_name}.';
 $l['reminder']='Påminnelse';
 $l['unknown']='Ukjent';
 $l['time']='Tidspunkt';
@@ -174,7 +174,7 @@ $l['click_here_to_contine']='Trykk her for å fortsette';
 $l['month']= 'måned';
 $l['strMonths']= 'måneder';
 $l['parentheses_invalid_error']='Ugyldige paranteser i spørringen. Du må endre disse.';
-$l['goAlreadyStarted']='Group-Office kjører allerede. Siden du ber om er lastet i Group-Office. Du kan nå lukke dette vinduet eller denne fanen og fortsette å arbeide i Group-Office.';
+$l['goAlreadyStarted']='{product_name} kjører allerede. Siden du ber om er lastet i {product_name}. Du kan nå lukke dette vinduet eller denne fanen og fortsette å arbeide i {product_name}.';
 $l['nReminders']='%s påminnelser';
 $l['oneReminder']='1 påminnelse';
 $l['youHaveReminders']='Du har %s i %s.';
@@ -200,17 +200,17 @@ $l["strCommunityForum"]='Brukerforum';
 $l["moduleRequired"]='Denne funksjonen krever modulen \'{module}\'. Denne modulen er ikke tilgjengelig.';
 $l["completeProfile"]= 'Vennligst fullfør din profil';
 $l["fullscreen"]='Fullskjermsmodus';
-$l["popupBlocker"]= 'Nettleseren din blokkerer sprettopvinduer fra Group-Office. Du må slå av blokkeringen for dette nettstedet';
+$l["popupBlocker"]= 'Nettleseren din blokkerer sprettopvinduer fra {product_name}. Du må slå av blokkeringen for dette nettstedet';
 $l["color"]='Farge';
 $l["browse"]='Bla...';
 $l["largeUpload"]='Store filer/mapper (krever Java)';
 $l["smallUpload"]='Små filer';
 $l["lostPassword"]='Glemt passordet?';
-$l["lostPasswordText"]='For å gjenopprette passordet må du ha mulighet til lese e-post utenfor Group-Office. Hvis du oppgir din e-postadresse vil du motta en e-post med videre instrukser. <br /><br />Angi din e-postadresse:';
+$l["lostPasswordText"]='For å gjenopprette passordet må du ha mulighet til lese e-post utenfor {product_name}. Hvis du oppgir din e-postadresse vil du motta en e-post med videre instrukser. <br /><br />Angi din e-postadresse:';
 $l["noJava"]='Java Webstart er ikke installert. Java gjør det enklere å rerigere filer, og forenkler filopplasting. Gå til <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a> for å installere Java.';
 $l["strHelpContents"]='Hjelp';
 $l["strReportBug"]='Meld inn en feil';
-$l["strAbout"]='Om Group-Office';
+$l["strAbout"]='Om {product_name}';
 $l["strUsage"]='Bruksstatistikk';
 $l["strName"]= 'Navn';
 $l["strDescription"]= 'Beskrivelse';
@@ -448,11 +448,11 @@ $l["thankyou"]='Takk';
 $l["applyMultiselect"]='Bruk valgene';
 $l["createdBy"]='Opprettet av';
 $l["debugModeDetected"]="Advarsel! Debug mode aktivert";
-$l["debugModeWarning"]="Du bør bare bruke \$config['debug']=true; under utvikling og feilsøking. Group-Office kjører saktere i debug mode!";
+$l["debugModeWarning"]="Du bør bare bruke \$config['debug']=true; under utvikling og feilsøking. {product_name} kjører saktere i debug mode!";
 $l["noItemSelectedWarning"]='Du må velge minst ett element.';
 $l["userGroup"]='Brukergruppe';
 $l["deselectAll"]='Fjern alle valgte';
-$l["confirmSelectLotsOfItems"]='Denne handlingen vil velge {count} elementer og kan føre til at Group-Office kjører tregt. Er du sikker på at du vil fortsette?';
+$l["confirmSelectLotsOfItems"]='Denne handlingen vil velge {count} elementer og kan føre til at {product_name} kjører tregt. Er du sikker på at du vil fortsette?';
 $l["captcha"]='Sikkerhetskode';
 $l["captchaEmpty"]='Sikkerhetskoden er tom';
 $l["multiselectComboMaxItemsReachedWarning"]='Du kan velge maksimalt {max} elementer';

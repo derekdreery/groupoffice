@@ -14,17 +14,17 @@ $l["strCommunityForum"]='Fórum comunitário';
 $l["moduleRequired"]='Esta função requer o \'{module}\' módulo. Este módulo não está disponível.';
 $l["completeProfile"]= 'Por favor complete seu perfil';
 $l["fullscreen"]='Tela cheia';
-$l["popupBlocker"]= 'Seu browser está bloqueando um popup do Group-Office. Por favor, desabilite o bloqueador de popup para este site';
+$l["popupBlocker"]= 'Seu browser está bloqueando um popup do {product_name}. Por favor, desabilite o bloqueador de popup para este site';
 $l["color"]='Cor';
 $l["browse"]='Procurar...';
 $l["largeUpload"]='Muitos arquivos/pastas (requer Java)';
 $l["smallUpload"]='Poucos arquivos';
 $l["lostPassword"]='Perdeu a senha?';
-$l["lostPasswordText"]='Para recuperar sua senha você precisa ter acesso ao seu e-mail sem acessar o Group-Office. Se você informar o e-mail, uma nova senha será enviada para ele.<br /><br />Informe seu e-mail:';
+$l["lostPasswordText"]='Para recuperar sua senha você precisa ter acesso ao seu e-mail sem acessar o {product_name}. Se você informar o e-mail, uma nova senha será enviada para ele.<br /><br />Informe seu e-mail:';
 $l["noJava"]='Java Webstart não instalado. O Java habilita a edição e envio fácil de arquivos . Visite <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a> para instalar.';
 $l["strHelpContents"]='Conteúdo da ajuda';
 $l["strReportBug"]='Informar um erro';
-$l["strAbout"]='Sobre o Group-Office';
+$l["strAbout"]='Sobre o {product_name}';
 $l["strUsage"]='Estatísticas de uso';
 $l["strName"]= 'Nome';
 $l["strDescription"]= 'Descrição';
@@ -263,18 +263,18 @@ $l["thankyou"]='Obrigado';
 $l["applyMultiselect"]='Aplicar multiseleção';
 $l["createdBy"]='Criado por';
 $l["debugModeDetected"]="Atenção! Modo de depuração habilitado";
-$l["debugModeWarning"]="Utilize \$config['debug']=true; apenas para desenvolvimento e resolução de problemas. Isto reduz o desempenho no Group-Office.";
+$l["debugModeWarning"]="Utilize \$config['debug']=true; apenas para desenvolvimento e resolução de problemas. Isto reduz o desempenho no {product_name}.";
 $l["noItemSelectedWarning"]='Selecione pelo menos um item por favor.';
 
 $l['about']='Versão: %s
 Copyright (c) 2003-%s, Intermesh
 Todos os direitos reservados.
-Este programa é protegido por leis de copyright e pela licença do Group-Office.
+Este programa é protegido por leis de copyright e pela licença do {product_name}.
 Para suporte entre em contato com o seu webmaster:
 %s
-Para mais informações sobre o Group-Office visite:
-http://www.group-office.com
-O Group-Office é desenvolvido pela Intermesh. Para mais informações sobre a Intermesh visite:;
+Para mais informações sobre o {product_name} visite:
+http://www.{product_name}.com
+O {product_name} é desenvolvido pela Intermesh. Para mais informações sobre a Intermesh visite:;
 http://www.intermesh.nl/en/';
 $l['totals']='Totais';
 $l['printPage']='Página %s of %s';
@@ -412,22 +412,22 @@ $l['admin']='Administrador';
 $l['beginning']='Saudações';
 $l['max_emails_reached']= "O número máximo de e-mails para o servidor SMTP %s, que é de %s por dia, foi atingido.";
 $l['usage_stats']='Uso de disco em %s';
-$l['usage_text']='Esta instalação do Group-Office está utilizando';
+$l['usage_text']='Esta instalação do {product_name} está utilizando';
 $l['database']='Banco de dados';
 $l['files']='Arquivos';
 $l['email']='E-mails';
 $l['total']='Total';
-$l['confirm_leave']='Se abandonar o Group-Office você irá perder as alterações não salvas';
+$l['confirm_leave']='Se abandonar o {product_name} você irá perder as alterações não salvas';
 $l['dataSaved']='Os dados foram salvos com sucesso';
-$l['uploadMultipleFiles'] = 'Clique em \'Procurar\' para selecionar arquivos ou pastas de seu computador. Clique em \'Enviar\' para transferir os arquivos para o Group-Office. Esta janela será fechada automaticamente quando a transferência estiver finalizada.';
-$l['loginToGO']='Clique aqui para acessar o Group-Office';
+$l['uploadMultipleFiles'] = 'Clique em \'Procurar\' para selecionar arquivos ou pastas de seu computador. Clique em \'Enviar\' para transferir os arquivos para o {product_name}. Esta janela será fechada automaticamente quando a transferência estiver finalizada.';
+$l['loginToGO']='Clique aqui para acessar o {product_name}';
 $l['links']='Links';
-$l['GOwebsite']='Site do Group-Office';
-$l['GOisAProductOf']='<i>Group-Office</i> é um produto da <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+$l['GOwebsite']='Site do {product_name}';
+$l['GOisAProductOf']='<i>{product_name}</i> é um produto da <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 $l['yes']='Sim';
 $l['no']='Não';
 $l['system']='Sistema';
-$l['goAlreadyStarted']='O Group-Office já foi inicializado. A janela requisitada está carregada no Group-Office. Você pode fechar esta janela ou continuar a trabalhar no Group-Office.';
+$l['goAlreadyStarted']='O {product_name} já foi inicializado. A janela requisitada está carregada no {product_name}. Você pode fechar esta janela ou continuar a trabalhar no {product_name}.';
 $l['no']='Não';
 $l['logFiles']='Arquivos de log';
 $l['reminder']='Lembrete';

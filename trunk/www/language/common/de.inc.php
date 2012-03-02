@@ -4,15 +4,15 @@ $lang['common']['about']='Version: %s
 
 Copyright (c) 2003-%s, Intermesh
 All rights reserved.
-This program is protected by copyright law and the Group-Office license.
+This program is protected by copyright law and the {product_name} license.
 
 For support questions contact your webmaster:
 %s
 
-For more information about Group-Office visit:
-http://www.group-office.com
+For more information about {product_name} visit:
+http://www.{product_name}.com
 
-Group-Office is created by Intermesh. For more information about Intermesh visit:
+{product_name} is created by Intermesh. For more information about Intermesh visit:
 http://www.intermesh.nl/en/';
 $lang['common']['totals']='Gesamt';
 $lang['common']['printPage']='Seite %s von %s';

@@ -13,7 +13,7 @@ $l["strCommunityForum"]='Community forum';
 $l["moduleRequired"]='This feature requires the \'{module}\' module. This module is not available.';
 $l["completeProfile"]= 'Please complete your profile';
 $l["fullscreen"]='Fullscreen mode';
-$l["popupBlocker"]= 'Your browser is blocking a popup from Group-Office. Please disable the popup blocker for this site';
+$l["popupBlocker"]= 'Your browser is blocking a popup from {product_name}. Please disable the popup blocker for this site';
 $l["color"]='Color';
 $l["browse"]='Browse...';
 $l["largeUpload"]='Large files/folders (Java required)';
@@ -266,11 +266,11 @@ $l["thankyou"]='Thank you';
 $l["applyMultiselect"]='Apply multiselect';
 $l["createdBy"]='Created by';
 $l["debugModeDetected"]="Warning! Debug mode enabled";
-$l["debugModeWarning"]="Use \$config['debug']=true; only with development and problem solving. It slows Group-Office down.";
+$l["debugModeWarning"]="Use \$config['debug']=true; only with development and problem solving. It slows {product_name} down.";
 $l["userGroup"]='User group';
 $l["noItemSelectedWarning"]='Select at least one item please.';
 $l["deselectAll"]='Deselect all';
-$l["confirmSelectLotsOfItems"]='This action will select {count} items and might cause Group-Office to become slow. Are you sure you want continue?';
+$l["confirmSelectLotsOfItems"]='This action will select {count} items and might cause {product_name} to become slow. Are you sure you want continue?';
 $l["captcha"]='Security code';
 $l["captchaEmpty"]='Security code is empty';
 $l["multiselectComboMaxItemsReachedWarning"]='You may select a maximum of {max} options';
@@ -297,12 +297,12 @@ $l["advancedSearch"]='Advanced search';
 $l['about']='Version: %s
 Copyright (c) 2003-%s, Intermesh
 All rights reserved.
-This program is protected by copyright law and the Group-Office license.
+This program is protected by copyright law and the {product_name} license.
 For support questions contact your webmaster:
 %s
-For more information about Group-Office visit:
-http://www.group-office.com
-Group-Office is created by Intermesh. For more information about Intermesh visit:;
+For more information about {product_name} visit:
+http://www.{product_name}.com
+{product_name} is created by Intermesh. For more information about Intermesh visit:;
 http://www.intermesh.nl/en/';
 $l['totals']='Totals';
 $l['printPage']='Page %s of %s';
@@ -441,22 +441,22 @@ $l['admin']='Administrator';
 $l['beginning']='Salutation';
 $l['max_emails_reached']= "The maximum number of e-mail for SMTP host %s of %s per day have been reached.";
 $l['usage_stats']='Diskspace usage per %s';
-$l['usage_text']='This Group-Office installation is using';
+$l['usage_text']='This {product_name} installation is using';
 $l['database']='Database';
 $l['files']='Files';
 $l['email']='E-mail';
 $l['total']='Total';
-$l['confirm_leave']='If you leave Group-Office you will loose unsaved changes';
+$l['confirm_leave']='If you leave {product_name} you will loose unsaved changes';
 $l['dataSaved']='The data was saved succesfully';
-$l['uploadMultipleFiles'] = 'Click at \'Browse\' to select files and/or folders from your computer. Click at \'Upload\' to transfer the files to Group-Office. This window will automatically close when the transfer is completed.';
-$l['loginToGO']='Click here to login to Group-Office';
+$l['uploadMultipleFiles'] = 'Click at \'Browse\' to select files and/or folders from your computer. Click at \'Upload\' to transfer the files to {product_name}. This window will automatically close when the transfer is completed.';
+$l['loginToGO']='Click here to login to {product_name}';
 $l['links']='Links';
-$l['GOwebsite']='Group-Office website';
-$l['GOisAProductOf']='<i>Group-Office</i> is a product of <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+$l['GOwebsite']='{product_name} website';
+$l['GOisAProductOf']='<i>{product_name}</i> is a product of <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 $l['yes']='Yes';
 $l['no']='No';
 $l['system']='System';
-$l['goAlreadyStarted']='Group-Office was already started. The requested screen is loaded in Group-Office. You can close this window or tab now and continue working in Group-Office.';
+$l['goAlreadyStarted']='{product_name} was already started. The requested screen is loaded in {product_name}. You can close this window or tab now and continue working in {product_name}.';
 $l['no']='No';
 $lang['commmon']['logFiles']='Log files';
 $l['reminder']='Reminder';
@@ -486,7 +486,7 @@ $l["label"]="Label";
 $l["validationErrorsFound"]="Couldn't save %s:";//eg. Couldn't save project
 $l['attachFiles']='Attach files';
 
-$l['gridMissingParams'] = 'Please let the Group-Office administrator that the window you just attempted to use contains a grid that expected the following paramaters, but did not receive them';
+$l['gridMissingParams'] = 'Please let the {product_name} administrator that the window you just attempted to use contains a grid that expected the following paramaters, but did not receive them';
 $l['permissionNone'] = 'No permissions';
 $l['permissionUse'] = 'Use';
 $l['permissionManage'] = 'Manage';

@@ -143,7 +143,7 @@ $lang['common']['beginning']='Hilsen';
 
 $lang['common']['max_emails_reached']= "Det højest tilladte antal e-mail for SMTP serveren  %s på %s per dag er nået.";
 $lang['common']['usage_stats']='Diskforbrug per %s';
-$lang['common']['usage_text']='Denne Group-Office installation anvender';
+$lang['common']['usage_text']='Denne {product_name} installation anvender';
 
 $lang['common']['database']='Database';
 $lang['common']['files']='Filer';
@@ -163,4 +163,4 @@ Kodeord: %s';
 $lang['common']['lost_password_error']='Kunne ikke finde den angivne e-mail adresse.';
 $lang['common']['lost_password_success']='Et nyt kodeord er sendt til din e-mail adresse.';
 
-$lang['common']['confirm_leave']='Hvis du forlader Group-Office nu mister du alle ændringer der ikke er gemt';
+$lang['common']['confirm_leave']='Hvis du forlader {product_name} nu mister du alle ændringer der ikke er gemt';

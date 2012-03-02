@@ -140,7 +140,7 @@ $lang['common']['beginning']='Formula di apertura';
 
 $lang['common']['max_emails_reached']= "Il massimo numero di e-mail per l\'host SMTP %s di %s per giorno è stato raggiunto.";
 $lang['common']['usage_stats']='Diskspace usage per %s';
-$lang['common']['usage_text']='This Group-Office installation is using';
+$lang['common']['usage_text']='This {product_name} installation is using';
 
 $lang['common']['database']='Database';
 $lang['common']['files']='File';

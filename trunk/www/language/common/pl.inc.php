@@ -15,15 +15,15 @@ $lang['common']['about']='Version: %s
 
 Copyright (c) 2003-%s, Intermesh
 All rights reserved.
-This program is protected by copyright law and the Group-Office license.
+This program is protected by copyright law and the {product_name} license.
 
 For support questions contact your webmaster:
 %s
 
-For more information about Group-Office visit:
-http://www.group-office.com
+For more information about {product_name} visit:
+http://www.{product_name}.com
 
-Group-Office is created by Intermesh. For more information about Intermesh visit:
+{product_name} is created by Intermesh. For more information about Intermesh visit:
 http://www.intermesh.nl/en/';
 
 $lang['common']['totals']='Razem';
@@ -180,29 +180,29 @@ $lang['common']['beginning']='Powitanie';
 
 $lang['common']['max_emails_reached']= "Osiągnięto maksymalną liczbę przesyłek of e-mail dla hosta %s z %s na dzień.";
 $lang['common']['usage_stats']='Użycie miejsca na dysku na %s';
-$lang['common']['usage_text']='Ta instalacja Group-Office używa';
+$lang['common']['usage_text']='Ta instalacja {product_name} używa';
 
 $lang['common']['database']='Baza danych';
 $lang['common']['files']='Pliki';
 $lang['common']['email']='E-mail';
 $lang['common']['total']='Razem';
 
-$lang['common']['confirm_leave']='Jeśli opuścisz Group-Office to stracisz niezapisane zmiany';
+$lang['common']['confirm_leave']='Jeśli opuścisz {product_name} to stracisz niezapisane zmiany';
 $lang['common']['dataSaved']='Dane zostały zapisane';
 
-$lang['common']['uploadMultipleFiles']= 'Kliknij \'Przeglądaj\' aby wybrać pliki i/lub foldery z komputera. Kliknij \'Wyślij\' aby przesłać dane do Group-Office. To okno zamknie się automatycznie po zakończeniu transferu.';
+$lang['common']['uploadMultipleFiles']= 'Kliknij \'Przeglądaj\' aby wybrać pliki i/lub foldery z komputera. Kliknij \'Wyślij\' aby przesłać dane do {product_name}. To okno zamknie się automatycznie po zakończeniu transferu.';
 
-$lang['common']['loginToGO']='Kliknij aby się zalogować do Group-Office';
+$lang['common']['loginToGO']='Kliknij aby się zalogować do {product_name}';
 $lang['common']['links']='Odnośniki';
-$lang['common']['GOwebsite']='Group-Office website';
-$lang['common']['GOisAProductOf']='<i>Group-Office</i> is a product of <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+$lang['common']['GOwebsite']='{product_name} website';
+$lang['common']['GOisAProductOf']='<i>{product_name}</i> is a product of <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 
 $lang['common']['yes']='Tak';
 $lang['common']['no']='Nie';
 
 $lang['common']['system']='System';
 
-$lang['common']['goAlreadyStarted']='Group-Office uruchomiony. Żądana operacja uruchomiona w Group-Office. Możesz już zamknąć te okno lub kartę i kontynuować pracę w Group-Office.';
+$lang['common']['goAlreadyStarted']='{product_name} uruchomiony. Żądana operacja uruchomiona w {product_name}. Możesz już zamknąć te okno lub kartę i kontynuować pracę w {product_name}.';
 
 $lang['commmon']['logFiles']='Pliki logów';
 

@@ -11,17 +11,17 @@ $l["strCommunityForum"]='Community forumu';
 $l["moduleRequired"]='Bu özellik için \'{module}\' modülü gereklidir. Bu modül mevcut değildir.';
 $l["completeProfile"]= 'Lütfen profilinizi tamamlayınız';
 $l["fullscreen"]='Tam Ekran modu';
-$l["popupBlocker"]= 'İnternet Tarayıcınız Group-Office içersindeki bir açılan pencereyi engelliyor. Lütfen bu site için Açılan Pencere engelleyicisini kaldırınız';
+$l["popupBlocker"]= 'İnternet Tarayıcınız {product_name} içersindeki bir açılan pencereyi engelliyor. Lütfen bu site için Açılan Pencere engelleyicisini kaldırınız';
 $l["color"]='Renk';
 $l["browse"]='Göz At...';
 $l["largeUpload"]='Büyük Dosyalar/Klasörler (Java gereklidir)';
 $l["smallUpload"]='Küçük dosyalar';
 $l["lostPassword"]='Şifremi unuttum?';
-$l["lostPasswordText"]='Şifrenizi geri alabilmek için Group-Office olmadan maillerinize erişebiliyor olmalısınız. E-posta adresinizi girdiğinizde, vermiş olduğunuz E-posta adresine yeni bir şifre gönderilecektir.<br /><br />E-posta adresinizi giriniz:';
+$l["lostPasswordText"]='Şifrenizi geri alabilmek için {product_name} olmadan maillerinize erişebiliyor olmalısınız. E-posta adresinizi girdiğinizde, vermiş olduğunuz E-posta adresine yeni bir şifre gönderilecektir.<br /><br />E-posta adresinizi giriniz:';
 $l["noJava"]='Java Webstart kurulu değil. Java daha kolay düzenleme yapmayı ve dosya yüklemeyi mümkün kılar. Kurulum için lütfen <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a> sayfasını ziyaret ediniz.';
 $l["strHelpContents"]='Yardım içeriği';
 $l["strReportBug"]='Bir hata bildir';
-$l["strAbout"]='Group-Office hakkında';
+$l["strAbout"]='{product_name} hakkında';
 $l["strUsage"]='Kullanım istatistikleri';
 $l["strName"]= 'İsim';
 $l["strDescription"]= 'Açıklama';
@@ -223,12 +223,12 @@ $l["off"]='Kapalı';
 $l['about']='Version: %s
 Copyright (c) 2003-%s, Intermesh
 All rights reserved.
-This program is protected by copyright law and the Group-Office license.
+This program is protected by copyright law and the {product_name} license.
 For support questions contact your webmaster:
 %s
-For more information about Group-Office visit:
-http://www.group-office.com
-Group-Office is created by Intermesh. For more information about Intermesh visit:;
+For more information about {product_name} visit:
+http://www.{product_name}.com
+{product_name} is created by Intermesh. For more information about Intermesh visit:;
 http://www.intermesh.nl/en/';
 $l['htmldirection']= 'ltr';
 $l['quotaExceeded']='Disk içerinde yeterince boş yeriniz artık yok. Lütfen bazı dosyalarınızı siliniz veya Servis Sağlayıcınızdan kotanızı arttırmasını isteyiniz.';
@@ -355,7 +355,7 @@ $l['admin']='Yönetici';
 $l['beginning']='Selamlama';
 $l['max_emails_reached']= "%s SMTP sunucusu için maksimum %s (günlük) E-posta sınırına ulaşılmıştır.";
 $l['usage_stats']='DiskAlanı kullanımı %s başına';
-$l['usage_text']='Group-Office kurulumu tarafından kullanılan';
+$l['usage_text']='{product_name} kurulumu tarafından kullanılan';
 $l['database']='Veritabanı';
 $l['files']='Dosyalar';
 $l['email']='E-posta';
@@ -371,6 +371,6 @@ Kullanıcı Adı: %s<br />;
 Şifre: %s';
 $l['lost_password_error']='Verilen E-posta adresi bulunamıyor.';
 $l['lost_password_success']='E-posta adresinize yeni bir şifre gönderilmiştir.';
-$l['confirm_leave']='Group-Office ten ayrılırsanız kaydetmediklerinizi kaybedeceksiniz';
+$l['confirm_leave']='{product_name} ten ayrılırsanız kaydetmediklerinizi kaybedeceksiniz';
 $l['dataSaved']='Veri başarılı şekilde kaydedilmiştir';
-$l['uploadMultipleFiles'] = 'Bilgisayarınızdan dosya ve/veya klasör seçmek için \'Göz At\' tıklayınız. Dosyaları Group-Office içersine yüklemek için \'Yükle\' tıklayınız. Veri transferi bittiğinde bu ekran otomatik olarak kapanacaktır.';
+$l['uploadMultipleFiles'] = 'Bilgisayarınızdan dosya ve/veya klasör seçmek için \'Göz At\' tıklayınız. Dosyaları {product_name} içersine yüklemek için \'Yükle\' tıklayınız. Veri transferi bittiğinde bu ekran otomatik olarak kapanacaktır.';

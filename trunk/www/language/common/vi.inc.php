@@ -3,8 +3,8 @@
 /** 
  * Copyright Intermesh
  * 
- * This file is part of Group-Office. You should have received a copy of the
- * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ * This file is part of {product_name}. You should have received a copy of the
+ * {product_name} license along with {product_name}. See the file /LICENSE.TXT
  * 
  * If you have questions write an e-mail to info@intermesh.nl
  * 
@@ -19,15 +19,15 @@ $lang['common']['about']='Phiên bản: %s
 
 Copyright (c) 2003-%s, Intermesh
 All rights reserved.
-This program is protected by copyright law and the Group-Office license.
+This program is protected by copyright law and the {product_name} license.
 
 For support questions contact your webmaster:
 %s
 
-For more information about Group-Office visit:
-http://www.group-office.com
+For more information about {product_name} visit:
+http://www.{product_name}.com
 
-Group-Office is created by Intermesh. For more information about Intermesh visit:
+{product_name} is created by Intermesh. For more information about Intermesh visit:
 http://www.intermesh.nl/en/';
 
 $lang['common']['totals']='Tổng';
@@ -203,15 +203,15 @@ $lang['common']['uploadMultipleFiles'] = 'Nhấn nút \'Duyệt\' để chọn f
 
 $lang['common']['loginToGO']='Nhấn vào đây để đăng nhập';
 $lang['common']['links']='Liên kết';
-$lang['common']['GOwebsite']='Group-Office website';
-$lang['common']['GOisAProductOf']='<i>Group-Office</i> là sản phẩm của <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+$lang['common']['GOwebsite']='{product_name} website';
+$lang['common']['GOisAProductOf']='<i>{product_name}</i> là sản phẩm của <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 
 $lang['common']['yes']='Có';
 $lang['common']['no']='Không';
 
 $lang['common']['system']='Hệ thống';
 
-$lang['common']['goAlreadyStarted']='Group-Office đã chạy. Màn hình yêu cầu đã nạp vào Group-Office. Bạn có thể đóng cửa sổ hoặc bảng này để tiếp tục làm việc';
+$lang['common']['goAlreadyStarted']='{product_name} đã chạy. Màn hình yêu cầu đã nạp vào {product_name}. Bạn có thể đóng cửa sổ hoặc bảng này để tiếp tục làm việc';
 $lang['common']['no']='Không';
 
 $lang['commmon']['logFiles']='File nhật ký';
@@ -233,7 +233,7 @@ $lang['common']['parentheses_invalid_error']='Câu truy vấn không đúng, xin
 $lang['common']['nReminders']='%s nhắc nhở';
 $lang['common']['oneReminder']='1 nhắc nhở';
 
-//Example: you have 1 reminders in Group-Office.
+//Example: you have 1 reminders in {product_name}.
 $lang['common']['youHaveReminders']='Bạn có %s / %s.';
 
 $lang['common']['createdBy']='Người tạo';

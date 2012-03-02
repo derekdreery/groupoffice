@@ -143,7 +143,7 @@ $lang['common']['beginning']='Puhuttelunimi';
 
 $lang['common']['max_emails_reached']= "Maksimaalinen määrä sähköpostia SMTP-palvelimelle %s  %s per päivä on saavutettu.";
 $lang['common']['usage_stats']='Kiintolevyn käyttö per %s';
-$lang['common']['usage_text']='Tämä Group-Office ympäristö käyttää';
+$lang['common']['usage_text']='Tämä {product_name} ympäristö käyttää';
 
 $lang['common']['database']='Tietokanta';
 $lang['common']['files']='Tiedostot';
@@ -163,5 +163,5 @@ Salasana: %s';
 $lang['common']['lost_password_error']='Annettua sähkäpostiosoitetta ei löytynyt.';
 $lang['common']['lost_password_success']='Uusi salasana on lähetetty sähköpostiinne.';
 
-$lang['common']['confirm_leave']='Jos poistutte Group-Officesta menetätte tallentamattomat muutoksenne';
+$lang['common']['confirm_leave']='Jos poistutte {product_name}sta menetätte tallentamattomat muutoksenne';
 

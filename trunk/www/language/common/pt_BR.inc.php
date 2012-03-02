@@ -6,15 +6,15 @@ $lang['common']['about']='Versão: %s
 
 Copyright (c) 2003-%s, Intermesh
 Todos os direitos reservados.
-Este programa é protegido por leis de copyright e pela licença do Group-Office.
+Este programa é protegido por leis de copyright e pela licença do {product_name}.
 
 Para suporte entre em contato com o seu webmaster:
 %s
 
-Para mais informações sobre o Group-Office visite:
-http://www.group-office.com
+Para mais informações sobre o {product_name} visite:
+http://www.{product_name}.com
 
-O Group-Office é desenvolvido pela Intermesh. Para mais informações sobre a Intermesh visite:
+O {product_name} é desenvolvido pela Intermesh. Para mais informações sobre a Intermesh visite:
 http://www.intermesh.nl/en/';
 
 $lang['common']['totals']='Totais';
@@ -175,7 +175,7 @@ $lang['common']['beginning']='Saudações';
 
 $lang['common']['max_emails_reached']= "O número máximo de e-mails para o servidor SMTP %s, que é de %s por dia, foi atingido.";
 $lang['common']['usage_stats']='Uso de disco em %s';
-$lang['common']['usage_text']='Esta instalação do Group-Office está utilizando';
+$lang['common']['usage_text']='Esta instalação do {product_name} está utilizando';
 
 
 $lang['common']['database']='Banco de dados';
@@ -184,23 +184,23 @@ $lang['common']['email']='E-mails';
 $lang['common']['total']='Total';
 
 
-$lang['common']['confirm_leave']='Se abandonar o Group-Office você irá perder as alterações não salvas';
+$lang['common']['confirm_leave']='Se abandonar o {product_name} você irá perder as alterações não salvas';
 $lang['common']['dataSaved']='Os dados foram salvos com sucesso';
 
-$lang['common']['uploadMultipleFiles'] = 'Clique em \'Procurar\' para selecionar arquivos ou pastas de seu computador. Clique em \'Enviar\' para transferir os arquivos para o Group-Office. Esta janela será fechada automaticamente quando a transferência estiver finalizada.';
+$lang['common']['uploadMultipleFiles'] = 'Clique em \'Procurar\' para selecionar arquivos ou pastas de seu computador. Clique em \'Enviar\' para transferir os arquivos para o {product_name}. Esta janela será fechada automaticamente quando a transferência estiver finalizada.';
 
 
-$lang['common']['loginToGO']='Clique aqui para acessar o Group-Office';
+$lang['common']['loginToGO']='Clique aqui para acessar o {product_name}';
 $lang['common']['links']='Links';
-$lang['common']['GOwebsite']='Site do Group-Office';
-$lang['common']['GOisAProductOf']='<i>Group-Office</i> é um produto da <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+$lang['common']['GOwebsite']='Site do {product_name}';
+$lang['common']['GOisAProductOf']='<i>{product_name}</i> é um produto da <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 
 $lang['common']['yes']='Sim';
 $lang['common']['no']='Não';
 
 $lang['common']['system']='Sistema';
 
-$lang['common']['goAlreadyStarted']='O Group-Office já foi inicializado. A janela requisitada está carregada no Group-Office. Você pode fechar esta janela ou continuar a trabalhar no Group-Office.';
+$lang['common']['goAlreadyStarted']='O {product_name} já foi inicializado. A janela requisitada está carregada no {product_name}. Você pode fechar esta janela ou continuar a trabalhar no {product_name}.';
 $lang['common']['no']='Não';
 
 $lang['commmon']['logFiles']='Arquivos de log';
@@ -222,7 +222,7 @@ $lang['common']['parentheses_invalid_error']='Parenteses na sua consulta são in
 $lang['common']['nReminders']='%s lembretes';
 $lang['common']['oneReminder']='1 lembrete';
 
-//Example: you have 1 reminders in Group-Office.
+//Example: you have 1 reminders in {product_name}.
 $lang['common']['youHaveReminders']='Você tem %s no %s.';
 
 $lang['common']['createdBy']='Criado por';

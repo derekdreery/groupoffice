@@ -2,15 +2,9 @@
 
 
 $l['about']='Versie: %s
-Copyright (c) 2003-%s, Intermesh
-Alle rechten voorbehouden
-Dit programma is beschermd door de auteurswet en de Group-Office licentie.
-Neem voor ondersteuning contact op met de helpdesk:
-%s
-Voor meer informatie over Group-Office ga naar:
-http://www.group-office.com
-Group-Office is gemaakt door Intermesh. Voor meer informatie over Intermesh ga naar:;
-http://www.intermesh.nl/';
+Copyright (c) 2003-%s, {product_name}
+Alle rechten voorbehouden';
+
 $l['totals']='Totalen';
 $l['printPage']='Pagina %s van %s';
 $l['htmldirection']='ltr';
@@ -145,22 +139,22 @@ $l['month'] = 'maand';
 $l['strMonths'] = 'maanden';
 $l['max_emails_reached']= "Het maximale aantal e-mails voor SMTP host %s van %s per dag is bereikt.";
 $l['usage_stats']='Schijfruimtegebruik per %s';
-$l['usage_text']='Deze Group-Office installatie gebruikt';
+$l['usage_text']='Deze {product_name} installatie gebruikt';
 $l['database']='Database';
 $l['files']='Bestanden';
 $l['email']='E-mail';
 $l['total']='Totaal';
-$l['confirm_leave']='Wanneer u Group-Office verlaat gaat onopgeslagen werk verloren.';
+$l['confirm_leave']='Wanneer u {product_name} verlaat gaat onopgeslagen werk verloren.';
 $l['dataSaved']='De gegevens zijn succesvol opgeslagen';
-$l['uploadMultipleFiles'] = 'Klik op \'Bladeren\' om bestanden en/of mappen van uw PC te selecteren. Klik daarna op \'Upload\' om de bestanden naar Group-Office te verzenden. Dit venster zal automatisch sluiten als de upload voltooid is.';
-$l['loginToGO']='Klik hier om in te loggen bij Group-Office';
+$l['uploadMultipleFiles'] = 'Klik op \'Bladeren\' om bestanden en/of mappen van uw PC te selecteren. Klik daarna op \'Upload\' om de bestanden naar {product_name} te verzenden. Dit venster zal automatisch sluiten als de upload voltooid is.';
+$l['loginToGO']='Klik hier om in te loggen bij {product_name}';
 $l['links']='Links';
-$l['GOwebsite']='Group-Office website';
-$l['GOisAProductOf']='<i>Group-Office</i> is een product van <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+$l['GOwebsite']='{product_name} website';
+$l['GOisAProductOf']='<i>{product_name}</i> is een product van <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 $l['yes']='Ja';
 $l['no']='Nee';
 $l['system']='Systeem';
-$l['goAlreadyStarted']='Group-Office is al gestart. Het opgevraagde scherm is in Group-Office geladen. U kunt dit venster of tabblad sluiten.';
+$l['goAlreadyStarted']='{product_name} is al gestart. Het opgevraagde scherm is in {product_name} geladen. U kunt dit venster of tabblad sluiten.';
 $lang['commmon']['logFiles']='Logbestanden';
 $l['startMenu']='Startmenu';
 $l['invalidDateError']='U heeft een ongeldige datum ingevoerd';
@@ -404,7 +398,7 @@ $l["cmdBrowseLinks"]= 'Koppelingen';
 $l["noFilesModule"]= 'De files-module is nodig voor deze functie';
 $l["strMax"]= 'Maximum';
 $l["settings"]='Instellingen';
-$l["popupBlocker"]= 'Uw browser blokkeert een popup van Group-Office. Schakel de popup blokkering uit voor Group-Office a.u.b.';
+$l["popupBlocker"]= 'Uw browser blokkeert een popup van {product_name}. Schakel de popup blokkering uit voor {product_name} a.u.b.';
 $l["strUsage"]='Gebruiksstatistieken';
 $l["today"]='Vandaag';
 $l["image"]='Afbeelding';
@@ -452,7 +446,7 @@ $l["debugModeWarning"]="Gebruik \$config['debug']=true; alleen voor ontwikkeling
 $l["userGroup"]='Gebruikersgroep';
 $l["noItemSelectedWarning"]='Selecteer minimaal één item.';
 $l["deselectAll"]='Deselecteer alles';
-$l["confirmSelectLotsOfItems"]='Deze actie zal {count} items selecteren en kan ervoor zorgen dat Group-Office traag wordt. Weet u zeker dat u door wilt gaan?';
+$l["confirmSelectLotsOfItems"]='Deze actie zal {count} items selecteren en kan ervoor zorgen dat {product_name} traag wordt. Weet u zeker dat u door wilt gaan?';
 $l["captcha"]='Beveiligings code';
 $l["captchaEmpty"]='Beveiligings code ontbreekt';
 $l["multiselectComboMaxItemsReachedWarning"]='U mag maximaal {max} opties selecteren';
@@ -482,7 +476,7 @@ $l['attachFiles']='Bijlagen toevoegen';
 
 $l["validationErrorsFound"]="Kon %s niet opslaan:";
 
-$l['gridMissingParams'] = 'Laat u a.u.b. de Group-Office beheerder weten dat het scherm wat u zojuist probeerde te gebruiken, een "grid" bevat die de volgende parameters nodig heeft, maar ze niet heeft ontvangen';
+$l['gridMissingParams'] = 'Laat u a.u.b. de {product_name} beheerder weten dat het scherm wat u zojuist probeerde te gebruiken, een "grid" bevat die de volgende parameters nodig heeft, maar ze niet heeft ontvangen';
 $l['permissionNone'] = 'Geen rechten';
 $l['permissionUse'] = 'Gebruiken';
 $l['permissionManage'] = 'Beheren';

@@ -140,7 +140,7 @@ $lang['common']['beginning']='Formulă de deschidere';
 
 $lang['common']['max_emails_reached']= "Maximul număr de e-mail pe SMTP %s din %s pe zi a fost ajuns.";
 $lang['common']['usage_stats']='Spaţiu disk pentru %s';
-$lang['common']['usage_text']='Acest instalaţie foloseşte Group-Office';
+$lang['common']['usage_text']='Acest instalaţie foloseşte {product_name}';
 
 $lang['common']['database']='Database';
 $lang['common']['files']='Fişier';

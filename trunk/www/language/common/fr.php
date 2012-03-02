@@ -14,17 +14,17 @@ $l["strCommunityForum"]='Forum communautaire';
 $l["moduleRequired"]='Pour cette fonction, le module \'{module}\' est requit. Ce module est non disponible.';
 $l["completeProfile"]= 'Veuillez compléter votre profil';
 $l["fullscreen"]='Plein écran';
-$l["popupBlocker"]= 'Votre navigateur est en train de bloquer une fenêtre popup de Group-Office. Veuillez désactiver le blocage des popups pour ce site';
+$l["popupBlocker"]= 'Votre navigateur est en train de bloquer une fenêtre popup de {product_name}. Veuillez désactiver le blocage des popups pour ce site';
 $l["color"]='Couleur';
 $l["browse"]='Parcourir...';
 $l["largeUpload"]='Joindre plusieurs fichiers (Java nécessaire)';
 $l["smallUpload"]='Joindre un fichier';
 $l["lostPassword"]='Vous avez perdu votre mot de passe ?';
-$l["lostPasswordText"]='Afin de retrouver votre mot de passe vous devez être capable de consulter votre boite de messagerie sans passer par Group-Office. Si vous renseignez votre adresse e-mail, un nouveau mot de passe va vous être envoyé.<br /><br />Saisissez votre adresse e-mail :';
+$l["lostPasswordText"]='Afin de retrouver votre mot de passe vous devez être capable de consulter votre boite de messagerie sans passer par {product_name}. Si vous renseignez votre adresse e-mail, un nouveau mot de passe va vous être envoyé.<br /><br />Saisissez votre adresse e-mail :';
 $l["noJava"]='Le client Java Webstart n\'est pas installé sur votre ordinateur. Ce client Java permet d\éditer et d\'envoyer facilement des fichiers vers le serveur. Afin de l\'installer, veuillez visiter le site suivant : <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a>.';
 $l["strHelpContents"]='Contenu de l\'aide';
 $l["strReportBug"]='Signaler un bug';
-$l["strAbout"]='A propos de Group-Office';
+$l["strAbout"]='A propos de {product_name}';
 $l["strUsage"]='Statistiques';
 $l["strName"]= 'Nom';
 $l["strDescription"]= 'Description';
@@ -262,11 +262,11 @@ $l["thankyou"]='Merci';
 $l["applyMultiselect"]='Appliquer la sélection multiple';
 $l["createdBy"]='Créé par';
 $l["debugModeDetected"]="<div align=\"center\" style=\"color: red;\">ATTENTION !<br />Le mode DEBUG est activé !<br /><br /></div>";
-$l["debugModeWarning"]="Utilisez la variable \$config['debug']=true; seulement en cas de développement ou résolution de problème. Sous ce mode Group-Office est considérablement ralenti.";
+$l["debugModeWarning"]="Utilisez la variable \$config['debug']=true; seulement en cas de développement ou résolution de problème. Sous ce mode {product_name} est considérablement ralenti.";
 $l["userGroup"]='Groupe utilisateur';
 $l["noItemSelectedWarning"]='Veuillez sélectionner au moins un élément.';
 $l["deselectAll"]='Désélectionner tous';
-$l["confirmSelectLotsOfItems"]='Cette action va sélectionner {count} article(s) et pourrait ralentir Group-Office. Êtes-vous sûr de vouloir continuer ?';
+$l["confirmSelectLotsOfItems"]='Cette action va sélectionner {count} article(s) et pourrait ralentir {product_name}. Êtes-vous sûr de vouloir continuer ?';
 $l["captcha"]='Code de sécurité';
 $l["captchaEmpty"]='Le code de sécurité est vide';
 $l["multiselectComboMaxItemsReachedWarning"]='Vous pouvez séléctionner au masimum {max} options';
@@ -285,12 +285,12 @@ $l["selectAll"]='Tout sélectionner';
 $l['about']='Version: %s
 Copyright (c) 2003-%s, Intermesh
 Tous droits réservés.
-Ce programme est protégé par la loi sur le copyright et par la licence Group-Office.
+Ce programme est protégé par la loi sur le copyright et par la licence {product_name}.
 Pour le support technique contacter votre administrateur:
 %s
-Pour plus d\'informations sur Group-Office visitez:
-http://www.group-office.com
-Group-Office est une solution créée par Intermesh. Pour plus d\'informations visitez :;
+Pour plus d\'informations sur {product_name} visitez:
+http://www.{product_name}.com
+{product_name} est une solution créée par Intermesh. Pour plus d\'informations visitez :;
 http://www.intermesh.nl/en/';
 $l['totals']='Total';
 $l['printPage']='Page %s sur %s';
@@ -421,22 +421,22 @@ $l['admin']='Administrateur';
 $l['beginning']='Salutation';
 $l['max_emails_reached']= "Info du serveur SMTP (%s) : Le nombre maximum d\'e-mail (%s par jour) a été atteint.";
 $l['usage_stats']='Espace disque utilisé : %s';
-$l['usage_text']='Cette installation de Group-Office utilise ';
+$l['usage_text']='Cette installation de {product_name} utilise ';
 $l['database']='Base de donnèes';
 $l['files']='Fichiers';
 $l['email']='E-mail';
 $l['total']='Total';
-$l['confirm_leave']='Si vous quittez Group-Office, vous allez perdre les données non enregistrées';
+$l['confirm_leave']='Si vous quittez {product_name}, vous allez perdre les données non enregistrées';
 $l['dataSaved']='Les données ont été sauvegardées avec succès';
-$l['uploadMultipleFiles'] = 'Cliquez sur \'Parcourir\' pour sélectionner le(s) fichier(s) ou répertoire(s) sur votre ordinateur. Cliquez sur \'Télécharger\' pour transférer le(s) fichier(s) ou répertoire(s) vers Group-Office. Cette fênetre sera fermée automatiquement à la fin du transfert.';
-$l['loginToGO']='Cliquez ici pour vous connecter à l\'application Group-Office';
+$l['uploadMultipleFiles'] = 'Cliquez sur \'Parcourir\' pour sélectionner le(s) fichier(s) ou répertoire(s) sur votre ordinateur. Cliquez sur \'Télécharger\' pour transférer le(s) fichier(s) ou répertoire(s) vers {product_name}. Cette fênetre sera fermée automatiquement à la fin du transfert.';
+$l['loginToGO']='Cliquez ici pour vous connecter à l\'application {product_name}';
 $l['links']='Liens';
-$l['GOwebsite']='Site web Group-Office';
-$l['GOisAProductOf']='<i>Group-Office</i> est un produit développé par <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+$l['GOwebsite']='Site web {product_name}';
+$l['GOisAProductOf']='<i>{product_name}</i> est un produit développé par <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 $l['yes']='Oui';
 $l['no']='Non';
 $l['system']='Système';
-$l['goAlreadyStarted']='Group-Office est déjà demarré. L\'écran demandé est chargé dans Group-Office. Vous pouvez fermer cette fenêtre et continuer à travailler dans Group-Office.';
+$l['goAlreadyStarted']='{product_name} est déjà demarré. L\'écran demandé est chargé dans {product_name}. Vous pouvez fermer cette fenêtre et continuer à travailler dans {product_name}.';
 $l['no']='Non';
 $lang['commmon']['logFiles']='Fichiers log';
 $l['reminder']='Rappel';

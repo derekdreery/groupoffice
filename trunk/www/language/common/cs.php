@@ -4,12 +4,12 @@
 $l['about']='Verze: %s
 Copyright (c) 2003-%s, Intermesh
 Všechna práva vyhrazena.
-Tento program je chráněn autorským zákonem a Group-Office licencí.
+Tento program je chráněn autorským zákonem a {product_name} licencí.
 Pro Vaše dotazy kontaktujte správce systému:
 %s
-Pro více informací o Group-Office navštivte:
-http://www.group-office.com
-Group-Office je vytvořen společností Intermesh. Pro více informací navštivte:;
+Pro více informací o {product_name} navštivte:
+http://www.{product_name}.com
+{product_name} je vytvořen společností Intermesh. Pro více informací navštivte:;
 http://www.intermesh.nl/en';
 $l['totals']='Součty';
 $l['printPage']='Strana %s z %s';
@@ -148,22 +148,22 @@ $l['admin']='Administrátor';
 $l['beginning']='Oslovení';
 $l['max_emails_reached']= "Byl překročen maximální počet emailů pro SMTP hosta %s z %s den.";
 $l['usage_stats']='Použité místo na disku %s';
-$l['usage_text']='Tato instalace sady Group-Office používá';
+$l['usage_text']='Tato instalace sady {product_name} používá';
 $l['database']='Databáze';
 $l['files']='Soubory';
 $l['email']='E-mail';
 $l['total']='Celkem';
-$l['confirm_leave']='Pokud opustíte Group-Office, neuložené změny budou ztraceny';
+$l['confirm_leave']='Pokud opustíte {product_name}, neuložené změny budou ztraceny';
 $l['dataSaved']='Data byla v pořádku uložena';
-$l['uploadMultipleFiles'] = 'Klikněte na \'Přidat z počítače\' pro výběr souboru a/nebo složky z Vašeho počítače. Klikněte na \'Přidat z pošty\' pro přenos souborů z Group-Office. Okno bude automaticky zavřeno po kompletním přenosu.';
-$l['loginToGO']='Klikněte zde pro přihlášení do Group-Office';
+$l['uploadMultipleFiles'] = 'Klikněte na \'Přidat z počítače\' pro výběr souboru a/nebo složky z Vašeho počítače. Klikněte na \'Přidat z pošty\' pro přenos souborů z {product_name}. Okno bude automaticky zavřeno po kompletním přenosu.';
+$l['loginToGO']='Klikněte zde pro přihlášení do {product_name}';
 $l['links']='Odkazy';
-$l['GOwebsite']='Group-Office stránky';
-$l['GOisAProductOf']='<i>Group-Office</i> je produkt od <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+$l['GOwebsite']='{product_name} stránky';
+$l['GOisAProductOf']='<i>{product_name}</i> je produkt od <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 $l['yes']='Ano';
 $l['no']='Ne';
 $l['system']='Systém';
-$l['goAlreadyStarted']='Group-Office byl úspěšně nastartován. Požadovaná obrazovka byla nahrána v Group-Office. Nyní můžete zavřít toto okno nebo záložku a pokračovat v práci v Group-Office.';
+$l['goAlreadyStarted']='{product_name} byl úspěšně nastartován. Požadovaná obrazovka byla nahrána v {product_name}. Nyní můžete zavřít toto okno nebo záložku a pokračovat v práci v {product_name}.';
 $lang['commmon']['logFiles']='Logovací soubory';
 $l['reminder']='Připomínka';
 $l['unknown']='Neznámé';
@@ -207,7 +207,7 @@ $l["lostPasswordText"]='Pro obnovení Vašeho hesla musíte zadat jinou e-mailov
 $l["noJava"]='Java Webstart není nainstalována. Java umožňuje snažší práci se soubory a jejich nahráváním. Podívejte se na <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a> pro stažení a následnou instalaci.';
 $l["strHelpContents"]='Obsah nápovědy';
 $l["strReportBug"]='Oznámit potíže';
-$l["strAbout"]='Informace o Group-Office';
+$l["strAbout"]='Informace o {product_name}';
 $l["strUsage"]='Statistika využití ';
 $l["strName"]= 'Jméno';
 $l["strName2"]= 'Jméno 2';
@@ -446,11 +446,11 @@ $l["thankyou"]='Děkujeme';
 $l["applyMultiselect"]='Použít vícenásobný výběr';
 $l["createdBy"]='Vytvořil';
 $l["debugModeDetected"]="Upozornění! Debug mód je povolený";
-$l["debugModeWarning"]="Použijte \$config['debug']=true; pouze pro vývoj a řešení problémů. Debug mód spomaluje práci v Group-Office.";
+$l["debugModeWarning"]="Použijte \$config['debug']=true; pouze pro vývoj a řešení problémů. Debug mód spomaluje práci v {product_name}.";
 $l["userGroup"]='Uživatelská skupina';
 $l["noItemSelectedWarning"]='Prosím, vyberte alespoň jednu položku.';
 $l["deselectAll"]='Odznačit vše';
-$l["confirmSelectLotsOfItems"]='Vybrali jste {count} položek a to může způsobit zpomalení Group-Office. Přejete si pokračovat?';
+$l["confirmSelectLotsOfItems"]='Vybrali jste {count} položek a to může způsobit zpomalení {product_name}. Přejete si pokračovat?';
 $l["captcha"]='Bezpečností kód';
 $l["captchaEmpty"]='Bezpečností kód je prázdný';
 $l["multiselectComboMaxItemsReachedWarning"]='Můžete vybrat maximálně {max} možností';

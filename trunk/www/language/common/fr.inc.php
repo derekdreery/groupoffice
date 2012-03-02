@@ -3,8 +3,8 @@
 //
 // Copyright Intermesh
 // 
-// This file is part of Group-Office. You should have received a copy of the
-// Group-Office license along with Group-Office. See the file /LICENSE.TXT
+// This file is part of {product_name}. You should have received a copy of the
+// {product_name} license along with {product_name}. See the file /LICENSE.TXT
 // 
 // If you have questions write an e-mail to info@intermesh.nl
 //
@@ -26,15 +26,15 @@ $lang['common']['about']='Version: %s
 
 Copyright (c) 2003-%s, Intermesh
 Tous droits réservés.
-Ce programme est protégé par la loi sur le copyright et par la licence Group-Office.
+Ce programme est protégé par la loi sur le copyright et par la licence {product_name}.
 
 Pour le support technique contacter votre administrateur:
 %s
 
-Pour plus d\'informations sur Group-Office visitez:
-http://www.group-office.com
+Pour plus d\'informations sur {product_name} visitez:
+http://www.{product_name}.com
 
-Group-Office est une solution créée par Intermesh. Pour plus d\'informations visitez :
+{product_name} est une solution créée par Intermesh. Pour plus d\'informations visitez :
 http://www.intermesh.nl/en/';
 $lang['common']['totals']='Total';
 $lang['common']['printPage']='Page %s sur %s';
@@ -165,22 +165,22 @@ $lang['common']['admin']='Administrateur';
 $lang['common']['beginning']='Salutation';
 $lang['common']['max_emails_reached']= "Info du serveur SMTP (%s) : Le nombre maximum d\'e-mail (%s par jour) a été atteint.";
 $lang['common']['usage_stats']='Espace disque utilisé : %s';
-$lang['common']['usage_text']='Cette installation de Group-Office utilise ';
+$lang['common']['usage_text']='Cette installation de {product_name} utilise ';
 $lang['common']['database']='Base de donnèes';
 $lang['common']['files']='Fichiers';
 $lang['common']['email']='E-mail';
 $lang['common']['total']='Total';
-$lang['common']['confirm_leave']='Si vous quittez Group-Office, vous allez perdre les données non enregistrées';
+$lang['common']['confirm_leave']='Si vous quittez {product_name}, vous allez perdre les données non enregistrées';
 $lang['common']['dataSaved']='Les données ont été sauvegardées avec succès';
-$lang['common']['uploadMultipleFiles'] = 'Cliquez sur \'Parcourir\' pour sélectionner le(s) fichier(s) ou répertoire(s) sur votre ordinateur. Cliquez sur \'Télécharger\' pour transférer le(s) fichier(s) ou répertoire(s) vers Group-Office. Cette fênetre sera fermée automatiquement à la fin du transfert.';
-$lang['common']['loginToGO']='Cliquez ici pour vous connecter à l\'application Group-Office';
+$lang['common']['uploadMultipleFiles'] = 'Cliquez sur \'Parcourir\' pour sélectionner le(s) fichier(s) ou répertoire(s) sur votre ordinateur. Cliquez sur \'Télécharger\' pour transférer le(s) fichier(s) ou répertoire(s) vers {product_name}. Cette fênetre sera fermée automatiquement à la fin du transfert.';
+$lang['common']['loginToGO']='Cliquez ici pour vous connecter à l\'application {product_name}';
 $lang['common']['links']='Liens';
-$lang['common']['GOwebsite']='Site web Group-Office';
-$lang['common']['GOisAProductOf']='<i>Group-Office</i> est un produit développé par <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+$lang['common']['GOwebsite']='Site web {product_name}';
+$lang['common']['GOisAProductOf']='<i>{product_name}</i> est un produit développé par <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 $lang['common']['yes']='Oui';
 $lang['common']['no']='Non';
 $lang['common']['system']='Système';
-$lang['common']['goAlreadyStarted']='Group-Office est déjà demarré. L\'écran demandé est chargé dans Group-Office. Vous pouvez fermer cette fenêtre et continuer à travailler dans Group-Office.';
+$lang['common']['goAlreadyStarted']='{product_name} est déjà demarré. L\'écran demandé est chargé dans {product_name}. Vous pouvez fermer cette fenêtre et continuer à travailler dans {product_name}.';
 $lang['common']['no']='Non';
 $lang['commmon']['logFiles']='Fichiers log';
 $lang['common']['reminder']='Rappel';
@@ -194,7 +194,7 @@ $lang['common']['click_here_to_contine']='Cliquez ici pour continuer';
 $lang['common']['parentheses_invalid_error']='Les parenthèses dans votre requète sont invalides. Veuillez les corriger.';
 $lang['common']['nReminders']='%s rappels';
 $lang['common']['oneReminder']='1 rappel';
-//Example: you have 1 reminders in Group-Office.
+//Example: you have 1 reminders in {product_name}.
 $lang['common']['youHaveReminders']='Vous avez %s dans %s.';
 $lang['common']['createdBy']='Créé par';
 $lang['common']['none']='Aucun';

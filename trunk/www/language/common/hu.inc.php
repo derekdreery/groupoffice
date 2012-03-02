@@ -11,9 +11,9 @@ Ha támogatásra van szüksége, kérdezze az Administratort:
 %s
 
 Több információért kérjük, látogasd meg:
-http://www.group-office.com
+http://www.{product_name}.com
 
-A Group-Office-t az Intermesh készítette. Több információért kérjük, látogassa meg:
+A {product_name}-t az Intermesh készítette. Több információért kérjük, látogassa meg:
 http://www.intermesh.nl/en/';
 
 $lang['common']['totals']='Összes';
@@ -165,7 +165,7 @@ $lang['common']['beginning']='Megszólítás';
 
 $lang['common']['max_emails_reached']= "The maximum number of e-mail for SMTP host %s of %s per day have been reached.";
 $lang['common']['usage_stats']='Hely van felhasználva %s-ból';
-$lang['common']['usage_text']='This Group-Office installation is using';
+$lang['common']['usage_text']='This {product_name} installation is using';
 
 $lang['common']['database']='Adatbázis';
 $lang['common']['files']='Fájlok';
@@ -179,10 +179,10 @@ $lang['common']['dataSaved']='Az adatok mentése sikeres volt';
 $lang['common']['uploadMultipleFiles'] = 'Kattincs a \'Tallózás\' gombra, hogy kiválaszd a feltöltendő fájlokat vagy mappákat a számítógépedről. Kattincs a \'Feltöltés\' gombra, ha fel akarsz tölteni fájlokat. Az ablak automatikusan be fog csukódni, ha végzett a feltöltéssel.';
 
 
-$lang['common']['loginToGO']='Kattincs ide, ha be akarsz jelentkezni a Group-Office-ba';
+$lang['common']['loginToGO']='Kattincs ide, ha be akarsz jelentkezni a {product_name}-ba';
 $lang['common']['links']='Linkek';
-$lang['common']['GOwebsite']='Group-Office weboldala';
-$lang['common']['GOisAProductOf']='<i>Group-Office</i> gyártója a <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+$lang['common']['GOwebsite']='{product_name} weboldala';
+$lang['common']['GOisAProductOf']='<i>{product_name}</i> gyártója a <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 
 $lang['common']['yes']='Igen';
 $lang['common']['no']='Nem';
