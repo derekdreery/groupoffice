@@ -3,4 +3,4 @@
 require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('customcss'));
 
 $lang['customcss']['name']='Egne CSS stiler';
-$lang['customcss']['description']='Overstyre Group-Office tema, og for eksempel legge inn din egen logo.';
+$lang['customcss']['description']='Overstyre {product_name} tema, og for eksempel legge inn din egen logo.';
