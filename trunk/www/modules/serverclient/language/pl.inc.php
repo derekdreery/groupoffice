@@ -6,5 +6,5 @@
 require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('serverclient'));
 
 $lang['serverclient']['name']='Serverclient';
-$lang['serverclient']['description']='Automatyczne tworzenie skrzynek pocztowych w Group-Office, którymi można zarządzać przez moduł "Postfixadmin"';
+$lang['serverclient']['description']='Automatyczne tworzenie skrzynek pocztowych w {product_name}, którymi można zarządzać przez moduł "Postfixadmin"';
 $lang['serverclient']['connect_error']='Nie można się połączyć z %s';
