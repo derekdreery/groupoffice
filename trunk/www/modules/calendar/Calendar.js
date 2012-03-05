@@ -1737,13 +1737,10 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		{
 			
 			this.writableCalendarsStore = new GO.data.JsonStore({
-				url: GO.settings.modules.calendar.url+'json.php',
+				url: GO.url("calendar/calendar/store"),
 				baseParams: {
-					'task': 'writable_calendars'
+					'level': GO.permissionLevels.writeAndDelete
 				},
-				root: 'results',
-				totalProperty: 'total',
-				id: 'id',
 				fields:['id','name','user_name'],
 				remoteSort:true,
 				sortInfo: {
@@ -1751,9 +1748,6 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					direction: 'ASC'
 				}
 			});
-			
-			
-
 
 			
 			this.writableViewsStore = new GO.data.JsonStore({
