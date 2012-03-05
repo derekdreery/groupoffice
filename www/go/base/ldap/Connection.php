@@ -30,7 +30,7 @@ class GO_Base_Ldap_Connection{
 			
 			if($this->_tls){
 				GO::debug('LDAP: Starting LDAP TLS');
-				ldap_start_tls($this->Link_ID);
+				ldap_start_tls($this->_link);
 			}
 		}
 		
