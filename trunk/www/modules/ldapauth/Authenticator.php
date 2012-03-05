@@ -252,6 +252,9 @@ class GO_Ldapauth_Authenticator {
 				$userAttributes[$userAttribute] = $value;
 			}
 		}
+		
+		if (!empty(GO::config()->ldap_use_uid_with_email_domain))
+			$userAttributes['email'] = $userAttributes['username'].'@'.GO::config()->ldap_use_uid_with_email_domain;
 
 		return $userAttributes;
 	}
