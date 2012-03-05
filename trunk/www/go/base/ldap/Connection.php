@@ -54,7 +54,7 @@ class GO_Base_Ldap_Connection{
 	 * @return boolean 
 	 */
 	public function bind($bindRdn, $password){
-		GO::debug("LDAP::bind($bindRdn, $password)");
+		GO::debug("LDAP::bind($bindRdn, ***)");
 		
 		$this->connect();
 		
