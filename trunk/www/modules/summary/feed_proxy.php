@@ -35,6 +35,9 @@ if($feed != '' && strpos($feed, 'http') === 0){
 		$xml = curl_exec($ch);
 	}else
 	{
+		if(!GO_Base_Fs_File::checkPathInput($path))
+			die("Invalid request");
+		
 		$xml = @file_get_contents($feed);
 	}
 	
