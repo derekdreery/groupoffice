@@ -45,12 +45,16 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 			
 			$module = new $moduleClass;//call_user_func($moduleClase();
 			
-			$response['results'][] = array(
+			$availableModules[$module->name()] = array(
 					'id'=>$module->id(),
 					'name'=>$module->name(),
 					'description'=>$module->description()
 			);
 		}
+		
+		ksort($availableModules);		
+		
+		$response['results']=array_values($availableModules);
 		
 		$response['total']=count($response['results']);
 		
