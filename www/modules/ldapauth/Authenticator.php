@@ -18,7 +18,7 @@ class GO_Ldapauth_Authenticator {
 			$this->_mapping = array(
 					'enabled' => new GO_Ldapauth_Mapping_Constant('1'),
 					'username' => 'uid',
-					'password' => 'userpassword',
+					//'password' => 'userpassword',
 					'first_name' => 'givenname',
 					'middle_name' => 'middlename',
 					'last_name' => 'sn',
