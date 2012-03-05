@@ -440,9 +440,11 @@ class GO_USERS extends db
 	}*/
 
 	public function get_user_realname($user_id){
+		
+		$user_id = intval($user_id);
 
 		if(!isset($this->cached_realnames[$user_id])){
-			$sql = "SELECT first_name, middle_name, last_name FROM go_users WHERE id=".intval($user_id);
+			$sql = "SELECT first_name, middle_name, last_name FROM go_users WHERE id=".$user_id;
 			$this->query($sql);
 			$record = $this->next_record();
 			
