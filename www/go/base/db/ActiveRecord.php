@@ -1758,7 +1758,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	public function setAttributes($attributes, $format=true){		
 		
-		GO::debug($this->className().'::setAttributes(); '.$this->pk);
+		//GO::debug($this->className().'::setAttributes(); '.$this->pk);
 		
 		if($this->_hasCustomfieldValue($attributes) && $this->customfieldsRecord)
 			$this->customfieldsRecord->setAttributes($attributes, $format);
