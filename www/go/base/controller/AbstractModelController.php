@@ -516,13 +516,16 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			
 			$workflowResponse['approvers'] = array();
 			$workflowResponse['approver_groups'] = array();
+			$workflowResponse['step_id'] = $workflowModel->step_id;
 			
 			if($workflowModel->step_id == '-1'){
 				$workflowResponse['step_name'] = GO::t('complete','workflow');
 				$workflowResponse['is_approver']=false;
+				$workflowResponse['step_all_must_approve']=false;
 			}else{
 				$workflowResponse['step_name'] = $currentStep->name;
-			
+				$workflowResponse['step_all_must_approve']=$currentStep->all_must_approve;
+				
 				$is_approver = GO_Workflow_Model_RequiredApprover::model()->findByPk(array("user_id"=>GO::user()->id,"process_model_id"=>$workflowModel->id,"approved"=>false));
 				
 				if($is_approver)
