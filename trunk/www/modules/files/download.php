@@ -12,11 +12,6 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-//Server and client send the session ID in the URL
-if(isset($_REQUEST['sid']))
-{
-    session_id($_REQUEST['sid']);
-}
 require_once("../../Group-Office.php");
 
 require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');

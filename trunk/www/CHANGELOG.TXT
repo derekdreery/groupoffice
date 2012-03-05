@@ -11,6 +11,7 @@
 - Swift Mailer upgraded to 4.1.5
 - Project tasks have a relation now and have a percentage complete field
 - Photo support in sync.
+- Sync multiple calendars
 - Billing module can create MS word and open-office invoices, quotes and orders.
 - Billing module can handle purchase orders and stock.
 

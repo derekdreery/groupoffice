@@ -17,15 +17,16 @@ Module icons
 
 karakter encoding: koi8-r
 
+TICKET GROUPS
 
-Wilmar:
-- Sync multiple calendars
-- foto sync z-push
+Filesearch batch edit
+Document conversion
+User import
+2 hour CMS ic
 
 
 
 *** Lage prio:
-Delete in lijst op dezelfde plek terugscrollen.
 LIST-STATUS gebruiken bij email
 TLS email
 Full date column
