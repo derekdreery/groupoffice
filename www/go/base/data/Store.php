@@ -196,6 +196,20 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 
     return $this->response;
   }
+	
+	private $_extraSortColumnNames=array();
+	private $_extraSortDirections=array();
+	
+	/**
+	 * Add additional sort columns that will always be appended.
+	 * 
+	 * @param array $columnNames
+	 * @param array $directions 
+	 */
+	public function addExtraSortColumns(array $columnNames, array $directions){
+		$this->_extraSortColumnNames=$columnNames;
+		$this->_extraSortDirections=$directions;
+	}
   
   
 
@@ -222,7 +236,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 		
 		if(isset($requestParams['groupDir']))
 			array_unshift ($dir, $requestParams['groupDir']);
-
+		
 		$sort = $this->getColumnModel()->getSortColumns($sort);
 		
 		$sortCount = count($sort);
@@ -230,6 +244,9 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 		for($i=0;$i<$sortCount-$dirCount;$i++){
 			$dir[]=$dir[0];
 		}
+		
+		$sort = array_merge($sort, $this->_extraSortColumnNames);
+		$dir = array_merge($dir, $this->_extraSortDirections);
 		
 //		for($i=0;$i<count($sort);$i++){
 //			$sort[$i] = $this->getColumnModel()->getSortColumn($sort[$i]);
