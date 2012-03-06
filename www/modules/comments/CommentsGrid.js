@@ -101,7 +101,11 @@ GO.comments.CommentsGrid = function(config){
 	this.on('rowdblclick', function(grid, rowIndex){		
 		if(this.writePermission)
 		{
-			var record = grid.getStore().getAt(rowIndex);			
+			var record = grid.getStore().getAt(rowIndex);
+			
+			if(!GO.comments.commentDialog)
+				GO.comments.commentDialog = new GO.comments.CommentDialog();
+			
 			GO.comments.commentDialog.show(record.data.id);
 		}
 	}, this);
