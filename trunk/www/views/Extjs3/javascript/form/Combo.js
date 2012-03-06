@@ -46,6 +46,7 @@ GO.form.ComboBox = Ext.extend(Ext.form.ComboBox, {
 	setRemoteText : function(text)
 	{
 		var r = this.findRecord(this.valueField, this.value);
+
 		if(!r)
 		{
 			var comboRecord = Ext.data.Record.create([{
@@ -61,8 +62,12 @@ GO.form.ComboBox = Ext.extend(Ext.form.ComboBox, {
 			var currentRecord = new comboRecord(recordData);
 			this.store.add(currentRecord);
             
-			this.setValue(this.value);
+			
+		}else
+		{
+			r.set(this.displayField,text);
 		}
+		this.setValue(this.value);
 	},
 
 	/*
