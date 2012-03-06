@@ -2,19 +2,12 @@
 //Uncomment this line in new translations!
 require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('common'));
 
-$lang['common']['about']='Verzió: %s
-
-Copyright (c) 2003-%s, Intermesh
-Minden jog fenntartva.
-
-Ha támogatásra van szüksége, kérdezze az Administratort:
-%s
-
-Több információért kérjük, látogasd meg:
-http://www.{product_name}.com
-
-A {product_name}-t az Intermesh készítette. Több információért kérjük, látogassa meg:
-http://www.intermesh.nl/en/';
+$lang['common']['about']='Verzió: {version}<br />
+<br />
+Copyright (c) 2003-{current_year}, {company_name}<br />
+Minden jog fenntartva.<br />
+<br />
+';
 
 $lang['common']['totals']='Összes';
 $lang['common']['printPage']='Oldal %s az %s-ból';

@@ -2,16 +2,12 @@
 
 
 $l['extjs_lang']='th'; 
-$l['about']='เวอร์ชั่น: %s
-Copyright (c) 2003-%s, Intermesh
-All rights reserved.
-This program is protected by copyright law and the {product_name} license.
-For support questions contact your webmaster:
-%s
-For more information about {product_name} visit:
-http://www.{product_name}.com
-{product_name} is created by Intermesh. For more information about Intermesh visit:;
-http://www.intermesh.nl/en/';
+$l['about']='เวอร์ชั่น: {version}<br />
+<br />
+Copyright (c) 2003-{current_year}, {company_name}<br />
+All rights reserved.<br />
+This program is protected by copyright law and the {product_name} license.<br />
+';
 $l['htmldirection']= 'ltr';
 $l['quotaExceeded']='พื้นที่ฐานข้อมูลไม่เพียงพอ. กรุณาลบไฟล์ หรือ ติดต่อผู้ดูแลระบบเพื่อเพิ่มพื้นที่ฐานข้อมูล';
 $l['errorsInForm'] = 'เกิดข้อผิดพลาดในการทำรายการ. กรุณาตรวจสอบความถูกต้องและลองอีกครั้ง.';

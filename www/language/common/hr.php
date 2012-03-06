@@ -1,14 +1,10 @@
 <?php
-$l['about']='Verzija: %s
-Autorska prava (c) 2003-%s, Intermesh
-Sva prava pridržana.
-Ovaj program je zaštićen zakonom o autorskim pravim i {product_name} licencom.
-Za pitanja oko podrške kontaktirajte vašeg administratora:
-%s
-Za više informacija o {product_name} posjetite:
-http://www.{product_name}.com
-{product_name} je kreiran od strane Intermesh. Za više informacija o Intermesh posjetite:;
-http://www.intermesh.nl/en/';
+$l['about']='Verzija: {version}<br />
+<br />
+Autorska prava (c) 2003-{current_year}, {company_name}<br />
+Sva prava pridržana.<br />
+Ovaj program je zaštićen zakonom o autorskim pravim i {product_name} licencom.<br />
+';
 $l['totals']='Ukupno';
 $l['printPage']='Stranica %s od %s';
 $l['htmldirection']= 'ltr';

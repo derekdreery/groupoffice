@@ -2,16 +2,11 @@
 
 
 $l['extjs_lang']='no_NB'; 
-$l['about']='Versjon: %s
-Copyright (c) 2003-%s, Intermesh
-Alle rettigheter forbeholdt.
-Dette programmet er beskyttet av opphavsretten og en egen {product_name} lisens.
-For brukerstøtte kontakt installasjonsansvarlig:
-%s
-Besøk {product_name} for mer informasjon på:
-http://www.{product_name}.com
-{product_name} er laget av Intermesh. Du finner mer informasjon om Intermesh på:;
-http://www.intermesh.nl/en/';
+$l['about']='Versjon: {version}<br />
+Copyright (c) 2003-{current_year}, {company_name}<br />
+Alle rettigheter forbeholdt.<br />
+Dette programmet er beskyttet av opphavsretten og en egen {product_name} lisens.<br />
+';
 $l['totals']='Totaler';
 $l['printPage']='Side %s av %s';
 $l['htmldirection']= 'ltr';

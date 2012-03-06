@@ -3,20 +3,12 @@
 
 require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('common'));
 $lang['common']['extjs_lang']='th'; 
-$lang['common']['about']='เวอร์ชั่น: %s
-
-Copyright (c) 2003-%s, Intermesh
-All rights reserved.
-This program is protected by copyright law and the {product_name} license.
-
-For support questions contact your webmaster:
-%s
-
-For more information about {product_name} visit:
-http://www.{product_name}.com
-
-{product_name} is created by Intermesh. For more information about Intermesh visit:
-http://www.intermesh.nl/en/';
+$lang['common']['about']='เวอร์ชั่น: {version}<br />
+<br />
+Copyright (c) 2003-{current_year}, {company_name}<br />
+All rights reserved.<br />
+This program is protected by copyright law and the {product_name} license.<br />
+';
 
 $lang['common']['htmldirection']= 'ltr';
 

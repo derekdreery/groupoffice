@@ -281,16 +281,11 @@ $l["captchaEmpty"]='Sicherheitscode ist leer';
 $l["multiselectComboMaxItemsReachedWarning"]='Sie können maximal {max} Einträge auswählen';
 $l["toScreen"]='Auf den Bildschirm';
 
-$l['about']='Version: %s
-Copyright (c) 2003-%s, Intermesh
-All rights reserved.
-This program is protected by copyright law and the {product_name} license.
-For support questions contact your webmaster:
-%s
-For more information about {product_name} visit:
-http://www.{product_name}.com
-{product_name} is created by Intermesh. For more information about Intermesh visit:;
-http://www.intermesh.nl/en/';
+$l['about']='Version: {version}<br />
+Copyright (c) 2003-{current_year}, {product_name}<br />
+All rights reserved.<br />
+This program is protected by copyright law and the {product_name} license.<br />
+';
 $l['totals']='Gesamt';
 $l['printPage']='Seite %s von %s';
 $l['htmldirection']='ltr';

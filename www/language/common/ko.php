@@ -288,16 +288,11 @@ $l["searchQueryName"]= '질의 이름 검색';
 $l["enterSearchQueryName"]= 'Enter search query name';
 $l["strUsersInGroup"]= 'Users in group';
 
-$l['about']='버전: %s
-Copyright (c) 2003-%s, Intermesh
-All rights reserved.
-This program is protected by copyright law and the {product_name} license.
-For support questions contact your webmaster:
-%s
-For more information about {product_name} visit:
-http://www.{product_name}.com
-{product_name} is created by Intermesh. For more information about Intermesh visit:;
-http://www.intermesh.nl/en/';
+$l['about']='버전: {version}<br />
+Copyright (c) 2003-{current_year}, {company_name}<br />
+All rights reserved.<br />
+This program is protected by copyright law and the {product_name} license.<br />
+';
 $l['totals']='전체';
 $l['printPage']='페이지 %s / %s';
 $l['htmldirection']= 'ltr';

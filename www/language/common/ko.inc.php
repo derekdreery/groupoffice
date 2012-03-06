@@ -2,20 +2,12 @@
 //Uncomment this line in new translations!
 require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('common'));
 
-$lang['common']['about']='버전: %s
-
-Copyright (c) 2003-%s, Intermesh
-All rights reserved.
-This program is protected by copyright law and the {product_name} license.
-
-For support questions contact your webmaster:
-%s
-
-For more information about {product_name} visit:
-http://www.{product_name}.com
-
-{product_name} is created by Intermesh. For more information about Intermesh visit:
-http://www.intermesh.nl/en/';
+$lang['common']['about']='버전: {version}<br />
+<br />
+Copyright (c) 2003-{current_year}, {company_name}<br />
+All rights reserved.<br />
+This program is protected by copyright law and the {product_name} license.<br />
+';
 
 $lang['common']['totals']='전체';
 $lang['common']['printPage']='페이지 %s / %s';

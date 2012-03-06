@@ -2,20 +2,12 @@
 //Uncomment this line in new translations!
 require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('common'));
 
-$lang['common']['about']='Versie: %s
-
-Copyright (c) 2003-%s, Intermesh
-Alle rechten voorbehouden
-Dit programma is beschermd door de auteurswet en de {product_name} licentie.
-
-Neem voor ondersteuning contact op met de helpdesk:
-%s
-
-Voor meer informatie over {product_name} ga naar:
-http://www.{product_name}.com
-
-{product_name} is gemaakt door Intermesh. Voor meer informatie over Intermesh ga naar:
-http://www.intermesh.nl/';
+$lang['common']['about']='Versie: {version}<br />
+<br />
+Copyright (c) 2003-{current_year}, {company_name}<br />
+Alle rechten voorbehouden<br />
+Dit programma is beschermd door de auteurswet en de {product_name} licentie.<br />
+';
 
 $lang['common']['totals']='Totalen';
 $lang['common']['printPage']='Pagina %s van %s';
