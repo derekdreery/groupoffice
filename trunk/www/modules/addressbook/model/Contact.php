@@ -634,4 +634,13 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		return GO_Addressbook_Model_Contact::model()->find(GO_Base_Db_FindParams::newInstance()->single()->criteria($criteria));		
 	}
 	
+	protected function afterMergeWith(GO_Base_Db_ActiveRecord $model) {
+		
+		//this contact becomes the new user contact
+		if($this->go_user_id>0)
+			$model->go_user_id=0;
+		
+		return parent::afterMergeWith($model);
+	}
+	
 }
