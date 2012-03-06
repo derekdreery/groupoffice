@@ -115,7 +115,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			
 		}catch(GO_Base_Exception_Validation $e){
 			$response['success']=false;
-			$response['feedback']=nl2br($e->getMessage());			
+			//can't use <br /> tags in response because this goes wrong with the extjs fileupload hack with an iframe.
+			$response['feedback']=$e->getMessage();			
 			$response['validationErrors']=$model->getValidationErrors();
 		}	
 
