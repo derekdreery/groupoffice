@@ -1,16 +1,12 @@
 <?php
 
 
-$l['about']= 'Version: %s
-Copyright (c) 2003-%s, Intermesh
-All rights reserved.
-Det här programmet omfattas av copyright-lagar och {product_name}-licensen.
-För support-frågor, kontakta din webmaster:
-%s
-För mer information om {product_name} besök:
-http://www.{product_name}.com
-{product_name} tillverkas av Intermesh. För mer information om Intermesh besök:;
-http://www.intermesh.nl/en/';
+$l['about']= 'Version: {version}<br />
+<br />
+Copyright (c) 2003-{current_year}, {company_name}<br />
+All rights reserved.<br />
+Det här programmet omfattas av copyright-lagar och {product_name}-licensen.<br />
+';
 $l['totals']='Totalt';
 $l['printPage']='Sida %s av %s';
 $l['htmldirection']= 'ltr';

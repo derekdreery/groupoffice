@@ -266,16 +266,11 @@ $l["debugModeDetected"]="Atenção! Modo de depuração habilitado";
 $l["debugModeWarning"]="Utilize \$config['debug']=true; apenas para desenvolvimento e resolução de problemas. Isto reduz o desempenho no {product_name}.";
 $l["noItemSelectedWarning"]='Selecione pelo menos um item por favor.';
 
-$l['about']='Versão: %s
-Copyright (c) 2003-%s, Intermesh
-Todos os direitos reservados.
-Este programa é protegido por leis de copyright e pela licença do {product_name}.
-Para suporte entre em contato com o seu webmaster:
-%s
-Para mais informações sobre o {product_name} visite:
-http://www.{product_name}.com
-O {product_name} é desenvolvido pela Intermesh. Para mais informações sobre a Intermesh visite:;
-http://www.intermesh.nl/en/';
+$l['about']='Versão: {version}<br />
+Copyright (c) 2003-{current_year}, {company_name}<br />
+Todos os direitos reservados.<br />
+Este programa é protegido por leis de copyright e pela licença do {product_name}.<br />
+';
 $l['totals']='Totais';
 $l['printPage']='Página %s of %s';
 $l['htmldirection']= 'ltr';

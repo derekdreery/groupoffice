@@ -1,16 +1,11 @@
 <?php
 
 
-$l['about']='Verze: %s
-Copyright (c) 2003-%s, Intermesh
-Všechna práva vyhrazena.
-Tento program je chráněn autorským zákonem a {product_name} licencí.
-Pro Vaše dotazy kontaktujte správce systému:
-%s
-Pro více informací o {product_name} navštivte:
-http://www.{product_name}.com
-{product_name} je vytvořen společností Intermesh. Pro více informací navštivte:;
-http://www.intermesh.nl/en';
+$l['about']='Verze: {version}<br />
+Copyright (c) 2003-{current_year}, {company_name}<br />
+Všechna práva vyhrazena.<br />
+Tento program je chráněn autorským zákonem a {product_name} licencí.<br />
+';
 $l['totals']='Součty';
 $l['printPage']='Strana %s z %s';
 $l['htmldirection']= 'ltr';

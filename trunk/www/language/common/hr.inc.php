@@ -7,20 +7,12 @@
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_base_language_file('common'));
 
-$lang['common']['about']='Verzija: %s
-
-Autorska prava (c) 2003-%s, Intermesh
-Sva prava pridržana.
-Ovaj program je zaštićen zakonom o autorskim pravim i {product_name} licencom.
-
-Za pitanja oko podrške kontaktirajte vašeg administratora:
-%s
-
-Za više informacija o {product_name} posjetite:
-http://www.{product_name}.com
-
-{product_name} je kreiran od strane Intermesh. Za više informacija o Intermesh posjetite:
-http://www.intermesh.nl/en/';
+$lang['common']['about']='Verzija: {version}<br />
+<br />
+Autorska prava (c) 2003-{current_year}, {company_name}<br />
+Sva prava pridržana.<br />
+Ovaj program je zaštićen zakonom o autorskim pravim i {product_name} licencom.<br />
+';
 
 $lang['common']['totals']='Ukupno';
 $lang['common']['printPage']='Stranica %s od %s';

@@ -1,9 +1,11 @@
 <?php
 
 
-$l['about']='Versie: %s
-Copyright (c) 2003-%s, {product_name}
-Alle rechten voorbehouden';
+$l['about']='Versie: {version}<br />
+Copyright (c) 2003-{current_year}, {company_name}<br />
+Alle rechten voorbehouden<br />
+Dit programma is beschermd door de auteurswet en de {product_name} licentie.<br />
+';
 
 $l['totals']='Totalen';
 $l['printPage']='Pagina %s van %s';

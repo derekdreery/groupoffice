@@ -220,16 +220,12 @@ $l["items"]='nesneler';
 $l["on"]='Açık';
 $l["off"]='Kapalı';
 
-$l['about']='Version: %s
-Copyright (c) 2003-%s, Intermesh
-All rights reserved.
-This program is protected by copyright law and the {product_name} license.
-For support questions contact your webmaster:
-%s
-For more information about {product_name} visit:
-http://www.{product_name}.com
-{product_name} is created by Intermesh. For more information about Intermesh visit:;
-http://www.intermesh.nl/en/';
+$l['about']='Version: {version}<br />
+<br />
+Copyright (c) 2003-{current_year}, {company_name}<br />
+All rights reserved.<br />
+This program is protected by copyright law and the {product_name} license.<br />
+';
 $l['htmldirection']= 'ltr';
 $l['quotaExceeded']='Disk içerinde yeterince boş yeriniz artık yok. Lütfen bazı dosyalarınızı siliniz veya Servis Sağlayıcınızdan kotanızı arttırmasını isteyiniz.';
 $l['errorsInForm'] = 'Form içersinde hatalar vardı. Düzeltip tekrar deneyin lütfen.';

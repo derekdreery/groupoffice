@@ -2,20 +2,12 @@
 //Uncomment this line in new translations!
 require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('common'));
 
-$lang['common']['about']='Versão: %s
-
-Copyright (c) 2003-%s, Intermesh
-Todos os direitos reservados.
-Este programa é protegido por leis de copyright e pela licença do {product_name}.
-
-Para suporte entre em contato com o seu webmaster:
-%s
-
-Para mais informações sobre o {product_name} visite:
-http://www.{product_name}.com
-
-O {product_name} é desenvolvido pela Intermesh. Para mais informações sobre a Intermesh visite:
-http://www.intermesh.nl/en/';
+$lang['common']['about']='Versão: {version}<br />
+<br />
+Copyright (c) 2003-{current_year}, {company_name}<br />
+Todos os direitos reservados.<br />
+Este programa é protegido por leis de copyright e pela licença do {product_name}.<br />
+';
 
 $lang['common']['totals']='Totais';
 $lang['common']['printPage']='Página %s of %s';

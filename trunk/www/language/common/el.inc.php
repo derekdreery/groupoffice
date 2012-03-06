@@ -2,20 +2,11 @@
 /* Translator for the Greek Language: Konstantinos Georgakopoulos (kgeorga@uom.gr)*/
 require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('common'));
 
-$lang['common']['about']='Έκδοση: %s
-
-Copyright (c) 2003-%s, Intermesh
-All rights reserved.
-Το πρόγραμμα αυτό προστατεύεται από το νόμο περί πνευματικών δικαιωμάτων και την άδεια λογισμικού {product_name}.
-
-Για ερωτήσεις τεχνικής υποστήριξης επικοινωνήστε με τον διαχειριστή του ιστοτόπου:
-%s
-
-Για περισσότερες πληροφορίες σχετικά με το {product_name} επισκευθείτε την διεύθυνση:
-http://www.{product_name}.com
-
-Το {product_name} δημιουργήθηκε από την εταιρεία Intermesh. Για περισσότερες πληροφορίες σχετικά με την Intermesh επισκευθείτε την διεύθυνση:
-http://www.intermesh.nl/en/';
+$lang['common']['about']='Έκδοση: {version}<br />
+<br />
+Copyright (c) 2003-{current_year}, {company_name}<br />
+All rights reserved.<br />
+Το πρόγραμμα αυτό προστατεύεται από το νόμο περί πνευματικών δικαιωμάτων και την άδεια λογισμικού {product_name}.<br />';
 
 $lang['common']['htmldirection']= 'ltr';
 

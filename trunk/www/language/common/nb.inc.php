@@ -3,20 +3,12 @@
 require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('common'));
 $lang['common']['extjs_lang']='no_NB'; 
 
-$lang['common']['about']='Versjon: %s
-
-Copyright (c) 2003-%s, Intermesh
-Alle rettigheter forbeholdt.
-Dette programmet er beskyttet av opphavsretten og en egen {product_name} lisens.
-
-For brukerstøtte kontakt installasjonsansvarlig:
-%s
-
-Besøk {product_name} for mer informasjon på:
-http://www.{product_name}.com
-
-{product_name} er laget av Intermesh. Du finner mer informasjon om Intermesh på:
-http://www.intermesh.nl/en/';
+$lang['common']['about']='Versjon: {version}<br />
+<br />
+Copyright (c) 2003-{current_year}, {company_name}<br />
+Alle rettigheter forbeholdt.<br />
+Dette programmet er beskyttet av opphavsretten og en egen {product_name} lisens.<br />
+';
 
 $lang['common']['totals']='Totaler';
 $lang['common']['printPage']='Side %s av %s';

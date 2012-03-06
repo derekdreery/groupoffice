@@ -225,15 +225,10 @@ $l["on"]='Be';
 $l["off"]='Ki';
 $l["keyword"]='Kulcsszó';
 
-$l['about']='Verzió: %s
-Copyright (c) 2003-%s, Intermesh
-Minden jog fenntartva.
-Ha támogatásra van szüksége, kérdezze az Administratort:
-%s
-Több információért kérjük, látogasd meg:
-http://www.{product_name}.com
-A {product_name}-t az Intermesh készítette. Több információért kérjük, látogassa meg:;
-http://www.intermesh.nl/en/';
+$l['about']='Verzió: {version}<br />
+Copyright (c) 2003-{current_year}, {company_name}<br />
+Minden jog fenntartva.<br />
+';
 $l['totals']='Összes';
 $l['printPage']='Oldal %s az %s-ból';
 $l['htmldirection']= 'ltr';

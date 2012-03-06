@@ -282,16 +282,11 @@ $l["portrait"]='Portrait';
 $l["landscape"]='Paysage';
 $l["strName2"]= 'Nom 2';
 $l["selectAll"]='Tout sélectionner';
-$l['about']='Version: %s
-Copyright (c) 2003-%s, Intermesh
-Tous droits réservés.
-Ce programme est protégé par la loi sur le copyright et par la licence {product_name}.
-Pour le support technique contacter votre administrateur:
-%s
-Pour plus d\'informations sur {product_name} visitez:
-http://www.{product_name}.com
-{product_name} est une solution créée par Intermesh. Pour plus d\'informations visitez :;
-http://www.intermesh.nl/en/';
+$l['about']='Version: {version}<br />
+Copyright (c) 2003-{current_year}, {company_name}<br />
+Tous droits réservés.<br />
+Ce programme est protégé par la loi sur le copyright et par la licence {product_name}.<br />
+';
 $l['totals']='Total';
 $l['printPage']='Page %s sur %s';
 $l['htmldirection']= 'ltr';

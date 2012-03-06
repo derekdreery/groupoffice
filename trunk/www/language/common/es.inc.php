@@ -152,7 +152,7 @@ $lang['common']['total']='Total';
 $lang['common']['loadingModules']='Cargando modulos';
 $lang['common']['loadingModule'] = 'Cargando modulo';
 
-$lang['common']['about']='Versión: %s';
+$lang['common']['about']='Versión: {version}';
 $lang['common']['totals']='Totales';
 $lang['common']['printPage']='Página %s de %s';
 $lang['common']['quotaExceeded']='No tiene mas espacio en el disco. Por favor borre algunos archivos o contacte a su proveedor para aumentar su límite';
