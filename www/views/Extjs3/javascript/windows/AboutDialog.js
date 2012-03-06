@@ -33,18 +33,34 @@ GO.dialog.AboutDialog = function(config){
 	
 	Ext.apply(this, config);
 
+	if (GO.settings.config.product_name=='Group-Office')
+		var aboutText = GO.lang['about'].replace('{company_name}', 'Intermesh B.V.');
+	else
+		var aboutText = GO.lang['about'].replace('{company_name}', '{product_name}');
+
 	GO.dialog.AboutDialog.superclass.constructor.call(this, {
 		modal:false,
 		layout:'fit',
-		height:500,
-		width:520,
+		height: 460,
+		width: 480,
 		resizable: false,
 		closeAction:'hide',
 		title:GO.lang.strAbout.replace('{product_name}', GO.settings.config.product_name),
 		items: new Ext.Panel({
 			border:false,
-			layout:'fit',
-			autoLoad:'about.php',
+			padding: '10px',
+			items: [
+				new GO.LogoComponent(),
+				new GO.form.PlainField({
+				hideLabel: true,
+				value: aboutText
+					.replace('{version}', GO.settings.config.product_version)
+					.replace('{current_year}', new Date().getFullYear())
+					.replace('{product_name}', GO.settings.config.product_name)
+					.replace('{product_name}', GO.settings.config.product_name)
+				})
+			],
+//			autoLoad:'about.php',
 			autoScroll:true
 			}),		
 		buttons: [
