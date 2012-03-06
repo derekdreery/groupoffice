@@ -231,7 +231,8 @@ Ext.extend(GO.files.FolderPropertiesDialog, GO.Window, {
 		form.findField('name').setDisabled(is_someones_home_dir || readonly || permission_level<GO.permissionLevels.write);
 		form.findField('share').setDisabled(is_someones_home_dir || readonly || permission_level<GO.permissionLevels.manage);
 		form.findField('apply_state').setDisabled(permission_level<GO.permissionLevels.manage && !GO.settings.has_admin_permission);
-		this.readPermissionsTab.setDisabled(readonly);
+		if(!this.readPermissionsTab.disabled)
+			this.readPermissionsTab.setDisabled(!is_someones_home_dir && readonly);
 	},
 	
 	save : function(hide)

@@ -83,3 +83,16 @@ $updates["201202061513"][]="CREATE TABLE IF NOT EXISTS `fs_versions` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;";
 
 $updates["201202071144"][]="ALTER TABLE `fs_files` DROP `status_id`";
+
+
+$updates["201203061115"][]="ALTER TABLE `fs_folders` CHANGE `readonly` `readonly` BOOLEAN NOT NULL DEFAULT '0'";
+$updates["201203061115"][]="UPDATE fs_folders SET readonly=0 where readonly=1";
+$updates["201203061115"][]="UPDATE fs_folders SET readonly=1 where readonly=2";
+
+$updates["201203061115"][]="ALTER TABLE `fs_folders` CHANGE `thumbs` `thumbs` BOOLEAN NOT NULL DEFAULT '0'";
+$updates["201203061115"][]="UPDATE fs_folders SET thumbs=0 where thumbs=1";
+$updates["201203061115"][]="UPDATE fs_folders SET thumbs=1 where thumbs=2";
+
+$updates["201203061115"][]="ALTER TABLE `fs_folders` CHANGE `visible` `visible` BOOLEAN NOT NULL DEFAULT '0'";
+$updates["201203061115"][]="UPDATE fs_folders SET visible=0 where visible=1";
+$updates["201203061115"][]="UPDATE fs_folders SET visible=1 where visible=2";
