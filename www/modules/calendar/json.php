@@ -514,10 +514,11 @@ try {
 				$color = $cal->getCalendarColor($cal_id, $GO_SECURITY->user_id);
 				
 				if(!$color){
+					if(!isset($default_colors[$i]))
+						$i = 0;
+					
 					$color = $default_colors[$i];
-					$i++;
-					if($i >= $default_colors_count)
-					$i = 0;
+					$i++;					
 				}
 
 				$default_bg[$cal_id] = $color;
