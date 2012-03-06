@@ -461,6 +461,9 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		}
 
 		if ($fileStart >= 0) {
+			
+			$store->resetResults();
+			
 			$store->getColumnModel()->formatColumn('type', '$model->type',array(),'extension');
 			$store->getColumnModel()->formatColumn('locked', '$model->isLocked()');
 			$store->getColumnModel()->formatColumn('locked_user_id', '$model->locked_user_id');

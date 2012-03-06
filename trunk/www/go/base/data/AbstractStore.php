@@ -63,6 +63,13 @@ abstract class GO_Base_Data_AbstractStore {
   }
 	
 	/**
+	 * Reset the store results. 
+	 */
+	public function resetResults(){
+		$this->response['results']=array();
+	}
+	
+	/**
 	 * Returns the column model
 	 * 
 	 * @return GO_Base_Data_ColumnModel 
