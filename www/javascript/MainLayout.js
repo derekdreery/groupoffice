@@ -402,7 +402,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	    			iconCls:'btn-report-bug',
 	    			text:GO.lang.strReportBug,
 	    			handler:function(){
-	    				var win = window.open('https://sourceforge.net/tracker2/?func=add&group_id=76359&atid=547651');
+	    				var win = window.open('http://sourceforge.net/tracker/?group_id=76359&atid=547651');
 	    				win.focus();			
 	    			},
 	    			scope:this
