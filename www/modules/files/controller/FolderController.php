@@ -182,19 +182,21 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 	protected function beforeSubmit(&$response, &$model, &$params) {
 
-		if (isset($params['share']) && $model->acl_id == 0) {
-			$model->visible = 1;
+		if(!$model->readonly && !$model->isSomeonesHomeFolder()){
+			if (isset($params['share']) && $model->acl_id == 0) {
+				$model->visible = 1;
 
-			$acl = new GO_Base_Model_Acl();
-			$acl->description = $model->tableName() . '.' . $model->aclField();
-			$acl->user_id = GO::user() ? GO::user()->id : 1;
-			$acl->save();
-			$model->acl_id = $response['acl_id'] = $acl->id;
-		}
+				$acl = new GO_Base_Model_Acl();
+				$acl->description = $model->tableName() . '.' . $model->aclField();
+				$acl->user_id = GO::user() ? GO::user()->id : 1;
+				$acl->save();
+				$model->acl_id = $response['acl_id'] = $acl->id;
+			}
 
-		if (!isset($params['share']) && $model->acl_id > 0) {
-			$model->acl->delete();
-			$model->acl_id = $response['acl_id'] = 0;
+			if (!isset($params['share']) && $model->acl_id > 0) {
+				$model->acl->delete();
+				$model->acl_id = $response['acl_id'] = 0;
+			}
 		}
 
 		return parent::beforeSubmit($response, $model, $params);

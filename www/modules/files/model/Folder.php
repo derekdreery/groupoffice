@@ -295,6 +295,9 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * @return boolean 
 	 */
 	public function isSomeonesHomeFolder(){
+		if($this->isNew)
+			return false;
+		
 		return $this->parent->name=='users' && $this->parent->parent_id==0;
 	}
 
