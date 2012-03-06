@@ -99,8 +99,11 @@ class GO_Base_Util_String {
 		}else{
 			
 			//Some mail clients send a different charset while the string is already utf-8 :(
-			if(function_exists('mb_check_encoding') && mb_check_encoding($str,'UTF-8'))
-				return $str;
+			//
+			//This went wrong with UTF-7
+			//
+//			if(function_exists('mb_check_encoding') && mb_check_encoding($str,'UTF-8'))
+//				return $str;
 
 			if(empty($from_charset)){
 
@@ -115,7 +118,6 @@ class GO_Base_Util_String {
 			if(substr($from_charset,0,5)=='x-mac')
 				return GO_Base_Util_Charset_Xmac::toUtf8($str, $from_charset);
 			
-
 			return iconv($from_charset, 'UTF-8//IGNORE', $str);
 		}
 	}
