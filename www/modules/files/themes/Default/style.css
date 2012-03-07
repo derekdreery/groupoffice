@@ -178,3 +178,11 @@ cursor:pointer;
 	background-position: right;
 	float:left;
 }
+
+
+.fs-thumb-locked{
+	background: url(../../../../views/Extjs3/themes/Default/images/16x16/lock.png) no-repeat;
+	background-position: 80px 84px;
+	height:100px;
+	width:100px;
+}

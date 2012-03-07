@@ -25,8 +25,14 @@ GO.files.ThumbsPanel = Ext.extend(Ext.Panel, {
 		
     var tpl = new Ext.XTemplate('<tpl for=".">',
             '<div class="fs-thumb-wrap" id="{name}">',
-		    '<div class="fs-thumb" style="background-image:url({thumb_url});">&nbsp;</div>',
-		    '<span class="x-editable">{shortName}</span></div>',
+						
+				
+		    '<div class="fs-thumb" style="background-image:url({thumb_url});">',
+				'<tpl if="locked_user_id&gt;0"><div class="fs-thumb-locked"></tpl>',
+				'&nbsp;',
+				'<tpl if="locked_user_id&gt;0"></div></tpl>',
+				'</div>',
+		    '<span class="x-editable">{shortName}</span></div>',				
         '</tpl>',
         '<div class="x-clear"></div>');
      
