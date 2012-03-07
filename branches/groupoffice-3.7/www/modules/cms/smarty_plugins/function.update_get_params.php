@@ -8,14 +8,13 @@
  * If you have questions write an e-mail to info@intermesh.nl
  *
  * @copyright Copyright Intermesh
- * @author Wilmar van Beusekom <wilmar@intermesh.nl>
+ * @author WilmarVB <wilmar@intermesh.nl>
  * 
  * This is part of the file filtering triplet smarty functions:
  * update_get_params, child_categories and sort_years. The first creates file
  * filtering hyperlinks for anchor tags in the filter menu's. The other two tags
  * search through the database to show the available category filters and year
- * filters, respectively. See the second duurzaamgebouw.nl template's news page
- * for an example.
+ * filters, respectively.
  */
 
 function smarty_function_update_get_params($params, &$smarty)
