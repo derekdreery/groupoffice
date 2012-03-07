@@ -48,7 +48,7 @@ class GO_Base_Component_MultiSelectGrid {
 			GO::config()->save_setting('ms_' . $this->_requestParamName, implode(',', $this->selectedIds), GO::session()->values['user_id']);
 		} else {
 			$this->selectedIds = GO::config()->get_setting('ms_' . $this->_requestParamName, GO::session()->values['user_id']);
-			$this->selectedIds = $this->selectedIds!==false ? explode(',', $this->selectedIds) : array();
+			$this->selectedIds = $this->selectedIds!==false && $this->selectedIds !=""  ? explode(',', $this->selectedIds) : array();
 		}
 	}
 	
