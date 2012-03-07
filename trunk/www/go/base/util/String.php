@@ -925,8 +925,7 @@ class GO_Base_Util_String {
 	 * @throws Exception 
 	 */
 	public static function detectXSS($string) {
-		$contains_xss = FALSE;
-
+		
 		if (!is_string($string)) {
 			throw new Exception(__('Passed parameter is not a string.'));
 		}
@@ -952,7 +951,8 @@ class GO_Base_Util_String {
 // Set the patterns we'll test against
 		$patterns = array(
 // Match any attribute starting with "on" or xmlns
-				'#(<[^>]+[\x00-\x20\"\'\/])(on|xmlns)[^>]*>?#iUu',
+				//'#(<[^>]+[\x00-\x20\"\'\/])(on|xmlns)[^>]*>?#iUu',
+				'#(<[^>]+[\s])(on|xmlns)[^>]*>?#iUu',
 // Match javascript:, livescript:, vbscript: and mocha: protocols
 				'!((java|live|vb)script|mocha):(\w)*!iUu',
 				'#-moz-binding[\x00-\x20]*:#u',
@@ -966,7 +966,7 @@ class GO_Base_Util_String {
 // Test both the original string and clean string
 			if (preg_match($pattern, $string, $matches) || preg_match($pattern, $orig, $matches)){
 				GO::debug("XSS pattern matched: ".$pattern);
-				GO::debug($matches);
+				//GO::debug($matches);
 				return true;			
 			}
 		}
