@@ -189,3 +189,6 @@ $l['invitation_update']='Updated invitation';
 $l['cancellation']='Cancellation';
 $l['non_selected'] = 'in non-selected calendar';
 $l['linkIfCalendarNotSupported']='Only use the links below if your mail client does not support calendaring functions.';
+$l['eventAccepted']='You have accepted the event.';
+$l['eventScheduledIn']='The event has been scheduled in your calendar named %s.';
+$l['eventDeclined']="You have declined the event.";
