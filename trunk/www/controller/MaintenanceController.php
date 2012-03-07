@@ -24,6 +24,15 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		return array('*');
 	}
 	
+	protected function actionGetNewAcl($params){
+		$acl = new GO_Base_Model_Acl();
+		$acl->user_id=isset($params['user_id']) ? $params['user_id'] : GO::user()->id;
+		$acl->description=$params['description'];
+		$acl->save();
+		
+		echo $acl->id;
+	}
+	
 	protected function actionRemoveDuplicates($params){
 		$checkModels = array(
 				"GO_Calendar_Model_Event"=>array('name', 'start_time', 'end_time', 'calendar_id', 'rrule', 'user_id'),

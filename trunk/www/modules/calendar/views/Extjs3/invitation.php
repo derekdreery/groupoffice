@@ -21,6 +21,16 @@ extract($data);
 <html>
 	<head>
 		<link href="<?php echo GO::config()->host; ?>views/Extjs3/themes/Default/external.css" type="text/css" rel="stylesheet" />
+		<?php
+		if(GO::user()->theme!='Default')
+		{
+			?>
+			<link href="<?php echo GO::config()->host; ?>views/Extjs3/themes/<?php echo GO::user()->theme; ?>/external.css" type="text/css" rel="stylesheet" />
+			<?php
+		}
+		if(!empty($GLOBALS['GO_CONFIG']->custom_css_url))
+			echo '<link href="'.$GLOBALS['GO_CONFIG']->custom_css_url.'" type="text/css" rel="stylesheet" />';
+		?>
 		<title><?php echo GO::config()->title; ?></title>
 	</head>
 <body>
@@ -29,17 +39,17 @@ extract($data);
 	
 	if($participant->status==GO_Calendar_Model_Participant::STATUS_ACCEPTED){	
 		?>
-		<p>You have accepted the event.</p>
+		<p><?php echo GO::t('eventAccepted','calendar'); ?></p>
 		<?php
 		if($event){
 			?>
-			<p>The event has been scheduled in your default calendar.</p>
+			<p><?php echo sprintf(GO::t('eventScheduledIn','calendar'),$event->calendar->name); ?></p>
 			<?php
 		}
 	}else
 	{
 		?>
-		<p>You have declined the event.</p>
+		<p><?php echo GO::t('eventDeclined','calendar'); ?></p>
 		<?php
 	}
 	?>
