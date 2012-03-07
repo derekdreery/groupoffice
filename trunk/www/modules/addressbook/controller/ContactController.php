@@ -152,7 +152,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	
 	
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
-		$columnModel->formatColumn('name','$model->name', array(),array('first_name','last_name'));
+		$columnModel->formatColumn('name','$model->getName(GO::user()->sort_name)', array(),array('first_name','last_name'));
 		$columnModel->formatColumn('company_name','$model->company_name');
 		$columnModel->formatColumn('ab_name','$model->ab_name');
 		
@@ -232,11 +232,10 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 				$query_type = 'LIKE';
 			}
 			//$criteria->addRawCondition('CONCAT_WS(`t`.`first_name`,`t`.`middle_name`,`t`.`last_name`)', ':query', $query_type);
-			$queryCrit = GO_Base_Db_FindCriteria::newInstance();
-			$queryCrit->addRawCondition('first_name', ':query', $query_type)
-				->addRawCondition('middle_name', ':query', $query_type, false)
-				->addRawCondition('last_name', ':query', $query_type, false);
-			$queryCrit->addBindParameter(':query', $query);
+			$queryCrit = GO_Base_Db_FindCriteria::newInstance()			
+				->addRawCondition(GO::user()->sort_name, ':query', $query_type)
+				->addBindParameter(':query', $query);
+				
 			$criteria->mergeWith($queryCrit);
 		}
 	

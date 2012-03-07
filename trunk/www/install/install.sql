@@ -392,7 +392,7 @@ CREATE TABLE IF NOT EXISTS `go_users` (
   `language` varchar(20) DEFAULT NULL,
   `theme` varchar(20) DEFAULT NULL,
   `first_weekday` tinyint(4) NOT NULL DEFAULT '0',
-  `sort_name` varchar(20) DEFAULT NULL,
+  `sort_name` varchar(20) NOT NULL DEFAULT 'first_name',
   `bank` varchar(50) DEFAULT NULL,
   `bank_no` varchar(50) DEFAULT NULL,
   `mtime` int(11) NOT NULL DEFAULT '0',

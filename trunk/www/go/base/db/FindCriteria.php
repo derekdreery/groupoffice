@@ -177,9 +177,11 @@ class GO_Base_Db_FindCriteria {
 	 * @param string $paramTag eg. ":paramName"
 	 * @param mixed $value
 	 * @param int $pdoType
+ 	 * @return GO_Base_Db_FindCriteria The complete GO_Base_Db_FindCriteria object is given as a return value.
 	 */
 	public function addBindParameter($paramTag, $value, $pdoType=PDO::PARAM_STR){
 		$this->addParams(array($paramTag=>array($value, $pdoType)));
+		return $this;
 	}
 	
 	/**
