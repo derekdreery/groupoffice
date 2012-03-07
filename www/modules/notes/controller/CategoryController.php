@@ -4,18 +4,28 @@ class GO_Notes_Controller_Category extends GO_Base_Controller_AbstractModelContr
 	protected $model = 'GO_Notes_Model_Category';
 	
 	
-	protected function getStoreMultiSelectProperties(){
-		return array('requestParam'=>'no-multiselect');
-	}
-	
-	protected function getStoreMultiSelectDefault(){
-		$category = GO_Notes_NotesModule::getDefaultNoteCategory(GO::user()->id);
-		return $category->id;
-	}	
+//	protected function getStoreMultiSelectProperties(){
+//		return array('requestParam'=>'no-multiselect');
+//	}
+//	
+//	protected function getStoreMultiSelectDefault(){
+//		$category = GO_Notes_NotesModule::getDefaultNoteCategory(GO::user()->id);
+//		return $category->id;
+//	}	
 	
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
 		$columnModel->formatColumn('user_name','$model->user ? $model->user->name : 0');
 		return parent::formatColumns($columnModel);
+	}
+	
+	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
+		
+		$multiSel = new GO_Base_Component_MultiSelectGrid(
+						'no-multiselect', 
+						"GO_Notes_Model_Category",$store, $params);		
+		$multiSel->formatCheckedColumn();
+		
+		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
 	}
 
 	
