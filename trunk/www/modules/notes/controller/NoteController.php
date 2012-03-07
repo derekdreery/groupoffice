@@ -3,26 +3,16 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 	
 	protected $model = 'GO_Notes_Model_Note';
 	
-	protected function getStoreMultiSelectProperties(){
-		return array(
-				'requestParam'=>'no-multiselect',
-				'permissionsModel'=>'GO_Notes_Model_Category',
-				'titleAttribute'=>'name'
-				);
-	}	
-	
-	protected function getStoreParams($params){
+	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()					
-//						->export('notes')
-						->joinCustomFields();
+		$multiSel = new GO_Base_Component_MultiSelectGrid(
+						'no-multiselect', 
+						"GO_Notes_Model_Category",$store, $params);		
+		$multiSel->addSelectedToFindCriteria($storeParams->getCriteria(), 'category_id');
+		$multiSel->setButtonParams($response);
+		$multiSel->setStoreTitle();
 		
-		if(count($this->multiselectIds)){
-			$findParams->ignoreAcl();
-			$findParams->criteria(GO_Base_Db_FindCriteria::newInstance()->addInCondition('category_id', $this->multiselectIds));
-		}
-						
-		return $findParams;
+		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
 	}
 
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
@@ -35,14 +25,11 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 	}
 	
 	
-	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
-		
-		
+	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {		
 		 if(GO::modules()->files){
 			 $f = new GO_Files_Controller_Folder();
 			 $f->processAttachments($response, $model, $params);
-		 }
-		
+		 }		
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}
 }
