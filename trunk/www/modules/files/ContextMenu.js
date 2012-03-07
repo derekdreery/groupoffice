@@ -241,10 +241,11 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 					break;
 		 		
 				default:
-					if(this.records[0].data.locked_user_id>0)
-						this.lockButton.hide();
-					else
-						this.lockButton.show();
+					
+					this.lockButton.setDisabled(this.records[0].data.locked_user_id>0);						
+		
+					this.gotaButton.setDisabled(this.records[0].data.locked_user_id>0 &&this.records[0].data.locked_user_id!=GO.settings.user_id);
+
 					
 					this.downloadButton.show();
 					this.gotaButton.show();
