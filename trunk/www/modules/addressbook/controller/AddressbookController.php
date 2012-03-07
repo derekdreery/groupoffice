@@ -1,16 +1,16 @@
 <?php
 class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractModelController{
 	
-	/*
-	 * This function initiates the contact filter by checked addressbooks.
-	 */
-	protected function getStoreMultiSelectProperties(){
-		return array(
-			'requestParam'=>'books',
-			//'permissionsModel'=>'GO_Addressbook_Model_Addressbook'
-			//'titleAttribute'=>'name'
-		);
-	}	
+	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
+		
+		$multiSel = new GO_Base_Component_MultiSelectGrid(
+						'books', 
+						"GO_Addressbook_Model_Addressbook",$store, $params);		
+		$multiSel->formatCheckedColumn();
+		
+		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
+	}
+
 	
 	protected $model = 'GO_Addressbook_Model_Addressbook';
 	

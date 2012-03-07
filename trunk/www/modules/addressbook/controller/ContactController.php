@@ -160,55 +160,34 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		return parent::formatColumns($columnModel);
 	}
 	
-	/*
-	 * This function initiates the contact filter by checked addressbooks.
-	 */
-	protected function getStoreMultiSelectProperties(){
-		return array(
-			'requestParam'=>'books',
-			'permissionsModel'=>'GO_Addressbook_Model_Addressbook'
-			//'titleAttribute'=>'name'
-		);
-	}	
-	
-	/**
-	 *
-	 * @param GO_Base_Db_FindCriteria $c
-	 * @param type $advancedQueryData 
-	 */
-//	private function _handleAdvancedQuery($c, $advancedQueryData){
-//		$advancedQueryData = json_decode($advancedQueryData, true);
-//		
-//		foreach($advancedQueryData as $record){
-//			if(!empty($record['field'])){
-//				//
-//				
-//				
-//				$isCustomField = substr($record['field'],0,4)=='col_';
-//				
-//				if ($record['comparator']=='LIKE')
-//					$record['value'] = '%'.$record['value'].'%';
-//				
-//				if($isCustomField){
-//					$tableAlias = 'cf';
-//				}else
-//				{
-//					$tableAlias = 't';
-//					$record['value']=GO_Filesearch_Model_Filesearch::model()->formatInput($record['field'], $record['value']);
-//				}
-//				
-//				if($record['close_group']){
-//					//$oldC = clone $c;
-//					$c->mergeWith(GO_Base_Db_FindCriteria::newInstance()->addCondition($record['field'], $record['value'], $record['comparator'],$tableAlias,$record['andor']=='AND'),$record['andor']=='AND');
-//				}else
-//				{								
-//					$c->addCondition($record['field'], $record['value'], $record['comparator'],$tableAlias,$record['andor']=='AND');
-//				}
-//			}
-//		}
-//		
-//		return $c;
-//	}
+
+
+	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
+		
+		$abMultiSel = new GO_Base_Component_MultiSelectGrid(
+						'books', 
+						"GO_Addressbook_Model_Addressbook",$store, $params);		
+		$abMultiSel->addSelectedToFindCriteria($storeParams->getCriteria(), 'addressbook_id');
+//		$abMultiSel->setButtonParams($response);
+//		$abMultiSel->setStoreTitle();
+		
+		$addresslistMultiSel = new GO_Base_Component_MultiSelectGrid(
+						'addresslist_filter', 
+						"GO_Addressbook_Model_Addresslist",$store, $params);				
+		
+		if(count($addresslistMultiSel->selectedIds))
+		{
+			$addresslistMultiSel->addSelectedToFindCriteria($storeParams->getCriteria(), 'addresslist_id','ac');
+			
+			//we need to join the addresslist link model if a filter for the addresslist is enabled.
+			$storeParams->join(GO_Addressbook_Model_AddresslistContact::model()->tableName(),
+							GO_Base_Db_FindCriteria::newInstance()->addCondition('id', 'ac.contact_id', '=', 't', true, true),
+							'ac'
+				);
+		}
+		
+		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
+	}
 	
 	/*
 	 * This function initiates the contact filters by:
@@ -219,8 +198,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	protected function getStoreParams($params) {	
 	
 		$criteria = GO_Base_Db_FindCriteria::newInstance()
-			->addModel(GO_Addressbook_Model_Contact::model(),'t')
-			->addInCondition('addressbook_id', $this->multiselectIds);
+			->addModel(GO_Addressbook_Model_Contact::model(),'t');
 				
 		// Filter by clicked letter
 		if (!empty($params['clicked_letter'])) {
@@ -240,7 +218,6 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		}
 	
 		$storeParams = GO_Base_Db_FindParams::newInstance()
-			->debugSql()
 			->export("contact")
 			->criteria($criteria)		
 			->joinModel(array(
@@ -252,46 +229,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	 			
 			))
 			->select('t.*,c.name AS company_name, addressbook.name AS ab_name, CONCAT_WS(\' \',`t`.`first_name`,`t`.`middle_name`,`t`.`last_name`) AS name');
-		
-//		if(count($this->multiselectIds)){
-//			$storeParams->ignoreAcl ()
-//							->joinModel(array(
-//				'model'=>'GO_Addressbook_Model_Addressbook',					
-//	 			'foreignField'=>'id', //defaults to primary key of the remote model
-//	 			'localField'=>'addressbook_id', //defaults to "id"
-//	 			'tableAlias'=>'addressbook', //Optional table alias
-//	 			'type'=>'INNER' //defaults to INNER,
-//	 			
-//			));
-//		}
-		
-		//if(empty($params['enable_addresslist_filter'])){
-		
-		// Filter by addresslist
-			if(isset($params['addresslist_filter']))
-			{
-				$addresslist_filter = json_decode($params['addresslist_filter'],true);
-				if (!empty($addresslist_filter)) {
-					$storeParams->join(GO_Addressbook_Model_AddresslistContact::model()->tableName(),
-							GO_Base_Db_FindCriteria::newInstance()->addCondition('id', 'ac.contact_id', '=', 't', true, true),
-							'ac'
-						)->getCriteria()->addInCondition('addresslist_id', $addresslist_filter,'ac');
-				}
-				GO::config()->save_setting('ms_addresslist_filter', implode(',',$addresslist_filter), GO::user()->id);
-			}
-			
-			
-			
-			//we should only add it if it's passed.
-//			elseif ($addresslist_filter = GO::config()->get_setting('ms_addresslist_filter', GO::user()->id))
-//			{	
-//				$addresslist_filter = empty($addresslist_filter) ? array() : explode(',', $addresslist_filter);
-//				$storeParams->join(GO_Addressbook_Model_AddresslistContact::model()->tableName(),
-//						GO_Base_Db_FindCriteria::newInstance()->addCondition('id', 'ac.contact_id', '=', 't', true, true),
-//						'ac'
-//					)->getCriteria()->addInCondition('addresslist_id', $addresslist_filter,'ac');
-//			}
-		//}
+	
 		return $storeParams;
 		
 	}

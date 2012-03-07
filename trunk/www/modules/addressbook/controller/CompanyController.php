@@ -93,18 +93,36 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}
-
-	/*
-	 * This function initiates the contact filter by checked addressbooks.
-	 */
-
-	protected function getStoreMultiSelectProperties() {
-		return array(
-				'requestParam' => 'books',
-				'permissionsModel' => 'GO_Addressbook_Model_Addressbook'
-						//'titleAttribute'=>'name'
-		);
+	
+	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
+		
+		$abMultiSel = new GO_Base_Component_MultiSelectGrid(
+						'books', 
+						"GO_Addressbook_Model_Addressbook",$store, $params);		
+		$abMultiSel->addSelectedToFindCriteria($storeParams->getCriteria(), 'addressbook_id');
+		//$abMultiSel->setButtonParams($response);
+		//$abMultiSel->setStoreTitle();
+		
+		$addresslistMultiSel = new GO_Base_Component_MultiSelectGrid(
+						'addresslist_filter', 
+						"GO_Addressbook_Model_Addresslist",$store, $params);				
+		
+		if(count($addresslistMultiSel->selectedIds))
+		{
+			$addresslistMultiSel->addSelectedToFindCriteria($storeParams->getCriteria(), 'addresslist_id','ac');
+			
+			//we need to join the addresslist link model if a filter for the addresslist is enabled.
+			$storeParams->join(
+							GO_Addressbook_Model_AddresslistCompany::model()->tableName(), 
+							GO_Base_Db_FindCriteria::newInstance()->addCondition('id', 'ac.company_id', '=', 't', true, true), 
+							'ac'
+				);
+		}
+		
+		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
 	}
+
+
 
 	/*
 	 * This function initiates the contact filters by:
@@ -117,8 +135,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 
 
 		$criteria = GO_Base_Db_FindCriteria::newInstance()
-						->addModel(GO_Addressbook_Model_Company::model(), 't')
-						->addInCondition('addressbook_id', $this->multiselectIds);
+						->addModel(GO_Addressbook_Model_Company::model(), 't');
 
 		// Filter by clicked letter
 		if (!empty($params['clicked_letter'])) {
@@ -147,25 +164,6 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		}
 
 
-		//if(empty($params['enable_addresslist_filter'])){
-		// Filter by addresslist
-		if (isset($params['addresslist_filter'])) {
-			$addresslist_filter = json_decode(($params['addresslist_filter']), true);
-			if (!empty($addresslist_filter)) {
-				$storeParams->join(GO_Addressbook_Model_AddresslistCompany::model()->tableName(), GO_Base_Db_FindCriteria::newInstance()->addCondition('id', 'ac.company_id', '=', 't', true, true), 'ac'
-				)->getCriteria()->addInCondition('addresslist_id', $addresslist_filter, 'ac');
-			}
-			GO::config()->save_setting('ms_addresslist_filter', implode(',', $addresslist_filter), GO::user()->id);
-		}
-//			elseif ($addresslist_filter = GO::config()->get_setting('ms_addresslist_filter', GO::user()->id))
-//			{
-//				$addresslist_filter = empty($addresslist_filter) ? array() : explode(',', $addresslist_filter);
-//				$storeParams->join(GO_Addressbook_Model_AddresslistCompany::model()->tableName(),
-//						GO_Base_Db_FindCriteria::newInstance()->addCondition('id', 'ac.company_id', '=', 't', true, true),
-//						'ac'
-//					)->getCriteria()->addInCondition('addresslist_id', $addresslist_filter,'ac');
-//			}
-		//}
 
 		return $storeParams;
 	}
@@ -192,25 +190,19 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 
 	protected function actionMoveEmployees($params) {
 		$to_company = GO_Addressbook_Model_Company::model()->findByPk($params['to_company_id']);
-//		$to_company = $ab->get_company($_POST['to_company_id']);
-//		$ab2 = new addressbook();
-//		$ab->get_company_contacts($_POST['from_company_id']);
 
 		$contacts = GO_Addressbook_Model_Contacts::model()->find(
 						GO_Base_Db_FindCriteria::newInstance()
 										->addCondition('company_id', $params['from_company_id'])
 		);
 
-
 		foreach ($contacts as $contact) {
 			$attributes = array(
-//				'id' => $contact->id,
 					'addressbook_id' => $to_company->addressbook_id,
 					'company_id' => $to_company->id
 			);
 			$contact->setAttributes($attributes);
 			$contact->save();
-//			$ab2->update_contact($up, false, $contact);
 		}
 
 		$response['success'] = true;
