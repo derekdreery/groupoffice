@@ -157,3 +157,7 @@ $updates["201202131145"][]= "CREATE TABLE IF NOT EXISTS `go_advanced_searches` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
 $updates["201202131153"][]= "ALTER TABLE `go_users` CHANGE `middle_name` `middle_name` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+
+$updates["201203070921"][]= "ALTER TABLE `go_users` CHANGE `sort_name` `sort_name` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'first_name'";
+
+$updates["201203070921"][]= "update go_users set sort_name='first_name' where sort_name!='first_name' AND sort_name!='last_name'";
