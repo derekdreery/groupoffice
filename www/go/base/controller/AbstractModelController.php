@@ -28,18 +28,6 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 */
 	protected $model;
 	
-	
-	/**
-	 * An array of Id's
-	 * 
-	 * It's often convenient to select multiple addressbooks, calendars etc. for
-	 * display in a grid. By overriding multiSelectProperties and multiSelectDefault
-	 * this array will be filled with ids that are send by the request parameter.
-	 * They will be saved to the database too.
-	 * 
-	 * @var array Ids that are selected 
-	 */
-	public $multiselectIds=array();
 
 	/**
 	 * The default action when the form in an edit dialog is submitted.
@@ -238,32 +226,6 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		return $response;
 	}
 	
-	/**
-	 *
-	 * It's often convenient to select multiple addressbooks, calendars etc. for
-	 * display in a grid. By overriding multiSelectProperties and multiSelectDefault
-	 * this array will be filled with ids that are send by the request parameter.
-	 * They will be saved to the database too.
-	 * 
-	 *
-	 * @return array The name of the request parameter sent by the view. 
-	 * 
-	 * array(
-				//'requestParam'=>'notes_categories_filter', //The name of the request parameter sent by the view. 
-				'permissionsModel'=>'GO_Notes_Model_Category', //The model to check permissions. 
-				'titleAttribute'=>'name' //Only set this if your grid needs the names of the permissionsmodel in the title.
-				);
-	 */
-	protected function getStoremultiSelectProperties(){
-		return false;
-	}
-	
-	/**
-	 * If nothing is selected. Return a default id if necessary.
-	 */
-	protected function getStoreMultiSelectDefault(){
-		return false;
-	}
 
 	/**
 	 * Override this function to supply additional parameters to the 
@@ -332,11 +294,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
   /**
    * The default grid action for the current model. This action also handles:
 	 * 
-	 * 1. Multiselection of related BELONGS_TO models (See getMultiSelectProperties).
-	 * 2. Advanced queries. See _handleAdvancedQuery, the contacts advanced search
+	 * 1. Advanced queries. See _handleAdvancedQuery, the contacts advanced search
 	 * use case in Group-Office, and
 	 * GO_Addressbook_Controller_Contact::beforeIntegrateRegularSql.
-	 * 3. Deleting models
+	 * 2. Deleting models
    */
   protected function actionStore($params){	
     $modelName = $this->model;  
@@ -350,63 +311,16 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		$this->processStoreDelete($store, $params);
 
-		if(($multiSelectProperties =$this->getStoremultiSelectProperties()) && empty($params['noMultiSelectFilter'])){
-
-			if(isset($params[$multiSelectProperties['requestParam']])){
-				$this->multiselectIds=json_decode($params[$multiSelectProperties['requestParam']], true);
-				GO::config()->save_setting('ms_'.$multiSelectProperties['requestParam'], implode(',',$this->multiselectIds), GO::session()->values['user_id']);
-			}else
-			{			
-				$this->multiselectIds = GO::config()->get_setting('ms_'.$multiSelectProperties['requestParam'], GO::session()->values['user_id']);
-				$this->multiselectIds  = $this->multiselectIds ? explode(',',$this->multiselectIds) : array();
-			}
-			
-			if(empty($this->multiselectIds))
-			{
-				$default = $this->getStoreMultiSelectDefault();
-				if($default){
-					$this->multiselectIds = array($default);
-					GO::config()->save_setting('ms_'.$multiSelectProperties['requestParam'],implode(',', $this->multiselectIds), GO::user()->id);
-				}
-			}
-			
-			//Do a check if the permission model needs to be checked. If we don't ignore the acl and the model is the same as the model of this controller
-			//it's not needed.
-			if(isset($multiSelectProperties['permissionsModel']) && $multiSelectProperties['permissionsModel']!=$this->model && empty($storeParams['ignoreAcl'])){
-				
-				$titleArray = array();
-				foreach($this->multiselectIds as $id){
-					
-					$model = GO::getModel($multiSelectProperties['permissionsModel'])->findByPk($id);
-					
-					if(!isset($response['buttonParams']) && $model && $model->getPermissionLevel()>GO_Base_Model_Acl::READ_PERMISSION){
-
-						//instruct the view for the add action.
-						$response['buttonParams']=array('id'=>$model->id,'name'=>$model->name, 'permissionLevel'=>$model->getPermissionLevel());
-					}
-					
-					if($model && !empty($multiSelectProperties['titleAttribute']))
-						$titleArray[]=$model->{$multiSelectProperties['titleAttribute']};
-				}		
-				if(count($titleArray))
-					$store->setTitle(implode(', ',$titleArray));
-			}
-		}
-
 
 		$columnModel = $store->getColumnModel();
-		$this->formatColumns($columnModel);
-		
-		if($multiSelectProperties)
-			$columnModel->formatColumn('checked','in_array($model->id, $controller->multiselectIds)', array('controller'=>$this));
-		
+		$this->formatColumns($columnModel);		
+	
 		$this->prepareStore($store);
 		
 		$storeParams = $store->getDefaultParams($params)->mergeWith($this->getStoreParams($params));
 		
-		if (!empty($params['advancedQueryData'])) {		
+		if (!empty($params['advancedQueryData']))
 			$this->_handleAdvancedQuery($params['advancedQueryData'],$storeParams);
-		}
 		
 		$this->beforeStoreStatement($response, $params, $store, $storeParams);
 			
