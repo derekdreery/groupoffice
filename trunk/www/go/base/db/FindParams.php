@@ -306,6 +306,9 @@ class GO_Base_Db_FindParams{
 	
 	/**
 	 * Join a model table on the query
+	 * Caution: Please be sure that the model has only a single key. If the model 
+	 *					has multiple keys then you need to build the Join criteria 
+	 *					manually with the Join function.
 	 * 
 	 * @param array $config
 	 * 
@@ -321,8 +324,6 @@ class GO_Base_Db_FindParams{
 	 *			'type'=>'INNER' //defaults to INNER,
 	 *			'criteria'=>GO_Base_Db_FindCriteria // Optional extra join parameters
 	 *			)
-	 * 
-	 * @todo Maybe add separate parameters for each config value?? public function joinModel($model,$foreignField,$localField,tableAlias='t',$type='INNER'){}
 	 * 
 	 * @return GO_Base_Db_FindParams 
 	 */
@@ -350,7 +351,7 @@ class GO_Base_Db_FindParams{
 		}				
 		
 		$table = $params['tableAlias'] ? $params['tableAlias'] : $joinModel->tableName();
-		
+
 		$params['criteria']->addRawCondition("`".$table."`.`".$params['foreignField']."`", "`".$params['localTableAlias']."`.`".$params['localField']."`");
 
 		return $this->join($joinModel->tableName(), $params['criteria'], $params['tableAlias'],$params['type']);
