@@ -27,15 +27,14 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 		return parent::formatColumns($columnModel);
 	}
 	
-	protected function getStoreMultiSelectProperties(){
-		return array('requestParam'=>'ta-taskslists');
-	}
-	
-	protected function getStoreMultiSelectDefault() {
-		$settings = GO_Tasks_Model_Settings::model()->getDefault(GO::user());
+	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
 		
+		$multiSel = new GO_Base_Component_MultiSelectGrid(
+						'ta-taskslists', 
+						"GO_Tasks_Model_Tasklist",$store, $params);		
+		$multiSel->formatCheckedColumn();
 		
-		return $settings->default_tasklist_id;	
+		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
 	}
 	
 	protected function remoteComboFields(){
