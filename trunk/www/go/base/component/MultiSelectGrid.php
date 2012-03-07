@@ -8,7 +8,7 @@ class GO_Base_Component_MultiSelectGrid {
 	 * 
 	 * @var array
 	 */
-	public $selectedIds;
+	public $selectedIds=array();
 	private $_modelName;
 	private $_models;
 	/**
