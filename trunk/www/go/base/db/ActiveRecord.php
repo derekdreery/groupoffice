@@ -3039,9 +3039,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$attr = $this->getCacheAttributes();
 		
 		if($attr){			
-			$stmt = $this->find(array(
-					'ignoreAcl'=>true
-			));			
+			$stmt = $this->find(GO_Base_Db_FindParams::newInstance()->ignoreAcl()->select('t.*'));			
 			$stmt->callOnEach('cacheSearchRecord', true);			
 		}
 	}
