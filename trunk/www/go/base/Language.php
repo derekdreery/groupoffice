@@ -98,6 +98,12 @@ class GO_Base_Language{
 		return str_replace('{product_name}',GO::config()->product_name,$translation);
 	}
 	
+	private function _replaceProductName($l){
+		foreach($l as $key=>$value)
+			$l[$key]=str_replace('{product_name}',GO::config()->product_name,$value);
+		return $l;
+	}
+	
 	private function _loadSection($module='base',$basesection='common'){
 		if(!isset($this->_lang[$module]) || ($module=='base' && !isset($this->_lang[$module][$basesection]))){
 			
@@ -119,20 +125,12 @@ class GO_Base_Language{
 			
 			if(isset($l)){
 				if($module=='base'){
-					$this->_lang[$module][$basesection]=$l;
+					$this->_lang[$module][$basesection]=$this->_replaceProductName($l);
 				}else
 				{
-					$this->_lang[$module]=$l;
+					$this->_lang[$module]=$this->_replaceProductName($l);
 				}
 			}
-			
-//			if(isset($l)){
-//				$this->_lang[$key]=$l;
-//			}elseif(isset($lang[$module])){
-//				$this->_lang[$key]=$lang[$module];
-//			}else	if(isset($lang[$basesection])){
-//				$this->_lang[$key]=$lang[$basesection];
-//			}
 		}
 	}
 	
