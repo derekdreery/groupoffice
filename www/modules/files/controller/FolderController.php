@@ -618,6 +618,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			{
 				if ($model->acl_id>0)
 					$folder->acl_id = $model->acl_id;
+				else
+					$folder->acl_id=0;
 				
 				$folder->name = $fsFolder->name();			
 				$folder->parent_id = $destinationFolder->id;
@@ -631,6 +633,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			GO::debug("No change needed");
 			if ($model->acl_id>0)
 				$folder->acl_id = $model->acl_id;
+			else
+				$folder->acl_id=0;
 			
 			$folder->systemSave = true;
 			$folder->visible = 0;
