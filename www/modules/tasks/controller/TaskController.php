@@ -129,14 +129,24 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		return $combos;
 	}
 
-	protected function getStoreMultiSelectProperties(){
-		return array(
-				'requestParam'=>'ta-taskslists',
-				'permissionsModel'=>'GO_Tasks_Model_Tasklist'
-				//'titleAttribute'=>'name'
-				);
-	}	
+
 	
+	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
+		
+		$multiSel = new GO_Base_Component_MultiSelectGrid(
+						'ta-taskslists', 
+						"GO_Tasks_Model_Tasklist",$store, $params);		
+		$multiSel->addSelectedToFindCriteria($storeParams->getCriteria(), 'tasklist_id');
+		$multiSel->setButtonParams($response);
+		$multiSel->setStoreTitle();
+		
+		$catMultiSel = new GO_Base_Component_MultiSelectGrid(
+						'categories', 
+						"GO_Tasks_Model_Category",$store, $params);		
+		$catMultiSel->addSelectedToFindCriteria($storeParams->getCriteria(), 'category_id');
+		
+		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
+	}
 	
 	
 	protected function beforeStore(&$response, &$params, &$store) {
@@ -147,12 +157,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 			if(isset($params['checked']))
 				$updateTask->setCompleted($params['checked']=="true");
 		}
-		
-//		$c = new GO_Base_Component_MultiSelect('ta-tasklists');
-//		$c->setTitleAttribute('name');
-//		$c->checkPermissionModel('GO_Tasks_Model_Tasklist');
-//		
-//		$this->addMultiSelectComponent($c);
+
 //		
 		return parent::beforeStore($response, $params, $store);
 	}
@@ -168,12 +173,6 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		return parent::formatColumns($columnModel);
 	}
 	
-	protected function getStoreMultiSelectDefault() {
-		$settings = GO_Tasks_Model_Settings::model()->getDefault(GO::user());
-		
-		
-		return $settings->default_tasklist_id;	
-	}
 		
 	protected function getStoreParams($params) {
 		
@@ -191,20 +190,15 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 			->joinCustomFields()
 			->criteria(GO_Base_Db_FindCriteria::newInstance()
 				->addModel(GO_Tasks_Model_Task::model(),'t')
-				->addInCondition('tasklist_id', $this->multiselectIds))										
-				->select('t.*, tl.name AS tasklist_name')
-				->joinModel(array(
+					)										
+			->select('t.*, tl.name AS tasklist_name')
+			->joinModel(array(
 					'model'=>'GO_Tasks_Model_Tasklist',					
 					'localField'=>'tasklist_id',
 					'tableAlias'=>'tl', //Optional table alias
 			));
 		
-		if(!empty($this->multiselectIds))
-			$storeParams->ignoreAcl();
-		
-		if(isset($params['categories'])) 
-			$storeParams->getCriteria()->addInCondition('category_id', json_decode($params['categories'], true),'t');
-
+	
 		$storeParams = $this->checkFilterParams($params['show'],$storeParams);
 		
 		if(GO::modules()->projects){
