@@ -152,9 +152,9 @@ GO.calendar.CalendarDialog = function(config)
 			handler: function(){
 				this.formPanel.form.submit({
 					waitMsg:GO.lang.waitMsgUpload,
-					url:GO.settings.modules.calendar.url+'action.php',
+					url: GO.url('calendar/calendar/importIcs'),//GO.settings.modules.calendar.url+'action.php',
 					params: {
-						task: 'import',
+//						task: 'import',
 						calendar_id:this.calendar_id
 					},
 					success: function(form,action)
@@ -214,7 +214,7 @@ GO.calendar.CalendarDialog = function(config)
 	});
 
 	this.formPanel = new Ext.FormPanel({
-		//fileUpload:true,
+		fileUpload:true,
 		url: GO.url("calendar/calendar/load"),
 		defaultType: 'textfield',
 		waitMsgTarget:true,

@@ -899,13 +899,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$exception->exception_event_id=$this->id;
 			$exception->save();
 		}		
-		
-		GO::debug((string) $vobject->organizer);
 	
-		if($vobject->organizer){
-			GO::debug("Importing organizer");
+		if($vobject->organizer)
 			$this->importVObjectAttendee($this, $vobject->organizer, true);
-		}
 		
 		$attendees = $vobject->select('attendee');
 		foreach($attendees as $attendee)
