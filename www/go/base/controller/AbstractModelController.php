@@ -359,9 +359,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			{			
 				$this->multiselectIds = GO::config()->get_setting('ms_'.$multiSelectProperties['requestParam'], GO::session()->values['user_id']);
 				$this->multiselectIds  = $this->multiselectIds ? explode(',',$this->multiselectIds) : array();
-//				$this->multiselectIds=array();
 			}
-		
 			
 			if(empty($this->multiselectIds))
 			{
@@ -409,6 +407,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		if (!empty($params['advancedQueryData'])) {		
 			$this->_handleAdvancedQuery($params['advancedQueryData'],$storeParams);
 		}
+		
+		$this->beforeStoreStatement($response, $params, $store, $storeParams);
 			
 		$store->setStatement(GO::getModel($modelName)->find($storeParams));
 		
@@ -438,6 +438,19 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	}
 	
 	protected function beforeStore(&$response, &$params, &$store){
+		return $response;
+	}
+	
+	/**
+	 * Fires just before the store SQL statement is executed.
+	 * 
+	 * @param array $response
+	 * @param array $params
+	 * @param GO_Base_Data_AbstractStore $store
+	 * @param GO_Base_Db_FindParams $storeParams
+	 * @return array 
+	 */
+	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams){
 		return $response;
 	}
 
