@@ -98,8 +98,24 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}
 	
-	
-	
-	
+	public function actionImportIcs($params) {
+		$response = array( 'success' => true );
+		$count = 0;
+		if (!file_exists($_FILES['ical_file']['tmp_name'][0])) {
+			throw new Exception($lang['common']['noFileUploaded']);
+		}else {
+			$file = new GO_Base_Fs_File($_FILES['ical_file']['tmp_name'][0]);
+			$file->convertToUtf8();
+			$contents = $file->getContents();
+			$vcal = GO_Base_VObject_Reader::read($contents);
+			foreach($vcal->vevent as $vevent) {
+				$event = new GO_Calendar_Model_Event();
+				$event->importVObject( $vevent, array('calendar_id'=>$params['calendar_id']) );
+				$count++;
+			}
+		}
+		$response['feedback'] = sprintf(GO::t('import_success','calendar'), $count);
+		return $response;
+	}
 	
 }
