@@ -74,8 +74,11 @@ GO.tasks.TasklistDialog = function(config)
 					this.importTab.form.submit({
 						//waitMsg:GO.lang.waitMsgUpload,
 						// TODO: Fix this import so it works with the new MVC structure
-						url:GO.settings.modules.tasks.url+'action.php',
-						params: {task: 'import', tasklist_id:this.tasklist_id},
+						url: GO.url('tasks/tasklist/importIcs'),//O.settings.modules.tasks.url+'action.php',
+						params: {
+//							task: 'import',
+							tasklist_id:this.tasklist_id
+						},
 						success: function(form,action)
 						{				
 							uploadFile.clearQueue();		
