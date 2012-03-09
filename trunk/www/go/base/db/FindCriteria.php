@@ -332,7 +332,7 @@ class GO_Base_Db_FindCriteria {
 				
 			}else
 			{
-				$this->_condition = $condition;				
+				$this->_condition = '('.$condition.')';				
 			}		
 		}
 		//always merge params. FindParams::join can add params without a condtion.
