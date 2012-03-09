@@ -28,6 +28,19 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 */
 	protected $model;
 	
+	
+	/**
+	 * Can be overriden if you have a primary key that's not 'id' or is an array.
+	 * Must return false if the PK is empty.
+	 * 
+	 * @param array $params
+	 * @return mixed 
+	 */
+	protected function getPrimaryKeyFromParams($params){
+	
+		return empty($params['id']) ? false : $params['id'];
+	}
+	
 
 	/**
 	 * The default action when the form in an edit dialog is submitted.
@@ -35,10 +48,12 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	protected function actionSubmit($params) {
 
 		$modelName = $this->model;
-		if (!empty($params['id'])){
-			$model = GO::getModel($modelName)->findByPk($params['id']);
-		}else
-		{
+		$pk = $this->getPrimaryKeyFromParams($params);
+		$model=false;
+		if ($pk)
+			$model = GO::getModel($modelName)->findByPk($pk);
+		
+		if(!$model){
 			$model = new $modelName;
 			$model->user_id=GO::user()->id;
 		}
@@ -137,8 +152,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	protected function actionLoad($params) {
 		$modelName = $this->model;
 		//$modelName::model() does not work on php 5.2!
-		if(!empty($params['id'])){
-			$model = GO::getModel($modelName)->findByPk($params['id']);
+		
+		$pk = $this->getPrimaryKeyFromParams($params);
+		if(!empty($pk)){
+			$model = GO::getModel($modelName)->findByPk($pk);
 		}else{
 			$model = new $modelName;
 			$model->setAttributes($params);
@@ -376,7 +393,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$response = array('data'=>array(),'success'=>true);
 				
 		$modelName = $this->model;
-		$model = GO::getModel($modelName)->findByPk($params['id']);
+		$model = GO::getModel($modelName)->findByPk($this->getPrimaryKeyFromParams($params));
 		
 		$response = $this->beforeDisplay($response, $model, $params);
 		
@@ -694,7 +711,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 */
 	protected function actionDelete($params) {
 		
-		$model = GO::getModel($this->model)->findByPk($params['id']);
+		$model = GO::getModel($this->model)->findByPk($this->getPrimaryKeyFromParams($params));
 		
 		$response=array();
 		
