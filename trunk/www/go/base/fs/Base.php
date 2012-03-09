@@ -46,7 +46,12 @@ abstract class GO_Base_Fs_Base{
 	 * @return GO_Base_Fs_Folder Parent folder object
 	 */
 	public function parent(){
-		return new GO_Base_Fs_Folder(dirname($this->path));
+		
+		$parentPath = dirname($this->path);
+		if($parentPath==$this->path)
+			return false;
+		
+		return new GO_Base_Fs_Folder($parentPath);
 	}
 	
 	/**
