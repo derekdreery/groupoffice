@@ -49,7 +49,7 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 				GO.files.downloadFile(this.model_id);
 			},
 			scope: this
-		},{
+		},this.propertiesBtn = new Ext.Button({
 			iconCls: 'btn-settings',
 			text: GO.lang.strProperties,
 			cls: 'x-btn-text-icon',
@@ -58,7 +58,7 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 				//this.addSaveHandler(GO.files.filePropertiesDialog);
 			},
 			scope: this
-		});
+		}));
 
 		return tbar;
 	},
@@ -72,7 +72,8 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 	{
 		GO.files.FilePanel.superclass.setData.call(this, data);
 		this.setTitle(data.name);		
-		this.editButton.setDisabled(data.locked);		
+		this.editButton.setDisabled(data.locked || !this.data.write_permission);		
+		this.propertiesBtn.setDisabled(!this.data.write_permission);
 	},
 
 	initComponent : function(){
