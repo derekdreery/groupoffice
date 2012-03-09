@@ -56,19 +56,20 @@ GO.files.FolderPropertiesDialog = function(config){
 			xtype: 'htmlcomponent',
 			html:'<hr />'
 		},
-		new Ext.form.Checkbox({
+		{
+			xtype:'xcheckbox',
 			boxLabel: GO.files.lang.activateSharing,
 			name: 'share',
 			checked: false,
 			hideLabel:true
-		}),
-		this.notifyCheckBox = new Ext.form.Checkbox({
+		},
+		this.notifyCheckBox = new Ext.ux.form.XCheckbox({
 			boxLabel: GO.files.lang.notifyChanges,
 			name: 'notify',
 			checked: false,
 			hideLabel:true
 		}),
-		this.applyStateCheckbox = new Ext.form.Checkbox({
+		this.applyStateCheckbox = new Ext.ux.form.XCheckbox({
 			boxLabel: GO.files.lang.applyState,
 			name: 'apply_state',
 			checked: false,

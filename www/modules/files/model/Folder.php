@@ -100,6 +100,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 				'folders' => array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_Folder', 'field' => 'parent_id', 'delete' => true, 'findParams'=>  GO_Base_Db_FindParams::newInstance()->order('name','ASC')),
 				'files' => array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_File', 'field' => 'folder_id', 'delete' => true),
 				'notifyUsers'=>array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_FolderNotification', 'field' => 'folder_id', 'delete' => true),
+				'preferences'=>array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_FolderPref', 'field' => 'folder_id', 'delete' => true),
 		);
 	}
 	
@@ -588,24 +589,24 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @return GO_Base_Db_ActiveStatement 
 	 */
-	public function getSubFolders(){
+	public function getSubFolders($findParams=false){
 		if($this->parent_id==0){
 			//this is a special folder like addressbooks, projects etc.
 			//we must check acl's here
-
-			return GO_Files_Model_Folder::model()->find(
-							GO_Base_Db_FindParams::newInstance()
-							->limit(100)//not so nice hardcoded limit
-							->order('name','ASC')
-							->criteria(GO_Base_Db_FindCriteria::newInstance()
+			
+			if(!$findParams)
+				$findParams=GO_Base_Db_FindParams::newInstance();
+			
+			
+			$findParams->criteria(GO_Base_Db_FindCriteria::newInstance()
 									->addModel(GO_Files_Model_Folder::model())
-									->addCondition('parent_id', $this->id))
-							
-					);
+									->addCondition('parent_id', $this->id));
+
+			return GO_Files_Model_Folder::model()->find($findParams);
 		}else
 		{
 			//relational queries don't check acl's
-			return $this->folders();
+			return $this->folders($findParams);
 		}
 	}
 	
