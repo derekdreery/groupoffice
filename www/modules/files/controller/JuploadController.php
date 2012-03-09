@@ -12,6 +12,8 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 
 		$sessionCookie = 'Cookie: ' . session_name() . '=' . session_id();
 
+		//TODO: Check if code below is necessary
+		
 //		if(!empty($cookieParams['domain']))
 //			$sessionCookie .= '; Domain='.$cookieParams['domain'];
 //		
@@ -26,19 +28,15 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 //		if($cookieParams['httponly'])
 //			$sessionCookie .= '; HttpOnly';
 
-		$browser = GO_Base_Util_Http::getBrowser();
-
-		$safari = $browser["name"] == "SAFARI" ? "true" : "false";
-
+		
 		$afterUploadScript = '
 			<script type="text/javascript">
 				function afterUpload(success){
 					
-					opener.GO.mainLayout.getModulePanel("files").sendOverwrite({upload:true});
-					var isSafari = ' . $safari . ';					
+					opener.GO.mainLayout.getModulePanel("files").sendOverwrite({upload:true});	
 
-					if(success && !isSafari){
-						//setTimeout("self.close();", 1000);
+					if(success){
+						setTimeout("self.close();", 1000);
 					}
 				}
 			</script>			
@@ -84,7 +82,7 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 
 			$count = 0;
 			while ($uploadedFile = array_shift($_FILES)) {
-
+				
 				if (isset($params['jupart'])) {
 					$originalFileName = $uploadedFile['name'];
 					$uploadedFile['name'] = $uploadedFile['name'] . '.part' . $params['jupart'];
@@ -110,11 +108,10 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 					$files = GO_Base_Fs_File::moveUploadedFiles($uploadedFile, $tmpFolder);
 					$file = $files[0];
 				}
-
 				$subdir = false;
 				if ((!empty($params['relpathinfo' . $count]) && !isset($params['jupart'])) ||
 								(!empty($params['relpathinfo' . $count]) && isset($params['jupart']) && !empty($params['jufinal']))) {
-					$fullpath = GO::config()->tmpdir . 'juploadqueue' . '/' . $params['relpathinfo' . $count];
+					$fullpath = GO::config()->tmpdir . 'juploadqueue' . '/' . str_replace('\\','/',$params['relpathinfo'.$count]);
 
 					$dir = new GO_Base_Fs_Folder($fullpath);
 					$dir->create();
@@ -122,10 +119,14 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 					$file->move($dir);
 				}
 				$count++;
-
+		
 				if ($subdir) {
-					if (!in_array($dir->path(), GO::session()->values['files']['uploadqueue']))
-						GO::session()->values['files']['uploadqueue'][] = $dir->path();
+						
+					$parent = $this->_findHighestParent($dir);
+					
+					go::debug($parent);
+					if (!in_array($parent->path(), GO::session()->values['files']['uploadqueue']))
+						GO::session()->values['files']['uploadqueue'][] = $parent->path();
 				} else {
 					GO::session()->values['files']['uploadqueue'][] = $file->path();
 				}
@@ -134,6 +135,18 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 			echo 'WARNING: ' . $e->getMessage() . "\n";
 		}
 		echo "SUCCESS\n";
+	}
+	
+	private function _findHighestParent(GO_Base_Fs_Folder $dir){
+		$parent = $dir;
+
+		while($parent->parent()->name()!="juploadqueue"){
+			go::debug($parent->name());
+			$parent=$parent->parent();
+		}
+
+		return $parent;
+		
 	}
 
 }
