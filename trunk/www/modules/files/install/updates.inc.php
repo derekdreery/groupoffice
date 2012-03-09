@@ -96,3 +96,10 @@ $updates["201203061115"][]="UPDATE fs_folders SET thumbs=1 where thumbs=2";
 $updates["201203061115"][]="ALTER TABLE `fs_folders` CHANGE `visible` `visible` BOOLEAN NOT NULL DEFAULT '0'";
 $updates["201203061115"][]="UPDATE fs_folders SET visible=0 where visible=1";
 $updates["201203061115"][]="UPDATE fs_folders SET visible=1 where visible=2";
+
+$updates["201203091439"][]="CREATE TABLE IF NOT EXISTS `fs_folder_pref` (
+  `folder_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `thumbs` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`folder_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";

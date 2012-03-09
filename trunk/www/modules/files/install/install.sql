@@ -216,3 +216,11 @@ CREATE TABLE IF NOT EXISTS `fs_versions` (
   PRIMARY KEY (`id`),
   KEY `file_id` (`file_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `fs_folder_pref`;
+CREATE TABLE IF NOT EXISTS `fs_folder_pref` (
+  `folder_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `thumbs` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`folder_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

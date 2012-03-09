@@ -135,7 +135,9 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				$folder = GO_Files_Model_Folder::model()->findByPk($params['node']);
 				$folder->checkFsSync();
 
-				$stmt = $folder->getSubFolders();
+				$stmt = $folder->getSubFolders(GO_Base_Db_FindParams::newInstance()
+							->limit(100)//not so nice hardcoded limit
+							->order('name','ASC'));
 
 				while ($subfolder = $stmt->fetch()) {
 					$response[] = $this->_folderToNode($subfolder, $expandFolderIds, false);
@@ -182,8 +184,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 	protected function beforeSubmit(&$response, &$model, &$params) {
 
-		if(!$model->readonly && !$model->isSomeonesHomeFolder()){
-			if (isset($params['share']) && $model->acl_id == 0) {
+		if(isset($params['share']) && !$model->readonly && !$model->isSomeonesHomeFolder() && $model->checkPermissionLevel(GO_Base_Model_Acl::MANAGE_PERMISSION)){
+			if ($params['share']==1 && $model->acl_id == 0) {
 				$model->visible = 1;
 
 				$acl = new GO_Base_Model_Acl();
@@ -193,7 +195,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				$model->acl_id = $response['acl_id'] = $acl->id;
 			}
 
-			if (!isset($params['share']) && $model->acl_id > 0) {
+			if ($params['share']==0 && $model->acl_id > 0) {
 				$model->acl->delete();
 				$model->acl_id = $response['acl_id'] = 0;
 			}
@@ -210,14 +212,14 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		$notifyRecursive = !empty($params['notifyRecursive']) && $params['notifyRecursive']=='true' ? true : false;
 		
-		if (isset($params['notify'])) {
-			$model->addNotifyUser(GO::user()->id,$notifyRecursive);
-		}
+		if(isset($params['notify'])){
+			if ($params['notify']==1) 
+				$model->addNotifyUser(GO::user()->id,$notifyRecursive);
 
-		if (!isset($params['notify'])){
-			$model->removeNotifyUser(GO::user()->id,$notifyRecursive);			
+			if ($params['notify']==0)
+				$model->removeNotifyUser(GO::user()->id,$notifyRecursive);			
 		}
-
+		
 		parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}
 
@@ -398,7 +400,14 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		//useful information for the view.
 		$response['path'] = $folder->path;
-		$response['thumbs'] = $folder->thumbs; //Show this page in thumbnails or list
+		
+		//Show this page in thumbnails or list
+		$folderPreference = GO_Files_Model_FolderPreference::model()->findByPk(array('user_id'=>GO::user()->id,'folder_id'=>$folder->id));
+		if($folderPreference)
+			$response['thumbs']=$folderPreference->thumbs;
+		else
+			$response['thumbs']=0;
+		
 		$response['parent_id'] = $folder->parent_id;
 		
 		//locked state
@@ -430,8 +439,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatListRecord'));
 		
-		$findParams = $store->getDefaultParams($params)
-						->ignoreAcl();
+		$findParams = $store->getDefaultParams($params);
 		
 		$findParamsArray = $findParams->getParams();
 		if(!isset($findParamsArray['start']))
@@ -440,7 +448,9 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		if(!isset($findParamsArray['limit']))
 			$findParamsArray['limit']=0;
 		
-		$stmt = $folder->folders($findParams);
+		//$stmt = $folder->folders($findParams);
+		
+		$stmt = $folder->getSubFolders($findParams);
 
 		$store->setStatement($stmt);
 

@@ -525,9 +525,9 @@ GO.files.FileBrowser = function(config){
 			var thumbs = this.gridStore.reader.jsonData.thumbs=='1';
 			if(thumbs!=pressed)
 				GO.request({
-					url:'files/folder/submit',
+					url:'files/folderPreference/submit',
 					params: {						
-						id: this.folder_id,
+						folder_id: this.folder_id,
 						thumbs: pressed ? '1' : '0'
 					}
 				});
