@@ -731,8 +731,13 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		$imapMessage = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
 
+		$inline = true;
+		
+		if(isset($params['inline']) && $params['inline'] == 0)
+			$inline = false;
+		
 		$file = new GO_Base_Fs_File($params['filename']);
-		GO_Base_Util_Http::outputDownloadHeaders($file,true,true);
+		GO_Base_Util_Http::outputDownloadHeaders($file,$inline,true);
 
 		$imapMessage->getImapConnection()->get_message_part_start($imapMessage->uid, $params['number']);
 		while ($line = $imapMessage->getImapConnection()->get_message_part_line()) {

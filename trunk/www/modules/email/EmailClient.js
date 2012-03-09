@@ -1264,7 +1264,6 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	
 	openAttachment :  function(attachment, panel, forceDownload)
 	{
-
 		var params = {
 			action:'attachment',
 			account_id: this.account_id,
@@ -1375,6 +1374,8 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 					}	
 				
 				default:
+					if(forceDownload)
+						attachment.url+='&inline=0';
 					window.open(attachment.url);
 					break;
 			}
