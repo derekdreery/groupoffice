@@ -263,9 +263,6 @@ GO.calendar.SettingsPanel = function(config) {
 };
 
 Ext.extend(GO.calendar.SettingsPanel, Ext.Panel, {
-	onLoadSettings : function(action) {
-		this.selectCalendar.setRemoteText(action.result.data.default_calendar_name);
-	},
 
 	onSaveSettings : function() {
 
