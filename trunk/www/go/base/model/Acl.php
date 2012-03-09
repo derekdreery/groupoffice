@@ -16,6 +16,11 @@
 /**
  * The ACL model
  * 
+ * 
+ * Add group to ACL:
+ * 
+ * replace into go_acl (acl_id, group_id, level) select acl_id,<group_id>,4 from go_users;
+ * 
  * @version $Id: Group.php 7607 2011-08-04 13:41:42Z mschering $
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl>

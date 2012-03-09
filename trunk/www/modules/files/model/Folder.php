@@ -617,7 +617,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	public function moveContentsFrom(GO_Files_Model_Folder $sourceFolder){
 		
 		//make sure database is in sync with filesystem.
-		$sourceFolder->syncFilesystem();
+		$sourceFolder->syncFilesystem(true);
 		
 		$stmt = $sourceFolder->folders();
 		while($subfolder = $stmt->fetch()){
