@@ -32,24 +32,31 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 			$response['data']['thumbnail_url'] = $model->thumbURL;
 		else
 			$response['data']['thumbnail_url'] = "";
+		
+		try{
+			if(GO::modules()->filesearch){
+				$filesearch = GO_Filesearch_Model_Filesearch::model()->findByPk($model->id);
+				if(!$filesearch){
+					$filesearch = GO_Filesearch_Model_Filesearch::model()->createFromFile($model);
+				}
 
-		if(GO::modules()->filesearch){
-			$filesearch = GO_Filesearch_Model_Filesearch::model()->findByPk($model->id);
-			if(!$filesearch){
-				$filesearch = GO_Filesearch_Model_Filesearch::model()->createFromFile($model);
-			}
-					
-			$response['data']=array_merge($response['data'],$filesearch->getAttributes('formatted'));
-			
-			if (!empty($params['query_params'])) {
-				$qp = json_decode($params['query_params'], true);
-				if (isset($qp['content_all'])){
-					
-					$c = new GO_Filesearch_Controller_Filesearch();
-					
-					$response['data']['text'] = $c->highlightSearchParams($qp, $response['data']['text']);
+				$response['data']=array_merge($response['data'],$filesearch->getAttributes('formatted'));
+
+				if (!empty($params['query_params'])) {
+					$qp = json_decode($params['query_params'], true);
+					if (isset($qp['content_all'])){
+
+						$c = new GO_Filesearch_Controller_Filesearch();
+
+						$response['data']['text'] = $c->highlightSearchParams($qp, $response['data']['text']);
+					}
 				}
 			}
+		}
+		catch(Exception $e){
+			GO::debug((string) $e);
+			
+			$response['data']['text'] = "Index out of date. Please rebuild it using the admin tools.";
 		}
 
 		return parent::afterDisplay($response, $model, $params);
