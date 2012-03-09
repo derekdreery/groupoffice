@@ -385,6 +385,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		return $store->getData();
 	}
+	
+	private $_listFolderPermissionLevel;
 
 	protected function actionList($params) {
 
@@ -395,6 +397,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		//This will check permissions too.
 		$folder = GO_Files_Model_Folder::model()->findByPk($params['folder_id']);
 
+		$this->_listFolderPermissionLevel=$folder->permissionLevel;
+		
 		if(!$folder)
 			return false;
 
@@ -516,6 +520,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$record['type'] = $model->fsFile->typeDescription();
 			$record['extension'] = $model->extension;
 			$record['size']=$model->size;
+			$record['permission_level']=$this->_listFolderPermissionLevel;
 		}
 		$record['thumb_url'] = $model->thumbURL;
 

@@ -241,14 +241,13 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 					break;
 		 		
 				default:
+					this.lockButton.show();
+					this.gotaButton.show();
 					
-					this.lockButton.setDisabled(this.records[0].data.locked_user_id>0);						
-		
-					this.gotaButton.setDisabled(this.records[0].data.locked_user_id>0 &&this.records[0].data.locked_user_id!=GO.settings.user_id);
-
+					this.lockButton.setDisabled(this.records[0].data.locked_user_id>0);								
+					this.gotaButton.setDisabled(this.records[0].data.permission_level<GO.permissionLevels.write || (this.records[0].data.locked_user_id>0 &&this.records[0].data.locked_user_id!=GO.settings.user_id));
 					
 					this.downloadButton.show();
-					this.gotaButton.show();
 					clickedAt == 'tree' ? this.compressButton.hide() : this.compressButton.show();
 					this.decompressButton.hide();
 					this.downloadLinkButton.show();
