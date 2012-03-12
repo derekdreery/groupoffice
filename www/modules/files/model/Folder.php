@@ -623,6 +623,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		
 		$stmt = $sourceFolder->folders();
 		while($subfolder = $stmt->fetch()){
+			GO::debug("MOVE ".$subfolder->name);
 			$subfolder->parent_id=$this->id;
 			$subfolder->appendNumberToNameIfExists();
 			$subfolder->save();
@@ -630,6 +631,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		
 		$stmt = $sourceFolder->files();
 		while($file = $stmt->fetch()){
+			GO::debug("MOVE ".$file->name);
 			$file->folder_id=$this->id;
 			$file->appendNumberToNameIfExists();
 			$file->save();
