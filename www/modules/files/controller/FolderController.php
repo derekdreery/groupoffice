@@ -606,6 +606,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				$existingFolder->readonly = 1;
 				$existingFolder->save();
 				
+				$folder->systemSave = true;
+				
 				$existingFolder->moveContentsFrom($folder);
 				
 				//delete empty folder.
