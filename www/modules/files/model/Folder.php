@@ -100,7 +100,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 				'folders' => array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_Folder', 'field' => 'parent_id', 'delete' => true, 'findParams'=>  GO_Base_Db_FindParams::newInstance()->order('name','ASC')),
 				'files' => array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_File', 'field' => 'folder_id', 'delete' => true),
 				'notifyUsers'=>array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_FolderNotification', 'field' => 'folder_id', 'delete' => true),
-				'preferences'=>array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_FolderPref', 'field' => 'folder_id', 'delete' => true),
+				'preferences'=>array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_FolderPreference', 'field' => 'folder_id', 'delete' => true),
 		);
 	}
 	
