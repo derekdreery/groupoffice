@@ -598,7 +598,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 //			$fsFolder->appendNumberToNameIfExists();
 			
 			if(($existingFolder = $destinationFolder->hasFolder($fsFolder->name()))){
-				GO::debug("Merging into existing folder.".$folder->path.' ('.$folder->id.') -> '.$existingFolder->path).' ('.$existingFolder->id.')';
+				GO::debug("Merging into existing folder.".$folder->path.' ('.$folder->id.') -> '.$existingFolder->path.' ('.$existingFolder->id.')');
 				if (!empty($model->acl_id))
 					$existingFolder->acl_id = $model->acl_id;
 	
