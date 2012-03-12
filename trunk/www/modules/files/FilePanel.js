@@ -192,6 +192,9 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 
 		if(GO.calendar)
 			this.template += GO.calendar.EventTemplate;
+		
+		if(GO.workflow)
+			this.template +=GO.workflow.WorkflowTemplate;
 
 		this.template += GO.linksTemplate;
 		
