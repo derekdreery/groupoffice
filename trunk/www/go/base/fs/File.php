@@ -103,7 +103,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		if(GO_Base_Fs_File::$allowDeletes)		
 			return !file_exists($this->path) || unlink($this->path);
 		else
-			throw new Exception("The program tried to delete a file while GO_Base_Fs_File::\$allowDeletes is set to false.");
+			throw new Exception("The program tried to delete a file (".$this->stripFileStoragePath().") while GO_Base_Fs_File::\$allowDeletes is set to false.");
 	}
 	
 	/**
