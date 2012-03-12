@@ -1103,14 +1103,12 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	},
 	
 	onDelete : function(clickedAt){
-
 		if(clickedAt=='tree')
 		{
 			var records = this.getSelectedTreeRecords();
 			GO.deleteItems({
-				url:GO.settings.modules.files.url+'action.php',
+				url:GO.url('files/folder/delete'),
 				params:{
-					task:'delete',
 					id: records[0].data.id
 				},
 				count:1,
