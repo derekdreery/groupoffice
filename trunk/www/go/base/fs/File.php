@@ -100,10 +100,17 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 * @return boolean 
 	 */
 	public function delete(){
+		
+		if(!file_exists($this->path))
+			return true;
+		
 		if(GO_Base_Fs_File::$allowDeletes)		
-			return !file_exists($this->path) || unlink($this->path);
-		else
-			throw new Exception("The program tried to delete a file (".$this->stripFileStoragePath().") while GO_Base_Fs_File::\$allowDeletes is set to false.");
+			return unlink($this->path);
+		else{
+			$errorMsg = "The program tried to delete a file (".$this->stripFileStoragePath().") while GO_Base_Fs_File::\$allowDeletes is set to false.";
+			GO::debug($errorMsg);
+			throw new Exception($errorMsg);
+		}
 	}
 	
 	/**
