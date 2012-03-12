@@ -1360,7 +1360,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 								{
 									images.push({
 										name: r.name,
-										src: r.url
+										src: r.url+'&inline=0'
 									});
 								}
 								if(r.name==attachment.name)
