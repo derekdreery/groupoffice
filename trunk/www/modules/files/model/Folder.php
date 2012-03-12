@@ -624,6 +624,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		$stmt = $sourceFolder->folders();
 		while($subfolder = $stmt->fetch()){
 			GO::debug("MOVE ".$subfolder->name);
+			$subfolder->systemSave=$sourceFolder->systemSave;
 			$subfolder->parent_id=$this->id;
 			$subfolder->appendNumberToNameIfExists();
 			$subfolder->save();
