@@ -125,7 +125,7 @@ Ext.extend(GO.tasks.SimpleTasksPanel, GO.grid.GridPanel, {
 		}, this);
    
 		this.on("rowdblclick", function(grid, rowClicked, e){
-			GO.linkHandlers[12].call(this, grid.selModel.selections.keys[0]);
+			GO.linkHandlers["GO_Tasks_Model_Task"].call(this, grid.selModel.selections.keys[0]);
 		}, this);
 			
 		Ext.TaskMgr.start({
@@ -167,54 +167,6 @@ GO.mainLayout.onReady(function(){
 								scope:this
 							}
 						});
-						
-//						this.manageTasksWindow = new Ext.Window({
-//							layout:'fit',
-//							items:this.PortletSettings =  new GO.tasks.PortletSettings(),
-//							width:700,
-//							height:400,
-//							title:GO.tasks.lang.visibleTasklists,
-//							closeAction:'hide',
-//							buttons:[{
-//								text: GO.lang.cmdSave,
-//								handler: function(){
-//									var params={
-//										'task' : 'save_portlet'
-//									};
-//									if(this.PortletSettings.store.loaded){
-//										params['tasklists']=Ext.encode(this.PortletSettings.getGridData());
-//									}
-//									Ext.Ajax.request({
-//										url: GO.settings.modules.tasks.url+'action.php',
-//										params: params,
-//										callback: function(options, success, response){
-//											if(!success)
-//											{
-//												Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
-//											}else
-//											{
-//												//var responseParams = Ext.decode(response.responseText);
-//												this.PortletSettings.store.reload();
-//												this.manageTasksWindow.hide();
-//												
-//												tasksGrid.store.reload();
-//											}
-//										},
-//										scope:this
-//									});
-//								},
-//								scope: this
-//							}],
-//							listeners:{
-//								show: function(){
-//									if(!this.PortletSettings.store.loaded)
-//									{
-//										this.PortletSettings.store.load();
-//									}
-//								},
-//								scope:this
-//							}
-//						});
 					}
 					this.selectTasklistsWin.show();
 				}
