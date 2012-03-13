@@ -54,7 +54,7 @@ class GO_Base_Router{
 	}
 	
 	/**
-	 * Get the currently processing controller action.
+	 * Get the currently processing controller action in lowercase.
 	 * 
 	 * @return string
 	 */
