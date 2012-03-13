@@ -161,13 +161,18 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 * @return string The path to the template folder in the current module. 
 	 */
 	private function _getTemplateFolderPath(){
-		$path = '';
+		$path = $this->rootTemplatePath;
 		$moduleName = $this->getModule()->id;
 		
-		$path .= GO::config()->root_path.'modules/'.$moduleName;
+//		$path .= GO::config()->root_path.'modules/'.$moduleName;
+//		if($moduleName != 'sites')
+//			$path .= '/sites';
+//		$path .= '/templates/'.$this->_site->template.'/';
+		
 		if($moduleName != 'sites')
-			$path .= '/sites';
-		$path .= '/templates/'.$this->_site->template.'/';
+			$path .= 'modules/'.$moduleName.'/';
+		
+		
 		return $path;
 	}
 	
@@ -177,13 +182,17 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 * @return string The url to the template folder in the current module. 
 	 */
 	private function _getTemplateFolderUrl(){
-		$url = '';
+		$url = $this->rootTemplateUrl;
 		$moduleName = $this->getModule()->id;
 		
-		$url .= GO::config()->host.'modules/'.$moduleName;
+//		$url .= GO::config()->host.'modules/'.$moduleName;
+//		if($moduleName != 'sites')
+//			$url .= '/sites';
+//		$url .= '/templates/'.$this->_site->template.'/';
+//		
 		if($moduleName != 'sites')
-			$url .= '/sites';
-		$url .= '/templates/'.$this->_site->template.'/';
+			$url .= 'modules/'.$moduleName.'/';
+		
 		return $url;
 	}
 	
