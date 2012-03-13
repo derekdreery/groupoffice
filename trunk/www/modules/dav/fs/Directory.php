@@ -203,7 +203,7 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 			throw new Sabre_DAV_Exception_FileNotFound("Folder not found in database");
 		}
 		
-		$stmt = $f->folders();
+		$stmt = $f->getSubFolders();
 
 		while ($folder = $stmt->fetch()) {
 			$nodes[] = $this->getChild($folder->name);
