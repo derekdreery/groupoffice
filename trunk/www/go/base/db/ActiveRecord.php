@@ -1880,16 +1880,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$attributes=$this->columns[$field];
 			
 			if(!empty($attributes['required']) && empty($this->_attributes[$field])){				
-				$this->setValidationError($field, $this->getAttributeLabel($field).' is required');				
+				$this->setValidationError($field, sprintf(GO::t('attributeRequired'),$this->getAttributeLabel($field)));				
 			}elseif(!empty($attributes['length']) && !empty($this->_attributes[$field]) && GO_Base_Util_String::length($this->_attributes[$field])>$attributes['length'])
 			{
-				$this->setValidationError($field, $this->getAttributeLabel($field).' was longer then the maximum allowed size of '.$attributes['length']);
+				$this->setValidationError($field, sprintf(GO::t('attributeTooLong'),$this->getAttributeLabel($field),$attributes['length']));
 			}elseif(!empty($attributes['regex']) && !empty($this->_attributes[$field]) && !preg_match($attributes['regex'], $this->_attributes[$field]))
 			{
-				$this->setValidationError($field, $this->getAttributeLabel($field).' was not correctly formatted');
+				$this->setValidationError($field, sprintf(GO::t('attributeIncorrectFormat'),$this->getAttributeLabel($field)));
 			}elseif(!empty($attributes['validator']) && !empty($this->_attributes[$field]) && !call_user_func($attributes['validator'], $this->_attributes[$field]))
 			{
-				$this->setValidationError($field, $this->getAttributeLabel($field).' did not validate');
+				$this->setValidationError($field, sprintf(GO::t('attributeInvalid'),$this->getAttributeLabel($field)));
 			}
 		}
 		

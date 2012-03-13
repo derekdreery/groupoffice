@@ -493,3 +493,8 @@ $l['missingRemoteModelId'] = 'Naam model niet doorgegeven aan dialoog.';
 $l['executeQuery'] = 'Zoekopdracht uitvoeren';
 $l['savedQuery'] = 'Opgeslagen zoekopdracht';
 $l['strNew'] = 'Nieuw';
+
+$l['attributeRequired']='Veld %s is verplicht';
+$l['attributeTooLong']='Veld %s is langer dan het maximum van %s tekens';
+$l['attributeIncorrectFormat']='Veld %s is niet in het juiste formaat';
+$l['attributeInvalid']='Field %s is ongeldig';
