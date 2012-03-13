@@ -2420,7 +2420,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}else
 			$sql .= "`".$this->primaryKey()."`=:".$this->primaryKey();
 		
-		//if($this->_debugSql)
+		if($this->_debugSql)
 			$this->_debugSql(array('bindParams'=>$this->_attributes), $sql);
 
 		try{
