@@ -92,7 +92,7 @@ GO.addressbook.TemplatesGrid = function(config)
 
 	config.deleteConfig= {
 		callback: function(){
-			GO.addressbook.ooTemplatesStore.reload();
+			GO.documenttemplates.ooTemplatesStore.reload();
 		},
 		scope: this
 	};
