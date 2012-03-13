@@ -162,7 +162,9 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		);
 
 		if ($expanded) {
-			$stmt = $folder->getSubFolders();
+			$stmt = $folder->getSubFolders(GO_Base_Db_FindParams::newInstance()
+							->limit(100)//not so nice hardcoded limit
+							->order('name','ASC'));
 			while ($subfolder = $stmt->fetch()) {
 				$node['children'][] = $this->_folderToNode($subfolder, $expandFolderIds, false);
 			}
