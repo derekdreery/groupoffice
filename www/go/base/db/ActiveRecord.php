@@ -31,7 +31,7 @@
  * @property int/array $pk Primary key value(s) for the model
  * @property string $module Name of the module this model belongs to
  * @property boolean $isNew Is the model new and not inserted in the database yet.
- * @property GO_Customfields_Model_AbstractCustomFieldsRecord $customfieldsRecord
+ * @property GO_Customfields_Model_AbstractCustomFieldsRecord $customfieldsRecord The custom fields model with all custom attributes.
  * @property String $localizedName The localized human friendly name of this model.
  * @property int $permissionLevel @see GO_Base_Model_Acl for available levels. Returns -1 if no aclField() is set in the model.
  * 
