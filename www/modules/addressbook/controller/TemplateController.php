@@ -30,6 +30,11 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 		
 		//return parent::getStoreParams($params);
 	}
+	
+	protected function beforeStore(&$response, &$params, &$store) {
+		$store->setDefaultSortOrder('name');
+		return parent::beforeStore($response, $params, $store);
+	}
 
 	protected function beforeSubmit(&$response, &$model, &$params) {
 		
@@ -86,13 +91,12 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 			$this->_defaultTemplate->save();
 		}
 		
-		$findParams = GO_Base_Db_FindParams::newInstance();			
+		$findParams = GO_Base_Db_FindParams::newInstance()->order('name');			
 		$findParams->getCriteria()->addCondition('type', GO_Addressbook_Model_Template::TYPE_EMAIL);
 				
 		$stmt = GO_Addressbook_Model_Template::model()->find($findParams);
 		
 		$store = GO_Base_Data_Store::newInstance(GO_Addressbook_Model_Template::model());		
-
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatEmailSelectionRecord'));
 		
 		$store->setStatement($stmt);
