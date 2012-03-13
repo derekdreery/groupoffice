@@ -155,22 +155,20 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				'text' => $folder->name,
 				'id' => $folder->id,
 				'draggable' => false,
-				'iconCls' => 'folder-default',
+				'iconCls' => !$folder->acl_id || $folder->readonly ? 'folder-default' : 'folder-shared',
 				'expanded' => $expanded,
 				'parent_id'=>$folder->parent_id,
 				'path'=>$folder->path
 		);
 
 		if ($expanded) {
-			$stmt = $folder->folders();
+			$stmt = $folder->getSubFolders();
 			while ($subfolder = $stmt->fetch()) {
 				$node['children'][] = $this->_folderToNode($subfolder, $expandFolderIds, false);
 			}
 		} else {
 			//check if folder has subfolders
-			$firstSubfolder = $folder->folders(array(
-					'single' => true
-							));
+			$firstSubfolder = $folder->getSubFolders(GO_Base_Db_FindParams::newInstance()->single());
 			if (!$firstSubfolder) {
 				//it doesn't habe any subfolders so instruct the client about this
 				//so it can present the node as a leaf.
@@ -396,6 +394,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		//get the folder that contains the files and folders to list.
 		//This will check permissions too.
 		$folder = GO_Files_Model_Folder::model()->findByPk($params['folder_id']);
+		if(!$folder)
+			return false;
 
 		$this->_listFolderPermissionLevel=$folder->permissionLevel;
 		
@@ -535,6 +535,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		{
 			//throw new Exception("Fs folder doesn't exist! ".$folder->fsFolder->path());
 			GO::debug("Deleting it because filesystem folder doesn't exist");
+			$folder->readonly = 1; //makes sure acl is not deleted
 			$folder->delete();
 			if($mustExist || $model->acl_id)
 				return $this->_createNewModelFolder($model);
@@ -558,7 +559,12 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 
 		$currentPath = $folder->path;
-		$newPath = $model->buildFilesPath();		
+		$newPath = $model->buildFilesPath();	
+		
+		if(GO::router()->getControllerAction()=='checkdatabase'){
+			$destinationFolder = GO_Files_Model_Folder::model()->findByPath(
+							dirname($newPath), true, array('acl_id'=>$model->findAclId(),'readonly'=>1));
+		}
 
 		if ($currentPath != $newPath) {
 			
@@ -566,7 +572,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 			//model has a new path. We must move the current folder					
 			$destinationFolder = GO_Files_Model_Folder::model()->findByPath(
-							dirname($newPath), true);
+							dirname($newPath), true, array('acl_id'=>$model->findAclId(),'readonly'=>1));
 			
 			
 			//sometimes the folder must be moved into a folder with the same. name
@@ -599,28 +605,29 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			
 			if(($existingFolder = $destinationFolder->hasFolder($fsFolder->name()))){
 				GO::debug("Merging into existing folder.".$folder->path.' ('.$folder->id.') -> '.$existingFolder->path.' ('.$existingFolder->id.')');
-				if (!empty($model->acl_id))
-					$existingFolder->acl_id = $model->acl_id;
-	
+				//if (!empty($model->acl_id))
+				$existingFolder->acl_id = $model->findAclId();	
 				$existingFolder->visible = 0;
 				$existingFolder->readonly = 1;
 				$existingFolder->save();
 				
 				$folder->systemSave = true;
 				
-				$existingFolder->moveContentsFrom($folder);
+				$existingFolder->moveContentsFrom($folder, true);
 				
 				//delete empty folder.
+				$folder->readonly = 1; //makes sure acl is not deleted
 				$folder->delete();				
 				
 				return $existingFolder->id;
 
 			}else
 			{
-				if ($model->acl_id>0)
-					$folder->acl_id = $model->acl_id;
-				else
-					$folder->acl_id=0;
+//				if ($model->acl_id>0)
+//					$folder->acl_id = $model->acl_id;
+//				else
+//					$folder->acl_id=0;
+				$folder->acl_id = $model->findAclId();	
 				
 				$folder->name = $fsFolder->name();			
 				$folder->parent_id = $destinationFolder->id;
@@ -632,11 +639,11 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		}else
 		{
 			GO::debug("No change needed");
-			if ($model->acl_id>0)
-				$folder->acl_id = $model->acl_id;
-			else
-				$folder->acl_id=0;
-			
+//			if ($model->acl_id>0)
+//				$folder->acl_id = $model->acl_id;
+//			else
+//				$folder->acl_id=0;
+			$folder->acl_id = $model->findAclId();				
 			$folder->systemSave = true;
 			$folder->visible = 0;
 			$folder->readonly = 1;
@@ -650,15 +657,12 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		
 		GO::debug("Create new model folder ".$model->className()."(ID:".$model->id.")");
 
-//		$f = new GO_Base_Fs_Folder(GO::config()->file_storage_path . $model->buildFilesPath());
-//		//$fullPath = $f->appendNumberToNameIfExists();
-//		$relPath = $f->stripFileStoragePath();
-
-		$folder = GO_Files_Model_Folder::model()->findByPath($model->buildFilesPath(),true);
+		$folder = GO_Files_Model_Folder::model()->findByPath($model->buildFilesPath(),true, array('acl_id'=>$model->findAclId(),'readonly'=>1));
 				
-		if (!empty($model->acl_id))
-			$folder->acl_id = $model->acl_id;
+//		if (!empty($model->acl_id))
+//			$folder->acl_id = $model->acl_id;
 		
+		$folder->acl_id=$model->findAclId();
 		$folder->visible = 0;
 		$folder->readonly = 1;
 		$folder->systemSave = true;

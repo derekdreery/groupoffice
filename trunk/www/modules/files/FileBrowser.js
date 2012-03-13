@@ -171,13 +171,13 @@ GO.files.FileBrowser = function(config){
 
 
 	var fields ={
-		fields:['type_id', 'id','name','type', 'size', 'mtime', 'extension', 'timestamp', 'thumb_url','path','acl_id','locked_user_id','locked','folder_id','permission_level'],
+		fields:['type_id', 'id','name','type', 'size', 'mtime', 'extension', 'timestamp', 'thumb_url','path','acl_id','locked_user_id','locked','folder_id','permission_level','readonly'],
 		columns:[{
 			id:'name',
 			header:GO.lang['strName'],
 			dataIndex: 'name',
 			renderer:function(v, meta, r){
-				var cls = r.get('acl_id')>0 ? 'folder-shared' : 'filetype filetype-'+r.get('extension');
+				var cls = r.get('acl_id')>0 && r.get('readonly')==0 ? 'folder-shared' : 'filetype filetype-'+r.get('extension');
 				if(r.get('locked_user_id')>0)
 					v = '<div class="fs-grid-locked">'+v+'</div>';
 				

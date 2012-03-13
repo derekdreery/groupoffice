@@ -233,7 +233,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * @param boolean $autoCreate True to auto create the folders. ACL's will be ignored.
 	 * @return GO_Files_Model_Folder 
 	 */
-	public function findByPath($relpath, $autoCreate=false) {
+	public function findByPath($relpath, $autoCreate=false, $autoCreateAttributes=array()) {
 		
 
 		$oldIgnoreAcl = GO::$ignoreAclPermissions;
@@ -255,9 +255,14 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 					return false;
 
 				$folder = new GO_Files_Model_Folder();
+				$folder->setAttributes($autoCreateAttributes);
 				$folder->name = $folderName;
 				$folder->parent_id = $parent_id;
 				$folder->save();					
+			}elseif(!empty($autoCreateAttributes))
+			{
+				$folder->setAttributes($autoCreateAttributes);
+				$folder->save();	
 			}
 
 			$parent_id = $folder->id;
@@ -583,32 +588,34 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	}
 	
 	/**
-	 * Get all the subfolders of this folder.
-	 * Unlike the standard folders relation it handles some folders differently.
-	 * On special folders like addressbooks, projects etc it checks authentication
-	 * for all subfolders. On normal folders it doesn't check authentication.
+	 * Get all the subfolders of this folder. This function checks permissions in a
+	 * special way. When folder have acl_id=0 they inherit permissions of the parent folder.
 	 * 
 	 * @return GO_Base_Db_ActiveStatement 
 	 */
-	public function getSubFolders($findParams=false){
-		if($this->parent_id==0){
-			//this is a special folder like addressbooks, projects etc.
-			//we must check acl's here
-			
+	public function getSubFolders($findParams=false){			
 			if(!$findParams)
 				$findParams=GO_Base_Db_FindParams::newInstance();
 			
+			$findParams->ignoreAcl(); //We'll build a special acl check for folders that inherit permissions here.
+			
+			$aclJoinCriteria = GO_Base_Db_FindCriteria::newInstance()
+							->addRawCondition('a.acl_id', 't.acl_id','=', false);
+			
+			$aclWhereCriteria = GO_Base_Db_FindCriteria::newInstance()
+							->addRawCondition('a.acl_id', 'NULL','IS', false)
+							->addCondition('user_id', GO::user()->id,'=','a', false)
+							->addInCondition("group_id", GO_Base_Model_User::getGroupIds(GO::user()->id),"a", false);
+			
+			$findParams->join(GO_Base_Model_AclUsersGroups::model()->tableName(), $aclJoinCriteria, 'a', 'LEFT');
 			
 			$findParams->criteria(GO_Base_Db_FindCriteria::newInstance()
 									->addModel(GO_Files_Model_Folder::model())
-									->addCondition('parent_id', $this->id));
-
+									->addCondition('parent_id', $this->id)
+									->mergeWith($aclWhereCriteria));
+			
+		
 			return GO_Files_Model_Folder::model()->find($findParams);
-		}else
-		{
-			//relational queries don't check acl's
-			return $this->folders($findParams);
-		}
 	}
 	
 	/**
@@ -616,7 +623,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @param GO_Files_Model_Folder $sourceFolder 
 	 */
-	public function moveContentsFrom(GO_Files_Model_Folder $sourceFolder){
+	public function moveContentsFrom(GO_Files_Model_Folder $sourceFolder, $mergeFolders=false){
 		
 		//make sure database is in sync with filesystem.
 		$sourceFolder->syncFilesystem(true);
@@ -624,10 +631,22 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		$stmt = $sourceFolder->folders();
 		while($subfolder = $stmt->fetch()){
 			GO::debug("MOVE ".$subfolder->name);
-			$subfolder->systemSave=$sourceFolder->systemSave;
-			$subfolder->parent_id=$this->id;
-			$subfolder->appendNumberToNameIfExists();
-			$subfolder->save();
+			$subfolder->systemSave=true;			
+			if(!$mergeFolders){
+				$subfolder->parent_id=$this->id;
+				$subfolder->appendNumberToNameIfExists();
+				$subfolder->save();
+			}else
+			{
+				if(($existingFolder = $this->hasFolder($subfolder->name))){
+					$existingFolder->moveContentsFrom($subfolder, true);
+					$subfolder->delete();
+				}else
+				{
+					$subfolder->parent_id=$this->id;
+					$subfolder->save();
+				}
+			}			
 		}
 		
 		$stmt = $sourceFolder->files();
@@ -676,6 +695,4 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 //		
 //		return $response;
 	}
-	
-	
 }
