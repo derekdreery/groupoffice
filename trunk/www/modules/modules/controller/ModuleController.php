@@ -17,6 +17,7 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 	
 	protected function getStoreParams($params) {
 		return GO_Base_Db_FindParams::newInstance()
+						->ignoreAcl()
 						->limit(0);
 	}
 	
@@ -40,6 +41,8 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 		$response['results']=array();
 		
 		$modules = GO::modules()->getAvailableModules();
+		
+		$availableModules=array();
 				
 		foreach($modules as $moduleClass){
 			
