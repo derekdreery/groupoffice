@@ -133,7 +133,8 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			 */
 			foreach ($groupsVisible as $group) {
 				if ($group['visible_permission']) {
-					$model->acl->addGroup($group['id']);
+					
+					$model->acl->addGroup($group['id'], GO_Base_Model_Acl::MANAGE_PERMISSION);
 				} else {
 					$model->acl->removeGroup($group['id']);
 				}
