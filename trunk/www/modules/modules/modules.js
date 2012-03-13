@@ -316,7 +316,7 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 			this.permissionsWin.on('hide',function(){
 				// Loop through the recently installed modules, allowing the user to
 				// set the permissions, module by module.
-				if(this.installedModules.length){
+				if(this.installedModules && this.installedModules.length){
 					var r = this.installedModules.shift();
 					this.permissionsWin.show(r.id,r.name,r.acl_id);
 				}
