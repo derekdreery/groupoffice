@@ -124,25 +124,25 @@ Ext.extend(GO.base.model.multiselect.panel, GO.grid.EditorGridPanel, {
 		this.store.loaded=false;
 		this.model_id=this.store.baseParams.model_id=model_id;
 		this.setDisabled(!model_id);
-	},
+	}
 	//private
-	callHandler : function(hide){
-		if(this.handler)
-		{
-			if(!this.scope)
-			{
-				this.scope=this;
-			}
-			
-			var selectedIds = this.getSelectionModel().getSelections().keys;
-			
-			var handler = this.handler.createDelegate(this.scope, [this.grid, selectedIds]);
-			handler.call();
-		}
-		if(hide)
-		{
-			this.hide();
-		}
-	}	
+//	callHandler : function(hide){
+//		if(this.handler)
+//		{
+//			if(!this.scope)
+//			{
+//				this.scope=this;
+//			}
+//			
+//			var selectedIds = this.getSelectionModel().getSelections().keys;
+//			
+//			var handler = this.handler.createDelegate(this.scope, [this.grid, selectedIds]);
+//			handler.call();
+//		}
+//		if(hide)
+//		{
+//			this.ownerCt.hide();
+//		}
+//	}	
 	
 });
