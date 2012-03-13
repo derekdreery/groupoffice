@@ -507,3 +507,8 @@ $l['missingRemoteModelId'] = 'Model name not passed to the dialog.';
 $l['executeQuery'] = 'Execute query';
 $l['savedQuery'] = 'Saved query';
 $l['strNew'] = 'New';
+
+$l['attributeRequired']='Field %s is required';
+$l['attributeTooLong']='Field %s is longer than the maximum of %s characters';
+$l['attributeIncorrectFormat']='Field %s is formatted incorrectly';
+$l['attributeInvalid']='Field %s was invalid';
