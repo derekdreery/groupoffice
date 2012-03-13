@@ -252,7 +252,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$this->_link($params, $message);
 		
 		//if there's an autolink tag in the message we want to link outgoing messages too.
-		if(($tag = $this->_findAutoLinkTag($params['content_type']=='html' ? $params['htmlbody'] : $params['plainbody']))){
+		$tags = $this->_findAutoLinkTags($params['content_type']=='html' ? $params['htmlbody'] : $params['plainbody']);
+		while($tag = array_shift($tags)){
 			if($tag['account_id']==$account->id){
 				try{
 					$linkModel = GO::getModel($tag['model'])->findByPk($tag['model_id']);				
@@ -650,10 +651,12 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		return $response;
 	}
 	
-	private function _findAutoLinkTag($data){
+	private function _findAutoLinkTags($data){
 		preg_match_all('/\[link:([^]]+)\]/',$data, $matches, PREG_SET_ORDER);
 		
-		if($match=array_shift($matches)){
+		$tags = array();
+		
+		while($match=array_shift($matches)){
 			$props = explode(',',base64_decode($match[1]));
 			
 			$tag=array();
@@ -662,9 +665,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$tag['model'] = $props[2];
 			$tag['model_id'] = $props[3];
 		
-			return $tag;
+			$tags[]=$tag;			
+			
 		}
-		return false;
+		return $tags;
 	}
 
 	/**
@@ -676,19 +680,24 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	 * @return string 
 	 */
 	private function _handleAutoLinkTag(GO_Email_Model_ImapMessage $imapMessage, $params, $response) {		
-		if(!$imapMessage->seen && $tag = $this->_findAutoLinkTag($response['htmlbody'])){
-			if($tag['server']==$_SERVER['SERVER_NAME'] && $imapMessage->account->id == $tag['account_id']){								
-				$linkModel = GO::getModel($tag['model'])->findByPk($tag['model_id']);				
-				if($linkModel){				
-					GO_Savemailas_Model_LinkedEmail::model()->createFromImapMessage($imapMessage, $linkModel);		
+		if(!$imapMessage->seen){
+			
+			$tags = $this->_findAutoLinkTags($response['htmlbody']);
+			
+			while($tag = array_shift($tags)){			
+				if($tag['server']==$_SERVER['SERVER_NAME'] && $imapMessage->account->id == $tag['account_id']){								
+					$linkModel = GO::getModel($tag['model'])->findByPk($tag['model_id']);				
+					if($linkModel){				
+						GO_Savemailas_Model_LinkedEmail::model()->createFromImapMessage($imapMessage, $linkModel);		
 
-					//we need this just to display a unified name
-					$searchCacheModel = $linkModel->getCachedSearchRecord();
+						//we need this just to display a unified name
+						$searchCacheModel = $linkModel->getCachedSearchRecord();
 
-					$response['htmlbody']='<div class="em-autolink-message">'.
-									sprintf(GO::t('autolinked','email'),'<span class="em-autolink-link" onclick="GO.linkHandlers[\''.$tag['model'].'\'].call(this, '.
-													$tag['model_id'].');">'.$searchCacheModel->name.'</div>').
-									$response['htmlbody'];					
+						$response['htmlbody']='<div class="em-autolink-message">'.
+										sprintf(GO::t('autolinked','email'),'<span class="em-autolink-link" onclick="GO.linkHandlers[\''.$tag['model'].'\'].call(this, '.
+														$tag['model_id'].');">'.$searchCacheModel->name.'</div>').
+										$response['htmlbody'];					
+					}
 				}
 			}
 		}
