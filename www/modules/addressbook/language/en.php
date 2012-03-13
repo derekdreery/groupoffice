@@ -356,3 +356,5 @@ $l['setCurrentTemplateAsDefault']='Set current template as default';
 $l['contactCustomFields']='Contacts custom fields';
 $l['companyCustomFields']='Company custom fields';
 $l['editUser']='Edit user';
+
+$l['templateContent']='Document';

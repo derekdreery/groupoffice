@@ -52,6 +52,11 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 		return GO::t('template', 'addressbook');
 	}
 	
+	protected function init() {
+		$this->columns['content']['required']=true;
+		return parent::init();
+	}
+	
 	
 	public function aclField(){
 		return 'acl_id';	
