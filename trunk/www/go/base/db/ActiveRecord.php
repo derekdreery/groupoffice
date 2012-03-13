@@ -89,10 +89,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	private $_validationErrors = array();
 
-	private $_attributeLabels;
-	
-	private $_attributeOutputMode;
-	
+	private $_attributeLabels;	
 	
 	/**
 	 *
@@ -187,10 +184,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	private $_relatedCache;
-	
-	
-	
-	
 	
 	protected $_attributes=array();
 	
@@ -1565,7 +1558,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			//We can't put this in the related cache because there's no reliable way to check if the situation has changed.
 		
 			//In a has one to relation ship the primary key of this model is stored in the "field" attribute of the related model.					
-			return GO::getModel($model)->findSingleByAttribute($r[$name]['field'], $this->pk, array('relation'=>$name));			
+			return empty($this->pk) ? false : GO::getModel($model)->findSingleByAttribute($r[$name]['field'], $this->pk, array('relation'=>$name,'debugSql'=>true));			
 		}elseif($r[$name]['type']==self::HAS_MANY)
 		{									
 			$remoteFieldThatHoldsMyPk = $r[$name]['field'];
