@@ -8,21 +8,13 @@ class GO_Comments_Controller_Comment extends GO_Base_Controller_AbstractModelCon
 		
 		return GO_Base_Db_FindParams::newInstance()
 						->ignoreAcl()	
+						->select('t.*')
 						->order('id','DESC')
 						->criteria(
 										GO_Base_Db_FindCriteria::newInstance()
 											->addCondition('model_id', $params['model_id'])
 											->addCondition('model_type_id', GO_Base_Model_ModelType::model()->findByModelName($params['model_name']))										
 										);
-//
-//		return array(
-//				'by' => array(
-//						array('model_id',$params['model_id'],'='),
-//						array('model_type_id',GO_Base_Model_ModelType::model()->findByModelName($params['model_name']),'=')
-//						),
-//				'ignoreAcl'=>true,
-//				'joinCustomFields'=>false
-//				);
 	}
 	
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
