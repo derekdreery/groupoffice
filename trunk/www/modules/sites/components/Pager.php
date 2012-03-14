@@ -210,7 +210,7 @@ class GO_Sites_Components_Pager extends GO_Sites_Components_Component {
 	public function renderTotalFound(){
 		echo '<table class="pager-totalfound-table">';
 			echo '<tr>';
-				echo '<td>Total items: '.$this->_totalFound.'</td>';
+				echo '<td>'.$this->_controller->t('pager_totalItems').': '.$this->_totalFound.'</td>';
 			echo '</tr>';
 		echo '</table>';
 	}
@@ -222,7 +222,7 @@ class GO_Sites_Components_Pager extends GO_Sites_Components_Component {
 	public function renderTotalPages(){
 		echo '<table class="pager-totalpages-table">';
 			echo '<tr>';
-				echo '<td>Page: '.$this->_currentPageNumber.' of '.$this->_totalPages.'</td>';
+				echo '<td>'.$this->_controller->t('pager_Page').': '.$this->_currentPageNumber.' '.$this->_controller->t('pager_Of').' '.$this->_totalPages.'</td>';
 			echo '</tr>';
 		echo '</table>';
 	}

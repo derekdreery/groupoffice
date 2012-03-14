@@ -88,7 +88,7 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 
 	public function t($key){
 		if(!$this->_language)
-			$this->_language = new GO_Sites_Language($this->_site->language);
+			$this->_language = new GO_Sites_Language($this->getRootTemplatePath(),$this->_site->language);
 		
 		return $this->_language->getTranslation($key);
 	}

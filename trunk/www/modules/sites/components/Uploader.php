@@ -37,7 +37,7 @@ class GO_Sites_Components_Uploader extends GO_Sites_Components_Component {
 	}
 	
 	public function render() {
-		echo '<div id="'.$this->_id.'">You browser doesn\'t have Adobe Flash installed.</div>';
+		echo '<div id="'.$this->_id.'">'.$this->_controller->t('uploader_NoFlash').'</div>';
 	}
 	
 	private function createjs(){
