@@ -34,6 +34,13 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	private $_page;
 	
 	/**
+	 * The language for this site
+	 * 
+	 * @var GO_Sites_Language 
+	 */
+	private $_language;
+	
+	/**
 	 * The path to the template folder in the sites module.
 	 *
 	 * @var string 
@@ -61,8 +68,8 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 */
 	protected $templateFolder;
 		
-//	protected $notification;
-	
+	protected $notifications;
+		
 	/**
 	 * Construct this object.
 	 * Sets the private variables site and page.
@@ -74,10 +81,18 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 		
 		$this->_site=$site;
 		$this->_page=$page;
+		$this->notifications = $this->getSite()->getNotificationsObject();
 		
 		parent::__construct();
 	}
 
+	public function t($key){
+		if(!$this->_language)
+			$this->_language = new GO_Sites_Language($this->_site->language);
+		
+		return $this->_language->getTranslation($key);
+	}
+	
 	/**
 	 * Returns the current site object
 	 * 
