@@ -1150,4 +1150,23 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		return array('success'=>true);
 	}
 	
+	
+	protected function actionSubmitMultiple($params) {
+						
+		$records = json_decode($params['records'], true);
+		$sort = 0;
+		foreach ($records as $attributes) {
+			$model = GO::getModel($this->model)->findByPk($attributes['id']);
+			$model->setAttributes($attributes);
+			
+			if($model->getSortOrderColumn())
+				$model->{$model->getSortOrderColumn()} = $sort;
+				
+			$model->save();
+			$sort++;
+		}
+
+		return array('success' => true);
+	}
+	
 }
