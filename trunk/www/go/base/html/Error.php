@@ -17,12 +17,12 @@ class GO_Base_Html_Error extends GO_Base_Html_Input {
 				if ($pos = strpos($inputName, '[')) {
 					$key1 = substr($inputName, 0, $pos);
 					$key2 = substr($inputName, $pos + 1, -1);
-					$v=trim($_POST[$key1][$key2]);					
+					$v=isset($_POST[$key1][$key2]) ? trim($_POST[$key1][$key2]) : '';						
 				}else
-				{
-					$v=trim($_POST[$inputName]);						
+				{					
+					$v=isset($_POST[$inputName]) ? trim($_POST[$inputName]) : '';						
 				}
-				if(empty($v))
+				if($v=='')
 					parent::setError($inputName, 'This field is required');
 			}
 		}
@@ -39,9 +39,15 @@ class GO_Base_Html_Error extends GO_Base_Html_Input {
 //					$model->$replaceattr = $_POST[$attr];
 //				}
 //			}
-
-			if (!$model->validate()) {
+			$errors=array();
+			if (!$model->validate())
 				$errors = $model->getValidationErrors();
+				
+			if($model->customfieldsRecord && !$model->customfieldsRecord->validate())
+				$errors = array_merge($errors, $model->customfieldsRecord->getValidationErrors());
+			
+				
+			if(count($errors)){
 				foreach ($errors as $attribute => $message) {
 					
 					$formAttribute = isset($attrmapping[$attribute]) ? $attrmapping[$attribute] : $attribute;
@@ -49,7 +55,7 @@ class GO_Base_Html_Error extends GO_Base_Html_Input {
 					GO_Base_Html_Input::setError($formAttribute, $message); // replace is needed because of a mix up with order model and company model
 				}
 				GO_Base_Html_Error::setError(GO::t('errorsInForm'));
-			}
+			}			
 		}
 //	}
 }
