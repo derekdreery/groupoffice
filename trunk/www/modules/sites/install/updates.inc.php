@@ -24,3 +24,5 @@ CHANGE `keywords` `keywords` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_gene
 CHANGE `path` `path` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
 CHANGE `template` `template` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
 CHANGE `content` `content` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+
+$updates["201202141200"][]="ALTER TABLE `si_sites` ADD `language` VARCHAR( 10 ) NOT NULL DEFAULT 'en'";
