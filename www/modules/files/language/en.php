@@ -85,3 +85,4 @@ $l['lockedBy']='Locked by';
 $l['lock']='Lock';
 
 $l['shortVersion']='Ver.';
+$l['fileIsLocked']='File is locked';
