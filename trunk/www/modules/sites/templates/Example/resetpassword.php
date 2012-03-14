@@ -2,25 +2,25 @@
 						<div class="subkader-small-bottom">
 							<div class="subkader-small-center">						
 								<?php if($this->formok): ?>
-									<h1>Reset password was successful.</h1>								
-									<p>Your password is successfully reset.</p>
+									<h1><?php echo $this->t('resetPasswordSuccessTitle'); ?></h1>								
+									<p><?php echo $this->t('resetPasswordSuccess'); ?></p>
 								<?php else: ?>
-								<h1>Reset password</h1>								
-								<p>Fill in the form below to reset your password.</p>
+									<h1><?php echo $this->t('resetPassword'); ?></h1>								
+									<p><?php echo $this->t('resetPasswordText'); ?></p>
 								
 								<?php 
 									GO_Base_Html_Form::renderBegin('sites/user/recover','resetpassword',true);
 								
 									GO_Base_Html_Password::render(array(
 										"required" => true,
-										"label" => "Password",
+										"label" => $this->t('password'),
 										"name" => "password",
 										"value" => ''
 									));
 									
 									GO_Base_Html_Password::render(array(
 										"required" => true,
-										"label" => "Confirm",
+										"label" => $this->t('confirm'),
 										"name" => "confirm",
 										"value" => ''
 									));
