@@ -1980,6 +1980,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 //		return GO_Files_Model_Folder::model()->findByPk($this->files_folder_id);
 //		
 //	}
+	
+	/**
+	 * Get the column name of the field this model sorts on.
+	 * It will automatically give the highest number to new models.
+	 * Useful in combination with GO_Base_Controller_AbstractModelController::actionSubmitMultiple().
+	 * Drag and drop actions will save the sort order in that action.
+	 * 
+	 * @return string 
+	 */
+	public function getSortOrderColumn(){
+		return false;
+	}
 
 
 	/**
@@ -2030,7 +2042,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 
 
-		if($this->isNew){				
+		if($this->isNew){		
+			
+			//automatically set sort order column
+			if($this->getSortOrderColumn())
+				$this->{$this->getSortOrderColumn()}=$this->count();
 
 			$wasNew=true;
 
