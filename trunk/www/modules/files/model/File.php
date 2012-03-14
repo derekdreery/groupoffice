@@ -157,6 +157,14 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		return new GO_Base_Fs_File($oldPath);
 	}
 	
+	protected function beforeDelete() {
+		
+		if($this->isLocked())
+			throw new Exception(GO::t("fileIsLocked","files"));
+		
+		return parent::beforeDelete();
+	}
+	
 	protected function beforeSave() {		
 		if(!$this->isNew){
 			if($this->isModified('name')){				
