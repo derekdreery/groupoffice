@@ -13,6 +13,8 @@ class GO_Base_Html_Hidden extends GO_Base_Html_Input {
 	protected function init() {
 		$this->attributes['type']='hidden';		
 		$this->attributes['class'].=' hidden';
+		$this->attributes['renderContainer'] = false;
+		$this->attributes['label'] = false;
 	}
 
 
