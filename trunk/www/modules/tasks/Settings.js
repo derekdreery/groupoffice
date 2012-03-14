@@ -69,7 +69,7 @@ GO.tasks.SettingsPanel = function(config) {
 
 Ext.extend(GO.tasks.SettingsPanel, Ext.Panel, {
 			onLoadSettings : function(action) {
-				this.selectTaskList.setRemoteText(action.result.data.default_tasklist_name);
+				//this.selectTaskList.setRemoteText(action.result.data.default_tasklist_name);
 			},
 			
 			onSaveSettings : function(){
