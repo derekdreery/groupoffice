@@ -14,6 +14,12 @@
 						"required" => true
 					));
 					
+					GO_Base_Html_Hidden::render(array(
+						"name" => "addressbook_id",
+						"model"=> $this->contact,
+						"value"=> 1272
+					));
+					
 					GO_Base_Html_Input::render(array(
 						"model"=> $this->contact,
 						"name" => "middle_name"
@@ -104,7 +110,8 @@
 					
 					GO_Customfields_Html_Field::render(array(
 						'model'=>$this->contact,
-						'name' => "col_21"
+						'name' => "col_21",
+						"empty_value" => ""
 					));
 					
 					
