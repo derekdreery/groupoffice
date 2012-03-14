@@ -173,3 +173,5 @@ Ext.extend(GO.form.HtmlEditor,Ext.form.HtmlEditor, {
 	}
 		
 });
+
+Ext.reg('xhtmleditor', GO.form.HtmlEditor);
