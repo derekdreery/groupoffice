@@ -44,6 +44,7 @@ class GO_Addressbook_Controller_Site extends GO_Sites_Controller_Site{
 		if (GO_Base_Util_Http::isPostRequest()) {
 			$this->contact->setAttributes($params);
 			
+			// This one is needed because this column is an checkbox
 			if(!isset($params["col_21"]))
 				$this->contact->customfieldsRecord->col_21 = false;
 			else
