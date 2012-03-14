@@ -19,8 +19,6 @@
 
 class GO_Addressbook_Controller_Site extends GO_Sites_Controller_Site{
 	
-	public $addressbook = 1272;
-	
 	/**
 	 * Sets the access permissions for guests
 	 * Defaults to '*' which means that all functions can be accessed by guests.
@@ -43,17 +41,12 @@ class GO_Addressbook_Controller_Site extends GO_Sites_Controller_Site{
 
 		if (GO_Base_Util_Http::isPostRequest()) {
 			$this->contact->setAttributes($params);
-			
-			// This one is needed because this column is an checkbox
-			if(!isset($params["col_21"]))
-				$this->contact->customfieldsRecord->col_21 = false;
-			else
-				$this->contact->customfieldsRecord->col_21 = true;
-			
-			$this->contact->addressbook_id = $this->addressbook;
-			
-			if($params['email'] != $params['confirm_email'])
-				GO_Base_Html_Error::setError($this->t('compareEmailError'), 'confirm_email');
+
+			// This checks the 2 email fields
+			if(isset($params['confirm_email']) && isset($params['email'])){
+				if($params['email'] != $params['confirm_email'])
+					GO_Base_Html_Error::setError($this->t('compareEmailError'), 'confirm_email');
+			}
 
 			$ok = GO_Base_Html_Error::checkRequired();
 			GO_Base_Html_Error::validateModel($this->contact);
@@ -63,9 +56,7 @@ class GO_Addressbook_Controller_Site extends GO_Sites_Controller_Site{
 				$this->notifications->addNotification('addcontact', $this->t('formSubmitNotification'), GO_Sites_NotificationsObject::NOTIFICATION_OK);
 				$this->pageRedirect('addcontact');
 			}
-		}
-				
+		}			
 		$this->renderPage($params);
 	}
-	
 }
