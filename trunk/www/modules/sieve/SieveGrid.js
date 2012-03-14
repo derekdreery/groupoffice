@@ -154,11 +154,17 @@ GO.sieve.SieveGrid = function(config){
 		this.sieveDialog.show(record.data.index, record.data.script_name, this.store.baseParams.account_id);
 		}, this);
 
-	this.on('show', function(){
-		this.store.load();
+	this.on('show', function(){		
 		this.selectScript.store.load({
 			callback:function(){
-				this.selectScript.setValue(this.selectScript.store.reader.jsonData.active);
+				if(this.selectScript.store.reader.jsonData.success){
+					this.selectScript.setValue(this.selectScript.store.reader.jsonData.active);
+					this.store.load();
+				}else
+				{
+					//alert("Sieve not supported");
+					this.setDisabled(true);
+				}
 			},
 			scope:this
 		});
@@ -177,6 +183,7 @@ GO.sieve.SieveGrid = function(config){
 
 Ext.extend(GO.sieve.SieveGrid, GO.grid.GridPanel,{
 	setAccountId : function(account_id){
+		this.setDisabled(false);
 		this.store.baseParams.account_id = account_id;
 		this.selectScript.store.baseParams.account_id = account_id;
 	},

@@ -96,7 +96,7 @@ try
 							array(),
 							true))
 			{
-				throw new Exception('Login failed');
+				throw new Exception('Sieve not supported on '.$account['host'].' using port '.$GLOBALS['GO_CONFIG']->sieve_port);
 			}
 
 			$sieve->activate($_REQUEST['script_name']);
@@ -122,11 +122,7 @@ try
 							array(),
 							true))
 			{
-				throw new Exception('Login failed');
-				if($sieve->error() == $sieve(SIEVE_ERROR_CONNECTION))
-				{
-					
-				}
+				throw new Exception('Sorry, manage sieve filtering not supported on '.$account['host'].' using port '.$GLOBALS['GO_CONFIG']->sieve_port);				
 			}
 			
 			$response['active']=$sieve->get_active();
