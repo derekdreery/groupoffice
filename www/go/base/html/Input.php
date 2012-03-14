@@ -25,9 +25,7 @@ class GO_Base_Html_Input {
 	public static function hasErrors(){
 		return !empty(GO::session()->values['formErrors']);
 	}
-	
-	
-	
+
 	/**
 	 *
 	 * @param type $inputName
@@ -61,6 +59,24 @@ class GO_Base_Html_Input {
 
 	public function __construct($attributes) {
 		$this->attributes = $attributes;
+		
+		if(!empty($this->attributes['model'])){
+			// Set the model properties
+			$columns = $this->attributes['model']->getColumns();
+			
+			if(!empty($columns[$this->attributes['name']]['customfield']))
+				$m = $columns[$this->attributes['name']]['customfield'];
+			else
+				$m =  $columns[$this->attributes['name']];
+			
+			if(empty($this->attributes['required']))
+				$this->attributes['required'] = !empty($m->required)?true:false;
+			
+			if(empty($this->attributes['label']))
+				$this->attributes['label'] = $this->attributes['model']->getAttributeLabel($this->attributes['name']);
+			
+			$this->attributes['value'] = $this->attributes['model']->getAttribute($this->attributes['name']);
+		}
 		
 		if(!empty($this->attributes['label'])){
 			if(!empty($this->attributes['required'])){
@@ -124,6 +140,39 @@ class GO_Base_Html_Input {
 		
 		$html = '<input id="'.$this->attributes['id'].'" class="'.$this->attributes['class'].'" type="'.$this->attributes['type'].'" name="'.$this->attributes['name'].'" value="'.htmlspecialchars($this->attributes['value'],ENT_COMPAT,'UTF-8').'" '.$this->attributes['extra'];
 
+		if (!empty($this->attributes['empty_text'])) {
+			$html .= ' onfocus="if(this.value==\'' . $this->attributes['empty_text'] . '\'){this.value=\'\';';
+
+			if (!empty($this->attributes['empty_text_active_class'])) {
+				$html .= 'this.className+=\' ' . $this->attributes['empty_text_active_class'] . '\'};"';
+			} else {
+				$html .= '}"';
+			}
+
+			$html .= ' onblur="if(this.value==\'\'){this.value=\'' . $this->attributes['empty_text'] . '\';';
+			if (!empty($this->attributes['empty_text_active_class'])) {
+				$html .= 'this.className=this.className.replace(\' ' . $this->attributes['empty_text_active_class'] . '\',\'\');';
+			}
+			$html .= '}"';
+		}
+
+		$html .= ' />';
+		
+		if (!empty($this->attributes['empty_text'])) {
+			$html .= '<input type="hidden" name="empty_texts[]" value="' . $this->attributes['name'] . ':' . $this->attributes['empty_text'] . '" />';
+		}
+		
+		return $html;
+	}
+	
+	
+	protected function renderCheckbox(){
+		
+		$html = '<input id="'.$this->attributes['id'].'" class="'.$this->attributes['class'].'" type="'.$this->attributes['type'].'" name="'.$this->attributes['name'].'" value="1" '.$this->attributes['extra'];
+
+		if(!empty($this->attributes['value'])&& $this->attributes['value']==1 )
+			$html .= 'checked';	
+		
 		if (!empty($this->attributes['empty_text'])) {
 			$html .= ' onfocus="if(this.value==\'' . $this->attributes['empty_text'] . '\'){this.value=\'\';';
 
@@ -267,7 +316,9 @@ class GO_Base_Html_Input {
 			$html .= $this->renderMultiInput();
 		} elseif($this->attributes['type'] == 'textarea'){
 			$html .= $this->renderTextarea();
-		} else {
+		} elseif($this->attributes['type'] == 'checkbox') {
+			$html .= $this->renderCheckbox();
+		}else{
 			$html .= $this->renderNormalInput();
 		}
 		
@@ -276,7 +327,7 @@ class GO_Base_Html_Input {
 
 		if($this->attributes['required'])
 			$html .= '<input type="hidden" name="required[]" value="'.$this->attributes['name'].'" />';
-		
+				
 		// Close the row div
 		if(!empty($this->attributes['renderContainer'])) {
 			$html .= '<div style="clear:both;"></div>';
