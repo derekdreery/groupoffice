@@ -464,10 +464,12 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$workflowResponse['step_id'] = $workflowModel->step_id;
 			
 			if($workflowModel->step_id == '-1'){
+				$workflowResponse['step_progress'] = '';
 				$workflowResponse['step_name'] = GO::t('complete','workflow');
 				$workflowResponse['is_approver']=false;
 				$workflowResponse['step_all_must_approve']=false;
 			}else{
+				$workflowResponse['step_progress'] = $workflowModel->getStepProgress();
 				$workflowResponse['step_name'] = $currentStep->name;
 				$workflowResponse['step_all_must_approve']=$currentStep->all_must_approve;
 				
