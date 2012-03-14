@@ -20,6 +20,7 @@
  * @property string $mod_rewrite_base_path
  * @property boolean $mod_rewrite
  * @property boolean $ssl
+ * @property string $language
  * @property string $login_path
  * @property string $logout_path
  * @property string $register_path
@@ -61,6 +62,19 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 	{	
 		return parent::model($className);
 	}
+	
+	
+	/**
+	 * Get the message banner object to display error and info messages.
+	 * 
+	 * @return GO_Sites_MessageBanner 
+	 */
+	public function getNotificationsObject(){
+		if(!isset(GO::session()->values['sites']['notificationsObject'][$this->id]))
+			GO::session()->values['sites']['notificationsObject'][$this->id]= new GO_Sites_NotificationsObject();
+		return GO::session()->values['sites']['notificationsObject'][$this->id];
+	}
+	
 
 	/**
 	 * Get the tablename of this model
