@@ -4,8 +4,8 @@
 				<p>&nbsp;</p>
 				<?php echo $this->getPage()->content; ?>
 				<p>&nbsp;</p>
-			</div>
+<!--			</div>
 		</div>
-	</div>
+	</div>-->
 
 <?php include("_contactform.php"); ?>			

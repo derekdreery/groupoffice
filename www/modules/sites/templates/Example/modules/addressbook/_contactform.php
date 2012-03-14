@@ -1,10 +1,11 @@
 <?php GO_Base_Html_Form::renderBegin('addressbook/site/addContact','addcontact',true); ?>
 
-	<div class="subkader-big-top">
+<!--	<div class="subkader-big-top">
 		<div class="subkader-big-bottom">
-			<div class="subkader-big-center">	
+			<div class="subkader-big-center">	-->
 				
 				<?php echo $this->notifications->render('addcontact'); ?>
+				<br />
 				
 				<?php 
 					GO_Base_Html_Input::render(array(
