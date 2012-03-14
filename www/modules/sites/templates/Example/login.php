@@ -2,9 +2,9 @@
 						<div class="subkader-small-bottom">
 							<div class="subkader-small-center">						
 
-								<h1>Are you here for the first time?</h1>								
-								<a href="<?php echo $this->pageUrl("register"); ?>">Click here to register once</a>
-								<h1>Login if you are already registered</h1>
+								<h1><?php echo $this->t('firstTime'); ?></h1>								
+								<a href="<?php echo $this->pageUrl("register"); ?>"><?php echo $this->t('registerOnceClick'); ?></a>
+								<h1><?php echo $this->t('registeredLogin'); ?></h1>
 								
 									<?php 
 									GO_Base_Html_Form::renderBegin('sites/user/login','login',true);
@@ -12,14 +12,14 @@
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
-										"label" => "Username",
+										"label" => $this->t('username'),
 										"name" => "username",
 										"value" => ''
 									));
 						
 									GO_Base_Html_Password::render(array(
 										"required" => true,
-										"label" => "Password",
+										"label" => $this->t('password'),
 										"name" => "password",
 										"value" => ''
 									));
@@ -40,7 +40,7 @@
 									
 									GO_Base_Html_Form::renderEnd();
 									?>
-									<a href="<?php echo $this->pageUrl($this->getSite()->getLostPasswordPath()); ?>">Lost password?</a>
+									<a href="<?php echo $this->pageUrl($this->getSite()->getLostPasswordPath()); ?>"><?php echo $this->t('lostPassword'); ?>?</a>
 							</div>
 						</div>
 
