@@ -12,69 +12,55 @@
  */
 
 GO.moduleManager.onModuleReady('email',function(){
-	Ext.override(GO.email.AccountDialog, {
-		sieveCheckedAccountId : 0,
-		
+	Ext.override(GO.email.AccountDialog, {	
 		initComponent : GO.email.AccountDialog.prototype.initComponent.createSequence(function(){
 
 			this.sieveGrid = new GO.sieve.SieveGrid();
-			var inPos = this.tabPanel.items.indexOf(this.filtersTab);
-			this.tabPanel.insert(inPos,this.sieveGrid);
 
-			this.tabPanel.on('beforetabchange', function(tabPanel, newPanel, oldPanel){
-				if(newPanel==this.sieveGrid && this.sieveCheckedAccountId!=this.account_id){
-					this.sieveCheck();
-					return false;
-				}
-			}, this)
+			this.tabPanel.add(this.sieveGrid);
 
-			this.on('show', function(){
-				this.tabPanel.hideTabStripItem(this.filtersTab);
-				this.tabPanel.unhideTabStripItem(this.sieveGrid.getId());
-				this.sieveCheckedAccountId=0;
-			}, this);
-
-			this.tabPanel.hideTabStripItem(this.filtersTab);
 		}),
 
-		sieveCheck :function(){
-			if(this.account_id > 0 && this.sieveCheckedAccountId!=this.account_id)
-			{
-				this.getEl().mask(GO.lang.waitMsgLoad);
-				Ext.Ajax.request({
-					url: GO.settings.modules.sieve.url+ 'fileIO.php',
-					success: function(response){
-						var sieve_supported = Ext.decode(response.responseText);
-
-						if(sieve_supported.sieve_supported)
-						{
-							// Hide the 'normal' panel and show this panel
-//							this.tabPanel.hideTabStripItem(this.filtersTab);
-							this.tabPanel.unhideTabStripItem(this.sieveGrid);
-							this.sieveGrid.show();
-						}
-						else
-						{
-							// Hide this panel and show the 'normal' panel
-							this.tabPanel.hideTabStripItem(this.sieveGrid);
-//							this.tabPanel.unhideTabStripItem(this.filtersTab);
-//							this.filtersTab.show();
-						}
-						this.getEl().unmask();
-					},
-					failure: function(response){
-						alert(GO.sieve.lang.checksieveerror);
-						this.getEl().unmask();
-					},
-					params: {
-						task: 'check_is_supported',
-						account_id: this.account_id
-					},
-					scope:this
-				});
-			}
-			this.sieveCheckedAccountId=this.account_id;
-		},
+//		sieveCheck :function(){
+//			if(this.account_id > 0 && this.sieveCheckedAccountId!=this.account_id)
+//			{
+//				this.getEl().mask(GO.lang.waitMsgLoad);
+//				Ext.Ajax.request({
+//					url: GO.settings.modules.sieve.url+ 'fileIO.php',
+//					success: function(response){
+//						var sieve_supported = Ext.decode(response.responseText);
+//						this.sieveGrid.show();
+//						if(sieve_supported.sieve_supported)
+//						{
+//							// Hide the 'normal' panel and show this panel
+////							this.tabPanel.hideTabStripItem(this.filtersTab);
+//							//this.tabPanel.unhideTabStripItem(this.sieveGrid);
+//							
+//						}
+//						else
+//						{
+//							// Hide this panel and show the 'normal' panel
+//							//this.tabPanel.hideTabStripItem(this.sieveGrid);
+//							//
+//							this.sieveGrid.getEl().update("Sieve is not supported for this e-mail account");
+////							this.tabPanel.unhideTabStripItem(this.filtersTab);
+////							this.filtersTab.show();
+//						}
+//						this.getEl().unmask();
+//					},
+//					failure: function(response){
+//						alert(GO.sieve.lang.checksieveerror);
+//						this.getEl().unmask();
+//					},
+//					params: {
+//						task: 'check_is_supported',
+//						account_id: this.account_id
+//					},
+//					scope:this
+//				});
+//			}
+//			this.sieveCheckedAccountId=this.account_id;
+//		},
 		setAccountId : GO.email.AccountDialog.prototype.setAccountId.createSequence(function(account_id){
 			this.sieveGrid.setAccountId(account_id);
 		})
