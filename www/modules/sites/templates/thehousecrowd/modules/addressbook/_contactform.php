@@ -84,42 +84,39 @@
 
 		GO_Customfields_Html_Field::render(array(
 			'model'=>$this->contact,
-			'name' => "col_17",
-			'label' => 'faafaf'
+			'name' => "col_3",
+			'label' => 'Where did you hear about us'
 		));
 
 		GO_Customfields_Html_Field::render(array(
 			'model'=>$this->contact,
-			'name' => "col_18"
+			'name' => "col_4",
+			'label' => 'What size investment do you anticipate making'
 		));
 
 		GO_Customfields_Html_Field::render(array(
 			'model'=>$this->contact,
-			'name' => "col_19"
+			'name' => "col_5",
+			'label' => 'Are you able to invest (at least £1000) within'
 		));
 
 		GO_Customfields_Html_Field::render(array(
 			'model'=>$this->contact,
-			'name' => "col_20"
+			'name' => "col_6",
+			'label' => 'We only send out small numbers of investment memorandum for each investment opportunity. So that we only send you relevant material please tell us about any preferences you have as to type of property / period of investment you are looking for.  Or conversely anything you will not consider'
 		));
 
 		GO_Customfields_Html_Field::render(array(
 			'model'=>$this->contact,
-			'name' => "col_21",
-			"empty_value" => ""
+			'name' => "col_7",
+			"empty_value" => "",
+			'label' => 'I have read and agree to the terms and conditions on this website'
 		));
-
-
-	?>
-
-	<a href="#" onclick="submitForm()" class="submitbutton"> 
-		Send
-	</a>
-
-	<script type="text/javascript">
-		function submitForm(){
-				document.addcontact.submit()
-		}
-	</script>
-
+		
+		GO_Base_Html_Submit::render(array(
+			"name" => "submit",
+			"value" => "submit"
+		));
+?>
+	
 <?php GO_Base_Html_Form::renderEnd(); ?>
