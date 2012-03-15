@@ -26,12 +26,12 @@ GO.query.SavedQueryDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	},
 	
 	beforeSubmit : function() {
-    if (this.formPanel.baseParams.model_name == 'GO_Addressbook_Model_Contact')
-			this.formPanel.baseParams.data = GO.addressbook.advancedSearchWindow._contactsQueryPanel.getGridData();
-		else
-			this.formPanel.baseParams.data = GO.addressbook.advancedSearchWindow._companiesQueryPanel.getGridData();
-		
-		this.formPanel.baseParams.data = Ext.encode(this.formPanel.baseParams.data);
+		this.formPanel.baseParams.data = Ext.encode(this.savedQueryGrid.queryPanel.getGridData());
+	},
+	
+	afterSubmit : function(){
+		this.savedQueryGrid.store.load();
+		this.savedQueryGrid.queryPanel.titleField.setValue('<b>'+this.formPanel.form.findField('name').getValue()+'</b>');
 	},
 	
 	buildForm : function () {

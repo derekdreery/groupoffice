@@ -30,7 +30,7 @@ GO.query.QueryContextMenu = function(config)
 		cls: 'x-btn-text-icon',
 		handler: function(button,item) {
 			var record = this.callingGrid.getSelectionModel().getSelected();
-			GO.addressbook.advancedSearchWindow.showSavedQueryDialog(record.data.id,this.callingGrid.modelName);
+			this.callingGrid.showSavedQueryDialog(record.data.id);
 		},
 		scope: this
 	})];
