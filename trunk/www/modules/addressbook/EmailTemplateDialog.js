@@ -94,11 +94,7 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 				success:function(form, action)
 				{
 					this.readPermissionsTab.setAcl(action.result.data.acl_id);
-					
-					this.selectUser.setRemoteText(action.result.data.user_name);
-					
-					//this.htmlEditPanel.setInlineAttachments(action.result.data.inlineAttachments);	
-					
+										
 					GO.addressbook.EmailTemplateDialog.superclass.show.call(this);
 				},
 				failure:function(form, action)
@@ -217,34 +213,34 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 		['{work_post_state}',GO.lang['strPostState']],
 		['{work_post_country}',GO.lang['strPostCountry']],
 		['{homepage}',GO.lang['strHomepage']],
-		['{my_name}',GO.lang.strName+' ('+GO.lang.strUser+')'],
-		['{my_first_name}',GO.lang['strFirstName']+' ('+GO.lang.strUser+')'],
-		['{my_middle_name}',GO.lang['strMiddleName']+' ('+GO.lang.strUser+')'],
-		['{my_last_name}',GO.lang['strLastName']+' ('+GO.lang.strUser+')'],
-		['{my_initials}',GO.lang['strInitials']+' ('+GO.lang.strUser+')'],
-		['{my_title}',GO.lang['strTitle']+' ('+GO.lang.strUser+')'],
-		['{my_email}',GO.lang['strEmail']+' ('+GO.lang.strUser+')'],
-		['{my_home_phone}',GO.lang['strPhone']+' ('+GO.lang.strUser+')'],
-		['{my_fax}',GO.lang['strFax']+' ('+GO.lang.strUser+')'],
-		['{my_cellular}',GO.lang['strCellular']+' ('+GO.lang.strUser+')'],
-		['{my_address}',GO.lang['strAddress']+' ('+GO.lang.strUser+')'],
-		['{my_address_no}',GO.lang['strAddressNo']+' ('+GO.lang.strUser+')'],
-		['{my_zip}',GO.lang['strZip']+' ('+GO.lang.strUser+')'],
-		['{my_city}',GO.lang['strCity']+' ('+GO.lang.strUser+')'],
-		['{my_state}',GO.lang['strState']+' ('+GO.lang.strUser+')'],
-		['{my_country}',GO.lang['strCountry']+' ('+GO.lang.strUser+')'],
-		['{my_company}',GO.lang['strCompany']+' ('+GO.lang.strUser+')'],
-		['{my_department}',GO.lang['strDepartment']+' ('+GO.lang.strUser+')'],
-		['{my_function}',GO.lang['strFunction']+' ('+GO.lang.strUser+')'],
-		['{my_work_phone}',GO.lang['strWorkPhone']+' ('+GO.lang.strUser+')'],
-		['{my_work_fax}',GO.lang['strWorkFax']+' ('+GO.lang.strUser+')'],
-		['{my_work_address}',GO.lang['strWorkAddress']+' ('+GO.lang.strUser+')'],
-		['{my_work_address_no}',GO.lang['strWorkAddressNo']+' ('+GO.lang.strUser+')'],
-		['{my_work_city}',GO.lang['strWorkCity']+' ('+GO.lang.strUser+')'],
-		['{my_work_zip}',GO.lang['strWorkZip']+' ('+GO.lang.strUser+')'],
-		['{my_work_state}',GO.lang['strWorkState']+' ('+GO.lang.strUser+')'],
-		['{my_work_country}',GO.lang['strWorkCountry']+' ('+GO.lang.strUser+')'],
-		['{my_homepage}',GO.lang.strHomepage+' ('+GO.lang.strUser+')'],
+		['{user:name}',GO.lang.strName+' ('+GO.lang.strUser+')'],
+		['{user:first_name}',GO.lang['strFirstName']+' ('+GO.lang.strUser+')'],
+		['{user:middle_name}',GO.lang['strMiddleName']+' ('+GO.lang.strUser+')'],
+		['{user:last_name}',GO.lang['strLastName']+' ('+GO.lang.strUser+')'],
+		['{user:initials}',GO.lang['strInitials']+' ('+GO.lang.strUser+')'],
+		['{user:title}',GO.lang['strTitle']+' ('+GO.lang.strUser+')'],
+		['{user:email}',GO.lang['strEmail']+' ('+GO.lang.strUser+')'],
+		['{user:home_phone}',GO.lang['strPhone']+' ('+GO.lang.strUser+')'],
+		['{user:fax}',GO.lang['strFax']+' ('+GO.lang.strUser+')'],
+		['{user:cellular}',GO.lang['strCellular']+' ('+GO.lang.strUser+')'],
+		['{user:address}',GO.lang['strAddress']+' ('+GO.lang.strUser+')'],
+		['{user:address_no}',GO.lang['strAddressNo']+' ('+GO.lang.strUser+')'],
+		['{user:zip}',GO.lang['strZip']+' ('+GO.lang.strUser+')'],
+		['{user:city}',GO.lang['strCity']+' ('+GO.lang.strUser+')'],
+		['{user:state}',GO.lang['strState']+' ('+GO.lang.strUser+')'],
+		['{user:country}',GO.lang['strCountry']+' ('+GO.lang.strUser+')'],
+		['{user:company}',GO.lang['strCompany']+' ('+GO.lang.strUser+')'],
+		['{user:department}',GO.lang['strDepartment']+' ('+GO.lang.strUser+')'],
+		['{user:function}',GO.lang['strFunction']+' ('+GO.lang.strUser+')'],
+		['{user:work_phone}',GO.lang['strWorkPhone']+' ('+GO.lang.strUser+')'],
+		['{user:work_fax}',GO.lang['strWorkFax']+' ('+GO.lang.strUser+')'],
+		['{user:work_address}',GO.lang['strWorkAddress']+' ('+GO.lang.strUser+')'],
+		['{user:work_address_no}',GO.lang['strWorkAddressNo']+' ('+GO.lang.strUser+')'],
+		['{user:work_city}',GO.lang['strWorkCity']+' ('+GO.lang.strUser+')'],
+		['{user:work_zip}',GO.lang['strWorkZip']+' ('+GO.lang.strUser+')'],
+		['{user:work_state}',GO.lang['strWorkState']+' ('+GO.lang.strUser+')'],
+		['{user:work_country}',GO.lang['strWorkCountry']+' ('+GO.lang.strUser+')'],
+		['{user:homepage}',GO.lang.strHomepage+' ('+GO.lang.strUser+')'],
 		['{unsubscribe_link}',GO.addressbook.lang.unsubscribeLink],
 		['%unsubscribe_href%',GO.addressbook.lang.unsubscribeHref]
 		];
@@ -344,7 +340,7 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 //				{
 //					var p = GO.customfields.types["8"].panels[i];
 //					for(var c=0;c<p.customfields.length;c++){
-//						autodata.push(['{my_'+p.customfields[c].dataname+'}',p.customfields[c].name]);
+//						autodata.push(['{user:'+p.customfields[c].dataname+'}',p.customfields[c].name]);
 //					}
 //				}
 //			}
@@ -398,12 +394,7 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 					anchor: '100%',
 					allowBlank:false,
 					fieldLabel: GO.lang.strName
-				},this.selectUser = new GO.form.SelectUser({
-					fieldLabel:GO.lang.strOwner,
-					disabled: !GO.settings.modules['addressbook']['write_permission'],
-					value: GO.settings.user_id,
-					anchor: '100%'
-				})]
+				}]
 			},
 			this.htmlEditPanel = new GO.base.email.EmailEditorPanel({
 				region:'center'
