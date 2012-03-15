@@ -226,8 +226,8 @@ GO.query.QueryPanel = function(config){
 		cls: 'x-btn-text-icon',
 		handler: function(){
 			this.titleField.setValue('<b>'+GO.lang['strNew']+'</b>');
-			GO.addressbook.advancedSearchWindow.queryId = 0;
-			this.setCriteriaStore(null);
+			this.fireEvent('reset',this);
+			this.setCriteriaStore();
 		},
 		scope: this
 	}];
@@ -251,6 +251,8 @@ GO.query.QueryPanel = function(config){
 
 
 	GO.query.QueryPanel.superclass.constructor.call(this, config);
+	
+	this.addEvents({'reset':true});
 
 };
 Ext.extend(GO.query.QueryPanel, GO.grid.EditorGridPanel,{

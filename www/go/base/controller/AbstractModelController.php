@@ -1019,7 +1019,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$advQueryRecord=$advancedQueryData[$i];
 			
 			//change * into % wildcard
-			$advQueryRecord['value']=str_replace('*','%', $advQueryRecord['value']);
+			$advQueryRecord['value']=isset($advQueryRecord['value']) ? str_replace('*','%', $advQueryRecord['value']) : '';
 			
 			if($i==0 || $advQueryRecord['start_group']){
 				$findCriteria->mergeWith($criteriaGroup,$criteriaGroupAnd);

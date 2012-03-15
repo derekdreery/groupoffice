@@ -53,6 +53,17 @@ GO.query.SavedQueryGrid = function(config) {
 
 	GO.query.SavedQueryGrid.superclass.constructor.call(this, config);
 	
+	this.queryPanel.on('reset',function(){
+		this.queryId=0;
+	},this);
+	
+	this.on('rowdblclick',function(grid,rowId,e){
+			var record = grid.store.getAt(rowId);
+			this.queryId = record.data.id;
+			this.queryPanel.setCriteriaStore(record);
+			this.queryPanel.titleField.setValue('<b>'+record.data.name+'</b>');
+		},this);
+	
 	this.on('contextmenu',function(eventObject,target,object){
 		if (!this.queryContextMenu)
 			this.queryContextMenu = new GO.query.QueryContextMenu();
@@ -64,23 +75,25 @@ GO.query.SavedQueryGrid = function(config) {
 }
 
 Ext.extend(GO.query.SavedQueryGrid,GO.grid.GridPanel,{
-
-//	saveQuery : function() {
-//		Ext.Ajax.request({
-//			url : GO.url('advancedSearch/submit'),
-//			baseParams: {
-//				modelName : this.modelName,
-//				data : this.store.getGridData()	
-//			},
-//			callback : function(options,success,response) {
-//				if (!GO.util.empty(success)) {
-//					if (this.modelName=='GO_Addressbook_Model_Contact')
-//						this.queryPanel._contactsQueryPanel.store.load();
-//					else
-//						this.queryPanel._companiesQueryPanel.store.load();
-//				}
-//			}
-//		});
-//	}
-
+	
+	queryId : 0,
+	
+	queryPanel : false,
+	
+	showSavedQueryDialog : function(queryId) {
+		
+		if(!queryId)
+			queryId=this.queryId;
+		
+		if (!this.savedQueryDialog)
+			this.savedQueryDialog = new GO.query.SavedQueryDialog({
+				savedQueryGrid:this
+			});
+		
+		this.savedQueryDialog.show(
+			queryId, {
+				'model_name' : this.modelName
+			}
+		);
+	}
 });
