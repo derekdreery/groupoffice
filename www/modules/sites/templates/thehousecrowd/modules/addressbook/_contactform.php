@@ -16,11 +16,6 @@
 		));
 
 		GO_Base_Html_Input::render(array(
-			"model"=> $this->contact,
-			"name" => "middle_name"
-		));
-
-		GO_Base_Html_Input::render(array(
 			"name" => "last_name",
 			"model"=> $this->contact,
 			"required" => true
@@ -47,7 +42,6 @@
 		));
 
 		GO_Base_Html_Input::render(array(
-			"required" => true,
 			"label" => "Address 2",
 			"name" => "address_no",
 			"value" => $this->contact->address_no

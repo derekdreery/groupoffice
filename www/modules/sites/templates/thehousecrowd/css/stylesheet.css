@@ -1,5 +1,5 @@
 body{
-	font-family: arial;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	font-size: 12px;
 }
 
@@ -12,24 +12,6 @@ body{
 	margin: 10px;
 }
 
-.submitbutton{
-	margin-top: 20px;
-	display: block;
-	border: 1px solid #000;
-	width: 100px;
-	text-align: center;
-	font-size: 14px;
-	text-decoration: none;
-	padding: 5px;
-	text-transform: uppercase;
-	background-color: green;
-	color:#fff;
-}
-
-.submitbutton:hover{
-	background-color: forestgreen;
-}
-
 .formrow{
 	padding-top: 5px;
 	padding-bottom: 5px;
@@ -38,10 +20,30 @@ body{
 .formlabel{
 	clear:both;
 	margin-bottom:3px;
+	line-height: 24px;
 }
 
 .copyright{
 	margin: 10px;
+}
+
+
+input, textarea { 
+ font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+input[type="submit"] {
+ height: 28px; 
+ line-height: 27px;
+ padding: 0 15px;
+ background: #212121;
+ border: none;
+ font-weight: bold;
+ color: #FFF;
+}
+
+input[type="submit"]:hover {
+ background: #FF4E00;
 }
 
 .input{
