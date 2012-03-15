@@ -513,6 +513,13 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 			$response['data']['htmlbody'] .= $header . $this->_quoteHtml($oldMessage['htmlbody']);
 
+			// Fix for array_merge functions on lines below when the $response['data']['inlineAttachments'] and $response['data']['attachments'] do not exist
+			if(empty($response['data']['inlineAttachments']))
+				$response['data']['inlineAttachments'] = array();
+			
+			if(empty($response['data']['attachments']))
+				$response['data']['attachments'] = array();
+			
 			$response['data']['inlineAttachments'] = array_merge($response['data']['inlineAttachments'], $oldMessage['inlineAttachments']);
 			$response['data']['attachments'] = array_merge($response['data']['attachments'], $oldMessage['attachments']);
 		} else {
