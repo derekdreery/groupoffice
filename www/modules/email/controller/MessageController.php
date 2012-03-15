@@ -421,6 +421,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$response['data']['htmlbody'] .= '<br /><br />' .
 							htmlspecialchars($replyText, ENT_QUOTES, 'UTF-8') .
 							'<br />' . $this->_quoteHtml($oldMessage['htmlbody']);
+			
+			// Fix for array_merge function on line below when the $response['data']['inlineAttachments'] do not exist
+			if(empty($response['data']['inlineAttachments']))
+				$response['data']['inlineAttachments'] = array();
 
 			$response['data']['inlineAttachments'] = array_merge($response['data']['inlineAttachments'], $oldMessage['inlineAttachments']);
 		} else {
