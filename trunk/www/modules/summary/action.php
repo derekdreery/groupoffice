@@ -38,6 +38,10 @@ try{
 			foreach($feeds as $feed)
 			{
 				$feed['user_id'] = $GLOBALS['GO_SECURITY']->user_id;
+				// Hack for the table being updated correctly.
+				if($feed['summary'] === true)
+					$feed['summary'] = 1;
+				
 				$feed['id'] = $feed['feedId'];
 				unset($feed['feedId']);
 				if($feed['id']>0)
