@@ -51,8 +51,12 @@ class GO_Base_Util_Number {
 		$ts = GO::user() ? GO::user()->thousands_separator : GO::config()->default_thousands_separator;
 		$ds = GO::user() ? GO::user()->decimal_separator : GO::config()->default_decimal_separator;
 		$number = str_replace($ts,'', $number);
-		//return floatval(str_replace($ds,'.',$number));
-		return str_replace($ds,'.',$number);
+		
+		if(!empty($number) && !is_numeric($number))
+			return false;
+		
+		return floatval(str_replace($ds,'.',$number));
+		//return str_replace($ds,'.',$number);
 	}
 
 	/**
