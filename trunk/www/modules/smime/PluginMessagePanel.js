@@ -34,6 +34,9 @@ GO.moduleManager.onModuleReady('email',function(){
 	Ext.override(GO.email.MessagePanel, {
 		initComponent : GO.email.MessagePanel.prototype.initComponent.createSequence(function(){
 			this.on('load',function(options, success, response, data, password){
+				
+				
+				this.smimeChecked=false;
 									
 				if(password)
 				{
