@@ -36,9 +36,6 @@ class GO_Addressbook_Controller_Site extends GO_Sites_Controller_Site{
 	protected function actionAddContact($params){
 		$this->contact = new GO_Addressbook_Model_Contact();
 		
-		if(GO::user())
-			$this->contact = GO::user()->createContact();
-
 		if (GO_Base_Util_Http::isPostRequest()) {
 			$this->contact->setAttributes($params);
 
