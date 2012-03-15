@@ -104,6 +104,7 @@
 			'model'=>$this->contact,
 			'name' => "col_7",
 			"empty_value" => "",
+			"required" => true,
 			'label' => 'I have read and agree to the terms and conditions on this website'
 		));
 		
