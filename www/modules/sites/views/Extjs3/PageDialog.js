@@ -170,5 +170,9 @@ GO.sites.PageDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 
 		this.addPanel(this.metaPanel);
 		
+	},
+	
+	setSiteId : function(siteId){
+		this.addBaseParam('site_id', siteId);
 	}
 });
