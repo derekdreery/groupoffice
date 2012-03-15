@@ -12,7 +12,7 @@
 		GO_Base_Html_Hidden::render(array(
 			"name" => "addressbook_id",
 			"model"=> $this->contact,
-			"value"=> 1272
+			"value"=> 1
 		));
 
 		GO_Base_Html_Input::render(array(
