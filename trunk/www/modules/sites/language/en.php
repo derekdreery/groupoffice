@@ -27,6 +27,7 @@ $l['deletePageText']='Are you sure that you want to delete this page?';
 
 $l['newSite']='New Site';
 $l['newPage']='New Page';
+$l['addPage']='Add Page';
 $l['yourContent']='Put your content here!';
 $l['moduleSettings']='Module Settings';
 
