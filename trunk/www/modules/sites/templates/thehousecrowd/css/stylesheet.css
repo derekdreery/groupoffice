@@ -1,0 +1,60 @@
+body{
+	font-family: arial;
+	font-size: 12px;
+}
+
+.content-text{
+	margin: 10px;
+	font-size: 14px;
+}
+
+.content-form{
+	margin: 10px;
+}
+
+.submitbutton{
+	margin-top: 20px;
+	display: block;
+	border: 1px solid #000;
+	width: 100px;
+	text-align: center;
+	font-size: 14px;
+	text-decoration: none;
+	padding: 5px;
+	text-transform: uppercase;
+	background-color: green;
+	color:#fff;
+}
+
+.submitbutton:hover{
+	background-color: forestgreen;
+}
+
+.formrow{
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.formlabel{
+	clear:both;
+	margin-bottom:3px;
+}
+
+.copyright{
+	margin: 10px;
+}
+
+.input{
+	float:left;
+	margin-right: 10px;
+}
+
+.error{
+	background-color: lightpink;
+}
+
+.errortext {
+	float:left;
+	color: red;
+	line-height: 24px;
+}
