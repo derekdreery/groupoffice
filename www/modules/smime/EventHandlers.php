@@ -67,9 +67,10 @@ class GO_Smime_EventHandlers {
 	}
 
 	public static function viewMessage(GO_Email_Controller_Message $controller, array &$response, GO_Email_Model_ImapMessage $imapMessage, GO_Email_Model_Account $account, $params) {
+		
 		if ($imapMessage->content_type == 'application/pkcs7-mime' || $imapMessage->content_type == 'application/x-pkcs7-mime') {
 
-			$encrypted = !isset($imapMessage->content_type_attributes['smime-type']) || $imapMessage->content_type_attributes['smime-type'] != 'signed-data';
+			$encrypted = !isset($imapMessage->content_type_attributes['smime-type']) || ($imapMessage->content_type_attributes['smime-type'] != 'signed-data' || $imapMessage->content_type_attributes['smime-type'] != 'enveloped-data');
 			if ($encrypted) {
 
 				GO::debug("Message is encrypted");
@@ -87,6 +88,7 @@ class GO_Smime_EventHandlers {
 
 				if (!isset(GO::session()->values['smime']['passwords'][$account->id])) {
 					$response['askPassword'] = true;
+					GO::debug("Need to ask for password");
 					return false;
 				}
 			}
@@ -132,7 +134,8 @@ class GO_Smime_EventHandlers {
 
 				if (empty($certs)) {
 					//password invalid
-					$message['askPassword'] = true;
+					$response['askPassword'] = true;
+					GO::debug("Invalid password");
 					return false;
 				}
 
@@ -141,15 +144,20 @@ class GO_Smime_EventHandlers {
 				$infile->delete();
 
 				if (!$return || !$outfile->exists() || !$outfile->size()) {					
-					$message['html_body'] = GO::t('decryptionFailed','smime') . '<br />';
+					$response['htmlbody'] = GO::t('decryptionFailed','smime') . '<br />';
 					while ($str = openssl_error_string()) {
-						$message['html_body'].='<br />' . $str;
+						$response['htmlbody'].='<br />' . $str;
 					}
+					GO::debug("Decryption failed");
 					return false;
 				}else
 				{
 					$message = GO_Email_Model_SavedMessage::model()->createFromMimeData($outfile->getContents());
-					$response = $message->toOutputArray(true);
+					$newResponse = $message->toOutputArray(true);
+					foreach($newResponse as $key=>$value){
+						if(!empty($value) || $key=='attachments')
+							$response[$key]=$value;
+					}
 					$response['smime_encrypted']=true;
 					$response['path']=$outfile->stripTempPath();
 				}
