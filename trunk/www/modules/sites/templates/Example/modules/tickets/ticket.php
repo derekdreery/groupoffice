@@ -106,7 +106,7 @@
 						$i++;
 						?>
 						<tr class="ticketmodel-row <?php echo $style; ?>">
-							<td><b><?php echo $message->user->name; ?></b> said:</td>
+							<td><b><?php echo $message->posterName; ?></b> said:</td>
 							<td align="right"><b><?php echo $message->ctime ;?></b></td>
 						</tr>
 						<tr class="ticketmodel-row <?php echo $style; ?>">
@@ -118,7 +118,7 @@
 								<td colspan="2">
 									<div class="ticket-message-attachment"><b>Files:</b></div>
 									<?php foreach ($files as $file => $obj): ?>
-										<div class="ticket-message-attachment"><a target="_blank" href="<?php echo $obj->downloadURL; ?>">
+										<div class="ticket-message-attachment"><a target="_blank" href="<?php echo GO::url('tickets/siteModule/downloadAttachment',array('file'=>$obj->id,'ticket_number'=>$ticket->ticket_number,'ticket_verifier'=>$ticket->ticket_verifier)); ?>">
 												<?php echo $file; ?>
 											</a></div>
 									<?php endforeach; ?>

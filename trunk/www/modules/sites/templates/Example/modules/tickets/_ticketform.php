@@ -163,6 +163,8 @@
 					}
 				</script>
 				
+				<?php if(GO::user()): ?>
+				
 				<div class="button-green-side" onmouseover="this.className='button-green-side-hover';"  onmouseout="this.className='button-green-side';" style="float:left;">
 					<div class="button-green-side-right">
 						<a href="<?php echo $this->pageUrl('support');?>" class="button-green-side-center"> 
@@ -170,6 +172,8 @@
 						</a>
 					</div>
 				</div>
+				<?php endif; ?>
+				
 			<div style="clear:both;"></div>
 		</div>
 	</div>
