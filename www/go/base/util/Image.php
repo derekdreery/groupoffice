@@ -20,19 +20,26 @@
 
 class GO_Base_Util_Image {
 
-	var $original_image;
-	var $resized_image;
-	var $image_type;
-	var $load_success;
+	private $original_image;
+	private $resized_image;
+	private $image_type;
+	public $load_success;
+	private $_original_filename;
 
 	public function __construct($filename=false) {
 		if ($filename)
 			$this->load_success=$this->load($filename);
 	}
+	
+	public function getImageType(){
+		return $this->image_type;
+	}
 
 	public function load($filename) {
 		$image_info = getimagesize($filename);
 		$this->image_type = $image_info[2];
+		
+		$this->_original_filename=$filename;
 
 		if ($this->image_type == IMAGETYPE_JPEG) {
 			$this->original_image = imagecreatefromjpeg($filename);
@@ -95,26 +102,38 @@ class GO_Base_Util_Image {
 			imagepng($this->resized_image);
 		}
 	}
+	
+	private function _getImage(){
+		return isset($this->resized_image) ? $this->resized_image :$this->original_image;
+	}
 
-	public function save($filename, $image_type=false, $compression=75, $permissions=null) {
-		if (!$image_type)
-			$image_type = $this->image_type;
+	public function save($filename, $image_type=false, $compression=85, $permissions=null) {
+		
+		if(isset($this->resized_image) || $image_type!=$this->image_type){
+		
+			if (!$image_type)
+				$image_type = $this->image_type;
 
-		$ret = false;
-		if ($image_type == IMAGETYPE_JPEG) {
-			$ret = imagejpeg($this->resized_image, $filename, $compression);
-		} elseif ($image_type == IMAGETYPE_GIF) {
-			$ret = imagegif($this->resized_image, $filename);
-		} elseif ($image_type == IMAGETYPE_PNG) {
-			$ret = imagepng($this->resized_image, $filename);
+			$ret = false;
+			if ($image_type == IMAGETYPE_JPEG) {
+				$ret = imagejpeg($this->_getImage(), $filename, $compression);
+			} elseif ($image_type == IMAGETYPE_GIF) {
+				$ret = imagegif($this->_getImage(), $filename);
+			} elseif ($image_type == IMAGETYPE_PNG) {
+				$ret = imagepng($this->_getImage(), $filename);
+			}
+
+			if(!$ret)
+				return false;
+		}else
+		{
+			//image type and dimension unchanged. Simply copy original.
+			if(!copy($this->_original_filename, $filename))
+				return false;
 		}
 		
-		if(!$ret)
-			return false;
-		
-		if ($permissions != null) {
+		if ($permissions != null)
 			chmod($filename, $permissions);
-		}
 		
 		return true;
 		

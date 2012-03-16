@@ -498,3 +498,6 @@ $l['attributeRequired']='Veld %s is verplicht';
 $l['attributeTooLong']='Veld %s is langer dan het maximum van %s tekens';
 $l['attributeIncorrectFormat']='Veld %s is niet in het juiste formaat';
 $l['attributeInvalid']='Field %s is ongeldig';
+$l['operationStopped']='Operatie gestopt.';
+$l['delimiter']='Scheidingsteken';
+$l['enclosure']='Omheiningsteken';

@@ -239,7 +239,9 @@ class GO_Base_Session extends GO_Base_Observable{
 	}
 	
 	/**
-	 * Close writing to session so other concurrent requests won't be locked out.
+	 * Close writing to session so other concurrent requests won't be blocked.
+	 * When a PHP session is open the webserver won't process a new request until 
+	 * the session is closed again.
 	 */
 	public function closeWriting(){		
 		session_write_close();

@@ -512,3 +512,6 @@ $l['attributeRequired']='Field %s is required';
 $l['attributeTooLong']='Field %s is longer than the maximum of %s characters';
 $l['attributeIncorrectFormat']='Field %s is formatted incorrectly';
 $l['attributeInvalid']='Field %s was invalid';
+$l['operationStopped']='Operation ended.';
+$l['delimiter']='Delimiter';
+$l['enclosure']='Enclosure';
