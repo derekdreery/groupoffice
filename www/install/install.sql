@@ -429,6 +429,6 @@ CREATE TABLE IF NOT EXISTS `go_advanced_searches` (
 	`name` VARCHAR(255) NOT NULL DEFAULT '',
 	`user_id` int(11) NOT NULL DEFAULT '0',
 	`acl_id` int(11) NOT NULL DEFAULT '0',
-	`data` TEXT NOT NULL DEFAULT '',
+	`data` TEXT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
