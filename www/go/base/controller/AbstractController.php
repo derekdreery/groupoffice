@@ -322,7 +322,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			
 		} catch (Exception $e) {
 			
-			GO::debug("EXCEPTION: ".$e->getMessage());
+			GO::debug("EXCEPTION: ".(string) $e);
 			
 					
 			$response['success'] = false;
