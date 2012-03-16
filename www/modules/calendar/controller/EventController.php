@@ -252,7 +252,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$this->_sendInvitation($newParticipantIds, $event, $isNewEvent, $modifiedAttributes);
 	}
 
-	private function _sendInvitation($newParticipantIds, $event, $isNewEvent, $modifiedAttributes, $method='REQUEST') {
+	private function _sendInvitation($newParticipantIds, $event, $isNewEvent, $modifiedAttributes, $method='REQUEST', $sendingParticipant=false) {
 
 		
 			$stmt = $event->participants();
@@ -281,10 +281,13 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 							$body = '<p>' . GO::t('invitation_update', 'calendar') . '</p>' .
 											$event->toHtml();
 						}
+						
+						$fromEmail = GO::user() ? GO::user()->email : $sendingParticipant->email;
+						$fromName = GO::user() ? GO::user()->name : $sendingParticipant->name;
 
 						$message = GO_Base_Mail_Message::newInstance(
 														$subject
-										)->setFrom(GO::user()->email, GO::user()->name)
+										)->setFrom($fromEmail, $fromName)
 										->addTo($participant->email, $participant->name);
 						
 						$ics=$event->toICS($method);
@@ -677,7 +680,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$event = false;
 		}
 		//notify organizer
-		$this->_sendInvitation(array(), $participant->event, false, array(), 'REPLY');
+		$this->_sendInvitation(array(), $participant->event, false, array(), 'REPLY', $participant);
 		
 		$this->render('invitation', array('participant'=>$participant, 'event'=>$event));
 	}

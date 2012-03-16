@@ -22,10 +22,12 @@ extract($data);
 	<head>
 		<link href="<?php echo GO::config()->host; ?>views/Extjs3/themes/Default/external.css" type="text/css" rel="stylesheet" />
 		<?php
-		if(GO::user()->theme!='Default')
-		{
+		
+		$theme = GO::user() ? GO::user()->theme : GO::config()->theme;
+		
+		if($theme!='Default'){
 			?>
-			<link href="<?php echo GO::config()->host; ?>views/Extjs3/themes/<?php echo GO::user()->theme; ?>/external.css" type="text/css" rel="stylesheet" />
+			<link href="<?php echo GO::config()->host; ?>views/Extjs3/themes/<?php echo $theme; ?>/external.css" type="text/css" rel="stylesheet" />
 			<?php
 		}
 		if(!empty($GLOBALS['GO_CONFIG']->custom_css_url))
