@@ -332,11 +332,10 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 //					$attributes['title'] = !empty($vobjProp->value) ? $vobjProp->value : null;
 //					break;
 				case 'TEL':
+					$types = array();
 					foreach ($vobjProp->parameters as $param) {
 						if ($param->name=='TYPE')
-							$types = explode(',',strtolower($param->value));
-						else
-							$types = array();
+							$types = explode(',',strtolower($param->value));							
 					}
 					if(in_array('work',$types) && ( in_array('voice',$types) || count($types)==1 ) ) {
 						$attributes['work_phone'] = $vobjProp->value;
@@ -368,11 +367,10 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 					break;
 //				case 'LABEL':
 				case 'ADR':
+					$types = array();
 					foreach ($vobjProp->parameters as $param) {
 						if ($param->name=='TYPE')
-							$types = explode(',',strtolower($param->value));
-						else
-							$types = array();
+							$types = explode(',',strtolower($param->value));						
 					}
 					if(in_array('work',$types)) {
 						$addrArr = explode(';',$vobjProp->value);
@@ -413,7 +411,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 					$attributes['function'] = $vobjProp->value;
 					break;
 				case 'BDAY':
-					$attributes['birthday'] = !empty($vobjProp->value) ? $vobjProp->value : null;
+					if(!empty($vobjProp->value))
+						$attributes['birthday'] = substr($vobjProp->value,0,4).'-'.substr($vobjProp->value,4,2).'-'.substr($vobjProp->value,6,2);
 					break;				
 				case 'NOTE':
 					$attributes['comment'] = $vobjProp->value;
