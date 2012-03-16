@@ -79,10 +79,11 @@
 								<?php echo $this->cart->getTable();?>						
 								<?php
 									GO_Base_Html_Checkbox::render(array(
-										"required" => false,
+										"required" => true,
 										"label" => 'I agree to the <a href="http://www.group-office.com/data/License+agreement" target="_blank">license terms and conditions</a>',
 										"name" => "agreement",
 										"value" => '1',
+										"empty_value" =>"",
 										"labelStyle" => "width:240px;"
 									));
 									
