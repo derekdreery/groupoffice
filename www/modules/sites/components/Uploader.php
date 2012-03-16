@@ -15,11 +15,10 @@ class GO_Sites_Components_Uploader extends GO_Sites_Components_Component {
 	
 	private $_swfUrl = '/plupload/js/plupload.flash.swf';
 	private $_silverLightUrl = '/plupload/js/plupload.silverlight.xap';
-	
-	
-	public function __construct($id, GO_Sites_Controller_Site $controller,$params,$formname="form") {
+		
+	public function __construct($id, GO_Sites_Controller_Site $controller,$params,$formname="form",$uploadTarget=false) {
 		$this->formname = $formname;
-		$this->uploadTarget = GO::url('core/plupload');
+		$this->uploadTarget = !$uploadTarget?GO::url('core/plupload'):$uploadTarget;
 		
 		parent::__construct($id, $controller,$params);
 	}

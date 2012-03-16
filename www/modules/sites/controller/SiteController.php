@@ -255,7 +255,7 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 		require($this->getRootTemplatePath().'footer.php');
 		
 	}
-
+	
 	/**
 	 * Checks if the last path needs to be changed and sets the right last path 
 	 * in the session. 
