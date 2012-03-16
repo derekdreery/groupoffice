@@ -253,7 +253,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 
 	
 	protected function getThumbURL() {
-		return GO::url('core/thumb', 'src=' . urlencode($this->path) . '&lw=100&ph=100&zc=1&filemtime=' . $this->fsFile->mtime());
+		return GO::url('core/thumb', 'src=' . urlencode($this->path) . '&lw=100&ph=100&zc=1&filemtime=' . $this->mtime);
 	}
 	
 	/**
