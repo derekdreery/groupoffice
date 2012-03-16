@@ -547,8 +547,10 @@ class GO_Base_Util_String {
 			$middle = isset($last['middle_name']) ? $last['middle_name'] : '';
 			$last = isset($last['last_name']) ? $last['last_name'] : '';
 		}
-
-		$sort_name = $sort_name == '' ? GO::user()->sort_name : $sort_name;
+		if(GO::user())
+			$sort_name = $sort_name == '' ? GO::user()->sort_name : $sort_name;
+		else
+			$sort_name ='first_name';
 
 		if ($sort_name== 'last_name') {
 			$name = 	!empty ($last) ? $last : '';
