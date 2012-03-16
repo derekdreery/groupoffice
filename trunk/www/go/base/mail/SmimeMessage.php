@@ -171,7 +171,7 @@ class GO_Base_Mail_SmimeMessage extends GO_Base_Mail_Message
 				unlink($this->tempout);
 			}
 
-			openssl_pkcs7_encrypt($this->tempin, $this->tempout,$this->recipcerts[0], $this->saved_headers);	
+			openssl_pkcs7_encrypt($this->tempin, $this->tempout,$this->recipcerts, $this->saved_headers);	
 			$this->encrypted=true;
 		}
 	}
