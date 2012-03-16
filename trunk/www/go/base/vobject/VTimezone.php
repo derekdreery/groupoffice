@@ -18,7 +18,7 @@ class GO_Base_VObject_VTimezone extends Sabre_VObject_Component {
 
 		parent::__construct($name, $iterator);
 
-		$tz = new DateTimeZone(GO::user()->timezone);
+		$tz = new DateTimeZone(GO::user() ? GO::user()->timezone : date_default_timezone_get());
 		//$tz = new DateTimeZone("Europe/Amsterdam");
 		$transitions = $tz->getTransitions();
 
