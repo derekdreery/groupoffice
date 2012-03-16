@@ -125,6 +125,29 @@ class GO_Base_Module extends GO_Base_Observable {
 	}
 	
 	/**
+	 * Return an array of modules this module depends on.
+	 * 
+	 * @return array 
+	 */
+	public function depends(){
+		return array();
+	}
+	
+	/**
+	 * Find the module manager class by id.
+	 * 
+	 * @param string $moduleId eg. "addressbook"
+	 * @return \GO_Base_Module|boolean 
+	 */
+	public static function findByModuleId($moduleId){
+		$className = 'GO_'.ucfirst($moduleId).'_'.ucfirst($moduleId).'Module';
+		if(class_exists($className))
+			return new $className;
+		else
+			return false;
+	}
+	
+	/**
 	 * Return the number of update queries.
 	 * 
 	 * @return integer 
@@ -136,13 +159,30 @@ class GO_Base_Module extends GO_Base_Observable {
 		
 		return GO_Base_Util_Common::countUpgradeQueries($updatesFile);
 	}
+	
+	public function checkDependenciesForInstallation($modulesToBeInstalled=array()){
+		$depends = $this->depends();
+		
+		foreach($depends as $moduleId){
+			if(!GO::modules()->isInstalled($moduleId) && !in_array($moduleId,$modulesToBeInstalled)){
+				
+				$moduleNames = array();
+				foreach($depends as $moduleId){
+					$modManager = GO_Base_Module::findByModuleId($moduleId);
+					$moduleNames[]=$modManager ? $modManager->name () : $moduleId;
+				}				
+				
+				throw new Exception("Module ".$this->name()." depends on ".implode(",",$moduleNames).". Please make sure all dependencies are installed.");
+			}
+		}
+	}
 
 	/**
 	 * Installs the module's tables etc
 	 * 
 	 * @return boolean
 	 */
-	public function install() {
+	public function install() {		
 		
 		$sqlFile = $this->path().'install/install.sql';
 		
