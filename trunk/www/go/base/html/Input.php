@@ -99,6 +99,7 @@ class GO_Base_Html_Input {
 
 		$this->attributes['required'] = empty($this->attributes['required']) ? false : true;
 		
+		$this->init();
 		
 		if (empty($this->attributes['forget_value'])) {
 			if ($pos = strpos($this->attributes['name'], '[')) {
@@ -108,7 +109,10 @@ class GO_Base_Html_Input {
 				$this->isPosted = isset($_POST[$key1][$key2]);
 				$this->attributes['value'] = isset($_POST[$key1][$key2]) ? $_POST[$key1][$key2] : $this->attributes['value'];
 			} else {
-				$this->attributes['value'] = isset($_POST[$this->attributes['name']]) ? $_POST[$this->attributes['name']] : $this->attributes['value'];
+				
+				if(!empty($this->attributes['type']) && $this->attributes['type'] != 'checkbox'){
+					$this->attributes['value'] = isset($_POST[$this->attributes['name']]) ? $_POST[$this->attributes['name']] : $this->attributes['value'];
+				}
 				$this->isPosted = isset($_POST[$this->attributes['name']]);
 			}
 		}
@@ -116,7 +120,6 @@ class GO_Base_Html_Input {
 //		if($this->isPosted && empty($this->attributes['value']) && $this->attributes['required'])
 //			self::setError ($this->attributes['name'], "This field is required");
 		
-
 		if(empty($this->attributes['value']) && !empty($this->attributes['empty_text'])){
 			$this->attributes['value'] = $this->attributes['empty_text'];
 		}
@@ -129,7 +132,7 @@ class GO_Base_Html_Input {
 			$this->attributes['id']='form_'.self::$id;
 		}
 		
-		$this->init();
+		//$this->init();
 		
 	}
 	
@@ -176,14 +179,20 @@ class GO_Base_Html_Input {
 	
 	protected function renderCheckbox(){
 		
+		$html = '';
+//		$checked = !empty($this->attributes['checked']);
+//		unset($this->attributes['checked']);
+		
 		if (isset($this->attributes['empty_value'])) {
-			$html = '<input type="hidden" name="'.$this->attributes['name'].'" value="'.$this->attributes['empty_value'].'"';
+			$html .= '<input type="hidden" name="'.$this->attributes['name'].'" value="'.$this->attributes['empty_value'].'"';
 			$html .= ' />';
 		}
 		
-		$html .= '<input id="'.$this->attributes['id'].'" class="'.$this->attributes['class'].'" type="'.$this->attributes['type'].'" name="'.$this->attributes['name'].'" value="1" '.$this->attributes['extra'];
+		$html .= '<input id="'.$this->attributes['id'].'" class="'.$this->attributes['class'].'" type="'.$this->attributes['type'].'" name="'.$this->attributes['name'].'" value="'.$this->attributes['value'].'" '.$this->attributes['extra'];
 
-		if(!empty($this->attributes['value'])&& $this->attributes['value']==1 )
+		//if(!empty($this->attributes['value']) && $this->attributes['value']==1 )
+
+		if(!empty($this->attributes['checked']) || ($this->isPosted && !empty($_POST[$this->attributes['name']])))
 			$html .= 'checked';	
 		
 		$html .= ' />';
