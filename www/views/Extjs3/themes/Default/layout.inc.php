@@ -96,7 +96,10 @@ if($GLOBALS['GO_SECURITY']->logged_in() && !isset($popup_groupoffice))
 	?>
 
 	<div id="go-powered-by" style="position:absolute;right:10px;bottom:10px">
-	Powered by Group-Office: <a target="_blank" class="normal-link" href="http://www.group-office.com">http://www.group-office.com</a>
+	Powered by <?php echo $GLOBALS['GO_CONFIG']->product_name; ?>
+	<?php if($GLOBALS['GO_CONFIG']->product_name=='Group-Office'){ ?>
+	: <a target="_blank" class="normal-link" href="http://www.group-office.com">http://www.group-office.com</a>
+	<?php } ?>
 	</div>
 
 	<div id="checker-icon"></div>
