@@ -65,8 +65,12 @@ class GO_Base_Util_SQL {
 	
 	public static function executeSqlFile($file){
 		$queries = self::getSqlQueries($file);
-		foreach($queries as $query)
-			GO::getDbConnection ()->query($query);
+		try{
+			foreach($queries as $query)
+				GO::getDbConnection ()->query($query);
+		}catch(Exception $e){
+			throw new Exception("Could not execute query: ".$query."\n\n".(string) $e);
+		}
 		
 		return true;
 	}
