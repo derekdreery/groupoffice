@@ -63,6 +63,8 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 		$admin->save();
 
 		$adminGroup->addUser($admin->id);
+		
+		$admin->checkDefaultModels();
 
 		redirect('finished.php');
 	}
