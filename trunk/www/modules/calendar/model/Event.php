@@ -600,28 +600,22 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 
 		//don't calculate timezone offset for all day events
-		$timezone_offset_string = GO_Base_Util_Date::get_timezone_offset($this->start_time);
-
-		if ($timezone_offset_string > 0) {
-			$gmt_string = '(\G\M\T +' . $timezone_offset_string . ')';
-		} elseif ($timezone_offset_string < 0) {
-			$gmt_string = '(\G\M\T -' . $timezone_offset_string . ')';
-		} else {
-			$gmt_string = '(\G\M\T)';
-		}
-
-		if ($this->all_day_event == '1') {
-			$event_datetime_format = GO::user()->completeDateFormat;
-		} else {
-			$event_datetime_format = GO::user()->completeDateFormat . ' ' . GO::user()->time_format . ' ' . $gmt_string;
-		}
+//		$timezone_offset_string = GO_Base_Util_Date::get_timezone_offset($this->start_time);
+//
+//		if ($timezone_offset_string > 0) {
+//			$gmt_string = '(\G\M\T +' . $timezone_offset_string . ')';
+//		} elseif ($timezone_offset_string < 0) {
+//			$gmt_string = '(\G\M\T -' . $timezone_offset_string . ')';
+//		} else {
+//			$gmt_string = '(\G\M\T)';
+//		}
 
 		$html .= '<tr><td colspan="2">&nbsp;</td></tr>';
 
 		$html .= '<tr><td>' . GO::t('startsAt', 'calendar') . ':</td>' .
-						'<td>' . date($event_datetime_format, $this->start_time) . '</td></tr>' .
+						'<td>' . GO_Base_Util_Date::get_timestamp($this->start_time, empty($this->all_day_event)) . '</td></tr>' .
 						'<tr><td>' . GO::t('endsAt', 'calendar') . ':</td>' .
-						'<td>' . date($event_datetime_format, $this->end_time) . '</td></tr>';
+						'<td>' . GO_Base_Util_Date::get_timestamp($this->end_time, empty($this->all_day_event)) . '</td></tr>';
 		
 		$html .= '</table>';
 		

@@ -261,7 +261,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				
 				if($event->is_organizer || $participant->is_organizer){
 
-					if ($participant->user_id != GO::user()->id) {
+					if (!GO::user() || $participant->user_id != GO::user()->id) {
 						$subject = $isNewEvent ? GO::t('invitation', 'calendar') : GO::t('invitation_update', 'calendar');
 						
 						
