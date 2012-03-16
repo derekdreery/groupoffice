@@ -226,8 +226,7 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 	},
 
 	installModule : function(grid) {
-		grid.container.mask(GO.lang['waitMsgLoad']);
-
+	
 		var selectionModel = grid.getSelectionModel();
 		var records = selectionModel.getSelections();
 		
@@ -239,12 +238,13 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 
 		if (records.length > 0) {
 			GO.request({
+				maskEl:grid.container,
 				url : 'modules/module/install',		
 				params:{
 					modules:Ext.encode(keys)
 				},
 				success: function(options, response, result) {
-					grid.container.unmask();
+
 					grid.store.reload();
 					this.store.reload();
 					this.availableModulesWin.hide();

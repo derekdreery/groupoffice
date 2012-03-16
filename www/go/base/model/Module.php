@@ -51,22 +51,14 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function getModuleManager(){
-		if(!isset($this->_moduleManager)){
-			$className = 'GO_'.ucfirst($this->id).'_'.ucfirst($this->id).'Module';
-
-			if(class_exists($className))
-				$this->_moduleManager = new $className;
-			else
-				$this->_moduleManager = false;
-		}
+		if(!isset($this->_moduleManager))	
+			$this->_moduleManager = GO_Base_Module::findByModuleId ($this->id);
 		
 		return $this->_moduleManager;
-		
-		
 	}
 	
 	protected function beforeSave() {
-		if($this->isNew){
+		if($this->isNew){			
 			$this->version = $this->moduleManager->databaseVersion();		
 			$this->sort_order = $this->count()+1;
 			$this->admin_menu = $this->moduleManager->adminModule();
