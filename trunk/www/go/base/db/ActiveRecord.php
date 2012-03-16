@@ -2013,7 +2013,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 		
 		//Don't do anything if nothing has been modified.
-		if(!$this->isModified() && (!$this->customfieldsRecord || !$this->customfieldsRecord->isModified()))
+		if(!$this->isNew && !$this->isModified() && (!$this->customfieldsRecord || !$this->customfieldsRecord->isModified()))
 			return true;
 
 
@@ -2741,8 +2741,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @return boolean whether the attribute exists and the assignment is conducted successfully
 	 * @see hasAttribute
 	 */
-	public function setAttribute($name,$value)
-	{		
+	public function setAttribute($name,$value, $format=false)
+	{	
+		if($format)
+			$value = $this->formatInput($name, $value);
+		
 		if(isset($this->columns[$name])){
 			
 			if(GO::config()->debug){

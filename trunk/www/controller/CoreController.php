@@ -323,12 +323,12 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 			}
 		}
 
-//				header("Expires: " . date("D, j M Y G:i:s ", time() + (86400 * 365)) . 'GMT'); //expires in 1 year
-//				header('Cache-Control: cache');
-//				header('Pragma: cache');
-//				header('Content-Type: ' . $file->mimeType());
-//				header('Content-Disposition: inline; filename="' . $cacheFilename . '"');
-//				header('Content-Transfer-Encoding: binary');
+				header("Expires: " . date("D, j M Y G:i:s ", time() + (86400 * 365)) . 'GMT'); //expires in 1 year
+				header('Cache-Control: cache');
+				header('Pragma: cache');
+				header('Content-Type: ' . $file->mimeType());
+				header('Content-Disposition: inline; filename="' . $cacheFilename . '"');
+				header('Content-Transfer-Encoding: binary');
 
 		readfile($readfile);
 
