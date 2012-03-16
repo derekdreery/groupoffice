@@ -9,6 +9,10 @@
  */
 class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	
+	protected function allowGuests() {
+		return array('plupload');
+	}
+	
 	protected function actionLink($params) {
 
 		$fromLinks = json_decode($_POST['fromLinks'], true);
@@ -471,6 +475,11 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	
 	
 	protected function actionPlupload($params) {
+		
+		if(!GO::user() && !GO_Base_Authorized_Actions::isAuthorized('plupload')){
+			throw new GO_Base_Exception_AccessDenied();
+		}
+		
 		$tmpFolder = new GO_Base_Fs_Folder(GO::config()->tmpdir . 'uploadqueue');
 		//$tmpFolder->delete();
 		$tmpFolder->create();
@@ -517,10 +526,16 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		
 		if(!in_array($targetDir . DIRECTORY_SEPARATOR . $fileName, GO::session()->values['files']['uploadqueue']))
 				GO::session()->values['files']['uploadqueue'][]=$targetDir . DIRECTORY_SEPARATOR . $fileName;
+		
+		$file = new GO_Base_Fs_File($targetDir . DIRECTORY_SEPARATOR . $fileName);
+		if ($file->exists() && $file->size() > GO::config()->max_file_size)
+			throw new Exception("File too large");
 
 // Handle non multipart uploads older WebKit versions didn't support multipart in HTML5
 		if (strpos($contentType, "multipart") !== false) {
+			
 			if (isset($_FILES['file']['tmp_name']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
+				
 				// Open temp file
 				$out = fopen($targetDir . DIRECTORY_SEPARATOR . $fileName, $chunk == 0 ? "wb" : "ab");
 				if ($out) {
