@@ -260,7 +260,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * 'required'=>true, //Will be true automatically if field in database may not be null and doesn't have a default value
 	 * 'length'=><max length of the value>, //Autodetected from db
 	 * 'validator'=><a function to call to validate the value>,
-	 * 'gotype'=>'number|textfield|textarea|unixtimestamp|unixdate', //Autodetected from db as far as possible. See loadColumns()
+	 * 'gotype'=>'number|textfield|textarea|unixtimestamp|unixdate|user', //Autodetected from db as far as possible. See loadColumns()
 	 * 'decimals'=>2//only for gotype=number)
 	 * 'regex'=>'A preg_match expression for validation',
 	 * 'dbtype'=>'varchar' //mysql database type
@@ -468,6 +468,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 							break;
 						case 'name':
 							$required=true;
+							break;
+						case 'user_id':
+							$gotype = 'user';
 							break;
 					}
 					
