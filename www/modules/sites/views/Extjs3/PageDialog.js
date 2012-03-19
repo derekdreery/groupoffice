@@ -67,7 +67,7 @@ GO.sites.PageDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 					width:300,
 					anchor: '100%',
 					maxLength: 100,
-					allowBlank:false,
+					allowBlank:true,
 					fieldLabel: GO.sites.lang.pageTemplate
 				},{
 					xtype: 'textfield',
