@@ -10,7 +10,11 @@ GO.base.form.getFormFieldByType = function(gotype, colName, config){
 		case 'number':
 			editor = new GO.form.NumberField(config);
 			break;
-					
+		
+		case 'user':
+			editor = new GO.form.SelectUser(config); 
+			break;
+		
 		case 'boolean':
 			editor = new Ext.form.Checkbox(config);
 			break;
