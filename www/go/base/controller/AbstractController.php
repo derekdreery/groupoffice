@@ -397,13 +397,18 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * 
 	 * @return string 
 	 */
-	public function getRoute(){
+	public function getRoute($action=''){
 		$arr = explode('_',get_class($this));
 				
 		if($arr[1]!='Core')
-			return strtolower($arr[1].'/'.$arr[3]);				
+			$route=$arr[1].'/'.$arr[3];				
 		else 
-			return strtolower($arr[3]);				
+			$route=$arr[3];				
+		
+		if($action!='')
+			$route .= '/'.$action;
+		
+		return $route;
 	}	
 	
 //	protected function isAjax(){
