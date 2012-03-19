@@ -94,7 +94,7 @@ class GO_Core_Controller_BatchEdit extends GO_Base_Controller_AbstractController
 		$rows = array();
 		foreach($columns as $key=>$value) {
 
-			if(!empty($value['gotype']) && $key != 'ctime' && $key != 'mtime') {
+			if(!empty($value['gotype']) && $key != 'ctime' && $key != 'mtime' && $key != 'company_id') {
 				$row = array();
 
 				$row['name']= $key;
