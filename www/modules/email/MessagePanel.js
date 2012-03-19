@@ -150,25 +150,30 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			scope: this,
 			success: function(options, response, data)
 			{							                          
-				if(this.updated)
-				{
-					data.iCalendar.feedback = GO.email.lang.icalendarEventUpdated;
-					this.updated = false;
-				}else
-				if(this.created)
-				{
-					data.iCalendar.feedback = GO.email.lang.icalendarEventCreated;
-					this.created = false;
-				}else
-				if(this.deleted)
-				{
-					data.iCalendar.feedback = GO.email.lang.icalendarEventDeleted;
-					this.deleted = false;
-				}else
-				if(this.declined)
-				{
-					data.iCalendar.feedback = GO.email.lang.icalendarInvitationDeclined;
-					this.declined = false;
+//				if(this.updated)
+//				{
+//					data.iCalendar.feedback = GO.email.lang.icalendarEventUpdated;
+//					this.updated = false;
+//				}else
+//				if(this.created)
+//				{
+//					data.iCalendar.feedback = GO.email.lang.icalendarEventCreated;
+//					this.created = false;
+//				}else
+//				if(this.deleted)
+//				{
+//					data.iCalendar.feedback = GO.email.lang.icalendarEventDeleted;
+//					this.deleted = false;
+//				}else
+//				if(this.declined)
+//				{
+//					data.iCalendar.feedback = GO.email.lang.icalendarInvitationDeclined;
+//					this.declined = false;
+//				}
+				
+				if(this.icalendarFeedback){
+					data.iCalendar.feedback = this.icalendarFeedback;			
+					delete this.icalendarFeedback;
 				}
 					
 				data.mailbox=mailbox;
@@ -491,20 +496,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			scope: this,
 			success: function(options, response, data)
 			{
-				if(data.updated)
-				{
-					this.updated = true;
-				}else
-				{
-					// check for declined invitations
-					if(this.status_id != 2)
-					{
-						this.created = true;
-					}else
-					{
-						this.declined = true;
-					}
-				}
+				this.icalendarFeedback = data.feedback;				
 					
 				this.loadMessage();
 			}
