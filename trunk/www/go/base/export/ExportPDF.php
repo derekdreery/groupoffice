@@ -46,10 +46,11 @@ class GO_Base_Export_ExportPDF extends GO_Base_Export_AbstractExport {
 		
 		if($this->header) {
 			$this->header = true;
-			$html .= $this->_write($this->getLabels());
+			$html .= $this->_write(array_values($this->getLabels()));
 		}
 		
 		while($record = $this->store->nextRecord()){
+			$record = $this->prepareRecord($record);
 			$html .= $this->_write($record);
 		}
 		

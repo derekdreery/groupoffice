@@ -140,6 +140,7 @@ class GO_Base_Data_ColumnModel {
 		
 		return $this;
 	}
+
 	
 	/**
 	 * Get the columns of this columnModel.
@@ -222,10 +223,13 @@ class GO_Base_Data_ColumnModel {
 
 	public function removeColumn($columnName) {
 		unset($this->_columns[$columnName]);
+		unset($this->_columnSort[$columnName]);
 	}
 
+	
 	public function resetColumns($columns) {
 		$this->_columns = $columns;
+		$this->_columnSort=array_keys($columns);
 	}
 
 	/**
