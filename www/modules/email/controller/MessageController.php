@@ -287,7 +287,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 			unset($response['data']['to'], $response['data']['cc'], $response['data']['bcc'], $response['data']['subject']);
 
-			if (empty($params['keepTags'])) {
+			//keep template tags for mailings to addresslists
+			if (empty($params['addresslist_id'])) {
 				$values = array();
 				//$contact_id=0;
 				//if contact_id is not set but email is check if there's contact info available
