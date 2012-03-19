@@ -425,7 +425,7 @@ GO.email.EmailComposer = function(config) {
 	this.addEvents({
 		'dialog_ready' :true,
 		//		attachmentDblClicked : true,
-		zipOfAttachmentsDblClicked : true,
+		//zipOfAttachmentsDblClicked : true,
 		'send' : true,
 		'reset' : true,
 		afterShowAndLoad:true,

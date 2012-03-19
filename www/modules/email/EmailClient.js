@@ -1082,7 +1082,7 @@ GO.email.EmailClient = function(config){
 	}, this);
   
 	this.messagePanel.on('attachmentClicked', this.openAttachment, this);
-	this.messagePanel.on('zipOfAttachmentsClicked', this.openZipOfAttachments, this);
+	//this.messagePanel.on('zipOfAttachmentsClicked', this.openZipOfAttachments, this);
   
   
 	/*this.messagePanel.on('emailClicked', function(email){
@@ -1382,14 +1382,14 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		}
 	},
 	
-	openZipOfAttachments : function()
-	{
-		document.location.href=GO.settings.modules.email.url+
-		'zip_attachments.php?account_id='+this.account_id+
-		'&mailbox='+encodeURIComponent(this.mailbox)+
-		'&uid='+this.messagePanel.uid+'&filename='+encodeURIComponent(this.messagePanel.data.subject);
-	},
-	
+//	openZipOfAttachments : function()
+//	{
+//		document.location.href=GO.settings.modules.email.url+
+//		'zip_attachments.php?account_id='+this.account_id+
+//		'&mailbox='+encodeURIComponent(this.mailbox)+
+//		'&uid='+this.messagePanel.uid+'&filename='+encodeURIComponent(this.messagePanel.data.subject);
+//	},
+//	
 	showComposer : function(values)
 	{
 		GO.email.showComposer(

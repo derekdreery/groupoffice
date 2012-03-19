@@ -203,6 +203,10 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		
 		return $new;
 	}
+	
+	public function getZipOfAttachmentsUrl(){
+		return '';
+	}
 
 	/**
 	 * Returns MIME fields contained in this class's instance as an associative
@@ -242,6 +246,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		$response['size'] = $this->size;
 
 		$response['attachments'] = array();
+		$response['zip_of_attachments_url']=$this->getZipOfAttachmentsUrl();
 
 		$response['inlineAttachments'] = array();
 
