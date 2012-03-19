@@ -99,5 +99,11 @@
 		}
 		return $ab;
 	}
+	
+	public function defaultAttributes() {
+		$attr = parent::defaultAttributes();
+		$attr['default_salutation']=GO::t('defaultSalutationTpl','addressbook');
+		return $attr;
+	}
 
 }
