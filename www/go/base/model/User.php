@@ -251,7 +251,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			foreach($groups as $groupName){
 				$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', $groupName);
 				if($group)
-					$this->acl->addGroup($group->id);
+					$this->acl->addGroup($group->id, GO_Base_Model_Acl::MANAGE_PERMISSION);
 			}
 		}
 	}
