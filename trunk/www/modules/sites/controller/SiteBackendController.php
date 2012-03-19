@@ -6,6 +6,8 @@ class GO_Sites_Controller_SiteBackend extends GO_Base_Controller_AbstractModelCo
 	
 	protected function actionSiteTree($params) {
 
+		$response=array();
+		
 		$findParams = GO_Base_Db_FindParams::newInstance();
 		//->getCriteria()->addCondition('user_id',GO::user()->id);
 
