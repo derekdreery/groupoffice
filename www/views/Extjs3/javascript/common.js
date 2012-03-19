@@ -262,9 +262,14 @@ GO.deleteItems = function(config)
 			{
 				config.store.baseParams[param]=config.params[param];
 			}
+			
+			var params = {};
+			
+			if(config.store.lastOptions && config.store.lastOptions.params && config.store.lastOptions.params.start)
+				params.start=config.store.lastOptions.params.start;
 						
-			config.store.reload({
-				//params: config.params,
+			config.store.load({
+				params: params,
 				callback: function(){
 					var callback;
 					if(!this.reader.jsonData.deleteSuccess)
