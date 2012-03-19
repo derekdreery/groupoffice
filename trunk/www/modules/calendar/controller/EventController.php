@@ -257,7 +257,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 			$stmt = $event->participants();
 
-			while ($participant = $stmt->fetch()) {
+			while ($participant = $stmt->fetch()) {				
 				
 				if($event->is_organizer || $participant->is_organizer){
 
@@ -537,8 +537,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		//find existing event
 		$event = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id, 0, $recurrenceDate);				
 
+		$eventUpdated = false;
+		
 		$userIsOrganizer=false;
 		if($event){
+			
+			$eventUpdated = true;
 
 			$participant = GO_Calendar_Model_Participant::model()
 							->findSingleByAttributes(array('event_id'=>$event->id, 'user_id'=>GO::user()->id));
@@ -609,6 +613,10 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				$this->_sendInvitation(array(), $event, false, array(), 'REPLY');
 			}
 		}
+		
+		$langKey = $eventUpdated ? 'eventUpdatedIn' : 'eventScheduledIn';
+		
+		$response['feedback']=sprintf(GO::t($langKey,'calendar'), $event->calendar->name, $participant->statusName);
 		$response['success']=true;
 		
 		return $response;
@@ -680,7 +688,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$event = false;
 		}
 		//notify organizer
-		$this->_sendInvitation(array(), $participant->event, false, array(), 'REPLY', $participant);
+		$this->_sendInvitation(array(), $event, false, array(), 'REPLY', $participant);
 		
 		$this->render('invitation', array('participant'=>$participant, 'event'=>$event));
 	}
