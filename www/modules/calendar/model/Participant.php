@@ -26,13 +26,15 @@
  * @property string $last_modified
  * @property int $is_organizer
  * @property string $role
+ * 
  * @property GO_Calendar_Model_Event $event
+ * @property string $statusName;
+ * 
  * 
  */
 class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
-	
-					
-	const STATUS_TENTATIVE = 3;	
+
+	const STATUS_TENTATIVE = 3;
 	const STATUS_DECLINED = 2;
 	const STATUS_ACCEPTED = 1;
 	const STATUS_PENDING = 0;
@@ -43,14 +45,14 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	 * @param String $className
 	 * @return GO_Calendar_Model_Participant
 	 */
-	public static function model($className=__CLASS__) {
+	public static function model($className = __CLASS__) {
 		return parent::model($className);
 	}
-	
+
 	public function validate() {
-		if(empty($this->name))
-			$this->name=$this->email;
-		
+		if (empty($this->name))
+			$this->name = $this->email;
+
 		return parent::validate();
 	}
 
@@ -74,10 +76,10 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	 */
 	public function relations() {
 		return array(
-				'event' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Calendar_Model_Event', 'field'=>'event_id'),
+				'event' => array('type' => self::BELONGS_TO, 'model' => 'GO_Calendar_Model_Event', 'field' => 'event_id'),
 		);
 	}
-	
+
 	/**
 	 * Check if the participant is available.
 	 * 
@@ -85,19 +87,18 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @return boolean/?
 	 */
-	public function isAvailable(){
-		if(empty($this->user_id) || !$this->_hasFreeBusyAccess()){
+	public function isAvailable() {
+		if (empty($this->user_id) || !$this->_hasFreeBusyAccess()) {
 			return '?';
-		}else
-		{
+		} else {
 			return self::userIsAvailable($this->event->start_time, $this->event->end_time, $this->user_id, $this->event);
 		}
 	}
-	
+
 	/**
 	 * @todo
 	 */
-	private function _hasFreeBusyAccess(){
+	private function _hasFreeBusyAccess() {
 		return true;
 	}
 
@@ -110,42 +111,59 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	 * @param type $ignoreEvent
 	 * @return boolean 
 	 */
-	public static function userIsAvailable($periodStartTime, $periodEndTime, $userId, $ignoreEvent=false) {
-			
+	public static function userIsAvailable($periodStartTime, $periodEndTime, $userId, $ignoreEvent = false) {
+
 		$findParams = GO_Base_Db_FindParams::newInstance()
 						->ignoreAcl();
-		
+
 		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
 						->addRawCondition('t.calendar_id', 'c.id');
-				
+
 		$findParams->join(GO_Calendar_Model_Calendar::model()->tableName(), $joinCriteria, 'c');
-		
-		$findParams->getCriteria()->addCondition('user_id', $userId,'=','c');
-		
-		if($ignoreEvent){
+
+		$findParams->getCriteria()->addCondition('user_id', $userId, '=', 'c');
+
+		if ($ignoreEvent) {
 			$findParams->getCriteria()
 							->addModel(GO_Calendar_Model_Event::model())
-							->addCondition('id', $ignoreEvent->id,'!=')
-							->addCondition('uuid', $ignoreEvent->uuid,'!=')
-							;
+							->addCondition('id', $ignoreEvent->id, '!=')
+							->addCondition('uuid', $ignoreEvent->uuid, '!=')
+			;
 		}
-		
+
 		$events = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, $periodStartTime, $periodEndTime, true);
 
-		return count($events)==0;
+		return count($events) == 0;
 	}
-	
+
 	public function defaultAttributes() {
 		$attr = parent::defaultAttributes();
-		$attr['user_id']=0;
+		$attr['user_id'] = 0;
 		return $attr;
 	}
-	
-	
-	
-	public function getSecurityToken (){
-		return md5($this->event_id.$this->email.$this->event->ctime);
+
+	public function getSecurityToken() {
+		return md5($this->event_id . $this->email . $this->event->ctime);
 	}
-	
+
+	public function getStatusName() {
+		switch ($this->status) {
+			case self::STATUS_TENTATIVE :
+				return GO::t('tentative','calendar');
+				break;
+
+			case self::STATUS_DECLINED :
+				return GO::t('declined','calendar');
+				break;
+
+			case self::STATUS_ACCEPTED :
+				return GO::t('accepted','calendar');
+				break;
+
+			default:
+				return GO::t('notRespondedYet','calendar');
+				break;
+		}
+	}
 
 }

@@ -41,17 +41,17 @@ extract($data);
 	
 	if($participant->status==GO_Calendar_Model_Participant::STATUS_ACCEPTED){	
 		?>
-		<p><?php echo GO::t('eventAccepted','calendar'); ?></p>
-		<?php
-		if($event){
-			?>
-			<p><?php echo sprintf(GO::t('eventScheduledIn','calendar'),$event->calendar->name); ?></p>
-			<?php
-		}
+		<p><?php echo GO::t('eventAccepted','calendar'); ?></p>		
 	}else
 	{
 		?>
 		<p><?php echo GO::t('eventDeclined','calendar'); ?></p>
+		<?php
+	}
+	
+	if($event){
+		?>
+		<p><?php echo sprintf(GO::t('eventScheduledIn','calendar'),$event->calendar->name, $participant->statusName); ?></p>
 		<?php
 	}
 	?>
