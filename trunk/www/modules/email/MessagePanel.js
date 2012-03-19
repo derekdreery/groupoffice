@@ -27,7 +27,6 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		
 		this.addEvents({
 			attachmentClicked : true,
-			zipOfAttachmentsClicked : true,
 			linkClicked : true,
 			emailClicked : true,
 			load : true,
@@ -70,8 +69,8 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		'<tpl for="attachments">'+
 		'<a class="filetype-link filetype-{extension}" id="'+this.attachmentsId+'_{[xindex-1]}" href="#">{name} ({human_size})</a> '+
 		'</tpl>'+
-		'<tpl if="attachments.length&gt;1">'+
-		'<a class="filetype-link filetype-zip" id="'+this.attachmentsId+'_zipofall" href="#">'+GO.email.lang.downloadAllAsZip+'</a>'+
+		'<tpl if="attachments.length&gt;1 && zip_of_attachments_url!=\'\'">'+
+		'<a class="filetype-link filetype-zip" href="{zip_of_attachments_url}" target="_blank">'+GO.email.lang.downloadAllAsZip+'</a>'+
 		'</tpl>'+
 		'</td></tr>'+
 		'</table>'+
@@ -371,15 +370,9 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		{			
 			var attachment_no = target.id.substr(this.attachmentsId.length+1);
 			
-			if(attachment_no=='zipofall')
-			{
-			//this.fireEvent('zipOfAttachmentsClicked');				
-			}else
-			{
-				e.preventDefault();
-				var attachment = this.data.attachments[attachment_no];				
-				this.attachmentContextMenu.showAt(e.getXY(), attachment);
-			} 
+			e.preventDefault();
+			var attachment = this.data.attachments[attachment_no];				
+			this.attachmentContextMenu.showAt(e.getXY(), attachment);
 		}
 			
 	},
@@ -388,16 +381,10 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 	{
 		if(target.id.substr(0,this.attachmentsId.length)==this.attachmentsId)
 		{
-			var attachment_no = target.id.substr(this.attachmentsId.length+1);
+			var attachment_no = target.id.substr(this.attachmentsId.length+1);			
 			
-			if(attachment_no=='zipofall')
-			{
-				this.fireEvent('zipOfAttachmentsClicked');				
-			}else
-			{
-				var attachment = this.data.attachments[attachment_no];
-				this.fireEvent('attachmentClicked', attachment, this);
-			} 
+			var attachment = this.data.attachments[attachment_no];
+			this.fireEvent('attachmentClicked', attachment, this);
 		}
 	},
 

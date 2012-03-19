@@ -110,6 +110,9 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 		return '';
 	}
 	
+	public function getZipOfAttachmentsUrl(){
+		return GO::url("savemailas/linkedEmail/zipOfAttachments", array("tmpdir"=>str_replace(GO::config()->tmpdir, '', $this->_getTempDir())));
+	}
 	
 	
 	protected function getAttachmentUrl($attachment) {
