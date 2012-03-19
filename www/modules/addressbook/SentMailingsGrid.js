@@ -64,7 +64,7 @@ GO.addressbook.SentMailingsGrid = function(config){
 					GO.linkHandlers["GO_Savemailas_Model_LinkedEmail"].call(this, 0, {action: "path", path:record.get('message_path')});
 					break;
 				case 'ml-btn-view-log':
-					document.location=GO.url("addressbook/sentMailing/viewLog",{'mailing_id': record.id});//GO.settings.modules.addressbook.url+'log_mailing.php?mailing_id='+record.id;
+					window.open(GO.url("addressbook/sentMailing/viewLog",{'mailing_id': record.id}));
 					break;
 			}
 		}

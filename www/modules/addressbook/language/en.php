@@ -348,9 +348,9 @@ $l['templateAlreadyExists'] = 'The template you are trying to create already exi
 $l['mailingAlreadyExists'] = 'The mailing you are trying to create already exists';
 $l['greet']='Best regards';
 $l['unsubscribe']='Unsubscribe';
-$l['unsubscription']='Click here to unsubscribe from this mailing.';
-$l['r_u_sure'] = 'Are you sure you want to unsubscribe from the mailing?';
-$l['delete_success'] = 'You have been successfully unsubscribed from the mailing.';
+$l['unsubscription']='Click here to unsubscribe from this address list.';
+$l['r_u_sure'] = 'Are you sure you want to unsubscribe from the address list?';
+$l['delete_success'] = 'You have been successfully unsubscribed from the address list.';
 $l['setCurrentTemplateAsDefault']='Set current template as default';
 
 $l['contactCustomFields']='Contacts custom fields';
