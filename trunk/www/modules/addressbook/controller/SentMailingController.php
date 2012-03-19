@@ -15,27 +15,27 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 	 * @param Array $params Parameters from EmailComposer
 	 * @return Array $params Parameters for GO_Base_Mail_Message::handleFormInput 
 	 */
-	private function _convertOldParams($params) {
-		$params['inlineAttachments'] = json_decode($params['inline_attachments']);
-
-		foreach ($params['inlineAttachments'] as $k => $ia) {
-			// tmpdir part may already be at the beginning of $ia['tmp_file']
-			if (strpos($ia->tmp_file, GO::config()->tmpdir) == 0)
-				$ia->tmp_file = substr($ia->tmp_file, strlen(GO::config()->tmpdir));
-
-			$params['inlineAttachments'][$k] = $ia;
-		}
-		$params['inlineAttachments'] = json_encode($params['inlineAttachments']);
-
-		if (!empty($params['content_type']) && strcmp($params['content_type'], 'html') != 0)
-			$params['body'] = $params['textbody'];
-
-		// Replace "[id:" string part in subject by the actual alias id
-		if (!empty($params['alias_id']) && !empty($params['subject']))
-			$params['subject'] = str_replace('[id:', '[' . $params['alias_id'] . ':', $params['subject']);
-
-		return $params;
-	}
+//	private function _convertOldParams($params) {
+//		$params['inlineAttachments'] = json_decode($params['inline_attachments']);
+//
+//		foreach ($params['inlineAttachments'] as $k => $ia) {
+//			// tmpdir part may already be at the beginning of $ia['tmp_file']
+//			if (strpos($ia->tmp_file, GO::config()->tmpdir) == 0)
+//				$ia->tmp_file = substr($ia->tmp_file, strlen(GO::config()->tmpdir));
+//
+//			$params['inlineAttachments'][$k] = $ia;
+//		}
+//		$params['inlineAttachments'] = json_encode($params['inlineAttachments']);
+//
+//		if (!empty($params['content_type']) && strcmp($params['content_type'], 'html') != 0)
+//			$params['body'] = $params['textbody'];
+//
+//		// Replace "[id:" string part in subject by the actual alias id
+//		if (!empty($params['alias_id']) && !empty($params['subject']))
+//			$params['subject'] = str_replace('[id:', '[' . $params['alias_id'] . ':', $params['subject']);
+//
+//		return $params;
+//	}
 
 
 	protected function actionSend($params) {
@@ -43,7 +43,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			throw new Exception(GO::t('feedbackNoReciepent', 'email'));
 		} else {
 			try {
-				$params = $this->_convertOldParams($params);
+				//$params = $this->_convertOldParams($params);
 
 				$message = GO_Base_Mail_Message::newInstance();
 				$message->handleEmailFormInput($params); // insert the inline and regular attachments in the MIME message
@@ -52,27 +52,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 				$mailing['subject'] = $params['subject'];
 				$mailing['addresslist_id'] = $params['addresslist_id'];
 				$mailing['message_path'] =  'mailings/' . GO::user()->id . '_' . date('Ymd_Gis') . '.eml';
-
-
-				// Set From address
-				$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);
-				$message->setFrom($alias->email, $alias->name);
-
-				// Set the message subject
-				if (!empty($params['subject']))
-					$message->setSubject($params['subject']);
-
-				// Set the priority of the message using $params['priority']
-				if (!empty($params['priority']))
-					$message->setPriority($params['priority']);
-
-				// Set the message body
-				if ($params['content_type'] == 'html') {
-					$message->setHtmlAlternateBody($params['body']);
-				} else {
-					$message->setBody($params['body']);
-				}
-				
+	
 				$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'mailings');
 				$folder->create();
 
@@ -167,14 +147,44 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		$failedRecipients = array();
 
 		$bodyWithTags = $message->getBody();
+		
+		
 
 		foreach ($mailing->contacts as $contact) {			
+			
+			$unsubscribeHref=GO::url('addressbook/sentMailing/unsubscribe', 
+							array(
+									'addresslist_id'=>$mailing->addresslist_id, 
+									'contact_id'=>$contact->id, 
+									'token'=>md5($contact->ctime.$contact->addressbook_id.$contact->email) //token to check so that users can't unsubscribe other members by guessing id's
+									), true, true);
+			
+			$body = str_replace('%unsubscribe_href%', $unsubscribeHref, $body); //curly brackets don't work inside links in browser wysiwyg editors.
+			
+			$body = GO_Addressbook_Model_Template::model()->replaceCustomTags($body,array(				
+				'unsubscribe_link'=>'<a href="'.$unsubscribeHref.'">'.GO::t("unsubscription","addressbook").'</a>'
+			), true);
+			
 			$message->setTo($contact->email, $contact->name);
-			$message->setBody(GO_Addressbook_Model_Template::model()->replaceModelTags($bodyWithTags, $contact));
+			$message->setBody(GO_Addressbook_Model_Template::model()->replaceModelTags($body, $contact));
 			$this->_sendmail($message, $contact, $mailer, $mailing);			
 		}
 
 		foreach ($mailing->companies as $company) {
+			
+			$unsubscribeHref=GO::url('addressbook/sentMailing/unsubscribe', 
+							array(
+									'addresslist_id'=>$mailing->addresslist_id, 
+									'company_id'=>$company->id, 
+									'token'=>md5($company->ctime.$company->addressbook_id.$company->email) //token to check so that users can't unsubscribe other members by guessing id's
+									), true, true);
+			
+			$body = str_replace('%unsubscribe_href%', $unsubscribeHref, $body); //curly brackets don't work inside links in browser wysiwyg editors.
+			
+			$body = GO_Addressbook_Model_Template::model()->replaceCustomTags($body,array(				
+				'unsubscribe_link'=>'<a href="'.$unsubscribeHref.'">'.GO::t("unsubscription","addressbook").'</a>'
+			), true);
+			
 			$message->setTo($company->email, $company->name);
 			$message->setBody(GO_Addressbook_Model_Template::model()->replaceModelTags($bodyWithTags, $company));
 			$this->_sendmail($message, $company, $mailer, $mailing);			
@@ -184,6 +194,43 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		$mailing->save();
 
 		echo "Mailing finished\n";
+	}
+	
+	public function actionUnsubscribe($params){
+		
+		if(!isset($params['contact_id']))
+			$params['contact_id']=0;
+		
+		if(!isset($params['company_id']))
+			$params['company_id']=0;
+		
+		if(!empty($params['sure'])){
+			if($params['contact_id']){
+				$contact = GO_Addressbook_Model_Contact::model()->findByPk($params['contact_id']);
+				
+				if(md5($contact->ctime.$contact->addressbook_id.$contact->email) != $params['token'])
+					throw new Exception("Invalid token!");
+				
+				$contact->email_allowed=0;
+				$contact->save();				
+			}else
+			{
+				if($params['contact_id']){
+					$company = GO_Addressbook_Model_Company::model()->findByPk($params['company_id']);
+
+					if(md5($company->ctime.$company->addressbook_id.$company->email) != $params['token'])
+						throw new Exception("Invalid token!");
+
+					$company->email_allowed=0;
+					$company->save();				
+				}
+			}
+			
+			$this->render('unsubscribed', $params);
+		}else
+		{		
+			$this->render('unsubscribe',$params);
+		}
 	}
 
 	private function _sendmail($message, $model, $mailer, $mailing) {
