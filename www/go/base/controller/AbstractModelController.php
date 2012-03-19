@@ -778,19 +778,22 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$findParams = GO::session()->values[$params['name']]['findParams'];
 		$findParams['limit']=0; // Let the export handle all found records without a limit
 		$model = GO::getModel(GO::session()->values[$params['name']]['model']);
-		
-		$store = new GO_Base_Data_Store();
 
+		$store = new GO_Base_Data_Store($this->getStoreColumnModel());	
+		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatStoreRecord'));		
+		
+		$columnModel = $store->getColumnModel();
+		$this->formatColumns($columnModel);		
+		
 		$stmt = $model->find($findParams);
 		$store->setStatement($stmt);
-
-		$columnModel = $store->getColumnModel();
-
+		
 		if(!empty($params['columns'])) {
 			$includeColumns = explode(',',$params['columns']);
-			$columnModel->setColumnsFromModel($model, array(), $includeColumns);
-		} else {
-			$columnModel->setColumnsFromModel($model);
+			foreach($columnModel->getColumns() as $c){
+				if(!in_array($c->getDataIndex(), $includeColumns))
+					$columnModel->removeColumn($c->getDataIndex());
+			}
 		}
 
 		if(!empty($params['type']))

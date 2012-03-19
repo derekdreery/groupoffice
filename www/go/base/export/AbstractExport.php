@@ -76,10 +76,21 @@ abstract class GO_Base_Export_AbstractExport {
 	public function getLabels(){
 		$columns = $this->columnModel->getColumns();
 		$labels = array();
-		foreach($columns as $column)			
-			$labels[]=$column->getLabel();
+		foreach($columns as $column)		
+			$labels[$column->getDataIndex()]=$column->getLabel();
 		
 		return $labels;
+	}
+	
+	protected function prepareRecord($record){
+		$c = array_keys($this->getLabels());
+		$frecord = array();
+		
+		foreach($c as $key){
+			$frecord[$key] = $record[$key];
+		}
+
+		return $frecord;
 	}
 	
 	/**

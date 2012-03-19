@@ -37,7 +37,6 @@ class GO_Base_Export_ExportHTML extends GO_Base_Export_AbstractExport {
 	}
 	
 	private function _write($data) {
-		
 		if($this->header) {
 			echo "<tr>\n";
 			foreach($data as $column)
@@ -62,12 +61,15 @@ class GO_Base_Export_ExportHTML extends GO_Base_Export_AbstractExport {
 		$this->_sendHeaders();
 		$this->_renderHead();
 		
+		$labels = $this->getLabels();
+
 		if($this->header) {
 			$this->header = true;
-			$this->_write($this->getLabels());
+			$this->_write(array_values($labels));
 		}
 		
 		while($record = $this->store->nextRecord()){
+			$record = $this->prepareRecord($record);
 			$this->_write($record);
 		}
 		
