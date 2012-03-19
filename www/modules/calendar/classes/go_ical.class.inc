@@ -327,6 +327,8 @@ class go_ical extends calendar
 			if($this->timezone_id != '')
 			{
 				$line .= ";TZID=\"".$this->timezone_id."\"";
+			}elseif(!$this->utc){
+				$line .= ";TZID=\"".date_default_timezone_get()."\"";
 			}
 				
 			$line .= ":".$date;
