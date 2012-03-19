@@ -287,6 +287,17 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		));
 		$mailing->save();
 	}
+	
+	protected function getStoreParams($params) {
+		
+		$criteria = GO_Base_Db_FindCriteria::newInstance();
+		
+		if(!GO::user()->isAdmin())
+			$criteria->addCondition('user_id', GO::user()->id);
+		
+		return GO_Base_Db_FindParams::newInstance()->criteria($criteria);
+						
+	}
 
 	protected function beforeStore(&$response, &$params, &$store) {
 
