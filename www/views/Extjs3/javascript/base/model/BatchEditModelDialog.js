@@ -33,8 +33,6 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 			config = {regex: new RegExp(record.get('regex'),record.get('regex_flags'))};
 		
 		var colName = record.get('name');
-		console.log(colName);
-		console.log(this.editors);
 		if(this.editors[colName])
 			var editor = new this.editors[colName];
 		else 
