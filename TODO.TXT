@@ -29,6 +29,9 @@ Billing tab naar volgende regel
 
 
 *** Lage prio:
+
+Gegevens wijzigen op site
+
 LIST-STATUS gebruiken bij email
 TLS email
 Full date column
@@ -48,4 +51,4 @@ Feature requests voting system
 
 Bij bedrijf -> displaypanel -> New -> Contact
 
-Save advanced searches
+Tickets sluiten door klant
