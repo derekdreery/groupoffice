@@ -188,7 +188,7 @@ class GO_Smime_Controller_Certificate extends GO_Base_Controller_AbstractControl
 
 	private function _decryptFile(GO_Base_Fs_File $srcFile, GO_Email_Model_Account $account) {
 		$data = $srcFile->getContents();
-		if (strpos($data, "enveloped-data") || stripos($data, 'Encrypted Message')) {
+		if (strpos($data, "enveloped-data") || strpos($data, 'Encrypted Message')) {
 			$cert = GO_Smime_Model_Certificate::model()->findByPk($account->id);
 			$password = GO::session()->values['smime']['passwords'][$params['account_id']];
 			openssl_pkcs12_read($cert->cert, $certs, $password);
