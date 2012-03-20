@@ -155,8 +155,11 @@ function get_mailbox_nodes($account_id, $folder_id, $user_id=0) {
 
 		$unseen = $imap->get_unseen($email->f('name'));
 
+		$iconCls = 'folder-default';
+		
 		if($email->f('name')=='INBOX') {
 			$inbox_new += $unseen['count'];
+			$iconCls = 'email-folder-inbox';
 		}
 
 		if ($unseen['count'] > 0) {
@@ -164,16 +167,23 @@ function get_mailbox_nodes($account_id, $folder_id, $user_id=0) {
 		}else {
 			$status_html = '&nbsp;<span class="em-folder-status" id="status_'.$email->f('id').'"></span>';
 		}
+		
 
 		switch($folder_name){
 			case 'Sent':
+				$iconCls = 'email-folder-sent';
 				$folder_name=$lang['email']['sent'];
 				break;
 			case 'Trash':
+				$iconCls = 'email-folder-trash';
 				$folder_name=$lang['email']['trash'];
 				break;
 			case 'Drafts':
+				$iconCls = 'email-folder-drafts';
 				$folder_name=$lang['email']['drafts'];
+				break;
+			case 'Spam':
+				$iconCls = 'email-folder-spam';
 				break;
 		}
 
@@ -182,7 +192,7 @@ function get_mailbox_nodes($account_id, $folder_id, $user_id=0) {
 							'text'=>$folder_name.$status_html,
 							'name'=>$folder_name,
 							'id'=>'folder_'.$email->f('id'),
-							'iconCls'=>'folder-default',
+							'iconCls'=>$iconCls,
 							'account_id'=>$email->f('account_id'),
 							'folder_id'=>$email->f('id'),
 							'canHaveChildren'=>$email->f('can_have_children'),
@@ -200,7 +210,7 @@ function get_mailbox_nodes($account_id, $folder_id, $user_id=0) {
 							'text'=>$folder_name.$status_html,
 							'name'=>$folder_name,
 							'id'=>'folder_'.$email->f('id'),
-							'iconCls'=>'folder-default',
+							'iconCls'=>$iconCls,
 							'account_id'=>$email->f('account_id'),
 							'folder_id'=>$email->f('id'),
 							'mailbox'=>$email->f('name'),
