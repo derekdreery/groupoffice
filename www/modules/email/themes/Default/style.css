@@ -295,3 +295,19 @@ margin:5px 2px;
 {
 	background:transparent !important;
 }
+
+.email-folder-inbox{
+	background-image:url(images/16x16/inbox.png) !important;
+}
+.email-folder-drafts{
+	background-image:url(images/16x16/drafts.png) !important;
+}
+.email-folder-sent{
+	background-image:url(images/16x16/sent.png) !important;
+}
+.email-folder-trash{
+	background-image:url(images/16x16/trash.png) !important;
+}
+.email-folder-spam{
+	background-image:url(images/16x16/spam.png) !important;
+}
