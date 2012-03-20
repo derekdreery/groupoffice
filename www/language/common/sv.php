@@ -5,7 +5,6 @@ $l['about']= 'Version: {version}<br />
 <br />
 Copyright (c) 2003-{current_year}, {company_name}<br />
 All rights reserved.<br />
-Det här programmet omfattas av copyright-lagar och {product_name}-licensen.<br />
 ';
 $l['totals']='Totalt';
 $l['printPage']='Sida %s av %s';

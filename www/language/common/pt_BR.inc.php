@@ -5,9 +5,7 @@ require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('common'));
 $lang['common']['about']='Versão: {version}<br />
 <br />
 Copyright (c) 2003-{current_year}, {company_name}<br />
-Todos os direitos reservados.<br />
-Este programa é protegido por leis de copyright e pela licença do {product_name}.<br />
-';
+Todos os direitos reservados.<br />';
 
 $lang['common']['totals']='Totais';
 $lang['common']['printPage']='Página %s of %s';

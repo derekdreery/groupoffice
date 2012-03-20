@@ -283,9 +283,7 @@ $l["toScreen"]='Auf den Bildschirm';
 
 $l['about']='Version: {version}<br />
 Copyright (c) 2003-{current_year}, {product_name}<br />
-All rights reserved.<br />
-This program is protected by copyright law and the {product_name} license.<br />
-';
+All rights reserved.<br />';
 $l['totals']='Gesamt';
 $l['printPage']='Seite %s von %s';
 $l['htmldirection']='ltr';

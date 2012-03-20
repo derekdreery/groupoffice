@@ -3,9 +3,7 @@
 
 $l['about']='Versie: {version}<br />
 Copyright (c) 2003-{current_year}, {company_name}<br />
-Alle rechten voorbehouden<br />
-Dit programma is beschermd door de auteurswet en de {product_name} licentie.<br />
-';
+Alle rechten voorbehouden<br />';
 
 $l['totals']='Totalen';
 $l['printPage']='Pagina %s van %s';

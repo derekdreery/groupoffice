@@ -5,7 +5,6 @@ $l['extjs_lang']='no_NB';
 $l['about']='Versjon: {version}<br />
 Copyright (c) 2003-{current_year}, {company_name}<br />
 Alle rettigheter forbeholdt.<br />
-Dette programmet er beskyttet av opphavsretten og en egen {product_name} lisens.<br />
 ';
 $l['totals']='Totaler';
 $l['printPage']='Side %s av %s';

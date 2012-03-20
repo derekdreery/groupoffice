@@ -3,7 +3,6 @@ $l['about']='Verzija: {version}<br />
 <br />
 Autorska prava (c) 2003-{current_year}, {company_name}<br />
 Sva prava pridržana.<br />
-Ovaj program je zaštićen zakonom o autorskim pravim i {product_name} licencom.<br />
 ';
 $l['totals']='Ukupno';
 $l['printPage']='Stranica %s od %s';

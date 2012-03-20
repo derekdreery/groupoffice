@@ -284,9 +284,7 @@ $l["strName2"]= 'Nom 2';
 $l["selectAll"]='Tout sélectionner';
 $l['about']='Version: {version}<br />
 Copyright (c) 2003-{current_year}, {company_name}<br />
-Tous droits réservés.<br />
-Ce programme est protégé par la loi sur le copyright et par la licence {product_name}.<br />
-';
+Tous droits réservés.<br />';
 $l['totals']='Total';
 $l['printPage']='Page %s sur %s';
 $l['htmldirection']= 'ltr';

@@ -224,7 +224,6 @@ $l['about']='Version: {version}<br />
 <br />
 Copyright (c) 2003-{current_year}, {company_name}<br />
 All rights reserved.<br />
-This program is protected by copyright law and the {product_name} license.<br />
 ';
 $l['htmldirection']= 'ltr';
 $l['quotaExceeded']='Disk içerinde yeterince boş yeriniz artık yok. Lütfen bazı dosyalarınızı siliniz veya Servis Sağlayıcınızdan kotanızı arttırmasını isteyiniz.';

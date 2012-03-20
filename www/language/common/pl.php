@@ -286,7 +286,6 @@ $l["link"]='Link';
 $l['about']='Version: {version}<br />
 Copyright (c) 2003-{current_year}, {company_name}<br />
 All rights reserved.<br />
-This program is protected by copyright law and the {product_name} license.<br />
 ';
 $l['totals']='Razem';
 $l['printPage']='Strona %s z %s';
