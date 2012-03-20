@@ -1174,7 +1174,7 @@ class cached_imap extends imap{
 		if($with_full_cached_message){
 			$sql .= ",`serialized_message_object` ";
 		}
-		$sql .= "FROM em_messages_cache WHERE folder_id=".$this->email->escape($folder_id)." AND uid IN (".$this->email->escape(implode(',',$uids)).")";
+		$sql .= "FROM em_messages_cache WHERE folder_id='".$this->email->escape($folder_id)."' AND uid IN (".$this->email->escape(implode(',',$uids)).")";
 		$this->email->query($sql);
 	}
 
