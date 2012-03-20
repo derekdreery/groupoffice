@@ -41,7 +41,7 @@ GO.dialog.AboutDialog = function(config){
 	GO.dialog.AboutDialog.superclass.constructor.call(this, {
 		modal:false,
 		layout:'fit',
-		height: 460,
+		height: 230,
 		width: 480,
 		resizable: false,
 		closeAction:'hide',
