@@ -6,7 +6,6 @@ $l['about']='เวอร์ชั่น: {version}<br />
 <br />
 Copyright (c) 2003-{current_year}, {company_name}<br />
 All rights reserved.<br />
-This program is protected by copyright law and the {product_name} license.<br />
 ';
 $l['htmldirection']= 'ltr';
 $l['quotaExceeded']='พื้นที่ฐานข้อมูลไม่เพียงพอ. กรุณาลบไฟล์ หรือ ติดต่อผู้ดูแลระบบเพื่อเพิ่มพื้นที่ฐานข้อมูล';

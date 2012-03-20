@@ -4,8 +4,7 @@
 $l['about']='Версия: {version}<br />
 <br />
 Copyright (c) 2003-{current_year}, {company_name}<br />
-All rights reserved.<br />
-This program is protected by copyright law and the {product_name} license.<br />
+All rights reserved.
 ';
 $l['totals']='Всего';
 $l['printPage']='Стр. %s из %s';

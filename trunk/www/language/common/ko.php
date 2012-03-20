@@ -291,7 +291,6 @@ $l["strUsersInGroup"]= 'Users in group';
 $l['about']='버전: {version}<br />
 Copyright (c) 2003-{current_year}, {company_name}<br />
 All rights reserved.<br />
-This program is protected by copyright law and the {product_name} license.<br />
 ';
 $l['totals']='전체';
 $l['printPage']='페이지 %s / %s';

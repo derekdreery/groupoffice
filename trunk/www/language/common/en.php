@@ -296,9 +296,8 @@ $l["advancedSearch"]='Advanced search';
 
 $l['about']='Version: {version}<br/>
 Copyright (c) 2003-{current_year}, {company_name}<br/>
-All rights reserved.<br/>
-This program is protected by copyright law and the {product_name} license.<br />
-';
+All rights reserved.';
+
 $l['totals']='Totals';
 $l['printPage']='Page %s of %s';
 $l['htmldirection']= 'ltr';
