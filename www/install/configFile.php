@@ -87,7 +87,7 @@ if (!$configFile) {
 		</div>
 		</p>
 
-		<?
+		<?php
 		GO_Base_Html_Input::render(array(
 				"required" => true,
 				"label" => "Protected files path",
