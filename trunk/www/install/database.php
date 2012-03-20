@@ -66,7 +66,7 @@ GO_Base_Html_Input::render(array(
 		"value"=>GO::config()->db_user
 ));
 
-GO_Base_Html_Input::render(array(
+GO_Base_Html_Password::render(array(
 		"label"=>"Password",
 		"name"=>"db_pass",
 		"value"=>""
