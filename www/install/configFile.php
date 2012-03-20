@@ -57,8 +57,9 @@ if (!$configFile) {
 	}
 	printHead();
 	//check if config root_path matches the current Group-Office in case an /etc/groupoffice/config.php was found that conflicts with this installation.
-	if (strpos(__FILE__, GO::config()->root_path) !== 0) {
-		errorMessage("WARNING: The config file $configFile was found but the root path points to another location " . GO::config()->root_path . " while you are installing in " . dirname(dirname(__FILE__)) . " now. You probably want to create a new config.php file for this installation.");
+	$filepath = str_replace("\\","/",__FILE__);
+	if (strpos($filepath, GO::config()->root_path) !== 0) {
+		errorMessage("WARNING: The config file $configFile was found but the root path points to another location " . GO::config()->root_path . " while you are installing in " . dirname(dirname($filepath)) . " now. You probably want to create a new config.php file for this installation.");
 	}
 
 	if (!is_writable($configFile)) {
