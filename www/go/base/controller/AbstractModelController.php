@@ -414,14 +414,15 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		if($model->customfieldsRecord)
 			$response = $this->_processCustomFieldsDisplay($model,$response);
 
-		if($model->hasLinks())
+		if($model->hasLinks()){
 			$response = $this->_processLinksDisplay($model,$response);
 
-		if(!isset($response['data']['events']) && GO::modules()->calendar)
-			$response = $this->_processEventsDisplay($model,$response);
+			if(!isset($response['data']['events']) && GO::modules()->calendar)
+				$response = $this->_processEventsDisplay($model,$response);
 			
-		if (!isset($response['data']['tasks']) && GO::modules()->tasks)
-			$response = $this->_processTasksDisplay($model,$response);
+			if (!isset($response['data']['tasks']) && GO::modules()->tasks)
+				$response = $this->_processTasksDisplay($model,$response);
+		}
 
 		if(!isset($response['data']['files']))
 			$response = $this->_processFilesDisplay($model,$response);
