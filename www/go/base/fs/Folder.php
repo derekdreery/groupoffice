@@ -36,10 +36,10 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 			if ($item != "." && $item != ".." &&
 							($getHidden || !(strpos($item, ".") === 0) )) {
 			
-				if(is_dir($folderPath))
-					$folders[] = new GO_Base_Fs_Folder($folderPath);
-				else
+				if(is_file($folderPath) || is_link($folderPath))					
 					$folders[] = new GO_Base_Fs_File($folderPath);
+				else
+					$folders[] = new GO_Base_Fs_Folder($folderPath);
 			}
 		}
 		closedir($dir);
