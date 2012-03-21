@@ -68,8 +68,8 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 						' -c='.GO::config()->get_config_file().
 						' --name='.$this->name;
 		
-		GO::debug($cmd);
-		throw new Exception($cmd);
+//		GO::debug($cmd);
+//		throw new Exception($cmd);
 						
 		exec($cmd, $output, $return_var);		
 

@@ -33,14 +33,14 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$configFolder->move($trashFolderConfig);
 		
 		try{
-			GO::getDbConnection()->query("DROP USER `".$installation->dbUser."`");		
+			GO::getDbConnection()->query("DROP USER '".$installation->dbUser."'@'".GO::config()->db_host."'");		
 		}catch(Exception $e){
-			trigger_error("Could not remove msyql user ".$installation->dbUser,E_USER_WARNING);
+			trigger_error("Could not remove mysql user ".$installation->dbUser,E_USER_WARNING);
 		}
 		try{
 			GO::getDbConnection()->query("DROP DATABASE `".$installation->dbName."`");
 		}catch(Exception $e){
-			trigger_error("Could not remove msyql database ".$installation->dbName,E_USER_WARNING);
+			trigger_error("Could not remove mysql database ".$installation->dbName,E_USER_WARNING);
 		}
 	}	
 	
