@@ -72,22 +72,6 @@ class GO_Base_Router{
 		if(!$params){
 			if(PHP_SAPI=='cli'){
 				$params = GO_Base_Util_Cli::parseArgs();
-				if(empty($params['r'])){
-					echo "\nGroup-Office CLI - Copyright Intermesh BV.\n\n".
-						"You must pass a controller route to use the command line script.\n".
-						"eg.:\n\n".
-						"sudo -u www-data php index.php -c=/path/to/config.php -r=maintenance/upgrade --param=value\n\n";
-					exit();
-					
-					
-				}elseif(isset($params['u']) && isset($params['p']))
-				{
-					$user = GO::session()->login($params['u'], $params['p']);
-					if(!$user){
-						die("Login failed for user ".$params['u']."\n");
-					}
-					unset($params['u'],$params['p']);
-				}
 			}else
 			{
 				$params=$_REQUEST;				

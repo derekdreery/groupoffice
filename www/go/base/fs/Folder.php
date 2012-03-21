@@ -89,8 +89,11 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 * @return GO_Base_Fs_Folder $destinationFolder
 	 */
 	public function move($destinationFolder,$newFolderName=false,$appendNumberToNameIfDestinationExists=false){
+		if(!$this->exists())
+			return false;
+		
 		$this->_validateSrcAndDestPath($destinationFolder->path(), $this->path());
-				
+					
 		if(!$newFolderName)
 			$newFolderName=$this->name();
 		
@@ -165,11 +168,13 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 */
 	public function create($permissionsMode=false){
 		
-		if(is_dir($this->path))
-			return true;
-		
 		if(!$permissionsMode)
 			$permissionsMode=GO::config()->folder_create_mode;		
+		
+		if(is_dir($this->path)){
+			chmod($this->path, $permissionsMode);
+			return true;
+		}		
 		
 		if(mkdir($this->path, $permissionsMode,true)){
 			if(GO::config()->file_change_group)

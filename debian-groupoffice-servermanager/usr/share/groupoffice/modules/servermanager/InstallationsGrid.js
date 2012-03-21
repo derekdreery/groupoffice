@@ -23,7 +23,7 @@ GO.servermanager.InstallationsGrid = function(config){
 	config.autoScroll=true;
 	config.split=true;
 	config.store = new GO.data.JsonStore({
-		url: GO.settings.modules.servermanager.url+ 'json.php',
+		url: GO.url("servermanager/installation/store"),
 		baseParams: {
 			task: 'installations'
 		},

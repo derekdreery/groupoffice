@@ -334,8 +334,17 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 				//$response['trace']=$e->getTraceAsString();
 				$response['exception']=(string) $e;
 			}
+			
+			if(PHP_SAPI=='cli'){
+				echo "Error: ".$response['feedback']."\n\n";
+				if(GO::config()->debug){
+					echo $e->getTraceAsString()."\n\n";
+				}
+				exit(1);
+			}
 
 			$this->render('Exception', $response);
+			
 
 			//exit();
 		}

@@ -20,19 +20,19 @@ if(PHP_SAPI=='cli'){
 	require_once($root.'go/base/util/Cli.php');
 	
 	$args = GO_Base_Util_Cli::parseArgs();
-
+	
 	if(isset($args['c'])){
 		define("GO_CONFIG_FILE", $args['c']);
 	}
 }
 
-
+try{
 $exampleUsage = 'sudo -u www-data php /var/www/trunk/www/install/autoinstall.php --adminusername=admin --adminpassword=admin --adminemail=admin@intermesh.dev --modules="email,addressbook,files"';
 $requiredArgs = array('adminusername','adminpassword','adminemail');
 
 foreach($requiredArgs as $ra){
 	if(empty($args[$ra])){
-		trigger_error("adminusername must be supplied.\n\nExample usage:\n\n".$exampleUsage."\n\n", E_USER_ERROR);
+		throw new Exception($ra." must be supplied.\n\nExample usage:\n\n".$exampleUsage."\n\n");
 	}
 }
 
@@ -43,11 +43,9 @@ GO::setIgnoreAclPermissions();
 
 $stmt = GO::getDbConnection()->query("SHOW TABLES");
 if ($stmt->rowCount())
-	trigger_error("Automatic installation of Group-Office aborted because database is not empty", E_USER_ERROR);
+	throw new Exception("Automatic installation of Group-Office aborted because database is not empty");
 else
 	echo "Database connection established. Database is empty\n";
-
-
 
 GO_Base_Util_SQL::executeSqlFile('install.sql');
 
@@ -109,3 +107,9 @@ $adminGroup->addUser($admin->id);
 
 
 echo "Database created successfully\n";
+}catch(Exception $e){
+	
+	echo $e->getMessage()."\n";
+	
+	exit(1);
+}

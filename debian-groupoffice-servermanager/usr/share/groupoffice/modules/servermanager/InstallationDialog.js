@@ -83,7 +83,7 @@ Ext.extend(GO.servermanager.InstallationDialog, Ext.Window,{
 		if(this.installation_id>0)
 		{
 			this.formPanel.load({
-				url : GO.settings.modules.servermanager.url+'json.php',
+				url : GO.url("servermanager/installation/load"),
 				
 				success:function(form, action)
 				{					
@@ -122,7 +122,7 @@ Ext.extend(GO.servermanager.InstallationDialog, Ext.Window,{
 	
 	setInstallationId : function(installation_id)
 	{
-		this.formPanel.form.baseParams['installation_id']=installation_id;
+		this.formPanel.form.baseParams['id']=installation_id;
 		this.installation_id=installation_id;
 
 		this.modulesGrid.store.baseParams.installation_id=installation_id;
@@ -140,7 +140,7 @@ Ext.extend(GO.servermanager.InstallationDialog, Ext.Window,{
 	
 	submitForm : function(hide){
 
-		var params =  {'task' : 'save_installation'};
+		var params =  {};
 		if(this.modulesGrid.store.loaded)
 		{
 			params.modules=Ext.encode(this.modulesGrid.getGridData());
@@ -148,7 +148,7 @@ Ext.extend(GO.servermanager.InstallationDialog, Ext.Window,{
 
 		this.formPanel.form.submit(
 		{
-			url:GO.settings.modules.servermanager.url+'action.php',
+			url:GO.url("servermanager/installation/submit"),
 			params:params,
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){
@@ -165,9 +165,9 @@ Ext.extend(GO.servermanager.InstallationDialog, Ext.Window,{
 					this.hide();	
 				}else
 				{				
-					if(action.result.installation_id)
+					if(action.result.id)
 					{
-						this.setInstallationId(action.result.installation_id);
+						this.setInstallationId(action.result.id);
 					}
 				}	
 			},		
@@ -572,7 +572,7 @@ Ext.extend(GO.servermanager.InstallationDialog, Ext.Window,{
     	waitMsgTarget:true,
 			url: GO.settings.modules.servermanager.url+'action.php',
 			border: false,
-			baseParams: {task: 'installation'},				
+			baseParams: {},				
 			items:this.tabPanel				
 		});
     

@@ -1810,7 +1810,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$publicProperties = $r->getProperties(ReflectionProperty::IS_PUBLIC);
 			foreach($publicProperties as $prop){
 				//$att[$prop->getName()]=$prop->getValue($this);
-				$this->_magicAttributeNames[]=$prop->getName();
+				//$prop = new ReflectionProperty();
+				if(!$prop->isStatic())
+					$this->_magicAttributeNames[]=$prop->getName();
 			}
 			
 //			$methods = $r->getMethods();
@@ -1908,13 +1910,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				if(is_array($attributes['unique']))
 					$relatedAttributes = array_merge($relatedAttributes,$attributes['unique']);
 				
-				$modified = $this->isNew;
-				if(!$modified){
-					foreach($relatedAttributes as $relatedAttribute){
-						if($this->isModified($relatedAttribute))
-							$modified=true;
-					}
+				$modified = false;
+				foreach($relatedAttributes as $relatedAttribute){
+					if($this->isModified($relatedAttribute))
+						$modified=true;
 				}
+				
 				if($modified){
 					$criteria = GO_Base_Db_FindCriteria::newInstance()
 								->addModel(GO::getModel($this->className()))
@@ -2314,9 +2315,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 		foreach($this->columns as $key=>$attr)
 		{
-			$value = $this->$key;
-			if(($attr['gotype']=='textfield' || $attr['gotype']=='textarea') && !in_array($value,$keywords)){
-				$keywords[]=$value;
+			if(isset($this->$key)){
+				$value = $this->$key;
+				if(($attr['gotype']=='textfield' || $attr['gotype']=='textarea') && !in_array($value,$keywords)){
+					$keywords[]=$value;
+				}
 			}
 		}
 		
@@ -2652,6 +2655,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function __get($name)
 	{
+		return $this->_getMagicAttribute($name);
+	}
+	
+	private function _getMagicAttribute($name, $triggerError=true){
 		if(isset($this->_attributes[$name])){
 			return $this->getAttribute($name, self::$attributeOutputMode);
 		}else{
@@ -2664,12 +2671,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			{
 				$r = $this->relations();
 				if(isset($r[$name]))	
-					return $this->_getRelated($name);				
+					return $this->_getRelated($name);
+				elseif($triggerError)
+					trigger_error ("Access to undefined property $name in ".$this->className());
 			}
-		}
-			
+		}		
 	}
-	
 	/**
 	 * Get a single attibute raw like in the database or formatted using the \
 	 * Group-Office user preferences.
@@ -2720,7 +2727,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	public function __isset($name){
-		$var = $this->$name;
+		$var = $this->_getMagicAttribute($name, false);
 		return isset($var);
 	}
 	
@@ -3082,17 +3089,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if($this->hasFiles())
 			unset($copy->files_folder_id);
 		
-		// We should only unset AUTO_INCREMENT fields here
 		$pkField = $this->primaryKey();
 		if(is_array($pkField)) {
-			// There is a reason why this bit is commented out:
-			// Composed primary key only makes sense if it is composed of only foreign keys
-			// we want to duplicate these foreign keys except for at least one, which
-			// MUST be passed in $params. See also the if-branch within
-			// if(is_array($pkField)) further down this function.
-			
-//			foreach($pkField as $key)
-//				unset($copy->$key);
+			foreach($pkField as $key)
+				unset($copy->$key);
 		}
 		else {
 			unset($copy->$pkField);
@@ -3108,18 +3108,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$copy->$key = $value;
 		}
 		
-		if(is_array($pkField)) {
-			//if primary key is an array of foreign keys. It must be modified.
-			$modified=false;
-			foreach($pkField as $key){
-				$modified=$copy->isModified($key);
-				if($modified)
-					break;
-			}
-			if(!$modified)
-				throw new Exception("Duplicate in ".$this->className()." should change the primary key of the copy");			
-		}
-		
 		//Generate new acl for this model
 		if($this->aclField() && !$this->joinAclField){
 			$copy->setNewAcl($this->user_id);
@@ -3131,7 +3119,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$copy->customFieldsRecord->setAttributes($this->customFieldsRecord->getAttributes('raw'), false);
 		}
 		
-
+		
 		
 		if($save)
 			$copy->save();
@@ -3171,11 +3159,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 		
 		$field = $r[$relationName]['field'];
-		GO::debug('=========================================================');
-		GO::debug($field);
+		
 		$stmt = $this->_getRelated($relationName);
 		while($model = $stmt->fetch()){
-			GO::debug($model->getAttributes());
 			$model->duplicate(array($field=>$duplicate->pk));
 		}
 		

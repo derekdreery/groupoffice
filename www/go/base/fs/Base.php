@@ -27,6 +27,9 @@ abstract class GO_Base_Fs_Base{
 		if(empty($path))
 			throw new Exception("Path may not be empty in GO_Base_Fs_Base");
 		
+		//normalize path slashes
+		$path=str_replace('\\','/', $path);
+		
 		if(!self::checkPathInput($path))
 			throw new Exception("The supplied path '$path' was invalid");
 		
@@ -122,6 +125,25 @@ abstract class GO_Base_Fs_Base{
 	public function isWritable(){
 		return is_writable($this->path);
 	}
+		
+	/**
+	 * Change owner
+	 * @param string $user
+	 * @return boolean 
+	 */
+	public function chown($user){
+		return chown($this->path, $user);
+	}
+	
+	/**
+	 * Change group
+	 * 
+	 * @param string $group
+	 * @return boolean 
+	 */
+	public function chgrp($group){
+		return chgrp($this->path, $group);
+	}
 	
 	/**
 	 *
@@ -158,7 +180,7 @@ abstract class GO_Base_Fs_Base{
 	 * @return boolean 
 	 */
 	public static function checkPathInput($path){
-		return strpos($path, '../') === false && strpos($path, '..\\')===false;
+		return strpos($path, '../') === false;
 	}
 	
 	
