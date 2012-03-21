@@ -31,7 +31,7 @@ GO.files.FilePropertiesDialog = function(config){
 			name: 'name',
 			anchor: '100%',
 			validator:function(v){
-				return !v.match(/[&\/:\*\?"<>|\\]/);
+				return !v.match(/[\/\*\"<>|\\]/);
 			}
 		},{
 			xtype: 'plainfield',
