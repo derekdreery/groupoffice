@@ -186,7 +186,7 @@ class GO_USERS extends db
 			$sql .= ' SQL_CALC_FOUND_ROWS';
 		}
 
-		$sql .= " u.id,u.username,u.first_name,u.middle_name,u.last_name,u.company,u.logins,u.lastlogin,u.registration_time,u.address,u.address_no,u.zip,u.city,u.state,u.country,u.home_phone,u.email,u.work_address,u.work_address_no,u.work_zip,u.work_city,u.work_state,u.work_country,u.work_phone,u.enabled";
+		$sql .= " u.id,u.username,u.first_name,u.middle_name,u.last_name,u.sex,u.company,u.logins,u.lastlogin,u.registration_time,u.address,u.address_no,u.zip,u.city,u.state,u.country,u.home_phone,u.email,u.work_address,u.work_address_no,u.work_zip,u.work_city,u.work_state,u.work_country,u.work_phone,u.enabled";
 
 		if($user_id > 0)
 		{
