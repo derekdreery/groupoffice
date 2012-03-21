@@ -1,3 +1,3 @@
 #!/bin/bash
 cd `dirname "$0"`
-sudo -u www-data php index.php -r="$@"
+sudo -u www-data groupofficecli.php -r="$@"

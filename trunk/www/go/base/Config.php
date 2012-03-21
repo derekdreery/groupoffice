@@ -1249,17 +1249,6 @@ class GO_Base_Config {
 			}
 		}
 		
-		$configData = "<?php\n";
-		foreach ($config as $key => $value) {
-			if ($value === true) {
-				$configData .= '$config["' . $key . '"]=true;' . "\n";
-			} elseif ($value === false) {
-				$configData .= '$config["'. $key . '"]=false;' . "\n";
-			} else {
-				$configData .= '$config["' . $key . '"]="' . $value . '";' . "\n";
-			}
-		}
-		
-		return file_put_contents(GO::config()->get_config_file(), $configData);
+		return GO_Base_Util_ConfigEditor::save(new GO_Base_Fs_File(GO::config()->get_config_file()), $config);
 	}
 }

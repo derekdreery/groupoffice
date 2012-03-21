@@ -1,34 +1,22 @@
 <?php
 
 class GO_Base_Util_ConfigEditor {
-	
-	private $_config;
-	
-	public function __construct(){
 
-		$values = get_object_vars(GO::config());
-
-		foreach($values as $key=>$value)
-		{
-			if($key == 'version')
-			break;
-
-			if(!is_object($value))
-			{
-				$this->_config[$key]=$value;
+	public static function save(GO_Base_Fs_File $file, array $config) {
+		$configData = "<?php\n";
+		foreach ($config as $key => $value) {
+			if ($value === true) {
+				$configData .= '$config["' . $key . '"]=true;' . "\n";
+			} elseif ($value === false) {
+				$configData .= '$config["' . $key . '"]=false;' . "\n";
+			} else {
+				$configData .= '$config["' . $key . '"]="' . $value . '";' . "\n";
 			}
 		}
 		
-	}
-	
-	public function __set($key, $value){
-		$this->_config[$key]=$value;
-	}
-	
-	public function __get($key){
-		return $this->_config[$key];
-	}
+		//make sure directory exists
+		$file->parent()->create();
 
-	
-
+		return file_put_contents($file->path(), $configData);
+	}
 }
