@@ -202,6 +202,8 @@ Ext.extend(GO.files.FolderPropertiesDialog, GO.Window, {
 				
 				this.notifyCheckBox.addListener('check',this.onNotifyChecked,this);
 				
+				GO.dialog.TabbedFormDialog.prototype.setRemoteComboTexts.call(this, action);
+				
 				GO.files.FolderPropertiesDialog.superclass.show.call(this);
 			},
 			failure: function(form, action) {
