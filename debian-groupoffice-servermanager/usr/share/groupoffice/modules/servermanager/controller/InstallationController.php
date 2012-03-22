@@ -68,7 +68,8 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		require($params['tmp_config']);		
 		unlink($params['tmp_config']);
 		
-		$config['db_pass']= GO_Base_Util_String::randomPassword(8,'a-zA-Z1-9');
+		if(!isset($config['db_pass']))
+			$config['db_pass']= GO_Base_Util_String::randomPassword(8,'a-z,A-Z,1-9');
 				
 		$this->_createFolderStructure($config, $installation);
 		
