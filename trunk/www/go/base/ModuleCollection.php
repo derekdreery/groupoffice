@@ -33,11 +33,11 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	}
 	
 	/**
-	 * Returns an array of all module classes found in the modules folder.
+	 * Returns an array of all module classes as string found in the modules folder.
 	 * 
-	 * @return array 
+	 * @return array Module class names eg. GO_Calendar_Module
 	 */
-	public function getAvailableModules(){
+	public function getAvailableModules($returnInstalled=false){
 		$folder = new GO_Base_Fs_Folder(GO::config()->root_path.'modules');
 		
 		$folders = $folder->ls();
@@ -45,7 +45,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 		foreach($folders as $folder){
 			$ucfirst = ucfirst($folder->name());
 			$moduleClass = $folder->path().'/'.$ucfirst.'Module.php';
-			if(file_exists($moduleClass) && !GO_Base_Model_Module::model()->findByPk($folder->name(), false, true)){
+			if(file_exists($moduleClass) && ($returnInstalled || !GO_Base_Model_Module::model()->findByPk($folder->name(), false, true))){
 				$modules[]='GO_'.$ucfirst.'_'.$ucfirst.'Module';
 			}
 		}
