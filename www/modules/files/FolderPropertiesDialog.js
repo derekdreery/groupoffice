@@ -110,11 +110,11 @@ GO.files.FolderPropertiesDialog = function(config){
 		this.tabPanel.add(this.disableCategoriesPanel);
 	}
 
-	if(GO.workflow)
-	{
-		this.workflowPanel = new GO.workflow.FolderPropertiesPanel();
-		this.tabPanel.insert(2,this.workflowPanel);
-	}
+//	if(GO.workflow)
+//	{
+//		this.workflowPanel = new GO.workflow.FolderPropertiesPanel();
+//		this.tabPanel.insert(2,this.workflowPanel);
+//	}
 		
 	this.formPanel = new Ext.form.FormPanel(
 	{
@@ -159,7 +159,6 @@ GO.files.FolderPropertiesDialog = function(config){
 		]		
 	});
 
-
 	this.addEvents({
 		'rename' : true,
 		'onNotifyChecked' : true
@@ -170,7 +169,9 @@ Ext.extend(GO.files.FolderPropertiesDialog, GO.Window, {
 	parent_id : 0,
 	show : function(folder_id)
 	{
-		this.folder_id = folder_id;
+		//this.folder_id = folder_id;
+		
+		this.setFolderId(folder_id);
 		
 		this.notifyCheckBox.removeListener('check',this.onNotifyChecked,this);
 		
@@ -207,9 +208,11 @@ Ext.extend(GO.files.FolderPropertiesDialog, GO.Window, {
 				Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
 			},
 			scope: this
-		});
-		
-		
+		});		
+	},
+	
+	setFolderId : function(id){
+		this.folder_id=id;
 	},
 	
 	onNotifyChecked : function(checkbox,checked) {
