@@ -143,7 +143,7 @@ Ext.extend(GO.servermanager.InstallationDialog, Ext.Window,{
 		var params =  {};
 		if(this.modulesGrid.store.loaded)
 		{
-			params.modules=Ext.encode(this.modulesGrid.getGridData());
+			params.modules=Ext.encode(this.modulesGrid.getSelected());
 		}
 
 		this.formPanel.form.submit(
@@ -523,7 +523,25 @@ Ext.extend(GO.servermanager.InstallationDialog, Ext.Window,{
 		});
 
 
-		this.modulesGrid = new GO.servermanager.ModulesGrid();
+		//this.modulesGrid = new GO.servermanager.ModulesGrid();
+
+		this.modulesGrid = new GO.grid.MultiSelectGrid({
+			id:'sm-modules',
+			title:GO.servermanager.lang.modules,
+			loadMask:true,
+			allowNoSelection:true,
+			store:new GO.data.JsonStore({
+				url: GO.url("servermanager/installation/modules"),
+				baseParams: {
+					installation_id:0
+				},
+				fields: ['id','name','installed','checked']
+			})
+		});
+		
+		this.modulesGrid.on('show',function(){			
+				this.modulesGrid.store.load();
+		},this);
 
 		var items  = [this.propertiesPanel, this.modulesGrid];
 		

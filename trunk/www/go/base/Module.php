@@ -186,12 +186,16 @@ class GO_Base_Module extends GO_Base_Observable {
 		
 		$sqlFile = $this->path().'install/install.sql';
 		
-		if(file_exists($sqlFile))
-		{
-			$queries = GO_Base_Util_SQL::getSqlQueries($sqlFile);
-			
-			foreach($queries as $query)
-				GO::getDbConnection ()->query($query);
+		try{
+			if(file_exists($sqlFile))
+			{
+				$queries = GO_Base_Util_SQL::getSqlQueries($sqlFile);
+
+				foreach($queries as $query)
+					GO::getDbConnection ()->query($query);
+			}
+		}catch(PDOException $e){
+			throw new Exception("SQL query failed: ".$query."\n\n".$e->getMessage());
 		}
 		
 		GO::clearCache();
