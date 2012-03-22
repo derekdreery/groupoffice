@@ -96,13 +96,18 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 		if(!$this->exists())
 			return false;
 		
+		if(is_link($this->path)){
+			$link = new GO_Base_Fs_File($this->path);
+			return $link->move($destinationFolder, $newFolderName, false, $appendNumberToNameIfDestinationExists);
+		}
+		
 		$this->_validateSrcAndDestPath($destinationFolder->path(), $this->path());
-					
+				
 		if(!$newFolderName)
 			$newFolderName=$this->name();
 		
 		$newPath = $destinationFolder->path().'/'.$newFolderName;		
-		
+				
 		if($appendNumberToNameIfDestinationExists){
 			$folder = new GO_Base_Fs_Folder($newPath);
 			$folder->appendNumberToNameIfExists();
