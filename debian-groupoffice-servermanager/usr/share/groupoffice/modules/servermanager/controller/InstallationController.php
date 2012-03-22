@@ -57,13 +57,19 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		if(!$installation)
 			throw new Exception("Installation ".$params['name']." not found!");
 		
+		
+		$configFile = new GO_Base_Fs_File($installation->configPath);
+		
+		//if config file already exists then include it so we will keep the manually added config values.
+		if($configFile->exists())
+			require($configFile->path());
+		
 		//create config file
 		require($params['tmp_config']);		
 		unlink($params['tmp_config']);
 		
 		$config['db_pass']= GO_Base_Util_String::randomPassword(8,'a-zA-Z1-9');
-		$configFile = new GO_Base_Fs_File($installation->configPath);
-		
+				
 		$this->_createFolderStructure($config, $installation);
 		
 		GO_Base_Util_ConfigEditor::save($configFile, $config);
@@ -71,9 +77,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$configFile->chgrp('www-data');
 		$configFile->chmod(0640);		
 		
-		$this->_createDatabase($config);
-		
-		$this->_createDatabaseContent($params, $installation, $config);
+		$this->_createDatabase($params, $installation, $config);		
 	}
 	
 	private function _createDatabaseContent($params, $installation, $config){
@@ -110,18 +114,27 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 
 	}
 	
-	private function _createDatabase($config){
+	private function _createDatabase($params, $installation, $config){
 		try{
-			GO::getDbConnection()->query("CREATE DATABASE IF NOT EXISTS `".$config['db_name']."`");
+			
+			if(!GO_Base_Db_Utils::databaseExists($config['db_name'])){
+			
+				GO::getDbConnection()->query("CREATE DATABASE IF NOT EXISTS `".$config['db_name']."`");				
 
+				$this->_createDatabaseContent($params, $installation, $config);
+			}
+			
 			$sql = "GRANT ALL PRIVILEGES ON `".$config['db_name']."`.*	TO ".
-							"'".$config['db_user']."'@'".$config['db_host']."' ".
-							"IDENTIFIED BY '".$config['db_pass']."' WITH GRANT OPTION";
+								"'".$config['db_user']."'@'".$config['db_host']."' ".
+								"IDENTIFIED BY '".$config['db_pass']."' WITH GRANT OPTION";
 
 			GO::getDbConnection()->query($sql);
-
 			GO::getDbConnection()->query('FLUSH PRIVILEGES');		
+			
 		}catch(Exception $e){
+			
+			$installation->delete();
+			
 			throw new Exception("Could not create database. Did you grant permissions to create databases to the main database user by running: \n\n".
 							"REVOKE ALL PRIVILEGES ON * . * FROM 'groupoffice-com'@'localhost';\n".
 							"GRANT ALL PRIVILEGES ON * . * TO 'groupoffice-com'@'localhost' WITH GRANT OPTION MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0 ;\n\n". $e->getMessage());
