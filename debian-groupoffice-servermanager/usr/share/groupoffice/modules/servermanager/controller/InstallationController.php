@@ -81,7 +81,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	}
 	
 	private function _createDatabaseContent($params, $installation, $config){
-		$cmd = 'php '.GO::config()->root_path.'install/autoinstall.php'.
+		$cmd = 'sudo -u www-data php '.GO::config()->root_path.'install/autoinstall.php'.
 						' -c='.$installation->configPath.
 						' --adminusername=admin'.
 						' --adminpassword="'.$params['adminpassword'].'"'.
@@ -115,25 +115,24 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	}
 	
 	private function _createDatabase($params, $installation, $config){
-		try{
-			
+		
+		try{			
 			if(!GO_Base_Db_Utils::databaseExists($config['db_name'])){
 			
 				GO::getDbConnection()->query("CREATE DATABASE IF NOT EXISTS `".$config['db_name']."`");				
+				
+				$sql = "GRANT ALL PRIVILEGES ON `".$config['db_name']."`.*	TO ".
+								"'".$config['db_user']."'@'".$config['db_host']."' ".
+								"IDENTIFIED BY '".$config['db_pass']."' WITH GRANT OPTION";			
+
+				GO::getDbConnection()->query($sql);
+				GO::getDbConnection()->query('FLUSH PRIVILEGES');		
 
 				$this->_createDatabaseContent($params, $installation, $config);
 			}
-			
-			$sql = "GRANT ALL PRIVILEGES ON `".$config['db_name']."`.*	TO ".
-								"'".$config['db_user']."'@'".$config['db_host']."' ".
-								"IDENTIFIED BY '".$config['db_pass']."' WITH GRANT OPTION";
-
-			GO::getDbConnection()->query($sql);
-			GO::getDbConnection()->query('FLUSH PRIVILEGES');		
-			
 		}catch(Exception $e){
 			
-			$installation->delete();
+			//$installation->delete();
 			
 			throw new Exception("Could not create database. Did you grant permissions to create databases to the main database user by running: \n\n".
 							"REVOKE ALL PRIVILEGES ON * . * FROM 'groupoffice-com'@'localhost';\n".
