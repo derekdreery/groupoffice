@@ -50,7 +50,14 @@ class GO_Tasks_Controller_Portlet extends GO_Base_Controller_AbstractMultiSelect
 	 * @return Array The array with the data for the grid. 
 	 */
 	protected function actionPortletGrid($params) {
-
+		
+		if(isset($params['completed_task_id'])) {
+			$updateTask = GO_Tasks_Model_Task::model()->findByPk($params['completed_task_id']);
+			
+			if(isset($params['checked']))
+				$updateTask->setCompleted($params['checked']=="true");
+		}
+		
 		// Find out the sort for the grid
 		$sort = !empty($params['sort']) ? $params['sort'] : 'due_time';
 		$dir = !empty($params['dir']) ? $params['dir'] : 'ASC';
