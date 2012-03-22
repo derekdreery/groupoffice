@@ -577,13 +577,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function getDbConnection()
 	{
-		if(self::$db!==null)
-			return self::$db;
-		else
-		{
-			self::$db=GO::getDbConnection();			
-		}
-		return self::$db;
+		return GO::getDbConnection();
+		
+//		if(self::$db!==null)
+//			return self::$db;
+//		else
+//		{
+//			self::$db=GO::getDbConnection();			
+//		}
+//		return self::$db;
 	}
 	
 	private function _joinAclTable(){
