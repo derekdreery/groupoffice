@@ -85,12 +85,12 @@ GO.files.FilePropertiesDialog = function(config){
 	
 	var items = [this.propertiesPanel, this.commentsPanel, this.versionsGrid];
 
-	
-	if(GO.workflow)
-	{
-		this.workflowPanel = new GO.workflow.FilePropertiesPanel();
-		items.push(this.workflowPanel);
-	}
+//	
+//	if(GO.workflow)
+//	{
+//		this.workflowPanel = new GO.workflow.FilePropertiesPanel();
+//		items.push(this.workflowPanel);
+//	}
 
 
 	if(GO.customfields && GO.customfields.types["GO_Files_Model_File"])
