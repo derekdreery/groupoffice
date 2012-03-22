@@ -94,8 +94,50 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		$this->file_storage_usage=$folder->calculateSize();
 		
 		$this->_calculateDatabaseSize($config['db_name']);
+		$this->_calculateMailboxUsage($config);
+		
+		GO::$disableModelCache=true;
+		
+		GO::setDbConnection(
+						$config['db_name'], 
+						$config['db_user'], 
+						$config['db_pass'], 
+						$config['db_host']
+						);
+		
+		$adminUser = GO_Base_Model_User::model()->findByPk(1);
+		$this->admin_email=$adminUser->email;
+		
+		GO::debug($this->admin_email);
+		
+		GO::setDbConnection();
+		
+//		$this->decimal_separator=$config['default_decimal_separator'];
+//		$this->thousands_separator=$config['default_thousands_separator'];
+//		$this->date_format=Date::get_dateformat($config['default_date_format'], $config['default_date_separator']);
+
+		
 		
 		//$this->save();
+	}
+	
+	private function _calculateMailboxUsage($config){
+		$this->mailbox_usage=0;
+		$this->mail_domains=isset($config['serverclient_domains']) ? $config['serverclient_domains'] : '';
+		
+		if(!empty(GO::config()->serverclient_server_url) && !empty($config['serverclient_domains'])) {
+			$c = new GO_Serverclient_HttpClient();
+			$response = $c->postfixRequest(array(
+					'task'=>'serverclient_get_usage',
+					'domains'=>$config['serverclient_domains']
+			));
+			
+			$response = json_decode($response);
+
+			foreach($response->domains as $domain) {
+				$this->mailbox_usage+=$domain->usage;
+			}
+		}
 	}
 	
 	private function _calculateDatabaseSize($dbName){
