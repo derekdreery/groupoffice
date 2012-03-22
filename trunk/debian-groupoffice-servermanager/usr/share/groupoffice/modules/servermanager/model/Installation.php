@@ -79,4 +79,34 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		
 		return parent::beforeDelete();
 	}
+	
+	protected function beforeSave() {
+		
+		$this->calculateStatistics();
+		
+		return parent::beforeSave();
+	}
+	
+	
+	public function calculateStatistics(){
+		require($this->configPath);
+		$folder = new GO_Base_Fs_Folder($config['file_storage_path']);
+		$this->file_storage_usage=$folder->calculateSize();
+		
+		$this->_calculateDatabaseSize($config['db_name']);
+		
+		//$this->save();
+	}
+	
+	private function _calculateDatabaseSize($dbName){
+		$stmt =GO::getDbConnection()->query("SHOW TABLE STATUS FROM `".$dbName."`;");
+
+		$this->database_usage=0;
+		while($r=$stmt->fetch()){
+			$this->database_usage+=$r['Data_length'];
+			$this->database_usage+=$r['Index_length'];
+		}
+	}
+	
+	
 }
