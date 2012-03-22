@@ -36,7 +36,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 			if ($item != "." && $item != ".." &&
 							($getHidden || !(strpos($item, ".") === 0) )) {
 			
-				if(is_file($folderPath) || is_link($folderPath))					
+				if(is_file($folderPath))					
 					$folders[] = new GO_Base_Fs_File($folderPath);
 				else
 					$folders[] = new GO_Base_Fs_Folder($folderPath);
@@ -58,6 +58,10 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 		
 		if(!$this->exists())
 			return true;
+		
+		//just delete symlink and not contents of linked folder!
+		if(is_link($this->path))
+			return unlink($this->path);
 		
 		$items = $this->ls(true);
 		
