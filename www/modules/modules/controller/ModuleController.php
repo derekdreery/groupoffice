@@ -43,11 +43,10 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 		$modules = GO::modules()->getAvailableModules();
 		
 		$availableModules=array();
-				
-		foreach($modules as $moduleClass){
+						
+		foreach($modules as $moduleClass){		
 			
-			$module = new $moduleClass;//call_user_func($moduleClase();
-			
+			$module = new $moduleClass;//call_user_func($moduleClase();			
 			$availableModules[$module->name()] = array(
 					'id'=>$module->id(),
 					'name'=>$module->name(),

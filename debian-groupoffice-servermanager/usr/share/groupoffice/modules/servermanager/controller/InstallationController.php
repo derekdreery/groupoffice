@@ -150,14 +150,14 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			{
 				throw new Exception('The passwords didn\'t match. Please try again');
 			}
-		}
+		}	
 				
 		$cmd = 'sudo TERM=dumb '.GO::config()->root_path.
 						'groupofficecli.php -r=servermanager/installation/create'.
 						' -c='.GO::config()->get_config_file().
 						' --tmp_config='.$tmpConfigFile->path().
 						' --name='.$model->name.
-						' --adminpassword='.$params['admin_password1'];	
+						' --adminpassword='.$params['admin_password1'];
 		
 		exec($cmd, $output, $return_var);		
 
@@ -167,21 +167,30 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}
+	
+	protected function beforeSubmit(&$response, &$model, &$params) {
+		
+		$modules = isset($params['modules']) ? json_decode($params['modules'], true) : false;
+		if (empty($params['id']) && empty($modules)) {
+			throw new Exception("Please select the allowed modules");
+		}
+		
+		return parent::beforeSubmit($response, $model, $params);
+	}
 	private function _createConfig($params, $model) {
 		if (isset($params['modules'])) {
-			$modules = json_decode($params['modules'], true);
-
-			$allowed = array();
-
-			foreach ($modules as $module) {
-				if ($module['allowed'])
-					$allowed[] = $module['id'];
-			}
-
-			$config['allowed_modules'] = implode(',', $allowed);
-		}elseif (empty($params['id'])) {
-			$config['allowed_modules'] = isset($default_config['allowed_modules']) ? $default_config['allowed_modules'] : '';
+			$modules = json_decode($params['modules']);
+			$modules[]='serverclient';
+			$modules[]='users';
+			$modules[]='groups';
+			$modules[]='modules';
+			
+			$config['allowed_modules'] = implode(',', $modules);
 		}
+		
+		//for testing
+		$config['debug']=true;
+		
 		$config['id']=$model->dbName;
 		$config['db_name']=$model->dbName;
 		$config['db_user']=$model->dbUser;
@@ -240,6 +249,35 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$response['total_users']=0;
 		
 		return parent::afterStore($response, $params, $store, $storeParams);
+	}
+	
+	
+	protected function actionModules($params){
+
+		$modules = GO::modules()->getAvailableModules(true);
+		
+		$hideModules = array('servermanager','serverclient','users','groups','modules','postfixadmin');
+		$availableModules=array();
+		foreach($modules as $moduleClass){
+			
+			$module = new $moduleClass;//call_user_func($moduleClase();
+			if(!in_array($module->id(), $hideModules)){
+				$availableModules[$module->name()] = array(
+						'id'=>$module->id(),
+						'name'=>$module->name(),
+						'description'=>$module->description(),
+						'checked'=>false
+				);
+			}
+		}
+		
+		ksort($availableModules);		
+		
+		$response['results']=array_values($availableModules);
+		
+		$response['total']=count($response['results']);
+		
+		return $response;		
 	}
 
 }

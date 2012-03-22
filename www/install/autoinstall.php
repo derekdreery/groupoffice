@@ -76,14 +76,23 @@ $modules = GO::modules()->getAvailableModules();
 
 if(isset($args['modules'])){
 	$installModules = explode(',', $args['modules']);
+	
+}elseif(!empty(GO::config()->allowed_modules)){
+	$installModules=explode(',',GO::config()->allowed_modules);
 }
-$installModules[]="modules";
-$installModules[]="users";
-$installModules[]="groups";
+
+if(isset($installModules)){
+	$installModules[]="modules";
+	$installModules[]="users";
+	$installModules[]="groups";
+}
 
 foreach ($modules as $moduleClass) {
 	$moduleController = new $moduleClass;
 	if ((!isset($installModules) && $moduleController->autoInstall()) || in_array($moduleController->id(), $installModules)) {
+		
+		echo "Installing module ".$moduleController->id()."\n";
+		
 		$module = new GO_Base_Model_Module();
 		$module->id = $moduleController->id();
 		$module->save();
@@ -97,11 +106,11 @@ $admin->username = $args['adminusername'];
 $admin->password = $args['adminpassword'];
 $admin->email = GO::config()->webmaster_email = $args['adminemail'];
 
-$admin->checkDefaultModels();
-
 GO::config()->save();
 
 $admin->save();
+
+$admin->checkDefaultModels();
 
 $adminGroup->addUser($admin->id);
 
