@@ -1437,8 +1437,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$model = isset($models[0]) ? $models[0] : false;
 		
 			//todo check read permissions
-			if($model && !$ignoreAcl && !$model->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
-				throw new GO_Base_Exception_AccessDenied();
+			if($model && !$ignoreAcl && !$model->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION)){
+				$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : '';
+				throw new GO_Base_Exception_AccessDenied($msg);
+			}
 
 			if($model)
 				GO::modelCache()->add($this->className(), $model);
@@ -2009,8 +2011,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 		//GO::debug('save'.$this->className());
 			
-		if(!$this->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
-			throw new GO_Base_Exception_AccessDenied();
+		if(!$this->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)){
+			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : '';
+			throw new GO_Base_Exception_AccessDenied($msg);
+		}
 		
 		if(!$this->validate()){
 			$errors = $this->getValidationErrors();
@@ -2483,8 +2487,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if($this->isNew)
 			return true;
 		
-		if(!$ignoreAcl && !$this->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION))
-			throw new GO_Base_Exception_AccessDenied ();
+		if(!$ignoreAcl && !$this->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION)){
+			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : '';
+			throw new GO_Base_Exception_AccessDenied ($msg);
+		}
 		
 		
 		if(!$this->beforeDelete())
