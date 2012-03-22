@@ -24,6 +24,24 @@
  */
 
 class GO_Base_Db_Utils{
+	
+	/**
+	 * Check if a database exists
+	 * 
+	 * @param string $tableName
+	 * @return boolean 
+	 */
+	public static function databaseExists($databaseName){
+		$stmt = GO::getDbConnection()->query('SHOW DATABASES');
+		while($r=$stmt->fetch()){
+			if($r[0]==$databaseName){
+				return true;
+			}		
+		}
+		
+		return false;
+	}
+	
 	/**
 	 * Check if a table exists in the Group-Office database.
 	 * 
