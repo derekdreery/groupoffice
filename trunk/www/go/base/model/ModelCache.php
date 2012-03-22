@@ -70,7 +70,10 @@ class GO_Base_Model_ModelCache{
 	 * @param String $modelClassName The GO_Base_Db_ActiveRecord derived class
 	 * @param mixed $primaryKey 
 	 */
-	public function get($modelClassName, $cacheKey){		
+	public function get($modelClassName, $cacheKey){	
+		
+		if(GO::$disableModelCache)
+			return;
 		
 		$formatted=$this->_formatCacheKey($cacheKey);
 		

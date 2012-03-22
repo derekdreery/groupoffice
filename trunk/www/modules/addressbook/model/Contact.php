@@ -204,7 +204,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$tpl = $this->addressbook->default_salutation;
 			$a = $this->getAttributes();
 			foreach($a as $key=>$value){
-				$tpl = str_replace('{'.$key.'}', $value, $tpl);
+				if(is_string($value))
+					$tpl = str_replace('{'.$key.'}', $value, $tpl);
 			}			
 			$tpl = preg_replace('/[ ]+/',' ',$tpl);
 			
