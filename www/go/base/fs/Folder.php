@@ -237,5 +237,25 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 		return strpos($this->path().'/', $parent->path().'/')===0;
 	}
 	
+	/**
+	 * Calculate size of the directory in bytes.
+	 * 
+	 * @return int/false 
+	 */
+	public function calculateSize(){
+		$cmd = 'du -sb "'.$this->path.'" 2>/dev/null';
 
+		$io = popen ($cmd, 'r' );
+
+		if($io){
+			$size = fgets ( $io, 4096);			
+			$size = preg_replace('/[\t\s]+/', ' ', trim($size));
+			$size = substr ( $size, 0, strpos ( $size, ' ' ) );			
+			
+			return $size;
+		}else
+		{
+			return false;
+		}		
+	}
 }

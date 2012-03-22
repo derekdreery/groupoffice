@@ -252,6 +252,30 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	}
 	
 	
+	public function formatStoreRecord($record, $model, $store) {
+		
+		$record['total_usage']= GO_Base_Util_Number::formatSize($record['file_storage_usage']+$record['database_usage']+$record['mailbox_usage']);
+		$record['file_storage_usage']= GO_Base_Util_Number::formatSize($record['file_storage_usage']);
+		$record['database_usage']= GO_Base_Util_Number::formatSize($record['database_usage']);
+		$record['mailbox_usage']= GO_Base_Util_Number::formatSize($record['mailbox_usage']);
+		
+		
+		if(file_exists($model->configPath))
+		{
+			require($model->configPath);
+			if(isset($config))
+			{
+				$record['enabled']=isset($config['enabled']) ? $config['enabled'] : true;
+				$record['title']=$config['title'];
+				$record['webmaster_email']=$config['webmaster_email'];
+				$record['max_users']=isset($config['max_users']) ? $config['max_users'] : 0;
+			}
+		}
+		
+		return parent::formatStoreRecord($record, $model, $store);
+	}
+	
+	
 	protected function actionModules($params){
 
 		$modules = GO::modules()->getAvailableModules(true);
