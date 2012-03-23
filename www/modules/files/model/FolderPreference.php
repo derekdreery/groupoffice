@@ -19,6 +19,7 @@
 
  * @property int $user_id
  * @property int $folder_id
+ * @property boolean $thumbs
  */
 class GO_Files_Model_FolderPreference extends GO_Base_Db_ActiveRecord {
 

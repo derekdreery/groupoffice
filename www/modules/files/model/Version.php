@@ -22,6 +22,8 @@
  * @property int $user_id 
  * @property int $mtime 
  * @property GO_Files_Model_File $file
+ * @property string $path
+ * @property int $version
  */
 class GO_Files_Model_Version extends GO_Base_Db_ActiveRecord {
 

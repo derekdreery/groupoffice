@@ -5,6 +5,9 @@ test invitation sending with moving in grid
 
 Workflow
 
+Grid scroll behouden bij reload
+Datums bij filesearch werken niet
+
 serverclient
 
 CMS compatible
