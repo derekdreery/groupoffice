@@ -190,5 +190,32 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 		GO::session()->start();
 		$this->pageRedirect($this->getSite()->getLoginPath());
 	}
+	
+	protected function actionProfile($params){
+		if(!GO::user())
+			$this->pageRedirect($this->getSite()->login_path);
+		
+		$user = GO::user();
+		
+		if (GO_Base_Util_Http::isPostRequest()) {
+
+			GO_Base_Html_Error::checkRequired();
+			
+			$user->password = $params['password'];
+			$user->passwordConfirm = $params['passwordConfirm'];
+
+			GO_Base_Html_Error::validateModel($user);
+		}
+		
+		
+		$params['user'] = $user;
+		$params['contact'] = GO::user()->contact;
+		
+		
+			
+		$this->renderPage($params);
+	}
+	
+	
 
 }

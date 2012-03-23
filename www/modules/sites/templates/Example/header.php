@@ -27,7 +27,7 @@
 				<?php if(!GO::user()) : ?>
 					<a href="<?php echo $this->pageUrl("login"); ?>"><?php echo $this->t('login'); ?></a> | <a href="<?php echo $this->pageUrl("register"); ?>"><?php echo $this->t('register'); ?></a>
 				<?php else: ?>
-					Welcome <?php echo GO::user()->name; ?> | <a href="<?php echo $this->pageUrl('logout'); ?>"><?php echo $this->t('logout'); ?></a>
+					Welcome <?php echo GO::user()->name; ?> | <a href="<?php echo $this->pageUrl('profile'); ?>"><?php echo $this->t('youraccount'); ?></a> | <a href="<?php echo $this->pageUrl('logout'); ?>"><?php echo $this->t('logout'); ?></a>
 				<?php endif; ?>
 			</div>
 
