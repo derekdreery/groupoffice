@@ -281,6 +281,12 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 
 		$modules = GO::modules()->getAvailableModules(true);
 		
+		$allowedModules = array();
+		if(!empty($params['installation_id']) && ($installation=  GO_ServerManager_Model_Installation::model()->findByPk($params['installation_id']))){
+			require($installation->configPath);
+			$allowedModules = explode(',', $config['allowed_modules']);
+		}
+		
 		$hideModules = array('servermanager','serverclient','users','groups','modules','postfixadmin');
 		$availableModules=array();
 		foreach($modules as $moduleClass){
@@ -291,7 +297,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 						'id'=>$module->id(),
 						'name'=>$module->name(),
 						'description'=>$module->description(),
-						'checked'=>false
+						'checked'=>in_array($module->id(), $allowedModules)
 				);
 			}
 		}

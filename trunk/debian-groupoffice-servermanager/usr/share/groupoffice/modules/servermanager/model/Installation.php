@@ -1,5 +1,53 @@
 <?php
 
+/**
+ * Group-Office
+ * 
+ * Copyright Intermesh BV. 
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ * 
+ * @license AGPL/Proprietary http://www.group-office.com/LICENSE.TXT
+ * @link http://www.group-office.com
+ * @package GO.modules.servermanager.model
+ * @version $Id: example.php 7607 20120101Z <<USERNAME>> $
+ * @copyright Copyright Intermesh BV.
+ * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
+ */
+ 
+/**
+ * The GO_ServerManager_Model_Installation model
+ *
+ * @package GO.modules.servermanager.model
+ * @property int $id
+ * @property int $mtime
+ * @property int $max_users
+ * @property int $count_users
+ * @property int $install_time
+ * @property int $lastlogin
+ * @property int $total_logins
+ * @property int $database_usage
+ * @property int $file_storage_usage
+ * @property int $mailbox_usage
+ * @property int $report_ctime
+ * @property string $comment
+ * @property string $features
+ * @property string $mail_domains
+ * @property string $admin_email
+ * @property string $admin_name
+ * @property string $admin_salutation
+ * @property string $admin_country
+ * @property string $date_format
+ * @property string $thousands_separator
+ * @property string $decimal_separator
+ * @property boolean $billing
+ * @property boolean $professional
+ * @property int $status_change_time
+ * @property string $config_file
+ */
+
 class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 
 	/**
@@ -25,6 +73,9 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		$this->columns['name']['unique']=true;
 		$this->columns['name']['regex']='/^[a-z0-9-_\.]*$/';
 		$this->columns['max_users']['required']=true;
+		
+		$this->columns['lastlogin']['gotype']='unixtimestamp';
+		$this->columns['install_time']['gotype']='unixtimestamp';
 		
 		return parent::init();
 	}
@@ -95,9 +146,16 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		
 		$this->_calculateDatabaseSize($config['db_name']);
 		$this->_calculateMailboxUsage($config);
+		$this->_calculateInstallationUsage($config);
 		
-		GO::$disableModelCache=true;
 		
+		
+		//$this->save();
+	}
+	
+	private function _calculateInstallationUsage($config){
+		//prevent model caching and switch to installation database.
+		GO::$disableModelCache=true;		
 		GO::setDbConnection(
 						$config['db_name'], 
 						$config['db_user'], 
@@ -107,18 +165,17 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		
 		$adminUser = GO_Base_Model_User::model()->findByPk(1);
 		$this->admin_email=$adminUser->email;
+		$this->install_time = $adminUser->ctime;
 		
-		GO::debug($this->admin_email);
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->select('count(*) as count, max(lastlogin) AS lastlogin');
+		$record = GO_Base_Model_User::model()->findSingle($findParams);						
 		
+		$this->last_login = $record['lastlogin'];
+		$this->count_users = $record['count'];
+		
+		//reconnect to servermanager database
 		GO::setDbConnection();
-		
-//		$this->decimal_separator=$config['default_decimal_separator'];
-//		$this->thousands_separator=$config['default_thousands_separator'];
-//		$this->date_format=Date::get_dateformat($config['default_date_format'], $config['default_date_separator']);
-
-		
-		
-		//$this->save();
 	}
 	
 	private function _calculateMailboxUsage($config){
