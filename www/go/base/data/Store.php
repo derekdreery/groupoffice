@@ -165,11 +165,14 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 
 	public function nextRecord() {
 		
-		$model = $this->_stmt->fetch();
-		
-		//return $model ? $model->getAttributes('formatted') : false;
+		$model = $this->nextModel();
 		
 		return $model ? $this->getColumnModel()->formatModel($model) : false;
+	}
+	
+	
+	public function nextModel(){
+		return $this->_stmt->fetch();
 	}
 	
 	public function getTotal() {

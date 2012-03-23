@@ -17,6 +17,8 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 	name : '',
 	url : '',
 	colModel : '',
+	
+	exportClassPath : "",
 
 	initComponent : function(){
 
@@ -139,7 +141,7 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 			GO.request({
 				url: 'export/types',
 				params:{
-					model: this.modelClassName
+					exportClassPath:this.exportClassPath
 				},
 				success: function(response, options, result)
 				{

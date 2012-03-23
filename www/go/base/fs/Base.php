@@ -285,6 +285,15 @@ abstract class GO_Base_Fs_Base{
 	}
 	
 	/**
+	 * Get the path without GO::config()->root_path.
+	 * 
+	 * @return string 
+	 */
+	public function stripRootPath(){
+		return str_replace(GO::config()->root_path,'', $this->path());
+	}
+	
+	/**
 	 * Get the path without GO::config()->tmpdir.
 	 * 
 	 * @return string 

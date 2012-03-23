@@ -36,6 +36,10 @@ class GO_Base_Db_FindParams{
 		return $this->_params;
 	}
 	
+	public function getParam($paramName){
+		return isset($this->_params[$paramName]) ? $this->_params[$paramName] : false;
+	}
+	
 	/**
 	 * Create a new instance of GO_Base_Db_FindParams
 	 * 
