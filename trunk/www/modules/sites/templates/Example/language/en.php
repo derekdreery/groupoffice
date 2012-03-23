@@ -47,9 +47,10 @@ $l['registerTitle']='Register at Intermesh Group-Office';
 $l['registerText']='Fill out this form and click on \'Ok\' to register. The fields marked with a * are required.';
 $l['lostPassword']='Lost password';
 
-
-
-
+$l['profileTitle']='Your profile information';
+$l['profileText']='Change your contact information below';
+$l['youraccount']='Your account';
+$l['yourlogincredentials']='Your login credentials';
 
 $l['pager_page']='Page';
 $l['pager_of']='of';
@@ -59,3 +60,8 @@ $l['uploader_noFlash']='You browser doesn\'t have Adobe Flash installed.';
 
 $l['webshop_checkout']='Checkout';
 
+
+
+
+$l['userUsername']='Username';
+$l['userPassword']='Password';
