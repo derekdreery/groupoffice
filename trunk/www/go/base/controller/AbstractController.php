@@ -278,7 +278,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			if($checkPermissions && !$this->_checkPermission($action)){
 				throw new GO_Base_Exception_AccessDenied();
 			}
-			$ignoreactions = $this->ignoreAclPermissions();
+			
 			$ignoreAcl = in_array($action, $this->ignoreAclPermissions()) || in_array('*', $this->ignoreAclPermissions());
 			if($ignoreAcl){		
 				$oldIgnore = GO::setIgnoreAclPermissions(true);				
@@ -335,7 +335,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 				$response['exception']=(string) $e;
 			}
 			
-			if(PHP_SAPI=='cli'){
+			if($this->isCli()){
 				echo "Error: ".$response['feedback']."\n\n";
 				if(GO::config()->debug){
 					echo $e->getTraceAsString()."\n\n";
@@ -419,6 +419,14 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		
 		return $route;
 	}	
+	
+	/**
+	 * Check if we are called with the Command Line Interface
+	 * @return type 
+	 */
+	public function isCli(){
+		return PHP_SAPI=='cli';
+	}
 	
 //	protected function isAjax(){
 //		return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH']==='XMLHttpRequest';

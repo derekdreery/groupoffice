@@ -942,20 +942,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		{
 			if(!($params instanceof GO_Base_Db_FindParams))
 				throw new Exception('$params parameter for find() must be instance of GO_Base_Db_FindParams');
+			
+			if($params->getParam("export")){
+				GO::session()->values[$params->getParam("export")]=array('name'=>$params->getParam("export"), 'model'=>$this->className(), 'findParams'=>$params);
+			}
+			
 			//it must be a GO_Base_Db_FindParams object
 			$params = $params->getParams();
 		}
 		
-		
-		//GO::debug('ActiveRecord::find()');		
-		
 		if(!empty($params['single'])){
 			unset($params['single']);
 			return $this->findSingle($params);
-		}
-		
-		if(!empty($params['export'])){
-			GO::session()->values[$params['export']]=array('name'=>$params['export'], 'model'=>$this->className(), 'findParams'=>$params);
 		}
 				
 		if(!empty($params['debugSql'])){

@@ -777,7 +777,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$showHeader = true;
 		
 		$findParams = GO::session()->values[$params['name']]['findParams'];
-		$findParams['limit']=0; // Let the export handle all found records without a limit
+		$findParams->limit(0); // Let the export handle all found records without a limit
 		$model = GO::getModel(GO::session()->values[$params['name']]['model']);
 
 		$store = new GO_Base_Data_Store($this->getStoreColumnModel());	
@@ -786,8 +786,6 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$columnModel = $store->getColumnModel();
 		$this->formatColumns($columnModel);		
 		
-		$stmt = $model->find($findParams);
-		$store->setStatement($stmt);
 		
 		if(!empty($params['columns'])) {
 			$includeColumns = explode(',',$params['columns']);
@@ -798,9 +796,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		}
 
 		if(!empty($params['type']))
-			$export = new $params['type']($store, $columnModel,$showHeader, $title, $orientation);
+			$export = new $params['type']($store, $columnModel,$model, $findParams, $showHeader, $title, $orientation);
 		else
-			$export = new GO_Base_Export_ExportCSV($store, $columnModel,$showHeader, $title, $orientation); // The default Export is the CSV outputter.
+			$export = new GO_Base_Export_ExportCSV($store, $columnModel, $model, $findParams, $showHeader, $title, $orientation); // The default Export is the CSV outputter.
 
 		$export->output();
 	}

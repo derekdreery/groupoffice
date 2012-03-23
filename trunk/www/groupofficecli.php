@@ -32,7 +32,10 @@ if(empty($args['r'])){
 {
 	$user = GO::session()->login($args['u'], $args['p']);
 	if(!$user){
-		die("Login failed for user ".$args['u']."\n");
+		
+		var_dump($args);
+		echo "Login failed for user ".$args['u']."\n";
+		exit(1);
 	}
 	unset($args['u'],$args['p']);
 }

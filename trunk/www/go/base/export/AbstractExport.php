@@ -32,6 +32,17 @@ abstract class GO_Base_Export_AbstractExport {
 	protected $orientation;
 	
 	/**
+	 * 
+	 * @var GO_Base_Db_ActiveRecord 
+	 */
+	protected $model;
+	/**
+	 * 
+	 * @var GO_Base_Db_FindParams 
+	 */
+	protected $findParams;
+	
+	/**
 	 * Display the exporter in the exportDialog?
 	 * @var Boolean 
 	 */
@@ -60,12 +71,21 @@ abstract class GO_Base_Export_AbstractExport {
 	 * @param String $title
 	 * @param Mixed $orientation ('P' for Portrait,'L' for Landscape of false for none) 
 	 */
-	public function __construct($store, $columnModel, $header=true, $title=false, $orientation=false) {
+	public function __construct(GO_Base_Data_Store $store, GO_Base_Data_ColumnModel $columnModel, GO_Base_Db_ActiveRecord $model, GO_Base_Db_FindParams $findParams, $header=true, $title=false, $orientation=false) {
 		$this->store = $store;
 		$this->columnModel = $columnModel;
 		$this->header = $header;
 		$this->title = $title;
 		$this->orientation = $orientation;
+		$this->model = $model;
+		$this->findParams= $findParams;
+		
+		$this->setStatement();
+	}
+	
+	protected function setStatement(){
+		$stmt = $this->model->find($this->findParams);
+		$this->store->setStatement($stmt);		
 	}
 	
 	/**
