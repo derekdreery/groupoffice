@@ -3095,7 +3095,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		//unset the files folder
 		if($this->hasFiles())
-			unset($copy->files_folder_id);
+			$copy->files_folder_id = 0;
 		
 		$pkField = $this->primaryKey();
 		if(is_array($pkField)) {
