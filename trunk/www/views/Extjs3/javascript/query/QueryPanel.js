@@ -244,8 +244,16 @@ GO.query.QueryPanel = function(config){
 			return true;
 		},
 		afteredit:function(e){
-			if(e.column==this.valueCol) 
-				e.record.set('rawValue',this.lastActiveEditor.field.getRawValue())
+			if(e.column==this.valueCol) {				
+				var rawValue;
+				if(typeof(this.lastActiveEditor.field.checked)!='undefined'){
+					rawValue=this.lastActiveEditor.field.checked ? 1 : 0;
+				}else
+				{
+					rawValue=this.lastActiveEditor.field.getRawValue();
+				}	
+				e.record.set('rawValue',rawValue)
+			}
 		}
 	}
 
