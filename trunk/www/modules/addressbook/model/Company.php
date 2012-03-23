@@ -41,6 +41,7 @@
  * @property int $addressbook_id
  * @property int $user_id
  * @property int $id
+ * @property int $link_id
  */
 
 class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {

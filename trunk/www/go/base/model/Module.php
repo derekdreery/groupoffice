@@ -24,6 +24,7 @@
  * @property boolean $admin_menu
  * @property int $sort_order
  * @property int $version
+ * @property int $acl_write
  */
 class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 

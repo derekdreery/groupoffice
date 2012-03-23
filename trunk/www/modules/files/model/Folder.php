@@ -37,6 +37,7 @@
  * @property string $cm_state The stored state of the column model whebn apply state is true
  * @property boolean $apply_state Apply the configured state of the column model to everybody.
  * @property GO_Base_Fs_Folder $fsFolder
+ * @property int $acl_write
  */
 class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	

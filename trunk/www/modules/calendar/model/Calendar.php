@@ -32,6 +32,7 @@
  * @property int $acl_id
  * @property int $user_id
  * @property int $group_id
+ * @property int $acl_write
  */
 class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel {
 

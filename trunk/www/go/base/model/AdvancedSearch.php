@@ -7,6 +7,10 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  * 
+ * @property int $user_id
+ * @property int $acl_id
+ * @property string $data
+ * @property string $model_name
  */
 
 class GO_Base_Model_AdvancedSearch extends GO_Base_Db_ActiveRecord {
