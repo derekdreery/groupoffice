@@ -238,3 +238,27 @@ $updates["201202011207"][]="ALTER TABLE `ab_addresslists` DROP `acl_write`";
 $updates["201202011207"][]="ALTER TABLE `ab_addresslists` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT";
 $updates["201202011207"][]="ALTER TABLE `ab_addresslist_companies` CHANGE `group_id` `addresslist_id` INT( 11 ) NOT NULL DEFAULT '0'";
 $updates["201202011207"][]="ALTER TABLE `ab_addresslist_contacts` CHANGE `group_id` `addresslist_id` INT( 11 ) NOT NULL DEFAULT '0'";
+
+$updates["201203260900"][]="ALTER TABLE `ab_companies` CHANGE `name` `name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates["201203260900"][]="ALTER TABLE `ab_companies` CHANGE `name2` `name2` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates["201203260900"][]="ALTER TABLE `ab_companies` CHANGE `address` `address` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates["201203260900"][]="ALTER TABLE `ab_companies` CHANGE `address_no` `address_no` VARCHAR( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates["201203260900"][]="ALTER TABLE `ab_companies` CHANGE `zip` `zip` VARCHAR( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates["201203260900"][]="ALTER TABLE `ab_companies` CHANGE `city` `city` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates["201203260900"][]="ALTER TABLE `ab_companies` CHANGE `state` `state` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates["201203260900"][]="ALTER TABLE `ab_companies` CHANGE `country` `country` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates["201203260900"][]="ALTER TABLE `ab_companies` CHANGE `post_address` `post_address` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates["201203260900"][]="ALTER TABLE `ab_companies` CHANGE `post_address_no` `post_address_no` VARCHAR( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates["201203260900"][]="ALTER TABLE `ab_companies` CHANGE `post_city` `post_city` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates["201203260900"][]="ALTER TABLE `ab_companies` CHANGE `post_state` `post_state` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates["201203260900"][]="ALTER TABLE `ab_companies` CHANGE `post_country` `post_country` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates["201203260900"][]="ALTER TABLE `ab_companies` CHANGE `post_zip` `post_zip` VARCHAR( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates["201203260900"][]="ALTER TABLE `ab_companies` CHANGE `phone` `phone` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates["201203260900"][]="ALTER TABLE `ab_companies` CHANGE `fax` `fax` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates["201203260900"][]="ALTER TABLE `ab_companies` CHANGE `email` `email` VARCHAR( 75 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates["201203260900"][]="ALTER TABLE `ab_companies` CHANGE `homepage` `homepage` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates["201203260900"][]="ALTER TABLE `ab_companies` CHANGE `bank_no` `bank_no` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates["201203260900"][]="ALTER TABLE `ab_companies` CHANGE `vat_no` `vat_no` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates["201203260900"][]="ALTER TABLE `ab_companies` CHANGE `crn` `crn` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates["201203260900"][]="ALTER TABLE `ab_companies` CHANGE `iban` `iban` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+
