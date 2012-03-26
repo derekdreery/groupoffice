@@ -43,8 +43,4 @@ class GO_Tasks_Model_Category extends GO_Base_Db_ActiveRecord {
 				'tasks' => array('type' => self::HAS_MANY, 'model' => 'GO_Tasks_Model_Task', 'field' => 'category_id', 'delete' => true),
 				);
 	}
-	
-	public function hasFiles(){
-		return true;
-	}
 }
