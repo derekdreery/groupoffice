@@ -209,7 +209,7 @@ GO.files.FileBrowser = function(config){
 
 	if(GO.customfields)
 	{
-		GO.customfields.addColumns(6, fields);
+		GO.customfields.addColumns("GO_Files_Model_File", fields);
 	}
 	
 	this.gridStore = new GO.data.JsonStore({
