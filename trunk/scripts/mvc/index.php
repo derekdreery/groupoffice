@@ -10,6 +10,7 @@
 				<li><a href="?action=createCFModel">Create a customfield model</a></li>
 				<li><a href="?action=createController">Create a Controller</a></li>
 				<li><a href="?action=getLangKeys">Get the language keys for a model</a></li>
+				<li><a href="?action=createYuml">Get the uml diagram from a model</a></li>
 			</ul>
 		</div>
 		<div id="content">
@@ -28,6 +29,9 @@
 						break;
 					case 'getLangKeys':
 						include "getModelLanguageKeys.php";
+						break;
+					case 'createYuml':
+						include "createYuml.php";
 						break;
 					default:
 						echo "Select a task from the menu!";
