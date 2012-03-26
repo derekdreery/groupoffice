@@ -39,9 +39,9 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 
 		if (!isset(self::$_allUserDefaultModels)) {
 			self::$_allUserDefaultModels = array();
-			$stmt = GO::modules()->getAll();
+			$modules = GO::modules()->getAllModules();
 			
-			while ($module=$stmt->fetch()) {
+			while ($module=array_shift($modules)) {
 			  $permissionLevel=$user_id ? GO_Base_Model_Acl::getUserPermissionLevel($module->acl_id, $user_id) : 1;
 				if($permissionLevel){
 				  if($module->moduleManager){

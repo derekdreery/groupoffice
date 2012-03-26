@@ -368,18 +368,17 @@ CREATE TABLE IF NOT EXISTS `go_state` (
 DROP TABLE IF EXISTS `go_users`;
 CREATE TABLE IF NOT EXISTS `go_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `password_type` varchar(20) DEFAULT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `enabled` tinyint(1) NOT NULL DEFAULT '1',
   `first_name` varchar(50) NOT NULL,
   `middle_name` varchar(50) NOT NULL DEFAULT '',
-  `last_name` varchar(100) DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
+  `last_name` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
   `acl_id` int(11) NOT NULL DEFAULT '0',
-  `date_format` varchar(20) DEFAULT NULL,
+  `date_format` varchar(20) NOT NULL DEFAULT 'dmY',
   `date_separator` char(1) NOT NULL DEFAULT '-',
-  `time_format` varchar(10) DEFAULT NULL,
+  `time_format` varchar(10) NOT NULL DEFAULT 'G:i',
   `thousands_separator` char(1) NOT NULL DEFAULT '.',
   `decimal_separator` char(1) NOT NULL DEFAULT ',',
   `currency` char(3) NOT NULL DEFAULT '',
@@ -387,14 +386,12 @@ CREATE TABLE IF NOT EXISTS `go_users` (
   `lastlogin` int(11) NOT NULL DEFAULT '0',
   `ctime` int(11) NOT NULL DEFAULT '0',
   `max_rows_list` tinyint(4) NOT NULL DEFAULT '20',
-  `timezone` varchar(50) DEFAULT NULL,
-  `start_module` varchar(50) DEFAULT NULL,
-  `language` varchar(20) DEFAULT NULL,
-  `theme` varchar(20) DEFAULT NULL,
+  `timezone` varchar(50) NOT NULL DEFAULT 'Europe/Amsterdam',
+  `start_module` varchar(50) NOT NULL DEFAULT 'summary',
+  `language` varchar(20) NOT NULL DEFAULT 'en',
+  `theme` varchar(20) NOT NULL DEFAULT 'Default',
   `first_weekday` tinyint(4) NOT NULL DEFAULT '0',
   `sort_name` varchar(20) NOT NULL DEFAULT 'first_name',
-  `bank` varchar(50) DEFAULT NULL,
-  `bank_no` varchar(50) DEFAULT NULL,
   `mtime` int(11) NOT NULL DEFAULT '0',
   `mute_sound` tinyint(1) NOT NULL DEFAULT '0',
   `mute_reminder_sound` tinyint(1) NOT NULL DEFAULT '0',
@@ -405,9 +402,9 @@ CREATE TABLE IF NOT EXISTS `go_users` (
   `files_folder_id` int(11) NOT NULL DEFAULT '0',
   `mail_reminders` tinyint(1) NOT NULL DEFAULT '0',
   `popup_reminders` tinyint(1) NOT NULL DEFAULT '0',
+  `password_type` varchar(20) NOT NULL DEFAULT 'crypt',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-
 -- --------------------------------------------------------
 
 --

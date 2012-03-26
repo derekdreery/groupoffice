@@ -274,10 +274,10 @@ if(count($load_modules)) {
 	}
 	
 	//Temporary dirty hack for namespaces
-	$stmt = GO::modules()->getAll();
-	while($module = $stmt->fetch()){
-		if($module->isAvailable())
-			fwrite($fp, 'Ext.ns("GO.'.$module->id.'");');
+	$modules = GO::modules()->getAllModules();
+			
+	while ($module=array_shift($modules)) {
+		fwrite($fp, 'Ext.ns("GO.'.$module->id.'");');
 	}
 	
 	//Put all lang vars in js

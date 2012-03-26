@@ -16,9 +16,15 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 	}
 	
 	protected function getStoreParams($params) {
-		return GO_Base_Db_FindParams::newInstance()
+		$findParams = GO_Base_Db_FindParams::newInstance()
 						->ignoreAcl()
 						->limit(0);
+		
+		if(!empty(GO::config()->allowed_modules))
+			$findParams->getCriteria ()->addInCondition ('id', explode(',',GO::config()->allowed_modules));
+		
+		return $findParams;
+		
 	}
 	
 	public static function formatRecord($record, $model, $store){
@@ -113,14 +119,15 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 		}
 			
 		$paramId = intval($params['id']);
-		$modStmt = GO::modules()->getAll();
 		$response = array(
 			'success' => true,
 			'results' => array(),
 			'total' => 0
 		);
 		$modules = array();
-		while ($module = $modStmt->fetch()) {
+		$mods = GO::modules()->getAllModules();
+			
+		while ($module=array_shift($mods)) {
 			$permissionLevel = 0;
 			$usersGroupPermissionLevel = false;
 			if (empty($paramId)) {				

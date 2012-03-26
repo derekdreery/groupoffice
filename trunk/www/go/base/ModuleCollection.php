@@ -26,10 +26,19 @@
  */
 class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	
+	private $_allowedModules;
 	
 	public function __construct($model='GO_Base_Model_Module'){
 
 		parent::__construct($model);
+	}
+	
+	private function _isAllowed($moduleid){
+		
+		if(!isset($this->_allowedModules))
+			$this->_allowedModules=empty(GO::config()->allowed_modules) ? array() : explode(',', GO::config()->allowed_modules);
+		
+		return empty($this->_allowedModules) || in_array($moduleid, $this->_allowedModules);			
 	}
 	
 	/**
@@ -45,7 +54,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 		foreach($folders as $folder){
 			$ucfirst = ucfirst($folder->name());
 			$moduleClass = $folder->path().'/'.$ucfirst.'Module.php';
-			if(file_exists($moduleClass) && ($returnInstalled || !GO_Base_Model_Module::model()->findByPk($folder->name(), false, true))){
+			if(file_exists($moduleClass) && $this->_isAllowed($folder->name()) && ($returnInstalled || !GO_Base_Model_Module::model()->findByPk($folder->name(), false, true))){
 				$modules[]='GO_'.$ucfirst.'_'.$ucfirst.'Module';
 			}
 		}
@@ -68,17 +77,19 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 		
 		foreach($modules as $module)
 		{	
-			$file = $module->path.ucfirst($module->id).'Module.php';
-			//todo load listeners
-			if(file_exists($file)){
-				//require_once($file);
-				$class='GO_'.ucfirst($module->id).'_'.ucfirst($module->id).'Module';
-				
-				$object = new $class;
-				if(method_exists($object, $method)){					
-					GO::debug('Calling '.$class.'::'.$method);
-					call_user_func_array(array($object, $method), $params);
-					//$object->$method($params);
+			if($this->_isAllowed($module->id)){
+				$file = $module->path.ucfirst($module->id).'Module.php';
+				//todo load listeners
+				if(file_exists($file)){
+					//require_once($file);
+					$class='GO_'.ucfirst($module->id).'_'.ucfirst($module->id).'Module';
+
+					$object = new $class;
+					if(method_exists($object, $method)){					
+						GO::debug('Calling '.$class.'::'.$method);
+						call_user_func_array(array($object, $method), $params);
+						//$object->$method($params);
+					}
 				}
 			}
 		}
@@ -87,6 +98,10 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	}
 	
 	public function __get($name) {
+		
+		if(!$this->_isAllowed($name))
+			return false;
+		
 		$model = parent::__get($name);
 		
 		if(!$model || !is_dir($model->path))
@@ -108,5 +123,35 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 				return false;
 		
 		return $model;
+	}
+	
+	
+	
+	
+	public function __isset($name){
+		if(!$this->_isAllowed($name))
+			return false;
+		
+		try{
+			return $this->model->findByPk($name)!==false;
+		}catch(GO_Base_Exception_AccessDenied $e){
+			return false;
+		}
+	}
+	/**
+	 * Query all modules.
+	 * 
+	 * @return GO_Base_Model_Module[]
+	 */
+	public function getAllModules(){
+		
+		$stmt = $this->model->find();
+		$modules = array();
+		while($module = $stmt->fetch()){
+			if($this->_isAllowed($module->id) && $module->isAvailable())
+				$modules[]=$module;
+		}
+		
+		return $modules;
 	}
 }
