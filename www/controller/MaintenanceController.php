@@ -285,8 +285,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		}
 
 
-		$stmt = GO::modules()->getAll();
-		while ($module = $stmt->fetch()) {
+		$modules = GO::modules()->getAllModules();
+			
+		while ($module=array_shift($modules)) {
 			$updatesFile = $module->path . 'install/updates.php';
 			if (!file_exists($updatesFile))
 				$updatesFile = $module->path . 'install/updates.inc.php';

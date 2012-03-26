@@ -161,3 +161,20 @@ $updates["201202131153"][]= "ALTER TABLE `go_users` CHANGE `middle_name` `middle
 $updates["201203070921"][]= "ALTER TABLE `go_users` CHANGE `sort_name` `sort_name` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'first_name'";
 
 $updates["201203070921"][]= "update go_users set sort_name='first_name' where sort_name!='first_name' AND sort_name!='last_name'";
+
+$updates["201203261017"][]= "ALTER TABLE `go_modules` DROP `acl_write`";
+
+$updates["201203261017"][]= "ALTER TABLE `go_users` CHANGE `username` `username` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ";
+$updates["201203261017"][]= "ALTER TABLE `go_users` CHANGE `password` `password` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ";
+$updates["201203261017"][]= "ALTER TABLE `go_users` CHANGE `first_name` `first_name` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
+$updates["201203261017"][]= "ALTER TABLE `go_users` CHANGE `last_name` `last_name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ";
+$updates["201203261017"][]= "ALTER TABLE `go_users` CHANGE `email` `email` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ";
+$updates["201203261017"][]= "ALTER TABLE `go_users` CHANGE `date_format` `date_format` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'dmY'";
+$updates["201203261017"][]= "ALTER TABLE `go_users` CHANGE `time_format` `time_format` VARCHAR( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'G:i'";
+$updates["201203261017"][]= "ALTER TABLE `go_users` CHANGE `timezone` `timezone` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'Europe/Amsterdam'";
+$updates["201203261017"][]= "ALTER TABLE `go_users` CHANGE `start_module` `start_module` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'summary'";
+$updates["201203261017"][]= "ALTER TABLE `go_users` CHANGE `language` `language` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'en'";
+$updates["201203261017"][]= "ALTER TABLE `go_users` CHANGE `theme` `theme` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'Default'";
+$updates["201203261017"][]= "ALTER TABLE `go_users` CHANGE `bank` `bank` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+$updates["201203261017"][]= "ALTER TABLE `go_users` CHANGE `bank_no` `bank_no` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+$updates["201203261017"][]= "ALTER TABLE `go_users` CHANGE `password_type` `password_type` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'crypt'";

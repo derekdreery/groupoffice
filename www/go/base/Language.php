@@ -183,8 +183,8 @@ class GO_Base_Language{
 		//always load users lang for settings panels
 		$this->_loadSection('users');
 		
-		$stmt = GO::modules()->getAll();
-		while($module = $stmt->fetch()){
+		$modules = GO::modules()->getAllModules();			
+		while ($module=array_shift($modules)) {
 			$this->_loadSection($module->id);
 		}
 		
