@@ -657,7 +657,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 	private function _createNewModelFolder(GO_Base_Db_ActiveRecord $model) {
 		
-		GO::debug("Create new model folder ".$model->className()."(ID:".$model->id.")");
+		//GO::debug("Create new model folder ".$model->className()."(ID:".$model->id.")");
 
 		$folder = GO_Files_Model_Folder::model()->findByPath($model->buildFilesPath(),true, array('acl_id'=>$model->findAclId(),'readonly'=>1));
 				
