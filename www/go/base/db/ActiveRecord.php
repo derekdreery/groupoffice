@@ -474,11 +474,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 							break;
 					}
 					
-					if(strpos($field['Extra'],'auto_increment')!==false)
-						$default = null;
-					else
-						$default = isset($field['Default']) ? $field['Default'] : '';
-					
+					$default = $field['Default'];
+					if($field['Null']=='NO' && is_null($default) && strpos($field['Extra'],'auto_increment')===false)
+						$default='';
 					
 					//$required = is_null($default) && $field['Null']=='NO' && strpos($field['Extra'],'auto_increment')===false;
 
