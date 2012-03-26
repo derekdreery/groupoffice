@@ -5,137 +5,144 @@
 								<h1><?php echo $this->t('profileTitle'); ?></h1>								
 								<p><?php echo $this->t('profileText'); ?></p>
 								
+								<?php echo $this->notifications->render('profile'); ?>
+								
 								<?php 
 									GO_Base_Html_Form::renderBegin('sites/user/profile','profile',true);
-																		
+									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => $this->t('firstName'),
 										"model" => $contact,
-										"name" => "first_name",
-										"value" => ''
+										"name" => "first_name"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => false,
 										"model" => $contact,
 										"label" => $this->t('middleName'),
-										"name" => "middle_name",
-										"value" => ''
+										"name" => "middle_name"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"model" => $contact,
 										"label" => $this->t('lastName'),
-										"name" => "last_name",
-										"value" => ''
+										"name" => "last_name"
 									));
 									
 									GO_Base_Html_Radio::render(array(
 										"required" => true,
 										"label" => $this->t('gender'),
-										"name" => "gender",
-										"value" => 'male',
+										"model" => $contact,
+										"name" => "sex",
 										"options" => array(
-												array("label"=>$this->t('male'),"value"=>"male"),
-												array("label"=>$this->t('female'),"value"=>"female")
+												array("label"=>$this->t('male'),"value"=>"M"),
+												array("label"=>$this->t('female'),"value"=>"F")
 										)
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => $this->t('email'),
+										"model" => $contact,
 										"name" => "email",
-										"value" => ''
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => $this->t('address'),
-										"name" => "address",
-										"value" => ''
+										"model" => $contact,
+										"name" => "address"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => $this->t('housenumber'),
-										"name" => "address_no",
-										"value" => ''
+										"model" => $contact,
+										"name" => "address_no"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => $this->t('zip'),
-										"name" => "zip",
-										"value" => ''
+										"model" => $contact,
+										"name" => "zip"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => $this->t('city'),
-										"name" => "city",
-										"value" => ''
+										"model" => $contact,
+										"name" => "city"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => false,
 										"label" => $this->t('state'),
-										"name" => "state",
-										"value" => ''
+										"model" => $contact,
+										"name" => "state"
 									));
 									
 									GO_Base_Html_Select::render(array(
 										"required" => true,
 										"label" => $this->t('country'),
-										'value' => 'NL',
+										"model" => $contact,
 										'name' => "country",
 										'options' => GO::language()->getCountries()
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => false,
+										"model" => $contact,
 										"label" => $this->t('phone'),
-										"name" => "phone",
-										"value" => ''
+										"name" => "home_phone"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => false,
+										"model" => $contact,
 										"label" => $this->t('mobile'),
-										"name" => "mobile",
-										"value" => ''
+										"name" => "cellular"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
+										"model" => $company,
 										"label" => $this->t('company'),
-										"name" => "company",
-										"value" => ''
+										"name" => "name"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => false,
+										"model" => $contact,
 										"label" => $this->t('department'),
-										"name" => "department",
-										"value" => ''
+										"name" => "department"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => false,
+										"model" => $contact,
 										"label" => $this->t('function'),
-										"name" => "function",
-										"value" => ''
+										"name" => "function"
 									));
 																
 									GO_Base_Html_Input::render(array(
 										"required" => false,
+										"model" => $company,
 										"label" => $this->t('vat'),
-										"name" => "vat_no",
-										"value" =>''
+										"name" => "vat_no"
 									));
 									echo "<br /><hr />";
 									echo '<h1>'.$this->t('yourlogincredentials').'</h1>';
+									
+									GO_Base_Html_Password::render(array(
+										"required" => false,
+										"label" => $this->t('currentPassword'),
+										"name" => "currentPassword",
+										"value" => ''
+									));
+									
 									GO_Base_Html_Input::render(array(
 										"required" => false, // False because it cannot be changed so it will not be posted because this is a disabled field
 										"model" => $user,
@@ -145,7 +152,7 @@
 									));
 
 									GO_Base_Html_Password::render(array(
-										"required" => true,
+										"required" => false,
 										"label" => $this->t('password'),
 										"model" => $user,
 										"name" => "password",
@@ -153,7 +160,7 @@
 									));
 									
 									GO_Base_Html_Password::render(array(
-										"required" => true,
+										"required" => false,
 										"label" => $this->t('confirm'),
 										"name" => "passwordConfirm",
 										"value" => ''

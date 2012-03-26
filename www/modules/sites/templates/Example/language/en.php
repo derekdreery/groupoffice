@@ -60,8 +60,9 @@ $l['uploader_noFlash']='You browser doesn\'t have Adobe Flash installed.';
 
 $l['webshop_checkout']='Checkout';
 
-
-
-
+$l['currentPassword']='Current password';
+$l['currentPasswordError']='Current password is not correct';
 $l['userUsername']='Username';
 $l['userPassword']='Password';
+
+$l['formEditSuccess']='Your credentials are updated successfully!';
