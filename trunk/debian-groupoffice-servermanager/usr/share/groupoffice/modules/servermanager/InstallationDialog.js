@@ -527,7 +527,7 @@ Ext.extend(GO.servermanager.InstallationDialog, Ext.Window,{
 
 		this.modulesGrid = new GO.grid.MultiSelectGrid({
 			id:'sm-modules',
-			title:GO.servermanager.lang.modules,
+			title:GO.servermanager.lang.availableModules,
 			loadMask:true,
 			allowNoSelection:true,
 			store:new GO.data.JsonStore({
