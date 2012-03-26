@@ -3,7 +3,7 @@
 class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 
 	protected function ignoreAclPermissions() {
-		return array('register','resetpassword');
+		return array('register','resetpassword','profile');
 	}
 
 	/**
@@ -196,23 +196,50 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 			$this->pageRedirect($this->getSite()->login_path);
 		
 		$user = GO::user();
+		$contact = $user->createContact();
+		
+		if($contact->company)
+			$company = $contact->company;
+		else
+			$company = new GO_Addressbook_Model_Company();
 		
 		if (GO_Base_Util_Http::isPostRequest()) {
 
 			GO_Base_Html_Error::checkRequired();
 			
-			$user->password = $params['password'];
-			$user->passwordConfirm = $params['passwordConfirm'];
-
+			if(!empty($params['password'])){
+				if(!$user->checkPassword($params['currentPassword'])){
+					GO_Base_Html_Error::setError($this->t('currentPasswordError'),'currentPassword');
+				}else{
+					$user->password = $params['password'];
+					$user->passwordConfirm = $params['passwordConfirm'];
+				}
+			}else{
+				unset($params['password']);
+				unset($params['passwordConfirm']);
+			}
+				
+			$contact->setAttributes($params);
+			$user->setAttributes($params);	
+			$company->setAttributes($params);
+			
 			GO_Base_Html_Error::validateModel($user);
+			GO_Base_Html_Error::validateModel($contact);
+			GO_Base_Html_Error::validateModel($company);
+			
+			if(!GO_Base_Html_Error::hasErrors()){
+				$user->save();
+				$company->save();
+				$contact->company_id = $company->id;				
+				$contact->save();
+				$this->notifications->addNotification('profile', $this->t('formEditSuccess'), GO_Sites_NotificationsObject::NOTIFICATION_OK);
+			}
 		}
 		
-		
 		$params['user'] = $user;
-		$params['contact'] = GO::user()->contact;
-		
-		
-			
+		$params['contact'] = $contact;
+		$params['company'] = $company;
+
 		$this->renderPage($params);
 	}
 	
