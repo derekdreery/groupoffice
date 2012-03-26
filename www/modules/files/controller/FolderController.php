@@ -711,7 +711,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				$model->save();
 		}
 
-		if(!$model->files_folder_id)
+		if(empty($model->files_folder_id))
 			$model->files_folder_id=0;
 		
 		GO_Base_Fs_File::$allowDeletes=$oldAllowDeletes;
