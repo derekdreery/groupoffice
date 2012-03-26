@@ -407,7 +407,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 				$sql = "SHOW COLUMNS FROM `" . $this->tableName() . "`;";
 				$stmt = $this->getDbConnection()->query($sql);
-				while ($field = $stmt->fetch()) {
+				while ($field = $stmt->fetch()) {					
 					preg_match('/([a-zA-Z].*)\(([1-9].*)\)/', $field['Type'], $matches);
 					if ($matches) {
 						$length = $matches[2];
@@ -467,14 +467,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 							$gotype = 'unixtimestamp';			
 							break;
 						case 'name':
-							$required=true;
+							$required=true;							
 							break;
 						case 'user_id':
 							$gotype = 'user';
 							break;
 					}
 					
-					$default = $field['Default'];
+					if(strpos($field['Extra'],'auto_increment')!==false)
+						$default = null;
+					else
+						$default = isset($field['Default']) ? $field['Default'] : '';
+					
 					
 					//$required = is_null($default) && $field['Null']=='NO' && strpos($field['Extra'],'auto_increment')===false;
 
