@@ -304,12 +304,16 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	 * @return Array 
 	 */
 	public static function getGroupIds($userId) {
-		if (GO::user() && $userId == GO::user()->id) {
+		if (!GO::$disableModelCache && GO::user() && $userId == GO::user()->id) {
 			if (!isset(GO::session()->values['user_groups'])) {
 				GO::session()->values['user_groups'] = array();
 
-				$stmt = GO::getDbConnection()->query("SELECT group_id FROM go_users_groups WHERE user_id=" . intval($userId));
-				$stmt->setFetchMode(PDO::FETCH_ASSOC);
+				$stmt= GO_Base_Model_UserGroup::model()->find(
+								GO_Base_Db_FindParams::newInstance()
+								->select('t.group_id')
+								->criteria(GO_Base_Db_FindCriteria::newInstance()
+												->addCondition("user_id", $userId))
+								);
 				while ($r = $stmt->fetch()) {
 					GO::session()->values['user_groups'][] = $r['group_id'];
 				}
@@ -318,7 +322,14 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			return GO::session()->values['user_groups'];
 		} else {
 			$ids = array();
-			$stmt = GO::getDbConnection()->query("SELECT group_id FROM go_users_groups WHERE user_id=" . intval($userId));
+			$stmt= GO_Base_Model_UserGroup::model()->find(
+								GO_Base_Db_FindParams::newInstance()
+								->select('t.group_id')
+								->debugSql()
+								->criteria(GO_Base_Db_FindCriteria::newInstance()
+												->addCondition("user_id", $userId))
+								);
+			
 			while ($r = $stmt->fetch()) {
 				$ids[] = $r['group_id'];
 			}
