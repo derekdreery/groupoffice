@@ -279,3 +279,5 @@ $updates["201203260900"][]="ALTER TABLE `ab_contacts` CHANGE `zip` `zip` VARCHAR
 $updates["201203260900"][]="ALTER TABLE `ab_contacts` CHANGE `address` `address` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 $updates["201203260900"][]="ALTER TABLE `ab_contacts` CHANGE `address_no` `address_no` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 $updates["201203260900"][]="ALTER TABLE `ab_contacts` CHANGE `salutation` `salutation` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+
+$updates["201203260900"][]="ALTER TABLE `ab_addressbooks` DROP `shared_acl`";

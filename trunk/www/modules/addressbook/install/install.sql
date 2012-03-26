@@ -8,7 +8,6 @@ CREATE TABLE IF NOT EXISTS `ab_addressbooks` (
   `user_id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(50) DEFAULT NULL,
   `acl_id` int(11) NOT NULL DEFAULT '0',
-  `shared_acl` tinyint(1) NOT NULL,
   `default_salutation` varchar(255) NOT NULL,
   `files_folder_id` int(11) NOT NULL DEFAULT '0',
   `users` tinyint(1) NOT NULL DEFAULT '0',
