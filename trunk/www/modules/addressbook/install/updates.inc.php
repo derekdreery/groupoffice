@@ -281,3 +281,7 @@ $updates["201203260900"][]="ALTER TABLE `ab_contacts` CHANGE `address_no` `addre
 $updates["201203260900"][]="ALTER TABLE `ab_contacts` CHANGE `salutation` `salutation` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 
 $updates["201203260900"][]="ALTER TABLE `ab_addressbooks` DROP `shared_acl`";
+
+$updates["201203271433"][]="ALTER TABLE `ab_sent_mailings` CHANGE `total` `total` INT NOT NULL DEFAULT '0'";
+$updates["201203271433"][]="ALTER TABLE `ab_sent_mailings` CHANGE `sent` `sent` INT NOT NULL DEFAULT '0'";
+$updates["201203271433"][]="ALTER TABLE `ab_sent_mailings` CHANGE `errors` `errors` INT NOT NULL DEFAULT '0'";
