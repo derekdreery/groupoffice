@@ -231,10 +231,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			if(!$this->_filesFolder)
 				throw new Exception("Could not create files folder for ".$this->className()." ".$this->pk);
 		}
-		return $this->_filesFolder;
-		
+		return $this->_filesFolder;		
 	}
-	
+
 	/**
 	 * Set to a model to enabled custom fields. A relation customfieldsRecord will be
 	 * created automatically and saving and deleting custom fields will be handled.

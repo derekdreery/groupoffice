@@ -275,12 +275,18 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	 * @param string $newFileName. Leave blank to use the same name.
 	 * @return GO_Files_Model_File 
 	 */
-	public function copy($destinationFolder, $newFileName=false){
+	public function copy($destinationFolder, $newFileName=false, $appendNumberToNameIfExists=false){
 		
 		$copy = $this->duplicate(array('folder_id'=>$destinationFolder->id), false);
-		$this->fsFile->copy($copy->fsFile->parent(), $newFileName);
+		
 		if($newFileName)
 			$copy->name=$newFileName;
+		
+		if($appendNumberToNameIfExists)
+			$copy->appendNumberToNameIfExists();
+			
+		$this->fsFile->copy($copy->fsFile->parent(), $copy->name);
+		
 		$copy->save();
 		
 		return $copy;
