@@ -228,6 +228,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$folder_id = $c->checkModelFolder($this, true, true);
 
 			$this->_filesFolder=GO_Files_Model_Folder::model()->findByPk($folder_id);
+			if(!$this->_filesFolder)
+				throw new Exception("Could not create files folder for ".$this->className()." ".$this->pk);
 		}
 		return $this->_filesFolder;
 		
