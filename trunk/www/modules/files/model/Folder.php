@@ -659,6 +659,34 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			$file->save();
 		}
 	}
+	
+	public function copyContentsFrom(GO_Files_Model_Folder $sourceFolder, $mergeFolders=false){
+		//make sure database is in sync with filesystem.
+		$sourceFolder->syncFilesystem(true);
+		
+		
+		$stmt = $sourceFolder->folders();
+		while($subfolder = $stmt->fetch()){
+
+			$subfolder->systemSave=true;			
+			if(!$mergeFolders){
+				$subfolder->copy($this);
+			}else
+			{
+				if(($existingFolder = $this->hasFolder($subfolder->name))){
+					$existingFolder->copyContentsFrom($subfolder, true);
+				}else
+				{
+					$subfolder->copy($this);
+				}
+			}			
+		}
+		
+		$stmt = $sourceFolder->files();
+		while($file = $stmt->fetch()){
+			$file->copy($this, false, true);
+		}
+	}
 
 	/**
 	 * Find all shared folders for the current user
