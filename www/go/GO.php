@@ -428,6 +428,8 @@ class GO{
 				$_GET = stripslashes_array($_GET);
 				$_POST = stripslashes_array($_POST);
 				$_COOKIE = stripslashes_array($_COOKIE);
+				if(isset($_FILES))
+					$_FILES = stripslashes_array($_FILES);
 			}
 
 			umask(0);
