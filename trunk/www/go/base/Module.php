@@ -266,7 +266,7 @@ class GO_Base_Module extends GO_Base_Observable {
 	 * The response is added to the controller action parameters with index
 	 * 'firstRun'.
 	 */
-	public static function firstRun(){
+	public static function firstRun(){		
 		return '';
 	}
 	
