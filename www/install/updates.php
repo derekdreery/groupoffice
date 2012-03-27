@@ -178,3 +178,8 @@ $updates["201203261017"][]= "ALTER TABLE `go_users` CHANGE `theme` `theme` VARCH
 $updates["201203261017"][]= "ALTER TABLE `go_users` CHANGE `bank` `bank` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 $updates["201203261017"][]= "ALTER TABLE `go_users` CHANGE `bank_no` `bank_no` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 $updates["201203261017"][]= "ALTER TABLE `go_users` CHANGE `password_type` `password_type` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'crypt'";
+
+
+$updates["201203261017"][]= "ALTER TABLE `go_users`
+  DROP `bank`,
+  DROP `bank_no`;";
