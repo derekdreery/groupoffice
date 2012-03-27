@@ -1,9 +1,6 @@
 #!/usr/bin/php
 <?php
-echo "\nGroup-Office CLI - Copyright Intermesh BV.\n\n";
 
-if(PHP_SAPI!='cli')
-	exit("ERROR: This script must be run on the command line\n\n");
 
 $root = dirname(__FILE__).'/';
 chdir($root);
@@ -20,6 +17,11 @@ if(isset($args['c'])){
 //initialize autoloading of library
 require_once($root.'go/GO.php');
 GO::init();
+
+echo "\nGroup-Office CLI - Copyright Intermesh BV.\n\n";
+
+if(PHP_SAPI!='cli')
+	exit("ERROR: This script must be run on the command line\n\n");
 
 if(empty($args['r'])){
 	
