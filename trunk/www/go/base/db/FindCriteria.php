@@ -277,7 +277,7 @@ class GO_Base_Db_FindCriteria {
 		$exact = $useExact ? '%' : '';
 		$value = $exact.$value.$exact;
 		
-		$this->_appendConditionString($tableAlias, $field, $value, $comparator);	
+		$this->_appendConditionString('t', $field, $value, $comparator, false);	
 	
 		return $this;
 	}
