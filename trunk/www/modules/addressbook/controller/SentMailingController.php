@@ -146,9 +146,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 
 		$failedRecipients = array();
 
-		$bodyWithTags = $message->getBody();
-		
-		
+		$bodyWithTags=$message->getBody();
 
 		foreach ($mailing->contacts as $contact) {			
 			
@@ -159,7 +157,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 									'token'=>md5($contact->ctime.$contact->addressbook_id.$contact->email) //token to check so that users can't unsubscribe other members by guessing id's
 									), true, true);
 			
-			$body = str_replace('%unsubscribe_href%', $unsubscribeHref, $body); //curly brackets don't work inside links in browser wysiwyg editors.
+			$body = str_replace('%unsubscribe_href%', $unsubscribeHref, $bodyWithTags); //curly brackets don't work inside links in browser wysiwyg editors.
 			
 			$body = GO_Addressbook_Model_Template::model()->replaceCustomTags($body,array(				
 				'unsubscribe_link'=>'<a href="'.$unsubscribeHref.'">'.GO::t("unsubscription","addressbook").'</a>'
@@ -179,14 +177,14 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 									'token'=>md5($company->ctime.$company->addressbook_id.$company->email) //token to check so that users can't unsubscribe other members by guessing id's
 									), true, true);
 			
-			$body = str_replace('%unsubscribe_href%', $unsubscribeHref, $body); //curly brackets don't work inside links in browser wysiwyg editors.
+			$body = str_replace('%unsubscribe_href%', $unsubscribeHref, $bodyWithTags); //curly brackets don't work inside links in browser wysiwyg editors.
 			
 			$body = GO_Addressbook_Model_Template::model()->replaceCustomTags($body,array(				
 				'unsubscribe_link'=>'<a href="'.$unsubscribeHref.'">'.GO::t("unsubscription","addressbook").'</a>'
 			), true);
 			
 			$message->setTo($company->email, $company->name);
-			$message->setBody(GO_Addressbook_Model_Template::model()->replaceModelTags($bodyWithTags, $company));
+			$message->setBody(GO_Addressbook_Model_Template::model()->replaceModelTags($body, $company));
 			$this->_sendmail($message, $company, $mailer, $mailing);			
 		}
 
