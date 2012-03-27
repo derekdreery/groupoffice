@@ -535,8 +535,15 @@ Ext.extend(GO.servermanager.InstallationDialog, Ext.Window,{
 				baseParams: {
 					installation_id:0
 				},
-				fields: ['id','name','installed','checked']
-			})
+				fields: ['id','name','installed','checked', "usercount"]
+			}),
+			showHeaders:true,
+			noSingleSelect:true,
+			extraColumns:[{
+					header:'Users',
+					dataIndex:'usercount',
+					width:60
+			}]
 		});
 		
 		this.modulesGrid.on('show',function(){			

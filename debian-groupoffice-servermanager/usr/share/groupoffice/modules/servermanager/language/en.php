@@ -69,3 +69,4 @@ $l["billing"]='Billing module';
 $l["enabled"]='Enabled';
 
 $l['availableModules']='Available modules';
+$l['usersPerModule']='Users per module';

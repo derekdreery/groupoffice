@@ -198,15 +198,12 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		while($attributes = array_shift($iUsers)){
 			$iUser = new GO_ServerManager_Model_InstallationUser();
 			
-			$user_id = $attributes['id'];
 			$modules = $attributes['modules'];
 			unset($attributes['id'],$attributes['modules']);
 			
 			$iUser->setAttributes($attributes, false);
 			$iUser->installation_id=$this->id;
 			$iUser->save();
-			
-			$modStmt = GO_Base_Model_Module::model()->find(GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::READ_PERMISSION, $user_id));
 			while($module = array_shift($modules)){
 				$iModule = new GO_ServerManager_Model_InstallationUserModule();
 				$iModule->user_id=$iUser->id;
@@ -235,6 +232,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 				$this->mailbox_usage+=$domain->usage;
 			}
 		}
+		$this->mailbox_usage*=1024;
 	}
 	
 	private function _calculateDatabaseSize($dbName){
