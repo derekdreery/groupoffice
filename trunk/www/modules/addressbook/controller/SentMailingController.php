@@ -79,7 +79,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			mkdir($log, 0755, true);
 
 		$log .= $mailing_id . '.log';
-		$cmd = GO::config()->cmd_php . ' '.GO::config()->root_path.'index.php -r=addressbook/sentMailing/batchSend -c="' . GO::config()->get_config_file() . '" --mailing_id=' . $mailing_id . ' >> ' . $log;
+		$cmd = GO::config()->cmd_php . ' '.GO::config()->root_path.'groupofficecli.php -r=addressbook/sentMailing/batchSend -c="' . GO::config()->get_config_file() . '" --mailing_id=' . $mailing_id . ' >> ' . $log;
 
 		if (!GO_Base_Util_Common::isWindows())
 			$cmd .= ' 2>&1 &';
