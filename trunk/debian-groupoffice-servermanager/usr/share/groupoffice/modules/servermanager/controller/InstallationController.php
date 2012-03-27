@@ -276,6 +276,23 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		return parent::formatStoreRecord($record, $model, $store);
 	}
 	
+	private function _countModuleUsers($installation_id, $module_id){
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->select('count(*) AS usercount')
+						->joinModel(array('model'=>'GO_ServerManager_Model_InstallationUser',  'localField'=>'user_id','tableAlias'=>'u'))
+						->single()
+						->debugSql()
+						->criteria(
+										GO_Base_Db_FindCriteria::newInstance()
+										->addCondition('installation_id', $installation_id,'=','u')
+										->addCondition('module_id', $module_id)
+										);
+		
+		$record = GO_ServerManager_Model_InstallationUserModule::model()->find($findParams);
+		return $record['usercount'];
+	}
+	
 	
 	protected function actionModules($params){
 
@@ -297,7 +314,8 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 						'id'=>$module->id(),
 						'name'=>$module->name(),
 						'description'=>$module->description(),
-						'checked'=>in_array($module->id(), $allowedModules)
+						'checked'=>in_array($module->id(), $allowedModules),
+						'usercount'=>!empty($params['installation_id']) ? $this->_countModuleUsers($params['installation_id'], $module->id()) : '-'
 				);
 			}
 		}
