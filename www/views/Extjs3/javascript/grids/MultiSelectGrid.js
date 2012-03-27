@@ -41,8 +41,7 @@ GO.grid.MultiSelectGrid = function (config){
 
 	Ext.apply(config, {
 		plugins: [this.checkColumn],		
-		layout:'fit',
-		cls: 'go-grid3-hide-headers',
+		layout:'fit',		
 		autoScroll:true,
 		columns:this.getColumns(),		
 		autoExpandColumn:'name',
@@ -50,13 +49,20 @@ GO.grid.MultiSelectGrid = function (config){
 			emptyText: GO.lang['strNoItems']
 		})
 	});
-
+	
+	if(!config.showHeaders)
+		config.cls='go-grid3-hide-headers';
+	
+	if(config.extraColumns)
+		config.columns = config.columns.concat(config.extraColumns);
+	
 	GO.grid.MultiSelectGrid.superclass.constructor.call(this, config);
 
-	this.on('rowclick',function(grid, rowIndex){
+	if(!config.noSingleSelect){
+		this.on('rowclick',function(grid, rowIndex){
 				this.applyFilter([grid.store.getAt(rowIndex).id]);
 			}, this);
-
+	}
 
 	this.store.on('load', function()
 	{
@@ -121,11 +127,12 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 	selectedAll : false,
 	
 	getColumns : function (){
-		return [this.checkColumn,{
+		var columns = [this.checkColumn,{
 			header:GO.lang.strName,
 			dataIndex: 'name',
 			id:'name'
-		}];
+		}];		
+		return columns;
 	},
 
 	selectAll : function()
