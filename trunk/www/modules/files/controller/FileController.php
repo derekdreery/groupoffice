@@ -113,7 +113,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		
 		$file = GO_Files_Model_File::model()->findByPk($params['id']);
 		$file->random_code=GO_Base_Util_String::randomPassword(11);
-		$file->expire_time = $params['expire_time'];
+		$file->expire_time = GO_Base_Util_Date::date_add($params['expire_time'],1);
 		$file->save();
 				
 		$html=$params['content_type']=='html';
