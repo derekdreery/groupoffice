@@ -27,6 +27,12 @@ try{
 					//$response['results'][]=array('name'=>'Remove duplicate folders and files', 'script'=>$GLOBALS['GO_MODULES']->modules['files']['url'].'scripts/removeduplicatefolders.php');
 					$response['results'][]=array('name'=>'Sync filesystem with files database', 'script'=>GO::url('files/folder/syncFilesystem'));
 				}
+				
+				if(isset($GLOBALS['GO_MODULES']->modules['filesearch']))
+				{
+					//$response['results'][]=array('name'=>'Remove duplicate folders and files', 'script'=>$GLOBALS['GO_MODULES']->modules['files']['url'].'scripts/removeduplicatefolders.php');
+					$response['results'][]=array('name'=>'Update filesearch index', 'script'=>GO::url('filesearch/filesearch/sync'));
+				}
 
 				if(!empty($GLOBALS['GO_CONFIG']->phpMyAdminUrl))
 					$response['results'][]=array('name'=>'PhpMyAdmin', 'script'=>$GLOBALS['GO_MODULES']->modules['tools']['url'].'phpmyadmin.php');

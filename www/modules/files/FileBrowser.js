@@ -1000,6 +1000,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			params.working_folder_id=this.folder_id;
 			
 			GO.request({
+				timeout:300000,
 				maskEl:this.getEl(),
 				url:'files/folder/decompress',
 				params:params,
@@ -1043,6 +1044,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			var store = this.getActiveGridStore();
 
 			GO.request({
+				timeout:300000,
 				maskEl:this.getEl(),
 				url:'files/folder/compress',
 				params:params,

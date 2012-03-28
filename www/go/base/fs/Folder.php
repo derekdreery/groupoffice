@@ -181,7 +181,8 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 			$permissionsMode=GO::config()->folder_create_mode;		
 		
 		if(is_dir($this->path)){
-			chmod($this->path, $permissionsMode);
+			if(!chmod($this->path, $permissionsMode))
+				GO::debug("chmod failed on ".$this->path);
 			return true;
 		}		
 		
