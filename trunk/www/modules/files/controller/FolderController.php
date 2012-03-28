@@ -57,10 +57,12 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 //		}
 //		
 		
-		if(!empty($params['sync_folder_id'])){
-			$syncFolder = GO_Files_Model_Folder::model()->findByPk($params['sync_folder_id']);
-			$syncFolder->syncFilesystem();
-		}
+		
+		//probably not necessary
+//		if(!empty($params['sync_folder_id'])){
+//			$syncFolder = GO_Files_Model_Folder::model()->findByPk($params['sync_folder_id']);
+//			$syncFolder->syncFilesystem();
+//		}
 		
 		$response = array();
 		
@@ -830,7 +832,6 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		if (!GO_Base_Util_Common::isWindows())
 			putenv('LANG=en_US.UTF-8');
 		
-		
 		$sources = json_decode($params['decompress_sources'], true);
 
 
@@ -844,7 +845,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$file = new GO_Base_Fs_File(GO::config()->file_storage_path.$filePath);
 			switch($file->extension()) {
 				case 'zip':
-					$cmd = GO::config()->cmd_unzip.' "'.$file->path().'"';					
+					$cmd = GO::config()->cmd_unzip.' -n "'.$file->path().'"';					
 					break;
 				case 'gz':
 				case 'tgz':
