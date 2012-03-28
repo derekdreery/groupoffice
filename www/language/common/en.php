@@ -457,6 +457,7 @@ $l['reminder']='Reminder';
 $l['unknown']='Unknown';
 $l['time']='Time';
 $l['dontChangeAdminsPermissions']='You can\'t change the permissions of the admin group';
+$l['dontChangeAdminPermissions']='You can\'t change the permissions of the admin';
 $l['dontChangeOwnersPermissions']='You can\'t change the permissions of the owner';
 $l['running_sys_upgrade']='Running required system update';
 $l['sys_upgrade_text']='One moment please. All output will be logged.';

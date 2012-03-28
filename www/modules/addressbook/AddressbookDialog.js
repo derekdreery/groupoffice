@@ -6,7 +6,8 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 			titleField:'name',
 			title:GO.addressbook.lang.addressbook,
 			formControllerUrl: 'addressbook/addressbook',
-			width:700
+			width:700,
+			height:440
 			//fileUpload:true
 		});
 		

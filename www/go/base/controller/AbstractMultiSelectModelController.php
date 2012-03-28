@@ -10,7 +10,15 @@
  */
 
 /**
- * Abstract class for Group-Office Models that needed to be multiselected.
+ * Abstract class for Group-Office Models that needed to be multiselected. The
+ * simplest problem you can solve with controllers of this type are when two
+ * model types have a MANY-MANY relation, and the goal is to select all records
+ * of model modelName that are related to a single model that can be identified
+ * using linkModelField.
+ * 
+ * The return values of both linkModelField() and getRemoteKey() MUST together
+ * identify relations between the two models. The return value of
+ * linkModelName() MUST be the name of the model that contains these relations.
  * 
  * Any function that starts with action will be publicly accessible by:
  * 
@@ -30,22 +38,28 @@
  * @version $Id: AbstractMultiSelectModelController.php 7607 2011-06-15 09:17:42Z wsmits $
  * @copyright Copyright Intermesh BV.
  * @author Wesley Smits <wsmits@intermesh.nl> 
+ * @author WilmarVB <wilmar@intermesh.nl>
+ * @author Merijn Schering <mschering@intermesh.nl>
  * @abstract
  */
 abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_Base_Controller_AbstractController{
 		
 	/**
-	 * The current model from where the relation is called
+	 * The name of the model we are showing and adding to the other model.
+	 * 
+	 * eg. When selecting calendars for a user in the sync settings this is set to GO_Calendar_Model_Calendar
 	 */
 	abstract public function modelName();
 	
 	/**
-	 * The model that handles the MANY_MANY relation.
+	 * The link model that handles the MANY_MANY relation.
+	 * 
+	 * eg. GO_Sync_Model_UserCalendars It's the link table between users and calendars.
 	 */
 	abstract public function linkModelName();
 	
 	/**
-	 * The key (from the combined key) of the linkmodel that identifies the linked model.
+	 * The key (from the combined key) of the linkmodel that identifies the model as defined in self::modelName().
 	 */
 	abstract public function linkModelField();
 	
@@ -71,7 +85,7 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 		$store = GO_Base_Data_Store::newInstance($model);
 		
 		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
-			->addCondition($this->_getRemoteKey(), $params['model_id'],'=','lt')
+			->addCondition($this->getRemoteKey(), $params['model_id'],'=','lt')
 			->addCondition($model->primaryKey(), 'lt.'.$this->linkModelField(), '=', 't', true, true);			
 		
 		$findParams = $store->getDefaultParams($params);
@@ -91,8 +105,24 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 		return $store->getData();
 	}
 	
+	/**
+	 * Override this to make changes in the columnModel of this controller's
+	 * selectNewStore and selectedStore.
+	 * @param GO_Base_Data_ColumnModel $cm 
+	 */
 	protected function formatColumns(GO_Base_Data_ColumnModel $cm){
 		
+	}
+	
+	/**
+	 * This MUST be overridden if you extend this class to handle models with
+	 * more than three primary keys.
+	 * @param array $params
+	 * @return array With keys being PK names and values being PK values of the
+	 * model to be deleted. 
+	 */
+	protected function getExtraDeletePks($params){
+		return array($this->getRemoteKey()=>$params['model_id']);
 	}
 	
 	/**
@@ -110,19 +140,22 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 	 */
 	protected function actionSelectedStore($params){
 		
+		$response = array();
+		
 		if(!empty($params['add'])) {
-			$ids = json_decode($params['add'],true);
-			
-			$linkmodelField = $this->linkModelField();
-			$remoteKey = $this->_getRemoteKey();
-			$linkModelName = $this->linkModelName();
-			
-			
-			foreach($ids as $id){
-				$linkModel = new $linkModelName();
-				$linkModel->$linkmodelField = $id;
-				$linkModel->$remoteKey = $params['model_id'];
-				$linkModel->save();
+			if($this->beforeAdd($params)){
+				$ids = json_decode($params['add'],true);
+
+				$linkmodelField = $this->linkModelField();
+				$remoteKey = $this->getRemoteKey();
+				$linkModelName = $this->linkModelName();
+
+				foreach($ids as $id){
+					$linkModel = new $linkModelName();
+					$linkModel->$linkmodelField = $id;
+					$linkModel->$remoteKey = $params['model_id'];
+					$linkModel->save();
+				}
 			}
 		}
 		
@@ -131,11 +164,30 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 		
 		$store = GO_Base_Data_Store::newInstance($model);
 		
-		$store->processDeleteActions($params, $this->linkModelName(), array($this->_getRemoteKey()=>$params['model_id']));
+		try {
+			if($this->beforeDelete($params)){
+				$store->processDeleteActions(
+					$params,
+					$this->linkModelName(),
+					$this->getExtraDeletePks($params)
+					);
+			} else {
+				$response['deleteSuccess'] = true;
+			}
+		} catch (Exception $e) {
+			$response['deleteSuccess'] = false;
+			$response['deleteFeedback'] = $e->getMessage();
+		}
 		
 		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
-			->addCondition($model->primaryKey(), 'lt.'.$this->linkModelField(), '=', 't', true, true)
-			->addCondition($this->_getRemoteKey(), $params['model_id'],'=','lt');			
+			->addCondition(
+							$model->primaryKey(),
+							'lt.'.$this->linkModelField(),
+							'=',
+							't',
+							true,
+							true)
+			->addCondition($this->getRemoteKey(),$params['model_id'],'=','lt');			
 		
 		$findParams = $store->getDefaultParams($params)
 						->ignoreAcl()
@@ -149,7 +201,51 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 		
 		$this->formatColumns($store->getColumnModel());
 
-		return $store->getData();
+		$response = array_merge($response,$store->getData());
+		
+		return $response;
+	}
+	
+	/**
+	 * Called by actionSelectedStore. It can be simultaneously overridden and
+	 * called upon to handle cases where linking linkedModels to the current model
+	 * is not allowed.
+	 * @param array $params The client parameters. When overriding, you may find
+	 * $params['model_id'] and $params['add'] to be interesting. The latter is a
+	 * list of ids of linkedModels to be linked.
+	 * @return boolean Iff true is returned, linking linkedModels will be
+	 * initiated.
+	 */
+	protected function beforeAdd(array $params) {
+		return true;
+	}
+	
+	/**
+	 * Called by actionSelectedStore. It can be simultaneously overridden and
+	 * called upon to handle cases where unlinking linkedModels to the current
+	 * model is not allowed.
+	 * @param array $params The client parameters. When overriding, you may find
+	 * $params['model_id'] and $params['delete_keys'] to be interesting. The
+	 * latter is a list of ids of linkedModels to be unlinked.
+	 * @return boolean Iff true is returned, unlinking linkedModels will be
+	 * initiated.
+	 */
+	protected function beforeDelete(array $params) {
+		return true;
+	}
+	
+	/**
+	 * This function is called in actionUpdateRecord, at the brink of initiating
+	 * the record updating process. You can judge whether or not $record should be
+	 * updated in this function. A nice feature is that you can force the
+	 * record fields to be updated to values of your own choosing.
+	 * @param array $params Client parameters.
+	 * @param array &$record The record to be judged on 
+	 * @return boolean Iff true, the initiating record updating process's brink
+	 * will be crossed. I.e., the record updating process will be initiated.
+	 */
+	protected function beforeUpdateRecord($params,&$record) {
+		return true;
 	}
 	
 	/**
@@ -158,7 +254,7 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 	 * 
 	 * @return String The remote key 
 	 */
-	private function _getRemoteKey(){
+	protected function getRemoteKey(){
 		$linkModel = GO::getModel($this->linkModelName());
 		$key = $linkModel->primaryKey();
 		
@@ -168,18 +264,16 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 	
 	public function actionUpdateRecord($params) {
 		$response = array('success'=>true);
-		
 		$record = json_decode($params['record'], true);
-		
-		$primaryKeys = array(
-				$this->_getRemoteKey()=>$params['model_id'], //eg. user_id
+		if ($this->beforeUpdateRecord($params,$record)) {
+			$primaryKeys = array(
+				$this->getRemoteKey()=>$params['model_id'], //eg. user_id
 				$this->linkModelField()=>$record['id'] //eg. calendar_id
-						);
-		
-		$linkModel = GO::getModel($this->linkModelName())->findByPk($primaryKeys);
-		$linkModel->setAttributes($record);
-		$linkModel->save();
-		
+			);
+			$linkModel = GO::getModel($this->linkModelName())->findByPk($primaryKeys);
+			$linkModel->setAttributes($record);
+			$linkModel->save();
+		}
 		return $response;
 	}
 

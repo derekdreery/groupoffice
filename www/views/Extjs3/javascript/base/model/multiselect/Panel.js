@@ -20,6 +20,7 @@ GO.base.model.multiselect.panel = function(config){
 					},
 					success:function(){
 						this.updateMask.hide();
+						this.store.load();
 					},
 					scope: this
 				});

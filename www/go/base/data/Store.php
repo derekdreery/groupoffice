@@ -100,11 +100,13 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 	}
 	
   /**
-   * Handle a delete request when a grid loads.
-   * 
+   * Handle a delete request when a grid loads. For proper use, make sure that
+	 * the array $params['delete_keys'] combined with the array $extraPkValue are
+	 * enough to identify the model that have to be deleted.
+	 * 
 	 * @param array $params The action request params
    * @param type $deleteModelName Name of the model to delete
-   * @param array $extraPkValue If your model has more then one pk. Then you can supply the other keys in an array eg. array('group_id'=>1)
+   * @param array $extraPkValue If your model has more then one pk. Then you can supply the other keys in an array eg. array('group_id'=>9,'user_id'=>0)
    */
 	public function processDeleteActions($params, $deleteModelName, $extraPkValue=false){
 		

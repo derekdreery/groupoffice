@@ -130,7 +130,7 @@ GO.files.FolderPropertiesDialog = function(config){
 		title:GO.lang['strProperties'],
 		layout:'fit',
 		width:500,
-		height:400,
+		height:440,
 		closeAction:'hide',
 		items:this.formPanel,
 		buttons:[
