@@ -11,7 +11,7 @@ GO.modules.ModulePermissionsWindow = Ext.extend(GO.Window,{
 			layout : 'fit',
 			modal : false,
 			height : 500,
-			width : 400,
+			width : 440,
 			modal:true,
 			closable:false,
 			closeAction:'hide',

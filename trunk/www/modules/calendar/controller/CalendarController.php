@@ -74,7 +74,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 	public function formatStoreRecord($record, $model, $store) {
 		
 		$record['user_name']=$model->user->name;
-		$record['group_name']=$model->group_name;
+		$record['group_name']= !empty($model->group) ? $model->group->name : '';
 		if(GO::modules()->customfields)
 			$record['customfields']=GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Calendar_Model_Event", $model->group_id);
 		

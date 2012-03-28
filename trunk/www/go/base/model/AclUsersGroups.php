@@ -43,4 +43,10 @@ class GO_Base_Model_AclUsersGroups extends GO_Base_Db_ActiveRecord {
   public function primaryKey() {
     return array('acl_id','user_id','group_id');
   }
+	
+	public function defaultAttributes() {
+		$attr = parent::defaultAttributes();
+		$attr['user_id'] = 0;
+		return $attr;
+	}
 }

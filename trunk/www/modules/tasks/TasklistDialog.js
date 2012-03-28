@@ -122,7 +122,7 @@ GO.tasks.TasklistDialog = function(config)
 					layout:'fit',
 					modal:false,
 					height:500,
-					width:400,
+					width:440,
 					closeAction:'hide',
 					items: this.tabPanel,
 					buttons:[

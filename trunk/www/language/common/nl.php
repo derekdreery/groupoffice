@@ -163,6 +163,7 @@ $l['reminder']='Herinnering';
 $l['unknown']='Onbekend';
 $l['time']='Tijd';
 $l['dontChangeAdminsPermissions']='U kunt de toegangsrechten van de beheerdersgroep niet wijzigen';
+$l['dontChangeAdminPermissions']='U kunt de toegangsrechten van de beheerder niet wijzigen';
 $l['dontChangeOwnersPermissions']='U kunt de toegangsrechten van de eigenaar niet wijzigen';
 $l['running_sys_upgrade']='Bezig met uitvoeren van vereiste systeemupdate';
 $l['sys_upgrade_text']='Een ogenblik geduld a.u.b. Alle uitvoer wordt in een logfile opgeslagen.';
