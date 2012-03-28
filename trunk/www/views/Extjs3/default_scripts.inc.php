@@ -107,7 +107,7 @@ if(!isset($lang['common']['extjs_lang'])) $lang['common']['extjs_lang'] = $GLOBA
 
 $file = 'base-'.md5($GLOBALS['GO_LANGUAGE']->language.$GLOBALS['GO_CONFIG']->mtime).'.js';
 $path = $GLOBALS['GO_CONFIG']->file_storage_path.'cache/'.$file;
-$url = $GLOBALS['GO_CONFIG']->host.'compress.php?file='.$file;
+
 
 if($GLOBALS['GO_CONFIG']->debug || !file_exists($path)) {
 	
@@ -222,6 +222,7 @@ if($GLOBALS['GO_CONFIG']->debug || !file_exists($path)) {
 
 if(!$GLOBALS['GO_CONFIG']->debug) {
 	$scripts=array();
+	$url = $GLOBALS['GO_CONFIG']->host.'compress.php?file='.$file.'&mtime='.filemtime($path);
 	$scripts[]=$url;
 }
 
@@ -362,7 +363,7 @@ if(count($load_modules)) {
 	//the same database and this can break things if the settings are cached.
 	$file = $GLOBALS['GO_SECURITY']->user_id.'-'.md5($GLOBALS['GO_CONFIG']->mtime.$GLOBALS['GO_CONFIG']->get_config_file().':'.$GLOBALS['GO_LANGUAGE']->language.':'.implode(':', $modules)).'.js';
 	$path = $GLOBALS['GO_CONFIG']->file_storage_path.'cache/'.$file;
-	$url = $GLOBALS['GO_CONFIG']->host.'compress.php?file='.$file;
+	
 	
 	if(!$GLOBALS['GO_CONFIG']->debug) {
 		if(!file_exists($path)) {
@@ -385,6 +386,8 @@ if(count($load_modules)) {
 				file_put_contents($path,"\n\n".file_get_contents($script),FILE_APPEND);
 			}
 		}
+		
+		$url = $GLOBALS['GO_CONFIG']->host.'compress.php?file='.$file.'&mtime='.filemtime($path);
 
 		$scripts=array($url);
 
