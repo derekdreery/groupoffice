@@ -395,6 +395,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$modelName = $this->model;
 		$model = GO::getModel($modelName)->findByPk($this->getPrimaryKeyFromParams($params));
 		
+		if(!$model)
+			throw new GO_Base_Exception_NotFound();
+		
 		$response = $this->beforeDisplay($response, $model, $params);
 		
 		//todo build in new style. Now it's necessary for old library functions
