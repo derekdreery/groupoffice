@@ -308,8 +308,8 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 * @param boolean $htmlspecialchars Set to true to escape special html characters. eg. & becomes &amp.
 	 * @return string 
 	 */
-	public function pageUrl($path='', $params=array(), $relative=true, $htmlspecialchars=false){
-		return $this->_site->pageUrl($path, $params, $relative);
+	public function pageUrl($path='', $params=array(), $relative=true, $htmlspecialchars=true){
+		return $this->_site->pageUrl($path, $params, $relative,$htmlspecialchars);
 	}
 	
 	
