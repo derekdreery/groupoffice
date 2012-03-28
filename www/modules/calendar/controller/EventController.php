@@ -683,12 +683,16 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		if($participant->user){
 			//if it's a GO user then put the event in it's default calendar.
 			$event = $participant->event->getCopyForParticipant($participant->user);
+			
+			//notify organizer
+			$this->_sendInvitation(array(), $event, false, array(), 'REPLY', $participant);
 		}else
 		{
 			$event = false;
+			//notify organizer
+			$this->_sendInvitation(array(), $participant->event, false, array(), 'REPLY', $participant);
 		}
-		//notify organizer
-		$this->_sendInvitation(array(), $event, false, array(), 'REPLY', $participant);
+		
 		
 		$this->render('invitation', array('participant'=>$participant, 'event'=>$event));
 	}
