@@ -156,6 +156,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$pk = $this->getPrimaryKeyFromParams($params);
 		if(!empty($pk)){
 			$model = GO::getModel($modelName)->findByPk($pk);
+			
+			if(!$model)
+				throw new GO_Base_Exception_NotFound();
+			
 		}else{
 			$model = new $modelName;
 			$model->setAttributes($params);
