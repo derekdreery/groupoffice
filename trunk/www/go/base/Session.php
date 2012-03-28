@@ -190,7 +190,7 @@ class GO_Base_Session extends GO_Base_Observable{
 			GO::language()->setLanguage($user->language);
 
 			if($countLogin){
-				$user->last_login=time();
+				$user->lastlogin=time();
 				$user->logins++;
 				$user->save();
 				
