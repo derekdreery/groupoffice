@@ -21,15 +21,15 @@ GO.LinksContextMenu = function(config)
 	config['minWidth']=180;
 					
 
-	this.deleteButton = new Ext.menu.Item({
-					iconCls: 'btn-delete',
-					text: GO.lang['cmdDelete'],
-					cls: 'x-btn-text-icon',
-					handler: function(){
-						this.fireEvent('delete', this, this.selected);
-					},
-					scope: this
-				});
+//	this.deleteButton = new Ext.menu.Item({
+//					iconCls: 'btn-delete',
+//					text: GO.lang['cmdDelete'],
+//					cls: 'x-btn-text-icon',
+//					handler: function(){
+//						this.fireEvent('delete', this, this.selected);
+//					},
+//					scope: this
+//				});
 				
 	this.unlinkButton = new Ext.menu.Item({
 					iconCls: 'btn-unlink',
@@ -53,7 +53,7 @@ GO.LinksContextMenu = function(config)
 	
 	config['items']=[
 				this.propertiesButton,
-				this.deleteButton,
+				//this.deleteButton,
 				this.unlinkButton
 				];
 				
