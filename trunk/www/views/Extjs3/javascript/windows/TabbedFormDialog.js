@@ -311,7 +311,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			
 		this.setRemoteModelId(remoteModelId);
 		
-		if(this.loadOnNewModel)
+		if(remoteModelId || this.loadOnNewModel)
 		{
 			
 			this.formPanel.load({
