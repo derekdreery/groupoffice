@@ -514,3 +514,5 @@ $l['attributeInvalid']='Field %s was invalid';
 $l['operationStopped']='Operation ended.';
 $l['delimiter']='Delimiter';
 $l['enclosure']='Enclosure';
+
+$l['notFound']='The requested item was not found.';
