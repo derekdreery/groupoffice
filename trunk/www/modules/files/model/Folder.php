@@ -161,7 +161,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		
 		return parent::beforeSave();
 	}
-
+	
 	protected function afterSave($wasNew) {
 
 		if ($wasNew) {
@@ -335,6 +335,10 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * @return GO_Files_Model_File 
 	 */
 	public function addFilesystemFile(GO_Base_Fs_File $file){
+		
+		if(!GO_Files_Model_File::checkQuota($file->size()))
+			throw new GO_Base_Exception_InsufficientDiskspace();
+		
 		$file->move($this->fsFolder);
 		return $this->addFile($file->name());
 	}

@@ -62,6 +62,9 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 		if ($folder->getPermissionLevel() < GO_Base_Model_Acl::WRITE_PERMISSION)
 			throw new Sabre_DAV_Exception_Forbidden();
 
+		if(!GO_Files_Model_File::checkQuota(strlen($data)))
+			throw new Sabre_DAV_Exception_InsufficientStorage();
+		
 		$newFile = new GO_Base_Fs_File($this->path . '/' . $name);
 		$newFile->putContents($data);
 

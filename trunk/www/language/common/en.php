@@ -302,6 +302,7 @@ $l['totals']='Totals';
 $l['printPage']='Page %s of %s';
 $l['htmldirection']= 'ltr';
 $l['quotaExceeded']='You don\'t have anymore diskspace left. Please delete some files or contact your provider to raise the quota';
+$l['youAreUsing']='You are using %s of %s';
 $l['errorsInForm'] = 'There were errors in the form. Correct them and try again.';
 $l['moduleRequired']='The %s module is required for this function';
 $l['loadingCore']= 'Loading base system';
