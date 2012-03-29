@@ -165,8 +165,17 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		return parent::beforeDelete();
 	}
 	
+	public static function checkQuota($newBytes){
+		if(GO::config()->quota>0){				
+			$currentQuota = GO::config()->get_setting('file_storage_usage');			
+			return $currentQuota+$newBytes<=GO::config()->quota;
+		}
+	}
+	
 	protected function beforeSave() {		
+		
 		if(!$this->isNew){
+			
 			if($this->isModified('name')){				
 				//rename filesystem file.
 				//throw new Exception($this->getOldAttributeValue('name'));
@@ -219,8 +228,32 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	protected function getFsFile() {
 		return new GO_Base_Fs_File(GO::config()->file_storage_path . $this->path);
 	}
+	
+	private function _addQuota(){
+		if(GO::config()->quota>0 && ($this->isModified('size') || $this->isNew)){
+			$sizeDiff = $this->fsFile->size()-$this->getOldAttributeValue('size');
+			
+			GO::debug("Adding quota: $sizeDiff");
+			
+			GO::config()->save_setting("file_storage_usage", GO::config()->get_setting('file_storage_usage')+$sizeDiff);
+		}
+	}
+	
+	private function _removeQuota(){
+		GO::debug("Removing quota: $this->size");
+		GO::config()->save_setting("file_storage_usage", GO::config()->get_setting('file_storage_usage')-$this->size);
+	}
+	
+	protected function afterSave($wasNew) {
+		$this->_addQuota();
+		
+		return parent::afterSave($wasNew);
+	}
 
 	protected function afterDelete() {
+		
+		$this->_removeQuota();
+		
 		$this->fsFile->delete();
 		
 		$versioningFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'versioning/'.$this->id);
@@ -315,6 +348,9 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		
 		if($this->isLocked())
 			throw new GO_Files_Exception_FileLocked();
+//		for safety allow replace action
+//		if(!GO_Files_Model_File::checkQuota($fsFile->size()-$this->size))
+//			throw new GO_Base_Exception_InsufficientDiskSpace();
 		
 		$this->saveVersion();
 				
@@ -323,7 +359,15 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		$this->mtime=$fsFile->mtime();
 	
 		$this->save();
-	}	
+	}
+	
+	public function putContents($data){
+//		for safety allow replace actions
+//		if(!GO_Files_Model_File::checkQuota(strlen($data)))
+//			throw new GO_Base_Exception_InsufficientDiskSpace();
+		
+		$this->fsFile->putContents($data);
+	}
 	
 	/**
 	 * Copy current file to the versioning system. 
