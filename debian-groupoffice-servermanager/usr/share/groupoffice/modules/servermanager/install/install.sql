@@ -106,3 +106,31 @@ CREATE TABLE `sm_reports` (
   KEY `billing` (`billing`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
         
+
+
+CREATE TABLE IF NOT EXISTS `sm_installation_users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `installation_id` int(11) NOT NULL,
+  `first_name` varchar(100) NOT NULL,
+  `middle_name` varchar(100) NOT NULL,
+  `last_name` varchar(100) NOT NULL,
+  `username` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL DEFAULT '',
+  `ctime` int(11) NOT NULL,
+  `lastlogin` int(11) NOT NULL,
+  `enabled` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `installation_id` (`installation_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=146 ;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `sm_installation_user_modules`
+--
+
+CREATE TABLE IF NOT EXISTS `sm_installation_user_modules` (
+  `user_id` int(11) NOT NULL,
+  `module_id` varchar(100) NOT NULL,
+  PRIMARY KEY (`user_id`,`module_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
