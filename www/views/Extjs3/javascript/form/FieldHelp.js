@@ -1,5 +1,6 @@
 Ext.ux.FieldHelp = Ext.extend(Object, (function(){
 	function syncInputSize(w, h) {
+		h = this.height || h;
 		this.el.setSize(w, h);
 	}
 
