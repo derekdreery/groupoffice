@@ -13,7 +13,7 @@ class GO_Serverclient_HttpClient extends GO_Base_Util_HttpClient{
 
 		if(!isset($response['success']) || !$response['success'])
 		{
-			go_debug($response);
+			GO::debug($response);
 			require($GLOBALS['GO_LANGUAGE']->get_language_file('serverclient'));
 			$feedback = sprintf(GO::t('connect_error','serverclient'), GO::config()->serverclient_server_url);
 			if(isset($response['feedback']))
