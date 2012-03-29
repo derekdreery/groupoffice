@@ -143,6 +143,9 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function report(){
+		if(!file_exists($this->configPath))
+			return false;
+		
 		require($this->configPath);
 		$folder = new GO_Base_Fs_Folder($config['file_storage_path']);
 		$this->file_storage_usage=$folder->calculateSize();
