@@ -26,7 +26,8 @@ GO.files.FilesContextMenu = function(config)
 		cls: 'x-btn-text-icon',
 		handler: function(){
 			window.open(GO.url("files/file/download",{
-				id:this.records[0].data.id
+				id:this.records[0].data.id,
+				inline:false
 				}));						
 		},
 		scope: this

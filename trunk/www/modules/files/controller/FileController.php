@@ -99,7 +99,12 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		}
 
 		
-		GO_Base_Util_Http::outputDownloadHeaders($file->fsFile, true, !empty($params['cache']));
+		// Show the file inside the browser or give it as a download
+		$inline = true; // Defaults to show inside the browser
+		if(isset($params['inline']) && $params['inline'] == "false")
+			$inline = false;
+
+		GO_Base_Util_Http::outputDownloadHeaders($file->fsFile, $inline, !empty($params['cache']));
 		$file->fsFile->output();
 	}
 
@@ -119,7 +124,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		$html=$params['content_type']=='html';
 		$bodyindex = $html ? 'htmlbody' : 'plainbody';
 		
-		$url = GO::url('files/file/download',array('id'=>$file->id,'random_code'=>$file->random_code),false, $html);
+		$url = GO::url('files/file/download',array('id'=>$file->id,'random_code'=>$file->random_code,'inline'=>false),false, $html);
 		
 		if($html){
 			$url = GO::t('clickHereToDownload', "files").' <a href="'.$url.'">'.$file->name.'</a>';

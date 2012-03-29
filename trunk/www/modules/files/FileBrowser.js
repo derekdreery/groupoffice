@@ -1854,7 +1854,7 @@ GO.files.openFile = function(record, store,e)
 
 
 GO.files.downloadFile = function (fileId){
-	window.open(GO.url("files/file/download",{id:fileId}));	
+	window.open(GO.url("files/file/download",{id:fileId,inline:false}));	
 }
 
 GO.files.editFile = function (fileId){
