@@ -644,7 +644,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				$response['iCalendar']['invitation'] = array(
 						'uuid' => (string) $vevent->uid,
 						'email_sender' => $response['sender'],
-						'email' => $imapMessage->account->email,
+						'email' => $imapMessage->account->getDefaultAlias()->email,
 						'event_declined' => $event && $event->status == 'DECLINED',
 						'event_id' => $event ? $event->id : 0,
 						'is_update' => $vcalendar->method == 'REPLY',
