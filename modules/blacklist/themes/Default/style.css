@@ -1,0 +1,6 @@
+.go-module-icon-blacklist , .go-menu-icon-blacklist{
+	background-image:url('images/blacklist.png') !important;
+}
+.go-tab-icon-blacklist {
+	background-image: none !important;
+}
