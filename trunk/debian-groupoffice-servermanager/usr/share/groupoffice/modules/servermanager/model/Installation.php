@@ -130,16 +130,19 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		
 		return parent::beforeDelete();
 	}
+		
 	
-	protected function beforeSave() {
-		
-		$this->calculateStatistics();
-		
-		return parent::beforeSave();
+	protected function afterDbInsert() {
+		if(class_exists("GO_Professional_LicenseCheck"))
+		{
+			$lc = new GO_Professional_LicenseCheck();
+			$this->token = $lc->generateToken($this);
+			
+			return true;
+		}
 	}
 	
-	
-	public function calculateStatistics(){
+	public function report(){
 		require($this->configPath);
 		$folder = new GO_Base_Fs_Folder($config['file_storage_path']);
 		$this->file_storage_usage=$folder->calculateSize();
@@ -148,9 +151,25 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		$this->_calculateMailboxUsage($config);
 		$this->_calculateInstallationUsage($config);
 		
+		$this->save();
 		
+		$report = $this->getAttributes();
 		
-		//$this->save();
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->select('module_id, count(*) AS usercount')
+						->joinModel(array('model'=>'GO_ServerManager_Model_InstallationUser',  'localField'=>'user_id','tableAlias'=>'u'))
+						->group(array('module_id'))
+						->debugSql()
+						->criteria(
+										GO_Base_Db_FindCriteria::newInstance()
+										->addCondition('installation_id', $this->id,'=','u')										
+										);
+		
+		$stmt = GO_ServerManager_Model_InstallationUserModule::model()->find($findParams);
+		
+		$report['modules']=$stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		return $report;
 	}
 	
 	private function _calculateInstallationUsage($config){
@@ -174,6 +193,8 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		$this->last_login = $record['lastlogin'];
 		$this->count_users = $record['count'];		
 		
+		$allowedModules = empty($config['allowed_modules']) ? array() : explode(',', $config['allowed_modules']);
+		
 		$stmt = GO_Base_Model_User::model()->find(GO_Base_Db_FindParams::newInstance()->ignoreAcl());
 		$iUsers=array();
 		while($user = $stmt->fetch()){
@@ -181,12 +202,16 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 			$iUser['modules']=array();
 			
 			$modStmt = GO_Base_Model_Module::model()->find(GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::READ_PERMISSION, $user->id));
-			while($module = $modStmt->fetch()){				
-				$iUser['modules'][]=$module->id;				
+			while($module = $modStmt->fetch()){			
+				if(empty($allowedModules) || in_array($module->id, $allowedModules))
+					$iUser['modules'][]=$module->id;				
 			}
 			
 			$iUsers[]=$iUser;
 		}
+		GO::config()->save_setting('mailbox_usage', $this->mailbox_usage);
+		GO::config()->save_setting('file_storage_usage', $this->file_storage_usage);
+		GO::config()->save_setting('database_usage', $this->database_usage);
 		
 		//var_dump($iUsers);
 		

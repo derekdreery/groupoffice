@@ -18,6 +18,8 @@ GO.servermanager.InstallationsGrid = function(config){
 		config = {};
 	}
 	
+
+	
 	config.title = GO.servermanager.lang.installations;
 	config.layout='fit';
 	config.autoScroll=true;
@@ -141,13 +143,31 @@ GO.servermanager.InstallationsGrid = function(config){
 		width:320
 	});
 	
+	
+	config.tbar=new Ext.Toolbar({
+		cls:'go-head-tb',
+		items:[{
+			iconCls: 'btn-add',
+			text: GO.lang['cmdAdd'],
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				GO.servermanager.installationDialog.show();
+			},
+			scope: this
+		},{
+			iconCls: 'btn-delete',
+			text: GO.lang['cmdDelete'],
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				this.deleteSelected();
+			},
+			scope: this
+		},'-',GO.lang['strSearch']+': ', ' ',this.searchField]		
+	});
 		    			    		
 	GO.servermanager.installationDialog.on('save', function(){   
 		this.store.reload();	    			    			
 	}, this);
-	
-	
-	
 	
 	
 	
