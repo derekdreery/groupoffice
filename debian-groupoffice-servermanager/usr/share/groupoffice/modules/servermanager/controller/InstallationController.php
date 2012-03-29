@@ -5,7 +5,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	protected $model = 'GO_Servermanager_Model_Installation';
 	
 	protected function allowGuests() {
-		return array('create','destroy');
+		return array('create','destroy', 'report');
 	}
 	
 	public function actionDestroy($params){
