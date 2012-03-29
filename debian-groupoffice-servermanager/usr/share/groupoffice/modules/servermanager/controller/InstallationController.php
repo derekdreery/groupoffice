@@ -219,7 +219,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$config['allow_themes'] = isset($params['allow_themes']) ? true : false;
 		$config['allow_password_change'] = isset($params['allow_password_change']) ? true : false;
 
-		$config['quota'] = GO_Base_Util_Number::unlocalize($params['quota']) * 1024;
+		$config['quota'] = GO_Base_Util_Number::unlocalize($params['quota']) * 1024*1024;
 		$config['restrict_smtp_hosts'] = $params['restrict_smtp_hosts'];
 		$config['serverclient_domains'] = $params['serverclient_domains'];
 		
@@ -327,6 +327,60 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$response['total']=count($response['results']);
 		
 		return $response;		
+	}
+	
+	
+	
+	protected function actionReport($params){
+		$stmt = GO_ServerManager_Model_Installation::model()->find();
+		
+		if(!$this->isCli())
+			echo '<pre>';
+		
+		$report = array(
+				'installations'=>array(),
+				'id'=>GO::config()->id,
+				'hostname'=>getHostName(),
+				'ip'=>  gethostbyname(getHostName()),
+				'uname'=>  php_uname()
+		);
+		
+		while($installation = $stmt->fetch()){
+			echo "Creating report for ".$installation->name."\n";
+			$report['installations'][]=$installation->report();
+		}
+		
+		if(class_exists('GO_Professional_LicenseCheck')){
+			
+			if(!isset(GO::config()->license_name)){
+				throw new Exception('$config["license_name"] is not set. Please contact Intermesh to get your key.');
+			}
+			
+			$report['license_name']=GO::config()->license_name;
+			
+			$c = new GO_Base_Util_HttpClient();
+			$response = $c->request('http://localhost/groupoffice/?r=licenses/license/report', array(
+					'report'=>json_encode($report)
+			));
+			
+			var_dump($response);
+		}
+		
+	
+	
+		
+				
+//		$message = GO_Base_Mail_Message::newInstance();
+//		$message->setSubject("Servermanager report for ". $report['hostname']);
+//
+//		$message->setBody(json_encode($report),'text/plain');
+//		$message->setFrom(GO::config()->webmaster_email,"Servermanager");
+//		$message->addTo('admin@intermesh.dev');
+//
+//		GO_Base_Mail_Mailer::newGoInstance()->send($message);
+				
+		
+		echo "Done";
 	}
 
 }

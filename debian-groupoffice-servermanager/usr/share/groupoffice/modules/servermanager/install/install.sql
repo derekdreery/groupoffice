@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS `sm_installations` (
   `status` varchar(50) NOT NULL,
   `status_change_time` int(11) NOT NULL,
   `config_file` varchar(255) NOT NULL,
+	`token` VARCHAR( 100 ) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
