@@ -169,6 +169,9 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		if(GO::config()->quota>0){				
 			$currentQuota = GO::config()->get_setting('file_storage_usage');			
 			return $currentQuota+$newBytes<=GO::config()->quota;
+		}else
+		{
+			return true;
 		}
 	}
 	
@@ -240,8 +243,10 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	}
 	
 	private function _removeQuota(){
-		GO::debug("Removing quota: $this->size");
-		GO::config()->save_setting("file_storage_usage", GO::config()->get_setting('file_storage_usage')-$this->size);
+		if(GO::config()->quota>0){
+			GO::debug("Removing quota: $this->size");
+			GO::config()->save_setting("file_storage_usage", GO::config()->get_setting('file_storage_usage')-$this->size);
+		}
 	}
 	
 	protected function afterSave($wasNew) {
