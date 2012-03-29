@@ -1,7 +1,6 @@
 <link href="<?php echo GO::config()->theme_url; ?>Default/images/groupoffice.ico?" rel="shortcut icon" type="image/x-icon">
 <title><?php echo GO::config()->title; ?> - BETA</title>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
-<meta name="description" content="Take your office online. Share projects, calendars, files and e-mail online with co-workers and clients. Easy to use and fully customizable, Group-Office takes online colaboration to the next level." />
 <?php
 $root_path = $GLOBALS['GO_CONFIG']->root_path.'views/Extjs3/';
 $root_url = $GLOBALS['GO_CONFIG']->host.'views/Extjs3/';
