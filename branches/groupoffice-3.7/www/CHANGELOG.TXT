@@ -1,3 +1,7 @@
+29-03-2012 3.7.47
+- Changed how GOTA launches a file
+- Added serbian translation
+
 02-03-2012 3.7.46
 - GOTA broken in file context menu
 
