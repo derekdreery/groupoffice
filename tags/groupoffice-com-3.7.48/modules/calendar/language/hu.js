@@ -1,0 +1,66 @@
+
+GO.calendar.lang.addressbook='Címjegyzék';
+
+GO.calendar.lang.appointment = 'Esemény';
+GO.calendar.lang.appointments = 'Események';
+GO.calendar.lang.recurrence = 'Ismétlődés';
+GO.calendar.lang.options = 'Options';
+GO.calendar.lang.repeatForever = 'Ismétlődés örökké';
+GO.calendar.lang.repeatEvery = 'Ismétlődés minden';
+GO.calendar.lang.repeatUntil = 'Ismétlés eddig a dátumig:';
+GO.calendar.lang.busy = 'Foglalt';
+GO.calendar.lang.allDay = 'Az időpont nem megfelelő';
+GO.calendar.lang.navigation = 'Navigation';
+GO.calendar.lang.oneDay = '1 Nap';
+GO.calendar.lang.fiveDays = '5 Nap';
+GO.calendar.lang.sevenDays = '7 Nap';
+GO.calendar.lang.month = 'Hónap';
+GO.calendar.lang.recurringEvent = 'Ismétlődő esemény';
+GO.calendar.lang.deleteRecurringEvent = 'Csak ezt az egy eseményt szeretnéd törölni, vagy az egész sorozatot?';
+GO.calendar.lang.singleOccurence = 'Egyszeri esemény';
+GO.calendar.lang.entireSeries = 'Sorozat megnyitása';
+GO.calendar.lang.calendar = 'Naptár';
+GO.calendar.lang.calendars = 'Naptárak';
+GO.calendar.lang.views = 'Nézet';
+GO.calendar.lang.administration = 'Administration';
+GO.calendar.lang.needsAction = 'Tennivaló van';
+GO.calendar.lang.accepted = 'Elfogadva';
+GO.calendar.lang.declined = 'Elutasítva';
+GO.calendar.lang.tentative = 'Kísérlet';
+GO.calendar.lang.delegated = 'Továbbítva';
+GO.calendar.lang.noRecurrence = 'Nincs ismétlődés';
+GO.calendar.lang.notRespondedYet = 'Még nem válaszolt';
+GO.calendar.lang.days = 'napok';
+GO.calendar.lang.weeks = 'hetek';
+GO.calendar.lang.monthsByDate = 'months by date';
+GO.calendar.lang.monthsByDay = 'months by day';
+GO.calendar.lang.years = 'évek';
+GO.calendar.lang.atDays = 'Minden nap';
+GO.calendar.lang.noReminder = 'Nincs emlékeztető';
+GO.calendar.lang.reminder='Emlékeztető';
+GO.calendar.lang.participants = 'Résztvevők';
+GO.calendar.lang.checkAvailability = 'Elérhetőség ellenőrzése';
+GO.calendar.lang.sendInvitation = 'Meghívó küldése';
+GO.calendar.lang.emailSendingNotConfigured = 'E-mail küldés nincs beállítva.';
+GO.calendar.lang.privateEvent = 'Személyes';
+GO.calendar.lang.noInformationAvailable = 'Nincs információ';
+GO.calendar.lang.noParticipantsToDisplay = 'Nincs résztvevő';
+GO.calendar.lang.previousDay = 'Előző nap';
+GO.calendar.lang.nextDay = 'Következő nap';
+GO.calendar.lang.noAppointmentsToDisplay = 'Nincs teendő';
+GO.calendar.lang.selectCalendar = 'Válassz naptárat';
+GO.calendar.lang.selectCalendarForAppointment = 'Válassz naptárat és jegyezd be ezt';
+GO.calendar.lang.closeWindow = 'Az esemény el lett fogadva és be lett jegyezve a naptárba. Bezárhatod az ablakot.';
+GO.calendar.lang.list='Lista';
+GO.calendar.lang.editRecurringEvent='Csak ezt az eseményt módosítod, vagy az egész sorozatot?';
+GO.calendar.lang.selectIcalendarFile='Válassz (*.ics) fájlt';
+
+GO.calendar.lang.location='Helyszín';
+GO.calendar.lang.startsAt='Kezdődik:';
+GO.calendar.lang.endsAt='Befejeződik:';
+GO.calendar.lang.eventDefaults='Alapértelmezett beállítások for appointments';
+
+GO.calendar.lang.importToCalendar='Új bejegyzés közvetlenül a naptárba';
+GO.calendar.lang.default_calendar='Alapértelmezett naptár';
+
+GO.calendar.lang.status='Állapot';
