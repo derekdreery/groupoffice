@@ -247,10 +247,14 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		$parts = explode('/', $relpath);
 		$parent_id = 0;
 		while ($folderName = array_shift($parts)) {
-			$folder = $this->findSingleByAttributes(array(
-					'parent_id' => $parent_id,
-					'name' => $folderName
-							));
+			
+			$findParams = GO_Base_Db_FindParams::newInstance();
+			$findParams->getCriteria()
+							->addCondition('parent_id', $parent_id)
+							->addBindParameter(':name', $folderName)
+							->addRawCondition('t.name COLLATE utf8_bin', ':name'); //use utf8_bin for case sensivitiy and special characters.
+			
+			$folder = $this->findSingle($findParams);
 			if (!$folder) {
 				if (!$autoCreate)
 					return false;
@@ -503,12 +507,14 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * @return GO_Files_Model_File 
 	 */
 	public function hasFile($filename){		
-		return $this->files(array(
-				'criteriaObject'=>GO_Base_Db_FindCriteria::newInstance()
-						->addModel(GO_Files_Model_File::model())
-						->addCondition('name', $filename),
-				'single'=>true
-		));
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->single();
+		$findParams->getCriteria()							
+							->addBindParameter(':name', $filename)
+							->addRawCondition('t.name COLLATE utf8_bin', ':name'); //use utf8_bin for case sensivitiy and special characters.
+		
+		return $this->files($findParams);
 	}
 	
 	/**
@@ -518,12 +524,14 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * @return GO_Files_Model_Folder
 	 */
 	public function hasFolder($filename){		
-		return $this->folders(array(
-				'criteriaObject'=>GO_Base_Db_FindCriteria::newInstance()
-						->addModel(GO_Files_Model_Folder::model())
-						->addCondition('name', $filename),
-				'single'=>true
-		));
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->single();
+		$findParams->getCriteria()							
+							->addBindParameter(':name', $filename)
+							->addRawCondition('t.name COLLATE utf8_bin', ':name'); //use utf8_bin for case sensivitiy and special characters.
+		
+		return $this->folders($findParams);
 	}
 	
 	
