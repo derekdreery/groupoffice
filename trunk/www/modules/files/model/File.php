@@ -272,9 +272,9 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @return string 
 	 */
-	protected function getEmailDownloadURL() {
+	public function getEmailDownloadURL($html=true) {
 		if (!empty($this->expire_time) && !empty($this->random_code)) {
-			return GO::url('files/file/download', array('id'=>$this->id,'random_code'=>$this->random_code), false);
+			return GO::url('files/file/download', array('id'=>$this->id,'random_code'=>$this->random_code,'inline'=>'false'), false, $html);
 		}
 	}
 	
