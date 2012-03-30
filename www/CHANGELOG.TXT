@@ -1,3 +1,6 @@
+30-03-2012 3.7.48
+- Broken projects query
+
 29-03-2012 3.7.47
 - Changed how GOTA launches a file
 - Added serbian translation
