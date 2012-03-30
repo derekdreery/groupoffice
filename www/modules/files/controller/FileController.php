@@ -124,7 +124,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		$html=$params['content_type']=='html';
 		$bodyindex = $html ? 'htmlbody' : 'plainbody';
 		
-		$url = GO::url('files/file/download',array('id'=>$file->id,'random_code'=>$file->random_code,'inline'=>false),false, $html);
+		$url = GO::url('files/file/download',array('id'=>$file->id,'random_code'=>$file->random_code,'inline'=>'false'),false, $html);
 		
 		if($html){
 			$url = GO::t('clickHereToDownload', "files").' <a href="'.$url.'">'.$file->name.'</a>';
