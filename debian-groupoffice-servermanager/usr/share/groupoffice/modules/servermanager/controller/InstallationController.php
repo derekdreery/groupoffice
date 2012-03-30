@@ -190,7 +190,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		}
 		
 		//for testing
-		$config['debug']=true;
+		$config['debug']=GO::config()->debug;
 		
 		$config['id']=$model->dbName;
 		$config['db_name']=$model->dbName;
