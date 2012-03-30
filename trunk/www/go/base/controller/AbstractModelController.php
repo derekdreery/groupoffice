@@ -492,8 +492,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				$approversStmnt = $workflowModel->requiredApprovers;
 			
 				while($approver = $approversStmnt->fetch()){
-					$workflowResponse['approvers'][] = array('name'=>$approver->name,'approved'=>$currentStep->hasApproved($workflowModel->id,$approver->id));
+					$workflowResponse['approvers'][] = array('name'=>$approver->name,'approved'=>$currentStep->hasApproved($workflowModel->id,$approver->id),'last'=>'0');
 				}
+				// Set the last flag for the latest approver in the list
+				$i = count($workflowResponse['approvers'])-1;
+				$workflowResponse['approvers'][$i]['last'] = "1";
 			
 				// Add the approver groups of the current step to the response
 				$approverGroupsStmnt = $currentStep->approverGroups;
@@ -519,7 +522,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 						'approver'=>$history->user->name,
 						'ctime'=>$history->ctime,
 						'comment'=>$history->comment,
-						'status'=>$history->status?GO::t('approved','workflow'):GO::t('declined','workflow')
+						'status'=>$history->status?"1":"0",
+						'status_name'=>$history->status?GO::t('approved','workflow'):GO::t('declined','workflow')
 				);
 				
 				GO_Base_Db_ActiveRecord::$attributeOutputMode = 'raw';
