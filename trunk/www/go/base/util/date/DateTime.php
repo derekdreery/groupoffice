@@ -219,7 +219,7 @@ class GO_Base_Util_Date_DateTime extends DateTime {
 //		if(!empty($diff['s']))
 //			$string .= $diff['s'].' '.GO::t('strSeconds');
 
-		return $string;
+		return rtrim($string,', ');
 	}
 
 }
