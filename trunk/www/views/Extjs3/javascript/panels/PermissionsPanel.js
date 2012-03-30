@@ -152,6 +152,11 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 			dataIndex : 'name',
 			menuDisabled:true,
 			sortable: true
+		},{
+			header: GO.lang.username,
+			dataIndex:'username',
+			menuDisabled:true,
+			sortable: true
 		}];
 		if(this.showLevel)
 		{
@@ -176,8 +181,13 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 					dataIndex : 'name',
 					menuDisabled:true,
 					sortable: true
+				},{
+					header: GO.lang.username,
+					dataIndex:'username',
+					menuDisabled:true,
+					sortable: true
 				}],
-				fields:['id','name','level'],
+				fields:['id','name','username','level'],
 				model_id: this.acl_id//GO.settings.user_id
 			});
 			
