@@ -3,7 +3,7 @@
 		<div class="ticket-top-container">
 			<div class="ticket-details">
 				<div class="ticket-details-title">
-					Ticket information
+					<?php echo $this->t('tickets_ticketTicketInformation'); ?>
 				</div>
 				<div class="ticket-details-text">
 					<table>
@@ -34,7 +34,7 @@
 	<div class="feature-large">
 		<div class="ticket-user-info">
 			<div class="ticket-user-title">
-				Your information
+				<?php echo $this->t('tickets_ticketYourInformation'); ?>
 			</div>
 			<div class="ticket-user-text">
 				<table>
@@ -65,7 +65,7 @@
 	<div class="feature-large">
 		<div class="ticket-agent-info">
 			<div class="ticket-agent-title">
-				Your ticket agent
+				<?php echo $this->t('tickets_ticketYourAgent'); ?>
 			</div>
 			<?php if ($ticket->agent): ?>
 				<?php if (!empty($ticket->agent->contact->photoURL)): ?>
@@ -78,8 +78,7 @@
 				</div>
 			<?php else: ?>
 				<div class="ticket-agent-text">
-					We will help you as soon as possible.<br/>
-					Please be patient
+					<?php echo $this->t('tickets_ticketNoAgent'); ?>
 				</div>
 			<?php endif; ?>		
 		</div>
@@ -106,7 +105,7 @@
 						$i++;
 						?>
 						<tr class="ticketmodel-row <?php echo $style; ?>">
-							<td><b><?php echo $message->posterName; ?></b> said:</td>
+							<td><b><?php echo $message->posterName; ?></b> <?php echo $this->t('tickets_messageSaid'); ?>:</td>
 							<td align="right"><b><?php echo $message->ctime ;?></b></td>
 						</tr>
 						<tr class="ticketmodel-row <?php echo $style; ?>">
@@ -116,7 +115,7 @@
 							<?php $files = $message->getFiles(); ?>
 							<tr class="ticketmodel-row <?php echo $style; ?>">
 								<td colspan="2">
-									<div class="ticket-message-attachment"><b>Files:</b></div>
+									<div class="ticket-message-attachment"><b><?php echo $this->t('tickets_messageFiles'); ?>:</b></div>
 									<?php foreach ($files as $file => $obj): ?>
 										<div class="ticket-message-attachment"><a target="_blank" href="<?php echo GO::url('tickets/siteModule/downloadAttachment',array('file'=>$obj->id,'ticket_number'=>$ticket->ticket_number,'ticket_verifier'=>$ticket->ticket_verifier)); ?>">
 												<?php echo $file; ?>

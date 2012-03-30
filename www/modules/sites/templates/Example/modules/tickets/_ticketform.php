@@ -126,52 +126,91 @@
 	<div class="subkader-big-top">
 		<div class="subkader-big-bottom">
 			<div class="subkader-big-center">	
-				<b>Your Message</b>
+				
 				<?php
-					GO_Base_Html_Textarea::render(array(
-						"required" => true,
-						//"label" => "Message",
-						"name" => "message",
-						"value" => "",
-						"extra" => 'style="width:800px;"'
-					));
+					
+					if($ticket->status_id != '-1'){
+						
+						echo "<b>Your Message</b>";
+						GO_Base_Html_Textarea::render(array(
+							"required" => true,
+							//"label" => "Message",
+							"name" => "message",
+							"value" => "",
+							"extra" => 'style="width:800px;"'
+						));
 
-					$uploader->render();
+						$uploader->render();
 
-					GO_Base_Html_Hidden::render(array(
-						"label" => "",
-						"name" => "submitticket",
-						"value" => 'Confirm',
-						"renderContainer" => false
-					));
+						GO_Base_Html_Hidden::render(array(
+							"label" => "",
+							"name" => "submitticket",
+							"value" => 'Confirm',
+							"renderContainer" => false
+						));
+					}else{
+						echo "<p>".$this->t('tickets_ticketIsClosed')."</p><p></p>";
+					}
 				?>
 
-				<div class="button-green" onmouseover="this.className='button-green-hover';"  onmouseout="this.className='button-green';" style="float:left; margin-right: 15px;">
-					<div class="button-green-right">
-						<a href="#" onclick="submitForm()" class="button-green-center"> 
-							Send
-						</a>
-					</div>
-				</div>
 				
-				<script type="text/javascript">
-					function submitForm(){
-//						if(document.createticket.message.value.replace(/\s/g,"") == "")
-//							alert("The message cannot be empty!");
-//						else
-							document.createticket.submit()
-					}
-				</script>
+				<?php if($ticket->status_id != '-1'): ?>
+					<div class="button-green" onmouseover="this.className='button-green-hover';"  onmouseout="this.className='button-green';" style="float:left; margin-right: 15px;">
+						<div class="button-green-right">
+							<a href="#" onclick="submitForm(false)" class="button-green-center"> 
+								<?php echo $this->t('tickets_ticketSend'); ?>
+							</a>
+						</div>
+					</div>
+				
+					<script type="text/javascript">
+						function submitForm(close){
+
+							var form = document.forms['createticket'];
+
+							var submit = true;
+
+							if(close==true){
+								var el = document.createElement("input");
+								el.type = "hidden";
+								el.name = "closeticket";
+								el.value = "true";
+								form.appendChild(el);
+
+								if(document.createticket.message.value.replace(/\s/g,"") != ""){
+									var answer = confirm("<?php echo $this->t('tickets_ticketCloseQuestion'); ?>")
+									if(!answer)
+										submit=false;
+								}
+							}
+
+							if(submit)
+								form.submit();
+
+						}
+					</script>
+				<?php endif; ?>
 				
 				<?php if(GO::user()): ?>
-				
-				<div class="button-green-side" onmouseover="this.className='button-green-side-hover';"  onmouseout="this.className='button-green-side';" style="float:left;">
-					<div class="button-green-side-right">
-						<a href="<?php echo $this->pageUrl('support');?>" class="button-green-side-center"> 
-							Back
-						</a>
+					<div class="button-green-side" onmouseover="this.className='button-green-side-hover';"  onmouseout="this.className='button-green-side';" style="float:left;">
+						<div class="button-green-side-right">
+							<a href="<?php echo $this->pageUrl('support');?>" class="button-green-side-center"> 
+								<?php echo $this->t('tickets_ticketBack'); ?>
+							</a>
+						</div>
 					</div>
-				</div>
+				<?php endif; ?>
+				
+				<?php if($ticket->status_id != '-1' && !$ticket->isNew): ?>
+					<div class="button-green" onmouseover="this.className='button-green-hover';"  onmouseout="this.className='button-green';" style="float:right; ">
+						<div class="button-green-right">
+							<a href="#" onclick="submitForm(true)" class="button-green-center"> 
+								<?php echo $this->t('tickets_ticketClose'); ?>
+							</a>
+						</div>
+					</div>
+				
+					
 				<?php endif; ?>
 				
 			<div style="clear:both;"></div>

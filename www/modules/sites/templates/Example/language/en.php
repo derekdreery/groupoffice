@@ -66,3 +66,17 @@ $l['userUsername']='Username';
 $l['userPassword']='Password';
 
 $l['formEditSuccess']='Your credentials are updated successfully!';
+
+
+$l['tickets_ticketCloseQuestion']='You are going to close this ticket. Are you sure?';
+$l['tickets_ticketIsClosed']='This ticket is closed. If you have a question please create a new one.';
+$l['tickets_ticketClose']='Close ticket';
+$l['tickets_ticketSend']='Send ticket';
+$l['tickets_ticketBack']='Back to ticketlist';
+$l['tickets_messageSaid']='said';
+$l['tickets_messageFiles']='Files';
+$l['tickets_ticketTicketInformation']='Ticket information';
+$l['tickets_ticketYourInformation']='Your information';
+$l['tickets_ticketYourAgent']='Your ticket agent';
+$l['tickets_ticketNoAgent']='We will help you as soon as possible.<br />Please be patient.';
+
