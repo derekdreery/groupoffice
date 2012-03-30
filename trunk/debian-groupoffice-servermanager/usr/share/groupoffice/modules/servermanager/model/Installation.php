@@ -114,6 +114,10 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	}
 
 	protected function beforeDelete() {
+		
+		if(!file_exists($this->configPath))
+			throw new Exception("Error: Could not find installation configuration.");
+		
 		$cmd = 'sudo TERM=dumb '.GO::config()->root_path.
 						'groupofficecli.php -r=servermanager/installation/destroy'.
 						' -c='.GO::config()->get_config_file().
