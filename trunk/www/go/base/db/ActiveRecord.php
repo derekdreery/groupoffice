@@ -690,7 +690,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if (!$this->aclField())
 			return false;
 		
-		if(!isset($this->_acl_id)){
+		//removed caching of _acl_id because the relation is cached already and when the relation changes the wrong acl_id is returned,
+		////this happened when moving contacts from one acl to another.
+		//if(!isset($this->_acl_id)){
 			//ACL is mapped to a relation. eg. $contact->addressbook->acl_id is defined as "addressbook.acl_id" in the contact model.
 			$modelWithAcl = $this->findRelatedAclModel();
 			if($modelWithAcl){
@@ -698,7 +700,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			} else {
 				$this->_acl_id = $this->{$this->aclField()};
 			}
-		}
+		//}
 		
 		return $this->_acl_id;		
 	}
