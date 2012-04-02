@@ -263,8 +263,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 				$rrule_arr[strtoupper(trim($param_arr[0]))] = strtoupper(trim($param_arr[1]));
 			}
 		}
-		
-		$return = array();
+
 		$this->_byday = !empty($rrule_arr['BYDAY']) ? explode(',', $rrule_arr['BYDAY']) : array();
 		$this->_bymonth = !empty($rrule_arr['BYMONTH']) ? intval($rrule_arr['BYMONTH']) : 0;
 		$this->_bymonthday = !empty($rrule_arr['BYMONTHDAY']) ? intval($rrule_arr['BYMONTHDAY']) : 0;
@@ -279,7 +278,6 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		//UNTESTED
 		if($this->_count>0 && empty($this->_until)){
 			$this->_until=0;
-			$start_time=$event['start_time'];
 			for($i=1;$i<$this->_count;$i++) {
 				$this->_until=$this->getNextRecurrence();
 			}			
