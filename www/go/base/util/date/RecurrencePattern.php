@@ -66,8 +66,11 @@ class GO_Base_Util_Date_RecurrencePattern{
 			$this->$setter($value);
 		}else
 		{
-			$var = '_'.$name;
-			$this->$var=$value;
+			$var = '_'.strtolower($name);
+			if(property_exists($this, $var))
+				$this->$var=$value;
+			else
+				trigger_error ("Access to undefined recurrence property ".$name);
 		}			
 	}
 	
@@ -77,8 +80,11 @@ class GO_Base_Util_Date_RecurrencePattern{
 			$this->$getter($name);
 		}else
 		{
-			$var = '_'.$name;
-			return $this->$var;
+			$var = '_'.strtolower($name);		
+			if(property_exists($this, $var))
+				return $this->$var;
+			else
+				trigger_error ("Access to undefined recurrence property ".$name);
 		}		
 	}
 	
