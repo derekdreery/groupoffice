@@ -138,7 +138,7 @@ class GO{
 		if($dbhost=="")
 			$dbhost=GO::config()->db_host;
 		
-		GO::debug("Connect: mysql:host=$dbhost;dbname=$dbname, $dbuser, $dbpass");
+		GO::debug("Connect: mysql:host=$dbhost;dbname=$dbname, $dbuser, ***");
 							
 		self::$db = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);
 		self::$db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
