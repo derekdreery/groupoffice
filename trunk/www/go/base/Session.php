@@ -59,7 +59,7 @@ class GO_Base_Session extends GO_Base_Observable{
 		$this->values = &$_SESSION['GO_SESSION'];
 		
 		if(!isset($this->values['security_token']))
-			$this->values['security_token']=GO_Base_Util_String::randomPassword(20);				
+			$this->values['security_token']=GO_Base_Util_String::randomPassword(20,'a-z,A-Z,1-9');				
 		
 //		if (GO::config()->session_inactivity_timeout > 0) {
 //			$now = time();
