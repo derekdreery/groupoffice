@@ -29,7 +29,12 @@
 								$linktoticket = '<a href="'.$this->pageUrl("ticket",array("ticket_number"=>$ticket->ticket_number)).'">';
 						?>
 						<tr class="ticketmodel-row <?php echo $style; ?>">
-							<td width="20px"><?php echo $linktoticket; ?><?php echo $ticket->unseen	?"":"<span class='image-new-message'></span>"; ?></a></td>
+							<td width="20px"><?php echo $linktoticket; ?>
+								<?php 
+									if($ticket->status != GO_Tickets_Model_Ticket::STATUS_CLOSED && $ticket->unseen){
+										echo "<span class='image-new-message'></span>";
+									}
+								?></a></td>
 							<td width="80px">
 								<?php echo $linktoticket; ?>
 								<?php echo $ticket->ticket_number; ?>
