@@ -97,10 +97,10 @@ class GO_Files_Model_Version extends GO_Base_Db_ActiveRecord {
 		$folder = $file->parent();
 		$folder->create();
 		
+		$this->file->fsFile->move($folder, $file->name());
+		
 		GO::config()->save_setting("file_storage_usage", GO::config()->get_setting('file_storage_usage')+$file->size());
 		
-		$this->file->fsFile->move($folder, $file->name());
-	
 		$this->_deleteOld();
 		
 		return parent::afterSave($wasNew);
@@ -109,9 +109,10 @@ class GO_Files_Model_Version extends GO_Base_Db_ActiveRecord {
 	protected function beforeDelete() {
 		
 		$file = $this->getFilesystemFile();
-		$file->delete();
 		
 		GO::config()->save_setting("file_storage_usage", GO::config()->get_setting('file_storage_usage')-$file->size());
+		
+		$file->delete();
 		
 		return parent::beforeDelete();
 	}
