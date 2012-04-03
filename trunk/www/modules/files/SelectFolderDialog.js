@@ -7,8 +7,9 @@ GO.files.SelectFolderDialog = Ext.extend(GO.Window, {
 		
 		this.layout='border';
 		this.title=GO.files.lang.selectFolder;
-		this.height=400;
-		this.width=200;
+		this.height=500;
+		this.width=500;
+		this.modal=true;
 		this.border=false;
 		this.collapsible=true;
 		this.maximizable=true;
