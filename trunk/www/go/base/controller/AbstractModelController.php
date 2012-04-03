@@ -965,7 +965,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		$columns = $model->getColumns();
 		foreach($columns as $name=>$attr){
-			if(!in_array($name, $params['exclude']))
+			if(!in_array($name, $params['exclude']) && (empty($params['hide_unknown_gotypes']) || !empty($attr['gotype'])))
 				$attributes['t.'.$name]=array('name'=>'t.'.$name,'label'=>$model->getAttributeLabel($name),'gotype'=>$attr['gotype']);				
 		}
 		
@@ -977,7 +977,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$customAttributes = array();
 			$columns = $model->customfieldsRecord->getColumns();
 			foreach($columns as $name=>$attr){
-				if($name != 'model_id' && !in_array($name, $params['exclude'])){					
+				if($name != 'model_id' && !in_array($name, $params['exclude']) && (empty($params['hide_unknown_gotypes']) || !empty($attr['gotype']))){					
 					$customAttributes['cf.'.$name]=array('name'=>'cf.'.$name, 'label'=>$model->customfieldsRecord->getAttributeLabel($name),'gotype'=>'customfield');					
 				}
 			}
