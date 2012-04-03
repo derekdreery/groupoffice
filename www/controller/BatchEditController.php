@@ -91,10 +91,15 @@ class GO_Core_Controller_BatchEdit extends GO_Base_Controller_AbstractController
 		$tmpModel = new $params['model_name']();
 		$columns = $tmpModel->getColumns();
 		
+		$params['excludeColumns']=array('ctime','mtime','company_id','model_id');
+		
+		if(isset($params['exclude']))
+			$params['excludeColumns']=  array_merge($params['excludeColumns'],explode(',', $params['exclude']));
+		
 		$rows = array();
 		foreach($columns as $key=>$value) {
 
-			if(!empty($value['gotype']) && $key != 'ctime' && $key != 'mtime' && $key != 'company_id') {
+			if(!in_array($key, $params['excludeColumns']) && !empty($value['gotype'])) {
 				$row = array();
 
 				$row['name']= $key;
@@ -126,7 +131,7 @@ class GO_Core_Controller_BatchEdit extends GO_Base_Controller_AbstractController
 
 			$cfrows = array();
 			foreach($cfcolumns as $key=>$value) {
-				if(!empty($value['gotype']) && $key != 'model_id') {
+				if(!in_array($key, $params['excludeColumns']) && !empty($value['gotype'])) {
 					$row = array();
 
 					$row['name']= $key;
