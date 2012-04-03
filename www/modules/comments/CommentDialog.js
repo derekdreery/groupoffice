@@ -81,6 +81,9 @@ Ext.extend(GO.comments.CommentDialog, Ext.Window,{
 			this.formPanel.form.reset();
 			GO.comments.CommentDialog.superclass.show.call(this);
 		}
+		if(config && config.model_name)
+			this.formPanel.baseParams.model_name=config.model_name;
+		
 		if(config && config.link_config)
 		{
 			this.link_config=config.link_config;
@@ -139,7 +142,7 @@ Ext.extend(GO.comments.CommentDialog, Ext.Window,{
 			border: false,
 			autoHeight: true,
 			cls:'go-form-panel',
-			baseParams: {task: 'comment'},				
+			baseParams: {id:0, model_name:''},				
 			items:[{
 				xtype: 'textarea',
 			  name: 'comments',

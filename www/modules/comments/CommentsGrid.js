@@ -99,7 +99,7 @@ GO.comments.CommentsGrid = function(config){
 		if(this.writePermission)
 		{
 			var record = grid.getStore().getAt(rowIndex);			
-			GO.comments.showCommentDialog(record.data.id);
+			GO.comments.showCommentDialog(record.data.id, {model_name:this.store.baseParams.model_name});
 		}
 	}, this);
 };

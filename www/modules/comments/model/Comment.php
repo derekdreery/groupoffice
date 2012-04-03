@@ -42,20 +42,14 @@ class GO_Comments_Model_Comment extends GO_Base_Db_ActiveRecord{
 		return parent::model($className);
 	}
 	
-//	public function linkType(){
-//		return false;
-//	}
-//
-//	public function aclField(){
-//		return false;
-//	}
+	protected function init() {
+		$this->columns['model_id']['required']=true;
+		$this->columns['model_type_id']['required']=true;
+		return parent::init();
+	}
+
 
 	public function tableName(){
 		return 'co_comments';
 	}
-
-//	public function hasFiles(){
-//		return false;
-//	}
-
 }
