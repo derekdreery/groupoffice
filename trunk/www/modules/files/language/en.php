@@ -86,3 +86,16 @@ $l['lock']='Lock';
 
 $l['shortVersion']='Ver.';
 $l['fileIsLocked']='File is locked';
+
+$l["fileId"] = "ID";
+$l["fileFolder_id"] = "Folder";
+$l["fileName"] = "Name";
+$l["fileLocked_user_id"] = "Locked user";
+$l["fileCtime"] = "Created at";
+$l["fileMtime"] = "Last modified";
+$l["fileSize"] = "Size";
+$l["fileUser_id"] = "User";
+$l["fileComment"] = "Comment";
+$l["fileExtension"] = "Extension";
+$l["fileExpire_time"] = "Expire time";
+$l["fileRandom_code"] = "Random Code";
