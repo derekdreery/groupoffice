@@ -667,17 +667,22 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		preg_match_all('/\[link:([^]]+)\]/',$data, $matches, PREG_SET_ORDER);
 		
 		$tags = array();
-		
+		$unique=array();
 		while($match=array_shift($matches)){
-			$props = explode(',',base64_decode($match[1]));
-			
-			$tag=array();
-			$tag['server'] = $props[0];
-			$tag['account_id'] = $props[1];
-			$tag['model'] = $props[2];
-			$tag['model_id'] = $props[3];
-		
-			$tags[]=$tag;			
+			//make sure we don't parse the same tag twice.
+			if(!in_array($match[1], $unique)){
+				$props = explode(',',base64_decode($match[1]));
+
+				$tag=array();
+				$tag['server'] = $props[0];
+				$tag['account_id'] = $props[1];
+				$tag['model'] = $props[2];
+				$tag['model_id'] = $props[3];
+
+				$tags[]=$tag;	
+
+				$unique[]=$match[1];
+			}
 			
 		}
 		return $tags;
