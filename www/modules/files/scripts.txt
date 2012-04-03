@@ -11,6 +11,7 @@ modules/files/VersionsGrid.js
 modules/files/NewFolderDialog.js
 modules/files/UploadDialog.js
 modules/files/SelectFile.js
+modules/files/SelectFolder.js
 modules/files/CustomField.js
 modules/files/FileBrowser.js
 modules/files/FilePanel.js
