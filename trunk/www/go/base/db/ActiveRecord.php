@@ -2135,6 +2135,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			GO::debug("WARNING: ".$this->className()."::afterSave returned false or no value");
 			return false;
 		}
+		
+		$this->_fixLinkedEmailAcls();
 
 		/**
 		 * Useful event for modules. For example custom fields can be loaded or a files folder.
@@ -2147,6 +2149,36 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$this->_modifiedAttributes = array();
 
 		return true;
+	}
+	
+	/**
+	 * Acl id's of linked emails are copies from the model they are linked too. 
+	 * For example an e-mail linked to a contact will get the acl id of the addressbook.
+	 * When you move a contact to another contact all the acl id's must change. 
+	 */
+	private function _fixLinkedEmailAcls(){
+		if(GO::modules()->isInstalled('savemailas')){
+			$arr = explode('.', $this->aclField());
+			if (count($arr) > 1) {
+				
+				$relation = $this->_getRelation($arr[0]);
+				
+				if($relation && $this->isModified($relation['field'])){
+					//acl relation changed. We must update linked emails
+					
+					GO::debug("Fixing linked e-mail acl's because relation $relation changed.");
+					
+					$stmt = GO_Savemailas_Model_LinkedEmail::model()->findLinks($this);
+					while($linkedEmail = $stmt->fetch()){
+						
+						GO::debug("Updating ".$linkedEmail->subject);
+						
+						$linkedEmail->acl_id=$this->findAclId();
+						$linkedEmail->save();
+					}
+				}
+			}
+		}
 	}
 	
 	
