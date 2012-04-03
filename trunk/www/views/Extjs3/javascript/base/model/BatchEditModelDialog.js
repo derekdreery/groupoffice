@@ -13,9 +13,11 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 		GO.base.model.BatchEditModelDialog.superclass.initComponent.call(this);	
 	},
 
-	setModels : function(model_name, keys, grid, editors){
+	setModels : function(model_name, keys, grid, editors,exclude){
 		this.formPanel.baseParams.model_name=model_name;
 		this.store.baseParams.model_name=model_name;
+		//this.formPanel.baseParams.exclude=exclude;
+		this.store.baseParams.exclude=exclude;
 		this.formPanel.baseParams.keys=Ext.encode(keys);
 		this.grid = grid;
 		this.editors = editors;
@@ -133,7 +135,7 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 	}
 });
 
-GO.base.model.showBatchEditModelDialog=function(model_name, keys, grid, editors){
+GO.base.model.showBatchEditModelDialog=function(model_name, keys, grid, editors,exclude){
 	
 	if (keys.length<=0) {
 			Ext.Msg.alert(GO.lang.batchSelectionError, GO.lang.batchSelectOne);
@@ -143,6 +145,6 @@ GO.base.model.showBatchEditModelDialog=function(model_name, keys, grid, editors)
 	if(!GO.base.model.batchEditModelDialog){
 		GO.base.model.batchEditModelDialog = new GO.base.model.BatchEditModelDialog();
 	}
-	GO.base.model.batchEditModelDialog.setModels(model_name, keys, grid, editors);
+	GO.base.model.batchEditModelDialog.setModels(model_name, keys, grid, editors,exclude);
 	GO.base.model.batchEditModelDialog.show();
 }
