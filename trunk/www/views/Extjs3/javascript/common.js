@@ -66,6 +66,8 @@ GO.request = function(config){
 			if(!result.success)
 			{
 				alert(result.feedback);
+				if(config.fail)
+					config.fail.call(config.scope, response, options, result);
 			}else 
 			{
 				//the same happens in GO.data.JSonStore.
