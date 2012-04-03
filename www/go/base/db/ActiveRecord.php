@@ -1241,11 +1241,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(isset($params['criteriaObject'])){
 			$criteriaObjectParams = $params['criteriaObject']->getParams();	
 				
+			//sort so that :param1 does not replace :param11 first.
+			arsort($criteriaObjectParams);	
+			
 			foreach($criteriaObjectParams as $param=>$value)
 				$sql = str_replace($param, '"'.$value[0].'"', $sql);									
 		}
 		
-		if(isset($params['bindParams'])){			
+		if(isset($params['bindParams'])){		
+			
+			//sort so that :param1 does not replace :param11 first.
+			arsort($params['bindParams']);			
+			
 			foreach($params['bindParams'] as $key=>$value)
 				$sql = str_replace(':'.$key, '"'.$value.'"', $sql);
 		}
