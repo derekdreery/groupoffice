@@ -65,8 +65,7 @@ class GO_Core_Controller_AclGroup extends GO_Base_Controller_AbstractMultiSelect
 	protected function actionSelectedStore($params) {
 		$response['manage_permission'] = $params['currentUserHasManagePermission'] = GO_Base_Model_Acl::getUserPermissionLevel(
 				$params['model_id'],
-				GO::user()->id,
-				true
+				GO::user()->id
 			) >= GO_Base_Model_Acl::MANAGE_PERMISSION;
 		$response = array_merge($response,parent::actionSelectedStore($params));
 		return $response;
@@ -103,7 +102,7 @@ class GO_Core_Controller_AclGroup extends GO_Base_Controller_AbstractMultiSelect
 	
 	protected function beforeUpdateRecord($params, &$record) {
 		if ($record['id']==GO::config()->group_root)
-			$record['level'] = GO_Base_Model_Acl::MANAGE_PERMISSION;
+			throw new GO_Base_Exception_AccessDenied();
 		return true;
 	}
 }
