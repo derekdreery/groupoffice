@@ -285,3 +285,5 @@ $updates["201203260900"][]="ALTER TABLE `ab_addressbooks` DROP `shared_acl`";
 $updates["201203271433"][]="ALTER TABLE `ab_sent_mailings` CHANGE `total` `total` INT NOT NULL DEFAULT '0'";
 $updates["201203271433"][]="ALTER TABLE `ab_sent_mailings` CHANGE `sent` `sent` INT NOT NULL DEFAULT '0'";
 $updates["201203271433"][]="ALTER TABLE `ab_sent_mailings` CHANGE `errors` `errors` INT NOT NULL DEFAULT '0'";
+
+$updates["201203271433"][]="ALTER TABLE `ab_email_templates` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
