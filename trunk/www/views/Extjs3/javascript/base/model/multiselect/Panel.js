@@ -10,20 +10,24 @@ GO.base.model.multiselect.panel = function(config){
 		fields: config.fields,
 		remoteSort: true,
 		listeners:{
-			update:function(store, record){
-				this.updateMask.show();
-				GO.request({
-					url: this.url+'/updateRecord',
-					params: {
-						model_id: this.model_id,
-						record: Ext.encode(record.data)
-					},
-					success:function(){
-						this.updateMask.hide();
-						this.store.load();
-					},
-					scope: this
-				});
+			update:function(store, record,operation){
+				if(operation==Ext.data.Record.EDIT){
+					GO.request({
+						maskEl:this.getEl(),
+						url: this.url+'/updateRecord',
+						params: {
+							model_id: this.model_id,
+							record: Ext.encode(record.data)
+						},
+						success:function(){
+							this.store.commitChanges();
+						},
+						fail:function(){
+							this.store.rejectChanges();
+						},
+						scope: this
+					});
+				}
 			},
 			scope:this
 		}
@@ -107,17 +111,10 @@ Ext.extend(GO.base.model.multiselect.panel, GO.grid.EditorGridPanel, {
 
 	model_id: 0,
 
-	updateMask: null,
-
 	afterRender : function(){
 
-		GO.base.model.multiselect.panel.superclass.afterRender.call(this);
-		
-		this.updateMask = new Ext.LoadMask(
-			this.getEl(),
-			{'msg':GO.lang["waitMsgLoad"]}
-		);
-		
+		GO.base.model.multiselect.panel.superclass.afterRender.call(this);	
+
 		if(!this.store.loaded)		
 			this.store.load();
 	},
