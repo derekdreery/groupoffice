@@ -53,4 +53,18 @@ class GO_Base_Model_ModelType extends GO_Base_Db_ActiveRecord {
 		
 		return $model->id;
 	}
+	
+	public function checkDatabase() {
+		
+		//delete if module is no longer installed. This should happen automatically
+		//after module uninstall but in some cases this went wrong.
+		$parts = explode('_',$this->model_name);
+		$module = strtolower($parts[1]);
+		if($module!='base' && !GO::modules()->isInstalled($module)){
+			$this->delete();
+		}else
+		{		
+			return parent::checkDatabase();
+		}
+	}
 }
