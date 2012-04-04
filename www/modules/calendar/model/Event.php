@@ -189,6 +189,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 	protected function beforeSave() {
 		
+		//Don't set reminders for the superadmin
+		if($this->calendar->user_id==1)
+			$this->reminder=0;
+		
+		
 		if($this->isResource()){
 			if($this->status=='ACCEPTED'){
 				$this->background='CCFFCC';
@@ -291,7 +296,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$remindTime = $this->start_time-$this->reminder;
 			if($remindTime>time()){
 				$this->deleteReminders();
-				$this->addReminder($this->name, $remindTime, $this->user_id);
+				$this->addReminder($this->name, $remindTime, $this->calendar->user_id);
 			}
 		}	
 
