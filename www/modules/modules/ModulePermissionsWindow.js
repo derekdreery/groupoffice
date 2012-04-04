@@ -40,10 +40,8 @@ GO.modules.ModulePermissionsWindow = Ext.extend(GO.Window,{
 	show: function(moduleId, name, acl_id) {
 		this.module_id=moduleId;
 		
-		this.setTitle(GO.lang['strPermissions'] + ' ' + name);
-		this.permissionsTab.setAcl(acl_id);
-		this.permissionsTab.aclGroupsStore.load();
-		this.permissionsTab.aclUsersStore.load();
-		GO.modules.ModulePermissionsWindow.superclass.show.call(this);
+		this.setTitle(GO.lang['strPermissions'] + ' ' + name);		
+		GO.modules.ModulePermissionsWindow.superclass.show.call(this);		
+		this.permissionsTab.setAcl(acl_id);		
 	}
 })
