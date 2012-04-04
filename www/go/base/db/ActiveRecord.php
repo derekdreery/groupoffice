@@ -2157,7 +2157,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * When you move a contact to another contact all the acl id's must change. 
 	 */
 	private function _fixLinkedEmailAcls(){
-		if(GO::modules()->isInstalled('savemailas')){
+		if($this->hasLinks() && GO::modules()->isInstalled('savemailas')){
 			$arr = explode('.', $this->aclField());
 			if (count($arr) > 1) {
 				
