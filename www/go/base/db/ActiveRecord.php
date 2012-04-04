@@ -3201,7 +3201,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @return boolean
 	 * @throws Exception 
 	 */
-	public function duplicateRelation($relationName, $duplicate){
+	public function duplicateRelation($relationName, $duplicate, array $attributes=array(), $findParams=false){
 		
 		$r= $this->relations();
 		
@@ -3214,11 +3214,25 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$field = $r[$relationName]['field'];
 		
-		$stmt = $this->_getRelated($relationName);
+		if(!$findParams)
+			$findParams=  GO_Base_Db_FindParams::newInstance ();
+		
+		$findParams->select('t.*');		
+		
+		$stmt = $this->_getRelated($relationName, $findParams);
 		while($model = $stmt->fetch()){
-			$model->duplicate(array($field=>$duplicate->pk));
+			
+			//set new foreign key
+			$attributes[$field]=$duplicate->pk;
+			
+			$duplicateRelatedModel = $model->duplicate($attributes);
+			$this->afterDuplicateRelation($relationName, $model, $duplicateRelatedModel);
 		}
 		
+		return true;
+	}
+	
+	protected function afterDuplicateRelation($relationName, GO_Base_Db_ActiveRecord $relatedModel, GO_Base_Db_ActiveRecord $duplicatedRelatedModel){
 		return true;
 	}
 	
