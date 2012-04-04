@@ -79,8 +79,8 @@ class GO_Base_Mail_ImapBodyStruct extends GO_Base_Mail_ImapBase {
 						}
 					}
 
-					if(empty($res['name']))
-						$res['name']=$res['filename'];
+					if(empty($res['filename']))
+						$res['filename']=$res['name'];
 				}
 			}
 			if (isset($vals[0]) && $vals[0] != ')') {
