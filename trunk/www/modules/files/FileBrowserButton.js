@@ -28,7 +28,8 @@ GO.files.FileBrowserButton = Ext.extend(Ext.Button, {
 							GO.files.openFolder(result.files_folder_id);
 							
 							//reload display panel on close
-							GO.files.fileBrowserWin.on('hide', this.ownerCt.ownerCt.reload, this.ownerCt.ownerCt, {single:true});
+							if(this.ownerCt.ownerCt.isDisplayPanel)
+								GO.files.fileBrowserWin.on('hide', this.ownerCt.ownerCt.reload, this.ownerCt.ownerCt, {single:true});
 						},
 						scope:this
 
