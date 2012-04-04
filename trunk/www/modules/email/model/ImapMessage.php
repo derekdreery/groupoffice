@@ -345,8 +345,8 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 				//ignore applefile's
 				if($part['subtype']=='applefile')
 					continue;
-
-				if (empty($part['name']) || $part['name'] == 'false') {
+				
+				if (empty($part['filename']) || $part['filename'] == 'false') {
 					if (!empty($part['subject'])) {
 						$a['name'] = GO_Base_Fs_File::stripInvalidChars(GO_Base_Mail_Utils::mimeHeaderDecode($part['subject'])) . '.eml';
 					} elseif ($part['type'] == 'message') {
@@ -361,7 +361,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 						}
 					}
 				} else {
-					$a['name'] = $imap->mime_header_decode($part['name']);
+					$a['name'] = $imap->mime_header_decode($part['filename']);
 				}
 				
 				$a['disposition'] = isset($part['disposition']) ? $part['disposition'] : '';
