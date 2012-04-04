@@ -118,15 +118,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		})];
 
 		if (GO.files) {
-			tbar.push(this.fileBrowseButton = new Ext.Button({
-				iconCls : 'btn-files',
-				cls : 'x-btn-text-icon',
-				text : GO.files.lang.files,
-				handler : function() {
-					GO.files.openFolder(this.files_folder_id);
-				},
-				scope : this,
-				disabled : true
+			tbar.push(this.fileBrowseButton = new GO.files.FileBrowserButton({
+				model_name:"GO_Calendar_Model_Event"
 			}));
 		}
 
@@ -364,7 +357,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					//this.setWritePermission(action.result.data.write_permission);
 					//this.selectCalendar.setValue(action.result.data.calendar_id);
 					this.selectCalendar.setRemoteText(action.result.remoteComboTexts.calendar_id);
-					this.files_folder_id = action.result.data.files_folder_id;
+					
+					
 					
 					if(GO.customfields)
 						GO.customfields.disableTabs(this.tabPanel, action.result);	
@@ -547,9 +541,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		this.selectLinkField.container.up('div.x-form-item').setDisplayed(event_id == 0);
 
 		this.linkBrowseButton.setDisabled(event_id < 1);
-		if (GO.files) {
-			this.fileBrowseButton.setDisabled(event_id < 1);
-		}
+		if(this.fileBrowseButton)
+			this.fileBrowseButton.setId(event_id);
 	},
 
 	setCurrentDate : function() {
