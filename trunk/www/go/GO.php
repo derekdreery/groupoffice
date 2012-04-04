@@ -453,11 +453,6 @@ class GO{
 
 			if (function_exists('mb_internal_encoding'))
 				mb_internal_encoding("UTF-8");
-
-
-			if (!GO::config()->enabled) {
-				die('<h1>Disabled</h1>This Group-Office installation has been disabled');
-			}			
 		}
 		
 		if (!empty(self::session()->values['user_id'])) {
