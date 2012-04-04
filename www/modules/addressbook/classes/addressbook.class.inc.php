@@ -790,7 +790,7 @@ class addressbook extends db {
 			}
 		}
 
-		$fields = "c.id, c.addressbook_id, c.first_name, c.middle_name, c.last_name, co.name AS company_name";
+		$fields = "c.id, c.addressbook_id, c.first_name, c.middle_name, c.last_name, co.name AS company_name,c.department,c.function";
 
 		if($query!='')
 			$query = '%'.$this->escape(str_replace(' ','%', $query)).'%';

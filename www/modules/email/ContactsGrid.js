@@ -19,7 +19,7 @@ GO.email.ContactsGrid = function(config){
 		root : 'results',
 		id : 'email',
 		totalProperty : 'total',
-		fields : ['id', 'name',  'email', 'ab_name', 'company_name'],
+		fields : ['id', 'name',  'email', 'ab_name', 'company_name', "function","department"],
 		remoteSort : true
 	});
 
@@ -44,6 +44,12 @@ GO.email.ContactsGrid = function(config){
 			dataIndex : 'ab_name',
 			css : 'white-space:normal;',
 			sortable : false
+		},{
+			header : GO.lang.strDepartment,
+			dataIndex : 'department'
+		},{
+			header : GO.lang.strFunction,
+			dataIndex : 'function'
 		}]
 	});
 	config.cm=columnModel;
