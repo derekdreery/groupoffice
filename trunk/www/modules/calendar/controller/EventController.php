@@ -221,7 +221,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 						$participant->status = GO_Calendar_Model_Participant::STATUS_ACCEPTED;
 					}else
 					{
-						$participant->status = GO_Calendar_Model_Participant::STATUS_PENDING;
+						//don't reset status because this will screw things up when organizer is just confirming the appointment.
+						//$participant->status = GO_Calendar_Model_Participant::STATUS_PENDING;
 					}
 				}
 
@@ -251,56 +252,73 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		if (!empty($params['send_invitation']))
 			$this->_sendInvitation($newParticipantIds, $event, $isNewEvent, $modifiedAttributes);
 	}
-
+	/**
+	 *
+	 * @param type $newParticipantIds
+	 * @param type $event
+	 * @param type $isNewEvent
+	 * @param type $modifiedAttributes
+	 * @param type $method
+	 * @param GO_Calendar_Model_Participant $sendingParticipant 
+	 */
 	private function _sendInvitation($newParticipantIds, $event, $isNewEvent, $modifiedAttributes, $method='REQUEST', $sendingParticipant=false) {
 
 		
 			$stmt = $event->participants();
 
-			while ($participant = $stmt->fetch()) {				
+			while ($participant = $stmt->fetch()) {		
 				
-				if($event->is_organizer || $participant->is_organizer){
-
-					if (!GO::user() || $participant->user_id != GO::user()->id) {
-						$subject = $isNewEvent ? GO::t('invitation', 'calendar') : GO::t('invitation_update', 'calendar');
-						
-						
-						$acceptUrl = GO::url("calendar/event/invitation",array("id"=>$event->id,'accept'=>1,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
-						$declineUrl = GO::url("calendar/event/invitation",array("id"=>$event->id,'accept'=>0,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
-
-						if($method=='REQUEST'){
-							$body = '<p>' . GO::t('invited', 'calendar') . '</p>' .
-											$event->toHtml() .
-											'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
-											'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
-											'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
-											'&nbsp;|&nbsp;' .
-											'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
-						}else
-						{
-							$body = '<p>' . GO::t('invitation_update', 'calendar') . '</p>' .
-											$event->toHtml();
-						}
-						
-						$fromEmail = GO::user() ? GO::user()->email : $sendingParticipant->email;
-						$fromName = GO::user() ? GO::user()->name : $sendingParticipant->name;
-
-						$message = GO_Base_Mail_Message::newInstance(
-														$subject
-										)->setFrom($fromEmail, $fromName)
-										->addTo($participant->email, $participant->name);
-						
-						$ics=$event->toICS($method);
-						
-						$message->setHtmlAlternateBody($body);
-						//$message->setBody($body, 'text/html','UTF-8');
-						$a = Swift_Attachment::newInstance($event->toICS($method), GO_Base_Fs_File::stripInvalidChars($event->name) . '.ics', 'text/calendar; METHOD="'.$method.'"');
-						$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
-						$a->setDisposition("inline");
-						$message->attach($a);
-						GO_Base_Mail_Mailer::newGoInstance()->send($message);
+				$shouldSend = ($method=='REQUEST' && !$participant->is_organizer) || $method=='REPLY' && $participant->is_organizer;
+									
+				if($shouldSend){
+					if($isNewEvent){
+						$subject = GO::t('invitation', 'calendar');
+					}elseif($sendingParticipant)
+					{							
+						$updateReponses = GO::t('updateReponses','calendar');
+						$subject= sprintf($updateReponses[$sendingParticipant->status], $sendingParticipant->name, $event->name);
+					}else
+					{
+						$subject = GO::t('invitation_update', 'calendar');
 					}
+
+
+					$acceptUrl = GO::url("calendar/event/invitation",array("id"=>$event->id,'accept'=>1,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
+					$declineUrl = GO::url("calendar/event/invitation",array("id"=>$event->id,'accept'=>0,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
+
+					if($method=='REQUEST'){
+						$body = '<p>' . GO::t('invited', 'calendar') . '</p>' .
+										$event->toHtml() .
+										'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
+										'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
+										'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
+										'&nbsp;|&nbsp;' .
+										'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
+					}else
+					{
+						$body = '<p>' . GO::t('invitation_update', 'calendar') . '</p>' .
+										$event->toHtml();
+					}
+
+					$fromEmail = GO::user() ? GO::user()->email : $sendingParticipant->email;
+					$fromName = GO::user() ? GO::user()->name : $sendingParticipant->name;
+
+					$message = GO_Base_Mail_Message::newInstance(
+													$subject
+									)->setFrom($fromEmail, $fromName)
+									->addTo($participant->email, $participant->name);
+
+					$ics=$event->toICS($method, $sendingParticipant);
+
+					$message->setHtmlAlternateBody($body);
+					//$message->setBody($body, 'text/html','UTF-8');
+					$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($event->name) . '.ics', 'text/calendar; METHOD="'.$method.'"');
+					$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+					$a->setDisposition("inline");
+					$message->attach($a);
+					GO_Base_Mail_Mailer::newGoInstance()->send($message);
 				}
+				
 			
 		}
 	}
@@ -610,7 +628,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				$participant->save();
 
 				//When the status changes we should notify the organizer.
-				$this->_sendInvitation(array(), $event, false, array(), 'REPLY');
+				$this->_sendInvitation(array(), $event, false, array(), 'REPLY', $participant);
 			}
 		}
 		
@@ -677,7 +695,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		else
 			$participant->status=GO_Calendar_Model_Participant::STATUS_ACCEPTED;
 		
-		$participant->save();
+		//save will be handled by organizer when he get's an email
+		//$participant->save();
 		
 		
 		if($participant->user){
