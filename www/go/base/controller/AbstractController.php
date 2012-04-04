@@ -60,7 +60,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	
 	public function __construct() {
 		
-		if (GO::config()->enabled) {
+		if (!GO::config()->enabled) {
 			$this->render('Disabled');
 			exit();
 		}	
