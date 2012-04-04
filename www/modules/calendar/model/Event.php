@@ -648,9 +648,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * Get this event as a VObject. This can be turned into a vcalendar file data.
 	 * 
 	 * @param string $method REQUEST, REPLY or CANCEL
+	 * @param GO_Calendar_Model_Participant $updateByParticipant The participant that is generating this ICS for a response.
 	 * @return Sabre_VObject_Component 
 	 */
-	public function toVObject($method='REQUEST'){
+	public function toVObject($method='REQUEST', $updateByParticipant=false){
 		$e=new Sabre_VObject_Component('vevent');
 		$e->uid=$this->uuid;		
 		
@@ -719,22 +720,27 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			}
 		}
 		
+		
 		$stmt = $this->participants();
 		while($participant=$stmt->fetch()){
-			if($participant->is_organizer){
-				$p = new Sabre_VObject_Property('organizer','mailto:'.$participant->email);				
-			}else
-			{
-				$p = new Sabre_VObject_Property('attendee','mailto:'.$participant->email);				
-			}
-			$p['CN']=$participant->name;
-			$p['RSVP']="true";
-			$p['PARTSTAT']=$this->_exportVObjectStatus($participant->status);
+			
+			if($participant->is_organizer || $method=='REQUEST' || ($updateByParticipant && $updateByParticipant->id==$participant->id)){
+				//var_dump($participant->email);
+				if($participant->is_organizer){
+					$p = new Sabre_VObject_Property('organizer','mailto:'.$participant->email);				
+				}else
+				{
+					$p = new Sabre_VObject_Property('attendee','mailto:'.$participant->email);				
+				}
+				$p['CN']=$participant->name;
+				$p['RSVP']="true";
+				$p['PARTSTAT']=$this->_exportVObjectStatus($participant->status);
 	
-			//If this is a meeting REQUEST then we must send all participants.
-			//For a CANCEL or REPLY we must send the organizer and the current user.
-			if($participant->is_organizer || $method=='REQUEST' || $this->calendar->user_id==$participant->user_id)
+				//If this is a meeting REQUEST then we must send all participants.
+				//For a CANCEL or REPLY we must send the organizer and the current user.
+			
 				$e->add($p);
+			}
 		}
 		
 		
@@ -749,21 +755,22 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * Get vcalendar data for an *.ics file.
 	 * 
 	 * @param string $method REQUEST, REPLY or CANCEL
-	 * @param int $forRecurrenceId 
+	 * @param GO_Calendar_Model_Participant $updateByParticipant The participant that is generating this ICS for a response.
 	 * 
 	 * Set this to a unix timestamp of the start of an occurence if it's an update
 	 * for a particular recurrence date.
 	 * 
 	 * @return type 
 	 */
-	public function toICS($method='REQUEST') {		
+	
+	public function toICS($method='REQUEST', $updateByParticipant=false) {		
 		
 		$c = new GO_Base_VObject_VCalendar();		
 		$c->method=$method;
 		
 		$c->add(new GO_Base_VObject_VTimezone());
 		
-		$c->add($this->toVObject($method));		
+		$c->add($this->toVObject($method, $updateByParticipant));		
 		return $c->serialize();		
 	}
 	

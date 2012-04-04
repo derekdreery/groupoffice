@@ -2655,7 +2655,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if($this->hasLinks()){
 			$stmt = GO_Base_Model_ModelType::model()->find();
 			while($modelType = $stmt->fetch()){
-
+				
 				$model = GO::getModel($modelType->model_name);
 				if($model->hasLinks()){
 
