@@ -80,12 +80,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
    */
   const MANY_MANY=4;	// n:n
   
-	/**
-	 * The database connection of this record
-	 * 
-	 * @var PDO  
-	 */
-	private static $db;
+//	/**
+//	 * The database connection of this record
+//	 * 
+//	 * @var PDO  
+//	 */
+//	private static $db;
 	
 	private $_validationErrors = array();
 
