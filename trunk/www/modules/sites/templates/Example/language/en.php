@@ -65,7 +65,7 @@ $l['currentPasswordError']='Current password is not correct';
 $l['userUsername']='Username';
 $l['userPassword']='Password';
 
-$l['formEditSuccess']='Your credentials are updated successfully!';
+$l['formEditSuccess']='Your credentials were updated successfully!';
 
 
 $l['tickets_ticketCloseQuestion']='You are going to close this ticket. Are you sure?';
