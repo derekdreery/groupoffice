@@ -8,19 +8,6 @@ Options -Indexes FollowSymLinks
 AllowOverride None
 </Directory>
 
-<Directory /home/govhosts>
-		Options -Indexes
-        <IfModule mod_php5.c>
-                php_value memory_limit 64M
-                php_flag magic_quotes_gpc Off
-                php_flag register_globals Off
-                php_flag log_errors On
-				php_flag output_buffering Off
-				php_value upload_max_filesize 20M
-        </IfModule>
-</Directory>
-
-
 ServerName {domain}
 ServerAlias *.{domain}
 ErrorLog /var/log/apache2/groupoffice_error.log

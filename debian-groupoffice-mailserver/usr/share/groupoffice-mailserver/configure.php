@@ -131,21 +131,38 @@ function file_contains($filename, $str){
 
 echo "Configuring Dovecot\n";
 
-$filename = file_contains('/etc/dovecot/dovecot-sql.conf', 'pa_mailboxes') ? '/etc/dovecot/dovecot-sql.conf.'.date('Ymd') : '/etc/dovecot/dovecot-sql.conf';
-create_file($filename,'tpl/etc/dovecot/dovecot-sql.conf', $replacements);
+exec('dovecot --version', $output);
 
-$filename = file_contains('/etc/dovecot/dovecot.conf', 'Group-Office') ? '/etc/dovecot/dovecot.conf.'.date('Ymd') : '/etc/dovecot/dovecot.conf';
-create_file($filename,'tpl/etc/dovecot/dovecot.conf', $replacements);
+$version = trim($output[0]);
 
+echo "Dovecot version ".$version." detected\n";
+
+if(version_compare(2, $version)>0){
+
+	$filename = file_contains('/etc/dovecot/dovecot-sql.conf', 'pa_mailboxes') ? '/etc/dovecot/dovecot-sql.conf.'.date('Ymd') : '/etc/dovecot/dovecot-sql.conf';
+	create_file($filename,'tpl/etc/dovecot/dovecot-sql.conf', $replacements);
+
+	$filename = file_contains('/etc/dovecot/dovecot.conf', 'Group-Office') ? '/etc/dovecot/dovecot.conf.'.date('Ymd') : '/etc/dovecot/dovecot.conf';
+	create_file($filename,'tpl/etc/dovecot/dovecot.conf', $replacements);
+}else
+{
+	$filename = '/etc/dovecot/dovecot-sql.conf.ext';
+	if(file_contains($filename, 'Group-Office'))$filename .= '.'.date('Ymd');
+	create_file($filename,'tpl/etc/dovecot/dovecot-sql.conf.ext', $replacements);
+	
+	$filename = '/etc/dovecot/conf.d/10-auth.conf';
+	if(file_contains($filename, 'Group-Office'))$filename .= '.'.date('Ymd');
+	create_file($filename,'tpl/etc/dovecot/conf.d/10-auth.conf', $replacements);
+	
+	$filename = '/etc/dovecot/conf.d/15-lda.conf';
+	if(file_contains($filename, 'Group-Office'))$filename .= '.'.date('Ymd');
+	create_file($filename,'tpl/etc/dovecot/conf.d/15-lda.conf', $replacements);
+}
 
 echo "Configuring amavis\n";
 $filename =  '/etc/amavis/conf.d/60-groupoffice_defaults';
 create_file($filename,'tpl/etc/amavis/conf.d/60-groupoffice_defaults', $replacements);
 
-
-echo "Configuring vacation\n";
-if(!file_exists('/etc/groupoffice/vacation'))
-	create_file('/etc/groupoffice/vacation','tpl/etc/groupoffice/vacation', $replacements);
 
 echo "Configuring groupoffice\n";
 if(!file_exists('/etc/groupoffice/globalconfig.inc.php'))

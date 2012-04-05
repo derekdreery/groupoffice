@@ -1,5 +1,4 @@
 <?php
-$config['postfixadmin_autoreply_domain']="autoreply.{domain}";
 $config['serverclient_server_url']="http://localhost/groupoffice/";
 $config['serverclient_username']="admin";
 $config['serverclient_password']="admin";
