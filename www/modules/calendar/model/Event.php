@@ -682,7 +682,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$dateType = $this->all_day_event ? Sabre_VObject_Element_DateTime::DATE : Sabre_VObject_Element_DateTime::LOCALTZ;
 		
 		if($this->all_day_event)
-			$e->{X-FUNAMBOL-ALLDAY}=1;
+			$e->{"X-FUNAMBOL-ALLDAY"}=1;
 		
 		if($this->exception_for_event_id>0){
 			//this is an exception
