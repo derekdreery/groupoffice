@@ -200,8 +200,10 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 		
 		if($contact->company)
 			$company = $contact->company;
-		else
+		else{
 			$company = new GO_Addressbook_Model_Company();
+			$company->addressbook_id=$contact->addressbook_id;
+		}
 		
 		if (GO_Base_Util_Http::isPostRequest()) {
 
