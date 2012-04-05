@@ -16,8 +16,7 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 	documentTitle : '',
 	name : '',
 	url : '',
-	colModel : '',
-	
+	colModel : '',	
 	exportClassPath : "",
 
 	initComponent : function(){
@@ -81,6 +80,10 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 		
 		this.includeHeaders.setValue(true);
 		
+		this.hiddenParamsField = new Ext.form.Hidden({
+			name:'params'
+		});
+		
 		this.formPanel = new Ext.form.FormPanel({
 			url:GO.url(this.url),
 			standardSubmit:true,
@@ -100,7 +103,8 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 				this.hiddenName,
 				this.hiddenUrl,
 				this.hiddenColumns,
-				this.hiddenHeaders
+				this.hiddenHeaders,
+				this.hiddenParamsField
 			]
 		});
 		
@@ -131,12 +135,13 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 	},
 	
 	show : function () {
+		
+		this.hiddenParamsField.setValue(Ext.encode(this.params));
+		this.hiddenDocumentTitle.setValue(this.documentTitle);
+		this.hiddenName.setValue(this.name);
+		this.hiddenUrl.setValue(this.url);
+	
 		if(!this.rendered){
-			
-			this.hiddenDocumentTitle.setValue(this.documentTitle);
-			this.hiddenName.setValue(this.name);
-			this.hiddenUrl.setValue(this.url);
-			
 				// Get the available export types for the form
 			GO.request({
 				url: 'export/types',
@@ -161,7 +166,7 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 		}else
 		{
 			GO.ExportGridDialog.superclass.show.call(this);
-		}
+		}		
 	},	
 	createExportTypeRadio : function(name,clsName, checked, useOrientation) {
 		var radioButton = new Ext.form.Radio({
