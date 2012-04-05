@@ -183,3 +183,6 @@ $updates["201203261017"][]= "ALTER TABLE `go_users` CHANGE `password_type` `pass
 $updates["201203261017"][]= "ALTER TABLE `go_users`
   DROP `bank`,
   DROP `bank_no`;";
+
+
+$updates["201204051001"][]= "ALTER TABLE `go_modules` ADD `enabled` BOOLEAN NOT NULL DEFAULT '1'";

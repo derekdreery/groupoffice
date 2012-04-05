@@ -118,3 +118,4 @@ $l['generatePassword']='Generate password';
 $l['generatedPasswordIs']='The generated password is';
 
 $l['openContact']='Open contact';
+$l['showProUsers']='Show pro users';

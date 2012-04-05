@@ -108,3 +108,5 @@ $l["muteReminderSound"]='Demp geluid bij herinneringen';
 $l["showSmilies"]='Toon smilies';
 
 $l['openContact']='Open contactpersoon';
+
+$l['showProUsers']='Toon pro grebruikers';

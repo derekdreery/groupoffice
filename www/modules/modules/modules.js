@@ -65,7 +65,14 @@ GO.modules.MainPanel = function(config) {
 		id:'name',
 		renderer : this.iconRenderer,
 		width:250
-	}]);
+	}
+//	,{
+//		header : GO.lang.users,
+//		dataIndex:'user_count',
+//		width:80,
+//		align:'right'
+//	}
+]);
 
 	config.view=new Ext.grid.GridView({
 		enableRowBody:true,

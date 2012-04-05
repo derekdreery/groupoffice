@@ -214,4 +214,54 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		//return array('success' => true);
 	}
 	
+	protected function getStoreParams($params) {
+		
+		$findParams =  GO_Base_Db_FindParams::newInstance();
+		
+		if(!empty($params['show_licensed'])){		
+		
+			if(class_exists("GO_Professional_LicenseCheck")){
+				$lc = new GO_Professional_LicenseCheck();
+
+				$proModuleAcls=array();
+				$proModules = $lc->getProModules();
+				foreach($proModules as $module)
+					$proModuleAcls[]=$module->acl_id;
+				
+				$aclJoinCriteria= GO_Base_Db_FindCriteria::newInstance()
+								->addRawCondition('a.user_id', 't.id')
+								->addRawCondition('a.group_id', 'ug.group_id','=',false);
+
+				$findParams
+					->ignoreAcl()
+					->joinModel(array(
+						'model'=>'GO_Base_Model_UserGroup',
+						'foreignField'=>'user_id',
+						'tableAlias'=>'ug'				
+					))
+					->join(GO_Base_Model_AclUsersGroups::model()->tableName(), $aclJoinCriteria,'a')
+					->group('t.id');
+
+				$findParams->getCriteria()->addInCondition('acl_id', $proModuleAcls,'a');
+
+			}		
+		}
+		
+		return $findParams;
+		
+	}
+	
+	protected function afterStore(&$response, &$params, &$store, $storeParams) {
+		if(class_exists("GO_Professional_LicenseCheck")){
+			$lc = new GO_Professional_LicenseCheck();
+			try{
+				$lc->checkProModules(true);
+			}catch(Exception $e){
+				$response['feedback']=$e->getMessage();
+			}
+		}
+		
+		return parent::afterStore($response, $params, $store, $storeParams);
+	}
+	
 }
