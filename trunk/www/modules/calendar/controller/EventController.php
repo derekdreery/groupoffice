@@ -696,7 +696,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$participant->status=GO_Calendar_Model_Participant::STATUS_ACCEPTED;
 		
 		//save will be handled by organizer when he get's an email
-		//$participant->save();
+		$participant->save();
 		
 		
 		if($participant->user){
