@@ -181,8 +181,10 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 			$permissionsMode=GO::config()->folder_create_mode;		
 		
 		if(is_dir($this->path)){
-			if(!chmod($this->path, $permissionsMode))
-				GO::debug("chmod failed on ".$this->path);
+			
+			//was trying to chmod /tmp. Best way is to leave existing folders alone.
+//			if(!chmod($this->path, $permissionsMode))
+//				GO::debug("chmod failed on ".$this->path);
 			return true;
 		}		
 		
