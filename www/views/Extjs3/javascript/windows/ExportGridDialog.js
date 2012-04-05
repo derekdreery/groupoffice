@@ -140,6 +140,7 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 		this.hiddenDocumentTitle.setValue(this.documentTitle);
 		this.hiddenName.setValue(this.name);
 		this.hiddenUrl.setValue(this.url);
+		
 	
 		if(!this.rendered){
 				// Get the available export types for the form
@@ -199,14 +200,7 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 	insertFormElement : function(targetIndex, elementToAdd){
 		this.formPanel.insert(targetIndex, elementToAdd);
 	},
-	setParams : function(title,name,url){
-		this.documentTitle = title;
-		this.name = name;
-		this.url = url;
-		this.hiddenDocumentTitle.setValue(this.documentTitle);
-		this.hiddenName.setValue(this.name);
-		this.hiddenUrl.setValue(this.url);
-	},
+	
 	submitForm : function(hide) {
 		this.formPanel.form.getEl().dom.target='_blank';
 		this.formPanel.form.el.dom.target='_blank';
