@@ -237,6 +237,7 @@ CREATE TABLE IF NOT EXISTS `go_modules` (
   `sort_order` int(11) NOT NULL DEFAULT '0',
   `admin_menu` tinyint(1) NOT NULL DEFAULT '0',
   `acl_id` int(11) NOT NULL DEFAULT '0',
+	`enabled` BOOLEAN NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

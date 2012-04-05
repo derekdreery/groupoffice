@@ -38,6 +38,8 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 			$record['name']=$model->id;
 		}
 		
+		//$record['user_count']=$model->acl->countUsers();
+		
 		return $record;
 	}
 	
@@ -192,6 +194,11 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 		foreach ($users as $user) {
 			foreach ($models as $model)
 				$model->getDefault($user);
+		}
+		
+		if(class_exists("GO_Professional_LicenseCheck")){
+			$lc = new GO_Professional_LicenseCheck();
+			$lc->checkProModules(true);
 		}
 
 		return $response;

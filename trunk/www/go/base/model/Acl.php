@@ -67,7 +67,7 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	public function tableName(){
 		return "go_acl_items";
 	}
-
+	
 	/**
 	 * Return the permission level that a user has for this ACL.
 	 *  
@@ -254,6 +254,7 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 		return parent::afterSave($wasNew);
 	}
 	
+		
 	
 	/**
 	 * Get all users that have access to an acl.
@@ -263,6 +264,15 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	 * @return Array of GO_Base_Model_User 
 	 */
 	public static function getAuthorizedUsers($aclId, $level){
+		
+		//todo change into ???:
+		
+//		SELECT u.username from go_acl a
+//left JOIN `go_users_groups` ug  ON (a.group_id=ug.group_id)
+//inner join go_users u on (u.id=a.user_id OR u.id=ug.user_id)
+//where a.acl_id=19260 and level>=1 group by u.id
+		
+		
 		$stmt =  GO_Base_Model_User::model()->find(GO_Base_Db_FindParams::newInstance()		
 						->ignoreAcl()
 						->join(GO_Base_Model_AclUsersGroups::model()->tableName(),GO_Base_Db_FindCriteria::newInstance()
@@ -299,6 +309,36 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 		}
 		
 		return $users;
+	}
+	
+	/**
+	 * Count the number of users that have access to this acl
+	 * 
+	 * @param int $level
+	 * @return int 
+	 */
+	public function countUsers($level=  GO_Base_Model_Acl::READ_PERMISSION){
+		
+		//Either user_id in go_acl is 0 or user_id in go_users_groups is NULL.
+		//We can add them up to get a distinct count.
+		
+//		SELECT count(distinct a.user_id+IFNULL(ug.user_id,0)) from go_acl a
+//left JOIN `go_users_groups` ug  ON (a.group_id=ug.group_id)
+//where acl_id=19260 and level>1
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->single()
+						//->debugSql()
+						->select('count(distinct t.user_id+IFNULL(ug.user_id,0)) AS count')
+						->join(GO_Base_Model_UserGroup::model()->tableName(),  GO_Base_Db_FindCriteria::newInstance()		
+										->addCondition('group_id', 'ug.group_id','=','t',true,true),
+										'ug','LEFT');
+		
+		$findParams->getCriteria()->addCondition('acl_id', $this->id)->addCondition('level', $level,'>=');
+		
+		$record = GO_Base_Model_AclUsersGroups::model()->find($findParams);
+		
+		return $record['count'];		
 	}
 	
 	public function checkDatabase() {
