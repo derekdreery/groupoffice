@@ -358,6 +358,7 @@ GO.addressbook.MainPanel = function(config)
 					var name;
 					var title;
 					var colmodel;
+					var documentTitle;
 					switch(activetab.id)
 					{
 						case 'ab-contacts-grid':
@@ -387,8 +388,12 @@ GO.addressbook.MainPanel = function(config)
 						colModel: colmodel
 					});
 				}
-				else
-					this.exportDialog.setParams(documentTitle, name, url);
+				else{
+					this.exportDialog.documentTitle=documentTitle;
+					this.exportDialog.documentTitle=name;
+					this.exportDialog.documentTitle=url;
+					this.exportDialog.colmodel=colmodel;
+				}					
 				
 				this.exportDialog.show();
 
