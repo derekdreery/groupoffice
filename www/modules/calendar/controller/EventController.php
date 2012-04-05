@@ -487,7 +487,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				if($participant){
 					$participant->status=GO_Calendar_Model_Participant::STATUS_DECLINED;
 					$participant->save();
-					$this->_sendInvitation(array(), $event, false, array(),'REPLY');
+					$this->_sendInvitation(array(), $event, false, array(),'REPLY',$participant);
 				}				
 			}
 		}
