@@ -59,15 +59,15 @@ function test_system(){
 
 	
 	$test['name']='PHP version';
-	$test['pass']=function_exists('version_compare') && version_compare( phpversion(), "5.2", ">=");
-	$test['feedback']='Fatal error: Your PHP version is too old to run '.$product_name.'. PHP 5.2 or higher is required';
+	$test['pass']=function_exists('version_compare') && version_compare( phpversion(), "5.3", ">=");
+	$test['feedback']='Fatal error: Your PHP version is too old to run '.$product_name.'. PHP 5.3 or higher is required';
 	$test['fatal']=true;
 
-	$tests[]=$test;
-	$test['name']='Session Cookies';
-	$test['pass']=ini_get('session.cookie_httponly')!=1;
-	$test['feedback']='Warning: session.cookie_httponly is set to 1. We recommend setting it to 0 because this can give problems with file uploads.';
-	$test['fatal']=false;
+//	$tests[]=$test;
+//	$test['name']='Session Cookies';
+//	$test['pass']=ini_get('session.cookie_httponly')!=1;
+//	$test['feedback']='Warning: session.cookie_httponly is set to 1. We recommend setting it to 0 because this can give problems with file uploads.';
+//	$test['fatal']=false;
 
 	$tests[]=$test;
 
