@@ -22,6 +22,8 @@ class GO_Base_Component_MultiSelectGrid {
 	 * 
 	 * You must create two instances. One in AddressbookController and the other one in ContactController.
 	 * 
+	 * Create them in GO_Base_Controller_AbstractModelController::beforeStoreStatement
+	 * 
 	 * @param string $requestParamName The name of the request parameter. It's the id of the MultiSelectGrid in the ExtJS view.
 	 * @param string $modelName Name of the model that the selected ID's belong to.
 	 * @param array $requestParams The request parameters
@@ -64,7 +66,8 @@ class GO_Base_Component_MultiSelectGrid {
 
 	/**
 	 * Add the selected id's to the findCriteria. You use this in the other controller. eg. ContactController and not AddressbookController.
-	 *	 
+	 * 
+	 * Should be called in GO_Base_Controller_AbstractModelController::beforeStoreStatement
 	 */
 	public function addSelectedToFindCriteria(GO_Base_Db_FindCriteria $findCriteria, $columnName, $tableAlias = 't', $useAnd = true, $useNot = false) {
 		$findCriteria->addInCondition($columnName, $this->selectedIds, $tableAlias, $useAnd, $useNot);
@@ -90,6 +93,8 @@ class GO_Base_Component_MultiSelectGrid {
 
 	/**
 	 * Set the title for the store. This will be outputted in the JSON response.
+	 * 
+	 * Should be called in GO_Base_Controller_AbstractModelController::beforeStoreStatement
 	 * 
 	 * @param GO_Base_Data_AbstractStore $store
 	 * @param string $titleAttribute 
