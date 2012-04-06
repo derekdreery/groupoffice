@@ -153,7 +153,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				$resourceEvent->user_id = $model->user_id;
 				
 
-				if (GO::modules()->customfields)
+				if (GO::modules()->customfields && isset($params['resource_options'][$resource_calendar_id]))
 					$resourceEvent->customfieldsRecord->setAttributes($params['resource_options'][$resource_calendar_id]);
 
 				$resourceEvent->save();
