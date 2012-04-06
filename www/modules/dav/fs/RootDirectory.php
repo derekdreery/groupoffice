@@ -42,7 +42,7 @@ class GO_Dav_Fs_RootDirectory extends Sabre_DAV_FS_Directory implements Sabre_DA
      * Returns a specific child node, referenced by its name 
      * 
      * @param string $name 
-     * @throws Sabre_DAV_Exception_FileNotFound
+     * @throws Sabre_DAV_Exception_NotFound
      * @return Sabre_DAV_INode 
      */
     public function getChild($name) {
