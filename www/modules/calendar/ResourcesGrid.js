@@ -52,19 +52,6 @@ GO.calendar.ResourcesGrid = function(config){
 			this.deleteSelected();
 		},
 		scope:this
-	},'-',{
-		iconCls: 'btn-settings',
-		text: GO.lang.strPermissions,
-		disabled: !GO.settings.modules.calendar.write_permission,
-		cls: 'x-btn-text-icon',
-		handler: function(){
-			if(!GO.calendar.permissionsDialog)
-			{
-				GO.calendar.permissionsDialog = new GO.calendar.PermissionsDialog();
-			}
-			GO.calendar.permissionsDialog.show(1);
-		},
-		scope: this
 	}];
 
 
