@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright Intermesh BV.
  *
@@ -7,7 +8,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  */
- 
+
 /**
  * The GO_Calendar_Model_Group model
  *
@@ -22,8 +23,7 @@
  * @property String $fields
  * @property int $show_not_as_busy
  */
-
-class GO_Calendar_Model_Group extends GO_Base_Db_ActiveRecord{
+class GO_Calendar_Model_Group extends GO_Base_Db_ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
@@ -31,34 +31,26 @@ class GO_Calendar_Model_Group extends GO_Base_Db_ActiveRecord{
 	 * @param String $className
 	 * @return GO_Calendar_Model_Group
 	 */
-	public static function model($className=__CLASS__)
-	{	
+	public static function model($className = __CLASS__) {
 		return parent::model($className);
 	}
-
-
-	/**
-	 * Enable this function if you want this model to check the acl's automatically.
-	 */
-	// public function aclField(){
-	//	 return 'acl_id';	
-	// }
-
+	
 	/**
 	 * Returns the table name
 	 */
-	 public function tableName() {
-		 return 'cal_groups';
-	 }
+	public function tableName() {
+		return 'cal_groups';
+	}
 
 	/**
 	 * Here you can define the relations of this model with other models.
 	 * See the parent class for a more detailed description of the relations.
 	 */
-	 public function relations() {
-		 
-		 return array(
-				'admins' => array('type'=>self::MANY_MANY, 'model'=>'GO_Base_Model_User', 'field'=>'group_id', 'linkModel' => 'GO_Calendar_Model_GroupAdmin'),
-			);
-	 }
+	public function relations() {
+
+		return array(
+				'admins' => array('type' => self::MANY_MANY, 'model' => 'GO_Base_Model_User', 'field' => 'group_id', 'linkModel' => 'GO_Calendar_Model_GroupAdmin'),
+		);
+	}
+
 }

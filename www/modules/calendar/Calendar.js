@@ -1768,8 +1768,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 
 			this.writableResourcesStore = new Ext.data.GroupingStore({
 				baseParams: {
-					'task': 'writable_calendars',
-					'resources' : 'true'
+					resourcesOnly : '1',
+					permissionLevel:GO.permissionLevels.write
 				},
 				reader: new Ext.data.JsonReader({
 					root: 'results',
@@ -1778,7 +1778,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					fields:['id','name','user_name','group_name']
 				}),
 				proxy: new Ext.data.HttpProxy({
-					url: GO.settings.modules.calendar.url+'json.php'
+					url: GO.url("calendar/calendar/calendarsWithGroup")
 				}),
 				groupField:'group_name',
 				sortInfo: {
@@ -2113,13 +2113,7 @@ GO.moduleManager.addModule('calendar', GO.calendar.MainPanel, {
 
 GO.mainLayout.onReady(function(){
 	GO.calendar.groupsStore = new GO.data.JsonStore({
-		url: GO.settings.modules.calendar.url+ 'json.php',
-		baseParams: {
-			task: 'groups'
-		},
-		root: 'results',
-		id: 'id',
-		totalProperty:'total',
+		url: GO.url("calendar/group/store"),
 		fields:['id','name','user_name','fields','acl_id'],
 		remoteSort: true
 	}),

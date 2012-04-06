@@ -3,6 +3,15 @@ class GO_Calendar_Controller_Group extends GO_Base_Controller_AbstractModelContr
 
 	protected $model = 'GO_Calendar_Model_Group';
 	
+	protected function getStoreParams($params) {
+		$findParams = GO_Base_Db_FindParams::newInstance();
+		
+		//don't show calendars group. First group is a special one for calendars.
+		$findParams->getCriteria()->addCondition('id', 1,'>');
+						
+		return $findParams;
+	}
+	
 	
 	protected function actionGroupsWithResources($params){
 		

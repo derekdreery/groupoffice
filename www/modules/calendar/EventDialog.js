@@ -1325,16 +1325,18 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		this.resourcesPanel = new Ext.Panel({
 			id:'resources-panel',
 			title:GO.calendar.lang.resources,
-			border:false,
-			layout:'accordion',
+			border:true,
+			//layout:'accordion',
 			forceLayout:true,
-			layoutConfig:{
-				titleCollapse:true,
-				animate:false,
-				activeOnTop:false
-			},
+			autoScroll:true,
+//			layoutConfig:{
+//				titleCollapse:true,
+//				animate:false,
+//				activeOnTop:false
+//			},
 			defaults:{
-				forceLayout:true
+				forceLayout:true,
+				border:false
 			}
 		});
 		this.resourcesPanel.on('show', function(){

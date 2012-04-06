@@ -65,24 +65,19 @@ Ext.extend(GO.calendar.GroupDialog, GO.Window, {
 		if (this.group_id > 0)
 		{
 			this.formPanel.load({
-				url : GO.settings.modules.calendar.url + 'json.php',
+				url : GO.url("calendar/group/load"),
 				waitMsg : GO.lang['waitMsgLoad'],
 				success : function(form, action)
 				{
 					this.groupAdminsPanel.setGroupId(action.result.data.id);
-					this.selectUser.setRemoteText(action.result.data.user_name);
 					
-					
-
 					if(this.group_id == 1)
 					{
 						this.tabPanel.hideTabStripItem('permissions-panel');
-						this.selectUser.setDisabled(true);
 						this.setTitle(GO.calendar.lang.calendar_group);
 					}else
 					{
 						this.tabPanel.unhideTabStripItem('permissions-panel');
-						this.selectUser.setDisabled(false);
 						this.setTitle(GO.calendar.lang.resource_group);
 					}
 
@@ -105,23 +100,20 @@ Ext.extend(GO.calendar.GroupDialog, GO.Window, {
 		if(GO.customfields)
 			this.disableCategoriesPanel.setModel(group_id,"GO_Calendar_Model_Event");
 		
-		this.formPanel.form.baseParams['group_id'] = group_id;
+		this.formPanel.form.baseParams['id'] = group_id;
 		this.group_id = group_id;
 	},
 	submitForm : function(hide)
 	{
 		this.formPanel.form.submit({
-			url : GO.settings.modules.calendar.url + 'action.php',
-			params : {
-				'task' : 'save_group'
-			},
+			url : GO.url("calendar/group/submit"),			
 			waitMsg : GO.lang['waitMsgSave'],
 			success : function(form, action)
 			{
-				if (action.result.group_id)
+				if (action.result.id)
 				{
-					this.groupAdminsPanel.setGroupId(action.result.group_id);
-					this.setGroupId(action.result.group_id);
+					this.groupAdminsPanel.setGroupId(action.result.id);
+					this.setGroupId(action.result.id);
 				}
 		
 				var fields = (this.group_id == 1) ? action.result.fields : false;
@@ -155,12 +147,7 @@ Ext.extend(GO.calendar.GroupDialog, GO.Window, {
 			cls : 'go-form-panel',
 			layout : 'form',
 			autoScroll : true,
-			items : [this.selectUser = new GO.form.SelectUser({
-				fieldLabel : GO.lang['strUser'],
-				disabled : !GO.settings.modules['calendar']['write_permission'],
-				value : GO.settings.user_id,
-				anchor : '100%'
-			}), {
+			items : [{
 				xtype : 'textfield',
 				name : 'name',
 				anchor : '100%',
@@ -173,27 +160,27 @@ Ext.extend(GO.calendar.GroupDialog, GO.Window, {
 			}]
 		});
 
-//		if(GO.customfields && GO.customfields.types["1"])
-//		{
-//			if(GO.customfields.types["1"].panels.length > 0)
-//			{
-//				var cfFieldset = new Ext.form.FieldSet({
-//					autoHeight:true,
-//					title:GO.customfields.lang.customfields
-//				});
-//				for(var i=0;i<GO.customfields.types["1"].panels.length;i++)
-//				{
-//					cfFieldset.add({
-//						xtype:'checkbox',
-//						name:'fields[cf_category_'+GO.customfields.types["1"].panels[i].category_id+']',
-//						hideLabel: true,
-//						boxLabel:GO.customfields.types["1"].panels[i].title
-//					});
-//				}
-//				this.propertiesPanel.add(cfFieldset);
-//			}
-//		}
-//	
+		//		if(GO.customfields && GO.customfields.types["1"])
+		//		{
+		//			if(GO.customfields.types["1"].panels.length > 0)
+		//			{
+		//				var cfFieldset = new Ext.form.FieldSet({
+		//					autoHeight:true,
+		//					title:GO.customfields.lang.customfields
+		//				});
+		//				for(var i=0;i<GO.customfields.types["1"].panels.length;i++)
+		//				{
+		//					cfFieldset.add({
+		//						xtype:'checkbox',
+		//						name:'fields[cf_category_'+GO.customfields.types["1"].panels[i].category_id+']',
+		//						hideLabel: true,
+		//						boxLabel:GO.customfields.types["1"].panels[i].title
+		//					});
+		//				}
+		//				this.propertiesPanel.add(cfFieldset);
+		//			}
+		//		}
+		//	
 		var items = [this.propertiesPanel];
 
 		this.groupAdminsPanel = new GO.calendar.GroupAdminsPanel({
@@ -216,11 +203,10 @@ Ext.extend(GO.calendar.GroupDialog, GO.Window, {
 		});
         
 		this.formPanel = new Ext.form.FormPanel({
-			waitMsgTarget : true,
-			url : GO.settings.modules.calendar.url + 'action.php',
+			waitMsgTarget : true,			
 			border : false,
 			baseParams : {
-				task : 'group'
+				id:0
 			},
 			items : this.tabPanel
 		});        

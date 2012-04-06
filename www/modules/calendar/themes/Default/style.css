@@ -569,3 +569,17 @@ a.x-monthGrid-cell-day-text:hover{
 .x-grid3-col-summary-calendar-name-heading{
 	white-space:normal !important;
 }
+
+
+#resources-panel .x-panel-header{
+	background:none;
+	border:0;
+}
+
+#resources-panel .x-panel-header-text{
+	font-size:13px;
+}
+
+#resources-panel .x-fieldset-header-text{
+	color:#666
+}
