@@ -40,7 +40,7 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 			$this->_folder = GO_Files_Model_Folder::model()->findByPath($this->relpath);
 
 			if (!$this->_folder) {
-				throw new Sabre_DAV_Exception_FileNotFound('Folder not found: ' . $this->relpath);
+				throw new Sabre_DAV_Exception_NotFound('Folder not found: ' . $this->relpath);
 			}
 		}
 		return $this->_folder;
@@ -148,7 +148,7 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 	 * Returns a specific child node, referenced by its name
 	 *
 	 * @param string $name
-	 * @throws Sabre_DAV_Exception_FileNotFound
+	 * @throws Sabre_DAV_Exception_NotFound
 	 * @return Sabre_DAV_INode
 	 */
 	public function getChild($name) {
@@ -162,7 +162,7 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 		} else if (file_exists($path)) {
 			return new GO_Dav_Fs_File($this->relpath . '/' . $name);
 		} else {
-			throw new Sabre_DAV_Exception_FileNotFound('File with name ' . $path . ' could not be located');
+			throw new Sabre_DAV_Exception_NotFound('File with name ' . $path . ' could not be located');
 		}
 	}
 
@@ -180,10 +180,10 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 
 		try {
 			if (!file_exists($path))
-				throw new Sabre_DAV_Exception_FileNotFound('File with name ' . $path . ' could not be located');
+				throw new Sabre_DAV_Exception_NotFound('File with name ' . $path . ' could not be located');
 
 			return true;
-		} catch (Sabre_DAV_Exception_FileNotFound $e) {
+		} catch (Sabre_DAV_Exception_NotFound $e) {
 
 			return false;
 		}
@@ -203,7 +203,7 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 		$f = $this->_getFolder();
 
 		if (!$f) {
-			throw new Sabre_DAV_Exception_FileNotFound("Folder not found in database");
+			throw new Sabre_DAV_Exception_NotFound("Folder not found in database");
 		}
 		
 		$stmt = $f->getSubFolders();

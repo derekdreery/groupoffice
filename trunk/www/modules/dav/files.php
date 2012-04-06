@@ -25,8 +25,8 @@ require_once GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/autoload.php'
 $authBackend = new GO_Dav_Auth_Backend();
 $userpass = $authBackend->getUserPass();
 
-//if(!GO::modules()->dav)
-//	trigger_error('DAV module not installed. Install it at Start menu -> Modules', E_USER_ERROR);
+if(!GO::modules()->isInstalled("dav"))
+	trigger_error('DAV module not installed. Install it at Start menu -> Modules', E_USER_ERROR);
 
 
 $root = new GO_Dav_Fs_RootDirectory();

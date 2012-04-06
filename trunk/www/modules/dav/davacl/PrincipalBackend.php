@@ -23,8 +23,8 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre_DAVACL_IPrincipalBackend {
 			'uri'=>'principals/'.$user->username,
 			'{DAV:}displayname' => $user->username,
 			'{http://sabredav.org/ns}email-address'=>$user->email,
-			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL'=>new Sabre_DAV_Property_Href('principals/'.$user->username.'/inbox'),
-			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL'=>new Sabre_DAV_Property_Href('principals/'.$user->username.'/outbox')
+//			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL'=>new Sabre_DAV_Property_Href('principals/'.$user->username.'/inbox'),
+//			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL'=>new Sabre_DAV_Property_Href('principals/'.$user->username.'/outbox')
 		);
 
 	}
@@ -64,13 +64,28 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre_DAVACL_IPrincipalBackend {
      */
 		public function getPrincipalByPath($path) {
 
-			$username = basename($path);
+		//path can be principals/username or
+		//principals/username/calendar-proxy-write
+		//we ignore principals and the second element is our username.
+
+			$pathParts = explode('/', $path);
+			
+			//var_dump($pathParts);
+
+
+			$username = $pathParts[1];
 
 			$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $username);
-			if (!$user)
+			if (!$user) {
 				return false;
-			else
+			} elseif (isset($pathParts[2])) {
+				return array(
+						'uri' => $path,
+						'{DAV:}displayname' => $pathParts[2]
+				);
+			} else {
 				return $this->_modelToDAVUser($user);
+			}
 		}
 
     /**
@@ -156,5 +171,49 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre_DAVACL_IPrincipalBackend {
 //        }
 
     }
+		
+		function updatePrincipal($path, $mutations){
+			return false;
+		}
+		
+		function searchPrincipals($prefixPath, array $searchProperties) {
+
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->select('t.username');
+		$findCriteria = $findParams->getCriteria();
+
+		foreach ($searchProperties as $property => $value) {
+
+			switch ($property) {
+
+				case '{DAV:}displayname' :
+
+					$findCriteria->addRawCondition("CONCAT(t.first_name,t.middle_name,t.last_name)", ":name", "LIKE");
+					$findCriteria->addBindParameter(":name", '%' . $value . '%');
+
+					break;
+				case '{http://sabredav.org/ns}email-address' :
+					$findCriteria->addCondition('email', '%' . $value . '%', 'LIKE');
+					break;
+				default :
+					// Unsupported property
+					return array();
+			}
+		}
+		
+		$stmt = GO_Base_Model_User::model()->find($findParams);
+
+		$principals = array();
+		while ($record = $stmt->fetch()) {
+			// Checking if the principal is in the prefix
+//			list($rowPrefix) = Sabre_DAV_URLUtil::splitPath($row['uri']);
+//			if ($rowPrefix !== $prefixPath)
+//				continue;
+
+			$principals[] = $record['username'];
+		}
+
+		return $principals;
+	}
 
 }
