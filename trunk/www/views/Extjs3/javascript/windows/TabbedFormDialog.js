@@ -174,7 +174,10 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		});
 	},
 	focus : function(){		
-		var firstField = this.formPanel.form.items.first();
+		var firstField = this.formPanel.form.items.find(function(item){
+			if(!item.disabled)
+				return true;
+		});
 		if(firstField)
 			firstField.focus();		
 	},
