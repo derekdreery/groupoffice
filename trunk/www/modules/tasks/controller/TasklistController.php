@@ -32,6 +32,7 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 		$multiSel = new GO_Base_Component_MultiSelectGrid(
 						'ta-taskslists', 
 						"GO_Tasks_Model_Tasklist",$store, $params);		
+		$multiSel->setFindParamsForDefaultSelection($storeParams);
 		$multiSel->formatCheckedColumn();
 		
 		return parent::beforeStoreStatement($response, $params, $store, $storeParams);

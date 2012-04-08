@@ -3,7 +3,7 @@
 class GO_Base_Component_MultiSelectGrid {
 
 	private $_requestParamName;
-	/**
+		/**
 	 * The selected model ID's
 	 * 
 	 * @var array
@@ -37,17 +37,46 @@ class GO_Base_Component_MultiSelectGrid {
 
 		$this->_requestParamName = $requestParamName;
 		$this->_store = $store;
-		$this->_modelName = $modelName;		
+		$this->_modelName = $modelName;				
 		
 		if(empty($requestParams['noMultiSelectFilter']))
 			$this->_setSelectedIds($requestParams);
 	}
+	
+	/**
+	 * Call this if you want the first item or all items to be selected by default.
+	 * 
+	 * @param GO_Base_Db_FindParams $findParams
+	 * @param boolean $selectAll 
+	 */
+	public function setFindParamsForDefaultSelection(GO_Base_Db_FindParams $findParams, $selectAll=false){
+		
+		if(empty($this->selectedIds)){
+			
+			if(!$selectAll){
+				$findParams = clone $findParams;
+				$findParams->limit(1)->single();
+				$model = GO::getModel($this->_modelName)->find($findParams);
 
+				$this->selectedIds=array($model->pk);		
+			}else{
+				$stmt = GO::getModel($this->_modelName)->find($findParams);
+				while($model = $stmt->fetch()){
+					$this->selectedIds[]=$model->pk;
+				}
+			}			
+			$this->_save();
+		}
+	}
+
+	private function _save(){
+		GO::config()->save_setting('ms_' . $this->_requestParamName, implode(',', $this->selectedIds), GO::session()->values['user_id']);
+	}
 
 	private function _setSelectedIds(array $requestParams) {
 		if (isset($requestParams[$this->_requestParamName])) {
 			$this->selectedIds = json_decode($requestParams[$this->_requestParamName], true);
-			GO::config()->save_setting('ms_' . $this->_requestParamName, implode(',', $this->selectedIds), GO::session()->values['user_id']);
+			$this->_save();
 		} else {
 			$this->selectedIds = GO::config()->get_setting('ms_' . $this->_requestParamName, GO::session()->values['user_id']);
 			$this->selectedIds = $this->selectedIds!==false && $this->selectedIds !=""  ? explode(',', $this->selectedIds) : array();

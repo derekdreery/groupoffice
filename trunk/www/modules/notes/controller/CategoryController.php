@@ -13,6 +13,7 @@ class GO_Notes_Controller_Category extends GO_Base_Controller_AbstractModelContr
 		$multiSel = new GO_Base_Component_MultiSelectGrid(
 						'no-multiselect', 
 						"GO_Notes_Model_Category",$store, $params);		
+		$multiSel->setFindParamsForDefaultSelection($storeParams);
 		$multiSel->formatCheckedColumn();
 		
 		return parent::beforeStoreStatement($response, $params, $store, $storeParams);

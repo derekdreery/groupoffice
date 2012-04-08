@@ -6,6 +6,7 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 		$multiSel = new GO_Base_Component_MultiSelectGrid(
 						'books', 
 						"GO_Addressbook_Model_Addressbook",$store, $params);		
+		$multiSel->setFindParamsForDefaultSelection($storeParams);
 		$multiSel->formatCheckedColumn();
 		
 		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
