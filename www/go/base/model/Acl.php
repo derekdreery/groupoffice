@@ -107,7 +107,7 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 		
 		$model = GO_Base_Model_AclUsersGroups::model()->findSingle($findParams);
 		if($model)
-			return $model->level;
+			return intval($model->level);
 		else 
 			return false;
 	}
