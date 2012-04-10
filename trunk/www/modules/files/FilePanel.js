@@ -98,6 +98,31 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 					scope:this
 				})
 			}
+			
+			if(target.hasClass("fs-deleteDL")){
+				
+			var answer = confirm(GO.files.lang.deleteDownloadLink);
+			if(answer){
+				
+					GO.request({
+						url:'files/file/submit',
+						params:{
+							id:this.data.id,
+							expire_time:0,
+							random_code:null
+						},
+						success:function(action, response, result){
+							this.reload();
+							var filesModulePanel = GO.mainLayout.getModulePanel('files');
+							if(filesModulePanel && filesModulePanel.folder_id==this.data.folder_id)
+								filesModulePanel.getActiveGridStore().load();
+						},
+						scope:this
+					})
+				}
+			}
+			
+			
 		}, this);
 		
 		this.loadUrl=GO.url('files/file/display');
@@ -154,7 +179,11 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 						
 						'<tr>'+
             '<td>'+GO.files.lang.downloadUrl+':</td>'+
-            '<td><a href="{download_link}" target="_blank">{download_link}</a></td>'+
+            '<td><a href="{download_link}" target="_blank">{download_link}</a>'+
+						//'<tpl if="unlock_allowed">'+
+							' <span class="fs-deleteDL" style="cursor:pointer;text-decoration:underline;">['+GO.files.lang.deletedDownloadLink+']</span>'+
+						//'</tpl>'+
+						'</td>'+
 						'</tr>'+
           '</tpl>'+
 
