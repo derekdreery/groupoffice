@@ -254,6 +254,48 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 		return parent::afterSave($wasNew);
 	}
 	
+	/**
+	 * Get all users in this acl. The user models will contain an extra
+	 * permission_level property.
+	 * 
+	 * @return GO_Base_Db_ActiveStatement 
+	 */
+	public function getUsers(){
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->select('t.*,a.level as permission_level')
+						->joinModel(array(
+								'model'=>"GO_Base_Model_AclUsersGroups",
+								'foreignField'=>'user_id',
+								'tableAlias'=>'a'								
+						));
+		
+		$findParams->getCriteria()->addCondition('acl_id', $this->id, '=','a');
+		
+		return GO_Base_Model_User::model()->find($findParams);
+	}
+	
+	/**
+	 * Get all groups in this acl. The group models will contain an extra
+	 * permission_level property.
+	 * 
+	 * @return GO_Base_Db_ActiveStatement 
+	 */
+	public function getGroups(){
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->select('t.*,a.level as permission_level')
+						->joinModel(array(
+								'model'=>"GO_Base_Model_AclUsersGroups",
+								'foreignField'=>'group_id',
+								'tableAlias'=>'a'								
+						));
+		
+		$findParams->getCriteria()->addCondition('acl_id', $this->id, '=','a');
+		
+		return GO_Base_Model_Group::model()->find($findParams);
+	}
+	
 		
 	
 	/**
