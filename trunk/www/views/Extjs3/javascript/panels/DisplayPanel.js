@@ -246,7 +246,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 			tbar.setDisabled(false);
 
 		if(this.editButton)
-			this.editButton.setDisabled(!this.data.permission_level<GO.permissionLevels.write);
+			this.editButton.setDisabled(this.data.permission_level<GO.permissionLevels.write);
 		
 		
 		if(this.newMenuButton){
