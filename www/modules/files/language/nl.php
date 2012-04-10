@@ -82,3 +82,6 @@ $l['notifyRecursiveQuestion']='Wilt u dit toepassen op alle submappen?';
 $l['unlock']='Vrijgeven';
 $l['lockedBy']='Vergrendeld door';
 $l['lock']='Vergrendelen';
+
+$l['deletedDownloadLink']='Verwijderen';
+$l['deleteDownloadLink']='Je staat op het punt om deze link te verwijderen, weet je het zeker?';
