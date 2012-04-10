@@ -566,7 +566,7 @@ class GO_Base_Util_String {
 			$name .= $last;
 		}
 
-		return $name;
+		return trim($name);
 	}
 
 
