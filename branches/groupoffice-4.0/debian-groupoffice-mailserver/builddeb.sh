@@ -46,6 +46,7 @@ if [ "$1" == "send" ]; then
 
 	#ssh mschering@imfoss.nl "dpkg-scanpackages /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary /dev/null | gzip -9c > /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary/Packages.gz"
 else
-	debuild -S -rfakeroot
+	debuild -rfakeroot
+	mv *.deb ../
 fi
 
