@@ -98,22 +98,6 @@ chown vmail:mail /var/lib/dovecot
 touch /var/lib/dovecot/shared-mailboxes.db
 chown vmail:mail /var/lib/dovecot/shared-mailboxes.db
 
-#check if user vacation exists. Exit code 0 means it exists
-if  ! id vacation 1>/dev/null 2>&1 ; then
-	echo setting up vacation
-	mkdir /var/spool/vacation
-	useradd -r -d /var/spool/vmail -s /sbin/nologin -c "Virtual vacation" vacation
-fi
-
-chown -R vacation:vacation /var/spool/vacation/
-chmod 700 /var/spool/vacation/
-touch /var/log/vacation.log /var/log/vacation-debug.log
-chown vacation:vacation /var/log/vacation*
-
-chown vacation:vacation /usr/bin/groupoffice-vacation
-chmod 700 /usr/bin/groupoffice-vacation
-
-
 
 #check if user spamd exists. Exit code 0 means it exists
 if  ! id spamd 1>/dev/null 2>&1 ; then
@@ -166,9 +150,7 @@ invoke-rc.d dovecot restart 3> /dev/null || true
 invoke-rc.d clamav-daemon restart 3> /dev/null || true
 invoke-rc.d clamav-freshclam restart 3> /dev/null || true
 
-php /usr/share/groupoffice-mailserver/addadminaccount.php
-
-find /home/groupoffice -maxdepth 2 -exec chown www-data:www-data {} \;
+#php /usr/share/groupoffice-mailserver/addadminaccount.php
 
 #DEBHELPER#
 

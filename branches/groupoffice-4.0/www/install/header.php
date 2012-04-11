@@ -1,6 +1,6 @@
 <?php
 define('GO_NO_SESSION',true);
-require('../GO.php');
+require(dirname(dirname(__FILE__)).'/GO.php');
 
 function redirect($url){
 	header('Location: '.$url);
