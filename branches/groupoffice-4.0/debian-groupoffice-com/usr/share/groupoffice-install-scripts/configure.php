@@ -76,8 +76,8 @@ chmod('/etc/groupoffice/config.php', 0640);
 
 require_once('/etc/groupoffice/config.php');
 
-exec('/usr/bin/php '.$config['root_path'].'install/autoinstall.php -c=/etc/groupoffice/config.php');
-exec('/usr/bin/php '.$config['root_path'].'groupofficecli.php -r=maintenance/upgrade -c=/etc/groupoffice/config.php');
+system('/usr/bin/php '.$config['root_path'].'install/autoinstall.php -c=/etc/groupoffice/config.php --adminpassword=admin --adminusername=admin');
+system('/usr/bin/php '.$config['root_path'].'groupofficecli.php -r=maintenance/upgrade -c=/etc/groupoffice/config.php');
 
 echo "Done!\n\n";
 ?>
