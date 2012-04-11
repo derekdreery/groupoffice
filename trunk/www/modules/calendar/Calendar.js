@@ -2026,15 +2026,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			});
 
 			this.categoriesGrid = new GO.calendar.CategoriesGrid({
-				title:GO.calendar.lang.categories,
+				title:GO.calendar.lang.globalCategories,
 				layout:'fit',
-				store:GO.calendar.categoriesStore,
-				deleteConfig: {
-					callback:function(){
-						this.adminDialog.madeChanges=true;
-					},
-					scope:this
-				}
+				store:GO.calendar.globalOnlyCategoriesStore
 			});
 
 			GO.calendar.categoryDialog = new GO.calendar.CategoryDialog();
@@ -2043,7 +2037,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				GO.calendar.categoriesStore.reload();		
 			},this);
 
-			var items = [this.calendarsGrid, this.viewsGrid, this.categoriesGrid];
+			var items = [this.calendarsGrid,this.categoriesGrid,this.viewsGrid];
 			if(GO.settings.has_admin_permission)
 			{
 				items.push(this.groupsGrid);
@@ -2119,15 +2113,41 @@ GO.mainLayout.onReady(function(){
 	}),
 
 	GO.calendar.categoriesStore = new GO.data.JsonStore({
-		url: GO.settings.modules.calendar.url+ 'json.php',
-		baseParams: {
-			task: 'categories'
+		url : GO.url('calendar/category/store'),
+		baseParams : {
+			calendar_id:0
 		},
-		root: 'results',
-		id: 'id',
-		totalProperty:'total',
-		fields:['id','name','user_name','user_id','color'],
-		remoteSort: true
+		root : 'results',
+		totalProperty : 'total',
+		id : 'id',
+		fields : ['id', 'name','color','calendar_id'],
+		remoteSort : true
+	}),
+	
+	GO.calendar.globalOnlyCategoriesStore = new GO.data.JsonStore({
+		url : GO.url('calendar/category/store'),
+		baseParams : {
+			calendar_id:0,
+			global_categories:1
+		},
+		root : 'results',
+		totalProperty : 'total',
+		id : 'id',
+		fields : ['id', 'name','color','calendar_id'],
+		remoteSort : true
+	}),
+	
+	GO.calendar.globalCategoriesStore = new GO.data.JsonStore({
+		url : GO.url('calendar/category/store'),
+		baseParams : {
+			calendar_id:0,
+			global_categories:1
+		},
+		root : 'results',
+		totalProperty : 'total',
+		id : 'id',
+		fields : ['id', 'name','color','calendar_id'],
+		remoteSort : true
 	}),
 
 	GO.newMenuItems.push({

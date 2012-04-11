@@ -72,6 +72,7 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 		return array(
 			'group' => array('type' => self::BELONGS_TO, 'model' => 'GO_Calendar_Model_Group', 'field' => 'group_id'),
 			'events' => array('type' => self::HAS_MANY, 'model' => 'GO_Calendar_Model_Event', 'field' => 'calendar_id', 'delete' => true),
+			'categories' => array('type' => self::HAS_MANY, 'model' => 'GO_Calendar_Model_Category', 'field' => 'calendar_id', 'delete' => true),
 			'tasklist' => array('type' => self::BELONGS_TO, 'model' => 'GO_Tasks_Model_Tasklist', 'field' => 'tasklist_id'),
 			'visible_tasklists' => array('type' => self::MANY_MANY, 'model' => 'GO_Tasks_Model_Tasklist', 'linkModel'=>'GO_Calendar_Model_CalendarTasklist', 'field'=>'calendar_id', 'linksTable' => 'cal_visible_tasklists', 'remoteField'=>'tasklist'),
 			);

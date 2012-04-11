@@ -166,6 +166,7 @@ $l["resourcesPermissions"]='Hulpmiddelen toegangsrechten';
 $l["categories"]='Categorieën';
 $l["category"]='Categorie';
 $l["globalCategory"]='Globale categorie';
+$l["globalCategories"]='Globale categorieen';
 $l["selectCategory"]='Selecteer categorie';
 $l["duration"]='Duur';
 $l["move"]='Verplaatsen';

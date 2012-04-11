@@ -19,7 +19,7 @@
  * @property int $id
  * @property String $name
  * @property String $color
- * @property int $user_id
+ * @property int $calendar_id
  */
 
 class GO_Calendar_Model_Category extends GO_Base_Db_ActiveRecord{

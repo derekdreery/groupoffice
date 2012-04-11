@@ -186,19 +186,15 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				params:{
 					requests:Ext.encode({
 						groups:{r:'calendar/group/store'},
-						categories:{r:'calendar/category/store'},
+						//categories:{r:'calendar/category/store'},
 						resources:{r:'calendar/group/groupsWithResources'}						
 					})
 				},
 				success: function(options, response, result)
 				{
 					GO.calendar.groupsStore.loadData(result.groups);
-					this.resourceGroupsStore.loadData(result.resources);
-
-					if(!GO.calendar.categoriesStore.loaded)
-						GO.calendar.categoriesStore.loadData(result.categories);
-
-
+					this.resourceGroupsStore.loadData(result.resources);				
+					
 					this.initialized=true;
 					
 					this.show(config);
@@ -369,7 +365,11 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 						this.toggleFieldSets(action.result.data.resources_checked);
 					}
 
-					this.selectCategory.container.up('div.x-form-item').setDisplayed(this.formPanel.form.baseParams['group_id']==1);
+					this.selectCategory.setCalendarId(action.result.data.calendar_id);
+					this.selectCategory.setRemoteText(action.result.remoteComboTexts.category_id);
+					//this.selectCategory.store.load();
+
+					//this.selectCategory.container.up('div.x-form-item').setDisplayed(this.formPanel.form.baseParams['group_id']==1);
 					
 					if(action.result.data.category_name)
 						this.selectCategory.setRemoteText(action.result.data.category_name);
@@ -888,13 +888,17 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			value:'',
 			valueField:'id',
 			displayField:'name',
-			store: GO.calendar.categoriesStore,
-			mode:'local',
+			store: GO.calendar.globalCategoriesStore,
+			mode:'remote',
 			triggerAction:'all',
 			emptyText:GO.calendar.lang.selectCategory,
 			editable:false,
 			selectOnFocus:true,
 			forceSelection:true,
+			setCalendarId : function(calendar_id){
+				this.clearLastSearch();
+				this.store.baseParams.calendar_id=calendar_id;
+			},
 			tpl:'<tpl for="."><div class="x-combo-list-item"><div style="float:left;width:20px;margin-right:5px;background-color:#{color}">&nbsp;</div>{name}</div></tpl>'
 		});
 
@@ -948,10 +952,14 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					scope:this,
 					change:function(sc, newValue, oldValue){
 						var record = sc.store.getById(newValue);
-						GO.customfields.disableTabs(this.tabPanel, record.data);	
+						GO.customfields.disableTabs(this.tabPanel, record.data);
+						this.selectCategory.setCalendarId(newValue);
+						this.selectCategory.reset();
 					}
 				}
-			}),this.selectCategory,new GO.form.PlainField({
+			}),
+			this.selectCategory,
+			new GO.form.PlainField({
 				fieldLabel: GO.lang.strOwner,
 				value: GO.settings.name,
 				name:'user_name'
