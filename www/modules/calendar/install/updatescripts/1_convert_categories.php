@@ -28,7 +28,7 @@ while($category = $stmt->fetch()){
 			// Get all events that have the old category and change the category to the new one.
 			$eventStmt = GO_Calendar_Model_Event::model()->findByAttributes(array('calendar_id'=>$calendar->id,'category_id'=>$category->id));
 			while($event = $eventStmt->fetch()){
-				echo "Update event $event->name\n";
+				//echo "Update event $event->name\n";
 				$event->category_id = $newCategory->id;
 				$event->save();
 			}
