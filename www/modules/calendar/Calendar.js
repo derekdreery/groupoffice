@@ -2037,7 +2037,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				GO.calendar.categoriesStore.reload();		
 			},this);
 
-			var items = [this.calendarsGrid,this.categoriesGrid,this.viewsGrid];
+			var items = [this.calendarsGrid,this.viewsGrid];
 			if(GO.settings.has_admin_permission)
 			{
 				items.push(this.groupsGrid);
@@ -2046,6 +2046,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			if(GO.settings.modules.calendar.write_permission)
 			{
 				items.push(this.resourcesGrid);
+				items.push(this.categoriesGrid);
 			}
             
 			this.adminDialog = new Ext.Window({
