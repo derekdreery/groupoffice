@@ -89,7 +89,7 @@ if(isset($installModules)){
 
 foreach ($modules as $moduleClass) {
 	$moduleController = new $moduleClass;
-	if ((!isset($installModules) && $moduleController->autoInstall()) || in_array($moduleController->id(), $installModules)) {
+	if ((!isset($installModules) && $moduleController->autoInstall()) || (isset($installModules) && in_array($moduleController->id(), $installModules))) {
 		
 		echo "Installing module ".$moduleController->id()."\n";
 		
