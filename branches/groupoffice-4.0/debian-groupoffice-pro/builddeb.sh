@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROMODULES="sync customfields gota caldav documenttemplates savemailas projects professional timeregistration hoursapproval billing tickets";
+PROMODULES="sync customfields gota caldav documenttemplates savemailas projects professional timeregistration hoursapproval tickets syncml";
 
 # useful: DEBCONF_DEBUG="developer"
 
@@ -45,7 +45,7 @@ for m in $PROMODULES; do
 	cp -R /var/www/release/packages/groupoffice-pro-$VERSION/modules/$m groupoffice-pro-$VERSION/usr/share/groupoffice/modules/
 done
 
-cp -R /var/www/release/packages/billing-$VERSION/billing groupoffice-pro-$VERSION/usr/share/groupoffice/modules
+#cp -R /var/www/release/packages/billing-$VERSION/billing groupoffice-pro-$VERSION/usr/share/groupoffice/modules
 
 cd groupoffice-pro-$VERSION
 
