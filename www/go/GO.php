@@ -409,6 +409,7 @@ class GO{
 					$log .= $_SERVER['REQUEST_URI'];
 
 				GO::debug($log);
+				GO::debug("User agent: ".$_SERVER['HTTP_USER_AGENT']." IP: ".$_SERVER['REMOTE_ADDR']);
 			}
 			//undo magic quotes if magic_quotes_gpc is enabled. It should be disabled!
 			if (get_magic_quotes_gpc()) {
