@@ -3,10 +3,8 @@ Distinguish declined and cancel	led events in grid.
 alarm import
 test invitation sending with moving in grid
 
-Workflow
 
 Grid scroll behouden bij reload
-Datums bij filesearch werken niet
 
 serverclient
 
@@ -20,15 +18,12 @@ Module icons
 
 karakter encoding: koi8-r
 
-TICKET GROUPS
-
-Filesearch batch edit
 Document conversion
 User import
-2 hour CMS ic
 
-Billing tab naar volgende regel
+Product opties bij billing
 
+Group-Office 100 users 600 euro, 150 users 700 euro etc.
 
 
 *** Lage prio:
