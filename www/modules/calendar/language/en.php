@@ -91,6 +91,7 @@ $l["resourcesPermissions"]='Resources permissions';
 $l["categories"]='Categories';
 $l["category"]='Category';
 $l["globalCategory"]='Global category';
+$l["globalCategories"]='Global categories';
 $l["selectCategory"]='Select category';
 $l["duration"]='Timespan';
 $l["move"]='Move';

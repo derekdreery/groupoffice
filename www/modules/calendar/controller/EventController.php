@@ -389,7 +389,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	protected function remoteComboFields() {
 		return array(
 				//	'category_id'=>'$model->category->name',
-				'calendar_id' => '$model->calendar->name'
+				'calendar_id' => '$model->calendar->name',
+				'category_id' => '$model->category->name'
 		);
 	}
 	

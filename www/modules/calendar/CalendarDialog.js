@@ -135,7 +135,12 @@ GO.calendar.CalendarDialog = function(config)
 		this.importButton.setDisabled(inputs.getCount()==1);
 	}, this);
 	
-
+	
+	this.categoriesGrid = new GO.calendar.CategoriesGrid({
+		title:GO.calendar.lang.category,
+		store: GO.calendar.categoriesStore,
+	});
+	
 	this.importTab = new Ext.Panel({		
 		layout:'form',
 		waitMsgTarget:true,
@@ -188,7 +193,8 @@ GO.calendar.CalendarDialog = function(config)
 	{
 		items.push(this.tasklistsTab);
 	}
-
+	
+	items.push(this.categoriesGrid);
 	items.push(this.readPermissionsTab);
 	items.push(this.importTab);
 
@@ -315,7 +321,9 @@ Ext.extend(GO.calendar.CalendarDialog, GO.Window, {
 			this.readPermissionsTab.setDisabled(true);
 
 			this.showGroups(resource);
-
+			
+			this.categoriesGrid.setCalendarId(0);
+			
 			GO.calendar.CalendarDialog.superclass.show.call(this);
 		}
 	},
@@ -326,7 +334,9 @@ Ext.extend(GO.calendar.CalendarDialog, GO.Window, {
 			this.tasklistsTab.store.loaded = false;
 			this.tasklistsTab.store.baseParams.calendar_id = calendar_id;
 		}
-
+		
+		this.categoriesGrid.setCalendarId(calendar_id);
+		
 		this.formPanel.form.load({
 			url: GO.url("calendar/calendar/load"),
 			params: {

@@ -35,12 +35,12 @@ CREATE TABLE IF NOT EXISTS `cal_calendars` (
 
 DROP TABLE IF EXISTS `cal_categories`;
 CREATE TABLE IF NOT EXISTS `cal_categories` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `color` char(6) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `calendar_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`)
+  KEY `calendar_id` (`calendar_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `cal_events` (
   `background` char(6) NOT NULL DEFAULT 'ebf1e2',
   `files_folder_id` int(11) NOT NULL,
   `read_only` tinyint(1) NOT NULL DEFAULT '0',
-  `category_id` int(11) NOT NULL DEFAULT '0',
+  `category_id` int(11) NULL,
   `sequence` int(11) NOT NULL DEFAULT '0',
   `exception_for_event_id` int(11) NOT NULL DEFAULT '0',
   `recurrence_id` varchar(20) NOT NULL DEFAULT '',
