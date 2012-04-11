@@ -1,0 +1,2 @@
+#Updates usage information in the servermanager.
+1 3 * * * root /usr/bin/php /usr/share/groupoffice-mailserver/cache_usage.php
