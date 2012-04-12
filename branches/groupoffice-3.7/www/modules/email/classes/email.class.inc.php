@@ -243,7 +243,7 @@ class email extends db {
 		if($count_login){
 			//clear old cache
 			$db = new db();
-			$sql = "DELETE FROM em_messages_cache WHERE udate<".Date::date_add(time(),-21)." AND account_id IN (SELECT id FROM em_accounts WHERE user_id=".$GO_SECURITY->user_id.")";
+			$sql = "DELETE FROM em_messages_cache WHERE udate<".Date::date_add(time(),-21);
 			$db->query($sql);
 		}
 	}
