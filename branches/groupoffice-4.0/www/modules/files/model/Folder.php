@@ -169,8 +169,10 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			$this->fsFolder->create();
 			
 			//sync parent timestamp
-			$this->parent->mtime=$this->parent->fsFolder->mtime();
-			$this->parent->save();			
+			if($this->parent){
+				$this->parent->mtime=$this->parent->fsFolder->mtime();
+				$this->parent->save();			
+			}
 			
 		} else {
 			
