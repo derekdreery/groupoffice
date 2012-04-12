@@ -118,10 +118,17 @@ Ext.extend(GO.base.model.multiselect.panel, GO.grid.EditorGridPanel, {
 		if(!this.store.loaded)		
 			this.store.load();
 	},
-	setModelId : function(model_id){
+	setModelId : function(model_id,load){
 		this.store.loaded=false;
 		this.model_id=this.store.baseParams.model_id=model_id;
 		this.setDisabled(!model_id);
+		
+		if(load){
+			if(model_id)
+				this.store.load();
+			else
+				this.store.removeAll();
+		}
 	}
 	//private
 //	callHandler : function(hide){
