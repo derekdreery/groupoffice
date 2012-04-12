@@ -17,7 +17,6 @@ modules/calendar/GroupDialog.js
 modules/calendar/ManagePermissionsPanel.js
 modules/calendar/ResourcesGrid.js
 modules/calendar/PortletSettings.js
-modules/calendar/GroupAdminsPanel.js
 modules/calendar/TasklistsGrid.js
 modules/calendar/EventPanel.js
 modules/calendar/CategoriesGrid.js
