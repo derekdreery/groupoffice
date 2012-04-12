@@ -1,0 +1,26 @@
+.notification{
+	padding: 5px;
+	clear:both;
+	margin-bottom: 5px;
+	margin-top: 5px;
+}
+
+.notice-ok{
+	border: 1px solid green;
+	background-color: lightgreen;
+}
+
+.notice-info{
+	border: 1px solid #0066BB;
+	background-color: lightcyan;
+}
+
+.notice-error{
+	border: 1px solid red;
+	background-color: lightpink;
+}
+
+.notice-warning{
+	border: 1px solid orange;
+	background-color: lightgoldenrodyellow;
+}
