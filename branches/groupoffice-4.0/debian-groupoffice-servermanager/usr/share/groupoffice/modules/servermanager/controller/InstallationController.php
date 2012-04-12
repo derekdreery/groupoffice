@@ -8,6 +8,10 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		return array('create','destroy', 'report');
 	}
 	
+	protected function ignoreAclPermissions() {
+		return array('create','destroy', 'report');
+	}
+	
 	protected function actionImport($params){
 		$folder = new GO_Base_Fs_Folder('/etc/groupoffice');
 		$items = $folder->ls();
@@ -18,7 +22,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				if(!$installation){
 					echo "Importing ".$item->name()."\n";
 					$installation = new GO_ServerManager_Model_Installation();
-					$installation->name=$item->name();
+					$installation->name=$item->name();					
 					$installation->report();					
 				}
 			}
@@ -353,7 +357,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$stmt = GO_ServerManager_Model_Installation::model()->find();
 		
 		if(!$this->isCli())
-			echo '<pre>';
+			throw new Exception("You may only run this command on the command line");
 		
 		$report = array(
 				'installations'=>array(),
@@ -368,21 +372,21 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			$report['installations'][]=$installation->report();
 		}
 		
-		if(class_exists('GO_Professional_LicenseCheck')){
-			
-			if(!isset(GO::config()->license_name)){
-				throw new Exception('$config["license_name"] is not set. Please contact Intermesh to get your key.');
-			}
-			
-			$report['license_name']=GO::config()->license_name;
-			
-			$c = new GO_Base_Util_HttpClient();
-			$response = $c->request('http://localhost/groupoffice/?r=licenses/license/report', array(
-					'report'=>json_encode($report)
-			));
-			
-			var_dump($response);
-		}
+//		if(class_exists('GO_Professional_LicenseCheck')){
+//			
+//			if(!isset(GO::config()->license_name)){
+//				throw new Exception('$config["license_name"] is not set. Please contact Intermesh to get your key.');
+//			}
+//			
+//			$report['license_name']=GO::config()->license_name;
+//			
+//			$c = new GO_Base_Util_HttpClient();
+//			$response = $c->request('http://localhost/groupoffice/?r=licenses/license/report', array(
+//					'report'=>json_encode($report)
+//			));
+//			
+//			var_dump($response);
+//		}
 		
 	
 	

@@ -151,6 +151,10 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 			return false;
 		
 		require($this->configPath);
+		
+		if(isset($config['max_users']))
+			$this->max_users=$config['max_users'];
+		
 		$folder = new GO_Base_Fs_Folder($config['file_storage_path']);
 		$this->file_storage_usage=$folder->calculateSize();
 		
@@ -158,7 +162,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		$this->_calculateMailboxUsage($config);
 		$this->_calculateInstallationUsage($config);
 		
-		$this->save();
+		//$this->save();
 		
 		$report = $this->getAttributes();
 		
@@ -197,7 +201,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 						->select('count(*) as count, max(lastlogin) AS lastlogin');
 		$record = GO_Base_Model_User::model()->findSingle($findParams);						
 		
-		$this->last_login = $record['lastlogin'];
+		$this->lastlogin = $record['lastlogin'];
 		$this->count_users = $record['count'];		
 		
 		$allowedModules = empty($config['allowed_modules']) ? array() : explode(',', $config['allowed_modules']);
@@ -224,6 +228,8 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		
 		//reconnect to servermanager database
 		GO::setDbConnection();
+		
+		$this->save();
 		
 		GO_ServerManager_Model_InstallationUser::model()->deleteByAttribute('installation_id', $this->id);
 		
