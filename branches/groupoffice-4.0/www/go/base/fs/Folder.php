@@ -24,9 +24,10 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 * Get folder directory listing.
 	 * 
 	 * @param boolean $getHidden
+	 * @param boolean|string $sort 'mtime','ctime' or 'name'
 	 * @return GO_Base_Fs_File or GO_Base_Fs_Folder
 	 */
-	public function ls($getHidden=false) {
+	public function ls($getHidden=false, $sort=false) {
 		if (!$dir = opendir($this->path))
 			return false;
 
@@ -37,14 +38,28 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 							($getHidden || !(strpos($item, ".") === 0) )) {
 			
 				if(is_file($folderPath))					
-					$folders[] = new GO_Base_Fs_File($folderPath);
+					$o = new GO_Base_Fs_File($folderPath);
 				else
-					$folders[] = new GO_Base_Fs_Folder($folderPath);
+					$o = new GO_Base_Fs_Folder($folderPath);
+				
+				if(!$sort){
+					$folders[]=$o;
+				}else{
+					$sortKey = $sort=='mtime' || $sort=='ctime' ? date('YmdGi', $o->$sort()).$o->name() : $o->$sort();
+					$folders[$sortKey]=$o;
+				}
 			}
 		}
+		
 		closedir($dir);
 		
-		return $folders;
+		if($sort){
+			ksort($folders);
+			return array_values($folders);
+		}else		
+		{
+			return $folders;
+		}
 	}
 	
 	/**

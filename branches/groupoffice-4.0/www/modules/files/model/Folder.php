@@ -165,7 +165,13 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	protected function afterSave($wasNew) {
 
 		if ($wasNew) {
+			
 			$this->fsFolder->create();
+			
+			//sync parent timestamp
+			$this->parent->mtime=$this->parent->fsFolder->mtime();
+			$this->parent->save();			
+			
 		} else {
 			
 			unset($this->_path);
@@ -314,7 +320,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 
 	
 	/**
-	 * Add a file to this folder
+	 * Add a file to this folder. The file must already be present on the filesystem.
 	 * 
 	 * @param String $name
 	 * @return GO_Files_Model_File 
@@ -444,7 +450,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		if($this->mtime < $this->fsFolder->mtime()){
 			GO::debug("Filesystem folder ".$this->path." is not in sync with database. Will sync now.");
 			$this->syncFilesystem ();
-			$this->mtime=time();
+			$this->mtime=$this->fsFolder->mtime();
 			$this->save();
 		}
 	}
