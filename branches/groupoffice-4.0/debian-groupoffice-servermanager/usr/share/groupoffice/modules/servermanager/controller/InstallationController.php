@@ -8,6 +8,24 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		return array('create','destroy', 'report');
 	}
 	
+	protected function actionImport($params){
+		$folder = new GO_Base_Fs_Folder('/etc/groupoffice');
+		$items = $folder->ls();
+		
+		foreach($items as $item){
+			if($item->isFolder() && $item->child('config.php')){
+				$installation = GO_ServerManager_Model_Installation::model()->findSingleByAttribute('name', $item->name());
+				if(!$installation){
+					echo "Importing ".$item->name()."\n";
+					$installation = new GO_ServerManager_Model_Installation();
+					$installation->name=$item->name();
+					$installation->report();					
+				}
+			}
+		}
+		echo "Done\n\n";
+	}
+	
 	public function actionDestroy($params){
 		if(PHP_SAPI!='cli')
 			throw new Exception("Action servermanager/installation/delete may only be run by root on the command line");
