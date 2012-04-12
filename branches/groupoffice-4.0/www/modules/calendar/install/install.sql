@@ -195,19 +195,16 @@ CREATE TABLE IF NOT EXISTS `cal_settings` (
 
 DROP TABLE IF EXISTS `cal_views`;
 CREATE TABLE IF NOT EXISTS `cal_views` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(50) DEFAULT NULL,
-  `start_hour` tinyint(4) NOT NULL DEFAULT '0',
-  `end_hour` tinyint(4) NOT NULL DEFAULT '0',
-  `event_colors_override` enum('0','1') NOT NULL DEFAULT '0',
   `time_interval` int(11) NOT NULL DEFAULT '1800',
   `acl_id` int(11) NOT NULL DEFAULT '0',
   `merge` tinyint(1) NOT NULL DEFAULT '0',
   `owncolor` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
