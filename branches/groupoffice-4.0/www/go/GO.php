@@ -122,20 +122,20 @@ class GO{
 		return self::$db;
 	}
 	
-	public static function setDbConnection($dbname="", $dbuser="", $dbpass="", $dbhost=""){
+	public static function setDbConnection($dbname=false, $dbuser=false, $dbpass=false, $dbhost=false){
 		
 		self::$db=null;
 		
-		if($dbname=="")
+		if($dbname===false)
 			$dbname=GO::config()->db_name;
 		
-		if($dbuser=="")
+		if($dbuser===false)
 			$dbuser=GO::config()->db_user;
 		
-		if($dbpass=="")
+		if($dbpass===false)
 			$dbpass=GO::config()->db_pass;
 
-		if($dbhost=="")
+		if($dbhost===false)
 			$dbhost=GO::config()->db_host;
 		
 		GO::debug("Connect: mysql:host=$dbhost;dbname=$dbname, $dbuser, ***");

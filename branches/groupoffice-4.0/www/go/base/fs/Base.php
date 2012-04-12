@@ -58,6 +58,24 @@ abstract class GO_Base_Fs_Base{
 	}
 	
 	/**
+	 * Get a child file or folder.
+	 * 
+	 * @param string $filename
+	 * @return \GO_Base_Fs_File|\GO_Base_Fs_Folder|boolean 
+	 */
+	public function child($filename){
+		$childPath = $this->path.'/'.$filename;
+		if(is_file($childPath)){
+			return new GO_Base_Fs_File($childPath);
+		} elseif(is_dir($childPath)){
+			return new GO_Base_Fs_Folder($childPath);
+		}else
+		{
+			return false;
+		}
+	}
+	
+	/**
 	 * Return absolute filesystem path
 	 * 
 	 * @return String 
