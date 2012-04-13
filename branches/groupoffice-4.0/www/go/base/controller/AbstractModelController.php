@@ -470,7 +470,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$workflowResponse['approvers'] = array();
 			$workflowResponse['approver_groups'] = array();
 			$workflowResponse['step_id'] = $workflowModel->step_id;
-			
+						
 			if($workflowModel->step_id == '-1'){
 				$workflowResponse['step_progress'] = '';
 				$workflowResponse['step_name'] = GO::t('complete','workflow');
@@ -492,11 +492,15 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				$approversStmnt = $workflowModel->requiredApprovers;
 			
 				while($approver = $approversStmnt->fetch()){
-					$workflowResponse['approvers'][] = array('name'=>$approver->name,'approved'=>$currentStep->hasApproved($workflowModel->id,$approver->id),'last'=>'0');
+					$approver_hasapproved = $currentStep->hasApproved($workflowModel->id,$approver->id);
+					//var_dump($approver_hasapproved);
+					$workflowResponse['approvers'][] = array('name'=>$approver->name,'approved'=>$approver_hasapproved,'last'=>'0');
 				}
 				// Set the last flag for the latest approver in the list
 				$i = count($workflowResponse['approvers'])-1;
-				$workflowResponse['approvers'][$i]['last'] = "1";
+				
+				if($i >= 0)
+					$workflowResponse['approvers'][$i]['last'] = "1";
 			
 				// Add the approver groups of the current step to the response
 				$approverGroupsStmnt = $currentStep->approverGroups;
