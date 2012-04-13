@@ -2136,7 +2136,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			return false;
 		}
 		
-		$this->_fixLinkedEmailAcls();
+		if(!$wasNew)
+			$this->_fixLinkedEmailAcls();
 
 		/**
 		 * Useful event for modules. For example custom fields can be loaded or a files folder.
@@ -2166,7 +2167,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				if($relation && $this->isModified($relation['field'])){
 					//acl relation changed. We must update linked emails
 					
-					GO::debug("Fixing linked e-mail acl's because relation $relation changed.");
+					GO::debug("Fixing linked e-mail acl's because relation ".$relation['name']." changed.");
 					
 					$stmt = GO_Savemailas_Model_LinkedEmail::model()->findLinks($this);
 					while($linkedEmail = $stmt->fetch()){
