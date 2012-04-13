@@ -2209,6 +2209,7 @@ GO.linkHandlers["GO_Calendar_Model_Event"]=function(id){
 	}
 	GO.calendar.eventLinkWindow.eventPanel.load(id);
 	GO.calendar.eventLinkWindow.show();
+	return GO.files.eventLinkWindow;
 };
 GO.linkPreviewPanels["GO_Calendar_Model_Event"]=function(config){
 	var config = config || {};
