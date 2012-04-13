@@ -398,6 +398,9 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		
 		GO::$disableModelCache=true;
 		
+//		if(class_exists("GO_Filesearch_FilesearchModule"))
+//			GO_Filesearch_FilesearchModule::$disableIndexing=true;
+		
 		if($this->fsFolder->exists()){
 			$items = $this->fsFolder->ls();
 			

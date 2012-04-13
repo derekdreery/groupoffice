@@ -48,7 +48,7 @@ $l['description'] = 'Files module; Module for sharing files.';
 
 $l['fileNotFound'] = 'File not found';
 $l['folderExists'] = 'The folder already exists';
-$l['filenameExists'] = 'Filename already exists';
+$l['filenameExists'] = 'Filename %s already exists';
 $l['uploadedSucces'] = 'File uploaded successfully';
 $l['ootextdoc']='Open-Office Text document';
 $l['wordtextdoc']='Microsoft Word document';

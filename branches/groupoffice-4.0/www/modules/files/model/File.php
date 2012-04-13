@@ -219,7 +219,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		
 		$existingFile = $this->folder->hasFile($this->name);
 		if($existingFile && $existingFile->id!=$this->id)
-			throw new Exception(GO::t('filenameExists','files'));
+			throw new Exception(sprintf(GO::t('filenameExists','files'), $this->path));
 		
 		return parent::beforeSave();
 	}
