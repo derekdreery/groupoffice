@@ -1966,6 +1966,7 @@ GO.linkHandlers["GO_Files_Model_File"]=function(id, record){
 	}
 	GO.files.linkFileWindow.filePanel.load(id);
 	GO.files.linkFileWindow.show();
+	return GO.files.linkFileWindow;
 }
 GO.linkPreviewPanels["GO_Files_Model_File"]=function(config){
 	config = config || {};
@@ -1986,6 +1987,7 @@ GO.linkHandlers["GO_Files_Model_Folder"]=function(id, record){
 	}
 	GO.files.linkFolderWindow.filePanel.load(id);
 	GO.files.linkFolderWindow.show();
+	return GO.files.linkFolderWindow;
 }
 GO.linkPreviewPanels["GO_Files_Model_Folder"]=function(config){
 	config = config || {};
