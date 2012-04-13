@@ -630,6 +630,7 @@ GO.linkHandlers["GO_Tasks_Model_Task"]=function(id, link_config){
 	}
 	GO.tasks.taskLinkWindow.taskPanel.load(id);
 	GO.tasks.taskLinkWindow.show();
+	return GO.tasks.taskLinkWindow;
 }
 
 GO.linkPreviewPanels["GO_Tasks_Model_Task"]=function(config){
