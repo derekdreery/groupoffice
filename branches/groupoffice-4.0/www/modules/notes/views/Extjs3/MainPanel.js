@@ -214,6 +214,7 @@ GO.linkHandlers["GO_Notes_Model_Note"]=function(id){
 	}
 	GO.notes.linkWindow.notePanel.load(id);
 	GO.notes.linkWindow.show();
+	return GO.notes.linkWindow;
 }
 
 GO.linkPreviewPanels["GO_Notes_Model_Note"]=function(config){
