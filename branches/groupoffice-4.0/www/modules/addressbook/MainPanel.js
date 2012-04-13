@@ -803,6 +803,7 @@ GO.linkHandlers["GO_Addressbook_Model_Contact"]=GO.mailFunctions.showContact=GO.
 	}
 	GO.addressbook.linkContactWindow.contactPanel.load(id);
 	GO.addressbook.linkContactWindow.show();
+	return GO.addressbook.linkContactWindow;
 }
 
 GO.linkPreviewPanels["GO_Addressbook_Model_Contact"]=function(config){
@@ -829,4 +830,5 @@ GO.linkHandlers["GO_Addressbook_Model_Company"]=function(id){
 	}
 	GO.addressbook.linkCompanyWindow.companyPanel.load(id);
 	GO.addressbook.linkCompanyWindow.show();
+	return GO.addressbook.linkCompanyWindow;
 }
