@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROMODULES="professional billing";
+PROMODULES="billing";
 
 # useful: DEBCONF_DEBUG="developer"
 
@@ -42,7 +42,7 @@ svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-offi
 mv debian-groupoffice-billing groupoffice-billing-$VERSION
 
 for m in $PROMODULES; do
-	cp -R /var/www/release/packages/billing-$VERSION/modules/$m groupoffice-billing-$VERSION/usr/share/groupoffice/modules/
+	cp -R /var/www/release/packages/billing-$VERSION/$m groupoffice-billing-$VERSION/usr/share/groupoffice/modules/
 done
 
 
