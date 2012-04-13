@@ -14,5 +14,5 @@ svn commit -m 'Updated changelogs'
 #./debian-groupoffice-mailserver/builddeb.sh 
 ./debian-groupoffice-pro/builddeb.sh 
 ./debian-groupoffice-billing/builddeb.sh 
-./debian-groupoffice-documents/builddeb.sh send
+./debian-groupoffice-documents/builddeb.sh
 #./debian-groupoffice-com/builddeb.sh real 
