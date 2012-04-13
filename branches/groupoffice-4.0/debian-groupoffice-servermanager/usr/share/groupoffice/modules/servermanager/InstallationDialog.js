@@ -328,14 +328,14 @@ Ext.extend(GO.servermanager.InstallationDialog, Ext.Window,{
 					anchor: '-20',
 				 	hideLabel:true,
 				  boxLabel: GO.servermanager.lang.allowThemes,
-				  checked:!GO.util.empty(GO.servermanager.config.allow_themes)
+				  checked:false
 				},{
 					xtype: 'checkbox',
 				  name: 'allow_password_change',
 					anchor: '-20',
 				  hideLabel:true,
 				  boxLabel: GO.servermanager.lang.allowPasswordChange,
-				  checked:!GO.util.empty(GO.servermanager.config.allow_password_change)
+				  checked:true
 				}/*,{
 					xtype: 'checkbox',
 				  name: 'allow_registration',
@@ -497,26 +497,23 @@ Ext.extend(GO.servermanager.InstallationDialog, Ext.Window,{
 						xtype: 'textfield',
 					  name: 'restrict_smtp_hosts',
 						anchor: '-20',					  
-					  fieldLabel: GO.servermanager.lang.restrictSmtpHosts,
-					  value:GO.servermanager.config.restrict_smtp_hosts
+					  fieldLabel: GO.servermanager.lang.restrictSmtpHosts
 					},{
 						xtype: 'textfield',
 					  name: 'serverclient_domains',
 						anchor: '-20',					  
-					  fieldLabel: GO.servermanager.lang.mailDomains,
-					  value:GO.servermanager.config.serverclient_domains
+					  fieldLabel: GO.servermanager.lang.mailDomains
 						},new GO.form.NumberField({
 						decimals:0,
 					  name: 'max_users',
 						anchor: '-20',
 					  allowBlank:false,
-					  fieldLabel: GO.servermanager.lang.maxUsers,
-					  value:GO.servermanager.config.max_users
+					  fieldLabel: GO.servermanager.lang.maxUsers
 					}),new GO.form.NumberField({
 					  name: 'quota',
 						anchor: '-20',					  
 					  fieldLabel: GO.servermanager.lang.quota,
-					  value:GO.servermanager.config.quota
+					  value:1
 					})]
 			}]
 				

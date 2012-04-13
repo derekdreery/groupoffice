@@ -5,7 +5,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	protected $model = 'GO_Servermanager_Model_Installation';
 	
 	protected function allowGuests() {
-		return array('create','destroy', 'report');
+		return array('create','destroy', 'report','upgradeall');
 	}
 	
 	protected function ignoreAclPermissions() {
@@ -108,7 +108,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 						' -c='.$installation->configPath.
 						' --adminusername=admin'.
 						' --adminpassword="'.$params['adminpassword'].'"'.
-						' --adminemail="'.$config['webmaster_email'].'"';
+						' --adminemail="'.$config['webmaster_email'].'" 2>&1';
 		
 		GO::debug($cmd);
 		
@@ -179,8 +179,8 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 						'groupofficecli.php -r=servermanager/installation/create'.
 						' -c='.GO::config()->get_config_file().
 						' --tmp_config='.$tmpConfigFile->path().
-						' --name='.$model->name.
-						' --adminpassword='.$params['admin_password1'];
+						' --name='.$model->name.	
+						' --adminpassword='.$params['admin_password1'].' 2>&1';
 		
 		exec($cmd, $output, $return_var);		
 
@@ -241,7 +241,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$config['allow_themes'] = isset($params['allow_themes']) ? true : false;
 		$config['allow_password_change'] = isset($params['allow_password_change']) ? true : false;
 
-		$config['quota'] = GO_Base_Util_Number::unlocalize($params['quota']) * 1024*1024;
+		$config['quota'] = GO_Base_Util_Number::unlocalize($params['quota'])*1024*1024*1024;
 		$config['restrict_smtp_hosts'] = $params['restrict_smtp_hosts'];
 		$config['serverclient_domains'] = $params['serverclient_domains'];
 		
@@ -351,6 +351,37 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		return $response;		
 	}
 	
+	protected function actionUpgradeAll($params){
+		
+		if(!$this->isCli())
+			throw new Exception("This action may only be ran on the command line.");
+		
+		$stmt = GO_Servermanager_Model_Installation::model()->find();
+		while($installation = $stmt->fetch()){
+			
+			echo "Upgrading ".$installation->name."\n";
+			
+			if(!file_exists($installation->configPath)){
+				echo "\nERROR: Config file ".$installation->configPath." not found\n\n";
+				continue;
+			}
+			
+			require($installation->configPath);
+			
+			$cmd = GO::config()->root_path.'groupofficecli.php -r=maintenance/upgrade -c="'.$installation->configPath.'"';
+			
+			system($cmd);		
+			
+			//exec('chown -R www-data:www-data '.$config['file_storage_path']);
+
+//			if($return_var!=0){
+//				echo "ERROR: ".implode("\n", $output);
+//			}
+			
+			echo "Done\n\n";
+			
+		}
+	}	
 	
 	
 	protected function actionReport($params){
