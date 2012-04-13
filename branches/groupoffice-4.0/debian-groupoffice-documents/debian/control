@@ -17,7 +17,15 @@ Depends: groupoffice-com,
 	php5-gd,
 	php5-cli,
 	php5-curl,
-	libwbxml2-utils | libwbxml2-0,
+	php5-xsl,
+	catdoc,
+	unzip,
+	tar,
+	imagemagick,
+	tesseract-ocr,
+	tesseract-ocr-eng,
+	poppler-utils,
+	exiv2
 	${misc:Depends}
 Description: 
  Adds the billing module. You need a license to make them work.
