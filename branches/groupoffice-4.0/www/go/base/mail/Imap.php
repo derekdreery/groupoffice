@@ -284,6 +284,149 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	private function set_mailbox_delimiter($delimiter) {
 		$this->delimiter=$_SESSION['GO_SESSION']['imap_delimiter'][$this->server]=$delimiter;
 	}
+	
+	
+	public function get_all_folders_with_status(){
+		
+		$delim = false;
+		
+		
+		$cmd = 'LIST "" "*" RETURN (STATUS (MESSAGES UNSEEN) SUBSCRIBED)'."\r\n";
+		
+		$this->send_command($cmd);
+		$result = $this->get_response(false, true);
+		
+		$folders = array();
+		foreach ($result as $vals) {
+			if (!isset($vals[0])) {
+				continue;
+			}
+			if ($vals[0] == 'A'.$this->command_count) {
+				continue;
+			}
+			if($vals[1]=='LIST'){
+				$flags = false;
+				$count = count($vals);
+				$folder = $this->utf7_decode($vals[($count - 1)]);
+				$flag = false;
+				$delim_flag = false;
+				$parent = '';
+				$folder_parts = array();
+				$no_select = false;
+				$can_have_kids = false;
+				$has_kids = false;
+				$marked = false;
+				$hidden = false;
+				$subscribed=false;
+
+				foreach ($vals as $v) {
+					if ($v == '(') {
+						$flag = true;
+					}
+					elseif ($v == ')') {
+						$flag = false;
+						$delim_flag = true;
+					}
+					else {
+						if ($flag) {
+							$flags .= ' '.$v;
+						}
+						if ($delim_flag && !$delim) {
+							$delim = $v;
+							$delim_flag = false;
+						}
+					}
+				}
+
+				if (!$this->delimiter) {
+					$this->set_mailbox_delimiter($delim);
+				}
+
+				if (stristr($flags, 'marked')) {
+					$marked = true;
+				}
+				if (!stristr($flags, 'noinferiors')) {
+					$can_have_kids = true;
+				}
+				if (stristr($flags, 'haschildren')) {
+					$has_kids = true;
+				}
+				
+				if (stristr($flags, 'subscribed')) {
+					$subscribed = true;
+				}
+				
+				if ($folder != 'INBOX' && stristr($flags, 'noselect')) {
+					$no_select = true;
+				}
+
+				if (!isset($folders[$folder]) && $folder) {
+					$folders[$folder] = array(
+									'delimiter' => $delim,
+									'name' => $folder,
+									'marked' => $marked,
+									'noselect' => $no_select,
+									'noinferiors' => $can_have_kids,
+									'haschildren' => $has_kids,
+									'subscribed'=>$subscribed
+					);
+				}
+			}else
+			{
+				$lastProp=false;
+				foreach ($vals as $v) {
+					if ($v == '(') {
+						$flag = true;
+					}
+					elseif ($v == ')') {
+						break;
+					}
+					else {
+						if($lastProp=='MESSAGES'){
+							$folders[$folder]['messages']=intval($v);
+						}elseif($lastProp=='UNSEEN'){
+							$folders[$folder]['unseen']=intval($v);
+						}
+					}
+					
+					$lastProp=$v;
+				}
+			}
+		}
+
+
+
+		
+
+		//sometimes shared folders like "Other user.shared" are in the folder list
+		//but there's no "Other user" parent folder. We create a dummy folder here.
+
+		foreach($folders as $name=>$folder){
+			$pos = strrpos($name, $delim);
+
+			if($pos){
+				$parent = substr($name,0,$pos);
+				if(!isset($folders[$parent]))
+				{
+					$folders[$parent]=array(
+								'delimiter' => $delim,
+								'name' => $parent,
+								'marked' => true,
+								'noselect' => true,
+								'can_have_children' => true,
+								'has_children' => true);
+				}
+			}
+
+			$last_folder = $name;
+		}
+
+		//GO::debug($folders);
+
+		ksort($folders);
+
+		return $folders;
+	}
 
 
 	/**

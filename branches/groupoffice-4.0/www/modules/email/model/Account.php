@@ -213,4 +213,29 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		
 		return $a;
 	}
+	
+	
+	
+	
+	
+	/**
+	 *
+	 * @return \GO_Email_Model_ImapMailbox 
+	 */
+	public function getAllMailboxesWithStatus(){
+		$imap = $this->openImapConnection();
+		
+		$folders = $imap->get_all_folders_with_status();
+		
+		$mailboxModels =array();
+		
+		foreach($folders as $folder){
+			$mailboxModels[]=new GO_Email_Model_ImapMailbox($this,$folder);
+		}
+		
+		return $mailboxModels;
+	}
+	
+	
+
 }

@@ -5,6 +5,15 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 	protected $model = "GO_Email_Model_Account";
 	
 	
+	protected function actionTest($params){
+		$account = GO_Email_Model_Account::model()->findSingle();
+		
+		echo 'test';
+		$folders=$account->getAllMailboxesWithStatus();
+		var_dump($folders);
+	}
+	
+	
 	protected function afterLoad(&$response, &$model, &$params) {
 		
 		$response['data']['password']=$model->decryptPassword();
@@ -83,6 +92,54 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		}
 		
 		return $response;
+	}
+	
+	
+	public function actionTree($params){
+		$stmt = GO_Base_Email_Account::model()->find();
+		
+		$response=array();
+		while($account = $stmt->fetch()){
+			
+			$node =  array(
+										'text'=>$account->email,
+										'name'=>$account->email,
+										'id'=>'account_'.$account->id,
+										'iconCls'=>'folder-account',
+										'expanded'=>true,
+										'account_id'=>$account->id,
+										'folder_id'=>0,
+										'mailbox'=>'INBOX',
+										'children'=>$this->_getMailboxTreeNodes($account),
+										'canHaveChildren'=>true,
+										'inbox_new'=>0,
+										'usage'=>"",
+										'parentExpanded'=>true
+					);
+			
+			$response[]=$node;
+			
+		}
+		
+		return $response;
+	}
+	
+	private function _buildHierarchy($folders){
+		
+	}
+	
+	private function _getMailboxTreeNodes(GO_Email_Model_Account $account){
+		$mailboxes = $account->getAllMailboxesWithStatus();
+		
+		$nodes = array();
+		
+		foreach($mailboxes as $mailbox){
+			$node = array(
+					'text'=>$mailbox->name,
+					'children'=>array()
+							);
+			
+		}
 	}
 
 }
