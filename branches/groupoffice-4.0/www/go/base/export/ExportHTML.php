@@ -61,12 +61,19 @@ class GO_Base_Export_ExportHTML extends GO_Base_Export_AbstractExport {
 		$this->_sendHeaders();
 		$this->_renderHead();
 		
-		$labels = $this->getLabels();
-
-		if($this->header) {
+//		$labels = $this->getLabels();
+//		if($this->header) {
+//			$this->header = true;
+//			$this->_write(array_values($labels));
+//		}
+		if($this->header){
 			$this->header = true;
-			$this->_write(array_values($labels));
+			if($this->humanHeaders)
+				$this->_write(array_values($this->getLabels()));
+			else
+				$this->_write(array_keys($this->getLabels()));
 		}
+		
 		
 		while($record = $this->store->nextRecord()){
 			$record = $this->prepareRecord($record);
