@@ -117,6 +117,15 @@ class GO_Base_Data_Column {
 	}
 	
 	/**
+	 * Set the sort index of this column
+	 * 
+	 * @param int $index  
+	 */
+	public function setSortIndex($index){
+		$this->_sortIndex=$index;
+	}
+	
+	/**
 	 * Returns the sortAlias for this column, of no sortAlias is provided the 
 	 * Dataindex will be returned.
 	 * 
