@@ -150,9 +150,17 @@ if(version_compare(2, $version)>0){
 	if(file_contains($filename, 'Group-Office'))$filename .= '.'.date('Ymd');
 	create_file($filename,'tpl/etc/dovecot/dovecot-sql.conf.ext', $replacements);
 	
+	$filename = '/etc/dovecot/conf.d/auth-sql.conf.ext';
+	if(file_contains($filename, 'Group-Office'))$filename .= '.'.date('Ymd');
+	create_file($filename,'tpl/etc/dovecot/conf.d/auth-sql.conf.ext', $replacements);
+	
 	$filename = '/etc/dovecot/conf.d/10-auth.conf';
 	if(file_contains($filename, 'Group-Office'))$filename .= '.'.date('Ymd');
 	create_file($filename,'tpl/etc/dovecot/conf.d/10-auth.conf', $replacements);
+	
+	$filename = '/etc/dovecot/conf.d/10-mail.conf';
+	if(file_contains($filename, 'Group-Office'))$filename .= '.'.date('Ymd');
+	create_file($filename,'tpl/etc/dovecot/conf.d/10-mail.conf', $replacements);
 	
 	$filename = '/etc/dovecot/conf.d/15-lda.conf';
 	if(file_contains($filename, 'Group-Office'))$filename .= '.'.date('Ymd');
