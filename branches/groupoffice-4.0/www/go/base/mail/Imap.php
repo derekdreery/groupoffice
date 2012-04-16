@@ -307,7 +307,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			if($vals[1]=='LIST'){
 				$flags = false;
 				$count = count($vals);
-				$folder = $this->utf7_decode($vals[($count - 1)]);
+				$folder = $vals[($count - 1)];
 				$flag = false;
 				$delim_flag = false;
 				$parent = '';
@@ -317,7 +317,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				$has_kids = false;
 				$marked = false;
 				$hidden = false;
-				$subscribed=false;
+				$subscribed=$folder=='INBOX';
 
 				foreach ($vals as $v) {
 					if ($v == '(') {
@@ -368,7 +368,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 									'noselect' => $no_select,
 									'noinferiors' => $can_have_kids,
 									'haschildren' => $has_kids,
-									'subscribed'=>$subscribed
+									'subscribed'=>$subscribed,
+									'unseen'=>0,
+									'messages'=>0
 					);
 				}
 			}else
@@ -402,23 +404,26 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		//but there's no "Other user" parent folder. We create a dummy folder here.
 
 		foreach($folders as $name=>$folder){
-			$pos = strrpos($name, $delim);
+			if($folder['subscribed']){
+				$pos = strrpos($name, $delim);
 
-			if($pos){
-				$parent = substr($name,0,$pos);
-				if(!isset($folders[$parent]))
-				{
-					$folders[$parent]=array(
-								'delimiter' => $delim,
-								'name' => $parent,
-								'marked' => true,
-								'noselect' => true,
-								'can_have_children' => true,
-								'has_children' => true);
+				if($pos){
+					$parent = substr($name,0,$pos);
+					if(!isset($folders[$parent]))
+					{
+						$folders[$parent]=array(
+									'delimiter' => $delim,
+									'name' => $parent,
+									'marked' => true,
+									'noselect' => true,
+									'can_have_children' => true,
+									'has_children' => true,
+									'subscribed'=>true,
+									'unseen'=>0,
+									'messsages'=>0);
+					}
 				}
 			}
-
-			$last_folder = $name;
 		}
 
 		//GO::debug($folders);
