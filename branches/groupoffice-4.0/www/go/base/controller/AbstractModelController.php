@@ -811,6 +811,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		if(!empty($params['columns'])) {
 			$includeColumns = explode(',',$params['columns']);
+			$columnModel->sort($includeColumns);
 			foreach($columnModel->getColumns() as $c){
 				if(!in_array($c->getDataIndex(), $includeColumns))
 					$columnModel->removeColumn($c->getDataIndex());
