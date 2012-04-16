@@ -775,7 +775,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 */
 	protected function actionExport($params) {
 	
+//		
+//		var_dump($params);
+//		
 		$showHeader = false;
+  	$humanHeaders = true;
 		$orientation = false;
 		
 		if(!empty($params['exportOrientation']) && ($params['exportOrientation']=="Horizontaal"))
@@ -790,6 +794,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	
 		if(!empty($params['includeHeaders']))
 			$showHeader = true;
+		
+		if(!empty($params['humanHeaders']))
+			$humanHeaders = false;
 		
 		$findParams = GO::session()->values[$params['name']]['findParams'];
 		$findParams->limit(0); // Let the export handle all found records without a limit
@@ -812,9 +819,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$extraParams = empty($params['params']) ? array() : json_decode($params['params'], true);
 
 		if(!empty($params['type']))
-			$export = new $params['type']($store, $columnModel,$model, $findParams, $showHeader, $title, $orientation, $extraParams);
+			$export = new $params['type']($store, $columnModel,$model, $findParams, $showHeader, $humanHeaders, $title, $orientation, $extraParams);
 		else
-			$export = new GO_Base_Export_ExportCSV($store, $columnModel, $model, $findParams, $showHeader, $title, $orientation, $extraParams); // The default Export is the CSV outputter.
+			$export = new GO_Base_Export_ExportCSV($store, $columnModel, $model, $findParams, $showHeader, $humanHeaders, $title, $orientation, $extraParams); // The default Export is the CSV outputter.
 
 		$export->output();
 	}
