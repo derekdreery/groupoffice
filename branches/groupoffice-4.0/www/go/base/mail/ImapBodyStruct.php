@@ -78,11 +78,12 @@ class GO_Base_Mail_ImapBodyStruct extends GO_Base_Mail_ImapBase {
 							array_shift($vals);
 						}
 					}
-
-					if(empty($res['filename']))
-						$res['filename']=$res['name'];
 				}
 			}
+			
+			if(empty($res['filename']) && !empty($res['name']))
+				$res['filename']=$res['name'];
+			
 			if (isset($vals[0]) && $vals[0] != ')') {
 				$res['language'] = array_shift($vals);
 			}

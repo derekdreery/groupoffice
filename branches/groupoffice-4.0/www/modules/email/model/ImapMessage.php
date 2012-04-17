@@ -122,7 +122,6 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 			
 			$this->_struct = $this->getImapConnection()->get_message_structure($this->uid);
 			
-			
 			if(count($this->_struct)==1) {
 					$headerCt = explode('/', $this->content_type);
 
