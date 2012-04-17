@@ -413,6 +413,9 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 
 	/**
 	 * Use this function to add panels to the window.
+	 * 
+	 * @var relatedGridParamName Set to the field name of the has_many relation. 
+	 * eg. Addressbook dialog showing contacts would have this value set to addressbook_id
 	 */
 	addPanel : function(panel, relatedGridParamName){
 		this._panels.push(panel);
