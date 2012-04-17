@@ -46,7 +46,7 @@ GO.sites.SiteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			Ext.MessageBox.confirm(GO.sites.lang.createDefaultPages, GO.sites.lang.reallyCreateDefaultPages, function(btn){
 				if(btn == 'yes'){
 					GO.request({
-						url: 'sites/site/createDefaultPages',
+						url: 'sites/siteModule/createDefaultPages',
 						params: {
 							site_id: this.remoteModelId
 						},
@@ -56,7 +56,7 @@ GO.sites.SiteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 						scope: this
 					});
 				}
-			});
+			}, this);
 		},this);
 		
 		this.propertiesPanel = new Ext.Panel({

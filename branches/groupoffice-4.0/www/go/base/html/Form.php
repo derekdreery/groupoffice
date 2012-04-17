@@ -25,6 +25,11 @@ class GO_Base_Html_Form {
 	}
 	
 	public static function renderEnd(){
+		
+		if(GO_Base_Html_Error::hasErrors()){
+			GO_Base_Html_Error::printErrors();
+		}
+		
 		echo self::getHtmlEnd();
 	}
 	

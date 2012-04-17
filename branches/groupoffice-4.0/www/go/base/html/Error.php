@@ -7,6 +7,12 @@ class GO_Base_Html_Error extends GO_Base_Html_Input {
 		return $error;
 	}
 	
+	public static function printErrors(){
+		foreach(GO::session()->values['formErrors'] as $inputName=>$error){
+			echo self::getError($inputName).'<br />';
+		}
+	}
+	
 	public static function setError($message,$inputName='form') {
 		return parent::setError($inputName, $message);
 	}
@@ -46,7 +52,6 @@ class GO_Base_Html_Error extends GO_Base_Html_Input {
 			if($model->customfieldsRecord && !$model->customfieldsRecord->validate())
 				$errors = array_merge($errors, $model->customfieldsRecord->getValidationErrors());
 			
-				
 			if(count($errors)){
 				foreach ($errors as $attribute => $message) {
 					
@@ -55,7 +60,11 @@ class GO_Base_Html_Error extends GO_Base_Html_Input {
 					GO_Base_Html_Input::setError($formAttribute, $message); // replace is needed because of a mix up with order model and company model
 				}
 				GO_Base_Html_Error::setError(GO::t('errorsInForm'));
-			}			
+				return false;
+			}else
+			{
+				return true;
+			}
 		}
 //	}
 }

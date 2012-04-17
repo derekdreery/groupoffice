@@ -40,5 +40,9 @@ if(file_exists('/etc/apache2/sites-enabled/000-default'))
 echo "Configuring sudo\n";
 set_value('/etc/sudoers','www-data ALL=NOPASSWD:/usr/share/groupoffice/groupofficecli.php');
 
+set_value('/etc/groupoffice/config.php','$config["servermanager_wildcard_domain"]="'.$wildcarddomain.'";');
+
+set_value('/etc/groupoffice/config.php','$config["servermaner_trials_enabled"]=false;');
+
 echo "Done!\n\n";
 ?>

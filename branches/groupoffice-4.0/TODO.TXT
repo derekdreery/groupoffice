@@ -3,6 +3,9 @@ Distinguish declined and cancel	led events in grid.
 alarm import
 test invitation sending with moving in grid
 
+Translate tool
+
+factuur e-mail bij bedrijven
 
 postfixadmin installation
 

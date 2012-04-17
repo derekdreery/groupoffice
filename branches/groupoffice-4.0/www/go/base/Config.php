@@ -1238,6 +1238,9 @@ class GO_Base_Config {
 	
 		$values = get_object_vars(GO::config());
 		$config=array();
+		
+		require($this->get_config_file());
+		
 		foreach($values as $key=>$value)
 		{
 			if($key == 'version')
