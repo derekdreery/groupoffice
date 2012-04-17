@@ -34,8 +34,8 @@ echo 'Configuring apache'."\n";
 if(!file_exists('/etc/apache2/sites-enabled/000-groupoffice'))
 	create_file('/etc/apache2/sites-enabled/000-groupoffice', 'tpl/etc/apache2/sites-enabled/000-groupoffice', $replacements);
 
-if(file_exists('/etc/apache2/sites-enabled/000-default'))
-	unlink('/etc/apache2/sites-enabled/000-default');
+//if(file_exists('/etc/apache2/sites-enabled/000-default'))
+//	unlink('/etc/apache2/sites-enabled/000-default');
 
 echo "Configuring sudo\n";
 set_value('/etc/sudoers','www-data ALL=NOPASSWD:/usr/share/groupoffice/groupofficecli.php');
