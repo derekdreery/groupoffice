@@ -219,7 +219,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	 *
 	 * @return \GO_Email_Model_ImapMailbox 
 	 */
-	public function getAllMailboxesWithStatus(){
+	public function getAllMailboxesWithStatus($hierarchy=true){
 		$imap = $this->openImapConnection();
 		
 		$folders = $imap->get_all_folders_with_status();
@@ -231,8 +231,8 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		$mailboxModels =array();
 		
 		foreach($folders as $folder){
-			if($folder['subscribed']){
-				$mailbox = new GO_Email_Model_ImapMailbox($this,$folder);
+			$mailbox = new GO_Email_Model_ImapMailbox($this,$folder);
+			if($hierarchy){
 				$mailboxModels[$folder['name']]=$mailbox;
 				$parentName = $mailbox->getParentName();
 				if($parentName===false){
@@ -240,7 +240,11 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 				}else{
 					$mailboxModels[$parentName]->addChild($mailbox);
 				}
+			}else
+			{
+				$rootMailboxes[]=$mailbox;
 			}
+			
 		}
 		
 		return $rootMailboxes;

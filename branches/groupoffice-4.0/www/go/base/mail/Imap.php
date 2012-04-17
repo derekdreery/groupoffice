@@ -218,6 +218,10 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 		return $this->capability;
 	}
+	
+	public function has_capability($str){
+		return stripos($this->get_capability(), $str)!==false;
+	}
 
 
 	public function get_acl($mailbox){
@@ -286,16 +290,22 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	}
 	
 	
-	public function get_all_folders_with_status(){
+	public function get_all_folders_with_status($subscribed=true){
 		
 		$delim = false;
 		
+		$listStatus = false;// $this->has_capability('LIST-STATUS');
 		
-		$cmd = 'LIST "" "*" RETURN (STATUS (MESSAGES UNSEEN) SUBSCRIBED)'."\r\n";
+		$listCmd = $subscribed ? 'LSUB' : 'LIST';
+		
+		if($listStatus)
+			$cmd = $listCmd.' "" "*" RETURN (STATUS (MESSAGES UNSEEN) SUBSCRIBED)'."\r\n";
+		else
+			$cmd = $listCmd.' "" "*"'."\r\n";
 		
 		$this->send_command($cmd);
 		$result = $this->get_response(false, true);
-		
+		//var_dump($result);
 		$folders = array();
 		foreach ($result as $vals) {
 			if (!isset($vals[0])) {
@@ -304,20 +314,20 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			if ($vals[0] == 'A'.$this->command_count) {
 				continue;
 			}
-			if($vals[1]=='LIST'){
+			
+			//var_dump($vals[1]);
+			if($vals[1]==$listCmd){
 				$flags = false;
 				$count = count($vals);
 				$folder = $vals[($count - 1)];
 				$flag = false;
 				$delim_flag = false;
 				$parent = '';
-				$folder_parts = array();
-				$no_select = false;
+					$no_select = false;
 				$can_have_kids = false;
 				$has_kids = false;
-				$marked = false;
-				$hidden = false;
-				$subscribed=$folder=='INBOX';
+				$marked = false;				
+				$subscribed=$listCmd=='LSUB';
 
 				foreach ($vals as $v) {
 					if ($v == '(') {
@@ -396,34 +406,41 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			}
 		}
 
-
-
+		if(!$listStatus){
+			//no support for list status. Get the status for each folder
+			//with seperate status calls
+			foreach($folders as $name=>$folder){
+				$status = $this->get_status($name);
+				$folders[$name]['messages']=$status['messages'];
+				$folders[$name]['unseen']=$status['unseen'];
+			}
+		}
 		
 
 		//sometimes shared folders like "Other user.shared" are in the folder list
 		//but there's no "Other user" parent folder. We create a dummy folder here.
 
 		foreach($folders as $name=>$folder){
-			if($folder['subscribed']){
-				$pos = strrpos($name, $delim);
+			
+			$pos = strrpos($name, $delim);
 
-				if($pos){
-					$parent = substr($name,0,$pos);
-					if(!isset($folders[$parent]))
-					{
-						$folders[$parent]=array(
-									'delimiter' => $delim,
-									'name' => $parent,
-									'marked' => true,
-									'noselect' => true,
-									'can_have_children' => true,
-									'has_children' => true,
-									'subscribed'=>true,
-									'unseen'=>0,
-									'messsages'=>0);
-					}
+			if($pos){
+				$parent = substr($name,0,$pos);
+				if(!isset($folders[$parent]))
+				{
+					$folders[$parent]=array(
+								'delimiter' => $delim,
+								'name' => $parent,
+								'marked' => true,
+								'noselect' => true,
+								'can_have_children' => true,
+								'has_children' => true,
+								'subscribed'=>true,
+								'unseen'=>0,
+								'messsages'=>0);
 				}
 			}
+			
 		}
 
 		//GO::debug($folders);
@@ -2112,6 +2129,38 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		}
 
 		return $this->selected_mailbox['uidnext'];		
+	}
+	
+	
+	public function get_status($mailbox){
+		$command = 'STATUS "'.$this->addslashes($this->utf7_encode($mailbox)).'" (MESSAGES UNSEEN)'."\r\n";
+		$this->send_command($command);
+		$result = $this->get_response(false, true);
+
+		$vals = array_shift($result);
+		
+		$status = array('unseen'=>0, 'messages'=>0);
+		
+		$lastProp=false;
+		foreach ($vals as $v) {
+			if ($v == '(') {
+				$flag = true;
+			}
+			elseif ($v == ')') {
+				break;
+			}
+			else {
+				if($lastProp=='MESSAGES'){
+					$status['messages']=intval($v);
+				}elseif($lastProp=='UNSEEN'){
+					$status['unseen']=intval($v);
+				}
+			}
+
+			$lastProp=$v;
+		}
+		
+		return $status;	
 	}
 
 	/**
