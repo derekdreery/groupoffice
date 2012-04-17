@@ -66,6 +66,11 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		}
 	}	
 	
+	private function _getConfigFromFile($path){
+		require($path);
+		return $config;
+	}
+	
 	public function actionCreate($params){
 		if(PHP_SAPI!='cli')
 			throw new Exception("Action servermanager/installation/create may only be run by root on the command line");
@@ -84,23 +89,24 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		
 		//if config file already exists then include it so we will keep the manually added config values.
 		if($configFile->exists())
-			require($configFile->path());
+			$existingConfig = $this->_getConfigFromFile($configFile->path());
+		else
+			$existingConfig = array();
 		
 		//create config file
-		require($params['tmp_config']);		
+		$newConfig = $this->_getConfigFromFile($params['tmp_config']);
 		unlink($params['tmp_config']);
 		
-		if(!isset($config['db_pass']))
-			$config['db_pass']= GO_Base_Util_String::randomPassword(8,'a-z,A-Z,1-9');
-				
-		$this->_createFolderStructure($config, $installation);
+		$existingConfig=array_merge($existingConfig, $newConfig);		
+
+		$this->_createFolderStructure($existingConfig, $installation);
 		
-		GO_Base_Util_ConfigEditor::save($configFile, $config);
+		GO_Base_Util_ConfigEditor::save($configFile, $existingConfig);
 		$configFile->chown('root');
 		$configFile->chgrp('www-data');
 		$configFile->chmod(0640);		
 		
-		$this->_createDatabase($params, $installation, $config);		
+		$this->_createDatabase($params, $installation, $existingConfig);		
 	}
 	
 	private function _createDatabaseContent($params, $installation, $config){
@@ -211,14 +217,24 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			$config['allowed_modules'] = implode(',', $modules);
 		}
 		
-		//for testing
-		$config['debug']=GO::config()->debug;
 		
-		$config['id']=$model->dbName;
-		$config['db_name']=$model->dbName;
-		$config['db_user']=$model->dbUser;
-		$config['db_host']=GO::config()->db_host;
-		
+		if(!file_exists($model->configPath)){
+			//only create these values on new config files.
+			
+			//for testing		
+			$config['debug']=GO::config()->debug;
+
+			$config['id']=$model->dbName;
+			$config['db_name']=$model->dbName;
+			$config['db_user']=$model->dbUser;
+			$config['db_host']=GO::config()->db_host;
+			$config['db_pass']= GO_Base_Util_String::randomPassword(8,'a-z,A-Z,1-9');
+			$config['host']='/';
+			$config['root_path']=$model->installPath.'groupoffice/';
+			$config['tmpdir']='/tmp/'.$model->name.'/';
+			$config['file_storage_path']=$model->installPath.'data/';
+		}
+				
 		$config['enabled']=empty($params['id']) || !empty($params['enabled']);
 		$config['max_users'] = GO_Base_Util_Number::unlocalize($params['max_users']);
 
@@ -245,10 +261,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$config['restrict_smtp_hosts'] = $params['restrict_smtp_hosts'];
 		$config['serverclient_domains'] = $params['serverclient_domains'];
 		
-		$config['host']='/';
-		$config['root_path']=$model->installPath.'groupoffice/';
-		$config['tmpdir']='/tmp/'.$model->name.'/';
-		$config['file_storage_path']=$model->installPath.'data/';
+		
 				
 
 		if (intval($config['max_users']) < 1)
