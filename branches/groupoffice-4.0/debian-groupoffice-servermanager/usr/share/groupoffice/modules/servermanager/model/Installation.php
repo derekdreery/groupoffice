@@ -112,6 +112,14 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 							
 		return parent::validate();
 	}
+	
+	public function defaultAttributes() {		
+		$attr = parent::defaultAttributes();
+		
+		$attr['max_users'] = isset(GO::config()->servermanager_max_users) ? GO::config()->servermanager_max_users : 3;
+		
+		return $attr;
+	}
 
 	protected function beforeDelete() {
 		
