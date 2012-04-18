@@ -13,7 +13,19 @@ http://www.ioncube.com/loaders.php
 
 
 UPGRADE FROM VERSION 3.x AND HIGHER:
-To upgrade to 4.0 you must upgrade your previous version to at least 3.7.41 first
+To upgrade to 4.0 you must upgrade your previous version to at least 3.7.41 first.
+
+DEBIAN PACKAGES:
+Change your apt sources.list and change the Group-Office repository into:
+deb http://repos.groupoffice.eu/ fourseven main
+
+Then run:
+apt-get update
+apt-get dist-upgrade
+
+MANUAL UPGRADE:
+Then remove all the existing Group-Office scripts. Then upload the new sources.
+Do not copy the new files over the existing files!
 
 Then you can run the install script in /install
 
