@@ -117,7 +117,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 	protected function actionEmailDownloadLink($params){
 		
 		$file = GO_Files_Model_File::model()->findByPk($params['id']);
-		$file->random_code=GO_Base_Util_String::randomPassword(11);
+		$file->random_code=GO_Base_Util_String::randomPassword(11,'a-z,A-Z,0-9');
 		$file->expire_time = GO_Base_Util_Date::date_add($params['expire_time'],1);
 		$file->save();
 				
