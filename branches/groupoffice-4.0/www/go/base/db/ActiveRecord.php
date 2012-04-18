@@ -92,6 +92,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	private $_attributeLabels;	
 	
 	/**
+	 * Force this activeRecord to save itself 
+	 * 
+	 * @var boolean 
+	 */
+	private $_forceSave = false;
+	
+	/**
 	 *
 	 * @var int Link type of this Model used for the link system. See also the linkTo function
 	 */
@@ -2038,7 +2045,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 		
 		//Don't do anything if nothing has been modified.
-		if(!$this->isNew && !$this->isModified() && (!$this->customfieldsRecord || !$this->customfieldsRecord->isModified()))
+		if(!$this->_forceSave && !$this->isNew && !$this->isModified() && (!$this->customfieldsRecord || !$this->customfieldsRecord->isModified()))
 			return true;
 
 
@@ -3533,6 +3540,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$this->filesFolder->moveContentsFrom($sourceFolder);		
 	}
+	
+	/**
+	 * This function forces this activeRecord to save itself.
+	 */
+	public function forceSave(){
+		
+		$this->_forceSave=true;
+	}	
 	
 	/**
 	 * Override this if you need to do extra stuff after merging.
