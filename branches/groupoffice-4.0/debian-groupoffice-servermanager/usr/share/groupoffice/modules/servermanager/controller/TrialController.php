@@ -10,8 +10,8 @@ class GO_Servermanager_Controller_Trial extends GO_Base_Controller_AbstractContr
 
 	public function actionCreate($params) {
 		
-		if(empty(GO::config()->servermaner_trials_enabled))
-			throw new Exception("Trials are not enabled. Set \$config['servermaner_trials_enabled']=true;");
+		if(empty(GO::config()->servermanager_trials_enabled))
+			throw new Exception("Trials are not enabled. Set \$config['servermanager_trials_enabled']=true;");
 
 		$this->newTrial = GO_ServerManager_Model_NewTrial::model()->findSingleByAttribute('key', $params['key']);
 
@@ -39,6 +39,10 @@ class GO_Servermanager_Controller_Trial extends GO_Base_Controller_AbstractContr
 				if ($return_var != 0) {
 					throw new Exception(implode('<br />', $output));
 				}
+				
+				
+				$this->render('trialcreated', array('installation'=>$installation));
+				exit();
 			}
 		}
 

@@ -37,6 +37,9 @@ class GO_Servermanager_Controller_Site extends GO_Sites_Controller_Site{
 	private function _sendMail(GO_ServerManager_Model_NewTrial $newTrial){
 		$body = file_get_contents($this->rootTemplatePath.'modules/servermanager/emails/trial.txt');
 		
+		$protocol = empty(GO::config()->servermanager_ssl) ? 'http' : 'https';
+		$url = $protocol.'://'.$newTrial->name.'.'.GO::config()->servermanager_wildcard_domain;
+		
 		$body = str_replace('{product_name}', GO::config()->product_name, $body);
 		$body = str_replace('{url}', $url, $body);
 		$body = str_replace('{name}', $newTrial->first_name.' '.$newTrial->last_name, $body);
@@ -48,10 +51,7 @@ class GO_Servermanager_Controller_Site extends GO_Sites_Controller_Site{
 		$subject = trim(substr($body, 0, $pos));
 		$body = trim(substr($body, $pos));
 		
-		$protocol = empty(GO::config()->servermanager_ssl) ? 'http' : 'https';
-		
-		$url = $protocol.'://'.$newTrial->name.'.'.GO::config()->servermanager_wildcard_domain;
-			
+					
 		$message = GO_Base_Mail_Message::newInstance($subject,$body)
 						->setFrom(GO::config()->webmaster_email, GO::config()->title)
 						->addTo($newTrial->email, $newTrial->first_name.' '.$newTrial->last_name)
@@ -62,8 +62,8 @@ class GO_Servermanager_Controller_Site extends GO_Sites_Controller_Site{
 	
 	protected function actionNewTrial($params){
 		
-		if(empty(GO::config()->servermaner_trials_enabled))
-			throw new Exception("Trials are not enabled. Set \$config['servermaner_trials_enabled']=true;");
+		if(empty(GO::config()->servermanager_trials_enabled))
+			throw new Exception("Trials are not enabled. Set \$config['servermanager_trials_enabled']=true;");
 		
 		if(!isset(GO::config()->servermanager_wildcard_domain))
 			throw new Exception("\$config['servermanager_wildcard_domain']='example.com'; is not defined in /etc/groupoffice/config.php");

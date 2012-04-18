@@ -2,7 +2,7 @@
 $this->render('externalHeader');
 ?>
 
-<p>Enter your regional settings and click on continue to complete the trial</p>
+<p>Enter your regional settings and click on continue to complete the trial:</p>
 
 <?php
 GO_Base_Html_Form::renderBegin('servermanager/trial/createtrial', 'createtrial', true);

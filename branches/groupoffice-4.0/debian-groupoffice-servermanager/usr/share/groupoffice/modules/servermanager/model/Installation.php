@@ -46,6 +46,8 @@
  * @property boolean $professional
  * @property int $status_change_time
  * @property string $config_file
+ * 
+ * @property string $url
  */
 
 class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
@@ -99,6 +101,11 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	
 	protected function getConfigPath(){
 		return '/etc/groupoffice/'.$this->name.'/config.php';
+	}
+	
+	protected function getUrl(){
+		$protocol = empty(GO::config()->servermanager_ssl) ? 'http' : 'https';
+		return $protocol.'://'.$this->name;
 	}
 	
 	public function validate() {
