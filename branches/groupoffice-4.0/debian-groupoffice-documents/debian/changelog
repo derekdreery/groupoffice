@@ -1,5 +1,5 @@
-groupoffice-documents (4.0.3) fourzero; urgency=low
+groupoffice-documents (4.0.4) fourzero; urgency=low
 
   * Changes can be found in /usr/share/groupoffice/CHANGELOG.TXT
 
- -- Merijn Schering <mschering@intermesh.nl>  Fri, 13 Apr 2012 10:23:24 +0200
+ -- Merijn Schering <mschering@intermesh.nl>  Wed, 18 Apr 2012 16:59:39 +0200

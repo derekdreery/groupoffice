@@ -15,8 +15,6 @@ serverclient
 
 CMS compatible
 
-Projects facturatie
-
 Export projecten en billing
 
 Module icons
