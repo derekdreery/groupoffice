@@ -345,6 +345,8 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 				if($part['subtype']=='applefile')
 					continue;
 				
+				//GO::debug($part);
+				
 				if (empty($part['filename']) || $part['filename'] == 'false') {
 					if (!empty($part['subject'])) {
 						$a['name'] = GO_Base_Fs_File::stripInvalidChars(GO_Base_Mail_Utils::mimeHeaderDecode($part['subject'])) . '.eml';

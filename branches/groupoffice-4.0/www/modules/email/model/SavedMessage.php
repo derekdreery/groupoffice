@@ -33,8 +33,11 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 	 * @param string $path Where the MIME file is stored
 	 * @return GO_Email_Model_SavedMessage
 	 */
-	public function createFromMimeFile($path) {
-		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.$path);
+	public function createFromMimeFile($path, $isTempFile=false) {
+		
+		$fullPath = $isTempFile ? GO::config()->tmpdir.$path : GO::config()->file_storage_path.$path;
+		
+		$file = new GO_Base_Fs_File($fullPath);
 		$mimeData = $file->contents();
 		
 		return $this->createFromMimeData($mimeData);
@@ -56,7 +59,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 				'decode_headers' => true,
 				'decode_bodies' => true
 						));
-
+		
 		if (!$structure)
 			throw new Exception("Could not decode mime data:\n\n $mimeData");
 

@@ -19,7 +19,7 @@ class GO_Base_Mail_ImapBodyStruct extends GO_Base_Mail_ImapBase {
 
 		array_shift($vals);
 		array_pop($vals);
-		$atts = array('name', 'filename', 'type', 'subtype', 'charset', 'id', 'description', 'encoding',
+		$atts = array('filename', 'type', 'subtype', 'charset', 'id', 'description', 'encoding',
 						'size', 'lines', 'md5', 'disposition', 'language', 'location');
 		$res = array();
 		if (count($vals) > 7) {
@@ -110,10 +110,12 @@ class GO_Base_Mail_ImapBodyStruct extends GO_Base_Mail_ImapBase {
 				}
 //if ($v=='filename') var_dump($res);
 			}
-			if (!isset($res['name'])) {
-				$res['name'] = 'message';
+			if (!isset($res['filename'])) {
+				$res['filename'] = 'message';
 			}
 		}
+		
+		GO::debug($vals);
 		return $res;
 	}
 
@@ -158,20 +160,21 @@ class GO_Base_Mail_ImapBodyStruct extends GO_Base_Mail_ImapBase {
 			$type = strtolower($vals[1]);
 			$sub = strtolower($vals[2]);
 			$part_type = 1;
-			switch ($type) {
-				case 'message':
-					switch ($sub) {
-						case 'delivery-status':
-						case 'external-body':
-						case 'disposition-notification':
-						case 'rfc822-headers':
-							break;
-						default:
-							$part_type = 2;
-							break;
-					}
-					break;
-			}
+			
+//			switch ($type) {
+//				case 'message':
+//					switch ($sub) {
+//						case 'delivery-status':
+//						case 'external-body':
+//						case 'disposition-notification':
+//						case 'rfc822-headers':
+//							break;
+//						default:
+//							$part_type = 2;
+//							break;
+//					}
+//					break;
+//			}
 			if ($vals[0] == '(' && $vals[1] == '(') {
 				$part_type = 3;
 			}
