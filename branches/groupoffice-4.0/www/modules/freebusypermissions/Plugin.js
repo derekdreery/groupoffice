@@ -5,7 +5,7 @@
 //				height:500,
 //				width:500,
 //				layout:'fit',
-//				title:GO.freebusypermission.lang.freebusyPermissions,
+//				title:GO.freebusypermissions.lang.name,
 //				closable:true,
 //				closeAction:'hide',
 //				buttons:[{
@@ -27,7 +27,7 @@
 //					this.freebusyPermissionsPanel.loadAcl();
 //				},
 //				scope:this,
-//				text:GO.freebusypermission.lang.freebusyPermissions
+//				text:GO.freebusypermissions.lang.freebusyPermissions
 //			});			
 //		}),
 //		
