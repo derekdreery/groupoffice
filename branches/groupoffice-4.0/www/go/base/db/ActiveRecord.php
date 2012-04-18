@@ -1075,6 +1075,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			else
 				$fields = $params['searchQueryFields'];
 			
+			
+			if(empty($fields))
+				throw new Exception("No automatic search fields defined for ".$this->className().". Maybe this model has no varchar fields? You can override function getFindSearchQueryParamFields() or you can supply them with GO_Base_Db_FindParams::searchFields()");
+			
 			//`name` LIKE "test" OR `content` LIKE "test"
 			
 			$first = true;
@@ -1496,7 +1500,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		return isset($r[$name]);		
 	}
 	
-	private function _getRelation($name){
+	protected function getRelation($name){
 		$r= $this->relations();
 		
 		if(!isset($r[$name]))
@@ -2162,7 +2166,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$arr = explode('.', $this->aclField());
 			if (count($arr) > 1) {
 				
-				$relation = $this->_getRelation($arr[0]);
+				$relation = $this->getRelation($arr[0]);
 				
 				if($relation && $this->isModified($relation['field'])){
 					//acl relation changed. We must update linked emails
@@ -3332,7 +3336,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		if(!$this->hasManyMany($relationName, $foreignPk)){
 			
-			$r = $this->_getRelation($relationName);
+			$r = $this->getRelation($relationName);
 			
 			if($this->isNew)
 				throw new Exception("Can't add manymany relation to a new model. Call save() first.");
@@ -3376,7 +3380,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 
 	public function removeAllManyMany($relationName){
-		$r = $this->_getRelation($relationName);
+		$r = $this->getRelation($relationName);
 		if(!$r)
 			throw new Exception("Relation '$relationName' not found in GO_Base_Db_ActiveRecord::hasManyMany()");
 		$linkModel = GO::getModel($r['linkModel']);
@@ -3393,7 +3397,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
    * @return GO_Base_Db_ActiveRecord or false 
    */
   public function hasManyMany($relationName, $foreignPk){
-		$r = $this->_getRelation($relationName);
+		$r = $this->getRelation($relationName);
 		if(!$r)
 			throw new Exception("Relation '$relationName' not found in GO_Base_Db_ActiveRecord::hasManyMany()");
 		
