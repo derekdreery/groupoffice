@@ -1,5 +1,5 @@
 body{
-	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-family: Helvetica, Arial, sans-serif;
 	font-size: 12px;
 }
 
@@ -32,7 +32,7 @@ input, textarea {
  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-input[type="submit"] {
+/*input[type="submit"] {
  height: 28px; 
  line-height: 27px;
  padding: 0 15px;
@@ -45,10 +45,11 @@ input[type="submit"] {
 input[type="submit"]:hover {
  background: #FF4E00;
 }
-
+*/
 .input{
+	width:200px;
 	float:left;
-	margin-right: 10px;
+	margin-right: 4px;
 }
 
 .error{
@@ -59,4 +60,19 @@ input[type="submit"]:hover {
 	float:left;
 	color: red;
 	line-height: 24px;
+	margin-right: 4px;
+	
+}
+
+#domain-row .input{
+	
+}
+
+#top-domain{
+	float:left;
+	line-height: 24px;
+}
+
+.submit{
+	width:auto;
 }
