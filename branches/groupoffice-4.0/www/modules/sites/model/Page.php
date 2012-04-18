@@ -99,8 +99,8 @@ class GO_Sites_Model_Page extends GO_Base_Db_ActiveRecord {
 		}
 	}	
 	
-	public function getUrl($params=array(),$relative=true){		
-		return $this->site->pageUrl($this->path, $params, $relative);
+	public function getUrl($params=array(),$relative=true, $htmlspecialchars=true){		
+		return $this->site->pageUrl($this->path, $params, $relative, $htmlspecialchars);
 	}
 	
 		
