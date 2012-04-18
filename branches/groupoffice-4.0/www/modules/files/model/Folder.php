@@ -373,10 +373,15 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * @param String $name
 	 * @return GO_Files_Model_Folder 
 	 */
-	public function addFolder($name, $syncFileSystem=false){
+	public function addFolder($name, $syncFileSystem=false, $syncOnNextAccess=false){
 		$folder = new GO_Files_Model_Folder();
 		$folder->parent_id = $this->id;
 		$folder->name = $name;
+		
+		//file manager will compare database timestamp with filesystem when it's accessed.
+		if($syncOnNextAccess)
+			$folder->mtime=1;
+			
 		$folder->save();
 		
 		if($syncFileSystem)
@@ -415,11 +420,14 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 
 				}else
 				{
+					
+					$willSync = $recurseOneLevel || $recurseAll;
+					
 					$folder = $this->hasFolder($item->name());
 					if(!$folder)
-						$folder = $this->addFolder($item->name());
+						$folder = $this->addFolder($item->name(), false, !$willSync);
 
-					if($recurseOneLevel || $recurseAll)
+					if($willSync)
 						$folder->syncFilesystem($recurseAll, false);				
 				}
 			}
