@@ -26,3 +26,5 @@ CHANGE `template` `template` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_gene
 CHANGE `content` `content` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 
 $updates["201202141200"][]="ALTER TABLE `si_sites` ADD `language` VARCHAR( 10 ) NOT NULL DEFAULT 'en'";
+
+$updates["201204180918"][]="update `si_sites` set template='Plain' where template ='thehousecrowd';";
