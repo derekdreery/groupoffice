@@ -114,8 +114,6 @@ class GO_Base_Mail_ImapBodyStruct extends GO_Base_Mail_ImapBase {
 				$res['filename'] = 'message';
 			}
 		}
-		
-		GO::debug($vals);
 		return $res;
 	}
 
