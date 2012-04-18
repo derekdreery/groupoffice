@@ -158,3 +158,6 @@ views/Extjs3/javascript/windows/ResetPasswordDialog.js
 views/Extjs3/javascript/query/SavedQueryGrid.js
 views/Extjs3/javascript/query/SavedQueryDialog.js
 views/Extjs3/javascript/query/QueryContextMenu.js
+
+
+views/Extjs3/javascript/base/util/MD5.js

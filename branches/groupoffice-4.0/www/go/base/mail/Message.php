@@ -404,8 +404,8 @@ class GO_Base_Mail_Message extends Swift_Message{
 
 						if ($tmpFile->exists()) {				
 							//Different browsers reformat URL's to absolute or relative. So a pattern match on the filename.
-							$filename = rawurlencode($tmpFile->name());
-							$result = preg_match('/="([^"]*'.preg_quote($filename).'[^"]*)"/',$params['htmlbody'],$matches);
+							//$filename = rawurlencode($tmpFile->name());
+							$result = preg_match('/="([^"]*'.preg_quote($ia->token).'[^"]*)"/',$params['htmlbody'],$matches);
 							if($result){
 								$img = Swift_EmbeddedFile::fromPath($tmpFile->path());
 								$img->setContentType($tmpFile->mimeType());
@@ -414,6 +414,9 @@ class GO_Base_Mail_Message extends Swift_Message{
 								//$tmpFile->delete();
 
 								$params['htmlbody'] = str_replace($matches[1], $contentId, $params['htmlbody']);
+							}else
+							{
+								throw new Exception("Error: inline attachment could not be found in text: ".$filename);
 							}
 						}else
 						{
