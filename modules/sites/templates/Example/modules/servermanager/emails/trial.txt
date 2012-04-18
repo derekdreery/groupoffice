@@ -1,0 +1,20 @@
+Complete your {product_name} trial installation
+
+Dear {name},
+
+Thank you for creating a {product_name} trial. You can complete the installation by clicking on the link below.
+The installation can take some time. Please don't interrupt the installation process.
+
+{link}
+
+After you finished the installation you can login as administrator with the following credentials:
+
+URL: {url}
+username: admin
+password: {password}
+
+Enjoy your trial! You will be notified automatically when your trial expires.
+
+With kind regards,
+
+The {product_name} team
