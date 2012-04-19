@@ -1929,7 +1929,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	private function _validateUniqueColumns(){
 		foreach($this->columns as $field=>$attributes){
 		
-			if(!empty($attributes['unique'])){
+			if(!empty($attributes['unique']) && !empty($this->_attributes[$field])){
 				
 				$relatedAttributes = array($field);
 				if(is_array($attributes['unique']))
