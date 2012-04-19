@@ -416,7 +416,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 								$params['htmlbody'] = str_replace($matches[1], $contentId, $params['htmlbody']);
 							}else
 							{
-								throw new Exception("Error: inline attachment could not be found in text: ".$filename);
+								throw new Exception("Error: inline attachment could not be found in text: ".$ia->token);
 							}
 						}else
 						{
