@@ -37,8 +37,7 @@ GO_Base_Html_Input::render(array(
 
 GO_Base_Html_Input::render(array(
 		"label" => "Middle name",
-		"name" => "middle_name",
-		"required" => true
+		"name" => "middle_name"
 ));
 
 GO_Base_Html_Input::render(array(
