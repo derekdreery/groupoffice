@@ -19,10 +19,14 @@ function create_file($file, $tpl, $replacements) {
 	file_put_contents($file, $data);
 }
 
-function set_value($file, $str) {
+function set_value($file, $str, $detect=false) {
+	
+	if(!$detect)
+		$detect=$str;
+	
 	$data = file_get_contents($file);
 
-	if(!strpos($data, $str)) {
+	if(!strpos($data, $detect)) {
 		$data .= $str."\n";
 	}
 	file_put_contents($file, $data);
@@ -40,9 +44,9 @@ if(!file_exists('/etc/apache2/sites-enabled/000-groupoffice'))
 echo "Configuring sudo\n";
 set_value('/etc/sudoers','www-data ALL=NOPASSWD:/usr/share/groupoffice/groupofficecli.php');
 
-set_value('/etc/groupoffice/config.php','$config["servermanager_wildcard_domain"]="'.$wildcarddomain.'";');
+set_value('/etc/groupoffice/config.php','$config["servermanager_wildcard_domain"]="'.$wildcarddomain.'";','servermanager_wildcard_domain');
 
-set_value('/etc/groupoffice/config.php','$config["servermaner_trials_enabled"]=false;');
+set_value('/etc/groupoffice/config.php','$config["servermanager_trials_enabled"]=false;','servermanager_trials_enabled');
 
 echo "Done!\n\n";
 ?>
