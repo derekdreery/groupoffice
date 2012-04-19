@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS `si_sites`;
+DROP TABLE IF EXISTS `si_pages`;
