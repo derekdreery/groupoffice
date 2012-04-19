@@ -446,7 +446,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 //		GO_Base_Mail_Mailer::newGoInstance()->send($message);
 				
 		
-		echo "Done";
+		echo "Done\n\n";
 	}
 
 }
