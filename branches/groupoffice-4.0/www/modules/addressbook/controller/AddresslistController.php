@@ -100,6 +100,38 @@
 
 		return array_merge($response, $store->getData());
 	}
+	
+	protected function actionGetRecipientsAsString($params){
+				
+		if(empty($params['addresslists']))
+			throw new Exception();
+			
+		$recipients = new GO_Base_Mail_EmailRecipients();
+		
+		$addresslistIds = json_decode($params['addresslists']);
+				
+		foreach($addresslistIds as $addresslistId){
+		
+			$addresslist = GO_Addressbook_Model_Addresslist::model()->findByPk($addresslistId);
+			
+			if($addresslist){
+				$contacts = $addresslist->contacts(GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('email', '','!=')));
+				while($contact = $contacts->fetch())				
+						$recipients->addRecipient($contact->email, $contact->name);
+
+				$companies = $addresslist->companies(GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('email', '','!=')));
+				while($company = $companies->fetch())
+						$recipients->addRecipient($company->email, $company->name);
+			}
+		}	
+		
+		return array(
+				'success'=>true,
+				'recipients'=>(string) $recipients
+		);
+	}
+	
+	
 
 	// TODO: get cross-session "selected addresslist" identifiers for getting store
 }
