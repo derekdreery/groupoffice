@@ -30,6 +30,9 @@ function get_model_by_type_id($model_type_id){
 	$sql = "SELECT model_name FROM go_model_types WHERE id=$model_type_id";
 		$db->query($sql);
 		$r = $db->next_record();
+		if(empty($r['model_name']))
+			return false;
+			
 		return GO::getModel($r['model_name']);
 }
 
