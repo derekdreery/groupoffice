@@ -115,7 +115,7 @@ Ext.extend(GO.base.model.multiselect.panel, GO.grid.EditorGridPanel, {
 
 		GO.base.model.multiselect.panel.superclass.afterRender.call(this);	
 
-		if(!this.store.loaded)		
+		if(!this.store.loaded && this.model_id)		
 			this.store.load();
 	},
 	setModelId : function(model_id,load){

@@ -252,8 +252,8 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 				},
 				success: function(options, response, result) {
 
-					grid.store.reload();
-					this.store.reload();
+					grid.store.load();
+					this.store.load();
 					this.availableModulesWin.hide();
 
 					this.installedModules=result.results;
