@@ -12,6 +12,8 @@ class GO_Base_Html_Submit extends GO_Base_Html_Input {
 	protected function init() {
 		$this->attributes['type']='submit';		
 		$this->attributes['class'].=' button submit';
-		$this->attributes['extra']='onclick="this.disabled=true;"';
+		
+		//following does not work on chrome
+		//$this->attributes['extra']='onclick="this.disabled=true;return true;"';
 	}
 }
