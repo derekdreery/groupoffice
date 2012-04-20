@@ -155,8 +155,7 @@ GO.addressbook.CompaniesGrid = function(config){
 			dataIndex: 'invoice_email',
 			hidden:true,
 			id: 'invoice_email'
-		},
-		{
+		},{
 			header: GO.lang.strMtime,
 			dataIndex:'mtime',
 			hidden:true,
