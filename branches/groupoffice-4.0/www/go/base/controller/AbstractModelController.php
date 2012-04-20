@@ -463,9 +463,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$workflowResponse = $workflowModel->getAttributes('html');
 
 //			$workflowResponse['id'] = $workflowModel->id;
-				$workflowResponse['process_name'] = $workflowModel->process->name;
+			$workflowResponse['process_name'] = $workflowModel->process->name;
 //			$workflowResponse['due_time'] = $workflowModel->due_time;
 //			$workflowResponse['shift_due_time'] = $workflowModel->shift_due_time;			
+			
+			$workflowResponse['user'] = !empty($workflowModel->user_id)?$workflowModel->user->name:'';
 			
 			$workflowResponse['approvers'] = array();
 			$workflowResponse['approver_groups'] = array();
