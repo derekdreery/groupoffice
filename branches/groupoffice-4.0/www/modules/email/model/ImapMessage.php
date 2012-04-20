@@ -94,6 +94,18 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 
 		return $imapMessage;
 	}
+	
+	
+	public function createFromHeaders($account, $mailbox, $uid, $headers){
+		$imapMessage = new GO_Email_Model_ImapMessage();
+		$attributes['uid']=$uid;
+		$attributes['account'] = $account;
+		$attributes['mailbox'] = $mailbox;
+
+		$imapMessage->setAttributes($attributes);
+
+		return $imapMessage;
+	}
 
 	/**
 	 * Save the message source to a file.

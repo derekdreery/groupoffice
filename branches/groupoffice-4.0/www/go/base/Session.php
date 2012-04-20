@@ -124,10 +124,8 @@ class GO_Base_Session extends GO_Base_Observable{
 		
 		$username = isset(self::$username) ? self::$username : 'notloggedin';
 		
-		if(GO::config()->debug){
-			GO::debug("Logout called for ".$username);
-			GO::debug(debug_backtrace());
-		}
+		
+		GO::debug("Logout called for ".$username);
 		//go_log(LOG_DEBUG, 'LOGOUT Username: '.$username.'; IP: '.$_SERVER['REMOTE_ADDR']);
 		GO::infolog("LOGOUT for user: \"".$username."\" from IP: ".$_SERVER['REMOTE_ADDR']);
 
@@ -230,6 +228,9 @@ class GO_Base_Session extends GO_Base_Observable{
 	 * TODO: REMOVE IF SYSTEM IS FULLY REBUILDED
 	 */
 	public static function setCompatibilitySessionVars(){
+		
+		if(defined("GO_NO_SESSION"))
+			return true;
 		
 		define('NO_EVENTS',true);
 		

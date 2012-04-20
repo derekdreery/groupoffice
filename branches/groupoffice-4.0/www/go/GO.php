@@ -414,6 +414,8 @@ class GO{
 					GO::debug("User agent: ".$_SERVER['HTTP_USER_AGENT']." IP: ".$_SERVER['REMOTE_ADDR']);
 				else
 					GO::debug("User agent: CLI");
+				
+				GO::debug("Config file: ".GO::config()->get_config_file());
 			}
 			//undo magic quotes if magic_quotes_gpc is enabled. It should be disabled!
 			if (get_magic_quotes_gpc()) {

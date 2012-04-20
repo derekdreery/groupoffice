@@ -214,7 +214,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			$this->capability = $_SESSION['GO_IMAP'][$this->server]['imap_capability'] = implode(' ', $response);
 		}
 
-		GO::debug('IMAP capability: '.$this->capability);
+		//GO::debug('IMAP capability: '.$this->capability);
 
 		return $this->capability;
 	}
@@ -290,18 +290,21 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	}
 	
 	
-	public function get_all_folders_with_status($subscribed=true){
+	public function list_folders($listSubscribed=true, $withStatus=false, $namespace='', $pattern='*'){
 		
 		$delim = false;
 		
-		$listStatus = false;// $this->has_capability('LIST-STATUS');
+		$listStatus = $this->has_capability('LIST-STATUS');
 		
-		$listCmd = $subscribed ? 'LSUB' : 'LIST';
+		$listCmd = $listSubscribed ? 'LSUB' : 'LIST';
 		
-		if($listStatus)
-			$cmd = $listCmd.' "" "*" RETURN (STATUS (MESSAGES UNSEEN) SUBSCRIBED)'."\r\n";
-		else
-			$cmd = $listCmd.' "" "*"'."\r\n";
+		$cmd = $listCmd.' "'.$namespace.'" "'.$pattern.'"';
+		
+		if($listStatus && $withStatus){
+			$cmd .= ' RETURN (STATUS (MESSAGES UNSEEN) SUBSCRIBED)';
+		}
+		
+		$cmd .= "\r\n";
 		
 		$this->send_command($cmd);
 		$result = $this->get_response(false, true);
@@ -327,7 +330,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				$can_have_kids = false;
 				$has_kids = false;
 				$marked = false;				
-				$subscribed=$listCmd=='LSUB';
+				$subscribed=$listSubscribed;
 
 				foreach ($vals as $v) {
 					if ($v == '(') {
@@ -405,8 +408,15 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				}
 			}
 		}
+		
+		if($listSubscribed && !isset($folders['INBOX'])){
+			//inbox is not subscribed. Let's fix that/
+			if(!$this->subscribe('INBOX'))
+				throw new Exception("Could not subscribe to INBOX folder!");
+			return $this->list_folders($listSubscribed);
+		}
 
-		if(!$listStatus){
+		if(!$listStatus && $withStatus){
 			//no support for list status. Get the status for each folder
 			//with seperate status calls
 			foreach($folders as $name=>$folder){
@@ -1229,7 +1239,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 								$n = 2;
 								while (isset($vals[$i + $n]) && $vals[$i + $n] != ')') {
 									$prop = str_replace('-','_',strtolower(substr($vals[$i + $n],1)));
-									GO::debug($prop);
+									//GO::debug($prop);
 									if(isset($message[$prop]))
 										$message[$prop]=true;
 
@@ -1297,6 +1307,22 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 		//GO::debug($final_headers);
 		return $final_headers;
+	}
+	
+	
+	public function get_message_headers_set($start, $limit, $sort_field , $reverse=false, $query='ALL')
+	{
+		GO::debug("get_message_headers_set($start, $limit, $sort_field , $reverse, $query)");
+		
+		$uids = $this->sort_mailbox($sort_field, $reverse, $query);
+		
+		if(!is_array($uids))
+			return array();
+
+		if($limit>0)
+			$uids=array_slice($uids,$start, $limit);
+
+		return $this->get_message_headers($uids, true);
 	}
 
 
