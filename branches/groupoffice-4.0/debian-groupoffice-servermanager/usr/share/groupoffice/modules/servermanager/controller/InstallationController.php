@@ -385,7 +385,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			
 			system($cmd);		
 			
-			//exec('chown -R www-data:www-data '.$config['file_storage_path']);
+			exec('chown -R www-data:www-data '.$config['file_storage_path'].'cache');
 
 //			if($return_var!=0){
 //				echo "ERROR: ".implode("\n", $output);
