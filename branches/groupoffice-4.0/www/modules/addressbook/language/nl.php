@@ -70,6 +70,7 @@ $l["cmdCompanyDetailsFor"]= 'Details voor';
 $l["cmdPanelCompany"]= 'Bedrijfsgegevens';
 $l["cmdFormLabelBankNo"]= 'Bankrekeningnummer';
 $l["cmdFormLabelVatNo"]= 'BTW-nummer';
+$l["cmdFormLabelInvoiceEmail"]= 'Factuuremail';
 $l["cmdFieldsetCompanyDetails"]= 'Bedrijfsgegevens';
 $l["cmdFieldsetVisitAddress"]= 'Bezoekadres';
 $l["cmdFieldsetPostAddress"]= 'Postadres';
