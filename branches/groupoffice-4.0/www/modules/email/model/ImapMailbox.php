@@ -48,17 +48,18 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		return substr($this->name, 0, $pos);
 	}
 
-	public function getBaseName() {
+	public function getBaseName($decode=false) {
 		$name = $this->name;
 		$pos = strrpos($name, $this->delimiter);
 
-		if ($pos === false)
-			return $name;
-		else
-			return substr($this->name, $pos + 1);
+		if ($pos !== false)
+			$name= substr($this->name, $pos + 1);
+		
+		
+		return $decode ? GO_Base_Mail_Utils::utf7_decode($name) : $name;
 	}
 
-	public function getDisplayname() {
+	public function getDisplayName() {
 		switch ($this->name) {
 			case 'INBOX':
 				return GO::t('inbox', 'email');
@@ -73,7 +74,7 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 				return GO::t('drafts', 'email');
 				break;
 			default:
-				return GO_Base_Mail_Utils::utf7_decode($this->getBaseName());
+				return $this->getBaseName(true);
 				break;
 		}
 	}
