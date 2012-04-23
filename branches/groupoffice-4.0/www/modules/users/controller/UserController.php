@@ -7,7 +7,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 	protected function ignoreAclPermissions() {
 		//ignore acl on submit so normal users can use the users module. 
 		//otherwise they are not allowed to save users.
-		return array('submit');
+		return array('*');
 	}
 	
 	protected function afterDisplay(&$response, &$model, &$params) {
