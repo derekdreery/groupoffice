@@ -290,7 +290,7 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 	},
 	
 	setInlineAttachments : function(inlineAttachments){
-		this.inlineAttachments = inlineAttachments;
+		this.inlineAttachments = inlineAttachments ? inlineAttachments : [];
 		this.hiddenInlineImagesField.setValue(Ext.encode(this.inlineAttachments));
 	},
 	
