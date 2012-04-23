@@ -419,7 +419,9 @@ class GO_Base_Mail_Message extends Swift_Message{
 							}
 						}else
 						{
-							throw new Exception("Error: inline attachment missing on server: ".$tmpFile->stripTempPath().".<br /><br />The temporary files folder is cleared on each login. Did you relogin?");
+							//this may happen when an inline image was attached but deleted in the editor afterwards.
+							//
+//							throw new Exception("Error: inline attachment missing on server: ".$tmpFile->stripTempPath().".<br /><br />The temporary files folder is cleared on each login. Did you relogin?");
 						}
 					}
 				}
