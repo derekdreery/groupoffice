@@ -779,5 +779,22 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		}
 		$imapMessage->getImapConnection()->disconnect();
 	}
+	
+	
+	public function actionSaveAttachment($params){
+		$folder = GO_Files_Model_Folder::model()->findByPk($params['folder_id']);
+		
+		
+		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.$folder->path.'/'.$params['filename']);
+		
+		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
+		$imap = $account->openImapConnection($params['mailbox']);
+
+		$response['success'] = $imap->save_to_file($params['uid'], $file->path(), $params['number'], $params['encoding']);
+		
+		if(!$response['success'])
+			$response['feedback']='Could not save to '.$file->stripFileStoragePath();
+		return $response;
+	}
 
 }
