@@ -32,7 +32,7 @@ class GO_Base_Data_ColumnModel {
 	//private $_sortFieldsAliases=array();
 
 	private $_modelFormatType='html';
-
+	
 	/**
 	 * Constructor of the ColumnModel class.
 	 * 
@@ -311,5 +311,9 @@ class GO_Base_Data_ColumnModel {
 		$this->_formatRecordFunction = $func;
 		
 		return $this;
+	}
+	
+	public function getColumnCount() {
+		return count($this->_columns);
 	}
 }
