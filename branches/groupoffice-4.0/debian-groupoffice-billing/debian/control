@@ -19,4 +19,4 @@ Depends: groupoffice-com,
 	php5-curl,
 	${misc:Depends}
 Description: 
- Adds the billing module. You need a license to make them work.
+ Adds the billing module. You need a license for this module.

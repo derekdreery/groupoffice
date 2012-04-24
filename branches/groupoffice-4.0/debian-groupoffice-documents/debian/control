@@ -28,4 +28,4 @@ Depends: groupoffice-com,
 	exiv2
 	${misc:Depends}
 Description: 
- Adds the billing module. You need a license to make them work.
+ Adds the deep file search and workflow module. You need a license to make them work.
