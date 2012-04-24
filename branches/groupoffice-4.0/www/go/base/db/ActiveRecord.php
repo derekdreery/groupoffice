@@ -2153,7 +2153,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		/**
 		 * Useful event for modules. For example custom fields can be loaded or a files folder.
 		 */
-		$this->fireEvent('save',array(&$this));
+		$this->fireEvent('save',array(&$this,$wasNew));
 
 
 		$this->cacheSearchRecord();
