@@ -17,13 +17,19 @@ class GO_Base_Util_HttpClient{
 		//for self-signed certificates
 		curl_setopt($this->_curl, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($this->_curl, CURLOPT_SSL_VERIFYHOST, false);
+		@curl_setopt($this->_curl, CURLOPT_FOLLOWLOCATION, TRUE);
 	}
 	
-	public function request($url, $params){
+	public function setCurlOption($option, $value){
+		curl_setopt($this->_curl, $option,$value);
+	}
+	
+	public function request($url, $params=array()){
 		
 		curl_setopt($this->_curl, CURLOPT_URL,$url);
-		curl_setopt($this->_curl, CURLOPT_POST, 1);
-		curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $params);
+		curl_setopt($this->_curl, CURLOPT_POST, !empty($params));
+		if(!empty($params))
+			curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $params);
 		curl_setopt($this->_curl, CURLOPT_RETURNTRANSFER, true);
 		
 		$response = curl_exec($this->_curl);
