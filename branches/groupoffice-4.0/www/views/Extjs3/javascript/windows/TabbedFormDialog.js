@@ -206,6 +206,11 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		});
 		
 	},
+	
+	addButton : function(button){
+		var tb = this.getFooterToolbar();
+		tb.addButton(button);
+	},
 
 	addCustomFields : function(){
 		if(this.customFieldType && GO.customfields && GO.customfields.types[this.customFieldType])
