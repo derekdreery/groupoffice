@@ -31,6 +31,9 @@ GO.base.model.ImportPanel = Ext.extend(Ext.Panel, {
 					
 					this.cmbController.selectFirst();
 					this.cmbFileType.selectFirst();
+					
+					this.cmbFileType.setVisible(this.fileTypeStore.getCount() > 1);
+					this.cmbController.setVisible(this.controllersStore.getCount() > 1);
 				},
 				show : function(){
 					this.fileSelector.clearQueue();
