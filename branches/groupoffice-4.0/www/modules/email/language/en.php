@@ -235,3 +235,5 @@ $l['defaultProgramInstructions'] ='<p>To set {product_name} as your default e-ma
 $l['xssDetected']="This message may contain malicious content. Click here to view the filtered message anyway.";
 $l['xssMessageHidden']='Message hidden for security reasons';
 $l['failedRecipients']='Failed to send to';
+
+$l['spam']='Spam';
