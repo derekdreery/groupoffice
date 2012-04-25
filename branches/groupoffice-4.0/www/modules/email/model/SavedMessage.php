@@ -119,7 +119,15 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 	
 	
 	protected function getAttachmentUrl($attachment) {
-		return GO::url('core/downloadTempFile', array('path'=>$attachment['tmp_file']));
+		
+		$file = new GO_Base_Fs_File($attachment['name']);
+		
+		if($file->extension()=='dat'){			
+			return GO::url('email/message/tnefAttachmentFromTempFile', array('tmp_file'=>$attachment['tmp_file']));
+		}else
+		{		
+			return GO::url('core/downloadTempFile', array('path'=>$attachment['tmp_file']));
+		}
 	}
 
 	private function _getParts($structure, $part_number_prefix='') {

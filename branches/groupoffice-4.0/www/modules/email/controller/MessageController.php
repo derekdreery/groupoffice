@@ -736,6 +736,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		return $response;
 	}
 	
+	//still used?
 	public function actionMessageAttachment($params){
 		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
@@ -775,6 +776,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$zipFile = $tmpFolder->child('winmail.zip');
 		GO_Base_Util_Http::outputDownloadHeaders($zipFile,false,true);
 		$zipFile->output();
+		
+		$tmpFolder->delete();
 	}
 
 	public function actionAttachment($params) {
@@ -793,11 +796,11 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		if(isset($params['inline']) && $params['inline'] == 0)
 			$inline = false;	
 		
-		
 		GO_Base_Util_Http::outputDownloadHeaders($file,$inline,true);
 
-		$account->openImapConnection($params['mailbox'])->get_message_part_start($params['uid'], $params['number']);
-		while ($line = $imapMessage->getImapConnection()->get_message_part_line()) {
+		$imap = $account->openImapConnection($params['mailbox']);
+		$imap->get_message_part_start($params['uid'], $params['number']);
+		while ($line = $imap->get_message_part_line()) {
 			switch (strtolower($params['encoding'])) {
 				case 'base64':
 					echo base64_decode($line);
@@ -810,7 +813,27 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 					break;
 			}
 		}
-		$imapMessage->getImapConnection()->disconnect();
+	}
+	
+	
+	protected function actionTnefAttachmentFromTempFile($params){
+		$tmpFolder = GO_Base_Fs_Folder::tempFolder(uniqid(time()));
+		$tmpFile = new GO_Base_Fs_File(GO::config()->tmpdir.$params['tmp_file']);
+		
+				chdir($tmpFolder->path());
+		exec(GO::config()->cmd_tnef.' -C '.$tmpFolder->path().' '.$tmpFile->path(), $output, $retVar);
+		if($retVar!=0)
+			throw new Exception("TNEF extraction failed: ".implode("\n", $output));		
+		
+		exec(GO::config()->cmd_zip.' -r "winmail.zip" *', $output, $retVar);
+		if($retVar!=0)
+			throw new Exception("ZIP compression failed: ".implode("\n", $output));		
+		
+		$zipFile = $tmpFolder->child('winmail.zip');
+		GO_Base_Util_Http::outputDownloadHeaders($zipFile,false,true);
+		$zipFile->output();
+		
+		$tmpFolder->delete();	
 	}
 	
 	
