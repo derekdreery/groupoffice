@@ -399,6 +399,9 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 */
 	public function syncFilesystem($recurseAll=false, $recurseOneLevel=true) {
 
+		if(GO::config()->debug)
+			GO::debug("syncFilesystem ".$this->path);
+		
 		$oldCache = GO::$disableModelCache;
 		
 		GO::$disableModelCache=true;
@@ -459,6 +462,8 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		
 		if(!$this->fsFolder->exists())
 			throw new Exception("Folder ".$this->path." doesn't exist on the filesystem! Please run a database check.");
+		
+		GO::debug('checkFsSync '.$this->path.' : '.$this->mtime.' < '.$this->fsFolder->mtime());
 		
 		if($this->mtime < $this->fsFolder->mtime()){
 			GO::debug("Filesystem folder ".$this->path." is not in sync with database. Will sync now.");
