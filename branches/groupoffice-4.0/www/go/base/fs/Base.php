@@ -75,6 +75,22 @@ abstract class GO_Base_Fs_Base{
 		}
 	}
 	
+	/** 
+	 * Create a new file object. Filesystem file is not created automatically.
+	 * 
+	 * @param string $filename
+	 * @param boolean $isFile
+	 * @return \GO_Base_Fs_File|\GO_Base_Fs_Folder 
+	 */
+	public function createChild($filename, $isFile=true){
+		$childPath = $this->path.'/'.$filename;
+		if($isFile){
+			return new GO_Base_Fs_File($childPath);
+		} elseif(is_dir($childPath)){
+			return new GO_Base_Fs_Folder($childPath);
+		}
+	}
+	
 	/**
 	 * Return absolute filesystem path
 	 * 

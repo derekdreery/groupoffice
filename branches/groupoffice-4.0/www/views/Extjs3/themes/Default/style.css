@@ -345,7 +345,7 @@ a.normal-link:hover{
 	background-image:url('images/16x16/filetypes/document.png') !important;
 }
 
-.filetype-zip, .filetype-tar, .filetype-gz, .filetype-tgz, .filetype-rar, .filetype-bz{
+.filetype-zip, .filetype-tar, .filetype-gz, .filetype-tgz, .filetype-rar, .filetype-bz, .filetype-dat{
 	background-image:url('images/16x16/filetypes/tar.png') !important;
 }
 

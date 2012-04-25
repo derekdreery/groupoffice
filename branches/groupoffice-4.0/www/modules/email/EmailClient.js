@@ -1280,10 +1280,10 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		{
 			switch(attachment.extension)
 			{
-				case 'dat':
-					document.location.href=GO.settings.modules.email.url+
-					'tnef.php'+url_params;
-					break;			
+//				case 'dat':
+//					document.location.href=GO.settings.modules.email.url+
+//					'tnef.php'+url_params;
+//					break;			
 				
 //				case 'vcs':
 //				case 'ics':

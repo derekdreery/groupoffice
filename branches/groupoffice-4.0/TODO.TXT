@@ -1,3 +1,9 @@
+Save attachment as mail werkt niet. 
+
+Log!
+
+
+
 Calendar:
 Distinguish declined and cancel	led events in grid.
 alarm import
@@ -31,7 +37,8 @@ Group-Office 100 users 600 euro, 150 users 700 euro etc.
 
 *** Lage prio:
 
-Gegevens wijzigen op site
+Save all attachments.
+
 
 LIST-STATUS gebruiken bij email
 TLS email
@@ -51,5 +58,3 @@ Freebusy support in sabredav 1.6
 Feature requests voting system
 
 Bij bedrijf -> displaypanel -> New -> Contact
-
-Tickets sluiten door klant

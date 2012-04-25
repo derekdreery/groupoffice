@@ -21,6 +21,22 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 
 	
 	/**
+	 * Get a temporary files folder.
+	 * 
+	 * @var string $sub Optionally create a sub folder
+	 * @return GO_Base_Fs_Folder 
+	 */
+	public static function tempFolder($sub=''){
+		$path = GO::config()->orig_tmpdir.GO::user()->id;
+		if(!empty($sub))
+			$path .= '/'.$sub;
+		
+		$folder = new GO_Base_Fs_Folder($path);
+		$folder->create();
+		return $folder;
+	}
+	
+	/**
 	 * Get folder directory listing.
 	 * 
 	 * @param boolean $getHidden
