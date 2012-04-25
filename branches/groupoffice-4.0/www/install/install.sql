@@ -186,16 +186,19 @@ CREATE TABLE IF NOT EXISTS `go_link_folders` (
 
 DROP TABLE IF EXISTS `go_log`;
 CREATE TABLE IF NOT EXISTS `go_log` (
-  `id` int(11) NOT NULL,
-  `link_id` int(11) NOT NULL,
-  `link_type` int(11) NOT NULL,
-  `time` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
-  `text` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `link_type` (`link_type`,`time`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
+  `username` varchar(50) NOT NULL DEFAULT '',
+  `model` varchar(255) NOT NULL DEFAULT '',
+  `model_id` varchar(255) NOT NULL DEFAULT '',
+  `ctime` int(11) NOT NULL,
+  `user_agent` varchar(100) NOT NULL DEFAULT '',
+  `ip` varchar(15) NOT NULL DEFAULT '',
+  `controller_route` varchar(255) NOT NULL DEFAULT '',
+  `action` varchar(20) NOT NULL DEFAULT '',
+  `message` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 -- --------------------------------------------------------
 
 --

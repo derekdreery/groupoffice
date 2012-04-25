@@ -150,6 +150,8 @@ class GO_Base_Session extends GO_Base_Observable{
 		}
 
 		$this->fireEvent('logout', array($old_session));
+		
+		$this->_log(GO_Log_Model_Log::ACTION_LOGOUT);
 	}
 	
 	/**
@@ -219,9 +221,19 @@ class GO_Base_Session extends GO_Base_Observable{
 			//using the session_regenerate_id() function.
 
 			session_regenerate_id();
+			
+			$this->_log(GO_Log_Model_Log::ACTION_LOGIN);
 		
 			return $user;
 		}		
+	}
+	
+	private function _log($action){
+		if(GO::modules()->isInstalled('log')){	
+			$log = new GO_Log_Model_Log();			
+			$log->action=$action;						
+			$log->save();
+		}
 	}
 	
 	/**

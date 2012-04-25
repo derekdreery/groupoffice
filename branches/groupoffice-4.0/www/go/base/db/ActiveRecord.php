@@ -99,6 +99,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	private $_forceSave = false;
 	
 	/**
+	 * See http://dev.mysql.com/doc/refman/5.1/en/insert-delayed.html
+	 * 
+	 * @var boolean 
+	 */
+	protected $insertDelayed=false;
+	
+	/**
 	 *
 	 * @var int Link type of this Model used for the link system. See also the linkTo function
 	 */
@@ -2141,6 +2148,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$this->customfieldsRecord->save();
 		}
 		
+		$this->_log($wasNew ? GO_Log_Model_Log::ACTION_ADD : GO_Log_Model_Log::ACTION_UPDATE);
+		
+		
 
 		if(!$this->afterSave($wasNew)){
 			GO::debug("WARNING: ".$this->className()."::afterSave returned false or no value");
@@ -2161,6 +2171,39 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$this->_modifiedAttributes = array();
 
 		return true;
+	}
+	
+	/**
+	 * Get the message for the log module. Returns the contents of the first text column by default.
+	 * 
+	 * @return string 
+	 */
+	public function getLogMessage($action){
+		
+		$attr = $this->getCacheAttributes();
+		if($attr){
+			$msg = $attr['name'];
+			if(isset($attr['description']))
+				$msg.="\n".$attr['description'];
+			return substr($msg,0,255);
+		}else
+			return false;
+	}
+	
+	private function _log($action){
+	
+		$message = $this->getLogMessage($action);
+		if($message && GO::modules()->isInstalled('log')){			
+			$log = new GO_Log_Model_Log();
+			
+			$pk = $this->pk;
+			$log->model_id=is_array($pk) ? var_export($pk, true) : $pk;
+			
+			$log->action=$action;
+			$log->model=$this->className();			
+			$log->message = $message;
+			$log->save();
+		}
 	}
 	
 	/**
@@ -2425,7 +2468,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 
 		
-		$sql = "INSERT INTO `{$this->tableName()}` (`".implode('`,`', $fieldNames)."`) VALUES ".
+		$sql = "INSERT ";
+		
+		if($this->insertDelayed)
+			$sql .= "DELAYED ";
+		
+		$sql .= "INTO `{$this->tableName()}` (`".implode('`,`', $fieldNames)."`) VALUES ".
 					"(:".implode(',:', $fieldNames).")";
 
 		if($this->_debugSql)			
@@ -2629,6 +2677,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$success = $this->getDbConnection()->query($sql);		
 		if(!$success)
 			throw new Exception("Could not delete from database");
+		
+		$this->_log(GO_Log_Model_Log::ACTION_DELETE);
 		
 		$attr = $this->getCacheAttributes();
 		

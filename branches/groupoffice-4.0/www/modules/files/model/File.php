@@ -79,6 +79,10 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	protected function getCacheAttributes() {
 		return array('name'=>$this->name, 'description'=>$this->path);
 	}
+	
+	public function getLogMessage($action){
+		return $this->path;
+	}
 	/**
 	 * Here you can define the relations of this model with other models.
 	 * See the parent class for a more detailed description of the relations.

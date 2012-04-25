@@ -90,6 +90,10 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	public function tableName() {
 		return 'fs_folders';
 	}
+	
+	public function getLogMessage($action){
+		return $this->path;
+	}
 
 	/**
 	 * Here you can define the relations of this model with other models.

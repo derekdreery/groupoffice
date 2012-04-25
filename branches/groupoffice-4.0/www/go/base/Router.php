@@ -44,6 +44,17 @@ class GO_Base_Router{
 	
 	private $_action;
 	
+	private $_r;
+	
+	/**
+	 * Get the controller route. eg. email/message/view
+	 * 
+	 * @return string 
+	 */
+	public function getControllerRoute(){
+		return $this->_r;
+	}
+	
 	/**
 	 * Get the currently active controller for this request.
 	 * 
@@ -79,6 +90,7 @@ class GO_Base_Router{
 		}
 				
 		$r = !empty($params['r']) ?  explode('/', $params['r']): array();		
+		$this->_r=isset($params['r']) ? $params['r'] : "";
 		
 		$first = isset($r[0]) ? ucfirst($r[0]) : 'Auth';
 		
