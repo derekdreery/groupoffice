@@ -789,8 +789,11 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
 		$imap = $account->openImapConnection($params['mailbox']);
-
+		
 		$response['success'] = $imap->save_to_file($params['uid'], $file->path(), $params['number'], $params['encoding']);
+		
+		if(!$folder->hasFile($file->name()))
+			$folder->addFile($file->name());
 		
 		if(!$response['success'])
 			$response['feedback']='Could not save to '.$file->stripFileStoragePath();
