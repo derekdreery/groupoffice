@@ -462,9 +462,16 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @param string[] $groupNames 
 	 */
-	public function addToGroups(array $groupNames){		
+	public function addToGroups(array $groupNames, $autoCreate=false){		
 		foreach($groupNames as $groupName){
 			$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', $groupName);
+			
+			if(!$group && $autoCreate){
+				$group = new GO_Base_Model_Group();
+				$group->name = $groupName;
+				$group->save();
+			}
+			
 			if($group)
 				$group->addUser($this->id);
 		}
