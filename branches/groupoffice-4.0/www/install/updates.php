@@ -202,3 +202,5 @@ $updates["201204251613"][]= "CREATE TABLE IF NOT EXISTS `go_log` (
   `message` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;";
+
+$updates["201204251613"][]= "ALTER TABLE `go_log` CHANGE `user_agent` `user_agent` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";

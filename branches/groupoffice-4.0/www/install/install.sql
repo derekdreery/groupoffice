@@ -192,7 +192,7 @@ CREATE TABLE IF NOT EXISTS `go_log` (
   `model` varchar(255) NOT NULL DEFAULT '',
   `model_id` varchar(255) NOT NULL DEFAULT '',
   `ctime` int(11) NOT NULL,
-  `user_agent` varchar(100) NOT NULL DEFAULT '',
+  `user_agent` varchar(255) NOT NULL DEFAULT '',
   `ip` varchar(15) NOT NULL DEFAULT '',
   `controller_route` varchar(255) NOT NULL DEFAULT '',
   `action` varchar(20) NOT NULL DEFAULT '',

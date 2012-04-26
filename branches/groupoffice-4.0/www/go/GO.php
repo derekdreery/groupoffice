@@ -517,10 +517,10 @@ class GO{
 
 		if (self::config()->log) {
 
-			if (empty(GO::session()->logdircheck)) {
+			if (empty(GO::session()->values["logdircheck"])) {
 				$folder = new GO_Base_Fs_Folder(dirname(self::config()->info_log));
 				$folder->create();				
-				GO::session()->logdircheck = true;
+				GO::session()->values["logdircheck"] = true;
 			}
 
 			$msg = '[' . date('Y-m-d G:i:s') . ']';
