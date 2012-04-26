@@ -460,7 +460,8 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Add the user to user groups.
 	 * 
-	 * @param string[] $groupNames 
+	 * @param string[] $groupNames
+	 * @param boolean $autoCreate 
 	 */
 	public function addToGroups(array $groupNames, $autoCreate=false){		
 		foreach($groupNames as $groupName){
