@@ -77,10 +77,10 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 				
 				GO::language()->setLanguage($user->language);
 
-				$siteTitle = $this->getSite()->title;
+				$siteTitle = $this->getSite()->name;
 				$url = $this->pageUrl('resetpassword',array(),false);
 
-				$fromName = $this->getSite()->title;
+				$fromName = $this->getSite()->name;
 				$fromEmail = 'noreply@intermesh.nl';
 				
 				$user->sendResetPasswordMail($siteTitle,$url,$fromName,$fromEmail);
