@@ -36,6 +36,13 @@ GO.users.ImportDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 //			]
 		});
 		
+		this.updateExisting = new Ext.ux.form.XCheckbox({
+			fieldLabel: GO.users.lang.updateExistingOnImport,
+			name: 'updateExisting'
+		});
+		
+		this.importPanel.add(this.updateExisting);
+		
 		this.exampleButton = new Ext.Button({
 			text:GO.users.lang.downloadSampleCSV,
 			width: 200,
