@@ -13,15 +13,7 @@ GO.users.ImportDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		
 		GO.users.ImportDialog.superclass.initComponent.call(this);	
 	},
-	
-	afterSubmit : function(action){
 
-		if(action.result.success)
-			Ext.Msg.alert(GO.lang.cmdImport, GO.lang.cmdImport+' '+GO.lang.strSuccess);
-		
-		GO.users.ImportDialog.superclass.afterSubmit.call(this,action);
-	},
-	
 	submitForm : function(hide){
 		if(this.importPanel.fileSelector.inputs.items.length == 1)
 			this.hide();
