@@ -264,4 +264,125 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		return parent::afterStore($response, $params, $store, $storeParams);
 	}
 	
+	/**
+	 * Get an example file for importing users
+	 * 
+	 * @param array $params 
+	 */
+	protected function actionGetImportExample($params){
+	
+		$data = array();
+		
+		for($i=0;$i<5;$i++){
+			$data[$i] = array(
+				'username'=>'user'.$i,
+				'password'=>'password'.$i,
+				'enabled'=>$i%3?1:0,
+				'first_name'=>'firstname'.$i,
+				'middle_name'=>'middlename'.$i,
+				'last_name'=>'lastname'.$i,
+				'initials'=>'AE',
+				'title'=>$i%2?'Mr.':'Mevr.',
+				'sex'=>$i%2?'M':'F',
+				'birthday'=>'0'.($i+1).'-0'.($i+3).'-8'.$i,
+				'email'=>'email'.$i.'@domain.com',
+				'company'=>'company',
+				'department'=>'department',
+				'function'=>'function',
+				'home_phone'=>'123456789'.$i,
+				'work_phone'=>'623451789'.$i,
+				'fax'=>'423156789'.$i,
+				'cellular'=>'061234567'.$i,
+				'country'=>'NL',
+				'state'=>'state',
+				'city'=>'city',
+				'zip'=>'zip',
+				'address'=>'Address',
+				'address_no'=>$i,
+				'groups'=>'Everyone,Internal,Some_group',
+				'modules_read'=>'summary,email,addressbook,files',
+				'modules_write'=>'tasks'
+			);
+		}
+		
+		GO_Base_Util_Http::outputDownloadHeaders(new GO_Base_Fs_File("users.csv"));
+		
+		$csvFile  = new GO_Base_Csv_Writer('php://output');
+	
+		$header = true;
+		
+		foreach($data as $row){
+			
+			if($header){
+				$csvFile->putRecord(array_keys($row));
+				$header=false;
+			}
+			
+			$csvFile->putRecord(array_values($row));
+		}		
+	}
+	
+	/**
+	 * The function that will be called when importing users 
+	 * 
+	 * @param array $params
+	 * @return array
+	 * @throws Exception When the controller cannot be found, an exeption will be thrown
+	 */
+	protected function actionImport($params){
+		
+		$response = array();
+		
+//		$params['updateExisting'] = true;
+		
+		$params['updateFindAttributes'] = 'username';
+		$params['file'] = $_FILES['files']['tmp_name'][0];
+		
+		ini_set('max_execution_time', 360);
+		ini_set('memory_limit', '256M');
+		
+		if($params['controller']=='GO_Users_Controller_User')
+			$controller = new GO_Users_Controller_User();
+		else
+			throw new Exception("No or wrong controller given");
+
+		$response = array_merge($response,$controller->run("importCsv",$params,false));
+		
+		$response['success'] = true;
+		return $response;
+	}
+	
+	/**
+	 * The actual call to the import CSV function
+	 * 
+	 * @param array $params
+	 * @return array $response 
+	 */
+	protected function actionImportCsv($params){
+		$summarylog = parent::actionImport($params);
+		return $summarylog->getErrorsJson();
+	}
+	
+	
+	/**
+	 * The afterimport for every imported user.
+	 * 
+	 * @param GO_Base_Model_User $model
+	 * @param array $attributes
+	 * @param array $record
+	 * @return boolean success
+	 */
+	protected function afterImport(&$model, &$attributes, $record){
+		
+		// Create the new groups
+		if(!empty($attributes["groups"]))
+			$model->addToGroups(explode(',',$attributes["groups"]),true);
+		
+		// Create the 
+		$c=$model->createContact();
+		$c->setAttributes($attributes);
+		$c->save();
+		
+		return parent::afterImport($model, $attributes, $record);
+	}
 }
