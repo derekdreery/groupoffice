@@ -1157,6 +1157,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 * @return <type>
 	 */
 	public function get_message_headers($uids, $full_data=false) {
+		
+		if(empty($uids))
+			return array();
 
 		$sorted_string = implode(',', $uids);
 		$this->clean($sorted_string, 'uid_list');
