@@ -31,7 +31,7 @@
 						<tr class="ticketmodel-row <?php echo $style; ?>">
 							<td width="20px"><?php echo $linktoticket; ?>
 								<?php 
-									if($ticket->status != GO_Tickets_Model_Ticket::STATUS_CLOSED && $ticket->unseen){
+									if($ticket->status_id != GO_Tickets_Model_Ticket::STATUS_CLOSED && $ticket->unseen){
 										echo "<span class='image-new-message'></span>";
 									}
 								?></a></td>
