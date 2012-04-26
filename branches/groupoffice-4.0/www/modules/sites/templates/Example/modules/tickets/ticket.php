@@ -37,27 +37,48 @@
 				<?php echo $this->t('tickets_ticketYourInformation'); ?>
 			</div>
 			<div class="ticket-user-text">
-				<table>
-					<tr>
-						<td>Name:</td><td><?php echo $ticket->contact->name; ?></td>
-					</tr>
-					<tr>
-						<td>Address:</td><td><?php echo $ticket->contact->address; ?> <?php echo $ticket->contact->address_no; ?></td>
-					</tr>
-					<tr>
-						<td>Zip/City:</td><td><?php echo $ticket->contact->zip; ?> <?php echo $ticket->contact->city; ?></td>
-					</tr>
-					<tr>
-						<td>Telephone:</td><td><?php echo $ticket->contact->work_phone; ?></td>
-					</tr>
-					<tr>
-						<td>Mobile:</td><td><?php echo $ticket->contact->cellular; ?></td>
-					</tr>
-					<tr>
-						<td>Email:</td><td><?php echo $ticket->contact->email; ?></td>
-					</tr>
-
-				</table>
+				
+				<?php if($ticket->contact): ?>
+					<table>
+						<tr>
+							<td>Name:</td><td><?php echo $ticket->contact->name; ?></td>
+						</tr>
+						<tr>
+							<td>Address:</td><td><?php echo $ticket->contact->address; ?> <?php echo $ticket->contact->address_no; ?></td>
+						</tr>
+						<tr>
+							<td>Zip/City:</td><td><?php echo $ticket->contact->zip; ?> <?php echo $ticket->contact->city; ?></td>
+						</tr>
+						<tr>
+							<td>Telephone:</td><td><?php echo $ticket->contact->work_phone; ?></td>
+						</tr>
+						<tr>
+							<td>Mobile:</td><td><?php echo $ticket->contact->cellular; ?></td>
+						</tr>
+						<tr>
+							<td>Email:</td><td><?php echo $ticket->contact->email; ?></td>
+						</tr>
+					</table>
+				<?php else: ?>
+					<table>
+						<tr>
+							<td>Name:</td><td><?php echo $ticket->contactName; ?></td>
+						</tr>
+						<tr>
+							<td>Address:</td><td><?php echo $ticket->address; ?> <?php echo $ticket->address_no; ?></td>
+						</tr>
+						<tr>
+							<td>Zip/City:</td><td><?php echo $ticket->zip; ?> <?php echo $ticket->city; ?></td>
+						</tr>
+						<tr>
+							<td>Telephone:</td><td><?php echo $ticket->phone; ?></td>
+						</tr>
+						<tr>
+							<td>Email:</td><td><?php echo $ticket->email; ?></td>
+						</tr>
+					</table>
+				<?php endif; ?>
+				
 			</div>
 		</div>
 	</div>
