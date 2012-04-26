@@ -23,7 +23,7 @@ a2enmod vhost_alias
 
 #chown -R www-data:www-data /home/govhosts
 
-invoke-rc.d apache2 restart 3> /dev/null || true
+invoke-rc.d apache2 reload 3> /dev/null || true
 
 /usr/share/groupoffice/groupofficecli.php -r=servermanager/installation/upgradeAll
 
