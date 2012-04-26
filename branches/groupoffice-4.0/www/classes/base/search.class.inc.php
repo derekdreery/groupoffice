@@ -534,19 +534,19 @@ class search extends db {
 	
 	function log($model_id, $model_type_id, $text)
 	{
-		global $GO_MODULES;
-		
-		if(isset($GLOBALS['GO_MODULES']->modules['log']) && !defined('NOLOG'))
-		{
-			$log['model_id']=$model_id;
-			$log['model_type_id']=$model_type_id;
-			$log['time']=time();
-			$log['text']=$text;
-			$log['user_id']=$GLOBALS['GO_SECURITY']->user_id;
-			$log['id']=$this->nextid('go_log');
-			
-			$this->insert_row('go_log', $log);
-		}
+//		global $GO_MODULES;
+//		
+//		if(isset($GLOBALS['GO_MODULES']->modules['log']) && !defined('NOLOG'))
+//		{
+//			$log['model_id']=$model_id;
+//			$log['model_type_id']=$model_type_id;
+//			$log['time']=time();
+//			$log['text']=$text;
+//			$log['user_id']=$GLOBALS['GO_SECURITY']->user_id;
+//			$log['id']=$this->nextid('go_log');
+//			
+//			$this->insert_row('go_log', $log);
+//		}
 	}
 	
 
