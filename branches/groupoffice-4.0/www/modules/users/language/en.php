@@ -119,3 +119,5 @@ $l['generatedPasswordIs']='The generated password is';
 
 $l['openContact']='Open contact';
 $l['showProUsers']='Show pro users';
+
+$l['updateExistingOnImport']='Update existing users (by username)';
