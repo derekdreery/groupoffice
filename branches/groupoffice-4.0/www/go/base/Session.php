@@ -203,7 +203,8 @@ class GO_Base_Session extends GO_Base_Observable{
 				$this->clearUserTempFiles();
 			}
 
-			self::setCompatibilitySessionVars(); // TODO: REMOVE IF SYSTEM IS FULLY REBUILT
+			if(PHP_SAPI!='cli')
+				self::setCompatibilitySessionVars(); // TODO: REMOVE IF SYSTEM IS FULLY REBUILT
 
 			$this->fireEvent('login', array($username, $password, $user));
 			
