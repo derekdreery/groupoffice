@@ -19,6 +19,6 @@ class GO_Log_LogModule extends GO_Base_Module{
 		exec($cmd, $output, $return_var);
 
 		if($return_var!=0)
-			throw new Exception(implode("\n", $output));
+			echo "Error: ".implode("\n", $output)."\n\n";
 	}
 }
