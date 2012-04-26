@@ -413,9 +413,14 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		
 		while($installation = $stmt->fetch()){
 			echo "Creating report for ".$installation->name."\n";
-			$report['installations'][]=$installation->report();
+			//$report['installations'][]=$installation->report();
 			
-			$this->fireEvent('report', array($installation));
+			//run tasks for installation like log rotation and filesearch index update.
+			
+			echo "Running daily tasks for installation\n";
+			$cmd ='/usr/share/groupoffice/groupofficecli.php -r=maintenance/servermanagerReport -c="'.$installation->configPath.'"  2>&1';				
+			system($cmd);
+		
 		}
 		
 //		if(class_exists('GO_Professional_LicenseCheck')){
