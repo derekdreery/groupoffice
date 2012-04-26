@@ -151,7 +151,8 @@ class GO_Base_Session extends GO_Base_Observable{
 
 		$this->fireEvent('logout', array($old_session));
 		
-		$this->_log(GO_Log_Model_Log::ACTION_LOGOUT);
+		if(!empty(GO::session()->values['countLogin']))
+			$this->_log(GO_Log_Model_Log::ACTION_LOGOUT);
 	}
 	
 	/**
@@ -222,7 +223,10 @@ class GO_Base_Session extends GO_Base_Observable{
 
 			session_regenerate_id();
 			
-			$this->_log(GO_Log_Model_Log::ACTION_LOGIN);
+			if($countLogin)
+				$this->_log(GO_Log_Model_Log::ACTION_LOGIN);
+			
+			GO::session()->values['countLogin']=$countLogin;
 		
 			return $user;
 		}		
