@@ -414,6 +414,8 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		while($installation = $stmt->fetch()){
 			echo "Creating report for ".$installation->name."\n";
 			$report['installations'][]=$installation->report();
+			
+			$this->fireEvent('report', array($installation));
 		}
 		
 //		if(class_exists('GO_Professional_LicenseCheck')){

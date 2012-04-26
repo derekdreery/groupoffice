@@ -45,7 +45,8 @@
  * @property boolean $billing
  * @property boolean $professional
  * @property int $status_change_time
- * @property string $config_file
+ * @property string $configPath
+ * @property string $installPath
  * 
  * @property string $url
  */
