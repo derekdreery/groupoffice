@@ -844,6 +844,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * @param array $params 
 	 */
 	protected function actionImport($params) {
+				
+		$summarylog = new GO_Base_Component_SummaryLog();
 		
 		GO::$disableModelCache=true; //for less memory usage
 		ini_set('max_execution_time', '0'); //allow long runs
@@ -885,12 +887,28 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		while ($record = $importFile->getRecord()) {
 			$attributes = array();
+			$model = false;
+			
 			foreach($attributeIndexMap as $index=>$attributeName){
 				$attributes[trim($attributeName)]=$record[$index];
 			}
-
-			$model = new $this->model;			
 			
+			if(!empty($params['updateExisting']) && !empty($params['updateFindAttributes'])){
+				
+				$findBy = explode(',', $params['updateFindAttributes']);
+				
+				$attr = array();
+				foreach($findBy as $attrib){
+					$attr[$attrib] = $attributes[$attrib];
+				}
+				
+				$model = GO::getModel($this->model)->findSingleByAttributes($attr);				
+			}
+			
+			if(!$model)
+				$model = new $this->model;	
+
+
 			if($this->beforeImport($model, $attributes, $record)){			
 				$columns = $model->getColumns();
 				//var_dump($columns);
@@ -920,11 +938,18 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				
 				$this->_parseImportDates($model);
 				
-				$model->save();			
+				try{
+					$model->save();
+				}
+				catch(Exception $e){
+					$summarylog->addError($record[0], $e->getMessage());
+				}
+				$summarylog->add();
 			}
 			
 			$this->afterImport($model, $attributes, $record);
 		}
+		return $summarylog;
 	}
 	
 	protected function beforeImport(&$model, &$attributes, $record){
