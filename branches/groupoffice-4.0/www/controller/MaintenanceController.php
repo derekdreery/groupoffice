@@ -7,7 +7,7 @@
 class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractController {
 	
 	protected function allowGuests() {
-		return array('upgrade','checkdatabase');
+		return array('upgrade','checkdatabase','servermanagerreport');
 	}
 
 	protected function init() {
@@ -423,10 +423,18 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		echo "All Done!\n";		
 		
-		if(php_sapi_name() != 'cli'){
+		if(!$this->isCli()){
 			echo '</pre><br /><br />';
 			echo '<a href="'.GO::config()->host.'">'.GO::t('cmdContinue').'</a>';
 		}
 		//return $response;
+	}
+	
+	
+	public function actionServermanagerReport($params){
+		if(!$this->isCli()){
+			trigger_error("This action must be ran on the command line", E_USER_ERROR);
+		}
+		$this->fireEvent('servermanagerReport');
 	}
 }

@@ -274,7 +274,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * @param boolean $render Render output automatically. Set to false if you run 
 	 *	a controller manually in another controller and want to capture the output.
 	 */
-	public function run($action='', $params, $render=true, $checkPermissions=true){
+	public function run($action='', $params=array(), $render=true, $checkPermissions=true){
 		try {
 			if(empty($action))
 				$action=strtolower($this->defaultAction);

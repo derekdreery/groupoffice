@@ -78,7 +78,26 @@ GO.log.MainPanel = function(config) {
 		width : 320
 	});
 		
-	config.tbar=new Ext.Toolbar({items:[GO.lang['strSearch'] + ':', this.searchField], cls:'go-head-tb'});
+	config.tbar=new Ext.Toolbar({items:[GO.lang['strSearch'] + ':', this.searchField,'-',{
+			iconCls: 'btn-export',
+			text: GO.lang.cmdExport,
+			cls: 'x-btn-text-icon',
+			handler:function(){
+				
+				if(!this.exportDialog)
+				{
+					this.exportDialog = new GO.ExportGridDialog({
+						url: 'log/log/export',
+						name: 'log',
+						documentTitle:this.title,
+						colModel: this.getColumnModel()
+					});
+				}				
+				this.exportDialog.show();
+
+			},
+			scope: this
+		}], cls:'go-head-tb'});
 			
 	GO.log.MainPanel.superclass.constructor.call(this, config);
 };

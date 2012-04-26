@@ -7,6 +7,11 @@ class GO_Log_Controller_Log extends GO_Base_Controller_AbstractModelController {
 	protected function allowGuests() {
 		return array('rotate');
 	}
+	
+	protected function getStoreParams($params) {
+		
+		return GO_Base_Db_FindParams::newInstance()->export("log");
+	}
 
 	protected function actionRotate($params){
 		
