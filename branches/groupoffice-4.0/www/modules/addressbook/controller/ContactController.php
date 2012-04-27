@@ -360,8 +360,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		
 	protected function beforeImport(&$model, &$attributes, $record) {
 		
-		if(!empty($attributes['company'])){
-				$company = GO_Addressbook_Model_Company::model()->findSingleByAttribute('name', $attributes['company']);
+		if(!empty($attributes['Company'])){
+				$company = GO_Addressbook_Model_Company::model()->findSingleByAttribute('name', $attributes['Company']);
 			
 			if($company)
 				$model->company_id = $company->id;
@@ -401,6 +401,17 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		GO_Base_VObject_Reader::convertVCard21ToVCard30($vobject);
 	
 		$contact->importVObject($vobject, $params);
+	}
+	
+	/**
+	 * The actual call to the import CSV function
+	 * 
+	 * @param array $params
+	 * @return array $response 
+	 */
+	protected function actionImportCsv($params){
+		$summarylog = parent::actionImport($params);
+		return $summarylog->getErrorsJson();
 	}
 	
 }

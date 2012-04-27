@@ -68,35 +68,59 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 			echo $contact->toVObject()->serialize();
 	}
 	
+	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
+		
+		if(isset($_FILES['files']['tmp_name'][0]))
+			$response = array_merge($response,$this->run("upload",$params,false));
+		
+		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
+	}
+	
 	protected function actionUpload($params) {
-		$params['a'] = $addressbook_id = $params['addressbook_id'];
-		$import_filetype = isset($params['import_filetype']) ? ($params['import_filetype']) : null;
+		//$params['a'] = $addressbook_id = $params['addressbook_id'];
+		$import_filetype = isset($params['fileType']) ? ($params['fileType']) : null;
+//				
+//		
+//		if (!empty($_FILES['import_file']['tmp_name']))
+//			$import_filename = ($_FILES['import_file']['tmp_name']);
+//		elseif (!empty($params['import_file']))
+//			$import_filename = ($params['import_file']);
+//		
+////		$separator	= isset($params['separator']) ? ($params['separator']) : ',';
+////		$quote	= isset($params['quote']) ? ($params['quote']) : '"';
+//		$params['file'] = GO::config()->tmpdir.uniqid(time());
+//		$response['success'] = true;
+//		GO::debug($import_filename);
+//
+//		if(!move_uploaded_file($import_filename, $params['file'])) {
+//			throw new Exception('Could not move '.$import_filename);
+//	  }
+
+//		$file = new GO_Base_Fs_File($_FILES['importFiles']['tmp_name']);
+//	  $file->convertToUtf8();
+		$params['file'] = $_FILES['files']['tmp_name'][0];
+		ini_set('max_execution_time', 360);
+		ini_set('memory_limit', '256M');
+		$response = array();
 		
-		if (!empty($_FILES['import_file']['tmp_name']))
-			$import_filename = ($_FILES['import_file']['tmp_name']);
-		elseif (!empty($params['import_file']))
-			$import_filename = ($params['import_file']);
-		
-		$separator	= isset($params['separator']) ? ($params['separator']) : ',';
-		$quote	= isset($params['quote']) ? ($params['quote']) : '"';
-		$params['file'] = $_SESSION['GO_SESSION']['addressbook']['import_file'] =GO::config()->tmpdir.uniqid(time());
-		$response['success'] = true;
-		GO::debug($import_filename);
-
-		if(!move_uploaded_file($import_filename, $_SESSION['GO_SESSION']['addressbook']['import_file'])) {
-			throw new Exception('Could not move '.$import_filename);
-	  }
-
-		$file = new GO_Base_Fs_File($_SESSION['GO_SESSION']['addressbook']['import_file']);
-	  $file->convertToUtf8();
-
 	  switch($import_filetype) {
-			case 'vcf':
-				ini_set('max_execution_time', 360);
-				ini_set('memory_limit', '256M');
+			case 'vcf':				
 				$response = array_merge($response,$this->run("importVcf",$params,false));
 				break;
+			default:
+				
+				if($params['controller']=='GO_Addressbook_Controller_Contact')
+					$controller = new GO_Addressbook_Controller_Contact();
+				elseif($params['controller']=='GO_Addressbook_Controller_Company')
+					$controller = new GO_Addressbook_Controller_Company();
+				else
+					throw new Exception("No or wrong controller given");
+				
+				$response = array_merge($response,$controller->run("ImportCsv",$params,false));
+				break;
 	  }		
+		
+		$response['success'] = true;
 		return $response;
 	}
 	
@@ -110,14 +134,17 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 		$data = $file->getContents();
 		$contact = new GO_Addressbook_Model_Contact();
 		$vcard = GO_Base_VObject_Reader::read($data);
-		$params['a'] = !empty($params['a']) ? $params['a'] : 1;
+		
+		if(!empty($params["addressbook_id"]))
+			throw new Exception("Param addressbook_id may not be empty");
+		//$params['addressbook_id'] = !empty($params['a']) ? $params['a'] : 1;
 		
 		if (is_array($vcard)) {
 			foreach ($vcard as $item) {
 				$contact->importVObject(
 					$item,
 					array(
-						'addressbook_id' => $params['a']
+						'addressbook_id' => $params['addressbook_id']
 					)
 				);
 			}
@@ -125,10 +152,11 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 			$contact->importVObject(
 				$vcard,
 				array(
-					'addressbook_id' => $params['a']
+					'addressbook_id' => $params['addressbook_id']
 				)
 			);
 		}
 		return array('success'=>true);
 	}
+	
 }

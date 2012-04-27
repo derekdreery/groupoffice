@@ -234,6 +234,16 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		$attributes['employees.name'] = array('name'=>'employees.name','label'=>GO::t('cmdPanelEmployee', 'addressbook'));
 		return parent::afterAttributes($attributes, $response, $params, $model);
 	}
-
+	
+	/**
+	 * The actual call to the import CSV function
+	 * 
+	 * @param array $params
+	 * @return array $response 
+	 */
+	protected function actionImportCsv($params){
+		$summarylog = parent::actionImport($params);
+		return $summarylog->getErrorsJson();
+	}
 }
 
