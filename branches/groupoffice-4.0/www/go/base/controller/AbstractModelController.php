@@ -851,104 +851,110 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		ini_set('max_execution_time', '0'); //allow long runs
 		ini_set('memory_limit','512M');
 		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
+		
+		if(is_file($params['file'])){
+			$importFile = new GO_Base_Fs_CsvFile($params['file']);
+		
+			if(!empty($params['delimiter']))
+				$importFile->delimiter = $params['delimiter'];
 
-		$importFile = new GO_Base_Fs_CsvFile($params['file']);
-		
-		if(!empty($params['delimiter']))
-			$importFile->delimiter = $params['delimiter'];
-		
-		if(!empty($params['enclosure']))
-			$importFile->enclosure = $params['enclosure'];
-		
-		if(php_sapi_name()=='cli'){
-			echo "Delimiter: ".$importFile->delimiter."\n";
-			echo "Enclosure: ".$importFile->enclosure."\n";
-			echo "File: ".$importFile->path()."\n\n";
-		}
-			
-		if(!$importFile->convertToUtf8())
-			exit("ERROR: Could not convert to UTF8. Is the file writable?\n\n");
+			if(!empty($params['enclosure']))
+				$importFile->enclosure = $params['enclosure'];
 
-		$headers = $importFile->getRecord();
-		
-		//Map the field headers to the index in the record.
-		//eg. name=>2,user_id=>4, etc.
-		$attributeIndexMap = array();		
-		for ($i = 0, $m = count($headers); $i < $m; $i++) {
-			if(substr($headers[$i],0,3)=='cf\\'){				
-				$cf = $this->_resolveCustomField($headers[$i]);
-				if($cf)
-					$attributeIndexMap[$i] = $cf;
-			}else
-			{
-				$attributeIndexMap[$i] = $headers[$i];
-			}
-		}
-
-		while ($record = $importFile->getRecord()) {
-			$attributes = array();
-			$model = false;
-			
-			foreach($attributeIndexMap as $index=>$attributeName){
-				$attributes[trim($attributeName)]=$record[$index];
+			if(php_sapi_name()=='cli'){
+				echo "Delimiter: ".$importFile->delimiter."\n";
+				echo "Enclosure: ".$importFile->enclosure."\n";
+				echo "File: ".$importFile->path()."\n\n";
 			}
 			
-			if(!empty($params['updateExisting']) && !empty($params['updateFindAttributes'])){
-				
-				$findBy = explode(',', $params['updateFindAttributes']);
-				
-				$attr = array();
-				foreach($findBy as $attrib){
-					$attr[$attrib] = $attributes[$attrib];
+			if(!$importFile->convertToUtf8())
+				exit("ERROR: Could not convert to UTF8. Is the file writable?\n\n");
+
+			$headers = $importFile->getRecord();
+
+			//Map the field headers to the index in the record.
+			//eg. name=>2,user_id=>4, etc.
+			$attributeIndexMap = array();		
+			for ($i = 0, $m = count($headers); $i < $m; $i++) {
+				if(substr($headers[$i],0,3)=='cf\\'){				
+					$cf = $this->_resolveCustomField($headers[$i]);
+					if($cf)
+						$attributeIndexMap[$i] = $cf;
+				}else
+				{
+					$attributeIndexMap[$i] = $headers[$i];
 				}
-				
-				$model = GO::getModel($this->model)->findSingleByAttributes($attr);				
 			}
-			
-			if(!$model)
-				$model = new $this->model;	
+
+			while ($record = $importFile->getRecord()) {
+				$attributes = array();
+				$model = false;
+
+				foreach($attributeIndexMap as $index=>$attributeName){
+					$attributes[trim($attributeName)]=$record[$index];
+				}
+
+				if(!empty($params['updateExisting']) && !empty($params['updateFindAttributes'])){
+
+					$findBy = explode(',', $params['updateFindAttributes']);
+
+					$attr = array();
+					foreach($findBy as $attrib){
+						$attr[$attrib] = $attributes[$attrib];
+					}
+
+					$model = GO::getModel($this->model)->findSingleByAttributes($attr);				
+				}
+
+				if(!$model)
+					$model = new $this->model;	
 
 
-			if($this->beforeImport($model, $attributes, $record)){			
-				$columns = $model->getColumns();
-				//var_dump($columns);
-				foreach($columns as $col=>$attr){
-					if(isset($attributes[$col])){
-//						if($attr['gotype']=='unixtimestamp' || $attr['gotype']=='unixdate'){
-//							$attributes[$col]=strtotime($attributes[$col]);
-//							
-						if($attr['gotype']=='number')
-						{						
-							$attributes[$col]=preg_replace('/[^.,\s0-9]+/','',$attributes[$col]);
+				if($this->beforeImport($model, $attributes, $record)){			
+					$columns = $model->getColumns();
+					//var_dump($columns);
+					foreach($columns as $col=>$attr){
+						if(isset($attributes[$col])){
+	//						if($attr['gotype']=='unixtimestamp' || $attr['gotype']=='unixdate'){
+	//							$attributes[$col]=strtotime($attributes[$col]);
+	//							
+							if($attr['gotype']=='number')
+							{						
+								$attributes[$col]=preg_replace('/[^.,\s0-9]+/','',$attributes[$col]);
+							}
 						}
 					}
-				}
-				
-				// True is set because import needs to be checked by the model.
-				$model->setAttributes($attributes, true);
-				
 
-				// If there are given baseparams to the importer
-				if(isset($params['importBaseParams'])) {
-					$baseParams = json_decode($params['importBaseParams'],true);
-					foreach($baseParams as $attr=>$val){
-						$model->setAttribute($attr,$val);
+					// True is set because import needs to be checked by the model.
+					$model->setAttributes($attributes, true);
+
+
+					// If there are given baseparams to the importer
+					if(isset($params['importBaseParams'])) {
+						$baseParams = json_decode($params['importBaseParams'],true);
+						foreach($baseParams as $attr=>$val){
+							$model->setAttribute($attr,$val);
+						}
 					}
+
+					$this->_parseImportDates($model);
+
+					try{
+						$model->save();
+					}
+					catch(Exception $e){
+						$summarylog->addError($record[0], $e->getMessage());
+					}
+					$summarylog->add();
 				}
-				
-				$this->_parseImportDates($model);
-				
-				try{
-					$model->save();
-				}
-				catch(Exception $e){
-					$summarylog->addError($record[0], $e->getMessage());
-				}
-				$summarylog->add();
 			}
 			
+			
 			$this->afterImport($model, $attributes, $record);
+		} else {
+			//$summarylog->addError('NO FILE FOUND', 'There is no file found that can be imported!');
 		}
+		
 		return $summarylog;
 	}
 	
