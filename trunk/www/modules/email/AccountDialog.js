@@ -1,11 +1,11 @@
 /**
  * Copyright Intermesh
- * 
+ *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
+ *
  * If you have questions write an e-mail to info@intermesh.nl
- * 
+ *
  * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
@@ -15,7 +15,7 @@ GO.email.AccountDialog = function(config) {
 	Ext.apply(this, config);
 
 	var sslCb;
-	
+
 
 	var incomingTab = {
 		title : GO.email.lang.incomingMail,
@@ -295,11 +295,13 @@ GO.email.AccountDialog = function(config) {
 			selectOnFocus : true,
 			forceSelection : true,
 			emptyText : GO.lang.disabled
+		}), new Ext.ux.form.XCheckbox({
+			boxLabel : GO.email.lang.ignoreSentFolder,
+			name : 'ignore_sent_folder',
+			checked : false,
+			hideLabel : true
 		})]
-
 	});
-
-	
 
 	this.permissionsTab = new GO.grid.PermissionsPanel({hideLevel:true});
 
@@ -409,7 +411,7 @@ GO.email.AccountDialog = function(config) {
 }
 
 Ext.extend(GO.email.AccountDialog, GO.Window, {
-	
+
 	save : function(hide) {
 		this.propertiesPanel.form.submit({
 
@@ -465,7 +467,7 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 			GO.email.subscribedFoldersStore.baseParams.account_id = account_id;
 			GO.email.subscribedFoldersStore.load();
 		} else {
-			
+
 			this.propertiesPanel.form.reset();
 			this.setAccountId(0);
 			this.foldersTab.setDisabled(true);
@@ -490,20 +492,20 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 		this.propertiesPanel.form.load({
 			url : GO.url("email/account/load"),
 			params : {
-				id : account_id				
+				id : account_id
 			},
 			waitMsg : GO.lang.waitMsgLoad,
 			success : function(form, action) {
 				this.refreshNeeded = false;
 
 				this.setAccountId(account_id);
-				
+
 				this.selectUser.setRemoteText(action.result.remoteComboTexts.user_id);
-						
+
 				this.aliasesButton.setDisabled(false);
 
 				this.foldersTab.setDisabled(false);
-	
+
 				this.permissionsTab.setAcl(action.result.data.acl_id);
 			},
 			scope : this
@@ -512,5 +514,5 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 
 	setAccountId : function(account_id){
 		this.account_id = account_id;
-	}	
+	}
 });

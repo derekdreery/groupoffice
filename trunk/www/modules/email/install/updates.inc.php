@@ -33,3 +33,5 @@ $updates["201201031630"][]="ALTER TABLE `em_accounts` CHANGE `sent` `sent` VARCH
 $updates["201201031630"][]="ALTER TABLE `em_accounts` CHANGE `drafts` `drafts` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'Drafts'";
 $updates["201201031630"][]="ALTER TABLE `em_accounts` CHANGE `trash` `trash` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'Trash'";
 $updates["201201031630"][]="ALTER TABLE `em_accounts` CHANGE `spam` `spam` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'Spam'";
+
+$updates["201204262325"][]="ALTER TABLE `em_accounts` ADD `ignore_sent_folder` TINYINT( 1 ) NOT NULL DEFAULT '0'";
