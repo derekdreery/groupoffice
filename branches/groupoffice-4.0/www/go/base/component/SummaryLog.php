@@ -44,7 +44,7 @@ class GO_Base_Component_SummaryLog {
 	 * @param string $message 
 	 */
 	public function addError($itemIdentifier, $message){
-		$this->_errors[$itemIdentifier]=$message;
+		$this->_errors[]= array('name'=>$itemIdentifier,'message'=>$message);
 	}
 	
 	/**
@@ -64,6 +64,7 @@ class GO_Base_Component_SummaryLog {
 	public function getErrorsJson(){
 		$response = array();
 		$response['summarylog']['total']=$this->_total;
+		$response['summarylog']['errorCount']=count($this->_errors);
 		$response['summarylog']['errors']=$this->_errors;
 		return $response;
 	}
