@@ -520,3 +520,7 @@ $l['enclosure']='Enclosure';
 $l['notFound']='The requested item was not found.';
 
 $l['groupofficeDisabled']="<p>This {product_name} account has been suspended.</p><p>Please contact your account manager.</p>";
+
+$l['summarylogImportText']="Tried to import {importCount} items.";
+$l['summarylogErrorText']="There where some errors during the import";
+$l['summarylogSuccessText']="Import successful";
