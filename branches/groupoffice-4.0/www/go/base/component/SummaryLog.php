@@ -62,7 +62,12 @@ class GO_Base_Component_SummaryLog {
 	 * @return array 
 	 */
 	public function getErrorsJson(){
+		
 		$response = array();
+		
+		if(empty($this->_total) && count($this->_errors) < 1)
+			return $response;
+		
 		$response['summarylog']['total']=$this->_total;
 		$response['summarylog']['errorCount']=count($this->_errors);
 		$response['summarylog']['errors']=$this->_errors;
