@@ -15,7 +15,8 @@
 
 /**
  * The GO_Email_Model_LinkedEmail model
-
+ *
+ * @property boolean $ignore_sent_folder
  * @property int $password_encrypted
  * @property string $smtp_password
  * @property string $smtp_username
@@ -42,7 +43,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
-	 * 
+	 *
 	 * @param String $className
 	 * @return GO_Email_Model_Account
 	 */
@@ -73,58 +74,58 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 				'aliases' => array('type'=>self::HAS_MANY, 'model'=>'GO_Email_Model_Alias', 'field'=>'account_id','delete'=>true),
 		);
 	}
-	
-	
-	protected function beforeSave() {		
+
+
+	protected function beforeSave() {
 		if($this->isModified('password')){
 			$encrypted = GO_Base_Util_Crypt::encrypt($this->password);
 			if($encrypted){
 				$this->password_encrypted=2;
-				$this->password = $encrypted;					
+				$this->password = $encrypted;
 			}
 		}
-		
+
 		//todo
 //		if($this->isModified('smtp_password'))
 //			$this->smtp_password = GO_Base_Util_Crypt::encrypt($this->smtp_password);
-		
-		
+
+
 		$imap = $this->openImapConnection();
 		$this->mbroot=$imap->check_mbroot($this->mbroot);
-		
-	
+
+
 		$this->_createDefaultFolder('sent');
 		$this->_createDefaultFolder('trash');
 		$this->_createDefaultFolder('spam');
-		$this->_createDefaultFolder('drafts');	
-		
+		$this->_createDefaultFolder('drafts');
+
 		return parent::beforeSave();
 	}
-	
+
 	private $_mailboxes;
-	
+
 	public function getMailboxes(){
 		if(!isset($_mailboxes)){
 			$this->_mailboxes= $this->openImapConnection()->get_folders($this->mbroot);
 		}
 		return $this->_mailboxes;
 	}
-	
+
 	private $_subscribed;
-	
+
 	public function getSubscribed(){
 		if(!isset($_subscribed)){
 			$this->_subscribed= $this->openImapConnection()->get_folders($this->mbroot, true);
 		}
 		return $this->_subscribed;
 	}
-	
-	
+
+
 	private function _createDefaultFolder($name){
-		
+
 		if(empty($this->$name))
 			return false;
-		
+
 		$mailboxes = $this->getMailboxes();
 		if(!in_array($this->$name, $mailboxes)){
 			if(! $this->openImapConnection()->create_folder($this->$name)){
@@ -140,59 +141,59 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 			}
 		}
 	}
-	
+
 	private $_imap;
-	
+
 	public function decryptPassword(){
 		return $this->password_encrypted==2 ? GO_Base_Util_Crypt::decrypt($this->password) : $this->password;
 	}
-	
+
 	/**
 	 * Open a connection to the imap server.
-	 * 
+	 *
 	 * @param string $mailbox
-	 * @return GO_Base_Mail_Imap 
+	 * @return GO_Base_Mail_Imap
 	 */
 	public function openImapConnection($mailbox='INBOX'){
 		if(!isset($this->_imap)){
-			$this->_imap = new GO_Base_Mail_Imap();			
-			
+			$this->_imap = new GO_Base_Mail_Imap();
+
 			try{
 				$this->_imap->connect($this->host, $this->port, $this->username, $this->decryptPassword(), $this->use_ssl);
 			}catch(GO_Base_Mail_ImapAuthenticationFailedException $e){
 				throw new Exception('Authententication failed for user '.$this->username.' on IMAP server ".$this->host.');
-			}		
+			}
 		}
 		if(!$this->_imap->select_mailbox($mailbox))
 			throw new Exception ("Could not open IMAP mailbox $mailbox");
-		
-		return $this->_imap;		
+
+		return $this->_imap;
 	}
 
-	
+
 	/**
 	 * Find an account by e-mail address.
-	 * 
+	 *
 	 * @param string $email
-	 * @return GO_Email_Model_Account 
+	 * @return GO_Email_Model_Account
 	 */
 	public function findByEmail($email){
-		
+
 		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
 						->addRawCondition('t.id', 'a.account_id');
-		
+
 		$findParams = GO_Base_Db_FindParams::newInstance()
 						->single()
 						->join(GO_Email_Model_Alias::model()->tableName(), $joinCriteria,'a')
 						->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('email', $email,'=','a'));
-		
+
 		return $this->find($findParams);
 	}
-	
+
 	/**
 	 * Get the default alias for this account.
-	 * 
-	 * @return GO_Email_Model_Alias 
+	 *
+	 * @return GO_Email_Model_Alias
 	 */
 	public function getDefaultAlias(){
 		return GO_Email_Model_Alias::model()->findSingleByAttributes(array(
@@ -200,8 +201,8 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 				'account_id'=>$this->id
 		));
 	}
-	
-	
+
+
 	public function addAlias($email, $name, $signature='', $default=1){
 		$a = new GO_Email_Model_Alias();
 		$a->account_id=$this->id;
@@ -210,7 +211,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		$a->signature=$signature;
 		$a->default=$default;
 		$a->save();
-		
+
 		return $a;
 	}
 }
