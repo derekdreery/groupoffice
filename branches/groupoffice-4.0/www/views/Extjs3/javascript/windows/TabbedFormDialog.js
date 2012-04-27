@@ -251,6 +251,15 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 								
 				this.afterSubmit(action);
 				
+				if(action.result.summarylog){
+					
+					if(!this.summaryDialog){
+						this.summaryDialog = new GO.dialog.SummaryDialog();
+					}
+					this.summaryDialog.setSummaryLog(action.result.summarylog);
+					this.summaryDialog.show();
+				}
+				
 				if(hide)
 				{
 					this.hide();	
