@@ -61,6 +61,9 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	public $createTempFilesForAttachments=false;
 	
 	
+	private $_cache;
+	
+	
 	/**
 	 * Returns a static model of itself
 	 * 
@@ -78,21 +81,27 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	 */
 	public function findByUid($account, $mailbox, $uid) {
 
-		$imapMessage = new GO_Email_Model_ImapMessage();
-		$imap = $account->openImapConnection($mailbox);
+		$cacheKey=$account->id.':'.$mailbox.':'.$uid;
+		
+		if(!isset($this->_cache[$cacheKey])){
+			$imapMessage = new GO_Email_Model_ImapMessage();
+			$imap = $account->openImapConnection($mailbox);
 
-		$attributes = $imap->get_message_header($uid, true);
+			$attributes = $imap->get_message_header($uid, true);
 
-		if (!$attributes)
-			return false;
+			if (!$attributes)
+				return false;
 
-		$attributes['uid']=$uid;
-		$attributes['account'] = $account;
-		$attributes['mailbox'] = $mailbox;
+			$attributes['uid']=$uid;
+			$attributes['account'] = $account;
+			$attributes['mailbox'] = $mailbox;
 
-		$imapMessage->setAttributes($attributes);
+			$imapMessage->setAttributes($attributes);
 
-		return $imapMessage;
+			$this->_cache[$cacheKey]=$imapMessage;
+		}
+
+		return $this->_cache[$cacheKey];
 	}
 	
 	
