@@ -611,6 +611,8 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 		$box = $this->utf7_encode($this->_escape( $mailbox_name));
 		$this->clean($box, 'mailbox');
+		
+		GO::debug("Selecting IMAP mailbox $box");
 
 		$command = "SELECT \"$box\"\r\n";
 	
