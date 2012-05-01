@@ -258,16 +258,14 @@ Ext.extend(GO.email.AddressbookDialog, Ext.Window, {
 			}
 
 			this.el.mask(GO.lang.waitMsgLoad);
-			Ext.Ajax.request({
-				url: GO.settings.modules.groups.url+'non_admin_json.php',
+			GO.request({
+				url: "groups/group/getRecipientsAsString",
 				params: {
-					task:'user_groups_string',
-					user_groups: user_groups.join(',')
+					groups: Ext.encode(user_groups)
 				},
-				callback: function(options, success, response)
+				success: function(options, response, result)
 				{
-					str = response.responseText;
-					this.fireEvent('addrecipients', field, str);
+					this.fireEvent('addrecipients', field, result.recipients);
 					this.el.unmask();
 				},
 				scope:this
