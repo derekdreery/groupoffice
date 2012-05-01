@@ -83,6 +83,12 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	
 	_relatedGrids : false,
 	
+	enableOkButton : true,
+	
+	enableApplyButton : true,
+	
+	enableCloseButton : true,
+	
 	initComponent : function(){
 		
 		Ext.applyIf(this, {
@@ -93,27 +99,39 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			maximizable:true,
 			width:600,
 			height:400,
-			closeAction:'hide',
-			buttons:[{
+			closeAction:'hide'
+		});
+		
+		var buttons = [];
+		
+		// These three buttons are enabled by default.
+		if (this.enableOkButton)
+			buttons.push({
 				text: GO.lang['cmdOk'],
 				handler: function(){
 					this.submitForm(true);
 				},
 				scope: this
-			},{
+			});
+		if (this.enableApplyButton)
+			buttons.push({
 				text: GO.lang['cmdApply'],
 				handler: function(){
 					this.submitForm();
 				},
 				scope:this
-			},{
+			});
+		if (this.enableCloseButton)
+			buttons.push({
 				text: GO.lang['cmdClose'],
 				handler: function(){
 					this.hide();
 				},
 				scope:this
-			}
-			]
+			});
+		
+		Ext.applyIf(this, {
+			buttons: buttons
 		});
 		
 		this._panels=[];
@@ -338,7 +356,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 				{					
 					this.setRemoteComboTexts(action);
 					
-					if(this.permissionsPanel && action.result.data[this.permissionsPanel.fieldName])
+					if(this.permissionsPanel)
 						this.permissionsPanel.setAcl(action.result.data[this.permissionsPanel.fieldName]);
 					
 					if(config && config.values)
