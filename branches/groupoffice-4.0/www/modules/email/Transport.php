@@ -26,7 +26,7 @@ class GO_Email_Transport extends Swift_SmtpTransport{
 		
 		if(!empty($account->smtp_username)){
 			$o->setUsername($account->smtp_username)
-				->setPassword($account->smtp_password);
+				->setPassword($account->decryptSmtpPassword());
 		}
 		return $o;
 	}	

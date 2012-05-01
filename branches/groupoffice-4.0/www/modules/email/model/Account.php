@@ -77,16 +77,16 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	
 	protected function beforeSave() {		
 		if($this->isModified('password')){
-			$encrypted = GO_Base_Util_Crypt::encrypt($this->password);
-			if($encrypted){
-				$this->password_encrypted=2;
+			$encrypted = GO_Base_Util_Crypt::encrypt($this->password);		
+			if($encrypted)
 				$this->password = $encrypted;					
-			}
 		}
-		
-		//todo
-//		if($this->isModified('smtp_password'))
-//			$this->smtp_password = GO_Base_Util_Crypt::encrypt($this->smtp_password);
+
+		if($this->isModified('smtp_password')){
+			$encrypted = GO_Base_Util_Crypt::encrypt($this->smtp_password);		
+			if($encrypted)
+				$this->smtp_password = $encrypted;
+		}
 		
 		
 		$imap = $this->openImapConnection();
@@ -104,7 +104,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	private $_mailboxes;
 	
 	public function getMailboxes(){
-		if(!isset($_mailboxes)){
+		if(!isset($this->_mailboxes)){
 			$this->_mailboxes= $this->openImapConnection()->get_folders($this->mbroot);
 		}
 		return $this->_mailboxes;
@@ -113,7 +113,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	private $_subscribed;
 	
 	public function getSubscribed(){
-		if(!isset($_subscribed)){
+		if(!isset($this->_subscribed)){
 			$this->_subscribed= $this->openImapConnection()->get_folders($this->mbroot, true);
 		}
 		return $this->_subscribed;
@@ -144,7 +144,14 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	private $_imap;
 	
 	public function decryptPassword(){
-		return $this->password_encrypted==2 ? GO_Base_Util_Crypt::decrypt($this->password) : $this->password;
+		//return $this->password_encrypted==2 ? GO_Base_Util_Crypt::decrypt($this->password) : $this->password;
+		$decrypted = GO_Base_Util_Crypt::decrypt($this->password);
+		return $decrypted ? $decrypted : $this->password;
+	}
+	
+	public function decryptSmtpPassword(){
+		$decrypted = GO_Base_Util_Crypt::decrypt($this->smtp_password);
+		return $decrypted ? $decrypted : $this->smtp_password;
 	}
 	
 	/**

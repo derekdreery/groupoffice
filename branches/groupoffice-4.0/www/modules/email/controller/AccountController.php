@@ -15,6 +15,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 	protected function afterLoad(&$response, &$model, &$params) {
 
 		$response['data']['password'] = $model->decryptPassword();
+		$response['data']['smtp_password'] = $model->decryptSmtpPassword();
 
 		$alias = $model->getDefaultAlias();
 
