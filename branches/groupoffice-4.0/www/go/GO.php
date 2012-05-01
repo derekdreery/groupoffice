@@ -411,7 +411,7 @@ class GO{
 				GO::debug($log);
 				
 				if(PHP_SAPI!='cli')				
-					GO::debug("User agent: ".$_SERVER['HTTP_USER_AGENT']." IP: ".$_SERVER['REMOTE_ADDR']);
+					GO::debug("User agent: ".(isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "unknown")." IP: ".$_SERVER['REMOTE_ADDR']);
 				else
 					GO::debug("User agent: CLI");
 				

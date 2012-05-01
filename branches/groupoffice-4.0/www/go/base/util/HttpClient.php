@@ -18,6 +18,8 @@ class GO_Base_Util_HttpClient{
 		curl_setopt($this->_curl, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($this->_curl, CURLOPT_SSL_VERIFYHOST, false);
 		@curl_setopt($this->_curl, CURLOPT_FOLLOWLOCATION, TRUE);
+		
+		$this->setCurlOption(CURLOPT_USERAGENT, "Group-Office HttpClient ".GO::config()->version. " (curl)");
 	}
 	
 	public function setCurlOption($option, $value){
@@ -40,6 +42,28 @@ class GO_Base_Util_HttpClient{
 		
 		return $response;		
 	}	
+	
+	
+	public function groupofficeLogin($baseUrl, $username, $password){
+		$postfields =array(
+			'username'=>$username,
+			'password'=>$password
+		);
+
+		$response =  $this->request($baseUrl.'?r=auth/login', $postfields);
+		$response = json_decode($response, true);
+
+		if(!isset($response['success']) || !$response['success'])
+		{
+			GO::debug($response);
+			$feedback = sprintf(GO::t('connect_error','serverclient'), $baseUrl);
+			if(isset($response['feedback']))
+				$feedback .= "\n\n".$response['feedback'];
+			throw new Exception($feedback);
+		}
+		
+		return true;
+	}
 	
 	public function __destruct(){
 		if($this->_curl)
