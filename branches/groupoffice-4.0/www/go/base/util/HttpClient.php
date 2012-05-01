@@ -1,9 +1,34 @@
 <?php
+/**
+ * Group-Office
+ * 
+ * Copyright Intermesh BV. 
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ * 
+ * @license AGPL/Proprietary http://www.group-office.com/LICENSE.TXT
+ * @link http://www.group-office.com
+ * @copyright Copyright Intermesh BV
+ * @version $Id: Number.php 7962 2011-08-24 14:48:45Z mschering $
+ * @author Merijn Schering <mschering@intermesh.nl>
+ * @package GO.base.util
+ */
+
+/**
+ * Http client using curl.
+ */
 class GO_Base_Util_HttpClient{
 	
 	private $_curl;
 	private $_cookieFile;
 	
+	/**
+	 * Key value array of params that will be sent with each request.
+	 * 
+	 * @var array 
+	 */
 	public $baseParams;
 	
 	public function __construct(){
@@ -27,10 +52,24 @@ class GO_Base_Util_HttpClient{
 		$this->setCurlOption(CURLOPT_USERAGENT, "Group-Office HttpClient ".GO::config()->version. " (curl)");
 	}
 	
+	/**
+	 * Set additional curl options. See php.net for details.
+	 * 
+	 * @param int $option
+	 * @param mixed $value 
+	 */
 	public function setCurlOption($option, $value){
 		curl_setopt($this->_curl, $option,$value);
 	}
 	
+	/**
+	 * Make a POST request to any URL
+	 * 
+	 * @param type $url
+	 * @param string $params POST parameters
+	 * @return string Response of the server.
+	 * @throws Exception 
+	 */
 	public function request($url, $params=array()){
 		
 		$params = array_merge($this->baseParams, $params);
@@ -50,7 +89,15 @@ class GO_Base_Util_HttpClient{
 		return $response;		
 	}	
 	
-	
+	/**
+	 * Login to a Group-Office installation
+	 * 
+	 * @param string $baseUrl eg. http://customer.group-office.com/
+	 * @param string $username
+	 * @param string $password
+	 * @return boolean
+	 * @throws Exception 
+	 */
 	public function groupofficeLogin($baseUrl, $username, $password){
 		$postfields =array(
 			'username'=>$username,
