@@ -151,7 +151,10 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 			}
 			
 			$response['user_id']=$user->id;
+			$response['security_token']=GO::session()->values["security_token"];
 		}
+		
+		
 
 		if (GO_Base_Util_Http::isAjaxRequest())
 			return $response;
