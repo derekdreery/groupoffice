@@ -52,6 +52,9 @@ class GO_Base_Util_Crypt {
 	 */
 	public static function encrypt($msg, $k='', $base64 = true) {
 
+		if($msg=="")
+			return "";
+		
 		//Check if mcrypt is supported. mbstring.func_overload will mess up substring with this function
 		if (!function_exists('mcrypt_module_open') || ini_get('mbstring.func_overload') > 0)
 			return false;
@@ -61,7 +64,7 @@ class GO_Base_Util_Crypt {
 			if (empty($k)) {
 				throw new Exception('Could not generate private key');
 			}
-		}
+		}		
 
 		# open cipher module (do not change cipher/mode)
 		if (!$td = mcrypt_module_open('rijndael-256', '', 'ctr', ''))
@@ -84,7 +87,7 @@ class GO_Base_Util_Crypt {
 		if ($base64)
 			$msg = base64_encode($msg);# base64 encode?
 
-		return $msg;				 # return iv+ciphertext+mac
+		return "{GOCRYPT}".$msg;				 # return iv+ciphertext+mac
 	}
 
 	/** Decryption Procedure
@@ -101,7 +104,12 @@ class GO_Base_Util_Crypt {
 		//Check if mcrypt is supported. mbstring.func_overload will mess up substring with this function
 		if (!function_exists('mcrypt_module_open') || ini_get('mbstring.func_overload') > 0)
 			return false;
+		
+		$msg = str_replace("{GOCRYPT}", "", $msg, $count);
 
+		if($count!=1)
+			return false;
+		
 		if (empty($k)) {
 			$k = self::getKey();
 			if (empty($k)) {
