@@ -315,7 +315,7 @@ class postfixadmin extends db {
 	 * @access public
 	 * @return Int Number of records found
 	 */
-	 
+
 	function get_authorized_domains($auth_type, $user_id, $query, $sort='name', $direction='ASC', $start=0, $offset=0, $no_backup_mx_domains=false)
 	{
 		$user_id=intval($user_id);

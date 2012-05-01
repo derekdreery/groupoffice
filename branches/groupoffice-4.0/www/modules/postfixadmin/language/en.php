@@ -4,6 +4,7 @@
 $l["postfixadmin"]='E-mail domains';
 $l["alias"]="Alias";
 $l["aliases"]="Aliases";
+$l['maxAliases'] = 'Max aliases';
 $l["address"]="Address";
 $l["goto_address"]="Goto";
 $l["domain"]="Domain";
@@ -11,6 +12,7 @@ $l["domains"]="Domains";
 $l["domain"]="Domain";
 $l["aliases"]="Aliases";
 $l["mailboxes"]="Mailboxes";
+$l['maxMailboxes'] = 'Max mailboxes';
 $l["maxquota"]="Max quota (MB)";
 $l["transport"]="Transport";
 $l["backupmx"]="Backup MX";

@@ -89,77 +89,77 @@ try{
 		case 'domain':
 		
 			
-			$domain = $postfixadmin->get_domain(($_REQUEST['domain_id']));
-
-
-			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
-			
-			$domain['user_name']= $GO_USERS->get_user_realname($domain['user_id']);
-			$domain['mtime']=Date::get_timestamp($domain['mtime']);
-			$domain['ctime']=Date::get_timestamp($domain['ctime']);	
-			$domain['quota']=Number::format($domain['quota']/1024);
-			$domain['maxquota']=Number::format($domain['maxquota']/1024);	
-			
-			$response['data']=$domain;						
-			$response['success']=true;
-			break;
+//			$domain = $postfixadmin->get_domain(($_REQUEST['domain_id']));
+//
+//
+//			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
+//			$GO_USERS = new GO_USERS();
+//			
+//			$domain['user_name']= $GO_USERS->get_user_realname($domain['user_id']);
+//			$domain['mtime']=Date::get_timestamp($domain['mtime']);
+//			$domain['ctime']=Date::get_timestamp($domain['ctime']);	
+//			$domain['quota']=Number::format($domain['quota']/1024);
+//			$domain['maxquota']=Number::format($domain['maxquota']/1024);	
+//			
+//			$response['data']=$domain;						
+//			$response['success']=true;
+//			break;
 			
 			
 				
 		case 'domains':
-			$auth_type = isset($_POST['auth_type']) ? ($_POST['auth_type']) : 'write';
-			
-			if(isset($_POST['delete_keys']))
-			{
-				try{
-					if(!$GLOBALS['GO_MODULES']->modules['postfixadmin']['write_permission'])
-						throw new AccessDeniedException();
-
-					$response['deleteSuccess']=true;
-					$delete_domains = json_decode(($_POST['delete_keys']));
-					foreach($delete_domains as $domain_id)
-					{
-						$postfixadmin->delete_domain($domain_id);
-					}
-				}catch(Exception $e)
-				{
-					$response['deleteSuccess']=false;
-					$response['deleteFeedback']=$e->getMessage();
-				}
-			}
-			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'domain';
-			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
-			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
-			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
-			$query = !empty($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
-			
-			$response['total'] = $postfixadmin->get_authorized_domains($auth_type, $GLOBALS['GO_SECURITY']->user_id,  $query, $sort, $dir, $start, $limit,!$GLOBALS['GO_MODULES']->modules['postfixadmin']['write_permission']);
-			$response['results']=array();
-			
-			$pa2 = new postfixadmin();
-
-			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
-			
-			while($domain = $postfixadmin->next_record())
-			{			
-				$domain['user_name']= $GO_USERS->get_user_realname($domain['user_id']);
-				
-				$domain['mtime']=Date::get_timestamp($domain['mtime']);			
-				$domain['ctime']=Date::get_timestamp($domain['ctime']);				
-				
-				$domain_info = $pa2->get_domain_info($postfixadmin->f('id'));
-
-				$domain['usage']=Number::format_size($domain_info['usage']*1024);
-				$domain['quota']=Number::format_size($domain['maxquota']*1024);
-				$domain['aliases']=$domain_info['alias_count'].' / '.$domain['aliases'];
-				$domain['mailboxes']=$domain_info['mailbox_count'].' / '.$domain['mailboxes'];
-				
-								
-				$response['results'][] = $domain;
-			}
-			break;
+//			$auth_type = isset($_POST['auth_type']) ? ($_POST['auth_type']) : 'write';
+//			
+//			if(isset($_POST['delete_keys']))
+//			{
+//				try{
+//					if(!$GLOBALS['GO_MODULES']->modules['postfixadmin']['write_permission'])
+//						throw new AccessDeniedException();
+//
+//					$response['deleteSuccess']=true;
+//					$delete_domains = json_decode(($_POST['delete_keys']));
+//					foreach($delete_domains as $domain_id)
+//					{
+//						$postfixadmin->delete_domain($domain_id);
+//					}
+//				}catch(Exception $e)
+//				{
+//					$response['deleteSuccess']=false;
+//					$response['deleteFeedback']=$e->getMessage();
+//				}
+//			}
+//			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'domain';
+//			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
+//			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
+//			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
+//			$query = !empty($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
+//			
+//			$response['total'] = $postfixadmin->get_authorized_domains($auth_type, $GLOBALS['GO_SECURITY']->user_id,  $query, $sort, $dir, $start, $limit,!$GLOBALS['GO_MODULES']->modules['postfixadmin']['write_permission']);
+//			$response['results']=array();
+//			
+//			$pa2 = new postfixadmin();
+//
+//			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
+//			$GO_USERS = new GO_USERS();
+//			
+//			while($domain = $postfixadmin->next_record())
+//			{			
+//				$domain['user_name']= $GO_USERS->get_user_realname($domain['user_id']);
+//				
+//				$domain['mtime']=Date::get_timestamp($domain['mtime']);			
+//				$domain['ctime']=Date::get_timestamp($domain['ctime']);				
+//				
+//				$domain_info = $pa2->get_domain_info($postfixadmin->f('id'));
+//
+//				$domain['usage']=Number::format_size($domain_info['usage']*1024);
+//				$domain['quota']=Number::format_size($domain['maxquota']*1024);
+//				$domain['aliases']=$domain_info['alias_count'].' / '.$domain['aliases'];
+//				$domain['mailboxes']=$domain_info['mailbox_count'].' / '.$domain['mailboxes'];
+//				
+//								
+//				$response['results'][] = $domain;
+//			}
+//			break;
 			
 		
 		case 'fetchmail_config':
@@ -238,16 +238,16 @@ try{
 			break;
 		
 		case 'mailbox':			
-			$mailbox = $postfixadmin->get_mailbox(($_REQUEST['mailbox_id']));		
-			
-			$mailbox['mtime']=Date::get_timestamp($mailbox['mtime']);		
-			$mailbox['ctime']=Date::get_timestamp($mailbox['ctime']);
-			$mailbox['quota']=Number::format($mailbox['quota']/1024);
-			
-					
-			$response['data']=$mailbox;						
-			$response['success']=true;			
-			break;
+//			$mailbox = $postfixadmin->get_mailbox(($_REQUEST['mailbox_id']));		
+//			
+//			$mailbox['mtime']=Date::get_timestamp($mailbox['mtime']);		
+//			$mailbox['ctime']=Date::get_timestamp($mailbox['ctime']);
+//			$mailbox['quota']=Number::format($mailbox['quota']/1024);
+//			
+//					
+//			$response['data']=$mailbox;						
+//			$response['success']=true;			
+//			break;
 				
 		case 'mailboxes':
 			

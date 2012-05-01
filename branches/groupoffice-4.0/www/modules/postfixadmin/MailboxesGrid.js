@@ -23,10 +23,7 @@ GO.postfixadmin.MailboxesGrid = function(config){
 	config.autoScroll=true;
 	config.split=true;
 	config.store = new GO.data.JsonStore({
-	    url: GO.settings.modules.postfixadmin.url+ 'json.php',
-	    baseParams: {
-	    	task: 'mailboxes'
-	    	},
+	    url: GO.url('postfixadmin/mailbox/store'),
 	    root: 'results',
 	    id: 'id',
 	    totalProperty:'total',
@@ -88,7 +85,7 @@ GO.postfixadmin.MailboxesGrid = function(config){
 			text: GO.lang['cmdAdd'],
 			cls: 'x-btn-text-icon',
 			handler: function(){				
-	    	this.mailboxDialog.show();
+	    	this.mailboxDialog.show(0, {loadParams:{domain_id:this.store.baseParams.domain_id}});
 			},
 			scope: this
 		},{
@@ -120,21 +117,20 @@ GO.postfixadmin.MailboxesGrid = function(config){
 	GO.postfixadmin.MailboxesGrid.superclass.constructor.call(this, config);
 	
 	this.on('rowdblclick', function(grid, rowIndex){
-		var record = grid.getStore().getAt(rowIndex);	
-		
-		this.mailboxDialog.show(record.data.id);
-		
+		var record = grid.getStore().getAt(rowIndex);			
+		this.mailboxDialog.show(record.data.id,{loadParams:{domain_id:this.store.baseParams.domain_id}});
 		}, this);
 	
 };
 
 Ext.extend(GO.postfixadmin.MailboxesGrid, GO.grid.GridPanel,{
 	
-	setDomainId : function(domain_id)
-	{
-		this.store.baseParams.domain_id=domain_id;
-		this.store.loaded=false;
-		this.mailboxDialog.formPanel.baseParams.domain_id=domain_id;
-		this.setDisabled(domain_id<1);
-	}
+	
+//	setDomainId : function(domain_id)
+//	{
+//		this.store.baseParams.domain_id=domain_id;
+//		this.store.loaded=false;
+//		this.mailboxDialog.setDomainId(domain_id);
+//		this.setDisabled(domain_id<1);
+//	}
 });
