@@ -50,7 +50,7 @@ class GO_Base_Util_Crypt {
 	 * 	@return  string   iv+ciphertext+mac or
 	 *           boolean  false on error
 	 */
-	public static function encrypt($msg, $k='', $base64 = true) {
+	public static function encrypt($msg, $k='', $base64 = true, $prefix='{GOCRYPT}') {
 
 		if($msg=="")
 			return "";
@@ -87,7 +87,7 @@ class GO_Base_Util_Crypt {
 		if ($base64)
 			$msg = base64_encode($msg);# base64 encode?
 
-		return "{GOCRYPT}".$msg;				 # return iv+ciphertext+mac
+		return $prefix.$msg;				 # return iv+ciphertext+mac
 	}
 
 	/** Decryption Procedure

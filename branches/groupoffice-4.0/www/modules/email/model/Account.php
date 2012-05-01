@@ -78,8 +78,10 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	protected function beforeSave() {		
 		if($this->isModified('password')){
 			$encrypted = GO_Base_Util_Crypt::encrypt($this->password);		
-			if($encrypted)
+			if($encrypted){
 				$this->password = $encrypted;					
+				$this->password_encrypted=2;//deprecated. remove when email is mvc style.
+			}
 		}
 
 		if($this->isModified('smtp_password')){

@@ -68,6 +68,12 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	public $passwordConfirm;
 	
 	/**
+	 * This variable will be set when the password is modified.
+	 * 
+	 * @var string 
+	 */
+	private $_unencryptedPassword;
+	/**
 	 * If this is set on a new user then it will be connected to this contact.
 	 * 
 	 * @var int 
@@ -211,9 +217,10 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		return 'users/'.$this->username;
 	}
 	
-	public function beforeSave(){
+	protected function beforeSave(){
 		
 		if($this->isModified('password') && !empty($this->password)){
+			$this->_unencryptedPassword=$this->password;
 			$this->password=crypt($this->password);
 			$this->password_type='crypt';
 		}
@@ -221,8 +228,18 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		return parent::beforeSave();
 	}	
 	
+	/**
+	 * When the password was just modified. You can call this function to get the
+	 * plain text password.
+	 * 
+	 * @return string 
+	 */
+	public function getUnencryptedPassword(){
+		return isset($this->_unencryptedPassword) ? $this->_unencryptedPassword : false;
+	}
+	
 
-	public function afterSave($wasNew) {
+	protected function afterSave($wasNew) {
 
 		if($wasNew){
 			$everyoneGroup = GO_Base_Model_Group::model()->findByPk(GO::config()->group_everyone);		

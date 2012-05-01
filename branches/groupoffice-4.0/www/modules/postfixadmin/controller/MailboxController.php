@@ -24,12 +24,27 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 	}
 	
 	protected function beforeSubmit(&$response, &$model, &$params) {
-		$domainModel = GO_Postfixadmin_Model_Domain::model()->findByPk($params['domain_id']);
+		if(isset($params['domain_id']))
+			$domainModel = GO_Postfixadmin_Model_Domain::model()->findByPk($params['domain_id']);
+		else {
+			$domainModel = GO_Postfixadmin_Model_Domain::model()->findSingleByAttribute("domain", $params['domain']); //serverclient module doesn't know the domain_id. It sends the domain name as string.
+			if(!$domainModel){
+				//todo create new domain
+				$domainModel = GO_Postfixadmin_Controller_Domain::model();
+				$domainModel->domain = $params['domain'];
+				$domainModel->user_id = GO::user()->id;
+				$domainModel->save();
+			}
+			$params['domain_id']=$domainModel->id;
+			
+			$model->quota = $domainModel->default_quota;
+		}
 		
 		if(isset($params['quota'])){
 			$model->quota=  GO_Base_Util_Number::unlocalize($params['quota'])*1024;
 			unset($params['quota']);
 		}
+			
 		
 		if ($params['password']!=$params['password2'])
 			throw new Exception(GO::t('passwordMatchError'));
@@ -40,14 +55,17 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 		if ($model->getIsNew()) {
 			// Create new alias
 			$now = time();
-			$aliasModel = GO_Postfixadmin_Model_Alias::model();
+			$aliasModel = GO_Postfixadmin_Model_Alias::model()->findSingleByAttribute('address', $params['username']);
+			if (empty($aliasModel)) {
+				$aliasModel = GO_Postfixadmin_Model_Alias::model();
+				$aliasModel->setIsNew(true);
+			}
 			$aliasModel->domain_id = $params['domain_id'];
 			$aliasModel->address = $params['username'];
 			$aliasModel->goto = $params['username'];
 			$aliasModel->ctime = $now;
 			$aliasModel->mtime = $now;
 			$aliasModel->active = 1;
-			$aliasModel->setIsNew(true);
 			$aliasModel->save();
 		}
 	}
