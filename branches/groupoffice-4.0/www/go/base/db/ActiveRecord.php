@@ -1373,9 +1373,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		//throw new Exception('Error: you supplied a searchQuery parameter to find but getFindSearchQueryParamFields() should be overriden in '.$this->className());
 		$fields = array();
 		foreach($this->columns as $field=>$attributes){
-			if(isset($attributes['gotype']) && $attributes['gotype']=='textfield'){
+//			if(isset($attributes['gotype']) && ($attributes['gotype']=='textfield' || $attributes['gotype']=='textarea')){
+//				$fields[]='`'.$prefixTable.'`.`'.$field.'`';
+//			}
+			if($field == 'keywords')
 				$fields[]='`'.$prefixTable.'`.`'.$field.'`';
-			}
 		}
 		
 		if($withCustomFields && $this->customfieldsRecord)
@@ -2420,8 +2422,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		{
 			if(isset($this->$key)){
 				$value = $this->$key;
-				if(($attr['gotype']=='textfield' || $attr['gotype']=='textarea') && !in_array($value,$keywords)){
-					$keywords[]=$value;
+				if(($attr['gotype']=='textfield' || $attr['gotype']=='customfield' || $attr['gotype']=='textarea') && !in_array($value,$keywords)){
+					if(!empty($value))
+						$keywords[]=$value;
 				}
 			}
 		}
