@@ -101,3 +101,5 @@ $l["fileComment"] = "Comment";
 $l["fileExtension"] = "Extension";
 $l["fileExpire_time"] = "Expire time";
 $l["fileRandom_code"] = "Random Code";
+
+$l['createDownloadLink']='Create downloadlink';

@@ -108,6 +108,25 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		$file->fsFile->output();
 	}
 
+	/**
+	 *
+	 * @param type $params 
+	 * @todo
+	 */
+	protected function actionCreateDownloadLink($params){
+		
+		$response=array();
+		
+		$file = GO_Files_Model_File::model()->findByPk($params['id']);
+	
+		$url = $file->getEmailDownloadURL(true,GO_Base_Util_Date::date_add($params['expire_time'],1));
+		
+		$response['url']=$url;
+		$response['success']=true;
+		
+		return $response;
+		
+	}	
 	
 	/**
 	 *
@@ -117,14 +136,11 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 	protected function actionEmailDownloadLink($params){
 		
 		$file = GO_Files_Model_File::model()->findByPk($params['id']);
-		$file->random_code=GO_Base_Util_String::randomPassword(11,'a-z,A-Z,0-9');
-		$file->expire_time = GO_Base_Util_Date::date_add($params['expire_time'],1);
-		$file->save();
 				
 		$html=$params['content_type']=='html';
 		$bodyindex = $html ? 'htmlbody' : 'plainbody';
 		
-		$url = $file->getEmailDownloadURL($html);
+		$url = $file->getEmailDownloadURL($html,GO_Base_Util_Date::date_add($params['expire_time'],1));
 		
 		if($html){
 			$url = GO::t('clickHereToDownload', "files").' <a href="'.$url.'">'.$file->name.'</a>';
