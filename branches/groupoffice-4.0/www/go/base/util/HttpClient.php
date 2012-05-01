@@ -4,7 +4,12 @@ class GO_Base_Util_HttpClient{
 	private $_curl;
 	private $_cookieFile;
 	
+	public $baseParams;
+	
 	public function __construct(){
+		
+		$this->baseParams=array();
+		
 		$this->_curl = curl_init();
 		
 		$cookieFile = GO::user() ? 'cookie_'.GO::user()->id.'.txt' : 'cookie_0.txt';
@@ -27,6 +32,8 @@ class GO_Base_Util_HttpClient{
 	}
 	
 	public function request($url, $params=array()){
+		
+		$params = array_merge($this->baseParams, $params);
 		
 		curl_setopt($this->_curl, CURLOPT_URL,$url);
 		curl_setopt($this->_curl, CURLOPT_POST, !empty($params));
@@ -52,6 +59,7 @@ class GO_Base_Util_HttpClient{
 
 		$response =  $this->request($baseUrl.'?r=auth/login', $postfields);
 		$response = json_decode($response, true);
+		
 
 		if(!isset($response['success']) || !$response['success'])
 		{
@@ -61,6 +69,8 @@ class GO_Base_Util_HttpClient{
 				$feedback .= "\n\n".$response['feedback'];
 			throw new Exception($feedback);
 		}
+		
+		$this->baseParams['security_token']=$response['security_token'];
 		
 		return true;
 	}
