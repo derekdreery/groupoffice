@@ -21,7 +21,7 @@ GO.addressbook.SelectCompany = function(config){
 	if (typeof(config.fields)=='undefined') {
 		config.fields = {
 			columns:[],
-			fields:['id', 'name_and_name2', 'post_address', 'post_address_no', 'post_zip', 'post_city', 'post_state', 'post_country', 'vat_no', 'email']
+			fields:['id', 'name_and_name2', 'post_address', 'post_address_no', 'post_zip', 'post_city', 'post_state', 'post_country', 'vat_no', 'crn','email','invoice_email']
 		};
 	}
 

@@ -261,6 +261,10 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 
 		foreach($attachments as $a){
 			$replaceCount = 0;
+			
+			//add unique token for detecting precense of inline attachment when we submit the message in handleFormInput
+			$a['token']=md5($a['tmp_file']);
+			$a['url'] .= '&amp;token='.$a['token'];				
 
 			
 			if (!empty($a['content_id']))

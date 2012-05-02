@@ -152,12 +152,13 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		$storeParams = GO_Base_Db_FindParams::newInstance()
 						->export("company")
 						->criteria($criteria)
-						->select('t.*t, ab.name AS addressbook_name')
-						->joinModel(array(
-				'model' => 'GO_Addressbook_Model_Addressbook',
-				'localField' => 'addressbook_id',
-				'tableAlias' => 'ab', //Optional table alias
-						));
+						->select('t.*, addressbook.name AS addressbook_name');
+//						->joinModel(array(
+//				'model' => 'GO_Addressbook_Model_Addressbook',
+//				'localField' => 'addressbook_id',
+//				'tableAlias' => 'ab', //Optional table alias
+//						));
+										
 
 		if (!empty($params['addressbook_id'])) {
 			$storeParams->getCriteria()->addCondition('addressbook_id', $params['addressbook_id']);
@@ -233,6 +234,16 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		$attributes['employees.name'] = array('name'=>'employees.name','label'=>GO::t('cmdPanelEmployee', 'addressbook'));
 		return parent::afterAttributes($attributes, $response, $params, $model);
 	}
-
+	
+	/**
+	 * The actual call to the import CSV function
+	 * 
+	 * @param array $params
+	 * @return array $response 
+	 */
+	protected function actionImportCsv($params){
+		$summarylog = parent::actionImport($params);
+		return $summarylog->getErrorsJson();
+	}
 }
 

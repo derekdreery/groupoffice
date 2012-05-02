@@ -199,6 +199,7 @@ GO.linkHandlers["GO_Base_Model_User"]=function(id){
 	}
 	GO.users.userLinkWindow.userPanel.load(id);
 	GO.users.userLinkWindow.show();
+	return GO.users.userLinkWindow;
 };
 
 GO.linkPreviewPanels["GO_Base_Model_User"]=function(config){

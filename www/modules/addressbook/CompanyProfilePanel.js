@@ -195,6 +195,13 @@ GO.addressbook.CompanyProfilePanel = function(config)
 		name: 'vat_no'
 	});
 	
+	this.formInvoiceEmail = new Ext.form.TextField(
+	{
+		fieldLabel: GO.addressbook.lang['cmdFormLabelInvoiceEmail'],
+		name: 'invoice_email',
+		vtype:'emailAddress'
+	});
+	
 	/*
 	 * 
 	 * 		ADDRESSBOOK
@@ -261,7 +268,8 @@ GO.addressbook.CompanyProfilePanel = function(config)
 						fieldLabel:GO.addressbook.lang.crn,
 						name:'crn'
 					},
-					this.formVatNo
+					this.formVatNo,
+					this.formInvoiceEmail
 				]
 	  	}]
 		},{

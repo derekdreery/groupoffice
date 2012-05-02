@@ -123,6 +123,7 @@ views/Extjs3/javascript/query/QueryPanel.js
 
 views/Extjs3/javascript/windows/UsersInGroup.js
 
+views/Extjs3/javascript/windows/SummaryDialog.js
 views/Extjs3/javascript/windows/TabbedFormDialog.js
 
 views/Extjs3/javascript/windows/ExportGridDialog.js
@@ -158,3 +159,6 @@ views/Extjs3/javascript/windows/ResetPasswordDialog.js
 views/Extjs3/javascript/query/SavedQueryGrid.js
 views/Extjs3/javascript/query/SavedQueryDialog.js
 views/Extjs3/javascript/query/QueryContextMenu.js
+
+
+views/Extjs3/javascript/base/util/MD5.js

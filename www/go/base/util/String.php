@@ -827,7 +827,7 @@ class GO_Base_Util_String {
 		}
 		
 		// Check for smilies to be enabled by the user (settings->Look & Feel-> Show Smilies)
-		if(GO::user()->show_smilies)
+		if(GO::user() && GO::user()->show_smilies)
 			$html = GO_Base_Util_String::replaceEmoticons($html,true);
 
 		return $html;

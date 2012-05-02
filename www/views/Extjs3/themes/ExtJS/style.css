@@ -235,3 +235,28 @@ line-height:20px;
 .ext-el-mask{z-index:8000;} /*set it lower for windows to be on top */
 
 /* end ext overrides */
+
+
+.summary-log-table{
+	border:none;
+}
+
+.summary-error-font{
+	color:red; 
+	font-weight:bold;
+}
+
+.summary-success-font{
+	color:green; 
+	font-weight:bold;
+}
+
+.summary-log-name {
+	width:50px;
+	vertical-align:top;
+}
+
+.summary-log-message {
+	padding-bottom: 5px;
+	vertical-align:top;
+}

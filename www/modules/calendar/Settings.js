@@ -278,7 +278,9 @@ Ext.extend(GO.calendar.SettingsPanel, Ext.Panel, {
 			GO.calendar.defaultReminderValue=this.reminderValue.getValue();
 			GO.calendar.defaultReminderMultiplier=this.reminderMultiplier.getValue();
 		}
-	}
+	},
+	//needed for override in freebusypermissions
+	onLoadSettings : function(action){}
 
 });
 

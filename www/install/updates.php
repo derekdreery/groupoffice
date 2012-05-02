@@ -186,3 +186,21 @@ $updates["201203261017"][]= "ALTER TABLE `go_users`
 
 
 $updates["201204051001"][]= "ALTER TABLE `go_modules` ADD `enabled` BOOLEAN NOT NULL DEFAULT '1'";
+
+$updates["201204251613"][]= "DROP TABLE IF EXISTS `go_log`;";
+$updates["201204251613"][]= "CREATE TABLE IF NOT EXISTS `go_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL DEFAULT '',
+  `model` varchar(255) NOT NULL DEFAULT '',
+  `model_id` varchar(255) NOT NULL DEFAULT '',
+  `ctime` int(11) NOT NULL,
+  `user_agent` varchar(100) NOT NULL DEFAULT '',
+  `ip` varchar(15) NOT NULL DEFAULT '',
+  `controller_route` varchar(255) NOT NULL DEFAULT '',
+  `action` varchar(20) NOT NULL DEFAULT '',
+  `message` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;";
+
+$updates["201204251613"][]= "ALTER TABLE `go_log` CHANGE `user_agent` `user_agent` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";

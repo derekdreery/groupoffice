@@ -1218,14 +1218,15 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		GO.files.saveAsDialog.show({
 			filename: attachment.name,
 			handler:function(dialog, folder_id, filename){
-				dialog.el.mask(GO.lang.waitMsgLoad);
-				Ext.Ajax.request({
-					url: GO.settings.modules.email.url+'action.php',
+			
+				GO.request({
+					maskEl:dialog.el,
+					url: 'email/message/saveAttachment',
 					params:{
-						task:'save_attachment',
+						//task:'save_attachment',
 						uid: this.messagePanel.uid,
 						mailbox: this.mailbox,
-						imap_id: attachment.imap_id,
+						number: attachment.number,
 						encoding: attachment.encoding,
 						type: attachment.type,
 						subtype: attachment.subtype,
@@ -1237,23 +1238,9 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 						sender:this.messagePanel.data.sender,
 						filepath:this.messagePanel.data.path//smime message are cached on disk
 					},
-					callback: function(options, success, response)
-					{
-						dialog.el.unmask();
-						if(!success)
-						{
-							alert( GO.lang['strRequestError']);
-						}else
-						{
-							var responseParams = Ext.decode(response.responseText);
-							if(!responseParams.success)
-							{
-								alert( responseParams.feedback);
-							}else
-							{
-								dialog.hide();
-							}
-						}
+					success: function(options, response, result)
+					{			
+						dialog.hide();						
 					},
 					scope:this
 				});
@@ -1264,6 +1251,9 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	
 	openAttachment :  function(attachment, panel, forceDownload)
 	{
+		if(!attachment)
+			return false;
+		
 		var params = {
 			action:'attachment',
 			account_id: this.account_id,
@@ -1293,10 +1283,10 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		{
 			switch(attachment.extension)
 			{
-				case 'dat':
-					document.location.href=GO.settings.modules.email.url+
-					'tnef.php'+url_params;
-					break;			
+//				case 'dat':
+//					document.location.href=GO.settings.modules.email.url+
+//					'tnef.php'+url_params;
+//					break;			
 				
 //				case 'vcs':
 //				case 'ics':

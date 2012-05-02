@@ -1,4 +1,4 @@
-2012/01/10 3.9.00
+2012/04/11 4.0.1
 This is a beta release for the upcoming 4.0 version. It is not intended for 
 production use. Please just use it for testing and provide us feedback in the 
 forum. 
@@ -7,6 +7,16 @@ it may seem like there are not so many changes but under the hood there's a shin
 new engine! This get's us ready for the future. It will enable us to create a
  mobile interface for example. It's also a much more organized and more secure 
 framework. Extensive security testing has been performed by Cigitel.
+There's also a new module for document management. You can search through files 
+and add workflow to documents.
+
+Important:
+
+If you use SyncML clients like funambol you must reconfigure them. When you use
+the debian repository you must connect to /sync instead of /sync.php. If you
+don't use Debian packages you can connect to /modules/syncml/index.php.
+Also make sure the syncml module is installed.
+
 
 10/03/2011 3.7.1
 This release has a lot of enhancements under the hood. Everything has been

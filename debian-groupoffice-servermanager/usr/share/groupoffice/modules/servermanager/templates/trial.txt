@@ -1,7 +1,7 @@
 Dear {name},
 
 Thank you for creating a Group-Office trial. You can complete the installation by clicking on the link below.
-The installation can take some time. Please don't interupt the installation process.
+The installation can take some time. Please don't interrupt the installation process.
 
 {link}
 

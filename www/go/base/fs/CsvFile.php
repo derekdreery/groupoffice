@@ -36,7 +36,7 @@ class GO_Base_Fs_CsvFile extends GO_Base_Fs_File{
 	
 	private function _setCSV($mode){
 		if(!isset($this->_csv)){
-			if ($mode='w') {
+			if (strpos($mode,'w')!==false) {
 				$this->_csv = new GO_Base_Csv_Writer($this->path());
 			} elseif ($mode='r') {
 				$this->_csv = new GO_Base_Csv_Reader($this->path());
@@ -64,7 +64,7 @@ class GO_Base_Fs_CsvFile extends GO_Base_Fs_File{
 	 * @return int The length of the written string, or false on failure.
 	 */
 	public function putRecord($fields){
-		$this->_setCSV('w');		
+		$this->_setCSV('w+');		
 		return $this->_csv->putRecord($fields);
 	}
 	

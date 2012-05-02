@@ -404,19 +404,23 @@ class GO_Base_Mail_Message extends Swift_Message{
 
 						if ($tmpFile->exists()) {				
 							//Different browsers reformat URL's to absolute or relative. So a pattern match on the filename.
-							$filename = rawurlencode($tmpFile->name());
-							$result = preg_match('/="([^"]*'.preg_quote($filename).'[^"]*)"/',$params['htmlbody'],$matches);
+							//$filename = rawurlencode($tmpFile->name());
+							$result = preg_match('/="([^"]*'.preg_quote($ia->token).'[^"]*)"/',$params['htmlbody'],$matches);
 							if($result){
 								$img = Swift_EmbeddedFile::fromPath($tmpFile->path());
 								$img->setContentType($tmpFile->mimeType());
 								$contentId = $this->embed($img);
 
-								//$tmpFile->delete();
-
-								$params['htmlbody'] = str_replace($matches[1], $contentId, $params['htmlbody']);
+								//$tmpFile->delete();								
+								$params['htmlbody'] = GO_Base_Util_String::replaceOnce($matches[1], $contentId, $params['htmlbody']);
+							}else
+							{
+								//this may happen when an inline image was attached but deleted in the editor afterwards.
+							//
+								//throw new Exception("Error: inline attachment could not be found in text: ".$ia->token);
 							}
 						}else
-						{
+						{							
 							throw new Exception("Error: inline attachment missing on server: ".$tmpFile->stripTempPath().".<br /><br />The temporary files folder is cleared on each login. Did you relogin?");
 						}
 					}

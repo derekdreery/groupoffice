@@ -34,7 +34,6 @@
  * @property int $files_folder_id
  * @property int $category_id
  * @property int $priority
- * @property String $project_name
  * @property int $project_id
  * @property int $percentage_complete
  */

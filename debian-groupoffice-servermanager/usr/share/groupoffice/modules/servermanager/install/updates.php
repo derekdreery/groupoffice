@@ -36,3 +36,6 @@ $updates["201203291226"][]="CREATE TABLE IF NOT EXISTS `sm_installation_user_mod
   `module_id` varchar(100) NOT NULL,
   PRIMARY KEY (`user_id`,`module_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+
+$updates["201203291226"][]="ALTER TABLE `sm_installations` CHANGE `lastlogin` `lastlogin` INT( 11 ) NOT NULL DEFAULT '0'";

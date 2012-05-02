@@ -52,6 +52,14 @@ Ext.extend(GO.base.model.ContextMenu, Ext.menu.Menu, {
 	getSelectedRecords : function() {
 		return this.grid.getSelectionModel().getSelections();
 	},
+	getSelectedKeys: function() {
+		var keys = [];
+		var records = this.grid.getSelectionModel().getSelections();
+		for(var i =0;i<records.length;i++)
+			keys.push(records[i].id);
+		
+		return keys;
+	},
 	show : function(grid,index,event) {
 		event.stopEvent();
 		

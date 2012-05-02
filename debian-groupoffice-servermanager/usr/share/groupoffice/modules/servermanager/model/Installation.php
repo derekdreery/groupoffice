@@ -45,7 +45,10 @@
  * @property boolean $billing
  * @property boolean $professional
  * @property int $status_change_time
- * @property string $config_file
+ * @property string $configPath
+ * @property string $installPath
+ * 
+ * @property string $url
  */
 
 class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
@@ -101,6 +104,11 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		return '/etc/groupoffice/'.$this->name.'/config.php';
 	}
 	
+	protected function getUrl(){
+		$protocol = empty(GO::config()->servermanager_ssl) ? 'http' : 'https';
+		return $protocol.'://'.$this->name;
+	}
+	
 	public function validate() {
 		if(empty($this->dbName))
 			$this->setValidationError('name','Name is invalid');
@@ -111,6 +119,14 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		}
 							
 		return parent::validate();
+	}
+	
+	public function defaultAttributes() {		
+		$attr = parent::defaultAttributes();
+		
+		$attr['max_users'] = isset(GO::config()->servermanager_max_users) ? GO::config()->servermanager_max_users : 3;
+		
+		return $attr;
 	}
 
 	protected function beforeDelete() {
@@ -151,6 +167,10 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 			return false;
 		
 		require($this->configPath);
+		
+		if(isset($config['max_users']))
+			$this->max_users=$config['max_users'];
+		
 		$folder = new GO_Base_Fs_Folder($config['file_storage_path']);
 		$this->file_storage_usage=$folder->calculateSize();
 		
@@ -158,7 +178,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		$this->_calculateMailboxUsage($config);
 		$this->_calculateInstallationUsage($config);
 		
-		$this->save();
+		//$this->save();
 		
 		$report = $this->getAttributes();
 		
@@ -197,8 +217,8 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 						->select('count(*) as count, max(lastlogin) AS lastlogin');
 		$record = GO_Base_Model_User::model()->findSingle($findParams);						
 		
-		$this->last_login = $record['lastlogin'];
-		$this->count_users = $record['count'];		
+		$this->lastlogin = intval($record['lastlogin']);
+		$this->count_users = intval($record['count']);		
 		
 		$allowedModules = empty($config['allowed_modules']) ? array() : explode(',', $config['allowed_modules']);
 		
@@ -224,6 +244,8 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		
 		//reconnect to servermanager database
 		GO::setDbConnection();
+		
+		$this->save();
 		
 		GO_ServerManager_Model_InstallationUser::model()->deleteByAttribute('installation_id', $this->id);
 		

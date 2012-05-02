@@ -73,6 +73,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			case 'shared':
 				$stmt = GO_Files_Model_Folder::model()->findShares(GO_Base_Db_FindParams::newInstance()->limit(100));
 				while ($folder = $stmt->fetch()) {
+					$folder->checkFsSync();
+					
 					$response[] = $this->_folderToNode($folder, $expandFolderIds, false);
 				}
 				break;
@@ -403,8 +405,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		$this->_listFolderPermissionLevel=$folder->permissionLevel;
 		
-		if(!$folder)
-			return false;
+		$folder->checkFsSync();
 
 		//useful information for the view.
 		$response['path'] = $folder->path;

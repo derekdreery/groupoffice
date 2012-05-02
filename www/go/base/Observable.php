@@ -96,7 +96,7 @@ class GO_Base_Observable{
 	 * @param String $eventName Name fo the event
 	 * @param Array $params Paramters for the listener function
 	 */
-	protected function fireEvent($eventName, $params){
+	protected function fireEvent($eventName, $params=array()){
 		
 		$className = get_class($this);		
 		

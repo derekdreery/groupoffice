@@ -110,7 +110,7 @@ class GO_Base_Html_Input {
 				$this->attributes['value'] = isset($_POST[$key1][$key2]) ? $_POST[$key1][$key2] : $this->attributes['value'];
 			} else {
 				
-				if(!empty($this->attributes['type']) && $this->attributes['type'] != 'checkbox'){
+				if(empty($this->attributes['type']) || $this->attributes['type'] != 'checkbox'){
 					$this->attributes['value'] = isset($_POST[$this->attributes['name']]) ? $_POST[$this->attributes['name']] : $this->attributes['value'];
 				}
 				$this->isPosted = isset($_POST[$this->attributes['name']]);

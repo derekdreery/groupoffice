@@ -239,6 +239,19 @@ class GO_Base_Db_FindParams{
 	}
 	
 	/**
+	 * Set the search fields to use when executing search queries
+	 * This needs to be RAW value of the field with the "table" prefix. Example: array('`pr`.`name`','`t`.`name`')
+	 * 
+	 * @param array $fields 
+	 * @return GO_Base_Db_FindParams 
+	 */
+	public function searchFields($fields=array()){
+		$this->_params['searchQueryFields']=$fields;
+		
+		return $this;
+	}
+	
+	/**
 	 * Join the custom fields table if it's available for the model.
 	 * 
 	 * @param boolean $value

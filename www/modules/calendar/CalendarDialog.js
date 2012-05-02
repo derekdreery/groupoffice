@@ -70,9 +70,25 @@ GO.calendar.CalendarDialog = function(config)
 
 	if(GO.tasks)
 	{
-		this.tasklistsTab = new GO.calendar.TasklistsGrid({
-			title:GO.tasks.lang.visibleTasklists
-		});
+		this.tasklistsTab = new GO.base.model.multiselect.panel({
+      title:GO.tasks.lang.visibleTasklists,
+      url:'calendar/calendarTasklist',
+      columns:[{header: GO.lang.strTitle, dataIndex: 'name'}],
+      fields:['id','name'],
+      model_id:0
+    });
+		
+		
+		
+		
+		
+		
+		
+		
+		
+//		this.tasklistsTab = new GO.calendar.TasklistsGrid({
+//			title:GO.tasks.lang.visibleTasklists
+//		});
 
 		this.selectTasklist = new GO.form.ComboBoxReset({
 			fieldLabel:'CalDAV '+GO.tasks.lang.tasklist,
@@ -331,8 +347,9 @@ Ext.extend(GO.calendar.CalendarDialog, GO.Window, {
 	{
 		if(GO.tasks)
 		{
-			this.tasklistsTab.store.loaded = false;
-			this.tasklistsTab.store.baseParams.calendar_id = calendar_id;
+			this.tasklistsTab.setModelId(calendar_id);
+//			this.tasklistsTab.store.loaded = false;
+//			this.tasklistsTab.store.baseParams.calendar_id = calendar_id;
 		}
 		
 		this.categoriesGrid.setCalendarId(calendar_id);

@@ -23,10 +23,7 @@ GO.postfixadmin.AliasesGrid = function(config){
 	config.autoScroll=true;
 	config.split=true;
 	config.store = new GO.data.JsonStore({
-	    url: GO.settings.modules.postfixadmin.url+ 'json.php',
-	    baseParams: {
-	    	task: 'aliases'
-	    	},
+	    url: GO.url('postfixadmin/alias/store'),
 	    root: 'results',
 	    id: 'id',
 	    totalProperty:'total',
@@ -83,11 +80,7 @@ GO.postfixadmin.AliasesGrid = function(config){
 			text: GO.lang['cmdAdd'],
 			cls: 'x-btn-text-icon',
 			handler: function(){
-				
-	    	this.aliasDialog.show();
-	    	
-	    	
-	    	
+	    	this.aliasDialog.show(0,{loadParams:{domain_id:this.store.baseParams.domain_id}});	    	
 			},
 			scope: this
 		},{
@@ -105,10 +98,8 @@ GO.postfixadmin.AliasesGrid = function(config){
 	GO.postfixadmin.AliasesGrid.superclass.constructor.call(this, config);
 	
 	this.on('rowdblclick', function(grid, rowIndex){
-		var record = grid.getStore().getAt(rowIndex);	
-		
-		this.aliasDialog.show(record.data.id);
-		
+		var record = grid.getStore().getAt(rowIndex);			
+		this.aliasDialog.show(record.data.id,{loadParams:{domain_id:this.store.baseParams.domain_id}});
 		}, this);
 	
 };

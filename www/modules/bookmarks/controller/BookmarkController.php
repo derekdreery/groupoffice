@@ -7,86 +7,85 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 	protected function actionDescription($params) {
 
 		$response = array();
-
 		if (function_exists('curl_init')) {
-			$ch = curl_init();
+			try{
 
-			curl_setopt($ch, CURLOPT_URL, $params['url']);
-			curl_setopt($ch, CURLOPT_HEADER, 0);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$c = new GO_Base_Util_HttpClient();
+				$c->setCurlOption(CURLOPT_CONNECTTIMEOUT, 2);
+				$c->setCurlOption(CURLOPT_TIMEOUT, 5);
+				$c->setCurlOption(CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);			
 
-			//pretend to be ff4
-			$useragent = "Mozilla/5.0 (X11; Linux x86_64; rv:2.0) Gecko/20100101 Firefox/4.0";
-			curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
+				$html = $c->request($params['url']);
 
-			//for self-signed certificates
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-			@curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+				//go_debug($html);
 
-			$html = curl_exec($ch);
-		} else {
-			$html = @file_get_contents($params['url']);
-		}
+				$html = str_replace("\r", '', $html);
+				$html = str_replace("\n", ' ', $html);
 
-		//go_debug($html);
+				$html = preg_replace("'</[\s]*([\w]*)[\s]*>'", "</$1>", $html);
 
-		$html = str_replace("\r", '', $html);
-		$html = str_replace("\n", ' ', $html);
+				preg_match('/<head>(.*)<\/head>/i', $html, $match);
+				if (isset($match[1])) {
+					$html = $match[1];
+					//go_debug($html);
 
-		$html = preg_replace("'</[\s]*([\w]*)[\s]*>'", "</$1>", $html);
+					preg_match('/charset=([^"\'>]*)/i', $html, $match);
+					if (isset($match[1])) {
 
-		preg_match('/<head>(.*)<\/head>/i', $html, $match);
-		if (isset($match[1])) {
-			$html = $match[1];
-			//go_debug($html);
-
-			preg_match('/charset=([^"\'>]*)/i', $html, $match);
-			if (isset($match[1])) {
-
-				$charset = strtolower(trim($match[1]));
-				if ($charset != 'utf-8')
-					$html = GO_Base_Util_String::to_utf8($html, $charset);
-			}
-
-			preg_match_all('/<meta[^>]*>/i', $html, $matches);
-
-			$description = '';
-			foreach ($matches[0] as $match) {
-				if (stripos($match, 'description')) {
-					$name_pos = stripos($match, 'content');
-					if ($name_pos) {
-						$description = substr($match, $name_pos + 7, -1);
-						$description = trim($description, '="\'/ ');
-						break;
+						$charset = strtolower(trim($match[1]));
+						if ($charset != 'utf-8')
+							$html = GO_Base_Util_String::to_utf8($html, $charset);
 					}
+
+					preg_match_all('/<meta[^>]*>/i', $html, $matches);
+
+					$description = '';
+					foreach ($matches[0] as $match) {
+						if (stripos($match, 'description')) {
+							$name_pos = stripos($match, 'content');
+							if ($name_pos) {
+								$description = substr($match, $name_pos + 7, -1);
+								$description = trim($description, '="\'/ ');
+								break;
+							}
+						}
+					}
+					//replace double spaces
+					$response['description'] = preg_replace('/\s+/', ' ', $description);
+
+					preg_match('/<title>(.*)<\/title>/i', $html, $match);
+					$response['title'] = $match ? preg_replace('/\s+/', ' ', trim($match[1])) : '';
 				}
 			}
-			//replace double spaces
-			$response['description'] = preg_replace('/\s+/', ' ', $description);
+			catch(Exception $e){
+				$response['title'] = '';
+				$response['description'] = '';
+			}
 
-			preg_match('/<title>(.*)<\/title>/i', $html, $match);
-			$response['title'] = $match ? preg_replace('/\s+/', ' ', trim($match[1])) : '';
+			try{
+
+				$contents = $c->request($params['url'] . '/favicon.ico');
+
+				if (!empty($contents)) {
+					$relpath = 'public/bookmarks/';
+					$path = GO::config()->file_storage_path . $relpath;
+					if (!is_dir($path))
+						mkdir($path, 0755, true);
+
+					$filename = str_replace('.', '_', preg_replace('/^https?:\/\//', '', $_POST['url'])) . '.ico';
+					$filename = rtrim(str_replace('/', '_', $filename), '_ ');
+
+					//var_dump($filename);
+
+					file_put_contents($path . $filename, $contents);
+
+					$response['logo'] = $relpath . $filename;
+				}
+			}
+			catch(Exception $e){
+				$response['logo'] = '';
+			}
 		}
-
-		$contents = @file_get_contents($params['url'] . '/favicon.ico');
-
-		if (!empty($contents)) {
-			$relpath = 'public/bookmarks/';
-			$path = GO::config()->file_storage_path . $relpath;
-			if (!is_dir($path))
-				mkdir($path, 0755, true);
-
-			$filename = str_replace('.', '_', preg_replace('/^https?:\/\//', '', $_POST['url'])) . '.ico';
-			$filename = rtrim(str_replace('/', '_', $filename), '_ ');
-
-			//var_dump($filename);
-
-			file_put_contents($path . $filename, $contents);
-
-			$response['logo'] = $relpath . $filename;
-		}
-
 		return $response;
 	}
 

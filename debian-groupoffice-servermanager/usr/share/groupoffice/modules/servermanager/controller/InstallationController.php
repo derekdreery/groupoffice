@@ -5,7 +5,29 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	protected $model = 'GO_Servermanager_Model_Installation';
 	
 	protected function allowGuests() {
+		return array('create','destroy', 'report','upgradeall');
+	}
+	
+	protected function ignoreAclPermissions() {
 		return array('create','destroy', 'report');
+	}
+	
+	protected function actionImport($params){
+		$folder = new GO_Base_Fs_Folder('/etc/groupoffice');
+		$items = $folder->ls();
+		
+		foreach($items as $item){
+			if($item->isFolder() && $item->child('config.php')){
+				$installation = GO_ServerManager_Model_Installation::model()->findSingleByAttribute('name', $item->name());
+				if(!$installation){
+					echo "Importing ".$item->name()."\n";
+					$installation = new GO_ServerManager_Model_Installation();
+					$installation->name=$item->name();					
+					$installation->report();					
+				}
+			}
+		}
+		echo "Done\n\n";
 	}
 	
 	public function actionDestroy($params){
@@ -44,6 +66,11 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		}
 	}	
 	
+	private function _getConfigFromFile($path){
+		require($path);
+		return $config;
+	}
+	
 	public function actionCreate($params){
 		if(PHP_SAPI!='cli')
 			throw new Exception("Action servermanager/installation/create may only be run by root on the command line");
@@ -62,23 +89,24 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		
 		//if config file already exists then include it so we will keep the manually added config values.
 		if($configFile->exists())
-			require($configFile->path());
+			$existingConfig = $this->_getConfigFromFile($configFile->path());
+		else
+			$existingConfig = array();
 		
 		//create config file
-		require($params['tmp_config']);		
+		$newConfig = $this->_getConfigFromFile($params['tmp_config']);
 		unlink($params['tmp_config']);
 		
-		if(!isset($config['db_pass']))
-			$config['db_pass']= GO_Base_Util_String::randomPassword(8,'a-z,A-Z,1-9');
-				
-		$this->_createFolderStructure($config, $installation);
+		$existingConfig=array_merge($existingConfig, $newConfig);		
+
+		$this->_createFolderStructure($existingConfig, $installation);
 		
-		GO_Base_Util_ConfigEditor::save($configFile, $config);
+		GO_Base_Util_ConfigEditor::save($configFile, $existingConfig);
 		$configFile->chown('root');
 		$configFile->chgrp('www-data');
 		$configFile->chmod(0640);		
 		
-		$this->_createDatabase($params, $installation, $config);		
+		$this->_createDatabase($params, $installation, $existingConfig);		
 	}
 	
 	private function _createDatabaseContent($params, $installation, $config){
@@ -86,7 +114,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 						' -c='.$installation->configPath.
 						' --adminusername=admin'.
 						' --adminpassword="'.$params['adminpassword'].'"'.
-						' --adminemail="'.$config['webmaster_email'].'"';
+						' --adminemail="'.$config['webmaster_email'].'" 2>&1';
 		
 		GO::debug($cmd);
 		
@@ -157,8 +185,8 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 						'groupofficecli.php -r=servermanager/installation/create'.
 						' -c='.GO::config()->get_config_file().
 						' --tmp_config='.$tmpConfigFile->path().
-						' --name='.$model->name.
-						' --adminpassword='.$params['admin_password1'];
+						' --name='.$model->name.	
+						' --adminpassword='.$params['admin_password1'].' 2>&1';
 		
 		exec($cmd, $output, $return_var);		
 
@@ -189,14 +217,24 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			$config['allowed_modules'] = implode(',', $modules);
 		}
 		
-		//for testing
-		$config['debug']=GO::config()->debug;
 		
-		$config['id']=$model->dbName;
-		$config['db_name']=$model->dbName;
-		$config['db_user']=$model->dbUser;
-		$config['db_host']=GO::config()->db_host;
-		
+		if(!file_exists($model->configPath)){
+			//only create these values on new config files.
+			
+			//for testing		
+			$config['debug']=GO::config()->debug;
+
+			$config['id']=$model->dbName;
+			$config['db_name']=$model->dbName;
+			$config['db_user']=$model->dbUser;
+			$config['db_host']=GO::config()->db_host;
+			$config['db_pass']= GO_Base_Util_String::randomPassword(8,'a-z,A-Z,1-9');
+			$config['host']='/';
+			$config['root_path']=$model->installPath.'groupoffice/';
+			$config['tmpdir']='/tmp/'.$model->name.'/';
+			$config['file_storage_path']=$model->installPath.'data/';
+		}
+				
 		$config['enabled']=empty($params['id']) || !empty($params['enabled']);
 		$config['max_users'] = GO_Base_Util_Number::unlocalize($params['max_users']);
 
@@ -219,14 +257,11 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$config['allow_themes'] = isset($params['allow_themes']) ? true : false;
 		$config['allow_password_change'] = isset($params['allow_password_change']) ? true : false;
 
-		$config['quota'] = GO_Base_Util_Number::unlocalize($params['quota']) * 1024*1024;
+		$config['quota'] = GO_Base_Util_Number::unlocalize($params['quota'])*1024*1024*1024;
 		$config['restrict_smtp_hosts'] = $params['restrict_smtp_hosts'];
 		$config['serverclient_domains'] = $params['serverclient_domains'];
 		
-		$config['host']='/';
-		$config['root_path']=$model->installPath.'groupoffice/';
-		$config['tmpdir']='/tmp/'.$model->name.'/';
-		$config['file_storage_path']=$model->installPath.'data/';
+		
 				
 
 		if (intval($config['max_users']) < 1)
@@ -329,13 +364,44 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		return $response;		
 	}
 	
+	protected function actionUpgradeAll($params){
+		
+		if(!$this->isCli())
+			throw new Exception("This action may only be ran on the command line.");
+		
+		$stmt = GO_Servermanager_Model_Installation::model()->find();
+		while($installation = $stmt->fetch()){
+			
+			echo "Upgrading ".$installation->name."\n";
+			
+			if(!file_exists($installation->configPath)){
+				echo "\nERROR: Config file ".$installation->configPath." not found\n\n";
+				continue;
+			}
+			
+			require($installation->configPath);
+			
+			$cmd = GO::config()->root_path.'groupofficecli.php -r=maintenance/upgrade -c="'.$installation->configPath.'"';
+			
+			system($cmd);		
+			
+			exec('chown -R www-data:www-data '.$config['file_storage_path'].'cache');
+
+//			if($return_var!=0){
+//				echo "ERROR: ".implode("\n", $output);
+//			}
+			
+			echo "Done\n\n";
+			
+		}
+	}	
 	
 	
 	protected function actionReport($params){
 		$stmt = GO_ServerManager_Model_Installation::model()->find();
 		
 		if(!$this->isCli())
-			echo '<pre>';
+			throw new Exception("You may only run this command on the command line");
 		
 		$report = array(
 				'installations'=>array(),
@@ -347,24 +413,31 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		
 		while($installation = $stmt->fetch()){
 			echo "Creating report for ".$installation->name."\n";
-			$report['installations'][]=$installation->report();
+			//$report['installations'][]=$installation->report();
+			
+			//run tasks for installation like log rotation and filesearch index update.
+			
+			echo "Running daily tasks for installation\n";
+			$cmd ='/usr/share/groupoffice/groupofficecli.php -r=maintenance/servermanagerReport -c="'.$installation->configPath.'"  2>&1';				
+			system($cmd);
+		
 		}
 		
-		if(class_exists('GO_Professional_LicenseCheck')){
-			
-			if(!isset(GO::config()->license_name)){
-				throw new Exception('$config["license_name"] is not set. Please contact Intermesh to get your key.');
-			}
-			
-			$report['license_name']=GO::config()->license_name;
-			
-			$c = new GO_Base_Util_HttpClient();
-			$response = $c->request('http://localhost/groupoffice/?r=licenses/license/report', array(
-					'report'=>json_encode($report)
-			));
-			
-			var_dump($response);
-		}
+//		if(class_exists('GO_Professional_LicenseCheck')){
+//			
+//			if(!isset(GO::config()->license_name)){
+//				throw new Exception('$config["license_name"] is not set. Please contact Intermesh to get your key.');
+//			}
+//			
+//			$report['license_name']=GO::config()->license_name;
+//			
+//			$c = new GO_Base_Util_HttpClient();
+//			$response = $c->request('http://localhost/groupoffice/?r=licenses/license/report', array(
+//					'report'=>json_encode($report)
+//			));
+//			
+//			var_dump($response);
+//		}
 		
 	
 	
@@ -380,7 +453,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 //		GO_Base_Mail_Mailer::newGoInstance()->send($message);
 				
 		
-		echo "Done";
+		echo "Done\n\n";
 	}
 
 }

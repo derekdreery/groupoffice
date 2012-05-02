@@ -22,14 +22,11 @@ GO.postfixadmin.DomainsGrid = function(config){
 	config.autoScroll=true;
 	config.split=true;
 	config.store = new GO.data.JsonStore({
-	    url: GO.settings.modules.postfixadmin.url+ 'json.php',
-	    baseParams: {
-	    	task: 'domains'
-	    	},
+	    url: GO.url('postfixadmin/domain/store'),
 	    root: 'results',
 	    id: 'id',
 	    totalProperty:'total',
-	    fields: ['id','user_name','domain','description','aliases','mailboxes','maxquota','quota','usage','transport','backupmx','ctime','mtime','active','acl_id'],
+	    fields: ['id','user_name','domain','description','alias_count','mailbox_count','maxquota','quota','usage','transport','backupmx','ctime','mtime','active','acl_id'],
 	    remoteSort: true
 	});
 	
@@ -51,10 +48,10 @@ GO.postfixadmin.DomainsGrid = function(config){
 			dataIndex: 'description'
 		},		{
 			header: GO.postfixadmin.lang.aliases, 
-			dataIndex: 'aliases'
+			dataIndex: 'alias_count'
 		},		{
 			header: GO.postfixadmin.lang.mailboxes, 
-			dataIndex: 'mailboxes'
+			dataIndex: 'mailbox_count'
 		},			{
 			header: GO.postfixadmin.lang.quota, 
 			dataIndex: 'quota',

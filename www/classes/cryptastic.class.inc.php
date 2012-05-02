@@ -44,6 +44,9 @@ class cryptastic {
 	 */
 	public function encrypt( $msg, $k='', $base64 = true ) {
 
+		if ($msg="")
+			return "";
+		
 		//Check if mcrypt is supported. mbstring.func_overload will mess up substring with this function
 		if(!function_exists('mcrypt_module_open') || ini_get('mbstring.func_overload')>0)
 			return false;
@@ -74,8 +77,8 @@ class cryptastic {
 		mcrypt_module_close($td);						# close cipher module
 
 		if ( $base64 ) $msg = base64_encode($msg);		# base64 encode?
-
-		return $msg;									# return iv+ciphertext+mac
+		
+		return "{GOCRYPT}".$msg;									# return iv+ciphertext+mac
 	}
 
 	/** Decryption Procedure
@@ -93,6 +96,12 @@ class cryptastic {
 		if(!function_exists('mcrypt_module_open') || ini_get('mbstring.func_overload')>0)
 			return false;
 
+		$msg = str_replace("{GOCRYPT}", "", $msg, $count);
+
+		if($count!=1)
+			return false;
+		
+		
 		if(empty($k)){
 			$k=$this->get_key();
 			if(empty($k)){

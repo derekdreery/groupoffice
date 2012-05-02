@@ -8,7 +8,7 @@ GO.addressbook.CompaniesGrid = function(config){
 	config.paging=true;
 	
 	var fields ={
-		fields:['id','name','name2','homepage','email','phone','fax','address','address_no','zip','city','state','country','post_address','post_address_no','post_city','post_state','post_country','post_zip','bank_no','vat_no','ctime','mtime','iban','crn','ab_name'],
+		fields:['id','name','name2','homepage','email','phone','fax','address','address_no','zip','city','state','country','post_address','post_address_no','post_city','post_state','post_country','post_zip','bank_no','vat_no','invoice_email','ctime','mtime','iban','crn','ab_name'],
 		columns:[
 		{
 			header: GO.addressbook.lang.id,
@@ -151,6 +151,11 @@ GO.addressbook.CompaniesGrid = function(config){
 			id: 'vat_no'
 		},
 		{
+			header: GO.addressbook.lang['cmdFormLabelInvoiceEmail'],
+			dataIndex: 'invoice_email',
+			hidden:true,
+			id: 'invoice_email'
+		},{
 			header: GO.lang.strMtime,
 			dataIndex:'mtime',
 			hidden:true,

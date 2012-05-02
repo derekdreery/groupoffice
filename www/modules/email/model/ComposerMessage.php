@@ -21,7 +21,6 @@ class GO_Email_Model_ComposerMessage extends GO_Email_Model_Message {
 		$a['encoding'] = '';
 		$a['disposition'] = '';
 		$a['url'] = GO::url('core/downloadTempFile',array('path'=>$file->name()));
-		
 		$this->attachments[] = $a;
 	}
 	

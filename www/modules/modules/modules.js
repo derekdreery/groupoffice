@@ -53,7 +53,7 @@ GO.modules.MainPanel = function(config) {
 			cls : 'x-btn-text-icon',
 			handler : function() {
 				var moduleRecord = this.getSelectionModel().getSelected();
-				this.showPermissions(moduleRecord.data.moduleId,moduleRecord.data.name,moduleRecord.data.acl_id);
+				this.showPermissions(moduleRecord.data.id,moduleRecord.data.name,moduleRecord.data.acl_id);
 			},
 			scope : this
 		}]
@@ -252,8 +252,8 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 				},
 				success: function(options, response, result) {
 
-					grid.store.reload();
-					this.store.reload();
+					grid.store.load();
+					this.store.load();
 					this.availableModulesWin.hide();
 
 					this.installedModules=result.results;

@@ -7,13 +7,13 @@
 class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractController {
 	
 	protected function allowGuests() {
-		return array('upgrade','checkdatabase');
+		return array('upgrade','checkdatabase','servermanagerreport');
 	}
 
 	protected function init() {
 		GO::$disableModelCache=true; //for less memory usage
 		ini_set('max_execution_time', '0'); //allow long runs		
-		
+		ini_set('memory_limit','512M');
 		ini_set('display_errors','on');
 		error_reporting(E_ALL);
 		
@@ -38,7 +38,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 				"GO_Calendar_Model_Event"=>array('name', 'start_time', 'end_time', 'calendar_id', 'rrule', 'user_id'),
 				"GO_Tasks_Model_Task"=>array('name', 'start_time', 'due_time', 'tasklist_id', 'rrule', 'user_id'),
 				"GO_Addressbook_Model_Contact"=>array('first_name', 'middle_name', 'last_name', 'addressbook_id', 'company_id', 'email'),
-				"GO_Billing_Model_Order"=>array('order_id','book_id','btime')
+				//"GO_Billing_Model_Order"=>array('order_id','book_id','btime')
 			);
 		
 		foreach($checkModels as $modelName=>$checkFields){
@@ -423,10 +423,18 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		echo "All Done!\n";		
 		
-		if(php_sapi_name() != 'cli'){
+		if(!$this->isCli()){
 			echo '</pre><br /><br />';
 			echo '<a href="'.GO::config()->host.'">'.GO::t('cmdContinue').'</a>';
 		}
 		//return $response;
+	}
+	
+	
+	public function actionServermanagerReport($params){
+		if(!$this->isCli()){
+			trigger_error("This action must be ran on the command line", E_USER_ERROR);
+		}
+		$this->fireEvent('servermanagerReport');
 	}
 }

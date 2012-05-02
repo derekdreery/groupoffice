@@ -61,6 +61,9 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	public $createTempFilesForAttachments=false;
 	
 	
+	private $_cache;
+	
+	
 	/**
 	 * Returns a static model of itself
 	 * 
@@ -78,14 +81,32 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	 */
 	public function findByUid($account, $mailbox, $uid) {
 
+		$cacheKey=$account->id.':'.$mailbox.':'.$uid;
+		
+		if(!isset($this->_cache[$cacheKey])){
+			$imapMessage = new GO_Email_Model_ImapMessage();
+			$imap = $account->openImapConnection($mailbox);
+
+			$attributes = $imap->get_message_header($uid, true);
+
+			if (!$attributes)
+				return false;
+
+			$attributes['uid']=$uid;
+			$attributes['account'] = $account;
+			$attributes['mailbox'] = $mailbox;
+
+			$imapMessage->setAttributes($attributes);
+
+			$this->_cache[$cacheKey]=$imapMessage;
+		}
+
+		return $this->_cache[$cacheKey];
+	}
+	
+	
+	public function createFromHeaders($account, $mailbox, $uid, $headers){
 		$imapMessage = new GO_Email_Model_ImapMessage();
-		$imap = $account->openImapConnection($mailbox);
-
-		$attributes = $imap->get_message_header($uid, true);
-
-		if (!$attributes)
-			return false;
-
 		$attributes['uid']=$uid;
 		$attributes['account'] = $account;
 		$attributes['mailbox'] = $mailbox;
@@ -121,7 +142,6 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		if(!isset($this->_struct)){
 			
 			$this->_struct = $this->getImapConnection()->get_message_structure($this->uid);
-			
 			
 			if(count($this->_struct)==1) {
 					$headerCt = explode('/', $this->content_type);
@@ -284,6 +304,8 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 			}
 		}
 		
+		$this->_plainBody = GO_Base_Util_String::normalizeCrlf($this->_plainBody);
+		
 		if($asHtml){
 			$body = $this->_plainBody;			
 			$body = GO_Base_Util_String::text_to_html($body);
@@ -345,6 +367,8 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 				//ignore applefile's
 				if($part['subtype']=='applefile')
 					continue;
+				
+				//GO::debug($part);
 				
 				if (empty($part['filename']) || $part['filename'] == 'false') {
 					if (!empty($part['subject'])) {

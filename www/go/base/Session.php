@@ -123,6 +123,9 @@ class GO_Base_Session extends GO_Base_Observable{
 	public function logout() {
 		
 		$username = isset(self::$username) ? self::$username : 'notloggedin';
+		
+		
+		GO::debug("Logout called for ".$username);
 		//go_log(LOG_DEBUG, 'LOGOUT Username: '.$username.'; IP: '.$_SERVER['REMOTE_ADDR']);
 		GO::infolog("LOGOUT for user: \"".$username."\" from IP: ".$_SERVER['REMOTE_ADDR']);
 
@@ -147,6 +150,9 @@ class GO_Base_Session extends GO_Base_Observable{
 		}
 
 		$this->fireEvent('logout', array($old_session));
+		
+		if(!empty(GO::session()->values['countLogin']))
+			$this->_log(GO_Log_Model_Log::ACTION_LOGOUT);
 	}
 	
 	/**
@@ -197,7 +203,8 @@ class GO_Base_Session extends GO_Base_Observable{
 				$this->clearUserTempFiles();
 			}
 
-			self::setCompatibilitySessionVars(); // TODO: REMOVE IF SYSTEM IS FULLY REBUILT
+			if(PHP_SAPI!='cli')
+				self::setCompatibilitySessionVars(); // TODO: REMOVE IF SYSTEM IS FULLY REBUILT
 
 			$this->fireEvent('login', array($username, $password, $user));
 			
@@ -216,15 +223,31 @@ class GO_Base_Session extends GO_Base_Observable{
 			//using the session_regenerate_id() function.
 
 			session_regenerate_id();
+			
+			if($countLogin)
+				$this->_log(GO_Log_Model_Log::ACTION_LOGIN);
+			
+			GO::session()->values['countLogin']=$countLogin;
 		
 			return $user;
 		}		
+	}
+	
+	private function _log($action){
+		if(GO::modules()->isInstalled('log')){	
+			$log = new GO_Log_Model_Log();			
+			$log->action=$action;						
+			$log->save();
+		}
 	}
 	
 	/**
 	 * TODO: REMOVE IF SYSTEM IS FULLY REBUILDED
 	 */
 	public static function setCompatibilitySessionVars(){
+		
+		if(defined("GO_NO_SESSION"))
+			return true;
 		
 		define('NO_EVENTS',true);
 		

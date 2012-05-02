@@ -296,8 +296,6 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 			//keep template tags for mailings to addresslists
 			if (empty($params['addresslist_id'])) {
-				$values = array();
-				//$contact_id=0;
 				//if contact_id is not set but email is check if there's contact info available
 				if (!empty($params['to']) || !empty($params['contact_id'])) {
 
@@ -745,6 +743,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		return $response;
 	}
 
+	//still used?
 	public function actionMessageAttachment($params){
 
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
@@ -759,21 +758,56 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		return $response;
 
 	}
+	
+	private function _tnefAttachment($params, GO_Email_Model_Account  $account){
+		
+		$tmpFolder = GO_Base_Fs_Folder::tempFolder(uniqid(time()));
+		$tmpFile = $tmpFolder->createChild('winmail.dat');
+		
+		$imap = $account->openImapConnection($params['mailbox']);
+		
+		$success = $imap->save_to_file($params['uid'], $tmpFile->path(), $params['number'], $params['encoding']);
+		if(!$success)
+			throw new Exception("Could not save temp file for tnef extraction");
+		
+		chdir($tmpFolder->path());
+		exec(GO::config()->cmd_tnef.' '.$tmpFile->path(), $output, $retVar);
+		if($retVar!=0)
+			throw new Exception("TNEF extraction failed: ".implode("\n", $output));		
+		$tmpFile->delete();
+
+		exec(GO::config()->cmd_zip.' -r "winmail.zip" *', $output, $retVar);
+		if($retVar!=0)
+			throw new Exception("ZIP compression failed: ".implode("\n", $output));		
+		
+		$zipFile = $tmpFolder->child('winmail.zip');
+		GO_Base_Util_Http::outputDownloadHeaders($zipFile,false,true);
+		$zipFile->output();
+		
+		$tmpFolder->delete();
+	}
 
 	public function actionAttachment($params) {
+		
+		$file = new GO_Base_Fs_File($params['filename']);
+		
+		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
-		$imapMessage = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
+		//$imapMessage = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
+		
+		if($file->extension()=='dat')
+			return $this->_tnefAttachment ($params, $account);
 
 		$inline = true;
 
 		if(isset($params['inline']) && $params['inline'] == 0)
-			$inline = false;
+			$inline = false;	
 
-		$file = new GO_Base_Fs_File($params['filename']);
 		GO_Base_Util_Http::outputDownloadHeaders($file,$inline,true);
 
-		$imapMessage->getImapConnection()->get_message_part_start($imapMessage->uid, $params['number']);
-		while ($line = $imapMessage->getImapConnection()->get_message_part_line()) {
+		$imap = $account->openImapConnection($params['mailbox']);
+		$imap->get_message_part_start($params['uid'], $params['number']);
+		while ($line = $imap->get_message_part_line()) {
 			switch (strtolower($params['encoding'])) {
 				case 'base64':
 					echo base64_decode($line);
@@ -786,7 +820,47 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 					break;
 			}
 		}
-		$imapMessage->getImapConnection()->disconnect();
+	}
+	
+	
+	protected function actionTnefAttachmentFromTempFile($params){
+		$tmpFolder = GO_Base_Fs_Folder::tempFolder(uniqid(time()));
+		$tmpFile = new GO_Base_Fs_File(GO::config()->tmpdir.$params['tmp_file']);
+		
+				chdir($tmpFolder->path());
+		exec(GO::config()->cmd_tnef.' -C '.$tmpFolder->path().' '.$tmpFile->path(), $output, $retVar);
+		if($retVar!=0)
+			throw new Exception("TNEF extraction failed: ".implode("\n", $output));		
+		
+		exec(GO::config()->cmd_zip.' -r "winmail.zip" *', $output, $retVar);
+		if($retVar!=0)
+			throw new Exception("ZIP compression failed: ".implode("\n", $output));		
+		
+		$zipFile = $tmpFolder->child('winmail.zip');
+		GO_Base_Util_Http::outputDownloadHeaders($zipFile,false,true);
+		$zipFile->output();
+		
+		$tmpFolder->delete();	
+	}
+	
+	
+	public function actionSaveAttachment($params){
+		$folder = GO_Files_Model_Folder::model()->findByPk($params['folder_id']);
+		
+		
+		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.$folder->path.'/'.$params['filename']);
+		
+		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
+		$imap = $account->openImapConnection($params['mailbox']);
+		
+		$response['success'] = $imap->save_to_file($params['uid'], $file->path(), $params['number'], $params['encoding']);
+		
+		if(!$folder->hasFile($file->name()))
+			$folder->addFile($file->name());
+		
+		if(!$response['success'])
+			$response['feedback']='Could not save to '.$file->stripFileStoragePath();
+		return $response;
 	}
 
 }

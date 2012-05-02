@@ -38,6 +38,8 @@ if (empty($args['r'])) {
 					. "\" mypassword && echo \$mypassword'";
 	
 	$password = rtrim(shell_exec($command));
+	
+	echo "\n";
 
 	$user = GO::session()->login($args['u'], $password);
 	if (!$user) {

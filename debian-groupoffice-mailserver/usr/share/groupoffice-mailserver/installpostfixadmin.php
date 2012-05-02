@@ -1,18 +1,22 @@
 #!/usr/bin/php
 <?php
 require('/etc/groupoffice/config.php');
-require($config['root_path'].'Group-Office.php');
+require($config['root_path'].'GO.php');
 
-try{
-	if(!isset($GLOBALS['GO_MODULES']->modules['postfixadmin']))
-	{
-		$GLOBALS['GO_MODULES']->add_module('postfixadmin');
-	}
+GO::setIgnoreAclPermissions();
 
-	if(!isset($GLOBALS['GO_MODULES']->modules['serverclient']))
-	{
-		$GLOBALS['GO_MODULES']->add_module('serverclient');
-	}
+try{	
+	if(!GO::modules()->isInstalled('postfixadmin')){
+		$module = new GO_Base_Model_Module();
+		$module->id = 'postfixadmin';
+		$module->save();
+	}	
+	
+	if(!GO::modules()->isInstalled('serverclient')){
+		$module = new GO_Base_Model_Module();
+		$module->id = 'serverclient';
+		$module->save();
+	}	
 }
 catch(Exception $e){
 	echo 'ERROR: '.$e->getMessage();

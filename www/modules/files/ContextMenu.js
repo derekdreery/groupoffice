@@ -154,13 +154,24 @@ GO.files.FilesContextMenu = function(config)
 	config['items'].push(this.compressButton);
 	config['items'].push(this.decompressButton);
 
+	this.createDownloadLinkButton = new Ext.menu.Item({
+			iconCls: 'btn-save',
+			text: GO.files.lang.createDownloadLink,
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				this.fireEvent('download_link', this, this.records, this.clickedAt, false);
+			},
+			scope: this
+		});
+		config['items'].push(this.createDownloadLinkButton);
+
 	if(GO.settings.modules.email) {
 		this.downloadLinkButton = new Ext.menu.Item({
 			iconCls: 'btn-email',
 			text: GO.files.lang.emailDownloadLink,
 			cls: 'x-btn-text-icon',
 			handler: function(){
-				this.fireEvent('download_link', this, this.records, this.clickedAt);
+				this.fireEvent('download_link', this, this.records, this.clickedAt, true);
 			},
 			scope: this
 		});

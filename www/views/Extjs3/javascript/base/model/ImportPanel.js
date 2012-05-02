@@ -31,6 +31,9 @@ GO.base.model.ImportPanel = Ext.extend(Ext.Panel, {
 					
 					this.cmbController.selectFirst();
 					this.cmbFileType.selectFirst();
+					
+					this.cmbFileType.setVisible(this.fileTypeStore.getCount() > 1);
+					this.cmbController.setVisible(this.controllersStore.getCount() > 1);
 				},
 				show : function(){
 					this.fileSelector.clearQueue();
@@ -54,21 +57,21 @@ GO.base.model.ImportPanel = Ext.extend(Ext.Panel, {
 		});
 		
 		this.txtDelimiter = new Ext.form.TextField({
-			name: 'importDelimiter',
+			name: 'delimiter',
 			fieldLabel: GO.addressbook.lang.cmdFormLabelValueSeperated,
 			allowBlank: false,
 			value: GO.settings.list_separator
 		});
 		
 		this.txtEnclosure = new Ext.form.TextField({
-			name: 'importEnclosure',
+			name: 'enclosure',
 			fieldLabel: GO.addressbook.lang.cmdFormLabelValueIncluded,
 			allowBlank: false,
 			value: GO.settings.text_separator
 		});
 		
 		this.cmbFileType = new GO.form.ComboBox({
-			hiddenName: 'importFileType',
+			hiddenName: 'fileType',
 			fieldLabel: GO.addressbook.lang.cmdFormLabelFileType,
 			store: this.fileTypeStore,
 			valueField:'value',
@@ -79,7 +82,7 @@ GO.base.model.ImportPanel = Ext.extend(Ext.Panel, {
 		});
 		
 		this.cmbController = new GO.form.ComboBox({
-			hiddenName: 'importController',
+			hiddenName: 'controller',
 			fieldLabel: GO.lang.cmdImport,
 			store: this.controllersStore,
 			valueField:'value',
@@ -90,7 +93,7 @@ GO.base.model.ImportPanel = Ext.extend(Ext.Panel, {
 		});
 		
 		this.fileSelector = new GO.form.UploadFile({
-			inputName: 'importFiles',
+			inputName: 'files',
 			fieldLabel: GO.lang.upload,
 			max:1
 		});
