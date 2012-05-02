@@ -167,7 +167,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		$response = array();
 		
-		if(!$model->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
+		if(!$model->checkPermissionLevel($model->isNew?GO_Base_Model_Acl::CREATE_PERMISSION:GO_Base_Model_Acl::WRITE_PERMISSION))
 			throw new GO_Base_Exception_AccessDenied();
 		
 		$response = $this->beforeLoad($response, $model, $params);
