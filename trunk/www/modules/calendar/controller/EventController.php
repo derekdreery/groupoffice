@@ -204,7 +204,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				if (!empty($params['add_to_participant_calendars']) && $participant->user_id > 0 && $participant->user_id != $event->user_id) {
 					$calendar = GO_Calendar_Model_Calendar::model()->findDefault($participant->user_id);
 
-					if ($calendar && $calendar->getPermissionLevel() >= GO_Base_Model_Acl::WRITE_PERMISSION) {
+					if ($calendar && GO_Base_Model_Acl::hasPermission($calendar->getPermissionLevel(),GO_Base_Model_Acl::WRITE_PERMISSION)) {
 
 						$participantEvent = GO_Calendar_Model_Event::model()->findByUuid($event->uuid,0,$calendar->id);
 						if (!$participantEvent)
