@@ -29,9 +29,9 @@ GO.calendar.SelectCalendar = function(config){
 	this.store = new GO.data.JsonStore({
 		url: GO.url("calendar/calendar/calendarsWithGroup"),
 		baseParams:{
-			permissionLevel:GO.permissionLevels.write
+			permissionLevel:GO.permissionLevels.create
 		},
-		fields:['id','name', 'group_name', 'user_name', 'group_id', 'customfields'],
+		fields:['id','name', 'group_name', 'user_name', 'group_id', 'customfields','permissionLevel'],
 		remoteSort:true
 	});
 
