@@ -42,6 +42,8 @@ class GO_Servermanager_Controller_Trial extends GO_Base_Controller_AbstractContr
 				
 				
 				$this->render('trialcreated', array('installation'=>$installation));
+				
+				$this->newTrial->delete();
 				exit();
 			}
 		}
