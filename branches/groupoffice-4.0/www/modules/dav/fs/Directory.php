@@ -59,7 +59,7 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 
 		$folder = $this->_getFolder();
 
-		if ($folder->getPermissionLevel() < GO_Base_Model_Acl::WRITE_PERMISSION)
+		if (!$folder->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
 			throw new Sabre_DAV_Exception_Forbidden();
 
 		$newFile = new GO_Base_Fs_File($this->path . '/' . $name);
@@ -87,7 +87,7 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 
 		$folder = $this->_getFolder();
 
-		if ($folder->getPermissionLevel() < GO_Base_Model_Acl::WRITE_PERMISSION)
+		if (!$folder->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
 			throw new Sabre_DAV_Exception_Forbidden();
 		
 		$folder->name = $name;
@@ -116,7 +116,7 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 
 		$folder = $this->_getFolder();
 
-		if ($folder->getPermissionLevel() < GO_Base_Model_Acl::WRITE_PERMISSION)
+		if (!$folder->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
 			throw new Sabre_DAV_Exception_Forbidden();
 	
 		$destFsFolder = new GO_Base_Fs_Folder($newPath);		
@@ -144,7 +144,7 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 
 		$folder = $this->_getFolder();
 
-		if ($folder->getPermissionLevel() < GO_Base_Model_Acl::WRITE_PERMISSION)
+		if (!$folder->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
 			throw new Sabre_DAV_Exception_Forbidden();
 
 		$folder->addFolder($name);
@@ -235,7 +235,7 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 
 		$folder = $this->_getFolder();
 		
-		if ($folder->getPermissionLevel() < GO_Base_Model_Acl::DELETE_PERMISSION)
+		if (!$folder->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION))
 			throw new Sabre_DAV_Exception_Forbidden();
 
 
