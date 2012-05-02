@@ -2220,7 +2220,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				if($relation && $this->isModified($relation['field'])){
 					//acl relation changed. We must update linked emails
 					
-					GO::debug("Fixing linked e-mail acl's because relation ".$relation['name']." changed.");
+					GO::debug("Fixing linked e-mail acl's because relation ".$arr[0]." changed.");
 					
 					$stmt = GO_Savemailas_Model_LinkedEmail::model()->findLinks($this);
 					while($linkedEmail = $stmt->fetch()){
