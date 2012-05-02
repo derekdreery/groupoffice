@@ -342,8 +342,7 @@ $l["unsubscribeHref"]='Unsubscribe href';
 $l["addDocumentTemplate"]='Add document template';
 $l["documentTemplate"]='Document template';
 $l["copyingMessages"]='Copying messages...';
-$l['name'] = 'E-mail templates and addresslists';
-$l['description'] = 'Adds e-mail templates and addresslists for sending newsletters to the addressbook.';
+
 $l['templateAlreadyExists'] = 'The template you are trying to create already exists';
 $l['mailingAlreadyExists'] = 'The mailing you are trying to create already exists';
 $l['greet']='Best regards';
