@@ -422,7 +422,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		//locked state
 		$response['lock_state']=!empty($folder->apply_state);
 		$response['cm_state']=isset($folder->cm_state)?$folder->cm_state:"";
-		$response['may_apply_state']=$folder->getPermissionLevel()==  GO_Base_Model_Acl::MANAGE_PERMISSION;
+		$response['may_apply_state']=GO_Base_Model_Acl::hasPermission($folder->getPermissionLevel(), GO_Base_Model_Acl::MANAGE_PERMISSION);
 
 
 		$store = GO_Base_Data_Store::newInstance(GO_Files_Model_Folder::model());
