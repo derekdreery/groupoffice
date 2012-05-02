@@ -418,6 +418,7 @@ $l["adminMenu"]= 'Beheermenu';
 $l["extra"]='Extra';
 $l["permissionsLevel"]='Niveau';
 $l["permissionRead"]='Alleen lezen';
+$l["permissionCreate"]= 'Lezen en nieuwe toevoegen';
 $l["permissionWrite"]='Schrijven';
 $l["permissionDelete"]='Schrijven en verwijderen';
 $l["permissionManage"]='Beheren';
