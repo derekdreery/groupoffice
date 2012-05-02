@@ -354,7 +354,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					//this.selectCalendar.setValue(action.result.data.calendar_id);
 					this.selectCalendar.setRemoteText(action.result.remoteComboTexts.calendar_id);
 					
-					
+					this.setPermissionLevel(action.result.data.permission_level);
 					
 					if(GO.customfields)
 						GO.customfields.disableTabs(this.tabPanel, action.result);	
@@ -407,6 +407,16 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 		this.fireEvent('show', this);
 	},
+	setPermissionLevel : function(permissionLevel){
+		// Disable the eventStatus select box and set it to the default "NEEDS-ACTION" value
+		if(this.event_id == 0 && permissionLevel == GO.permissionLevels.create){
+			this.eventStatus.setValue('NEEDS-ACTION');
+			this.eventStatus.setDisabled(true);
+		}else{
+			this.eventStatus.setDisabled(false);
+		}
+	},
+	
 	updateResourcePanel : function()
 	{
 		var values = {};
@@ -955,6 +965,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 						GO.customfields.disableTabs(this.tabPanel, record.data);
 						this.selectCategory.setCalendarId(newValue);
 						this.selectCategory.reset();
+						// Set the permissionlevel so we know if we have the right permissions
+						this.setPermissionLevel(record.data.permissionLevel);
 					}
 				}
 			}),
