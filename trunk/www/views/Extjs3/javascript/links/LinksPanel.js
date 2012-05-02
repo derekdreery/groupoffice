@@ -166,7 +166,7 @@ GO.grid.LinksPanel = function(config){
 	
 	this.linksGrid.store.on('load', function(){
 		
-		this.setWritePermission(this.linksGrid.store.reader.jsonData.permissionLevel>GO.permissionLevels.read);
+		this.setWritePermission(this.linksGrid.store.reader.jsonData.permissionLevel>=GO.permissionLevels.write);
 		
 	}, this);
 	

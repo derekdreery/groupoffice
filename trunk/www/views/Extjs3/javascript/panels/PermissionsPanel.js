@@ -46,10 +46,11 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 						id:0,
 						fields : ['value', 'text'],
 						data : [
-							[1, GO.lang.permissionRead],
-							[2, GO.lang.permissionWrite],
-							[3, GO.lang.permissionDelete],
-							[4, GO.lang.permissionManage]
+							[10, GO.lang.permissionRead],
+							[20, GO.lang.permissionCreate],
+							[30, GO.lang.permissionWrite],
+							[40, GO.lang.permissionDelete],
+							[50, GO.lang.permissionManage]
 						]
 					}),
 					valueField : 'value',

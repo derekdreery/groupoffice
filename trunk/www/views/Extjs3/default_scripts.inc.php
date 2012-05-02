@@ -84,10 +84,11 @@ $scripts[]=$view_root_uri.'javascript/namespaces.js';
 	
 	
 	GO.permissionLevels={
-		read:1,
-		write:2,
-		writeAndDelete:3,
-		manage:4		
+		read:10,
+		create:20,
+		write:30,
+		writeAndDelete:40,
+		manage:50		
 	};
 
 <?php
