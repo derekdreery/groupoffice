@@ -92,6 +92,20 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	private $_attributeLabels;	
 	
 	/**
+	 * Force this activeRecord to save itself 
+	 * 
+	 * @var boolean 
+	 */
+	private $_forceSave = false;
+	
+	/**
+	 * See http://dev.mysql.com/doc/refman/5.1/en/insert-delayed.html
+	 * 
+	 * @var boolean 
+	 */
+	protected $insertDelayed=false;
+	
+	/**
 	 *
 	 * @var int Link type of this Model used for the link system. See also the linkTo function
 	 */
@@ -1075,6 +1089,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			else
 				$fields = $params['searchQueryFields'];
 			
+			
+			if(empty($fields))
+				throw new Exception("No automatic search fields defined for ".$this->className().". Maybe this model has no varchar fields? You can override function getFindSearchQueryParamFields() or you can supply them with GO_Base_Db_FindParams::searchFields()");
+			
 			//`name` LIKE "test" OR `content` LIKE "test"
 			
 			$first = true;
@@ -1355,9 +1373,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		//throw new Exception('Error: you supplied a searchQuery parameter to find but getFindSearchQueryParamFields() should be overriden in '.$this->className());
 		$fields = array();
 		foreach($this->columns as $field=>$attributes){
-			if($attributes['type']==PDO::PARAM_STR){
+//			if(isset($attributes['gotype']) && ($attributes['gotype']=='textfield' || $attributes['gotype']=='textarea')){
+//				$fields[]='`'.$prefixTable.'`.`'.$field.'`';
+//			}
+			if($field == 'keywords')
 				$fields[]='`'.$prefixTable.'`.`'.$field.'`';
-			}
 		}
 		
 		if($withCustomFields && $this->customfieldsRecord)
@@ -1496,7 +1516,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		return isset($r[$name]);		
 	}
 	
-	private function _getRelation($name){
+	protected function getRelation($name){
 		$r= $this->relations();
 		
 		if(!isset($r[$name]))
@@ -1918,7 +1938,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	private function _validateUniqueColumns(){
 		foreach($this->columns as $field=>$attributes){
 		
-			if(!empty($attributes['unique'])){
+			if(!empty($attributes['unique']) && !empty($this->_attributes[$field])){
 				
 				$relatedAttributes = array($field);
 				if(is_array($attributes['unique']))
@@ -2034,7 +2054,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 		
 		//Don't do anything if nothing has been modified.
-		if(!$this->isNew && !$this->isModified() && (!$this->customfieldsRecord || !$this->customfieldsRecord->isModified()))
+		if(!$this->_forceSave && !$this->isNew && !$this->isModified() && (!$this->customfieldsRecord || !$this->customfieldsRecord->isModified()))
 			return true;
 
 
@@ -2130,18 +2150,22 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$this->customfieldsRecord->save();
 		}
 		
+		$this->_log($wasNew ? GO_Log_Model_Log::ACTION_ADD : GO_Log_Model_Log::ACTION_UPDATE);
+		
+		
 
 		if(!$this->afterSave($wasNew)){
 			GO::debug("WARNING: ".$this->className()."::afterSave returned false or no value");
 			return false;
 		}
 		
-		$this->_fixLinkedEmailAcls();
+		if(!$wasNew)
+			$this->_fixLinkedEmailAcls();
 
 		/**
 		 * Useful event for modules. For example custom fields can be loaded or a files folder.
 		 */
-		$this->fireEvent('save',array(&$this));
+		$this->fireEvent('save',array(&$this,$wasNew));
 
 
 		$this->cacheSearchRecord();
@@ -2149,6 +2173,39 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$this->_modifiedAttributes = array();
 
 		return true;
+	}
+	
+	/**
+	 * Get the message for the log module. Returns the contents of the first text column by default.
+	 * 
+	 * @return string 
+	 */
+	public function getLogMessage($action){
+		
+		$attr = $this->getCacheAttributes();
+		if($attr){
+			$msg = $attr['name'];
+			if(isset($attr['description']))
+				$msg.="\n".$attr['description'];
+			return substr($msg,0,255);
+		}else
+			return false;
+	}
+	
+	private function _log($action){
+	
+		$message = $this->getLogMessage($action);
+		if($message && GO::modules()->isInstalled('log')){			
+			$log = new GO_Log_Model_Log();
+			
+			$pk = $this->pk;
+			$log->model_id=is_array($pk) ? var_export($pk, true) : $pk;
+			
+			$log->action=$action;
+			$log->model=$this->className();			
+			$log->message = $message;
+			$log->save();
+		}
 	}
 	
 	/**
@@ -2161,12 +2218,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$arr = explode('.', $this->aclField());
 			if (count($arr) > 1) {
 				
-				$relation = $this->_getRelation($arr[0]);
+				$relation = $this->getRelation($arr[0]);
 				
 				if($relation && $this->isModified($relation['field'])){
 					//acl relation changed. We must update linked emails
 					
-					GO::debug("Fixing linked e-mail acl's because relation $relation changed.");
+					GO::debug("Fixing linked e-mail acl's because relation ".$relation['name']." changed.");
 					
 					$stmt = GO_Savemailas_Model_LinkedEmail::model()->findLinks($this);
 					while($linkedEmail = $stmt->fetch()){
@@ -2365,8 +2422,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		{
 			if(isset($this->$key)){
 				$value = $this->$key;
-				if(($attr['gotype']=='textfield' || $attr['gotype']=='textarea') && !in_array($value,$keywords)){
-					$keywords[]=$value;
+				if(($attr['gotype']=='textfield' || $attr['gotype']=='customfield' || $attr['gotype']=='textarea') && !in_array($value,$keywords)){
+					if(!empty($value))
+						$keywords[]=$value;
 				}
 			}
 		}
@@ -2413,7 +2471,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 
 		
-		$sql = "INSERT INTO `{$this->tableName()}` (`".implode('`,`', $fieldNames)."`) VALUES ".
+		$sql = "INSERT ";
+		
+		if($this->insertDelayed)
+			$sql .= "DELAYED ";
+		
+		$sql .= "INTO `{$this->tableName()}` (`".implode('`,`', $fieldNames)."`) VALUES ".
 					"(:".implode(',:', $fieldNames).")";
 
 		if($this->_debugSql)			
@@ -2617,6 +2680,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$success = $this->getDbConnection()->query($sql);		
 		if(!$success)
 			throw new Exception("Could not delete from database");
+		
+		$this->_log(GO_Log_Model_Log::ACTION_DELETE);
 		
 		$attr = $this->getCacheAttributes();
 		
@@ -2901,7 +2966,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	private function _linkExists($model){		
-		if($model instanceof GO_Base_Model_SearchCacheRecord){
+		if($model->className()=="GO_Base_Model_SearchCacheRecord"){
 			$model_id = $model->model_id;
 			$model_type_id = $model->model_type_id;
 		}else
@@ -2910,10 +2975,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$model_type_id = $model->modelTypeId();
 		}
 		
-		$table = $this instanceof GO_Base_Model_SearchCacheRecord ? GO::getModel($this->model_name)->model()->tableName() : $this->tableName();
+		$table = $this->className()=="GO_Base_Model_SearchCacheRecord" ? GO::getModel($this->model_name)->model()->tableName() : $this->tableName();		
+		$this_id = $this->className()=="GO_Base_Model_SearchCacheRecord" ? $this->model_id : $this->id;
 		
 		$sql = "SELECT count(*) FROM `go_links_$table` WHERE ".
-			"`id`=".intval($this->id)." AND model_type_id=".$model_type_id." AND `model_id`=".$model_id;
+			"`id`=".intval($this_id)." AND model_type_id=".$model_type_id." AND `model_id`=".$model_id;
 		$stmt = $this->getDbConnection()->query($sql);
 		return $stmt->fetchColumn(0) > 0;		
 	}
@@ -3330,7 +3396,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		if(!$this->hasManyMany($relationName, $foreignPk)){
 			
-			$r = $this->_getRelation($relationName);
+			$r = $this->getRelation($relationName);
 			
 			if($this->isNew)
 				throw new Exception("Can't add manymany relation to a new model. Call save() first.");
@@ -3374,7 +3440,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 
 	public function removeAllManyMany($relationName){
-		$r = $this->_getRelation($relationName);
+		$r = $this->getRelation($relationName);
 		if(!$r)
 			throw new Exception("Relation '$relationName' not found in GO_Base_Db_ActiveRecord::hasManyMany()");
 		$linkModel = GO::getModel($r['linkModel']);
@@ -3391,7 +3457,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
    * @return GO_Base_Db_ActiveRecord or false 
    */
   public function hasManyMany($relationName, $foreignPk){
-		$r = $this->_getRelation($relationName);
+		$r = $this->getRelation($relationName);
 		if(!$r)
 			throw new Exception("Relation '$relationName' not found in GO_Base_Db_ActiveRecord::hasManyMany()");
 		
@@ -3527,6 +3593,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$this->filesFolder->moveContentsFrom($sourceFolder);		
 	}
+	
+	/**
+	 * This function forces this activeRecord to save itself.
+	 */
+	public function forceSave(){
+		
+		$this->_forceSave=true;
+	}	
 	
 	/**
 	 * Override this if you need to do extra stuff after merging.

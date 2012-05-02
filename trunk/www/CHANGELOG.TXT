@@ -1,4 +1,4 @@
-20-03-2012 3.9.00 (4.0 beta)
+11-04-2012 4.0.1 (beta)
 - Complete new MVC PHP framework
 - Extensive security audit by Cigitel.
 - Users are stored in the addressbook too.

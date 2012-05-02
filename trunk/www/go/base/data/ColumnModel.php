@@ -32,7 +32,7 @@ class GO_Base_Data_ColumnModel {
 	//private $_sortFieldsAliases=array();
 
 	private $_modelFormatType='html';
-
+	
 	/**
 	 * Constructor of the ColumnModel class.
 	 * 
@@ -161,7 +161,26 @@ class GO_Base_Data_ColumnModel {
 	 * @return GO_Base_Data_Column 
 	 */
 	public function getColumn($dataindex){
+		
+		if(empty($this->_columns[$dataindex]))
+			return false;
 		return $this->_columns[$dataindex];
+	}
+	
+	public function sort($columnNames){
+		
+		
+		for($i=0;$i<count($columnNames);$i++){
+			$column = $this->getColumn($columnNames[$i]);
+			if($column){
+				$column->setSortIndex($i);
+				$this->_columnSort[$columnNames[$i]]=$i;
+			}
+		}
+		
+		unset($this->_columnsSorted);
+		$this->_sortColumns();
+		
 	}
 	
 	
@@ -292,5 +311,9 @@ class GO_Base_Data_ColumnModel {
 		$this->_formatRecordFunction = $func;
 		
 		return $this;
+	}
+	
+	public function getColumnCount() {
+		return count($this->_columns);
 	}
 }

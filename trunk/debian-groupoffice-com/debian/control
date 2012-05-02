@@ -9,7 +9,7 @@ Homepage: http://www.group-office.com
 
 Package: groupoffice-com
 Architecture: all
-Depends: libapache2-mod-php5,
+Depends: libapache2-mod-php5 (>= 5.3),
 	mysql-server,
 	php5-mysql | php5-mysqli,
 	php5-gd,

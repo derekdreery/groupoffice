@@ -28,7 +28,7 @@ class GO_Comments_Controller_Comment extends GO_Base_Controller_AbstractModelCon
 		////GO_Base_Model_SearchCacheRecord::model()->findByPk(array('model_id'=>$params['model_id'], 'model_type_id'=>GO_Base_Model_ModelType::model()->findByModelName($params['model_name'])));
 
 		$response['permisson_level']=$model->permissionLevel;
-		$response['write_permission']=$model->permissionLevel>  GO_Base_Model_Acl::WRITE_PERMISSION;
+		$response['write_permission']=$model->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION);
 		if(!$response['permisson_level'])
 		{
 			throw new AccessDeniedException();

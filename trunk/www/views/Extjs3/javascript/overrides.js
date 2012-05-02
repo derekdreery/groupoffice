@@ -277,7 +277,11 @@ Ext.override(Ext.Component, {
  */
 Ext.decode = Ext.util.JSON.decode = function(json){
 	try{
-		return eval("(" + json + ')');
+		var json = eval("(" + json + ')');
+		if(json && json.redirectToLogin)
+			document.location.href=BaseHref;
+		
+		return json;
 	}
 	catch (e)
 	{

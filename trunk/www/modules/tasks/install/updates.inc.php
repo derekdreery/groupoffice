@@ -67,3 +67,5 @@ $updates["201112221547"][]="CREATE TABLE IF NOT EXISTS `cf_ta_tasks` (
 $updates["201112221547"][]="ALTER TABLE `ta_tasks` ADD `percentage_complete` TINYINT NOT NULL DEFAULT '0'";
 $updates["201112221547"][]="ALTER TABLE `ta_tasks` ADD `project_id` INT NOT NULL DEFAULT '0'";
 $updates["201201121400"][]="ALTER TABLE `ta_tasklists` DROP `acl_write`";
+
+$updates["201204231436"][]="ALTER TABLE `ta_tasks` DROP `project_name`;";

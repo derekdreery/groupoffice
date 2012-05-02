@@ -122,20 +122,20 @@ class GO{
 		return self::$db;
 	}
 	
-	public static function setDbConnection($dbname="", $dbuser="", $dbpass="", $dbhost=""){
+	public static function setDbConnection($dbname=false, $dbuser=false, $dbpass=false, $dbhost=false){
 		
 		self::$db=null;
 		
-		if($dbname=="")
+		if($dbname===false)
 			$dbname=GO::config()->db_name;
 		
-		if($dbuser=="")
+		if($dbuser===false)
 			$dbuser=GO::config()->db_user;
 		
-		if($dbpass=="")
+		if($dbpass===false)
 			$dbpass=GO::config()->db_pass;
 
-		if($dbhost=="")
+		if($dbhost===false)
 			$dbhost=GO::config()->db_host;
 		
 		GO::debug("Connect: mysql:host=$dbhost;dbname=$dbname, $dbuser, ***");
@@ -409,7 +409,13 @@ class GO{
 					$log .= $_SERVER['REQUEST_URI'];
 
 				GO::debug($log);
-				GO::debug("User agent: ".$_SERVER['HTTP_USER_AGENT']." IP: ".$_SERVER['REMOTE_ADDR']);
+				
+				if(PHP_SAPI!='cli')				
+					GO::debug("User agent: ".(isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "unknown")." IP: ".$_SERVER['REMOTE_ADDR']);
+				else
+					GO::debug("User agent: CLI");
+				
+				GO::debug("Config file: ".GO::config()->get_config_file());
 			}
 			//undo magic quotes if magic_quotes_gpc is enabled. It should be disabled!
 			if (get_magic_quotes_gpc()) {
@@ -511,10 +517,10 @@ class GO{
 
 		if (self::config()->log) {
 
-			if (empty(GO::session()->logdircheck)) {
+			if (empty(GO::session()->values["logdircheck"])) {
 				$folder = new GO_Base_Fs_Folder(dirname(self::config()->info_log));
 				$folder->create();				
-				GO::session()->logdircheck = true;
+				GO::session()->values["logdircheck"] = true;
 			}
 
 			$msg = '[' . date('Y-m-d G:i:s') . ']';

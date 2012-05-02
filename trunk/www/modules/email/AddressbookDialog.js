@@ -227,25 +227,22 @@ Ext.extend(GO.email.AddressbookDialog, Ext.Window, {
 				
 		if (this.mailingsGrid && activeGrid == this.mailingsGrid) {
 					
-			var mailing_groups = [];
+			var addresslists = [];
 					
 			for(var i=0;i<selections.length;i++)
 			{
-				mailing_groups.push(selections[i].data.id);
-			}
-					
-			this.el.mask(GO.lang.waitMsgLoad);
-			Ext.Ajax.request({
-				url: GO.settings.modules.mailings.url+'json.php',
-				params: {
-					task:'mailing_group_string',
-					mailing_groups: mailing_groups.join(',')
+				addresslists.push(selections[i].data.id);
+			}					
+
+			GO.request({
+				maskEl: this.getEl(),
+				url: "addressbook/addresslist/getRecipientsAsString",
+				params: {					
+					addresslists: Ext.encode(addresslists)
 				},
-				callback: function(options, success, response)
-				{
-					str = response.responseText;
-					this.fireEvent('addrecipients', field, str);
-					this.el.unmask();
+				success: function(options, response, result)
+				{					
+					this.fireEvent('addrecipients', field, result.recipients);
 				},
 				scope:this
 			});
@@ -261,16 +258,14 @@ Ext.extend(GO.email.AddressbookDialog, Ext.Window, {
 			}
 
 			this.el.mask(GO.lang.waitMsgLoad);
-			Ext.Ajax.request({
-				url: GO.settings.modules.groups.url+'non_admin_json.php',
+			GO.request({
+				url: "groups/group/getRecipientsAsString",
 				params: {
-					task:'user_groups_string',
-					user_groups: user_groups.join(',')
+					groups: Ext.encode(user_groups)
 				},
-				callback: function(options, success, response)
+				success: function(options, response, result)
 				{
-					str = response.responseText;
-					this.fireEvent('addrecipients', field, str);
+					this.fireEvent('addrecipients', field, result.recipients);
 					this.el.unmask();
 				},
 				scope:this

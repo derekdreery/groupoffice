@@ -79,6 +79,10 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	protected function getCacheAttributes() {
 		return array('name'=>$this->name, 'description'=>$this->path);
 	}
+	
+	public function getLogMessage($action){
+		return $this->path;
+	}
 	/**
 	 * Here you can define the relations of this model with other models.
 	 * See the parent class for a more detailed description of the relations.
@@ -219,7 +223,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		
 		$existingFile = $this->folder->hasFile($this->name);
 		if($existingFile && $existingFile->id!=$this->id)
-			throw new Exception(GO::t('filenameExists','files'));
+			throw new Exception(sprintf(GO::t('filenameExists','files'), $this->path));
 		
 		return parent::beforeSave();
 	}
@@ -272,7 +276,14 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @return string 
 	 */
-	public function getEmailDownloadURL($html=true) {
+	public function getEmailDownloadURL($html=true, $newExpireTime=false) {
+		
+		if($newExpireTime){
+			$this->random_code=GO_Base_Util_String::randomPassword(11,'a-z,A-Z,0-9');
+			$this->expire_time = $newExpireTime;
+			$this->save();
+		}
+		
 		if (!empty($this->expire_time) && !empty($this->random_code)) {
 			return GO::url('files/file/download', array('id'=>$this->id,'random_code'=>$this->random_code,'inline'=>'false'), false, $html);
 		}

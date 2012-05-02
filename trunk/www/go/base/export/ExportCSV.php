@@ -38,8 +38,12 @@ class GO_Base_Export_ExportCSV extends GO_Base_Export_AbstractExport {
 	public function output(){
 		$this->_sendHeaders();
 		
-		if($this->header)
-			$this->_write(array_keys ($this->getLabels()));
+		if($this->header){
+			if($this->humanHeaders)
+				$this->_write(array_values($this->getLabels()));
+			else
+				$this->_write(array_keys($this->getLabels()));
+		}
 		
 		while($record = $this->store->nextRecord()){
 			$record = $this->prepareRecord($record);

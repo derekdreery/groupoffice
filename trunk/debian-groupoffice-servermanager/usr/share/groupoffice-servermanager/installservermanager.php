@@ -1,13 +1,18 @@
 #!/usr/bin/php
 <?php
-require_once('/etc/groupoffice/config.php');
-require($config['root_path'].'Group-Office.php');
+require('/etc/groupoffice/config.php');
+require($config['root_path'].'GO.php');
 
+GO::setIgnoreAclPermissions();
 
-
-
-if(!isset($GLOBALS['GO_MODULES']->modules['servermanager']))
-{
-	$GLOBALS['GO_MODULES']->add_module('servermanager');
+try{	
+	if(!GO::modules()->isInstalled('servermanager')){
+		$module = new GO_Base_Model_Module();
+		$module->id = 'servermanager';
+		$module->save();
+	}	
+}
+catch(Exception $e){
+	echo 'ERROR: '.$e->getMessage();
 }
 

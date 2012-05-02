@@ -90,6 +90,10 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	public function tableName() {
 		return 'fs_folders';
 	}
+	
+	public function getLogMessage($action){
+		return $this->path;
+	}
 
 	/**
 	 * Here you can define the relations of this model with other models.
@@ -165,7 +169,15 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	protected function afterSave($wasNew) {
 
 		if ($wasNew) {
+			
 			$this->fsFolder->create();
+			
+			//sync parent timestamp
+			if($this->parent){
+				$this->parent->mtime=$this->parent->fsFolder->mtime();
+				$this->parent->save();			
+			}
+			
 		} else {
 			
 			unset($this->_path);
@@ -314,7 +326,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 
 	
 	/**
-	 * Add a file to this folder
+	 * Add a file to this folder. The file must already be present on the filesystem.
 	 * 
 	 * @param String $name
 	 * @return GO_Files_Model_File 
@@ -365,10 +377,15 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * @param String $name
 	 * @return GO_Files_Model_Folder 
 	 */
-	public function addFolder($name, $syncFileSystem=false){
+	public function addFolder($name, $syncFileSystem=false, $syncOnNextAccess=false){
 		$folder = new GO_Files_Model_Folder();
 		$folder->parent_id = $this->id;
 		$folder->name = $name;
+		
+		//file manager will compare database timestamp with filesystem when it's accessed.
+		if($syncOnNextAccess)
+			$folder->mtime=1;
+			
 		$folder->save();
 		
 		if($syncFileSystem)
@@ -386,9 +403,15 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 */
 	public function syncFilesystem($recurseAll=false, $recurseOneLevel=true) {
 
+		if(GO::config()->debug)
+			GO::debug("syncFilesystem ".$this->path);
+		
 		$oldCache = GO::$disableModelCache;
 		
 		GO::$disableModelCache=true;
+		
+//		if(class_exists("GO_Filesearch_FilesearchModule"))
+//			GO_Filesearch_FilesearchModule::$disableIndexing=true;
 		
 		if($this->fsFolder->exists()){
 			$items = $this->fsFolder->ls();
@@ -404,11 +427,14 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 
 				}else
 				{
+					
+					$willSync = $recurseOneLevel || $recurseAll;
+					
 					$folder = $this->hasFolder($item->name());
 					if(!$folder)
-						$folder = $this->addFolder($item->name());
+						$folder = $this->addFolder($item->name(), false, !$willSync);
 
-					if($recurseOneLevel || $recurseAll)
+					if($willSync)
 						$folder->syncFilesystem($recurseAll, false);				
 				}
 			}
@@ -441,10 +467,12 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		if(!$this->fsFolder->exists())
 			throw new Exception("Folder ".$this->path." doesn't exist on the filesystem! Please run a database check.");
 		
+		GO::debug('checkFsSync '.$this->path.' : '.$this->mtime.' < '.$this->fsFolder->mtime());
+		
 		if($this->mtime < $this->fsFolder->mtime()){
 			GO::debug("Filesystem folder ".$this->path." is not in sync with database. Will sync now.");
 			$this->syncFilesystem ();
-			$this->mtime=time();
+			$this->mtime=$this->fsFolder->mtime();
 			$this->save();
 		}
 	}

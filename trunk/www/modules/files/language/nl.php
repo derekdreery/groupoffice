@@ -85,3 +85,5 @@ $l['lock']='Vergrendelen';
 
 $l['deletedDownloadLink']='Verwijderen';
 $l['deleteDownloadLink']='Je staat op het punt om deze link te verwijderen, weet je het zeker?';
+
+$l['createDownloadLink']='Maak downloadlink';

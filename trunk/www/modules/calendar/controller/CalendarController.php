@@ -88,21 +88,21 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		return $record;
 	}	
 	
-	public function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
+//	public function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
 			
-		if(!empty($params['tasklists'])){
-			$visible_tasklists = json_decode($params['tasklists']);
+//		if(!empty($params['tasklists'])){
+//			$visible_tasklists = json_decode($params['tasklists']);
+//		
+//			foreach($visible_tasklists as $vtsklst) {
+//				if($vtsklst->visible)
+//					$model->addManyMany('visible_tasklists', $vtsklst->id);
+//				else
+//					$model->removeManyMany ('visible_tasklists', $vtsklst->id);
+//			}
+//		}
 		
-			foreach($visible_tasklists as $vtsklst) {
-				if($vtsklst->visible)
-					$model->addManyMany('visible_tasklists', $vtsklst->id);
-				else
-					$model->removeManyMany ('visible_tasklists', $vtsklst->id);
-			}
-		}
-		
-		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
-	}
+//		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
+//	}
 	
 	public function actionImportIcs($params) {
 		$response = array( 'success' => true );

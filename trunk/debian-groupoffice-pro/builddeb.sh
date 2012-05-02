@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROMODULES="sync customfields gota caldav documenttemplates savemailas projects professional timeregistration hoursapproval billing tickets";
+PROMODULES="sync customfields gota caldav documenttemplates savemailas projects professional timeregistration hoursapproval tickets syncml";
 
 # useful: DEBCONF_DEBUG="developer"
 
@@ -15,7 +15,7 @@ else
 FULLPATH=''
 fi
 
-VERSION=`cat ../www/classes/base/config.class.inc.php | grep '$version' | sed -e 's/[^0-9\.]*//g'`
+VERSION=`cat ../www/go/base/Config.php | grep '$version' | sed -e 's/[^0-9\.]*//g'`
 
 if [[ $VERSION =~ ^([0-9]\.[0-9])\.[0-9]{1,2}$ ]]; then
 	MAJORVERSION=${BASH_REMATCH[1]}
@@ -45,16 +45,18 @@ for m in $PROMODULES; do
 	cp -R /var/www/release/packages/groupoffice-pro-$VERSION/modules/$m groupoffice-pro-$VERSION/usr/share/groupoffice/modules/
 done
 
-cp -R /var/www/release/packages/billing-$VERSION/billing groupoffice-pro-$VERSION/usr/share/groupoffice/modules
+#cp -R /var/www/release/packages/billing-$VERSION/billing groupoffice-pro-$VERSION/usr/share/groupoffice/modules
 
 cd groupoffice-pro-$VERSION
 
 if [ "$1" == "send" ]; then
 	debuild -rfakeroot
 	cd ..
-	scp *.deb mschering@imfoss.nl:/var/www/groupoffice/repos.groupoffice.eu/groupoffice/poolthreeseven/main/
+	scp *.deb mschering@imfoss.nl:/var/www/groupoffice/repos.groupoffice.eu/groupoffice/poolfourzero/main/
 
 	#ssh mschering@imfoss.nl "dpkg-scanpackages /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary /dev/null | gzip -9c > /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary/Packages.gz"
 else
-	debuild -S -rfakeroot
+	debuild -rfakeroot
+	cd ..
+	mv *.deb ../
 fi

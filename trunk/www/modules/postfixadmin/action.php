@@ -116,48 +116,48 @@ try{
 
 		case 'save_domain':
 
-			$domain = array();
-
-			$domain_id=$domain['id']=isset($_POST['domain_id']) ? ($_POST['domain_id']) : 0;
-
-			if(isset($_POST['user_id']))
-			$domain['user_id']=$_POST['user_id'];
-			
-			$domain['description']=$_POST['description'];
-			if(isset($_POST['aliases']))
-				$domain['aliases']=$_POST['aliases'];
-				
-			if(isset($_POST['mailboxes']))
-				$domain['mailboxes']=$_POST['mailboxes'];
-				
-			if(isset($_POST['maxquota']))
-				$domain['maxquota']=Number::to_phpnumber($_POST['maxquota'])*1024;;
-				
-			if(isset($_POST['quota']))
-				$domain['quota']=Number::to_phpnumber($_POST['quota'])*1024;;
-				
-			$domain['transport']='virtual';
-			//$domain['backupmx']=$_POST['backupmx'];
-			$domain['backupmx']=isset($_POST['backupmx']) ? '1' : '0';
-			$domain['active']=isset($_POST['active']) ? '1' : '0';
-
-			if($domain['id']>0)
-			{
-				$postfixadmin->update_domain($domain);
-				$response['success']=true;
-			}else
-			{
-				$domain['domain']=$_POST['domain'];
-				
-				$domain['user_id']=$GLOBALS['GO_SECURITY']->user_id;
-
-				$response['acl_id']=$domain['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('domain');
-
-				$domain_id= $postfixadmin->add_domain($domain);
-
-				$response['domain_id']=$domain_id;
-				$response['success']=true;
-			}
+//			$domain = array();
+//
+//			$domain_id=$domain['id']=isset($_POST['domain_id']) ? ($_POST['domain_id']) : 0;
+//
+//			if(isset($_POST['user_id']))
+//			$domain['user_id']=$_POST['user_id'];
+//			
+//			$domain['description']=$_POST['description'];
+//			if(isset($_POST['aliases']))
+//				$domain['aliases']=$_POST['aliases'];
+//				
+//			if(isset($_POST['mailboxes']))
+//				$domain['mailboxes']=$_POST['mailboxes'];
+//				
+//			if(isset($_POST['maxquota']))
+//				$domain['maxquota']=Number::to_phpnumber($_POST['maxquota'])*1024;;
+//				
+//			if(isset($_POST['quota']))
+//				$domain['quota']=Number::to_phpnumber($_POST['quota'])*1024;;
+//				
+//			$domain['transport']='virtual';
+//			//$domain['backupmx']=$_POST['backupmx'];
+//			$domain['backupmx']=isset($_POST['backupmx']) ? '1' : '0';
+//			$domain['active']=isset($_POST['active']) ? '1' : '0';
+//
+//			if($domain['id']>0)
+//			{
+//				$postfixadmin->update_domain($domain);
+//				$response['success']=true;
+//			}else
+//			{
+//				$domain['domain']=$_POST['domain'];
+//				
+//				$domain['user_id']=$GLOBALS['GO_SECURITY']->user_id;
+//
+//				$response['acl_id']=$domain['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('domain');
+//
+//				$domain_id= $postfixadmin->add_domain($domain);
+//
+//				$response['domain_id']=$domain_id;
+//				$response['success']=true;
+//			}
 
 
 
@@ -310,36 +310,36 @@ try{
 			
 		case 'save_mailbox':
 
-			if($_POST['password1']!=$_POST['password2'])
-			throw new Exception($lang['common']['passwordMatchError']);
-
-			$mailbox_id=$mailbox['id']=isset($_POST['mailbox_id']) ? ($_POST['mailbox_id']) : 0;
-
-			$mailbox['domain_id']=$_POST['domain_id'];
-
-			$domain = $postfixadmin->get_domain($mailbox['domain_id']);		
+//			if($_POST['password1']!=$_POST['password2'])
+//			throw new Exception($lang['common']['passwordMatchError']);
+//
+//			$mailbox_id=$mailbox['id']=isset($_POST['mailbox_id']) ? ($_POST['mailbox_id']) : 0;
+//
+//			$mailbox['domain_id']=$_POST['domain_id'];
+//
+//			$domain = $postfixadmin->get_domain($mailbox['domain_id']);		
 			
 			if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $domain['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
-				throw new AccessDeniedException();			
+				throw new AccessDeniedException();
 
-			if(!empty($_POST['password1']))
-				$mailbox['password']=md5(trim($_POST['password1']));
+//			if(!empty($_POST['password1']))
+//				$mailbox['password']=md5(trim($_POST['password1']));
+//			
+//			$mailbox['name']=$_POST['name'];
+//			$mailbox['quota']=Number::to_phpnumber($_POST['quota'])*1024;
+//			
+//			if(!empty($domain['maxquota']) && empty($mailbox['quota']))
+//			{
+//				throw new Exception('You are not allowed to disable quota');
+//			}
+//
+//			$mailbox['active']=isset($_POST['active']) ? '1' : '0';
 			
-			$mailbox['name']=$_POST['name'];
-			$mailbox['quota']=Number::to_phpnumber($_POST['quota'])*1024;
+//			$mailbox['go_installation_id']=isset($_POST['go_installation_id']) ? (trim($_POST['go_installation_id'])) : '';
 			
-			if(!empty($domain['maxquota']) && empty($mailbox['quota']))
-			{
-				throw new Exception('You are not allowed to disable quota');
-			}
-
-			$mailbox['active']=isset($_POST['active']) ? '1' : '0';
-			
-			$mailbox['go_installation_id']=isset($_POST['go_installation_id']) ? (trim($_POST['go_installation_id'])) : '';
-			
-			$mailbox['vacation_active']=isset($_POST['vacation_active']) ? '1' : '0';
-			$mailbox['vacation_subject']=$_POST['vacation_subject'];
-			$mailbox['vacation_body']=$_POST['vacation_body'];
+//			$mailbox['vacation_active']=isset($_POST['vacation_active']) ? '1' : '0';
+//			$mailbox['vacation_subject']=$_POST['vacation_subject'];
+//			$mailbox['vacation_body']=$_POST['vacation_body'];
 			
 			
 			
@@ -347,101 +347,101 @@ try{
 			if($mailbox['id']>0)
 			{
 				$old_mailbox = $postfixadmin->get_mailbox($mailbox['id']);
-				$vacation_alias = str_replace('@','#', $old_mailbox['username']).'@'.$GLOBALS['GO_CONFIG']->postfixadmin_autoreply_domain;		
+//				$vacation_alias = str_replace('@','#', $old_mailbox['username']).'@'.$GLOBALS['GO_CONFIG']->postfixadmin_autoreply_domain;		
 
 				if(!empty($domain['maxquota']))// && $old_mailbox['quota']!=$mailbox['quota'])
 				{
-					$totalquota=$postfixadmin->sum_quota($domain['id'])-$old_mailbox['quota'];				
-					if($totalquota+$mailbox['quota']>$domain['maxquota'])
-					{
-						$left = $domain['maxquota']-$totalquota;
-						throw new Exception('The maximum quota has been reached. You have '.Number::format($left/1024).'MB left');
-					}
+//					$totalquota=$postfixadmin->sum_quota($domain['id'])-$old_mailbox['quota'];				
+//					if($totalquota+$mailbox['quota']>$domain['maxquota'])
+//					{
+//						$left = $domain['maxquota']-$totalquota;
+//						throw new Exception('The maximum quota has been reached. You have '.Number::format($left/1024).'MB left');
+//					}
 				}
 				
 				$postfixadmin->update_mailbox($mailbox);
 				
-				if($old_mailbox['vacation_active']=='1' && $mailbox['vacation_active']=='0')
-				{	
-					$alias = $postfixadmin->get_alias_by_address($old_mailbox['username']);
-									
-					$up_alias['id']=$alias['id'];
-					$up_alias['goto']= preg_replace ( "/$vacation_alias,/", '', $alias['goto']);
-          $up_alias['goto']= preg_replace ( "/,$vacation_alias/", '', $up_alias['goto']);
-          $up_alias['goto']= preg_replace ( "/$vacation_alias/", '', $up_alias['goto']);
-          
-					$postfixadmin->update_alias($up_alias);
-					
-					$postfixadmin->remove_notifications($old_mailbox['username']);
-					
-				}elseif($old_mailbox['vacation_active']=='0' && $mailbox['vacation_active']=='1')
-				{
-					$alias = $postfixadmin->get_alias_by_address($old_mailbox['username']);
-					
-					$up_alias['id']=$alias['id'];
-					$up_alias['goto']= $alias['goto'];
-					
-					if(!empty($up_alias['goto']))
-						$up_alias['goto'] .= ',';
-						
-          $up_alias['goto'] .=$vacation_alias;
-          
-					$postfixadmin->update_alias($up_alias);
-				}
+//				if($old_mailbox['vacation_active']=='1' && $mailbox['vacation_active']=='0')
+//				{	
+//					$alias = $postfixadmin->get_alias_by_address($old_mailbox['username']);
+//									
+//					$up_alias['id']=$alias['id'];
+//					$up_alias['goto']= preg_replace ( "/$vacation_alias,/", '', $alias['goto']);
+//          $up_alias['goto']= preg_replace ( "/,$vacation_alias/", '', $up_alias['goto']);
+//          $up_alias['goto']= preg_replace ( "/$vacation_alias/", '', $up_alias['goto']);
+//          
+//					$postfixadmin->update_alias($up_alias);
+//					
+//					$postfixadmin->remove_notifications($old_mailbox['username']);
+//					
+//				}elseif($old_mailbox['vacation_active']=='0' && $mailbox['vacation_active']=='1')
+//				{
+//					$alias = $postfixadmin->get_alias_by_address($old_mailbox['username']);
+//					
+//					$up_alias['id']=$alias['id'];
+//					$up_alias['goto']= $alias['goto'];
+//					
+//					if(!empty($up_alias['goto']))
+//						$up_alias['goto'] .= ',';
+//						
+//          $up_alias['goto'] .=$vacation_alias;
+//          
+//					$postfixadmin->update_alias($up_alias);
+//				}
 				
 				$response['success']=true;
 			}else
 			{
 				
 				
-				$mailbox['maildir']=$domain['domain'].'/'.trim($_POST['username']).'/';
-				$mailbox['username']=(str_replace('@'.$domain['domain'], '', trim($_POST['username']))).'@'.$domain['domain'];
-				
-				if($postfixadmin->get_mailbox_by_username($mailbox['username']))
-					throw new Exception('The mailbox already exist');
-					
-				if(!empty($domain['mailboxes']))
-				{
-					$mailboxcount=$postfixadmin->get_mailboxes($domain['id']);				
-					if($mailboxcount>=$domain['mailboxes'])
-					{
-						throw new Exception('The maximum number of mailboxes has been reached');
-					}
-				}
-				
-				if(!empty($domain['maxquota']))
-				{
-					$totalquota=$postfixadmin->sum_quota($domain['id']);				
-					if($totalquota+$mailbox['quota']>$domain['maxquota'])
-					{
-						$left = $domain['maxquota']-$totalquota;
-						throw new Exception('The maximum quota has been reached. You have '.Number::format($left/1024).'MB left');
-					}
-				}				
+//				$mailbox['maildir']=$domain['domain'].'/'.trim($_POST['username']).'/';
+//				$mailbox['username']=(str_replace('@'.$domain['domain'], '', trim($_POST['username']))).'@'.$domain['domain'];
+//				
+//				if($postfixadmin->get_mailbox_by_username($mailbox['username']))
+//					throw new Exception('The mailbox already exist');
+//					
+//				if(!empty($domain['mailboxes']))
+//				{
+//					$mailboxcount=$postfixadmin->get_mailboxes($domain['id']);				
+//					if($mailboxcount>=$domain['mailboxes'])
+//					{
+//						throw new Exception('The maximum number of mailboxes has been reached');
+//					}
+//				}
+//				
+//				if(!empty($domain['maxquota']))
+//				{
+//					$totalquota=$postfixadmin->sum_quota($domain['id']);				
+//					if($totalquota+$mailbox['quota']>$domain['maxquota'])
+//					{
+//						$left = $domain['maxquota']-$totalquota;
+//						throw new Exception('The maximum quota has been reached. You have '.Number::format($left/1024).'MB left');
+//					}
+//				}				
 					
 				$mailbox_id= $postfixadmin->add_mailbox($mailbox);
 				$response['mailbox_id']=$mailbox_id;
 				$response['success']=true;
 
 				//create alias				
-				if($mailbox['vacation_active']=='1')
-				{
-					$vacation_alias = str_replace('@','#', $mailbox['username']).'@'.$GLOBALS['GO_CONFIG']->postfixadmin_autoreply_domain;
-					
-					$alias['goto']=$mailbox['username'].','.$vacation_alias;
-				}else
-				{
-					$alias['goto']=$mailbox['username'];	
-				}
-
-				$alias['domain_id']=$mailbox['domain_id'];
-				$alias['address']=$mailbox['username'];
-				
-				$alias['active']=$mailbox['active'];
-				
-				
-
-				$postfixadmin->add_alias($alias);
+//				if($mailbox['vacation_active']=='1')
+//				{
+//					$vacation_alias = str_replace('@','#', $mailbox['username']).'@'.$GLOBALS['GO_CONFIG']->postfixadmin_autoreply_domain;
+//					
+//					$alias['goto']=$mailbox['username'].','.$vacation_alias;
+//				}else
+//				{
+//					$alias['goto']=$mailbox['username'];	
+//				}
+//
+//				$alias['domain_id']=$mailbox['domain_id'];
+//				$alias['address']=$mailbox['username'];
+//				
+//				$alias['active']=$mailbox['active'];
+//				
+//				
+//
+//				$postfixadmin->add_alias($alias);
 
 				if(isset($_POST['aliases'])){
 					$aliases = array_map('trim', explode(',',$_POST['aliases']));

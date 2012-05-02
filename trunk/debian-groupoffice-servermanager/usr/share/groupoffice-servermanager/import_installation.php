@@ -177,7 +177,7 @@ if($status!=0)
 		die("@#!&@! - The import of the sql file failed!\n\n");
 
 //Het groupoffice installatie check script uitvoeren
-system('php importinstallations.php', $status);
+system('/usr/share/groupoffice/groupofficecli.php -r=servermanager/installation/import', $status);
 if($status==0)
 {
 	echo "\n\n\n\n";

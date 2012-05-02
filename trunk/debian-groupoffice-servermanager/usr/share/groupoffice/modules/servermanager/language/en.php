@@ -55,7 +55,7 @@ $l["configEditor"]='Config editor';
 
 $l["restrictSmtpHosts"]='Restrict SMTP hosts';
 $l["mailDomains"]='Mail domains';
-$l["quota"]='Quota (MB)';
+$l["quota"]='Quota (GB)';
 $l["domain"]='Domain';
 $l["adminPassword"]='Admin password';
 $l["confirmAdminPassword"]='Confirm';

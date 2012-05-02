@@ -1,16 +1,24 @@
+Notifications on uploads
+
+SelectCompany custom field
+
+
 Calendar:
 Distinguish declined and cancel	led events in grid.
 alarm import
 test invitation sending with moving in grid
 
+Translate tool
+
+factuur e-mail bij bedrijven
+
+postfixadmin installation
 
 Grid scroll behouden bij reload
 
 serverclient
 
 CMS compatible
-
-Projects facturatie
 
 Export projecten en billing
 
@@ -28,7 +36,8 @@ Group-Office 100 users 600 euro, 150 users 700 euro etc.
 
 *** Lage prio:
 
-Gegevens wijzigen op site
+Save all attachments.
+
 
 LIST-STATUS gebruiken bij email
 TLS email
@@ -48,5 +57,3 @@ Freebusy support in sabredav 1.6
 Feature requests voting system
 
 Bij bedrijf -> displaypanel -> New -> Contact
-
-Tickets sluiten door klant

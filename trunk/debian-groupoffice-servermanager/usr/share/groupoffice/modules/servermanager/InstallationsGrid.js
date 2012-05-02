@@ -98,26 +98,14 @@ GO.servermanager.InstallationsGrid = function(config){
 			header: GO.servermanager.lang.totalUsage,
 			dataIndex: 'total_usage',
 			align:'right'
-		},{
-			header: GO.servermanager.lang.strComment,
-			dataIndex: 'comment'
-		},{
+		}
+//		,{
+//			header: GO.servermanager.lang.strComment,
+//			dataIndex: 'comment'
+//		}
+		,{
 			header: GO.servermanager.lang.mailDomains,
 			dataIndex: 'mail_domains',
-			sortable:false
-		},{
-			header: GO.servermanager.lang.billing,
-			dataIndex: 'billing',
-			renderer:function(v){
-				return v=="1" ? GO.lang.cmdYes : GO.lang.cmdNo;
-			},
-			sortable:false
-		},{
-			header: 'Professional',
-			dataIndex: 'professional',
-			renderer:function(v){
-				return v=="1" ? GO.lang.cmdYes : GO.lang.cmdNo;
-			},
 			sortable:false
 		}
 		]

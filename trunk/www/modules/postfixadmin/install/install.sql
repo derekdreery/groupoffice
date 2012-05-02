@@ -18,7 +18,7 @@
 
 DROP TABLE IF EXISTS `pa_aliases`;
 CREATE TABLE IF NOT EXISTS `pa_aliases` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `domain_id` int(11) NOT NULL,
   `address` varchar(255) default NULL,
   `goto` text,
@@ -38,49 +38,24 @@ CREATE TABLE IF NOT EXISTS `pa_aliases` (
 
 DROP TABLE IF EXISTS `pa_domains`;
 CREATE TABLE IF NOT EXISTS `pa_domains` (
-  `id` int(11) NOT NULL default '0',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `domain` varchar(255) default NULL,
   `description` varchar(255) default NULL,
-  `aliases` int(10) NOT NULL default '0',
-  `mailboxes` int(10) NOT NULL default '0',
-  `maxquota` bigint(20) NOT NULL default '0',
+  `max_aliases` int(10) NOT NULL default '0',
+  `max_mailboxes` int(10) NOT NULL default '0',
   `quota` bigint(20) NOT NULL default '0',
-  `transport` varchar(255) default NULL,
+  `default_quota` bigint(20) NOT NULL default '0',
+  `transport` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'virtual'
   `backupmx` tinyint(1) NOT NULL default '0',
   `ctime` int(11) NOT NULL default '0',
   `mtime` int(11) NOT NULL default '0',
-  `active` enum('0','1') NOT NULL default '1',
+  `active` BOOLEAN NOT NULL DEFAULT '1',
   `acl_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `domain` (`domain`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Postfix Admin - Virtual Domains';
 
--- --------------------------------------------------------
-
---
--- Tabel structuur voor tabel `pa_fetchmail`
---
-
-DROP TABLE IF EXISTS `pa_fetchmail`;
-CREATE TABLE IF NOT EXISTS `pa_fetchmail` (
-  `id` int(11) unsigned NOT NULL auto_increment,
-  `mailbox` varchar(255) default NULL,
-  `src_server` varchar(255) default NULL,
-  `src_auth` enum('password','kerberos_v5','kerberos','kerberos_v4','gssapi','cram-md5','otp','ntlm','msn','ssh','any') default NULL,
-  `src_user` varchar(255) default NULL,
-  `src_password` varchar(255) default NULL,
-  `src_folder` varchar(255) default NULL,
-  `poll_time` int(11) unsigned NOT NULL default '10',
-  `fetchall` tinyint(1) unsigned NOT NULL default '0',
-  `keep` tinyint(1) unsigned NOT NULL default '0',
-  `protocol` enum('POP3','IMAP','POP2','ETRN','AUTO') default NULL,
-  `extra_options` text,
-  `returned_text` text,
-  `mda` varchar(255) default NULL,
-  `date` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -90,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `pa_fetchmail` (
 
 DROP TABLE IF EXISTS `pa_mailboxes`;
 CREATE TABLE IF NOT EXISTS `pa_mailboxes` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `domain_id` int(11) NOT NULL,
   `go_installation_id` varchar(50) default NULL,
   `username` varchar(255) default NULL,
@@ -101,27 +76,11 @@ CREATE TABLE IF NOT EXISTS `pa_mailboxes` (
   `domain` varchar(255) default NULL,
   `ctime` int(11) NOT NULL,
   `mtime` int(11) NOT NULL,
-  `active` enum('0','1') NOT NULL default '1',
-  `vacation_active` enum('0','1') NOT NULL,
-  `vacation_subject` varchar(255) default NULL,
-  `vacation_body` text,
-  `usage` int(11) NOT NULL,
+  `active` BOOLEAN NOT NULL DEFAULT '1',
+  `usage` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `username` (`username`),
   KEY `username_2` (`username`,`vacation_active`),
   KEY `go_installation_id` (`go_installation_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Postfix Admin - Virtual Mailboxes';
 
--- --------------------------------------------------------
-
---
--- Tabel structuur voor tabel `pa_vacation_notification`
---
-
-DROP TABLE IF EXISTS `pa_vacation_notification`;
-CREATE TABLE IF NOT EXISTS `pa_vacation_notification` (
-  `on_vacation` varchar(100) NOT NULL default '',
-  `notified` varchar(100) NOT NULL default '',
-  `notified_at` timestamp NOT NULL default CURRENT_TIMESTAMP,
-  PRIMARY KEY  (`on_vacation`,`notified`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;     

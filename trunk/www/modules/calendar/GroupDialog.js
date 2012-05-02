@@ -14,7 +14,7 @@ GO.calendar.GroupDialog = function(config) {
 	config.layout = 'fit';
 	config.modal = false;
 	config.resizable = false;
-	config.width = 500;
+	config.width = 550;
 	config.height = 450;
 	config.closeAction = 'hide';
 	config.title = GO.calendar.lang.resource_group;
@@ -69,7 +69,7 @@ Ext.extend(GO.calendar.GroupDialog, GO.Window, {
 				waitMsg : GO.lang['waitMsgLoad'],
 				success : function(form, action)
 				{
-					this.groupAdminsPanel.setGroupId(action.result.data.id);
+					this.groupAdminsPanel.setModelId(action.result.data.id);
 					
 					if(this.group_id == 1)
 					{
@@ -91,7 +91,7 @@ Ext.extend(GO.calendar.GroupDialog, GO.Window, {
 			});            
 		} else
 {			
-			this.groupAdminsPanel.setGroupId(0);
+			this.groupAdminsPanel.setModelId(0);
 			GO.calendar.GroupDialog.superclass.show.call(this);
 		}
 	},
@@ -112,7 +112,7 @@ Ext.extend(GO.calendar.GroupDialog, GO.Window, {
 			{
 				if (action.result.id)
 				{
-					this.groupAdminsPanel.setGroupId(action.result.id);
+					this.groupAdminsPanel.setModelId(action.result.id);
 					this.setGroupId(action.result.id);
 				}
 		
@@ -183,8 +183,15 @@ Ext.extend(GO.calendar.GroupDialog, GO.Window, {
 		//	
 		var items = [this.propertiesPanel];
 
-		this.groupAdminsPanel = new GO.calendar.GroupAdminsPanel({
-			id:'permissions-panel'
+		this.groupAdminsPanel = new GO.base.model.multiselect.panel({
+			title: GO.calendar.lang.admins,
+			url:'calendar/groupAdmin',
+			columns:[
+				{header: GO.lang.strTitle, dataIndex: 'name'},
+				{header:GO.lang.strEmail,dataIndex: 'email'}
+			],
+			fields:['id','name','email'],
+			model_id:0
 		});
 
 		items.push(this.groupAdminsPanel);

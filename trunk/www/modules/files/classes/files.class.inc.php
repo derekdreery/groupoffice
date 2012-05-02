@@ -47,7 +47,7 @@ class files extends db {
 		$events->add_listener('user_delete', __FILE__, 'files', 'user_delete');
 		//$events->add_listener('add_user', __FILE__, 'files', 'add_user');
 		$events->add_listener('build_search_index', __FILE__, 'files', 'build_search_index');
-		$events->add_listener('login', __FILE__, 'files', 'login');
+//		$events->add_listener('login', __FILE__, 'files', 'login');
 		$events->add_listener('init_customfields_types', __FILE__, 'files', 'init_customfields_types');
 		$events->add_listener('load_file_properties', __FILE__, 'files', 'get_file_cf_category_permissions');
 	}
@@ -1177,35 +1177,35 @@ class files extends db {
 		return $this->num_rows();
 	}
 
-	public static function login($username, $password, $user, $count_login) {
-	// Default timeout: 30 days
-
-		if($count_login){
-			global $GO_CONFIG, $GO_MODULES;
-
-			//this will rebuild the cached shares folder
-			//disabled this because of slowdown with lots of users
-			//$GLOBALS['GO_CONFIG']->save_setting('fs_shared_cache', 0, $user['id']);
-
-			$timeout = 60*60*24*30;
-			$deltime = time() - $timeout;
-
-			$fs = new files();
-
-			$fs->query("SELECT ff.id FROM fs_new_files AS fn, fs_files AS ff
-				WHERE fn.file_id = ff.id AND ctime < ? AND fn.user_id = ?", 'ii', array($deltime, $user['id']));
-
-			if(isset($GO_MODULES->modules['newfiles']) && !empty($GO_MODULES->modules['newfiles']['write_permission'])) {
-				$files = array();
-				if($fs->num_rows() > 0) {
-					while($file = $fs->next_record()) {
-						$files[] = $file['id'];
-					}
-					$fs->query("DELETE FROM fs_new_files WHERE file_id IN (".implode(',', $files).") ");
-				}
-			}
-		}
-	}
+//	public static function login($username, $password, $user, $count_login) {
+//	// Default timeout: 30 days
+//
+//		if($count_login){
+//			global $GO_CONFIG, $GO_MODULES;
+//
+//			//this will rebuild the cached shares folder
+//			//disabled this because of slowdown with lots of users
+//			//$GLOBALS['GO_CONFIG']->save_setting('fs_shared_cache', 0, $user['id']);
+//
+//			$timeout = 60*60*24*30;
+//			$deltime = time() - $timeout;
+//
+//			$fs = new files();
+//
+//			$fs->query("SELECT ff.id FROM fs_new_files AS fn, fs_files AS ff
+//				WHERE fn.file_id = ff.id AND ctime < ? AND fn.user_id = ?", 'ii', array($deltime, $user['id']));
+//
+//			if(isset($GO_MODULES->modules['newfiles']) && !empty($GO_MODULES->modules['newfiles']['write_permission'])) {
+//				$files = array();
+//				if($fs->num_rows() > 0) {
+//					while($file = $fs->next_record()) {
+//						$files[] = $file['id'];
+//					}
+//					$fs->query("DELETE FROM fs_new_files WHERE file_id IN (".implode(',', $files).") ");
+//				}
+//			}
+//		}
+//	}
 
 	function sksort($array, $sort='name', $dir='DESC') {
 		if (count($array)) {

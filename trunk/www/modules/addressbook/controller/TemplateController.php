@@ -109,7 +109,7 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 		
 		$response = $store->getData();
 		
-		if($response['total']>1){
+		if($response['total']>0){
 
 			$response['results'][] = '-';
 

@@ -18,6 +18,14 @@ printHead();
 <?php
 GO_Base_Html_Select::render(array(
 		"required" => true,
+		'label' => 'Country',
+		'value' => GO::config()->default_country,
+		'name' => "default_country",
+		'options' => GO::language()->getCountries()
+));
+
+GO_Base_Html_Select::render(array(
+		"required" => true,
 		'label' => 'Language',
 		'value' => GO::config()->language,
 		'name' => "language",
@@ -48,6 +56,14 @@ GO_Base_Html_Select::render(array(
 		'options' => $dateFormats
 ));
 
+GO_Base_Html_Input::render(array(
+		"required" => true,
+		"label" => "Date separator",
+		"name" => "default_date_separator",
+		"value" => GO::config()->default_date_separator
+));
+
+
 
 $timeFormats = array();
 foreach (GO::config()->time_formats as $format)	
@@ -65,7 +81,7 @@ GO_Base_Html_Select::render(array(
 GO_Base_Html_Input::render(array(
 		"required" => true,
 		"label" => "Currency",
-		"name" => "currency",
+		"name" => "default_currency",
 		"value" => GO::config()->default_currency
 ));
 

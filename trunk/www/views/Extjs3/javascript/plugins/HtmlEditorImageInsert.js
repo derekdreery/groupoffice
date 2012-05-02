@@ -100,13 +100,17 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 
 	selectTempImage : function(path)
 	{
-		this.selectedUrl = GO.url("core/downloadTempFile", {path:path});
+		
+		var token = GO.base.util.MD5(path);
+		
+		this.selectedUrl = GO.url("core/downloadTempFile", {path:path, token: token});
 
-		this.selectedPath = path;
+		this.selectedPath = path;	
+		
 
 		var html = '<img src="'+this.selectedUrl+'" border="0" />';
 
-		this.fireEvent('insert', this,  this.selectedPath, true);
+		this.fireEvent('insert', this,  this.selectedPath, true, token);
 		
 		this.menu.hide();
 
@@ -120,12 +124,14 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 		this.selectedRecord = r;
 		this.selectedPath = r.data.path;
 		
+		var token = GO.base.util.MD5(r.data.name);
+		
 		//filename is added as parameter. This is only for matching the url in the body of the html in GO_Base_Mail_Message::handleEmailFormInput with preg_match.
-		this.selectedUrl = GO.url("files/file/download",{id:r.data.id,filename:r.data.name});
+		this.selectedUrl = GO.url("files/file/download",{id:r.data.id,token:token});
 						
 		var html = '<img src="'+this.selectedUrl+'" border="0" />';
 								
-		this.fireEvent('insert', this, this.selectedPath, false);
+		this.fireEvent('insert', this, this.selectedPath, false, token);
 
 		this.editor.focus();
 			

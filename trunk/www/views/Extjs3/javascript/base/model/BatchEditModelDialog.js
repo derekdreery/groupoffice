@@ -135,7 +135,7 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 	}
 });
 
-GO.base.model.showBatchEditModelDialog=function(model_name, keys, grid, editors,exclude){
+GO.base.model.showBatchEditModelDialog=function(model_name, keys, grid, editors,exclude,title){
 	
 	if (keys.length<=0) {
 			Ext.Msg.alert(GO.lang.batchSelectionError, GO.lang.batchSelectOne);
@@ -145,6 +145,11 @@ GO.base.model.showBatchEditModelDialog=function(model_name, keys, grid, editors,
 	if(!GO.base.model.batchEditModelDialog){
 		GO.base.model.batchEditModelDialog = new GO.base.model.BatchEditModelDialog();
 	}
+	
+	if(title){
+		GO.base.model.batchEditModelDialog.setTitle(title);
+	}
+	
 	GO.base.model.batchEditModelDialog.setModels(model_name, keys, grid, editors,exclude);
 	GO.base.model.batchEditModelDialog.show();
 }

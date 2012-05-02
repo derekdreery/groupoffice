@@ -136,4 +136,30 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 		return parent::beforeSubmit($response, $model, $params);
 	}
 	
+	protected function actionGetRecipientsAsString($params){
+				
+		if(empty($params['groups']))
+			throw new Exception();
+			
+		$recipients = new GO_Base_Mail_EmailRecipients();
+		
+		$groupIds = json_decode($params['groups']);
+				
+		foreach($groupIds as $groupId){
+		
+			$group = GO_Base_Model_Group::model()->findByPk($groupId);
+			
+			if($group){
+				$users = $group->users(GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('email', '','!=')));
+				while($user = $users->fetch())				
+					$recipients->addRecipient($user->email, $user->name);
+			}	
+		}
+		
+		return array(
+				'success'=>true,
+				'recipients'=>(string) $recipients
+		);
+	}
+	
 }

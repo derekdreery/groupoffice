@@ -41,6 +41,7 @@ $l["cmdCompanyDetailsFor"]= 'Details for';
 $l["cmdPanelCompany"]= 'Company details';
 $l["cmdFormLabelBankNo"]= 'Bank number';
 $l["cmdFormLabelVatNo"]= 'VAT number';
+$l["cmdFormLabelInvoiceEmail"]= 'Invoicing email';
 $l["cmdFieldsetCompanyDetails"]= 'Company details';
 $l["cmdFieldsetVisitAddress"]= 'Visit address';
 $l["cmdFieldsetPostAddress"]= 'Post address';

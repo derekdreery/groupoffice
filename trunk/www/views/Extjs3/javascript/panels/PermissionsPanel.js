@@ -237,30 +237,26 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 	setAcl : function(acl_id) {
 
 		this.acl_id = acl_id ? acl_id : 0;
-		this.loaded = false;
-		this.aclGroupsGrid.setModelId(acl_id);
-		this.aclUsersGrid.setModelId(acl_id);
-		this.setDisabled(GO.util.empty(acl_id));
-		
-		if (this.isVisible()) {
-			this.loadAcl();
-		}
+		this.aclGroupsGrid.setModelId(acl_id, this.isVisible());
+		this.aclUsersGrid.setModelId(acl_id, this.isVisible());
+		this.setDisabled(GO.util.empty(acl_id));	
 	},
 
 	onShow : function() {
 
 		GO.grid.PermissionsPanel.superclass.onShow.call(this);
 
-		if (!this.loaded) {
+		if (!this.aclGroupsGrid.loaded) {
 			this.loadAcl();
 		}
 
 	},
 
 	loadAcl : function(){
-		this.aclGroupsGrid.store.load();
-		this.aclUsersGrid.store.load();
-		this.loaded = true;
+		if(this.acl_id>0){
+			this.aclGroupsGrid.store.load();
+			this.aclUsersGrid.store.load();
+		}
 	},
 
 	afterRender : function() {
@@ -269,7 +265,7 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 
 		var v = this.isVisible();
 
-		if (v && !this.loaded) {
+		if (v && !this.aclGroupsGrid.loaded) {
 			this.loadAcl();
 		}
 	},

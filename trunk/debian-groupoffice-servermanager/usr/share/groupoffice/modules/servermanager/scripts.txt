@@ -2,3 +2,4 @@ modules/servermanager/InstallationsGrid.js
 modules/servermanager/InstallationDialog.js
 modules/servermanager/InstallationPanel.js
 modules/servermanager/MainPanel.js
+modules/servermanager/sites/SiteDialog.js

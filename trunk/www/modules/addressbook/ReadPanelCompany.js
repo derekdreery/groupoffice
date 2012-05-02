@@ -277,6 +277,10 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 			{
 				this.template +=GO.customfields.displayPanelTemplate;
 			}
+			
+			if(GO.workflow){
+				this.template +=GO.workflow.WorkflowTemplate;
+			}
 								
 			if(GO.tasks)
 				this.template +=GO.tasks.TaskTemplate;

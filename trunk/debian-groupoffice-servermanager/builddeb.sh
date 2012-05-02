@@ -13,7 +13,7 @@ else
 FULLPATH=''
 fi
 
-VERSION=`cat ../www/classes/base/config.class.inc.php | grep '$version' | sed -e 's/[^0-9\.]*//g'`
+VERSION=`cat ../www/go/base/Config.php | grep '$version' | sed -e 's/[^0-9\.]*//g'`
 
 if [[ $VERSION =~ ^([0-9]\.[0-9])\.[0-9]{1,2}$ ]]; then
 	MAJORVERSION=${BASH_REMATCH[1]}
@@ -42,9 +42,11 @@ cd groupoffice-servermanager-$VERSION
 if [ "$1" == "send" ]; then
 	debuild -rfakeroot
 	cd ..
-	scp *.deb mschering@imfoss.nl:/var/www/groupoffice/repos.groupoffice.eu/groupoffice/poolthreeseven/main/
+	scp *.deb mschering@imfoss.nl:/var/www/groupoffice/repos.groupoffice.eu/groupoffice/poolfourzero/main/
 
 	#ssh mschering@imfoss.nl "dpkg-scanpackages /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary /dev/null | gzip -9c > /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary/Packages.gz"
 else
-	debuild -S -rfakeroot
+	debuild -rfakeroot
+	cd ..
+	mv *.deb ../
 fi

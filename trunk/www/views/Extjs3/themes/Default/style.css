@@ -345,7 +345,7 @@ a.normal-link:hover{
 	background-image:url('images/16x16/filetypes/document.png') !important;
 }
 
-.filetype-zip, .filetype-tar, .filetype-gz, .filetype-tgz, .filetype-rar, .filetype-bz{
+.filetype-zip, .filetype-tar, .filetype-gz, .filetype-tgz, .filetype-rar, .filetype-bz, .filetype-dat{
 	background-image:url('images/16x16/filetypes/tar.png') !important;
 }
 
@@ -1966,4 +1966,29 @@ body.ext-ie6 .x-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em
 
 .x-form-trigger-plus{
 	background-image:url(images/trigger-plus.gif) !important;
+}
+
+
+.summary-log-table{
+	border:none;
+}
+
+.summary-error-font{
+	color:red; 
+	font-weight:bold;
+}
+
+.summary-success-font{
+	color:green; 
+	font-weight:bold;
+}
+
+.summary-log-name {
+	width:50px;
+	vertical-align:top;
+}
+
+.summary-log-message {
+	padding-bottom: 5px;
+	vertical-align:top;
 }

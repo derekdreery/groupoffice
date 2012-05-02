@@ -11,11 +11,11 @@
 			<link href="<?php echo GO::config()->host; ?>views/Extjs3/themes/<?php echo $theme; ?>/external.css" type="text/css" rel="stylesheet" />
 			<?php
 		}
-		if(!empty($GLOBALS['GO_CONFIG']->custom_css_url))
-			echo '<link href="'.$GLOBALS['GO_CONFIG']->custom_css_url.'" type="text/css" rel="stylesheet" />';
+		if(!empty(GO::config()->custom_css_url))
+			echo '<link href="'.GO::config()->custom_css_url.'" type="text/css" rel="stylesheet" />';
 		
-		if(isset($GLOBALS['GO_MODULES']->modules['customcss']) && file_exists($GLOBALS['GO_CONFIG']->file_storage_path.'customcss/style.css'))
-			echo '<style>'.file_get_contents($GLOBALS['GO_CONFIG']->file_storage_path.'customcss/style.css').'</style>'."\n";
+		if(GO::modules()->isInstalled("customcss") && file_exists(GO::config()->file_storage_path.'customcss/style.css'))
+			echo '<style>'.file_get_contents(GO::config()->file_storage_path.'customcss/style.css').'</style>'."\n";
 		?>
 		<title><?php echo GO::config()->title; ?></title>
 	</head>

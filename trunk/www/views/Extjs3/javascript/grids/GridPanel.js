@@ -137,11 +137,20 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 					this.deleteSelected();
 				},
 				scope: this
-			},'-',new GO.form.SearchField({
-				store: this.store,
-				width:150
-			}));
+			});
+			
+			if(!this.hideSearchField){
+				this.tbar.push(
+					'-',
+					new GO.form.SearchField({
+						store: this.store,
+						width:150
+					})
+				);
+			}
 		}
+		
+		
 		
 		
 		GO.grid.GridPanel.superclass.initComponent.call(this);

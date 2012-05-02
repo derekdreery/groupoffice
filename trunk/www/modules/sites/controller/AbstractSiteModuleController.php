@@ -46,10 +46,18 @@ abstract class GO_Sites_Controller_AbstractSiteModule extends GO_Base_Controller
 	protected function _saveDefaultPages($defaultPages){
 		if(!empty($this->site_id)){
 			foreach($defaultPages as $p){
-				$page = new GO_Sites_Model_Page();
-				$page->site_id = $this->site_id;
-				$page->setAttributes($p);
-				$page->save();
+				
+				$existing = GO_Sites_Model_Page::model()->findSingleByAttributes(array(
+					'site_id'=>$this->site_id,
+					'path'=>$p['path']
+				));
+				
+				if(!$existing){				
+					$page = new GO_Sites_Model_Page();
+					$page->site_id = $this->site_id;
+					$page->setAttributes($p);
+					$page->save();
+				}
 			}
 		}
 	}

@@ -53,6 +53,11 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 			name       : 'includeHidden'
 		});
 		
+		this.humanHeaders = new Ext.form.Checkbox({
+			fieldLabel : 'Use column names for headers',
+			name       : 'humanHeaders'
+		});
+		
 		this.includeHeaders = new Ext.form.Checkbox({
 			fieldLabel  : 'Export headers too',
 			name				: 'includeHeaders'
@@ -98,6 +103,7 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 				this.radioGroup,
 				this.includeHidden,
 				this.includeHeaders,
+				this.humanHeaders,
 				this.exportOrientation,
 				this.hiddenDocumentTitle,
 				this.hiddenName,

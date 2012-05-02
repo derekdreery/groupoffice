@@ -7,6 +7,17 @@ GO.sites.PagesContextMenu = function(config){
 
 	config.items=[];
 	
+	config.items.push({
+		iconCls: 'btn-view',
+		text: GO.lang.strView,
+		cls: 'x-btn-text-icon',
+		handler:function(){
+			window.open(GO.url('sites/pageBackend/redirectToFront', {id: this.selected[0].id}));			
+		},
+		scope:this
+	});
+
+	
 	this.actionPageProperties = new Ext.menu.Item({
 		iconCls: 'btn-settings',
 		text: GO.sites.lang.pageProperties,
@@ -30,6 +41,7 @@ GO.sites.PagesContextMenu = function(config){
 		}
 	});
 	config.items.push(this.actionDeletePage);
+		
 
 	GO.sites.PagesContextMenu.superclass.constructor.call(this,config);
 

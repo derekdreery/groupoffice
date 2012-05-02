@@ -136,12 +136,13 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 			win.focus();
 		},
 		attachmentClicked: function(attachment, panel){
-			if(attachment.type=='message')
+			if(attachment.mime=='message/rfc822')
 			{
-				this.remoteMessage.part_number=attachment.number+".0";
-				// TODO: Replace GO.linkHandlers[9] index with model name of table
-				// em_links, when that is created.
-				GO.email.showMessageAttachment(0, panel.remoteMessage);
+				GO.email.showMessageAttachment(0, {
+					action:'path',
+					path:attachment.tmp_file,
+					isTempFile:true
+				});
 			}else
 			{
 				window.open(attachment.url);

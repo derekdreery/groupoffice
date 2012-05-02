@@ -273,9 +273,10 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 		$noReturnPages = array(
 				$this->_site->getLoginPath(),
 				$this->_site->getRegisterPath(),
-				$this->_site->getPasswordResetPath()
+				$this->_site->getPasswordResetPath(),
+				$this->_site->getLostPasswordPath()
 		);
-
+		
 		if(!in_array($this->_page->path, $noReturnPages)){
 			GO::session()->values['sites']['lastPath'] = $this->_page->path;
 			GO::session()->values['sites']['lastParams'] = $params;

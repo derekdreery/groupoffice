@@ -83,6 +83,12 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	
 	_relatedGrids : false,
 	
+	enableOkButton : true,
+	
+	enableApplyButton : true,
+	
+	enableCloseButton : true,
+	
 	initComponent : function(){
 		
 		Ext.applyIf(this, {
@@ -93,27 +99,39 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			maximizable:true,
 			width:600,
 			height:400,
-			closeAction:'hide',
-			buttons:[{
+			closeAction:'hide'
+		});
+		
+		var buttons = [];
+		
+		// These three buttons are enabled by default.
+		if (this.enableOkButton)
+			buttons.push({
 				text: GO.lang['cmdOk'],
 				handler: function(){
 					this.submitForm(true);
 				},
 				scope: this
-			},{
+			});
+		if (this.enableApplyButton)
+			buttons.push({
 				text: GO.lang['cmdApply'],
 				handler: function(){
 					this.submitForm();
 				},
 				scope:this
-			},{
+			});
+		if (this.enableCloseButton)
+			buttons.push({
 				text: GO.lang['cmdClose'],
 				handler: function(){
 					this.hide();
 				},
 				scope:this
-			}
-			]
+			});
+		
+		Ext.applyIf(this, {
+			buttons: buttons
 		});
 		
 		this._panels=[];
@@ -206,6 +224,11 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		});
 		
 	},
+	
+	addButton : function(button){
+		var tb = this.getFooterToolbar();
+		tb.addButton(button);
+	},
 
 	addCustomFields : function(){
 		if(this.customFieldType && GO.customfields && GO.customfields.types[this.customFieldType])
@@ -245,6 +268,15 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 					this.permissionsPanel.setAcl(action.result[this.permissionsPanel.fieldName]);
 								
 				this.afterSubmit(action);
+				
+				if(action.result.summarylog){
+					
+					if(!this.summaryDialog){
+						this.summaryDialog = new GO.dialog.SummaryDialog();
+					}
+					this.summaryDialog.setSummaryLog(action.result.summarylog);
+					this.summaryDialog.show();
+				}
 				
 				if(hide)
 				{
@@ -324,7 +356,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 				{					
 					this.setRemoteComboTexts(action);
 					
-					if(this.permissionsPanel && action.result.data[this.permissionsPanel.fieldName])
+					if(this.permissionsPanel)
 						this.permissionsPanel.setAcl(action.result.data[this.permissionsPanel.fieldName]);
 					
 					if(config && config.values)
@@ -413,6 +445,9 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 
 	/**
 	 * Use this function to add panels to the window.
+	 * 
+	 * @var relatedGridParamName Set to the field name of the has_many relation. 
+	 * eg. Addressbook dialog showing contacts would have this value set to addressbook_id
 	 */
 	addPanel : function(panel, relatedGridParamName){
 		this._panels.push(panel);

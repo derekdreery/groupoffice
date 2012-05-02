@@ -463,14 +463,16 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$workflowResponse = $workflowModel->getAttributes('html');
 
 //			$workflowResponse['id'] = $workflowModel->id;
-				$workflowResponse['process_name'] = $workflowModel->process->name;
+			$workflowResponse['process_name'] = $workflowModel->process->name;
 //			$workflowResponse['due_time'] = $workflowModel->due_time;
 //			$workflowResponse['shift_due_time'] = $workflowModel->shift_due_time;			
+			
+			$workflowResponse['user'] = !empty($workflowModel->user_id)?$workflowModel->user->name:'';
 			
 			$workflowResponse['approvers'] = array();
 			$workflowResponse['approver_groups'] = array();
 			$workflowResponse['step_id'] = $workflowModel->step_id;
-			
+						
 			if($workflowModel->step_id == '-1'){
 				$workflowResponse['step_progress'] = '';
 				$workflowResponse['step_name'] = GO::t('complete','workflow');
@@ -492,11 +494,15 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				$approversStmnt = $workflowModel->requiredApprovers;
 			
 				while($approver = $approversStmnt->fetch()){
-					$workflowResponse['approvers'][] = array('name'=>$approver->name,'approved'=>$currentStep->hasApproved($workflowModel->id,$approver->id),'last'=>'0');
+					$approver_hasapproved = $currentStep->hasApproved($workflowModel->id,$approver->id);
+					//var_dump($approver_hasapproved);
+					$workflowResponse['approvers'][] = array('name'=>$approver->name,'approved'=>$approver_hasapproved,'last'=>'0');
 				}
 				// Set the last flag for the latest approver in the list
 				$i = count($workflowResponse['approvers'])-1;
-				$workflowResponse['approvers'][$i]['last'] = "1";
+				
+				if($i >= 0)
+					$workflowResponse['approvers'][$i]['last'] = "1";
 			
 				// Add the approver groups of the current step to the response
 				$approverGroupsStmnt = $currentStep->approverGroups;
@@ -771,7 +777,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 */
 	protected function actionExport($params) {
 	
+//		
+//		var_dump($params);
+//		
 		$showHeader = false;
+  	$humanHeaders = true;
 		$orientation = false;
 		
 		if(!empty($params['exportOrientation']) && ($params['exportOrientation']=="Horizontaal"))
@@ -787,6 +797,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		if(!empty($params['includeHeaders']))
 			$showHeader = true;
 		
+		if(!empty($params['humanHeaders']))
+			$humanHeaders = false;
+		
 		$findParams = GO::session()->values[$params['name']]['findParams'];
 		$findParams->limit(0); // Let the export handle all found records without a limit
 		$model = GO::getModel(GO::session()->values[$params['name']]['model']);
@@ -800,6 +813,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		if(!empty($params['columns'])) {
 			$includeColumns = explode(',',$params['columns']);
+			$columnModel->sort($includeColumns);
 			foreach($columnModel->getColumns() as $c){
 				if(!in_array($c->getDataIndex(), $includeColumns))
 					$columnModel->removeColumn($c->getDataIndex());
@@ -808,9 +822,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$extraParams = empty($params['params']) ? array() : json_decode($params['params'], true);
 
 		if(!empty($params['type']))
-			$export = new $params['type']($store, $columnModel,$model, $findParams, $showHeader, $title, $orientation, $extraParams);
+			$export = new $params['type']($store, $columnModel,$model, $findParams, $showHeader, $humanHeaders, $title, $orientation, $extraParams);
 		else
-			$export = new GO_Base_Export_ExportCSV($store, $columnModel, $model, $findParams, $showHeader, $title, $orientation, $extraParams); // The default Export is the CSV outputter.
+			$export = new GO_Base_Export_ExportCSV($store, $columnModel, $model, $findParams, $showHeader, $humanHeaders, $title, $orientation, $extraParams); // The default Export is the CSV outputter.
 
 		$export->output();
 	}
@@ -830,87 +844,118 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * @param array $params 
 	 */
 	protected function actionImport($params) {
+				
+		$summarylog = new GO_Base_Component_SummaryLog();
 		
 		GO::$disableModelCache=true; //for less memory usage
 		ini_set('max_execution_time', '0'); //allow long runs
 		ini_set('memory_limit','512M');
 		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
+		
+		if(is_file($params['file'])){
+			$importFile = new GO_Base_Fs_CsvFile($params['file']);
+		
+			if(!empty($params['delimiter']))
+				$importFile->delimiter = $params['delimiter'];
 
-		$importFile = new GO_Base_Fs_CsvFile($params['file']);
-		
-		if(!empty($params['delimiter']))
-			$importFile->delimiter = $params['delimiter'];
-		
-		if(!empty($params['enclosure']))
-			$importFile->enclosure = $params['enclosure'];
-		
-		if(php_sapi_name()=='cli'){
-			echo "Delimiter: ".$importFile->delimiter."\n";
-			echo "Enclosure: ".$importFile->enclosure."\n";
-			echo "File: ".$importFile->path()."\n\n";
-		}
-			
-		if(!$importFile->convertToUtf8())
-			exit("ERROR: Could not convert to UTF8. Is the file writable?\n\n");
+			if(!empty($params['enclosure']))
+				$importFile->enclosure = $params['enclosure'];
 
-		$headers = $importFile->getRecord();
-		
-		//Map the field headers to the index in the record.
-		//eg. name=>2,user_id=>4, etc.
-		$attributeIndexMap = array();		
-		for ($i = 0, $m = count($headers); $i < $m; $i++) {
-			if(substr($headers[$i],0,3)=='cf\\'){				
-				$cf = $this->_resolveCustomField($headers[$i]);
-				if($cf)
-					$attributeIndexMap[$i] = $cf;
-			}else
-			{
-				$attributeIndexMap[$i] = $headers[$i];
+			if(php_sapi_name()=='cli'){
+				echo "Delimiter: ".$importFile->delimiter."\n";
+				echo "Enclosure: ".$importFile->enclosure."\n";
+				echo "File: ".$importFile->path()."\n\n";
 			}
-		}
+			
+			if(!$importFile->convertToUtf8())
+				exit("ERROR: Could not convert to UTF8. Is the file writable?\n\n");
 
-		while ($record = $importFile->getRecord()) {
-			$attributes = array();
-			foreach($attributeIndexMap as $index=>$attributeName){
-				$attributes[trim($attributeName)]=$record[$index];
+			$headers = $importFile->getRecord();
+
+			//Map the field headers to the index in the record.
+			//eg. name=>2,user_id=>4, etc.
+			$attributeIndexMap = array();		
+			for ($i = 0, $m = count($headers); $i < $m; $i++) {
+				if(substr($headers[$i],0,3)=='cf\\'){				
+					$cf = $this->_resolveCustomField($headers[$i]);
+					if($cf)
+						$attributeIndexMap[$i] = $cf;
+				}else
+				{
+					$attributeIndexMap[$i] = $headers[$i];
+				}
 			}
 
-			$model = new $this->model;			
-			
-			if($this->beforeImport($model, $attributes, $record)){			
-				$columns = $model->getColumns();
-				//var_dump($columns);
-				foreach($columns as $col=>$attr){
-					if(isset($attributes[$col])){
-//						if($attr['gotype']=='unixtimestamp' || $attr['gotype']=='unixdate'){
-//							$attributes[$col]=strtotime($attributes[$col]);
-//							
-						if($attr['gotype']=='number')
-						{						
-							$attributes[$col]=preg_replace('/[^.,\s0-9]+/','',$attributes[$col]);
+			while ($record = $importFile->getRecord()) {
+				$attributes = array();
+				$model = false;
+
+				foreach($attributeIndexMap as $index=>$attributeName){
+					$attributes[trim($attributeName)]=$record[$index];
+				}
+
+				if(!empty($params['updateExisting']) && !empty($params['updateFindAttributes'])){
+
+					$findBy = explode(',', $params['updateFindAttributes']);
+
+					$attr = array();
+					foreach($findBy as $attrib){
+						$attr[$attrib] = $attributes[$attrib];
+					}
+
+					$model = GO::getModel($this->model)->findSingleByAttributes($attr);				
+				}
+
+				if(!$model)
+					$model = new $this->model;	
+
+
+				if($this->beforeImport($model, $attributes, $record)){			
+					$columns = $model->getColumns();
+					//var_dump($columns);
+					foreach($columns as $col=>$attr){
+						if(isset($attributes[$col])){
+	//						if($attr['gotype']=='unixtimestamp' || $attr['gotype']=='unixdate'){
+	//							$attributes[$col]=strtotime($attributes[$col]);
+	//							
+							if($attr['gotype']=='number')
+							{						
+								$attributes[$col]=preg_replace('/[^.,\s0-9]+/','',$attributes[$col]);
+							}
 						}
 					}
-				}
-				
-				// True is set because import needs to be checked by the model.
-				$model->setAttributes($attributes, true);
-				
 
-				// If there are given baseparams to the importer
-				if(isset($params['importBaseParams'])) {
-					$baseParams = json_decode($params['importBaseParams'],true);
-					foreach($baseParams as $attr=>$val){
-						$model->setAttribute($attr,$val);
+					// True is set because import needs to be checked by the model.
+					$model->setAttributes($attributes, true);
+
+
+					// If there are given baseparams to the importer
+					if(isset($params['importBaseParams'])) {
+						$baseParams = json_decode($params['importBaseParams'],true);
+						foreach($baseParams as $attr=>$val){
+							$model->setAttribute($attr,$val);
+						}
 					}
+
+					$this->_parseImportDates($model);
+
+					try{
+						$model->save();
+					}
+					catch(Exception $e){
+						$summarylog->addError($record[0], $e->getMessage());
+					}
+					$summarylog->add();
 				}
-				
-				$this->_parseImportDates($model);
-				
-				$model->save();			
 			}
 			
+			
 			$this->afterImport($model, $attributes, $record);
+		} else {
+			//$summarylog->addError('NO FILE FOUND', 'There is no file found that can be imported!');
 		}
+		
+		return $summarylog;
 	}
 	
 	protected function beforeImport(&$model, &$attributes, $record){
