@@ -2043,7 +2043,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 		//GO::debug('save'.$this->className());
 			
-		if(!$this->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)){
+		if(!$this->checkPermissionLevel($this->isNew?GO_Base_Model_Acl::CREATE_PERMISSION:GO_Base_Model_Acl::WRITE_PERMISSION)){
 			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : '';
 			throw new GO_Base_Exception_AccessDenied($msg);
 		}
