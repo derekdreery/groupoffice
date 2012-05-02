@@ -34,10 +34,11 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Permission level constants.
 	 */
-	const READ_PERMISSION=1;
-	const WRITE_PERMISSION=2;
-	const DELETE_PERMISSION=3;
-	const MANAGE_PERMISSION=4;
+	const READ_PERMISSION=10;
+	const	CREATE_PERMISSION=20;
+	const WRITE_PERMISSION=30;
+	const DELETE_PERMISSION=40;
+	const MANAGE_PERMISSION=50;
 	
 	/**
 	 * Returns a static model of itself
@@ -64,6 +65,18 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 		);
 	}
 
+	
+	/**
+	 * Check for permissionlevel and return a boolean if it's OK or not
+	 * 
+	 * @param int $level The permissionlevel that is currently in use
+	 * @param int $requiredLevel The minimal permissionlevel that is needed
+	 * @return boolean Has permission or not 
+	 */
+	public static function hasPermission($level, $requiredLevel) {
+		return $level>=$requiredLevel;
+	}
+	
 	public function tableName(){
 		return "go_acl_items";
 	}
