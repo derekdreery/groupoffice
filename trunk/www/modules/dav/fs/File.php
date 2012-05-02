@@ -31,7 +31,7 @@ class GO_Dav_Fs_File extends Sabre_DAV_FS_Node implements Sabre_DAV_IFile {
 		$fsFile = new GO_Base_Fs_File($this->path);
 
 		$this->folder = GO_Files_Model_Folder::model()->findByPath($fsFile->parent()->stripFileStoragePath());
-		if ($this->folder->getPermissionLevel() < GO_Base_Model_Acl::WRITE_PERMISSION)
+		if (!GO_Base_Model_Acl::hasPermission($this->folder->getPermissionLevel(), GO_Base_Model_Acl::WRITE_PERMISSION))
 			throw new Sabre_DAV_Exception_Forbidden();
 
 		/* if($delete){
