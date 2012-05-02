@@ -239,7 +239,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$result['success'] = false;
 		$company = GO_Addressbook_Model_Company::model()->findByPk($params['company_id']);
 		
-		if(GO_Base_Model_Acl::getUserPermissionLevel($company->getAcl()->id,GO::user()->id)<GO_Base_Model_Acl::WRITE_PERMISSION)
+		if(!$company->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
 			throw new GO_Base_Exception_AccessDenied();
 		
 		if(isset($params['delete_keys']))
