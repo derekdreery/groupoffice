@@ -66,10 +66,8 @@ class GO_Core_Controller_AclUser extends GO_Base_Controller_AbstractMultiSelectM
 	 * @return $response for the client. 
 	 */
 	protected function actionSelectedStore($params) {
-		$response['manage_permission'] = $params['currentUserHasManagePermission'] = GO_Base_Model_Acl::getUserPermissionLevel(
-				$params['model_id'],
-				GO::user()->id
-			) >= GO_Base_Model_Acl::MANAGE_PERMISSION;
+		$currentPermissionLevel = GO_Base_Model_Acl::getUserPermissionLevel($params['model_id'],GO::user()->id);
+		$response['manage_permission'] = $params['currentUserHasManagePermission'] =  GO_Base_Model_Acl::hasPermission($currentPermissionLevel,GO_Base_Model_Acl::MANAGE_PERMISSION);
 		$response = array_merge($response,parent::actionSelectedStore($params));
 		return $response;
 	}
