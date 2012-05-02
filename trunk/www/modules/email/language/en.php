@@ -236,4 +236,4 @@ $l['xssDetected']="This message may contain malicious content. Click here to vie
 $l['xssMessageHidden']='Message hidden for security reasons';
 $l['failedRecipients']='Failed to send to';
 $l['spam']='Spam';
-$l['ignoreSentFolder']='Ignore sent folder (message will be saved in same folder wherefrom user sent it)';
+$l['ignoreSentFolder']='Store replies in the same folder as the original message';
