@@ -148,7 +148,7 @@ class GO_Base_Component_MultiSelectGrid {
 	public function setButtonParams(&$response){
 		$models = $this->_getModels();
 		foreach ($models as $model) {		
-			if(!isset($response['buttonParams']) && $model->getPermissionLevel()>GO_Base_Model_Acl::READ_PERMISSION){
+			if(!isset($response['buttonParams']) && GO_Base_Model_Acl::hasPermission($model->getPermissionLevel(),GO_Base_Model_Acl::CREATE_PERMISSION)){
 
 				//instruct the view for the add action.
 				$response['buttonParams']=array('id'=>$model->id,'name'=>$model->name, 'permissionLevel'=>$model->getPermissionLevel());

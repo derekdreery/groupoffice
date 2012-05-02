@@ -256,7 +256,8 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	private function _checkRequiredPermissionLevels($action){
 		//check action permission
 		if(isset($this->requiredPermissionLevels[$action])){
-			return GO_Base_Model_Acl::getUserPermissionLevel($this->requiredPermissionLevels[$action]['aclId'])>=$this->requiredPermissionLevels[$action]['requiredPermissionLevel'];
+			$permLevel = GO_Base_Model_Acl::getUserPermissionLevel($this->requiredPermissionLevels[$action]['aclId']);
+			return GO_Base_Model_Acl::getUserPermissionLevel($permLevel,$this->requiredPermissionLevels[$action]['requiredPermissionLevel']);
 		}elseif($action!='*'){
 			return $this->_checkRequiredPermissionLevels('*');
 		}else

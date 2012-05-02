@@ -410,7 +410,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$response['data'] = array_merge($response['data'], $model->getAttributes('html'));
 		$response['data']['model']=$model->className();
 		$response['data']['permission_level']=$model->getPermissionLevel();
-		$response['data']['write_permission']=$response['data']['permission_level']>GO_Base_Model_Acl::READ_PERMISSION;
+		$response['data']['write_permission']=GO_Base_Model_Acl::hasPermission($response['data']['permission_level'],GO_Base_Model_Acl::WRITE_PERMISSION);
 
 		$response['data']['customfields']=array();
 		
