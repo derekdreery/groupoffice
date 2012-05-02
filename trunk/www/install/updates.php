@@ -204,3 +204,9 @@ $updates["201204251613"][]= "CREATE TABLE IF NOT EXISTS `go_log` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;";
 
 $updates["201204251613"][]= "ALTER TABLE `go_log` CHANGE `user_agent` `user_agent` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+
+// Change permission levels to new values
+$updates["201205020900"][]="UPDATE `go_acl` SET `level`=10 WHERE `level`=1;";
+$updates["201205020900"][]="UPDATE `go_acl` SET `level`=30 WHERE `level`=2;";
+$updates["201205020900"][]="UPDATE `go_acl` SET `level`=40 WHERE `level`=3;";
+$updates["201205020900"][]="UPDATE `go_acl` SET `level`=50 WHERE `level`=4;";
