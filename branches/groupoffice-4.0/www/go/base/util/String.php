@@ -422,6 +422,14 @@ class GO_Base_Util_String {
 	 */
 
 	public static function split_name($full_name) {
+		if (strpos($full_name,',')) {
+			
+			$parts = explode(',',$full_name);
+			$full_name = implode(' ',array_reverse($parts));			
+		} 
+		
+		$full_name = trim(preg_replace("/[\s]+/", " ", $full_name));
+		
 		$name_arr = explode(' ', $full_name);
 
 		$name['first_name'] = $full_name;
@@ -445,6 +453,7 @@ class GO_Base_Util_String {
 			}
 		}
 		$name['middle_name'] = trim($name['middle_name']);
+		
 		return $name;
 	}
 
