@@ -241,6 +241,7 @@ $l["administration"]='Administration';
 $l["extra"]='Extra';
 $l["permissionsLevel"]='Level';
 $l["permissionRead"]='Read only';
+$l["permissionCreate"]='Read and Create only';
 $l["permissionWrite"]='Write';
 $l["permissionDelete"]='Write and delete';
 $l["permissionManage"]='Manage';
