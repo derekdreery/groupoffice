@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `em_accounts` (
   `smtp_port` int(11) NOT NULL,
   `smtp_encryption` char(3) NOT NULL,
   `smtp_username` varchar(50) DEFAULT NULL,
-  `smtp_password` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '';,
+  `smtp_password` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
   `password_encrypted` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
