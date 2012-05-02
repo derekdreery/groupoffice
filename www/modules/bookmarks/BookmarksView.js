@@ -113,7 +113,7 @@ GO.bookmarks.BookmarksView = function(config){
 		
 				
 
-//	if (this.DV.getRecord(node).data.permissionLevel>GO.permissionLevels.read) // users kunnen niet rechts klikken op public bookmarks
+//	if (this.DV.getRecord(node).data.permissionLevel>=GO.permissionLevels.write) // users kunnen niet rechts klikken op public bookmarks
 //{
 //	GO.bookmarks.showBookmarksDialog({
 //		record:record,
