@@ -150,15 +150,15 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 			
 			// ExtJs view was not built to handle Write / Write And Delete permissions,
 			// but only no read permission, and read and manage permission:
-			if ($permissionLevel > GO_Base_Model_Acl::READ_PERMISSION)
+			if (GO_Base_Model_Acl::hasPermission($permissionLevel,GO_Base_Model_Acl::CREATE_PERMISSION))
 				$permissionLevel = GO_Base_Model_Acl::MANAGE_PERMISSION;			
 			
 			$modules[$translated]= array(
 				'id' => $module->id,
 				'name' => $translated,
 				'permissionLevel' => $permissionLevel,
-				'disable_none' => $usersGroupPermissionLevel!==false && $usersGroupPermissionLevel >= GO_Base_Model_Acl::READ_PERMISSION,
-				'disable_use' => $usersGroupPermissionLevel!==false && $usersGroupPermissionLevel > GO_Base_Model_Acl::READ_PERMISSION
+				'disable_none' => $usersGroupPermissionLevel!==false && GO_Base_Model_Acl::hasPermission($usersGroupPermissionLevel,GO_Base_Model_Acl::READ_PERMISSION),
+				'disable_use' => $usersGroupPermissionLevel!==false && GO_Base_Model_Acl::hasPermission($usersGroupPermissionLevel, GO_Base_Model_Acl::CREATE_PERMISSION)
 			);
 			$response['total'] += 1;
 		}
