@@ -502,3 +502,9 @@ $l['delimiter']='Scheidingsteken';
 $l['enclosure']='Omheiningsteken';
 
 $l['groupofficeDisabled']="<p>Deze {product_name} account is geblokkeerd.</p><p>Neem contact op met uw account manager a.u.b.</p>";
+
+
+$l['exportIncludeHidden'] = 'Exporteer ook verborgen kolommen';
+$l['exportHumanHeaders'] = 'Gebruik kolomnamen uit database';
+$l['exportIncludeHeaders'] = 'Exporteer kolomnamen ook';
+$l['exportOrientation'] = 'Orientatie';

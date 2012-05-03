@@ -524,3 +524,8 @@ $l['groupofficeDisabled']="<p>This {product_name} account has been suspended.</p
 $l['summarylogImportText']="Tried to import {importCount} items.";
 $l['summarylogErrorText']="There where some errors during the import";
 $l['summarylogSuccessText']="Import successful";
+
+$l['exportIncludeHidden'] = 'Export hidden columns too';
+$l['exportHumanHeaders'] = 'Use database column names for headers';
+$l['exportIncludeHeaders'] = 'Export headers too';
+$l['exportOrientation'] = 'Orientation';
