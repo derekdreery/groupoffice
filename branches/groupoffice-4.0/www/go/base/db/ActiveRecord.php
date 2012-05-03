@@ -1198,11 +1198,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				$msg .= "\n\nFull SQL Query: ".$sql;
 
 				if(isset($params['bindParams'])){	
-					$msg .= "\nbBind params: ".var_export($params['bindParams'], true);
+					$msg .= "\nBind params: ".var_export($params['bindParams'], true);
 				}
 
 				if(isset($criteriaObjectParams)){
-					$msg .= "\nbBind params: ".var_export($criteriaObjectParams, true);
+					$msg .= "\nBind params: ".var_export($criteriaObjectParams, true);
 				}
 
 				$msg .= "\n\n".$e->getTraceAsString();
