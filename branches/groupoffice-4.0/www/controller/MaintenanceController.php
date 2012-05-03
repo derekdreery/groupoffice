@@ -472,8 +472,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	}
 	
 	/**
-	 * Compares the language contents of two language files, and echoes the fields
-	 * that are in one file but not the other as Html.
+	 * Used in actionCheckLanguage. Compares the language contents of two language
+	 * files, and echoes the fields that are in one file but not the other as Html.
 	 * @param String $lang1Path Full path to first language file.
 	 * @param String $lang2Path Full path to second language file.
 	 * @return string Html string containing useful information for the user.
@@ -500,7 +500,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	}
 	
 	/**
-	 * Parse the file, putting its language fields into $contentArr.
+	 * Used in actionCheckLanguage. Parse the file, putting its language fields
+	 * into $contentArr.
 	 * @param String $filePath The full path to the file.
 	 * @param Array &$contentArr The array to put the language fields in.
 	 * @return string Output string, possibly containing warnings for the user.
@@ -536,8 +537,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	}
 	
 	/**
-	 * Compares two arrays and returns as Html the fields that is in one but not
-	 * the other.
+	 * Used in actionCheckLanguage. Compares two arrays and returns as Html the
+	 * fields that is in one but not the other.
 	 * @param Array $array1
 	 * @param Array $array2
 	 * @return String 
@@ -563,14 +564,52 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		return $outputString;
 	}
 	
-	
+	/**
+	 * Run from the browser's address bar. Collects all language files, and puts
+	 * them in a zip file in the file storage path, respecting the folder
+	 * structure. I.e., you can later unpack the file contents to the
+	 * Group-Office path.
+	 * @param type $params No parameters!
+	 */
 	protected function actionZipLang($params){
+		if (!empty($params['langCode'])) {
+			$langCode = $params['langCode'];
+		} else {
+			die('<font color="red"><i>The GET parameter langCode is obligatory for the zipLang action!</i></font>');
+		}
+		$fileNames = array();
 		
 		//gather file list in array
+		$commonLangFolder = new GO_Base_Fs_Folder(GO::config()->root_path.'language/');
+		$commonLangFolderContentArr = $commonLangFolder->ls();
+		$moduleModelArr = GO::modules()->getAllModules();
+
+		foreach ($commonLangFolderContentArr as $commonLangFolder) {
+			if (get_class($commonLangFolder)=='GO_Base_Fs_Folder') {
+				$commonLangFileArr = $commonLangFolder->ls();
+				foreach ($commonLangFileArr as $commonLangFile)
+					if (get_class($commonLangFile)=='GO_Base_Fs_File' && $commonLangFile->name()==$langCode.'.php') {
+						$fileNames[] = str_replace(GO::config()->root_path,'',$commonLangFile->path());
+					}
+			}
+		}
 		
+		foreach ($moduleModelArr as $moduleModel) {
+			$modLangFolder = new GO_Base_Fs_Folder($moduleModel->path.'language/');
+			$modLangFiles = $modLangFolder->ls();
+			foreach ($modLangFiles as $modLangFile) {
+				if ($modLangFile->name()==$langCode.'.php')
+					$fileNames[] = str_replace(GO::config()->root_path,'',$modLangFile->path());
+			}
+		}
+		
+		$tmpFile = GO_Base_Fs_File::tempFile($langCode, 'zip');
 		
 		//exec zip
-		
-		exec(GO::config()->cmd_zip.' lang.zip '.implode(" ", $files),$output, $retVal);
+		$cmdString = GO::config()->cmd_zip.' '.$tmpFile->path().' '.implode(" ", $fileNames);
+		exec($cmdString,$outputArr);
+		GO_Base_Util_Http::outputDownloadHeaders($tmpFile);
+		$tmpFile->output();
+		$tmpFile->delete();
 	}
 }
