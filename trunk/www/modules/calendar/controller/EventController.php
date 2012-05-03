@@ -460,9 +460,24 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 //	}	
 
 	protected function actionStore($params) {
+	
+		$response = array();
+		
 		$events = GO_Calendar_Model_Event::model()->findCalculatedForPeriod(false, strtotime("2011-10-03"), strtotime("2011-10-10"));
-
+		
 		var_dump($events);
+
+		$response['write_permission']='';
+		$response['comment']='';
+		$response['calendar_id']='';
+		$response['calendar_name']='';
+		$response['permission_level']='';
+		$response['title']='';
+		$response['count']='';
+		$response['mtime']='';
+		$response['count_events_only']='';
+		
+		return $response;
 	}
 
 	protected function actionIcs($params) {
