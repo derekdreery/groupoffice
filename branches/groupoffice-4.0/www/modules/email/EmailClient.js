@@ -179,6 +179,50 @@ GO.email.EmailClient = function(config){
 		GO.email.saveAsItems[i].scope=this;
 	}
 	
+	var addSendersItems = [{
+		text:GO.email.lang.to,
+		field:'to',
+		handler:this.addSendersTo,
+		scope:this
+	},{
+		text:'CC',
+		field:'cc',
+		handler:this.addSendersTo,
+		scope:this
+	},{
+		text:'BCC',
+		field:'bcc',
+		handler:this.addSendersTo,
+		scope:this
+	}];
+	
+	if (GO.addressbook) {
+		addSendersItems.push({
+			text: GO.addressbook.lang.addresslist,
+			cls: 'x-btn-text-icon',
+			menu: this.addresslistsMenu = new GO.menu.JsonMenu({
+				store: new GO.data.JsonStore({
+					url: GO.url("addressbook/addresslist/store"),
+					baseParams: {
+						permissionLevel: GO.permissionLevels.write,
+						forContextMenu: true
+					},
+					fields: ['id', 'text'],
+					remoteSort: true
+				}),
+				listeners:{
+					scope:this,
+					itemclick : function(item, e ) {
+						this.addSendersToAddresslist(item.id);
+						return false;							
+					}
+				}
+			}),
+			multiple:true,
+			scope: this
+		});
+	}
+	
 	var contextItems = [
 	{
 		text: GO.email.lang.markAsRead,
@@ -241,22 +285,7 @@ GO.email.EmailClient = function(config){
 		text: GO.email.lang.addSendersTo,
 		cls: 'x-btn-text-icon',
 		menu: {
-			items:[{
-				text:GO.email.lang.to,
-				field:'to',
-				handler:this.addSendersTo,
-				scope:this
-			},{
-				text:'CC',
-				field:'cc',
-				handler:this.addSendersTo,
-				scope:this
-			},{
-				text:'BCC',
-				field:'bcc',
-				handler:this.addSendersTo,
-				scope:this
-			}]
+			items: addSendersItems
 		},
 		multiple:true
 	}];
@@ -1629,6 +1658,74 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 			config.values[menuItem.field]=emails.join(', ');
 			GO.email.showComposer(config);
 		}
+	},
+
+	addSendersToAddresslist : function(addresslistId) {
+		var records = this.messagesGrid.getSelectionModel().getSelections();
+		var senderNames = new Array();
+		var senderEmails = new Array();
+		for (var i=0;i<records.length;i++) {
+			senderNames.push(records[i].data.from);
+			senderEmails.push(records[i].data.sender);
+		}
+		
+		senderNames.push('Testpersoon, Testje');
+		senderEmails.push('foobar@testpersoon.dev');
+		senderNames.push('Testpersoon1, Testje');
+		senderEmails.push('foobar1@testpersoon.dev');
+		senderNames.push('Testpersoon2, Testje');
+		senderEmails.push('foobar2@testpersoon.dev');
+		
+		Ext.Ajax.request({
+			url: GO.url('addressbook/addresslist/addContactsToAddresslist'),
+			params: {
+				senderNames: Ext.encode(senderNames),
+				senderEmails: Ext.encode(senderEmails),
+				addresslistId: addresslistId
+			},
+			callback: function(options, success, response)
+			{
+				if(!success)
+				{
+					Ext.MessageBox.alert(GO.lang.strError, response.result.errors);
+				}else
+				{
+					var responseParams = Ext.decode(response.responseText);
+					if(responseParams.success)
+					{
+
+					}else
+					{
+						if (!GO.util.empty(responseParams.unknownSenders)) {
+							
+							if (!this.unknownRecipientsDialogForAddresslist) {
+								this.unknownRecipientsDialogForAddresslist = new GO.email.UnknownRecipientsDialog();
+								this.unknownRecipientsDialogForAddresslist.on('hide',function(){
+									if (!GO.util.empty(this.unknownRecipientsDialogForAddresslist.addresslistId))
+										delete this.unknownRecipientsDialogForAddresslist.addresslistId;
+								},this);
+							}
+
+							this.unknownRecipientsDialogForAddresslist.store.loadData({
+								recipients : Ext.decode(responseParams.unknownSenders)
+							});
+
+							this.unknownRecipientsDialogForAddresslist.addresslistId = addresslistId;
+
+							this.unknownRecipientsDialogForAddresslist.show({
+								title : GO.email.lang.addUnknownSenders,
+								descriptionText : GO.email.lang.addUnknownSendersText,
+								disableSkipUnknownCheckbox : true
+							});
+
+						} else {
+							Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
+						}
+					}
+				}
+			},
+			scope: this
+		});
 	},
 
 	updateState : function(node, open, folder)
