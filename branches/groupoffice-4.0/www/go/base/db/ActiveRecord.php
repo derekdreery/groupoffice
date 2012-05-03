@@ -1703,12 +1703,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}	
 	
 	public function formatAttribute($attributeName, $value, $html=false){
-		if(!isset($this->columns[$attributeName]['gotype'])){			
-
-			if(false && $this->customfieldsModel() && substr($attributeName,0,4)=='col_'){
+		if(!isset($this->columns[$attributeName]['gotype'])){
+			if($this->customfieldsModel() && substr($attributeName,0,4)=='col_'){
 				//if it's a custom field then we create a dummy customfields model.
-				$cfModel = $this->_createCustomFieldsRecordFromAttributes();				
-				return $cfModel->formatAttribute($attributeName, $value);
+				$cfModel = $this->_createCustomFieldsRecordFromAttributes();		
+			//	debug_print_backtrace();
+				return $cfModel->formatAttribute($attributeName, $value, $html);
 			}else	{
 				return $value;
 			}
@@ -3077,7 +3077,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		if(!isset($this->_customfieldsRecord)){
 			
-			$customattr = $this->attributes;
+			$customattr = $this->_attributes;
 			$customattr['model_id']=$this->id;
 
 			$this->_customfieldsRecord = new $model;

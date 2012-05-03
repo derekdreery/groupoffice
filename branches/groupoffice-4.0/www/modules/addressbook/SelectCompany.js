@@ -15,13 +15,16 @@
 GO.addressbook.SelectCompany = function(config){
 	
 	Ext.apply(this, config);
+	
+	if(!this.valueField)
+		this.valueField='id';
 		
 	this.displayField='name_and_name2';
 
 	if (typeof(config.fields)=='undefined') {
 		config.fields = {
 			columns:[],
-			fields:['id', 'name_and_name2', 'post_address', 'post_address_no', 'post_zip', 'post_city', 'post_state', 'post_country', 'vat_no', 'crn','email','invoice_email']
+			fields:['id', 'name_and_name2', 'post_address', 'post_address_no', 'post_zip', 'post_city', 'post_state', 'post_country', 'vat_no', 'crn','email','invoice_email','cf']
 		};
 	}
 
@@ -48,11 +51,12 @@ GO.addressbook.SelectCompany = function(config){
 			remoteSort: true
 		});
 	}
+	
+	
 
 	this.store.setDefaultSort('name', 'asc');
 
-	GO.addressbook.SelectCompany.superclass.constructor.call(this,{
-		valueField: 'id',
+	GO.addressbook.SelectCompany.superclass.constructor.call(this,{		
 		triggerAction: 'all',
 		selectOnFocus:true,
 		pageSize: parseInt(GO.settings['max_rows_list'])
@@ -60,3 +64,5 @@ GO.addressbook.SelectCompany = function(config){
 	
 }
 Ext.extend(GO.addressbook.SelectCompany, GO.form.ComboBoxReset);
+
+Ext.ComponentMgr.registerType('selectcompany', GO.addressbook.SelectCompany);
