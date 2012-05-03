@@ -450,6 +450,10 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		
 		$findParams = $store->getDefaultParams($params);
 		
+		//sorting on custom fields doesn't work for folders
+		if(isset($params['sort']) && substr($params['sort'],0,4)=='col_')
+			$findParams->order ("name", $params['dir']);
+			
 		$findParamsArray = $findParams->getParams();
 		if(!isset($findParamsArray['start']))
 			$findParamsArray['start']=0;
