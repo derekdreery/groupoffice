@@ -891,7 +891,7 @@ class GO_Base_Util_String {
 		);
 
 		foreach ($emoticons as $emoticon => $img) {
-			$imgpath = GO::config()->full_url . 'views/Extjs3/themes/' . GO::user()->theme . '/images/emoticons/normal/' . $img;
+			$imgpath = GO::config()->host . 'views/Extjs3/themes/' . GO::user()->theme . '/images/emoticons/normal/' . $img;
 			$imgstring = '<img src="' . $imgpath . '" alt="' . $emoticon . '" />';
 			if ($html)
 				$string = GO_Base_Util_String::htmlReplace($emoticon, $imgstring, $string);
