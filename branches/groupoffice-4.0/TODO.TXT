@@ -1,22 +1,18 @@
-Notifications on uploads
+Notifications on uploads (Michal)
 
 SelectCompany custom field
 
+
+Profile tab in settings dialog
 
 Calendar:
 Distinguish declined and cancel	led events in grid.
 alarm import
 test invitation sending with moving in grid
 
-Translate tool
-
-factuur e-mail bij bedrijven
-
 postfixadmin installation
 
 Grid scroll behouden bij reload
-
-serverclient
 
 CMS compatible
 
@@ -27,7 +23,6 @@ Module icons
 karakter encoding: koi8-r
 
 Document conversion
-User import
 
 Product opties bij billing
 
