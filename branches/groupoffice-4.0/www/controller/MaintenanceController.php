@@ -437,4 +437,140 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		}
 		$this->fireEvent('servermanagerReport');
 	}
+	
+	/**
+	 * Action to be called from browser address bar. It compares all the language
+	 * fields of lang1 and lang2 in the current Group-Office installation, and
+	 * echoes the fields that are in one language but not the other.
+	 * @param type $params MUST contain $params['lang1'] AND $params['lang2']
+	 */
+	protected function actionCheckLanguage($params){
+		$lang1code = $params['lang1'];
+		$lang2code = $params['lang2'];
+		
+		$commonLangFolder = new GO_Base_Fs_Folder(GO::config()->root_path.'language/');
+		$commonLangFolderContentArr = $commonLangFolder->ls();
+		$moduleModelArr = GO::modules()->getAllModules();
+		
+		foreach ($commonLangFolderContentArr as $commonContentEl) {
+			if (get_class($commonContentEl)=='GO_Base_Fs_Folder') {				
+				echo '<h3>'.$commonContentEl->path().'</h3>';
+				echo $this->_compareLangFiles($commonContentEl->path().'/'.$lang1code.'.php', $commonContentEl->path().'/'.$lang2code.'.php');
+				echo '<hr>';
+				
+			} else {
+//				$commonContentEl = new GO_Base_Fs_File();
+//				$langFileContentString = $commonContentEl->getContents();
+			}
+		}
+		
+		foreach ($moduleModelArr as $moduleModel) {
+			echo '<h3>'.$moduleModel->path.'</h3>';
+			echo $this->_compareLangFiles($moduleModel->path.'language/'.$lang1code.'.php', $moduleModel->path.'language/'.$lang2code.'.php');
+			echo '<hr>';
+		}
+	}
+	
+	/**
+	 * Compares the language contents of two language files, and echoes the fields
+	 * that are in one file but not the other as Html.
+	 * @param String $lang1Path Full path to first language file.
+	 * @param String $lang2Path Full path to second language file.
+	 * @return string Html string containing useful information for the user.
+	 */
+	private function _compareLangFiles($lang1Path,$lang2Path) {
+		$outputHtml = '';
+		$content1Arr = array();
+		$content2Arr = array();
+		
+		$outputHtml .= $this->_langFieldsToArray($lang1Path,$content1Arr);
+		$outputHtml .= $this->_langFieldsToArray($lang2Path,$content2Arr);				
+
+		if(!empty($content1Arr) && !empty($content2Arr))
+		{
+			$outputHtml .= '<i>Missing in '.$lang2Path.':</i><br />'
+							.$this->_getMissingFields($content1Arr, $content2Arr)
+							.'<br />';
+			$outputHtml .= '<i>Missing in '.$lang1Path.':</i><br />'
+							.$this->_getMissingFields($content2Arr, $content1Arr)
+							.'<br />';
+		}
+		
+		return $outputHtml;
+	}
+	
+	/**
+	 * Parse the file, putting its language fields into $contentArr.
+	 * @param String $filePath The full path to the file.
+	 * @param Array &$contentArr The array to put the language fields in.
+	 * @return string Output string, possibly containing warnings for the user.
+	 */
+	private function _langFieldsToArray($filePath,&$contentArr) {
+		$outputString = '';
+		$langFile = new GO_Base_Fs_File($filePath);
+		
+		if(!file_exists($langFile->path())) {
+			$outputString .= '<i><font color="red">File not found: "'.$langFile->path().'"</font></i><br />';
+		} else {
+			$encodingName = $langFile->detectEncoding($langFile->getContents());
+			if ( $encodingName == 'UTF-8' || $encodingName == 'ASCII' || $langFile->convertToUtf8() ) {
+				$lines = file($langFile->path());
+				if (count($lines)) {
+					foreach($lines as $line)
+					{
+						$first_equal = strpos($line,'=');
+						if($first_equal != 0)
+						{
+							$key = trim(substr($line, 0, $first_equal));
+							$contentArr[$key] = trim(substr($line, $first_equal, strlen($line)-1));
+						}
+					}
+				} else {
+					$outputString .= '<i><font color="red">Could not compare '.str_replace(GO::config()->root_path, '', $langFile->path()).', because it has no translation contents!</font></i><br />';
+				}
+			} else {
+				$outputString .= '<i><font color="red">Could not compare with '.str_replace(GO::config()->root_path, '', $langFile->path()).', because it cannot be made UTF-8!</font></i><br />';
+			}
+		}
+		return $outputString;
+	}
+	
+	/**
+	 * Compares two arrays and returns as Html the fields that is in one but not
+	 * the other.
+	 * @param Array $array1
+	 * @param Array $array2
+	 * @return String 
+	 */
+	private function _getMissingFields($array1, $array2)
+	{
+		$outputString = '';
+		$diffs = array_diff_key($array1, $array2);
+		
+		if(!empty($diffs))
+		{
+			foreach($diffs as $key=>$diff)
+			{
+				if(!strpos($diff, '{}'))
+					$output[] = $key.$diff;
+			}
+			if(!empty($output))
+			{
+				foreach ($output as $out)
+					$outputString .= htmlentities($out,ENT_QUOTES,'UTF-8').'<br />';
+			}
+		}
+		return $outputString;
+	}
+	
+	
+	protected function actionZipLang($params){
+		
+		//gather file list in array
+		
+		
+		//exec zip
+		
+		exec(GO::config()->cmd_zip.' lang.zip '.implode(" ", $files),$output, $retVal);
+	}
 }
