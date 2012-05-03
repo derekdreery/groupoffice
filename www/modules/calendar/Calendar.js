@@ -367,7 +367,9 @@ GO.calendar.MainPanel = function(config){
 	this.calendarListPanel.add(this.resourcesList);
 
 	this.daysGridStore = new GO.data.JsonStore({
-		url: GO.settings.modules.calendar.url+'json.php',
+		//url: GO.settings.modules.calendar.url+'json.php',
+		url:GO.url('calendar/event/store'),
+		
 		baseParams: {
 			task: 'events'
 		},
