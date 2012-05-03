@@ -16,10 +16,10 @@ class GO_Base_Mail_ImapBodyStruct extends GO_Base_Mail_ImapBase {
 	}
 	function parse_single_part($array) {
 		$vals = $array[0];
-
+		
 		array_shift($vals);
 		array_pop($vals);
-		$atts = array('filename', 'type', 'subtype', 'charset', 'id', 'description', 'encoding',
+		$atts = array('name', 'type', 'subtype', 'charset', 'id', 'description', 'encoding',
 						'size', 'lines', 'md5', 'disposition', 'language', 'location');
 		$res = array();
 		if (count($vals) > 7) {
@@ -80,9 +80,8 @@ class GO_Base_Mail_ImapBodyStruct extends GO_Base_Mail_ImapBase {
 					}
 				}
 			}
-			
-			if(empty($res['filename']) && !empty($res['name']))
-				$res['filename']=$res['name'];
+			if(empty($res['name']) && !empty($res['filename']))
+				$res['name']=$res['filename'];
 			
 			if (isset($vals[0]) && $vals[0] != ')') {
 				$res['language'] = array_shift($vals);
@@ -110,8 +109,8 @@ class GO_Base_Mail_ImapBodyStruct extends GO_Base_Mail_ImapBase {
 				}
 //if ($v=='filename') var_dump($res);
 			}
-			if (!isset($res['filename'])) {
-				$res['filename'] = 'message';
+			if (!isset($res['name'])) {
+				$res['name'] = 'message';
 			}
 		}
 		return $res;
