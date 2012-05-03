@@ -357,3 +357,5 @@ $l['companyCustomFields']='Company custom fields';
 $l['editUser']='Edit user';
 
 $l['templateContent']='Document';
+
+$l['addresslistIdMustBePositive']='This panel expects an addresslist ID that is positive, but did not receive one. Please contact the administrator.';

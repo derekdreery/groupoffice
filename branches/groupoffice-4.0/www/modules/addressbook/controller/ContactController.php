@@ -233,7 +233,51 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		return $storeParams;
 		
 	}
-	
+
+	public function actionMergeEmailWithContact($params) {
+		$email = (isset($params['email']) && $params['email']) ? $params['email'] : '';
+		$replaceEmail = (isset($params['replace_email']) && $params['replace_email']) ? $params['replace_email'] : '';
+		$contactId = (isset($params['contact_id']) && $params['contact_id']) ? $params['contact_id'] : 0;
+
+		$response['success'] = false;
+		if($email && $contactId)
+		{
+			$contactModel = GO_Addressbook_Model_Contact::model()->findByPk($contactId);
+			$emailAddresses = array($contactModel->email, $contactModel->email2, $contactModel->email3);
+
+			if(!$replaceEmail)
+			{		    		    		    
+				if(!in_array($email, $emailAddresses))
+				{
+					$index = array_search('', $emailAddresses);
+					if($index === false) {
+						$response['addresses'] = array(array('name' => $contactModel->email), array('name' => $contactModel->email2), array('name' => $contactModel->email3));
+						$response['contact_name'] = $contactModel->name;
+					} else{
+						$field = ($index == 0) ? 'email' : 'email'.($index+1);
+						$contactModel->$field = $email;
+						$contactModel->save();
+					}	
+					$response['success'] = true;
+				} else {
+					$response['feedback'] = GO::t('emailAlreadyExists','addressbook');
+				}
+			} else {
+				$index = array_search($replaceEmail, $emailAddresses);
+				if($index === false)
+				{
+					$response['feedback'] = GO::t('emailDoesntExists','addressbook');
+				}else
+				{
+					$field = ($index == 0) ? 'email' : 'email'.($index+1);
+					$contactModel->$field = $email;
+					$contactModel->save();
+					$response['success']=true;
+				}		        
+			}	
+	  }
+		return $response;
+	}
 	
 	function actionEmployees($params) {
 		$result['success'] = false;
@@ -413,6 +457,6 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$summarylog = parent::actionImport($params);
 		return $summarylog->getErrorsJson();
 	}
-	
+
 }
 
