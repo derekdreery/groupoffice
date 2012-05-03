@@ -290,10 +290,10 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	
 	public function formatStoreRecord($record, $model, $store) {
 		
-		$record['total_usage']= GO_Base_Util_Number::formatSize($record['file_storage_usage']+$record['database_usage']+$record['mailbox_usage']);
-		$record['file_storage_usage']= GO_Base_Util_Number::formatSize($record['file_storage_usage']);
-		$record['database_usage']= GO_Base_Util_Number::formatSize($record['database_usage']);
-		$record['mailbox_usage']= GO_Base_Util_Number::formatSize($record['mailbox_usage']);
+		$record['total_usage']= GO_Base_Util_Number::formatSize(($record['file_storage_usage']+$record['database_usage']+$record['mailbox_usage'])*1024);
+		$record['file_storage_usage']= GO_Base_Util_Number::formatSize($record['file_storage_usage']*1024);
+		$record['database_usage']= GO_Base_Util_Number::formatSize($record['database_usage']*1024);
+		$record['mailbox_usage']= GO_Base_Util_Number::formatSize($record['mailbox_usage']*1024);
 		
 		
 		if(file_exists($model->configPath))
@@ -413,7 +413,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		
 		while($installation = $stmt->fetch()){
 			echo "Creating report for ".$installation->name."\n";
-			//$report['installations'][]=$installation->report();
+			$report['installations'][]=$installation->report();
 			
 			//run tasks for installation like log rotation and filesearch index update.
 			
