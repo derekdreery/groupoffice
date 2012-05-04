@@ -535,7 +535,7 @@ $l['remove']="Remove";
 $l['removeSelected']="Remove selected";
 $l['removeUpload']="Remove upload";
 $l['removeAll']="Remove all";
-$l['Queued'];
+$l['queued']="Queued";
 $l['uploading']='Uploading ({0}%)';
 $l['failed']='Failed';
 $l['done']='Done';
