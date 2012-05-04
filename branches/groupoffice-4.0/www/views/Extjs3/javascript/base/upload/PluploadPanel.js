@@ -72,8 +72,8 @@ GO.base.upload.PluploadPanel = function(config){
  
 		statusQueuedText: GO.lang.qeued,
 		statusUploadingText: GO.lang.uploading,
-		statusFailedText: '<span style="color: red">'.GO.lang.failed+'</span>',
-		statusDoneText: '<span style="color: green">'.GO.lang.done+'</span>',
+		statusFailedText: '<span style="color: red">'+GO.lang.failed+'</span>',
+		statusDoneText: '<span style="color: green">'+GO.lang.done+'</span>',
  
 		statusInvalidSizeText: GO.lang.tooBig,
 		statusInvalidExtensionText: GO.lang.invalidFileType,
