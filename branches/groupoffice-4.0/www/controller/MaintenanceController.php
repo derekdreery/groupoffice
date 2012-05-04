@@ -9,6 +9,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	protected function allowGuests() {
 		return array('upgrade','checkdatabase','servermanagerreport');
 	}
+	
+	//don't check token in this controller
+	protected function checkSecurityToken(){}
 
 	protected function init() {
 		GO::$disableModelCache=true; //for less memory usage
@@ -445,12 +448,16 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	 * @param type $params MUST contain $params['lang1'] AND $params['lang2']
 	 */
 	protected function actionCheckLanguage($params){
-		$lang1code = $params['lang1'];
-		$lang2code = $params['lang2'];
+		$lang1code = empty($params['lang1']) ? 'en' : $params['lang1'];
+		$lang2code = empty($params['lang2']) ? 'nl' : $params['lang2'];
 		
 		$commonLangFolder = new GO_Base_Fs_Folder(GO::config()->root_path.'language/');
 		$commonLangFolderContentArr = $commonLangFolder->ls();
 		$moduleModelArr = GO::modules()->getAllModules();
+		
+		echo "<h1>Translate tool</h1>";
+				
+		echo '<p><a href="'.GO::url("maintenance/zipLanguage",array("lang"=>$lang2code)).'">Download zip file for '.$lang2code.'</a></p>';
 		
 		foreach ($commonLangFolderContentArr as $commonContentEl) {
 			if (get_class($commonContentEl)=='GO_Base_Fs_Folder') {				
@@ -569,13 +576,13 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	 * them in a zip file in the file storage path, respecting the folder
 	 * structure. I.e., you can later unpack the file contents to the
 	 * Group-Office path.
-	 * @param type $params No parameters!
+	 * @param type $params 
 	 */
-	protected function actionZipLang($params){
-		if (!empty($params['langCode'])) {
-			$langCode = $params['langCode'];
+	protected function actionZipLanguage($params){
+		if (!empty($params['lang'])) {
+			$langCode = $params['lang'];
 		} else {
-			die('<font color="red"><i>The GET parameter langCode is obligatory for the zipLang action!</i></font>');
+			die('<font color="red"><i>The GET parameter lang is required for the zipLanguage action!</i></font>');
 		}
 		$fileNames = array();
 		
