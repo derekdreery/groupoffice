@@ -1,5 +1,5 @@
 <link href="<?php echo GO::config()->theme_url; ?>Default/images/groupoffice.ico?" rel="shortcut icon" type="image/x-icon">
-<title><?php echo GO::config()->title; ?> - BETA</title>
+<title><?php echo GO::config()->title; ?></title>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 <?php
 $root_path = $GLOBALS['GO_CONFIG']->root_path.'views/Extjs3/';

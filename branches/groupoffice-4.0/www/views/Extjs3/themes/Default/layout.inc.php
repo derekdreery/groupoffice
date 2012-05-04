@@ -41,7 +41,7 @@ if($GLOBALS['GO_SECURITY']->logged_in() && !isset($popup_groupoffice))
 {
 	?>
 	<div id="mainNorthPanel">
-		<div id="beta">BETA</div>
+<!--		<div id="beta">BETA</div>-->
 		<div id="headerLeft">
 			<?php echo $lang['common']['loggedInAs'].' '.htmlspecialchars(GO::user()->name); ?>
 		</div>

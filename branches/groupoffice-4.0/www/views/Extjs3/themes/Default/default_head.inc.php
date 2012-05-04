@@ -3,7 +3,7 @@ $favicon = !empty($GO_CONFIG->favicon) ? $GO_CONFIG->favicon : $GO_CONFIG->theme
 ?>
 <meta name="robots" content="noindex" />
 <link href="<?php echo $favicon; ?>" rel="shortcut icon" type="image/x-icon">
-<title><?php echo GO::config()->title; ?> - BETA</title>
+<title><?php echo GO::config()->title; ?></title>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 <?php
 
