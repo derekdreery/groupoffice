@@ -529,3 +529,18 @@ $l['exportIncludeHidden'] = 'Export hidden columns too';
 $l['exportHumanHeaders'] = 'Use database column names for headers';
 $l['exportIncludeHeaders'] = 'Export headers too';
 $l['exportOrientation'] = 'Orientation';
+
+
+$l['remove']="Remove";
+$l['removeSelected']="Remove selected";
+$l['removeUpload']="Remove upload";
+$l['removeAll']="Remove all";
+$l['Queued'];
+$l['uploading']='Uploading ({0}%)';
+$l['failed']='Failed';
+$l['done']='Done';
+$l['tooBig']='Too big';
+$l['invalidFileType']='Invalid file type';
+$l['uploadQueueEmpty']="Upload queue is empty";
+$l['dropFilesHere']="Drop files here";
+$l['pluploadProgressText']="{0}/{1} ({3} failed) ({5}/s)";
