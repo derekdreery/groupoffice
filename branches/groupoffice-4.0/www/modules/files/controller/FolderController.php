@@ -10,8 +10,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		
 		GO::$ignoreAclPermissions=true; //allow this script access to all
 		GO::$disableModelCache=true; //for less memory usage
-		ini_set('max_execution_time', '300');
-		session_write_close();		
+		ini_set('max_execution_time', '0');
+		GO::session()->closeWriting();		
 		
 		$folders = array('users','projects','addressbook','billing','notes','tickets');	
 		
