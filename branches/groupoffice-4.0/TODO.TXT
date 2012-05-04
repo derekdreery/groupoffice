@@ -1,7 +1,6 @@
 Notifications on uploads (Michal)
 
-SelectCompany custom field
-
+carddav
 
 Profile tab in settings dialog
 

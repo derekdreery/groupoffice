@@ -614,7 +614,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			}
 		}
 		
-		$tmpFile = GO_Base_Fs_File::tempFile($langCode, 'zip');
+		$tmpFile = GO_Base_Fs_File::tempFile($langCode.'-'.str_replace('.','-', GO::config()->version), 'zip');
 		
 		//exec zip
 		$cmdString = GO::config()->cmd_zip.' '.$tmpFile->path().' '.implode(" ", $fileNames);
