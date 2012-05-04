@@ -297,3 +297,7 @@ $updates["201205021029"][]="insert into ab_addresslist_contacts SELECT m.group_i
 
 
 $updates["201205031447"][]="update cf_fields set datatype='GO_Addressbook_Customfieldtype_Contact' where datatype='contact'";
+
+$updates["201205031447"][]="update `ab_email_templates` set content = replace(content, '{my_', '{user:') WHERE type=0";
+$updates["201205031447"][]="update `ab_email_templates` et content = replace(content, '{user:company','{usercompany:name') WHERE type=0";
+$updates["201205031447"][]="UPDATE `ab_email_templates` SET content = replace( content, '{user:work_', '{usercompany:' ) WHERE TYPE =0";
