@@ -151,8 +151,8 @@ $updates["201202131145"][]= "CREATE TABLE IF NOT EXISTS `go_advanced_searches` (
 	`name` VARCHAR(255) NOT NULL DEFAULT '',
 	`user_id` int(11) NOT NULL DEFAULT '0',
 	`acl_id` int(11) NOT NULL DEFAULT '0',
-	`data` TEXT NOT NULL DEFAULT '',
-	`model_name` VARCHAR(32) NOT NULL DEFAULT '',
+	`data` TEXT NULL DEFAULT '',
+	`model_name` VARCHAR(100) NOT NULL DEFAULT '',
 	PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
@@ -204,3 +204,6 @@ $updates["201204251613"][]= "CREATE TABLE IF NOT EXISTS `go_log` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;";
 
 $updates["201204251613"][]= "ALTER TABLE `go_log` CHANGE `user_agent` `user_agent` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+
+$updates["201204251613"][]= "ALTER TABLE `go_advanced_searches` ADD `model_name` VARCHAR( 100 ) NOT NULL DEFAULT ''";
+$updates["201204251613"][]="ALTER TABLE `go_advanced_searches` CHANGE `model_name` `model_name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
