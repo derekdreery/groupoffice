@@ -588,25 +588,29 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		//gather file list in array
 		$commonLangFolder = new GO_Base_Fs_Folder(GO::config()->root_path.'language/');
-		$commonLangFolderContentArr = $commonLangFolder->ls();
-		$moduleModelArr = GO::modules()->getAllModules();
+		if($commonLangFolder->exists()){
+			$commonLangFolderContentArr = $commonLangFolder->ls();
+			$moduleModelArr = GO::modules()->getAllModules();
 
-		foreach ($commonLangFolderContentArr as $commonLangFolder) {
-			if (get_class($commonLangFolder)=='GO_Base_Fs_Folder') {
-				$commonLangFileArr = $commonLangFolder->ls();
-				foreach ($commonLangFileArr as $commonLangFile)
-					if (get_class($commonLangFile)=='GO_Base_Fs_File' && $commonLangFile->name()==$langCode.'.php') {
-						$fileNames[] = str_replace(GO::config()->root_path,'',$commonLangFile->path());
-					}
+			foreach ($commonLangFolderContentArr as $commonLangFolder) {
+				if (get_class($commonLangFolder)=='GO_Base_Fs_Folder') {
+					$commonLangFileArr = $commonLangFolder->ls();
+					foreach ($commonLangFileArr as $commonLangFile)
+						if (get_class($commonLangFile)=='GO_Base_Fs_File' && $commonLangFile->name()==$langCode.'.php') {
+							$fileNames[] = str_replace(GO::config()->root_path,'',$commonLangFile->path());
+						}
+				}
 			}
 		}
 		
 		foreach ($moduleModelArr as $moduleModel) {
 			$modLangFolder = new GO_Base_Fs_Folder($moduleModel->path.'language/');
-			$modLangFiles = $modLangFolder->ls();
-			foreach ($modLangFiles as $modLangFile) {
-				if ($modLangFile->name()==$langCode.'.php')
-					$fileNames[] = str_replace(GO::config()->root_path,'',$modLangFile->path());
+			if($modLangFolder->exists()){
+				$modLangFiles = $modLangFolder->ls();
+				foreach ($modLangFiles as $modLangFile) {
+					if ($modLangFile->name()==$langCode.'.php')
+						$fileNames[] = str_replace(GO::config()->root_path,'',$modLangFile->path());
+				}
 			}
 		}
 		
@@ -614,7 +618,11 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		//exec zip
 		$cmdString = GO::config()->cmd_zip.' '.$tmpFile->path().' '.implode(" ", $fileNames);
-		exec($cmdString,$outputArr);
+		exec($cmdString,$outputArr, $retVal);
+		
+		if($retVal>0)
+			trigger_error("Creating ZIP file failed! ".implode("<br />", $outputArr), E_USER_ERROR);
+		
 		GO_Base_Util_Http::outputDownloadHeaders($tmpFile);
 		$tmpFile->output();
 		$tmpFile->delete();
