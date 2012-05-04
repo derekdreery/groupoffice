@@ -5,7 +5,7 @@ class GO_Addressbook_Customfieldtype_Company extends GO_Customfields_Customfield
 		return 'Company';
 	}
 	
-	public function formatDisplay($key, &$attributes) {
+	public function formatDisplay($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model) {
 		$html="";
 		if(!empty($attributes[$key])) {
 

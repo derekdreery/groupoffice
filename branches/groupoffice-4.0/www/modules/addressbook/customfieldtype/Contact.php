@@ -5,7 +5,7 @@ class GO_Addressbook_Customfieldtype_Contact extends GO_Customfields_Customfield
 		return 'Contact';
 	}
 	
-	public function formatDisplay($key, &$attributes) {
+	public function formatDisplay($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model) {
 		$html="";
 		if(!empty($attributes[$key])) {
 
