@@ -143,3 +143,5 @@ $updates["201204121221"][]="ALTER TABLE `cal_views` DROP `end_hour`";
 $updates["201204121221"][]="ALTER TABLE `cal_views` DROP `event_colors_override`";
 $updates["201204121221"][]="ALTER TABLE `cal_views` DROP `acl_write`";
 $updates["201204121221"][]="ALTER TABLE `cal_views` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
+
+$updates["201205031333"][]="delete FROM `cal_participants` WHERE event_id=0;";

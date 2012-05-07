@@ -1028,8 +1028,16 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 	}
 	
-	
+	/**
+	 * Check if this event has other participant then the given user id.
+	 * 
+	 * @param int $user_id
+	 * @return boolean 
+	 */
 	public function hasOtherParticipants($user_id){
+		
+		if(empty($this->id))
+			return false;
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()
 						->single();

@@ -172,7 +172,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 			$this->max_users=$config['max_users'];
 		
 		$folder = new GO_Base_Fs_Folder($config['file_storage_path']);
-		$this->file_storage_usage=$folder->calculateSize();
+		$this->file_storage_usage=$folder->calculateSize()/1024;
 		
 		$this->_calculateDatabaseSize($config['db_name']);
 		$this->_calculateMailboxUsage($config);
@@ -275,18 +275,17 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		
 		if(!empty(GO::config()->serverclient_server_url) && !empty($config['serverclient_domains'])) {
 			$c = new GO_Serverclient_HttpClient();
-			$response = $c->postfixRequest(array(
-					'task'=>'serverclient_get_usage',
-					'domains'=>$config['serverclient_domains']
-			));
+			$c->postfixLogin();
 			
-			$response = json_decode($response);
-
-			foreach($response->domains as $domain) {
-				$this->mailbox_usage+=$domain->usage;
-			}
+			$response = $c->request(
+					GO::config()->serverclient_server_url."?r=postfixadmin/domain/getUsage", 
+					array('domains'=>json_encode(explode(",",$config['serverclient_domains'])))
+			);
+			
+			$result = json_decode($response);
+			$this->mailbox_usage=$result->usage;			
 		}
-		$this->mailbox_usage*=1024;
+		
 	}
 	
 	private function _calculateDatabaseSize($dbName){
@@ -297,6 +296,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 			$this->database_usage+=$r['Data_length'];
 			$this->database_usage+=$r['Index_length'];
 		}
+		$this->database_usage/=1024;
 	}
 	
 	

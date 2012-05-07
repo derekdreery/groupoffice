@@ -61,3 +61,5 @@ $l["domain"]="Domene";
 $l["defaultQuota"]='Standard kvote (MB)';
 $l["usage"]="Bruk";
 $l["postfixadmin"]='E-post domener';
+$l['maxAliases']= 'Maks. aliaser';
+$l['maxMailboxes']= 'Maks. mailbokser';

@@ -101,9 +101,10 @@ GO.addressbook.ContactDialog = function(config)
 	this.photoPanel,
 	this.commentPanel];
 	      
-	items.push(new GO.addressbook.SelectAddresslistsPanel());
+	this.selectAddresslistsPanel = new GO.addressbook.SelectAddresslistsPanel();
+				
+	items.push(this.selectAddresslistsPanel);
 	
-  
 	if(GO.customfields && GO.customfields.types["GO_Addressbook_Model_Contact"])
 	{
 		for(var i=0;i<GO.customfields.types["GO_Addressbook_Model_Contact"].panels.length;i++)
@@ -235,6 +236,8 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 	show : function(contact_id, config)
 	{
 		
+		var config = config || {};
+		
 		if(!this.rendered)
 		{
 			this.render(Ext.getBody());
@@ -300,6 +303,10 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 				this.personalPanel.formAddressBooks.selectFirst();
 				this.personalPanel.setAddressbookID(this.personalPanel.formAddressBooks.getValue());
 			}
+			
+			
+			if(!GO.util.empty(config.addresslistIds))
+				this.setAddresslistCheckBoxes(config.addresslistIds);
 						
 //			if(this.contact_id > 0)
 //			{
@@ -406,5 +413,14 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 		this.contactPhoto.setPhotoSrc(url);
 		this.deleteImageCB.setValue(false);
 		this.deleteImageCB.setDisabled(url=='');
+	},
+	
+	setAddresslistCheckBoxes : function(addresslistIds) {
+		for (var i=0; i<addresslistIds.length; i++) {
+			var field = this.formPanel.find('name', 'addresslist_'+addresslistIds[i]);
+			if (!GO.util.empty(field))
+				field[0].setValue(true);
+		}
 	}
+	
 });

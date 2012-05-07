@@ -16,7 +16,7 @@ GO.files.FilesGrid = function(config) {
 
 Ext.extend(GO.files.FilesGrid, GO.grid.GridPanel, {
 	applyStoredState : function(state){
-		delete state.sort;
+		//delete state.sort;
 		this.stateful=false;
 
 		GO.files.FilesGrid.superclass.applyState.call(this, state);

@@ -10,21 +10,28 @@
  * 
  * @copyright Copyright Intermesh
  * @author Wilmar van Beusekom <wilmar@intermesh.nl>
- */class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractModelController {
+ */
+
+class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractModelController {
 
 	protected $model = 'GO_Addressbook_Model_Addresslist';
 	
 	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
 		
-		$multiSel = new GO_Base_Component_MultiSelectGrid(
-						'addresslist_filter', 
-						"GO_Addressbook_Model_Addresslist",$store, $params);		
-		$multiSel->formatCheckedColumn();
-		
+		if (empty($params['forContextMenu'])) {
+			$multiSel = new GO_Base_Component_MultiSelectGrid(
+							'addresslist_filter', 
+							"GO_Addressbook_Model_Addresslist",$store, $params);		
+			$multiSel->formatCheckedColumn();
+		}
 		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
 	}
 
-
+	public function formatStoreRecord($record, $model, $store) {
+		$record['text'] = $record['name'];
+		return $record;
+	}
+	
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
 
 		$columnModel->formatColumn('user_name', '$model->user->name');
@@ -131,7 +138,71 @@
 		);
 	}
 	
-	
+	/**
+	 * Add contacts to an addresslist.
+	 * @param type $params MUST contain addresslistId AND (EITHER senderNames and
+	 * senderEmails OR contactIds)
+	 * @return $response If there are email addresses that are not found in any
+	 * addressbook, the corresponding senders are registered in 
+	 * $response['unknownSenders'], and  $response['success'] becomes false, so
+	 * that the user can decide what to do with the unknown senders.
+	 */
+	public function actionAddContactsToAddresslist($params) {
+		$addresslistModel = GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslistId']);
+		$response = array(
+			'success'=>true,
+		);
+		
+		if (!empty($params['contactIds'])) {
+			// Only contact ids are sent from the client
+			$contactIds = json_decode($params['contactIds']);
+			foreach ($contactIds as $contactId) {
+				$addresslistModel->addManyMany('contacts',$contactId);
+			}
+		} else {
+			// email addresses and names are sent from the client
+			$senderEmails = json_decode($params['senderEmails']);
+			$senderNames = json_decode($params['senderNames']);
+			$senders = array(); // format: $senders[$senderEmail] = array('first_name'=>'Jack','middle_name'=>'','last_name'=>'Johnson');
+			$unknownSenders = array(); // format: $unknownSenders[$senderEmail] = array('first_name'=>'Jack','middle_name'=>'','last_name'=>'Johnson');
+
+			// Create array of senders
+			foreach ($senderEmails as $key => $senderEmail) {
+				if (empty($senders[$senderEmail]))
+					$senders[$senderEmail] = $senderNames[$key];
+			}
+
+			foreach($senders as $senderEmail => $senderNameArr){
+				$contactNameArr = GO_Base_Util_String::split_name($senderNameArr);
+				$contactModel = GO_Addressbook_Model_Contact::model()->findSingleByAttribute('email', $senderEmail);
+
+				if (empty($contactModel) && empty($unknownSenders[$senderEmail])) {
+					// Keep track of contacts not found in database.
+					$unknownSenders[] = array(
+						'email'=>$senderEmail,
+						'name'=>$senderNameArr,
+						'first_name'=>$contactNameArr['first_name'],
+						'middle_name'=>$contactNameArr['middle_name'],
+						'last_name'=>$contactNameArr['last_name']
+					);
+				} else {
+					// add contact to addresslist
+					$contactModel->first_name = $contactNameArr['first_name'];
+					$contactModel->middle_name = $contactNameArr['middle_name'];
+					$contactModel->last_name = $contactNameArr['last_name'];
+					$addresslistModel->addManyMany('contacts', $contactModel->id);
+				}
+			}
+			
+			if (count($unknownSenders)) {
+				$response['success'] = false;
+				$response['unknownSenders'] = json_encode($unknownSenders);
+				$response['addresslistId'] = $addresslistModel->id;
+			}
+		}
+		
+		return $response;
+	}
 
 	// TODO: get cross-session "selected addresslist" identifiers for getting store
 }

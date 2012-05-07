@@ -38,10 +38,24 @@ class GO_Base_Export_ExportCSV extends GO_Base_Export_AbstractExport {
 	public function output(){
 		$this->_sendHeaders();
 		
+		
+		
 		if($this->header){
-			if($this->humanHeaders)
-				$this->_write(array_values($this->getLabels()));
-			else
+			if($this->humanHeaders){
+				
+				//workaround Libreoffice bug: https://bugs.freedesktop.org/show_bug.cgi?id=48347
+				$headers = array_values($this->getLabels());
+				
+				for($i=0;$i<count($headers);$i++){
+					if($headers[$i] == 'ID')
+						$headers[$i] = 'Id';
+				}
+				
+				$this->_write($headers);
+				// End of workaround
+				
+				//$this->_write(array_values($this->getLabels()));
+			}else
 				$this->_write(array_keys($this->getLabels()));
 		}
 		

@@ -1198,11 +1198,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				$msg .= "\n\nFull SQL Query: ".$sql;
 
 				if(isset($params['bindParams'])){	
-					$msg .= "\nbBind params: ".var_export($params['bindParams'], true);
+					$msg .= "\nBind params: ".var_export($params['bindParams'], true);
 				}
 
 				if(isset($criteriaObjectParams)){
-					$msg .= "\nbBind params: ".var_export($criteriaObjectParams, true);
+					$msg .= "\nBind params: ".var_export($criteriaObjectParams, true);
 				}
 
 				$msg .= "\n\n".$e->getTraceAsString();
@@ -1373,10 +1373,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		//throw new Exception('Error: you supplied a searchQuery parameter to find but getFindSearchQueryParamFields() should be overriden in '.$this->className());
 		$fields = array();
 		foreach($this->columns as $field=>$attributes){
-//			if(isset($attributes['gotype']) && ($attributes['gotype']=='textfield' || $attributes['gotype']=='textarea')){
-//				$fields[]='`'.$prefixTable.'`.`'.$field.'`';
-//			}
-			if($field == 'keywords')
+			if(isset($attributes['gotype']) && ($attributes['gotype']=='textfield' || $attributes['gotype']=='textarea'))
 				$fields[]='`'.$prefixTable.'`.`'.$field.'`';
 		}
 		
@@ -1706,12 +1703,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}	
 	
 	public function formatAttribute($attributeName, $value, $html=false){
-		if(!isset($this->columns[$attributeName]['gotype'])){			
-
-			if(false && $this->customfieldsModel() && substr($attributeName,0,4)=='col_'){
+		if(!isset($this->columns[$attributeName]['gotype'])){
+			if($this->customfieldsModel() && substr($attributeName,0,4)=='col_'){
 				//if it's a custom field then we create a dummy customfields model.
-				$cfModel = $this->_createCustomFieldsRecordFromAttributes();				
-				return $cfModel->formatAttribute($attributeName, $value);
+				$cfModel = $this->_createCustomFieldsRecordFromAttributes();		
+			//	debug_print_backtrace();
+				return $cfModel->formatAttribute($attributeName, $value, $html);
 			}else	{
 				return $value;
 			}
@@ -2223,7 +2220,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				if($relation && $this->isModified($relation['field'])){
 					//acl relation changed. We must update linked emails
 					
-					GO::debug("Fixing linked e-mail acl's because relation ".$relation['name']." changed.");
+					GO::debug("Fixing linked e-mail acl's because relation ".$arr[0]." changed.");
 					
 					$stmt = GO_Savemailas_Model_LinkedEmail::model()->findLinks($this);
 					while($linkedEmail = $stmt->fetch()){
@@ -3080,7 +3077,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		if(!isset($this->_customfieldsRecord)){
 			
-			$customattr = $this->attributes;
+			$customattr = $this->_attributes;
 			$customattr['model_id']=$this->id;
 
 			$this->_customfieldsRecord = new $model;

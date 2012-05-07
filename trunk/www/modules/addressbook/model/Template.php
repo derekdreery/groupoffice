@@ -79,11 +79,12 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	
 	private function _getModelAttributes($model, $tagPrefix=''){
 		$attributes = $model->getAttributes('formatted');		
-		$attributes = $this->_addTagPrefixAndRemoveEmptyValues($attributes, $tagPrefix);
-		
+				
 		if($model->customfieldsRecord){
 			$attributes = array_merge($attributes, $model->customfieldsRecord->getAttributes('formatted'));
 		}
+
+		$attributes = $this->_addTagPrefixAndRemoveEmptyValues($attributes, $tagPrefix);
 		
 		return $attributes;
 	}

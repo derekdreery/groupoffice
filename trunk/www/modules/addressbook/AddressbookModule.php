@@ -112,12 +112,8 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 '.GO::t('greet','addressbook').'<br />
 <br />
 <br />
-{my_name}
-&lt;gotpl if="my_company"&gt;{my_company}<br />&lt;/gotpl&gt;
-&lt;gotpl if="my_work_address"&gt;{my_work_address} {my_work_address_no}<br />&lt;/gotpl&gt;
-&lt;gotpl if="my_work_zip"&gt;{my_work_zip} {my_work_city}<br />&lt;/gotpl&gt;
-&lt;gotpl if="my_work_phone"&gt;T: {my_work_phone}<br />&lt;/gotpl&gt;'
-		);
+{user:name}<br />
+{usercompany:name}<br />');
 		
 		$template = new GO_Addressbook_Model_Template();
 		$template->setAttributes(array(
