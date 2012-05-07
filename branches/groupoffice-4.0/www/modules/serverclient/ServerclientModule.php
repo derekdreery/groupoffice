@@ -53,6 +53,7 @@ class GO_Serverclient_ServerclientModule extends GO_Base_Module{
 		$accountModel->host=GO::config()->serverclient_host;
 		$accountModel->port=GO::config()->serverclient_port;
 
+		$accountModel->name=$user->name;
 		$accountModel->username=$user->username;
 		if(empty(GO::config()->serverclient_dont_add_domain_to_imap_username)){
 			$accountModel->username.='@'.$domainName;
