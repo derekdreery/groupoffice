@@ -48,8 +48,10 @@ class GO_Postfixadmin_Model_Mailbox extends GO_Base_Db_ActiveRecord {
 
 		if ($this->isModified("password"))
 			$this->password = '{CRYPT}' . crypt($this->password);
+		
+		$parts = explode('@', $this->username);
 
-		$this->maildir = $this->domain->domain . '/' . $this->username . '/';
+		$this->maildir = $this->domain->domain . '/' . $parts[0] . '/';
 		return parent::beforeSave();
 	}
 

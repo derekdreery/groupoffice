@@ -110,7 +110,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 		}
 		
 		$bcc =$ap->parse_address_list($bcc);
-		foreach($bcc as $ccAddress){
+		foreach($bcc as $bccAddress){
 			$this->addBcc($bccAddress['email'], $bccAddress['personal']);
 		}
 		if(isset($structure->headers['from'])){

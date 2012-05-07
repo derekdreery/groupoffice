@@ -50,14 +50,31 @@ GO.email.UnknownRecipientsDialog = Ext.extend(Ext.Window, {
 				}
 	
 				if(action == 'btn-add')
-				{		  
-					GO.addressbook.showContactDialog(0, {values: record.data});
+				{
+					this.addContactToAddresslistAtSaveContactEvent = true;
+					GO.addressbook.showContactDialog(0, {
+						values: record.data,
+						addresslistIds: new Array(this.addresslistId),
+						first_name: record.data.first_name,
+						middle_name: record.data.middle_name,
+						last_name: record.data.last_name
+					});
 					//GO.addressbook.contactDialog.formPanel.form.setValues(record.data);
 				}else
 				{
 					if(!GO.email.findContactDialog)
 					{
 						GO.email.findContactDialog = new GO.email.FindContactDialog();
+						
+						if (!GO.util.empty(this.addresslistId)) {
+								GO.email.findContactDialog.on('email_merged', function(contactId) {
+								if (this.addresslistId>0) {
+									this.addToAddressbook(contactId,this.addresslistId);
+								} else {
+									alert(GO.addressbook.lang.addresslistIdMustBePositive);
+								}
+								}, this);
+						}
 					}
 		     
 					GO.email.findContactDialog.show(record.data);
@@ -97,31 +114,20 @@ GO.email.UnknownRecipientsDialog = Ext.extend(Ext.Window, {
 			})
 		});
 
-		
-		this.title= GO.email.lang.addUnknownRecipients;
-		this.layout='fit';
-		this.modal=false;
-		this.height=400;
-		this.width=600;
-		this.closable=true;
-		this.closeAction='hide';
-		this.items= new Ext.Panel({
-			autoScroll:true,
-			layout:'border',
-			items: [
-			new Ext.Panel({
+		var items = [
+			this.descriptionTextPanel = new Ext.Panel({
 				border: false,
 				region:'north',
-				html: GO.email.lang.addUnknownRecipientsText,
+				html: this.descriptionText  ? this.descriptionText : GO.email.lang.addUnknownRecipientsText,
 				cls:'go-form-panel'
 			}),
-			this.grid,
-			new Ext.Panel({
+			this.grid
+		];
+		
+		if (GO.util.empty(this.disableSkipUnknownCheckbox)) {
+			items.push(new Ext.Panel({
 				border: false,
-				region:'south',
-				autoHeight:true,
-				items:[
-				this.skipUnknownRecipients = new Ext.form.Checkbox({
+				items: this.skipUnknownRecipients = new Ext.form.Checkbox({
 					boxLabel:GO.email.lang.skipUnknownRecipientsAction,
 					hideLabel:true,
 					checked:false,
@@ -130,7 +136,7 @@ GO.email.UnknownRecipientsDialog = Ext.extend(Ext.Window, {
 						check : function(field, checked)
 						{
 							GO.email.skipUnknownRecipients = checked;
-			    
+
 							Ext.Ajax.request({
 								url: GO.settings.modules.email.url+ 'action.php',
 								params: {
@@ -142,13 +148,43 @@ GO.email.UnknownRecipientsDialog = Ext.extend(Ext.Window, {
 						},
 						scope : this
 					}
-				})
-				],
+				}),
+				region:'south',
+				autoHeight:true,
 				cls:'go-form-panel'
-			})
-			]
+			}))
+		}
+		
+		this.title= !GO.util.empty(this.title) ? this.title : GO.email.lang.addUnknownRecipients;
+		this.layout='fit';
+		this.modal=false;
+		this.height=400;
+		this.width=600;
+		this.closable=true;
+		this.closeAction='hide';
+		this.items= new Ext.Panel({
+			autoScroll:true,
+			layout:'border',
+			items: items
 		});	
 		
 		GO.email.UnknownRecipientsDialog.superclass.initComponent.call(this);
+		
+	},
+	
+	addToAddressbook : function(contactId,addresslistId) {
+		Ext.Ajax.request({
+			url: GO.url('addressbook/addresslist/addContactsToAddresslist'),
+			params: {
+				contactIds: Ext.encode(new Array(contactId)),
+				addresslistId : addresslistId
+			}
+//			,
+//			callback: function(options, success, response)
+//			{
+//
+//			}
+		});
 	}
+	
 });

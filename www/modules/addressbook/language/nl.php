@@ -213,3 +213,5 @@ $l["documentTemplate"]='Documentsjabloon';
 $l["copyingMessages"]='Bezig met kopiëren van berichten...';
 $l['editUser']='Bewerk gebruiker';
 $l['template']='Sjabloon';
+
+$l['addresslistIdMustBePositive']='Dit paneel verwacht een adreslijst ID die positief is, maar heeft zo een niet ontvangen. Neemt u a.u.b. contact op met de beheerder.';

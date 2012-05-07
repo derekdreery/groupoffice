@@ -65,10 +65,10 @@
 							<td>Name:</td><td><?php echo $ticket->contactName; ?></td>
 						</tr>
 						<tr>
-							<td>Address:</td><td><?php echo $ticket->address; ?> <?php echo $ticket->address_no; ?></td>
+							<td>Address:</td><td>-</td>
 						</tr>
 						<tr>
-							<td>Zip/City:</td><td><?php echo $ticket->zip; ?> <?php echo $ticket->city; ?></td>
+							<td>Zip/City:</td><td>-</td>
 						</tr>
 						<tr>
 							<td>Telephone:</td><td><?php echo $ticket->phone; ?></td>

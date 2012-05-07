@@ -36,3 +36,5 @@ modules/addressbook/SelectAddressbookDialog.js
 modules/addressbook/AddresslistsFilterPanel.js
 
 modules/addressbook/SexCombobox.js
+
+modules/addressbook/CustomField.js

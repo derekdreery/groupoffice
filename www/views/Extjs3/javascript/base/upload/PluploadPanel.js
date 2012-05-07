@@ -62,26 +62,26 @@ GO.base.upload.PluploadPanel = function(config){
 		deleteButtonCls: 'btn-delete',
 
 		// localization
-		addButtonText: 'Add files',
-		uploadButtonText: 'Upload',
-		cancelButtonText: 'Cancel upload',
-		deleteButtonText: 'Remove',
-		deleteSelectedText: '<b>Remove selected</b>',
-		deleteUploadedText: 'Remove uploaded',
-		deleteAllText: 'Remove ALL',
+		addButtonText: GO.lang.cmdAdd,
+		uploadButtonText: GO.lang.upload,
+		cancelButtonText: GO.lang.cmdCancel,
+		deleteButtonText: GO.lang.remove,
+		deleteSelectedText: '<b>'+GO.lang.removeSelected+'</b>',
+		deleteUploadedText: GO.lang.removeUpload,
+		deleteAllText: GO.lang.removeAll,
  
-		statusQueuedText: 'Queued',
-		statusUploadingText: 'Uploading ({0}%)',
-		statusFailedText: '<span style="color: red">FAILED</span>',
-		statusDoneText: '<span style="color: green">DONE</span>',
+		statusQueuedText: GO.lang.qeued,
+		statusUploadingText: GO.lang.uploading,
+		statusFailedText: '<span style="color: red">'+GO.lang.failed+'</span>',
+		statusDoneText: '<span style="color: green">'+GO.lang.done+'</span>',
  
-		statusInvalidSizeText: 'Too big',
-		statusInvalidExtensionText: 'Invalid file type',
+		statusInvalidSizeText: GO.lang.tooBig,
+		statusInvalidExtensionText: GO.lang.invalidFileType,
  
-		emptyText: '<div class="plupload_emptytext"><span>Upload queue is empty</span></div>',
-		emptyDropText: '<div class="plupload_emptytext"><span>Drop files here</span></div>',
+		emptyText: '<div class="plupload_emptytext"><span>'+GO.lang.uploadQueueEmpty+'</span></div>',
+		emptyDropText: '<div class="plupload_emptytext"><span>'+GO.lang.dropFilesHere+'</span></div>',
  
-		progressText: '{0}/{1} ({3} failed) ({5}/s)'
+		progressText: GO.lang.pluploadProgressText
 	// params are number of
 	// {0} files sent
 	// {1} total files

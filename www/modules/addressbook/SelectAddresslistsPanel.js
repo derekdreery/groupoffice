@@ -73,6 +73,6 @@ GO.addressbook.SelectAddresslistsPanel = Ext.extend(Ext.Panel, {
 			this.loadComponents();
 			this.setDisabled(false);
 		}, this);
-	}
+	}	
 });
 

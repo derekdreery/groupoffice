@@ -10,8 +10,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		
 		GO::$ignoreAclPermissions=true; //allow this script access to all
 		GO::$disableModelCache=true; //for less memory usage
-		ini_set('max_execution_time', '300');
-		session_write_close();		
+		ini_set('max_execution_time', '0');
+		GO::session()->closeWriting();		
 		
 		$folders = array('users','projects','addressbook','billing','notes','tickets');	
 		
@@ -424,6 +424,16 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$response['cm_state']=isset($folder->cm_state)?$folder->cm_state:"";
 		$response['may_apply_state']=GO_Base_Model_Acl::hasPermission($folder->getPermissionLevel(), GO_Base_Model_Acl::MANAGE_PERMISSION);
 
+		
+		if($response["lock_state"]){
+			$state = json_decode($response["cm_state"]);
+			
+			if(isset($state->sort)){
+				$params['sort']=$state->sort->field;
+				$params['dir']=$state->sort->direction;
+			}
+		}
+		
 
 		$store = GO_Base_Data_Store::newInstance(GO_Files_Model_Folder::model());
 
@@ -450,6 +460,10 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		
 		$findParams = $store->getDefaultParams($params);
 		
+		//sorting on custom fields doesn't work for folders
+		if(isset($params['sort']) && substr($params['sort'],0,4)=='col_')
+			$findParams->order ("name", $params['dir']);
+			
 		$findParamsArray = $findParams->getParams();
 		if(!isset($findParamsArray['start']))
 			$findParamsArray['start']=0;

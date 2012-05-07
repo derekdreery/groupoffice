@@ -1,7 +1,7 @@
 <?php
 
 
-$l['extjs_lang']='no_NB'; 
+
 $l['about']='Versjon: {version}<br />
 Copyright (c) 2003-{current_year}, {company_name}<br />
 Alle rettigheter forbeholdt.<br />
@@ -118,9 +118,6 @@ $l['full_days'][6] = "Lørdag";
 $l['default']='forvalg';
 $l['description']='Beskrivelse';
 $l['date']='Dato';
-$l['default_salutation']['M']='Kjære Hr';
-$l['default_salutation']['F']='Kjære Fr';
-$l['default_salutation']['unknown']='Kjære Hr/Fr';
 $l['mins'] = 'Min';
 $l['hour'] = 'time';
 $l['hours'] = 'timer';
@@ -178,9 +175,7 @@ $l['alert']='Varsling';
 $l['theFolderAlreadyExists']='Det eksisterer allerede en mappe med dette navnet!';
 $l['other']='Andre';
 $l['name2']= 'Navn 2';
-$l['copy']='kopi';
 $l['upload_file_to_big']='Filen du forsøker å laste opp er større enn maksimalt tillate størrelse på %s.';
-
 $l["exportHiddenColumns"]='Eksporter også skjulte kolonner';
 $l["searchQuery"]='spørring';
 $l["pleaseApplyFirst"]='Du må lagre først ved å trykke på \'Apply\'';
@@ -453,7 +448,6 @@ $l["multiselectComboMaxItemsReachedWarning"]='Du kan velge maksimalt {max} eleme
 $l["toScreen"]='Til skjerm';
 $l["none"]= 'Ingen';
 $l["userSelectedLanguage"]= 'Mitt forhåndsvalgte språk';
-
 $l["orientation"]='Papirretning';
 $l["portrait"]='Stående';
 $l["landscape"]='Liggende';
@@ -468,3 +462,58 @@ $l["searchQueryName"]= 'Navn på spørring';
 $l["enterSearchQueryName"]= 'Angi navn for spørring';
 $l["strUsersInGroup"]= 'Brukere i gruppen';
 $l["pleaseEnterASearchTerm"]='Angi et søkebegrep';
+$l["strSuffix"]= 'Suffiks';
+$l["strContact"]= 'Kontaktperson';
+$l["cmdContinue"]='Fortsett';
+$l["matchDuplicates"]='Finn duplikater';
+$l["showFirstDuplicateOnly"]='Vis bare første duplikat';
+$l["advancedSearch"]='Avanser søk';
+$l['youAreUsing']='Du bruker %s av %s';
+$l['default_salutation_M']='Kjære';
+$l['default_salutation_F']='Kjære';
+$l['default_salutation_unknown']='Kjære';
+$l['dontChangeAdminPermissions']='Du kan ikke endre rettighetene for administrator';
+$l["batchEdit"]="Masseredigering";
+$l["batchSelectOne"]="Du må velge minst ett element!";
+$l["batchSelectionError"]="Ingen valgt!";
+$l["label"]="Felt";
+$l["validationErrorsFound"]="Kunne ikke lagre %s:";//eg. Couldn't save project
+$l['attachFiles']='Legg ved filer';
+$l['gridMissingParams']= 'Gi beskjed til {product_name} administrator om at vinduet du forsøkte å åpne inneholder et rutenett som forventer følgende parametere, men som ikke mottok dem';
+$l['permissionNone']= 'Ingen rettigheter';
+$l['permissionUse']= 'Bruk';
+$l['permissionManage']= 'Behandle';
+$l["changePassword"]= 'Endre passord';
+$l["changePasswordText"]= 'Fyll ut skjemaet nedenfor for å endre passordet ditt.';
+$l["changePasswordSuccess"]= 'Passordet ble endret!';
+$l["changePasswordSuccessTitle"]= 'Passordet er endret';
+$l["noEmailGiven"]= 'Ingen e-postadresse er angitt';
+$l["usertokenInvalid"]= 'Ingen gyldig brukertoken er angitt!';
+$l["noUserFoundWithEmail"]="Finner ingen bruker med denne e-postadressen!";
+$l["viesDownException"]='VIES tjenesten er nede. Du kan fullføre ordren sin, men du kan først betale når vi manuelt har sjekket ditt Vies nummer.';
+$l['advSearch']='Avansert søk';
+$l['alreadyExists']='%s "%s" finnes fra før'; //eg. Project "Some name" already exists.
+$l['merge']='Slå sammen';
+$l['mergeDeleteItems']='Slett valgte elementer etter sammenslåing';
+$l['mergeAttributes']='Slå sammen datafelter hvis de er tomme i målelementet.';
+$l['missingRemoteModelId']= 'Modellnavn er ikke sendt til dialogen.';
+$l['executeQuery']= 'Kjør søk';
+$l['savedQuery']= 'Lagre søk';
+$l['strNew']= 'Ny';
+$l['attributeRequired']='Feltet %s er påkrevet';
+$l['attributeTooLong']='Feltet %s er lengere enn maksimalt tillatte %s tegn';
+$l['attributeIncorrectFormat']='Feltet %s er formattert feil';
+$l['attributeInvalid']='Feltet %s er ugyldig';
+$l['operationStopped']='Handlingen stoppet.';
+$l['delimiter']='Feltgrense';
+$l['enclosure']='Tekstgrense';
+$l['notFound']='Elementet ble ikke funnet.';
+$l['groupofficeDisabled']="<p>Denne {product_name} kontoen er deaktivert.</p><p>Vennligst kontakt administratoren din.</p>";
+$l['summarylogImportText']="Forsøkte å importere {importCount} elementer.";
+$l['summarylogErrorText']="Det oppsto noen feil under importen";
+$l['summarylogSuccessText']="Import fullført!";
+$l['exportIncludeHidden']= 'Eksporter også skjulte kolonner';
+$l['exportHumanHeaders']= 'Bruke databasefeltnavn i overskrifter';
+$l['exportIncludeHeaders']= 'Eksporter også overskrifter';
+$l['exportOrientation']= 'Papirretning';
+

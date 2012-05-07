@@ -288,6 +288,9 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 		$amp = $this->mod_rewrite ? '?' : $amp;
 		if($params){
 			foreach($params as $name=>$value){
+//				if(is_array($value))
+//					throw new Exception(var_export($params));
+//				
 				$url .= $amp.$name.'='.urlencode($value);
 				$amp = $htmlspecialchars ? '&amp;' : '&';
 			}

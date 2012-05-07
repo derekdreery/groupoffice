@@ -44,10 +44,12 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 			$model->quota=  GO_Base_Util_Number::unlocalize($params['quota'])*1024;
 			unset($params['quota']);
 		}
-			
 		
 		if ($params['password']!=$params['password2'])
 			throw new Exception(GO::t('passwordMatchError'));
+		
+		if(empty($params['password']))
+			unset($params['password']);
 		
 		if(isset($params['username']))
 			$params['username'] .= '@'.$domainModel->domain;
@@ -71,7 +73,8 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 	}
 	
 	public function formatStoreRecord($record, $model, $store) {
-		$record['quota'] = GO_Base_Util_Number::localize($model->quota/1024);
+		$record['usage'] = GO_Base_Util_Number::formatSize($model->usage*1024);
+		$record['quota'] = GO_Base_Util_Number::formatSize($model->quota*1024);
 		return $record;
 	}
 	
@@ -79,9 +82,6 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 	protected function actionCacheUsage($params){
 		if(!$this->isCli())
 			throw new Exception("Not in CLI");
-		
-		if(isset($argv[1]))
-			define('CONFIG_FILE', $argv[1]);
 
 		if(!GO::modules()->isInstalled('postfixadmin'))
 			trigger_error('Postfixadmin module must be installed',E_USER_ERROR);
@@ -91,8 +91,8 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 		while ($mailboxModel = $activeStmt->fetch()) {
 			$folder = new GO_Base_Fs_Folder('/home/vmail/'.$mailboxModel->maildir);
 			echo 'Calculating size of '.$folder->path()."\n";
-			$mailboxModel->usage = $folder->calculateSize($path)/1024;
-			echo $mailboxModel->usage."\n";
+			$mailboxModel->usage = $folder->calculateSize()/1024;
+			echo $mailboxModel->usage." kilobytes\n";
 			$mailboxModel->save();
 		}
 

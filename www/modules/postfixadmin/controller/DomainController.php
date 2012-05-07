@@ -63,5 +63,31 @@ class GO_Postfixadmin_Controller_Domain extends GO_Base_Controller_AbstractModel
 		return $response;
 	}
 	
+	
+	protected function actionGetUsage($params){
+		$domains = json_decode($params['domains']);
+						
+		$response['success']=true;
+		
+		$record = GO_Postfixadmin_Model_Mailbox::model()->find(
+			GO_Base_Db_FindParams::newInstance()
+				->single()
+				->select('SUM(`usage`) AS `usage`')
+				->joinModel(array(
+	 			'model'=>'GO_Postfixadmin_Model_Domain',
+	 			'localField'=>'domain_id',
+	 			'tableAlias'=>'d'	
+				))
+				->criteria(
+					GO_Base_Db_FindCriteria::newInstance()
+						->addInCondition('domain', $domains,'d')
+				)
+		);
+		
+		$response['usage']=$record["usage"];
+		
+		return $response;		
+	}
+	
 }
 

@@ -292,3 +292,12 @@ $updates["201204180924"][]="ALTER TABLE `ab_companies` CHANGE `address_no` `addr
 $updates["201204180924"][]="ALTER TABLE `ab_companies` CHANGE `post_address_no` `post_address_no` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
 
 $updates["201204201205"][]="ALTER TABLE `ab_companies` ADD `invoice_email` varchar(75) DEFAULT '';";
+
+$updates["201205021029"][]="insert into ab_addresslist_contacts SELECT m.group_id,c.id FROM `ml_mailing_users`m inner join ab_contacts c on c.go_user_id=m.user_id";
+
+
+$updates["201205031447"][]="update cf_fields set datatype='GO_Addressbook_Customfieldtype_Contact' where datatype='contact'";
+
+$updates["201205031447"][]="update `ab_email_templates` set content = replace(content, '{my_', '{user:') WHERE type=0";
+$updates["201205031447"][]="update `ab_email_templates` set content = replace(content, '{user:company','{usercompany:name') WHERE type=0";
+$updates["201205031447"][]="UPDATE `ab_email_templates` SET content = replace( content, '{user:work_', '{usercompany:' ) WHERE TYPE =0";

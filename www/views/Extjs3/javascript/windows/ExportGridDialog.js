@@ -49,22 +49,23 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 		}, this);
 		
 		this.includeHidden = new Ext.form.Checkbox({
-			fieldLabel : 'Export hidden columns too',
+			fieldLabel : GO.lang.exportIncludeHidden,
 			name       : 'includeHidden'
 		});
 		
 		this.humanHeaders = new Ext.form.Checkbox({
-			fieldLabel : 'Use column names for headers',
-			name       : 'humanHeaders'
+			fieldLabel : GO.lang.exportHumanHeaders,
+			name       : 'humanHeaders',
+			checked		 : true
 		});
 		
 		this.includeHeaders = new Ext.form.Checkbox({
-			fieldLabel  : 'Export headers too',
+			fieldLabel  : GO.lang.exportIncludeHeaders,
 			name				: 'includeHeaders'
 		});
 		
 		this.exportOrientation = new Ext.form.ComboBox({
-			fieldLabel : 'Orientation',
+			fieldLabel : GO.lang.exportOrientation,
 			name: 'exportOrientation',
 			mode: 'local',
 			editable:false,
