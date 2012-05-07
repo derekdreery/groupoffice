@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `pa_domains` (
   `max_mailboxes` int(10) NOT NULL default '0',
   `quota` bigint(20) NOT NULL default '0',
   `default_quota` bigint(20) NOT NULL default '0',
-  `transport` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'virtual'
+  `transport` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'virtual',
   `backupmx` tinyint(1) NOT NULL default '0',
   `ctime` int(11) NOT NULL default '0',
   `mtime` int(11) NOT NULL default '0',
