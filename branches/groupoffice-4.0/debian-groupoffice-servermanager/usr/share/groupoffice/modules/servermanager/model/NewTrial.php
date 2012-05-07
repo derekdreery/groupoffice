@@ -42,6 +42,9 @@ class GO_ServerManager_Model_NewTrial extends GO_Base_Db_ActiveRecord {
 		return 'sm_new_trials';
 	}
 	
+	public function primaryKey() {
+		return array("name");
+	}
 	protected function init() {
 		
 		$this->columns['name']['required']=true;
