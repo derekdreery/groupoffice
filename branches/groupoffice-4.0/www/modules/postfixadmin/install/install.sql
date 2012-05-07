@@ -80,7 +80,6 @@ CREATE TABLE IF NOT EXISTS `pa_mailboxes` (
   `usage` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `username` (`username`),
-  KEY `username_2` (`username`,`vacation_active`),
   KEY `go_installation_id` (`go_installation_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Postfix Admin - Virtual Mailboxes';
 
