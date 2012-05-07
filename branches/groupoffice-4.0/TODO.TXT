@@ -7,15 +7,10 @@ Profile tab in settings dialog
 Calendar:
 Distinguish declined and cancel	led events in grid.
 alarm import
-test invitation sending with moving in grid
-
-postfixadmin installation
 
 Grid scroll behouden bij reload
 
-CMS compatible
-
-Export projecten en billing
+CMS compatible (Wilmar)
 
 Module icons
 
