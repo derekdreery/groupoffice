@@ -38,7 +38,7 @@ class GO_Base_Mail_EmailRecipients{
 		//echo $email.' '.$personal.'<br />';
 		if(empty($email))
 			return false;
-		
+
 		$this->_addresses[trim($email)]=trim($personal);
 	}
 
@@ -71,7 +71,7 @@ class GO_Base_Mail_EmailRecipients{
 	public function getAddress(){
 		reset($this->_addresses);
 		$each = each($this->_addresses);
-		return array('email'=>$each['key'], 'personal'=>$each['value']);
+		return array('email'=>$each['key'], 'personal'=>empty($each['value']) ? $each['key'] : $each['value']);
 	}
 	
 //	public function getEmail($index=0){

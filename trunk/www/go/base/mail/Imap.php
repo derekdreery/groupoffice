@@ -1206,7 +1206,8 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 					'seen'=>0,
 					'flagged'=>0,
 					'answered'=>0,
-					'forwarded'=>0
+					'forwarded'=>0,
+					'has_attachments'=>0
 				);
 
 				$count = count($vals);
@@ -1299,7 +1300,19 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 					$message['reply_to']=$this->mime_header_decode($message['reply_to']);
 					if(isset($message['cc']))
 						$message['cc']=$this->mime_header_decode($message['cc']);
+					
+					preg_match("'([^/]*)/([^ ;\n\t]*)'i", $message['content_type'], $ct);
+
+					if (isset($ct[2]) && $ct[1] != 'text' && $ct[2] != 'alternative' && $ct[2] != 'related')
+					{
+						$message["has_attachments"] = 1;
+					}
+					
 					$headers[$message['uid']] = $message;
+					
+					//$message['priority']=intval($message['x-priority']);
+		
+					
 				}
 			}
 		}
