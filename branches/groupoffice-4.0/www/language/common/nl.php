@@ -508,3 +508,17 @@ $l['exportIncludeHidden'] = 'Exporteer ook verborgen kolommen';
 $l['exportHumanHeaders'] = 'Gebruik kolomnamen uit database';
 $l['exportIncludeHeaders'] = 'Exporteer kolomnamen ook';
 $l['exportOrientation'] = 'Orientatie';
+
+$l['remove']="Verwijder";
+$l['removeSelected']="Selectie verwijderen";
+$l['removeUpload']="Verwijder upload";
+$l['removeAll']="Verwijder alles";
+$l['queued']="In wachtrij";
+$l['uploading']='Bezig met uploaden ({0}%)';
+$l['failed']='Mislukt';
+$l['done']='Klaar';
+$l['tooBig']='Te groot';
+$l['invalidFileType']='Ongeldig bestandtype';
+$l['uploadQueueEmpty']="De wachtrij is leeg";
+$l['dropFilesHere']="Drop bestanden hier";
+$l['pluploadProgressText']="{0}/{1} ({3} mislukt) ({5}/s)";
