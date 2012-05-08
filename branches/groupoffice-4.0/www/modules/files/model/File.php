@@ -301,8 +301,11 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	}
 
 	
-	protected function getThumbURL() {
-		return GO::url('core/thumb', 'src=' . urlencode($this->path) . '&lw=100&ph=100&zc=1&filemtime=' . $this->mtime);
+	public function getThumbURL($urlParams=array("lw"=>100, "ph"=>100, "zc"=>1)) {
+		
+		$urlParams['filemtime']=$this->mtime;
+		$urlParams['src']=$this->path;
+		return GO::url('core/thumb', $urlParams);
 	}
 	
 	/**
@@ -414,6 +417,26 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 			return $folder->hasFile(GO_Base_Fs_File::utf8Basename($relpath));
 		}
 		
+	}
+	
+	/**
+	 * Check if the file is an image.
+	 * 
+	 * @return boolean 
+	 */
+	public function isImage(){
+		switch($this->extension){
+			case 'ico':
+			case 'jpg':
+			case 'jpeg':
+			case 'png':
+			case 'gif':
+			case 'xmind':
+
+				return true;
+			default:
+				return false;
+		}
 	}
 	
 	

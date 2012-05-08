@@ -65,13 +65,16 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 	
 	show : function(images, index)
 	{
+		if(!index)
+			index=0;
+		
 		GO.files.ImageViewer.superclass.show.call(this);
 		
 		this.viewerImages = images;
 		
 		this.loadImage(index);		
 	},
-	
+		
 	loadImage : function(index)
 	{
 		this.body.mask(GO.lang.waitMsgLoad);

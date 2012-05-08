@@ -1756,39 +1756,31 @@ GO.files.openFile = function(record, store,e)
 						closeAction:'hide'
 					});
 				}
-
-				var imgindex = 0;
-				var images = Array();
-				if(store)
-				{
-					for (var i = 0; i < store.data.items.length;  i++)
-					{
-						var r = store.data.items[i].data;
-
-						if(r.extension=='jpg' || r.extension=='png' || r.extension=='gif' || r.extension=='bmp' || r.extension=='jpeg' || r.extension=='xmind')
-						{							
-							images.push({
-								name: r['name'],
-								src: GO.url("core/thumb",{src:r.path,lw:this.imageViewer.width-20,ph:this.imageViewer.height-100}),
-								download_path: GO.url("files/file/download", {inline:false,id:r.id}),
-								index:r[index]
-							})
-						}
-						if(r[index]==record.data[index])
-						{
-							imgindex=images.length-1;
-						}
-					}
-				}else
-				{			
-					images.push({
-						name: record.data['name'],
-						src: GO.url("core/thumb",{src:record.data.path,lw:this.imageViewer.width-20,ph:this.imageViewer.height-100}),
-						download_path: url
-					});					
+				
+				var imagesParams = {};
+				imagesParams[index]=record.data[index];
+				imagesParams["thumbParams"]=Ext.encode({lw:this.imageViewer.width-20,ph:this.imageViewer.height-100});
+				if(store){
+					imagesParams["sort"]=store.sortInfo.field;
+					imagesParams["dir"]=store.sortInfo.direction;
 				}
-
-				this.imageViewer.show(images, imgindex);
+				
+				GO.request({
+					url:"files/folder/images",
+					params:imagesParams,
+					maskEl:Ext.getBody(),
+					success:function(response, options, result){
+						this.imageViewer.show(result.images, result.index);
+					},
+					scope:this
+				})
+				
+				
+//				this.imageViewer.show([{
+//						name: record.data['name'],
+//						src: GO.url("core/thumb",{src:record.data.path,lw:this.imageViewer.width-20,ph:this.imageViewer.height-100}),
+//						download_path: url
+//					}]);
 
 				break;
 

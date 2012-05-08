@@ -913,4 +913,50 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			}
 		}
 	}
+	
+	
+	protected function actionImages($params){
+		if(isset($params["id"])){
+			$currentFile = GO_Files_Model_File::model()->findByPk($params["id"]);			
+		}else
+		{
+			$currentFile = GO_Files_Model_File::model()->findByPath($params["path"]);			
+		}
+		
+		$folder = $currentFile->folder();
+		
+		$thumbParams = json_decode($params['thumbParams'], true);
+		
+		$response["success"]=true;
+		$response['images']=array();
+		$response['index']=$index=0;
+		
+		if(!isset($params["sort"]))
+			$params["sort"]="name";
+		
+		if(!isset($params["dir"]))
+			$params["dir"]="ASC";
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->debugSql()
+						->order($params["sort"], $params["dir"]);
+		
+		$stmt = $folder->files($findParams);
+		while($file = $stmt->fetch()){
+			if($file->isImage()){
+				if($file->id == $currentFile->id)
+					$response['index']=$index;
+
+				$index++;
+
+				$response['images'][]=array(
+					"name"=>$file->name,
+					"url"=>$file->downloadUrl,
+					"src"=>$file->getThumbUrl($thumbParams)
+				);
+			}
+		}
+		
+		return $response;
+	}
 }
