@@ -53,12 +53,12 @@ GO.base.upload.PluploadPanel = function(config){
 		//			}
 		//			],
 
-		runtime_visible: true, // show current runtime in statusbar
+		runtime_visible: false, // show current runtime in statusbar
 
 		// icon classes for toolbar buttons
 		addButtonCls: 'btn-add',
 		uploadButtonCls: 'btn-up',
-		cancelButtonCls: 'btn-cancel',
+		cancelButtonCls: 'btn-delete',
 		deleteButtonCls: 'btn-delete',
 
 		// localization
@@ -70,7 +70,7 @@ GO.base.upload.PluploadPanel = function(config){
 		deleteUploadedText: GO.lang.removeUpload,
 		deleteAllText: GO.lang.removeAll,
  
-		statusQueuedText: GO.lang.qeued,
+		statusQueuedText: GO.lang.queued,
 		statusUploadingText: GO.lang.uploading,
 		statusFailedText: '<span style="color: red">'+GO.lang.failed+'</span>',
 		statusDoneText: '<span style="color: green">'+GO.lang.done+'</span>',
