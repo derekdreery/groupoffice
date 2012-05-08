@@ -16,7 +16,7 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 	}
 
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
-		$columnModel->formatColumn('user_name','$model->user->name');
+		$columnModel->formatColumn('user_name','$model->user->name',array(),'user_id');
 		return parent::formatColumns($columnModel);
 	}
 

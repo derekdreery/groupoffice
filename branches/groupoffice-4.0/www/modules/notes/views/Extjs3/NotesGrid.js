@@ -24,7 +24,8 @@ GO.notes.NotesGrid = function(config){
 		columns:[
 		{
 			header: GO.lang.strName,
-			dataIndex: 'name'
+			dataIndex: 'name',
+			sortable: true
 		},
 		{
 			header: GO.lang.strOwner,
@@ -34,10 +35,12 @@ GO.notes.NotesGrid = function(config){
 		},		{
 			header: GO.lang.strCtime,
 			dataIndex: 'ctime',
-			hidden:true
+			hidden:true,
+			sortable: true
 		},		{
 			header: GO.lang.strMtime,
-			dataIndex: 'mtime'
+			dataIndex: 'mtime',
+			sortable: true
 		}
 		]
 	};
@@ -71,9 +74,6 @@ GO.notes.NotesGrid = function(config){
 	config.paging=true;
 
 	var columnModel =  new Ext.grid.ColumnModel({
-		defaults:{
-			sortable:true
-		},
 		columns:fields.columns
 	});
 	
