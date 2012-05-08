@@ -1760,7 +1760,7 @@ GO.files.openFile = function(record, store,e)
 				var imagesParams = {};
 				imagesParams[index]=record.data[index];
 				imagesParams["thumbParams"]=Ext.encode({lw:this.imageViewer.width-20,ph:this.imageViewer.height-100});
-				if(store){
+				if(store && store.sortInfo){
 					imagesParams["sort"]=store.sortInfo.field;
 					imagesParams["dir"]=store.sortInfo.direction;
 				}
