@@ -1770,7 +1770,7 @@ GO.files.openFile = function(record, store,e)
 							images.push({
 								name: r['name'],
 								src: GO.url("core/thumb",{src:r.path,lw:this.imageViewer.width-20,ph:this.imageViewer.height-100}),
-								download_path: GO.url("files/file/download", {inline:false}),
+								download_path: GO.url("files/file/download", {inline:false,id:r.id}),
 								index:r[index]
 							})
 						}
