@@ -277,7 +277,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		$cacheDir->create();
 
 
-		$cacheFilename = str_replace(array('/', '\\'), '_', $file->parent()->path() . '_' . $w . '_' . $h . '_' . $lw . '_' . $lh . '_' . $pw . '_' . $lw);
+		$cacheFilename = str_replace(array('/', '\\'), '_', $file->parent()->path() . '_' . $w . '_' . $h . '_' . $lw . '_' . $ph. '_' . '_' . $pw . '_' . $lw);
 		if ($zc) {
 			$cacheFilename .= '_zc';
 		}
@@ -287,10 +287,15 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		$readfile = $cacheDir->path() . '/' . $cacheFilename;
 		$thumbExists = file_exists($cacheDir->path() . '/' . $cacheFilename);
 		$thumbMtime = $thumbExists ? filemtime($cacheDir->path() . '/' . $cacheFilename) : 0;
+		
+		GO::debug("Thumb mtime: ".$thumbMtime." (".$cacheFilename.")");
 
 		if (!empty($params['nocache']) || !$thumbExists || $thumbMtime < $file->mtime() || $thumbMtime < $file->ctime()) {
+			
+			GO::debug("Resizing image");
 			$image = new GO_Base_Util_Image($file->path());
 			if (!$image->load_success) {
+				GO::debug("Failed to load image for thumbnailing");
 				//failed. Stream original image
 				$readfile = $file->path();
 			} else {
@@ -310,6 +315,8 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 							$h = $ph;
 						}
 					}
+					
+					GO::debug($w."x".$h);
 
 					if ($w && $h) {
 						$image->resize($w, $h);
