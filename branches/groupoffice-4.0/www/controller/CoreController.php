@@ -273,7 +273,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 
 
 
-		$cacheDir = new GO_Base_Fs_Folder(GO::config()->file_storage_path . 'thumbcache');
+		$cacheDir = new GO_Base_Fs_Folder(GO::config()->orig_tmpdir . 'thumbcache');
 		$cacheDir->create();
 
 
