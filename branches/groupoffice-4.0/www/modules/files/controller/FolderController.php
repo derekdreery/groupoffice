@@ -421,19 +421,18 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		
 		//locked state
 		$response['lock_state']=!empty($folder->apply_state);
-		$response['cm_state']=isset($folder->cm_state)?$folder->cm_state:"";
+		$response['cm_state']=isset($folder->cm_state) && !empty($folder->apply_state) ? $folder->cm_state : "";
 		$response['may_apply_state']=$folder->getPermissionLevel()==  GO_Base_Model_Acl::MANAGE_PERMISSION;
 
-		
 		if($response["lock_state"]){
 			$state = json_decode($response["cm_state"]);
-			
+
 			if(isset($state->sort)){
 				$params['sort']=$state->sort->field;
 				$params['dir']=$state->sort->direction;
 			}
 		}
-		
+
 
 		$store = GO_Base_Data_Store::newInstance(GO_Files_Model_Folder::model());
 

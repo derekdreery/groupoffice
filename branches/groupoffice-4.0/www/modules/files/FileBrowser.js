@@ -286,6 +286,7 @@ GO.files.FileBrowser = function(config){
 		}
 	},this);
 	
+	
 	this.filesContextMenu = new GO.files.FilesContextMenu();
 	
 	this.filesContextMenu.on('properties', function(menu, records){		
@@ -740,8 +741,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			state = Ext.state.Manager.get(this.gridPanel.id);
 		}
 		
-		//console.log(state);
-
+		//state.sort=store.sortInfo;
+		
 		if(state){
 			this.gridPanel.applyStoredState(state);
 
