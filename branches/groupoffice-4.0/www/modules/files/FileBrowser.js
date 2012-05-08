@@ -1765,17 +1765,13 @@ GO.files.openFile = function(record, store,e)
 					{
 						var r = store.data.items[i].data;
 
-						if(r.extension=='jpg' || r.extension=='png' || r.extension=='gif' || r.extension=='bmp' || r.extension=='jpeg' )
-						{
+						if(r.extension=='jpg' || r.extension=='png' || r.extension=='gif' || r.extension=='bmp' || r.extension=='jpeg' || r.extension=='xmind')
+						{							
 							images.push({
 								name: r['name'],
-								src: GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+r[index]
-							})
-						} else if (r.extension=='xmind') {
-							images.push({
-								name: r['name'],
-								src: GO.settings.config.host+'controls/thumb.php?src='+r.path+'&w=600',
-								download_path: GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+r[index]
+								src: GO.url("core/thumb",{src:r.path,lw:this.imageViewer.width-20,ph:this.imageViewer.height-100}),
+								download_path: GO.url("files/file/download", {inline:false}),
+								index:r[index]
 							})
 						}
 						if(r[index]==record.data[index])
@@ -1784,19 +1780,12 @@ GO.files.openFile = function(record, store,e)
 						}
 					}
 				}else
-				{
-					if (record.data.extension=='xmind') {
-						images.push({
-							name: record.data['name'],
-							src: GO.settings.config.host+'controls/thumb.php?src='+record.data.path+'&w=600',
-							download_path: GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index]
-						})
-					} else {
-						images.push({
-							name: record.data['name'],
-							src: url
-						})
-					}
+				{			
+					images.push({
+						name: record.data['name'],
+						src: GO.url("core/thumb",{src:record.data.path,lw:this.imageViewer.width-20,ph:this.imageViewer.height-100}),
+						download_path: url
+					});					
 				}
 
 				this.imageViewer.show(images, imgindex);
