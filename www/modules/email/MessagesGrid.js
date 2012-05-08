@@ -64,7 +64,7 @@ GO.email.MessagesGrid = function(config){
 		config.view=new Ext.grid.GridView({
 			emptyText: GO.lang['strNoItems'],
 			getRowClass:function(row, index) {
-				if (row.data['new'] == '1') {
+				if (row.data['seen'] == '0') {
 					return 'ml-new-row';
 				}
 			}
@@ -240,7 +240,7 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 	},
 	renderMessageSmallRes : function(value, p, record){
 		
-		if(record.data['new']=='1')
+		if(record.data['seen']=='0')
 		{
 			return String.format('<div id="sbj_'+record.data['uid']+'" class="NewSubject">{0}</div>{1}', value, record.data['subject']);
 		}else
@@ -250,7 +250,7 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 	},
 	
 	renderMessage : function(value, p, record){
-		if(record.data['new']=='1')
+		if(record.data['seen']=='0')
 		{
 			return String.format('<div id="sbj_'+record.data['uid']+'" class="NewSubject">{0}</div>{1}', value, record.data['subject']);
 		}else
@@ -276,7 +276,7 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 		}
 		str += '<div class="'+cls+'"></div>';
 		
-		if(record.data['attachments']=='1')
+		if(record.data['has_attachments']=='1')
 		{
 			str += '<div class="email-grid-icon ml-icon-attach"></div>';
 		//str += '<img src=\"' + GOimages['attach'] +' \" style="display:block" />';

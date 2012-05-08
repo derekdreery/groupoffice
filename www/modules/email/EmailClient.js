@@ -21,15 +21,11 @@ GO.email.EmailClient = function(config){
 	}
 	
 	this.messagesStore = new GO.data.JsonStore({
-		url: GO.settings.modules.email.url+'json.php',
-		baseParams: {
-			//"node": '',
-			"task": 'messages'
-		},
+		url: GO.url("email/message/store"),
 		root: 'results',
 		totalProperty: 'total',
 		id: 'uid',
-		fields:['uid','icon','flagged','attachments','new','subject','from','sender','size','date', 'priority','answered','forwarded'],
+		fields:['uid','icon','flagged','has_attachments','seen','subject','from','sender','size','date', 'priority','answered','forwarded'],
 		remoteSort: true
 	});
 	
@@ -227,7 +223,7 @@ GO.email.EmailClient = function(config){
 	{
 		text: GO.email.lang.markAsRead,
 		handler: function(){
-			this.doTaskOnMessages('mark_as_read');
+			this.flagMessages('Seen', false);
 		},
 		scope:this,
 		multiple:true
@@ -235,7 +231,7 @@ GO.email.EmailClient = function(config){
 	{
 		text: GO.email.lang.markAsUnread,
 		handler: function(){
-			this.doTaskOnMessages('mark_as_unread');
+			this.flagMessages('Seen', true);
 		},
 		scope: this,
 		multiple:true
@@ -243,7 +239,7 @@ GO.email.EmailClient = function(config){
 	{
 		text: GO.email.lang.flag,
 		handler: function(){
-			this.doTaskOnMessages('flag');
+			this.flagMessages('Flagged', false);
 		},
 		scope: this,
 		multiple:true
@@ -251,7 +247,7 @@ GO.email.EmailClient = function(config){
 	{
 		text: GO.email.lang.unflag,
 		handler: function(){
-			this.doTaskOnMessages('unflag');
+			this.flagMessages('Flagged', true);
 		},
 		scope: this,
 		multiple:true
@@ -328,432 +324,12 @@ GO.email.EmailClient = function(config){
 		region:'west'
 	});
 
-	// set the root node
-	var root = new Ext.tree.AsyncTreeNode({
-		text: GO.email.lang.accounts,
-		draggable:false
-	});
-	this.treePanel.setRootNode(root);
-
-	var items = [
-	this.addFolderButton = new Ext.menu.Item({
-		iconCls: 'btn-add',
-		text: GO.email.lang.addFolder,
-		handler: function(){
-			Ext.MessageBox.prompt(GO.lang.strName, GO.email.lang.enterFolderName, function(button, text){
-				if(button=='ok')
-				{
-					var sm = this.treePanel.getSelectionModel();
-					var node = sm.getSelectedNode();
-
-					Ext.Ajax.request({
-						url: GO.settings.modules.email.url+'action.php',
-						params: {
-							task: 'add_folder',
-							folder_id: node.attributes.folder_id,
-							account_id: node.attributes.account_id,
-							new_folder_name: text
-						},
-						callback: function(options, success, response)
-						{
-							if(!success)
-							{
-								Ext.MessageBox.alert(GO.lang.strError, response.result.errors);
-							}else
-							{
-								var responseParams = Ext.decode(response.responseText);
-								if(responseParams.success)
-								{
-									//TODO: Check for mb mode
-									if(responseParams.is_mbroot){
-										delete node.parentNode.attributes.children;
-										node.parentNode.reload();
-									} else {									
-										//remove preloaded children otherwise it won't request the server
-										delete node.attributes.children;
-										node.reload();
-									}
-								}else
-								{
-									Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
-								}
-							}
-						},
-						scope: this
-					});
-				}
-
-			}, this);
-		},
-		scope:this
-	}),
-	this.renameFolderButton = new Ext.menu.Item({
-		iconCls: 'btn-edit',
-		text: GO.email.lang.renameFolder,
-		handler: function()
-		{
-			var sm = this.treePanel.getSelectionModel();
-			var node = sm.getSelectedNode();
-
-			if(!node|| node.attributes.folder_id<1)
-			{
-				Ext.MessageBox.alert(GO.lang.strError, GO.email.lang.selectFolderRename);
-			}else if(node.attributes.mailbox=='INBOX')
-			{
-				Ext.MessageBox.alert(GO.lang.strError, GO.email.lang.cantRenameInboxFolder);
-			}else
-			{
-				Ext.MessageBox.prompt(GO.lang.strName, GO.email.lang.enterFolderName, function(button, text){
-					if(button=='ok')
-					{
-						var sm = this.treePanel.getSelectionModel();
-						var node = sm.getSelectedNode();
-
-						this.el.mask(GO.lang.waitMsgLoad);
-
-						Ext.Ajax.request({
-							url: GO.settings.modules.email.url+'action.php',
-							params: {
-								task: 'rename_folder',
-								folder_id: node.attributes.folder_id,
-								new_name: text
-							},
-							callback: function(options, success, response)
-							{
-								if(!success)
-								{
-									Ext.MessageBox.alert(GO.lang.strError, response.result.errors);
-									this.el.unmask();
-								}else
-								{
-									var responseParams = Ext.decode(response.responseText);
-									if(responseParams.success)
-									{
-										//remove preloaded children otherwise it won't request the server
-										delete node.parentNode.attributes.children;
-
-										var updateFolderName = function(){
-											var node = this.treePanel.getNodeById('folder_'+this.folder_id);
-											if(node){
-												if(this.folder_id==node.attributes.folder_id){
-													this.mailbox = node.attributes.mailbox;
-													this.treePanel.getSelectionModel().select(node);
-												}
-											}
-											this.el.unmask();
-										}
-										node.parentNode.reload(updateFolderName.createDelegate(this));
-									}else
-									{
-										Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
-										this.el.unmask();
-									}
-								}
-							},
-							scope: this
-						});
-					}
-				}, this, false, node.attributes.name);
-			}
-		},
-		scope:this
-	}),'-',	new Ext.menu.Item({
-		iconCls: 'btn-delete',
-		text:GO.email.lang.deleteOldMails,
-		cls: 'x-btn-text-icon',
-		scope:this,
-		handler: function()
-		{
-			if (typeof(this.deleteOldMailDialog)=='undefined') {
-				this.deleteOldMailDialog = new GO.email.DeleteOldMailDialog();
-			}
-			this.deleteOldMailDialog.setNode(this.treePanel.getSelectionModel().getSelectedNode());
-			this.deleteOldMailDialog.show();
-		}
-	}),this.emptyFolderButton = new Ext.menu.Item({
-		iconCls: 'btn-delete',
-		text: GO.email.lang.emptyFolder,
-		handler: function(){
-
-			var sm = this.treePanel.getSelectionModel();
-			var node = sm.getSelectedNode();
-
-			var t = new Ext.Template(GO.email.lang.emptyFolderConfirm);
-
-			Ext.MessageBox.confirm(GO.lang['strConfirm'], t.applyTemplate(node.attributes), function(btn){
-				if(btn=='yes')
-				{
-					this.getEl().mask(GO.lang.waitMsgLoad);
-					Ext.Ajax.request({
-						url: GO.settings.modules.email.url+'action.php',
-						params:{
-							task:'empty_folder',
-							account_id: node.attributes.account_id,
-							mailbox: node.attributes.mailbox
-						},
-						callback:function(){
-							if(node.attributes.mailbox==this.mailbox)
-							{
-								this.messagesGrid.store.removeAll();
-								this.messagePanel.reset();
-							}
-							this.updateFolderStatus(node.attributes.folder_id);
-							this.updateNotificationEl();
-							this.getEl().unmask();
-						},
-						scope: this
-					});
-				}
-			}, this);
-		},
-		scope:this
-	}),this.deleteFolderButton = new Ext.menu.Item({
-		iconCls: 'btn-delete',
-		text: GO.lang.cmdDelete,
-		cls: 'x-btn-text-icon',
-		scope: this,
-		handler: function(){
-			var sm = this.treePanel.getSelectionModel();
-			var node = sm.getSelectedNode();
-
-			if(!node|| node.attributes.folder_id<1)
-			{
-				Ext.MessageBox.alert(GO.lang.strError, GO.email.lang.selectFolderDelete);
-			}else if(node.attributes.mailbox=='INBOX')
-			{
-				Ext.MessageBox.alert(GO.lang.strError, GO.email.lang.cantDeleteInboxFolder);
-			}else
-			{
-				GO.deleteItems({
-					url: GO.settings.modules.email.url+'action.php',
-					params: {
-						task: 'delete_folder',
-						folder_id: node.attributes.folder_id
-					},
-					callback: function(responseParams)
-					{
-						if(responseParams.success)
-						{
-							node.remove();
-
-							if(node.attributes.mailbox==this.messagesGrid.store.baseParams.mailbox){
-								this.messagesGrid.store.removeAll();
-							}
-
-							if(GO.emailportlet){
-								GO.emailportlet.foldersStore.load();
-							}
-						}else
-						{
-							Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
-						}
-					},
-					count: 1,
-					scope: this
-				});
-			}
-		}
-	}),this.shareBtn = new Ext.menu.Item({
-		iconCls:'em-btn-share-mailbox ',
-		text: GO.email.lang.shareFolder,
-		handler:function(){
-			if(!this.imapAclDialog)
-				this.imapAclDialog = new GO.email.ImapAclDialog();
-
-			var sm = this.treePanel.getSelectionModel();
-			var node = sm.getSelectedNode();
-
-			this.imapAclDialog.setParams(node.attributes.account_id,node.attributes.mailbox, node.text);
-			this.imapAclDialog.show();
-		},
-		scope:this
-
-	})];
+	
 
 	
-	for(i=0;i<GO.email.extraTreeContextMenuItems.length;i++)
-	{
-		items.push(GO.email.extraTreeContextMenuItems[i]);
-	}
-
-	this.treeContextMenu = new Ext.menu.Menu({		
-		items: items
-	});
-	
-	
-	
-	this.treePanel.on('contextmenu', function(node, e){
-		e.stopEvent();
-
-		var selModel = this.treePanel.getSelectionModel();
-		
-		if(!selModel.isSelected(node))
-		{
-			selModel.clearSelections();
-			selModel.select(node);
-		}
-		
-		var coords = e.getXY();
-
-		this.addFolderButton.setDisabled(!node.attributes.canHaveChildren);
-		this.shareBtn.setVisible(node.attributes.aclSupported);
-
-		if (GO.settings.modules.email.write_permission) {
-			var node_id_type = node.attributes.id.substring(0,6);
-			this.treeContextMenu.items.get(5).setDisabled(node_id_type!='folder');
-		}
-
-		this.treeContextMenu.showAt([coords[0], coords[1]]);
-	}, this);
-
-	this.treePanel.on('startdrag', function(tree, node, e){
-		if(node.id.indexOf('account')>-1){
-			tree.dropZone.appendOnly=false;
-		}else
-		{
-			tree.dropZone.appendOnly=true;
-		}
-	}, this);
-
-	this.treePanel.on('beforenodedrop', function(e){
-		if(!e.dropNode)
-		{
-			var s = e.data.selections, messages = [];
-
-			for(var i = 0, len = s.length; i < len; i++){
-				messages.push(s[i].id);
-			}
-
-			if(messages.length>0)
-			{
-
-				if(this.account_id != e.target.attributes['account_id'])
-				{
-					var params = {
-						task:'move',
-						from_account_id:this.account_id,
-						to_account_id:e.target.attributes['account_id'],
-						from_mailbox:this.mailbox,
-						to_mailbox:e.target.attributes['mailbox'],
-						messages:Ext.encode(messages)
-					}
-					Ext.MessageBox.progress(GO.email.lang.moving, '', '');
-					Ext.MessageBox.updateProgress(0, '0%', '');
-
-					var conn = new Ext.data.Connection({
-						timeout:300000
-					});
-
-					var moveRequest = function(newMessages){
-
-						if(!newMessages)
-						{
-							params.total=messages.length;
-						}else
-						{
-							params.messages=Ext.encode(newMessages);
-						}
-
-						conn.request({
-							url:GO.settings.modules.email.url+'action.php',
-							params:params,
-							callback:function(options, success, response){
-								var responseParams = Ext.decode(response.responseText);
-								if(!responseParams.success)
-								{
-									alert(responseParams.feedback);
-									Ext.MessageBox.hide();
-								}else if(responseParams.messages && responseParams.messages.length>0)
-								{
-									Ext.MessageBox.updateProgress(responseParams.progress, (responseParams.progress*100)+'%', '');
-									moveRequest.call(this, responseParams.messages);
-								}else
-								{
-									this.messagesGrid.store.reload({
-										callback:function(){
-
-											if(this.messagePanel.uid && !this.messagesGrid.store.getById(this.messagePanel.uid))
-											{
-												this.messagePanel.reset();
-											}
-
-											Ext.MessageBox.hide();
-										},
-										scope:this
-									});
-								}
-
-							},
-							scope:this
-						});
-					}
-					moveRequest.call(this);
-
-				}else	if(this.mailbox == e.target.mailbox)
-				{
-					return false;
-				}else
-				{
-					this.messagesGrid.store.baseParams['action']='move';
-					this.messagesGrid.store.baseParams['from_account_id']=this.account_id;
-					this.messagesGrid.store.baseParams['to_account_id']=e.target.attributes['account_id'];
-					this.messagesGrid.store.baseParams['from_mailbox']=this.mailbox;
-					this.messagesGrid.store.baseParams['to_mailbox']=e.target.attributes['mailbox'];
-					this.messagesGrid.store.baseParams['messages']=Ext.encode(messages);
-
-					this.messagesGrid.store.reload({
-						callback:function(){
-							if(this.messagePanel.uid && !this.messagesGrid.store.getById(this.messagePanel.uid))
-							{
-								this.messagePanel.reset();
-							}
-						},
-						scope:this
-					});
-
-					delete this.messagesGrid.store.baseParams['action'];
-					delete this.messagesGrid.store.baseParams['from_mailbox'];
-					delete this.messagesGrid.store.baseParams['to_mailbox'];
-					delete this.messagesGrid.store.baseParams['messages'];
-					delete this.messagesGrid.store.baseParams['to_account_id'];
-					delete this.messagesGrid.store.baseParams['from_account_id'];
-				}
-
-			}
-		}
-	},
-	this);
-
-	this.treePanel.on('nodedrop', function(e){
-		if(e.dropNode)
-		{
-			if(e.source.dragData.node.id.indexOf('account')>-1 && e.target.id.indexOf('account')>-1 && e.point!='append'){
-				var sortorder=[];
-				var c = this.treePanel.getRootNode().childNodes;
-
-				for(var i=0;i<c.length;i++){
-					sortorder.push(c[i].attributes.account_id);
-				}
-				Ext.Ajax.request({
-					url: GO.settings.modules.email.url+'action.php',
-					params: {
-						task: 'save_accounts_sort_order',
-						sort_order: Ext.encode(sortorder)
-					}
-				});
-			}else
-			{
-				this.treePanel.moveFolder(e.target.attributes['account_id'], e.target.id , e.data.node);
-			}
-		}
-
-		this.treePanel.dropZone.appendOnly=true;
-	},
-	this);
-
 	
 	//select the first inbox to be displayed in the messages grid
-	root.on('load', function(node)
+	this.treePanel.getRootNode().on('load', function(node)
 	{
 		this.body.unmask();		
 		if(node.childNodes[0])
@@ -775,7 +351,6 @@ GO.email.EmailClient = function(config){
 
 							this.setAccount(
 								firstInboxNode.attributes.account_id,
-								firstInboxNode.attributes.folder_id,
 								firstInboxNode.attributes.mailbox,
 								firstInboxNode.parentNode.attributes.usage
 								);
@@ -793,41 +368,40 @@ GO.email.EmailClient = function(config){
 		}
 	}, this);
 	
-	this.treePanel.on('beforeclick', function(node){
-		if(node.attributes.folder_id==0)
-			return false;
-	}, this);
+//	this.treePanel.on('beforeclick', function(node){
+//		if(node.attributes.folder_id==0)
+//			return false;
+//	}, this);
 
 	this.treePanel.on('beforeclick', function(node){
-			if(node.attributes.noSelect==1)
+			if(node.attributes.noselect==1)
 			{
 				return false;
 			}
 	});
 
 	this.treePanel.on('click', function(node)	{
-		if(node.attributes.folder_id>0)
-		{
+//		if(node.attributes.folder_id>0)
+//		{
 			var usage='';
-			var cnode = node;
-			while(cnode.parentNode && usage=='')
-			{
-				if(cnode.attributes.usage)
-				{
-					usage=cnode.attributes.usage;
-				}else
-				{
-					cnode=cnode.parentNode;
-				}
-			}
+//			var cnode = node;
+//			while(cnode.parentNode && usage=='')
+//			{
+//				if(cnode.attributes.usage)
+//				{
+//					usage=cnode.attributes.usage;
+//				}else
+//				{
+//					cnode=cnode.parentNode;
+//				}
+//			}
 			
 			this.setAccount(
 				node.attributes.account_id,
-				node.attributes.folder_id,
 				node.attributes.mailbox,
 				usage
 				);
-		}
+//		}
 	}, this);
 
 	this.treePanel.on('collapsenode', function(node)
@@ -1088,10 +662,10 @@ GO.email.EmailClient = function(config){
 			this.printButton.setDisabled(false);
 			
 			var record = this.messagesGrid.store.getById(this.messagePanel.uid);
-			if(record.data['new']==1)
+			if(record.data['seen']==0)
 			{
 				this.incrementFolderStatus(this.folder_id, -1);
-				record.set('new','0');
+				record.set('seen','1');
 			}
 		}
   	
@@ -1418,9 +992,9 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		});
 	},
 	
-	setAccount : function(account_id,folder_id,mailbox, usage)
+	setAccount : function(account_id,mailbox, usage)
 	{
-		if(folder_id!=this.folder_id)
+		if(account_id!=this.account_id || this.mailbox!=mailbox)
 		{
 			this.messagePanel.reset();
 			this.messagesGrid.getSelectionModel().clearSelections();
@@ -1429,13 +1003,11 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		this.messagesGrid.expand();
 		
 		this.account_id = account_id;
-		this.folder_id = folder_id;
 		this.mailbox = mailbox;
 
 		//messagesPanel.setTitle(mailbox);
 		this.messagesGrid.store.baseParams['task']='messages';
 		this.messagesGrid.store.baseParams['account_id']=account_id;
-		this.messagesGrid.store.baseParams['folder_id']=folder_id;
 		this.messagesGrid.store.baseParams['mailbox']=mailbox;
 		this.messagesGrid.store.load({
 			params:{
@@ -1532,84 +1104,57 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		this.accountsDialog.show();
 	},
 	
-	doTaskOnMessages : function (task){
+	flagMessages : function (flag, clear){
 		var selectedRows = this.messagesGrid.selModel.selections.keys;
 
 		if(selectedRows.length)
 		{
 			
-			Ext.Ajax.request({
-				url: GO.settings.modules.email.url+'action.php',
+			GO.request({
+				url: "email/message/setFlag",
 				params: {
-					task: 'flag_messages',
 					account_id: this.account_id,
 					mailbox: this.mailbox,
-					action: task,
+					flag: flag,
+					clear: clear ? 1 : 0,
 					messages: Ext.encode(selectedRows)
 				},
-				callback: function(options, success, response)
+				success: function(options, response,result)
 				{
+					var field;
+					var value;
 
-					if(!success)
-					{
-						Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
-					}else
-					{
-						
-						var responseParams = Ext.decode(response.responseText);
-						if(!responseParams.success)
-						{
-							Ext.MessageBox.alert(GO.lang['strError'], responseParams.feedback);
-						}else
-						{
-							var field;
-							var value;
-							
-							var records = this.messagesGrid.selModel.getSelections();
-							
-							switch(task)
-							{
-								case 'mark_as_read':
-									field='new';
-									value=false;
+					var records = this.messagesGrid.selModel.getSelections();
 
-									for(var i=0;i<records.length;i++){
-										if(records[i].get('new')=='1')
-											GO.email.totalUnseen--;
-									}
-									
-									break;
-								case 'mark_as_unread':
-									field='new';
-									value=true;
-									
-									for(var i=0;i<records.length;i++){
-										if(records[i].get('new')!='1')
-											GO.email.totalUnseen++;
-									}
-									break;
-									
-								case 'flag':
-									field='flagged';
-									value=true;
-									break;
-								case 'unflag':
-									field='flagged';
-									value=false;
-									break;
+					switch(flag)
+					{
+						case 'Seen':
+							field='seen';
+							value=!clear;
+
+							for(var i=0;i<records.length;i++){
+								if(records[i].get('seen')!=clear)
+									GO.email.totalUnseen-=clear;
 							}
-							
-							
-							for(var i=0;i<records.length;i++)
-							{
-								records[i].set(field, value);
-								records[i].commit();
-							}
-							
-							this.updateFolderStatus(this.folder_id, responseParams.unseen);
-							this.updateNotificationEl();
-						}
+
+							break;
+						case 'flag':
+							field='flagged';
+							value=clear;
+							break;						
 					}
+
+
+					for(var i=0;i<records.length;i++)
+					{
+						records[i].set(field, value);
+						records[i].commit();
+					}
+
+					//this.updateFolderStatus(this.folder_id, responseParams.unseen);
+					//this.updateNotificationEl();
+						
+					
 				},
 				scope:this
 			});
@@ -1730,6 +1275,8 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 
 	updateState : function(node, open, folder)
 	{
+		console.log("todo");
+		return;
 		var id = (folder) ? node.attributes.folder_id : node.attributes.account_id;
 		if(node.attributes.parentExpanded != open)
 		{

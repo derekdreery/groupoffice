@@ -111,9 +111,33 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		$attributes['account'] = $account;
 		$attributes['mailbox'] = $mailbox;
 
-		$imapMessage->setAttributes($attributes);
+		$imapMessage->setAttributes($headers);
 
 		return $imapMessage;
+	}
+	
+	public function getAttributes($formatted=false){
+		if(!$formatted)
+			return $this->attributes;
+		
+		$attributes = $this->attributes;
+		
+		$from = $this->from->getAddress();
+		$attributes['from']=$from["personal"];
+		
+		foreach($this->to->getAddresses() as $email=>$personal)
+			$attributes['to']=$personal.", ";
+		
+		
+		$dayStart = mktime(0,0,0);
+		//$dayEnd = mktime(0,0,0,date('m'),date('d')+1);
+		
+		if($this->udate<$dayStart)
+			$attributes["date"]=GO_Base_Util_Date::get_timestamp($this->udate, false);
+		else
+			$attributes["date"]=date(GO::user()->time_format, $this->udate);		
+		
+		return $attributes;
 	}
 
 	/**

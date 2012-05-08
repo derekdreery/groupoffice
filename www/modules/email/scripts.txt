@@ -24,3 +24,4 @@ modules/email/MessageDialog.js
 modules/email/ImapAclDialog.js
 modules/email/ImapAclUserDialog.js
 modules/email/DeleteOldMailDialog.js
+modules/email/TreeContextMenu.js

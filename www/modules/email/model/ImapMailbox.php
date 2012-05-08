@@ -5,11 +5,10 @@
  * @var boolean $noinferiors
  * @var boolean $marked
  * @var boolean $haschildren
+ * @var boolean $noselect
  * @var int $unseen
  * @var int $messages
  * @var string $delimiter
- * @var string $name
-
 
  */
 class GO_Email_Model_ImapMailbox extends GO_Base_Model {
