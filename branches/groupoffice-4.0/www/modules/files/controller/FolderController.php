@@ -951,7 +951,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 				$response['images'][]=array(
 					"name"=>$file->name,
-					"url"=>$file->downloadUrl,
+					"download_path"=>$file->downloadUrl,
 					"src"=>$file->getThumbUrl($thumbParams)
 				);
 			}
