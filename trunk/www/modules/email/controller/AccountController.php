@@ -102,11 +102,11 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					'id' => 'account_' . $account->id,
 					'iconCls' => 'folder-account',
 					'expanded' => true,
+					'noselect'=>false,
 					'account_id' => $account->id,
-					'folder_id' => 0,
 					'mailbox' => 'INBOX',
-					'children' => $this->_getMailboxTreeNodes($account->getAllMailboxesWithStatus()),
-					'canHaveChildren' => true,
+					'children' => $this->_getMailboxTreeNodes($account->getAllMailboxes(true, true)),
+					'noinferiors' => false,
 					'inbox_new' => 0,
 					'usage' => "",
 					'parentExpanded' => true
@@ -115,8 +115,8 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			$response[] = $node;
 		}
 
-		var_dump($response);
-		exit();
+//		var_dump($response);
+//		exit();
 
 		return $response;
 	}
@@ -124,6 +124,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 	private function _getMailboxTreeNodes($mailboxes) {
 		$nodes = array();
 		foreach ($mailboxes as $mailbox) {
+			/* @var $mailbox GO_Email_Model_ImapMailbox */
 			if(!$mailbox->subscribed)
 				continue;
 					
@@ -133,38 +134,51 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			} else {
 				$statusHtml = '&nbsp;<span class="em-folder-status" id="status_' . $nodeId . '"></span>';
 			}
+			
+			$children = $this->_getMailboxTreeNodes($mailbox->getChildren());
 
 			$node = array(
 					'text' => $mailbox->getDisplayName().$statusHtml,
 					'mailbox' => $mailbox->name,
+					'account_id'=>$mailbox->getAccount()->id,
 					'iconCls' => 'folder-default',
-					'expanded' => true,
+					'expanded' => !count($children),
 					'id' => $nodeId,
-					'children' => $this->_getMailboxTreeNodes($mailbox->getChildren())
+					'noselect'=>$mailbox->noselect,
+					//'noinferiors'=>$mailbox->noinferiors,
+					'children' => $children
 			);
+			
+			$sortIndex=5;
 
 			switch ($mailbox->name) {
 				case 'INBOX':
 					$node['iconCls'] = 'email-folder-inbox';
+					$sortIndex=0;
 					break;
 				case $mailbox->getAccount()->sent:
 					$node['iconCls'] = 'email-folder-sent';
+					$sortIndex=1;
 					break;
 				case $mailbox->getAccount()->trash:
 					$node['iconCls'] = 'email-folder-trash';
+					$sortIndex=3;
 					break;
 				case $mailbox->getAccount()->drafts:
 					$node['iconCls'] = 'email-folder-drafts';
+					$sortIndex=2;
 					break;
 				case 'Spam':
 					$node['iconCls'] = 'email-folder-spam';
+					$sortIndex=4;
 					break;
 			}
 
-			$nodes[] = $node;
+			$nodes[$sortIndex.$mailbox->name] = $node;
 		}
-
-		return $nodes;
+		ksort($nodes);
+		
+		return array_values($nodes);
 	}
 
 }

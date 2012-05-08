@@ -1,6 +1,74 @@
 <?php
 
 class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController {
+	
+	
+	protected function actionStore($params){
+		
+		if(!isset($params['start']))
+			$params['start']=0;
+		
+		if(!isset($params['limit']))
+			$params['limit']=GO::user()->max_rows_list;
+		
+		if(!isset($params['dir']))
+			$params['dir']="ASC";
+		
+		//TODO
+		$query="";
+		
+		$sort=isset($params['sort']) ? $params['sort'] : 'from';
+
+		switch($sort) {
+			case 'from':
+				$sortField='FROM';
+				break;
+			case 'date':
+				$sortField='DATE';
+				break;
+			case 'subject':
+				$sortField='SUBJECT';
+				break;
+			case 'size':
+				$sortField='SIZE';
+				break;
+			default:
+				$sortField='DATE';
+		}
+			
+		
+		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+		/* @var $account GO_Email_Model_Account */
+		
+		$imap = $account->openImapConnection($params["mailbox"]);
+		
+		/* @var $imap GO_Base_Mail_Imap */
+		$headersSet = $imap->get_message_headers_set($params['start'], $params['limit'], $sortField , $params['dir']!='ASC', $query);
+		$response["results"]=array();
+		foreach($headersSet as $uid=>$headers){
+			$message = GO_Email_Model_ImapMessage::model()->createFromHeaders($account, $params["mailbox"], $uid, $headers);			
+			
+			$response["results"][]=$message->getAttributes(true);
+		}
+	
+		$response['total'] = $imap->sort_count;
+		
+		return $response;
+	}
+	
+	protected function actionSetFlag($params){
+		$messages = json_decode($params['messages']);
+		
+		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+		/* @var $account GO_Email_Model_Account */
+		
+		$imap = $account->openImapConnection($params["mailbox"]);
+		/* @var $imap GO_Base_Mail_Imap */
+		$response['success']=$imap->set_message_flag($messages, "\\".$params["flag"], !empty($params["clear"]));
+		
+		return $response;
+	}
+	
 
 	private function _findUnknownRecipients($params) {
 
