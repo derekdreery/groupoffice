@@ -445,14 +445,22 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		
 		$stmt= $this->folders();
 		while($folder = $stmt->fetch()){
-			if(!$folder->fsFolder->exists())
-				$folder->delete();
+			try{
+				if(!$folder->fsFolder->exists())
+					$folder->delete();
+			}catch(Exception $e){
+				echo $e->getMessage()."\n";
+			}
 		}
 		
 		$stmt= $this->files();
 		while($file = $stmt->fetch()){
-			if(!$file->fsFile->exists())
-				$file->delete();
+			try{
+				if(!$file->fsFile->exists())
+					$file->delete();
+			}catch(Exception $e){
+				echo $e->getMessage()."\n";
+			}
 		}
 		
 		GO::$disableModelCache=$oldCache;
