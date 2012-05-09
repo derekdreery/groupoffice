@@ -222,6 +222,24 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 
 		return $a;
 	}
+	
+	/**
+	 *
+	 * @return \GO_Email_Model_ImapMailbox 
+	 */
+	public function getRootMailboxes($withStatus=false){
+		$imap = $this->openImapConnection();
+		
+		$rootMailboxes = array();
+		
+		$folders = $imap->list_folders(true,$withStatus,"","%");
+		foreach($folders as $folder){
+			$mailbox = new GO_Email_Model_ImapMailbox($this,$folder);
+			$rootMailboxes[]=$mailbox;
+		}
+		
+		return $rootMailboxes;
+	}
 
 	
 	/**
@@ -231,9 +249,9 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	public function getAllMailboxes($hierarchy=true, $withStatus=false){
 		$imap = $this->openImapConnection();
 		
-		$folders = $imap->list_folders(true,true, $withStatus);
+		$folders = $imap->list_folders(true, $withStatus);
 		
-		$node= array('name'=>'','children'=>array());
+		//$node= array('name'=>'','children'=>array());
 		
 		$rootMailboxes = array();
 		
