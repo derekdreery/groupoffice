@@ -145,45 +145,7 @@ try{
 			$response['success']=true;
 			
 			break;
-		
-		case 'lost_password':
-
-			require($GLOBALS['GO_LANGUAGE']->get_base_language_file('lostpassword'));
-
-			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
-			
-			if($user = $GO_USERS->get_user_by_email($_POST['email']))
-			{
-				$url = $GLOBALS['GO_CONFIG']->full_url.'change_lost_password.php?username='.$user['username'].'&code1='.md5($user['password']).'&code2='.md5($user['lastlogin'].$user['registration_time']);
-
-				$salutation = $lang['common']['default_salutation'][$user['sex']];
-				if(!empty($user['middle_name']))
-					$salutation .= ' '.$user['middle_name'];
-				$salutation .= ' '.$user['last_name'];
-
-				$mail_body = sprintf($lang['lostpassword']['lost_password_body'],
-					$salutation,
-					$GLOBALS['GO_CONFIG']->title,
-					$user['username'],
-					$url);
 				
-				require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
-				$swift = new GoSwift($user['email'], $lang['lostpassword']['lost_password_subject']);
-				$swift->set_body($mail_body,'plain');
-				$swift->set_from($GLOBALS['GO_CONFIG']->webmaster_email, $GLOBALS['GO_CONFIG']->title);
-				$swift->sendmail();				
-				
-				$response['success']=true;
-				$response['feedback']=$lang['lostpassword']['lost_password_success'];
-			}else
-			{
-				$response['success']=false;
-				$response['feedback']=$lang['lostpassword']['lost_password_error'];
-			}
-			
-			break;
-		
 		case 'save_settings':
 
 			$GLOBALS['GO_EVENTS']->fire_event('before_save_settings');
