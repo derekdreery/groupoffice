@@ -103,3 +103,5 @@ $updates["201203091439"][]="CREATE TABLE IF NOT EXISTS `fs_folder_pref` (
   `thumbs` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`folder_id`,`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates["201205071400"][]="update cf_fields set datatype='GO_Files_Customfieldtype_File' where datatype='file'";
