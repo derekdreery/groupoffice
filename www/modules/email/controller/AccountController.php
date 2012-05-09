@@ -142,11 +142,14 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					'mailbox' => $mailbox->name,
 					'account_id'=>$mailbox->getAccount()->id,
 					'iconCls' => 'folder-default',
-					'expanded' => !count($children),
+					
 					'id' => $nodeId,
 					'noselect'=>$mailbox->noselect,
-					//'noinferiors'=>$mailbox->noinferiors,
-					'children' => $children
+					'noinferiors'=>$mailbox->noinferiors,
+					//'children' => $mailbox->hasnochildren ? array() : null
+					//'expanded' => $mailbox->hasnochildren,
+					'children'=>$children,
+					'expanded' => !count($children),
 			);
 			
 			$sortIndex=5;

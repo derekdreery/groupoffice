@@ -263,51 +263,114 @@ GO.email.AccountsTree = function(config){
 				});
 			}else
 			{
-				this.moveFolder(e.target.attributes['account_id'], e.target.id , e.data.node);
+				this.moveFolder(e.target.attributes['account_id'], e.target , e.data.node);
 			}
 		}
 
 		this.dropZone.appendOnly=true;
 	},
 	this);
-
 	
 	
 	
+//	this.treeEditor = new Ext.tree.TreeEditor(
+//		this,
+//		new Ext.form.TextField({
+//			cancelOnEsc:true,
+//			completeOnEnter:true,
+//			maskRe:/[^:]/
+//		}),
+//		{
+//			listeners:{
+//				complete  : this.afterEdit,
+//				startedit : function( editor, boundEl, value )
+//				{
+//					console.log(editor.editNode.attributes.mailbox);
+//					editor.setValue(editor.editNode.attributes.mailbox);
+//				},
+//				beforecomplete  : function( editor, value, startValue){
+//					value=value.trim();
+//					if(GO.util.empty(value)){
+//						editor.focus();
+//						return false;
+//					}
+//				},
+//				scope:this
+//			}
+//		});
 }
 
 Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {	
 	setUsage : function(usage){		
 			this.statusBar.body.update(usage);
 	},
-	moveFolder : function(account_id, target_id, node)
+	moveFolder : function(account_id, targetNode, node)
 	{
-		Ext.Ajax.request({
-			url:GO.settings.modules.email.url+'action.php',
-			params:{
-				task:'move_folder',
+	
+		GO.request({
+			url:"email/folder/move",
+			params:{				
 				account_id:account_id,
-				source_id:node.id,
-				target_id:target_id
+				sourceMailbox:node.attributes.mailbox,
+				targetMailbox:targetNode.attributes.mailbox
 			},
-			callback:function(options, success, response)
+			fail : function(){
+				this.refresh();
+			},
+			success:function(options, response, result)
 			{
-				var responseParams = Ext.decode(response.responseText);
-				if(responseParams.success)
-				{
-					//remove preloaded children otherwise it won't request the server
-					delete node.parentNode.attributes.children;
-					node.parentNode.reload();
-				}else
-				{
-					var accountNode = this.getNodeById('account_'+account_id)
-					if(accountNode)
-						accountNode.reload();
-					
-					Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
-				}								
+				
+				//this.refresh(node.parentNode);
+				
+//				var responseParams = Ext.decode(response.responseText);
+//				if(responseParams.success)
+//				{
+//					//remove preloaded children otherwise it won't request the server
+//					delete node.parentNode.attributes.children;
+//					node.parentNode.reload();
+//				}else
+//				{
+//					var accountNode = this.getNodeById('account_'+account_id)
+//					if(accountNode)
+//						accountNode.reload();
+//					
+//					Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
+//				}								
 			},
 			scope:this
 		});
+	},
+	
+	refresh : function(node){
+		//todo only reload current node.
+		
+		//remove preloaded children otherwise it won't request the server
+//										delete node.parentNode.attributes.children;
+
+		this.getRootNode().reload();
 	}
+	
+	
+	
+//	afterEdit : function(editor, text, oldText ){
+//
+//		GO.request({
+//			url:'email/folder/submit',
+//			params:{				
+//				parent:editor.editNode.parentNode.id=='root' ? "" : editor.editNode.parentNode.attributes.mailbox,
+//				account_id:editor.editNode.parentNode.attributes.account_id,
+//				oldmailbox:oldText,
+//				newmailbox:text
+//			},
+//			success: function(response, options, result)
+//			{
+//				if(!result.success)
+//				{					
+//					editor.editNode.destroy();
+//					alert(result.feedback);
+//				}				
+//			},
+//			scope:this
+//		});
+//	}
 });

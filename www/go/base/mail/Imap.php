@@ -292,23 +292,27 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	
 	public function list_folders($listSubscribed=true, $withStatus=false, $namespace='', $pattern='*'){
 		
-		$delim = false;
+		//$delim = false;
 		
 		$listStatus = $this->has_capability('LIST-STATUS');
 		
 		$listCmd = $listSubscribed ? 'LSUB' : 'LIST';
+		//$listCmd = 'LIST';
+		
 		
 		$cmd = $listCmd.' "'.$namespace.'" "'.$pattern.'"';
 		
 		if($listStatus && $withStatus){
-			$cmd .= ' RETURN (STATUS (MESSAGES UNSEEN) SUBSCRIBED)';
+			$cmd .= ' RETURN (STATUS (MESSAGES UNSEEN))';
 		}
+		
+		GO::debug($cmd);
 		
 		$cmd .= "\r\n";
 		
 		$this->send_command($cmd);
 		$result = $this->get_response(false, true);
-		//var_dump($result);
+		//GO::debug($result);
 		$folders = array();
 		foreach ($result as $vals) {
 			if (!isset($vals[0])) {
@@ -316,18 +320,19 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			}
 			if ($vals[0] == 'A'.$this->command_count) {
 				continue;
-			}
+			}			
 			
-			//var_dump($vals[1]);
 			if($vals[1]==$listCmd){
 				$flags = false;
-				$count = count($vals);
-				$folder = $vals[($count - 1)];
+				//$count = count($vals);
+				$folder = false;//$vals[($count - 1)];
 				$flag = false;
 				$delim_flag = false;
+				$delim=false;
 				$parent = '';
-					$no_select = false;
-				$can_have_kids = false;
+				$no_select = false;
+				$can_have_kids = true;
+				$has_no_kids=false;
 				$has_kids = false;
 				$marked = false;				
 				$subscribed=$listSubscribed;
@@ -347,6 +352,8 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 						if ($delim_flag && !$delim) {
 							$delim = $v;
 							$delim_flag = false;
+						}elseif($delim && !$folder){
+								$folder = $v;
 						}
 					}
 				}
@@ -359,10 +366,14 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 					$marked = true;
 				}
 				if (!stristr($flags, 'noinferiors')) {
-					$can_have_kids = true;
+					$can_have_kids = false;
 				}
 				if (stristr($flags, 'haschildren')) {
 					$has_kids = true;
+				}
+				
+				if (stristr($flags, 'hasnochildren')) {
+					$has_no_kids = true;
 				}
 				
 				if (stristr($flags, 'subscribed')) {
@@ -372,6 +383,8 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				if ($folder != 'INBOX' && stristr($flags, 'noselect')) {
 					$no_select = true;
 				}
+				
+				
 
 				if (!isset($folders[$folder]) && $folder) {
 					$folders[$folder] = array(
@@ -381,6 +394,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 									'noselect' => $no_select,
 									'noinferiors' => $can_have_kids,
 									'haschildren' => $has_kids,
+									'hasnochildren' => $has_no_kids,
 									'subscribed'=>$subscribed,
 									'unseen'=>0,
 									'messages'=>0
@@ -409,11 +423,11 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			}
 		}
 		
-		if($listSubscribed && !isset($folders['INBOX'])){
+		if($namespace=="" && $listSubscribed && !isset($folders['INBOX'])){
 			//inbox is not subscribed. Let's fix that/
 			if(!$this->subscribe('INBOX'))
 				throw new Exception("Could not subscribe to INBOX folder!");
-			return $this->list_folders($listSubscribed);
+			return $this->list_folders($listSubscribed, $withStatus, $namespace, $pattern);
 		}
 
 		if(!$listStatus && $withStatus){
@@ -443,8 +457,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 								'name' => $parent,
 								'marked' => true,
 								'noselect' => true,
-								'can_have_children' => true,
-								'has_children' => true,
+								'noinferiors' => false,
+								'haschildren' => true,
+								'hasnochildren' => false,
 								'subscribed'=>true,
 								'unseen'=>0,
 								'messsages'=>0);
@@ -2075,6 +2090,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 		$command = 'RENAME "'.$this->addslashes($this->utf7_encode($mailbox)).'" "'.
 						$this->addslashes($this->utf7_encode($new_mailbox)).'"'."\r\n";
+		
+		GO::debug($command);
+		
 		$this->send_command($command);
 		$result = $this->get_response(false);
 		

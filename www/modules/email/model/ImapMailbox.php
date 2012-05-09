@@ -5,6 +5,7 @@
  * @var boolean $noinferiors
  * @var boolean $marked
  * @var boolean $haschildren
+ * @var boolean $hasnochildren
  * @var boolean $noselect
  * @var int $unseen
  * @var int $messages
@@ -35,7 +36,19 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 	}
 
 	public function __get($name) {
+		
+		$getter = "get".$name;
+		if(method_exists($this, $getter))
+			return $this->$getter($name);			
+		
 		return $this->_attributes[$name];
+	}
+	
+	public function getDelimiter(){
+		if(!isset($this->_attributes["delimiter"]))
+			$this->_attributes["delimiter"]=$this->getAccount()->openImapConnection ()->get_mailbox_delimiter ();
+		
+		return $this->_attributes["delimiter"];
 	}
 
 	public function getParentName() {
@@ -81,10 +94,28 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 	}
 
 	public function addChild(GO_Email_Model_ImapMailbox $mailbox) {
+		if(!isset($this->_children)){
+			$this->_children = array();
+		}
 		$this->_children[] = $mailbox;
 	}
 
 	public function getChildren() {
+		
+//		if(!isset($this->_children)){
+//
+//			$imap = $this->getAccount()->openImapConnection();
+//
+//			$this->_children = array();
+//
+//			$folders = $imap->list_folders(true,$withStatus,$this->mailbox.$this->delimiter,"%");
+//			foreach($folders as $folder){
+//				$mailbox = new GO_Email_Model_ImapMailbox($this,$folder);
+//				$this->_children[]=$mailbox;
+//			}
+//
+//		}
+		
 		return $this->_children;
 	}
 
@@ -99,4 +130,30 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 //	public function isSent(){
 //		return $this->name==$this->_account->sent;
 //	}
+	
+	public function rename($name){
+		$parentName = $this->getParentName();
+		$newMailbox = empty($parentName) ? $name : $this->delimiter.$name;
+		
+		return $this->getAccount()->openImapConnection()->rename_folder($this->name, $newMailbox);
+	}
+	
+	public function createChild($name, $subscribe=true){
+		$newMailbox = empty($this->name) ? $name : $this->name.$this->delimiter.$name;
+		
+		return $this->getAccount()->openImapConnection()->create_folder($newMailbox, $subscribe);
+	}
+	
+	public function move(GO_Email_Model_ImapMailbox $targetMailbox){
+		
+		$newMailbox =$targetMailbox->name.$this->delimiter.$this->getBaseName();
+		
+		$success = $this->getAccount()->openImapConnection()->rename_folder($this->name, $newMailbox);
+		if(!$success)
+			return false;
+		
+		$this->name = $newMailbox;
+		
+		return true;
+	}
 }

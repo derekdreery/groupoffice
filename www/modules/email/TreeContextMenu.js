@@ -4,10 +4,10 @@ GO.email.TreeContextMenu = Ext.extend(Ext.menu.Menu,{
 		this.addFolderButton.setDisabled(node.attributes.noinferiors);
 		this.shareBtn.setVisible(node.attributes.aclSupported);
 
-//		if (GO.settings.modules.email.write_permission) {
-//			var node_id_type = node.attributes.id.substring(0,6);
-//			this.items.get(5).setDisabled(node_id_type!='folder');
-//		}
+	//		if (GO.settings.modules.email.write_permission) {
+	//			var node_id_type = node.attributes.id.substring(0,6);
+	//			this.items.get(5).setDisabled(node_id_type!='folder');
+	//		}
 	},
 	initComponent : function(){
 		
@@ -21,44 +21,25 @@ GO.email.TreeContextMenu = Ext.extend(Ext.menu.Menu,{
 					{
 						var sm = this.treePanel.getSelectionModel();
 						var node = sm.getSelectedNode();
-
-						Ext.Ajax.request({
-							url: GO.settings.modules.email.url+'action.php',
+				
+						GO.request({
+							url: "email/folder/create",
+							maskEl: Ext.getBody(),
 							params: {
-								task: 'add_folder',
-								folder_id: node.attributes.folder_id,
+								parent: node.attributes.mailbox,
 								account_id: node.attributes.account_id,
-								new_folder_name: text
+								name: text
 							},
-							callback: function(options, success, response)
-							{
-								if(!success)
-								{
-									Ext.MessageBox.alert(GO.lang.strError, response.result.errors);
-								}else
-								{
-									var responseParams = Ext.decode(response.responseText);
-									if(responseParams.success)
-									{
-										//TODO: Check for mb mode
-										if(responseParams.is_mbroot){
-											delete node.parentNode.attributes.children;
-											node.parentNode.reload();
-										} else {									
-											//remove preloaded children otherwise it won't request the server
-											delete node.attributes.children;
-											node.reload();
-										}
-									}else
-									{
-										Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
-									}
-								}
+							success: function(options, response, result)
+							{								
+								this.treePanel.refresh(node);
+							},
+							fail : function(){
+								this.treePanel.refresh();
 							},
 							scope: this
 						});
 					}
-
 				}, this);
 			},
 			scope:this
@@ -71,7 +52,7 @@ GO.email.TreeContextMenu = Ext.extend(Ext.menu.Menu,{
 				var sm = this.treePanel.getSelectionModel();
 				var node = sm.getSelectedNode();
 
-				if(!node|| node.attributes.folder_id<1)
+				if(!node || !node.attributes.mailbox)
 				{
 					Ext.MessageBox.alert(GO.lang.strError, GO.email.lang.selectFolderRename);
 				}else if(node.attributes.mailbox=='INBOX')
@@ -85,47 +66,38 @@ GO.email.TreeContextMenu = Ext.extend(Ext.menu.Menu,{
 							var sm = this.treePanel.getSelectionModel();
 							var node = sm.getSelectedNode();
 
-							this.el.mask(GO.lang.waitMsgLoad);
-
-							Ext.Ajax.request({
-								url: GO.settings.modules.email.url+'action.php',
+							GO.request({								
+								maskEl: Ext.getBody(),
+								url: "email/folder/rename",
 								params: {
-									task: 'rename_folder',
-									folder_id: node.attributes.folder_id,
-									new_name: text
+									account_id: node.attributes.account_id,
+									mailbox: node.attributes.mailbox,
+									name: text
 								},
-								callback: function(options, success, response)
+								success: function(options, response, result)
 								{
-									if(!success)
-									{
-										Ext.MessageBox.alert(GO.lang.strError, response.result.errors);
-										this.el.unmask();
-									}else
-									{
-										var responseParams = Ext.decode(response.responseText);
-										if(responseParams.success)
-										{
-											//remove preloaded children otherwise it won't request the server
-											delete node.parentNode.attributes.children;
-
-											var updateFolderName = function(){
-												var node = this.treePanel.getNodeById('folder_'+this.folder_id);
-												if(node){
-													if(this.folder_id==node.attributes.folder_id){
-														this.mailbox = node.attributes.mailbox;
-														this.treePanel.getSelectionModel().select(node);
-													}
-												}
-												this.el.unmask();
-											}
-											node.parentNode.reload(updateFolderName.createDelegate(this));
-										}else
-										{
-											Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
-											this.el.unmask();
-										}
-									}
+									this.treePanel.refresh(node);
+									
+										//remove preloaded children otherwise it won't request the server
+//										delete node.parentNode.attributes.children;
+//
+//										var updateFolderName = function(){
+//											var node = this.treePanel.getNodeById('folder_'+this.folder_id);
+//											if(node){
+//												if(this.folder_id==node.attributes.folder_id){
+//													this.mailbox = node.attributes.mailbox;
+//													this.treePanel.getSelectionModel().select(node);
+//												}
+//											}
+//											this.el.unmask();
+//										}
+//										node.parentNode.reload(updateFolderName.createDelegate(this));
+										
+									
 								},
+								fail : function(){
+								this.treePanel.refresh();
+							},
 								scope: this
 							});
 						}
@@ -253,6 +225,8 @@ GO.email.TreeContextMenu = Ext.extend(Ext.menu.Menu,{
 		}
 		
 		GO.email.TreeContextMenu.superclass.initComponent.call(this);
+		
+
 	}
 }
 );
