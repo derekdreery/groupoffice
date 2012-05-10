@@ -133,12 +133,14 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 		config.items.push(this.hiddenCtField);
 		config.items.push(this.hiddenAttachmentsField);
 		config.items.push(this.hiddenInlineImagesField);
+		
+		var anchorHeight = config.enableSubjectField ? "-20" : "100%";
 
 
 		this.htmlEditor = new GO.form.HtmlEditor({
 			name:'htmlbody',
 			hideLabel: true,
-			anchor: '100% 100%',
+			anchor: '100% '+anchorHeight,
 			plugins:this.initHtmlEditorPlugins(),			
 			listeners:{
 				
@@ -164,7 +166,7 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 		
 		this.textEditor = new Ext.form.TextArea({
 			name: 'plainbody',
-			anchor : '100% 100%',
+			anchor : '100% '+anchorHeight,
 			hideLabel : true,
 			cls:'em-plaintext-body-field'
 		})
@@ -172,9 +174,8 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 		if (!GO.util.empty(config.enableSubjectField))
 			config.items.push({
 				xtype: 'textfield',
-				name: 'subject',
-				width: '100%',
-				anchor: '-20',
+				name: 'subject',				
+				anchor: '100%',
 				allowBlank: false,
 				fieldLabel: GO.lang['strSubject']
 			});
@@ -266,6 +267,9 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 			this.attachmentsView.getEl().setHeight(attachmentsElHeight);
 		}			
 		height += attachmentsElHeight+attachmentsEl.getMargins('tb');
+		
+		if(this.enableSubjectField)
+			height+=30;
 		
 		var newAnchor = "100% -"+height;
 		
