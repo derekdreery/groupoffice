@@ -306,6 +306,8 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		
 		$this->_plainBody = GO_Base_Util_String::normalizeCrlf($this->_plainBody);
 		
+		$this->extractUuencodedAttachments($this->_plainBody);
+		
 		if($asHtml){
 			$body = $this->_plainBody;			
 			$body = GO_Base_Util_String::text_to_html($body);
