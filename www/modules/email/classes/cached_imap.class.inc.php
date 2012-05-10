@@ -555,7 +555,8 @@ class cached_imap extends imap{
 
 		//$message['attachments']=$this->find_message_attachments($struct, $message['body_ids']);
 		//don't pass body ids for inline attachment in apple's flowed mails.
-		$message['attachments']=$this->find_message_attachments($struct, $message['body_ids']);
+		$attachments = $this->find_message_attachments($struct, $message['body_ids']);
+		$message['attachments']=array_merge($message['attachments'], $attachments);
 
 		$message['smime_signed']=false;
 		foreach($message['attachments'] as $key=>$a){
@@ -843,7 +844,7 @@ class cached_imap extends imap{
 					$attachment['imap_id']=$plain_part['imap_id'];
 					unset($attachment['data']);
 					$attachment['uuencoded_partnumber']=$i+1;
-
+//var_dump($attachment);
 					$message['attachments'][]=$attachment;
 				}
 			}			
