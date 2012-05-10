@@ -203,7 +203,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 			//$size = strlen($matches[4][$i]);
 
 			$file = GO_Base_Fs_File::tempFile($filename);
-			$file->putContents($matches[4][$i]);
+			$file->putContents(convert_uudecode($matches[4][$i]));
 
 			$this->attachments["UU".$i]=array(
 				"url"=>GO::url('core/downloadTempFile', array('path'=>$file->stripTempPath())),
