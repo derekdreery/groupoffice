@@ -37,7 +37,7 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 
 	protected function actionInit($params) {
 		
-		if($params['SET_LANGUAGE'])
+		if(!empty($params['SET_LANGUAGE']))
 			GO::config()->language=$params['SET_LANGUAGE'];
 
 		$this->loadInit();
