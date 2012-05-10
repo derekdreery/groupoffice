@@ -24,7 +24,11 @@ class GO_Calendar_Controller_Group extends GO_Base_Controller_AbstractModelContr
 		while($group = $stmt->fetch()){
 			$record = $group->getAttributes('formatted');
 			
-			$record['customfields']=GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Calendar_Model_Event", $group->id);
+			if(GO::modules()->customfields)
+				$record['customfields']=GO_Custmfields_Controller_Category::getEnabledCategoryData("GO_Calendar_Model_Event", $group->id);
+			else
+				$record['customfields']=array();
+			
 			$record['resources']=array();
 			
 			$calStmt = GO_Calendar_Model_Calendar::model()->find(GO_Base_Db_FindParams::newInstance()
