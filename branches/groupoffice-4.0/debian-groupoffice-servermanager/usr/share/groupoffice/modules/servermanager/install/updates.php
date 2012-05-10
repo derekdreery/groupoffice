@@ -50,18 +50,18 @@ $updates["201205091330"][]="CREATE TABLE IF NOT EXISTS `sm_auto_email` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
 $updates["201205091615"][]="INSERT INTO `sm_auto_email` (`id`,`name`,`days`,`mime`,`active`) VALUES (NULL , 'Example automatic email', '20',
-'Message-ID: <1336643875.4fab91236a9f0@localhost>
-Date: Thu, 10 May 2012 11:57:55 +0200
+'Message-ID: <1336645137.4fab9611360c0@localhost>
+Date: Thu, 10 May 2012 12:18:57 +0200
 Subject: Example automatic email
 From: 
 MIME-Version: 1.0
 Content-Type: multipart/alternative;
- boundary=\"_=_swift_v4_13366438754fab91236c40f_=_\"
+ boundary=\"_=_swift_v4_13366451374fab961137ae9_=_\"
 X-Mailer: Group-Office 4.0.12
 X-MimeOLE: Produced by Group-Office 4.0.12
 
 
---_=_swift_v4_13366438754fab91236c40f_=_
+--_=_swift_v4_13366451374fab961137ae9_=_
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
@@ -93,18 +93,10 @@ Thank you for using Group-Office!
 With kind rega=
 rds,
 
-Intermesh
+The Group-Office team.
 
-Intermesh
-Reitscheweg 37
-5=
-231 BX 's-Hertogenbosch
-The Netherlands
-tel. +31 73 644 55 08=
 
-http://www.group-office.com
-
---_=_swift_v4_13366438754fab91236c40f_=_
+--_=_swift_v4_13366451374fab961137ae9_=_
 Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
@@ -117,9 +109,8 @@ l continue using it. If you want to continue using Group-Office you must=
  pay for the service after this trial period expires. If you don't order=
  within 20 days then we asume you don't want to use Group-Office anymore=
  and your installation will be removed.<br><br>Thank you for using Group=
--Office!<br><br>With kind regards,<br><br>Intermesh<br><br>Intermesh<br>=
-Reitscheweg 37<br>5231 BX 's-Hertogenbosch<br>The Netherlands<br>tel. +3=
-1 73 644 55 08<br>http://www.group-office.com
+-Office!<br><br>With kind regards,<br><br>The Group-Office team.<br>
 
---_=_swift_v4_13366438754fab91236c40f_=_--
+--_=_swift_v4_13366451374fab961137ae9_=_--
+
 ', '0');";
