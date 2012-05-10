@@ -49,45 +49,77 @@ $updates["201205091330"][]="CREATE TABLE IF NOT EXISTS `sm_auto_email` (
 	PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
-$updates["201205091615"][]="INSERT INTO `sm_auto_email` (`id`,`name`,`days`,`mime`,`active`) VALUES (NULL , 'Example automatic email', '14',
-'Message-ID: <1336642466.4fab8ba2ddffa@localhost>
-Date: Thu, 10 May 2012 11:34:26 +0200
+$updates["201205091615"][]="INSERT INTO `sm_auto_email` (`id`,`name`,`days`,`mime`,`active`) VALUES (NULL , 'Example automatic email', '20',
+'Message-ID: <1336643875.4fab91236a9f0@localhost>
+Date: Thu, 10 May 2012 11:57:55 +0200
 Subject: Example automatic email
 From: 
 MIME-Version: 1.0
 Content-Type: multipart/alternative;
- boundary=\"_=_swift_v4_13366424664fab8ba2df910_=_\"
+ boundary=\"_=_swift_v4_13366438754fab91236c40f_=_\"
 X-Mailer: Group-Office 4.0.12
 X-MimeOLE: Produced by Group-Office 4.0.12
 
 
---_=_swift_v4_13366424664fab8ba2df910_=_
+--_=_swift_v4_13366438754fab91236c40f_=_
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
 Dear {installation:admin_name},
 
-{automaticemail:days} days ag=
-o, on {installation:ctime}, the trial
-office environment {installati=
-on:name} has been created. Would you
-like a full license?
+You receive this e-mail becau=
+se on {installation:ctime},
+{automaticemail:days} days ago, you creat=
+ed a 30 day trial
+installation of Group-Office Professional at
+h=
+ttp://{installation:name}.
+We want to remind you that the trial peri=
+od will expire in 10 days.
 
-B=
-est regards,
+We hope you are enjoying your trial p=
+eriod and you will continue using
+it. If you want to continue using =
+Group-Office you must pay for the
+service after this trial period ex=
+pires. If you don't order within 20
+days then we asume you don't want=
+ to use Group-Office anymore and your
+installation will be remov=
+ed.
+
+Thank you for using Group-Office!
+
+With kind rega=
+rds,
+
 Intermesh
 
---_=_swift_v4_13366424664fab8ba2df910_=_
+Intermesh
+Reitscheweg 37
+5=
+231 BX 's-Hertogenbosch
+The Netherlands
+tel. +31 73 644 55 08=
+
+http://www.group-office.com
+
+--_=_swift_v4_13366438754fab91236c40f_=_
 Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Dear {installation:admin_name},<br><br>{automaticemail:days} days ago, o=
-n {installation:ctime}, the trial office environment {installation:name}=
- has been created. Would you like a full license?<br><br>Best regards,<b=
-r>Intermesh
+Dear {installation:admin_name},<br><br>You receive this e-mail because o=
+n {installation:ctime}, {automaticemail:days} days ago, you created a 30=
+ day trial installation of Group-Office Professional at http://{installa=
+tion:name}.<br>We want to remind you that the trial period will expire i=
+n 10 days.<br><br>We hope you are enjoying your trial period and you wil=
+l continue using it. If you want to continue using Group-Office you must=
+ pay for the service after this trial period expires. If you don't order=
+ within 20 days then we asume you don't want to use Group-Office anymore=
+ and your installation will be removed.<br><br>Thank you for using Group=
+-Office!<br><br>With kind regards,<br><br>Intermesh<br><br>Intermesh<br>=
+Reitscheweg 37<br>5231 BX 's-Hertogenbosch<br>The Netherlands<br>tel. +3=
+1 73 644 55 08<br>http://www.group-office.com
 
-
-
---_=_swift_v4_13366424664fab8ba2df910_=_--
-
+--_=_swift_v4_13366438754fab91236c40f_=_--
 ', '0');";
