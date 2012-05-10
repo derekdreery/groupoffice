@@ -19,12 +19,16 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 	protected $relpath;
 
 	public function __construct($path){
-		global $GO_CONFIG;
+		global $GO_CONFIG, $files, $GO_SECURITY;
 		
 		$path = rtrim($path, '/');
 
 		$this->relpath=$path;
 		$path = $GO_CONFIG->file_storage_path.$path;
+		
+		if(!$files->has_read_permission($GO_SECURITY->user_id, $this->getFolder())){
+			throw new Sabre_DAV_Exception_Forbidden();
+		}
 
 		parent::__construct($path);
 	}

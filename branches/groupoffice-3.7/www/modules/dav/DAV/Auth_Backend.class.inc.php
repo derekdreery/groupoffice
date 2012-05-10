@@ -55,8 +55,8 @@ class GO_DAV_Auth_Backend implements Sabre_DAV_Auth_IBackend  {
 
 		global $GO_SECURITY;
 
-		if($GO_SECURITY->user_id>0)
-				return true;
+//		if($GO_SECURITY->user_id>0)
+//				return true;
 		
 		$this->realm=$realm;
 

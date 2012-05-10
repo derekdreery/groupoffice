@@ -45,13 +45,13 @@ $files = new files();
 $authBackend = new GO_DAV_Auth_Backend();
 $userpass = $authBackend->getUserPass();
 
+//var_dump($userpass);
 
 $children = array();
-//if($GO_SECURITY->logged_in()){
-$children[] = new GO_DAV_FS_Directory('users/' . $userpass[0]);
-$children[] = new GO_DAV_Shared_Directory();
-
-//}
+if($userpass){
+	$children[] = new GO_DAV_FS_Directory('users/' . $userpass[0]);
+	$children[] = new GO_DAV_Shared_Directory();
+}
 
 $root = new Sabre_DAV_SimpleDirectory('root',$children);
 
