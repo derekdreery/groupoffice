@@ -12,9 +12,9 @@
  * @license AGPL/Proprietary http://www.group-office.com/LICENSE.TXT
  * @link http://www.group-office.com
  * @package GO.modules.servermanager.model
- * @version $Id: example.php 7607 20120101Z <<USERNAME>> $
  * @copyright Copyright Intermesh BV.
- * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
+ * @author Merijn Schering mschering@intermesh.nl
+ * @author WilmarVB wilmar@intermesh.nl
  */
  
 /**
@@ -211,6 +211,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		
 		$adminUser = GO_Base_Model_User::model()->findByPk(1);
 		$this->admin_email=$adminUser->email;
+		$this->admin_name=$adminUser->name;
 		$this->install_time = $adminUser->ctime;
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()

@@ -39,3 +39,55 @@ $updates["201203291226"][]="CREATE TABLE IF NOT EXISTS `sm_installation_user_mod
 
 
 $updates["201203291226"][]="ALTER TABLE `sm_installations` CHANGE `lastlogin` `lastlogin` INT( 11 ) NOT NULL DEFAULT '0'";
+
+$updates["201205091330"][]="CREATE TABLE IF NOT EXISTS `sm_auto_email` (
+	`id` INT( 11 ) NOT NULL AUTO_INCREMENT,
+	`name` varchar(50) NOT NULL DEFAULT '',
+	`days` int(5) NOT NULL DEFAULT '0',
+	`mime` TEXT,
+	`active` tinyint(1) NOT NULL DEFAULT '0',
+	PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates["201205091615"][]="INSERT INTO `sm_auto_email` (`id`,`name`,`days`,`mime`,`active`) VALUES (NULL , 'Example automatic email', '14',
+'Message-ID: <1336642466.4fab8ba2ddffa@localhost>
+Date: Thu, 10 May 2012 11:34:26 +0200
+Subject: Example automatic email
+From: 
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary=\"_=_swift_v4_13366424664fab8ba2df910_=_\"
+X-Mailer: Group-Office 4.0.12
+X-MimeOLE: Produced by Group-Office 4.0.12
+
+
+--_=_swift_v4_13366424664fab8ba2df910_=_
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Dear {installation:admin_name},
+
+{automaticemail:days} days ag=
+o, on {installation:ctime}, the trial
+office environment {installati=
+on:name} has been created. Would you
+like a full license?
+
+B=
+est regards,
+Intermesh
+
+--_=_swift_v4_13366424664fab8ba2df910_=_
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Dear {installation:admin_name},<br><br>{automaticemail:days} days ago, o=
+n {installation:ctime}, the trial office environment {installation:name}=
+ has been created. Would you like a full license?<br><br>Best regards,<b=
+r>Intermesh
+
+
+
+--_=_swift_v4_13366424664fab8ba2df910_=_--
+
+', '0');";

@@ -9,6 +9,7 @@
  * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
+ * @author WilmarVB <wilmar@intermesh.nl>
  */
  
 GO.servermanager.InstallationsGrid = function(config){
@@ -150,7 +151,23 @@ GO.servermanager.InstallationsGrid = function(config){
 				this.deleteSelected();
 			},
 			scope: this
-		},'-',GO.lang['strSearch']+': ', ' ',this.searchField]		
+		},
+		'-',
+		{
+			iconCls: 'btn-addressbook-manage',
+			text: GO.lang.administration,
+			cls: 'x-btn-text-icon',
+			handler:function(){
+				if(!this.manageDialog)
+				{
+					this.manageDialog = new GO.servermanager.ManageDialog();
+				}
+				this.manageDialog.show();
+			},
+			scope: this
+		},
+		'-',
+		GO.lang['strSearch']+': ', ' ',this.searchField]		
 	});
 		    			    		
 	GO.servermanager.installationDialog.on('save', function(){   

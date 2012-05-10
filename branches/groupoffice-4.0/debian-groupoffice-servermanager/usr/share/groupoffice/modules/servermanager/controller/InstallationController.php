@@ -398,6 +398,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	
 	
 	protected function actionReport($params){
+		$now = time();
 		$stmt = GO_ServerManager_Model_Installation::model()->find();
 		
 		if(!$this->isCli())
@@ -420,8 +421,13 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			echo "Running daily tasks for installation\n";
 			$cmd ='/usr/share/groupoffice/groupofficecli.php -r=maintenance/servermanagerReport -c="'.$installation->configPath.'"  2>&1';				
 			system($cmd);
+			
+			
+			$this->_sendAutomaticEmails($installation,$now);
 		
 		}
+		
+		
 		
 //		if(class_exists('GO_Professional_LicenseCheck')){
 //			
@@ -456,5 +462,70 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		echo "Done\n\n";
 	}
 
+	private function _sendAutomaticEmails(GO_Servermanager_Model_Installation $installationModel, $nowUnixTime=false) {
+		if (!is_int($nowUnixTime))
+			$nowUnixTime = time();
+		
+		$autoEmailsStmt = GO_ServerManager_Model_AutomaticEmail::model()
+			->find(
+				GO_Base_Db_FindParams::newInstance()
+					->select('t.*')
+					->criteria(
+						GO_Base_Db_FindCriteria::newInstance()
+							->addCondition('active','1')
+					)
+			);
+		
+		while ($autoEmailModel = $autoEmailsStmt->fetch()) {
+			if (!empty($autoEmailModel->active) && $nowUnixTime-$autoEmailModel->days*24*3600 >= $installationModel->ctime) {
+				$message = GO_Base_Mail_Message::newInstance()
+					->loadMimeMessage($autoEmailModel->mime)
+					->addTo($installationModel->admin_email, $installationModel->admin_name)
+					->setFrom(GO::config()->webmaster_email, 'Servermanager Administrator');
+
+				$body = $this->_parseTags(
+					$message->getBody(),
+					array('installation'=>$installationModel,'automaticemail'=>$autoEmailModel)
+				);
+				
+				$message->setBody($body);
+
+				GO_Base_Mail_Mailer::newGoInstance()->send($message);
+			}
+		}
+		
+	}
+	
+	/**
+	 * Parses string using tag combinations of the form:
+	 * 'modelname:attributename' replaced by the value of $model->attribute
+	 * @param String $string String to be parsed
+	 * @param array $models Array of ActiveRecords. Keys will be the prefixes (the
+	 * modelname part mentioned above).
+	 * @return String Parsed string.
+	 */
+	private function _parseTags($string,array $models) {
+		$attributes = array();
+		foreach ($models as $tagPrefix => $model) {
+			$attributes = array_merge($attributes,$this->_addPrefixToKeys($model->getAttributes(),$tagPrefix.':'));
+		}
+		$templateParser = new GO_Base_Util_TemplateParser();
+		return $templateParser->parse($string, $attributes);
+	}
+	
+	/**
+	 * Puts the prefix $tagPrefix before each key in the $array.
+	 * @param array $array
+	 * @param string $tagPrefix
+	 * @return array
+	 */
+	private function _addPrefixToKeys(array $array,$tagPrefix) {
+		$outputArray = array();
+		foreach ($array as $k => $v) {
+			$outputArray[$tagPrefix.$k] = $v;
+		}
+		return $outputArray;
+	}
+	
 }
 
