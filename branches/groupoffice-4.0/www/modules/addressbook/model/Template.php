@@ -36,6 +36,8 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	
 	const TYPE_DOCUMENT=1;
 	
+	public $htmlSpecialChars=true;
+	
 		/**
 	 * Returns a static model of itself
 	 * 
@@ -129,8 +131,7 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 		
 		$attributes = array_merge($attributes, $this->_getUserAttributes());
 		
-		$templateParser = new GO_Base_Util_TemplateParser();
-		return $templateParser->parse($content, $attributes, $leaveEmptyTags);
+		return $this->_parse($content, $attributes, $leaveEmptyTags);
 	}
 	
 	
@@ -153,6 +154,17 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 		$attributes = array_merge($attributes, $this->_getModelAttributes($model, $tagPrefix));
 		
 		$attributes = array_merge($attributes, $this->_getUserAttributes());
+	
+		return $this->_parse($content, $attributes, $leaveEmptyTags);
+		
+	}
+	
+	private function _parse($content, $attributes, $leaveEmptyTags){
+		
+		if($this->htmlSpecialChars){
+			foreach($attributes as $key=>$value)
+				$attributes[$key]=htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
+		}
 		
 		$templateParser = new GO_Base_Util_TemplateParser();
 		return $templateParser->parse($content, $attributes, $leaveEmptyTags);
@@ -184,10 +196,7 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 		
 		$attributes['contact:salutation']=GO::t('default_salutation_unknown');
 		
-		//var_dump($attributes);
-		
-		$templateParser = new GO_Base_Util_TemplateParser();
-		return $templateParser->parse($content, $attributes, $leaveEmptyTags);
+		return $this->_parse($content, $attributes, $leaveEmptyTags);
 	}
 	
 	/**
@@ -203,8 +212,7 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	 * @return string 
 	 */
 	public function replaceCustomTags($content, $attributes, $leaveEmptyTags=false){
-		$templateParser = new GO_Base_Util_TemplateParser();
-		return $templateParser->parse($content, $attributes, $leaveEmptyTags);
+		return $this->_parse($content, $attributes, $leaveEmptyTags);
 	}
 
 //	/**
