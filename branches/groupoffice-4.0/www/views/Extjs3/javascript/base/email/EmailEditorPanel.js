@@ -7,7 +7,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @author Wilmar van Beusekom <wilmar@intermesh.nl>
+ * @author WilmarVB <wilmar@intermesh.nl>
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
@@ -168,6 +168,16 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 			hideLabel : true,
 			cls:'em-plaintext-body-field'
 		})
+
+		if (!GO.util.empty(config.enableSubjectField))
+			config.items.push({
+				xtype: 'textfield',
+				name: 'subject',
+				width: '100%',
+				anchor: '-20',
+				allowBlank: false,
+				fieldLabel: GO.lang['strSubject']
+			});
 
 		config.items.push(this.htmlEditor);
 		config.items.push(this.textEditor);
