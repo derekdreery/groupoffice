@@ -147,7 +147,7 @@ GO.email.AccountsTree = function(config){
 			if(messages.length>0)
 			{
 
-				if(this.account_id != e.target.attributes['account_id'])
+				if(this.dropNode.attributes["account_id"] != e.target.attributes['account_id'])
 				{
 					var params = {
 						task:'move',

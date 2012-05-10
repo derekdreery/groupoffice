@@ -139,7 +139,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 
 			$node = array(
 					'text' => $mailbox->getDisplayName().$statusHtml,
-					'mailbox' => $mailbox->name,
+					'mailbox' => $mailbox->getName(true),
 					'account_id'=>$mailbox->getAccount()->id,
 					'iconCls' => 'folder-default',
 					

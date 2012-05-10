@@ -39,7 +39,7 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		
 		$getter = "get".$name;
 		if(method_exists($this, $getter))
-			return $this->$getter($name);			
+			return $this->$getter();			
 		
 		return $this->_attributes[$name];
 	}
@@ -58,6 +58,10 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 			return false;
 
 		return substr($this->name, 0, $pos);
+	}
+	
+	public function getName($decode=false){
+		return $decode ? GO_Base_Mail_Utils::utf7_decode($this->_attributes["name"]) : $this->_attributes["name"];
 	}
 
 	public function getBaseName($decode=false) {
