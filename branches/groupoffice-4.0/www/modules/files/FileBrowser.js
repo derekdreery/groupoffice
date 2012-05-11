@@ -1513,7 +1513,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		{
 			this.newFolderWindow = new GO.files.NewFolderDialog();
 			this.newFolderWindow.on('save', function(){
-				this.getActiveGridStore().reload();
+				this.getActiveGridStore().load();
 								
 				// problem if folder didn't have a subfolder yet
 				// fixed by reloading parent

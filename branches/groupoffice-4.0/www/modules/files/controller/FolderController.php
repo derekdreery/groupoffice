@@ -503,6 +503,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$store->getColumnModel()->formatColumn('folder_id', '$model->folder_id');
 			
 			$findParams = $store->getDefaultParams($params)
+							->debugSql()
 							->limit($fileLimit)
 							->start($fileStart);
 
