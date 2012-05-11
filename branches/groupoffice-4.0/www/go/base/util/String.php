@@ -593,12 +593,15 @@ class GO_Base_Util_String {
 
 	public static function cut_string($string, $maxlength, $cut_whole_words = true) {
 		if (strlen($string) > $maxlength) {
-			$temp = substr($string, 0, $maxlength -3);
+			
+			$substrFunc = function_exists('mb_substr') ? 'mb_substr' : 'substr';
+			
+			$temp = $substrFunc($string, 0, $maxlength -3);
 			if ($cut_whole_words) {
 				if ($pos = strrpos($temp, ' ')) {
-					return substr($temp, 0, $pos).'...';
+					return $substrFunc($temp, 0, $pos).'...';
 				} else {
-					return $temp = substr($string, 0, $maxlength -3).'...';
+					return $temp = $substrFunc($string, 0, $maxlength -3).'...';
 				}
 			} else {
 				return $temp.'...';
