@@ -292,7 +292,13 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		ob_clean();
 		flush();
 
-		#readfile($this->path());
+		//readfile somehow caused a memory exhausted error. This stopped when I added 
+		//ob_clean and flush above, but the browser hung with presenting the download 
+		//dialog until the entire download was completed.
+		//The code below seems to work better.
+		//
+		//readfile($this->path());
+		
 		$handle = fopen($this->path(), "rb");
 
 		if (!is_resource($handle))
