@@ -40,7 +40,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 					$filesearch = GO_Filesearch_Model_Filesearch::model()->createFromFile($model);
 				}
 
-				$response['data']=array_merge($response['data'],$filesearch->getAttributes('formatted'));
+				$response['data']=array_merge($filesearch->getAttributes('formatted'), $response['data']);
 
 				if (!empty($params['query_params'])) {
 					$qp = json_decode($params['query_params'], true);

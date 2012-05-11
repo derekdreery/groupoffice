@@ -172,11 +172,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			
 			$this->fsFolder->create();
 			
-			//sync parent timestamp
-			if($this->parent){
-				$this->parent->mtime=$this->parent->fsFolder->mtime();
-				$this->parent->save();			
-			}
+		
 			
 		} else {
 			
@@ -214,6 +210,13 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 					
 				}
 			}
+		}
+		
+		//sync parent timestamp
+		if($this->parent){
+//				$this->parent->mtime=$this->parent->fsFolder->mtime();
+//				$this->parent->save();			
+			$this->parent->touch();
 		}
 
 		return parent::afterSave($wasNew);

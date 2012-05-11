@@ -256,6 +256,9 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	protected function afterSave($wasNew) {
 		$this->_addQuota();
 		
+		//touch the timestamp so it won't sync with the filesystem
+		$this->folder->touch();
+		
 		return parent::afterSave($wasNew);
 	}
 

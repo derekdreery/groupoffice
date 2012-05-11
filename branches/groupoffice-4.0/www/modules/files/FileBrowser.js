@@ -835,7 +835,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 		GO.files.filePropertiesDialogListeners={
 			scope:this,
-			rename:function(dlg, folder_id){
+			save:function(dlg, file_id, folder_id){
 				if(this.folder_id==folder_id)
 				{
 					this.getActiveGridStore().load();
@@ -845,14 +845,15 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 		GO.files.folderPropertiesDialogListeners={
 			scope:this,
-			save:function(dlg, folder_id){
-				this.setFolderID(folder_id, true);
-			},
-			rename:function(dlg, parent_id){
-				/*if(parent_id==this.folder_id)
+//			save:function(dlg, folder_id){
+//				this.setFolderID(folder_id, true);
+//			},
+			save:function(dlg, folder_id, parent_id){
+				if(parent_id==this.folder_id)
 				{
 					this.setFolderID(parent_id);
-				}*/
+				}
+				//console.log(parent_id);
 				var node = this.treePanel.getNodeById(parent_id);
 				if(node)
 				{
@@ -1663,6 +1664,7 @@ GO.files.showFilePropertiesDialog = function(file_id){
 		GO.files.filePropertiesDialog = new GO.files.FilePropertiesDialog();
 
 	if(GO.files.filePropertiesDialogListeners){
+		
 		GO.files.filePropertiesDialog.on(GO.files.filePropertiesDialogListeners);
 		delete GO.files.filePropertiesDialogListeners;
 	}
