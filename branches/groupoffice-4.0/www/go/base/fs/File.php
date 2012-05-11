@@ -288,8 +288,20 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	/**
 	 * Output the contents of this file to standard out (browser).
 	 */
-	public function output(){
-		readfile($this->path());
+	public function output() {
+		ob_clean();
+		flush();
+
+		#readfile($this->path());
+		$handle = fopen($this->path(), "rb");
+
+		if (!is_resource($handle))
+			throw new Exception("Could not read file");
+		
+		while (!feof($handle)) {
+			echo fread($handle, 1024);
+			flush();
+		}
 	}
 	
 	/**
