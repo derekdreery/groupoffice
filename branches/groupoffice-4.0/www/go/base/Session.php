@@ -266,7 +266,8 @@ class GO_Base_Session extends GO_Base_Observable{
 	 * When a PHP session is open the webserver won't process a new request until 
 	 * the session is closed again.
 	 */
-	public function closeWriting(){		
+	public function closeWriting(){	
+		GO::debug("Session writing closed");
 		session_write_close();
 	}
 	

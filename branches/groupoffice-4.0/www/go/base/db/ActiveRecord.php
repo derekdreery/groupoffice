@@ -785,7 +785,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	private function _getFindQueryUid($params){
 		//create unique query id
 		
-		unset($params['start'], $params['orderDirection'], $params['order']);
+		unset($params['start'], $params['orderDirection'], $params['order'], $params['limit']);
 		if(isset($params['criteriaObject'])){
 			$params['criteriaParams']=$params['criteriaObject']->getParams();
 			$params['criteriaParams']=$params['criteriaObject']->getCondition();
@@ -1005,10 +1005,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(!empty($params['distinct']))
 			$sql .= "DISTINCT ";
 		
-		if(!empty($params['calcFoundRows']) && !empty($params['limit']) && empty($params['start'])){
+		//Unique query ID for storing found rows in session
+		$queryUid = $this->_getFindQueryUid($params);
+		
+		if(!empty($params['calcFoundRows']) && !empty($params['limit']) && (empty($params['start']) || !isset(GO::session()->values[$queryUid]))){
 			
 			//TODO: This is MySQL only code			
 			$sql .= "SQL_CALC_FOUND_ROWS ";
+			
+			$calcFoundRows=true;
+		}else
+		{
+			$calcFoundRows=false;
 		}
 		
 		
@@ -1216,19 +1224,17 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(!empty($params['calcFoundRows'])){
 			if(!empty($params['limit'])){
 				
-				$queryUid = $this->_getFindQueryUid($params);
-				
 				//Total numbers are cached in session when browsing through pages.
-				if(empty($params['start']) || !isset(GO::session()->values[$queryUid])){
+				if($calcFoundRows){
 					//TODO: This is MySQL only code
 					$sql = "SELECT FOUND_ROWS() as found;";			
 					$r2 = $this->getDbConnection()->query($sql);
 					$record = $r2->fetch(PDO::FETCH_ASSOC);
 					//$foundRows = intval($record['found']);
-					$foundRows = GO::session()->values[$queryUid]=intval($record['found']);	
+					$foundRows = GO::session()->values[$queryUid]=intval($record['found']);						
 				}
 				else
-				{
+				{					
 					$foundRows=GO::session()->values[$queryUid];
 				}
 						
