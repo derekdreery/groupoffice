@@ -2034,6 +2034,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	public function getSortOrderColumn(){
 		return false;
 	}
+	
+	/**
+	 * Just update the mtime timestamp 
+	 */
+	public function touch(){
+		$this->mtime=time();
+		return $this->_dbUpdate();
+	}
 
 
 	/**
