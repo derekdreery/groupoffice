@@ -151,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `em_messages_cache` (
   `serialized_message_object` mediumtext NOT NULL,
   PRIMARY KEY (`folder_id`,`uid`),
   KEY `account_id` (`account_id`),
-	KEY `account_id` (`udate`)
+	KEY `update` (`udate`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
