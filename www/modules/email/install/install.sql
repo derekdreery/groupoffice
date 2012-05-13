@@ -115,7 +115,7 @@ DROP TABLE IF EXISTS `em_links`;
 CREATE TABLE IF NOT EXISTS `em_links` (
   `link_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
-  `from` varchar(http://www.group-office.com/forum/index.php255) default NULL,
+  `from` varchar(255) default NULL,
   `to` text,
   `subject` varchar(255) default NULL,
   `time` int(11) NOT NULL default '0',
