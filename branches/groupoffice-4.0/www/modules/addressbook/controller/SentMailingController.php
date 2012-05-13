@@ -164,6 +164,10 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			), true);
 			
 			$message->setTo($contact->email, $contact->name);
+			
+			if(empty($contact->salutation))
+				$contact->salutation=$mailing->addresslist->default_salutation;
+			
 			$message->setBody(GO_Addressbook_Model_Template::model()->replaceModelTags($body, $contact));
 			$this->_sendmail($message, $contact, $mailer, $mailing);			
 		}
@@ -180,8 +184,10 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			$body = str_replace('%unsubscribe_href%', $unsubscribeHref, $bodyWithTags); //curly brackets don't work inside links in browser wysiwyg editors.
 			
 			$body = GO_Addressbook_Model_Template::model()->replaceCustomTags($body,array(				
-				'unsubscribe_link'=>'<a href="'.$unsubscribeHref.'">'.GO::t("unsubscription","addressbook").'</a>'
+				'unsubscribe_link'=>'<a href="'.$unsubscribeHref.'">'.GO::t("unsubscription","addressbook").'</a>',
 			), true);
+			
+			$company->salutation = $mailing->addresslist->default_salutation;
 			
 			$message->setTo($company->email, $company->name);
 			$message->setBody(GO_Addressbook_Model_Template::model()->replaceModelTags($body, $company));
