@@ -1,5 +1,8 @@
 Notifications on uploads (Michal)
 
+Public calendar:
+http://www.group-office.com/forum/viewtopic.php?f=6&t=8091
+
 carddav
 
 Profile tab in settings dialog
