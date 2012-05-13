@@ -477,7 +477,13 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			);
 		
 		while ($autoEmailModel = $autoEmailsStmt->fetch()) {
-			if (!empty($autoEmailModel->active) && $nowUnixTime-$autoEmailModel->days*24*3600 >= $installationModel->ctime) {
+			
+			//Send the mail only if the creation time of the installation + the number of days is today.
+			$dayStart = GO_Base_Util_Date::date_add($nowUnixTime,-$autoEmailModel->days);
+			$dayStart = GO_Base_Util_Date::clear_time($dayStart);
+			$dayEnd = GO_Base_Util_Date::date_add($dayStart,1);			
+			
+			if (!empty($autoEmailModel->active) && $installationModel->ctime>$dayStart && $installationModel->ctime<$dayEnd) {
 				$message = GO_Base_Mail_Message::newInstance()
 					->loadMimeMessage($autoEmailModel->mime)
 					->addTo($installationModel->admin_email, $installationModel->admin_name)
