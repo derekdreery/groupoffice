@@ -288,7 +288,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 						if(!empty($this->_plainBody))
 							$this->_plainBody.= "\n";
 
-						$this->_plainBody .= $imap->get_message_part_decoded($this->uid, $plainPart['number'],$plainPart['encoding'], $plainPart['charset'],$this->peek,512000);
+						$this->_plainBody .= $imap->get_message_part_decoded($this->uid, $plainPart['number'],$plainPart['encoding'], $plainPart['charset'],$this->peek);
 					}else
 					{
 						if($asHtml){
