@@ -827,7 +827,7 @@ class cached_imap extends imap{
 					if(!empty($message['plain_body']))
 						$message['plain_body'].= "\n";
 
-					$message['plain_body'].=$this->get_message_part_decoded($message['uid'],$plain_part['imap_id'],$plain_part['encoding'], $plain_part['charset'],$peek, 512000);
+					$message['plain_body'].=$this->get_message_part_decoded($message['uid'],$plain_part['imap_id'],$plain_part['encoding'], $plain_part['charset'],$peek);
 					//$message['body_ids'][]=$plain_part['imap_id'];
 				}else
 				{								
