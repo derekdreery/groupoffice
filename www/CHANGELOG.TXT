@@ -1,3 +1,6 @@
+13-05-2012 3.7.51
+- Broken install.sql in email module
+
 13-05-2012 3.7.50
 - Broken install.sql in email module
 
