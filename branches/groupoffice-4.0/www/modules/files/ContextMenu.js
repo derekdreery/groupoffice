@@ -97,7 +97,28 @@ GO.files.FilesContextMenu = function(config)
 			})
 		}
 	})
-	
+
+	this.unlockButton = new Ext.menu.Item({
+		iconCls: 'btn-unlock',
+		text: GO.files.lang.unlock,
+		cls: 'x-btn-text-icon',
+		scope:this,
+		handler: function(){
+			GO.request({
+				url:'files/file/submit',
+				params:{
+					id:this.records[0].data.id,
+					locked_user_id:0
+				},
+				success:function(action, response, result){
+					var filesModulePanel = GO.mainLayout.getModulePanel('files');
+					if(filesModulePanel && filesModulePanel.folder_id==this.records[0].data.folder_id)
+						filesModulePanel.getActiveGridStore().load();
+				},
+				scope:this
+			})
+		}
+	})
 	
 	this.compressButton = new Ext.menu.Item({
 		iconCls: 'btn-compress',
@@ -134,6 +155,7 @@ GO.files.FilesContextMenu = function(config)
 		config['items'].push(this.gotaButton);
 	}
 	config['items'].push(this.lockButton);
+	config['items'].push(this.unlockButton);
 				
 
 	config['items'].push({ 
@@ -248,6 +270,7 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 					break;
 				case 'folder':
 					this.lockButton.hide();
+					this.unlockButton.setVisible(false);
 					this.downloadButton.hide();
 					if(this.gotaButton)
 						this.gotaButton.hide();
@@ -262,7 +285,8 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 					if(this.gotaButton)
 						this.gotaButton.show();
 					
-					this.lockButton.setDisabled(this.records[0].data.locked_user_id>0);								
+					this.lockButton.setDisabled(this.records[0].data.locked_user_id>0);
+					this.unlockButton.setVisible(this.records[0].data.locked_user_id>0);
 					
 					if(this.gotaButton)
 						this.gotaButton.setDisabled(this.records[0].data.permission_level<GO.permissionLevels.write || (this.records[0].data.locked_user_id>0 &&this.records[0].data.locked_user_id!=GO.settings.user_id));
