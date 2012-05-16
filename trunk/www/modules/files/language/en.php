@@ -103,3 +103,15 @@ $l["fileExpire_time"] = "Expire time";
 $l["fileRandom_code"] = "Random Code";
 
 $l['createDownloadLink']='Create downloadlink';
+
+$l['notifyFolderAdd'] = 'Folder %s was add to %s by %s';
+$l['notifyFolderRename'] = 'Folder %s was renamed to %s by %s';
+$l['notifyFolderMove'] = 'Folder %s was moved to %s by %s';
+$l['notifyFolderDelete'] = 'Folder %s was deleted by %s';
+
+$l['notifyFileAdd'] = 'File %s was add to %s by %s';
+$l['notifyFileRename'] = 'File %s was renamed to %s by %s';
+$l['notifyFileMove'] = 'File %s was moved to %s by %s';
+$l['notifyFileDelete'] = 'File %s was deleted by %s';
+$l['notifyFileUpdate'] = 'File %s was updated by %s';
+$l['notificationEmailSubject'] = 'FolderNotification Email';

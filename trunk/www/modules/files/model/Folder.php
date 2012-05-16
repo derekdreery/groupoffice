@@ -92,7 +92,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function getLogMessage($action){
-		return $this->path;
+                return $this->path;
 	}
 
 	/**
@@ -101,11 +101,11 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 */
 	public function relations() {
 		return array(
-				'parent' => array('type' => self::BELONGS_TO, 'model' => 'GO_Files_Model_Folder', 'field' => 'parent_id'),
-				'folders' => array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_Folder', 'field' => 'parent_id', 'delete' => true, 'findParams'=>  GO_Base_Db_FindParams::newInstance()->order('name','ASC')),
-				'files' => array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_File', 'field' => 'folder_id', 'delete' => true),
-				'notifyUsers'=>array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_FolderNotification', 'field' => 'folder_id', 'delete' => true),
-				'preferences'=>array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_FolderPreference', 'field' => 'folder_id', 'delete' => true),
+                        'parent' => array('type' => self::BELONGS_TO, 'model' => 'GO_Files_Model_Folder', 'field' => 'parent_id'),
+                        'folders' => array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_Folder', 'field' => 'parent_id', 'delete' => true, 'findParams'=>  GO_Base_Db_FindParams::newInstance()->order('name','ASC')),
+                        'files' => array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_File', 'field' => 'folder_id', 'delete' => true),
+                        'notifyUsers'=>array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_FolderNotification', 'field' => 'folder_id', 'delete' => true),
+                        'preferences'=>array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_FolderPreference', 'field' => 'folder_id', 'delete' => true),
 		);
 	}
 	
@@ -166,8 +166,8 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		return parent::beforeSave();
 	}
 	
-	protected function afterSave($wasNew) {
-
+	protected function afterSave($wasNew) {                         
+		
 		if ($wasNew) {
 			
 			$this->fsFolder->create();
@@ -175,7 +175,14 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			//sync parent timestamp
 			if($this->parent){
 				$this->parent->mtime=$this->parent->fsFolder->mtime();
-				$this->parent->save();			
+				$this->parent->save();
+                                
+				$this->notifyUsers(
+					$this->parent->id,
+					GO_Files_Model_FolderNotificationMessage::ADD_FOLDER,
+					$this->name,					
+					$this->parent->getPath()					
+				);			
 			}
 			
 		} else {
@@ -202,6 +209,17 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 
 					if (!$fsFolder->move($newFsFolder))
 						throw new Exception("Could not rename folder on the filesystem");
+                                        
+					$this->notifyUsers(
+						array(
+						    $this->id,
+						    $oldFolder->id,
+						    $this->parent->id
+						),
+						GO_Files_Model_FolderNotificationMessage::MOVE_FOLDER,
+						$oldRelPath . '/' . $oldName,
+						$newRelPath
+					);					
 				}
 				
 				//if the filesystem folder is missing check if we need to move it when the name or parent folder changes.
@@ -212,6 +230,15 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 
 					$oldFsFolder->rename($this->name);
 					
+					$this->notifyUsers(
+						array(
+                            $this->id, 
+                            $this->parent->id
+                        ),
+						GO_Files_Model_FolderNotificationMessage::RENAME_FOLDER,
+						$this->parent->path . '/' . $this->getOldAttributeValue('name'),
+						$this->parent->path . '/' . $this->name
+					);
 				}
 			}
 		}
@@ -233,6 +260,11 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 				$acl->delete();
 		}
 		
+		$this->notifyUsers(
+			array($this->id, $this->parent->id),
+			GO_Files_Model_FolderNotificationMessage::DELETE_FOLDER,
+			$this->getPath()
+		);                
 		return parent::afterDelete();
 	}
 	
@@ -517,16 +549,29 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		}
 	}
   
-  /**
-   * Check if a user receives notifications about changes in the folder.
-   * 
-   * @param type $user_id
-   * @return GO_Files_Model_FolderNotification or false 
-   */
-  public function hasNotifyUser($user_id){
-    return GO_Files_Model_FolderNotification::model()->findByPk(array('user_id'=>$user_id, 'folder_id'=>$this->pk)) !== false;
-  }
+    /**
+    * Check if a user receives notifications about changes in the folder.
+    * 
+    * @param type $user_id
+    * @return GO_Files_Model_FolderNotification or false 
+    */
+    public function hasNotifyUser($user_id){
+        return GO_Files_Model_FolderNotification::model()->findByPk(
+            array('user_id'=>$user_id, 'folder_id'=>$this->pk)
+        ) !== false;
+    }
 	
+    /**
+    *
+    * @param int|array $folder_id
+    * @param type $type
+    * @param type $arg1
+    * @param type $arg2 
+    */
+    public function notifyUsers($folder_id, $type, $arg1, $arg2 = '') {
+        GO_Files_Model_FolderNotification::model()->storeNotification($folder_id, $type, $arg1, $arg2);
+    }
+  
 	
 	/**
 	 * Check if this folder has a file by filename and return the model.

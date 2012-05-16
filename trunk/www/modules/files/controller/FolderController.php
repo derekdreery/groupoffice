@@ -737,7 +737,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	}
 
 	protected function actionProcessUploadQueue($params) {
-
+            
 		$response['success'] = true;
 
 		if (!isset($params['overwrite']))
@@ -774,8 +774,9 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 								break;
 
 							case 'yestoall':
-							case 'yes':							
-
+							case 'yes':
+                                //we dont want overwrite file in no case
+                                $existingFile->replace($file);
 								if ($params['overwrite'] == 'yes')
 									$params['overwrite'] = 'ask';
 								break;
@@ -789,15 +790,9 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 								break;
 						}
-					}
-
-					if($existingFile){
-						$existingFile->replace($file);
-					}else
-					{
+					} else {
 						$destinationFolder->addFileSystemFile($file);
 					}
-
 					$response['success'] = true;
 				}
 			}
