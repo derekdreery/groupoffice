@@ -1479,7 +1479,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 							if(destinationNode)
 							{
 								//delete destinationNode.attributes.children;
-								destinationNode.attributes.children=[];
+								destinationNode.attributes.children=false;
 								destinationNode.attributes.childrenRendered=false;
 								destinationNode.reload();
 							}
@@ -1697,6 +1697,8 @@ GO.mainLayout.onReady(function(){
 			GO.files.filePropertiesDialog.tabPanel.setActiveTab(3);
 		}
 	}
+        
+    GO.checker.registerRequest("files/notification/unsent",{},function(checker, data){});
 });
 
 
@@ -1993,3 +1995,5 @@ GO.moduleManager.addModule('files', GO.files.FileBrowser, {
 	title : GO.files.lang.files,
 	iconCls : 'go-tab-icon-files'
 });
+
+

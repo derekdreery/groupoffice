@@ -188,24 +188,36 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 				//throw new Exception($this->getOldAttributeValue('name'));
 				$oldFsFile = $this->_getOldFsFile();		
 				if($oldFsFile->exists())
-					$oldFsFile->rename($this->name);				
+					$oldFsFile->rename($this->name);
+				
+				$this->notifyUsers(
+					$this->folder_id,
+					GO_Files_Model_FolderNotificationMessage::RENAME_FILE,
+					$this->folder->path . '/' . $this->getOldAttributeValue('name'),
+					$this->folder->path . '/' . $this->name
+				);
 			}
 
-			if($this->isModified('folder_id')){
-//				//file will be moved so we need the old folder path.
-//				$oldFolderId = $this->getOldAttributeValue('folder_id');
-//				$oldFolder = GO_Files_Model_Folder::model()->findByPk($oldFolderId);				
-//				$oldRelPath = $oldFolder->path;				
-//				$oldPath = GO::config()->file_storage_path . $oldRelPath . '/' . $this->name;
-//			
-//
-//				$fsFile= new GO_Base_Fs_File($oldPath);
-				
+			if($this->isModified('folder_id')){				
 				if(!isset($oldFsFile))
 					$oldFsFile = $this->_getOldFsFile();
 
 				if (!$oldFsFile->move(new GO_Base_Fs_Folder(GO::config()->file_storage_path . dirname($this->path))))
 					throw new Exception("Could not rename folder on the filesystem");
+				
+				//get old folder objekt
+                                $oldFolderId = $this->getOldAttributeValue('folder_id');
+				$oldFolder = GO_Files_Model_Folder::model()->findByPk($oldFolderId);
+
+				$this->notifyUsers(
+					array(
+					    $this->getOldAttributeValue('folder_id'),
+					    $this->folder_id
+					),
+					GO_Files_Model_FolderNotificationMessage::MOVE_FILE,
+					$oldFolder->path . '/' . $this->name,
+					$this->path
+				);
 			}
 		}
 		
@@ -256,6 +268,23 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	protected function afterSave($wasNew) {
 		$this->_addQuota();
 		
+		if ($wasNew) {
+			$this->notifyUsers(
+				$this->folder_id,
+				GO_Files_Model_FolderNotificationMessage::ADD_FILE,
+                $this->name,
+				$this->folder->path
+			);
+		} else {
+			if (!$this->isModified('name') && !$this->isModified('folder_id')) {
+				$this->notifyUsers(
+					$this->folder_id,
+					GO_Files_Model_FolderNotificationMessage::UPDATE_FILE,
+					$this->path
+				);
+			}
+		}
+		
 		return parent::afterSave($wasNew);
 	}
 
@@ -267,6 +296,12 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		
 		$versioningFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'versioning/'.$this->id);
 		$versioningFolder->delete();
+		
+		$this->notifyUsers(
+            $this->folder_id,
+			GO_Files_Model_FolderNotificationMessage::DELETE_FILE, 
+			$this->path
+		);
 
 		return parent::afterDelete();
 	}
@@ -439,5 +474,16 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		}
 		$this->name=$newName;
 		return $this->name;
+	}
+	
+	/**
+	 *
+	 * @param type $folder_id
+	 * @param type $type
+	 * @param type $arg1
+	 * @param type $arg2 
+	 */
+	public function notifyUsers($folder_id, $type, $arg1, $arg2 = '') {
+		GO_Files_Model_FolderNotification::model()->storeNotification($folder_id, $type, $arg1, $arg2);
 	}
 }
