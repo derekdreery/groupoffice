@@ -11,10 +11,7 @@ class GO_Files_Model_FolderNotificationMessage extends GO_Base_Db_ActiveRecord {
     const RENAME_FILE = 6;
     const MOVE_FILE = 7;
     const DELETE_FILE = 8;
-    const UPDATE_FILE = 9;
-        
-    protected $isNew = true;
-
+    const UPDATE_FILE = 9;      
 
     /**
      *
@@ -31,19 +28,6 @@ class GO_Files_Model_FolderNotificationMessage extends GO_Base_Db_ActiveRecord {
      */
     public function tableName() {
             return 'fs_notification_messages';
-    }
-        
-    /**
-     *
-     * @return bool 
-     */
-	protected function beforeSave() {
-        if ($this->isNew) {
-            $this->modified_user_id = GO::user()->id;
-            $this->mtime = time();
-            $this->status = 0;
-        }
-        return parent::beforeSave();
     }
         
     /**
@@ -68,9 +52,18 @@ class GO_Files_Model_FolderNotificationMessage extends GO_Base_Db_ActiveRecord {
 
         $notifications = array();
         while ($fnRow = $stmt->fetch()) {
-                $fnRow->isNew = false;
                 $notifications[] = $fnRow;
         }
         return $notifications;               
-    }                
+    }
+    
+    public function defaultAttributes() {
+        $attr = parent::defaultAttributes();
+        
+        $attr['modified_user_id'] = GO::user()->id;
+        $attr['mtime'] = time();
+        $attr['status'] = 0;
+        
+        return $attr;
+    }
 }
