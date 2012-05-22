@@ -11,7 +11,14 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 	protected function allowGuests() {
 		return array("cacheusage");
 	}
-	
+		
+	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
+		$storeParams->criteria(
+			GO_Base_Db_FindCriteria::newInstance()
+				->addCondition('domain_id',$params['domain_id'])
+		);
+		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
+	}
 	
 	protected function afterLoad(&$response, &$model, &$params) {
 		if($model->isNew)
