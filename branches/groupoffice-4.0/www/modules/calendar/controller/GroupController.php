@@ -25,7 +25,7 @@ class GO_Calendar_Controller_Group extends GO_Base_Controller_AbstractModelContr
 			$record = $group->getAttributes('formatted');
 			
 			if(GO::modules()->customfields)
-				$record['customfields']=GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Calendar_Model_Event", $group->id);
+				$record['customfields'] = GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Calendar_Model_Event", $group->id);
 			else
 				$record['customfields']=array();
 			
