@@ -1312,7 +1312,7 @@ class GO_CONFIG {
 			$response['has_admin_permission']=$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id);
 		}
 		foreach($_SESSION['GO_SESSION'] as $key=>$value) {
-			if(!is_array($value)) {
+			if(!is_array($value) && $key!='config_file') {
 				$response[$key]=$value;
 			}
 		}
