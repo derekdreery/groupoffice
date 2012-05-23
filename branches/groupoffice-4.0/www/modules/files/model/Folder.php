@@ -466,6 +466,9 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			}
 		}
 		
+		$this->mtime=$this->fsFolder->mtime();
+		$this->save();
+		
 		GO::$disableModelCache=$oldCache;
 	}
 	
@@ -483,8 +486,8 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		if($this->mtime < $this->fsFolder->mtime()){
 			GO::debug("Filesystem folder ".$this->path." is not in sync with database. Will sync now.");
 			$this->syncFilesystem ();
-			$this->mtime=$this->fsFolder->mtime();
-			$this->save();
+//			$this->mtime=$this->fsFolder->mtime();
+//			$this->save();
 		}
 	}
 	
