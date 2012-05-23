@@ -20,13 +20,31 @@ $settings['state']=array();
 if(GO::user()) {
 	//state for Ext components
 	$settings['state'] = $GLOBALS['GO_CONFIG']->get_state(GO::user()->id, $settings['state_index']);
-
-	$settings['has_admin_permission']=GO::user()->isAdmin();
-}
-foreach($_SESSION['GO_SESSION'] as $key=>$value) {
-	if(!is_array($value)) {
-		$settings[$key]=$value;
-	}
+	$settings['user_id']=GO::user()->id;	
+	$settings['has_admin_permission']=GO::user()->isAdmin();	
+	$settings['username'] = GO::user()->username;
+	$settings['name'] = GO::user()->name;
+	$settings['email'] = GO::user()->email;
+	$settings['thousands_separator'] = GO::user()->thousands_separator;
+	$settings['decimal_separator'] = GO::user()->decimal_separator;
+	$settings['date_format'] = GO::user()->date_format;
+	$settings['date_separator'] = GO::user()->date_separator;
+	$settings['time_format'] = GO::user()->time_format;
+	$settings['currency'] = GO::user()->currency;
+	$settings['lastlogin'] = GO::user()->lastlogin;
+	$settings['max_rows_list'] = GO::user()->max_rows_list;
+	$settings['timezone'] = GO::user()->timezone;
+	$settings['start_module'] = GO::user()->start_module;
+	$settings['theme'] = GO::user()->theme;
+	$settings['mute_sound'] = GO::user()->mute_sound;
+	$settings['mute_reminder_sound'] = GO::user()->mute_reminder_sound;
+	$settings['mute_new_mail_sound'] = GO::user()->mute_new_mail_sound;
+	$settings['popup_reminders'] = GO::user()->popup_reminders;
+	$settings['show_smilies'] = GO::user()->show_smilies;
+	$settings['first_weekday'] = GO::user()->first_weekday;
+	$settings['sort_name'] = GO::user()->sort_name;
+	$settings['list_separator'] = GO::user()->list_separator;
+	$settings['text_separator'] = GO::user()->text_separator;
 }
 
 require_once(GO::config()->root_path.'classes/base/theme.class.inc.php');
