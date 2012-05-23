@@ -1,5 +1,5 @@
-groupoffice-servermanager (3.7.50) threeseven; urgency=low
+groupoffice-servermanager (3.7.51) threeseven; urgency=low
 
   * Changes can be found in /usr/share/groupoffice/CHANGELOG.TXT
 
- -- Merijn Schering <mschering@intermesh.nl>  Sun, 13 May 2012 21:58:40 +0200
+ -- Merijn Schering <mschering@intermesh.nl>  Wed, 23 May 2012 08:57:16 +0200
