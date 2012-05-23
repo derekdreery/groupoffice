@@ -24,7 +24,7 @@ GO.dialog.MergeWindow = Ext.extend(GO.Window,{
 			region:'center',
 			layout:'fit',
 			tbar:[
-			GO.lang['strSearch']+': ', ' ',this.searchField,
+			GO.lang['strSearch']+': ', ' ',this.searchField
 			],
 			store:this.store,
 			columns:[{
