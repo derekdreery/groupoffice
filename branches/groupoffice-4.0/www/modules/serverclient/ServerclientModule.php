@@ -17,8 +17,11 @@ class GO_Serverclient_ServerclientModule extends GO_Base_Module{
 			if(!empty($user->serverclient_domains)){
 				
 				$httpClient = new GO_Serverclient_HttpClient();
-				if(!$httpClient->postfixLogin())
-					throw new Exception("Could not login to postfixadmin module");
+				try{
+					$httpClient->postfixLogin();
+				}catch(Exception $e){
+					throw new Exception("Could not login to postfixadmin module. Check the username and password in /etc/groupoffice/globalconfig.inc.php\n\nMessage from Postfixadmin:\n\n".$e->getMessage());
+				}
 				
 				foreach ($user->serverclient_domains as $domain) {
 					//domain is, for example "intermesh.dev".

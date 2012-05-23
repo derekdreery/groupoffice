@@ -111,7 +111,7 @@ class GO_Base_Util_HttpClient{
 		if(!isset($response['success']) || !$response['success'])
 		{
 			GO::debug($response);
-			$feedback = sprintf(GO::t('connect_error','serverclient'), $baseUrl);
+			$feedback = "Could not connect to ".GO::config()->product_name." installation at ".$baseUrl;
 			if(isset($response['feedback']))
 				$feedback .= "\n\n".$response['feedback'];
 			throw new Exception($feedback);
