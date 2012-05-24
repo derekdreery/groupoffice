@@ -61,7 +61,7 @@ GO.servermanager.InstallationDialog = function(config){
 	GO.servermanager.InstallationDialog.superclass.constructor.call(this, config);
 	this.addEvents({'save' : true});	
 }
-Ext.extend(GO.servermanager.InstallationDialog, Ext.Window,{
+Ext.extend(GO.servermanager.InstallationDialog, GO.Window,{
 	
 	show : function (installation_id, config) {
 		if(!this.rendered)
@@ -84,7 +84,7 @@ Ext.extend(GO.servermanager.InstallationDialog, Ext.Window,{
 		{
 			this.formPanel.load({
 				url : GO.url("servermanager/installation/load"),
-				
+				waitMsg:GO.lang.waitMsgLoad,
 				success:function(form, action)
 				{					
 					GO.servermanager.InstallationDialog.superclass.show.call(this);
@@ -125,9 +125,11 @@ Ext.extend(GO.servermanager.InstallationDialog, Ext.Window,{
 		this.formPanel.form.baseParams['id']=installation_id;
 		this.installation_id=installation_id;
 
-		this.modulesGrid.store.baseParams.installation_id=installation_id;
-		this.modulesGrid.store.removeAll();
-		this.modulesGrid.store.loaded=false;
+		if(this.modulesGrid.store.baseParams.installation_id!=installation_id){
+			this.modulesGrid.store.baseParams.installation_id=installation_id;
+			this.modulesGrid.store.removeAll();
+			this.modulesGrid.store.loaded=false;
+		}
 		
 		this.formPanel.form.findField('admin_password1').allowBlank=installation_id>0;
 		this.formPanel.form.findField('admin_password2').allowBlank=installation_id>0;

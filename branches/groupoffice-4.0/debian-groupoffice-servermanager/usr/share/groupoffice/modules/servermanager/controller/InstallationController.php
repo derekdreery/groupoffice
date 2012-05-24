@@ -336,6 +336,10 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$allowedModules = array();
 		if(!empty($params['installation_id']) && ($installation=  GO_ServerManager_Model_Installation::model()->findByPk($params['installation_id']))){
 			require($installation->configPath);
+			
+			if(!isset($config['allowed_modules']))
+				$config['allowed_modules']="";
+			
 			$allowedModules = explode(',', $config['allowed_modules']);
 		}
 		
