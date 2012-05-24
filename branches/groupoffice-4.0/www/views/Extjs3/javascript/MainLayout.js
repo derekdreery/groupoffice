@@ -236,7 +236,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 
 	init : function(){
 
-		window.name='groupoffice';
+		//window.name='groupoffice';
     
 		GO.loginDialog = new GO.dialog.LoginDialog({modal:true});
 

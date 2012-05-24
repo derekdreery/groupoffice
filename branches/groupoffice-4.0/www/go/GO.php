@@ -57,6 +57,17 @@ class GO{
 	}
 	
 	/**
+	 * Get a unique ID for Group-Office. It's mainly used for the javascript window id.
+	 * @return type 
+	 */
+	public static function getId(){
+		
+		$serverName = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : "unknown";
+		
+		return GO::config()->id.'AT'.$serverName;
+	}
+	
+	/**
 	 * This GO_Base_Model_ModelCache.php mechanism can consume a lot of memory 
 	 * when running large batch scripts. That's why it can be disabled.
 	 * 

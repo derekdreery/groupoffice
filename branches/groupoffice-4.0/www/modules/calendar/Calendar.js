@@ -814,12 +814,14 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		GO.calendar.MainPanel.superclass.onShow.call(this);
 		this.daysGrid.scrollToLastPosition();
 
-		if(GO.calendar.activePanel.id != 'view-grid')
-		{
-			GO.calendar.activePanel.store.reload();
-		}else
-		{
-			GO.calendar.activePanel.reload();
+		if(GO.calendar.activePanel){
+			if(GO.calendar.activePanel.id != 'view-grid')
+			{
+				GO.calendar.activePanel.store.reload();
+			}else
+			{
+				GO.calendar.activePanel.reload();
+			}
 		}
 	},
 	afterRender : function(){

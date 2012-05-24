@@ -14,7 +14,11 @@ $funcParams = isset($p) ? $p : '';
 <title><?php echo GO::config()->product_name; ?></title>
 <script type="text/javascript">
 function launchGO(){
-	var win = window.open('', "groupoffice");
+	//var win = window.open('', "groupoffice");
+	
+	var win = window.open('', "<?php echo GO::getId(); ?>");
+	
+
 
 	if(win.GO && win.GO.<?php echo $module; ?>)
 	{

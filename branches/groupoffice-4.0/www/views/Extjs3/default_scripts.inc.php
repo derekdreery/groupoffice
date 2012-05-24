@@ -156,7 +156,9 @@ if($GLOBALS['GO_SECURITY']->logged_in() && $fullscreen=='true' && !isset($_REQUE
 }
 
 if($GLOBALS['GO_SECURITY']->logged_in() && !isset($popup_groupoffice)) {
-	echo 'window.name="groupoffice";';
+	echo 'window.name="'.GO::getId().'";';
+	
+	//echo 'window.name="groupoffice";';
 }else
 {
 	echo 'window.name="groupoffice-login";';
@@ -560,17 +562,13 @@ if(isset($_REQUEST['f']))
 	$fp = GO_Base_Util_Crypt::decrypt($_REQUEST['f']);
 	
 
-	$loadevent = 'render';
-
+	
 	?>
 	if(GO.<?php echo $fp['m']; ?>)
 	{
-
-		 <?php if(!empty($loadevent)) echo 'GO.mainLayout.on("'.$loadevent.'",function(){'; ?>
-
-					GO.<?php echo $fp['m']; ?>.<?php echo $fp['f']; ?>.apply(this, <?php echo json_encode($fp['p']); ?>);
-
-		 <?php if(!empty($loadevent)) echo '});'; ?>
+		 GO.mainLayout.on("render", function(){
+				GO.<?php echo $fp['m']; ?>.<?php echo $fp['f']; ?>.apply(this, <?php echo json_encode($fp['p']); ?>);
+		 });
 	}
 	<?php
 	
