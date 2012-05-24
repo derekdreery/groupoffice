@@ -235,6 +235,10 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	 * @return bool 
 	 */
 	public function removeGroup($groupId) {
+		
+		if($groupId==GO::config()->group_root)
+			return false;
+		
 		$model = $this->hasGroup($groupId);
 		if($model)
 			return $model->delete();
