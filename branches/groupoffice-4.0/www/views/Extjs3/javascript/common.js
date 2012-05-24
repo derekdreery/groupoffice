@@ -387,7 +387,13 @@ GO.util.unlocalizeNumber = function (number, decimal_separator, thousands_separa
 		var re = new RegExp('['+thousands_separator+']', 'g');
 		number = number.replace(re, "");
 	}
-	return parseFloat(number.replace(decimal_separator, "."));
+	
+	number = parseFloat(number.replace(decimal_separator, "."));
+	
+	if(isNaN(number))
+		number=0;
+	
+	return number;
 }
 
 String.prototype.regexpEscape = function() {
