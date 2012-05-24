@@ -75,7 +75,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		}
 		
 		
-		$stmt = GO_Addressbook_Model_Addresslist::model()->find();
+		$stmt = GO_Addressbook_Model_Addresslist::model()->find(GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION));
 		while($addresslist = $stmt->fetch()){
 			$linkModel = $addresslist->hasManyMany('contacts', $model->id);
 			$mustHaveLinkModel = isset($params['addresslist_' . $addresslist->id]);
