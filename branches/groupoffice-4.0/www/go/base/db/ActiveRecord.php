@@ -1506,13 +1506,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		return $record['count'];		
 	}
 	
-	/**
-	 * May be overriden to do stuff after the model was loaded from the database
-	 */
-	protected function afterLoad(){
-			//GO::debug($this);
-	}
-	
 	private function _relationExists($name){
 		$r= $this->relations();
 		

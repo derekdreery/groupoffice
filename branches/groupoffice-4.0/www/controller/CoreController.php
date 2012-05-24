@@ -15,17 +15,17 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	
 	protected function actionLink($params) {
 
-		$fromLinks = json_decode($_POST['fromLinks'], true);
-		$toLinks = json_decode($_POST['toLinks'], true);
-		$from_folder_id = isset($_POST['from_folder_id']) ? $_POST['from_folder_id'] : 0;
-		$to_folder_id = isset($_POST['to_folder_id']) ? $_POST['to_folder_id'] : 0;
+		$fromLinks = json_decode($params['fromLinks'], true);
+		$toLinks = json_decode($params['toLinks'], true);
+		$from_folder_id = isset($params['from_folder_id']) ? $params['from_folder_id'] : 0;
+		$to_folder_id = isset($params['to_folder_id']) ? $params['to_folder_id'] : 0;
 
 		foreach ($fromLinks as $fromLink) {
-			$fromModel = call_user_func(array($fromLink['model_name'], 'model'))->findByPk($fromLink['model_id']);
+			$fromModel = GO::getModel($fromLink['model_name'])->findByPk($fromLink['model_id']);
 
 			foreach ($toLinks as $toLink) {
-				$model = call_user_func(array($toLink['model_name'], 'model'))->findByPk($toLink['model_id']);
-				$fromModel->link($model, $_POST['description'], $from_folder_id, $to_folder_id);
+				$model = GO::getModel($toLink['model_name'])->findByPk($toLink['model_id']);
+				$fromModel->link($model, $params['description'], $from_folder_id, $to_folder_id);
 			}
 		}
 
