@@ -27,7 +27,7 @@ if(GO::user()) {
 	$settings['email'] = GO::user()->email;
 	$settings['thousands_separator'] = GO::user()->thousands_separator;
 	$settings['decimal_separator'] = GO::user()->decimal_separator;
-	$settings['date_format'] = GO::user()->date_format;
+	$settings['date_format'] = GO::user()->completeDateFormat;
 	$settings['date_separator'] = GO::user()->date_separator;
 	$settings['time_format'] = GO::user()->time_format;
 	$settings['currency'] = GO::user()->currency;
