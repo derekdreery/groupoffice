@@ -199,7 +199,7 @@ class templates extends db {
 				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
 
-				$cf_values = $cf->get_values(1, 2, $contact['id']);
+				$cf_values = $cf->get_values(1, 2, $contact['id'], false, false);
 				$contact = array_merge($contact, $cf_values);
 			}else {
 				$cf=false;
