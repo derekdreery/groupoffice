@@ -123,6 +123,9 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 		
 		$attributes = $this->_getDefaultTags();
 		
+		if(!empty($contact->salutation))
+			$attributes['salutation']=$contact->salutation;
+		
 		$attributes = array_merge($attributes, $this->_getModelAttributes($contact, 'contact:'));
 		if($contact->company)
 		{
@@ -172,6 +175,7 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	
 	private function _getDefaultTags(){
 		$attributes['contact:salutation']=GO::t('default_salutation_unknown');
+		$attributes['salutation']=GO::t('default_salutation_unknown');
 		$attributes['date']=GO_Base_Util_Date::get_timestamp(time(), false);
 		
 		return $attributes;

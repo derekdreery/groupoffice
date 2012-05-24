@@ -105,7 +105,7 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 			$user->createContact();
 		
 		$message = new GO_Base_Mail_Message();
-		$message->setHtmlAlternateBody('&lt;gotpl if="salutation"&gt;{salutation},<br />&lt;/gotpl&gt;
+		$message->setHtmlAlternateBody('{salutation},<br />
 <br />
 {body}<br />
 <br />
