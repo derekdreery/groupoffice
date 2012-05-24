@@ -2932,7 +2932,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$model_type_id = $model->modelTypeId();			
 		}
 		
-		$table = $isSearchCacheModel ? GO::getModel($this->model_name)->model()->tableName() : $this->tableName();
+		$table = $isSearchCacheModel ? GO::getModel($this->model_name)->tableName() : $this->tableName();
 		
 		$id = $isSearchCacheModel ? $this->model_id : $this->id;
 		
@@ -2965,9 +2965,31 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$result = $this->getDbConnection()->prepare($sql);
 		$success = $result->execute($values);
 		
-		if($success)
+		if($success){
+			
+//			if(!$this->afterLink($model, $isSearchCacheModel, $description, $this_folder_id, $model_folder_id, $linkBack))
+//				return false;
+			
 			return !$linkBack || $model->link($this, $description, $model_folder_id, $this_folder_id, false);
+		}
 	}
+	
+//	/**
+//	 * Can be overriden to do something after linking. It's a public method because sometimes
+//	 * searchCacheRecord models are used for linking. In that case we can call the afterLink method of the real model instead of the searchCacheRecord model.
+//	 * 
+//	 * @param GO_Base_Db_ActiveRecord $model
+//	 * @param boolean $isSearchCacheModel True if the given model is a search cache model. 
+//	 *	In that case you can use the following code to get the real model:  $realModel = $isSearchCacheModel ? GO::getModel($this->model_name)->findByPk($this->model_id) : $this;
+//	 * @param string $description
+//	 * @param int $this_folder_id
+//	 * @param int $model_folder_id
+//	 * @param boolean $linkBack 
+//	 * @return boolean
+//	 */
+//	public function afterLink(GO_Base_Db_ActiveRecord $model, $isSearchCacheModel, $description='', $this_folder_id=0, $model_folder_id=0, $linkBack=true){
+//		return true;
+//	}
 	
 	private function _linkExists($model){		
 		if($model->className()=="GO_Base_Model_SearchCacheRecord"){
