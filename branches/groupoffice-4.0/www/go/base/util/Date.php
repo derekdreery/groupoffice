@@ -595,8 +595,11 @@ class GO_Base_Util_Date {
 		{
 			return 0;
 		}
-		$time = strtotime(GO_Base_Util_Date::to_input_format($date_string));			
-		return $time;		
+		
+		//$time = strtotime(GO_Base_Util_Date::to_input_format($date_string));			
+		//return $time;		
+		$date = new DateTime(GO_Base_Util_Date::to_input_format($date_string));
+		return $date->format("U");
 	}
 
 	/**
