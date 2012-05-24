@@ -38,6 +38,8 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	
 	public $htmlSpecialChars=true;
 	
+	private $_defaultTags;
+	
 		/**
 	 * Returns a static model of itself
 	 * 
@@ -56,7 +58,22 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	
 	protected function init() {
 		$this->columns['content']['required']=true;
+		
+		$this->addDefaultTag('contact:salutation', GO::t('default_salutation_unknown'));
+		$this->addDefaultTag('salutation', GO::t('default_salutation_unknown'));
+		$this->addDefaultTag('date', GO_Base_Util_Date::get_timestamp(time(), false));
+		
 		return parent::init();
+	}
+	
+	/**
+	 * Add a default tag value.
+	 * 
+	 * @param string $key
+	 * @param string $value 
+	 */
+	public function addDefaultTag($key, $value){
+		$this->_defaultTags[$key]=$value;
 	}
 	
 	
@@ -121,7 +138,7 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	 */
 	public function replaceContactTags($content, GO_Addressbook_Model_Contact $contact, $leaveEmptyTags=false){
 		
-		$attributes = $this->_getDefaultTags();
+		$attributes = $this->_defaultTags;
 		
 		if(!empty($contact->salutation))
 			$attributes['salutation']=$contact->salutation;
@@ -152,7 +169,7 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	 * @return string 
 	 */
 	public function replaceModelTags($content, $model, $tagPrefix='', $leaveEmptyTags=false){
-		$attributes = $this->_getDefaultTags();
+		$attributes = $this->_defaultTags;
 		
 		$attributes = array_merge($attributes, $this->_getModelAttributes($model, $tagPrefix));
 		
@@ -173,14 +190,6 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 		return $templateParser->parse($content, $attributes, $leaveEmptyTags);
 	}
 	
-	private function _getDefaultTags(){
-		$attributes['contact:salutation']=GO::t('default_salutation_unknown');
-		$attributes['salutation']=GO::t('default_salutation_unknown');
-		$attributes['date']=GO_Base_Util_Date::get_timestamp(time(), false);
-		
-		return $attributes;
-	}
-	
 	/**
 	 * Replaces all tags of the current user.
 	 * 
@@ -194,11 +203,11 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	 */
 	public function replaceUserTags($content, $leaveEmptyTags=false){
 		
-		$attributes = $this->_getDefaultTags();
+		$attributes = $this->_defaultTags;
 		
 		$attributes = array_merge($attributes, $this->_getUserAttributes());
 		
-		$attributes['contact:salutation']=GO::t('default_salutation_unknown');
+		//$attributes['contact:salutation']=GO::t('default_salutation_unknown');
 		
 		return $this->_parse($content, $attributes, $leaveEmptyTags);
 	}
