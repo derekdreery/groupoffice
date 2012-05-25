@@ -289,7 +289,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->_sendResourceNotification($wasNew);
 		}else
 		{
-			if(!$wasNew)
+			if(!$wasNew && $this->hasModificationsForParticipants())
 				$this->_updateResourceEvents();
 		}
 
@@ -302,6 +302,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}	
 
 		return parent::afterSave($wasNew);
+	}
+	
+	public function hasModificationsForParticipants(){
+		return $this->isModified("start_time") || $this->isModified("end_time") || $this->isModified("name") || $this->isModified("location") || $this->isModified('status');
 	}
 	
 	
@@ -323,72 +327,73 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$resourceEvent->save();
 		}
 	}
-	
+		
 	private function _sendResourceNotification($wasNew){
 		
-		$url = GO::createExternalUrl('calendar', 'showEvent', array(array('values'=>array('event_id' => $this->id))));		
-		
-		$stmt = $this->calendar->group->admins();
-		while($user = $stmt->fetch()){
-			if($wasNew){
-				$body = sprintf(GO::t('resource_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
-								. $this->toHtml()
-								. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
-			
-				$subject = sprintf(GO::t('resource_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
-			}else
-			{
-				$body = sprintf(GO::t('resource_modified_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
-								. $this->toHtml()
-								. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
-			
-				$subject = sprintf(GO::t('resource_modified_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
-			}
-			
-			$message = GO_Base_Mail_Message::newInstance(
-								$subject
-								)->setFrom(GO::user()->email, GO::user()->name)
-								->addTo($user->email, $user->name);
+		if($this->hasModificationsForParticipants()){			
+			$url = GO::createExternalUrl('calendar', 'showEvent', array(array('values'=>array('event_id' => $this->id))));		
 
-			$message->setHtmlAlternateBody($body);					
-			
-			GO_Base_Mail_Mailer::newGoInstance()->send($message);
-		}
-		
-		if($this->user_id!=GO::user()->id){
-			//todo send update to user
-			
-			if($this->isModified('status')){
-				if($this->status=='ACCEPTED'){
-					$body = sprintf(GO::t('your_resource_accepted_mail_body','calendar'),$user->name,$this->calendar->name).'<br /><br />'
-								. $this->toHtml()
-								. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
-			
-					$subject = sprintf(GO::t('your_resource_accepted_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
+			$stmt = $this->calendar->group->admins();
+			while($user = $stmt->fetch()){
+				if($wasNew){
+					$body = sprintf(GO::t('resource_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
+									. $this->toHtml()
+									. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
+
+					$subject = sprintf(GO::t('resource_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
 				}else
 				{
-						$body = sprintf(GO::t('your_resource_declined_mail_body','calendar'),$user->name,$this->calendar->name).'<br /><br />'
+					$body = sprintf(GO::t('resource_modified_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
+									. $this->toHtml()
+									. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
+
+					$subject = sprintf(GO::t('resource_modified_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
+				}
+
+				$message = GO_Base_Mail_Message::newInstance(
+									$subject
+									)->setFrom(GO::user()->email, GO::user()->name)
+									->addTo($user->email, $user->name);
+
+				$message->setHtmlAlternateBody($body);					
+
+				GO_Base_Mail_Mailer::newGoInstance()->send($message);
+			}
+				
+			if($this->user_id!=GO::user()->id){
+				//todo send update to user
+				if($this->isModified('status')){				
+					if($this->status=='ACCEPTED'){
+						$body = sprintf(GO::t('your_resource_accepted_mail_body','calendar'),$user->name,$this->calendar->name).'<br /><br />'
+									. $this->toHtml()
+									. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
+
+						$subject = sprintf(GO::t('your_resource_accepted_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
+					}else
+					{
+							$body = sprintf(GO::t('your_resource_declined_mail_body','calendar'),$user->name,$this->calendar->name).'<br /><br />'
+									. $this->toHtml()
+									. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
+
+						$subject = sprintf(GO::t('your_resource_declined_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
+					}
+				}else
+				{
+					$body = sprintf(GO::t('your_resource_modified_mail_body','calendar'),$user->name,$this->calendar->name).'<br /><br />'
 								. $this->toHtml()
 								. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
-			
-					$subject = sprintf(GO::t('your_resource_declined_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
+					$subject = sprintf(GO::t('your_resource_modified_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
 				}
-			}else
-			{
-				$body = sprintf(GO::t('your_resource_modified_mail_body','calendar'),$user->name,$this->calendar->name).'<br /><br />'
-							. $this->toHtml()
-							. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
-				$subject = sprintf(GO::t('your_resource_modified_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
-			}
-			
-			$message = GO_Base_Mail_Message::newInstance(
-								$subject
-								)->setFrom(GO::user()->email, GO::user()->name)
-								->addTo($this->user->email, $this->user->name);
 
-			$message->setHtmlAlternateBody($body);					
-			
-			GO_Base_Mail_Mailer::newGoInstance()->send($message);
+				$message = GO_Base_Mail_Message::newInstance(
+									$subject
+									)->setFrom(GO::user()->email, GO::user()->name)
+									->addTo($this->user->email, $this->user->name);
+
+				$message->setHtmlAlternateBody($body);					
+
+				GO_Base_Mail_Mailer::newGoInstance()->send($message);
+			}
 		}
 	}
 
