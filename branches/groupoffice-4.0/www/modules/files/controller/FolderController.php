@@ -706,7 +706,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	}
 
 	public function checkModelFolder(GO_Base_Db_ActiveRecord $model, $saveModel=false, $mustExist=false) {
-		$oldAllowDeletes = GO_Base_Fs_File::setAllowedDeletes(false);
+		$oldAllowDeletes = GO_Base_Fs_File::setAllowDeletes(false);
 		
 		$folder = false;
 		if ($model->files_folder_id > 0)
@@ -731,7 +731,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		if(empty($model->files_folder_id))
 			$model->files_folder_id=0;
 		
-		 GO_Base_Fs_File::setAllowedDeletes($oldAllowDeletes);
+		 GO_Base_Fs_File::setAllowDeletes($oldAllowDeletes);
 		
 		return $model->files_folder_id;
 	}

@@ -30,13 +30,13 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 * @param boolean
 	 * @return boolean old value
 	 */
-	public function setAllowedDeletes($allowedDeletes){
+	public static function setAllowDeletes($allowDeletes){
 		
 //		GO::debugCalledFrom();
 //		GO::debug("Allowed deletes is ".($allowedDeletes ? "true" : "false"));
 		
 		$old = self::$_allowDeletes;
-		self::$_allowDeletes=$allowedDeletes;
+		self::$_allowDeletes=$allowDeletes;
 		
 		return $old;
 	}
