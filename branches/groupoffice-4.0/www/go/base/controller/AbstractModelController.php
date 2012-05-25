@@ -328,6 +328,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
     $store = new GO_Base_Data_Store($this->getStoreColumnModel());	
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatStoreRecord'));		
 		
+		if(!empty($params["forEditing"]))
+			$store->getColumnModel ()->setModelFormatType ("formatted");
+		
 		$response=array();
 		
 		$response = $this->beforeStore($response, $params, $store);
@@ -1036,6 +1039,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		foreach($attributes as $field=>$attr)
 			$response['results'][]=$attr;
+		
+		$response['success']=true;
 		
 		return $response;		
 	}
