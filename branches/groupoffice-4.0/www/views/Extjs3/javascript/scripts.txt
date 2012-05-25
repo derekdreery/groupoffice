@@ -12,6 +12,7 @@ views/Extjs3/javascript/SmallPagingToolbar.js
 
 views/Extjs3/javascript/buttons/AddButton.js
 views/Extjs3/javascript/buttons/DeleteButton.js
+views/Extjs3/javascript/buttons/QuickEditButton.js
 
 
 views/Extjs3/javascript/WeekPicker.js
@@ -162,3 +163,5 @@ views/Extjs3/javascript/query/QueryContextMenu.js
 
 
 views/Extjs3/javascript/base/util/MD5.js
+views/Extjs3/javascript/grids/RowEditor.js
+views/Extjs3/javascript/base/QuickEditDialog.js
