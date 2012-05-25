@@ -9,6 +9,7 @@ $l["errorDetails"]='Detailed error';
 $l["contactSupportDesk"]='Contact support desk';
 $l["disabled"]='Disabled';
 $l["changesWillBeLost"]='You made changes in the current screen. Press cancel and save changes or Ok to continue and delete your changes.';
+$l['errorsInForm'] = "There are errors in the form. Please correct them and try again.";
 $l["strCommunityForum"]='Community forum';
 $l["moduleRequired"]='This feature requires the \'{module}\' module. This module is not available.';
 $l["completeProfile"]= 'Please complete your profile';
