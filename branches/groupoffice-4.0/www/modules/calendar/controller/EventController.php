@@ -31,7 +31,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 	function beforeSubmit(&$response, &$model, &$params) {
 
-		$this->_checkConflicts();
+		
 		
 		if(!empty($params['duplicate']))
 			$model = $model->duplicate();
@@ -96,10 +96,72 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 //		else
 //			$model->reminder = 0;
 
+		$model->setAttributes($params);
+		
+		if(!$this->_checkConflicts($response, $model, $params)){
+			return false;
+		}
+		
 		return parent::beforeSubmit($response, $model, $params);
 	}
 
-	private function _checkConflicts() {
+	private function _checkConflicts(&$response, GO_Calendar_Model_Event &$event, &$params) {
+		
+		if(!$event->busy)
+			return true;
+		
+		if(empty($params["check_conflicts"]))
+			return true;
+		
+		
+		/* Check for conflicts with other events in the calendar */		
+		$findParams = GO_Base_Db_FindParams::newInstance();
+		$findParams->getCriteria()->addCondition("calendar_id", $event->calendar_id);
+		
+		$conflictingEvents = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, $event->start_time, $event->end_time, true);
+		
+		while($conflictEvent = array_shift($conflictingEvents)) {
+
+			if($conflictEvent["id"]!=$event->id && (empty($params['exception_for_event_id']) || $params['exception_for_event_id']!=$conflictEvent["id"])){
+				throw new Exception('Ask permission');
+			}
+		}
+		
+		
+		/* Check for conflicts regarding resources */
+		if (!$event->isResource() && isset($params['resources'])) {
+			
+			$resources=array();
+			foreach ($params['resources'] as $resource_calendar_id => $enabled) {
+				if($enabled)
+					$resources[]=$resource_calendar_id;
+			}
+			
+			if (count($resources)) {
+				
+				$findParams = GO_Base_Db_FindParams::newInstance();
+				$findParams->getCriteria()->addInCondition("calendar_id", $resources);
+
+				$conflictingEvents = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, $event->start_time, $event->end_time, true);
+				
+				$resourceConlictsFound=false;
+			
+				foreach ($conflictingEvents as $conflictEvent) {
+					if ($conflictEvent['id'] != $event->id) {
+						$resourceCalendar = GO_Calendar_Model_Calendar::model()->findByPk($conflictEvent['calendar_id']);
+						$resourceConlictsFound=true;
+						$response['resources'][] = $resourceCalendar->name;						
+					}
+				}
+
+				if ($resourceConlictsFound){
+					$response["feedback"]="Resource conflict";
+					$response["success"]=false;
+					return false;
+				}
+			}
+		}
+		
 		return true;
 	}
 

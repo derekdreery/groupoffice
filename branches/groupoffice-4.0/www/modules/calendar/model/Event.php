@@ -428,16 +428,18 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @param int $periodStartTime
 	 * @param int $periodEndTime
 	 * @param boolean $onlyBusyEvents
-	 * @return GO_Calendar_Model_Event[] 
+	 * @return GO_Base_Db_ActiveStatement
 	 */
 	public function findForPeriod($findParams, $periodStartTime, $periodEndTime=0, $onlyBusyEvents=false){
 		if (!$findParams)
 			$findParams = GO_Base_Db_FindParams::newInstance();
 
-		$findParams->order('start_time', 'ASC');
+		$findParams->order('start_time', 'ASC')->debugSql();
 		
-		if($periodEndTime)
-			$findParams->getCriteria()->addCondition('start_time', $periodEndTime, '<');
+//		if($periodEndTime)
+//			$findParams->getCriteria()->addCondition('start_time', $periodEndTime, '<');
+		
+		$findParams->getCriteria()->addModel(GO_Calendar_Model_Event::model(), "t");
 		
 		if ($onlyBusyEvents)
 			$findParams->getCriteria()->addCondition('busy', 1);

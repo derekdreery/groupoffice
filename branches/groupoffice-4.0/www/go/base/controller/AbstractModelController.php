@@ -58,71 +58,73 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$model->user_id=GO::user()->id;
 		}
 
-		$this->beforeSubmit($response, $model, $params);
+		$ret = $this->beforeSubmit($response, $model, $params);
 		
-		$model->setAttributes($params);
-		
-		$modifiedAttributes = $model->getModifiedAttributes();
-		try{
-			$response['success'] = $model->save();
+		if($ret!==false)
+		{		
+			$model->setAttributes($params);
 
-			$response['id'] = $model->pk;
+			$modifiedAttributes = $model->getModifiedAttributes();
+			try{
+				$response['success'] = $model->save();
 
-			//If the model has it's own ACL id then we return the newly created ACL id.
-			//The model automatically creates it.
-			if ($model->aclField() && !$model->joinAclField) {
-				$response[$model->aclField()] = $model->{$model->aclField()};
-			}
+				$response['id'] = $model->pk;
+
+				//If the model has it's own ACL id then we return the newly created ACL id.
+				//The model automatically creates it.
+				if ($model->aclField() && !$model->joinAclField) {
+					$response[$model->aclField()] = $model->{$model->aclField()};
+				}
 
 
-			if (!empty($params['link'])) {
+				if (!empty($params['link'])) {
 
-				//a link is sent like  GO_Notes_Model_Note:1
-				//where 1 is the id of the model
+					//a link is sent like  GO_Notes_Model_Note:1
+					//where 1 is the id of the model
 
-				$linkProps = explode(':', $params['link']);			
-				$linkModel = GO::getModel($linkProps[0])->findByPk($linkProps[1]);
-				$model->link($linkModel);			
-			}
+					$linkProps = explode(':', $params['link']);			
+					$linkModel = GO::getModel($linkProps[0])->findByPk($linkProps[1]);
+					$model->link($linkModel);			
+				}
 
-			if(!empty($_FILES['importFiles'])){
+				if(!empty($_FILES['importFiles'])){
 
-				$attachments = $_FILES['importFiles'];
-				$count = count($attachments['name']);
+					$attachments = $_FILES['importFiles'];
+					$count = count($attachments['name']);
 
-				$params['enclosure'] = $params['importEnclosure'];
-				$params['delimiter'] = $params['importDelimiter'];
+					$params['enclosure'] = $params['importEnclosure'];
+					$params['delimiter'] = $params['importDelimiter'];
 
-				for($i=0;$i<$count;$i++){
-					if(is_uploaded_file($attachments['tmp_name'][$i])) {
-						$params['file']= $attachments['tmp_name'][$i];
-						//$params['model'] = $params['importModel'];
+					for($i=0;$i<$count;$i++){
+						if(is_uploaded_file($attachments['tmp_name'][$i])) {
+							$params['file']= $attachments['tmp_name'][$i];
+							//$params['model'] = $params['importModel'];
 
-						$controller = new $params['importController'];
+							$controller = new $params['importController'];
 
-						$controller->run("import",$params,false);
+							$controller->run("import",$params,false);
+						}
 					}
 				}
-			}
 
 
-			$this->afterSubmit($response, $model, $params, $modifiedAttributes);
-			
-			$this->fireEvent('submit', array(
-				&$this,
-				&$response,
-				&$model,
-				&$params,
-				$modifiedAttributes
-		));
-			
-		}catch(GO_Base_Exception_Validation $e){
-			$response['success']=false;
-			//can't use <br /> tags in response because this goes wrong with the extjs fileupload hack with an iframe.
-			$response['feedback']=$e->getMessage();			
-			$response['validationErrors']=$model->getValidationErrors();
-		}	
+				$this->afterSubmit($response, $model, $params, $modifiedAttributes);
 
+				$this->fireEvent('submit', array(
+					&$this,
+					&$response,
+					&$model,
+					&$params,
+					$modifiedAttributes
+			));
+
+			}catch(GO_Base_Exception_Validation $e){
+				$response['success']=false;
+				//can't use <br /> tags in response because this goes wrong with the extjs fileupload hack with an iframe.
+				$response['feedback']=$e->getMessage();			
+				$response['validationErrors']=$model->getValidationErrors();
+			}	
+		}
 		return $response;
 	}
 
