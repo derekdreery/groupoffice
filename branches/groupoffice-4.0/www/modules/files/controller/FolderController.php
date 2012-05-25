@@ -7,7 +7,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	
 	protected function actionSyncFilesystem($params){
 		
-		GO_Base_Fs_File::$allowDeletes=false;
+		$oldAllowDeletes = GO_Base_Fs_File::setAllowedDeletes(true);
 		
 		GO::$ignoreAclPermissions=true; //allow this script access to all
 		GO::$disableModelCache=true; //for less memory usage
@@ -27,7 +27,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		
 		echo "Done\n";
 		
-		
+		GO_Base_Fs_File::setAllowedDeletes($oldAllowDeletes);
 //		$folders = array('billing','email');	
 //		
 //		foreach($folders as $name){
@@ -706,8 +706,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	}
 
 	public function checkModelFolder(GO_Base_Db_ActiveRecord $model, $saveModel=false, $mustExist=false) {
-		$oldAllowDeletes = GO_Base_Fs_File::$allowDeletes;
-		GO_Base_Fs_File::$allowDeletes=false;
+		$oldAllowDeletes = GO_Base_Fs_File::setAllowedDeletes(true);
 		
 		$folder = false;
 		if ($model->files_folder_id > 0)
@@ -732,7 +731,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		if(empty($model->files_folder_id))
 			$model->files_folder_id=0;
 		
-		GO_Base_Fs_File::$allowDeletes=$oldAllowDeletes;
+		 GO_Base_Fs_File::setAllowedDeletes($oldAllowDeletes);
 		
 		return $model->files_folder_id;
 	}

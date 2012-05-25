@@ -149,7 +149,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	protected function actionCheckDatabase($params) {
 		$response = array();
 		
-		GO_Base_Fs_File::$allowDeletes=false;
+		$oldAllowDeletes = GO_Base_Fs_File::setAllowedDeletes(true);
 				
 		if(!headers_sent())
 			header('Content-Type: text/plain; charset=UTF-8');
@@ -171,7 +171,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		echo "All Done!\n";
 		
-		GO_Base_Fs_File::$allowDeletes=true;
+		GO_Base_Fs_File::setAllowedDeletes($oldAllowDeletes);
 		
 		return $response;
 	}
@@ -348,6 +348,10 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 							if (!file_exists($updateScript)) {
 								die($updateScript . ' not found!');
 							}
+							
+							//flush cache so column definitions in ActiveRecord reload
+							GO::cache()->flush();
+							
 							//if(!$quiet)
 							echo 'Running ' . $updateScript . "\n";
 							if (empty($params['test']))

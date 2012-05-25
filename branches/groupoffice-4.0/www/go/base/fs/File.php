@@ -20,13 +20,26 @@
 
 class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	
+	
+	private static $_allowDeletes=true;
+	
 	/**
 	 * Set this to false if you want to make sure no files are deleted
 	 * in a script. If a file is deleted
 	 * 
-	 * @var boolean
+	 * @param boolean
+	 * @return boolean old value
 	 */
-	public static $allowDeletes=true;
+	public function setAllowedDeletes($allowedDeletes){
+		
+		GO::debugCalledFrom();
+		GO::debug("Allowed deletes is ".($allowedDeletes ? "true" : "false"));
+		
+		$old = self::$_allowDeletes;
+		self::$_allowDeletes=$allowedDeletes;
+		
+		return $old;
+	}
 	
 	/**
 	 * Get a unique temporary file.
@@ -104,7 +117,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		if(!file_exists($this->path))
 			return true;
 		
-		if(GO_Base_Fs_File::$allowDeletes)		
+		if(self::$_allowDeletes)		
 			return unlink($this->path);
 		else{
 			$errorMsg = "The program tried to delete a file (".$this->stripFileStoragePath().") while GO_Base_Fs_File::\$allowDeletes is set to false.";

@@ -575,6 +575,13 @@ class GO{
 		}
 	}
 	
+	
+	public static function debugCalledFrom(){
+		$trace = debug_backtrace(); 
+		$call = $trace[1];
+		GO::debug("Funtion: ".$call["function"]." called in file ".$call["file"]." line ".$call["line"]);
+	}
+	
 	private static $_language;
 	
 	/**
