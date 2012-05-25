@@ -145,7 +145,7 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 * @param boolean $checkPermissions
 	 * 
 	 */
-	public function run($action = '', $params, $render = true, $checkPermissions = true) {
+	public function run($action = '', $params=array(), $render = true, $checkPermissions = true) {
 		
 		$this->_checkSessionVars($params);
 		$this->_checkAuth();
