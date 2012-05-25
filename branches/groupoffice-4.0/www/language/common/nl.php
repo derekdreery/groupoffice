@@ -522,3 +522,5 @@ $l['invalidFileType']='Ongeldig bestandtype';
 $l['uploadQueueEmpty']="De wachtrij is leeg";
 $l['dropFilesHere']="Drop bestanden hier";
 $l['pluploadProgressText']="{0}/{1} ({3} mislukt) ({5}/s)";
+
+$l['quickEdit'] = "Snel bewerken";

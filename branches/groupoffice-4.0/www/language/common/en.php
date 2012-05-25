@@ -544,3 +544,5 @@ $l['invalidFileType']='Invalid file type';
 $l['uploadQueueEmpty']="Upload queue is empty";
 $l['dropFilesHere']="Drop files here";
 $l['pluploadProgressText']="{0}/{1} ({3} failed) ({5}/s)";
+
+$l['quickEdit'] = "Quick edit";
