@@ -81,7 +81,11 @@ class GO_Base_Html_Input {
 		
 		if(!empty($this->attributes['label'])){
 			if(!empty($this->attributes['required'])){
-				$this->attributes['label'] .= '<span class="required">*</span>';
+				if (!empty($this->attributes['requiredClass']))
+					$reqClassString = ' '.$this->attributes['requiredClass'];
+				else
+					$reqClassString = '';
+				$this->attributes['label'] .= '<span class="required'.$reqClassString.'">*</span>';
 			}		
 		}
 		
@@ -149,8 +153,23 @@ class GO_Base_Html_Input {
 	
 	protected function renderNormalInput(){
 		
-		$html = '<input id="'.$this->attributes['id'].'" class="'.$this->attributes['class'].'" type="'.$this->attributes['type'].'" name="'.$this->attributes['name'].'" value="'.htmlspecialchars($this->attributes['value'],ENT_COMPAT,'UTF-8').'" '.$this->attributes['extra'];
+		$html = '';
+		
+		if (!empty($this->attributes['inputInDiv'])) {
+			$inputDivClassString = "input-container";
+			if (!empty($this->attributes['inputDivClass']))
+				$inputDivClassString .= " ".$this->attributes['inputDivClass'];
+			$html .= '<div class="'.$inputDivClassString.'">';
+		}
+		
+		$html .= '<input id="'.$this->attributes['id'].'" class="'.$this->attributes['class'].'" type="'.$this->attributes['type'].'" name="'.$this->attributes['name'].'" value="'.htmlspecialchars($this->attributes['value'],ENT_COMPAT,'UTF-8').'" '.$this->attributes['extra'];
 
+		if (!empty($this->attributes['size']))
+			$html .= ' size="'.$this->attributes['size'].'" ';
+		
+		if (!empty($this->attributes['maxlength']))
+			$html .= ' maxlength="'.$this->attributes['maxlength'].'" ';
+		
 		if (!empty($this->attributes['empty_text'])) {
 			$html .= ' onfocus="if(this.value==\'' . $this->attributes['empty_text'] . '\'){this.value=\'\';';
 
@@ -168,6 +187,12 @@ class GO_Base_Html_Input {
 		}
 
 		$html .= ' />';
+		
+		if (!empty($this->attributes['inputInDiv'])) {
+			if (!empty($this->attributes['afterInput']))
+				$html .= $this->attributes['afterInput'];
+			$html .= '</div>';
+		}
 		
 		if (!empty($this->attributes['empty_text'])) {
 			$html .= '<input type="hidden" name="empty_texts[]" value="' . $this->attributes['name'] . ':' . $this->attributes['empty_text'] . '" />';
