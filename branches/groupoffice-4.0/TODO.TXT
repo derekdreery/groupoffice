@@ -1,9 +1,8 @@
 Notifications on uploads (Michal)
 
-Public calendar:
-http://www.group-office.com/forum/viewtopic.php?f=6&t=8091
-
+recurly (simon zimmo)
 carddav
+Koba
 
 Profile tab in settings dialog
 
@@ -51,3 +50,8 @@ Freebusy support in sabredav 1.6
 Feature requests voting system
 
 Bij bedrijf -> displaypanel -> New -> Contact
+
+
+
+UCF for deb pkgs
+http://www.group-office.com/forum/viewtopic.php?f=6&t=8083
