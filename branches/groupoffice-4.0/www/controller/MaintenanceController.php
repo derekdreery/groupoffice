@@ -149,7 +149,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	protected function actionCheckDatabase($params) {
 		$response = array();
 		
-		$oldAllowDeletes = GO_Base_Fs_File::setAllowedDeletes(true);
+		$oldAllowDeletes = GO_Base_Fs_File::setAllowedDeletes(false);
 				
 		if(!headers_sent())
 			header('Content-Type: text/plain; charset=UTF-8');

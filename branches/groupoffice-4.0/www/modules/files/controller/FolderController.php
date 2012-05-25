@@ -7,7 +7,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	
 	protected function actionSyncFilesystem($params){
 		
-		$oldAllowDeletes = GO_Base_Fs_File::setAllowedDeletes(true);
+		$oldAllowDeletes = GO_Base_Fs_File::setAllowedDeletes(false);
 		
 		GO::$ignoreAclPermissions=true; //allow this script access to all
 		GO::$disableModelCache=true; //for less memory usage
@@ -706,7 +706,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	}
 
 	public function checkModelFolder(GO_Base_Db_ActiveRecord $model, $saveModel=false, $mustExist=false) {
-		$oldAllowDeletes = GO_Base_Fs_File::setAllowedDeletes(true);
+		$oldAllowDeletes = GO_Base_Fs_File::setAllowedDeletes(false);
 		
 		$folder = false;
 		if ($model->files_folder_id > 0)
