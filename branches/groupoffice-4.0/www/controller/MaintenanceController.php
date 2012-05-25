@@ -349,9 +349,6 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 								die($updateScript . ' not found!');
 							}
 							
-							//flush cache so column definitions in ActiveRecord reload
-							GO::cache()->flush();
-							
 							//if(!$quiet)
 							echo 'Running ' . $updateScript . "\n";
 							if (empty($params['test']))

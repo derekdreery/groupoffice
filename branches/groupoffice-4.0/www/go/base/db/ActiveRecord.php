@@ -412,11 +412,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	/**
 	 * Loads the column information from the database
 	 * 
+	 * Normally this wouldn't be called publicly. But when the database is 
+	 * upgraded the column definitions may change and they need to be reloaded.
+	 * 
+	 * @package boolean $ignoreCache
 	 */
-	protected function loadColumns() {
+	public function loadColumns($ignoreCache=false) {
 		if($this->tableName()){
 			
-			$this->columns=GO::cache()->get('modelColumns_'.$this->tableName());
+			$this->columns=$ignoreCache ? false : GO::cache()->get('modelColumns_'.$this->tableName());
 			
 			if(!$this->columns){
 			
@@ -2801,8 +2805,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				elseif($triggerError){
 					if(!isset($this->columns[$name]))
 						trigger_error ("Access to undefined property $name in ".$this->className());
-					else 
-						GO::debug("Column $name is NULL in ".$this->className());				
+//					else 
+//						GO::debug("Column $name is NULL in ".$this->className());				
 				}
 			}
 		}		

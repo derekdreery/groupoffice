@@ -576,10 +576,14 @@ class GO{
 	}
 	
 	
-	public static function debugCalledFrom(){
+	public static function debugCalledFrom($limit=1){
 		$trace = debug_backtrace(); 
-		$call = $trace[1];
-		GO::debug("Funtion: ".$call["function"]." called in file ".$call["file"]." line ".$call["line"]);
+		for($i=0;$i<$limit;$i++){
+			if(isset($trace[$i+1])){
+				$call = $trace[$i+1];
+				GO::debug("Funtion: ".$call["function"]." called in file ".$call["file"]." line ".$call["line"]);
+			}
+		}
 	}
 	
 	private static $_language;
