@@ -1,13 +1,13 @@
 <?php
 /**
  * Group-Office
- * 
- * Copyright Intermesh BV. 
+ *
+ * Copyright Intermesh BV.
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
  *
  * If you have questions write an e-mail to info@intermesh.nl
- * 
+ *
  * @license AGPL/Proprietary http://www.group-office.com/LICENSE.TXT
  * @link http://www.group-office.com
  * @copyright Copyright Intermesh BV
@@ -18,20 +18,20 @@
 
 /**
  * Main configuration
- * 
+ *
  * This class holds the main configuration options of Group-Office
  * Don't modify this file. The values defined here are just default values.
  * They are overwritten by the configuration options in /config.php or
  * /etc/groupoffice/{HOSTNAME}/config.php
  *
  * To edit these options use install.php.
- * 
+ *
  * @license AGPL/Proprietary http://www.group-office.com/LICENSE.TXT
  * @link http://www.group-office.com
  * @author Merijn Schering <mschering@intermesh.nl>
  * @version $Id: config.class.inc.php 7687 2011-06-23 12:00:34Z mschering $
  * @copyright Copyright Intermesh BV.
- * @package GO.base 
+ * @package GO.base
  */
 
 class GO_Base_Config {
@@ -66,7 +66,15 @@ class GO_Base_Config {
 	 * @var bool
 	 */
 	var $debug_log = false;
-	
+
+	/**
+	 * Enable FirePhp
+	 *
+	 * @var bool
+	 * @access  public
+	 */
+	var $firephp = false;
+
 	/**
 	 * Info log location. If empty it will be in <file_storage_path>/log/info.log
 	 * @var bool
@@ -120,7 +128,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $default_currency='€';
+	var $default_currency='â‚¬';
 
 	/**
 	 * Default date format
@@ -186,7 +194,7 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $theme = 'Default';
-	
+
 	/**
 	 * Default theme
 	 *
@@ -227,7 +235,7 @@ class GO_Base_Config {
 	 */
 	var $allow_registration = false;
 
-	
+
 
 	/**
 	 * Allow e-mail address more then once
@@ -237,7 +245,7 @@ class GO_Base_Config {
 	 */
 	var $allow_duplicate_email = false;
 
-	
+
 	/**
 	 * Grant read permissions for these modules to new self-registered users.
 	 * Module names are separated by a comma.
@@ -290,10 +298,10 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $host = '/groupoffice/';
-	
+
 	/**
 	 * Useful to force https://your.host:433 or something like that
-	 * 
+	 *
 	 * @var bool
 	 * @access  public
 	 */
@@ -422,10 +430,10 @@ class GO_Base_Config {
 	var $db_socket = '';
 
 	/**
-	 * 
+	 *
 	 * Useful in clustering mode. Defaults to "1". Set to the number of clustered
 	 * nodes.
-	 * 
+	 *
 	 * @var string
 	 * @access public
 	 */
@@ -627,7 +635,7 @@ class GO_Base_Config {
 	 * @var int
 	 */
 	var $default_password_length=6;
-	
+
 	/**
 	 * Automatically log a user out after n seconds of inactivity
 	 *
@@ -656,14 +664,14 @@ class GO_Base_Config {
 	 */
 
 	var $disable_security_token_check=false;
-	
+
 	/**
 	 * The number of items displayed in the navigation panels (Calendars, addressbooks etc.)
 	 * Don't set this number too high because it may slow the browser and server down.
-	 * 
-	 * @var type 
+	 *
+	 * @var type
 	 */
-	
+
 	var $nav_page_size=50;
 
 
@@ -888,7 +896,7 @@ class GO_Base_Config {
 		foreach($config as $key=>$value) {
 			$this->$key=$value;
 		}
-		
+
 		if($this->info_log=="")
 			$this->info_log =$this->file_storage_path.'log/info.log';
 
@@ -903,7 +911,7 @@ class GO_Base_Config {
 			$this->host = dirname($_SERVER['PHP_SELF']);
 			if(basename($this->host)=='install')
 				$this->host = dirname($this->host);
-			
+
 			//if(substr($this->host,-1) != '/') {
 				$this->host .= '/';
 			//}
@@ -923,12 +931,12 @@ class GO_Base_Config {
 			if(empty($config['tmpdir']) && function_exists('sys_get_temp_dir')) {
 				$this->tmpdir = str_replace('\\','/', sys_get_temp_dir());
 			}
-			
+
 			$this->default_timezone=date_default_timezone_get();
-			
+
 			$lc = localeconv();
-			
-			$this->default_currency=empty($lc['currency_symbol']) ? '€' : $lc['currency_symbol'];
+
+			$this->default_currency=empty($lc['currency_symbol']) ? 'â‚¬' : $lc['currency_symbol'];
 			$this->default_decimal_separator=empty($lc['decimal_point']) ? '.' : $lc['decimal_point'];
 			$this->default_thousands_separator=$this->default_decimal_separator == '.' ? ',' : '.';//$lc['thousands_sep'];
 		}
@@ -954,14 +962,17 @@ class GO_Base_Config {
 		// url to user configuration apps
 		$this->configuration_url = $this->host.$this->configuration_url.'/';
 
-		
+
 		if($this->debug)
 			$this->debug_log=true;
 
-		if($this->debug_log) {			
+		if($this->debug_log) {
 			list ($usec, $sec) = explode(" ", microtime());
 			$this->loadstart = ((float) $usec + (float) $sec);
 		}
+
+		if($this->firephp)
+			$this->firephp=true;
 
 		// database class library
 //		require_once($this->class_path.'database/base_db.class.inc.php');
@@ -980,17 +991,17 @@ class GO_Base_Config {
 		if($this->debug_log) {
 			$this->log=true;
 		}
-		
+
 		$this->set_full_url();
 
-	
+
 
 	}
-	
+
 	/**
 	 * Get the temporary files folder.
-	 * 
-	 * @return GO_Base_Fs_Folder 
+	 *
+	 * @return GO_Base_Fs_Folder
 	 */
 	public function getTempFolder(){
 		$folder = new GO_Base_Fs_Folder($this->orig_tmpdir.GO::user()->id);
@@ -1018,8 +1029,8 @@ class GO_Base_Config {
 		}
 		return $this->zlib_compress;
 	}
-	
-	
+
+
 	public function getCompleteDateFormat(){
 		return $this->default_date_format[0].
 						$this->default_date_separator.
@@ -1078,12 +1089,12 @@ class GO_Base_Config {
 			}
 
 			//openlog('[Group-Office]['.date('Ymd G:i').']', LOG_PERROR, LOG_USER);
-			
+
 			while(!isset($_SESSION['GO_SESSION']['config_file'])){
 				$count++;
 				$config_file = $config_dir.'config.php';
 				//syslog(LOG_NOTICE,$config_file);
-			
+
 				if(@file_exists($config_file)) {
 					$_SESSION['GO_SESSION']['config_file']=$config_file;
 					return $config_file;
@@ -1093,9 +1104,9 @@ class GO_Base_Config {
 				if($count==10 || dirname($config_dir) == $config_dir){
 					break;
 				}
-				$config_dir .= '/';			
+				$config_dir .= '/';
 			}
-			
+
 			/*if(isset($_SERVER['SCRIPT_FILENAME']) && isset($_SERVER['PHP_SELF'])) {
 				$config_file = dirname(substr($_SERVER['SCRIPT_FILENAME'], 0 ,-strlen($_SERVER['PHP_SELF']))).'/config.php';
 				if(@file_exists($config_file)) {
@@ -1130,12 +1141,12 @@ class GO_Base_Config {
 	 * @access public
 	 */
 	function set_full_url() {
-		//full_url may be configured permanent in config.php. If not then 
+		//full_url may be configured permanent in config.php. If not then
 		//autodetect it and put it in the session. It can be used by wordpress for
 		//example.
-		
+
 		//this used to use HTTP_HOST but that is a client controlled value which can be manipulated and is unsafe.
-		
+
 		if(isset($_SERVER["SERVER_NAME"])) {
 			if(!isset($_SESSION['GO_SESSION']['full_url']) && isset($_SERVER["SERVER_NAME"])) {
 				$https = (isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == "1")) || !empty($_SERVER["HTTP_X_SSL_REQUEST"]);
@@ -1172,7 +1183,7 @@ class GO_Base_Config {
 	function get_setting($name, $user_id=0) {
 		$attributes['name']=$name;
 		$attributes['user_id']=$user_id;
-		
+
 		$setting = GO_Base_Model_Setting::model()->findSingleByAttributes($attributes);
 		if ($setting) {
 			return $setting->value;
@@ -1191,20 +1202,20 @@ class GO_Base_Config {
 	 * @return bool Returns true on succes
 	 */
 	function save_setting( $name, $value, $user_id=0) {
-		
+
 		$attributes['name']=$name;
 		$attributes['user_id']=$user_id;
-		
+
 		$setting = GO_Base_Model_Setting::model()->findSingleByAttributes($attributes);
 		if(!$setting){
 			$setting = new GO_Base_Model_Setting();
 			$setting->setAttributes($attributes);
 		}
-		
+
 		$setting->value=$value;
 		$setting->save();
-		
-		
+
+
 //		if ( $this->get_setting($name, $user_id) === false ) {
 //			return $this->db->query("INSERT INTO go_settings (name, value, user_id) VALUES ('".$this->db->escape($name)."', '".$this->db->escape($value)."', ".intval($user_id).")");
 //		} else {
@@ -1222,25 +1233,25 @@ class GO_Base_Config {
 	function delete_setting( $name , $user_id=0) {
 		$attributes['name']=$name;
 		$attributes['user_id']=$user_id;
-		
+
 		$setting = GO_Base_Model_Setting::model()->findSingleByAttributes($attributes);
 		return $setting->delete();
 	}
 
-	
+
 
 	/**
 	 * Save the current configuraton to the config.php file.
-	 * 
-	 * @return boolean 
+	 *
+	 * @return boolean
 	 */
-	public function save() {	
-	
+	public function save() {
+
 		$values = get_object_vars(GO::config());
 		$config=array();
-		
+
 		require($this->get_config_file());
-		
+
 		foreach($values as $key=>$value)
 		{
 			if($key == 'version')
@@ -1251,7 +1262,7 @@ class GO_Base_Config {
 				$config[$key]=$value;
 			}
 		}
-		
+
 		return GO_Base_Util_ConfigEditor::save(new GO_Base_Fs_File(GO::config()->get_config_file()), $config);
 	}
 }
