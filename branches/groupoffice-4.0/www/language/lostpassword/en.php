@@ -8,7 +8,9 @@ $l['lost_password_subject']='New password request';
 $l['lost_password_body']='%s,
 You requested a new password for %s. Your username is "%s".
 Click at the link below (or paste it in a browser) to change your password:
-%s;
+
+%s
+
 If you did not request a new password please delete this mail.';
 $l['lost_password_error']='Could not find the supplied e-mail address.';
 $l['lost_password_success']='An e-mail with instructions has been sent to your e-mail address.';

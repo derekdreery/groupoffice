@@ -8,7 +8,9 @@ $l['lost_password_subject']='Nova senha solicitada';
 $l['lost_password_body']='%s,
 Você solicitou uma nova senha para %s. Seu nome de usuário é "%s".
 Clique no link abaixo (ou copie e cole em um browser) para alterar sua senha:
-%s;
+
+%s
+
 Se você não solicitou uma nova senha por favor ignore esta mensagem.';
 $l['lost_password_error']='Não foi possível encontrar o endereço de e-mail solicitado.';
 $l['lost_password_success']='Um e-mail foi enviado para seu endereço, com instruções sobre como alterar a senha.';
