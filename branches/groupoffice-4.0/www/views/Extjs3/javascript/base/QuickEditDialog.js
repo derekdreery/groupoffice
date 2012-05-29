@@ -33,7 +33,7 @@ GO.base.QuickEditDialog = function(config) {
 	})
 }
 
-Ext.extend(GO.base.QuickEditDialog, Ext.Window, {
+Ext.extend(GO.base.QuickEditDialog, GO.Window, {
 	
 	////////////////////////////////////////////////////////////
 	// FIELDS SPECIFIC FOR THIS KIND OF DIALOG
