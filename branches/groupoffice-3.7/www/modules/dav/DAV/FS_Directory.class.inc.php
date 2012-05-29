@@ -26,7 +26,7 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 		$this->relpath=$path;
 		$path = $GO_CONFIG->file_storage_path.$path;
 		
-		if(!$files->has_read_permission($GO_SECURITY->user_id, $this->getFolder())){
+		if($path != "users/".$GLOBALS['userpass'][0] && !$files->has_read_permission($GO_SECURITY->user_id, $this->getFolder())){
 			throw new Sabre_DAV_Exception_Forbidden();
 		}
 
