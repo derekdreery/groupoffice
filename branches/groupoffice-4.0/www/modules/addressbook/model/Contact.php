@@ -621,14 +621,14 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$p->add(new GO_Base_VObject_Parameter('TYPE','WORK,VOICE'));
 			$e->add($p);	
 		}
-		if (!empty($this->fax)) {
-			$p = new Sabre_VObject_Property('TEL',$this->fax);
-			$p->add(new GO_Base_VObject_Parameter('TYPE','HOME,FAX'));
-			$e->add($p);	
-		}
 		if (!empty($this->work_fax)) {
 			$p = new Sabre_VObject_Property('TEL',$this->work_fax);
 			$p->add(new GO_Base_VObject_Parameter('TYPE','WORK,FAX'));
+			$e->add($p);	
+		}
+		if (!empty($this->fax)) {
+			$p = new Sabre_VObject_Property('TEL',$this->fax);
+			$p->add(new GO_Base_VObject_Parameter('TYPE','HOME,FAX'));
 			$e->add($p);	
 		}
 		if (!empty($this->cellular)) {
