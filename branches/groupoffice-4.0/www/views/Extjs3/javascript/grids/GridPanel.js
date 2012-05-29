@@ -73,7 +73,9 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 				if(GO.customfields.nonGridTypes.indexOf(GO.customfields.columns[this.store.model][i].datatype)==-1){
 					if(GO.customfields.columns[this.store.model][i].exclude_from_grid != 'true')
 					{
-                                        
+            if(!this.columns){
+							this.columns = this.cm.columns;
+						}              
 						this.columns.push(GO.customfields.columns[this.store.model][i]);
 					}
 				}
