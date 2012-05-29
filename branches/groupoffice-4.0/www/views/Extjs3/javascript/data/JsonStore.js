@@ -55,6 +55,23 @@ GO.data.JsonStore = function(config) {
 		remoteSort: true
 	});
 	
+	if(GO.customfields && config.model)
+	{
+		if(GO.customfields.columns[config.model])
+		{
+			for(var i=0;i<GO.customfields.columns[config.model].length;i++)
+			{
+				if(GO.customfields.nonGridTypes.indexOf(GO.customfields.columns[config.model][i].datatype)==-1){
+					if(GO.customfields.columns[config.model][i].exclude_from_grid != 'true')
+					{
+						config.fields.push(GO.customfields.columns[config.model][i].dataIndex);
+																					
+					}
+				}
+			}		
+		}	
+	}
+	
 	GO.data.JsonStore.superclass.constructor.call (this, config);
 	
 	this.on('load', function(){
