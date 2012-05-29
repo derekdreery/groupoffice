@@ -1740,7 +1740,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				//strtotime hangs a while on parsing 0000-00-00 from the database. There shouldn't be such a date in it but 
 				//the old system stored dates like this.
 				
-				if($value == "0000-00-00")
+				if($value == "0000-00-00" || empty($value))
 					return "";
 				
 				$date = new DateTime($value);
