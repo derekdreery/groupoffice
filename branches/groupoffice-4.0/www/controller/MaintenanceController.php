@@ -240,6 +240,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	}
 	
 	protected function actionUpgrade($params) {
+		
+		GO::clearCache();
 				
 		//don't be strict in upgrade process
 		GO::getDbConnection()->query("SET sql_mode=''");
