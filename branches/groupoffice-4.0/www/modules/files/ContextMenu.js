@@ -225,6 +225,7 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 	
 	records : [],	
 	
+	unlockAllowed : false,
 	
 	showAt : function(xy, records, clickedAt)
 	{ 	
@@ -287,6 +288,7 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 					
 					this.lockButton.setDisabled(this.records[0].data.locked_user_id>0);
 					this.unlockButton.setVisible(this.records[0].data.locked_user_id>0);
+					this.unlockButton.setDisabled(!this.unlockAllowed);
 					
 					if(this.gotaButton)
 						this.gotaButton.setDisabled(this.records[0].data.permission_level<GO.permissionLevels.write || (this.records[0].data.locked_user_id>0 &&this.records[0].data.locked_user_id!=GO.settings.user_id));

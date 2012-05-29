@@ -271,6 +271,10 @@ GO.files.FileBrowser = function(config){
 	
 	this.gridPanel.on('rowdblclick', this.onGridDoubleClick, this);
 
+	this.gridPanel.store.on('load', function(store,records,options){
+		this.filesContextMenu.unlockAllowed = store.reader.jsonData.unlock_allowed;
+		console.log(this.filesContextMenu.unlockAllowed);
+	},this);
 
 	/*
 	 * Handles saving of locked state by the admin of the folder.
