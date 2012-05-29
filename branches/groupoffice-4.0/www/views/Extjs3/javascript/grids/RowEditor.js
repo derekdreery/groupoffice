@@ -239,7 +239,11 @@ Ext.ux.grid.RowEditor = Ext.extend(Ext.Panel, {
                         adjust += 1;
                     }
                     fields[i].show();
-                    fields[i].setWidth(cm.getColumnWidth(i) - adjust);
+										var newWidth = cm.getColumnWidth(i) - adjust;
+                    fields[i].width = newWidth;
+										var inputField = document.getElementById(this.items.keys[i]);
+										if (inputField != null && inputField.style.width)
+											inputField.style.width = newWidth;
                 } else{
                     fields[i].hide();
                 }

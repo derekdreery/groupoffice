@@ -119,6 +119,9 @@ Ext.extend(GO.base.QuickEditDialog, GO.Window, {
 			plugins: [ this.rowEditor ],
 			store: this.store,
 			columns: this.editorGridParams.gridColumns,
+			enableColumnMove : false,
+			enableDragDrop : false,
+			enableHdMenu : false,
 			paging: true,
 			view:new Ext.grid.GridView({
 				autoFill: true,
@@ -267,3 +270,11 @@ Ext.extend(GO.base.QuickEditDialog, GO.Window, {
 	}
 	
 });
+
+GO.base.QuickEditDialog.cloneColumns = function (colArray) {
+	var arrayOfClones = [];
+	for (var i=0; i<colArray.length; i++) {
+		arrayOfClones[i] = GO.util.clone(colArray[i]);
+	}
+	return arrayOfClones;
+}
