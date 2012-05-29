@@ -398,7 +398,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			echo "Ran in test mode\n";
 		}
 		
-		echo "Removing cached javascripts...\n\n";		
+		echo "Removing cached javascripts...\n\n";	
+		//in some exceptions alowed deletes is still on false here.
+		GO_Base_Fs_File::setAllowDeletes(true);
 		GO::clearCache();
 		
 		if($v3){
