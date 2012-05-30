@@ -1,10 +1,15 @@
 Notifications on uploads (Michal)
 
-recurly (simon zimmo)
+recurly (simon zimmo) (Wilmar)
+
+Password sync postfixadmin
+
 carddav
 Koba
 
-Profile tab in settings dialog
+Settings module (Michael)
+Profile tab in settings dialog (Michael)
+LDAP Sync
 
 Calendar:
 Distinguish declined and cancel	led events in grid.
