@@ -21,8 +21,11 @@ CREATE TABLE IF NOT EXISTS `go_acl` (
   `user_id` int(11) NOT NULL DEFAULT '0',
   `group_id` int(11) NOT NULL DEFAULT '0',
   `level` tinyint(4) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`acl_id`,`user_id`,`group_id`)
+  PRIMARY KEY (`acl_id`,`user_id`,`group_id`),
+  KEY `acl_id` (`acl_id`,`user_id`),
+  KEY `acl_id_2` (`acl_id`,`group_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 
 -- --------------------------------------------------------
 
@@ -313,12 +316,15 @@ CREATE TABLE IF NOT EXISTS `go_search_cache` (
   `description` varchar(255) NOT NULL DEFAULT '',
   `model_type_id` int(11) NOT NULL DEFAULT '0',
   `model_name` varchar(100) DEFAULT NULL,
-  `keywords` text,
+  `keywords` varchar(255) NOT NULL DEFAULT '',
   `mtime` int(11) NOT NULL DEFAULT '0',
   `acl_id` int(11) NOT NULL,
   `type` varchar(20) NOT NULL,
   PRIMARY KEY (`model_id`,`model_type_id`),
-  KEY `name` (`name`)
+  KEY `name` (`name`),
+  KEY `keywords` (`keywords`),
+  KEY `acl_id` (`acl_id`),
+  KEY `mtime` (`mtime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

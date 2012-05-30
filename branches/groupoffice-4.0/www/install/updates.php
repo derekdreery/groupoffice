@@ -207,3 +207,12 @@ $updates["201204251613"][]= "ALTER TABLE `go_log` CHANGE `user_agent` `user_agen
 
 $updates["201204251613"][]= "ALTER TABLE `go_advanced_searches` ADD `model_name` VARCHAR( 100 ) NOT NULL DEFAULT ''";
 $updates["201204251613"][]="ALTER TABLE `go_advanced_searches` CHANGE `model_name` `model_name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+
+$updates["201204251613"][]="ALTER TABLE `go_acl` ADD INDEX ( `acl_id` , `user_id` ) ;";
+$updates["201204251613"][]="ALTER TABLE `go_acl` ADD INDEX ( `acl_id` , `group_id` ) ;";
+
+
+$updates["201204251613"][]="ALTER TABLE `go_search_cache` CHANGE `keywords` `keywords` VARCHAR( 254 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+
+$updates["201204251613"][]="ALTER TABLE `go_search_cache` ADD INDEX ( `acl_id` ) ";
+$updates["201204251613"][]="ALTER TABLE `go_search_cache` ADD INDEX ( `keywords` ) ";

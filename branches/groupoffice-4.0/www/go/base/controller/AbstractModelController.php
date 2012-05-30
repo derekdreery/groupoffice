@@ -331,9 +331,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		if(!empty($params["forEditing"]))
 			$store->getColumnModel ()->setModelFormatType ("formatted");
 		
-		$response=array();
+		$response=array("success"=>true,"results"=>array());
 		
-		$response = $this->beforeStore($response, $params, $store);
+		if($this->beforeStore($response, $params, $store)===false)
+			return $response;
 		
 		$this->processStoreDelete($store, $params);
 
@@ -354,9 +355,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		$response = array_merge($response, $store->getData());
 		
-		$response['success']=true;
 		
-    $response = $this->afterStore($response, $params, $store, $storeParams);		
+   if($this->afterStore($response, $params, $store, $storeParams)===false)
+			return $response;
 		
 		//this parameter is set when this request is the first request of the module.
 		//We pass the response on to the output.
@@ -374,11 +375,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
   }	
 	
 	protected function afterStore(&$response, &$params, &$store, $storeParams){
-		return $response;
+		return true;
 	}
 	
 	protected function beforeStore(&$response, &$params, &$store){
-		return $response;
+		return true;
 	}
 	
 	/**

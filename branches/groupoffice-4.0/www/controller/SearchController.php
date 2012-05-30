@@ -24,6 +24,11 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 				$response['deleteFeedback']=$e->getMessage();
 			}
 		}
+		
+		//search query is required
+		if(empty($params["query"])){
+			return false;
+		}
 	
 		
 		return parent::beforeStore($response, $params, $store);
