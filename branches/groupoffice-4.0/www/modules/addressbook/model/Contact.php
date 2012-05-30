@@ -57,10 +57,7 @@
  * @property GO_Addressbook_Model_Company $company
  */
 class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
-	
-	
-	public $photoFile;
-	
+		
 	/**
 	 * Returns a static model of itself
 	 * 
@@ -224,12 +221,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function afterSave($wasNew) {
-		
-		if(isset($this->photoFile)){
-			$this->setPhoto($this->photoFile->path());
-			unset($this->photoFile);
-		}
-		
+	
 		if(!$wasNew && $this->isModified('addressbook_id') && ($company=$this->company())){
 			//make sure company is in the same addressbook.
 			$company->addressbook_id=$this->addressbook_id;
@@ -326,9 +318,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			switch ($vobjProp->name) {
 				case 'PHOTO':					
 					if(!empty($vobjProp->value)){
-						$file = GO_Base_Fs_File::tempFile('','jpg');
-						$file->putContents(base64_decode($vobjProp->value));
-						$this->photoFile=$file;
+						$photoFile = GO_Base_Fs_File::tempFile('','jpg');
+						$photoFile->putContents(base64_decode($vobjProp->value));
 					}
 					break;
 				case 'N':
@@ -481,6 +472,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$this->setAttribute('company_id',$company->id);			
 		}
 		$this->save();
+		if (!empty($photoFile));
+			$this->setPhoto($photoFile->path());
 		
 		foreach ($remainingVcardProps as $prop) {
 			if (!empty($this->id) && substr($prop['name'],0,2)=='X-') {
