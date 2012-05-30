@@ -1,7 +1,0 @@
-Template: groupoffice/information
-Type: note
-_Description: Group-Office is going to be installed
- After installation is completed launch your browser and go to
- http://localhost/groupoffice/ or replace localhost with the hostname / IP of
- this machine. The default login is username: admin and password: admin.
- Enjoy Group-Office!
