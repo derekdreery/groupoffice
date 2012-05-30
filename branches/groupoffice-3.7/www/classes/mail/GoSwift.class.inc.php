@@ -187,7 +187,7 @@ class GoSwift extends Swift_Mailer{
 
 		$headers->addTextHeader("X-Mailer", "Group-Office ".$GO_CONFIG->version);
 		$headers->addTextHeader("X-MimeOLE", "Produced by Group-Office ".$GO_CONFIG->version);
-		$headers->addTextHeader("X-Originating-IP", "[".$_SERVER['REMOTE_ADDR']."]");
+		$headers->addTextHeader("X-Remote-Addr", "[".$_SERVER['REMOTE_ADDR']."]");
 
 		if(!empty($email_to))
 			$this->set_to($email_to);
