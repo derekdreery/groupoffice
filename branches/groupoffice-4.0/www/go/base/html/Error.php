@@ -36,6 +36,14 @@ class GO_Base_Html_Error extends GO_Base_Html_Input {
 		return !parent::hasErrors();
 	}
 	
+	public static function checkEmailInput($params) {
+		if ( isset($params['email_check']) && isset($params['email'])
+				&& strcmp($params['email_check'],$params['email']) !== 0
+			) {
+			parent::setError('email_check','Email address is not the same');
+		}
+	}
+	
 	public static function validateModel($model,$attrmapping=false){
 		
 //		if(GO_Base_Util_Http::isPostRequest()){
