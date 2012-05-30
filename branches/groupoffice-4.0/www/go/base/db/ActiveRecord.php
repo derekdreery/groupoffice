@@ -743,7 +743,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 	/**
 	 * Returns the permission level if an aclField is defined in the model. Otherwise
-	 * it returns -1;
+	 * it returns GO_Base_Model_Acl::MANAGE_PERMISSION;
 	 * 
 	 * @return int GO_Base_Model_Acl::*_PERMISSION 
 	 */
@@ -754,7 +754,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			return GO_Base_Model_Acl::MANAGE_PERMISSION;
 		
 		if(!$this->aclField())
-			return -1;	
+			return GO_Base_Model_Acl::MANAGE_PERMISSION;
 		
 		if(!GO::user())
 			return false;
