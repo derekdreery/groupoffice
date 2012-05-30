@@ -16,6 +16,10 @@
 $settings['state_index'] = 'go';
 
 $settings['language']=GO::user() ? GO::user()->language : GO::config()->language;
+
+if(isset($_REQUEST["SET_LANGUAGE"]))
+	$settings['language']=$_REQUEST["SET_LANGUAGE"];
+
 $settings['state']=array();
 if(GO::user()) {
 	//state for Ext components
@@ -169,7 +173,7 @@ if($GLOBALS['GO_SECURITY']->logged_in() && !isset($popup_groupoffice)) {
 <?php
 if(!isset($lang['common']['extjs_lang'])) $lang['common']['extjs_lang'] = $GLOBALS['GO_LANGUAGE']->language;
 
-$file = 'base-'.md5($GLOBALS['GO_LANGUAGE']->language.GO::config()->mtime).'.js';
+$file = 'base-'.md5($settings['language'].GO::config()->mtime).'.js';
 $path = GO::config()->file_storage_path.'cache/'.$file;
 
 
@@ -332,29 +336,31 @@ if(!isset($default_scripts_load_modules)){
 
 if(count($load_modules)) {
 	
-	
-	$fp=fopen(GO::config()->file_storage_path.'cache/module-languages.js','w');
-	if(!$fp){
-		die('Could not write to cache directory');
+	$modLangPath =GO::config()->file_storage_path.'cache/'.$settings['language'].'-module-languages.js';
+	if(!file_exists($modLangPath) || GO::config()->debug){
+		$fp=fopen($modLangPath,'w');
+		if(!$fp){
+			die('Could not write to cache directory');
+		}
+
+		//Temporary dirty hack for namespaces
+		$modules = GO::modules()->getAllModules();
+
+		while ($module=array_shift($modules)) {
+			fwrite($fp, 'Ext.ns("GO.'.$module->id.'");');
+		}
+
+		//Put all lang vars in js
+		$language = new GO_Base_Language();
+		$l = $language->getAllLanguage();
+		unset($l['base']);
+
+		fwrite($fp, 'if(GO.customfields){Ext.ns("GO.customfields.columns");Ext.ns("GO.customfields.types");}');
+		foreach($l as $module=>$langVars){
+			fwrite($fp,'GO.'.$module.'.lang='.json_encode($langVars).';');
+		}
+		fclose($fp);
 	}
-	
-	//Temporary dirty hack for namespaces
-	$modules = GO::modules()->getAllModules();
-			
-	while ($module=array_shift($modules)) {
-		fwrite($fp, 'Ext.ns("GO.'.$module->id.'");');
-	}
-	
-	//Put all lang vars in js
-	$language = new GO_Base_Language();
-	$l = $language->getAllLanguage();
-	unset($l['base']);
-	
-	fwrite($fp, 'if(GO.customfields){Ext.ns("GO.customfields.columns");Ext.ns("GO.customfields.types");}');
-	foreach($l as $module=>$langVars){
-		fwrite($fp,'GO.'.$module.'.lang='.json_encode($langVars).';');
-	}
-	fclose($fp);
 	//$scripts[]=GO::config()->file_storage_path.'cache/module-languages.js';
 	
 	if(!GO::config()->debug){
