@@ -73,6 +73,7 @@ class GO_Servermanager_Controller_Site extends GO_Sites_Controller_Site{
 			
 			GO_Base_Html_Error::checkRequired();			
 				
+			GO_Base_Html_Error::checkEmailInput($params);
 			
 			$newTrial =  new GO_ServerManager_Model_NewTrial();
 			$newTrial->setAttributes($params);
