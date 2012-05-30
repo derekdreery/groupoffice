@@ -364,11 +364,11 @@ if(count($load_modules)) {
 	//$scripts[]=GO::config()->file_storage_path.'cache/module-languages.js';
 	
 	if(!GO::config()->debug){
-		$scripts[]=GO::config()->file_storage_path.'cache/module-languages.js';
+		$scripts[]=$modLangPath;
 	}else
 	{
 		//$dynamic_debug_script=GO::config()->file_storage_path.'cache/languages.js';
-		$scripts[]=GO::config()->host.'compress.php?file=module-languages.js&mtime='.filemtime($dynamic_debug_script);
+		$scripts[]=GO::config()->host.'compress.php?file='.basename($modLangPath).'&mtime='.filemtime($modLangPath);
 	}
 	
 	//load language first so it can be overridden
