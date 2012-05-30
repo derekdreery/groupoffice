@@ -438,6 +438,32 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		}
 	}	
 	
+	protected function actionRunOnAll($params){
+		
+		if(!$this->isCli())
+			throw new Exception("This action may only be ran on the command line.");
+		
+		$stmt = GO_Servermanager_Model_Installation::model()->find();
+		while($installation = $stmt->fetch()){
+			
+			echo "Upgrading ".$installation->name."\n";
+			
+			if(!file_exists($installation->configPath)){
+				echo "\nERROR: Config file ".$installation->configPath." not found\n\n";
+				continue;
+			}
+			
+			require($installation->configPath);
+			
+			$cmd = GO::config()->root_path.'groupofficecli.php -r="'.$params["route"].'" -c="'.$installation->configPath.'"';
+			
+			system($cmd);		
+						
+			echo "Done\n\n";
+			
+		}
+	}	
+	
 	
 	protected function actionReport($params){
 		$now = time();
