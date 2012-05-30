@@ -203,7 +203,7 @@ Ext.extend(GO.base.QuickEditDialog, GO.Window, {
 	_showNameValues : function(changes,rowIndex) {
 		for (var i=0; i<this.editGrid.colModel.config.length; i++) {
 			var dataIndex = this.editGrid.colModel.config[i].dataIndex;
-			if (this._hasKey(dataIndex,this.editorGridParams.replaceFields)) {
+			if (this._hasKey(dataIndex,this.editorGridParams.replaceFieldsOnSubmit)) {
 				this.editGrid.store.getAt(rowIndex).set(
 					dataIndex,
 					this.editGrid.colModel.getCellEditor(i,rowIndex).field.lastSelectionText
