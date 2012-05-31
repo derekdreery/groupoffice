@@ -407,15 +407,15 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		if($v3){
 			
-			if(GO::modules()->isInstalled('projects') && GO::modules()->isInstalled('files')){
-				echo "Renaming projects folder temporarily for new project paths\n";
-				$folder = GO_Files_Model_Folder::model()->findByPath('projects');
-				if($folder){
-					$folder->name='oldprojects';
-					$folder->systemSave=true;
-					$folder->save();
-				}
-			}
+//			if(GO::modules()->isInstalled('projects') && GO::modules()->isInstalled('files')){
+//				echo "Renaming projects folder temporarily for new project paths\n";
+//				$folder = GO_Files_Model_Folder::model()->findByPath('projects');
+//				if($folder){
+//					$folder->name='oldprojects';
+//					$folder->systemSave=true;
+//					$folder->save();
+//				}
+//			}
 			
 			
 //			echo "Checking database after version 3.7 upgrade.\n";
