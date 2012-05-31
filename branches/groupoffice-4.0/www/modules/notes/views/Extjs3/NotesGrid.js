@@ -19,9 +19,34 @@ GO.notes.NotesGrid = function(config){
 	}
 
 
-	var fields ={
-		fields:['id','category_id','user_name','ctime','mtime','name','content'],
-		columns:[
+
+	
+	config.title = GO.notes.lang.notes;
+	config.layout='fit';
+	config.autoScroll=true;
+	config.split=true;
+	config.store = new GO.data.JsonStore({
+		url: GO.url('notes/note/store'),		
+		root: 'results',
+		id: 'id',
+		totalProperty:'total',
+		fields: ['id','category_id','user_name','ctime','mtime','name','content'],
+		remoteSort: true,
+		model:"GO_Notes_Model_Note"
+	});
+
+	config.store.on('load', function()
+	{
+		if(config.store.reader.jsonData.feedback)
+		{
+			alert(config.store.reader.jsonData.feedback);
+		}
+	},this)
+
+	config.paging=true;
+
+	
+	config.columns=[
 		{
 			header: GO.lang.strName,
 			dataIndex: 'name',
@@ -42,42 +67,7 @@ GO.notes.NotesGrid = function(config){
 			dataIndex: 'mtime',
 			sortable: true
 		}
-		]
-	};
-
-	if(GO.customfields)
-	{
-		GO.customfields.addColumns("GO_Notes_Model_Note", fields);
-	}
-	
-	config.title = GO.notes.lang.notes;
-	config.layout='fit';
-	config.autoScroll=true;
-	config.split=true;
-	config.store = new GO.data.JsonStore({
-		url: GO.url('notes/note/store'),		
-		root: 'results',
-		id: 'id',
-		totalProperty:'total',
-		fields: fields.fields,
-		remoteSort: true
-	});
-
-	config.store.on('load', function()
-	{
-		if(config.store.reader.jsonData.feedback)
-		{
-			alert(config.store.reader.jsonData.feedback);
-		}
-	},this)
-
-	config.paging=true;
-
-	var columnModel =  new Ext.grid.ColumnModel({
-		columns:fields.columns
-	});
-	
-	config.cm=columnModel;
+		];
 	
 	config.view=new Ext.grid.GridView({
 		autoFill: true,

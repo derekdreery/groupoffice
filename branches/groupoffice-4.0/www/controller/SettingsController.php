@@ -29,12 +29,15 @@ class GO_Core_Controller_Settings extends GO_Base_Controller_AbstractController 
 			unset($params['password']);
 		}
 		$user->setAttributes($params);
+		$contact = $user->createContact();
+		$contact->setAttributes($params);
+		$contact->save();
 		
 		$response['success']=$user->save();
 		
 		GO::modules()->callModuleMethod('submitSettings', array(&$this, &$params, &$response, $user), false);
 		
-		
+
 		GO_Base_Session::setCompatibilitySessionVars();
 		
 		
