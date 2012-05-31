@@ -1234,7 +1234,7 @@ Ext.ux.form.SuperBoxSelect = Ext.extend(Ext.ux.form.SuperBoxSelect,Ext.form.Comb
 			tag :'input',
 			type :'hidden',
 			value : itemVal,
-			name : (this.hiddenName || this.name)
+			name : (this.hiddenName || this.name)+"[]"
 		};
 
 		if(this.disabled){
