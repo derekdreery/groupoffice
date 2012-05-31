@@ -80,6 +80,9 @@ class GO_Servermanager_Controller_Site extends GO_Sites_Controller_Site{
 			
 			GO_Base_Html_Error::validateModel($newTrial);
 			
+			if (!empty($params['use_addressbook']))
+				$this->_writeAddressbookEntries($params);
+			
 			//var_dump(GO::session()->values['formErrors']);
 			
 					
@@ -99,5 +102,53 @@ class GO_Servermanager_Controller_Site extends GO_Sites_Controller_Site{
 	public function actionTrialCreated($params){
 		$this->newTrial = GO_ServerManager_Model_NewTrial::model()->findSingleByAttribute('key', $params['key']);
 		$this->renderPage($params);
+	}
+	
+	private function _writeAddressbookEntries($params) {
+		$addressbookModel = GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('name',$params['use_addressbook']);
+		$companyModel = new GO_Addressbook_Model_Company();
+		$companyEmptyAttributes = $companyModel->getAttributes('raw');
+		$contactModel = new GO_Addressbook_Model_Contact();
+		$contactEmptyAttributes = $contactModel->getAttributes('raw');
+			
+		foreach ($params as $k => $v) {
+			$paramKeyStringArr = explode('_',$k);
+			if ($paramKeyStringArr[0] == 'addressbook') {
+				array_shift($paramKeyStringArr);
+				switch ($paramKeyStringArr[0]) {
+					case 'company' :
+						array_shift($paramKeyStringArr);
+						$attributeName = implode('_',$paramKeyStringArr);
+						if (array_key_exists($attributeName,$companyEmptyAttributes))
+							$companyModel->$attributeName = $v;
+						break;
+					case 'contact' :
+						array_shift($paramKeyStringArr);
+					default:
+						$attributeName = implode('_',$paramKeyStringArr);
+						if (array_key_exists($attributeName,$contactEmptyAttributes))
+							$contactModel->$attributeName = $v;
+						break;
+				}
+			} else {
+				if (array_key_exists($k,$contactEmptyAttributes))
+					$contactModel->$k = $v;
+			}
+		}
+
+		$serverClient = new GO_Serverclient_HttpClient();
+		$serverClient->groupofficeLogin(GO::config()->remote_addressbook_server_url, GO::config()->remote_addressbook_login_username, GO::config()->remote_addressbook_login_password);
+		
+		if ($companyModel->isModified()) {
+			$companyModel->addressbook_id = $addressbookModel->id;			
+			$serverClient->request(GO::config()->remote_addressbook_server_url.'?r=addressbook/company/submit', $companyModel->getAttributes());
+		}
+		
+		if ($contactModel->isModified()) {
+			$contactModel->addressbook_id = $addressbookModel->id;
+			if ($companyModel->id > 0)
+				$contactModel->company_id = $companyModel->id;
+			$serverClient->request(GO::config()->remote_addressbook_server_url.'?r=addressbook/contact/submit', $contactModel->getAttributes());
+		}
 	}
 }
