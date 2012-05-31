@@ -312,19 +312,7 @@ GO.email.EmailComposer = function(config) {
 
 	//Set a long timeout for large attachments
 	this.formPanel.form.timeout=3000;
-
-	this.templatesStore = new GO.data.JsonStore({
-		url : GO.url("addressbook/template/emailSelection"),
-		baseParams : {
-			'type':"0"
-		},
-		root : 'results',
-		totalProperty : 'total',
-		id : 'id',
-		fields : ['id', 'name', 'group', 'text','template_id','checked'],
-		remoteSort : true
-	});
-
+	
 	var tbar = [this.sendButton = new Ext.Button({
 		text : GO.email.lang.send,
 		iconCls : 'btn-send',
@@ -372,6 +360,19 @@ GO.email.EmailComposer = function(config) {
 	}
 
 	if(GO.addressbook){
+		
+		this.templatesStore = new GO.data.JsonStore({
+			url : GO.url("addressbook/template/emailSelection"),
+			baseParams : {
+				'type':"0"
+			},
+			root : 'results',
+			totalProperty : 'total',
+			id : 'id',
+			fields : ['id', 'name', 'group', 'text','template_id','checked'],
+			remoteSort : true
+		});
+		
 		tbar.push(this.templatesBtn = new Ext.Button({
 
 			iconCls:'ml-btn-mailings',
