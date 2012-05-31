@@ -273,7 +273,7 @@ GO.files.FileBrowser = function(config){
 
 	this.gridPanel.store.on('load', function(store,records,options){
 		this.filesContextMenu.unlockAllowed = store.reader.jsonData.unlock_allowed;
-		console.log(this.filesContextMenu.unlockAllowed);
+//		console.log(this.filesContextMenu.unlockAllowed);
 	},this);
 
 	/*
