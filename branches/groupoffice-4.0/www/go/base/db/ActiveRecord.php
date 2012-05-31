@@ -1691,14 +1691,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	/**
 	 * Format database values for display in the user's locale.
 	 * 
-	 * @param array $attributes
 	 * @param bool $html set to true if it's used for html output
 	 * @return array 
 	 */
-	protected function formatOutputValues($attributes, $html=false){
+	protected function formatOutputValues($html=false){
 		
 		$formatted = array();
-		foreach($attributes as $attributeName=>$value){			
+		foreach($this->_attributes as $attributeName=>$value){			
 			$formatted[$attributeName]=$this->formatAttribute($attributeName, $value, $html);
 		}
 		
@@ -1833,7 +1832,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if($outputType=='raw')
 			$att=$this->_attributes;
 		else
-			$att=$this->formatOutputValues($this->_attributes, $outputType=='html');		
+			$att=$this->formatOutputValues($outputType=='html');		
 
 		foreach($this->_getMagicAttributeNames() as $attName){
 			$att[$attName]=$this->$attName;
