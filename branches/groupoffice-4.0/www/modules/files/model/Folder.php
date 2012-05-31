@@ -281,8 +281,8 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 				$folder->save();					
 			}elseif(!empty($autoCreateAttributes))
 			{
-				$folder->setAttributes($autoCreateAttributes);
-				$folder->save();	
+//				$folder->setAttributes($autoCreateAttributes);
+//				$folder->save();	
 			}
 
 			$parent_id = $folder->id;
