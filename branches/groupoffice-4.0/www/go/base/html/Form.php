@@ -24,9 +24,9 @@ class GO_Base_Html_Form {
 		echo self::getHtmlBegin($targetRoute,$formName,$showErrors);
 	}
 	
-	public static function renderEnd(){
+	public static function renderEnd($printErrors=true){
 		
-		if(GO_Base_Html_Error::hasErrors()){
+		if($printErrors && GO_Base_Html_Error::hasErrors()){
 			GO_Base_Html_Error::printErrors();
 		}
 		
