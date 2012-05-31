@@ -93,7 +93,6 @@ Ext.extend(GO.base.QuickEditDialog, GO.Window, {
 	/////////////////////////////////
 	
 	_buildGrid : function(){
-	
 		this.store = new GO.data.JsonStore({
 			url: GO.url(this.editorGridParams.moduleName+'/'+this.editorGridParams.modelName+'/store'),
 			fields: this.editorGridParams.storeFields,
