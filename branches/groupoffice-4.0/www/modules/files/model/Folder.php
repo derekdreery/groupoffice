@@ -281,6 +281,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 				$folder->save();					
 			}elseif(!empty($autoCreateAttributes))
 			{
+				//should not apply it to existing folders. this leads to unexpected results.
 //				$folder->setAttributes($autoCreateAttributes);
 //				$folder->save();	
 			}

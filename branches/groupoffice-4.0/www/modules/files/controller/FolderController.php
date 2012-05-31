@@ -551,7 +551,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 	private function _checkExistingModelFolder($model, $folder, $mustExist=false) {
 		
-		GO::debug("Check existing model folder ".$model->className()."(ID:".$model->id." Folder ID: ".$folder->id.")");
+		GO::debug("Check existing model folder ".$model->className()."(ID:".$model->id." Folder ID: ".$folder->id." ACL ID: ".$model->findAclId().")");
 
 		if(!$folder->fsFolder->exists())
 		{
@@ -587,6 +587,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			return false;
 		
 		if(GO::router()->getControllerAction()=='checkdatabase'){
+			//Always ensure folder exists on check database
 			$destinationFolder = GO_Files_Model_Folder::model()->findByPath(
 							dirname($newPath), true, array('acl_id'=>$model->findAclId(),'readonly'=>1));
 		}
