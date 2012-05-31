@@ -3207,7 +3207,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		if ($this->hasFiles() && GO::modules()->isInstalled('files')) {
 			//ACL must be generated here.
-			$fc = new GO_Files_Controller_Folder();
+			$fc = new GO_Files_Controller_Folder();	
 			$this->files_folder_id = $fc->checkModelFolder($this);
 		}
 		

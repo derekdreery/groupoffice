@@ -1236,4 +1236,12 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		return array('success' => true);
 	}
 	
+	
+	protected function actionCheck($params){
+		$model = GO::getModel($this->model)->findByPk($params["id"]);
+		$model->checkDatabase();
+		
+		echo "Done\n";
+	}
+	
 }
