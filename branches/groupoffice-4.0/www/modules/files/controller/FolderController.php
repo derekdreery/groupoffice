@@ -583,6 +583,9 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$currentPath = $folder->path;
 		$newPath = $model->buildFilesPath();	
 		
+		if(!$newPath)
+			return false;
+		
 		if(GO::router()->getControllerAction()=='checkdatabase'){
 			$destinationFolder = GO_Files_Model_Folder::model()->findByPath(
 							dirname($newPath), true, array('acl_id'=>$model->findAclId(),'readonly'=>1));
