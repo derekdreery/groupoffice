@@ -1,0 +1,3 @@
+modules/wordpress/MainPanel.js
+modules/wordpress/PublishPanel.js
+modules/wordpress/AdminDialog.js
