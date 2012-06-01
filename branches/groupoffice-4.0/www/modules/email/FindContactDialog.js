@@ -69,7 +69,7 @@ Ext.extend(GO.email.FindContactDialog, Ext.Window, {
 			params: {
 				contact_id: this.contact_id,
 				email: this.email,
-				replace_email: this.replace_email,
+				replace_email: this.replace_email
 			},
 			callback: function(options, success, response)
 			{

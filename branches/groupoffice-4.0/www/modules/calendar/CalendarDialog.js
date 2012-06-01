@@ -154,7 +154,7 @@ GO.calendar.CalendarDialog = function(config)
 	
 	this.categoriesGrid = new GO.calendar.CategoriesGrid({
 		title:GO.calendar.lang.category,
-		store: GO.calendar.categoriesStore,
+		store: GO.calendar.categoriesStore
 	});
 	
 	this.importTab = new Ext.Panel({		
