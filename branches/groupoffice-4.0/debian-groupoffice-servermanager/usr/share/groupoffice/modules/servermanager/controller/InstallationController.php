@@ -5,7 +5,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	protected $model = 'GO_Servermanager_Model_Installation';
 	
 	protected function allowGuests() {
-		return array('create','destroy', 'report','upgradeall');
+		return array('create','destroy', 'report','upgradeall','rename');
 	}
 	
 	protected function ignoreAclPermissions() {
@@ -71,8 +71,51 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		return $config;
 	}
 	
+	
+	public function actionRename($params){
+	
+		if(!$this->isCli())
+			throw new Exception("Action servermanager/installation/create may only be run by root on the command line");
+		
+		$this->checkRequiredParameters(array("oldname","newname"), $params);		
+		
+		$installation = GO_ServerManager_Model_Installation::model()->findSingleByAttribute('name', $params['oldname']);
+		
+		if(!$installation)
+			throw new GO_Base_Exception_NotFound();
+		
+		$configFolder = new GO_Base_Fs_Folder(dirname($installation->configPath));
+		$installationFolder = new GO_Base_Fs_Folder($installation->installPath);
+		
+		$oldDbName = $installation->dbName;
+		$oldDbUser = $installation->dbUser;
+		
+		require($installation->configPath);
+		
+		
+		$installation->name = $params["newname"];
+		$installation->save();		
+		
+		$newInstallPath = $installationFolder->parent()->path()."/".$installation->name."/";
+		
+		$config['id']=$installation->name;	
+		$config['file_storage_path']=$newInstallPath."data/";
+		$config['root_path']=$newInstallPath."groupoffice/";
+		system('mv "'.$configFolder->path().'" "'.$configFolder->parent()->path()."/".$installation->name.'"');
+		
+		//$configFolder->move(new GO_Base_Fs_Folder("/etc/groupoffice"), $installation->name);
+		
+		GO_Base_Util_ConfigEditor::save(new GO_Base_Fs_File($installation->configPath), $config);
+		
+		//$installationFolder->move(new GO_Base_Fs_Folder("/home/govhosts"), $installation->name);
+		
+		system('mv "'.$installationFolder->path().'" "'.$newInstallPath.'"');
+		
+		echo "Installation ".$params['oldname']." was renamed to ".$params['newname']."\n";		
+	}
+	
 	public function actionCreate($params){
-		if(PHP_SAPI!='cli')
+		if(!$this->isCli())
 			throw new Exception("Action servermanager/installation/create may only be run by root on the command line");
 		
 		//todo check if we are root
@@ -106,7 +149,9 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$configFile->chgrp('www-data');
 		$configFile->chmod(0640);		
 		
-		$this->_createDatabase($params, $installation, $existingConfig);		
+		$this->_createDatabase($installation, $existingConfig);		
+		
+		$this->_createDatabaseContent($params, $installation, $existingConfig);
 	}
 	
 	private function _createDatabaseContent($params, $installation, $config){
@@ -143,21 +188,16 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 
 	}
 	
-	private function _createDatabase($params, $installation, $config){
+	private function _createDatabase($installation, $config){
 		
 		try{			
 			if(!GO_Base_Db_Utils::databaseExists($config['db_name'])){
 			
 				GO::getDbConnection()->query("CREATE DATABASE IF NOT EXISTS `".$config['db_name']."`");				
 				
-				$sql = "GRANT ALL PRIVILEGES ON `".$config['db_name']."`.*	TO ".
-								"'".$config['db_user']."'@'".$config['db_host']."' ".
-								"IDENTIFIED BY '".$config['db_pass']."' WITH GRANT OPTION";			
+				$this->_createDbUser($config);
 
-				GO::getDbConnection()->query($sql);
-				GO::getDbConnection()->query('FLUSH PRIVILEGES');		
-
-				$this->_createDatabaseContent($params, $installation, $config);
+				
 			}
 		}catch(Exception $e){
 			
@@ -167,6 +207,15 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 							"REVOKE ALL PRIVILEGES ON * . * FROM 'groupoffice-com'@'localhost';\n".
 							"GRANT ALL PRIVILEGES ON * . * TO 'groupoffice-com'@'localhost' WITH GRANT OPTION MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0 ;\n\n". $e->getMessage());
 		}
+	}
+	
+	private function _createDbUser($config){
+		$sql = "GRANT ALL PRIVILEGES ON `".$config['db_name']."`.*	TO ".
+								"'".$config['db_user']."'@'".$config['db_host']."' ".
+								"IDENTIFIED BY '".$config['db_pass']."' WITH GRANT OPTION";			
+
+		GO::getDbConnection()->query($sql);
+		GO::getDbConnection()->query('FLUSH PRIVILEGES');		
 	}
 	
 	protected function afterLoad(&$response, &$model, &$params) {
