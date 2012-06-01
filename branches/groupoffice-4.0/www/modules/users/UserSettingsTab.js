@@ -84,7 +84,7 @@ GO.users.UserSettingsTab = function(config)
 
 		this.formSalutation = new Ext.form.TextField(
 		{
-			fieldLabel: GO.addressbook.lang['cmdFormLabelSalutation'],
+			fieldLabel: GO.lang.strSalutation,
 			name: 'salutation'
 		});
 	
@@ -172,13 +172,25 @@ GO.users.UserSettingsTab = function(config)
 			hiddenName: 'country'
 		});
 
-		this.formCompany = new GO.addressbook.SelectCompany({
-			fieldLabel: GO.lang['strCompany'],
-			name: 'company',
-			hiddenName: 'company_id',
-			emptyText: GO.addressbook.lang['cmdFormCompanyEmptyText'],
-			addressbook_id: this.addressbook_id
-		});
+		if(GO.addressbook){
+			this.formCompany = new GO.addressbook.SelectCompany({
+				fieldLabel: GO.lang['strCompany'],
+				name: 'company',
+				hiddenName: 'company_id',
+				emptyText: GO.addressbook.lang['cmdFormCompanyEmptyText'],
+				addressbook_id: this.addressbook_id
+			});
+			
+			this.formAddressBooks = new GO.addressbook.SelectAddressbook({
+				fieldLabel: GO.addressbook.lang['cmdFormLabelAddressBooks'],
+				store: GO.addressbook.writableAddressbooksStore,			
+				selectOnFocus:true,
+				forceSelection: true,
+				allowBlank: true,
+				anchor:'100%'
+			});
+			
+		}
 	
 		this.formDepartment = new Ext.form.TextField(
 		{
@@ -203,35 +215,26 @@ GO.users.UserSettingsTab = function(config)
 			fieldLabel: GO.lang['strWorkFax'],
 			name: 'work_fax'
 		});
-
-
-		this.formAddressBooks = new GO.addressbook.SelectAddressbook({
-			fieldLabel: GO.addressbook.lang['cmdFormLabelAddressBooks'],
-			store: GO.addressbook.writableAddressbooksStore,			
-			selectOnFocus:true,
-			forceSelection: true,
-			allowBlank: true,
-			anchor:'100%'
-		});
-		
+	
 		if(!config.forUser){
-			this.formAddressBooks.on('beforeselect', function(combo, record)
-			{
-				if(this.formCompany.getValue()==0 || confirm(GO.addressbook.lang.moveAll))
+			if(GO.addressbook){
+				this.formAddressBooks.on('beforeselect', function(combo, record)
 				{
-					this.setAddressbookID(record.data.id);
-					this.setSalutation();
-					return true;
-				}else
-				{
-					return false;
-				}
-			}, this);
-		
-
-			this.formAddressBooks.on('select', function(){
-				this.setSalutation(true)
-			}, this);
+					if(this.formCompany.getValue()==0 || confirm(GO.addressbook.lang.moveAll))
+					{
+						this.setAddressbookID(record.data.id);
+						this.setSalutation();
+						return true;
+					}else
+					{
+						return false;
+					}
+				}, this);
+				
+				this.formAddressBooks.on('select', function(){
+					this.setSalutation(true)
+				}, this);
+			}
 
 			this.formFirstName.on('blur', function(){
 				this.setSalutation(false)
@@ -290,7 +293,7 @@ GO.users.UserSettingsTab = function(config)
 					anchor:'100%'
 				},
 				autoHeight:true,
-				title:GO.addressbook.lang.cmdFieldsetPersonalDetails,
+				title:GO.lang.personalDetailsFor,
 				items:[
 					this.formFirstName,
 					this.formMiddleName,
@@ -302,12 +305,6 @@ GO.users.UserSettingsTab = function(config)
 					this.formSalutation, 
 					this.formBirthday
 				]
-			},{	xtype: 'fieldset',
-					title: GO.addressbook.lang['cmdFieldsetWork'],
-					autoHeight: true,
-					collapsed: false,
-					defaults: { anchor:'100%'},
-					items: [this.formCompany,this.formDepartment,this.formFunction]
 			}]
 		},{
   		columnWidth: .5,
@@ -315,21 +312,32 @@ GO.users.UserSettingsTab = function(config)
     	style: 'margin-left: 5px;',
 			items: [{
 				xtype: 'fieldset',
-				title: GO.addressbook.lang['cmdFieldsetContact'],
+				title: GO.lang.fieldsetContact,
 				autoHeight: true,
 				collapsed: false,
 				defaults: { anchor: '100%' },
 				items:[this.formEmail,this.formEmail2,this.formEmail3,this.formHomePhone,this.formFax,this.formCellular,this.formWorkPhone,this.formWorkFax]
 			},{
 					xtype: 'fieldset',
-					title: GO.addressbook.lang['cmdFieldsetAddress'],
+					title: GO.lang.fieldsetAddress,
 					autoHeight: true,
 					collapsed: false,
 					defaults: { anchor: '100%' },
 					items:[this.formAddress,this.formAddressNo,this.formPostal,this.formCity,this.formState,this.formCountry]
-				
 			}]
 		}];
+	
+		if(GO.addressbook){
+			this.companyFieldset = new Ext.form.FieldSet({
+				title: GO.lang.fieldsetWork,
+				autoHeight: true,
+				collapsed: false,
+				defaults: { anchor:'100%'},
+				items: [this.formCompany,this.formDepartment,this.formFunction]
+			});
+			config.items[0].items.push(this.companyFieldset);
+		}
+	
 	
 		GO.users.UserSettingsTab.superclass.constructor.call(this, config);	
 	
