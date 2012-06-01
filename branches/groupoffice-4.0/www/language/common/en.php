@@ -547,3 +547,7 @@ $l['dropFilesHere']="Drop files here";
 $l['pluploadProgressText']="{0}/{1} ({3} failed) ({5}/s)";
 
 $l['quickEdit'] = "Quick edit";
+$l["personalDetailsFor"]= 'Personal details for';
+$l["fieldsetWork"]= 'Work';
+$l["fieldsetAddress"]= 'Address';
+$l["fieldsetContact"]= 'Contact details';
