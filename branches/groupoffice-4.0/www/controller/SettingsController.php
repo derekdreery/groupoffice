@@ -29,9 +29,13 @@ class GO_Core_Controller_Settings extends GO_Base_Controller_AbstractController 
 			unset($params['password']);
 		}
 		$user->setAttributes($params);
+		
+		GO::$ignoreAclPermissions = true;
 		$contact = $user->createContact();
+		unset($params['id']);
 		$contact->setAttributes($params);
 		$contact->save();
+		GO::$ignoreAclPermissions = false;
 		
 		$response['success']=$user->save();
 		
