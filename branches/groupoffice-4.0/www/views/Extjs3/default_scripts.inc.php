@@ -17,8 +17,11 @@ $settings['state_index'] = 'go';
 
 $settings['language']=GO::user() ? GO::user()->language : GO::config()->language;
 
-if(isset($_REQUEST["SET_LANGUAGE"]))
-	$settings['language']=$_REQUEST["SET_LANGUAGE"];
+$user_id = GO::user() ? GO::user()->id : 0;
+
+//done in AuthController already
+//if(isset($_REQUEST["SET_LANGUAGE"]))
+//	$settings['language']=$_REQUEST["SET_LANGUAGE"];
 
 $settings['state']=array();
 if(GO::user()) {
@@ -336,7 +339,7 @@ if(!isset($default_scripts_load_modules)){
 
 if(count($load_modules)) {
 	
-	$modLangPath =GO::config()->file_storage_path.'cache/'.$settings['language'].'-module-languages.js';
+	$modLangPath =GO::config()->file_storage_path.'cache/'.$settings['language'].'-'.$user_id.'-module-languages.js';
 	if(!file_exists($modLangPath) || GO::config()->debug){
 		$fp=fopen($modLangPath,'w');
 		if(!$fp){
