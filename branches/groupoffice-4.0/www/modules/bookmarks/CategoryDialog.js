@@ -98,8 +98,6 @@ Ext.extend(GO.bookmarks.CategoryDialog, Ext.Window,{
 					//	this.setWritePermission(action.result.data.write_permission);
 					this.readPermissionsTab.setAcl(action.result.data.acl_id);
 					
-					this.selectUser.setRemoteText(action.result.data.user_name);
-					
 					GO.bookmarks.CategoryDialog.superclass.show.call(this);
 				},
 
