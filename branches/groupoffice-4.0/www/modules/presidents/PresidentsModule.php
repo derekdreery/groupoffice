@@ -5,7 +5,7 @@
 class GO_Presidents_PresidentsModule extends GO_Base_Module{
 	
 	public function autoInstall() {
-		return true;
+		return false;
 	}
 	
 	public function author() {
