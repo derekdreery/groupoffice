@@ -457,6 +457,15 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $file_storage_path = '/home/groupoffice/';
+	
+	
+	/**
+	 * Convert non ASCII characters to ASCII codes when uploaded to Group-Office.
+	 * Useful for Windows servers that don't support UTF8.
+	 * 
+	 * @var boolean 
+	 */
+	public $convert_utf8_filenames_to_ascii=false;
 
 	/**
 	 * The maximum file size the filebrowser attempts to upload. Be aware that
@@ -677,7 +686,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.0.21';
+	var $version = '4.0.22';
 
 
 	/* The permissions mode to use when creating files
@@ -707,7 +716,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20120531';
+	var $mtime = '20120601';
 
 	#group configuration
 	/**

@@ -25,6 +25,18 @@ class GO_Base_Util_String {
 		$text = str_replace("\r","",$text);
 		return $crlf != "\n" ? str_replace("\n",$crlf,$text) : $text;
 	}
+	
+	/**
+	 * Convert non ascii characters to chars that come close to them.
+	 * @param type $string
+	 * @return type 
+	 */
+	public static function utf8ToASCII($string){
+		setlocale(LC_ALL, 'en_US.UTF8');
+		return iconv("UTF-8","ASCII//TRANSLIT",$string);
+		//return preg_replace('/[^a-zA-Z0-9 ,-:_]+/','',$string);
+	}
+
 
 	public static function get_first_letters($phrase) {
 
