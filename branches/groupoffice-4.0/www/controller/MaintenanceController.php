@@ -424,6 +424,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 //			ob_flush();
 			
 			echo "Building search cache after version 3.7 upgrade.\n";
+			ob_flush();
 			$this->actionBuildSearchCache($params);
 			echo "Done\n\n";
 			ob_flush();
