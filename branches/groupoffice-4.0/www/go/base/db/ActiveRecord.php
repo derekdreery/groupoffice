@@ -510,7 +510,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					
 				}
 
-				GO::cache()->set('modelColumns_'.$this->tableName(), $this->columns);
+				if(!$ignoreCache)
+					GO::cache()->set('modelColumns_'.$this->tableName(), $this->columns);
 			}
 		}
 	}
