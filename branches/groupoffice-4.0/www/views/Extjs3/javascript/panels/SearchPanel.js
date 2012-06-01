@@ -103,7 +103,7 @@ GO.grid.SearchPanel = function(config){
 		}],
 		autoExpandMax:2500,
 		autoExpandColumn:'name',
-		paging:20,
+		paging:true,
 		layout:'fit',
 		view:new Ext.grid.GridView({
 			enableRowBody:true,
