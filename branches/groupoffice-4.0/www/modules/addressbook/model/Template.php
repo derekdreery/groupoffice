@@ -39,6 +39,7 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	public $htmlSpecialChars=true;
 	
 	private $_defaultTags;
+	private $_lineBreak;
 	
 		/**
 	 * Returns a static model of itself
@@ -74,6 +75,10 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	 */
 	public function addDefaultTag($key, $value){
 		$this->_defaultTags[$key]=$value;
+	}
+	
+	public function setLineBreak($lb){
+		$this->_lineBreak=$lb;
 	}
 	
 	
@@ -184,6 +189,11 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 		if($this->htmlSpecialChars){
 			foreach($attributes as $key=>$value)
 				$attributes[$key]=htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
+		}
+		
+		if(isset($this->_lineBreak)){
+			foreach($attributes as $key=>$value)
+				$attributes[$key]=str_replace("\n", $this->_lineBreak, $attributes[$key]);
 		}
 		
 		$templateParser = new GO_Base_Util_TemplateParser();
