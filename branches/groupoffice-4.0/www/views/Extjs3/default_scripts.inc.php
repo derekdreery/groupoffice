@@ -335,11 +335,16 @@ if(!isset($default_scripts_load_modules)){
 
 
 //var_dump($load_modules);
-
+$modulesCacheStr = array();
+foreach($load_modules as $module)
+	if($module['read_permission']) 
+			$modulesCacheStr[]=$module['id'];
+	
+$modulesCacheStr=md5(implode('-',$modulesCacheStr));
 
 if(count($load_modules)) {
 	
-	$modLangPath =GO::config()->file_storage_path.'cache/'.$settings['language'].'-'.$user_id.'-module-languages.js';
+	$modLangPath =GO::config()->file_storage_path.'cache/'.$settings['language'].'-'.$modulesCacheStr.'-module-languages.js';
 	if(!file_exists($modLangPath) || GO::config()->debug){
 		$fp=fopen($modLangPath,'w');
 		if(!$fp){
@@ -434,7 +439,7 @@ if(count($load_modules)) {
 
 	//include config file location because in some cases different URL's point to
 	//the same database and this can break things if the settings are cached.
-	$file = $GLOBALS['GO_SECURITY']->user_id.'-'.md5(GO::config()->mtime.GO::config()->get_config_file().':'.$GLOBALS['GO_LANGUAGE']->language.':'.implode(':', $modules)).'.js';
+	$file = $GLOBALS['GO_SECURITY']->user_id.'-'.md5(GO::config()->mtime.GO::config()->get_config_file().':'.$GLOBALS['GO_LANGUAGE']->language.':'.$modulesCacheStr).'.js';
 	$path = GO::config()->file_storage_path.'cache/'.$file;
 	
 	
