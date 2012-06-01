@@ -171,7 +171,7 @@ GO.files.FileBrowser = function(config){
 
 
 	var fields ={
-		fields:['type_id', 'id','name','type', 'size', 'mtime', 'extension', 'timestamp', 'thumb_url','path','acl_id','locked_user_id','locked','folder_id','permission_level','readonly'],
+		fields:['type_id', 'id','name','type', 'size', 'mtime', 'extension', 'timestamp', 'thumb_url','path','acl_id','locked_user_id','locked','folder_id','permission_level','readonly','unlock_allowed'],
 		columns:[{
 			id:'name',
 			header:GO.lang['strName'],
@@ -270,11 +270,6 @@ GO.files.FileBrowser = function(config){
 	}, this);	
 	
 	this.gridPanel.on('rowdblclick', this.onGridDoubleClick, this);
-
-	this.gridPanel.store.on('load', function(store,records,options){
-		this.filesContextMenu.unlockAllowed = store.reader.jsonData.unlock_allowed;
-//		console.log(this.filesContextMenu.unlockAllowed);
-	},this);
 
 	/*
 	 * Handles saving of locked state by the admin of the folder.

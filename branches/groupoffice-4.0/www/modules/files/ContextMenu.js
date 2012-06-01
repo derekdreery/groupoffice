@@ -90,8 +90,12 @@ GO.files.FilesContextMenu = function(config)
 				success:function(action, response, result){
 				
 					var filesModulePanel = GO.mainLayout.getModulePanel('files');
-					if(filesModulePanel && filesModulePanel.folder_id==this.records[0].data.folder_id)
+					if(filesModulePanel && filesModulePanel.folder_id==this.records[0].data.folder_id) {
 						filesModulePanel.getActiveGridStore().load();
+						filesModulePanel.folderPanel.setVisible(false);
+						filesModulePanel.filePanel.setVisible(true);
+						filesModulePanel.filePanel.load(this.records[0].json.id,true);
+					}
 				},
 				scope:this
 			})
@@ -112,8 +116,12 @@ GO.files.FilesContextMenu = function(config)
 				},
 				success:function(action, response, result){
 					var filesModulePanel = GO.mainLayout.getModulePanel('files');
-					if(filesModulePanel && filesModulePanel.folder_id==this.records[0].data.folder_id)
+					if(filesModulePanel && filesModulePanel.folder_id==this.records[0].data.folder_id) {
 						filesModulePanel.getActiveGridStore().load();
+						filesModulePanel.folderPanel.setVisible(false);
+						filesModulePanel.filePanel.setVisible(true);
+						filesModulePanel.filePanel.load(this.records[0].json.id,true);
+					}
 				},
 				scope:this
 			})
@@ -224,9 +232,7 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 	clickedAt : 'grid',
 	
 	records : [],	
-	
-	unlockAllowed : false,
-	
+		
 	showAt : function(xy, records, clickedAt)
 	{ 	
 		if(clickedAt)
@@ -288,7 +294,7 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 					
 					this.lockButton.setDisabled(this.records[0].data.locked_user_id>0);
 					this.unlockButton.setVisible(this.records[0].data.locked_user_id>0);
-					this.unlockButton.setDisabled(!this.unlockAllowed);
+					this.unlockButton.setDisabled(!this.records[0].data.unlock_allowed);
 					
 					if(this.gotaButton)
 						this.gotaButton.setDisabled(this.records[0].data.permission_level<GO.permissionLevels.write || (this.records[0].data.locked_user_id>0 &&this.records[0].data.locked_user_id!=GO.settings.user_id));

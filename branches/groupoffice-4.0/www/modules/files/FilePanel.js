@@ -41,7 +41,7 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 	createTopToolbar : function(){
 		var tbar = GO.files.FilePanel.superclass.createTopToolbar.call(this);
 
-		tbar.splice(1,0,{
+		tbar.splice(1,0,this.downloadButton= new Ext.Button({
 			iconCls: 'btn-save',
 			text: GO.lang.download,
 			cls: 'x-btn-text-icon',
@@ -49,7 +49,7 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 				GO.files.downloadFile(this.model_id);
 			},
 			scope: this
-		},this.propertiesBtn = new Ext.Button({
+		}),this.propertiesBtn = new Ext.Button({
 			iconCls: 'btn-settings',
 			text: GO.lang.strProperties,
 			cls: 'x-btn-text-icon',
@@ -73,6 +73,7 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 		GO.files.FilePanel.superclass.setData.call(this, data);
 		this.setTitle(data.name);		
 		this.editButton.setDisabled(data.locked || !this.data.write_permission);		
+		this.downloadButton.setDisabled(data.locked);
 		this.propertiesBtn.setDisabled(!this.data.write_permission);
 	},
 

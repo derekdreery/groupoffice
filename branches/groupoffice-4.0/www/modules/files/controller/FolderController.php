@@ -525,9 +525,6 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 							));
 			$response['total']+=$record['total'];
 		}
-
-
-		$response['unlock_allowed'] = GO::user()->isAdmin() || $folder->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION);
 		
 		return $response;
 	}
@@ -547,6 +544,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$record['extension'] = $model->extension;
 			$record['size']=$model->size;
 			$record['permission_level']=$this->_listFolderPermissionLevel;
+			$record['unlock_allowed']=$model->unlockAllowed();
 		}
 		$record['thumb_url'] = $model->thumbURL;
 

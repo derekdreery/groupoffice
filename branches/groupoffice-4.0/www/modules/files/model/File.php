@@ -146,6 +146,10 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		return !empty($this->locked_user_id) && $this->locked_user_id!=GO::user()->id;
 	}
 	
+	public function unlockAllowed(){
+		return ($this->locked_user_id==GO::user()->id || GO::user()->isAdmin()) && $this->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION);
+	}
+	
 	private function _getOldFsFile(){
 		$filename = $this->isModified('name') ? $this->getOldAttributeValue('name') : $this->name;
 		if($this->isModified('folder_id')){
@@ -225,8 +229,9 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		}
 		
 		if($this->isModified('locked_user_id')){
-			$old_locked_user_id = $this->getOldAttributeValue('locked_user_id');
-			if(!empty($old_locked_user_id) && $old_locked_user_id != GO::user()->id && !GO::user()->isAdmin())
+//			$old_locked_user_id = $this->getOldAttributeValue('locked_user_id');
+//			if(!empty($old_locked_user_id) && $old_locked_user_id != GO::user()->id && !GO::user()->isAdmin())
+			if (!$this->unlockAllowed())
 				throw new GO_Files_Exception_FileLocked();
 		}
 		

@@ -17,7 +17,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		
 		$response['data']['locked_user_name']=$model->lockedByUser ? $model->lockedByUser->name : '';
 		$response['data']['locked']=$model->isLocked();
-		$response['data']['unlock_allowed']=(!$model->isLocked() || GO::user()->isAdmin()) && $model->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION);
+		$response['data']['unlock_allowed']=$model->unlockAllowed();
 		
 
 		if (!empty($model->random_code) && time() < $model->expire_time) {
