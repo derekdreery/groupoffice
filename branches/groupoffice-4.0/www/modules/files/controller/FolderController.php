@@ -388,7 +388,9 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$stmt = GO_Files_Model_Folder::model()->findShares($findParams);
 		$store->setStatement($stmt);
 
-		return $store->getData();
+		$response = $store->getData();
+		$response['permission_level']=GO_Base_Model_Acl::READ_PERMISSION;
+		return $response;
 	}
 	
 	private $_listFolderPermissionLevel;
@@ -405,6 +407,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			return false;
 
 		$this->_listFolderPermissionLevel=$folder->permissionLevel;
+		
+		$response['permission_level']=$folder->permissionLevel;
 		
 		$folder->checkFsSync();
 

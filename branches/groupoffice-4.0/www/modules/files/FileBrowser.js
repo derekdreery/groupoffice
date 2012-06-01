@@ -766,7 +766,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 		this.path = store.reader.jsonData.path;
 
-		this.setWritePermission(true);///store.reader.jsonData.write_permission);
+		this.setWritePermission(store.reader.jsonData.permission_level>=GO.permissionLevels.write);
 		
 		this.thumbsToggle.toggle(store.reader.jsonData.thumbs=='1');
 		
