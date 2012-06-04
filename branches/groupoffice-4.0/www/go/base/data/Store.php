@@ -263,8 +263,11 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 						->calcFoundRows()
 						->joinCustomFields()
 						->order($sort, $dir);
+		
+		//do not prefix search query with a wildcard by default. 
+		//When you start a query with a wildcard mysql can't use indexes.
 		if(!empty($requestParams['query']))
-			$findParams->searchQuery ('%'.preg_replace ('/[\s*]+/','%', $requestParams['query']).'%');
+			$findParams->searchQuery (preg_replace ('/[\s*]+/','%', $requestParams['query']).'%');
 		
 		if(isset($requestParams['limit']))
 			$findParams->limit ($requestParams['limit']);
