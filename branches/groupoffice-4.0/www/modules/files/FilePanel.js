@@ -73,7 +73,7 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 		GO.files.FilePanel.superclass.setData.call(this, data);
 		this.setTitle(data.name);		
 		this.editButton.setDisabled(data.locked || !this.data.write_permission);		
-		this.downloadButton.setDisabled(data.locked);
+
 		this.propertiesBtn.setDisabled(!this.data.write_permission);
 	},
 
