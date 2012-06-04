@@ -118,10 +118,14 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * @return string 
 	 */
 	protected function getPath($forceResolve=false) {
+				
 		if($forceResolve || !isset($this->_path)){
 			$this->_path = $this->name;
 			$currentFolder = $this;
 			while ($currentFolder = $currentFolder->parent) {
+				
+				GO::debug($currentFolder->name);
+				
 				$this->_path = $currentFolder->name . '/' . $this->_path;
 			}
 		}
