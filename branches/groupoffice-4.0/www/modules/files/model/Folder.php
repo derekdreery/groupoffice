@@ -155,7 +155,28 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		return new GO_Base_Fs_Folder(GO::config()->file_storage_path . $this->path);
 	}
 	
+	
+	private function _checkParentId(){
+		if($this->isModified("parent_id")){
+			$ids=array($this->id);
+			
+			$currentFolder=$this;
+			
+			while ($currentFolder = $currentFolder->parent) {				
+				if(in_array($currentFolder->id, $ids)){					
+					$this->setValidationError ("parent_id", "Can not move folder into this folder because it's a child");
+					break;
+				}
+			}
+			
+			//throw new Exception("test");
+		}
+	}
+	
 	public function validate() {
+		
+		$this->_checkParentId();
+		
 		if($this->parent_id==0){
 			//top level folders are readonly to everyone.
 			$this->readonly=1;
@@ -700,7 +721,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function hasChildren(){
-		return true;//$this->getSubFolders(GO_Base_Db_FindParams::newInstance()->single(), true);
+		return $this->getSubFolders(GO_Base_Db_FindParams::newInstance()->single(), true);
 	}
 	
 	/**
