@@ -51,19 +51,28 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		if(!empty($params['type_filter'])) {
 			if(isset($params['types'])) {
 				$types= json_decode($params['types'], true);
+				//only search for available types. eg. don't search for contacts if the user doesn't have access to the addressbook
+				if(empty($types)){
+					$stmt = GO_Base_Model_ModelType::model()->find();
+					while($modelType = $stmt->fetch()){
+						$model = GO::getModel($modelType->model_name);
+						if(GO::modules()->{$model->module})
+							$types[]=$modelType->id;
+					}
+
+				}
 				if(!isset($params['no_filter_save']))
 					GO::config()->save_setting ('link_type_filter', implode(',',$types), GO::user()->id);
 			}else {
 				$types = GO::config()->get_setting('link_type_filter', GO::user()->id);
-				$types = empty($types) ? array() : explode(',', $types);
+				$types = empty($types) ? array() : explode(',', $types);	
 			}
 		}
 		
-		if(!empty($types)){
-//			$types = json_decode($params['types'], true);
-			if(count($types))
-				$storeParams->getCriteria()->addInCondition('model_type_id', $types);
-		}
+		
+		
+		$storeParams->getCriteria()->addInCondition('model_type_id', $types);
+		
 		return $storeParams;
 	}
 	
@@ -84,7 +93,8 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		$types=array();
 		while($modelType = $stmt->fetch()){
 			$model = GO::getModel($modelType->model_name);
-			$types[$model->localizedName]=array('id'=>$modelType->id, 'model_name'=>$modelType->model_name, 'name'=>$model->localizedName, 'checked'=>in_array($modelType->id,$typesArr));
+			if(GO::modules()->{$model->module})
+				$types[$model->localizedName]=array('id'=>$modelType->id, 'model_name'=>$modelType->model_name, 'name'=>$model->localizedName, 'checked'=>in_array($modelType->id,$typesArr));
 		}
 		
 		ksort($types);
