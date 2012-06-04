@@ -203,6 +203,9 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				$model->acl_id = $response['acl_id'] = 0;
 			}
 		}
+		
+		if(!empty($params['name']) && GO::config()->convert_utf8_filenames_to_ascii)
+			$params['name']=GO_Base_Util_String::utf8ToASCII ($params['name']);
 
 		return parent::beforeSubmit($response, $model, $params);
 	}
