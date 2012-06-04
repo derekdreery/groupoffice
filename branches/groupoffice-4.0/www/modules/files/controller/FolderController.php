@@ -42,7 +42,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	
 	private function _getExpandFolderIds($params){
 		$expandFolderIds=array();
-		if(!empty($params['expand_folder_id'])) {
+		if(!empty($params['expand_folder_id']) && $params['expand_folder_id']!='shared') {
 			$expandFolderIds=  GO_Files_Model_Folder::model()->getFolderIdsInPath($params['expand_folder_id']);
 		}
 		return $expandFolderIds;
@@ -175,7 +175,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			}
 		} else {
 			//check if folder has subfolders
-			$firstSubfolder = $folder->getSubFolders(GO_Base_Db_FindParams::newInstance()->single());
+			$firstSubfolder = $folder->hasChildren();
 			if (!$firstSubfolder) {
 				//it doesn't habe any subfolders so instruct the client about this
 				//so it can present the node as a leaf.

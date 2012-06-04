@@ -131,6 +131,10 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	public function getFolderIdsInPath($folder_id){
 		$ids=array();
 		$currentFolder = GO_Files_Model_Folder::model()->findByPk($folder_id);
+		
+		if(!$currentFolder)
+			return $ids;
+		
 		while ($currentFolder = $currentFolder->parent) {
 			$ids[] = $currentFolder->id;
 		}	
@@ -656,7 +660,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @return GO_Base_Db_ActiveStatement 
 	 */
-	public function getSubFolders($findParams=false){			
+	public function getSubFolders($findParams=false, $noGrouping=false){			
 			if(!$findParams)
 				$findParams=GO_Base_Db_FindParams::newInstance();
 			
@@ -677,9 +681,14 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 									->addCondition('parent_id', $this->id)
 									->mergeWith($aclWhereCriteria));
 			
-			$findParams->group(array('t.id'));
+			if($noGrouping)
+				$findParams->group(array('t.id'));
 		
 			return GO_Files_Model_Folder::model()->find($findParams);
+	}
+	
+	public function hasChildren(){
+		return $this->getSubFolders(GO_Base_Db_FindParams::newInstance()->single(), true);
 	}
 	
 	/**
@@ -760,6 +769,8 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		
 		if(!$findParams)
 			$findParams = new GO_Base_Db_FindParams();
+		
+		$findParams->debugSql();
 				
 		 $findParams->getCriteria()
 					->addModel(GO_Files_Model_Folder::model())

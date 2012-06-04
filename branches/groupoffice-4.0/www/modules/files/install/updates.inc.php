@@ -107,3 +107,5 @@ $updates["201203091439"][]="CREATE TABLE IF NOT EXISTS `fs_folder_pref` (
 $updates["201205071400"][]="update cf_fields set datatype='GO_Files_Customfieldtype_File' where datatype='file'";
 
 $updates["201205301738"][]="ALTER TABLE `fs_folders` ADD INDEX ( `parent_id` , `name` ) ;";
+
+$updates["201205301738"][]="ALTER TABLE `fs_folders` ADD INDEX ( `visible` ) ;";
