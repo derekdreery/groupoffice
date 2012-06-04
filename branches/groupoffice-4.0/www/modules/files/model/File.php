@@ -229,9 +229,8 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		}
 		
 		if($this->isModified('locked_user_id')){
-//			$old_locked_user_id = $this->getOldAttributeValue('locked_user_id');
-//			if(!empty($old_locked_user_id) && $old_locked_user_id != GO::user()->id && !GO::user()->isAdmin())
-			if (!$this->unlockAllowed())
+			$old_locked_user_id = $this->getOldAttributeValue('locked_user_id');
+			if(!empty($old_locked_user_id) && $old_locked_user_id != GO::user()->id && !GO::user()->isAdmin())
 				throw new GO_Files_Exception_FileLocked();
 		}
 		
