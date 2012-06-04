@@ -455,6 +455,7 @@ GO.files.FileBrowser = function(config){
 				Ext.MessageBox.alert(GO.lang.strError,
 				GO.lang.noJava);
 			} else {
+				GO.files.juploadFileBrowser=this; //for handling after upload
 				GO.util.popup({
 					url: GO.url('files/jupload/renderJupload'),
 					//GO.settings.modules.files.url+'jupload/index.php?id='+encodeURIComponent(this.folder_id),
