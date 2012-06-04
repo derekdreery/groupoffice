@@ -1152,14 +1152,11 @@ class GO_Base_Config {
 				if ($https) {
 					$_SESSION['GO_SESSION']['full_url'] .= "s";
 				}
-				/*$url .= "://";
-				if ((!$https && $_SERVER["SERVER_PORT"] != "80") || ($https && $_SERVER["SERVER_PORT"] != "443")) {
-					$url .= $_SERVER["HTTP_HOST"].":".$_SERVER["SERVER_PORT"].$this->host;
-				} else {
-					$url .= $_SERVER["HTTP_HOST"].$this->host;
-				}*/
-
-				$_SESSION['GO_SESSION']['full_url'] .= '://'.$_SERVER["SERVER_NAME"].$this->host;
+				$_SESSION['GO_SESSION']['full_url'] .= "://".$_SERVER["SERVER_NAME"];
+				if ((!$https && $_SERVER["SERVER_PORT"] != "80") || ($https && $_SERVER["SERVER_PORT"] != "443")) 
+					$_SESSION['GO_SESSION']['full_url'] .= ":".$_SERVER["SERVER_PORT"];
+								
+				$_SESSION['GO_SESSION']['full_url'] .= $this->host;
 			}
 			$this->full_url=$_SESSION['GO_SESSION']['full_url'];
 		}else
