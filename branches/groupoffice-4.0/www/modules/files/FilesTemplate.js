@@ -35,11 +35,16 @@ GO.files.filesTemplate =
 				'<td style="white-space:nowrap">{mtime}</td>'+
 
 				'<tpl if="extension!=\'folder\'">'+
-					'<td style="white-space:nowrap">'+
-					
-						'<a style="display:block" class="go-icon btn-edit" href="#files_{[xindex-1]}">&nbsp;</a>'+
-					
-					'</td>'+
+					'<tpl if="locked">'+
+						'<td style="white-space:nowrap">'+
+							'<div style="display:block;opacity:0.4;filter:alpha(opacity=40);" class="go-icon btn-edit">&nbsp;</div>'+
+						'</td>'+
+					'</tpl>'+
+					'<tpl if="!locked">'+
+						'<td style="white-space:nowrap">'+
+							'<a style="display:block" class="go-icon btn-edit" href="#files_{[xindex-1]}">&nbsp;</a>'+
+						'</td>'+
+					'</tpl>'+
 				'</tpl>'+
 				'<tpl if="extension==\'folder\'">'+
 					'<td style="white-space:nowrap">'+					
