@@ -802,8 +802,6 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		
 		if(!$findParams)
 			$findParams = new GO_Base_Db_FindParams();
-		
-		$findParams->debugSql();
 				
 		 $findParams->getCriteria()
 					->addModel(GO_Files_Model_Folder::model())
