@@ -174,9 +174,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				$node['children'][] = $this->_folderToNode($subfolder, $expandFolderIds, false);
 			}
 		} else {
-			//check if folder has subfolders
-			$firstSubfolder = $folder->hasChildren();
-			if (!$firstSubfolder) {
+			if (!$folder->hasChildren()) {
 				//it doesn't habe any subfolders so instruct the client about this
 				//so it can present the node as a leaf.
 				$node['children'] = array();

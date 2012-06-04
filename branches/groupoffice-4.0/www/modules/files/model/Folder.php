@@ -690,7 +690,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function hasChildren(){
-		return $this->getSubFolders(GO_Base_Db_FindParams::newInstance()->single(), true);
+		return true;//$this->getSubFolders(GO_Base_Db_FindParams::newInstance()->single(), true);
 	}
 	
 	/**
