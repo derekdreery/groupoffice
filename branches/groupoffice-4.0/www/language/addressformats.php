@@ -4,7 +4,8 @@ $af['default']='{address} {address_no}
 {state}
 {country}';
 
-$af['US']='{address_no} {address}
+$af['US']='{address}
+{address_no}
 {city}, {state} {zip}
 {country}';
 
@@ -20,7 +21,8 @@ $af['FR']='{address_no} {address}
 {zip} {city}
 {state} {country}';
 
-$af['GB']='{address_no} {address}
+$af['GB']='{address}
+{address_no}
 {city}
 {zip}
 {country}';
