@@ -48,8 +48,19 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 			$storeParams->getCriteria()->addInCondition('model_type_id', $types);
 		}
 		
-		if(isset($params['types'])){
-			$types = json_decode($params['types'], true);
+		if(!empty($params['type_filter'])) {
+			if(isset($params['types'])) {
+				$types= json_decode($params['types'], true);
+				if(!isset($params['no_filter_save']))
+					GO::config()->save_setting ('link_type_filter', implode(',',$types), GO::user()->id);
+			}else {
+				$types = GO::config()->get_setting('link_type_filter', GO::user()->id);
+				$types = empty($types) ? array() : explode(',', $types);
+			}
+		}
+		
+		if(!empty($types)){
+//			$types = json_decode($params['types'], true);
 			if(count($types))
 				$storeParams->getCriteria()->addInCondition('model_type_id', $types);
 		}
@@ -67,10 +78,13 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		
 		$stmt = GO_Base_Model_ModelType::model()->find();
 		
+		$typesString = GO::config()->get_setting('link_type_filter',GO::user()->id);
+		$typesArr = explode(',',$typesString);
+		
 		$types=array();
 		while($modelType = $stmt->fetch()){
 			$model = GO::getModel($modelType->model_name);
-			$types[$model->localizedName]=array('id'=>$modelType->id, 'model_name'=>$modelType->model_name, 'name'=>$model->localizedName);
+			$types[$model->localizedName]=array('id'=>$modelType->id, 'model_name'=>$modelType->model_name, 'name'=>$model->localizedName, 'checked'=>in_array($modelType->id,$typesArr));
 		}
 		
 		ksort($types);
