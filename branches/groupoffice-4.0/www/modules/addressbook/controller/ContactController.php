@@ -118,7 +118,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'contacts/contact_photos/'.$params['id'].'.jpg');
 		if(!$file->exists())
 			exit("No photo set");		
-		GO_Base_Util_Http::outputDownloadHeaders($file, true, true);
+		GO_Base_Util_Http::outputDownloadHeaders($file, true, false);
 		$file->output();
 	}
 	
@@ -126,7 +126,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	protected function afterDisplay(&$response, &$model, &$params) {
 			
 		$response['data']['name']=$model->name;
-		$response['data']['photo_url']=$model->photoURL;
+		$response['data']['photo_url']=$model->photoURL.'&mtime='.time();
 		$response['data']['addressbook_name']=$model->addressbook->name;
 		
 		$company = $model->company();
