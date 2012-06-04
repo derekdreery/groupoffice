@@ -681,7 +681,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 									->addCondition('parent_id', $this->id)
 									->mergeWith($aclWhereCriteria));
 			
-			if($noGrouping)
+			if(!$noGrouping)
 				$findParams->group(array('t.id'));
 		
 			return GO_Files_Model_Folder::model()->find($findParams);
