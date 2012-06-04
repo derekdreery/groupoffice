@@ -21,7 +21,9 @@ GO.groups.MainPanel = function(config){
 
 	this.store = new GO.data.JsonStore({
 	    url: GO.url('groups/group/store'),
-	    baseParams: {},
+	    baseParams: {
+				manage:1
+			},
 	    root: 'results',
 	    id: 'id',
 	    totalProperty:'total',

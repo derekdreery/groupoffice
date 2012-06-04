@@ -60,7 +60,31 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	protected function actionGroups($params) {
 		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_Group::model());
 		$store->setDefaultSortOrder('name', 'ASC');
-		$store->setStatement (GO_Base_Model_Group::model()->find($store->getDefaultParams($params)));
+		
+		$findParams = $store->getDefaultParams($params);
+		
+		if(empty($params['manage'])){
+			
+			//permissions are handled differently. Users may use all groups they are member of.
+			$findParams->ignoreAcl();
+			
+			if(!GO::user()->isAdmin()){
+				$findParams->getCriteria()
+								->addCondition('admin_only', 1,'!=')
+								->addCondition('user_id', GO::user()->id,'=','ug');
+				
+				$findParams->joinModel(array(
+						'model'=>"GO_Base_Model_UserGroup",
+						'localTableAlias'=>'t', //defaults to "t"	  
+						'foreignField'=>'group_id', //defaults to primary key of the remote model
+						'tableAlias'=>'ug', //Optional table alias
+	 			));
+			}
+			
+		}
+		
+		
+		$store->setStatement (GO_Base_Model_Group::model()->find($findParams));
 		return $store->getData();
 	}
 
