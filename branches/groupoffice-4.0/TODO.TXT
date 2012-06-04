@@ -1,3 +1,5 @@
+Add max_file_storage setting to servermanager
+
 Notifications on uploads (Michal)
 
 recurly (simon zimmo) (Wilmar)
