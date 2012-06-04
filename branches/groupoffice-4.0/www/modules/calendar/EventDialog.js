@@ -1493,7 +1493,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		
 		var form = this.formPanel.form;
 		switch (value) {
-			case '' :
+			default :
 				this.disableDays(true);
 				this.monthTime.setDisabled(true);
 				this.repeatForever.setDisabled(true);

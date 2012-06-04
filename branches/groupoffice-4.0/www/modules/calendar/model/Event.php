@@ -722,7 +722,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$e->location=$this->location;
 
 		if(!empty($this->rrule)){
-			$e->rrule=str_replace('RRULE:','',$this->rrule);					
+			
+			$rRule = new GO_Base_Util_Icalendar_Rrule();
+			$rRule->readIcalendarRruleString($this->start_time, $this->rrule);
+			
+			$e->rrule=str_replace('RRULE:','',$rRule->createRrule());					
 			$stmt = $this->exceptions(GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('exception_event_id', 0)));
 			while($exception = $stmt->fetch()){
 				$exdate = new Sabre_VObject_Element_DateTime('exdate',Sabre_VObject_Element_DateTime::DATE);

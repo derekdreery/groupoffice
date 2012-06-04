@@ -23,11 +23,11 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 	 * Create a Rrule object from a Rrule string. This function automatically finds 
 	 * out which Rrule version is used. 
 	 * 
-	 * @param String $eventStartTime The time the recurrence pattern starts. This is important to calculate the correct interval.
+	 * @param String $eventstarttime The time the recurrence pattern starts. This is important to calculate the correct interval.
 	 * @param String $rrule 'FREQ=DAILY;UNTIL=22-02-2222;INTERVAL=2;
 	 */
-	public function readIcalendarRruleString($eventStartTime, $rrule) {
-		$this->_eventStartTime = $eventStartTime;
+	public function readIcalendarRruleString($eventstarttime, $rrule) {
+		$this->_eventstarttime = $eventstarttime;
 		$rrule = str_replace('RRULE:', '', $rrule);
 		if (strpos($rrule, 'FREQ') === false) 
 			$this->_parseRruleIcalendarV1($rrule);
@@ -45,7 +45,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		$parameters['until'] = !isset($json['repeat_forever']) && isset($json['until']) ? GO_Base_Util_Date::to_unixtime($json['until']) : '';
 		$parameters['bymonth'] = isset($json['bymonth'])?$json['bymonth']:'';
 		$parameters['bymonthday'] = isset($json['bymonthday'])?$json['bymonthday']:'';
-		$parameters['eventStartTime'] = isset($json['eventStartTime'])?strtotime($json['eventStartTime']):strtotime($json['start_time']);
+		$parameters['eventstarttime'] = isset($json['eventstarttime'])?strtotime($json['eventstarttime']):strtotime($json['start_time']);
 		
 		$parameters['byday']=array();
 		
@@ -61,9 +61,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		
 		$this->setParams($parameters);
 		
-		$this->_shiftDays();	
-		
-		
+		$this->_byday = $this->shiftDays($this->_byday);			
 	}
 	
 		
@@ -72,22 +70,24 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 	 * 
 	 * @return String $rrule eg.: 'FREQ=DAILY;UNTIL=22-02-2222;INTERVAL=2;
 	 */
-	public function createRrule() {
+	public function createRrule($shiftDays=true) {
+		
+		$byday = $shiftDays ? $this->shiftDays($this->_byday, false) : $this->_byday;
 		
 		$rrule = 'RRULE:INTERVAL='.$this->_interval.';FREQ='.$this->_freq;
 
 		switch($this->_freq)
 		{
 			case 'WEEKLY':
-				$rrule .= ";BYDAY=".implode(',', $this->_byday);
+				$rrule .= ";BYDAY=".implode(',', $byday);
 			break;
 
 			case 'MONTHLY':				
 				if($this->_bymonthday){
-					$rrule .= ';BYMONTHDAY='.date('j', $this->_eventStartTime);
+					$rrule .= ';BYMONTHDAY='.date('j', $this->_eventstarttime);
 				}else
 				{
-					$rrule .= ';BYDAY='.implode(',', $this->_byday);
+					$rrule .= ';BYSETPOS='.$this->_bysetpos.';BYDAY='.implode(',', $byday);
 				}
 			break;
 		}
@@ -120,7 +120,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 
 			case 'MONTHLY':				
 				if($this->_bymonthday){
-					$rrule .= 'MD'.$this->_interval.' '.date('j', $this->_eventStartTime);
+					$rrule .= 'MD'.$this->_interval.' '.date('j', $this->_eventstarttime);
 				}else
 				{
 					$rrule .= 'MP'.$this->_interval.' '.$this->_bysetpos.'+ '.implode(',', $this->_byday);
@@ -290,6 +290,10 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 	 * @return array Rrule 
 	 */
 	public function createJSONOutput() {
+		
+		$days = $this->shiftDays($this->_byday, false);
+		//$days = $this->_byday;
+		
 		$response = array();
 		if (isset($this->_freq)) {
 			if (!empty($this->_until)){
@@ -306,17 +310,16 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 
 				case 'WEEKLY':
 					
-					foreach($this->_byday as $day)
+					foreach($days as $day)
 						$response[$day]=1;
+					break;
 
 				case 'MONTHLY':
-					if (isset($this->_byday) && !empty($this->_byday)) {
-						$response['bysetpos'] = substr($this->_byday[0], 0, 1);
-						foreach($this->_byday as $day)
+					if (isset($days) && !empty($days)) {
+						$response['bysetpos'] = substr($days[0], 0, 1);
+						foreach($days as $day)
 							$response[substr($day,1)]=1;						
-					} else {
-						$response['freq'];
-					}
+					} 
 					break;
 			}
 		}

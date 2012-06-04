@@ -86,7 +86,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		if (!empty($params['freq'])) {
 			$rRule = new GO_Base_Util_Icalendar_Rrule();
 			$rRule->readJsonArray($params);
-			$model->rrule = $rRule->createRrule();
+			$model->rrule = $rRule->createRrule(false);
 		} elseif (isset($params['freq'])) {
 			$model->rrule = "";
 		}
@@ -437,6 +437,10 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$settings = GO_Calendar_Model_Settings::model()->findByPk($model->calendar->user_id);
 			if($settings)
 				$response['data']['background']=$settings->background;
+			
+			$days = array('SU','MO','TU','WE','TH','FR','SA');
+			
+			$response['data'][$days[date('w')]]=1;
 		}
 		
 		if(!$model->isResource() && $model->id>0)
