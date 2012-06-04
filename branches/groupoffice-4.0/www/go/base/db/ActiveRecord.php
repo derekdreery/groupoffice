@@ -1124,7 +1124,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 		
 		
-		if($this->aclField() && empty($params['ignoreAcl']) && (!empty($params['limit']) && $params['limit']>1)){	
+		if($this->aclField() && empty($params['ignoreAcl']) && (empty($params['limit']) || $params['limit']!=1)){	
 			
 			//add group by pk so acl join won't return duplicate rows. Don't do this with limit=1 because that makes no sense and causes overhead.
 			
