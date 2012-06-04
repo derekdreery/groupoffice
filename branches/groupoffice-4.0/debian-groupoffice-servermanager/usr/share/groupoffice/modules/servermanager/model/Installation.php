@@ -150,7 +150,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		
 		return parent::beforeDelete();
 	}
-		
+	
 	
 	protected function afterDbInsert() {
 		if(class_exists("GO_Professional_LicenseCheck"))

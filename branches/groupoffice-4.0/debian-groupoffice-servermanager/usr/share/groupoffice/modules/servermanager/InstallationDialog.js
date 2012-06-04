@@ -134,7 +134,10 @@ Ext.extend(GO.servermanager.InstallationDialog, GO.Window,{
 		this.formPanel.form.findField('admin_password1').allowBlank=installation_id>0;
 		this.formPanel.form.findField('admin_password2').allowBlank=installation_id>0;
 
+		
 		this.formPanel.form.findField('enabled').setDisabled(installation_id==0);
+		
+		this.formPanel.form.findField('name').setDisabled(installation_id>0);
 	//	this.configPanel.setDisabled(installation_id==0);
 		//this.linksPanel.loadLinks(installation_id, 13);
 

@@ -149,9 +149,8 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$configFile->chgrp('www-data');
 		$configFile->chmod(0640);		
 		
-		$this->_createDatabase($installation, $existingConfig);		
+		$this->_createDatabase($params,$installation, $existingConfig);		
 		
-		$this->_createDatabaseContent($params, $installation, $existingConfig);
 	}
 	
 	private function _createDatabaseContent($params, $installation, $config){
@@ -188,7 +187,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 
 	}
 	
-	private function _createDatabase($installation, $config){
+	private function _createDatabase($params, $installation, $config){
 		
 		try{			
 			if(!GO_Base_Db_Utils::databaseExists($config['db_name'])){
@@ -197,7 +196,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				
 				$this->_createDbUser($config);
 
-				
+				$this->_createDatabaseContent($params, $installation, $existingConfig);
 			}
 		}catch(Exception $e){
 			
@@ -274,7 +273,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 						' --tmp_config='.$tmpConfigFile->path().
 						' --name='.$model->name.	
 						' --adminpassword='.$params['admin_password1'].' 2>&1';
-		
+		//throw new Exception($cmd);
 		exec($cmd, $output, $return_var);		
 
 		if($return_var!=0){
