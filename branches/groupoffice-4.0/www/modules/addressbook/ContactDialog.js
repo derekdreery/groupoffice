@@ -43,7 +43,7 @@ GO.addressbook.ContactDialog = function(config)
 	this.deleteImageCB = new Ext.form.Checkbox({
 		boxLabel: GO.addressbook.lang.deleteImage,
 		labelSeparator: '',
-		name: 'delete_image',
+		name: 'delete_photo',
 		allowBlank: true,
 		hideLabel:true,
 		disabled:true
