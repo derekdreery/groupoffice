@@ -31,9 +31,29 @@ class GO_Base_Util_String {
 	 * @param type $string
 	 * @return type 
 	 */
-	public static function utf8ToASCII($string){
+	public static function utf8ToASCII($string) {
+
+		//cyrillic
+		$cyr = array(
+		"а", "б", "в", "г", "д", "ђ", "е", "ж", "з", "и", "й", "ј", "к", "л", "љ", "м", "н",
+    "њ", "о", "п", "р", "с", "т", "ћ", "у", "ф", "х", "ц", "ч", "џ", "ш","ъ","ы","ь","э","ю","я",
+				
+    "А", "Б", "В", "Г", "Д", "Ђ", "Е", "Ж", "З", "И", "Й", "Ј", "К", "Л", "Љ", "М", "Н",
+    "Њ", "О", "П", "Р", "С", "Т", "Ћ", "У", "Ф", "Х", "Ц", "Ч", "Џ", "Ш","Ъ","Ы","Ь","Э","Ю","Я");
+		
+
+
+    $lat = array ("a", "b", "v", "g", "d", "d", "e", "z", "z", "i", "j", "j", "k", "l", "lj", "m", "n", "nj", "o", "p",
+    "r", "s", "t", "c", "u", "f", "h", "c", "c", "dz", "s","'","Y","'","e","yu","ya",
+				
+    "A", "B", "B", "G", "D", "D", "E", "Z", "Z", "I", "J", "J", "K", "L", "LJ", "M", "N", "NJ", "O", "P",
+    "R", "S", "T", "C", "U", "F", "H", "C", "C", "DZ", "S","'","Y","'","E","Yu","Ya"
+    );
+		
+		$string = str_replace($cyr, $lat, $string);
+
 		setlocale(LC_ALL, 'en_US.UTF8');
-		return iconv("UTF-8","ASCII//TRANSLIT",$string);
+		return iconv("UTF-8", "US-ASCII//TRANSLIT", $string);
 		//return preg_replace('/[^a-zA-Z0-9 ,-:_]+/','',$string);
 	}
 
