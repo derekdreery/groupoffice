@@ -122,9 +122,15 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		if($forceResolve || !isset($this->_path)){
 			$this->_path = $this->name;
 			$currentFolder = $this;
-			while ($currentFolder = $currentFolder->parent) {
+			
+			$ids=array($this->id);
+			
+			while ($currentFolder = $currentFolder->parent) {				
 				
-				GO::debug($currentFolder->name);
+				if(in_array($currentFolder->id, $ids))
+					throw new Exception("Infinite folder loop detected in ".$this->_path." ".implode(",", $ids));
+				else
+					$ids[]=$currentFolder->id;
 				
 				$this->_path = $currentFolder->name . '/' . $this->_path;
 			}
