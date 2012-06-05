@@ -822,7 +822,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			}
 		});
 
-		this.allDayCB = new Ext.form.Checkbox({
+		this.allDayCB = new Ext.ux.form.XCheckbox({
 			boxLabel : GO.calendar.lang.allDay,
 			name : 'all_day_event',
 			checked : false,
@@ -1051,7 +1051,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 		this.cb = [];
 		for (var day = 0; day < 7; day++) {
-			this.cb[day] = new Ext.form.Checkbox({
+			this.cb[day] = new Ext.ux.form.XCheckbox({
 				boxLabel : GO.lang.shortDays[day],
 				name : days[day],
 				disabled : true,
@@ -1076,7 +1076,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			}
 		});
 
-		this.repeatForever = new Ext.form.Checkbox({
+		this.repeatForever = new Ext.ux.form.XCheckbox({
 			boxLabel : GO.calendar.lang.repeatForever,
 			name : 'repeat_forever',
 			checked : true,
@@ -1167,7 +1167,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		this.participantsPanel = new GO.calendar.ParticipantsPanel(this);
 
 
-		this.privateCB = new Ext.form.Checkbox({
+		this.privateCB = new Ext.ux.form.XCheckbox({
 			boxLabel : GO.calendar.lang.privateEvent,
 			name : 'private',
 			checked : false,
