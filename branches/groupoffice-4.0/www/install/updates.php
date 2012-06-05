@@ -220,3 +220,12 @@ $updates["201204251613"][]="ALTER TABLE `go_search_cache` ADD INDEX ( `keywords`
 $updates["201204251613"][]="ALTER TABLE `go_search_cache` CHANGE `keywords` `keywords` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 
 $updates["201204251613"][]="update go_users set language='en' where language='';";
+
+$updates["201206051617"][]="ALTER TABLE `go_search_cache` ADD FULLTEXT ft_keywords(
+`name` ,
+`keywords`
+);";
+
+$updates["201206051617"][]="ALTER TABLE go_search_cache DROP INDEX name";
+$updates["201206051617"][]="ALTER TABLE go_search_cache DROP INDEX keywords";
+$updates["201206051617"][]="ALTER TABLE go_search_cache DROP INDEX name_2";

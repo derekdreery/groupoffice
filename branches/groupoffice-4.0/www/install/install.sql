@@ -321,10 +321,8 @@ CREATE TABLE IF NOT EXISTS `go_search_cache` (
   `acl_id` int(11) NOT NULL,
   `type` varchar(20) NOT NULL,
   PRIMARY KEY (`model_id`,`model_type_id`),
-  KEY `name` (`name`),
-  KEY `keywords` (`keywords`),
   KEY `acl_id` (`acl_id`),
-  KEY `mtime` (`mtime`)
+  FULLTEXT KEY `ft_keywords` (`name`,`keywords`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

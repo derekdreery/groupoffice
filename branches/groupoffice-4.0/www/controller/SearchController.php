@@ -28,6 +28,11 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		//search query is required
 		if(empty($params["query"])){
 			return false;
+		}else
+		{
+			//we'll do a full text search in getStoreParams			
+			$params['match']=$params["query"];
+			unset($params["query"]);
 		}
 	
 		
@@ -67,6 +72,10 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		}		
 		
 		$storeParams->getCriteria()->addInCondition('model_type_id', $types);
+		
+		
+		//if (!empty($matchQuery))
+		$storeParams->getCriteria()->addMatchCondition(array('name','keywords'), '+'.str_replace(' ',' +',$params['match']));
 		
 		return $storeParams;
 	}

@@ -253,7 +253,14 @@ class GO_Base_Db_FindCriteria {
 		$paramTag = $this->_getParamTag();
 		$this->_params[$paramTag]=array($matchQuery, PDO::PARAM_STR);
 		
-		$this->_condition .= ' MATCH(`'.$tableAlias.'`.`'.$field.'`) AGAINST ('.$paramTag.' IN '.$mode.' MODE)';
+		$fields = array();
+		if(!is_array($field))
+			$field = array($field);
+		
+		foreach($field as $f)
+		 $fields[]='`'.$tableAlias.'`.`'.$f.'`';
+		
+		$this->_condition .= ' MATCH('.implode(",", $fields).') AGAINST ('.$paramTag.' IN '.$mode.' MODE)';
 		
 		return $this;
 	}
