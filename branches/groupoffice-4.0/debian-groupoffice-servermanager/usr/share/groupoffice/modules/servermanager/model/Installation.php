@@ -54,6 +54,12 @@
 class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 
 	/**
+	 * Ignore existing database and folder structure when importing.
+	 * 
+	 * @var boolean 
+	 */
+	public $ignoreExistingForImport=false;
+	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
@@ -113,7 +119,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		if(empty($this->dbName))
 			$this->setValidationError('name','Name is invalid');
 		
-		if($this->isNew){
+		if($this->isNew && !$this->ignoreExistingForImport){
 			if(file_exists('/var/lib/mysql/'.$this->dbName) || file_exists('/etc/apache2/sites-enabled/'.$this->name) || is_dir($this->installPath))
 				$this->setValidationError ('name', GO::t('duplicateHost','servermanager'));
 		}
