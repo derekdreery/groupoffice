@@ -218,3 +218,5 @@ $updates["201204251613"][]="ALTER TABLE `go_search_cache` ADD INDEX ( `acl_id` )
 $updates["201204251613"][]="ALTER TABLE `go_search_cache` ADD INDEX ( `keywords` ) ";
 
 $updates["201204251613"][]="ALTER TABLE `go_search_cache` CHANGE `keywords` `keywords` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+
+$updates["201204251613"][]="update go_users set language='en' where language='';";
