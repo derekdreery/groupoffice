@@ -435,6 +435,10 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 //			echo "Done\n\n";
 //			ob_flush();
 			
+			$versioningFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'versioning');
+			if($versioningFolder->exists())
+				$versioningFolder->rename("versioning_backup_3_7");
+				
 			echo "Building search cache after version 3.7 upgrade.\n";
 			ob_flush();
 			$this->actionBuildSearchCache($params);
