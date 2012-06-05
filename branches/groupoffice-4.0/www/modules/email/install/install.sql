@@ -162,6 +162,7 @@ CREATE TABLE IF NOT EXISTS `em_links` (
   `time` int(11) NOT NULL DEFAULT '0',
   `path` varchar(255) DEFAULT NULL,
   `ctime` int(11) NOT NULL,
+	`mtime` INT NOT NULL,
   `acl_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `account_id` (`user_id`)
