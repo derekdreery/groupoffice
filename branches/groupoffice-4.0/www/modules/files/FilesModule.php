@@ -33,7 +33,8 @@ class GO_Files_FilesModule extends GO_Base_Module{
 			if(!$folder->acl){
 				$folder->setNewAcl($user->id);
 				$folder->user_id=$user->id;
-				$folder->visible=1;
+				$folder->visible=0;
+				$folder->readonly=1;
 				$folder->save();
 			}
 			//$folder->syncFilesystem();		

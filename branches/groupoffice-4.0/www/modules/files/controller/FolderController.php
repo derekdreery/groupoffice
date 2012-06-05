@@ -48,6 +48,17 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		return $expandFolderIds;
 	}
 	
+	private function _buildSharedTree($expandFolderIds){
+		
+		$shares =GO_Files_Model_Folder::model()->getTopLevelShares(GO_Base_Db_FindParams::newInstance()->limit(100));
+		foreach($shares as $folder){
+			$response[]=$this->_folderToNode($folder, $expandFolderIds, false);	
+		}
+		
+		return $response;
+
+	}
+	
 
 	protected function actionTree($params) {
 		//GO::$ignoreAclPermissions=true;
@@ -72,12 +83,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		switch ($params['node']) {
 			case 'shared':
-				$stmt = GO_Files_Model_Folder::model()->findShares(GO_Base_Db_FindParams::newInstance()->limit(100));
-				while ($folder = $stmt->fetch()) {
-					$folder->checkFsSync();
-					
-					$response[] = $this->_folderToNode($folder, $expandFolderIds, false);
-				}
+				$response=$this->_buildSharedTree($expandFolderIds);
 				break;
 			case 'root':
 				if (!empty($params['root_folder_id'])) {
@@ -378,19 +384,26 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 	private function _listShares($params) {
 
-		$store = GO_Base_Data_Store::newInstance(GO_Files_Model_Folder::model());
-		
-		//set sort aliases
-		$store->getColumnModel()->formatColumn('type', '$model->type',array(),'name');
-		$store->getColumnModel()->formatColumn('size', '"-"',array(),'name');
-		
-		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatListRecord'));
-		$findParams = $store->getDefaultParams($params);
-		$stmt = GO_Files_Model_Folder::model()->findShares($findParams);
-		$store->setStatement($stmt);
-
-		$response = $store->getData();
+		//$store = GO_Base_Data_Store::newInstance(GO_Files_Model_Folder::model());
+//		
+//		//set sort aliases
+//		$store->getColumnModel()->formatColumn('type', '$model->type',array(),'name');
+//		$store->getColumnModel()->formatColumn('size', '"-"',array(),'name');
+//		
+//		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatListRecord'));
+//		$findParams = $store->getDefaultParams($params);
+//		$stmt = GO_Files_Model_Folder::model()->findShares($findParams);
+//		$store->setStatement($stmt);
+//
+//		$response = $store->getData();
 		$response['permission_level']=GO_Base_Model_Acl::READ_PERMISSION;
+		
+		$shares =GO_Files_Model_Folder::model()->getTopLevelShares(GO_Base_Db_FindParams::newInstance()->limit(100));
+		foreach($shares as $folder){
+			$record=$folder->getAttributes("html");
+			$record = $this->formatListRecord($record, $folder, false);
+			$response['results'][]=$record;
+		}
 		return $response;
 	}
 	

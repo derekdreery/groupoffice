@@ -40,10 +40,12 @@ class GO_Dav_Fs_SharedDirectory extends Sabre_DAV_FS_Directory implements Sabre_
 	 */
 	public function getChildren() {
 		GO::debug('Shared::getChildren()');
-		$stmt = GO_Files_Model_Folder::model()->findShares();
+		//$stmt = GO_Files_Model_Folder::model()->findShares();
+		
+		$shares =GO_Files_Model_Folder::model()->getTopLevelShares(GO_Base_Db_FindParams::newInstance()->limit(100));
 
 		$nodes = array();
-		while($folder = $stmt->fetch()){
+		while($folder = array_shift($shares)){
 			$nodes[]=new GO_DAV_FS_Directory($folder->path);
 		}
 

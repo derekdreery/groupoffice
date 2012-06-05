@@ -810,23 +810,32 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		
 		return GO_Files_Model_Folder::model()->find($findParams);
 		
-//		//sort by path and only list top level shares
-//		$shares = array();
-//		while($folder = $stmt->fetch())
-//		{
-//			$shares[$folder->path]=$folder;
-//		}
-//		ksort($shares);
-//		
-//		$response=array();
-//		foreach($shares as $path=>$folder){
-//			$isSubDir = isset($lastFolder) && $folder->isSubFolderOf($lastFolder);
-//			
-//			if(!$isSubDir)
-//				$response[]=$folder;
-//			$lastFolder=$folder;
-//		}
-//		
-//		return $response;
+		
+	}
+	
+	public function getTopLevelShares($findParams=false){
+		
+		$stmt = $this->findShares($findParams);
+		//sort by path and only list top level shares
+		$shares = array();
+		while ($folder = $stmt->fetch()) {
+			$folder->checkFsSync();
+			
+			//sort by path and only list top level shares		
+			$shares[$folder->path]=$folder;
+		}
+		ksort($shares);
+		
+		$response=array();
+		foreach($shares as $path=>$folder){
+			$isSubDir = isset($lastPath) && strpos($path.'/', $lastPath.'/')===0;
+			
+			if(!$isSubDir)
+				$response[]=$folder;
+			
+			$lastPath=$path;
+		}
+		
+		return $response;
 	}
 }
