@@ -129,6 +129,10 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		if(empty($params['keepexisting']))
 			GO::getDbConnection()->query('TRUNCATE TABLE go_search_cache');
+		
+		//inserting is much faster without full text index. It's faster to add it again afterwards.
+		GO::getDbConnection()->query("ALTER TABLE go_search_cache DROP INDEX ft_keywords");
+		
 		if(!headers_sent())
 			header('Content-Type: text/plain; charset=UTF-8');
 		
@@ -143,6 +147,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		GO::modules()->callModuleMethod('buildSearchCache', array(&$response));
 		
+		GO::getDbConnection()->query("ALTER TABLE `go_search_cache` ADD FULLTEXT ft_keywords(`name` ,`keywords`);");
 		
 		echo "\n\nAll done!\n\n";
 	}
