@@ -1116,8 +1116,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 					if($tableAlias=='t')
 						$advQueryRecord['value']=GO::getModel($this->model)->formatInput($field, $advQueryRecord['value']);						
-					elseif($tableAlias=='cf')
+					elseif($tableAlias=='cf'){
 						$advQueryRecord['value']=GO::getModel(GO::getModel($this->model)->customfieldsModel())->formatInput ($field, $advQueryRecord['value']);
+					}
 					
 					$criteriaGroup->addCondition($field, $advQueryRecord['value'], $advQueryRecord['comparator'],$tableAlias,$advQueryRecord['andor']=='AND');
 				}

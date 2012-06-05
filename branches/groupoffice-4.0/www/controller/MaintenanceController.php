@@ -15,7 +15,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	
 
 	protected function actionTest($params) {
-
+		
 	}
 
 	protected function init() {
