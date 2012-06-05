@@ -590,24 +590,30 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$this->_new=$new;
 	}
 
+	private $_pdo;
 	
 	/**
 	 * Returns the database connection used by active record.
 	 * By default, the "db" application component is used as the database connection.
 	 * You may override this method if you want to use a different database connection.
-	 * @return PDO the database connection used by active record.
+	 * @return GO_Base_Db_PDO the database connection used by active record.
 	 */
 	public function getDbConnection()
 	{
-		return GO::getDbConnection();
+		if(!isset($this->_pdo))
+			$this->_pdo= GO::getDbConnection();
 		
-//		if(self::$db!==null)
-//			return self::$db;
-//		else
-//		{
-//			self::$db=GO::getDbConnection();			
-//		}
-//		return self::$db;
+		return $this->_pdo;
+	}
+	
+	/**
+	 * Connect the model to another database then the default.
+	 * 
+	 * @param GO_Base_Db_PDO $pdo 
+	 */
+	public function setDbConnection(GO_Base_Db_PDO $pdo){
+		$this->_pdo=$pdo;
+		GO::modelCache()->remove($this->className());
 	}
 	
 	private function _joinAclTable(){
