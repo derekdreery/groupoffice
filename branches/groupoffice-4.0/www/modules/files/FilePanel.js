@@ -95,6 +95,10 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 						var filesModulePanel = GO.mainLayout.getModulePanel('files');
 						if(filesModulePanel && filesModulePanel.folder_id==this.data.folder_id)
 							filesModulePanel.getActiveGridStore().load();
+						if (!GO.util.empty(GO.files.fileBrowser))
+							GO.files.fileBrowser.gridStore.load();
+						if (!GO.util.empty(GO.selectFileBrowser))
+							GO.selectFileBrowser.gridStore.load();
 					},
 					scope:this
 				})

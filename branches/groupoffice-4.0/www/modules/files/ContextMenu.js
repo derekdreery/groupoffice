@@ -96,6 +96,11 @@ GO.files.FilesContextMenu = function(config)
 						filesModulePanel.filePanel.setVisible(true);
 						filesModulePanel.filePanel.load(this.records[0].json.id,true);
 					}
+					
+					if (!GO.util.empty(GO.files.fileBrowser))
+						GO.files.fileBrowser.gridStore.load();
+					if (!GO.util.empty(GO.selectFileBrowser))
+						GO.selectFileBrowser.gridStore.load();
 				},
 				scope:this
 			})
@@ -122,6 +127,10 @@ GO.files.FilesContextMenu = function(config)
 						filesModulePanel.filePanel.setVisible(true);
 						filesModulePanel.filePanel.load(this.records[0].json.id,true);
 					}
+					if (!GO.util.empty(GO.files.fileBrowser))
+						GO.files.fileBrowser.gridStore.load();
+					if (!GO.util.empty(GO.selectFileBrowser))
+						GO.selectFileBrowser.gridStore.load();
 				},
 				scope:this
 			})
