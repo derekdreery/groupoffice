@@ -1051,7 +1051,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 		this.cb = [];
 		for (var day = 0; day < 7; day++) {
-			this.cb[day] = new Ext.ux.form.XCheckbox({
+			this.cb[day] = new Ext.form.Checkbox({
 				boxLabel : GO.lang.shortDays[day],
 				name : days[day],
 				disabled : true,
