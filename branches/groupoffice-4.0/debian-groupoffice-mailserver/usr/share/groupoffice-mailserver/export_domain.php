@@ -76,7 +76,7 @@ file_put_contents($sql_file, $sql, FILE_APPEND);
 
 $pa->get_mailboxes($domain_id);
 while($record = $pa->next_record()){
-
+	unset($record['id']);
 	$record['domain_id']='{domain_id}';
 
 	$sql = $sql_export->array_to_insert('pa_mailboxes', $record, 'INSERT IGNORE').";\n";
@@ -88,7 +88,7 @@ file_put_contents($sql_file, "\n---\n\n", FILE_APPEND);
 
 $pa->get_aliases($domain_id);
 while($record = $pa->next_record()){
-	
+	unset($record['id']);
 	$record['domain_id']='{domain_id}';
 	
 	$sql = $sql_export->array_to_insert('pa_aliases', $record, 'INSERT IGNORE').";\n";
