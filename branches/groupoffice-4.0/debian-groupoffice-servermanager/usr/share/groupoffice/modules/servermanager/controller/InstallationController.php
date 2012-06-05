@@ -22,6 +22,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				if(!$installation){
 					echo "Importing ".$item->name()."\n";
 					$installation = new GO_ServerManager_Model_Installation();
+					$installation->ignoreExistingForImport=true;
 					$installation->name=$item->name();					
 					$installation->report();					
 				}
