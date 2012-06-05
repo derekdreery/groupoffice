@@ -56,7 +56,8 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 					$stmt = GO_Base_Model_ModelType::model()->find();
 					while($modelType = $stmt->fetch()){
 						$model = GO::getModel($modelType->model_name);
-						if(GO::modules()->{$model->module})
+						$module = $modelType->model_name == "GO_Base_Model_User" ? "users" : $model->module;
+						if(GO::modules()->{$module})
 							$types[]=$modelType->id;
 					}
 
@@ -93,7 +94,10 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		$types=array();
 		while($modelType = $stmt->fetch()){
 			$model = GO::getModel($modelType->model_name);
-			if(GO::modules()->{$model->module})
+			
+			$module = $modelType->model_name == "GO_Base_Model_User" ? "users" : $model->module;
+			
+			if(GO::modules()->{$module})
 				$types[$model->localizedName]=array('id'=>$modelType->id, 'model_name'=>$modelType->model_name, 'name'=>$model->localizedName, 'checked'=>in_array($modelType->id,$typesArr));
 		}
 		
