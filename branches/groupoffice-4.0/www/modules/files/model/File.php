@@ -167,8 +167,9 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	
 	protected function beforeDelete() {
 		
-		if($this->isLocked())
-			throw new Exception(GO::t("fileIsLocked","files"));
+		//blocked database check. We check this in the controller now.
+		if($this->isLocked() && !GO::user()->isAdmin())
+			throw new Exception(GO::t("fileIsLocked","files").': '.$this->path);
 		
 		return parent::beforeDelete();
 	}
