@@ -197,6 +197,17 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				$this->_createDbUser($config);
 
 				$this->_createDatabaseContent($params, $installation, $existingConfig);
+			}else
+			{
+				if(!empty($params['adminpassword'])){
+					GO::setDbConnection($config["db_name"], $config["db_user"], $config["db_pass"]);					
+					
+					$admin = GO_Base_Model_User::model()->findByPk(1, false,true,true);
+					$admin->password=$params['adminpassword'];
+					$admin->save();	
+					
+					GO::setDbConnection();
+				}
 			}
 		}catch(Exception $e){
 			
