@@ -7,11 +7,16 @@
 class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractController {
 	
 	protected function allowGuests() {
-		return array('upgrade','checkdatabase','servermanagerreport');
+		return array('upgrade','checkdatabase','servermanagerreport','test');
 	}
 	
 	//don't check token in this controller
 	protected function checkSecurityToken(){}
+	
+
+	protected function actionTest($params) {
+
+	}
 
 	protected function init() {
 		GO::$disableModelCache=true; //for less memory usage
