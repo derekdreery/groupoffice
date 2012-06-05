@@ -53,14 +53,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 				$types= json_decode($params['types'], true);
 				//only search for available types. eg. don't search for contacts if the user doesn't have access to the addressbook
 				if(empty($types)){
-					$stmt = GO_Base_Model_ModelType::model()->find();
-					while($modelType = $stmt->fetch()){
-						$model = GO::getModel($modelType->model_name);
-						$module = $modelType->model_name == "GO_Base_Model_User" ? "users" : $model->module;
-						if(GO::modules()->{$module})
-							$types[]=$modelType->id;
-					}
-
+					$types=$this->_getAllModelTypes();
 				}
 				if(!isset($params['no_filter_save']))
 					GO::config()->save_setting ('link_type_filter', implode(',',$types), GO::user()->id);
@@ -68,13 +61,27 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 				$types = GO::config()->get_setting('link_type_filter', GO::user()->id);
 				$types = empty($types) ? array() : explode(',', $types);	
 			}
-		}
-		
-		
+		}else
+		{
+			$types=$this->_getAllModelTypes();
+		}		
 		
 		$storeParams->getCriteria()->addInCondition('model_type_id', $types);
 		
 		return $storeParams;
+	}
+	
+	private function _getAllModelTypes(){
+		$types=array();
+		$stmt = GO_Base_Model_ModelType::model()->find();
+		while($modelType = $stmt->fetch()){
+			$model = GO::getModel($modelType->model_name);
+			$module = $modelType->model_name == "GO_Base_Model_User" ? "users" : $model->module;
+			if(GO::modules()->{$module})
+				$types[]=$modelType->id;
+		}
+		return $types;
+
 	}
 	
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
