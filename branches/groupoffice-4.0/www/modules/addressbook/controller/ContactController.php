@@ -126,7 +126,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	protected function afterDisplay(&$response, &$model, &$params) {
 			
 		$response['data']['name']=$model->name;
-		$response['data']['photo_url']=$model->photoURL.'&mtime='.time();
+		$response['data']['photo_url']=$model->photoURL;
 		$response['data']['addressbook_name']=$model->addressbook->name;
 		
 		$company = $model->company();

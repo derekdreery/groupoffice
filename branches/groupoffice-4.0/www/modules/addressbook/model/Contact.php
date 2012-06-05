@@ -277,7 +277,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function getPhotoURL(){
-		return $this->photo ? GO::url('addressbook/contact/photo', 'id='.$this->id) : '';
+		return $this->photo ? GO::url('addressbook/contact/photo', array('id'=>$this->id,'mtime'=>filemtime($this->photo))) : '';
 	}
 	
 	/**
