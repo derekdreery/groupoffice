@@ -1,3 +1,7 @@
+Import matching dialog
+
+resize vcard photo's
+
 Add max_file_storage setting to servermanager
 
 Notifications on uploads (Michal)
@@ -6,7 +10,6 @@ recurly (simon zimmo) (Wilmar)
 
 Password sync postfixadmin
 
-carddav
 Koba
 
 Settings module (Michael)
