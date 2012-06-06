@@ -475,7 +475,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$this->setAttribute('company_id',$company->id);			
 		}
 		$this->save();
-		if (!empty($photoFile));
+		
+		if (!empty($photoFile))
 			$this->setPhoto($photoFile->path());
 		
 		foreach ($remainingVcardProps as $prop) {
