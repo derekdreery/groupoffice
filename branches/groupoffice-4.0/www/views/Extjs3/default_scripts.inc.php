@@ -338,7 +338,7 @@ if(!isset($default_scripts_load_modules)){
 $modulesCacheStr = array();
 foreach($load_modules as $module)
 	if($module['read_permission']) 
-			$modulesCacheStr[]=$module['id'];
+			$modulesCacheStr[]=$module['id'].($module['write_permission'] ? '0' : '1');
 	
 $modulesCacheStr=md5(implode('-',$modulesCacheStr));
 
