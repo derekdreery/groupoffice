@@ -191,7 +191,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	protected function beforeSave() {
 		
 		//Don't set reminders for the superadmin
-		if($this->calendar->user_id==1)
+		if($this->calendar->user_id==1 && !GO::config()->debug)
 			$this->reminder=0;
 		
 		
@@ -769,6 +769,23 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		//todo alarms
 		
+		if($this->reminder>0){
+//			BEGIN:VALARM
+//ACTION:DISPLAY
+//TRIGGER;VALUE=DURATION:-PT5M
+//DESCRIPTION:Default Mozilla Description
+//END:VALARM
+			$a=new Sabre_VObject_Component('valarm');
+			$a->action='DISPLAY';
+			$trigger = new Sabre_VObject_Property('trigger','-PT'.($this->reminder/60).'M');
+			$trigger['VALUE']='DURATION';
+			$a->add($trigger);
+			$a->description="Default description";
+			
+			$e->add($a);
+			
+		}
+		
 		return $e;
 	}
 	
@@ -920,6 +937,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			}
 			
 		}
+		
+		if($vobject->valarm){
+			$reminderTime = $vobject->valarm->getEffectiveTriggerTime();
+			//echo $reminderTime->format('c');
+			$this->reminder = $this->start_time-$reminderTime->format('U');
+		}
 
 		$this->save();
 		
@@ -942,6 +965,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$this->addException($dt->format('U'));
 			}
 		}
+		
+		
 
 		return $this;
 	}	
