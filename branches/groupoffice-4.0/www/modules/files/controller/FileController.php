@@ -69,10 +69,20 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		$response['data']['extension'] = $model->fsFile->extension();
 		$response['data']['type'] = GO::t($model->fsFile->extension(), 'base', 'filetypes');
 		
+		$response['data']['name']=$model->fsFile->nameWithoutExtension();
+		
 		if (GO::modules()->customfields)
 			$response['customfields'] = GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Files_Model_File", $model->folder_id);
 
 		return parent::afterLoad($response, $model, $params);
+	}
+	
+	protected function beforeSubmit(&$response, &$model, &$params) {
+		
+		if(isset($params['name']))		
+			$params['name'].='.'.$model->fsFile->extension();		
+		
+		return parent::beforeSubmit($response, $model, $params);
 	}
 
 	protected function actionDownload($params) {
