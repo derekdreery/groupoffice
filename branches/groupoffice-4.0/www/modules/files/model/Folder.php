@@ -830,10 +830,10 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		foreach($shares as $path=>$folder){
 			$isSubDir = isset($lastPath) && strpos($path.'/', $lastPath.'/')===0;
 			
-			if(!$isSubDir)
-				$response[]=$folder;
-			
-			$lastPath=$path;
+			if(!$isSubDir){
+				$response[]=$folder;			
+				$lastPath=$path;
+			}
 		}
 		
 		return $response;
