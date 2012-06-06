@@ -220,6 +220,13 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$storeParams = GO_Base_Db_FindParams::newInstance()
 			->export("contact")
 			->criteria($criteria)		
+			->searchFields(array(
+				"CONCAT(t.first_name,t.middle_name,t.last_name)", 
+				"t.email",
+				"t.email2",
+				"t.email3",			
+				"c.name",
+				))
 			->joinModel(array(
 				'model'=>'GO_Addressbook_Model_Company',					
 	 			'foreignField'=>'id', //defaults to primary key of the remote model

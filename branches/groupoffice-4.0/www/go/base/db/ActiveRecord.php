@@ -1388,7 +1388,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * 
 	 * @return array Field names that should be used for the search query.
 	 */
-	public function getFindSearchQueryParamFields($prefixTable='t', $withCustomFields=true){
+	public function getFindSearchQueryParamFields($prefixTable='t', $withCustomFields=false){
 		//throw new Exception('Error: you supplied a searchQuery parameter to find but getFindSearchQueryParamFields() should be overriden in '.$this->className());
 		$fields = array();
 		foreach($this->columns as $field=>$attributes){
