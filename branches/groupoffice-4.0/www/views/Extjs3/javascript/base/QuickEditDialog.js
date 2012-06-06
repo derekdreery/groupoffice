@@ -114,7 +114,7 @@ Ext.extend(GO.base.QuickEditDialog, GO.Window, {
 
 		this.editGrid = new GO.grid.GridPanel({
 			height: 'auto',
-			width: 'auto',
+//			width: 'auto',
 			plugins: [ this.rowEditor ],
 			store: this.store,
 			columns: this.editorGridParams.gridColumns,
@@ -122,15 +122,18 @@ Ext.extend(GO.base.QuickEditDialog, GO.Window, {
 			enableDragDrop : false,
 			enableHdMenu : false,
 			paging: true,
-			view:new Ext.grid.GridView({
-				autoFill: true,
-				forceFit: true,
+			view: new Ext.grid.GridView({
+				autoFill: false,
+//				forceFit: true,
 				emptyText: GO.lang['strNoItems']
 			}),
 			sm:new Ext.grid.RowSelectionModel(),
 			loadMask:true,
 			clicksToEdit:1
 		});
+		
+		for (var i=0;i<this.editGrid.getColumnModel().getColumnCount();i++)
+			this.editGrid.getColumnModel().setHidden(i,false);
 
 		GO.request({
 			url : this.editorGridParams.moduleName+'/'+this.editorGridParams.modelName+'/attributes',
@@ -190,12 +193,6 @@ Ext.extend(GO.base.QuickEditDialog, GO.Window, {
 	_hasKey : function(needle, haystack) {
 		for(var currentNeedle in haystack)
 			if(currentNeedle == needle) return true;
-		return false;
-	},
-	
-	_inArray : function(needle,haystack) {
-		for(var i=0; i<haystack.length; i++)
-			if (haystack[i]==needle) return i;
 		return false;
 	},
 	
@@ -270,10 +267,39 @@ Ext.extend(GO.base.QuickEditDialog, GO.Window, {
 	
 });
 
-GO.base.QuickEditDialog.cloneColumns = function (colArray) {
-	var arrayOfClones = [];
+//GO.base.QuickEditDialog.inArray = function(needle,haystack) {
+//	for(var i=0; i<haystack.length; i++)
+//		if (haystack[i]==needle) return i;
+//	return false;
+//}
+
+GO.base.QuickEditDialog.getValidColDataIds = function (colArray) {
+	var validColDataIds = [];
 	for (var i=0; i<colArray.length; i++) {
-		arrayOfClones[i] = GO.util.clone(colArray[i]);
+		if (
+				colArray[i].datatype!='GO_Customfields_Customfieldtype_Heading' // Doesn't make sense to put a non-editable field in the editorGrid
+				&& colArray[i].datatype!='GO_Customfields_Customfieldtype_Treeselect' // Treeselect may be implemented later
+				&& colArray[i].datatype!='GO_Customfields_Customfieldtype_TreeselectSlave' // Treeselect may be implemented later
+			)
+			validColDataIds.push(colArray[i].dataIndex);
+	}
+	return validColDataIds;
+}
+
+GO.base.QuickEditDialog.cloneArrayValid = function (array,dataIds,nameField) {
+	var arrayOfClones = [];
+	for (var i=0; i<array.length; i++) {
+		if (array[i][nameField]=='id' || dataIds.indexOf(array[i][nameField])>-1) {
+			arrayOfClones.push(GO.util.clone(array[i]));
+		}
 	}
 	return arrayOfClones;
 }
+//
+//GO.base.QuickEditDialog.cloneColumns = function (colArray) {
+//	var arrayOfClones = [];
+//	for (var i=0; i<colArray.length; i++) {
+//		arrayOfClones[i] = GO.util.clone(colArray[i]);
+//	}
+//	return arrayOfClones;
+//}
