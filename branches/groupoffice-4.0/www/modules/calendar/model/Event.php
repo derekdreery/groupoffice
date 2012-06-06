@@ -204,6 +204,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			}
 		}
 		
+		if($this->rrule != ""){			
+			$rrule = new GO_Base_Util_Icalendar_Rrule();
+			$rrule->readIcalendarRruleString($this->start_time, $this->rrule);						
+			$this->repeat_end_time = $rrule->until;
+		}
+		
 		return parent::beforeSave();
 	}
 	
@@ -706,12 +712,14 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		
 		$dtstart = new Sabre_VObject_Element_DateTime('dtstart',$dateType);
-		$dtstart->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->start_time));		
+		$dtstart->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->start_time), $dateType);		
 		//$dtstart->offsetUnset('VALUE');
 		$e->add($dtstart);
 		
+		$end_time = $this->all_day_event ? $this->end_time+60 : $this->end_time;
+		
 		$dtend = new Sabre_VObject_Element_DateTime('dtend',$dateType);
-		$dtend->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->end_time));		
+		$dtend->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($end_time), $dateType);		
 		//$dtend->offsetUnset('VALUE');
 		$e->add($dtend);
 

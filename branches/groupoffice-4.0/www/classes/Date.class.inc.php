@@ -188,6 +188,7 @@ class Date {
 		{
 			if($event['repeat_end_time'] = $ical2array->parse_date($rrule['UNTIL']))
 			{
+				
 				$event['repeat_forever']='0';
 				$event['repeat_end_time'] = mktime(0,0,0, date('n', $event['repeat_end_time']), date('j', $event['repeat_end_time'])+1, date('Y', $event['repeat_end_time']));
 			}else

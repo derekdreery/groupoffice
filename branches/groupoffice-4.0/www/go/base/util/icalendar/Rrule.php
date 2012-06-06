@@ -42,10 +42,10 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		
 		$parameters['interval'] = intval($json['interval']);
 		$parameters['freq'] = strtoupper($json['freq']);
-		$parameters['until'] = empty($json['repeat_forever']) && isset($json['until']) ? GO_Base_Util_Date::to_unixtime($json['until']) : '';
+		$parameters['eventstarttime'] = isset($json['eventstarttime'])?strtotime($json['eventstarttime']):strtotime($json['start_time']);
+		$parameters['until'] = empty($json['repeat_forever']) && isset($json['until']) ? GO_Base_Util_Date::to_unixtime($json['until'].' '.date('G', $parameters['eventstarttime']).':'.date('i', $parameters['eventstarttime'])) : '';
 		$parameters['bymonth'] = isset($json['bymonth'])?$json['bymonth']:'';
 		$parameters['bymonthday'] = isset($json['bymonthday'])?$json['bymonthday']:'';
-		$parameters['eventstarttime'] = isset($json['eventstarttime'])?strtotime($json['eventstarttime']):strtotime($json['start_time']);
 		
 		$parameters['byday']=array();
 		
@@ -94,7 +94,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 			
 		if ($this->_until>0)
 		{
-			$rrule .= ";UNTIL=".date('Ymd', $this->_until);
+			$rrule .= ";UNTIL=".gmdate('Ymd\\THis\\Z', $this->_until);
 		}
 		return $rrule;
 	}

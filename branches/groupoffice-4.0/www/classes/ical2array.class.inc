@@ -552,27 +552,27 @@ class ical2array {
 			$min = 0;
 			$sec = 0;
 		}
+		
+		if(strpos($date, 'Z') !== false) {
+			return gmmktime($hour, $min, $sec, $month, $day , $year);
+		}
 
 		if(isset($this->force_timezone)) {
 			$timezone_offset = $this->force_timezone;
 		}else {
-			if(strpos($date, 'Z') === false) {
-				if(isset($this->timezones[$timezone_id]) && isset($this->timezones[$timezone_id]['STANDARD'])) {
-					//if ($this->is_standard_timezone($timezone_id)) {
-					$standard_tzoffset = $this->timezones[$timezone_id]['STANDARD'];
-					$daylight_tzoffset = isset($this->timezones[$timezone_id]['DAYLIGHT']) ? $this->timezones[$timezone_id]['DAYLIGHT'] : $standard_tzoffset;
-					if(date('I', mktime($hour, $min, $sec, $month, $day , $year)) > 0) {
-						//event is in DST
-						$timezone_offset = $daylight_tzoffset;
-					}else {
-						$timezone_offset = $standard_tzoffset;
-					}
-				}				
-			}else
-			{
-				$timezone_offset = 0;
-			}
+			if(isset($this->timezones[$timezone_id]) && isset($this->timezones[$timezone_id]['STANDARD'])) {
+				//if ($this->is_standard_timezone($timezone_id)) {
+				$standard_tzoffset = $this->timezones[$timezone_id]['STANDARD'];
+				$daylight_tzoffset = isset($this->timezones[$timezone_id]['DAYLIGHT']) ? $this->timezones[$timezone_id]['DAYLIGHT'] : $standard_tzoffset;
+				if(date('I', mktime($hour, $min, $sec, $month, $day , $year)) > 0) {
+					//event is in DST
+					$timezone_offset = $daylight_tzoffset;
+				}else {
+					$timezone_offset = $standard_tzoffset;
+				}
+			}				
 		}
+
 
 		if(isset($timezone_offset)){
 			return gmmktime($hour-$timezone_offset, $min, $sec, $month, $day , $year);
