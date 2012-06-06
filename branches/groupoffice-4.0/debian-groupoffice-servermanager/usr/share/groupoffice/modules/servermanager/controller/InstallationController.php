@@ -197,7 +197,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				
 				$this->_createDbUser($config);
 
-				$this->_createDatabaseContent($params, $installation, $existingConfig);
+				$this->_createDatabaseContent($params, $installation, $config);
 			}else
 			{
 				if(!empty($params['adminpassword'])){
