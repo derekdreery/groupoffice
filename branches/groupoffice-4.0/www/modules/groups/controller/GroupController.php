@@ -15,8 +15,9 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 //    return $store;
 //  }
 
+
 	protected function allowWithoutModuleAccess() {
-		return array('getusers');
+		return array('getusers', 'getrecipientsasstring');
 	}
 	
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
