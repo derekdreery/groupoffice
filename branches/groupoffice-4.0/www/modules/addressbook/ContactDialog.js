@@ -132,34 +132,6 @@ GO.addressbook.ContactDialog = function(config)
 	});
 	
 	
-	if(GO.settings.modules.users.read_permission){
-		config.tbar=[{
-				handler:function(){
-					GO.users.showUserDialog();
-					if(this.go_user_id){
-						GO.users.userDialog.formPanel.load({
-							url:GO.url('addressbook/contact/load'),
-							params: {
-								id : this.contact_id 
-							},
-							failure:function(form, action)
-							{
-								Ext.Msg.alert(GO.lang['strError'], action.result.feedback)
-							},
-							scope: this				
-						});
-					}else
-					{
-						
-					}
-					//GO.users.userDialog.contactPanel.fillPersonalFields();
-				},
-				scope:this,
-				text:GO.addressbook.lang.createUser
-			}];
-	}
-	
-	
 	//this.downloadDocumentButton = new Ext.Button();
 
 	this.collapsible=true;
