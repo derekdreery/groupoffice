@@ -27,7 +27,7 @@ GO.addressbook.AdvancedSearchWindow = function(config){
 		};
 	config.modal=false;
 	config.resizable=true;
-	config.width=850;
+	config.width=900;
 	config.height=350;
 	config.closeAction='hide';
 	config.items = [{
@@ -39,9 +39,8 @@ GO.addressbook.AdvancedSearchWindow = function(config){
 				}), this._contactsQueriesGrid = new GO.query.SavedQueryGrid({
 					region: 'west',
 					queryPanel: this._contactsQueryPanel,
-					width:200,
+					width:120,
 					split:true,
-					queryPanel: this._contactsQueryPanel,
 					modelName:'GO_Addressbook_Model_Contact'
 				})]
 		},{
@@ -53,7 +52,7 @@ GO.addressbook.AdvancedSearchWindow = function(config){
 					modelAttributesUrl:GO.url('addressbook/company/attributes')
 				}), this._companiesQueriesGrid = new GO.query.SavedQueryGrid({
 					region: 'west',
-					width:200,
+					width:120,
 					split:true,
 					queryPanel: this._companiesQueryPanel,
 					modelName:'GO_Addressbook_Model_Company'

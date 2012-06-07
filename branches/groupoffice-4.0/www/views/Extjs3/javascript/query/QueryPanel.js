@@ -46,7 +46,8 @@ GO.query.QueryPanel = function(config){
 	var fields ={
 		fields:['andor','field','comparator', 'value','start_group','gotype','rawValue','rawFieldLabel'],
 		columns:[	{
-			width: 60,
+			menuDisabled:true,
+			width: 40,
 			header: 'AND / OR',
 			dataIndex: 'andor',
 			editor:new GO.form.ComboBox({
@@ -71,6 +72,7 @@ GO.query.QueryPanel = function(config){
 			})
 		},{
 			id:'field',
+			menuDisabled:true,
 			width:150,
 			header: 'Field',
 			dataIndex: 'field',
@@ -101,6 +103,7 @@ GO.query.QueryPanel = function(config){
 					}
 				})
 		},{
+			menuDisabled:true,
 			width:50,
 			header: 'Comparator',
 			dataIndex: 'comparator',
@@ -128,7 +131,8 @@ GO.query.QueryPanel = function(config){
 				forceSelection:true
 			})
 		},{
-			width:100,
+			menuDisabled:true,
+			width:200,
 			header: 'Value',
 			dataIndex: 'value',
 			renderer:function(v, meta, record){
@@ -144,6 +148,7 @@ GO.query.QueryPanel = function(config){
 			})
 		},
 		new GO.grid.CheckColumn({
+			menuDisabled:true,
 			header: 'Start group',
 			width:100,
 			dataIndex: 'start_group'
@@ -206,21 +211,20 @@ GO.query.QueryPanel = function(config){
 		},
 		scope: this
 	},
-//	{
-//		iconCls: 'btn-delete',
-//		text: GO.lang['cmdDelete'],
-//		cls: 'x-btn-text-icon',
-//		handler: function(){
-//			var selectedRows = this.selModel.getSelections();
-//			for(var i=0;i<selectedRows.length;i++)
-//			{
-//				selectedRows[i].commit();
-//				this.store.remove(selectedRows[i]);
-//			}
-//		},
-//		scope: this
-//	},
 	{
+		iconCls: 'btn-delete',
+		text: GO.lang['cmdDelete'],
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			var selectedRows = this.selModel.getSelections();
+			for(var i=0;i<selectedRows.length;i++)
+			{
+				selectedRows[i].commit();
+				this.store.remove(selectedRows[i]);
+			}
+		},
+		scope: this
+	},'-',{
 		iconCls: 'btn-delete',
 		text: GO.lang['cmdReset'],
 		cls: 'x-btn-text-icon',
@@ -230,7 +234,8 @@ GO.query.QueryPanel = function(config){
 			this.setCriteriaStore();
 		},
 		scope: this
-	}];
+	}
+	];
 
 	config.listeners={
 		render:function(){

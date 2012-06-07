@@ -78,6 +78,7 @@ views/Extjs3/javascript/form/SuperBoxSelect.js
 views/Extjs3/javascript/form/SelectPriority.js
 views/Extjs3/javascript/form/XCheckbox.js
 views/Extjs3/javascript/form/HtmlEditor.js
+views/Extjs3/javascript/form/DateTime.js
 
 views/Extjs3/javascript/form/HtmlComponent.js
 views/Extjs3/javascript/form/NumberField.js
