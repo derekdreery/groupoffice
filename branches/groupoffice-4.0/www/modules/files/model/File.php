@@ -249,7 +249,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	}
 
 	protected function getPath() {
-		return $this->folder->path . '/' . $this->name;
+		return $this->folder ? $this->folder->path . '/' . $this->name : $this->name;
 	}
 
 	protected function getFsFile() {
