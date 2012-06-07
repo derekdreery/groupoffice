@@ -41,6 +41,11 @@ class GO_Calendar_Model_Group extends GO_Base_Db_ActiveRecord {
 	public function tableName() {
 		return 'cal_groups';
 	}
+	
+	protected function init() {
+		$this->columns['name']['unique']=true;
+		return parent::init();
+	}
 
 	/**
 	 * Here you can define the relations of this model with other models.
