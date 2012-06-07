@@ -15,7 +15,7 @@ GO.addressbook.addressbooksStoreFields = new Array('id','name','user_name', 'acl
 
 
 GO.addressbook.readableAddressbooksStore = new GO.data.JsonStore({
-			url: GO.url('addressbook/addressbook/Store'),
+			url: GO.url('addressbook/addressbook/store'),
 			baseParams: {
 				'permissionLevel' : GO.permissionLevels.read,
 				limit:parseInt(GO.settings['max_rows_list'])
@@ -29,7 +29,7 @@ GO.addressbook.readableAddressbooksStore = new GO.data.JsonStore({
 		});
 
 GO.addressbook.writableAddressbooksStore = new GO.data.JsonStore({
-			url: GO.url('addressbook/addressbook/Store'),
+			url: GO.url('addressbook/addressbook/store'),
 			baseParams: {
 				'permissionLevel' : GO.permissionLevels.write,
 				limit:parseInt(GO.settings['max_rows_list'])
@@ -46,7 +46,7 @@ GO.addressbook.writableAddresslistsStore = new GO.data.JsonStore({
     baseParams: {
         permissionLevel: GO.permissionLevels.write
     },
-    fields: ['id', 'name', 'owner','acl_id'],
+    fields: ['id', 'name', 'user_name','acl_id'],
     remoteSort: true
 });
 		
@@ -61,7 +61,7 @@ GO.addressbook.readableAddresslistsStore = new GO.data.JsonStore({
     baseParams: {
         permissionLevel: GO.permissionLevels.read
     },
-    fields: ['id', 'name', 'owner','acl_id', 'checked'],
+    fields: ['id', 'name', 'user_name','acl_id', 'checked'],
     remoteSort: true
 });
 
