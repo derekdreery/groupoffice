@@ -822,8 +822,7 @@ class GO_Base_Util_String {
 	 * @return string HTML formatted string
 	 */
 	public static function sanitizeHtml($html) {
-		global $GO_CONFIG;
-
+	
 		//needed for very large strings when data is embedded in the html with an img tag
 		ini_set('pcre.backtrack_limit', (int)ini_get( 'pcre.backtrack_limit' )+ 1000000 );
 
@@ -857,6 +856,8 @@ class GO_Base_Util_String {
 		"'<title>.*?</title>'usi",
 		"'<head[^>]*>.*?</head>'usi",
 		"'<head[^>]*>'usi",
+		"'<base[^>]*>'usi",
+		"'<meta[^>]*>'usi",
 		"'<bgsound[^>]*>'usi",
 		
 		/* MS Word junk */
