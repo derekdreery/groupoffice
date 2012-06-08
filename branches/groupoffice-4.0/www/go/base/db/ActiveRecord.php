@@ -302,7 +302,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		//$pk = $this->pk;
 
-		$this->loadColumns();
+		$this->loadColumns(GO::router()->getControllerRoute()=="maintenance/upgrade");
 		$this->setIsNew($newRecord);
 		
 		if($this->isNew) 
