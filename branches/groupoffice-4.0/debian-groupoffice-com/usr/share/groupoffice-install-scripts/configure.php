@@ -16,7 +16,10 @@ $replacements['db_name']=$dbname;
 $replacements['db_user']=$dbuser;
 $replacements['db_pass']=$dbpass;
 //$replacements['domain']=$domain;
-$replacements['timezone']=trim(file_get_contents('/etc/timezone'));
+
+$tz = trim(file_get_contents('/etc/timezone'));
+$tzs = explode("\n",$z);
+$replacements['timezone']=  array_pop($tzs);
 
 
 exec('locale',$output);
