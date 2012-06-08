@@ -260,8 +260,12 @@ class GO_Base_Db_FindCriteria {
 		foreach($field as $f)
 		 $fields[]='`'.$tableAlias.'`.`'.$f.'`';
 		
-		$this->_condition .= ' MATCH('.implode(",", $fields).') AGAINST ('.$paramTag.' IN '.$mode.' MODE)';
+		$this->_condition .= ' MATCH('.implode(",", $fields).') AGAINST ('.$paramTag;
 		
+		if($mode!='NATURAL')
+			$this->_condition .= ' IN '.$mode.' MODE';
+		
+		$this->_condition .= ')';
 		return $this;
 	}
 	
