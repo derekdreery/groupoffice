@@ -168,7 +168,7 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 			
 		}
 		
-		
+		//return $response;
 
 		if (GO_Base_Util_Http::isAjaxRequest())
 			return $response;

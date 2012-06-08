@@ -28,6 +28,20 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 		return $response;
 	}
 	
+	
+	protected function actionSetPassword($params){
+		$mailbox = GO_Postfixadmin_Model_Mailbox::model()->findSingleByAttributes(array(
+				"username"=>$params["username"]				
+		));
+		
+		$mailbox->password=$params["password"];
+		$mailbox->save();
+		
+		$response['success']=true;
+		
+		return $response;
+	}
+	
 	protected function beforeSubmit(&$response, &$model, &$params) {
 		if(isset($params['domain_id']))
 			$domainModel = GO_Postfixadmin_Model_Domain::model()->findByPk($params['domain_id']);
@@ -35,7 +49,7 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 			$domainModel = GO_Postfixadmin_Model_Domain::model()->findSingleByAttribute("domain", $params['domain']); //serverclient module doesn't know the domain_id. It sends the domain name as string.
 			if(!$domainModel){
 				//todo create new domain
-				$domainModel = GO_Postfixadmin_Controller_Domain::model();
+				$domainModel = new	GO_Postfixadmin_Model_Domain();
 				$domainModel->domain = $params['domain'];
 				$domainModel->user_id = GO::user()->id;
 				$domainModel->save();
