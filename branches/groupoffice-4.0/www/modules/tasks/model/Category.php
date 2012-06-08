@@ -39,7 +39,7 @@ class GO_Tasks_Model_Category extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function init() {
-		$this->columns['name']['unique']=array($this->tasklist_id);
+		$this->columns['name']['unique']=array("tasklist_id");
 		return parent::init();
 	}
 
