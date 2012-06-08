@@ -36,7 +36,7 @@ class GO_Calendar_Model_Category extends GO_Base_Db_ActiveRecord{
 	}
 
 	protected function init() {
-		$this->columns['name']['unique']=array($this->calendar_id);
+		$this->columns['name']['unique']=array("calendar_id");
 		return parent::init();
 	}
 
