@@ -17,6 +17,7 @@ $replacements['db_user']=$dbuser;
 $replacements['db_pass']=$dbpass;
 //$replacements['domain']=$domain;
 
+//sometimes the timezone file has multiple lines
 $tz = trim(file_get_contents('/etc/timezone'));
 $tzs = explode("\n",$z);
 $replacements['timezone']=  array_pop($tzs);
