@@ -346,6 +346,9 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		}
 		
 		if($isUploadedFile){
+			if(!is_uploaded_file($this->path()))
+				return false;
+			
 			if(move_uploaded_file($this->path(), $newPath)){
 				$this->path = $newPath;
 				return true;
