@@ -75,7 +75,12 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		
 		
 		//if (!empty($matchQuery))
-		$storeParams->getCriteria()->addMatchCondition(array('name','keywords'), '+'.str_replace(' ',' +',$params['match']));
+		
+		$params['match']=preg_replace('/[\s]+/',' ', $params['match']);
+		$words = explode(' ',$params['match']);
+		$str = '+"'.implode('" +"', $words).'"';
+		//throw new Exception($str);
+		$storeParams->getCriteria()->addMatchCondition(array('name','keywords'), $str);
 		
 		return $storeParams;
 	}
