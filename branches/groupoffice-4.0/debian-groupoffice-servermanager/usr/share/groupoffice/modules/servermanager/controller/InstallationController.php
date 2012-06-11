@@ -424,7 +424,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 										);
 		
 		$record = GO_ServerManager_Model_InstallationUserModule::model()->find($findParams);
-		return $record['usercount'];
+		return $record->usercount;
 	}
 	
 	

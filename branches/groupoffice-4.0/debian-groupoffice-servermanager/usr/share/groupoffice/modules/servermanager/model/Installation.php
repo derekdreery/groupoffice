@@ -224,8 +224,8 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 						->select('count(*) as count, max(lastlogin) AS lastlogin');
 		$record = GO_Base_Model_User::model()->findSingle($findParams);						
 		
-		$this->lastlogin = intval($record['lastlogin']);
-		$this->count_users = intval($record['count']);		
+		$this->lastlogin = intval($record->lastlogin);
+		$this->count_users = intval($record->count);		
 		
 		$allowedModules = empty($config['allowed_modules']) ? array() : explode(',', $config['allowed_modules']);
 		
