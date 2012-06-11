@@ -229,3 +229,5 @@ $updates["201206051617"][]="ALTER TABLE `go_search_cache` ADD FULLTEXT ft_keywor
 $updates["201206051617"][]="ALTER TABLE go_search_cache DROP INDEX name";
 $updates["201206051617"][]="ALTER TABLE go_search_cache DROP INDEX keywords";
 $updates["201206051617"][]="ALTER TABLE go_search_cache DROP INDEX name_2";
+
+$updates["201206110852"][]="ALTER TABLE `go_search_cache` ADD INDEX name( `name` ) ";

@@ -41,7 +41,8 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 	
 	protected function getStoreParams($params) {
 		$storeParams = GO_Base_Db_FindParams::newInstance()
-						->select('t.*');
+						->select('t.*')
+						->debugSql();
 		
 		if(isset($params['model_names'])){
 			$model_names = json_decode($params['model_names'], true);
@@ -80,7 +81,9 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		$str='+'.preg_replace('/[\s]+/',' +', $params['match']);
 		//$str=str_replace('-','*',$str);
 		//throw new Exception($str);
+		
 		$storeParams->getCriteria()->addMatchCondition(array('name','keywords'), $str);
+		$storeParams->getCriteria()->addCondition('name', preg_replace('/[\s]+/','%',$params['match']).'%', 'LIKE');
 		
 		return $storeParams;
 	}
