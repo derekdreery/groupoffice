@@ -382,9 +382,9 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 		
 		$findParams->getCriteria()->addCondition('acl_id', $this->id)->addCondition('level', $level,'>=');
 		
-		$record = GO_Base_Model_AclUsersGroups::model()->find($findParams);
+		$model = GO_Base_Model_AclUsersGroups::model()->find($findParams);
 		
-		return $record['count'];		
+		return $model->count;		
 	}
 	
 	public function checkDatabase() {

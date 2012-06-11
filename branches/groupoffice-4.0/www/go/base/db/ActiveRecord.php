@@ -1030,13 +1030,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$calcFoundRows=false;
 		}
 		
-		
+		$fetchObject= true;
 		if(empty($params['fields'])){
 			$params['fields']=$this->_getDefaultFindSelectFields(isset($params['limit']) && $params['limit']==1);
-			$fetchObject= true;
+			//$fetchObject= true;
 		}else
 		{
-			$fetchObject = strpos($params['fields'],'t.*')!==false || strpos($params['fields'],'t.id')!==false;
+			//$fetchObject = strpos($params['fields'],'t.*')!==false || strpos($params['fields'],'t.id')!==false;
 		}
 		
 		$sql .= $params['fields'].$aclJoin['fields'].' ';

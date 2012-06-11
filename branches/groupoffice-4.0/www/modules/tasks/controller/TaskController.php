@@ -71,7 +71,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 			$findParams->getCriteria()->addCondition('project_id', $params['project_id']);										
 			$record = GO_Tasks_Model_Task::model()->find($findParams);
 			
-			$response['data']['name']='['.($record["count"]+1).'] ';
+			$response['data']['name']='['.($record->count+1).'] ';
 		}
 			
 		//$response['data']['remind_time']=date(GO::user()->time_format, strtotime($response['data']['reminder']));

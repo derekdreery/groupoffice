@@ -123,7 +123,7 @@ class GO_Base_Model_Reminder extends GO_Base_Db_ActiveRecord {
 		
 		$record = GO_Base_Model_ReminderUser::model()->find($params);
 		
-		return $record['count']>0;
+		return $record->count > 0;
 	}
 	
 	

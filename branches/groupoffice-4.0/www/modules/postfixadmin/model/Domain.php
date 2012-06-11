@@ -92,7 +92,7 @@ class GO_Postfixadmin_Model_Domain extends GO_Base_Db_ActiveRecord {
 						->addCondition('domain_id',$this->id)
 				)
 		);
-		return $activeRecord['sum_used_quota'];
+		return $activeRecord->sum_used_quota;
 	}
 	
 	public function getSumMailboxes() {
@@ -106,7 +106,7 @@ class GO_Postfixadmin_Model_Domain extends GO_Base_Db_ActiveRecord {
 						->addCondition('domain_id',$this->id)
 				)
 		);
-		return $record['count'];
+		return $record->count;
 	}
 	
 	public function getSumAliases() {
@@ -119,7 +119,7 @@ class GO_Postfixadmin_Model_Domain extends GO_Base_Db_ActiveRecord {
 						->addCondition('domain_id',$this->id)
 				)
 		);
-		return $record['count'];
+		return $record->count;
 	}
 
 }
