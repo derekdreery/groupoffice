@@ -302,8 +302,8 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 * Output the contents of this file to standard out (browser).
 	 */
 	public function output() {
-		ob_clean();
-		flush();
+		@ob_clean();
+		@flush();
 
 		//readfile somehow caused a memory exhausted error. This stopped when I added 
 		//ob_clean and flush above, but the browser hung with presenting the download 
