@@ -617,6 +617,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$html .= '<tr><td style="vertical-align:top">' . GO::t('location', 'calendar') . ':</td>' .
 							'<td>' . GO_Base_Util_String::text_to_html($this->location) . '</td></tr>';
 		}
+		
+		if(!empty($this->description)){
+			$html .= '<tr><td style="vertical-align:top">' . GO::t('strDescription') . ':</td>' .
+							'<td>' . GO_Base_Util_String::text_to_html($this->description) . '</td></tr>';
+		}
 
 		//don't calculate timezone offset for all day events
 //		$timezone_offset_string = GO_Base_Util_Date::get_timezone_offset($this->start_time);
