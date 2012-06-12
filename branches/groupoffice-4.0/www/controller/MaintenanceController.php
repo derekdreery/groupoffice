@@ -125,6 +125,10 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	 * @return array 
 	 */
 	protected function actionBuildSearchCache($params) {
+		
+		if(!headers_sent())
+			header('Content-Type: text/plain; charset=UTF-8');
+		
 		$response = array();
 		
 		if(empty($params['keepexisting']))
