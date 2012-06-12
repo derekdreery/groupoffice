@@ -3,7 +3,21 @@
 class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController {
 	
 	
+	private function _moveMessages($imap, $params, &$response){
+		if(isset($params['action']) && $params['action']=='move') {
+			
+			$messages = json_decode($params['messages']);
+			$imap->move($messages, $params['to_mailbox']);		
+			
+			//return possible changed unseen status
+			$unseen = $imap->get_unseen($params['to_mailbox']);
+			$response['unseen'][$params['to_mailbox']]=$unseen['count'];
+		}
+	}
+	
 	protected function actionStore($params){
+		
+		
 		
 		if(!isset($params['start']))
 			$params['start']=0;
@@ -42,16 +56,28 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		$imap = $account->openImapConnection($params["mailbox"]);
 		
+		$response['unseen']=array();
+		
+		$this->_moveMessages($imap, $params, $response);
+		
+		$imap = $account->openImapConnection($params["mailbox"]);
+		
 		/* @var $imap GO_Base_Mail_Imap */
 		$headersSet = $imap->get_message_headers_set($params['start'], $params['limit'], $sortField , $params['dir']!='ASC', $query);
 		$response["results"]=array();
 		foreach($headersSet as $uid=>$headers){
 			$message = GO_Email_Model_ImapMessage::model()->createFromHeaders($account, $params["mailbox"], $uid, $headers);			
 			
-			$response["results"][]=$message->getAttributes(true);
+			$record = $message->getAttributes(true);
+			$record['account_id']=$account->id;
+			$record['mailbox']=$params["mailbox"];
+			$response["results"][]=$record;
 		}
 	
 		$response['total'] = $imap->sort_count;
+		
+		$unseen = $imap->get_unseen($params['mailbox']);
+		$response['unseen'][$params['mailbox']]=$unseen['count'];
 		
 		return $response;
 	}
@@ -65,6 +91,9 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$imap = $account->openImapConnection($params["mailbox"]);
 		/* @var $imap GO_Base_Mail_Imap */
 		$response['success']=$imap->set_message_flag($messages, "\\".$params["flag"], !empty($params["clear"]));
+		
+		$unseen = $imap->get_unseen($params['mailbox']);
+		$response['unseen']=$unseen['count'];
 		
 		return $response;
 	}

@@ -31,8 +31,15 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		$this->_account = $account;
 
 		$this->_attributes = $attributes;
+		
+		//throw new Exception(var_export($attributes, true));
 
 		$this->_children = array();
+	}
+	
+	public function __isset($name) {
+		$var = $this->__get($name);
+		return isset($var);
 	}
 
 	public function __get($name) {
@@ -106,19 +113,19 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 
 	public function getChildren() {
 		
-//		if(!isset($this->_children)){
-//
-//			$imap = $this->getAccount()->openImapConnection();
-//
-//			$this->_children = array();
-//
-//			$folders = $imap->list_folders(true,$withStatus,$this->mailbox.$this->delimiter,"%");
-//			foreach($folders as $folder){
-//				$mailbox = new GO_Email_Model_ImapMailbox($this,$folder);
-//				$this->_children[]=$mailbox;
-//			}
-//
-//		}
+		if(!isset($this->_children)){
+
+			$imap = $this->getAccount()->openImapConnection();
+
+			$this->_children = array();
+
+			$folders = $imap->list_folders(true,$withStatus,$this->mailbox.$this->delimiter,"%");
+			foreach($folders as $folder){
+				$mailbox = new GO_Email_Model_ImapMailbox($this,$folder);
+				$this->_children[]=$mailbox;
+			}
+
+		}
 		
 		return $this->_children;
 	}
@@ -144,6 +151,8 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 	
 	public function createChild($name, $subscribe=true){
 		$newMailbox = empty($this->name) ? $name : $this->name.$this->delimiter.$name;
+		
+		//throw new Exception($newMailbox);
 		
 		return $this->getAccount()->openImapConnection()->create_folder($newMailbox, $subscribe);
 	}

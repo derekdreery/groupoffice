@@ -62,7 +62,8 @@ GO.email.AccountsTree = function(config){
 	// set the root node
 	var root = new Ext.tree.AsyncTreeNode({
 		text: GO.email.lang.accounts,
-		draggable:false
+		draggable:false,
+		id:'root'
 	});
 	this.setRootNode(root);
 
@@ -146,8 +147,14 @@ GO.email.AccountsTree = function(config){
 
 			if(messages.length>0)
 			{
+				
+				console.log(e);
+				console.log(s[0].data);
+				console.log(e.target.attributes);
+				
+				var firstDraggedMessage = s[0].data;
 
-				if(this.dropNode.attributes["account_id"] != e.target.attributes['account_id'])
+				if(firstDraggedMessage["account_id"] != e.target.attributes['account_id'])
 				{
 					var params = {
 						task:'move',
@@ -160,9 +167,7 @@ GO.email.AccountsTree = function(config){
 					Ext.MessageBox.progress(GO.email.lang.moving, '', '');
 					Ext.MessageBox.updateProgress(0, '0%', '');
 
-					var conn = new Ext.data.Connection({
-						timeout:300000
-					});
+				
 
 					var moveRequest = function(newMessages){
 
@@ -174,8 +179,9 @@ GO.email.AccountsTree = function(config){
 							params.messages=Ext.encode(newMessages);
 						}
 
-						conn.request({
-							url:GO.settings.modules.email.url+'action.php',
+						GO.request({
+							timeout:300000,
+							url:"email/message/move",
 							params:params,
 							callback:function(options, success, response){
 								var responseParams = Ext.decode(response.responseText);
@@ -209,34 +215,34 @@ GO.email.AccountsTree = function(config){
 					}
 					moveRequest.call(this);
 
-				}else	if(this.mailbox == e.target.mailbox)
+				}else	if(firstDraggedMessage.mailbox == e.target.mailbox)
 				{
 					return false;
 				}else
 				{
-					this.messagesGrid.store.baseParams['action']='move';
-					this.messagesGrid.store.baseParams['from_account_id']=this.account_id;
-					this.messagesGrid.store.baseParams['to_account_id']=e.target.attributes['account_id'];
-					this.messagesGrid.store.baseParams['from_mailbox']=this.mailbox;
-					this.messagesGrid.store.baseParams['to_mailbox']=e.target.attributes['mailbox'];
-					this.messagesGrid.store.baseParams['messages']=Ext.encode(messages);
+					this.mainPanel.messagesGrid.store.baseParams['action']='move';
+//					this.messagesGrid.store.baseParams['from_account_id']=this.account_id;
+//					this.messagesGrid.store.baseParams['to_account_id']=e.target.attributes['account_id'];
+//					this.messagesGrid.store.baseParams['from_mailbox']=this.mailbox;
+					this.mainPanel.messagesGrid.store.baseParams['to_mailbox']=e.target.attributes['mailbox'];
+					this.mainPanel.messagesGrid.store.baseParams['messages']=Ext.encode(messages);
 
-					this.messagesGrid.store.reload({
+					this.mainPanel.messagesGrid.store.reload({
 						callback:function(){
-							if(this.messagePanel.uid && !this.messagesGrid.store.getById(this.messagePanel.uid))
+							if(this.mainPanel.messagePanel.uid && !this.mainPanel.messagesGrid.store.getById(this.mainPanel.messagePanel.uid))
 							{
-								this.messagePanel.reset();
+								this.mainPanel.messagePanel.reset();
 							}
 						},
 						scope:this
 					});
 
-					delete this.messagesGrid.store.baseParams['action'];
-					delete this.messagesGrid.store.baseParams['from_mailbox'];
-					delete this.messagesGrid.store.baseParams['to_mailbox'];
-					delete this.messagesGrid.store.baseParams['messages'];
-					delete this.messagesGrid.store.baseParams['to_account_id'];
-					delete this.messagesGrid.store.baseParams['from_account_id'];
+					delete this.mainPanel.messagesGrid.store.baseParams['action'];
+//					delete this.messagesGrid.store.baseParams['from_mailbox'];
+					delete this.mainPanel.messagesGrid.store.baseParams['to_mailbox'];
+					delete this.mainPanel.messagesGrid.store.baseParams['messages'];
+//					delete this.messagesGrid.store.baseParams['to_account_id'];
+//					delete this.messagesGrid.store.baseParams['from_account_id'];
 				}
 
 			}
@@ -343,11 +349,15 @@ Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {
 	
 	refresh : function(node){
 		//todo only reload current node.
-		
-		//remove preloaded children otherwise it won't request the server
-//										delete node.parentNode.attributes.children;
-
-		this.getRootNode().reload();
+		if(node){
+			//remove preloaded children otherwise it won't request the server
+			delete node.attributes.children;
+			console.log(node);
+			node.reload();
+		}else
+		{
+			this.getRootNode().reload();
+		}
 	}
 	
 	

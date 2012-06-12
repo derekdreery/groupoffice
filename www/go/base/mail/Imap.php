@@ -2193,7 +2193,14 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		return $this->selected_mailbox['uidnext'];		
 	}
 	
-	
+	/**
+	 * Get unseen and messages in an array. eg:
+	 * 
+	 * array('messages'=>2, 'unseen'=>1);
+	 * 
+	 * @param string $mailbox
+	 * @return array  
+	 */
 	public function get_status($mailbox){
 		$command = 'STATUS "'.$this->addslashes($this->utf7_encode($mailbox)).'" (MESSAGES UNSEEN)'."\r\n";
 		$this->send_command($command);

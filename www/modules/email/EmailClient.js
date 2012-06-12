@@ -25,7 +25,7 @@ GO.email.EmailClient = function(config){
 		root: 'results',
 		totalProperty: 'total',
 		id: 'uid',
-		fields:['uid','icon','flagged','has_attachments','seen','subject','from','sender','size','date', 'priority','answered','forwarded'],
+		fields:['uid','icon','flagged','has_attachments','seen','subject','from','sender','size','date', 'priority','answered','forwarded','account_id','mailbox'],
 		remoteSort: true
 	});
 	
@@ -137,8 +137,8 @@ GO.email.EmailClient = function(config){
 		cm.setColumnHeader(cm.getIndexById('from'), header);
 		
 		var unseen = this.messagesGrid.store.reader.jsonData.unseen;
-		for(var folder_id in unseen)
-			this.updateFolderStatus(folder_id,unseen[folder_id]);
+		for(var mailbox in unseen)
+			this.updateFolderStatus(mailbox,unseen[mailbox]);
 		
 		if(this.messagesGrid.store.baseParams['query'] && this.messagesGrid.store.baseParams['query']!='' && this.searchDialog.hasSearch){
 			this.resetSearchButton.setVisible(true);
@@ -150,7 +150,7 @@ GO.email.EmailClient = function(config){
 		var selModel = this.treePanel.getSelectionModel();
 		if(!selModel.getSelectedNode())
 		{
-			var node = this.treePanel.getNodeById('folder_'+this.messagesGrid.store.reader.jsonData.folder_id);
+			var node = this.treePanel.getNodeById('folder_'+this.messagesGrid.store.reader.jsonData.mailbox);
 			if(node)
 			{
 				selModel.select(node);
@@ -321,7 +321,8 @@ GO.email.EmailClient = function(config){
 
 	GO.email.treePanel = this.treePanel = new GO.email.AccountsTree({
 		id:'email-tree-panel',
-		region:'west'
+		region:'west',
+		mainPanel:this
 	});
 
 	
@@ -369,7 +370,7 @@ GO.email.EmailClient = function(config){
 	}, this);
 	
 //	this.treePanel.on('beforeclick', function(node){
-//		if(node.attributes.folder_id==0)
+//		if(node.attributes.mailbox==0)
 //			return false;
 //	}, this);
 
@@ -381,7 +382,7 @@ GO.email.EmailClient = function(config){
 	});
 
 	this.treePanel.on('click', function(node)	{
-//		if(node.attributes.folder_id>0)
+//		if(node.attributes.mailbox>0)
 //		{
 			var usage='';
 //			var cnode = node;
@@ -406,12 +407,12 @@ GO.email.EmailClient = function(config){
 
 	this.treePanel.on('collapsenode', function(node)
 	{
-		if(node.attributes.folder_id && (node.attributes.folder_id != 'undefined') && node.childNodes.length)
+		if(node.attributes.mailbox && (node.attributes.mailbox != 'undefined') && node.childNodes.length)
 		{
 			this.updateState(node, false, true);
 		//this.updateFolderState(node, false);
 		}else
-		if(!node.attributes.folder_id && node.attributes.account_id)
+		if(!node.attributes.mailbox && node.attributes.account_id)
 		{
 			this.updateState(node, false, false);
 		//this.updateAccountState(node, false);
@@ -420,12 +421,12 @@ GO.email.EmailClient = function(config){
 
 	this.treePanel.on('expandnode', function(node)
 	{
-		if(node.attributes.folder_id && (node.attributes.folder_id != 'undefined') && node.childNodes.length)
+		if(node.attributes.mailbox && (node.attributes.mailbox != 'undefined') && node.childNodes.length)
 		{
 			this.updateState(node, true, true);
 		//this.updateFolderState(node, true);
 		}else
-		if(!node.attributes.folder_id && node.attributes.account_id)
+		if(!node.attributes.mailbox && node.attributes.account_id)
 		{
 			this.updateState(node, true, false);
 		//this.updateAccountState(node, true);
@@ -664,7 +665,7 @@ GO.email.EmailClient = function(config){
 			var record = this.messagesGrid.store.getById(this.messagePanel.uid);
 			if(record.data['seen']==0)
 			{
-				this.incrementFolderStatus(this.folder_id, -1);
+				this.incrementFolderStatus(this.mailbox, -1);
 				record.set('seen','1');
 			}
 		}
@@ -820,7 +821,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		}
 		GO.files.saveAsDialog.show({
 			filename: attachment.name,
-			handler:function(dialog, folder_id, filename){
+			handler:function(dialog, mailbox, filename){
 			
 				GO.request({
 					maskEl:dialog.el,
@@ -835,7 +836,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 						subtype: attachment.subtype,
 						account_id: this.account_id,
 						uuencoded_partnumber: attachment.uuencoded_partnumber,
-						folder_id: folder_id,
+						mailbox: mailbox,
 						filename: filename,
 						charset:attachment.charset,
 						sender:this.messagePanel.data.sender,
@@ -1018,18 +1019,23 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		
 		this.treePanel.setUsage(usage);
 	},
+	
+	getFolderNodeId : function (account_id, mailbox){
+		return "f_"+account_id+"_"+mailbox;
+	},
 	/**
 	 * Returns true if the current folder needs to be refreshed in the grid
 	 */
-	updateFolderStatus : function(folder_id, unseen)
+	updateFolderStatus : function(mailbox, unseen)
 	{
-		var statusEl = Ext.get('status_'+folder_id);
+		var statusElId = "status_"+this.getFolderNodeId(this.account_id, mailbox);
+		var statusEl = Ext.get(statusElId);
 
-		var node = this.treePanel.getNodeById('folder_'+folder_id);
-		if(node && node.attributes.mailbox=='INBOX')
-		{
-			node.parentNode.attributes.inbox_new=unseen;
-		}
+//		var node = this.treePanel.getNodeById('folder_'+mailbox);
+//		if(node && node.attributes.mailbox=='INBOX')
+//		{
+//			node.parentNode.attributes.inbox_new=unseen;
+//		}
 		
 		if(statusEl && statusEl.dom)
 		{
@@ -1051,10 +1057,10 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		return false;
 	},
 	
-	incrementFolderStatus : function(folder_id, increment)
+	incrementFolderStatus : function(mailbox, increment)
 	{
-		//decrease treeview status id is defined in tree_json.php
-		var statusEl = Ext.get('status_'+folder_id);
+		var statusElId = "status_"+this.getFolderNodeId(this.account_id, mailbox);
+		var statusEl = Ext.get(statusElId);
 		
 		var statusText = statusEl.dom.innerHTML;
 		
@@ -1065,7 +1071,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		}
 		status+=increment;
 		
-		this.updateFolderStatus(folder_id, status);
+		this.updateFolderStatus(mailbox, status);
 		this.updateNotificationEl();
 	},
 	
@@ -1151,8 +1157,8 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 						records[i].commit();
 					}
 
-					//this.updateFolderStatus(this.folder_id, responseParams.unseen);
-					//this.updateNotificationEl();
+					this.updateFolderStatus(this.mailbox, result.unseen);
+					this.updateNotificationEl();
 						
 					
 				},
@@ -1277,7 +1283,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	{
 		console.log("todo");
 		return;
-		var id = (folder) ? node.attributes.folder_id : node.attributes.account_id;
+		var id = (folder) ? node.attributes.mailbox : node.attributes.account_id;
 		if(node.attributes.parentExpanded != open)
 		{
 			Ext.Ajax.request({
@@ -1348,16 +1354,16 @@ GO.mainLayout.onReady(function(){
 						var ep = GO.mainLayout.getModulePanel('email');
 
 						var totalUnseen = 0;
-						for(var folder_id in data.email_status)
+						for(var mailbox in data.email_status)
 						{
 							if(ep){
-								var changed = ep.updateFolderStatus(folder_id, data.email_status[folder_id].unseen);
-								if(changed && ep.messagesGrid.store.baseParams.folder_id==folder_id)
+								var changed = ep.updateFolderStatus(mailbox, data.email_status[mailbox].unseen);
+								if(changed && ep.messagesGrid.store.baseParams.mailbox==mailbox)
 								{
 									ep.messagesGrid.store.reload();
 								}
 							}
-							totalUnseen += data.email_status[folder_id].unseen;
+							totalUnseen += data.email_status[mailbox].unseen;
 						}
 
 						if(totalUnseen!=GO.email.totalUnseen && totalUnseen>0)
@@ -1573,7 +1579,7 @@ GO.email.showMessageAttachment = function(id, remoteMessage){
 ////                if(GO.settings.modules.savemailas.read_permission)
 ////                        taskShowConfig.values.subject='[id:'+item.parentMenu.link_config.modelNameAndId+'] ';
 //
-//                taskShowConfig.selectFilesFromFolderID = item.parentMenu.panel.data.files_folder_id;
+//                taskShowConfig.selectFilesFromFolderID = item.parentMenu.panel.data.files_mailbox;
 //                this.availableComposer = GO.email.showComposer(taskShowConfig);
 //                
 //                if(!GO.files.selectFilesDialog)
