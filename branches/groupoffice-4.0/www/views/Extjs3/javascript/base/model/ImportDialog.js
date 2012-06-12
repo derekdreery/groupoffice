@@ -222,24 +222,27 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 	
 	_createCSVHeaderStore : function(headersArray) {
 		var data = [];
+		data.push([-1,'---']);
 		for (var colNr=0; colNr<headersArray.length; colNr++) {
 			data.push([colNr,headersArray[colNr]]);
 		}
 		
-		delete this._csvHeaderStore;
+		if (!(this._csvHeaderStore)) {
+			this._csvHeaderStore = new Ext.data.ArrayStore({
+				storeId: 'csvHeaderStore',
+				idIndex: 0,
+				fields:['colNr','headerString']
+			});
+		}
 		
-		this._csvHeaderStore = new Ext.data.ArrayStore({
-			storeId: 'csvHeaderStore',
-			idIndex: 0,
-			fields:['colNr','headerString'],
-			data: data
-		});
+		this._csvHeaderStore.removeAll();
+		this._csvHeaderStore.loadData(data);
 		
 	},
 	
 	// When, in case of an imported CSV, the model attributes are loaded, open up the second dialog
 	_onAttributesLoaded : function(attributes) {
-		
+
 		this._modelAttributes = {};
 		
 		for (var i=0; i<attributes.length; i++) {
@@ -251,95 +254,100 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 			}
 		}
 		
-		this.importData = new Ext.form.FormPanel({
-			waitMsgTarget:true,
-			
-			//id: 'addressbook-default-import-data-window',
-			labelWidth: 125,
-			border: false,
-			defaults: { 
-				anchor:'-20'
-			},
-			cls: 'go-form-panel',
-			autoHeight:true
-		});
+		if (!this.importFieldsFormPanel) {
+			this.importFieldsFormPanel = new Ext.form.FormPanel({
+				waitMsgTarget:true,
 
-		this.importData.form.timeout=300;
+				//id: 'addressbook-default-import-data-window',
+				labelWidth: 125,
+				border: false,
+				defaults: { 
+					anchor:'-20'
+				},
+				cls: 'go-form-panel',
+				autoHeight:true
+			});
+
+			this.importFieldsFormPanel.form.timeout=300;
+		
+			for(var key in this._modelAttributes)
+			{
+				var combo =  new Ext.form.ComboBox({
+					fieldLabel: this._modelAttributes[key],
+					id: this._moduleName+'_'+this._modelName+'_import_combo_'+key,
+					store: this._csvHeaderStore,
+					displayField:'headerString',
+					valueField:	'colNr',
+					hiddenName: key,
+					mode: 'local',
+					triggerAction: 'all',
+					editable:false
+				});
+
+				this.importFieldsFormPanel.add(combo);
+			}
+		} else {
+			this.importFieldsFormPanel.getForm().reset();
+		}
 		
 		for(var key in this._modelAttributes)
 		{
 			var keyArray = key.split('.');
 			var matchingRecordId = this._csvHeaderStore.findBy( function findByDisplayField(record,id) {
-						if (!GO.util.empty(keyArray[1]) && record.data.headerString.toLowerCase()==keyArray[1].toLowerCase())
-							return true;
-						if (record.data.headerString.toLowerCase()==key.toLowerCase())
-							return true;
-						if (record.data.headerString.toLowerCase()==keyArray[0].toLowerCase())
-							return true;
-						return false;
-					}, this);
-					
+				if (!GO.util.empty(keyArray[1]) && record.data.headerString.toLowerCase()==keyArray[1].toLowerCase())
+					return true;
+				if (record.data.headerString.toLowerCase()==key.toLowerCase())
+					return true;
+				if (record.data.headerString.toLowerCase()==keyArray[0].toLowerCase())
+					return true;
+				return false;
+			}, this);
+
 			var matchingRecord = this._csvHeaderStore.getAt(matchingRecordId);
-					
+
 			if (!GO.util.empty(matchingRecord))
 				var colNr = matchingRecord.data.colNr;
 			else
 				var colNr = null;
-			
-			var combo =  new Ext.form.ComboBox({
-				fieldLabel: this._modelAttributes[key],
-				id:  'export_combo_'+key,
-				store: this._csvHeaderStore,
-				displayField:'headerString',
-				valueField:	'colNr',
-				hiddenName: key,
-				mode: 'local',
-				triggerAction: 'all',
-				editable:false,
-				value : colNr
-			});
-			
-			this.importData.add(combo);
-		}
-		
-		var buttons = [
-		{
-			text: GO.lang['cmdOk'],
-			handler: function() {
-				this._rememberCSVmappings();
-				this._csvFieldDialog.close();
-			},
-			scope: this
-		},
 
-		{
-			text: GO.lang['cmdClose'],
-			handler: function(){
-				this._csvFieldDialog.close();
-			},
-			scope: this
+			var component = this.importFieldsFormPanel.getForm().findField(this._moduleName+'_'+this._modelName+'_import_combo_'+key);
+
+			component.setValue(colNr);
 		}
-		];
-		
-		delete this._csvFieldDialog;
-		
-		this._csvFieldDialog = new Ext.Window({
-			autoScroll:true,
-			height: 400,
-			width: 400,
-			modal:true,
-			title: GO.addressbook.lang.matchFields,
-			items: [
-			this.importData
-			],
-			buttons: buttons			
-		});
+
+		if (!this._csvFieldDialog) {
+			this._csvFieldDialog = new GO.Window({
+				autoScroll:true,
+				height: 400,
+				width: 400,
+				modal:true,
+				title: GO.addressbook.lang.matchFields,
+				items: [
+				this.importFieldsFormPanel
+				],
+				buttons: [{
+					text: GO.lang['cmdOk'],
+					handler: function() {
+						this._rememberCSVmappings();
+						this._csvFieldDialog.close();
+					},
+					scope: this
+				},{
+					text: GO.lang['cmdClose'],
+					handler: function(){
+						this._csvFieldDialog.close();
+					},
+					scope: this
+				}]
+			});
+		}
 		
 		this._csvFieldDialog.show();			
 	},
 	
 	_rememberCSVmappings : function() {
-		Ext.each(this.importData.items.items,function(item,index,allItems){
+		this._userSelectCSVMappings = {};
+		Ext.each(this.importFieldsFormPanel.items.items,function(item,index,allItems){
 			if (typeof(item.value)=='number') {
 				var idArray = (item.id).substring(13).split('.');
 				this._userSelectCSVMappings[item.value] = idArray[1];
