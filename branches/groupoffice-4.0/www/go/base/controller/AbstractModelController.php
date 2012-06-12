@@ -501,7 +501,6 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			
 				while($approver = $approversStmnt->fetch()){
 					$approver_hasapproved = $currentStep->hasApproved($workflowModel->id,$approver->id);
-					//var_dump($approver_hasapproved);
 					$workflowResponse['approvers'][] = array('name'=>$approver->name,'approved'=>$approver_hasapproved,'last'=>'0');
 				}
 				// Set the last flag for the latest approver in the list
@@ -781,11 +780,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * 
 	 * @param Array $params 
 	 */
-	protected function actionExport($params) {
-	
-//		
-//		var_dump($params);
-//		
+	protected function actionExport($params) {	
 		$showHeader = false;
   	$humanHeaders = true;
 		$orientation = false;
@@ -902,7 +897,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				$model = false;
 
 				foreach($attributeIndexMap as $index=>$attributeName){
-					$attributes[trim($attributeName)]=$record[$index];
+					if ($index>=0)
+						$attributes[trim($attributeName)] = $record[$index];
 				}
 
 				if(!empty($params['updateExisting']) && !empty($params['updateFindAttributes'])){
@@ -932,7 +928,6 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				
 				if($this->beforeImport($params, $model, $attributes, $record)){
 					$columns = $model->getColumns();
-					//var_dump($columns);
 					foreach($columns as $col=>$attr){
 						if(isset($attributes[$col])){
 	//						if($attr['gotype']=='unixtimestamp' || $attr['gotype']=='unixdate'){
