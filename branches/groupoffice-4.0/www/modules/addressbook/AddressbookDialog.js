@@ -97,19 +97,102 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 		
 		this.addPanel(this.propertiesPanel);
 		
-		this.addPanel( this.importPanel = new GO.base.model.ImportPanel({
-			filetypes:[
-				['csv','CSV (Comma Separated Values)'],
-				['vcf','VCF (vCard)']
-			],
-			controllers:[
-				['GO_Addressbook_Controller_Contact',GO.addressbook.lang.contacts],
-				['GO_Addressbook_Controller_Company',GO.addressbook.lang.companies]
-			],
-			importBaseParams:[
-				{'addressbook_id':this.remoteModelId}
+		this.importDialogs = {};
+		
+		this.addPanel(this.importPanel = new Ext.Panel({
+			title:GO.lang.cmdImport,
+			layout: 'form',
+			items: [],
+			defaults: {anchor:'100%'},
+			border: false,
+			labelWidth: 150,
+			toolbars: [],
+			cls:'go-form-panel',
+			items: [
+				this.fileTypeCB = new GO.form.ComboBox({
+					hiddenName: 'fileType',
+					fieldLabel: GO.addressbook.lang.cmdFormLabelFileType,
+					store: new Ext.data.ArrayStore({
+						storeId: 'fileTypeStore',
+						idIndex: 0,
+						fields:['value','label'],
+						data: [
+							['CSV','CSV (Comma Separated Values)'],
+							['VCard','VCF (vCard)']
+						]
+					}),
+					valueField:'value',
+					displayField:'label',
+					mode:'local',
+					allowBlank: false,
+					triggerAction: 'all'
+				}), this.controllerNameCB = new GO.form.ComboBox({
+					hiddenName: 'controller',
+					fieldLabel: GO.lang.cmdImport,
+					store: new Ext.data.ArrayStore({
+						storeId: 'controllersStore',
+						idIndex: 0,
+						fields:['value','label'],
+						data: [
+							['GO_Addressbook_Controller_Contact',GO.addressbook.lang.contacts],
+							['GO_Addressbook_Controller_Company',GO.addressbook.lang.companies]
+						]
+					}),
+					valueField:'value',
+					displayField:'label',
+					mode:'local',
+					allowBlank: false,
+					triggerAction: 'all'
+				}),new Ext.Panel({
+					layout: 'form',
+					border: false,
+					items: [
+						new Ext.Button({
+							text: GO.lang.cmdContinue,
+							width: '20%',
+							handler: function(){
+								var controllerName = this.controllerNameCB.getValue();		
+								var fileType = this.fileTypeCB.getValue();
+								if (!GO.util.empty(controllerName) && !GO.util.empty(fileType)) {
+									if ( !this.importDialogs[fileType] )
+										this.importDialogs[fileType] = {};
+									if ( !this.importDialogs[fileType][controllerName] ) {
+											this.importDialogs[fileType][controllerName] = new GO.base.model.ImportDialog({
+												importBaseParams : { addressbook_id : this.remoteModelId },
+												controllerName : controllerName,
+												fileType: fileType,
+												excludedAttributes : ['ctime','mtime','user_id', 'contact_name','link_id','files_folder_id','comment','email_allowed']
+											});
+										}
+									this.importDialogs[fileType][controllerName].show(this.remoteModelId);
+								}
+							},
+							scope: this
+						})
+					]
+				})
 			]
 		}));
+		
+		this.fileTypeCB.on('select',function(combo,record,index){
+			if (record.id=='VCard')
+				this.controllerNameCB.setValue('GO_Addressbook_Controller_Contact');
+			this.controllerNameCB.setVisible(record.id=='CSV');
+		},this);
+		
+//		this.addPanel( this.importPanel = new GO.base.model.ImportPanel({
+//			filetypes:[
+//				['csv','CSV (Comma Separated Values)'],
+//				['vcf','VCF (vCard)']
+//			],
+//			controllers:[
+//				['GO_Addressbook_Controller_Contact',GO.addressbook.lang.contacts],
+//				['GO_Addressbook_Controller_Company',GO.addressbook.lang.companies]
+//			],
+//			importBaseParams:[
+//				{'addressbook_id':this.remoteModelId}
+//			]
+//		}));
 		
 		this.addPermissionsPanel(new GO.grid.PermissionsPanel());
 		
