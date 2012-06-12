@@ -8,8 +8,6 @@ Notifications on uploads (Michal)
 
 recurly (simon zimmo) (Wilmar)
 
-Password sync postfixadmin
-
 Koba
 
 Settings module (Michael)
