@@ -858,6 +858,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		ini_set('memory_limit','512M');
 		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
 		
+		$attributeIndexMap = isset($params['attributeIndexMap'])
+			? $attributeIndexMap = json_decode($params['attributeIndexMap'],true)
+			: array();
+		
 		if(is_file($params['file'])){
 			$importFile = new GO_Base_Fs_CsvFile($params['file']);
 		
@@ -880,15 +884,16 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 			//Map the field headers to the index in the record.
 			//eg. name=>2,user_id=>4, etc.
-			$attributeIndexMap = array();		
-			for ($i = 0, $m = count($headers); $i < $m; $i++) {
-				if(substr($headers[$i],0,3)=='cf\\'){				
-					$cf = $this->_resolveCustomField($headers[$i]);
-					if($cf)
-						$attributeIndexMap[$i] = $cf;
-				}else
-				{
-					$attributeIndexMap[$i] = $headers[$i];
+			if (empty($attributeIndexMap)) {
+				for ($i = 0, $m = count($headers); $i < $m; $i++) {
+					if(substr($headers[$i],0,3)=='cf\\'){				
+						$cf = $this->_resolveCustomField($headers[$i]);
+						if($cf)
+							$attributeIndexMap[$i] = $cf;
+					}else
+					{
+						$attributeIndexMap[$i] = $headers[$i];
+					}
 				}
 			}
 
@@ -914,9 +919,18 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 				if(!$model)
 					$model = new $this->model;	
+				
+				
+					// If there are given baseparams to the importer
+					if(isset($params['importBaseParams'])) {
+						$baseParams = json_decode($params['importBaseParams'],true);
+						foreach($baseParams as $attr=>$val){
+							$attributes[$attr]=$val;
+						}
+					}
 
-
-				if($this->beforeImport($model, $attributes, $record)){			
+				
+				if($this->beforeImport($params, $model, $attributes, $record)){
 					$columns = $model->getColumns();
 					//var_dump($columns);
 					foreach($columns as $col=>$attr){
@@ -935,16 +949,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 					$model->setAttributes($attributes, true);
 
 
-					// If there are given baseparams to the importer
-					if(isset($params['importBaseParams'])) {
-						$baseParams = json_decode($params['importBaseParams'],true);
-						foreach($baseParams as $attr=>$val){
-							$model->setAttribute($attr,$val);
-						}
-					}
 
 					$this->_parseImportDates($model);
-
+					
 					try{
 						$model->save();
 					}
@@ -964,7 +971,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		return $summarylog;
 	}
 	
-	protected function beforeImport(&$model, &$attributes, $record){
+	protected function beforeImport($params, &$model, &$attributes, $record){
 		return true;
 	}
 	protected function afterImport(&$model, &$attributes, $record){
@@ -1007,6 +1014,14 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		else
 			$params['exclude']=explode(',', $params['exclude']);
 		
+		$params['exclude_cf_datatypes'] = !empty($params['exclude_cf_datatypes'])
+			? json_decode($params['exclude_cf_datatypes'])
+			: array();
+		
+		$params['exclude_attributes'] = !empty($params['exclude_attributes'])
+			? json_decode($params['exclude_attributes'])
+			: array();
+		
 		array_push($params['exclude'], 'id','acl_id','files_folder_id');
 		
 		$response['results']=array();
@@ -1017,7 +1032,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		$columns = $model->getColumns();
 		foreach($columns as $name=>$attr){
-			if(!in_array($name, $params['exclude']) && (empty($params['hide_unknown_gotypes']) || !empty($attr['gotype'])))
+			if(!in_array($name, $params['exclude'])
+							&& (empty($params['hide_unknown_gotypes']) || !empty($attr['gotype']))
+							&& !in_array($name,$params['exclude_attributes'])
+				)
 				$attributes['t.'.$name]=array('name'=>'t.'.$name,'label'=>$model->getAttributeLabel($name),'gotype'=>$attr['gotype']);				
 		}
 		
@@ -1029,7 +1047,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$customAttributes = array();
 			$columns = $model->customfieldsRecord->getColumns();
 			foreach($columns as $name=>$attr){
-				if($name != 'model_id' && !in_array($name, $params['exclude']) && (empty($params['hide_unknown_gotypes']) || !empty($attr['gotype']))){					
+				if($name != 'model_id'
+								&& !in_array($name, $params['exclude'])
+								&& (empty($params['hide_unknown_gotypes']) || !empty($attr['gotype']))
+								&& !in_array($attr['customfield']->datatype,$params['exclude_cf_datatypes']))
+				{					
 					$customAttributes['cf.'.$name]=array('name'=>'cf.'.$name, 'label'=>$model->customfieldsRecord->getAttributeLabel($name),'gotype'=>'customfield');					
 				}
 			}
@@ -1243,6 +1265,20 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$model->checkDatabase();
 		
 		echo "Done\n";
+	}
+
+	protected function actionReadCSVHeaders($params) {
+		$response['success'] = true;
+		$response['results'] = array();
+		$response['total'] = 0;
+
+		$importFile = new GO_Base_Fs_CsvFile($_FILES['files']['tmp_name'][0]);
+		$firstRow = $importFile->getRecord();
+		
+		$response['results'] = explode($params['delimiter'],$firstRow[0]);
+		$response['total'] = count($response['results']);
+		
+		return $response;
 	}
 	
 }
