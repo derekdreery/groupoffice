@@ -280,6 +280,11 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			}else
 			{
 				$this->get_folders();
+//				$cmd = 'LIST "" ""'."\r\n";
+//				$this->send_command($cmd);
+//				$result = $this->get_response(false, true);
+//				var_dump($result);
+//				throw new Exception("test");
 			}
 		}
 		return $this->delimiter;
@@ -292,18 +297,24 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	
 	public function list_folders($listSubscribed=true, $withStatus=false, $namespace='', $pattern='*'){
 		
+		GO::debug("list_folders($listSubscribed, $withStatus, $namespace, $pattern");
 		//$delim = false;
 		
 		$listStatus = $this->has_capability('LIST-STATUS');
 		
 		$listCmd = $listSubscribed ? 'LSUB' : 'LIST';
-		//$listCmd = 'LIST';
 		
+		if($listSubscribed && $this->has_capability("LIST-EXTENDED"))
+			$listCmd = "LIST (SUBSCRIBED)";
 		
+				
 		$cmd = $listCmd.' "'.$namespace.'" "'.$pattern.'"';
 		
+		if($listSubscribed && $this->has_capability("LIST-EXTENDED"))
+			$listCmd = 'LIST';
+		
 		if($listStatus && $withStatus){
-			$cmd .= ' RETURN (STATUS (MESSAGES UNSEEN))';
+			$cmd .= ' RETURN (CHILDREN STATUS (MESSAGES UNSEEN))';
 		}
 		
 		GO::debug($cmd);
@@ -312,7 +323,8 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		
 		$this->send_command($cmd);
 		$result = $this->get_response(false, true);
-		//GO::debug($result);
+		GO::debug($result);
+
 		$folders = array();
 		foreach ($result as $vals) {
 			if (!isset($vals[0])) {
@@ -443,32 +455,32 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 		//sometimes shared folders like "Other user.shared" are in the folder list
 		//but there's no "Other user" parent folder. We create a dummy folder here.
+		if(empty($namespace)){
+			foreach($folders as $name=>$folder){
 
-		foreach($folders as $name=>$folder){
-			
-			$pos = strrpos($name, $delim);
+				$pos = strrpos($name, $delim);
 
-			if($pos){
-				$parent = substr($name,0,$pos);
-				if(!isset($folders[$parent]))
-				{
-					$folders[$parent]=array(
-								'delimiter' => $delim,
-								'name' => $parent,
-								'marked' => true,
-								'noselect' => true,
-								'noinferiors' => false,
-								'haschildren' => true,
-								'hasnochildren' => false,
-								'subscribed'=>true,
-								'unseen'=>0,
-								'messsages'=>0);
+				if($pos){
+					$parent = substr($name,0,$pos);
+					if(!isset($folders[$parent]))
+					{
+						$folders[$parent]=array(
+									'delimiter' => $delim,
+									'name' => $parent,
+									'marked' => true,
+									'noselect' => true,
+									'noinferiors' => false,
+									'haschildren' => true,
+									'hasnochildren' => false,
+									'subscribed'=>true,
+									'unseen'=>0,
+									'messsages'=>0);
+					}
 				}
 			}
-			
 		}
 
-		//GO::debug($folders);
+	//	GO::debug($folders);
 
 		ksort($folders);
 
