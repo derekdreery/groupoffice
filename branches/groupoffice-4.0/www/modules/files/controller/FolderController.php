@@ -49,7 +49,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	}
 	
 	private function _buildSharedTree($expandFolderIds){
-		
+		$response=array();
 		$shares =GO_Files_Model_Folder::model()->getTopLevelShares(GO_Base_Db_FindParams::newInstance()->limit(100));
 		foreach($shares as $folder){
 			$response[]=$this->_folderToNode($folder, $expandFolderIds, false);	
@@ -397,7 +397,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 //
 //		$response = $store->getData();
 		$response['permission_level']=GO_Base_Model_Acl::READ_PERMISSION;
-		
+		$response['results']=array();
 		$shares =GO_Files_Model_Folder::model()->getTopLevelShares(GO_Base_Db_FindParams::newInstance()->limit(100));
 		foreach($shares as $folder){
 			$record=$folder->getAttributes("html");
