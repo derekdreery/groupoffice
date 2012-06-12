@@ -15,8 +15,9 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 //    return $store;
 //  }
 
+
 	protected function allowWithoutModuleAccess() {
-		return array('getusers');
+		return array('getusers', 'getrecipientsasstring');
 	}
 	
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
@@ -146,8 +147,9 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 		$groupIds = json_decode($params['groups']);
 				
 		foreach($groupIds as $groupId){
-		
-			$group = GO_Base_Model_Group::model()->findByPk($groupId);
+			
+			//ignore acl because members may use groups even without permissions
+			$group = GO_Base_Model_Group::model()->findByPk($groupId, false, true);
 			
 			if($group){
 				$users = $group->users(GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('email', '','!=')));

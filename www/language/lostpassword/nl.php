@@ -8,7 +8,9 @@ $l['lost_password_subject']='Aanvraag voor nieuw wachtwoord';
 $l['lost_password_body']='%s,
 U heeft een nieuw wachtwoord voor %s aangevraagd. Uw gebruikersnaam is "%s".
 Klik op onderstaande link (of plak deze in uw browser) om uw wachtwoord te veranderen:
-%s;
+
+%s
+
 Als u niet om een nieuw wachtwoord heeft gevraagd verwijder dan deze e-mail.';
 $l['lost_password_error']='Kon het opgegeven e-mail adres niet vinden..';
 $l['lost_password_success']='Een e-mail met instructies is naar uw e-mail adres verzonden.';

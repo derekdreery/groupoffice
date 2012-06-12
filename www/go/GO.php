@@ -56,7 +56,18 @@ class GO{
 	}
 
 	/**
-	 * This GO_Base_Model_ModelCache.php mechanism can consume a lot of memory
+	 * Get a unique ID for Group-Office. It's mainly used for the javascript window id.
+	 * @return type 
+	 */
+	public static function getId(){
+		
+		$serverName = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : "unknown";
+		
+		return GO::config()->id.'AT'.$serverName;
+	}
+	
+	/**
+	 * This GO_Base_Model_ModelCache.php mechanism can consume a lot of memory 
 	 * when running large batch scripts. That's why it can be disabled.
 	 *
 	 * @var boolean
@@ -137,21 +148,22 @@ class GO{
 		if($dbhost===false)
 			$dbhost=GO::config()->db_host;
 
-		GO::debug("Connect: mysql:host=$dbhost;dbname=$dbname, $dbuser, ***");
+//		GO::debug("Connect: mysql:host=$dbhost;dbname=$dbname, $dbuser, ***");
 
-		self::$db = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);
-		self::$db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
-		self::$db->setAttribute( PDO::ATTR_STATEMENT_CLASS, array( 'GO_Base_Db_ActiveStatement', array() ) );
+		self::$db = new GO_Base_Db_PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);
+//		self::$db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+//		self::$db->setAttribute( PDO::ATTR_STATEMENT_CLASS, array( 'GO_Base_Db_ActiveStatement', array() ) );
+//
+//		//todo needed for foundRows
+//		self::$db->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY,true); 
+//
+//		self::$db->query("SET NAMES utf8");
+//
+//		if(GO::config()->debug){
+//			//GO::debug("Setting MySQL sql_mode to TRADITIONAL");
+//			self::$db->query("SET sql_mode='TRADITIONAL'");
+//		}
 
-		//todo needed for foundRows
-		self::$db->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY,true);
-
-		self::$db->query("SET NAMES utf8");
-
-		if(GO::config()->debug){
-			//GO::debug("Setting MySQL sql_mode to TRADITIONAL");
-			self::$db->query("SET sql_mode='TRADITIONAL'");
-		}
 	}
 
 	/**
@@ -592,6 +604,17 @@ class GO{
 		}
 	}
 
+	
+	public static function debugCalledFrom($limit=1){
+		$trace = debug_backtrace(); 
+		for($i=0;$i<$limit;$i++){
+			if(isset($trace[$i+1])){
+				$call = $trace[$i+1];
+				GO::debug("Funtion: ".$call["function"]." called in file ".$call["file"]." line ".$call["line"]);
+			}
+		}
+	}
+	
 	private static $_language;
 
 	/**

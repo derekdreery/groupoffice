@@ -104,7 +104,13 @@ $updates["201203091439"][]="CREATE TABLE IF NOT EXISTS `fs_folder_pref` (
   PRIMARY KEY (`folder_id`,`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
-$updates["201205162334"][]="CREATE TABLE IF NOT EXISTS `fs_notification_messages` (
+$updates["201205071400"][]="update cf_fields set datatype='GO_Files_Customfieldtype_File' where datatype='file'";
+
+$updates["201205301738"][]="ALTER TABLE `fs_folders` ADD INDEX ( `parent_id` , `name` ) ;";
+
+$updates["201205301738"][]="ALTER TABLE `fs_folders` ADD INDEX ( `visible` ) ;";
+
+$updates["201206121503"][]="CREATE TABLE IF NOT EXISTS `fs_notification_messages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `modified_user_id` int(11) NOT NULL,

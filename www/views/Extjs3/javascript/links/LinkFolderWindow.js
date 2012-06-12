@@ -73,7 +73,7 @@ GO.LinkFolderWindow = function(config){
 	this.addEvents({'save' : true});	
 }
 
-Ext.extend(GO.LinkFolderWindow, Ext.Window,{
+Ext.extend(GO.LinkFolderWindow, GO.Window,{
 
 	
 	show : function (config) {
@@ -85,8 +85,8 @@ Ext.extend(GO.LinkFolderWindow, Ext.Window,{
 		{
 			config.folder_id=0
 		}
-		this.link_id=config.link_id ? config.link_id : 0;
-		this.link_type=config.link_type ? config.link_type : 0;
+		this.model_id=config.model_id ? config.model_id : 0;
+		this.model_name=config.model_name ? config.model_name : 0;
 		this.parent_id=config.parent_id ? config.parent_id : 0;
 			
 		this.setLinkFolderId(config.folder_id);
@@ -94,13 +94,13 @@ Ext.extend(GO.LinkFolderWindow, Ext.Window,{
 		if(this.folder_id>0)
 		{
 			this.formPanel.load({
-				url : BaseHref+'json.php',
+				url : GO.url("linkFolder/load"),
 				
 				success:function(form, action)
 				{		
 					this.setLinkFolderId (action.result.data.id);
-					this.link_id=action.result.data.link_id;
-					this.link_type=action.result.data.link_type;
+					this.model_id=action.result.data.model_id;
+					this.model_name=action.result.data.model_name;
 					this.parent_id=action.result.data.parent_id;
 					GO.LinkFolderWindow.superclass.show.call(this);
 				},
@@ -133,11 +133,10 @@ Ext.extend(GO.LinkFolderWindow, Ext.Window,{
 	submitForm : function(hide){
 		this.formPanel.form.submit(
 		{
-			url:BaseHref+'action.php',
+			url:GO.url("linkFolder/submit"),
 			params: {
-				'task' : 'save_link_folder',
-				link_id : this.link_id,
-				link_type : this.link_type,
+				model_id : this.model_id,
+				model_name : this.model_name,
 				parent_id : this.parent_id
 				},
 			waitMsg:GO.lang['waitMsgSave'],

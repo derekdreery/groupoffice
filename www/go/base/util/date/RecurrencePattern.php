@@ -43,11 +43,10 @@ class GO_Base_Util_Date_RecurrencePattern{
 	protected $_byday;
 	protected $_bymonth;
 	protected $_bymonthday;
-	protected $_eventStartTime;
+	protected $_eventstarttime;
 	protected $_bysetpos;
 	
 	protected $_days=array('SU','MO','TU','WE','TH','FR','SA');
-
 	
 	public function __construct($params = array()){
 		$this->setParams($params);
@@ -97,7 +96,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 				'byday' => $this->_byday,
 				'bymonth' => $this->_bymonth,
 				'bymonthday' => $this->_bymonthday,
-				'eventStartTime' => $this->_eventStartTime,
+				'eventstarttime' => $this->_eventstarttime,
 		);
 	}
 	
@@ -129,15 +128,15 @@ class GO_Base_Util_Date_RecurrencePattern{
 	 */
 	public function getNextRecurrence($startTime=false)
 	{
-		if(!isset($this->_recurPositionStartTime) || $this->_recurPositionStartTime<$this->_eventStartTime)
-			$this->_recurPositionStartTime=$this->_eventStartTime;
+		if(!isset($this->_recurPositionStartTime) || $this->_recurPositionStartTime<$this->_eventstarttime)
+			$this->_recurPositionStartTime=$this->_eventstarttime;
 		
 		if(!$startTime)
 			$startTime=$this->_recurPositionStartTime;
 
 		//if the start of the event matches the time to check then return 0.
 		//the next recurrence matches exactly.
-		if($this->_eventStartTime==$startTime){
+		if($this->_eventstarttime==$startTime){
 			$next = $startTime;
 		}else
 		{
@@ -160,7 +159,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 	protected function _getNextRecurrenceDaily($startTime){
 							
 		$daysBetweenNextAndFirstEvent=$this->_findNumberOfDays($startTime, $this->_interval);
-		$recurrenceTime =  GO_Base_Util_Date::date_add($this->_eventStartTime,$daysBetweenNextAndFirstEvent);
+		$recurrenceTime =  GO_Base_Util_Date::date_add($this->_eventstarttime,$daysBetweenNextAndFirstEvent);
 		return $recurrenceTime;
 		
 	}
@@ -184,7 +183,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 	
 		$daysBetweenNextAndFirstEvent=$this->_findNumberOfDays($startTime, $period, false);
 		
-		$firstPossibleWeekStart = $recurrenceTime = GO_Base_Util_Date::date_add($this->_eventStartTime,$daysBetweenNextAndFirstEvent);
+		$firstPossibleWeekStart = $recurrenceTime = GO_Base_Util_Date::date_add($this->_eventstarttime,$daysBetweenNextAndFirstEvent);
 		
 		//check each weekday for a match
 		for($day=0;$day<7;$day++){			
@@ -210,17 +209,17 @@ class GO_Base_Util_Date_RecurrencePattern{
 			$monthBetweenNextAndFirstEvent=$this->_findNumberOfMonths($startTime, $this->_interval);
 			//echo $monthBetweenNextAndFirstEvent."\n";
 			
-			$recurrenceTime =  GO_Base_Util_Date::date_add($this->_eventStartTime, 0, $monthBetweenNextAndFirstEvent);
+			$recurrenceTime =  GO_Base_Util_Date::date_add($this->_eventstarttime, 0, $monthBetweenNextAndFirstEvent);
 		}else
 		{
 
 			//set event start to first day of month for calculation of the number of periods.
-			$this->_eventStartTime=mktime(0,0,0,date('m',$this->_eventStartTime),1,date('Y',$this->_eventStartTime));
+			$this->_eventstarttime=mktime(0,0,0,date('m',$this->_eventstarttime),1,date('Y',$this->_eventstarttime));
 			
 			//eg. 3rd monday of the month
 			$monthBetweenNextAndFirstEvent=$this->_findNumberOfMonths($startTime, $this->_interval, false);
 			
-			$recurrenceTime = $firstPossibleTime=GO_Base_Util_Date::date_add($this->_eventStartTime, 0, $monthBetweenNextAndFirstEvent);
+			$recurrenceTime = $firstPossibleTime=GO_Base_Util_Date::date_add($this->_eventstarttime, 0, $monthBetweenNextAndFirstEvent);
 			
 			$currentMonth = $startMonth = date('m', $recurrenceTime);
 						
@@ -298,7 +297,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 	
 	protected function _getNextRecurrenceYearly($startTime){
 		$monthsBetweenNextAndFirstEvent=$this->_findNumberOfMonths($startTime, $this->_interval*12);
-		$recurrenceTime =  GO_Base_Util_Date::date_add($this->_eventStartTime, 0, $monthsBetweenNextAndFirstEvent);
+		$recurrenceTime =  GO_Base_Util_Date::date_add($this->_eventstarttime, 0, $monthsBetweenNextAndFirstEvent);
 		
 		return $recurrenceTime;
 	}
@@ -306,8 +305,8 @@ class GO_Base_Util_Date_RecurrencePattern{
 	
 	protected function _findNumberOfMonths($startTime, $interval, $ceil=true){
 		
-		$intervalYears = date('Y', $startTime)-date('Y', $this->_eventStartTime);
-		$intervalMonths = date('n', $startTime)-date('n', $this->_eventStartTime);
+		$intervalYears = date('Y', $startTime)-date('Y', $this->_eventstarttime);
+		$intervalMonths = date('n', $startTime)-date('n', $this->_eventstarttime);
 		$intervalMonths = 12*$intervalYears+$intervalMonths;
 
 		$devided = $intervalMonths/$interval;
@@ -336,7 +335,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 	 * @return int Number of periods that fall between event start and start time
 	 */
 	protected function _findNumberOfDays($startTime, $interval=1, $ceil=true){
-		$eventStartDateTime = new GO_Base_Util_Date_DateTime(date('c',$this->_eventStartTime));
+		$eventStartDateTime = new GO_Base_Util_Date_DateTime(date('c',$this->_eventstarttime));
 		$startDateTime= new GO_Base_Util_Date_DateTime(date('c',$startTime));
 		
 		//diff is only compatible with 5.3 and we want 5.2 compatibility
@@ -364,8 +363,8 @@ class GO_Base_Util_Date_RecurrencePattern{
 	 * 
 	 * @param boolean $toGmt Will be converted to GMT time (true) or from GMT time (false).
 	 */
-	protected function _shiftDays($toGmt=true){
-		$date = new DateTime(date('Y-m-d G:i', $this->_eventStartTime));
+	protected function shiftDays($days, $toGmt=true){
+		$date = new DateTime(date('Y-m-d G:i', $this->_eventstarttime));
 		$timezoneOffset = $date->getOffset();
 				
 		$localStartHour = $date->format('G');
@@ -373,16 +372,16 @@ class GO_Base_Util_Date_RecurrencePattern{
 		$gmtStartHour = $localStartHour-($timezoneOffset/3600);
 
 		if ($gmtStartHour > 23) {
-			$shiftDay = $toGmt ? 1 : 0;
+			$shiftDay = $toGmt ? 1 : -1;
 		}elseif ($gmtStartHour < 0) {
-			$shiftDay = $toGmt ? 0 : 1;
+			$shiftDay = $toGmt ? -1 : 1;
 		} else {
 			$shiftDay = 0;
 		}	
 	
 		$newByDay=array();
 		if($shiftDay!=0){
-			foreach($this->_byday as $day){
+			foreach($days as $day){
 				
 				$number = "";
 				$dayStr = $day;
@@ -394,7 +393,10 @@ class GO_Base_Util_Date_RecurrencePattern{
 				$shiftedDay = $this->_days[array_search($dayStr, $this->_days)+$shiftDay];
 				$newByDay[]=$number.$shiftedDay;
 			}						
-			$this->_byday=$newByDay;
+			return $newByDay;
+		}else
+		{
+			return $days;
 		}
 	}	
 }

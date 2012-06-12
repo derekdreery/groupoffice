@@ -15,17 +15,17 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	
 	protected function actionLink($params) {
 
-		$fromLinks = json_decode($_POST['fromLinks'], true);
-		$toLinks = json_decode($_POST['toLinks'], true);
-		$from_folder_id = isset($_POST['from_folder_id']) ? $_POST['from_folder_id'] : 0;
-		$to_folder_id = isset($_POST['to_folder_id']) ? $_POST['to_folder_id'] : 0;
+		$fromLinks = json_decode($params['fromLinks'], true);
+		$toLinks = json_decode($params['toLinks'], true);
+		$from_folder_id = isset($params['from_folder_id']) ? $params['from_folder_id'] : 0;
+		$to_folder_id = isset($params['to_folder_id']) ? $params['to_folder_id'] : 0;
 
 		foreach ($fromLinks as $fromLink) {
-			$fromModel = call_user_func(array($fromLink['model_name'], 'model'))->findByPk($fromLink['model_id']);
+			$fromModel = GO::getModel($fromLink['model_name'])->findByPk($fromLink['model_id']);
 
 			foreach ($toLinks as $toLink) {
-				$model = call_user_func(array($toLink['model_name'], 'model'))->findByPk($toLink['model_id']);
-				$fromModel->link($model, $_POST['description'], $from_folder_id, $to_folder_id);
+				$model = GO::getModel($toLink['model_name'])->findByPk($toLink['model_id']);
+				$fromModel->link($model, $params['description'], $from_folder_id, $to_folder_id);
 			}
 		}
 
@@ -60,7 +60,31 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	protected function actionGroups($params) {
 		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_Group::model());
 		$store->setDefaultSortOrder('name', 'ASC');
-		$store->setStatement (GO_Base_Model_Group::model()->find($store->getDefaultParams($params)));
+		
+		$findParams = $store->getDefaultParams($params);
+		
+		if(empty($params['manage'])){
+			
+			//permissions are handled differently. Users may use all groups they are member of.
+			$findParams->ignoreAcl();
+			
+			if(!GO::user()->isAdmin()){
+				$findParams->getCriteria()
+								->addCondition('admin_only', 1,'!=')
+								->addCondition('user_id', GO::user()->id,'=','ug');
+				
+				$findParams->joinModel(array(
+						'model'=>"GO_Base_Model_UserGroup",
+						'localTableAlias'=>'t', //defaults to "t"	  
+						'foreignField'=>'group_id', //defaults to primary key of the remote model
+						'tableAlias'=>'ug', //Optional table alias
+	 			));
+			}
+			
+		}
+		
+		
+		$store->setStatement (GO_Base_Model_Group::model()->find($findParams));
 		return $store->getData();
 	}
 
@@ -273,11 +297,11 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 
 
 
-		$cacheDir = new GO_Base_Fs_Folder(GO::config()->file_storage_path . 'thumbcache');
+		$cacheDir = new GO_Base_Fs_Folder(GO::config()->orig_tmpdir . 'thumbcache');
 		$cacheDir->create();
 
 
-		$cacheFilename = str_replace(array('/', '\\'), '_', $file->parent()->path() . '_' . $w . '_' . $h . '_' . $lw . '_' . $lh . '_' . $pw . '_' . $lw);
+		$cacheFilename = str_replace(array('/', '\\'), '_', $file->parent()->path() . '_' . $w . '_' . $h . '_' . $lw . '_' . $ph. '_' . '_' . $pw . '_' . $lw);
 		if ($zc) {
 			$cacheFilename .= '_zc';
 		}
@@ -287,10 +311,15 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		$readfile = $cacheDir->path() . '/' . $cacheFilename;
 		$thumbExists = file_exists($cacheDir->path() . '/' . $cacheFilename);
 		$thumbMtime = $thumbExists ? filemtime($cacheDir->path() . '/' . $cacheFilename) : 0;
+		
+		GO::debug("Thumb mtime: ".$thumbMtime." (".$cacheFilename.")");
 
 		if (!empty($params['nocache']) || !$thumbExists || $thumbMtime < $file->mtime() || $thumbMtime < $file->ctime()) {
+			
+			GO::debug("Resizing image");
 			$image = new GO_Base_Util_Image($file->path());
 			if (!$image->load_success) {
+				GO::debug("Failed to load image for thumbnailing");
 				//failed. Stream original image
 				$readfile = $file->path();
 			} else {
@@ -310,6 +339,8 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 							$h = $ph;
 						}
 					}
+					
+					GO::debug($w."x".$h);
 
 					if ($w && $h) {
 						$image->resize($w, $h);

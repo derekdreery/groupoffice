@@ -33,7 +33,7 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 			<script type="text/javascript">
 				function afterUpload(success){
 					
-					opener.GO.mainLayout.getModulePanel("files").sendOverwrite({upload:true});	
+					opener.GO.files.juploadFileBrowser.sendOverwrite({upload:true});	
 
 					if(success){
 						setTimeout("self.close();", 1000);

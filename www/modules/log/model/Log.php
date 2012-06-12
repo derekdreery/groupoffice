@@ -32,6 +32,14 @@ class GO_Log_Model_Log extends GO_Base_Db_ActiveRecord {
 		return parent::init();
 	}
 	
+	public function validate() {
+		
+		if(strlen($this->message) > 255)
+			$this->message=substr($this->message, 0,255);
+			
+		return parent::validate();
+	}
+	
 	public function defaultAttributes() {
 		$attr = parent::defaultAttributes();
 		if(PHP_SAPI=='cli')

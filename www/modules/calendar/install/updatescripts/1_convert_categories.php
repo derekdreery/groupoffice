@@ -10,29 +10,32 @@ $oldCategories = array();
 $stmt = GO_Calendar_Model_Category::model()->find();
 while($category = $stmt->fetch()){
 	
-	if($category->user_id != 0){
+	if($category->calendar_id != 0){
 		$oldCategories[] = $category->id;
 
 		echo "Category $category->name\n";
 
-		$calStmt = GO_Calendar_Model_Calendar::model()->findByAttribute('user_id', $category->user_id);
+		$calStmt = GO_Calendar_Model_Calendar::model()->findByAttribute('calendar_id', $category->user_id);
 		while($calendar = $calStmt->fetch()){
 
-			// Create the new categories for each calendar
-			$newCategory = new GO_Calendar_Model_Category();
-			$newCategory->name = $category->name;
-			$newCategory->color = $category->color;
-			$newCategory->user_id = $calendar->id;
-			$newCategory->save();
+			try{
+				// Create the new categories for each calendar
+				$newCategory = new GO_Calendar_Model_Category();
+				$newCategory->name = $category->name;
+				$newCategory->color = $category->color;
+				$newCategory->calendar_id = $calendar->id;
+				$newCategory->save();
 
-			// Get all events that have the old category and change the category to the new one.
-			$eventStmt = GO_Calendar_Model_Event::model()->findByAttributes(array('calendar_id'=>$calendar->id,'category_id'=>$category->id));
-			while($event = $eventStmt->fetch()){
-				//echo "Update event $event->name\n";
-				$event->category_id = $newCategory->id;
-				$event->save();
+				// Get all events that have the old category and change the category to the new one.
+				$eventStmt = GO_Calendar_Model_Event::model()->findByAttributes(array('calendar_id'=>$calendar->id,'category_id'=>$category->id));
+				while($event = $eventStmt->fetch()){
+					//echo "Update event $event->name\n";
+					$event->category_id = $newCategory->id;
+					$event->save();
+				}
+			}catch(Exception $e){
+				echo $e->getMessage()."\n";
 			}
-
 		}
 	}
 }

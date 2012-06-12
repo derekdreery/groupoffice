@@ -70,8 +70,8 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 	
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
 		
-		if(isset($_FILES['files']['tmp_name'][0]))
-			$response = array_merge($response,$this->run("upload",$params,false));
+//		if(isset($_FILES['files']['tmp_name'][0]))
+//			$response = array_merge($response,$this->run("upload",$params,false));
 		
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}

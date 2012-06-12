@@ -12,9 +12,9 @@
  * @license AGPL/Proprietary http://www.group-office.com/LICENSE.TXT
  * @link http://www.group-office.com
  * @package GO.modules.servermanager.model
- * @version $Id: example.php 7607 20120101Z <<USERNAME>> $
  * @copyright Copyright Intermesh BV.
- * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
+ * @author Merijn Schering mschering@intermesh.nl
+ * @author WilmarVB wilmar@intermesh.nl
  */
  
 /**
@@ -53,6 +53,12 @@
 
 class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 
+	/**
+	 * Ignore existing database and folder structure when importing.
+	 * 
+	 * @var boolean 
+	 */
+	public $ignoreExistingForImport=false;
 	/**
 	 * Returns a static model of itself
 	 * 
@@ -113,7 +119,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		if(empty($this->dbName))
 			$this->setValidationError('name','Name is invalid');
 		
-		if($this->isNew){
+		if($this->isNew && !$this->ignoreExistingForImport){
 			if(file_exists('/var/lib/mysql/'.$this->dbName) || file_exists('/etc/apache2/sites-enabled/'.$this->name) || is_dir($this->installPath))
 				$this->setValidationError ('name', GO::t('duplicateHost','servermanager'));
 		}
@@ -150,7 +156,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		
 		return parent::beforeDelete();
 	}
-		
+	
 	
 	protected function afterDbInsert() {
 		if(class_exists("GO_Professional_LicenseCheck"))
@@ -186,7 +192,6 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 						->select('module_id, count(*) AS usercount')
 						->joinModel(array('model'=>'GO_ServerManager_Model_InstallationUser',  'localField'=>'user_id','tableAlias'=>'u'))
 						->group(array('module_id'))
-						->debugSql()
 						->criteria(
 										GO_Base_Db_FindCriteria::newInstance()
 										->addCondition('installation_id', $this->id,'=','u')										
@@ -211,14 +216,15 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		
 		$adminUser = GO_Base_Model_User::model()->findByPk(1);
 		$this->admin_email=$adminUser->email;
+		$this->admin_name=$adminUser->name;
 		$this->install_time = $adminUser->ctime;
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()
 						->select('count(*) as count, max(lastlogin) AS lastlogin');
 		$record = GO_Base_Model_User::model()->findSingle($findParams);						
 		
-		$this->lastlogin = intval($record['lastlogin']);
-		$this->count_users = intval($record['count']);		
+		$this->lastlogin = intval($record->lastlogin);
+		$this->count_users = intval($record->count);		
 		
 		$allowedModules = empty($config['allowed_modules']) ? array() : explode(',', $config['allowed_modules']);
 		
@@ -241,6 +247,9 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		GO::config()->save_setting('database_usage', $this->database_usage);
 		
 		//var_dump($iUsers);
+		
+		
+		//GO::debug($this->getAttributes());
 		
 		//reconnect to servermanager database
 		GO::setDbConnection();

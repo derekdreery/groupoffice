@@ -50,6 +50,10 @@ class GO_Bookmarks_Model_Category extends GO_Base_Db_ActiveRecord {
 	public function primaryKey() {
 		return 'id';
 	}
+	protected function init() {
+		$this->columns['name']['unique']=true;
+		return parent::init();
+	}
 	
 	protected function getPermissionLevelForNewModel(){
 		return GO_Base_Model_Acl::DELETE_PERMISSION;

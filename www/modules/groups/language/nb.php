@@ -18,3 +18,4 @@ $l["adminOnly"]= 'Kun admin';
 $l["adminOnlyLabel"]= 'Kun administratorer kan ha tilgang til denne gruppen for å tildele rettigheter til for eksempel kalendere.';
 $l["groupMembers"]='Gruppemedlemmer';
 $l["managePermissions"]= 'Behandle tillatelser';
+$l['modulePermissions']= 'Modulrettigheter';

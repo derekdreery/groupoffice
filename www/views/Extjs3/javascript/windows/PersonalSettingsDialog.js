@@ -19,7 +19,9 @@ GO.PersonalSettingsDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			goDialogId:'settings',
 			title:GO.lang.settings,
 			formControllerUrl: 'settings',
-			width:900
+			width:900,
+			height:550,
+			enableApplyButton:false
 		});
 		
 		GO.PersonalSettingsDialog.superclass.initComponent.call(this);	

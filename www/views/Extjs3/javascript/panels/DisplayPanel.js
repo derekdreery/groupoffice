@@ -472,7 +472,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 			this.loading=true;
 
 			this.loadParams[this.idParam]=this.model_id=this.link_id=id;
-			this.loadParams['hidden_sections']=Ext.encode(this.hiddenSections)
+			this.loadParams['hidden_sections']=Ext.encode(this.hiddenSections);
 			
 			this.body.mask(GO.lang.waitMsgLoad);
 			Ext.Ajax.request({

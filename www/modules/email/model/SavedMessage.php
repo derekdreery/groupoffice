@@ -146,7 +146,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 
 
 				if ($part->ctype_primary == 'text' && ($part->ctype_secondary == 'plain' || $part->ctype_secondary == 'html') && (!isset($part->disposition) || $part->disposition != 'attachment') && empty($part->d_parameters['filename'])) {
-					
+								
 					$body = GO_Base_Util_String::clean_utf8($part->body);
 					
 					if (stripos($part->ctype_secondary, 'plain') !== false) {
@@ -217,12 +217,14 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 				}
 			}
 		} elseif (isset($structure->body)) {
+			
+			$text_part = $structure->body;			
 			//convert text to html
 			if (stripos($structure->ctype_secondary, 'plain') !== false) {
-				$text_part = nl2br($structure->body);
-			} else {
-				$text_part = $structure->body;
-			}
+				$this->extractUuencodedAttachments($text_part);
+				$text_part = nl2br($text_part);
+			} 
+			
 			$text_part = GO_Base_Util_String::clean_utf8($text_part);
 			$this->_loadedBody .= $text_part;
 		}

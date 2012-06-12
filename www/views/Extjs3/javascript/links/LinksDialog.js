@@ -103,55 +103,55 @@ Ext.extend(GO.dialog.LinksDialog, Ext.Window, {
 			this.tolinks.push({'model_id' : records[i].data['model_id'], 'model_name' : records[i].data['model_name']});
 		}
 
-//		if(this.tolinks.length==1){
-//			if(!this.selectFolderWindow){
-//
-//				this.selectFolderTree = new GO.LinksTree();
-//				this.selectFolderTree.on('dblclick', function(node){
-//					var to_folder_id = parseInt(node.id.replace('lt-folder-',''));
-//					this.sendLinkRequest(this.tolinks, to_folder_id);
-//					this.selectFolderWindow.hide();
-//				}, this);
-//
-//				this.selectFolderWindow = new GO.Window({
-//					layout:'fit',
-//					title:GO.lang.selectFolder,
-//					items:this.selectFolderTree,
-//					closeAction:'hide',
-//					width:400,
-//					height:400,
-//					modal:true,
-//					closable:true,
-//					buttons:[{
-//							text:GO.lang.cmdOk,
-//							handler:function(){
-//
-//								var node = this.selectFolderTree.getSelectionModel().getSelectedNode();
-//								if(!node){
-//									alert(GO.lang.selectFolder);
-//								}
-//
-//								var to_folder_id = parseInt(node.id.replace('lt-folder-',''));
-//								this.sendLinkRequest(this.tolinks, to_folder_id);
-//								this.selectFolderWindow.hide();
-//							},
-//							scope:this
-//					}]
-//				});
-//			}
-//			this.selectFolderWindow.show();
-//
-//			this.selectFolderTree.loadLinks(this.tolinks[0]['model_id'], this.tolinks[0]['model_name'], function(rootNode){
-//				if(!rootNode.childNodes.length){
-//					this.selectFolderWindow.hide();
-//					this.sendLinkRequest(this.tolinks);
-//				}
-//			}, this);
-//			
-//		}else
-//		{
+		if(this.tolinks.length==1){
+			if(!this.selectFolderWindow){
+
+				this.selectFolderTree = new GO.LinksTree();
+				this.selectFolderTree.on('dblclick', function(node){
+					var to_folder_id = parseInt(node.id.replace('lt-folder-',''));
+					this.sendLinkRequest(this.tolinks, to_folder_id);
+					this.selectFolderWindow.hide();
+				}, this);
+
+				this.selectFolderWindow = new GO.Window({
+					layout:'fit',
+					title:GO.lang.selectFolder,
+					items:this.selectFolderTree,
+					closeAction:'hide',
+					width:400,
+					height:400,
+					modal:true,
+					closable:true,
+					buttons:[{
+							text:GO.lang.cmdOk,
+							handler:function(){
+
+								var node = this.selectFolderTree.getSelectionModel().getSelectedNode();
+								if(!node){
+									alert(GO.lang.selectFolder);
+								}
+
+								var to_folder_id = parseInt(node.id.replace('lt-folder-',''));
+								this.sendLinkRequest(this.tolinks, to_folder_id);
+								this.selectFolderWindow.hide();
+							},
+							scope:this
+					}]
+				});
+			}
+			this.selectFolderWindow.show();
+
+			this.selectFolderTree.loadLinks(this.tolinks[0]['model_id'], this.tolinks[0]['model_name'], function(rootNode){
+				if(!rootNode.childNodes.length){
+					this.selectFolderWindow.hide();
+					this.sendLinkRequest(this.tolinks);
+				}
+			}, this);
+			
+		}else
+		{
 			this.sendLinkRequest(this.tolinks);
-		//}
+		}
 
 		
 	},

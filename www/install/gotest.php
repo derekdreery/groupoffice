@@ -309,7 +309,7 @@ function test_system(){
 
 	
 	
-	if(!empty(GO::config()->title))
+	if(class_exists("GO") && !empty(GO::config()->title))
 	{		
 		$test['name']='Protected files path';
 		$test['pass']=is_writable(GO::config()->file_storage_path);

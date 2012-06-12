@@ -60,12 +60,24 @@ $sql = file_get_contents($sql_file);
 $queries = String::get_sql_queries($sql_file);
 //var_dump($queries);
 
-$domain_id = $pa->nextid('pa_domains');
+//$domain_id = $pa->nextid('pa_domains');
 
+$sql = "SHOW TABLE STATUS LIKE 'pa_domains'";
+$pa->query($sql);
+$record = $pa->next_record();
+$domain_id=$record['Auto_increment'];
 
+$first=true;
 foreach($queries as $query){
 	//echo "QUERY: $query\n";
 	$query = str_replace('{domain_id}', $domain_id, $query);
+	if($first){
+		$query = str_replace('`aliases`', '`max_aliases`', $query);
+		$query = str_replace('`mailboxes`', '`max_mailboxes`', $query);
+		$query = str_replace('`quota`', '`default_quota`', $query);
+		$query = str_replace('`maxquota`', '`total_quota`', $query);
+		$first=false;
+	}
 	$pa->query($query);
 }
 

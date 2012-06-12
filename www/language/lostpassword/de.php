@@ -8,7 +8,9 @@ $l['lost_password_subject']='Neues Passwort angefordert';
 $l['lost_password_body']='%s,
 Sie haben für %s ein neues Passwort angefordert? Ihr Benutzername ist "%s".
 Klicken Sie auf den folgenden Link (oder kopieren Sie diesen in die Adresszeile Ihres Browsers), wenn Sie Ihr Passwort ändern möchten:
-%s;
+
+%s
+
 Sollten Sie kein neues Passwort angefordert haben, können Sie diese Nachricht einfach löschen.';
 $l['lost_password_error']='Konnte die angegebene E-Mail-Adresse nicht finden.';
 $l['lost_password_success']='Eine E-Mail mit weiteren Anweisungen wurde an Ihr E-Mail-Konto versendet.';

@@ -134,9 +134,10 @@ $updates["201202211344"][]="update cal_calendars set project_id=0;";
 $updates["201203101510"][]="ALTER TABLE `cal_events` CHANGE `category_id` `category_id` INT( 11 ) NULL;";
 $updates["201203101510"][]="ALTER TABLE `cal_categories` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT;";
 
+$updates["201203101514"][]="ALTER TABLE `cal_categories` CHANGE `user_id` `calendar_id` INT( 11 ) NOT NULL;";
 $updates["201203101515"][]="script:1_convert_categories.php";
 
-$updates["201203101520"][]="ALTER TABLE `cal_categories` CHANGE `user_id` `calendar_id` INT( 11 ) NOT NULL;";
+
 
 $updates["201204121221"][]="ALTER TABLE `cal_views` DROP `start_hour`";
 $updates["201204121221"][]="ALTER TABLE `cal_views` DROP `end_hour`";

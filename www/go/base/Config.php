@@ -465,6 +465,15 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $file_storage_path = '/home/groupoffice/';
+	
+	
+	/**
+	 * Convert non ASCII characters to ASCII codes when uploaded to Group-Office.
+	 * Useful for Windows servers that don't support UTF8.
+	 * 
+	 * @var boolean 
+	 */
+	public $convert_utf8_filenames_to_ascii=false;
 
 	/**
 	 * The maximum file size the filebrowser attempts to upload. Be aware that
@@ -673,7 +682,27 @@ class GO_Base_Config {
 	 */
 
 	var $nav_page_size=50;
-
+	
+	/**
+	 * Enable logging of slow requests
+	 * 
+	 * @var boolean 
+	 */
+	public $log_slow_requests=false;
+	
+	/**
+	 * Slow request time in seconds
+	 * 
+	 * @var float 
+	 */
+	public $log_slow_requests_trigger=1;
+	
+	/**
+	 * Path of the log file
+	 * 
+	 * @var string 
+	 */
+	public $log_slow_requests_file="/home/groupoffice/slow-requests.log";
 
 	/*//////////////////////////////////////////////////////////////////////////////
 	 //////////      Variables that are not touched by the installer   /////////////
@@ -685,7 +714,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.0.11';
+	var $version = '4.0.34';
 
 
 	/* The permissions mode to use when creating files
@@ -715,7 +744,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20120503';
+	var $mtime = '20120612-1';
 
 	#group configuration
 	/**
@@ -966,13 +995,18 @@ class GO_Base_Config {
 		if($this->debug)
 			$this->debug_log=true;
 
-		if($this->debug_log) {
+		if($this->debug_log || $this->log_slow_requests) {			
+
 			list ($usec, $sec) = explode(" ", microtime());
 			$this->loadstart = ((float) $usec + (float) $sec);
+			
+			$dat = getrusage();
+			define('PHP_TUSAGE', microtime(true));
+			define('PHP_RUSAGE', $dat["ru_utime.tv_sec"]*1e6+$dat["ru_utime.tv_usec"]);
 		}
 
-		if($this->firephp)
-			$this->firephp=true;
+//		if($this->firephp)
+//			$this->firephp=true;
 
 		// database class library
 //		require_once($this->class_path.'database/base_db.class.inc.php');
@@ -1015,9 +1049,35 @@ class GO_Base_Config {
 			//GO::debug('Performed '.$GLOBALS['query_count'].' database queries', $this);
 
 			GO::debug('Page load took: '.(GO_Base_Util_Date::getmicrotime()-$this->loadstart).'ms', $this);
-
 			GO::debug('Peak memory usage:'.round(memory_get_peak_usage()/1048576,2).'MB', $this);
 			GO::debug("--------------------\n", $this);
+		}
+		
+		$this->_logSlowRequest();
+	}
+	
+	private function _logSlowRequest(){
+		if($this->log_slow_requests){
+			$time = GO_Base_Util_Date::getmicrotime()-$this->loadstart;
+			if($time>$this->log_slow_requests_trigger){
+
+				$logStr = "URI: ";
+
+				if(isset($_SERVER['HTTP_HOST']))
+					$logStr .= $_SERVER['HTTP_HOST'];
+
+				if(isset($_SERVER['REQUEST_URI']))
+					$logStr .= $_SERVER['REQUEST_URI'];
+
+				$logStr .= '; ';
+
+				$logStr .= 'r: '.GO::router()->getControllerRoute().';';
+
+				$logStr .= 'time: '.$time.';'."\n";
+
+
+				file_put_contents($this->log_slow_requests_file, $logStr,FILE_APPEND);			
+			}		
 		}
 	}
 
@@ -1154,14 +1214,11 @@ class GO_Base_Config {
 				if ($https) {
 					$_SESSION['GO_SESSION']['full_url'] .= "s";
 				}
-				/*$url .= "://";
-				if ((!$https && $_SERVER["SERVER_PORT"] != "80") || ($https && $_SERVER["SERVER_PORT"] != "443")) {
-					$url .= $_SERVER["HTTP_HOST"].":".$_SERVER["SERVER_PORT"].$this->host;
-				} else {
-					$url .= $_SERVER["HTTP_HOST"].$this->host;
-				}*/
-
-				$_SESSION['GO_SESSION']['full_url'] .= '://'.$_SERVER["SERVER_NAME"].$this->host;
+				$_SESSION['GO_SESSION']['full_url'] .= "://".$_SERVER["SERVER_NAME"];
+				if ((!$https && $_SERVER["SERVER_PORT"] != "80") || ($https && $_SERVER["SERVER_PORT"] != "443")) 
+					$_SESSION['GO_SESSION']['full_url'] .= ":".$_SERVER["SERVER_PORT"];
+								
+				$_SESSION['GO_SESSION']['full_url'] .= $this->host;
 			}
 			$this->full_url=$_SESSION['GO_SESSION']['full_url'];
 		}else

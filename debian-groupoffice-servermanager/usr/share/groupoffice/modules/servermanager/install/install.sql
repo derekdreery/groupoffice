@@ -108,3 +108,19 @@ CREATE TABLE IF NOT EXISTS `sm_new_trials` (
   PRIMARY KEY (`name`),
   KEY `key` (`key`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `sm_auto_email`
+--
+
+DROP TABLE IF EXISTS `sm_auto_email`;
+CREATE TABLE IF NOT EXISTS `sm_auto_email` (
+	`id` INT( 11 ) NOT NULL AUTO_INCREMENT,
+	`name` varchar(50) NOT NULL DEFAULT '',
+	`days` int(5) NOT NULL DEFAULT '0',
+	`mime` TEXT,
+	`active` tinyint(1) NOT NULL DEFAULT '0',
+	PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

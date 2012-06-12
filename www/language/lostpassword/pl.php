@@ -8,7 +8,9 @@ $l['lost_password_subject']='Prośba o nowe hasło';
 $l['lost_password_body']='%s,
 Wysłano prośbę o zmianę hasła z %s. Twoja nazwa użytkownika to "%s".
 Kliknij w poniższy odnośnik (lub wklej do przeglądarki) aby zmienić hasło:
-%s;
+
+%s
+
 Jeśli nie wysyłełeś prośby o zmianę hasła to skasuj tą wiadomość.';
 $l['lost_password_error']='Nie można odnaleźć podanego adresu e-mail.';
 $l['lost_password_success']='Instrukcję zmiany hasła wysłano na Twój adres e-mail.';

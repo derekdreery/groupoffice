@@ -30,3 +30,5 @@ $updates["201204251500"][] = "update pa_domains set active=1 where active=2;";
 $updates["201204251500"][] = "ALTER TABLE `pa_aliases` CHANGE `active` `active` BOOLEAN NOT NULL DEFAULT '1';";
 $updates["201204251500"][] = "update pa_aliases set active=0 where active=1;";
 $updates["201204251500"][] = "update pa_aliases set active=1 where active=2;";
+
+$updates["201204251500"][] = "script:1_disable_vacation.php";

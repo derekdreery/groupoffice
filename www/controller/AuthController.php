@@ -35,7 +35,10 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 			$this->fireEvent('loadapplication', array(&$this));
 	}
 
-	protected function actionInit() {
+	protected function actionInit($params) {
+		
+		if(!empty($params['SET_LANGUAGE']))
+			GO::config()->language=$params['SET_LANGUAGE'];
 
 		$this->loadInit();
 		$this->render('index');
@@ -152,9 +155,20 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 			
 			$response['user_id']=$user->id;
 			$response['security_token']=GO::session()->values["security_token"];
+			
+			if(!empty($params["login_language"]))
+			{
+				GO::user()->language=$params["login_language"];
+				GO::user()->save();
+				
+				//TODO remove when ready				
+				require_once(GO::config()->root_path."Group-Office.php");
+				$GLOBALS["GO_LANGUAGE"]->set_language($params["login_language"]);
+			}
+			
 		}
 		
-		
+		//return $response;
 
 		if (GO_Base_Util_Http::isAjaxRequest())
 			return $response;

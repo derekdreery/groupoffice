@@ -5,7 +5,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	protected $model = 'GO_Servermanager_Model_Installation';
 	
 	protected function allowGuests() {
-		return array('create','destroy', 'report','upgradeall');
+		return array('create','destroy', 'report','upgradeall','rename');
 	}
 	
 	protected function ignoreAclPermissions() {
@@ -22,6 +22,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				if(!$installation){
 					echo "Importing ".$item->name()."\n";
 					$installation = new GO_ServerManager_Model_Installation();
+					$installation->ignoreExistingForImport=true;
 					$installation->name=$item->name();					
 					$installation->report();					
 				}
@@ -71,8 +72,51 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		return $config;
 	}
 	
+	
+	public function actionRename($params){
+	
+		if(!$this->isCli())
+			throw new Exception("Action servermanager/installation/create may only be run by root on the command line");
+		
+		$this->checkRequiredParameters(array("oldname","newname"), $params);		
+		
+		$installation = GO_ServerManager_Model_Installation::model()->findSingleByAttribute('name', $params['oldname']);
+		
+		if(!$installation)
+			throw new GO_Base_Exception_NotFound();
+		
+		$configFolder = new GO_Base_Fs_Folder(dirname($installation->configPath));
+		$installationFolder = new GO_Base_Fs_Folder($installation->installPath);
+		
+		$oldDbName = $installation->dbName;
+		$oldDbUser = $installation->dbUser;
+		
+		require($installation->configPath);
+		
+		
+		$installation->name = $params["newname"];
+		$installation->save();		
+		
+		$newInstallPath = $installationFolder->parent()->path()."/".$installation->name."/";
+		
+		$config['id']=$installation->name;	
+		$config['file_storage_path']=$newInstallPath."data/";
+		$config['root_path']=$newInstallPath."groupoffice/";
+		system('mv "'.$configFolder->path().'" "'.$configFolder->parent()->path()."/".$installation->name.'"');
+		
+		//$configFolder->move(new GO_Base_Fs_Folder("/etc/groupoffice"), $installation->name);
+		
+		GO_Base_Util_ConfigEditor::save(new GO_Base_Fs_File($installation->configPath), $config);
+		
+		//$installationFolder->move(new GO_Base_Fs_Folder("/home/govhosts"), $installation->name);
+		
+		system('mv "'.$installationFolder->path().'" "'.$newInstallPath.'"');
+		
+		echo "Installation ".$params['oldname']." was renamed to ".$params['newname']."\n";		
+	}
+	
 	public function actionCreate($params){
-		if(PHP_SAPI!='cli')
+		if(!$this->isCli())
 			throw new Exception("Action servermanager/installation/create may only be run by root on the command line");
 		
 		//todo check if we are root
@@ -106,7 +150,8 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$configFile->chgrp('www-data');
 		$configFile->chmod(0640);		
 		
-		$this->_createDatabase($params, $installation, $existingConfig);		
+		$this->_createDatabase($params,$installation, $existingConfig);		
+		
 	}
 	
 	private function _createDatabaseContent($params, $installation, $config){
@@ -150,14 +195,20 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			
 				GO::getDbConnection()->query("CREATE DATABASE IF NOT EXISTS `".$config['db_name']."`");				
 				
-				$sql = "GRANT ALL PRIVILEGES ON `".$config['db_name']."`.*	TO ".
-								"'".$config['db_user']."'@'".$config['db_host']."' ".
-								"IDENTIFIED BY '".$config['db_pass']."' WITH GRANT OPTION";			
-
-				GO::getDbConnection()->query($sql);
-				GO::getDbConnection()->query('FLUSH PRIVILEGES');		
+				$this->_createDbUser($config);
 
 				$this->_createDatabaseContent($params, $installation, $config);
+			}else
+			{
+				if(!empty($params['adminpassword'])){
+					GO::setDbConnection($config["db_name"], $config["db_user"], $config["db_pass"]);					
+					
+					$admin = GO_Base_Model_User::model()->findByPk(1, false,true,true);
+					$admin->password=$params['adminpassword'];
+					$admin->save();	
+					
+					GO::setDbConnection();
+				}
 			}
 		}catch(Exception $e){
 			
@@ -167,6 +218,53 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 							"REVOKE ALL PRIVILEGES ON * . * FROM 'groupoffice-com'@'localhost';\n".
 							"GRANT ALL PRIVILEGES ON * . * TO 'groupoffice-com'@'localhost' WITH GRANT OPTION MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0 ;\n\n". $e->getMessage());
 		}
+	}
+	
+	private function _createDbUser($config){
+		$sql = "GRANT ALL PRIVILEGES ON `".$config['db_name']."`.*	TO ".
+								"'".$config['db_user']."'@'".$config['db_host']."' ".
+								"IDENTIFIED BY '".$config['db_pass']."' WITH GRANT OPTION";			
+
+		GO::getDbConnection()->query($sql);
+		GO::getDbConnection()->query('FLUSH PRIVILEGES');		
+	}
+	
+	protected function afterLoad(&$response, &$model, &$params) {
+		
+		if(file_exists($model->configPath))
+		{
+			require($model->configPath);
+			if(isset($config))
+			{
+				$response['data']['enabled']=empty($config['id']) || !empty($config['enabled']);
+				$response['data']['max_users'] = GO_Base_Util_Number::unlocalize($config['max_users']);
+
+				$response['data']['webmaster_email'] = $config['webmaster_email'];
+				$response['data']['title'] = $config['title'];
+				$response['data']['default_country'] = $config['default_country'];
+				$response['data']['language'] = $config['language'];
+				$response['data']['default_timezone'] = $config['default_timezone'];
+				$response['data']['default_currency'] = $config['default_currency'];
+				$response['data']['default_time_format'] = $config['default_time_format'];
+				$response['data']['default_date_format'] = $config['default_date_format'];
+				$response['data']['default_date_separator'] = $config['default_date_separator'];
+				$response['data']['default_thousands_separator'] = $config['default_thousands_separator'];
+				$response['data']['theme'] = $config['theme'];
+
+				$response['data']['default_decimal_separator'] = $config['default_decimal_separator'];
+				$response['data']['first_weekday'] = $config['first_weekday'];
+
+
+				$response['data']['allow_themes'] = isset($config['allow_themes']) ? true : false;
+				$response['data']['allow_password_change'] = isset($config['allow_password_change']) ? true : false;
+
+				$response['data']['quota'] = GO_Base_Util_Number::localize($config['quota']/1024/1024);
+				$response['data']['restrict_smtp_hosts'] = $config['restrict_smtp_hosts'];
+				$response['data']['serverclient_domains'] = $config['serverclient_domains'];
+			}
+		}
+		
+		return parent::afterLoad($response, $model, $params);
 	}
 
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
@@ -187,7 +285,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 						' --tmp_config='.$tmpConfigFile->path().
 						' --name='.$model->name.	
 						' --adminpassword='.$params['admin_password1'].' 2>&1';
-		
+		//throw new Exception($cmd);
 		exec($cmd, $output, $return_var);		
 
 		if($return_var!=0){
@@ -305,6 +403,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				$record['title']=$config['title'];
 				$record['webmaster_email']=$config['webmaster_email'];
 				$record['max_users']=isset($config['max_users']) ? $config['max_users'] : 0;
+				$record['serverclient_domains']=$config['serverclient_domains'];
 			}
 		}
 		
@@ -325,7 +424,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 										);
 		
 		$record = GO_ServerManager_Model_InstallationUserModule::model()->find($findParams);
-		return $record['usercount'];
+		return $record->usercount;
 	}
 	
 	
@@ -336,6 +435,10 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$allowedModules = array();
 		if(!empty($params['installation_id']) && ($installation=  GO_ServerManager_Model_Installation::model()->findByPk($params['installation_id']))){
 			require($installation->configPath);
+			
+			if(!isset($config['allowed_modules']))
+				$config['allowed_modules']="";
+			
 			$allowedModules = explode(',', $config['allowed_modules']);
 		}
 		
@@ -396,8 +499,35 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		}
 	}	
 	
+	protected function actionRunOnAll($params){
+		
+		if(!$this->isCli())
+			throw new Exception("This action may only be ran on the command line.");
+		
+		$stmt = GO_Servermanager_Model_Installation::model()->find();
+		while($installation = $stmt->fetch()){
+			
+			echo "Upgrading ".$installation->name."\n";
+			
+			if(!file_exists($installation->configPath)){
+				echo "\nERROR: Config file ".$installation->configPath." not found\n\n";
+				continue;
+			}
+			
+			require($installation->configPath);
+			
+			$cmd = GO::config()->root_path.'groupofficecli.php -r="'.$params["route"].'" -c="'.$installation->configPath.'"';
+			
+			system($cmd);		
+						
+			echo "Done\n\n";
+			
+		}
+	}	
+	
 	
 	protected function actionReport($params){
+		$now = time();
 		$stmt = GO_ServerManager_Model_Installation::model()->find();
 		
 		if(!$this->isCli())
@@ -420,8 +550,13 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			echo "Running daily tasks for installation\n";
 			$cmd ='/usr/share/groupoffice/groupofficecli.php -r=maintenance/servermanagerReport -c="'.$installation->configPath.'"  2>&1';				
 			system($cmd);
+			
+			
+			$this->_sendAutomaticEmails($installation,$now);
 		
 		}
+		
+		
 		
 //		if(class_exists('GO_Professional_LicenseCheck')){
 //			
@@ -456,5 +591,76 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		echo "Done\n\n";
 	}
 
+	private function _sendAutomaticEmails(GO_Servermanager_Model_Installation $installationModel, $nowUnixTime=false) {
+		if (!is_int($nowUnixTime))
+			$nowUnixTime = time();
+		
+		$autoEmailsStmt = GO_ServerManager_Model_AutomaticEmail::model()
+			->find(
+				GO_Base_Db_FindParams::newInstance()
+					->select('t.*')
+					->criteria(
+						GO_Base_Db_FindCriteria::newInstance()
+							->addCondition('active','1')
+					)
+			);
+		
+		while ($autoEmailModel = $autoEmailsStmt->fetch()) {
+			
+			//Send the mail only if the creation time of the installation + the number of days is today.
+			$dayStart = GO_Base_Util_Date::date_add($nowUnixTime,-$autoEmailModel->days);
+			$dayStart = GO_Base_Util_Date::clear_time($dayStart);
+			$dayEnd = GO_Base_Util_Date::date_add($dayStart,1);			
+			
+			if (!empty($autoEmailModel->active) && $installationModel->ctime>$dayStart && $installationModel->ctime<$dayEnd) {
+				$message = GO_Base_Mail_Message::newInstance()
+					->loadMimeMessage($autoEmailModel->mime)
+					->addTo($installationModel->admin_email, $installationModel->admin_name)
+					->setFrom(GO::config()->webmaster_email, 'Servermanager Administrator');
+
+				$body = $this->_parseTags(
+					$message->getBody(),
+					array('installation'=>$installationModel,'automaticemail'=>$autoEmailModel)
+				);
+				
+				$message->setBody($body);
+
+				GO_Base_Mail_Mailer::newGoInstance()->send($message);
+			}
+		}
+		
+	}
+	
+	/**
+	 * Parses string using tag combinations of the form:
+	 * 'modelname:attributename' replaced by the value of $model->attribute
+	 * @param String $string String to be parsed
+	 * @param array $models Array of ActiveRecords. Keys will be the prefixes (the
+	 * modelname part mentioned above).
+	 * @return String Parsed string.
+	 */
+	private function _parseTags($string,array $models) {
+		$attributes = array();
+		foreach ($models as $tagPrefix => $model) {
+			$attributes = array_merge($attributes,$this->_addPrefixToKeys($model->getAttributes(),$tagPrefix.':'));
+		}
+		$templateParser = new GO_Base_Util_TemplateParser();
+		return $templateParser->parse($string, $attributes);
+	}
+	
+	/**
+	 * Puts the prefix $tagPrefix before each key in the $array.
+	 * @param array $array
+	 * @param string $tagPrefix
+	 * @return array
+	 */
+	private function _addPrefixToKeys(array $array,$tagPrefix) {
+		$outputArray = array();
+		foreach ($array as $k => $v) {
+			$outputArray[$tagPrefix.$k] = $v;
+		}
+		return $outputArray;
+	}
+	
 }
 

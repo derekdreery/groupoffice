@@ -8,7 +8,9 @@ $l['lost_password_subject']='Požadavek na nové heslo';
 $l['lost_password_body']='%s,
 Váš požadavek na nové heslo pro %s. Vaše uživatelské jméno je "%s".
 Klikněte na odkaz níže (nebo ho vložte do prohlížeče), pro změnu hesla:
-%s;
+
+%s
+
 Pokud jste nežádal o nové heslo, prosím smažte tento mail.';
 $l['lost_password_error']='Nebylo možné vyhledat e-mailovou adresu.';
 $l['lost_password_success']='E-mail s instrukcemi byl odeslán na Vaši e-mailovou adresu.';

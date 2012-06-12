@@ -20,8 +20,9 @@ GO.addressbook.SelectContact = function(config){
 	if(!config.valueField)
 		config.valueField='id';
 
+		config.tpl = '<tpl for="."><div class="x-combo-list-item">{' + config.displayField + '} ({ab_name}) <tpl if="go_user_id&gt;0"><div class="go-model-icon-GO_Base_Model_User" style="width:16px;height:16px;display:inline-block;vertical-align:middle"></div></tpl></div></tpl>';
 
-	var fields = {fields: ['id', 'cf', 'name', 'salutation', 'email', 'first_name', 'middle_name','last_name', 'home_phone', 'work_phone', 'cellular', 'company_id','company_name','address','address_no','zip','city','state','country'], columns:[]};
+	var fields = {fields: ['id', 'cf', 'name', 'salutation', 'email', 'first_name', 'middle_name','last_name', 'home_phone', 'work_phone', 'cellular', 'company_id','company_name','address','address_no','zip','city','state','country','ab_name','go_user_id'], columns:[]};
 	if(GO.customfields)
 	{
 		GO.customfields.addColumns("GO_Addressbook_Model_Contact", fields);

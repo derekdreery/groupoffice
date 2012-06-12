@@ -9,6 +9,6 @@ if(GO_Base_Db_Utils::fieldExists('go_users', 'company')){
 	$sql = "UPDATE ab_companies SET post_address=address,post_address_no=address_no,post_country=country,post_state=state,post_city=city,post_zip=zip WHERE addressbook_id={$ab->id}";
 	$pdo->query($sql);
 
-	$sql = "UPDATE ab_contacts SET company_id=(select id from ab_companies where email=ab_contacts.email and addressbook_id={$ab->id} LIMIT 0,1) WHERE addressbook_id={$ab->id}";
+	$sql = "UPDATE ab_contacts SET company_id=(select id from ab_companies where email=ab_contacts.email collate utf8_general_ci and addressbook_id={$ab->id} LIMIT 0,1) WHERE addressbook_id={$ab->id}";
 	$pdo->query($sql);
 }

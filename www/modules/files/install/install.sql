@@ -69,7 +69,9 @@ CREATE TABLE IF NOT EXISTS `fs_folders` (
   `apply_state` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `name` (`name`),
-  KEY `parent_id` (`parent_id`)
+  KEY `parent_id` (`parent_id`),
+  KEY `parent_id_2` (`parent_id`,`name`),
+  KEY `visible` (`visible`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

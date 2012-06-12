@@ -11,7 +11,7 @@
  * @version $Id: en.js 7708 2011-07-06 14:13:04Z wilmar1980 $
  * @author Dat Pham <datpx@fab.vn> +84907382345
  */
-require($GO_LANGUAGE->get_fallback_language_file('notes'));
+require($GO_LANGUAGE->get_fallback_language_file('settings'));
 
 $lang['settings']['name']='Thiết lập';
 $lang['settings']['description']='Bạn sẽ thiết lập nhiều thông số qua module này';

@@ -516,4 +516,17 @@ $l['exportIncludeHidden']= 'Eksporter også skjulte kolonner';
 $l['exportHumanHeaders']= 'Bruke databasefeltnavn i overskrifter';
 $l['exportIncludeHeaders']= 'Eksporter også overskrifter';
 $l['exportOrientation']= 'Papirretning';
+$l['remove']="Fjern";
+$l['removeSelected']="Fjern valgte";
+$l['removeUpload']="Avbryt opplasting";
+$l['removeAll']="Fjern alle";
+$l['queued']="I kø";
+$l['uploading']='Laster opp ({0}%)';
+$l['failed']='Feilet';
+$l['done']='Ferdig';
+$l['tooBig']='For stor';
+$l['invalidFileType']='Ugyldig filtype';
+$l['uploadQueueEmpty']="Opplastingskøen er tom!";
+$l['dropFilesHere']="Slipp filer her";
+$l['pluploadProgressText']="{0}/{1} ({3} feilet) ({5}/s)";
 

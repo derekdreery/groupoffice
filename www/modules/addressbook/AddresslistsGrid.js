@@ -63,7 +63,7 @@ GO.addressbook.AddresslistsGrid = function(config)
 	},
 	{
 		header: GO.addressbook.lang['cmdOwner'],
-		dataIndex: 'owner' ,
+		dataIndex: 'user_name' ,
 		sortable: false
 	}
 	]);

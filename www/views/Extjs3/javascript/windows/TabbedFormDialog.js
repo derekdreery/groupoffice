@@ -365,6 +365,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 					GO.dialog.TabbedFormDialog.superclass.show.call(this);
 					this.afterLoad(remoteModelId, config, action);
 					
+					this.afterShowAndLoad(remoteModelId, config);
+					
 					this.formPanel.form.clearInvalid();
 					
 					this.updateTitle();
@@ -382,6 +384,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			this.updateTitle();
 			
 			GO.dialog.TabbedFormDialog.superclass.show.call(this);
+			
+			this.afterShowAndLoad(remoteModelId, config);
 		}
 		
 		//if the newMenuButton from another passed a linkTypeId then set this value in the select link field
@@ -408,6 +412,10 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 					f.setRemoteText(t[fieldName]);
 			}
 		}
+	},
+	
+	afterShowAndLoad : function (remoteModelId, config){
+		
 	},
 
 	updateTitle : function() {

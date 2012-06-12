@@ -90,6 +90,7 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 	 */
 	public function getDefault(GO_Base_Model_User $user) {	
 		
+			
 		if(!$user)
 			return false;
 		
@@ -117,11 +118,15 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 			$defaultModel->user_id = $user->id;
 			
 			if(isset($this->columns['name'])){
-				$defaultModel->name = $user->name;
-				$defaultModel->makeAttributeUnique('name');
+//				$defaultModel->name = $user->name;
+//				$defaultModel->makeAttributeUnique('name');
+				$this->setDefaultAttributes($defaultModel, $user);
 			}
 			
-			$defaultModel->save();
+			//any user may do this.
+			$oldIgnore = GO::setIgnoreAclPermissions(true);		
+			$defaultModel->save();			
+			GO::setIgnoreAclPermissions($oldIgnore);
 		}
 
 		if ($settingsModelName) {
@@ -130,5 +135,27 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 		}
 
 		return $defaultModel;
+	}
+	
+	protected function setDefaultAttributes(GO_Base_Db_ActiveRecord $defaultModel, GO_Base_Model_User $user){
+		
+		//TODO Get templates for this name		
+		$template = "{first_name} {middle_name} {last_name}";
+		
+		$defaultModel->name = $this->parseUserTemplate($template, $user->getAttributes());
+		$defaultModel->makeAttributeUnique('name');
+	}
+	
+	private function parseUserTemplate($template, $attributes)
+	{
+		foreach($attributes as $key=>$value){
+			if(is_string($value))
+				$template = str_replace("{".$key."}", $value, $template);
+		}
+
+		$template = trim(preg_replace('/\s+/', ' ',$template));
+		$template = str_replace(array('()','[]'),'', $template);
+
+		return $template;
 	}
 }

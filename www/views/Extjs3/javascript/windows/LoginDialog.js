@@ -278,7 +278,7 @@ Ext.extend(GO.dialog.LoginDialog, GO.Window, {
 		this.formPanel.add({
 			fieldLabel: GO.lang['strMiddleName'], 
 			name: 'middle_name', 
-			allowBlank: false});
+			allowBlank: true});
 		
 		this.formPanel.add({
 			fieldLabel: GO.lang['strLastName'], 

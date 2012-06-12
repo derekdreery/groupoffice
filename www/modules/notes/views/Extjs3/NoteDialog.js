@@ -34,7 +34,7 @@ GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		});
 
 		this.propertiesPanel = new Ext.Panel({
-			title:GO.lang['strProperties'],			
+			title:GO.lang['strProperties'],
 			cls:'go-form-panel',
 			layout:'form',
 			items:[{

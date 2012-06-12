@@ -210,7 +210,7 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre_DAVACL_IPrincipalBackend {
 //			if ($rowPrefix !== $prefixPath)
 //				continue;
 
-			$principals[] = $record['username'];
+			$principals[] = $record->username;
 		}
 
 		return $principals;

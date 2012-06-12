@@ -223,7 +223,7 @@ Ext.ux.PluploadPanel = Ext.extend(Ext.Panel, {
         var queued = total - success - failed;
 //console.log('Sent', sent, 'Total', total, 'Success', success, 'Failed', failed, 'Queued', queued, 'Speed', speed);
         if ( total ) {
-            this.progressText = '';
+//            this.progressText = '';
             var pbarText = String.format( this.progressText || '{2} of {1} uploaded ({5}/s)', sent, total, success, failed, queued, speed );
             var percent = t.percent / 100;
 

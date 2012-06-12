@@ -36,6 +36,11 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	
 	const TYPE_DOCUMENT=1;
 	
+	public $htmlSpecialChars=true;
+	
+	private $_defaultTags;
+	private $_lineBreak;
+	
 		/**
 	 * Returns a static model of itself
 	 * 
@@ -54,7 +59,26 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	
 	protected function init() {
 		$this->columns['content']['required']=true;
+		
+		$this->addDefaultTag('contact:salutation', GO::t('default_salutation_unknown'));
+		$this->addDefaultTag('salutation', GO::t('default_salutation_unknown'));
+		$this->addDefaultTag('date', GO_Base_Util_Date::get_timestamp(time(), false));
+		
 		return parent::init();
+	}
+	
+	/**
+	 * Add a default tag value.
+	 * 
+	 * @param string $key
+	 * @param string $value 
+	 */
+	public function addDefaultTag($key, $value){
+		$this->_defaultTags[$key]=$value;
+	}
+	
+	public function setLineBreak($lb){
+		$this->_lineBreak=$lb;
 	}
 	
 	
@@ -119,7 +143,10 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	 */
 	public function replaceContactTags($content, GO_Addressbook_Model_Contact $contact, $leaveEmptyTags=false){
 		
-		$attributes = $this->_getDefaultTags();
+		$attributes = $this->_defaultTags;
+		
+		if(!empty($contact->salutation))
+			$attributes['salutation']=$contact->salutation;
 		
 		$attributes = array_merge($attributes, $this->_getModelAttributes($contact, 'contact:'));
 		if($contact->company)
@@ -129,8 +156,7 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 		
 		$attributes = array_merge($attributes, $this->_getUserAttributes());
 		
-		$templateParser = new GO_Base_Util_TemplateParser();
-		return $templateParser->parse($content, $attributes, $leaveEmptyTags);
+		return $this->_parse($content, $attributes, $leaveEmptyTags);
 	}
 	
 	
@@ -148,21 +174,30 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	 * @return string 
 	 */
 	public function replaceModelTags($content, $model, $tagPrefix='', $leaveEmptyTags=false){
-		$attributes = $this->_getDefaultTags();
+		$attributes = $this->_defaultTags;
 		
 		$attributes = array_merge($attributes, $this->_getModelAttributes($model, $tagPrefix));
 		
 		$attributes = array_merge($attributes, $this->_getUserAttributes());
+	
+		return $this->_parse($content, $attributes, $leaveEmptyTags);
+		
+	}
+	
+	private function _parse($content, $attributes, $leaveEmptyTags){
+		
+		if($this->htmlSpecialChars){
+			foreach($attributes as $key=>$value)
+				$attributes[$key]=htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
+		}
+		
+		if(isset($this->_lineBreak)){
+			foreach($attributes as $key=>$value)
+				$attributes[$key]=str_replace("\n", $this->_lineBreak, $attributes[$key]);
+		}
 		
 		$templateParser = new GO_Base_Util_TemplateParser();
 		return $templateParser->parse($content, $attributes, $leaveEmptyTags);
-	}
-	
-	private function _getDefaultTags(){
-		$attributes['contact:salutation']=GO::t('default_salutation_unknown');
-		$attributes['date']=GO_Base_Util_Date::get_timestamp(time(), false);
-		
-		return $attributes;
 	}
 	
 	/**
@@ -178,16 +213,13 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	 */
 	public function replaceUserTags($content, $leaveEmptyTags=false){
 		
-		$attributes = $this->_getDefaultTags();
+		$attributes = $this->_defaultTags;
 		
 		$attributes = array_merge($attributes, $this->_getUserAttributes());
 		
-		$attributes['contact:salutation']=GO::t('default_salutation_unknown');
+		//$attributes['contact:salutation']=GO::t('default_salutation_unknown');
 		
-		//var_dump($attributes);
-		
-		$templateParser = new GO_Base_Util_TemplateParser();
-		return $templateParser->parse($content, $attributes, $leaveEmptyTags);
+		return $this->_parse($content, $attributes, $leaveEmptyTags);
 	}
 	
 	/**
@@ -203,8 +235,7 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	 * @return string 
 	 */
 	public function replaceCustomTags($content, $attributes, $leaveEmptyTags=false){
-		$templateParser = new GO_Base_Util_TemplateParser();
-		return $templateParser->parse($content, $attributes, $leaveEmptyTags);
+		return $this->_parse($content, $attributes, $leaveEmptyTags);
 	}
 
 //	/**

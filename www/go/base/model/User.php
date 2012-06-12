@@ -332,7 +332,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 												->addCondition("user_id", $userId))
 								);
 				while ($r = $stmt->fetch()) {
-					GO::session()->values['user_groups'][] = $r['group_id'];
+					GO::session()->values['user_groups'][] = $r->group_id;
 				}
 			}
 		
@@ -348,7 +348,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 								);
 			
 			while ($r = $stmt->fetch()) {
-				$ids[] = $r['group_id'];
+				$ids[] = $r->group_id;
 			}
 			return $ids;
 		}

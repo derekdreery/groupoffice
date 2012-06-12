@@ -686,34 +686,37 @@ class GO_Base_Mail_MimeDecode
      */
     function _decodeHeader($input)
     {
-        // Remove white space between encoded-words
-        $input = preg_replace('/(=\?[^?]+\?(q|b)\?[^?]*\?=)(\s)+=\?/i', '\1=?', $input);
-
-        // For each encoded-word...
-        while (preg_match('/(=\?([^?]+)\?(q|b)\?([^?]*)\?=)/i', $input, $matches)) {
-
-            $encoded  = $matches[1];
-            $charset  = $matches[2];
-            $encoding = $matches[3];
-            $text     = $matches[4];
-
-            switch (strtolower($encoding)) {
-                case 'b':
-                    $text = base64_decode($text);
-                    break;
-
-                case 'q':
-                    $text = str_replace('_', ' ', $text);
-                    preg_match_all('/=([a-f0-9]{2})/i', $text, $matches);
-                    foreach($matches[1] as $value)
-                        $text = str_replace('='.$value, chr(hexdec($value)), $text);
-                    break;
-            }
-
-            $input = str_replace($encoded, $text, $input);
-        }
-
-        return $input;
+			//Merijn: Use this for utf8 support
+			return GO_Base_Mail_Utils::mimeHeaderDecode($input);
+			
+//        // Remove white space between encoded-words
+//        $input = preg_replace('/(=\?[^?]+\?(q|b)\?[^?]*\?=)(\s)+=\?/i', '\1=?', $input);
+//
+//        // For each encoded-word...
+//        while (preg_match('/(=\?([^?]+)\?(q|b)\?([^?]*)\?=)/i', $input, $matches)) {
+//
+//            $encoded  = $matches[1];
+//            $charset  = $matches[2];
+//            $encoding = $matches[3];
+//            $text     = $matches[4];
+//
+//            switch (strtolower($encoding)) {
+//                case 'b':
+//                    $text = base64_decode($text);
+//                    break;
+//
+//                case 'q':
+//                    $text = str_replace('_', ' ', $text);
+//                    preg_match_all('/=([a-f0-9]{2})/i', $text, $matches);
+//                    foreach($matches[1] as $value)
+//                        $text = str_replace('='.$value, chr(hexdec($value)), $text);
+//                    break;
+//            }
+//
+//            $input = str_replace($encoded, $text, $input);
+//        }
+//
+//        return $input;
     }
 
     /**

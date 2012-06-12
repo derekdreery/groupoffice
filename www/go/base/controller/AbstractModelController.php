@@ -58,71 +58,73 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$model->user_id=GO::user()->id;
 		}
 
-		$this->beforeSubmit($response, $model, $params);
+		$ret = $this->beforeSubmit($response, $model, $params);
 		
-		$model->setAttributes($params);
-		
-		$modifiedAttributes = $model->getModifiedAttributes();
-		try{
-			$response['success'] = $model->save();
+		if($ret!==false)
+		{		
+			$model->setAttributes($params);
 
-			$response['id'] = $model->pk;
+			$modifiedAttributes = $model->getModifiedAttributes();
+			try{
+				$response['success'] = $model->save();
 
-			//If the model has it's own ACL id then we return the newly created ACL id.
-			//The model automatically creates it.
-			if ($model->aclField() && !$model->joinAclField) {
-				$response[$model->aclField()] = $model->{$model->aclField()};
-			}
+				$response['id'] = $model->pk;
+
+				//If the model has it's own ACL id then we return the newly created ACL id.
+				//The model automatically creates it.
+				if ($model->aclField() && !$model->joinAclField) {
+					$response[$model->aclField()] = $model->{$model->aclField()};
+				}
 
 
-			if (!empty($params['link'])) {
+				if (!empty($params['link'])) {
 
-				//a link is sent like  GO_Notes_Model_Note:1
-				//where 1 is the id of the model
+					//a link is sent like  GO_Notes_Model_Note:1
+					//where 1 is the id of the model
 
-				$linkProps = explode(':', $params['link']);			
-				$linkModel = GO::getModel($linkProps[0])->findByPk($linkProps[1]);
-				$model->link($linkModel);			
-			}
+					$linkProps = explode(':', $params['link']);			
+					$linkModel = GO::getModel($linkProps[0])->findByPk($linkProps[1]);
+					$model->link($linkModel);			
+				}
 
-			if(!empty($_FILES['importFiles'])){
+				if(!empty($_FILES['importFiles'])){
 
-				$attachments = $_FILES['importFiles'];
-				$count = count($attachments['name']);
+					$attachments = $_FILES['importFiles'];
+					$count = count($attachments['name']);
 
-				$params['enclosure'] = $params['importEnclosure'];
-				$params['delimiter'] = $params['importDelimiter'];
+					$params['enclosure'] = $params['importEnclosure'];
+					$params['delimiter'] = $params['importDelimiter'];
 
-				for($i=0;$i<$count;$i++){
-					if(is_uploaded_file($attachments['tmp_name'][$i])) {
-						$params['file']= $attachments['tmp_name'][$i];
-						//$params['model'] = $params['importModel'];
+					for($i=0;$i<$count;$i++){
+						if(is_uploaded_file($attachments['tmp_name'][$i])) {
+							$params['file']= $attachments['tmp_name'][$i];
+							//$params['model'] = $params['importModel'];
 
-						$controller = new $params['importController'];
+							$controller = new $params['importController'];
 
-						$controller->run("import",$params,false);
+							$controller->run("import",$params,false);
+						}
 					}
 				}
-			}
 
 
-			$this->afterSubmit($response, $model, $params, $modifiedAttributes);
-			
-			$this->fireEvent('submit', array(
-				&$this,
-				&$response,
-				&$model,
-				&$params,
-				$modifiedAttributes
-		));
-			
-		}catch(GO_Base_Exception_Validation $e){
-			$response['success']=false;
-			//can't use <br /> tags in response because this goes wrong with the extjs fileupload hack with an iframe.
-			$response['feedback']=$e->getMessage();			
-			$response['validationErrors']=$model->getValidationErrors();
-		}	
+				$this->afterSubmit($response, $model, $params, $modifiedAttributes);
 
+				$this->fireEvent('submit', array(
+					&$this,
+					&$response,
+					&$model,
+					&$params,
+					$modifiedAttributes
+			));
+
+			}catch(GO_Base_Exception_Validation $e){
+				$response['success']=false;
+				//can't use <br /> tags in response because this goes wrong with the extjs fileupload hack with an iframe.
+				$response['feedback']=$e->getMessage();			
+				$response['validationErrors']=$model->getValidationErrors();
+			}	
+		}
 		return $response;
 	}
 
@@ -326,9 +328,13 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
     $store = new GO_Base_Data_Store($this->getStoreColumnModel());	
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatStoreRecord'));		
 		
-		$response=array();
+		if(!empty($params["forEditing"]))
+			$store->getColumnModel ()->setModelFormatType ("formatted");
 		
-		$response = $this->beforeStore($response, $params, $store);
+		$response=array("success"=>true,"results"=>array());
+		
+		if($this->beforeStore($response, $params, $store)===false)
+			return $response;
 		
 		$this->processStoreDelete($store, $params);
 
@@ -349,9 +355,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		$response = array_merge($response, $store->getData());
 		
-		$response['success']=true;
 		
-    $response = $this->afterStore($response, $params, $store, $storeParams);		
+   if($this->afterStore($response, $params, $store, $storeParams)===false)
+			return $response;
 		
 		//this parameter is set when this request is the first request of the module.
 		//We pass the response on to the output.
@@ -369,11 +375,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
   }	
 	
 	protected function afterStore(&$response, &$params, &$store, $storeParams){
-		return $response;
+		return true;
 	}
 	
 	protected function beforeStore(&$response, &$params, &$store){
-		return $response;
+		return true;
 	}
 	
 	/**
@@ -495,7 +501,6 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			
 				while($approver = $approversStmnt->fetch()){
 					$approver_hasapproved = $currentStep->hasApproved($workflowModel->id,$approver->id);
-					//var_dump($approver_hasapproved);
 					$workflowResponse['approvers'][] = array('name'=>$approver->name,'approved'=>$approver_hasapproved,'last'=>'0');
 				}
 				// Set the last flag for the latest approver in the list
@@ -584,7 +589,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		if (isset(GO::modules()->files) && $model->hasFiles() && $response['data']['files_folder_id']>0) {
 
 			$fc = new GO_Files_Controller_Folder();
-			$listResponse = $fc->run("list",array('folder_id'=>$response['data']['files_folder_id']),false);
+			$listResponse = $fc->run("list",array('folder_id'=>$response['data']['files_folder_id'], "limit"=>20),false);
 			$response['data']['files'] = $listResponse['results'];
 		} else {
 			$response['data']['files'] = array();
@@ -669,7 +674,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$startOfDay = GO_Base_Util_Date::clear_time(time());
 
 		$findParams = GO_Base_Db_FindParams::newInstance()->order('due_time','DESC');
-		$findParams->getCriteria()->addCondition('start_time', $startOfDay, '>=')->addCondition('status', GO_Tasks_Model_Task::STATUS_COMPLETED, '!=');						
+		$findParams->getCriteria()->addCondition('start_time', $startOfDay, '<=')->addCondition('status', GO_Tasks_Model_Task::STATUS_COMPLETED, '!=');						
 
 		$stmt = GO_Tasks_Model_Task::model()->findLinks($model, $findParams);		
 
@@ -775,11 +780,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * 
 	 * @param Array $params 
 	 */
-	protected function actionExport($params) {
-	
-//		
-//		var_dump($params);
-//		
+	protected function actionExport($params) {	
 		$showHeader = false;
   	$humanHeaders = true;
 		$orientation = false;
@@ -852,6 +853,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		ini_set('memory_limit','512M');
 		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
 		
+		$attributeIndexMap = isset($params['attributeIndexMap'])
+			? $attributeIndexMap = json_decode($params['attributeIndexMap'],true)
+			: array();
+		
 		if(is_file($params['file'])){
 			$importFile = new GO_Base_Fs_CsvFile($params['file']);
 		
@@ -874,15 +879,16 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 			//Map the field headers to the index in the record.
 			//eg. name=>2,user_id=>4, etc.
-			$attributeIndexMap = array();		
-			for ($i = 0, $m = count($headers); $i < $m; $i++) {
-				if(substr($headers[$i],0,3)=='cf\\'){				
-					$cf = $this->_resolveCustomField($headers[$i]);
-					if($cf)
-						$attributeIndexMap[$i] = $cf;
-				}else
-				{
-					$attributeIndexMap[$i] = $headers[$i];
+			if (empty($attributeIndexMap)) {
+				for ($i = 0, $m = count($headers); $i < $m; $i++) {
+					if(substr($headers[$i],0,3)=='cf\\'){				
+						$cf = $this->_resolveCustomField($headers[$i]);
+						if($cf)
+							$attributeIndexMap[$i] = $cf;
+					}else
+					{
+						$attributeIndexMap[$i] = $headers[$i];
+					}
 				}
 			}
 
@@ -891,7 +897,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				$model = false;
 
 				foreach($attributeIndexMap as $index=>$attributeName){
-					$attributes[trim($attributeName)]=$record[$index];
+					if ($index>=0)
+						$attributes[trim($attributeName)] = $record[$index];
 				}
 
 				if(!empty($params['updateExisting']) && !empty($params['updateFindAttributes'])){
@@ -908,11 +915,19 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 				if(!$model)
 					$model = new $this->model;	
+				
+				
+					// If there are given baseparams to the importer
+					if(isset($params['importBaseParams'])) {
+						$baseParams = json_decode($params['importBaseParams'],true);
+						foreach($baseParams as $attr=>$val){
+							$attributes[$attr]=$val;
+						}
+					}
 
-
-				if($this->beforeImport($model, $attributes, $record)){			
+				
+				if($this->beforeImport($params, $model, $attributes, $record)){
 					$columns = $model->getColumns();
-					//var_dump($columns);
 					foreach($columns as $col=>$attr){
 						if(isset($attributes[$col])){
 	//						if($attr['gotype']=='unixtimestamp' || $attr['gotype']=='unixdate'){
@@ -929,16 +944,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 					$model->setAttributes($attributes, true);
 
 
-					// If there are given baseparams to the importer
-					if(isset($params['importBaseParams'])) {
-						$baseParams = json_decode($params['importBaseParams'],true);
-						foreach($baseParams as $attr=>$val){
-							$model->setAttribute($attr,$val);
-						}
-					}
 
 					$this->_parseImportDates($model);
-
+					
 					try{
 						$model->save();
 					}
@@ -958,7 +966,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		return $summarylog;
 	}
 	
-	protected function beforeImport(&$model, &$attributes, $record){
+	protected function beforeImport($params, &$model, &$attributes, $record){
 		return true;
 	}
 	protected function afterImport(&$model, &$attributes, $record){
@@ -1001,6 +1009,14 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		else
 			$params['exclude']=explode(',', $params['exclude']);
 		
+		$params['exclude_cf_datatypes'] = !empty($params['exclude_cf_datatypes'])
+			? json_decode($params['exclude_cf_datatypes'])
+			: array();
+		
+		$params['exclude_attributes'] = !empty($params['exclude_attributes'])
+			? json_decode($params['exclude_attributes'])
+			: array();
+		
 		array_push($params['exclude'], 'id','acl_id','files_folder_id');
 		
 		$response['results']=array();
@@ -1011,7 +1027,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		$columns = $model->getColumns();
 		foreach($columns as $name=>$attr){
-			if(!in_array($name, $params['exclude']) && (empty($params['hide_unknown_gotypes']) || !empty($attr['gotype'])))
+			if(!in_array($name, $params['exclude'])
+							&& (empty($params['hide_unknown_gotypes']) || !empty($attr['gotype']))
+							&& !in_array($name,$params['exclude_attributes'])
+				)
 				$attributes['t.'.$name]=array('name'=>'t.'.$name,'label'=>$model->getAttributeLabel($name),'gotype'=>$attr['gotype']);				
 		}
 		
@@ -1023,7 +1042,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$customAttributes = array();
 			$columns = $model->customfieldsRecord->getColumns();
 			foreach($columns as $name=>$attr){
-				if($name != 'model_id' && !in_array($name, $params['exclude']) && (empty($params['hide_unknown_gotypes']) || !empty($attr['gotype']))){					
+				if($name != 'model_id'
+								&& !in_array($name, $params['exclude'])
+								&& (empty($params['hide_unknown_gotypes']) || !empty($attr['gotype']))
+								&& !in_array($attr['customfield']->datatype,$params['exclude_cf_datatypes']))
+				{					
 					$customAttributes['cf.'.$name]=array('name'=>'cf.'.$name, 'label'=>$model->customfieldsRecord->getAttributeLabel($name),'gotype'=>'customfield');					
 				}
 			}
@@ -1034,6 +1057,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		foreach($attributes as $field=>$attr)
 			$response['results'][]=$attr;
+		
+		$response['success']=true;
 		
 		return $response;		
 	}
@@ -1108,8 +1133,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 					if($tableAlias=='t')
 						$advQueryRecord['value']=GO::getModel($this->model)->formatInput($field, $advQueryRecord['value']);						
-					elseif($tableAlias=='cf')
+					elseif($tableAlias=='cf'){
 						$advQueryRecord['value']=GO::getModel(GO::getModel($this->model)->customfieldsModel())->formatInput ($field, $advQueryRecord['value']);
+					}
 					
 					$criteriaGroup->addCondition($field, $advQueryRecord['value'], $advQueryRecord['comparator'],$tableAlias,$advQueryRecord['andor']=='AND');
 				}
@@ -1226,6 +1252,28 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		}
 
 		return array('success' => true);
+	}
+	
+	
+	protected function actionCheck($params){
+		$model = GO::getModel($this->model)->findByPk($params["id"]);
+		$model->checkDatabase();
+		
+		echo "Done\n";
+	}
+
+	protected function actionReadCSVHeaders($params) {
+		$response['success'] = true;
+		$response['results'] = array();
+		$response['total'] = 0;
+
+		$importFile = new GO_Base_Fs_CsvFile($_FILES['files']['tmp_name'][0]);
+		$firstRow = $importFile->getRecord();
+		
+		$response['results'] = explode($params['delimiter'],$firstRow[0]);
+		$response['total'] = count($response['results']);
+		
+		return $response;
 	}
 	
 }
