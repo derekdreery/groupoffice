@@ -47,13 +47,15 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		$parameters['bymonth'] = isset($json['bymonth'])?$json['bymonth']:'';
 		$parameters['bymonthday'] = isset($json['bymonthday'])?$json['bymonthday']:'';
 		
+		//bysetpos is not understood by old lib
+		$parameters['bysetpos']=$json['bysetpos'];
 		$parameters['byday']=array();
 		
 		foreach($this->_days as $day){
 			if(isset($json[$day])){
 				$day = $day;
-				if(!empty($json['bysetpos']))
-					$day = $json['bysetpos'].$day;
+//				if(!empty($json['bysetpos']))
+//					$day = $json['bysetpos'].$day;
 				
 				$parameters['byday'][]=$day;
 			}
@@ -87,7 +89,10 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 					$rrule .= ';BYMONTHDAY='.date('j', $this->_eventstarttime);
 				}else
 				{
-					$rrule .= ';BYSETPOS='.$this->_bysetpos.';BYDAY='.implode(',', $byday);
+					if(!empty($this->_bysetpos))
+						$rrule .= ";BYSETPOS=".$this->_bysetpos;
+						
+					$rrule .= ';BYDAY='.implode(',', $byday);
 				}
 			break;
 		}
