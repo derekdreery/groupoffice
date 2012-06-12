@@ -10,12 +10,12 @@ $oldCategories = array();
 $stmt = GO_Calendar_Model_Category::model()->find();
 while($category = $stmt->fetch()){
 	
-	if($category->user_id != 0){
+	if($category->calendar_id != 0){
 		$oldCategories[] = $category->id;
 
 		echo "Category $category->name\n";
 
-		$calStmt = GO_Calendar_Model_Calendar::model()->findByAttribute('user_id', $category->user_id);
+		$calStmt = GO_Calendar_Model_Calendar::model()->findByAttribute('calendar_id', $category->user_id);
 		while($calendar = $calStmt->fetch()){
 
 			try{
@@ -23,7 +23,7 @@ while($category = $stmt->fetch()){
 				$newCategory = new GO_Calendar_Model_Category();
 				$newCategory->name = $category->name;
 				$newCategory->color = $category->color;
-				$newCategory->user_id = $calendar->id;
+				$newCategory->calendar_id = $calendar->id;
 				$newCategory->save();
 
 				// Get all events that have the old category and change the category to the new one.
