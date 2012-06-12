@@ -132,7 +132,11 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		//inserting is much faster without full text index. It's faster to add it again afterwards.
 		echo "Dropping full text search index\n";
-		GO::getDbConnection()->query("ALTER TABLE go_search_cache DROP INDEX ft_keywords");
+		try{
+			GO::getDbConnection()->query("ALTER TABLE go_search_cache DROP INDEX ft_keywords");
+		}catch(Exception $e){
+			echo $e->getMessage()."\n";
+		}
 		
 		if(!headers_sent())
 			header('Content-Type: text/plain; charset=UTF-8');
