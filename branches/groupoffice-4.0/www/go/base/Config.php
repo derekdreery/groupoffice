@@ -706,7 +706,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.0.33';
+	var $version = '4.0.34';
 
 
 	/* The permissions mode to use when creating files
@@ -736,7 +736,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20120612';
+	var $mtime = '20120612-1';
 
 	#group configuration
 	/**
@@ -1045,26 +1045,27 @@ class GO_Base_Config {
 	}
 	
 	private function _logSlowRequest(){
-		$time = GO_Base_Util_Date::getmicrotime()-$this->loadstart;
-		if($time>$this->log_slow_requests_trigger){
-			
-			$logStr = "URI: ";
-			
-			if(isset($_SERVER['HTTP_HOST']))
-				$logStr .= $_SERVER['HTTP_HOST'];
-			
-			if(isset($_SERVER['REQUEST_URI']))
-				$logStr .= $_SERVER['REQUEST_URI'];
-			
-			$logStr .= '; ';
-			
-			$logStr .= 'r: '.GO::router()->getControllerRoute().';';
-			
-			$logStr .= 'time: '.$time.';'."\n";
-			
-			
-			file_put_contents($this->log_slow_requests_file, $logStr,FILE_APPEND);
-			
+		if($this->log_slow_requests){
+			$time = GO_Base_Util_Date::getmicrotime()-$this->loadstart;
+			if($time>$this->log_slow_requests_trigger){
+
+				$logStr = "URI: ";
+
+				if(isset($_SERVER['HTTP_HOST']))
+					$logStr .= $_SERVER['HTTP_HOST'];
+
+				if(isset($_SERVER['REQUEST_URI']))
+					$logStr .= $_SERVER['REQUEST_URI'];
+
+				$logStr .= '; ';
+
+				$logStr .= 'r: '.GO::router()->getControllerRoute().';';
+
+				$logStr .= 'time: '.$time.';'."\n";
+
+
+				file_put_contents($this->log_slow_requests_file, $logStr,FILE_APPEND);			
+			}		
 		}
 	}
 
