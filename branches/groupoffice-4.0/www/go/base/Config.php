@@ -674,7 +674,27 @@ class GO_Base_Config {
 	 */
 	
 	var $nav_page_size=50;
-
+	
+	/**
+	 * Enable logging of slow requests
+	 * 
+	 * @var boolean 
+	 */
+	public $log_slow_requests=false;
+	
+	/**
+	 * Slow request time in seconds
+	 * 
+	 * @var float 
+	 */
+	public $log_slow_requests_trigger=1;
+	
+	/**
+	 * Path of the log file
+	 * 
+	 * @var string 
+	 */
+	public $log_slow_requests_file="/home/groupoffice/slow-requests.log";
 
 	/*//////////////////////////////////////////////////////////////////////////////
 	 //////////      Variables that are not touched by the installer   /////////////
@@ -967,9 +987,13 @@ class GO_Base_Config {
 		if($this->debug)
 			$this->debug_log=true;
 
-		if($this->debug_log) {			
+		if($this->debug_log || $this->log_slow_requests) {			
 			list ($usec, $sec) = explode(" ", microtime());
 			$this->loadstart = ((float) $usec + (float) $sec);
+			
+			$dat = getrusage();
+			define('PHP_TUSAGE', microtime(true));
+			define('PHP_RUSAGE', $dat["ru_utime.tv_sec"]*1e6+$dat["ru_utime.tv_usec"]);
 		}
 
 		// database class library
@@ -1013,9 +1037,34 @@ class GO_Base_Config {
 			//GO::debug('Performed '.$GLOBALS['query_count'].' database queries', $this);
 
 			GO::debug('Page load took: '.(GO_Base_Util_Date::getmicrotime()-$this->loadstart).'ms', $this);
-
 			GO::debug('Peak memory usage:'.round(memory_get_peak_usage()/1048576,2).'MB', $this);
 			GO::debug("--------------------\n", $this);
+		}
+		
+		$this->_logSlowRequest();
+	}
+	
+	private function _logSlowRequest(){
+		$time = GO_Base_Util_Date::getmicrotime()-$this->loadstart;
+		if($time>$this->log_slow_requests_trigger){
+			
+			$logStr = "URI: ";
+			
+			if(isset($_SERVER['HTTP_HOST']))
+				$logStr .= $_SERVER['HTTP_HOST'];
+			
+			if(isset($_SERVER['REQUEST_URI']))
+				$logStr .= $_SERVER['REQUEST_URI'];
+			
+			$logStr .= '; ';
+			
+			$logStr .= 'r: '.GO::router()->getControllerRoute().';';
+			
+			$logStr .= 'time: '.$time.';'."\n";
+			
+			
+			file_put_contents($this->log_slow_requests_file, $logStr,FILE_APPEND);
+			
 		}
 	}
 
