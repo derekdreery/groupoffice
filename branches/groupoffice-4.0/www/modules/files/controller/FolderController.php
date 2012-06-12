@@ -533,11 +533,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$response['total']+=$filesResponse['total'];
 			$response['results'] = array_merge($response['results'], $filesResponse['results']);
 		} else {
-			$record = $folder->files(array(
-					'single' => true,
-					'fields' => 'count(*) as total'
-							));
-			$response['total']+=$record['total'];
+			$record = $folder->files(GO_Base_Db_FindParams::newInstance()->single()->select('count(*) as total'));
+			$response['total']+=$record->total;
 		}
 		
 		return $response;
