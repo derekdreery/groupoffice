@@ -125,7 +125,8 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 					displayField:'label',
 					mode:'local',
 					allowBlank: false,
-					triggerAction: 'all'
+					triggerAction: 'all',
+					value: 'CSV'
 				}), this.controllerNameCB = new GO.form.ComboBox({
 					hiddenName: 'controller',
 					fieldLabel: GO.lang.cmdImport,
@@ -142,7 +143,8 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 					displayField:'label',
 					mode:'local',
 					allowBlank: false,
-					triggerAction: 'all'
+					triggerAction: 'all',
+					value: 'GO_Addressbook_Controller_Contact'
 				}),new Ext.Panel({
 					layout: 'form',
 					border: false,
@@ -161,7 +163,7 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 												importBaseParams : { addressbook_id : this.remoteModelId },
 												controllerName : controllerName,
 												fileType: fileType,
-												excludedAttributes : ['ctime','mtime','user_id', 'contact_name','link_id','files_folder_id','comment','email_allowed']
+												excludedAttributes : ['ctime','mtime','user_id', 'contact_name','link_id','files_folder_id']
 											});
 										}
 									this.importDialogs[fileType][controllerName].show(this.remoteModelId);
