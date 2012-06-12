@@ -212,4 +212,37 @@ $updates["201205020900"][]="UPDATE `go_acl` SET `level`=40 WHERE `level`=3;";
 $updates["201205020900"][]="UPDATE `go_acl` SET `level`=50 WHERE `level`=4;";
 
 $updates["201204251613"][]= "ALTER TABLE `go_advanced_searches` ADD `model_name` VARCHAR( 100 ) NOT NULL DEFAULT ''";
+
 $updates["201204251613"][]="ALTER TABLE `go_advanced_searches` CHANGE `model_name` `model_name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+
+$updates["201204251613"][]="ALTER TABLE `go_acl` ADD INDEX ( `acl_id` , `user_id` ) ;";
+$updates["201204251613"][]="ALTER TABLE `go_acl` ADD INDEX ( `acl_id` , `group_id` ) ;";
+
+
+$updates["201204251613"][]="ALTER TABLE `go_search_cache` CHANGE `keywords` `keywords` VARCHAR( 254 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+
+$updates["201204251613"][]="ALTER TABLE `go_search_cache` ADD INDEX ( `acl_id` ) ";
+$updates["201204251613"][]="ALTER TABLE `go_search_cache` ADD INDEX ( `keywords` ) ";
+
+$updates["201204251613"][]="ALTER TABLE `go_search_cache` CHANGE `keywords` `keywords` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+
+$updates["201204251613"][]="update go_users set language='en' where language='';";
+
+$updates["201206051617"][]="ALTER TABLE `go_search_cache` ADD FULLTEXT ft_keywords(
+`name` ,
+`keywords`
+);";
+
+$updates["201206051617"][]="ALTER TABLE go_search_cache DROP INDEX name";
+$updates["201206051617"][]="ALTER TABLE go_search_cache DROP INDEX keywords";
+$updates["201206051617"][]="ALTER TABLE go_search_cache DROP INDEX name_2";
+
+$updates["201206110852"][]="ALTER TABLE `go_search_cache` ADD INDEX name( `name` ) ";
+
+$updates["201206110852"][]="ALTER TABLE `go_link_folders` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
+$updates["201206110852"][]="ALTER TABLE `go_link_folders` CHANGE `link_type` `model_type_id` INT( 11 ) NOT NULL ";
+$updates["201206110852"][]="ALTER TABLE `go_link_folders` CHANGE `link_id` `model_id` INT( 11 ) NOT NULL ";
+
+$updates["201206110852"][]="ALTER TABLE `go_link_folders` CHANGE `model_id` `model_id` INT( 11 ) NOT NULL DEFAULT '0'";
+$updates["201206110852"][]="ALTER TABLE `go_link_folders` CHANGE `model_type_id` `model_type_id` INT( 11 ) NOT NULL DEFAULT '0'";
+$updates["201206110852"][]="ALTER TABLE `go_link_folders` CHANGE `parent_id` `parent_id` INT( 11 ) NOT NULL DEFAULT '0'";

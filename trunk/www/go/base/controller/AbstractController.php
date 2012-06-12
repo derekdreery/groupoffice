@@ -437,6 +437,27 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		return PHP_SAPI=='cli';
 	}
 	
+	/**
+	 * Check if required controller parameters are present
+	 * 
+	 * @param array $requiredParams
+	 * @param array $givenParams
+	 * @throws Exception 
+	 */
+	protected function checkRequiredParameters($requiredParams, $givenParams){
+		
+		$missingParams = array();
+		
+		foreach($requiredParams as $param){
+			if(empty($givenParams[$param]))
+				$missingParams[]=$param;
+		}
+		
+		if(count($missingParams))
+			throw new Exception("The following required controller action params are missing: ".implode(",", $missingParams));
+				
+	}
+	
 //	protected function isAjax(){
 //		return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH']==='XMLHttpRequest';
 //	}

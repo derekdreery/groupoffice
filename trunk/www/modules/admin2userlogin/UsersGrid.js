@@ -6,7 +6,7 @@ GO.admin2userlogin.UsersGrid = function(config){
 	}
 
 	var fields ={
-		fields : ['id','username','name','lastlogin','registration_time'],
+		fields : ['id','username','name','lastlogin','registration_time','enabled'],
 		columns :[{
 			header: GO.admin2userlogin.lang.userId,
 			dataIndex: 'id',
@@ -72,7 +72,12 @@ GO.admin2userlogin.UsersGrid = function(config){
 	config.cm=columnModel;
 	
 	config.view=new Ext.grid.GridView({
-		emptyText: GO.lang['strNoItems']
+		emptyText: GO.lang['strNoItems'],
+		getRowClass : function(record, rowIndex, p, store){
+			if(GO.util.empty(record.data.enabled)){
+				return 'user-disabled';
+			}
+		}
 	});
 	
 	config.sm=new Ext.grid.RowSelectionModel();

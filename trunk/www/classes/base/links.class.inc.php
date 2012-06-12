@@ -219,9 +219,11 @@ class GO_LINKS extends db
 	function delete_link($link_id1, $type1, $link_id2=0, $type2=0)
 	{		
 			$model = get_model_by_type_id($type1);
+			
 			$table1 = $model->tableName();
 			
 			$model = get_model_by_type_id($type2);
+			
 			$table2 = $model->tableName();
 		//if($link_id1>0)
 		//{

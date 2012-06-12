@@ -337,3 +337,20 @@ CREATE TABLE IF NOT EXISTS `ab_sent_mailing_contacts` (
   `contact_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`sent_mailing_id`,`contact_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `ab_contacts_vcard_props`
+--
+
+DROP TABLE IF EXISTS `ab_contacts_vcard_props`;
+CREATE TABLE IF NOT EXISTS `ab_contacts_vcard_props` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `contact_id` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(255) NOT NULL DEFAULT '',
+	`parameters` varchar(1023) NOT NULL DEFAULT '',
+  `value` VARCHAR( 1023 ) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+	KEY `contact_id` (`contact_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;

@@ -228,6 +228,9 @@ switch($task)
 		{			
 			$visible_user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$GLOBALS['GO_CONFIG']->register_visible_user_groups)));
 		}
+		
+		$visible_user_groups[]=$GLOBALS['GO_CONFIG']->group_root;
+		
 		$GO_GROUPS->get_groups();
 		$groups = new GO_GROUPS();
 

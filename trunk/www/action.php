@@ -145,45 +145,7 @@ try{
 			$response['success']=true;
 			
 			break;
-		
-		case 'lost_password':
-
-			require($GLOBALS['GO_LANGUAGE']->get_base_language_file('lostpassword'));
-
-			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
-			
-			if($user = $GO_USERS->get_user_by_email($_POST['email']))
-			{
-				$url = $GLOBALS['GO_CONFIG']->full_url.'change_lost_password.php?username='.$user['username'].'&code1='.md5($user['password']).'&code2='.md5($user['lastlogin'].$user['registration_time']);
-
-				$salutation = $lang['common']['default_salutation'][$user['sex']];
-				if(!empty($user['middle_name']))
-					$salutation .= ' '.$user['middle_name'];
-				$salutation .= ' '.$user['last_name'];
-
-				$mail_body = sprintf($lang['lostpassword']['lost_password_body'],
-					$salutation,
-					$GLOBALS['GO_CONFIG']->title,
-					$user['username'],
-					$url);
 				
-				require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
-				$swift = new GoSwift($user['email'], $lang['lostpassword']['lost_password_subject']);
-				$swift->set_body($mail_body,'plain');
-				$swift->set_from($GLOBALS['GO_CONFIG']->webmaster_email, $GLOBALS['GO_CONFIG']->title);
-				$swift->sendmail();				
-				
-				$response['success']=true;
-				$response['feedback']=$lang['lostpassword']['lost_password_success'];
-			}else
-			{
-				$response['success']=false;
-				$response['feedback']=$lang['lostpassword']['lost_password_error'];
-			}
-			
-			break;
-		
 		case 'save_settings':
 
 			$GLOBALS['GO_EVENTS']->fire_event('before_save_settings');
@@ -312,88 +274,88 @@ try{
 
 			break;
 
-		case 'link':
-
-			require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
-			$GO_LINKS = new GO_LINKS();
-
-			$fromLinks = json_decode($_POST['fromLinks'],true);
-			$toLinks = json_decode($_POST['toLinks'],true);
-			$from_folder_id=isset($_POST['folder_id']) ? $_POST['folder_id'] : 0;
-			$to_folder_id=isset($_POST['to_folder_id']) ? $_POST['to_folder_id'] : 0;
-
-			foreach($fromLinks as $fromLink)
-			{
-				foreach($toLinks as $toLink)
-				{
-					$GO_LINKS->add_link($fromLink['link_id'], $fromLink['link_type'], $toLink['link_id'], $toLink['link_type'],$from_folder_id, $to_folder_id, $_POST['description'], $_POST['description']);
-				}
-			}
-
-			$response['success']=true;
-				break;
-		case 'updatelink':
-
-			require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
-			$GO_LINKS = new GO_LINKS();
-			
-			$link['id']=$_POST['link_id1'];
-			$link['link_id']=$_POST['link_id2'];
-			$link['link_type']=$_POST['link_type2'];
-			$link['description']=$_POST['description'];
-
-			$GO_LINKS->update_link($_POST['link_type1'],$link);
-			
-			$link['id']=$_POST['link_id2'];
-			$link['link_id']=$_POST['link_id1'];
-			$link['link_type']=$_POST['link_type1'];
-
-			$GO_LINKS->update_link($_POST['link_type2'],$link);
-			
-			$response['success']=true;
-		break;
-		
-		case 'move_links':
-
-			require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
-			$GO_LINKS = new GO_LINKS();
-			
-			$move_links = json_decode(($_POST['selections']), true);
-			$target = json_decode(($_POST['target']), true);
-			
-			$response['moved_links']=array();
-			
-			foreach($move_links as $link_and_type)
-			{
-				$link = explode(':', $link_and_type);
-				$link_type = $link[0];
-				$link_id = $link[1];
-				
-				if($link_type=='folder')
-				{
-					if($target['folder_id'] != $link_id && !$GO_LINKS->is_sub_folder($link_id, $target['folder_id']))
-					{
-						$folder['id']=$link_id;
-						$folder['parent_id']=$target['folder_id'];
-						$GO_LINKS->update_folder($folder);
-						
-						$response['moved_links'][]=$link_and_type;
-					}
-				}else
-				{
-					$update_link['link_type']=$link_type;
-					$update_link['link_id']=$link_id;
-					$update_link['id']=$target['link_id'];
-					$update_link['folder_id']=$target['folder_id'];
-					$GO_LINKS->update_link($target['link_type'], $update_link);
-					
-					$response['moved_links'][]=$link_and_type;
-				}
-			}
-			$response['success']=true;
-			
-			
-			break;
+//		case 'link':
+//
+//			require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
+//			$GO_LINKS = new GO_LINKS();
+//
+//			$fromLinks = json_decode($_POST['fromLinks'],true);
+//			$toLinks = json_decode($_POST['toLinks'],true);
+//			$from_folder_id=isset($_POST['folder_id']) ? $_POST['folder_id'] : 0;
+//			$to_folder_id=isset($_POST['to_folder_id']) ? $_POST['to_folder_id'] : 0;
+//
+//			foreach($fromLinks as $fromLink)
+//			{
+//				foreach($toLinks as $toLink)
+//				{
+//					$GO_LINKS->add_link($fromLink['link_id'], $fromLink['link_type'], $toLink['link_id'], $toLink['link_type'],$from_folder_id, $to_folder_id, $_POST['description'], $_POST['description']);
+//				}
+//			}
+//
+//			$response['success']=true;
+//				break;
+//		case 'updatelink':
+//
+//			require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
+//			$GO_LINKS = new GO_LINKS();
+//			
+//			$link['id']=$_POST['link_id1'];
+//			$link['link_id']=$_POST['link_id2'];
+//			$link['link_type']=$_POST['link_type2'];
+//			$link['description']=$_POST['description'];
+//
+//			$GO_LINKS->update_link($_POST['link_type1'],$link);
+//			
+//			$link['id']=$_POST['link_id2'];
+//			$link['link_id']=$_POST['link_id1'];
+//			$link['link_type']=$_POST['link_type1'];
+//
+//			$GO_LINKS->update_link($_POST['link_type2'],$link);
+//			
+//			$response['success']=true;
+//		break;
+//		
+//		case 'move_links':
+//
+//			require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
+//			$GO_LINKS = new GO_LINKS();
+//			
+//			$move_links = json_decode(($_POST['selections']), true);
+//			$target = json_decode(($_POST['target']), true);
+//			
+//			$response['moved_links']=array();
+//			
+//			foreach($move_links as $link_and_type)
+//			{
+//				$link = explode(':', $link_and_type);
+//				$link_type = $link[0];
+//				$link_id = $link[1];
+//				
+//				if($link_type=='folder')
+//				{
+//					if($target['folder_id'] != $link_id && !$GO_LINKS->is_sub_folder($link_id, $target['folder_id']))
+//					{
+//						$folder['id']=$link_id;
+//						$folder['parent_id']=$target['folder_id'];
+//						$GO_LINKS->update_folder($folder);
+//						
+//						$response['moved_links'][]=$link_and_type;
+//					}
+//				}else
+//				{
+//					$update_link['link_type']=$link_type;
+//					$update_link['link_id']=$link_id;
+//					$update_link['id']=$target['link_id'];
+//					$update_link['folder_id']=$target['folder_id'];
+//					$GO_LINKS->update_link($target['link_type'], $update_link);
+//					
+//					$response['moved_links'][]=$link_and_type;
+//				}
+//			}
+//			$response['success']=true;
+//			
+//			
+//			break;
 
 		case 'save_link_folder':
 

@@ -1855,6 +1855,9 @@ class calendar extends db {
 
 				//go_debug($calculated_event['name'].': '.date('Ymd G:i', $calculated_event['start_time']).' - '.date('Ymd G:i', $calculated_event['end_time']));
 
+				
+//							echo date('c',$calculated_event['start_time'])."<br>\n";
+//			echo date('c', $event['repeat_end_time'])."<br>\n";
 
 				//outside display
 				if($calculated_event['start_time'] >= $interval_end_time || $calculated_event['end_time'] <= $interval_start_time || ($calculated_event['repeat_end_time'] && $calculated_event['start_time'] > $event['repeat_end_time']))

@@ -38,4 +38,15 @@ class GO_Base_Mail_Mailer extends Swift_Mailer{
 		return $mailer;
   }
 	
+	public function send(Swift_Mime_Message $message, &$failedRecipients = null) {
+		
+		if(GO::config()->debug)
+			GO::debug("Sending e-mail to ".implode(",",array_keys($message->getTo())));
+		
+//		debug_print_backtrace();
+//		exit("NO MAIL");
+		
+		return parent::send($message, $failedRecipients);
+	}
+	
 }

@@ -36,4 +36,6 @@ $updates["201201031630"][]="ALTER TABLE `em_accounts` CHANGE `spam` `spam` VARCH
 $updates["201205011100"][]="UPDATE `em_accounts` SET password=CONCAT('{GOCRYPT}',`password`);";
 $updates["201205011230"][]="ALTER TABLE `em_accounts` CHANGE `smtp_password` `smtp_password` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '';";
 $updates["201205011400"][]="script:encrypt.inc.php";
-$updates["201204262325"][]="ALTER TABLE `em_accounts` ADD `ignore_sent_folder` TINYINT( 1 ) NOT NULL DEFAULT '0'";
+$updates["201206051342"][]="ALTER TABLE `em_links` ADD `mtime` INT NOT NULL DEFAULT '0' AFTER `ctime` ";
+
+$updates["201206121446"][]="ALTER TABLE `em_accounts` ADD `ignore_sent_folder` TINYINT( 1 ) NOT NULL DEFAULT '0'";

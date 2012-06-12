@@ -244,8 +244,11 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 	 * @return array $response 
 	 */
 	protected function actionImportCsv($params){
+		$params['file'] = $_FILES['files']['tmp_name'][0];
 		$summarylog = parent::actionImport($params);
-		return $summarylog->getErrorsJson();
+		$response = $summarylog->getErrorsJson();
+		$response['success'] = true;
+		return $response;
 	}
 }
 

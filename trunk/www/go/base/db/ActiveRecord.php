@@ -302,7 +302,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		//$pk = $this->pk;
 
-		$this->loadColumns();
+		$this->loadColumns(GO::router()->getControllerRoute()=="maintenance/upgrade");
 		$this->setIsNew($newRecord);
 		
 		if($this->isNew) 
@@ -412,11 +412,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	/**
 	 * Loads the column information from the database
 	 * 
+	 * Normally this wouldn't be called publicly. But when the database is 
+	 * upgraded the column definitions may change and they need to be reloaded.
+	 * 
+	 * @package boolean $ignoreCache
 	 */
-	protected function loadColumns() {
+	public function loadColumns($ignoreCache=false) {
 		if($this->tableName()){
 			
-			$this->columns=GO::cache()->get('modelColumns_'.$this->tableName());
+			$this->columns=$ignoreCache ? false : GO::cache()->get('modelColumns_'.$this->tableName());
 			
 			if(!$this->columns){
 			
@@ -506,7 +510,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					
 				}
 
-				GO::cache()->set('modelColumns_'.$this->tableName(), $this->columns);
+				if(!$ignoreCache)
+					GO::cache()->set('modelColumns_'.$this->tableName(), $this->columns);
 			}
 		}
 	}
@@ -585,24 +590,32 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$this->_new=$new;
 	}
 
+	private $_pdo;
 	
 	/**
 	 * Returns the database connection used by active record.
 	 * By default, the "db" application component is used as the database connection.
 	 * You may override this method if you want to use a different database connection.
-	 * @return PDO the database connection used by active record.
+	 * @return GO_Base_Db_PDO the database connection used by active record.
 	 */
 	public function getDbConnection()
 	{
-		return GO::getDbConnection();
+		if(isset($this->_pdo))
+			return $this->_pdo;
+		else
+			return GO::getDbConnection();
 		
-//		if(self::$db!==null)
-//			return self::$db;
-//		else
-//		{
-//			self::$db=GO::getDbConnection();			
-//		}
-//		return self::$db;
+		return $this->_pdo;
+	}
+	
+	/**
+	 * Connect the model to another database then the default.
+	 * 
+	 * @param GO_Base_Db_PDO $pdo 
+	 */
+	public function setDbConnection(GO_Base_Db_PDO $pdo){
+		$this->_pdo=$pdo;
+		GO::modelCache()->remove($this->className());
 	}
 	
 	private function _joinAclTable(){
@@ -739,7 +752,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 	/**
 	 * Returns the permission level if an aclField is defined in the model. Otherwise
-	 * it returns -1;
+	 * it returns GO_Base_Model_Acl::MANAGE_PERMISSION;
 	 * 
 	 * @return int GO_Base_Model_Acl::*_PERMISSION 
 	 */
@@ -750,7 +763,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			return GO_Base_Model_Acl::MANAGE_PERMISSION;
 		
 		if(!$this->aclField())
-			return -1;	
+			return GO_Base_Model_Acl::MANAGE_PERMISSION;
 		
 		if(!GO::user())
 			return false;
@@ -785,7 +798,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	private function _getFindQueryUid($params){
 		//create unique query id
 		
-		unset($params['start'], $params['orderDirection'], $params['order']);
+		unset($params['start'], $params['orderDirection'], $params['order'], $params['limit']);
 		if(isset($params['criteriaObject'])){
 			$params['criteriaParams']=$params['criteriaObject']->getParams();
 			$params['criteriaParams']=$params['criteriaObject']->getCondition();
@@ -1005,19 +1018,27 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(!empty($params['distinct']))
 			$sql .= "DISTINCT ";
 		
-		if(!empty($params['calcFoundRows']) && !empty($params['limit']) && empty($params['start'])){
+		//Unique query ID for storing found rows in session
+		$queryUid = $this->_getFindQueryUid($params);
+		
+		if(!empty($params['calcFoundRows']) && !empty($params['limit']) && (empty($params['start']) || !isset(GO::session()->values[$queryUid]))){
 			
 			//TODO: This is MySQL only code			
 			$sql .= "SQL_CALC_FOUND_ROWS ";
-		}
-		
-		
-		if(empty($params['fields'])){
-			$params['fields']=$this->_getDefaultFindSelectFields(isset($params['limit']) && $params['limit']==1);
-			$fetchObject= true;
+			
+			$calcFoundRows=true;
 		}else
 		{
-			$fetchObject = strpos($params['fields'],'t.*')!==false || strpos($params['fields'],'t.id')!==false;
+			$calcFoundRows=false;
+		}
+		
+		$fetchObject= true;
+		if(empty($params['fields'])){
+			$params['fields']=$this->_getDefaultFindSelectFields(isset($params['limit']) && $params['limit']==1);
+			//$fetchObject= true;
+		}else
+		{
+			//$fetchObject = strpos($params['fields'],'t.*')!==false || strpos($params['fields'],'t.id')!==false;
 		}
 		
 		$sql .= $params['fields'].$aclJoin['fields'].' ';
@@ -1111,7 +1132,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 		
 		
-		if($this->aclField() && empty($params['ignoreAcl'])){
+		if($this->aclField() && empty($params['ignoreAcl']) && (empty($params['limit']) || $params['limit']!=1)){	
+			
+			//add group by pk so acl join won't return duplicate rows. Don't do this with limit=1 because that makes no sense and causes overhead.
 			
 			$pk = is_array($this->primaryKey()) ? $this->primaryKey() : array($this->primaryKey());
 			
@@ -1216,19 +1239,17 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(!empty($params['calcFoundRows'])){
 			if(!empty($params['limit'])){
 				
-				$queryUid = $this->_getFindQueryUid($params);
-				
 				//Total numbers are cached in session when browsing through pages.
-				if(empty($params['start']) || !isset(GO::session()->values[$queryUid])){
+				if($calcFoundRows){
 					//TODO: This is MySQL only code
 					$sql = "SELECT FOUND_ROWS() as found;";			
 					$r2 = $this->getDbConnection()->query($sql);
 					$record = $r2->fetch(PDO::FETCH_ASSOC);
 					//$foundRows = intval($record['found']);
-					$foundRows = GO::session()->values[$queryUid]=intval($record['found']);	
+					$foundRows = GO::session()->values[$queryUid]=intval($record['found']);						
 				}
 				else
-				{
+				{					
 					$foundRows=GO::session()->values[$queryUid];
 				}
 						
@@ -1369,11 +1390,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * 
 	 * @return array Field names that should be used for the search query.
 	 */
-	public function getFindSearchQueryParamFields($prefixTable='t', $withCustomFields=true){
+	public function getFindSearchQueryParamFields($prefixTable='t', $withCustomFields=false){
 		//throw new Exception('Error: you supplied a searchQuery parameter to find but getFindSearchQueryParamFields() should be overriden in '.$this->className());
 		$fields = array();
 		foreach($this->columns as $field=>$attributes){
-			if(isset($attributes['gotype']) && ($attributes['gotype']=='textfield' || $attributes['gotype']=='textarea'))
+			if(isset($attributes['gotype']) && ($attributes['gotype']=='textfield' || $attributes['gotype']=='textarea' || $attributes['gotype']=='customfield'))
 				$fields[]='`'.$prefixTable.'`.`'.$field.'`';
 		}
 		
@@ -1498,13 +1519,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$stmt = $this->getDbConnection()->query("SELECT count(*) AS count FROM `".$this->tableName()."`");
 		$record = $stmt->fetch();
 		return $record['count'];		
-	}
-	
-	/**
-	 * May be overriden to do stuff after the model was loaded from the database
-	 */
-	protected function afterLoad(){
-			//GO::debug($this);
 	}
 	
 	private function _relationExists($name){
@@ -1688,14 +1702,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	/**
 	 * Format database values for display in the user's locale.
 	 * 
-	 * @param array $attributes
 	 * @param bool $html set to true if it's used for html output
 	 * @return array 
 	 */
-	protected function formatOutputValues($attributes, $html=false){
+	protected function formatOutputValues($html=false){
 		
 		$formatted = array();
-		foreach($attributes as $attributeName=>$value){			
+		foreach($this->_attributes as $attributeName=>$value){			
 			$formatted[$attributeName]=$this->formatAttribute($attributeName, $value, $html);
 		}
 		
@@ -1736,7 +1749,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			case 'date':
 				//strtotime hangs a while on parsing 0000-00-00 from the database. There shouldn't be such a date in it but 
 				//the old system stored dates like this.
-				return $value != '0000-00-00' ? GO_Base_Util_Date::get_timestamp(strtotime($value),false) : '';
+				
+				if($value == "0000-00-00" || empty($value))
+					return "";
+				
+				$date = new DateTime($value);
+				return $date->format(GO::user()->completeDateFormat);
+				
+				//return $value != '0000-00-00' ? GO_Base_Util_Date::get_timestamp(strtotime($value),false) : '';
 				break;
 
 			case 'number':
@@ -1823,7 +1843,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if($outputType=='raw')
 			$att=$this->_attributes;
 		else
-			$att=$this->formatOutputValues($this->_attributes, $outputType=='html');		
+			$att=$this->formatOutputValues($outputType=='html');		
 
 		foreach($this->_getMagicAttributeNames() as $attName){
 			$att[$attName]=$this->$attName;
@@ -2027,6 +2047,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function getSortOrderColumn(){
 		return false;
+	}
+	
+	/**
+	 * Just update the mtime timestamp 
+	 */
+	public function touch(){
+		$this->mtime=time();
+		return $this->_dbUpdate();
 	}
 
 
@@ -2787,8 +2815,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				elseif($triggerError){
 					if(!isset($this->columns[$name]))
 						trigger_error ("Access to undefined property $name in ".$this->className());
-					else 
-						GO::debug("Column $name is NULL in ".$this->className());				
+//					else 
+//						GO::debug("Column $name is NULL in ".$this->className());				
 				}
 			}
 		}		
@@ -2925,7 +2953,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$model_type_id = $model->modelTypeId();			
 		}
 		
-		$table = $isSearchCacheModel ? GO::getModel($this->model_name)->model()->tableName() : $this->tableName();
+		$table = $isSearchCacheModel ? GO::getModel($this->model_name)->tableName() : $this->tableName();
 		
 		$id = $isSearchCacheModel ? $this->model_id : $this->id;
 		
@@ -2958,9 +2986,31 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$result = $this->getDbConnection()->prepare($sql);
 		$success = $result->execute($values);
 		
-		if($success)
+		if($success){
+			
+//			if(!$this->afterLink($model, $isSearchCacheModel, $description, $this_folder_id, $model_folder_id, $linkBack))
+//				return false;
+			
 			return !$linkBack || $model->link($this, $description, $model_folder_id, $this_folder_id, false);
+		}
 	}
+	
+//	/**
+//	 * Can be overriden to do something after linking. It's a public method because sometimes
+//	 * searchCacheRecord models are used for linking. In that case we can call the afterLink method of the real model instead of the searchCacheRecord model.
+//	 * 
+//	 * @param GO_Base_Db_ActiveRecord $model
+//	 * @param boolean $isSearchCacheModel True if the given model is a search cache model. 
+//	 *	In that case you can use the following code to get the real model:  $realModel = $isSearchCacheModel ? GO::getModel($this->model_name)->findByPk($this->model_id) : $this;
+//	 * @param string $description
+//	 * @param int $this_folder_id
+//	 * @param int $model_folder_id
+//	 * @param boolean $linkBack 
+//	 * @return boolean
+//	 */
+//	public function afterLink(GO_Base_Db_ActiveRecord $model, $isSearchCacheModel, $description='', $this_folder_id=0, $model_folder_id=0, $linkBack=true){
+//		return true;
+//	}
 	
 	private function _linkExists($model){		
 		if($model->className()=="GO_Base_Model_SearchCacheRecord"){
@@ -2979,6 +3029,33 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			"`id`=".intval($this_id)." AND model_type_id=".$model_type_id." AND `model_id`=".$model_id;
 		$stmt = $this->getDbConnection()->query($sql);
 		return $stmt->fetchColumn(0) > 0;		
+	}
+	
+	/**
+	 * Update folder_id or description of a link
+	 * 
+	 * @param GO_Base_Db_ActiveRecord $model
+	 * @param array $attributes
+	 * @return boolean 
+	 */
+	public function updateLink(GO_Base_Db_ActiveRecord $model, array $attributes){
+		$sql = "UPDATE `go_links_".$this->tableName()."`";
+		
+		$updates=array();
+		$bindParams=array();
+		foreach($attributes as $field=>$value){
+			$updates[] = "`$field`=:".$field;		
+			$bindParams[':'.$field]=$value;
+		}
+		
+		$sql .= "SET ".implode(',',$updates).
+			" WHERE model_type_id=".$model->modelTypeId()." AND model_id=".$model->id;
+		
+//		var_dump($sql);
+//		var_dump($bindParams);
+		
+		$result = $this->getDbConnection()->prepare($sql);
+		return $result->execute($bindParams);
 	}
 	
 	/**
@@ -3167,7 +3244,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		if ($this->hasFiles() && GO::modules()->isInstalled('files')) {
 			//ACL must be generated here.
-			$fc = new GO_Files_Controller_Folder();
+			$fc = new GO_Files_Controller_Folder();	
 			$this->files_folder_id = $fc->checkModelFolder($this);
 		}
 		

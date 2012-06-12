@@ -146,6 +146,10 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		return !empty($this->locked_user_id) && $this->locked_user_id!=GO::user()->id;
 	}
 	
+	public function unlockAllowed(){
+		return ($this->locked_user_id==GO::user()->id || GO::user()->isAdmin()) && $this->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION);
+	}
+	
 	private function _getOldFsFile(){
 		$filename = $this->isModified('name') ? $this->getOldAttributeValue('name') : $this->name;
 		if($this->isModified('folder_id')){
@@ -163,8 +167,9 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	
 	protected function beforeDelete() {
 		
-		if($this->isLocked())
-			throw new Exception(GO::t("fileIsLocked","files"));
+		//blocked database check. We check this in the controller now.
+		if($this->isLocked() && !GO::user()->isAdmin())
+			throw new Exception(GO::t("fileIsLocked","files").': '.$this->path);
 		
 		return parent::beforeDelete();
 	}
@@ -178,6 +183,21 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 			return true;
 		}
 	}
+	
+//	public function validate() {
+//		
+//		if(GO::config()->convert_utf8_filenames_to_ascii){
+//			$newName = GO_Base_Util_String::utf8ToASCII($this->name);
+//			if($newName!=$this->name){
+//				if($this->fsFile->exists())
+//					$this->fsFile->rename ($newName);
+//				
+//				$this->name = $newName;
+//			}
+//		}
+//		
+//		return parent::validate();
+//	}
 	
 	protected function beforeSave() {		
 		
@@ -241,7 +261,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	}
 
 	protected function getPath() {
-		return $this->folder->path . '/' . $this->name;
+		return $this->folder ? $this->folder->path . '/' . $this->name : $this->name;
 	}
 
 	protected function getFsFile() {
@@ -267,7 +287,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	
 	protected function afterSave($wasNew) {
 		$this->_addQuota();
-		
+
 		if ($wasNew) {
 			$this->notifyUsers(
 				$this->folder_id,
@@ -285,6 +305,11 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 			}
 		}
 		
+
+		//touch the timestamp so it won't sync with the filesystem
+		$this->folder->touch();
+		
+
 		return parent::afterSave($wasNew);
 	}
 
@@ -336,8 +361,11 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	}
 
 	
-	protected function getThumbURL() {
-		return GO::url('core/thumb', 'src=' . urlencode($this->path) . '&lw=100&ph=100&zc=1&filemtime=' . $this->mtime);
+	public function getThumbURL($urlParams=array("lw"=>100, "ph"=>100, "zc"=>1)) {
+		
+		$urlParams['filemtime']=$this->mtime;
+		$urlParams['src']=$this->path;
+		return GO::url('core/thumb', $urlParams);
 	}
 	
 	/**
@@ -449,6 +477,26 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 			return $folder->hasFile(GO_Base_Fs_File::utf8Basename($relpath));
 		}
 		
+	}
+	
+	/**
+	 * Check if the file is an image.
+	 * 
+	 * @return boolean 
+	 */
+	public function isImage(){
+		switch($this->extension){
+			case 'ico':
+			case 'jpg':
+			case 'jpeg':
+			case 'png':
+			case 'gif':
+			case 'xmind':
+
+				return true;
+			default:
+				return false;
+		}
 	}
 	
 	

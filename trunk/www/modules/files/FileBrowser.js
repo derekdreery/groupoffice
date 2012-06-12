@@ -171,7 +171,7 @@ GO.files.FileBrowser = function(config){
 
 
 	var fields ={
-		fields:['type_id', 'id','name','type', 'size', 'mtime', 'extension', 'timestamp', 'thumb_url','path','acl_id','locked_user_id','locked','folder_id','permission_level','readonly'],
+		fields:['type_id', 'id','name','type', 'size', 'mtime', 'extension', 'timestamp', 'thumb_url','path','acl_id','locked_user_id','locked','folder_id','permission_level','readonly','unlock_allowed'],
 		columns:[{
 			id:'name',
 			header:GO.lang['strName'],
@@ -271,7 +271,6 @@ GO.files.FileBrowser = function(config){
 	
 	this.gridPanel.on('rowdblclick', this.onGridDoubleClick, this);
 
-
 	/*
 	 * Handles saving of locked state by the admin of the folder.
 	 **/
@@ -285,6 +284,7 @@ GO.files.FileBrowser = function(config){
 			return false;
 		}
 	},this);
+	
 	
 	this.filesContextMenu = new GO.files.FilesContextMenu();
 	
@@ -455,6 +455,7 @@ GO.files.FileBrowser = function(config){
 				Ext.MessageBox.alert(GO.lang.strError,
 				GO.lang.noJava);
 			} else {
+				GO.files.juploadFileBrowser=this; //for handling after upload
 				GO.util.popup({
 					url: GO.url('files/jupload/renderJupload'),
 					//GO.settings.modules.files.url+'jupload/index.php?id='+encodeURIComponent(this.folder_id),
@@ -740,8 +741,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			state = Ext.state.Manager.get(this.gridPanel.id);
 		}
 		
-		//console.log(state);
-
+		//state.sort=store.sortInfo;
+		
 		if(state){
 			this.gridPanel.applyStoredState(state);
 
@@ -761,7 +762,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 		this.path = store.reader.jsonData.path;
 
-		this.setWritePermission(true);///store.reader.jsonData.write_permission);
+		this.setWritePermission(store.reader.jsonData.permission_level>=GO.permissionLevels.write);
 		
 		this.thumbsToggle.toggle(store.reader.jsonData.thumbs=='1');
 		
@@ -834,7 +835,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 		GO.files.filePropertiesDialogListeners={
 			scope:this,
-			rename:function(dlg, folder_id){
+			save:function(dlg, file_id, folder_id){
 				if(this.folder_id==folder_id)
 				{
 					this.getActiveGridStore().load();
@@ -844,14 +845,15 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 		GO.files.folderPropertiesDialogListeners={
 			scope:this,
-			save:function(dlg, folder_id){
-				this.setFolderID(folder_id, true);
-			},
-			rename:function(dlg, parent_id){
-				/*if(parent_id==this.folder_id)
+//			save:function(dlg, folder_id){
+//				this.setFolderID(folder_id, true);
+//			},
+			save:function(dlg, folder_id, parent_id){
+				if(parent_id==this.folder_id)
 				{
 					this.setFolderID(parent_id);
-				}*/
+				}
+				//console.log(parent_id);
 				var node = this.treePanel.getNodeById(parent_id);
 				if(node)
 				{
@@ -1512,7 +1514,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		{
 			this.newFolderWindow = new GO.files.NewFolderDialog();
 			this.newFolderWindow.on('save', function(){
-				this.getActiveGridStore().reload();
+				this.getActiveGridStore().load();
 								
 				// problem if folder didn't have a subfolder yet
 				// fixed by reloading parent
@@ -1662,6 +1664,7 @@ GO.files.showFilePropertiesDialog = function(file_id){
 		GO.files.filePropertiesDialog = new GO.files.FilePropertiesDialog();
 
 	if(GO.files.filePropertiesDialogListeners){
+		
 		GO.files.filePropertiesDialog.on(GO.files.filePropertiesDialogListeners);
 		delete GO.files.filePropertiesDialogListeners;
 	}
@@ -1757,50 +1760,31 @@ GO.files.openFile = function(record, store,e)
 						closeAction:'hide'
 					});
 				}
-
-				var imgindex = 0;
-				var images = Array();
-				if(store)
-				{
-					for (var i = 0; i < store.data.items.length;  i++)
-					{
-						var r = store.data.items[i].data;
-
-						if(r.extension=='jpg' || r.extension=='png' || r.extension=='gif' || r.extension=='bmp' || r.extension=='jpeg' )
-						{
-							images.push({
-								name: r['name'],
-								src: GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+r[index]
-							})
-						} else if (r.extension=='xmind') {
-							images.push({
-								name: r['name'],
-								src: GO.settings.config.host+'controls/thumb.php?src='+r.path+'&w=600',
-								download_path: GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+r[index]
-							})
-						}
-						if(r[index]==record.data[index])
-						{
-							imgindex=images.length-1;
-						}
-					}
-				}else
-				{
-					if (record.data.extension=='xmind') {
-						images.push({
-							name: record.data['name'],
-							src: GO.settings.config.host+'controls/thumb.php?src='+record.data.path+'&w=600',
-							download_path: GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index]
-						})
-					} else {
-						images.push({
-							name: record.data['name'],
-							src: url
-						})
-					}
+				
+				var imagesParams = {};
+				imagesParams[index]=record.data[index];
+				imagesParams["thumbParams"]=Ext.encode({lw:this.imageViewer.width-20,ph:this.imageViewer.height-100});
+				if(store && store.sortInfo){
+					imagesParams["sort"]=store.sortInfo.field;
+					imagesParams["dir"]=store.sortInfo.direction;
 				}
-
-				this.imageViewer.show(images, imgindex);
+				
+				GO.request({
+					url:"files/folder/images",
+					params:imagesParams,
+					maskEl:Ext.getBody(),
+					success:function(response, options, result){
+						this.imageViewer.show(result.images, result.index);
+					},
+					scope:this
+				})
+				
+				
+//				this.imageViewer.show([{
+//						name: record.data['name'],
+//						src: GO.url("core/thumb",{src:record.data.path,lw:this.imageViewer.width-20,ph:this.imageViewer.height-100}),
+//						download_path: url
+//					}]);
 
 				break;
 

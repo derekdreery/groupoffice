@@ -222,7 +222,8 @@ class GO_Base_Session extends GO_Base_Observable{
 			//the application to identify a valid authenticated session. This is possible in PHP by
 			//using the session_regenerate_id() function.
 
-			session_regenerate_id();
+			if(PHP_SAPI!='cli')
+				session_regenerate_id();
 			
 			if($countLogin)
 				$this->_log(GO_Log_Model_Log::ACTION_LOGIN);
@@ -266,7 +267,8 @@ class GO_Base_Session extends GO_Base_Observable{
 	 * When a PHP session is open the webserver won't process a new request until 
 	 * the session is closed again.
 	 */
-	public function closeWriting(){		
+	public function closeWriting(){	
+		GO::debug("Session writing closed");
 		session_write_close();
 	}
 	

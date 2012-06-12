@@ -79,6 +79,12 @@ class GO_Base_Model_SearchCacheRecord extends GO_Base_Db_ActiveRecord {
 	}
 	
 	
+	public function getFindSearchQueryParamFields($prefixTable = 't', $withCustomFields = true) {
+		return array('t.name');
+		
+		//keywords are matched with fulltext index
+	}
+	
 	/**
 	 * Set this to true so it won't be deleted.
 	 * @var type 

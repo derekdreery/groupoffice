@@ -25,6 +25,62 @@ class GO_Base_Util_String {
 		$text = str_replace("\r","",$text);
 		return $crlf != "\n" ? str_replace("\n",$crlf,$text) : $text;
 	}
+	
+	/**
+	 * Convert non ascii characters to chars that come close to them.
+	 * @param type $string
+	 * @return type 
+	 */
+	public static function utf8ToASCII($string) {
+
+		//cyrillic
+//		$cyr = array(
+//		"а", "б", "в", "г", "д", "ђ", "е", "ж", "з", "и", "й", "ј", "к", "л", "љ", "м", "н",
+//    "њ", "о", "п", "р", "с", "т", "ћ", "у", "ф", "х", "ц", "ч", "џ", "ш","ъ","ы","ь","э","ю","я",
+//				
+//    "А", "Б", "В", "Г", "Д", "Ђ", "Е", "Ж", "З", "И", "Й", "Ј", "К", "Л", "Љ", "М", "Н",
+//    "Њ", "О", "П", "Р", "С", "Т", "Ћ", "У", "Ф", "Х", "Ц", "Ч", "Џ", "Ш","Ъ","Ы","Ь","Э","Ю","Я");
+//		
+//
+//
+//    $lat = array ("a", "b", "v", "g", "d", "d", "e", "z", "z", "i", "j", "j", "k", "l", "lj", "m", "n", "nj", "o", "p",
+//    "r", "s", "t", "c", "u", "f", "h", "c", "c", "dz", "s","'","Y","'","e","yu","ya",
+//				
+//    "A", "B", "B", "G", "D", "D", "E", "Z", "Z", "I", "J", "J", "K", "L", "LJ", "M", "N", "NJ", "O", "P",
+//    "R", "S", "T", "C", "U", "F", "H", "C", "C", "DZ", "S","'","Y","'","E","Yu","Ya"
+//    );
+//		$string = str_replace($cyr, $lat, $string);
+		
+		$rus = array("/а/", "/б/", "/в/",
+				"/г/", "/ґ/", "/д/", "/е/", "/ё/", "/ж/",
+				"/з/", "/и/", "/й/", "/к/", "/л/", "/м/",
+				"/н/", "/о/", "/п/", "/р/", "/с/", "/т/",
+				"/у/", "/ф/", "/х/", "/ц/", "/ч/", "/ш/",
+				"/щ/", "/ы/", "/э/", "/ю/", "/я/", "/ь/",
+				"/ъ/", "/і/", "/ї/", "/є/", "/А/", "/Б/",
+				"/В/", "/Г/", "/ґ/", "/Д/", "/Е/", "/Ё/",
+				"/Ж/", "/З/", "/И/", "/Й/", "/К/", "/Л/",
+				"/М/", "/Н/", "/О/", "/П/", "/Р/", "/С/",
+				"/Т/", "/У/", "/Ф/", "/Х/", "/Ц/", "/Ч/",
+				"/Ш/", "/Щ/", "/Ы/", "/Э/", "/Ю/", "/Я/",
+				"/Ь/", "/Ъ/", "/І/", "/Ї/", "/Є/", "/Ü/", "/ü/", "/Ö/", "/ö/", "/Ä/", "/ä/", "/ß/");
+		$lat = array("a", "b", "v",
+				"g", "g", "d", "e", "e", "zh", "z", "i",
+				"j", "k", "l", "m", "n", "o", "p", "r",
+				"s", "t", "u", "f", "h", "c", "ch", "sh",
+				"sh'", "y", "e", "yu", "ya", "'", "'", "i",
+				"i", "e", "A", "B", "V", "G", "G", "D",
+				"E", "E", "ZH", "Z", "I", "J", "K", "L",
+				"M", "N", "O", "P", "R", "S", "T", "U",
+				"F", "H", "C", "CH", "SH", "SH'", "Y", "E",
+				"YU", "YA", "'", "'", "I", "I", "E", "Ue", "ue", "Oe", "oe", "Ae", "ae", "ss");
+		$string = preg_replace($rus, $lat, $string);
+
+		setlocale(LC_ALL, 'en_US.UTF8');
+		return iconv("UTF-8", "US-ASCII//TRANSLIT", $string);
+		//return preg_replace('/[^a-zA-Z0-9 ,-:_]+/','',$string);
+	}
+
 
 	public static function get_first_letters($phrase) {
 
@@ -593,12 +649,15 @@ class GO_Base_Util_String {
 
 	public static function cut_string($string, $maxlength, $cut_whole_words = true) {
 		if (strlen($string) > $maxlength) {
-			$temp = substr($string, 0, $maxlength -3);
+			
+			$substrFunc = function_exists('mb_substr') ? 'mb_substr' : 'substr';
+			
+			$temp = $substrFunc($string, 0, $maxlength -3);
 			if ($cut_whole_words) {
 				if ($pos = strrpos($temp, ' ')) {
-					return substr($temp, 0, $pos).'...';
+					return $substrFunc($temp, 0, $pos).'...';
 				} else {
-					return $temp = substr($string, 0, $maxlength -3).'...';
+					return $temp = $substrFunc($string, 0, $maxlength -3).'...';
 				}
 			} else {
 				return $temp.'...';
@@ -763,8 +822,7 @@ class GO_Base_Util_String {
 	 * @return string HTML formatted string
 	 */
 	public static function sanitizeHtml($html) {
-		global $GO_CONFIG;
-
+	
 		//needed for very large strings when data is embedded in the html with an img tag
 		ini_set('pcre.backtrack_limit', (int)ini_get( 'pcre.backtrack_limit' )+ 1000000 );
 
@@ -798,6 +856,8 @@ class GO_Base_Util_String {
 		"'<title>.*?</title>'usi",
 		"'<head[^>]*>.*?</head>'usi",
 		"'<head[^>]*>'usi",
+		"'<base[^>]*>'usi",
+		"'<meta[^>]*>'usi",
 		"'<bgsound[^>]*>'usi",
 		
 		/* MS Word junk */

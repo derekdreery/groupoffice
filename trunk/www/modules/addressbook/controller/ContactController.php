@@ -75,7 +75,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		}
 		
 		
-		$stmt = GO_Addressbook_Model_Addresslist::model()->find();
+		$stmt = GO_Addressbook_Model_Addresslist::model()->find(GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION));
 		while($addresslist = $stmt->fetch()){
 			$linkModel = $addresslist->hasManyMany('contacts', $model->id);
 			$mustHaveLinkModel = isset($params['addresslist_' . $addresslist->id]);
@@ -118,7 +118,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'contacts/contact_photos/'.$params['id'].'.jpg');
 		if(!$file->exists())
 			exit("No photo set");		
-		GO_Base_Util_Http::outputDownloadHeaders($file, true, true);
+		GO_Base_Util_Http::outputDownloadHeaders($file, true, false);
 		$file->output();
 	}
 	
@@ -220,6 +220,13 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$storeParams = GO_Base_Db_FindParams::newInstance()
 			->export("contact")
 			->criteria($criteria)		
+			->searchFields(array(
+				"CONCAT(t.first_name,t.middle_name,t.last_name)", 
+				"t.email",
+				"t.email2",
+				"t.email3",			
+				"c.name",
+				))
 			->joinModel(array(
 				'model'=>'GO_Addressbook_Model_Company',					
 	 			'foreignField'=>'id', //defaults to primary key of the remote model
@@ -402,16 +409,44 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	}
 	
 		
-	protected function beforeImport(&$model, &$attributes, $record) {
+	protected function beforeImport($params, &$model, &$attributes, $record) {	
 		
-		if(!empty($attributes['Company'])){
-				$company = GO_Addressbook_Model_Company::model()->findSingleByAttribute('name', $attributes['Company']);
-			
-			if($company)
-				$model->company_id = $company->id;
+		$impBasParams = json_decode($params['importBaseParams'],true);
+		$addressbookId = $impBasParams['addressbook_id'];
+		
+		if(!empty($attributes['Company']))
+			$companyName = $attributes['Company'];
+		else if(!empty($attributes['company']))
+			$companyName = $attributes['company'];
+		else if(!empty($attributes['company_name']))
+			$companyName = $attributes['company_name'];
+		else if(!empty($attributes['companyName']))
+			$companyName = $attributes['companyName'];	
+		else if(!empty($attributes['name']))
+			$companyName = $attributes['name'];	
+		
+		if(!empty($companyName)) {
+			$companyModel = GO_Addressbook_Model_Company::model()->find(
+				GO_Base_Db_FindParams::newInstance()
+					->single()
+					->criteria(
+						GO_Base_Db_FindCriteria::newInstance()
+							->addCondition('name',$companyName)
+							->addCondition('addressbook_id',$addressbookId)
+					)
+			);
+			if (empty($companyModel)) {
+				$companyModel = new GO_Addressbook_Model_Company();
+				$companyModel->setAttributes(array(
+					'name' => $companyName,
+					'addressbook_id' => $addressbookId
+				));
+				$companyModel->save();
+			}
+			$model->company_id = $companyModel->id;
 		}
 		
-		return parent::beforeImport($model, $attributes, $record);
+		return parent::beforeImport($params, $model, $attributes, $record);
 	}
 	
 	
@@ -437,6 +472,14 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	protected function actionImportVCard($params){
 		$contact = new GO_Addressbook_Model_Contact();
 		
+		if(isset($_FILES['files']['tmp_name'][0]))
+			$params['file'] = $_FILES['files']['tmp_name'][0];
+		
+		if (!empty($params['importBaseParams'])) {
+			$importBaseParams = json_decode($params['importBaseParams'],true);
+			$params['addressbook_id'] = $importBaseParams['addressbook_id'];
+		}
+		
 		$file = new GO_Base_Fs_File($params['file']);
 		$data = $file->getContents();		
 		$vobject = GO_Base_VObject_Reader::read($data);
@@ -445,6 +488,10 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		GO_Base_VObject_Reader::convertVCard21ToVCard30($vobject);
 	
 		$contact->importVObject($vobject, $params);
+		
+		$response['success']=true;
+		
+		return $response;
 	}
 	
 	/**
@@ -453,10 +500,13 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	 * @param array $params
 	 * @return array $response 
 	 */
-	protected function actionImportCsv($params){
+	protected function actionImportCsv($params){		
+		$params['file'] = $_FILES['files']['tmp_name'][0];
 		$summarylog = parent::actionImport($params);
-		return $summarylog->getErrorsJson();
+		$response = $summarylog->getErrorsJson();
+		$response['success'] = true;
+		return $response;
 	}
-
+	
 }
 

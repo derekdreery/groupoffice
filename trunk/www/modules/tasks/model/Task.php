@@ -125,8 +125,26 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 				$this->addReminder($this->name, $this->reminder, $this->tasklist->user_id);
 		}	
 		
+		if($this->isModified('project_id') && $this->project)
+			$this->link($this->project);
+		
 		return parent::afterSave($wasNew);
 	}
+	
+//	public function afterLink(GO_Base_Db_ActiveRecord $model, $isSearchCacheModel, $description = '', $this_folder_id = 0, $model_folder_id = 0, $linkBack = true) {
+//		throw new Exception();
+//		$modelName = $isSearchCacheModel ? $model->model_name : $model->className;
+//		$modelId = $isSearchCacheModel ? $model->model_id : $model->id;
+//		echo $modelName;
+//		if($modelName=="GO_Projects_Model_Project")
+//		{
+//			$this->project_id=$modelId;
+//			$this->save();
+//		}
+//		
+//		
+//		return parent::afterLink($model, $isSearchCacheModel, $description, $this_folder_id, $model_folder_id, $linkBack);
+//	}
 	
 	protected function afterDelete() {
 		$this->deleteReminders();

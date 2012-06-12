@@ -16,17 +16,42 @@
 $settings['state_index'] = 'go';
 
 $settings['language']=GO::user() ? GO::user()->language : GO::config()->language;
+
+$user_id = GO::user() ? GO::user()->id : 0;
+
+//done in AuthController already
+//if(isset($_REQUEST["SET_LANGUAGE"]))
+//	$settings['language']=$_REQUEST["SET_LANGUAGE"];
+
 $settings['state']=array();
 if(GO::user()) {
 	//state for Ext components
 	$settings['state'] = $GLOBALS['GO_CONFIG']->get_state(GO::user()->id, $settings['state_index']);
-
-	$settings['has_admin_permission']=GO::user()->isAdmin();
-}
-foreach($_SESSION['GO_SESSION'] as $key=>$value) {
-	if(!is_array($value)) {
-		$settings[$key]=$value;
-	}
+	$settings['user_id']=GO::user()->id;	
+	$settings['has_admin_permission']=GO::user()->isAdmin();	
+	$settings['username'] = GO::user()->username;
+	$settings['name'] = GO::user()->name;
+	$settings['email'] = GO::user()->email;
+	$settings['thousands_separator'] = GO::user()->thousands_separator;
+	$settings['decimal_separator'] = GO::user()->decimal_separator;
+	$settings['date_format'] = GO::user()->completeDateFormat;
+	$settings['date_separator'] = GO::user()->date_separator;
+	$settings['time_format'] = GO::user()->time_format;
+	$settings['currency'] = GO::user()->currency;
+	$settings['lastlogin'] = GO::user()->lastlogin;
+	$settings['max_rows_list'] = GO::user()->max_rows_list;
+	$settings['timezone'] = GO::user()->timezone;
+	$settings['start_module'] = GO::user()->start_module;
+	$settings['theme'] = GO::user()->theme;
+	$settings['mute_sound'] = GO::user()->mute_sound;
+	$settings['mute_reminder_sound'] = GO::user()->mute_reminder_sound;
+	$settings['mute_new_mail_sound'] = GO::user()->mute_new_mail_sound;
+	$settings['popup_reminders'] = GO::user()->popup_reminders;
+	$settings['show_smilies'] = GO::user()->show_smilies;
+	$settings['first_weekday'] = GO::user()->first_weekday;
+	$settings['sort_name'] = GO::user()->sort_name;
+	$settings['list_separator'] = GO::user()->list_separator;
+	$settings['text_separator'] = GO::user()->text_separator;
 }
 
 require_once(GO::config()->root_path.'classes/base/theme.class.inc.php');
@@ -139,7 +164,9 @@ if($GLOBALS['GO_SECURITY']->logged_in() && $fullscreen=='true' && !isset($_REQUE
 }
 
 if($GLOBALS['GO_SECURITY']->logged_in() && !isset($popup_groupoffice)) {
-	echo 'window.name="groupoffice";';
+	echo 'window.name="'.GO::getId().'";';
+	
+	//echo 'window.name="groupoffice";';
 }else
 {
 	echo 'window.name="groupoffice-login";';
@@ -150,7 +177,7 @@ if($GLOBALS['GO_SECURITY']->logged_in() && !isset($popup_groupoffice)) {
 <?php
 if(!isset($lang['common']['extjs_lang'])) $lang['common']['extjs_lang'] = $GLOBALS['GO_LANGUAGE']->language;
 
-$file = 'base-'.md5($GLOBALS['GO_LANGUAGE']->language.GO::config()->mtime).'.js';
+$file = 'base-'.md5($settings['language'].GO::config()->mtime).'.js';
 $path = GO::config()->file_storage_path.'cache/'.$file;
 
 
@@ -309,41 +336,48 @@ if(!isset($default_scripts_load_modules)){
 
 
 //var_dump($load_modules);
-
+$modulesCacheStr = array();
+foreach($load_modules as $module)
+	if($module['read_permission']) 
+			$modulesCacheStr[]=$module['id'].($module['write_permission'] ? '0' : '1');
+	
+$modulesCacheStr=md5(implode('-',$modulesCacheStr));
 
 if(count($load_modules)) {
 	
-	
-	$fp=fopen(GO::config()->file_storage_path.'cache/module-languages.js','w');
-	if(!$fp){
-		die('Could not write to cache directory');
+	$modLangPath =GO::config()->file_storage_path.'cache/'.$settings['language'].'-'.$modulesCacheStr.'-module-languages.js';
+	if(!file_exists($modLangPath) || GO::config()->debug){
+		$fp=fopen($modLangPath,'w');
+		if(!$fp){
+			die('Could not write to cache directory');
+		}
+
+		//Temporary dirty hack for namespaces
+		$modules = GO::modules()->getAllModules();
+
+		while ($module=array_shift($modules)) {
+			fwrite($fp, 'Ext.ns("GO.'.$module->id.'");');
+		}
+
+		//Put all lang vars in js
+		$language = new GO_Base_Language();
+		$l = $language->getAllLanguage();
+		unset($l['base']);
+
+		fwrite($fp, 'if(GO.customfields){Ext.ns("GO.customfields.columns");Ext.ns("GO.customfields.types");}');
+		foreach($l as $module=>$langVars){
+			fwrite($fp,'GO.'.$module.'.lang='.json_encode($langVars).';');
+		}
+		fclose($fp);
 	}
-	
-	//Temporary dirty hack for namespaces
-	$modules = GO::modules()->getAllModules();
-			
-	while ($module=array_shift($modules)) {
-		fwrite($fp, 'Ext.ns("GO.'.$module->id.'");');
-	}
-	
-	//Put all lang vars in js
-	$language = new GO_Base_Language();
-	$l = $language->getAllLanguage();
-	unset($l['base']);
-	
-	fwrite($fp, 'if(GO.customfields){Ext.ns("GO.customfields.columns");Ext.ns("GO.customfields.types");}');
-	foreach($l as $module=>$langVars){
-		fwrite($fp,'GO.'.$module.'.lang='.json_encode($langVars).';');
-	}
-	fclose($fp);
 	//$scripts[]=GO::config()->file_storage_path.'cache/module-languages.js';
 	
 	if(!GO::config()->debug){
-		$scripts[]=GO::config()->file_storage_path.'cache/module-languages.js';
+		$scripts[]=$modLangPath;
 	}else
 	{
 		//$dynamic_debug_script=GO::config()->file_storage_path.'cache/languages.js';
-		$scripts[]=GO::config()->host.'compress.php?file=module-languages.js&mtime='.filemtime($dynamic_debug_script);
+		$scripts[]=GO::config()->host.'compress.php?file='.basename($modLangPath).'&mtime='.filemtime($modLangPath);
 	}
 	
 	//load language first so it can be overridden
@@ -406,7 +440,7 @@ if(count($load_modules)) {
 
 	//include config file location because in some cases different URL's point to
 	//the same database and this can break things if the settings are cached.
-	$file = $GLOBALS['GO_SECURITY']->user_id.'-'.md5(GO::config()->mtime.GO::config()->get_config_file().':'.$GLOBALS['GO_LANGUAGE']->language.':'.implode(':', $modules)).'.js';
+	$file = $GLOBALS['GO_SECURITY']->user_id.'-'.md5(GO::config()->mtime.GO::config()->get_config_file().':'.$GLOBALS['GO_LANGUAGE']->language.':'.$modulesCacheStr).'.js';
 	$path = GO::config()->file_storage_path.'cache/'.$file;
 	
 	
@@ -543,17 +577,13 @@ if(isset($_REQUEST['f']))
 	$fp = GO_Base_Util_Crypt::decrypt($_REQUEST['f']);
 	
 
-	$loadevent = 'render';
-
+	
 	?>
 	if(GO.<?php echo $fp['m']; ?>)
 	{
-
-		 <?php if(!empty($loadevent)) echo 'GO.mainLayout.on("'.$loadevent.'",function(){'; ?>
-
-					GO.<?php echo $fp['m']; ?>.<?php echo $fp['f']; ?>.apply(this, <?php echo json_encode($fp['p']); ?>);
-
-		 <?php if(!empty($loadevent)) echo '});'; ?>
+		 GO.mainLayout.on("render", function(){
+				GO.<?php echo $fp['m']; ?>.<?php echo $fp['f']; ?>.apply(this, <?php echo json_encode($fp['p']); ?>);
+		 });
 	}
 	<?php
 	

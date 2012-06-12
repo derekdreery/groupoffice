@@ -37,6 +37,11 @@ class GO_Tasks_Model_Category extends GO_Base_Db_ActiveRecord {
 	public function tableName() {
 		return 'ta_categories';
 	}
+	
+	protected function init() {
+		$this->columns['name']['unique']=array("tasklist_id");
+		return parent::init();
+	}
 
 	public function relations() {
 		return array(

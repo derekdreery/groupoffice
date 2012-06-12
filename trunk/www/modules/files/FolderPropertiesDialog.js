@@ -262,7 +262,7 @@ Ext.extend(GO.files.FolderPropertiesDialog, GO.Window, {
 					this.formPanel.form.findField('path').setValue(action.result.new_path);
 					this.fireEvent('rename', this, this.parent_id);				
 				}
-				this.fireEvent('save', this, this.folder_id);
+				this.fireEvent('save', this, this.folder_id, this.parent_id);
 				
 				GO.dialog.TabbedFormDialog.prototype.refreshActiveDisplayPanels.call(this);
 				

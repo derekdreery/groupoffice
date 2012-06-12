@@ -312,19 +312,7 @@ GO.email.EmailComposer = function(config) {
 
 	//Set a long timeout for large attachments
 	this.formPanel.form.timeout=3000;
-
-	this.templatesStore = new GO.data.JsonStore({
-		url : GO.url("addressbook/template/emailSelection"),
-		baseParams : {
-			'type':"0"
-		},
-		root : 'results',
-		totalProperty : 'total',
-		id : 'id',
-		fields : ['id', 'name', 'group', 'text','template_id','checked'],
-		remoteSort : true
-	});
-
+	
 	var tbar = [this.sendButton = new Ext.Button({
 		text : GO.email.lang.send,
 		iconCls : 'btn-send',
@@ -372,6 +360,19 @@ GO.email.EmailComposer = function(config) {
 	}
 
 	if(GO.addressbook){
+		
+		this.templatesStore = new GO.data.JsonStore({
+			url : GO.url("addressbook/template/emailSelection"),
+			baseParams : {
+				'type':"0"
+			},
+			root : 'results',
+			totalProperty : 'total',
+			id : 'id',
+			fields : ['id', 'name', 'group', 'text','template_id','checked'],
+			remoteSort : true
+		});
+		
 		tbar.push(this.templatesBtn = new Ext.Button({
 
 			iconCls:'ml-btn-mailings',
@@ -737,6 +738,17 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 //				this.bccFieldCheck.setChecked(GO.email.showBCCfield == '1');
 			}
 			
+			var params = config.loadParams ? config.loadParams : {
+				uid : config.uid,					
+				task : config.task,
+				mailbox : config.mailbox
+			};
+			
+			//for directly loading a contact in a template
+			if(config.contact_id)
+				params.contact_id=config.contact_id;
+
+			params.to = this.toCombo.getValue();			
 
 			if (config.uid || config.template_id || config.loadUrl || config.loadParams) {
 		
@@ -745,28 +757,15 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 //				
 				var fromRecord = this.fromCombo.store.getById(this.fromCombo.getValue());
 
-				var params = config.loadParams ? config.loadParams : {
-					uid : config.uid,					
-					task : config.task,
-					mailbox : config.mailbox
-				};
 				
 				params.account_id =fromRecord.get('account_id');
 				params.alias_id=fromRecord.get('id');	
-
-				//for directly loading a contact in a template
-				if(config.contact_id)
-					params.contact_id=config.contact_id;
 				
 				if (config.addresslist_id > 0) {
 					// so that template loading won't replace fields
 					params.addresslist_id = config.addresslist_id;
 				}
-
-				//if (config.template_id>0) {
 				params.template_id=config.template_id;
-				params.to = this.toCombo.getValue();
-				//}
 				
 				var url;
 				
@@ -818,7 +817,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			{
 				//in case users selects new default template.
 				this.lastLoadUrl = GO.url("email/message/template");
-				this.lastLoadParams = {};
+				this.lastLoadParams = params;
 				this.afterShowAndLoad(config);
 				
 			}

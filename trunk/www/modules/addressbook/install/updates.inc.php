@@ -301,3 +301,13 @@ $updates["201205031447"][]="update cf_fields set datatype='GO_Addressbook_Custom
 $updates["201205031447"][]="update `ab_email_templates` set content = replace(content, '{my_', '{user:') WHERE type=0";
 $updates["201205031447"][]="update `ab_email_templates` set content = replace(content, '{user:company','{usercompany:name') WHERE type=0";
 $updates["201205031447"][]="UPDATE `ab_email_templates` SET content = replace( content, '{user:work_', '{usercompany:' ) WHERE TYPE =0";
+
+$updates["201205231030"][]="CREATE TABLE IF NOT EXISTS `ab_contacts_vcard_props` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `contact_id` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(255) NOT NULL DEFAULT '',
+	`parameters` varchar(1023) NOT NULL DEFAULT '',
+  `value` VARCHAR( 1023 ) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  KEY `contact_id` (`contact_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;";

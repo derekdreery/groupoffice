@@ -185,6 +185,44 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 			throw new Exception("Attachment number $number not found");
 		}
 	}
+	
+	
+	protected function extractUuencodedAttachments(&$body)
+	{
+		$body = str_replace("\r", '', $body);
+		$regex = "/(begin ([0-7]{3}) (.+))\n(.+)\nend/Us";
+
+		preg_match_all($regex, $body, $matches);
+
+    
+    for ($i = 0; $i < count($matches[3]); $i++) {
+//			$boundary	= $matches[1][$i];
+//			$fileperm	= $matches[2][$i];
+			$filename	= trim($matches[3][$i]);
+
+			//$size = strlen($matches[4][$i]);
+
+			$file = GO_Base_Fs_File::tempFile($filename);
+			$file->putContents(convert_uudecode($matches[4][$i]));
+
+			$this->attachments["UU".$i]=array(
+				"url"=>GO::url('core/downloadTempFile', array('path'=>$file->stripTempPath())),
+				'name'=>$filename,
+				"content_id"=>"",
+				"mime"=>$file->mimeType(),
+				'disposition'=>'attachment',
+				'encoding'=>'',
+				"tmp_file"=>$file->path(),
+				"index"=>-1,				
+				'size'=>$file->size(),
+				'human_size'=>$file->humanSize(),
+				"extension"=>$file->extension()
+			);
+    }
+		
+    //remove it from the body.
+    $body = preg_replace($regex, "", $body);
+	}
 
 	/** 
 	 * Return the URL to display the attachment

@@ -90,16 +90,18 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 			if($encrypted)
 				$this->smtp_password = $encrypted;
 		}
+		
+		if($this->isNew || $this->isModified("host") || $this->isModified("port") || $this->isModified("username")  || $this->isModified("password")){
+			$imap = $this->openImapConnection();
+			$this->mbroot=$imap->check_mbroot($this->mbroot);
 
-		$imap = $this->openImapConnection();
-		$this->mbroot=$imap->check_mbroot($this->mbroot);
 
-
-		$this->_createDefaultFolder('sent');
-		$this->_createDefaultFolder('trash');
-		$this->_createDefaultFolder('spam');
-		$this->_createDefaultFolder('drafts');
-
+			$this->_createDefaultFolder('sent');
+			$this->_createDefaultFolder('trash');
+			$this->_createDefaultFolder('spam');
+			$this->_createDefaultFolder('drafts');	
+		}
+		
 		return parent::beforeSave();
 	}
 

@@ -11,8 +11,8 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 		this.border=false;
 		this.plain=true;
 		this.maximizable=true;
-		this.width=640;
-		this.height=Ext.getBody().getHeight()-80;
+		this.width=800;
+		this.height=600;
 		this.bodyStyle='text-align:center;vertical-align:middle';
 		this.title=GO.files.lang.imageViewer;
 		this.autoScroll=true;
@@ -65,13 +65,16 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 	
 	show : function(images, index)
 	{
+		if(!index)
+			index=0;
+		
 		GO.files.ImageViewer.superclass.show.call(this);
 		
 		this.viewerImages = images;
 		
 		this.loadImage(index);		
 	},
-	
+		
 	loadImage : function(index)
 	{
 		this.body.mask(GO.lang.waitMsgLoad);

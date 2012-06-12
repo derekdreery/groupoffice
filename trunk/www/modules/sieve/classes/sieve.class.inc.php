@@ -296,9 +296,9 @@ class sieve {
 //{
 //	fileinto \"Spam\";
 //}";
-			$this->save_script('groupoffice', $content);
-			$this->activate('groupoffice');
-			$active = 'groupoffice';
+			$this->save_script('default', $content);
+			$this->activate('default');
+			$active = 'default';
 		}
 		return $active;
 	}

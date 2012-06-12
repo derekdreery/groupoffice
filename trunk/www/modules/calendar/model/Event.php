@@ -191,7 +191,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	protected function beforeSave() {
 		
 		//Don't set reminders for the superadmin
-		if($this->calendar->user_id==1)
+		if($this->calendar->user_id==1 && !GO::config()->debug)
 			$this->reminder=0;
 		
 		
@@ -202,6 +202,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			{
 				$this->background='FF6666';
 			}
+		}
+		
+		if($this->rrule != ""){			
+			$rrule = new GO_Base_Util_Icalendar_Rrule();
+			$rrule->readIcalendarRruleString($this->start_time, $this->rrule);						
+			$this->repeat_end_time = $rrule->until;
 		}
 		
 		return parent::beforeSave();
@@ -289,7 +295,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->_sendResourceNotification($wasNew);
 		}else
 		{
-			if(!$wasNew)
+			if(!$wasNew && $this->hasModificationsForParticipants())
 				$this->_updateResourceEvents();
 		}
 
@@ -302,6 +308,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}	
 
 		return parent::afterSave($wasNew);
+	}
+	
+	public function hasModificationsForParticipants(){
+		return $this->isModified("start_time") || $this->isModified("end_time") || $this->isModified("name") || $this->isModified("location") || $this->isModified('status');
 	}
 	
 	
@@ -323,72 +333,73 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$resourceEvent->save();
 		}
 	}
-	
+		
 	private function _sendResourceNotification($wasNew){
 		
-		$url = GO::createExternalUrl('calendar', 'showEvent', array(array('values'=>array('event_id' => $this->id))));		
-		
-		$stmt = $this->calendar->group->admins();
-		while($user = $stmt->fetch()){
-			if($wasNew){
-				$body = sprintf(GO::t('resource_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
-								. $this->toHtml()
-								. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
-			
-				$subject = sprintf(GO::t('resource_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
-			}else
-			{
-				$body = sprintf(GO::t('resource_modified_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
-								. $this->toHtml()
-								. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
-			
-				$subject = sprintf(GO::t('resource_modified_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
-			}
-			
-			$message = GO_Base_Mail_Message::newInstance(
-								$subject
-								)->setFrom(GO::user()->email, GO::user()->name)
-								->addTo($user->email, $user->name);
+		if($this->hasModificationsForParticipants()){			
+			$url = GO::createExternalUrl('calendar', 'showEvent', array(array('values'=>array('event_id' => $this->id))));		
 
-			$message->setHtmlAlternateBody($body);					
-			
-			GO_Base_Mail_Mailer::newGoInstance()->send($message);
-		}
-		
-		if($this->user_id!=GO::user()->id){
-			//todo send update to user
-			
-			if($this->isModified('status')){
-				if($this->status=='ACCEPTED'){
-					$body = sprintf(GO::t('your_resource_accepted_mail_body','calendar'),$user->name,$this->calendar->name).'<br /><br />'
-								. $this->toHtml()
-								. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
-			
-					$subject = sprintf(GO::t('your_resource_accepted_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
+			$stmt = $this->calendar->group->admins();
+			while($user = $stmt->fetch()){
+				if($wasNew){
+					$body = sprintf(GO::t('resource_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
+									. $this->toHtml()
+									. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
+
+					$subject = sprintf(GO::t('resource_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
 				}else
 				{
-						$body = sprintf(GO::t('your_resource_declined_mail_body','calendar'),$user->name,$this->calendar->name).'<br /><br />'
+					$body = sprintf(GO::t('resource_modified_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
+									. $this->toHtml()
+									. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
+
+					$subject = sprintf(GO::t('resource_modified_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
+				}
+
+				$message = GO_Base_Mail_Message::newInstance(
+									$subject
+									)->setFrom(GO::user()->email, GO::user()->name)
+									->addTo($user->email, $user->name);
+
+				$message->setHtmlAlternateBody($body);					
+
+				GO_Base_Mail_Mailer::newGoInstance()->send($message);
+			}
+				
+			if($this->user_id!=GO::user()->id){
+				//todo send update to user
+				if($this->isModified('status')){				
+					if($this->status=='ACCEPTED'){
+						$body = sprintf(GO::t('your_resource_accepted_mail_body','calendar'),$user->name,$this->calendar->name).'<br /><br />'
+									. $this->toHtml()
+									. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
+
+						$subject = sprintf(GO::t('your_resource_accepted_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
+					}else
+					{
+							$body = sprintf(GO::t('your_resource_declined_mail_body','calendar'),$user->name,$this->calendar->name).'<br /><br />'
+									. $this->toHtml()
+									. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
+
+						$subject = sprintf(GO::t('your_resource_declined_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
+					}
+				}else
+				{
+					$body = sprintf(GO::t('your_resource_modified_mail_body','calendar'),$user->name,$this->calendar->name).'<br /><br />'
 								. $this->toHtml()
 								. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
-			
-					$subject = sprintf(GO::t('your_resource_declined_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
+					$subject = sprintf(GO::t('your_resource_modified_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
 				}
-			}else
-			{
-				$body = sprintf(GO::t('your_resource_modified_mail_body','calendar'),$user->name,$this->calendar->name).'<br /><br />'
-							. $this->toHtml()
-							. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
-				$subject = sprintf(GO::t('your_resource_modified_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
-			}
-			
-			$message = GO_Base_Mail_Message::newInstance(
-								$subject
-								)->setFrom(GO::user()->email, GO::user()->name)
-								->addTo($this->user->email, $this->user->name);
 
-			$message->setHtmlAlternateBody($body);					
-			
-			GO_Base_Mail_Mailer::newGoInstance()->send($message);
+				$message = GO_Base_Mail_Message::newInstance(
+									$subject
+									)->setFrom(GO::user()->email, GO::user()->name)
+									->addTo($this->user->email, $this->user->name);
+
+				$message->setHtmlAlternateBody($body);					
+
+				GO_Base_Mail_Mailer::newGoInstance()->send($message);
+			}
 		}
 	}
 
@@ -428,16 +439,18 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @param int $periodStartTime
 	 * @param int $periodEndTime
 	 * @param boolean $onlyBusyEvents
-	 * @return GO_Calendar_Model_Event[] 
+	 * @return GO_Base_Db_ActiveStatement
 	 */
 	public function findForPeriod($findParams, $periodStartTime, $periodEndTime=0, $onlyBusyEvents=false){
 		if (!$findParams)
 			$findParams = GO_Base_Db_FindParams::newInstance();
 
-		$findParams->order('start_time', 'ASC');
+		$findParams->order('start_time', 'ASC')->debugSql();
 		
-		if($periodEndTime)
-			$findParams->getCriteria()->addCondition('start_time', $periodEndTime, '<');
+//		if($periodEndTime)
+//			$findParams->getCriteria()->addCondition('start_time', $periodEndTime, '<');
+		
+		$findParams->getCriteria()->addModel(GO_Calendar_Model_Event::model(), "t");
 		
 		if ($onlyBusyEvents)
 			$findParams->getCriteria()->addCondition('busy', 1);
@@ -604,6 +617,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$html .= '<tr><td style="vertical-align:top">' . GO::t('location', 'calendar') . ':</td>' .
 							'<td>' . GO_Base_Util_String::text_to_html($this->location) . '</td></tr>';
 		}
+		
+		if(!empty($this->description)){
+			$html .= '<tr><td style="vertical-align:top">' . GO::t('strDescription') . ':</td>' .
+							'<td>' . GO_Base_Util_String::text_to_html($this->description) . '</td></tr>';
+		}
 
 		//don't calculate timezone offset for all day events
 //		$timezone_offset_string = GO_Base_Util_Date::get_timezone_offset($this->start_time);
@@ -699,12 +717,14 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		
 		$dtstart = new Sabre_VObject_Element_DateTime('dtstart',$dateType);
-		$dtstart->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->start_time));		
+		$dtstart->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->start_time), $dateType);		
 		//$dtstart->offsetUnset('VALUE');
 		$e->add($dtstart);
 		
+		$end_time = $this->all_day_event ? $this->end_time+60 : $this->end_time;
+		
 		$dtend = new Sabre_VObject_Element_DateTime('dtend',$dateType);
-		$dtend->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->end_time));		
+		$dtend->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($end_time), $dateType);		
 		//$dtend->offsetUnset('VALUE');
 		$e->add($dtend);
 
@@ -715,7 +735,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$e->location=$this->location;
 
 		if(!empty($this->rrule)){
-			$e->rrule=str_replace('RRULE:','',$this->rrule);					
+			
+			$rRule = new GO_Base_Util_Icalendar_Rrule();
+			$rRule->readIcalendarRruleString($this->start_time, $this->rrule);
+			
+			$e->rrule=str_replace('RRULE:','',$rRule->createRrule());					
 			$stmt = $this->exceptions(GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('exception_event_id', 0)));
 			while($exception = $stmt->fetch()){
 				$exdate = new Sabre_VObject_Element_DateTime('exdate',Sabre_VObject_Element_DateTime::DATE);
@@ -749,6 +773,23 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		
 		//todo alarms
+		
+		if($this->reminder>0){
+//			BEGIN:VALARM
+//ACTION:DISPLAY
+//TRIGGER;VALUE=DURATION:-PT5M
+//DESCRIPTION:Default Mozilla Description
+//END:VALARM
+			$a=new Sabre_VObject_Component('valarm');
+			$a->action='DISPLAY';
+			$trigger = new Sabre_VObject_Property('trigger','-PT'.($this->reminder/60).'M');
+			$trigger['VALUE']='DURATION';
+			$a->add($trigger);
+			$a->description="Default description";
+			
+			$e->add($a);
+			
+		}
 		
 		return $e;
 	}
@@ -901,6 +942,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			}
 			
 		}
+		
+		if($vobject->valarm){
+			$reminderTime = $vobject->valarm->getEffectiveTriggerTime();
+			//echo $reminderTime->format('c');
+			$this->reminder = $this->start_time-$reminderTime->format('U');
+		}
 
 		$this->save();
 		
@@ -923,6 +970,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$this->addException($dt->format('U'));
 			}
 		}
+		
+		
 
 		return $this;
 	}	

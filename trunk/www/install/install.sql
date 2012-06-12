@@ -21,8 +21,11 @@ CREATE TABLE IF NOT EXISTS `go_acl` (
   `user_id` int(11) NOT NULL DEFAULT '0',
   `group_id` int(11) NOT NULL DEFAULT '0',
   `level` tinyint(4) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`acl_id`,`user_id`,`group_id`)
+  PRIMARY KEY (`acl_id`,`user_id`,`group_id`),
+  KEY `acl_id` (`acl_id`,`user_id`),
+  KEY `acl_id_2` (`acl_id`,`group_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 
 -- --------------------------------------------------------
 
@@ -168,15 +171,15 @@ CREATE TABLE IF NOT EXISTS `go_link_descriptions` (
 
 DROP TABLE IF EXISTS `go_link_folders`;
 CREATE TABLE IF NOT EXISTS `go_link_folders` (
-  `id` int(11) NOT NULL,
-  `parent_id` int(11) NOT NULL,
-  `link_id` int(11) NOT NULL,
-  `link_type` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11)  NOT NULL DEFAULT '0',
+  `model_id` int(11)  NOT NULL DEFAULT '0',
+  `model_type_id` int(11)  NOT NULL DEFAULT '0',
   `name` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `link_id` (`link_id`,`link_type`),
+  KEY `link_id` (`model_id`,`model_type_id`),
   KEY `parent_id` (`parent_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -313,12 +316,14 @@ CREATE TABLE IF NOT EXISTS `go_search_cache` (
   `description` varchar(255) NOT NULL DEFAULT '',
   `model_type_id` int(11) NOT NULL DEFAULT '0',
   `model_name` varchar(100) DEFAULT NULL,
-  `keywords` text,
+  `keywords` varchar(255) NOT NULL DEFAULT '',
   `mtime` int(11) NOT NULL DEFAULT '0',
   `acl_id` int(11) NOT NULL,
   `type` varchar(20) NOT NULL,
   PRIMARY KEY (`model_id`,`model_type_id`),
-  KEY `name` (`name`)
+  KEY `acl_id` (`acl_id`),
+  FULLTEXT KEY `ft_keywords` (`name`,`keywords`),
+	INDEX name( `name` )
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -430,7 +435,7 @@ CREATE TABLE IF NOT EXISTS `go_advanced_searches` (
 	`name` VARCHAR(255) NOT NULL DEFAULT '',
 	`user_id` int(11) NOT NULL DEFAULT '0',
 	`acl_id` int(11) NOT NULL DEFAULT '0',
-	`data` TEXT NULL DEFAULT '',
+	`data` TEXT NULL,
 	`model_name` VARCHAR(100) NOT NULL DEFAULT '',
 	PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

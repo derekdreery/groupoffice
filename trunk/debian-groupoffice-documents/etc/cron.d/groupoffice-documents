@@ -1,1 +1,1 @@
-0 1 * * * root /usr/bin/php /usr/share/groupofficecli.php -c=/etc/groupoffice/config.php -r=filesearch/filesearch/sync > /dev/null
+0 1 * * * root /usr/bin/php /usr/share/groupoffice/groupofficecli.php -c=/etc/groupoffice/config.php -r=filesearch/filesearch/sync > /dev/null

@@ -268,6 +268,10 @@ abstract class GO_Base_Fs_Base{
 		if(empty($filename)){
 			$filename = 'unnamed';
 		}
+		
+		if(GO::config()->convert_utf8_filenames_to_ascii)
+			$filename = GO_Base_Util_String::utf8ToASCII($filename);
+		
 		return $filename;
 	}
 	

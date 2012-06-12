@@ -20,13 +20,26 @@
 
 class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	
+	
+	private static $_allowDeletes=true;
+	
 	/**
 	 * Set this to false if you want to make sure no files are deleted
 	 * in a script. If a file is deleted
 	 * 
-	 * @var boolean
+	 * @param boolean
+	 * @return boolean old value
 	 */
-	public static $allowDeletes=true;
+	public static function setAllowDeletes($allowDeletes){
+		
+//		GO::debugCalledFrom();
+//		GO::debug("Allowed deletes is ".($allowedDeletes ? "true" : "false"));
+		
+		$old = self::$_allowDeletes;
+		self::$_allowDeletes=$allowDeletes;
+		
+		return $old;
+	}
 	
 	/**
 	 * Get a unique temporary file.
@@ -104,7 +117,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		if(!file_exists($this->path))
 			return true;
 		
-		if(GO_Base_Fs_File::$allowDeletes)		
+		if(self::$_allowDeletes)		
 			return unlink($this->path);
 		else{
 			$errorMsg = "The program tried to delete a file (".$this->stripFileStoragePath().") while GO_Base_Fs_File::\$allowDeletes is set to false.";
@@ -288,8 +301,26 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	/**
 	 * Output the contents of this file to standard out (browser).
 	 */
-	public function output(){
-		readfile($this->path());
+	public function output() {
+		@ob_clean();
+		@flush();
+
+		//readfile somehow caused a memory exhausted error. This stopped when I added 
+		//ob_clean and flush above, but the browser hung with presenting the download 
+		//dialog until the entire download was completed.
+		//The code below seems to work better.
+		//
+		//readfile($this->path());
+		
+		$handle = fopen($this->path(), "rb");
+
+		if (!is_resource($handle))
+			throw new Exception("Could not read file");
+		
+		while (!feof($handle)) {
+			echo fread($handle, 1024);
+			flush();
+		}
 	}
 	
 	/**
@@ -315,6 +346,9 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		}
 		
 		if($isUploadedFile){
+			if(!is_uploaded_file($this->path()))
+				return false;
+			
 			if(move_uploaded_file($this->path(), $newPath)){
 				$this->path = $newPath;
 				return true;

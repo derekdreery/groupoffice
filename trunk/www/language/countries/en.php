@@ -242,3 +242,4 @@ $l['KP'] = 'Korea, Democratic people\'s republic of';
 $l['KR'] = 'Korea, Republic of';
 $l['RS'] = 'Republic of Serbia';
 $l['ME'] = 'Republic of Montenegro';
+$l['CI']='Canary Islands';

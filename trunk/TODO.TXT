@@ -1,21 +1,24 @@
+Import matching dialog
+
+resize vcard photo's
+
+Add max_file_storage setting to servermanager
+
 Notifications on uploads (Michal)
 
-carddav
+recurly (simon zimmo) (Wilmar)
 
-Profile tab in settings dialog
+Koba
+
+Settings module (Michael)
+
+LDAP Sync
 
 Calendar:
 Distinguish declined and cancel	led events in grid.
-alarm import
-test invitation sending with moving in grid
 
-postfixadmin installation
 
-Grid scroll behouden bij reload
-
-CMS compatible
-
-Export projecten en billing
+CMS compatible (Wilmar)
 
 Module icons
 
@@ -32,6 +35,8 @@ Group-Office 100 users 600 euro, 150 users 700 euro etc.
 
 Save all attachments.
 
+Twinfield
+VOIP
 
 LIST-STATUS gebruiken bij email
 TLS email

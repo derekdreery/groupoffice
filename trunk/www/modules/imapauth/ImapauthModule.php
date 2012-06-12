@@ -68,6 +68,8 @@ class GO_Imapauth_ImapauthModule extends GO_Base_Module {
 								$user->addToGroups($ia->config['groups']);
 							
 							$ia->user = $user;
+							
+							$user->checkDefaultModels();
 
 							$ia->createEmailAccount($user, $ia->config, $ia->imapUsername, $ia->imapPassword);
 						} catch (Exception $e) {

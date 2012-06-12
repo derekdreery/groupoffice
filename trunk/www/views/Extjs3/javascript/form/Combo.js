@@ -56,6 +56,13 @@ GO.form.ComboBox = Ext.extend(Ext.form.ComboBox, {
 			}]);
 
 			var recordData = {};
+			
+			if(this.store.fields && this.store.fields.keys){
+				for(var i=0;i<this.store.fields.keys.length;i++){
+					recordData[this.store.fields.keys[i]]="";
+				}
+			}
+			
 			recordData[this.valueField]=this.value;
 			recordData[this.displayField]=text;
 

@@ -24,6 +24,16 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 				$response['deleteFeedback']=$e->getMessage();
 			}
 		}
+		
+		//search query is required
+		if(empty($params["query"])){
+			return false;
+		}else
+		{
+			//we'll do a full text search in getStoreParams			
+			$params['match']=$params["query"];
+			unset($params["query"]);
+		}
 	
 		
 		return parent::beforeStore($response, $params, $store);
@@ -31,7 +41,8 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 	
 	protected function getStoreParams($params) {
 		$storeParams = GO_Base_Db_FindParams::newInstance()
-						->select('t.*');
+						->select('t.*')
+						->debugSql();
 		
 		if(isset($params['model_names'])){
 			$model_names = json_decode($params['model_names'], true);
@@ -43,12 +54,51 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 			$storeParams->getCriteria()->addInCondition('model_type_id', $types);
 		}
 		
-		if(isset($params['types'])){
-			$types = json_decode($params['types'], true);
-			if(count($types))
-				$storeParams->getCriteria()->addInCondition('model_type_id', $types);
-		}
+		if(!empty($params['type_filter'])) {
+			if(isset($params['types'])) {
+				$types= json_decode($params['types'], true);
+				//only search for available types. eg. don't search for contacts if the user doesn't have access to the addressbook
+				if(empty($types)){
+					$types=$this->_getAllModelTypes();
+				}
+				if(!isset($params['no_filter_save']))
+					GO::config()->save_setting ('link_type_filter', implode(',',$types), GO::user()->id);
+			}else {
+				$types = GO::config()->get_setting('link_type_filter', GO::user()->id);
+				$types = empty($types) ? array() : explode(',', $types);	
+			}
+		}else
+		{
+			$types=$this->_getAllModelTypes();
+		}		
+		
+		$storeParams->getCriteria()->addInCondition('model_type_id', $types);
+		
+		
+		//if (!empty($matchQuery))
+		
+		
+		$str='+'.preg_replace('/[\s]+/',' +', $params['match']);
+		//$str=str_replace('-','*',$str);
+		//throw new Exception($str);
+		
+		$storeParams->getCriteria()->addMatchCondition(array('name','keywords'), $str);
+		$storeParams->getCriteria()->addCondition('name', preg_replace('/[\s]+/','%',$params['match']).'%', 'LIKE');
+		
 		return $storeParams;
+	}
+	
+	private function _getAllModelTypes(){
+		$types=array();
+		$stmt = GO_Base_Model_ModelType::model()->find();
+		while($modelType = $stmt->fetch()){
+			$model = GO::getModel($modelType->model_name);
+			$module = $modelType->model_name == "GO_Base_Model_User" ? "users" : $model->module;
+			if(GO::modules()->{$module})
+				$types[]=$modelType->id;
+		}
+		return $types;
+
 	}
 	
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
@@ -62,10 +112,17 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		
 		$stmt = GO_Base_Model_ModelType::model()->find();
 		
+		$typesString = GO::config()->get_setting('link_type_filter',GO::user()->id);
+		$typesArr = explode(',',$typesString);
+		
 		$types=array();
 		while($modelType = $stmt->fetch()){
 			$model = GO::getModel($modelType->model_name);
-			$types[$model->localizedName]=array('id'=>$modelType->id, 'model_name'=>$modelType->model_name, 'name'=>$model->localizedName);
+			
+			$module = $modelType->model_name == "GO_Base_Model_User" ? "users" : $model->module;
+			
+			if(GO::modules()->{$module})
+				$types[$model->localizedName]=array('id'=>$modelType->id, 'model_name'=>$modelType->model_name, 'name'=>$model->localizedName, 'checked'=>in_array($modelType->id,$typesArr));
 		}
 		
 		ksort($types);
@@ -112,6 +169,9 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 //		}
 		
 		$storeParams = $store->getDefaultParams($params);
+		
+		//if(!empty($params['folder_id']))
+		$storeParams->getCriteria ()->addCondition ('folder_id', $params['folder_id'],'=','l');
 		
 		if(isset($params['types'])){
 			$types = json_decode($params['types'], true);

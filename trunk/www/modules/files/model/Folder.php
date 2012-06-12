@@ -118,10 +118,20 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * @return string 
 	 */
 	protected function getPath($forceResolve=false) {
+				
 		if($forceResolve || !isset($this->_path)){
 			$this->_path = $this->name;
 			$currentFolder = $this;
-			while ($currentFolder = $currentFolder->parent) {
+			
+			$ids=array($this->id);
+			
+			while ($currentFolder = $currentFolder->parent) {				
+				
+				if(in_array($currentFolder->id, $ids))
+					throw new Exception("Infinite folder loop detected in ".$this->_path." ".implode(",", $ids));
+				else
+					$ids[]=$currentFolder->id;
+				
 				$this->_path = $currentFolder->name . '/' . $this->_path;
 			}
 		}
@@ -131,6 +141,10 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	public function getFolderIdsInPath($folder_id){
 		$ids=array();
 		$currentFolder = GO_Files_Model_Folder::model()->findByPk($folder_id);
+		
+		if(!$currentFolder)
+			return $ids;
+		
 		while ($currentFolder = $currentFolder->parent) {
 			$ids[] = $currentFolder->id;
 		}	
@@ -141,7 +155,28 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		return new GO_Base_Fs_Folder(GO::config()->file_storage_path . $this->path);
 	}
 	
+	
+	private function _checkParentId(){
+		if($this->isModified("parent_id")){
+			$ids=array($this->id);
+			
+			$currentFolder=$this;
+			
+			while ($currentFolder = $currentFolder->parent) {				
+				if(in_array($currentFolder->id, $ids)){					
+					$this->setValidationError ("parent_id", "Can not move folder into this folder because it's a child");
+					break;
+				}
+			}
+			
+			//throw new Exception("test");
+		}
+	}
+	
 	public function validate() {
+		
+		$this->_checkParentId();
+		
 		if($this->parent_id==0){
 			//top level folders are readonly to everyone.
 			$this->readonly=1;
@@ -172,6 +207,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			
 			$this->fsFolder->create();
 			
+
 			//sync parent timestamp
 			if($this->parent){
 				$this->parent->mtime=$this->parent->fsFolder->mtime();
@@ -242,6 +278,13 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 				}
 			}
 		}
+		
+		//sync parent timestamp
+		if($this->parent){
+//				$this->parent->mtime=$this->parent->fsFolder->mtime();
+//				$this->parent->save();			
+			$this->parent->touch();
+		}
 
 		return parent::afterSave($wasNew);
 	}
@@ -310,8 +353,9 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 				$folder->save();					
 			}elseif(!empty($autoCreateAttributes))
 			{
-				$folder->setAttributes($autoCreateAttributes);
-				$folder->save();	
+				//should not apply it to existing folders. this leads to unexpected results.
+//				$folder->setAttributes($autoCreateAttributes);
+//				$folder->save();	
 			}
 
 			$parent_id = $folder->id;
@@ -353,7 +397,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		if($this->isNew)
 			return false;
 		
-		return $this->parent->name=='users' && $this->parent->parent_id==0;
+		return $this->parent && $this->parent->name=='users' && $this->parent->parent_id==0;
 	}
 
 	
@@ -450,7 +494,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			
 
 			foreach ($items as $item) {
-				GO::debug("FS SYNC: Adding fs ".$item->name()." to database");
+				//GO::debug("FS SYNC: Adding fs ".$item->name()." to database");
 				if ($item->isFile()) {
 					$file = $this->hasFile($item->name());
 					
@@ -477,15 +521,26 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		
 		$stmt= $this->folders();
 		while($folder = $stmt->fetch()){
-			if(!$folder->fsFolder->exists())
-				$folder->delete();
+			try{
+				if(!$folder->fsFolder->exists())
+					$folder->delete();
+			}catch(Exception $e){
+				echo $e->getMessage()."\n";
+			}
 		}
 		
 		$stmt= $this->files();
 		while($file = $stmt->fetch()){
-			if(!$file->fsFile->exists())
-				$file->delete();
+			try{
+				if(!$file->fsFile->exists())
+					$file->delete();
+			}catch(Exception $e){
+				echo $e->getMessage()."\n";
+			}
 		}
+		
+		$this->mtime=$this->fsFolder->mtime();
+		$this->save();
 		
 		GO::$disableModelCache=$oldCache;
 	}
@@ -504,8 +559,8 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		if($this->mtime < $this->fsFolder->mtime()){
 			GO::debug("Filesystem folder ".$this->path." is not in sync with database. Will sync now.");
 			$this->syncFilesystem ();
-			$this->mtime=$this->fsFolder->mtime();
-			$this->save();
+//			$this->mtime=$this->fsFolder->mtime();
+//			$this->save();
 		}
 	}
 	
@@ -686,11 +741,13 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @return GO_Base_Db_ActiveStatement 
 	 */
-	public function getSubFolders($findParams=false){			
+	public function getSubFolders($findParams=false, $noGrouping=false){			
 			if(!$findParams)
 				$findParams=GO_Base_Db_FindParams::newInstance();
 			
 			$findParams->ignoreAcl(); //We'll build a special acl check for folders that inherit permissions here.
+			
+			$findParams->debugSql();
 			
 			$aclJoinCriteria = GO_Base_Db_FindCriteria::newInstance()
 							->addRawCondition('a.acl_id', 't.acl_id','=', false);
@@ -707,9 +764,14 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 									->addCondition('parent_id', $this->id)
 									->mergeWith($aclWhereCriteria));
 			
-			$findParams->group(array('t.id'));
+			if(!$noGrouping)
+				$findParams->group(array('t.id'));
 		
 			return GO_Files_Model_Folder::model()->find($findParams);
+	}
+	
+	public function hasChildren(){
+		return $this->getSubFolders(GO_Base_Db_FindParams::newInstance()->single(), true);
 	}
 	
 	/**
@@ -798,23 +860,32 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		
 		return GO_Files_Model_Folder::model()->find($findParams);
 		
-//		//sort by path and only list top level shares
-//		$shares = array();
-//		while($folder = $stmt->fetch())
-//		{
-//			$shares[$folder->path]=$folder;
-//		}
-//		ksort($shares);
-//		
-//		$response=array();
-//		foreach($shares as $path=>$folder){
-//			$isSubDir = isset($lastFolder) && $folder->isSubFolderOf($lastFolder);
-//			
-//			if(!$isSubDir)
-//				$response[]=$folder;
-//			$lastFolder=$folder;
-//		}
-//		
-//		return $response;
+		
+	}
+	
+	public function getTopLevelShares($findParams=false){
+		
+		$stmt = $this->findShares($findParams);
+		//sort by path and only list top level shares
+		$shares = array();
+		while ($folder = $stmt->fetch()) {
+			$folder->checkFsSync();
+			
+			//sort by path and only list top level shares		
+			$shares[$folder->path]=$folder;
+		}
+		ksort($shares);
+		
+		$response=array();
+		foreach($shares as $path=>$folder){
+			$isSubDir = isset($lastPath) && strpos($path.'/', $lastPath.'/')===0;
+			
+			if(!$isSubDir){
+				$response[]=$folder;			
+				$lastPath=$path;
+			}
+		}
+		
+		return $response;
 	}
 }

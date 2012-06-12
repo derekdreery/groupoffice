@@ -17,7 +17,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		
 		$response['data']['locked_user_name']=$model->lockedByUser ? $model->lockedByUser->name : '';
 		$response['data']['locked']=$model->isLocked();
-		$response['data']['unlock_allowed']=(!$model->isLocked() || GO::user()->isAdmin()) && $model->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION);
+		$response['data']['unlock_allowed']=$model->unlockAllowed();
 		
 
 		if (!empty($model->random_code) && time() < $model->expire_time) {
@@ -40,7 +40,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 					$filesearch = GO_Filesearch_Model_Filesearch::model()->createFromFile($model);
 				}
 
-				$response['data']=array_merge($response['data'],$filesearch->getAttributes('formatted'));
+				$response['data']=array_merge($filesearch->getAttributes('formatted'), $response['data']);
 
 				if (!empty($params['query_params'])) {
 					$qp = json_decode($params['query_params'], true);
@@ -69,10 +69,20 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		$response['data']['extension'] = $model->fsFile->extension();
 		$response['data']['type'] = GO::t($model->fsFile->extension(), 'base', 'filetypes');
 		
+		$response['data']['name']=$model->fsFile->nameWithoutExtension();
+		
 		if (GO::modules()->customfields)
 			$response['customfields'] = GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Files_Model_File", $model->folder_id);
 
 		return parent::afterLoad($response, $model, $params);
+	}
+	
+	protected function beforeSubmit(&$response, &$model, &$params) {
+		
+		if(isset($params['name']))		
+			$params['name'].='.'.$model->fsFile->extension();		
+		
+		return parent::beforeSubmit($response, $model, $params);
 	}
 
 	protected function actionDownload($params) {

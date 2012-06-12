@@ -7,6 +7,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	
 	protected function actionSyncFilesystem($params){
 		
+		$oldAllowDeletes = GO_Base_Fs_File::setAllowedDeletes(false);
 		
 		GO::$ignoreAclPermissions=true; //allow this script access to all
 		GO::$disableModelCache=true; //for less memory usage
@@ -26,7 +27,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		
 		echo "Done\n";
 		
-		
+		GO_Base_Fs_File::setAllowedDeletes($oldAllowDeletes);
 //		$folders = array('billing','email');	
 //		
 //		foreach($folders as $name){
@@ -41,10 +42,21 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	
 	private function _getExpandFolderIds($params){
 		$expandFolderIds=array();
-		if(!empty($params['expand_folder_id'])) {
+		if(!empty($params['expand_folder_id']) && $params['expand_folder_id']!='shared') {
 			$expandFolderIds=  GO_Files_Model_Folder::model()->getFolderIdsInPath($params['expand_folder_id']);
 		}
 		return $expandFolderIds;
+	}
+	
+	private function _buildSharedTree($expandFolderIds){
+		$response=array();
+		$shares =GO_Files_Model_Folder::model()->getTopLevelShares(GO_Base_Db_FindParams::newInstance()->limit(100));
+		foreach($shares as $folder){
+			$response[]=$this->_folderToNode($folder, $expandFolderIds, false);	
+		}
+		
+		return $response;
+
 	}
 	
 
@@ -71,12 +83,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		switch ($params['node']) {
 			case 'shared':
-				$stmt = GO_Files_Model_Folder::model()->findShares(GO_Base_Db_FindParams::newInstance()->limit(100));
-				while ($folder = $stmt->fetch()) {
-					$folder->checkFsSync();
-					
-					$response[] = $this->_folderToNode($folder, $expandFolderIds, false);
-				}
+				$response=$this->_buildSharedTree($expandFolderIds);
 				break;
 			case 'root':
 				if (!empty($params['root_folder_id'])) {
@@ -173,9 +180,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				$node['children'][] = $this->_folderToNode($subfolder, $expandFolderIds, false);
 			}
 		} else {
-			//check if folder has subfolders
-			$firstSubfolder = $folder->getSubFolders(GO_Base_Db_FindParams::newInstance()->single());
-			if (!$firstSubfolder) {
+			if (!$folder->hasChildren()) {
 				//it doesn't habe any subfolders so instruct the client about this
 				//so it can present the node as a leaf.
 				$node['children'] = array();
@@ -204,6 +209,9 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				$model->acl_id = $response['acl_id'] = 0;
 			}
 		}
+		
+		if(!empty($params['name']) && GO::config()->convert_utf8_filenames_to_ascii)
+			$params['name']=GO_Base_Util_String::utf8ToASCII ($params['name']);
 
 		return parent::beforeSubmit($response, $model, $params);
 	}
@@ -376,18 +384,27 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 	private function _listShares($params) {
 
-		$store = GO_Base_Data_Store::newInstance(GO_Files_Model_Folder::model());
-		
-		//set sort aliases
-		$store->getColumnModel()->formatColumn('type', '$model->type',array(),'name');
-		$store->getColumnModel()->formatColumn('size', '"-"',array(),'name');
-		
-		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatListRecord'));
-		$findParams = $store->getDefaultParams($params);
-		$stmt = GO_Files_Model_Folder::model()->findShares($findParams);
-		$store->setStatement($stmt);
-
-		return $store->getData();
+		//$store = GO_Base_Data_Store::newInstance(GO_Files_Model_Folder::model());
+//		
+//		//set sort aliases
+//		$store->getColumnModel()->formatColumn('type', '$model->type',array(),'name');
+//		$store->getColumnModel()->formatColumn('size', '"-"',array(),'name');
+//		
+//		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatListRecord'));
+//		$findParams = $store->getDefaultParams($params);
+//		$stmt = GO_Files_Model_Folder::model()->findShares($findParams);
+//		$store->setStatement($stmt);
+//
+//		$response = $store->getData();
+		$response['permission_level']=GO_Base_Model_Acl::READ_PERMISSION;
+		$response['results']=array();
+		$shares =GO_Files_Model_Folder::model()->getTopLevelShares(GO_Base_Db_FindParams::newInstance()->limit(100));
+		foreach($shares as $folder){
+			$record=$folder->getAttributes("html");
+			$record = $this->formatListRecord($record, $folder, false);
+			$response['results'][]=$record;
+		}
+		return $response;
 	}
 	
 	private $_listFolderPermissionLevel;
@@ -405,6 +422,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		$this->_listFolderPermissionLevel=$folder->permissionLevel;
 		
+		$response['permission_level']=$folder->permissionLevel;//$folder->readonly ? GO_Base_Model_Acl::READ_PERMISSION : $folder->permissionLevel;
+		
 		$folder->checkFsSync();
 
 		//useful information for the view.
@@ -421,19 +440,18 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		
 		//locked state
 		$response['lock_state']=!empty($folder->apply_state);
-		$response['cm_state']=isset($folder->cm_state)?$folder->cm_state:"";
+		$response['cm_state']=isset($folder->cm_state) && !empty($folder->apply_state) ? $folder->cm_state : "";
 		$response['may_apply_state']=GO_Base_Model_Acl::hasPermission($folder->getPermissionLevel(), GO_Base_Model_Acl::MANAGE_PERMISSION);
 
-		
-		if($response["lock_state"]){
-			$state = json_decode($response["cm_state"]);
-			
-			if(isset($state->sort)){
-				$params['sort']=$state->sort->field;
-				$params['dir']=$state->sort->direction;
-			}
-		}
-		
+//		if($response["lock_state"]){
+//			$state = json_decode($response["cm_state"]);
+//
+//			if(isset($state->sort)){
+//				$params['sort']=$state->sort->field;
+//				$params['dir']=$state->sort->direction;
+//			}
+//		}
+
 
 		$store = GO_Base_Data_Store::newInstance(GO_Files_Model_Folder::model());
 
@@ -503,6 +521,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$store->getColumnModel()->formatColumn('folder_id', '$model->folder_id');
 			
 			$findParams = $store->getDefaultParams($params)
+							->debugSql()
 							->limit($fileLimit)
 							->start($fileStart);
 
@@ -514,14 +533,10 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$response['total']+=$filesResponse['total'];
 			$response['results'] = array_merge($response['results'], $filesResponse['results']);
 		} else {
-			$record = $folder->files(array(
-					'single' => true,
-					'fields' => 'count(*) as total'
-							));
-			$response['total']+=$record['total'];
+			$record = $folder->files(GO_Base_Db_FindParams::newInstance()->single()->select('count(*) as total'));
+			$response['total']+=$record->total;
 		}
-
-
+		
 		return $response;
 	}
 
@@ -540,6 +555,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$record['extension'] = $model->extension;
 			$record['size']=$model->size;
 			$record['permission_level']=$this->_listFolderPermissionLevel;
+			$record['unlock_allowed']=$model->unlockAllowed();
 		}
 		$record['thumb_url'] = $model->thumbURL;
 
@@ -548,7 +564,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 	private function _checkExistingModelFolder($model, $folder, $mustExist=false) {
 		
-		GO::debug("Check existing model folder ".$model->className()."(ID:".$model->id." Folder ID: ".$folder->id.")");
+		GO::debug("Check existing model folder ".$model->className()."(ID:".$model->id." Folder ID: ".$folder->id." ACL ID: ".$model->findAclId().")");
 
 		if(!$folder->fsFolder->exists())
 		{
@@ -580,7 +596,11 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$currentPath = $folder->path;
 		$newPath = $model->buildFilesPath();	
 		
+		if(!$newPath)
+			return false;
+		
 		if(GO::router()->getControllerAction()=='checkdatabase'){
+			//Always ensure folder exists on check database
 			$destinationFolder = GO_Files_Model_Folder::model()->findByPath(
 							dirname($newPath), true, array('acl_id'=>$model->findAclId(),'readonly'=>1));
 		}
@@ -705,8 +725,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	}
 
 	public function checkModelFolder(GO_Base_Db_ActiveRecord $model, $saveModel=false, $mustExist=false) {
-		$oldAllowDeletes = GO_Base_Fs_File::$allowDeletes;
-		GO_Base_Fs_File::$allowDeletes=false;
+		$oldAllowDeletes = GO_Base_Fs_File::setAllowDeletes(false);
 		
 		$folder = false;
 		if ($model->files_folder_id > 0)
@@ -731,7 +750,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		if(empty($model->files_folder_id))
 			$model->files_folder_id=0;
 		
-		GO_Base_Fs_File::$allowDeletes=$oldAllowDeletes;
+		 GO_Base_Fs_File::setAllowDeletes($oldAllowDeletes);
 		
 		return $model->files_folder_id;
 	}
@@ -908,5 +927,51 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				}
 			}
 		}
+	}
+	
+	
+	protected function actionImages($params){
+		if(isset($params["id"])){
+			$currentFile = GO_Files_Model_File::model()->findByPk($params["id"]);			
+		}else
+		{
+			$currentFile = GO_Files_Model_File::model()->findByPath($params["path"]);			
+		}
+		
+		$folder = $currentFile->folder();
+		
+		$thumbParams = json_decode($params['thumbParams'], true);
+		
+		$response["success"]=true;
+		$response['images']=array();
+		$response['index']=$index=0;
+		
+		if(!isset($params["sort"]))
+			$params["sort"]="name";
+		
+		if(!isset($params["dir"]))
+			$params["dir"]="ASC";
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->debugSql()
+						->order($params["sort"], $params["dir"]);
+		
+		$stmt = $folder->files($findParams);
+		while($file = $stmt->fetch()){
+			if($file->isImage()){
+				if($file->id == $currentFile->id)
+					$response['index']=$index;
+
+				$index++;
+
+				$response['images'][]=array(
+					"name"=>$file->name,
+					"download_path"=>$file->downloadUrl,
+					"src"=>$file->getThumbUrl($thumbParams)
+				);
+			}
+		}
+		
+		return $response;
 	}
 }

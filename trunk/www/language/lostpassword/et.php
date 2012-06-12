@@ -8,7 +8,9 @@ $l['lost_password_subject']='Uue parooli palve';
 $l['lost_password_body']='%s,
 Sinu palutud uus parool %s. Sinu kasutajanimi on "%s".
 parooli vahetamiseks vajuta all olevale lingile (või kopeeri see brauseri aadressireale):
-%s;
+
+%s
+
 Juhul, kui sa parooli vahetamist ei palunud, siis kustuta see e-kiri';
 $l['lost_password_error']='Pakutud e-posti aadressi ei leitud.';
 $l['lost_password_success']='Juhenditega e-kiri saadeti sinu näidatud aadressile.';

@@ -7,11 +7,16 @@
 class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractController {
 	
 	protected function allowGuests() {
-		return array('upgrade','checkdatabase','servermanagerreport');
+		return array('upgrade','checkdatabase','servermanagerreport','test');
 	}
 	
 	//don't check token in this controller
 	protected function checkSecurityToken(){}
+	
+
+	protected function actionTest($params) {
+		
+	}
 
 	protected function init() {
 		GO::$disableModelCache=true; //for less memory usage
@@ -124,6 +129,15 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		if(empty($params['keepexisting']))
 			GO::getDbConnection()->query('TRUNCATE TABLE go_search_cache');
+		
+		//inserting is much faster without full text index. It's faster to add it again afterwards.
+		echo "Dropping full text search index\n";
+		try{
+			GO::getDbConnection()->query("ALTER TABLE go_search_cache DROP INDEX ft_keywords");
+		}catch(Exception $e){
+			echo $e->getMessage()."\n";
+		}
+		
 		if(!headers_sent())
 			header('Content-Type: text/plain; charset=UTF-8');
 		
@@ -138,6 +152,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		GO::modules()->callModuleMethod('buildSearchCache', array(&$response));
 		
+		echo "Adding full text search index\n";
+		GO::getDbConnection()->query("ALTER TABLE `go_search_cache` ADD FULLTEXT ft_keywords(`name` ,`keywords`);");
 		
 		echo "\n\nAll done!\n\n";
 	}
@@ -149,7 +165,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	protected function actionCheckDatabase($params) {
 		$response = array();
 		
-		GO_Base_Fs_File::$allowDeletes=false;
+		$oldAllowDeletes = GO_Base_Fs_File::setAllowDeletes(false);
 				
 		if(!headers_sent())
 			header('Content-Type: text/plain; charset=UTF-8');
@@ -171,7 +187,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		echo "All Done!\n";
 		
-		GO_Base_Fs_File::$allowDeletes=true;
+		GO_Base_Fs_File::setAllowDeletes($oldAllowDeletes);
 		
 		return $response;
 	}
@@ -240,6 +256,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	}
 	
 	protected function actionUpgrade($params) {
+		
+		GO::clearCache();
 				
 		//don't be strict in upgrade process
 		GO::getDbConnection()->query("SET sql_mode=''");
@@ -348,6 +366,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 							if (!file_exists($updateScript)) {
 								die($updateScript . ' not found!');
 							}
+							
 							//if(!$quiet)
 							echo 'Running ' . $updateScript . "\n";
 							if (empty($params['test']))
@@ -397,20 +416,22 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			echo "Ran in test mode\n";
 		}
 		
-		echo "Removing cached javascripts...\n\n";		
+		echo "Removing cached javascripts...\n\n";	
+		//in some exceptions alowed deletes is still on false here.
+		GO_Base_Fs_File::setAllowDeletes(true);
 		GO::clearCache();
 		
 		if($v3){
 			
-			if(GO::modules()->isInstalled('projects') && GO::modules()->isInstalled('files')){
-				echo "Renaming projects folder temporarily for new project paths\n";
-				$folder = GO_Files_Model_Folder::model()->findByPath('projects');
-				if($folder){
-					$folder->name='oldprojects';
-					$folder->systemSave=true;
-					$folder->save();
-				}
-			}
+//			if(GO::modules()->isInstalled('projects') && GO::modules()->isInstalled('files')){
+//				echo "Renaming projects folder temporarily for new project paths\n";
+//				$folder = GO_Files_Model_Folder::model()->findByPath('projects');
+//				if($folder){
+//					$folder->name='oldprojects';
+//					$folder->systemSave=true;
+//					$folder->save();
+//				}
+//			}
 			
 			
 //			echo "Checking database after version 3.7 upgrade.\n";
@@ -418,7 +439,12 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 //			echo "Done\n\n";
 //			ob_flush();
 			
+			$versioningFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'versioning');
+			if($versioningFolder->exists())
+				$versioningFolder->rename("versioning_backup_3_7");
+				
 			echo "Building search cache after version 3.7 upgrade.\n";
+			ob_flush();
 			$this->actionBuildSearchCache($params);
 			echo "Done\n\n";
 			ob_flush();

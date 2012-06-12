@@ -18,7 +18,7 @@ GO.tasks.ContinueTaskDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		Ext.apply(this, {
 			autoHeight:true,
 			goDialogId:'task',
-			title:GO.tasks.lang.scheduleCall,
+			title:GO.tasks.lang.continueTask,
 			formControllerUrl: 'tasks/task'
 		});
 		

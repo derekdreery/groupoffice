@@ -66,6 +66,21 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 		{
 			this.store=this.ds;
 		}
+		
+		if(this.store.model && GO.customfields && GO.customfields.columns[this.store.model]){
+			for(var i=0;i<GO.customfields.columns[this.store.model].length;i++)
+			{
+				if(GO.customfields.nonGridTypes.indexOf(GO.customfields.columns[this.store.model][i].datatype)==-1){
+					if(GO.customfields.columns[this.store.model][i].exclude_from_grid != 'true')
+					{
+            if(!this.columns){
+							this.columns = this.cm.columns;
+						}              
+						this.columns.push(GO.customfields.columns[this.store.model][i]);
+					}
+				}
+			}	
+		}
 
 		if(!this.noDelete){
 			this.keys.push({
@@ -201,6 +216,13 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 		}, this, {
 			delay:250
 		});
+		
+		//Load the datastore when render event fires if autoLoadStore is true
+		this.on('render',function(grid)
+		{
+			if(this.autoLoadStore)
+				grid.store.load();
+		}, this);
 	
 		this.on('rowdblclick', function(grid, rowIndex){
 			var record = grid.getStore().getAt(rowIndex);			
@@ -212,10 +234,14 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 	deleteConfig : {},
 
 	/**
+	 *@cnf {Boolean} Load the datastore into the grid when it's rendered for the first time
+	 */
+	autoLoadStore: false,
+
+	/**
 	 * @cfg {Boolean} paging True to set the store's limit parameter and render a bottom
 	 * paging toolbar.
 	 */
-
 	paging : false,
 
 	/**
@@ -319,7 +345,7 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 			this.editDialog = new this.editDialogClass;
 
 			this.editDialog.on('save', function(){   
-				this.store.load();   
+				this.store.reload();   
 				this.changed=true;
 			}, this);	
 		}

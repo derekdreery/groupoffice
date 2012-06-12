@@ -14,7 +14,7 @@
 									if($this->license->getAttribute('upgrades','raw') > time())
 										echo '<p>This license is available till: <b>'. $this->license->upgrades.'</b></p>';
 									else
-										echo '<p>This license is <b><font color="red">expired</font></b>.</p>';
+											echo '<p>The support contract for this license is <b><font color="red">expired</font></b>. Go to the <a href="'.$this->pageUrl('invoices').'">Invoices</a> page to renew your support contract.</p>';
 									
 									echo '<p>Hostname for this license: <b>'.$this->license->host.'</b></p>';
 									echo '<p>Ip-addressfor this license: <b>'.$this->license->ip.'</b></p>';
