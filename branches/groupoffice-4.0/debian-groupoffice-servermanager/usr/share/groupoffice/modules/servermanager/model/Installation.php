@@ -192,7 +192,6 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 						->select('module_id, count(*) AS usercount')
 						->joinModel(array('model'=>'GO_ServerManager_Model_InstallationUser',  'localField'=>'user_id','tableAlias'=>'u'))
 						->group(array('module_id'))
-						->debugSql()
 						->criteria(
 										GO_Base_Db_FindCriteria::newInstance()
 										->addCondition('installation_id', $this->id,'=','u')										
@@ -248,6 +247,9 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		GO::config()->save_setting('database_usage', $this->database_usage);
 		
 		//var_dump($iUsers);
+		
+		
+		//GO::debug($this->getAttributes());
 		
 		//reconnect to servermanager database
 		GO::setDbConnection();
