@@ -35,4 +35,16 @@ class GO_Base_Model_LinkFolder extends GO_Base_Db_ActiveRecord {
 	public function tableName() {
 		return 'go_link_folders';
 	}
+	
+	public function relations() {
+		return array(
+				'children' => array('type'=>self::HAS_MANY, 'model'=>'GO_Base_Model_LinkFolder', 'field'=>'parent_id', 'delete'=>true)
+				);
+	}
+	
+	public function hasChildren(){
+		$first = $this->children(GO_Base_Db_FindParams::newInstance()->single());
+		
+		return $first!=false;
+	}
 }

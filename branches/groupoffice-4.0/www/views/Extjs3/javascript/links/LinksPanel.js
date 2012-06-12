@@ -37,8 +37,12 @@ GO.grid.LinksPanel = function(config){
 		config.id='go-links-panel';
 	}
 
-	this.linksDialog = new GO.dialog.LinksDialog({linksStore: config['store']});
-	this.linksDialog.on('link', function(){this.linksGrid.store.reload();}, this);
+	this.linksDialog = new GO.dialog.LinksDialog({
+		linksStore: config['store']
+		});
+	this.linksDialog.on('link', function(){
+		this.linksGrid.store.reload();
+	}, this);
 	
 	this.linksTree = new GO.LinksTree({
 		id:config.id+'_tree',
@@ -66,7 +70,7 @@ GO.grid.LinksPanel = function(config){
 		if(folder_id!='')
 		{
 			var coords = e.getXY();
-			this.linksContextMenu.showAt([coords[0], coords[1]], ['folder:'+folder_id], 'folder');	
+			this.linksContextMenu.showAt([coords[0], coords[1]], ['GO_Base_Model_LinkFolder:'+folder_id], 'folder');	
 		}		
 	}, this);
 	
@@ -87,21 +91,21 @@ GO.grid.LinksPanel = function(config){
 		if(e.data.selections)
 		{
 			//dropped from grid
-		  for(var i=0;i<e.data.selections.length;i++)
+			for(var i=0;i<e.data.selections.length;i++)
 			{
-				if(e.data.selections[i].data.link_and_type.substr(0,6)=='folder')
-				{					
-					var id = e.data.selections[i].data.link_and_type.substr(7);
-					var movedNode = this.linksTree.getNodeById('lt-folder-'+id);
-					var targetNode = this.linksTree.getNodeById('lt-folder-'+target.folder_id);
-					targetNode.appendChild(movedNode);
-				}
-				selections.push(e.data.selections[i].data.link_and_type);
+				//				if(e.data.selections[i].data.link_and_type.substr(0,6)=='folder')
+				//				{					
+				//					var id = e.data.selections[i].data.link_and_type.substr(7);
+				//					var movedNode = this.linksTree.getNodeById('lt-folder-'+id);
+				//					var targetNode = this.linksTree.getNodeById('lt-folder-'+target.folder_id);
+				//					targetNode.appendChild(movedNode);
+				//				}
+				selections.push(e.data.selections[i].data.model_name_and_id);
 			}
 		}else
 		{
 			//dropped from tree		  
-		  selections = ['folder:'+e.data.node.id.substr(10)];
+			selections = ['GO_Base_Model_LinkFolder:'+e.data.node.id.substr(10)];
 		}
 		
 		this.moveSelections(selections, target);
@@ -115,9 +119,9 @@ GO.grid.LinksPanel = function(config){
 		id: config.id+'_grid',
 		noFilterSave:config.noFilterSave,		
 		deleteConfig:{
-				scope:this,
-				success:this.onDelete
-			}
+			scope:this,
+			success:this.onDelete
+		}
 	});
 
 	this.linksGrid.store.on('load', function(){
@@ -152,10 +156,10 @@ GO.grid.LinksPanel = function(config){
 		e.stopEvent();
 		
 		var sm =grid.getSelectionModel();
-    if(sm.isSelected(rowIndex) !== true) {
-      sm.clearSelections();
-      sm.selectRow(rowIndex);
-    }
+		if(sm.isSelected(rowIndex) !== true) {
+			sm.clearSelections();
+			sm.selectRow(rowIndex);
+		}
 
 
 		var coords = e.getXY();
@@ -208,39 +212,39 @@ GO.grid.LinksPanel = function(config){
 	this.linkTypeFilter = new GO.LinkTypeFilterPanel({
 		region:'south',
 		height:300
-//		region:'west',
-//		width:160,
-//		layout:'border',
-//		id:config.id+'_west'
-//		store:new GO.data.JsonStore({
-//			root: 'results',
-//			data: {"results":GO.linkTypes}, //defined in /default_scripts.inc.php
-//			fields: ['id','name', 'checked'],
-//			id:'id'
-//		})
+	//		region:'west',
+	//		width:160,
+	//		layout:'border',
+	//		id:config.id+'_west'
+	//		store:new GO.data.JsonStore({
+	//			root: 'results',
+	//			data: {"results":GO.linkTypes}, //defined in /default_scripts.inc.php
+	//			fields: ['id','name', 'checked'],
+	//			id:'id'
+	//		})
 	});
 	this.linkTypeFilter.on('change', function(grid, types){
 		this.linksGrid.store.baseParams.types = Ext.encode(types);
 		this.linksGrid.store.load();
-		//delete this.linksGrid.store.baseParams.types;
+	//delete this.linksGrid.store.baseParams.types;
 	}, this);
 	
 	config.items=[
-			{
-				region:'west',
-				width:160,
-				layout:'border',
-				id:config.id+'_west',
-				split:true,
-				items:[
-					this.linksTree,
-					this.linkTypeFilter
-				]
-			},
-//			this.linkTypeFilter,
-			this.linksGrid,
-			this.previewPanel
-		];
+	{
+		region:'west',
+		width:160,
+		layout:'border',
+		id:config.id+'_west',
+		split:true,
+		items:[
+		this.linksTree,
+		this.linkTypeFilter
+		]
+	},
+	//			this.linkTypeFilter,
+	this.linksGrid,
+	this.previewPanel
+	];
 	
 	this.linksContextMenu = new GO.LinksContextMenu();
 	
@@ -257,7 +261,7 @@ GO.grid.LinksPanel = function(config){
 	
 	this.linksContextMenu.on('delete', function(menu,selections){
 
-		if(selections.indexOf('folder:'+this.folder_id)>-1){
+		if(selections.indexOf('GO_Base_Model_LinkFolder:'+this.folder_id)>-1){
 			this.setFolder(0,true);
 		}
 		
@@ -285,61 +289,61 @@ GO.grid.LinksPanel = function(config){
 	config.hideMode='offsets';
 		
 	config['tbar'] = [
-			this.linkButton = new Ext.Button({
-				iconCls: 'btn-link',
-				text: GO.lang['cmdLink'],
-				cls: 'x-btn-text-icon',
-				handler: function(){				
-					this.linksDialog.show();					
-				},
-				scope: this
+	this.linkButton = new Ext.Button({
+		iconCls: 'btn-link',
+		text: GO.lang['cmdLink'],
+		cls: 'x-btn-text-icon',
+		handler: function(){				
+			this.linksDialog.show();					
+		},
+		scope: this
 				
-			}),
-			this.newFolderButton = new Ext.Button({
-				iconCls: 'btn-add',
-				text: GO.lang.newFolder,
-				cls: 'x-btn-text-icon',
-				handler: function() {
+	}),
+	this.newFolderButton = new Ext.Button({
+		iconCls: 'btn-add',
+		text: GO.lang.newFolder,
+		cls: 'x-btn-text-icon',
+		handler: function() {
 					
-					this.folderWindow.show({
-						model_id : this.model_id,
-						model_name : this.model_name,
-						parent_id : this.folder_id
-					});
-				},
-				scope: this
-			}),
-			this.unlinkButton = new Ext.Button({
-				iconCls: 'btn-unlink',
-				text: GO.lang['cmdUnlink'],
-				cls: 'x-btn-text-icon',
-				handler: function() {
+			this.folderWindow.show({
+				model_id : this.model_id,
+				model_name : this.model_name,
+				parent_id : this.folder_id
+			});
+		},
+		scope: this
+	}),
+	this.unlinkButton = new Ext.Button({
+		iconCls: 'btn-unlink',
+		text: GO.lang['cmdUnlink'],
+		cls: 'x-btn-text-icon',
+		handler: function() {
 
-					this.unlinkSelected();
-				},
-				scope: this
-			}),'-',{
-				iconCls: 'btn-refresh',
-				text: GO.lang['cmdRefresh'],
-				cls: 'x-btn-text-icon',
-				handler: function(){
-					this.linksGrid.store.load();
-					//this.linksTree.getRootNode().reload();
-				},
-				scope: this
+			this.unlinkSelected();
+		},
+		scope: this
+	}),'-',{
+		iconCls: 'btn-refresh',
+		text: GO.lang['cmdRefresh'],
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			this.linksGrid.store.load();
+			this.linksTree.getRootNode().reload();
+		},
+		scope: this
 
 			
-			}
-//			,'-',this.deleteButton = new Ext.Button({
-//				iconCls: 'btn-delete',
-//				text: GO.lang['cmdDelete'],
-//				cls: 'x-btn-text-icon',
-//				handler: function(){
-//					this.linksGrid.deleteSelected();
-//				},
-//				scope: this
-//			})
-		];
+	}
+	//			,'-',this.deleteButton = new Ext.Button({
+	//				iconCls: 'btn-delete',
+	//				text: GO.lang['cmdDelete'],
+	//				cls: 'x-btn-text-icon',
+	//				handler: function(){
+	//					this.linksGrid.deleteSelected();
+	//				},
+	//				scope: this
+	//			})
+	];
 		
 	if(GO.links && GO.links.SettingsDialog)
 	{
@@ -365,7 +369,7 @@ GO.grid.LinksPanel = function(config){
 
 	
 	
-  GO.grid.LinksPanel.superclass.constructor.call(this, config);
+	GO.grid.LinksPanel.superclass.constructor.call(this, config);
 	
 }
 
@@ -424,34 +428,27 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 	
 	moveSelections : function(selections, target)
 	{
-		Ext.Ajax.request({
-			url: BaseHref+'action.php',
+		GO.request({
+			url: "linkFolder/moveLinks",
 			params: {
-				'task' : 'move_links',
 				selections : Ext.encode(selections),
 				target : Ext.encode(target)
-				},
-			callback: function(options, success, response){				
-				
-				if(!success)
-				{
-					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
-				}else
-				{
-					var responseParams = Ext.decode(response.responseText);
+			},
+			success: function(options,  response, result){				
+				this.linksGrid.store.reload();
 					
-					if(responseParams.moved_links)
-					{
-						for(var i=0;i<responseParams.moved_links.length;i++)
-						{
-							var record = this.linksGrid.store.getById(responseParams.moved_links[i]);
-							if(record)
-							{
-								this.linksGrid.store.remove(record);
-							}
-						}
-					}					
-				}
+			//				if(responseParams.moved_links)
+			//				{
+			//					for(var i=0;i<responseParams.moved_links.length;i++)
+			//					{
+			//						var record = this.linksGrid.store.getById(responseParams.moved_links[i]);
+			//						if(record)
+			//						{
+			//							this.linksGrid.store.remove(record);
+			//						}
+			//					}
+			//				}					
+				
 			},
 			scope:this								
 			
@@ -473,7 +470,7 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 			this.previewPanel.getLayout().activeItem.editHandler();
 		}
 
-		/*else	if(GO.linkHandlers[record.data.model_name])
+	/*else	if(GO.linkHandlers[record.data.model_name])
 		{
 			GO.linkHandlers[record.data.model_name].call(this, record.data.id);
 
@@ -495,7 +492,9 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 			}else
 			{
 				if(!this.linkPreviewPanels[record.data.model_name]){
-					this.linkPreviewPanels[record.data.model_name] = GO.linkPreviewPanels[record.data.model_name].call(this, {id:panelId});
+					this.linkPreviewPanels[record.data.model_name] = GO.linkPreviewPanels[record.data.model_name].call(this, {
+						id:panelId
+					});
 					this.previewPanel.add(this.linkPreviewPanels[record.data.model_name]);
 				}
 				this.previewPanel.getLayout().setActiveItem(panelId);
@@ -553,7 +552,7 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 		if(!noload){
 			this.linksGrid.store.baseParams.types = Ext.encode(this.linkTypeFilter.getSelected());
 			this.linksGrid.store.load();
-			//delete this.linksGrid.store.baseParams.types;
+		//delete this.linksGrid.store.baseParams.types;
 		}
 	},
 	
@@ -580,10 +579,10 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 
 			//reset all preview panels
 			this.previewPanel.items.each(function(p){
-			if(p.reset){
-				p.reset();
-			}
-		});
+				if(p.reset){
+					p.reset();
+				}
+			});
 
 		}
 	}

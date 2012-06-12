@@ -231,3 +231,11 @@ $updates["201206051617"][]="ALTER TABLE go_search_cache DROP INDEX keywords";
 $updates["201206051617"][]="ALTER TABLE go_search_cache DROP INDEX name_2";
 
 $updates["201206110852"][]="ALTER TABLE `go_search_cache` ADD INDEX name( `name` ) ";
+
+$updates["201206110852"][]="ALTER TABLE `go_link_folders` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
+$updates["201206110852"][]="ALTER TABLE `go_link_folders` CHANGE `link_type` `model_type_id` INT( 11 ) NOT NULL ";
+$updates["201206110852"][]="ALTER TABLE `go_link_folders` CHANGE `link_id` `model_id` INT( 11 ) NOT NULL ";
+
+$updates["201206110852"][]="ALTER TABLE `go_link_folders` CHANGE `model_id` `model_id` INT( 11 ) NOT NULL DEFAULT '0'";
+$updates["201206110852"][]="ALTER TABLE `go_link_folders` CHANGE `model_type_id` `model_type_id` INT( 11 ) NOT NULL DEFAULT '0'";
+$updates["201206110852"][]="ALTER TABLE `go_link_folders` CHANGE `parent_id` `parent_id` INT( 11 ) NOT NULL DEFAULT '0'";

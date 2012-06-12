@@ -3030,6 +3030,33 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	/**
+	 * Update folder_id or description of a link
+	 * 
+	 * @param GO_Base_Db_ActiveRecord $model
+	 * @param array $attributes
+	 * @return boolean 
+	 */
+	public function updateLink(GO_Base_Db_ActiveRecord $model, array $attributes){
+		$sql = "UPDATE `go_links_".$this->tableName()."`";
+		
+		$updates=array();
+		$bindParams=array();
+		foreach($attributes as $field=>$value){
+			$updates[] = "`$field`=:".$field;		
+			$bindParams[':'.$field]=$value;
+		}
+		
+		$sql .= "SET ".implode(',',$updates).
+			" WHERE model_type_id=".$model->modelTypeId()." AND model_id=".$model->id;
+		
+//		var_dump($sql);
+//		var_dump($bindParams);
+		
+		$result = $this->getDbConnection()->prepare($sql);
+		return $result->execute($bindParams);
+	}
+	
+	/**
 	 * Unlink a model from this model
 	 * 
 	 * @param GO_Base_Db_ActiveRecord $model

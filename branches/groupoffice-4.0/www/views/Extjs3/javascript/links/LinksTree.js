@@ -24,8 +24,8 @@ GO.LinksTree = function(config){
 	config.animate=true;
 	config.loader=new GO.base.tree.TreeLoader(
 	{
-		dataUrl:BaseHref+'json.php',
-		baseParams:{task: 'link_folders_tree', link_type: 0, link_id: 0},
+		dataUrl:GO.url("linkFolder/tree"),
+		baseParams:{model_name: "", model_id: 0},
 		preloadChildren:true
 	});
 	config.collapsed=config.treeCollapsed;
@@ -54,10 +54,10 @@ GO.LinksTree = function(config){
 
 Ext.extend(GO.LinksTree, Ext.tree.TreePanel, {
 	
-	loadLinks : function(link_id, link_type, cb, scope)
+	loadLinks : function(model_id, model_name, cb, scope)
 	{
-		this.loader.baseParams.link_id=link_id;
-		this.loader.baseParams.link_type=link_type;
+		this.loader.baseParams.model_id=model_id;
+		this.loader.baseParams.model_name=model_name;
 
 		if(cb){
 			if(scope){

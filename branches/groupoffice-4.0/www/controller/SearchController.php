@@ -170,6 +170,9 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		
 		$storeParams = $store->getDefaultParams($params);
 		
+		//if(!empty($params['folder_id']))
+		$storeParams->getCriteria ()->addCondition ('folder_id', $params['folder_id'],'=','l');
+		
 		if(isset($params['types'])){
 			$types = json_decode($params['types'], true);
 			if(count($types))

@@ -171,15 +171,15 @@ CREATE TABLE IF NOT EXISTS `go_link_descriptions` (
 
 DROP TABLE IF EXISTS `go_link_folders`;
 CREATE TABLE IF NOT EXISTS `go_link_folders` (
-  `id` int(11) NOT NULL,
-  `parent_id` int(11) NOT NULL,
-  `link_id` int(11) NOT NULL,
-  `link_type` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11)  NOT NULL DEFAULT '0',
+  `model_id` int(11)  NOT NULL DEFAULT '0',
+  `model_type_id` int(11)  NOT NULL DEFAULT '0',
   `name` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `link_id` (`link_id`,`link_type`),
+  KEY `link_id` (`model_id`,`model_type_id`),
   KEY `parent_id` (`parent_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
