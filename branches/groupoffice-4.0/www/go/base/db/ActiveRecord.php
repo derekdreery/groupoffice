@@ -600,8 +600,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function getDbConnection()
 	{
-		if(!isset($this->_pdo))
-			$this->_pdo= GO::getDbConnection();
+		if(isset($this->_pdo))
+			return $this->_pdo;
+		else
+			return GO::getDbConnection();
 		
 		return $this->_pdo;
 	}
