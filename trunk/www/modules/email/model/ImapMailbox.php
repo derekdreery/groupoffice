@@ -34,7 +34,7 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		
 		//throw new Exception(var_export($attributes, true));
 
-		$this->_children = array();
+		//$this->_children = array();
 	}
 	
 	public function __isset($name) {
@@ -49,6 +49,11 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 			return $this->$getter();			
 		
 		return $this->_attributes[$name];
+	}
+	
+	public function getHasChildren(){
+		
+		//todo
 	}
 	
 	public function getDelimiter(){
@@ -112,16 +117,15 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 	}
 
 	public function getChildren() {
-		
 		if(!isset($this->_children)){
 
 			$imap = $this->getAccount()->openImapConnection();
 
 			$this->_children = array();
 
-			$folders = $imap->list_folders(true,$withStatus,$this->mailbox.$this->delimiter,"%");
+			$folders = $imap->list_folders(true,true,$this->name.$this->delimiter,"%");
 			foreach($folders as $folder){
-				$mailbox = new GO_Email_Model_ImapMailbox($this,$folder);
+				$mailbox = new GO_Email_Model_ImapMailbox($this->account,$folder);
 				$this->_children[]=$mailbox;
 			}
 

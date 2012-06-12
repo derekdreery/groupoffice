@@ -121,11 +121,11 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		{
 			$parts = explode('_',$params['node']);
 			$accountId=$parts[1];
-			$mailbox=$parts[2];
+			$mailboxName=$parts[2];
 			
 			$account = GO_Email_Model_Account::model()->findByPk($accountId);
 			
-			$mailbox = new GO_Email_Model_ImapMailbox($account, array('name'=>$mailbox));
+			$mailbox = new GO_Email_Model_ImapMailbox($account, array('name'=>$mailboxName));
 			$response= $this->_getMailboxTreeNodes($mailbox->getChildren());
 		}
 
@@ -149,7 +149,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 				$statusHtml = '&nbsp;<span class="em-folder-status" id="status_' . $nodeId . '"></span>';
 			}
 			
-			$children = $this->_getMailboxTreeNodes($mailbox->getChildren());
+			//$children = $this->_getMailboxTreeNodes($mailbox->getChildren());
 
 			$node = array(
 					'text' => $mailbox->getDisplayName().$statusHtml,
@@ -160,11 +160,13 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					'id' => $nodeId,
 					'noselect'=>$mailbox->noselect,
 					'noinferiors'=>$mailbox->noinferiors,
-					//'children' => $mailbox->hasnochildren ? array() : null
-					//'expanded' => $mailbox->hasnochildren,
-					'children'=>$children,
-					'expanded' => !count($children),
+					'children' => $mailbox->hasnochildren ? array() : null,
+					'expanded' => $mailbox->hasnochildren
+					//'children'=>$children,
+					//'expanded' => !count($children),
 			);
+			
+			//if($mailbox->hasnochildren)
 			
 			$sortIndex=5;
 
