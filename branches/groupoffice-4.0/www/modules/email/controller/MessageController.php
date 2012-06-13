@@ -498,6 +498,25 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		}
 
 		$headerLines = $this->_getForwardHeaders($message);
+		
+		if($message instanceof GO_Email_Model_ImapMessage){
+			//saved messages always create temp files
+			$message->createTempFilesForInlineAttachments = true;
+			$message->createTempFilesForAttachments = true;
+		}
+
+		$oldMessage = $message->toOutputArray($html);
+
+		// Fix for array_merge functions on lines below when the $response['data']['inlineAttachments'] and $response['data']['attachments'] do not exist
+		if(empty($response['data']['inlineAttachments']))
+			$response['data']['inlineAttachments'] = array();
+
+		if(empty($response['data']['attachments']))
+			$response['data']['attachments'] = array();
+
+		$response['data']['inlineAttachments'] = array_merge($response['data']['inlineAttachments'], $oldMessage['inlineAttachments']);
+		$response['data']['attachments'] = array_merge($response['data']['attachments'], $oldMessage['attachments']);
+
 
 		if ($html) {
 			$header = '<br /><br />' . GO::t('original_message', 'email') . '<br />';
@@ -505,33 +524,14 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				$header .= '<b>' . $line[0] . ':&nbsp;</b>' . htmlspecialchars($line[1], ENT_QUOTES, 'UTF-8') . "<br />";
 
 			$header .= "<br /><br />";
-
-			if($message instanceof GO_Email_Model_ImapMessage){
-				//saved messages always create temp files
-				$message->createTempFilesForInlineAttachments = true;
-				$message->createTempFilesForAttachments = true;
-			}
-
-			$oldMessage = $message->toOutputArray(true);
-
-			$response['data']['htmlbody'] .= $header . $this->_quoteHtml($oldMessage['htmlbody']);
-
-			// Fix for array_merge functions on lines below when the $response['data']['inlineAttachments'] and $response['data']['attachments'] do not exist
-			if(empty($response['data']['inlineAttachments']))
-				$response['data']['inlineAttachments'] = array();
-			
-			if(empty($response['data']['attachments']))
-				$response['data']['attachments'] = array();
-			
-			$response['data']['inlineAttachments'] = array_merge($response['data']['inlineAttachments'], $oldMessage['inlineAttachments']);
-			$response['data']['attachments'] = array_merge($response['data']['attachments'], $oldMessage['attachments']);
+			$response['data']['htmlbody'] .= $header . $oldMessage['htmlbody'];			
 		} else {
 			$header = "\n\n" . GO::t('original_message', 'email') . "\n";
 			foreach ($headerLines as $line)
 				$header .= $line[0] . ': ' . $line[1] . "\n";
 			$header .= "\n\n";
 
-			$response['data']['plainbody'] .= $header . $oldBody;
+			$response['data']['plainbody'] .= $header . $oldMessage['plainbody'];
 		}
 
 		if($message instanceof GO_Email_Model_ImapMessage){
