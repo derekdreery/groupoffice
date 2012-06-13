@@ -93,8 +93,8 @@ class GO_Base_Router{
 		$this->_r=isset($params['r']) ? $params['r'] : "";
 		
 		$first = isset($r[0]) ? ucfirst($r[0]) : 'Auth';
-		
-		if(file_exists(GO::config()->root_path.'controller/'.$first.'Controller.php')){
+
+		if(empty($r[2]) && file_exists(GO::config()->root_path.'controller/'.$first.'Controller.php')){
 			//this is a controller name that belongs to the Group-Office framework
 			$module='Core';
 			$controller=$first;
