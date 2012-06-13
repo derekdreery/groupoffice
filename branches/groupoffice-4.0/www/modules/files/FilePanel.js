@@ -130,7 +130,7 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 			
 		}, this);
 		
-		this.loadUrl=GO.url('files/file/display');
+		this.loadUrl=('files/file/display');
 		
 		this.template =
 

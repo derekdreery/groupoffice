@@ -37,7 +37,7 @@ GO.files.FolderPanel = Ext.extend(GO.DisplayPanel,{
 
 	initComponent : function(){	
 		
-		this.loadUrl=GO.url('files/folder/display');
+		this.loadUrl=('files/folder/display');
 		
 		this.template =
 

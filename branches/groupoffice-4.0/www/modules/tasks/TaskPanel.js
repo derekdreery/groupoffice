@@ -24,7 +24,7 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 	
 	initComponent : function(){
 	
-		this.loadUrl=GO.url('tasks/task/display');
+		this.loadUrl=('tasks/task/display');
 	
 		this.template = 			
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+

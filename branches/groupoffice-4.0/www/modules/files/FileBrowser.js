@@ -1844,6 +1844,9 @@ GO.files.editFile = function (fileId){
 		}else
 		{
 			document.location.href=GO.url('gota/file/edit&id='+fileId);
+			
+			
+			
 			return;
 		}
 	}	

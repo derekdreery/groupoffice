@@ -464,6 +464,9 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 	
 	load : function(id, reload)
 	{
+		if(this.loading && id==this.model_id)
+			return false;
+		
 		if(this.expandListenObject.collapsed || !this.rendered){
 			//model_id is needed for editHandlers
 			this.collapsedLinkId=this.model_id=id;
@@ -474,33 +477,25 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 			this.loadParams[this.idParam]=this.model_id=this.link_id=id;
 			this.loadParams['hidden_sections']=Ext.encode(this.hiddenSections);
 			
-			this.body.mask(GO.lang.waitMsgLoad);
-			Ext.Ajax.request({
+			GO.request({
+				maskEl:this.body,
 				url: this.loadUrl,
 				params:this.loadParams,
-				callback: function(options, success, response)
-				{
-					this.loading=false;
-					this.body.unmask();
-					if(!success)
-					{
-						Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
-					}else
-					{
-						var responseParams = Ext.decode(response.responseText);
-						if(!responseParams.success){
-							Ext.MessageBox.alert(GO.lang['strError'], responseParams.feedback);
-						}else
-						{
-							this.setData(responseParams.data);
-							if(!reload)
-								this.body.scrollTo('top', 0);
-						}
-					}				
+				success: function(options, response, result)
+				{				
+					this.setData(result.data);
+					if(!reload)
+						this.body.scrollTo('top', 0);
+					
+					this.stopLoading.defer(300, this);
 				},
 				scope: this			
 			});
 		}
+	},
+	
+	stopLoading : function(){
+		this.loading=false;
 	},
 
 	setTitle : function(title){
