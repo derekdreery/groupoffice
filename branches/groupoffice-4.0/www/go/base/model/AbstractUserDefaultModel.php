@@ -137,10 +137,36 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 		return $defaultModel;
 	}
 	
+	public static function getNameTemplate($className){
+		$template = GO::config()->get_setting("name_template_".$className);
+		if(!$template)
+			$template = "{first_name} {middle_name} {last_name}";
+		
+		return $template;
+	}
+	
+	public static function setNameTemplate($className,$templateString,$findModelsToChangeParams=false,$remoteForeignKey=false){
+		GO::config()->save_setting("name_template_".$className,$templateString);
+		if ($findModelsToChangeParams instanceof GO_Base_Db_FindParams && $remoteForeignKey!==false) {
+			$model = GO_Base_Db_ActiveRecord::model($className);
+			$stmt = $model->find($findModelsToChangeParams->ignoreAcl());
+			while ($record = $stmt->fetch(PDO::FETCH_ASSOC)) {
+				$updateModel = new $className();
+				$updateModel = $updateModel->findByPk($record[$remoteForeignKey]);
+				$updateModel->id = $record[$remoteForeignKey];
+				$updateModel->name = GO_Base_Util_String::reformat_name_template($templateString,$record);
+				$updateModel->save();
+			}
+		}
+
+	}
+	
 	protected function setDefaultAttributes(GO_Base_Db_ActiveRecord $defaultModel, GO_Base_Model_User $user){
 		
 		//TODO Get templates for this name		
-		$template = "{first_name} {middle_name} {last_name}";
+		//$template = "{first_name} {middle_name} {last_name}";
+		
+		$template = self::getNameTemplate($this->className());
 		
 		$defaultModel->name = $this->parseUserTemplate($template, $user->getAttributes());
 		$defaultModel->makeAttributeUnique('name');
