@@ -84,8 +84,8 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		
 		$subCriteria = GO_Base_Db_FindCriteria::newInstance()
 						//->addMatchCondition(array('name','keywords'), $params['match'],'t',true,'NATURAL');
-						->addMatchCondition(array('name','keywords'), $str);
-						//->addCondition('name', preg_replace('/[\s]+/','%',$params['match']).'%', 'LIKE','t',false);
+						->addMatchCondition(array('name','keywords'), $str)
+						->addCondition('name', preg_replace('/[\s*]+/','%',$params['match']).'%', 'LIKE','t',false);
 		
 		$storeParams->getCriteria()->mergeWith($subCriteria);
 		
