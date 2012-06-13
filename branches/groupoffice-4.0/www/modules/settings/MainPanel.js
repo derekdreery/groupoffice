@@ -7,11 +7,7 @@ GO.settings.MainPanel = function(config){
 	config.labelWidth=150;
 	config.border=false;
 	config.padding= 10;
-	config.url= GO.settings.modules.settings.url+'data.php',
-	config.baseParams={
-				task:'load_settings',
-				save: false
-			};
+	config.url= GO.url('settings/setting/load');
 
 	config.items={
 		xtype:'fieldset',
@@ -48,8 +44,9 @@ GO.settings.MainPanel = function(config){
 		handler: function()
 		{
 			this.el.mask(GO.lang.waitMsgLoad);				
-			this.form.baseParams.save = true;
+//			this.form.baseParams.save = true;
 			this.form.submit({
+				url: GO.url('settings/setting/submit'),
 				success: function(form,action){this.el.unmask();},
 				failure: function(form,action){this.el.unmask();},
 				scope: this
