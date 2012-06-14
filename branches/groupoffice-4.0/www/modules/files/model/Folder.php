@@ -195,12 +195,21 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		if($this->parent){
 			$existingFolder = $this->parent->hasFolder($this->name);
 			if($existingFolder && $existingFolder->id!=$this->id)
-				throw new Exception(GO::t('folderExists','files'));
+				throw new Exception(GO::t('folderExists','files').': '.$this->path);
 		}
 		
 		return parent::beforeSave();
 	}
 	
+	public function setAttribute($name, $value, $format = false) {
+		
+		//so that path gets resolved again
+		if($name=='parent_id')
+			unset($this->_path);
+		
+		return parent::setAttribute($name, $value, $format);
+	}
+			
 	protected function afterSave($wasNew) {
 
 		if ($wasNew) {
@@ -651,11 +660,14 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 */
 	public function copy($destinationFolder){
 		
+		if(GO::config()->debug)
+			GO::debug("Copy folder ".$this->path." to ".$destinationFolder->path);
+		
 		$existing = $destinationFolder->hasFolder($this->name);
 		if(!$existing){
-			$copy = $this->duplicate();
-			$copy->parent_id=$destinationFolder->id;
-			if(!$copy->save())
+			$copy = $this->duplicate(array("parent_id"=>$destinationFolder->id));
+			//$copy->parent_id=$destinationFolder->id;
+			if(!$copy)
 				return false;
 
 			if(!$this->fsFolder->copy($copy->fsFolder->parent()))

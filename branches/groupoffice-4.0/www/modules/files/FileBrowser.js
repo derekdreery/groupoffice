@@ -1477,17 +1477,16 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 								}
 							}							
 								
-							var destinationNode = this.treePanel.getNodeById(pasteDestination);
+							var destinationNode = this.treePanel.getNodeById(pasteDestination);							
 							if(destinationNode)
 							{
-								//delete destinationNode.attributes.children;
-								destinationNode.attributes.children=[];
-								destinationNode.attributes.childrenRendered=false;
+								delete destinationNode.attributes.children;								
 								destinationNode.reload();
 							}
 								
-							if(pasteSources)
+							if(pasteSources && params.paste_mode=="cut")
 							{
+								//remove moved nodes if we cut and paste
 								for(var i=0;i<pasteSources.length;i++)
 								{
 									var arr = pasteSources[i].split(':');
