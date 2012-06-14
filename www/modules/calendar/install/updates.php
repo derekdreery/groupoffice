@@ -146,3 +146,5 @@ $updates["201204121221"][]="ALTER TABLE `cal_views` DROP `acl_write`";
 $updates["201204121221"][]="ALTER TABLE `cal_views` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
 
 $updates["201205031333"][]="delete FROM `cal_participants` WHERE event_id=0;";
+
+$updates["201206131104"][]="ALTER TABLE `cal_categories` CHANGE `color` `color` CHAR( 6 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'EBF1E2'";

@@ -10,7 +10,7 @@ GO.moduleManager.on('moduleconstructed',function(mm,moduleName,panel){
 				width: 300
 			},{
 				xtype:'checkbox',
-				name:'change_all_calendar_names',
+				name:'GO_Calendar_Model_Calendar_change_all_names',
 				fieldLabel:GO.calendar.lang.globalsettings_allchangelabel,
 				listeners: {
 	  			 "check": function(cb, isenabled) {

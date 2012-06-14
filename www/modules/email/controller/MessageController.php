@@ -496,10 +496,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$message = GO_Email_Model_SavedMessage::model()->createFromMimeFile($params['path']);
 		}
 
-		return $this->_messageToReplyResponse($params, $message);
+		return $this->_messageToReplyResponse($params, $message, $account);
 	}
 
-	private function _messageToReplyResponse($params, GO_Email_Model_ComposerMessage $message) {
+	private function _messageToReplyResponse($params, GO_Email_Model_ComposerMessage $message, GO_Email_Model_Account $account) {
 		$html = $params['content_type'] == 'html';
 
 		$fullDays = GO::t('full_days');
@@ -542,14 +542,28 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		} else {
 			$response['data']['subject'] = $message->subject;
 		}
+		
+		
+		//find the right sender alias
+		$stmt = $account->aliases;
+		while($possibleAlias = $stmt->fetch()){
+			if($message->to->hasRecipient($possibleAlias->email)){
+				$alias = $possibleAlias;
+				break;
+			}
+		}
+		
+		if(!isset($alias))
+			$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);		
+		
+		$response['data']['alias_id']=$alias->id;		
 
 		if (!empty($params['replyAll'])) {
 			$toList = new GO_Base_Mail_EmailRecipients();
 			$toList->mergeWith($message->from)
 							->mergeWith($message->to);
 
-			//remove our own alias from the recipients.
-			$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);
+			//remove our own alias from the recipients.			
 			$toList->removeRecipient($alias->email);
 			$message->cc->removeRecipient($alias->email);
 
@@ -602,6 +616,25 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		}
 
 		$headerLines = $this->_getForwardHeaders($message);
+		
+		if($message instanceof GO_Email_Model_ImapMessage){
+			//saved messages always create temp files
+			$message->createTempFilesForInlineAttachments = true;
+			$message->createTempFilesForAttachments = true;
+		}
+
+		$oldMessage = $message->toOutputArray($html);
+
+		// Fix for array_merge functions on lines below when the $response['data']['inlineAttachments'] and $response['data']['attachments'] do not exist
+		if(empty($response['data']['inlineAttachments']))
+			$response['data']['inlineAttachments'] = array();
+
+		if(empty($response['data']['attachments']))
+			$response['data']['attachments'] = array();
+
+		$response['data']['inlineAttachments'] = array_merge($response['data']['inlineAttachments'], $oldMessage['inlineAttachments']);
+		$response['data']['attachments'] = array_merge($response['data']['attachments'], $oldMessage['attachments']);
+
 
 		if ($html) {
 			$header = '<br /><br />' . GO::t('original_message', 'email') . '<br />';
@@ -610,32 +643,14 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 			$header .= "<br /><br />";
 
-			if($message instanceof GO_Email_Model_ImapMessage){
-				//saved messages always create temp files
-				$message->createTempFilesForInlineAttachments = true;
-				$message->createTempFilesForAttachments = true;
-			}
-
-			$oldMessage = $message->toOutputArray(true);
-
-			$response['data']['htmlbody'] .= $header . $this->_quoteHtml($oldMessage['htmlbody']);
-
-			// Fix for array_merge functions on lines below when the $response['data']['inlineAttachments'] and $response['data']['attachments'] do not exist
-			if(empty($response['data']['inlineAttachments']))
-				$response['data']['inlineAttachments'] = array();
-
-			if(empty($response['data']['attachments']))
-				$response['data']['attachments'] = array();
-
-			$response['data']['inlineAttachments'] = array_merge($response['data']['inlineAttachments'], $oldMessage['inlineAttachments']);
-			$response['data']['attachments'] = array_merge($response['data']['attachments'], $oldMessage['attachments']);
+			$response['data']['htmlbody'] .= $header . $oldMessage['htmlbody'];			
 		} else {
 			$header = "\n\n" . GO::t('original_message', 'email') . "\n";
 			foreach ($headerLines as $line)
 				$header .= $line[0] . ': ' . $line[1] . "\n";
 			$header .= "\n\n";
 
-			$response['data']['plainbody'] .= $header . $oldBody;
+			$response['data']['plainbody'] .= $header . $oldMessage['plainbody'];
 		}
 
 		if($message instanceof GO_Email_Model_ImapMessage){

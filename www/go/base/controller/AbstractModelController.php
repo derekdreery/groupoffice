@@ -1268,9 +1268,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$response['total'] = 0;
 
 		$importFile = new GO_Base_Fs_CsvFile($_FILES['files']['tmp_name'][0]);
-		$firstRow = $importFile->getRecord();
-		
-		$response['results'] = explode($params['delimiter'],$firstRow[0]);
+		$importFile->delimiter = $params['delimiter'];
+		$importFile->enclosure = $params['enclosure'];
+
+		$response['results'] = $importFile->getRecord();
 		$response['total'] = count($response['results']);
 		
 		return $response;

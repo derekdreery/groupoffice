@@ -15,7 +15,7 @@ while($category = $stmt->fetch()){
 
 		echo "Category $category->name\n";
 
-		$calStmt = GO_Calendar_Model_Calendar::model()->findByAttribute('calendar_id', $category->user_id);
+		$calStmt = GO_Calendar_Model_Calendar::model()->findByAttribute('user_id', $category->calendar_id);
 		while($calendar = $calStmt->fetch()){
 
 			try{

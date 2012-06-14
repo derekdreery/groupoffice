@@ -280,6 +280,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * 'regex'=>'A preg_match expression for validation',
 	 * 'dbtype'=>'varchar' //mysql database type
 	 * 'unique'=>false //true to enforce a unique value
+	 * 'greater'=>'start_time' //this column must be greater than column start time
+	 * 'greaterorequal'=>'start_time' //this column must be greater or equal to column start time
 	 * 
 	 * The validator looks like this:
 	 * 
@@ -1939,6 +1941,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}elseif(!empty($attributes['validator']) && !empty($this->_attributes[$field]) && !call_user_func($attributes['validator'], $this->_attributes[$field]))
 			{
 				$this->setValidationError($field, sprintf(GO::t('attributeInvalid'),$this->getAttributeLabel($field)));
+			}elseif(!empty($attributes['greater'])){
+				if($this->_attributes[$field]<=$this->_attributes[$attributes['greater']])
+					$this->setValidationError($field, sprintf(GO::t('attributeGreater'), $this->getAttributeLabel($field), $this->getAttributeLabel($attributes['greater'])));
+			}elseif(!empty($attributes['greaterorequal'])){
+				if($this->_attributes[$field]<$this->_attributes[$attributes['greaterorequal']])
+					$this->setValidationError($field, sprintf(GO::t('attributeGreaterOrQueal'), $this->getAttributeLabel($field), $this->getAttributeLabel($attributes['greaterorequal'])));
 			}
 		}
 		
@@ -3265,18 +3273,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	/**
 	 * Duplicates the current activerecord to a new one.
 	 * 
-	 * @param array $params Array of parameters that need to be set in the newly created activerecord as KEY => VALUE. Like: $params = array('attribute1'=>1,'attribute2'=>'Hello');
+	 * @param array $attributes Array of attributes that need to be set in the newly created activerecord as KEY => VALUE. Like: $params = array('attribute1'=>1,'attribute2'=>'Hello');
 	 *
 	 * @return Object The newly created object
 	 * 
 	 * @todo Copy the linked items too.  Use __clone() ??
 	 * 
 	 */
-	public function duplicate($params = array(), $save=true) {
+	public function duplicate($attributes = array(), $save=true) {
 		
 		//$copy = new GO_Base_Db_ActiveRecord(true);
 		$copy = clone $this;
-		
+			
 		unset($copy->ctime);
 		
 		//unset the files folder
@@ -3298,7 +3306,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 		
 
-		foreach($params as $key=>$value) {
+		foreach($attributes as $key=>$value) {
 			$copy->$key = $value;
 		}
 		

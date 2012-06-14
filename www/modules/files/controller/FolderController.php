@@ -7,7 +7,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	
 	protected function actionSyncFilesystem($params){
 		
-		$oldAllowDeletes = GO_Base_Fs_File::setAllowedDeletes(false);
+		$oldAllowDeletes = GO_Base_Fs_File::setAllowDeletes(false);
 		
 		GO::$ignoreAclPermissions=true; //allow this script access to all
 		GO::$disableModelCache=true; //for less memory usage
@@ -521,7 +521,6 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$store->getColumnModel()->formatColumn('folder_id', '$model->folder_id');
 			
 			$findParams = $store->getDefaultParams($params)
-							->debugSql()
 							->limit($fileLimit)
 							->start($fileStart);
 
@@ -953,7 +952,6 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$params["dir"]="ASC";
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()
-						->debugSql()
 						->order($params["sort"], $params["dir"]);
 		
 		$stmt = $folder->files($findParams);

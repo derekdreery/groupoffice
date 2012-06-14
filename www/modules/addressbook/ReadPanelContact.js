@@ -25,7 +25,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 	
 	initComponent : function(){	
 		
-		this.loadUrl=GO.url('addressbook/contact/display');
+		this.loadUrl=('addressbook/contact/display');
 		
 		this.template = 
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+

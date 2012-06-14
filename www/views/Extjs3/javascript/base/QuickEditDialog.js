@@ -48,6 +48,7 @@ Ext.extend(GO.base.QuickEditDialog, GO.Window, {
 		modelName : '', // MANDATORY
 		storeFields : [], // MANDATORY
 		gridColumns : false, // MANDATORY
+		requiredFields : [], // OPTIONAL
 		replaceFieldsOnSubmit : {} // OPTIONAL
 		// IF replaceFieldsOnSubmit is used, it WILL BE in two ways. See the example
 		// from projects module below.
@@ -259,6 +260,9 @@ Ext.extend(GO.base.QuickEditDialog, GO.Window, {
 				var config = GO.base.form.getFormFieldByType(resultsData.goType,resultsData.dataIndex);
 				config.margins = {top:0,bottom:0,left:0,right:1};
 			}
+
+			if (this.editorGridParams.requiredFields.indexOf(colIds[i])>=0)
+				config.allowBlank = false;
 			
 			editorConfigs.push(config);
 		}
@@ -286,10 +290,16 @@ GO.base.QuickEditDialog.getValidColDataIds = function (colArray) {
 	return validColDataIds;
 }
 
-GO.base.QuickEditDialog.cloneArrayValid = function (array,dataIds,nameField) {
+/**
+ * Clones an array of objects.
+ * Param 1: array, the array whose items are to be cloned
+ * Param 2: dataIdsToClone, array of ids with which to identify the array's items that are to be cloned
+ * Param 3: nameFieldToIdentify, the items' property name with which to identify the items
+ */
+GO.base.QuickEditDialog.cloneArrayValid = function (array,dataIdsToClone,nameFieldToIdentify) {
 	var arrayOfClones = [];
 	for (var i=0; i<array.length; i++) {
-		if (array[i][nameField]=='id' || dataIds.indexOf(array[i][nameField])>-1) {
+		if (array[i][nameFieldToIdentify]=='id' || dataIdsToClone.indexOf(array[i][nameFieldToIdentify])>-1) {
 			arrayOfClones.push(GO.util.clone(array[i]));
 		}
 	}
