@@ -43,7 +43,7 @@ GO.settings.MainPanel = function(config){
 		cls: 'x-btn-text-icon',
 		handler: function()
 		{
-//			this.el.mask(GO.lang.waitMsgLoad);				
+			this.el.mask(GO.lang.waitMsgLoad);				
 //			this.form.baseParams.save = true;
 			this.form.submit({
 				url: GO.url('settings/setting/submit'),
