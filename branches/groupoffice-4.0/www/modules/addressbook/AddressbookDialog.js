@@ -178,7 +178,7 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 		
 		this.fileTypeCB.on('select',function(combo,record,index){
 			if (record.id=='VCard')
-				this.controllerNameCB.setValue('GO_Addressbook_Controller_Contact');
+				this.controllerNameCB.setValue('GO_Addressbook_Controller_Company');
 			this.controllerNameCB.setVisible(record.id=='CSV');
 		},this);
 		
