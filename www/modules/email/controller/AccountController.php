@@ -99,6 +99,26 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 
 		return $response;
 	}
+	
+	public function actionSubscribtionsTree($params){
+		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+		
+		$rootMailboxes = $account->getRootMailboxes(false, false);
+		
+		//GO::debug($rootMailboxes);
+		if ($params['node'] == 'root') 
+			return $this->_getMailboxTreeNodes($rootMailboxes, true);
+		else{
+			$parts = explode('_', $params['node']);
+			$accountId = $parts[1];
+			$mailboxName = $parts[2];
+
+			$account = GO_Email_Model_Account::model()->findByPk($accountId);
+
+			$mailbox = new GO_Email_Model_ImapMailbox($account, array('name' => $mailboxName));
+			return $this->_getMailboxTreeNodes($mailbox->getChildren(false, false), true);
+		}
+	}
 
 	public function actionTree($params) {
 
@@ -148,12 +168,12 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		return $response;
 	}
 
-	private function _getMailboxTreeNodes($mailboxes) {
+	private function _getMailboxTreeNodes($mailboxes, $subscribtions=false) {
 		$nodes = array();
 		foreach ($mailboxes as $mailbox) {
 			/* @var $mailbox GO_Email_Model_ImapMailbox */
-			if (!$mailbox->subscribed)
-				continue;
+//			if (!$mailbox->subscribed)
+//				continue;
 
 			$nodeId = 'f_' . $mailbox->getAccount()->id . '_' . $mailbox->name;
 			if ($mailbox->unseen > 0) {
@@ -171,6 +191,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					'iconCls' => 'folder-default',
 					'id' => $nodeId,
 					'noselect' => $mailbox->noselect,
+					'disabled' =>$mailbox->noselect,
 					'noinferiors' => $mailbox->noinferiors,
 					'children' => $mailbox->hasnochildren ? array() : null,
 					'expanded' => $mailbox->hasnochildren
@@ -179,8 +200,12 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			);
 
 			if (!$mailbox->hasnochildren && $this->_isExpanded($nodeId)) {
-				$node['children'] = $this->_getMailboxTreeNodes($mailbox->getChildren());
+				$node['children'] = $this->_getMailboxTreeNodes($mailbox->getChildren(!$subscribtions, !$subscribtions),$subscribtions);
 				$node['expanded'] = true;
+			}
+			
+			if($subscribtions){
+				$node['checked']=$mailbox->subscribed;
 			}
 
 			//if($mailbox->hasnochildren)
