@@ -23,6 +23,7 @@ GO.base.model.ImportDialog = function(config) {
 	
 	GO.base.model.ImportDialog.superclass.constructor.call(this,config);
 	
+	this._createAttributesStore();
 }
 
 Ext.extend( GO.base.model.ImportDialog, GO.Window, {
@@ -39,19 +40,20 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 	// Fields that MUST be initiated at construction by passing:
 	// 'excludedCustomFieldDataTypes', 'modelContainerIdName', 'controllerName' and 'fileType'
 	// in the constructor config parameter.
-	_importBaseParams : '', // Predefined attributes to set. MUST be object e.g., {addressbook_id : 3}. As an extra effect, these predefined attributes will not be imported.
+	_importBaseParams : '', // Predefined attributes to set. MUST be object e.g., {addressbook_id : 3, foo: 'bar'}. As an extra effect, model attributes that are set this way will not be imported in this use case.
 	_moduleName : '', // e.g., addressbook
 	_modelName : '', // e.g., contact
-	_fileType : '', // e.g., csv
+	_fileType : '', // e.g., CSV, VCard
 	_excludedCustomFieldDataTypes : ['GO_Customfields_Customfieldtype_Heading','GO_Customfields_Customfieldtype_Function'], // Default setting. These are the custom field types that are excluded from import.
 	_excludedAttributes : [], // fields named here are excluded from import.
 	
 	// Fields that are set while the dialog is being used.
-	_modelAttributes : {}, // All the model attributes used for CSV import.
-	_csvHeaderStore : null, // ArrayStore containing all the CSV headers.
-	_userSelectCSVMappings : {}, // An element of this object is, e.g., this._userSelectCSVMappings[33] = 't.first_name';, which says that the 33rd column of the CSV goes to the t.first_name field of the models.
+	_colHeaders : {}, // This is a buffer associative array for all the cell values of the uploaded CSV file's first row.
+	_attributesStore : null, // Also a buffer, an ArrayStore containing all the current model's attributes.
+	_userSelectCSVMappings : {}, // An element of this object is, e.g., this._userSelectCSVMappings[33] = 'first_name';, which says that the 33rd column of the CSV goes to the t.first_name field of the models.
 	
 	_csvFieldDialog : null, // The second dialog in the use case.
+	_inputIdPrefix : '', // Prefix for the input field id's in the _csvFieldDialog.
 	
 	/****************************************************************************
 	 ****************************************************************************
@@ -65,6 +67,7 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 	show : function(modelContainerId) {
 		this.modelContainerIdField.setValue(modelContainerId);
 		GO.base.model.ImportDialog.superclass.show.call(this);
+		this.fileSelector.clearQueue();
 	},
 	
 	// Config MUST have parameters
@@ -82,7 +85,7 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 	},
 	
 	// Submit form to import the file.
-	_submitForm : function(hide) {
+	_submitForm : function() {
 		this.formPanel.form.submit({
 			url : GO.url(this._moduleName + '/' + this._modelName + '/import' + this._fileType),
 			params : {
@@ -90,10 +93,32 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 				importBaseParams : Ext.encode(this._importBaseParams)
 			},
 			success : function( success, response, result ) {
+				var errorsText = '';
+				if (!GO.util.empty(response.result.summarylog)) {
+					for (var i=0; i<response.result.summarylog.errors.length; i++)
+						errorsText = errorsText + response.result.summarylog.errors[i].message + '<br />';
+					Ext.MessageBox.alert(GO.lang.strError,errorsText);
+				}
+				
 				if (!response.result.success) {
 					Ext.MessageBox.alert(GO.lang.strError,result.feedback);
 				} else {
-					Ext.MessageBox.alert(GO.lang.strSuccess,GO.addressbook.lang['importSuccess']);
+					if (response.result.totalCount)
+						Ext.MessageBox.alert(
+							'',
+							GO.addressbook.lang['importSuccessCount']+' '+response.result.successCount+'/'+response.result.totalCount
+							+'<br />'+errorsText
+						);
+					else
+						Ext.MessageBox.alert(
+							'',
+							GO.addressbook.lang['importSuccess']
+							+'<br />'+errorsText
+						);
+						
+					this.hide();
+					if (!GO.util.empty(this._csvFieldDialog))
+						this._csvFieldDialog.close();
 				}
 			},
 			failure : function ( form, action ) {
@@ -136,17 +161,17 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 			fieldLabel: GO.lang.upload,
 			max:1
 		});
-		
+				
 		if (this._fileType=='CSV')
 			this.fileSelector.on('fileAdded',function(file){
-				this.formPanel.form.submit({
-					url: GO.url(this._moduleName + '/' + this._modelName + '/readCSVHeaders'),
-					success: function(form, action) {
-						this._createCSVHeaderStore(action.result.results);
-						this.showImportDataSelectionWindow();
-					},
-					scope: this
-				})
+//				this.formPanel.form.submit({
+//					url: GO.url(this._moduleName + '/' + this._modelName + '/readCSVHeaders'),
+//					success: function(form, action) {
+//						
+//					},
+//					scope: this
+//				})
+				this.showImportDataSelectionWindow();
 			},this);
 		
 		this.fileTypeField = new Ext.form.TextField({
@@ -170,17 +195,12 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 				this.modelContainerIdField
 			],
 			buttons: [{
-				text: GO.lang.cmdOk,
+				text: GO.lang.cmdImport,
 				width: '20%',
+				disabled: this._fileType=='CSV',
+				hidden: this._fileType=='CSV',
 				handler: function(){
-					this._submitForm(true);
-				},
-				scope: this
-			},{
-				text: GO.lang.cmdApply,
-				width: '20%',
-				handler: function(){
-					this._submitForm(false);
+					this._submitForm();
 				},
 				scope: this
 			},{
@@ -206,55 +226,65 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 	
 	showImportDataSelectionWindow: function()
 	{
+		this.formPanel.form.submit({
+			url: GO.url(this._moduleName + '/' + this._modelName + '/readCSVHeaders'),
+			success: function(form, action) {
+				this._buildCsvImportForm(action.result.results);
+				this.el.mask();
+				this._csvFieldDialog.show();
+			},
+			scope: this
+		});
+	},
+	
+	_createAttributesStore : function() {
+		var data = [];
+		data.push(['-','-','< < '+GO.lang.unused+' > >']);
+		
+		if (!(this._attributesStore)) {
+			this._attributesStore = new Ext.data.ArrayStore({
+				storeId: 'attributesStore',
+				idIndex: 0,
+				fields:['dbShortFieldName','dbFieldFullName','label']
+			});
+		}
+		
+		this._attributesStore.removeAll();
+		
 		GO.request({
 			url: this._moduleName+'/'+this._modelName+'/attributes',
 			params: {
 				exclude_cf_datatypes: Ext.encode(this._excludedCustomFieldDataTypes),
 				exclude_attributes: Ext.encode(this._excludedAttributes)
 			},
-			success: function(options, response, result)
+			success: function(options, response, attributeResult)
 			{
-				this._onAttributesLoaded(result.results);
+				for (var i=0; i<attributeResult.results.length; i++) {
+					var nameArray = attributeResult.results[i]['name'].split('.');
+					var nameOnly = nameArray[1];
+					if (attributeResult.results[i]['gotype']=='customfield') {
+						if (GO.customfields)
+							data.push([nameOnly,attributeResult.results[i]['name'],attributeResult.results[i]['label']]);
+					} else {
+						data.push([nameOnly,attributeResult.results[i]['name'],attributeResult.results[i]['label']]);
+					}
+				}
+				this._attributesStore.loadData(data);
 			},
 			scope:this
-		});		
+		});	
 	},
 	
-	_createCSVHeaderStore : function(headersArray) {
-		var data = [];
-		data.push([-1,'---']);
-		for (var colNr=0; colNr<headersArray.length; colNr++) {
-			data.push([colNr,headersArray[colNr]]);
-		}
-		
-		if (!(this._csvHeaderStore)) {
-			this._csvHeaderStore = new Ext.data.ArrayStore({
-				storeId: 'csvHeaderStore',
-				idIndex: 0,
-				fields:['colNr','headerString']
-			});
-		}
-		
-		this._csvHeaderStore.removeAll();
-		this._csvHeaderStore.loadData(data);
-		
-	},
-	
-	// When, in case of an imported CSV, the model attributes are loaded, open up the second dialog
-	_onAttributesLoaded : function(attributes) {
+	// Create the second dialog, should be done after every new uploaded file
+	// in showImportDataSelectionWindow()
+	_buildCsvImportForm : function(colHeaders) {
 
-		this._modelAttributes = {};
-		
-		for (var i=0; i<attributes.length; i++) {
-			if (attributes[i].gotype=='customfield') {
-				if (GO.customfields)
-					this._modelAttributes[attributes[i].name] = attributes[i].label;
-			} else {
-				this._modelAttributes[attributes[i].name] = attributes[i].label;
-			}
-		}
+		this._colHeaders = colHeaders;
 		
 		if (!this.importFieldsFormPanel) {
+			
+			this._inputIdPrefix = this._moduleName+'_'+this._modelName+'_import_combo_';
+			
 			this.importFieldsFormPanel = new Ext.form.FormPanel({
 				waitMsgTarget:true,
 
@@ -269,50 +299,49 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 			});
 
 			this.importFieldsFormPanel.form.timeout=300;
-		
-			for(var key in this._modelAttributes)
-			{
-				var combo =  new Ext.form.ComboBox({
-					fieldLabel: this._modelAttributes[key],
-					id: this._moduleName+'_'+this._modelName+'_import_combo_'+key,
-					store: this._csvHeaderStore,
-					displayField:'headerString',
-					valueField:	'colNr',
-					hiddenName: key,
-					mode: 'local',
-					triggerAction: 'all',
-					editable:false
-				});
-
-				this.importFieldsFormPanel.add(combo);
-			}
 		} else {
-			this.importFieldsFormPanel.getForm().reset();
+			// This destroys all the form's components for every new uploaded file.
+			this.importFieldsFormPanel.removeAll(true);
 		}
 		
-		for(var key in this._modelAttributes)
+		// Create and add new fields for every column for every new uploaded file.
+		for(var colNr=0; colNr<this._colHeaders.length; colNr++)
 		{
-			var keyArray = key.split('.');
-			var matchingRecordId = this._csvHeaderStore.findBy( function findByDisplayField(record,id) {
-				if (!GO.util.empty(keyArray[1]) && record.data.headerString.toLowerCase()==keyArray[1].toLowerCase())
-					return true;
-				if (record.data.headerString.toLowerCase()==key.toLowerCase())
-					return true;
-				if (record.data.headerString.toLowerCase()==keyArray[0].toLowerCase())
-					return true;
-				return false;
+			var combo =  new Ext.form.ComboBox({
+				fieldLabel: this._colHeaders[colNr],
+				id: this._inputIdPrefix+colNr,
+				store: this._attributesStore,
+				displayField:'label',
+				valueField:	'dbShortFieldName',
+				hiddenName: colNr,
+				mode: 'local',
+				triggerAction: 'all',
+				editable:false
+			});
+
+			this.importFieldsFormPanel.add(combo);
+		}
+		
+		/**
+		 * This presets the comboboxes of the second dialog, such that any
+		 * recognized column field in the form has the matching model attribute
+		 * value in its combobox.
+		 */
+		for(var colNr=0; colNr<this._colHeaders.length; colNr++)
+		{
+			var colName = this._colHeaders[colNr];
+			var matchingRecordId = this._attributesStore.findBy( function findByDisplayField(attributeRecord,id) {
+				return !GO.util.empty(colName) && attributeRecord.data.dbShortFieldName.toLowerCase()==colName.toLowerCase();
 			}, this);
 
-			var matchingRecord = this._csvHeaderStore.getAt(matchingRecordId);
-
-			if (!GO.util.empty(matchingRecord))
-				var colNr = matchingRecord.data.colNr;
+			if (!GO.util.empty(this._attributesStore.getAt(matchingRecordId)))
+				var presetMatchingValue = this._attributesStore.getAt(matchingRecordId).data.dbShortFieldName;
 			else
-				var colNr = null;
+				var presetMatchingValue = '-';
 
-			var component = this.importFieldsFormPanel.getForm().findField(this._moduleName+'_'+this._modelName+'_import_combo_'+key);
+			var component = this.importFieldsFormPanel.getForm().findField(this._inputIdPrefix+colNr);
 
-			component.setValue(colNr);
+			component.setValue(presetMatchingValue);
 		}
 
 		if (!this._csvFieldDialog) {
@@ -326,31 +355,41 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 				this.importFieldsFormPanel
 				],
 				buttons: [{
-					text: GO.lang['cmdOk'],
+					text: GO.lang['cmdImport'],
 					handler: function() {
 						this._rememberCSVmappings();
-						this._csvFieldDialog.close();
+						this._submitForm();
+						this.hide();
+						this.el.unmask();
 					},
 					scope: this
 				},{
-					text: GO.lang['cmdClose'],
+					text: GO.lang['cmdCancel'],
 					handler: function(){
 						this._csvFieldDialog.close();
+						this.hide();
+						this.el.unmask();
 					},
 					scope: this
 				}]
 			});
 		}
-		
-		this._csvFieldDialog.show();			
 	},
 	
+	/**
+	 * Last bit before the import paramaters are submitted: make ready the array
+	 * this._userSelectCSVMappings as set by the user. That is basically an array
+	 * whose keys are the column number in the uploaded CSV file (starting from 0),
+	 * and whose values are the database field names such as used in the GO
+	 * framework queries (e.g. in the case of contact import: t.address_no,
+	 * companies.name)
+	 */
 	_rememberCSVmappings : function() {
 		this._userSelectCSVMappings = {};
 		Ext.each(this.importFieldsFormPanel.items.items,function(item,index,allItems){
-			if (typeof(item.value)=='number') {
-				var idArray = (item.id).substring(13).split('.');
-				this._userSelectCSVMappings[item.value] = idArray[1];
+			if (item.value!='-') {
+				var colNr = item.id.replace(this._inputIdPrefix,"");
+				this._userSelectCSVMappings[colNr] = item.value;
 			}
 		},this);
 	}
