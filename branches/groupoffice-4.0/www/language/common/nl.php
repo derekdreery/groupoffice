@@ -524,3 +524,5 @@ $l['dropFilesHere']="Drop bestanden hier";
 $l['pluploadProgressText']="{0}/{1} ({3} mislukt) ({5}/s)";
 
 $l['quickEdit'] = "Snel bewerken";
+
+$l["unused"]='Ongebruikt';
