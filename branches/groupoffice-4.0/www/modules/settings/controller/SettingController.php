@@ -29,6 +29,7 @@ class GO_Settings_Controller_Setting extends GO_Base_Controller_AbstractControll
 	protected function actionSubmit($params) {
 		
 		$text = $params['login_screen_text'];
+		$reportFeedback = '';
 
 		if(preg_match("/^<br[^>]*>$/", $text))
 			$text="";
@@ -41,11 +42,25 @@ class GO_Settings_Controller_Setting extends GO_Base_Controller_AbstractControll
 		if (!empty($params['addressbook_name_template']))
 			GO_Base_Model_AbstractUserDefaultModel::setNameTemplate("GO_Addressbook_Model_Addressbook",$params['addressbook_name_template']);
 		
-		if (isset($params['GO_Tasks_Model_Tasklist_change_all_names'])) {
-//			$sql = 'SELECT tal.id AS tasklist_id, usr.* FROM ta_tasklists AS tal INNER JOIN ta_settings AS sett ON sett.default_tasklist_id = tal.id INNER JOIN go_users AS usr ON sett.user_id = usr.id';
-
-			$tlFindParams = GO_Base_Db_FindParams::newInstance()
-				->select('t.id AS tasklist_id, usr.*')
+		if (!empty($params['task_name_template']))
+			GO_Base_Model_AbstractUserDefaultModel::setNameTemplate("GO_Tasks_Model_Tasklist",$params['task_name_template']);
+		if (isset($params['GO_Tasks_Model_Tasklist_change_all_names']))
+			$this->_updateAllDefaultTasklists($reportFeedback);
+		
+		if (!empty($params['calendar_name_template']))
+			GO_Base_Model_AbstractUserDefaultModel::setNameTemplate("GO_Calendar_Model_Calendar",$params['calendar_name_template']);
+		if (isset($params['GO_Calendar_Model_Calendar_change_all_names']))
+			$this->_updateAllDefaultCalendars($reportFeedback);	
+		
+		$response['feedback'] = !empty($reportFeedback) ? $reportFeedback : GO::t('allRenamingSuccess','settings');
+		$response['success'] = true;
+		return $response;
+	}
+	
+	private function _updateAllDefaultTasklists(&$feedback='') {		
+		$stmt = GO_Tasks_Model_Tasklist::model()->find(
+			GO_Base_Db_FindParams::newInstance()
+				->ignoreAcl()
 				->joinModel(
 					array(
 						'model'=>'GO_Tasks_Model_Settings',
@@ -54,28 +69,21 @@ class GO_Settings_Controller_Setting extends GO_Base_Controller_AbstractControll
 						'foreignField'=>'default_tasklist_id',
 						'tableAlias'=>'sett'
 					)
-				)
-				->joinModel(
-					array(
-						'model'=>'GO_Base_Model_User',
-						'localTableAlias'=>'sett',
-						'localField'=>'user_id',
-						'foreignField'=>'id',
-						'tableAlias'=>'usr'
-					)
-				);
-			$tlKey = 'tasklist_id';
-		} else {
-			$tlFindParams = false;
-			$tlKey = false;
+				));
+		while ($updateModel = $stmt->fetch()) {
+			try{
+				$updateModel->setDefaultAttributes(false);
+				$updateModel->save();
+			}catch(Exception $e){
+				$feedback .= $e->getMessage();
+			}
 		}
-		if (!empty($params['task_name_template']))
-			GO_Base_Model_AbstractUserDefaultModel::setNameTemplate("GO_Tasks_Model_Tasklist",$params['task_name_template'],$tlFindParams,$tlKey);
-
-		if (isset($params['GO_Calendar_Model_Calendar_change_all_names'])) {
-//			$sql = 'SELECT cal.id AS calendar_id, usr.* FROM cal_calendars AS cal INNER JOIN cal_settings AS sett ON sett.calendar_id = cal.id INNER JOIN go_users AS usr ON sett.user_id = usr.id';
-			$calFindParams = GO_Base_Db_FindParams::newInstance()
-				->select('t.id AS calendar_id, usr.*')
+	}
+	
+	private function _updateAllDefaultCalendars(&$feedback=''){
+		$stmt = GO_Calendar_Model_Calendar::model()->find(
+			GO_Base_Db_FindParams::newInstance()
+				->ignoreAcl()
 				->joinModel(
 					array(
 						'model'=>'GO_Calendar_Model_Settings',
@@ -84,27 +92,16 @@ class GO_Settings_Controller_Setting extends GO_Base_Controller_AbstractControll
 						'foreignField'=>'calendar_id',
 						'tableAlias'=>'sett'
 					)
-				)
-				->joinModel(
-					array(
-						'model'=>'GO_Base_Model_User',
-						'localTableAlias'=>'sett',
-						'localField'=>'user_id',
-						'foreignField'=>'id',
-						'tableAlias'=>'usr'
-					)
-				);
-			$calKey = 'calendar_id';
-		} else {
-			$calFindParams = false;
-			$calKey = false;
+				));
+		while ($updateModel = $stmt->fetch()) {
+			try{
+				$updateModel->setDefaultAttributes(false);
+				$updateModel->save();
+			}catch(Exception $e){
+				$feedback .= $e->getMessage();
+			}
 		}
-		if (!empty($params['calendar_name_template']))
-			GO_Base_Model_AbstractUserDefaultModel::setNameTemplate("GO_Calendar_Model_Calendar",$params['calendar_name_template'],$calFindParams,$calKey);
-		
-		$response['success'] = true;
-		return $response;
 	}
-	
+
 }
 ?>

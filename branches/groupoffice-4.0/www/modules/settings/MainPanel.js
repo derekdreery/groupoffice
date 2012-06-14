@@ -43,12 +43,18 @@ GO.settings.MainPanel = function(config){
 		cls: 'x-btn-text-icon',
 		handler: function()
 		{
-			this.el.mask(GO.lang.waitMsgLoad);				
+//			this.el.mask(GO.lang.waitMsgLoad);				
 //			this.form.baseParams.save = true;
 			this.form.submit({
 				url: GO.url('settings/setting/submit'),
-				success: function(form,action){this.el.unmask();},
-				failure: function(form,action){this.el.unmask();},
+				success: function(form,action){
+					this.el.unmask();
+					Ext.MessageBox.alert('',action.result.feedback);
+				},
+				failure: function(form,action){
+					this.el.unmask();
+					Ext.MessageBox.alert(GO.lang.strError,action.result.feedback);
+				},
 				scope: this
 			});
 		},
