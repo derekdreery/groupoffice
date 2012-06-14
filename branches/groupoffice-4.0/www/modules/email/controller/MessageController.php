@@ -392,10 +392,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$message = GO_Email_Model_SavedMessage::model()->createFromMimeFile($params['path']);
 		}		
 		
-		return $this->_messageToReplyResponse($params, $message);
+		return $this->_messageToReplyResponse($params, $message, $account);
 	}
 
-	private function _messageToReplyResponse($params, GO_Email_Model_ComposerMessage $message) {
+	private function _messageToReplyResponse($params, GO_Email_Model_ComposerMessage $message, GO_Email_Model_Account $account) {
 		$html = $params['content_type'] == 'html';
 
 		$fullDays = GO::t('full_days');
@@ -438,14 +438,28 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		} else {
 			$response['data']['subject'] = $message->subject;
 		}
+		
+		
+		//find the right sender alias
+		$stmt = $account->aliases;
+		while($possibleAlias = $stmt->fetch()){
+			if($message->to->hasRecipient($possibleAlias->email)){
+				$alias = $possibleAlias;
+				break;
+			}
+		}
+		
+		if(!isset($alias))
+			$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);		
+		
+		$response['data']['alias_id']=$alias->id;		
 
 		if (!empty($params['replyAll'])) {
 			$toList = new GO_Base_Mail_EmailRecipients();
 			$toList->mergeWith($message->from)
 							->mergeWith($message->to);
 			
-			//remove our own alias from the recipients.
-			$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);
+			//remove our own alias from the recipients.			
 			$toList->removeRecipient($alias->email);
 			$message->cc->removeRecipient($alias->email);
 				
