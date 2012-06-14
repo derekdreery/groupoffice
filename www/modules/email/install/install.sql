@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS `em_aliases` (
   `name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `signature` text,
-  `default` enum('0','1') NOT NULL,
+  `default` BOOLEAN NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `account_id` (`account_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;

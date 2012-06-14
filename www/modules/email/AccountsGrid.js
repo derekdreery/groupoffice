@@ -22,13 +22,7 @@ GO.email.AccountsGrid = function(config){
 	config.border=false;
 	config.autoScroll=true;
 	config.store = new GO.data.JsonStore({
-		url: GO.settings.modules.email.url+'json.php',
-		baseParams: {		
-			"task": 'accounts'
-		},
-		root: 'results',
-		totalProperty: 'total',
-		id: 'id',
+		url: GO.url("email/account/store"),
 		fields:['id','email','host', 'user_name', 'username','smtp_host'],
 		remoteSort: true,
 		sortInfo:{field: 'email', direction: "ASC"}
