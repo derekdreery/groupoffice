@@ -3265,18 +3265,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	/**
 	 * Duplicates the current activerecord to a new one.
 	 * 
-	 * @param array $params Array of parameters that need to be set in the newly created activerecord as KEY => VALUE. Like: $params = array('attribute1'=>1,'attribute2'=>'Hello');
+	 * @param array $attributes Array of attributes that need to be set in the newly created activerecord as KEY => VALUE. Like: $params = array('attribute1'=>1,'attribute2'=>'Hello');
 	 *
 	 * @return Object The newly created object
 	 * 
 	 * @todo Copy the linked items too.  Use __clone() ??
 	 * 
 	 */
-	public function duplicate($params = array(), $save=true) {
+	public function duplicate($attributes = array(), $save=true) {
 		
 		//$copy = new GO_Base_Db_ActiveRecord(true);
 		$copy = clone $this;
-		
+			
 		unset($copy->ctime);
 		
 		//unset the files folder
@@ -3298,7 +3298,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 		
 
-		foreach($params as $key=>$value) {
+		foreach($attributes as $key=>$value) {
 			$copy->$key = $value;
 		}
 		
