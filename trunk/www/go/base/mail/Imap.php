@@ -317,6 +317,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			$cmd .= ' RETURN (CHILDREN STATUS (MESSAGES UNSEEN))';
 		}
 		
+		if($this->has_capability("LIST-EXTENDED") && !$listSubscribed)
+			$cmd .= ' RETURN (CHILDREN SUBSCRIBED)';
+		
 		GO::debug($cmd);
 		
 		$cmd .= "\r\n";
@@ -392,7 +395,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 					$subscribed = true;
 				}
 				
-				if ($folder != 'INBOX' && stristr($flags, 'noselect')) {
+				if ($folder != 'INBOX' && (stristr($flags, 'noselect') || stristr($flags, 'NonExistent'))) {
 					$no_select = true;
 				}
 				
@@ -480,7 +483,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			}
 		}
 
-	//	GO::debug($folders);
+//		GO::debug($folders);
 
 		ksort($folders);
 
