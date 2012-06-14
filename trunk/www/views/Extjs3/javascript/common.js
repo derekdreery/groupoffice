@@ -13,6 +13,11 @@
  
 Ext.namespace('GO.util');
 
+GO.log = function(v){
+	if(console)
+		console.log(v);
+}
+
 GO.util.callToHref = function(phone){
 	phone = phone.replace(/[^0-9+]/g,'');
 	return GO.calltoTemplate.replace('{phone}', phone);

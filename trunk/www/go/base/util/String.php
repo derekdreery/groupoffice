@@ -1292,7 +1292,7 @@ class GO_Base_Util_String {
 	{
 		$keys = array_keys($name);
 
-		$editedKeys = array_map(array("String", "_addAccolades"), $keys);
+		$editedKeys = array_map(array("GO_Base_Util_String", "_addAccolades"), $keys);
 
 		$res = trim(preg_replace('/\s+/', ' ',str_replace($editedKeys, array_values($name),$template)));
 
@@ -1301,7 +1301,7 @@ class GO_Base_Util_String {
 		return $res;
 	}
 
-	function _addAccolades($string)
+	static protected function _addAccolades($string)
 	{
 		return '{'.$string.'}';
 	}

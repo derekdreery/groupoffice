@@ -25,7 +25,7 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 		
 	initComponent : function(){	
 		
-		this.loadUrl=GO.url('notes/note/display');
+		this.loadUrl=('notes/note/display');
 		
 		this.template = 
 

@@ -300,7 +300,7 @@ $updates["201205031447"][]="update cf_fields set datatype='GO_Addressbook_Custom
 
 $updates["201205031447"][]="update `ab_email_templates` set content = replace(content, '{my_', '{user:') WHERE type=0";
 $updates["201205031447"][]="update `ab_email_templates` set content = replace(content, '{user:company','{usercompany:name') WHERE type=0";
-$updates["201205031447"][]="UPDATE `ab_email_templates` SET content = replace( content, '{user:work_', '{usercompany:' ) WHERE TYPE =0";
+$updates["201205031447"][]="UPDATE `ab_email_templates` SET content = replace( content, '{user:work_', '{usercompany:' ) WHERE type =0";
 
 $updates["201205231030"][]="CREATE TABLE IF NOT EXISTS `ab_contacts_vcard_props` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -311,3 +311,37 @@ $updates["201205231030"][]="CREATE TABLE IF NOT EXISTS `ab_contacts_vcard_props`
   PRIMARY KEY (`id`),
   KEY `contact_id` (`contact_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;";
+
+
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{first_name}","{contact:first_name}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{middle_name}","{contact:middle_name}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{last_name}","{contact:last_name}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{initials}","{contact:initials}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{title}","{contact:title}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{email}","{contact:email}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{home_phone}","{contact:home_phone}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{fax}","{contact:fax}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{cellular}","{contact:cellular}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{address}","{contact:address}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{address_no}","{contact:address_no}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{zip}","{contact:zip}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{city}","{contact:city}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{state}","{contact:state}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{country}","{contact:country}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{company}","{contact:company}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{department}","{contact:department}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{function}","{contact:function}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{work_phone}","{contact:work_phone}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{work_fax}","{contact:work_fax}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{work_address}","{contact:work_address}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{work_address_no}","{contact:work_address_no}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{work_city}","{contact:work_city}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{work_zip}","{contact:work_zip}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{work_state}","{contact:work_state}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{work_country}","{contact:work_country}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{work_post_address}","{contact:work_post_address}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{work_address_no}","{contact:work_post_address_no}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{work_post_city}","{contact:work_post_city}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{work_post_zip}","{contact:work_post_zip}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{work_post_state}","{contact:work_post_state}") WHERE type =0';
+$updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{work_post_country}","{contact:work_post_country}") WHERE type =0';

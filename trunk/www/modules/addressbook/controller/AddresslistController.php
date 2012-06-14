@@ -16,6 +16,13 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 
 	protected $model = 'GO_Addressbook_Model_Addresslist';
 	
+	protected function beforeStore(&$response, &$params, &$store) {
+		
+		$store->setDefaultSortOrder('name','ASC');
+		
+		return parent::beforeStore($response, $params, $store);
+	}
+	
 	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
 		
 		if (empty($params['forContextMenu'])) {

@@ -85,12 +85,9 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 	 
 	 this.lastConfig=config;
 	 this.lastId=id;
-	 
-		this.el.mask(GO.lang.strWaitMsgLoad);
-
+		
 		if(!this.remoteMessage)
 			this.remoteMessage={};
-
 
 		this.messageId=id;		
 		this.remoteMessage.id=this.messageId;
@@ -99,33 +96,32 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 		switch(config.action){
 			
 			case 'path':
-				this.loadUrl=GO.url("savemailas/linkedEmail/loadPath");
+				this.loadUrl=("savemailas/linkedEmail/loadPath");
 			break;
 			
 			case 'attachment':
-				this.loadUrl = GO.url("email/message/messageAttachment");
+				this.loadUrl = ("email/message/messageAttachment");
 				break;
 				
 			case 'file':
-				this.loadUrl=GO.url("savemailas/linkedEmail/loadFile");
+				this.loadUrl=("savemailas/linkedEmail/loadFile");
 				break;
 				
 			default:
-				this.loadUrl=GO.url("savemailas/linkedEmail/loadLink");
+				this.loadUrl=("savemailas/linkedEmail/loadLink");
 				
 				break;
 			
 		}
 
-		Ext.Ajax.request({
+		GO.request({
+			maskEl:this.el,
 			url: this.loadUrl,
 			params: this.remoteMessage,
 			scope: this,
-			callback: function(options, success, response)
-			{
-				var data = Ext.decode(response.responseText);
+			success: function(options, response, data)
+			{				
 				this.setMessage(data);
-				this.el.unmask();
 			}
 		});
 	},

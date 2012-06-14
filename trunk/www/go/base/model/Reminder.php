@@ -59,7 +59,7 @@ class GO_Base_Model_Reminder extends GO_Base_Db_ActiveRecord {
 	 */
 	public static function newInstance($name, $time, $model_name='', $model_id=0){
 		$r = new GO_Base_Model_Reminder();
-		$r->name=$name;
+		$r->name=	GO_Base_Util_String::cut_string($name, 100);
 		$r->time=$time;
 		$r->model_type_id=GO::getModel($model_name)->modelTypeId();
 		$r->model_id=$model_id;

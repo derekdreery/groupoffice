@@ -51,4 +51,21 @@ class GO_Log_Model_Log extends GO_Base_Db_ActiveRecord {
 		$attr['username']=GO::user() ? GO::user()->username : 'notloggedin';
 		return $attr;
 	}
+	
+	/**
+	 * Log a custom message
+	 * 
+	 * @param string $action eg update, save
+	 * @param string $message 
+	 */
+	public static function create($action, $message){
+		$log = new GO_Log_Model_Log();
+		
+		$log->model_id=0;
+
+		$log->action=$action;
+		$log->model="";			
+		$log->message = $message;
+		$log->save();
+	}
 }

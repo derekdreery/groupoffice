@@ -451,12 +451,9 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Copy current file to the versioning system. 
 	 */
-	public function saveVersion(){
-		if(empty(GO::config()->max_file_versions))
-			GO::config()->max_file_versions=3;
-		
-		if(GO::config()->max_file_versions>1){
-			$version = new GO_files_Model_Version();
+	public function saveVersion(){		
+		if(GO::config()->max_file_versions>-1){
+			$version = new GO_Files_Model_Version();
 			$version->file_id=$this->id;
 			$version->save();
 		}

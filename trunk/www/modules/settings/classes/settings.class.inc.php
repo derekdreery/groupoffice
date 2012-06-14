@@ -33,35 +33,5 @@ class settings // extends db
 			echo 'GO.mainLayout.on("login", function(mainLayout){mainLayout.msg("'.String::escape_javascript ($login_screen_text_title).'", "'.String::escape_javascript ($login_screen_text).'", 3600, 400);});';
 		}
 	}
-
-	//private $db;
-
-	public function settings()
-	{
-		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
-		//$this->db = new db();
-	}
-
-	public function getSettingByName($name)
-	{
-		return $GLOBALS['GO_CONFIG']->get_setting($name);
-	}
-
-	public function getAllSettings()
-	{
-		return $GLOBALS['GO_CONFIG']->get_settings();
-	}
-
-	public function getSettingsByUser($userid)
-	{
-		return $GLOBALS['GO_CONFIG']->get_settings($userid);
-	}
-
-	public function save_setting($name, $value, $userid)
-	{
-		$GLOBALS['GO_CONFIG']->save_setting($name, $value, $userid);
-		
-		return $GLOBALS['GO_CONFIG']->get_setting($name);
-	}
 }
 ?>

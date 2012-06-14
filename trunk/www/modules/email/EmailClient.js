@@ -1219,14 +1219,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 			senderNames.push(records[i].data.from);
 			senderEmails.push(records[i].data.sender);
 		}
-		
-		senderNames.push('Testpersoon, Testje');
-		senderEmails.push('foobar@testpersoon.dev');
-		senderNames.push('Testpersoon1, Testje');
-		senderEmails.push('foobar1@testpersoon.dev');
-		senderNames.push('Testpersoon2, Testje');
-		senderEmails.push('foobar2@testpersoon.dev');
-		
+			
 		Ext.Ajax.request({
 			url: GO.url('addressbook/addresslist/addContactsToAddresslist'),
 			params: {

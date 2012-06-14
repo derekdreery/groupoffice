@@ -37,7 +37,7 @@ DROP TABLE IF EXISTS `cal_categories`;
 CREATE TABLE IF NOT EXISTS `cal_categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `color` char(6) NOT NULL,
+  `color` char(6) NOT NULL DEFAULT 'EBF1E2',
   `calendar_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `calendar_id` (`calendar_id`)
