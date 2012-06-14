@@ -15,102 +15,100 @@ GO.email.FoldersDialog = function(config) {
 	Ext.apply(this, config);
 
 	this.foldersTree = new Ext.tree.TreePanel({
-				animate : true,
-				border : false,
-				autoScroll : true,
-				height : 200,
-				loader : new GO.base.tree.TreeLoader({
-							dataUrl : GO.settings.modules.email.url
-									+ 'json.php',
-							baseParams : {
-								task : 'tree-edit',
-								account_id : 0
-							},
-							preloadChildren : true,
-							listeners : {
-								beforeload : function() {
-									this.body.mask(GO.lang.waitMsgLoad);
-								},
-								load : function() {
-									this.body.unmask();
-								},
-								scope : this
-							}
-						})
-			});
+		animate : true,
+		border : false,
+		autoScroll : true,
+		height : 200,
+		loader : new GO.base.tree.TreeLoader({
+			dataUrl : GO.url("email/account/subscribtionsTree"),
+			baseParams : {
+				list_all : 1,
+				account_id : 0
+			},
+			preloadChildren : true,
+			listeners : {
+				beforeload : function() {
+					this.body.mask(GO.lang.waitMsgLoad);
+				},
+				load : function() {
+					this.body.unmask();
+				},
+				scope : this
+			}
+		})
+	});
 
 	// set the root node
 	this.rootNode = new Ext.tree.AsyncTreeNode({
-				text : GO.email.lang.root,
-				draggable : false,
-				id : 'account',
-				folder_id : 0,
-				expanded : false
-			});
+		text : GO.email.lang.root,
+		draggable : false,
+		id : 'root',
+		expanded : false
+	});
 	this.foldersTree.setRootNode(this.rootNode);
 
 	this.rootNode.on('load', function() {
-				this.rootNode.select();
+		this.rootNode.select();
 
-			}, this);
+	}, this);
 
 	this.foldersTree.on('checkchange', function(node, checked) {
 
-				this.body.mask(GO.lang.waitMsgSave, 'x-mask-loading');
+		this.body.mask(GO.lang.waitMsgSave, 'x-mask-loading');
 
-				var task = checked ? 'subscribe' : 'unsubscribe';
+		var task = checked ? 'subscribe' : 'unsubscribe';
 
-				Ext.Ajax.request({
-							url : GO.settings.modules.email.url + 'action.php',
-							params : {
-								task : task,
-								account_id : this.account_id,
-								mailbox : node.attributes.mailbox
-							},
-							callback : function(options, success, response) {
-								if (!success) {
-									Ext.MessageBox.alert(GO.lang.strError,
-											response.result.feedback);
-								}
-								this.body.unmask();
-							},
-							scope : this
-						});
+		Ext.Ajax.request({
+			url : GO.settings.modules.email.url + 'action.php',
+			params : {
+				task : task,
+				account_id : this.account_id,
+				mailbox : node.attributes.mailbox
+			},
+			callback : function(options, success, response) {
+				if (!success) {
+					Ext.MessageBox.alert(GO.lang.strError,
+						response.result.feedback);
+				}
+				this.body.unmask();
+			},
+			scope : this
+		});
 
-			}, this);
+	}, this);
 
 	var treeEdit = new Ext.tree.TreeEditor(this.foldersTree, {
-				ignoreNoChange : true
-			});
+		ignoreNoChange : true
+	});
 
 	treeEdit.on('beforestartedit', function(editor, boundEl, value) {
-				if (editor.editNode.attributes.folder_id == 0
-						|| editor.editNode.attributes.mailbox == 'INBOX') {
-					alert(GO.email.lang.cantEditFolder);
-					return false;
-				}
-			});
+		if (editor.editNode.attributes.folder_id == 0
+			|| editor.editNode.attributes.mailbox == 'INBOX') {
+			alert(GO.email.lang.cantEditFolder);
+			return false;
+		}
+	});
 
 	treeEdit.on('beforecomplete', function(editor, boundEl, value) {
 
-				Ext.Ajax.request({
-							url : GO.settings.modules.email.url + 'action.php',
-							params : {
-								task : 'rename_folder',
-								folder_id : editor.editNode.attributes.folder_id,
-								new_name : boundEl
-							},
-							callback : function(options, success, response) {
-								if (!success) {
-									Ext.MessageBox.alert(GO.lang.strError,
-											response.result.feedback);
-								} else {
-									return true;
-								}
-							}
-						});
+		Ext.Ajax.request({
+			url : GO.settings.modules.email.url + 'action.php',
+			params : {
+				task : 'rename_folder',
+				folder_id : editor.editNode.attributes.folder_id,
+				new_name : boundEl
+			},
+			callback : function(options, success, response) {
+				if (!success) {
+					Ext.MessageBox.alert(GO.lang.strError,
+						response.result.feedback);
+				} else {
+					return true;
+				}
+			}
+		});
 
-			});
+	});
 
 	GO.email.FoldersDialog.superclass.constructor.call(this, {
 		layout : 'fit',
@@ -137,29 +135,29 @@ GO.email.FoldersDialog = function(config) {
 
 				if (!node || node.attributes.folder_id < 1) {
 					Ext.MessageBox.alert(GO.lang.strError,
-							GO.email.lang.selectFolderDelete);
+						GO.email.lang.selectFolderDelete);
 				} else if (node.attributes.mailbox == 'INBOX') {
 					Ext.MessageBox.alert(GO.lang.strError,
-							GO.email.lang.cantDeleteInboxFolder);
+						GO.email.lang.cantDeleteInboxFolder);
 				} else {
 					GO.deleteItems({
-								url : GO.settings.modules.email.url
-										+ 'action.php',
-								params : {
-									task : 'delete_folder',
-									folder_id : node.attributes.folder_id
-								},
-								callback : function(responseParams) {
-									if (responseParams.success) {
-										node.remove();
-									} else {
-										Ext.MessageBox.alert(GO.lang.strError,
-												responseParams.feedback);
-									}
-								},
-								count : 1,
-								scope : this
-							});
+						url : GO.settings.modules.email.url
+						+ 'action.php',
+						params : {
+							task : 'delete_folder',
+							folder_id : node.attributes.folder_id
+						},
+						callback : function(responseParams) {
+							if (responseParams.success) {
+								node.remove();
+							} else {
+								Ext.MessageBox.alert(GO.lang.strError,
+									responseParams.feedback);
+							}
+						},
+						count : 1,
+						scope : this
+					});
 				}
 			}
 		}, {
@@ -173,50 +171,50 @@ GO.email.FoldersDialog = function(config) {
 
 				if (!node) {
 					Ext.MessageBox.alert(GO.lang.strError,
-							GO.email.lang.selectFolderAdd);
+						GO.email.lang.selectFolderAdd);
 				} else {
 					Ext.MessageBox.prompt(GO.lang.strName,
-							GO.email.lang.enterFolderName, function(button,
-									text) {
+						GO.email.lang.enterFolderName, function(button,
+							text) {
 
-								if (button == 'ok') {
-									Ext.Ajax.request({
-										url : GO.settings.modules.email.url
-												+ 'action.php',
-										params : {
-											task : 'add_folder',
-											folder_id : node.attributes.folder_id,
-											account_id : this.account_id,
-											new_folder_name : text
-										},
-										callback : function(options, success,
-												response) {
-											if (!success) {
-												Ext.MessageBox.alert(
-														GO.lang.strError,
-														response.result.errors);
+							if (button == 'ok') {
+								Ext.Ajax.request({
+									url : GO.settings.modules.email.url
+									+ 'action.php',
+									params : {
+										task : 'add_folder',
+										folder_id : node.attributes.folder_id,
+										account_id : this.account_id,
+										new_folder_name : text
+									},
+									callback : function(options, success,
+										response) {
+										if (!success) {
+											Ext.MessageBox.alert(
+												GO.lang.strError,
+												response.result.errors);
+										} else {
+											var responseParams = Ext
+											.decode(response.responseText);
+											if (responseParams.success) {
+												// remove preloaded children
+												// otherwise it won't
+												// request the server
+												delete node.attributes.children;
+												node.reload();
 											} else {
-												var responseParams = Ext
-														.decode(response.responseText);
-												if (responseParams.success) {
-													// remove preloaded children
-													// otherwise it won't
-													// request the server
-													delete node.attributes.children;
-													node.reload();
-												} else {
-													Ext.MessageBox
-															.alert(
-																	GO.lang.strError,
-																	responseParams.feedback);
-												}
-
+												Ext.MessageBox
+												.alert(
+													GO.lang.strError,
+													responseParams.feedback);
 											}
-										},
-										scope : this
-									});
-								}
-							}, this);
+
+										}
+									},
+									scope : this
+								});
+							}
+						}, this);
 				}
 			},
 			scope : this
@@ -227,7 +225,7 @@ GO.email.FoldersDialog = function(config) {
 			cls : 'x-btn-text-icon',
 			handler : function() {
 				this.rootNode.reload();
-				/*
+			/*
 				Ext.Ajax.request({
 							url : GO.settings.modules.email.url + 'action.php',
 							params : {
@@ -250,43 +248,43 @@ GO.email.FoldersDialog = function(config) {
 
 		],
 		buttons : [{
-					text : GO.lang.cmdClose,
-					handler : function() {
-						this.hide();
-					},
-					scope : this
-				}]
+			text : GO.lang.cmdClose,
+			handler : function() {
+				this.hide();
+			},
+			scope : this
+		}]
 	});
 }
 
 Ext.extend(GO.email.FoldersDialog, Ext.Window, {
 
-			show : function(account_id) {
+	show : function(account_id) {
 
-				this.render(Ext.getBody());
+		this.render(Ext.getBody());
 
-				this.account_id = account_id;
-				this.foldersTree.loader.baseParams.account_id = account_id;
+		this.account_id = account_id;
+		this.foldersTree.loader.baseParams.account_id = account_id;
 
-				if (!this.rootNode.isExpanded())
-					this.rootNode.expand();
-				else
-					this.rootNode.reload();
+		if (!this.rootNode.isExpanded())
+			this.rootNode.expand();
+		else
+			this.rootNode.reload();
 
-				GO.email.FoldersDialog.superclass.show.call(this);
+		GO.email.FoldersDialog.superclass.show.call(this);
 
-			},
+	},
 
-			getSubscribtionData : function() {
-				var data = [];
-				for (var i = 0; i < this.allFoldersStore.data.items.length; i++) {
-					data[i] = {
-						id : this.allFoldersStore.data.items[i].get('id'),
-						subscribed : this.allFoldersStore.data.items[i]
-								.get('subscribed'),
-						name : this.allFoldersStore.data.items[i].get('name')
-					};
-				}
-				return data;
-			}
-		});
+	getSubscribtionData : function() {
+		var data = [];
+		for (var i = 0; i < this.allFoldersStore.data.items.length; i++) {
+			data[i] = {
+				id : this.allFoldersStore.data.items[i].get('id'),
+				subscribed : this.allFoldersStore.data.items[i]
+				.get('subscribed'),
+				name : this.allFoldersStore.data.items[i].get('name')
+			};
+		}
+		return data;
+	}
+});

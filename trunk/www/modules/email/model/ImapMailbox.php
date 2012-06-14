@@ -116,14 +116,14 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		$this->_children[] = $mailbox;
 	}
 
-	public function getChildren() {
+	public function getChildren($subscribed=true, $withStatus=true) {
 		if(!isset($this->_children)){
 
 			$imap = $this->getAccount()->openImapConnection();
 
 			$this->_children = array();
 
-			$folders = $imap->list_folders(true,true,$this->name.$this->delimiter,"%");
+			$folders = $imap->list_folders($subscribed,$withStatus,$this->name.$this->delimiter,"%");
 			foreach($folders as $folder){
 				$mailbox = new GO_Email_Model_ImapMailbox($this->account,$folder);
 				$this->_children[]=$mailbox;
