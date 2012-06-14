@@ -148,13 +148,13 @@ GO.email.EmailComposer = function(config) {
 		fieldLabel : GO.email.lang.from,
 		name : 'alias_name',
 		anchor : '100%',
-		displayField : 'name',
+		displayField : 'from',
 		valueField : 'id',
 		hiddenName : 'alias_id',
 		forceSelection : true,
 		triggerAction : 'all',
 		mode : 'local',
-		tpl: '<tpl for="."><div class="x-combo-list-item">{name:htmlEncode}</div></tpl>',
+		tpl: '<tpl for="."><div class="x-combo-list-item">{from:htmlEncode}</div></tpl>',
 		listeners:{
 			beforeselect: function(cb, newAccountRecord){
 				var oldAccountRecord = cb.store.getById(cb.getValue());

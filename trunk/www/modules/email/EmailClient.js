@@ -1337,7 +1337,7 @@ GO.email.aliasesStore = new GO.data.JsonStore({
 	root: 'results',
 	id: 'id',
 	totalProperty:'total',
-	fields: ['id','account_id','name','email','html_signature', 'plain_signature'],
+	fields: ['id','account_id', 'from', 'name','email','html_signature', 'plain_signature'],
 	remoteSort: true
 });
 

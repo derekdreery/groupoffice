@@ -18,13 +18,7 @@ GO.email.AliasesGrid = function(config){
 	config.layout='fit';
 	config.autoScroll=true;
 	config.store = new GO.data.JsonStore({
-	    url: GO.settings.modules.email.url+ 'json.php',
-	    baseParams: {
-	    	task: 'aliases'
-	    	},
-	    root: 'results',
-	    id: 'id',
-	    totalProperty:'total',
+	    url: GO.url("email/alias/store"),
 	    fields: ['id','account_id','name','email','signature'],
 	    remoteSort: true
 	});
