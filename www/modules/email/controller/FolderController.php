@@ -37,6 +37,19 @@ class GO_Email_Controller_Folder extends GO_Base_Controller_AbstractController {
 		return array("success"=>$success);
 	}
 	
-	
-	
+	protected function actionStore($params){
+		
+		$response = array(
+				"results"=>array(),
+				"success"=>true
+		);
+		
+		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+		$mailboxes = $account->getAllMailboxes(false, false);
+		foreach($mailboxes as $mailbox){
+			$response['results'][]=array('name'=>$mailbox->name);
+		}
+		
+		return $response;		
+	}
 }

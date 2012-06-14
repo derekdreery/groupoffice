@@ -218,17 +218,21 @@ GO.email.AccountDialog = function(config) {
 	};
 
 	GO.email.subscribedFoldersStore = new GO.data.JsonStore({
-
-		url : GO.settings.modules.email.url + 'json.php',
+		url : GO.url("email/folder/store"),
 		baseParams : {
 			task : 'subscribed_folders',
 			account_id : 0
 		},
-		root : 'data',
-		fields : ['id', 'name']
+		fields : ['name']
 	});
 
 	this.foldersTab = new Ext.Panel({
+		listeners:{
+			show:function(){
+				
+				GO.email.subscribedFoldersStore.load();
+			}
+		},
 		title : GO.email.lang.folders,
 		autoHeight : true,
 		layout : 'form',
@@ -465,7 +469,6 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 		if (account_id) {
 			this.loadAccount(account_id);
 			GO.email.subscribedFoldersStore.baseParams.account_id = account_id;
-			GO.email.subscribedFoldersStore.load();
 		} else {
 
 			this.propertiesPanel.form.reset();

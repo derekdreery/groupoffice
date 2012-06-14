@@ -260,7 +260,7 @@ GO.email.EmailClient = function(config){
 			var record = this.messagesGrid.selModel.getSelected();
 			if(record)
 			{
-				var win = window.open(GO.settings.modules.email.url+'source.php?account_id='+this.account_id+'&mailbox='+encodeURIComponent(this.mailbox)+'&uid='+encodeURIComponent(record.data.uid));
+				var win = window.open(GO.url("email/message/source",{account_id:this.account_id,mailbox:this.mailbox,uid:record.data.uid}));
 				win.focus();
 			}
 				
