@@ -551,3 +551,6 @@ $l["personalDetailsFor"]= 'Personal details for';
 $l["fieldsetWork"]= 'Work';
 $l["fieldsetAddress"]= 'Address';
 $l["fieldsetContact"]= 'Contact details';
+
+$l["attributeGreater"]="Field '%s' must be greater than '%s'";
+$l["attributeGreaterOrEqual"]="Field '%s' must be greater or equal to '%s'";
