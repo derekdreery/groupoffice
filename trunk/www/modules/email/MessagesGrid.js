@@ -234,7 +234,7 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 	},
 	toggleUnread : function(item, pressed)
 	{
-		GO.email.messagesGrid.store.baseParams['unread']=pressed;
+		GO.email.messagesGrid.store.baseParams['unread']=pressed ? 1 : 0;
                 
 		GO.email.messagesGrid.store.load();
 	},

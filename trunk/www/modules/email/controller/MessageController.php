@@ -29,7 +29,16 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$params['dir']="ASC";
 		
 		//TODO
-		$query="";
+		$query=isset($params['query']) ? $params['query'] : "";
+		
+		//passed when only unread should be shown
+		if(!empty($params['unread'])) {
+			$query = str_replace(array('UNSEEN', 'SEEN'), array('', ''), $query);
+			if ($query == '')
+				$query .= 'UNSEEN';
+			else
+				$query.= ' UNSEEN';
+		}
 		
 		$sort=isset($params['sort']) ? $params['sort'] : 'from';
 
