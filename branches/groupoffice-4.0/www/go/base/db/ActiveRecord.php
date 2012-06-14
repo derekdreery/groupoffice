@@ -280,6 +280,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * 'regex'=>'A preg_match expression for validation',
 	 * 'dbtype'=>'varchar' //mysql database type
 	 * 'unique'=>false //true to enforce a unique value
+	 * 'greater'=>'start_time' //this column must be greater than column start time
+	 * 'greaterorequal'=>'start_time' //this column must be greater or equal to column start time
 	 * 
 	 * The validator looks like this:
 	 * 
@@ -1939,6 +1941,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}elseif(!empty($attributes['validator']) && !empty($this->_attributes[$field]) && !call_user_func($attributes['validator'], $this->_attributes[$field]))
 			{
 				$this->setValidationError($field, sprintf(GO::t('attributeInvalid'),$this->getAttributeLabel($field)));
+			}elseif(!empty($attributes['greater'])){
+				if($this->_attributes[$field]<=$this->_attributes[$attributes['greater']])
+					$this->setValidationError($field, sprintf(GO::t('attributeGreater'), $this->getAttributeLabel($field), $this->getAttributeLabel($attributes['greater'])));
+			}elseif(!empty($attributes['greaterorequal'])){
+				if($this->_attributes[$field]<$this->_attributes[$attributes['greaterorequal']])
+					$this->setValidationError($field, sprintf(GO::t('attributeGreaterOrQueal'), $this->getAttributeLabel($field), $this->getAttributeLabel($attributes['greaterorequal'])));
 			}
 		}
 		
