@@ -169,6 +169,8 @@ GO.email.EmailComposer = function(config) {
 				 */
 				if(this.emailEditor.getContentType()=='html'){
 					editorValue = editorValue.replace(/<br>/g, '<br />');
+					oldSig=oldSig.replace(/<br>/g, '<br />')
+					newSig=newSig.replace(/<br>/g, '<br />')
 				}
 				if(GO.util.empty(oldSig))
 				{
