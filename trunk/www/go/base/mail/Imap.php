@@ -102,7 +102,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			$this->send_command($command);
 			$this->state = 'disconnected';
 			$result = $this->get_response();
-			//GO::debug($this->commands);
+			GO::debug($this->commands);
 
 			//GO::debug($this->responses);
 
@@ -1197,7 +1197,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 		if($full_data)
 			$command .= " BCC REPLY-TO DISPOSITION-NOTIFICATION-TO CONTENT-TRANSFER-ENCODING MESSAGE-ID";
-
+		
 		$command .= ")])\r\n";
 		
 		$this->send_command($command);
