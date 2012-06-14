@@ -677,7 +677,7 @@ GO.email.EmailClient = function(config){
 			GO.email.search_type = 'from';
 			this.messagesGrid.showUnreadButton.toggle(false, true);
 			this.messagesGrid.store.baseParams['search'] = sender;
-			GO.email.messagesGrid.store.baseParams['unread']=false;
+			GO.email.messagesGrid.store.baseParams['unread']=0;
 			this.messagesGrid.setSearchFields('from', sender);
 
 			this.messagesGrid.store.load({
