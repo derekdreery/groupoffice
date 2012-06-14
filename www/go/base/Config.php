@@ -1279,7 +1279,7 @@ class GO_Base_Config {
 		}
 
 		$setting->value=$value;
-		$setting->save();
+		return $setting->save();
 
 
 //		if ( $this->get_setting($name, $user_id) === false ) {
