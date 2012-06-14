@@ -108,7 +108,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 						'noselect'=>false,
 						'account_id' => $account->id,
 						'mailbox' => 'INBOX',
-						'children' => $this->_getMailboxTreeNodes($account->getAllMailboxes(true, true)),
+						'children' => $this->_getMailboxTreeNodes($account->getRootMailboxes(true)),
 						'noinferiors' => false,
 						'inbox_new' => 0,
 						'usage' => "",
@@ -119,6 +119,8 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			}
 		}else
 		{
+//			$this->_setExpanded($params['node']);
+			
 			$parts = explode('_',$params['node']);
 			$accountId=$parts[1];
 			$mailboxName=$parts[2];
@@ -166,6 +168,11 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					//'expanded' => !count($children),
 			);
 			
+			if(!$mailbox->hasnochildren && $this->_isExpanded($nodeId)){
+				$node['children']=$this->_getMailboxTreeNodes($mailbox->getChildren());
+				$node['expanded']=true;
+			}
+			
 			//if($mailbox->hasnochildren)
 			
 			$sortIndex=5;
@@ -198,6 +205,29 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		ksort($nodes);
 		
 		return array_values($nodes);
+	}
+	
+	private $_treeState;
+	private function _isExpanded($nodeId){
+		if(!isset($this->_treeState)){
+			$state = GO::config()->get_setting("email_accounts_tree", GO::user()->id);
+			$this->_treeState = empty($state) ? array() : json_decode($state);
+		}
+		
+		return in_array($nodeId, $this->_treeState);
+	}
+	
+//	private function _setExpanded($nodeId){	
+//		
+//		if(!$this->_isExpanded($nodeId)){
+//			$this->_treeState[]=$nodeId;
+//			GO::config()->save_setting("email_accounts_tree", json_encode($this->_treeState), GO::user()->id);
+//		}
+//	}
+	
+	protected function actionSaveTreeState($params){
+		$response['success']=GO::config()->save_setting("email_accounts_tree", $params['expandedNodes'], GO::user()->id);
+		return $response;
 	}
 
 }

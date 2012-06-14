@@ -62,6 +62,18 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		$imap = $account->openImapConnection($params["mailbox"]);
 		
+		if(!empty($params['delete_keys'])){
+			$uids = json_decode($params['delete_keys']);
+			
+			if(!empty($account->trash) && $params["mailbox"] != $account->trash) {
+				$imap->set_message_flag($uids, "\Seen");
+				$response['deleteSuccess']=$imap->move($uids,$account->trash);
+			}else {
+
+				$response['deleteSuccess']=$imap->delete($uids);
+			}
+		}
+		
 		/* @var $imap GO_Base_Mail_Imap */
 		$headersSet = $imap->get_message_headers_set($params['start'], $params['limit'], $sortField , $params['dir']!='ASC', $query);
 		$response["results"]=array();
@@ -78,6 +90,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		$unseen = $imap->get_unseen($params['mailbox']);
 		$response['unseen'][$params['mailbox']]=$unseen['count'];
+		
+		
+		//deletes must be confirmed if no trash folder is used or when we are in the trash folder to delete permanently
+		$response['deleteConfirm']=empty($account->trash) || $account->trash==$params['mailbox'];
 		
 		return $response;
 	}

@@ -24,14 +24,23 @@ GO.email.AccountsTree = function(config){
 	config.animate=true;
 	config.loader=new GO.base.tree.TreeLoader(
 	{
+		baseParams:{
+			expandedNodes:""
+		},
 		dataUrl:GO.url("email/account/tree"),
 		preloadChildren:true
 	});
-
-	config.loader.on("load", function(treeLoader, node)
-	{
-		node.attributes.parentExpanded=true;
+	
+	config.loader.on('beforeload', function(loader, node){
+		loader.baseParams.expandedNodes = Ext.encode(this.getExpandedNodes());
 	}, this);
+	
+	
+
+//	config.loader.on("load", function(treeLoader, node)
+//	{
+//		node.attributes.parentExpanded=true;
+//	}, this);
 
 	config.containerScroll=true;
 	config.rootVisible=false;
@@ -65,7 +74,30 @@ GO.email.AccountsTree = function(config){
 		draggable:false,
 		id:'root'
 	});
+	
+	root.on("beforeload", function(){
+		//stop state saving when loading entire tree
+		this.saveTreeState=false;
+	}, this);
+	
 	this.setRootNode(root);
+	
+	
+	this.on('collapsenode', function(node)
+	{
+		if(this.saveTreeState && node.childNodes.length)
+			this.updateState();		
+	},this);
+
+	this.on('expandnode', function(node)
+	{
+		//if root node is expanded then we are done loading the entire tree. After that we must start saving states
+		if(node.id=="root")
+			this.saveTreeState=true;
+		
+		if(node.id!="root" && this.saveTreeState && node.childNodes.length)
+			this.updateState();
+	},this);
 
 	this.on('nodedragover', function(e)
 	{		
@@ -147,10 +179,6 @@ GO.email.AccountsTree = function(config){
 
 			if(messages.length>0)
 			{
-				
-				console.log(e);
-				console.log(s[0].data);
-				console.log(e.target.attributes);
 				
 				var firstDraggedMessage = s[0].data;
 
@@ -278,6 +306,9 @@ GO.email.AccountsTree = function(config){
 	this);
 	
 	
+
+	
+	
 	
 //	this.treeEditor = new Ext.tree.TreeEditor(
 //		this,
@@ -307,9 +338,32 @@ GO.email.AccountsTree = function(config){
 }
 
 Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {	
+	
+	saveTreeState : false,
+	
+	updateState : function(){
+		GO.request({
+			url:"email/account/saveTreeState",
+			params:{
+				expandedNodes:Ext.encode(this.getExpandedNodes())
+			}
+		});
+	},
 	setUsage : function(usage){		
 			this.statusBar.body.update(usage);
 	},
+	
+	getExpandedNodes : function(){
+		var expanded = new Array();
+		this.getRootNode().cascade(function(n){
+			if(n.expanded){
+			expanded.push(n.attributes.id);
+			}
+		});
+		
+		return expanded;
+	},
+	
 	moveFolder : function(account_id, targetNode, node)
 	{
 	

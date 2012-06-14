@@ -165,7 +165,7 @@ GO.email.EmailClient = function(config){
 		}*/
 
 		//don't confirm delete to trashfolder
-		this.messagesGrid.deleteConfig.noConfirmation=!this.messagesGrid.store.reader.jsonData.trash && !GO.util.empty(this.messagesGrid.store.reader.jsonData.trash_folder);
+		this.messagesGrid.deleteConfig.noConfirmation=!this.messagesGrid.store.reader.jsonData.deleteConfirm;
 	}, this);
 
 	GO.email.saveAsItems = GO.email.saveAsItems || [];
@@ -405,33 +405,7 @@ GO.email.EmailClient = function(config){
 //		}
 	}, this);
 
-	this.treePanel.on('collapsenode', function(node)
-	{
-		if(node.attributes.mailbox && (node.attributes.mailbox != 'undefined') && node.childNodes.length)
-		{
-			this.updateState(node, false, true);
-		//this.updateFolderState(node, false);
-		}else
-		if(!node.attributes.mailbox && node.attributes.account_id)
-		{
-			this.updateState(node, false, false);
-		//this.updateAccountState(node, false);
-		}
-	},this);
 
-	this.treePanel.on('expandnode', function(node)
-	{
-		if(node.attributes.mailbox && (node.attributes.mailbox != 'undefined') && node.childNodes.length)
-		{
-			this.updateState(node, true, true);
-		//this.updateFolderState(node, true);
-		}else
-		if(!node.attributes.mailbox && node.attributes.account_id)
-		{
-			this.updateState(node, true, false);
-		//this.updateAccountState(node, true);
-		}
-	},this);
 	
 	this.searchDialog = new GO.email.SearchDialog({
 		store:this.messagesGrid.store
@@ -725,6 +699,7 @@ GO.email.EmailClient = function(config){
 };
 
 Ext.extend(GO.email.EmailClient, Ext.Panel,{	
+
 	
 	moveGrid : function(){
 		if(this.topMessagesGrid.isVisible())
@@ -1270,45 +1245,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 			},
 			scope: this
 		});
-	},
-
-	updateState : function(node, open, folder)
-	{
-		console.log("todo");
-		return;
-		var id = (folder) ? node.attributes.mailbox : node.attributes.account_id;
-		if(node.attributes.parentExpanded != open)
-		{
-			Ext.Ajax.request({
-				url: GO.settings.modules.email.url+'action.php',
-				params: {
-					task: 'update_state',
-					id: id,
-					open: open,
-					folder: folder
-				},
-				callback: function(options, success, response)
-				{
-					if(!success)
-					{
-						Ext.MessageBox.alert(GO.lang.strError, response.result.errors);
-					}else
-					{
-						var responseParams = Ext.decode(response.responseText);
-						if(responseParams.success)
-						{
-							node.attributes.parentExpanded = open;
-						}else
-						{
-							Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
-						}
-					}
-				},
-				scope: this
-			});
-		}
 	}
-	
 });
 
 GO.mainLayout.onReady(function(){
