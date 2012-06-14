@@ -120,7 +120,7 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 			if(isset($this->columns['name'])){
 //				$defaultModel->name = $user->name;
 //				$defaultModel->makeAttributeUnique('name');
-				$this->setDefaultAttributes($defaultModel, $user);
+				$defaultModel->setDefaultAttributes($user);
 			}
 			
 			//any user may do this.
@@ -145,31 +145,33 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 		return $template;
 	}
 	
-	public static function setNameTemplate($className,$templateString,$findModelsToChangeParams=false,$remoteForeignKey=false){
-		GO::config()->save_setting("name_template_".$className,$templateString);
-		if ($findModelsToChangeParams instanceof GO_Base_Db_FindParams && $remoteForeignKey!==false) {
-			$model = GO_Base_Db_ActiveRecord::model($className);
-			$stmt = $model->find($findModelsToChangeParams->ignoreAcl());
-			while ($record = $stmt->fetch(PDO::FETCH_ASSOC)) {
-				$updateModel = new $className();
-				$updateModel = $updateModel->findByPk($record[$remoteForeignKey]);
-				$updateModel->id = $record[$remoteForeignKey];
-				$updateModel->name = GO_Base_Util_String::reformat_name_template($templateString,$record);
-				$updateModel->save();
-			}
-		}
-
+	public static function setNameTemplate($className,$templateString){
+		return GO::config()->save_setting("name_template_".$className,$templateString);
 	}
 	
-	protected function setDefaultAttributes(GO_Base_Db_ActiveRecord $defaultModel, GO_Base_Model_User $user){
+	/**
+	 *
+	 * @param GO_Base_Db_User $user User model, defaults to false.
+	 * @param string &$feedback Feedback string for calling scope, contains
+	 * success / failure reports on every default model.
+	 */
+	public function setDefaultAttributes($user=false,&$feedback=''){
 		
-		//TODO Get templates for this name		
-		//$template = "{first_name} {middle_name} {last_name}";
+		if(!$user)
+			$user=$this->user;
 		
+		if(!$user)
+			throw new Exception(" - ".GO::t(get_class($this),'settings')." '".$this->name."' ".GO::t('notRenamedNoUser','settings').".<br />");
+	
 		$template = self::getNameTemplate($this->className());
+
+		$attr = $user->getAttributes();
+		if($contact = $user->createContact())
+			$attr = array_merge($attr, $contact->getAttributes());
+
+		$this->name = $this->parseUserTemplate($template, $attr);
+		$this->makeAttributeUnique('name');
 		
-		$defaultModel->name = $this->parseUserTemplate($template, $user->getAttributes());
-		$defaultModel->makeAttributeUnique('name');
 	}
 	
 	private function parseUserTemplate($template, $attributes)
