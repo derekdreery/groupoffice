@@ -117,23 +117,21 @@ class GO_Files_Model_Version extends GO_Base_Db_ActiveRecord {
 		return parent::beforeDelete();
 	}
 	
-	private function _deleteOld(){
-		
-		if(!GO::config()->max_file_versions){
-			GO::config()->max_file_versions=3;
+	private function _deleteOld(){	
+
+		if(!empty(GO::config()->max_file_versions)){
+			$params = GO_Base_Db_FindParams::newInstance()
+							->ignoreAcl()
+							->start(GO::config()->max_file_versions)
+							->limit(10)
+							->order('mtime','DESC');
+
+			$params->getCriteria()->addCondition('file_id', $this->file_id);
+
+			$stmt = $this->find($params);
+
+			$stmt->callOnEach('delete');
 		}
-		
-		$params = GO_Base_Db_FindParams::newInstance()
-						->ignoreAcl()
-						->start(GO::config()->max_file_versions)
-						->limit(10)
-						->order('mtime','DESC');
-		
-		$params->getCriteria()->addCondition('file_id', $this->file_id);
-		
-		$stmt = $this->find($params);
-		
-		$stmt->callOnEach('delete');
 	}
 }
 

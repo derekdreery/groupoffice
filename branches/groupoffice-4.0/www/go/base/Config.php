@@ -475,6 +475,15 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $max_file_size = '10000000';
+	
+	
+	/**
+	 * Maximum number of old file versions to keep
+	 * -1 will disable versioning. 0 will keep an infinite number of versions (Be careful!).
+	 * 
+	 * @var int 
+	 */
+	public $max_file_versions = 3;
 
 
 	#email variables
