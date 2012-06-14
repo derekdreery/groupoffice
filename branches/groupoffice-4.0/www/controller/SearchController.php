@@ -56,17 +56,18 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		
 		if(!empty($params['type_filter'])) {
 			if(isset($params['types'])) {
-				$types= json_decode($params['types'], true);
-				//only search for available types. eg. don't search for contacts if the user doesn't have access to the addressbook
-				if(empty($types)){
-					$types=$this->_getAllModelTypes();
-				}
-				if(!isset($params['no_filter_save']))
-					GO::config()->save_setting ('link_type_filter', implode(',',$types), GO::user()->id);
+				$types= json_decode($params['types'], true);				
 			}else {
 				$types = GO::config()->get_setting('link_type_filter', GO::user()->id);
 				$types = empty($types) ? array() : explode(',', $types);	
 			}
+			
+			//only search for available types. eg. don't search for contacts if the user doesn't have access to the addressbook
+			if(empty($types))
+					$types=$this->_getAllModelTypes();
+			
+			if(!isset($params['no_filter_save']) && isset($params['types']))
+				GO::config()->save_setting ('link_type_filter', implode(',',$types), GO::user()->id);
 		}else
 		{
 			$types=$this->_getAllModelTypes();
