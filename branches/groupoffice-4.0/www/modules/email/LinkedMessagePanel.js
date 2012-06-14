@@ -100,7 +100,7 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 			break;
 			
 			case 'attachment':
-				this.loadUrl = GO.url("email/message/messageAttachment");
+				this.loadUrl = ("email/message/messageAttachment");
 				break;
 				
 			case 'file':
