@@ -504,6 +504,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$params['file'] = $_FILES['files']['tmp_name'][0];
 		$summarylog = parent::actionImport($params);
 		$response = $summarylog->getErrorsJson();
+		$response['successCount'] = $summarylog->getTotalSuccessful();
+		$response['totalCount'] = $summarylog->getTotal();
 		$response['success'] = true;
 		return $response;
 	}
