@@ -41,7 +41,23 @@ class GO_Base_Mail_EmailRecipients{
 		
 		$this->_addresses[trim($email)]=trim($personal);
 	}
+	
+	/**
+	 * Check if an e-mail address is in this list
+	 * 
+	 * @param string $email
+	 * @return boolean 
+	 */
+	public function hasRecipient($email){
+		return isset($this->_addresses[$email]);
+	}
 
+	
+	/**
+	 * Count the addresses
+	 * 
+	 * @return int 
+	 */
 	public function count(){
 		return count($this->_addresses);
 	}
