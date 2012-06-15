@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-$title = $GO_CONFIG->get_setting('dokuwiki_title');
+$title = GO::config()->get_setting('dokuwiki_title');
 if (empty($title)) $title='Dokuwiki';
 
 /*
@@ -20,6 +20,6 @@ $GO_SCRIPTS_JS .= 'Ext.namespace("GO.dokuwiki");Ext.namespace("GO.dokuwiki.setti
 <script type="text/javascript">
 	Ext.namespace("GO.dokuwiki");
 	Ext.namespace("GO.dokuwiki.settings");
-	GO.dokuwiki.settings.externalUrl='<?php echo $GO_CONFIG->get_setting('dokuwiki_external_url'); ?>';
+	GO.dokuwiki.settings.externalUrl='<?php echo GO::config()->get_setting('dokuwiki_external_url'); ?>';
 	GO.dokuwiki.settings.title='<?php echo $title; ?>';
 </script>
