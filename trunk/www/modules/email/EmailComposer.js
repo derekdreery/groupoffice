@@ -190,13 +190,9 @@ GO.email.EmailComposer = function(config) {
 		name : 'to',
 		anchor : '100%',
 		height : 50,
-		store : new Ext.data.JsonStore({
-			url : BaseHref + 'json.php',
-			baseParams : {
-				task : "email"
-			},
-			fields : ['full_email','info'],
-			root : 'persons'
+		store : new GO.data.JsonStore({
+			url : GO.url("addressbook/contact/email"),
+			fields : ['full_email','info']
 		}),
 		valueField : 'full_email',
 		displayField : 'info'
@@ -208,13 +204,9 @@ GO.email.EmailComposer = function(config) {
 		name : 'cc',
 		anchor : '100%',
 		height : 50,
-		store : new Ext.data.JsonStore({
-			url : BaseHref + 'json.php',
-			baseParams : {
-				task : "email"
-			},
-			fields : ['full_email'],
-			root : 'persons'
+		store : new GO.data.JsonStore({
+			url : GO.url("addressbook/contact/email"),
+			fields : ['full_email','info']
 		}),
 		displayField : 'full_email',
 		hideTrigger : true,
@@ -230,13 +222,9 @@ GO.email.EmailComposer = function(config) {
 		name : 'bcc',
 		anchor : '100%',
 		height : 50,
-		store : new Ext.data.JsonStore({
-			url : BaseHref + 'json.php',
-			baseParams : {
-				task : "email"
-			},
-			fields : ['full_email'],
-			root : 'persons'
+		store : new GO.data.JsonStore({
+			url : GO.url("addressbook/contact/email"),
+			fields : ['full_email','info']
 		}),
 		displayField : 'full_email',
 		hideTrigger : true,

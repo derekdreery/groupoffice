@@ -55,10 +55,10 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		
 		//todo make compatible with servers that can't return subscribed flag
 		
-		if(isset($this->_attributes['haschildren']))
+		if(isset($this->_attributes['haschildren']) && $this->_attributes['haschildren'])
 			return true;
 		
-		if(isset($this->_attributes['hasnochildren']))
+		if(isset($this->_attributes['hasnochildren']) && $this->_attributes['hasnochildren'])
 			return false;
 			
 		//todo figure out
