@@ -17,8 +17,51 @@ class GO_Email_Controller_Folder extends GO_Base_Controller_AbstractController {
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 				
 		$mailbox = new GO_Email_Model_ImapMailbox($account, array("name"=>$params["mailbox"]));
-		$success = $mailbox->rename($params["name"]);
+		$response['success'] = $mailbox->rename($params["name"]);
 		
+		if(!$response['success'])
+			$response['feedback']="Failed to rename ".$params['mailbox']." to ".$params['name'];
+		
+		
+		return $response;
+	}
+	
+	protected function actionSubscribe($params){
+		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+				
+		$mailbox = new GO_Email_Model_ImapMailbox($account, array("name"=>$params["mailbox"]));
+		$response['success'] = $mailbox->subscribe();
+		
+		if(!$response['success'])
+			$response['feedback']="Failed to subscribe to ".$params['mailbox'];
+		return $response;
+	}
+	
+	protected function actionUnsubscribe($params){
+		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+				
+		$mailbox = new GO_Email_Model_ImapMailbox($account, array("name"=>$params["mailbox"]));
+		$success = $mailbox->unsubscribe();
+		
+		if(!$response['success'])
+			$response['feedback']="Failed to unsubscribe from ".$params['mailbox'];
+		return $response;
+	}
+	
+	protected function actionDelete($params){
+		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+				
+		$mailbox = new GO_Email_Model_ImapMailbox($account, array("name"=>$params["mailbox"]));
+		$success = $mailbox->delete();
+		
+		return array("success"=>$success);
+	}
+	
+	protected function actionTruncate($params){
+		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+				
+		$mailbox = new GO_Email_Model_ImapMailbox($account, array("name"=>$params["mailbox"]));
+		$success = $mailbox->truncate();
 		
 		return array("success"=>$success);
 	}

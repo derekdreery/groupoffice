@@ -53,24 +53,18 @@ GO.email.FoldersDialog = function(config) {
 	}, this);
 
 	this.foldersTree.on('checkchange', function(node, checked) {
+		
+		var route = checked ? 'email/folder/subscribe' : 'email/folder/unsubscribe';
 
-		this.body.mask(GO.lang.waitMsgSave, 'x-mask-loading');
-
-		var task = checked ? 'subscribe' : 'unsubscribe';
-
-		Ext.Ajax.request({
-			url : GO.settings.modules.email.url + 'action.php',
+		GO.request({
+			maskEl:this.body,
+			url : route,
 			params : {
-				task : task,
 				account_id : this.account_id,
 				mailbox : node.attributes.mailbox
 			},
-			callback : function(options, success, response) {
-				if (!success) {
-					Ext.MessageBox.alert(GO.lang.strError,
-						response.result.feedback);
-				}
-				this.body.unmask();
+			fail:function(){
+				this.foldersTree.getRootNode().reload();
 			},
 			scope : this
 		});
@@ -89,22 +83,17 @@ GO.email.FoldersDialog = function(config) {
 		}
 	});
 
-	treeEdit.on('beforecomplete', function(editor, boundEl, value) {
-
-		Ext.Ajax.request({
-			url : GO.settings.modules.email.url + 'action.php',
+	treeEdit.on('beforecomplete', function(editor, text, value) {
+		
+		GO.request({
+			url : 'email/folder/rename',
 			params : {
-				task : 'rename_folder',
-				folder_id : editor.editNode.attributes.folder_id,
-				new_name : boundEl
+				account_id: editor.editNode.attributes.account_id,
+				mailbox: editor.editNode.attributes.mailbox,
+				name: text
 			},
-			callback : function(options, success, response) {
-				if (!success) {
-					Ext.MessageBox.alert(GO.lang.strError,
-						response.result.feedback);
-				} else {
-					return true;
-				}
+			fail : function() {
+				this.foldersTree.getRootNode().reload();
 			}
 		});
 
@@ -133,30 +122,32 @@ GO.email.FoldersDialog = function(config) {
 				var sm = this.foldersTree.getSelectionModel();
 				var node = sm.getSelectedNode();
 
-				if (!node || node.attributes.folder_id < 1) {
-					Ext.MessageBox.alert(GO.lang.strError,
-						GO.email.lang.selectFolderDelete);
-				} else if (node.attributes.mailbox == 'INBOX') {
-					Ext.MessageBox.alert(GO.lang.strError,
-						GO.email.lang.cantDeleteInboxFolder);
-				} else {
+				if(!node|| node.attributes.folder_id<1)
+				{
+					Ext.MessageBox.alert(GO.lang.strError, GO.email.lang.selectFolderDelete);
+				}else if(node.attributes.mailbox=='INBOX')
+				{
+					Ext.MessageBox.alert(GO.lang.strError, GO.email.lang.cantDeleteInboxFolder);
+				}else
+				{
 					GO.deleteItems({
-						url : GO.settings.modules.email.url
-						+ 'action.php',
-						params : {
-							task : 'delete_folder',
-							folder_id : node.attributes.folder_id
+						url: GO.url("email/folder/delete"),
+						params: {						
+							account_id:this.account_id,
+							mailbox: node.attributes.mailbox
 						},
-						callback : function(responseParams) {
-							if (responseParams.success) {
-								node.remove();
-							} else {
-								Ext.MessageBox.alert(GO.lang.strError,
-									responseParams.feedback);
+						callback: function(responseParams)
+						{
+							if(responseParams.success)
+							{
+								node.remove();								
+							}else
+							{
+								Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
 							}
 						},
-						count : 1,
-						scope : this
+						count: 1,
+						scope: this
 					});
 				}
 			}
@@ -178,41 +169,25 @@ GO.email.FoldersDialog = function(config) {
 							text) {
 
 							if (button == 'ok') {
-								Ext.Ajax.request({
-									url : GO.settings.modules.email.url
-									+ 'action.php',
-									params : {
-										task : 'add_folder',
-										folder_id : node.attributes.folder_id,
-										account_id : this.account_id,
-										new_folder_name : text
+								GO.request({
+									url: "email/folder/create",
+									maskEl: Ext.getBody(),
+									params: {
+										parent: node.attributes.mailbox,
+										account_id: this.account_id,
+										name: text
 									},
-									callback : function(options, success,
-										response) {
-										if (!success) {
-											Ext.MessageBox.alert(
-												GO.lang.strError,
-												response.result.errors);
-										} else {
-											var responseParams = Ext
-											.decode(response.responseText);
-											if (responseParams.success) {
-												// remove preloaded children
-												// otherwise it won't
-												// request the server
-												delete node.attributes.children;
-												node.reload();
-											} else {
-												Ext.MessageBox
-												.alert(
-													GO.lang.strError,
-													responseParams.feedback);
-											}
-
-										}
+									success: function(options, response, result)
+									{								
+										delete node.attributes.children;
+										node.reload();
 									},
-									scope : this
+									fail : function(){
+										this.rootNode.reload();
+									},
+									scope: this
 								});
+						
 							}
 						}, this);
 				}
