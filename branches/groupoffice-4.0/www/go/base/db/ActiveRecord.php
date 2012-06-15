@@ -496,6 +496,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					}
 					
 					$default = $field['Default'];
+				
+					//TODO: Why no default null value here???
 					if($field['Null']=='NO' && is_null($default) && strpos($field['Extra'],'auto_increment')===false)
 						$default='';
 					
