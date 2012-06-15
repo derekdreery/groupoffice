@@ -125,7 +125,19 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		$response = array();
 
 		if ($params['node'] == 'root') {
-			$stmt = GO_Email_Model_Account::model()->find();
+			
+			$findParams = GO_Base_Db_FindParams::newInstance()
+						->select('t.*')
+						->joinModel(array(
+								'model' => 'GO_Email_Model_AccountSort',
+								'foreignField' => 'account_id', //defaults to primary key of the remote model
+								'localField' => 'id', //defaults to primary key of the model
+								'type' => 'LEFT'
+						))
+						->ignoreAdminGroup()
+						->order('order', 'DESC');
+			
+			$stmt = GO_Email_Model_Account::model()->find($findParams);
 
 			while ($account = $stmt->fetch()) {
 
@@ -269,6 +281,24 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 	protected function actionSaveTreeState($params) {
 		$response['success'] = GO::config()->save_setting("email_accounts_tree", $params['expandedNodes'], GO::user()->id);
 		return $response;
+	}
+	
+	
+	protected function actionSaveSort($params){
+		$sort_order = json_decode($params['sort_order'], true);		
+		$count = count($sort_order);
+		
+		GO_Email_Model_AccountSort::model()->deleteByAttribute("user_id", GO::user()->id);
+
+		for($i=0;$i<$count;$i++) {
+			
+			$as = new GO_Email_Model_AccountSort();
+			$as->order=$count-$i;
+			$as->account_id=$sort_order[$i];
+			$as->save();
+		}
+		
+		return array("success"=>true);
 	}
 
 }

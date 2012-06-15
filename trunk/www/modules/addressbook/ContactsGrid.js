@@ -179,7 +179,7 @@ GO.addressbook.ContactsGrid = function(config){
 	config.store = new GO.data.JsonStore({
 		url: GO.url('addressbook/contact/store'),
 		baseParams: {
-			enable_addresslist_filter:true
+			filters:1
 		},
 		root: 'results',
 		id: 'id',
