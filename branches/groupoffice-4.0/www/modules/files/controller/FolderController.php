@@ -27,7 +27,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		
 		echo "Done\n";
 		
-		GO_Base_Fs_File::setAllowedDeletes($oldAllowDeletes);
+		GO_Base_Fs_File::setAllowDeletes($oldAllowDeletes);
 //		$folders = array('billing','email');	
 //		
 //		foreach($folders as $name){
