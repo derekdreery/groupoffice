@@ -862,44 +862,6 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		{
 			switch(attachment.extension)
 			{
-//				case 'dat':
-//					document.location.href=GO.settings.modules.email.url+
-//					'tnef.php'+url_params;
-//					break;			
-				
-//				case 'vcs':
-//				case 'ics':
-//					if(!forceDownload)
-//					{
-//						params.task='icalendar_attachment';
-//						Ext.Ajax.request({
-//							url: GO.settings.modules.email.url+'json.php',
-//							params: params,
-//							callback: function(options, success, response)
-//							{
-//								if(success)
-//								{
-//									var values = Ext.decode(response.responseText);
-//									
-//									if(!values.success)
-//									{
-//										alert(values.feedback);
-//									}else
-//									{
-//										GO.calendar.showEventDialog({
-//											values: values
-//										});
-//									}
-//								}else
-//								{
-//									alert( GO.lang.strRequestError);
-//								}
-//							},
-//							scope: this
-//						});
-//						break;
-//					}
-				
 				case 'png':
 				case 'bmp':
 				case 'png':
@@ -1330,13 +1292,7 @@ GO.mainLayout.onReady(function(){
 });
 
 GO.email.aliasesStore = new GO.data.JsonStore({
-	url: GO.settings.modules.email.url+ 'json.php',
-	baseParams: {
-		task: 'all_aliases'
-	},
-	root: 'results',
-	id: 'id',
-	totalProperty:'total',
+	url: GO.url("email/alias/store"),
 	fields: ['id','account_id', 'from', 'name','email','html_signature', 'plain_signature'],
 	remoteSort: true
 });
