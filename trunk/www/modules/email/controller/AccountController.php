@@ -176,16 +176,21 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 //				continue;
 
 			$nodeId = 'f_' . $mailbox->getAccount()->id . '_' . $mailbox->name;
-			if ($mailbox->unseen > 0) {
-				$statusHtml = '&nbsp;<span class="em-folder-status" id="status_' . $nodeId . '">(' . $mailbox->unseen . ')</span>';
-			} else {
-				$statusHtml = '&nbsp;<span class="em-folder-status" id="status_' . $nodeId . '"></span>';
+			
+			$text = $mailbox->getDisplayName();
+			
+			if(!$subscribtions){				
+				if ($mailbox->unseen > 0) {
+					$text .= '&nbsp;<span class="em-folder-status" id="status_' . $nodeId . '">(' . $mailbox->unseen . ')</span>';
+				} else {
+					$text .= '&nbsp;<span class="em-folder-status" id="status_' . $nodeId . '"></span>';
+				}
 			}
 
 			//$children = $this->_getMailboxTreeNodes($mailbox->getChildren());
 
 			$node = array(
-					'text' => $mailbox->getDisplayName() . $statusHtml,
+					'text' => $text,
 					'mailbox' => $mailbox->getName(true),
 					'account_id' => $mailbox->getAccount()->id,
 					'iconCls' => 'folder-default',
@@ -193,13 +198,13 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					'noselect' => $mailbox->noselect,
 					'disabled' =>$mailbox->noselect,
 					'noinferiors' => $mailbox->noinferiors,
-					'children' => $mailbox->hasnochildren ? array() : null,
-					'expanded' => $mailbox->hasnochildren
+					'children' => !$mailbox->haschildren ? array() : null,
+					'expanded' => !$mailbox->haschildren
 							//'children'=>$children,
 							//'expanded' => !count($children),
 			);
 
-			if (!$mailbox->hasnochildren && $this->_isExpanded($nodeId)) {
+			if ($mailbox->haschildren && $this->_isExpanded($nodeId)) {
 				$node['children'] = $this->_getMailboxTreeNodes($mailbox->getChildren(!$subscribtions, !$subscribtions),$subscribtions);
 				$node['expanded'] = true;
 			}

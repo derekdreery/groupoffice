@@ -76,7 +76,7 @@ GO.email.TreeContextMenu = Ext.extend(Ext.menu.Menu,{
 								},
 								success: function(options, response, result)
 								{
-									this.treePanel.refresh(node);
+									this.treePanel.refresh(node.parentNode);
 									
 										//remove preloaded children otherwise it won't request the server
 //										delete node.parentNode.attributes.children;
@@ -128,26 +128,24 @@ GO.email.TreeContextMenu = Ext.extend(Ext.menu.Menu,{
 
 				var t = new Ext.Template(GO.email.lang.emptyFolderConfirm);
 
-				Ext.MessageBox.confirm(GO.lang['strConfirm'], t.applyTemplate(node.attributes), function(btn){
+				Ext.MessageBox.confirm(GO.lang['strConfirm'], t.applyTemplate({name:node.attributes.text}), function(btn){
 					if(btn=='yes')
 					{
-						this.getEl().mask(GO.lang.waitMsgLoad);
-						Ext.Ajax.request({
-							url: GO.settings.modules.email.url+'action.php',
+						GO.request({
+							maskEl:GO.mainLayout.getModulePanel("email").getEl(),
+							url: "email/folder/truncate",
 							params:{
-								task:'empty_folder',
 								account_id: node.attributes.account_id,
 								mailbox: node.attributes.mailbox
 							},
-							callback:function(){
+							success:function(){
 								if(node.attributes.mailbox==this.mailbox)
 								{
 									this.messagesGrid.store.removeAll();
 									this.messagePanel.reset();
 								}
-								this.updateFolderStatus(node.attributes.folder_id);
-								this.updateNotificationEl();
-								this.getEl().unmask();
+								GO.mainLayout.getModulePanel("email").updateFolderStatus(node.attributes.mailbox, 0);
+								GO.mainLayout.getModulePanel("email").updateNotificationEl();
 							},
 							scope: this
 						});
@@ -173,10 +171,10 @@ GO.email.TreeContextMenu = Ext.extend(Ext.menu.Menu,{
 				}else
 				{
 					GO.deleteItems({
-						url: GO.settings.modules.email.url+'action.php',
-						params: {
-							task: 'delete_folder',
-							folder_id: node.attributes.folder_id
+						url: GO.url("email/folder/delete"),
+						params: {					
+							account_id:node.attributes.account_id,
+							mailbox: node.attributes.mailbox
 						},
 						callback: function(responseParams)
 						{
@@ -184,7 +182,7 @@ GO.email.TreeContextMenu = Ext.extend(Ext.menu.Menu,{
 							{
 								node.remove();
 
-								if(node.attributes.mailbox==this.messagesGrid.store.baseParams.mailbox){
+								if(node.attributes.mailbox==GO.mainLayout.getModulePanel("email").messagesGrid.store.baseParams.mailbox){
 									this.messagesGrid.store.removeAll();
 								}
 

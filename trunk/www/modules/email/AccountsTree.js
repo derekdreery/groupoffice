@@ -131,7 +131,8 @@ GO.email.AccountsTree = function(config){
 	
 	
 	this.treeContextMenu = new GO.email.TreeContextMenu({		
-		treePanel:this
+		treePanel:this,
+		messagesGrid:this.messagesGrid
 	});
 	
 	

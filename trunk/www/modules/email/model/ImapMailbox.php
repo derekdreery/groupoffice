@@ -53,7 +53,25 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 	
 	public function getHasChildren(){
 		
-		//todo
+		//todo make compatible with servers that can't return subscribed flag
+		
+		if(isset($this->_attributes['haschildren']))
+			return true;
+		
+		if(isset($this->_attributes['hasnochildren']))
+			return false;
+			
+		//todo figure out
+		
+		
+	}
+	
+	public function getSubscribed(){
+		
+		//todo make compatible with servers that can't return subscribed flag
+		
+		return $this->_attributes['subscribed'];
+		
 	}
 	
 	public function getDelimiter(){
@@ -147,10 +165,23 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 //	}
 	
 	public function rename($name){
+		
 		$parentName = $this->getParentName();
-		$newMailbox = empty($parentName) ? $name : $this->delimiter.$name;
+		$newMailbox = empty($parentName) ? $name : $parentName.$this->delimiter.$name;
+		
+		//throw new Exception($this->name." -> ".$newMailbox);
 		
 		return $this->getAccount()->openImapConnection()->rename_folder($this->name, $newMailbox);
+	}
+	
+	public function delete(){		
+		return $this->getAccount()->openImapConnection()->delete_folder($this->name);
+	}
+	
+	public function truncate(){
+		$imap = $this->getAccount()->openImapConnection($this->name);
+		$sort = $imap->sort_mailbox();
+		return $imap->delete($sort);
 	}
 	
 	public function createChild($name, $subscribe=true){
@@ -172,5 +203,17 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		$this->name = $newMailbox;
 		
 		return true;
+	}
+	
+	public function subscribe(){
+		$this->subscribed = $this->getAccount()->openImapConnection()->subscribe($this->name);
+		
+		return $this->subscribed;
+	}
+	
+	public function unsubscribe(){
+		$this->subscribed = !$this->getAccount()->openImapConnection()->unsubscribe($this->name);
+		
+		return !$this->subscribed;
 	}
 }

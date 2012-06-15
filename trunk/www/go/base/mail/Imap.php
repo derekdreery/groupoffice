@@ -1957,22 +1957,22 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	public function set_message_flag($uids, $flags, $clear=false) {
 		$status=false;
 		$uid_strings = array();
-		if (!empty($uids)) {
-			if (count($uids) > 500) {
-				while (count($uids) > 500) {
-					$uid_strings[] = implode(',', array_splice($uids, 0, 500));
-				}
-				if (count($uids)) {
-					$uid_strings[] = implode(',', $uids);
-				}
+		if (empty($uids))
+			return true;
+			
+		if (count($uids) > 500) {
+			while (count($uids) > 500) {
+				$uid_strings[] = implode(',', array_splice($uids, 0, 500));
 			}
-			else {
+			if (count($uids)) {
 				$uid_strings[] = implode(',', $uids);
 			}
 		}
 		else {
-			$uid_strings[] = $uid_str;
+			$uid_strings[] = implode(',', $uids);
 		}
+
+		
 		foreach ($uid_strings as $uid_string) {
 			if ($uid_string) {
 				$this->clean($uid_string, 'uid_list');
@@ -2105,8 +2105,8 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 		$command = 'RENAME "'.$this->addslashes($this->utf7_encode($mailbox)).'" "'.
 						$this->addslashes($this->utf7_encode($new_mailbox)).'"'."\r\n";
-		
-		GO::debug($command);
+//		throw new Exception($command);
+//		GO::debug($command);
 		
 		$this->send_command($command);
 		$result = $this->get_response(false);
