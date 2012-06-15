@@ -47,14 +47,14 @@ GO.email.AddressbookDialog = function(config) {
 		}, this);
 
 		this.companiesStore = new GO.data.JsonStore({
-			url : GO.settings.modules.addressbook.url + 'json.php',
+			url : GO.url("addressbook/company/store"),
 			baseParams : {
-				task : 'companies',
-				require_email:true
+				//task : 'companies',
+				require_email:true				
 			},
-			root : 'results',
-			id : 'id',
-			totalProperty : 'total',
+//			root : 'results',
+//			id : 'id',
+//			totalProperty : 'total',
 			fields : ['id', 'name', 'city', 'email', 'phone',
 			'homepage', 'address', 'zip'],
 			remoteSort : true

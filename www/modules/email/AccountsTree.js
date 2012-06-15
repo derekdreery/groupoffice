@@ -289,10 +289,9 @@ GO.email.AccountsTree = function(config){
 				for(var i=0;i<c.length;i++){
 					sortorder.push(c[i].attributes.account_id);
 				}
-				Ext.Ajax.request({
-					url: GO.settings.modules.email.url+'action.php',
+				GO.request({
+					url: "email/account/saveSort",
 					params: {
-						task: 'save_accounts_sort_order',
 						sort_order: Ext.encode(sortorder)
 					}
 				});

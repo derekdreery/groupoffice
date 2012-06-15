@@ -98,27 +98,29 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 	
 	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
 		
-		$abMultiSel = new GO_Base_Component_MultiSelectGrid(
-						'books', 
-						"GO_Addressbook_Model_Addressbook",$store, $params);		
-		$abMultiSel->addSelectedToFindCriteria($storeParams->getCriteria(), 'addressbook_id');
-		//$abMultiSel->setButtonParams($response);
-		//$abMultiSel->setStoreTitle();
-		
-		$addresslistMultiSel = new GO_Base_Component_MultiSelectGrid(
-						'addresslist_filter', 
-						"GO_Addressbook_Model_Addresslist",$store, $params);				
-		
-		if(count($addresslistMultiSel->selectedIds))
-		{
-			$addresslistMultiSel->addSelectedToFindCriteria($storeParams->getCriteria(), 'addresslist_id','ac');
-			
-			//we need to join the addresslist link model if a filter for the addresslist is enabled.
-			$storeParams->join(
-							GO_Addressbook_Model_AddresslistCompany::model()->tableName(), 
-							GO_Base_Db_FindCriteria::newInstance()->addCondition('id', 'ac.company_id', '=', 't', true, true), 
-							'ac'
-				);
+		if(!empty($params['filters'])){
+			$abMultiSel = new GO_Base_Component_MultiSelectGrid(
+							'books', 
+							"GO_Addressbook_Model_Addressbook",$store, $params);		
+			$abMultiSel->addSelectedToFindCriteria($storeParams->getCriteria(), 'addressbook_id');
+			//$abMultiSel->setButtonParams($response);
+			//$abMultiSel->setStoreTitle();
+
+			$addresslistMultiSel = new GO_Base_Component_MultiSelectGrid(
+							'addresslist_filter', 
+							"GO_Addressbook_Model_Addresslist",$store, $params);				
+
+			if(count($addresslistMultiSel->selectedIds))
+			{
+				$addresslistMultiSel->addSelectedToFindCriteria($storeParams->getCriteria(), 'addresslist_id','ac');
+
+				//we need to join the addresslist link model if a filter for the addresslist is enabled.
+				$storeParams->join(
+								GO_Addressbook_Model_AddresslistCompany::model()->tableName(), 
+								GO_Base_Db_FindCriteria::newInstance()->addCondition('id', 'ac.company_id', '=', 't', true, true), 
+								'ac'
+					);
+			}
 		}
 		
 		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
@@ -165,9 +167,10 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		if (!empty($params['addressbook_id'])) {
 			$storeParams->getCriteria()->addCondition('addressbook_id', $params['addressbook_id']);
 		}
-
-
-
+		
+		if(!empty($params['require_email']))
+			$storeParams->getCriteria()->addCondition('email', "","!=");
+		
 		return $storeParams;
 	}
 

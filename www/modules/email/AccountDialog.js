@@ -320,7 +320,7 @@ GO.email.AccountDialog = function(config) {
 	}
 
 	this.propertiesPanel = new Ext.form.FormPanel({
-		url : GO.settings.modules.email.url + 'action.php',
+		url : GO.url("email/account/submit"),
 		// labelWidth: 75, // label settings here cascade unless
 		// overridden
 		defaults:{forceLayout:true},

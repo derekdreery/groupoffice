@@ -185,7 +185,7 @@ GO.addressbook.CompaniesGrid = function(config){
 	config.store = new GO.data.JsonStore({
 		url: GO.url('addressbook/company/store'),
 		baseParams: {
-			enable_addresslists_filter:true
+			filters:1
 		},
 		root: 'results',
 		id: 'id',
