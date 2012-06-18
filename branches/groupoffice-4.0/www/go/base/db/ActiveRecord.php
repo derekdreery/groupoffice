@@ -1943,10 +1943,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}elseif(!empty($attributes['validator']) && !empty($this->_attributes[$field]) && !call_user_func($attributes['validator'], $this->_attributes[$field]))
 			{
 				$this->setValidationError($field, sprintf(GO::t('attributeInvalid'),$this->getAttributeLabel($field)));
-			}elseif(!empty($attributes['greater'])){
+			}elseif(!empty($attributes['greater']) && !empty($this->_attributes[$field])){
 				if($this->_attributes[$field]<=$this->_attributes[$attributes['greater']])
 					$this->setValidationError($field, sprintf(GO::t('attributeGreater'), $this->getAttributeLabel($field), $this->getAttributeLabel($attributes['greater'])));
-			}elseif(!empty($attributes['greaterorequal'])){
+			}elseif(!empty($attributes['greaterorequal']) && !empty($this->_attributes[$field])){
 				if($this->_attributes[$field]<$this->_attributes[$attributes['greaterorequal']])
 					$this->setValidationError($field, sprintf(GO::t('attributeGreaterOrQueal'), $this->getAttributeLabel($field), $this->getAttributeLabel($attributes['greaterorequal'])));
 			}
