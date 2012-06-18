@@ -1,17 +1,15 @@
+Geafactureerd type ook als gesloten beschouwen
+
 Import matching dialog
 
 resize vcard photo's
 
 Add max_file_storage setting to servermanager
 
-Notifications on uploads (Michal)
-
 recurly (simon zimmo) (Wilmar)
 
 Koba
 
-Settings module (Michael)
-Profile tab in settings dialog (Michael)
 LDAP Sync
 
 Calendar:
