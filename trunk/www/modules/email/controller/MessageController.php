@@ -2,6 +2,30 @@
 
 class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController {
 	
+	protected function actionNotification($params){
+		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+		
+		$alias = $this->_findAliasFromRecipients($account, new GO_Base_Mail_EmailRecipients($params['message_to']));	
+		if(!$alias)
+			$alias = $account->getDefaultAlias();
+
+		$body = sprintf(GO::t('notification_body','email'), $params['subject'], GO_Base_Util_Date::get_timestamp(time()));
+
+		$message = new GO_Base_Mail_Message(
+						sprintf(GO::t('notification_subject','email'),$params['subject']),
+						$body
+						);
+		$message->setFrom($alias->email, $alias->name);
+		$toList = new GO_Base_Mail_EmailRecipients($params['notification_to']);
+		$address=$toList->getAddress();
+		$message->setTo($address['email'], $address['personal']);
+			
+		$mailer = GO_Base_Mail_Mailer::newGoInstance(GO_Email_Transport::newGoInstance($account));
+		$response['success'] = $mailer->send($message);
+		
+		return $response;
+	}
+	
 	
 	private function _moveMessages($imap, $params, &$response){
 		if(isset($params['action']) && $params['action']=='move') {
@@ -568,19 +592,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$response['data']['subject'] = $message->subject;
 		}
 		
-		
-		//find the right sender alias
-		$stmt = $account->aliases;
-		while($possibleAlias = $stmt->fetch()){
-			if($message->to->hasRecipient($possibleAlias->email)){
-				$alias = $possibleAlias;
-				break;
-			}
-		}
-		
-		if(!isset($alias))
-			$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);		
-		
+		$alias = $this->_findAliasFromRecipients($account, $message->to);	
+		if(!$alias)
+			$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);
+				
 		$response['data']['alias_id']=$alias->id;		
 
 		if (!empty($params['replyAll'])) {
@@ -607,6 +622,26 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$this->_keepHeaders($response, $params);
 
 		return $response;
+	}
+	
+	/**
+	 *
+	 * @param GO_Email_Model_Account $account
+	 * @param GO_Base_Mail_EmailRecipients $recipients
+	 * @return GO_Email_Model_Alias|false 
+	 */
+	private function _findAliasFromRecipients(GO_Email_Model_Account $account, GO_Base_Mail_EmailRecipients $recipients){
+		$alias=false;
+		//find the right sender alias
+		$stmt = $account->aliases;
+		while($possibleAlias = $stmt->fetch()){
+			if($recipients->hasRecipient($possibleAlias->email)){
+				$alias = $possibleAlias;
+				break;
+			}
+		}
+		
+		return $alias;
 	}
 
 	/**

@@ -200,23 +200,6 @@ GO.email.FoldersDialog = function(config) {
 			cls : 'x-btn-text-icon',
 			handler : function() {
 				this.rootNode.reload();
-			/*
-				Ext.Ajax.request({
-							url : GO.settings.modules.email.url + 'action.php',
-							params : {
-								task : 'syncfolders',
-								account_id : this.account_id
-							},
-							callback : function(options, success, response) {
-								if (!success) {
-									Ext.MessageBox.alert(GO.lang.strError,
-											response.result.feedback);
-								} else {
-									this.rootNode.reload();
-								}
-							},
-							scope : this
-						});*/
 			},
 			scope : this
 		}

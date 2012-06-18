@@ -142,22 +142,6 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 			}else
 			{
 				window.open(attachment.url);
-				
-//				if(panel.data.path)
-//				{
-//					document.location.href=GO.settings.modules.email.url+
-//					'mimepart.php?path='+
-//					encodeURIComponent(panel.data.path)+'&part_imap_id='+attachment.imap_id;
-//				}else
-//				{
-//					document.location.href=GO.settings.modules.email.url+
-//					'mimepart.php?uid='+panel.uid+'' +
-//					'&account_id='+panel.remoteMessage.account_id+'' +
-//					'&encoding='+panel.remoteMessage.encoding+'' +
-//					'&mailbox='+encodeURIComponent(panel.remoteMessage.mailbox)+'' +
-//					'&imap_id='+panel.remoteMessage.imap_id+'' +
-//					'&part_imap_id='+attachment.imap_id;
-//				}
 			}
 		}
 	}

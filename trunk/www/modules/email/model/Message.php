@@ -261,6 +261,8 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 
 		$response['notification'] = $this->disposition_notification_to;
 		$response['subject'] = $this->subject;
+		
+		$response['seen']=$this->seen;
 				
 		$from = $this->from->getAddress();
 		$response['from'] = $from['personal'];
