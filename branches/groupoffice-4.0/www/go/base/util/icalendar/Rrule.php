@@ -48,7 +48,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		$parameters['bymonthday'] = isset($json['bymonthday'])?$json['bymonthday']:'';
 		
 		//bysetpos is not understood by old lib
-		$parameters['bysetpos']=$json['bysetpos'];
+		$parameters['bysetpos']=isset($json['bysetpos']) ? $json['bysetpos'] : 1;
 		$parameters['byday']=array();
 		
 		foreach($this->_days as $day){
