@@ -20,8 +20,8 @@ CREATE TABLE IF NOT EXISTS `pm_presidents` (
   `tookoffice` date NOT NULL,
   `leftoffice` date NOT NULL,
   `income` decimal(14,2) NOT NULL,
-  `ctime` int(11) NOT NULL,
-  `mtime` int(11) NOT NULL,
+  `ctime` int(11) NOT NULL DEFAULT '0',
+  `mtime` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY  (`id`)
 );
 
