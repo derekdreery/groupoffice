@@ -473,7 +473,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	
 	
 	protected function actionImportVCard($params){
-		$contact = new GO_Addressbook_Model_Contact();
+		
+		$summaryLog = new GO_Base_Component_SummaryLog();
 		
 		if(isset($_FILES['files']['tmp_name'][0]))
 			$params['file'] = $_FILES['files']['tmp_name'][0];
@@ -484,14 +485,25 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		}
 		
 		$file = new GO_Base_Fs_File($params['file']);
-		$data = $file->getContents();		
-		$vobject = GO_Base_VObject_Reader::read($data);
+		
+		$vObjectsArray = GO_Base_VObject_Reader::prepareData($file->getContents());
 		unset($params['file']);
+
+		foreach($vObjectsArray as $nr => $vObject) {
+			GO_Base_VObject_Reader::convertVCard21ToVCard30($vObject);
+			$contact = new GO_Addressbook_Model_Contact();
+			try {
+				if ($contact->importVObject($vObject, $params))
+					$summaryLog->addSuccessful();
+			} catch (Exception $e) {
+				$summaryLog->addError($nr+1, $e->getMessage());
+			}
+			$summaryLog->add();
+		}
 		
-		GO_Base_VObject_Reader::convertVCard21ToVCard30($vobject);
-	
-		$contact->importVObject($vobject, $params);
-		
+		$response = $summaryLog->getErrorsJson();
+		$response['successCount'] = $summaryLog->getTotalSuccessful();
+		$response['totalCount'] = $summaryLog->getTotal();
 		$response['success']=true;
 		
 		return $response;

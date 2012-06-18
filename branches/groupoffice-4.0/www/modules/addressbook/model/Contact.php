@@ -203,6 +203,10 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		
 		$this->_autoSalutation();
 		
+		if (strtolower($this->sex)==strtolower(GO::t('female','addressbook')))
+			$this->sex = 'F';
+		$this->sex = $this->sex=='M' || $this->sex=='F' ? $this->sex : 'M';
+		
 		return parent::beforeSave();
 	}
 	
