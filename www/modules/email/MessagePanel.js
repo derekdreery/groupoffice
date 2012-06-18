@@ -343,21 +343,18 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		
 		this.body.scrollTo('top',0);
 		
-		if(this.data['new']=='1' && this.data.notification)
+		if(!this.data.seen && this.data.notification)
 		{
 			if(GO.email.alwaysRespondToNotifications || confirm(GO.email.lang.sendNotification.replace('%s', this.data.notification)))
 			{
-				var params = {
-					task:'notification',
-					account_id: this.data.account_id,
-					message_to:this.data.to,
-					notification_to: this.data.notification,
-					subject: this.data.subject
-				}
-				
-				Ext.Ajax.request({
-					url: GO.settings.modules.email.url+'action.php',
-					params: params
+				GO.request({
+					url: "email/message/notification",
+					params: {					
+						account_id: this.account_id,
+						message_to:this.data.to_string,
+						notification_to: this.data.notification,
+						subject: this.data.subject
+					}
 				});
 			}
 		}
