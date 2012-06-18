@@ -49,9 +49,9 @@ Ext.extend(GO.plugins.HtmlEditorSpellCheck, Ext.util.Observable, {
             cls : 'x-btn-icon go-edit-spellcheck',
             enableToggle: false,
             scope: this,            
-						menu:{
-							items:langs
-						},
+			menu:{
+				items:langs
+			},
             clickEvent:'mousedown',
             tabIndex:-1,
 			overflowText: GO.lang.spellcheck,
@@ -61,10 +61,10 @@ Ext.extend(GO.plugins.HtmlEditorSpellCheck, Ext.util.Observable, {
 	},
 	
 	spellcheck : function (lang) {
-		if (this.EmailComposer.isHTML()){
+		if (this.EmailComposer.getName() == 'htmlbody') {
 			var self = this;
 			Ext.Ajax.request({
-				url: BaseHref+'HtmlEditorSpellCheck.php',
+				url: GO.url("core/spellcheck"),
 				success: function (result,request){
 					self.processResults(result,request,self);
 				},
@@ -173,12 +173,13 @@ Ext.extend(GO.plugins.HtmlEditorSpellCheck, Ext.util.Observable, {
 		
 	},
 	
-	replaceSpelling : function (word,self){
+	replaceSpelling : function (word,self){		
+		var replaceobject;
 		//IE doesn't treat whitespace as dom elements like firefox and chrome.
 		if (Ext.isIE && self.getAttribute('ieAfterObject') == ' '){
-			var replaceobject = document.createTextNode(word+' ');	
+			replaceobject = document.createTextNode(word+' ');	
 		}else{
-			var replaceobject = document.createTextNode(word);
+			replaceobject = document.createTextNode(word);
 		}
 		self.parentNode.replaceChild(replaceobject,self);
 		this.Suggestions.destroy();
