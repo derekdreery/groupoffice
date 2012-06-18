@@ -60,9 +60,14 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		
 		if(isset($this->_attributes['hasnochildren']) && $this->_attributes['hasnochildren'])
 			return false;
-			
-		//todo figure out
 		
+		if(isset($this->_attributes['noinferiors']) && $this->_attributes['noinferiors'])
+			return false;
+			
+			
+		//oh oh, bad mailserver can't tell us if it has children. Let's find out the expensive way
+		$folders = $this->getAccount()->openImapConnection($this->name)->list_folders(true, false,"",$this->name.$this->delimiter.'%');
+		return count($folders);
 		
 	}
 	

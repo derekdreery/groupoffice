@@ -438,7 +438,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			}
 		}
 		
-		if($namespace=="" && $listSubscribed && !isset($folders['INBOX'])){
+		if($namespace=="" && $pattern=="" && $listSubscribed && !isset($folders['INBOX'])){
 			//inbox is not subscribed. Let's fix that/
 			if(!$this->subscribe('INBOX'))
 				throw new Exception("Could not subscribe to INBOX folder!");
