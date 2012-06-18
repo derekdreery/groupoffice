@@ -320,10 +320,10 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 					break;
 
 				case 'MONTHLY':
-					if (isset($days) && !empty($days)) {
-						$response['bysetpos'] = substr($days[0], 0, 1);
+					$response['bysetpos'] = $this->bysetpos;
+					if (!empty($days)) {						
 						foreach($days as $day)
-							$response[substr($day,1)]=1;						
+							$response[$day]=1;						
 					} 
 					break;
 			}
