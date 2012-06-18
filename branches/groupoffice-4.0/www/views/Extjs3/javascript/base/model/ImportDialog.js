@@ -86,6 +86,9 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 	
 	// Submit form to import the file.
 	_submitForm : function() {
+		if (!this._loadMask)
+			this._loadMask = new Ext.LoadMask(Ext.getBody(), {msg: GO.addressbook.lang.importing+'...'});
+		this._loadMask.show();
 		this.formPanel.form.submit({
 			url : GO.url(this._moduleName + '/' + this._modelName + '/import' + this._fileType),
 			params : {
@@ -95,11 +98,15 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 			success : function( success, response, result ) {
 				var errorsText = '';
 				if (!GO.util.empty(response.result.summarylog)) {
-					for (var i=0; i<response.result.summarylog.errors.length; i++)
-						errorsText = errorsText + response.result.summarylog.errors[i].message + '<br />';
+					for (var i=0; i<response.result.summarylog.errors.length; i++) {
+						if (i==0)
+							errorsText = '<br />' + GO.lang.failedImportItems + ':<br />';
+						errorsText = errorsText + GO.lang.item + ' ' + response.result.summarylog.errors[i].name + ': ' +
+													response.result.summarylog.errors[i].message + '<br />';
+					}
 					Ext.MessageBox.alert(GO.lang.strError,errorsText);
 				}
-				
+
 				if (!response.result.success) {
 					Ext.MessageBox.alert(GO.lang.strError,result.feedback);
 				} else {
@@ -107,19 +114,20 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 						Ext.MessageBox.alert(
 							'',
 							GO.addressbook.lang['importSuccessCount']+' '+response.result.successCount+'/'+response.result.totalCount
-							+'<br />'+errorsText
+							+ errorsText
 						);
 					else
 						Ext.MessageBox.alert(
 							'',
 							GO.addressbook.lang['importSuccess']
-							+'<br />'+errorsText
+							+ errorsText
 						);
 						
 					this.hide();
 					if (!GO.util.empty(this._csvFieldDialog))
 						this._csvFieldDialog.close();
 				}
+				this._loadMask.hide();
 			},
 			failure : function ( form, action ) {
 				if (!GO.util.empty(action.result.summarylog)) {
@@ -130,6 +138,7 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 				} else if (!GO.util.empty(action.result.feedback)) {
 					Ext.MessageBox.alert(GO.lang.strError,action.result.feedback);
 				}
+				this._loadMask.hide();
 			},
 			scope: this
 		});
