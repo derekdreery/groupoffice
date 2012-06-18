@@ -163,9 +163,13 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 				'unsubscribe_link'=>'<a href="'.$unsubscribeHref.'">'.GO::t("unsubscription","addressbook").'</a>'
 			), true);
 			
-			$message->setTo($contact->email, $contact->name);
-			$message->setBody(GO_Addressbook_Model_Template::model()->replaceModelTags($body, $contact));
-			$this->_sendmail($message, $contact, $mailer, $mailing);			
+			try{
+				$message->setTo($contact->email, $contact->name);
+				$message->setBody(GO_Addressbook_Model_Template::model()->replaceModelTags($body, $contact));
+				$this->_sendmail($message, $contact, $mailer, $mailing);			
+			}catch(Exception $e){
+				echo "Error for ".$contact->email.": ".$e->getMessage()."\n";
+			}
 		}
 
 		foreach ($mailing->companies as $company) {
@@ -183,9 +187,13 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 				'unsubscribe_link'=>'<a href="'.$unsubscribeHref.'">'.GO::t("unsubscription","addressbook").'</a>'
 			), true);
 			
-			$message->setTo($company->email, $company->name);
-			$message->setBody(GO_Addressbook_Model_Template::model()->replaceModelTags($body, $company));
-			$this->_sendmail($message, $company, $mailer, $mailing);			
+			try{
+				$message->setTo($company->email, $company->name);
+				$message->setBody(GO_Addressbook_Model_Template::model()->replaceModelTags($body, $company));
+				$this->_sendmail($message, $company, $mailer, $mailing);			
+			}catch(Exception $e){
+				echo "Error for ".$company->email.": ".$e->getMessage()."\n";
+			}
 		}
 
 		$mailing->status = GO_Addressbook_Model_SentMailing::STATUS_FINISHED;
