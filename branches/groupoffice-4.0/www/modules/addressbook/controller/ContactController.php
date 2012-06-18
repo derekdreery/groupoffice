@@ -152,7 +152,10 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	
 	
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
-		$columnModel->formatColumn('name','$model->getName(GO::user()->sort_name)', array(),array('first_name','last_name'), GO::t('strName'));
+		
+		$sortAlias = GO::user()->sort_name=="first_name" ? array('first_name','last_name') : array('last_name','first_name');
+		
+		$columnModel->formatColumn('name','$model->getName(GO::user()->sort_name)', array(),$sortAlias, GO::t('strName'));
 		$columnModel->formatColumn('company_name','$model->company_name', array(),'', GO::t('company','addressbook'));
 		$columnModel->formatColumn('ab_name','$model->ab_name', array(),'', GO::t('addressbook','addressbook'));
 		
