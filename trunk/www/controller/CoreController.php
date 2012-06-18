@@ -651,5 +651,30 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		
 		return $response;
 	}
+	
+	protected function actionSpellCheck($params) {
+		
+		if (!isset($params['lang']))
+			$params['lang'] = GO::session()->values['language'];
 
+		if (   !isset($params['tocheck'])
+			|| empty($params['tocheck'])
+			|| !function_exists('pspell_new')
+		) {
+			$response['errorcount'] = 0;
+			$response['text'] = '';
+		} else {
+
+			$mispeltwords = GO_Base_Util_SpellChecker::check($params['tocheck'], $params['lang']);
+			if (!empty($mispeltwords)) {
+				$response['errorcount'] = count($mispeltwords);
+				$response['text'] = GO_Base_Util_SpellChecker::replaceMisspeltWords($mispeltwords, $params['tocheck']);
+			} else {
+				$response['errorcount'] = 0;
+				$response['text'] = $params['tocheck'];
+			}
+		}
+
+		return $response;
+	}
 }
