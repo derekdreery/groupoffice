@@ -207,19 +207,23 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		$response['success']=true;
 		$response['results']=array();
 	
+		if(empty($params['query']))
+			return $response;
 		
 		if(GO::modules()->addressbook){
 			$findParams = GO_Base_Db_FindParams::newInstance()
-							->searchQuery($params['query'])
+							->searchQuery('%'.preg_replace ('/[\s*]+/','%', $params['query']).'%')
 							->select('t.*, addressbook.name AS ab_name')
 							->limit(10);
+			
 
-			$findParams->getCriteria()						
-
+			$criteria = GO_Base_Db_FindCriteria::newInstance()
 							->addCondition("email", "","!=")
 							->addCondition("email2", "","!=",'t',false)
 							->addCondition("email3", "","!=",'t',false);
 
+			$findParams->getCriteria()->mergeWith($criteria);
+							
 			$stmt = GO_Addressbook_Model_Contact::model()->find($findParams);
 			
 
