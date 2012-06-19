@@ -117,10 +117,15 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$record['account_id']=$account->id;
 			$record['mailbox']=$params["mailbox"];
 			
-			if($params["mailbox"]==$account->sent){				
+			if($params["mailbox"]==$account->sent || $params["mailbox"]==$account->drafts){				
 				$addresses = $message->to->getAddresses();				
-				$record['from']=htmlspecialchars(implode(',', $addresses), ENT_COMPAT, 'UTF-8');
+				$record['from']=  htmlspecialchars(implode(',', $addresses), ENT_COMPAT, 'UTF-8');
 			}
+			
+			if(empty($record['subject']))
+				$record['subject']=GO::t('no_subject','email');
+				
+				
 			
 			$response["results"][]=$record;
 		}
@@ -130,6 +135,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$unseen = $imap->get_unseen($params['mailbox']);
 		$response['unseen'][$params['mailbox']]=$unseen['count'];
 		
+		//special folder flags
+		$response['sent']=$params['mailbox']==$account->sent;
+		$response['drafts']=$params['mailbox']==$account->drafts;
+		$response['trash']=$params['mailbox']==$account->trash;
 		
 		//deletes must be confirmed if no trash folder is used or when we are in the trash folder to delete permanently
 		$response['deleteConfirm']=empty($account->trash) || $account->trash==$params['mailbox'];
@@ -319,6 +328,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	protected function actionSend($params) {
 
 		$response['success'] = true;
+		$response['feedback']='';
 
 		$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);
 		$account = GO_Email_Model_Account::model()->findByPk($alias->account_id);
@@ -379,11 +389,15 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			 */
 			if ($account->ignore_sent_folder && !empty($params['reply_mailbox']))
 				$account->sent = $params['reply_mailbox'];
-
+			
+		
 			if ($account->sent) {
 				//if a sent items folder is set in the account then save it to the imap folder
 				$imap = $account->openImapConnection($account->sent);
-				$imap->append_message($account->sent, $message->toString(), "\Seen");
+				if(!$imap->append_message($account->sent, $message->toString(), "\Seen")){
+					$response['success']=false;
+					$response['feedback'].='Failed to save send item to '.$account->sent;
+				}
 			}
 
 			if (!empty($params['draft_uid'])) {
