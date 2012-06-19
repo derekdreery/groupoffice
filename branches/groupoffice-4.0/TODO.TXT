@@ -1,6 +1,5 @@
 Geafactureerd type ook als gesloten beschouwen
 
-Import matching dialog
 
 resize vcard photo's
 
