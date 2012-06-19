@@ -731,7 +731,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 	public function get_unseen($mailbox=false) {
 		
-		if($this->_unseen[$mailbox]){
+		if(isset($this->_unseen[$mailbox])){
 			return $this->_unseen[$mailbox];
 		}
 
