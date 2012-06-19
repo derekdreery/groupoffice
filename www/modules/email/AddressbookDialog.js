@@ -219,7 +219,17 @@ GO.email.AddressbookDialog = function(config) {
 	});
 };
 
-Ext.extend(GO.email.AddressbookDialog, Ext.Window, {
+Ext.extend(GO.email.AddressbookDialog, GO.Window, {
+	focus : function(){
+		var panel = this.tabPanel.getActiveTab();
+		var tb = panel.getTopToolbar();
+		if(tb){
+			var components =tb.findByType("searchfield");
+			if(components.length)
+				components[0].focus();
+		}
+		
+	},
 	addRecipients : function(field) {
 		var str="";
 		var activeGrid = this.tabPanel.getLayout().activeItem;
@@ -271,32 +281,6 @@ Ext.extend(GO.email.AddressbookDialog, Ext.Window, {
 				scope:this
 			});
 		}else
-		/*if(activeGrid == this.addressbooksGrid)
-		{
-			var addressbooks = [];
-
-			for(var i=0;i<selections.length;i++)
-			{
-				addressbooks.push(selections[i].data.id);
-			}
-
-			this.el.mask(GO.lang.waitMsgLoad);
-			Ext.Ajax.request({
-				url: GO.settings.modules.addressbook.url+'json.php',
-				params: {
-					task:'addressbooks_string',
-					addressbooks: addressbooks.join(',')
-				},
-				callback: function(options, success, response)
-				{
-					str = response.responseText;
-					this.fireEvent('addrecipients', field, str);
-					this.el.unmask();
-				},
-				scope:this
-			});
-		}
-		else*/
 		{
 			var emails = [];
 

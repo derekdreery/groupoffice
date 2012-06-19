@@ -85,3 +85,5 @@ GO.form.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
 		}
 	}
 });
+
+Ext.reg('searchfield', GO.form.SearchField);
