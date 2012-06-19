@@ -167,7 +167,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			
 			try{
 				$message->setTo($contact->email, $contact->name);
-				$message->setBody(GO_Addressbook_Model_Template::model()->replaceModelTags($body, $contact));
+				$message->setBody(GO_Addressbook_Model_Template::model()->replaceContactTags($body, $contact));
 				$this->_sendmail($message, $contact, $mailer, $mailing);			
 			}catch(Exception $e){
 				echo "Error for ".$contact->email.": ".$e->getMessage()."\n";
