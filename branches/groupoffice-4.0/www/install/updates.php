@@ -253,3 +253,6 @@ $updates["201206191425"][]="UPDATE `go_acl` SET `level`=10 WHERE `level`=1;";
 $updates["201206191425"][]="UPDATE `go_acl` SET `level`=30 WHERE `level`=2;";
 $updates["201206191425"][]="UPDATE `go_acl` SET `level`=40 WHERE `level`=3;";
 $updates["201206191425"][]="UPDATE `go_acl` SET `level`=50 WHERE `level`=4;";
+
+
+$updates["201206191755"][]="ALTER TABLE `go_acl` CHANGE `level` `level` TINYINT( 4 ) NOT NULL DEFAULT '10'";
