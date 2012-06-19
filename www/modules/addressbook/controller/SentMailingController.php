@@ -95,6 +95,8 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 
 		if (PHP_SAPI != 'cli')
 			throw new Exception("This action may only be executed on the command line interace");
+		
+		GO::$disableModelCache=true;
 
 		$mailing = GO_Addressbook_Model_SentMailing::model()->findByPk($params['mailing_id']);
 		if (!$mailing)
