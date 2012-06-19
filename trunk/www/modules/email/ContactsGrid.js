@@ -12,13 +12,8 @@ GO.email.ContactsGrid = function(config){
 	config.border=false;
 
 	config.store = new GO.data.JsonStore({
-		url : GO.settings.modules.addressbook.url + 'json.php',
-		baseParams : {
-			task : 'search_email_contacts'
-		},
-		root : 'results',
+		url : GO.url("addressbook/contact/searchEmail"),
 		id : 'email',
-		totalProperty : 'total',
 		fields : ['id', 'name',  'email', 'ab_name', 'company_name', "function","department"],
 		remoteSort : true
 	});

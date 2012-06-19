@@ -509,89 +509,52 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		return $response;
 	}
 	
-	
-	protected function actionEmail($params){
-		
-		$findParams = GO_Base_Db_FindParams::newInstance()
-						->searchQuery($params['query'])
-						->select('t.*, addressbook.name AS ab_name')
-						->limit(10);
-		
-		$findParams->getCriteria()						
-						
-						->addCondition("email", "","!=")
-						->addCondition("email2", "","!=",'t',false)
-						->addCondition("email3", "","!=",'t',false);
-		
-		$stmt = GO_Addressbook_Model_Contact::model()->find($findParams);
+	protected function actionSearchEmail($params) {
 		
 		$response['success']=true;
 		$response['results']=array();
 		
-		while($contact = $stmt->fetch()){
-			$record['name']=$contact->name;
-			
-			if($contact->email!=""){
-				$l = new GO_Base_Mail_EmailRecipients();
-				$l->addRecipient($contact->email, $record['name']);
-				
-				$record['info']=htmlspecialchars((string) $l.' ('.sprintf(GO::t('contactFromAddressbook','addressbook'), $contact->ab_name).')', ENT_COMPAT, 'UTF-8');
-				$record['full_email']=htmlspecialchars((string) $l , ENT_COMPAT, 'UTF-8');										
-				
-				$response['results'][]=$record;
-			}
-			
-			if($contact->email2!=""){
-				$l = new GO_Base_Mail_EmailRecipients();
-				$l->addRecipient($contact->email2, $record['name']);
-				
-				$record['info']=htmlspecialchars((string) $l.' ('.sprintf(GO::t('contactFromAddressbook','addressbook'), $contact->ab_name).')', ENT_COMPAT, 'UTF-8');
-				$record['full_email']=htmlspecialchars((string) $l , ENT_COMPAT, 'UTF-8');										
-				
-				$response['results'][]=$record;
-			}
-			
-			if($contact->email3!=""){
-				$l = new GO_Base_Mail_EmailRecipients();
-				$l->addRecipient($contact->email3, $record['name']);
-				
-				$record['info']=htmlspecialchars((string) $l.' ('.sprintf(GO::t('contactFromAddressbook','addressbook'), $contact->ab_name).')', ENT_COMPAT, 'UTF-8');
-				$record['full_email']=htmlspecialchars((string) $l , ENT_COMPAT, 'UTF-8');										
-				
-				$response['results'][]=$record;
-			}
-			
-			
-			if(count($response['results'])<10) {
-				
-				$findParams = GO_Base_Db_FindParams::newInstance()
-								->limit(10-count($response['results']))
-								->select('t.*, addressbook.name AS ab_name')
-								->searchQuery($params['query']);
-		
-				$findParams->getCriteria()						
-								->addCondition("email", "","!=");
-
-				$stmt = GO_Addressbook_Model_Company::model()->find($findParams);
-		
-				while($company = $stmt->fetch()){
-					$record['name']=$company->name;
-
-					$l = new GO_Base_Mail_EmailRecipients();
-					$l->addRecipient($company->email, $record['name']);
-
-					$record['info']=htmlspecialchars((string) $l.' ('.sprintf(GO::t('companyFromAddressbook','addressbook'), $company->ab_name).')', ENT_COMPAT, 'UTF-8');
-					$record['full_email']=htmlspecialchars((string) $l , ENT_COMPAT, 'UTF-8');										
-
-					$response['results'][]=$record;
-
-				}
-			}
-			
+		if(empty($params['query']))
 			return $response;
-			
-		}
-	}
-	
-}
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->searchQuery($params['query'])
+						->select('t.*, addressbook.name AS ab_name, c.name AS company_name')
+						->limit(20)
+						->joinModel(array(
+							'model'=>'GO_Addressbook_Model_Company',					
+							'foreignField'=>'id', //defaults to primary key of the remote model
+							'localField'=>'company_id', //defaults to "id"
+							'tableAlias'=>'c', //Optional table alias
+							'type'=>'LEFT' //defaults to INNER,
+						));
 
+		$findParams->getCriteria()
+						->addCondition("email", "", "!=")
+						->addCondition("email2", "", "!=", 't', false)
+						->addCondition("email3", "", "!=", 't', false);
+
+		$stmt = GO_Addressbook_Model_Contact::model()->find($findParams);
+
+
+		while ($contact = $stmt->fetch()) {
+			
+			$record = $contact->getAttributes();
+			
+			if ($contact->email != "")				
+				$response['results'][] = $record;
+
+			if ($contact->email2 != "") {
+				$record['email']=$contact->email2;
+				$response['results'][] = $record;
+			}
+
+			if ($contact->email3 != "") {
+				$record['email']=$contact->email3;				
+				$response['results'][] = $record;
+			}
+		}
+		
+		return $response;
+	}
+}
