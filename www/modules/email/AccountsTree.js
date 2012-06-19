@@ -406,7 +406,6 @@ Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {
 		if(node){
 			//remove preloaded children otherwise it won't request the server
 			delete node.attributes.children;
-			console.log(node);
 			node.reload();
 		}else
 		{
