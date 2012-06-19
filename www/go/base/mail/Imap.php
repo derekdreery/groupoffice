@@ -62,9 +62,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		GO::debug("imap::connect($server, $port, $username, ***, $ssl, $starttls)");
 
 		//cache DNS in session. Seems to be faster with gmail somehow.
-//		if(empty($_SESSION['GO_SESSION']['imap'][$server]))
+//		if(empty(GO::session()->values['imap'][$server]))
 //		{
-//			$_SESSION['GO_SESSION']['imap'][$server]=gethostbyname($server);
+//			GO::session()->values['imap'][$server]=gethostbyname($server);
 //		}
 		
 		$this->ssl = $ssl;
@@ -205,13 +205,13 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 */
 
 	public function get_capability() {
-		if (isset($_SESSION['GO_IMAP'][$this->server]['imap_capability'])) {
-			$this->capability=$_SESSION['GO_IMAP'][$this->server]['imap_capability'];
+		if (isset(GO::session()->values['GO_IMAP'][$this->server]['imap_capability'])) {
+			$this->capability=GO::session()->values['GO_IMAP'][$this->server]['imap_capability'];
 		}else {
 			$command = "CAPABILITY\r\n";
 			$this->send_command($command);
 			$response = $this->get_response();
-			$this->capability = $_SESSION['GO_IMAP'][$this->server]['imap_capability'] = implode(' ', $response);
+			$this->capability = GO::session()->values['GO_IMAP'][$this->server]['imap_capability'] = implode(' ', $response);
 		}
 
 		//GO::debug('IMAP capability: '.$this->capability);
@@ -275,8 +275,8 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 	public function get_mailbox_delimiter() {
 		if(!$this->delimiter){
-			if(isset($_SESSION['GO_SESSION']['imap_delimiter'][$this->server])){
-				$this->delimiter=$_SESSION['GO_SESSION']['imap_delimiter'][$this->server];
+			if(isset(GO::session()->values['imap_delimiter'][$this->server])){
+				$this->delimiter=GO::session()->values['imap_delimiter'][$this->server];
 			}else
 			{
 				$this->get_folders();
@@ -291,7 +291,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	}
 
 	private function set_mailbox_delimiter($delimiter) {
-		$this->delimiter=$_SESSION['GO_SESSION']['imap_delimiter'][$this->server]=$delimiter;
+		$this->delimiter=GO::session()->values['imap_delimiter'][$this->server]=$delimiter;
 	}
 	
 	
@@ -1377,14 +1377,15 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			$key .= $reverse ? '_1' : '_0';
 			
 			//var_dump(GO::session()->values['emailmod'][$key]);			
-
-			if(isset(GO::session()->values['emailmod'][$key]['unseen']) && GO::session()->values['emailmod'][$key]['unseen']==$unseen['count']){
+			$unseenCheck = $unseen['count'].':'.$this->selected_mailbox['messages'];
+			//var_dump($unseenCheck);
+			if(isset(GO::session()->values['emailmod'][$key]['unseen']) && GO::session()->values['emailmod'][$key]['unseen']==$unseenCheck){
 					//throw new Exception("From cache");
 				$uids = GO::session()->values['emailmod'][$key]['uids'];
 				$this->sort_count=count($uids);
 			}else
 			{		
-				GO::session()->values['emailmod'][$key]['unseen']=$unseen['count'];
+				GO::session()->values['emailmod'][$key]['unseen']=$unseenCheck;
 				$uids = GO::session()->values['emailmod'][$key]['uids'] = $this->sort_mailbox($sort_field, $reverse, $query);
 			}
 		}else
