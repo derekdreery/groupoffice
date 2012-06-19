@@ -1237,18 +1237,18 @@ GO.mainLayout.onReady(function(){
 					success:function(options, response, data){
 						var ep = GO.mainLayout.getModulePanel('email');
 
-						var totalUnseen = 0;
-						for(var mailbox in data.email_status)
-						{
-							if(ep){
-								var changed = ep.updateFolderStatus(mailbox, data.email_status[mailbox].unseen);
-								if(changed && ep.messagesGrid.store.baseParams.mailbox==mailbox)
-								{
-									ep.messagesGrid.store.reload();
-								}
-							}
-							totalUnseen += data.email_status[mailbox].unseen;
-						}
+						var totalUnseen = data.email_status.unseen;
+//						for(var mailbox in data.email_status)
+//						{
+//							if(ep){
+//								var changed = ep.updateFolderStatus(mailbox, data.email_status[mailbox].unseen);
+//								if(changed && ep.messagesGrid.store.baseParams.mailbox==mailbox)
+//								{
+//									ep.messagesGrid.store.reload();
+//								}
+//							}
+//							totalUnseen += data.email_status[mailbox].unseen;
+//						}
 
 						if(totalUnseen!=GO.email.totalUnseen && totalUnseen>0)
 						{
