@@ -34,8 +34,10 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 				"username"=>$params["username"]				
 		));
 		
-		$mailbox->password=$params["password"];
-		$mailbox->save();
+		if($mailbox){
+			$mailbox->password=$params["password"];
+			$mailbox->save();
+		}
 		
 		$response['success']=true;
 		
