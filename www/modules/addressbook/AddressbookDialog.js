@@ -144,7 +144,7 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 					mode:'local',
 					allowBlank: false,
 					triggerAction: 'all',
-					value: 'GO_Addressbook_Controller_Contact'
+					value: 'GO_Addressbook_Controller_Company'
 				}),new Ext.Panel({
 					layout: 'form',
 					border: false,
@@ -179,7 +179,7 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 		this.fileTypeCB.on('select',function(combo,record,index){
 			if (record.id=='VCard')
 				this.controllerNameCB.setValue('GO_Addressbook_Controller_Contact');
-			this.controllerNameCB.setVisible(record.id=='CSV');
+			this.controllerNameCB.setDisabled(record.id!='CSV');
 		},this);
 		
 //		this.addPanel( this.importPanel = new GO.base.model.ImportPanel({

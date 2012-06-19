@@ -13,6 +13,13 @@ class GO_Base_Component_SummaryLog {
 	private $_total = 0;
 	
 	/**
+	 * The total successfully handled items count
+	 * 
+	 * @var int 
+	 */
+	private $_totalSuccess = 0;
+	
+	/**
 	 * List of items that went wrong
 	 * 
 	 * @var array 
@@ -28,6 +35,10 @@ class GO_Base_Component_SummaryLog {
 		$this->_total = $this->_total+$count;
 	}
 	
+	public function addSuccessful($count=1){
+		$this->_totalSuccess = $this->_totalSuccess+$count;
+	}
+	
 	/**
 	 * Get the totals
 	 * 
@@ -35,6 +46,15 @@ class GO_Base_Component_SummaryLog {
 	 */
 	public function getTotal(){
 		return $this->_total;
+	}
+	
+	/**
+	 * Get the successful totals
+	 * 
+	 * @return int
+	 */
+	public function getTotalSuccessful(){
+		return $this->_totalSuccess;
 	}
 	
 	/**

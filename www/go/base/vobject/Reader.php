@@ -1,12 +1,105 @@
 <?php
+/**
+ * Class extended from and based on parts of Sabre_VObject_Reader, with
+ * functionality to read multiple VObjects from a single VCard.
+ * @author Evert Pot (http://www.rooftopsolutions.nl/)
+ * @author WilmarVB <wilmar@intermesh.nl>
+ * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License 
+ */
+
 //require vendor lib SabreDav vobject
 require_once(GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/VObject/includes.php');
 		
 class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 	
+  const REGEX_ELEMENT_STRING = "/^(?P<name>[A-Z0-9-\.]+)(?:;(?P<params>([^:^\"]|\"([^\"]*)\")*))?:(?P<value>.*)$/i";
+	const REGEX_PARAM_STRING = '/(?<=^|;)(?P<paramName>[A-Z0-9-]+)(=(?P<paramValue>[^\"^;]*|"[^"]*")(?=$|;))?/i';
+				
+	public static function prepareData($dataString) {
+		$outputVObjects = array();
+		
+		$dataString = str_replace(array("\r\n","\n\n"),array("\n","\n"),$dataString);
+		$lines = explode("\n",$dataString);
+		$currentlyBusy = false;
+		
+		if (stripos($lines[count($lines)-2],'END:')!==0)
+			throw new Sabre_VObject_ParseException('Invalid VCard: it does not end with the END element.');
+		
+		// Make sure the lines are put in an array separately per VCard.		
+		foreach ($lines as $lineNr => $line) {
+			
+			if (stripos($line,"BEGIN:VCARD")!==false) {
+			
+				if ($currentlyBusy)
+					throw new Sabre_VObject_ParseException('BEGIN element found prematurely in line #'.($lineNr+1).'.');
+				$currentlyBusy=true;
+				$currentVObject = Sabre_VObject_Component::create(strtoupper(substr($line,6)));
+				
+			} elseif (stripos($line,"END:VCARD")!==false) {
+			
+				if (!$currentlyBusy)
+					throw new Sabre_VObject_ParseException('END element found prematurely in line #'.($lineNr+1).'.');
+				$currentlyBusy=false;
+				$outputVObjects[] = $currentVObject;
+			
+			} else if (empty($line) || $line[0]==="\t") {
+
+				// DO NOTHING
+				
+			} else {
+			
+				if (!$currentlyBusy)
+					throw new Sabre_VObject_ParseException('Before line #'.($lineNr+1).', there must be a BEGIN element.');
+
+				$result = preg_match(self::REGEX_ELEMENT_STRING,$line,$matches);
+        if (!$result)
+          throw new Sabre_VObject_ParseException('Invalid VObject, line ' . ($lineNr+1) . ' did not follow the icalendar/vcard format');
+
+        $vProp = Sabre_VObject_Property::create(
+					strtoupper($matches['name']),
+					preg_replace_callback('#(\\\\(\\\\|N|n|;|,))#', array('self','checkForN'), $matches['value'])
+				);
+
+        if ($matches['params'])
+					foreach(self::readParams($matches['params']) as $param)
+						$vProp->add($param);
+				
+				$currentVObject->add($vProp);
+				
+			}
+			
+		}
+		return $outputVObjects;
+	}
+	
+	protected static function checkForN($matches) {
+		if ($matches[2]==='n' || $matches[2]==='N') {
+			return "\n";
+		} else {
+			return $matches[2];
+		}
+	}
+	
+	protected static function readParams($params) {
+		
+		preg_match_all(self::REGEX_PARAM_STRING, $params, $matches,  PREG_SET_ORDER);
+		
+		$outParams = array();	
+		foreach($matches as $match) {
+			$value = isset($match['paramValue'])?$match['paramValue']:null;
+			if (isset($value[0])) {
+				// Stripping quotes, if needed
+				if ($value[0] === '"') $value = substr($value,1,strlen($value)-2);
+			} else {
+				$value = '';
+			}
+			$outParams[] = new Sabre_VObject_Parameter($match['paramName'], preg_replace_callback('#(\\\\(\\\\|N|n|;|,))#',array('self','checkForN'), $value));
+		}
+		return $outParams;
+	}
+	
 	public static function parseDuration($duration){
 		preg_match('/(-?)P([0-9]+[WD])?T?([0-9]+H)?([0-9]+M)?([0-9]+S)?/', (string) $duration, $matches);
-		//var_dump($matches);
 
 
 		$negative = $matches[1]=='-' ? -1 : 1;

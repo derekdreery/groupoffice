@@ -104,7 +104,8 @@ $l["moveAll"]= 'Het bedrijf en al zijn werknemers zullen ook naar het nieuwe adr
 $l["addressbook"]= 'Adresboek';
 $l["addressbooks"]= 'Adresboeken';
 $l["sendMailing"]='Nieuwsbrief versturen';
-$l["importSuccess"]='Gegevens succesvol geimporteerd';
+$l["importSuccessCount"]='Gegevens die succesvol zijn geïmporteerd:';
+$l["importSuccess"]='Gegevens succesvol geïmporteerd!';
 $l["searchOnSender"]='Opzoeken in adresboek';
 $l["confirmCreate"]='Contactpersoon niet gevonden. Wilt u een nieuw contactpersoon aanmaken?';
 $l["selectMailingGroup"]='Selecteer adreslijst';
@@ -215,3 +216,6 @@ $l['editUser']='Bewerk gebruiker';
 $l['template']='Sjabloon';
 
 $l['addresslistIdMustBePositive']='Dit paneel verwacht een adreslijst ID die positief is, maar heeft zo een niet ontvangen. Neemt u a.u.b. contact op met de beheerder.';
+$l['male']='Man';
+$l['female']='Vrouw';
+$l['importing']='Importeren';

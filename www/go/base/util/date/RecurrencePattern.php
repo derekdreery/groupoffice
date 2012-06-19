@@ -17,14 +17,14 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.util.date
  * 
- * @property int $until
- * @property string $freq
- * @property int $interval
- * @property array $byday
- * @property array $bymonth
- * @property int $bymonthday
- * @property int $eventStartTime
- * @property int $bysetpos
+ * @property int $until Recurrence end date
+ * @property string $freq Recurrence type. DAILY, WEEKLY, MONTHLY and YEARLY
+ * @property int $interval Repeats every n days/weeks/months/years
+ * @property array $byday Day to occur with monthly recurrence
+ * @property array $bymonth Month to occur with yearly recurrence
+ * @property int $bymonthday The day of the mont
+ * @property int $eventStartTime Start time of the event
+ * @property int $bysetpos The nth day of the mont
  */
 class GO_Base_Util_Date_RecurrencePattern{
 	
