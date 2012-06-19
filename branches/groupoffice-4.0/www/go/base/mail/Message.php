@@ -51,7 +51,8 @@ class GO_Base_Mail_Message extends Swift_Message{
 
 		$headers->addTextHeader("X-Mailer", "Group-Office ".GO::config()->version);
 		$headers->addTextHeader("X-MimeOLE", "Produced by Group-Office ".GO::config()->version);
-		$headers->addTextHeader("X-Remote-Addr", "[".$_SERVER['REMOTE_ADDR']."]");
+		$remoteAddr = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'cli';
+		$headers->addTextHeader("X-Remote-Addr", "[".$remoteAddr."]");
 	}
 	
 	/**
@@ -98,28 +99,29 @@ class GO_Base_Mail_Message extends Swift_Message{
 		$to = isset($structure->headers['to']) && strpos($structure->headers['to'],'undisclosed')===false ? $structure->headers['to'] : '';
 		$cc = isset($structure->headers['cc']) && strpos($structure->headers['cc'],'undisclosed')===false ? $structure->headers['cc'] : '';
 		$bcc = isset($structure->headers['bcc']) && strpos($structure->headers['bcc'],'undisclosed')===false ? $structure->headers['bcc'] : '';
+	
+		$toList = new GO_Base_Mail_EmailRecipients($to);
+		$to =$toList->getAddresses();
+		foreach($to as $email=>$personal)
+			$this->addTo($email, $personal);
 		
-		$ap = new GO_Base_Mail_AddressParser();
-		$to =$ap->parse_address_list($to);
-		foreach($to as $toAddress){
-			$this->addTo($toAddress['email'], $toAddress['personal']);
-		}
+		$ccList = new GO_Base_Mail_EmailRecipients($cc);
+		$cc =$ccList->getAddresses();
+		foreach($cc as $email=>$personal)
+			$this->addCc($email, $personal);
 		
-		$cc =$ap->parse_address_list($cc);
-		foreach($cc as $ccAddress){
-			$this->addCc($ccAddress['email'], $ccAddress['personal']);
-		}
-		
-		$bcc =$ap->parse_address_list($bcc);
-		foreach($bcc as $bccAddress){
-			$this->addBcc($bccAddress['email'], $bccAddress['personal']);
-		}
+		$bccList = new GO_Base_Mail_EmailRecipients($bcc);
+		$bcc =$bccList->getAddresses();
+		foreach($bcc as $email=>$personal)
+			$this->addBcc($email, $personal);
+
 		if(isset($structure->headers['from'])){
-			$addresses=$ap->parse_address_list($structure->headers['from']);
-			if(isset($addresses[0]))
-			{
-				$this->setFrom($addresses[0]['email'], $addresses[0]['personal']);
-			}		
+			
+			$fromList = new GO_Base_Mail_EmailRecipients($structure->headers['from']);
+			$from =$fromList->getAddress();
+		
+			if($from)
+				$this->setFrom($from['email'], $from['personal']);
 		}
 		
 		$this->_getParts($structure);
