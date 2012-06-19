@@ -124,7 +124,9 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 								'model' => 'GO_Email_Model_AccountSort',
 								'foreignField' => 'account_id', //defaults to primary key of the remote model
 								'localField' => 'id', //defaults to primary key of the model
-								'type' => 'LEFT'
+								'type' => 'LEFT',
+								'tableAlias'=>'s',
+								'criteria'=>  GO_Base_Db_FindCriteria::newInstance()->addCondition('user_id', GO::user()->id,'=','s')
 						))
 						->ignoreAdminGroup()
 						->order('order', 'DESC');
