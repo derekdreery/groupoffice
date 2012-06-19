@@ -84,15 +84,15 @@ GO.calendar.MainPanel = function(config){
 	},this);
 		
 	GO.calendar.calendarsStore = this.calendarsStore = new GO.data.JsonStore({
-		url: GO.settings.modules.calendar.url+'json.php',
-		baseParams: {
-			'task': 'calendars',
-			limit:parseInt(GO.settings['max_rows_list'])
-		},
-		root: 'results',
-		totalProperty: 'total',
-		id: 'id',
-//		url:GO.url("calendar/calendar/store"),
+//		url: GO.settings.modules.calendar.url+'json.php',
+//		baseParams: {
+//			'task': 'calendars',
+//			limit:parseInt(GO.settings['max_rows_list'])
+//		},
+//		root: 'results',
+//		totalProperty: 'total',
+//		id: 'id',
+		url:GO.url("calendar/calendar/store"),
 		fields:['id','name','comment','user_name','group_id', 'group_name','checked', 'project_id'],
 		remoteSort:true
 	});
@@ -367,8 +367,8 @@ GO.calendar.MainPanel = function(config){
 	this.calendarListPanel.add(this.resourcesList);
 
 	this.daysGridStore = new GO.data.JsonStore({
-		//url: GO.settings.modules.calendar.url+'json.php',
-		url:GO.url('calendar/event/store'),
+		url: GO.settings.modules.calendar.url+'json.php',
+//		url:GO.url('calendar/event/store'),
 		
 		baseParams: {
 			task: 'events'
