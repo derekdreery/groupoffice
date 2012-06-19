@@ -191,7 +191,7 @@ GO.email.EmailComposer = function(config) {
 		anchor : '100%',
 		height : 50,
 		store : new GO.data.JsonStore({
-			url : GO.url("addressbook/contact/email"),
+			url : GO.url("search/email"),
 			fields : ['full_email','info']
 		}),
 		valueField : 'full_email',
@@ -205,7 +205,7 @@ GO.email.EmailComposer = function(config) {
 		anchor : '100%',
 		height : 50,
 		store : new GO.data.JsonStore({
-			url : GO.url("addressbook/contact/email"),
+			url : GO.url("search/email"),
 			fields : ['full_email','info']
 		}),
 		displayField : 'full_email',
@@ -223,7 +223,7 @@ GO.email.EmailComposer = function(config) {
 		anchor : '100%',
 		height : 50,
 		store : new GO.data.JsonStore({
-			url : GO.url("addressbook/contact/email"),
+			url : GO.url("search/email"),
 			fields : ['full_email','info']
 		}),
 		displayField : 'full_email',
