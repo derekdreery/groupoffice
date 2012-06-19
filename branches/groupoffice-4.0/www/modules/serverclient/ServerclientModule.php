@@ -76,7 +76,7 @@ class GO_Serverclient_ServerclientModule extends GO_Base_Module{
 		$result=json_decode($response);
 
 		if(!$result->success)
-			throw new Exception("Could not create mailbox on postfixadmin module. ".$result->feedback);
+			throw new Exception("Could not set mailbox password on postfixadmin module. ".$result->feedback);
 		
 		if(GO::modules()->isInstalled('email')){
 			$stmt = GO_Email_Model_Account::model()->findByAttributes(array(
