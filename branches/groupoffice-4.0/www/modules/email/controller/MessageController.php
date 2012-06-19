@@ -116,6 +116,12 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$record = $message->getAttributes(true);
 			$record['account_id']=$account->id;
 			$record['mailbox']=$params["mailbox"];
+			
+			if($params["mailbox"]==$account->sent){				
+				$addresses = $message->to->getAddresses();				
+				$record['from']=htmlspecialchars(implode(',', $addresses), ENT_COMPAT, 'UTF-8');
+			}
+			
 			$response["results"][]=$record;
 		}
 	
