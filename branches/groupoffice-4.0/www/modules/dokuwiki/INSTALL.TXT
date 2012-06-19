@@ -1,5 +1,7 @@
 Documentation for installing the Dokuwiki plugin to Group-Office.
 
+IMPORTANT NOTICE: You need to turn off "suhosin.session.encrypt" in the suhosin.ini file to let this module work. Otherwise this module cannot read the Group-Office session.
+
 NOTICE: Dokuwiki needs to be installed on the same domain as your Group-Office installation.
 NOTICE: After this install procedure only users of Group-Office can login to Dokuwiki.
 
