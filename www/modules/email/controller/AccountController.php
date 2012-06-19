@@ -137,21 +137,24 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 
 				$alias = $account->getDefaultAlias();
 				if($alias){
+					$nodeId='account_' . $account->id;
+					
 					$node = array(
 							'text' => $alias->email,
 							'name' => $alias->email,
-							'id' => 'account_' . $account->id,
+							'id' => $nodeId,
 							'iconCls' => 'folder-account',
-							'expanded' => true,
+							'expanded' => $this->_isExpanded($nodeId),
 							'noselect' => false,
 							'account_id' => $account->id,
-							'mailbox' => 'INBOX',
-							'children' => $this->_getMailboxTreeNodes($account->getRootMailboxes(true)),
+							'mailbox' => 'INBOX',							
 							'noinferiors' => false,
 							'inbox_new' => 0,
-							'usage' => "",
-							'parentExpanded' => true
+							'usage' => ""
 					);
+					
+					if($node['expanded'])
+						$node['children']=$this->_getMailboxTreeNodes($account->getRootMailboxes(true));
 
 					$response[] = $node;
 				}
@@ -161,16 +164,17 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 
 			$parts = explode('_', $params['node']);
 			$accountId = $parts[1];
-			$mailboxName = $parts[2];
-
 			$account = GO_Email_Model_Account::model()->findByPk($accountId);
+			
+			if($parts[0]=="account"){
+				$response=$this->_getMailboxTreeNodes($account->getRootMailboxes(true));
+			}else{				
+				$mailboxName = $parts[2];
 
-			$mailbox = new GO_Email_Model_ImapMailbox($account, array('name' => $mailboxName));
-			$response = $this->_getMailboxTreeNodes($mailbox->getChildren());
+				$mailbox = new GO_Email_Model_ImapMailbox($account, array('name' => $mailboxName));
+				$response = $this->_getMailboxTreeNodes($mailbox->getChildren());
+			}
 		}
-
-//		var_dump($response);
-//		exit();
 
 		return $response;
 	}
