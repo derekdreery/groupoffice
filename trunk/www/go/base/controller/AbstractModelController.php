@@ -949,6 +949,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 					
 					try{
 						$model->save();
+						$summarylog->addSuccessful();
 					}
 					catch(Exception $e){
 						$summarylog->addError($record[0], $e->getMessage());

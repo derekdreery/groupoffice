@@ -8,6 +8,10 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 		return array('permissionsstore');
 	}
 	
+	protected function ignoreAclPermissions() {		
+		return array('*');
+	}
+		
 	protected function prepareStore(GO_Base_Data_Store $store){		
 			
 		$store->getColumnModel()->setFormatRecordFunction(array('GO_Modules_Controller_Module', 'formatRecord'));

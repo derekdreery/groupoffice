@@ -29,7 +29,8 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 						));
 
 		$response['data']['employees'] = array();
-		$stmt = $model->contacts();
+		$sortAlias = GO::user()->sort_name=="first_name" ? array('first_name','last_name') : array('last_name','first_name');
+		$stmt = $model->contacts(GO_Base_Db_FindParams::newInstance()->order($sortAlias));
 		while ($contact = $stmt->fetch()) {
 			$response['data']['employees'][] = array(
 					'id' => $contact->id,
@@ -250,6 +251,8 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		$params['file'] = $_FILES['files']['tmp_name'][0];
 		$summarylog = parent::actionImport($params);
 		$response = $summarylog->getErrorsJson();
+		$response['successCount'] = $summarylog->getTotalSuccessful();
+		$response['totalCount'] = $summarylog->getTotal();
 		$response['success'] = true;
 		return $response;
 	}

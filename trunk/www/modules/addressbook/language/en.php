@@ -77,7 +77,8 @@ $l["moveAll"]= 'The company and all employees will also be moved to the new addr
 $l["addressbook"]= 'Address book';
 $l["addressbooks"]= 'Address books';
 $l["sendMailing"]='Send mailing';
-$l["importSuccess"]='Data imported successfully';
+$l["importSuccessCount"]='Records imported successfully:';
+$l["importSuccess"]='Records imported successfully!';
 $l["searchOnSender"]='Lookup in address book';
 $l["confirmCreate"]='Contact doesn\'t exist. Do you wish to create a new contact?';
 $l["matchFields"]='Match the fields';
@@ -359,3 +360,6 @@ $l['editUser']='Edit user';
 $l['templateContent']='Document';
 
 $l['addresslistIdMustBePositive']='This panel expects an addresslist ID that is positive, but did not receive one. Please contact the administrator.';
+$l['male']='Male';
+$l['female']='Female';
+$l['importing']='Importing';

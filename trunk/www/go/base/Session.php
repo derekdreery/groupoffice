@@ -171,12 +171,16 @@ class GO_Base_Session extends GO_Base_Observable{
 		
 		$success=true;
 		
-		if (!$user)
+		if (!$user){
+			GO::debug("LOGIN: User ".$username." not found");
 			$success=false;
-		elseif(!$user->enabled)
+		}elseif(!$user->enabled){
+			GO::debug("LOGIN: User ".$username." is disabled");
 			$success=false;
-		elseif(!$user->checkPassword($password))
+		}elseif(!$user->checkPassword($password)){
+			GO::debug("LOGIN: Incorrect password for ".$username);
 			$success=false;
+		}
 		
 		$str = "LOGIN ";		
 		$str .= $success ? "SUCCESS" : "FAILED" ;		

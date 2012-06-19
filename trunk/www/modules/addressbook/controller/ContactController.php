@@ -152,7 +152,10 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	
 	
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
-		$columnModel->formatColumn('name','$model->getName(GO::user()->sort_name)', array(),array('first_name','last_name'), GO::t('strName'));
+		
+		$sortAlias = GO::user()->sort_name=="first_name" ? array('first_name','last_name') : array('last_name','first_name');
+		
+		$columnModel->formatColumn('name','$model->getName(GO::user()->sort_name)', array(),$sortAlias, GO::t('strName'));
 		$columnModel->formatColumn('company_name','$model->company_name', array(),'', GO::t('company','addressbook'));
 		$columnModel->formatColumn('ab_name','$model->ab_name', array(),'', GO::t('addressbook','addressbook'));
 		
@@ -471,7 +474,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	
 	
 	protected function actionImportVCard($params){
-		$contact = new GO_Addressbook_Model_Contact();
+		
+		$summaryLog = new GO_Base_Component_SummaryLog();
 		
 		if(isset($_FILES['files']['tmp_name'][0]))
 			$params['file'] = $_FILES['files']['tmp_name'][0];
@@ -482,14 +486,25 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		}
 		
 		$file = new GO_Base_Fs_File($params['file']);
-		$data = $file->getContents();		
-		$vobject = GO_Base_VObject_Reader::read($data);
+		
+		$vObjectsArray = GO_Base_VObject_Reader::prepareData($file->getContents());
 		unset($params['file']);
+
+		foreach($vObjectsArray as $nr => $vObject) {
+			GO_Base_VObject_Reader::convertVCard21ToVCard30($vObject);
+			$contact = new GO_Addressbook_Model_Contact();
+			try {
+				if ($contact->importVObject($vObject, $params))
+					$summaryLog->addSuccessful();
+			} catch (Exception $e) {
+				$summaryLog->addError($nr+1, $e->getMessage());
+			}
+			$summaryLog->add();
+		}
 		
-		GO_Base_VObject_Reader::convertVCard21ToVCard30($vobject);
-	
-		$contact->importVObject($vobject, $params);
-		
+		$response = $summaryLog->getErrorsJson();
+		$response['successCount'] = $summaryLog->getTotalSuccessful();
+		$response['totalCount'] = $summaryLog->getTotal();
 		$response['success']=true;
 		
 		return $response;
@@ -505,6 +520,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$params['file'] = $_FILES['files']['tmp_name'][0];
 		$summarylog = parent::actionImport($params);
 		$response = $summarylog->getErrorsJson();
+		$response['successCount'] = $summarylog->getTotalSuccessful();
+		$response['totalCount'] = $summarylog->getTotal();
 		$response['success'] = true;
 		return $response;
 	}

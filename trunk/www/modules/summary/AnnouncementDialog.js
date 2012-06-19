@@ -131,6 +131,7 @@ Ext.extend(GO.summary.AnnouncementDialog, Ext.Window,{
 			items:[{
 				xtype: 'datefield',
 			  name: 'due_time',
+				minValue:new Date(),
 				anchor: '-20',
 				format: GO.settings.date_format,
 			  fieldLabel: GO.summary.lang.dueTime

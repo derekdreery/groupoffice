@@ -738,7 +738,12 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			if(config.contact_id)
 				params.contact_id=config.contact_id;
 
-			params.to = this.toCombo.getValue();			
+			params.to = this.toCombo.getValue();		
+			
+			if (config.addresslist_id > 0) {
+				// so that template loading won't replace fields
+				params.addresslist_id = config.addresslist_id;
+			}
 
 			if (config.uid || config.template_id || config.loadUrl || config.loadParams) {
 		
@@ -749,12 +754,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 				
 				params.account_id =fromRecord.get('account_id');
-				params.alias_id=fromRecord.get('id');	
+				params.alias_id=fromRecord.get('id');					
 				
-				if (config.addresslist_id > 0) {
-					// so that template loading won't replace fields
-					params.addresslist_id = config.addresslist_id;
-				}
 				params.template_id=config.template_id;
 				
 				var url;
@@ -1016,36 +1017,36 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	}
 });
 
-GO.email.TemplatesList = function(config) {
+//GO.email.TemplatesList = function(config) {
+//
+//	Ext.apply(config);
+//	var tpl = new Ext.XTemplate(
+//		'<div id="template-0" class="go-item-wrap">'+GO.addressbook.lang.noTemplate+'</div>',
+//		'<tpl for=".">',
+//		'<div id="template-{id}" class="go-item-wrap"">{name}</div>',
+//		'<tpl if="!GO.util.empty(default_template)"><div class="ml-template-default-spacer"></div></tpl>',
+//		'</tpl>');
+//
+//	GO.email.TemplatesList.superclass.constructor.call(this, {
+//		store : config.store,
+//		tpl : tpl,
+//		singleSelect : true,
+//		autoHeight : true,
+//		overClass : 'go-view-over',
+//		itemSelector : 'div.go-item-wrap',
+//		selectedClass : 'go-view-selected'
+//	});
+//}
 
-	Ext.apply(config);
-	var tpl = new Ext.XTemplate(
-		'<div id="template-0" class="go-item-wrap">'+GO.addressbook.lang.noTemplate+'</div>',
-		'<tpl for=".">',
-		'<div id="template-{id}" class="go-item-wrap"">{name}</div>',
-		'<tpl if="!GO.util.empty(default_template)"><div class="ml-template-default-spacer"></div></tpl>',
-		'</tpl>');
-
-	GO.email.TemplatesList.superclass.constructor.call(this, {
-		store : config.store,
-		tpl : tpl,
-		singleSelect : true,
-		autoHeight : true,
-		overClass : 'go-view-over',
-		itemSelector : 'div.go-item-wrap',
-		selectedClass : 'go-view-selected'
-	});
-}
-
-Ext.extend(GO.email.TemplatesList, Ext.DataView, {
-	onRender : function(ct, position) {
-		this.el = ct.createChild({
-			tag : 'div',
-			cls : 'go-select-list'
-		});
-
-		GO.email.TemplatesList.superclass.onRender.apply(this,
-			arguments);
-	}
-
-});
+//Ext.extend(GO.email.TemplatesList, Ext.DataView, {
+//	onRender : function(ct, position) {
+//		this.el = ct.createChild({
+//			tag : 'div',
+//			cls : 'go-select-list'
+//		});
+//
+//		GO.email.TemplatesList.superclass.onRender.apply(this,
+//			arguments);
+//	}
+//
+//});

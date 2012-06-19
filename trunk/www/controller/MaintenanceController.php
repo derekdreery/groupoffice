@@ -25,7 +25,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		ini_set('display_errors','on');
 		error_reporting(E_ALL);
 		
-		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
+		
 	}
 	
 	protected function ignoreAclPermissions() {
@@ -42,6 +42,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	}
 	
 	protected function actionRemoveDuplicates($params){
+		
+		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
+		
 		$checkModels = array(
 				"GO_Calendar_Model_Event"=>array('name', 'start_time', 'end_time', 'calendar_id', 'rrule', 'user_id'),
 				"GO_Tasks_Model_Task"=>array('name', 'start_time', 'due_time', 'tasklist_id', 'rrule', 'user_id'),
@@ -129,6 +132,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		if(!headers_sent())
 			header('Content-Type: text/plain; charset=UTF-8');
 		
+		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
+		
 		$response = array();
 		
 		if(empty($params['keepexisting']))
@@ -170,6 +175,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		$response = array();
 		
 		$oldAllowDeletes = GO_Base_Fs_File::setAllowDeletes(false);
+		
+		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
 				
 		if(!headers_sent())
 			header('Content-Type: text/plain; charset=UTF-8');
