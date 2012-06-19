@@ -20,11 +20,13 @@ class GO_Log_Controller_Log extends GO_Base_Controller_AbstractModelController {
 		
 		$findParams = GO_Base_Db_FindParams::newInstance();
 		
-		$findParams->getCriteria()->addCondition('ctime', GO_Base_Util_Date::date_add(time(),-14));
+		$findParams->getCriteria()->addCondition('ctime', GO_Base_Util_Date::date_add(time(),-14), '<');
 		
 		$stmt = GO_Log_Model_Log::model()->find($findParams);
 		
-		if($stmt->rowCount()){
+		$count = $stmt->rowCount();
+		echo "Dumping ".$count." records to CSV file\n";
+		if($count){
 			$logPath = '/var/log/groupoffice/'.GO::config()->id.'.csv';
 
 			$csvLogFile = new GO_Base_Fs_CsvFile($logPath);
@@ -37,6 +39,8 @@ class GO_Log_Controller_Log extends GO_Base_Controller_AbstractModelController {
 				$log->delete();
 			}
 		}
+		
+		echo "Done\n";
 	}
 }
 
