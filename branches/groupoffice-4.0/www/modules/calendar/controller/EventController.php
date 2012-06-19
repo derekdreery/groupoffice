@@ -530,8 +530,6 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$response = array();
 		
 		$events = GO_Calendar_Model_Event::model()->findCalculatedForPeriod(false, strtotime("2011-10-03"), strtotime("2011-10-10"));
-		
-		var_dump($events);
 
 		$response['write_permission']='';
 		$response['comment']='';
