@@ -142,24 +142,25 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			while ($account = $stmt->fetch()) {
 
 				$alias = $account->getDefaultAlias();
+				if($alias){
+					$node = array(
+							'text' => $alias->email,
+							'name' => $alias->email,
+							'id' => 'account_' . $account->id,
+							'iconCls' => 'folder-account',
+							'expanded' => true,
+							'noselect' => false,
+							'account_id' => $account->id,
+							'mailbox' => 'INBOX',
+							'children' => $this->_getMailboxTreeNodes($account->getRootMailboxes(true)),
+							'noinferiors' => false,
+							'inbox_new' => 0,
+							'usage' => "",
+							'parentExpanded' => true
+					);
 
-				$node = array(
-						'text' => $alias->email,
-						'name' => $alias->email,
-						'id' => 'account_' . $account->id,
-						'iconCls' => 'folder-account',
-						'expanded' => true,
-						'noselect' => false,
-						'account_id' => $account->id,
-						'mailbox' => 'INBOX',
-						'children' => $this->_getMailboxTreeNodes($account->getRootMailboxes(true)),
-						'noinferiors' => false,
-						'inbox_new' => 0,
-						'usage' => "",
-						'parentExpanded' => true
-				);
-
-				$response[] = $node;
+					$response[] = $node;
+				}
 			}
 		} else {
 //			$this->_setExpanded($params['node']);
