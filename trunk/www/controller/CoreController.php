@@ -13,6 +13,12 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		return array('plupload');
 	}
 	
+	protected function saveSetting($params){
+		$response['success']=GO::config()->save_setting($params['name'], $params['value'], $params['user_id']);
+		
+		return $response;
+	}
+	
 	protected function actionLink($params) {
 
 		$fromLinks = json_decode($params['fromLinks'], true);

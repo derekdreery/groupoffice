@@ -21,17 +21,17 @@ GO.email.SettingsPanel = function(config) {
 	},this.useHtml = new Ext.form.Checkbox({
 		boxLabel:GO.email.lang.htmlMarkup,
 		hideLabel:true,
-		checked:GO.email.lang.useHtmlMarkup,
+		checked:GO.email.useHtmlMarkup,
 		name:'use_html_markup'
 	}),this.skipUnknownRecipients = new Ext.form.Checkbox({
 		boxLabel:GO.email.lang.skipUnknownRecipients,
 		hideLabel:true,
-		checked:GO.email.lang.skipUnknownRecipients,
+		checked:GO.email.skipUnknownRecipients,
 		name:'skip_unknown_recipients'
 	}),this.alwaysRequestNotification = new Ext.form.Checkbox({
 		boxLabel:GO.email.lang.alwaysRequestNotification,
 		hideLabel:true,
-		checked:GO.email.lang.alwaysRequestNotification,
+		checked:GO.email.alwaysRequestNotification,
 		name:'always_request_notification'
 	}),this.alwaysRespondToNotifications = new Ext.form.Checkbox({
 		boxLabel:GO.email.lang.alwaysRespondToNotifications,
@@ -62,7 +62,7 @@ GO.email.SettingsPanel = function(config) {
 				]
 			}),
 			width:70,
-			value : GO.email.lang.fontSize,
+			value : GO.email.fontSize,
 			valueField : 'value',
 			displayField : 'value',
 			mode : 'local',
@@ -91,7 +91,7 @@ Ext.extend(GO.email.SettingsPanel, Ext.Panel, {
 
 });
 
-//GO.mainLayout.onReady(function() {
-//			GO.moduleManager.addSettingsPanel('email',
-//					GO.email.SettingsPanel);
-//		});
+GO.mainLayout.onReady(function() {
+			GO.moduleManager.addSettingsPanel('email',
+					GO.email.SettingsPanel);
+		});

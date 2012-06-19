@@ -137,11 +137,12 @@ GO.email.UnknownRecipientsDialog = Ext.extend(Ext.Window, {
 						{
 							GO.email.skipUnknownRecipients = checked;
 
-							Ext.Ajax.request({
-								url: GO.settings.modules.email.url+ 'action.php',
+							GO.request({
+								url: "core/saveSetting",
 								params: {
-									checked: checked,
-									task: 'save_skip_unknown_recipients'
+									value: checked ? 1 : 0,
+									name:"email_skip_unknown_recipients",
+									user_id:GO.settings.user_id
 								},				
 								scope: this
 							});
