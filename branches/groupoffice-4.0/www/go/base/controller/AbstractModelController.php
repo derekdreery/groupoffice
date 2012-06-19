@@ -77,7 +77,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				}
 
 
-				if (!empty($params['link'])) {
+				if (!empty($params['link']) && $model->hasLinks()) {
 
 					//a link is sent like  GO_Notes_Model_Note:1
 					//where 1 is the id of the model
