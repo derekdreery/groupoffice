@@ -1,0 +1,63 @@
+Geafactureerd type ook als gesloten beschouwen
+
+Import matching dialog
+
+resize vcard photo's
+
+Add max_file_storage setting to servermanager
+
+recurly (simon zimmo) (Wilmar)
+
+Koba
+
+LDAP Sync
+
+Calendar:
+Distinguish declined and cancel	led events in grid.
+alarm import
+
+Grid scroll behouden bij reload
+
+CMS compatible (Wilmar)
+
+Module icons
+
+karakter encoding: koi8-r
+
+Document conversion
+
+Product opties bij billing
+
+Group-Office 100 users 600 euro, 150 users 700 euro etc.
+
+
+*** Lage prio:
+
+Save all attachments.
+
+Twinfield
+VOIP
+
+LIST-STATUS gebruiken bij email
+TLS email
+Full date column
+
+Licentie checks per module
+
+Servermanager bestelfunctie
+
+e-mail mvc
+overige modules mvc
+sticky user group that is shared with all items members create
+E-mail files functie
+
+Freebusy support in sabredav 1.6
+
+Feature requests voting system
+
+Bij bedrijf -> displaypanel -> New -> Contact
+
+
+
+UCF for deb pkgs
+http://www.group-office.com/forum/viewtopic.php?f=6&t=8083
