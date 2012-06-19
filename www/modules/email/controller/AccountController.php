@@ -80,10 +80,13 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 				//$response['email_status'][$inbox['id']]=$account;
 				$response['email_status']['unseen'] += $unseen['count'];
 				
+				
 			} catch (Exception $e) {
 				GO::debug($e->getMessage());
 			}
-			$imap->disconnect();
+			
+			if(!empty($imap))
+				$imap->disconnect();			
 		}
 
 		return $response;

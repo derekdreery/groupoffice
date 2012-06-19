@@ -246,3 +246,10 @@ $updates["201206110852"][]="ALTER TABLE `go_link_folders` CHANGE `link_id` `mode
 $updates["201206110852"][]="ALTER TABLE `go_link_folders` CHANGE `model_id` `model_id` INT( 11 ) NOT NULL DEFAULT '0'";
 $updates["201206110852"][]="ALTER TABLE `go_link_folders` CHANGE `model_type_id` `model_type_id` INT( 11 ) NOT NULL DEFAULT '0'";
 $updates["201206110852"][]="ALTER TABLE `go_link_folders` CHANGE `parent_id` `parent_id` INT( 11 ) NOT NULL DEFAULT '0'";
+
+
+// Change permission levels to new values
+$updates["201206191425"][]="UPDATE `go_acl` SET `level`=10 WHERE `level`=1;";
+$updates["201206191425"][]="UPDATE `go_acl` SET `level`=30 WHERE `level`=2;";
+$updates["201206191425"][]="UPDATE `go_acl` SET `level`=40 WHERE `level`=3;";
+$updates["201206191425"][]="UPDATE `go_acl` SET `level`=50 WHERE `level`=4;";
