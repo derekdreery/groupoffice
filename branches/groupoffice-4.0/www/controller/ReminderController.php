@@ -27,6 +27,7 @@ class GO_Core_Controller_Reminder extends GO_Base_Controller_AbstractController 
 	
 	protected function actionStore($params){
 		$params = GO_Base_Db_FindParams::newInstance()
+						->select('t.*')
 						->join(GO_Base_Model_ReminderUser::model()->tableName(),
 									GO_Base_Db_FindCriteria::newInstance()
 											->addModel(GO_Base_Model_Reminder::model())
@@ -70,6 +71,8 @@ class GO_Core_Controller_Reminder extends GO_Base_Controller_AbstractController 
 		}else {
 			$record['local_time']=GO_Base_Util_Date::get_timestamp($time, true);
 		}
+		
+		$record['text'] = htmlspecialchars_decode($record['text']);
 		
 		return $record;		
 	}
