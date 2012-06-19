@@ -726,8 +726,14 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 * @param <type> $folder
 	 * @return <type>
 	 */
+	
+	private $_unseen;
 
 	public function get_unseen($mailbox=false) {
+		
+		if($this->_unseen[$mailbox]){
+			return $this->_unseen[$mailbox];
+		}
 
 		if($mailbox){
 			if(!$this->select_mailbox($mailbox)){
@@ -761,7 +767,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$this->selected_mailbox['unseen']=$unseen;
 
 		//GO::debug($unseen);
-		return array('count'=>$unseen, 'uids'=>$uids);
+		$this->_unseen[$mailbox]= array('count'=>$unseen, 'uids'=>$uids);
+		
+		return $this->_unseen[$mailbox];
 	}
 
 
@@ -1362,7 +1370,27 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	{
 		GO::debug("get_message_headers_set($start, $limit, $sort_field , $reverse, $query)");
 		
-		$uids = $this->sort_mailbox($sort_field, $reverse, $query);
+		if($query=='ALL' || $query==""){
+			$unseen = $this->get_unseen($this->selected_mailbox['name']);
+
+			$key = 'sort_cache_'.$this->selected_mailbox['name'].'_'.$this->server.'_'.$sort_field;
+			$key .= $reverse ? '_1' : '_0';
+			
+			//var_dump(GO::session()->values['emailmod'][$key]);			
+
+			if(isset(GO::session()->values['emailmod'][$key]['unseen']) && GO::session()->values['emailmod'][$key]['unseen']==$unseen['count']){
+					//throw new Exception("From cache");
+				$uids = GO::session()->values['emailmod'][$key]['uids'];
+				$this->sort_count=count($uids);
+			}else
+			{		
+				GO::session()->values['emailmod'][$key]['unseen']=$unseen['count'];
+				$uids = GO::session()->values['emailmod'][$key]['uids'] = $this->sort_mailbox($sort_field, $reverse, $query);
+			}
+		}else
+		{
+			$uids = $this->sort_mailbox($sort_field, $reverse, $query);
+		}
 		
 		if(!is_array($uids))
 			return array();
