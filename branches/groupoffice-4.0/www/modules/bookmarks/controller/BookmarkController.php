@@ -7,6 +7,9 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 	protected function actionDescription($params) {
 
 		$response = array();
+		$response['title'] = '';
+		$response['description'] = '';
+				
 		if (function_exists('curl_init')) {
 			try{
 
@@ -58,8 +61,7 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 				}
 			}
 			catch(Exception $e){
-				$response['title'] = '';
-				$response['description'] = '';
+				
 			}
 
 			try{
