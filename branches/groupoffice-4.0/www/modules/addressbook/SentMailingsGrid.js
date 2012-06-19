@@ -5,6 +5,33 @@ GO.addressbook.SentMailingsGrid = function(config){
 		config = {};
 	}
 	
+	config.tbar = [{
+				iconCls: 'ml-btn-mailings',
+				text: GO.addressbook.lang.sendMailing,
+				cls: 'x-btn-text-icon',
+				handler: function(){
+					if(!this.selectAddresslistWindow)
+					{
+						this.selectAddresslistWindow=new GO.addressbook.SelectAddresslistWindow();
+						this.selectAddresslistWindow.on("select", function(win, addresslist_id){
+							var composer = GO.email.showComposer({addresslist_id:addresslist_id});
+							composer.on('hide', function(){
+								this.store.load();
+							}, this, {single:true});
+						}, this);
+					}
+					this.selectAddresslistWindow.show();
+				},
+				scope: this
+			},'-',{
+			iconCls: 'btn-delete',
+			text: GO.lang['cmdDelete'],
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				this.deleteSelected();
+			},
+			scope: this
+		}];
 	
 	config.layout='fit';
 	config.autoScroll=true;

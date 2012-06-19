@@ -337,7 +337,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		if($mailing->user_id != GO::user()->id && !GO::user()->isAdmin())
 			throw new GO_Base_Exception_AccessDenied();				
 		
-		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'log/mailings/'.$mailing->id.'.log');		
+		$file = $mailing->logFile;		
 		GO_Base_Util_Http::outputDownloadHeaders($file);
 		$file->output();
 	}
