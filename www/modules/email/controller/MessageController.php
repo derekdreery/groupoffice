@@ -105,6 +105,14 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 				$response['deleteSuccess']=$imap->delete($uids);
 			}
+			if(!$response['deleteSuccess']) {
+				$lasterror = $imap->last_error();
+				if(stripos($lasterror,'quota')!==false) {
+					$response['deleteFeedback']=GO::t('quotaError','email');
+				}else {
+					$response['deleteFeedback']=GO::t('deleteError').":\n\n".$lasterror."\n\n".GO::t('disable_trash_folder','email');
+				}
+			}
 		}
 		
 		/* @var $imap GO_Base_Mail_Imap */

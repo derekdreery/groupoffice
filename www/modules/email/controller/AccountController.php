@@ -111,6 +111,22 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			return $this->_getMailboxTreeNodes($mailbox->getChildren(false, false), true);
 		}
 	}
+	
+	private function _getUsage(GO_Email_Model_Account $account){
+		$usage="";
+		$quota = $account->openImapConnection()->get_quota();
+		
+		if(isset($quota['usage'])) {
+			if(!empty($quota['limit'])) {
+				$percentage = ceil($quota['usage']*100/$quota['limit']);
+				$usage = sprintf(GO::t('usage_limit','email'), $percentage.'%', GO_Base_Util_Number::formatSize($quota['limit']*1024));
+			}	else {
+				$usage = sprintf(GO::t('usage','email'), GO_Base_Util_Number::formatSize($quota['usage']*1024));
+			}
+		}
+		//var_dump($usage);
+		return $usage;
+	}
 
 	public function actionTree($params) {
 
@@ -150,7 +166,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 							'mailbox' => 'INBOX',							
 							'noinferiors' => false,
 							'inbox_new' => 0,
-							'usage' => ""
+							'usage' => $this->_getUsage($account)
 					);
 					
 					if($node['expanded'])
