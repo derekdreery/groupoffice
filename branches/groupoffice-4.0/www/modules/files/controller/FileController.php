@@ -82,6 +82,11 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		if(isset($params['name']))		
 			$params['name'].='.'.$model->fsFile->extension();		
 		
+		if(isset($params['lock'])){
+			//GOTA sends lock parameter It does not know the user ID.
+			$model->locked_user_id=empty($params['lock']) ? 0 : GO::user()->id;
+		}
+		
 		return parent::beforeSubmit($response, $model, $params);
 	}
 
