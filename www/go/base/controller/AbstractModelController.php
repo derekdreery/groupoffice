@@ -838,12 +838,18 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		}
 		$extraParams = empty($params['params']) ? array() : json_decode($params['params'], true);
 
+		$this->beforeExport($store, $columnModel,$model, $findParams, $showHeader, $humanHeaders, $title, $orientation, $extraParams);
+		
 		if(!empty($params['type']))
 			$export = new $params['type']($store, $columnModel,$model, $findParams, $showHeader, $humanHeaders, $title, $orientation, $extraParams);
 		else
 			$export = new GO_Base_Export_ExportCSV($store, $columnModel, $model, $findParams, $showHeader, $humanHeaders, $title, $orientation, $extraParams); // The default Export is the CSV outputter.
 
 		$export->output();
+	}
+	
+	protected function beforeExport(&$store, &$columnModel,&$model, &$findParams, &$showHeader, &$humanHeaders, &$title, &$orientation, &$extraParams){
+		
 	}
 	
 	/**
