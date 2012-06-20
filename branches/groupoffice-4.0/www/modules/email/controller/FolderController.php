@@ -41,10 +41,11 @@ class GO_Email_Controller_Folder extends GO_Base_Controller_AbstractController {
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 				
 		$mailbox = new GO_Email_Model_ImapMailbox($account, array("name"=>$params["mailbox"]));
-		$success = $mailbox->unsubscribe();
+		$response['success'] = $mailbox->unsubscribe();
 		
 		if(!$response['success'])
 			$response['feedback']="Failed to unsubscribe from ".$params['mailbox'];
+		
 		return $response;
 	}
 	
