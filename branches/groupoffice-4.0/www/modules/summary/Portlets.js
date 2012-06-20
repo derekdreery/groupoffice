@@ -41,13 +41,12 @@ GO.mainLayout.onReady(function(){
 									return false;
 								}
 								var params={
-									'task' : 'save_feeds'
 								};
 								if(this.WebFeedsGrid.store.loaded){
 									params['feeds']=Ext.encode(this.WebFeedsGrid.getGridData());
 								}
 								Ext.Ajax.request({
-									url: GO.settings.modules.summary.url+'action.php',
+									url: GO.url('summary/rssFeed/saveFeeds'),
 									params: params,
 									callback: function(options, success, response){
 										if(!success)
@@ -59,7 +58,8 @@ GO.mainLayout.onReady(function(){
 											this.WebFeedsGrid.store.reload();
 											this.manageWebFeedsWindow.hide();
 											rssTabPanel.items.each(function(p){ // Walk through tabs
-												if(responseParams.data[p.feedId]==undefined) // Deleted feed
+												console.log(p);
+												if(!GO.util.empty(responseParams.data) && responseParams.data[p.feedId]==undefined) // Deleted feed
 													rssTabPanel.remove(p);
 												else // Feed already exists
 												{
@@ -128,10 +128,8 @@ GO.mainLayout.onReady(function(){
 
 	GO.summary.portlets['portlet-rss-reader'].on('render',function(){
 		Ext.Ajax.request({
-			url: GO.settings.modules.summary.url+'json.php',
-			params: {
-				'task':'rss_tabs'
-			},
+			url: GO.url('summary/rssFeed/store'),
+			params: {},
 			waitMsg: GO.lang['waitMsgLoad'],
 			waitMsgTarget: 'portlet-rss-reader',
 			scope:this,
@@ -142,7 +140,7 @@ GO.mainLayout.onReady(function(){
 				}else
 				{
 					var rssTabPanels = Ext.decode(response.responseText);
-					if(rssTabPanels.data.length == 0)
+					if(rssTabPanels.results.length == 0)
 					{
 						rssTabPanel.add(new Ext.Panel({
 							title: '<br />',
@@ -153,12 +151,12 @@ GO.mainLayout.onReady(function(){
 					}
 					else
 					{
-						for(var i=0;i<rssTabPanels.data.length;i++){
+						for(var i=0;i<rssTabPanels.results.length;i++){
 							rssTabPanel.add(new GO.portlets.rssFeedPortlet({
-								feedId: rssTabPanels.data[i].id,
-								feed: rssTabPanels.data[i].url,
-								title: rssTabPanels.data[i].title,
-								showPreview:parseInt(rssTabPanels.data[i].summary),
+								feedId: rssTabPanels.results[i].id,
+								feed: rssTabPanels.results[i].url,
+								title: rssTabPanels.results[i].title,
+								showPreview:parseInt(rssTabPanels.results[i].summary),
 								closable:false
 							}));
 							rssTabPanel.setActiveTab(0);
@@ -182,10 +180,8 @@ GO.mainLayout.onReady(function(){
 	
 	noteInput.on('change', function(){
 		notePanel.form.submit({
-			url: GO.settings.modules.summary.url+'action.php',
-			params: {
-				'task':'save_note'
-			},
+			url: GO.url('summary/note/submit'),
+			params: {},
 			waitMsg: GO.lang['waitMsgSave']			
 		});
 	});
@@ -197,10 +193,8 @@ GO.mainLayout.onReady(function(){
 	
 	notePanel.on('render', function(){
 		notePanel.load({
-			url: GO.settings.modules.summary.url+'json.php',
-			params:{
-				task:'note'
-			},
+			url: GO.url('summary/note/load'),
+			params:{},
 			waitMsg: GO.lang['waitMsgLoad']
 		});				
 	});
