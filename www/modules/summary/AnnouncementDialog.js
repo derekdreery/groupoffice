@@ -68,7 +68,7 @@ Ext.extend(GO.summary.AnnouncementDialog, Ext.Window,{
 		if(this.announcement_id>0)
 		{
 			this.formPanel.load({
-				url : GO.settings.modules.summary.url+'json.php',
+				url : GO.url('summary/announcement/load'),
 				waitMsg:GO.lang['waitMsgLoad'],
 				success:function(form, action)
 				{
@@ -88,14 +88,14 @@ Ext.extend(GO.summary.AnnouncementDialog, Ext.Window,{
 	},
 	setAnnouncementId : function(announcement_id)
 	{
-		this.formPanel.form.baseParams['announcement_id']=announcement_id;
+		this.formPanel.form.baseParams['id']=announcement_id;
 		this.announcement_id=announcement_id;
 	},
 	submitForm : function(hide){
 		this.formPanel.form.submit(
 		{
-			url:GO.settings.modules.summary.url+'action.php',
-			params: {'task' : 'save_announcement'},
+			url: GO.url('summary/announcement/submit'),
+			params: {},
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){
 				this.fireEvent('save', this);
@@ -104,9 +104,9 @@ Ext.extend(GO.summary.AnnouncementDialog, Ext.Window,{
 					this.hide();	
 				}else
 				{
-					if(action.result.announcement_id)
+					if(action.result.id)
 					{
-						this.setAnnouncementId(action.result.announcement_id);
+						this.setAnnouncementId(action.result.id);
 					}
 				}
 			},		
@@ -124,9 +124,9 @@ Ext.extend(GO.summary.AnnouncementDialog, Ext.Window,{
 	buildForm : function () {
     this.formPanel = new Ext.form.FormPanel({
 	    waitMsgTarget:true,
-			url: GO.settings.modules.summary.url+'action.php',
+			url: GO.url('summary/announcement/submit'),
 			border: false,
-			baseParams: {task: 'announcement'},				
+			baseParams: {},				
 			cls:'go-form-panel',			
 			items:[{
 				xtype: 'datefield',

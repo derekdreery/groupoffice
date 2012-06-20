@@ -48,10 +48,8 @@ GO.summary.WebFeedsGrid = function(config){
 	]
 	};
 	config.store = new GO.data.JsonStore({
-		url: GO.settings.modules.summary.url+ 'json.php',
-		baseParams: {
-			task: 'webfeeds'
-		},
+		url: GO.url('summary/rssFeed/webFeeds'),
+		baseParams: {},
 		root: 'results',
 		id: 'feedId',
 		totalProperty:'total',
