@@ -126,8 +126,13 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$record['mailbox']=$params["mailbox"];
 			
 			if($params["mailbox"]==$account->sent || $params["mailbox"]==$account->drafts){				
-				$addresses = $message->to->getAddresses();				
-				$record['from']=  htmlspecialchars(implode(',', $addresses), ENT_COMPAT, 'UTF-8');
+				$addresses = $message->to->getAddresses();
+				$from=array();
+				foreach($addresses as $email=>$personal)
+				{
+					$from[]=empty($personal) ? $email : $personal;
+				}
+				$record['from']=  htmlspecialchars(implode(',', $from), ENT_COMPAT, 'UTF-8');
 			}
 			
 			if(empty($record['subject']))
