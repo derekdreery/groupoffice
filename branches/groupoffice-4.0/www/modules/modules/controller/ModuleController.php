@@ -124,7 +124,6 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 				throw new GO_Base_Exception_AccessDenied();
 		}
 			
-		$paramId = intval($params['id']);
 		$response = array(
 			'success' => true,
 			'results' => array(),
@@ -136,24 +135,24 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 		while ($module=array_shift($mods)) {
 			$permissionLevel = 0;
 			$usersGroupPermissionLevel = false;
-			if (empty($paramId)) {				
+			if (empty($params['id'])) {				
 				$aclUsersGroup = $module->acl->hasGroup(GO::config()->group_everyone); // everybody group
-				$permissionLevel=$aclUsersGroup ? $aclUsersGroup->level : 0;
+				$permissionLevel=$usersGroupPermissionLevel=$aclUsersGroup ? $aclUsersGroup->level : 0;
 			} else {
 				if ($params['paramIdType']=='groupId') {
-				
-					$aclUsersGroup = $module->acl->hasGroup($paramId);
+					//when looking at permissions from the groups module.
+					$aclUsersGroup = $module->acl->hasGroup($params['id']);
 					$permissionLevel=$aclUsersGroup ? $aclUsersGroup->level : 0;
 				} else {
-					$permissionLevel = GO_Base_Model_Acl::getUserPermissionLevel($module->acl_id, $paramId);					
-					$usersGroupPermissionLevel= GO_Base_Model_Acl::getUserPermissionLevel($module->acl_id, $paramId, true);
+					//when looking from the users module
+					$permissionLevel = GO_Base_Model_Acl::getUserPermissionLevel($module->acl_id, $params['id']);					
+					$usersGroupPermissionLevel= GO_Base_Model_Acl::getUserPermissionLevel($module->acl_id, $params['id'], true);
 				}
 			}
 			
 			$translated = $module->moduleManager ? $module->moduleManager->name() : $module->id;
 			
-			// ExtJs view was not built to handle Write / Write And Delete permissions,
-			// but only no read permission, and read and manage permission:
+			// Module permissions only support read permission and manage permission:
 			if (GO_Base_Model_Acl::hasPermission($permissionLevel,GO_Base_Model_Acl::CREATE_PERMISSION))
 				$permissionLevel = GO_Base_Model_Acl::MANAGE_PERMISSION;			
 			

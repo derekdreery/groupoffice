@@ -386,7 +386,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 							echo 'Excuting query: ' . $query . "\n";
 							if (empty($params['test'])) {
 								try {
-									GO::getDbConnection()->query($query);
+									if(!empty($query))
+										GO::getDbConnection()->query($query);
 								} catch (PDOException $e) {
 									//var_dump($e);
 									echo $e->getMessage() . "\n";
