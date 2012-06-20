@@ -438,7 +438,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			}
 		}
 		
-		if($namespace=="" && $pattern=="" && $listSubscribed && !isset($folders['INBOX'])){
+		if($namespace=="" && $pattern=="%" && $listSubscribed && !isset($folders['INBOX'])){
 			//inbox is not subscribed. Let's fix that/
 			if(!$this->subscribe('INBOX'))
 				throw new Exception("Could not subscribe to INBOX folder!");
@@ -1378,13 +1378,19 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			
 			//var_dump(GO::session()->values['emailmod'][$key]);			
 			$unseenCheck = $unseen['count'].':'.$this->selected_mailbox['messages'];
+			if(!empty($this->selected_mailbox['uidnext']))
+				$unseenCheck .= ':'.$this->selected_mailbox['uidnext'];
+			
+			GO::debug($unseenCheck);
 			//var_dump($unseenCheck);
 			if(isset(GO::session()->values['emailmod'][$key]['unseen']) && GO::session()->values['emailmod'][$key]['unseen']==$unseenCheck){
 					//throw new Exception("From cache");
+				GO::debug("IMAP sort from session cache");
 				$uids = GO::session()->values['emailmod'][$key]['uids'];
 				$this->sort_count=count($uids);
 			}else
 			{		
+				GO::debug("IMAP sort from server");
 				GO::session()->values['emailmod'][$key]['unseen']=$unseenCheck;
 				$uids = GO::session()->values['emailmod'][$key]['uids'] = $this->sort_mailbox($sort_field, $reverse, $query);
 			}
