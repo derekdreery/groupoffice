@@ -349,7 +349,6 @@ GO.email.EmailClient = function(config){
 						if(node.childNodes[0])
 						{
 							var firstInboxNode = node.childNodes[0];
-
 							this.setAccount(
 								firstInboxNode.attributes.account_id,
 								firstInboxNode.attributes.mailbox,
@@ -385,17 +384,17 @@ GO.email.EmailClient = function(config){
 //		if(node.attributes.mailbox>0)
 //		{
 			var usage='';
-//			var cnode = node;
-//			while(cnode.parentNode && usage=='')
-//			{
-//				if(cnode.attributes.usage)
-//				{
-//					usage=cnode.attributes.usage;
-//				}else
-//				{
-//					cnode=cnode.parentNode;
-//				}
-//			}
+			var cnode = node;
+			while(cnode.parentNode && usage=='')
+			{
+				if(cnode.attributes.usage)
+				{
+					usage=cnode.attributes.usage;
+				}else
+				{
+					cnode=cnode.parentNode;
+				}
+			}
 			
 			this.setAccount(
 				node.attributes.account_id,
