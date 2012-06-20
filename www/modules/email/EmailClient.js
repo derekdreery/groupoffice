@@ -1074,7 +1074,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 							break;
 						case 'Flagged':
 							field='flagged';
-							value=clear;
+							value=!clear;
 							break;						
 					}
 
