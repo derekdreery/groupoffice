@@ -808,13 +808,29 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$store = new GO_Base_Data_Store($this->getStoreColumnModel());	
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatStoreRecord'));		
 		
+		$response = array();
+		
+		$this->beforeStore($response, $params, $store);
+		$this->prepareStore($store);
+		
+		$storeParams = $store->getDefaultParams($params)->mergeWith($this->getStoreParams($params));
+		$this->beforeStoreStatement($response, $params, $store, $storeParams);
+		
+		$this->afterStore($response, $params, $store, $storeParams);
+		
 		$columnModel = $store->getColumnModel();
 		$this->formatColumns($columnModel);		
 		
 		
 		if(!empty($params['columns'])) {
 			$includeColumns = explode(',',$params['columns']);
+			foreach($includeColumns as $incColumn){
+				if(!$columnModel->getColumn($incColumn))
+					$columnModel->addColumn (new GO_Base_Data_Column($incColumn,$incColumn));
+			}
+				
 			$columnModel->sort($includeColumns);
+			
 			foreach($columnModel->getColumns() as $c){
 				if(!in_array($c->getDataIndex(), $includeColumns))
 					$columnModel->removeColumn($c->getDataIndex());
