@@ -954,9 +954,12 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	/**
 	 * Returns true if the current folder needs to be refreshed in the grid
 	 */
-	updateFolderStatus : function(mailbox, unseen)
+	updateFolderStatus : function(mailbox, unseen, account_id)
 	{
-		var statusElId = "status_"+this.getFolderNodeId(this.account_id, mailbox);
+		if(!account_id)
+			account_id=this.messagesGrid.store.baseParams.account_id;
+		
+		var statusElId = "status_"+this.getFolderNodeId(account_id, mailbox);
 		var statusEl = Ext.get(statusElId);
 
 //		var node = this.treePanel.getNodeById('folder_'+mailbox);
@@ -998,6 +1001,8 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 			var status = parseInt(statusText.substring(1, statusText.length-1));
 		}
 		status+=increment;
+		
+		GO.email.totalUnseen+=increment;
 		
 		this.updateFolderStatus(mailbox, status);
 		this.updateNotificationEl();
@@ -1236,18 +1241,19 @@ GO.mainLayout.onReady(function(){
 					success:function(options, response, data){
 						var ep = GO.mainLayout.getModulePanel('email');
 
-						var totalUnseen = data.email_status.unseen;
-//						for(var mailbox in data.email_status)
-//						{
-//							if(ep){
-//								var changed = ep.updateFolderStatus(mailbox, data.email_status[mailbox].unseen);
-//								if(changed && ep.messagesGrid.store.baseParams.mailbox==mailbox)
-//								{
-//									ep.messagesGrid.store.reload();
-//								}
-//							}
-//							totalUnseen += data.email_status[mailbox].unseen;
-//						}
+						var totalUnseen = data.email_status.total_unseen;
+						if(ep){
+							for(var i=0;i<data.email_status.unseen.length;i++)
+							{
+								var s = data.email_status.unseen[i];
+	
+								var changed = ep.updateFolderStatus(s.mailbox, s.unseen,s.account_id);
+								if(changed && ep.messagesGrid.store.baseParams.mailbox==s.mailbox && ep.messagesGrid.store.baseParams.account_id==s.account_id)
+								{
+									ep.messagesGrid.store.reload();
+								}
+							}
+						}
 
 						if(totalUnseen!=GO.email.totalUnseen && totalUnseen>0)
 						{
@@ -1276,6 +1282,7 @@ GO.mainLayout.onReady(function(){
 			},
 			scope:this,
 			interval:120000
+//			interval:4000
 		});
 
 		

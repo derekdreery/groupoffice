@@ -62,7 +62,8 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 	protected function actionCheckUnseen($params) {
 
 		$response=array("success"=>true);
-		$response['email_status']['unseen']=0;
+		$response['email_status']['total_unseen']=0;
+		$response['email_status']['unseen']=array();
 		
 		GO::session()->closeWriting();
 		
@@ -77,8 +78,8 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 				
 				$unseen = $imap->get_unseen();
 
-				//$response['email_status'][$inbox['id']]=$account;
-				$response['email_status']['unseen'] += $unseen['count'];
+				$response['email_status']['unseen'][]=array('account_id'=>$account->id,'mailbox'=>'INBOX', 'unseen'=>$unseen['count']);
+				$response['email_status']['total_unseen'] += $unseen['count'];
 				
 				
 			} catch (Exception $e) {
