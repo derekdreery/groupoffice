@@ -141,7 +141,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 *
 	 * @return String Full formatted name of the user
 	 */
-	public function getName($sort_name=false){
+	public function getName($sort_name="first_name"){
 		
 		return GO_Base_Util_String::format_name($this->last_name, $this->first_name, $this->middle_name,$sort_name);
 	}
