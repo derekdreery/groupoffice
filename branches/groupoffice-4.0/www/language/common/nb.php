@@ -529,4 +529,13 @@ $l['invalidFileType']='Ugyldig filtype';
 $l['uploadQueueEmpty']="Opplastingskøen er tom!";
 $l['dropFilesHere']="Slipp filer her";
 $l['pluploadProgressText']="{0}/{1} ({3} feilet) ({5}/s)";
-
+$l["permissionCreate"]='Bare lese og opprette';
+$l['quickEdit']= "Hurtigredigering";
+$l["personalDetailsFor"]= 'Personlige opplysninger for';
+$l["fieldsetWork"]= 'Arbeid';
+$l["fieldsetAddress"]= 'Adresse';
+$l["fieldsetContact"]= 'Kontaktoplysninger';
+$l["unused"]='Ikke i bruk';
+$l["attributeGreater"]="Feltet '%s' må være støtte enn '%s'";
+$l["attributeGreaterOrEqual"]="Feltet '%s' må være større enn eller lik '%s'";
+$l["failedImportItems"]="Feilede importelementer";
