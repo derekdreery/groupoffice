@@ -535,7 +535,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			return $response;
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()
-						->searchQuery($params['query'])
+						->searchQuery('%'.preg_replace ('/[\s*]+/','%', $params['query']).'%')
 						->select('t.*, addressbook.name AS ab_name, c.name AS company_name')
 						->limit(20)
 						->joinModel(array(
@@ -546,10 +546,12 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 							'type'=>'LEFT' //defaults to INNER,
 						));
 
-		$findParams->getCriteria()
-						->addCondition("email", "", "!=")
-						->addCondition("email2", "", "!=", 't', false)
-						->addCondition("email3", "", "!=", 't', false);
+		$criteria = GO_Base_Db_FindCriteria::newInstance()
+							->addCondition("email", "","!=")
+							->addCondition("email2", "","!=",'t',false)
+							->addCondition("email3", "","!=",'t',false);
+
+		$findParams->getCriteria()->mergeWith($criteria);
 
 		$stmt = GO_Addressbook_Model_Contact::model()->find($findParams);
 
