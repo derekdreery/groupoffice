@@ -190,6 +190,7 @@ class GO_Base_Session extends GO_Base_Observable{
 		else
 			$str .= 'unknown';
 		GO::infolog($str);
+		GO::debug($str);
 		
 		if(!$success){
 			return false;
