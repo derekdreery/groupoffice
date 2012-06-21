@@ -394,8 +394,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				if (stristr($flags, 'subscribed')) {
 					$subscribed = true;
 				}
+				$nonexistent = stristr($flags, 'NonExistent');
 				
-				if ($folder != 'INBOX' && (stristr($flags, 'noselect') || stristr($flags, 'NonExistent'))) {
+				if ($folder != 'INBOX' && (stristr($flags, 'noselect') || $nonexistent)) {
 					$no_select = true;
 				}
 				
@@ -407,6 +408,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 									'name' => $folder,
 									'marked' => $marked,
 									'noselect' => $no_select,
+									'nonexistent' => $nonexistent,
 									'noinferiors' => $can_have_kids,
 									'haschildren' => $has_kids,
 									'hasnochildren' => $has_no_kids,
@@ -2106,12 +2108,12 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	public function delete_folder($mailbox) {
 		$this->clean($mailbox, 'mailbox');
 
-		$this->unsubscribe($mailbox);
+		$success = $this->unsubscribe($mailbox);
 
 		$command = 'DELETE "'.$this->addslashes($this->utf7_encode($mailbox))."\"\r\n";
 		$this->send_command($command);
 		$result = $this->get_response(false);
-		return $this->check_response($result, false);		
+		return $success;		
 	}
 
 	public function get_folder_tree($mailbox) {

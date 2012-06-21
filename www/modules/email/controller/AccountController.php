@@ -199,6 +199,11 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 	private function _getMailboxTreeNodes($mailboxes, $subscribtions=false) {
 		$nodes = array();
 		foreach ($mailboxes as $mailbox) {
+			
+			//skip mailboxes with nonexistent flags if we're not listing subscribtions
+//			if(!$subscribtions && $mailbox->nonexistent)
+//				continue;
+			
 			/* @var $mailbox GO_Email_Model_ImapMailbox */
 //			if (!$mailbox->subscribed)
 //				continue;
