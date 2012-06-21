@@ -10,12 +10,12 @@ class GO_Files_Customfieldtype_File extends GO_Customfields_Customfieldtype_Abst
 		if(!empty($attributes[$key])) {
 
 			if(GO::modules()->users && !defined('EXPORTING')){
-				$html='<a href="#" onclick=\'GO.linkHandlers["GO_Files_Model_File"].call(this,'.
-					$this->getId($attributes[$key]).');\' title="'.$this->getName($attributes[$key]).'">'.
-						$this->getName($attributes[$key]).'</a>';
+				$html='<a href="#" onclick=\'GO.linkHandlers["GO_Files_Model_File"].call(this,"'.
+					$attributes[$key].'");\' title="'.$attributes[$key].'">'.
+						$attributes[$key].'</a>';
 			}else
 			{
-				$html=$this->getName($attributes[$key]);
+				$html=$attributes[$key];
 			}
 		}
 		return $html;

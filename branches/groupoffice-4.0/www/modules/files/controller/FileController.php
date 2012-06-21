@@ -7,7 +7,19 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 	protected function allowGuests() {
 		return array('download'); //permissions will be checked manually in that action
 	}
+	
+	protected function actionDisplay($params) {
+		
+		//custom fields send path as ID.
+		if(!empty($params['id']) && !is_numeric($params['id'])){
+			$file = GO_Files_Model_File::model()->findByPath($params['id']);
+			$params['id']=$file->id;
+		}
+		
+		return parent::actionDisplay($params);
+	}
 
+	
 	protected function afterDisplay(&$response, &$model, &$params) {
 
 		$response['data']['path'] = $model->path;
