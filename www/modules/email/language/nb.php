@@ -235,3 +235,4 @@ $l['defaultProgramInstructions']='<p>For å angi {product_name} som ditt standar
 $l['xssDetected']="Denne meldingen kan ha inneholde skadelig kode. Klikk her hvis du likevel vil se meldingen.";
 $l['xssMessageHidden']='Meldingen er skjult av sikkerhetshensyn';
 $l['failedRecipients']='Klarte ikke å sende til';
+$l['ignoreSentFolder']='Lagre svar i samme mappe som den originale meldingen';

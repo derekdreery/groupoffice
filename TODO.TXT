@@ -1,5 +1,6 @@
 Geafactureerd type ook als gesloten beschouwen
 
+GOTA moet weten of file gelocked of niet is.
 
 resize vcard photo's
 

@@ -98,5 +98,13 @@ $l["fileExtension"]= "Filtype";
 $l["fileExpire_time"]= "Utløper";
 $l["fileRandom_code"]= "Unik kode";
 $l['createDownloadLink']='Lag nedlastningslenke';
-
-
+$l['notifyFolderAdd']= 'Mappen %s ble opprettet i %s av %s';
+$l['notifyFolderRename']= 'Mappen %s fikk endret navn til %s av %s';
+$l['notifyFolderMove']= 'Mappen %s ble flyttet til %s av %s';
+$l['notifyFolderDelete']= 'Mappen %s ble slettet av %s';
+$l['notifyFileAdd']= 'Filen %s ble lagt til i %s av %s';
+$l['notifyFileRename']= 'Filen %s fikk endret navn til %s av %s';
+$l['notifyFileMove']= 'Filen %s ble flyttet til %s av %s';
+$l['notifyFileDelete']= 'Filen %s ble slettet av %s';
+$l['notifyFileUpdate']= 'Filen %s ble endret av %s';
+$l['notificationEmailSubject']= 'Melding om endringer i mapper';
