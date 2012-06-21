@@ -74,13 +74,14 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 
 		while ($account = $stmt->fetch()) {
 			try {
-				$imap = $account->openImapConnection();
-				
-				$unseen = $imap->get_unseen();
+				if($account->getDefaultAlias()){
+					$imap = $account->openImapConnection();
 
-				$response['email_status']['unseen'][]=array('account_id'=>$account->id,'mailbox'=>'INBOX', 'unseen'=>$unseen['count']);
-				$response['email_status']['total_unseen'] += $unseen['count'];
-				
+					$unseen = $imap->get_unseen();
+
+					$response['email_status']['unseen'][]=array('account_id'=>$account->id,'mailbox'=>'INBOX', 'unseen'=>$unseen['count']);
+					$response['email_status']['total_unseen'] += $unseen['count'];
+				}
 				
 			} catch (Exception $e) {
 				GO::debug($e->getMessage());
