@@ -259,36 +259,34 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 
 					$response['results'][]=$record;
 				}
-
-
-				if(count($response['results'])<10) {
-
-					$findParams = GO_Base_Db_FindParams::newInstance()
-									->limit(10-count($response['results']))
-									->select('t.*, addressbook.name AS ab_name')
-									->searchQuery($params['query']);
-
-					$findParams->getCriteria()						
-									->addCondition("email", "","!=");
-
-					$stmt = GO_Addressbook_Model_Company::model()->find($findParams);
-
-					while($company = $stmt->fetch()){
-						$record['name']=$company->name;
-
-						$l = new GO_Base_Mail_EmailRecipients();
-						$l->addRecipient($company->email, $record['name']);
-
-						$record['info']=htmlspecialchars((string) $l.' ('.sprintf(GO::t('companyFromAddressbook','addressbook'), $company->ab_name).')', ENT_COMPAT, 'UTF-8');
-						$record['full_email']=htmlspecialchars((string) $l , ENT_COMPAT, 'UTF-8');										
-
-						$response['results'][]=$record;
-
-					}
-				}
-
-
 			}
+
+			if(count($response['results'])<10) {
+
+				$findParams = GO_Base_Db_FindParams::newInstance()
+								->limit(10-count($response['results']))
+								->select('t.*, addressbook.name AS ab_name')
+								->searchQuery($params['query']);
+
+				$findParams->getCriteria()						
+								->addCondition("email", "","!=");
+
+				$stmt = GO_Addressbook_Model_Company::model()->find($findParams);
+
+				while($company = $stmt->fetch()){
+					$record['name']=$company->name;
+
+					$l = new GO_Base_Mail_EmailRecipients();
+					$l->addRecipient($company->email, $record['name']);
+
+					$record['info']=htmlspecialchars((string) $l.' ('.sprintf(GO::t('companyFromAddressbook','addressbook'), $company->ab_name).')', ENT_COMPAT, 'UTF-8');
+					$record['full_email']=htmlspecialchars((string) $l , ENT_COMPAT, 'UTF-8');										
+
+					$response['results'][]=$record;
+
+				}
+			}
+			
 		}else
 		{
 			//no addressbook module for this user. Fall back to user search.
