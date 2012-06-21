@@ -7,7 +7,7 @@
 								
 								<?php 
 									GO_Base_Html_Form::renderBegin('sites/user/register','register',true);
-																		
+									echo GO_Base_Html_Error::getError();
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => $this->t('firstName'),
