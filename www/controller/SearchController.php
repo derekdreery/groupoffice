@@ -214,6 +214,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		
 		if(GO::modules()->addressbook){
 			$findParams = GO_Base_Db_FindParams::newInstance()
+							->debugSql()
 							->searchQuery($query)
 							->select('t.*, addressbook.name AS ab_name')
 							->limit(10);
@@ -289,19 +290,18 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 				}
 			}
 			
-		}else
+		}
+		
+		if(count($response['results'])<10)
 		{
 			//no addressbook module for this user. Fall back to user search.
-				$findParams = GO_Base_Db_FindParams::newInstance()
-							->searchQuery($query)
-							->select('t.*')
-							->limit(10);
+			$findParams = GO_Base_Db_FindParams::newInstance()
+						->searchQuery($query)
+						->select('t.*')
+						->limit(10-count($response['results']));
 
 			
 			$stmt = GO_Base_Model_User::model()->find($findParams);
-
-			$response['success']=true;
-			$response['results']=array();
 
 			while($user = $stmt->fetch()){
 				$record['name']=$user->name;
@@ -309,7 +309,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 				$l = new GO_Base_Mail_EmailRecipients();
 				$l->addRecipient($user->email, $record['name']);
 
-				$record['info']=htmlspecialchars((string) $l, ENT_COMPAT, 'UTF-8');
+				$record['info']=htmlspecialchars((string) $l.' ('.GO::t('strUser').')', ENT_COMPAT, 'UTF-8');
 				$record['full_email']=htmlspecialchars((string) $l , ENT_COMPAT, 'UTF-8');										
 
 				$response['results'][]=$record;
