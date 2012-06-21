@@ -795,7 +795,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		}
 		GO.files.saveAsDialog.show({
 			filename: attachment.name,
-			handler:function(dialog, mailbox, filename){
+			handler:function(dialog, folder_id, filename){
 			
 				GO.request({
 					maskEl:dialog.el,
@@ -810,7 +810,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 						subtype: attachment.subtype,
 						account_id: this.account_id,
 						uuencoded_partnumber: attachment.uuencoded_partnumber,
-						mailbox: mailbox,
+						folder_id: folder_id,
 						filename: filename,
 						charset:attachment.charset,
 						sender:this.messagePanel.data.sender,
