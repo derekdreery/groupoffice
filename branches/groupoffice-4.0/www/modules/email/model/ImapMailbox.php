@@ -7,6 +7,7 @@
  * @var boolean $haschildren
  * @var boolean $hasnochildren
  * @var boolean $noselect
+ * @var boolean $nonexistent
  * @var int $unseen
  * @var int $messages
  * @var string $delimiter
