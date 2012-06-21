@@ -45,8 +45,18 @@ class GO_Files_FilesModule extends GO_Base_Module{
 	}
 	
 	public static function saveUser($user, $wasNew) {
+		//throw new Exception($user->getOldAttributeValue('username'));
 		if($wasNew){
 			$folder = GO_Files_Model_Folder::model()->findHomeFolder($user);			
+		}elseif($user->isModified('username')){
+			$folder = GO_Files_Model_Folder::model()->findByPath('users/'.$user->getOldAttributeValue('username'));
+			if($folder)
+			{
+				$folder->name=$user->username;
+				$folder->systemSave=true;
+				//throw new Exception($folder->path);
+				$folder->save();				
+			}
 		}
 	}
 	

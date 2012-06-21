@@ -120,7 +120,7 @@ Ext.extend(GO.users.AccountPanel, Ext.form.FieldSet,{
 	{
 		this.invitationField.setDisabled(user_id>0);
 		this.invitationField.getEl().up('.x-form-item').setDisplayed(!user_id);
-		this.usernameField.setDisabled(user_id>0);
+		//this.usernameField.setDisabled(user_id>0);
 		this.passwordField2.allowBlank=(user_id>0);
 		this.passwordField1.allowBlank=(user_id>0);
 	}
