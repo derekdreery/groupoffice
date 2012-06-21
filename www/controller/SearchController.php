@@ -210,9 +210,11 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		if(empty($params['query']))
 			return $response;
 		
+		$query = '%'.preg_replace ('/[\s*]+/','%', $params['query']).'%'; 
+		
 		if(GO::modules()->addressbook){
 			$findParams = GO_Base_Db_FindParams::newInstance()
-							->searchQuery('%'.preg_replace ('/[\s*]+/','%', $params['query']).'%')
+							->searchQuery($query)
 							->select('t.*, addressbook.name AS ab_name')
 							->limit(10);
 			
@@ -266,7 +268,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 				$findParams = GO_Base_Db_FindParams::newInstance()
 								->limit(10-count($response['results']))
 								->select('t.*, addressbook.name AS ab_name')
-								->searchQuery($params['query']);
+								->searchQuery($query,array('t.name','t.email'));
 
 				$findParams->getCriteria()						
 								->addCondition("email", "","!=");
@@ -291,7 +293,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		{
 			//no addressbook module for this user. Fall back to user search.
 				$findParams = GO_Base_Db_FindParams::newInstance()
-							->searchQuery($params['query'])
+							->searchQuery($query)
 							->select('t.*')
 							->limit(10);
 
