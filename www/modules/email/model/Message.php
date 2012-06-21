@@ -328,4 +328,5 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		return $response;
 	}
 
+	
 }

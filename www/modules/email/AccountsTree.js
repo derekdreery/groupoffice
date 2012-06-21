@@ -187,9 +187,9 @@ GO.email.AccountsTree = function(config){
 				{
 					var params = {
 						task:'move',
-						from_account_id:this.account_id,
+						from_account_id:this.mainPanel.messagesGrid.store.baseParams.account_id,
 						to_account_id:e.target.attributes['account_id'],
-						from_mailbox:this.mailbox,
+						from_mailbox:this.mainPanel.messagesGrid.store.baseParams.mailbox,
 						to_mailbox:e.target.attributes['mailbox'],
 						messages:Ext.encode(messages)
 					}
@@ -212,24 +212,19 @@ GO.email.AccountsTree = function(config){
 							timeout:300000,
 							url:"email/message/move",
 							params:params,
-							callback:function(options, success, response){
-								var responseParams = Ext.decode(response.responseText);
-								if(!responseParams.success)
+							success:function(options, response, result){
+								if(result.messages && result.messages.length>0)
 								{
-									alert(responseParams.feedback);
-									Ext.MessageBox.hide();
-								}else if(responseParams.messages && responseParams.messages.length>0)
-								{
-									Ext.MessageBox.updateProgress(responseParams.progress, (responseParams.progress*100)+'%', '');
-									moveRequest.call(this, responseParams.messages);
+									Ext.MessageBox.updateProgress(result.progress, (result.progress*100)+'%', '');
+									moveRequest.call(this, result.messages);
 								}else
 								{
-									this.messagesGrid.store.reload({
+									this.mainPanel.messagesGrid.store.reload({
 										callback:function(){
 
-											if(this.messagePanel.uid && !this.messagesGrid.store.getById(this.messagePanel.uid))
+											if(this.mainPanel.messagePanel.uid && !this.mainPanel.messagesGrid.store.getById(this.mainPanel.messagePanel.uid))
 											{
-												this.messagePanel.reset();
+												this.mainPanel.messagePanel.reset();
 											}
 
 											Ext.MessageBox.hide();
@@ -380,7 +375,7 @@ Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {
 			success:function(options, response, result)
 			{
 				
-				//this.refresh(node.parentNode);
+				this.refresh(node.parentNode);
 				
 //				var responseParams = Ext.decode(response.responseText);
 //				if(responseParams.success)

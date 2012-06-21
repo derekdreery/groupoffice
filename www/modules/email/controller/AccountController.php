@@ -235,12 +235,12 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 
 			$node = array(
 					'text' => $text,
-					'mailbox' => $mailbox->getName(true),
+					'mailbox' => $mailbox->name,
 					'account_id' => $mailbox->getAccount()->id,
 					'iconCls' => 'folder-default',
 					'id' => $nodeId,
-					'noselect' => $mailbox->noselect,
-					'disabled' =>$mailbox->noselect,
+					'noselect' => false,//$mailbox->noselect,
+					'disabled' =>false,//$mailbox->noselect, //kerio sends noselect flags for valid folders
 					'noinferiors' => $mailbox->noinferiors,
 					'children' => !$mailbox->haschildren ? array() : null,
 					'expanded' => !$mailbox->haschildren
