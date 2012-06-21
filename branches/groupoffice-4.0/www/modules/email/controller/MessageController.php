@@ -1117,4 +1117,64 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		return $response;
 	}
 
+	
+	protected function actionMove($params){
+			$start_time = time();
+			
+			$messages= json_decode($params['messages'], true);
+			$total = $params['total'];
+
+			//move to another imap account
+			//$imap2 = new cached_imap();
+			//$from_account = $imap->open_account($params['from_account_id'], $params['from_mailbox']);
+			$from_account=GO_Email_Model_Account::model()->findByPk($params['from_account_id']);
+			$to_account=GO_Email_Model_Account::model()->findByPk($params['to_account_id']);
+
+			$imap = $from_account->openImapConnection($params['from_mailbox']);
+			$imap2 = $to_account->openImapConnection($params['to_mailbox']);
+
+			$delete_messages =array();
+			while($uid=array_shift($messages)) {
+				$source = $imap->get_message_part($uid);
+
+				$header = $imap->get_message_header($uid);
+
+				$flags = '\Seen';
+				if(!empty($header['flagged'])) {
+					$flags .= ' \Flagged';
+				}
+				if(!empty($header['answered'])) {
+					$flags .= ' \Answered';
+				}
+				if(!empty($header['forwarded'])) {
+					$flags .= ' $Forwarded';				}
+
+				if(!$imap2->append_message($params['to_mailbox'], $source, $flags)) {
+					$imap2->disconnect();
+					throw new Exception('Could not move message');
+				}
+
+				$delete_messages[]=$uid;
+
+				$left = count($messages);
+
+				if($left && $start_time-5<time()) {
+
+					$done = $total-$left;
+
+					$response['messages']=$messages;
+					$response['progress']=number_format($done/$total,2);
+				
+					break;
+				}
+			}
+			$imap->delete($delete_messages);
+
+			$imap2->disconnect();
+			$imap->disconnect();
+
+			$response['success']=true;
+			
+			return $response;
+	}
 }

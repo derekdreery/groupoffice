@@ -324,7 +324,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			$listCmd = "LIST (SUBSCRIBED)";
 		
 				
-		$cmd = $listCmd.' "'.$namespace.'" "'.$pattern.'"';
+		$cmd = $listCmd.' "'.$this->addslashes($this->utf7_encode($namespace)).'" "'.$this->addslashes($this->utf7_encode($pattern)).'"';
 		
 		if($listSubscribed && $this->has_capability("LIST-EXTENDED"))
 			$listCmd = 'LIST';
@@ -421,7 +421,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				if (!isset($folders[$folder]) && $folder) {
 					$folders[$folder] = array(
 									'delimiter' => $delim,
-									'name' => $folder,
+									'name' => $this->utf7_decode($folder),
 									'marked' => $marked,
 									'noselect' => $no_select,
 									'nonexistent' => $nonexistent,
@@ -594,7 +594,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			if (!isset($folders[$folder]) && $folder) {
 				$folders[$folder] = array(
 								'delimiter' => $delim,
-								'name' => $folder,
+								'name' => $this->utf7_decode($folder),
 								'marked' => $marked,
 								'noselect' => $no_select,
 								'can_have_children' => $can_have_kids,

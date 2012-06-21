@@ -33,6 +33,9 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 
 		$this->_attributes = $attributes;
 		
+//		if(isset($this->_attributes['name']))
+//			$this->_attributes['name']=GO_Base_Mail_Utils::utf7_decode($this->_attributes["name"]);
+		
 		//throw new Exception(var_export($attributes, true));
 
 		//$this->_children = array();
@@ -65,10 +68,14 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		if(isset($this->_attributes['noinferiors']) && $this->_attributes['noinferiors'])
 			return false;
 			
-			
+		//GO::debug($this->_attributes['haschildren'])	;
+		
 		//oh oh, bad mailserver can't tell us if it has children. Let's find out the expensive way
-		$folders = $this->getAccount()->openImapConnection($this->name)->list_folders(true, false,"",$this->name.$this->delimiter.'%');
-		return count($folders);
+		$folders = $this->getAccount()->openImapConnection()->list_folders(true, false,"",$this->name.$this->delimiter.'%');
+		//store values for caching
+		$this->_attributes['haschildren']= count($folders)>0;
+		$this->_attributes['hasnochildren']= count($folders)==0;
+		return $this->_attributes['haschildren'];
 		
 	}
 	
@@ -96,11 +103,11 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		return substr($this->name, 0, $pos);
 	}
 	
-	public function getName($decode=false){
-		return $decode ? GO_Base_Mail_Utils::utf7_decode($this->_attributes["name"]) : $this->_attributes["name"];
-	}
+//	public function getName($decode=false){
+//		return $decode ? GO_Base_Mail_Utils::utf7_decode($this->_attributes["name"]) : $this->_attributes["name"];
+//	}
 
-	public function getBaseName($decode=false) {
+	public function getBaseName() {
 		$name = $this->name;
 		$pos = strrpos($name, $this->delimiter);
 
@@ -108,7 +115,7 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 			$name= substr($this->name, $pos + 1);
 		
 		
-		return $decode ? GO_Base_Mail_Utils::utf7_decode($name) : $name;
+		return $name;
 	}
 
 	public function getDisplayName() {
@@ -175,7 +182,7 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		$parentName = $this->getParentName();
 		$newMailbox = empty($parentName) ? $name : $parentName.$this->delimiter.$name;
 		
-		//throw new Exception($this->name." -> ".$newMailbox);
+//		throw new Exception($this->name." -> ".$newMailbox);
 		
 		return $this->getAccount()->openImapConnection()->rename_folder($this->name, $newMailbox);
 	}
