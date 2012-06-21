@@ -200,7 +200,12 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 	
 	public function move(GO_Email_Model_ImapMailbox $targetMailbox){
 		
-		$newMailbox =$targetMailbox->name.$this->delimiter.$this->getBaseName();
+		$newMailbox = "";
+		
+		if(!empty($targetMailbox->name))
+			$newMailbox .= $targetMailbox->name.$this->delimiter;						
+					
+		$newMailbox .= $this->getBaseName();
 		
 		$success = $this->getAccount()->openImapConnection()->rename_folder($this->name, $newMailbox);
 		if(!$success)
