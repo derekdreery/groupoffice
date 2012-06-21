@@ -759,7 +759,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			
 			$findParams->ignoreAcl(); //We'll build a special acl check for folders that inherit permissions here.
 			
-			$findParams->debugSql();
+			//$findParams->debugSql();
 			
 			$aclJoinCriteria = GO_Base_Db_FindCriteria::newInstance()
 							->addRawCondition('a.acl_id', 't.acl_id','=', false);

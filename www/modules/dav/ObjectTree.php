@@ -26,7 +26,7 @@ class GO_Dav_ObjectTree extends Sabre_DAV_ObjectTree{
 		$moveable = $this->getNodeForPath($sourcePath);
 
 		$destination = $this->getNodeForPath(dirname($destinationPath));
-		$targetServerPath = $destination->getServerPath().'/'.utf8_basename($destinationPath);
+		$targetServerPath = $destination->getServerPath().'/'.GO_Base_Fs_File::utf8Basename($destinationPath);
 
         $moveable->move($targetServerPath);
     }
