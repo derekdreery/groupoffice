@@ -72,7 +72,11 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 	{
 		GO.files.FilePanel.superclass.setData.call(this, data);
 		this.setTitle(data.name);		
-		this.editButton.setDisabled(data.locked || !this.data.write_permission);		
+		this.editButton.setDisabled(data.locked || !this.data.write_permission);	
+		
+		//custom fields pass path as ID and it will be looked up by the controller. So we must set the actual ID here.
+		//see actionDisplay in FileController
+		this.model_id=this.data.id;
 
 		this.propertiesBtn.setDisabled(!this.data.write_permission);
 	},
