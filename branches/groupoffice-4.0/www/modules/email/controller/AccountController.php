@@ -115,6 +115,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 	
 	private function _getUsage(GO_Email_Model_Account $account){
 		$usage="";
+		
 		$quota = $account->openImapConnection()->get_quota();
 		
 		if(isset($quota['usage'])) {
@@ -167,11 +168,20 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 							'mailbox' => '',							
 							'noinferiors' => false,
 							'inbox_new' => 0,
-							'usage' => $this->_getUsage($account)
+							'usage' => ""
 					);
+					try{
+						$node['usage']=$this->_getUsage($account);
+						if($node['expanded'])
+							$node['children']=$this->_getMailboxTreeNodes($account->getRootMailboxes(true));
+						
+					}catch(Exception $e){
+						$node['text'] .= ' ('.GO::t('error').')';
+						$node['children']=array();
+						$node['expanded']=true;
+						$node['qtipCfg'] = array('title'=>GO::t('error'), 'text' =>htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8'));
+					}
 					
-					if($node['expanded'])
-						$node['children']=$this->_getMailboxTreeNodes($account->getRootMailboxes(true));
 
 					$response[] = $node;
 				}
@@ -285,7 +295,18 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 	private function _isExpanded($nodeId) {
 		if (!isset($this->_treeState)) {
 			$state = GO::config()->get_setting("email_accounts_tree", GO::user()->id);
-			$this->_treeState = empty($state) ? array() : json_decode($state);
+			
+			if(empty($state)){
+				//account and inbox nodes are expanded by default
+				if((stristr($nodeId, 'account') || substr($nodeId,-6)=='_INBOX')){
+					return true;
+				}else
+				{
+					return false;
+				}
+			}
+			
+			$this->_treeState = json_decode($state);
 		}
 
 		return in_array($nodeId, $this->_treeState);

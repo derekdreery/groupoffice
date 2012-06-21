@@ -295,10 +295,26 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	}
 	
 	
+	private $_subscribedFoldersCache;
+	
+	private function _isSubscribed($mailboxName, $flags){
+		if($this->has_capability("LIST-EXTENDED")){
+			return stristr($flags, 'subscribed');
+		}else
+		{
+			if(!isset($this->_subscribedFoldersCache[$this->server.$this->username])){
+				$this->_subscribedFoldersCache[$this->server.$this->username] = $this->list_folders(true, false, '', '*');				
+			}
+			return isset($this->_subscribedFoldersCache[$this->server.$this->username][$mailboxName]);
+		}
+	}
+	
 	public function list_folders($listSubscribed=true, $withStatus=false, $namespace='', $pattern='*'){
 		
 		GO::debug("list_folders($listSubscribed, $withStatus, $namespace, $pattern");
 		//$delim = false;
+		
+		//unset($this->_subscribedFoldersCache);
 		
 		$listStatus = $this->has_capability('LIST-STATUS');
 		
@@ -320,13 +336,13 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		if($this->has_capability("LIST-EXTENDED") && !$listSubscribed)
 			$cmd .= ' RETURN (CHILDREN SUBSCRIBED)';
 		
-		GO::debug($cmd);
+//		GO::debug($cmd);
 		
 		$cmd .= "\r\n";
 		
 		$this->send_command($cmd);
 		$result = $this->get_response(false, true);
-		GO::debug($result);
+//		GO::debug($result);
 
 		$folders = array();
 		foreach ($result as $vals) {
@@ -391,9 +407,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 					$has_no_kids = true;
 				}
 				
-				if (stristr($flags, 'subscribed')) {
-					$subscribed = true;
-				}
+				
+				$subscribed = $listSubscribed || $this->_isSubscribed($folder, $flags);
+				
 				$nonexistent = stristr($flags, 'NonExistent');
 				
 				if ($folder != 'INBOX' && (stristr($flags, 'noselect') || $nonexistent)) {

@@ -130,17 +130,21 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 			return false;
 
 		$mailboxes = $this->getMailboxes();
-		if(!in_array($this->$name, $mailboxes)){
-			if(! $this->openImapConnection()->create_folder($this->$name)){
-				if(isset($mailboxes[0])){
-					$this->mbroot= $this->openImapConnection()->check_mbroot($mailboxes[0]);
+		
+		//throw new Exception(var_export($mailboxes, true));
+		
+		if(!isset($mailboxes[$this->$name])){
+//			throw new Exception($this->$name);
+			if(!$this->openImapConnection()->create_folder($this->$name)){
+//				if(isset($mailboxes[0])){
+					$this->mbroot= $this->openImapConnection()->check_mbroot("INBOX");
 
-					$this->$name = $this->mboot.$this->$name;
+					$this->$name = $this->mbroot.$this->$name;
 
 					if(!in_array($this->$name, $mailboxes)){
 						 $this->openImapConnection()->create_folder($this->$name);
 					}
-				}
+//				}
 			}
 		}
 	}
@@ -175,7 +179,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 			try{
 				$this->_imap->connect($this->host, $this->port, $this->username, $this->decryptPassword(), $this->use_ssl);
 			}catch(GO_Base_Mail_ImapAuthenticationFailedException $e){
-				throw new Exception('Authententication failed for user '.$this->username.' on IMAP server ".$this->host.');
+				throw new Exception('Authententication failed for user '.$this->username.' on IMAP server '.$this->host);
 			}
 		}
 		if(!$this->_imap->select_mailbox($mailbox))
