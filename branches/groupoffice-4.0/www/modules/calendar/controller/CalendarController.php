@@ -52,9 +52,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 				));
 
 		$response['data']['url']='<a class="normal-link" target="_blank" href="'.$url.'">'.GO::t('rightClickToCopy','calendar').'</a>';
-		
-		//REFACTOR NEEDED
-		$response['data']['ics_url']='<a class="normal-link" target="_blank" href="'.GO::config()->full_url.'modules/calendar/export.php?calendar_id='.$response['data']['id'].'&months_in_past=1">'.GO::t('rightClickToCopy','calendar').'</a>';
+		$response['data']['ics_url']='<a class="normal-link" target="_blank" href="'.GO::url("calendar/calendar/exportIcs", array("calendar_id"=>$response['data']['id'],"months_in_past"=>1)).'">'.GO::t('rightClickToCopy','calendar').'</a>';
 
 		
 		return parent::afterLoad($response, $model, $params);
@@ -140,6 +138,31 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		}
 		$response['feedback'] = sprintf(GO::t('import_success','calendar'), $count);
 		return $response;
+	}
+	
+	
+	public function actionExportIcs($params){
+		
+		$calendar = GO_Calendar_Model_Calendar::model()->findByPk($params["calendar_id"]);
+		
+		$c = new GO_Base_VObject_VCalendar();				
+		$c->add(new GO_Base_VObject_VTimezone());
+		
+		$months_in_past = isset($params['months_in_past']) ? intval($params['months_in_past']) : 0;
+		
+		$findParams = GO_Base_Db_FindParams::newInstance();
+		$findParams->getCriteria()->addCondition("calendar_id", $params["calendar_id"]);
+		
+		if(!empty($params['months_in_past']))		
+			$stmt = GO_Calendar_Model_Event::model()->findForPeriod($findParams, GO_Base_Util_Date::date_add(time(), 0, -$months_in_past));
+		else
+			$stmt = GO_Calendar_Model_Event::model()->find($findParams);
+		
+		while($event = $stmt->fetch())
+			$c->add($event->toVObject());			
+		
+		GO_Base_Util_Http::outputDownloadHeaders(new GO_Base_FS_File($calendar->name.'.ics'));
+		echo $c->serialize();
 	}
 	
 }

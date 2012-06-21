@@ -694,7 +694,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		//$ct->offsetUnset('VALUE');
 		$e->add($ct);
 		
-    $e->summary = $this->name;
+    $e->summary = (string) $this->name;
 		
 		$e->status = $this->status;
 		
