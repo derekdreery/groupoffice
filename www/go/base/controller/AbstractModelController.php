@@ -781,6 +781,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * @param Array $params 
 	 */
 	protected function actionExport($params) {	
+		
+		//used by custom fields to format diffently
+		define('EXPORTING', true);
+		
+		
 		$showHeader = false;
   	$humanHeaders = true;
 		$orientation = false;
@@ -807,6 +812,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		$store = new GO_Base_Data_Store($this->getStoreColumnModel());	
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatStoreRecord'));		
+		//$store->getColumnModel()->setModelFormatType('formatted'); //no html
 		
 		$response = array();
 		
