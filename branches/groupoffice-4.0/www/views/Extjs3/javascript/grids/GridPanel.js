@@ -208,15 +208,22 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 			if(record)
 				this.rowClicked=true;
 		}, this);
+		
+		//no delay on this
+		this.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
+			if(!this.rowClicked)
+			{
+				this.lastSelectedIndex= this.currentSelectedIndex;
+				this.currentSelectedIndex= this.getSelectionModel().last;
+			}
+		}	,this);
 
 		this.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
 			if(!this.rowClicked)
 			{
 				var record = this.getSelectionModel().getSelected();
 				if(record==r)
-				{
-					this.lastSelectedIndex= this.currentSelectedIndex;
-					this.currentSelectedIndex= this.getSelectionModel().last;
+				{					
 					this.fireEvent('delayedrowselect', this, rowIndex, r);
 				}
 			}
@@ -253,16 +260,23 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 	paging : false,
 	
 	
-	selectNextAfterDelete : function(){
-		if(this.currentSelectedIndex>this.lastSelectedIndex){
-			//selection is going up
-			if(!this.getSelectionModel().selectNext())
-				this.getSelectionModel().selectPrevious();
+	selectNextAfterDelete : function(){		
+		var old = this.lastSelectedIndex;
+		if(this.currentSelectedIndex>this.lastSelectedIndex){			
+			//return value is always false somehow so we check with getSelected
+			this.getSelectionModel().selectRow(this.currentSelectedIndex);
+			
+			if(!this.getSelectionModel().getSelected())				
+				this.getSelectionModel().selectLastRow();
 		}else
 		{
-			if(!this.getSelectionModel().selectPrevious())
-				this.getSelectionModel().selectNext();
+			//return value is always false somehow so we check with getSelected
+			this.getSelectionModel().selectRow(this.currentSelectedIndex-1);			
+			if(!this.getSelectionModel().getSelected())
+				this.getSelectionModel().selectFirstRow();
 		}
+		
+		this.lastSelectedIndex=old;
 	},
 
 	/**
@@ -446,6 +460,15 @@ GO.grid.EditorGridPanel = function(config)
 		}
 		this.rowClicked=true;
 	}, this);
+	
+	//no delay on this
+	this.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
+		if(!this.rowClicked)
+		{
+			this.lastSelectedIndex= this.currentSelectedIndex;
+			this.currentSelectedIndex= this.getSelectionModel().last;
+		}
+	}	,this);
 
 	this.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
 		if(!this.rowClicked)
@@ -453,8 +476,6 @@ GO.grid.EditorGridPanel = function(config)
 			var record = this.getSelectionModel().getSelected();
 			if(record==r)
 			{
-				this.lastSelectedRecord = this.currentSelectedRecord;
-				this.currentSelectedRecord=r;
 				this.fireEvent('delayedrowselect', this, rowIndex, r);
 			}
 		}
@@ -466,6 +487,9 @@ GO.grid.EditorGridPanel = function(config)
 
 Ext.extend(GO.grid.EditorGridPanel, Ext.grid.EditorGridPanel, {
 
+	lastSelectedIndex : false,
+	currentSelectedIndex : false,
+	
 	deleteConfig : {},
 
 	/**
@@ -491,6 +515,25 @@ Ext.extend(GO.grid.EditorGridPanel, Ext.grid.EditorGridPanel, {
 	getGridData : GO.grid.GridPanel.prototype.getGridData,
 
 	numberRenderer : GO.grid.GridPanel.prototype.numberRenderer,
+	
+	selectNextAfterDelete : function(){		
+		var old = this.lastSelectedIndex;
+		if(this.currentSelectedIndex>this.lastSelectedIndex){			
+			//return value is always false somehow so we check with getSelected
+			this.getSelectionModel().selectRow(this.currentSelectedIndex);
+			
+			if(!this.getSelectionModel().getSelected())				
+				this.getSelectionModel().selectLastRow();
+		}else
+		{
+			//return value is always false somehow so we check with getSelected
+			this.getSelectionModel().selectRow(this.currentSelectedIndex-1);			
+			if(!this.getSelectionModel().getSelected())
+				this.getSelectionModel().selectFirstRow();
+		}
+		
+		this.lastSelectedIndex=old;
+	},
 
 	/**
 	 * Checks if a grid cell is valid
