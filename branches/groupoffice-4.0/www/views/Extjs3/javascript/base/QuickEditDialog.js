@@ -133,8 +133,8 @@ Ext.extend(GO.base.QuickEditDialog, GO.Window, {
 			clicksToEdit:1
 		});
 		
-		for (var i=0;i<this.editGrid.getColumnModel().getColumnCount();i++)
-			this.editGrid.getColumnModel().setHidden(i,false);
+//		for (var i=0;i<this.editGrid.getColumnModel().getColumnCount();i++)
+//			this.editGrid.getColumnModel().setHidden(i,false);
 
 		GO.request({
 			url : this.editorGridParams.moduleName+'/'+this.editorGridParams.modelName+'/attributes',
