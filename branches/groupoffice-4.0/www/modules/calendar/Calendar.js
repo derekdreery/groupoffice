@@ -973,7 +973,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					this.resourcesStore.loadData(jsonData.resources);
 					if(this.projectCalendarsList)
 						this.projectCalendarsStore.loadData(jsonData.project_calendars);
-					GO.calendar.categoriesStore.loadData(jsonData.categories);
+					//GO.calendar.categoriesStore.loadData(jsonData.categories);
 
 					this.getEl().unmask();
 					
