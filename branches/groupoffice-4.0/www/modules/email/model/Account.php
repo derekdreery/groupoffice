@@ -241,8 +241,8 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		$imap = $this->openImapConnection();
 		
 		$rootMailboxes = array();
-		
-		$folders = $imap->list_folders($subscribed,$withStatus,"","%");
+				
+		$folders = $imap->list_folders($subscribed,$withStatus,"","{$this->mbroot}%");
 		foreach($folders as $folder){
 			$mailbox = new GO_Email_Model_ImapMailbox($this,$folder);
 			$rootMailboxes[]=$mailbox;

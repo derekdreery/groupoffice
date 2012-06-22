@@ -75,10 +75,12 @@ class GO_Email_Controller_Folder extends GO_Base_Controller_AbstractController {
 		$targetMailbox = new GO_Email_Model_ImapMailbox($account, array("name"=>$params["targetMailbox"]));
 			
 		
-		$success = $sourceMailbox->move($targetMailbox);
+		$response['success'] = $sourceMailbox->move($targetMailbox);
+		if(!$response['success'])
+			$response['feedback']="Could not move folder $sourceMailbox to $targetMailbox";
 		
 		
-		return array("success"=>$success);
+		return $response;
 	}
 	
 	protected function actionStore($params){
