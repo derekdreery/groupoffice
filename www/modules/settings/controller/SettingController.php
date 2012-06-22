@@ -52,7 +52,7 @@ class GO_Settings_Controller_Setting extends GO_Base_Controller_AbstractControll
 		if (isset($params['GO_Calendar_Model_Calendar_change_all_names']))
 			$this->_updateAllDefaultCalendars($reportFeedback);	
 		
-		$response['feedback'] = !empty($reportFeedback) ? $reportFeedback : GO::t('allRenamingSuccess','settings');
+		$response['feedback'] = !empty($reportFeedback) ? $reportFeedback : '';
 		$response['success'] = true;
 		return $response;
 	}
