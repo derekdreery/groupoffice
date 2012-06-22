@@ -164,15 +164,15 @@ if((PHP_SAPI != 'cli' || PHP_SAPI == '') && file_exists($GO_CONFIG->root_path.'m
 
 $GO_EVENTS = new GO_EVENTS();
 
-if($GO_CONFIG->session_inactivity_timeout>0){
-	$now = time();
-	if(isset($_SESSION['last_activity']) && $_SESSION['last_activity']+$GO_CONFIG->session_inactivity_timeout<$now){
-		$GO_SECURITY->logout();
-	}elseif(isset($_POST['task']) && $_POST['task']!='checker')//don't update on the automatic checker function that runs every 2 mins.
-	{
-		$_SESSION['last_activity']=$now;
-	}
-}
+//if($GO_CONFIG->session_inactivity_timeout>0){
+//	$now = time();
+//	if(isset($_SESSION['last_activity']) && $_SESSION['last_activity']+$GO_CONFIG->session_inactivity_timeout<$now){
+//		$GO_SECURITY->logout();
+//	}elseif(isset($_POST['task']) && $_POST['task']!='checker')//don't update on the automatic checker function that runs every 2 mins.
+//	{
+//		$_SESSION['last_activity']=$now;
+//	}
+//}
 
 
 if (!empty($_REQUEST['SET_LANGUAGE'])){
