@@ -1417,13 +1417,22 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			$uids = $this->sort_mailbox($sort_field, $reverse, $query);
 		}
 		
+		GO::debug("Count uids: ".count($uids));
+		
 		if(!is_array($uids))
 			return array();
 
 		if($limit>0)
 			$uids=array_slice($uids,$start, $limit);
+		
+		$chunks = array_chunk($uids, 1000);
+		
+		$headers = array();
+		while($subset = array_shift($chunks)){
+			$headers = array_merge($headers, $this->get_message_headers($subset, true));
+		}
 
-		return $this->get_message_headers($uids, true);
+		return $headers;
 	}
 
 
@@ -1625,6 +1634,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		{
 			$parts=array('text_found'=>false, 'parts'=>array());
 		}
+		$imgs  =array('jpg','jpeg','gif','png','bmp');
 		foreach ($struct as $id => $vals) {
 
 			//GO::debug($vals);
@@ -1639,11 +1649,18 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 						$parts['text_found']=true;
 						$parts['parts'][] = $vals;
 
-					}elseif($vals['type']=='image' && in_array($vals['subtype'], array('jpg','jpeg','gif','png','bmp')) && $vals['disposition']=='inline' && empty($vals['id']))
+					}elseif($vals['type']=='image' && in_array($vals['subtype'], $imgs) && $vals['disposition']=='inline' && empty($vals['id']))
 					{
-						//an inline image without ID. We'll display in the part order. Apple
-						//mail sends mail like this.
-						$parts['parts'][]=$vals;
+						//GO::debug($vals);
+						//work around ugly stuff. Some mails contain stuff with type image/gif but it's actually an html file.
+						//so we double check if the image has a filename that it has a valid image extension
+						$file = empty($vals['name']) ? false : new GO_Base_Fs_File($vals['name']);						
+						if(!$file || $file->isImage()){
+
+							//an inline image without ID. We'll display in the part order. Apple
+							//mail sends mail like this.
+							$parts['parts'][]=$vals;
+						}
 					}
 				}
 			
