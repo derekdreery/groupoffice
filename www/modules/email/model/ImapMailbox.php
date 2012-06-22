@@ -57,6 +57,9 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 	
 	public function getHasChildren(){
 		
+		if($this->isRootMailbox())
+			return false;
+		
 		//todo make compatible with servers that can't return subscribed flag
 		
 		if(isset($this->_attributes['haschildren']) && $this->_attributes['haschildren'])
@@ -67,6 +70,9 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		
 		if(isset($this->_attributes['noinferiors']) && $this->_attributes['noinferiors'])
 			return false;
+		
+		
+		
 			
 		//GO::debug($this->_attributes['haschildren'])	;
 		
@@ -146,6 +152,11 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		}
 		$this->_children[] = $mailbox;
 	}
+	
+	public function isRootMailbox(){
+		//throw new Exception($this->name.$this->delimiter.' = '.$this->getAccount()->mbroot);
+		return $this->name.$this->delimiter==$this->getAccount()->mbroot;
+	}
 
 	public function getChildren($subscribed=true, $withStatus=true) {
 		if(!isset($this->_children)){
@@ -153,11 +164,14 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 			$imap = $this->getAccount()->openImapConnection();
 
 			$this->_children = array();
-
-			$folders = $imap->list_folders($subscribed,$withStatus,$this->name.$this->delimiter,"%");
-			foreach($folders as $folder){
-				$mailbox = new GO_Email_Model_ImapMailbox($this->account,$folder);
-				$this->_children[]=$mailbox;
+			
+			if(!$this->isRootMailbox())
+			{
+				$folders = $imap->list_folders($subscribed,$withStatus,$this->name.$this->delimiter,"%");
+				foreach($folders as $folder){
+					$mailbox = new GO_Email_Model_ImapMailbox($this->account,$folder);
+					$this->_children[]=$mailbox;
+				}
 			}
 
 		}
@@ -233,5 +247,9 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		$this->subscribed = !$this->getAccount()->openImapConnection()->unsubscribe($this->name);
 		
 		return !$this->subscribed;
+	}
+	
+	public function __toString() {
+		return $this->_attributes['name'];
 	}
 }
