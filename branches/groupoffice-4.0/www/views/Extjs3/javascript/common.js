@@ -276,7 +276,7 @@ GO.deleteItems = function(config)
 				params.start=config.store.lastOptions.params.start;
 			
 			if(config.grid){
-				config.grid.getSelectionModel().selectPrevious();
+				config.grid.selectNextAfterDelete();
 			}
 						
 			config.store.load({

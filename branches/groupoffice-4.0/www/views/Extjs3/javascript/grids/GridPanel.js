@@ -54,6 +54,9 @@
 
 GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 	
+	lastSelectedIndex : false,
+	currentSelectedIndex : false,
+	
 	initComponent : function(){
 		
 
@@ -195,8 +198,11 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 
 			if(!e.ctrlKey && !e.shiftKey)
 			{
-				if(record)
+				if(record){
+					this.lastSelectedIndex= this.currentSelectedIndex;
+					this.currentSelectedIndex= this.getSelectionModel().last;
 					this.fireEvent('delayedrowselect', this, rowIndex, record);
+				}
 			}
 		
 			if(record)
@@ -209,6 +215,8 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 				var record = this.getSelectionModel().getSelected();
 				if(record==r)
 				{
+					this.lastSelectedIndex= this.currentSelectedIndex;
+					this.currentSelectedIndex= this.getSelectionModel().last;
 					this.fireEvent('delayedrowselect', this, rowIndex, r);
 				}
 			}
@@ -243,6 +251,19 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 	 * paging toolbar.
 	 */
 	paging : false,
+	
+	
+	selectNextAfterDelete : function(){
+		if(this.currentSelectedIndex>this.lastSelectedIndex){
+			//selection is going up
+			if(!this.getSelectionModel().selectNext())
+				this.getSelectionModel().selectPrevious();
+		}else
+		{
+			if(!this.getSelectionModel().selectPrevious())
+				this.getSelectionModel().selectNext();
+		}
+	},
 
 	/**
 	 * Sends a delete request to the remote store. It will send the selected keys in json
@@ -418,6 +439,9 @@ GO.grid.EditorGridPanel = function(config)
 		if(!e.ctrlKey && !e.shiftKey)
 		{
 			var record = this.getSelectionModel().getSelected();
+			this.lastSelectedRecord = this.currentSelectedRecord;
+			this.currentSelectedRecord=record;
+			
 			this.fireEvent('delayedrowselect', this, rowIndex, record);
 		}
 		this.rowClicked=true;
@@ -429,6 +453,8 @@ GO.grid.EditorGridPanel = function(config)
 			var record = this.getSelectionModel().getSelected();
 			if(record==r)
 			{
+				this.lastSelectedRecord = this.currentSelectedRecord;
+				this.currentSelectedRecord=r;
 				this.fireEvent('delayedrowselect', this, rowIndex, r);
 			}
 		}
