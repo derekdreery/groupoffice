@@ -1437,9 +1437,13 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 	function check_mbroot($mbroot) {
 		$mbroot = trim($mbroot);
+		
+		if(empty($mbroot))
+			return "";
 
 		$list = $this->get_folders('', false,'%');
-		//GO::debug($list);
+//		GO::debug($list);
+//		throw new Exception($mbroot);
 		if (is_array($list)) {
 			while ($folder = array_shift($list)) {
 				if (!$this->delimiter && strlen($folder['delimiter']) > 0) {
