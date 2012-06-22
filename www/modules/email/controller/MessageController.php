@@ -575,13 +575,14 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$message = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
 		}else
 		{
+			$account=false;
 			$message = GO_Email_Model_SavedMessage::model()->createFromMimeFile($params['path']);
 		}
 
 		return $this->_messageToReplyResponse($params, $message, $account);
 	}
 
-	private function _messageToReplyResponse($params, GO_Email_Model_ComposerMessage $message, GO_Email_Model_Account $account) {
+	private function _messageToReplyResponse($params, GO_Email_Model_ComposerMessage $message, $account=false) {
 		$html = $params['content_type'] == 'html';
 
 		$fullDays = GO::t('full_days');
@@ -625,9 +626,11 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$response['data']['subject'] = $message->subject;
 		}
 		
-		$alias = $this->_findAliasFromRecipients($account, $message->to);	
-		if(!$alias)
-			$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);
+		if(!isset($params['alias_id']))
+			$params['alias_id']=0;
+		
+		$alias = $this->_findAliasFromRecipients($account, $message->to, $params['alias_id']);	
+		
 				
 		$response['data']['alias_id']=$alias->id;		
 
@@ -663,16 +666,38 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	 * @param GO_Base_Mail_EmailRecipients $recipients
 	 * @return GO_Email_Model_Alias|false 
 	 */
-	private function _findAliasFromRecipients(GO_Email_Model_Account $account, GO_Base_Mail_EmailRecipients $recipients){
+	private function _findAliasFromRecipients($account, GO_Base_Mail_EmailRecipients $recipients, $alias_id=0){
 		$alias=false;
+		$defaultAlias=false;
+		
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+				->select('t.*')
+				->joinModel(array(
+						'model' => 'GO_Email_Model_AccountSort',
+						'foreignField' => 'account_id', //defaults to primary key of the remote model
+						'localField' => 'account_id', //defaults to primary key of the model
+						'type' => 'LEFT'
+				))
+				->ignoreAdminGroup()
+				->order('order', 'DESC');
+		
+		
 		//find the right sender alias
-		$stmt = $account->aliases;
+		$stmt = $account ? $account->aliases : GO_Email_Model_Alias::model()->find($findParams);
 		while($possibleAlias = $stmt->fetch()){
+			
+			if(!$defaultAlias)
+				$defaultAlias = $possibleAlias;
+			
 			if($recipients->hasRecipient($possibleAlias->email)){
 				$alias = $possibleAlias;
 				break;
 			}
 		}
+		
+		if(!$alias)
+			$alias = empty($alias_id)  ? $defaultAlias : GO_Email_Model_Alias::model()->findByPk($alias_id);
 		
 		return $alias;
 	}
