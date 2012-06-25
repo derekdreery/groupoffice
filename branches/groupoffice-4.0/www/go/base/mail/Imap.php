@@ -305,6 +305,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			if(!isset($this->_subscribedFoldersCache[$this->server.$this->username])){
 				$this->_subscribedFoldersCache[$this->server.$this->username] = $this->list_folders(true, false, '', '*');				
 			}
+			GO::debug(array_keys($this->_subscribedFoldersCache[$this->server.$this->username]));
 			return isset($this->_subscribedFoldersCache[$this->server.$this->username][$mailboxName]);
 		}
 	}
@@ -320,21 +321,29 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		
 		$listCmd = $listSubscribed ? 'LSUB' : 'LIST';
 		
-		if($listSubscribed && $this->has_capability("LIST-EXTENDED"))
-			$listCmd = "LIST (SUBSCRIBED)";
+//		if($listSubscribed && $this->has_capability("LIST-EXTENDED"))
+////		$listCmd = "LIST (SUBSCRIBED)";		
+//			$listCmd = "LIST";
 		
 				
 		$cmd = $listCmd.' "'.$this->addslashes($this->utf7_encode($namespace)).'" "'.$this->addslashes($this->utf7_encode($pattern)).'"';
 		
-		if($listSubscribed && $this->has_capability("LIST-EXTENDED"))
-			$listCmd = 'LIST';
+//		if($listSubscribed && $this->has_capability("LIST-EXTENDED"))
+//			$listCmd = 'LIST';
 		
-		if($listStatus && $withStatus){
-			$cmd .= ' RETURN (CHILDREN STATUS (MESSAGES UNSEEN))';
+//		if($listStatus && $withStatus){
+//			$cmd .= ' RETURN (CHILDREN SUBSCRIBED STATUS (MESSAGES UNSEEN))';
+//		}
+		
+		if($this->has_capability("LIST-EXTENDED")){
+				$cmd .= ' RETURN (CHILDREN SUBSCRIBED';
+				
+				if($withStatus){
+					$cmd .= ' STATUS (MESSAGES UNSEEN)';
+				}
+
+			$cmd .= ')';
 		}
-		
-		if($this->has_capability("LIST-EXTENDED") && !$listSubscribed)
-			$cmd .= ' RETURN (CHILDREN SUBSCRIBED)';
 		
 //		GO::debug($cmd);
 		
@@ -366,7 +375,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				$has_no_kids=false;
 				$has_kids = false;
 				$marked = false;				
-				$subscribed=$listSubscribed;
+				//$subscribed=$listSubscribed;
 
 				foreach ($vals as $v) {
 					if ($v == '(') {
@@ -388,6 +397,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 						}
 					}
 				}
+				
+				if($folder=='dovecot')
+					continue;
 
 				if (!$this->delimiter) {
 					$this->set_mailbox_delimiter($delim);
@@ -489,7 +501,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 									'delimiter' => $delim,
 									'name' => $parent,
 									'marked' => true,
-									'noselect' => true,
+									'noselect' => $parent!='INBOX',
 									'noinferiors' => false,
 									'haschildren' => true,
 									'hasnochildren' => false,
