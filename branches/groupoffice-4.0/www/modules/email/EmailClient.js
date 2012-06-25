@@ -337,7 +337,7 @@ GO.email.EmailClient = function(config){
 		{
 			var firstAccountNode=false;
 
-			this.updateNotificationEl();
+//			this.updateNotificationEl();
 
 			for(var i=0;i<node.childNodes.length;i++){
 				firstAccountNode = node.childNodes[i];
@@ -775,17 +775,17 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 
 		GO.email.EmailClient.superclass.onShow.call(this);
 	},
-	
-	updateNotificationEl : function(){
-		var node = this.treePanel.getRootNode();
 
-		GO.email.totalUnseen=0;
-		for(var i=0;i<node.childNodes.length;i++)
-		{
-			GO.email.totalUnseen += node.childNodes[i].attributes.inbox_new;
-		}
-
-	},
+//	updateNotificationEl : function(){
+//		var node = this.treePanel.getRootNode();
+//	
+//		GO.email.totalUnseen=0;
+//		for(var i=0;i<node.childNodes.length;i++)
+//		{
+//			GO.email.totalUnseen += node.childNodes[i].attributes.inbox_new;
+//		}
+//
+//	},
 	
 	saveAttachment : function(attachment)
 	{
@@ -998,14 +998,14 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		var status = 0;
 		if(statusText!='')
 		{
-			var status = parseInt(statusText.substring(1, statusText.length-1));
+			status = parseInt(statusText.substring(1, statusText.length-1));
 		}
 		status+=increment;
-		
-		GO.email.totalUnseen+=increment;
+	
+//		GO.email.totalUnseen+=increment;
 		
 		this.updateFolderStatus(mailbox, status);
-		this.updateNotificationEl();
+//		this.updateNotificationEl();
 	},
 	
 
@@ -1071,10 +1071,10 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 							field='seen';
 							value=!clear;
 
-							for(var i=0;i<records.length;i++){
-								if(records[i].get('seen')!=clear)
-									GO.email.totalUnseen-=clear;
-							}
+//							for(var i=0;i<records.length;i++){
+//								if(records[i].get('seen')!=clear)
+//									GO.email.totalUnseen-=clear;
+//							}
 
 							break;
 						case 'Flagged':
@@ -1091,7 +1091,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 					}
 
 					this.updateFolderStatus(this.mailbox, result.unseen);
-					this.updateNotificationEl();
+//					this.updateNotificationEl();
 						
 					
 				},
@@ -1241,7 +1241,7 @@ GO.mainLayout.onReady(function(){
 					success:function(options, response, data){
 						var ep = GO.mainLayout.getModulePanel('email');
 
-						var totalUnseen = data.email_status.total_unseen;
+					//	var totalUnseen = data.email_status.total_unseen;
 						if(ep){
 							for(var i=0;i<data.email_status.unseen.length;i++)
 							{
@@ -1255,9 +1255,9 @@ GO.mainLayout.onReady(function(){
 							}
 						}
 
-						if(totalUnseen!=GO.email.totalUnseen && totalUnseen>0)
+						if(data.email_status.has_new)
 						{
-							data.reminderText='<p>'+GO.email.lang.youHaveNewMails.replace('{new}', totalUnseen)+'</p>';
+							data.reminderText='<p>'+GO.email.lang.youHaveNewMails.replace('{new}', data.email_status.total_unseen)+'</p>';
 
 							if(!ep || !ep.isVisible())
 								GO.email.notificationEl.setDisplayed(true);
@@ -1275,8 +1275,7 @@ GO.mainLayout.onReady(function(){
 							}
 						}
 
-						GO.email.notificationEl.update(totalUnseen);
-						GO.email.totalUnseen=totalUnseen;
+						GO.email.notificationEl.update(data.email_status.total_unseen);
 					}
 				});
 			},
