@@ -29,7 +29,7 @@ require('../../Group-Office.php');
 		<form method="POST" action="submit.php" enctype="multipart/form-data">
 
 			<input type="hidden" name="return_to" value="<?php echo $_SERVER['PHP_SELF']; ?>" />
-			<input type="hidden" name="addressbook" value="Wilmar van Beusekom"  />
+			<input type="hidden" name="addressbook" value="Test Addressbook"  />
 			<input type="hidden" name="confirmation_email" value="testConfirmationEmail.eml"  />
 <!--			<input type="hidden" name="contact_id" value="22290"  />-->
 			<input type="hidden" name="mailings[]" value="Test Adreslijst"  />
