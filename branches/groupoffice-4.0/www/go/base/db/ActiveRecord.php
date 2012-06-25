@@ -1686,7 +1686,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					return  GO_Base_Util_Number::unlocalize($value);
 					break;
 				case 'boolean':
-					return  empty($value) ? 0 : 1; 
+					return  empty($value) || $value=="false" ? 0 : 1; 
 					break;				
 				case 'date':
 					return  GO_Base_Util_Date::to_db_date($value);
@@ -3060,9 +3060,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$sql .= "SET ".implode(',',$updates).
 			" WHERE model_type_id=".$model->modelTypeId()." AND model_id=".$model->id;
-		
-//		var_dump($sql);
-//		var_dump($bindParams);
 		
 		$result = $this->getDbConnection()->prepare($sql);
 		return $result->execute($bindParams);
