@@ -84,17 +84,9 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 
 					$response['email_status']['unseen'][]=array('account_id'=>$account->id,'mailbox'=>'INBOX', 'unseen'=>$unseen['count']);
 					$response['email_status']['total_unseen'] += $unseen['count'];
-					GO::debug("UID next: ".$imap->selected_mailbox['uidnext']);
-					if(!isset($response['email_status']['has_new'])){						
-						if(isset(GO::session()->values['email_status']['uidnext'][$account->id]) && GO::session()->values['email_status']['uidnext'][$account->id]!=$imap->selected_mailbox['uidnext']){
-							$response['email_status']['has_new']=true;
-						}else
-						{
-							GO::session()->values['email_status']['uidnext'][$account->id]=0;
-						}
-					}				
 					
-					GO::session()->values['email_status']['uidnext'][$account->id]=$imap->selected_mailbox['uidnext'];
+					if(!isset($response['email_status']['has_new']) && $account->hasNewMessages)
+						$response['email_status']['has_new']=true;					
 				}
 				
 			} catch (Exception $e) {

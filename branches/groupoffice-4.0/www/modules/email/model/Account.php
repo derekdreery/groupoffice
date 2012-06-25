@@ -38,6 +38,8 @@
  * @property int $acl_id
  * @property int $user_id
  * @property int $id
+ * 
+ * @property boolean $hasNewMessages
  */
 class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 
@@ -184,8 +186,29 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		}
 		if(!$this->_imap->select_mailbox($mailbox))
 			throw new Exception ("Could not open IMAP mailbox $mailbox");
+		
+		$this->_setHasNewMessages();
 
 		return $this->_imap;
+	}
+	
+	private $_hasNewMessages=false;
+	
+	private function _setHasNewMessages(){
+		if($this->_imap->selected_mailbox['name']=='INBOX' && isset($this->_imap->selected_mailbox['uidnext'])){
+			if(isset(GO::session()->values['email_status']['uidnext'][$this->id]) && GO::session()->values['email_status']['uidnext'][$this->id]!=$this->_imap->selected_mailbox['uidnext']){
+				$this->_hasNewMessages=true;
+			}else
+			{
+				GO::session()->values['email_status']['uidnext'][$this->id]=0;
+			}
+
+			GO::session()->values['email_status']['uidnext'][$this->id]=$this->_imap->selected_mailbox['uidnext'];
+		}
+	}
+	
+	protected function getHasNewMessages(){
+		return $this->_hasNewMessages;
 	}
 
 
