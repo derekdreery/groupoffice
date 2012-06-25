@@ -53,7 +53,8 @@ class GO_Base_Session extends GO_Base_Observable{
 				session_name('groupoffice');
 				session_start();
 			}
-			GO::debug("Started session");
+			//GO::debug causes endless loop
+			//GO::debug("Started session");
 		}
 		
 		$this->values = &$_SESSION['GO_SESSION'];
@@ -238,6 +239,9 @@ class GO_Base_Session extends GO_Base_Observable{
 				$this->_log(GO_Log_Model_Log::ACTION_LOGIN);
 			
 			GO::session()->values['countLogin']=$countLogin;
+			
+			//for logging
+			GO::session()->values['username']=GO::user()->username;
 		
 			return $user;
 		}		
