@@ -249,7 +249,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @param String $tmpFile 
 	 */
-	protected function setPhoto($tmpFile){
+	public function setPhoto($tmpFile){
 
 		$destination = GO::config()->file_storage_path.'contacts/contact_photos/'.$this->id.'.jpg';
 		
