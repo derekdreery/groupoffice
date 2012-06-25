@@ -141,11 +141,11 @@ GO.email.TreeContextMenu = Ext.extend(Ext.menu.Menu,{
 							success:function(){
 								if(node.attributes.mailbox==this.mailbox)
 								{
-									this.messagesGrid.store.removeAll();
-									this.messagePanel.reset();
+									GO.mainLayout.getModulePanel("email").messagesGrid.store.removeAll();
+									GO.mainLayout.getModulePanel("email").messagePanel.reset();
 								}
 								GO.mainLayout.getModulePanel("email").updateFolderStatus(node.attributes.mailbox, 0);
-								GO.mainLayout.getModulePanel("email").updateNotificationEl();
+//								GO.mainLayout.getModulePanel("email").updateNotificationEl();
 							},
 							scope: this
 						});

@@ -65,7 +65,9 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		$response['email_status']['total_unseen']=0;
 		$response['email_status']['unseen']=array();
 		
-		GO::session()->closeWriting();
+		
+		
+		//GO::session()->closeWriting();
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()						
 						->ignoreAdminGroup();
@@ -74,13 +76,25 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 
 		while ($account = $stmt->fetch()) {
 			try {
-				if($account->getDefaultAlias()){
+				if($account->getDefaultAlias()){					
+					
 					$imap = $account->openImapConnection();
 
 					$unseen = $imap->get_unseen();
 
 					$response['email_status']['unseen'][]=array('account_id'=>$account->id,'mailbox'=>'INBOX', 'unseen'=>$unseen['count']);
 					$response['email_status']['total_unseen'] += $unseen['count'];
+					GO::debug("UID next: ".$imap->selected_mailbox['uidnext']);
+					if(!isset($response['email_status']['has_new'])){						
+						if(isset(GO::session()->values['email_status']['uidnext'][$account->id]) && GO::session()->values['email_status']['uidnext'][$account->id]!=$imap->selected_mailbox['uidnext']){
+							$response['email_status']['has_new']=true;
+						}else
+						{
+							GO::session()->values['email_status']['uidnext'][$account->id]=0;
+						}
+					}				
+					
+					GO::session()->values['email_status']['uidnext'][$account->id]=$imap->selected_mailbox['uidnext'];
 				}
 				
 			} catch (Exception $e) {
@@ -168,7 +182,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 							'account_id' => $account->id,
 							'mailbox' => '',							
 							'noinferiors' => false,
-							'inbox_new' => 0,
+							//'inbox_new' => 0,
 							'usage' => ""
 					);
 					try{
