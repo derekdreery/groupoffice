@@ -288,7 +288,7 @@ class GO_Base_Session extends GO_Base_Observable{
 	public function setCurrentUser($user_id) {
 		
 		if(GO::modules()->isInstalled("log"))
-			GO_Log_Model_Log::create ("setcurrentuser", "Script changed user without logging in");
+			GO_Log_Model_Log::create ("setcurrentuser", "Set user ID to $user_id");
 	
 		
 		//remember user id in session
