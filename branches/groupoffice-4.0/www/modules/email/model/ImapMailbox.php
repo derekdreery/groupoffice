@@ -77,7 +77,7 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		//GO::debug($this->_attributes['haschildren'])	;
 		
 		//oh oh, bad mailserver can't tell us if it has children. Let's find out the expensive way
-		$folders = $this->getAccount()->openImapConnection()->list_folders(true, false,"",$this->name.$this->delimiter.'%');
+		$folders = $this->getAccount()->openImapConnection()->list_folders(false, false,"",$this->name.$this->delimiter.'%');
 		//store values for caching
 		$this->_attributes['haschildren']= count($folders)>0;
 		$this->_attributes['hasnochildren']= count($folders)==0;

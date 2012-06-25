@@ -218,8 +218,8 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		foreach ($mailboxes as $mailbox) {
 			
 			//skip mailboxes with nonexistent flags if we're not listing subscribtions
-//			if(!$subscribtions && $mailbox->nonexistent)
-//				continue;
+			if(!$subscribtions && !$mailbox->subscribed && !$mailbox->haschildren)
+				continue;
 			
 			/* @var $mailbox GO_Email_Model_ImapMailbox */
 //			if (!$mailbox->subscribed)
@@ -245,17 +245,18 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					'account_id' => $mailbox->getAccount()->id,
 					'iconCls' => 'folder-default',
 					'id' => $nodeId,
-					'noselect' => false,//$mailbox->noselect,
-					'disabled' =>false,//$mailbox->noselect, //kerio sends noselect flags for valid folders
+					'noselect' => $mailbox->noselect,
+					'disabled' =>$subscribtions && $mailbox->noselect,
 					'noinferiors' => $mailbox->noinferiors,
 					'children' => !$mailbox->haschildren ? array() : null,
-					'expanded' => !$mailbox->haschildren
+					'expanded' => !$mailbox->haschildren,
+					'cls'=>$mailbox->noselect==1 ? 'em-tree-node-noselect' : null,
 							//'children'=>$children,
 							//'expanded' => !count($children),
 			);
 
 			if ($mailbox->haschildren && $this->_isExpanded($nodeId)) {
-				$node['children'] = $this->_getMailboxTreeNodes($mailbox->getChildren(!$subscribtions, !$subscribtions),$subscribtions);
+				$node['children'] = $this->_getMailboxTreeNodes($mailbox->getChildren(false, !$subscribtions),$subscribtions);
 				$node['expanded'] = true;
 			}
 			
