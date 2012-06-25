@@ -12,6 +12,8 @@ Koba
 
 LDAP Sync
 
+Sieve MVC en redesign vakantie. Automatisch vullen aliasen
+
 Calendar:
 Distinguish declined and cancel	led events in grid.
 alarm import
