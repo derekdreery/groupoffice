@@ -20,7 +20,6 @@
 /////////////////////////////////////////////////////////////////////////////////
 
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('formprocessor'));
 
-$lang['formprocessor']['name']='Générateur de formulaire';
-$lang['formprocessor']['description']='Peut être utilisé afin de créer des formulaires de contact, des newsletters...';
+$l['name']='Générateur de formulaire';
+$l['description']='Peut être utilisé afin de créer des formulaires de contact, des newsletters...';

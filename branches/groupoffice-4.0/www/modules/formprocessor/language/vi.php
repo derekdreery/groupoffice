@@ -12,6 +12,5 @@
  * @author Dat Pham <datpx@fab.vn> +84907382345
  */
  
-require($GO_LANGUAGE->get_fallback_language_file('formprocessor'));
-$lang['formprocessor']['name']='Xử lý form';
-$lang['formprocessor']['description']='Can be used to create contact forms, newsletter subscriptions and adding contacts from a website';
+$l['name']='Xử lý form';
+$l['description']='Can be used to create contact forms, newsletter subscriptions and adding contacts from a website';
