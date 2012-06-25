@@ -598,6 +598,10 @@ class GO{
 				//$lines = explode("\n", $text);
 
 				//$text = $prefix.$text;
+				
+				$user = isset(GO::session()->values['username']) ? GO::session()->values['username'] : 'notloggedin';
+				
+				$text = "[$user] ".str_replace("\n","\n[$user] ", $text);
 
 				file_put_contents(self::config()->file_storage_path . 'debug.log', $text . "\n", FILE_APPEND);
 			}
