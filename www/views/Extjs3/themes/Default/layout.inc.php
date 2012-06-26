@@ -16,7 +16,7 @@ if(isset($GLOBALS['GO_MODULES']->modules['customcss']) && file_exists($GLOBALS['
 <div id="loading-mask" style="width:100%;height:100%;background:#f1f1f1;position:absolute;z-index:20000;left:0;top:0;">&#160;</div>
 <div id="loading">
 	<div class="loading-indicator">
-	<img src="<?php echo $GLOBALS['GO_CONFIG']->host; ?>views/Extjs3/ext/resources/images/default/grid/loading.gif" style="width:16px;height:16px;vertical-align:middle" />&#160;<span id="load-status"><?php echo $lang['common']['loadingCore']; ?></span>
+	<img src="<?php echo $GLOBALS['GO_CONFIG']->host; ?>views/Extjs3/ext/resources/images/default/grid/loading.gif" style="width:16px;height:16px;vertical-align:middle" />&#160;<span id="load-status"><?php echo GO::t('loadingCore'); ?></span>
 	<div id="copyright" style="font-size:10px; font-weight:normal;margin-top:15px;">Copyright &copy; <?php
 	if($GLOBALS['GO_CONFIG']->product_name!='Group-Office'){
 		echo $GLOBALS['GO_CONFIG']->product_name;
@@ -43,7 +43,7 @@ if($GLOBALS['GO_SECURITY']->logged_in() && !isset($popup_groupoffice))
 	<div id="mainNorthPanel">
 <!--		<div id="beta">BETA</div>-->
 		<div id="headerLeft">
-			<?php echo $lang['common']['loggedInAs'].' '.htmlspecialchars(GO::user()->name); ?>
+			<?php echo GO::t('loggedInAs').' '.htmlspecialchars(GO::user()->name); ?>
 		</div>
 		<div id="headerRight">
 			
@@ -60,33 +60,29 @@ if($GLOBALS['GO_SECURITY']->logged_in() && !isset($popup_groupoffice))
 			
 			<span id="search_query"></span>
 			
-			<a id="start-menu-link" href="#"><?php echo $lang['common']['startMenu']; ?></a>
+			<a id="start-menu-link" href="#"><?php echo GO::t('startMenu'); ?></a>
 
 												<span class="top-menu-separator">|</span>
 			
 			<a href="#" id="configuration-link">
-				<?php echo $lang['common']['settings']; ?></a>
+				<?php echo GO::t('settings'); ?></a>
 
 												<span class="top-menu-separator">|</span>
                         
 			<a href="#" id="help-link">
-				<?php echo $lang['common']['help']; ?></a>
+				<?php echo GO::t('help'); ?></a>
 
 			<?php
 			if(!$GLOBALS['GO_SECURITY']->http_authenticated_session){?>
 			<span class="top-menu-separator">|</span>
 			<a href="javascript:GO.mainLayout.logout();">
-				<?php echo $lang['common']['logout']; ?></a>
+				<?php echo GO::t('logout'); ?></a>
             <?php } ?>
 		</div>
 	</div>
 	
-	<script type="text/javascript">Ext.get("load-status").update("<?php echo $lang['common']['loadingModules']; ?>");</script>	
+	<script type="text/javascript">Ext.get("load-status").update("<?php echo GO::t('loadingModules'); ?>");</script>	
 	<script type="text/javascript">
-	/*window.onbeforeunload=function(){
-		return "<?php echo addslashes($lang['common']['confirm_leave']); ?>";
-	};*/
-
 	Ext.onReady(GO.mainLayout.init, GO.mainLayout);
 	</script>
 <?php
@@ -103,7 +99,7 @@ if($GLOBALS['GO_SECURITY']->logged_in() && !isset($popup_groupoffice))
 	</div>
 
 	<div id="checker-icon"></div>
-	<script type="text/javascript">Ext.get("load-status").update("<?php echo $lang['common']['loadingLogin']; ?>");</script>
+	<script type="text/javascript">Ext.get("load-status").update("<?php echo GO::t('loadingLogin'); ?>");</script>
 	<script type="text/javascript">	
 	<?php
 	//set in /default_scripts.inc.php

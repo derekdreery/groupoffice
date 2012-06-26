@@ -15,7 +15,7 @@
 
 $settings['state_index'] = 'go';
 
-$settings['language']=GO::user() ? GO::user()->language : GO::config()->language;
+$settings['language']=GO::language()->getLanguage();
 
 $user_id = GO::user() ? GO::user()->id : 0;
 
