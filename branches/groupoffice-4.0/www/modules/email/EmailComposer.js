@@ -208,7 +208,7 @@ GO.email.EmailComposer = function(config) {
 			url : GO.url("search/email"),
 			fields : ['full_email','info']
 		}),
-		displayField : 'full_email',
+		displayField : 'info',
 		hideTrigger : true,
 		minChars : 2,
 		triggerAction : 'all',
@@ -226,7 +226,7 @@ GO.email.EmailComposer = function(config) {
 			url : GO.url("search/email"),
 			fields : ['full_email','info']
 		}),
-		displayField : 'full_email',
+		displayField : 'info',
 		hideTrigger : true,
 		minChars : 2,
 		triggerAction : 'all',
