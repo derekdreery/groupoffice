@@ -47,16 +47,18 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 */
 	protected function actionSubmit($params) {
 
-		$modelName = $this->model;
-		$pk = $this->getPrimaryKeyFromParams($params);
-		$model=false;
-		if ($pk)
-			$model = GO::getModel($modelName)->findByPk($pk);
+//		$modelName = $this->model;
+//		$pk = $this->getPrimaryKeyFromParams($params);
+//		$model=false;
+//		if ($pk)
+//			$model = GO::getModel($modelName)->findByPk($pk);
+//		
+//		if(!$model){
+//			$model = new $modelName;
+//			$model->user_id=GO::user()->id;
+//		}
 		
-		if(!$model){
-			$model = new $modelName;
-			$model->user_id=GO::user()->id;
-		}
+		$model = $this->getModelFromParams($params);
 
 		$ret = $this->beforeSubmit($response, $model, $params);
 		
@@ -147,13 +149,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
 		
 	}
-
-	/**
-	 * Action to load a single record.
-	 */
-	protected function actionLoad($params) {
+	
+	protected function getModelFromParams($params){
 		$modelName = $this->model;
-		//$modelName::model() does not work on php 5.2!
 		
 		$pk = $this->getPrimaryKeyFromParams($params);
 		if(!empty($pk)){
@@ -166,6 +164,18 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$model = new $modelName;
 			$model->setAttributes($params);
 		}
+		
+		return $model;
+	}
+
+	/**
+	 * Action to load a single record.
+	 */
+	protected function actionLoad($params) {
+		
+		//$modelName::model() does not work on php 5.2!
+		
+		$model = $this->getModelFromParams($params);
 		
 		$response = array();
 		
