@@ -697,10 +697,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
     $e->summary = (string) $this->name;
 		
 		switch($this->owner_status){
-			case GO_Calendar_Model_Event::STATUS_ACCEPTED:
+			case GO_Calendar_Model_Participant::STATUS_ACCEPTED:
 				$e->status = "CONFIRMED";
 				break;
-			case GO_Calendar_Model_Event::STATUS_DECLINED:
+			case GO_Calendar_Model_Participant::STATUS_DECLINED:
 				$e->status = "CANCELLED";
 				break;
 			default:
