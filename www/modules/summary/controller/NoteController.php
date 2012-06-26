@@ -12,22 +12,18 @@
 class GO_Summary_Controller_Note extends GO_Base_Controller_AbstractModelController{
 	
 	protected $model = 'GO_Summary_Model_Note';
+	
 
-	protected function beforeLoad(&$response, &$model, &$params) {
+	protected function getModelFromParams($params) {
 		$model = GO_Summary_Model_Note::model()->findByPk(GO::user()->id);
-		return false;
+		if(!$model){
+			$model = new GO_Summary_Model_Note();
+			$model->save();
+		}
+		
+		return $model;
 	}
 	
-	protected function beforeSubmit(&$response, &$model, &$params) {
-		$model = GO_Summary_Model_Note::model()->findByPk(GO::user()->id);
-		if (empty($model)) {
-			$model = new GO_Summary_Model_Note();
-			$model->setIsNew(true);
-		} else {
-			$model->setIsNew(false);
-		}
-		$model->user_id = $params['user_id'] = GO::user()->id;
-	}
 	
 }
 
