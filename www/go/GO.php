@@ -308,6 +308,10 @@ class GO{
 			require_once(dirname(dirname(__FILE__)) . '/'.self::$_classes[$className]);
 		}else
 		{
+			//For SabreDAV
+			if(strpos($className,'Sabre_')===0) {
+        include self::config()->root_path . 'go/vendor/SabreDAV/lib/Sabre/' . str_replace('_','/',substr($className,6)) . '.php';
+			}
 
 			if(substr($className,0,7)=='GO_Base'){
 				$arr = explode('_', $className);
