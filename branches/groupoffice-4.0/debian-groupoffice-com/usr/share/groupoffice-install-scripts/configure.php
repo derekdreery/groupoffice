@@ -19,7 +19,7 @@ $replacements['db_pass']=$dbpass;
 
 //sometimes the timezone file has multiple lines
 $tz = trim(file_get_contents('/etc/timezone'));
-$tzs = explode("\n",$z);
+$tzs = explode("\n",$tz);
 $replacements['timezone']=  array_pop($tzs);
 
 
