@@ -1,3 +1,25 @@
+2012/06/26 4.0.49
+After long series of beta testing it's finally complete! 
+
+It's important to know that the CMS module is no longer supported. We've also
+dropped the Wordpress, PHPBB and formprocessor module.
+
+The new features are:
+- Search through the contents of files
+- CardDAV support
+- File locking in the files module
+- Document workflow module
+- Users are stored in the addressbook too.
+- Ticket groups for better permission management.
+- Better file upload component
+- gnupg support dropped. smime still supported.
+- Project tasks have a relation now and have a percentage complete field
+- Photo support in sync.
+- Sync multiple calendars
+- Billing module can create MS word and open-office invoices, quotes and orders.
+- Billing module can handle purchase orders and stock.
+
+
 2012/04/11 4.0.1
 This is a beta release for the upcoming 4.0 version. It is not intended for 
 production use. Please just use it for testing and provide us feedback in the 
