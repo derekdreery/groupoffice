@@ -674,8 +674,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$e=new Sabre_VObject_Component('vevent');
 		$e->uid=$this->uuid;		
 		
-//		if(isset($this->sequence))
-//			$e->sequence=$this->sequence;
+		if(isset($this->sequence))
+			$e->sequence=$this->sequence;
 		
 		$dtstamp = new Sabre_VObject_Element_DateTime('dtstamp');
 		$dtstamp->setDateTime(new DateTime(), Sabre_VObject_Element_DateTime::UTC);		
@@ -696,7 +696,18 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
     $e->summary = (string) $this->name;
 		
-		$e->status = $this->status;
+		switch($this->owner_status){
+			case GO_Calendar_Model_Event::STATUS_ACCEPTED:
+				$e->status = "CONFIRMED";
+				break;
+			case GO_Calendar_Model_Event::STATUS_DECLINED:
+				$e->status = "CANCELLED";
+				break;
+			default:
+				$e->status = "TENTATIVE";
+				break;			
+		}
+		
 		
 		$dateType = $this->all_day_event ? Sabre_VObject_Element_DateTime::DATE : Sabre_VObject_Element_DateTime::LOCALTZ;
 		
