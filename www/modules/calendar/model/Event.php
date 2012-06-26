@@ -674,8 +674,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$e=new Sabre_VObject_Component('vevent');
 		$e->uid=$this->uuid;		
 		
-		if(isset($this->sequence))
-			$e->sequence=$this->sequence;
+//		if(isset($this->sequence))
+//			$e->sequence=$this->sequence;
 		
 		$dtstamp = new Sabre_VObject_Element_DateTime('dtstamp');
 		$dtstamp->setDateTime(new DateTime(), Sabre_VObject_Element_DateTime::UTC);		
