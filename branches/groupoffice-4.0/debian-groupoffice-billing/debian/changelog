@@ -1,5 +1,5 @@
-groupoffice-billing (4.0.48) fourzero; urgency=low
+groupoffice-billing (4.0.49) fourzero; urgency=low
 
   * Changes can be found in /usr/share/groupoffice/CHANGELOG.TXT
 
- -- Merijn Schering <mschering@intermesh.nl>  Mon, 25 Jun 2012 16:57:54 +0200
+ -- Merijn Schering <mschering@intermesh.nl>  Tue, 26 Jun 2012 15:45:35 +0200
