@@ -139,7 +139,7 @@ GO.email.TreeContextMenu = Ext.extend(Ext.menu.Menu,{
 								mailbox: node.attributes.mailbox
 							},
 							success:function(){
-								if(node.attributes.mailbox==this.mailbox)
+								if(node.attributes.mailbox==GO.mainLayout.getModulePanel("email").messagesGrid.store.baseParams.mailbox)
 								{
 									GO.mainLayout.getModulePanel("email").messagesGrid.store.removeAll();
 									GO.mainLayout.getModulePanel("email").messagePanel.reset();
