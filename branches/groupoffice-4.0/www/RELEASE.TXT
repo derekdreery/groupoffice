@@ -1,4 +1,4 @@
-2012/06/26 4.0.49
+2012/06/26 4.0.50
 After long series of beta testing it's finally complete! 
 
 It's important to know that the CMS module is no longer supported. We've also
