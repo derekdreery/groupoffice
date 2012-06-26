@@ -4,6 +4,12 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 	protected $model = 'GO_Files_Model_Folder';
 	
+	protected function allowGuests() {
+		if($this->isCli())
+			return array('syncfilesystem');
+		else
+			return parent::allowGuests();
+	}
 	
 	protected function actionSyncFilesystem($params){
 		
