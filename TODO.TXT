@@ -1,3 +1,7 @@
+Z-push 2.0
+
+Resource beheer altijd weergeven.
+
 Geafactureerd type ook als gesloten beschouwen
 
 GOTA moet weten of file gelocked of niet is.
