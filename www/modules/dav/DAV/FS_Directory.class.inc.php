@@ -19,14 +19,16 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 	protected $relpath;
 
 	public function __construct($path){
-		global $GO_CONFIG, $files, $GO_SECURITY;
+		global $GO_CONFIG, $GO_SECURITY;
 		
 		$path = rtrim($path, '/');
 
 		$this->relpath=$path;
 		$path = $GO_CONFIG->file_storage_path.$path;
 		
-		if($this->relpath != "users/".$GLOBALS['userpass'][0] && !$files->has_read_permission($GO_SECURITY->user_id, $this->getFolder())){
+		$this->files = new files();
+		
+		if($this->relpath != "users/".$GLOBALS['userpass'][0] && !$this->files->has_read_permission($GO_SECURITY->user_id, $this->getFolder())){
 			throw new Sabre_DAV_Exception_Forbidden();
 		}
 
@@ -37,7 +39,7 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 		global $files;
 		if(!isset($this->folder)){
 			
-			$this->folder=$files->resolve_path($this->relpath);
+			$this->folder=$this->files->resolve_path($this->relpath);
 
 			if(!$this->folder){
 				throw new Sabre_DAV_Exception_FileNotFound('File not found: '.$this->relpath);
@@ -58,12 +60,12 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 		
 		global $GO_SECURITY, $files;
 
-		if(!$files->has_write_permission($GO_SECURITY->user_id, $this->getFolder()))
+		if(!$this->files->has_write_permission($GO_SECURITY->user_id, $this->getFolder()))
 			throw new Sabre_DAV_Exception_Forbidden();
 
         $newPath = $this->path . '/' . $name;
         file_put_contents($newPath,$data);
-				$file_id = $files->import_file($newPath, $this->folder['id']);
+				$file_id = $this->files->import_file($newPath, $this->folder['id']);
     }
 
 	/**
@@ -75,12 +77,12 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
     public function setName($name) {
 		global $GO_SECURITY, $files;
 
-		if(!$files->has_write_permission($GO_SECURITY->user_id, $this->getFolder()))
+		if(!$this->files->has_write_permission($GO_SECURITY->user_id, $this->getFolder()))
 			throw new Sabre_DAV_Exception_Forbidden();
 
         parent::setName($name);
 
-		$this->relpath = $files->strip_server_path($this->path);
+		$this->relpath = $this->files->strip_server_path($this->path);
     }
 
 	public function getServerPath(){
@@ -102,20 +104,20 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 
 		global $GO_SECURITY, $files;
 
-		if(!$files->has_write_permission($GO_SECURITY->user_id, $this->getFolder()))
+		if(!$this->files->has_write_permission($GO_SECURITY->user_id, $this->getFolder()))
 			throw new Sabre_DAV_Exception_Forbidden();
 
 		rename($this->path, $newPath);
 
-		$destFolder = $files->resolve_path($files->strip_server_path(dirname($newPath)));
+		$destFolder = $this->files->resolve_path($this->files->strip_server_path(dirname($newPath)));
 
 		$sourceFolder = $this->getFolder();
 		$sourceFolder['name']=utf8_basename($newPath);
 
-		$files->move_folder($sourceFolder, $destFolder);
+		$this->files->move_folder($sourceFolder, $destFolder);
 
 		$this->path = $newPath;
-		$this->relpath = $files->strip_server_path($this->path);
+		$this->relpath = $this->files->strip_server_path($this->path);
     }
 
     /**
@@ -128,13 +130,13 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 
 		global $GO_SECURITY, $files;
 
-		if(!$files->has_write_permission($GO_SECURITY->user_id, $this->getFolder()))
+		if(!$this->files->has_write_permission($GO_SECURITY->user_id, $this->getFolder()))
 			throw new Sabre_DAV_Exception_Forbidden();
 
         //$newPath = $this->path . '/' . $name;
         //mkdir($newPath);
 
-		$files->mkdir($this->getFolder(), $name);
+		$this->files->mkdir($this->getFolder(), $name);
     }
 
     /**
@@ -208,15 +210,15 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 			go_debug('Could not get: '.$this->relpath);
 		}
 
-		$files->check_folder_sync($f, $this->relpath);
-		$files->get_folders($f['id'],'name','ASC',0,0,true);
+		$this->files->check_folder_sync($f, $this->relpath);
+		$this->files->get_folders($f['id'],'name','ASC',0,0,true);
 
-		while($folder = $files->next_record()) {
+		while($folder = $this->files->next_record()) {
 			$nodes[]=$this->getChild($folder['name']);
 		}
 
-		$files->get_files($f['id'], 'name', 'ASC', 0, 0);
-		while($file = $files->next_record()) {
+		$this->files->get_files($f['id'], 'name', 'ASC', 0, 0);
+		while($file = $this->files->next_record()) {
 			$nodes[]=$this->getChild($file['name']);
 		}
 
@@ -233,14 +235,14 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 
 		global $GO_SECURITY, $files;
 
-		if(!$files->has_write_permission($GO_SECURITY->user_id, $this->getFolder()))
+		if(!$this->files->has_write_permission($GO_SECURITY->user_id, $this->getFolder()))
 			throw new Sabre_DAV_Exception_Forbidden();
 
 
         //foreach($this->getChildren() as $child) $child->delete();
        // rmdir($this->path);
 
-		$files->delete_folder($this->getFolder());
+		$this->files->delete_folder($this->getFolder());
 
     }
 
