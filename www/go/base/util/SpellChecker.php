@@ -38,7 +38,10 @@ class GO_Base_Util_SpellChecker {
                     foreach ($mispeltwords as $word => $sugestions){
                         //not sure how to fix this in one go so will use another regex to add another space between repeat words
                         $tokens[$key] = preg_replace('/(\b(\w+)(\b\s)*\2\b)/','\2\3\3\2',$tokens[$key]);
-                        $tokens[$key] = preg_replace('/(^|[._,\'"-]|&lt;|\s)'.preg_quote($word).'(\s|[._,@\'"-]|&gt;|$)/i','\1'.self::_inlineSpellSystem($word,$sugestions,'\2').'\2',$tokens[$key]);
+                        $tokens[$key] = mb_ereg_replace(
+                            '(^|[._,\'"-]|&lt;|\s)'.preg_quote($word).'(\s|[._,@\'"-]|&gt;|$)','\1'.
+                            self::_inlineSpellSystem($word,$sugestions,'\2').'\2',$tokens[$key], "m"
+                        );
                     }
                 }
             }
@@ -81,7 +84,7 @@ class GO_Base_Util_SpellChecker {
         //Remove numbers
         $text = preg_replace('/[0-9.,]+/sm',' ',$text);
         //Replace any characters which should be splitters
-        $text = mb_ereg_replace("@".preg_quote('!"\'#$%&()*+,-.:;<=>?@[]^_{|}§©«®±¶·¸»¼½¾\\¿×÷¤/','/')."@", '', $text, "m");
+        $text = mb_ereg_replace("[".preg_quote('!"\'#$%&()*+,-.:;<=>?@[]^_{|}§©«®±¶·¸»¼½¾\\¿×÷¤/','/')."]", '', $text, "m");
         //Fix MultiSpace
         $text = preg_replace('/\s+/',' ',$text);
 
