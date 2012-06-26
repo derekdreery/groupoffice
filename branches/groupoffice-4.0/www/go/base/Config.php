@@ -299,14 +299,14 @@ class GO_Base_Config {
 	 */
 	var $host = '/groupoffice/';
 
-	/**
-	 * Useful to force https://your.host:433 or something like that
-	 *
-	 * @var bool
-	 * @access  public
-	 */
-
-	var $force_login_url = false;
+//	/**
+//	 * Useful to force https://your.host:433 or something like that
+//	 *
+//	 * @var bool
+//	 * @access  public
+//	 */
+//
+//	var $force_login_url = false;
 
 	/**
 	 * Full URL to reach Group-Office with slash on end. This value is determined
