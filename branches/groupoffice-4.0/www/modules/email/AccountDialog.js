@@ -475,6 +475,7 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 			this.propertiesPanel.form.reset();
 			this.setAccountId(0);
 			this.foldersTab.setDisabled(true);
+			this.permissionsTab.setAcl(0);
 
 			// default values
 
