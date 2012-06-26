@@ -41,6 +41,18 @@ class GO_Base_Db_FindParams{
 	}
 	
 	/**
+	 * Set the Distinct select option
+	 * 
+	 * @param boolean $useDistinct
+	 * @return \GO_Base_Db_FindParams 
+	 */
+	public function distinct($useDistinct = true){
+		$this->_params['distinct'] = $useDistinct;
+		return $this;
+	}
+	
+	
+	/**
 	 * Create a new instance of GO_Base_Db_FindParams
 	 * 
 	 * @return GO_Base_Db_FindParams 
