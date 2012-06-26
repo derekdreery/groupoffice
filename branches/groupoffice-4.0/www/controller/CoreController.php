@@ -455,10 +455,12 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 			//$router = new GO_Base_Router();
 
 			$requests = json_decode($params['requests'], true);
-			foreach($requests as $responseIndex=>$requestParams){
-				ob_start();				
-				GO::router()->runController($requestParams);
-				echo "\n".'"'.$responseIndex.'" : '.ob_get_clean().",\n";
+			if(is_array($requests)){
+				foreach($requests as $responseIndex=>$requestParams){
+					ob_start();				
+					GO::router()->runController($requestParams);
+					echo "\n".'"'.$responseIndex.'" : '.ob_get_clean().",\n";
+				}
 			}
 			echo "success:true\n}\n";	
 	}
