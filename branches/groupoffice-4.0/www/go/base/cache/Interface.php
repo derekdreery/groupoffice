@@ -21,7 +21,7 @@
 
 interface GO_Base_Cache_Interface{
 	
-	public function set($key, $value);
+	public function set($key, $value, $ttl=0);
 	public function get($key);
 	public function delete($key);
 	public function flush();
