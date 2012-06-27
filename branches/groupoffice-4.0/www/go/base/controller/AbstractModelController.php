@@ -681,10 +681,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	}
 	
 	private function _processTasksDisplay($model,$response){
-		$startOfDay = GO_Base_Util_Date::clear_time(time());
+		//$startOfDay = GO_Base_Util_Date::clear_time(time());
 
 		$findParams = GO_Base_Db_FindParams::newInstance()->order('due_time','DESC');
-		$findParams->getCriteria()->addCondition('start_time', $startOfDay, '<=')->addCondition('status', GO_Tasks_Model_Task::STATUS_COMPLETED, '!=');						
+		//$findParams->getCriteria()->addCondition('start_time', $startOfDay, '<=')->addCondition('status', GO_Tasks_Model_Task::STATUS_COMPLETED, '!=');						
 
 		$stmt = GO_Tasks_Model_Task::model()->findLinks($model, $findParams);		
 
