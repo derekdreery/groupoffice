@@ -160,7 +160,7 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		return $this->name.$this->delimiter==$this->getAccount()->mbroot;
 	}
 
-	public function getChildren($subscribed=true, $withStatus=true) {
+	public function getChildren($subscribed=false, $withStatus=true) {
 		if(!isset($this->_children)){
 
 			$imap = $this->getAccount()->openImapConnection();
