@@ -30,6 +30,8 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 
 	public function __construct(GO_Email_Model_Account $account, $attributes) {
 		$this->_account = $account;
+		
+		GO::debug("GO_Email_Model_ImapMailbox:".$attributes['name']);
 
 		$this->_attributes = $attributes;
 		
@@ -167,7 +169,7 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 			
 			if(!$this->isRootMailbox())
 			{
-				$folders = $imap->list_folders($subscribed,$withStatus,$this->name.$this->delimiter,"%");
+				$folders = $imap->list_folders($subscribed,$withStatus,"","$this->name$this->delimiter%");
 				foreach($folders as $folder){
 					$mailbox = new GO_Email_Model_ImapMailbox($this->account,$folder);
 					$this->_children[]=$mailbox;
