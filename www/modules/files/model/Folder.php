@@ -220,7 +220,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			//sync parent timestamp
 			if($this->parent){
 				$this->parent->mtime=$this->parent->fsFolder->mtime();
-				$this->parent->save();
+				$this->parent->save(true);
                                 
 				$this->notifyUsers(
 					$this->parent->id,
@@ -491,6 +491,8 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		if(GO::config()->debug)
 			GO::debug("syncFilesystem ".$this->path);
 		
+		$oldIgnoreAcl = GO::setIgnoreAclPermissions(true);
+		
 		$oldCache = GO::$disableModelCache;
 		
 		GO::$disableModelCache=true;
@@ -552,6 +554,8 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		$this->save();
 		
 		GO::$disableModelCache=$oldCache;
+		
+		GO::setIgnoreAclPermissions($oldIgnoreAcl);
 	}
 	
 	/**

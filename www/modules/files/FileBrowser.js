@@ -762,7 +762,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 		this.path = store.reader.jsonData.path;
 
-		this.setWritePermission(store.reader.jsonData.permission_level>=GO.permissionLevels.write);
+		this.setWritePermission(store.reader.jsonData.permission_level);
 		
 		this.thumbsToggle.toggle(store.reader.jsonData.thumbs=='1');
 		
@@ -1559,12 +1559,16 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		}
 	},
 	
-	setWritePermission : function(writePermission)
+	setWritePermission : function(permissionLevel)
 	{
-		this.newButton.setDisabled(!writePermission);
-		this.deleteButton.setDisabled(!writePermission);
-		this.uploadButton.setDisabled(!writePermission);
-		this.cutButton.setDisabled(!writePermission);
+		var writePermission=permissionLevel>=GO.permissionLevels.write;
+		var deletePermission=permissionLevel>=GO.permissionLevels.writeAndDelete;
+		var createPermission=permissionLevel>=GO.permissionLevels.create;
+		
+		this.newButton.setDisabled(!createPermission);
+		this.deleteButton.setDisabled(!deletePermission);
+		this.uploadButton.setDisabled(!createPermission);
+		this.cutButton.setDisabled(!deletePermission);
 		this.pasteButton.setDisabled(!writePermission || !this.pasteSelections.length);
 					
 	//this.filesContextMenu.deleteButton.setDisabled(!writePermission);
