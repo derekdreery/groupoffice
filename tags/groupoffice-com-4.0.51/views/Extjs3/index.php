@@ -1,0 +1,90 @@
+<?php
+/** 
+ * Copyright Intermesh
+ * 
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ * 
+ * If you have questions write an e-mail to info@intermesh.nl
+ * 
+ * @copyright Copyright Intermesh
+ * @version $Id$
+ * @author Merijn Schering <mschering@intermesh.nl>
+ */
+
+header('Content-Type: text/html; charset=UTF-8');
+require_once("Group-Office.php");
+
+global $GO_CONFIG, $GO_INCLUDES, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $GO_EVENTS, $GO_THEME, $lang;
+
+
+
+//$config_file = $GLOBALS['GO_CONFIG']->get_config_file();
+if(empty($GLOBALS['GO_CONFIG']->db_user))
+{
+	header('Location: install/');
+	exit();
+}
+
+////Redirect to correct login url if a force_login_url is set. Useful to force ssl
+//if($GLOBALS['GO_CONFIG']->force_login_url && strpos($GLOBALS['GO_CONFIG']->full_url,$GLOBALS['GO_CONFIG']->force_login_url)===false) {
+//	unset($_SESSION['GO_SESSION']['full_url']);
+//	header('Location: '.$GLOBALS['GO_CONFIG']->force_login_url);
+//	exit();
+//}
+//
+//$mtime = $GLOBALS['GO_CONFIG']->get_setting('upgrade_mtime');
+//
+//if($mtime!=$GLOBALS['GO_CONFIG']->mtime)
+//{
+//	header('Location: '.$GO_CONFIG->host.'router.php?r=core/upgrade');
+////	if($GLOBALS['GO_SECURITY']->logged_in())
+////		$GLOBALS['GO_SECURITY']->logout();
+////	
+////	echo '<html><head><style>body{font-family:arial;}</style></head><body>';
+////	echo '<h1>'.$lang['common']['running_sys_upgrade'].'</h1><p>'.$lang['common']['sys_upgrade_text'].'</p>';
+////	require($GLOBALS['GO_CONFIG']->root_path.'install/upgrade.php');
+////	echo '<a href="#" onclick="document.location.reload();">'.$lang['common']['click_here_to_contine'].'</a>';
+////	echo '</body></html>';
+//	exit();
+//}
+
+//temporary hack. In the future this controller will replace this index.php script.
+//Now we need it to fire events.
+//$newController = new GO_Core_Controller_Core();
+//$newController->run();
+
+
+
+//will do autologin here before theme is loaded.
+try{
+$GLOBALS['GO_SECURITY']->logged_in();
+}
+catch(Exception $e){
+
+}
+
+
+if(isset($_REQUEST['task']) && $_REQUEST['task']=='logout')
+{
+	$GLOBALS['GO_SECURITY']->logout();	
+	if(isset($_COOKIE['GO_FULLSCREEN']) && $_COOKIE['GO_FULLSCREEN']=='1')
+	{
+		?>
+		<script type="text/javascript">
+		window.close();
+		</script>
+		<?php
+		exit();
+	}else
+	{
+		header('Location: '.$GLOBALS['GO_CONFIG']->host);
+		exit();
+	}
+}
+
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/theme.class.inc.php');
+$GO_THEME = new GO_THEME();
+
+
+require_once($GLOBALS['GO_THEME']->theme_path."layout.inc.php");
