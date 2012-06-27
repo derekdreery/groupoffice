@@ -53,7 +53,7 @@ GO.base.upload.PluploadPanel = function(config){
 		//			}
 		//			],
 
-		runtime_visible: false, // show current runtime in statusbar
+		runtime_visible: true, // show current runtime in statusbar
 
 		// icon classes for toolbar buttons
 		addButtonCls: 'btn-add',
