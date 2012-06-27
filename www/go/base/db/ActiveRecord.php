@@ -1398,7 +1398,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		//throw new Exception('Error: you supplied a searchQuery parameter to find but getFindSearchQueryParamFields() should be overriden in '.$this->className());
 		$fields = array();
 		foreach($this->columns as $field=>$attributes){
-			if(isset($attributes['gotype']) && ($attributes['gotype']=='textfield' || $attributes['gotype']=='textarea' || $attributes['gotype']=='customfield'))
+			if(isset($attributes['gotype']) && ($attributes['gotype']=='textfield' || $attributes['gotype']=='textarea' || ($attributes['gotype']=='customfield' && $attributes['customfield']->customfieldtype->includeInSearches())))
 				$fields[]='`'.$prefixTable.'`.`'.$field.'`';
 		}
 		
