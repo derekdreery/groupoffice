@@ -1,3 +1,5 @@
+Password promt on imap logon failure
+
 Z-push 2.0
 
 Resource beheer altijd weergeven.
