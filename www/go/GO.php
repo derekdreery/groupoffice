@@ -83,6 +83,7 @@ class GO{
 		'GO_Base_Model_User' => 'go/base/model/User.php',
 		'GO_Base_Cache_Interface' => 'go/base/cache/Interface.php',
 		'GO_Base_Cache_Disk' => 'go/base/cache/Disk.php',
+		'GO_Base_Cache_Apc' => 'go/base/cache/Apc.php',
 		'GO_Base_Db_ActiveStatement' => 'go/base/db/ActiveStatement.php',
 		'GO_Base_Util_String' => 'go/base/util/String.php',
 		'GO_Base_Model_ModelCache' => 'go/base/model/ModelCache.php',
@@ -261,7 +262,10 @@ class GO{
 	public static function cache(){
 
 		if (!isset(self::$_cache)) {
-			self::$_cache=new GO_Base_Cache_Disk();
+			if(function_exists("apc_store"))
+				self::$_cache=new GO_Base_Cache_Apc();
+			else
+				self::$_cache=new GO_Base_Cache_Disk();
 		}
 		return self::$_cache;
 	}

@@ -175,7 +175,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		if(empty($mailbox))
 			$mailbox="INBOX";
 		
-		if(!isset($this->_imap)){
+		if(!is_resource($this->_imap)){
 			$this->_imap = new GO_Base_Mail_Imap();
 
 			try{
