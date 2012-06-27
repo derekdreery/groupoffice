@@ -211,11 +211,11 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			$command = "CAPABILITY\r\n";
 			$this->send_command($command);
 			$response = $this->get_response();
-			$this->capability = GO::session()->values['GO_IMAP'][$this->server]['imap_capability'] = implode(' ', $response);
+			$this->capability = GO::session()->values['GO_IMAP'][$this->server]['imap_capability'] = implode(' ', $response);			
 		}
-
-		//GO::debug('IMAP capability: '.$this->capability);
-
+		
+//		GO::debug('IMAP capability: '.$this->capability);
+		
 		return $this->capability;
 	}
 	
@@ -298,7 +298,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	private $_subscribedFoldersCache;
 	
 	private function _isSubscribed($mailboxName, $flags){
-		if($this->has_capability("LIST-EXTENDED")){
+		if($mailboxName=="INBOX"){
+			return true;
+		}elseif($this->has_capability("LIST-EXTENDED")){
 			return stristr($flags, 'subscribed');
 		}else
 		{
@@ -345,13 +347,13 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			$cmd .= ')';
 		}
 		
-//		GO::debug($cmd);
+		GO::debug($cmd);
 		
 		$cmd .= "\r\n";
 		
 		$this->send_command($cmd);
 		$result = $this->get_response(false, true);
-//		GO::debug($result);
+		GO::debug($result);
 
 		$folders = array();
 		foreach ($result as $vals) {
@@ -440,9 +442,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 									'noinferiors' => $can_have_kids,
 									'haschildren' => $has_kids,
 									'hasnochildren' => $has_no_kids,
-									'subscribed'=>$subscribed,
-									'unseen'=>0,
-									'messages'=>0
+									'subscribed'=>$subscribed
 					);
 				}
 			}else
@@ -468,50 +468,52 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			}
 		}
 		
-		if($namespace=="" && $pattern=="%" && $listSubscribed && !isset($folders['INBOX'])){
-			//inbox is not subscribed. Let's fix that/
-			if(!$this->subscribe('INBOX'))
-				throw new Exception("Could not subscribe to INBOX folder!");
-			return $this->list_folders($listSubscribed, $withStatus, $namespace, $pattern);
-		}
+//		if($namespace=="" && $pattern=="%" && $listSubscribed && !isset($folders['INBOX'])){
+//			//inbox is not subscribed. Let's fix that/
+//			if(!$this->subscribe('INBOX'))
+//				throw new Exception("Could not subscribe to INBOX folder!");
+//			return $this->list_folders($listSubscribed, $withStatus, $namespace, $pattern);
+//		}
 
-		if(!$listStatus && $withStatus){
+		if($withStatus){
 			//no support for list status. Get the status for each folder
 			//with seperate status calls
 			foreach($folders as $name=>$folder){
-				$status = $this->get_status($name);
-				$folders[$name]['messages']=$status['messages'];
-				$folders[$name]['unseen']=$status['unseen'];
+				if(!isset($folders[$name]['unseen'])){
+					$status = $this->get_status($name);				
+					$folders[$name]['messages']=$status['messages'];
+					$folders[$name]['unseen']=$status['unseen'];
+				}
 			}
 		}
 		
 
 		//sometimes shared folders like "Other user.shared" are in the folder list
 		//but there's no "Other user" parent folder. We create a dummy folder here.
-		if(empty($namespace)){
-			foreach($folders as $name=>$folder){
-
-				$pos = strrpos($name, $delim);
-
-				if($pos){
-					$parent = substr($name,0,$pos);
-					if(!isset($folders[$parent]))
-					{
-						$folders[$parent]=array(
-									'delimiter' => $delim,
-									'name' => $parent,
-									'marked' => true,
-									'noselect' => $parent!='INBOX',
-									'noinferiors' => false,
-									'haschildren' => true,
-									'hasnochildren' => false,
-									'subscribed'=>true,
-									'unseen'=>0,
-									'messsages'=>0);
-					}
-				}
-			}
-		}
+//		if(empty($namespace)){
+//			foreach($folders as $name=>$folder){
+//
+//				$pos = strrpos($name, $delim);
+//
+//				if($pos){
+//					$parent = substr($name,0,$pos);
+//					if(!isset($folders[$parent]))
+//					{
+//						$folders[$parent]=array(
+//									'delimiter' => $delim,
+//									'name' => $parent,
+//									'marked' => true,
+//									'noselect' => $parent!='INBOX',
+//									'noinferiors' => false,
+//									'haschildren' => true,
+//									'hasnochildren' => false,
+//									'subscribed'=>true,
+//									'unseen'=>0,
+//									'messsages'=>0);
+//					}
+//				}
+//			}
+//		}
 
 //		GO::debug($folders);
 
