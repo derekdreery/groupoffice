@@ -1,8 +1,20 @@
 GO.email.TreeContextMenu = Ext.extend(Ext.menu.Menu,{
 	
+	hasAcl : function(node){
+		var p = node.parentNode;
+		while(p){
+				if(p.attributes.acl_supported){
+						return true;
+				}
+				p = p.parentNode;
+		}
+		return false;
+	},
+	
 	setNode : function(node){
 		this.addFolderButton.setDisabled(node.attributes.noinferiors);
-		this.shareBtn.setVisible(node.attributes.aclSupported);
+		
+		this.shareBtn.setVisible(this.hasAcl(node));
 
 	//		if (GO.settings.modules.email.write_permission) {
 	//			var node_id_type = node.attributes.id.substring(0,6);
