@@ -2071,14 +2071,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	/**
 	 * Saves the model to the database
 	 * 
+	 * @var boolean $ignoreAcl
 	 * @return boolean 
 	 */
 	
-	public function save(){
+	public function save($ignoreAcl=false){
 			
 		//GO::debug('save'.$this->className());
 			
-		if(!$this->checkPermissionLevel($this->isNew?GO_Base_Model_Acl::CREATE_PERMISSION:GO_Base_Model_Acl::WRITE_PERMISSION)){
+		if(!$ignoreAcl && !$this->checkPermissionLevel($this->isNew?GO_Base_Model_Acl::CREATE_PERMISSION:GO_Base_Model_Acl::WRITE_PERMISSION)){
 			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : '';
 			throw new GO_Base_Exception_AccessDenied($msg);
 		}
