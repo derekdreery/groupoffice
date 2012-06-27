@@ -238,6 +238,11 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		if(!GO_Base_Db_Utils::tableExists('go_model_types')){
 			
+			$upgrade_mtime = GO::config()->get_setting('upgrade_mtime');
+			
+			if($upgrade_mtime < 20111222)
+				exit("Old version detected but it's older then Group-Office 3.7.41. You must upgrade to the latest 3.7 version first.");
+			
 			echo "Older version of Group-Office detected. Preparing database for 4.0 upgrade\n";
 		
 			$queries[]="TRUNCATE TABLE `go_state`";
