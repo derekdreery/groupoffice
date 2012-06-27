@@ -19,8 +19,6 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 	var $delimiter=false;
 
-	var $errors=array();
-
 	var $sort_count = false;
 	
 	public function __construct(){
@@ -30,20 +28,6 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	public function __destruct() {
 		$this->disconnect();
 	}
-
-	public function last_error(){
-		$count=count($this->errors);
-		//GO::debug($this->errors);
-		if($count)
-			return $this->errors[$count-1];
-		else
-			return false;
-	}
-
-	public function clear_errors(){
-		//$this->errors=array();
-	}
-
 
 	/**
 	 * Connects to the IMAP server and authenticates the user
@@ -205,16 +189,19 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 */
 
 	public function get_capability() {
-		if (isset(GO::session()->values['GO_IMAP'][$this->server]['imap_capability'])) {
-			$this->capability=GO::session()->values['GO_IMAP'][$this->server]['imap_capability'];
-		}else {
-			$command = "CAPABILITY\r\n";
-			$this->send_command($command);
-			$response = $this->get_response();
-			$this->capability = GO::session()->values['GO_IMAP'][$this->server]['imap_capability'] = implode(' ', $response);			
-		}
+//		if (isset(GO::session()->values['GO_IMAP'][$this->server]['imap_capability'])) {
+//			$this->capability=GO::session()->values['GO_IMAP'][$this->server]['imap_capability'];
+//		}else {
+			if(!isset($this->capability)){
+				$command = "CAPABILITY\r\n";
+				$this->send_command($command);
+				$response = $this->get_response();
+				$this->capability = implode(' ', $response);
+			}
+//			$this->capability = GO::session()->values['GO_IMAP'][$this->server]['imap_capability'] = implode(' ', $response);			
+//		}
 		
-//		GO::debug('IMAP capability: '.$this->capability);
+		GO::debug('IMAP capability: '.$this->capability);
 		
 		return $this->capability;
 	}
@@ -253,9 +240,11 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$this->clean($mailbox, 'mailbox');
 
 		$command = "SETACL $mailbox $identifier $permissions\r\n";
+		//throw new Exception($command);
 		$this->send_command($command);
 
 		$response = $this->get_response();
+		
 		return $this->check_response($response);
 	}
 
@@ -480,9 +469,15 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			//with seperate status calls
 			foreach($folders as $name=>$folder){
 				if(!isset($folders[$name]['unseen'])){
-					$status = $this->get_status($name);				
-					$folders[$name]['messages']=$status['messages'];
-					$folders[$name]['unseen']=$status['unseen'];
+					if($folders[$name]['nonexistent'] || $folders[$name]['noeselect']){
+						$folders[$name]['messages']=0;
+						$folders[$name]['unseen']=0;
+					}else
+					{
+						$status = $this->get_status($name);				
+						$folders[$name]['messages']=$status['messages'];
+						$folders[$name]['unseen']=$status['unseen'];
+					}
 				}
 			}
 		}

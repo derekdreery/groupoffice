@@ -162,6 +162,8 @@ class GO_Email_Controller_Folder extends GO_Base_Controller_AbstractController {
 
 		$response['success'] = $imap->set_acl($params['mailbox'], $params['identifier'], $perms);
 		
+		if(!$response['success'])
+			$response['feedback']=$imap->last_error();
 		return $response;
 	}
 }

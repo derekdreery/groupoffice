@@ -18,11 +18,29 @@ abstract class GO_Base_Mail_ImapBase {
 					'ALL'
 	);
 	
+	
+	var $errors=array();
+	
 	/*
 	 * If we don't no the encoding of a filename header. Use the last charset found
 	 * in a part. mb_detect_encoding doesn't work reliable.
 	 */
 	var $default_charset='';
+	
+	
+	public function last_error(){
+		$count=count($this->errors);
+		//GO::debug($this->errors);
+		if($count)
+			return $this->errors[$count-1];
+		else
+			return false;
+	}
+
+	public function clear_errors(){
+		$this->errors=array();
+	}
+
 
 
 	function input_validate($val, $type) {
@@ -316,7 +334,10 @@ abstract class GO_Base_Mail_ImapBase {
 			if (preg_match("/^A".$this->command_count." OK/i", $line)) {
 				$result = true;
 			}
-		}
+			if(!$result)
+				$this->errors[]=$line;
+		}	
+		
 		return $result;
 	}
 
