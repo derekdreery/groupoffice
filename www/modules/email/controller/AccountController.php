@@ -175,12 +175,15 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 							'mailbox' => '',							
 							'noinferiors' => false,
 							//'inbox_new' => 0,
-							'usage' => ""
+							'usage' => "",
+							"acl_supported"=>false
 					);
 					try{
 						$node['usage']=$this->_getUsage($account);
 						if($node['expanded'])
 							$node['children']=$this->_getMailboxTreeNodes($account->getRootMailboxes(true));
+						
+						$node['acl_supported']=$account->openImapConnection()->has_capability('ACL');
 						
 					}catch(Exception $e){
 						$node['text'] .= ' ('.GO::t('error').')';
@@ -250,7 +253,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					'noinferiors' => $mailbox->noinferiors,
 					'children' => !$mailbox->haschildren ? array() : null,
 					'expanded' => !$mailbox->haschildren,
-					'cls'=>$mailbox->noselect==1 ? 'em-tree-node-noselect' : null,
+					'cls'=>$mailbox->noselect==1 ? 'em-tree-node-noselect' : null
 							//'children'=>$children,
 							//'expanded' => !count($children),
 			);
@@ -349,6 +352,18 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		}
 		
 		return array("success"=>true);
+	}
+	
+	
+	protected function actionUsernames($params){
+		
+		$store = GO_Base_Data_Store::newInstance(GO_Email_Model_Account::model());
+		
+		$findParams= $store->getDefaultParams($params)->group('username');
+		$stmt = GO_Email_Model_Account::model()->find($findParams);
+		$store->setStatement($stmt);
+		
+		return $store->getData();
 	}
 
 }

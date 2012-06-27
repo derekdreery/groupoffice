@@ -98,4 +98,70 @@ class GO_Email_Controller_Folder extends GO_Base_Controller_AbstractController {
 		
 		return $response;		
 	}
+	
+	
+	protected function actionAclStore($params) {
+		
+		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+		$imap = $account->openImapConnection($params['mailbox']);
+		
+		if (isset($params['delete_keys'])) {
+			try {
+				$response['deleteSuccess'] = true;
+				$delete_ids = json_decode($params['delete_keys']);
+				foreach ($delete_ids as $id) {
+					$imap->delete_acl($params['mailbox'], $id);
+				}
+			} catch (Exception $e) {
+				$response['deleteSuccess'] = false;
+				$response['deleteFeedback'] = $e->getMessage();
+			}
+		}
+
+		$response['success']=true;
+		$response['results'] = $imap->get_acl($params['mailbox']);
+
+		foreach ($response['results'] as &$record) {
+			$record['read'] = strpos($record['permissions'], 'r') !== false;
+			$record['write'] = strpos($record['permissions'], 'w') !== false;
+			$record['delete'] = strpos($record['permissions'], 't') !== false;
+			$record['createmailbox'] = strpos($record['permissions'], 'k') !== false;
+			$record['deletemailbox'] = strpos($record['permissions'], 'x') !== false;
+			$record['admin'] = strpos($record['permissions'], 'a') !== false;
+		}
+		
+		return $response;
+	}
+	
+	protected function actionSetAcl($params) {
+		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+		$imap = $account->openImapConnection($params['mailbox']);
+
+		$perms = '';
+
+		//lrwstipekxacd
+
+		if (isset($params['read'])) 
+			$perms .='lrs';		
+
+		if (isset($params['write'])) 
+			$perms .='wip';		
+
+		if (isset($params['delete'])) 
+			$perms .='te';		
+
+		if (isset($params['createmailbox'])) 
+			$perms .='k';
+		
+		if (isset($params['deletemailbox'])) 
+			$perms .='x';
+		
+		if (isset($params['admin'])) 
+			$perms .='a';
+		
+
+		$response['success'] = $imap->set_acl($params['mailbox'], $params['identifier'], $perms);
+		
+		return $response;
+	}
 }
