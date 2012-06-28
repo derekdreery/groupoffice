@@ -549,8 +549,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		if(!empty($params['uid'])){
 			$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 			$message = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
-			$message->createTempFilesForInlineAttachments = true;
-			$message->createTempFilesForAttachments = true;
+			$message->createTempFilesForAttachments();
 			$response['sendParams']['draft_uid'] = $message->uid;
 		}else
 		{
@@ -600,7 +599,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		if ($html) {
 			//saved messages always create temp files
 			if($message instanceof GO_Email_Model_ImapMessage)
-				$message->createTempFilesForInlineAttachments = true;
+				$message->createTempFilesForAttachments(true);
 
 			$oldMessage = $message->toOutputArray(true);
 
@@ -737,8 +736,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		if($message instanceof GO_Email_Model_ImapMessage){
 			//saved messages always create temp files
-			$message->createTempFilesForInlineAttachments = true;
-			$message->createTempFilesForAttachments = true;
+			$message->createTempFilesForAttachments();
 		}
 
 		$oldMessage = $message->toOutputArray($html);
@@ -848,23 +846,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$atts = $imapMessage->getAttachments();
 
 		foreach ($atts as $a) {
-//		$a['url'] = '';
-//		$a['name'] = $filename;
-//		$a['number'] = $part_number_prefix . $part_number;
-//		$a['content_id'] = $content_id;
-//		$a['mime'] = $mime_type;
-//		$a['tmp_file'] = false;
-//		$a['index'] = count($this->attachments);
-//		$a['size'] = isset($part->body) ? strlen($part->body) : 0;
-//		$a['human_size'] = GO_Base_Util_Number::formatSize($a['size']);
-//		$a['extension'] = $f->extension();
-//		$a['encoding'] = isset($part->headers['content-transfer-encoding']) ? $part->headers['content-transfer-encoding'] : '';
-//		$a['disposition'] = isset($part->disposition);
-
-			if ($a['mime'] == 'text/calendar' || $a['extension'] == 'ics') {
+			if ($a->mime == 'text/calendar' || $a->getExtension() == 'ics') {
 				$imap = $imapMessage->getImapConnection();
 
-				$data = $imap->get_message_part_decoded($imapMessage->uid, $a['number'], $a['encoding']);
+				$data = $imap->get_message_part_decoded($imapMessage->uid, $a->number, $a->encoding);
 				try{
 					$vcalendar = GO_Base_VObject_Reader::read($data);
 					$vevent = $vcalendar->vevent[0];
