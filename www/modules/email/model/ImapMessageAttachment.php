@@ -1,6 +1,27 @@
 <?php
+/**
+ * Copyright Intermesh
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @version $Id: GO_Email_Model_LinkedEmail.php 7607 2011-09-01 15:38:01Z <<USERNAME>> $
+ * @copyright Copyright Intermesh
+ * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
+ */
+
+/**
+ * IMAP message attachment model
+ */
+
 class GO_Email_Model_ImapMessageAttachment extends GO_Email_Model_MessageAttachment{
 
+	/**
+	 *
+	 * @var GO_Email_Model_Account 
+	 */
 	public $account;
 	public $mailbox;
 	public $uid;
