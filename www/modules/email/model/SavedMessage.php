@@ -118,17 +118,17 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 	}
 	
 	
-	protected function getAttachmentUrl($attachment) {
-		
-		$file = new GO_Base_Fs_File($attachment['name']);
-		
-		if($file->extension()=='dat'){			
-			return GO::url('email/message/tnefAttachmentFromTempFile', array('tmp_file'=>$attachment['tmp_file']));
-		}else
-		{		
-			return GO::url('core/downloadTempFile', array('path'=>$attachment['tmp_file']));
-		}
-	}
+//	protected function getAttachmentUrl($attachment) {
+//		
+//		$file = new GO_Base_Fs_File($attachment['name']);
+//		
+//		if($file->extension()=='dat'){			
+//			return GO::url('email/message/tnefAttachmentFromTempFile', array('tmp_file'=>$attachment['tmp_file']));
+//		}else
+//		{		
+//			return GO::url('core/downloadTempFile', array('path'=>$attachment['tmp_file']));
+//		}
+//	}
 
 	private function _getParts($structure, $part_number_prefix='') {
 		if (isset($structure->parts)) {
@@ -181,33 +181,30 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 						$content_id='';						
 					}
 					
+					
+					$f = new GO_Base_Fs_File($filename);
+					
+					$a = new GO_Email_Model_MessageAttachment();										
+					$a->name=$filename;
+					$a->number=$part_number_prefix.$part_number;
+					$a->content_id=$content_id;
+					$a->mime=$mime_type;
+					
 					$tmp_file = new GO_Base_Fs_File($this->_getTempDir().$filename);
 					if(!empty($part->body)){
 						$tmp_file = new GO_Base_Fs_File($this->_getTempDir().$filename);
 						if(!$tmp_file->exists())
 							$tmp_file->putContents($part->body);
-					}else
-					{
-						$tmp_file=false;
-					}
-					
-					$f = new GO_Base_Fs_File($filename);
-					
-					
-					$a['name']=$filename;
-					$a['number']=$part_number_prefix.$part_number;
-					$a['content_id']=$content_id;
-					$a['mime']=$mime_type;
-					$a['tmp_file']=$tmp_file ? $tmp_file->stripTempPath() : false;
-					$a['index']=count($this->attachments);
-					$a['size']=isset($part->body) ? strlen($part->body) : 0;
-					$a['human_size']= GO_Base_Util_Number::formatSize($a['size']);
-					$a['extension']=  $f->extension();
-					$a['encoding'] = isset($part->headers['content-transfer-encoding']) ? $part->headers['content-transfer-encoding'] : '';
-					$a['disposition'] = isset($part->disposition) ? $part->disposition : '';
-					$a['url']=$this->getAttachmentUrl($a);
-					
-					$this->attachments[$a['number']]=$a;
+						
+						$a->setTempFile($tmp_file);
+					}					
+
+					$a->index=count($this->attachments);
+					$a->size=isset($part->body) ? strlen($part->body) : 0;
+					$a->encoding = isset($part->headers['content-transfer-encoding']) ? $part->headers['content-transfer-encoding'] : '';
+					$a->disposition = isset($part->disposition) ? $part->disposition : '';
+		
+					$this->addAttachment($a);
 					
 				}
 
