@@ -83,7 +83,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 
 		$cacheKey='email:'.$account->id.':'.$mailbox.':'.$uid;
 		
-		$cachedMessage = GO::cache()->get($cacheKey);
+		$cachedMessage = false;//GO::cache()->get($cacheKey);
 	
 		if($cachedMessage)
 		{
