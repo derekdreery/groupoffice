@@ -803,7 +803,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$imapMessage = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
 
 		//workaround for gmail. It doesn't flag messages as seen automatically.
-		if (!$imapMessage->seen && !stripos($account->host, 'gmail') !== false)
+		if (!$imapMessage->seen && stripos($account->host, 'gmail') !== false)
 			$imapMessage->getImapConnection()->set_message_flag(array($imapMessage->uid), "\Seen");
 
 		$response = $imapMessage->toOutputArray(true);
