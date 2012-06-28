@@ -250,7 +250,7 @@ class GO_Base_Config {
 	 * 
 	 * @var string 
 	 */
-	public $html_editor_font = "12px Arial, Helvetica, sans-serif";
+	public $html_editor_font = "font-size:13px; font-family:Arial, Helvetica, sans-serif;";
 
 
 	/**
