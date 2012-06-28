@@ -100,7 +100,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 
 			$this->_createDefaultFolder('sent');
 			$this->_createDefaultFolder('trash');
-			$this->_createDefaultFolder('spam');
+			//	$this->_createDefaultFolder('spam');
 			$this->_createDefaultFolder('drafts');	
 		}
 		
