@@ -262,9 +262,9 @@ class GO{
 	public static function cache(){
 
 		if (!isset(self::$_cache)) {
-//			if(function_exists("apc_store"))
-//				self::$_cache=new GO_Base_Cache_Apc();
-//			else
+			if(function_exists("apc_store"))
+				self::$_cache=new GO_Base_Cache_Apc();
+			else
 				self::$_cache=new GO_Base_Cache_Disk();
 		}
 		return self::$_cache;
