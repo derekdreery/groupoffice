@@ -170,6 +170,11 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 			$attr = array_merge($attr, $contact->getAttributes());
 
 		$this->name = $this->parseUserTemplate($template, $attr);
+		
+		//fallback on username if name template is somehow empty. Can happen with imap auth or invalid template.
+		if(empty($this->name))
+			$this->name = $user->username;
+		
 		$this->makeAttributeUnique('name');
 		
 	}
