@@ -43,17 +43,22 @@ class GO_Email_Model_ImapMessageAttachment extends GO_Email_Model_MessageAttachm
 		$this->uid=$uid;
 	}
 	
-	private function _getTempDir(){
+	public function getTempDir(){
 		$this->_tmpDir=GO::config()->tmpdir.'imap_messages/'.$this->account->id.'-'.$this->mailbox.'-'.$this->uid.'/';
 		if(!is_dir($this->_tmpDir))
 			mkdir($this->_tmpDir, 0700, true);
 		return $this->_tmpDir;
 	}
 	
+	public function saveToFile(GO_Base_Fs_Folder $targetFolder){
+		$imap = $this->account->openImapConnection($this->mailbox);
+		return $imap->save_to_file($this->uid, $targetFolder->createChild($this->name)->path(),  $this->number, $this->encoding, true);
+	}
+	
 	public function createTempFile() {
 		
 		if(!$this->hasTempFile()){
-			$tmpFile = new GO_Base_Fs_File($this->_getTempDir().$this->name);				
+			$tmpFile = new GO_Base_Fs_File($this->getTempDir().$this->name);				
 			if(!$tmpFile->exists()){
 				$imap = $this->account->openImapConnection($this->mailbox);
 				$imap->save_to_file($this->uid, $tmpFile->path(),  $this->number, $this->encoding, true);

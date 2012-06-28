@@ -401,6 +401,10 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	
 	private $_imapAttachmentsLoaded=false;
 	
+	/**
+	 *
+	 * @return \GO_Email_Model_ImapMessageAttachment [] 
+	 */
 	public function &getAttachments() {
 		if(!$this->_imapAttachmentsLoaded){			
 			
@@ -479,10 +483,18 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	
 	
 	public function getZipOfAttachmentsUrl(){
-		return GO::config()->host.'modules/email/'.
-		'zip_attachments.php?account_id='.$this->account->id.
-		'&mailbox='.urlencode($this->mailbox).
-		'&uid='.$this->uid.'&filename='.urlencode($this->subject);
+//		return GO::config()->host.'modules/email/'.
+//		'zip_attachments.php?account_id='.$this->account->id.
+//		'&mailbox='.urlencode($this->mailbox).
+//		'&uid='.$this->uid.'&filename='.urlencode($this->subject);
+//		
+		$params = array(
+					"account_id"=>$this->account->id,
+					"mailbox"=>$this->mailbox,
+					"uid"=>$this->uid					
+			);
+		
+		return GO::url('email/message/zipAllAttachments', $params);
 	}
 //	
 //	protected function getAttachmentUrl($attachment) {
