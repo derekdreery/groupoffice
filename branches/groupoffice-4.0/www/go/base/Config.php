@@ -244,6 +244,13 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $allow_duplicate_email = false;
+	
+	/**
+	 * The font used in all HTML editor including the E-mail editor
+	 * 
+	 * @var string 
+	 */
+	public $html_editor_font = "12px Arial, Helvetica, sans-serif";
 
 
 	/**
@@ -723,7 +730,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.0.51';
+	var $version = '4.0.52';
 
 
 	/* The permissions mode to use when creating files
@@ -753,7 +760,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20120627';
+	var $mtime = '20120628';
 
 	#group configuration
 	/**
