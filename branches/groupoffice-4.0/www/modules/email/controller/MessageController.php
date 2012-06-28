@@ -1187,4 +1187,37 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			
 			return $response;
 	}
+	
+	protected function actionZipAllAttachments($params){
+		
+		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+		//$imap  = $account->openImapConnection($params['mailbox']);
+		
+		$message = GO_Email_Model_ImapMessage::model()->findByUid($account, $params["mailbox"], $params["uid"]);
+		
+		$tmpFolder = GO_Base_Fs_Folder::tempFolder(uniqid(time()));
+		$atts = $message->getAttachments();
+		foreach($atts as $att){
+			if(!$att->isInline())
+				$att->saveToFile($tmpFolder);
+		}	
+		
+		$zipfile = $tmpFolder->parent()->createChild(GO::t('attachments','email').'.zip');						
+		
+		chdir($tmpFolder->path());
+		$cmd =GO::config()->cmd_zip.' -r "'.$zipfile->path().'" *';
+		exec($cmd, $output, $return);
+		
+		if($return>0)
+			throw new Exception(var_export($output, true));
+		
+		GO_Base_Util_Http::outputDownloadHeaders($zipfile, false);
+		
+		readfile($zipfile->path());
+		
+		$tmpFolder->delete();
+		$zipfile->delete();
+		
+	}
+	
 }
