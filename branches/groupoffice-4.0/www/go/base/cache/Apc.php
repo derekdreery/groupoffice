@@ -20,8 +20,12 @@
  */
 class GO_Base_Cache_Apc implements GO_Base_Cache_Interface{
 	
+	private $_prefix;
+	
 	public function __construct() {
 		GO::debug("Using GO_Base_Cache_Apc cache");
+		
+		$this->_prefix=GO::config()->db_name.'-';
 	}
 
 	/**
@@ -31,7 +35,7 @@ class GO_Base_Cache_Apc implements GO_Base_Cache_Interface{
 	 * @param int $ttl Seconds to live
 	 */
 	public function set($key, $value, $ttl=0){
-		return apc_store ( $key , $value, $ttl );
+		return apc_store ($this->_prefix.$key , $value, $ttl );
 	}
 	
 	/**
@@ -42,7 +46,7 @@ class GO_Base_Cache_Apc implements GO_Base_Cache_Interface{
 	 */
 	public function get($key){
 		
-		return apc_fetch($key);
+		return apc_fetch($this->_prefix.$key);
 	}
 	
 	/**
@@ -51,7 +55,7 @@ class GO_Base_Cache_Apc implements GO_Base_Cache_Interface{
 	 * @param string $key 
 	 */
 	public function delete($key){
-		apc_delete($key);
+		apc_delete($this->_prefix.$key);
 	}
 	/**
 	 * Flush all values 

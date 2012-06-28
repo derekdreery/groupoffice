@@ -61,6 +61,9 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_Interface{
 	 * @param int $ttl Seconds to live
 	 */
 	public function set($key, $value, $ttl=0){
+		
+		$key = GO_Base_Fs_File::stripInvalidChars($key,'-');
+						
 		if($ttl){
 			$this->_ttls[$key]=$this->_time+$ttl;
 			$this->_ttlsDirty=true;
@@ -79,6 +82,8 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_Interface{
 	 * @return boolean 
 	 */
 	public function get($key){
+		
+		$key = GO_Base_Fs_File::stripInvalidChars($key, '-');
 		
 		if(!empty($this->_ttls[$key]) && $this->_ttls[$key]<$this->_time){
 			unlink($this->_dir.$key);
@@ -99,6 +104,8 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_Interface{
 	 * @param string $key 
 	 */
 	public function delete($key){
+		$key = GO_Base_Fs_File::stripInvalidChars($key, '-');
+		
 		unset($this->_ttls[$key]);
 		$this->_ttlsDirty=true;
 		if(file_exists($this->_dir.$key))
