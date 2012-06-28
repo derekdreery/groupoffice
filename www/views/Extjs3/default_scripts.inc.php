@@ -26,6 +26,7 @@ $user_id = GO::user() ? GO::user()->id : 0;
 $settings['state']=array();
 if(GO::user()) {
 	//state for Ext components
+	$settings['html_editor_font']=GO::config()->html_editor_font;
 	$settings['state'] = $GLOBALS['GO_CONFIG']->get_state(GO::user()->id, $settings['state_index']);
 	$settings['user_id']=GO::user()->id;	
 	$settings['has_admin_permission']=GO::user()->isAdmin();	
