@@ -226,26 +226,29 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 		
 		this.hiddenCtField.setValue(html ? 'html' : 'plain');
 		
-		if(html)
-			this.insertDefaultFont();
-		else
+//		if(html)
+//			this.insertDefaultFont();
+//		else
+//			this.textEditor.selectText(0,0);
+//		
+		if(!html)
 			this.textEditor.selectText(0,0);
 
 	//this.editor = html ? this.htmlEditor : this.textEditor;
 	},
 
-	insertDefaultFont : function(){
-		var font = this.htmlEditor.fontSelect.dom.value;
-		var v = this.htmlEditor.getValue();
-		if(v.toLowerCase().substring(0,5)!='<font'){
-			if(v=='')
-				v='<br />';
-			
-			v='<font face="'+font+'">'+v+'</font>'
-		}
-
-		this.htmlEditor.setValue(v);		
-	},
+//	insertDefaultFont : function(){
+//		var font = this.htmlEditor.fontSelect.dom.value;
+//		var v = this.htmlEditor.getValue();
+//		if(v.toLowerCase().substring(0,5)!='<font'){
+//			if(v=='')
+//				v='<br />';
+//			
+//			v='<font face="'+font+'">'+v+'</font>'
+//		}
+//
+//		this.htmlEditor.setValue(v);		
+//	},
 
 	fireSubmit : function(e) {		
 		if (e.ctrlKey && Ext.EventObject.ENTER == e.getKey()) {

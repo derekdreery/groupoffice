@@ -385,6 +385,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 
 		if($params['content_type']=='html'){
 			
+						
 			$params['htmlbody'] = $this->_embedPastedImages($params['htmlbody']);
 			
 			//inlineAttachments is an array(array('url'=>'',tmp_file=>'relative/path/');
@@ -430,8 +431,12 @@ class GO_Base_Mail_Message extends Swift_Message{
 				}
 			}
 			$params['htmlbody']=$this->_fixRelativeUrls($params['htmlbody']);
+						
+			$htmlTop = '<html><head><style type="text/css">body,p,td,div,span{font: '.GO::config()->html_editor_font.';};body{border: 0; margin: 0; padding: {0}px; height: {1}px; cursor: text}body p{margin:0px;}</style></head><body>';
 			
-			$this->setHtmlAlternateBody($params['htmlbody']);
+			$htmlBottom = '</body></html>';
+			
+			$this->setHtmlAlternateBody($htmlTop.$params['htmlbody'].$htmlBottom);
 		}else
 		{
 			$this->setBody($params['plainbody'], 'text/plain');
