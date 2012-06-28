@@ -1,3 +1,5 @@
+Attachment object that can create the temp files anytime
+
 Password promt on imap logon failure
 
 Z-push 2.0
