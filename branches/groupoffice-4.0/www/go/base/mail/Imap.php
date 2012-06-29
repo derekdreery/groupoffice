@@ -465,6 +465,20 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 //				throw new Exception("Could not subscribe to INBOX folder!");
 //			return $this->list_folders($listSubscribed, $withStatus, $namespace, $pattern);
 //		}
+		
+			//sometimes shared folders like "Other user.shared" are in the folder list
+		//but there's no "Other user" parent folder. We create a dummy folder here.
+		if($pattern=='%' || $pattern=='INBOX'.$delim.'%'){
+			$folders["INBOX"]=array(
+						'delimiter' => $delim,
+						'name' => 'INBOX',
+						'marked' => true,
+						'noselect' => false,
+						'noinferiors' => false,
+						'subscribed'=>true,
+						'unseen'=>0,
+						'messsages'=>0);
+		}
 
 		if($withStatus){
 			//no support for list status. Get the status for each folder
@@ -483,36 +497,6 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				}
 			}
 		}
-		
-
-		//sometimes shared folders like "Other user.shared" are in the folder list
-		//but there's no "Other user" parent folder. We create a dummy folder here.
-		if($pattern=='%' || $pattern=='INBOX'.$delim.'%'){
-			foreach($folders as $name=>$folder){
-
-				$pos = strrpos($name, $delim);
-
-				if($pos){
-					$parent = substr($name,0,$pos);
-					if(!isset($folders[$parent]))
-					{
-						$folders[$parent]=array(
-									'delimiter' => $delim,
-									'name' => $parent,
-									'marked' => true,
-									'noselect' => $parent!='INBOX',
-									'noinferiors' => false,
-									'haschildren' => true,
-									'hasnochildren' => false,
-									'subscribed'=>true,
-									'unseen'=>0,
-									'messsages'=>0);
-					}
-				}
-			}
-		}
-
-//		GO::debug($folders);
 
 		ksort($folders);
 
