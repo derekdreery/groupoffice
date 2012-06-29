@@ -474,6 +474,8 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 						'name' => 'INBOX',
 						'marked' => true,
 						'noselect' => false,
+						'haschildren'=>false,
+						'hasnochildren'=>true,
 						'noinferiors' => false,
 						'subscribed'=>true,
 						'unseen'=>0,
