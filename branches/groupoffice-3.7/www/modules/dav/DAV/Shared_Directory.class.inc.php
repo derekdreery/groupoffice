@@ -47,10 +47,8 @@ class GO_DAV_Shared_Directory extends Sabre_DAV_FS_Directory implements Sabre_DA
 		global $GO_SECURITY,$GO_CONFIG, $files;
 
 		$count = $files->get_cached_shares($GO_SECURITY->user_id);
-go_debug($count);
 		$nodes = array();
 		while($r=$files->next_record()){
-			go_debug($r['path']);
 			$nodes[]=new GO_DAV_FS_Directory($r['path']);
 		}
 
