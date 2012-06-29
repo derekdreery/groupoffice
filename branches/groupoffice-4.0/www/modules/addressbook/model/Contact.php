@@ -484,6 +484,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$company->save();
 			$this->setAttribute('company_id',$company->id);			
 		}
+		
+		$this->cutAttributeLengths();
 		$this->save();
 		
 		if (!empty($photoFile))
