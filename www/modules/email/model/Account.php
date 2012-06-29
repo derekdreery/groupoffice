@@ -192,6 +192,18 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		return $this->_imap;
 	}
 	
+	/**
+	 * Get the imap connection if it's open.
+	 * 
+	 * @return GO_Base_Mail_Imap 
+	 */
+	public function getImapConnection(){
+		if(is_resource($this->_imap))
+			return $this->_imap;
+		else
+			return false;
+	}
+	
 	private $_hasNewMessages=false;
 	
 	private function _setHasNewMessages(){
