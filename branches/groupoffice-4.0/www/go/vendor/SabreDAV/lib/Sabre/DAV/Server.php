@@ -244,6 +244,9 @@ class Sabre_DAV_Server {
             $this->httpResponse->sendStatus($httpCode);
             $this->httpResponse->setHeaders($headers);
             $this->httpResponse->sendBody($DOM->saveXML());
+						
+						GO::debug("SabreDAV Exception: ");
+						GO::debug((string) $e);
 
         }
 
