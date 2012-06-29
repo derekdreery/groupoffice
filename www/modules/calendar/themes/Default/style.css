@@ -384,7 +384,7 @@ background-color: #F1F1F1 !important;
 
 .x-calGrid-headings-table {
 	border-collapse:collapse;
-	background-image:url(../../../../themes/Default/images/extjs/layout/panel-title-light-bg.gif);
+	background-image:url(../../../../views/Extjs3/themes/Default/images/extjs/layout/panel-title-light-bg.gif);
 	border-bottom:1px solid #ccc;	
 }
 
@@ -407,7 +407,7 @@ background-color: #F1F1F1 !important;
 .x-calGrid-all-day-table {
 	border-collapse:collapse;
 	table-layout:fixed;
-	background-image:url(../../../../themes/Default/images/extjs/layout/panel-title-light-bg.gif);
+	background-image:url(../../../../views/Extjs3/themes/Default/images/extjs/layout/panel-title-light-bg.gif);
 }
 
 
