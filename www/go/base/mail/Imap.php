@@ -336,13 +336,13 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			$cmd .= ')';
 		}
 		
-//		GO::debug($cmd);
+		GO::debug($cmd);
 		
 		$cmd .= "\r\n";
 		
 		$this->send_command($cmd);
 		$result = $this->get_response(false, true);
-//		GO::debug($result);
+		GO::debug($result);
 
 		$folders = array();
 		foreach ($result as $vals) {
@@ -485,30 +485,30 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 		//sometimes shared folders like "Other user.shared" are in the folder list
 		//but there's no "Other user" parent folder. We create a dummy folder here.
-//		if(empty($namespace)){
-//			foreach($folders as $name=>$folder){
-//
-//				$pos = strrpos($name, $delim);
-//
-//				if($pos){
-//					$parent = substr($name,0,$pos);
-//					if(!isset($folders[$parent]))
-//					{
-//						$folders[$parent]=array(
-//									'delimiter' => $delim,
-//									'name' => $parent,
-//									'marked' => true,
-//									'noselect' => $parent!='INBOX',
-//									'noinferiors' => false,
-//									'haschildren' => true,
-//									'hasnochildren' => false,
-//									'subscribed'=>true,
-//									'unseen'=>0,
-//									'messsages'=>0);
-//					}
-//				}
-//			}
-//		}
+		if(empty($namespace)){
+			foreach($folders as $name=>$folder){
+
+				$pos = strrpos($name, $delim);
+
+				if($pos){
+					$parent = substr($name,0,$pos);
+					if(!isset($folders[$parent]))
+					{
+						$folders[$parent]=array(
+									'delimiter' => $delim,
+									'name' => $parent,
+									'marked' => true,
+									'noselect' => $parent!='INBOX',
+									'noinferiors' => false,
+									'haschildren' => true,
+									'hasnochildren' => false,
+									'subscribed'=>true,
+									'unseen'=>0,
+									'messsages'=>0);
+					}
+				}
+			}
+		}
 
 //		GO::debug($folders);
 
