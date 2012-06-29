@@ -1,0 +1,5 @@
+modules/gnupg/KeysGrid.js
+modules/gnupg/SecurityDialog.js
+modules/gnupg/GenKeyDialog.js
+modules/gnupg/ImportKeyDialog.js
+modules/gnupg/SignKeyDialog.js
