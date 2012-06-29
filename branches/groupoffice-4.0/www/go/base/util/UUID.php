@@ -120,8 +120,6 @@ class GO_Base_Util_UUID {
   }
 
 	public static function create($type, $name){
-		global $GO_CONFIG;
-
 		//get or create namespace uuid for Group-Office
 		$namespace = GO::config()->get_setting('uuid_namespace');
 		if(!$namespace){
