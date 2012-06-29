@@ -415,7 +415,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		}		
 		
 		$this->setAttributes($attributes, false);
-		
+		$this->cutAttributeLengths();
 		$this->save();
 		
 		return $this;
