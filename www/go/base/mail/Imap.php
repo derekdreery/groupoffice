@@ -343,6 +343,8 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$this->send_command($cmd);
 		$result = $this->get_response(false, true);
 		GO::debug($result);
+		
+		$delim=false;
 
 		$folders = array();
 		foreach ($result as $vals) {
@@ -485,7 +487,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 		//sometimes shared folders like "Other user.shared" are in the folder list
 		//but there's no "Other user" parent folder. We create a dummy folder here.
-		if(empty($namespace)){
+		if($pattern=='%' || $pattern=='INBOX'.$delim.'%'){
 			foreach($folders as $name=>$folder){
 
 				$pos = strrpos($name, $delim);
