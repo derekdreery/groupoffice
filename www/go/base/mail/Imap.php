@@ -336,13 +336,13 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			$cmd .= ')';
 		}
 		
-		GO::debug($cmd);
+//		GO::debug($cmd);
 		
 		$cmd .= "\r\n";
 		
 		$this->send_command($cmd);
 		$result = $this->get_response(false, true);
-		GO::debug($result);
+//		GO::debug($result);
 
 		$folders = array();
 		foreach ($result as $vals) {
@@ -1521,7 +1521,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$command = "UID FETCH $uid BODYSTRUCTURE\r\n";
 		$this->send_command($command);
 		$result = $this->get_response(false, true);
-		
+				
 		while (isset($result[0][0]) && isset($result[0][1]) && $result[0][0] == '*' && strtoupper($result[0][1]) == 'OK') {
 			array_shift($result);
 		}
