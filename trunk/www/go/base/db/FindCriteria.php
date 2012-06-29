@@ -154,6 +154,8 @@ class GO_Base_Db_FindCriteria {
 	/**
 	 * Adds a condition to this object and returns itself. 
 	 * 
+	 * You can also create field IS NULL with this function for example.
+	 * 
 	 * WARNING: This function does not do any sanity checks on the input! It just 
 	 * inserts the plain values so user input may not be passed to this function.
 	 * You can use parameter tags like :paramName and use the addBindParameter function.
