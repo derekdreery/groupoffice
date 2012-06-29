@@ -29,6 +29,12 @@ class GO_Base_Mail_Utils{
 
 				$string = str_replace($v, $fld, $string);
 			}
+//		}elseif(($pos = strpos($string, "''"))){
+//			//eg. iso-8859-1''%66%6F%73%73%2D%69%74%2D%73%6D%61%6C%6C%2E%67%69%66
+//			$charset = substr($string,0, $pos);
+//			$value = rawurldecode(substr($string, $pos+2));
+//
+//			$string=GO_Base_Util_String::to_utf8($string, $charset);
 		}else
 		{			
 			$string=GO_Base_Util_String::to_utf8($string, $defaultCharset);
