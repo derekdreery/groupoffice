@@ -471,7 +471,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			//with seperate status calls
 			foreach($folders as $name=>$folder){
 				if(!isset($folders[$name]['unseen'])){
-					if($folders[$name]['nonexistent'] || $folders[$name]['noeselect']){
+					if($folders[$name]['nonexistent'] || $folders[$name]['noselect']){
 						$folders[$name]['messages']=0;
 						$folders[$name]['unseen']=0;
 					}else
