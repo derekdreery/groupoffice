@@ -67,7 +67,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		
 		
 		
-		//GO::session()->closeWriting();
+		GO::session()->closeWriting();
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()						
 						->ignoreAdminGroup();

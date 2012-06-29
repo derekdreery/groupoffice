@@ -195,15 +195,21 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	private $_hasNewMessages=false;
 	
 	private function _setHasNewMessages(){
+		
+		$cacheKey = GO::user()->id.':'.$this->id.':uidnext';
+		
 		if($this->_imap->selected_mailbox['name']=='INBOX' && isset($this->_imap->selected_mailbox['uidnext'])){
-			if(isset(GO::session()->values['email_status']['uidnext'][$this->id]) && GO::session()->values['email_status']['uidnext'][$this->id]!=$this->_imap->selected_mailbox['uidnext']){
+			
+			$uidnext = $value = GO::cache()->get($cacheKey);
+			
+			if($uidnext!==false && $uidnext!=$this->_imap->selected_mailbox['uidnext']){
 				$this->_hasNewMessages=true;
 			}else
 			{
-				GO::session()->values['email_status']['uidnext'][$this->id]=0;
+				$uidnext=0;
 			}
-
-			GO::session()->values['email_status']['uidnext'][$this->id]=$this->_imap->selected_mailbox['uidnext'];
+			GO::cache()->set($cacheKey, $this->_imap->selected_mailbox['uidnext']);
+			//GO::session()->values['email_status']['uidnext'][$this->id]=$this->_imap->selected_mailbox['uidnext'];
 		}
 	}
 	
