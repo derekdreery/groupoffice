@@ -960,6 +960,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->reminder = $this->start_time-$reminderTime->format('U');
 		}
 
+		$this->cutAttributeLengths();
+		
 		$this->save();
 		
 		if(!empty($exception)){			

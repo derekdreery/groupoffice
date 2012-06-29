@@ -1315,5 +1315,9 @@ class GO_Base_Util_String {
 	public static function length($str){
 		return function_exists("mb_strlen") ? mb_strlen($str, 'UTF-8') : strlen($str);
 	}
+	
+	public static function substr($string, $start, $length=null){
+		return function_exists("mb_substr") ? mb_substr($string, $start, $length) : substr($string, $start, $length);
+	}
 
 }
