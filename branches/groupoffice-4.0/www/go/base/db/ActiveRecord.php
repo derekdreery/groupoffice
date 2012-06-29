@@ -2410,21 +2410,35 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 			$attr = array_merge($autoAttr, $attr);
 			
-			//make sure these attributes are not too long
-			if(GO_Base_Util_String::length($attr['name'])>100)
-				$attr['name']=substr($attr['name'], 0, 100);
-			
-			if(GO_Base_Util_String::length($attr['description'])>255)
-				$attr['description']=substr($attr['description'], 0, 255);
+//			//make sure these attributes are not too long
+//			if(GO_Base_Util_String::length($attr['name'])>100)
+//				$attr['name']=substr($attr['name'], 0, 100);
+//			
+//			if(GO_Base_Util_String::length($attr['description'])>255)
+//				$attr['description']=GO_Base_Util_String::substr($attr['description'], 0, 255);
 			
 			//GO::debug($attr);
 
 			$model->setAttributes($attr, false);
+			$model->cutAttributeLengths();
 			$model->save();
 			return $model;
 			
 		}
 		return false;
+	}
+	
+	
+	/**
+	 * Cut all attributes to their maximum lengths. Useful when importing stuff. 
+	 */
+	public function cutAttributeLengths(){
+		$attr = $this->getModifiedAttributes();
+		foreach($attr as $attribute=>$oldVal){
+			if(!empty($this->columns[$attribute]['length']) && GO_Base_Util_String::length($this->_attributes[$attribute])>$this->columns[$attribute]['length']){
+				$this->_attributes[$attribute]=GO_Base_Util_String::substr($this->_attributes[$attribute], 0, $this->columns[$attribute]['length']);
+			}
+		}
 	}
 	
 	public function getCachedSearchRecord(){
