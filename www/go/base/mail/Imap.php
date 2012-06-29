@@ -301,7 +301,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		}
 	}
 	
-	public function list_folders($listSubscribed=true, $withStatus=false, $namespace='', $pattern='*'){
+	public function list_folders($listSubscribed=true, $withStatus=false, $namespace='', $pattern='*', $isRoot=false){
 		
 		GO::debug("list_folders($listSubscribed, $withStatus, $namespace, $pattern");
 		//$delim = false;
@@ -468,7 +468,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		
 			//sometimes shared folders like "Other user.shared" are in the folder list
 		//but there's no "Other user" parent folder. We create a dummy folder here.
-		if($pattern=='%' || $pattern=='INBOX'.$delim.'%'){
+		if(!isset($folders['INBOX']) && $isRoot){
 			$folders["INBOX"]=array(
 						'delimiter' => $delim,
 						'name' => 'INBOX',
@@ -477,9 +477,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 						'haschildren'=>false,
 						'hasnochildren'=>true,
 						'noinferiors' => false,
-						'subscribed'=>true,
-						'unseen'=>0,
-						'messsages'=>0);
+						'subscribed'=>true);
 		}
 
 		if($withStatus){
