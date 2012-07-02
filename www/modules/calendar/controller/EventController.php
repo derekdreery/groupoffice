@@ -597,8 +597,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$attachments = $message->getAttachments();
 		
 		foreach($attachments as $attachment){
-			if($attachment['mime']=='text/calendar'){
-				$data = $message->getImapConnection()->get_message_part_decoded($message->uid, $attachment['number'], $attachment['encoding']);
+			if($attachment->mime=='text/calendar'){
+				$data = $message->getImapConnection()->get_message_part_decoded($message->uid, $attachment->number, $attachment->encoding);
 				
 				$vcalendar = GO_Base_VObject_Reader::read($data);
 
