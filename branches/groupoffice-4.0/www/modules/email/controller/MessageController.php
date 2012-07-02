@@ -612,11 +612,13 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		$fullDays = GO::t('full_days');
 
-		$from = $message->from->getAddress();
+		$replyTo = $message->reply_to->count() ? $message->reply_to : $message->from;
+		$from =$replyTo->getAddress();
+		
+		$fromArr = $message->from->getAddress();
 
-		$replyText = sprintf(GO::t('replyHeader', 'email'), $fullDays[date('w', $message->udate)], date(GO::user()->completeDateFormat, $message->udate), date(GO::user()->time_format, $message->udate), $from['personal']);
-
-
+		$replyText = sprintf(GO::t('replyHeader', 'email'), $fullDays[date('w', $message->udate)], date(GO::user()->completeDateFormat, $message->udate), date(GO::user()->time_format, $message->udate), $fromArr['personal']);
+		
 		//for template loading so we can fill the template tags
 		$params['to'] = $from['email'];
 
@@ -661,7 +663,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		if (!empty($params['replyAll'])) {
 			$toList = new GO_Base_Mail_EmailRecipients();
-			$toList->mergeWith($message->from)
+			$toList->mergeWith($replyTo)
 							->mergeWith($message->to);
 
 			//remove our own alias from the recipients.			
@@ -671,7 +673,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$response['data']['to'] = (string) $toList;
 			$response['data']['cc'] = (string) $message->cc;
 		} else {
-			$response['data']['to'] = (string) $message->from;
+			$response['data']['to'] = (string) $replyTo;
 		}
 
 		//for saving sent items in actionSend
