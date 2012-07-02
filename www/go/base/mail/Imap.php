@@ -473,6 +473,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 						'delimiter' => $delim,
 						'name' => 'INBOX',
 						'marked' => true,
+						'nonexistent'=>false,
 						'noselect' => false,
 						'haschildren'=>false,
 						'hasnochildren'=>true,
