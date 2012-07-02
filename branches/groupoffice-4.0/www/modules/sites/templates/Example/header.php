@@ -44,7 +44,7 @@
 								<a class="topmenu-item-center" href="<?php echo $page->url; ?>"><?php echo $page->name; ?></a>
 							</div>
 						</div>
-						<?
+						<?php
 					}
 					?>				
 					</div>
