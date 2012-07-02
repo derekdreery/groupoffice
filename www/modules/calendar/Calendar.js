@@ -77,7 +77,6 @@ GO.calendar.formatQtip = function(data)
 	
 	str += '<br />'+GO.lang.strCtime+': '+data.creationDate.format(GO.settings.date_format+' '+GO.settings.time_format);
 	
-	
 	if(data.location!='')
 	{
 		str += '<br />'+GO.calendar.lang.location+': '+data.location;
@@ -102,7 +101,6 @@ GO.calendar.MainPanel = function(config){
 		cls:'cal-date-picker',
 		showToday:false
 	});
-
 	
 	this.datePicker.on("select", function(datePicker, DateObj){
 		this.setDisplay({
