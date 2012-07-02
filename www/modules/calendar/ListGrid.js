@@ -35,6 +35,7 @@ GO.calendar.ListGrid = function(config)
 			'private',
 			'repeats',
 			'background',
+			'status_color',
 			'day',
 			'task_id',
 			'contact_id',
@@ -46,11 +47,12 @@ GO.calendar.ListGrid = function(config)
 			'ctime'
 			]
 		}),
-		baseParams: {
-			task:'events'
-		},
+//		baseParams: {
+//			task:'events'
+//		},
 		proxy: new Ext.data.HttpProxy({
-			url: GO.settings.modules.calendar.url+'json.php'
+		//	url: GO.settings.modules.calendar.url+'json.php'
+			url:GO.url('calendar/event/store')
 		}),
 		groupField:'day',
 		sortInfo: {
@@ -79,7 +81,13 @@ GO.calendar.ListGrid = function(config)
 		width:90,
 		renderer: function(v, metadata, record)
 		{
-			var html = '<div class="';
+			var html = '';
+			
+			//TODO: Set the correct background color for the following span block. The background-color depends on the status of the event.
+			if(!GO.util.empty(record.data.status_color))
+				html += '<span class="x-calListGrid-event-status" style="background-color:#'+record.data.status_color+';"></span>';
+			
+			html += '<div class="';
 			if(record.data.link_count>0)
 			{
 				html +='cal-has-links';

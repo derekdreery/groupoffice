@@ -88,7 +88,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		
 		return $store->getData();
 	}
-	
+		
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
 		
 		$columnModel->formatColumn('user_name','$model->user->name');
@@ -142,4 +142,45 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		return $response;
 	}
 	
+	/**
+	* Load the user_calendar_colors 
+	* 
+	* @param array $params
+	* @return array 
+	*/	
+	public function actionLoadColors($params){
+		$store = GO_Base_Data_Store::newInstance(GO_Calendar_Model_CalendarUserColor::model());
+
+		$findParams = $store->getDefaultParams($params)
+						->join(GO_Calendar_Model_Calendar::model()->tableName(), GO_Base_Db_FindCriteria::newInstance()->addCondition('calendar_id', 'cal.id', '=', 't', true, true),'cal')
+						->order(array('cal.name'))						
+						->select('t.*,cal.name AS name,cal.id as id');
+		
+		$stmt = GO_Calendar_Model_CalendarUserColor::model()->find($findParams);
+		
+		$store->setStatement($stmt);
+
+		return $store->getData();
+	}
+	
+	/**
+	 * Save the user_calendar_colors
+	 * 
+	 * @param array $params
+	 * @return array 
+	 */
+	public function actionSubmitColors($params){
+		$params = json_decode($params['griddata']);
+		
+		foreach($params as $cC){			
+			$calendarColor = GO_Calendar_Model_CalendarUserColor::model()->findByPk(array('calendar_id'=>$cC->id,'user_id'=>GO::user()->id));
+			if($calendarColor)
+				$calendarColor->color = $cC->color;
+			
+			$calendarColor->save();
+		}
+		$response['success']=true;
+
+		return $response;
+	}
 }

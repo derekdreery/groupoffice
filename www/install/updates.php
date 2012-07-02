@@ -246,3 +246,6 @@ $updates["201206110852"][]="ALTER TABLE `go_link_folders` CHANGE `link_id` `mode
 $updates["201206110852"][]="ALTER TABLE `go_link_folders` CHANGE `model_id` `model_id` INT( 11 ) NOT NULL DEFAULT '0'";
 $updates["201206110852"][]="ALTER TABLE `go_link_folders` CHANGE `model_type_id` `model_type_id` INT( 11 ) NOT NULL DEFAULT '0'";
 $updates["201206110852"][]="ALTER TABLE `go_link_folders` CHANGE `parent_id` `parent_id` INT( 11 ) NOT NULL DEFAULT '0'";
+
+$updates["201206271200"][]="ALTER TABLE `go_holidays` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
+$updates["201206280900"][]="ALTER TABLE `go_holidays` CHANGE `region` `region` VARCHAR( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";

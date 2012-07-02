@@ -654,6 +654,10 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 			if(col)
 			{
 				var text = '';
+
+				if(!GO.util.empty(eventData.status_color))
+					text += '<span class="x-calGrid-event-status" style="background-color:#'+eventData.status_color+';"></span>';
+				
 				if(eventData.startDate.format('G')!='0')
 				{
 					text += eventData.startDate.format(GO.settings.time_format)+'&nbsp;';
@@ -1225,6 +1229,4 @@ Ext.extend(GO.calendar.dd.MonthDropTarget, Ext.dd.DropTarget, {
 		}
 		return this.dropAllowed;
 	}
-
-
 });

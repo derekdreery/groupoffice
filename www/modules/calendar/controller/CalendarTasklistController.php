@@ -7,7 +7,7 @@ class GO_Calendar_Controller_CalendarTasklist extends GO_Base_Controller_Abstrac
 	 * @return String 
 	 */
 	public function modelName() {
-		return 'GO_Calendar_Model_Calendar';
+		return 'GO_Tasks_Model_Tasklist';
 	}
 	
 	/**

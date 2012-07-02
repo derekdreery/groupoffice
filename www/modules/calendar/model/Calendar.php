@@ -35,7 +35,14 @@
  * @property int $acl_write
  */
 class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel {
-
+	
+	/**
+	 * The default color to display this calendar in the view
+	 * 
+	 * @var string 
+	 */
+	public $displayColor = false;
+	
 	/**
 	 * Returns a static model of itself
 	 * 
@@ -96,5 +103,20 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	
 	public function settingsPkAttribute() {
 		return 'calendar_id';
+	}	
+	
+	/**
+	 * Get the color of this calendar from the Calendar_user_Color table.
+	 * 
+	 * @param int $userId
+	 * @return string The color or false if no color is found 
+	 */
+	public function getColor($userId){
+		$userColor = GO_Calendar_Model_CalendarUserColor::model()->findByPk(array('calendar_id'=>$this->id,'user_id'=>$userId));
+
+		if($userColor)
+			return $userColor->color;
+		else
+			return false;
 	}
 }
