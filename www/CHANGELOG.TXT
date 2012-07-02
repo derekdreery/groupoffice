@@ -1,3 +1,7 @@
+02-07-2012 4.0.56
+- Bug in CalDAV with Applie ical fixed.
+- Bug in calendar invitations fixed.
+
 26-06-2012 4.0.50
 - Lot's of bug fixes thanks to the beta testers!
 - SabreDAV upgraded to 1.6.3
