@@ -931,7 +931,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		return $model;		
 	}
 	
-	private function _getDefaultFindSelectFields($single=false){
+	/**
+	 * Get all default select fields. It excludes BLOBS and TEXT fields.
+	 * This function is used by find.
+	 * 
+	 * @param boolean $single
+	 * @param string $tableAlias
+	 * @return string 
+	 */
+	public function getDefaultFindSelectFields($single=false, $tableAlias='t'){
 		
 		if($single)
 			return 't.*';
@@ -941,7 +949,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				$fields[]=$name;
 		}
 		
-		return "`t`.`".implode('`, `t`.`', $fields)."`";
+		
+		return "`$tableAlias`.`".implode('`, `'.$tableAlias.'`.`', $fields)."`";
 	}
 	
 
@@ -1038,7 +1047,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$fetchObject= true;
 		if(empty($params['fields'])){
-			$params['fields']=$this->_getDefaultFindSelectFields(isset($params['limit']) && $params['limit']==1);
+			$params['fields']=$this->getDefaultFindSelectFields(isset($params['limit']) && $params['limit']==1);
 			//$fetchObject= true;
 		}else
 		{
@@ -1054,7 +1063,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 			$cfModel = GO::getModel($this->customfieldsModel());
 			
-			$sql .= ",cf.* ";
+			$sql .= ", ".$cfModel->getDefaultFindSelectFields(isset($params['limit']) && $params['limit']==1, 'cf');
 		}
 		
 		
