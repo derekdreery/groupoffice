@@ -583,3 +583,31 @@ a.x-monthGrid-cell-day-text:hover{
 #resources-panel .x-fieldset-header-text{
 	color:#666
 }
+
+.x-calGrid-event-status {
+/*	background-color: red;*/
+	border: 1px solid #666666;
+	border-radius: 6px 6px 6px 6px;
+	display: block;
+	float: left;
+	height: 8px;
+	line-height: 50px;
+	margin-left: 2px;
+	margin-right: 2px;
+	margin-top: 1px;
+	width: 8px;
+}
+
+.x-calListGrid-event-status{
+	/*	background-color: red;*/
+	border: 1px solid #666666;
+	border-radius: 6px 6px 6px 6px;
+	display: block;
+/*	float: left;*/
+	height: 8px;
+	line-height: 50px;
+	margin-left: 2px;
+	margin-right: 2px;
+	margin-top: 1px;
+	width: 8px;
+}

@@ -44,6 +44,9 @@ GO.calendar.CalendarEvent = Ext.data.Record.create([
 	name: 'background'
 },
 {
+	name: 'status_color'
+},
+{
 	name: 'read_only'
 },
 {
@@ -1123,7 +1126,12 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 
 	addGridEvent : function (eventData, day, startRow, endRow, recalculateAppointments)
 	{
-		var text = '<span class="x-calGrid-event-time';
+		var text = '';
+
+		if(!GO.util.empty(eventData.status_color))
+			text += '<span class="x-calGrid-event-status" style="background-color:#'+eventData.status_color+';"></span>';
+                
+		text += '<span class="x-calGrid-event-time';
 
 		if(eventData.link_count>0){
 			text +=' cal-has-links'

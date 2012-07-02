@@ -640,7 +640,12 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					has_other_participants: this.participantsPanel.invitationRequired()
 				};
 
-
+				if(!GO.util.empty(action.result.status_color))
+					newEvent.status_color = action.result.status_color;
+				
+				if(!GO.util.empty(action.result.status))
+					newEvent.status = action.result.status;
+					
 				this.fireEvent('save', newEvent, this.oldDomId);
 				
 				GO.dialog.TabbedFormDialog.prototype.refreshActiveDisplayPanels.call(this);

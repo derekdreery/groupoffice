@@ -31,8 +31,6 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 	function beforeSubmit(&$response, &$model, &$params) {
 
-		
-		
 		if(!empty($params['duplicate']))
 			$model = $model->duplicate();
 
@@ -82,7 +80,6 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$model->end_time = mktime($new_end_time['hours'], $new_end_time['minutes'], 0, $old_end_date['mon'], $old_end_date['mday'], $old_end_date['year']);
 		}
 
-
 		if (!empty($params['freq'])) {
 			$rRule = new GO_Base_Util_Icalendar_Rrule();
 			$rRule->readJsonArray($params);
@@ -113,7 +110,6 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		if(empty($params["check_conflicts"]))
 			return true;
 		
-		
 		/* Check for conflicts with other events in the calendar */		
 		$findParams = GO_Base_Db_FindParams::newInstance();
 		$findParams->getCriteria()->addCondition("calendar_id", $event->calendar_id);
@@ -121,12 +117,14 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$conflictingEvents = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, $event->start_time, $event->end_time, true);
 		
 		while($conflictEvent = array_shift($conflictingEvents)) {
-
-			if($conflictEvent["id"]!=$event->id && (empty($params['exception_for_event_id']) || $params['exception_for_event_id']!=$conflictEvent["id"])){
+			if($conflictEvent->getEvent()->id!=$event->id && (empty($params['exception_for_event_id']) || $params['exception_for_event_id']!=$conflictEvent->getEvent()->id)){
 				throw new Exception('Ask permission');
 			}
+
+//			if($conflictEvent["id"]!=$event->id && (empty($params['exception_for_event_id']) || $params['exception_for_event_id']!=$conflictEvent["id"])){
+//				throw new Exception('Ask permission');
+//			}
 		}
-		
 		
 		/* Check for conflicts regarding resources */
 		if (!$event->isResource() && isset($params['resources'])) {
@@ -170,18 +168,19 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$isNewEvent = empty($params['id']);
 
 		if (!$model->isResource()) {
-
 			$this->_saveParticipants($params, $model, $isNewEvent, $modifiedAttributes);
-
 			$this->_saveResources($params, $model, $isNewEvent, $modifiedAttributes);
 		}
 		
-		
-		 if(GO::modules()->files){
-			 //handle attachment when event is saved from an email.
-			 $f = new GO_Files_Controller_Folder();
-			 $f->processAttachments($response, $model, $params);
-		 }
+		if(GO::modules()->files){
+			//handle attachment when event is saved from an email.
+			$f = new GO_Files_Controller_Folder();
+			$f->processAttachments($response, $model, $params);
+		}
+		 
+		 // Send the status and status background color with the response
+		$response['status_color'] = $model->getStatusColor();
+		$response['status'] = $model->status;
 
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}
@@ -525,27 +524,367 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 //				);
 //	}	
 
+	/**
+	 *
+	 * @param type $params
+	 * @return boolean 
+	 */
 	protected function actionStore($params) {
-	
+		
+		$colors = array(
+		'F0AE67','FFCC00','FFFF00','CCFF00','66FF00',
+		'00FFCC','00CCFF','0066FF','95C5D3','6704FB',
+		'CC00FF','FF00CC','CC99FF','FB0404','FF6600',
+		'C43B3B','996600','66FF99','999999','00FFFF'
+	);
+		
 		$response = array();
-		
-		$events = GO_Calendar_Model_Event::model()->findCalculatedForPeriod(false, strtotime("2011-10-03"), strtotime("2011-10-10"));
-		
-		var_dump($events);
-
-		$response['write_permission']='';
-		$response['comment']='';
 		$response['calendar_id']='';
-		$response['calendar_name']='';
-		$response['permission_level']='';
-		$response['title']='';
-		$response['count']='';
-		$response['mtime']='';
-		$response['count_events_only']='';
+		$response['title']= '';
+		$response['results'] = array();
+		
+		$startTime = $params['start_time'];
+		$endTime = $params['end_time'];
+		
+		// Check for the given calendars if they have events in the given period
+		if(!empty($params['calendars']))
+			$calendars = json_decode($params['calendars']);
+		else
+			$calendars = $params['calendar_id'];
+		
+		$colorIndex = 0;
+		
+		// Set the count of the total activated calendars in the response.
+		$response['calendar_count'] = count($calendars);
+		
+		foreach($calendars as $calendarId){
+			// Get the calendar model that is used for these events
+			$calendar = GO_Calendar_Model_Calendar::model()->findByPk($calendarId);
+			
+			// Set the colors for each calendar
+			$calendar->displayColor = $colors[$colorIndex];
+			if($colorIndex < count($colors))
+				$colorIndex++;
+			else
+				$colorIndex=0;
+			
+			
+			if($response['calendar_count'] > 1){
+				$background = $calendar->getColor(GO::user()->id);
+
+				if(empty($background)){
+					$background = $calendar->displayColor;
+				}
+				$response['backgrounds'][$calendar->id]=$background;
+			}
+			
+			
+			$response['title'] .= $calendar->name.' & ';
+
+			// Set the first calendarId to the response // MAYBE DEPRECATED??
+			if(empty($response['calendar_id'])){
+				$response['calendar_id']=$calendar->id;
+				$response['write_permission']= $calendar->permissionLevel >= GO_Base_Model_Acl::WRITE_PERMISSION?true:false;
+				$response['calendar_name']=$calendar->name;
+				$response['permission_level']=$calendar->permissionLevel;
+				$response['count']=0;
+				$response['comment']=$calendar->comment;
+				
+				if($calendar->show_bdays && GO::modules()->addressbook){
+					$response = $this->_getBirthdayResponseForPeriod($response,$calendar,$startTime,$endTime);
+				}
+
+				$response = $this->_getHolidayResponseForPeriod($response,$calendar,$startTime,$endTime);
+
+				if(GO::modules()->tasks){
+					$response = $this->_getTaskResponseForPeriod($response,$calendar,$startTime,$endTime);
+				}
+			}
+
+			$response = $this->_getEventResponseForPeriod($response,$calendar,$startTime,$endTime);
+			
+		}
+		
+		//Sanitize the title so there is no & on the end.
+		$response['title'] = trim($response['title'],' &');
+
+		ksort($response['results']);
+		
+		//Remove the index from the response array
+		$response['results']=  array_values($response['results']);
+		
+		$response['success']=true;
 		
 		return $response;
 	}
+	
+	/**
+	 * Fill the response array with the tasks thas are in the visible tasklists 
+	 * for this calendar between the start and end time
+	 * 
+	 * @param array $response
+	 * @param GO_Calendar_Model_Calendar $calendar
+	 * @param string $startTime
+	 * @param string $endTime
+	 * @return array 
+	 */
+	private function _getTaskResponseForPeriod($response,$calendar,$startTime,$endTime){
+		$resultCount = 0;
+		$dayString = GO::t('full_days');
+		
+		$tasklists = $calendar->visible_tasklists;
 
+		$lists = array();
+		while($tasklist = $tasklists->fetch()){
+			$lists[] = $tasklist->id;
+		}
+		if(!empty($lists)){
+			
+			$taskFindCriteria = GO_Base_Db_FindCriteria::newInstance()
+							->addCondition('due_time', strtotime($startTime),'>=')
+							->addCondition('due_time', strtotime($endTime), '<=');
+
+		
+			$taskFindCriteria->addInCondition('tasklist_id', $lists);
+	
+
+			$taskFindParams = GO_Base_Db_FindParams::newInstance()
+							->criteria($taskFindCriteria)
+							->debugSql();
+
+			$tasks = GO_Tasks_Model_Task::model()->find($taskFindParams);
+
+			while($task = $tasks->fetch()){
+
+				$startTime = date('Y-m-d',$task->due_time).' 00:00';
+				$endTime = date('Y-m-d',$task->due_time).' 23:59';
+
+				$resultCount++;
+				
+
+
+				$response['results'][$this->_getIndex($response['results'],(int)$task->due_time)] = array(
+					'id'=>$response['count']++,
+					'link_count'=>$task->countLinks(),
+					'name'=>$task->name,
+					'description'=>$task->description,
+					'time'=>'00:00',
+					'start_time'=>$startTime,
+					'end_time'=>$endTime,
+					//'background'=>$calendar->displayColor,
+					'background'=>'EBF1E2',
+					'day'=>$dayString[date('w', ($task->due_time))].' '.GO_Base_Util_Date::get_timestamp($task->due_time,false),
+					'read_only'=>true,
+					'task_id'=>$task->id
+				);
+			}
+		}
+		// Set the count of the tasks
+		$response['count_tasks_only'] = $resultCount;
+		
+		return $response;
+	}
+	
+	private function _getIndex($results, $start_time){
+
+		while(isset($results[$start_time])) {
+			$start_time++;
+		}
+		return $start_time;
+	}
+	
+	/**
+	 * Fill the response array with the holidays between the start and end time
+	 * 
+	 * @param array $response
+	 * @param GO_Calendar_Model_Calendar $calendar
+	 * @param string $startTime
+	 * @param string $endTime
+	 * @return array 
+	 */
+	private function _getHolidayResponseForPeriod($response,$calendar,$startTime,$endTime){
+		$resultCount = 0;
+		$dayString = GO::t('full_days');
+		
+		$holidays = GO_Base_Model_Holiday::model()->getHolidaysInPeriod($startTime, $endTime, $calendar->user->language);
+			
+			while($holiday = $holidays->fetch()){
+				$resultCount++;
+				$response['results'][$this->_getIndex($response['results'],strtotime(date(GO::user()->time_format, $holiday->date)))] = array(
+					'id'=>$response['count']++,
+					'name'=>htmlspecialchars($holiday->name, ENT_COMPAT, 'UTF-8'),
+					'description'=>'',
+					'time'=>date(GO::user()->time_format, $holiday->date),
+					'all_day_event'=>1,
+					'start_time'=>date('Y-m-d',$holiday->date).' 00:00',
+					'end_time'=>date('Y-m-d',$holiday->date).' 23:59',
+					//'background'=>$calendar->displayColor,
+					'background'=>'EBF1E2',
+					'day'=>$dayString[date('w', $holiday->date)].' '.GO_Base_Util_Date::get_timestamp($holiday->date,false),
+					'read_only'=>true
+					);
+			}
+			
+			// Set the count of the holidays
+			$response['count_holidays_only'] = $resultCount;
+		
+		return $response;
+	}
+	
+	/**
+	 * Fill the response array with the birthdays of the contacts in the 
+	 * addressbooks between the start and end time
+	 * 
+	 * @param array $response
+	 * @param GO_Calendar_Model_Calendar $calendar
+	 * @param string $startTime
+	 * @param string $endTime
+	 * @return array 
+	 */
+	private function _getBirthdayResponseForPeriod($response,$calendar,$startTime,$endTime){
+		$adressbooks = GO_Addressbook_Model_Addressbook::model()->find(GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::READ_PERMISSION));
+		
+		$resultCount = 0;
+		$dayString = GO::t('full_days');
+		$addressbookKeys = array();
+
+		while($addressbook = $adressbooks->fetch()){
+			$addressbookKeys[] = $addressbook->id;
+		}
+
+		$alreadyProcessed = array();
+		$contacts = $this->_getBirthdays($startTime,$endTime,$addressbookKeys);
+
+		foreach ($contacts as $contact){
+
+			if(!in_array($contact->id, $alreadyProcessed)){
+				$alreadyProcessed[] = $contact->id;
+
+				$name = GO_Base_Util_String::format_name($contact->last_name, $contact->first_name, $contact->middle_name);
+				$start_arr = explode('-',$contact->upcoming);
+
+				$start_unixtime = mktime(0,0,0,$start_arr[1],$start_arr[2],$start_arr[0]);
+				
+				$resultCount++;
+				
+				$response['results'][$this->_getIndex($response['results'],strtotime($contact->upcoming.' 00:00'))] = array(
+					'id'=>$response['count']++,
+					'name'=>htmlspecialchars(str_replace('{NAME}',$name,GO::t('birthday_name','calendar')), ENT_COMPAT, 'UTF-8'),
+					'description'=>htmlspecialchars(str_replace(array('{NAME}','{AGE}'), array($name,$contact->upcoming-$contact->birthday), GO::t('birthday_desc','calendar')), ENT_COMPAT, 'UTF-8'),
+					'time'=>date(GO::user()->time_format, $start_unixtime),												
+					'start_time'=>$contact->upcoming.' 00:00',
+					'end_time'=>$contact->upcoming.' 23:59',
+//					'background'=>$calendar->displayColor,
+					'background'=>'EBF1E2',
+					'day'=>$dayString[date('w', $start_unixtime)].' '.GO_Base_Util_Date::get_timestamp($start_unixtime,false),
+					'read_only'=>true,
+					'contact_id'=>$contact->id
+				);
+			}
+		}
+		
+		// Set the count of the birthdays
+		$response['count_birthdays_only'] = $resultCount;
+		
+			return $response;
+	}
+	
+	/**
+	 * Fill the response array with the events of the given calendar between 
+	 * the start and end time
+	 * 
+	 * @param array $response
+	 * @param GO_Calendar_Model_Calendar $calendar
+	 * @param string $startTime
+	 * @param string $endTime
+	 * @return array 
+	 */
+	private function _getEventResponseForPeriod($response,$calendar,$startTime,$endTime){
+		$events = array();
+		$dayString = GO::t('full_days');
+				
+		$resultCount = 0;
+		
+		$events = GO_Calendar_Model_Event::model()->findCalculatedForPeriod(
+								GO_Base_Db_FindParams::newInstance()->criteria(
+									GO_Base_Db_FindCriteria::newInstance()->addCondition('calendar_id', $calendar->id)
+								), 
+								strtotime($startTime), 
+								strtotime($endTime)
+							);
+
+		foreach($events as $event){
+
+			$eventModel = $event->getEvent();
+
+			$eventData = $eventModel->getAttributes('formatted');
+			// Change the date and time to the right format so the view can read and use it
+			$eventData['start_time'] = date('Y-m-d H:i', $event->getAlternateStartTime());
+			$eventData['end_time'] = date('Y-m-d H:i',  $event->getAlternateEndTime());	
+			$eventData['ctime'] = date('Y-m-d H:i',  $eventModel->ctime);
+			
+			
+			if($response['calendar_count'] > 1){
+			
+				$background = $calendar->getColor(GO::user()->id);
+
+				if(empty($background)){
+					$background = $calendar->displayColor;
+				}
+			} else {
+				$background = $eventModel->background;
+			}
+
+			if($event->isAllDay()){
+				$eventData['time'] =  $event->getFormattedTime();
+			} else {
+				if (date(GO::user()->date_format, $event->getAlternateStartTime()) != date(GO::user()->date_format, $event->getAlternateEndTime()))
+					$eventData['time'] =  $event->getFormattedTime();
+				else
+					$eventData['time'] =  $event->getFormattedTime();
+			}
+			$eventData['id'] = $response['count']++;
+			$eventData['event_id'] = $eventModel->id;
+			$eventData['has_other_participants'] = $event->hasOtherParticipants();
+			$eventData['link_count'] = $event->getLinkCount();
+			$eventData['calendar_name'] = $event->getCalendar()->name;
+			$eventData['description'] = nl2br(htmlspecialchars(GO_Base_Util_String::cut_string($eventModel->description, 800), ENT_COMPAT, 'UTF-8'));
+			$eventData['private'] = $event->isPrivate();
+			$eventData['background'] = $background;
+			$eventData['status_color'] = $eventModel->getStatusColor();
+			$eventData['status'] = $eventModel->status;
+			$eventData['repeats'] = $event->isRepeating();
+			$eventData['all_day_event'] = $event->isAllDay();
+			$eventData['day'] = $dayString[date('w', ($eventModel->start_time))].' '.GO_Base_Util_Date::get_timestamp($eventModel->start_time,false);  // date(implode(GO::user()->date_separator,str_split(GO::user()->date_format,1)), ($eventModel->start_time));
+			$eventData['read_only'] = $event->isReadOnly();
+			$eventData['model_name'] = $eventModel->className();
+
+			$eventData['username'] = $eventModel->user->getName();
+
+			$duration = $event->getDurationInMinutes();
+
+			if($duration >= 60){
+				$durationHours = floor($duration / 60);
+				$durationRestMinutes = $duration % 60;
+				$eventData['duration'] = $durationHours.' '.GO::t('hours').', '.$durationRestMinutes.' '.GO::t('mins');
+			} else {
+				$eventData['duration'] = $duration.'m';
+			}
+			
+			$resultCount++;
+
+			$response['results'][$this->_getIndex($response['results'],strtotime($eventData['start_time']))]=$eventData;
+		}
+
+		if(!empty($eventModel))
+			$response['mtime'] = $eventModel->mtime;
+		
+		// Set the count of the events
+		$response['count_events_only'] = $resultCount;
+		
+		return $response;
+	}
+		
 	protected function actionIcs($params) {
 		$event = GO_Calendar_Model_Event::model()->findByPk($params['id']);
 		//header('Content-Type: text/plain');
@@ -796,5 +1135,48 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		
 		$this->render('invitation', array('participant'=>$participant, 'event'=>$event));
+	}
+	
+	/**
+	 * Get the birthdays of the contacts in the given addressbooks between 
+	 * the given start and end time.
+	 * 
+	 * @param string $start_time
+	 * @param string $end_time
+	 * @param array $abooks
+	 * @return GO_Base_Db_ActiveStatement 
+	 */
+	private function _getBirthdays($start_time,$end_time,$abooks=array()) {
+
+		$start = date('Y-m-d',strtotime($start_time));
+		$end = date('Y-m-d',strtotime($end_time));
+
+		$select = "t.id, birthday, first_name, middle_name, last_name, "
+			."IF (STR_TO_DATE(CONCAT(YEAR('$start'),'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e') >= '$start', "
+			."STR_TO_DATE(CONCAT(YEAR('$start'),'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e') , "
+			."STR_TO_DATE(CONCAT(YEAR('$start')+1,'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e')) "
+			."as upcoming ";
+		
+		$findCriteria = GO_Base_Db_FindCriteria::newInstance()
+						->addCondition('birthday', '0000-00-00', '!=')
+						->addRawCondition('birthday', 'NULL', 'IS NOT');
+		
+		if(count($abooks)) {
+			$abooks=array_map('intval', $abooks);
+			$findCriteria->addInCondition('addressbook_id', $abooks);
+		}
+		
+		$having = "upcoming BETWEEN '$start' AND '$end'";
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->distinct()
+						->select($select)
+						->criteria($findCriteria)
+						->having($having)
+						->order('upcoming');
+
+		$contacts = GO_Addressbook_Model_Contact::model()->find($findParams);
+		
+		return $contacts;
 	}
 }

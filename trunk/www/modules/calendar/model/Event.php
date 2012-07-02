@@ -30,6 +30,7 @@
  * @property string $location
  * @property string $description
  * @property string $name
+ * @property string $status
  * @property boolean $all_day_event
  * @property int $end_time
  * @property int $start_time
@@ -42,6 +43,13 @@
  * @author Wesley Smits <wsmits@intermesh.nl>
  */
 class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
+
+	const STATUS_TENTATIVE = 'TENTATIVE';
+	const STATUS_DECLINED = 'DECLINED';
+	const STATUS_ACCEPTED = 'ACCEPTED';
+	const STATUS_CONFIRMED = 'CONFIRMED';
+	const STATUS_NEEDS_ACTION = 'NEEDS-ACTION';
+	const STATUS_DELEGATED = 'DELEGATED';
 
 	/**
 	 * The date where the exception needs to be created. If this is set on a new event
@@ -100,7 +108,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		return $defaults;
 	}
-
+	
 	public function customfieldsModel() {
 		return "GO_Calendar_Customfields_Model_Event";
 	}
@@ -137,6 +145,37 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		return 'calendar/' . GO_Base_Fs_Base::stripInvalidChars($this->calendar->name) . '/' . date('Y', $this->start_time) . '/' . GO_Base_Fs_Base::stripInvalidChars($this->name).' ('.$this->id.')';
 	}
 
+	/**
+	 * Get the color for the current status of this event
+	 * 
+	 * @return string 
+	 */
+	public function getStatusColor(){
+		
+		switch($this->status){
+			case GO_Calendar_Model_Event::STATUS_TENTATIVE:
+				$color = 'FFFF00'; //Yellow
+			break;
+			case GO_Calendar_Model_Event::STATUS_DECLINED:
+				$color = 'FF0000'; //Red			
+			break;
+			case GO_Calendar_Model_Event::STATUS_ACCEPTED:
+				$color = '00FF00'; //Lime
+			break;
+			case GO_Calendar_Model_Event::STATUS_CONFIRMED:
+				$color = '32CD32'; //LimeGreen
+			break;
+			case GO_Calendar_Model_Event::STATUS_NEEDS_ACTION:
+				$color = 'FF8C00'; //DarkOrange
+			break;
+			case GO_Calendar_Model_Event::STATUS_DELEGATED:
+				$color = '0000CD'; //MediumBlue
+			break;
+		}
+		
+		return $color;
+	}
+	
 	/**
 	 * Get the date interval for the event.
 	 * 
@@ -482,35 +521,80 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 
 	private function _calculateRecurrences($event, $periodStartTime, $periodEndTime) {
-		if (empty($event->rrule)) {
-			//not a recurring event
-			$this->_calculatedEvents[] = $event->getAttributes('formatted');
+		
+		$localEvent = new GO_Calendar_Model_LocalEvent($event, $periodStartTime, $periodEndTime);
+		
+		if(!$localEvent->isRepeating()){
+			$this->_calculatedEvents[] = $localEvent;
 		} else {
 			$rrule = new GO_Base_Util_Icalendar_Rrule();
-			$rrule->readIcalendarRruleString($event->start_time, $event->rrule);
+			$rrule->readIcalendarRruleString($localEvent->getEvent()->start_time, $localEvent->getEvent()->rrule);
 
-			$rrule->setRecurpositionStartTime($periodStartTime);
+			$rrule->setRecurpositionStartTime($localEvent->getPeriodStartTime());
 
-			$origEventAttr = $event->getAttributes('formatted');
+			$origEventAttr = $localEvent->getEvent()->getAttributes('formatted');
 
 			while ($occurenceStartTime = $rrule->getNextRecurrence()) {
 
-				if ($occurenceStartTime > $periodEndTime)
+				if ($occurenceStartTime > $localEvent->getPeriodEndTime())
 					break;
 
-				$origEventAttr['start_time'] = GO_Base_Util_Date::get_timestamp($occurenceStartTime);
+				$localEvent->setAlternateStartTime(GO_Base_Util_Date::get_timestamp($occurenceStartTime));
 
 				$diff = $this->getDiff();
 
 				$endTime = new GO_Base_Util_Date_DateTime(date('c', $occurenceStartTime));
 				$endTime->addDiffCompat($diff);
-				$origEventAttr['end_time'] = GO_Base_Util_Date::get_timestamp($endTime->format('U'));
+				$localEvent->setAlternateEndTime(GO_Base_Util_Date::get_timestamp($endTime->format('U')));
 
-				$this->_calculatedEvents[$occurenceStartTime . '-' . $origEventAttr['id']] = $origEventAttr;
+				$this->_calculatedEvents[$occurenceStartTime . '-' . $origEventAttr['id']] = $localEvent;
 			}
-
-			ksort($this->_calculatedEvents);
 		}
+		
+		
+//		if (empty($event->rrule)) {
+//			//not a recurring event
+//			$this->_calculatedEvents[] = $event->getAttributes('formatted');
+//		} else {
+//			$rrule = new GO_Base_Util_Icalendar_Rrule();
+//			$rrule->readIcalendarRruleString($event->start_time, $event->rrule);
+//
+//			$rrule->setRecurpositionStartTime($periodStartTime);
+//
+//			$origEventAttr = $event->getAttributes('formatted');
+//
+//			while ($occurenceStartTime = $rrule->getNextRecurrence()) {
+//
+//				if ($occurenceStartTime > $periodEndTime)
+//					break;
+//
+//				$origEventAttr['start_time'] = GO_Base_Util_Date::get_timestamp($occurenceStartTime);
+//
+//				$diff = $this->getDiff();
+//
+//				$endTime = new GO_Base_Util_Date_DateTime(date('c', $occurenceStartTime));
+//				$endTime->addDiffCompat($diff);
+//				$origEventAttr['end_time'] = GO_Base_Util_Date::get_timestamp($endTime->format('U'));
+//
+//				$this->_calculatedEvents[$occurenceStartTime . '-' . $origEventAttr['id']] = $origEventAttr;
+//			}
+//
+//			ksort($this->_calculatedEvents);
+//		}
+	}
+	
+	/**
+	 * Create a localEvent model from this event model
+	 * 
+	 * @param GO_Calendar_Model_Event $event
+	 * @param string $periodStartTime
+	 * @param string $periodEndTime
+	 * @return GO_Calendar_Model_LocalEvent 
+	 */
+	public function getLocalEvent($event, $periodStartTime, $periodEndTime){
+		$localEvent = new GO_Calendar_Model_LocalEvent($event, $periodStartTime, $periodEndTime);
+		
+		return $localEvent;
 	}
 	
 	/**
@@ -1042,7 +1126,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	private function _exportVObjectStatus($status)
 	{
 		$statuses = array(
-			GO_Calendar_Model_Participant::STATUS_PENDING=>'NEEDS-ACTION',
+			GO_Calendar_Model_Participant::STATUS_PENDING=>'NEEDS-ACTION',	
 			GO_Calendar_Model_Participant::STATUS_ACCEPTED=>'ACCEPTED',
 			GO_Calendar_Model_Participant::STATUS_DECLINED=>'DECLINED',
 			GO_Calendar_Model_Participant::STATUS_TENTATIVE=>'TENTATIVE'
@@ -1083,7 +1167,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @param int $user_id
 	 * @return boolean 
 	 */
-	public function hasOtherParticipants($user_id){
+	public function hasOtherParticipants($user_id=0){
+		
+		if(empty($user_id))
+			$user_id=GO::user()->id;
 		
 		if(empty($this->id))
 			return false;
