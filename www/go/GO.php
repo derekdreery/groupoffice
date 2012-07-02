@@ -422,7 +422,7 @@ class GO{
 
 		if(!defined('GO_LOADED')){ //check if old Group-Office.php was loaded
 
-			if(GO::config()->debug){
+			if(GO::config()->debug || GO::config()->debug_log){
 				$username = GO::user() ? GO::user()->username : 'nobody';
 
 				$log = '['.date('Y-m-d G:i').']['.$username.'] Start of new request: ';
