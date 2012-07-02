@@ -1697,7 +1697,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					return  GO_Base_Util_Number::unlocalize($value);
 					break;
 				case 'boolean':
-					return  empty($value) || $value=="false" ? 0 : 1; 
+					$ret= empty($value) || $value==="false" ? 0 : 1; 
+					return $ret;
 					break;				
 				case 'date':
 					return  GO_Base_Util_Date::to_db_date($value);
