@@ -311,7 +311,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 																	// all of this contact's properties starting with this prefix will
 																	// be removed to make place for the ones in the imported VCard.
 
-		// Remove this contact's stand, non-GO VCard properties.
+		// Remove this contact's non-GO VCard properties.
 		// (We assume they will be updated by the client during the current sync process).
 		if (!empty($this->id)) {
 			$nonGO_PropModels_toDelete = GO_Addressbook_Model_ContactVcardProperty::model()
@@ -685,13 +685,18 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		
 		foreach ($propModels as $propModel) {
 			$p = new Sabre_VObject_Property($propModel['name'],$propModel['value']);
-			$paramStrings = explode(';',$propModel['parameters']);
-			foreach ($paramStrings as $paramString) {
-				$paramStringArr = explode('=',$paramString);
-				$param = new GO_Base_VObject_Parameter($paramStringArr[0]);
-				if (!empty($paramStringArr[1]))
-					$param->value = $paramStringArr[1];
-				$p->add($param);
+			if(!empty($propModel['parameters'])){
+				$paramStrings = explode(';',$propModel['parameters']);
+				foreach ($paramStrings as $paramString) {
+					if(!empty($paramString)){
+						$paramStringArr = explode('=',$paramString);
+
+						$param = new GO_Base_VObject_Parameter($paramStringArr[0]);
+						if (!empty($paramStringArr[1]))
+							$param->value = $paramStringArr[1];
+						$p->add($param);
+					}
+				}
 			}
 			$e->add($p);
 		}
