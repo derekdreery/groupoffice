@@ -1,33 +1,7 @@
 <?php
 
 class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController {
-	
-	protected function actionSource($params) {		
 		
-		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
-		/* @var $account GO_Email_Model_Account */
-		
-		$imap  = $account->openImapConnection($params['mailbox']);
-
-		header("Content-type: text/plain; charset: US-ASCII");
-		header('Content-Disposition: inline; filename="message_source.txt"');
-
-		/*
-		 * Somehow fetching a message with an empty message part which should fetch it
-		 * all doesn't work. (http://tools.ietf.org/html/rfc3501#section-6.4.5)
-		 *
-		 * That's why I first fetch the header and then the text.
-		 */
-		$header = $imap->get_message_part($params['uid'], 'HEADER', true) . "\r\n\r\n";
-		$size = $imap->get_message_part_start($params['uid'], 'TEXT', true);
-
-		header('Content-Length: ' . strlen($header) . $size);
-
-		echo $header;
-		while ($line = $imap->get_message_part_line())
-			echo $line;
-	}
-	
 	protected function actionNotification($params){
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		
@@ -1109,10 +1083,34 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		return $response;
 	}
 	
-	
-	
-	
-	
+	protected function actionSource($params) {
+		
+		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+		$imap  = $account->openImapConnection($params['mailbox']);
+
+//		header("Content-type: text/plain; charset: US-ASCII");
+//		header('Content-Disposition: inline; filename="message_source.txt"');
+		
+		$filename = empty($params['download']) ? "message.txt" :"message.eml";
+		
+		GO_Base_Util_Http::outputDownloadHeaders(new GO_Base_Fs_File($filename), empty($params['download']));	
+
+		/*
+		 * Somehow fetching a message with an empty message part which should fetch it
+		 * all doesn't work. (http://tools.ietf.org/html/rfc3501#section-6.4.5)
+		 *
+		 * That's why I first fetch the header and then the text.
+		 */
+		$header = $imap->get_message_part($params['uid'], 'HEADER') . "\r\n\r\n";
+		$size = $imap->get_message_part_start($params['uid'], 'TEXT');
+
+		header('Content-Length: ' . strlen($header) . $size);
+
+		echo $header;
+		while ($line = $imap->get_message_part_line())
+			echo $line;
+	}
+
 	protected function actionDeleteOld($params){
 
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
