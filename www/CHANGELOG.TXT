@@ -1,3 +1,6 @@
+02-07-2012 3.7.534
+- Bug in read only contact sync
+
 29-06-2012 3.7.53
 - Fix in webdav
 
