@@ -1,6 +1,8 @@
 02-07-2012 4.0.56
 - Bug in CalDAV with Applie ical fixed.
 - Bug in calendar invitations fixed.
+- Bug in announcement formatting.
+- Bug with changing fonts in E-mail composer. Font selection removed.
 
 26-06-2012 4.0.50
 - Lot's of bug fixes thanks to the beta testers!
