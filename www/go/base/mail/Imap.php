@@ -28,6 +28,22 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	public function __destruct() {
 		$this->disconnect();
 	}
+	
+	public function checkConnection(){
+		if(!is_resource($this->handle)){
+			return $this->connect(
+							$this->server, 
+							$this->port,
+							$this->username,
+							$this->password,
+							$this->ssl,
+							$this->starttls,
+							$this->auth);
+		}else
+		{
+			return true;
+		}
+	}
 
 	/**
 	 * Connects to the IMAP server and authenticates the user
@@ -60,11 +76,10 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$this->username=$username;
 		$this->password=$password;
 
-		if ($this->ssl) {
-			$this->server = 'ssl://'.$this->server;
-		}
+		$server = $this->ssl ? 'ssl://'.$this->server : $this->server;
+		
 
-		$this->handle = @fsockopen($this->server, $this->port, $errorno, $errorstr, 30);
+		$this->handle = @fsockopen($server, $this->port, $errorno, $errorstr, 30);
 		if (!is_resource($this->handle)) {
 			throw new Exception('Failed to open socket #'.$errorno.'. '.$errorstr);
 		}
