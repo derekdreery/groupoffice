@@ -384,6 +384,7 @@ GO.addressbook.MainPanel = function(config)
 					this.exportDialog = new GO.ExportGridDialog({
 						url: url,
 						name: name,
+						exportClassPath:'modules/addressbook/export',
 						documentTitle: title,
 						colModel: colmodel
 					});
