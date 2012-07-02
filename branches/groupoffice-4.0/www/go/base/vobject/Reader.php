@@ -26,34 +26,37 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 			throw new Sabre_VObject_ParseException('Invalid VCard: it does not end with the END element.');
 		
 		// Make sure the lines are put in an array separately per VCard.		
-		foreach ($lines as $lineNr => $line) {
+		for ($i=0; $i<count($lines); $i++) {
 			
-			if (stripos($line,"BEGIN:VCARD")!==false) {
+			if (stripos($lines[$i],"BEGIN:VCARD")!==false) {
 			
 				if ($currentlyBusy)
-					throw new Sabre_VObject_ParseException('BEGIN element found prematurely in line #'.($lineNr+1).'.');
+					throw new Sabre_VObject_ParseException('BEGIN element found prematurely in line #'.($i+1).'.');
 				$currentlyBusy=true;
-				$currentVObject = Sabre_VObject_Component::create(strtoupper(substr($line,6)));
+				$currentVObject = Sabre_VObject_Component::create(strtoupper(substr($lines[$i],6)));
 				
-			} elseif (stripos($line,"END:VCARD")!==false) {
+			} elseif (stripos($lines[$i],"END:VCARD")!==false) {
 			
 				if (!$currentlyBusy)
-					throw new Sabre_VObject_ParseException('END element found prematurely in line #'.($lineNr+1).'.');
+					throw new Sabre_VObject_ParseException('END element found prematurely in line #'.($i+1).'.');
 				$currentlyBusy=false;
 				$outputVObjects[] = $currentVObject;
 			
-			} else if (empty($line) || $line[0]==="\t") {
+			} else if (empty($lines[$i]) || $lines[$i][0]==="\t") {
 
 				// DO NOTHING
 				
 			} else {
-			
+				if ($lines[$i+1][0]===" " || $lines[$i+1][0]==="\t") {
+					$lines[$i+1] = $lines[$i].$lines[$i+1];
+					continue;
+				}
 				if (!$currentlyBusy)
-					throw new Sabre_VObject_ParseException('Before line #'.($lineNr+1).', there must be a BEGIN element.');
+					throw new Sabre_VObject_ParseException('Before line #'.($i+1).', there must be a BEGIN element.');
 
-				$result = preg_match(self::REGEX_ELEMENT_STRING,$line,$matches);
+				$result = preg_match(self::REGEX_ELEMENT_STRING,$lines[$i],$matches);
         if (!$result)
-          throw new Sabre_VObject_ParseException('Invalid VObject, line ' . ($lineNr+1) . ' did not follow the icalendar/vcard format');
+          throw new Sabre_VObject_ParseException('Invalid VObject, line ' . ($i+1) . ' did not follow the icalendar/vcard format');
 
         $vProp = Sabre_VObject_Property::create(
 					strtoupper($matches['name']),
