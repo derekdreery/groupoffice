@@ -1,6 +1,6 @@
 <?php
 
-GO::$ignoreAclPermissions=true;
+
 
 class formprocessor{
 	/*
@@ -108,6 +108,8 @@ class formprocessor{
 
 	function process_form()
 	{
+		GO::$ignoreAclPermissions=true;
+		
 		$this->check_required();		
 
 		if(!isset($_POST['salutation']))
