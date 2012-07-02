@@ -25,5 +25,12 @@ class GO_Summary_Controller_Announcement extends GO_Base_Controller_AbstractMode
 		else
 			return GO_Base_Db_FindParams::newInstance()->select('t.*');
 	}
+	
+	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+		
+		$columnModel->formatColumn('user_name', '$model->user->name');
+		
+		return parent::formatColumns($columnModel);
+	}
 }
 
