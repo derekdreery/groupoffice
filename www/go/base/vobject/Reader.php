@@ -47,7 +47,7 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 				// DO NOTHING
 				
 			} else {
-				if ($lines[$i+1][0]===" " || $lines[$i+1][0]==="\t") {
+				if ($lines[$i+1][0]===" " || $lines[$i+1][0]==="\t" || strpos($lines[$i+1],'\n')===0 || strpos($lines[$i+1],'\r\n')===0) {
 					$lines[$i+1] = $lines[$i].$lines[$i+1];
 					continue;
 				}
