@@ -87,7 +87,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		$cacheKey='email:'.$account->id.':'.$mailbox.':'.$uid;
 		
 		$cachedMessage = isset($this->_cache[$cacheKey]) ? $this->_cache[$cacheKey] : GO::cache()->get($cacheKey);
-	
+		
 		if($cachedMessage)
 		{
 			GO::debug("Returning message $cacheKey from cache");
