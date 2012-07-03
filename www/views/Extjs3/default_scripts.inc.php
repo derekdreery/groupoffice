@@ -27,7 +27,7 @@ $settings['state']=array();
 if(GO::user()) {
 	//state for Ext components
 	$settings['html_editor_font']=GO::config()->html_editor_font;
-	$settings['state'] = $GLOBALS['GO_CONFIG']->get_state(GO::user()->id, $settings['state_index']);
+	$settings['state'] = GO_Base_Model_State::model()->getFullClientState(GO::user()->id);
 	$settings['user_id']=GO::user()->id;	
 	$settings['has_admin_permission']=GO::user()->isAdmin();	
 	$settings['username'] = GO::user()->username;
@@ -551,7 +551,7 @@ if(count($load_modules)) {
 
 	Ext.BLANK_IMAGE_URL = '<?php echo GO::config()->host; ?>views/Extjs3/ext/resources/images/default/s.gif';
 
-	Ext.state.Manager.setProvider(new GO.state.HttpProvider({url: BaseHref+'state.php'}));
+	Ext.state.Manager.setProvider(new GO.state.HttpProvider());
 	//Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 
 

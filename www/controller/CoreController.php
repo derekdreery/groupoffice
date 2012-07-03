@@ -685,4 +685,26 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 
 		return $response;
 	}
+	
+	
+	
+	protected function actionSaveState($params){
+		//close writing to session so other concurrent requests won't be locked out.
+		GO::session()->closeWriting();
+
+		$values = json_decode($params['values'], true);
+
+		foreach($values as $name=>$value){
+			
+			$state = GO_Base_Model_State::model()->findByPk(array('name'=>$name,'user_id'=>GO::user()->id));
+			
+			if(!$state)
+				$state = new GO_Base_Model_State();
+			
+			$state->value=$value;
+			$state->save();
+		}
+		$response['success']=true;
+		echo json_encode($response);
+	}
 }

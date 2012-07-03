@@ -209,9 +209,21 @@ class GO{
 	public static function user(){
 		if(empty(GO::session()->values['user_id'])){
 			return false;
-		}else{
-			if(!isset(self::$_user))
-				self::$_user = GO_Base_Model_User::model()->findByPk(GO::session()->values['user_id'], array(), true);
+		}else{		
+			
+			if(!isset(self::$_user)){
+				
+				$cacheKey = 'GO_Base_Model_User:'.GO::session()->values['user_id'];
+				$cachedUser = GO::cache()->get($cacheKey);
+				
+				if($cachedUser){
+					self::$_user=$cachedUser;
+				}else
+				{
+					self::$_user = GO_Base_Model_User::model()->findByPk(GO::session()->values['user_id'], array(), true);
+					GO::cache()->set($cacheKey, self::$_user);
+				}
+			}
 
 			return self::$_user;
 		}

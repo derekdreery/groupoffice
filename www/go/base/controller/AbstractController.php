@@ -143,7 +143,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			
 			$moduleId = strtolower($classParts[1]);
 			
-			$this->_module = GO_Base_Model_Module::model()->findByPk($moduleId, false, true);			
+			$this->_module = $moduleId=='core' ? false : GO_Base_Model_Module::model()->findByPk($moduleId, false, true);			
 		}
 		
 		return $this->_module;
