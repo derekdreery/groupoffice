@@ -39,7 +39,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	 * 
 	 * @var boolean 
 	 */
-	public $peek=false;
+	public $peek=true;
 	
 	
 //	/**
@@ -91,6 +91,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		if($cachedMessage)
 		{
 			GO::debug("Returning message $cacheKey from cache");
+			$cachedMessage->cacheOnDestruct=$cacheKey;
 			return $cachedMessage;
 		}else
 		{
@@ -276,6 +277,20 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		}
 	}
 	
+//	public function __wakeup() {
+//		unset($this->seen);
+//		unset($this->flag);
+//	}
+	
+//	private function _setSeen(){
+//		
+//		if(!$this->peek && empty($this->seen)){			
+//			$this->seen =true;
+//
+//			$this->getImapConnection()->set_message_flag(array($this->uid), "\Seen");
+//		}
+//	}
+	
 	public function getHtmlBody($asText=false){		
 		if(!isset($this->_htmlBody)){
 			$imap = $this->getImapConnection();		
@@ -308,6 +323,9 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 			if(empty($this->_htmlBody) && !$asText){
 				$this->_htmlBody = $this->getPlainBody(true);			
 			}
+		}else
+		{
+//			$this->_setSeen();
 		}
 		
 		if($asText){
@@ -348,6 +366,9 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 					}
 				}			
 			}
+		}else
+		{
+//			$this->_setSeen();
 		}
 		
 		$this->_plainBody = GO_Base_Util_String::normalizeCrlf($this->_plainBody);

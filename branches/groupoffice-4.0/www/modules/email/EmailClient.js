@@ -635,12 +635,12 @@ GO.email.EmailClient = function(config){
 			this.forwardButton.setDisabled(false);
 			this.printButton.setDisabled(false);
 			
-			var record = this.messagesGrid.store.getById(this.messagePanel.uid);
-			if(record.data['seen']==0)
-			{
-				this.incrementFolderStatus(this.mailbox, -1);
-				record.set('seen','1');
-			}
+//			var record = this.messagesGrid.store.getById(this.messagePanel.uid);
+//			if(record.data['seen']==0)
+//			{
+//				this.incrementFolderStatus(this.mailbox, -1);
+//				record.set('seen','1');
+//			}
 		}
   	
 	}, this);
@@ -757,8 +757,38 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 			{
 				//this.messagePanel.uid=r.data['uid'];
 				this.messagePanel.loadMessage(r.data.uid, this.mailbox, this.account_id);
+				
+				if(!r.data.seen){
+					//set read with 2 sec delay.
+					this.markAsRead.defer(2000, this, [r.data.uid, this.mailbox, this.account_id]);				
+				}
 			}
 		}, this);
+	},
+	
+	markAsRead : function(uid, mailbox, account_id){
+		if(this.messagePanel.uid==uid && this.messagePanel.mailbox==mailbox && this.messagePanel.account_id==account_id){
+				GO.request({
+				url: "email/message/setFlag",
+				params: {
+					account_id: account_id,
+					mailbox: mailbox,
+					flag: "Seen",
+					clear: 0,
+					messages: Ext.encode([uid])
+				},
+				success: function(options, response,result)
+				{
+					var record = this.messagesGrid.store.getById(uid);
+					record.set("seen", 1);
+					record.commit();					
+
+					this.updateFolderStatus(this.mailbox, result.unseen);						
+					
+				},
+				scope:this
+			});
+		}
 	},
 	
 	afterRender : function(){
