@@ -74,6 +74,7 @@ class GO{
 	 */
 	public static $disableModelCache=false;
 
+	private static $_classesIsDirty=false;
 	private static $_classes = array (
 		'GO_Base_Observable' => 'go/base/Observable.php',
 		'GO_Base_Session' => 'go/base/Session.php',
@@ -263,7 +264,7 @@ class GO{
 
 		if (!isset(self::$_cache)) {
 			if(GO::config()->debug)
-				self::$_cache=new GO_Base_Cache_None();
+				self::$_cache=new GO_Base_Cache_Apc();
 			elseif(function_exists("apc_store"))
 				self::$_cache=new GO_Base_Cache_Apc();
 			else
@@ -294,15 +295,6 @@ class GO{
 		return self::$_session;
 	}
 
-
-	public static function exportBaseClasses(){
-		var_export(self::$_classes);
-	}
-
-	public static function getBaseClasses(){
-		return self::$_classes;
-	}
-
 	/**
 	 * The automatic class loader for Group-Office.
 	 *
@@ -311,9 +303,11 @@ class GO{
 	public static function autoload($className) {
 
 		if(isset(self::$_classes[$className])){
-			require_once(dirname(dirname(__FILE__)) . '/'.self::$_classes[$className]);
+			//don't use GO::config()->root_path here because it might not be autoloaded yet causing an infite loop.
+			require(dirname(dirname(__FILE__)) . '/'.self::$_classes[$className]);
 		}else
 		{
+			GO::debug("Autoloading: ".$className);
 			//For SabreDAV
 			if(strpos($className,'Sabre_')===0) {
         include self::config()->root_path . 'go/vendor/SabreDAV/lib/Sabre/' . str_replace('_','/',substr($className,6)) . '.php';
@@ -328,11 +322,12 @@ class GO{
 				$baseClassFile = dirname(dirname(__FILE__)) . '/'.$location;
 				require($baseClassFile);
 
-				//for exportBaseClasses so we can optimize
+				//store it in the classes array so we can cache that for faster loading next time.
+				self::$_classesIsDirty=true;
 				self::$_classes[$className]=$location;
 
 			}  else {
-				$orgClassName = $className;
+				//$orgClassName = $className;
 				$forGO = substr($className,0,3)=='GO_';
 
 				if ($forGO)
@@ -346,10 +341,10 @@ class GO{
 
 					if($module!='core'){
 						//$file = self::modules()->$module->path; //doesn't play nice with objects in the session and autoloading
-						$file = self::config()->root_path.'modules/'.$module.'/';
+						$file = 'modules/'.$module.'/';
 					}else
 					{
-						$file = self::config()->root_path;
+						$file = "";
 					}
 					for($i=0,$c=count($arr);$i<$c;$i++){
 						if($i==$c-1){
@@ -363,19 +358,34 @@ class GO{
 						}
 
 					}
+					
+					$fullPath = self::config()->root_path.$file;
 
-					if(!file_exists($file) || is_dir($file)){
+					if(!file_exists($fullPath) || is_dir($fullPath)){
 						//throw new Exception('Class '.$orgClassName.' not found! ('.$file.')');
 						return false;
 					}
+					
+					//store it in the classes array so we can cache that for faster loading next time.
+					self::$_classes[$className]=$file;
+					self::$_classesIsDirty=true;
 
-					require($file);
+					require($fullPath);
 				}
 			}
 		}
 	}
 
 	private static $initialized=false;
+	
+	
+	/**
+	 * Called by GO_Base_Config::__destruct() so we can do stuff at the end 
+	 */
+	public static function endRequest(){
+		if(self::$_classesIsDirty)
+			GO::cache()->set('autoload_classes', self::$_classes);
+	}
 
 	/**
 	 * This function inititalizes Group-Office.
@@ -387,10 +397,15 @@ class GO{
 			throw new Exception("Group-Office was already initialized");
 		}
 		self::$initialized=true;
-
-		spl_autoload_register(array('GO', 'autoload'));
+				
+		spl_autoload_register(array('GO', 'autoload'));	
 
 		GO::session();
+		
+		//get cached autoload classes
+		$classes = GO::cache()->get('autoload_classes');
+		if($classes)
+			self::$_classes=$classes;
 
 		date_default_timezone_set(GO::user() ? GO::user()->timezone : GO::config()->default_timezone);
 

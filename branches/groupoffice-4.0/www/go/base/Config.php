@@ -1069,6 +1069,8 @@ class GO_Base_Config {
 			GO::debug("--------------------\n", $this);
 		}
 		
+		GO::endRequest();
+		
 		$this->_logSlowRequest();
 	}
 	
