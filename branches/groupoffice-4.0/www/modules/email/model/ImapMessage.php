@@ -145,6 +145,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		
 		$from = $this->from->getAddress();
 		$attributes['from']=$from["personal"];
+		$attributes['sender']=$from["email"];
 		
 		foreach($this->to->getAddresses() as $email=>$personal)
 			$attributes['to']=$personal.", ";
