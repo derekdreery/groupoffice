@@ -187,7 +187,7 @@ class GO_Base_Util_Date_DateTime extends DateTime {
 			$this->setDate($this->format('Y'), $this->format('n'), $this->format('j') + $diff['days']);
 
 		if ($diff['h'] > 0 || $diff['i'] > 0)
-			$this->setTime($this->format('G') + $diff['h'], $this->format('i'), $this->format('s'));
+			$this->setTime($this->format('G') + $diff['h'], $this->format('i')+$diff['i'], $this->format('s'));
 
 		return $this;
 	}
