@@ -1,3 +1,6 @@
+03-07-2012 4.0.57
+- Cache problem that caused a lot of problems in the e-mail client
+
 02-07-2012 4.0.56
 - Bug in CalDAV with Applie ical fixed.
 - Bug in calendar invitations fixed.
