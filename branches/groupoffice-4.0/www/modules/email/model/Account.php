@@ -218,13 +218,12 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 			
 			$uidnext = $value = GO::cache()->get($cacheKey);
 			
-			if($uidnext!==false && $uidnext!=$this->_imap->selected_mailbox['uidnext']){
+			if($uidnext!==false && $uidnext!=$this->_imap->selected_mailbox['uidnext'])
 				$this->_hasNewMessages=true;
-			}else
-			{
-				$uidnext=0;
-			}
-			GO::cache()->set($cacheKey, $this->_imap->selected_mailbox['uidnext']);
+			
+			//throw new Exception($this->_imap->selected_mailbox['uidnext']."!=".$uidnext);
+			if($this->_imap->selected_mailbox['uidnext']!=$uidnext)
+				GO::cache()->set($cacheKey, $this->_imap->selected_mailbox['uidnext']);
 			//GO::session()->values['email_status']['uidnext'][$this->id]=$this->_imap->selected_mailbox['uidnext'];
 		}
 	}
