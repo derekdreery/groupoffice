@@ -183,9 +183,6 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 			}catch(GO_Base_Mail_ImapAuthenticationFailedException $e){
 				throw new Exception('Authententication failed for user '.$this->username.' on IMAP server '.$this->host);
 			}
-		}else
-		{
-			$this->_imap->checkConnection();
 		}
 		if(!$this->_imap->select_mailbox($mailbox))
 			throw new Exception ("Could not open IMAP mailbox $mailbox");
@@ -195,18 +192,22 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		return $this->_imap;
 	}
 	
+	public function __wakeup() {
+		unset($this->_imap);
+	}
+	
 	/**
 	 * Get the imap connection if it's open.
 	 * 
 	 * @return GO_Base_Mail_Imap 
 	 */
-	public function getImapConnection(){
-		if(isset($this->_imap)){
-			$this->_imap->checkConnection();
-			return $this->_imap;
-		}else
-			return false;
-	}
+//	public function getImapConnection(){
+//		if(isset($this->_imap)){
+//			$this->_imap->checkConnection();
+//			return $this->_imap;
+//		}else
+//			return false;
+//	}
 	
 	private $_hasNewMessages=false;
 	
