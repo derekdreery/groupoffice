@@ -97,11 +97,42 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	/**
 	 * Todo replace compress.php with this action
 	 */
-	protected function actionCompress() {
+	protected function actionCompress($params) {
 		
+		GO::session()->closeWriting();
+		
+		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'cache/'.basename($params['file']));
+
+		$ext = $file->extension();
+
+		$type = $ext =='js' ? 'text/javascript' : 'text/css';
+
+		$use_compression = GO::config()->use_zlib_compression();
+
+		if($use_compression){
+			ob_start();
+			ob_start('ob_gzhandler');
+		}
+		$offset = 30*24*60*60;
+		header ("Content-Type: $type; charset: UTF-8");
+		header("Expires: " . date("D, j M Y G:i:s ", time()+$offset) . 'GMT');
+		header('Cache-Control: cache');
+		header('Pragma: cache');
+		if(!$use_compression){
+			header("Content-Length: ".$file->size());
+		}
+		readfile($file->path());
+
+		if($use_compression){
+			ob_end_flush();  // The ob_gzhandler one
+
+			header("Content-Length: ".ob_get_length());
+
+			ob_end_flush();  // The main one
+		}
 	}
 
-	private $clientScripts = array();
+//	private $clientScripts = array();
 
 //	protected function registerClientScript($url, $type='url') {
 //		$this->clientScripts[] = array($type, $url);
