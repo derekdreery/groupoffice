@@ -388,7 +388,7 @@ class GO{
 	 */
 	public static function endRequest(){
 		if(self::$_classesIsDirty)
-			GO::cache()->set('autoload_classes', self::$_classes);
+			@GO::cache()->set('autoload_classes', self::$_classes);
 	}
 
 	/**
