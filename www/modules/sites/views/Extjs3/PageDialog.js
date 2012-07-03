@@ -85,6 +85,10 @@ GO.sites.PageDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 					maxLength: 100,
 					allowBlank:false,
 					fieldLabel: GO.sites.lang.pageControllerAction
+				},{
+					xtype: 'xcheckbox',
+					name:'login_required',
+					fieldLabel: "Login required"
 				}]
 			}]
 		});
