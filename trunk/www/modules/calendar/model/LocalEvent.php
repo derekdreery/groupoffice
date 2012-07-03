@@ -78,7 +78,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 	/**
 	 * Get the start time of the recurring event in the selected period
 	 * 
-	 * @return string TIMESTAMP 
+	 * @return int Unix timestamp 
 	 */
 	public function getAlternateStartTime(){
 		if(empty($this->_alternateStartTime))
@@ -90,7 +90,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 	/**
 	 * Get the end time of the recurring event in the selected period
 	 * 
-	 * @return string TIMESTAMP 
+	 * @return int Unix timestamp 
 	 */
 	public function getAlternateEndTime(){
 		if(empty($this->_alternateEndTime))
@@ -102,19 +102,21 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 	/**
 	 * Set the start time of the recurring event in the selected period
 	 * 
-	 * @param string $time  TIMESTAMP
+	 * @param int $time  Unix timestamp
 	 */
 	public function setAlternateStartTime($time){
-		$this->_alternateStartTime = strtotime($time);
+
+		$this->_alternateStartTime = $time;
+		
 	}
 	
 	/**
 	 * Set the end time of the recurring event in the selected period
 	 * 
-	 * @param string $time  TIMESTAMP
+	 * @param int $time  Unix timestamp
 	 */
 	public function setAlternateEndTime($time){
-		$this->_alternateEndTime = strtotime($time);
+		$this->_alternateEndTime = $time;
 	}
 	
 	/**

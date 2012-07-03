@@ -184,6 +184,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public function getDiff() {
 		$startDateTime = new GO_Base_Util_Date_DateTime(date('c', $this->start_time));
 		$endDateTime = new GO_Base_Util_Date_DateTime(date('c', $this->end_time));
+		
 		return $startDateTime->getDiffCompat($endDateTime);
 	}
 
@@ -539,15 +540,17 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				if ($occurenceStartTime > $localEvent->getPeriodEndTime())
 					break;
 
-				$localEvent->setAlternateStartTime(GO_Base_Util_Date::get_timestamp($occurenceStartTime));
+				$localEvent->setAlternateStartTime($occurenceStartTime);
 
-				$diff = $this->getDiff();
+				$diff = $event->getDiff();
 
 				$endTime = new GO_Base_Util_Date_DateTime(date('c', $occurenceStartTime));
 				$endTime->addDiffCompat($diff);
-				$localEvent->setAlternateEndTime(GO_Base_Util_Date::get_timestamp($endTime->format('U')));
+				$localEvent->setAlternateEndTime($endTime->format('U'));
 
 				$this->_calculatedEvents[$occurenceStartTime . '-' . $origEventAttr['id']] = $localEvent;
+				
+				$localEvent = new GO_Calendar_Model_LocalEvent($event, $periodStartTime, $periodEndTime);
 			}
 		}
 		
