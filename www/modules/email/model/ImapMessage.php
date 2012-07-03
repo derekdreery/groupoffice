@@ -64,6 +64,9 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	public $cacheOnDestruct=false;
 	
 	
+	private $_cache;
+	
+	
 	/**
 	 * Returns a static model of itself
 	 * 
@@ -83,7 +86,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 
 		$cacheKey='email:'.$account->id.':'.$mailbox.':'.$uid;
 		
-		$cachedMessage = GO::cache()->get($cacheKey);
+		$cachedMessage = isset($this->_cache[$cacheKey]) ? $this->_cache[$cacheKey] : GO::cache()->get($cacheKey);
 	
 		if($cachedMessage)
 		{
@@ -108,6 +111,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 
 			$imapMessage->cacheOnDestruct=$cacheKey;
 			
+			$this->_cache[$cacheKey]=$imapMessage;
 			
 			return $imapMessage;
 		}		
