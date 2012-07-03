@@ -256,8 +256,12 @@ class GO{
 
 
 	private static $_cache;
+	
 	/**
-	 * @todo implement memcached driver
+	 * Returns cache driver. Cached items will persist between connections and are
+	 * available to all users. When debug is enabled a dummy cache driver is used
+	 * that caches nothing.
+	 * 
 	 * @return GO_Base_Cache_Interface
 	 */
 	public static function cache(){
