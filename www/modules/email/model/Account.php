@@ -171,11 +171,11 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	 * @return GO_Base_Mail_Imap
 	 */
 	public function openImapConnection($mailbox='INBOX'){
-		
+	
 		if(empty($mailbox))
 			$mailbox="INBOX";
 		
-		if(!isset($this->_imap)){
+		if(empty($this->_imap)){
 			$this->_imap = new GO_Base_Mail_Imap();
 
 			try{
@@ -193,7 +193,8 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function __wakeup() {
-		unset($this->_imap);
+		//reestablish imap connection after deserialization
+		$this->_imap=false;
 	}
 	
 	/**

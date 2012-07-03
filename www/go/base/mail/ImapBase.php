@@ -304,11 +304,14 @@ abstract class GO_Base_Mail_ImapBase {
 		else {
 			$command = 'A'.$this->command_number().' '.$command;
 		}
-		if (!is_resource($this->handle))
-				return false;
+		if (!is_resource($this->handle)){
+				throw new Exception("Lost connection to ".$this->server);
+		}
 
-		if(!fputs($this->handle, $command))
-				return false;
+		if(!fputs($this->handle, $command)){
+			throw new Exception("Lost connection to ".$this->server);
+//				eturn false;
+		}
 		
 
 		//GO::debug($command);

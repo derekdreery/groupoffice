@@ -2921,6 +2921,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function __unset($name)
 	{		
+		GO::debug("Unset: ".$name);
 		unset($this->_attributes[$name]);		
 	}
 	

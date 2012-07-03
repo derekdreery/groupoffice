@@ -268,7 +268,7 @@ class GO{
 
 		if (!isset(self::$_cache)) {
 			if(GO::config()->debug)
-				self::$_cache=new GO_Base_Cache_None();
+				self::$_cache=new GO_Base_Cache_Apc();
 			elseif(function_exists("apc_store"))
 				self::$_cache=new GO_Base_Cache_Apc();
 			else
