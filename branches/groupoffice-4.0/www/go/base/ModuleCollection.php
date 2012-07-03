@@ -149,9 +149,14 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 //			
 //		$stmt = $this->model->find($findParams);
 		
-	public function getAllModules(){
-			
-		$stmt = $this->model->find();
+	public function getAllModules($ignoreAcl=false){
+		
+		$findParams = GO_Base_Db_FindParams::newInstance();
+		
+		if($ignoreAcl)
+			$findParams->ignoreAcl ();
+		
+		$stmt = $this->model->find($findParams);
 		$modules = array();
 		while($module = $stmt->fetch()){
 			if($this->_isAllowed($module->id) && $module->isAvailable())
