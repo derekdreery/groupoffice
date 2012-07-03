@@ -264,7 +264,7 @@ class GO{
 
 		if (!isset(self::$_cache)) {
 			if(GO::config()->debug)
-				self::$_cache=new GO_Base_Cache_Apc();
+				self::$_cache=new GO_Base_Cache_None();
 			elseif(function_exists("apc_store"))
 				self::$_cache=new GO_Base_Cache_Apc();
 			else
@@ -307,7 +307,7 @@ class GO{
 			require(dirname(dirname(__FILE__)) . '/'.self::$_classes[$className]);
 		}else
 		{
-			GO::debug("Autoloading: ".$className);
+//			GO::debug("Autoloading: ".$className);
 			//For SabreDAV
 			if(strpos($className,'Sabre_')===0) {
         include self::config()->root_path . 'go/vendor/SabreDAV/lib/Sabre/' . str_replace('_','/',substr($className,6)) . '.php';
