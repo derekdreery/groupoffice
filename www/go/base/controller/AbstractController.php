@@ -322,8 +322,6 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			//restore old value for acl permissions if this method was allowed for guests.
 			if(isset($oldIgnore))
 				GO::setIgnoreAclPermissions($oldIgnore);
-			
-			//GO::exportBaseClasses();
 
 			return $response;
 			
