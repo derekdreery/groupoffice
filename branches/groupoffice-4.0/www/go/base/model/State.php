@@ -20,13 +20,13 @@
  * @property int $user_id
  */
 
-class GO_Base_Model_Setting extends GO_Base_Db_ActiveRecord {
+class GO_Base_Model_State extends GO_Base_Db_ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
-	 * @return GO_Base_Model_Setting 
+	 * @return GO_Base_Model_State 
 	 */
 	public static function model($className=__CLASS__)
 	{	
@@ -34,14 +34,26 @@ class GO_Base_Model_Setting extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function tableName() {
-		return 'go_settings';
-	}
-	
-	public function defaultAttributes() {
-		return array('user_id'=>0);
+		return 'go_state';
 	}
 	
 	public function primaryKey() {
 		return array('name','user_id');
+	}
+	
+	/**
+	 * Get's the user's client state in a key value array.
+	 * 
+	 * @param int $user_id
+	 * @return array 
+	 */
+	public function getFullClientState($user_id){
+		$state = array();
+		$stmt = $this->findByAttribute('user_id', $user_id, GO_Base_Db_FindParams::newInstance()->select('t.*'));
+		while($model= $stmt->fetch()){
+			$state[$model->name]=$model->value;
+		}
+		
+		return $state;		
 	}
 }
