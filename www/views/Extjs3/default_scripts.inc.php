@@ -19,6 +19,8 @@ $settings['language']=GO::language()->getLanguage();
 
 $user_id = GO::user() ? GO::user()->id : 0;
 
+$load_modules = GO::modules()->getAllModules(true);
+
 //done in AuthController already
 //if(isset($_REQUEST["SET_LANGUAGE"]))
 //	$settings['language']=$_REQUEST["SET_LANGUAGE"];
@@ -27,8 +29,8 @@ $settings['state']=array();
 if(GO::user()) {
 	//state for Ext components
 	$settings['html_editor_font']=GO::config()->html_editor_font;
-	$settings['state'] = GO_Base_Model_State::model()->getFullClientState(GO::user()->id);
-	$settings['user_id']=GO::user()->id;	
+	$settings['state'] = GO_Base_Model_State::model()->getFullClientState($user_id);
+	$settings['user_id']=$user_id;	
 	$settings['has_admin_permission']=GO::user()->isAdmin();	
 	$settings['username'] = GO::user()->username;
 	$settings['name'] = GO::user()->name;
@@ -53,14 +55,15 @@ if(GO::user()) {
 	$settings['sort_name'] = GO::user()->sort_name;
 	$settings['list_separator'] = GO::user()->list_separator;
 	$settings['text_separator'] = GO::user()->text_separator;
+	
 }
-
-require_once(GO::config()->root_path.'classes/base/theme.class.inc.php');
-$GLOBALS['GO_THEME'] = new GO_THEME();
+//
+//require_once(GO::config()->root_path.'classes/base/theme.class.inc.php');
+//$GLOBALS['GO_THEME'] = new GO_THEME();
 
 //$settings['modules']=$GLOBALS['GO_MODULES']->modules;
-$settings['config']['theme_url']=$GLOBALS['GO_THEME']->theme_url;
-$settings['config']['theme']=$GLOBALS['GO_THEME']->theme;
+//$settings['config']['theme_url']=GO::user()->theme;
+//$settings['config']['theme']=GO::user()->theme;
 $settings['config']['product_name']=GO::config()->product_name;
 $settings['config']['product_version']=GO::config()->version;
 $settings['config']['host']=GO::config()->host;
@@ -121,8 +124,8 @@ $scripts[]=$view_root_uri.'javascript/namespaces.js';
 
 //some functions require extra security
 
-if(isset($_SESSION['GO_SESSION']['security_token'])){	
-	echo 'GO.securityToken="'.$_SESSION['GO_SESSION']['security_token'].'";';
+if(isset(GO::session()->values['security_token'])){	
+	echo 'GO.securityToken="'.GO::session()->values['security_token'].'";';
 }
 
 //if(isset($_REQUEST['after_login_url'])) {
@@ -150,8 +153,8 @@ if(isset($_REQUEST['SET_LANGUAGE']) && preg_match('/[a-z_]/', $_REQUEST['SET_LAN
 
 //echo 'GO.afterLoginUrl="'.$after_login_url.'";';
 
-$fullscreen = isset($_COOKIE['GO_FULLSCREEN']) && $_COOKIE['GO_FULLSCREEN']=='1' ? 'true' : 'false';
-echo 'GO.fullscreen='.$fullscreen.';';
+//$fullscreen = isset($_COOKIE['GO_FULLSCREEN']) && $_COOKIE['GO_FULLSCREEN']=='1' ? 'true' : 'false';
+//echo 'GO.fullscreen='.$fullscreen.';';
 
 /*
  * If fullscreen mode is enabled and the user is already logged in we set $popup_groupoffice with the URL to load Group-Office
@@ -159,12 +162,12 @@ echo 'GO.fullscreen='.$fullscreen.';';
  *
  * In themes/Default/layout.inc.php we handle this var.
  */
-if($GLOBALS['GO_SECURITY']->logged_in() && $fullscreen=='true' && !isset($_REQUEST['fullscreen_loaded'])) {
-	//$popup_groupoffice = isset($_REQUEST['after_login_url']) ? smart_stripslashes($_REQUEST['after_login_url']) : GO::config()->host;
-	$popup_groupoffice = String::add_params_to_url($popup_groupoffice, 'fullscreen_loaded=true');
-}
+//if(GO::user() && $fullscreen=='true' && !isset($_REQUEST['fullscreen_loaded'])) {
+//	//$popup_groupoffice = isset($_REQUEST['after_login_url']) ? smart_stripslashes($_REQUEST['after_login_url']) : GO::config()->host;
+//	$popup_groupoffice = String::add_params_to_url($popup_groupoffice, 'fullscreen_loaded=true');
+//}
 
-if($GLOBALS['GO_SECURITY']->logged_in() && !isset($popup_groupoffice)) {
+if(GO::user()) {
 	echo 'window.name="'.GO::getId().'";';
 	
 	//echo 'window.name="groupoffice";';
@@ -187,8 +190,8 @@ $path = GO::config()->file_storage_path.'cache/'.$file;
 if(GO::config()->debug || !file_exists($path)) {
 	
 	//cleanup old cache
-	require_once(GO::config()->class_path.'filesystem.class.inc');
-	$fs = new filesystem();
+//	require_once(GO::config()->class_path.'filesystem.class.inc');
+//	$fs = new filesystem();
 	/*$files = $fs->get_files_sorted(GO::config()->file_storage_path.'cache');
 	while($file=array_shift($files)) {
 		if(substr($file['name'],0, 7)=='base-'.$GLOBALS['GO_LANGUAGE']->language) {
@@ -214,7 +217,7 @@ if(GO::config()->debug || !file_exists($path)) {
 //		}
 //	}
 
-	$dynamic_debug_scripts=array();
+//	$dynamic_debug_scripts=array();
 
 	require(GO::config()->root_path.'language/languages.inc.php');
 	$fp=fopen(GO::config()->file_storage_path.'cache/languages.js','w');
@@ -253,8 +256,8 @@ if(GO::config()->debug || !file_exists($path)) {
 		$scripts[]=GO::config()->file_storage_path.'cache/languages.js';
 	}else
 	{
-		$dynamic_debug_script=GO::config()->file_storage_path.'cache/languages.js';
-		$scripts[]=GO::config()->host.'compress.php?file=languages.js&mtime='.filemtime($dynamic_debug_script);
+		$dynamic_debug_script=GO::config()->file_storage_path.'cache/languages.js';		
+		$scripts[]=GO::url("core/compress", array('file'=>'languages.js', 'mtime'=>filemtime($dynamic_debug_script)));	
 	}
 
 	include($GLOBALS['GO_LANGUAGE']->get_base_language_file('countries'));
@@ -273,7 +276,7 @@ if(GO::config()->debug || !file_exists($path)) {
 	}else
 	{
 		$dynamic_debug_script=GO::config()->file_storage_path.'cache/countries.js';
-		$scripts[]=GO::config()->host.'compress.php?file=countries.js&mtime='.filemtime($dynamic_debug_script);
+		$scripts[]=GO::url("core/compress", array('file'=>'countries.js', 'mtime'=>filemtime($dynamic_debug_script)));			
 	}
 
 	
@@ -297,8 +300,7 @@ if(GO::config()->debug || !file_exists($path)) {
 
 if(!GO::config()->debug) {
 	$scripts=array();
-	$url = GO::config()->host.'compress.php?file='.$file.'&mtime='.filemtime($path);
-	$scripts[]=$url;
+	$scripts[]=GO::url("core/compress", array('file'=>$file, 'mtime'=>filemtime($path)));	
 }
 
 foreach($scripts as $script) {
@@ -313,36 +315,36 @@ foreach($scripts as $script) {
 </script>
 <?php
 
-foreach($GLOBALS['GO_MODULES']->modules as $module) {
-	if(file_exists($module['path'].'logged_off_scripts.inc.php')) {
-		require($module['path'].'logged_off_scripts.inc.php');
+foreach($load_modules as $module) {
+	if(file_exists($module->moduleManager->path().'logged_off_scripts.inc.php')) {
+		require($module->moduleManager->path().'logged_off_scripts.inc.php');
 	}
-	if(file_exists($module['path'].'views/Extjs3/logged_off_scripts.inc.php')) {
-		require($module['path'].'views/Extjs3/logged_off_scripts.inc.php');
+	if(file_exists($module->moduleManager->path().'views/Extjs3/logged_off_scripts.inc.php')) {
+		require($module->moduleManager->path().'views/Extjs3/logged_off_scripts.inc.php');
 	}
 }
 
 $scripts=array();
-$load_modules=array();
-if(!isset($default_scripts_load_modules)){
-	if($GLOBALS['GO_SECURITY']->logged_in() && !isset($popup_groupoffice)){
-		$load_modules=$GLOBALS['GO_MODULES']->modules;
-	}
-}else
-{
-	foreach($default_scripts_load_modules as $module)
-	{
-		$GLOBALS['GO_MODULES']->modules[$module]['read_permission']=true;
-		$load_modules[]=$GLOBALS['GO_MODULES']->modules[$module];
-	}
-}
+//$load_modules=array();
+//if(!isset($default_scripts_load_modules)){
+//	if($GLOBALS['GO_SECURITY']->logged_in() && !isset($popup_groupoffice)){
+//		$load_modules=$GLOBALS['GO_MODULES']->modules;
+//	}
+//}else
+//{
+//	foreach($default_scripts_load_modules as $module)
+//	{
+//		$GLOBALS['GO_MODULES']->modules[$module]['read_permission']=true;
+//		$load_modules[]=$GLOBALS['GO_MODULES']->modules[$module];
+//	}
+//}
 
 
 //var_dump($load_modules);
 $modulesCacheStr = array();
 foreach($load_modules as $module)
-	if($module['read_permission']) 
-			$modulesCacheStr[]=$module['id'].($module['write_permission'] ? '0' : '1');
+	if($module->permissionLevel) 
+		$modulesCacheStr[]=$module->id.($module->permissionLevel>GO_Base_Model_Acl::READ_PERMISSION ? '1' : '0');
 	
 $modulesCacheStr=md5(implode('-',$modulesCacheStr));
 
@@ -378,9 +380,8 @@ if(count($load_modules)) {
 	if(!GO::config()->debug){
 		$scripts[]=$modLangPath;
 	}else
-	{
-		//$dynamic_debug_script=GO::config()->file_storage_path.'cache/languages.js';
-		$scripts[]=GO::config()->host.'compress.php?file='.basename($modLangPath).'&mtime='.filemtime($modLangPath);
+	{		
+		$scripts[]=GO::url("core/compress", array('file'=>basename($modLangPath), 'mtime'=>filemtime($modLangPath)));
 	}
 	
 	//load language first so it can be overridden
@@ -403,12 +404,12 @@ if(count($load_modules)) {
 
 
 	foreach($load_modules as $module) {
-		if($module['read_permission']) {
-			if(file_exists($module['path'].'prescripts.inc.php')) {
-				require($module['path'].'prescripts.inc.php');
+		if($module->permissionLevel) {
+			if(file_exists($module->moduleManager->path().'prescripts.inc.php')) {
+				require($module->moduleManager->path().'prescripts.inc.php');
 			}
-			if(file_exists($module['path'].'views/Extjs3/prescripts.inc.php')) {
-				require($module['path'].'views/Extjs3/prescripts.inc.php');
+			if(file_exists($module->moduleManager->path().'views/Extjs3/prescripts.inc.php')) {
+				require($module->moduleManager->path().'views/Extjs3/prescripts.inc.php');
 			}
 		}
 	}
@@ -416,13 +417,13 @@ if(count($load_modules)) {
 
 	$modules=array();
 	foreach($load_modules as $module) {
-		if($module['read_permission']) {
+		if($module->permissionLevel) {
 
-			$module_uri = GO::config()->debug ? $module['url'] : $module['path'];
+//			$module_uri = GO::config()->debug ? $module->moduleManager->url() : $module->moduleManager->path();
 			
-			$scriptsFile = $module['path'].'scripts.txt';
+			$scriptsFile = $module->moduleManager->path().'scripts.txt';
 			if(!file_exists($scriptsFile))
-						$scriptsFile = $module['path'].'views/Extjs3/scripts.txt';	
+						$scriptsFile = $module->moduleManager->path().'views/Extjs3/scripts.txt';	
 
 			if(file_exists($scriptsFile)) {
 				$data = file_get_contents($scriptsFile);
@@ -434,7 +435,7 @@ if(count($load_modules)) {
 				}
 			}
 
-			$modules[]=$module['id'].$module['write_permission'];
+			$modules[]=$module->id.$module->permissionLevel;
 		}
 	}
 
@@ -443,7 +444,7 @@ if(count($load_modules)) {
 
 	//include config file location because in some cases different URL's point to
 	//the same database and this can break things if the settings are cached.
-	$file = $GLOBALS['GO_SECURITY']->user_id.'-'.md5(GO::config()->mtime.GO::config()->get_config_file().':'.$GLOBALS['GO_LANGUAGE']->language.':'.$modulesCacheStr).'.js';
+	$file = $user_id.'-'.md5(GO::config()->mtime.GO::config()->get_config_file().':'.GO::language()->getLanguage().':'.$modulesCacheStr).'.js';
 	$path = GO::config()->file_storage_path.'cache/'.$file;
 	
 	
@@ -451,17 +452,17 @@ if(count($load_modules)) {
 		if(!file_exists($path)) {
 		
 			//cleanup old cache
-			require_once(GO::config()->class_path.'filesystem.class.inc');
-			$fs = new filesystem();
+//			require_once(GO::config()->class_path.'filesystem.class.inc');
+//			$fs = new filesystem();
 			/*$files = $fs->get_files_sorted(GO::config()->file_storage_path.'cache');
 			while($file=array_shift($files)) {
-				if(substr($file['name'],0, 1)==$GLOBALS['GO_SECURITY']->user_id) {
+				if(substr($file['name'],0, 1)==$user_id) {
 					unlink($file['path']);
 				}
 			}*/
 
-			file_put_contents(GO::config()->file_storage_path.'cache/'.$GLOBALS['GO_SECURITY']->user_id.'-modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode($GLOBALS['GO_MODULES']->modules)).'");');
-			array_unshift($scripts, GO::config()->file_storage_path.'cache/'.$GLOBALS['GO_SECURITY']->user_id.'-modules.js');
+			file_put_contents(GO::config()->file_storage_path.'cache/'.$user_id.'-modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode($GLOBALS['GO_MODULES']->modules)).'");');
+			array_unshift($scripts, GO::config()->file_storage_path.'cache/'.$user_id.'-modules.js');
 
 
 			foreach($scripts as $script) {
@@ -469,14 +470,17 @@ if(count($load_modules)) {
 			}
 		}
 		
-		$url = GO::config()->host.'compress.php?file='.$file.'&mtime='.filemtime($path);
+		$url=GO::url("core/compress", array('file'=>$file, 'mtime'=>filemtime($path)));
 
 		$scripts=array($url);
 
 	}else
 	{
-		file_put_contents(GO::config()->file_storage_path.'cache/'.$GLOBALS['GO_SECURITY']->user_id.'-modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode($GLOBALS['GO_MODULES']->modules)).'");');
-		array_unshift($scripts, GO::config()->host.'compress.php?file='.$GLOBALS['GO_SECURITY']->user_id.'-modules.js&mtime='.filemtime(GO::config()->file_storage_path.'cache/'.$GLOBALS['GO_SECURITY']->user_id.'-modules.js'));
+		file_put_contents(GO::config()->file_storage_path.'cache/'.$user_id.'-modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode($GLOBALS['GO_MODULES']->modules)).'");');
+		
+		$url=GO::url("core/compress", array('file'=>$user_id.'-modules.js', 'mtime'=>filemtime(GO::config()->file_storage_path.'cache/'.$user_id.'-modules.js')));		
+		array_unshift($scripts, $url);
+		
 	}
 	
 	foreach($scripts as $script) {
@@ -491,47 +495,47 @@ if(count($load_modules)) {
 
 	$GO_SCRIPTS_JS='';
 
-	foreach($load_modules as $module) {
-		$GLOBALS['GO_LANGUAGE']->require_language_file($module['id']);
-	}
+//	foreach($load_modules as $module) {
+//		$GLOBALS['GO_LANGUAGE']->require_language_file($module['id']);
+//	}
 
 	//The checked values is used in the SearchPanel.js for the filter
-	$types = GO::config()->get_setting('link_type_filter', $GLOBALS['GO_SECURITY']->user_id);
-	$types = empty($types) ? array() : explode(',', $types);
-
-	$link_types=array();
-	if(isset($lang['link_type'])){
-		asort($lang['link_type']);
-		foreach($lang['link_type'] as $id=>$name) {
-			$type['id']=$id;
-			$type['name']=$name;
-			$type['checked']=in_array($id, $types);
-			$link_types[] = $type;
-		}
-	}
-
-	$GO_SCRIPTS_JS .= 'GO.linkTypes='.json_encode($link_types).';';
-
-	require_once(GO::config()->class_path.'export/export_query.class.inc.php');
-	$eq = new export_query();
-
-	$GO_SCRIPTS_JS.=$eq->find_custom_exports();
+//	$types = GO::config()->get_setting('link_type_filter', $user_id);
+//	$types = empty($types) ? array() : explode(',', $types);
+//
+//	$link_types=array();
+//	if(isset($lang['link_type'])){
+//		asort($lang['link_type']);
+//		foreach($lang['link_type'] as $id=>$name) {
+//			$type['id']=$id;
+//			$type['name']=$name;
+//			$type['checked']=in_array($id, $types);
+//			$link_types[] = $type;
+//		}
+//	}
+//
+//	$GO_SCRIPTS_JS .= 'GO.linkTypes='.json_encode($link_types).';';
+//
+//	require_once(GO::config()->class_path.'export/export_query.class.inc.php');
+//	$eq = new export_query();
+//
+//	$GO_SCRIPTS_JS.=$eq->find_custom_exports();
 
 	
 	foreach($load_modules as $module) {
-		if($module['read_permission']) {
-			if(file_exists($module['path'].'scripts.inc.php')) {
-				require($module['path'].'scripts.inc.php');
+		if($module->permissionLevel) {
+			if(file_exists($module->moduleManager->path().'scripts.inc.php')) {
+				require($module->moduleManager->path().'scripts.inc.php');
 			}
-			if(file_exists($module['path'].'views/Extjs3/scripts.inc.php')) {
-				require($module['path'].'views/Extjs3/scripts.inc.php');
+			if(file_exists($module->moduleManager->path().'views/Extjs3/scripts.inc.php')) {
+				require($module->moduleManager->path().'views/Extjs3/scripts.inc.php');
 			}
 		}
 	}
 
 	$GLOBALS['GO_EVENTS']->fire_event('load_scripts', array(&$GO_SCRIPTS_JS));	
 
-	$filename = $GLOBALS['GO_SECURITY']->user_id.'-scripts.js';
+	$filename = $user_id.'-scripts.js';
 	$path = GO::config()->file_storage_path.'cache/'.$filename;
 
 	if($GO_SCRIPTS_JS!=@file_get_contents($path)){
@@ -539,7 +543,7 @@ if(count($load_modules)) {
 	}
 	if(file_exists($path)){
 
-		$url = GO::config()->host.'compress.php?file='.$filename.'&mtime='.filemtime($path);
+		$url=GO::url("core/compress", array('file'=>$filename, 'mtime'=>filemtime($path)));		
 		echo '<script type="text/javascript" src="'.$url.'"></script>'."\n";
 	}
 }
@@ -561,8 +565,8 @@ if(count($load_modules)) {
 	
 	
 	
-	if(isset($_SESSION['GO_SESSION']['security_token']))		
-		echo 'Ext.Ajax.extraParams={security_token:"'.$_SESSION['GO_SESSION']['security_token'].'"};';
+	if(isset(GO::session()->values['security_token']))		
+		echo 'Ext.Ajax.extraParams={security_token:"'.GO::session()->values['security_token'].'"};';
 	?>
 </script>
 <?php
