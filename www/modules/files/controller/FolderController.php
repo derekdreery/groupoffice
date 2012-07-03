@@ -925,7 +925,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			while ($tmp_file = array_shift($tmp_files)) {
 				if (!empty($tmp_file['tmp_file'])) {
 					
-					$file = new GO_Base_Fs_File($tmp_file['tmp_file']);
+					$file = new GO_Base_Fs_File(GO::config()->tmpdir.$tmp_file['tmp_file']);
 					$file->move(new GO_Base_Fs_Folder(GO::config()->file_storage_path . $folder->path));
 					
 					$folder->addFile($file->name());					
