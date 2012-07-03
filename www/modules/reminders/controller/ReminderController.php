@@ -54,6 +54,8 @@ class GO_Reminders_Controller_Reminder extends GO_Base_Controller_AbstractModelC
 	
 	protected function actionReminderUsers($params) {
 		
+		GO::setIgnoreAclPermissions();
+		
 		$reminderModel = GO_Base_Model_Reminder::model()->findByPk($params['reminder_id']);
 		$response['success'] = true;
 		$response['total'] = 0;
