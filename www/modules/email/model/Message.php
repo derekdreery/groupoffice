@@ -301,7 +301,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 			$a['url'] .= '&amp;token='.$a['token'];				
 
 			
-			if (!empty($a['content_id']))
+			if ($html && !empty($a['content_id']))
 				$response['htmlbody'] = str_replace('cid:' . $a['content_id'], $a['url'], $response['htmlbody'], $replaceCount);
 
 			if ($a['name'] == 'smime.p7s') {

@@ -374,25 +374,6 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		}
 	}
 	
-	
-
-	 /*
-	 * @return array
-	 * 
-	 * $a['url']='';
-	 *  $a['name']=$filename;
-			$a['number']=$part_number_prefix.$part_number;
-			$a['content_id']=$content_id;
-			$a['mime']=$mime_type;
-			$a['tmp_file']=false;
-			$a['index']=count($this->attachments);
-			$a['size']=isset($part->body) ? strlen($part->body) : 0;
-			$a['human_size']= GO_Base_Util_Number::formatSize($a['size']);
-			$a['extension']=  $f->extension();
-			$a['encoding'] = isset($part->headers['content-transfer-encoding']) ? $part->headers['content-transfer-encoding'] : '';
-			$a['disposition'] = isset($part->disposition) ? $part->disposition : ''; 
-	 */
-	
 	public function createTempFilesForAttachments($inlineOnly=false){
 		$atts = $this->getAttachments();
 		

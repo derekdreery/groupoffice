@@ -805,14 +805,23 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		//workaround for gmail. It doesn't flag messages as seen automatically.
 		if (!$imapMessage->seen && stripos($account->host, 'gmail') !== false)
 			$imapMessage->getImapConnection()->set_message_flag(array($imapMessage->uid), "\Seen");
+		
+		if(!empty($params['create_temporary_attachments']))
+			$imapMessage->createTempFilesForAttachments();
+		
+		$plaintext = !empty($params['plaintext']);
+		
+		$response = $imapMessage->toOutputArray(!$plaintext);
+		
+		if(!$plaintext){
+			$response = $this->_blockImages($params, $response);
+			$response = $this->_checkXSS($params, $response);
 
-		$response = $imapMessage->toOutputArray(true);
-		$response = $this->_blockImages($params, $response);
-		$response = $this->_checkXSS($params, $response);
-
-		$response = $this->_handleAutoLinkTag($imapMessage, $params, $response);
-		$response = $this->_handleInvitations($imapMessage, $params, $response);
-
+			$response = $this->_handleAutoLinkTag($imapMessage, $params, $response);
+			$response = $this->_handleInvitations($imapMessage, $params, $response);
+		}
+		
+		$response = $this->_getContact($imapMessage, $params, $response);
 
 		$this->fireEvent('view', array(
 				&$this,
@@ -824,6 +833,15 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		$response['success'] = true;
 
+		return $response;
+	}
+	
+	private function _getContact(GO_Email_Model_ImapMessage $imapMessage,$params, $response){
+		$response['sender_contact_id']=0;
+		if(!empty($params['get_contact_id']) && GO::modules()->addressbook && ($contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($response['sender']))) {
+			$response['sender_contact_id']=$contact->id;
+			$response['contact_name']=$contact->name;			
+		}
 		return $response;
 	}
 
