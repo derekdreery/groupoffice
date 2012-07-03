@@ -10,7 +10,7 @@
 class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	
 	protected function allowGuests() {
-		return array('plupload');
+		return array('plupload','compress');
 	}
 	
 	protected function saveSetting($params){
