@@ -176,7 +176,9 @@ if($GLOBALS['GO_SECURITY']->logged_in() && !isset($popup_groupoffice)) {
 ?>
 </script>
 <?php
-if(!isset($lang['common']['extjs_lang'])) $lang['common']['extjs_lang'] = $GLOBALS['GO_LANGUAGE']->language;
+$extjsLang = GO::t('extjs_lang');
+if($extjsLang=='extjs_lang')
+	$extjsLang = GO::language()->getLanguage();
 
 $file = 'base-'.md5($settings['language'].GO::config()->mtime).'.js';
 $path = GO::config()->file_storage_path.'cache/'.$file;
@@ -203,9 +205,9 @@ if(GO::config()->debug || !file_exists($path)) {
 //			$scripts[]=$root_uri.'language/common/'.$GLOBALS['GO_LANGUAGE']->language.'.js';
 //		}
 //
-//		if(file_exists(GO::config()->root_path.'ext/src/locale/ext-lang-'.$lang['common']['extjs_lang'].'.js')) {
-//			$scripts[]=$view_root_uri.'ext/src/locale/ext-lang-'.$lang['common']['extjs_lang'].'.js';
-//		}
+		if(file_exists($view_root_uri.'ext/src/locale/ext-lang-'.$extjsLang.'.js')) {
+			$scripts[]=$view_root_uri.'ext/src/locale/ext-lang-'.$extjsLang.'.js';
+		}
 //
 //		if(file_exists(GO::config()->root_path.'modules/users/language/'.$GLOBALS['GO_LANGUAGE']->language.'.js')) {
 //			$scripts[]=$root_uri.'modules/users/language/'.$GLOBALS['GO_LANGUAGE']->language.'.js';
