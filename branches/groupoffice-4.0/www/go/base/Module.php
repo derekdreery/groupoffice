@@ -144,7 +144,7 @@ class GO_Base_Module extends GO_Base_Observable {
 		if(class_exists($className))
 			return new $className;
 		else
-			return false;
+			return new GO_Base_Module();
 	}
 	
 	/**
