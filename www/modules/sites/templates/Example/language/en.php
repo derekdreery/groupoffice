@@ -54,6 +54,7 @@ $l['yourlogincredentials']='Your login credentials';
 $l['generalInformation']='User information';
 $l['addressDetails']='Address information';
 $l['postAddressDetails']='Post address information';
+$l['companyInformation']='Company information';
 
 $l['postAddress']='Post Address';
 $l['postHousenumber']='Post Number of house';
