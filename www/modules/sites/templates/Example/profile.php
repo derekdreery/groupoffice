@@ -177,13 +177,14 @@
 										"required" => false,
 										"label" => $this->t('addressIsPostAddress'),
 										"model" => $company,
+										"id" => "addressCheck",
 										"value" => "1",
 										"name" => "post_address_is_address",
 										"checked" => $company->post_address_is_address
 									));
 									
 									echo '<div class="post-address"';
-									echo !empty($company->post_address_is_address)?' style="display:none;"':'';
+								//	echo !empty($company->post_address_is_address)?' style="display:none;"':'';
 									echo '>';
 									
 									echo "<br /><hr />";
