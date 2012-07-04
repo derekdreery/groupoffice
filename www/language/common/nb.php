@@ -539,3 +539,4 @@ $l["unused"]='Ikke i bruk';
 $l["attributeGreater"]="Feltet '%s' må være støtte enn '%s'";
 $l["attributeGreaterOrEqual"]="Feltet '%s' må være større enn eller lik '%s'";
 $l["failedImportItems"]="Feilede importelementer";
+$l['extjs_lang']='no_NB';

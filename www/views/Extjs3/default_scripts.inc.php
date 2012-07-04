@@ -87,6 +87,7 @@ $settings['config']['nav_page_size']=intval(GO::config()->nav_page_size);
 
 $root_uri = GO::config()->debug ? GO::config()->host : GO::config()->root_path;
 $view_root_uri = $root_uri.'views/Extjs3/';
+$view_root_path = GO::config()->root_path.'views/Extjs3/';
 
 $scripts=array();
 //important to load focus first
@@ -208,7 +209,8 @@ if(GO::config()->debug || !file_exists($path)) {
 //			$scripts[]=$root_uri.'language/common/'.$GLOBALS['GO_LANGUAGE']->language.'.js';
 //		}
 //
-		if(file_exists($view_root_uri.'ext/src/locale/ext-lang-'.$extjsLang.'.js')) {
+		//echo $view_root_uri.'ext/src/locale/ext-lang-'.$extjsLang.'.js';
+		if(file_exists($view_root_path.'ext/src/locale/ext-lang-'.$extjsLang.'.js')) {
 			$scripts[]=$view_root_uri.'ext/src/locale/ext-lang-'.$extjsLang.'.js';
 		}
 //
