@@ -238,6 +238,7 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 				$contact->company_id = $company->id;				
 				$contact->save();
 				$this->notifications->addNotification('profile', $this->t('formEditSuccess'), GO_Sites_NotificationsObject::NOTIFICATION_OK);
+				$this->pageRedirect($this->getPage()->path);
 			}
 		}
 		
