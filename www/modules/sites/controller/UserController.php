@@ -243,7 +243,7 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 			}
 		}
 		
-		$company->post_address_is_address = $company->address==$comapny->post_address?true:false;
+		$company->post_address_is_address = $company->address==$company->post_address?true:false;
 		
 		var_dump($company->address);
 		var_dump($company->post_address);
