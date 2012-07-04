@@ -45,13 +45,13 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		//'<tr><td><b>'+GO.lang.strSize+'</b></td><td>: {size}</td></tr>'+
 		'<tr><td><b>'+GO.email.lang.to+'</b></td><td>: '+
 		'<tpl for="to">'+
-		'{personal} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.name)]}\');">{email}</a>&gt;; </tpl>'+	
+		'{personal} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.personal)]}\');">{email}</a>&gt;; </tpl>'+	
 		'</tpl>'+
 		'</td></tr>'+
 		'<tpl if="cc.length">'+
 		'<tr><td><b>'+GO.email.lang.cc+'</b></td><td>: '+
 		'<tpl for="cc">'+
-		'{personal} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.name)]}\');">{email}</a>&gt;; </tpl>'+	
+		'{personal} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.personal)]}\');">{email}</a>&gt;; </tpl>'+	
 		'</tpl>'+
 		'</td></tr>'+
 		'</tpl>'+
