@@ -147,15 +147,15 @@ GO.email.EmailClient = function(config){
 			this.resetSearchButton.setVisible(false);
 		}
 		
-		var selModel = this.treePanel.getSelectionModel();
-		if(!selModel.getSelectedNode())
-		{
-			var node = this.treePanel.getNodeById('folder_'+this.messagesGrid.store.reader.jsonData.mailbox);
-			if(node)
-			{
-				selModel.select(node);
-			}
-		}
+//		var selModel = this.treePanel.getSelectionModel();
+//		if(!selModel.getSelectedNode())
+//		{
+//			var node = this.treePanel.getNodeById('folder_'+this.messagesGrid.store.reader.jsonData.mailbox);
+//			if(node)
+//			{
+//				selModel.select(node);
+//			}
+//		}
 
 		/*
 		 *This method is annoying when searching for unread mails
@@ -348,12 +348,16 @@ GO.email.EmailClient = function(config){
 
 						if(node.childNodes[0])
 						{
-							var firstInboxNode = node.childNodes[0];
-							this.setAccount(
-								firstInboxNode.attributes.account_id,
-								firstInboxNode.attributes.mailbox,
-								firstInboxNode.parentNode.attributes.usage
-								);
+							//don't know why but it doesn't work without a 10ms delay.
+							this.treePanel.getSelectionModel().select.defer(10,this.treePanel.getSelectionModel(), [node.childNodes[0]]);
+	
+							
+//							var firstInboxNode = node.childNodes[0];
+//							this.setAccount(
+//								firstInboxNode.attributes.account_id,
+//								firstInboxNode.attributes.mailbox,
+//								firstInboxNode.parentNode.attributes.usage
+//								);
 						//if(!this.checkMailStarted)
 						//this.checkMail.defer(this.checkMailInterval, this);
 						}
@@ -380,27 +384,22 @@ GO.email.EmailClient = function(config){
 			}
 	});
 
-	this.treePanel.on('click', function(node)	{
+	this.treePanel.getSelectionModel().on('selectionchange', function(sm, node)	{
 //		if(node.attributes.mailbox>0)
 //		{
-			var usage='';
-			var cnode = node;
-			while(cnode.parentNode && usage=='')
-			{
-				if(cnode.attributes.usage)
-				{
-					usage=cnode.attributes.usage;
-				}else
-				{
-					cnode=cnode.parentNode;
-				}
+			if(node){
+				var usage='';
+
+				var inboxNode =this.treePanel.findInboxNode(node);
+				if(inboxNode)
+					usage=inboxNode.attributes.usage;
+
+				this.setAccount(
+					node.attributes.account_id,
+					node.attributes.mailbox,
+					usage
+					);
 			}
-			
-			this.setAccount(
-				node.attributes.account_id,
-				node.attributes.mailbox,
-				usage
-				);
 //		}
 	}, this);
 

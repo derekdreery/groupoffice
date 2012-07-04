@@ -348,6 +348,29 @@ Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {
 			this.statusBar.body.update(usage);
 	},
 	
+	findInboxNode : function(node){
+		
+		if(node.attributes.isAccount){
+			accountNode=node;
+		}else
+		{
+			var p = node.parentNode;
+			var accountNode=false;
+			while(p){
+					if(p.attributes.isAccount){
+							accountNode=p;
+							break;
+					}
+					p = p.parentNode;
+			}
+		}
+		
+		if(!accountNode)
+			return false;
+		
+		return accountNode.findChild('mailbox','INBOX');
+	},
+	
 	getExpandedNodes : function(){
 		var expanded = new Array();
 		this.getRootNode().cascade(function(n){
