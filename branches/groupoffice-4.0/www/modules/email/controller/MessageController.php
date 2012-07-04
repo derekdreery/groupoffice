@@ -996,7 +996,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		$response = $message->toOutputArray();
 		$response = $this->_checkXSS($params, $response);
-
+		$response['success']=true;
 		return $response;
 
 	}
