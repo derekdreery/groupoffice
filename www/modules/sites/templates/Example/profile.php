@@ -50,6 +50,51 @@
 									));
 									
 									GO_Base_Html_Input::render(array(
+										"required" => false,
+										"model" => $contact,
+										"label" => $this->t('phone'),
+										"name" => "home_phone"
+									));
+									
+									GO_Base_Html_Input::render(array(
+										"required" => false,
+										"model" => $contact,
+										"label" => $this->t('mobile'),
+										"name" => "cellular"
+									));
+									
+									GO_Base_Html_Input::render(array(
+										"required" => true,
+										"model" => $company,
+										"label" => $this->t('company'),
+										"name" => "name"
+									));
+									
+									GO_Base_Html_Input::render(array(
+										"required" => false,
+										"model" => $contact,
+										"label" => $this->t('department'),
+										"name" => "department"
+									));
+									
+									GO_Base_Html_Input::render(array(
+										"required" => false,
+										"model" => $contact,
+										"label" => $this->t('function'),
+										"name" => "function"
+									));
+																
+									GO_Base_Html_Input::render(array(
+										"required" => false,
+										"model" => $company,
+										"label" => $this->t('vat'),
+										"name" => "vat_no"
+									));
+									
+									echo "<br /><hr />";
+									echo '<h2>'.$this->t('addressDetails').'</h2>';
+									
+									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => $this->t('address'),
 										"model" => $contact,
@@ -92,49 +137,54 @@
 										'options' => GO::language()->getCountries()
 									));
 									
-									GO_Base_Html_Input::render(array(
-										"required" => false,
-										"model" => $contact,
-										"label" => $this->t('phone'),
-										"name" => "home_phone"
-									));
+									echo "<br /><hr />";
+									echo '<h2>'.$this->t('postAddressDetails').'</h2>';
 									
 									GO_Base_Html_Input::render(array(
-										"required" => false,
+										"required" => true,
+										"label" => $this->t('postAddress'),
 										"model" => $contact,
-										"label" => $this->t('mobile'),
-										"name" => "cellular"
+										"name" => "post_address"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
-										"model" => $company,
-										"label" => $this->t('company'),
-										"name" => "name"
+										"label" => $this->t('postHousenumber'),
+										"model" => $contact,
+										"name" => "post_address_no"
+									));
+									
+									GO_Base_Html_Input::render(array(
+										"required" => true,
+										"label" => $this->t('postZip'),
+										"model" => $contact,
+										"name" => "post_zip"
+									));
+									
+									GO_Base_Html_Input::render(array(
+										"required" => true,
+										"label" => $this->t('postCity'),
+										"model" => $contact,
+										"name" => "post_city"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => false,
+										"label" => $this->t('postState'),
 										"model" => $contact,
-										"label" => $this->t('department'),
-										"name" => "department"
+										"name" => "post_state"
 									));
 									
-									GO_Base_Html_Input::render(array(
-										"required" => false,
+									GO_Base_Html_Select::render(array(
+										"required" => true,
+										"label" => $this->t('postCountry'),
 										"model" => $contact,
-										"label" => $this->t('function'),
-										"name" => "function"
+										'name' => "post_country",
+										'options' => GO::language()->getCountries()
 									));
-																
-									GO_Base_Html_Input::render(array(
-										"required" => false,
-										"model" => $company,
-										"label" => $this->t('vat'),
-										"name" => "vat_no"
-									));
+																		
 									echo "<br /><hr />";
-									echo '<h1>'.$this->t('yourlogincredentials').'</h1>';
+									echo '<h2>'.$this->t('yourlogincredentials').'</h2>';
 									
 									GO_Base_Html_Password::render(array(
 										"required" => false,
