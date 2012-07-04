@@ -291,8 +291,6 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 			$attributes = $imap->get_message_header($this->uid, true);
 			$this->setAttributes($attributes);
 			
-			throw new Exception("seen");
-			
 			return $this->attributes['seen'];
 		}
 	}
