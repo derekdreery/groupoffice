@@ -251,8 +251,15 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 			}
 		}
 		
-		$company->post_address_is_address = $company->address==$company->post_address?true:false;
-		
+		$company->post_address_is_address = false;
+	
+		if($company->address==$company->post_address && 
+			 $company->address_no==$company->post_address_no &&
+			 $company->city==$company->post_city
+			){
+			 $company->post_address_is_address = true;
+		}
+				
 		$params['user'] = $user;
 		$params['contact'] = $contact;
 		$params['company'] = $company;
