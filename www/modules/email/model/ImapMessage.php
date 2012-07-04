@@ -277,10 +277,25 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		}
 	}
 	
-//	public function __wakeup() {
-//		unset($this->seen);
-//		unset($this->flag);
-//	}
+	public function __wakeup() {
+		unset($this->seen);
+		unset($this->flag);
+	}
+	
+	protected function getSeen(){
+		if(isset($this->attributes['seen'])){
+			return $this->attributes['seen'];
+		}else
+		{
+			$imap = $this->getImapConnection();		
+			$attributes = $imap->get_message_header($this->uid, true);
+			$this->setAttributes($attributes);
+			
+			throw new Exception("seen");
+			
+			return $this->attributes['seen'];
+		}
+	}
 	
 //	private function _setSeen(){
 //		

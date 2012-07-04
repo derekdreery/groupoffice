@@ -44,3 +44,7 @@ $updates["201206121446"][]="ALTER TABLE `em_accounts` ADD `ignore_sent_folder` T
 $updates["201206141446"][]="";
 $updates["201206141446"][]="";
 $updates["201206141446"][]="";
+
+
+$updates["201207040933"][]="ALTER TABLE `em_links` ADD `uid` VARCHAR( 100 ) NOT NULL DEFAULT '',
+ADD INDEX ( `uid` ) ";

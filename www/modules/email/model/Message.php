@@ -80,18 +80,27 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	 * @return mixed property value
 	 * @see getAttribute
 	 */
-	public function __get($name) {
-		if (isset($this->attributes[$name])) {
+	public function __get($name) {		
+		
+		$getter = 'get'.$name;
+		if(method_exists($this, $getter))
+			return $this->$getter();
+		else	if (isset($this->attributes[$name])) {
 			return $this->attributes[$name];
 		}
 	}
 	
 	public function __set($name, $value){
-		$this->attributes[$name]=$value;
+		$setter = 'set'.$name;
+		if(method_exists($this, $setter))
+			return $this->$setter($name, $value);
+		else
+			$this->attributes[$name]=$value;
 	}
 	
 	public function __isset($name) {
-		return isset($this->attributes[$name]);
+		$value = $this->__get($name);
+		return isset($value);
 	}
 	
 	public function __unset($name) {
@@ -258,7 +267,9 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		$response['notification'] = $this->disposition_notification_to;
 		$response['subject'] = $this->subject;
 		
-		$response['seen']=$this->seen;
+		//seen is expensive because it can't be recovered from cache.
+		// We'll use the grid to check if a message was seen or not.
+		//$response['seen']=$this->seen;
 				
 		$from = $this->from->getAddress();
 		$response['from'] = $from['personal'];

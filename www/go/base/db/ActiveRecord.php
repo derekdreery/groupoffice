@@ -3112,9 +3112,20 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$result = $this->getDbConnection()->prepare($sql);
 		$success = $result->execute($values);
 		
-		if($success)
+		if($success){
+			
+			$this->afterUnlink($model);
+			
 			return !$unlinkBack || $model->unlink($this, false);
+		}else
+		{
+			return false;
+		}		
+	}
+	
+	protected function afterUnlink(GO_Base_Db_ActiveRecord $model){
 		
+		return true;
 	}
 	
 	/**
