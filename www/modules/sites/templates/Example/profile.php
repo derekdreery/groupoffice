@@ -173,16 +173,16 @@
 										'options' => GO::language()->getCountries()
 									));
 									
-									echo "<br /><hr />";
-									echo '<h2>'.$this->t('postAddressDetails').'</h2>';
-									
 									GO_Base_Html_Checkbox::render(array(
 										"required" => true,
 										"label" => $this->t('addressIsPostAddress'),
 										"model" => $contact,
-										"name" => "post_address"
+										"name" => "post_address_is_address"
 									));
 									
+									echo "<br /><hr />";
+									echo '<h2>'.$this->t('postAddressDetails').'</h2>';
+																		
 									echo '<div class="post-address">';
 									GO_Base_Html_Input::render(array(
 										"required" => true,
@@ -228,6 +228,7 @@
 									));		
 									
 									echo '</div>';
+									echo "<br /><hr />";
 									
 									GO_Base_Html_Submit::render(array(
 										"label" => "",
