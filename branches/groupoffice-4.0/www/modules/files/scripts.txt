@@ -17,6 +17,7 @@ modules/files/FileBrowser.js
 modules/files/FilePanel.js
 modules/files/FolderPanel.js
 modules/files/TreePanel.js
+modules/files/TreeFilePanel.js
 modules/files/FilesGrid.js
 modules/files/SelectFilesDialog.js
 modules/files/SelectFilesGrid.js

@@ -85,7 +85,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$response = array();
 		
 		$expandFolderIds = $this->_getExpandFolderIds($params);
-		
+        
+        $showFiles = isset($params['showFiles']);
 
 		switch ($params['node']) {
 			case 'shared':
@@ -95,14 +96,14 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				if (!empty($params['root_folder_id'])) {
 					$folder = GO_Files_Model_Folder::model()->findByPk($params['root_folder_id']);
 					$folder->checkFsSync();
-					$node = $this->_folderToNode($folder, $expandFolderIds);
+					$node = $this->_folderToNode($folder, $expandFolderIds, true, $showFiles);
 					$response[] = $node;
 				} else {
 					$folder = GO_Files_Model_Folder::model()->findHomeFolder(GO::user());
 
 					$folder->checkFsSync();
 
-					$node = $this->_folderToNode($folder, $expandFolderIds);
+					$node = $this->_folderToNode($folder, $expandFolderIds, true, $showFiles);
 					$node['text'] = GO::t('personal', 'files');
 					$node['iconCls'] = 'folder-home';
 					$node['path'] = $folder->path;
@@ -127,7 +128,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 						$contactsFolder = GO_Files_Model_Folder::model()->findByPath('addressbook');
 
 						if ($contactsFolder) {
-							$node = $this->_folderToNode($contactsFolder, $expandFolderIds, false);
+							$node = $this->_folderToNode($contactsFolder, $expandFolderIds, false, $showFiles);
 							$node['text'] = GO::t('addressbook', 'addressbook');
 							$response[] = $node;
 						}
@@ -137,7 +138,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 						$projectsFolder = GO_Files_Model_Folder::model()->findByPath('projects');
 
 						if ($projectsFolder) {
-							$node = $this->_folderToNode($projectsFolder, $expandFolderIds, false);
+							$node = $this->_folderToNode($projectsFolder, $expandFolderIds, false, $showFiles);
 							$node['text'] = GO::t('projects', 'projects');
 							$response[] = $node;
 						}
@@ -157,7 +158,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 							->order('name','ASC'));
 
 				while ($subfolder = $stmt->fetch()) {
-					$response[] = $this->_folderToNode($subfolder, $expandFolderIds, false);
+					$response[] = $this->_folderToNode($subfolder, $expandFolderIds, false, $showFiles);
 				}
 
 				break;
@@ -166,7 +167,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		return $response;
 	}
 
-	private function _folderToNode($folder, $expandFolderIds=array(), $withChildren=true) {
+	private function _folderToNode($folder, $expandFolderIds=array(), $withChildren=true, $withFiles = false) {
 		$expanded = $withChildren || in_array($folder->id, $expandFolderIds);
 		$node = array(
 				'text' => $folder->name,
@@ -185,16 +186,43 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			while ($subfolder = $stmt->fetch()) {
 				$node['children'][] = $this->_folderToNode($subfolder, $expandFolderIds, false);
 			}
+            
+            if ($withFiles) {
+				$this->_addFileNodes($folder, $node);
+			}
 		} else {
 			if (!$folder->hasChildren()) {
 				//it doesn't habe any subfolders so instruct the client about this
 				//so it can present the node as a leaf.
 				$node['children'] = array();
 				$node['expanded'] = true;
+                
+                if ($withFiles) {
+                    $this->_addFileNodes($folder, $node);
+                }
 			}
 		}
 
 		return $node;
+	}
+    
+    private function _addFileNodes($folder, &$node) {
+		$stmt = $folder->files();
+
+		while($file = $stmt->fetch()) {
+			$fileNode = array(
+				'text' => $file->name,
+				'id' => $file->id,
+				'draggable' => false,
+				'leaf' => true,
+				'path'=> $folder->path . '/' . $file->name,
+				'iconCls' => 'filetype-' . $file->extension,
+				'checked' => false
+			);
+
+			$node['children'][] = $fileNode;
+			GO::debug($file);
+		}
 	}
 
 	protected function beforeSubmit(&$response, &$model, &$params) {

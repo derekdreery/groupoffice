@@ -41,6 +41,9 @@
  */
 class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	
+    //bug fix
+    public $files_folder_id = 0;
+    
 	private $_path;
 	
 	//prevents acl id's to be generated automatically by the activerecord.

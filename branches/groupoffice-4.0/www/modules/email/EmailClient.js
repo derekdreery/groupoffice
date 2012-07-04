@@ -1451,8 +1451,99 @@ GO.newMenuItems.push({
 		
 		GO.email.showComposer(taskShowConfig);
 	}
+},{
+    text: GO.email.lang.emailFiles,
+    iconCls: 'go-model-icon-GO_Email_Model_LinkedEmail',
+    handler:function(item, e){
+    	GO.request({
+    		url:'files/folder/checkModelFolder',
+    		maskEl:item.parentMenu.panel.ownerCt.getEl(),
+    		params:{
+    			mustExist:false,
+    			model: item.parentMenu.panel.model_name,
+    			id: item.parentMenu.panel.data.id
+    		},
+    		success:function(response, options, result){
+				GO.email.openFolderTree(result.files_folder_id);
+    		},
+    		scope: this
+    	});
+    }
 });
 
+GO.email.openFolderTree = function(id, folder_id) {
+    if (!GO.email.treeFileBrowser) {
+        GO.email.treeFileBrowser = new GO.Window({
+            title: GO.files.lang.fileBrowser,
+            height:500,
+            width:400,
+            layout:'fit',
+            border:false,
+            maximizable:true,
+            collapsible:true,
+            closeAction:'hide',
+            items: [
+                GO.email.folderTree = new GO.files.TreeFilePanel()
+            ],
+            tbar: new Ext.Toolbar({
+                cls:'go-head-tb',
+                region:'north',
+                items:[{
+                    iconCls: 'btn-refresh',
+                    text: GO.lang.cmdRefresh,
+                    cls: 'x-btn-text-icon',
+                    handler: function() {
+                        GO.email.folderTree.getRootNode().reload()
+                        this.btnSelectAll.toggle(false);
+                    },
+                    scope: this
+                },
+                this.btnSelectAll = new Ext.Button({
+                    iconCls: 'btn-select-all',
+                    text: GO.lang.selectAll,
+                    cls: 'x-btn-text-icon',
+                    enableToggle: true,
+                    pressed: false,
+                    toggleHandler: function(btn, state) {
+                        GO.email.folderTree.getRootNode().cascade(function(n) {
+                            n.getUI().toggleCheck(state);
+                        });
+                    },
+                    scope: this
+                })
+                ]
+            }),
+            buttons:[{
+                text: GO.lang['cmdOk'],
+                handler: function(){
+
+                    var selFiles = new Array();
+                    var selNodes = GO.email.folderTree.getChecked();
+
+                    Ext.each(selNodes, function(node) {
+                        selFiles.push(node.attributes.path);
+                    });
+
+                    var c = GO.email.showComposer();
+
+                    c.emailEditor.attachmentsView.afterUpload({addFileStorageFiles:Ext.encode(selFiles)});
+
+                    GO.email.treeFileBrowser.hide();
+                },
+                scope:this
+            }]
+        });
+    }
+    GO.email.folderTree.getLoader().baseParams.root_folder_id=id;
+    GO.email.folderTree.getLoader().baseParams.expand_folder_id=folder_id;
+    GO.email.folderTree.getRootNode().reload({
+        callback:function(){
+            delete GO.email.folderTree.getLoader().baseParams.expand_folder_id;
+        },
+        scope:this
+    });
+    GO.email.treeFileBrowser.show();
+}
 
 GO.email.showMessageAttachment = function(id, remoteMessage){
 
@@ -1479,65 +1570,3 @@ GO.email.showMessageAttachment = function(id, remoteMessage){
 	GO.email.linkedMessageWin.show();
 	GO.email.linkedMessagePanel.load(id, remoteMessage);
 }
-
-//GO.newMenuItems.push({
-//	text: GO.email.lang.emailFiles,
-//	iconCls: 'go-model-icon-GO_Email_Model_LinkedEmail',
-//	handler:function(item, e)
-//        {               
-//                var taskShowConfig = item.parentMenu.taskShowConfig || {};
-//                //taskShowConfig.link_config=item.parentMenu.link_config
-//                taskShowConfig.values={};
-//                if(item.parentMenu.panel.data.email){
-//                        var to='';
-//                        if(item.parentMenu.panel.data.full_name){
-//                                to='"'+item.parentMenu.panel.data.full_name+'" <'+item.parentMenu.panel.data.email+'>';
-//                        }else if(item.parentMenu.panel.data.name){
-//                                to='"'+item.parentMenu.panel.data.name+'" <'+item.parentMenu.panel.data.email+'>';
-//                        }
-//
-//                        taskShowConfig.values.to=to;
-//                }
-//
-////                if(GO.settings.modules.savemailas.read_permission)
-////                        taskShowConfig.values.subject='[id:'+item.parentMenu.link_config.modelNameAndId+'] ';
-//
-//                taskShowConfig.selectFilesFromFolderID = item.parentMenu.panel.data.files_mailbox;
-//                this.availableComposer = GO.email.showComposer(taskShowConfig);
-//                
-//                if(!GO.files.selectFilesDialog)
-//                {
-//                    GO.files.selectFilesDialog = new GO.files.SelectFilesDialog();
-//
-//                    GO.files.selectFilesDialog.on('save', function(obj, files)
-//                    {
-//                            for(var i=0; i<files.length; i++)
-//                            {
-//                                    files[i] = files[i].substr(2);
-//                            }                          
-//
-//                            Ext.Ajax.request({
-//                                    url:GO.settings.modules.files.url+'json.php',
-//                                    params:{
-//                                            task:'attachments',
-//                                            file_ids: Ext.encode(files)
-//                                    },
-//                                    callback:function(options, success, response){
-//
-//                                            var data = Ext.decode(response.responseText);
-//
-//                                            if(!data.success)
-//                                                {
-//                                                        Ext.Msg.alert(GO.lang['strError'], data.feedback);
-//                                                }else
-//                                                {
-//                                                        this.availableComposer.addAttachments(data.results);
-//                                                }
-//                                    },
-//                                    scope:this
-//                            });
-//                    },this)
-//                }                
-//        }
-//
-//});
