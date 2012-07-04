@@ -265,6 +265,7 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 		$params['company'] = $company;
 
 		$this->getPage()->attachHeaderInclude('js',$this->getRootTemplateUrl().'js/jquery-1.7.2.min.js');
+		$this->getPage()->attachHeaderInclude('js',$this->getRootTemplateUrl().'js/profileToggle.js');
 		
 		$this->renderPage($params);
 	}
