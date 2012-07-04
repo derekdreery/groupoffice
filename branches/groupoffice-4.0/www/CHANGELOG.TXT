@@ -1,3 +1,8 @@
+04-07-2012 4.0.60
+- Speed optimizations in mail client
+- Sync unread flags bug
+- Small bug fixes
+
 03-07-2012 4.0.57
 - Cache problem that caused a lot of problems in the e-mail client
 
