@@ -225,7 +225,10 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 			$user->setAttributes($params);	
 			$company->setAttributes($params);
 			
-			var_dump($params);
+			
+			if(!empty($params['post_address_is_address'])){
+				$company->setPostAddressFromVisitAddress();
+			}
 			
 			GO_Base_Html_Error::validateModel($user);
 			GO_Base_Html_Error::validateModel($contact);
