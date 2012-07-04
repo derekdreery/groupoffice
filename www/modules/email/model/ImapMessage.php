@@ -329,8 +329,8 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 					}else //if($this->isAttachment($htmlPart['number']))
 					{
 						$attachment =& $this->getAttachment($htmlPart['number']);
-						$attachment['content_id']='go-autogen-'.$htmlPart['number'];
-						$this->_htmlBody .= '<img alt="'.$htmlPart['name'].'" src="cid:'.$attachment['content_id'].'" style="display:block;margin:10px 0;" />';
+						$attachment->content_id='go-autogen-'.$htmlPart['number'];
+						$this->_htmlBody .= '<img alt="'.$htmlPart['name'].'" src="cid:'.$attachment->content_id.'" style="display:block;margin:10px 0;" />';
 					}
 //					else
 //					{
