@@ -940,7 +940,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	 * @return string
 	 */
 	private function _handleAutoLinkTag(GO_Email_Model_ImapMessage $imapMessage, $params, $response) {
-		if(!$imapMessage->seen){
+		//seen flag is expensive because it can't be recovered from cache
+//		if(!$imapMessage->seen){
 
 			$tags = $this->_findAutoLinkTags($response['htmlbody']);
 
@@ -960,7 +961,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 					}
 				}
 			}
-		}
+//		}
 
 		return $response;
 	}

@@ -1194,7 +1194,6 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	}
 
 
-
 	/**
 	 * Get's message headers from an UID range:
 	 *
