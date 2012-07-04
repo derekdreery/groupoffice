@@ -133,42 +133,42 @@
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => $this->t('address'),
-										"model" => $contact,
+										"model" => $company,
 										"name" => "address"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => $this->t('housenumber'),
-										"model" => $contact,
+										"model" => $company,
 										"name" => "address_no"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => $this->t('zip'),
-										"model" => $contact,
+										"model" => $company,
 										"name" => "zip"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => $this->t('city'),
-										"model" => $contact,
+										"model" => $company,
 										"name" => "city"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => false,
 										"label" => $this->t('state'),
-										"model" => $contact,
+										"model" => $company,
 										"name" => "state"
 									));
 									
 									GO_Base_Html_Select::render(array(
 										"required" => true,
 										"label" => $this->t('country'),
-										"model" => $contact,
+										"model" => $company,
 										'name' => "country",
 										'options' => GO::language()->getCountries()
 									));
@@ -189,42 +189,42 @@
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => $this->t('postAddress'),
-										"model" => $contact,
+										"model" => $company,
 										"name" => "post_address"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => $this->t('postHousenumber'),
-										"model" => $contact,
+										"model" => $company,
 										"name" => "post_address_no"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => $this->t('postZip'),
-										"model" => $contact,
+										"model" => $company,
 										"name" => "post_zip"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => $this->t('postCity'),
-										"model" => $contact,
+										"model" => $company,
 										"name" => "post_city"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => false,
 										"label" => $this->t('postState'),
-										"model" => $contact,
+										"model" => $company,
 										"name" => "post_state"
 									));
 									
 									GO_Base_Html_Select::render(array(
 										"required" => true,
 										"label" => $this->t('postCountry'),
-										"model" => $contact,
+										"model" => $company,
 										'name' => "post_country",
 										'options' => GO::language()->getCountries()
 									));		
