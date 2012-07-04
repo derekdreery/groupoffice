@@ -1,4 +1,4 @@
-					<?php $this->_page->attachHeaderInclude('js',$this->_controller->getRootTemplateUrl().'js/jquery-1.7.2.min.js'); ?>
+					<?php //$this->_page->attachHeaderInclude('js',$this->_controller->getRootTemplateUrl().'js/jquery-1.7.2.min.js'); ?>
 
 					<div class="subkader-small-top">
 						<div class="subkader-small-bottom">
