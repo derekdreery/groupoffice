@@ -17,7 +17,7 @@ GO.portlets.rssFeedPortlet = function(config) {
 
 	config.store = new Ext.data.Store({
 		proxy: new Ext.data.HttpProxy({
-			url: GO.settings.modules.summary.url+'feed_proxy.php'
+			url: GO.url("summary/rssFeed/proxy")
 		}),
 		baseParams: {
 			feed: config.feed

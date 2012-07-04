@@ -8,114 +8,101 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  */
+class GO_Summary_Controller_RssFeed extends GO_Base_Controller_AbstractModelController {
 
-class GO_Summary_Controller_RssFeed extends GO_Base_Controller_AbstractModelController{
-	
 	protected $model = 'GO_Summary_Model_RssFeed';
-	
+
 	protected function actionSaveFeeds($params) {
-		
+
 		$feeds = json_decode($params['feeds'], true);
 		$ids = array();
-		
-		$response['data'] = array();
-		foreach($feeds as $feed)
-		{
-			$feed['user_id'] = GO::user()->id;
-			// Hack for the table being updated correctly.
-			if(isset($feed['summary']) && $feed['summary'] === true)
-				$feed['summary'] = 1;
-			else
-				$feed['summary'] = 0;
 
-			if ($feed['feedId']>0) {
-				$feed['id'] = $feed['feedId'];
-			}
-			unset($feed['feedId']);
-				
-			$feedModel = new GO_Summary_Model_RssFeed();
+		$response['data'] = array();
+		foreach ($feeds as $feed) {
+			//$feed['user_id'] = GO::user()->id;
+			
+			if(!empty($feed['id']))
+				$feedModel = GO_Summary_Model_RssFeed::model()->findByPk($feed['id']);
+			else
+				$feedModel = new GO_Summary_Model_RssFeed();
+			
 			$feedModel->setAttributes($feed);
-			$feedModel->setIsNew(!isset($feed['id']));
 			$feedModel->save();
 			$feed['id'] = $feedModel->id;
-			
+
 			$ids[] = $feed['id'];
-			$response['data'][$feed['id']]=$feed;
+			$response['data'][$feed['id']] = $feed;
 		}
-		
+
 		// delete other feeds
 		$feedStmt = GO_Summary_Model_RssFeed::model()
-			->find(
-				GO_Base_Db_FindParams::newInstance()
-					->criteria(
-						GO_Base_Db_FindCriteria::newInstance()
-							->addCondition('user_id', GO::user()->id)
-							->addInCondition('id', $ids, 't', true, true)
-					)
-			);
+						->find(
+						GO_Base_Db_FindParams::newInstance()
+						->criteria(
+										GO_Base_Db_FindCriteria::newInstance()
+										->addCondition('user_id', GO::user()->id)
+										->addInCondition('id', $ids, 't', true, true)
+						)
+		);
 		while ($deleteFeedModel = $feedStmt->fetch())
 			$deleteFeedModel->delete();
-		
+
 		$response['ids'] = $ids;
-		$response['success']=true;
-		
+		$response['success'] = true;
+
 		return $response;
 	}
-	
+
 	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
-		$storeParams->getCriteria()->addCondition('user_id',GO::user()->id);
+		$storeParams->getCriteria()->addCondition('user_id', GO::user()->id);
 		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
 	}
 	
-	protected function actionWebFeeds($params) {
-//		if(isset($_POST['delete_keys']))
-//		{
-//			try{
-//				$response['deleteSuccess']=true;
-//				$delete_webfeeds = json_decode(($_POST['delete_keys']));
-//				foreach($delete_webfeeds as $webfeed_id)
-//				{
-//					$summary->delete_webfeed($webfeed_id);
-//				}
-//			}catch(Exception $e)
-//			{
-//				$response['deleteSuccess']=false;
-//				$response['deleteFeedback']=$e->getMessage();
-//			}
-//		}
-		
-		$getActive = isset($_POST['active']) && $_POST['active']=='true';
-		$response['total'] = 0;
-		$response['results'] = array();
-		
+	protected function getStoreParams($params) {
 		$findCriteria = GO_Base_Db_FindCriteria::newInstance()
-			->addCondition('user_id',GO::user()->id);
-		if ($getActive)
-			$findCriteria
-				->mergeWith(
-					GO_Base_Db_FindCriteria::newInstance()
-						->addCondition('due_time','UNIX_TIMESTAMP()','>')
-						->addCondition('due_time','0','=',false)
-				);
-		
-		$feedsStmt = GO_Summary_Model_RssFeed::model()
-			->find(
-				GO_Base_Db_FindParams::newInstance()
-					->criteria($findCriteria)
-			);
-		while ($feedModel = $feedsStmt->fetch()) {
-			$response['total']+=1;
-			$response['results'][] = array(
-				'feedId' => $feedModel->id,
-				'user_id' => $feedModel->user_id,
-				'title' => $feedModel->title,
-				'url' => $feedModel->url
-			);
-		}
-
-		$response['success'] = true;
-		return $response;
+						->addCondition('user_id', GO::user()->id);
+		return GO_Base_Db_FindParams::newInstance()
+						->criteria($findCriteria);
 	}
+
 	
+	protected function actionProxy($params) {
+		$feed = $params['feed'];
+		if ($feed != '' && strpos($feed, 'http') === 0) {
+			header('Content-Type: text/xml');
+
+			if (function_exists('curl_init')) {
+				$ch = curl_init();
+
+				curl_setopt($ch, CURLOPT_URL, $feed);
+				curl_setopt($ch, CURLOPT_HEADER, 0);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+				//for self-signed certificates
+				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+				curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+
+				//suppress warning:
+				//PHP Warning: curl_setopt() [<a href='function.curl-setopt'>function.curl-setopt</a>]:
+				//CURLOPT_FOLLOWLOCATION cannot be activated when in safe_mode or an open_basedir is set in feed_proxy.php on line 29
+				@curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+
+				$xml = curl_exec($ch);
+			} else {
+				if (!GO_Base_Fs_File::checkPathInput($feed))
+					throw new Exception("Invalid request");
+
+				$xml = @file_get_contents($feed);
+			}
+
+			if ($xml) {
+				$xml = str_replace('<content:encoded>', '<content>', $xml);
+				$xml = str_replace('</content:encoded>', '</content>', $xml);
+				$xml = str_replace('</dc:creator>', '</author>', $xml);
+				echo str_replace('<dc:creator', '<author', $xml);
+			}
+		}
+	}
+
 }
 
