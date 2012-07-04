@@ -51,6 +51,9 @@ $l['profileTitle']='Your profile information';
 $l['profileText']='Change your contact information below';
 $l['youraccount']='Your account';
 $l['yourlogincredentials']='Your login credentials';
+$l['generalInformation']='User information';
+$l['addressDetails']='Address';
+$l['postAddressDetails']='Post address';
 
 $l['pager_page']='Page';
 $l['pager_of']='of';
