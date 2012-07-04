@@ -225,6 +225,8 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 			$user->setAttributes($params);	
 			$company->setAttributes($params);
 			
+			var_dump($params);
+			
 			GO_Base_Html_Error::validateModel($user);
 			GO_Base_Html_Error::validateModel($contact);
 			GO_Base_Html_Error::validateModel($company);
