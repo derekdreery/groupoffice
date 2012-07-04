@@ -1,3 +1,5 @@
+Note sync
+
 reminder als licentie verloopt
 
 Attachment object that can create the temp files anytime
@@ -75,3 +77,6 @@ Password encrypted notes
 
 UCF for deb pkgs
 http://www.group-office.com/forum/viewtopic.php?f=6&t=8083
+
+Drag & drop contacts:
+http://www.group-office.com/forum/viewtopic.php?f=5&t=8351
