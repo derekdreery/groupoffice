@@ -264,7 +264,7 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 		$params['contact'] = $contact;
 		$params['company'] = $company;
 
-		$this->_page->attachHeaderInclude('js',$this->_controller->getRootTemplateUrl().'js/jquery-1.7.2.min.js');
+		$this->getPage()->attachHeaderInclude('js',$this->_controller->getRootTemplateUrl().'js/jquery-1.7.2.min.js');
 		
 		$this->renderPage($params);
 	}
