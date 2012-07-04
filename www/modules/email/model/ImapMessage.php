@@ -380,8 +380,8 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 							$this->_plainBody.='{inline_'.count($inlineImages).'}';
 							
 							$attachment =& $this->getAttachment($plainPart['number']);
-							$attachment['content_id']='go-autogen-'.$plainPart['number'];
-							$inlineImages[]='<img alt="'.$plainPart['name'].'" src="cid:'.$attachment['content_id'].'" style="display:block;margin:10px 0;" />';
+							$attachment->content_id='go-autogen-'.$plainPart['number'];
+							$inlineImages[]='<img alt="'.$plainPart['name'].'" src="cid:'.$attachment->content_id.'" style="display:block;margin:10px 0;" />';
 						}
 					}
 				}			
@@ -392,8 +392,8 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 				if($plainPart['type']!='text'){					
 					if($asHtml){					
 						$attachment =& $this->getAttachment($plainPart['number']);
-						$attachment['content_id']='go-autogen-'.$plainPart['number'];
-						$inlineImages[]='<img alt="'.$plainPart['name'].'" src="cid:'.$attachment['content_id'].'" style="display:block;margin:10px 0;" />';
+						$attachment->content_id='go-autogen-'.$plainPart['number'];
+						$inlineImages[]='<img alt="'.$plainPart['name'].'" src="cid:'.$attachment->content_id.'" style="display:block;margin:10px 0;" />';
 					}
 				}
 			}
