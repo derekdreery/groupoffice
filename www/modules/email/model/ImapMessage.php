@@ -383,7 +383,15 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 			}
 		}else
 		{
-//			$this->_setSeen();
+			foreach($this->_plainParts['parts'] as $plainPart){
+				if($plainPart['type']!='text'){					
+					if($asHtml){					
+						$attachment =& $this->getAttachment($plainPart['number']);
+						$attachment['content_id']='go-autogen-'.$plainPart['number'];
+						$inlineImages[]='<img alt="'.$plainPart['name'].'" src="cid:'.$attachment['content_id'].'" style="display:block;margin:10px 0;" />';
+					}
+				}
+			}
 		}
 		
 		$this->_plainBody = GO_Base_Util_String::normalizeCrlf($this->_plainBody);
