@@ -277,6 +277,11 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		}
 	}
 	
+	/**
+	 * Unset the flags when we wakeup from the cache. We can't know if the flags have been changed.
+	 * When they are accessed they are fetched from the IMAP server in getSeen. 
+	 * getFlag is not implemented because there was no need for it.
+	 */
 	public function __wakeup() {
 		unset($this->seen);
 		unset($this->flag);
@@ -286,7 +291,9 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		if(isset($this->attributes['seen'])){
 			return $this->attributes['seen'];
 		}else
-		{
+		{			
+			//when a message is retrieved from cache, we don't know if the seen flag has been changed.
+			//so when this is requested we fetch it from the IMAP server.
 			$imap = $this->getImapConnection();		
 			$attributes = $imap->get_message_header($this->uid, true);
 			$this->setAttributes($attributes);
