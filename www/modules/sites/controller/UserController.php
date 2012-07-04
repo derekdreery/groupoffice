@@ -223,12 +223,24 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 				
 			$contact->setAttributes($params);
 			$user->setAttributes($params);	
+			
+			if(!empty($params['post_address_is_address'])){
+				
+				$params['post_address'] = $params['address'];
+				$params['post_address_no'] = $params['address_no'];
+				$params['post_zip'] = $params['zip'];
+				$params['post_city'] = $params['city'];
+				$params['post_state'] = $params['state'];
+				$params['post_country'] = $params['country'];
+				
+				$company->setPostAddressFromVisitAddress();
+			}
+			
+			
 			$company->setAttributes($params);
 			
 			
-			if(!empty($params['post_address_is_address'])){
-				$company->setPostAddressFromVisitAddress();
-			}
+			
 			
 			GO_Base_Html_Error::validateModel($user);
 			GO_Base_Html_Error::validateModel($contact);
