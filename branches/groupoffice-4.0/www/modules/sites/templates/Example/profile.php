@@ -173,6 +173,8 @@
 										'options' => GO::language()->getCountries()
 									));
 									
+									var_dump($company->post_address_is_address);
+									
 									GO_Base_Html_Checkbox::render(array(
 										"required" => false,
 										"label" => $this->t('addressIsPostAddress'),
