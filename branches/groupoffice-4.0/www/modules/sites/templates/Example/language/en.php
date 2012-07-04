@@ -52,8 +52,15 @@ $l['profileText']='Change your contact information below';
 $l['youraccount']='Your account';
 $l['yourlogincredentials']='Your login credentials';
 $l['generalInformation']='User information';
-$l['addressDetails']='Address';
-$l['postAddressDetails']='Post address';
+$l['addressDetails']='Address information';
+$l['postAddressDetails']='Post address information';
+
+$l['postAddress']='Post Address';
+$l['postHousenumber']='Post Number of house';
+$l['postZip']='Post ZIP/Postal code';
+$l['postCity']='Post City';
+$l['postState']='Post State/Province';
+$l['postCountry']='Post Country';
 
 $l['pager_page']='Page';
 $l['pager_of']='of';
