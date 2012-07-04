@@ -1,14 +1,12 @@
 GO.email.TreeContextMenu = Ext.extend(Ext.menu.Menu,{
 	
 	hasAcl : function(node){
-		var p = node.parentNode;
-		while(p){
-				if(p.attributes.acl_supported){
-						return true;
-				}
-				p = p.parentNode;
-		}
-		return false;
+		
+		var inboxNode = this.treePanel.findInboxNode(node);
+		if(!inboxNode)
+			return false;
+		else
+			return inboxNode.attributes.acl_supported;
 	},
 	
 	setNode : function(node){

@@ -129,6 +129,11 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			if(!empty($quota['limit'])) {
 				$percentage = ceil($quota['usage']*100/$quota['limit']);
 				$usage = sprintf(GO::t('usage_limit','email'), $percentage.'%', GO_Base_Util_Number::formatSize($quota['limit']*1024));
+				
+				$round5 = floor($usage/5)*5;
+
+				$usage='<span class="em-usage-'.$round5.'">'.$usage.'</span>';
+				
 			}	else {
 				$usage = sprintf(GO::t('usage','email'), GO_Base_Util_Number::formatSize($quota['usage']*1024));
 			}
@@ -170,6 +175,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 							'text' => $alias->email,
 							'name' => $alias->email,
 							'id' => $nodeId,
+							'isAccount'=>true,
 							'iconCls' => 'folder-account',
 							'expanded' => $this->_isExpanded($nodeId),
 							'noselect' => false,
@@ -177,15 +183,15 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 							'mailbox' => '',							
 							'noinferiors' => false,
 							//'inbox_new' => 0,
-							'usage' => "",
-							"acl_supported"=>false
+							//'usage' => "",
+							//"acl_supported"=>false
 					);
 					try{
-						$node['usage']=$this->_getUsage($account);
+						
 						if($node['expanded'])
 							$node['children']=$this->_getMailboxTreeNodes($account->getRootMailboxes(true));
 						
-						$node['acl_supported']=$account->openImapConnection()->has_capability('ACL');
+						
 						
 					}catch(Exception $e){
 						$node['text'] .= ' ('.GO::t('error').')';
@@ -255,10 +261,17 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					'noinferiors' => $mailbox->noinferiors,
 					'children' => !$mailbox->haschildren ? array() : null,
 					'expanded' => !$mailbox->haschildren,
+//					'usage'=>'',
+//					'acl_supported'=>false,
 					'cls'=>$mailbox->noselect==1 ? 'em-tree-node-noselect' : null
 							//'children'=>$children,
 							//'expanded' => !count($children),
 			);
+			
+			if($mailbox->name=='INBOX'){
+				$node['usage']=$this->_getUsage($mailbox->getAccount());
+				$node['acl_supported']=$mailbox->getAccount()->openImapConnection()->has_capability('ACL');
+			}
 
 			if ($mailbox->haschildren && $this->_isExpanded($nodeId)) {
 				$node['children'] = $this->_getMailboxTreeNodes($mailbox->getChildren(false, !$subscribtions),$subscribtions);
