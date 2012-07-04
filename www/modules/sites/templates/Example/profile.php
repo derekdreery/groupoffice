@@ -10,6 +10,42 @@
 								<?php 
 									GO_Base_Html_Form::renderBegin('sites/user/profile','profile',true);
 									
+									echo "<br /><hr />";
+									echo '<h2>'.$this->t('yourlogincredentials').'</h2>';
+									
+									GO_Base_Html_Password::render(array(
+										"required" => false,
+										"label" => $this->t('currentPassword'),
+										"name" => "currentPassword",
+										"value" => ''
+									));
+									
+									GO_Base_Html_Input::render(array(
+										"required" => false, // False because it cannot be changed so it will not be posted because this is a disabled field
+										"model" => $user,
+										"label" => $this->t('username'),
+										"name" => "username",
+										"extra" => "disabled"
+									));
+
+									GO_Base_Html_Password::render(array(
+										"required" => false,
+										"label" => $this->t('password'),
+										"model" => $user,
+										"name" => "password",
+										"value" => ''
+									));
+									
+									GO_Base_Html_Password::render(array(
+										"required" => false,
+										"label" => $this->t('confirm'),
+										"name" => "passwordConfirm",
+										"value" => ''
+									));
+									
+									echo "<br /><hr />";
+									echo '<h2>'.$this->t('generalInformation').'</h2>';
+									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => $this->t('firstName'),
@@ -183,39 +219,6 @@
 										'options' => GO::language()->getCountries()
 									));
 																		
-									echo "<br /><hr />";
-									echo '<h2>'.$this->t('yourlogincredentials').'</h2>';
-									
-									GO_Base_Html_Password::render(array(
-										"required" => false,
-										"label" => $this->t('currentPassword'),
-										"name" => "currentPassword",
-										"value" => ''
-									));
-									
-									GO_Base_Html_Input::render(array(
-										"required" => false, // False because it cannot be changed so it will not be posted because this is a disabled field
-										"model" => $user,
-										"label" => $this->t('username'),
-										"name" => "username",
-										"extra" => "disabled"
-									));
-
-									GO_Base_Html_Password::render(array(
-										"required" => false,
-										"label" => $this->t('password'),
-										"model" => $user,
-										"name" => "password",
-										"value" => ''
-									));
-									
-									GO_Base_Html_Password::render(array(
-										"required" => false,
-										"label" => $this->t('confirm'),
-										"name" => "passwordConfirm",
-										"value" => ''
-									));
-									
 									GO_Base_Html_Submit::render(array(
 										"label" => "",
 										"name" => "submit",
