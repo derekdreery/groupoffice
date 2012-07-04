@@ -729,8 +729,10 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 			
 			$state = GO_Base_Model_State::model()->findByPk(array('name'=>$name,'user_id'=>GO::user()->id));
 			
-			if(!$state)
+			if(!$state){
 				$state = new GO_Base_Model_State();
+				$state->name=$name;
+			}
 			
 			$state->value=$value;
 			$state->save();
