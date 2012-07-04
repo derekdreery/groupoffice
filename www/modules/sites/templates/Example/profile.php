@@ -182,13 +182,13 @@
 										"checked" => $company->post_address_is_address
 									));
 									
-									echo "<br /><hr />";
-									echo '<h2>'.$this->t('postAddressDetails').'</h2>';
-																		
 									echo '<div class="post-address"';
 									echo !empty($company->post_address_is_address)?' style="display:none;"':'';
 									echo '>';
 									
+									echo "<br /><hr />";
+									echo '<h2>'.$this->t('postAddressDetails').'</h2>';
+																											
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => $this->t('postAddress'),
