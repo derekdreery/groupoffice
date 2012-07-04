@@ -70,6 +70,8 @@ Feature requests voting system
 Bij bedrijf -> displaypanel -> New -> Contact
 
 
+Password encrypted notes
+
 
 UCF for deb pkgs
 http://www.group-office.com/forum/viewtopic.php?f=6&t=8083
