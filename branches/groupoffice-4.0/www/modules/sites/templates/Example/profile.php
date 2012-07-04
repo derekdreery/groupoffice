@@ -172,14 +172,13 @@
 										'name' => "country",
 										'options' => GO::language()->getCountries()
 									));
-									
-									var_dump($company->post_address_is_address);
-									
+
 									GO_Base_Html_Checkbox::render(array(
 										"required" => false,
 										"label" => $this->t('addressIsPostAddress'),
 										"model" => $company,
-										"name" => "post_address_is_address"
+										"name" => "post_address_is_address",
+										"checked" => $company->post_address_is_address
 									));
 									
 									echo "<br /><hr />";
