@@ -630,7 +630,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		if(!isset($params['alias_id']))
 			$params['alias_id']=0;
 		
-		$alias = $this->_findAliasFromRecipients($account, $message->to, $params['alias_id']);	
+		$recipients = $message->to;
+		$recipients->mergeWith($message->cc);
+		
+		$alias = $this->_findAliasFromRecipients($account, $recipients, $params['alias_id']);	
 		
 				
 		$response['data']['alias_id']=$alias->id;		
