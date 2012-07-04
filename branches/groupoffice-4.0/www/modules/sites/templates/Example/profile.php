@@ -100,7 +100,35 @@
 									));
 																	
 									echo "<br /><hr />";
-									echo '<h2>'.$this->t('addressDetails').'</h2>';
+									echo '<h2>'.$this->t('companyInformation').'</h2>';
+									
+									GO_Base_Html_Input::render(array(
+										"required" => true,
+										"model" => $company,
+										"label" => $this->t('company'),
+										"name" => "name"
+									));
+									
+									GO_Base_Html_Input::render(array(
+										"required" => false,
+										"model" => $contact,
+										"label" => $this->t('department'),
+										"name" => "department"
+									));
+									
+									GO_Base_Html_Input::render(array(
+										"required" => false,
+										"model" => $contact,
+										"label" => $this->t('function'),
+										"name" => "function"
+									));
+																
+									GO_Base_Html_Input::render(array(
+										"required" => false,
+										"model" => $company,
+										"label" => $this->t('vat'),
+										"name" => "vat_no"
+									));			
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
@@ -148,6 +176,14 @@
 									echo "<br /><hr />";
 									echo '<h2>'.$this->t('postAddressDetails').'</h2>';
 									
+									GO_Base_Html_Checkbox::render(array(
+										"required" => true,
+										"label" => $this->t('addressIsPostAddress'),
+										"model" => $contact,
+										"name" => "post_address"
+									));
+									
+									echo '<div class="post-address">';
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => $this->t('postAddress'),
@@ -189,38 +225,9 @@
 										"model" => $contact,
 										'name' => "post_country",
 										'options' => GO::language()->getCountries()
-									));
-																		
-									echo "<br /><hr />";
-									echo '<h2>'.$this->t('companyInformation').'</h2>';
+									));		
 									
-									GO_Base_Html_Input::render(array(
-										"required" => true,
-										"model" => $company,
-										"label" => $this->t('company'),
-										"name" => "name"
-									));
-									
-									GO_Base_Html_Input::render(array(
-										"required" => false,
-										"model" => $contact,
-										"label" => $this->t('department'),
-										"name" => "department"
-									));
-									
-									GO_Base_Html_Input::render(array(
-										"required" => false,
-										"model" => $contact,
-										"label" => $this->t('function'),
-										"name" => "function"
-									));
-																
-									GO_Base_Html_Input::render(array(
-										"required" => false,
-										"model" => $company,
-										"label" => $this->t('vat'),
-										"name" => "vat_no"
-									));									
+									echo '</div>';
 									
 									GO_Base_Html_Submit::render(array(
 										"label" => "",

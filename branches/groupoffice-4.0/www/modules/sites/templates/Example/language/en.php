@@ -52,7 +52,7 @@ $l['profileText']='Change your contact information below';
 $l['youraccount']='Your account';
 $l['yourlogincredentials']='Your login credentials';
 $l['generalInformation']='User information';
-$l['addressDetails']='Address information';
+$l['addressIsPostAddress']='Post address is the same as address';
 $l['postAddressDetails']='Post address information';
 $l['companyInformation']='Company information';
 
