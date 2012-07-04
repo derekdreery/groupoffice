@@ -174,9 +174,9 @@
 									));
 									
 									GO_Base_Html_Checkbox::render(array(
-										"required" => true,
+										"required" => false,
 										"label" => $this->t('addressIsPostAddress'),
-										"model" => $contact,
+										"model" => $company,
 										"name" => "post_address_is_address"
 									));
 									
@@ -228,7 +228,7 @@
 									));		
 									
 									echo '</div>';
-									echo "<br /><hr />";
+									echo "<br /><hr /><br />";
 									
 									GO_Base_Html_Submit::render(array(
 										"label" => "",
