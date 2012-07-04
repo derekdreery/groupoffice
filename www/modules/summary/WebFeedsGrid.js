@@ -40,20 +40,20 @@ GO.summary.WebFeedsGrid = function(config){
 			header: GO.lang.url,
 			dataIndex: 'url',
 			editor: new Ext.form.TextField({
-				 allowBlank: false,
-				 vtype: 'url'
+				 allowBlank: false
+//				 vtype: 'url'
 			})
 		},
 		SummaryColumn
 	]
 	};
 	config.store = new GO.data.JsonStore({
-		url: GO.url('summary/rssFeed/webFeeds'),
+		url: GO.url('summary/rssFeed/store'),
 		baseParams: {},
 		root: 'results',
-		id: 'feedId',
+		id: 'id',
 		totalProperty:'total',
-		fields:['feedId', 'title', 'url', 'summary'],
+		fields:['id', 'title', 'url', 'summary'],
 		remoteSort: true
 	});
 
@@ -87,7 +87,7 @@ GO.summary.WebFeedsGrid = function(config){
 
 	var Feed = Ext.data.Record.create([
 	{
-		name: 'feedId',
+		name: 'id',
 		type: 'int'
 	},
 	{
@@ -111,7 +111,7 @@ GO.summary.WebFeedsGrid = function(config){
 		cls: 'x-btn-text-icon',
 		handler: function(){
 			var e = new Feed({
-				feedId: '0'
+				id: '0'
 			});
 			this.stopEditing();
 			this.store.insert(0, e);
