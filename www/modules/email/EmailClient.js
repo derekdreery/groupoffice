@@ -622,7 +622,7 @@ GO.email.EmailClient = function(config){
 	}];
 
   	
-	this.messagePanel.on('load', function(options, success, response){
+	this.messagePanel.on('load', function(options, success, response, data, password){
 		if(!success)
 		{
 			this.messagePanel.uid=0;
@@ -635,12 +635,23 @@ GO.email.EmailClient = function(config){
 			this.forwardButton.setDisabled(false);
 			this.printButton.setDisabled(false);
 			
-//			var record = this.messagesGrid.store.getById(this.messagePanel.uid);
-//			if(record.data['seen']==0)
-//			{
-//				this.incrementFolderStatus(this.mailbox, -1);
-//				record.set('seen','1');
-//			}
+			var record = this.messagesGrid.store.getById(this.messagePanel.uid);
+
+			if(!record.data.seen && data.notification)
+			{
+				if(GO.email.alwaysRespondToNotifications || confirm(GO.email.lang.sendNotification.replace('%s', data.notification)))
+				{
+					GO.request({
+						url: "email/message/notification",
+						params: {					
+							account_id: this.messagePanel.account_id,
+							message_to:data.to_string,
+							notification_to: data.notification,
+							subject: data.subject
+						}
+					});
+				}
+			}
 		}
   	
 	}, this);
