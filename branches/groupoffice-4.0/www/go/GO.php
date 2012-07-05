@@ -280,7 +280,7 @@ class GO{
 
 		if (!isset(self::$_cache)) {
 			if(GO::config()->debug)
-				self::$_cache=new GO_Base_Cache_None();
+				self::$_cache=new GO_Base_Cache_Apc();
 			elseif(function_exists("apc_store"))
 				self::$_cache=new GO_Base_Cache_Apc();
 			else
@@ -399,7 +399,8 @@ class GO{
 	 * Called by GO_Base_Config::__destruct() so we can do stuff at the end 
 	 */
 	public static function endRequest(){
-		if(self::$_classesIsDirty)
+		//cli may resolve symlinks and apache doesn't this causes double includes
+		if(self::$_classesIsDirty && PHP_SAPI!='cli')
 			@GO::cache()->set('autoload_classes', self::$_classes);
 	}
 
