@@ -257,6 +257,10 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		
 		$this->createContact();
 		
+		//remove cache for GO::user() calls.
+		$cacheKey = 'GO_Base_Model_User:'.GO::session()->values['user_id'];
+		GO::cache()->delete($cacheKey);
+		
 		GO::modules()->callModuleMethod('saveUser', array(&$this, $wasNew));
 
 		return parent::afterSave($wasNew);
