@@ -162,8 +162,7 @@ Ext.extend(GO.portlets.rssFeedPortlet, GO.grid.GridPanel, {
 	},
 
 	loadFeed : function(url, preview) {
-		if(typeof(preview) == 'undefined')
-			preview = 1;
+		//console.log(preview);
 		var view = this.getView();
 		view.showPreview = preview;
 

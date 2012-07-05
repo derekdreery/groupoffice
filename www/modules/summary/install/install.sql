@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `su_rss_feeds` (
   `user_id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
   `url` varchar(255) default NULL,
-  `summary` tinyint(1) NOT NULL,
+  `summary` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
