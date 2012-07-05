@@ -19,6 +19,7 @@ class GO_Servermanager_Controller_Trial extends GO_Base_Controller_AbstractContr
 			
 			
 			$installation = new GO_ServerManager_Model_Installation();
+			$installation->status=GO_ServerManager_Model_Installation::STATUS_TRIAL;
 			$installation->name = $this->newTrial->name.'.'.GO::config()->servermanager_wildcard_domain;
 			
 			if(GO_Base_Html_Error::validateModel($installation)){

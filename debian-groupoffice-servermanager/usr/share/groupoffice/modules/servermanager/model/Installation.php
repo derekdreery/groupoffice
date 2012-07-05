@@ -53,6 +53,8 @@
 
 class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 
+	const STATUS_TRIAL ='trial';
+	const STATUS_ACTIVE ='ignore';
 	/**
 	 * Ignore existing database and folder structure when importing.
 	 * 

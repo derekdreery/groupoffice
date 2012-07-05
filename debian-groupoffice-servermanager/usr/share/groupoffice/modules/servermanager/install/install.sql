@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `sm_installations` (
   `decimal_separator` char(1) DEFAULT NULL,
   `billing` tinyint(1) NOT NULL DEFAULT '0',
   `professional` tinyint(1) NOT NULL DEFAULT '0',
-  `status` varchar(50) NOT NULL,
+  `status` varchar(50) NOT NULL DEFAULT 'ignore',
   `status_change_time` int(11) NOT NULL DEFAULT '0',
   `config_file` varchar(255) NOT NULL DEFAULT '',
   `token` varchar(100) NOT NULL,

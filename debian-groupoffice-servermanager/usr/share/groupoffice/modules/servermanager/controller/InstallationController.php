@@ -561,7 +561,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			try{
 				$report['installations'][]=$installation->report();
 			}catch(Exception $e){
-				echo $e->getMessage();
+				echo $e->getMessage()."\n";
 				$report['errors']=(string) $e;
 			}
 			
