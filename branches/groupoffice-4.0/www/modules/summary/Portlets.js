@@ -58,14 +58,14 @@ GO.mainLayout.onReady(function(){
 											this.WebFeedsGrid.store.reload();
 											this.manageWebFeedsWindow.hide();
 											rssTabPanel.items.each(function(p){ // Walk through tabs
-												if(!GO.util.empty(responseParams.data) && responseParams.data[p.feedId]==undefined) // Deleted feed
+												if(!GO.util.empty(responseParams.data) && responseParams.data[p.id]==undefined) // Deleted feed
 													rssTabPanel.remove(p);
 												else // Feed already exists
 												{
 													var r = responseParams.data[p.id];
 
-													if(p.feed != r.url || parseInt(p.getView().showPreview) != parseInt(r.summary))
-														p.loadFeed(r.url, parseInt(r.summary));
+													if(p.feed != r.url || p.getView().showPreview != r.summary)
+														p.loadFeed(r.url, r.summary);
 													if(p.title != r.title)
 														p.setTitle(r.title);
 													delete responseParams.data[p.id]; //Remove id (don't create it again)
@@ -76,10 +76,10 @@ GO.mainLayout.onReady(function(){
 												if(i != 'remove')
 												{
 													rssTabPanel.add(new GO.portlets.rssFeedPortlet({
-														id: responseParams.data[i].id,
+														feed_id: responseParams.data[i].id,
 														feed: responseParams.data[i].url,
 														title: responseParams.data[i].title,
-														showPreview:parseInt(responseParams.data[i].summary),
+														showPreview:responseParams.data[i].summary,
 														closable:false
 													}));
 												}
@@ -152,7 +152,7 @@ GO.mainLayout.onReady(function(){
 					{
 						for(var i=0;i<rssTabPanels.results.length;i++){
 							rssTabPanel.add(new GO.portlets.rssFeedPortlet({
-								id: rssTabPanels.results[i].id,
+								feed_id: rssTabPanels.results[i].id,
 								feed: rssTabPanels.results[i].url,
 								title: rssTabPanels.results[i].title,
 								showPreview:rssTabPanels.results[i].summary,
