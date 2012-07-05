@@ -1,3 +1,6 @@
+05-07-2012 4.0.62
+- Cache problem with reply all and language change
+
 04-07-2012 4.0.60
 - Speed optimizations in mail client
 - Sync unread flags bug
