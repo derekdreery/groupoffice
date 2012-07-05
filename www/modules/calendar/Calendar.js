@@ -855,7 +855,10 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					//reload grid if old or new event repeats. Do not reload if an occurence of a repeating event is modified
 					if(newEvent.repeats || !oldDomId)//|| (activeGrid.remoteEvents[oldDomId] && activeGrid.remoteEvents[oldDomId].repeats && activeGrid.remoteEvents[oldDomId].event_id==newEvent.event_id))
 					{
-						activeGrid.store.reload();
+						if(this.displayType=='view')
+							activeGrid.reload();
+						else
+							activeGrid.store.reload();
 					}else
 					{
 						//var remove_id = newEvent.exception_event_id ? newEvent.exception_event_id : newEvent.event_id;
