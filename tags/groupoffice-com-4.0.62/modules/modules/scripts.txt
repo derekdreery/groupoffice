@@ -1,0 +1,2 @@
+modules/modules/ModulePermissionsWindow.js
+modules/modules/modules.js
