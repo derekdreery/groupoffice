@@ -207,45 +207,49 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	private function _calculateInstallationUsage($config){
 		//prevent model caching and switch to installation database.
 		GO::$disableModelCache=true;		
-		GO::setDbConnection(
-						$config['db_name'], 
-						$config['db_user'], 
-						$config['db_pass'], 
-						$config['db_host']
-						);
-		
-		$adminUser = GO_Base_Model_User::model()->findByPk(1);
-		$this->admin_email=$adminUser->email;
-		$this->admin_name=$adminUser->name;
-		$this->install_time = $adminUser->ctime;
-		
-		$findParams = GO_Base_Db_FindParams::newInstance()
-						->select('count(*) as count, max(lastlogin) AS lastlogin');
-		$record = GO_Base_Model_User::model()->findSingle($findParams);						
-		
-		$this->lastlogin = intval($record->lastlogin);
-		$this->count_users = intval($record->count);		
-		
-		$allowedModules = empty($config['allowed_modules']) ? array() : explode(',', $config['allowed_modules']);
-		
-		$stmt = GO_Base_Model_User::model()->find(GO_Base_Db_FindParams::newInstance()->ignoreAcl());
-		$iUsers=array();
-		while($user = $stmt->fetch()){
-			$iUser = $user->getAttributes('raw');
-			$iUser['modules']=array();
-			
-			$modStmt = GO_Base_Model_Module::model()->find(GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::READ_PERMISSION, $user->id));
-			while($module = $modStmt->fetch()){			
-				if(empty($allowedModules) || in_array($module->id, $allowedModules))
-					$iUser['modules'][]=$module->id;				
+		try{
+			GO::setDbConnection(
+							$config['db_name'], 
+							$config['db_user'], 
+							$config['db_pass'], 
+							$config['db_host']
+							);
+
+			$adminUser = GO_Base_Model_User::model()->findByPk(1);
+			$this->admin_email=$adminUser->email;
+			$this->admin_name=$adminUser->name;
+			$this->install_time = $adminUser->ctime;
+
+			$findParams = GO_Base_Db_FindParams::newInstance()
+							->select('count(*) as count, max(lastlogin) AS lastlogin');
+			$record = GO_Base_Model_User::model()->findSingle($findParams);						
+
+			$this->lastlogin = intval($record->lastlogin);
+			$this->count_users = intval($record->count);		
+
+			$allowedModules = empty($config['allowed_modules']) ? array() : explode(',', $config['allowed_modules']);
+
+			$stmt = GO_Base_Model_User::model()->find(GO_Base_Db_FindParams::newInstance()->ignoreAcl());
+			$iUsers=array();
+			while($user = $stmt->fetch()){
+				$iUser = $user->getAttributes('raw');
+				$iUser['modules']=array();
+
+				$modStmt = GO_Base_Model_Module::model()->find(GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::READ_PERMISSION, $user->id));
+				while($module = $modStmt->fetch()){			
+					if(empty($allowedModules) || in_array($module->id, $allowedModules))
+						$iUser['modules'][]=$module->id;				
+				}
+
+				$iUsers[]=$iUser;
 			}
-			
-			$iUsers[]=$iUser;
+			GO::config()->save_setting('mailbox_usage', $this->mailbox_usage);
+			GO::config()->save_setting('file_storage_usage', $this->file_storage_usage);
+			GO::config()->save_setting('database_usage', $this->database_usage);
+		}catch(Exception $e){
+			GO::setDbConnection();
+			throw new Exception($e->getMessage());
 		}
-		GO::config()->save_setting('mailbox_usage', $this->mailbox_usage);
-		GO::config()->save_setting('file_storage_usage', $this->file_storage_usage);
-		GO::config()->save_setting('database_usage', $this->database_usage);
-		
 		//var_dump($iUsers);
 		
 		
