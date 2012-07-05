@@ -1,3 +1,6 @@
+Trials verwijderen / suspenden. Autoload cache gaat fout op cli.
+
+
 Note sync
 
 reminder als licentie verloopt
