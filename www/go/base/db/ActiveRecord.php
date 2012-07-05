@@ -608,8 +608,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			return $this->_pdo;
 		else
 			return GO::getDbConnection();
-		
-		return $this->_pdo;
 	}
 	
 	/**
