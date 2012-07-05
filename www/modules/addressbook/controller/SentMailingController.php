@@ -156,7 +156,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 							array(
 									'addresslist_id'=>$mailing->addresslist_id, 
 									'contact_id'=>$contact->id, 
-									'token'=>md5($contact->ctime.$contact->addressbook_id.$contact->email) //token to check so that users can't unsubscribe other members by guessing id's
+									'token'=>md5($contact->ctime.$contact->addressbook_id.$contact->firstEmail) //token to check so that users can't unsubscribe other members by guessing id's
 									), true, true);
 			
 			$body = str_replace('%unsubscribe_href%', $unsubscribeHref, $bodyWithTags); //curly brackets don't work inside links in browser wysiwyg editors.
@@ -166,11 +166,11 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			), true);
 			
 			try{
-				$message->setTo($contact->email, $contact->name);
+				$message->setTo($contact->firstEmail, $contact->name);
 				$message->setBody(GO_Addressbook_Model_Template::model()->replaceContactTags($body, $contact));
 				$this->_sendmail($message, $contact, $mailer, $mailing);			
 			}catch(Exception $e){
-				echo "Error for ".$contact->email.": ".$e->getMessage()."\n";
+				echo "Error for ".$contact->firstEmail.": ".$e->getMessage()."\n";
 			}
 		}
 
@@ -216,7 +216,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			if($params['contact_id']){
 				$contact = GO_Addressbook_Model_Contact::model()->findByPk($params['contact_id']);
 				
-				if(md5($contact->ctime.$contact->addressbook_id.$contact->email) != $params['token'])
+				if(md5($contact->ctime.$contact->addressbook_id.$contact->firstEmail) != $params['token'])
 					throw new Exception("Invalid token!");
 				
 				$contact->email_allowed=0;
@@ -247,16 +247,23 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		
 		$error = 0;
 		$sent = 0;
+		
+		if($typestring=='contact'){
+			$email = $model->firstEmail;
+		}else
+		{
+			$email = $model->email;
+		}
 
 		if(!$model->email_allowed){
-			echo "Skipping $typestring ".$model->email." because newsletter sending is disabled in the addresslists tab.\n\n";
+			echo "Skipping $typestring ".$email." because newsletter sending is disabled in the addresslists tab.\n\n";
 			$error = 1;
-		}elseif(empty($model->email)){
+		}elseif(empty($email)){
 			echo "Skipping $typestring ".$model->name." no e-mail address was set.\n\n";
 			$error = 1;
 		}else
 		{		
-			echo "Sending to " . $typestring . " id: " . $model->id . " email: " . $model->email . "\n";
+			echo "Sending to " . $typestring . " id: " . $model->id . " email: " . $email . "\n";
 
 			$mailing = GO_Addressbook_Model_SentMailing::model()->findByPk($mailing->id, array(), true, true);
 			if($mailing->status==GO_Addressbook_Model_SentMailing::STATUS_PAUSED)
