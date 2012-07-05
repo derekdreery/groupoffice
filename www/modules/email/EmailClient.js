@@ -1453,7 +1453,7 @@ GO.newMenuItems.push({
 	}
 },{
     text: GO.email.lang.emailFiles,
-    iconCls: 'go-model-icon-GO_Email_Model_LinkedEmail',
+    iconCls: 'em-btn-email-files',
     handler:function(item, e){
     	GO.request({
     		url:'files/folder/checkModelFolder',

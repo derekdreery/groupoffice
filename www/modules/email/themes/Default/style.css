@@ -66,6 +66,10 @@ margin:5px 2px;
 	height:16px;
 }
 
+.em-btn-email-files{
+	background-image: url('images/16x16/attach.png') !important;
+}
+
 .go-module-icon-email , .go-menu-icon-email{
 	background-image: url('images/16x16/message.png') !important;
 }
