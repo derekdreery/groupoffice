@@ -543,7 +543,12 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		
 		while($installation = $stmt->fetch()){
 			echo "Creating report for ".$installation->name."\n";
-			$report['installations'][]=$installation->report();
+			try{
+				$report['installations'][]=$installation->report();
+			}catch(Exception $e){
+				echo $e->getMessage();
+				$report['errors']=(string) $e;
+			}
 			
 			//run tasks for installation like log rotation and filesearch index update.
 			
@@ -613,6 +618,9 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			$dayEnd = GO_Base_Util_Date::date_add($dayStart,1);			
 			
 			if (!empty($autoEmailModel->active) && $installationModel->ctime>$dayStart && $installationModel->ctime<$dayEnd) {
+				
+				echo "Sending message ".$autoEmailModel->name." to ".$installationModel->admin_email."\n";
+				
 				$message = GO_Base_Mail_Message::newInstance()
 					->loadMimeMessage($autoEmailModel->mime)
 					->addTo($installationModel->admin_email, $installationModel->admin_name)
