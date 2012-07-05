@@ -542,6 +542,21 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		);
 		
 		while($installation = $stmt->fetch()){
+			
+			if(!file_exists($installation->configPath)){
+				echo "Config file does not exist for ".$installation->name."\n";
+				continue;
+			}
+			
+			$config=array();
+			require($installation->configPath);
+			if(empty($config['enabled']))
+			{
+				echo "Installation ".$installation->name." is suspended\n";
+				continue;
+			}
+			
+			
 			echo "Creating report for ".$installation->name."\n";
 			try{
 				$report['installations'][]=$installation->report();
