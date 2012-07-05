@@ -550,7 +550,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			
 			$config=array();
 			require($installation->configPath);
-			if(empty($config['enabled']))
+			if(isset($config['enabled']) && $config['enabled']==false)
 			{
 				echo "Installation ".$installation->name." is suspended\n";
 				continue;
