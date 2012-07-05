@@ -630,8 +630,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		if(!isset($params['alias_id']))
 			$params['alias_id']=0;
 		
-		$recipients = $message->to;
-		$recipients->mergeWith($message->cc);
+		$recipients = new GO_Base_Mail_EmailRecipients();
+		$recipients->mergeWith($message->cc)->mergeWith($message->to);
 		
 		$alias = $this->_findAliasFromRecipients($account, $recipients, $params['alias_id']);	
 		
@@ -641,11 +641,13 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		if (!empty($params['replyAll'])) {
 			$toList = new GO_Base_Mail_EmailRecipients();
 			$toList->mergeWith($replyTo)
-							->mergeWith($message->to);
+							->mergeWith($message->to);			
 
-			//remove our own alias from the recipients.			
-			$toList->removeRecipient($alias->email);
-			$message->cc->removeRecipient($alias->email);
+			//remove our own alias from the recipients.		
+			if($toList->count()>1){
+				$toList->removeRecipient($alias->email);
+				$message->cc->removeRecipient($alias->email);
+			}
 
 			$response['data']['to'] = (string) $toList;
 			$response['data']['cc'] = (string) $message->cc;
