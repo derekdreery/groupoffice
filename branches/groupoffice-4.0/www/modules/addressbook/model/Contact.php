@@ -53,6 +53,7 @@
  * @property int $user_id
  * @property int $id
  * 
+ * @property string $firstEmail Automatically returns the first filled in e-mail address.
  * @property GO_Addressbook_Model_Addressbook $addressbook
  * @property GO_Addressbook_Model_Company $company
  */
@@ -741,6 +742,19 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$model->go_user_id=0;
 		
 		return parent::afterMergeWith($model);
+	}
+	
+	
+	protected function getFirstEmail(){
+		if(!empty($this->email)){
+			return $this->email;
+		}elseif(!empty($this->email2)){
+			return $this->email2;
+		}elseif(!empty($this->email3)){
+			return $this->email3;
+		}else{
+			return false;
+		}
 	}
 	
 }
