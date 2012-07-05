@@ -230,18 +230,20 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 			$this->count_users = intval($record->count);		
 
 			$allowedModules = empty($config['allowed_modules']) ? array() : explode(',', $config['allowed_modules']);
-
-			$stmt = GO_Base_Model_User::model()->find(GO_Base_Db_FindParams::newInstance()->ignoreAcl());
 			$iUsers=array();
+			$stmt = GO_Base_Model_User::model()->find(GO_Base_Db_FindParams::newInstance()->ignoreAcl());
+			
 			while($user = $stmt->fetch()){
 				$iUser = $user->getAttributes('raw');
 				$iUser['modules']=array();
-
+				$oldIgnore = GO::setIgnoreAclPermissions(false);
 				$modStmt = GO_Base_Model_Module::model()->find(GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::READ_PERMISSION, $user->id));
 				while($module = $modStmt->fetch()){			
 					if(empty($allowedModules) || in_array($module->id, $allowedModules))
 						$iUser['modules'][]=$module->id;				
 				}
+				
+				GO::setIgnoreAclPermissions($oldIgnore);
 
 				$iUsers[]=$iUser;
 			}

@@ -1,8 +1,13 @@
 <?php
 class GO_Base_Db_PDO extends PDO{
+//	private $_dsn;
 	public function __construct($dsn, $username, $passwd, $options=null) {
 		
 		GO::debug("Connect: $dsn, $username, ***");
+		
+//		GO::debugCalledFrom(2);
+		
+//		$this->_dsn = $dsn;
 		
 		parent::__construct($dsn, $username, $passwd, $options);
 		
@@ -19,4 +24,9 @@ class GO_Base_Db_PDO extends PDO{
 			$this->query("SET sql_mode='TRADITIONAL'");
 		}
 	}
+	
+//	public function __destruct() {
+//		GO::debug("Disconnect. ".$this->_dsn);
+//		//parent::__destruct();
+//	}
 }
