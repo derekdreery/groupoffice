@@ -819,11 +819,15 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$response = $imapMessage->toOutputArray(!$plaintext);
 		
 		if(!$plaintext){
-			$response = $this->_blockImages($params, $response);
-			$response = $this->_checkXSS($params, $response);
+			
+			//Don't do these special actions in the special folders
+			if($params['mailbox']!=$account->sent && $params['mailbox']!=$account->trash && $params['mailbox']!=$account->drafts){
+				$response = $this->_blockImages($params, $response);
+				$response = $this->_checkXSS($params, $response);
 
-			$response = $this->_handleAutoLinkTag($imapMessage, $params, $response);
-			$response = $this->_handleInvitations($imapMessage, $params, $response);
+				$response = $this->_handleAutoLinkTag($imapMessage, $params, $response);
+				$response = $this->_handleInvitations($imapMessage, $params, $response);
+			}
 		}
 		
 		$response = $this->_getContact($imapMessage, $params, $response);
