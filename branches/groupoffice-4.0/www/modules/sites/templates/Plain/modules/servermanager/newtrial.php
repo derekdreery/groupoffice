@@ -16,7 +16,7 @@ GO_Base_Html_Input::render(array(
 
 ?>
 <div id="top-domain">
-	@<?php echo GO::config()->servermanager_wildcard_domain; ?>
+	.<?php echo GO::config()->servermanager_wildcard_domain; ?>
 </div>
 </div>
 
