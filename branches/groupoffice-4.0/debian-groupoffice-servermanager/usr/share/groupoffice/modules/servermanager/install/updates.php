@@ -114,3 +114,6 @@ l continue using it. If you want to continue using Group-Office you must=
 --_=_swift_v4_13366451374fab961137ae9_=_--
 
 ', '0');";
+
+
+$updates["201207051558"][]="ALTER TABLE `sm_installations` CHANGE `status` `status` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'ignore'";
