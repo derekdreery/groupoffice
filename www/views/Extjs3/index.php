@@ -20,7 +20,7 @@ global $GO_CONFIG, $GO_INCLUDES, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $GO_EV
 
 
 //$config_file = $GLOBALS['GO_CONFIG']->get_config_file();
-if(empty($GLOBALS['GO_CONFIG']->db_user))
+if(!GO::isInstalled())
 {
 	header('Location: install/');
 	exit();

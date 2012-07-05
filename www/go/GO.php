@@ -279,7 +279,7 @@ class GO{
 	public static function cache(){
 
 		if (!isset(self::$_cache)) {
-			if(GO::config()->debug)
+			if(GO::config()->debug || !GO::isInstalled())
 				self::$_cache=new GO_Base_Cache_None();
 			elseif(function_exists("apc_store"))
 				self::$_cache=new GO_Base_Cache_Apc();
@@ -825,6 +825,16 @@ class GO{
 		}
 
 		return $classes;
+	}
+	
+	
+	/**
+	 * Checks if Group-Office is already installed. 
+	 * 
+	 * @return boolean
+	 */
+	public static function isInstalled(){
+		return !empty(GO::config()->db_user);
 	}
 
 }
