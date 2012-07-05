@@ -1455,19 +1455,38 @@ GO.newMenuItems.push({
     text: GO.email.lang.emailFiles,
     iconCls: 'em-btn-email-files',
     handler:function(item, e){
-    	GO.request({
-    		url:'files/folder/checkModelFolder',
-    		maskEl:item.parentMenu.panel.ownerCt.getEl(),
-    		params:{
-    			mustExist:false,
-    			model: item.parentMenu.panel.model_name,
-    			id: item.parentMenu.panel.data.id
-    		},
-    		success:function(response, options, result){
-				GO.email.openFolderTree(result.files_folder_id);
-    		},
-    		scope: this
-    	});
+    	var panel = item.parentMenu.panel;
+
+        if (panel.model_name == 'GO_Files_Model_File') {
+            GO.request({
+                url:'files/file/display',
+                maskEl:panel.ownerCt.getEl(),
+                params:{
+                    id: panel.data.id
+                },
+                success:function(response, options, result){
+                    var c = GO.email.showComposer();
+                    c.emailEditor.attachmentsView.afterUpload({
+                        addFileStorageFiles: Ext.encode(new Array(result.data.path))
+                    });
+                },
+                scope: this
+            });
+        } else {
+            GO.request({
+                url:'files/folder/checkModelFolder',
+                maskEl:panel.ownerCt.getEl(),
+                params:{
+                    mustExist:false,
+                    model: panel.model_name,
+                    id: panel.data.id
+                },
+                success:function(response, options, result){
+                    GO.email.openFolderTree(result.files_folder_id);
+                },
+                scope: this
+            });
+        }
     }
 });
 
