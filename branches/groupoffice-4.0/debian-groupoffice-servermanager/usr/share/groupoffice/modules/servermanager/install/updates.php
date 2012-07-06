@@ -117,3 +117,5 @@ l continue using it. If you want to continue using Group-Office you must=
 
 
 $updates["201207051558"][]="ALTER TABLE `sm_installations` CHANGE `status` `status` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'ignore'";
+$updates["201207051558"][]="UPDATE sm_installations set status='ignore' where status=''";
+$updates["201207051558"][]="UPDATE sm_installations set status='trial' where status!='ignore'";
