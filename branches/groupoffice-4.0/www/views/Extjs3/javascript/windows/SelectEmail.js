@@ -273,7 +273,7 @@ GO.dialog.SelectEmail = function(config) {
 	}
 
 	this.userGroupsStore = new GO.data.JsonStore({
-		url : GO.settings.modules.groups.url + 'non_admin_json.php',
+		url : GO.url("core/groups"),
 		baseParams : {
 			task : 'groups'
 		},
