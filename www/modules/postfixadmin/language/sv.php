@@ -60,3 +60,6 @@ $l["cache"]="Cache";
 $l["domain"]="Domän";
 $l["usage"]="Användning";
 $l["defaultQuota"]='Standard-quota (MB)';
+
+$l['maxAliases']= 'Max alias';
+$l['maxMailboxes']= 'Max brevlådor';
