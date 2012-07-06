@@ -1466,8 +1466,10 @@ GO.newMenuItems.push({
                 },
                 success:function(response, options, result){
                     var c = GO.email.showComposer();
-                    c.emailEditor.attachmentsView.afterUpload({
-                        addFileStorageFiles: Ext.encode(new Array(result.data.path))
+                    c.on('dialog_ready', function(){
+                    	c.emailEditor.attachmentsView.afterUpload({
+                        	addFileStorageFiles: Ext.encode(new Array(result.data.path))
+                    	});
                     });
                 },
                 scope: this
@@ -1544,8 +1546,11 @@ GO.email.openFolderTree = function(id, folder_id) {
                     });
 
                     var c = GO.email.showComposer();
-
-                    c.emailEditor.attachmentsView.afterUpload({addFileStorageFiles:Ext.encode(selFiles)});
+                    c.on('dialog_ready', function(){
+                    	c.emailEditor.attachmentsView.afterUpload({
+                        	addFileStorageFiles: Ext.encode(selFiles)
+                    	});
+                    });
 
                     GO.email.treeFileBrowser.hide();
                 },
