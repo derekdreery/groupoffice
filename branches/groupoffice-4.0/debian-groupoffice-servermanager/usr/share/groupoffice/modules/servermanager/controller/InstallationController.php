@@ -541,8 +541,10 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				'uname'=>  php_uname()
 		);
 		
-		while($installation = $stmt->fetch()){
-			
+		$installations = $stmt->fetchAll();
+		$stmt = null;
+		
+		while($installation = array_shift($installations)){			
 			if(!file_exists($installation->configPath)){
 				echo "Config file does not exist for ".$installation->name."\n";
 				continue;
