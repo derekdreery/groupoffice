@@ -255,6 +255,8 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 			GO::config()->save_setting('database_usage', $this->database_usage);
 		}catch(Exception $e){
 			GO::setDbConnection();
+			$stmt=null;
+			$modStmt=null;
 			throw new Exception($e->getMessage());
 		}
 		//var_dump($iUsers);
