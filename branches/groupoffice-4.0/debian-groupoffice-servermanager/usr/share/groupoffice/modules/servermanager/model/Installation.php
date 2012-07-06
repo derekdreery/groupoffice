@@ -108,7 +108,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		return '/home/govhosts/'.$this->name.'/';
 	}
 	
-	protected function getConfigPath(){
+	protected function getConfigPath(){		
 		return '/etc/groupoffice/'.$this->name.'/config.php';
 	}
 	
@@ -139,21 +139,22 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 
 	protected function beforeDelete() {
 		
-		if(!file_exists($this->configPath))
-			throw new Exception("Error: Could not find installation configuration.");
+		if(file_exists($this->configPath)){
+			//throw new Exception("Error: Could not find installation configuration.");
 		
-		$cmd = 'sudo TERM=dumb '.GO::config()->root_path.
-						'groupofficecli.php -r=servermanager/installation/destroy'.
-						' -c='.GO::config()->get_config_file().
-						' --name='.$this->name;
-		
-//		GO::debug($cmd);
-//		throw new Exception($cmd);
-						
-		exec($cmd, $output, $return_var);		
+			$cmd = 'sudo TERM=dumb '.GO::config()->root_path.
+							'groupofficecli.php -r=servermanager/installation/destroy'.
+							' -c='.GO::config()->get_config_file().
+							' --name='.$this->name;
 
-		if($return_var!=0){
-			throw new Exception(implode("\n", $output));
+	//		GO::debug($cmd);
+	//		throw new Exception($cmd);
+
+			exec($cmd, $output, $return_var);		
+
+			if($return_var!=0){
+				throw new Exception(implode("\n", $output));
+			}
 		}
 		
 		return parent::beforeDelete();
