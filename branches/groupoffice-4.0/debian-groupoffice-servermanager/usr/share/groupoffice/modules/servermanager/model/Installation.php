@@ -14,7 +14,6 @@
  * @package GO.modules.servermanager.model
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering mschering@intermesh.nl
- * @author WilmarVB wilmar@intermesh.nl
  */
  
 /**
@@ -184,10 +183,10 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		$this->file_storage_usage=$folder->calculateSize()/1024;
 		
 		$this->_calculateDatabaseSize($config['db_name']);
-//		$this->_calculateMailboxUsage($config);
+		$this->_calculateMailboxUsage($config);
 		$this->_calculateInstallationUsage($config);
 		
-		//$this->save();
+		$this->save();
 		
 		$report = $this->getAttributes();
 		
