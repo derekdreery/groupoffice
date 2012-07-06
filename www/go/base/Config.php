@@ -346,7 +346,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $help_link = 'http://www.group-office.com/wiki/';
+	var $help_link = 'http://wiki4.group-office.com/wiki/';
 
 
 	/**
@@ -730,7 +730,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.0.62';
+	var $version = '4.0.63';
 
 
 	/* The permissions mode to use when creating files
@@ -760,7 +760,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20120705';
+	var $mtime = '20120706';
 
 	#group configuration
 	/**
