@@ -1397,13 +1397,13 @@ GO.email.showComposer = function(config){
 			}
 		});
 
-                availableComposer.on('dialog_ready', function(composer)
-                {
-                        if(this.selectFiles)
-                        {                              
-                                GO.files.selectFilesDialog.show(this.selectFiles);
-                        }
-                },this);
+		availableComposer.on('dialog_ready', function(composer)
+		{
+			if(this.selectFiles)
+			{                              
+				GO.files.selectFilesDialog.show(this.selectFiles);
+			}
+		},this);
 		
 		GO.email.composers.push(availableComposer);
 	}
@@ -1470,7 +1470,7 @@ GO.newMenuItems.push({
                     	c.emailEditor.attachmentsView.afterUpload({
                         	addFileStorageFiles: Ext.encode(new Array(result.data.path))
                     	});
-                    });
+                    },this,{single:true});
                 },
                 scope: this
             });
@@ -1506,6 +1506,12 @@ GO.email.openFolderTree = function(id, folder_id) {
             items: [
                 GO.email.folderTree = new GO.files.TreeFilePanel()
             ],
+						listeners:{
+							show:function(){
+								this.btnSelectAll.toggle(false);
+							},
+							scope:this
+						},
             tbar: new Ext.Toolbar({
                 cls:'go-head-tb',
                 region:'north',
@@ -1550,7 +1556,7 @@ GO.email.openFolderTree = function(id, folder_id) {
                     	c.emailEditor.attachmentsView.afterUpload({
                         	addFileStorageFiles: Ext.encode(selFiles)
                     	});
-                    });
+                    },this, {single:true});
 
                     GO.email.treeFileBrowser.hide();
                 },
