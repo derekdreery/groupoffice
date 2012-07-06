@@ -256,8 +256,8 @@ Ext.extend(GO.servermanager.InstallationDialog, GO.Window,{
 								fields: ['value', 'text'],
 								data : [
 									['trial', '30 day trial'],
-									['warntrial1', 'First warning, 20 days until deletion'],
-									['warntrial2', 'Second warning, 10 days until deletion'],
+//									['warntrial1', 'First warning, 20 days until deletion'],
+//									['warntrial2', 'Second warning, 10 days until deletion'],
 									['ignore', 'Never remove installation']
 								]
 
