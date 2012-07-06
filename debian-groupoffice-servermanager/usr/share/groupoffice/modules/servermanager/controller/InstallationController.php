@@ -37,6 +37,10 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		
 		$installation = GO_ServerManager_Model_Installation::model()->findSingleByAttribute('name', $params['name']);
 		
+		if($installation->name=='servermanager'){
+			throw new Exception("You can't delete the servermanager installation");
+		}
+		
 		if(!$installation)
 			throw new Exception("Installation ".$params['name']." not found!");
 		
