@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROMODULES="workflow filesearch";
+PROMODULES="workflow filesearch scanbox";
 
 # useful: DEBCONF_DEBUG="developer"
 
