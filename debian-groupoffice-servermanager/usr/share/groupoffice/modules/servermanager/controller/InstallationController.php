@@ -558,25 +558,35 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				continue;
 			}
 			
+			$suspended=false;
 			
 			echo "Creating report for ".$installation->name."\n";
 			try{
 				$report['installations'][]=$installation->report();
+				
+				if($installation->status == GO_ServerManager_Model_Installation::STATUS_TRIAL && $installation->install_time<GO_Base_Util_Date::date_add(time(),-30)){
+					$this->_suspend($installation, $config);
+					$suspended=true;
+				}
+				
 			}catch(Exception $e){
 				echo $e->getMessage()."\n";
 				$report['errors']=(string) $e;
 			}
 			
 			//run tasks for installation like log rotation and filesearch index update.
-			
-			echo "Running daily tasks for installation\n";
-			$cmd ='/usr/share/groupoffice/groupofficecli.php -r=maintenance/servermanagerReport -c="'.$installation->configPath.'"  2>&1';				
-			system($cmd);
+			if(!$suspended){
+				echo "Running daily tasks for installation\n";
+				$cmd ='/usr/share/groupoffice/groupofficecli.php -r=maintenance/servermanagerReport -c="'.$installation->configPath.'"  2>&1';				
+				system($cmd);
+			}
 			
 			
 			$this->_sendAutomaticEmails($installation,$now);
 		
 		}
+		
+		
 		
 		
 		
@@ -611,6 +621,12 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				
 		
 		echo "Done\n\n";
+	}
+	
+	private function _suspend(GO_ServerManager_Model_Installation $installation,$config){
+		echo "Suspending installation ".$installation->name."\n";
+		$config['enabled']=false;
+		GO_Base_Util_ConfigEditor::save(new GO_Base_Fs_File($installation->configPath), $config);
 	}
 
 	private function _sendAutomaticEmails(GO_Servermanager_Model_Installation $installationModel, $nowUnixTime=false) {

@@ -257,6 +257,9 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 			GO::setDbConnection();
 			$stmt=null;
 			$modStmt=null;
+			
+			if(isset($oldIgnore))
+				GO::setIgnoreAclPermissions($oldIgnore);
 			throw new Exception($e->getMessage());
 		}
 		//var_dump($iUsers);
