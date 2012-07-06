@@ -654,7 +654,11 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			$dayStart = GO_Base_Util_Date::clear_time($dayStart);
 			$dayEnd = GO_Base_Util_Date::date_add($dayStart,1);			
 			
-			if (!empty($autoEmailModel->active) && $installationModel->ctime>$dayStart && $installationModel->ctime<$dayEnd) {
+//			echo $autoEmailModel->name.' '.date('c', $dayStart).' - '.date('c', $dayEnd)."\n";
+			
+//			echo "Installation time: ".date('c', $installationModel->install_time)."\n";
+			
+			if (!empty($autoEmailModel->active) && $installationModel->install_time>=$dayStart && $installationModel->install_time<$dayEnd) {
 				
 				echo "Sending message ".$autoEmailModel->name." to ".$installationModel->admin_email."\n";
 				
