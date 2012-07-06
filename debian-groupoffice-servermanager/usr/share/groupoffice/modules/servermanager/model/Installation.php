@@ -183,7 +183,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		$this->file_storage_usage=$folder->calculateSize()/1024;
 		
 		$this->_calculateDatabaseSize($config['db_name']);
-		$this->_calculateMailboxUsage($config);
+//		$this->_calculateMailboxUsage($config);
 		$this->_calculateInstallationUsage($config);
 		
 		//$this->save();
@@ -242,11 +242,14 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 					if(empty($allowedModules) || in_array($module->id, $allowedModules))
 						$iUser['modules'][]=$module->id;				
 				}
+				$modStmt=null;
 				
 				GO::setIgnoreAclPermissions($oldIgnore);
 
 				$iUsers[]=$iUser;
 			}
+			//unset stmt to clean up connections
+			$stmt=null;
 			GO::config()->save_setting('mailbox_usage', $this->mailbox_usage);
 			GO::config()->save_setting('file_storage_usage', $this->file_storage_usage);
 			GO::config()->save_setting('database_usage', $this->database_usage);
