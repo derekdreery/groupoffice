@@ -71,3 +71,15 @@ $l["overDue"]='Klart';
 $l["futureTasks"]='Framtida uppgifter';
 $l["all"]='Alla';
 $l["active"]='Aktiv';
+
+$l["globalsettings_templatelabel"]='Uppgiftsmall';
+$l["globalsettings_allchangelabel"]='Ändra existerande?';
+$l["globalsettings_renameall"]= 'Döp om alla?';
+$l["taskName"]='Namn';
+$l["taskCtime"]='Skapad';
+$l["taskMtime"]='Modifierad';
+$l["taskDue_time"]='Förfaller';
+$l["taskStatus"]='Status';
+$l["taskCompletion_time"]='Färdig';
+$l["taskProject_name"]='Projekt';
+$l['taskPercentage_complete']='Procent färdigt';

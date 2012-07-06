@@ -105,3 +105,15 @@ $l["firstName"]= 'Förnamn';
 $l["sendInvitation"]='Skicka inbjudan';
 $l["contactInfo"]='Kontaktinfo';
 $l["popupNotification"]='Visa ett popup-fönster för påminnelser och ny e-post';
+
+$l["muteNewMailSound"]='Tysta ljud vid ny e-post';
+$l["muteReminderSound"]='Tysta påminnelseljud';
+$l["showSmilies"]='Visa smilies';
+$l['dashdmy']='Dag-Månad-År';
+$l['slashmdy']='Månad/Dag/År';
+$l['dotdmy']='Dag.Månad.År';
+$l['slashdmy']='Dag/Månad/År';
+$l['generatePassword']='Generera lösenord';
+$l['generatedPasswordIs']='Det genererade lösenordet är';
+$l['openContact']='Öppna kontakt';
+$l['updateExistingOnImport']='Uppdatera existerande användare (med användarnamn)';
