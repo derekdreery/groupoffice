@@ -151,7 +151,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 		
 	public function getAllModules($ignoreAcl=false){
 		
-		$findParams = GO_Base_Db_FindParams::newInstance();
+		$findParams = GO_Base_Db_FindParams::newInstance()->order("sort_order");
 		
 		if($ignoreAcl)
 			$findParams->ignoreAcl ();
