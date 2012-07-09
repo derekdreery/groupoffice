@@ -93,6 +93,10 @@ class GO_Base_Util_HttpClient{
 		return $response;		
 	}	
 	
+	public function getHttpCode(){
+		return curl_getinfo($this->_curl, CURLINFO_HTTP_CODE);		
+	}
+	
 	/**
 	 * Login to a Group-Office installation
 	 * 

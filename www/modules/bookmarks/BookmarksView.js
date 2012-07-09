@@ -68,18 +68,18 @@ GO.bookmarks.BookmarksView = function(config){
    * Close-button om node in Dataview te verwijderen
    */
 
-//	if (!this.closeButton)
-//	{
-//		this.closeButton = new GO.bookmarks.CloseButton({
-//			autoEl: {
-//				tag: 'img',
-//				src: 'modules/bookmarks/themes/Default/images/close.gif',
-//				cls: 'closebutton'
-//			}
-//		});
-//	}
-//	this.closeButton.hide();
-//	this.closeButton.on('remove_bookmark', GO.bookmarks.removeBookmark, this);
+	//	if (!this.closeButton)
+	//	{
+	//		this.closeButton = new GO.bookmarks.CloseButton({
+	//			autoEl: {
+	//				tag: 'img',
+	//				src: 'modules/bookmarks/themes/Default/images/close.gif',
+	//				cls: 'closebutton'
+	//			}
+	//		});
+	//	}
+	//	this.closeButton.hide();
+	//	this.closeButton.on('remove_bookmark', GO.bookmarks.removeBookmark, this);
 
 
 	/*
@@ -113,13 +113,13 @@ GO.bookmarks.BookmarksView = function(config){
 		
 				
 
-//	if (this.DV.getRecord(node).data.permissionLevel>=GO.permissionLevels.write) // users kunnen niet rechts klikken op public bookmarks
-//{
-//	GO.bookmarks.showBookmarksDialog({
-//		record:record,
-//		edit:1
-///);
-//}
+	//	if (this.DV.getRecord(node).data.permissionLevel>=GO.permissionLevels.write) // users kunnen niet rechts klikken op public bookmarks
+	//{
+	//	GO.bookmarks.showBookmarksDialog({
+	//		record:record,
+	//		edit:1
+	///);
+	//}
  
 	}, this);
 
@@ -133,23 +133,23 @@ GO.bookmarks.BookmarksView = function(config){
 
 	this.DV.on('mouseenter',function( DV, index, node, e) {
 		
-//		if((this.mouseOver)&&(this.DV.getRecord(node)!=undefined)){
-//			if (this.DV.getRecord(node).data.permissionLevel>GO.permissionLevels.write) // users zien geen kruisje bij een public bookmark
-//			{
-//				this.closeButton.show();
-//				this.closeButton.record=this.DV.getRecord(node);
-//				this.closeButton.getEl().alignTo(node, 'tr', [-21,6]);
-//			}
-//		}
-	}, this, {
-		delay:600,
-		buffer:200
-	})
+		//		if((this.mouseOver)&&(this.DV.getRecord(node)!=undefined)){
+		//			if (this.DV.getRecord(node).data.permissionLevel>GO.permissionLevels.write) // users zien geen kruisje bij een public bookmark
+		//			{
+		//				this.closeButton.show();
+		//				this.closeButton.record=this.DV.getRecord(node);
+		//				this.closeButton.getEl().alignTo(node, 'tr', [-21,6]);
+		//			}
+		//		}
+		}, this, {
+			delay:600,
+			buffer:200
+		})
 
-//	this.DV.on('mouseleave',function( DV, index, node, e) {
-//		this.mouseOver=false;
-//		this.closeButton.hideIfNotOver.defer(100, this.closeButton);
-//	}, this);
+	//	this.DV.on('mouseleave',function( DV, index, node, e) {
+	//		this.mouseOver=false;
+	//		this.closeButton.hideIfNotOver.defer(100, this.closeButton);
+	//	}, this);
 
 	Ext.apply(config, {
 		listeners:{
@@ -180,34 +180,29 @@ GO.bookmarks.BookmarkContextMenu = function(config)
 
 				
 	this.deleteButton = new Ext.menu.Item({
-					iconCls: 'btn-delete',
-					text: 'Delete bookmark',
-					cls: 'x-btn-text-icon',
-					handler: function(){
-						GO.bookmarks.removeBookmark(this.record);						
-					},
-					scope:this
+		iconCls: 'btn-delete',
+		text: GO.lang.cmdDelete,
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			GO.bookmarks.removeBookmark(this.record);						
+		},
+		scope:this
 	});
 	
 	this.editButton = new Ext.menu.Item({
-					iconCls: 'btn-edit',
-					text: 'Edit bookmark',
-					cls: 'x-btn-text-icon',
-					handler: function(){
+		iconCls: 'btn-edit',
+		text: GO.lang.cmdEdit,
+		cls: 'x-btn-text-icon',
+		handler: function(){
 
-						GO.bookmarks.showBookmarksDialog({
-								record:this.record,
-								edit:1
-					})
+			GO.bookmarks.showBookmarksDialog({
+				record:this.record,
+				edit:1
+			})
 					
-					},
-					scope:this
-				
-			
-		
-					
-	
-});
+		},
+		scope:this
+	});
 				
 
 				
