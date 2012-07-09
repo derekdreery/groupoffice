@@ -67,7 +67,10 @@ class GO_Base_Module extends GO_Base_Observable {
 	 * @return String 
 	 */
 	public function name() {
-		return GO::t('name', $this->id());// isset($lang[$this->id]['name']) ? $lang[$this->id]['name'] : $this->id;
+		$name = GO::t('name', $this->id());
+		if($name=='name')
+			$name = $this->id();
+		return $name;
 	}
 
 	/**
