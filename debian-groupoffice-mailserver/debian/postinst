@@ -141,8 +141,8 @@ fi
 cp /usr/share/groupoffice-mailserver/tpl/etc/postfix/master.cf $FILE
 
 
-php /usr/share/groupoffice-mailserver/configure.php
-php /usr/share/groupoffice-mailserver/installpostfixadmin.php
+sudo -u www-data php /usr/share/groupoffice-mailserver/configure.php
+sudo -u www-data php /usr/share/groupoffice-mailserver/installpostfixadmin.php
 
 invoke-rc.d spamassassin restart 3> /dev/null || true
 invoke-rc.d postfix restart 3> /dev/null || true
@@ -150,7 +150,7 @@ invoke-rc.d dovecot restart 3> /dev/null || true
 invoke-rc.d clamav-daemon restart 3> /dev/null || true
 invoke-rc.d clamav-freshclam restart 3> /dev/null || true
 
-php /usr/share/groupoffice-mailserver/addadminaccount.php
+sudo -u www-data php /usr/share/groupoffice-mailserver/addadminaccount.php
 
 #DEBHELPER#
 

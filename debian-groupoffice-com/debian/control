@@ -18,9 +18,11 @@ Depends: libapache2-mod-php5 (>= 5.3),
 	php5-mcrypt,
 	zip, 
 	tnef,
+	sudo,
 	${misc:Depends},
 	dbconfig-common,
 	ucf (>= 0.28)
+Suggests: php-apc
 Description:
  Group-Office is a web based groupware application
  Take your office online. Share projects, calendars, files and e-mail online 
