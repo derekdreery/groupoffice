@@ -136,6 +136,12 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 			success: function(options, response, data)
 			{				
 				this.setMessage(data);
+				
+				
+				if(this.data.is_linked_message)
+					this.linkButton.show();
+				else
+					this.linkButton.hide();
 			}
 		});
 	},

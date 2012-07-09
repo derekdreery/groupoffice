@@ -343,12 +343,6 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		
 		this.body.scrollTo('top',0);
 		
-		
-		if(this.data.is_linked_message)
-			this.linkButton.show();
-		else
-			this.linkButton.hide();
-		
 	},
 	
 	onAttachmentContextMenu : function (e, target){
