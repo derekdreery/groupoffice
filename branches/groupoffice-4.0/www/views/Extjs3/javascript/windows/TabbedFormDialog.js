@@ -144,13 +144,16 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 
 		this.addCustomFields();
 		
-		this.formPanel = new Ext.form.FormPanel({
+		this.formPanelConfig=this.formPanelConfig || {};
+		this.formPanelConfig = Ext.apply(this.formPanelConfig, {
 			waitMsgTarget:true,			
 			border: false,
 			fileUpload: this.fileUpload,
 			baseParams : {},
 			layout:'fit'
 		});
+		
+		this.formPanel = new Ext.form.FormPanel(this.formPanelConfig);
 
 		if(this._panels.length > 1) {		    
 			this._tabPanel = new Ext.TabPanel({
