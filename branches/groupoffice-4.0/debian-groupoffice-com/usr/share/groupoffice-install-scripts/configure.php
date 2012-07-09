@@ -80,8 +80,8 @@ chmod('/etc/groupoffice/config.php', 0640);
 
 require_once('/etc/groupoffice/config.php');
 
-system('/usr/bin/php '.$config['root_path'].'install/autoinstall.php -c=/etc/groupoffice/config.php --adminpassword=admin --adminusername=admin --adminemail=admin@example.com');
-system('/usr/bin/php '.$config['root_path'].'groupofficecli.php -r=maintenance/upgrade -c=/etc/groupoffice/config.php');
+system('sudo -u www-data /usr/bin/php '.$config['root_path'].'install/autoinstall.php -c=/etc/groupoffice/config.php --adminpassword=admin --adminusername=admin --adminemail=admin@example.com');
+system('sudo -u www-data /usr/bin/php '.$config['root_path'].'groupofficecli.php -r=maintenance/upgrade -c=/etc/groupoffice/config.php');
 
 echo "Done!\n\n";
 ?>
