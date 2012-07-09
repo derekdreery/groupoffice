@@ -34,6 +34,7 @@ if(GO::user()) {
 	$settings['has_admin_permission']=GO::user()->isAdmin();	
 	$settings['username'] = GO::user()->username;
 	$settings['name'] = GO::user()->name;
+	
 	$settings['email'] = GO::user()->email;
 	$settings['thousands_separator'] = GO::user()->thousands_separator;
 	$settings['decimal_separator'] = GO::user()->decimal_separator;
@@ -63,7 +64,7 @@ if(GO::user()) {
 
 //$settings['modules']=$GLOBALS['GO_MODULES']->modules;
 //$settings['config']['theme_url']=GO::user()->theme;
-//$settings['config']['theme']=GO::user()->theme;
+$settings['config']['theme']=GO::config()->theme;
 $settings['config']['product_name']=GO::config()->product_name;
 $settings['config']['product_version']=GO::config()->version;
 $settings['config']['host']=GO::config()->host;
@@ -81,6 +82,8 @@ $settings['config']['max_attachment_size']=GO::config()->max_attachment_size;
 $settings['config']['max_file_size']=GO::config()->max_file_size;
 $settings['config']['help_link']=GO::config()->help_link;
 $settings['config']['nav_page_size']=intval(GO::config()->nav_page_size);
+
+$settings['config']['default_country'] = GO::config()->default_country;
 
 
 
