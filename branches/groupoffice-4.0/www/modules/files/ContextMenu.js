@@ -264,7 +264,7 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 		if(records.length=='1')
 		{
 			extension = records[0].data.extension;
-
+			
 			switch(extension)
 			{
 				case 'zip':
@@ -277,6 +277,7 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 					this.decompressButton.show();
 					this.compressButton.hide();
 					this.downloadLinkButton.show();
+					this.createDownloadLinkButton.show();
 					break;
 
 				case '':
@@ -294,6 +295,7 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 						this.decompressButton.show();
 						this.compressButton.hide();
 						this.downloadLinkButton.show();
+						this.createDownloadLinkButton.show();
 					}
 					break;
 				case 'folder':
@@ -305,6 +307,7 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 					this.decompressButton.hide();
 					clickedAt == 'tree' ? this.compressButton.hide() : this.compressButton.show();
 					this.downloadLinkButton.hide();
+					this.createDownloadLinkButton.hide();
 
 					break;
 
@@ -324,6 +327,7 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 					clickedAt == 'tree' ? this.compressButton.hide() : this.compressButton.show();
 					this.decompressButton.hide();
 					this.downloadLinkButton.show();
+					this.createDownloadLinkButton.show();
 					break;
 			}
 		}else
@@ -331,6 +335,7 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 			clickedAt == 'tree' ? this.compressButton.hide() : this.compressButton.show();
 			this.decompressButton.hide();
 			this.downloadButton.hide();
+			this.createDownloadLinkButton.hide();
 
 			if(this.gotaButton)
 				this.gotaButton.hide();
