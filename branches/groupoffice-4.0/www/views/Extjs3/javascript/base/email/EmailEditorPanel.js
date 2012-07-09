@@ -101,8 +101,27 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 	},
 	
 	focus : function(){
-		this.getActiveEditor().focus();
+		if(this.getContentType()=='html'){
+			return this.htmlEditor.focus();
+		}else	{
+			//focus textarea at beginning
+			var elem = this.textEditor.getEl().dom;
+			if(elem.createTextRange) {
+				var range = elem.createTextRange();
+				range.move('character', 0);
+				range.select();
+			}
+			else {
+				if(elem.selectionStart) {
+					elem.focus();
+					elem.setSelectionRange(0, 0);
+				}
+				else
+					elem.focus();
+			}
+		}
 	},
+
 	
 	getActiveEditor : function(){
 		if(this.getContentType()=='html')
