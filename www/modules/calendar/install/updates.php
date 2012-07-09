@@ -148,3 +148,5 @@ $updates["201204121221"][]="ALTER TABLE `cal_views` CHANGE `id` `id` INT( 11 ) N
 $updates["201205031333"][]="delete FROM `cal_participants` WHERE event_id=0;";
 
 $updates["201206131104"][]="ALTER TABLE `cal_categories` CHANGE `color` `color` CHAR( 6 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'EBF1E2'";
+
+$updates["201207090855"][]="ALTER TABLE `cal_calendars` CHANGE `show_bdays` `show_bdays` TINYINT( 1 ) NOT NULL DEFAULT '0'";
