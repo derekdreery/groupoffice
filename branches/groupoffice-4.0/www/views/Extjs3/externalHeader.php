@@ -4,7 +4,23 @@
 		<link href="<?php echo GO::config()->host; ?>views/Extjs3/themes/Default/external.css" type="text/css" rel="stylesheet" />
 		<?php
 		
+		$themesUrl = GO::config()->host."views/Extjs3/themes/";
+		$themesPath = GO::config()->root_path."views/Extjs3/themes/";
 		$theme = GO::user() ? GO::user()->theme : GO::config()->theme;
+		
+		if(!empty(GO::config()->favicon))
+		{
+			$favicon = GO::config()->favicon;
+		}else
+		{
+			$favicon = $themesPath.$theme.'/images/groupoffice.ico';
+			if(!file_exists($favicon))
+				$favicon = $themesUrl.'Default/images/groupoffice.ico';
+			else
+				$favicon = $themesUrl.$theme.'/images/groupoffice.ico';
+		}
+		
+		
 		
 		if($theme!='Default'){
 			?>
@@ -17,7 +33,14 @@
 		if(GO::modules()->isInstalled("customcss") && file_exists(GO::config()->file_storage_path.'customcss/style.css'))
 			echo '<style>'.file_get_contents(GO::config()->file_storage_path.'customcss/style.css').'</style>'."\n";
 		?>
+			<link href="<?php echo $favicon; ?>" rel="shortcut icon" type="image/x-icon">
 		<title><?php echo GO::config()->title; ?></title>
+		
+		<?php
+		if(isset($head)){
+			echo $head;
+		}
+		?>
 	</head>
 <body>
 	<div id="container">

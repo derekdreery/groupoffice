@@ -1273,56 +1273,42 @@ GO.mainLayout.onReady(function(){
 			}, this);
 		}
 
-		Ext.TaskMgr.start({
-			run: function(){
-				GO.request({
-					url:'email/account/checkUnseen',
-					scope:this,
-					success:function(options, response, data){
-						var ep = GO.mainLayout.getModulePanel('email');
+			//register a new request to the checker. It will poll unseen tickets every two minutes
+		GO.checker.registerRequest("email/account/checkUnseen",{},function(checker, result, data){
+			
+				var ep = GO.mainLayout.getModulePanel('email');
 
-					//	var totalUnseen = data.email_status.total_unseen;
-						if(ep){
-							for(var i=0;i<data.email_status.unseen.length;i++)
-							{
-								var s = data.email_status.unseen[i];
+			//	var totalUnseen = result.email_status.total_unseen;
+				if(ep){
+					for(var i=0;i<result.email_status.unseen.length;i++)
+					{
+						var s = result.email_status.unseen[i];
 
-								var changed = ep.updateFolderStatus(s.mailbox, s.unseen,s.account_id);
-								if(changed && ep.messagesGrid.store.baseParams.mailbox==s.mailbox && ep.messagesGrid.store.baseParams.account_id==s.account_id)
-								{
-									ep.messagesGrid.store.reload();
-								}
-							}
-						}
-
-						if(data.email_status.has_new)
+						var changed = ep.updateFolderStatus(s.mailbox, s.unseen,s.account_id);
+						if(changed && ep.messagesGrid.store.baseParams.mailbox==s.mailbox && ep.messagesGrid.store.baseParams.account_id==s.account_id)
 						{
-							data.reminderText='<p>'+GO.email.lang.youHaveNewMails.replace('{new}', data.email_status.total_unseen)+'</p>';
-
-							if(!ep || !ep.isVisible())
-								GO.email.notificationEl.setDisplayed(true);
-
-							GO.playAlarm();
-							if(!GO.hasFocus && !GO.util.empty(GO.settings.popup_reminders)){
-								GO.reminderPopup = GO.util.popup({
-									width:400,
-									height:300,
-									url:BaseHref+'reminder.php?reminder_text='+encodeURIComponent(data.reminderText)+"&count=0",
-									target:'groupofficeReminderPopup',
-									position:'br',
-									closeOnFocus:false
-								});
-							}
+							ep.messagesGrid.store.reload();
 						}
-
-						GO.email.notificationEl.update(data.email_status.total_unseen);
 					}
-				});
-			},
-			scope:this,
-			interval:120000
-//			interval:4000
+				}
+
+				if(result.email_status.has_new)
+				{
+					data.popup=true;
+					data.alarm=true;
+
+					data.getParams={
+						unseenEmails:result.email_status.total_unseen
+					}
+
+					if(!ep || !ep.isVisible())
+						GO.email.notificationEl.setDisplayed(true);
+
+
+					GO.email.notificationEl.update(result.email_status.total_unseen);
+				}
 		});
+
 
 
 	}
