@@ -39,6 +39,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	submitAction : 'submit',
 	
 	loadAction : 'load',
+	
+	forceTabs : false,
 
 	/**
 	 * The controller will be called with this post parameter.
@@ -155,7 +157,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		
 		this.formPanel = new Ext.form.FormPanel(this.formPanelConfig);
 
-		if(this._panels.length > 1) {		    
+		if(this._panels.length > 1 || this.forceTabs) {		    
 			this._tabPanel = new Ext.TabPanel({
 				activeTab: 0,
 				enableTabScroll:true,
