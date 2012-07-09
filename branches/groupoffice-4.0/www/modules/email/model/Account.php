@@ -211,9 +211,13 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	
 	private $_hasNewMessages=false;
 	
+	private function _getCacheKey(){
+		return GO::user()->id.':'.$this->id.':uidnext';
+	}
+	
 	private function _setHasNewMessages(){
 		
-		$cacheKey = GO::user()->id.':'.$this->id.':uidnext';
+		$cacheKey = $this->_getCacheKey();
 		
 		if($this->_imap->selected_mailbox['name']=='INBOX' && isset($this->_imap->selected_mailbox['uidnext'])){
 			
@@ -223,13 +227,15 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 				$this->_hasNewMessages=true;
 			
 			//throw new Exception($this->_imap->selected_mailbox['uidnext']."!=".$uidnext);
-			if($this->_imap->selected_mailbox['uidnext']!=$uidnext)
-				GO::cache()->set($cacheKey, $this->_imap->selected_mailbox['uidnext']);
+//			if($this->_imap->selected_mailbox['uidnext']!=$uidnext)
+//				GO::cache()->set($cacheKey, $this->_imap->selected_mailbox['uidnext']);
 			//GO::session()->values['email_status']['uidnext'][$this->id]=$this->_imap->selected_mailbox['uidnext'];
 		}
 	}
 	
 	protected function getHasNewMessages(){
+		if(!empty($this->_imap->selected_mailbox['uidnext']))
+			GO::cache()->set($this->_getCacheKey(), $this->_imap->selected_mailbox['uidnext']);		
 		return $this->_hasNewMessages;
 	}
 
