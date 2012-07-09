@@ -65,8 +65,6 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		$response['email_status']['total_unseen']=0;
 		$response['email_status']['unseen']=array();
 		
-		
-		
 		GO::session()->closeWriting();
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()						
@@ -96,7 +94,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			if(!empty($imap))
 				$imap->disconnect();			
 		}
-
+//$response['email_status']['has_new']=true;	
 		return $response;
 	}
 	

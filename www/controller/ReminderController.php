@@ -76,4 +76,29 @@ class GO_Core_Controller_Reminder extends GO_Base_Controller_AbstractController 
 		
 		return $record;		
 	}
+	
+	
+	protected function actionDisplay($params){
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->select('count(*) AS count')
+						->join(GO_Base_Model_ReminderUser::model()->tableName(),
+									GO_Base_Db_FindCriteria::newInstance()
+											->addModel(GO_Base_Model_Reminder::model())
+											->addCondition('id', 'ru.reminder_id','=','t',true, true),
+										'ru')						
+						->criteria(GO_Base_Db_FindCriteria::newInstance()
+										->addModel(GO_Base_Model_ReminderUser::model(),'ru')
+										->addCondition('user_id', GO::user()->id,'=','ru')
+										->addCondition('time', time(),'<','ru')
+										);
+		
+		$model=GO_Base_Model_Reminder::model()->findSingle($findParams);		
+		
+		$html="";
+		
+		$this->fireEvent('reminderdisplay', array($this, &$html, $params));
+		
+		$this->render("Reminder", array('count'=>intval($model->count),'html'=>$html));
+	}
 }
