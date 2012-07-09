@@ -48,7 +48,7 @@ class GO_Base_Observable{
 		}
 		$dirExists = is_dir($dir);
 		if(!$dirExists){
-			mkdir($dir, 0755,true);
+			mkdir($dir, 0777,true);
 			
 			GO::modules()->callModuleMethod('initListeners');
 			
