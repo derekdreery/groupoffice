@@ -115,10 +115,10 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		
 		if(!empty($params['random_code'])){
 			if($file->random_code!=$params['random_code'])
-				throw new Exception("Invalid download link");
+				throw new GO_Base_Exception_NotFound();
 			
 			if(time()>$file->expire_time)
-				throw new Exception("Sorry, the download link has expired");				
+				throw new Exception(GO::t('downloadLinkExpired', 'files'));				
 		}else
 		{
 			if(!$file->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
