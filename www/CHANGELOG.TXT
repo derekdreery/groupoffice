@@ -1,4 +1,7 @@
-05-07-2012 4.0.63
+09-07-2012 4.0.64
+- Various small bugfixes
+
+06-07-2012 4.0.63
 - Don't autolink Drafts, Sent Items and trash messages.
 - E-mail files function
 - Scanbox module included

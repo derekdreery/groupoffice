@@ -1,11 +1,14 @@
+Ticket groepen werken niet daniel malmgren
+
+Automatisch ticket maken van support@intermesh.nl
+
+
 http://www.group-office.com/forum/viewtopic.php?f=3&t=8353
 
 
 Note sync
 
 reminder als licentie verloopt
-
-Attachment object that can create the temp files anytime
 
 Password promt on imap logon failure
 
