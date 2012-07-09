@@ -20,7 +20,8 @@ GO.servermanager.ManageDialog = Ext.extend(GO.dialog.TabbedFormDialog,{
 			title: GO.lang.administration,
 			formControllerUrl: 'servermanager/automaticEmail', // change this if new panels are added
 			width:700,
-			height:440
+			height:440,
+			forceTabs:true
 			//fileUpload:true
 		});
 		GO.servermanager.ManageDialog.superclass.initComponent.call(this);
@@ -28,7 +29,7 @@ GO.servermanager.ManageDialog = Ext.extend(GO.dialog.TabbedFormDialog,{
 
 	buildForm : function() {
 		this.autoEmailGrid = new GO.grid.GridPanel({
-			title: GO.servermanager.lang.autoEmail,
+			title: GO.servermanager.lang.autoEmails,
 			layout: 'fit',
 			store: new GO.data.JsonStore({
 				url: GO.url("servermanager/automaticEmail/store"),

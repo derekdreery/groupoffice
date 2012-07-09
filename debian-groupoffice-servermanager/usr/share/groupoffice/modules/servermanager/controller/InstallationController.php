@@ -259,8 +259,8 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				$response['data']['first_weekday'] = $config['first_weekday'];
 
 
-				$response['data']['allow_themes'] = isset($config['allow_themes']) ? true : false;
-				$response['data']['allow_password_change'] = isset($config['allow_password_change']) ? true : false;
+				$response['data']['allow_themes'] = !empty($config['allow_themes']);
+				$response['data']['allow_password_change'] = !empty($config['allow_password_change']);
 
 				$response['data']['quota'] = GO_Base_Util_Number::localize($config['quota']/1024/1024);
 				$response['data']['restrict_smtp_hosts'] = $config['restrict_smtp_hosts'];
@@ -356,14 +356,14 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$config['first_weekday'] = $params['first_weekday'];
 
 
-		$config['allow_themes'] = isset($params['allow_themes']) ? true : false;
-		$config['allow_password_change'] = isset($params['allow_password_change']) ? true : false;
+		$config['allow_themes'] = !empty($params['allow_themes']);
+		$config['allow_password_change'] = !empty($params['allow_password_change']);
 
 		$config['quota'] = GO_Base_Util_Number::unlocalize($params['quota'])*1024*1024*1024;
 		$config['restrict_smtp_hosts'] = $params['restrict_smtp_hosts'];
 		$config['serverclient_domains'] = $params['serverclient_domains'];
 		
-		
+		//throw new Exception(var_export($config, true));
 				
 
 		if (intval($config['max_users']) < 1)

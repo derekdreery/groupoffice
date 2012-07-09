@@ -71,5 +71,6 @@ $l["enabled"]='Enabled';
 $l['availableModules']='Available modules';
 $l['usersPerModule']='Users per module';
 $l['autoEmail']='Automatic email';
+$l['autoEmails']='Automatic emails';
 $l['nDays']='Send mail this many days after installation';
 $l['days']='Days';
