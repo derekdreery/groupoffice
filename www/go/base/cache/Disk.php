@@ -33,7 +33,7 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_Interface{
 		$this->_dir = GO::config()->tmpdir.'diskcache/';
 		
 		if(!is_dir($this->_dir))
-			mkdir($this->_dir, 0700, true);
+			mkdir($this->_dir, 0777, true);
 		
 		$this->_ttlFile = $this->_dir.'ttls.txt';
 		//if(!GO::config()->debug)
@@ -119,7 +119,7 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_Interface{
 		$this->_ttlsDirty=true;
 		$folder = new GO_Base_Fs_Folder($this->_dir);
 		$folder->delete();
-		$folder->create(0700);
+		$folder->create(0777);
 	}
 	
 	public function __destruct(){
