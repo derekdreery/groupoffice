@@ -247,10 +247,10 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 
 			this.getSelectionModel().clearSelections();
 		}
-		if(this.lastSelectedIndex>-1)
-		{
-			this.getView().focusRow(this.lastSelectedIndex);
-		}
+//		if(this.lastSelectedIndex>-1)
+//		{
+//			this.getView().focusRow(this.lastSelectedIndex);
+//		}
 
 		this.selectedAll = (records.length == this.store.data.items.length) ? true : false;
 		if(this.allowNoSelection)
