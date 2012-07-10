@@ -655,7 +655,8 @@ GO.files.FileBrowser = function(config){
 
 	this.eastPanel = new Ext.Panel({
 		region:'east',
-		layout:'fit',
+		layout:'card',
+		activeItem: 0,
 		//items:[this.filePanel, this.folderPanel],
 		collapsed:config.filePanelCollapsed,
 		width:450,
@@ -693,14 +694,16 @@ GO.files.FileBrowser = function(config){
 
 	this.on('fileselected',function(grid, r){
 		if(r.data.extension!='folder'){
-			this.folderPanel.setVisible(false);
-			this.filePanel.setVisible(true);
+//			this.folderPanel.setVisible(false);
+//			this.filePanel.show()
+			this.eastPanel.getLayout().setActiveItem(this.filePanel);
 
 			this.filePanel.load(r.id.substr(2));
 		}else
 		{
-			this.filePanel.setVisible(false);
-			this.folderPanel.setVisible(true);
+//			this.filePanel.setVisible(false);
+//			this.folderPanel.show();
+			this.eastPanel.getLayout().setActiveItem(this.folderPanel);
 
 			this.folderPanel.load(r.id.substr(2));
 		}
