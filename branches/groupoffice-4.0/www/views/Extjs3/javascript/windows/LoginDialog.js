@@ -98,13 +98,15 @@ GO.dialog.LoginDialog = function(config){
 			boxLabel: GO.lang.remindPassword,
 			name:'remind',
 			height:20//explicit height for IE7 bug with ext 3.2
-		},this.fullscreenField = new Ext.form.Checkbox({
-			hideLabel:true,
-			boxLabel: GO.lang.fullscreen,
-			checked:GO.fullscreen,
-			name:'fullscreen',
-			height:20//explicit height for IE7 bug with ext 3.2
-		})
+		}
+//		,this.fullscreenField = new Ext.form.Checkbox({
+//			hideLabel:true,
+//			boxLabel: GO.lang.fullscreen,
+//			checked:GO.fullscreen,
+//			name:'fullscreen',
+//			height:20//explicit height for IE7 bug with ext 3.2
+//		}
+//	)
 		]
 	});
 
