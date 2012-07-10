@@ -29,6 +29,9 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
  
 			this.template = '<div>'+
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
+				'<tr>'+
+						'<td colspan="2" class="display-panel-heading">'+GO.addressbook.lang.company+': {name}</td>'+
+				'</tr>'+
 					/*'<tr>'+
 						'<tpl if="this.isCompanySecondColumn(values)">'+
 							'<td colspan="2" valign="top" class="display-panel-heading">'+

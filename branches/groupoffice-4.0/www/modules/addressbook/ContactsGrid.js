@@ -212,6 +212,7 @@ GO.addressbook.ContactsGrid = function(config){
 	config.enableDragDrop=true;
 	config.ddGroup='AddressBooksDD';
 
+//		config.bordertrue;
 	GO.addressbook.ContactsGrid.superclass.constructor.call(this, config);
 };
 

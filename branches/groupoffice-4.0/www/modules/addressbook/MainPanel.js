@@ -98,20 +98,22 @@ GO.addressbook.MainPanel = function(config)
 	this.contactEastPanel = new GO.addressbook.ContactReadPanel({
 		id:'ab-contact-panel',
 		region : 'east',
-		title: GO.addressbook.lang['cmdPanelContact'],
+//		title: GO.addressbook.lang['cmdPanelContact'],
 		width:420,
 		collapseMode:'mini',
 		collapsible:true,
+		hideCollapseTool:true,
 		split:true
 	});
 
 	this.companyEastPanel = new GO.addressbook.CompanyReadPanel({
 		id:'ab-company-panel',
 		region : 'east',
-		title: GO.addressbook.lang['cmdPanelCompany'],
+//		title: GO.addressbook.lang['cmdPanelCompany'],
 		width:420,
 		collapseMode:'mini',
 		collapsible:true,
+		hideCollapseTool:true,
 		split:true
 	});
 

@@ -29,7 +29,7 @@ GO.calendar.EventPanel = Ext.extend(GO.DisplayPanel,{
 		this.template =
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
 					'<tr>'+
-						'<td colspan="2" class="display-panel-heading">{name}</td>'+
+						'<td colspan="2" class="display-panel-heading">'+GO.calendar.lang.event+': {name}</td>'+
 					'</tr>'+
 					'<tr>'+
 						'<td colspan="2"><table><tr><td>'+GO.calendar.lang.calendar+': </td><td>{calendar_name}</td></tr></table></td>'+
