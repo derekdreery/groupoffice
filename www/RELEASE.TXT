@@ -7,7 +7,7 @@ It's important to know that:
 - Vacation auto response is now handled by the sieve module. You need to install 
 	the module and make sure that your IMAP server supports the sieve and managesieve protocol.
 	WARNING: Upgrading removes all active vacation auto replies
-- SyncML datastores have been changed to: card, event and task
+- SyncML URL and datastores have been changed to: card, event and task
 
 
 The new features are:
