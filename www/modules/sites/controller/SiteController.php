@@ -1,6 +1,7 @@
 <?php
+
 /*
- * Copyright Intermesh BV.
+ * Copyright Intermesh BV
  *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
@@ -9,356 +10,180 @@
  */
 
 /**
- * The GO_Tasks_Controller_Category controller
+ * Default controller for site module, contains default action like register, login, logout, index, lostpassword
  *
- * @package GO.modules.Tasks
- * @version $Id: GO_Tasks_Controller_Category.php 7607 2011-09-20 10:07:50Z wsmits $
- * @copyright Copyright Intermesh BV.
- * @author Wesley Smits wsmits@intermesh.nl
+ * @package GO.modules.sites.controller
+ * @copyright Copyright Intermesh
+ * @version $Id DefaultController.php 2012-06-08 10:51:35 mdhart $ 
+ * @author Michael de Hart <mdehart@intermesh.nl> 
  */
+class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontController
+{
+	public function allowGuests()
+	{
+		return array('login','register','content','index','error','recoverpassword','resetpassword');
+	}
+	
+	/**
+	 *Can be used to render homepage or something. Doesn't do much more
+	 */
+	public function actionIndex(){
+		 $this->render('index'); 
+	}
+	
+	/**
+	 * Renders content item selected them from database using slug and render them using the content view
+	 * @throws GO_Base_Exception_NotFound if the content item with given slug was not found
+	 */
+	public function actionContent() {
+		$content = GO_Sites_Model_Content::model()->findSingleByAttribute('slug', $_GET['slug']);
+		
+		if($content == null)
+			throw new GO_Base_Exception_NotFound('404 Page not found');
+		
+		$this->render('content', array('content'=>$content));
+	}
+	
+	/**
+	 * Register a new user 
+	 */
+	public function actionRegister() {
+		$user = new GO_Base_Model_User();
+		$contact = new GO_Addressbook_Model_Contact();
+		
+		if(GO_Base_Util_Http::isPostRequest())
+		{
+			$user->setAttributes($_POST['GO_Base_Model_User']);
+			$contact->setAttributes($_POST['GO_Addressbook_Model_Contact']);
+			if($user->validate() && $contact->validate())
+			{
+				GO::$ignoreAclPermissions = true; //Guest have no right to create users by default ignore this
+				if($user->save())
+				{
+					$contact = $user->createContact();
+					$contact->setAttributes($_POST['GO_Addressbook_Model_Contact']);
+					$user->addToGroups(GOS::site()->getSite()->getDefaultGroupNames()); // Default groups are in si_sites table
+					$addressbook = GO_Addressbook_Model_Addressbook::model()->getUsersAddressbook();
+					$contact->addressbook_id = $addressbook->id;
+					$contact->user_id = $user->id;
+					$contact->save();
 
-class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
-	
-	/**
-	 * The current site model
-	 * 
-	 * @var GO_Sites_Model_Site 
-	 */
-	private $_site;
-	
-	/**
-	 * The current page model
-	 * 
-	 * @var GO_Sites_Model_Page 
-	 */
-	private $_page;
-	
-	/**
-	 * The language for this site
-	 * 
-	 * @var GO_Sites_Language 
-	 */
-	private $_language;
-	
-	/**
-	 * The path to the template folder in the sites module.
-	 *
-	 * @var string 
-	 */
-	protected $rootTemplatePath;
-	
-	/**
-	 * The url to the template folder in the sites module.
-	 * 
-	 * @var string 
-	 */
-	protected $rootTemplateUrl;
-	
-	/**
-	 * The url to the template folder of the current module
-	 * 
-	 * @var string 
-	 */
-	protected $templateUrl;
-	
-	/**
-	 * The path of the template folder in the current module
-	 * 
-	 * @var string 
-	 */
-	protected $templateFolder;
-		
-	protected $notifications;
-		
-	/**
-	 * Construct this object.
-	 * Sets the private variables site and page.
-	 * 
-	 * @param GO_Sites_Model_Site $site
-	 * @param GO_Sites_Model_Page $page 
-	 */
-	public function __construct($site, $page) {	
-		
-		$this->_site=$site;
-		$this->_page=$page;
-		$this->notifications = $this->getSite()->getNotificationsObject();
-		
-		parent::__construct();
-	}
-
-	public function t($key){
-		if(!$this->_language)
-			$this->_language = new GO_Sites_Language($this->getRootTemplatePath(),$this->_site->language);
-		
-		return $this->_language->getTranslation($key);
-	}
-	
-	/**
-	 * Returns the current site object
-	 * 
-	 * @return GO_Sites_Model_Site The current site
-	 */
-	public function getSite(){
-		return $this->_site;
-	}
-	
-	/**
-	 * Returns the current page object
-	 * 
-	 * @return GO_Sites_Model_Page The current page 
-	 */
-	public function getPage(){
-		return $this->_page;
-	}
-	
-	/**
-	 * Sets the access permissions for guests
-	 * Defaults to '*' which means that all functions can be accessed by guests.
-	 * 
-	 * @return array List of all functions that can be accessed by guests 
-	 */
-	protected function allowGuests() {
-		return array('*');
-	}
-	
-	/**
-	 * Initialize this object and sets the protected variables
-	 * 
-	 * @return mixed 
-	 */
-	protected function init() {
-
-		$this->rootTemplatePath = GO::config()->root_path.'modules/sites/templates/'.$this->_site->template.'/';
-		$this->rootTemplateUrl = GO::config()->host.'modules/sites/templates/'.$this->_site->template.'/';
-		$this->templateUrl = $this->_getTemplateFolderUrl();
-		$this->templateFolder = new GO_Base_Fs_Folder($this->_getTemplateFolderPath());
-
-		return parent::init();
-	}
-	
-	/**
-	 * Run function of this controller. This will override the run function of the parent class.
-	 * 
-	 * @param string $action
-	 * @param array $params
-	 * @param boolean $render
-	 * @param boolean $checkPermissions
-	 * 
-	 */
-	public function run($action = '', $params=array(), $render = true, $checkPermissions = true) {
-		
-		$this->_checkSessionVars($params);
-		$this->_checkAuth();
-		parent::run($action, $params, $render, $checkPermissions);
-	}
-	
-	/**
-	 * Get the path of the template folder in the sites module.
-	 * 
-	 * @return string The path to the template folder in the sites module. 
-	 */
-	public function getRootTemplatePath(){
-		return $this->rootTemplatePath;
-	}
-	
-	/**
-	 * Get the url of the template folder in the sites module.
-	 * 
-	 * @return string The url to the template folder in the sites module.
-	 */
-	public function getRootTemplateUrl(){
-		return $this->rootTemplateUrl;
-	}
-		
-	/**
-	 * Private function to get the template folder path of the current module.
-	 * 
-	 * @return string The path to the template folder in the current module. 
-	 */
-	private function _getTemplateFolderPath(){
-		$path = $this->rootTemplatePath;
-		$moduleName = $this->getModule()->id;
-		
-//		$path .= GO::config()->root_path.'modules/'.$moduleName;
-//		if($moduleName != 'sites')
-//			$path .= '/sites';
-//		$path .= '/templates/'.$this->_site->template.'/';
-		
-		if($moduleName != 'sites')
-			$path .= 'modules/'.$moduleName.'/';
-		
-		
-		return $path;
-	}
-	
-	/**
-	 * Private function to get the template folder url of the current module.
-	 * 
-	 * @return string The url to the template folder in the current module. 
-	 */
-	private function _getTemplateFolderUrl(){
-		$url = $this->rootTemplateUrl;
-		$moduleName = $this->getModule()->id;
-		
-//		$url .= GO::config()->host.'modules/'.$moduleName;
-//		if($moduleName != 'sites')
-//			$url .= '/sites';
-//		$url .= '/templates/'.$this->_site->template.'/';
-//		
-		if($moduleName != 'sites')
-			$url .= 'modules/'.$moduleName.'/';
-		
-		return $url;
-	}
-	
-	/**
-	 * The default index action
-	 * This default action should be overrriden
-	 * 
-	 * @param array $params The parameters that need to be passed through to 
-	 * the page.
-	 */
-	protected function actionIndex($params){		
-		$this->renderPage($params);		
-	}
-	
-	/**
-	 * Function that you can override.
-	 * This function will be called right before the renderpage function.
-	 * 
-	 * @param array $params The parameters that need to be passed through to 
-	 * the page.
-	 */
-	protected function beforeRenderPage($params){
-		
-	}
-
-	/**
-	 * Render the page 
-	 * 
-	 * @todo Make the header and footer dynamic
-	 * 
-	 * @param array $params The parameters that need to be passed through to 
-	 * the page.
-	 */
-	protected function renderPage($params=array()){
-
-		GO_Base_Db_ActiveRecord::$attributeOutputMode='html';
-
-		$this->beforeRenderPage($params);
-		extract($params);
-
-		$template = empty($this->_page->template) ? 'index.php' : $this->_page->template.'.php';
-
-		require($this->getRootTemplatePath().'header.php');
-		require($this->templateFolder->path().'/'.$template);
-		require($this->getRootTemplatePath().'footer.php');
-		
-	}
-	
-	/**
-	 * Checks if the last path needs to be changed and sets the right last path 
-	 * in the session. 
-	 */
-	private function _checkSessionVars($params=array()){
-		
-		if(!isset(GO::session()->values['sites']))
-			GO::session()->values['sites'] = array();
-		
-		if(isset(GO::session()->values['sites']['lastPath'])){
-			$lastParams = isset(GO::session()->values['sites']['lastParams']) ? GO::session()->values['sites']['lastParams'] : array();
-			$this->_site->setLastPath(GO::session()->values['sites']['lastPath'],$lastParams);
+					// Automatically log the newly created user in.
+					if(GO::session()->login($user->username, $_POST['GO_Base_Model_User']['password']))
+						$this->redirect($this->getReturnUrl());
+					else
+						throw new Exception('Login after registreation failed.');
+				}
+			}
 		}
 		
-		$noReturnPages = array(
-				$this->_site->getLoginPath(),
-				$this->_site->getRegisterPath(),
-				$this->_site->getPasswordResetPath(),
-				$this->_site->getLostPasswordPath()
-		);
+		$this->render('register', array('model'=>$user,'contact'=>$contact));
+	}
+	
+	/**
+	 * Action that needs to be called for the page to let the user recover 
+	 * the password.
+	 */
+	public function actionRecoverPassword() {
 		
-		if(!in_array($this->_page->path, $noReturnPages)){
-			GO::session()->values['sites']['lastPath'] = $this->_page->path;
-			GO::session()->values['sites']['lastParams'] = $params;
-		}
-	}
-	
-	/**
-	 * Check if the page needs that a user is logged in and checks if the user is 
-	 * logged in also. 
-	 */
-	private function _checkAuth() {
-		if($this->_page->login_required && !GO::user()){
-			$this->pageRedirect($this->_site->getLoginPath());
-		}
-	}
+		if (GO_Base_Util_Http::isPostRequest())
+		{
+			$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $_POST['email']);
+			
+			if($user == null){
+				GOS::site()->notifier->setMessage('error', GO::t("invaliduser","sites"));
+			}else{
+				//GO::language()->setLanguage($user->language);
 
-	/**
-	 * Will be displayed when a page is not found 
-	 */
-	protected function notFound(){
-		echo '<h1>Not found</h1>';
+				$siteTitle = GOS::site()->getSite()->name;
+				$url = $this->createUrl('/sites/site/resetpassword', array(), false);
+
+				$fromName = GOS::site()->getSite()->name;
+				$fromEmail = 'noreply@intermesh.nl'; //.GOS::site()->getSite()->domain;
+				
+				$user->sendResetPasswordMail($siteTitle,$url,$fromName,$fromEmail);
+				GOS::site()->notifier->setMessage('success', GO::t('recoverEmailSent', 'sites')." ".$user->email);
+			}
+		}
+		
+		$this->render('recoverPassword');
+	}
+	
+	public function actionResetPassword()
+	{
+		if(empty($_GET['email']))
+			throw new Exception(GO::t("noemail","sites"));
+
+		$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $_GET['email']);
+
+		if(!$user)
+			throw new Exception(GO::t("invaliduser","sites"));
+		
+		GO::language()->setLanguage($user->language);
+
+		if(isset($_GET['usertoken']) && $_GET['usertoken'] == $user->getSecurityToken())
+		{
+			if (GO_Base_Util_Http::isPostRequest())
+			{
+				$user->password = $_POST['GO_Base_Model_User']['password'];
+				$user->passwordConfirm = $_POST['GO_Base_Model_User']['passwordConfirm'];
+
+				GO::$ignoreAclPermissions = true; 
+				
+				if($user->validate() && $user->save())
+					GOS::site()->notifier->setMessage('success',GO::t('resetPasswordSuccess', 'sites'));
+			}
+		}
+		else
+			GOS::site()->notifier->setMessage('error',GO::t("invalidusertoken","sites"));
+				
+		$user->password = null;
+		$this->render('resetPassword', array('user'=>$user));
 	}
 	
 	/**
-	 * Generate a controller URL.
-	 * 
-	 * @param string $path To controller. eg. addressbook/contact/submit
-	 * @param array $params eg. array('id'=>1,'someVar'=>'someValue')
-	 * @param boolean $relative Defaults to true. Set to false to return an absolute URL.
-	 * @param boolean $htmlspecialchars Set to true to escape special html characters. eg. & becomes &amp.
-	 * @return string 
+	 * Render a login page 
 	 */
-	public function pageUrl($path='', $params=array(), $relative=true, $htmlspecialchars=true){
-		return $this->_site->pageUrl($path, $params, $relative,$htmlspecialchars);
+	public function actionLogin(){
+		
+		$model = new GO_Base_Model_User();
+		
+		if (GO_Base_Util_Http::isPostRequest()) {
+			$model->username = $_POST['GO_Base_Model_User']['username'];
+			$password = $_POST['GO_Base_Model_User']['password'];
+
+			$user = GO::session()->login($model->username, $password);
+
+			if (!$user) {
+				GOS::site()->notifier->setMessage('error', GO::t('badLogin')); // set the correct login failure message
+			} else {
+				if (!empty($_POST['rememberMe'])) {
+
+					$encUsername = GO_Base_Util_Crypt::encrypt($model->username);
+					if ($encUsername)
+						$encUsername = $model->username;
+
+					$encPassword = GO_Base_Util_Crypt::encrypt($password);
+					if ($encPassword)
+						$encPassword = $password;
+
+					GO_Base_Util_Http::setCookie('GO_UN', $encUsername);
+					GO_Base_Util_Http::setCookie('GO_PW', $encPassword);
+				}
+				$this->redirect($this->getReturnUrl());
+			}
+		}
+
+		$this->render('login',array('model'=>$model));
 	}
-	
 	
 	/**
-	 * Redirect to the given page.
-	 * 
-	 * @param string $path The path of the redirect page
-	 * @param array $params The parameters that need to be passed through the 
-	 * redirect page
+	 * Logout the current user and redirect to loginpage 
 	 */
-	protected function pageRedirect($path = '', $params=array()) {
-		header('Location: ' .$this->_site->pageUrl($path, $params, true, false));
-		exit();
+	public function actionLogout(){
+		GO::session()->logout();
+		GO::session()->start();
+		$this->redirect(GOS::site()->getLoginUrl());
 	}
-//	
-//	protected function setNotification($type, $string){
-//		
-//	}
-//	
-//	protected function getNotification(){
-//		
-//	}
-	
-	/**
-	 * Get the webshop for this website if it has one.
-	 * 
-	 * @return GO_Webshop_Model_Webshop 
-	 */
-	protected function getWebshop(){
-		return GO_Webshop_Model_Webshop::model()->findSingleByAttribute('site_id',$this->_site->id);
-	}
-	
-//	/**
-//	 * Static install function for a site.
-//	 * 
-//	 * @param int $site_id
-//	 * @return GO_Sites_Model_Site 
-//	 */
-//	public static function install($site_id=0){
-//		if(!empty($site_id))
-//			$site = GO_Sites_Model_Site::model()->findByPk($site_id);
-//		else
-//			$site = new GO_Sites_Model_Site();
-//		
-//		$site->save();
-//		
-//		
-//		return $site;
-//	}
-	
 }
+?>

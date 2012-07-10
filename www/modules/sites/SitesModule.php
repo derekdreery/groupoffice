@@ -1,12 +1,6 @@
 <?php
 
 class GO_Sites_SitesModule extends GO_Base_Module{
-		
-	
-	public static function initListeners(){		
-//		GO_Base_Model_User::model()->addListener('save', 'GO_Notes_NotesModule', 'saveUser');
-//		GO_Base_Model_User::model()->addListener('delete', 'GO_Notes_NotesModule', 'deleteUser');		
-	}	
 	
 	public function autoInstall() {
 		return false;

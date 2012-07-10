@@ -1,6 +1,23 @@
 <?php
 
-class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
+/*
+ * Copyright Intermesh BV
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ */
+
+/**
+ * Constroller for user specific frontend actions
+ *
+ * @package GO.
+ * @copyright Copyright Intermesh
+ * @version $Id UserController.php 2012-06-29 15:44:51 mdhart $ 
+ * @author Michael de Hart <mdehart@intermesh.nl> 
+ */
+class GO_Sites_Controller_User extends GO_Sites_Components_AbstractFrontController {
 
 	protected function ignoreAclPermissions() {
 		return array('register','resetpassword','profile');
@@ -51,10 +68,10 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 				$contact->save();
 
 				GO::session()->login($params['username'], $params['password']); // Automatically log the newly created user in.
-				$this->pageRedirect($this->getSite()->getLastPath(),$this->getSite()->getLastParams());
+				$this->redirect($this->getReturnUrl());
 			}
 		}
-		$this->renderPage($params);
+		$this->render('register',$params);
 	}
 
 	/**
@@ -90,7 +107,7 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 			}
 		}
 		
-		$this->renderPage($params);
+		$this->render('recover', $params);
 	}
 
 	protected function actionResetPassword($params) {
@@ -131,7 +148,7 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 			}
 		}
 		
-		$this->renderPage($params);
+		$this->render('resetPassword',$params);
 	}
 	
 	
@@ -143,12 +160,15 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 	 * 
 	 * The function will redirect you automatically to the latest page that you
 	 * had visited before the login.
-	 * 
-	 * @param array $params The params that are passed through to this page
 	 */
-	protected function actionLogin($params) {
-
+	public function actionLogin(){
+		
+		$model = new GO_Base_Model_User();
+		
 		if (GO_Base_Util_Http::isPostRequest()) {
+			
+			$params['username'] = $_POST['GO_Base_Model_User']['username'];
+			$params['password'] = $_POST['GO_Base_Model_User']['password'];
 
 			$user = GO::session()->login($params['username'], $params['password']);
 
@@ -170,33 +190,27 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 					GO_Base_Util_Http::setCookie('GO_UN', $encUsername);
 					GO_Base_Util_Http::setCookie('GO_PW', $encPassword);
 				}
-
-				$this->pageRedirect($this->getSite()->getLastPath(),$this->getSite()->getLastParams());
+				$this->redirect($this->getReturnUrl());
 			}
 		}
 
-		$this->renderPage($params);
+		$this->render('login',array('model'=>$model));
 	}
 
 	/**
 	 * The action that needs to be called if you want that a user needs to 
 	 * be logged out.
-	 * 
-	 * @param array $params The params that need to be passed to the page after 
-	 * the user is logged out.
 	 */
-	protected function actionLogout($params) {
+	public function actionLogout(){
 		GO::session()->logout();
 		GO::session()->start();
-		$this->pageRedirect($this->getSite()->getLoginPath());
+		$this->redirect(GOS::site()->getLoginUrl());
 	}
 	
 	protected function actionProfile($params){
-		if(!GO::user())
-			$this->pageRedirect($this->getSite()->login_path);
 		
 		$user = GO::user();
-		$contact = $user->createContact();
+		$contact = $user->contact;
 		
 		if($contact->company)
 			$company = $contact->company;
@@ -206,45 +220,33 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site {
 		}
 		
 		if (GO_Base_Util_Http::isPostRequest()) {
-
-			GO_Base_Html_Error::checkRequired();
-			
-			if(!empty($params['password'])){
-				if(!$user->checkPassword($params['currentPassword'])){
-					GO_Base_Html_Error::setError($this->t('currentPasswordError'),'currentPassword');
+			if(!empty($_POST['GO_Base_Model_User']['password']))
+			{
+				if(!$model->checkPassword($_POST['currentPassword'])){
+					GOS::site()->notifier->setMessage('error', "Huidig wachtwoord onjuist");
 				}else{
-					$user->password = $params['password'];
-					$user->passwordConfirm = $params['passwordConfirm'];
+					$model->password = $_POST['GO_Base_Model_User']['password'];
+					$model->passwordConfirm = $_POST['GO_Base_Model_User']['passwordConfirm'];
 				}
 			}else{
-				unset($params['password']);
-				unset($params['passwordConfirm']);
+				unset($_POST['GO_Base_Model_User']['password']);
+				unset($_POST['GO_Base_Model_User']['passwordConfirm']);
 			}
 				
-			$contact->setAttributes($params);
-			$user->setAttributes($params);	
-			$company->setAttributes($params);
+			$contact->attributes = $_POST['GO_Addressbook_Model_Contact'];
+			$user->attributes = $_POST['GO_Base_Model_User'];
+			$company->attributes = $_POST['GO_Addressbook_Model_Company'];
 			
-			GO_Base_Html_Error::validateModel($user);
-			GO_Base_Html_Error::validateModel($contact);
-			GO_Base_Html_Error::validateModel($company);
-			
-			if(!GO_Base_Html_Error::hasErrors()){
-				$user->save();
+			if($user->save()){
 				$company->save();
 				$contact->company_id = $company->id;				
 				$contact->save();
-				$this->notifications->addNotification('profile', $this->t('formEditSuccess'), GO_Sites_NotificationsObject::NOTIFICATION_OK);
+				GOS::site()->notifier->setMessage('success', GOS::t('formEditSuccess'));
 			}
 		}
-		
-		$params['user'] = $user;
-		$params['contact'] = $contact;
-		$params['company'] = $company;
 
-		$this->renderPage($params);
+		$this->render('profile', array('user'=>$user,'contact'=>$contact));
 	}
-	
-	
 
 }
+?>

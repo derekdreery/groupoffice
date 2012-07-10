@@ -1,5 +1,5 @@
 <?php
-class GO_Sites_Components_Pager extends GO_Sites_Components_Component {
+class GO_Sites_Widgets_Pager extends GO_Sites_Widgets_Component {
 	
 	/**
 	 * The limit of models per page
@@ -77,17 +77,18 @@ class GO_Sites_Components_Pager extends GO_Sites_Components_Component {
 	 *	Number 2 will create [2][3][4=current][5][6]
 	 *  Number 3 will create [1][2][3][4=current][5][6][7]
 	 */
-	public function __construct($id, GO_Sites_Controller_Site $controller,$params, $model, GO_Base_Db_FindParams $findParams, $limit=10, $offset=0){		
+	public function __construct($id, $params, $model, GO_Base_Db_FindParams $findParams, $limit=10, $offset=0){		
 
 		$this->limit = $limit;
 		$this->offset = $offset;
 		$this->_findParams = $findParams;
 		$this->_model = $model;
 
-		parent::__construct($id, $controller,$params);
+		parent::__construct($id, $params);
 		
 		$this->_currentPageNumber = isset($params[$this->getRequestParam()]) ? $params[$this->getRequestParam()] : 1;
-		$this->_page->attachHeaderInclude('css',$this->_controller->getRootTemplateUrl().'css/pager.css'); // Include the right css file in the header
+		GOS::site()->scripts->registerCssFile(GOS::site()->controller->getViewUrl().'css/pager.css');  // Include the right css file in the header
+
 		$this->_initialize();
 	}
 	
@@ -172,10 +173,12 @@ class GO_Sites_Components_Pager extends GO_Sites_Components_Component {
 				}
 
 				for($page=$offsetStart;$page<=$offsetEnd;$page++){
-					if($page == $this->_currentPageNumber)
-						echo '<td class="pager-block pager-active"><a href="'.$this->_page->getUrl(array_merge($this->getAdditionalParams(),array($this->getRequestParam()=>$page))).'">'.$page.'</a></td>';
-					else
-						echo '<td class="pager-block pager-inactive"><a href="'.$this->_page->getUrl(array_merge($this->getAdditionalParams(),array($this->getRequestParam()=>$page))).'">'.$page.'</a></td>';
+					$params = array_merge($this->getAdditionalParams(),array($this->getRequestParam()=>$page));
+						$url = GOS::site()->getController()->createUrl(array(GOS::site()->route, $params));
+					if($page == $this->_currentPageNumber) {
+						echo '<td class="pager-block pager-active"><a href="'.$url.'">'.$page.'</a></td>';
+					} else
+						echo '<td class="pager-block pager-inactive"><a href="'.$url.'">'.$page.'</a></td>';
 				}	
 				// END: RENDER THE PAGE NUMBER BLOCKS
 				
