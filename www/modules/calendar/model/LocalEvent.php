@@ -22,6 +22,18 @@
  */
 class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 	
+	
+	private $_initials = array();
+	private $_calendarNames = array();
+	
+	private $_isMerged = false;
+	
+	private $_backgroundColor = '';
+	
+	public $displayId = 0;
+	
+	private $_displayName = '';
+	
 	/**
 	 *
 	 * @var GO_Calendar_Model_Event 
@@ -71,10 +83,132 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 		$this->_event = $event;
 		$this->_startTime = $periodStartTime;
 		$this->_endTime = $periodEndTime;
+		$this->_backgroundColor = $event->background;
+		$this->_displayName = $event->name;
 		
 		$this->_calendar = $this->_event->calendar;	
+		
+		$this->_initials[] = $event->user->getShortName();
+		$this->_calendarNames[] = $this->_calendar->name;
 	}
 	
+	public function setBackgroundColor($color){
+		$this->_backgroundColor = $color;
+	}
+	
+	public function getUuid(){
+		return $this->_event->uuid;
+	}
+	
+	public function getResponseData(){
+		
+		$dayString = GO::t('full_days');
+		
+		$response = $this->_event->getAttributes('formatted');
+
+		if($this->isAllDay()){
+			$response['time'] =  $event->getFormattedTime();
+		} else {
+			if (date(GO::user()->date_format, $this->getAlternateStartTime()) != date(GO::user()->date_format, $this->getAlternateEndTime()))
+				$response['time'] =  $this->getFormattedTime();
+			else
+				$response['time'] =  $this->getFormattedTime();
+		}
+		
+		$response['status'] = $this->_event->status;
+		$response['username'] = $this->_event->user->getName();
+		
+		if($this->_isMerged){
+			$response['name'] = $response['name'] .' ('.implode(',',$this->_initials).')';
+			$response['calendar_name'] = implode('; ',$this->_calendarNames);
+			unset($response['status']); // unset this, it is not relevant to show this in merge view
+			unset($response['username']); // unset this, it is not relevant to show this in merge view.
+		}
+		
+		$response['id'] = $this->displayId;
+		$response['background'] = $this->_backgroundColor;
+		$response['start_time'] = date('Y-m-d H:i', $this->getAlternateStartTime());
+		$response['end_time'] = date('Y-m-d H:i',  $this->getAlternateEndTime());	
+		$response['ctime'] = date('Y-m-d H:i',  $this->_event->ctime);
+		$response['event_id'] = $this->_event->id;
+		$response['has_other_participants'] = $this->hasOtherParticipants();
+		$response['link_count'] = $this->getLinkCount();
+		
+		$response['description'] = nl2br(htmlspecialchars(GO_Base_Util_String::cut_string($this->_event->description, 800), ENT_COMPAT, 'UTF-8'));
+		$response['private'] = $this->isPrivate();
+		$response['status_color'] = $this->_event->getStatusColor();
+		
+		$response['repeats'] = $this->isRepeating();
+		$response['all_day_event'] = $this->isAllDay();
+		$response['day'] = $dayString[date('w', ($this->_event->start_time))].' '.GO_Base_Util_Date::get_timestamp($this->_event->start_time,false);  // date(implode(GO::user()->date_separator,str_split(GO::user()->date_format,1)), ($eventModel->start_time));
+		$response['read_only'] = $this->isReadOnly();
+		$response['model_name'] = $this->_event->className();
+		
+		
+		$duration = $this->getDurationInMinutes();
+
+		if($duration >= 60){
+			$durationHours = floor($duration / 60);
+			$durationRestMinutes = $duration % 60;
+			$response['duration'] = $durationHours.' '.GO::t('hours').', '.$durationRestMinutes.' '.GO::t('mins');
+		} else {
+			$response['duration'] = $duration.'m';
+		}
+		
+		return $response;
+	}
+	
+	public function getName(){
+		return $this->_displayName;
+	}
+	
+	public function mergeWithEvent($event){
+		
+		$this->_isMerged = true;
+		$this->_initials[] = $event->getEvent()->user->getShortName();
+		$this->_calendarNames[] = $event->getCalendar()->name;
+		$this->_backgroundColor = 'FFFFFF';
+		
+		//append start_time for recurring events.
+////		$merge_index = $current_event['uuid'].'-'.$current_event['start_time'];
+////		
+////		
+////		if (array_key_exists($merge_index,$uuid_array)) {
+////			
+////			$uuid_array[$merge_index][] = $event_nr;
+////			if (count($uuid_array[$merge_index])==2) {
+////				$merged_event_nr = $uuid_array[$merge_index][0];
+////				
+////				$chosen_events[$merged_event_nr]['background'] = 'FFFFFF';
+////				$chosen_events[$merged_event_nr]['username'] = '';//$lang['calendar']['non_selected'];
+////				
+////				$name_exploded = explode('(',$chosen_events[$merged_event_nr]['name']);
+////				if (count($name_exploded)>1) array_pop($name_exploded);
+////				$chosen_events[$merged_event_nr]['name'] = implode('(',$name_exploded);
+////				$chosen_events[$merged_event_nr]['name'] .= ' ('.String::get_first_letters($calendar_names[$chosen_events[$merged_event_nr]['calendar_id']]).')';
+////			}
+////			if (count($uuid_array[$merge_index])>=2) {
+////				$merged_event_nr = $uuid_array[$merge_index][0];
+////				
+////				$chosen_events[$merged_event_nr]['calendar_name'] .= '; '.$calendar_names[$current_event['calendar_id']];
+////				$chosen_events[$merged_event_nr]['name'] = substr($chosen_events[$merged_event_nr]['name'],0,-1);
+////				$chosen_events[$merged_event_nr]['name'] .= ','.String::get_first_letters($calendar_names[$current_event['calendar_id']]).')';
+////				//$chosen_events[$merged_event_nr]['name'] .= ', '.$participating_calendar['name'];
+////				//if ($current_event['invitation_uuid']=='') {
+////					//$chosen_events[$merged_event_nr]['username'] = $GO_USERS->get_user_realname($current_event['user_id']);
+////					//$chosen_events[$merged_event_nr]['num_participants']++;
+////				//}
+////				return true;
+////			}
+////		} else {
+////			$uuid_array[$merge_index] = array($event_nr);
+////		}
+//		
+//		return $response;
+		
+		
+	}
+
 	/**
 	 * Get the start time of the recurring event in the selected period
 	 * 

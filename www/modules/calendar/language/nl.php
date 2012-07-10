@@ -187,3 +187,6 @@ $l["publishICS"]='Publiceer iCalendar bestand voor afgelopen maand en toekomstig
 $l["addTimeRegistration"]='Invoeren als tijdsregistratie';
 $l["showNotBusy"]='Nieuwe boekingen niet als bezet tonen';
 $l["sendEmailParticipants"]= 'Email opstellen voor deelnemers';
+
+$l['errorOrganizerOnly'] = 'Alleen de organisator mag deze afspraak bewerken.';
+$l['errorOrganizerOnlyTitle'] = 'U bent niet de organisator';
