@@ -212,7 +212,8 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	private $_hasNewMessages=false;
 	
 	private function _getCacheKey(){
-		return GO::user()->id.':'.$this->id.':uidnext';
+		$user_id = GO::user() ? GO::user()->id : 0;
+		return $user_id.':'.$this->id.':uidnext';
 	}
 	
 	private function _setHasNewMessages(){
