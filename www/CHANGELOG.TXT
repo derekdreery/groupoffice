@@ -1,3 +1,10 @@
+10-07-2012 4.0.67
+- Strange characters from Romanian and Hungarian language files removed.
+- Bug in e-mail sync with some IMAP servers.
+- Folders with underscores didn't expand sometimes
+- All info panels show the type and name on top now. More consistent.
+- Workflow module has an icon now.
+
 09-07-2012 4.0.64
 - Various small bugfixes
 
