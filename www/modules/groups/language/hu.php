@@ -1,6 +1,6 @@
 <?php
 
-﻿;
+;
 $l["group"]= 'Csoport';
 $l["groups"]= 'Csoportok';
 $l["owner"]= 'Tulajdonos';

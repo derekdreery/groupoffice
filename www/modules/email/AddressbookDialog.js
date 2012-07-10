@@ -98,6 +98,56 @@ GO.email.AddressbookDialog = function(config) {
 		items.push(this.companyGrid);
 
 	}
+	
+	
+	
+	
+	this.usersStore = new GO.data.JsonStore({
+		url : GO.url("core/users"),
+		fields : ['id', 'username', 'name',  'email'],
+		remoteSort : true
+	});
+
+	this.usersSearchField = new GO.form.SearchField({
+		store : this.usersStore,
+		width : 320
+	});
+
+	this.usersGrid = new GO.grid.GridPanel({
+		title : GO.addressbook.lang.users,
+		paging : true,
+		border : false,
+		store : this.usersStore,
+		view : new Ext.grid.GridView({
+			autoFill : true,
+			forceFit : true
+		}),
+		columns : [{
+			header : GO.lang['strName'],
+			dataIndex : 'name',
+			css : 'white-space:normal;',
+			sortable : true
+		}, {
+			header : GO.lang['strUsername'],
+			dataIndex : 'username',
+			css : 'white-space:normal;',
+			sortable : true
+		},{
+			header : GO.lang['strEmail'],
+			dataIndex : 'email',
+			css : 'white-space:normal;',
+			sortable : true
+		}],
+		sm : new Ext.grid.RowSelectionModel(),
+		tbar : [GO.lang['strSearch'] + ': ', ' ', this.usersSearchField]
+	});
+
+	this.usersGrid.on('show', function() {
+		this.usersStore.load();
+	}, this);
+	items.push(this.usersGrid);
+	
+	
 
 	if (GO.addressbook) {
 		this.mailingsGrid = new GO.grid.GridPanel({

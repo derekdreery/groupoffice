@@ -133,6 +133,7 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 		$formattedRecord['checked']=$this->_defaultTemplate->template_id==$model->id;
 		$formattedRecord['text']=$model->name;
 		$formattedRecord['template_id']=$model->id;
+		unset($formattedRecord['id']);
 		return $formattedRecord;
 	}
 	

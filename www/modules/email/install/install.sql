@@ -163,11 +163,13 @@ CREATE TABLE IF NOT EXISTS `em_links` (
   `time` int(11) NOT NULL DEFAULT '0',
   `path` varchar(255) DEFAULT NULL,
   `ctime` int(11) NOT NULL,
-	`mtime` INT NOT NULL,
+  `mtime` int(11) NOT NULL DEFAULT '0',
   `acl_id` int(11) NOT NULL,
+  `uid` varchar(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
-  KEY `account_id` (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  KEY `account_id` (`user_id`),
+  KEY `uid` (`uid`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
 
 -- --------------------------------------------------------
 

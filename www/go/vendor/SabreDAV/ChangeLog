@@ -1,3 +1,23 @@
+1.6.3-stable (2012-06-12)
+	* Added: It's now possible to specify in Sabre_DAV_Client which type of
+	  authentication is to be used.
+	* Fixed: Issue 206: Sabre_DAV_Client PUT requests are fixed.
+	* Fixed: Issue 205: Parsing an iCalendar 0-second date interval.
+	* Fixed: Issue 112: Stronger validation of iCalendar objects. Now making
+	  sure every iCalendar object only contains 1 component, and disallowing
+	  vcards, forcing every component to have a UID.
+	* Fixed: Basic validation for vcards in the CardDAV plugin.
+	* Fixed: Issue 213: Workaround for an Evolution bug, that prevented it
+	  from updating events.
+	* Fixed: Issue 211: A time-limit query on a non-relative alarm trigger in
+	  a recurring event could result in an endless loop.
+	* Fixed: All uri fields are now a maximum of 200 characters. The Bynari
+	  outlook plugin used much longer strings so this should improve
+	  compatibility.
+	* Fixed: Added a workaround for a bug in KDE 4.8.2 contact syncing. See
+	  https://bugs.kde.org/show_bug.cgi?id=300047
+	* Fixed: Issue 217: Sabre_DAV_Tree_FileSystem was pretty broken.
+
 1.6.2-stable (2012-04-16)
 	* Fixed: Sabre_VObject_Node::$parent should have been public.
 	* Fixed: Recurrence rules of events are now taken into consideration when

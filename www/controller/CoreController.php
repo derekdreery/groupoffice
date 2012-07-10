@@ -10,10 +10,10 @@
 class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	
 	protected function allowGuests() {
-		return array('plupload');
+		return array('plupload','compress');
 	}
 	
-	protected function saveSetting($params){
+	protected function actionSaveSetting($params){
 		$response['success']=GO::config()->save_setting($params['name'], $params['value'], $params['user_id']);
 		
 		return $response;
@@ -97,11 +97,42 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	/**
 	 * Todo replace compress.php with this action
 	 */
-	protected function actionCompress() {
+	protected function actionCompress($params) {
 		
+		GO::session()->closeWriting();
+		
+		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'cache/'.basename($params['file']));
+
+		$ext = $file->extension();
+
+		$type = $ext =='js' ? 'text/javascript' : 'text/css';
+
+		$use_compression = GO::config()->use_zlib_compression();
+
+		if($use_compression){
+			ob_start();
+			ob_start('ob_gzhandler');
+		}
+		$offset = 30*24*60*60;
+		header ("Content-Type: $type; charset: UTF-8");
+		header("Expires: " . date("D, j M Y G:i:s ", time()+$offset) . 'GMT');
+		header('Cache-Control: cache');
+		header('Pragma: cache');
+		if(!$use_compression){
+			header("Content-Length: ".$file->size());
+		}
+		readfile($file->path());
+
+		if($use_compression){
+			ob_end_flush();  // The ob_gzhandler one
+
+			header("Content-Length: ".ob_get_length());
+
+			ob_end_flush();  // The main one
+		}
 	}
 
-	private $clientScripts = array();
+//	private $clientScripts = array();
 
 //	protected function registerClientScript($url, $type='url') {
 //		$this->clientScripts[] = array($type, $url);
@@ -455,10 +486,12 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 			//$router = new GO_Base_Router();
 
 			$requests = json_decode($params['requests'], true);
-			foreach($requests as $responseIndex=>$requestParams){
-				ob_start();				
-				GO::router()->runController($requestParams);
-				echo "\n".'"'.$responseIndex.'" : '.ob_get_clean().",\n";
+			if(is_array($requests)){
+				foreach($requests as $responseIndex=>$requestParams){
+					ob_start();				
+					GO::router()->runController($requestParams);
+					echo "\n".'"'.$responseIndex.'" : '.ob_get_clean().",\n";
+				}
 			}
 			echo "success:true\n}\n";	
 	}
@@ -682,5 +715,29 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		}
 
 		return $response;
+	}
+	
+	
+	
+	protected function actionSaveState($params){
+		//close writing to session so other concurrent requests won't be locked out.
+		GO::session()->closeWriting();
+
+		$values = json_decode($params['values'], true);
+
+		foreach($values as $name=>$value){
+			
+			$state = GO_Base_Model_State::model()->findByPk(array('name'=>$name,'user_id'=>GO::user()->id));
+			
+			if(!$state){
+				$state = new GO_Base_Model_State();
+				$state->name=$name;
+			}
+			
+			$state->value=$value;
+			$state->save();
+		}
+		$response['success']=true;
+		echo json_encode($response);
 	}
 }

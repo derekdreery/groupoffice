@@ -41,3 +41,9 @@ $af['NO']='{address}
 {zip} {city}
 {state}
 {country}';
+
+$af['SV']='{address}
+{address_no}
+{zip} {city}
+{state}
+{country}';

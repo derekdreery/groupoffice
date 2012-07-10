@@ -19,7 +19,7 @@ GO.files.FilesContextMenu = function(config)
 	}
 	config['shadow']='frame';
 	config['minWidth']=180;
-	
+
 	this.downloadButton = new Ext.menu.Item({
 		iconCls: 'btn-save',
 		text: GO.lang.download,
@@ -28,13 +28,13 @@ GO.files.FilesContextMenu = function(config)
 			window.open(GO.url("files/file/download",{
 				id:this.records[0].data.id,
 				inline:false
-				}));						
+				}));
 		},
 		scope: this
 	});
-				
-	
-	
+
+
+
 	/*this.pasteButton = new Ext.menu.Item({
 					iconCls: 'btn-paste',
 					text: 'Paste',
@@ -43,7 +43,7 @@ GO.files.FilesContextMenu = function(config)
 						this.fireEvent('paste', this);
 					},
 					scope: this
-				});*/				
+				});*/
 
 	this.deleteButton = new Ext.menu.Item({
 		iconCls: 'btn-delete',
@@ -73,8 +73,8 @@ GO.files.FilesContextMenu = function(config)
 		},
 		scope: this
 	});
-				
-				
+
+
 	this.lockButton = new Ext.menu.Item({
 		iconCls: 'btn-lock',
 		text: GO.files.lang.lock,
@@ -88,7 +88,7 @@ GO.files.FilesContextMenu = function(config)
 					locked_user_id:GO.settings.user_id
 				},
 				success:function(action, response, result){
-				
+
 					var filesModulePanel = GO.mainLayout.getModulePanel('files');
 					if(filesModulePanel && filesModulePanel.folder_id==this.records[0].data.folder_id) {
 						filesModulePanel.getActiveGridStore().load();
@@ -96,7 +96,7 @@ GO.files.FilesContextMenu = function(config)
 						filesModulePanel.filePanel.setVisible(true);
 						filesModulePanel.filePanel.load(this.records[0].json.id,true);
 					}
-					
+
 					if (!GO.util.empty(GO.files.fileBrowser))
 						GO.files.fileBrowser.gridStore.load();
 					if (!GO.util.empty(GO.selectFileBrowser))
@@ -136,7 +136,7 @@ GO.files.FilesContextMenu = function(config)
 			})
 		}
 	})
-	
+
 	this.compressButton = new Ext.menu.Item({
 		iconCls: 'btn-compress',
 		text: GO.lang.compress,
@@ -155,9 +155,9 @@ GO.files.FilesContextMenu = function(config)
 		},
 		scope: this
 	});
-	
+
 	config['items']=[this.downloadButton];
-				
+
 	if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission)
 	{
 		this.gotaButton = new Ext.menu.Item({
@@ -173,21 +173,21 @@ GO.files.FilesContextMenu = function(config)
 	}
 	config['items'].push(this.lockButton);
 	config['items'].push(this.unlockButton);
-				
 
-	config['items'].push({ 
+
+	config['items'].push({
 		iconCls: 'btn-properties',
-		text: GO.lang['strProperties'], 
+		text: GO.lang['strProperties'],
 		handler: function(){
 			this.fireEvent('properties', this, this.records);
 		},
-		scope:this					
+		scope:this
 	});
-	
+
 	config['items'].push(new Ext.menu.Separator());
 	config['items'].push(this.cutButton);
 	config['items'].push(this.copyButton);
-	//this.pasteButton,				
+	//this.pasteButton,
 	config['items'].push(new Ext.menu.Separator());
 	config['items'].push(this.deleteButton);
 	config['items'].push(this.compressSeparator = new Ext.menu.Separator());
@@ -195,15 +195,15 @@ GO.files.FilesContextMenu = function(config)
 	config['items'].push(this.decompressButton);
 
 	this.createDownloadLinkButton = new Ext.menu.Item({
-			iconCls: 'btn-save',
-			text: GO.files.lang.createDownloadLink,
-			cls: 'x-btn-text-icon',
-			handler: function(){
-				this.fireEvent('download_link', this, this.records, this.clickedAt, false);
-			},
-			scope: this
-		});
-		config['items'].push(this.createDownloadLinkButton);
+		iconCls: 'btn-save',
+		text: GO.files.lang.createDownloadLink,
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			this.fireEvent('download_link', this, this.records, this.clickedAt, false);
+		},
+		scope: this
+	});
+	config['items'].push(this.createDownloadLinkButton);
 
 	if(GO.settings.modules.email) {
 		this.downloadLinkButton = new Ext.menu.Item({
@@ -216,12 +216,23 @@ GO.files.FilesContextMenu = function(config)
 			scope: this
 		});
 		config['items'].push(this.downloadLinkButton);
+
+		this.emailFilesButton = new Ext.menu.Item({
+			iconCls: 'em-btn-email-files',
+			text: GO.email.lang.emailFiles,
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				this.fireEvent('email_files', this, this.records);
+			},
+			scope: this
+		});
+		config['items'].push(this.emailFilesButton);
 	}
-				
+
 	GO.files.FilesContextMenu.superclass.constructor.call(this, config);
-	
+
 	this.addEvents({
-		
+
 		'properties' : true,
 		'paste' : true,
 		'cut' : true,
@@ -229,29 +240,30 @@ GO.files.FilesContextMenu = function(config)
 		'delete' : true,
 		'compress' : true,
 		'decompress' : true,
-		'download_link' : true
-		
+		'download_link' : true,
+		'email_files' : true
+
 	});
-	
+
 }
 
 Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
-	/*tree or grid */	
-	
+	/*tree or grid */
+
 	clickedAt : 'grid',
-	
-	records : [],	
-		
+
+	records : [],
+
 	showAt : function(xy, records, clickedAt)
-	{ 	
+	{
 		if(clickedAt)
 			this.clickedAt = clickedAt;
-	
+
 		var extension = '';
 		this.records = records;
 		if(records.length=='1')
-		{				
-			extension = records[0].data.extension;				
+		{
+			extension = records[0].data.extension;
 			
 			switch(extension)
 			{
@@ -265,8 +277,9 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 					this.decompressButton.show();
 					this.compressButton.hide();
 					this.downloadLinkButton.show();
+					this.createDownloadLinkButton.show();
 					break;
-		 		
+
 				case '':
 					if (records[0].data.type=='Map') {
 						this.downloadButton.hide();
@@ -282,6 +295,7 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 						this.decompressButton.show();
 						this.compressButton.hide();
 						this.downloadLinkButton.show();
+						this.createDownloadLinkButton.show();
 					}
 					break;
 				case 'folder':
@@ -293,37 +307,40 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 					this.decompressButton.hide();
 					clickedAt == 'tree' ? this.compressButton.hide() : this.compressButton.show();
 					this.downloadLinkButton.hide();
-		 			
+					this.createDownloadLinkButton.hide();
+
 					break;
-		 		
+
 				default:
 					this.lockButton.show();
 					if(this.gotaButton)
 						this.gotaButton.show();
-					
+
 					this.lockButton.setDisabled(this.records[0].data.locked_user_id>0);
 					this.unlockButton.setVisible(this.records[0].data.locked_user_id>0);
 					this.unlockButton.setDisabled(!this.records[0].data.unlock_allowed);
-					
+
 					if(this.gotaButton)
 						this.gotaButton.setDisabled(this.records[0].data.permission_level<GO.permissionLevels.write || (this.records[0].data.locked_user_id>0 &&this.records[0].data.locked_user_id!=GO.settings.user_id));
-					
+
 					this.downloadButton.show();
 					clickedAt == 'tree' ? this.compressButton.hide() : this.compressButton.show();
 					this.decompressButton.hide();
 					this.downloadLinkButton.show();
-					break;	 		
+					this.createDownloadLinkButton.show();
+					break;
 			}
 		}else
 		{
 			clickedAt == 'tree' ? this.compressButton.hide() : this.compressButton.show();
 			this.decompressButton.hide();
 			this.downloadButton.hide();
-			
+			this.createDownloadLinkButton.hide();
+
 			if(this.gotaButton)
 				this.gotaButton.hide();
 		}
 
 		GO.files.FilesContextMenu.superclass.showAt.call(this, xy);
-	}	
+	}
 });

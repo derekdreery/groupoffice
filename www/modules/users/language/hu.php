@@ -1,6 +1,6 @@
 <?php
 
-﻿;
+;
 $l["cmdCheckColumnRead"]= 'Use';
 $l["cmdCheckColumnWrite"]= 'Kezelés';
 $l["cmdHeaderColumnName"]= 'Modul neve';

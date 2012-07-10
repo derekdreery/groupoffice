@@ -80,18 +80,31 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	 * @return mixed property value
 	 * @see getAttribute
 	 */
-	public function __get($name) {
-		if (isset($this->attributes[$name])) {
+	public function __get($name) {		
+		
+		$getter = 'get'.$name;
+		if(method_exists($this, $getter))
+			return $this->$getter();
+		else	if (isset($this->attributes[$name])) {
 			return $this->attributes[$name];
 		}
 	}
 	
 	public function __set($name, $value){
-		$this->attributes[$name]=$value;
+		$setter = 'set'.$name;
+		if(method_exists($this, $setter))
+			return $this->$setter($name, $value);
+		else
+			$this->attributes[$name]=$value;
 	}
 	
 	public function __isset($name) {
-		return isset($this->attributes['name']);
+		$value = $this->__get($name);
+		return isset($value);
+	}
+	
+	public function __unset($name) {
+		unset($this->attributes[$name]);
 	}
 
 	/**
@@ -141,28 +154,16 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	/**
 	 * Get an array of attachments in this message.
 	 * 
-	 * @return array
+	 * @return array GO_Email_Model_MessageAttachment
 	 * 
-	 * The array is formatted like this:
-	 * 
-	 * indexed by $a['number']
-	 * 
-	 * $a['url']='';
-	 *  $a['name']=$filename;
-			$a['number']="2";
-			$a['content_id']=$content_id;
-			$a['mime']=$mime_type;
-			$a['tmp_file']=false;
-			$a['index']=count($this->_attachments);
-			$a['size']=isset($part->body) ? strlen($part->body) : 0;
-			$a['human_size']= GO_Base_Util_Number::formatSize($a['size']);
-			$a['extension']=  $f->extension();
-			$a['encoding'] = isset($part->headers['content-transfer-encoding']) ? $part->headers['content-transfer-encoding'] : '';
-			$a['disposition'] = isset($part->disposition) ? $part->disposition : ''; 
 	 */
 	
 	public function &getAttachments() {
 		return $this->attachments;
+	}
+	
+	public function addAttachment(GO_Email_Model_MessageAttachment $a){
+		$this->attachments[$a->number]=$a;
 	}
 	
 	public function isAttachment($number){
@@ -204,36 +205,40 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 
 			$file = GO_Base_Fs_File::tempFile($filename);
 			$file->putContents(convert_uudecode($matches[4][$i]));
-
-			$this->attachments["UU".$i]=array(
-				"url"=>GO::url('core/downloadTempFile', array('path'=>$file->stripTempPath())),
-				'name'=>$filename,
-				"content_id"=>"",
-				"mime"=>$file->mimeType(),
-				'disposition'=>'attachment',
-				'encoding'=>'',
-				"tmp_file"=>$file->path(),
-				"index"=>-1,				
-				'size'=>$file->size(),
-				'human_size'=>$file->humanSize(),
-				"extension"=>$file->extension()
-			);
+			
+			$a = GO_Email_Model_MessageAttachment::model()->createFromTempFile($file);
+			$a->number = "UU".$i;
+			$this->addAttachment($a);
+			
+//			$this->attachments["UU".$i]=array(
+//				"url"=>GO::url('core/downloadTempFile', array('path'=>$file->stripTempPath())),
+//				'name'=>$filename,
+//				"content_id"=>"",
+//				"mime"=>$file->mimeType(),
+//				'disposition'=>'attachment',
+//				'encoding'=>'',
+//				"tmp_file"=>$file->path(),
+//				"index"=>-1,				
+//				'size'=>$file->size(),
+//				'human_size'=>$file->humanSize(),
+//				"extension"=>$file->extension()
+//			);
     }
 		
     //remove it from the body.
     $body = preg_replace($regex, "", $body);
 	}
 
-	/** 
-	 * Return the URL to display the attachment
-	 * 
-	 * @param array $attachment See getAttachments
-	 * @return string 
-	 */
-	protected function getAttachmentUrl($attachment) {
-		return '';
-	}
-	
+//	/** 
+//	 * Return the URL to display the attachment
+//	 * 
+//	 * @param array $attachment See getAttachments
+//	 * @return string 
+//	 */
+//	protected function getAttachmentUrl($attachment) {
+//		return '';
+//	}
+//	
 	private function _convertRecipientArray($r){
 		$new = array();
 		foreach($r as $email=>$personal)
@@ -262,7 +267,9 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		$response['notification'] = $this->disposition_notification_to;
 		$response['subject'] = $this->subject;
 		
-		$response['seen']=$this->seen;
+		//seen is expensive because it can't be recovered from cache.
+		// We'll use the grid to check if a message was seen or not.
+		//$response['seen']=$this->seen;
 				
 		$from = $this->from->getAddress();
 		$response['from'] = $from['personal'];
@@ -299,15 +306,17 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 
 		$attachments = $this->getAttachments();
 
-		foreach($attachments as $a){
+		foreach($attachments as $att){
 			$replaceCount = 0;
+			
+			$a = $att->getAttributes();				
 			
 			//add unique token for detecting precense of inline attachment when we submit the message in handleFormInput
 			$a['token']=md5($a['tmp_file']);
 			$a['url'] .= '&amp;token='.$a['token'];				
 
 			
-			if (!empty($a['content_id']))
+			if ($html && !empty($a['content_id']))
 				$response['htmlbody'] = str_replace('cid:' . $a['content_id'], $a['url'], $response['htmlbody'], $replaceCount);
 
 			if ($a['name'] == 'smime.p7s') {
@@ -328,4 +337,5 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		return $response;
 	}
 
+	
 }

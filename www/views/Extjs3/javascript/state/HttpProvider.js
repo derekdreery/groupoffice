@@ -45,8 +45,7 @@
  */
 GO.state.HttpProvider = function(config){
 	GO.state.HttpProvider.superclass.constructor.call(this);
-	this.url = BaseHref+"state.php";
-    
+	this.url = GO.url("core/saveState"); 
 	/*
     if(!config.jsonState)
     {
@@ -120,7 +119,6 @@ Ext.extend(GO.state.HttpProvider, Ext.state.Provider, {
 		Ext.Ajax.request({
 			url: this.url,
 			params: {
-				task: 'set',
 				values:Ext.encode(this.changedValues)
 			},
 			callback : callback,
@@ -134,7 +132,6 @@ Ext.extend(GO.state.HttpProvider, Ext.state.Provider, {
 		Ext.Ajax.request({
 			url: this.url,
 			params: {
-				task: 'set',
 				'name': name,
 				'value': 'null'
 			}

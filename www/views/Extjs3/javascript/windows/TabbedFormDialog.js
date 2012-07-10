@@ -39,6 +39,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	submitAction : 'submit',
 	
 	loadAction : 'load',
+	
+	forceTabs : false,
 
 	/**
 	 * The controller will be called with this post parameter.
@@ -144,15 +146,18 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 
 		this.addCustomFields();
 		
-		this.formPanel = new Ext.form.FormPanel({
+		this.formPanelConfig=this.formPanelConfig || {};
+		this.formPanelConfig = Ext.apply(this.formPanelConfig, {
 			waitMsgTarget:true,			
 			border: false,
 			fileUpload: this.fileUpload,
 			baseParams : {},
 			layout:'fit'
 		});
+		
+		this.formPanel = new Ext.form.FormPanel(this.formPanelConfig);
 
-		if(this._panels.length > 1) {		    
+		if(this._panels.length > 1 || this.forceTabs) {		    
 			this._tabPanel = new Ext.TabPanel({
 				activeTab: 0,
 				enableTabScroll:true,

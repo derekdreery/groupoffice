@@ -45,13 +45,13 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		//'<tr><td><b>'+GO.lang.strSize+'</b></td><td>: {size}</td></tr>'+
 		'<tr><td><b>'+GO.email.lang.to+'</b></td><td>: '+
 		'<tpl for="to">'+
-		'{personal} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.name)]}\');">{email}</a>&gt;; </tpl>'+	
+		'{personal} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.personal)]}\');">{email}</a>&gt;; </tpl>'+	
 		'</tpl>'+
 		'</td></tr>'+
 		'<tpl if="cc.length">'+
 		'<tr><td><b>'+GO.email.lang.cc+'</b></td><td>: '+
 		'<tpl for="cc">'+
-		'{personal} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.name)]}\');">{email}</a>&gt;; </tpl>'+	
+		'{personal} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.personal)]}\');">{email}</a>&gt;; </tpl>'+	
 		'</tpl>'+
 		'</td></tr>'+
 		'</tpl>'+
@@ -343,21 +343,6 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		
 		this.body.scrollTo('top',0);
 		
-		if(!this.data.seen && this.data.notification)
-		{
-			if(GO.email.alwaysRespondToNotifications || confirm(GO.email.lang.sendNotification.replace('%s', this.data.notification)))
-			{
-				GO.request({
-					url: "email/message/notification",
-					params: {					
-						account_id: this.account_id,
-						message_to:this.data.to_string,
-						notification_to: this.data.notification,
-						subject: this.data.subject
-					}
-				});
-			}
-		}
 	},
 	
 	onAttachmentContextMenu : function (e, target){

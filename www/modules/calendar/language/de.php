@@ -117,7 +117,6 @@ $l['event']='Ereignis';
 $l['startsAt']='Beginnt am';
 $l['endsAt']='Endet am';
 $l['exceptionNoCalendarID']='ACHTUNG: Keine Kalender-ID!';
-$l['appointment']='Termin: ';
 $l['allTogether']='Alle zusammen';
 $l['location']='Ort';
 $l['invited']='Sie sind zu folgendem Termin eingeladen';

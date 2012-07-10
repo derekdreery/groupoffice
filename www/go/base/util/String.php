@@ -647,17 +647,19 @@ class GO_Base_Util_String {
 	 * @return string
 	 */
 
-	public static function cut_string($string, $maxlength, $cut_whole_words = true) {
+	public static function cut_string($string, $maxlength, $cut_whole_words = true, $append='...') {
 		if (strlen($string) > $maxlength) {
 			
 			$substrFunc = function_exists('mb_substr') ? 'mb_substr' : 'substr';
 			
-			$temp = $substrFunc($string, 0, $maxlength -3);
+			$maxlength -= strlen($append);
+			
+			$temp = $substrFunc($string, 0, $maxlength);
 			if ($cut_whole_words) {
 				if ($pos = strrpos($temp, ' ')) {
-					return $substrFunc($temp, 0, $pos).'...';
+					return $substrFunc($temp, 0, $pos).$append;
 				} else {
-					return $temp = $substrFunc($string, 0, $maxlength -3).'...';
+					return $temp = $substrFunc($string, 0, $maxlength).$append;
 				}
 			} else {
 				return $temp.'...';
@@ -1314,6 +1316,10 @@ class GO_Base_Util_String {
 	 */
 	public static function length($str){
 		return function_exists("mb_strlen") ? mb_strlen($str, 'UTF-8') : strlen($str);
+	}
+	
+	public static function substr($string, $start, $length=null){
+		return function_exists("mb_substr") ? mb_substr($string, $start, $length) : substr($string, $start, $length);
 	}
 
 }

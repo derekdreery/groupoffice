@@ -42,5 +42,5 @@ class GO_Base_Model_ReminderUser extends GO_Base_Db_ActiveRecord {
 	public function primaryKey() {
 		return array('reminder_id','user_id');
 	}
-  
+	  
 }

@@ -44,7 +44,7 @@ $l['accept_confirm']='Proprietarul va fi avertizat căci ai acceptat evenimentul
 $l['decline_title']='Refuzat';
 $l['decline_confirm']='Proprietarul va fi avertizat căci ai refuzat evenimentul';
 $l['cumulative']='Regulă de repetare eronată. Următorul eveniment nu poate începe înainte de a fi terminat cel precedent.';
-﻿;
+;
 $l["addressbook"]='Agendă';
 $l["appointment"]= 'Programare';
 $l["appointments"]= 'Programări';

@@ -66,7 +66,21 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 						composer.on('hide', this.reload, this, {single:true});
 					},
 					scope: this
-				}];
+				},this.linkButton = new Ext.Button({
+					iconCls: 'btn-link',
+					text: GO.lang.cmdLink,
+					hidden:true,
+					handler: function(){
+						if(!this.linksDialog)
+						{
+							this.linksDialog = new GO.dialog.LinksDialog();							
+						}
+
+						this.linksDialog.setSingleLink(this.data.id, "GO_Savemailas_Model_LinkedEmail");
+						this.linksDialog.show();
+								},
+					scope: this
+				})];
 
 		GO.email.LinkedMessagePanel.superclass.initComponent.call(this);
 	},
@@ -122,6 +136,12 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 			success: function(options, response, data)
 			{				
 				this.setMessage(data);
+				
+				
+				if(this.data.is_linked_message)
+					this.linkButton.show();
+				else
+					this.linkButton.hide();
 			}
 		});
 	},

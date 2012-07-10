@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `go_acl` (
   `acl_id` int(11) NOT NULL DEFAULT '0',
   `user_id` int(11) NOT NULL DEFAULT '0',
   `group_id` int(11) NOT NULL DEFAULT '0',
-  `level` tinyint(4) NOT NULL DEFAULT '1',
+  `level` tinyint(4) NOT NULL DEFAULT '10',
   PRIMARY KEY (`acl_id`,`user_id`,`group_id`),
   KEY `acl_id` (`acl_id`,`user_id`),
   KEY `acl_id_2` (`acl_id`,`group_id`)

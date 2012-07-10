@@ -781,9 +781,20 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		//$ct->offsetUnset('VALUE');
 		$e->add($ct);
 		
-    $e->summary = $this->name;
+    $e->summary = (string) $this->name;
 		
-		$e->status = $this->status;
+		switch($this->owner_status){
+			case GO_Calendar_Model_Participant::STATUS_ACCEPTED:
+				$e->status = "CONFIRMED";
+				break;
+			case GO_Calendar_Model_Participant::STATUS_DECLINED:
+				$e->status = "CANCELLED";
+				break;
+			default:
+				$e->status = "TENTATIVE";
+				break;			
+		}
+		
 		
 		$dateType = $this->all_day_event ? Sabre_VObject_Element_DateTime::DATE : Sabre_VObject_Element_DateTime::LOCALTZ;
 		
@@ -1036,6 +1047,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->reminder = $this->start_time-$reminderTime->format('U');
 		}
 
+		$this->cutAttributeLengths();
+		
 		$this->save();
 		
 		if(!empty($exception)){			

@@ -76,7 +76,7 @@ class GO_Core_Controller_Export extends GO_Base_Controller_AbstractController {
 					$showInView=$class->getStaticPropertyValue('showInView');
 					$name = $class->getStaticPropertyValue('name');
 					$useOrientation = $class->getStaticPropertyValue('useOrientation');
-					
+
 					if($showInView)
 						$defaultTypes[$classname] = array('name'=>$name,'useOrientation'=>$useOrientation);
 				}

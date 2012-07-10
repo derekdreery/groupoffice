@@ -244,6 +244,13 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $allow_duplicate_email = false;
+	
+	/**
+	 * The font used in all HTML editor including the E-mail editor
+	 * 
+	 * @var string 
+	 */
+	public $html_editor_font = "font-size:13px; font-family:Arial, Helvetica, sans-serif;";
 
 
 	/**
@@ -299,14 +306,14 @@ class GO_Base_Config {
 	 */
 	var $host = '/groupoffice/';
 
-	/**
-	 * Useful to force https://your.host:433 or something like that
-	 *
-	 * @var bool
-	 * @access  public
-	 */
-
-	var $force_login_url = false;
+//	/**
+//	 * Useful to force https://your.host:433 or something like that
+//	 *
+//	 * @var bool
+//	 * @access  public
+//	 */
+//
+//	var $force_login_url = false;
 
 	/**
 	 * Full URL to reach Group-Office with slash on end. This value is determined
@@ -339,7 +346,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $help_link = 'http://www.group-office.com/wiki/';
+	var $help_link = 'http://wiki4.group-office.com/wiki/';
 
 
 	/**
@@ -723,7 +730,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.0.38';
+	var $version = '4.0.68';
 
 
 	/* The permissions mode to use when creating files
@@ -753,7 +760,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20120618';
+	var $mtime = '20120710';
 
 	#group configuration
 	/**
@@ -1061,6 +1068,8 @@ class GO_Base_Config {
 			GO::debug('Peak memory usage:'.round(memory_get_peak_usage()/1048576,2).'MB', $this);
 			GO::debug("--------------------\n", $this);
 		}
+		
+		GO::endRequest();
 		
 		$this->_logSlowRequest();
 	}

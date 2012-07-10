@@ -20,18 +20,18 @@ global $GO_CONFIG, $GO_INCLUDES, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $GO_EV
 
 
 //$config_file = $GLOBALS['GO_CONFIG']->get_config_file();
-if(empty($GLOBALS['GO_CONFIG']->db_user))
+if(!GO::isInstalled())
 {
 	header('Location: install/');
 	exit();
 }
 
-//Redirect to correct login url if a force_login_url is set. Useful to force ssl
-if($GLOBALS['GO_CONFIG']->force_login_url && strpos($GLOBALS['GO_CONFIG']->full_url,$GLOBALS['GO_CONFIG']->force_login_url)===false) {
-	unset($_SESSION['GO_SESSION']['full_url']);
-	header('Location: '.$GLOBALS['GO_CONFIG']->force_login_url);
-	exit();
-}
+////Redirect to correct login url if a force_login_url is set. Useful to force ssl
+//if($GLOBALS['GO_CONFIG']->force_login_url && strpos($GLOBALS['GO_CONFIG']->full_url,$GLOBALS['GO_CONFIG']->force_login_url)===false) {
+//	unset($_SESSION['GO_SESSION']['full_url']);
+//	header('Location: '.$GLOBALS['GO_CONFIG']->force_login_url);
+//	exit();
+//}
 //
 //$mtime = $GLOBALS['GO_CONFIG']->get_setting('upgrade_mtime');
 //

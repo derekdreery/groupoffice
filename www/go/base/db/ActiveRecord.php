@@ -610,8 +610,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			return $this->_pdo;
 		else
 			return GO::getDbConnection();
-		
-		return $this->_pdo;
 	}
 	
 	/**
@@ -934,17 +932,26 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		return $model;		
 	}
 	
-	private function _getDefaultFindSelectFields($single=false){
+	/**
+	 * Get all default select fields. It excludes BLOBS and TEXT fields.
+	 * This function is used by find.
+	 * 
+	 * @param boolean $single
+	 * @param string $tableAlias
+	 * @return string 
+	 */
+	public function getDefaultFindSelectFields($single=false, $tableAlias='t'){
 		
 		if($single)
-			return 't.*';
+			return $tableAlias.'.*';
 		
 		foreach($this->columns as $name=>$attr){
 			if($attr['gotype']!='blob' && $attr['gotype']!='textarea')
 				$fields[]=$name;
 		}
 		
-		return "`t`.`".implode('`, `t`.`', $fields)."`";
+		
+		return "`$tableAlias`.`".implode('`, `'.$tableAlias.'`.`', $fields)."`";
 	}
 	
 
@@ -1041,7 +1048,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$fetchObject= true;
 		if(empty($params['fields'])){
-			$params['fields']=$this->_getDefaultFindSelectFields(isset($params['limit']) && $params['limit']==1);
+			$params['fields']=$this->getDefaultFindSelectFields(isset($params['limit']) && $params['limit']==1);
 			//$fetchObject= true;
 		}else
 		{
@@ -1057,7 +1064,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 			$cfModel = GO::getModel($this->customfieldsModel());
 			
-			$sql .= ",cf.* ";
+			$selectFields = $cfModel->getDefaultFindSelectFields(isset($params['limit']) && $params['limit']==1, 'cf');
+			if(!empty($selectFields))
+				$sql .= ", ".$selectFields;
 		}
 		
 		
@@ -1401,7 +1410,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		//throw new Exception('Error: you supplied a searchQuery parameter to find but getFindSearchQueryParamFields() should be overriden in '.$this->className());
 		$fields = array();
 		foreach($this->columns as $field=>$attributes){
-			if(isset($attributes['gotype']) && ($attributes['gotype']=='textfield' || $attributes['gotype']=='textarea' || $attributes['gotype']=='customfield'))
+			if(isset($attributes['gotype']) && ($attributes['gotype']=='textfield' || $attributes['gotype']=='textarea' || ($attributes['gotype']=='customfield' && $attributes['customfield']->customfieldtype->includeInSearches())))
 				$fields[]='`'.$prefixTable.'`.`'.$field.'`';
 		}
 		
@@ -1689,7 +1698,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					return  GO_Base_Util_Number::unlocalize($value);
 					break;
 				case 'boolean':
-					return  empty($value) ? 0 : 1; 
+					$ret= empty($value) || $value==="false" ? 0 : 1; 
+					return $ret;
 					break;				
 				case 'date':
 					return  GO_Base_Util_Date::to_db_date($value);
@@ -2101,14 +2111,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	/**
 	 * Saves the model to the database
 	 * 
+	 * @var boolean $ignoreAcl
 	 * @return boolean 
 	 */
 	
-	public function save(){
+	public function save($ignoreAcl=false){
 			
 		//GO::debug('save'.$this->className());
 			
-		if(!$this->checkPermissionLevel($this->isNew?GO_Base_Model_Acl::CREATE_PERMISSION:GO_Base_Model_Acl::WRITE_PERMISSION)){
+		if(!$ignoreAcl && !$this->checkPermissionLevel($this->isNew?GO_Base_Model_Acl::CREATE_PERMISSION:GO_Base_Model_Acl::WRITE_PERMISSION)){
 			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : '';
 			throw new GO_Base_Exception_AccessDenied($msg);
 		}
@@ -2439,21 +2450,35 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 			$attr = array_merge($autoAttr, $attr);
 			
-			//make sure these attributes are not too long
-			if(GO_Base_Util_String::length($attr['name'])>100)
-				$attr['name']=substr($attr['name'], 0, 100);
-			
-			if(GO_Base_Util_String::length($attr['description'])>255)
-				$attr['description']=substr($attr['description'], 0, 255);
+//			//make sure these attributes are not too long
+//			if(GO_Base_Util_String::length($attr['name'])>100)
+//				$attr['name']=substr($attr['name'], 0, 100);
+//			
+//			if(GO_Base_Util_String::length($attr['description'])>255)
+//				$attr['description']=GO_Base_Util_String::substr($attr['description'], 0, 255);
 			
 			//GO::debug($attr);
 
 			$model->setAttributes($attr, false);
+			$model->cutAttributeLengths();
 			$model->save();
 			return $model;
 			
 		}
 		return false;
+	}
+	
+	
+	/**
+	 * Cut all attributes to their maximum lengths. Useful when importing stuff. 
+	 */
+	public function cutAttributeLengths(){
+		$attr = $this->getModifiedAttributes();
+		foreach($attr as $attribute=>$oldVal){
+			if(!empty($this->columns[$attribute]['length']) && GO_Base_Util_String::length($this->_attributes[$attribute])>$this->columns[$attribute]['length']){
+				$this->_attributes[$attribute]=GO_Base_Util_String::substr($this->_attributes[$attribute], 0, $this->columns[$attribute]['length']);
+			}
+		}
 	}
 	
 	public function getCachedSearchRecord(){
@@ -2924,6 +2949,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function __unset($name)
 	{		
+		GO::debug("Unset: ".$name);
 		unset($this->_attributes[$name]);		
 	}
 	
@@ -3091,9 +3117,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$sql .= "SET ".implode(',',$updates).
 			" WHERE model_type_id=".$model->modelTypeId()." AND model_id=".$model->id;
 		
-//		var_dump($sql);
-//		var_dump($bindParams);
-		
 		$result = $this->getDbConnection()->prepare($sql);
 		return $result->execute($bindParams);
 	}
@@ -3117,9 +3140,20 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$result = $this->getDbConnection()->prepare($sql);
 		$success = $result->execute($values);
 		
-		if($success)
+		if($success){
+			
+			$this->afterUnlink($model);
+			
 			return !$unlinkBack || $model->unlink($this, false);
+		}else
+		{
+			return false;
+		}		
+	}
+	
+	protected function afterUnlink(GO_Base_Db_ActiveRecord $model){
 		
+		return true;
 	}
 	
 	/**

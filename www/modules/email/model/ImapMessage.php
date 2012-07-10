@@ -39,26 +39,29 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	 * 
 	 * @var boolean 
 	 */
-	public $peek=false;
+	public $peek=true;
 	
 	
-	/**
-	 * Set this to true to get temporary files when using toOutputArray() or
-	 * getAttachments. This is necessary when the output is prepared for sending 
-	 * with the composer.
-	 * 
-	 * @var boolean 
-	 */
-	public $createTempFilesForInlineAttachments=false;
+//	/**
+//	 * Set this to true to get temporary files when using toOutputArray() or
+//	 * getAttachments. This is necessary when the output is prepared for sending 
+//	 * with the composer.
+//	 * 
+//	 * @var boolean 
+//	 */
+//	public $createTempFilesForInlineAttachments=false;
 	
-	/**
-	 * Set this to true to get temporary files when using toOutputArray() or
-	 * getAttachments. This is necessary when the output is prepared for sending 
-	 * with the composer.
-	 * 
-	 * @var boolean 
-	 */
-	public $createTempFilesForAttachments=false;
+//	/**
+//	 * Set this to true to get temporary files when using toOutputArray() or
+//	 * getAttachments. This is necessary when the output is prepared for sending 
+//	 * with the composer.
+//	 * 
+//	 * @var boolean 
+//	 */
+//	public $createTempFilesForAttachments=false;
+	
+	
+	public $cacheOnDestruct=false;
 	
 	
 	private $_cache;
@@ -81,9 +84,18 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	 */
 	public function findByUid($account, $mailbox, $uid) {
 
-		$cacheKey=$account->id.':'.$mailbox.':'.$uid;
+		$cacheKey='email:'.$account->id.':'.$mailbox.':'.$uid;
 		
-		if(!isset($this->_cache[$cacheKey])){
+		$cachedMessage = isset($this->_cache[$cacheKey]) ? $this->_cache[$cacheKey] : GO::cache()->get($cacheKey);
+		
+		if($cachedMessage)
+		{
+			GO::debug("Returning message $cacheKey from cache");
+			$cachedMessage->cacheOnDestruct=$cacheKey;
+			return $cachedMessage;
+		}else
+		{
+		
 			$imapMessage = new GO_Email_Model_ImapMessage();
 			$imap = $account->openImapConnection($mailbox);
 
@@ -98,10 +110,20 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 
 			$imapMessage->setAttributes($attributes);
 
+			$imapMessage->cacheOnDestruct=$cacheKey;
+			
 			$this->_cache[$cacheKey]=$imapMessage;
+			
+			return $imapMessage;
+		}		
+	}
+	
+	public function __destruct() {
+		if($this->cacheOnDestruct){
+			$cacheKey=$this->cacheOnDestruct;
+			$this->cacheOnDestruct=false;
+			GO::cache()->set($cacheKey, $this, 3600*24*3);
 		}
-
-		return $this->_cache[$cacheKey];
 	}
 	
 	
@@ -124,6 +146,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		
 		$from = $this->from->getAddress();
 		$attributes['from']=$from["personal"];
+		$attributes['sender']=$from["email"];
 		
 		foreach($this->to->getAddresses() as $email=>$personal)
 			$attributes['to']=$personal.", ";
@@ -254,6 +277,40 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		}
 	}
 	
+	/**
+	 * Unset the flags when we wakeup from the cache. We can't know if the flags have been changed.
+	 * When they are accessed they are fetched from the IMAP server in getSeen. 
+	 * getFlag is not implemented because there was no need for it.
+	 */
+	public function __wakeup() {
+		unset($this->seen);
+		unset($this->flag);
+	}
+	
+	protected function getSeen(){
+		if(isset($this->attributes['seen'])){
+			return $this->attributes['seen'];
+		}else
+		{			
+			//when a message is retrieved from cache, we don't know if the seen flag has been changed.
+			//so when this is requested we fetch it from the IMAP server.
+			$imap = $this->getImapConnection();		
+			$attributes = $imap->get_message_header($this->uid, true);
+			$this->setAttributes($attributes);
+			
+			return $this->attributes['seen'];
+		}
+	}
+	
+//	private function _setSeen(){
+//		
+//		if(!$this->peek && empty($this->seen)){			
+//			$this->seen =true;
+//
+//			$this->getImapConnection()->set_message_flag(array($this->uid), "\Seen");
+//		}
+//	}
+	
 	public function getHtmlBody($asText=false){		
 		if(!isset($this->_htmlBody)){
 			$imap = $this->getImapConnection();		
@@ -272,8 +329,8 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 					}else //if($this->isAttachment($htmlPart['number']))
 					{
 						$attachment =& $this->getAttachment($htmlPart['number']);
-						$attachment['content_id']='go-autogen-'.$htmlPart['number'];
-						$this->_htmlBody .= '<img alt="'.$htmlPart['name'].'" src="cid:'.$attachment['content_id'].'" style="display:block;margin:10px 0;" />';
+						$attachment->content_id='go-autogen-'.$htmlPart['number'];
+						$this->_htmlBody .= '<img alt="'.$htmlPart['name'].'" src="cid:'.$attachment->content_id.'" style="display:block;margin:10px 0;" />';
 					}
 //					else
 //					{
@@ -286,6 +343,9 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 			if(empty($this->_htmlBody) && !$asText){
 				$this->_htmlBody = $this->getPlainBody(true);			
 			}
+		}else
+		{
+//			$this->_setSeen();
 		}
 		
 		if($asText){
@@ -320,11 +380,22 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 							$this->_plainBody.='{inline_'.count($inlineImages).'}';
 							
 							$attachment =& $this->getAttachment($plainPart['number']);
-							$attachment['content_id']='go-autogen-'.$plainPart['number'];
-							$inlineImages[]='<img alt="'.$plainPart['name'].'" src="cid:'.$attachment['content_id'].'" style="display:block;margin:10px 0;" />';
+							$attachment->content_id='go-autogen-'.$plainPart['number'];
+							$inlineImages[]='<img alt="'.$plainPart['name'].'" src="cid:'.$attachment->content_id.'" style="display:block;margin:10px 0;" />';
 						}
 					}
 				}			
+			}
+		}else
+		{
+			foreach($this->_plainParts['parts'] as $plainPart){
+				if($plainPart['type']!='text'){					
+					if($asHtml){					
+						$attachment =& $this->getAttachment($plainPart['number']);
+						$attachment->content_id='go-autogen-'.$plainPart['number'];
+						$inlineImages[]='<img alt="'.$plainPart['name'].'" src="cid:'.$attachment->content_id.'" style="display:block;margin:10px 0;" />';
+					}
+				}
 			}
 		}
 		
@@ -352,32 +423,23 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		}
 	}
 	
-	private function _getTempDir(){
-		$this->_tmpDir=GO::config()->tmpdir.'imap_messages/'.$this->account->id.'-'.$this->mailbox.'-'.$this->uid.'/';
-		if(!is_dir($this->_tmpDir))
-			mkdir($this->_tmpDir, 0755, true);
-		return $this->_tmpDir;
+	public function createTempFilesForAttachments($inlineOnly=false){
+		$atts = $this->getAttachments();
+		
+		foreach($atts as $a){
+			if(!$inlineOnly || $a->isInline()){
+				$a->createTempFile();
+			}
+		}
 	}
-
-	 /*
-	 * @return array
-	 * 
-	 * $a['url']='';
-	 *  $a['name']=$filename;
-			$a['number']=$part_number_prefix.$part_number;
-			$a['content_id']=$content_id;
-			$a['mime']=$mime_type;
-			$a['tmp_file']=false;
-			$a['index']=count($this->attachments);
-			$a['size']=isset($part->body) ? strlen($part->body) : 0;
-			$a['human_size']= GO_Base_Util_Number::formatSize($a['size']);
-			$a['extension']=  $f->extension();
-			$a['encoding'] = isset($part->headers['content-transfer-encoding']) ? $part->headers['content-transfer-encoding'] : '';
-			$a['disposition'] = isset($part->disposition) ? $part->disposition : ''; 
-	 */
+	
 	
 	private $_imapAttachmentsLoaded=false;
 	
+	/**
+	 *
+	 * @return \GO_Email_Model_ImapMessageAttachment [] 
+	 */
 	public function &getAttachments() {
 		if(!$this->_imapAttachmentsLoaded){			
 			
@@ -396,27 +458,30 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 				
 			//var_dump($part);
 				
+				$a = new GO_Email_Model_ImapMessageAttachment();
+				$a->setImapParams($this->account, $this->mailbox, $this->uid);
+				
 				if (empty($part['name']) || $part['name'] == 'false') {
 					if (!empty($part['subject'])) {
-						$a['name'] = GO_Base_Fs_File::stripInvalidChars(GO_Base_Mail_Utils::mimeHeaderDecode($part['subject'])) . '.eml';
+						$a->name = GO_Base_Fs_File::stripInvalidChars(GO_Base_Mail_Utils::mimeHeaderDecode($part['subject'])) . '.eml';
 					} elseif ($part['type'] == 'message') {
-						$a['name'] = isset($part['description']) ? GO_Base_Fs_File::stripInvalidChars($part['description']) . '.eml' : 'message.eml';
+						$a->name = isset($part['description']) ? GO_Base_Fs_File::stripInvalidChars($part['description']) . '.eml' : 'message.eml';
 					} elseif ($part['subtype'] == 'calendar') {
-						$a['name'] = GO::t('event','email') . '.ics';
+						$a->name = GO::t('event','email') . '.ics';
 					} else {
 						if ($part['type'] == 'text') {
-							$a['name'] = $part['subtype'] . '.txt';
+							$a->name = $part['subtype'] . '.txt';
 						} else {
-							$a['name'] = $part['type'] . '-' . $part['subtype'];
+							$a->name = $part['type'] . '-' . $part['subtype'];
 						}
 					}
 				} else {
-					$a['name'] = $imap->mime_header_decode($part['name']);
+					$a->name = $imap->mime_header_decode($part['name']);
 				}
 				
-				$a['disposition'] = isset($part['disposition']) ? $part['disposition'] : '';
-				$a['number'] = $part['number'];
-				$a['content_id']='';
+				$a->disposition = isset($part['disposition']) ? $part['disposition'] : '';
+				$a->number = $part['number'];
+				$a->content_id='';
 				if (!empty($part["id"])) {
 					//when an image has an id it belongs somewhere in the text we gathered above so replace the
 					//source id with the correct link to display the image.
@@ -426,32 +491,25 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 						$tmp_id = substr($part["id"], 1,-1);
 					}
 					$id = $tmp_id;
-					$a['content_id']=$id;
+					$a->content_id=$id;
 				}
 				
-				$f = new GO_Base_Fs_File($a['name']);
-				if(($this->createTempFilesForInlineAttachments && (!empty($a['content_id']) || $a['disposition']=='inline')) || ($this->createTempFilesForAttachments && empty($a['content_id']))){
-					$tmpFile = new GO_Base_Fs_File($this->_getTempDir().$a['name']);				
-					if(!$tmpFile->exists())
-						$imap->save_to_file($this->uid, $tmpFile->path(),  $part['number'], $part['encoding'], true);
-					
-					$a['tmp_file']=$tmpFile->stripTempPath();
-				}else
-				{
-					$a['tmp_file']=false;
-				}
+//				$f = new GO_Base_Fs_File($a->name);
+//				if(($this->createTempFilesForInlineAttachments && (!empty($a->content_id) || $a->disposition=='inline')) || ($this->createTempFilesForAttachments && empty($a->content_id))){
+//					$tmpFile = new GO_Base_Fs_File($this->_getTempDir().$a->name);				
+//					if(!$tmpFile->exists())
+//						$imap->save_to_file($this->uid, $tmpFile->path(),  $part['number'], $part['encoding'], true);
+//					
+//					$a->setTempFile($tmpFile);
+//				}
 							
-				$a['mime']=$part['type'] . '/' . $part['subtype'];
+				$a->mime=$part['type'] . '/' . $part['subtype'];
 				
-				$a['index']=count($this->attachments);
-				$a['size']=$part['size'];
-				$a['human_size']= GO_Base_Util_Number::formatSize($a['size']);
-				$a['extension']=  $f->extension();
-				$a['encoding'] = $part['encoding'];
+				$a->index=count($this->attachments);
+				$a->size=$part['size'];
+				$a->encoding = $part['encoding'];
 				
-				$a['url']=$this->getAttachmentUrl($a);
-				
-				$this->attachments[$a['number']]=$a;
+				$this->addAttachment($a);
 			}			
 		}	
 		
@@ -460,42 +518,50 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	
 	
 	public function getZipOfAttachmentsUrl(){
-		return GO::config()->host.'modules/email/'.
-		'zip_attachments.php?account_id='.$this->account->id.
-		'&mailbox='.urlencode($this->mailbox).
-		'&uid='.$this->uid.'&filename='.urlencode($this->subject);
-	}
-	
-	protected function getAttachmentUrl($attachment) {
-		
-		if(!empty($attachment['tmp_file']))
-			return GO::url('core/downloadTempFile', array('path'=>$attachment['tmp_file']));
-		
-//		$mime = explode('/',$attachment['mime']);
+//		return GO::config()->host.'modules/email/'.
+//		'zip_attachments.php?account_id='.$this->account->id.
+//		'&mailbox='.urlencode($this->mailbox).
+//		'&uid='.$this->uid.'&filename='.urlencode($this->subject);
 //		
-//		return  GO::config()->host."modules/email/attachment.php?".
-//			"account_id=".$this->account->id.
-//			"&amp;mailbox=".urlencode($this->mailbox).
-//			"&amp;uid=".$this->uid.
-//			"&amp;imap_id=".$attachment["number"].
-//			"&amp;encoding=".$attachment["encoding"].
-//			"&amp;type=".$mime[0].
-//			"&amp;subtype=".$mime[1].
-//			"&amp;filename=".urlencode($attachment["name"]);
-		
-		
 		$params = array(
-				"account_id"=>$this->account->id,
-				"mailbox"=>$this->mailbox,
-				"uid"=>$this->uid,
-				"number"=>$attachment['number'],				
-				"encoding"=>$attachment['encoding'],				
-				"filename"=>$attachment['name']
-		);
+					"account_id"=>$this->account->id,
+					"mailbox"=>$this->mailbox,
+					"uid"=>$this->uid					
+			);
 		
-		return GO::url('email/message/attachment', $params);
+		return GO::url('email/message/zipAllAttachments', $params);
 	}
-	
+//	
+//	protected function getAttachmentUrl($attachment) {
+//		
+//		if(!empty($attachment['tmp_file']))
+//			return GO::url('core/downloadTempFile', array('path'=>$attachment['tmp_file']));
+//		
+////		$mime = explode('/',$attachment['mime']);
+////		
+////		return  GO::config()->host."modules/email/attachment.php?".
+////			"account_id=".$this->account->id.
+////			"&amp;mailbox=".urlencode($this->mailbox).
+////			"&amp;uid=".$this->uid.
+////			"&amp;imap_id=".$attachment["number"].
+////			"&amp;encoding=".$attachment["encoding"].
+////			"&amp;type=".$mime[0].
+////			"&amp;subtype=".$mime[1].
+////			"&amp;filename=".urlencode($attachment["name"]);
+//		
+//		
+//		$params = array(
+//				"account_id"=>$this->account->id,
+//				"mailbox"=>$this->mailbox,
+//				"uid"=>$this->uid,
+//				"number"=>$attachment['number'],				
+//				"encoding"=>$attachment['encoding'],				
+//				"filename"=>$attachment['name']
+//		);
+//		
+//		return GO::url('email/message/attachment', $params);
+//	}
+//	
 	
 	
 	

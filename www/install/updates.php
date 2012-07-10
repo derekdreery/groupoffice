@@ -247,5 +247,15 @@ $updates["201206110852"][]="ALTER TABLE `go_link_folders` CHANGE `model_id` `mod
 $updates["201206110852"][]="ALTER TABLE `go_link_folders` CHANGE `model_type_id` `model_type_id` INT( 11 ) NOT NULL DEFAULT '0'";
 $updates["201206110852"][]="ALTER TABLE `go_link_folders` CHANGE `parent_id` `parent_id` INT( 11 ) NOT NULL DEFAULT '0'";
 
-$updates["201206271200"][]="ALTER TABLE `go_holidays` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
-$updates["201206280900"][]="ALTER TABLE `go_holidays` CHANGE `region` `region` VARCHAR( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+
+// Change permission levels to new values
+$updates["201206191425"][]="UPDATE `go_acl` SET `level`=10 WHERE `level`=1;";
+$updates["201206191425"][]="UPDATE `go_acl` SET `level`=30 WHERE `level`=2;";
+$updates["201206191425"][]="UPDATE `go_acl` SET `level`=40 WHERE `level`=3;";
+$updates["201206191425"][]="UPDATE `go_acl` SET `level`=50 WHERE `level`=4;";
+
+
+$updates["201206191755"][]="ALTER TABLE `go_acl` CHANGE `level` `level` TINYINT( 4 ) NOT NULL DEFAULT '10'";
+
+$updates["201207101616"][]="ALTER TABLE `go_holidays` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
+$updates["201207101616"][]="ALTER TABLE `go_holidays` CHANGE `region` `region` VARCHAR( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";

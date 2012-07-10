@@ -237,15 +237,42 @@ class GO_Sites_Controller_User extends GO_Sites_Components_AbstractFrontControll
 			$user->attributes = $_POST['GO_Base_Model_User'];
 			$company->attributes = $_POST['GO_Addressbook_Model_Company'];
 			
-			if($user->save()){
+			if(!empty($params['post_address_is_address']))
+				$company->setPostAddressFromVisitAddress();
+
+			GO_Base_Html_Error::validateModel($user);
+			GO_Base_Html_Error::validateModel($contact);
+			GO_Base_Html_Error::validateModel($company);
+			
+			if(!GO_Base_Html_Error::hasErrors()){
+				$user->save();
+
 				$company->save();
 				$contact->company_id = $company->id;				
 				$contact->save();
 				GOS::site()->notifier->setMessage('success', GOS::t('formEditSuccess'));
+				$this->pageRedirect($this->getPage()->path);
 			}
 		}
 
+		$company->post_address_is_address = false;
+	
+		if($company->address==$company->post_address && 
+			 $company->address_no==$company->post_address_no &&
+			 $company->city==$company->post_city
+			){
+			 $company->post_address_is_address = true;
+		}
+				
+		$params['user'] = $user;
+		$params['contact'] = $contact;
+		$params['company'] = $company;
+
+		$this->getPage()->attachHeaderInclude('js',$this->getRootTemplateUrl().'js/jquery-1.7.2.min.js');
+		$this->getPage()->attachHeaderInclude('js',$this->getRootTemplateUrl().'js/profileToggle.js');		
+		
 		$this->render('profile', array('user'=>$user,'contact'=>$contact));
+
 	}
 
 }

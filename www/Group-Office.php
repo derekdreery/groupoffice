@@ -112,8 +112,8 @@ if(!is_int($_SESSION['GO_SESSION']['timezone']))
 	date_default_timezone_set($_SESSION['GO_SESSION']['timezone']);
 }
 //after date_default_timezone otherwise date function might raise an error
-if(!class_exists('GO'))
-	go_debug('['.date('Y-m-d G:i').'] Start of new request: '.$_SERVER['REQUEST_URI']);
+//if(!class_exists('GO'))
+//	go_debug('['.date('Y-m-d G:i').'] Start of new request: '.$_SERVER['REQUEST_URI']);
 //go_debug($_POST);
 if($GO_CONFIG->debug){
 	function groupoffice_error_handler($errno, $errstr, $errfile, $errline, $errcontext) {
@@ -164,15 +164,15 @@ if((PHP_SAPI != 'cli' || PHP_SAPI == '') && file_exists($GO_CONFIG->root_path.'m
 
 $GO_EVENTS = new GO_EVENTS();
 
-if($GO_CONFIG->session_inactivity_timeout>0){
-	$now = time();
-	if(isset($_SESSION['last_activity']) && $_SESSION['last_activity']+$GO_CONFIG->session_inactivity_timeout<$now){
-		$GO_SECURITY->logout();
-	}elseif(isset($_POST['task']) && $_POST['task']!='checker')//don't update on the automatic checker function that runs every 2 mins.
-	{
-		$_SESSION['last_activity']=$now;
-	}
-}
+//if($GO_CONFIG->session_inactivity_timeout>0){
+//	$now = time();
+//	if(isset($_SESSION['last_activity']) && $_SESSION['last_activity']+$GO_CONFIG->session_inactivity_timeout<$now){
+//		$GO_SECURITY->logout();
+//	}elseif(isset($_POST['task']) && $_POST['task']!='checker')//don't update on the automatic checker function that runs every 2 mins.
+//	{
+//		$_SESSION['last_activity']=$now;
+//	}
+//}
 
 
 if (!empty($_REQUEST['SET_LANGUAGE'])){

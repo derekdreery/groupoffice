@@ -21,9 +21,8 @@ GO.summary.AnnouncementsGrid = function(config){
 	config.autoScroll=true;
 	config.split=true;
 	config.store = new GO.data.JsonStore({
-		url: GO.settings.modules.summary.url+ 'json.php',
+		url: GO.url('summary/announcement/store'),
 		baseParams: {
-			task: 'announcements'
 		},
 		root: 'results',
 		id: 'id',

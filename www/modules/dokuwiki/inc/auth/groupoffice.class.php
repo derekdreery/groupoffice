@@ -16,6 +16,12 @@ class auth_groupoffice extends auth_basic {
    */
   function auth_groupoffice()
   {
+		// Check for suhosin patch to be disabled
+		$suhosinEncrypt = ini_get('suhosin.session.encrypt');
+		if(!empty($suhosinEncrypt) && strtolower($suhosinEncrypt) == 'on')
+			throw new Exception('You need to turn off "suhosin.session.encrypt" in the suhosin.ini file to let this module work. Otherwise this module cannot read the Group-Office session.');
+		
+		
     $this->cando['external'] = true;
     $this->cando['logoff'] = false;
     $this->success = true;

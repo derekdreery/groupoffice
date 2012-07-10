@@ -1,6 +1,6 @@
 <?php
 
-﻿;
+;
 $l["comment"]="Hozzászólás";
 $l["comments"]="Hozzászólások";
 $l["fiveLatestComments"]='5 utolsó hozzászólás';

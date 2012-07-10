@@ -14,3 +14,9 @@ $l["owner"]= 'Ägare';
 $l["lblNew"]= 'Ny';
 $l["newGroupName"]= 'Ange den nya gruppens namn';
 $l["searchAllUsers"]= 'Sök bland alla användare';
+$l["adminOnly"]= 'Bara admin';
+$l["adminOnlyLabel"]= 'Bara administratörer kan använda denna grupp för att ge behörigheter till t ex kalendrar.';
+$l["groupMembers"]='Gruppmedlemmar';
+$l["managePermissions"]= 'Hantera behörigheter';
+$l['modulePermissions']= 'Modulbehörigheter';
+

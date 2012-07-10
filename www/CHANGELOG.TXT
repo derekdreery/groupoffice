@@ -1,3 +1,42 @@
+10-07-2012 4.0.67
+- Strange characters from Romanian and Hungarian language files removed.
+- Bug in e-mail sync with some IMAP servers.
+- Folders with underscores didn't expand sometimes
+- All info panels show the type and name on top now. More consistent.
+- Workflow module has an icon now.
+
+09-07-2012 4.0.64
+- Various small bugfixes
+
+06-07-2012 4.0.63
+- Don't autolink Drafts, Sent Items and trash messages.
+- E-mail files function
+- Scanbox module included
+
+05-07-2012 4.0.62
+- Cache problem with reply all and language change
+
+04-07-2012 4.0.60
+- Speed optimizations in mail client
+- Sync unread flags bug
+- Small bug fixes
+
+03-07-2012 4.0.57
+- Cache problem that caused a lot of problems in the e-mail client
+
+02-07-2012 4.0.56
+- Bug in CalDAV with Applie ical fixed.
+- Bug in calendar invitations fixed.
+- Bug in announcement formatting.
+- Bug with changing fonts in E-mail composer. Font selection removed.
+
+26-06-2012 4.0.50
+- Lot's of bug fixes thanks to the beta testers!
+- SabreDAV upgraded to 1.6.3
+- SwiftMailer upgraded
+- Searching uses full text index now to achieve better performance
+- E-mail module no longer uses database cache. It connects to IMAP directly.
+
 11-04-2012 4.0.1 (beta)
 - Complete new MVC PHP framework
 - Extensive security audit by Cigitel.

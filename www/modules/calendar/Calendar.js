@@ -394,8 +394,8 @@ GO.calendar.MainPanel = function(config){
 	var storeFields=['id','event_id','name','start_time','end_time','description', 'repeats', 'private','status','location', 'background', 'status_color', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','all_day_event','username','duration', 'link_count', 'has_other_participants','participant_ids','ctime','is_organizer'];
 
 	this.daysGridStore = new GO.data.JsonStore({
-		//url: GO.settings.modules.calendar.url+'json.php',
-		url:GO.url('calendar/event/store'),
+		url: GO.settings.modules.calendar.url+'json.php',
+//		url:GO.url('calendar/event/store'),
 		
 		baseParams: {
 			task: 'events'
@@ -884,7 +884,10 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					//reload grid if old or new event repeats. Do not reload if an occurence of a repeating event is modified
 					if(newEvent.repeats || !oldDomId)//|| (activeGrid.remoteEvents[oldDomId] && activeGrid.remoteEvents[oldDomId].repeats && activeGrid.remoteEvents[oldDomId].event_id==newEvent.event_id))
 					{
-						activeGrid.store.reload();
+						if(this.displayType=='view')
+							activeGrid.reload();
+						else
+							activeGrid.store.reload();
 					}else
 					{
 						//var remove_id = newEvent.exception_event_id ? newEvent.exception_event_id : newEvent.event_id;

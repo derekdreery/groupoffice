@@ -387,7 +387,7 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 			run: this.checkForNotifications,
 			scope:this,
 			interval:120000 //check changes every 2 minutes
-		//interval:5000 //testing each 5 sec (for debugging)
+//			interval:5000 //testing each 5 sec (for debugging)
 		});
 	},
   
@@ -421,20 +421,26 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 				}else
 				{
 					var result = Ext.decode(response.responseText);
-		  
-					//		  {
-					//			reminders:{results[]}
-					//			"tickets/ticket/unseen":{unseen=1}
-					//		  }
+					
+					var data = {
+						alarm:false,
+						popup:false,
+						getParams:{}
+					};	
+					
+					var storeData={};
+	
 
 					for(var id in result){
 						if(id=="reminders"){
-							this.handleReminderResponse(result[id]);
+							storeData =result[id];
 						}else if (id!='success')
 						{				
-							this.callbacks[id].callback.call(this.callbacks[id].scope, this, result[id])
+							this.callbacks[id].callback.call(this.callbacks[id].scope, this, result[id],data)
 						}
 					}
+					
+					this.handleReminderResponse(storeData, data);
 
 				}
 			//this.fireEvent('endcheck', this, data);
@@ -443,20 +449,15 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 		});
 	},
   
-	handleReminderResponse : function(data){
+	handleReminderResponse : function(storeData, data){
 		if(data)
 		{
-			//Extra text for popup
-			data.reminderText="";
+			
+//			this.fireEvent('check', this, data);
 
-			//should alarm play?
-			data.alarm=false;
-
-			this.fireEvent('check', this, data);
-
-			if(data.results)
+			if(storeData.results)
 			{
-				this.checkerWindow.checkerGrid.store.loadData(data);
+				this.checkerWindow.checkerGrid.store.loadData(storeData);
 				if(this.lastCount != this.checkerWindow.checkerGrid.store.getCount())
 				{
 					this.lastCount = this.checkerWindow.checkerGrid.store.getCount();
@@ -467,29 +468,27 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 					
 					this.reminderIcon.setDisplayed(true);
 
-					if(GO.util.empty(GO.settings.mute_reminder_sound))
-						data.alarm=true;
-					else
-						data.alarm=false;
+					data.alarm=true;
+					data.popup=true;			
 				}
 			}else
 			{
 				this.reminderIcon.setDisplayed(false);
 			}
 
-			if(data.alarm){
-				GO.playAlarm();
-				if(!GO.hasFocus && !GO.util.empty(GO.settings.popup_reminders)){
-					GO.reminderPopup = GO.util.popup({
-						width:400,
-						height:300,
-						url:BaseHref+'reminder.php?count='+this.lastCount+'&reminder_text='+encodeURIComponent(data.reminderText),
-						target:'groupofficeReminderPopup',
-						position:'br',
-						closeOnFocus:false
-					});
-
-				}
+			if(data.alarm && GO.util.empty(GO.settings.mute_reminder_sound)){
+				GO.playAlarm();				
+			}
+			
+			if(data.popup && !GO.util.empty(GO.settings.popup_reminders)){
+				GO.reminderPopup = GO.util.popup({
+					width:400,
+					height:400,
+					url:GO.url("reminder/display", data.getParams),
+					target:'groupofficeReminderPopup',
+					position:'br',
+					closeOnFocus:false
+				});
 			}
 		}
 		

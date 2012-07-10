@@ -112,6 +112,8 @@ Ext.extend(GO.base.QuickEditDialog, GO.Window, {
 		this.rowEditor.on('afteredit',function(object,changes,record,rowIndex) {			
 			this._applyRowChanges(changes,record,rowIndex);
 		},this);
+		
+		this.setRenderers();		
 
 		this.editGrid = new GO.grid.GridPanel({
 			height: 'auto',
@@ -133,8 +135,8 @@ Ext.extend(GO.base.QuickEditDialog, GO.Window, {
 			clicksToEdit:1
 		});
 		
-		for (var i=0;i<this.editGrid.getColumnModel().getColumnCount();i++)
-			this.editGrid.getColumnModel().setHidden(i,false);
+//		for (var i=0;i<this.editGrid.getColumnModel().getColumnCount();i++)
+//			this.editGrid.getColumnModel().setHidden(i,false);
 
 		GO.request({
 			url : this.editorGridParams.moduleName+'/'+this.editorGridParams.modelName+'/attributes',
@@ -149,6 +151,18 @@ Ext.extend(GO.base.QuickEditDialog, GO.Window, {
 			scope:this
 		});
 
+	},
+	
+	setRenderers : function() {
+		for (var i=0; i<this.editorGridParams.gridColumns.length; i++) {
+			if (this.editorGridParams.gridColumns[i].datatype=='GO_Customfields_Customfieldtype_Checkbox') {
+				this.editorGridParams.gridColumns[i].renderer = function(v) {
+					if (v==0 || v==false)
+						return GO.lang.cmdNo;
+					return GO.lang.cmdYes;
+				}
+			}
+		}
 	},
 	
 	_applyRowChanges : function(changes,record,rowIndex) {

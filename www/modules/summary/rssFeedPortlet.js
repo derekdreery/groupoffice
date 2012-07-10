@@ -17,7 +17,7 @@ GO.portlets.rssFeedPortlet = function(config) {
 
 	config.store = new Ext.data.Store({
 		proxy: new Ext.data.HttpProxy({
-			url: GO.settings.modules.summary.url+'feed_proxy.php'
+			url: GO.url("summary/rssFeed/proxy")
 		}),
 		baseParams: {
 			feed: config.feed
@@ -162,8 +162,7 @@ Ext.extend(GO.portlets.rssFeedPortlet, GO.grid.GridPanel, {
 	},
 
 	loadFeed : function(url, preview) {
-		if(typeof(preview) == 'undefined')
-			preview = 1;
+		//console.log(preview);
 		var view = this.getView();
 		view.showPreview = preview;
 

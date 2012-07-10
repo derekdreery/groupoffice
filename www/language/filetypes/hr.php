@@ -1,6 +1,6 @@
 <?php
 
-﻿;
+;
 $l['unknown'] = 'Nepoznata vrsta datoteke';
 $l['txt'] = 'Tekst datoteka';
 $l['sxw'] = 'OpenOffice.Org tekst';

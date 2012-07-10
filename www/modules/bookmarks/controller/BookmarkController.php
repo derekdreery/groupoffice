@@ -7,6 +7,9 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 	protected function actionDescription($params) {
 
 		$response = array();
+		$response['title'] = '';
+		$response['description'] = '';
+				
 		if (function_exists('curl_init')) {
 			try{
 
@@ -58,15 +61,14 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 				}
 			}
 			catch(Exception $e){
-				$response['title'] = '';
-				$response['description'] = '';
+				
 			}
 
 			try{
 
 				$contents = $c->request($params['url'] . '/favicon.ico');
 
-				if (!empty($contents)) {
+				if (!empty($contents) && $c->getHttpCode()!=404) {
 					$relpath = 'public/bookmarks/';
 					$path = GO::config()->file_storage_path . $relpath;
 					if (!is_dir($path))
@@ -86,6 +88,9 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 				$response['logo'] = '';
 			}
 		}
+		
+		$response['title']=GO_Base_Util_String::cut_string($response['title'], 64, true, "");
+		$response['description']=GO_Base_Util_String::cut_string($response['description'], 255, true, "");
 		return $response;
 	}
 

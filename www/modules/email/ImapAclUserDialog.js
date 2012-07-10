@@ -5,10 +5,9 @@ GO.email.ImapAclUserDialog = Ext.extend(GO.Window, {
 		this.formPanel = new Ext.form.FormPanel({
 			autoHeight:true,
 			waitMsgTarget : true,
-			url : GO.settings.modules.email.url + 'action.php',
+			url : GO.url("email/folder/setAcl"),
 			border : false,
 			baseParams : {
-				task : 'setacl',
 				account_id : 0,
 				mailbox:''
 			},
@@ -24,12 +23,7 @@ GO.email.ImapAclUserDialog = Ext.extend(GO.Window, {
 					selectOnFocus:true,					
 					pageSize: parseInt(GO.settings['max_rows_list']),
 					store: new GO.data.JsonStore({
-						url: GO.settings.modules.email.url+'json.php',
-						baseParams: {
-							'task':'usernames'
-						},
-						root: 'results',
-						totalProperty: 'total',
+						url: GO.url("email/account/usernames"),
 						id: 'username',
 						fields:['username','email'],
 						remoteSort: true
@@ -116,10 +110,7 @@ GO.email.ImapAclUserDialog = Ext.extend(GO.Window, {
 
 	submitForm : function(hide) {
 		this.formPanel.form.submit({
-			url : GO.settings.modules.email.url + 'action.php',
-			params : {
-				'task' : 'setacl'
-			},
+			url : GO.url("email/folder/setAcl"),
 			waitMsg : GO.lang['waitMsgSave'],
 			success : function(form, action) {
 

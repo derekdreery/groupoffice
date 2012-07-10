@@ -12,7 +12,7 @@ class GO_Base_Util_SpellChecker {
 
     public static function check($text, $language) {
 
-        self::$_pLink = pspell_new($language, "", "", "", PSPELL_FAST);
+        self::$_pLink = pspell_new($language, "", "", "utf-8", PSPELL_FAST);
 
         $words = self::_getWords($text);
         $checkspelling = self::_checkWords($words);
@@ -38,7 +38,10 @@ class GO_Base_Util_SpellChecker {
                     foreach ($mispeltwords as $word => $sugestions){
                         //not sure how to fix this in one go so will use another regex to add another space between repeat words
                         $tokens[$key] = preg_replace('/(\b(\w+)(\b\s)*\2\b)/','\2\3\3\2',$tokens[$key]);
-                        $tokens[$key] = preg_replace('/(^|[._,\'"-]|&lt;|\s)'.preg_quote($word).'(\s|[._,@\'"-]|&gt;|$)/i','\1'.self::_inlineSpellSystem($word,$sugestions,'\2').'\2',$tokens[$key]);
+                        $tokens[$key] = mb_ereg_replace(
+                            '(^|[._,\'"-]|&lt;|\s)'.preg_quote($word).'(\s|[._,@\'"-]|&gt;|$)','\1'.
+                            self::_inlineSpellSystem($word,$sugestions,'\2').'\2',$tokens[$key], "m"
+                        );
                     }
                 }
             }
@@ -55,12 +58,11 @@ class GO_Base_Util_SpellChecker {
         $out = '';
         if (is_array($sugestions) && !empty($sugestions)){
             foreach ($sugestions as $sugestion){
-                $out .= $before . GO_Base_Util_String::to_utf8($sugestion) . $after;
+                $out .= $before . $sugestion . $after;
             }
         }else{
             $out .= $before. GO::t('No Sugestions') . $after;
         }
-
         return $out;
     }
 
@@ -74,7 +76,7 @@ class GO_Base_Util_SpellChecker {
         //Assume there might be HTML so remove it;
         $text = strip_tags($text);
         //Decode HTML Entities
-        $text = html_entity_decode($text,ENT_QUOTES);
+        $text = html_entity_decode($text, ENT_QUOTES);
         //Remove any email addresses (this could be stronger!)
         $text = preg_replace('/\w+@[a-zA-Z0-9-.]+\.(com|edu|gov|mil|net|org|biz|info|name|museum|us|ca|uk)/si',' ',$text);
         //Remove any web address (this could be stronger)
@@ -82,7 +84,7 @@ class GO_Base_Util_SpellChecker {
         //Remove numbers
         $text = preg_replace('/[0-9.,]+/sm',' ',$text);
         //Replace any characters which should be splitters
-        $text = preg_replace('/['.preg_quote('!"\'#$%&()*+,-.:;<=>?@[]^_{|}§©«®±¶·¸»¼½¾\\¿×÷¤/','/').']/si',' ',$text);
+        $text = mb_ereg_replace("[".preg_quote('!"\'#$%&()*+,-.:;<=>?@[]^_{|}§©«®±¶·¸»¼½¾\\¿×÷¤/','/')."]", '', $text, "m");
         //Fix MultiSpace
         $text = preg_replace('/\s+/',' ',$text);
 
@@ -90,6 +92,9 @@ class GO_Base_Util_SpellChecker {
     }
 
     private static function _checkWords($words) {
+
+        $words = array_filter($words);
+
         if (is_array($words) and !empty($words)) {
             $badwords = array();
             foreach ($words as $word){

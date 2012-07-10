@@ -1,6 +1,6 @@
 <?php
 
-﻿;
+;
 $l['success']='<h1>Lozinka promjenjena</h1><p>Vaša lozinka je uspješno promjenjena. Možete nastaviti do stranice za prijavu.</p>';
 $l['send']='Pošalji';
 $l['login']='Prijavi se';

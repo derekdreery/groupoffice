@@ -256,8 +256,8 @@ Ext.extend(GO.servermanager.InstallationDialog, GO.Window,{
 								fields: ['value', 'text'],
 								data : [
 									['trial', '30 day trial'],
-									['warntrial1', 'First warning, 20 days until deletion'],
-									['warntrial2', 'Second warning, 10 days until deletion'],
+//									['warntrial1', 'First warning, 20 days until deletion'],
+//									['warntrial2', 'Second warning, 10 days until deletion'],
 									['ignore', 'Never remove installation']
 								]
 
@@ -328,14 +328,14 @@ Ext.extend(GO.servermanager.InstallationDialog, GO.Window,{
 				  fieldLabel: GO.servermanager.lang.theme,
 				  value:GO.settings.config.theme
 				},{
-					xtype: 'checkbox',
+					xtype: 'xcheckbox',
 				  name: 'allow_themes',
 					anchor: '-20',
 				 	hideLabel:true,
 				  boxLabel: GO.servermanager.lang.allowThemes,
 				  checked:false
 				},{
-					xtype: 'checkbox',
+					xtype: 'xcheckbox',
 				  name: 'allow_password_change',
 					anchor: '-20',
 				  hideLabel:true,
@@ -377,7 +377,7 @@ Ext.extend(GO.servermanager.InstallationDialog, GO.Window,{
 						fieldLabel: GO.lang['strCountry'],
 						hiddenName: 'default_country',
 						anchor: '-20',
-						value: GO.settings.country
+						value: GO.settings.config.default_country
 					}),new Ext.form.ComboBox({
 						anchor: '-20',
 						fieldLabel: GO.users.lang['cmdFormLabelLanguage'],

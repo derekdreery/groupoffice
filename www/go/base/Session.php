@@ -53,13 +53,18 @@ class GO_Base_Session extends GO_Base_Observable{
 				session_name('groupoffice');
 				session_start();
 			}
-			GO::debug("Started session");
+			//GO::debug causes endless loop
+			//GO::debug("Started session");
 		}
 		
 		$this->values = &$_SESSION['GO_SESSION'];
 		
-		if(!isset($this->values['security_token']))
+		if(!isset($this->values['security_token'])){
+			
+			//this log here causes endless loop and segfaults
+			//$this->_log("security_token");
 			$this->values['security_token']=GO_Base_Util_String::randomPassword(20,'a-z,A-Z,1-9');				
+		}
 		
 //		if (GO::config()->session_inactivity_timeout > 0) {
 //			$now = time();
@@ -190,6 +195,7 @@ class GO_Base_Session extends GO_Base_Observable{
 		else
 			$str .= 'unknown';
 		GO::infolog($str);
+		GO::debug($str);
 		
 		if(!$success){
 			return false;
@@ -233,6 +239,9 @@ class GO_Base_Session extends GO_Base_Observable{
 				$this->_log(GO_Log_Model_Log::ACTION_LOGIN);
 			
 			GO::session()->values['countLogin']=$countLogin;
+			
+			//for logging
+			GO::session()->values['username']=GO::user()->username;
 		
 			return $user;
 		}		
@@ -281,6 +290,11 @@ class GO_Base_Session extends GO_Base_Observable{
 	 * @param int $user_id
 	 */
 	public function setCurrentUser($user_id) {
+		
+//		if(GO::modules()->isInstalled("log"))
+//			GO_Log_Model_Log::create ("setcurrentuser", "Set user ID to $user_id");
+	
+		
 		//remember user id in session
 		$this->values['user_id']=$user_id;
 	}

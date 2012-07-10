@@ -120,8 +120,8 @@
 
 .go-html-formatted td {   
    display: table-cell;  
-   vertical-align: inherit;  
-   text-align: inherit; 
+/*   vertical-align: inherit;  
+   text-align: inherit; */
  }  
    
 .go-html-formatted th {  

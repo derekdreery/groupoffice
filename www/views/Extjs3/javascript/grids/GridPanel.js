@@ -54,6 +54,9 @@
 
 GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 	
+	lastSelectedIndex : false,
+	currentSelectedIndex : false,
+	
 	initComponent : function(){
 		
 
@@ -195,20 +198,32 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 
 			if(!e.ctrlKey && !e.shiftKey)
 			{
-				if(record)
+				if(record){
+					this.lastSelectedIndex= this.currentSelectedIndex;
+					this.currentSelectedIndex= this.getSelectionModel().last;
 					this.fireEvent('delayedrowselect', this, rowIndex, record);
+				}
 			}
 		
 			if(record)
 				this.rowClicked=true;
 		}, this);
+		
+		//no delay on this
+		this.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
+			if(!this.rowClicked)
+			{
+				this.lastSelectedIndex= this.currentSelectedIndex;
+				this.currentSelectedIndex= this.getSelectionModel().last;
+			}
+		}	,this);
 
 		this.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
 			if(!this.rowClicked)
 			{
 				var record = this.getSelectionModel().getSelected();
 				if(record==r)
-				{
+				{					
 					this.fireEvent('delayedrowselect', this, rowIndex, r);
 				}
 			}
@@ -243,6 +258,26 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 	 * paging toolbar.
 	 */
 	paging : false,
+	
+	
+	selectNextAfterDelete : function(){		
+		var old = this.lastSelectedIndex;
+		if(this.currentSelectedIndex>this.lastSelectedIndex){			
+			//return value is always false somehow so we check with getSelected
+			this.getSelectionModel().selectRow(this.currentSelectedIndex);
+			
+			if(!this.getSelectionModel().getSelected())				
+				this.getSelectionModel().selectLastRow();
+		}else
+		{
+			//return value is always false somehow so we check with getSelected
+			this.getSelectionModel().selectRow(this.currentSelectedIndex-1);			
+			if(!this.getSelectionModel().getSelected())
+				this.getSelectionModel().selectFirstRow();
+		}
+		
+		this.lastSelectedIndex=old;
+	},
 
 	/**
 	 * Sends a delete request to the remote store. It will send the selected keys in json
@@ -273,6 +308,7 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 
 		var deleteItemsConfig = {
 			store:this.store,
+			grid: this,
 			params: params,
 			count: this.selModel.selections.keys.length,
 			extraWarning: config.extraWarning || "",
@@ -417,10 +453,22 @@ GO.grid.EditorGridPanel = function(config)
 		if(!e.ctrlKey && !e.shiftKey)
 		{
 			var record = this.getSelectionModel().getSelected();
+			this.lastSelectedRecord = this.currentSelectedRecord;
+			this.currentSelectedRecord=record;
+			
 			this.fireEvent('delayedrowselect', this, rowIndex, record);
 		}
 		this.rowClicked=true;
 	}, this);
+	
+	//no delay on this
+	this.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
+		if(!this.rowClicked)
+		{
+			this.lastSelectedIndex= this.currentSelectedIndex;
+			this.currentSelectedIndex= this.getSelectionModel().last;
+		}
+	}	,this);
 
 	this.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
 		if(!this.rowClicked)
@@ -439,6 +487,9 @@ GO.grid.EditorGridPanel = function(config)
 
 Ext.extend(GO.grid.EditorGridPanel, Ext.grid.EditorGridPanel, {
 
+	lastSelectedIndex : false,
+	currentSelectedIndex : false,
+	
 	deleteConfig : {},
 
 	/**
@@ -464,6 +515,25 @@ Ext.extend(GO.grid.EditorGridPanel, Ext.grid.EditorGridPanel, {
 	getGridData : GO.grid.GridPanel.prototype.getGridData,
 
 	numberRenderer : GO.grid.GridPanel.prototype.numberRenderer,
+	
+	selectNextAfterDelete : function(){		
+		var old = this.lastSelectedIndex;
+		if(this.currentSelectedIndex>this.lastSelectedIndex){			
+			//return value is always false somehow so we check with getSelected
+			this.getSelectionModel().selectRow(this.currentSelectedIndex);
+			
+			if(!this.getSelectionModel().getSelected())				
+				this.getSelectionModel().selectLastRow();
+		}else
+		{
+			//return value is always false somehow so we check with getSelected
+			this.getSelectionModel().selectRow(this.currentSelectedIndex-1);			
+			if(!this.getSelectionModel().getSelected())
+				this.getSelectionModel().selectFirstRow();
+		}
+		
+		this.lastSelectedIndex=old;
+	},
 
 	/**
 	 * Checks if a grid cell is valid

@@ -29,9 +29,8 @@ class email extends db {
 	}
 
 	public static function head(){
-		global $GO_CONFIG, $GO_SECURITY;
 
-		$font_size = $GLOBALS['GO_SECURITY']->logged_in() ? $GLOBALS['GO_CONFIG']->get_setting('email_font_size', $GLOBALS['GO_SECURITY']->user_id) : false;
+		$font_size = GO::user() ? GO::config()->get_setting('email_font_size', GO::user()->id) : false;
 		if(!$font_size)
 			$font_size='12px';
 

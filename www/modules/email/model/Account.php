@@ -38,6 +38,8 @@
  * @property int $acl_id
  * @property int $user_id
  * @property int $id
+ * 
+ * @property boolean $hasNewMessages
  */
 class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 
@@ -98,7 +100,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 
 			$this->_createDefaultFolder('sent');
 			$this->_createDefaultFolder('trash');
-			$this->_createDefaultFolder('spam');
+			//	$this->_createDefaultFolder('spam');
 			$this->_createDefaultFolder('drafts');	
 		}
 		
@@ -130,17 +132,21 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 			return false;
 
 		$mailboxes = $this->getMailboxes();
-		if(!in_array($this->$name, $mailboxes)){
-			if(! $this->openImapConnection()->create_folder($this->$name)){
-				if(isset($mailboxes[0])){
-					$this->mbroot= $this->openImapConnection()->check_mbroot($mailboxes[0]);
+		
+		//throw new Exception(var_export($mailboxes, true));
+		
+		if(!isset($mailboxes[$this->$name])){
+//			throw new Exception($this->$name);
+			if(!$this->openImapConnection()->create_folder($this->$name)){
+//				if(isset($mailboxes[0])){
+					$this->mbroot= $this->openImapConnection()->check_mbroot("INBOX");
 
-					$this->$name = $this->mboot.$this->$name;
+					$this->$name = $this->mbroot.$this->$name;
 
 					if(!in_array($this->$name, $mailboxes)){
 						 $this->openImapConnection()->create_folder($this->$name);
 					}
-				}
+//				}
 			}
 		}
 	}
@@ -165,19 +171,73 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	 * @return GO_Base_Mail_Imap
 	 */
 	public function openImapConnection($mailbox='INBOX'){
-		if(!isset($this->_imap)){
+	
+		if(empty($mailbox))
+			$mailbox="INBOX";
+		
+		if(empty($this->_imap)){
 			$this->_imap = new GO_Base_Mail_Imap();
 
 			try{
 				$this->_imap->connect($this->host, $this->port, $this->username, $this->decryptPassword(), $this->use_ssl);
 			}catch(GO_Base_Mail_ImapAuthenticationFailedException $e){
-				throw new Exception('Authententication failed for user '.$this->username.' on IMAP server ".$this->host.');
+				throw new Exception('Authententication failed for user '.$this->username.' on IMAP server '.$this->host);
 			}
 		}
 		if(!$this->_imap->select_mailbox($mailbox))
 			throw new Exception ("Could not open IMAP mailbox $mailbox");
+		
+		$this->_setHasNewMessages();
 
 		return $this->_imap;
+	}
+	
+	public function __wakeup() {
+		//reestablish imap connection after deserialization
+		$this->_imap=false;
+	}
+	
+	/**
+	 * Get the imap connection if it's open.
+	 * 
+	 * @return GO_Base_Mail_Imap 
+	 */
+	public function getImapConnection(){
+		if(isset($this->_imap)){
+			return $this->_imap;
+		}else
+			return false;
+	}
+	
+	private $_hasNewMessages=false;
+	
+	private function _getCacheKey(){
+		$user_id = GO::user() ? GO::user()->id : 0;
+		return $user_id.':'.$this->id.':uidnext';
+	}
+	
+	private function _setHasNewMessages(){
+		
+		$cacheKey = $this->_getCacheKey();
+		
+		if($this->_imap->selected_mailbox['name']=='INBOX' && isset($this->_imap->selected_mailbox['uidnext'])){
+			
+			$uidnext = $value = GO::cache()->get($cacheKey);
+			
+			if($uidnext!==false && $uidnext!=$this->_imap->selected_mailbox['uidnext'])
+				$this->_hasNewMessages=true;
+			
+			//throw new Exception($this->_imap->selected_mailbox['uidnext']."!=".$uidnext);
+//			if($this->_imap->selected_mailbox['uidnext']!=$uidnext)
+//				GO::cache()->set($cacheKey, $this->_imap->selected_mailbox['uidnext']);
+			//GO::session()->values['email_status']['uidnext'][$this->id]=$this->_imap->selected_mailbox['uidnext'];
+		}
+	}
+	
+	protected function getHasNewMessages(){
+		if(!empty($this->_imap->selected_mailbox['uidnext']))
+			GO::cache()->set($this->_getCacheKey(), $this->_imap->selected_mailbox['uidnext']);		
+		return $this->_hasNewMessages;
 	}
 
 
@@ -229,12 +289,13 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	 *
 	 * @return \GO_Email_Model_ImapMailbox 
 	 */
-	public function getRootMailboxes($withStatus=false, $subscribed=true){
+	public function getRootMailboxes($withStatus=false, $subscribed=false){
 		$imap = $this->openImapConnection();
 		
 		$rootMailboxes = array();
-		
-		$folders = $imap->list_folders($subscribed,$withStatus,"","%");
+				
+		$folders = $imap->list_folders($subscribed,$withStatus,"","{$this->mbroot}%", true);		
+//		GO::debug($folders);
 		foreach($folders as $folder){
 			$mailbox = new GO_Email_Model_ImapMailbox($this,$folder);
 			$rootMailboxes[]=$mailbox;
@@ -251,7 +312,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	public function getAllMailboxes($hierarchy=true, $withStatus=false){
 		$imap = $this->openImapConnection();
 		
-		$folders = $imap->list_folders(true, $withStatus);
+		$folders = $imap->list_folders(true, $withStatus,'','*',true);
 		
 		//$node= array('name'=>'','children'=>array());
 		
