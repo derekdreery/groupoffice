@@ -108,8 +108,9 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			return $this->_getMailboxTreeNodes($rootMailboxes, true);
 		else{
 			$parts = explode('_', $params['node']);
-			$accountId = $parts[1];
-			$mailboxName = $parts[2];
+			$type = array_shift($parts);
+			$accountId = array_shift($parts);
+			$mailboxName = implode('_', $parts);
 
 			$account = GO_Email_Model_Account::model()->findByPk($accountId);
 
@@ -206,14 +207,15 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 //			$this->_setExpanded($params['node']);
 
 			$parts = explode('_', $params['node']);
-			$accountId = $parts[1];
+			$type = array_shift($parts);
+			$accountId = array_shift($parts);
+			$mailboxName = implode('_', $parts);
+			
 			$account = GO_Email_Model_Account::model()->findByPk($accountId);
 			
-			if($parts[0]=="account"){
+			if($type=="account"){
 				$response=$this->_getMailboxTreeNodes($account->getRootMailboxes(true));
-			}else{				
-				$mailboxName = $parts[2];
-
+			}else{
 				$mailbox = new GO_Email_Model_ImapMailbox($account, array('name' => $mailboxName));
 				$response = $this->_getMailboxTreeNodes($mailbox->getChildren());
 			}
