@@ -21,7 +21,18 @@ GO.calendar.EventPanel = Ext.extend(GO.DisplayPanel,{
 	editHandler : function(){		
 		GO.calendar.showEventDialog({event_id: this.link_id});
 	},
-
+	
+	updateToolbar : function(){
+		
+		GO.calendar.EventPanel.superclass.updateToolbar.call(this);
+		
+		if(!this.data.is_organizer){
+			var tbar = this.getTopToolbar();
+			if(tbar)
+				tbar.setDisabled(true);
+		}
+	},
+	
 	initComponent : function(){
 		
 		this.loadUrl=('calendar/event/display');

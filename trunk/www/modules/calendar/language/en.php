@@ -198,3 +198,6 @@ $l['eventUpdatedIn']='The event in calendar %s has been updated with status %s';
 $l['updateReponses'][1]='%s has accepted the event %s';
 $l['updateReponses'][2]='%s has declined the event %s';
 $l['updateReponses'][3]='%s has marked the event %s as tentative';
+
+$l['errorOrganizerOnly'] = 'You are not authorised to edit this event because you are not the organizer.';
+$l['errorOrganizerOnlyTitle'] = 'You are not the organizer';

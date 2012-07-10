@@ -21,6 +21,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 	protected $model = 'GO_Calendar_Model_Event';
 	
+	private $_uuidEvents = array();
+	
+	
 	protected function allowGuests() {
 		return array('invitation');
 	}
@@ -31,6 +34,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 	function beforeSubmit(&$response, &$model, &$params) {
 
+		if(!$model->is_organizer)
+			throw new GO_Base_Exception_AccessDenied();
+		
 		if(!empty($params['duplicate']))
 			$model = $model->duplicate();
 
@@ -269,7 +275,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 						$participantEvent = GO_Calendar_Model_Event::model()->findByUuid($event->uuid,0,$calendar->id);
 						if (!$participantEvent)
-							$participantEvent = $event->duplicate(array('calendar_id' => $calendar->id));
+							$participantEvent = $event->duplicate(array('calendar_id' => $calendar->id,'user_id'=>$participant->user_id,'is_organiser'=>false));
 
 						//TODO: Do we want this?
 						//$participant->status=GO_Calendar_Model_Participant::STATUS_ACCEPTED;
@@ -604,7 +610,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$response = $this->_getEventResponseForPeriod($response,$calendar,$startTime,$endTime);
 			
 		}
-		
+
 		//Sanitize the title so there is no & on the end.
 		$response['title'] = trim($response['title'],' &');
 
@@ -663,7 +669,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				
 
 
-				$response['results'][$this->_getIndex($response['results'],(int)$task->due_time)] = array(
+				$response['results'][$this->_getIndex($response['results'],(int)$task->due_time,$task->name)] = array(
 					'id'=>$response['count']++,
 					'link_count'=>$task->countLinks(),
 					'name'=>$task->name,
@@ -685,12 +691,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		return $response;
 	}
 	
-	private function _getIndex($results, $start_time){
+	private function _getIndex($results, $start_time,$name=''){
 
-		while(isset($results[$start_time])) {
+		while(isset($results[$start_time.'_'.$name])) {
 			$start_time++;
 		}
-		return $start_time;
+		return $start_time.'_'.$name;
 	}
 	
 	/**
@@ -801,10 +807,10 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 */
 	private function _getEventResponseForPeriod($response,$calendar,$startTime,$endTime){
 		$events = array();
-		$dayString = GO::t('full_days');
-				
-		$resultCount = 0;
 		
+		$resultCount = 0;
+	
+		// Get all the localEvent models between the given time period
 		$events = GO_Calendar_Model_Event::model()->findCalculatedForPeriod(
 								GO_Base_Db_FindParams::newInstance()->criteria(
 									GO_Base_Db_FindCriteria::newInstance()->addCondition('calendar_id', $calendar->id)
@@ -813,71 +819,37 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 								strtotime($endTime)
 							);
 
+		// Loop through each event and prepare the view for it.
 		foreach($events as $event){
-
-			$eventModel = $event->getEvent();
-
-			$eventData = $eventModel->getAttributes('formatted');
-			// Change the date and time to the right format so the view can read and use it
-			$eventData['start_time'] = date('Y-m-d H:i', $event->getAlternateStartTime());
-			$eventData['end_time'] = date('Y-m-d H:i',  $event->getAlternateEndTime());	
-			$eventData['ctime'] = date('Y-m-d H:i',  $eventModel->ctime);
+		
+			// Check for a double event, and merge them if they are double
+			if(array_key_exists($event->getUuid(), $this->_uuidEvents))
+				$this->_uuidEvents[$event->getUuid()]->mergeWithEvent($event);
+			else
+				$this->_uuidEvents[$event->getUuid()] = $event;
 			
-			
+			// If you are showing more than one calendar, then change the display 
+			// color of the current event to the color of the calendar it belongs to.
 			if($response['calendar_count'] > 1){
-			
 				$background = $calendar->getColor(GO::user()->id);
-
-				if(empty($background)){
-					$background = $calendar->displayColor;
-				}
-			} else {
-				$background = $eventModel->background;
-			}
-
-			if($event->isAllDay()){
-				$eventData['time'] =  $event->getFormattedTime();
-			} else {
-				if (date(GO::user()->date_format, $event->getAlternateStartTime()) != date(GO::user()->date_format, $event->getAlternateEndTime()))
-					$eventData['time'] =  $event->getFormattedTime();
-				else
-					$eventData['time'] =  $event->getFormattedTime();
-			}
-			$eventData['id'] = $response['count']++;
-			$eventData['event_id'] = $eventModel->id;
-			$eventData['has_other_participants'] = $event->hasOtherParticipants();
-			$eventData['link_count'] = $event->getLinkCount();
-			$eventData['calendar_name'] = $event->getCalendar()->name;
-			$eventData['description'] = nl2br(htmlspecialchars(GO_Base_Util_String::cut_string($eventModel->description, 800), ENT_COMPAT, 'UTF-8'));
-			$eventData['private'] = $event->isPrivate();
-			$eventData['background'] = $background;
-			$eventData['status_color'] = $eventModel->getStatusColor();
-			$eventData['status'] = $eventModel->status;
-			$eventData['repeats'] = $event->isRepeating();
-			$eventData['all_day_event'] = $event->isAllDay();
-			$eventData['day'] = $dayString[date('w', ($eventModel->start_time))].' '.GO_Base_Util_Date::get_timestamp($eventModel->start_time,false);  // date(implode(GO::user()->date_separator,str_split(GO::user()->date_format,1)), ($eventModel->start_time));
-			$eventData['read_only'] = $event->isReadOnly();
-			$eventData['model_name'] = $eventModel->className();
-
-			$eventData['username'] = $eventModel->user->getName();
-
-			$duration = $event->getDurationInMinutes();
-
-			if($duration >= 60){
-				$durationHours = floor($duration / 60);
-				$durationRestMinutes = $duration % 60;
-				$eventData['duration'] = $durationHours.' '.GO::t('hours').', '.$durationRestMinutes.' '.GO::t('mins');
-			} else {
-				$eventData['duration'] = $duration.'m';
+				if(empty($background))
+					$background = $calendar->displayColor;				
+				$event->setBackgroundColor($background);
 			}
 			
+			// Set the id of the event, this is a count of the displayed events 
+			// in the view.
+			$event->displayId = $response['count']++;
+
+			// Add one to the global result count;
 			$resultCount++;
-
-			$response['results'][$this->_getIndex($response['results'],strtotime($eventData['start_time']))]=$eventData;
 		}
-
-		if(!empty($eventModel))
-			$response['mtime'] = $eventModel->mtime;
+		
+		foreach($this->_uuidEvents as $uuidEvent){
+			// Add the event to the results array
+						
+			$response['results'][$this->_getIndex($response['results'],$uuidEvent->getAlternateStartTime(),$uuidEvent->getName())]=$uuidEvent->getResponseData();
+		}
 		
 		// Set the count of the events
 		$response['count_events_only'] = $resultCount;
@@ -891,7 +863,6 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		GO_Base_Util_Http::outputDownloadHeaders(new GO_Base_FS_File('calendar.ics'));
 		echo $event->toICS();
 	}
-	
 	
 	protected function actionDelete($params){
 		
