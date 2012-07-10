@@ -1,9 +1,6 @@
 <?php
-
-﻿;
 $l['name'] = 'E-mail';
 $l['description'] = 'E-mail klijent. Svi korisnici će biti u mogućnosti slati i primati e-mailove';
-$lang['link_type'][9]='E-mail';
 $l['feedbackNoReciepent'] = 'Niste unijeli primatelja';
 $l['feedbackSMTPProblem'] = 'Došlo je do problema u komunikaciji sa SMTP: ';
 $l['feedbackUnexpectedError'] = 'Pojavio se ne predviđeni problem sa izgradnjom e-maila: ';
