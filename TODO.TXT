@@ -5,12 +5,13 @@ Automatisch ticket maken van support@intermesh.nl
 
 http://www.group-office.com/forum/viewtopic.php?f=3&t=8353
 
+VCF import via mail
 
 Note sync
 
 reminder als licentie verloopt
 
-Password promt on imap logon failure
+Password prompt on imap logon failure
 
 Z-push 2.0
 
@@ -31,12 +32,6 @@ Koba
 LDAP Sync
 
 Sieve MVC en redesign vakantie. Automatisch vullen aliasen
-
-Calendar:
-Distinguish declined and cancel	led events in grid.
-alarm import
-
-Grid scroll behouden bij reload
 
 CMS compatible (Wilmar)
 
@@ -86,3 +81,14 @@ http://www.group-office.com/forum/viewtopic.php?f=6&t=8083
 
 Drag & drop contacts:
 http://www.group-office.com/forum/viewtopic.php?f=5&t=8351
+
+
+Docs:
+
+- Sieve
+- Workflow
+- Smime
+- Bookmarks
+- CardDav
+
+- Alles even nalopen

@@ -486,6 +486,10 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	 * @param type $params MUST contain $params['lang1'] AND $params['lang2']
 	 */
 	protected function actionCheckLanguage($params){
+		
+		
+		header('Content-Type: text/html; charset=UTF-8');
+		
 		$lang1code = empty($params['lang1']) ? 'en' : $params['lang1'];
 		$lang2code = empty($params['lang2']) ? 'nl' : $params['lang2'];
 		
@@ -544,6 +548,16 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		return $outputHtml;
 	}
 	
+	private function _replaceBOM($filePath){
+		$origStr = file_get_contents($filePath);
+		$str = str_replace("\xEF\xBB\xBF", '', $origStr);	
+//		$str = str_replace("ï»¿", '', $str);	
+		if($str!=$origStr){					
+			file_put_contents($filePath, $str);
+		}			
+		
+	}
+	
 	/**
 	 * Used in actionCheckLanguage. Parse the file, putting its language fields
 	 * into $contentArr.
@@ -555,9 +569,12 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		$outputString = '';
 		$langFile = new GO_Base_Fs_File($filePath);
 		
+		
+		
 		if(!file_exists($langFile->path())) {
 			$outputString .= '<i><font color="red">File not found: "'.$langFile->path().'"</font></i><br />';
 		} else {
+			$this->_replaceBOM($filePath);
 			$encodingName = $langFile->detectEncoding($langFile->getContents());
 			if ( $encodingName == 'UTF-8' || $encodingName == 'ASCII' || $langFile->convertToUtf8() ) {
 				$lines = file($langFile->path());
@@ -577,6 +594,11 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			} else {
 				$outputString .= '<i><font color="red">Could not compare with '.str_replace(GO::config()->root_path, '', $langFile->path()).', because it cannot be made UTF-8!</font></i><br />';
 			}
+			
+			//for displaying errors
+			include($filePath);
+			
+			
 		}
 		return $outputString;
 	}

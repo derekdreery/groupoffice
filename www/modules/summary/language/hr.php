@@ -1,13 +1,13 @@
 <?php
 
-﻿;
+;
 $l['name']='Početna stranica';
 $l['description']='Prikazuje pregled različitih aktualnih stavki';
 $l['default_rss_url']='http://www.vecernji.hr/rss/';
 $l['default_rss_title']='Vijesti';
 $l['announcement']='Objava';
 $l['announcements']='Objave';
-﻿;
+;
 $l["summary"]= 'Početna stranica';
 $l["noItems"]= 'Nemate nikakve stavke na vašoj početnoj stranici.';
 $l["selectPortlet"]= 'Odaberi stavku';
