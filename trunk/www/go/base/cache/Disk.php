@@ -20,51 +20,110 @@
  */
 class GO_Base_Cache_Disk implements GO_Base_Cache_Interface{
 	
-	private $_values;
-	private $_file;
-	private $_dirty=false;
+	private $_ttls;
+	private $_ttlFile;
+	private $_ttlsDirty=false;
+	private $_dir;
+	
+	private $_time;
 	
 	public function __construct(){
-		$this->_file = GO::config()->file_storage_path.'cache/diskCache.txt';
-		if(!GO::config()->debug)
-			$this->_load();
+		GO::debug("Using GO_Base_Cache_Disk cache");
+		
+		$this->_dir = GO::config()->tmpdir.'diskcache/';
+		
+		if(!is_dir($this->_dir))
+			mkdir($this->_dir, 0777, true);
+		
+		$this->_ttlFile = $this->_dir.'ttls.txt';
+		//if(!GO::config()->debug)
+		$this->_load();
+		
+		$this->_time=time();
 	}
 	
 	private function _load(){
-		if(!isset($this->_values)){
+		if(!isset($this->_ttls)){
 			
-			if(file_exists($this->_file)){
-				$data = file_get_contents($this->_file);
-				$this->_values = unserialize($data);
+			if(file_exists($this->_ttlFile)){
+				$data = file_get_contents($this->_ttlFile);
+				$this->_ttls = unserialize($data);
 			}else
 			{
-				$this->_values = array();
+				$this->_ttls = array();
 			}
 		}
 	}
-	
-	public function set($key, $value){
-		$this->_values[$key]=$value;
+	/**
+	 * Store any value in the cache
+	 * @param string $key
+	 * @param mixed $value Will be serialized
+	 * @param int $ttl Seconds to live
+	 */
+	public function set($key, $value, $ttl=0){
 		
-		$this->_dirty=true;
+		$key = GO_Base_Fs_File::stripInvalidChars($key,'-');
+						
+		if($ttl){
+			$this->_ttls[$key]=$this->_time+$ttl;
+			$this->_ttlsDirty=true;
+		}
+		
+		file_put_contents($this->_dir.$key, serialize($value));
+		
+		
 		
 	}
 	
+	/**
+	 * Get a value from the cache
+	 * 
+	 * @param string $key
+	 * @return boolean 
+	 */
 	public function get($key){
-		return isset($this->_values[$key]) ? $this->_values[$key] : false;
+		
+		$key = GO_Base_Fs_File::stripInvalidChars($key, '-');
+		
+		if(!empty($this->_ttls[$key]) && $this->_ttls[$key]<$this->_time){
+			unlink($this->_dir.$key);
+			return false;
+		}elseif(!file_exists($this->_dir.$key))
+		{
+			return false;
+		}else
+		{
+			$data = file_get_contents($this->_dir.$key);
+			return unserialize($data);
+		}
 	}
 	
+	/**
+	 * Delete a value from the cache
+	 * 
+	 * @param string $key 
+	 */
 	public function delete($key){
-		unset($this->_values[$key]);
-		$this->_dirty=true;
+		$key = GO_Base_Fs_File::stripInvalidChars($key, '-');
+		
+		unset($this->_ttls[$key]);
+		$this->_ttlsDirty=true;
+		if(file_exists($this->_dir.$key))
+			unlink($this->_dir.$key);
 	}
+	/**
+	 * Flush all values 
+	 */
 	public function flush(){
-		$this->_values=array();
-		$this->_dirty=true;
+		$this->_ttls=array();
+		$this->_ttlsDirty=true;
+		$folder = new GO_Base_Fs_Folder($this->_dir);
+		$folder->delete();
+		$folder->create(0777);
 	}
 	
 	public function __destruct(){
-		if($this->_dirty && !GO::config()->debug)
-			file_put_contents($this->_file, serialize($this->_values));
+		if($this->_ttlsDirty)
+			file_put_contents($this->_ttlFile, serialize($this->_ttls));
 	}
 }

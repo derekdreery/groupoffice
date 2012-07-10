@@ -18,11 +18,29 @@ abstract class GO_Base_Mail_ImapBase {
 					'ALL'
 	);
 	
+	
+	var $errors=array();
+	
 	/*
 	 * If we don't no the encoding of a filename header. Use the last charset found
 	 * in a part. mb_detect_encoding doesn't work reliable.
 	 */
 	var $default_charset='';
+	
+	
+	public function last_error(){
+		$count=count($this->errors);
+		//GO::debug($this->errors);
+		if($count)
+			return $this->errors[$count-1];
+		else
+			return false;
+	}
+
+	public function clear_errors(){
+		$this->errors=array();
+	}
+
 
 
 	function input_validate($val, $type) {
@@ -286,11 +304,14 @@ abstract class GO_Base_Mail_ImapBase {
 		else {
 			$command = 'A'.$this->command_number().' '.$command;
 		}
-		if (!is_resource($this->handle))
-				return false;
+		if (!is_resource($this->handle)){
+				throw new Exception("Lost connection to ".$this->server);
+		}
 
-		if(!fputs($this->handle, $command))
-				return false;
+		if(!fputs($this->handle, $command)){
+			throw new Exception("Lost connection to ".$this->server);
+//				eturn false;
+		}
 		
 
 		//GO::debug($command);
@@ -316,7 +337,10 @@ abstract class GO_Base_Mail_ImapBase {
 			if (preg_match("/^A".$this->command_count." OK/i", $line)) {
 				$result = true;
 			}
-		}
+			if(!$result)
+				$this->errors[]=$line;
+		}	
+		
 		return $result;
 	}
 

@@ -92,8 +92,8 @@ class GO_Core_Controller_AclUser extends GO_Base_Controller_AbstractMultiSelectM
 					throw new AccessDeniedException();
 			
 			foreach ($delKeys as $delKey) {
-				if ($delKey==1)
-					throw new Exception(GO::t('dontChangeAdminPermissions'));
+//				if ($delKey==1)
+//					throw new Exception(GO::t('dontChangeAdminPermissions'));
 				
 				$aclItem = GO_Base_Model_Acl::model()->findByPk($params['model_id']);
 				if ($aclItem->user_id == $delKey) {

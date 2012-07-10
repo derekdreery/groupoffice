@@ -12,16 +12,23 @@ class GO_Email_Controller_Alias extends GO_Base_Controller_AbstractModelControll
 	}
 
 	protected function getStoreParams($params) {
-		$findParams = GO_Base_Db_FindParams::newInstance()
-						->select('t.*')
-						->joinModel(array(
-								'model' => 'GO_Email_Model_AccountSort',
-								'foreignField' => 'account_id', //defaults to primary key of the remote model
-								'localField' => 'account_id', //defaults to primary key of the model
-								'type' => 'LEFT'
-						))
-						->ignoreAdminGroup()
-						->order('order', 'DESC');
+		
+		if(empty($params['account_id'])){
+			$findParams = GO_Base_Db_FindParams::newInstance()
+							->select('t.*')
+							->joinModel(array(
+									'model' => 'GO_Email_Model_AccountSort',
+									'foreignField' => 'account_id', //defaults to primary key of the remote model
+									'localField' => 'account_id', //defaults to primary key of the model
+									'type' => 'LEFT'
+							))
+							->ignoreAdminGroup()
+							->order(array('order','default'), array('DESC','DESC'));
+		}else
+		{
+			$findParams = GO_Base_Db_FindParams::newInstance();
+			$findParams->getCriteria()->addCondition("account_id", $params['account_id'])->addCondition("default", 1,'!=');
+		}
 
 		return $findParams;
 	}

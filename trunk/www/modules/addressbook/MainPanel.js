@@ -98,20 +98,22 @@ GO.addressbook.MainPanel = function(config)
 	this.contactEastPanel = new GO.addressbook.ContactReadPanel({
 		id:'ab-contact-panel',
 		region : 'east',
-		title: GO.addressbook.lang['cmdPanelContact'],
+//		title: GO.addressbook.lang['cmdPanelContact'],
 		width:420,
 		collapseMode:'mini',
 		collapsible:true,
+		hideCollapseTool:true,
 		split:true
 	});
 
 	this.companyEastPanel = new GO.addressbook.CompanyReadPanel({
 		id:'ab-company-panel',
 		region : 'east',
-		title: GO.addressbook.lang['cmdPanelCompany'],
+//		title: GO.addressbook.lang['cmdPanelCompany'],
 		width:420,
 		collapseMode:'mini',
 		collapsible:true,
+		hideCollapseTool:true,
 		split:true
 	});
 
@@ -365,37 +367,48 @@ GO.addressbook.MainPanel = function(config)
 							url = 'addressbook/contact/export';
 							name = 'contact';
 							documentTitle = 'ExportContact';
-							colmodel = this.contactsGrid.getColumnModel();							
-//							config.query='search_contacts';
-//							config.colModel = this.contactsGrid.getColumnModel();
+							colmodel = this.contactsGrid.getColumnModel();
+							
+							if(!this.exportDialogContacts) {
+								this.exportDialogContacts = new GO.ExportGridDialog({
+									url: url,
+									name: name,
+									exportClassPath:'modules/addressbook/export',
+									documentTitle: title,
+									colModel: colmodel
+								});
+							} else {
+								this.exportDialogContacts.documentTitle=documentTitle;
+								this.exportDialogContacts.documentTitle=name;
+								this.exportDialogContacts.documentTitle=url;
+								this.exportDialogContacts.colmodel=colmodel;
+							}
+							this.exportDialogContacts.show();
 							break;
 						case 'ab-company-grid':
 							url = 'addressbook/company/export';
 							name = 'company';
 							documentTitle = 'ExportCompany';
 							colmodel = this.companiesGrid.getColumnModel();
-//							config.query='search_companies';
-//							config.colModel = this.companiesGrid.getColumnModel();
+							
+							if(!this.exportDialogCompanies) {
+								this.exportDialogCompanies = new GO.ExportGridDialog({
+									url: url,
+									name: name,
+									documentTitle: title,
+									colModel: colmodel
+								});
+							} else {
+								this.exportDialogCompanies.documentTitle=documentTitle;
+								this.exportDialogCompanies.documentTitle=name;
+								this.exportDialogCompanies.documentTitle=url;
+								this.exportDialogCompanies.colmodel=colmodel;
+							}
+							this.exportDialogCompanies.show();
 							break;
 					}
 
-				if(!this.exportDialog)
-				{
-					this.exportDialog = new GO.ExportGridDialog({
-						url: url,
-						name: name,
-						documentTitle: title,
-						colModel: colmodel
-					});
-				}
-				else{
-					this.exportDialog.documentTitle=documentTitle;
-					this.exportDialog.documentTitle=name;
-					this.exportDialog.documentTitle=url;
-					this.exportDialog.colmodel=colmodel;
-				}					
 				
-				this.exportDialog.show();
 
 
 //					config.title = activetab.title;

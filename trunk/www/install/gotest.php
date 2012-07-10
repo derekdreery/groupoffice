@@ -51,6 +51,12 @@ if(!function_exists('format_size'))
 	}
 }
 
+function ini_is_enabled($name){
+	$v = ini_get($name);
+	
+	return $v==1 || strtolower($v)=='on';
+}
+
 function test_system(){
 
 	global $product_name;
@@ -72,7 +78,7 @@ function test_system(){
 	$tests[]=$test;
 
 	$test['name']='Output buffering';
-	$test['pass']=ini_get('output_buffering')!=1;
+	$test['pass']=!ini_is_enabled('output_buffering');
 	$test['feedback']='Warning: output_buffering is enabled. This will increase memory usage might cause memory errors';
 	$test['fatal']=false;
 
@@ -125,14 +131,14 @@ function test_system(){
 
 
 	$test['name']='File upload support';
-	$test['pass']=ini_get('file_uploads') == '1';
+	$test['pass']=ini_is_enabled('file_uploads');
 	$test['feedback']='Warning: File uploads are disabled. Please set file_uploads=On in php.ini.';
 	$test['fatal']=false;
 
 	$tests[]=$test;
 
 	$test['name']='Safe mode';
-	$test['pass']=ini_get('safe_mode') != '1';
+	$test['pass']=!ini_is_enabled('safe_mode');
 	$test['feedback']='Warning: safe_mode is enabled in php.ini. This may cause trouble with the filesystem module and Synchronization. If you can please set safe_mode=Off in php.ini';
 	$test['fatal']=false;
 
@@ -145,15 +151,15 @@ function test_system(){
 
 	$tests[]=$test;
 
-	$test['name']='URL fopen';
-	$test['pass']=ini_get('allow_url_fopen') == '1';
-	$test['feedback']='Warning: allow_url_fopen is disabled in php.ini. RSS feeds on the start page will not work.';
-	$test['fatal']=false;
+//	$test['name']='URL fopen';
+//	$test['pass']=ini_is_enabled('allow_url_fopen');
+//	$test['feedback']='Warning: allow_url_fopen is disabled in php.ini. RSS feeds on the start page will not work.';
+//	$test['fatal']=false;
 
-	$tests[]=$test;
+//	$tests[]=$test;
 	
 	$test['name']='Register globals';
-	$test['pass']=ini_get('register_globals') != '1';
+	$test['pass']=!ini_is_enabled('register_globals');
 	$test['feedback']='Warning: register_globals is enabled in php.ini. This causes a problem in the spell checker and probably in some other parts. It\'s recommended to disable this.';
 	$test['fatal']=false;
 
@@ -180,7 +186,7 @@ function test_system(){
 
 	$tests[]=$test;
 	$test['name']='Error logging';
-	$test['pass']=ini_get('log_errors')=='1';
+	$test['pass']=ini_is_enabled('log_errors');
 	$test['feedback']='Warning: PHP error logging is disabled in php.ini. It\'s recommended that this feature is enabled in a production environment.';
 	$test['fatal']=false;
 
@@ -304,6 +310,14 @@ function test_system(){
 	$test['pass']=empty($ze1compat);
 	$test['feedback']='Fatal error: zend.ze1_compatibility_mode is enabled. '.$product_name.' can\'t run with this setting enabled';
 	$test['fatal']=true;
+
+	$tests[]=$test;
+	
+	
+	$test['name']='APC Cache';
+	$test['pass']=  extension_loaded('apc');
+	$test['feedback']='Warning: APC is not present. You will get better performance with this extension.';
+	$test['fatal']=false;
 
 	$tests[]=$test;
 

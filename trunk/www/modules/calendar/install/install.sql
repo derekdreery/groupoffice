@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `cal_calendars` (
   `time_interval` int(11) NOT NULL DEFAULT '1800',
   `public` tinyint(1) NOT NULL DEFAULT '0',
   `shared_acl` tinyint(1) NOT NULL DEFAULT '0',
-  `show_bdays` tinyint(1) NOT NULL DEFAULT '1',
+  `show_bdays` tinyint(1) NOT NULL DEFAULT '0',
   `comment` varchar(255) NOT NULL DEFAULT '',
   `project_id` int(11) NOT NULL DEFAULT '0',
   `tasklist_id` int(11) NOT NULL DEFAULT '0',

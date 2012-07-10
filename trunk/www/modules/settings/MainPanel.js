@@ -49,7 +49,8 @@ GO.settings.MainPanel = function(config){
 				url: GO.url('settings/setting/submit'),
 				success: function(form,action){
 					this.el.unmask();
-					Ext.MessageBox.alert('',action.result.feedback);
+					if (!GO.util.empty(action.result.feedback))
+						Ext.MessageBox.alert('',action.result.feedback);
 				},
 				failure: function(form,action){
 					this.el.unmask();

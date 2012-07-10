@@ -25,6 +25,7 @@ GO.email.AccountsGrid = function(config){
 		url: GO.url("email/account/store"),
 		fields:['id','email','host', 'user_name', 'username','smtp_host'],
 		remoteSort: true,
+		permissionLevel:GO.permissionLevels.write,
 		sortInfo:{field: 'email', direction: "ASC"}
 	});	
 	config.paging=true;

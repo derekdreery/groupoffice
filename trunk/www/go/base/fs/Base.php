@@ -255,8 +255,8 @@ abstract class GO_Base_Fs_Base{
 	 * @param string $filename
 	 * @return string 
 	 */
-	public static function stripInvalidChars($filename){
-		$filename = trim(preg_replace(self::INVALID_CHARS,'', $filename));
+	public static function stripInvalidChars($filename, $replace=''){
+		$filename = trim(preg_replace(self::INVALID_CHARS,$replace, $filename));
 
 		//IE likes to change a double white space to a single space
 		//We must do this ourselves so the filenames will match.
@@ -271,6 +271,9 @@ abstract class GO_Base_Fs_Base{
 		
 		if(GO::config()->convert_utf8_filenames_to_ascii)
 			$filename = GO_Base_Util_String::utf8ToASCII($filename);
+		
+		if(strlen($filename)>255)
+			$filename = substr($filename, 0,255);
 		
 		return $filename;
 	}

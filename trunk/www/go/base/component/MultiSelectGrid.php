@@ -50,13 +50,13 @@ class GO_Base_Component_MultiSelectGrid {
 	 * @param boolean $selectAll 
 	 */
 	public function setFindParamsForDefaultSelection(GO_Base_Db_FindParams $findParams, $selectAll=false){
-		GO::debug($this->selectedIds);
+
 		if(empty($this->selectedIds)){
 			$findParamsCopy = clone $findParams;
 			$findParamsCopy->ignoreAcl(false);
 			if(!$selectAll){				
 				
-				$findParamsCopy->limit(1)->single()->debugSql();
+				$findParamsCopy->limit(1)->single();
 				$model = GO::getModel($this->_modelName)->find($findParamsCopy);
 
 				$this->selectedIds=array($model->pk);		
@@ -82,6 +82,8 @@ class GO_Base_Component_MultiSelectGrid {
 		} else {
 			$this->selectedIds = GO::config()->get_setting('ms_' . $this->_requestParamName, GO::session()->values['user_id']);
 			$this->selectedIds = $this->selectedIds!==false && $this->selectedIds !=""  ? explode(',', $this->selectedIds) : array();
+			//this will validate the selection
+			$this->_getModels();
 		}
 	}
 	
@@ -112,11 +114,29 @@ class GO_Base_Component_MultiSelectGrid {
 	private function _getModels(){
 		if(!isset($this->_models))
 		{
+			$errors = false;
+			
 			$this->_models=array();
 			foreach ($this->selectedIds as $modelId) {
-				$model = GO::getModel($this->_modelName)->findByPk($modelId);				
-				if($model)
-					$this->_models[]=$model;
+				try{
+					$model = GO::getModel($this->_modelName)->findByPk($modelId);				
+					if($model)
+						$this->_models[]=$model;
+				}
+				catch(Exception $e){
+					$errors=true;
+				}
+			}
+			
+			if($errors){
+				//one of the selections could not be fetched. This may happen when something is
+				//deleted or a user doesn't have permissions anymore.
+				//remove the id's from the selection.
+				$this->selectedIds=array();
+				foreach($this->_models as $model){
+					$this->selectedIds[]=$model->pk;
+				}
+				$this->_save();
 			}
 		}
 		return $this->_models;

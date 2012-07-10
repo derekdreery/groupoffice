@@ -21,7 +21,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 
 	
 	/**
-	 * Get a temporary files folder.
+	 * Get the temporary files folder or obitonally a subfolder of it.
 	 * 
 	 * @var string $sub Optionally create a sub folder
 	 * @return GO_Base_Fs_Folder 

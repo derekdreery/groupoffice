@@ -31,7 +31,7 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
 					'<tr>'+
-						'<td colspan="2" class="display-panel-heading">{name}</td>'+
+						'<td colspan="2" class="display-panel-heading">'+GO.notes.lang.note+': {name}</td>'+
 					'</tr>'+
 					'<tr>'+
 						'<td>ID:</td>'+

@@ -116,9 +116,7 @@ class GO_Base_Db_FindParams{
 	 * Set the selected fields for the select query.
 	 * Defaults to all fields except for TEXT and BLOB fields.
 	 * 
-	 * Remember the model table is aliased with 't'.  
-	 * if you supply this and the fields do not contain t.* then 
-	 * the system can't return full objects. Arrays will be fetched instead.
+	 * Remember the model table is aliased with 't'. Using this may result in incomplete models.
 	 * 
 	 * @param string $fields
 	 * @return GO_Base_Db_FindParams 

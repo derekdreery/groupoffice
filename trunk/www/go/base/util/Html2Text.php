@@ -155,8 +155,8 @@ class GO_Base_Util_Html2Text
         '/<p[^>]*>(.*?)<\/p>[ \t]*/i',                           // <P>
         '/<\/div[^>]*>[ \t]*/i',                           // <div>
         '/<br[^>]*>[ \t]*/i',                          // <br>
-        '/<b[^>]*>(.*?)<\/b>/ie',                // <b>
-        '/<strong[^>]*>(.*?)<\/strong>/ie',      // <strong>
+//        '/<b[^>]*>(.*?)<\/b>/ie',                // <b>
+//        '/<strong[^>]*>(.*?)<\/strong>/ie',      // <strong>
         '/<i[^>]*>(.*?)<\/i>/i',                 // <i>
         '/<em[^>]*>(.*?)<\/em>/i',               // <em>
         '/(<ul[^>]*>|<\/ul>)[\s]*/i',                 // <ul> and </ul>
@@ -209,8 +209,8 @@ class GO_Base_Util_Html2Text
         "\n\n\\1\n\n",                               // <P>
         "\n",                               // </div>
         "\n",                                   // <br>
-        'strtoupper("\\1")',                    // <b>
-        'strtoupper("\\1")',                    // <strong>
+//        'strtoupper("\\1")',                    // <b>
+//        'strtoupper("\\1")',                    // <strong>
         '_\\1_',                                // <i>
         '_\\1_',                                // <em>
         "\n\n",                                 // <ul> and </ul>

@@ -20,7 +20,13 @@
 
 class GO_Email_EmailModule extends GO_Base_Module{	
 
-	
+	public static function initListeners() {
+		
+		$c = new GO_Core_Controller_Reminder();
+		$c->addListener('reminderdisplay', "GO_Email_EmailModule", "reminderDisplay");
+		
+		return parent::initListeners();
+	}
 	public function autoInstall() {
 		return true;
 	}
@@ -45,4 +51,8 @@ class GO_Email_EmailModule extends GO_Base_Module{
 		return parent::submitSettings($settingsController, $params, $response, $user);
 	}
 	
+	public static function reminderDisplay($controller, &$html, $params){
+		if(!empty($params['unseenEmails']))
+			$html .= '<p>'.str_replace('{new}', $params['unseenEmails'], GO::t('youHaveNewMails','email')).'</p>';		
+	}	
 }

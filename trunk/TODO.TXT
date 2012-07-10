@@ -1,6 +1,25 @@
+Ticket groepen werken niet daniel malmgren
+
+Automatisch ticket maken van support@intermesh.nl
+
+
+http://www.group-office.com/forum/viewtopic.php?f=3&t=8353
+
+VCF import via mail
+
+Note sync
+
+reminder als licentie verloopt
+
+Password prompt on imap logon failure
+
+Z-push 2.0
+
+Resource beheer altijd weergeven.
+
 Geafactureerd type ook als gesloten beschouwen
 
-Import matching dialog
+GOTA moet weten of file gelocked of niet is.
 
 resize vcard photo's
 
@@ -12,11 +31,7 @@ Koba
 
 LDAP Sync
 
-Calendar:
-Distinguish declined and cancel	led events in grid.
-alarm import
-
-Grid scroll behouden bij reload
+Sieve MVC en redesign vakantie. Automatisch vullen aliasen
 
 CMS compatible (Wilmar)
 
@@ -58,6 +73,22 @@ Feature requests voting system
 Bij bedrijf -> displaypanel -> New -> Contact
 
 
+Password encrypted notes
+
 
 UCF for deb pkgs
 http://www.group-office.com/forum/viewtopic.php?f=6&t=8083
+
+Drag & drop contacts:
+http://www.group-office.com/forum/viewtopic.php?f=5&t=8351
+
+
+Docs:
+
+- Sieve
+- Workflow
+- Smime
+- Bookmarks
+- CardDav
+
+- Alles even nalopen

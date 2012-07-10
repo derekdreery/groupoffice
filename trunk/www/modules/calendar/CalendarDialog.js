@@ -54,7 +54,7 @@ GO.calendar.CalendarDialog = function(config)
 			forceSelection:true,
 			anchor:'100%'
 		}),{
-			xtype:'checkbox',
+			xtype:'xcheckbox',
 			name:'show_bdays',
 			boxLabel:GO.calendar.lang.show_bdays,
 			hideLabel:true

@@ -14,7 +14,6 @@
  * @package GO.modules.servermanager.model
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering mschering@intermesh.nl
- * @author WilmarVB wilmar@intermesh.nl
  */
  
 /**
@@ -53,6 +52,8 @@
 
 class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 
+	const STATUS_TRIAL ='trial';
+	const STATUS_ACTIVE ='ignore';
 	/**
 	 * Ignore existing database and folder structure when importing.
 	 * 
@@ -106,7 +107,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		return '/home/govhosts/'.$this->name.'/';
 	}
 	
-	protected function getConfigPath(){
+	protected function getConfigPath(){		
 		return '/etc/groupoffice/'.$this->name.'/config.php';
 	}
 	
@@ -137,21 +138,22 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 
 	protected function beforeDelete() {
 		
-		if(!file_exists($this->configPath))
-			throw new Exception("Error: Could not find installation configuration.");
+		if(file_exists($this->configPath)){
+			//throw new Exception("Error: Could not find installation configuration.");
 		
-		$cmd = 'sudo TERM=dumb '.GO::config()->root_path.
-						'groupofficecli.php -r=servermanager/installation/destroy'.
-						' -c='.GO::config()->get_config_file().
-						' --name='.$this->name;
-		
-//		GO::debug($cmd);
-//		throw new Exception($cmd);
-						
-		exec($cmd, $output, $return_var);		
+			$cmd = 'sudo TERM=dumb '.GO::config()->root_path.
+							'groupofficecli.php -r=servermanager/installation/destroy'.
+							' -c='.GO::config()->get_config_file().
+							' --name='.$this->name;
 
-		if($return_var!=0){
-			throw new Exception(implode("\n", $output));
+	//		GO::debug($cmd);
+	//		throw new Exception($cmd);
+
+			exec($cmd, $output, $return_var);		
+
+			if($return_var!=0){
+				throw new Exception(implode("\n", $output));
+			}
 		}
 		
 		return parent::beforeDelete();
@@ -184,7 +186,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		$this->_calculateMailboxUsage($config);
 		$this->_calculateInstallationUsage($config);
 		
-		//$this->save();
+		$this->save();
 		
 		$report = $this->getAttributes();
 		
@@ -207,45 +209,59 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	private function _calculateInstallationUsage($config){
 		//prevent model caching and switch to installation database.
 		GO::$disableModelCache=true;		
-		GO::setDbConnection(
-						$config['db_name'], 
-						$config['db_user'], 
-						$config['db_pass'], 
-						$config['db_host']
-						);
-		
-		$adminUser = GO_Base_Model_User::model()->findByPk(1);
-		$this->admin_email=$adminUser->email;
-		$this->admin_name=$adminUser->name;
-		$this->install_time = $adminUser->ctime;
-		
-		$findParams = GO_Base_Db_FindParams::newInstance()
-						->select('count(*) as count, max(lastlogin) AS lastlogin');
-		$record = GO_Base_Model_User::model()->findSingle($findParams);						
-		
-		$this->lastlogin = intval($record->lastlogin);
-		$this->count_users = intval($record->count);		
-		
-		$allowedModules = empty($config['allowed_modules']) ? array() : explode(',', $config['allowed_modules']);
-		
-		$stmt = GO_Base_Model_User::model()->find(GO_Base_Db_FindParams::newInstance()->ignoreAcl());
-		$iUsers=array();
-		while($user = $stmt->fetch()){
-			$iUser = $user->getAttributes('raw');
-			$iUser['modules']=array();
+		try{
+			GO::setDbConnection(
+							$config['db_name'], 
+							$config['db_user'], 
+							$config['db_pass'], 
+							$config['db_host']
+							);
+
+			$adminUser = GO_Base_Model_User::model()->findByPk(1);
+			$this->admin_email=$adminUser->email;
+			$this->admin_name=$adminUser->name;
+			$this->install_time = $adminUser->ctime;
+
+			$findParams = GO_Base_Db_FindParams::newInstance()
+							->select('count(*) as count, max(lastlogin) AS lastlogin');
+			$record = GO_Base_Model_User::model()->findSingle($findParams);						
+
+			$this->lastlogin = intval($record->lastlogin);
+			$this->count_users = intval($record->count);		
+
+			$allowedModules = empty($config['allowed_modules']) ? array() : explode(',', $config['allowed_modules']);
+			$iUsers=array();
+			$stmt = GO_Base_Model_User::model()->find(GO_Base_Db_FindParams::newInstance()->ignoreAcl());
 			
-			$modStmt = GO_Base_Model_Module::model()->find(GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::READ_PERMISSION, $user->id));
-			while($module = $modStmt->fetch()){			
-				if(empty($allowedModules) || in_array($module->id, $allowedModules))
-					$iUser['modules'][]=$module->id;				
+			while($user = $stmt->fetch()){
+				$iUser = $user->getAttributes('raw');
+				$iUser['modules']=array();
+				$oldIgnore = GO::setIgnoreAclPermissions(false);
+				$modStmt = GO_Base_Model_Module::model()->find(GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::READ_PERMISSION, $user->id));
+				while($module = $modStmt->fetch()){			
+					if(empty($allowedModules) || in_array($module->id, $allowedModules))
+						$iUser['modules'][]=$module->id;				
+				}
+				$modStmt=null;
+				
+				GO::setIgnoreAclPermissions($oldIgnore);
+
+				$iUsers[]=$iUser;
 			}
+			//unset stmt to clean up connections
+			$stmt=null;
+			GO::config()->save_setting('mailbox_usage', $this->mailbox_usage);
+			GO::config()->save_setting('file_storage_usage', $this->file_storage_usage);
+			GO::config()->save_setting('database_usage', $this->database_usage);
+		}catch(Exception $e){
+			GO::setDbConnection();
+			$stmt=null;
+			$modStmt=null;
 			
-			$iUsers[]=$iUser;
+			if(isset($oldIgnore))
+				GO::setIgnoreAclPermissions($oldIgnore);
+			throw new Exception($e->getMessage());
 		}
-		GO::config()->save_setting('mailbox_usage', $this->mailbox_usage);
-		GO::config()->save_setting('file_storage_usage', $this->file_storage_usage);
-		GO::config()->save_setting('database_usage', $this->database_usage);
-		
 		//var_dump($iUsers);
 		
 		

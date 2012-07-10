@@ -1,6 +1,6 @@
 <?php
 
-﻿;
+;
 $l['name'] = 'Datoteke';
 $l['description'] = 'Datotečni modul. Modul za dijeljenje datoteka.';
 $lang['link_type'][6]='Datoteka';
@@ -31,7 +31,7 @@ $l['downloadLink'] = 'Link za skidanje';
 $l['clickHereToDownload'] = 'Kliknite ovdje kako bi ste skinuli datoteku preko sigurnog linka';
 $l['copyPasteToDownload'] = 'Kliknite na sigurni link ispod ili ga kopirajte u vaš preglednik interneta kako bi skinuli datoteku.';
 $l['possibleUntil'] = 'moguće do';
-$l['fileNotFound']='Žao nam je, datoteka koji ste probali skinuti nije pronađena.';﻿;
+$l['fileNotFound']='Žao nam je, datoteka koji ste probali skinuti nije pronađena.';;
 $l["files"]='Datoteke';
 $l["template"]= 'Predložak';
 $l["manageTemplates"]= 'Upravljanje predlošcima';

@@ -21,6 +21,9 @@
  * @property string $subject
  * @property int $user_id
  * @property int $id
+ * 
+ * @property GO_Base_Fs_File $logFile
+ * @property GO_Base_Fs_File $messageFile
  */
 class GO_Addressbook_Model_SentMailing extends GO_Base_Db_ActiveRecord {
 	const STATUS_RUNNING=1;
@@ -82,6 +85,30 @@ class GO_Addressbook_Model_SentMailing extends GO_Base_Db_ActiveRecord {
 						)
 		);
 		$this->save();
+	}
+	
+	protected function getLogFile(){
+		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'log/mailings/'.$this->id.'.log');		
+		return $file;
+	}
+	
+	protected function getMessageFile(){
+		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.$this->message_path);		
+		return $file;
+	}
+	
+	protected function beforeDelete() {
+		if($this->status==self::STATUS_RUNNING)
+			throw new Exception("Can't delete a running mailing. Pause it first.");
+		return parent::beforeDelete();
+	}
+	
+	protected function afterDelete() {
+		
+		$this->logFile->delete();
+		$this->messageFile->delete();
+		
+		return parent::afterDelete();
 	}
 
 }

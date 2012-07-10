@@ -270,3 +270,7 @@ $l['companyCustomFields']='Egendefinerte felt firmaer';
 $l['editUser']='Rediger bruker';
 $l['templateContent']='Dokument';
 $l['addresslistIdMustBePositive']='Dette panelet forventer en adresseliste-ID som er positiv, men fikk ikke dette. Vennligst kontakt administrator.';
+$l["importSuccessCount"]='Importerte poster:';
+$l['male']='Mann';
+$l['female']='Kvinne';
+$l['importing']='Importerer';

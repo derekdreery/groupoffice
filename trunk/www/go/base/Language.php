@@ -48,7 +48,13 @@ class GO_Base_Language{
 		$oldIso = $this->_langIso;
 		
 		if(!$isoCode){
-			$this->_langIso=GO::user() ? GO::user()->language : GO::config()->language;
+			if(isset($_REQUEST['SET_LANGUAGE'])){
+				$this->_langIso=$_REQUEST['SET_LANGUAGE'];
+			}elseif(GO::user()){
+				$this->_langIso=GO::user()->language;
+			}else{
+				$this->_langIso=$this->_getDefaultLanguage();
+			}
 		}else
 		{
 			$this->_langIso=$isoCode;
@@ -58,6 +64,37 @@ class GO_Base_Language{
 			$this->_lang=array();
 		
 		return $oldIso;
+	}
+	
+	private function _getDefaultLanguage(){
+		if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
+			$browserLanguages = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+		else
+			$browserLanguages=array();
+		
+		foreach($browserLanguages as $lang){
+			if($this->hasLanguage($lang))
+				return $lang;
+		}
+		
+		return GO::config()->language;		
+	}
+	
+	/**
+	 * @return string Language ISO code. eg. en,nl or en_UK
+	 */
+	public function getLanguage(){
+		return $this->_langIso;
+	}
+	
+	/**
+	 * Check if language is supported
+	 * 
+	 * @param string $langIso
+	 * @return boolean 
+	 */
+	public function hasLanguage($langIso){
+		return $this->_find_file($langIso, 'base', 'common');
 	}
 	
 	/**

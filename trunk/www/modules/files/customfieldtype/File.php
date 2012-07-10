@@ -9,25 +9,16 @@ class GO_Files_Customfieldtype_File extends GO_Customfields_Customfieldtype_Abst
 		$html="";
 		if(!empty($attributes[$key])) {
 
-			if(GO::modules()->users && !defined('EXPORTING')){
-				$html='<a href="#" onclick=\'GO.linkHandlers["GO_Files_Model_File"].call(this,'.
-					$this->getId($attributes[$key]).');\' title="'.$this->getName($attributes[$key]).'">'.
-						$this->getName($attributes[$key]).'</a>';
+			if(!defined('EXPORTING')){
+				$html='<a href="#" onclick=\'GO.linkHandlers["GO_Files_Model_File"].call(this,"'.
+					$attributes[$key].'");\' title="'.$attributes[$key].'">'.
+						$attributes[$key].'</a>';
 			}else
 			{
-				$html=$this->getName($attributes[$key]);
+				$html=$attributes[$key];
 			}
 		}
 		return $html;
 	}
 
-	private function getId($cf) {
-		$pos = strpos($cf,':');
-		return substr($cf,0,$pos);
-	}
-
-	private function getName($cf) {
-		$pos = strpos($cf,':');
-		return htmlspecialchars(substr($cf,$pos+1), ENT_COMPAT,'UTF-8');
-	}
 }

@@ -1,6 +1,6 @@
 <?php
 
-﻿;
+;
 $l['name'] = 'Korisnici';
 $l['description'] = 'Administratorski modul. Upravljanje sa korisnicima programa.';
 $l['deletePrimaryAdmin'] = 'Ne možete obrisati primarnog administratora';
@@ -20,7 +20,7 @@ $l['register_email_body']='{product_name} račun je kreiran za vas na {url}
 Podaci za prijavu su:
 Korisničko ime: {username};
 Lozinka: {password}';
-$l['max_users_reached']='Dosegnut je maksimalan broj korisnika za ovaj sistem.';﻿;
+$l['max_users_reached']='Dosegnut je maksimalan broj korisnika za ovaj sistem.';;
 $l["cmdCheckColumnRead"]= 'Koristi';
 $l["cmdCheckColumnWrite"]= 'Upravljaj';
 $l["cmdHeaderColumnName"]= 'Ime modula';

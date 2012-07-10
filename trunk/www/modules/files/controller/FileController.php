@@ -7,7 +7,19 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 	protected function allowGuests() {
 		return array('download'); //permissions will be checked manually in that action
 	}
+	
+	protected function actionDisplay($params) {
+		
+		//custom fields send path as ID.
+		if(!empty($params['id']) && !is_numeric($params['id'])){
+			$file = GO_Files_Model_File::model()->findByPath($params['id']);
+			$params['id']=$file->id;
+		}
+		
+		return parent::actionDisplay($params);
+	}
 
+	
 	protected function afterDisplay(&$response, &$model, &$params) {
 
 		$response['data']['path'] = $model->path;
@@ -82,6 +94,11 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		if(isset($params['name']))		
 			$params['name'].='.'.$model->fsFile->extension();		
 		
+		if(isset($params['lock'])){
+			//GOTA sends lock parameter It does not know the user ID.
+			$model->locked_user_id=empty($params['lock']) ? 0 : GO::user()->id;
+		}
+		
 		return parent::beforeSubmit($response, $model, $params);
 	}
 
@@ -98,10 +115,10 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		
 		if(!empty($params['random_code'])){
 			if($file->random_code!=$params['random_code'])
-				throw new Exception("Invalid download link");
+				throw new GO_Base_Exception_NotFound();
 			
 			if(time()>$file->expire_time)
-				throw new Exception("Sorry, the download link has expired");				
+				throw new Exception(GO::t('downloadLinkExpired', 'files'));				
 		}else
 		{
 			if(!$file->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
@@ -168,11 +185,17 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 			$message = GO_Email_Model_SavedMessage::model()->createFromMimeData($template->content);
 	
 			$response['data']=$message->toOutputArray($html, true);
-			$response['data'][$bodyindex] = GO_Addressbook_Model_Template::model()->replaceUserTags($response['data'][$bodyindex], true);
-			if(strpos($response['data'][$bodyindex],'{body}'))
+			
+			if(strpos($response['data'][$bodyindex],'{body}')){
+				$response['data'][$bodyindex] = GO_Addressbook_Model_Template::model()->replaceUserTags($response['data'][$bodyindex], true);
+				
+				GO_Addressbook_Model_Template::model()->htmlSpecialChars=false;
 				$response['data'][$bodyindex] = GO_Addressbook_Model_Template::model()->replaceCustomTags($response['data'][$bodyindex], array('body'=>$text));			
-			else
+			}else{
+				$response['data'][$bodyindex] = GO_Addressbook_Model_Template::model()->replaceUserTags($response['data'][$bodyindex], false);
 				$response['data'][$bodyindex] = $text.$response['data'][$bodyindex];
+			}
+				
 			
 		}else
 		{

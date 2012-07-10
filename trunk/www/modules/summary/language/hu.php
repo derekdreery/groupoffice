@@ -1,6 +1,6 @@
 <?php
 
-﻿;
+;
 $l["summary"]= 'Összegzés';
 $l["noItems"]= 'Nincs egyetlen elem sem a kezdőlapodon.';
 $l["selectPortlet"]= 'Select portlet';

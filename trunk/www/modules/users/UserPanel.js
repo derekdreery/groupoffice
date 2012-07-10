@@ -6,7 +6,7 @@ GO.users.UserPanel = Ext.extend(GO.DisplayPanel,{
 
 	idParam : 'id',
 
-	loadUrl : GO.url("users/user/display"),
+	loadUrl : "users/user/display",
 
 	editGoDialogId : 'user',
 

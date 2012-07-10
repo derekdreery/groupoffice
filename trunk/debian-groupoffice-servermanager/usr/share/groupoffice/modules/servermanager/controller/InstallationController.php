@@ -37,6 +37,10 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		
 		$installation = GO_ServerManager_Model_Installation::model()->findSingleByAttribute('name', $params['name']);
 		
+		if($installation->name=='servermanager'){
+			throw new Exception("You can't delete the servermanager installation");
+		}
+		
 		if(!$installation)
 			throw new Exception("Installation ".$params['name']." not found!");
 		
@@ -255,8 +259,8 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				$response['data']['first_weekday'] = $config['first_weekday'];
 
 
-				$response['data']['allow_themes'] = isset($config['allow_themes']) ? true : false;
-				$response['data']['allow_password_change'] = isset($config['allow_password_change']) ? true : false;
+				$response['data']['allow_themes'] = !empty($config['allow_themes']);
+				$response['data']['allow_password_change'] = !empty($config['allow_password_change']);
 
 				$response['data']['quota'] = GO_Base_Util_Number::localize($config['quota']/1024/1024);
 				$response['data']['restrict_smtp_hosts'] = $config['restrict_smtp_hosts'];
@@ -352,14 +356,14 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$config['first_weekday'] = $params['first_weekday'];
 
 
-		$config['allow_themes'] = isset($params['allow_themes']) ? true : false;
-		$config['allow_password_change'] = isset($params['allow_password_change']) ? true : false;
+		$config['allow_themes'] = !empty($params['allow_themes']);
+		$config['allow_password_change'] = !empty($params['allow_password_change']);
 
 		$config['quota'] = GO_Base_Util_Number::unlocalize($params['quota'])*1024*1024*1024;
 		$config['restrict_smtp_hosts'] = $params['restrict_smtp_hosts'];
 		$config['serverclient_domains'] = $params['serverclient_domains'];
 		
-		
+		//throw new Exception(var_export($config, true));
 				
 
 		if (intval($config['max_users']) < 1)
@@ -541,20 +545,52 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				'uname'=>  php_uname()
 		);
 		
-		while($installation = $stmt->fetch()){
+		$installations = $stmt->fetchAll();
+		$stmt = null;
+		
+		while($installation = array_shift($installations)){			
+			if(!file_exists($installation->configPath)){
+				echo "Config file does not exist for ".$installation->name."\n";
+				continue;
+			}
+			
+			$config=array();
+			require($installation->configPath);
+			if(isset($config['enabled']) && $config['enabled']==false)
+			{
+				echo "Installation ".$installation->name." is suspended\n";
+				continue;
+			}
+			
+			$suspended=false;
+			
 			echo "Creating report for ".$installation->name."\n";
-			$report['installations'][]=$installation->report();
+			try{
+				$report['installations'][]=$installation->report();
+				
+				if($installation->status == GO_ServerManager_Model_Installation::STATUS_TRIAL && $installation->install_time<GO_Base_Util_Date::date_add(time(),-30)){
+					$this->_suspend($installation, $config);
+					$suspended=true;
+				}
+				
+			}catch(Exception $e){
+				echo $e->getMessage()."\n";
+				$report['errors']=(string) $e;
+			}
 			
 			//run tasks for installation like log rotation and filesearch index update.
-			
-			echo "Running daily tasks for installation\n";
-			$cmd ='/usr/share/groupoffice/groupofficecli.php -r=maintenance/servermanagerReport -c="'.$installation->configPath.'"  2>&1';				
-			system($cmd);
+			if(!$suspended){
+				echo "Running daily tasks for installation\n";
+				$cmd ='/usr/share/groupoffice/groupofficecli.php -r=maintenance/servermanagerReport -c="'.$installation->configPath.'"  2>&1';				
+				system($cmd);
+			}
 			
 			
 			$this->_sendAutomaticEmails($installation,$now);
 		
 		}
+		
+		
 		
 		
 		
@@ -590,6 +626,12 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		
 		echo "Done\n\n";
 	}
+	
+	private function _suspend(GO_ServerManager_Model_Installation $installation,$config){
+		echo "Suspending installation ".$installation->name."\n";
+		$config['enabled']=false;
+		GO_Base_Util_ConfigEditor::save(new GO_Base_Fs_File($installation->configPath), $config);
+	}
 
 	private function _sendAutomaticEmails(GO_Servermanager_Model_Installation $installationModel, $nowUnixTime=false) {
 		if (!is_int($nowUnixTime))
@@ -612,7 +654,14 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			$dayStart = GO_Base_Util_Date::clear_time($dayStart);
 			$dayEnd = GO_Base_Util_Date::date_add($dayStart,1);			
 			
-			if (!empty($autoEmailModel->active) && $installationModel->ctime>$dayStart && $installationModel->ctime<$dayEnd) {
+//			echo $autoEmailModel->name.' '.date('c', $dayStart).' - '.date('c', $dayEnd)."\n";
+			
+//			echo "Installation time: ".date('c', $installationModel->install_time)."\n";
+			
+			if (!empty($autoEmailModel->active) && $installationModel->install_time>=$dayStart && $installationModel->install_time<$dayEnd) {
+				
+				echo "Sending message ".$autoEmailModel->name." to ".$installationModel->admin_email."\n";
+				
 				$message = GO_Base_Mail_Message::newInstance()
 					->loadMimeMessage($autoEmailModel->mime)
 					->addTo($installationModel->admin_email, $installationModel->admin_name)

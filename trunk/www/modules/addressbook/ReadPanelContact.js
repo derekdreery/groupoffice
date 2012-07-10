@@ -29,6 +29,9 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 		
 		this.template = 
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
+				'<tr>'+
+						'<td colspan="2" class="display-panel-heading">'+GO.addressbook.lang.contact+': {name}</td>'+
+				'</tr>'+
 					/*'<tr>'+
 						'<td colspan="2" class="display-panel-heading">' + GO.addressbook.lang['cmdContactDetailsFor'] + ' <b>{name}</b></td>'+
 					'</tr>'+*/

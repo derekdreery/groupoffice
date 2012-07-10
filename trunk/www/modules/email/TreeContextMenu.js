@@ -1,8 +1,18 @@
 GO.email.TreeContextMenu = Ext.extend(Ext.menu.Menu,{
 	
+	hasAcl : function(node){
+		
+		var inboxNode = this.treePanel.findInboxNode(node);
+		if(!inboxNode)
+			return false;
+		else
+			return inboxNode.attributes.acl_supported;
+	},
+	
 	setNode : function(node){
 		this.addFolderButton.setDisabled(node.attributes.noinferiors);
-		this.shareBtn.setVisible(node.attributes.aclSupported);
+		
+		this.shareBtn.setVisible(this.hasAcl(node));
 
 	//		if (GO.settings.modules.email.write_permission) {
 	//			var node_id_type = node.attributes.id.substring(0,6);
@@ -139,13 +149,13 @@ GO.email.TreeContextMenu = Ext.extend(Ext.menu.Menu,{
 								mailbox: node.attributes.mailbox
 							},
 							success:function(){
-								if(node.attributes.mailbox==this.mailbox)
+								if(node.attributes.mailbox==GO.mainLayout.getModulePanel("email").messagesGrid.store.baseParams.mailbox)
 								{
-									this.messagesGrid.store.removeAll();
-									this.messagePanel.reset();
+									GO.mainLayout.getModulePanel("email").messagesGrid.store.removeAll();
+									GO.mainLayout.getModulePanel("email").messagePanel.reset();
 								}
 								GO.mainLayout.getModulePanel("email").updateFolderStatus(node.attributes.mailbox, 0);
-								GO.mainLayout.getModulePanel("email").updateNotificationEl();
+//								GO.mainLayout.getModulePanel("email").updateNotificationEl();
 							},
 							scope: this
 						});
@@ -183,7 +193,7 @@ GO.email.TreeContextMenu = Ext.extend(Ext.menu.Menu,{
 								node.remove();
 
 								if(node.attributes.mailbox==GO.mainLayout.getModulePanel("email").messagesGrid.store.baseParams.mailbox){
-									this.messagesGrid.store.removeAll();
+									GO.mainLayout.getModulePanel("email").messagesGrid.store.removeAll();
 								}
 
 								if(GO.emailportlet){

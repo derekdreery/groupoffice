@@ -29,6 +29,7 @@
  */
 class GO_Base_Module extends GO_Base_Observable {
 
+	private $_id;
 	/**
 	 * Get the id of the module which is identical to 
 	 * the folder name in the modules folder.
@@ -38,10 +39,17 @@ class GO_Base_Module extends GO_Base_Observable {
 	 */
 	public function id() {
 		
-		$className = get_class($this);
-		
-		$arr = explode('_', $className);
-		return strtolower($arr[1]);
+		if(!isset($this->_id)){
+			$className = get_class($this);
+
+			$arr = explode('_', $className);
+			$this->_id=strtolower($arr[1]);
+		}
+		return $this->_id;
+	}
+	
+	public function setId($id){
+		$this->_id=$id;
 	}
 	
 	/**
@@ -59,7 +67,10 @@ class GO_Base_Module extends GO_Base_Observable {
 	 * @return String 
 	 */
 	public function name() {
-		return GO::t('name', $this->id());// isset($lang[$this->id]['name']) ? $lang[$this->id]['name'] : $this->id;
+		$name = GO::t('name', $this->id());
+		if($name=='name')
+			$name = $this->id();
+		return $name;
 	}
 
 	/**
@@ -143,8 +154,11 @@ class GO_Base_Module extends GO_Base_Observable {
 		$className = 'GO_'.ucfirst($moduleId).'_'.ucfirst($moduleId).'Module';
 		if(class_exists($className))
 			return new $className;
-		else
-			return false;
+		else{
+			$modMan =  new GO_Base_Module();
+			$modMan->setId($moduleId);
+			return $modMan;
+		}
 	}
 	
 	/**

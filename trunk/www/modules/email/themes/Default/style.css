@@ -1,3 +1,4 @@
+
 .em-autolink-message{
 	padding:5px;
 	border:1px solid #ddd;
@@ -21,10 +22,22 @@
 	margin:0 !important;
 }
 
-.em-statusbar-body{
+.em-statusbar-body span{
 line-height:21px !important;
 padding-left:2px;
 }
+
+.em-usage-95{
+	color:red !important;
+	font-weight:bold !important;
+	line-height: 20px !important;
+}
+.em-usage-85, .em-usage-90{
+	color:orange !important;
+	font-weight:bold !important;
+	line-height: 20px !important;
+}
+
 
 
 .em-blocked{
@@ -51,6 +64,10 @@ margin:5px 2px;
 	background-image: url('images/16x16/message.png') !important;
 	width:16px;
 	height:16px;
+}
+
+.em-btn-email-files{
+	background-image: url('images/16x16/attach.png') !important;
 }
 
 .go-module-icon-email , .go-menu-icon-email{
@@ -209,7 +226,7 @@ margin:5px 2px;
 }
 
 .message-body{
-	padding: 5px;	
+	padding: 8px;	
 }
 .em-message p, .em-composer p{
 	margin:0px;

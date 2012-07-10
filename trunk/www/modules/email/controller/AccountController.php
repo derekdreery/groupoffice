@@ -61,42 +61,40 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 
 	protected function actionCheckUnseen($params) {
 
-		require_once(GO::config()->root_path . 'Group-Office.php');
-		global $GO_SECURITY, $GO_MODULES;
-
+		$response=array("success"=>true);
+		$response['email_status']['total_unseen']=0;
+		$response['email_status']['unseen']=array();
+		
 		GO::session()->closeWriting();
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()						
+						->ignoreAdminGroup();
 
+		$stmt = GO_Email_Model_Account::model()->find($findParams);
 
-		require_once ($GLOBALS['GO_MODULES']->modules['email']['class_path'] . "email.class.inc.php");
-		require_once ($GLOBALS['GO_MODULES']->modules['email']['class_path'] . "cached_imap.class.inc.php");
-
-		$imap = new cached_imap();
-		$email = new email();
-		$email2 = new email();
-
-
-		$response['success'] = true;
-		$count = $email->get_accounts($GLOBALS['GO_SECURITY']->user_id);
-		$response['email_status'] = array();
-		while ($email->next_record()) {
+		while ($account = $stmt->fetch()) {
 			try {
-				$account = $imap->open_account($email->f('id'), 'INBOX', false);
-
-				if ($account) {
-					$inbox = $email2->get_folder($email->f('id'), 'INBOX');
+				if($account->getDefaultAlias()){					
+					
+					$imap = $account->openImapConnection();
 
 					$unseen = $imap->get_unseen();
 
-					//$response['email_status'][$inbox['id']]=$account;
-					$response['email_status'][$inbox['id']]['unseen'] = $unseen['count'];
-					$response['email_status'][$inbox['id']]['messages'] = $imap->selected_mailbox['messages'];
+					$response['email_status']['unseen'][]=array('account_id'=>$account->id,'mailbox'=>'INBOX', 'unseen'=>$unseen['count']);
+					$response['email_status']['total_unseen'] += $unseen['count'];
+					
+					if(!isset($response['email_status']['has_new']) && $account->hasNewMessages)
+						$response['email_status']['has_new']=true;					
 				}
+				
 			} catch (Exception $e) {
-				go_debug($e->getMessage());
+				GO::debug($e->getMessage());
 			}
-			$imap->disconnect();
+			
+			if(!empty($imap))
+				$imap->disconnect();			
 		}
-
+//$response['email_status']['has_new']=true;	
 		return $response;
 	}
 	
@@ -110,8 +108,9 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			return $this->_getMailboxTreeNodes($rootMailboxes, true);
 		else{
 			$parts = explode('_', $params['node']);
-			$accountId = $parts[1];
-			$mailboxName = $parts[2];
+			$type = array_shift($parts);
+			$accountId = array_shift($parts);
+			$mailboxName = implode('_', $parts);
 
 			$account = GO_Email_Model_Account::model()->findByPk($accountId);
 
@@ -119,8 +118,32 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			return $this->_getMailboxTreeNodes($mailbox->getChildren(false, false), true);
 		}
 	}
+	
+	private function _getUsage(GO_Email_Model_Account $account){
+		$usage="";
+		
+		$quota = $account->openImapConnection()->get_quota();
+		
+		if(isset($quota['usage'])) {
+			if(!empty($quota['limit'])) {
+				$percentage = ceil($quota['usage']*100/$quota['limit']);
+				$usage = sprintf(GO::t('usage_limit','email'), $percentage.'%', GO_Base_Util_Number::formatSize($quota['limit']*1024));
+				
+				$round5 = floor($usage/5)*5;
+
+				$usage='<span class="em-usage-'.$round5.'">'.$usage.'</span>';
+				
+			}	else {
+				$usage = sprintf(GO::t('usage','email'), GO_Base_Util_Number::formatSize($quota['usage']*1024));
+			}
+		}
+		//var_dump($usage);
+		return $usage;
+	}
 
 	public function actionTree($params) {
+		GO::session()->closeWriting();
+		
 
 		$response = array();
 
@@ -132,7 +155,9 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 								'model' => 'GO_Email_Model_AccountSort',
 								'foreignField' => 'account_id', //defaults to primary key of the remote model
 								'localField' => 'id', //defaults to primary key of the model
-								'type' => 'LEFT'
+								'type' => 'LEFT',
+								'tableAlias'=>'s',
+								'criteria'=>  GO_Base_Db_FindCriteria::newInstance()->addCondition('user_id', GO::user()->id,'=','s')
 						))
 						->ignoreAdminGroup()
 						->order('order', 'DESC');
@@ -142,40 +167,59 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			while ($account = $stmt->fetch()) {
 
 				$alias = $account->getDefaultAlias();
+				if($alias){
+					$nodeId='account_' . $account->id;
+					
+					$node = array(
+							'text' => $alias->email,
+							'name' => $alias->email,
+							'id' => $nodeId,
+							'isAccount'=>true,
+							'iconCls' => 'folder-account',
+							'expanded' => $this->_isExpanded($nodeId),
+							'noselect' => false,
+							'account_id' => $account->id,
+							'mailbox' => '',							
+							'noinferiors' => false,
+							//'inbox_new' => 0,
+							//'usage' => "",
+							//"acl_supported"=>false
+					);
+					try{
+						
+						if($node['expanded'])
+							$node['children']=$this->_getMailboxTreeNodes($account->getRootMailboxes(true));
+						
+						
+						
+					}catch(Exception $e){
+						$node['text'] .= ' ('.GO::t('error').')';
+						$node['children']=array();
+						$node['expanded']=true;
+						$node['qtipCfg'] = array('title'=>GO::t('error'), 'text' =>htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8'));
+					}
+					
 
-				$node = array(
-						'text' => $alias->email,
-						'name' => $alias->email,
-						'id' => 'account_' . $account->id,
-						'iconCls' => 'folder-account',
-						'expanded' => true,
-						'noselect' => false,
-						'account_id' => $account->id,
-						'mailbox' => 'INBOX',
-						'children' => $this->_getMailboxTreeNodes($account->getRootMailboxes(true)),
-						'noinferiors' => false,
-						'inbox_new' => 0,
-						'usage' => "",
-						'parentExpanded' => true
-				);
-
-				$response[] = $node;
+					$response[] = $node;
+				}
 			}
 		} else {
 //			$this->_setExpanded($params['node']);
 
 			$parts = explode('_', $params['node']);
-			$accountId = $parts[1];
-			$mailboxName = $parts[2];
-
+			$type = array_shift($parts);
+			$accountId = array_shift($parts);
+			$mailboxName = implode('_', $parts);
+			
 			$account = GO_Email_Model_Account::model()->findByPk($accountId);
-
-			$mailbox = new GO_Email_Model_ImapMailbox($account, array('name' => $mailboxName));
-			$response = $this->_getMailboxTreeNodes($mailbox->getChildren());
+			
+			if($type=="account"){
+				$response=$this->_getMailboxTreeNodes($account->getRootMailboxes(true));
+			}else{
+				$mailbox = new GO_Email_Model_ImapMailbox($account, array('name' => $mailboxName));
+				$response = $this->_getMailboxTreeNodes($mailbox->getChildren());
+			}
 		}
-
-//		var_dump($response);
-//		exit();
 
 		return $response;
 	}
@@ -183,6 +227,11 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 	private function _getMailboxTreeNodes($mailboxes, $subscribtions=false) {
 		$nodes = array();
 		foreach ($mailboxes as $mailbox) {
+			
+			//skip mailboxes with nonexistent flags if we're not listing subscribtions
+			if(!$subscribtions && !$mailbox->subscribed && !$mailbox->haschildren)
+				continue;
+			
 			/* @var $mailbox GO_Email_Model_ImapMailbox */
 //			if (!$mailbox->subscribed)
 //				continue;
@@ -203,21 +252,29 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 
 			$node = array(
 					'text' => $text,
-					'mailbox' => $mailbox->getName(true),
+					'mailbox' => $mailbox->name,
 					'account_id' => $mailbox->getAccount()->id,
 					'iconCls' => 'folder-default',
 					'id' => $nodeId,
 					'noselect' => $mailbox->noselect,
-					'disabled' =>$mailbox->noselect,
+					'disabled' =>$subscribtions && $mailbox->noselect,
 					'noinferiors' => $mailbox->noinferiors,
 					'children' => !$mailbox->haschildren ? array() : null,
-					'expanded' => !$mailbox->haschildren
+					'expanded' => !$mailbox->haschildren,
+//					'usage'=>'',
+//					'acl_supported'=>false,
+					'cls'=>$mailbox->noselect==1 ? 'em-tree-node-noselect' : null
 							//'children'=>$children,
 							//'expanded' => !count($children),
 			);
+			
+			if($mailbox->name=='INBOX'){
+				$node['usage']=$this->_getUsage($mailbox->getAccount());
+				$node['acl_supported']=$mailbox->getAccount()->openImapConnection()->has_capability('ACL');
+			}
 
 			if ($mailbox->haschildren && $this->_isExpanded($nodeId)) {
-				$node['children'] = $this->_getMailboxTreeNodes($mailbox->getChildren(!$subscribtions, !$subscribtions),$subscribtions);
+				$node['children'] = $this->_getMailboxTreeNodes($mailbox->getChildren(false, !$subscribtions),$subscribtions);
 				$node['expanded'] = true;
 			}
 			
@@ -264,7 +321,18 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 	private function _isExpanded($nodeId) {
 		if (!isset($this->_treeState)) {
 			$state = GO::config()->get_setting("email_accounts_tree", GO::user()->id);
-			$this->_treeState = empty($state) ? array() : json_decode($state);
+			
+			if(empty($state)){
+				//account and inbox nodes are expanded by default
+				if((stristr($nodeId, 'account') || substr($nodeId,-6)=='_INBOX')){
+					return true;
+				}else
+				{
+					return false;
+				}
+			}
+			
+			$this->_treeState = json_decode($state);
 		}
 
 		return in_array($nodeId, $this->_treeState);
@@ -299,6 +367,18 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		}
 		
 		return array("success"=>true);
+	}
+	
+	
+	protected function actionUsernames($params){
+		
+		$store = GO_Base_Data_Store::newInstance(GO_Email_Model_Account::model());
+		
+		$findParams= $store->getDefaultParams($params)->group('username');
+		$stmt = GO_Email_Model_Account::model()->find($findParams);
+		$store->setStatement($stmt);
+		
+		return $store->getData();
 	}
 
 }

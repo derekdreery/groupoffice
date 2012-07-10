@@ -53,6 +53,7 @@
  * @property int $user_id
  * @property int $id
  * 
+ * @property string $firstEmail Automatically returns the first filled in e-mail address.
  * @property GO_Addressbook_Model_Addressbook $addressbook
  * @property GO_Addressbook_Model_Company $company
  */
@@ -141,7 +142,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 *
 	 * @return String Full formatted name of the user
 	 */
-	public function getName($sort_name=false){
+	public function getName($sort_name="first_name"){
 		
 		return GO_Base_Util_String::format_name($this->last_name, $this->first_name, $this->middle_name,$sort_name);
 	}
@@ -249,7 +250,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @param String $tmpFile 
 	 */
-	protected function setPhoto($tmpFile){
+	public function setPhoto($tmpFile){
 
 		$destination = GO::config()->file_storage_path.'contacts/contact_photos/'.$this->id.'.jpg';
 		
@@ -311,7 +312,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 																	// all of this contact's properties starting with this prefix will
 																	// be removed to make place for the ones in the imported VCard.
 
-		// Remove this contact's stand, non-GO VCard properties.
+		// Remove this contact's non-GO VCard properties.
 		// (We assume they will be updated by the client during the current sync process).
 		if (!empty($this->id)) {
 			$nonGO_PropModels_toDelete = GO_Addressbook_Model_ContactVcardProperty::model()
@@ -484,6 +485,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$company->save();
 			$this->setAttribute('company_id',$company->id);			
 		}
+		
+		$this->cutAttributeLengths();
 		$this->save();
 		
 		if (!empty($photoFile))
@@ -683,13 +686,18 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		
 		foreach ($propModels as $propModel) {
 			$p = new Sabre_VObject_Property($propModel['name'],$propModel['value']);
-			$paramStrings = explode(';',$propModel['parameters']);
-			foreach ($paramStrings as $paramString) {
-				$paramStringArr = explode('=',$paramString);
-				$param = new GO_Base_VObject_Parameter($paramStringArr[0]);
-				if (!empty($paramStringArr[1]))
-					$param->value = $paramStringArr[1];
-				$p->add($param);
+			if(!empty($propModel['parameters'])){
+				$paramStrings = explode(';',$propModel['parameters']);
+				foreach ($paramStrings as $paramString) {
+					if(!empty($paramString)){
+						$paramStringArr = explode('=',$paramString);
+
+						$param = new GO_Base_VObject_Parameter($paramStringArr[0]);
+						if (!empty($paramStringArr[1]))
+							$param->value = $paramStringArr[1];
+						$p->add($param);
+					}
+				}
 			}
 			$e->add($p);
 		}
@@ -734,6 +742,19 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$model->go_user_id=0;
 		
 		return parent::afterMergeWith($model);
+	}
+	
+	
+	protected function getFirstEmail(){
+		if(!empty($this->email)){
+			return $this->email;
+		}elseif(!empty($this->email2)){
+			return $this->email2;
+		}elseif(!empty($this->email3)){
+			return $this->email3;
+		}else{
+			return false;
+		}
 	}
 	
 }

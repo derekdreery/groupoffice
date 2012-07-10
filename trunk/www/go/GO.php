@@ -74,6 +74,7 @@ class GO{
 	 */
 	public static $disableModelCache=false;
 
+	private static $_classesIsDirty=false;
 	private static $_classes = array (
 		'GO_Base_Observable' => 'go/base/Observable.php',
 		'GO_Base_Session' => 'go/base/Session.php',
@@ -83,6 +84,7 @@ class GO{
 		'GO_Base_Model_User' => 'go/base/model/User.php',
 		'GO_Base_Cache_Interface' => 'go/base/cache/Interface.php',
 		'GO_Base_Cache_Disk' => 'go/base/cache/Disk.php',
+		'GO_Base_Cache_Apc' => 'go/base/cache/Apc.php',
 		'GO_Base_Db_ActiveStatement' => 'go/base/db/ActiveStatement.php',
 		'GO_Base_Util_String' => 'go/base/util/String.php',
 		'GO_Base_Model_ModelCache' => 'go/base/model/ModelCache.php',
@@ -207,9 +209,21 @@ class GO{
 	public static function user(){
 		if(empty(GO::session()->values['user_id'])){
 			return false;
-		}else{
-			if(!isset(self::$_user))
-				self::$_user = GO_Base_Model_User::model()->findByPk(GO::session()->values['user_id'], array(), true);
+		}else{		
+			
+			if(!isset(self::$_user)){
+				
+				$cacheKey = 'GO_Base_Model_User:'.GO::session()->values['user_id'];
+				$cachedUser = GO::cache()->get($cacheKey);
+				
+				if($cachedUser){
+					self::$_user=$cachedUser;
+				}else
+				{
+					self::$_user = GO_Base_Model_User::model()->findByPk(GO::session()->values['user_id'], array(), true);
+					GO::cache()->set($cacheKey, self::$_user);
+				}
+			}
 
 			return self::$_user;
 		}
@@ -254,14 +268,23 @@ class GO{
 
 
 	private static $_cache;
+	
 	/**
-	 * @todo implement memcached driver
+	 * Returns cache driver. Cached items will persist between connections and are
+	 * available to all users. When debug is enabled a dummy cache driver is used
+	 * that caches nothing.
+	 * 
 	 * @return GO_Base_Cache_Interface
 	 */
 	public static function cache(){
 
 		if (!isset(self::$_cache)) {
-			self::$_cache=new GO_Base_Cache_Disk();
+			if(GO::config()->debug || !GO::isInstalled())
+				self::$_cache=new GO_Base_Cache_None();
+			elseif(function_exists("apc_store"))
+				self::$_cache=new GO_Base_Cache_Apc();
+			else
+				self::$_cache=new GO_Base_Cache_Disk();
 		}
 		return self::$_cache;
 	}
@@ -288,15 +311,6 @@ class GO{
 		return self::$_session;
 	}
 
-
-	public static function exportBaseClasses(){
-		var_export(self::$_classes);
-	}
-
-	public static function getBaseClasses(){
-		return self::$_classes;
-	}
-
 	/**
 	 * The automatic class loader for Group-Office.
 	 *
@@ -305,9 +319,15 @@ class GO{
 	public static function autoload($className) {
 
 		if(isset(self::$_classes[$className])){
-			require_once(dirname(dirname(__FILE__)) . '/'.self::$_classes[$className]);
+			//don't use GO::config()->root_path here because it might not be autoloaded yet causing an infite loop.
+			require(dirname(dirname(__FILE__)) . '/'.self::$_classes[$className]);
 		}else
 		{
+//			GO::debug("Autoloading: ".$className);
+			//For SabreDAV
+			if(strpos($className,'Sabre_')===0) {
+        include self::config()->root_path . 'go/vendor/SabreDAV/lib/Sabre/' . str_replace('_','/',substr($className,6)) . '.php';
+			}
 
 			if(substr($className,0,7)=='GO_Base'){
 				$arr = explode('_', $className);
@@ -318,11 +338,12 @@ class GO{
 				$baseClassFile = dirname(dirname(__FILE__)) . '/'.$location;
 				require($baseClassFile);
 
-				//for exportBaseClasses so we can optimize
+				//store it in the classes array so we can cache that for faster loading next time.
+				self::$_classesIsDirty=true;
 				self::$_classes[$className]=$location;
 
 			}  else {
-				$orgClassName = $className;
+				//$orgClassName = $className;
 				$forGO = substr($className,0,3)=='GO_';
 
 				if ($forGO)
@@ -336,10 +357,10 @@ class GO{
 
 					if($module!='core'){
 						//$file = self::modules()->$module->path; //doesn't play nice with objects in the session and autoloading
-						$file = self::config()->root_path.'modules/'.$module.'/';
+						$file = 'modules/'.$module.'/';
 					}else
 					{
-						$file = self::config()->root_path;
+						$file = "";
 					}
 					for($i=0,$c=count($arr);$i<$c;$i++){
 						if($i==$c-1){
@@ -353,19 +374,35 @@ class GO{
 						}
 
 					}
+					
+					$fullPath = self::config()->root_path.$file;
 
-					if(!file_exists($file) || is_dir($file)){
+					if(!file_exists($fullPath) || is_dir($fullPath)){
 						//throw new Exception('Class '.$orgClassName.' not found! ('.$file.')');
 						return false;
 					}
+					
+					//store it in the classes array so we can cache that for faster loading next time.
+					self::$_classes[$className]=$file;
+					self::$_classesIsDirty=true;
 
-					require($file);
+					require($fullPath);
 				}
 			}
 		}
 	}
 
 	private static $initialized=false;
+	
+	
+	/**
+	 * Called by GO_Base_Config::__destruct() so we can do stuff at the end 
+	 */
+	public static function endRequest(){
+		//cli may resolve symlinks and apache doesn't this causes double includes
+		if(self::$_classesIsDirty && PHP_SAPI!='cli')
+			@GO::cache()->set('autoload_classes', self::$_classes);
+	}
 
 	/**
 	 * This function inititalizes Group-Office.
@@ -377,10 +414,15 @@ class GO{
 			throw new Exception("Group-Office was already initialized");
 		}
 		self::$initialized=true;
-
-		spl_autoload_register(array('GO', 'autoload'));
+				
+		spl_autoload_register(array('GO', 'autoload'));	
 
 		GO::session();
+		
+		//get cached autoload classes
+		$classes = GO::cache()->get('autoload_classes');
+		if($classes)
+			self::$_classes=$classes;
 
 		date_default_timezone_set(GO::user() ? GO::user()->timezone : GO::config()->default_timezone);
 
@@ -412,7 +454,7 @@ class GO{
 
 		if(!defined('GO_LOADED')){ //check if old Group-Office.php was loaded
 
-			if(GO::config()->debug){
+			if(GO::config()->debug || GO::config()->debug_log){
 				$username = GO::user() ? GO::user()->username : 'nobody';
 
 				$log = '['.date('Y-m-d G:i').']['.$username.'] Start of new request: ';
@@ -598,6 +640,10 @@ class GO{
 				//$lines = explode("\n", $text);
 
 				//$text = $prefix.$text;
+				
+				$user = isset(GO::session()->values['username']) ? GO::session()->values['username'] : 'notloggedin';
+				
+				$text = "[$user] ".str_replace("\n","\n[$user] ", $text);
 
 				file_put_contents(self::config()->file_storage_path . 'debug.log', $text . "\n", FILE_APPEND);
 			}
@@ -610,7 +656,7 @@ class GO{
 		for($i=0;$i<$limit;$i++){
 			if(isset($trace[$i+1])){
 				$call = $trace[$i+1];
-				GO::debug("Funtion: ".$call["function"]." called in file ".$call["file"]." line ".$call["line"]);
+				GO::debug("Function: ".$call["function"]." called in file ".$call["file"]." line ".$call["line"]);
 			}
 		}
 	}
@@ -779,6 +825,16 @@ class GO{
 		}
 
 		return $classes;
+	}
+	
+	
+	/**
+	 * Checks if Group-Office is already installed. 
+	 * 
+	 * @return boolean
+	 */
+	public static function isInstalled(){
+		return !empty(GO::config()->db_user);
 	}
 
 }

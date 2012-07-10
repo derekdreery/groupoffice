@@ -43,24 +43,24 @@ GO.files.FileRecord = Ext.data.Record.create([
 {
 	name: 'thumb_url',
 	type: 'string'
-} 
+}
 ]);
 
 /*
- * 
+ *
  * if config.treeRootVisible == false (default) then the tree will load automatically!
- * 
+ *
  */
 
 GO.files.FileBrowser = function(config){
-	
+
 	if(!config)
 	{
 		config = {};
 	}
 	if(!config.id)
 		config.id=Ext.id();
-	
+
 
 	this.treePanel = new GO.files.TreePanel({
 		region:'west',
@@ -74,46 +74,46 @@ GO.files.FileBrowser = function(config){
 		ddGroup : 'FilesDD',
 		enableDD:true
 	});
-	
-	
-	
+
+
+
 	//select the first inbox to be displayed in the messages grid
 	this.treePanel.getRootNode().on('load', function(node)
-	{	
+	{
 		//var grid_id = !this.treePanel.rootVisible && node.childNodes[0] ? node.childNodes[0].id : node.id;
 		if(!this.folder_id)
 		{
 			this.folder_id=node.childNodes[0].id;
 		}
 		this.setFolderID(this.folder_id);
-		
+
 	}, this);
-	
-	
-	
+
+
+
 	this.treePanel.on('click', function(node)	{
 		this.setFolderID(node.id, true);
 	}, this);
 
 	this.treePanel.on('contextmenu', function(node, e){
 		e.stopEvent();
-		
+
 		var selModel = this.treePanel.getSelectionModel();
-		
+
 		if(!selModel.isSelected(node))
 		{
 			selModel.clearSelections();
 			selModel.select(node);
 		}
-		
+
 		var records = this.getSelectedTreeRecords();
-		
+
 		var coords = e.getXY();
 		this.filesContextMenu.showAt(coords, records, 'tree');
 	}, this);
-	
+
 	this.treePanel.on('beforenodedrop', function(e){
-		
+
 		if(e.data.selections)
 		{
 			var selections = e.data.selections;
@@ -126,16 +126,16 @@ GO.files.FileBrowser = function(config){
 			record.data['type_id']='d:'+e.data.node.id;
 			var selections = [record];
 		}
-		
+
 		this.paste('cut', e.target.id, selections);
 	},
 	this);
-	
+
 	this.treePanel.on('nodedragover', function(dragEvent){
-		
+
 		if(!dragEvent.dropNode)
 		{
-				
+
 			//comes from grid, don't allow it to paste it into a child
 			for(var i=0;i<dragEvent.data.selections.length;i++)
 			{
@@ -144,12 +144,12 @@ GO.files.FileBrowser = function(config){
 					var moveid = dragEvent.data.selections[i].data.id;
 					var parentid = dragEvent.data.selections[i].data.parent_id;
 					var targetid = dragEvent.target.id;
-					
+
 					if(moveid==targetid || parentid==targetid)
 					{
 						return false;
 					}
-				
+
 					var dragNode = this.treePanel.getNodeById(moveid);
 					if(dragNode.parentNode.id == targetid || dragEvent.target.isAncestor(dragNode))
 					{
@@ -157,7 +157,7 @@ GO.files.FileBrowser = function(config){
 					}
 					return true;
 				}
-			}			
+			}
 		}else
 		{
 			var parentId = this.treePanel.getNodeById(dragEvent.dropNode.id).parentNode.id;
@@ -180,7 +180,7 @@ GO.files.FileBrowser = function(config){
 				var cls = r.get('acl_id')>0 && r.get('readonly')==0 ? 'folder-shared' : 'filetype filetype-'+r.get('extension');
 				if(r.get('locked_user_id')>0)
 					v = '<div class="fs-grid-locked">'+v+'</div>';
-				
+
 				return '<div class="go-grid-icon '+cls+'" style="float:left;">'+v+'</div>';
 			}
 		},{
@@ -211,7 +211,7 @@ GO.files.FileBrowser = function(config){
 	{
 		GO.customfields.addColumns("GO_Files_Model_File", fields);
 	}
-	
+
 	this.gridStore = new GO.data.JsonStore({
 //		url: GO.settings.modules.files.url+'json.php',
 //		baseParams: {
@@ -224,11 +224,11 @@ GO.files.FileBrowser = function(config){
 		fields:fields.fields,
 		remoteSort:true
 	});
-	
+
 	this.gridStore.on('load', this.onStoreLoad, this);
-	
+
 	if(config.filesFilter)
-	{		
+	{
 		this.setFilesFilter(config.filesFilter);
 	}
 
@@ -252,23 +252,23 @@ GO.files.FileBrowser = function(config){
 			columns:fields.columns
 		})
 	});
-		
+
 	this.gridPanel.on('delayedrowselect', function (grid, rowIndex, r){
 		this.fireEvent('fileselected', this, r);
 	}, this);
-		
-	
+
+
 	this.gridPanel.on('render', function(){
 		//enable row sorting
-		var DDtarget = new Ext.dd.DropTarget(this.gridPanel.getView().mainBody, 
+		var DDtarget = new Ext.dd.DropTarget(this.gridPanel.getView().mainBody,
 		{
 			ddGroup : 'FilesDD',
 			copy:false,
 			notifyOver : this.onGridNotifyOver,
 			notifyDrop : this.onGridNotifyDrop.createDelegate(this)
 		});
-	}, this);	
-	
+	}, this);
+
 	this.gridPanel.on('rowdblclick', this.onGridDoubleClick, this);
 
 	/*
@@ -284,61 +284,63 @@ GO.files.FileBrowser = function(config){
 			return false;
 		}
 	},this);
-	
-	
+
+
 	this.filesContextMenu = new GO.files.FilesContextMenu();
-	
-	this.filesContextMenu.on('properties', function(menu, records){		
+
+	this.filesContextMenu.on('properties', function(menu, records){
 		this.showPropertiesDialog(records[0]);
 	}, this);
-	
-	this.filesContextMenu.on('cut', function(menu, records){		
+
+	this.filesContextMenu.on('cut', function(menu, records){
 		this.onCutCopy('cut', records);
 	}, this);
 
-	this.filesContextMenu.on('copy', function(menu, records){		
+	this.filesContextMenu.on('copy', function(menu, records){
 		this.onCutCopy('copy', records);
 	}, this);
-	
-	this.filesContextMenu.on('delete', function(menu, records, clickedAt){		
+
+	this.filesContextMenu.on('delete', function(menu, records, clickedAt){
 		this.onDelete(clickedAt);
 	}, this);
-	
-	this.filesContextMenu.on('compress', function(menu, records, clickedAt){		
+
+	this.filesContextMenu.on('compress', function(menu, records, clickedAt){
 		this.onCompress(records);
 	}, this);
-	
-	this.filesContextMenu.on('decompress', function(menu, records){		
+
+	this.filesContextMenu.on('decompress', function(menu, records){
 		this.onDecompress(records);
 	}, this);
 
 	this.filesContextMenu.on('download_link', function(menu, records, clickedAt, email){
-		
-		
 		this.onDownloadLink(records,email);
 	}, this);
-	
+
+
+	this.filesContextMenu.on('email_files', function(menu, records){
+		this.emailFiles(records);
+	}, this);
 
 	this.gridPanel.on('rowcontextmenu', this.onGridRowContextMenu, this);
-	
-	
+
+
 	this.newMenu = new Ext.menu.Menu({
 		//id: 'new-menu',
 		items: []
 	});
-	
+
 	this.newButton = new Ext.Button({
 		text:GO.lang.cmdNew,
 		iconCls: 'btn-add',
 		menu: this.newMenu
 	});
-	
+
 	this.locationTextField = new Ext.form.TextField({
 		fieldLabel:GO.lang.strLocation,
 		name:'files-location',
 		anchor:'100%'
 	});
-	
+
 	this.locationPanel = new Ext.Panel({
 		region:'north',
 		layout:'form',
@@ -350,7 +352,7 @@ GO.files.FileBrowser = function(config){
 		cls:'go-files-location-panel',
 		items:this.locationTextField
 	});
-	
+
 	this.upButton = new Ext.Button({
 		iconCls: 'btn-up',
 		text: GO.lang.up,
@@ -361,7 +363,7 @@ GO.files.FileBrowser = function(config){
 		scope: this,
 		disabled:true
 	});
-	
+
 	this.pasteButton = new Ext.Button({
 		iconCls: 'btn-paste',
 		text: GO.lang.paste,
@@ -370,7 +372,7 @@ GO.files.FileBrowser = function(config){
 		scope: this,
 		disabled:true
 	});
-					
+
 	this.deleteButton = new Ext.Button({
 		iconCls: 'btn-delete',
 		text: GO.lang.cmdDelete,
@@ -380,7 +382,7 @@ GO.files.FileBrowser = function(config){
 		},
 		scope: this
 	});
-	
+
 	this.cutButton= new Ext.Button({
 		iconCls: 'btn-cut',
 		text: GO.lang.cut,
@@ -413,7 +415,7 @@ GO.files.FileBrowser = function(config){
 		},
 		scope: this
 	});
-				
+
 	var tbar = [];
 
 	tbar.push(this.newButton);
@@ -433,7 +435,7 @@ GO.files.FileBrowser = function(config){
 					if ( success.length ) {
 						this.sendOverwrite({
 							upload:true
-							
+
 						});
 						if(!failures.length){
 							uploadpanel.onDeleteAll();
@@ -444,7 +446,7 @@ GO.files.FileBrowser = function(config){
 			}
 		}
 	});
-	
+
 	this.jUploadItem = new Ext.menu.Item({
 		iconCls: 'btn-upload',
 		text : GO.lang.largeUpload,
@@ -459,8 +461,8 @@ GO.files.FileBrowser = function(config){
 				GO.util.popup({
 					url: GO.url('files/jupload/renderJupload'),
 					//GO.settings.modules.files.url+'jupload/index.php?id='+encodeURIComponent(this.folder_id),
-					width : 660, 
-					height: 500, 
+					width : 660,
+					height: 500,
 					target: 'jupload',
 					allwaysOnTop:true // Not working!!
 				});
@@ -475,22 +477,22 @@ GO.files.FileBrowser = function(config){
 			this.jUploadItem
 		]
 	});
-		
+
 	this.uploadButton = new Ext.Button({
 		text:GO.lang.upload,
 		iconCls: 'btn-upload',
 		menu: this.uploadMenu
 	});
-		
+
 	if(!config.hideActionButtons)
-	{				
-		tbar.push(this.uploadButton);		
+	{
+		tbar.push(this.uploadButton);
 		tbar.push('-');
 	}
 
-	
+
 	tbar.push(this.upButton);
-	tbar.push({            
+	tbar.push({
 		iconCls: "btn-refresh",
 		text:GO.lang.cmdRefresh,
 		handler: function(){
@@ -498,18 +500,18 @@ GO.files.FileBrowser = function(config){
 		},
 		scope:this
 	});
-  
+
 	if(!config.hideActionButtons)
 	{
-		tbar.push('-');			
+		tbar.push('-');
 		tbar.push(this.copyButton);
 		tbar.push(this.cutButton);
 		tbar.push(this.pasteButton);
 		tbar.push('-');
 		tbar.push(this.deleteButton);
 		tbar.push('-');
-	}				
-	
+	}
+
 	tbar.push(this.thumbsToggle = new Ext.Button({
 		text: GO.files.lang.thumbnails,
 		iconCls: 'btn-thumbnails',
@@ -524,12 +526,12 @@ GO.files.FileBrowser = function(config){
 				//this.thumbsPanel.setStore(false);
 				this.cardPanel.getLayout().setActiveItem(0);
 			}
-      	
+
 			var thumbs = this.gridStore.reader.jsonData.thumbs=='1';
 			if(thumbs!=pressed)
 				GO.request({
 					url:'files/folderPreference/submit',
-					params: {						
+					params: {
 						folder_id: this.folder_id,
 						thumbs: pressed ? '1' : '0'
 					}
@@ -537,7 +539,7 @@ GO.files.FileBrowser = function(config){
 		},
 		scope:this
 	}));
-		
+
 	if(!config.hideActionButtons)
 	{
 		tbar.push('-');
@@ -578,10 +580,10 @@ GO.files.FileBrowser = function(config){
 		},
 		scope:this
 	}];
-	
-	
+
+
 	config['layout']='border';
-	config['tbar']=new Ext.Toolbar({		
+	config['tbar']=new Ext.Toolbar({
 		cls:'go-head-tb',
 		items: tbar
 	});
@@ -589,21 +591,21 @@ GO.files.FileBrowser = function(config){
 	this.thumbsPanel = new GO.files.ThumbsPanel({
 		store:this.gridStore
 	});
-	
+
 	this.thumbsPanel.view.on('click', function(view, index,node,e){
 		var record = view.store.getAt(index);
 		this.fireEvent('fileselected', this, record);
 	}, this);
-	
+
 	this.thumbsPanel.view.on('dblclick', function(view, index, node, e){
-		
+
 		var record = view.store.getAt(index);
-		
+
 		this.fireEvent('filedblclicked', this, record);
-		
+
 		if(record.data.extension=='folder')
 		{
-			this.setFolderID(record.data.id, true);	
+			this.setFolderID(record.data.id, true);
 		}else
 		{
 			if(this.fileClickHandler)
@@ -612,31 +614,31 @@ GO.files.FileBrowser = function(config){
 			}else
 			{
 				GO.files.openFile(record, this.getActiveGridStore(), e);
-			}			
+			}
 		}
 	}, this);
-	
-	this.thumbsPanel.view.on('contextmenu', function(view, index, node, e){		 
-		
+
+	this.thumbsPanel.view.on('contextmenu', function(view, index, node, e){
+
 		if(!view.isSelected(index))
 		{
-			view.clearSelections();			
-			view.selectRange(index, index);			
+			view.clearSelections();
+			view.selectRange(index, index);
 		}
 		var records = view.getSelectedRecords();
-		
+
 		e.stopEvent();
 		this.contextTreeID = node.id;
-		
+
 		var coords = e.getXY();
 		this.filesContextMenu.showAt(coords, records);
-		
+
 	}, this);
-	
+
 	this.thumbsPanel.on('drop', function(targetID, dragRecords){
 		this.paste('cut', targetID, dragRecords);
 	}, this);
-	
+
 	this.cardPanel =new Ext.Panel({
 		region:'center',
 		layout:'card',
@@ -649,19 +651,20 @@ GO.files.FileBrowser = function(config){
 	});
 
 
-	
+
 
 	this.eastPanel = new Ext.Panel({
 		region:'east',
-		layout:'fit',
+		layout:'card',
+		activeItem: 0,
 		//items:[this.filePanel, this.folderPanel],
 		collapsed:config.filePanelCollapsed,
 		width:450,
 		collapseMode:'mini',
 		collapsible:true,
+		hideCollapseTool:true,
 		split:true,
-		border:false,
-		title: '&nbsp;'
+		border:false
 	});
 
 
@@ -677,13 +680,13 @@ GO.files.FileBrowser = function(config){
 		expandListenObject:this.eastPanel
 	});
 	this.eastPanel.add(this.folderPanel);
-	
-			
+
+
 	config['items']=[this.locationPanel, this.treePanel,this.cardPanel,this.eastPanel];
-	
+
 	GO.files.FileBrowser.superclass.constructor.call(this, config);
 
-	
+
 	this.addEvents({
 		fileselected : true,
 		filedblclicked : true
@@ -691,25 +694,27 @@ GO.files.FileBrowser = function(config){
 
 	this.on('fileselected',function(grid, r){
 		if(r.data.extension!='folder'){
-			this.folderPanel.setVisible(false);
-			this.filePanel.setVisible(true);
-			
+//			this.folderPanel.setVisible(false);
+//			this.filePanel.show()
+			this.eastPanel.getLayout().setActiveItem(this.filePanel);
+
 			this.filePanel.load(r.id.substr(2));
 		}else
 		{
-			this.filePanel.setVisible(false);
-			this.folderPanel.setVisible(true);
+//			this.filePanel.setVisible(false);
+//			this.folderPanel.show();
+			this.eastPanel.getLayout().setActiveItem(this.folderPanel);
 
 			this.folderPanel.load(r.id.substr(2));
 		}
-			
+
 	}, this);
 
-	
+
 }
 
 Ext.extend(GO.files.FileBrowser, Ext.Panel,{
-		
+
 	fileClickHandler : false,
 	scope : this,
 	pasteSelections : Array(),
@@ -723,7 +728,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	saveCMState: function(state) {
 		GO.request({
 			url: "files/folder/submit",
-			params : {				
+			params : {
 				'id' : this.folder_id,
 				'cm_state' : Ext.encode(state)
 			},
@@ -740,9 +745,9 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		{
 			state = Ext.state.Manager.get(this.gridPanel.id);
 		}
-		
+
 		//state.sort=store.sortInfo;
-		
+
 		if(state){
 			this.gridPanel.applyStoredState(state);
 
@@ -762,10 +767,10 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 		this.path = store.reader.jsonData.path;
 
-		this.setWritePermission(store.reader.jsonData.permission_level>=GO.permissionLevels.write);
-		
+		this.setWritePermission(store.reader.jsonData.permission_level);
+
 		this.thumbsToggle.toggle(store.reader.jsonData.thumbs=='1');
-		
+
 		if(this.folder_id=='new')
 		{
 			var num_files = store.reader.jsonData.num_files;
@@ -773,7 +778,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			if(activeNode)
 				activeNode.setText(GO.files.lang.newFiles + " (" + num_files + ")");
 		}
-		
+
 		this.emptyListButton.setVisible(this.folder_id=='new' && num_files > 0);
 
 		if(store.reader.jsonData.refreshed)
@@ -785,11 +790,11 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				activeNode.reload();
 			}
 		}
-		
+
 		this.parentID = store.reader.jsonData.parent_id;
 		if(!this.parentID || !this.treePanel.getNodeById(this.parentID))
-		{		
-			this.upButton.setDisabled(true);			
+		{
+			this.upButton.setDisabled(true);
 		}else
 		{
 			this.upButton.setDisabled(false);
@@ -800,24 +805,24 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		}
 
 	},
-	
+
 	/*onShow : function(){
-		
+
 		GO.files.FileBrowser.superclass.onShow.call(this);
-		
+
 		if(!this.loaded)
 		{
 			this.loadFiles();
 		}
-				
+
 	},*/
-	
+
 	setFileClickHandler : function(handler, scope)
 	{
 		this.fileClickHandler = handler;
 		this.scope = scope;
 	},
-	
+
 	setFilesFilter : function(filter)
 	{
 		var old_filter = this.gridStore.baseParams['files_filter'];
@@ -829,8 +834,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		}
 	},
 
-	
-	afterRender : function(){		
+
+	afterRender : function(){
 		GO.files.FileBrowser.superclass.afterRender.call(this);
 
 		GO.files.filePropertiesDialogListeners={
@@ -862,29 +867,29 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				}
 			}
 		}
-		
-		this.buildNewMenu();	
+
+		this.buildNewMenu();
 	},
 
-	
+
 	setRootID : function(rootID, folder_id)
 	{
-		//if(this.treePanel.getLoader().baseParams.root_folder_id!=rootID || (folder_id>0 && this.folder_id!=folder_id))                
-                this.folder_id=folder_id;
-                this.treePanel.getLoader().baseParams.root_folder_id=rootID;
-                this.treePanel.getLoader().baseParams.expand_folder_id=folder_id;
-                this.treePanel.getRootNode().reload({
-                        callback:function(){
-                                delete this.treePanel.getLoader().baseParams.expand_folder_id;
-                        },
-                        scope:this
-                });
+		//if(this.treePanel.getLoader().baseParams.root_folder_id!=rootID || (folder_id>0 && this.folder_id!=folder_id))
+				this.folder_id=folder_id;
+				this.treePanel.getLoader().baseParams.root_folder_id=rootID;
+				this.treePanel.getLoader().baseParams.expand_folder_id=folder_id;
+				this.treePanel.getRootNode().reload({
+						callback:function(){
+								delete this.treePanel.getLoader().baseParams.expand_folder_id;
+						},
+						scope:this
+				});
 	},
-	
-	buildNewMenu : function(){		
-	
+
+	buildNewMenu : function(){
+
 		this.newMenu.removeAll();
-		
+
 		GO.request({
 			url: 'files/template/store',
 			success: function(response, options, result)
@@ -897,7 +902,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 					handler: this.promptNewFolder,
 					scope: this
 				});
-			
+
 				if(result.results.length)
 				{
 					this.newMenu.add('-');
@@ -913,11 +918,11 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 								this.createFileFromTemplate(item.template_id);
 							},
-							scope:this	
+							scope:this
 						});
 
-						this.newMenu.add(menuItem);						
-					}						
+						this.newMenu.add(menuItem);
+					}
 				}
 
 				if(GO.settings.modules.files.write_permission)
@@ -941,30 +946,30 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 							}
 							this.templatesWindow.show();
 						},
-						scope: this					
+						scope: this
 					});
 				}
 
 			},
-			scope: this		
-		});		
+			scope: this
+		});
 	},
-	
+
 	createFileFromTemplate : function(template_id, filename){
-		
+
 		if(!filename || filename == '')
 		{
-			Ext.Msg.prompt(GO.files.lang.enterName, GO.files.lang.pleaseEnterName, 
-				function(id, filename){ 
+			Ext.Msg.prompt(GO.files.lang.enterName, GO.files.lang.pleaseEnterName,
+				function(id, filename){
 					if(id=='cancel')
 						return false;
 					else
 						this.createFileFromTemplate(template_id, filename);
 				},this);
 		}else
-		{			
+		{
 			var store = this.getActiveGridStore();
-			
+
 			GO.request({
 				url: 'files/template/createFile',
 				params:{
@@ -987,24 +992,24 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				},
 				scope:this
 			});
-		}		
+		}
 	},
-	
+
 	onDecompress : function(records){
-		
-		var decompress_sources = [];		
+
+		var decompress_sources = [];
 		for(var i=0;i<records.length;i++)
 		{
 			decompress_sources.push(records[i].data.path);
 		}
-				
+
 		if(decompress_sources.length)
-		{		
+		{
 			var store = this.getActiveGridStore();
 			var params = {};
 			params['decompress_sources']=Ext.encode(decompress_sources);
 			params.working_folder_id=this.folder_id;
-			
+
 			GO.request({
 				timeout:300000,
 				maskEl:this.getEl(),
@@ -1014,30 +1019,30 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 					store.load();
 				}
 			});
-		}		
+		}
 	},
-	
+
 	onCompress : function(records, filename)
-	{		
-	
+	{
+
 		var params = {
 			compress_sources: [],
 			working_folder_id:this.folder_id,
 			destination_folder_id:this.folder_id
 		};
-		
+
 		for(var i=0;i<records.length;i++)
 		{
 			if(records[i].data.parent_id)//for tree
 				params.working_folder_id=records[i].data.parent_id;
-			
+
 			params.compress_sources.push(records[i].data.path);
 		}
-		
+
 
 		if(!filename || filename == '')
 		{
-			Ext.Msg.prompt(GO.files.lang.enterName, GO.files.lang.pleaseEnterNameArchive, 
+			Ext.Msg.prompt(GO.files.lang.enterName, GO.files.lang.pleaseEnterNameArchive,
 				function(id, filename){
 					if(id=='ok'){
 						this.onCompress(records, filename);
@@ -1057,17 +1062,17 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				success:function(){
 					store.load();
 				}
-			});			
-		}		
+			});
+		}
 
 	},
-	
+
 	getSelectedTreeRecords : function(){
 		var sm = this.treePanel.getSelectionModel();
 		var nodes = sm.getSelectedNodes();
-		 
+
 		var records=[];
-		 
+
 		for(var i=0;i<nodes.length;i++)
 		{
 			records.push({
@@ -1080,7 +1085,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		}
 		return records;
 	},
-	
+
 	getSelectedGridRecords : function(){
 		//detect grid on selModel. thumbs doesn't have that
 		if(this.cardPanel.getLayout().activeItem.selModel)
@@ -1092,11 +1097,11 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			return this.thumbsPanel.view.getSelectedRecords();
 		}
 	},
-	
+
 	getActiveGridStore : function(){
 		return this.gridStore;
 	},
-	
+
 	onCutCopy : function(pasteMode, records){
 		this.pasteSelections=records;
 		this.pasteMode=pasteMode;
@@ -1109,7 +1114,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	onPaste : function(){
 		this.paste(this.pasteMode, this.folder_id, this.pasteSelections);
 	},
-	
+
 	onDelete : function(clickedAt){
 		if(clickedAt=='tree')
 		{
@@ -1121,7 +1126,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				},
 				count:1,
 				callback:function(responseParams){
-					
+
 					if(responseParams.success)
 					{
 						var treeNode = this.treePanel.getNodeById(records[0].data.id);
@@ -1130,7 +1135,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 							//parentNode is destroyed after remove so keep it for later use
 							var parentNodeId = treeNode.parentNode.id;
 							treeNode.remove();
-							
+
 							var activeTreenode = this.treePanel.getNodeById(this.folder_id);
 							if(!activeTreenode){
 								//current folder must have been removed. Let's go up.
@@ -1174,6 +1179,20 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		}
 	},
 
+	emailFiles: function(records) {
+
+		Ext.each(records, function(record) {
+			var folderId = record.data.folder_id;
+			var id = record.data.id;
+
+			if (!Ext.isEmpty(folderId)) {
+				GO.email.emailFiles(record.data.path);
+			} else {
+				GO.email.openFolderTree(id);
+			}
+		});
+	},
+
 	onDownloadLink : function(records,email){
 
 		this.emailDownloadLink=email;
@@ -1199,7 +1218,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				closeAction:'hide',
 				items: [this.expireForm]
 			});
-			this.expireForm.items.get('expire_time').on('select', function(field,date){			
+			this.expireForm.items.get('expire_time').on('select', function(field,date){
 				if(this.emailDownloadLink){
 
 					GO.email.showComposer({
@@ -1213,12 +1232,12 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 					GO.request({
 						maskEl: this.getEl(),
 						url: 'files/file/createDownloadLink',
-						params: {					
+						params: {
 							id:this.file_data.id,
 							expire_time: parseInt(date.setDate(date.getDate())/1000)
 						},
 						success: function(options, response, result)
-						{					
+						{
 							this.filePanel.reload();
 						},
 						scope:this
@@ -1271,9 +1290,9 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			var sm=data.grid.getSelectionModel();
 			var rows=sm.getSelections();
 			var dragData = dd.getDragData(e);
-			
+
 			var dropRecord = data.grid.store.data.items[dragData.rowIndex];
-			
+
 			if(dropRecord.data.extension=='folder')
 			{
 				for(var i=0;i<data.selections.length;i++)
@@ -1290,14 +1309,14 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			return false;
 		}
 	},
-	
+
 	onGridRowContextMenu : function(grid, rowIndex, e) {
 		var selections = grid.getSelectionModel().getSelections();
-			
+
 		var coords = e.getXY();
 		this.filesContextMenu.showAt(coords, selections, 'grid');
 	},
-	
+
 	paste : function(pasteMode, destination, records)
 	{
 		var paste_sources = Array();
@@ -1310,21 +1329,21 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				folderSelected = true;
 			}*/
 		}
-		
+
 		var params = {
 			ids : Ext.encode(paste_sources),
 			destination_folder_id : destination,
 			paste_mode : pasteMode,
 			id : this.folder_id
 		};
-		
+
 		this.sendOverwrite(params);
-		
+
 	},
-	
-	
+
+
 	refresh : function(syncFilesystemWithDatabase){
-	
+
 		var activeNode = this.treePanel.getNodeById(this.folder_id);
 
 		this.treePanel.getLoader().baseParams.expand_folder_id=this.folder_id;
@@ -1346,46 +1365,46 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 		if(syncFilesystemWithDatabase)
 			delete this.treePanel.getLoader().baseParams.sync_folder_id;
-		
+
 		this.filePanel.reload();
 	},
-	
+
 	sendOverwrite : function(params){
-		
-		if(!params.command)		
+
+		if(!params.command)
 			params.command='ask';
-		
+
 		if(!params.destination_folder_id)
 			params.destination_folder_id=this.folder_id;
-				
+
 		this.overwriteParams = params;
 
 		this.getEl().mask(GO.lang.waitMsgSave);
-		
+
 		var url = params.upload ? GO.url('files/folder/processUploadQueue') : GO.url('files/folder/paste');
-		
+
 		Ext.Ajax.request({
 			url: url,
 			params:this.overwriteParams,
 			callback: function(options, success, response){
 
 				this.getEl().unmask();
-					
+
 				var pasteSources = Ext.decode(this.overwriteParams.ids);
 				var pasteDestination = this.overwriteParams.destination_folder_id;
-					
-					
+
+
 				//delete params.paste_sources;
 				//delete params.paste_destination;
-					
+
 				if(!success)
 				{
 					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
 				}else
 				{
-						
+
 					var responseParams = Ext.decode(response.responseText);
-						
+
 					if(!responseParams.success && !responseParams.fileExists)
 					{
 						if(this.overwriteDialog)
@@ -1400,7 +1419,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 						{
 							if(!this.overwriteDialog)
 							{
-									
+
 								this.overwriteDialog = new Ext.Window({
 									width:500,
 									autoHeight:true,
@@ -1447,11 +1466,11 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 										},
 										scope: this
 									}]
-										
+
 								});
 								this.overwriteDialog.render(Ext.getBody());
 							}
-								
+
 							var t = new Ext.Template(GO.lang.overwriteFile);
 							t.overwrite(this.overwriteDialog.body, {
 								file: responseParams.fileExists
@@ -1475,15 +1494,15 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 										break;
 									}
 								}
-							}							
-								
-							var destinationNode = this.treePanel.getNodeById(pasteDestination);							
+							}
+
+							var destinationNode = this.treePanel.getNodeById(pasteDestination);
 							if(destinationNode)
 							{
 								delete destinationNode.attributes.children;
 								destinationNode.reload();
 							}
-								
+
 							if(pasteSources && params.paste_mode=="cut")
 							{
 								//remove moved nodes if we cut and paste
@@ -1495,7 +1514,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 										node.remove();
 								}
 							}
-								
+
 							if(this.overwriteDialog)
 								this.overwriteDialog.hide();
 						}
@@ -1504,17 +1523,17 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			},
 			scope: this
 		});
-	
+
 	},
-	
+
 	promptNewFolder : function(){
-		
+
 		if(!this.newFolderWindow)
 		{
 			this.newFolderWindow = new GO.files.NewFolderDialog();
 			this.newFolderWindow.on('save', function(){
 				this.getActiveGridStore().load();
-								
+
 				// problem if folder didn't have a subfolder yet
 				// fixed by reloading parent
 				var activeNode = this.treePanel.getNodeById(this.folder_id);
@@ -1529,13 +1548,13 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		}
 		this.newFolderWindow.show(this.folder_id);
 	},
-	
+
 	onGridDoubleClick : function(grid, rowClicked, e){
 		var selectionModel = grid.getSelectionModel();
 		var record = selectionModel.getSelected();
 
 		this.fireEvent('filedblclicked', this, record);
-		
+
 		if(record.data.extension=='folder')
 		{
 			this.setFolderID(record.data.id, true);
@@ -1558,24 +1577,28 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			}
 		}
 	},
-	
-	setWritePermission : function(writePermission)
+
+	setWritePermission : function(permissionLevel)
 	{
-		this.newButton.setDisabled(!writePermission);
-		this.deleteButton.setDisabled(!writePermission);
-		this.uploadButton.setDisabled(!writePermission);
-		this.cutButton.setDisabled(!writePermission);
+		var writePermission=permissionLevel>=GO.permissionLevels.write;
+		var deletePermission=permissionLevel>=GO.permissionLevels.writeAndDelete;
+		var createPermission=permissionLevel>=GO.permissionLevels.create;
+
+		this.newButton.setDisabled(!createPermission);
+		this.deleteButton.setDisabled(!deletePermission);
+		this.uploadButton.setDisabled(!createPermission);
+		this.cutButton.setDisabled(!deletePermission);
 		this.pasteButton.setDisabled(!writePermission || !this.pasteSelections.length);
-					
+
 	//this.filesContextMenu.deleteButton.setDisabled(!writePermission);
 	},
-	
+
 	setFolderID : function(id, expand)
 	{
 		this.folder_id = id;
 		//this.gridStore.baseParams['id']=this.thumbsStore.baseParams['id']=id;
 		this.gridStore.baseParams['folder_id']=id;
-	
+
 		this.getActiveGridStore().load({
 			callback:function(){
 				var activeNode = this.treePanel.getNodeById(id);
@@ -1600,21 +1623,21 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			},
 			scope:this
 		});
-		
-				
+
+
 	},
-	
+
 	/*expandID : function(id){
 		var folders = split('/', id);
-		
+
 		var curID = folders[0];
-		
+
 		var node = this.treePanel.getNodeById(curID);
 		if(node)
 		{
 			node.expand();
 		}
-		
+
 		for(var i=1;i<folders.length;i++)
 		{
 			curID = curid+'/'+folders[i];
@@ -1623,14 +1646,14 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			{
 				node.expand();
 			}
-		}		
+		}
 	},*/
 
-	
+
 	showGridPropertiesDialog  : function(){
 		var selModel = this.gridPanel.getSelectionModel();
 		var selections = selModel.getSelections();
-		
+
 		if(selections.length==0)
 		{
 			Ext.Msg.alert(GO.lang['strError'], GO.lang['noItemSelected']);
@@ -1640,10 +1663,10 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		}else
 		{
 			this.showPropertiesDialog(selections[0]);
-			
+
 		}
 	},
-	
+
 	showPropertiesDialog : function(record)
 	{
 		if(record.data.extension=='folder')
@@ -1663,7 +1686,7 @@ GO.files.showFilePropertiesDialog = function(file_id){
 		GO.files.filePropertiesDialog = new GO.files.FilePropertiesDialog();
 
 	if(GO.files.filePropertiesDialogListeners){
-		
+
 		GO.files.filePropertiesDialog.on(GO.files.filePropertiesDialogListeners);
 		delete GO.files.filePropertiesDialogListeners;
 	}
@@ -1687,7 +1710,7 @@ GO.files.showFolderPropertiesDialog = function(folder_id){
 
 
 GO.mainLayout.onReady(function(){
-	
+
 	if(GO.workflowLinkHandlers)
 	{
 		GO.workflowLinkHandlers[6]=function(id, process_file_id){
@@ -1699,8 +1722,8 @@ GO.mainLayout.onReady(function(){
 			GO.files.filePropertiesDialog.tabPanel.setActiveTab(3);
 		}
 	}
-        
-    GO.checker.registerRequest("files/notification/unsent",{},function(checker, data){});
+
+	GO.checker.registerRequest("files/notification/unsent",{},function(checker, data){});
 });
 
 
@@ -1738,7 +1761,7 @@ GO.files.openFile = function(record, store,e)
 
 	if(GO.files.filesObservable.fireEvent('beforeopenfile', record, store,e)){
 		var index = record.data.id ? 'id' : 'path';
-		
+
 		var params = {};
 		params[index]=record.data[index];
 		var url = GO.url('files/file/download',params);
@@ -1759,7 +1782,7 @@ GO.files.openFile = function(record, store,e)
 						closeAction:'hide'
 					});
 				}
-				
+
 				var imagesParams = {};
 				imagesParams[index]=record.data[index];
 				imagesParams["thumbParams"]=Ext.encode({lw:this.imageViewer.width-20,ph:this.imageViewer.height-100});
@@ -1767,7 +1790,7 @@ GO.files.openFile = function(record, store,e)
 					imagesParams["sort"]=store.sortInfo.field;
 					imagesParams["dir"]=store.sortInfo.direction;
 				}
-				
+
 				GO.request({
 					url:"files/folder/images",
 					params:imagesParams,
@@ -1777,8 +1800,8 @@ GO.files.openFile = function(record, store,e)
 					},
 					scope:this
 				})
-				
-				
+
+
 //				this.imageViewer.show([{
 //						name: record.data['name'],
 //						src: GO.url("core/thumb",{src:record.data.path,lw:this.imageViewer.width-20,ph:this.imageViewer.height-100}),
@@ -1800,17 +1823,17 @@ GO.files.openFile = function(record, store,e)
 			case 'ppt':
 			case 'odp':
 			case 'txt':
-				
+
 			case 'sxw':
 			case 'sxc':
-				
+
 				if(GO.util.empty(record.get('locked'))){
 					GO.files.editFile(record.data.id);
 				}else
 				{
 					window.open(url);
 				}
-					
+
 				break;
 			case 'mht':
 			case 'eml':
@@ -1818,12 +1841,12 @@ GO.files.openFile = function(record, store,e)
 				{
 					GO.linkHandlers["GO_Savemailas_Model_LinkedEmail"].call(this, record.data.id, {
 						action:'file'
-						
+
 					});
 					break;
 				}
 
-			default:				
+			default:
 				window.open(url);
 				break;
 		}
@@ -1832,40 +1855,40 @@ GO.files.openFile = function(record, store,e)
 
 
 GO.files.downloadFile = function (fileId){
-	window.open(GO.url("files/file/download",{id:fileId,inline:false}));	
+	window.open(GO.url("files/file/download",{id:fileId,inline:false}));
 }
 
 GO.files.editFile = function (fileId){
-	
+
 	if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission)
 	{
 		if(!deployJava.isWebStartInstalled('1.6.0'))
 		{
-			Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);			
+			Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);
 		}else
 		{
 			document.location.href=GO.url('gota/file/edit&id='+fileId);
-			
-			
-			
+
+
+
 			return;
 		}
-	}	
-	GO.files.downloadFile(fileId);	
+	}
+	GO.files.downloadFile(fileId);
 }
 
 
 GO.files.openFolder = function(id, folder_id)
 {
 	if(!GO.files.fileBrowser)
-	{	
+	{
 		GO.files.fileBrowser=new GO.files.FileBrowser({
 			id:'popupfb',
 			border:false,
 			treeRootVisible:true,
 			filePanelCollapsed:true
 		});
-		GO.files.fileBrowserWin = new GO.Window({			
+		GO.files.fileBrowserWin = new GO.Window({
 			title: GO.files.lang.fileBrowser,
 			height:500,
 			width:900,
@@ -1877,18 +1900,18 @@ GO.files.openFolder = function(id, folder_id)
 			items: GO.files.fileBrowser/*,
 			buttons:[
 				{
-					text: GO.lang['cmdClose'],				        						
+					text: GO.lang['cmdClose'],
 					handler: function(){
 						GO.files.fileBrowserWin.hide();
 					},
 					scope:this
-				}				
+				}
 			]*/
-		});		
+		});
 	}
 	GO.files.fileBrowser.setRootID(id, folder_id);
 	GO.files.fileBrowserWin.show();
-	
+
 	return GO.files.fileBrowser;
 }
 
@@ -1908,7 +1931,7 @@ GO.files.createSelectFileBrowser = function(){
 			modal:true,
 			layout:'fit',
 			border:false,
-			collapsible:true,			
+			collapsible:true,
 			maximizable:true,
 			closeAction:'hide',
 			items: GO.selectFileBrowser,
@@ -1981,5 +2004,3 @@ GO.moduleManager.addModule('files', GO.files.FileBrowser, {
 	title : GO.files.lang.files,
 	iconCls : 'go-tab-icon-files'
 });
-
-

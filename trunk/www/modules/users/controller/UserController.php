@@ -184,9 +184,6 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			$ab->users = true;
 			$ab->save();
 		}
-
-		//$pdo = GO::getDbConnection();
-
 		$stmt = GO_Base_Model_User::model()->find();
 		while ($user = $stmt->fetch()) {
 

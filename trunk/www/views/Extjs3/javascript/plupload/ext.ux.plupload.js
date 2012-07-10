@@ -101,8 +101,8 @@ Ext.ux.PluploadPanel = Ext.extend(Ext.Panel, {
                     menu: new Ext.menu.Menu({
                         items: [
                             {text: config.deleteSelectedText || '<b>Remove selected</b>', handler: this.onDeleteSelected, scope: this },
-                            '-',
-                            {text: config.deleteUploadedText || 'Remove uploaded', handler: this.onDeleteUploaded, scope: this },
+//                            '-',
+//                            {text: config.deleteUploadedText || 'Remove uploaded', handler: this.onDeleteUploaded, scope: this },
                             '-',
                             {text: config.deleteAllText || 'Remove all', handler: this.onDeleteAll, scope: this }
                         ]

@@ -34,7 +34,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		while ($contact = $stmt->fetch()) {
 			$response['data']['employees'][] = array(
 					'id' => $contact->id,
-					'name' => $contact->name,
+					'name' => $contact->getName(GO::user()->sort_name),
 					'function' => $contact->function,
 					'email' => $contact->email
 			);

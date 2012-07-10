@@ -143,7 +143,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			
 			$moduleId = strtolower($classParts[1]);
 			
-			$this->_module = GO_Base_Model_Module::model()->findByPk($moduleId, false, true);			
+			$this->_module = $moduleId=='core' ? false : GO_Base_Model_Module::model()->findByPk($moduleId, false, true);			
 		}
 		
 		return $this->_module;
@@ -322,8 +322,6 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			//restore old value for acl permissions if this method was allowed for guests.
 			if(isset($oldIgnore))
 				GO::setIgnoreAclPermissions($oldIgnore);
-			
-			//GO::exportBaseClasses();
 
 			return $response;
 			

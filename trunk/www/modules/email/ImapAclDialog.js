@@ -4,9 +4,8 @@ GO.email.ImapAclDialog = Ext.extend(GO.Window, {
 
 		this.grid = new GO.grid.GridPanel({
 			store:new GO.data.JsonStore({
-				url: GO.settings.modules.email.url+'json.php',
+				url: GO.url("email/folder/aclStore"),
 				baseParams: {
-					"task": 'getacl',
 					mailbox:"",
 					account_id:0
 				},

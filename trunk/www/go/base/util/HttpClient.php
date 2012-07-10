@@ -82,7 +82,7 @@ class GO_Base_Util_HttpClient{
 		curl_setopt($this->_curl, CURLOPT_POST, !empty($params));
 		if(!empty($params))
 			curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $params);
-		curl_setopt($this->_curl, CURLOPT_RETURNTRANSFER, true);
+		@curl_setopt($this->_curl, CURLOPT_RETURNTRANSFER, true);
 		
 		$response = curl_exec($this->_curl);
 		
@@ -92,6 +92,10 @@ class GO_Base_Util_HttpClient{
 		
 		return $response;		
 	}	
+	
+	public function getHttpCode(){
+		return curl_getinfo($this->_curl, CURLINFO_HTTP_CODE);		
+	}
 	
 	/**
 	 * Login to a Group-Office installation

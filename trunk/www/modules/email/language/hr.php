@@ -1,9 +1,6 @@
 <?php
-
-﻿;
 $l['name'] = 'E-mail';
 $l['description'] = 'E-mail klijent. Svi korisnici će biti u mogućnosti slati i primati e-mailove';
-$lang['link_type'][9]='E-mail';
 $l['feedbackNoReciepent'] = 'Niste unijeli primatelja';
 $l['feedbackSMTPProblem'] = 'Došlo je do problema u komunikaciji sa SMTP: ';
 $l['feedbackUnexpectedError'] = 'Pojavio se ne predviđeni problem sa izgradnjom e-maila: ';
@@ -52,7 +49,7 @@ $l['iCalendar_event_not_found']='Ova poruka sadrži ažuriranja za događaj koji
 $l['iCalendar_update_available']='Ova poruka sadrži ažuriranja za postojeći događaj.';
 $l['iCalendar_update_old']='Ova poruka sadrži događaj koji je već obrađen.';
 $l['iCalendar_event_cancelled']='Ova poruka sadrži otkaz događaja.';
-$l['iCalendar_event_invitation_declined']='Ova poruka sadrži pozivnicu za događaj koji ste već odbili.';﻿;
+$l['iCalendar_event_invitation_declined']='Ova poruka sadrži pozivnicu za događaj koji ste već odbili.';
 $l["forwardTo"]='Proslijedi pošto';
 $l["messages"]='Poruke';
 $l["message"]='Poruka';

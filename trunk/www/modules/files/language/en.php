@@ -115,3 +115,5 @@ $l['notifyFileMove'] = 'File %s was moved to %s by %s';
 $l['notifyFileDelete'] = 'File %s was deleted by %s';
 $l['notifyFileUpdate'] = 'File %s was updated by %s';
 $l['notificationEmailSubject'] = 'FolderNotification Email';
+
+$l['downloadLinkExpired'] = "Sorry, the download link for this file has expired";

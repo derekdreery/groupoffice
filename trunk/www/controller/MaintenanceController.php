@@ -13,11 +13,6 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	//don't check token in this controller
 	protected function checkSecurityToken(){}
 	
-
-	protected function actionTest($params) {
-		
-	}
-
 	protected function init() {
 		GO::$disableModelCache=true; //for less memory usage
 		ini_set('max_execution_time', '0'); //allow long runs		
@@ -238,6 +233,11 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		if(!GO_Base_Db_Utils::tableExists('go_model_types')){
 			
+			$upgrade_mtime = GO::config()->get_setting('upgrade_mtime');
+			
+			if($upgrade_mtime < 20111222)
+				exit("Old version detected but it's older then Group-Office 3.7.41. You must upgrade to the latest 3.7 version first.");
+			
 			echo "Older version of Group-Office detected. Preparing database for 4.0 upgrade\n";
 		
 			$queries[]="TRUNCATE TABLE `go_state`";
@@ -386,7 +386,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 							echo 'Excuting query: ' . $query . "\n";
 							if (empty($params['test'])) {
 								try {
-									GO::getDbConnection()->query($query);
+									if(!empty($query))
+										GO::getDbConnection()->query($query);
 								} catch (PDOException $e) {
 									//var_dump($e);
 									echo $e->getMessage() . "\n";
@@ -485,6 +486,10 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	 * @param type $params MUST contain $params['lang1'] AND $params['lang2']
 	 */
 	protected function actionCheckLanguage($params){
+		
+		
+		header('Content-Type: text/html; charset=UTF-8');
+		
 		$lang1code = empty($params['lang1']) ? 'en' : $params['lang1'];
 		$lang2code = empty($params['lang2']) ? 'nl' : $params['lang2'];
 		
@@ -543,6 +548,16 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		return $outputHtml;
 	}
 	
+	private function _replaceBOM($filePath){
+		$origStr = file_get_contents($filePath);
+		$str = str_replace("\xEF\xBB\xBF", '', $origStr);	
+//		$str = str_replace("ï»¿", '', $str);	
+		if($str!=$origStr){					
+			file_put_contents($filePath, $str);
+		}			
+		
+	}
+	
 	/**
 	 * Used in actionCheckLanguage. Parse the file, putting its language fields
 	 * into $contentArr.
@@ -554,9 +569,12 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		$outputString = '';
 		$langFile = new GO_Base_Fs_File($filePath);
 		
+		
+		
 		if(!file_exists($langFile->path())) {
 			$outputString .= '<i><font color="red">File not found: "'.$langFile->path().'"</font></i><br />';
 		} else {
+			$this->_replaceBOM($filePath);
 			$encodingName = $langFile->detectEncoding($langFile->getContents());
 			if ( $encodingName == 'UTF-8' || $encodingName == 'ASCII' || $langFile->convertToUtf8() ) {
 				$lines = file($langFile->path());
@@ -576,6 +594,11 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			} else {
 				$outputString .= '<i><font color="red">Could not compare with '.str_replace(GO::config()->root_path, '', $langFile->path()).', because it cannot be made UTF-8!</font></i><br />';
 			}
+			
+			//for displaying errors
+			include($filePath);
+			
+			
 		}
 		return $outputString;
 	}

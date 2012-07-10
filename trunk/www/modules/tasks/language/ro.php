@@ -12,7 +12,7 @@ $l['statuses']['TENTATIVE']= 'Tentativ';
 $l['statuses']['DELEGATED']= 'Delegat';
 $l['statuses']['COMPLETED']= 'Complectat';
 $l['statuses']['IN-PROCESS']= 'In curs';
-﻿;
+;
 $l["task"]= 'Activitate';
 $l["noTask"]= 'Nu sunt activităţi de vizualizat';
 $l["tasks"]= 'Activitate';

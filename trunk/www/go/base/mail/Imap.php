@@ -19,8 +19,6 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 	var $delimiter=false;
 
-	var $errors=array();
-
 	var $sort_count = false;
 	
 	public function __construct(){
@@ -30,20 +28,22 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	public function __destruct() {
 		$this->disconnect();
 	}
-
-	public function last_error(){
-		$count=count($this->errors);
-		//GO::debug($this->errors);
-		if($count)
-			return $this->errors[$count-1];
-		else
-			return false;
+	
+	public function checkConnection(){
+		if(!is_resource($this->handle)){
+			return $this->connect(
+							$this->server, 
+							$this->port,
+							$this->username,
+							$this->password,
+							$this->ssl,
+							$this->starttls,
+							$this->auth);
+		}else
+		{
+			return true;
+		}
 	}
-
-	public function clear_errors(){
-		//$this->errors=array();
-	}
-
 
 	/**
 	 * Connects to the IMAP server and authenticates the user
@@ -62,9 +62,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		GO::debug("imap::connect($server, $port, $username, ***, $ssl, $starttls)");
 
 		//cache DNS in session. Seems to be faster with gmail somehow.
-//		if(empty($_SESSION['GO_SESSION']['imap'][$server]))
+//		if(empty(GO::session()->values['imap'][$server]))
 //		{
-//			$_SESSION['GO_SESSION']['imap'][$server]=gethostbyname($server);
+//			GO::session()->values['imap'][$server]=gethostbyname($server);
 //		}
 		
 		$this->ssl = $ssl;
@@ -76,11 +76,10 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$this->username=$username;
 		$this->password=$password;
 
-		if ($this->ssl) {
-			$this->server = 'ssl://'.$this->server;
-		}
+		$server = $this->ssl ? 'ssl://'.$this->server : $this->server;
+		
 
-		$this->handle = @fsockopen($this->server, $this->port, $errorno, $errorstr, 30);
+		$this->handle = @fsockopen($server, $this->port, $errorno, $errorstr, 30);
 		if (!is_resource($this->handle)) {
 			throw new Exception('Failed to open socket #'.$errorno.'. '.$errorstr);
 		}
@@ -205,17 +204,20 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 */
 
 	public function get_capability() {
-		if (isset($_SESSION['GO_IMAP'][$this->server]['imap_capability'])) {
-			$this->capability=$_SESSION['GO_IMAP'][$this->server]['imap_capability'];
-		}else {
-			$command = "CAPABILITY\r\n";
-			$this->send_command($command);
-			$response = $this->get_response();
-			$this->capability = $_SESSION['GO_IMAP'][$this->server]['imap_capability'] = implode(' ', $response);
-		}
-
-		//GO::debug('IMAP capability: '.$this->capability);
-
+//		if (isset(GO::session()->values['GO_IMAP'][$this->server]['imap_capability'])) {
+//			$this->capability=GO::session()->values['GO_IMAP'][$this->server]['imap_capability'];
+//		}else {
+			if(!isset($this->capability)){
+				$command = "CAPABILITY\r\n";
+				$this->send_command($command);
+				$response = $this->get_response();
+				$this->capability = implode(' ', $response);
+			}
+//			$this->capability = GO::session()->values['GO_IMAP'][$this->server]['imap_capability'] = implode(' ', $response);			
+//		}
+		
+		GO::debug('IMAP capability: '.$this->capability);
+		
 		return $this->capability;
 	}
 	
@@ -253,9 +255,11 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$this->clean($mailbox, 'mailbox');
 
 		$command = "SETACL $mailbox $identifier $permissions\r\n";
+		//throw new Exception($command);
 		$this->send_command($command);
 
 		$response = $this->get_response();
+		
 		return $this->check_response($response);
 	}
 
@@ -275,8 +279,8 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 	public function get_mailbox_delimiter() {
 		if(!$this->delimiter){
-			if(isset($_SESSION['GO_SESSION']['imap_delimiter'][$this->server])){
-				$this->delimiter=$_SESSION['GO_SESSION']['imap_delimiter'][$this->server];
+			if(isset(GO::session()->values['imap_delimiter'][$this->server])){
+				$this->delimiter=GO::session()->values['imap_delimiter'][$this->server];
 			}else
 			{
 				$this->get_folders();
@@ -291,34 +295,61 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	}
 
 	private function set_mailbox_delimiter($delimiter) {
-		$this->delimiter=$_SESSION['GO_SESSION']['imap_delimiter'][$this->server]=$delimiter;
+		$this->delimiter=GO::session()->values['imap_delimiter'][$this->server]=$delimiter;
 	}
 	
 	
-	public function list_folders($listSubscribed=true, $withStatus=false, $namespace='', $pattern='*'){
+	private $_subscribedFoldersCache;
+	
+	private function _isSubscribed($mailboxName, $flags){
+		if($mailboxName=="INBOX"){
+			return true;
+		}elseif($this->has_capability("LIST-EXTENDED")){
+			return stristr($flags, 'subscribed');
+		}else
+		{
+			if(!isset($this->_subscribedFoldersCache[$this->server.$this->username])){
+				$this->_subscribedFoldersCache[$this->server.$this->username] = $this->list_folders(true, false, '', '*');				
+			}
+			GO::debug(array_keys($this->_subscribedFoldersCache[$this->server.$this->username]));
+			return isset($this->_subscribedFoldersCache[$this->server.$this->username][$mailboxName]);
+		}
+	}
+	
+	public function list_folders($listSubscribed=true, $withStatus=false, $namespace='', $pattern='*', $isRoot=false){
 		
 		GO::debug("list_folders($listSubscribed, $withStatus, $namespace, $pattern");
 		//$delim = false;
+		
+		//unset($this->_subscribedFoldersCache);
 		
 		$listStatus = $this->has_capability('LIST-STATUS');
 		
 		$listCmd = $listSubscribed ? 'LSUB' : 'LIST';
 		
-		if($listSubscribed && $this->has_capability("LIST-EXTENDED"))
-			$listCmd = "LIST (SUBSCRIBED)";
+//		if($listSubscribed && $this->has_capability("LIST-EXTENDED"))
+////		$listCmd = "LIST (SUBSCRIBED)";		
+//			$listCmd = "LIST";
 		
 				
-		$cmd = $listCmd.' "'.$namespace.'" "'.$pattern.'"';
+		$cmd = $listCmd.' "'.$this->addslashes($this->utf7_encode($namespace)).'" "'.$this->addslashes($this->utf7_encode($pattern)).'"';
 		
-		if($listSubscribed && $this->has_capability("LIST-EXTENDED"))
-			$listCmd = 'LIST';
+//		if($listSubscribed && $this->has_capability("LIST-EXTENDED"))
+//			$listCmd = 'LIST';
 		
-		if($listStatus && $withStatus){
-			$cmd .= ' RETURN (CHILDREN STATUS (MESSAGES UNSEEN))';
+//		if($listStatus && $withStatus){
+//			$cmd .= ' RETURN (CHILDREN SUBSCRIBED STATUS (MESSAGES UNSEEN))';
+//		}
+		
+		if($this->has_capability("LIST-EXTENDED")){
+				$cmd .= ' RETURN (CHILDREN SUBSCRIBED';
+				
+				if($withStatus){
+					$cmd .= ' STATUS (MESSAGES UNSEEN)';
+				}
+
+			$cmd .= ')';
 		}
-		
-		if($this->has_capability("LIST-EXTENDED") && !$listSubscribed)
-			$cmd .= ' RETURN (CHILDREN SUBSCRIBED)';
 		
 		GO::debug($cmd);
 		
@@ -327,6 +358,8 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$this->send_command($cmd);
 		$result = $this->get_response(false, true);
 		GO::debug($result);
+		
+		$delim=false;
 
 		$folders = array();
 		foreach ($result as $vals) {
@@ -350,7 +383,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				$has_no_kids=false;
 				$has_kids = false;
 				$marked = false;				
-				$subscribed=$listSubscribed;
+				//$subscribed=$listSubscribed;
 
 				foreach ($vals as $v) {
 					if ($v == '(') {
@@ -372,6 +405,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 						}
 					}
 				}
+				
+				if($folder=='dovecot')
+					continue;
 
 				if (!$this->delimiter) {
 					$this->set_mailbox_delimiter($delim);
@@ -391,11 +427,12 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 					$has_no_kids = true;
 				}
 				
-				if (stristr($flags, 'subscribed')) {
-					$subscribed = true;
-				}
 				
-				if ($folder != 'INBOX' && (stristr($flags, 'noselect') || stristr($flags, 'NonExistent'))) {
+				$subscribed = $listSubscribed || $this->_isSubscribed($folder, $flags);
+				
+				$nonexistent = stristr($flags, 'NonExistent');
+				
+				if ($folder != 'INBOX' && (stristr($flags, 'noselect') || $nonexistent)) {
 					$no_select = true;
 				}
 				
@@ -404,15 +441,14 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				if (!isset($folders[$folder]) && $folder) {
 					$folders[$folder] = array(
 									'delimiter' => $delim,
-									'name' => $folder,
+									'name' => $this->utf7_decode($folder),
 									'marked' => $marked,
 									'noselect' => $no_select,
+									'nonexistent' => $nonexistent,
 									'noinferiors' => $can_have_kids,
 									'haschildren' => $has_kids,
 									'hasnochildren' => $has_no_kids,
-									'subscribed'=>$subscribed,
-									'unseen'=>0,
-									'messages'=>0
+									'subscribed'=>$subscribed
 					);
 				}
 			}else
@@ -438,52 +474,45 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			}
 		}
 		
-		if($namespace=="" && $pattern=="" && $listSubscribed && !isset($folders['INBOX'])){
-			//inbox is not subscribed. Let's fix that/
-			if(!$this->subscribe('INBOX'))
-				throw new Exception("Could not subscribe to INBOX folder!");
-			return $this->list_folders($listSubscribed, $withStatus, $namespace, $pattern);
+//		if($namespace=="" && $pattern=="%" && $listSubscribed && !isset($folders['INBOX'])){
+//			//inbox is not subscribed. Let's fix that/
+//			if(!$this->subscribe('INBOX'))
+//				throw new Exception("Could not subscribe to INBOX folder!");
+//			return $this->list_folders($listSubscribed, $withStatus, $namespace, $pattern);
+//		}
+		
+			//sometimes shared folders like "Other user.shared" are in the folder list
+		//but there's no "Other user" parent folder. We create a dummy folder here.
+		if(!isset($folders['INBOX']) && $isRoot){
+			$folders["INBOX"]=array(
+						'delimiter' => $delim,
+						'name' => 'INBOX',
+						'marked' => true,
+						'nonexistent'=>false,
+						'noselect' => false,
+						'haschildren'=>false,
+						'hasnochildren'=>true,
+						'noinferiors' => false,
+						'subscribed'=>true);
 		}
 
-		if(!$listStatus && $withStatus){
+		if($withStatus){
 			//no support for list status. Get the status for each folder
 			//with seperate status calls
 			foreach($folders as $name=>$folder){
-				$status = $this->get_status($name);
-				$folders[$name]['messages']=$status['messages'];
-				$folders[$name]['unseen']=$status['unseen'];
-			}
-		}
-		
-
-		//sometimes shared folders like "Other user.shared" are in the folder list
-		//but there's no "Other user" parent folder. We create a dummy folder here.
-		if(empty($namespace)){
-			foreach($folders as $name=>$folder){
-
-				$pos = strrpos($name, $delim);
-
-				if($pos){
-					$parent = substr($name,0,$pos);
-					if(!isset($folders[$parent]))
+				if(!isset($folders[$name]['unseen'])){
+					if($folders[$name]['nonexistent'] || $folders[$name]['noselect']){
+						$folders[$name]['messages']=0;
+						$folders[$name]['unseen']=0;
+					}else
 					{
-						$folders[$parent]=array(
-									'delimiter' => $delim,
-									'name' => $parent,
-									'marked' => true,
-									'noselect' => true,
-									'noinferiors' => false,
-									'haschildren' => true,
-									'hasnochildren' => false,
-									'subscribed'=>true,
-									'unseen'=>0,
-									'messsages'=>0);
+						$status = $this->get_status($name);				
+						$folders[$name]['messages']=$status['messages'];
+						$folders[$name]['unseen']=$status['unseen'];
 					}
 				}
 			}
 		}
-
-//		GO::debug($folders);
 
 		ksort($folders);
 
@@ -576,7 +605,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			if (!isset($folders[$folder]) && $folder) {
 				$folders[$folder] = array(
 								'delimiter' => $delim,
-								'name' => $folder,
+								'name' => $this->utf7_decode($folder),
 								'marked' => $marked,
 								'noselect' => $no_select,
 								'can_have_children' => $can_have_kids,
@@ -726,8 +755,14 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 * @param <type> $folder
 	 * @return <type>
 	 */
+	
+	private $_unseen;
 
 	public function get_unseen($mailbox=false) {
+		
+		if(isset($this->_unseen[$mailbox])){
+			return $this->_unseen[$mailbox];
+		}
 
 		if($mailbox){
 			if(!$this->select_mailbox($mailbox)){
@@ -761,7 +796,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$this->selected_mailbox['unseen']=$unseen;
 
 		//GO::debug($unseen);
-		return array('count'=>$unseen, 'uids'=>$uids);
+		$this->_unseen[$mailbox]= array('count'=>$unseen, 'uids'=>$uids);
+		
+		return $this->_unseen[$mailbox];
 	}
 
 
@@ -1157,7 +1194,6 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	}
 
 
-
 	/**
 	 * Get's message headers from an UID range:
 	 *
@@ -1328,6 +1364,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 					$message['from']=$this->mime_header_decode($message['from']);
 					$message['to']=$this->mime_header_decode($message['to']);
 					$message['reply_to']=$this->mime_header_decode($message['reply_to']);
+					$message['disposition_notification_to']=$this->mime_header_decode($message['disposition_notification_to']);
 					if(isset($message['cc']))
 						$message['cc']=$this->mime_header_decode($message['cc']);
 					
@@ -1362,15 +1399,51 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	{
 		GO::debug("get_message_headers_set($start, $limit, $sort_field , $reverse, $query)");
 		
-		$uids = $this->sort_mailbox($sort_field, $reverse, $query);
+		if($query=='ALL' || $query==""){
+			$unseen = $this->get_unseen($this->selected_mailbox['name']);
+
+			$key = 'sort_cache_'.$this->selected_mailbox['name'].'_'.$this->server.'_'.$sort_field;
+			$key .= $reverse ? '_1' : '_0';
+			
+			//var_dump(GO::session()->values['emailmod'][$key]);			
+			$unseenCheck = $unseen['count'].':'.$this->selected_mailbox['messages'];
+			if(!empty($this->selected_mailbox['uidnext']))
+				$unseenCheck .= ':'.$this->selected_mailbox['uidnext'];
+			
+			GO::debug($unseenCheck);
+			//var_dump($unseenCheck);
+			if(isset(GO::session()->values['emailmod'][$key]['unseen']) && GO::session()->values['emailmod'][$key]['unseen']==$unseenCheck){
+					//throw new Exception("From cache");
+				GO::debug("IMAP sort from session cache");
+				$uids = GO::session()->values['emailmod'][$key]['uids'];
+				$this->sort_count=count($uids);
+			}else
+			{		
+				GO::debug("IMAP sort from server");
+				GO::session()->values['emailmod'][$key]['unseen']=$unseenCheck;
+				$uids = GO::session()->values['emailmod'][$key]['uids'] = $this->sort_mailbox($sort_field, $reverse, $query);
+			}
+		}else
+		{
+			$uids = $this->sort_mailbox($sort_field, $reverse, $query);
+		}
+		
+		GO::debug("Count uids: ".count($uids));
 		
 		if(!is_array($uids))
 			return array();
 
 		if($limit>0)
 			$uids=array_slice($uids,$start, $limit);
+		
+		$chunks = array_chunk($uids, 1000);
+		
+		$headers = array();
+		while($subset = array_shift($chunks)){
+			$headers = array_merge($headers, $this->get_message_headers($subset, true));
+		}
 
-		return $this->get_message_headers($uids, true);
+		return $headers;
 	}
 
 
@@ -1384,9 +1457,13 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 	function check_mbroot($mbroot) {
 		$mbroot = trim($mbroot);
+		
+		if(empty($mbroot))
+			return "";
 
 		$list = $this->get_folders('', false,'%');
-		//GO::debug($list);
+//		GO::debug($list);
+//		throw new Exception($mbroot);
 		if (is_array($list)) {
 			while ($folder = array_shift($list)) {
 				if (!$this->delimiter && strlen($folder['delimiter']) > 0) {
@@ -1446,7 +1523,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$command = "UID FETCH $uid BODYSTRUCTURE\r\n";
 		$this->send_command($command);
 		$result = $this->get_response(false, true);
-		
+				
 		while (isset($result[0][0]) && isset($result[0][1]) && $result[0][0] == '*' && strtoupper($result[0][1]) == 'OK') {
 			array_shift($result);
 		}
@@ -1568,6 +1645,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		{
 			$parts=array('text_found'=>false, 'parts'=>array());
 		}
+		$imgs  =array('jpg','jpeg','gif','png','bmp');
 		foreach ($struct as $id => $vals) {
 
 			//GO::debug($vals);
@@ -1582,11 +1660,18 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 						$parts['text_found']=true;
 						$parts['parts'][] = $vals;
 
-					}elseif($vals['type']=='image' && in_array($vals['subtype'], array('jpg','jpeg','gif','png','bmp')) && $vals['disposition']=='inline' && empty($vals['id']))
+					}elseif($vals['type']=='image' && in_array($vals['subtype'], $imgs) && $vals['disposition']=='inline' && empty($vals['id']))
 					{
-						//an inline image without ID. We'll display in the part order. Apple
-						//mail sends mail like this.
-						$parts['parts'][]=$vals;
+						//GO::debug($vals);
+						//work around ugly stuff. Some mails contain stuff with type image/gif but it's actually an html file.
+						//so we double check if the image has a filename that it has a valid image extension
+						$file = empty($vals['name']) ? false : new GO_Base_Fs_File($vals['name']);						
+						if(!$file || $file->isImage()){
+
+							//an inline image without ID. We'll display in the part order. Apple
+							//mail sends mail like this.
+							$parts['parts'][]=$vals;
+						}
 					}
 				}
 			
@@ -2071,12 +2156,12 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	public function delete_folder($mailbox) {
 		$this->clean($mailbox, 'mailbox');
 
-		$this->unsubscribe($mailbox);
+		$success = $this->unsubscribe($mailbox);
 
 		$command = 'DELETE "'.$this->addslashes($this->utf7_encode($mailbox))."\"\r\n";
 		$this->send_command($command);
 		$result = $this->get_response(false);
-		return $this->check_response($result, false);		
+		return $success;		
 	}
 
 	public function get_folder_tree($mailbox) {

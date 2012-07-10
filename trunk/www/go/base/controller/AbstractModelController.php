@@ -47,16 +47,18 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 */
 	protected function actionSubmit($params) {
 
-		$modelName = $this->model;
-		$pk = $this->getPrimaryKeyFromParams($params);
-		$model=false;
-		if ($pk)
-			$model = GO::getModel($modelName)->findByPk($pk);
+//		$modelName = $this->model;
+//		$pk = $this->getPrimaryKeyFromParams($params);
+//		$model=false;
+//		if ($pk)
+//			$model = GO::getModel($modelName)->findByPk($pk);
+//		
+//		if(!$model){
+//			$model = new $modelName;
+//			$model->user_id=GO::user()->id;
+//		}
 		
-		if(!$model){
-			$model = new $modelName;
-			$model->user_id=GO::user()->id;
-		}
+		$model = $this->getModelFromParams($params);
 
 		$ret = $this->beforeSubmit($response, $model, $params);
 		
@@ -77,7 +79,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				}
 
 
-				if (!empty($params['link'])) {
+				if (!empty($params['link']) && $model->hasLinks()) {
 
 					//a link is sent like  GO_Notes_Model_Note:1
 					//where 1 is the id of the model
@@ -147,13 +149,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
 		
 	}
-
-	/**
-	 * Action to load a single record.
-	 */
-	protected function actionLoad($params) {
+	
+	protected function getModelFromParams($params){
 		$modelName = $this->model;
-		//$modelName::model() does not work on php 5.2!
 		
 		$pk = $this->getPrimaryKeyFromParams($params);
 		if(!empty($pk)){
@@ -166,6 +164,18 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$model = new $modelName;
 			$model->setAttributes($params);
 		}
+		
+		return $model;
+	}
+
+	/**
+	 * Action to load a single record.
+	 */
+	protected function actionLoad($params) {
+		
+		//$modelName::model() does not work on php 5.2!
+		
+		$model = $this->getModelFromParams($params);
 		
 		$response = array();
 		
@@ -671,10 +681,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	}
 	
 	private function _processTasksDisplay($model,$response){
-		$startOfDay = GO_Base_Util_Date::clear_time(time());
+		//$startOfDay = GO_Base_Util_Date::clear_time(time());
 
 		$findParams = GO_Base_Db_FindParams::newInstance()->order('due_time','DESC');
-		$findParams->getCriteria()->addCondition('start_time', $startOfDay, '<=')->addCondition('status', GO_Tasks_Model_Task::STATUS_COMPLETED, '!=');						
+		//$findParams->getCriteria()->addCondition('start_time', $startOfDay, '<=')->addCondition('status', GO_Tasks_Model_Task::STATUS_COMPLETED, '!=');						
 
 		$stmt = GO_Tasks_Model_Task::model()->findLinks($model, $findParams);		
 
@@ -781,6 +791,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * @param Array $params 
 	 */
 	protected function actionExport($params) {	
+		
+		//used by custom fields to format diffently
+		define('EXPORTING', true);
+		
+		
 		$showHeader = false;
   	$humanHeaders = true;
 		$orientation = false;
@@ -807,6 +822,17 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		$store = new GO_Base_Data_Store($this->getStoreColumnModel());	
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatStoreRecord'));		
+		//$store->getColumnModel()->setModelFormatType('formatted'); //no html
+		
+		$response = array();
+		
+		$this->beforeStore($response, $params, $store);
+		$this->prepareStore($store);
+		
+		$storeParams = $store->getDefaultParams($params)->mergeWith($this->getStoreParams($params));
+		$this->beforeStoreStatement($response, $params, $store, $storeParams);
+		
+		$this->afterStore($response, $params, $store, $storeParams);
 		
 		$columnModel = $store->getColumnModel();
 		$this->formatColumns($columnModel);		
@@ -814,7 +840,13 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		if(!empty($params['columns'])) {
 			$includeColumns = explode(',',$params['columns']);
+			foreach($includeColumns as $incColumn){
+				if(!$columnModel->getColumn($incColumn))
+					$columnModel->addColumn (new GO_Base_Data_Column($incColumn,$incColumn));
+			}
+				
 			$columnModel->sort($includeColumns);
+			
 			foreach($columnModel->getColumns() as $c){
 				if(!in_array($c->getDataIndex(), $includeColumns))
 					$columnModel->removeColumn($c->getDataIndex());
@@ -822,12 +854,18 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		}
 		$extraParams = empty($params['params']) ? array() : json_decode($params['params'], true);
 
+		$this->beforeExport($store, $columnModel,$model, $findParams, $showHeader, $humanHeaders, $title, $orientation, $extraParams);
+		
 		if(!empty($params['type']))
 			$export = new $params['type']($store, $columnModel,$model, $findParams, $showHeader, $humanHeaders, $title, $orientation, $extraParams);
 		else
 			$export = new GO_Base_Export_ExportCSV($store, $columnModel, $model, $findParams, $showHeader, $humanHeaders, $title, $orientation, $extraParams); // The default Export is the CSV outputter.
 
 		$export->output();
+	}
+	
+	protected function beforeExport(&$store, &$columnModel,&$model, &$findParams, &$showHeader, &$humanHeaders, &$title, &$orientation, &$extraParams){
+		
 	}
 	
 	/**

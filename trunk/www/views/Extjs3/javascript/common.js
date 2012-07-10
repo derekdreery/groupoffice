@@ -274,6 +274,8 @@ GO.deleteItems = function(config)
 			
 			if(config.store.lastOptions && config.store.lastOptions.params && config.store.lastOptions.params.start)
 				params.start=config.store.lastOptions.params.start;
+			
+			
 						
 			config.store.load({
 				params: params,
@@ -301,6 +303,12 @@ GO.deleteItems = function(config)
 						callback = config.callback.createDelegate(config.scope);
 						callback.call(this, config);
 					}	
+					
+					
+					if(config.grid && typeof(config.grid.selectNextAfterDelete)=="function"){
+						config.grid.selectNextAfterDelete();
+					}
+					
 				}
 			}
 			);

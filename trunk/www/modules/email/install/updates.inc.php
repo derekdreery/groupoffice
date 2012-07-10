@@ -41,6 +41,10 @@ $updates["201206051342"][]="ALTER TABLE `em_links` ADD `mtime` INT NOT NULL DEFA
 $updates["201206121446"][]="ALTER TABLE `em_accounts` ADD `ignore_sent_folder` TINYINT( 1 ) NOT NULL DEFAULT '0'";
 
 
-$updates["201206141446"][]="ALTER TABLE `em_aliases` CHANGE `default` `default` BOOLEAN NOT NULL DEFAULT '0'";
-$updates["201206141446"][]="UPDATE em_aliases SET `default`=0 where `default`=1";
-$updates["201206141446"][]="UPDATE em_aliases SET `default`=1 where `default`=2";
+$updates["201206141446"][]="";
+$updates["201206141446"][]="";
+$updates["201206141446"][]="";
+
+
+$updates["201207040933"][]="ALTER TABLE `em_links` ADD `uid` VARCHAR( 100 ) NOT NULL DEFAULT '',
+ADD INDEX ( `uid` ) ";

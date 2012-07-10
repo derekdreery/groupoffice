@@ -1,6 +1,6 @@
 <?php
 
-﻿;
+;
 $l['name']='Zadaci';
 $l['description']='Upravljanje zadacima i obvezama.';
 $lang['link_type'][12]=$l['task']='Zadatak';
@@ -20,7 +20,7 @@ $l['list']='Lista zadataka';
 $l['tasklistChanged']="* Lista zadataka promjenjena iz '%s' u '%s'";
 $l['statusChanged']="* Status promjenjen iz '%s' u '%s'";
 $l['multipleSelected']='Više listi zadataka odabrano';
-$l['incomplete_delete']='Nemate dopuštenje za brisanje svih odabranih zadataka';﻿;
+$l['incomplete_delete']='Nemate dopuštenje za brisanje svih odabranih zadataka';;
 $l["task"]= 'Zadatak';
 $l["noTask"]= 'Nema zadataka za prikazati';
 $l["tasks"]= 'Zadaci';

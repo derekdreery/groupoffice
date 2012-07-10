@@ -1,6 +1,6 @@
 <?php
 
-﻿;
+;
 $l["category"]="Kategória";
 $l["categories"]="Kategóriák";
 $l["note"]="Feljegyzés";

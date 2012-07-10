@@ -1,6 +1,6 @@
 <?php
 
-﻿;
+;
 $l['name']='Sumar';
 $l['description']='Introdu aici descrierea';
 $l['default_rss_url']='http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml';
@@ -8,7 +8,7 @@ $l['announcement']='Comunicaţie';
 $l['announcements']='Comunicaţii';
 $l['announcement']='Comunicaţie';
 $l['announcements']='Comunicaţii';
-﻿;
+;
 $l["expires"]="Scadenţa";
 $l["summary"]= 'Sumar';
 $l["noItems"]= 'Nun ai nici un item în pagina de start.';

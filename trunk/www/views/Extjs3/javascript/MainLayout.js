@@ -30,7 +30,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 
 	ready : false,
 	
-	fullscreenPopup : false,
+//	fullscreenPopup : false,
 
 	state : false,
 
@@ -46,14 +46,14 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		}
 	},
 	
-	launchFullscreen : function(url)
-	{
-		this.fullscreenPopup = GO.util.popup({
-			url: url,
-			target: 'groupoffice'
-		});	
-	},	
-	
+//	launchFullscreen : function(url)
+//	{
+//		this.fullscreenPopup = GO.util.popup({
+//			url: url,
+//			target: 'groupoffice'
+//		});	
+//	},	
+//	
 	login : function(){
 
 		new Ext.Viewport();
@@ -102,17 +102,17 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		GO.loginDialog.addCallback(function(){
 				//var url = GO.afterLoginUrl ? GO.afterLoginUrl : GO.settings.config.host;
 				var url = GO.settings.config.host;
-				if(GO.loginDialog.fullscreenField.getValue() && window.name!='groupoffice')
-				{
-					url = GO.util.addParamToUrl(url, 'fullscreen_loaded','true');
-
-					this.launchFullscreen(url);
-					GO.loginDialog.hideDialog=false;
-					GO.loginDialog.on('callbackshandled', this.createLoginCallback, this);
-				}else
-				{					
+//				if(GO.loginDialog.fullscreenField.getValue() && window.name!='groupoffice')
+//				{
+//					url = GO.util.addParamToUrl(url, 'fullscreen_loaded','true');
+//
+//					this.launchFullscreen(url);
+//					GO.loginDialog.hideDialog=false;
+//					GO.loginDialog.on('callbackshandled', this.createLoginCallback, this);
+//				}else
+//				{					
 					document.location.href=url;
-				}
+//				}
 			}, this);		
 	},
 	
