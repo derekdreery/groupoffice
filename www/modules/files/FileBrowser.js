@@ -661,9 +661,9 @@ GO.files.FileBrowser = function(config){
 		width:450,
 		collapseMode:'mini',
 		collapsible:true,
+		hideCollapseTool:true,
 		split:true,
-		border:false,
-		title: '&nbsp;'
+		border:false
 	});
 
 

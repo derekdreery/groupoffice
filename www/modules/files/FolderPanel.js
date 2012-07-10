@@ -28,7 +28,7 @@ GO.files.FolderPanel = Ext.extend(GO.DisplayPanel,{
 
 	setData : function(data)
 	{
-		this.setTitle(data.name);
+//		this.setTitle(data.name);
 	
 		this.topToolbar.items.items[0].setVisible(false);
 
@@ -43,8 +43,7 @@ GO.files.FolderPanel = Ext.extend(GO.DisplayPanel,{
 
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
 					'<tr>'+
-						'<td>'+GO.files.lang.path+':</td>'+
-						'<td>{path}</td>'+
+						'<td colspan="2" class="display-panel-heading">'+GO.files.lang.folder+': {path}</td>'+
 					'</tr>'+
 					'<tr>'+
 						'<td>'+GO.lang.strType+':</td>'+

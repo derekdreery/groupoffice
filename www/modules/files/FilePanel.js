@@ -65,13 +65,13 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 
 	reset : function(){
 		GO.files.FilePanel.superclass.reset.call(this);
-		this.setTitle('&nbsp;');
+//		this.setTitle('&nbsp;');
 	},
 
 	setData : function(data)
 	{
 		GO.files.FilePanel.superclass.setData.call(this, data);
-		this.setTitle(data.name);		
+//		this.setTitle(data.name);		
 		this.editButton.setDisabled(data.locked || !this.data.write_permission);	
 		
 		//custom fields pass path as ID and it will be looked up by the controller. So we must set the actual ID here.
@@ -139,9 +139,12 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 		this.template =
 
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
+//					'<tr>'+
+//						'<td width="120">'+GO.files.lang.path+':</td>'+
+//						'<td>{path}</td>'+
+//					'</tr>'+
 					'<tr>'+
-						'<td width="120">'+GO.files.lang.path+':</td>'+
-						'<td>{path}</td>'+
+						'<td colspan="2" class="display-panel-heading">'+GO.files.lang.file+': {path}</td>'+
 					'</tr>'+
 					'<tr>'+
 						'<td>'+GO.lang.strType+':</td>'+
