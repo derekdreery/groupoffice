@@ -314,6 +314,22 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	public function getName() {
 		return GO_Base_Util_String::format_name($this->last_name, $this->first_name, $this->middle_name,'first_name');
 	}
+	
+	/**
+	 *
+	 * @return String Short name of the user 
+	 * Example: Foo Bar will output FB
+	 */
+	public function getShortName() {
+		
+		if(!empty($this->first_name))
+			$short = substr($this->first_name,0,1);  
+		
+		if(!empty($this->last_name))
+			$short .= substr($this->last_name,0,1);  
+		
+		return strtoupper($short);
+	}
 
 	/**
 	 * Returns an array of user group id's
