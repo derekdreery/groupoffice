@@ -91,6 +91,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 	private $_attributeLabels;	
 	
+	public static $db; //The database the active record should use
+	
 	/**
 	 * Force this activeRecord to save itself 
 	 * 
@@ -356,9 +358,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 			$classParts = explode('_',$this->className());
 			$prefix = strtolower(array_pop($classParts));
-
+			
 			foreach($this->columns as $columnName=>$columnData){
-				$this->_attributeLabels[$columnName] = GO::t($prefix.ucfirst($columnName), $this->getModule(),'',$found);
+				$this->_attributeLabels[$columnName] = GO::t($prefix.ucfirst($columnName), $this->getModule(),'common',$found);
 				if(!$found) {
 						switch($columnName){
 							case 'user_id':
@@ -617,10 +619,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * 
 	 * @param GO_Base_Db_PDO $pdo 
 	 */
-	public function setDbConnection(GO_Base_Db_PDO $pdo){
+	public function setDbConnection($pdo) {
 		$this->_pdo=$pdo;
 		GO::modelCache()->remove($this->className());
 	}
+	
 	
 	private function _joinAclTable(){
 		$arr = explode('.',$this->aclField());
@@ -870,7 +873,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @return GO_Base_Db_ActiveRecord 
 	 */
 	public function findSingleByAttributes($attributes, $findParams=false){
-		
+
 		$cacheKey = md5(serialize($attributes));
 		//Use cache so identical findByPk calls are only executed once per script request
 		$cachedModel =  GO::modelCache()->get($this->className(), $cacheKey);
@@ -1914,6 +1917,20 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		return $this->getPermissionLevel()>=$level;
 	}
 	
+	/**
+		* Returns a value indicating whether the attribute is required.
+		* This is determined by checking if the attribute is associated with a
+		* {@link CRequiredValidator} validation rule in the current {@link scenario}.
+		* @param string $attribute attribute name
+		* @return boolean whether the attribute is required
+		*/
+	public function isAttributeRequired($attribute)
+	{
+		  if(!isset($this->columns[$attribute]))
+				return false;
+			return $this->columns[$attribute]['required'];
+	}
+	
 
 	/**
 	 * Validates all attributes of this model
@@ -1921,7 +1938,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @todo Implement unique fields. eg. Name of addresbook must be unique
 	 * @return boolean 
 	 */
-
+	
 	public function validate(){
 				
 		//foreach($this->columns as $field=>$attributes){
@@ -2033,6 +2050,19 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	protected function setValidationError($attribute,$message) {
 		$this->_validationErrors[$attribute] = $message;
+	}
+	
+	/**
+		* Returns a value indicating whether there is any validation error.
+		* @param string $attribute attribute name. Use null to check all attributes.
+		* @return boolean whether there is any error.
+		*/
+	public function hasValidationErrors($attribute=null)
+	{
+		if ($attribute === null)
+			return $this->_validationErrors !== array();
+		else
+			return isset($this->_validationErrors[$attribute]);
 	}
 	
 	
