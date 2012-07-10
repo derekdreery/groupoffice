@@ -1,10 +1,10 @@
 <?php
 
-﻿;
+;
 $l['name']='Zabilješke';
 $l['description']='Modul za stvaranje zabilješki (bookmarks).';
 $l['general']='Opći';
-$l['googleDescription']="Traži na web-u";﻿;
+$l['googleDescription']="Traži na web-u";;
 $l["bookmarks"]='Zabilješke';
 $l["bookmark"]='Zabilješka';
 $l["category"]='Kategorija';

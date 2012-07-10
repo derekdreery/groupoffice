@@ -1,11 +1,11 @@
 <?php
 
-﻿;
+;
 $l['name']='Sieve';
 $l['description']='Upravljaj sieve e-mail pravilima za filtriranje';
 $l['active']='aktivno';
 $l['standardvacation']='Standardno pravilo za odmor';
-$l['standardvacationmessage']='Na godišnjem sam odmoru';﻿;
+$l['standardvacationmessage']='Na godišnjem sam odmoru';;
 $l["name"]= 'Ime';
 $l["scriptname"]= 'Ime skripte';
 $l["index"]= 'Indeks';

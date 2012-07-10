@@ -20,7 +20,7 @@ Modificările a fost făcute de %s:
 ';
 $l['modified']='Modificat';
 $l['new']='Nou';
-$l['deleted']='Şters';﻿;
+$l['deleted']='Şters';;
 $l["files"]='Dosar';
 $l["template"]= 'Model';
 $l["manageTemplates"]= 'Administrează modelele';
