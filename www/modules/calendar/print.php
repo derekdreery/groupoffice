@@ -8,7 +8,7 @@ require_once ($GO_MODULES->modules['calendar']['class_path'] . "go_ical.class.in
 require_once ($GO_MODULES->modules['calendar']['class_path'] . 'pdf.class.inc.php');
 
 
-require_once ($GLOBALS['GO_LANGUAGE']->get_language_file('calendar'));
+require($GLOBALS['GO_LANGUAGE']->get_language_file('calendar'));
 $cal = new calendar();
 $cal2 = new calendar();
 
