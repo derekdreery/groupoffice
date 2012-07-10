@@ -312,7 +312,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	public function getAllMailboxes($hierarchy=true, $withStatus=false){
 		$imap = $this->openImapConnection();
 		
-		$folders = $imap->list_folders(true, $withStatus);
+		$folders = $imap->list_folders(true, $withStatus,'','*',true);
 		
 		//$node= array('name'=>'','children'=>array());
 		
