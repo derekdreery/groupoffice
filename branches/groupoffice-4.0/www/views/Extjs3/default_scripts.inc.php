@@ -94,7 +94,7 @@ $view_root_path = GO::config()->root_path.'views/Extjs3/';
 
 $scripts=array();
 //important to load focus first
-$scripts[]=$view_root_uri.'javascript/focus.js';
+//$scripts[]=$view_root_uri.'javascript/focus.js';
 
 
 //if(GO::config()->debug) {
