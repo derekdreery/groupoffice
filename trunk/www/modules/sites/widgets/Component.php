@@ -1,18 +1,12 @@
 <?php
-class GO_Sites_Components_Component {
+class GO_Sites_Widgets_Component {
 	/**
 	 * The component id
 	 * 
 	 * @var string 
 	 */
 	protected $_id;
-	
-	/**
-	 * The page to show this component on
-	 * 
-	 * @var GO_Sites_Model_Page 
-	 */
-	protected $_page;
+
 	
 	/**
 	 * The controller that is used
@@ -30,10 +24,8 @@ class GO_Sites_Components_Component {
 	 * 
 	 * @param string $id 
 	 */
-	protected function __construct($id,GO_Sites_Controller_Site $controller,$params){
+	protected function __construct($id, $params){
 		$this->_id = $id;
-		$this->_page = $controller->getPage();
-		$this->_controller = $controller;
 		$this->_params = $params;
 		$this->_init();
 	}
@@ -69,24 +61,6 @@ class GO_Sites_Components_Component {
 	 */
 	public function setId($id){
 		$this->_id = $id;
-	}
-	
-	/**
-	 * Get the components page
-	 * 
-	 * @return string  
-	 */
-	public function getPage(){
-		return $this->_page;
-	}
-	
-	/**
-	 * Set the components page
-	 * 
-	 * @param GO_Sites_Model_Page $page 
-	 */
-	public function setPage($page){
-		$this->_page = $page;
 	}
 	
 	/**

@@ -1,13 +1,13 @@
 <?php 
-class GO_Sites_Language{
+class GO_Sites_Components_Language{
 	private $_langIso='en';
 	private $_lang;
 	
 	private $_templatePath;
 	
 	
-	public function __construct($templatePath,$isoCode=false) {
-		$this->_templatePath = $templatePath;
+	public function __construct($isoCode=false) {
+		$this->_templatePath = GOS::site()->getController()->getTemplatePath();
 		$this->setLanguage($isoCode);
 	}
 	
@@ -36,6 +36,8 @@ class GO_Sites_Language{
 		$file = $this->_find_file();
 		if($file)
 			require($file);
+		else
+			throw new Exception('Language file not found');
 		
 		if(isset($l)){
 			if(!empty($l[$name]))
@@ -57,7 +59,7 @@ class GO_Sites_Language{
 	
 	/**
 	 * Get all supported languages.
-	 * 
+	 * TODO: loop through file in language directory
 	 * @return array array('en'=>'English');
 	 */
 	public function getLanguages(){
