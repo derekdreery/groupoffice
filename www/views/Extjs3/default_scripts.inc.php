@@ -362,10 +362,8 @@ if(count($load_modules)) {
 			die('Could not write to cache directory');
 		}
 
-		//Temporary dirty hack for namespaces
-		$modules = GO::modules()->getAllModules();
-
-		while ($module=array_shift($modules)) {
+		//Namespaces		
+		foreach($load_modules as $module){
 			fwrite($fp, 'Ext.ns("GO.'.$module->id.'");');
 		}
 
