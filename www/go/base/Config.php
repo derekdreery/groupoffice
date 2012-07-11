@@ -340,14 +340,6 @@ class GO_Base_Config {
 	 */
 	var $webmaster_email = 'webmaster@example.com';
 
-	/**
-	 * The link in menu help -> contents
-	 *
-	 * @var     string
-	 * @access  public
-	 */
-	var $help_link = 'http://wiki4.group-office.com/wiki/';
-
 
 	/**
 	 * The path to the root of Group-Office with slash on end
@@ -836,6 +828,16 @@ class GO_Base_Config {
 	 */
 
 	var $configuration_url = 'configuration';
+	
+	
+	/**
+	 * The link in menu help -> contents
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $help_link = 'http://wiki4.group-office.com/wiki/';
+	
 	/**
 	 * Relative path to the classes directory with no slash at start and end
 	 *
