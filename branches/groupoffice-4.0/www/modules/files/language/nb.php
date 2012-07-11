@@ -108,3 +108,4 @@ $l['notifyFileMove']= 'Filen %s ble flyttet til %s av %s';
 $l['notifyFileDelete']= 'Filen %s ble slettet av %s';
 $l['notifyFileUpdate']= 'Filen %s ble endret av %s';
 $l['notificationEmailSubject']= 'Melding om endringer i mapper';
+$l['downloadLinkExpired']= "Beklager, men denne nedlastningslenken er utløpt!";

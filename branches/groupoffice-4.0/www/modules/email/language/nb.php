@@ -229,7 +229,7 @@ $l["everythingBefore"]= 'Alle e-poster som er eldre enn';
 $l["alsoChildren"]= 'La dette også gjelde for e-poster i undermappene.';
 $l["addUnknownSenders"]='Legg til ukjente avsendere';
 $l["addUnknownSendersText"]='Du legger nå til valgte avsendere til en adresseliste. Først må følgende merkede avsendere legges inn i en Group-Office adressebok. Klikk på navnene for å legge dem inn eller lukk dette vinduet.';
-$l["emailFiles"]='Send filen med e-post';
+$l["emailFiles"]='Send filer med e-post';
 $l['autolinked']='Denne e-posten ble automatisk lenket til %s';
 $l['defaultProgramInstructions']='<p>For å angi {product_name} som ditt standard e-postprogram må du <a class="normal-link" href="http://www.{product_name}.com/wiki/E-mail#Set_{product_name}_as_your_default_e-mail_client" target="_blank">følge denne veiledningen</a>.</p><p>Hvis du bruker Windows må du også laste ned å kjøre <a class="normal-link" href="{url}">denne registerfilen</a></p>';
 $l['xssDetected']="Denne meldingen kan ha inneholde skadelig kode. Klikk her hvis du likevel vil se meldingen.";
