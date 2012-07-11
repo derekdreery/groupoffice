@@ -792,8 +792,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 */
 	protected function actionExport($params) {	
 		
+		
+		//define('EXPORTING', true);
 		//used by custom fields to format diffently
-		define('EXPORTING', true);
+		if(GO::modules()->customfields)
+			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=true;
 		
 		
 		$showHeader = false;
