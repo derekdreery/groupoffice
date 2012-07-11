@@ -521,10 +521,10 @@ if(count($load_modules)) {
 //
 //	$GO_SCRIPTS_JS .= 'GO.linkTypes='.json_encode($link_types).';';
 //
-//	require_once(GO::config()->class_path.'export/export_query.class.inc.php');
-//	$eq = new export_query();
-//
-//	$GO_SCRIPTS_JS.=$eq->find_custom_exports();
+	require_once(GO::config()->class_path.'export/export_query.class.inc.php');
+	$eq = new export_query();
+
+	$GO_SCRIPTS_JS.=$eq->find_custom_exports();
 
 	
 	foreach($load_modules as $module) {
