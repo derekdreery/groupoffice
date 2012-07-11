@@ -143,6 +143,9 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	 */
 	public function replaceContactTags($content, GO_Addressbook_Model_Contact $contact, $leaveEmptyTags=false){
 		
+		if(GO::modules()->customfields)
+			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=true;
+		
 		$attributes = $this->_defaultTags;
 		
 		if(!empty($contact->salutation))
@@ -155,6 +158,9 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 		}
 		
 		$attributes = array_merge($attributes, $this->_getUserAttributes());
+		
+		if(GO::modules()->customfields)
+			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=false;
 		
 		return $this->_parse($content, $attributes, $leaveEmptyTags);
 	}
@@ -174,6 +180,10 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	 * @return string 
 	 */
 	public function replaceModelTags($content, $model, $tagPrefix='', $leaveEmptyTags=false){
+		
+		if(GO::modules()->customfields)
+			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=true;
+		
 		$attributes = $this->_defaultTags;
 		
 		$attributes = array_merge($attributes, $this->_getModelAttributes($model, $tagPrefix));
@@ -181,6 +191,9 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 		$attributes = array_merge($attributes, $this->_getUserAttributes());
 		
 		$content = $this->_replaceRelations($content, $model, $tagPrefix, $leaveEmptyTags);
+		
+		if(GO::modules()->customfields)
+			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=false;
 	
 		return $this->_parse($content, $attributes, $leaveEmptyTags);		
 	}
@@ -242,12 +255,17 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	 * @return string 
 	 */
 	public function replaceUserTags($content, $leaveEmptyTags=false){
+		if(GO::modules()->customfields)
+			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=true;
 		
 		$attributes = $this->_defaultTags;
 		
 		$attributes = array_merge($attributes, $this->_getUserAttributes());
 		
 		//$attributes['contact:salutation']=GO::t('default_salutation_unknown');
+		
+		if(GO::modules()->customfields)
+			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=false;
 		
 		return $this->_parse($content, $attributes, $leaveEmptyTags);
 	}
