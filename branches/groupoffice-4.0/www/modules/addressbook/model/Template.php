@@ -179,9 +179,39 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 		$attributes = array_merge($attributes, $this->_getModelAttributes($model, $tagPrefix));
 		
 		$attributes = array_merge($attributes, $this->_getUserAttributes());
-	
-		return $this->_parse($content, $attributes, $leaveEmptyTags);
 		
+		$content = $this->_replaceRelations($content, $model, $tagPrefix, $leaveEmptyTags);
+	
+		return $this->_parse($content, $attributes, $leaveEmptyTags);		
+	}
+	
+	/**
+	 * 
+	 * Replaces relations if found in the template.
+	 * eg. {project:responsibleUser:name}
+	 * 
+	 * @param type $content
+	 * @param type $model
+	 * @param type $tagPrefix
+	 * @param type $leaveEmptyTags 
+	 */
+	private function _replaceRelations($content, $model, $tagPrefix='', $leaveEmptyTags=false){
+		
+		$relations = $model->relations();
+		$pattern = '/'.preg_quote($tagPrefix,'/').'([^:]+):[^\}]+\}/';
+		if(preg_match_all($pattern,$content, $matches)){
+			foreach($matches[1] as $relation){
+				if(isset($relations[$relation])){
+					$relatedModel = $model->$relation;	
+
+					if($relatedModel){
+
+						$content = $this->replaceModelTags($content, $relatedModel, $tagPrefix.$relation.':', $leaveEmptyTags);
+					}
+				}
+			}
+		}
+		return $content;
 	}
 	
 	private function _parse($content, $attributes, $leaveEmptyTags){
