@@ -1,3 +1,8 @@
+12-07-2012 4.0.70
+- GOTA wasn't working on some servers
+- Some tags were missing in document templates.
+- New E-mail notify sometimes didn't show.
+
 10-07-2012 4.0.67
 - Strange characters from Romanian and Hungarian language files removed.
 - Bug in e-mail sync with some IMAP servers.
