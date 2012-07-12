@@ -80,15 +80,16 @@ class GO_Base_Util_Http {
 	/**
 	 * Output the right headers for outputting file data to a browser.
 	 * 
-	 * @param GO_Base_Fs_File $file
+	 * @param GO_Base_Fs_File $file Use GO_Base_Fs_MemoryFile for outputting variables
 	 * @param boolean $inline
 	 * @param boolean $cache Cache the file for one day in the browser.
+	 * @param array $extraHeaders  Key value array for extra headers
 	 */
-	public static function outputDownloadHeaders(GO_Base_Fs_File $file, $inline=true, $cache=false) {
+	public static function outputDownloadHeaders(GO_Base_Fs_File $file, $inline=true, $cache=false, $extraHeaders=array()) {
 		if($file->exists()){
 			header('Content-Length: ' . $file->size());
 			header("Last-Modified: " . gmdate("D, d M Y H:i:s", $file->mtime())." GMT");
-			header("ETag: " . md5_file($file->path()));
+			header("ETag: " . $file->md5Hash());
 		}
 		header('Content-Transfer-Encoding: binary');		
 		
@@ -115,6 +116,23 @@ class GO_Base_Util_Http {
 				header('Pragma: no-cache');
 			}
 		}
+		
+		foreach($extraHeaders as $header=>$value){
+			header($header.': '.$value);
+		}
+	}
+	
+	/**
+	 * Download a file to the client
+	 * 
+	 * @param GO_Base_Fs_File $file Use GO_Base_Fs_MemoryFile for outputting variables
+	 * @param boolean $inline
+	 * @param boolean $cache Cache the file for one day in the browser.
+	 * @param array $extraHeaders  Key value array for extra headers
+	 */
+	public static function downloadFile(GO_Base_Fs_File $file, $inline=true, $cache=false, $extraHeaders=array()){
+		self::outputDownloadHeaders($file, $inline, $cache, $extraHeaders);
+		$file->output();
 	}
 	
 	/**
