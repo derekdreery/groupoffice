@@ -364,7 +364,8 @@ if(count($load_modules)) {
 
 		//Namespaces		
 		foreach($load_modules as $module){
-			fwrite($fp, 'Ext.ns("GO.'.$module->id.'");');
+			if($module->permissionLevel)
+				fwrite($fp, 'Ext.ns("GO.'.$module->id.'");');
 		}
 
 		//Put all lang vars in js
