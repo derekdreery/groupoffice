@@ -236,9 +236,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			$upgrade_mtime = GO::config()->get_setting('upgrade_mtime');
 			
 			if($upgrade_mtime < 20111222)
-				exit("Old version detected but it's older then Group-Office 3.7.41. You must upgrade to the latest 3.7 version first.");
+				exit("Old version detected but it's older then ".GO::config()->product_name." 3.7.41. You must upgrade to the latest 3.7 version first.");
 			
-			echo "Older version of Group-Office detected. Preparing database for 4.0 upgrade\n";
+			echo "Older version of ".GO::config()->product_name." detected. Preparing database for 4.0 upgrade\n";
 		
 			$queries[]="TRUNCATE TABLE `go_state`";
 			$queries[]="delete from go_settings where name='version'";
@@ -302,7 +302,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		ob_start("ob_upgrade_log");
 		
 		
-		echo "Updating Group-Office database\n";
+		echo "Updating ".GO::config()->product_name." database\n";
 		
 		//build an array of all update files. The queries are indexed by timestamp
 		//so they will all be executed in the right order.
