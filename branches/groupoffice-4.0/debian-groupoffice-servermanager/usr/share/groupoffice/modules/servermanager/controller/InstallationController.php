@@ -407,7 +407,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				$record['title']=$config['title'];
 				$record['webmaster_email']=$config['webmaster_email'];
 				$record['max_users']=isset($config['max_users']) ? $config['max_users'] : 0;
-				$record['serverclient_domains']=$config['serverclient_domains'];
+				$record['serverclient_domains']=isset($config['serverclient_domains']) ? $config['serverclient_domains'] : '';
 			}
 		}
 		
