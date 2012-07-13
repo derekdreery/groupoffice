@@ -63,9 +63,6 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 			return $this->_pageTitle;
 		else
 		{
-			if ($this->getAction() !== null && strcasecmp($this->getAction(), $this->defaultAction))
-				return $this->_pageTitle = ucfirst($this->getAction()) . ' - ' . GOS::site()->getName();
-			else
 				return $this->_pageTitle = GOS::site()->getName();
 		}
 	}
