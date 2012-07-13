@@ -15,6 +15,15 @@
  * @copyright Copyright Intermesh
  * @version $Id Website.php 2012-06-07 14:11:08 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
+ * 
+ * @property GO_Sites_Components_Notifier $notifier notification object for success/error messages
+ * @property GO_Sites_Components_AbstractFrontController $controller The current accessed controller
+ * @property GO_Sites_Components_Request $request The request component.
+ * @property GO_Sites_Components_UrlManager $urlManager The URL manager component.
+ * @property string $baseUrl The relative URL for the application.
+ * @property string $route The homepage URL.
+ * @property string $name Name of the website.
+ * @property GO_Sites_Model_Site $site website active record object.
  */
 class GO_Sites_Components_Website
 {
@@ -39,7 +48,6 @@ class GO_Sites_Components_Website
 	
 	private $_site; //The site active record object
 	private $_theme;
-	public $id;
 	
 	
 	public function __construct($domain)
@@ -51,7 +59,6 @@ class GO_Sites_Components_Website
 			if($site==null)
 				throw new GO_Base_Exception_NotFound('Website not found in database');
 			$this->_site = $site;
-			$this->id = $site->id; //TODO: remove??
 	}
 	
 	/**
@@ -67,8 +74,12 @@ class GO_Sites_Components_Website
 			return $this->$getter();
 		throw new Exception('Property "'.get_class($this).'.'.$name.'" is not defined.');
 	}
-
 	
+	public function getId()
+	{
+		return $this->_site->id;
+	}
+
 	public function getSite()
 	{
 		return $this->_site;

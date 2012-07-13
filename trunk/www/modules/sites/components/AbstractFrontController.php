@@ -20,10 +20,19 @@
  */
 abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Controller_AbstractController
 {
+	/**
+	 * Frontend action can be accessed without moduel access
+	 * @return array actions that can be accessed withou module access 
+	 */
 	protected function allowWithoutModuleAccess()
 	{
-		return array('*'); //parent::allowWithoutModuleAccess();
+		return array('*');
 	}
+	/**
+	 * By default allow guest to the frontend
+	 * Override again of pages requere login
+	 * @return array action that can be accessed as guest 
+	 */
 	protected function allowGuests() {
 		return array('*');
 	}
@@ -69,7 +78,7 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 	public function processOutput($output)
 	{
 		//output is passed as refference
-		GOS::site()->getScripts()->render($output);
+		GOS::site()->scripts->render($output);
 
 		return $output;
 	}
@@ -92,8 +101,6 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 		$output = $this->renderPartial($view, $data, true);
 		if (($layoutFile = $this->getLayoutFile($this->layout)) !== false)
 			$output = $this->renderFile($layoutFile, array('content' => $output), true);
-
-		//$this->afterRender($view, $output);
 
 		$output = $this->processOutput($output); //use script component to register script files in views
 
@@ -151,29 +158,49 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 			require($_viewFile_);
 	}
 
-	public function getTemplatePath()
+	private function getTemplatePath()
 	{
 		return GO::config()->root_path . 'modules/sites/templates/' . $this->template . '/';
 	}
 
-	public function getViewPath()
+	private function getViewPath()
 	{
 		return $this->getTemplatePath() . 'views/' . $this->getModule()->id . '/';
 	}
 
-	public function getViewUrl()
+	/**
+	 * Returns to url of the template folder.
+	 * Will search in root/{templatename}
+	 * Can be used by Views for inserting css or js files from template folder
+	 * @return string  url to template assets
+	 * @throws GO_Base_Exception_NotFound when the template directory doesn't excists
+	 */
+	public function getTemplateUrl()
 	{
-		return GO::config()->host . 'modules/sites/templates/' . $this->template . '/';
+		$template_url = $this->template."/";
+		if(file_exists($template_url)) //look in rpot/template
+			return $template_url;
+		
+		$template_url = GO::config()->host . 'modules/sites/templates/' . $this->template . '/assets/';
+		if(file_exists($template_url)) //look in sites module
+			return $template_url;
+
+		throw new GO_Base_Exception_NotFound('Could not find the template directory');
 	}
 
 	/**
 	 * Returns the path to the viewfile based on the used template and module
+	 * It will search for a template first if not found look in the views/site/ folder
+	 * the default viewfile provided by the module
 	 * @param string $viewName name to the viewfile
 	 * @return string path of the viewfile
 	 */
 	public function getViewFile($viewName)
 	{
-		return $this->getViewPath() . $viewName . '.php';
+		$theme_view_file = $this->getViewPath() . $viewName . '.php';
+		if(file_exists($theme_view_file))
+			return $theme_view_file;
+		return GO::config()->root_path . 'modules/'. $this->getModule()->id . '/views/site/' . $viewName . '.php';
 	}
 
 	/**

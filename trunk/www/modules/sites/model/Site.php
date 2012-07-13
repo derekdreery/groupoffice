@@ -34,10 +34,10 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 	function defaultAttributes() {
 		return array(
 				'domain'=>$_SERVER['SERVER_NAME'],
-				'template'=>'Example',
+				'template'=>'template_folder',
 				'ssl'=>false,
 				'mod_rewrite'=>false,
-				'login_path'=>'/sites/default/login',
+				'login_path'=>'/sites/site/login',
 				'register_user_groups '=>'Website Users',
 				'user_id'=>GO::user()->id
 			);

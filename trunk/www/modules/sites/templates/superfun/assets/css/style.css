@@ -1,0 +1,168 @@
+/* 
+    Document   : style
+    Created on : Jun 5, 2012, 2:14:14 PM
+    Author     : mdhart
+    Description:
+        Main stylesheet for reservation form superfun
+*/
+
+html body{
+font-family:Verdana, Arial, Helvetica, sans-serif;
+font-size:12px;
+background-color: #EEEEEE;
+}
+h1,h2,h3,h4,h5,h6 { margin:0; padding:0; color: #222;}
+h1{ margin: 8px 0; }
+
+table { font-size: 12px; }
+table caption { background-color: #222; color: white; font-size: 14px; padding: 5px; text-align: left;}
+
+.wrapper {
+	margin: 0 auto;
+	width: 960px;
+	position: relative;
+	overflow: hidden;
+}
+#rightbar { float:right; position: relative; width: 30%; top: 0px; bottom: 0px; }
+
+ul#sidecart { list-style-type: none; margin:0; padding: 0; 
+							border: 1px solid #aaaaaa; max-height: 68%;
+							overflow-y: scroll; background-color: #e5e5e5;
+}
+ul#sidecart li { padding: 5px; border-bottom: 1px solid #aaaaaa; }
+
+#carttotal { background-color: #222; color: white; height: 20px; padding: 5px;}
+#carttotal ul { list-style-type: none; padding: 0; margin: 0; float:left;  }
+#carttotal a { float: right; }
+
+ul#sidecart div.price { float: right; }
+
+.main { width: 68%; float: left; border-right: 1px solid #aaaaaa; }
+.cart_panel { position: fixed; height: 100%; width: 300px; }
+.footer { clear: both;}
+
+table { width: 100%;}
+table th { background-color: grey; }
+table td { border-bottom: 1px solid grey; padding: 0; margin:0; }
+
+span.free { color: green; }
+span.full { color: red; }
+
+/* ----------- My Form ----------- */
+.row {min-height: 28px;}
+
+div.form
+{
+	margin: 0;
+}
+
+div.form input,
+div.form textarea,
+div.form select
+{
+	margin: 0.2em 0 0.5em 0;
+}
+
+div.form fieldset
+{
+	border: 1px solid #DDD;
+	padding: 10px;
+	margin: 0 0 10px 0;
+    -moz-border-radius:7px;
+}
+div.form .checkbox label {width: auto; display: inline; margin-right: 8px;}
+div.form .checkbox input { float: left; margin: 7px 7px 0 0;}
+div.form label
+{
+	font-weight: bold;
+	font-size: 0.9em;
+	display: block;
+	width: 160px;
+	float: left;
+	line-height: 28px;
+}
+
+div.form .row
+{
+	margin: 5px 0;
+	border-bottom: 1px solid #e5e5e5;
+}
+
+div.form .hint
+{
+	margin: 0;
+	padding: 0;
+	color: #999;
+}
+
+div.form .note
+{
+	font-style: italic;
+}
+
+div.form span.required
+{
+	color: red;
+}
+
+div.form div.error label,
+div.form label.error,
+div.form span.error
+{
+	color: #C00;
+}
+
+div.form div.error input,
+div.form div.error textarea,
+div.form div.error select,
+div.form input.error,
+div.form textarea.error,
+div.form select.error
+{
+	background: #FEE;
+	border-color: #C00;
+}
+
+div.form div.success input,
+div.form div.success textarea,
+div.form div.success select,
+div.form input.success,
+div.form textarea.success,
+div.form select.success
+{
+	background: #E6EFC2;
+	border-color: #C6D880;
+}
+
+
+div.form .errorSummary
+{
+	border: 2px solid #C00;
+	padding: 7px 7px 12px 7px;
+	margin: 0 0 20px 0;
+	background: #FEE;
+	font-size: 0.9em;
+}
+
+div.form .errorMessage, .errorMessage
+{
+	color: red;
+	font-size: 0.9em;
+}
+div.form .successMessage, .successMessage
+{
+	color: green;
+	font-size: 0.9em;
+}
+
+div.form .errorSummary p
+{
+	margin: 0;
+	padding: 5px;
+}
+
+div.form .errorSummary ul
+{
+	margin: 0;
+	padding: 0 0 0 20px;
+}
