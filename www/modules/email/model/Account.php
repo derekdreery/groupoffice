@@ -213,6 +213,9 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function getHasNewMessages(){
+		
+		GO::debug("getHasNewMessages UIDNext ".(isset($this->_imap->selected_mailbox['uidnext']) ? $this->_imap->selected_mailbox['uidnext'] : ""));
+		
 		if(isset($this->_imap->selected_mailbox['name']) && $this->_imap->selected_mailbox['name']=='INBOX' && !empty($this->_imap->selected_mailbox['uidnext'])){
 			
 			$cacheKey = $this->_getCacheKey();

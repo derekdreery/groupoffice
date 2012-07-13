@@ -386,7 +386,7 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 		Ext.TaskMgr.start({
 			run: this.checkForNotifications,
 			scope:this,
-			interval:120000 //check changes every 2 minutes
+			interval:GO.settings.config.debug ? 30000 : 120000 //check changes every 2 minutes
 //			interval:5000 //testing each 5 sec (for debugging)
 		});
 	},
