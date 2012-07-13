@@ -363,15 +363,18 @@ if(count($load_modules)) {
 		}
 
 		//Namespaces		
-		foreach($load_modules as $module){
-			if($module->permissionLevel)
-				fwrite($fp, 'Ext.ns("GO.'.$module->id.'");');
+		$modules = GO::modules()->getAllModules();
+
+		while ($module=array_shift($modules)) {
+			fwrite($fp, 'Ext.ns("GO.'.$module->id.'");');
 		}
 
 		//Put all lang vars in js
 		$language = new GO_Base_Language();
 		$l = $language->getAllLanguage();
 		unset($l['base']);
+		
+//		var_dump($l);
 
 		fwrite($fp, 'if(GO.customfields){Ext.ns("GO.customfields.columns");Ext.ns("GO.customfields.types");}');
 		foreach($l as $module=>$langVars){
