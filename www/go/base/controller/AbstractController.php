@@ -45,6 +45,12 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	private $_module;
 	
 	/**
+	 * the currently runned action
+	 * @var type 
+	 */
+	private $_action;
+	
+	/**
 	 *
 	 * @var string The default action when none is specified. 
 	 */
@@ -150,6 +156,14 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	}
 	
 	/**
+	 * Returns the currenly callen action name;
+	 * @return string
+	 */
+	public function getAction(){
+		return $this->_action;
+	}
+	
+	/**
 	 * Default headers to send. 
 	 */
 	protected function headers(){
@@ -222,7 +236,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * @param string $action
 	 * @return boolean boolean
 	 */
-	private function _checkPermission($action){
+	protected function _checkPermission($action){
 		
 		$allowGuests = $this->allowGuests();
 		
@@ -278,9 +292,9 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	public function run($action='', $params=array(), $render=true, $checkPermissions=true){
 		try {
 			if(empty($action))
-				$action=strtolower($this->defaultAction);
+				$this->_action=$action=strtolower($this->defaultAction);
 			else
-				$action=strtolower($action);
+				$this->_action=$action=strtolower($action);
 			
 			if($checkPermissions && !$this->_checkPermission($action)){
 				throw new GO_Base_Exception_AccessDenied();
@@ -391,10 +405,11 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	
 	/**
 	 * This default action should be overrriden
+	 * Abstract controller should not have any actions
 	 */
-	protected function actionIndex($params){
-		
-	}
+	//protected function actionIndex($params){
+	//	
+	//}
 	
 	/**
 	 * Redirect the browser.
