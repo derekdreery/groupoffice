@@ -48,6 +48,7 @@ class GO_Base_Util_HttpClient{
 		curl_setopt($this->_curl, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($this->_curl, CURLOPT_SSL_VERIFYHOST, false);
 		@curl_setopt($this->_curl, CURLOPT_FOLLOWLOCATION, TRUE);
+		curl_setopt($this->_curl, CURLOPT_ENCODING, "UTF-8");
 		
 		$this->setCurlOption(CURLOPT_USERAGENT, "Group-Office HttpClient ".GO::config()->version. " (curl)");
 		
