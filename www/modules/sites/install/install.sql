@@ -39,11 +39,9 @@ CREATE  TABLE IF NOT EXISTS `si_content` (
   CONSTRAINT `fk_si_content_si_content1`
     FOREIGN KEY (`parent_id` )
     REFERENCES `si_content` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_si_content_si_sites1`
     FOREIGN KEY (`site_id` )
     REFERENCES `si_sites` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE NO ACTION ON UPDATE NO ACTION)
 ENGINE = InnoDB;
