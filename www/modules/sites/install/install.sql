@@ -1,78 +1,49 @@
--- phpMyAdmin SQL Dump
--- version 3.4.5deb1
--- http://www.phpmyadmin.net
---
--- Machine: localhost
--- Genereertijd: 07 dec 2011 om 14:15
--- Serverversie: 5.1.58
--- PHP-Versie: 5.3.6-13ubuntu3.2
+CREATE  TABLE IF NOT EXISTS `si_sites` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `name` VARCHAR(100) NOT NULL ,
+  `domain` VARCHAR(100) NOT NULL ,
+  `login_path` VARCHAR(255) NOT NULL ,
+  `template` VARCHAR(100) NOT NULL ,
+  `register_user_groups` VARCHAR(100) NULL ,
+  `ssl` TINYINT(1) NULL ,
+  `mod_rewrite` TINYINT(1) NULL ,
+  `mtime` INT NOT NULL ,
+  `ctime` INT NOT NULL ,
+  `user_id` INT NOT NULL ,
+  `language_id` INT NOT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB;
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-
---
--- Database: `intermesh`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `si_pages`
---
-
-CREATE TABLE IF NOT EXISTS `si_pages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `parent_id` int(11) NOT NULL DEFAULT '0',
-  `site_id` int(11) NOT NULL DEFAULT '0',
-  `user_id` int(11) NOT NULL DEFAULT '0',
-  `ctime` int(11) NOT NULL,
-  `mtime` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL DEFAULT 'New Page',
-  `title` varchar(100) NOT NULL DEFAULT 'New Page',
-  `description` varchar(255) NOT NULL DEFAULT '',
-  `keywords` varchar(255) NOT NULL DEFAULT '',
-  `path` varchar(255) NOT NULL DEFAULT '',
-  `template` varchar(100) NOT NULL DEFAULT '',
-  `content` text NOT NULL,
-  `hidden` tinyint(1) NOT NULL DEFAULT '0',
-  `sort` int(11) NOT NULL DEFAULT '0',
-  `login_required` tinyint(1) NOT NULL DEFAULT '0',
-  `controller` varchar(80) NOT NULL DEFAULT 'GO_Sites_Controller_Site',
-  `controller_action` varchar(80) NOT NULL DEFAULT 'index',
-  PRIMARY KEY (`id`),
-  KEY `path` (`path`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `si_sites`
---
-
-CREATE TABLE IF NOT EXISTS `si_sites` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `mtime` int(11) NOT NULL,
-  `ctime` int(11) NOT NULL,
-  `domain` varchar(100) NOT NULL,
-  `template` varchar(100) NOT NULL,
-  `login_path` varchar(255) NOT NULL DEFAULT 'login',
-  `ssl` tinyint(1) NOT NULL DEFAULT '0',
-  `mod_rewrite` tinyint(1) NOT NULL DEFAULT '0',
-  `mod_rewrite_base_path` varchar(50) NOT NULL DEFAULT '/',
-  `lost_password_path` varchar(255) NOT NULL DEFAULT 'lostpassword',
-  `reset_password_path` varchar(255) NOT NULL DEFAULT 'resetpassword',
-  `register_path` varchar(255) NOT NULL DEFAULT 'register',
-  `logout_path` varchar(255) NOT NULL DEFAULT 'logout',
-  `register_user_groups` varchar(50) DEFAULT '',
-  `language` varchar(10) NOT NULL DEFAULT 'en',
-  PRIMARY KEY (`id`),
-  KEY `domain` (`domain`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+-- -----------------------------------------------------
+-- Table `si_content`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `si_content` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `user_id` INT NOT NULL ,
+  `ctime` INT NOT NULL DEFAULT 0 ,
+  `mtime` INT NOT NULL DEFAULT 0 ,
+  `title` VARCHAR(100) NOT NULL ,
+  `slug` VARCHAR(100) NOT NULL ,
+  `meta_title` VARCHAR(100) NULL ,
+  `meta_description` VARCHAR(255) NULL ,
+  `meta_keywords` VARCHAR(255) NULL ,
+  `content` TEXT NULL ,
+  `status` INT NOT NULL DEFAULT 1 ,
+  `parent_id` INT NULL ,
+  `site_id` INT NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `slug_UNIQUE` (`slug` ASC, `site_id` ASC) ,
+  INDEX `fk_si_content_si_content1` (`parent_id` ASC) ,
+  INDEX `fk_si_content_si_sites1` (`site_id` ASC) ,
+  CONSTRAINT `fk_si_content_si_content1`
+    FOREIGN KEY (`parent_id` )
+    REFERENCES `si_content` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_si_content_si_sites1`
+    FOREIGN KEY (`site_id` )
+    REFERENCES `si_sites` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;

@@ -18,19 +18,19 @@ GO.sites.SitesContextMenu = function(config){
 		}
 	});
 	config.items.push(this.actionSiteProperties);
-	
+	/*
 	this.actionAddPage = new Ext.menu.Item({
 		iconCls: 'btn-add',
-		text: GO.sites.lang.addPage,
+		text: GO.sites.lang.addContent,
 		cls: 'x-btn-text-icon',
 		scope:this,
 		handler: function()
 		{
-			this.addPage();
+			this.addContent();
 		}
 	});
 	config.items.push(this.actionAddPage);
-	
+	*/
 	this.actionDeleteSite = new Ext.menu.Item({
 		iconCls: 'btn-delete',
 		text: GO.sites.lang.deleteSite,
@@ -69,7 +69,7 @@ Ext.extend(GO.sites.SitesContextMenu, Ext.menu.Menu, {
 		var site_id = this.selected[0].id.substring(5,this.selected[0].id.length);
 		GO.mainLayout.getModulePanel('sites').showSiteDialog(site_id);
 	},
-	addPage : function(){
+	addContent : function(){
 
 		var site_id = this.selected[0].id.substring(5,this.selected[0].id.length);
 		

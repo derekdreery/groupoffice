@@ -20,7 +20,7 @@ GO.sites.PageDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		Ext.apply(this, {
 			goDialogId:'page',
 			title:GO.sites.lang.page,
-			formControllerUrl: 'sites/pageBackend'
+			formControllerUrl: 'sites/content'
 		});
 		
 		GO.sites.PageDialog.superclass.initComponent.call(this);	

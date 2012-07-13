@@ -8,10 +8,10 @@
 		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
-		<link href="<?php echo $this->getViewUrl(); ?>css/jquery-ui.css" rel="stylesheet" type="text/css" />
+		<link href="<?php echo $this->getTemplateUrl(); ?>css/jquery-ui.css" rel="stylesheet" type="text/css" />
+		<link href="<?php echo $this->getTemplateUrl(); ?>css/style.css" rel="stylesheet" type="text/css" />
 		
 		<title><?php echo $this->getPageTitle(); ?></title>
-		<link href="<?php echo $this->getViewUrl(); ?>css/style.css" rel="stylesheet" type="text/css" />
 	</head>
 
 	<body>
