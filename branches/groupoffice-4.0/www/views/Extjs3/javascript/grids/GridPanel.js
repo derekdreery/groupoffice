@@ -260,23 +260,66 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 	paging : false,
 	
 	
-	selectNextAfterDelete : function(){		
-		var old = this.lastSelectedIndex;
-		if(this.currentSelectedIndex>this.lastSelectedIndex){			
-			//return value is always false somehow so we check with getSelected
-			this.getSelectionModel().selectRow(this.currentSelectedIndex);
-			
-			if(!this.getSelectionModel().getSelected())				
-				this.getSelectionModel().selectLastRow();
-		}else
-		{
-			//return value is always false somehow so we check with getSelected
-			this.getSelectionModel().selectRow(this.currentSelectedIndex-1);			
-			if(!this.getSelectionModel().getSelected())
-				this.getSelectionModel().selectFirstRow();
-		}
+//	selectNextAfterDelete : function(){		
+//		var old = this.lastSelectedIndex;
+//		if(this.currentSelectedIndex>this.lastSelectedIndex){			
+//			//return value is always false somehow so we check with getSelected
+//			this.getSelectionModel().selectRow(this.currentSelectedIndex);
+//			
+//			if(!this.getSelectionModel().getSelected())				
+//				this.getSelectionModel().selectLastRow();
+//		}else
+//		{
+//			//return value is always false somehow so we check with getSelected
+//			this.getSelectionModel().selectRow(this.currentSelectedIndex-1);			
+//			if(!this.getSelectionModel().getSelected())
+//				this.getSelectionModel().selectFirstRow();
+//		}
+//		
+//		this.lastSelectedIndex=old;
+//	},
+	selectNextAfterDelete : function(selectNext){	
 		
-		this.lastSelectedIndex=old;
+		switch(selectNext){
+			case "last":
+				this.getSelectionModel().selectLastRow();
+				break;
+				
+			case "first":
+				this.getSelectionModel().selectFirstRow();
+				break;
+				
+			default:			
+				//console.log("DEFAULT");
+				//this.getSelectionModel().selectRecords([selectNext]);	
+				var index = this.store.indexOfId(selectNext.id);
+//				console.log(index);
+				this.getSelectionModel().selectRow(index);
+				break;
+		}
+//		if(!GO.util.empty(selectNext)){
+//			console.log("NIET LEEG");
+//			this.getSelectionModel().selectRecords([selectNext]);
+//		} else {
+//			console.log("LEEG");
+//			this.getSelectionModel().selectFirstRow();
+//			var old = this.lastSelectedIndex;
+//			if(this.currentSelectedIndex>this.lastSelectedIndex){			
+//				//return value is always false somehow so we check with getSelected
+//				this.getSelectionModel().selectRow(this.currentSelectedIndex);
+//
+//				if(!this.getSelectionModel().getSelected())				
+//					this.getSelectionModel().selectLastRow();
+//			}else
+//			{
+//				//return value is always false somehow so we check with getSelected
+//				this.getSelectionModel().selectRow(this.currentSelectedIndex-1);			
+//				if(!this.getSelectionModel().getSelected())
+//					this.getSelectionModel().selectFirstRow();
+//			}
+//
+//			this.lastSelectedIndex=old;
+//		}
 	},
 
 	/**
@@ -314,7 +357,49 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 			extraWarning: config.extraWarning || "",
 			noConfirmation: config.noConfirmation
 		};
-
+		
+		var selectedArray = this.selModel.getSelections();
+		
+		var move = 'up'; // Default move up
+		
+		if(this.currentSelectedIndex>this.lastSelectedIndex)
+			move = 'down'; // check for move down
+	
+		// Calculate wich item should be selected after the deletion
+		if(selectedArray.length > 1){ // If you have selected more than one item
+			// Select the item after the latest selected item
+			var highestIndex = 0;
+			for(var i=0;i<selectedArray.length;i++){ // loop through the selected items
+				var indexInstore = this.store.indexOf(selectedArray[i]);
+				if(highestIndex < indexInstore) // Check if the index in the store is higher than the current index
+					highestIndex = indexInstore; // If so, change the highest index
+			}
+			
+			// Check if there is an item after the latest selected index
+			var itemIndexAfterSelected = highestIndex+1;
+			
+		} else {
+			// Select the item after the (single)selected item
+			var indexInstore = this.store.indexOf(this.selModel.getSelected());
+			
+			var itemIndexAfterSelected;
+			if(move =='down')
+				itemIndexAfterSelected = indexInstore-1;
+			else
+				itemIndexAfterSelected = indexInstore+1;
+			
+		}
+		
+		var selectThisRecordAfterDelete = this.store.getAt(itemIndexAfterSelected);
+		if(!selectThisRecordAfterDelete){
+			if(move =='down')
+				selectThisRecordAfterDelete = "first";
+			else
+				selectThisRecordAfterDelete = "last";
+		}	
+		
+		deleteItemsConfig['selectRecordAfterDelete']=selectThisRecordAfterDelete;
+		
 		if(config.callback)
 		{
 			deleteItemsConfig['callback']=config.callback;
@@ -516,24 +601,74 @@ Ext.extend(GO.grid.EditorGridPanel, Ext.grid.EditorGridPanel, {
 
 	numberRenderer : GO.grid.GridPanel.prototype.numberRenderer,
 	
-	selectNextAfterDelete : function(){		
-		var old = this.lastSelectedIndex;
-		if(this.currentSelectedIndex>this.lastSelectedIndex){			
-			//return value is always false somehow so we check with getSelected
-			this.getSelectionModel().selectRow(this.currentSelectedIndex);
-			
-			if(!this.getSelectionModel().getSelected())				
-				this.getSelectionModel().selectLastRow();
-		}else
-		{
-			//return value is always false somehow so we check with getSelected
-			this.getSelectionModel().selectRow(this.currentSelectedIndex-1);			
-			if(!this.getSelectionModel().getSelected())
-				this.getSelectionModel().selectFirstRow();
-		}
+//	selectNextAfterDelete : function(selectNext){	
+//		if(!GO.util.empty(selectNext)){
+//			console.log("NIET LEEG");
+//			this.getSelectionModel().selectRecords([selectNext]);
+//		} else {
+//			console.log("LEEG");
+//			var old = this.lastSelectedIndex;
+//			if(this.currentSelectedIndex>this.lastSelectedIndex){			
+//				//return value is always false somehow so we check with getSelected
+//				this.getSelectionModel().selectRow(this.currentSelectedIndex);
+//
+//				if(!this.getSelectionModel().getSelected())				
+//					this.getSelectionModel().selectLastRow();
+//			}else
+//			{
+//				//return value is always false somehow so we check with getSelected
+//				this.getSelectionModel().selectRow(this.currentSelectedIndex-1);			
+//				if(!this.getSelectionModel().getSelected())
+//					this.getSelectionModel().selectFirstRow();
+//			}
+//
+//			this.lastSelectedIndex=old;
+//		}
+//	},
+selectNextAfterDelete : function(selectNext){	
 		
-		this.lastSelectedIndex=old;
+		switch(selectNext){
+			case "last":
+				this.getSelectionModel().selectLastRow();
+				break;
+				
+			case "first":
+				this.getSelectionModel().selectFirstRow();
+				break;
+				
+			default:			
+				//console.log("DEFAULT");
+				//this.getSelectionModel().selectRecords([selectNext]);	
+				var index = this.store.indexOfId(selectNext.id);
+//				console.log(index);
+				this.getSelectionModel().selectRow(index);
+				break;
+		}
+//		if(!GO.util.empty(selectNext)){
+//			console.log("NIET LEEG");
+//			this.getSelectionModel().selectRecords([selectNext]);
+//		} else {
+//			console.log("LEEG");
+//			this.getSelectionModel().selectFirstRow();
+//			var old = this.lastSelectedIndex;
+//			if(this.currentSelectedIndex>this.lastSelectedIndex){			
+//				//return value is always false somehow so we check with getSelected
+//				this.getSelectionModel().selectRow(this.currentSelectedIndex);
+//
+//				if(!this.getSelectionModel().getSelected())				
+//					this.getSelectionModel().selectLastRow();
+//			}else
+//			{
+//				//return value is always false somehow so we check with getSelected
+//				this.getSelectionModel().selectRow(this.currentSelectedIndex-1);			
+//				if(!this.getSelectionModel().getSelected())
+//					this.getSelectionModel().selectFirstRow();
+//			}
+//
+//			this.lastSelectedIndex=old;
+//		}
 	},
+
 
 	/**
 	 * Checks if a grid cell is valid
