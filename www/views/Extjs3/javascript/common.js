@@ -306,7 +306,14 @@ GO.deleteItems = function(config)
 					
 					
 					if(config.grid && typeof(config.grid.selectNextAfterDelete)=="function"){
-						config.grid.selectNextAfterDelete();
+	
+						config.grid.selectNextAfterDelete(config.selectRecordAfterDelete);
+						
+//						if(!GO.util.empty(config.selectRecordAfterDelete)){
+//							
+//						} else {
+//							config.grid.selectNextAfterDelete();
+//						}
 					}
 					
 				}
