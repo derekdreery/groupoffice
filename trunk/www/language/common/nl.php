@@ -528,6 +528,14 @@ $l['quickEdit'] = "Snel bewerken";
 
 $l["unused"]='Ongebruikt';
 
+
+$l['userFirst_name']='Voornaam';
+$l['userMiddle_name']='Tussenvoegsel';
+$l['userLast_name']='Achternaam';
+$l['userPassword']='Wachtwoord';
+$l['passwordConfirm']='Wachtwoord herhalen';
+$l['userEmail']='Email adres';
+$l['userUsername']='Gebruikersnaam';
 $l["failedImportItems"]="Mislukte import items";
 
 $l["birthdayFormatMustBe"]="Verjaardagsveld moet in de volgende vorm zijn";
