@@ -665,7 +665,8 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				$message = GO_Base_Mail_Message::newInstance()
 					->loadMimeMessage($autoEmailModel->mime)
 					->addTo($installationModel->admin_email, $installationModel->admin_name)
-					->setFrom(GO::config()->webmaster_email, 'Servermanager Administrator');
+					->addBcc(GO::config()->webmaster_email)
+					->setFrom(GO::config()->webmaster_email, GO::config()->title);
 
 				$body = $this->_parseTags(
 					$message->getBody(),
