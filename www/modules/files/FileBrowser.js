@@ -1810,31 +1810,26 @@ GO.files.openFile = function(record, store,e)
 
 				break;
 
-			case 'php':
-			case 'js':
-			case 'docx':
-			case 'xlsx':
-			case 'pptx':
-			case 'dwg':
-			case 'doc':
-			case 'odt':
-			case 'ods':
-			case 'xls':
-			case 'ppt':
-			case 'odp':
-			case 'txt':
-
-			case 'sxw':
-			case 'sxc':
-
-				if(GO.util.empty(record.get('locked'))){
-					GO.files.editFile(record.data.id);
-				}else
-				{
-					window.open(url);
-				}
-
-				break;
+//			case 'php':
+//			case 'js':
+//			case 'docx':
+//			case 'xlsx':
+//			case 'pptx':
+//			case 'dwg':
+//			case 'doc':
+//			case 'odt':
+//			case 'ods':
+//			case 'xls':
+//			case 'ppt':
+//			case 'odp':
+//			case 'txt':
+//
+//			case 'sxw':
+//			case 'sxc':
+//
+//				
+//
+//				break;
 			case 'mht':
 			case 'eml':
 				if(GO.savemailas)
@@ -1847,7 +1842,12 @@ GO.files.openFile = function(record, store,e)
 				}
 
 			default:
-				window.open(url);
+				if(GO.util.empty(record.get('locked'))){
+					GO.files.editFile(record.data.id);
+				}else
+				{
+					window.open(url);
+				}
 				break;
 		}
 	}
