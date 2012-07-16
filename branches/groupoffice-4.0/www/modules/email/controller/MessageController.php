@@ -1163,7 +1163,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$response['total']=count($uids);
 		//$response['success'] = $imap->delete($uids);
 		$response['success'] =true;
-		if(!$response['total']){
+		if($response['total']){
 			$chunks = array_chunk($uids, 1000);
 			while($uids=array_shift($chunks)){
 				if(!$imap->move($uids, $params['target_mailbox'])){
