@@ -279,7 +279,7 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 //		this.lastSelectedIndex=old;
 //	},
 	selectNextAfterDelete : function(selectNext){	
-		
+
 		switch(selectNext){
 			case "last":
 				this.getSelectionModel().selectLastRow();
@@ -362,7 +362,7 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 		
 		var move = 'up'; // Default move up
 		
-		if(this.currentSelectedIndex>this.lastSelectedIndex)
+		if(this.currentSelectedIndex<this.lastSelectedIndex)
 			move = 'down'; // check for move down
 	
 		// Calculate wich item should be selected after the deletion
