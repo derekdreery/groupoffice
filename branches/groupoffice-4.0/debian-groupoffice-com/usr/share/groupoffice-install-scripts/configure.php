@@ -20,8 +20,14 @@ $replacements['db_pass']=$dbpass;
 //sometimes the timezone file has multiple lines
 $tz = trim(file_get_contents('/etc/timezone'));
 $tzs = explode("\n",$tz);
-$replacements['timezone']=  array_pop($tzs);
-
+$tzs[]="Europe/Amsterdam";
+foreach($tzs as $timezone){
+	$valid = @date_default_timezone_set($timezone);
+	if($valid){
+		$replacements['timezone']=$timezone;
+		break;
+	}
+}
 
 exec('locale',$output);
 
