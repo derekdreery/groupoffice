@@ -1,3 +1,10 @@
+12-07-2012 4.0.72
+- Small bug fixes
+- Delete old mail replaced by move old mail so it can be used for archiving too.
+- Bug in connecting to postfix
+- Edit e-mail button opened GOTA. Now it launches the E-mail viewer.
+- Bug fix with selecting next mail after deleting one.
+
 12-07-2012 4.0.70
 - GOTA wasn't working on some servers
 - Some tags were missing in document templates.
