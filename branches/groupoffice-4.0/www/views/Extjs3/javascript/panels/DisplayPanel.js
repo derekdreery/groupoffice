@@ -414,9 +414,9 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 					}else
 					{
 						if(GO.files){
-							//var record = new GO.files.FileRecord(file);
+							var record = new GO.files.FileRecord(file);
 							//GO.files.showFilePropertiesDialog(record.get('id'));
-							GO.files.editFile(file.id);
+							GO.files.openFile(record);
 						}else
 						{
 							window.open(GO.url("files/file/download",{id:file.id}));
