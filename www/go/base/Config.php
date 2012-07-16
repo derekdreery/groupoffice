@@ -979,7 +979,7 @@ class GO_Base_Config {
 				$this->tmpdir = str_replace('\\','/', sys_get_temp_dir());
 			}
 
-			$this->default_timezone=date_default_timezone_get();
+			$this->default_timezone=@date_default_timezone_get(); //suppress warning if using system tz
 
 			$lc = localeconv();
 
