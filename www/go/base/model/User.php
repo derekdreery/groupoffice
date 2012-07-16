@@ -445,10 +445,13 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		if (GO::modules()->isInstalled("addressbook")) {
 			
 			if(!empty($this->contact_id)){
+				//this is for old databases
 				$contact = GO_Addressbook_Model_Contact::model()->findByPk($this->contact_id);
 				if($contact){
-					$contact->go_user_id=$this->id;
-					$contact->save();
+					if($contact->go_user_id!=$this->id){
+						$contact->go_user_id=$this->id;
+						$contact->save();
+					}
 					return $contact;
 				}
 			}
