@@ -117,16 +117,16 @@ GO.email.TreeContextMenu = Ext.extend(Ext.menu.Menu,{
 			scope:this
 		}),'-',	new Ext.menu.Item({
 			iconCls: 'btn-delete',
-			text:GO.email.lang.deleteOldMails,
+			text:GO.email.lang.moveOldMails,
 			cls: 'x-btn-text-icon',
 			scope:this,
 			handler: function()
 			{
-				if (typeof(this.deleteOldMailDialog)=='undefined') {
-					this.deleteOldMailDialog = new GO.email.DeleteOldMailDialog();
+				if (typeof(this.moveOldMailDialog)=='undefined') {
+					this.moveOldMailDialog = new GO.email.MoveOldMailDialog();
 				}
-				this.deleteOldMailDialog.setNode(this.treePanel.getSelectionModel().getSelectedNode());
-				this.deleteOldMailDialog.show();
+				this.moveOldMailDialog.setNode(this.treePanel.getSelectionModel().getSelectedNode());
+				this.moveOldMailDialog.show();
 			}
 		}),this.emptyFolderButton = new Ext.menu.Item({
 			iconCls: 'btn-delete',
