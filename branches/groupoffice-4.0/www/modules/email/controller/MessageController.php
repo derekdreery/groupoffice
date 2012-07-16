@@ -1139,7 +1139,14 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			echo $line;
 	}
 
-	protected function actionDeleteOld($params){
+	protected function actionMoveOld($params){
+		
+		$this->checkRequiredParameters(array('mailbox','target_mailbox'), $params);
+		
+		if($params['mailbox']==$params['target_mailbox'])
+		{
+			throw new Exception(GO::t("sourceAndTargetSame","email"));
+		}
 
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		$imap  = $account->openImapConnection($params['mailbox']);
@@ -1154,10 +1161,30 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$uids = $imap->sort_mailbox('ARRIVAL',false,'BEFORE "'.$date_string.'"');		
 		
 		$response['total']=count($uids);
-		$response['success'] = $imap->delete($uids);
+		//$response['success'] = $imap->delete($uids);
+		$response['success'] = !$response['total'] || $imap->move($uids, $params['target_mailbox']);
 		
 		return $response;
 	}
+//	
+//	protected function moveOld($params){
+//		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+//		$imap  = $account->openImapConnection($params['mailbox']);
+//
+//
+//		$before_timestamp = GO_Base_Util_Date::to_unixtime($params['until_date']);
+//		if (empty($before_timestamp))
+//			throw new Exception(GO::t('untilDateError','email').': '.$params['until_date']);
+//
+//		$date_string = date('d-M-Y',$before_timestamp);
+//		
+//		$uids = $imap->sort_mailbox('ARRIVAL',false,'BEFORE "'.$date_string.'"');		
+//		
+//		$response['total']=count($uids);
+//		$response['success'] = $imap->move($uids, $params['target_mailbox']);
+//		
+//		return $response;
+//	}
 
 	
 	protected function actionMove($params){
