@@ -1,3 +1,13 @@
+Bij alle omgebouwde modules .php zoeken in *.js files zodat oude php code uiteindelijk weg kan.
+
+
+Auke: Vinkje erbij voor grof vuil bij goederen. Aparte rapportage hiervoor. 4 uur
+
+Arjen mul: 1 uur voor korting
+
+Search Co: autolink 8 uur.
+
+
 Billing systeem servermanager
 
 Ticket groepen werken niet daniel malmgren
