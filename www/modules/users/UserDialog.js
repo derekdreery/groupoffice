@@ -20,7 +20,8 @@
 			title:GO.users.lang.userSettings,
 			formControllerUrl: 'users/user',
 			height:580,
-			width:800
+			width:800,
+			stateId:'go-user-window'
 			
 		});
 		
