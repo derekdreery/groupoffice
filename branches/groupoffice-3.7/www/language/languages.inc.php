@@ -1,6 +1,7 @@
 <?php
 $languages['ko']='한국어';
 $languages['ca']='Català';
+$languages['bn']= '  বাংলা (বাংলাদেশ) ';
 $languages['cn']='Chinese Simplified';
 $languages['zh-tw']='Chinese Traditional';
 $languages['cs']='Čeština';
@@ -23,9 +24,7 @@ $languages['ru']='Русский';
 $languages['ro']='Romanian';
 $languages['fi']='Suomi - Finland';
 $languages['sv']='Svenska';
-$languages['sb']='Serbian';
 $languages['tr']='Türkçe';
 $languages['th']='ไทย';
 $languages['vi']='Tiếng Việt';
-
 $language_aliases['no']='nb';

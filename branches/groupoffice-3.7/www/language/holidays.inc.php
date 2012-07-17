@@ -266,4 +266,16 @@ $input_holidays['var']['sv']['49'] = 'Pingstdagen';
 // $input_holidays['var']['sv']['**'] = 'Midsommardagen';
 // // All hallows day: the saturday between October 31 and November 6
 // $input_holidays['var']['sv']['**'] = 'Alla helgons dag';
+
+//Bangladesh
+$input_holidays['fix']['bn']['02-21'] = ' শহীদ দিবস এবং আন্তর্জাতিক মাতৃভাষা দিবস ';
+$input_holidays['fix']['bn']['03-26'] = '  স্বাধীনতা দিবস ';
+$input_holidays['fix']['bn']['04-13'] = 'চৈত্র সংক্রান্তি ';
+$input_holidays['fix']['bn']['04-14'] = 'বাংলা নববর্ষ ';
+$input_holidays['fix']['bn']['05-01'] = ' মে দিবস ';
+$input_holidays['fix']['bn']['08-15'] = ' জাতীয় শোক দিবস ';
+$input_holidays['fix']['bn']['12-16'] = ' বিজয় দিবস ';
+
+
+
 ?>

@@ -1,3 +1,6 @@
+17-07-2012 3.7.55
+- Show folder ID in CMS.
+
 02-07-2012 3.7.54
 - Bug in read only contact sync
 
