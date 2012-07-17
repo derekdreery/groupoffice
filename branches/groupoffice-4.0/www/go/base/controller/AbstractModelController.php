@@ -1024,21 +1024,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$categoryName = $parts[1];
 		$fieldName = $parts[2];
 		
-		$category = GO_Customfields_Model_Category::model()->findSingleByAttributes(array('extends_model'=>$this->model, 'name'=>$categoryName));
-		
-		if(!$category){
-			$category = new GO_Customfields_Model_Category();
-			$category->extends_model=$this->model;
-			$category->name=$categoryName;
-			$category->save();
-		}	
-		$field = GO_Customfields_Model_Field::model()->findSingleByAttributes(array('category_id'=>$category->id,'name'=>$fieldName));
-		if(!$field){
-			$field = new GO_Customfields_Model_Field();
-			$field->category_id=$category->id;
-			$field->name=$fieldName;
-			$field->save();
-		}
+		$category = GO_Customfields_Model_Category::model()->createIfNotExists($this->model,$categoryName);		
+		$field = GO_Customfields_Model_Field::model()->createIfNotExists($category->id,$fieldName);	
 		
 		return $field->columnName();
 	}
