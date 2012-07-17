@@ -17,7 +17,7 @@ GO.base.QuickEditDialog = function(config) {
 	config.layout = 'fit';
 	config.width = 1024;
 	config.height = 640;
-	config.title = GO.lang.quickEdit+': '+config.editorGridParams.modelName;
+	config.title = GO.lang.quickEdit;
 	
 	this.editorGridParams = config.editorGridParams;
 	this._buildGrid();
