@@ -687,4 +687,79 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		$tmpFile->output();
 		$tmpFile->delete();
 	}
+	
+	
+	protected function actionRemoveEmptyStuff($params){
+		
+		GO::session()->closeWriting();
+		
+		if(!$this->isCli())			
+			echo '<pre>';
+		
+		if(GO::modules()->isInstalled("addressbook")){
+			echo "\n\nProcessing addressbook\n";
+			flush();
+			$stmt = GO_Addressbook_Model_Addressbook::model()->find();
+			while($addressbook = $stmt->fetch()){
+				$contactStmt = $addressbook->contacts();
+				$companiesStmt = $addressbook->companies();
+				
+				if(!$contactStmt->rowCount() && !$companiesStmt->rowCount()){
+					echo "Removing ".$addressbook->name."\n";
+					$addressbook->delete();
+					flush();
+				}
+			}
+		}
+		
+		if(GO::modules()->isInstalled("calendar")){
+			echo "\n\nProcessing calendar\n";
+			flush();
+			
+			$stmt = GO_Calendar_Model_Calendar::model()->find();
+			while($calendar = $stmt->fetch()){
+				$eventStmt = $calendar->events();
+				
+				if(!$eventStmt->rowCount()){
+					echo "Removing ".$calendar->name."\n";
+					$calendar->delete();
+					flush();
+				}
+			}
+		}
+		
+		if(GO::modules()->isInstalled("tasks")){
+			echo "\n\nProcessing tasks\n";
+			flush();
+			
+			$stmt = GO_Tasks_Model_Tasklist::model()->find();
+			while($tasklist = $stmt->fetch()){
+				$eventStmt = $tasklist->tasks();
+				
+				if(!$eventStmt->rowCount()){
+					echo "Removing ".$tasklist->name."\n";
+					$tasklist->delete();
+					flush();
+				}
+			}
+		}
+		
+		
+		if(GO::modules()->isInstalled("notes")){
+			echo "\n\nProcessing notes\n";
+			flush();
+			
+			$stmt = GO_Notes_Model_Category::model()->find();
+			while($cat = $stmt->fetch()){
+				$eventStmt = $cat->notes();
+				
+				if(!$eventStmt->rowCount()){
+					echo "Removing ".$cat->name."\n";
+					$cat->delete();
+					flush();
+				}
+			}
+		}
+		
+	}
 }
