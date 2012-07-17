@@ -4,14 +4,12 @@ GO.Window = function(config)
 	{
 		config={};
 	}
-
-	config.maximizable=true;
-	config.minimizable=true;
-
-	if(!config.keys)
-	{
-		config.keys=[];
-	}
+	
+	Ext.applyIf(config,{
+		keys:[],
+		maximizable:true,
+		minimizable:true
+	});
 	
 	GO.Window.superclass.constructor.call(this, config);
 /*
