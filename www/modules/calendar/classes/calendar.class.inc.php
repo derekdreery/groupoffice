@@ -58,7 +58,7 @@ class calendar extends db {
 			$cal = new calendar();
 			$db = new db();
 
-			$sql = 'SELECT cal.id AS calendar_id, usr.* FROM cal_calendars AS cal INNER JOIN cal_settings AS sett ON (sett.calendar_id = cal.id AND sett.user_id=cal.user_id) INNER JOIN go_users AS usr ON sett.user_id = usr.id WHERE usr.id!=1';
+			$sql = 'SELECT cal.id AS calendar_id, usr.* FROM cal_calendars AS cal INNER JOIN cal_settings AS sett ON sett.calendar_id = cal.id INNER JOIN go_users AS usr ON sett.user_id = usr.id';
 			$db->query($sql);
 			
 			while($calendar = $db->next_record())

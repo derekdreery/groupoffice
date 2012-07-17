@@ -77,13 +77,7 @@ function insert_events($calendars, $start_time, $end_time) {
 			}
 		}
 
-		$background = $event['background'];
-		
-		if(!empty($default_bg) && count($default_bg) > 1 && !empty($default_bg[$event['calendar_id']])) {
-			$background = $default_bg[$event['calendar_id']];
-		}
-
-		//$background = !empty($default_bg) && !empty($default_bg[$event['calendar_id']]) ? $default_bg[$event['calendar_id']] : $event['background'];
+		$background = !empty($default_bg) && !empty($default_bg[$event['calendar_id']]) ? $default_bg[$event['calendar_id']] : $event['background'];
 
 		$name = $event['name'];
 
