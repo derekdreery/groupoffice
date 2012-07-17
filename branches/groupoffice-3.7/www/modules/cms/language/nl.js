@@ -62,3 +62,5 @@ GO.cms.lang.enableCategories = 'Paginacategorieën inschakelen';
 GO.cms.lang.parentCategory = 'Bovenliggende categorie';
 
 GO.cms.lang.sure2remove = 'Deze verwijdering kan niet ongedaan gemaakt worden, alhoewel hierdoor geen pagina\'s van de site worden verwijderd. Weet u zeker dat u deze categorie en alle onderliggende categorieën wilt verwijderen?';
+
+GO.cms.lang.folderId = 'Folder id';
