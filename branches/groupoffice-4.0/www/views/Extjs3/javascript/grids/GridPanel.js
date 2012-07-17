@@ -360,30 +360,32 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 		
 		var selectedArray = this.selModel.getSelections();
 		
-		var move = 'up'; // Default move up
+		this.move = 'up'; // Default move up
 		
 		if(this.currentSelectedIndex<this.lastSelectedIndex)
-			move = 'down'; // check for move down
+			this.move = 'down'; // check for move down
 	
+			
+		var indexInstore;
+		var itemIndexAfterSelected;
 		// Calculate wich item should be selected after the deletion
 		if(selectedArray.length > 1){ // If you have selected more than one item
 			// Select the item after the latest selected item
 			var highestIndex = 0;
 			for(var i=0;i<selectedArray.length;i++){ // loop through the selected items
-				var indexInstore = this.store.indexOf(selectedArray[i]);
+				indexInstore = this.store.indexOf(selectedArray[i]);
 				if(highestIndex < indexInstore) // Check if the index in the store is higher than the current index
 					highestIndex = indexInstore; // If so, change the highest index
 			}
 			
 			// Check if there is an item after the latest selected index
-			var itemIndexAfterSelected = highestIndex+1;
+			itemIndexAfterSelected = highestIndex+1;
 			
 		} else {
 			// Select the item after the (single)selected item
-			var indexInstore = this.store.indexOf(this.selModel.getSelected());
+			indexInstore = this.store.indexOf(this.selModel.getSelected());
 			
-			var itemIndexAfterSelected;
-			if(move =='down')
+			if(this.move =='down')
 				itemIndexAfterSelected = indexInstore-1;
 			else
 				itemIndexAfterSelected = indexInstore+1;
@@ -392,7 +394,7 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 		
 		var selectThisRecordAfterDelete = this.store.getAt(itemIndexAfterSelected);
 		if(!selectThisRecordAfterDelete){
-			if(move =='down')
+			if(this.move =='down')
 				selectThisRecordAfterDelete = "first";
 			else
 				selectThisRecordAfterDelete = "last";
