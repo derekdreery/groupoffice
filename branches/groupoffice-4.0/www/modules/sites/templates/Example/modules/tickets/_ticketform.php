@@ -148,6 +148,15 @@
 							"value" => 'Confirm',
 							"renderContainer" => false
 						));
+						
+						GO_Base_Html_Hidden::render(array(
+							"label" => "",
+							"id" => "closeticket",
+							"name" => "closeticket",
+							"value" => 0,
+							"renderContainer" => false
+						));
+						
 					}else{
 						echo "<p>".$this->t('tickets_ticketIsClosed')."</p><p></p>";
 					}
@@ -171,16 +180,13 @@
 							var submit = true;
 
 							if(close==true){
-								var el = document.createElement("input");
-								el.type = "hidden";
-								el.name = "closeticket";
-								el.value = "true";
-								form.appendChild(el);
-
 								if(document.createticket.message.value.replace(/\s/g,"") != ""){
+									$('#closeticket').val(1);
 									var answer = confirm("<?php echo $this->t('tickets_ticketCloseQuestion'); ?>")
-									if(!answer)
+									if(!answer){
 										submit=false;
+										$('#closeticket').val(0);
+									}
 								}
 							}
 
