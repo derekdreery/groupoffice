@@ -195,6 +195,12 @@ Ext.extend(GO.cms.FolderDialog, Ext.Window,{
 			  allowBlank:false,
 			  fieldLabel: GO.lang.strName
 			},{
+				xtype: 'plainfield',
+			  name: 'id',
+				anchor: '-20',
+			  allowBlank:false,
+			  fieldLabel: GO.cms.lang.folderId
+			},{
 				xtype: 'checkbox',
 			  name: 'disabled',
 				anchor: '-20',
