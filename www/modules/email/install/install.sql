@@ -41,6 +41,8 @@ CREATE TABLE IF NOT EXISTS `em_accounts` (
   `smtp_password` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
   `password_encrypted` tinyint(4) NOT NULL DEFAULT '0',
 	`ignore_sent_folder` TINYINT( 1 ) NOT NULL DEFAULT '0',
+	`sieve_port` int(11) NOT NULL,
+	`sieve_usetls` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;

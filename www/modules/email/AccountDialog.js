@@ -16,6 +16,37 @@ GO.email.AccountDialog = function(config) {
 
 	var sslCb;
 
+	var advancedItems = [ new Ext.form.TextField({
+		fieldLabel : GO.email.lang.port,
+		name : 'port',
+		value : '143',
+		allowBlank : false
+	}), new Ext.form.TextField({
+		fieldLabel : GO.email.lang.rootMailbox,
+		name : 'mbroot'
+	}) ];
+
+	if (GO.sieve) {
+		advancedItems.push(
+			new Ext.form.NumberField({
+				fieldLabel : GO.sieve.lang.sievePort,
+				name : 'sieve_port',
+				value : GO.email.sievePortValue,
+				decimals : 0,
+				allowBlank : false
+			})
+		);
+		advancedItems.push(
+			new Ext.form.Checkbox({
+				boxLabel: GO.sieve.lang.name+': '+GO.sieve.lang.useTLS,
+				labelSeparator: '',
+				name: 'sieve_usetls',
+				allowBlank: true,
+				hideLabel:true,
+				checked: GO.email.sieveUseTlsValue
+			})
+		);
+	}
 
 	var incomingTab = {
 		title : GO.email.lang.incomingMail,
@@ -99,15 +130,7 @@ GO.email.AccountDialog = function(config) {
 			labelWidth : 75,
 			labelAlign : 'left',
 
-			items : [ new Ext.form.TextField({
-				fieldLabel : GO.email.lang.port,
-				name : 'port',
-				value : '143',
-				allowBlank : false
-			}), new Ext.form.TextField({
-				fieldLabel : GO.email.lang.rootMailbox,
-				name : 'mbroot'
-			})]
+			items : advancedItems
 		}]
 	};
 

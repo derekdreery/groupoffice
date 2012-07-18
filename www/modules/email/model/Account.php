@@ -332,6 +332,4 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		return $rootMailboxes;
 	}
 	
-	
-
 }
