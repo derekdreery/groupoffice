@@ -29,6 +29,19 @@ if(empty($always_respond_to_notifications))
 else
 	$GO_SCRIPTS_JS .= 'true;';
 
+if (GO::modules()->isInstalled('sieve')) {
+$GO_SCRIPTS_JS .= 'GO.email.sievePortValue=';
+	if (!empty(GO::config()->sieve_port))
+		$GO_SCRIPTS_JS .= GO::config()->sieve_port . ';';
+	else
+		$GO_SCRIPTS_JS .= '4190;';
+
+	$GO_SCRIPTS_JS .= 'GO.email.sieveUseTlsValue=';
+	if (isset(GO::config()->sieve_usetls))
+		$GO_SCRIPTS_JS .= !empty(GO::config()->sieve_usetls) ? 'true;' : 'false;';
+	else
+		$GO_SCRIPTS_JS .= 'true;';
+}
 
 $font_size = $GLOBALS['GO_CONFIG']->get_setting('email_font_size', $GLOBALS['GO_SECURITY']->user_id);
 if(empty($font_size))
