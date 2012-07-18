@@ -18,9 +18,8 @@ GO.sieve.SieveGrid = function(config){
 		valueField:'value',
 		displayField:'name',
 		store: new GO.data.JsonStore({
-			url:GO.settings.modules.sieve.url+'fileIO.php',
+			url: GO.url('sieve/sieve/scripts'),
 			baseParams: {
-				task: 'get_sieve_scripts',
 				account_id: 0
 			},
 			fields: ['name', 'value'],
@@ -41,13 +40,13 @@ GO.sieve.SieveGrid = function(config){
 	},this);
 
 	var fields ={
-		fields:['id','name', 'index', 'script_name','disabled'],
+		fields:['id','name', 'index', 'script_name','active'],
 		columns:[{
 			header: GO.sieve.lang.name,
 			dataIndex: 'name'
 		},{
-			header: GO.sieve.lang.disabled,
-			dataIndex: 'disabled',
+			header: GO.sieve.lang.active,
+			dataIndex: 'active',
 			renderer: function(value, metaData, record, rowIndex, colIndex, store) {
 				if(value)
 					value = GO.lang.cmdYes;
@@ -68,9 +67,8 @@ GO.sieve.SieveGrid = function(config){
 	config.autoScroll=true;
 	config.border=false;
 	config.store = new GO.data.JsonStore({
-		url: GO.settings.modules.sieve.url+ 'fileIO.php',
+		url: GO.url('sieve/sieve/rules'),
 		baseParams: {
-			task: 'get_sieve_rules',
 			script_name: ''
 			},
 		root: 'results',
@@ -127,10 +125,9 @@ GO.sieve.SieveGrid = function(config){
 			cls: 'x-btn-text-icon',
 			handler: function(){
 				Ext.Ajax.request({
-				 url: GO.settings.modules.sieve.url+ 'fileIO.php',
+				 url: GO.url('sieve/sieve/setActiveScript'),
 				 scope:this,
 				 params: {
-					 task: 'set_active_script',
 					 script_name: this.selectScript.getValue(),
 					 account_id: this.store.baseParams.account_id
 				 },
@@ -184,6 +181,7 @@ GO.sieve.SieveGrid = function(config){
 Ext.extend(GO.sieve.SieveGrid, GO.grid.GridPanel,{
 	setAccountId : function(account_id){
 		this.setDisabled(false);
+		this.accountId=account_id;
 		this.store.baseParams.account_id = account_id;
 		this.selectScript.store.baseParams.account_id = account_id;
 	},
@@ -223,9 +221,8 @@ Ext.extend(GO.sieve.SieveGrid, GO.grid.GridPanel,{
 		}
 
 		Ext.Ajax.request({
-			url: GO.settings.modules.sieve.url+'fileIO.php',
+			url: GO.url('sieve/sieve/saveScriptsSortOrder'),
 			params: {
-				task: 'save_scripts_sort_order',
 				sort_order: Ext.encode(filters),
 				account_id: this.store.baseParams.account_id
 			}
