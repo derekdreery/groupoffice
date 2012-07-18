@@ -183,7 +183,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 
 			delete this._panels[0].title;
 			this._panels[0].header=false;
-			this._panels[0].elements=this._panels[0].elements.replace(',header','');
+			if(this._panels[0].elements)
+				this._panels[0].elements=this._panels[0].elements.replace(',header','');
 
 			this.formPanel.add(this._panels[0]);
 		}
