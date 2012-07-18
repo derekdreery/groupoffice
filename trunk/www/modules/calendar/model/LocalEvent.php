@@ -107,7 +107,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 		$response = $this->_event->getAttributes('formatted');
 
 		if($this->isAllDay()){
-			$response['time'] =  $event->getFormattedTime();
+			$response['time'] =  $this->_event->getFormattedTime();
 		} else {
 			if (date(GO::user()->date_format, $this->getAlternateStartTime()) != date(GO::user()->date_format, $this->getAlternateEndTime()))
 				$response['time'] =  $this->getFormattedTime();
