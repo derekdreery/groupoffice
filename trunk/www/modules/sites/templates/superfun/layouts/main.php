@@ -78,7 +78,7 @@
 
 			<div class="footer">		
 					<a href="http://www.superfun.nl"> Visit superfun.nl</a>
-					<div class="copyright">Copyright Superfun <?php echo date('Y'); ?><br />
+					<div class="copyright">Copyright Superfun <?php echo date('Y'); ?><br /><br />
 					 Middelhoefseweg 10, 3819 AA  AMERSFOORT | tel. 033-4951831<br />BTW Nr. NL.8512.97.420B01 | KVK nr. 54418607
 					</div>
 			</div>
