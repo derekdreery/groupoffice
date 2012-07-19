@@ -179,6 +179,7 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 	 * @param array $params 
 	 */
 	public function actionCheckDefaultModels($params) {
+		GO::$disableModelCache=true;
 		$response = array('success' => true);
 		$module = GO_Base_Model_Module::model()->findByPk($params['moduleId']);
 		$users = $module->acl->getAuthorizedUsers($module->acl_id, GO_Base_Model_Acl::READ_PERMISSION);
