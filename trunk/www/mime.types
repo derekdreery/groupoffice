@@ -119,7 +119,7 @@ application/x-ica ica
 application/x-internet-signup ins isp
 application/x-iphone iii
 application/x-iso9660-image iso
-application/x-java-jnlp-file jnlp
+text/xml jnlp
 application/x-javascript js
 application/x-jmol jmz
 application/x-kchart chrt
