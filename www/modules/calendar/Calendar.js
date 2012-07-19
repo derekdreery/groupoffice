@@ -744,21 +744,24 @@ GO.calendar.MainPanel = function(config){
 		text: GO.lang.cmdPrint,
 		cls: 'x-btn-text-icon',
 		handler: function(){
-			//this.getActivePanel().body.print({printCSS:'<style>.x-calGrid-grid-container{overflow:visible !important}}</style>'});
-									
+
 			var sD = this.getActivePanel().startDate;
 			var eD = this.getActivePanel().endDate;
-									
-			var l = GO.settings.modules.calendar.url+'print.php?start_time='+sD.format('Y-m-d')+'&end_time='+eD.format('Y-m-d');
-									
+
+			var urlParams = {};
+			
+			urlParams.start_time = sD.format('Y-m-d');
+			urlParams.end_time = eD.format('Y-m-d');
+			urlParams.print	= true;
+
 			if(!GO.util.empty(this.view_id))
-			{
-				l+='&view_id='+this.view_id;
-			}else
-			{
-				l+='&calendars='+Ext.encode(this.calendars);
-			}
-			document.location=l;
+				urlParams.view_id = this.view_id;
+			else
+				urlParams.calendars = Ext.encode(this.calendars);
+
+			var url = GO.url('calendar/event/store',urlParams);
+									
+			document.location=url;
 		},
 		scope: this
 	})

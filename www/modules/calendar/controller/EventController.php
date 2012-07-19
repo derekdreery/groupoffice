@@ -549,8 +549,15 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$response['title']= '';
 		$response['results'] = array();
 		
-		$startTime = $params['start_time'];
-		$endTime = $params['end_time'];
+		if(!empty($params['start_time']))
+			$startTime = $params['start_time'];
+		else
+			$startTime = date('Y-m-d h:m',time());
+		
+		if(!empty($params['end_time']))
+			$endTime = $params['end_time'];
+		else
+			$endTime = date('Y-m-d h:m',strtotime(date("Y-m-d", strtotime($startTime)) . " +3 months"));
 		
 		// Check for the given calendars if they have events in the given period
 		if(!empty($params['calendars']))
@@ -559,6 +566,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$calendars = $params['calendar_id'];
 		
 		$colorIndex = 0;
+		
+		$response['start_time'] = strtotime($startTime);
+		$response['end_time'] = strtotime($endTime);
 		
 		// Set the count of the total activated calendars in the response.
 		$response['calendar_count'] = count($calendars);
@@ -622,6 +632,10 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		$response['success']=true;
 		
+		// If you have clicked on the "print" button
+		if(isset($params['print']))
+			$this->_createPdf($response);
+				
 		return $response;
 	}
 	
@@ -815,7 +829,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$events = GO_Calendar_Model_Event::model()->findCalculatedForPeriod(
 								GO_Base_Db_FindParams::newInstance()->criteria(
 									GO_Base_Db_FindCriteria::newInstance()->addCondition('calendar_id', $calendar->id)
-								), 
+								)->select(),
 								strtotime($startTime), 
 								strtotime($endTime)
 							);
@@ -842,18 +856,13 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			// in the view.
 			$event->displayId = $response['count']++;
 
-			// Add one to the global result count;
-			$resultCount++;
+			$resultCount++; // Add one to the global result count;
 		}
 		
-		foreach($this->_uuidEvents as $uuidEvent){
-			// Add the event to the results array
-						
+		foreach($this->_uuidEvents as $uuidEvent) // Add the event to the results array
 			$response['results'][$this->_getIndex($response['results'],$uuidEvent->getAlternateStartTime(),$uuidEvent->getName())]=$uuidEvent->getResponseData();
-		}
 		
-		// Set the count of the events
-		$response['count_events_only'] = $resultCount;
+		$response['count_events_only'] = $resultCount; // Set the count of the events
 		
 		return $response;
 	}
@@ -1150,5 +1159,16 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$contacts = GO_Addressbook_Model_Contact::model()->find($findParams);
 		
 		return $contacts;
+	}
+
+	/**
+	 * Create a PDF file from the response that is also send to the view.
+	 *  
+	 * @param array $response 
+	 */
+	private function _createPdf($response){
+		$pdf = new GO_Calendar_Views_Pdf_CalendarPdf('L', $unit='mm', $format='A4', $unicode=true, $encoding='UTF-8', $diskcache=false, $pdfa=false);
+		$pdf->setParams($response);
+		$pdf->Output(GO_Base_Fs_File::stripInvalidChars($response['title']).'.pdf');
 	}
 }
