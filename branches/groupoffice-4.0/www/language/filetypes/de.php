@@ -62,7 +62,6 @@ $l['psd']='Adobe Photoshop Bild';
 $l['rtf']='Rich Text Format';
 $l['swf']='Macromedia Flash Film';
 $l['fla']='Macromedia Flash Dokument';
-$l['xlt']='Microsoft Excel Tabellenvorlage';
 $l['ai']='Adobe Illustrator Datei';
 $l['eml']='E-Mail Nachricht';
 $l['csv'] ='CSV (Trennzeichen-getrennt)';

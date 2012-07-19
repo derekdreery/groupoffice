@@ -38,8 +38,6 @@ $l["stateLocked"]= 'Ordneranzeige durch Besitzer/Administrator gesperrt';
 
 $l['name']='Dateien';
 $l['description']='Modul zum Verwalten und Freigeben von Dateien';
-$lang['link_type'][6]='Datei';
-$lang['link_type'][17]='Ordner';
 $l['fileNotFound']='Datei nicht gefunden';
 $l['folderExists']='Der Ordner ist bereits vorhanden';
 $l['filenameExists']='Dateiname existiert bereits';

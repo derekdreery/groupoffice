@@ -2,7 +2,6 @@
 
 $l["comment"]='Kommentar';
 $l["comments"]='Kommentare';
-$l["fiveLatestComments"]='Die 5 letzten Kommentare';
 $l["browseComments"]='Kommentare durchschauen';
 $l["recentComments"]='Letzte Kommentare';
 
