@@ -269,6 +269,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	protected function actionUpgrade($params) {
 		
 		GO::clearCache();
+		
+		GO_Base_Db_Columns::$forceLoad=true;
 				
 		//don't be strict in upgrade process
 		GO::getDbConnection()->query("SET sql_mode=''");
