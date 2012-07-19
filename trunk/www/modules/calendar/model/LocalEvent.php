@@ -138,6 +138,9 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 		$response['private'] = $this->isPrivate();
 		$response['status_color'] = $this->_event->getStatusColor();
 		
+		if(!empty($this->_event->description))
+			$response['description'] = $this->_event->description;
+		
 		$response['repeats'] = $this->isRepeating();
 		$response['all_day_event'] = $this->isAllDay();
 		$response['day'] = $dayString[date('w', ($this->_event->start_time))].' '.GO_Base_Util_Date::get_timestamp($this->_event->start_time,false);  // date(implode(GO::user()->date_separator,str_split(GO::user()->date_format,1)), ($eventModel->start_time));
