@@ -19,12 +19,12 @@ class GO_Base_Db_Columns{
 		if(isset(self::$_columns[$tableName]) && !self::$forceLoad){
 			return self::$_columns[$tableName];
 		}elseif(($columns = GO::cache()->get($cacheKey))){
-			GO::debug("Got columns from cache for $tableName");
+//			GO::debug("Got columns from cache for $tableName");
 			self::$_columns[$tableName]=$columns;
 			return self::$_columns[$tableName];
 		}else
 		{	
-			GO::debug("Loading columns for $tableName");
+//			GO::debug("Loading columns for $tableName");
 			self::$_columns[$tableName]=array();
 			$sql = "SHOW COLUMNS FROM `" . $tableName. "`;";
 			$stmt = $model->getDbConnection()->query($sql);
