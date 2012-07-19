@@ -531,3 +531,5 @@ $l["unused"]='Ongebruikt';
 $l["failedImportItems"]="Mislukte import items";
 
 $l["birthdayFormatMustBe"]="Verjaardagsveld moet in de volgende vorm zijn";
+
+$l["pointForText"]="Wijs de cursor hier om de tekst te lezen";

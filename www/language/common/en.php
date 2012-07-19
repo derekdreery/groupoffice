@@ -562,3 +562,5 @@ $l["attributeGreaterOrEqual"]="Field '%s' must be greater or equal to '%s'";
 $l["failedImportItems"]="Failed import items";
 
 $l["birthdayFormatMustBe"]="Birthday field must be in the following form";
+
+$l["pointForText"]="Point cursor here to read entry";
