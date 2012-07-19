@@ -1,5 +1,9 @@
+
+instructiefilm
+
 Bij alle omgebouwde modules .php zoeken in *.js files zodat oude php code uiteindelijk weg kan.
 
+Giralis
 
 Auke: Vinkje erbij voor grof vuil bij goederen. Aparte rapportage hiervoor. 4 uur
 
@@ -73,10 +77,8 @@ Licentie checks per module
 
 Servermanager bestelfunctie
 
-e-mail mvc
 overige modules mvc
 sticky user group that is shared with all items members create
-E-mail files functie
 
 Freebusy support in sabredav 1.6
 

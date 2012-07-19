@@ -8,7 +8,6 @@ $l["category_id"]='Kategorie ID';
 $l["content"]='Inhalt';
 $l["manageCategories"]='Kategorien verwalten';
 
-$l['note']='Notiz';
 $l['name']='Notizen';
 $l['description']='Modul zum Anlegen von Notizen';
 $l['category']='Kategorie';

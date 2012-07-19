@@ -94,3 +94,5 @@ $l['description']='Verwaltung von Sieve E-Mailfilterregeln';
 $l['active']='aktiv';
 $l['standardvacation']='Abwesenheitsnotiz (Standard)';
 $l['standardvacationmessage']='Ich bin nicht da.';
+
+$l["subjectequals"]= 'Betreff gleich';
