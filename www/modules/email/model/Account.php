@@ -332,4 +332,16 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		return $rootMailboxes;
 	}
 	
+	public function defaultAttributes() {
+		$attr = parent::defaultAttributes();
+		if (GO::modules()->isInstalled('sieve')) {
+			$attr['sieve_port'] = !empty(GO::config()->sieve_port) ? GO::config()->sieve_port : '4190';
+			if (isset(GO::config()->sieve_usetls))
+				$attr['sieve_usetls'] = !empty(GO::config()->sieve_usetls);
+			else
+				$attr['sieve_usetls'] = true;
+		}	
+		return $attr;
+	}
+	
 }

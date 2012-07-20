@@ -31,7 +31,6 @@ GO.email.AccountDialog = function(config) {
 			new Ext.form.NumberField({
 				fieldLabel : GO.sieve.lang.sievePort,
 				name : 'sieve_port',
-				value : GO.email.sievePortValue,
 				decimals : 0,
 				allowBlank : false
 			})
@@ -42,8 +41,7 @@ GO.email.AccountDialog = function(config) {
 				labelSeparator: '',
 				name: 'sieve_usetls',
 				allowBlank: true,
-				hideLabel:true,
-				checked: GO.email.sieveUseTlsValue
+				hideLabel:true
 			})
 		);
 	}
