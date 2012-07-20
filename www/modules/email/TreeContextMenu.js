@@ -209,7 +209,7 @@ GO.email.TreeContextMenu = Ext.extend(Ext.menu.Menu,{
 					});
 				}
 			}
-		}),this.shareBtn = new Ext.menu.Item({
+		}),'-',this.shareBtn = new Ext.menu.Item({
 			iconCls:'em-btn-share-mailbox ',
 			text: GO.email.lang.shareFolder,
 			handler:function(){
@@ -224,7 +224,19 @@ GO.email.TreeContextMenu = Ext.extend(Ext.menu.Menu,{
 			},
 			scope:this
 
-		})];
+		}),{
+			iconCls : 'btn-settings',
+			text : GO.email.lang.subscribeFolders,
+			scope : this,
+			handler : function() {
+				if (!this.foldersDialog) {
+					this.foldersDialog = new GO.email.FoldersDialog();
+				}
+				var sm = this.treePanel.getSelectionModel();
+				var node = sm.getSelectedNode();
+				this.foldersDialog.show(node.attributes.account_id);
+			}
+		}];
 
 	
 		for(var i=0;i<GO.email.extraTreeContextMenuItems.length;i++)
