@@ -370,7 +370,7 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 				call_user_func_array($callback, array_merge(array($user), $callbackArguments));
 			}else
 			{
-				$users[]=$user->id;
+				$users[]=$user;
 			}
 		}
 		
@@ -399,7 +399,7 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 					call_user_func_array($callback, array_merge(array($user), $callbackArguments));
 				}else
 				{
-					$users[]=$user->id;
+					$users[]=$user;
 				}
 			}
 		}
