@@ -17,6 +17,9 @@ if(!isset($vars['subject']))
 	
 if(!isset($vars['body']))
 	$vars['body']='';
+//
+//var_dump($vars);
+//exit();
 
 header('Location: '.GO::createExternalUrl('email', 'showComposer', array('values'=>$vars)));
 

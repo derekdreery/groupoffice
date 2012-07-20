@@ -590,13 +590,14 @@ if(isset($_REQUEST['f']))
 {
 	$fp = GO_Base_Util_Crypt::decrypt($_REQUEST['f']);
 	
-
+	GO::debug("External function parameters:");
+	GO::debug($fp);
 	
 	?>
 	if(GO.<?php echo $fp['m']; ?>)
 	{
 		 GO.mainLayout.on("render", function(){
-				GO.<?php echo $fp['m']; ?>.<?php echo $fp['f']; ?>.apply(this, <?php echo json_encode($fp['p']); ?>);
+				GO.<?php echo $fp['m']; ?>.<?php echo $fp['f']; ?>.call(this, <?php echo json_encode($fp['p']); ?>);
 		 });
 	}
 	<?php
