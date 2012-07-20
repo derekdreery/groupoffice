@@ -59,19 +59,20 @@ GO.sieve.SieveDialog = function(config) {
 		}
 	})
 
+	this.nameField = new Ext.form.TextField({
+		fieldLabel:GO.lang.strName,
+		name:'rule_name',
+		width: 360,
+		allowBlank:false
+	});
+
 	this.formPanel = new Ext.FormPanel({
 		style:'padding:5px;',
 		autoHeight:true,
 		border:false,
 		url: GO.url('sieve/sieve/rule'),
 		baseParams:{},
-		items:[{
-				fieldLabel:GO.lang.strName,
-				name:'rule_name',
-				xtype:'textfield',
-				width: 360,
-				allowBlank:false
-			},{
+		items:[this.nameField,{
 				name:'active',
 				checked:true,
 				xtype:'checkbox',
@@ -141,6 +142,11 @@ GO.sieve.SieveDialog = function(config) {
 	});
 }
 Ext.extend(GO.sieve.SieveDialog, GO.Window, {
+
+	focus : function(){
+		this.nameField.focus();
+	},
+
 	show : function(script_index,script_name, account_id) {
 
 			GO.sieve.SieveDialog.superclass.show.call(this);
@@ -158,7 +164,7 @@ Ext.extend(GO.sieve.SieveDialog, GO.Window, {
 					{
 						this.rgMethod.setValue(action.result.data.join);
 						this.actionGrid.store.loadData(action.result);
-						this.criteriumGrid.store.loadData(action.result);
+						this.criteriumGrid.store.loadData(action.result);						
 					},
 					failure:function(form, action)
 					{
