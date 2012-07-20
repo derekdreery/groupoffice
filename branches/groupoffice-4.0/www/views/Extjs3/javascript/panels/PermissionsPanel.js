@@ -38,6 +38,25 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 		if(!this.title){
 			this.title=GO.lang.strPermissions;
 		}
+		
+		var levelData = [];
+		
+		if(!this.levels || this.levels.indexOf(GO.permissionLevels.read)!=-1)
+			levelData.push([GO.permissionLevels.read, GO.lang.permissionRead]);
+		
+		if(!this.levels || this.levels.indexOf(GO.permissionLevels.create)!=-1)
+			levelData.push([GO.permissionLevels.create, GO.lang.permissionCreate]);
+		
+		if(!this.levels || this.levels.indexOf(GO.permissionLevels.write)!=-1)
+			levelData.push([GO.permissionLevels.write, GO.lang.permissionWrite]);		
+		
+		
+		if(!this.levels || this.levels.indexOf(GO.permissionLevels.writeAndDelete)!=-1)
+			levelData.push([GO.permissionLevels.writeAndDelete, GO.lang.permissionDelete]);
+		
+		if(!this.levels || this.levels.indexOf(GO.permissionLevels.manage)!=-1)
+			levelData.push([GO.permissionLevels.manage, GO.lang.permissionManage]);
+		
 
 		this.showLevel = (this.hideLevel) ? false : true;			
 
@@ -45,13 +64,7 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 					store : new Ext.data.SimpleStore({
 						id:0,
 						fields : ['value', 'text'],
-						data : [
-							[10, GO.lang.permissionRead],
-							[20, GO.lang.permissionCreate],
-							[30, GO.lang.permissionWrite],
-							[40, GO.lang.permissionDelete],
-							[50, GO.lang.permissionManage]
-						]
+						data : levelData
 					}),
 					valueField : 'value',
 					displayField : 'text',
