@@ -52,12 +52,14 @@
 						<?php while($package=$packages->fetch()): ?>
 							<tr  class="model-row <?php echo $style; ?>" style="border-collapse: collapse;">
 								<td colspan="3">
-									&nbsp;&nbsp;&nbsp;<a target="_blank" href="<?php echo GO::url("licenses/package/downloadPackageFile",array('package_id'=>$package->id),true,true); ?>"><?php echo $package->package_name; ?></a>
+<!--									&nbsp;&nbsp;&nbsp;<a target="_blank" href="<?php echo GO::url("licenses/package/downloadPackageFile",array('package_id'=>$package->id),true,true); ?>"><?php echo $package->package_name; ?></a>-->
+									&nbsp;&nbsp;&nbsp;<?php echo $package->package_name; ?>
 								</td>
 								<td>
 									<?php if(!$license->new): ?>
-										<a target="_blank" href="<?php echo GO::url('licenses/license/downloadLicenseFile',array('package_id'=>$package->id,'license_id'=>$license->id),true,true); ?>">Download license</a>
+										<a target="_blank" href="<?php echo GO::url('licenses/license/downloadLicenseFile',array('package_id'=>$package->id,'license_id'=>$license->id),true,true); ?>">Download license</a> | 
 									<?php endif; ?>
+										<a target="_blank" href="<?php echo GO::url("licenses/package/downloadPackageFile",array('package_id'=>$package->id),true,true); ?>">Download package</a>
 								</td>
 							</tr>
 						<?php endwhile; ?>
