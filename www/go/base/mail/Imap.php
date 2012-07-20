@@ -216,7 +216,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 //			$this->capability = GO::session()->values['GO_IMAP'][$this->server]['imap_capability'] = implode(' ', $response);			
 //		}
 		
-		GO::debug('IMAP capability: '.$this->capability);
+//		GO::debug('IMAP capability: '.$this->capability);
 		
 		return $this->capability;
 	}
@@ -351,13 +351,13 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			$cmd .= ')';
 		}
 		
-		GO::debug($cmd);
+//		GO::debug($cmd);
 		
 		$cmd .= "\r\n";
 		
 		$this->send_command($cmd);
 		$result = $this->get_response(false, true);
-		GO::debug($result);
+//		GO::debug($result);
 		
 		$delim=false;
 
