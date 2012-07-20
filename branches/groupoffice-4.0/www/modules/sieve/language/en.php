@@ -104,8 +104,8 @@ $l['standardvacationmessage']='I am on vacation';
 
 $l['setAction']='Set action';
 $l['setFilter']='Set criterium';
-$l['sievePort']='Sieve port';
-$l['useTLS']='Use TLS';
+$l['sievePort']='Sieve filter port number';
+$l['useTLS']='Use secure connection for (Sieve) email filters';
 $l['cmdSaveChanges']='Save changes';
 $l['pleaseAddCriterium']='Please click \'add\' to add a criterium';
 $l['pleaseAddAction']='Please click \'add\' to add an action';
