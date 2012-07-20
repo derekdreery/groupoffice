@@ -129,7 +129,8 @@ Ext.extend(GO.sieve.ActionGrid, GO.grid.GridPanel,{
 								target:"",
 								days:"",
 								addresses:"",
-								reason:""
+								reason:"",
+								text : GO.sieve.lang.stop
 							});
 
 					this.store.insert(insertId, stopRecord);
