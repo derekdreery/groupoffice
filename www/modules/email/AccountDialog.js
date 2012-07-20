@@ -330,7 +330,10 @@ GO.email.AccountDialog = function(config) {
 		})]
 	});
 
-	this.permissionsTab = new GO.grid.PermissionsPanel({hideLevel:true});
+	this.permissionsTab = new GO.grid.PermissionsPanel({levels:[
+			GO.permissionLevels.read,
+			GO.permissionLevels.manage
+	]});
 
 	//this.permissionsTab.disabled = false;
 
