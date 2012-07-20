@@ -1,3 +1,7 @@
+12-07-2012 4.0.73
+- Better memory management in ActiveRecords
+- Updated German translation
+
 12-07-2012 4.0.72
 - Small bug fixes
 - Delete old mail replaced by move old mail so it can be used for archiving too.
