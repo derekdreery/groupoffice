@@ -312,7 +312,7 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 		this.txtEmailAddressOptional = new Ext.form.TextArea({
 			name: 'email',
 			allowBlank:true,
-			width:300,
+			anchor: '100%',
 			fieldLabel:GO.sieve.lang.addressesLabelOptional,
 			hidden: true,
 			disabled: true
@@ -321,7 +321,7 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 		this.txtEmailAddress = new Ext.form.TextArea({
 			name: 'email',
 			allowBlank:false,
-			width:300,
+			anchor: '100%',
 			fieldLabel:GO.sieve.lang.addressesLabel,
 			hidden: true,
 			disabled: true
@@ -346,7 +346,6 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 
 		this.txtDays = new GO.form.NumberField({
 			name: 'days',
-			value: 3,
 			hidden:true,
 			allowBlank:false,
 			width:70,
@@ -383,6 +382,8 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 		if (use==true) {
 			component.show();
 			component.setDisabled(false);
+			if (component == this.txtDays)
+				this.txtDays.setValue(3);
 		} else {
 			component.hide();
 			component.setDisabled(true);
