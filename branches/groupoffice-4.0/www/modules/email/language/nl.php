@@ -224,3 +224,4 @@ $l["deletingEmails"]= 'Emails aan het verwijderen...';
 $l["everythingBefore"]= 'Alle emails voor';
 $l["alsoChildren"]= 'Deze bewerking ook toepassen op emails in subfolders.';
 $l['failedRecipients']='Kon het bericht niet verzenden naar';
+$l['subscribeFolders']='Abonneren op mappen';
