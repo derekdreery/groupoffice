@@ -1115,9 +1115,6 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		$imap  = $account->openImapConnection($params['mailbox']);
-
-//		header("Content-type: text/plain; charset: US-ASCII");
-//		header('Content-Disposition: inline; filename="message_source.txt"');
 		
 		$filename = empty($params['download']) ? "message.txt" :"message.eml";
 		
@@ -1129,8 +1126,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		 *
 		 * That's why I first fetch the header and then the text.
 		 */
-		$header = $imap->get_message_part($params['uid'], 'HEADER') . "\r\n\r\n";
-		$size = $imap->get_message_part_start($params['uid'], 'TEXT');
+		$header = $imap->get_message_part($params['uid'], 'HEADER', true) . "\r\n\r\n";
+		$size = $imap->get_message_part_start($params['uid'], 'TEXT', true);
 
 		header('Content-Length: ' . strlen($header) . $size);
 
