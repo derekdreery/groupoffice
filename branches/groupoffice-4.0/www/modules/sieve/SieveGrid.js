@@ -22,7 +22,7 @@ GO.sieve.SieveGrid = function(config){
 			baseParams: {
 				account_id: 0
 			},
-			fields: ['name', 'value'],
+			fields: ['name', 'value','active'],
 			root: 'results'
 		}),
 		mode:'local',
@@ -124,23 +124,30 @@ GO.sieve.SieveGrid = function(config){
 			text: GO.sieve.lang.activate,
 			cls: 'x-btn-text-icon',
 			handler: function(){
-				Ext.Ajax.request({
-				 url: GO.url('sieve/sieve/setActiveScript'),
-				 scope:this,
-				 params: {
-					 script_name: this.selectScript.getValue(),
-					 account_id: this.store.baseParams.account_id
-				 },
-				 success: function(){
-					 this.selectScript.store.reload();
-					 this.setSelectedScript();
-					 this.selectScript.setRawValue(this.selectScript.getRawValue() + ' ('+GO.sieve.lang.active+')');
-					 this.store.reload();
-				 },
-				 failure: function(){
-					//TODO: nog een melding geven
-				 }
-				},this);
+				
+				this.selectScript.store.load({
+					params:{
+						set_active_script_name: this.selectScript.getValue()						
+					},
+					callback:function(){
+						this.selectScript.setValue(this.selectScript.getValue());
+					},
+					scope:this
+				});
+//				GO.request({
+//				 url: 'sieve/sieve/setActiveScript',
+//				 scope:this,
+//				 params: {
+//					 
+//					 account_id: this.store.baseParams.account_id
+//				 },
+//				 success: function(){
+//					 this.selectScript.store.reload();
+//					 this.setSelectedScript();
+//					 this.selectScript.setRawValue(this.selectScript.getRawValue() + ' ('+GO.sieve.lang.active+')');
+//					 this.store.reload();
+//				 }
+//				},this);
 			},
 			scope: this
 		}];
