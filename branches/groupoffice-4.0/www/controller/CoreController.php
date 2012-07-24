@@ -47,6 +47,34 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	 * @return  
 	 */
 	protected function actionUsers($params) {
+		
+		if(GO::user()->isAdmin())
+			GO::config()->limit_usersearch=0;
+		
+//		GO::config()->limit_usersearch=10;
+		
+//		if(empty($params['query']) && !empty($params['queryRequired'])){
+//			return array(
+////					'emptyText'=>"Enter queSry",
+//					'success'=>true,
+//					'results'=>array()
+//			);
+//		}
+		
+		if(!isset($params['limit']))
+			$params['limit']=0;
+		
+		if(!isset($params['start']))
+			$params['start']=0;
+		
+		// Check for the value "limit_usersearch" in the group-office config file and then add the limit.
+		if(!empty(GO::config()->limit_usersearch)){
+			if($params['limit']>GO::config()->limit_usersearch)
+				$params['limit'] = GO::config()->limit_usersearch;			
+			
+			if($params['start']+$params['limit']>GO::config()->limit_usersearch)
+				$params['start']=0;
+		}
 
 		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_User::model());
 		$store->setDefaultSortOrder('name', 'ASC');
@@ -56,7 +84,12 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 
 		$store->setStatement (GO_Base_Model_User::model()->find($store->getDefaultParams($params)));
 
-		return $store->getData();
+		$response = $store->getData();
+		
+		if(!empty(GO::config()->limit_usersearch) && $response['total']>GO::config()->limit_usersearch)
+			$response['total']=GO::config()->limit_usersearch;	
+		
+		return $response;
 	}
 
 	/**
