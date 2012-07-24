@@ -538,3 +538,4 @@ $l["contentEncrypted"]="Inhoud is versleuteld.";
 $l['passwordConfirm'] = 'Wachtwoord bevestigen';
 $l['decryptContent'] = 'Inhoud ontsleutelen';
 $l['clickHereToDecrypt'] = 'Klik hier om inhoud te ontsleutelen en in te zien.';
+$l['passwordSubmissionError']='Er trad een fout op bij het gebruik van het wachtwoord. Er zijn geen wijzigingen aangebracht op deze item. Neemt u a.u.b. contact op met de beheerder en specificeer de stappen die gezet zijn vlak voor deze melding.';

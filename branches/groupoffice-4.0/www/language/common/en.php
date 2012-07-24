@@ -569,3 +569,4 @@ $l["contentEncrypted"]="Content is encrypted.";
 $l['passwordConfirm'] = 'Password confirmation';
 $l['decryptContent'] = 'Decrypt content';
 $l['clickHereToDecrypt'] = 'Click here to decrypt and read the content.';
+$l['passwordSubmissionError']='An error occurred using the password. No changes have been made to this item. Please contact the administrator and specify the steps taken before this message occurred.';
