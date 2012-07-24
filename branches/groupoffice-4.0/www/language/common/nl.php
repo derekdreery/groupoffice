@@ -533,3 +533,8 @@ $l["failedImportItems"]="Mislukte import items";
 $l["birthdayFormatMustBe"]="Verjaardagsveld moet in de volgende vorm zijn";
 
 $l["pointForText"]="Wijs de cursor hier om de tekst te lezen";
+$l["encryptContent"]="Inhoud versleutelen";
+$l["contentEncrypted"]="Inhoud is versleuteld.";
+$l['passwordConfirm'] = 'Wachtwoord bevestigen';
+$l['decryptContent'] = 'Inhoud ontsleutelen';
+$l['clickHereToDecrypt'] = 'Klik hier om inhoud te ontsleutelen en in te zien.';

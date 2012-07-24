@@ -564,3 +564,8 @@ $l["failedImportItems"]="Failed import items";
 $l["birthdayFormatMustBe"]="Birthday field must be in the following form";
 
 $l["pointForText"]="Point cursor here to read entry";
+$l["encryptContent"]="Encrypt content";
+$l["contentEncrypted"]="Content is encrypted.";
+$l['passwordConfirm'] = 'Password confirmation';
+$l['decryptContent'] = 'Decrypt content';
+$l['clickHereToDecrypt'] = 'Click here to decrypt and read the content.';
