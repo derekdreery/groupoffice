@@ -27,12 +27,14 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 	 * @param String $rrule 'FREQ=DAILY;UNTIL=22-02-2222;INTERVAL=2;
 	 */
 	public function readIcalendarRruleString($eventstarttime, $rrule) {
-		$this->_eventstarttime = $eventstarttime;
-		$rrule = str_replace('RRULE:', '', $rrule);
-		if (strpos($rrule, 'FREQ') === false) 
-			$this->_parseRruleIcalendarV1($rrule);
-		else
-			$this->_parseRruleIcalendar($rrule);
+		if(!empty($rrule)){			
+			$this->_eventstarttime = $eventstarttime;
+			$rrule = str_replace('RRULE:', '', $rrule);
+			if (strpos($rrule, 'FREQ') === false) 
+				$this->_parseRruleIcalendarV1($rrule);
+			else
+				$this->_parseRruleIcalendar($rrule);
+		}
 	}
 	
 		
@@ -73,6 +75,9 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 	 * @return String $rrule eg.: 'FREQ=DAILY;UNTIL=22-02-2222;INTERVAL=2;
 	 */
 	public function createRrule($shiftDays=true) {
+		
+		if(empty($this->_freq))
+			return "";
 		
 		$byday = $shiftDays ? $this->shiftDays($this->_byday, false) : $this->_byday;
 		
