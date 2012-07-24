@@ -462,6 +462,8 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		}		
 	},
 	
+	afterLoad : function(result) {},
+	
 	load : function(id, reload)
 	{
 		if(this.loading && id==this.model_id)
@@ -488,6 +490,8 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 						this.body.scrollTo('top', 0);
 					
 					this.stopLoading.defer(300, this);
+					
+					this.afterLoad(result);
 				},
 				scope: this			
 			});
