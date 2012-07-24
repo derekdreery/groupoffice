@@ -345,3 +345,7 @@ $updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(co
 $updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{work_post_zip}","{contact:work_post_zip}") WHERE type =0';
 $updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{work_post_state}","{contact:work_post_state}") WHERE type =0';
 $updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(content,"{work_post_country}","{contact:work_post_country}") WHERE type =0';
+
+
+//Added website field to contact main form
+$updates["201207241127"][]="ALTER TABLE `ab_contacts` ADD `homepage` VARCHAR( 255 ) NULL AFTER `cellular`";
