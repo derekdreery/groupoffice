@@ -15,9 +15,6 @@ $config[] =
 	'remove_domain_from_username' => false,
 	'create_email_account' => true,
 	'groups' => array('Internal'),
-	'visible_groups' => array('Everyone', 'Internal'),
-	'modules_read' => array('email', 'files', 'addressbook', 'calendar', 'tasks', 'notes', 'summary'),
-	'modules_write' => array(),
 
 	'smtp_host'=>'localhost',
 	'smtp_port'=>'25',
