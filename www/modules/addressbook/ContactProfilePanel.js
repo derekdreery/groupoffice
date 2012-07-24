@@ -139,6 +139,11 @@ GO.addressbook.ContactProfilePanel = function(config)
 			fieldLabel: GO.lang['strCellular'],
 			name: 'cellular'
 		});
+		this.formHomepage = new Ext.form.TextField(
+		{
+			fieldLabel: GO.lang['strHomepage'],
+			name: 'homepage'
+		});
 	
 														
 	
@@ -343,7 +348,7 @@ GO.addressbook.ContactProfilePanel = function(config)
 			this.contactFieldset.add(this.formEmail);	
 		}
 		
-		this.contactFieldset.add([this.formEmail2,this.formEmail3,this.formHomePhone,this.formFax,this.formCellular,this.formWorkPhone,this.formWorkFax]);
+		this.contactFieldset.add([this.formEmail2,this.formEmail3,this.formHomePhone,this.formFax,this.formCellular,this.formWorkPhone,this.formWorkFax,this.formHomepage]);
 		
 		
 		this.workFieldset =
