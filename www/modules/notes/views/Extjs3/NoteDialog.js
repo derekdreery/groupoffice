@@ -9,12 +9,14 @@
  * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
+ * @author WilmarVB <wilmar@intermesh.nl>
  */
  
 GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	
 	customFieldType : "GO_Notes_Model_Note",
-	_encrypted : undefined,
+//	_passwordChangePermission : true,
+	_userInputPassword : false,
 	
 	initComponent : function(){
 		
@@ -30,11 +32,18 @@ GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	},
 	
 	beforeLoad : function(remoteModelId,config) {
-		this._encrypted = undefined;
+		this._userPermissionPassword = false; //
+//		this._passwordChangePermission = true; // before loading is initiated, e.g., with a new note, the user can change the encryption password
+		delete this.formPanel.form.baseParams['currentPassword'];
 	},
 	
 	afterLoad : function(remoteModelId,config,action) {
 		var responseData = Ext.decode(action.response.responseText);
+		
+//		this._passwordChangePermission = responseData.data.passwordChangePermission;
+		
+		delete this.formPanel.form.baseParams['currentPassword'];
+		
 		this.contentField.setDisabled(responseData.data.encrypted);
 		this._toggleNewPasswordFields(false);
 		this.buttonOk.setDisabled(responseData.data.encrypted);
@@ -42,11 +51,18 @@ GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		if (responseData.data.encrypted) {
 			if (GO.util.empty(this.unlockDialog)) {
 				this.unlockDialog = new GO.Window({
+					modal:true,					
 					title: GO.lang.decryptContent,
-					width: 280,
-					height: 100,
+					width: 320,
+					height: 120,
 					layout: 'fit',
+					keys:[{
+							key: Ext.EventObject.ENTER,
+							fn : this._loadWithPassword,
+							scope : this
+					}],
 					items: [new Ext.form.FormPanel({
+						cls:'go-form-panel',
 						layout: 'form',
 						items: [this.unlockPasswordField = new Ext.form.TextField({
 							name: 'userInputPassword',
@@ -55,31 +71,7 @@ GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 						})],
 						buttons: [{
 							text: GO.lang['cmdOk'],
-							handler: function(){
-								this.formPanel.form.load({
-									url: GO.url('notes/note/load'),
-									params: {
-										'userInputPassword' : this.unlockPasswordField.getValue()
-									},
-									success: function(form, action) {
-										var responseData2 = Ext.decode(action.response.responseText);
-										this.contentField.setDisabled(responseData2.data.encrypted);
-										this.buttonOk.setDisabled(responseData2.data.encrypted);
-										this.buttonApply.setDisabled(responseData2.data.encrypted);
-										this.unlockDialog.hide();
-									},
-									failure: function(form, action) {
-										this.encryptCheckbox.setValue(true);
-										this._toggleNewPasswordFields(false);
-										if (action.failureType == 'client') {					
-											Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strErrorsInForm']);			
-										} else {
-											Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
-										}
-									},
-									scope: this
-								})
-							},
+							handler: this._loadWithPassword,
 							scope: this
 						},
 						{
@@ -94,35 +86,35 @@ GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 					})]
 				});
 //				this.unlockDialog.on('hide',function(){
-//					this._encrypted = undefined;
+//					this._passwordChangePermission = undefined;
 //				},this);
 				this.unlockDialog.on('show',function(){
 					this.unlockPasswordField.setValue('');
+					this.unlockPasswordField.focus(false,100);
 				},this);
 			}
 			this.unlockDialog.show();
 		}
-		this._encrypted = responseData.data.encrypted;
 	},
-		
+	
+	beforeSubmit : function(params) {
+		if (!GO.util.empty(this._userInputPassword))
+			this.formPanel.form.baseParams['currentPassword'] = this._userInputPassword;
+		else
+			delete this.formPanel.form.baseParams['currentPassword'];
+	},
+	
 	afterSubmit : function(action) {
-		var responseData = Ext.decode(action.response.responseText);
+		var responseData = Ext.decode(action.response.responseText);		
 		if (responseData.encrypted) {
 			this.contentField.setValue(GO.lang['contentEncrypted']);
-			this._toggleNewPasswordFields(false);
-			this.buttonOk.setDisabled(true);
+			this._toggleNewPasswordFields(false); // if the note is encrypted after succesful form submission, there is no need for the password fields
+			this.buttonOk.setDisabled(true); // editing is prohibited unless the user entered the password using this.unlockDialog and this._loadWithPassword()
 			this.buttonApply.setDisabled(true);
 		}
-		this.contentField.setDisabled(responseData.encrypted);
+		this.contentField.setDisabled(responseData.encrypted); // disable the content field to underline the fact that editing an encrypted field is prohibited
 		
-		this._encrypted = responseData.encrypted;
-		
-		// if decrypted --> encrypted:
-		// - turn off uipassword1 & uipassword2
-		// - turn disable content && set content value to 'this is encrypted'
-		// if encrypted --> decrypted:
-		// - turn on uipassword1 & uipassword2
-		// - show content
+		delete this.formPanel.form.baseParams['currentPassword'];
 	},
 	
 	buildForm : function () {
@@ -190,16 +182,53 @@ GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			this.contentField = new Ext.form.TextArea({
 				name: 'content',
 				anchor: '100%',
-				height: 300,
+				height: 280,
 				hideLabel:true
 			})]				
 		});
 
 		this.encryptCheckbox.on('check', function(cb,checked){
-			this._toggleNewPasswordFields(checked);
+//			if (this._encrypted) {
+				this._toggleNewPasswordFields(checked);
+//			} else {
+//				this.encryptCheckbox.setValue(true);
+//				this._toggleNewPasswordFields(false);
+//			}
 		},this);
 
 		this.addPanel(this.propertiesPanel);
+	},
+	
+	_loadWithPassword : function() {
+		this.formPanel.form.load({
+			url: GO.url('notes/note/load'),
+			params: {
+				'userInputPassword' : this.unlockPasswordField.getValue()
+			},
+			success: function(form, action) {
+//				this._passwordChangePermission = true;// password entered correctly: allow changing it
+				this._toggleNewPasswordFields(true);
+				this.encryptCheckbox.setValue(true);
+				this._userInputPassword = this.unlockPasswordField.getValue(); // this is the only place this should be set, it is remembered so that users are able to edit the note without re-entering the password
+				this.uiPassword1Field.allowBlank = true; this.uiPassword1Field.validate(); // hack to toggle allowBlank dynamically
+				this.uiPassword2Field.allowBlank = true; this.uiPassword2Field.validate();
+				this.contentField.setDisabled(false); // password entered correctly: allow editing
+				this.buttonOk.setDisabled(false);
+				this.buttonApply.setDisabled(false);
+				this.unlockDialog.hide();
+			},
+			failure: function(form, action) {
+				this._userInputPassword = false;
+				this.encryptCheckbox.setValue(true);
+				this._toggleNewPasswordFields(false); // user mustn't be able to change the password if he entered it incorrectly
+				if (action.failureType == 'client') {					
+					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strErrorsInForm']);			
+				} else {
+					Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
+				}
+			},
+			scope: this
+		})
 	},
 	
 	_toggleNewPasswordFields : function(on) {
@@ -207,5 +236,14 @@ GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		this.uiPassword1Field.setVisible(on);
 		this.uiPassword2Field.setDisabled(!on);
 		this.uiPassword2Field.setVisible(on);
+		
+		this.uiPassword1Field.allowBlank = false; this.uiPassword1Field.validate();
+		this.uiPassword2Field.allowBlank = false; this.uiPassword2Field.validate();
+		
+		if (on) {
+			this.uiPassword1Field.setValue('');
+			this.uiPassword2Field.setValue('');
+		}
 	}
+	
 });

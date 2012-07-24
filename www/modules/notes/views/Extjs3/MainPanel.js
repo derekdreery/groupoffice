@@ -71,8 +71,8 @@ GO.notes.MainPanel = function(config){
 		this.eastPanel.editHandler();
 	}, this);
 
-	this.centerPanel.store.on('load', function(){
-		if(this.eastPanel.data.category_id!=this.category_id)
+	this.centerPanel.store.on('load', function(){		
+		if(this.eastPanel.data.category_id!=this.centerPanel.store.baseParams.category_id)
 		{
 			this.eastPanel.reset();
 		}
