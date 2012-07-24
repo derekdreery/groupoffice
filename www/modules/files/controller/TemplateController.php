@@ -63,7 +63,11 @@ class GO_files_Controller_Template extends GO_Base_Controller_AbstractModelContr
 		
 		$folder = GO_Files_Model_Folder::model()->findByPk($params['folder_id']);
 		
-		$fsFile = new GO_Base_Fs_File(GO::config()->file_storage_path.$folder->path.'/'.$filename.'.'.$template->extension);
+		$path = GO::config()->file_storage_path.$folder->path.'/'.$filename;
+		if(!empty($template->extension))
+			$path .= '.'.$template->extension;
+		
+		$fsFile = new GO_Base_Fs_File($path);
 		$fsFile->putContents($template->content);
 		
 		$fileModel = GO_Files_Model_File::importFromFilesystem($fsFile);
