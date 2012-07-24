@@ -42,6 +42,13 @@
  * @property boolean $hasNewMessages
  */
 class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
+	
+	/**
+	 * Set to false if you don't want the IMAP connection on save.
+	 * 
+	 * @var boolean 
+	 */
+	public $checkImapConnectionOnSave=true;
 
 	/**
 	 * Returns a static model of itself
@@ -93,10 +100,13 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 				$this->smtp_password = $encrypted;
 		}
 		
-		if($this->isNew || $this->isModified("host") || $this->isModified("port") || $this->isModified("username")  || $this->isModified("password")){
+		if(
+				($this->isNew || $this->isModified("host") || $this->isModified("port") || $this->isModified("username")  || $this->isModified("password")) 
+				&& $this->checkImapConnectionOnSave
+			){
+
 			$imap = $this->openImapConnection();
 			$this->mbroot=$imap->check_mbroot($this->mbroot);
-
 
 			$this->_createDefaultFolder('sent');
 			$this->_createDefaultFolder('trash');
