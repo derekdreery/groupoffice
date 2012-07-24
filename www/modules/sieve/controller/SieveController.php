@@ -1,6 +1,4 @@
 <?php
-ini_set('display_errors', '0');
-error_reporting('E_ALL ~E_STRICT');
 class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelController{
 	
 	private $_sieve;
@@ -34,6 +32,9 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 	protected function actionScripts($params) {
 		
 		$this->_sieveConnect($params['account_id']);
+		
+		if(!empty($params['set_active_script_name']))
+			$this->_sieve->activate($params['set_active_script_name']);				
 
 		$response['active']=$this->_sieve->get_active();
 		$all_scripts = $this->_sieve->get_scripts();
@@ -45,10 +46,10 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 
 			if($script == $response['active'])
 			{
-				$name = $script.' (' . $lang['sieve']['active'] . ')';
+				$name .= ' ('.GO::t('active','sieve').')';
 			}
 
-			$response['results'][]=array('value'=>$script,'name'=>$name);
+			$response['results'][]=array('value'=>$script,'name'=>$name, 'active'=>$script == $response['active']);
 		}
 
 		$response['success'] = true;
@@ -273,20 +274,20 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 		return $response;
 	}
 
-	protected function actionSetActiveScript($params) {
-		$this->_sieveConnect($params['account_id']);
-
-		$this->_sieve->activate($params['script_name']);
-
-		if($this->_sieve->save())
-			$response['success'] = true;
-		else{
-			$response['success'] = false;
-			$response['feedback']=$this->_sieve->error();
-		}
-		return $response;
-	}
-	
+//	protected function actionSetActiveScript($params) {
+//		$this->_sieveConnect($params['account_id']);
+//
+//		$this->_sieve->activate($params['script_name']);
+//
+//		if($this->_sieve->save())
+//			$response['success'] = true;
+//		else{
+//			$response['success'] = false;
+//			$response['feedback']=$this->_sieve->error();
+//		}
+//		return $response;
+//	}
+//	
 	protected function actionSaveScriptsSortOrder($params) {
 		
 		$this->_sieveConnect($params['account_id']);
