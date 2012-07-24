@@ -104,6 +104,9 @@ GO.email.AddressbookDialog = function(config) {
 	
 	this.usersStore = new GO.data.JsonStore({
 		url : GO.url("core/users"),
+		baseParams:{
+			queryRequired:true
+		},
 		fields : ['id', 'username', 'name',  'email'],
 		remoteSort : true
 	});

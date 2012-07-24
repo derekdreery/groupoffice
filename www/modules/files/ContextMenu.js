@@ -329,9 +329,14 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 					this.downloadButton.show();
 					clickedAt == 'tree' ? this.compressButton.hide() : this.compressButton.show();
 					this.decompressButton.hide();
-					this.downloadLinkButton.show();
+					
+					if(this.downloadLinkButton)
+						this.downloadLinkButton.show();
+					
 					this.createDownloadLinkButton.show();
-					this.emailFilesButton.show();
+					
+					if(this.emailFilesButton)
+						this.emailFilesButton.show();
 					break;
 			}
 		}else
