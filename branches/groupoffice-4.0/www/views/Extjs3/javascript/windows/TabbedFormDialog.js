@@ -108,29 +108,29 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		
 		// These three buttons are enabled by default.
 		if (this.enableOkButton)
-			buttons.push({
+			buttons.push(this.buttonOk = new Ext.Button({
 				text: GO.lang['cmdOk'],
 				handler: function(){
 					this.submitForm(true);
 				},
 				scope: this
-			});
+			}));
 		if (this.enableApplyButton)
-			buttons.push({
+			buttons.push(this.buttonApply = new Ext.Button({
 				text: GO.lang['cmdApply'],
 				handler: function(){
 					this.submitForm();
 				},
 				scope:this
-			});
+			}));
 		if (this.enableCloseButton)
-			buttons.push({
+			buttons.push(this.buttonClose = new Ext.Button({
 				text: GO.lang['cmdClose'],
 				handler: function(){
 					this.hide();
 				},
 				scope:this
-			});
+			}));
 		
 		Ext.applyIf(this, {
 			buttons: buttons
