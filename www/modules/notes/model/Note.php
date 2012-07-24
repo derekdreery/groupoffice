@@ -89,5 +89,5 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 		
 		return $attr;
 	}
-
+		
 }

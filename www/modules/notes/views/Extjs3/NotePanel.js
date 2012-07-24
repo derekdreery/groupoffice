@@ -38,7 +38,12 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 						'<td>{id}</td>'+
 					'</tr>'+
 					'<tr>'+
-						'<td colspan="2">{content}</td>'+
+						'<tpl if="GO.util.empty(encrypted)">'+
+							'<td colspan="2">{content}</td>'+
+						'</tpl>'+
+						'<tpl if="!GO.util.empty(encrypted)">'+
+							'<td colspan="2"><a href="javascript:GO.notes.showNoteDialog({id});">{content}</a></td>'+
+						'</tpl>'+
 					'</tr>'+									
 				'</table>';																		
 				

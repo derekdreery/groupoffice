@@ -51,5 +51,45 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 		 }		
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}
+	
+	protected function beforeSubmit(&$response, &$model, &$params) {
+		$response['encrypted'] = !empty($params['encrypted']);
+		if (isset($params['userInputPassword1']) && isset($params['userInputPassword2'])) {
+			if ($params['userInputPassword1']!=$params['userInputPassword2'])
+				throw new Exception(GO::t('passwordMatchError'));
+			$params['password'] = crypt($params['userInputPassword1']);
+			$params['content'] = GO_Base_Util_Crypt::encrypt($params['content'],$params['userInputPassword1']);
+		} else {
+			$params['password'] = '';
+		}
+		return parent::beforeSubmit($response, $model, $params);
+	}
+	
+	protected function beforeLoad(&$response, &$model, &$params) {
+		$response['data']['encrypted'] = $model->encrypted = !empty($model->password);
+		if (isset($params['userInputPassword'])) {
+
+			if ($model->password!=crypt($params['userInputPassword'],$model->password))
+				throw new Exception(GO::t('badPassword'));
+
+			$response['data']['content'] = $model->content = GO_Base_Util_Crypt::decrypt($model->content, $params['userInputPassword']);
+
+			if (!empty($response['data']['content']))
+				$response['data']['encrypted'] = $model->encrypted = false;
+		}
+		
+		if (!empty($response['data']['encrypted']))
+			$response['data']['content'] = $model->content = GO::t('contentEncrypted');
+
+		return parent::beforeLoad($response, $model, $params);
+	}
+	
+	protected function beforeDisplay(&$response, &$model, &$params) {
+		if (!empty($model->password)) {
+			$response['data']['content'] = $model->content = GO::t('clickHereToDecrypt');
+		}
+		$response['data']['encrypted'] = !empty($model->password);
+		return $response;
+	}
 }
 

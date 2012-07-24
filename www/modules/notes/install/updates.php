@@ -29,3 +29,5 @@ $updates["201112221547"][]="CREATE TABLE IF NOT EXISTS `cf_no_notes` (
   `model_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`model_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates["201207191545"][]="ALTER TABLE `no_notes` ADD `password` varchar(255) DEFAULT '';";
