@@ -124,8 +124,16 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 		this.store.on('load', function(){
 			this.changed=false;
 			
-			if(this.store.reader.jsonData && this.store.reader.jsonData.title)
-				this.setTitle(this.store.reader.jsonData.title);
+			if(this.store.reader.jsonData){
+				if(this.store.reader.jsonData.title)
+					this.setTitle(this.store.reader.jsonData.title);
+				
+//				if(this.store.reader.jsonData.emptyText){
+//					this.getView().emptyText=this.store.reader.jsonData.emptyText;
+//				}
+			} 
+			
+			
 		}, this);
 	
 		if(typeof(this.loadMask)=='undefined')
