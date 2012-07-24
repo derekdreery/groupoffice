@@ -348,7 +348,10 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		$this->uuid = (string) $vobject->uid;
 		$this->name = (string) $vobject->summary;
 		$this->description = (string) $vobject->description;
-		if(!empty($vobject->dtstart))
+		
+		$startTime = $vobject->dtstart->getDateTime();
+		
+		if(!empty($startTime))
 			$this->start_time = $vobject->dtstart->getDateTime()->format('U');
 		
 		if(!empty($vobject->dtend))
@@ -370,7 +373,9 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 			$rrule = new GO_Base_Util_Icalendar_Rrule();
 			$rrule->readIcalendarRruleString($this->start_time, (string) $vobject->rrule);			
 			$this->rrule = $rrule->createRrule();
-			$this->repeat_end_time = $rrule->until;
+			
+			if(isset($rrule->until))
+				$this->repeat_end_time = $rrule->until;
 		}		
 		
 		//var_dump($vobject->status);
