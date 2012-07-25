@@ -32,13 +32,15 @@ GO.email.AccountDialog = function(config) {
 				fieldLabel : GO.sieve.lang.sievePort,
 				name : 'sieve_port',
 				decimals : 0,
-				allowBlank : false
+				allowBlank : false,
+				value:GO.sieve.sievePort
 			})
 		);
 		advancedItems.push(
 			new Ext.form.Checkbox({
-				boxLabel: GO.sieve.lang.name+': '+GO.sieve.lang.useTLS,
+				boxLabel: GO.sieve.lang.useTLS,
 				labelSeparator: '',
+				checked:GO.sieve.sieveTls,
 				name: 'sieve_usetls',
 				allowBlank: true,
 				hideLabel:true
