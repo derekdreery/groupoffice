@@ -348,17 +348,23 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		$this->uuid = (string) $vobject->uid;
 		$this->name = (string) $vobject->summary;
 		$this->description = (string) $vobject->description;
-		
-		$startTime = $vobject->dtstart->getDateTime();
-		
-		if(!empty($startTime))
+	
+		if(!empty($vobject->dtstart))
 			$this->start_time = $vobject->dtstart->getDateTime()->format('U');
 		
-		if(!empty($vobject->dtend))
+		if(!empty($vobject->dtend)){
 			$this->due_time = $vobject->dtend->getDateTime()->format('U');
+			
+			if(empty($vobject->dtstart))
+				$this->start_time=$this->due_time;
+		}
 		
-		if(!empty($vobject->due))
+		if(!empty($vobject->due)){
 			$this->due_time = $vobject->due->getDateTime()->format('U');
+			
+			if(empty($vobject->dtstart))
+				$this->start_time=$this->due_time;
+		}
 				
 		if($vobject->dtstamp)
 			$this->mtime=$vobject->dtstamp->getDateTime()->format('U');
@@ -408,6 +414,10 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		{
 			$this->completion_time=0;
 		}
+		
+		if(!empty($vobject->{"percent-complete"}))
+			$this->percentage_complete=(string) $vobject->{"percent-complete"};
+		
 		
 		if($this->status=='COMPLETED' && empty($this->completion_time))
 			$this->completion_time=time();

@@ -318,9 +318,13 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 
 		$vcalendar = GO_Base_VObject_Reader::read($data);
 		
+		GO_Base_VObject_Reader::convertVCalendarToICalendar($vcalendar);
+		
 		foreach($vcalendar->vtodo as $vtodo)
+		{			
 			$task = new GO_Tasks_Model_Task();
 			$task->importVObject($vtodo);
+		}
 	}
 	
 	protected function actionIcs($params) {
