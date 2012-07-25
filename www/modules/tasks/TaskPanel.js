@@ -19,7 +19,7 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 	editGoDialogId : 'task',
 	
 	editHandler : function(){		
-		GO.tasks.showTaskDialog({task_id: this.link_id});		
+		GO.tasks.showTaskDialog({task_id: this.model_id});		
 	},	
 	
 	initComponent : function(){
