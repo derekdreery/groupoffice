@@ -2321,7 +2321,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 			$model->setAttributes($attr, false);
 			$model->cutAttributeLengths();
-			$model->save();
+			$model->save(true);
 			return $model;
 			
 		}

@@ -223,6 +223,8 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			$this->_unencryptedPassword=$this->password;
 			$this->password=crypt($this->password);
 			$this->password_type='crypt';
+			
+			$this->digest = md5($this->username.":".GO::config()->product_name.":".$this->password);
 		}
 		
 		return parent::beforeSave();
@@ -409,6 +411,14 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 				GO::setIgnoreAclPermissions($oldIgnore);
 			}
 		}
+		
+		$digest = md5($this->username.":".GO::config()->product_name.":".$password);
+		if($digest != $this->digest)
+		{
+			$this->digest=$digest;
+			$this->save(true);
+		}
+		
 		return true;
 	}	
 	

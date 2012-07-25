@@ -434,7 +434,7 @@ class Sabre_DAV_Server {
      * @return void
      */
     public function invokeMethod($method, $uri) {
-
+			
         $method = strtoupper($method);
 
         if (!$this->broadcastEvent('beforeMethod',array($method, $uri))) return;
