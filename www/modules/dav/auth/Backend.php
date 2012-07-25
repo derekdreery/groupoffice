@@ -25,16 +25,16 @@ class GO_Dav_Auth_Backend extends Sabre_DAV_Auth_Backend_AbstractDigest {
 			$this->_user_id=$user->id;
 			return $user->digest;
 		}
-	}
+	}	
 	
-	
-	public function authenticate(\Sabre_DAV_Server $server, $realm) {
-		
+	public function authenticate(\Sabre_DAV_Server $server, $realm) {		
 		if(parent::authenticate($server, $realm)){
 			GO::session()->setCurrentUser($this->_user_id);
+			return true;
 		}
 	}
 	
+//	For basic auth
 //	protected function validateUserPass($username, $password) {
 //		$user = GO::session()->login($username, $password, false);
 //		if($user)
