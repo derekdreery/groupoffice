@@ -21,7 +21,7 @@ class GO_Dav_Auth_Backend extends Sabre_DAV_Auth_Backend_AbstractDigest {
 		
 		if(!$user)
 			return null;
-		else{
+		else{	
 			$this->_user_id=$user->id;
 			return $user->digest;
 		}

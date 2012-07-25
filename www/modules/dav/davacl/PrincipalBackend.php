@@ -19,13 +19,16 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre_DAVACL_IPrincipalBackend {
 
 	private function _modelToDAVUser(GO_Base_Model_User $user){
 
-		return array(
+		$data= array(
+			'id'=>$user->id,
 			'uri'=>'principals/'.$user->username,
 			'{DAV:}displayname' => $user->username,
 			'{http://sabredav.org/ns}email-address'=>$user->email,
 //			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL'=>new Sabre_DAV_Property_Href('principals/'.$user->username.'/inbox'),
 //			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL'=>new Sabre_DAV_Property_Href('principals/'.$user->username.'/outbox')
 		);
+		
+		return $data;
 
 	}
     /**
@@ -74,6 +77,8 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre_DAVACL_IPrincipalBackend {
 
 
 			$username = $pathParts[1];
+			
+			GO::debug("getPrincipalByPath($path)");
 
 			$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $username);
 			if (!$user) {
@@ -96,6 +101,7 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre_DAVACL_IPrincipalBackend {
      */
     public function getGroupMemberSet($principal) {
 
+			GO::debug("getGroupMemberSet($principal)");
 //        $principal = $this->getPrincipalByPath($principal);
 //        if (!$principal) throw new Sabre_DAV_Exception('Principal not found');
 //
@@ -117,7 +123,9 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre_DAVACL_IPrincipalBackend {
      * @return array 
      */
     public function getGroupMembership($principal) {
-
+			GO::debug("getGroupMemberSet($principal)");
+			
+			return array();
 //        $principal = $this->getPrincipalByPath($principal);
 //        if (!$principal) throw new Sabre_DAV_Exception('Principal not found');
 //
@@ -142,7 +150,7 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre_DAVACL_IPrincipalBackend {
      * @return void
      */
     public function setGroupMemberSet($principal, array $members) {
-
+			GO::debug("setGroupMemberSet($principal)");
         // Grabbing the list of principal id's.
 //        $stmt = $this->pdo->prepare('SELECT id, uri FROM principals WHERE uri IN (? ' . str_repeat(', ? ', count($members)) . ');');
 //        $stmt->execute(array_merge(array($principal), $members));
@@ -177,6 +185,8 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre_DAVACL_IPrincipalBackend {
 		}
 		
 		function searchPrincipals($prefixPath, array $searchProperties) {
+			
+			GO::debug("searchPrincipals");
 
 		$findParams = GO_Base_Db_FindParams::newInstance()
 						->select('t.username');
