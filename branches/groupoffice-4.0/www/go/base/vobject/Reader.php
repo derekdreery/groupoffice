@@ -237,6 +237,11 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 					if(count($types))
 						$property->add(new GO_Base_VObject_Parameter('TYPE', implode(',', $types)));					
 				}
+				
+				if($property->name=='BDAY' && !empty($property->value)){
+					$property->value = substr($property->value,0,4).'-'.substr($property->value,4,2).'-'.substr($property->value,6,2);
+//					echo $property->value."\n";
+				}
 			}
 		}	
 	}
