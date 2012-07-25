@@ -175,8 +175,9 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 	public function getTemplateUrl()
 	{
 		$template_url = $this->template."/";
-		if(file_exists($template_url)) //look in rpot/template
-			return "/".$template_url;
+
+		if(file_exists($template_url)) //look in root/[templatename]
+			return GO::config()->host . $template_url;
 		
 		$template_url = GO::config()->host . 'modules/sites/templates/' . $this->template . '/assets/';
 		if(file_exists($template_url)) //look in sites module
