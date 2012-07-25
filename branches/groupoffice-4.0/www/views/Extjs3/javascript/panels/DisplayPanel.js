@@ -518,7 +518,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		}else if(this.ownerCt)
 		{
 			//we are in a window
-			this.ownerCt.title;
+			return this.ownerCt.title;
 		}
 		return false;
 	},

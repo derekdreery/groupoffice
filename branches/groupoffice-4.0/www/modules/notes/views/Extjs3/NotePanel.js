@@ -79,45 +79,49 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 	},
 	
 	afterLoad : function(result) {
-		if (!GO.util.empty(this.passwordPanel))
-			this.passwordPanel.destroy();
-		
-		this.passwordPanel = new Ext.Panel({
-			renderTo: 'encryptedNoteDisplaySecure',
-			layout: 'column',
-			border: false,
-			keys:[{
-				key: Ext.EventObject.ENTER,
-				fn : this._loadWithPassword,
-				scope : this
-			}],
-			items: [
-				this.passwordField = new Ext.form.TextField({
-					name: 'password',
-//						emptyText: GO.lang['password']+' '+GO.lang['decryptContent'],
-					inputType: 'password',
-					width: '60%'
-				}),
-				this.passwordButton = new Ext.Button({
-						text: GO.lang['decryptContent'],
-						handler: this._loadWithPassword,
-						scope: this
-					})
-			]
-		});
-		
-		if (!GO.util.empty(result.data.encrypted))
-			this.passwordPanel.show();
-		else
-			this.passwordPanel.hide();
+		if(this.data.encrypted){
+			if (!this.passwordPanel){
+				this.passwordPanel = new Ext.Panel({			
+					renderTo: 'encryptedNoteDisplaySecure',
+					layout: 'column',
+					border: false,
+					keys:[{
+						key: Ext.EventObject.ENTER,
+						fn : this._loadWithPassword,
+						scope : this
+					}],
+					items: [
+						this.passwordField = new Ext.form.TextField({
+							name: 'password',
+		//						emptyText: GO.lang['password']+' '+GO.lang['decryptContent'],
+							inputType: 'password',
+							width: '60%'
+						}),
+						this.passwordButton = new Ext.Button({
+								text: GO.lang['decryptContent'],
+								handler: function(){
+									this._loadWithPassword(this.passwordField.getValue());
+									this.passwordField.setValue("");
+								},
+								scope: this
+							})
+					]
+				});
+			}else
+			{
+				var el = Ext.get('encryptedNoteDisplaySecure');
+				//console.log(el);
+				el.appendChild(this.passwordPanel.getEl());
+			}
+		}
 	},
 	
-	_loadWithPassword : function() {
+	_loadWithPassword : function(pass) {
 		GO.request({
 			url: 'notes/note/display',
 			params: {
 				'id' : this.model_id,
-				'userInputPassword' : this.passwordField.getValue()
+				'userInputPassword' : pass
 			},
 			success: function(options, response, result) {
 				if (!GO.util.empty(result.feedback))
