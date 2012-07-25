@@ -66,6 +66,7 @@ GO.sieve.SieveGrid = function(config){
 	config.region='center';
 	config.autoScroll=true;
 	config.border=false;
+	config.disabled=true;
 	config.store = new GO.data.JsonStore({
 		url: GO.url('sieve/sieve/rules'),
 		baseParams: {
@@ -187,7 +188,7 @@ GO.sieve.SieveGrid = function(config){
 
 Ext.extend(GO.sieve.SieveGrid, GO.grid.GridPanel,{
 	setAccountId : function(account_id){
-		this.setDisabled(false);
+		this.setDisabled(!account_id);
 		this.accountId=account_id;
 		this.store.baseParams.account_id = account_id;
 		this.selectScript.store.baseParams.account_id = account_id;
