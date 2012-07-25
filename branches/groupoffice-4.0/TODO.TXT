@@ -1,3 +1,14 @@
+Gordon, adresboek leeg bij composer en hij ziet alle users
+
+
+Mail reminders en core/cron door wilmar
+
+BUg: http://www.group-office.com/forum/viewtopic.php?f=6&t=8317
+
+Iedereen mag views aanmaken in agenda
+
+Bug: http://www.group-office.com/forum/viewtopic.php?f=1&t=8409&p=28295#p28295
+
 
 instructiefilm
 
@@ -23,7 +34,7 @@ http://www.group-office.com/forum/viewtopic.php?f=3&t=8353
 
 VCF import via mail
 
-Note sync
+Note sync bij syncml. Funambol outlook ondersteund dit.
 
 reminder als licentie verloopt
 
