@@ -593,9 +593,6 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 * @return Sabre_VObject_Component 
 	 */
 	public function toVObject(){
-		//require vendor lib SabreDav vobject
-		require_once(GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/VObject/includes.php');
-
 		$e=new Sabre_VObject_Component('vcard');
 		
 		$e->add('VERSION','3.0');
