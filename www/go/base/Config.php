@@ -752,7 +752,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20120719';
+	var $mtime = '20120725';
 
 	#group configuration
 	/**

@@ -1,6 +1,13 @@
-12-07-2012 4.0.73
+25-07-2012 4.0.73
 - Better memory management in ActiveRecords
 - Updated German translation
+- Small usability improvements
+- Bug fix in SyncML (Outlook sync)
+- Small bug fixes
+- Username and password cookies were not encrypted
+- Security bug in calendar
+- Notes can be encrypted with a password now.
+- New encrypted custom field
 
 12-07-2012 4.0.72
 - Small bug fixes
