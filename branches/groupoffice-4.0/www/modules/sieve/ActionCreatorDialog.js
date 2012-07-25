@@ -383,7 +383,7 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 			component.show();
 			component.setDisabled(false);
 			if (component == this.txtDays)
-				this.txtDays.setValue(3);
+				this.txtDays.setValue(7);
 		} else {
 			component.hide();
 			component.setDisabled(true);
