@@ -21,6 +21,7 @@ GO.sieve.CriteriumGrid = function(config){
 	config.height=180;
 	config.style='margin: 5px;';
 	config.border=true;
+	config.cls = 'go-grid3-hide-headers';
 	var fields ={
 		fields:['test','not','type','arg','arg1','arg2','text'],
 		header: false,
