@@ -1,3 +1,6 @@
+25-07-2012 4.0.74
+- Bug in multiselect panels.
+
 25-07-2012 4.0.73
 - Better memory management in ActiveRecords
 - Updated German translation
