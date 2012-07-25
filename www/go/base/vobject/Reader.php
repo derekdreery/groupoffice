@@ -147,8 +147,16 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 			$vobject->version='2.0';
 			foreach($vobject->children() as $child)
 			{
-				if($child instanceof Sabre_VObject_Component){
-					foreach($child->children() as $property){
+				if($child instanceof Sabre_VObject_Component){				
+					
+					for($i=0;$i<count($child->children);$i++){
+						$property = $child->children[$i];
+						if((string) $property->value==""){
+							GO_Syncml_Server::debug("Unsetting: ".$property->name);
+							array_splice($child->children, $i, 1);
+							$i--;
+						}
+						
 						if(isset($property['ENCODING']) && strtoupper($property['ENCODING'])=='QUOTED-PRINTABLE'){
 							$value = quoted_printable_decode($property->value);
 							$value = str_replace("\r","",$value);
@@ -162,10 +170,10 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 						$rrule = new GO_Base_Util_Icalendar_Rrule();
 						$rrule->readIcalendarRruleString($child->dtstart->getDateTime()->format('U'), (string) $child->rrule);			
 						$child->rrule = str_replace('RRULE:','',$rrule->createRrule());
-					}
+					}					
 				}					
 			}
-		}	
+		}
 	}
 	
 	
