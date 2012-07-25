@@ -96,8 +96,8 @@ Ext.extend(GO.form.ComboBoxMulti, GO.form.ComboBox, {
             return;
         }
         var pad = (this.sep == ' ' ? '' : ' ');
-				var typedValue = v.substring(r.left, r.right).trim();
-				if(value.indexOf(typedValue)==-1){
+				var typedValue = v.substring(r.left, r.right).trim().toLowerCase();
+				if(value.toLowerCase().indexOf(typedValue)==-1){
 					//don't replace with different value
 					//return false;
 					value=typedValue;
