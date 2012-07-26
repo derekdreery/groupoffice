@@ -1,0 +1,10 @@
+GO.modules.lang.cmdSaveChanges = 'Desar canvis';
+GO.modules.lang.cmdInstall = 'Instal·lar';
+GO.modules.lang.cmdUninstall = 'Desinstal·lar';
+GO.modules.lang.cmdAvailableModules = 'Mòduls disponibles';
+GO.modules.lang.cmdModuleName = 'Nom del mòdul';
+GO.modules.lang.cmdModuleDescription = 'Descripció';
+GO.modules.lang.cmdModulesCannotBeDeleted = 'El mòdul "Mòduls" no es pot esborrar!.';
+GO.modules.lang.cmdGridColumnModuleName= 'Nom del mòdul';
+GO.modules.lang.cmdUninstallMessage= 'ATENCIÓ! Tota la informació d\'aquest mòdul serà esborrada! Esteu segurs de voler desinstal·lar el mòdul "{0}"?';
+GO.modules.lang.modules='Mòduls';
