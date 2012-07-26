@@ -83,7 +83,7 @@ Ext.extend(GO.dokuwiki.SettingsDialog, Ext.Window,{
 			scope: this
 		});
 	},
-
+	
 	buildForm : function() {
 		this.panel = new Ext.Panel({
 			border:false,
@@ -97,7 +97,15 @@ Ext.extend(GO.dokuwiki.SettingsDialog, Ext.Window,{
 				name : 'external_url',
 				fieldLabel : GO.dokuwiki.lang.externalUrl,
 				anchor : '100%',
-				allowBlank : false
+				allowBlank : false,
+				validator: function(value){
+
+					if(!GO.dokuwiki.checkHost(value)){
+						return "Wrong Domain (Please make sure it implements http(s)://";
+					} else {
+						return true;
+					}
+				}
 			}),this.titleField = new Ext.form.TextField({
 				name : 'title',
 				fieldLabel : GO.dokuwiki.lang.title,

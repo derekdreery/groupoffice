@@ -25,7 +25,8 @@ GO.dokuwiki.MainPanel = function(config){
 			cls: 'x-btn-text-icon',
 			text: GO.lang['cmdRefresh'],
 			handler:function(){
-					this.checkHost(GO.dokuwiki.settings.externalUrl);
+				GO.dokuwiki.checkHost(GO.dokuwiki.settings.externalUrl);
+					//this.checkHost(GO.dokuwiki.settings.externalUrl);
 					//GO.dokuwiki.iFrameComponent.setUrl(GO.settings.modules.dokuwiki.url);
 					GO.dokuwiki.iFrameComponent.setUrl(GO.dokuwiki.settings.externalUrl);
 			},
@@ -66,7 +67,7 @@ GO.dokuwiki.MainPanel = function(config){
   config.listeners={
     scope:this,
     render:function(){
-      this.checkHost(GO.dokuwiki.settings.externalUrl);
+      GO.dokuwiki.checkHost(GO.dokuwiki.settings.externalUrl);
     }
   }
 
@@ -75,23 +76,32 @@ GO.dokuwiki.MainPanel = function(config){
 }
 
 Ext.extend(GO.dokuwiki.MainPanel, Ext.Panel,{
-  checkHost : function(wikiurl) {
-
-		if(GO.util.empty(wikiurl))
-			return true;
-		
-    var godomain = window.location.hostname;
-    var wikidomain = wikiurl.match(/:\/\/(www\.)?(.[^/:]+)/)[2];
-    
-    if(godomain != wikidomain)
-      Ext.MessageBox.show({
-        title:'Wrong Domain',
-        msg:"Login and Logout functions will not work properly because Dokuwiki is on a different domain than Group-Office.<br /><br />Group-Office Domain: " + godomain + "<br />Dokuwiki Domain: " + wikidomain,
-        buttons: Ext.Msg.OK,
-        icon: Ext.MessageBox.ERROR
-      });
-  }
+  
 });
+
+
+GO.dokuwiki.checkHost = function(wikiurl) {
+
+	if(GO.util.empty(wikiurl))
+		return false;
+
+	var godomain = window.location.hostname;
+
+	var wikidomain = wikiurl.match(/http(s)?:\/\/([^/:]+)/i);
+
+	if(!wikidomain || godomain != wikidomain[2]){
+		return false;
+		Ext.MessageBox.show({
+			title:'Wrong Domain',
+			msg:"Login and Logout functions will not work properly because Dokuwiki is on a different domain than Group-Office.<br /><br />Group-Office Domain: " + godomain + "<br />Dokuwiki Domain: " + wikidomain,
+			buttons: Ext.Msg.OK,
+			icon: Ext.MessageBox.ERROR
+		});
+	} else {
+		return true;
+	}
+};
+
 
 GO.moduleManager.addModule('dokuwiki', GO.dokuwiki.MainPanel, {
 	title : GO.dokuwiki.settings.title,
