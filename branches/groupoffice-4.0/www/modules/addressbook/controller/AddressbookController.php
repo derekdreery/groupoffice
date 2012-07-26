@@ -129,34 +129,41 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 	 * Example command line call: /path/to/groupoffice/groupoffice addressbook/addressbook/importVcf --file=filename.txt --addressbook_id=1
 	 * @param Array $params Parameters. MUST contain string $params['file'].
 	 */
-	protected function actionImportVcf($params){
-		$file = new GO_Base_Fs_File($params['file']);
-		$data = $file->getContents();
-		$contact = new GO_Addressbook_Model_Contact();
-		$vcard = GO_Base_VObject_Reader::read($data);
-		
-		if(!empty($params["addressbook_id"]))
-			throw new Exception("Param addressbook_id may not be empty");
-		//$params['addressbook_id'] = !empty($params['a']) ? $params['a'] : 1;
-		
-		if (is_array($vcard)) {
-			foreach ($vcard as $item) {
-				$contact->importVObject(
-					$item,
-					array(
-						'addressbook_id' => $params['addressbook_id']
-					)
-				);
-			}
-		} else {
-			$contact->importVObject(
-				$vcard,
-				array(
-					'addressbook_id' => $params['addressbook_id']
-				)
-			);
-		}
-		return array('success'=>true);
-	}
-	
+//	protected function actionImportVcf($params){
+//		$file = new GO_Base_Fs_File($params['file']);
+//		$file->convertToUtf8();
+//
+//		$data = $file->getContents();
+//		
+//		$contact = new GO_Addressbook_Model_Contact();
+//		$vcard = GO_Base_VObject_Reader::read($data);
+//		
+//		GO_Base_VObject_Reader::convertVCard21ToVCard30($vcard);
+//		
+//		
+//		
+//		if(!empty($params["addressbook_id"]))
+//			throw new Exception("Param addressbook_id may not be empty");
+//		//$params['addressbook_id'] = !empty($params['a']) ? $params['a'] : 1;
+//		
+//		if (is_array($vcard)) {
+//			foreach ($vcard as $item) {
+//				$contact->importVObject(
+//					$item,
+//					array(
+//						'addressbook_id' => $params['addressbook_id']
+//					)
+//				);
+//			}
+//		} else {
+//			$contact->importVObject(
+//				$vcard,
+//				array(
+//					'addressbook_id' => $params['addressbook_id']
+//				)
+//			);
+//		}
+//		return array('success'=>true);
+//	}
+//	
 }

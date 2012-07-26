@@ -338,8 +338,13 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 					break;
 				case 'N':
 					$nameArr = explode(';',$vobjProp->value);
-					$attributes['last_name'] = $nameArr[0];
-					$attributes['first_name'] = $nameArr[1];
+					if(isset($nameArr[0]))
+						$attributes['last_name'] = $nameArr[0];
+					if(isset($nameArr[1]))
+						$attributes['first_name'] = $nameArr[1];
+					
+					
+					
 					$attributes['middle_name'] = !empty($nameArr[2]) ? $nameArr[2] : '' ;
 					$attributes['suffix'] = !empty($nameArr[4]) ? $nameArr[4] : '' ;
 					$attributes['title'] = !empty($nameArr[3]) ? $nameArr[3] : '' ;
@@ -402,19 +407,29 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 					}
 					if(in_array('work',$types)) {
 						$addrArr = explode(';',$vobjProp->value);
-						$companyAttributes['address'] = $addrArr[2];
-						$companyAttributes['city'] = $addrArr[3];
-						$companyAttributes['state'] = $addrArr[4];
-						$companyAttributes['zip'] = $addrArr[5];
-						$companyAttributes['country'] = $addrArr[6];
+						if(isset($addrArr[2]))
+							$companyAttributes['address'] = $addrArr[2];
+						if(isset($addrArr[3]))
+							$companyAttributes['city'] = $addrArr[3];
+						if(isset($addrArr[4]))
+							$companyAttributes['state'] = $addrArr[4];
+						if(isset($addrArr[5]))
+							$companyAttributes['zip'] = $addrArr[5];						
+						if(isset($addrArr[6]))
+							$companyAttributes['country'] = $addrArr[6];
 					}
 					if(in_array('home',$types)) {
 						$addrArr = explode(';',$vobjProp->value);
-						$attributes['address'] = $addrArr[2];
-						$attributes['city'] = $addrArr[3];
-						$attributes['state'] = $addrArr[4];
-						$attributes['zip'] = $addrArr[5];
-						$attributes['country'] = $addrArr[6];
+						if(isset($addrArr[2]))
+							$attributes['address'] = $addrArr[2];
+						if(isset($addrArr[3]))
+							$attributes['city'] = $addrArr[3];
+						if(isset($addrArr[4]))
+							$attributes['state'] = $addrArr[4];
+						if(isset($addrArr[5]))
+							$attributes['zip'] = $addrArr[5];
+						if(isset($addrArr[6]))
+							$attributes['country'] = $addrArr[6];
 					}
 					break;
 				case 'EMAIL':
@@ -470,6 +485,9 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		$attributes=array_map('trim',$attributes);
 		
 		$attributes = $this->_splitAddress($attributes);
+		
+		if(empty($attributes['last_name']) && empty($attributes['first_name']))
+			$attributes['first_name']='unnamed';
 
 		$this->setAttributes($attributes, false);		
 		
@@ -533,6 +551,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$propModel->name = $prop['name'];
 			$propModel->parameters = $prop['parameters'];
 			$propModel->value = $prop['value'];
+			$propModel->cutAttributeLengths();
 			$propModel->save();
 		}
 		
