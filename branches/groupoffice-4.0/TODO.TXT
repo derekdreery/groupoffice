@@ -10,8 +10,6 @@ Iedereen mag views aanmaken in agenda
 Bug: http://www.group-office.com/forum/viewtopic.php?f=1&t=8409&p=28295#p28295
 
 
-instructiefilm
-
 Bij alle omgebouwde modules .php zoeken in *.js files zodat oude php code uiteindelijk weg kan.
 
 Giralis

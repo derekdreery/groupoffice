@@ -72,6 +72,34 @@ class GO_Base_Module extends GO_Base_Observable {
 			$name = $this->id();
 		return $name;
 	}
+	
+	/**
+	 * Get URL to module icon
+	 * 
+	 * @return string 
+	 */
+	public function icon(){
+		
+		$icon = $this->_findIconByTheme(GO::user()->theme);
+		if(!$icon)
+			$icon = $this->_findIconByTheme("Default");
+		
+		if(!$icon)
+			$icon = GO::config()->host.'views/Extjs3/themes/Default/images/16x16/unknown.png';
+		
+		return $icon;
+	}
+	
+	private function _findIconByTheme($theme){
+		$path = $this->path();
+		if(file_exists($path.'/themes/'.$theme.'/images/'.$this->id().'.png')){
+			return GO::config()->host.'modules/'.$this->id().'/themes/'.$theme.'/images/'.$this->id().'.png';
+		}elseif(file_exists($path.'views/Extjs3/themes/'.$theme.'/images/'.$this->id().'.png')){
+			return GO::config()->host.'modules/'.$this->id().'/views/Extjs3/themes/'.$theme.'/images/'.$this->id().'.png';
+		}  else {
+			return false;
+		}
+	}
 
 	/**
 	 * Return the localized description
