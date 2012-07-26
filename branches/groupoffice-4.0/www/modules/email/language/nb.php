@@ -236,3 +236,4 @@ $l["moveOldMailsInstructions"]= 'Velg en dato. Når du deretter klikker OK, vil 
 $l["moveOldMailsSure"]= 'Er du sikker på at du vil flytte alle e-poster eldre enn {date} fra "{source}" til "{target}"?';
 $l["nMovedMailsTxt"]= 'Antall flyttede e-poster er ';
 $l['sourceAndTargetSame']="Kildemappe og målmappe kan ikke være samme mappe!";
+$l['subscribeFolders']='Abonnere på mapper';
