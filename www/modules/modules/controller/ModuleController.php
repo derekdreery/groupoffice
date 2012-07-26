@@ -33,14 +33,12 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 	
 	public static function formatRecord($record, $model, $store){
 
-		if($model->moduleManager){
-			$record['description'] = $model->moduleManager->description();
-			$record['name'] = $model->moduleManager->name();
-			$record['author'] = $model->moduleManager->author();
-		}else
-		{
-			$record['name']=$model->id;
-		}
+		//if($model->moduleManager){
+		$record['description'] = $model->moduleManager->description();
+		$record['name'] = $model->moduleManager->name();
+		$record['author'] = $model->moduleManager->author();
+		$record['icon'] = $model->moduleManager->icon();
+
 		
 		//$record['user_count']=$model->acl->countUsers();
 		
@@ -62,7 +60,8 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 			$availableModules[$module->name()] = array(
 					'id'=>$module->id(),
 					'name'=>$module->name(),
-					'description'=>$module->description()
+					'description'=>$module->description(),
+					'icon'=>$module->icon()
 			);
 		}
 		
