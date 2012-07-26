@@ -11,7 +11,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
- /**
+/**
  * @class GO.form.NumberField
  * @extends Ext.form.TextField
  * Numeric text field that provides automatic number formatting by using the
@@ -21,6 +21,27 @@
  * @param {Object} config Configuration options
  */
 GO.form.NumberField = Ext.extend(Ext.form.TextField, {
+	
+	/**
+     * @cfg {String} minText Error text to display if the minimum value validation fails (defaults to "The minimum value for this field is {minValue}")
+     */
+	minText : "The minimum value for this field is {0}",
+    
+	/**
+     * @cfg {String} maxText Error text to display if the maximum value validation fails (defaults to "The maximum value for this field is {maxValue}")
+     */
+	maxText : "The maximum value for this field is {0}",
+	
+	/**
+		* @cfg {Number} minValue The minimum allowed value (defaults to Number.NEGATIVE_INFINITY)
+		*/
+	minValue : Number.NEGATIVE_INFINITY,
+
+	/**
+		* @cfg {Number} maxValue The maximum allowed value (defaults to Number.MAX_VALUE)
+		*/
+	maxValue : Number.MAX_VALUE,
+		
 	/**
 	 * @cfg {Number} decimals The maximum precision to display after the decimal separator (defaults to 2)
 	 */
@@ -42,6 +63,38 @@ GO.form.NumberField = Ext.extend(Ext.form.TextField, {
 	fixPrecision : function(){
 		var number = GO.util.unlocalizeNumber(this.getValue());
 		this.setValue(GO.util.numberFormat(number, this.decimals));
+	},
+	
+	
+	
+	
+	/**
+     * Runs all of NumberFields validations and returns an array of any errors. Note that this first
+     * runs TextField's validations, so the returned array is an amalgamation of all field errors.
+     * The additional validations run test that the value is a number, and that it is within the
+     * configured min and max values.
+     * @param {Mixed} value The value to get errors for (defaults to the current field value)
+     * @return {Array} All validation errors for this field
+     */
+	getErrors: function(value) {
+		var errors = GO.form.NumberField.superclass.getErrors.apply(this, arguments);
+        
+		value = Ext.isDefined(value) ? value : GO.util.unlocalizeNumber(this.getRawValue());
+				
+		if (value.length < 1) { // if it's blank and textfield didn't flag it then it's valid
+			return errors;
+		}
+        
+         
+		if (value < this.minValue) {
+			errors.push(String.format(this.minText, this.minValue));
+		}
+        
+		if (value > this.maxValue) {
+			errors.push(String.format(this.maxText, this.maxValue));
+		}
+        
+		return errors;
 	}
 });
 

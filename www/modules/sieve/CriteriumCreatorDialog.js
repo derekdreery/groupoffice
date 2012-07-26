@@ -35,18 +35,6 @@ GO.sieve.CriteriumRecord = Ext.data.Record.create([{
 GO.sieve.CriteriumCreatorDialog = function(config){
 	config = config || {};
 
-//	config.border=false;
-//		config.autoHeight=true;
-//		config.region='center';
-//		config.url=GO.settings.modules.sieve.url+'fileIO.php';
-//		config.baseParams={
-//			task : 'addRule',
-//			account_id : 0,
-//			script_name : '',
-//			rule_name : '',
-//			script_index : 0
-//		};
-
 	this._buildForm();
 
 	config.title=GO.sieve.lang.setFilter;
