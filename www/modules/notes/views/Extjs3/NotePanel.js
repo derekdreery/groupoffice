@@ -87,7 +87,9 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 					border: false,
 					keys:[{
 						key: Ext.EventObject.ENTER,
-						fn : this._loadWithPassword,
+						fn : function() {
+							this._loadWithPassword(this.passwordField.getValue());
+						},
 						scope : this
 					}],
 					items: [
