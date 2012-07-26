@@ -52,8 +52,12 @@ GO.email.ContactsGrid = function(config){
 	config.view=new Ext.grid.GridView({
 		autoFill: true,
 		forceFit: true,
-		emptyText: GO.lang['strNoItems']		
+		emptyText: GO.lang.pleaseEnterQuery,
+		deferEmptyText: false
 	});
+	
+
+	
 	config.sm=new Ext.grid.RowSelectionModel({
 		singleSelect:config.singleSelect
 	});
@@ -63,6 +67,19 @@ GO.email.ContactsGrid = function(config){
 		store : config.store,
 		width : 320
 	});
+	
+	this.contactsSearchField.on("search", function(){
+		this.getView().emptyText=GO.lang['strNoItems'];
+	}, this);
+	
+	this.contactsSearchField.on("reset", function(){
+		this.getView().emptyText=GO.lang.pleaseEnterQuery;
+		this.store.removeAll();
+		//cancel store load
+		return false;
+	}, this);
+	
+	
 
 	config.tbar=[GO.lang['strSearch'] + ': ', ' ', this.contactsSearchField];
 
