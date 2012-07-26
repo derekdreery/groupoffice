@@ -156,6 +156,23 @@ class GO_Base_Model_Reminder extends GO_Base_Db_ActiveRecord {
 		return array('snooze_time'=>7200);
 	}
 	
+	/**
+	 * Get the model to which this reminder belongs. A reminder can belong to an Event or Task for example.
+	 * 
+	 * @return GO_Base_Db_ActiveRecord|boolean 
+	 */
+	public function getRelatedModel(){
+		
+		if(!$this->model_type_id || !$this->model_id)
+			return false;
+		
+		$modelType = GO_Base_Model_ModelType::model()->findByPk($this->model_type_id);
+		
+		$model = GO::getModel($modelType->model_name)->findByPk($this->model_id);
+		
+		return $model;		
+	}
+	
 	
 	public function findByModel($modelName, $id){
 		$model_type_id = GO::getModel($modelName)->modelTypeId();		
