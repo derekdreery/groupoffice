@@ -83,8 +83,24 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 		$attributes['udate']=strtotime($attributes['date']);
 		$attributes['size']=strlen($mimeData);
 
-		$this->setAttributes($attributes);
+//		
+//		GO::debug($structure->headers);
+//		
+		if(preg_match("/([^\/]*\/[^;]*)(.*)/", $structure->headers['content-type'], $matches)){
+			$attributes['content_type_attributes']=array();
+			$attributes['content_type']=$matches[1];
+			$atts = trim($matches[2], ' ;');							
+			$atts=explode(';', $atts);
+
+			for($i=0;$i<count($atts);$i++){
+				$keyvalue=explode('=', $atts[$i]);
+				if(isset($keyvalue[1]) && $keyvalue[0]!='boundary')
+					$attributes['content_type_attributes'][trim($keyvalue[0])]=trim($keyvalue[1],' "');
+			}
+		}
 		
+		$this->setAttributes($attributes);
+
 		$this->_getParts($structure);
 		
 		//$this->_loadedBody=  GO_Base_Util_String::clean_utf8($this->_loadedBody);
