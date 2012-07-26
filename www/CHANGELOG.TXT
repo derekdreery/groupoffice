@@ -1,3 +1,7 @@
+26-07-2012 4.0.76
+- Small bug fixes
+- Updated Norwegian
+
 26-07-2012 4.0.75
 - Fix for latest funambol client
 - Fix for iOS caldav and carddav connection
