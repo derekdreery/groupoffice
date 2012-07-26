@@ -240,9 +240,6 @@ class GO_Base_Session extends GO_Base_Observable{
 			
 			GO::session()->values['countLogin']=$countLogin;
 			
-			//for logging
-			GO::session()->values['username']=GO::user()->username;
-		
 			return $user;
 		}		
 	}
@@ -297,5 +294,8 @@ class GO_Base_Session extends GO_Base_Observable{
 		
 		//remember user id in session
 		$this->values['user_id']=$user_id;
+		
+		//for logging
+		GO::session()->values['username']=GO::user()->username;
 	}
 }
