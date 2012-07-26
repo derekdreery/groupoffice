@@ -75,3 +75,12 @@ $l["globalsettings_allchangelabel"]='Bestaande veranderen?';
 $l["globalsettings_renameall"]= 'Weet u zeker dat u alles wilt hernoemen?';
 
 $l['taskPercentage_complete']='Percentage voltooid';
+
+$l["task"]= 'Taak';
+$l["taskName"]='Naam';
+$l["taskCtime"]='Gemaakt op';
+$l["taskMtime"]='Gewijzigd op';
+$l["taskDue_time"]='Eindigt op';
+$l["taskStatus"]='Status';
+$l["taskCompletion_time"]='Voltooid op';
+$l["taskProject_name"]='Project';
