@@ -60,8 +60,6 @@ Sieve MVC en redesign vakantie. Automatisch vullen aliasen
 
 CMS compatible (Wilmar)
 
-Module icons
-
 karakter encoding: koi8-r
 
 Document conversion
