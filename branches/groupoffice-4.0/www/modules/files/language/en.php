@@ -92,7 +92,7 @@ $l['fileIsLocked']='File is locked';
 $l["fileId"] = "ID";
 $l["fileFolder_id"] = "Folder";
 $l["fileName"] = "Name";
-$l["fileLocked_user_id"] = "Locked user";
+$l["fileLocked_user_id"] = "Locked by";
 $l["fileCtime"] = "Created at";
 $l["fileMtime"] = "Last modified";
 $l["fileSize"] = "Size";
@@ -114,6 +114,6 @@ $l['notifyFileRename'] = 'File %s was renamed to %s by %s';
 $l['notifyFileMove'] = 'File %s was moved to %s by %s';
 $l['notifyFileDelete'] = 'File %s was deleted by %s';
 $l['notifyFileUpdate'] = 'File %s was updated by %s';
-$l['notificationEmailSubject'] = 'FolderNotification Email';
+$l['notificationEmailSubject'] = 'Updates in folder';
 
 $l['downloadLinkExpired'] = "Sorry, the download link for this file has expired";
