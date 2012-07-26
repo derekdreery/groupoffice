@@ -79,6 +79,10 @@ GO.postfixadmin.MailboxesGrid = function(config){
 			this.store.reload();	    			    			
 		}, this);
 	
+	this.searchField = new GO.form.SearchField({
+		store: config.store,
+		width:320
+  });
 	
 	config.tbar=[{
 			iconCls: 'btn-add',							
@@ -96,7 +100,7 @@ GO.postfixadmin.MailboxesGrid = function(config){
 				this.deleteSelected();
 			},
 			scope: this
-		}];
+		},GO.lang['strSearch']+': ', ' ',this.searchField];
 
 	config.listeners={
 		show:function(){
