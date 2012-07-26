@@ -352,7 +352,8 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 			decimals:0,
 			fieldLabel:GO.sieve.lang.days,
 			disabled: true,
-			hidden: true
+			minValue:1,
+			value:7
 		});
 			
 		this.formPanel = new Ext.form.FormPanel({
