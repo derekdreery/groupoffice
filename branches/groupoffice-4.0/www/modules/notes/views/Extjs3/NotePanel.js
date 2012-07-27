@@ -90,7 +90,7 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 					keys:[{
 						key: Ext.EventObject.ENTER,
 						fn : function() {
-							this._loadWithPassword(this.passwordField.getValue());
+							this._loadWithPassword();
 						},
 						scope : this
 					}],
@@ -104,8 +104,7 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 						this.passwordButton = new Ext.Button({
 								text: GO.lang['decryptContent'],
 								handler: function(){
-									this._loadWithPassword(this.passwordField.getValue());
-									this.passwordField.setValue("");
+									this._loadWithPassword();									
 								},
 								scope: this
 							})
@@ -120,7 +119,11 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 		}
 	},
 	
-	_loadWithPassword : function(pass) {
+	_loadWithPassword : function() {
+		
+		var pass = this.passwordField.getValue();
+		this.passwordField.setValue("");
+		
 		GO.request({
 			url: 'notes/note/display',
 			params: {
