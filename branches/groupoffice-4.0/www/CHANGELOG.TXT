@@ -1,3 +1,8 @@
+27-07-2012 4.0.77
+- Updated German
+- CardDAV didn't work on the Mac
+- Other small bug fixes.
+
 26-07-2012 4.0.76
 - Small bug fixes
 - Updated Norwegian
