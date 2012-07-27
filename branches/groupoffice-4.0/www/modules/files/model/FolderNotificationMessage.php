@@ -1,5 +1,34 @@
 <?php
 
+/**
+ * Group-Office
+ * 
+ * Copyright Intermesh BV. 
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ * 
+ * @license AGPL/Proprietary http://www.group-office.com/LICENSE.TXT
+ * @link http://www.group-office.com
+ * @package GO.modules.files.model
+ * @version $Id: example.php 7607 20120101Z <<USERNAME>> $
+ * @copyright Copyright Intermesh BV.
+ * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
+ */
+ 
+/**
+ * The GO_Files_Model_FolderNotificationMessage model
+ *
+ * @package GO.modules.files.model
+ * @property int $modified_user_id
+ * @property int $type
+ * @property string $arg1
+ * @property string $arg2
+ * @property int $mtime
+ * @property boolean $status
+ */
+
 class GO_Files_Model_FolderNotificationMessage extends GO_Base_Db_ActiveRecord {
         
     const ADD_FOLDER = 1;
