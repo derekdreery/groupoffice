@@ -1,6 +1,9 @@
 <?php
-
-
+//GO.settingsmodule.lang.mainTitle= 'Settings';
+//GO.settingsmodule.lang.loginScreenText='Login screen text';
+//GO.settingsmodule.lang.text='Text';
+//GO.settingsmodule.lang.title='Title';
+//GO.settingsmodule.lang.loginTextEnabled='Enable login screen text';
 $l['name']='Einstellungen';
 $l['description']='Mit diesem Modul können Sie diverse Einstellungen von Groupoffice und seinen Modulen verwalten.';
 $l['mainTitle'] = 'Einstellungen';
