@@ -630,6 +630,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		$e=new Sabre_VObject_Component('vcard');
 					
 		$e->add('VERSION','3.0');
+		$e->prodid='-//Intermesh//NONSGML Group-Office '.GO::config()->version.'//EN';		
 		
 		if(empty($this->uuid)){
 			$this->uuid=GO_Base_Util_UUID::create('contact', $this->id);
@@ -707,10 +708,12 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$e->note=$this->comment;
 		}
 		
-		$mtimeDateTime = new DateTime('@'.$this->mtime);
-		$rev = new Sabre_VObject_Element_DateTime('LAST-MODIFIED');
-		$rev->setDateTime($mtimeDateTime, Sabre_VObject_Element_DateTime::UTC);		
-		$e->add($rev);
+//		$mtimeDateTime = new DateTime('@'.$this->mtime);
+//		$rev = new Sabre_VObject_Element_DateTime('LAST-MODIFIED');
+//		$rev->setDateTime($mtimeDateTime, Sabre_VObject_Element_DateTime::UTC);		
+//		$e->add($rev);
+		
+		$e->rev=gmdate("Y-m-d\TH:m:s\Z", $this->time);
 		
 		
 		if($this->photo){
