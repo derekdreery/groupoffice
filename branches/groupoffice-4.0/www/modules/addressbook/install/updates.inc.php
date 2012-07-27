@@ -349,3 +349,6 @@ $updates["201206131531"][]='UPDATE `ab_email_templates` SET content = replace(co
 
 //Added website field to contact main form
 $updates["201207241127"][]="ALTER TABLE `ab_contacts` ADD `homepage` VARCHAR( 255 ) NULL AFTER `cellular`";
+
+$updates["201207271144"][]="ALTER TABLE `ab_contacts` ADD `uuid` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `id` ,
+ADD INDEX ( `uuid` ) ";
