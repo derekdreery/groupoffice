@@ -525,50 +525,50 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		if (!empty($photoFile))
 			$this->setPhoto($photoFile->path());
 		
-		foreach ($remainingVcardProps as $prop) {
-			if (!empty($this->id) && substr($prop['name'],0,2)=='X-') {
-				// Process encounters a custom property name in the VCard.
-				$arr = explode('-',$prop['name']);
-				$currentPropName = 'X-'.$arr[1];
-				if (!in_array($currentPropName,$deletedPropertiesPrefixes_nonGO)) {
-					// Process encounters a new custom property prefix in the VCard.
-					// Now deleting all properties with this contact that have this prefix.
-					// Because of $deletedPropertiesPrefixes_nonGO, this is only done once
-					// per sync per VCard.
-					$deletablePropertiesStmt = GO_Addressbook_Model_ContactVcardProperty::model()->find(
-						GO_Base_Db_FindParams::newInstance()->criteria(
-							GO_Base_Db_FindCriteria::newInstance()
-								->addCondition('contact_id',$this->id)
-								->addCondition('name',$currentPropName.'-%','LIKE')
-						)
-					);
-
-					while ($delPropModel = $deletablePropertiesStmt->fetch())
-						$delPropModel->delete();
-
-					$deletedPropertiesPrefixes_nonGO[] = $currentPropName; // Keep track of prefixes for which we have deleted the properties.
-				}
-			}
-			
-			$propModel = GO_Addressbook_Model_ContactVcardProperty::model()->find(
-				GO_Base_Db_FindParams::newInstance()
-					->single()
-					->criteria(
-						GO_Base_Db_FindCriteria::newInstance()
-							->addCondition('contact_id',$this->id)
-							->addCondition('name',$prop['name'])
-							->addCondition('parameters',$prop['parameters'])
-					)
-				);
-			if (empty($propModel))
-				$propModel = new GO_Addressbook_Model_ContactVcardProperty();
-			$propModel->contact_id = $this->id;
-			$propModel->name = $prop['name'];
-			$propModel->parameters = $prop['parameters'];
-			$propModel->value = $prop['value'];
-			$propModel->cutAttributeLengths();
-			$propModel->save();
-		}
+//		foreach ($remainingVcardProps as $prop) {
+//			if (!empty($this->id) && substr($prop['name'],0,2)=='X-') {
+//				// Process encounters a custom property name in the VCard.
+//				$arr = explode('-',$prop['name']);
+//				$currentPropName = 'X-'.$arr[1];
+//				if (!in_array($currentPropName,$deletedPropertiesPrefixes_nonGO)) {
+//					// Process encounters a new custom property prefix in the VCard.
+//					// Now deleting all properties with this contact that have this prefix.
+//					// Because of $deletedPropertiesPrefixes_nonGO, this is only done once
+//					// per sync per VCard.
+//					$deletablePropertiesStmt = GO_Addressbook_Model_ContactVcardProperty::model()->find(
+//						GO_Base_Db_FindParams::newInstance()->criteria(
+//							GO_Base_Db_FindCriteria::newInstance()
+//								->addCondition('contact_id',$this->id)
+//								->addCondition('name',$currentPropName.'-%','LIKE')
+//						)
+//					);
+//
+//					while ($delPropModel = $deletablePropertiesStmt->fetch())
+//						$delPropModel->delete();
+//
+//					$deletedPropertiesPrefixes_nonGO[] = $currentPropName; // Keep track of prefixes for which we have deleted the properties.
+//				}
+//			}
+//			
+//			$propModel = GO_Addressbook_Model_ContactVcardProperty::model()->find(
+//				GO_Base_Db_FindParams::newInstance()
+//					->single()
+//					->criteria(
+//						GO_Base_Db_FindCriteria::newInstance()
+//							->addCondition('contact_id',$this->id)
+//							->addCondition('name',$prop['name'])
+//							->addCondition('parameters',$prop['parameters'])
+//					)
+//				);
+//			if (empty($propModel))
+//				$propModel = new GO_Addressbook_Model_ContactVcardProperty();
+//			$propModel->contact_id = $this->id;
+//			$propModel->name = $prop['name'];
+//			$propModel->parameters = $prop['parameters'];
+//			$propModel->value = $prop['value'];
+//			$propModel->cutAttributeLengths();
+//			$propModel->save();
+//		}
 		
 		return $this;
 	}
@@ -720,25 +720,25 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$e->add($p);	
 		}
 		
-		$propModels = $this->vcardProperties->fetchAll(PDO::FETCH_ASSOC);
-		
-		foreach ($propModels as $propModel) {
-			$p = new Sabre_VObject_Property($propModel['name'],$propModel['value']);
-			if(!empty($propModel['parameters'])){
-				$paramStrings = explode(';',$propModel['parameters']);
-				foreach ($paramStrings as $paramString) {
-					if(!empty($paramString)){
-						$paramStringArr = explode('=',$paramString);
-
-						$param = new GO_Base_VObject_Parameter($paramStringArr[0]);
-						if (!empty($paramStringArr[1]))
-							$param->value = $paramStringArr[1];
-						$p->add($param);
-					}
-				}
-			}
-			$e->add($p);
-		}
+//		$propModels = $this->vcardProperties->fetchAll(PDO::FETCH_ASSOC);
+//		
+//		foreach ($propModels as $propModel) {
+//			$p = new Sabre_VObject_Property($propModel['name'],$propModel['value']);
+//			if(!empty($propModel['parameters'])){
+//				$paramStrings = explode(';',$propModel['parameters']);
+//				foreach ($paramStrings as $paramString) {
+//					if(!empty($paramString)){
+//						$paramStringArr = explode('=',$paramString);
+//
+//						$param = new GO_Base_VObject_Parameter($paramStringArr[0]);
+//						if (!empty($paramStringArr[1]))
+//							$param->value = $paramStringArr[1];
+//						$p->add($param);
+//					}
+//				}
+//			}
+//			$e->add($p);
+//		}
 		
 		return $e;
 	}
