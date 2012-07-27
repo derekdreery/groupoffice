@@ -56,6 +56,7 @@
  * @property string $firstEmail Automatically returns the first filled in e-mail address.
  * @property GO_Addressbook_Model_Addressbook $addressbook
  * @property GO_Addressbook_Model_Company $company
+ * @property string $homepage
  */
 class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		

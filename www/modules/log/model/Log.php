@@ -1,4 +1,36 @@
 <?php
+/**
+ * Group-Office
+ * 
+ * Copyright Intermesh BV. 
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ * 
+ * @license AGPL/Proprietary http://www.group-office.com/LICENSE.TXT
+ * @link http://www.group-office.com
+ * @package GO.modules.log.model
+ * @version $Id: example.php 7607 20120101Z <<USERNAME>> $
+ * @copyright Copyright Intermesh BV.
+ * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
+ */
+ 
+/**
+ * The GO_Log_Model_Log model
+ *
+ * @package GO.modules.log.model
+ * @property int $user_id
+ * @property string $username
+ * @property string $model_id
+ * @property int $ctime
+ * @property string $user_agent
+ * @property string $ip
+ * @property string $controller_route
+ * @property string $action
+ * @property string $message
+ */
+
 class GO_Log_Model_Log extends GO_Base_Db_ActiveRecord {
 	
 	
