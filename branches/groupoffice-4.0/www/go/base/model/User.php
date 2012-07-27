@@ -131,7 +131,8 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 
 	public function relations() {
 		return array(
-				'contact' => array('type' => self::HAS_ONE, 'model' => 'GO_Addressbook_Model_Contact', 'field' => 'go_user_id')
+			'contact' => array('type' => self::HAS_ONE, 'model' => 'GO_Addressbook_Model_Contact', 'field' => 'go_user_id'),
+			'reminders' => array('type'=>self::MANY_MANY, 'model'=>'GO_Base_Model_Reminder', 'field'=>'user_id', 'linkModel' => 'GO_Base_Model_ReminderUser')
 		);
 	}
 	
