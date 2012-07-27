@@ -21,7 +21,7 @@ class GO_Summary_Controller_Announcement extends GO_Base_Controller_AbstractMode
 					GO_Base_Db_FindCriteria::newInstance()
 						->addCondition('due_time', 0, '=', 't', false)
 						->addCondition('due_time', mktime(0,0,0), '>=', 't', false)
-				);
+				)->order('id','DESC');
 		else
 			return GO_Base_Db_FindParams::newInstance()->select('t.*');
 	}
