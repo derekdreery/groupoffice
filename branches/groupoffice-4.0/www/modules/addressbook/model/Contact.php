@@ -630,6 +630,12 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		$e=new Sabre_VObject_Component('vcard');
 					
 		$e->add('VERSION','3.0');
+		
+		if(empty($this->uuid)){
+			$this->uuid=GO_Base_Util_UUID::create('contact', $this->id);
+			$this->save(true);
+		}
+		
 		$e->uid=$this->uuid;
 		$e->add('N',$this->last_name.";".$this->first_name.";".$this->middle_name.';'.$this->title.';'.$this->suffix);
 		$e->add('FN',$this->name);
