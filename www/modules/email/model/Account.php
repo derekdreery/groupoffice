@@ -40,6 +40,8 @@
  * @property int $id
  * 
  * @property boolean $hasNewMessages
+ * @property int $sieve_port
+ * @property boolean $sieve_tls
  */
 class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	
