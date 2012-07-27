@@ -19,8 +19,8 @@
 }
 
 .settings {
-    background-image:url( ../../../../ext/shared/icons/fam/folder_wrench.png ) !important;
+    background-image:url( ../../../../views/Extjs3/ext/shared/icons/fam/folder_wrench.png ) !important;
 }
 .nav {
-    background-image:url( ../../../../ext/shared/icons/fam/folder_go.png ) !important;
+    background-image:url( ../../../../views/Extjs3/ext/shared/icons/fam/folder_go.png ) !important;
 }
