@@ -19,6 +19,18 @@ invoke-rc.d apache2 reload > /dev/null || true
 
 php /usr/share/groupoffice-install-scripts/configure.php
 
+#cache dir is touched by root by this process
+if [ -e /home/groupoffice/cache ]; then
+	chown -R www-data:www-data /home/groupoffice/cache
+else
+	chown -R www-data:www-data /home/groupoffice
+fi
+
+#cache dir is touched by root by this process
+if [ -e /home/diskcache ]; then
+	chown -R www-data:www-data /home/diskcache
+fi
+
 #DEBHELPER#
 
 exit 0
