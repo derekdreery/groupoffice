@@ -316,6 +316,10 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$companyAttributes['addressbook_id'] = $attributes['addressbook_id'];
 		} 
 		
+		$uid = (string) $vobject->uid;
+		if(!empty($uid) && empty($attributes['uuid']))
+			$attributes['uuid'] = $uid;
+		
 		$emails = array();
 		$remainingVcardProps = array(); // format: $remainingVcardProps[$integer] = array('name'=>$vobjName, 'parameters'=>$vobjParams, 'value'=>$vobjValue)
 		$deletedPropertiesPrefixes_nonGO = array(); // This is to keep track of the prefixes occurring in the current VCard.
