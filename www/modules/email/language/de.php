@@ -209,7 +209,6 @@ $l['iCalendar_update_available']='Diese Nachricht enthält eine Aktualisierung e
 $l['iCalendar_update_old']='Diese Nachricht enthält einen Termin, der bereits verarbeitet wurde.';
 $l['iCalendar_event_cancelled']='Diese Nachricht enthält die Absage eines Termins.';
 $l['iCalendar_event_invitation_declined']='Diese Nachricht enthält einen Termin den sie abgelehnt haben.';
-
 $l["addUnknownSenders"]='Unbekannte Absender hinzufügen';
 $l["addUnknownSendersText"]='Sie fügen die ausgewählten Absenderadressen einer Adressliste hinzu. Zuvor müssen die gewählten Absender einem Group-Office-Adressbuch hinzugefügt werden. Klicken Sie auf einen Namen, wenn Sie die Person hinzufügen möchten oder schließen Sie dieses Fenster.';
 $l["emailFiles"]='Dateien versenden';
@@ -228,3 +227,4 @@ $l['xssMessageHidden']='Aus Sicherheitsgründen wurde die Nachricht verborgen';
 $l['failedRecipients']='Fehler beim Senden an';
 $l['ignoreSentFolder']='Speichere Antworten im gleichen Ordner wie die Originalnachicht';
 $l['sourceAndTargetSame']="Quell- und Zielmailbox scheinen nicht identisch zu sein";
+$l['subscribeFolders']='Ordner abonnieren';
