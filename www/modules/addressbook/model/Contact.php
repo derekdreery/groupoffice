@@ -212,6 +212,16 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		return parent::beforeSave();
 	}
 	
+	protected function afterDbInsert() {
+		if(empty($this->uuid)){
+			$this->uuid = GO_Base_Util_UUID::create('contact', $this->id);
+			return true;
+		}else
+		{
+			return false;
+		}
+	}
+	
 	private function _autoSalutation(){
 		if(empty($this->salutation)){
 			$tpl = $this->addressbook->default_salutation;
@@ -614,8 +624,9 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 */
 	public function toVObject(){
 		$e=new Sabre_VObject_Component('vcard');
-		
+					
 		$e->add('VERSION','3.0');
+		$e->uid=$this->uuid;
 		$e->add('N',$this->last_name.";".$this->first_name.";".$this->middle_name.';'.$this->title.';'.$this->suffix);
 		$e->add('FN',$this->name);
 		

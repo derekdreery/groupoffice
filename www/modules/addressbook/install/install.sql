@@ -114,6 +114,7 @@ CREATE TABLE IF NOT EXISTS `ab_companies` (
 DROP TABLE IF EXISTS `ab_contacts`;
 CREATE TABLE IF NOT EXISTS `ab_contacts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+	`uuid` VARCHAR( 255 ) NOT NULL DEFAULT '',
   `user_id` int(11) NOT NULL DEFAULT '0',
   `addressbook_id` int(11) NOT NULL DEFAULT '0',
   `first_name` varchar(50) NOT NULL,
@@ -155,7 +156,8 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
   KEY `email2` (`email2`),
   KEY `email3` (`email3`),
   KEY `last_name` (`last_name`),
-  KEY `go_user_id` (`go_user_id`)
+  KEY `go_user_id` (`go_user_id`),
+	KEY `uuid` (`uuid`),
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
 
 -- --------------------------------------------------------
