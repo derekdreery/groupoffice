@@ -8,6 +8,10 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
+ * @property int $user_id
+ * @property string $title
+ * @property string $url
+ * @property boolean $summary
  */
 
 class GO_Summary_Model_RssFeed extends GO_Base_Db_ActiveRecord {
@@ -19,6 +23,12 @@ class GO_Summary_Model_RssFeed extends GO_Base_Db_ActiveRecord {
 	
 	public function tableName(){
 		return 'su_rss_feeds';
+	}
+	
+	protected function init() {
+		
+		$this->columns['url']['gotype']='html';
+		return parent::init();
 	}
 	
 }
