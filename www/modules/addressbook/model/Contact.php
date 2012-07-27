@@ -713,7 +713,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 //		$rev->setDateTime($mtimeDateTime, Sabre_VObject_Element_DateTime::UTC);		
 //		$e->add($rev);
 		
-		$e->rev=gmdate("Y-m-d\TH:m:s\Z", $this->time);
+		$e->rev=gmdate("Y-m-d\TH:m:s\Z", $this->mtime);
 		
 		
 		if($this->photo){
