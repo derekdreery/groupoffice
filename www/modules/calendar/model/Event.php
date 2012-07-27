@@ -868,6 +868,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$this->start_time = $vobject->dtstart->getDateTime()->format('U');
 		$this->end_time = $vobject->dtend->getDateTime()->format('U');
 		
+		//TODO needs improving
+		if(isset($vobject->dtend['VALUE']) && $vobject->dtend['VALUE']=='DATE')
+			$this->end_time-=60;
+		
 		if((string) $vobject->rrule != ""){			
 			$rrule = new GO_Base_Util_Icalendar_Rrule();
 			$rrule->readIcalendarRruleString($this->start_time, (string) $vobject->rrule);			
