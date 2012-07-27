@@ -8,6 +8,12 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
+ * @property int $user_id
+ * @property int $due_time
+ * @property int $ctime
+ * @property int $mtime
+ * @property string $title
+ * @property string $content
  */
 
 class GO_Summary_Model_Announcement extends GO_Base_Db_ActiveRecord {

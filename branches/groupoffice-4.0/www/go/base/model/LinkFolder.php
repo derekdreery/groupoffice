@@ -18,6 +18,10 @@
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.model
+ * @property int $parent_id
+ * @property int $model_id
+ * @property int $model_type_id
+ * @property string $name
  */
 class GO_Base_Model_LinkFolder extends GO_Base_Db_ActiveRecord {
 
