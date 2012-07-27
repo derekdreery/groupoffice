@@ -242,3 +242,4 @@ $l['male']='Männlich';
 $l['female']='Weiblich';
 $l['importing']='Importieren';
 $l['unsubscribe']='Austragen';
+$l["sendingEmailAllowed"]= 'Das Senden von E-Mails an diese E-Mailadresse gestatten';
