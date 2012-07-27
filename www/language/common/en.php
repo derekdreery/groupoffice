@@ -572,3 +572,6 @@ $l['clickHereToDecrypt'] = 'Click here to decrypt and read the content.';
 $l['passwordSubmissionError']='An error occurred using the password. No changes have been made to this item. Please contact the administrator and specify the steps taken before this message occurred.';
 
 $l['pleaseEnterQuery']="Please enter a search query";
+
+$l['numMinValue']="The minimum value for this field is {0}";
+$l['numMaxValue']="The maximum value for this field is {0}";

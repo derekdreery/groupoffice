@@ -565,3 +565,6 @@ $l["fieldsetContact"]= 'Contactgegevens';
 $l["attributeGreater"]="Veld '%s' moet groter zijn dan'%s'";
 $l["attributeGreaterOrEqual"]="Veld '%s' moet groter of gelijk zijn aan '%s'";
 $l['pleaseEnterQuery']="Voer een zoekterm in a.u.b.";
+
+$l['numMinValue']="De minimale waarde voor dit veld is {0}";
+$l['numMaxValue']="De maximale waarde voor dit veld is {0}";
