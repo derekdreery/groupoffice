@@ -25,12 +25,12 @@ GO.form.NumberField = Ext.extend(Ext.form.TextField, {
 	/**
      * @cfg {String} minText Error text to display if the minimum value validation fails (defaults to "The minimum value for this field is {minValue}")
      */
-	minText : "The minimum value for this field is {0}",
+	minText : GO.lang.numMinValue,
     
 	/**
      * @cfg {String} maxText Error text to display if the maximum value validation fails (defaults to "The maximum value for this field is {maxValue}")
      */
-	maxText : "The maximum value for this field is {0}",
+	maxText : GO.lang.numMaxValue,
 	
 	/**
 		* @cfg {Number} minValue The minimum allowed value (defaults to Number.NEGATIVE_INFINITY)
