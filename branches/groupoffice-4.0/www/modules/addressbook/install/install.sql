@@ -157,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
   KEY `email3` (`email3`),
   KEY `last_name` (`last_name`),
   KEY `go_user_id` (`go_user_id`),
-	KEY `uuid` (`uuid`),
+	KEY `uuid` (`uuid`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
 
 -- --------------------------------------------------------
