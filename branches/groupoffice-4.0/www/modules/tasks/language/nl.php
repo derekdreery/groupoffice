@@ -3,7 +3,6 @@
 
 $l['name']='Taken';
 $l['description']='Taken module';
-$l['task']='Taak';
 $l['status']='Status';
 $l['scheduled_call']='Telefoongesprek gepland op %s';
 $l['statuses']['NEEDS-ACTION']='Actie nodig';
@@ -20,7 +19,7 @@ $l['list']='Takenlijst';
 $l['tasklistChanged']="* Takenlijst is veranderd van '%s' naar '%s'";
 $l['statusChanged']="* Status is veranderd van'%s' naar '%s'";
 $l['multipleSelected']='Meerdere takenlijsten geselecteerd';
-$l['incomplete_delete']='U heeft niet voldoende rechten om alle geselecteerde taken te verwijderen';$l["task"]= 'Taak';
+$l['incomplete_delete']='U heeft niet voldoende rechten om alle geselecteerde taken te verwijderen';
 $l["noTask"]= 'Geen taken om weer te geven';
 $l["tasks"]= 'Taken';
 $l["addTask"]= 'Taak toevoegen...';
