@@ -973,6 +973,8 @@ class GO_Base_Config {
 				$this->cmd_unzip=$this->root_path.'controls/win32/unzip.exe';
 				$this->cmd_xml2wbxml=$this->root_path.'controls/win32/libwbxml/xml2wbxml.exe';
 				$this->cmd_wbxml2xml=$this->root_path.'controls/win32/libwbxml/wbxml2xml.exe';
+				
+				$this->convert_utf8_filenames_to_ascii=true;
 			}
 
 			if(empty($config['tmpdir']) && function_exists('sys_get_temp_dir')) {
