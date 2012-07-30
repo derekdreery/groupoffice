@@ -16,6 +16,8 @@ dbc_go groupoffice-com $@
 
 invoke-rc.d apache2 reload > /dev/null || true
 
+#Don't exit on error because samba share might cause problems
+set +e
 
 php /usr/share/groupoffice-install-scripts/configure.php
 
@@ -27,8 +29,8 @@ else
 fi
 
 #cache dir is touched by root by this process
-if [ -e /home/diskcache ]; then
-	chown -R www-data:www-data /home/diskcache
+if [ -e /tmp/diskcache ]; then
+	chown -R www-data:www-data /tmp/diskcache
 fi
 
 #DEBHELPER#
