@@ -3,7 +3,7 @@
 
 $l['name']='Taken';
 $l['description']='Taken module';
-$lang['link_type'][12]=$l['task']='Taak';
+$l['task']='Taak';
 $l['status']='Status';
 $l['scheduled_call']='Telefoongesprek gepland op %s';
 $l['statuses']['NEEDS-ACTION']='Actie nodig';
