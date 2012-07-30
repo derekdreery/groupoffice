@@ -1096,7 +1096,9 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$folder = GO_Files_Model_Folder::model()->findByPk($params['folder_id']);
 		
 		
+		$params['filename'] = GO_Base_Fs_File::stripInvalidChars($params['filename']);
 		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.$folder->path.'/'.$params['filename']);
+		
 		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
 		$imap = $account->openImapConnection($params['mailbox']);
