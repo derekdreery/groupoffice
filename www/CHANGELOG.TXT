@@ -1,3 +1,8 @@
+30-07-2012 4.0.78
+- Bug in install.sql of addressbook that made new installations fail.
+- Bug in Hungarian language files
+- Bug in monthly recurring event.
+
 27-07-2012 4.0.77
 - Updated German
 - CardDAV didn't work on the Mac
