@@ -192,6 +192,20 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	/**
 	 * Create the new group for this installation
 	 * 
+	 * Example array for in the config file.
+	 * 
+	 * $config['servermanager_auto_groups']=array(
+	 *	'Group1'=>array(
+	 *		'modules_read'=>'addressbook,calendar',
+	 *		'modules_manage'=>'tickets'
+	 *	),
+	 *	'Group2'=>array(
+	 *		'modules_read'=>'addressbook',
+	 *		'modules_manage'=>'tickets,calendar'
+	 *	)
+	 * );
+	 * 
+	 * 
 	 * @param string $name The name of the new group
 	 * @param array $permissions Array of permission options for the group
 	 */
