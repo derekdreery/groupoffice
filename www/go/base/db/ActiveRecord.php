@@ -548,18 +548,28 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$origValue = $value =  $this->$attributeName;
 
-		while($existing = $this->findSingle(array(
-				'criteriaObject'=>  GO_Base_Db_FindCriteria::newInstance()
-					->addModel(GO::getModel($this->className()))
-					->addCondition($attributeName, $value)
-					->addCondition($this->primaryKey(), $this->pk, '!=')
-		)))
-		{			
-			
-			$value = $origValue.' ('.$x.')';
+		while ($existing = $this->_findExisting($attributeName, $value)) {
+
+			$value = $origValue . ' (' . $x . ')';
 			$x++;
 		}
 		$this->$attributeName=$value;
+	}
+	
+	private function _findExisting($attributeName, $value){
+		
+		$criteria = GO_Base_Db_FindCriteria::newInstance()
+										->addModel(GO::getModel($this->className()))
+										->addCondition($attributeName, $value);
+		
+		if($this->pk)
+			$criteria->addCondition($this->primaryKey(), $this->pk, '!=');
+		
+		$existing = $this->findSingle(GO_Base_Db_FindParams::newInstance()
+						->debugSql()
+						->criteria($criteria));
+		
+		return $existing;
 	}
 	
 	private $_permissionLevel;
