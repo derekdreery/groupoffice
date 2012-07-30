@@ -276,9 +276,12 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 						this.gotaButton.show();
 					this.decompressButton.show();
 					this.compressButton.hide();
-					this.downloadLinkButton.show();
+					if(this.downloadLinkButton)
+						this.downloadLinkButton.show();
 					this.createDownloadLinkButton.show();
-					this.emailFilesButton.show();
+					
+					if(this.emailFilesButton)
+						this.emailFilesButton.show();
 					break;
 
 				case '':
@@ -288,16 +291,20 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 							this.gotaButton.hide();
 						this.decompressButton.hide();
 						this.compressButton.show();
-						this.downloadLinkButton.hide();
+						if(this.downloadLinkButton)
+							this.downloadLinkButton.hide();
 					} else {
 						this.downloadButton.show();
 						if(this.gotaButton)
 							this.gotaButton.show();
 						this.decompressButton.show();
 						this.compressButton.hide();
-						this.downloadLinkButton.show();
+						if(this.downloadLinkButton)
+							this.downloadLinkButton.show();
 						this.createDownloadLinkButton.show();
-						this.emailFilesButton.show();
+						
+						if(this.emailFilesButton)
+							this.emailFilesButton.show();
 					}
 					break;
 				case 'folder':
@@ -308,9 +315,15 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 						this.gotaButton.hide();
 					this.decompressButton.hide();
 					clickedAt == 'tree' ? this.compressButton.hide() : this.compressButton.show();
-					this.downloadLinkButton.hide();
+					
+					if(this.downloadLinkButton)
+						this.downloadLinkButton.hide();
+					
+					
 					this.createDownloadLinkButton.hide();
-					this.emailFilesButton.hide();
+					
+					if(this.emailFilesButton)
+						this.emailFilesButton.hide();
 
 					break;
 
@@ -347,11 +360,15 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 			this.downloadButton.hide();
 			this.createDownloadLinkButton.hide();
 
-			this.emailFilesButton.show();
+			if(this.emailFilesButton)
+				this.emailFilesButton.show();
 
 			Ext.each(this.records, function(record) {
 				if (record.data.extension == 'folder') {
-					this.emailFilesButton.hide();
+					
+					if(this.emailFilesButton)
+						this.emailFilesButton.hide();
+					
 					return false;
 				}
 			}, this);
