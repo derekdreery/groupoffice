@@ -78,7 +78,7 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 						'id',
 						'displayText'
 				],
-				data: [['H', 'Horizontaal'], ['V', 'Verticaal']]
+				data: [['H', GO.lang.landscape], ['V', GO.lang.portrait]]
 			}),
 			valueField: 'id',
 			displayField: 'displayText'
