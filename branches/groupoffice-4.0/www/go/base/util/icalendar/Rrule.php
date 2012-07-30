@@ -44,6 +44,8 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		
 		$parameters['interval'] = intval($json['interval']);
 		$parameters['freq'] = strtoupper($json['freq']);
+		if($parameters['freq']=='MONTHLY_DATE')
+			$parameters['freq']='MONTHLY';
 		$parameters['eventstarttime'] = isset($json['eventstarttime'])?strtotime($json['eventstarttime']):strtotime($json['start_time']);
 		$parameters['until'] = empty($json['repeat_forever']) && isset($json['until']) ? GO_Base_Util_Date::to_unixtime($json['until'].' '.date('G', $parameters['eventstarttime']).':'.date('i', $parameters['eventstarttime'])) : '';
 		$parameters['bymonth'] = isset($json['bymonth'])?$json['bymonth']:'';
@@ -92,7 +94,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 			case 'MONTHLY':				
 				if($this->_bymonthday){
 					$rrule .= ';BYMONTHDAY='.date('j', $this->_eventstarttime);
-				}else
+				}elseif (!empty($this->_byday))
 				{
 					if(!empty($this->_bysetpos))
 						$rrule .= ";BYSETPOS=".$this->_bysetpos;
@@ -330,6 +332,9 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 						foreach($days as $day)
 							$response[$day]=1;						
 					} 
+					
+					if($this->bysetpos==0)
+						$response['freq']='MONTHLY_DATE';
 					break;
 			}
 		}
