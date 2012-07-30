@@ -1,17 +1,14 @@
 <?php
-
-﻿;
 $l['name'] = 'Adresar';
 $l['description'] = 'Modul za upravljanje kontaktima.';
 $l['allAddressbooks'] = 'Svi adresari';
-$lang['common']['addressbookAlreadyExists'] = 'Adresar koji želite napraviti već postoji';
 $l['notIncluded'] = 'Nemoj uvoziti';
 $l['comment'] = 'Komentar';
 $l['bankNo'] = 'Bankovni račun'; ;
 $l['vatNo'] = 'OIB broj';
 $l['contactsGroup'] = 'Grupa';
-$lang['link_type'][2]=$l['contact'] = 'Kontakt';
-$lang['link_type'][3]=$l['company'] = 'Tvrtka';
+$l['contact'] = 'Kontakt';
+$l['company'] = 'Tvrtka';
 $l['customers'] = 'Kupci';
 $l['suppliers'] = 'Dobavljači';
 $l['prospects'] = 'Potencijalni';
@@ -29,7 +26,6 @@ $l['incomplete_delete_companies']='Nemate odobrenje da obrišete sve odabrane tv
 $l['emailAlreadyExists']='E-mail adresa je već dodana ovom kontaktu';
 $l['emailDoesntExists']='E-mail adresa nije pronađena';
 $l['imageNotSupported']='Slika koju ste prenjeli nije podržana. Samo gif, png i jpg slike su podržane.';
-﻿;
 $l["newSearch"]='Nova pretraga';
 $l["executeQuery"]='Pokreni traženi upit';
 $l["savedQueries"]='Sačuvani upiti za traženje';
