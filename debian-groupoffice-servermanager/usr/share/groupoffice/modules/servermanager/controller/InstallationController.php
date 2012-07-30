@@ -171,7 +171,70 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 
 		if($return_var!=0)
 			throw new Exception(implode("\n", $output));
+		
+		// Create the groups for this installation that are given in the config file.
+		if(!empty(GO::config()->servermanager_auto_groups)){
+			GO::setDbConnection(
+							$config['db_name'], 
+							$config['db_user'], 
+							$config['db_pass'], 
+							$config['db_host']
+							);
+			
+			foreach(GO::config()->servermanager_auto_groups as $group=>$permissions){
+				$this->_createGroup($group, $permissions);
+			}
+
+			GO::setDbConnection();
+		}
 	}
+	
+	/**
+	 * Create the new group for this installation
+	 * 
+	 * @param string $name The name of the new group
+	 * @param array $permissions Array of permission options for the group
+	 */
+	private function _createGroup($name,$permissions){
+		$group = new GO_Base_Model_Group();
+		$group->name = $name;
+
+		if($group->save()){
+			if(!empty($permissions['modules_read']))
+				$this->_setGroupRights($group,$permissions['modules_read'], 'read');
+			
+			if(!empty($permissions['modules_manage']))
+				$this->_setGroupRights($group,$permissions['modules_manage'],'manage');
+		}
+	}
+	
+	/**
+	 * Set the rights for the created group.
+	 * 
+	 * @param GO_Base_Model_Group $group The group to set the rights for.
+	 * @param string $modules A comma separated string with the module names.
+	 * @param string $type Permission type, possible values: 'read','manage' defaults to 'read'.
+	 */
+	private function _setGroupRights($group,$modules,$type='read'){
+		$modules =  explode(',',$modules);
+		
+		$permission = GO_Base_Model_Acl::READ_PERMISSION;
+		
+		switch($type){
+			case 'manage':		
+				$permission = GO_Base_Model_Acl::MANAGE_PERMISSION;
+			break;
+			case 'read':
+			default:
+				$permission = GO_Base_Model_Acl::READ_PERMISSION;
+		}
+		
+		foreach($modules as $moduleName){
+			if(GO::modules()->$moduleName)
+				GO::modules()->$moduleName->acl->addGroup($group->id,$permission);
+		}
+	}
+	
 	
 	private function _createFolderStructure($config, $installation){
 		
