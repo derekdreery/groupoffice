@@ -93,8 +93,11 @@ system('/usr/bin/php '.$config['root_path'].'groupofficecli.php -r=maintenance/u
 
 echo "Setting cache permissions\n\n";
 
-system('chown -R www-data:www-data '.GO::config()->tmpdir.'cache');
-system('chown -R www-data:www-data '.GO::config()->tmpdir.'diskcache');
+if(is_dir($config['tmpdir'].'cache'))
+	system('chown -R www-data:www-data '.$config['tmpdir'].'cache');
+
+if(is_dir($config['tmpdir'].'cache'))
+	system('chown -R www-data:www-data '.$config['tmpdir'].'diskcache');
 
 echo "Done!\n\n";
 ?>
