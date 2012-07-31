@@ -339,6 +339,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	 * @return boolean
 	 */
 	protected function actionSend($params) {
+		
+		GO::session()->closeWriting();
 
 		$response['success'] = true;
 		$response['feedback']='';
