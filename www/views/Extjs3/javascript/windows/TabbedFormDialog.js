@@ -328,6 +328,9 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	show : function (remoteModelId, config) {
 		
 		config = config || {};
+				
+		if(!config.loadParams)
+			config.loadParams={};
 		
 		this.showConfig = config;
 		
