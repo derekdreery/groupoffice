@@ -37,9 +37,8 @@ GO.email.AccountDialog = function(config) {
 			})
 		);
 		advancedItems.push(
-			new Ext.form.Checkbox({
+			new Ext.ux.form.XCheckbox({
 				boxLabel: GO.sieve.lang.useTLS,
-				labelSeparator: '',
 				checked:GO.sieve.sieveTls,
 				name: 'sieve_usetls',
 				allowBlank: true,
@@ -113,7 +112,7 @@ GO.email.AccountDialog = function(config) {
 				},
 				scope : this
 			}
-		}),sslCb = new Ext.form.Checkbox({
+		}),sslCb = new Ext.ux.form.XCheckbox({
 				fieldLabel : GO.email.lang.ssl,
 				name : 'use_ssl',
 				checked : false
@@ -348,7 +347,10 @@ GO.email.AccountDialog = function(config) {
 	this.propertiesPanel = new Ext.form.FormPanel({
 		url : GO.url("email/account/submit"),
 		// labelWidth: 75, // label settings here cascade unless
-		// overridden
+		// overridden,
+		baseParams:{
+			ajax:true
+		},
 		defaults:{forceLayout:true},
 		defaultType : 'textfield',
 		waitMsgTarget : true,
