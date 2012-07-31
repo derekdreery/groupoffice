@@ -43,17 +43,13 @@ class GO_Base_Export_ExportPDF extends GO_Base_Export_AbstractExport {
 	public function output(){
 		
 		$html = '<table border="1" cellspacing="0" cellpadding="2">';
-		
-//		if($this->header) {
-//			$this->header = true;
-//			$html .= $this->_write(array_values($this->getLabels()));
-//		}
-		if($this->header){
-			$this->header = true;
+	
+		if($this->header)
+		{
 			if($this->humanHeaders)
-				$this->_write(array_values($this->getLabels()));
+				$html .= $this->_write(array_values($this->getLabels()));
 			else
-				$this->_write(array_keys($this->getLabels()));
+				$html .= $this->_write(array_keys($this->getLabels()));
 		}
 		
 		
