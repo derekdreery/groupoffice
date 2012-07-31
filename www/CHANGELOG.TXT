@@ -1,3 +1,7 @@
+30-07-2012 4.0.82
+- Sync only selected addressbooks and calendars with CalDAV and CardDAV
+- Small bug fixes
+
 30-07-2012 4.0.81
 - Fixed file system permissions issue.
 
