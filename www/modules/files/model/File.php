@@ -39,6 +39,9 @@
  * @property GO_Base_Model_User $lockedByUser
  */
 class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
+	
+	
+	public static $deleteInDatabaseOnly=false;
 
 	/**
 	 * Returns a static model of itself
@@ -317,7 +320,8 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		
 		$this->_removeQuota();
 		
-		$this->fsFile->delete();
+		if(!GO_Files_Model_File::$deleteInDatabaseOnly)			
+			$this->fsFile->delete();
 		
 		$versioningFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'versioning/'.$this->id);
 		$versioningFolder->delete();
