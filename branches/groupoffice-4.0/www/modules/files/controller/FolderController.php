@@ -3,6 +3,8 @@
 class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelController {
 
 	protected $model = 'GO_Files_Model_Folder';
+	
+	
 
 	protected function allowGuests() {
 		if($this->isCli())
@@ -20,11 +22,21 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		ini_set('max_execution_time', '0');
 		GO::session()->closeWriting();
 
-		$folders = array('users','projects','addressbook','billing','notes','tickets');
+		$folders = array('users','projects','addressbook','notes','tickets');
+		
+		$billingFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'billing');
+		if($billingFolder->exists()){
+			$bFolders = $billingFolder->ls();
+
+			foreach($bFolders as $folder){
+				if($folder->isFolder() && $folder->name()!='notifications'){
+					$folders[]=$folder->name();
+				}
+			}		
+		}
 
 		echo "<pre>";
 		foreach($folders as $name){
-
 			echo "Syncing ".$name."\n";
 
 			$folder = GO_Files_Model_Folder::model()->findByPath($name, true);
@@ -34,16 +46,19 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		echo "Done\n";
 
 		GO_Base_Fs_File::setAllowDeletes($oldAllowDeletes);
-//      $folders = array('billing','email');
-//
-//      foreach($folders as $name){
-//
-//          echo "Deleting ".$name."\n";
-//
-//          $folder = GO_Files_Model_Folder::model()->findByPath($name);
-//          if($folder)
-//              $folder->delete();
-//      }
+		$folders = array('email', 'billing/notifications');
+
+		foreach($folders as $name){
+
+				echo "Deleting ".$name."\n";
+				
+				GO_Files_Model_Folder::$deleteInDatabaseOnly=true;
+				GO_Files_Model_File::$deleteInDatabaseOnly=true;
+
+				$folder = GO_Files_Model_Folder::model()->findByPath($name);
+				if($folder)
+						$folder->delete();
+		}
 	}
 
 	private function _getExpandFolderIds($params){
