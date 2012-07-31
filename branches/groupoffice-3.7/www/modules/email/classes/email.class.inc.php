@@ -473,7 +473,7 @@ class email extends db {
 					$account['password_encrypted']=2;
 				}
 				
-				$this->insert_row('em_accounts', $account);
+				$this->insert_row('em_accounts', $account, "", false);
 
 				$this->_synchronize_folders($account, $mailboxes, $subscribed);
 
@@ -544,7 +544,7 @@ class email extends db {
 			if(isset($account['signature']))
 				$alias['signature']=$account['signature'];
 
-			$this->update_row('em_aliases',array('account_id', 'default'), $alias);
+			$this->update_row('em_aliases',array('account_id', 'default'), $alias,"",false);
 
 			unset($account['name'],$account['email'],$account['signature']);
 		}
@@ -655,11 +655,11 @@ class email extends db {
 			$password_encrypted=2;
 		}
 
-		$sql = "UPDATE em_accounts SET password='".$this->escape($password).
+		$sql = "UPDATE em_accounts SET password='".$this->escape($password, false).
 						"', password_encrypted=$password_encrypted ";
 		
 		if($smtp_password_too){
-			$sql .= ", smtp_password='".$this->escape($plain_password)."'";
+			$sql .= ", smtp_password='".$this->escape($plain_password, false)."'";
 		}		
 		
 		$sql.=	"WHERE username='".$this->escape($username)."' ".
