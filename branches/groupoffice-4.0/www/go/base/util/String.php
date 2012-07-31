@@ -662,7 +662,7 @@ class GO_Base_Util_String {
 					return $temp = $substrFunc($string, 0, $maxlength).$append;
 				}
 			} else {
-				return $temp.'...';
+				return $temp.$append;
 			}
 
 		} else {
