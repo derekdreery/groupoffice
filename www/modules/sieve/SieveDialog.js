@@ -79,7 +79,7 @@ GO.sieve.SieveDialog = function(config) {
 				fieldLabel:GO.sieve.lang.activateFilter
 			},
 			this.rgMethod,
-			this.criteriaLabel = new Ext.form.Label({text: '...'+GO.sieve.lang.meetingTheseCriteria+':',	width:'100%',	style: 'padding-bottom: 10px; font-weight:bold;'}),
+			this.criteriaLabel = new Ext.form.Label({text: '...'+GO.sieve.lang.meetingTheseCriteria+':',	width:'100%',	style: 'padding-bottom: 10px; font-weight:bold;'})
 		]
 	});
 
