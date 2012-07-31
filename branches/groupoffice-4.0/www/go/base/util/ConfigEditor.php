@@ -9,7 +9,9 @@ class GO_Base_Util_ConfigEditor {
 				$configData .= '$config["' . $key . '"]=true;' . "\n";
 			} elseif ($value === false) {
 				$configData .= '$config["' . $key . '"]=false;' . "\n";
-			} else {
+			} else if(is_array($value)) {
+				$configData .= '$config["' . $key . '"]=' . var_export($value,true).';' . "\n";
+			}else{
 				$configData .= '$config["' . $key . '"]="' . $value . '";' . "\n";
 			}
 		}
