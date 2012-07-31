@@ -12,9 +12,9 @@
  * The GO_Tasks_Controller_Category controller
  *
  * @package GO.modules.Tasks
- * @version $Id: GO_Tasks_Controller_Category.php 7607 2011-09-20 10:07:50Z <<USERNAME>> $
+ * @version $Id: GO_Tasks_Controller_Category.php 7607 2011-09-20 10:07:50Z wsmits $
  * @copyright Copyright Intermesh BV.
- * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
+ * @author Wesley Smits wsmits@intermesh.nl
  */
 
 class GO_Tasks_Controller_Category extends GO_Base_Controller_AbstractModelController{
@@ -35,6 +35,17 @@ class GO_Tasks_Controller_Category extends GO_Base_Controller_AbstractModelContr
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
 		$columnModel->formatColumn('user_name','$model->user ? $model->user->name : GO::t("globalCategory","tasks")');
 		return parent::formatColumns($columnModel);
+	}
+	
+	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store,  GO_Base_Db_FindParams $storeParams) {
+	
+		$storeParams->criteria(
+			GO_Base_Db_FindCriteria::newInstance()
+						->addCondition('user_id', GO::user()->id)
+						->addCondition('user_id', 0, '=', 't', false)
+		);
+		
+		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
 	}
 	
 	
