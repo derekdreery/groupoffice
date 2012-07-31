@@ -402,8 +402,24 @@ GO.email.EmailClient = function(config){
 			}
 //		}
 	}, this);
+	
+	this.treePanel.on('click',function(node){
+		var selectedNode = this.treePanel.getSelectionModel().getSelectedNode();
+		
+		if(node.id==selectedNode.id){
+			var usage='';
 
-
+				var inboxNode =this.treePanel.findInboxNode(node);
+				if(inboxNode)
+					usage=inboxNode.attributes.usage;
+				
+			this.setAccount(
+				node.attributes.account_id,
+				node.attributes.mailbox,
+				usage
+				);
+		}
+	}, this);
 
 	this.searchDialog = new GO.email.SearchDialog({
 		store:this.messagesGrid.store
