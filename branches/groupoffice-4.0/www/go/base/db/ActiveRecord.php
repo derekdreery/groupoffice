@@ -2039,8 +2039,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 			if($this->aclField() && !$this->joinAclField && empty($this->{$this->aclField()})){
 				//generate acl id				
-
-				$this->setNewAcl(!empty($this->user_id) ? $this->user_id : 1);
+				if(!empty($this->user_id))
+					$this->setNewAcl($this->user_id);
+				else
+					$this->setNewAcl(GO::user() ? GO::user()->id : 1);
 			}				
 			
 			if ($this->hasFiles() && GO::modules()->isInstalled('files')) {
