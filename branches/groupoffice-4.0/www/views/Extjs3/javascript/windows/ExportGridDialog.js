@@ -124,15 +124,15 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 			items: [this.formPanel],
 			buttons:[
 			{ 
-				text: GO.lang['cmdClose'], 
-				handler: function(){ 
-					this.hide(); 
-				}, 
-				scope: this 
-			},{ 
 				text: GO.lang['cmdExport'], 
 				handler: function(){ 
 					this.submitForm(true);
+				}, 
+				scope: this 
+			},{ 
+				text: GO.lang['cmdClose'], 
+				handler: function(){ 
+					this.hide(); 
 				}, 
 				scope: this 
 			}]
