@@ -456,6 +456,18 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 				})]
 			});
 
+			this.deleteCategoryButton = new Ext.Button({
+				iconCls: 'btn-delete',
+				text: GO.lang['cmdDelete'],
+				cls: 'x-btn-text-icon',
+				//disabled: !GO.settings.modules.tasks.write_permission,
+				handler: function(){
+					this.categoriesGrid.deleteSelected();
+				},
+				scope:this
+			});
+
+
 			this.categoriesGrid = new GO.grid.GridPanel( {
 				paging:true,
 				border:false,
@@ -487,20 +499,26 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 					handler: function(){
 						this.categoryDialog.show();
 					},
-					disabled: !GO.settings.modules.tasks.write_permission,
+					//disabled: !GO.settings.modules.tasks.write_permission,
 					scope: this
-				},{
-					iconCls: 'btn-delete',
-					text: GO.lang['cmdDelete'],
-					cls: 'x-btn-text-icon',
-					disabled: !GO.settings.modules.tasks.write_permission,
-					handler: function(){
-						this.categoriesGrid.deleteSelected();
-					},
-					scope:this
-				}]
+				},
+				this.deleteCategoryButton
+			]
 			});
 			
+			this.categoriesGridSelectionModel = this.categoriesGrid.getSelectionModel();
+			this.categoriesGridSelectionModel.on("selectionchange", function(selModel){
+				var disabled = false;
+				if(!GO.settings.modules.tasks.write_permission){
+					var selectedRows = selModel.getSelections();
+					for (var i = 0; i < selectedRows.length; i++) {
+						if(selectedRows[i].data.user_id != GO.settings.user_id && disabled !=true)
+							disabled = true;
+					}
+				}
+				this.deleteCategoryButton.setDisabled(disabled);
+			}, this);
+
 			this.tasklistsGrid.on("rowdblclick", function(grid, rowClicked, e){
 
 				this.tasklistDialog.show(grid.selModel.selections.keys[0]);
