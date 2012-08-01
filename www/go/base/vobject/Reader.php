@@ -285,6 +285,9 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 			$data = str_replace("=\n", "=",$data);
 		}
 		
+		//workaround for funambol bug		
+		$data = str_replace('EXDATE: ', 'EXDATE:', $data);
+		
 		return parent::read($data);
 	}
 	

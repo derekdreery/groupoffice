@@ -213,7 +213,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 
 				case 'W':
 					$this->_freq = 'WEEKLY';
-					$this->_byday = implode(',', $expl_rrule);
+					$this->_byday = $expl_rrule;
 					break;
 
 				case 'MP':
@@ -226,7 +226,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 					  } */
 					$month_time = array_shift($expl_rrule);
 					//todo negative month times
-					$this->_byday = substr($month_time, 0, strlen($month_time) - 1) . array_shift($expl_rrule);
+					$this->_byday = array(substr($month_time, 0, strlen($month_time) - 1) . array_shift($expl_rrule));
 					break;
 
 				case 'MD':

@@ -20,7 +20,7 @@
  * @property int $until Recurrence end date
  * @property string $freq Recurrence type. DAILY, WEEKLY, MONTHLY and YEARLY
  * @property int $interval Repeats every n days/weeks/months/years
- * @property array $byday Day to occur with monthly recurrence
+ * @property array $byday Day to occur with monthly recurrence.  eg. array('MO','WE') OR array('1MO') in case of the first monday
  * @property array $bymonth Month to occur with yearly recurrence
  * @property int $bymonthday The day of the mont
  * @property int $eventStartTime Start time of the event
