@@ -67,8 +67,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$model->setAttributes($params);
 
 			$modifiedAttributes = $model->getModifiedAttributes();
-			try{
-				$response['success'] = $model->save();
+			if($model->save() ){
+				$response['success'] = true; //$model->save();
 
 				$response['id'] = $model->pk;
 
@@ -120,10 +120,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 					$modifiedAttributes
 			));
 
-			}catch(GO_Base_Exception_Validation $e){
+			}else{
 				$response['success']=false;
 				//can't use <br /> tags in response because this goes wrong with the extjs fileupload hack with an iframe.
-				$response['feedback']=$e->getMessage();			
+				$response['feedback']=sprintf(GO::t('validationErrorsFound'),strtolower($model->localizedName))."\n\n" . implode("\n", $model->getValidationErrors())."\n";			
 				$response['validationErrors']=$model->getValidationErrors();
 			}	
 		}
