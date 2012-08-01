@@ -533,3 +533,4 @@ $l['passwordConfirm']= 'Kennwortbestätigung';
 $l['decryptContent']= 'Entschlüsselter Inhalt';
 $l['clickHereToDecrypt']= 'Klicken Sie hier, um den Inhalt zu entschlüsseln und zu lesen.';
 $l['passwordSubmissionError']='Bei der Verwendung des Kennwortes ist ein Fehler aufgetreten. An diesem Eintrag wurden keine Veränderungen vorgenommen. Wenden Sie sich bitte an den Administrator und teilen Ihm mit, was Sie getan haben, bevor diese Meldung erschien.';
+$l['pleaseEnterQuery']="Geben Sie bitte einen Suchbegriff ein";
