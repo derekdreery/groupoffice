@@ -1094,15 +1094,27 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				var actionData = {};
 
 				//do last because orginal times will be lost after this.
+//				var event = this.elementToEvent(this.clickedEventId);
+//
+//				if(this.remoteEvents[this.clickedEventId]['repeats'] && this.writePermission)
+//				{
+//					this.handleRecurringEvent("eventDblClick", event, actionData);
+//				}else
+//				{
+//					this.fireEvent("eventDblClick", this, event, actionData);
+//				}
+//				
 				var event = this.elementToEvent(this.clickedEventId);
 
-				if(this.remoteEvents[this.clickedEventId]['repeats'] && this.writePermission)
-				{
-					this.handleRecurringEvent("eventDblClick", event, actionData);
-				}else
-				{
-					this.fireEvent("eventDblClick", this, event, actionData);
-				}
+					if(event['repeats'] && this.writePermission)
+					{
+						this.handleRecurringEvent("eventDblClick", event, {});
+					}else
+					{
+						this.fireEvent("eventDblClick", this, event, {
+							singleInstance : this.writePermission
+							});
+					}
 			}, this);
 			
 			
