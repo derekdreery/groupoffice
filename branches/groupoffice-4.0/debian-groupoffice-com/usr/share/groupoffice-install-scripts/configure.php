@@ -99,5 +99,11 @@ if(is_dir($config['tmpdir'].'cache'))
 if(is_dir($config['tmpdir'].'cache'))
 	system('chown -R www-data:www-data '.$config['tmpdir'].'diskcache');
 
+
+system('chown www-data:www-data '.$config['file_storage_path']);
+system('chown www-data:www-data '.$config['file_storage_path'].'*');
+if(is_dir($config['file_storage_path'].'cache'))
+	system('chown -R www-data:www-data '.$config['file_storage_path'].'cache');
+
 echo "Done!\n\n";
 ?>
