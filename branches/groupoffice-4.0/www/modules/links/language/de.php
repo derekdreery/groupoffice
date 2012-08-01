@@ -7,7 +7,7 @@ $l["defaultLinkFolderText"]='Hier eingetragene Ordner werden automatisch angeleg
 $l["linkFolders"]='Standard Ordnerverknüpfungen';
 $l["link"]='Verknüpfung';
 
-$l['name']='Beschreibung von Verknuepfungen';
-$l['description']='Modul zum Festlegen von Standardbeschreibungen fuer Verknuepfungen';
+$l['name']='Beschreibung von Verknüpfungen';
+$l['description']='Modul zum Festlegen von Standardbeschreibungen für Verknüpfungen';
 $l['link_description']='Beschreibung';
 $l['link_descriptions']='Beschreibungen';

@@ -106,4 +106,5 @@ $l['notifyFileRename']= 'Datei %s wurde in %s durch %s umbenannt';
 $l['notifyFileMove']= 'Datei %s wurde nach %s durch %s verschoben';
 $l['notifyFileDelete']= 'Datei %s wurde durch %s gelöscht';
 $l['notifyFileUpdate']= 'Datei %s wurde durch %s aktualisiert';
-$l['downloadLinkExpired']= "Sorry, der Downloadlink für diese Datei ist abgelaufen";
+$l['downloadLinkExpired']= "Der Downloadlink für diese Datei ist abgelaufen";
+$l['notificationEmailSubject']= 'Änderungen im Ordner';
