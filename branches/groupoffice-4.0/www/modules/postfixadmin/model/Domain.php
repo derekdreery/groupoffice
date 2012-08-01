@@ -92,7 +92,7 @@ class GO_Postfixadmin_Model_Domain extends GO_Base_Db_ActiveRecord {
 						->addCondition('domain_id',$this->id)
 				)
 		);
-		return $activeRecord->sum_used_quota;
+		return isset($activeRecord->sum_used_quota) ? $activeRecord->sum_used_quota : 0;
 	}
 	
 	public function getSumMailboxes() {
