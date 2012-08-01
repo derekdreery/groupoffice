@@ -1,1 +1,0 @@
-GO.freebusypermission.lang.freebusyPermissions='Toegangsrechten voor beschikbaarheid';
