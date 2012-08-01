@@ -224,6 +224,9 @@ try
 			$limit = !empty($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 
 			$user_id = $GO_MODULES->modules['mailings']['write_permission'] ? 0 : $GO_SECURITY->user_id;
+			
+			if($sort=="user_name")
+				$sort="ctime";
 
 
 			$response['total'] = $ml->get_mailings($_POST['mailing_group_id'],$user_id, $start, $limit, $sort, $dir);

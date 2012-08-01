@@ -86,7 +86,8 @@ GO.mailings.SentMailingsGrid = function(config){
 			dataIndex: 'subject'
 		},	{
 			header: GO.lang.strOwner, 
-			dataIndex: 'user_name'
+			dataIndex: 'user_name',
+			sortable:false
 		},	{
 			header: GO.lang.strCtime, 
 			dataIndex: 'ctime'
