@@ -1,4 +1,5 @@
 01-08-2012 4.0.85
+- Updated German
 - Small bug fixes
 
 30-07-2012 4.0.83
