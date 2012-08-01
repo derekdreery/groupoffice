@@ -2025,8 +2025,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 		
 		if(!$this->validate()){
-			$errors = $this->getValidationErrors();
-			throw new GO_Base_Exception_Validation(sprintf(GO::t('validationErrorsFound'),strtolower($this->localizedName))."\n\n".implode("\n", $errors)."\n");			
+			return false;
 		}
 		
 		//Don't do anything if nothing has been modified.
