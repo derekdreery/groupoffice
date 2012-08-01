@@ -105,8 +105,8 @@ var dateFormat = GO.settings.date_format.substring(0,1)+GO.settings.date_format.
 					triggerAction:'all',
 					editable: false,
 					selectOnFocus:true,
-					forceSelection: true,
-					value: GO.settings.language
+					forceSelection: true
+//					value: GO.settings.language
 				}),
 				new Ext.form.ComboBox({
 					fieldLabel: GO.users.lang.cmdFormLabelTimezone,
@@ -162,8 +162,7 @@ var dateFormat = GO.settings.date_format.substring(0,1)+GO.settings.date_format.
 					editable: false,
 					selectOnFocus: true,
 					value: GO.settings.dateformat,
-					forceSelection: true,
-					allowBlank: true
+					forceSelection: true
 				}),
 				new Ext.form.ComboBox({
 					fieldLabel: GO.users.lang.timeFormat,
