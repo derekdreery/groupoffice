@@ -253,11 +253,11 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			if ($params['share']==1 && $model->acl_id == 0) {
 				$model->visible = 1;
 
-				$acl = new GO_Base_Model_Acl();
-				$acl->description = $model->tableName() . '.' . $model->aclField();
-				$acl->user_id = GO::user() ? GO::user()->id : 1;
-				$acl->save();
-				$model->acl_id = $response['acl_id'] = $acl->id;
+//				$acl = new GO_Base_Model_Acl();
+//				$acl->description = $model->tableName() . '.' . $model->aclField();
+//				$acl->user_id = GO::user() ? GO::user()->id : 1;
+//				$acl->save();
+				$model->setNewAcl();
 			}
 
 			if ($params['share']==0 && $model->acl_id > 0) {
