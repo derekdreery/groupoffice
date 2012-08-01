@@ -212,9 +212,10 @@ abstract class GO_Base_Fs_Base{
 	 * 
 	 * @param String $path
 	 * @return boolean 
-	 */
+	 */	
 	public static function checkPathInput($path){
-		return strpos($path, '../') === false;
+		$path = '/'.str_replace('\\','/', $path);
+		return strpos($path, '/../') === false;
 	}
 	
 	
