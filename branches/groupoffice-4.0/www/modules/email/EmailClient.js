@@ -406,7 +406,7 @@ GO.email.EmailClient = function(config){
 	this.treePanel.on('click',function(node){
 		var selectedNode = this.treePanel.getSelectionModel().getSelectedNode();
 		
-		if(node.id==selectedNode.id){
+		if(selectedNode && node.id==selectedNode.id){
 			var usage='';
 
 				var inboxNode =this.treePanel.findInboxNode(node);
