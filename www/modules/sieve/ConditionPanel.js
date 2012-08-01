@@ -6,12 +6,12 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: TestsPanel.php 0000 2010-12-29 09:08:00 wsmits $
+ * @version $Id: ConditionPanel.php 0000 2010-12-29 09:08:00 wsmits $
  * @copyright Copyright Intermesh
  * @author Wesley Smits <wsmits@intermesh.nl>
  */
 
-GO.sieve.TestsPanel = function(config){
+GO.sieve.ConditionPanel = function(config){
 config = config || {};
 
 	this.cmbField = new GO.form.ComboBox({
@@ -290,10 +290,10 @@ config = config || {};
 			],
 			hideLabel:true
 		}];
-	GO.sieve.TestsPanel.superclass.constructor.call(this, config);
+	GO.sieve.ConditionPanel.superclass.constructor.call(this, config);
 }
 
-Ext.extend(GO.sieve.TestsPanel, Ext.FormPanel,{
+Ext.extend(GO.sieve.ConditionPanel, Ext.FormPanel,{
 	index : -1,
 	grid : false,
 
@@ -430,7 +430,7 @@ Ext.extend(GO.sieve.TestsPanel, Ext.FormPanel,{
 		this.doLayout();
 	},
 	onShow : function(){
-		GO.sieve.TestsPanel.superclass.onShow.call(this);
+		GO.sieve.ConditionPanel.superclass.onShow.call(this);
 	},
 	resetForm : function(){
 		this.btnAddRule.setText(GO.lang.cmdAdd);

@@ -109,13 +109,15 @@ GO.base.model.multiselect.panel = function(config){
 
 Ext.extend(GO.base.model.multiselect.panel, GO.grid.EditorGridPanel, {
 
+	autoLoadStore : true,
+	
 	model_id: 0,
 
 	afterRender : function(){
 
 		GO.base.model.multiselect.panel.superclass.afterRender.call(this);	
 
-		if(!this.store.loaded && this.model_id)		
+		if(this.autoLoadStore && !this.store.loaded && this.model_id)		
 			this.store.load();
 	},
 	setModelId : function(model_id,load){

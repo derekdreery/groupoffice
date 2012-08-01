@@ -21,6 +21,13 @@
  * The GO_ServerManager_Model_Installation model
  *
 
+ * @property string $title
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $email
+ * @property string $password
+ * @property string $key
+ * @property int $ctime
  */
 
 class GO_ServerManager_Model_NewTrial extends GO_Base_Db_ActiveRecord {

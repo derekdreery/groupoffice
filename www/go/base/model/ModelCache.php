@@ -44,6 +44,9 @@ class GO_Base_Model_ModelCache{
 		
 		$cacheKey = $this->_formatCacheKey($cacheKey);		
 		
+		if(isset($this->_models[$modelClassName]) && count($this->_models[$modelClassName])>100)
+			array_shift ($this->_models[$modelClassName]);
+		
 		$this->_models[$modelClassName][$cacheKey]=$model;
 
 	}

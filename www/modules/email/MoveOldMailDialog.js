@@ -1,4 +1,4 @@
-GO.email.DeleteOldMailDialog = function(config){
+GO.email.MoveOldMailDialog = function(config){
 	
 	if(!config)
 	{
@@ -8,12 +8,12 @@ GO.email.DeleteOldMailDialog = function(config){
 	this.buildForm();
 
 	config.layout='fit';
-	config.title=GO.email.lang.deleteOldMails;
+	config.title=GO.email.lang.moveOldMails;
 	//	config.stateId='email-message-dialog';
 	config.maximizable=true;
 	config.modal=false;
 	config.width=500;
-	config.height=170;
+	config.height=200;
 	config.resizable=true;
 	config.minizable=true;
 	config.closeAction='hide';	
@@ -34,14 +34,14 @@ GO.email.DeleteOldMailDialog = function(config){
 		scope:this
 	}];
 	
-	GO.email.DeleteOldMailDialog.superclass.constructor.call(this, config);
+	GO.email.MoveOldMailDialog.superclass.constructor.call(this, config);
 
 }
 
-Ext.extend(GO.email.DeleteOldMailDialog, Ext.Window,{
+Ext.extend(GO.email.MoveOldMailDialog, Ext.Window,{
 
 	onShow : function() {
-		GO.email.DeleteOldMailDialog.superclass.onShow.call(this);
+		GO.email.MoveOldMailDialog.superclass.onShow.call(this);
 		if (typeof(this.node)=='object') {
 			this.folderNameField.setValue(this.node.attributes.mailbox);
 		}
@@ -51,7 +51,7 @@ Ext.extend(GO.email.DeleteOldMailDialog, Ext.Window,{
 	buildForm : function() {
 		this.formPanel = new Ext.form.FormPanel({
 			timeout:120000,
-			url : GO.url("email/message/deleteOld"),
+			url : GO.url("email/message/MoveOld"),
 			waitMsgTarget : true,
 			border : false,
 			cls : 'go-form-panel',
@@ -64,8 +64,29 @@ Ext.extend(GO.email.DeleteOldMailDialog, Ext.Window,{
 				anchor : '100%',
 				allowBlank:false,
 				hideLabel : true,
-				value : GO.email.lang.deleteOldMailsInstructions
-			}, this.untilDate = new Ext.form.DateField({
+				value : GO.email.lang.moveOldMailsInstructions
+			},this.selectMailbox = new GO.form.ComboBoxReset({
+				fieldLabel : "Move to",
+				hiddenName : 'target_mailbox',
+				store : new GO.data.JsonStore({
+					url : GO.url("email/folder/store"),
+					baseParams : {
+						task : 'subscribed_folders',
+						account_id : 0
+					},
+					fields : ['name']
+				}),
+				valueField : 'name',
+				displayField : 'name',
+				value:'Trash',
+				typeAhead : true,
+				mode : 'local',
+				triggerAction : 'all',
+				editable : false,
+				selectOnFocus : true,
+				forceSelection : true
+			})
+		, this.untilDate = new Ext.form.DateField({
 				name : 'until_date',
 				width : 100,
 				format : GO.settings['date_format'],
@@ -79,6 +100,8 @@ Ext.extend(GO.email.DeleteOldMailDialog, Ext.Window,{
 	setNode : function(node) {
 		this.node = node;
 		this.account_id = node.attributes.account_id;
+		this.selectMailbox.store.baseParams.account_id=this.account_id;
+		this.selectMailbox.store.load();
 	},
 
 	getDefaultDate : function() {
@@ -96,15 +119,15 @@ Ext.extend(GO.email.DeleteOldMailDialog, Ext.Window,{
 
 	submitForm : function(hide) {
 		Ext.Msg.show({
-			title: GO.email.lang.deleteOldMails,
+			title: GO.email.lang.MoveOldMails,
 			icon: Ext.MessageBox.WARNING,
-			msg: GO.email.lang.deleteOldMailsSure1+' '+this.untilDate.value+GO.email.lang.deleteOldMailsSure2,
+			msg: GO.email.lang.moveOldMailsSure.replace("{date}", this.untilDate.value).replace("{source}", this.folderNameField.getValue()).replace("{target}", this.selectMailbox.getValue()),
 			buttons: Ext.Msg.YESNO,
 			animEl: 'elId',
 			fn: function(btn) {
 				if (btn=='yes') {
 					this.formPanel.form.submit({
-						url : GO.url("email/message/deleteOld"),
+						url : GO.url("email/message/MoveOld"),
 						params : {
 							'account_id' : this.account_id,
 							'mailbox' : this.node.attributes.mailbox
@@ -114,7 +137,7 @@ Ext.extend(GO.email.DeleteOldMailDialog, Ext.Window,{
 
 							GO.email.messagesGrid.store.load({
 								callback:function(){
-									Ext.MessageBox.alert(GO.lang.strSuccess, GO.email.lang.nDeletedMailsTxt+": "+action.result.total);
+									Ext.MessageBox.alert(GO.lang.strSuccess, GO.email.lang.nMovedMailsTxt+": "+action.result.total);
 									this.hide();
 								},
 								scope:this

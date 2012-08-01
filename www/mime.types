@@ -31,7 +31,7 @@ application/smil smi smil
 application/wordperfect wpd
 application/wordperfect5.1 wp5
 application/xhtml+xml xhtml xht
-application/xml xml xsl
+application/xml xml xsl gof
 application/zip zip
 application/vnd.cinderella cdy
 application/vnd.google-earth.kml+xml kml

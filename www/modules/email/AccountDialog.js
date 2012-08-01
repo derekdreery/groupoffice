@@ -16,6 +16,36 @@ GO.email.AccountDialog = function(config) {
 
 	var sslCb;
 
+	var advancedItems = [ new Ext.form.TextField({
+		fieldLabel : GO.email.lang.port,
+		name : 'port',
+		value : '143',
+		allowBlank : false
+	}), new Ext.form.TextField({
+		fieldLabel : GO.email.lang.rootMailbox,
+		name : 'mbroot'
+	}) ];
+
+	if (GO.sieve) {
+		advancedItems.push(
+			new Ext.form.NumberField({
+				fieldLabel : GO.sieve.lang.sievePort,
+				name : 'sieve_port',
+				decimals : 0,
+				allowBlank : false,
+				value:GO.sieve.sievePort
+			})
+		);
+		advancedItems.push(
+			new Ext.ux.form.XCheckbox({
+				boxLabel: GO.sieve.lang.useTLS,
+				checked:GO.sieve.sieveTls,
+				name: 'sieve_usetls',
+				allowBlank: true,
+				hideLabel:true
+			})
+		);
+	}
 
 	var incomingTab = {
 		title : GO.email.lang.incomingMail,
@@ -82,7 +112,7 @@ GO.email.AccountDialog = function(config) {
 				},
 				scope : this
 			}
-		}),sslCb = new Ext.form.Checkbox({
+		}),sslCb = new Ext.ux.form.XCheckbox({
 				fieldLabel : GO.email.lang.ssl,
 				name : 'use_ssl',
 				checked : false
@@ -99,15 +129,7 @@ GO.email.AccountDialog = function(config) {
 			labelWidth : 75,
 			labelAlign : 'left',
 
-			items : [ new Ext.form.TextField({
-				fieldLabel : GO.email.lang.port,
-				name : 'port',
-				value : '143',
-				allowBlank : false
-			}), new Ext.form.TextField({
-				fieldLabel : GO.email.lang.rootMailbox,
-				name : 'mbroot'
-			})]
+			items : advancedItems
 		}]
 	};
 
@@ -307,7 +329,10 @@ GO.email.AccountDialog = function(config) {
 		})]
 	});
 
-	this.permissionsTab = new GO.grid.PermissionsPanel({hideLevel:true});
+	this.permissionsTab = new GO.grid.PermissionsPanel({levels:[
+			GO.permissionLevels.read,
+			GO.permissionLevels.manage
+	]});
 
 	//this.permissionsTab.disabled = false;
 
@@ -322,7 +347,10 @@ GO.email.AccountDialog = function(config) {
 	this.propertiesPanel = new Ext.form.FormPanel({
 		url : GO.url("email/account/submit"),
 		// labelWidth: 75, // label settings here cascade unless
-		// overridden
+		// overridden,
+		baseParams:{
+			ajax:true
+		},
 		defaults:{forceLayout:true},
 		defaultType : 'textfield',
 		waitMsgTarget : true,

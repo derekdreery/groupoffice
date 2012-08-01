@@ -19,7 +19,7 @@ GO.modules.MainPanel = function(config) {
 
 	this.installedModulesDS = new GO.data.JsonStore({
 		url : GO.url('modules/module/store'),
-		fields : ['name', 'description', 'id', 'sort_order','admin_menu', 'acl_id'],
+		fields : ['name', 'description', 'id', 'sort_order','admin_menu', 'acl_id','icon'],
 		remoteSort : true
 	});
 
@@ -30,7 +30,7 @@ GO.modules.MainPanel = function(config) {
 			direction: 'ASC' // or 'DESC' (case sensitive for local sorting)
 		},
 		fields : ['name', 'description', 'id', 'sort_order',
-		'admin_menu', 'acl_id']
+		'admin_menu', 'acl_id','icon']
 	});
 
 	config.tbar = new Ext.Toolbar({
@@ -333,7 +333,7 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 	},
 
 	iconRenderer : function(name, cell, record) {
-		return '<div class="mo-title" style="background-image:url('+BaseHref+'modules/'+record.data.id+'/themes/Default/images/'+record.data.id+'.png)">'
+		return '<div class="mo-title" style="background-image:url('+record.data["icon"]+')">'
 		+ name + '</div>';
 	}
 });

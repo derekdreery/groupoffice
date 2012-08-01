@@ -477,8 +477,8 @@ $l['other']='Other';
 $l['upload_file_to_big']='The file you tried to upload was larger then the maximum allowed size of %s.';
 
 $l["batchEdit"]="Batch edit";
-$l["batchSelectOne"]="Select at least one item!";
-$l["batchSelectionError"]="Nothing selected!";
+$l["batchSelectOne"]="Select at least one item";
+$l["batchSelectionError"]="You didn't select anything";
 $l["label"]="Label";
 
 $l["validationErrorsFound"]="Couldn't save %s:";//eg. Couldn't save project
@@ -491,12 +491,12 @@ $l['permissionManage'] = 'Manage';
 
 $l["changePassword"]= 'Change password';
 $l["changePasswordText"]= 'Please fill in the form below to reset your password.';
-$l["changePasswordSuccess"]= 'Your password is changed successfully!';
-$l["changePasswordSuccessTitle"]= 'Password is changed';
+$l["changePasswordSuccess"]= 'Your password has been changed';
+$l["changePasswordSuccessTitle"]= 'Password has been changed';
 
 $l["noEmailGiven"]= 'No email given';
 $l["usertokenInvalid"]= 'No valid usertoken given!';
-$l["noUserFoundWithEmail"]="No user found with the given email address!";
+$l["noUserFoundWithEmail"]="Sorry, No user has been found for the given email address";
 
 $l["viesDownException"]='The VIES service is down. You can complete your order but you can only pay when we have manually checked your Vies number.';
 
@@ -523,7 +523,7 @@ $l['notFound']='The requested item was not found.';
 
 $l['groupofficeDisabled']="<p>This {product_name} account has been suspended.</p><p>Please contact your account manager.</p>";
 
-$l['summarylogImportText']="Tried to import {importCount} items.";
+$l['summarylogImportText']="Imported {importCount} items.";
 $l['summarylogErrorText']="There where some errors during the import";
 $l['summarylogSuccessText']="Import successful";
 
@@ -571,3 +571,16 @@ $l['userUsername']='Username';
 $l["failedImportItems"]="Failed import items";
 
 $l["birthdayFormatMustBe"]="Birthday field must be in the following form";
+
+$l["pointForText"]="Point cursor here to read entry";
+$l["encryptContent"]="Encrypt content";
+$l["contentEncrypted"]="Content is encrypted.";
+$l['passwordConfirm'] = 'Password confirmation';
+$l['decryptContent'] = 'Decrypt content';
+$l['clickHereToDecrypt'] = 'Click here to decrypt and read the content.';
+$l['passwordSubmissionError']='An error occurred using the password. No changes have been made to this item. Please contact the administrator and specify the steps taken before this message occurred.';
+
+$l['pleaseEnterQuery']="Please enter a search query";
+
+$l['numMinValue']="The minimum value for this field is {0}";
+$l['numMaxValue']="The maximum value for this field is {0}";

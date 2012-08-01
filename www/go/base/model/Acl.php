@@ -320,54 +320,92 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @param int $aclId
 	 * @param int $level 
+	 * @params Array $callback Call a function with the user as argument. 
+	 * This was added to save memory so that not all users have to be in memory. 
+	 * If you pass this argument this function will return void.
 	 * @return Array of GO_Base_Model_User 
 	 */
-	public static function getAuthorizedUsers($aclId, $level){
+	public static function getAuthorizedUsers($aclId, $level=GO_Base_Model_Acl::READ_PERMISSION, $callback=false, $callbackArguments=array()){
 		
-		//todo change into ???:
-		
+		//Very slow!:		
 //		SELECT u.username from go_acl a
 //left JOIN `go_users_groups` ug  ON (a.group_id=ug.group_id)
 //inner join go_users u on (u.id=a.user_id OR u.id=ug.user_id)
 //where a.acl_id=19260 and level>=1 group by u.id
 		
+		//VERy slow too
+		//todo Sub query support with query builder
+//		$stmt = GO::getDbConnection()->prepare("SELECT * 
+//FROM go_users u
+//where exists
+//(select id from go_acl a LEFT JOIN `go_users_groups` ug  ON ( `a`.`group_id` = ug.group_id) where acl_id=:acl_id and level>=:level and (a.user_id=u.id or ug.user_id=u.id)
+//)");
+//		$stmt->bindParam("acl_id", $aclId, PDO::PARAM_INT);
+//		$stmt->bindParam("level", $level, PDO::PARAM_INT);
+//		$stmt->execute();
+//		
+//		$stmt->setFetchMode(PDO::FETCH_CLASS, "GO_Base_Model_User",array(false));
+//		return $stmt;
 		
-		$stmt =  GO_Base_Model_User::model()->find(GO_Base_Db_FindParams::newInstance()		
-						->ignoreAcl()
-						->join(GO_Base_Model_AclUsersGroups::model()->tableName(),GO_Base_Db_FindCriteria::newInstance()
+		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
 										->addModel(GO_Base_Model_AclUsersGroups::model(), 'a')
 										->addModel(GO_Base_Model_User::model(), 't')
 										->addCondition('id', 'a.user_id','=','t',true,true)
-										->addCondition('acl_id', $aclId,'=','a')
-										->addCondition('level', $level,'>=','a')
+										->addCondition('acl_id', $aclId,'=','a');
+		
+		if($level > GO_Base_Model_Acl::READ_PERMISSION)
+				$joinCriteria->addCondition('level', $level,'>=','a');
+		
+		$stmt =  GO_Base_Model_User::model()->find(GO_Base_Db_FindParams::newInstance()		
+						->ignoreAcl()
+						->join(GO_Base_Model_AclUsersGroups::model()->tableName(),$joinCriteria
 										,'a')
 						);
 		
-		$users = $stmt->fetchAll();
+		$users=array();
 		$ids = array();
-		foreach($users as $user)
+		while($user=$stmt->fetch()){
 			$ids[]=$user->id;
+			if($callback){
+				call_user_func_array($callback, array_merge(array($user), $callbackArguments));
+			}else
+			{
+				$users[]=$user;
+			}
+		}
+		
+		$joinCriteria  = GO_Base_Db_FindCriteria::newInstance()
+										->addModel(GO_Base_Model_AclUsersGroups::model(),'a')										
+										->addCondition('group_id', 'ug.group_id','=','a',true,true)
+										->addCondition('acl_id', $aclId,'=','a');
+		
+		if($level > GO_Base_Model_Acl::READ_PERMISSION)
+			$joinCriteria->addCondition('level', $level,'>=','a');
+		
 		
 		$stmt =  GO_Base_Model_User::model()->find(GO_Base_Db_FindParams::newInstance()				
 						->ignoreAcl()
 						->join(GO_Base_Model_UserGroup::model()->tableName(),  GO_Base_Db_FindCriteria::newInstance()		
 										->addCondition('id', 'ug.user_id','=','t',true,true),
 										'ug')
-						->join(GO_Base_Model_AclUsersGroups::model()->tableName(),GO_Base_Db_FindCriteria::newInstance()
-										->addModel(GO_Base_Model_AclUsersGroups::model(),'a')										
-										->addCondition('group_id', 'ug.group_id','=','a',true,true)
-										->addCondition('acl_id', $aclId,'=','a')
-										->addCondition('level', $level,'>=','a')
+						->join(GO_Base_Model_AclUsersGroups::model()->tableName(),$joinCriteria
 										,'a')
 						->order('a.level')
 						->group('t.id'));
 		
 		while($user = $stmt->fetch()){
-			if(!in_array($user->id, $ids))
-				$users[]=$user;
+			if(!in_array($user->id, $ids)){				
+				if($callback){
+					call_user_func_array($callback, array_merge(array($user), $callbackArguments));
+				}else
+				{
+					$users[]=$user;
+				}
+			}
 		}
 		
-		return $users;
+		if(!$callback)
+			return $users;
 	}
 	
 	/**

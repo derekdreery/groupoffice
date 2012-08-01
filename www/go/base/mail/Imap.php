@@ -216,7 +216,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 //			$this->capability = GO::session()->values['GO_IMAP'][$this->server]['imap_capability'] = implode(' ', $response);			
 //		}
 		
-		GO::debug('IMAP capability: '.$this->capability);
+//		GO::debug('IMAP capability: '.$this->capability);
 		
 		return $this->capability;
 	}
@@ -351,13 +351,13 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			$cmd .= ')';
 		}
 		
-		GO::debug($cmd);
+//		GO::debug($cmd);
 		
 		$cmd .= "\r\n";
 		
 		$this->send_command($cmd);
 		$result = $this->get_response(false, true);
-		GO::debug($result);
+//		GO::debug($result);
 		
 		$delim=false;
 
@@ -1640,6 +1640,8 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		if (!is_array($struct) || empty($struct)) {
 			return $parts;
 		}
+		
+//		GO::debug($struct);
 
 		if(!$parts)
 		{
@@ -1678,7 +1680,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				//don't decent into message/RFC822 files. Sometimes they come nested in the body from the IMAP server.
 				if (isset($vals['subs']) && (!isset($vals['subtype']) || $vals['subtype']!='rfc822')){
 
-					$text_found_at_this_level = $parts['text_found'];
+//					$text_found_at_this_level = $parts['text_found'];
 					$this->find_body_parts($vals['subs'], $type, $subtype, $parts);
 
 					//
@@ -1777,8 +1779,8 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	  'subtype' => 'mixed',
 	)
 					 */
-					if(!$text_found_at_this_level && $parts['text_found'])
-						break;
+//					if(!$text_found_at_this_level && $parts['text_found'])
+//						break;
 				}
 			}
 		}

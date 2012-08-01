@@ -130,10 +130,13 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 			$file->convertToUtf8();
 			$contents = $file->getContents();
 			$vcal = GO_Base_VObject_Reader::read($contents);
-			foreach($vcal->vevent as $vevent) {
-				$event = new GO_Calendar_Model_Event();
-				$event->importVObject( $vevent, array('calendar_id'=>$params['calendar_id']) );
-				$count++;
+			
+			if(!empty($vcal->vevent)){
+				foreach($vcal->vevent as $vevent) {
+					$event = new GO_Calendar_Model_Event();
+					$event->importVObject( $vevent, array('calendar_id'=>$params['calendar_id']) );
+					$count++;
+				}
 			}
 		}
 		$response['feedback'] = sprintf(GO::t('import_success','calendar'), $count);

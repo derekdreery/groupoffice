@@ -24,8 +24,13 @@
  * @property int $mtime
  * @property int $ctime
  * @property int $user_id
+ * 
+ * @property boolean $encrypted
+ * @property string $password
  */
 class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
+	
+	private $_decrypted=false;
 	
 	/**
 	 * Returns a static model of itself
@@ -89,5 +94,30 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 		
 		return $attr;
 	}
+	
+	
+	
+	
+	
+	protected function getEncrypted(){
+		return !$this->_decrypted && !empty($this->password);
+	}
 
+	
+	public function decrypt($password) {
+		
+		if($this->password!=crypt($password,$this->password)){
+			return false;		
+		}else{
+			$this->_decrypted=true;
+			$this->content = GO_Base_Util_Crypt::decrypt($this->content, $password);
+			return true;
+		}
+	}
+	
+	public function encrypt($password){
+		$this->content = GO_Base_Util_Crypt::encrypt($this->content, $password);
+		$this->password = $password;
+	}
+		
 }

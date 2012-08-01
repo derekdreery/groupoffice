@@ -127,7 +127,10 @@ class GO_Base_Util_Date_RecurrencePattern{
 	 * @return int Unix timestamp 
 	 */
 	public function getNextRecurrence($startTime=false)
-	{
+	{		
+		if(empty($this->_freq))
+			return false;
+		
 		if(!isset($this->_recurPositionStartTime) || $this->_recurPositionStartTime<$this->_eventstarttime)
 			$this->_recurPositionStartTime=$this->_eventstarttime;
 		

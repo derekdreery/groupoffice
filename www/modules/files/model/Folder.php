@@ -51,6 +51,8 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * @var boolean Set to true by a system save so the readonly flag won't take effect in beforeSave
 	 */
 	public $systemSave=false;
+	
+	public static $deleteInDatabaseOnly=false;
 
 	/**
 	 * Returns a static model of itself
@@ -302,7 +304,9 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	protected function afterDelete() {
 		
 		GO::debug("after delete ".$this->path." ".$this->fsFolder->path());
-		$this->fsFolder->delete();		
+		
+		if(!GO_Files_Model_Folder::$deleteInDatabaseOnly)
+			$this->fsFolder->delete();		
 		
 		//Read only flag is set for addressbooks, tasklists etc. They share the same acl so deleting it would make addressbooks inaccessible.
 		if(!$this->readonly){

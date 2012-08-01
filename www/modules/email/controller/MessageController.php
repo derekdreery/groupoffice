@@ -339,6 +339,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	 * @return boolean
 	 */
 	protected function actionSend($params) {
+		
+		GO::session()->closeWriting();
 
 		$response['success'] = true;
 		$response['feedback']='';
@@ -1096,7 +1098,9 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$folder = GO_Files_Model_Folder::model()->findByPk($params['folder_id']);
 		
 		
+		$params['filename'] = GO_Base_Fs_File::stripInvalidChars($params['filename']);
 		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.$folder->path.'/'.$params['filename']);
+		
 		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
 		$imap = $account->openImapConnection($params['mailbox']);
@@ -1115,9 +1119,6 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		$imap  = $account->openImapConnection($params['mailbox']);
-
-//		header("Content-type: text/plain; charset: US-ASCII");
-//		header('Content-Disposition: inline; filename="message_source.txt"');
 		
 		$filename = empty($params['download']) ? "message.txt" :"message.eml";
 		
@@ -1129,8 +1130,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		 *
 		 * That's why I first fetch the header and then the text.
 		 */
-		$header = $imap->get_message_part($params['uid'], 'HEADER') . "\r\n\r\n";
-		$size = $imap->get_message_part_start($params['uid'], 'TEXT');
+		$header = $imap->get_message_part($params['uid'], 'HEADER', true) . "\r\n\r\n";
+		$size = $imap->get_message_part_start($params['uid'], 'TEXT', true);
 
 		header('Content-Length: ' . strlen($header) . $size);
 
@@ -1139,7 +1140,14 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			echo $line;
 	}
 
-	protected function actionDeleteOld($params){
+	protected function actionMoveOld($params){
+		
+		$this->checkRequiredParameters(array('mailbox','target_mailbox'), $params);
+		
+		if($params['mailbox']==$params['target_mailbox'])
+		{
+			throw new Exception(GO::t("sourceAndTargetSame","email"));
+		}
 
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		$imap  = $account->openImapConnection($params['mailbox']);
@@ -1154,10 +1162,40 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$uids = $imap->sort_mailbox('ARRIVAL',false,'BEFORE "'.$date_string.'"');		
 		
 		$response['total']=count($uids);
-		$response['success'] = $imap->delete($uids);
+		//$response['success'] = $imap->delete($uids);
+		$response['success'] =true;
+		if($response['total']){
+			$chunks = array_chunk($uids, 1000);
+			while($uids=array_shift($chunks)){
+				if(!$imap->move($uids, $params['target_mailbox'])){
+					throw new Exception("Could not move mails! ".$imap->last_error());
+				}
+			}
+		}
+		
+		
 		
 		return $response;
 	}
+//	
+//	protected function moveOld($params){
+//		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+//		$imap  = $account->openImapConnection($params['mailbox']);
+//
+//
+//		$before_timestamp = GO_Base_Util_Date::to_unixtime($params['until_date']);
+//		if (empty($before_timestamp))
+//			throw new Exception(GO::t('untilDateError','email').': '.$params['until_date']);
+//
+//		$date_string = date('d-M-Y',$before_timestamp);
+//		
+//		$uids = $imap->sort_mailbox('ARRIVAL',false,'BEFORE "'.$date_string.'"');		
+//		
+//		$response['total']=count($uids);
+//		$response['success'] = $imap->move($uids, $params['target_mailbox']);
+//		
+//		return $response;
+//	}
 
 	
 	protected function actionMove($params){

@@ -40,8 +40,17 @@
  * @property int $id
  * 
  * @property boolean $hasNewMessages
+ * @property int $sieve_port
+ * @property boolean $sieve_tls
  */
 class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
+	
+	/**
+	 * Set to false if you don't want the IMAP connection on save.
+	 * 
+	 * @var boolean 
+	 */
+	public $checkImapConnectionOnSave=true;
 
 	/**
 	 * Returns a static model of itself
@@ -93,10 +102,13 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 				$this->smtp_password = $encrypted;
 		}
 		
-		if($this->isNew || $this->isModified("host") || $this->isModified("port") || $this->isModified("username")  || $this->isModified("password")){
+		if(
+				($this->isNew || $this->isModified("host") || $this->isModified("port") || $this->isModified("username")  || $this->isModified("password")) 
+				&& $this->checkImapConnectionOnSave
+			){
+
 			$imap = $this->openImapConnection();
 			$this->mbroot=$imap->check_mbroot($this->mbroot);
-
 
 			$this->_createDefaultFolder('sent');
 			$this->_createDefaultFolder('trash');
@@ -186,9 +198,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		}
 		if(!$this->_imap->select_mailbox($mailbox))
 			throw new Exception ("Could not open IMAP mailbox $mailbox");
-		
-		$this->_setHasNewMessages();
-
+	
 		return $this->_imap;
 	}
 	
@@ -209,35 +219,29 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 			return false;
 	}
 	
-	private $_hasNewMessages=false;
-	
 	private function _getCacheKey(){
 		$user_id = GO::user() ? GO::user()->id : 0;
 		return $user_id.':'.$this->id.':uidnext';
 	}
 	
-	private function _setHasNewMessages(){
+	protected function getHasNewMessages(){
 		
-		$cacheKey = $this->_getCacheKey();
+		GO::debug("getHasNewMessages UIDNext ".(isset($this->_imap->selected_mailbox['uidnext']) ? $this->_imap->selected_mailbox['uidnext'] : ""));
 		
-		if($this->_imap->selected_mailbox['name']=='INBOX' && isset($this->_imap->selected_mailbox['uidnext'])){
+		if(isset($this->_imap->selected_mailbox['name']) && $this->_imap->selected_mailbox['name']=='INBOX' && !empty($this->_imap->selected_mailbox['uidnext'])){
+			
+			$cacheKey = $this->_getCacheKey();
 			
 			$uidnext = $value = GO::cache()->get($cacheKey);
 			
-			if($uidnext!==false && $uidnext!=$this->_imap->selected_mailbox['uidnext'])
-				$this->_hasNewMessages=true;
+			GO::cache()->set($cacheKey, $this->_imap->selected_mailbox['uidnext']);					
 			
-			//throw new Exception($this->_imap->selected_mailbox['uidnext']."!=".$uidnext);
-//			if($this->_imap->selected_mailbox['uidnext']!=$uidnext)
-//				GO::cache()->set($cacheKey, $this->_imap->selected_mailbox['uidnext']);
-			//GO::session()->values['email_status']['uidnext'][$this->id]=$this->_imap->selected_mailbox['uidnext'];
+			if($uidnext!==false && $uidnext!=$this->_imap->selected_mailbox['uidnext']){
+				return true;
+			}			
 		}
-	}
-	
-	protected function getHasNewMessages(){
-		if(!empty($this->_imap->selected_mailbox['uidnext']))
-			GO::cache()->set($this->_getCacheKey(), $this->_imap->selected_mailbox['uidnext']);		
-		return $this->_hasNewMessages;
+			
+		return false;
 	}
 
 
@@ -340,6 +344,16 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		return $rootMailboxes;
 	}
 	
+	public function defaultAttributes() {
+		$attr = parent::defaultAttributes();
+//		if (GO::modules()->isInstalled('sieve')) {
+			$attr['sieve_port'] = !empty(GO::config()->sieve_port) ? GO::config()->sieve_port : '4190';
+			if (isset(GO::config()->sieve_usetls))
+				$attr['sieve_usetls'] = !empty(GO::config()->sieve_usetls);
+			else
+				$attr['sieve_usetls'] = true;
+//		}	
+		return $attr;
+	}
 	
-
 }

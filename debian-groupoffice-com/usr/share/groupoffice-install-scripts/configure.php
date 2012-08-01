@@ -20,8 +20,14 @@ $replacements['db_pass']=$dbpass;
 //sometimes the timezone file has multiple lines
 $tz = trim(file_get_contents('/etc/timezone'));
 $tzs = explode("\n",$tz);
-$replacements['timezone']=  array_pop($tzs);
-
+$tzs[]="Europe/Amsterdam";
+foreach($tzs as $timezone){
+	$valid = @date_default_timezone_set($timezone);
+	if($valid){
+		$replacements['timezone']=$timezone;
+		break;
+	}
+}
 
 exec('locale',$output);
 
@@ -80,8 +86,24 @@ chmod('/etc/groupoffice/config.php', 0640);
 
 require_once('/etc/groupoffice/config.php');
 
-system('sudo -u www-data /usr/bin/php '.$config['root_path'].'install/autoinstall.php -c=/etc/groupoffice/config.php --adminpassword=admin --adminusername=admin --adminemail=admin@example.com');
-system('sudo -u www-data /usr/bin/php '.$config['root_path'].'groupofficecli.php -r=maintenance/upgrade -c=/etc/groupoffice/config.php');
+system('/usr/bin/php '.$config['root_path'].'install/autoinstall.php -c=/etc/groupoffice/config.php --adminpassword=admin --adminusername=admin --adminemail=admin@example.com');
+system('/usr/bin/php '.$config['root_path'].'groupofficecli.php -r=maintenance/upgrade -c=/etc/groupoffice/config.php');
+
+
+
+echo "Setting cache permissions\n\n";
+
+if(is_dir($config['tmpdir'].'cache'))
+	system('chown -R www-data:www-data '.$config['tmpdir'].'cache');
+
+if(is_dir($config['tmpdir'].'cache'))
+	system('chown -R www-data:www-data '.$config['tmpdir'].'diskcache');
+
+
+system('chown www-data:www-data '.$config['file_storage_path']);
+system('chown www-data:www-data '.$config['file_storage_path'].'*');
+if(is_dir($config['file_storage_path'].'cache'))
+	system('chown -R www-data:www-data '.$config['file_storage_path'].'cache');
 
 echo "Done!\n\n";
 ?>

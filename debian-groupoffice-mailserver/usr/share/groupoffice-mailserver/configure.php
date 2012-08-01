@@ -144,6 +144,9 @@ if(version_compare(2, $version)>0){
 
 	$filename = file_contains('/etc/dovecot/dovecot.conf', 'Group-Office') ? '/etc/dovecot/dovecot.conf.'.date('Ymd') : '/etc/dovecot/dovecot.conf';
 	create_file($filename,'tpl/etc/dovecot/dovecot.conf', $replacements);
+	
+	if(!file_contains('/etc/groupoffice/config.php', 'sieve_port'))
+		set_value('/etc/groupoffice/config.php', '$config[\'sieve_port\']="2000";');
 }else
 {
 	$filename = '/etc/dovecot/dovecot-sql.conf.ext';
@@ -173,6 +176,9 @@ if(version_compare(2, $version)>0){
 	$filename = '/etc/dovecot/conf.d/20-imap.conf';
 	if(file_contains($filename, 'Group-Office'))$filename .= '.'.date('Ymd');
 	create_file($filename,'tpl/etc/dovecot/conf.d/20-imap.conf', $replacements);
+	
+	if(!file_contains('/etc/groupoffice/config.php', 'sieve_port'))
+		set_value('/etc/groupoffice/config.php', '$config[\'sieve_port\']="4190";');
 }
 
 echo "Configuring amavis\n";

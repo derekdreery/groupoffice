@@ -242,3 +242,4 @@ $l['KP']= 'Korea, Den demokratiske folkerepublikken';
 $l['KR']= 'Korea, Republikken';
 $l['RS']= 'Republikken Serbia';
 $l['ME']= 'Republikken Montenegro';
+$l['IC']= 'Kanariøyene';

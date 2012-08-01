@@ -349,7 +349,7 @@ background-color: #F1F1F1 !important;
 
 .x-calGrid-event-container .x-resizable-handle-south, .x-calGrid-event-container .x-resizable-handle{
 	background:transparent;
-	background-image: url(../../../../ext/resources/images/default/s.gif);
+	background-image: url(../../../../views/Extjs3/ext/resources/images/default/s.gif);
 }
 
 .x-calGrid-all-day-event-container {

@@ -33,14 +33,12 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 	
 	public static function formatRecord($record, $model, $store){
 
-		if($model->moduleManager){
-			$record['description'] = $model->moduleManager->description();
-			$record['name'] = $model->moduleManager->name();
-			$record['author'] = $model->moduleManager->author();
-		}else
-		{
-			$record['name']=$model->id;
-		}
+		//if($model->moduleManager){
+		$record['description'] = $model->moduleManager->description();
+		$record['name'] = $model->moduleManager->name();
+		$record['author'] = $model->moduleManager->author();
+		$record['icon'] = $model->moduleManager->icon();
+
 		
 		//$record['user_count']=$model->acl->countUsers();
 		
@@ -62,7 +60,8 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 			$availableModules[$module->name()] = array(
 					'id'=>$module->id(),
 					'name'=>$module->name(),
-					'description'=>$module->description()
+					'description'=>$module->description(),
+					'icon'=>$module->icon()
 			);
 		}
 		
@@ -179,9 +178,13 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 	 * @param array $params 
 	 */
 	public function actionCheckDefaultModels($params) {
+		
+		GO::session()->closeWriting();
+		
+//		GO::$disableModelCache=true;
 		$response = array('success' => true);
 		$module = GO_Base_Model_Module::model()->findByPk($params['moduleId']);
-		$users = $module->acl->getAuthorizedUsers($module->acl_id, GO_Base_Model_Acl::READ_PERMISSION);
+		
 		
 		$models = array();
 		$modMan = $module->moduleManager;
@@ -193,18 +196,22 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 				}
 			}
 		}
+//		GO::debug(count($users));
 		
-		foreach ($users as $user) {
-			foreach ($models as $model)
-				$model->getDefault($user);
-		}
+		$module->acl->getAuthorizedUsers($module->acl_id, GO_Base_Model_Acl::READ_PERMISSION, array("GO_Modules_Controller_Module","checkDefaultModelCallback"), array($models));
 		
-		if(class_exists("GO_Professional_LicenseCheck")){
-			$lc = new GO_Professional_LicenseCheck();
-			$lc->checkProModules(true);
-		}
+		
+//		if(class_exists("GO_Professional_LicenseCheck")){
+//			$lc = new GO_Professional_LicenseCheck();
+//			$lc->checkProModules(true);
+//		}
 
 		return $response;
+	}
+	
+	public static function checkDefaultModelCallback($user, $models){		
+		foreach ($models as $model)
+			$model->getDefault($user);		
 	}
 	
 	public function actionSaveSortOrder($params){

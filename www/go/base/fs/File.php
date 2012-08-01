@@ -452,7 +452,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 */
 	public function convertToUtf8(){
 		
-		if(!is_writable($this->path()))
+		if(!$this->isWritable())
 			return false;
 		
 		$str = $this->getContents();
@@ -465,5 +465,9 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 			$enc='UTF-8';
 		
 		return $this->putContents(GO_Base_Util_String::clean_utf8($str, $enc));
+	}
+	
+	public function md5Hash(){
+		return md5_file($this->path);
 	}
 }

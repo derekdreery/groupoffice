@@ -402,8 +402,24 @@ GO.email.EmailClient = function(config){
 			}
 //		}
 	}, this);
+	
+	this.treePanel.on('click',function(node){
+		var selectedNode = this.treePanel.getSelectionModel().getSelectedNode();
+		
+		if(node.id==selectedNode.id){
+			var usage='';
 
-
+				var inboxNode =this.treePanel.findInboxNode(node);
+				if(inboxNode)
+					usage=inboxNode.attributes.usage;
+				
+			this.setAccount(
+				node.attributes.account_id,
+				node.attributes.mailbox,
+				usage
+				);
+		}
+	}, this);
 
 	this.searchDialog = new GO.email.SearchDialog({
 		store:this.messagesGrid.store
@@ -1275,7 +1291,7 @@ GO.mainLayout.onReady(function(){
 
 			//register a new request to the checker. It will poll unseen tickets every two minutes
 		GO.checker.registerRequest("email/account/checkUnseen",{},function(checker, result, data){
-			
+
 				var ep = GO.mainLayout.getModulePanel('email');
 
 			//	var totalUnseen = result.email_status.total_unseen;
@@ -1418,19 +1434,7 @@ GO.newMenuItems.push({
 	text: GO.email.lang.email,
 	iconCls: 'go-model-icon-GO_Email_Model_ImapMessage',
 	handler:function(item, e){
-		var taskShowConfig = item.parentMenu.taskShowConfig || {};
-		taskShowConfig.link_config=item.parentMenu.link_config
-		taskShowConfig.values={};
-		if(typeof(item.parentMenu.panel)!='undefined' && typeof(item.parentMenu.panel.data.email)!='undefined'){
-			var to='';
-			if(item.parentMenu.panel.data.full_name){
-				to='"'+item.parentMenu.panel.data.full_name+'" <'+item.parentMenu.panel.data.email+'>';
-			}else if(item.parentMenu.panel.data.name){
-				to='"'+item.parentMenu.panel.data.name+'" <'+item.parentMenu.panel.data.email+'>';
-			}
-
-			taskShowConfig.values.to=to;
-		}
+		var taskShowConfig = GO.email.getTaskShowConfig(item);
 
 //		if(GO.settings.modules.savemailas.read_permission)
 //			taskShowConfig.values.subject='[id:'+item.parentMenu.link_config.modelNameAndId+'] ';
@@ -1451,7 +1455,7 @@ GO.newMenuItems.push({
 					id: panel.data.id
 				},
 				success:function(response, options, result){
-					GO.email.emailFiles(result.data.path);
+					GO.email.emailFiles(result.data.path, this);
 				},
 				scope: this
 			});
@@ -1465,7 +1469,7 @@ GO.newMenuItems.push({
 					id: panel.data.id
 				},
 				success:function(response, options, result){
-					GO.email.openFolderTree(result.files_folder_id);
+					GO.email.openFolderTree(result.files_folder_id, 0, this);
 				},
 				scope: this
 			});
@@ -1473,12 +1477,44 @@ GO.newMenuItems.push({
 	}
 });
 
-GO.email.emailFiles = function(files) {
+GO.email.getTaskShowConfig = function(item) {
+
+	var taskShowConfig = {};
+
+	if (Ext.isDefined(item)) {
+		taskShowConfig = item.parentMenu.taskShowConfig || {};
+		taskShowConfig.link_config=item.parentMenu.link_config
+	}
+
+	taskShowConfig.values={};
+
+	if (Ext.isDefined(item)) {
+
+		taskShowConfig.values={};
+		if(typeof(item.parentMenu.panel)!='undefined' && typeof(item.parentMenu.panel.data.email)!='undefined'){
+			var to='';
+			if(item.parentMenu.panel.data.full_name){
+				to='"'+item.parentMenu.panel.data.full_name+'" <'+item.parentMenu.panel.data.email+'>';
+			}else if(item.parentMenu.panel.data.name){
+				to='"'+item.parentMenu.panel.data.name+'" <'+item.parentMenu.panel.data.email+'>';
+			}
+
+			taskShowConfig.values.to=to;
+		}
+	}
+
+	return taskShowConfig;
+}
+
+GO.email.emailFiles = function(files, item) {
 	if (!Ext.isArray(files)) {
 		files = new Array(files);
 	}
 
-	var c = GO.email.showComposer();
+	var composerConfig = GO.email.getTaskShowConfig(item);
+
+	var c = GO.email.showComposer(composerConfig);
+
 	c.on('dialog_ready', function(){
 		c.emailEditor.attachmentsView.afterUpload({
 			addFileStorageFiles: Ext.encode(files)
@@ -1486,7 +1522,8 @@ GO.email.emailFiles = function(files) {
 	},this,{single:true});
 }
 
-GO.email.openFolderTree = function(id, folder_id) {
+GO.email.openFolderTree = function(id, folder_id, referenceItem) {
+
 	if (!GO.email.treeFileBrowser) {
 		GO.email.treeFileBrowser = new GO.Window({
 			title: GO.files.lang.fileBrowser,
@@ -1545,13 +1582,17 @@ GO.email.openFolderTree = function(id, folder_id) {
 						selFiles.push(node.attributes.path);
 					});
 
-					GO.email.emailFiles(selFiles);
+					GO.email.emailFiles(
+						selFiles,
+						this.treeFileBrowser.referenceItem
+					);
 					GO.email.treeFileBrowser.hide();
 				},
 				scope:this
 			}]
 		});
 	}
+
 	GO.email.folderTree.getLoader().baseParams.root_folder_id=id;
 	GO.email.folderTree.getLoader().baseParams.expand_folder_id=folder_id;
 	GO.email.folderTree.getRootNode().reload({
@@ -1561,6 +1602,10 @@ GO.email.openFolderTree = function(id, folder_id) {
 		scope:this
 	});
 
+	if (!referenceItem)
+		referenceItem = {};
+
+	GO.email.treeFileBrowser.referenceItem = referenceItem;
 	GO.email.treeFileBrowser.show();
 }
 

@@ -171,7 +171,84 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 
 		if($return_var!=0)
 			throw new Exception(implode("\n", $output));
+		
+		// Create the groups for this installation that are given in the config file.
+		if(!empty(GO::config()->servermanager_auto_groups)){
+			GO::setDbConnection(
+							$config['db_name'], 
+							$config['db_user'], 
+							$config['db_pass'], 
+							$config['db_host']
+							);
+			
+			foreach(GO::config()->servermanager_auto_groups as $group=>$permissions){
+				$this->_createGroup($group, $permissions);
+			}
+
+			GO::setDbConnection();
+		}
 	}
+	
+	/**
+	 * Create the new group for this installation
+	 * 
+	 * Example array for in the config file.
+	 * 
+	 * $config['servermanager_auto_groups']=array(
+	 *	'Group1'=>array(
+	 *		'modules_read'=>'addressbook,calendar',
+	 *		'modules_manage'=>'tickets'
+	 *	),
+	 *	'Group2'=>array(
+	 *		'modules_read'=>'addressbook',
+	 *		'modules_manage'=>'tickets,calendar'
+	 *	)
+	 * );
+	 * 
+	 * 
+	 * @param string $name The name of the new group
+	 * @param array $permissions Array of permission options for the group
+	 */
+	private function _createGroup($name,$permissions){
+		$group = new GO_Base_Model_Group();
+		$group->name = $name;
+
+		if($group->save()){
+			if(!empty($permissions['modules_read']))
+				$this->_setGroupRights($group,$permissions['modules_read'], 'read');
+			
+			if(!empty($permissions['modules_manage']))
+				$this->_setGroupRights($group,$permissions['modules_manage'],'manage');
+		}
+	}
+	
+	/**
+	 * Set the rights for the created group.
+	 * 
+	 * @param GO_Base_Model_Group $group The group to set the rights for.
+	 * @param string $modules A comma separated string with the module names.
+	 * @param string $type Permission type, possible values: 'read','manage' defaults to 'read'.
+	 */
+	private function _setGroupRights($group,$modules,$type='read'){
+		$modules =  explode(',',$modules);
+		
+		$permission = GO_Base_Model_Acl::READ_PERMISSION;
+		
+		switch($type){
+			case 'manage':		
+				$permission = GO_Base_Model_Acl::MANAGE_PERMISSION;
+			break;
+			case 'read':
+			default:
+				$permission = GO_Base_Model_Acl::READ_PERMISSION;
+		}
+		
+		foreach($modules as $moduleName){
+			if(GO::modules()->$moduleName)
+				GO::modules()->$moduleName->acl->addGroup($group->id,$permission);
+		}
+	}
+	
 	
 	private function _createFolderStructure($config, $installation){
 		
@@ -407,7 +484,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				$record['title']=$config['title'];
 				$record['webmaster_email']=$config['webmaster_email'];
 				$record['max_users']=isset($config['max_users']) ? $config['max_users'] : 0;
-				$record['serverclient_domains']=$config['serverclient_domains'];
+				$record['serverclient_domains']=isset($config['serverclient_domains']) ? $config['serverclient_domains'] : '';
 			}
 		}
 		
@@ -665,7 +742,8 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				$message = GO_Base_Mail_Message::newInstance()
 					->loadMimeMessage($autoEmailModel->mime)
 					->addTo($installationModel->admin_email, $installationModel->admin_name)
-					->setFrom(GO::config()->webmaster_email, 'Servermanager Administrator');
+					->addBcc(GO::config()->webmaster_email)
+					->setFrom(GO::config()->webmaster_email, GO::config()->title);
 
 				$body = $this->_parseTags(
 					$message->getBody(),

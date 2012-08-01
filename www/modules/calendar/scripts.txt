@@ -1,3 +1,4 @@
+modules/calendar/Settings.js
 modules/calendar/Calendar.js
 modules/calendar/EventTemplate.js
 modules/calendar/EventDialog.js
@@ -10,7 +11,6 @@ modules/calendar/ViewDialog.js
 modules/calendar/Portlet.js
 modules/calendar/ParticipantsPanel.js
 modules/calendar/AvailabilityCheckWindow.js
-modules/calendar/Settings.js
 modules/calendar/SelectCalendar.js
 modules/calendar/GroupsGrid.js
 modules/calendar/GroupDialog.js

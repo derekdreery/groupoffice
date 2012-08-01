@@ -48,11 +48,12 @@ class GO_Base_Util_HttpClient{
 		curl_setopt($this->_curl, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($this->_curl, CURLOPT_SSL_VERIFYHOST, false);
 		@curl_setopt($this->_curl, CURLOPT_FOLLOWLOCATION, TRUE);
+		curl_setopt($this->_curl, CURLOPT_ENCODING, "UTF-8");
 		
 		$this->setCurlOption(CURLOPT_USERAGENT, "Group-Office HttpClient ".GO::config()->version. " (curl)");
 		
 		//set ajax header for Group-Office
-		$this->setCurlOption(CURLOPT_HTTPHEADER, array("X-Requested-With" => "XMLHttpRequest"));
+		$this->setCurlOption(CURLOPT_HTTPHEADER, array("X-Requested-With: XMLHttpRequest"));
 
 	}
 	
@@ -120,6 +121,7 @@ class GO_Base_Util_HttpClient{
 		
 		$response = json_decode($response, true);
 		
+//		var_dump($response);
 
 		if(!isset($response['success']) || !$response['success'])
 		{
@@ -127,6 +129,9 @@ class GO_Base_Util_HttpClient{
 			$feedback = "Could not connect to ".GO::config()->product_name." installation at ".$baseUrl;
 			if(isset($response['feedback']))
 				$feedback .= "\n\n".$response['feedback'];
+			else
+				$feedback .= "\n\n".var_export($response, true);
+			
 			throw new Exception($feedback);
 		}
 		

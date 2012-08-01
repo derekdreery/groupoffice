@@ -236,9 +236,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			$upgrade_mtime = GO::config()->get_setting('upgrade_mtime');
 			
 			if($upgrade_mtime < 20111222)
-				exit("Old version detected but it's older then Group-Office 3.7.41. You must upgrade to the latest 3.7 version first.");
+				exit("Old version detected but it's older then ".GO::config()->product_name." 3.7.41. You must upgrade to the latest 3.7 version first.");
 			
-			echo "Older version of Group-Office detected. Preparing database for 4.0 upgrade\n";
+			echo "Older version of ".GO::config()->product_name." detected. Preparing database for 4.0 upgrade\n";
 		
 			$queries[]="TRUNCATE TABLE `go_state`";
 			$queries[]="delete from go_settings where name='version'";
@@ -269,6 +269,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	protected function actionUpgrade($params) {
 		
 		GO::clearCache();
+		
+		GO_Base_Db_Columns::$forceLoad=true;
 				
 		//don't be strict in upgrade process
 		GO::getDbConnection()->query("SET sql_mode=''");
@@ -302,7 +304,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		ob_start("ob_upgrade_log");
 		
 		
-		echo "Updating Group-Office database\n";
+		echo "Updating ".GO::config()->product_name." database\n";
 		
 		//build an array of all update files. The queries are indexed by timestamp
 		//so they will all be executed in the right order.
@@ -686,5 +688,80 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		GO_Base_Util_Http::outputDownloadHeaders($tmpFile);
 		$tmpFile->output();
 		$tmpFile->delete();
+	}
+	
+	
+	protected function actionRemoveEmptyStuff($params){
+		
+		GO::session()->closeWriting();
+		
+		if(!$this->isCli())			
+			echo '<pre>';
+		
+		if(GO::modules()->isInstalled("addressbook")){
+			echo "\n\nProcessing addressbook\n";
+			flush();
+			$stmt = GO_Addressbook_Model_Addressbook::model()->find();
+			while($addressbook = $stmt->fetch()){
+				$contactStmt = $addressbook->contacts();
+				$companiesStmt = $addressbook->companies();
+				
+				if(!$contactStmt->rowCount() && !$companiesStmt->rowCount()){
+					echo "Removing ".$addressbook->name."\n";
+					$addressbook->delete();
+					flush();
+				}
+			}
+		}
+		
+		if(GO::modules()->isInstalled("calendar")){
+			echo "\n\nProcessing calendar\n";
+			flush();
+			
+			$stmt = GO_Calendar_Model_Calendar::model()->find();
+			while($calendar = $stmt->fetch()){
+				$eventStmt = $calendar->events();
+				
+				if(!$eventStmt->rowCount()){
+					echo "Removing ".$calendar->name."\n";
+					$calendar->delete();
+					flush();
+				}
+			}
+		}
+		
+		if(GO::modules()->isInstalled("tasks")){
+			echo "\n\nProcessing tasks\n";
+			flush();
+			
+			$stmt = GO_Tasks_Model_Tasklist::model()->find();
+			while($tasklist = $stmt->fetch()){
+				$eventStmt = $tasklist->tasks();
+				
+				if(!$eventStmt->rowCount()){
+					echo "Removing ".$tasklist->name."\n";
+					$tasklist->delete();
+					flush();
+				}
+			}
+		}
+		
+		
+		if(GO::modules()->isInstalled("notes")){
+			echo "\n\nProcessing notes\n";
+			flush();
+			
+			$stmt = GO_Notes_Model_Category::model()->find();
+			while($cat = $stmt->fetch()){
+				$eventStmt = $cat->notes();
+				
+				if(!$eventStmt->rowCount()){
+					echo "Removing ".$cat->name."\n";
+					$cat->delete();
+					flush();
+				}
+			}
+		}
+		
 	}
 }

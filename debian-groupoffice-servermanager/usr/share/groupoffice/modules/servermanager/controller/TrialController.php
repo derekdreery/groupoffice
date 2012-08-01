@@ -17,6 +17,10 @@ class GO_Servermanager_Controller_Trial extends GO_Base_Controller_AbstractContr
 
 		if (GO_Base_Util_Http::isPostRequest()) {
 			
+			//clean up old trial requests that were never
+			$stmt = GO_ServerManager_Model_NewTrial::model()->find(GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('ctime', GO_Base_Util_Date::date_add(time(),-1), '<')));
+			$stmt->callOnEach("delete");
+			
 			
 			$installation = new GO_ServerManager_Model_Installation();
 			$installation->status=GO_ServerManager_Model_Installation::STATUS_TRIAL;

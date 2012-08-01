@@ -2,9 +2,7 @@
 
 $l["cmdCheckColumnRead"]='Lesen';
 $l["cmdCheckColumnWrite"]='Schreiben';
-$l["cmdCheckColumnGroups"]='Gruppen';
 $l["cmdHeaderColumnName"]='Modulname';
-$l["cmdHeaderColumnGroups"]='Gruppen';
 $l["cmdHeaderGridUserHasAccess"]='Der Benutzer hat Zugriff auf';
 $l["userIsMemberOf"]='Der Benutzer ist Mitglied von';
 $l["userVisibleTo"]='Der Benutzer ist sichtbar für';
@@ -109,3 +107,11 @@ Ihre Logindaten sind:
 Benutzername: {username};
 Passwort: {password}';
 $l['max_users_reached']='Für dieses System wurde die maximale Benutzeranzahl erreicht.';
+
+$l['dashdmy']='Tag-Monat-Jahr';
+$l['slashmdy']='Monat/Tag/Jahr';
+$l['dotdmy']='Tag.Monat.Jahr';
+$l['slashdmy']='Tag/Monat/Jahr';
+$l['generatePassword']='Erzeuge Kennwort';
+$l['generatedPasswordIs']='Das zeugte Kennwort lautet';
+$l['updateExistingOnImport']='Vorhandene Nutzer aktualisieren (per Nutzername)';

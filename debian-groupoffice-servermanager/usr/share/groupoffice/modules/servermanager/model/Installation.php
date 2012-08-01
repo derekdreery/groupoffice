@@ -48,6 +48,8 @@
  * @property string $installPath
  * 
  * @property string $url
+ * @property string $config_file
+ * @property string $token
  */
 
 class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {

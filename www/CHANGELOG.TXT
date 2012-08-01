@@ -1,3 +1,58 @@
+30-07-2012 4.0.83
+- Small bug fixes
+
+30-07-2012 4.0.82
+- Sync only selected addressbooks and calendars with CalDAV and CardDAV
+- Small bug fixes
+
+30-07-2012 4.0.81
+- Fixed file system permissions issue.
+
+30-07-2012 4.0.78
+- Bug in install.sql of addressbook that made new installations fail.
+- Bug in Hungarian language files
+- Bug in monthly recurring event.
+
+27-07-2012 4.0.77
+- Updated German
+- CardDAV didn't work on the Mac
+- Other small bug fixes.
+
+26-07-2012 4.0.76
+- Small bug fixes
+- Updated Norwegian
+- Manage SyncML devices
+
+26-07-2012 4.0.75
+- Fix for latest funambol client
+- Fix for iOS caldav and carddav connection
+
+25-07-2012 4.0.74
+- Bug in multiselect panels.
+
+25-07-2012 4.0.73
+- Better memory management in ActiveRecords
+- Updated German translation
+- Small usability improvements
+- Bug fix in SyncML (Outlook sync)
+- Small bug fixes
+- Username and password cookies were not encrypted
+- Security bug in calendar
+- Notes can be encrypted with a password now.
+- New encrypted custom field
+
+12-07-2012 4.0.72
+- Small bug fixes
+- Delete old mail replaced by move old mail so it can be used for archiving too.
+- Bug in connecting to postfix
+- Edit e-mail button opened GOTA. Now it launches the E-mail viewer.
+- Bug fix with selecting next mail after deleting one.
+
+12-07-2012 4.0.70
+- GOTA wasn't working on some servers
+- Some tags were missing in document templates.
+- New E-mail notify sometimes didn't show.
+
 10-07-2012 4.0.67
 - Strange characters from Romanian and Hungarian language files removed.
 - Bug in e-mail sync with some IMAP servers.

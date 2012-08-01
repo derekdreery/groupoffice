@@ -51,13 +51,14 @@ GO.form.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
 
 	onTrigger1Click : function(){
 
-		this.fireEvent('reset', this);
+		
 		
 		if(this.hasSearch){
-			this.store.baseParams[this.paramName]='';
-			this.store.load();
+			this.store.baseParams[this.paramName]='';			
 			this.el.dom.value = '';
 			this.hasSearch = false;
+			if(this.fireEvent('reset', this)!==false)
+				this.store.load();
 		}		
 	},
 

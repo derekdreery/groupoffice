@@ -3,6 +3,8 @@
 class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelController {
 
 	protected $model = 'GO_Files_Model_Folder';
+	
+	
 
 	protected function allowGuests() {
 		if($this->isCli())
@@ -20,11 +22,21 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		ini_set('max_execution_time', '0');
 		GO::session()->closeWriting();
 
-		$folders = array('users','projects','addressbook','billing','notes','tickets');
+		$folders = array('users','projects','addressbook','notes','tickets');
+		
+		$billingFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'billing');
+		if($billingFolder->exists()){
+			$bFolders = $billingFolder->ls();
+
+			foreach($bFolders as $folder){
+				if($folder->isFolder() && $folder->name()!='notifications'){
+					$folders[]=$folder->name();
+				}
+			}		
+		}
 
 		echo "<pre>";
 		foreach($folders as $name){
-
 			echo "Syncing ".$name."\n";
 
 			$folder = GO_Files_Model_Folder::model()->findByPath($name, true);
@@ -34,16 +46,19 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		echo "Done\n";
 
 		GO_Base_Fs_File::setAllowDeletes($oldAllowDeletes);
-//      $folders = array('billing','email');
-//
-//      foreach($folders as $name){
-//
-//          echo "Deleting ".$name."\n";
-//
-//          $folder = GO_Files_Model_Folder::model()->findByPath($name);
-//          if($folder)
-//              $folder->delete();
-//      }
+		$folders = array('email', 'billing/notifications');
+
+		foreach($folders as $name){
+
+				echo "Deleting ".$name."\n";
+				
+				GO_Files_Model_Folder::$deleteInDatabaseOnly=true;
+				GO_Files_Model_File::$deleteInDatabaseOnly=true;
+
+				$folder = GO_Files_Model_Folder::model()->findByPath($name);
+				if($folder)
+						$folder->delete();
+		}
 	}
 
 	private function _getExpandFolderIds($params){
@@ -662,7 +677,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				GO::debug("Destination folder is the same!");
 				$folder->name=uniqid();
 				$folder->systemSave=true;
-				$folder->save();
+				$folder->save(true);
 
 				GO::debug("Moved folder to temp:".$folder->fsFolder->path());
 
@@ -688,7 +703,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				$existingFolder->acl_id = $model->findAclId();
 				$existingFolder->visible = 0;
 				$existingFolder->readonly = 1;
-				$existingFolder->save();
+				$existingFolder->save(true);
 
 				$folder->systemSave = true;
 
@@ -713,7 +728,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				$folder->systemSave = true;
 				$folder->visible = 0;
 				$folder->readonly = 1;
-				$folder->save();
+				$folder->save(true);
 			}
 		}else
 		{
@@ -726,7 +741,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$folder->systemSave = true;
 			$folder->visible = 0;
 			$folder->readonly = 1;
-			$folder->save();
+			$folder->save(true);
 		}
 
 		return $folder->id;
@@ -775,7 +790,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$model->files_folder_id = $this->_checkExistingModelFolder($model, $folder, $mustExist);
 
 			if ($saveModel)
-				$model->save();
+				$model->save(true);
 		}elseif (isset($model->acl_id) || $mustExist) {
 			//this model has an acl_id. So we should create a shared folder with this acl.
 			//this folder should always exist.
@@ -784,7 +799,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$model->files_folder_id = $this->_createNewModelFolder($model);
 
 			if ($saveModel)
-				$model->save();
+				$model->save(true);
 		}
 
 		if(empty($model->files_folder_id))
@@ -953,17 +968,19 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		if (!empty($params['tmp_files'])) {
 			$tmp_files = json_decode($params['tmp_files'], true);
 
-			$folder_id = $this->checkModelFolder($model, true, true);
+			if(count($tmp_files)){
+				$folder_id = $this->checkModelFolder($model, true, true);
 
-			$folder = GO_Files_Model_Folder::model()->findByPk($folder_id);
+				$folder = GO_Files_Model_Folder::model()->findByPk($folder_id);
 
-			while ($tmp_file = array_shift($tmp_files)) {
-				if (!empty($tmp_file['tmp_file'])) {
+				while ($tmp_file = array_shift($tmp_files)) {
+					if (!empty($tmp_file['tmp_file'])) {
 
-					$file = new GO_Base_Fs_File(GO::config()->tmpdir.$tmp_file['tmp_file']);
-					$file->move(new GO_Base_Fs_Folder(GO::config()->file_storage_path . $folder->path));
+						$file = new GO_Base_Fs_File(GO::config()->tmpdir.$tmp_file['tmp_file']);
+						$file->move(new GO_Base_Fs_Folder(GO::config()->file_storage_path . $folder->path));
 
-					$folder->addFile($file->name());
+						$folder->addFile($file->name());
+					}
 				}
 			}
 		}

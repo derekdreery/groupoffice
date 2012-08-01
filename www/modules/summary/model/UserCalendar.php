@@ -8,6 +8,8 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
+ * @property int $user_id
+ * @property int $calendar_id
  */
 
 class GO_Summary_Model_UserCalendar extends GO_Base_Db_ActiveRecord {

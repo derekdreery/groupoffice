@@ -362,7 +362,7 @@ if(count($load_modules)) {
 			die('Could not write to cache directory');
 		}
 
-		//Temporary dirty hack for namespaces
+		//Namespaces		
 		$modules = GO::modules()->getAllModules();
 
 		while ($module=array_shift($modules)) {
@@ -373,6 +373,8 @@ if(count($load_modules)) {
 		$language = new GO_Base_Language();
 		$l = $language->getAllLanguage();
 		unset($l['base']);
+		
+//		var_dump($l);
 
 		fwrite($fp, 'if(GO.customfields){Ext.ns("GO.customfields.columns");Ext.ns("GO.customfields.types");}');
 		foreach($l as $module=>$langVars){
@@ -521,10 +523,10 @@ if(count($load_modules)) {
 //
 //	$GO_SCRIPTS_JS .= 'GO.linkTypes='.json_encode($link_types).';';
 //
-//	require_once(GO::config()->class_path.'export/export_query.class.inc.php');
-//	$eq = new export_query();
-//
-//	$GO_SCRIPTS_JS.=$eq->find_custom_exports();
+	require_once(GO::config()->class_path.'export/export_query.class.inc.php');
+	$eq = new export_query();
+
+	$GO_SCRIPTS_JS.=$eq->find_custom_exports();
 
 	
 	foreach($load_modules as $module) {
@@ -588,13 +590,14 @@ if(isset($_REQUEST['f']))
 {
 	$fp = GO_Base_Util_Crypt::decrypt($_REQUEST['f']);
 	
-
+	GO::debug("External function parameters:");
+	GO::debug($fp);
 	
 	?>
 	if(GO.<?php echo $fp['m']; ?>)
 	{
 		 GO.mainLayout.on("render", function(){
-				GO.<?php echo $fp['m']; ?>.<?php echo $fp['f']; ?>.apply(this, <?php echo json_encode($fp['p']); ?>);
+				GO.<?php echo $fp['m']; ?>.<?php echo $fp['f']; ?>.call(this, <?php echo json_encode($fp['p']); ?>);
 		 });
 	}
 	<?php

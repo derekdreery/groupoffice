@@ -42,9 +42,9 @@ GO.email.AddressbookDialog = function(config) {
 			title:GO.addressbook.lang.contacts
 		});
 
-		this.contactsGrid.on('show', function() {
-			this.contactsGrid.store.load();
-		}, this);
+//		this.contactsGrid.on('show', function() {			
+//			//this.contactsGrid.store.load();
+//		}, this);
 
 		this.companiesStore = new GO.data.JsonStore({
 			url : GO.url("addressbook/company/store"),
@@ -64,6 +64,18 @@ GO.email.AddressbookDialog = function(config) {
 			store : this.companiesStore,
 			width : 320
 		});
+		
+		this.companySearchField.on("search", function(){
+			this.companyGrid.getView().emptyText=GO.lang['strNoItems'];
+		}, this);
+
+		this.companySearchField.on("reset", function(){
+			this.companyGrid.getView().emptyText=GO.lang.pleaseEnterQuery;
+			
+			this.companyGrid.store.removeAll();
+			//cancel store load
+			return false;
+		}, this);
 
 		this.companyGrid = new GO.grid.GridPanel({
 			title : GO.addressbook.lang.companies,
@@ -72,7 +84,9 @@ GO.email.AddressbookDialog = function(config) {
 			store : this.companiesStore,
 			view : new Ext.grid.GridView({
 				autoFill : true,
-				forceFit : true
+				forceFit : true,
+				deferEmptyText: false,
+				emptyText: GO.lang.pleaseEnterQuery
 			}),
 			columns : [{
 				header : GO.lang['strName'],
@@ -90,20 +104,21 @@ GO.email.AddressbookDialog = function(config) {
 			this.companySearchField]
 		});
 
-		this.companyGrid.on('show', function() {
-			this.companiesStore.load();
-		}, this);
+//		this.companyGrid.on('show', function() {
+//			this.companiesStore.load();
+//		}, this);
 
 		items.push(this.contactsGrid);
 		items.push(this.companyGrid);
 
 	}
-	
-	
-	
+		
 	
 	this.usersStore = new GO.data.JsonStore({
 		url : GO.url("core/users"),
+		baseParams:{
+			queryRequired:true
+		},
 		fields : ['id', 'username', 'name',  'email'],
 		remoteSort : true
 	});
@@ -112,6 +127,18 @@ GO.email.AddressbookDialog = function(config) {
 		store : this.usersStore,
 		width : 320
 	});
+	
+	this.usersSearchField.on("search", function(){
+		this.usersGrid.getView().emptyText=GO.lang['strNoItems'];
+	}, this);
+
+	this.usersSearchField.on("reset", function(){
+		this.usersGrid.getView().emptyText=GO.lang.pleaseEnterQuery;
+		
+		this.usersGrid.store.removeAll();
+		//cancel store load
+		return false;
+	}, this);
 
 	this.usersGrid = new GO.grid.GridPanel({
 		title : GO.addressbook.lang.users,
@@ -120,7 +147,9 @@ GO.email.AddressbookDialog = function(config) {
 		store : this.usersStore,
 		view : new Ext.grid.GridView({
 			autoFill : true,
-			forceFit : true
+			forceFit : true,
+			deferEmptyText: false,
+			emptyText: GO.lang.pleaseEnterQuery
 		}),
 		columns : [{
 			header : GO.lang['strName'],
@@ -142,9 +171,9 @@ GO.email.AddressbookDialog = function(config) {
 		tbar : [GO.lang['strSearch'] + ': ', ' ', this.usersSearchField]
 	});
 
-	this.usersGrid.on('show', function() {
-		this.usersStore.load();
-	}, this);
+//	this.usersGrid.on('show', function() {
+//		this.usersStore.load();
+//	}, this);
 	items.push(this.usersGrid);
 	
 	

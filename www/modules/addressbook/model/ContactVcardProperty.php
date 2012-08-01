@@ -10,6 +10,10 @@
  *
  * @copyright Copyright Intermesh
  * @author WilmarVB <wilmar@intermesh.nl>
+ * @property int $contact_id
+ * @property string $name
+ * @property string $parameters
+ * @property string $value
  */
 
 class GO_Addressbook_Model_ContactVcardProperty extends GO_Base_Db_ActiveRecord {

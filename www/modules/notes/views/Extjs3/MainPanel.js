@@ -70,13 +70,6 @@ GO.notes.MainPanel = function(config){
 	this.centerPanel.on('rowdblclick', function(grid, rowIndex){
 		this.eastPanel.editHandler();
 	}, this);
-
-	this.centerPanel.store.on('load', function(){
-		if(this.eastPanel.data.category_id!=this.category_id)
-		{
-			this.eastPanel.reset();
-		}
-	}, this);
 	
 	this.eastPanel = new GO.notes.NotePanel({
 		region:'east',

@@ -502,7 +502,7 @@ $l['operationStopped']='Operatie gestopt.';
 $l['delimiter']='Scheidingsteken';
 $l['enclosure']='Omheiningsteken';
 
-$l['groupofficeDisabled']="<p>Deze {product_name} account is geblokkeerd.</p><p>Neem contact op met uw account manager a.u.b.</p>";
+$l['groupofficeDisabled']="<p>Deze {product_name} account is uitgeschakeld.</p><p>Neem contact op met uw account manager a.u.b.</p>";
 
 
 $l['exportIncludeHidden'] = 'Exporteer ook verborgen kolommen';
@@ -539,3 +539,40 @@ $l['userUsername']='Gebruikersnaam';
 $l["failedImportItems"]="Mislukte import items";
 
 $l["birthdayFormatMustBe"]="Verjaardagsveld moet in de volgende vorm zijn";
+
+$l["pointForText"]="Wijs de cursor hier om de tekst te lezen";
+$l["encryptContent"]="Inhoud versleutelen";
+$l["contentEncrypted"]="Inhoud is versleuteld.";
+$l['passwordConfirm'] = 'Wachtwoord bevestigen';
+$l['decryptContent'] = 'Inhoud ontsleutelen';
+$l['clickHereToDecrypt'] = 'Klik hier om inhoud te ontsleutelen en in te zien.';
+$l['passwordSubmissionError']='Er trad een fout op bij het gebruik van het wachtwoord. Er zijn geen wijzigingen aangebracht op deze item. Neemt u a.u.b. contact op met de beheerder en specificeer de stappen die gezet zijn vlak voor deze melding.';
+
+$l["cmdContinue"]='Doorgaan';
+$l['youAreUsing']='U gebruikt %s van %s';
+$l["batchEdit"]="Meerdere bewerken";
+$l["batchSelectOne"]="Selecteer minstens één item";
+$l["batchSelectionError"]="U heeft niets geselecteerd";
+$l["label"]="Label";
+$l["changePassword"]= 'Wachtwoord veranderen';
+$l["changePasswordText"]= 'Vul onderstaand formulier in om uw wachtwoord te veranderen';
+$l["changePasswordSuccess"]= 'Uw wachtwoord is veranderd';
+$l["changePasswordSuccessTitle"]= 'Wachtworrd veranderd';
+$l["noEmailGiven"]= 'Geen e-mail opgegeven';
+$l["usertokenInvalid"]= 'Ongeldig token';
+$l["noUserFoundWithEmail"]="Helaas, er is geen gebruiker gevonden met dat e-mail adres.";
+$l["viesDownException"]='De VIES service is onbereikbaar. U kunt uw order plaatsen maar wij zullen uw BTW nummer nog handmatig controleren';
+$l['notFound']='Het opgevraagde item werd niet gevonden.';
+$l['summarylogImportText']="{importCount} items wereden geïmporteerd";
+$l['summarylogErrorText']="Er waren fouten bij het importeren";
+$l['summarylogSuccessText']="Import geslaagd";
+$l["personalDetailsFor"]= 'Persoonlijke gegevens voor';
+$l["fieldsetWork"]= 'Werk';
+$l["fieldsetAddress"]= 'Adres';
+$l["fieldsetContact"]= 'Contactgegevens';
+$l["attributeGreater"]="Veld '%s' moet groter zijn dan'%s'";
+$l["attributeGreaterOrEqual"]="Veld '%s' moet groter of gelijk zijn aan '%s'";
+$l['pleaseEnterQuery']="Voer een zoekterm in a.u.b.";
+
+$l['numMinValue']="De minimale waarde voor dit veld is {0}";
+$l['numMaxValue']="De maximale waarde voor dit veld is {0}";

@@ -30,7 +30,9 @@ class GO_Files_FilesModule extends GO_Base_Module{
 			//$folder->syncFilesystem();
 			
 			//$folder = GO_Files_Model_Folder::model()->findByPath('users/'.$user->username, true);
-			if(!$folder->acl){
+			
+			//In some cases the acl id of the home folder was copied from the user. We will correct that here.
+			if(!$folder->acl || $folder->acl_id==$user->acl_id){
 				$folder->setNewAcl($user->id);
 				$folder->user_id=$user->id;
 				$folder->visible=0;
