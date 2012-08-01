@@ -340,14 +340,6 @@ class GO_Base_Config {
 	 */
 	var $webmaster_email = 'webmaster@example.com';
 
-	/**
-	 * The link in menu help -> contents
-	 *
-	 * @var     string
-	 * @access  public
-	 */
-	var $help_link = 'http://wiki4.group-office.com/wiki/';
-
 
 	/**
 	 * The path to the root of Group-Office with slash on end
@@ -699,26 +691,26 @@ class GO_Base_Config {
 
 	var $nav_page_size=50;
 	
-	/**
-	 * Enable logging of slow requests
-	 * 
-	 * @var boolean 
-	 */
-	public $log_slow_requests=false;
-	
-	/**
-	 * Slow request time in seconds
-	 * 
-	 * @var float 
-	 */
-	public $log_slow_requests_trigger=1;
-	
-	/**
-	 * Path of the log file
-	 * 
-	 * @var string 
-	 */
-	public $log_slow_requests_file="/home/groupoffice/slow-requests.log";
+//	/**
+//	 * Enable logging of slow requests
+//	 * 
+//	 * @var boolean 
+//	 */
+//	public $log_slow_requests=false;
+//	
+//	/**
+//	 * Slow request time in seconds
+//	 * 
+//	 * @var float 
+//	 */
+//	public $log_slow_requests_trigger=1;
+//	
+//	/**
+//	 * Path of the log file
+//	 * 
+//	 * @var string 
+//	 */
+//	public $log_slow_requests_file="/home/groupoffice/slow-requests.log";
 
 	/*//////////////////////////////////////////////////////////////////////////////
 	 //////////      Variables that are not touched by the installer   /////////////
@@ -730,7 +722,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.0.68';
+	var $version = '4.0.83';
 
 
 	/* The permissions mode to use when creating files
@@ -760,7 +752,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20120710';
+	var $mtime = '20120731-1';
 
 	#group configuration
 	/**
@@ -836,6 +828,16 @@ class GO_Base_Config {
 	 */
 
 	var $configuration_url = 'configuration';
+	
+	
+	/**
+	 * The link in menu help -> contents
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $help_link = 'http://wiki4.group-office.com/wiki/';
+	
 	/**
 	 * Relative path to the classes directory with no slash at start and end
 	 *
@@ -971,13 +973,15 @@ class GO_Base_Config {
 				$this->cmd_unzip=$this->root_path.'controls/win32/unzip.exe';
 				$this->cmd_xml2wbxml=$this->root_path.'controls/win32/libwbxml/xml2wbxml.exe';
 				$this->cmd_wbxml2xml=$this->root_path.'controls/win32/libwbxml/wbxml2xml.exe';
+				
+				$this->convert_utf8_filenames_to_ascii=true;
 			}
 
 			if(empty($config['tmpdir']) && function_exists('sys_get_temp_dir')) {
 				$this->tmpdir = str_replace('\\','/', sys_get_temp_dir());
 			}
 
-			$this->default_timezone=date_default_timezone_get();
+			$this->default_timezone=@date_default_timezone_get(); //suppress warning if using system tz
 
 			$lc = localeconv();
 
@@ -1011,24 +1015,15 @@ class GO_Base_Config {
 		if($this->debug)
 			$this->debug_log=true;
 
-		if($this->debug_log || $this->log_slow_requests) {			
+		if($this->debug_log){// || $this->log_slow_requests) {			
 
 			list ($usec, $sec) = explode(" ", microtime());
 			$this->loadstart = ((float) $usec + (float) $sec);
 			
-			$dat = getrusage();
-			define('PHP_TUSAGE', microtime(true));
-			define('PHP_RUSAGE', $dat["ru_utime.tv_sec"]*1e6+$dat["ru_utime.tv_usec"]);
+//			$dat = getrusage();
+//			define('PHP_TUSAGE', microtime(true));
+//			define('PHP_RUSAGE', $dat["ru_utime.tv_sec"]*1e6+$dat["ru_utime.tv_usec"]);
 		}
-
-//		if($this->firephp)
-//			$this->firephp=true;
-
-		// database class library
-//		require_once($this->class_path.'database/base_db.class.inc.php');
-//		require_once($this->class_path.'database/'.$this->db_type.'.class.inc.php');
-//
-//		$this->db = new db($this);
 
 		if(is_string($this->file_create_mode)) {
 			$this->file_create_mode=octdec($this->file_create_mode);
@@ -1071,33 +1066,33 @@ class GO_Base_Config {
 		
 		GO::endRequest();
 		
-		$this->_logSlowRequest();
+//		$this->_logSlowRequest();
 	}
 	
-	private function _logSlowRequest(){
-		if($this->log_slow_requests){
-			$time = GO_Base_Util_Date::getmicrotime()-$this->loadstart;
-			if($time>$this->log_slow_requests_trigger){
-
-				$logStr = "URI: ";
-
-				if(isset($_SERVER['HTTP_HOST']))
-					$logStr .= $_SERVER['HTTP_HOST'];
-
-				if(isset($_SERVER['REQUEST_URI']))
-					$logStr .= $_SERVER['REQUEST_URI'];
-
-				$logStr .= '; ';
-
-				$logStr .= 'r: '.GO::router()->getControllerRoute().';';
-
-				$logStr .= 'time: '.$time.';'."\n";
-
-
-				file_put_contents($this->log_slow_requests_file, $logStr,FILE_APPEND);			
-			}		
-		}
-	}
+//	private function _logSlowRequest(){
+//		if($this->log_slow_requests){
+//			$time = GO_Base_Util_Date::getmicrotime()-$this->loadstart;
+//			if($time>$this->log_slow_requests_trigger){
+//
+//				$logStr = "URI: ";
+//
+//				if(isset($_SERVER['HTTP_HOST']))
+//					$logStr .= $_SERVER['HTTP_HOST'];
+//
+//				if(isset($_SERVER['REQUEST_URI']))
+//					$logStr .= $_SERVER['REQUEST_URI'];
+//
+//				$logStr .= '; ';
+//
+//				$logStr .= 'r: '.GO::router()->getControllerRoute().';';
+//
+//				$logStr .= 'time: '.$time.';'."\n";
+//
+//
+//				file_put_contents($this->log_slow_requests_file, $logStr,FILE_APPEND);			
+//			}		
+//		}
+//	}
 
 	function use_zlib_compression(){
 

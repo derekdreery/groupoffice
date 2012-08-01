@@ -85,6 +85,8 @@ class GO_Email_Controller_Folder extends GO_Base_Controller_AbstractController {
 	
 	protected function actionStore($params){
 		
+		GO::session()->closeWriting();
+		
 		$response = array(
 				"results"=>array(),
 				"success"=>true

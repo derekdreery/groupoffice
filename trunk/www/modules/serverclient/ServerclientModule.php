@@ -62,7 +62,10 @@ class GO_Serverclient_ServerclientModule extends GO_Base_Module{
 	private static function _setMailboxPassword($httpClient, $user, $domain){
 		//domain is, for example "intermesh.dev".
 		
-		$username = $user->username.'@'.$domain;
+		$username = $user->username;
+		if(empty(GO::config()->serverclient_dont_add_domain_to_imap_username))
+			$username.='@'.$domain;
+		
 		
 		$url = GO::config()->serverclient_server_url."?r=postfixadmin/mailbox/submit";
 		$response = $httpClient->request($url, array(

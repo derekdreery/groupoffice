@@ -8,6 +8,8 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
+ * @property int $user_id
+ * @property string $text
  */
 
 class GO_Summary_Model_Note extends GO_Base_Db_ActiveRecord {

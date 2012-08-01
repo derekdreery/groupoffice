@@ -1,3 +1,25 @@
+Mail reminders en core/cron door wilmar
+
+BUg: http://www.group-office.com/forum/viewtopic.php?f=6&t=8317
+
+Iedereen mag views aanmaken in agenda
+
+Bug: http://www.group-office.com/forum/viewtopic.php?f=1&t=8409&p=28295#p28295
+
+
+Bij alle omgebouwde modules .php zoeken in *.js files zodat oude php code uiteindelijk weg kan.
+
+Giralis
+
+Auke: Vinkje erbij voor grof vuil bij goederen. Aparte rapportage hiervoor. 4 uur
+
+Arjen mul: 1 uur voor korting
+
+Search Co: autolink 8 uur.
+
+
+Billing systeem servermanager
+
 Ticket groepen werken niet daniel malmgren
 
 Automatisch ticket maken van support@intermesh.nl
@@ -7,7 +29,7 @@ http://www.group-office.com/forum/viewtopic.php?f=3&t=8353
 
 VCF import via mail
 
-Note sync
+Note sync bij syncml. Funambol outlook ondersteund dit.
 
 reminder als licentie verloopt
 
@@ -35,8 +57,6 @@ Sieve MVC en redesign vakantie. Automatisch vullen aliasen
 
 CMS compatible (Wilmar)
 
-Module icons
-
 karakter encoding: koi8-r
 
 Document conversion
@@ -61,10 +81,8 @@ Licentie checks per module
 
 Servermanager bestelfunctie
 
-e-mail mvc
 overige modules mvc
 sticky user group that is shared with all items members create
-E-mail files functie
 
 Freebusy support in sabredav 1.6
 
@@ -73,8 +91,7 @@ Feature requests voting system
 Bij bedrijf -> displaypanel -> New -> Contact
 
 
-Password encrypted notes
-
+Billing MVC
 
 UCF for deb pkgs
 http://www.group-office.com/forum/viewtopic.php?f=6&t=8083

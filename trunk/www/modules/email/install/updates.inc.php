@@ -45,6 +45,8 @@ $updates["201206141446"][]="";
 $updates["201206141446"][]="";
 $updates["201206141446"][]="";
 
+$updates["201207040933"][]="ALTER TABLE `em_links` ADD `uid` VARCHAR( 100 ) NOT NULL DEFAULT '', ADD INDEX ( `uid` ) ";
 
-$updates["201207040933"][]="ALTER TABLE `em_links` ADD `uid` VARCHAR( 100 ) NOT NULL DEFAULT '',
-ADD INDEX ( `uid` ) ";
+$updates["201207191730"][]="ALTER TABLE `em_accounts` ADD `sieve_port` int(11) NOT NULL;";
+$updates["201207191730"][]="ALTER TABLE `em_accounts` ADD `sieve_usetls` tinyint(1) NOT NULL DEFAULT '1';";
+$updates["201207191730"][]="UPDATE `em_accounts` SET `sieve_port`='2000'";

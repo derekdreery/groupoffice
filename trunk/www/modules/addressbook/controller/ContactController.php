@@ -486,12 +486,21 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		}
 		
 		$file = new GO_Base_Fs_File($params['file']);
-		
-		$vObjectsArray = GO_Base_VObject_Reader::prepareData($file->getContents());
-		unset($params['file']);
+		$file->convertToUtf8();
 
-		foreach($vObjectsArray as $nr => $vObject) {
+		$data = "BEGIN:ADDRESSBOOK\n".$file->getContents()."END:ADDRESSBOOK";
+		GO::debug($data);
+		
+		$vaddressbook = GO_Base_VObject_Reader::read($data);
+		
+//		GO::debug($vObjectsArray);
+		unset($params['file']);
+		$nr=0;
+		foreach($vaddressbook->vcard as $vObject) {
+			$nr++;
 			GO_Base_VObject_Reader::convertVCard21ToVCard30($vObject);
+			GO::debug($vObject->serialize());
+			
 			$contact = new GO_Addressbook_Model_Contact();
 			try {
 				if ($contact->importVObject($vObject, $params))

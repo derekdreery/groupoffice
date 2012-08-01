@@ -142,11 +142,11 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 			if (!empty($params['remind'])) {
 
 				$encUsername = GO_Base_Util_Crypt::encrypt($params['username']);
-				if ($encUsername)
+				if (!$encUsername)
 					$encUsername = $params['username'];
 
 				$encPassword = GO_Base_Util_Crypt::encrypt($params['password']);
-				if ($encPassword)
+				if (!$encPassword)
 					$encPassword = $params['password'];
 
 				GO_Base_Util_Http::setCookie('GO_UN', $encUsername);

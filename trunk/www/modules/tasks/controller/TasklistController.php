@@ -54,13 +54,14 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 			$file->convertToUtf8();
 			$contents = $file->getContents();
 			$vcal = GO_Base_VObject_Reader::read($contents);
+			GO_Base_VObject_Reader::convertVCalendarToICalendar($vcal);
 			foreach($vcal->vtodo as $vtask) {
 				$event = new GO_Tasks_Model_Task();
 				$event->importVObject( $vtask, array('tasklist_id'=>$params['tasklist_id']) );
 				$count++;
 			}
 		}
-		$response['feedback'] = sprintf(GO::t('import_success','tasklist'), $count);
+		$response['feedback'] = sprintf(GO::t('import_success','tasks'), $count);
 		return $response;
 	}
 }

@@ -43,12 +43,7 @@ abstract class GO_Base_Model extends GO_Base_Observable{
 	public static function model($className=__CLASS__)
 	{		
 		if(isset(self::$_models[$className])){
-			$model = self::$_models[$className];
-			if(GO::router()->getControllerRoute()=="maintenance/upgrade"){
-				//column definitions may change
-				if(method_exists($model, "loadColumns"))
-					$model->loadColumns(true);
-			}
+			$model = self::$_models[$className];			
 		}else
 		{
 			$model=self::$_models[$className]=new $className(false);			

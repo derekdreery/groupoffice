@@ -18,6 +18,6 @@ class GO_Base_VObject_VCalendar extends Sabre_VObject_Component {
 		parent::__construct($name, $iterator);
 		
 		$this->version='2.0';
-		$this->prodid='-//Intermesh//NONSGML Group-Office//EN';		
+		$this->prodid='-//Intermesh//NONSGML Group-Office '.GO::config()->version.'//EN';		
 	}
 }

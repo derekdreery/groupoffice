@@ -127,9 +127,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 
 	protected function getCacheAttributes() {
+		
 		return array(
-				'name' => $this->name,
-				'description' => $this->description
+				'name' => $this->private ?  GO::t('privateEvent','calendar') : $this->name,
+				'description' => $this->private ?  "" : $this->description
 		);
 	}
 
@@ -954,6 +955,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$this->description = (string) $vobject->description;
 		$this->start_time = $vobject->dtstart->getDateTime()->format('U');
 		$this->end_time = $vobject->dtend->getDateTime()->format('U');
+		
+		//TODO needs improving
+		if(isset($vobject->dtend['VALUE']) && $vobject->dtend['VALUE']=='DATE')
+			$this->end_time-=60;
 		
 		if((string) $vobject->rrule != ""){			
 			$rrule = new GO_Base_Util_Icalendar_Rrule();

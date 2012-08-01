@@ -9,6 +9,7 @@
  * @version $Id: ActionGrid.js 0000 2010-12-16 08:57:17 wsmits $
  * @copyright Copyright Intermesh
  * @author Wesley Smits <wsmits@intermesh.nl>
+ * @author WilmarVB <wilmar@intermesh.nl>
  */
 
 GO.sieve.ActionGrid = function(config){
@@ -21,75 +22,13 @@ GO.sieve.ActionGrid = function(config){
 	config.border=true;
 	config.cls = 'go-grid3-hide-headers';
 	var fields ={
-		fields:['type','copy','target','days','addresses','reason','text'],
+		fields:['type','copy','target','days','addresses','reason','vacationStart','vacationEnd','text'],
 		header: false,
-		columns:[
-//		{
-//			header: GO.sieve.lang.type,
-//			dataIndex: 'type'
-//		},{
-//			header: GO.sieve.lang.copy,
-//			dataIndex: 'copy'
-//		},{
-//			header: GO.sieve.lang.target,
-//			dataIndex: 'target'
-//		},{
-//			header: GO.sieve.lang.days,
-//			dataIndex: 'days'
-//		},{
-//			header: GO.sieve.lang.addresses,
-//			dataIndex: 'addresses'
-//		},{
-//			header: GO.sieve.lang.reason,
-//			dataIndex: 'reason'
-//		},
-		{
-			header:false,
-			dataIndex:'text',
-			renderer:function(value, metaData, record, rowIndex, colIndex, store){
-				
-				var txtToDisplay = '';
-
-				switch(record.data.type)
-				{
-					case 'fileinto':
-						if(record.data.copy)
-							txtToDisplay = GO.sieve.lang.copyto+' '+record.data.target;
-						else
-							txtToDisplay = GO.sieve.lang.fileinto+' '+record.data.target;
-						break;
-
-					case 'redirect':
-						if(record.data.copy)
-							txtToDisplay = GO.sieve.lang.sendcopyto+' '+record.data.target;
-						else
-							txtToDisplay = GO.sieve.lang.forwardto+' '+record.data.target;
-						break;
-
-					case 'vacation':
-							txtToDisplay = GO.sieve.lang.vacsendevery+' '+record.data.days+' '+GO.sieve.lang.vacdaystoadresses+' '+record.data.addresses+' '+GO.sieve.lang.vacationmessage+' '+record.data.reason;
-						break;
-
-					case 'reject':
-							txtToDisplay = GO.sieve.lang.refusewithmesssage+' '+record.data.target;
-						break;
-
-					case 'discard':
-							txtToDisplay = GO.sieve.lang.discard;
-						break;
-
-					case 'stop':
-							txtToDisplay = GO.sieve.lang.stop;
-						break;
-						
-					default:
-							txtToDisplay = GO.sieve.lang.errorshowtext;
-						break;
-				}
-				return txtToDisplay;
-			}
-		}
-	]};
+		columns:[{
+				header:false,
+				dataIndex:'text'
+			}]
+	};
 
 	var columnModel =  new Ext.grid.ColumnModel({
 		columns:fields.columns
@@ -108,19 +47,25 @@ GO.sieve.ActionGrid = function(config){
 	config.view=new Ext.grid.GridView({
 		autoFill: true,
 		forceFit: true,
-		emptyText: GO.lang['strNoItems']
+		emptyText: GO.sieve.lang.pleaseAddAction
 	});
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
 	config.tbar=[{
+			iconCls: 'btn-add',
+			text: GO.lang['cmdAdd'],
+			cls: 'x-btn-text-icon',
+			handler: function(){this.showActionCreatorDialog();},
+				scope: this
+		},{
 			iconCls: 'btn-delete',
 			text: GO.lang['cmdDelete'],
 			cls: 'x-btn-text-icon',
-			handler: function(){ this.deleteSelected();},
+			handler: function(){this.deleteSelected();},
 				scope: this
 		}];
 
-	GO.sieve.SieveGrid.superclass.constructor.call(this, config);
+	GO.sieve.ActionGrid.superclass.constructor.call(this, config);
 
 	this.on('render',function(){
 		//enable row sorting
@@ -163,6 +108,66 @@ Ext.extend(GO.sieve.ActionGrid, GO.grid.GridPanel,{
 		for (var i = 0; i < this.store.data.items.length;  i++)
 		{
 			filters[this.store.data.items[i].get('id')] = i;
+		}
+	},
+	
+	_saveActionRecord : function( values ) {
+		var record;
+		if(values.id<0)
+		{
+			record = new GO.sieve.ActionRecord(values);
+			var insertId = this.store.getCount();
+
+			if(this.store.getCount() > 0 && this.store.getAt(this.store.getCount()-1).data.type == 'stop'){
+				insertId = this.store.getCount()-1;
+			}else
+			{
+				if (!(values.type=='redirect' && values.copy==true) && values.type!='vacation') {
+					var stopRecord = new GO.sieve.ActionRecord({
+								type:"stop",
+								copy: false,
+								target:"",
+								days:"",
+								addresses:"",
+								reason:"",
+								text : GO.sieve.lang.stop
+							});
+
+					this.store.insert(insertId, stopRecord);
+				}
+			}
+			//}
+			if(values.type=='vacation')
+				insertId = 0;
+
+			record.data.id = insertId;
+
+			this.store.insert(insertId, record);
+		}
+		else
+		{
+			record = this.store.getAt(values.id);
+			Ext.apply(record.data,values);
+			record.commit();
+		}
+	},
+	
+	showActionCreatorDialog : function(recordId) {	
+		if (!this.actionCreatorDialog) {
+			this.actionCreatorDialog = new GO.sieve.ActionCreatorDialog();
+			this.actionCreatorDialog.on('actionPrepared',function(actionValues){
+				this._saveActionRecord(actionValues);
+			},this);
+		}
+		
+		if (recordId>=0) {
+			var record = this.store.getAt(recordId);
+			record.set('id',recordId);
+			this.actionCreatorDialog.show(record);
+		} else {
+			var record = new Ext.data.Record();
+			record.set('id',-1);
+			this.actionCreatorDialog.show(record);
 		}
 	}
 });

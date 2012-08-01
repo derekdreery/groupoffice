@@ -43,6 +43,9 @@
  * @abstract
  */
 abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_Base_Controller_AbstractController{
+	
+	
+	protected $uniqueSelection=true;
 		
 	/**
 	 * The name of the model we are showing and adding to the other model.
@@ -89,12 +92,15 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 			->addCondition($model->primaryKey(), 'lt.'.$this->linkModelField(), '=', 't', true, true);			
 		
 		$findParams = $store->getDefaultParams($params);
-		$findParams->join($linkModel->tableName(), $joinCriteria, 'lt', 'LEFT');
 		
-		$findCriteria = GO_Base_Db_FindCriteria::newInstance()
-						->addCondition($this->linkModelField(), null,'IS','lt');
+		if($this->uniqueSelection){
+			$findParams->join($linkModel->tableName(), $joinCriteria, 'lt', 'LEFT');
+
+			$findCriteria = GO_Base_Db_FindCriteria::newInstance()
+							->addCondition($this->linkModelField(), null,'IS','lt');
+			$findParams->criteria($findCriteria);
+		}
 		
-		$findParams->criteria($findCriteria);
 		
 		$availableModels = $model->find($findParams);
 		
@@ -259,8 +265,7 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 		$key = $linkModel->primaryKey();
 		
 		return $key[0]==$this->linkModelField() ? $key[1] : $key[0];
-	}
-	
+	}	
 	
 	public function actionUpdateRecord($params) {
 		$response = array('success'=>true);

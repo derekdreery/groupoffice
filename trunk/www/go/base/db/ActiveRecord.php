@@ -291,10 +291,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			return true;
 		}
 	 */
-	protected $columns=array(
-				'id'=>array('type'=>PDO::PARAM_INT,'required'=>true,'length'=>null, 'validator'=>null,)
-			);	
+	protected $columns;
 	
+//	=array(
+//				'id'=>array('type'=>PDO::PARAM_INT,'required'=>true,'length'=>null, 'validator'=>null,)
+//			);	
+//	
 	private $_new=true;
 
 	/**
@@ -306,7 +308,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		//$pk = $this->pk;
 
-		$this->loadColumns(GO::router()->getControllerRoute()=="maintenance/upgrade");
+		$this->columns=GO_Base_Db_Columns::getColumns($this);
 		$this->setIsNew($newRecord);
 		
 		if($this->isNew) 
@@ -412,118 +414,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$this->columns[$attribute]['label'] = $label;
 	}
 	
-	
-	/**
-	 * Loads the column information from the database
-	 * 
-	 * Normally this wouldn't be called publicly. But when the database is 
-	 * upgraded the column definitions may change and they need to be reloaded.
-	 * 
-	 * @package boolean $ignoreCache
-	 */
-	public function loadColumns($ignoreCache=false) {
-		if($this->tableName()){
-			
-			$this->columns=$ignoreCache ? false : GO::cache()->get('modelColumns_'.$this->tableName());
-			
-			if(!$this->columns){
-			
-				$sql = "SHOW COLUMNS FROM `" . $this->tableName() . "`;";
-				$stmt = $this->getDbConnection()->query($sql);
-				while ($field = $stmt->fetch()) {					
-					preg_match('/([a-zA-Z].*)\(([1-9].*)\)/', $field['Type'], $matches);
-					if ($matches) {
-						$length = $matches[2];
-						$type = $matches[1];
-					} else {
-						$type = $field['Type'];
-						$length = 0;
-					}
-
-					$required=false;
-					$gotype = 'textfield';
-	
-					$pdoType = PDO::PARAM_STR;
-					switch ($type) {
-						case 'int':
-						case 'tinyint':
-						case 'bigint':
-						
-							$pdoType = PDO::PARAM_INT;
-							if($length==1 && $type=='tinyint')
-								$gotype='boolean';
-							else
-								$gotype = '';
-							
-							$length = 0;
-							
-							break;		
-						
-						case 'float':
-						case 'double':
-						case 'decimal':
-							$pdoType = PDO::PARAM_STR;
-							$length = 0;
-							$gotype = 'number';
-							break;
-						
-						case 'mediumtext':
-						case 'longtext':
-						case 'text':
-							$gotype = 'textarea';
-							break;
-						
-						case 'mediumblob':
-						case 'longblob':
-						case 'blob':
-							$gotype = 'blob';
-							break;
-						
-						case 'date':
-							$gotype='date';
-							break;
-					}
-
-					switch($field['Field']){
-						case 'ctime':
-						case 'mtime':
-							$gotype = 'unixtimestamp';			
-							break;
-						case 'name':
-							$required=true;							
-							break;
-						case 'user_id':
-							$gotype = 'user';
-							break;
-					}
-					
-					$default = $field['Default'];
-				
-					//TODO: Why no default null value here???
-					if($field['Null']=='NO' && is_null($default) && strpos($field['Extra'],'auto_increment')===false)
-						$default='';
-					
-					//$required = is_null($default) && $field['Null']=='NO' && strpos($field['Extra'],'auto_increment')===false;
-
-					$this->columns[$field['Field']]=array(
-							'type'=>$pdoType,
-							'required'=>$required,
-							'length'=>$length,
-							'gotype'=>$gotype,
-							'default'=>$default,
-							'dbtype'=>$type
-					);
-					
-				}
-
-				if(!$ignoreCache)
-					GO::cache()->set('modelColumns_'.$this->tableName(), $this->columns);
-			}
-		}
-	}
-	
-	
-
 	
 	
 //	/**
@@ -661,18 +551,28 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$origValue = $value =  $this->$attributeName;
 
-		while($existing = $this->findSingle(array(
-				'criteriaObject'=>  GO_Base_Db_FindCriteria::newInstance()
-					->addModel(GO::getModel($this->className()))
-					->addCondition($attributeName, $value)
-					->addCondition($this->primaryKey(), $this->pk, '!=')
-		)))
-		{			
-			
-			$value = $origValue.' ('.$x.')';
+		while ($existing = $this->_findExisting($attributeName, $value)) {
+
+			$value = $origValue . ' (' . $x . ')';
 			$x++;
 		}
 		$this->$attributeName=$value;
+	}
+	
+	private function _findExisting($attributeName, $value){
+		
+		$criteria = GO_Base_Db_FindCriteria::newInstance()
+										->addModel(GO::getModel($this->className()))
+										->addCondition($attributeName, $value);
+		
+		if($this->pk)
+			$criteria->addCondition($this->primaryKey(), $this->pk, '!=');
+		
+		$existing = $this->findSingle(GO_Base_Db_FindParams::newInstance()
+						->debugSql()
+						->criteria($criteria));
+		
+		return $existing;
 	}
 	
 	private $_permissionLevel;
@@ -2461,7 +2361,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 			$model->setAttributes($attr, false);
 			$model->cutAttributeLengths();
-			$model->save();
+			$model->save(true);
 			return $model;
 			
 		}

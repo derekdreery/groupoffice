@@ -54,7 +54,7 @@
 {
   border:1px solid #dddddd;
 	margin:0px !important;
-  background: #efefef url(../../../../ext/resources/images/default/grid/row-over.gif) repeat-x left top;
+  background: #efefef url(../../../../views/Extjs3/ext/resources/images/default/grid/row-over.gif) repeat-x left top;
 }
 
 .x-form-add-trigger 

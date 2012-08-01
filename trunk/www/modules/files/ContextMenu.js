@@ -205,7 +205,7 @@ GO.files.FilesContextMenu = function(config)
 	});
 	config['items'].push(this.createDownloadLinkButton);
 
-	if(GO.settings.modules.email) {
+	if(GO.email) {
 		this.downloadLinkButton = new Ext.menu.Item({
 			iconCls: 'btn-email',
 			text: GO.files.lang.emailDownloadLink,
@@ -264,7 +264,7 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 		if(records.length=='1')
 		{
 			extension = records[0].data.extension;
-			
+
 			switch(extension)
 			{
 				case 'zip':
@@ -276,8 +276,12 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 						this.gotaButton.show();
 					this.decompressButton.show();
 					this.compressButton.hide();
-					this.downloadLinkButton.show();
+					if(this.downloadLinkButton)
+						this.downloadLinkButton.show();
 					this.createDownloadLinkButton.show();
+					
+					if(this.emailFilesButton)
+						this.emailFilesButton.show();
 					break;
 
 				case '':
@@ -287,15 +291,20 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 							this.gotaButton.hide();
 						this.decompressButton.hide();
 						this.compressButton.show();
-						this.downloadLinkButton.hide();
+						if(this.downloadLinkButton)
+							this.downloadLinkButton.hide();
 					} else {
 						this.downloadButton.show();
 						if(this.gotaButton)
 							this.gotaButton.show();
 						this.decompressButton.show();
 						this.compressButton.hide();
-						this.downloadLinkButton.show();
+						if(this.downloadLinkButton)
+							this.downloadLinkButton.show();
 						this.createDownloadLinkButton.show();
+						
+						if(this.emailFilesButton)
+							this.emailFilesButton.show();
 					}
 					break;
 				case 'folder':
@@ -306,8 +315,15 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 						this.gotaButton.hide();
 					this.decompressButton.hide();
 					clickedAt == 'tree' ? this.compressButton.hide() : this.compressButton.show();
-					this.downloadLinkButton.hide();
+					
+					if(this.downloadLinkButton)
+						this.downloadLinkButton.hide();
+					
+					
 					this.createDownloadLinkButton.hide();
+					
+					if(this.emailFilesButton)
+						this.emailFilesButton.hide();
 
 					break;
 
@@ -326,16 +342,36 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 					this.downloadButton.show();
 					clickedAt == 'tree' ? this.compressButton.hide() : this.compressButton.show();
 					this.decompressButton.hide();
-					this.downloadLinkButton.show();
+					
+					if(this.downloadLinkButton)
+						this.downloadLinkButton.show();
+					
 					this.createDownloadLinkButton.show();
+					
+					if(this.emailFilesButton)
+						this.emailFilesButton.show();
 					break;
 			}
 		}else
 		{
+
 			clickedAt == 'tree' ? this.compressButton.hide() : this.compressButton.show();
 			this.decompressButton.hide();
 			this.downloadButton.hide();
 			this.createDownloadLinkButton.hide();
+
+			if(this.emailFilesButton)
+				this.emailFilesButton.show();
+
+			Ext.each(this.records, function(record) {
+				if (record.data.extension == 'folder') {
+					
+					if(this.emailFilesButton)
+						this.emailFilesButton.hide();
+					
+					return false;
+				}
+			}, this);
 
 			if(this.gotaButton)
 				this.gotaButton.hide();

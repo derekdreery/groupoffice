@@ -20,12 +20,14 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 	editGoDialogId : 'note',
 	
 	editHandler : function(){
-		GO.notes.showNoteDialog(this.link_id);		
+		GO.notes.showNoteDialog(this.model_id);		
 	},	
 		
 	initComponent : function(){	
 		
 		this.loadUrl=('notes/note/display');
+		
+		this.id=Ext.id();
 		
 		this.template = 
 
@@ -38,7 +40,12 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 						'<td>{id}</td>'+
 					'</tr>'+
 					'<tr>'+
-						'<td colspan="2">{content}</td>'+
+						'<tpl if="GO.util.empty(encrypted)">'+
+							'<td colspan="2">{content}</td>'+
+						'</tpl>'+
+						'<tpl if="!GO.util.empty(encrypted)">'+
+							'<td colspan="2"><div id="encryptedNoteDisplaySecure'+this.id+'"></div></td>'+
+						'</tpl>'+
 					'</tr>'+									
 				'</table>';																		
 				
@@ -71,5 +78,66 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 		}		
 
 		GO.notes.NotePanel.superclass.initComponent.call(this);
+	},
+	
+	afterLoad : function(result) {
+		if(this.data.encrypted){
+			if (!this.passwordPanel){
+				this.passwordPanel = new Ext.Panel({			
+					renderTo: 'encryptedNoteDisplaySecure'+this.id,
+					layout: 'column',
+					border: false,
+					keys:[{
+						key: Ext.EventObject.ENTER,
+						fn : function() {
+							this._loadWithPassword();
+						},
+						scope : this
+					}],
+					items: [
+						this.passwordField = new Ext.form.TextField({
+							name: 'password',
+		//						emptyText: GO.lang['password']+' '+GO.lang['decryptContent'],
+							inputType: 'password',
+							width: '60%'
+						}),
+						this.passwordButton = new Ext.Button({
+								text: GO.lang['decryptContent'],
+								handler: function(){
+									this._loadWithPassword();									
+								},
+								scope: this
+							})
+					]
+				});
+			}else
+			{
+				var el = Ext.get('encryptedNoteDisplaySecure'+this.id);
+				//console.log(el);
+				el.appendChild(this.passwordPanel.getEl());
+			}
+		}
+	},
+	
+	_loadWithPassword : function() {
+		
+		var pass = this.passwordField.getValue();
+		this.passwordField.setValue("");
+		
+		GO.request({
+			url: 'notes/note/display',
+			params: {
+				'id' : this.model_id,
+				'userInputPassword' : pass
+			},
+			success: function(options, response, result) {
+				if (!GO.util.empty(result.feedback))
+					Ext.MessageBox.alert('', result.feedback);
+				if (GO.util.empty(result.data.encrypted)) {
+					document.getElementById('encryptedNoteDisplaySecure'+this.id).innerHTML = result.data.content;
+				}
+			},
+			scope: this
+		});
 	}
 });			

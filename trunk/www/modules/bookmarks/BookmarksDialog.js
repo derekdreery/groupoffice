@@ -244,7 +244,7 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 			this.thumbExample = new Ext.Component({
 				style: {
 					marginLeft: '100px'
-				}}),
+				}})
 			]
 		});
 		

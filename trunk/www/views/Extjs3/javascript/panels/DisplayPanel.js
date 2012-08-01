@@ -414,9 +414,9 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 					}else
 					{
 						if(GO.files){
-							//var record = new GO.files.FileRecord(file);
+							var record = new GO.files.FileRecord(file);
 							//GO.files.showFilePropertiesDialog(record.get('id'));
-							GO.files.editFile(file.id);
+							GO.files.openFile(record);
 						}else
 						{
 							window.open(GO.url("files/file/download",{id:file.id}));
@@ -462,6 +462,8 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		}		
 	},
 	
+	afterLoad : function(result) {},
+	
 	load : function(id, reload)
 	{
 		if(this.loading && id==this.model_id)
@@ -488,6 +490,8 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 						this.body.scrollTo('top', 0);
 					
 					this.stopLoading.defer(300, this);
+					
+					this.afterLoad(result);
 				},
 				scope: this			
 			});
@@ -514,7 +518,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		}else if(this.ownerCt)
 		{
 			//we are in a window
-			this.ownerCt.title;
+			return this.ownerCt.title;
 		}
 		return false;
 	},

@@ -108,29 +108,29 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		
 		// These three buttons are enabled by default.
 		if (this.enableOkButton)
-			buttons.push({
+			buttons.push(this.buttonOk = new Ext.Button({
 				text: GO.lang['cmdOk'],
 				handler: function(){
 					this.submitForm(true);
 				},
 				scope: this
-			});
+			}));
 		if (this.enableApplyButton)
-			buttons.push({
+			buttons.push(this.buttonApply = new Ext.Button({
 				text: GO.lang['cmdApply'],
 				handler: function(){
 					this.submitForm();
 				},
 				scope:this
-			});
+			}));
 		if (this.enableCloseButton)
-			buttons.push({
+			buttons.push(this.buttonClose = new Ext.Button({
 				text: GO.lang['cmdClose'],
 				handler: function(){
 					this.hide();
 				},
 				scope:this
-			});
+			}));
 		
 		Ext.applyIf(this, {
 			buttons: buttons
@@ -183,7 +183,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 
 			delete this._panels[0].title;
 			this._panels[0].header=false;
-			this._panels[0].elements=this._panels[0].elements.replace(',header','');
+			if(this._panels[0].elements)
+				this._panels[0].elements=this._panels[0].elements.replace(',header','');
 
 			this.formPanel.add(this._panels[0]);
 		}
@@ -325,8 +326,11 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	afterSubmit : function(action){},
 	
 	show : function (remoteModelId, config) {
-
+		
 		config = config || {};
+				
+		if(!config.loadParams)
+			config.loadParams={};
 		
 		this.showConfig = config;
 		

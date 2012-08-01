@@ -641,7 +641,7 @@ class calendar extends db {
 		}
 
 		$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ".
-		" GROUP BY v.id ORDER BY ".$this->escape($sort).' '.$this->escape($dir);
+		" GROUP BY v.id ORDER BY `".$this->escape($sort).'` '.$this->escape($dir);
 
 		$sql = $this->add_limits_to_query($sql, $start, $offset);
 		$this->query($sql);

@@ -3,7 +3,6 @@
 
 $l['name']='Taken';
 $l['description']='Taken module';
-$lang['link_type'][12]=$l['task']='Taak';
 $l['status']='Status';
 $l['scheduled_call']='Telefoongesprek gepland op %s';
 $l['statuses']['NEEDS-ACTION']='Actie nodig';
@@ -20,7 +19,7 @@ $l['list']='Takenlijst';
 $l['tasklistChanged']="* Takenlijst is veranderd van '%s' naar '%s'";
 $l['statusChanged']="* Status is veranderd van'%s' naar '%s'";
 $l['multipleSelected']='Meerdere takenlijsten geselecteerd';
-$l['incomplete_delete']='U heeft niet voldoende rechten om alle geselecteerde taken te verwijderen';$l["task"]= 'Taak';
+$l['incomplete_delete']='U heeft niet voldoende rechten om alle geselecteerde taken te verwijderen';
 $l["noTask"]= 'Geen taken om weer te geven';
 $l["tasks"]= 'Taken';
 $l["addTask"]= 'Taak toevoegen...';
@@ -75,3 +74,12 @@ $l["globalsettings_allchangelabel"]='Bestaande veranderen?';
 $l["globalsettings_renameall"]= 'Weet u zeker dat u alles wilt hernoemen?';
 
 $l['taskPercentage_complete']='Percentage voltooid';
+
+$l["task"]= 'Taak';
+$l["taskName"]='Naam';
+$l["taskCtime"]='Gemaakt op';
+$l["taskMtime"]='Gewijzigd op';
+$l["taskDue_time"]='Eindigt op';
+$l["taskStatus"]='Status';
+$l["taskCompletion_time"]='Voltooid op';
+$l["taskProject_name"]='Project';

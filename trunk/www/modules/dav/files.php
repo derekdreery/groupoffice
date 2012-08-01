@@ -23,7 +23,6 @@ define("GO_NO_SESSION", true);
 
 // Authentication backend
 $authBackend = new GO_Dav_Auth_Backend();
-$userpass = $authBackend->getUserPass();
 
 if(!GO::modules()->isInstalled("dav"))
 	trigger_error('DAV module not installed. Install it at Start menu -> Modules', E_USER_ERROR);
@@ -35,6 +34,7 @@ $tree = new GO_Dav_ObjectTree($root);
 
 // The rootnode needs in turn to be passed to the server class
 $server = new Sabre_DAV_Server($tree);
+$server->debugExceptions=GO::config()->debug;
 
 //baseUri can also be /webdav/ with:
 //Alias /webdav/ /path/to/files.php
@@ -50,7 +50,7 @@ $server->addPlugin($lockPlugin);
 $browser = new Sabre_DAV_Browser_Plugin();
 $server->addPlugin($browser);
 
-$auth = new Sabre_DAV_Auth_Plugin($authBackend,'Group-Office WebDAV server');
+$auth = new Sabre_DAV_Auth_Plugin($authBackend,GO::config()->product_name);
 $server->addPlugin($auth);
 
 // Temporary file filter

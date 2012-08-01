@@ -6,12 +6,13 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: TestsGrid.js 0000 2010-12-29 08:56:17 wsmits $
+ * @version $Id: CriteriumGrid.js 0000 2010-12-29 08:56:17 wsmits $
  * @copyright Copyright Intermesh
  * @author Wesley Smits <wsmits@intermesh.nl>
+ * @author WilmarVB <wilmar@intermesh.nl>
  */
 
-GO.sieve.TestsGrid = function(config){
+GO.sieve.CriteriumGrid = function(config){
 	if(!config)
 	{
 		config = {};
@@ -20,6 +21,7 @@ GO.sieve.TestsGrid = function(config){
 	config.height=180;
 	config.style='margin: 5px;';
 	config.border=true;
+	config.cls = 'go-grid3-hide-headers';
 	var fields ={
 		fields:['test','not','type','arg','arg1','arg2','text'],
 		header: false,
@@ -157,7 +159,7 @@ GO.sieve.TestsGrid = function(config){
 	});
 
 	config.store = new GO.data.JsonStore({
-	    root: 'tests',
+	    root: 'criteria',
 	    id: 'id',
 	    totalProperty:'total',
 	    fields: fields.fields,
@@ -170,19 +172,25 @@ GO.sieve.TestsGrid = function(config){
 	config.view=new Ext.grid.GridView({
 		autoFill: true,
 		forceFit: true,
-		emptyText: GO.lang['strNoItems']
+		emptyText: GO.sieve.lang['pleaseAddCriterium']
 	});
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
 	config.tbar=[{
+			iconCls: 'btn-add',
+			text: GO.lang['cmdAdd'],
+			cls: 'x-btn-text-icon',
+			handler: function(){this.showCriteriumCreatorDialog();},
+				scope: this
+		},{
 			iconCls: 'btn-delete',
 			text: GO.lang['cmdDelete'],
 			cls: 'x-btn-text-icon',
 			handler: function(){this.deleteSelected();},
-			scope: this
+				scope: this
 		}];
 
-	GO.sieve.TestsGrid.superclass.constructor.call(this, config);
+	GO.sieve.CriteriumGrid.superclass.constructor.call(this, config);
 
 	this.on('render',function(){
 	
@@ -194,9 +202,14 @@ GO.sieve.TestsGrid = function(config){
 			notifyDrop : this.onNotifyDrop.createDelegate(this)
 		});
 	}, this);
+	
+	this.on('rowdblclick', function(grid, index, e){
+//		var record = this.store.getAt(index);
+		this.showCriteriumCreatorDialog(index);
+	},this);
 };
 
-Ext.extend(GO.sieve.TestsGrid, GO.grid.GridPanel,{
+Ext.extend(GO.sieve.CriteriumGrid, GO.grid.GridPanel,{
 	deleteSelected : function(){this.store.remove(this.getSelectionModel().getSelections());},
 	
 	onNotifyDrop : function(dd, e, data)
@@ -226,6 +239,39 @@ Ext.extend(GO.sieve.TestsGrid, GO.grid.GridPanel,{
 		for (var i = 0; i < this.store.data.items.length;  i++)
 		{
 			filters[this.store.data.items[i].get('id')] = i;
+		}
+	},
+	
+	_saveCriteriumRecord : function(values) {
+		if(values.id<0){
+			var record = new GO.sieve.CriteriumRecord(values)
+			record.set('id',this.store.getCount());
+			this.store.insert( this.store.getCount(), record);
+		}
+		else
+		{
+			var record = this.store.getAt(values.id);
+			Ext.apply(record.data,values);
+			record.commit();
+		}
+	},
+	
+	showCriteriumCreatorDialog : function(recordId) {
+		if (!this.criteriumCreatorDialog) {
+			this.criteriumCreatorDialog = new GO.sieve.CriteriumCreatorDialog();
+			this.criteriumCreatorDialog.on('criteriumPrepared',function(critValues){
+				this._saveCriteriumRecord(critValues);
+			},this);
+		}
+		
+		if (recordId>=0) {
+			var record = this.store.getAt(recordId);
+			record.set('id',recordId);
+			this.criteriumCreatorDialog.show(record);
+		} else {
+			var record = new Ext.data.Record();
+			record.set('id',-1);
+			this.criteriumCreatorDialog.show(record);
 		}
 	}
 });

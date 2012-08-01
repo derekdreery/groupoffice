@@ -143,7 +143,10 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	 */
 	public function replaceContactTags($content, GO_Addressbook_Model_Contact $contact, $leaveEmptyTags=false){
 		
-		$attributes = $this->_defaultTags;
+		if(GO::modules()->customfields)
+			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=true;
+		
+		$attributes = $leaveEmptyTags ? array() : $this->_defaultTags;
 		
 		if(!empty($contact->salutation))
 			$attributes['salutation']=$contact->salutation;
@@ -155,6 +158,11 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 		}
 		
 		$attributes = array_merge($attributes, $this->_getUserAttributes());
+		
+		GO::debug($attributes);
+		
+		if(GO::modules()->customfields)
+			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=false;
 		
 		return $this->_parse($content, $attributes, $leaveEmptyTags);
 	}
@@ -174,14 +182,51 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	 * @return string 
 	 */
 	public function replaceModelTags($content, $model, $tagPrefix='', $leaveEmptyTags=false){
-		$attributes = $this->_defaultTags;
+		
+		if(GO::modules()->customfields)
+			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=true;
+		
+		$attributes = $leaveEmptyTags ? array() : $this->_defaultTags;
 		
 		$attributes = array_merge($attributes, $this->_getModelAttributes($model, $tagPrefix));
 		
 		$attributes = array_merge($attributes, $this->_getUserAttributes());
-	
-		return $this->_parse($content, $attributes, $leaveEmptyTags);
 		
+		$content = $this->_replaceRelations($content, $model, $tagPrefix, $leaveEmptyTags);
+		
+		if(GO::modules()->customfields)
+			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=false;
+	
+		return $this->_parse($content, $attributes, $leaveEmptyTags);		
+	}
+	
+	/**
+	 * 
+	 * Replaces relations if found in the template.
+	 * eg. {project:responsibleUser:name}
+	 * 
+	 * @param type $content
+	 * @param type $model
+	 * @param type $tagPrefix
+	 * @param type $leaveEmptyTags 
+	 */
+	private function _replaceRelations($content, $model, $tagPrefix='', $leaveEmptyTags=false){
+		
+		$relations = $model->relations();
+		$pattern = '/'.preg_quote($tagPrefix,'/').'([^:]+):[^\}]+\}/';
+		if(preg_match_all($pattern,$content, $matches)){
+			foreach($matches[1] as $relation){
+				if(isset($relations[$relation])){
+					$relatedModel = $model->$relation;	
+
+					if($relatedModel){
+
+						$content = $this->replaceModelTags($content, $relatedModel, $tagPrefix.$relation.':', $leaveEmptyTags);
+					}
+				}
+			}
+		}
+		return $content;
 	}
 	
 	private function _parse($content, $attributes, $leaveEmptyTags){
@@ -212,12 +257,17 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	 * @return string 
 	 */
 	public function replaceUserTags($content, $leaveEmptyTags=false){
+		if(GO::modules()->customfields)
+			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=true;
 		
-		$attributes = $this->_defaultTags;
+		$attributes = $leaveEmptyTags ? array() : $this->_defaultTags;
 		
 		$attributes = array_merge($attributes, $this->_getUserAttributes());
 		
 		//$attributes['contact:salutation']=GO::t('default_salutation_unknown');
+		
+		if(GO::modules()->customfields)
+			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=false;
 		
 		return $this->_parse($content, $attributes, $leaveEmptyTags);
 	}
