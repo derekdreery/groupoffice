@@ -27,7 +27,7 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 		
 		this.loadUrl=('notes/note/display');
 		
-		this.id=Ext.id();
+		this.encryptId=Ext.id();
 		
 		this.template = 
 
@@ -44,7 +44,7 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 							'<td colspan="2">{content}</td>'+
 						'</tpl>'+
 						'<tpl if="!GO.util.empty(encrypted)">'+
-							'<td colspan="2"><div id="encryptedNoteDisplaySecure'+this.id+'"></div></td>'+
+							'<td colspan="2"><div id="encryptedNoteDisplaySecure'+this.encryptId+'"></div></td>'+
 						'</tpl>'+
 					'</tr>'+									
 				'</table>';																		
@@ -84,7 +84,7 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 		if(this.data.encrypted){
 			if (!this.passwordPanel){
 				this.passwordPanel = new Ext.Panel({			
-					renderTo: 'encryptedNoteDisplaySecure'+this.id,
+					renderTo: 'encryptedNoteDisplaySecure'+this.encryptId,
 					layout: 'column',
 					border: false,
 					keys:[{
@@ -112,7 +112,7 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 				});
 			}else
 			{
-				var el = Ext.get('encryptedNoteDisplaySecure'+this.id);
+				var el = Ext.get('encryptedNoteDisplaySecure'+this.encryptId);
 				//console.log(el);
 				el.appendChild(this.passwordPanel.getEl());
 			}
@@ -134,7 +134,7 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 				if (!GO.util.empty(result.feedback))
 					Ext.MessageBox.alert('', result.feedback);
 				if (GO.util.empty(result.data.encrypted)) {
-					document.getElementById('encryptedNoteDisplaySecure'+this.id).innerHTML = result.data.content;
+					document.getElementById('encryptedNoteDisplaySecure'+this.encryptId).innerHTML = result.data.content;
 				}
 			},
 			scope: this
