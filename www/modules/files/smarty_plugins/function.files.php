@@ -31,6 +31,9 @@ function smarty_function_files($params, &$smarty)
 	$fs = new filesystem();
 	$files = $fs->get_files_sorted($path);
 
+	if (!empty($params['random']) && $params['random']!='false' && $params['random']!='0')
+		shuffle($files);
+	
 	$html = '';
 	
 	$item_name = isset($params['item_name']) ? $params['item_name'] : 'file'; 
