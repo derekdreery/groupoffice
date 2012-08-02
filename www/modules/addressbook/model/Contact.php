@@ -512,9 +512,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			if (empty($company)) {
 				$company = new GO_Addressbook_Model_Company();
 				$company->setAttributes($companyAttributes,false);
-			} else {
-				$company->setAttribute('addressbook_id', $companyAttributes['addressbook_id']);
-			}
+			} 
+			$company->addressbook_id=$this->addressbook_id;
 			$company->save();
 			$this->setAttribute('company_id',$company->id);			
 		}
