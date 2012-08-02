@@ -1,3 +1,6 @@
+??-08-2012 4.0.87
+- Fixed Bug: Cannot export and import uuid in addressbook contacts. Now the uuid field is available in export and import)
+
 02-08-2012 4.0.86
 - Fixed Bug: Timeregistration export table columns are on top of each other when having a long project name
 - Fixed bug: Settings->Synchronisation->Email-Account is not saved after panel submit
