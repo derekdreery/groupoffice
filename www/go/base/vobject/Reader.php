@@ -222,7 +222,8 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 				if(isset($property['ENCODING']) && strtoupper($property['ENCODING'])=='QUOTED-PRINTABLE'){
 					$value = quoted_printable_decode($property->value);
 					$value = str_replace("\r","",$value);
-					$value = GO_Base_Util_String::to_utf8($value);
+//					GO::debug($value);
+//					$value = GO_Base_Util_String::to_utf8($value);
 					$property->setValue($value);				
 					unset($property['ENCODING']);
 				}
