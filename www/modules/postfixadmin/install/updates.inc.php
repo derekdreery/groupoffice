@@ -32,3 +32,5 @@ $updates["201204251500"][] = "update pa_aliases set active=0 where active=1;";
 $updates["201204251500"][] = "update pa_aliases set active=1 where active=2;";
 
 $updates["201204251500"][] = "script:1_disable_vacation.php";
+
+$updates["201208030852"][] = "ALTER TABLE `pa_mailboxes` DROP `domain`;";
