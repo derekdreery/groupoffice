@@ -178,7 +178,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 			$lb = "\n";
 		}
 		
-		$text = $url.' ('.GO::t('possibleUntil','files').' '.GO_Base_Util_Date::get_timestamp($file->expire_time, false).')'.$lb.$lb;
+		$text = $url.' ('.GO::t('possibleUntil','files').' '.GO_Base_Util_Date::get_timestamp(GO_Base_Util_Date::date_add($file->expire_time,-1), false).')'.$lb.$lb;
 
 		
 		if($params['template_id'] && ($template = GO_Addressbook_Model_Template::model()->findByPk($params['template_id']))){
