@@ -28,7 +28,7 @@ $l['emptyFile']='Tom fil';
 $l['downloadLink']= 'Nedlastingslenke';
 $l['clickHereToDownload']= 'Klikk her for å laste ned filen via en sikker lenke';
 $l['copyPasteToDownload']= 'Klikk på den sikre lenken nedenfor eller kopier den inn i adressefeltet i nettleseren din for å laste ned filen.';
-$l['possibleUntil']= 'mulig fram til';
+$l['possibleUntil']= 'mulig fram til og med';
 
 $l["files"]='Filer';
 $l["template"]= 'Mal';
