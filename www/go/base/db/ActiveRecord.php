@@ -2019,7 +2019,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			throw new GO_Base_Exception_AccessDenied($msg);
 		}
 		
-		if(!$this->isNew && $this->_aclModified() && !$this->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)){
+		if(!$this->isNew && $this->_aclModified() && !$this->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION)){
 			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : sprintf(GO::t('cannotMoveError'),'this');
 			throw new GO_Base_Exception_AccessDenied($msg);
 		}
