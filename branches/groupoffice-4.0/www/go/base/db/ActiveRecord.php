@@ -610,6 +610,31 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 	}
 	
+	
+	/**
+	 * Check if the acl field is modified.
+	 * 
+	 * Example: acl field is: addressbook.acl_id
+	 * Then this function fill search for the addressbook relation and checks if the key is changed in this relation.
+	 * If the key is changed then it will return true else it will return false.
+	 * 
+	 * @return boolean
+	 */
+	private function _aclModified(){
+		if (!$this->aclField())
+			return false;
+	
+		$arr = explode('.', $this->aclField());
+		
+		if(count($arr)==1)
+			return false;
+		
+		$relation = array_shift($arr);
+		$r = $this->getRelation($relation);
+		return $this->isModified($r['field']);
+	}
+	
+	
 	/**
 	 * Find the acl_id integer value that applies to this model.
 	 * 
@@ -1994,6 +2019,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			throw new GO_Base_Exception_AccessDenied($msg);
 		}
 		
+		if(!$this->isNew && $this->_aclModified() && !$this->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)){
+			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : sprintf(GO::t('cannotMoveError'),'this');
+			throw new GO_Base_Exception_AccessDenied($msg);
+		}
+		
 		if(!$this->validate()){
 			$errors = $this->getValidationErrors();
 			throw new GO_Base_Exception_Validation(sprintf(GO::t('validationErrorsFound'),strtolower($this->localizedName))."\n\n".implode("\n", $errors)."\n");			
@@ -2094,8 +2124,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if ($this->customfieldsRecord){
 			//id is not set if this is a new record so we make sure it's set here.
 			$this->customfieldsRecord->model_id=$this->id;
-
+			
 			$this->customfieldsRecord->save();
+			
+//			if($this->customfieldsRecord->save())
+//				$this->touch(); // If the customfieldsRecord is saved then set the mtime of this record.
 		}
 		
 		$this->_log($wasNew ? GO_Log_Model_Log::ACTION_ADD : GO_Log_Model_Log::ACTION_UPDATE);
