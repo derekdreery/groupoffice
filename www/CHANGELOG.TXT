@@ -1,3 +1,8 @@
+??-08-2012 4.0.88
+- Added error message when you are not able to move contacts to an other addressbook
+- Added aclModified check to activeRecord to determine if an Acl is changed.
+
+
 02-08-2012 4.0.87
 - Fixed Bug: Cannot export and import uuid in addressbook contacts. (Now the uuid field is available in export and import)
 - Fixed Language: Timeregistration translation in French for customfields is fixed
