@@ -350,20 +350,26 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		
 		foreach ($ids as $id) {
 			$model = GO_Addressbook_Model_Contact::model()->findByPk($id);
-			if (!empty($model->company)) {
-				$companyContr = new GO_Addressbook_Controller_Company();
-				$resp = $companyContr->run("changeAddressbook",array(
-					'items' => '["'.$model->company->id.'"]',
-					'book_id' => $params['book_id']
-				),false);
-				array_merge($response['failedToMove'],$resp['failedToMove']);
-			} else {
-				$failed_id = !($model->setAttribute( 'addressbook_id' , $params['book_id'] ) && $model->save()) ? $id : null;
-				if ($failed_id) {
-					$response['failedToMove'][] = $failed_id;
-					$response['success'] = false;
+			try{
+				
+				if ($model->company) {
+					//the company will move it's contact along too.
+					$model->company->addressbook_id=$params['book_id'];
+					$model->company->save();
+				} else {
+
+					$model->addressbook_id=$params['book_id'];
+					$model->save();				
 				}
+			}catch(GO_Base_Exception_AccessDenied $e){
+				$response['failedToMove'][]=$model->id;
 			}
+		}
+		$response['success']=empty($response['failedToMove']);
+		
+		if(!$response['success']){
+			$count = count($response['failedToMove']);
+			$response['feedback'] = sprintf(GO::t('cannotMoveError'),$count);
 		}
 		
 		return $response;
