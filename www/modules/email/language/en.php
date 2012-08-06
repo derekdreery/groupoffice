@@ -240,3 +240,6 @@ $l['spam']='Spam';
 $l['ignoreSentFolder']='Store replies in the same folder as the original message';
 $l['sourceAndTargetSame']="Source and target mailbox may not be the same";
 $l['subscribeFolders']='Subscribe to folders';
+
+$l['imapLoginFailed']='Authententication failed for user "%username".';
+$l['tryNewCredentials']='Please enter try with a different IMAP password.';

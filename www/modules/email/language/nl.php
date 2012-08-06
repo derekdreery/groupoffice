@@ -225,3 +225,6 @@ $l["everythingBefore"]= 'Alle emails voor';
 $l["alsoChildren"]= 'Deze bewerking ook toepassen op emails in subfolders.';
 $l['failedRecipients']='Kon het bericht niet verzenden naar';
 $l['subscribeFolders']='Abonneren op mappen';
+
+$l['imapLoginFailed']='Authententicatie mislukt voor gebruiker "%username".';
+$l['tryNewCredentials']='Probeert u het a.u.b. met een andere IMAP wachtwoord.';
