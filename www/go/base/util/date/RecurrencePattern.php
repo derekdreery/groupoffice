@@ -204,6 +204,10 @@ class GO_Base_Util_Date_RecurrencePattern{
 		return $this->_getNextRecurrenceWeekly(GO_Base_Util_Date::date_add($firstPossibleWeekStart,$period));
 	}
 	
+	protected function _getNextRecurrenceMonthly_date($startTime){
+		$this->_getNextRecurrenceMonthly($startTime);
+	}
+	
 	protected function _getNextRecurrenceMonthly($startTime){
 		
 							
