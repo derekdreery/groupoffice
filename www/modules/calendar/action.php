@@ -34,7 +34,7 @@ function get_posted_event() {
 
 	$event['busy']=isset($_POST['busy']) ? '1' : '0';
 	$event['reminder'] = isset($_POST['reminder_multiplier']) ? $_POST['reminder_multiplier'] * $_POST['reminder_value'] : 0;
-	$event['background'] = $_POST['background'];
+	$event['background'] = !empty($_POST['background']) ? $_POST['background'] : 'EBF1E2';
 	$event['category_id'] = isset($_POST['category_id']) ? $_POST['category_id'] : 0;
 
 	$timezone_offset = Date::get_timezone_offset(Date::to_unixtime($_POST['start_date']));
