@@ -1,4 +1,9 @@
 ??-08-2012 4.0.89
+- Fix calander:
+ -- update event with resource.
+ -- delete resource from event
+ -- select resource when only write permissions
+ -- send mail when deleting event to participants
 - Fixed label Agent when exporting tickets
 - Fixed hr translation in Links module. 
 - Fixed task bug in Caldav backend
