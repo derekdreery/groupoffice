@@ -1,6 +1,7 @@
 ??-08-2012 4.0.89
+- Fixed problem with default background color in events
 - Fix export orientation when exporting PDFs works again
-- Fix calander:
+- Fix calendar:
  -- update event with resource.
  -- delete resource from event
  -- select resource when only write permissions
