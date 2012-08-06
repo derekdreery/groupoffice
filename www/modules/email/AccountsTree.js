@@ -437,8 +437,8 @@ Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {
 	},
 	
 	_handleFailedIMAPConnections : function(errorNodes) {
-		this.accountId = errorNodes[this._nodeId]['account_id'].replace('account_','');
 		if (typeof(errorNodes[this._nodeId])=='object') {
+			this.accountId = errorNodes[this._nodeId]['account_id'].replace('account_','');
 			if (!this.imapLoginFailedDialog)
 				this.imapLoginFailedDialog = new GO.Window({
 					title: GO.lang['strError'],
