@@ -32,7 +32,7 @@ class GO_Calendar_Controller_Group extends GO_Base_Controller_AbstractModelContr
 			$record['resources']=array();
 			
 			$calStmt = GO_Calendar_Model_Calendar::model()->find(GO_Base_Db_FindParams::newInstance()
-							->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)
+							->permissionLevel(GO_Base_Model_Acl::READ_PERMISSION)
 							->joinCustomFields()
 							->criteria(GO_Base_Db_FindCriteria::newInstance()
 										->addCondition('group_id',$group->id)
