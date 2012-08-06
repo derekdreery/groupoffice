@@ -803,7 +803,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
   	$humanHeaders = true;
 		$orientation = false;
 		
-		if(!empty($params['exportOrientation']) && ($params['exportOrientation']=="Horizontaal"))
+		if(!empty($params['exportOrientation']) && ($params['exportOrientation']=="Landscape"))
 			$orientation = 'L'; // Set the orientation to Landscape
 		else
 			$orientation = 'P'; // Set the orientation to Portrait
