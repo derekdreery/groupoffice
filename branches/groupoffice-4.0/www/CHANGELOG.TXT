@@ -1,4 +1,5 @@
 ??-08-2012 4.0.89
+- Fix export orientation when exporting PDFs works again
 - Fix calander:
  -- update event with resource.
  -- delete resource from event
