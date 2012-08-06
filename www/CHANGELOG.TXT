@@ -1,3 +1,6 @@
+??-08-2012 4.0.89
+- Fixed hr translation in Links module. 
+
 03-08-2012 4.0.88
 - Fixed bug: E-mail download link date one day off
 - Signed GOTA
