@@ -36,9 +36,9 @@ GO.email.AccountsTree = function(config){
 	}, this);
 	
 	config.loader.on('load',function(loader,node,response){
-		var errorNodes = this._getErrorNodes(Ext.decode(response.responseText));
+		this._setErrorNodes(Ext.decode(response.responseText));
 		this._nodeId = 0;
-		this._handleFailedIMAPConnections(errorNodes);
+		this._handleFailedIMAPConnections();
 	},this);
 
 //	config.loader.on("load", function(treeLoader, node)
@@ -340,6 +340,7 @@ Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {
 	saveTreeState : false,
 	
 	_nodeId : 0,
+	_errorNodes : [],
 	
 	updateState : function(){
 		GO.request({
@@ -436,9 +437,9 @@ Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {
 		}
 	},
 	
-	_handleFailedIMAPConnections : function(errorNodes) {
-		if (typeof(errorNodes[this._nodeId])=='object') {
-			this.accountId = errorNodes[this._nodeId]['account_id'].replace('account_','');
+	_handleFailedIMAPConnections : function() {
+		if (typeof(this._errorNodes[this._nodeId])=='object') {
+			this.accountId = this._errorNodes[this._nodeId]['account_id'].replace('account_','');
 			if (!this.imapLoginFailedDialog)
 				this.imapLoginFailedDialog = new GO.Window({
 					title: GO.lang['strError'],
@@ -493,27 +494,26 @@ Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {
 							handler : function() {
 								this.imapLoginFailedDialog.hide();
 								this.imapLoginFailedFormPanel.form.reset();
-								if (this._nodeId+1<errorNodes.length-1) {
+								if (this._nodeId+1<this._errorNodes.length) {
 									this._nodeId++;
-									this._handleFailedIMAPConnections(errorNodes)
+									this._handleFailedIMAPConnections()
 								}
 							},
 							scope : this
 						}]
 					})]
 				});
-			this.imapLoginFailedInfoField.setValue(GO.email.lang['imapLoginFailed'].replace('%username',errorNodes[this._nodeId]['name'])+' '+GO.email.lang['tryNewCredentials']);
+			this.imapLoginFailedInfoField.setValue(GO.email.lang['imapLoginFailed'].replace('%username',this._errorNodes[this._nodeId]['name'])+' '+GO.email.lang['tryNewCredentials']);
 			this.imapLoginFailedDialog.show();
 		}
 	},
 	
-	_getErrorNodes : function (nodes) {
-		var errorNodes = [];
+	_setErrorNodes : function (nodes) {
+		this._errorNodes = [];
 		for (var nodeId in nodes) {
-			if (!nodes[nodeId].isAccount)
-				errorNodes.push(nodes[nodeId]);
+			if (!nodes[nodeId].isAccount && !GO.util.empty(nodes[nodeId].hasError))
+				this._errorNodes.push(nodes[nodeId]);
 		}
-		return errorNodes;
 	}
 	
 //	afterEdit : function(editor, text, oldText ){

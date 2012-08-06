@@ -175,6 +175,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 							'name' => $alias->email,
 							'id' => $nodeId,
 							'isAccount'=>true,
+							'hasError'=>false,
 							'iconCls' => 'folder-account',
 							'expanded' => $this->_isExpanded($nodeId),
 							'noselect' => false,
@@ -195,7 +196,6 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					}
 					
 					$response[] = $node;
-					
 				}
 			}
 		} else {
@@ -222,6 +222,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 	private function _checkImapConnectException(Exception $e, &$node) {
 		if (strpos($e->getMessage(),'Authentication failed')==0) {
 			$node['isAccount'] = false;
+			$node['hasError'] = true;
 			$node['text'] .= ' ('.GO::t('error').')';
 			$node['children']=array();
 			$node['expanded']=true;
