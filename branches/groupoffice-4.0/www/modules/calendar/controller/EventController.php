@@ -117,6 +117,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		/* Check for conflicts with other events in the calendar */		
 		$findParams = GO_Base_Db_FindParams::newInstance();
 		$findParams->getCriteria()->addCondition("calendar_id", $event->calendar_id);
+		if(!$event->isNew)
+			$findParams->getCriteria()->addCondition("resource_event_id", $event->id, '<>');
 		
 		$conflictingEvents = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, $event->start_time, $event->end_time, true);
 		
@@ -133,15 +135,17 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			
 			$resources=array();
 			foreach ($params['resources'] as $resource_calendar_id => $enabled) {
-				if($enabled)
+				if($enabled=='on')
 					$resources[]=$resource_calendar_id;
 			}
 			
-			if (count($resources)) {
+			if (count($resources) > 0) {
 				
 				$findParams = GO_Base_Db_FindParams::newInstance();
 				$findParams->getCriteria()->addInCondition("calendar_id", $resources);
-
+				if(!$event->isNew)
+					$findParams->getCriteria()->addCondition("resource_event_id", $event->id, '<>');
+				
 				$conflictingEvents = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, $event->start_time, $event->end_time, true);
 				
 				$resourceConlictsFound=false;
@@ -195,14 +199,15 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 * @param type $modifiedAttributes 
 	 */
 	private function _saveResources($params, $model, $isNewEvent, $modifiedAttributes) {
-
+		$ids = array();
 		if (isset($params['resources'])) {
-			$ids = array();
+			
 			foreach ($params['resources'] as $resource_calendar_id => $enabled) {
-				$resourceEvent = $isNewEvent ? false : GO_Calendar_Model_Event::model()->findResourceForEvent($model->id, $resource_calendar_id);
-				if (!$resourceEvent) {
+				
+				if(!$isNewEvent)
+					$resourceEvent = GO_Calendar_Model_Event::model()->findResourceForEvent($model->id, $resource_calendar_id);
+				if($resourceEvent == null)
 					$resourceEvent = new GO_Calendar_Model_Event();
-				}
 
 				$resourceEvent->resource_event_id=$model->id;
 				$resourceEvent->calendar_id = $resource_calendar_id;
@@ -217,23 +222,22 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 				if (GO::modules()->customfields && isset($params['resource_options'][$resource_calendar_id]))
 					$resourceEvent->customfieldsRecord->setAttributes($params['resource_options'][$resource_calendar_id]);
-
-				$resourceEvent->save();
+				
+				$resourceEvent->save(true);
 
 				$ids[] = $resourceEvent->id;
 			}
-
-			//delete all other resource events
-			$stmt = GO_Calendar_Model_Event::model()->find(
-							GO_Base_Db_FindParams::newInstance()
-											->criteria(
-															GO_Base_Db_FindCriteria::newInstance()
-															->addInCondition('id', $ids, 't', true, true)
-															->addCondition('resource_event_id', $model->id)
-											)
-			);
-			$stmt->callOnEach('delete');
 		}
+		//delete all other resource events
+		$stmt = GO_Calendar_Model_Event::model()->find(
+						GO_Base_Db_FindParams::newInstance()
+										->criteria(
+														GO_Base_Db_FindCriteria::newInstance()
+														->addInCondition('id', $ids, 't', true, true)
+														->addCondition('resource_event_id', $model->id)
+										)
+		);
+		$stmt->callOnEach('delete');
 	}
 
 	private function _saveParticipants($params, $event, $isNewEvent, $modifiedAttributes) {
@@ -330,7 +334,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 			while ($participant = $stmt->fetch()) {		
 				
-				$shouldSend = ($method=='REQUEST' && !$participant->is_organizer) || $method=='REPLY' && $participant->is_organizer;
+				$shouldSend = ($method=='REQUEST' && !$participant->is_organizer) || 
+					($method=='REPLY' && $participant->is_organizer) || 
+					($method=='CANCEL' && !$participant->is_organizer);
 									
 				if($shouldSend){
 					if($isNewEvent){
@@ -339,6 +345,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					{							
 						$updateReponses = GO::t('updateReponses','calendar');
 						$subject= sprintf($updateReponses[$sendingParticipant->status], $sendingParticipant->name, $event->name);
+					}elseif($method == 'CANCEL')
+					{
+						$subject = GO::t('cancellation','calendar');
 					}else
 					{
 						$subject = GO::t('invitation_update', 'calendar');
@@ -348,7 +357,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					$acceptUrl = GO::url("calendar/event/invitation",array("id"=>$event->id,'accept'=>1,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
 					$declineUrl = GO::url("calendar/event/invitation",array("id"=>$event->id,'accept'=>0,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
 
-					if($method=='REQUEST'){
+					if($method=='REQUEST' && $isNewEvent){
 						$body = '<p>' . GO::t('invited', 'calendar') . '</p>' .
 										$event->toHtml() .
 										'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
@@ -356,10 +365,18 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 										'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
 										'&nbsp;|&nbsp;' .
 										'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
-					}else
+					}elseif($method=='CANCEL') {
+						$body = '<p>' . GO::t('cancelMessage', 'calendar') . '</p>' .
+										$event->toHtml();
+					}else // on update event
 					{
 						$body = '<p>' . GO::t('invitation_update', 'calendar') . '</p>' .
-										$event->toHtml();
+										$event->toHtml() .
+										'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
+										'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
+										'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
+										'&nbsp;|&nbsp;' .
+										'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
 					}
 
 					$fromEmail = GO::user() ? GO::user()->email : $sendingParticipant->email;
