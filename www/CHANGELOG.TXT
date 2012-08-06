@@ -1,4 +1,5 @@
 ??-08-2012 4.0.89
+- Fixed label Agent when exporting tickets
 - Fixed hr translation in Links module. 
 - Fixed task bug in Caldav backend
 
