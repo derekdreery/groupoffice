@@ -321,7 +321,6 @@ GO.email.AccountsTree = function(config){
 //				complete  : this.afterEdit,
 //				startedit : function( editor, boundEl, value )
 //				{
-//					console.log(editor.editNode.attributes.mailbox);
 //					editor.setValue(editor.editNode.attributes.mailbox);
 //				},
 //				beforecomplete  : function( editor, value, startValue){
@@ -438,7 +437,6 @@ Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {
 	},
 	
 	_handleFailedIMAPConnections : function(errorNodes) {
-		console.log(errorNodes[this._nodeId]);
 		this.accountId = errorNodes[this._nodeId]['account_id'].replace('account_','');
 		if (typeof(errorNodes[this._nodeId])=='object') {
 			if (!this.imapLoginFailedDialog)
