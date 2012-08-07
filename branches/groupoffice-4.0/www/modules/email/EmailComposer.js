@@ -829,6 +829,11 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		
 		params.content_type = this.emailEditor.getContentType();
 		
+//		var ctFieldVal = this.emailEditor.hiddenCtField.getValue();
+//		var inlineImgVal = this.emailEditor.hiddenInlineImagesField.getValue();
+		var attachVal = this.emailEditor.hiddenAttachmentsField.getValue(); // remember attachment
+		var attachments = this.emailEditor.attachmentsView.store.getRange(); 
+		
 		this.formPanel.form.load({
 					url : url,
 					params : params,
@@ -844,6 +849,12 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 						if(action.result.sendParams)
 							Ext.apply(this.sendParams, action.result.sendParams);
+						
+//						this.emailEditor.hiddenCtField.setValue(ctFieldVal);
+//						this.emailEditor.hiddenInlineImagesField.setValue(inlineImgVal);
+						this.emailEditor.hiddenAttachmentsField.setValue(attachVal);
+						this.emailEditor.attachmentsView.store.loadData(attachments);
+						
 					},
 					scope : this
 				});
