@@ -329,6 +329,35 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 					if(GO.customfields)
 						GO.customfields.disableTabs(this.tabPanel, action.result);	
 					
+					if (!GO.util.empty(config.contactData)) {
+						this.personalPanel.formFirstName.setValue(config.contactData['first_name']);
+						this.personalPanel.formMiddleName.setValue(config.contactData['middle_name']);
+						this.personalPanel.formLastName.setValue(config.contactData['last_name']);
+						this.personalPanel.formTitle.setValue(config.contactData['title']);
+						this.personalPanel.formAfternameTitle.setValue(config.contactData['suffix']);
+						this.personalPanel.sexCombo.setValue(config.contactData['sex']);
+						this.personalPanel.formBirthday.setValue(config.contactData['birthday']);
+						if (!GO.util.empty(this.personalPanel.formEmail))
+							this.personalPanel.formEmail.setValue(config.contactData['email']);
+						this.personalPanel.formEmail2.setValue(config.contactData['email2']);
+						this.personalPanel.formEmail3.setValue(config.contactData['email3']);
+						this.personalPanel.formHomePhone.setValue(config.contactData['home_phone']);
+						this.personalPanel.formFax.setValue(config.contactData['fax']);
+						this.personalPanel.formCellular.setValue(config.contactData['cellular']);
+						this.personalPanel.formHomepage.setValue(config.contactData['homepage']);
+						this.personalPanel.formAddress.setValue(config.contactData['address']);
+						this.personalPanel.formAddressNo.setValue(config.contactData['address_no']);
+						this.personalPanel.formPostal.setValue(config.contactData['zip']);
+						this.personalPanel.formCity.setValue(config.contactData['city']);
+						this.personalPanel.formState.setValue(config.contactData['state']);
+						this.personalPanel.formCountry.setValue(config.contactData['country']);
+						this.personalPanel.formWorkPhone.setValue(config.contactData['work_phone']);
+						this.personalPanel.formWorkFax.setValue(config.contactData['work_fax']);
+//						this.personalPanel.formCompany.setValue(config.contactData['company_id']);
+						this.personalPanel.formDepartment.setValue(config.contactData['department']);
+						this.personalPanel.formFunction.setValue(config.contactData['function']);
+					}
+					
 					GO.addressbook.ContactDialog.superclass.show.call(this);
 				//}
 			},

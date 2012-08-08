@@ -483,6 +483,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		
 		$summaryLog = new GO_Base_Component_SummaryLog();
 		
+		$readOnly = !empty($params['readOnly']);
+		
 		if(isset($_FILES['files']['tmp_name'][0]))
 			$params['file'] = $_FILES['files']['tmp_name'][0];
 		
@@ -502,6 +504,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 //		GO::debug($vObjectsArray);
 		unset($params['file']);
 		$nr=0;
+		if ($readOnly)
+			$contactsAttr = array();
 		foreach($vaddressbook->vcard as $vObject) {
 			$nr++;
 			GO_Base_VObject_Reader::convertVCard21ToVCard30($vObject);
@@ -509,8 +513,10 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			
 			$contact = new GO_Addressbook_Model_Contact();
 			try {
-				if ($contact->importVObject($vObject, $params))
+				if ($contact->importVObject($vObject, $params, !$readOnly))
 					$summaryLog->addSuccessful();
+				if ($readOnly)
+					$contactsAttr[] = $contact->getAttributes('formatted');
 			} catch (Exception $e) {
 				$summaryLog->addError($nr+1, $e->getMessage());
 			}
@@ -518,6 +524,9 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		}
 		
 		$response = $summaryLog->getErrorsJson();
+		if ($readOnly) {
+			$response['contacts'] = $contactsAttr;
+		}
 		$response['successCount'] = $summaryLog->getTotalSuccessful();
 		$response['totalCount'] = $summaryLog->getTotal();
 		$response['success']=true;
