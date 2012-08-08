@@ -9,6 +9,7 @@
 - Fixed label Agent when exporting tickets
 - Fixed hr translation in Links module. 
 - Fixed task bug in Caldav backend
+- User can enter IMAP password on IMAP connection failed.
 
 03-08-2012 4.0.88
 - Fixed bug: E-mail download link date one day off
