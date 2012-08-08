@@ -1,4 +1,4 @@
-??-08-2012 4.0.89
+08-08-2012 4.0.89
 - Fixed problem with default background color in events
 - Fix export orientation when exporting PDFs works again
 - Fix calendar:
