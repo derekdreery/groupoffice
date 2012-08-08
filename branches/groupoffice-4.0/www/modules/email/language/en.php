@@ -243,3 +243,5 @@ $l['subscribeFolders']='Subscribe to folders';
 
 $l['imapLoginFailed']='Authententication failed for user "%username".';
 $l['tryNewCredentials']='Please enter try with a different IMAP password.';
+
+$l['moveTo']='Move to';

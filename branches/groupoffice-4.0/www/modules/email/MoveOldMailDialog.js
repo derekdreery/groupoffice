@@ -66,7 +66,7 @@ Ext.extend(GO.email.MoveOldMailDialog, Ext.Window,{
 				hideLabel : true,
 				value : GO.email.lang.moveOldMailsInstructions
 			},this.selectMailbox = new GO.form.ComboBoxReset({
-				fieldLabel : "Move to",
+				fieldLabel : GO.email.lang.moveTo,
 				hiddenName : 'target_mailbox',
 				store : new GO.data.JsonStore({
 					url : GO.url("email/folder/store"),
