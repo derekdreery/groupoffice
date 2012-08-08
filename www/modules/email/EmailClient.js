@@ -962,7 +962,8 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 				default:
 					if(forceDownload)
 						attachment.url+='&inline=0';
-					window.open(attachment.url);
+					if (attachment.extension!='vcf'||forceDownload)
+						window.open(attachment.url);
 					break;
 			}
 		}

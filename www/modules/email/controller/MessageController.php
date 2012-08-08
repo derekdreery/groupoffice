@@ -1040,7 +1040,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	public function actionAttachment($params) {
 		
 		$file = new GO_Base_Fs_File($params['filename']);
-		
+		$outString = '';
 		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		//$imapMessage = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
@@ -1060,14 +1060,27 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		while ($line = $imap->get_message_part_line()) {
 			switch (strtolower($params['encoding'])) {
 				case 'base64':
-					echo base64_decode($line);
+					$outString .= base64_decode($line);
 					break;
 				case 'quoted-printable':
-					echo quoted_printable_decode($line);
+					$outString .= quoted_printable_decode($line);
 					break;
 				default:
-					echo $line;
+					$outString .= $line;
 					break;
+			}
+		}
+		
+		if (empty($params['importVCard']))
+			echo $outString;
+		else {
+			if (GO::modules()->isInstalled('addressbook')) {
+				$tmpFile = new GO_Base_Fs_File(GO::config()->tmpdir.$params['filename']);
+				$tmpFile->tempFile(GO::config()->tmpdir.$params['filename'],'vcf');
+				$tmpFile->putContents($outString);
+				$abController = new GO_Addressbook_Controller_Contact();
+				$response = $abController->run('importVCard', array('file'=>$tmpFile->path(),'readOnly'=>true), false, true);
+				echo json_encode($response);
 			}
 		}
 	}
