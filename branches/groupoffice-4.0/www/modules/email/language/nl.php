@@ -172,6 +172,7 @@ $l["htmlMarkup"]= 'Gebruik HTML opmaak';
 $l["confirmLostChanges"]= 'Uw wijzigingen gaan verloren. Weet u het zeker?';
 $l["manageAliases"]='Beheer afzendaliassen';
 $l["addSendersTo"]='Voeg afzenders toe aan...';
+$l["deleteSendersFrom"]='Verwijder afzenders van...';
 $l["defaultTemplate"]='Stel geselecteerd sjabloon in als standaard';
 $l["moving"]='Bezig met verplaatsen...';
 $l["alias"]="Alias";

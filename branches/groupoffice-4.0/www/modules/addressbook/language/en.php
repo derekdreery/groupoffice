@@ -364,3 +364,4 @@ $l['male']='Male';
 $l['female']='Female';
 $l['importing']='Importing';
 $l['contactUuid']='UUID';
+$l['nRemovedFromAddresslist']='%n contacts have been identified and removed from the selected address list.';
