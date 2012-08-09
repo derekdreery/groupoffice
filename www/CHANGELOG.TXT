@@ -1,5 +1,7 @@
 
 ??-08-2012 4.0.90
+- Updated German language
+- Updated Italian language
 - Bugfix: No files got attached to the email composer when using "Send files" in the Files module when the users default template is 'None'
 - Bugfix: Email module MessageGrid will expand when it is collapsed and the visible email gets deleted.
 
