@@ -480,6 +480,7 @@ GO.email.EmailClient = function(config){
 		cls: 'x-btn-text-icon',
 		handler: function(){
 			this.messagesGrid.deleteSelected();
+			this.messagesGrid.expand();
 		},
 		scope: this
 	},new Ext.Toolbar.Separator(),
