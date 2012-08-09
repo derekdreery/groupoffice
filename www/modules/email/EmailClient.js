@@ -219,6 +219,35 @@ GO.email.EmailClient = function(config){
 		});
 	}
 
+	var deleteSendersItems = [];
+	
+	if (GO.addressbook) {
+		deleteSendersItems.push({
+			text: GO.addressbook.lang.addresslist,
+			cls: 'x-btn-text-icon',
+			menu: this.addresslistsMenu = new GO.menu.JsonMenu({
+				store: new GO.data.JsonStore({
+					url: GO.url("addressbook/addresslist/store"),
+					baseParams: {
+						permissionLevel: GO.permissionLevels.write,
+						forContextMenu: true
+					},
+					fields: ['id', 'text'],
+					remoteSort: true
+				}),
+				listeners:{
+					scope:this,
+					itemclick : function(item, e ) {
+						this.deleteSendersFromAddresslist(item.id);
+						return false;
+					}
+				}
+			}),
+			multiple:true,
+			scope: this
+		});
+	}
+
 	var contextItems = [
 	{
 		text: GO.email.lang.markAsRead,
@@ -282,6 +311,14 @@ GO.email.EmailClient = function(config){
 		cls: 'x-btn-text-icon',
 		menu: {
 			items: addSendersItems
+		},
+		multiple:true
+	},{
+		iconCls: 'btn-delete',
+		text: GO.email.lang.deleteSendersFrom,
+		cls: 'x-btn-text-icon',
+		menu: {
+			items: deleteSendersItems
 		},
 		multiple:true
 	}];
@@ -1261,6 +1298,34 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 			},
 			scope: this
 		});
+	},
+	
+	deleteSendersFromAddresslist : function(addresslistId) {
+		if (GO.addressbook) {
+			var records = this.messagesGrid.getSelectionModel().getSelections();
+			var senderEmails = new Array();
+			for (var i=0;i<records.length;i++) {
+				senderEmails.push(records[i].data.sender);
+			}
+
+			Ext.Ajax.request({
+				url: GO.url('addressbook/addresslist/deleteContactsFromAddresslist'),
+				params: {
+					senderEmails: Ext.encode(senderEmails),
+					addresslistId: addresslistId
+				},
+				callback: function(options, success, response)
+				{
+					var responseData = Ext.decode(response.responseText);
+					if(!success) {
+						Ext.MessageBox.alert(GO.lang.strError, responseData.feedback);
+					} else {
+						Ext.MessageBox.alert(GO.lang.strSuccess, GO.addressbook.lang['nRemovedFromAddresslist'].replace('%n',responseData.nRemoved));
+					}
+				},
+				scope: this
+			});
+		}
 	}
 });
 

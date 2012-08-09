@@ -219,3 +219,5 @@ $l['addresslistIdMustBePositive']='Dit paneel verwacht een adreslijst ID die pos
 $l['male']='Man';
 $l['female']='Vrouw';
 $l['importing']='Importeren';
+
+$l['nRemovedFromAddresslist']='%n contacten zijn herkend en verwijderd uit de geselecteerde adreslijst.';

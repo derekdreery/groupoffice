@@ -132,6 +132,7 @@ $l["email"]="Email";
 $l["signature"]="Signature";
 $l["manageAliases"]='Manage sender aliases';
 $l["addSendersTo"]='Add senders to...';
+$l["deleteSendersFrom"]='Delete senders from...';
 $l["defaultTemplate"]='Set selected template as default';
 $l["moving"]='Moving...';
 $l["orderFilters"]='You can change the order of filters by dragging.';

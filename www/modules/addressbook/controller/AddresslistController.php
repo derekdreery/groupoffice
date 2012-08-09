@@ -211,6 +211,30 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 		return $response;
 	}
 
+	public function actionDeleteContactsFromAddresslist($params) {
+		$addresslistModel = GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslistId']);
+		$response = array(
+			'success'=>true,
+			'nRemoved'=>0
+		);
+		
+		// email addresses and names are sent from the client
+		$senderEmails = json_decode($params['senderEmails']);
+
+		foreach($senderEmails as $senderEmail){
+			$contactModel = GO_Addressbook_Model_Contact::model()->findSingleByAttribute('email',$senderEmail);
+			if (!empty($contactModel)) {
+				if ($addresslistModel->hasManyMany('contacts', $contactModel->id)) {
+					$removed = $addresslistModel->removeManyMany('contacts', $contactModel->id);
+					if ($removed)
+						$response['nRemoved']++;
+				}
+			}
+		}
+		
+		return $response;
+	}
+	
 	// TODO: get cross-session "selected addresslist" identifiers for getting store
 }
 
