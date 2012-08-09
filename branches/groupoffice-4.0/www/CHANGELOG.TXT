@@ -1,4 +1,10 @@
+
+??-08-2012 4.0.90
+- Bugfix: No files got attached to the email composer when using "Send files" in the Files module when the users default template is 'None'
+- Bugfix: Email module MessageGrid will expand when it is collapsed and the visible email gets deleted.
+
 08-08-2012 4.0.89
+
 - Fixed problem with default background color in events
 - Fix export orientation when exporting PDFs works again
 - Fix calendar:
