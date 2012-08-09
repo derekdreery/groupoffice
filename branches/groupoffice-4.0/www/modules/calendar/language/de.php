@@ -184,7 +184,6 @@ $l['invitation']='Einladung';
 $l['invitation_update']='Aktualisierung';
 $l['cancellation']='Absage';
 $l['non_selected']= 'nicht in ausgewähltem Kalendar';
-
 $l["confirmed"]= 'Bestätigt';
 $l["globalCategories"]='Globale Kategorie';
 $l['appointment']= 'Termin';
@@ -197,3 +196,4 @@ $l['eventUpdatedIn']='Der Termin im Kalender %s wurde mit dem Status %s aktualis
 $l['updateReponses'][1]='%s hat den Termin %s akzeptiert';
 $l['updateReponses'][2]='%s hat den Termin %s abgewiesen';
 $l['updateReponses'][3]='%s hat den Termin %s als vorläufig markiert';
+$l['cancelMessage']='Der folgende Termin, zu dem Sie eingeladen waren, wurde abgesagt.';

@@ -228,3 +228,6 @@ $l['failedRecipients']='Fehler beim Senden an';
 $l['ignoreSentFolder']='Speichere Antworten im gleichen Ordner wie die Originalnachicht';
 $l['sourceAndTargetSame']="Quell- und Zielmailbox scheinen nicht identisch zu sein";
 $l['subscribeFolders']='Ordner abonnieren';
+$l['imapLoginFailed']='Authentifikation für den Nutzer "%username" fehlgeschlagen.';
+$l['tryNewCredentials']='Versuchen Sie ein alternatives IMAP-Kennwort einzugeben.';
+$l['moveTo']='Verschiebe nach';
