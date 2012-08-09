@@ -47,7 +47,6 @@ $l["exists"]= 'ist vorhanden';
 $l["notexists"]= 'ist nicht vorhanden';
 $l["fileinto"]= 'Verschiebe nach';
 $l["copyto"]= 'Kopiere nach';
-$l["redirect"]= 'Weiterleitung an';
 $l["redirect_to"]= 'Sende Kopie an';
 $l["vacation"]= 'Abwesenheitsnotiz';
 $l["reject"]= 'Abweisen mit Nachricht';
