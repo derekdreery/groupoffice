@@ -1,5 +1,6 @@
 
 ??-08-2012 4.0.90
+- Database fix for recurring events that could have been added when there was a bug in previous version.
 - Updated German language
 - Updated Italian language
 - Bugfix: No files got attached to the email composer when using "Send files" in the Files module when the users default template is 'None'
