@@ -1,5 +1,6 @@
 
 ??-08-2012 4.0.90
+- Bugfix: Event->delete() will ignore ACL permissions when it is a resource of the current user
 - Database fix for recurring events that could have been added when there was a bug in previous version.
 - Updated German language
 - Updated Italian language
