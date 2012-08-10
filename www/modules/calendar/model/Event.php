@@ -311,6 +311,17 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		return parent::afterSave($wasNew);
 	}
 	
+	/**
+	 * If this is a resource of the current user ignore ACL permissions when deleting 
+	 */
+	public function delete($ignoreAcl=false)
+	{
+		if(!empty($this->resource_event_id) && $this->user_id == GO::user()->id)
+			parent::delete(true);
+		else
+			parent::delete($ignoreAcl);
+	}
+	
 	public function hasModificationsForParticipants(){
 		return $this->isModified("start_time") || $this->isModified("end_time") || $this->isModified("name") || $this->isModified("location") || $this->isModified('status');
 	}
