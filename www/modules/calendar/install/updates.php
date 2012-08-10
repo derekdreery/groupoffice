@@ -152,3 +152,6 @@ $updates["201206131104"][]="ALTER TABLE `cal_categories` CHANGE `color` `color` 
 $updates["201207090855"][]="ALTER TABLE `cal_calendars` CHANGE `show_bdays` `show_bdays` TINYINT( 1 ) NOT NULL DEFAULT '0'";
 
 $updates["201208010855"][]="ALTER TABLE `cal_events` CHANGE `name` `name` VARCHAR( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL"; 
+
+//database could have been corrupted by an earlier bug that was fixed. this query will take care of the issue.
+$updates['201208101000'][]="UPDATE `cal_events` SET `rrule` = replace(rrule, '=MONTHLY_DATE', '=MONTHLY')"; 
