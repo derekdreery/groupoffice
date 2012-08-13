@@ -66,21 +66,22 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 		
 		this.exportOrientation = new Ext.form.ComboBox({
 			fieldLabel : GO.lang.exportOrientation,
+			hiddenName: 'exportOrientation',
 			name: 'exportOrientation',
 			mode: 'local',
 			editable:false,
 			triggerAction:'all',
+			lazyRender:true,
 			width: 120,
 			value:"V",
-			store: new Ext.data.ArrayStore({
-				id:"id",
+			store: new Ext.data.SimpleStore({
 				fields: [
-						'id',
+						'myId',
 						'displayText'
 				],
 				data: [['H', GO.lang.landscape], ['V', GO.lang.portrait]]
 			}),
-			valueField: 'id',
+			valueField: 'myId',
 			displayField: 'displayText'
 		});
 		
