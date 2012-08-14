@@ -78,7 +78,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 
 		if(!GO.tasks.categoriesStore.loaded)
 			GO.tasks.categoriesStore.load();
-		
+
 		//tmpfiles on the server ({name:'Name',tmp_file:/tmp/name.ext} will be attached)
 		this.formPanel.baseParams.tmp_files = config.tmp_files ? Ext.encode(config.tmp_files) : '';
 
@@ -142,7 +142,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 					this.selectCategory.setValue("");
 				}else
 				{
-					this.selectCategory.setRemoteText(action.result.data.category_name);
+					this.selectCategory.setRemoteText(action.result.remoteComboTexts.category_id);
 				}
 					
 				this.formPanel.form.clearInvalid();
