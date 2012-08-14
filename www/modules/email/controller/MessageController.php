@@ -134,9 +134,11 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				}
 				$record['from']=  htmlspecialchars(implode(',', $from), ENT_COMPAT, 'UTF-8');
 			}
-			
+					
 			if(empty($record['subject']))
 				$record['subject']=GO::t('no_subject','email');
+			else
+				$record['subject'] = htmlspecialchars($record['subject']);
 				
 				
 			
