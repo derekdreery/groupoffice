@@ -87,7 +87,7 @@ class GO_Sites_Widgets_Pager extends GO_Sites_Widgets_Component {
 		parent::__construct($id, $params);
 		
 		$this->_currentPageNumber = isset($params[$this->getRequestParam()]) ? $params[$this->getRequestParam()] : 1;
-		GOS::site()->scripts->registerCssFile(GOS::site()->controller->getViewUrl().'css/pager.css');  // Include the right css file in the header
+		GOS::site()->scripts->registerCssFile(GOS::site()->controller->getTemplateUrl().'css/pager.css');  // Include the right css file in the header
 
 		$this->_initialize();
 	}
@@ -174,7 +174,7 @@ class GO_Sites_Widgets_Pager extends GO_Sites_Widgets_Component {
 
 				for($page=$offsetStart;$page<=$offsetEnd;$page++){
 					$params = array_merge($this->getAdditionalParams(),array($this->getRequestParam()=>$page));
-						$url = GOS::site()->getController()->createUrl(array(GOS::site()->route, $params));
+						$url = GOS::site()->getController()->createUrl(GOS::site()->route, $params);
 					if($page == $this->_currentPageNumber) {
 						echo '<td class="pager-block pager-active"><a href="'.$url.'">'.$page.'</a></td>';
 					} else
@@ -187,14 +187,14 @@ class GO_Sites_Widgets_Pager extends GO_Sites_Widgets_Component {
 					if($this->_currentPageNumber == $this->_totalPages)
 						echo '>';
 					else
-						echo '<a href="'.$this->_page->getUrl(array_merge($this->getAdditionalParams(),array($this->getRequestParam()=>$next))).'">></a>';
+						echo '<a href="'.GOS::site()->getController()->createUrl(array_merge($this->getAdditionalParams(),array($this->getRequestParam()=>$next))).'">></a>';
 				echo '</td>';
 				
 				echo '<td class="pager-block pager-inactive">';
 					if($this->_currentPageNumber == $this->_totalPages)
 						echo '>>';
 					else
-						echo '<a href="'.$this->_page->getUrl(array_merge($this->getAdditionalParams(),array($this->getRequestParam()=>$this->_totalPages))).'">>></a>';
+						echo '<a href="'.GOS::site()->getController()->createUrl(array_merge($this->getAdditionalParams(),array($this->getRequestParam()=>$this->_totalPages))).'">>></a>';
 				echo '</td>';
 				// END: RENDER THE PAGER NEXT ARROWS
 				
@@ -213,7 +213,7 @@ class GO_Sites_Widgets_Pager extends GO_Sites_Widgets_Component {
 	public function renderTotalFound(){
 		echo '<table class="pager-totalfound-table">';
 			echo '<tr>';
-				echo '<td>'.$this->_controller->t('pager_totalItems').': '.$this->_totalFound.'</td>';
+				echo '<td>'.GOS::site()->getController()->t('pager_totalItems').': '.$this->_totalFound.'</td>';
 			echo '</tr>';
 		echo '</table>';
 	}
@@ -225,7 +225,7 @@ class GO_Sites_Widgets_Pager extends GO_Sites_Widgets_Component {
 	public function renderTotalPages(){
 		echo '<table class="pager-totalpages-table">';
 			echo '<tr>';
-				echo '<td>'.$this->_controller->t('pager_page').': '.$this->_currentPageNumber.' '.$this->_controller->t('pager_of').' '.$this->_totalPages.'</td>';
+				echo '<td>'.GOS::site()->getController()->t('pager_page').': '.$this->_currentPageNumber.' '.$this->_controller->t('pager_of').' '.$this->_totalPages.'</td>';
 			echo '</tr>';
 		echo '</table>';
 	}

@@ -122,7 +122,7 @@
 <?php endif; ?>
 <div style="clear:both"></div>
 
-<?php include("_ticketform.php"); ?>			
+<?php $this->renderPartial("_ticketform", array('ticket'=>$ticket, 'message'=>$message, 'tickettypes'=>$tickettypes, 'uploader'=>$uploader)); ?>			
 
 <?php if ($pager->models): ?>
 
@@ -153,7 +153,7 @@
 								<td colspan="2">
 									<div class="ticket-message-attachment"><b><?php echo GOS::t('tickets_messageFiles'); ?>:</b></div>
 									<?php foreach ($files as $file => $obj): ?>
-										<div class="ticket-message-attachment"><a target="_blank" href="<?php echo $this->createUrl(array('tickets/siteModule/downloadAttachment','file'=>$obj->id,'ticket_number'=>$ticket->ticket_number,'ticket_verifier'=>$ticket->ticket_verifier)); ?>">
+										<div class="ticket-message-attachment"><a target="_blank" href="<?php echo $this->createUrl('tickets/siteModule/downloadAttachment',array('file'=>$obj->id,'ticket_number'=>$ticket->ticket_number,'ticket_verifier'=>$ticket->ticket_verifier)); ?>">
 												<?php echo $file; ?>
 											</a></div>
 									<?php endforeach; ?>

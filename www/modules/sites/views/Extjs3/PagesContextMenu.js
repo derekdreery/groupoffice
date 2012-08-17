@@ -12,7 +12,7 @@ GO.sites.PagesContextMenu = function(config){
 		text: GO.lang.strView,
 		cls: 'x-btn-text-icon',
 		handler:function(){
-			window.open(GO.url('sites/pageBackend/redirectToFront', {id: this.selected[0].id}));			
+			window.open(GO.url('sites/contentBackend/redirectToFront', {id: this.selected[0].id}));			
 		},
 		scope:this
 	});
@@ -67,7 +67,7 @@ Ext.extend(GO.sites.PagesContextMenu, Ext.menu.Menu, {
 
 	showPagePropertiesDialog : function() {
 		//console.log(this.selected[0].id);
-		GO.mainLayout.getModulePanel('sites').showPageDialog(this.selected[0].id);
+		GO.mainLayout.getModulePanel('sites').showContentDialog(this.selected[0].id);
 	},
 	deletePage : function() {
 		var page_id = this.selected[0].id;
@@ -75,7 +75,7 @@ Ext.extend(GO.sites.PagesContextMenu, Ext.menu.Menu, {
 		Ext.MessageBox.confirm(GO.sites.lang.deletePage, GO.sites.lang.deletePageText, function(btn){
 			if(btn == 'yes'){
 				Ext.Ajax.request({
-					url: GO.url('sites/pageBackend/delete'),
+					url: GO.url('sites/contentBackend/delete'),
 					params: {
 						id: page_id
 					},

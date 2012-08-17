@@ -38,6 +38,10 @@ $l = array(
 		'siteModRewrite'=>'Mod Rewrite gebruiken',
 		'siteRegisterUserGroups'=>'Group waar geregistreerde gebruiker in komen',
 		
+		'nameProperties'=>'Eigenschappen',
+		'deleteContent'=>'Inhoud verwijderen',
+		'deleteContentText'=>'Wilt u uw inhoud verwijderen?',
+		
 		//Frontend languages
 		'login'=>'Inloggen',
 		'register'=>'Registreren',

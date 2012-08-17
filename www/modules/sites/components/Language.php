@@ -7,7 +7,7 @@ class GO_Sites_Components_Language{
 	
 	
 	public function __construct($isoCode=false) {
-		$this->_templatePath = GOS::site()->getController()->getTemplatePath();
+		$this->_templatePath = GOS::site()->controller->getTemplatePath();
 		$this->setLanguage($isoCode);
 	}
 	
@@ -37,7 +37,7 @@ class GO_Sites_Components_Language{
 		if($file)
 			require($file);
 		else
-			throw new Exception('Language file not found');
+			throw new GO_Base_Exception_NotFound('Language file not found');
 		
 		if(isset($l)){
 			if(!empty($l[$name]))

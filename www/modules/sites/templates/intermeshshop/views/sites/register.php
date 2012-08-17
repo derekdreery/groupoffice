@@ -24,37 +24,33 @@
 <?php echo GO_Sites_Components_Html::beginForm(); ?>
 
 	<div class="row">
-		<?php echo GO_Sites_Components_Html::activeLabelEx($model, 'first_name'); ?>
-		<?php echo GO_Sites_Components_Html::activeTextField($model, 'first_name'); ?>
-		<?php echo GO_Sites_Components_Html::error($model, 'first_name'); ?>
+		<?php echo GO_Sites_Components_Html::activeLabelEx($user, 'first_name'); ?>
+		<?php echo GO_Sites_Components_Html::activeTextField($user, 'first_name'); ?>
+		<?php echo GO_Sites_Components_Html::error($user, 'first_name'); ?>
 	</div>
 	<div class="row">
-		<?php echo GO_Sites_Components_Html::activeLabelEx($model, 'middle_name'); ?>
-		<?php echo GO_Sites_Components_Html::activeTextField($model, 'middle_name'); ?>
-		<?php echo GO_Sites_Components_Html::error($model, 'middle_name'); ?>
+		<?php echo GO_Sites_Components_Html::activeLabelEx($user, 'middle_name'); ?>
+		<?php echo GO_Sites_Components_Html::activeTextField($user, 'middle_name'); ?>
+		<?php echo GO_Sites_Components_Html::error($user, 'middle_name'); ?>
 	</div>
 	<div class="row">
-		<?php echo GO_Sites_Components_Html::activeLabelEx($model, 'last_name'); ?>
-		<?php echo GO_Sites_Components_Html::activeTextField($model, 'last_name'); ?>
-		<?php echo GO_Sites_Components_Html::error($model, 'last_name'); ?>
+		<?php echo GO_Sites_Components_Html::activeLabelEx($user, 'last_name'); ?>
+		<?php echo GO_Sites_Components_Html::activeTextField($user, 'last_name'); ?>
+		<?php echo GO_Sites_Components_Html::error($user, 'last_name'); ?>
 	</div>
 	<div class="row">
 		<?php echo GO_Sites_Components_Html::activeLabelEx($contact, 'sex'); ?>
-		<?php echo GO_Sites_Components_Html::activeRadioButtonList($contact, 'sex', array(GOS::t('male')=>'male',GOS::t('female')=>'female')); ?>
+		<div class="buttonList">
+			<?php echo GO_Sites_Components_Html::activeRadioButtonList($contact, 'sex', array('male'=>GOS::t('male'),'female'=>GOS::t('female')), array('separator'=>'')); ?>
+		</div>
 		<?php echo GO_Sites_Components_Html::error($contact, 'sex'); ?>
 	</div>
 	<div class="row">
-		<?php echo GO_Sites_Components_Html::activeLabelEx($model, 'email'); ?>
-		<?php echo GO_Sites_Components_Html::activeTextField($model, 'email'); ?>
-		<?php echo GO_Sites_Components_Html::error($model, 'email'); ?>
+		<?php echo GO_Sites_Components_Html::activeLabelEx($user, 'email'); ?>
+		<?php echo GO_Sites_Components_Html::activeTextField($user, 'email'); ?>
+		<?php echo GO_Sites_Components_Html::error($user, 'email'); ?>
 	</div>
 	
-	
-	<div class="row">
-		<?php echo GO_Sites_Components_Html::activeLabelEx($model, 'email'); ?>
-		<?php echo GO_Sites_Components_Html::activeTextField($model, 'email'); ?>
-		<?php echo GO_Sites_Components_Html::error($model, 'email'); ?>
-	</div>
 	<div class="row">
 		<?php echo GO_Sites_Components_Html::activeLabelEx($contact, 'address'); ?>
 		<?php echo GO_Sites_Components_Html::activeTextField($contact, 'address'); ?>
@@ -120,25 +116,25 @@
 	</div>
 	
 	<div class="row">
-		<?php echo GO_Sites_Components_Html::activeLabelEx($contact, 'vat_no'); ?>
-		<?php echo GO_Sites_Components_Html::activeTextField($contact, 'vat_no'); ?>
-		<?php echo GO_Sites_Components_Html::error($contact, 'vat_no'); ?>
+		<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'vat_no'); ?>
+		<?php echo GO_Sites_Components_Html::activeTextField($company, 'vat_no'); ?>
+		<?php echo GO_Sites_Components_Html::error($company, 'vat_no'); ?>
 	</div>
 	
 	<div class="row">
-		<?php echo GO_Sites_Components_Html::activeLabelEx($model, 'username'); ?>
-		<?php echo GO_Sites_Components_Html::activeTextField($model, 'username'); ?>
-		<?php echo GO_Sites_Components_Html::error($model, 'username'); ?>
+		<?php echo GO_Sites_Components_Html::activeLabelEx($user, 'username'); ?>
+		<?php echo GO_Sites_Components_Html::activeTextField($user, 'username'); ?>
+		<?php echo GO_Sites_Components_Html::error($user, 'username'); ?>
 	</div>
 	<div class="row">
-		<?php echo GO_Sites_Components_Html::activeLabelEx($model, 'password'); ?>
-		<?php echo GO_Sites_Components_Html::activePasswordField($model, 'password'); ?>
-		<?php echo GO_Sites_Components_Html::error($model, 'password'); ?>
+		<?php echo GO_Sites_Components_Html::activeLabelEx($user, 'password'); ?>
+		<?php echo GO_Sites_Components_Html::activePasswordField($user, 'password'); ?>
+		<?php echo GO_Sites_Components_Html::error($user, 'password'); ?>
 	</div>
 	<div class="row">
-		<?php echo GO_Sites_Components_Html::activeLabelEx($model, 'passwordConfirm'); ?>
-		<?php echo GO_Sites_Components_Html::activePasswordField($model, 'passwordConfirm'); ?>
-		<?php echo GO_Sites_Components_Html::error($model, 'passwordConfirm'); ?>
+		<?php echo GO_Sites_Components_Html::activeLabelEx($user, 'passwordConfirm'); ?>
+		<?php echo GO_Sites_Components_Html::activePasswordField($user, 'passwordConfirm'); ?>
+		<?php echo GO_Sites_Components_Html::error($user, 'passwordConfirm'); ?>
 	</div>
 
 	<div class="row buttons">

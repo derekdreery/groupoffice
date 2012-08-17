@@ -36,6 +36,7 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 	protected function allowGuests() {
 		return array('*');
 	}
+	
 	/**
 	 * @var string the name of the layout to be applied to this controller's views.
 	 * Defaults to main, meaning no layout will be applied.
@@ -56,6 +57,12 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 	 * @var string
 	 */
 	private $_pageTitle;
+	
+	/**
+	 * the name of the action that is running. Empty string if none
+	 * @var string name of runned action 
+	 */
+	private $_actionId ='';
 
 	public function getPageTitle()
 	{
@@ -63,7 +70,7 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 			return $this->_pageTitle;
 		else
 		{
-				return $this->_pageTitle = GOS::site()->getName();
+				return $this->_pageTitle = ucfirst($this->_action);
 		}
 	}
 
@@ -155,7 +162,7 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 			require($_viewFile_);
 	}
 
-	private function getTemplatePath()
+	public function getTemplatePath()
 	{
 		return GO::config()->root_path . 'modules/sites/templates/' . $this->template . '/';
 	}
@@ -183,7 +190,7 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 		if(file_exists($template_url)) //look in sites module
 			return $template_url;
 
-		throw new GO_Base_Exception_NotFound('Could not find the template directory');
+		throw new GO_Base_Exception_NotFound('Could not find the template directory '. $template_url);
 	}
 
 	/**
@@ -249,7 +256,7 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 			return $returnUrl;
 		}
 		else
-			return "/"; //Homepage
+			return GO::config()->host; //Homepage
 	}
 
 	public function run($action = '', $params = array(), $render = true, $checkPermissions = true)
@@ -282,6 +289,10 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 			$controller = new GO_Sites_Controller_Site();
 			$controller->template = $this->template;
 			$controller->render('error', array('error' => $e));
+		}
+		catch(Exception $e)
+		{
+			echo $e->getMessage();
 		}
 	}
 	

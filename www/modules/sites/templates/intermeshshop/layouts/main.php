@@ -10,14 +10,12 @@
 
 					Download your purchased products immediately
 					Download product updates at any..." />
-		<title><?php echo $this->getPageTitle(); ?></title>
-		<link href="<?php echo $this->getViewUrl(); ?>css/stylesheet.css" rel="stylesheet" type="text/css" />
-		<link href="<?php echo $this->getViewUrl(); ?>css/buttons.css" rel="stylesheet" type="text/css" />
-		<link href="<?php echo $this->getViewUrl(); ?>css/tabs.css" rel="stylesheet" type="text/css" />
-		<link href="<?php echo $this->getViewUrl(); ?>css/webshop.css" rel="stylesheet" type="text/css" />
-		<link href="<?php echo $this->getViewUrl(); ?>css/notifications.css" rel="stylesheet" type="text/css" />
-		
-		<?php	 //echo $this->getPage()->renderHeaderIncludes(); ?>
+		<title><?php echo $this->getPageTitle() . " - " . GOS::site()->getName(); ?></title>
+		<link href="<?php echo $this->getTemplateUrl(); ?>css/stylesheet.css" rel="stylesheet" type="text/css" />
+		<link href="<?php echo $this->getTemplateUrl(); ?>css/buttons.css" rel="stylesheet" type="text/css" />
+		<link href="<?php echo $this->getTemplateUrl(); ?>css/tabs.css" rel="stylesheet" type="text/css" />
+		<link href="<?php echo $this->getTemplateUrl(); ?>css/webshop.css" rel="stylesheet" type="text/css" />
+		<link href="<?php echo $this->getTemplateUrl(); ?>css/notifications.css" rel="stylesheet" type="text/css" />
 
 	</head>
 
@@ -38,9 +36,9 @@
 					<div id="topmenu-item-center_43" class="topmenu-item-center topmenu-item-center_0">						
 				
 						
-						<div class="topmenu-item-left <?php if(GOS::site()->route=='webshop/site/products')echo 'selected'; ?>">
+						<div class="topmenu-item-left <?php if(GOS::site()->route=='billing/site/products')echo 'selected'; ?>">
 							<div class="topmenu-item-right">
-								<a class="topmenu-item-center" href="<?php echo $this->createUrl('/webshop/site/products'); ?>">Products</a>
+								<a class="topmenu-item-center" href="<?php echo $this->createUrl('/billing/site/products'); ?>">Products</a>
 							</div>
 						</div>
 						<div class="topmenu-item-left <?php if(GOS::site()->route=='billing/site/invoices')echo 'selected'; ?>">
@@ -77,7 +75,24 @@
 			</div>
 			<div class="hoofd-kader">
 				
-				<?php echo $content; ?>
+				<div class="hoofd-kader-menu">
+
+			<div class="hoofd-tab-left">
+				<div class="hoofd-tab-right">
+					<a class="hoofd-tab-center" href="#">
+						<?php echo $this->getPageTitle(); ?>
+					</a>
+				</div>
+			</div>
+
+			</div>
+				<div class="hoofd-kader-top"></div>
+				<div class="hoofd-kader-center">
+				
+					<?php echo $content; ?>
+					
+					</div>
+			<div class="hoofd-kader-bottom"></div>
 				
 			</div>
 

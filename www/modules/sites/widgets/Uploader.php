@@ -19,24 +19,27 @@ class GO_Sites_Widgets_Uploader extends GO_Sites_Widgets_Component {
 	public function __construct($id,$params,$formname="form",$uploadTarget=false) {
 		$this->formname = $formname;
 		$this->uploadTarget = !$uploadTarget?GO::url('core/plupload'):$uploadTarget;
-		
+
 		parent::__construct($id, $params);
 	}
 
-	protected function _init(){
+	protected function _init()
+	{
+		$assetUrl = GOS::site()->assets->publish(GO::config()->root_path.'modules/sites/widgets/Uploader');
 		
-		$this->_silverLightUrl = GO::config()->host.'modules/sites/widgets/Uploader/plupload/js/plupload.silverlight.xap';
-		$this->_swfUrl = GO::config()->host.'modules/sites/widgets/Uploader/plupload/js/plupload.flash.swf';
+		$this->_silverLightUrl = $assetUrl.'/Uploader/plupload/js/plupload.silverlight.xap';
+		$this->_swfUrl = $assetUrl.'/Uploader/plupload/js/plupload.flash.swf';
 		
-		GOS::site()->scripts->registerScriptFile(GO::config()->host.'modules/sites/widgets/Uploader/jquery-1.7.1.min.js'); 
-		GOS::site()->scripts->registerScriptFile(GO::config()->host.'modules/sites/widgets/Uploader/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js'); 
-		GOS::site()->scripts->registerScriptFile(GO::config()->host.'modules/sites/widgets/Uploader/plupload/js/plupload.full.js'); 
-		GOS::site()->scripts->registerCssFile(GO::config()->host.'modules/sites/widgets/Uploader/uploader_style.css'); 
+		GOS::site()->scripts->registerGapiScript('jquery');
+		
+		GOS::site()->scripts->registerScriptFile($assetUrl.'/Uploader/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js'); 
+		GOS::site()->scripts->registerScriptFile($assetUrl.'/Uploader/plupload/js/plupload.full.js'); 
+		GOS::site()->scripts->registerCssFile($assetUrl.'/Uploader/uploader_style.css'); 
 		GOS::site()->scripts->registerScript('UploadComponent', $this->createjs(), GO_Sites_Components_Scripts::POS_READY);
 	}
 	
 	public function render() {
-		echo '<div id="'.$this->_id.'">'.GOS::t('uploader_noFlash').'</div>';
+		echo '<div id="'.$this->_id.'">Loading upload widget...</div>';
 	}
 	
 	private function createjs(){
@@ -69,6 +72,6 @@ $(function() {
 
 EOD;
 		
-		return "<script>".$script."</script>";
+		return $script;
 	} 	
 }

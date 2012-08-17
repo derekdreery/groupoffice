@@ -50,6 +50,18 @@ class GO_Sites_Controller_SiteBackend extends GO_Base_Controller_AbstractModelCo
 		return $response;
 	}
 	
+	protected function afterLoad(&$response, &$model, &$params)
+	{
+		if(GO::modules()->isInstalled('webshop'))
+		{
+			$webshop = GO_Webshop_Model_Webshop::model()->findSingleByAttribute('site_id', $model->id);
+			if($webshop != null)
+				$response['data']['webshop'] = $webshop->getAttributes();
+		}
+		
+		return parent::afterLoad($response, $model, $params);
+	}
+	
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
 		
 //		if(empty($params['id'])){

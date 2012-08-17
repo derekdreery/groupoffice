@@ -16,7 +16,11 @@
 			<div class="subkader-big-center">		
 				<table class="models-table" width="100%" style="border-collapse: collapse;">
 					<tr>
-						<th align="left">Invoice no.</th><th align="left">Date</th><th align="left">Status</th><th></th><th></th>
+						<th align="left">Invoice no.</th>
+						<th align="left">Date</th>
+						<th align="left">Status</th>
+						<th></th>
+						<th></th>
 					</tr>
 					<?php $i = 0; ?>
 					<?php foreach($pager->models as $invoice): ?>
@@ -31,7 +35,7 @@
 							<tr class="model-row <?php echo $style; ?>" style="border-collapse: collapse;">
 								<td><?php echo $invoice->order_id; ?></td>
 								<td><?php echo $invoice->btime; ?></td>
-								<td><?php echo $invoice->status->getName(2); //2 is language id of webshop ?></td>
+								<td><?php echo $invoice->status->getName(1); //2 is language id of webshop ?></td>
 								<td>
 									<?php if(!empty($invoice->ptime)): ?>
 										<?php echo $invoice->ptime; ?>

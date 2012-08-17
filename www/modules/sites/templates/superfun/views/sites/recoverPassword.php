@@ -16,7 +16,7 @@
 			<?php endif; ?>
 		</div>
 		<div class="row buttons">
-			<?php echo GO_Sites_Components_Html::submitButton('Verzenden'); ?>
+			<?php echo GO_Sites_Components_Html::submitButton('Verzenden', array('class'=>'btn btn-primary')); ?>
 		</div>
 	<?php echo GO_Sites_Components_Html::endForm(); ?>
 
