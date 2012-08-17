@@ -1,6 +1,6 @@
 <div class="product">
 	
-	<?php $DEFAULT_SHOP_LANG = 2; ?>
+	<?php $DEFAULT_SHOP_LANG = 1; ?>
 
 	<h2><?php echo $product->getLanguage($DEFAULT_SHOP_LANG)->name; ?></h2>
 	<p><?php echo $product->getLanguage($DEFAULT_SHOP_LANG)->description; ?></p>

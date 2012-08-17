@@ -33,10 +33,10 @@ class GOS
 		*/
 	public static function setSite($app)
 	{
-					if(self::$_site===null || $app===null)
-									self::$_site=$app;
-					else
-									throw new Exception('Frontend site can only be created once.');
+		if(self::$_site===null || $app===null)
+			self::$_site=$app;
+		else
+			throw new Exception('Frontend site can only be created once.');
 	}
 
 	/**
@@ -46,7 +46,7 @@ class GOS
 	 */
 	public static function site()
 	{
-					return self::$_site;
+		return self::$_site;
 	}
 	
 	/**
@@ -57,8 +57,15 @@ class GOS
 		return self::$_site->getLanguage()->getTranslation($key);
 	}
 	
+	/**
+	 * Init GO and return the website component
+	 * @return GO_Sites_Components_Website 
+	 */
 	public static function launch()
 	{
+		//Go up 3 dirs (components, sites, modules) to find GO.php
+		require(dirname(__FILE__).'/../../../GO.php');
+
 		return new GO_Sites_Components_Website($_SERVER["SERVER_NAME"]);
 	}
 }

@@ -14,29 +14,21 @@
 GO.sites.SiteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	
 	customFieldType : "GO_Sites_Model_Site",
-	
-	initComponent : function(){
-		
+
+	initComponent : function() {
 		Ext.apply(this, {
 			goDialogId:'site',
-			title:GO.sites.lang.site,
+			title:GO.sites.lang.siteProperties,
 			formControllerUrl: 'sites/siteBackend',
 			height:550
 		});
 		
-		GO.sites.SiteDialog.superclass.initComponent.call(this);	
-	},
-	afterLoad : function(remoteModelId, config, action){
-		if(this.remoteModelId == 0)
-			this.createDefaultPagesButton.setDisabled(true);
-		else
-			this.createDefaultPagesButton.setDisabled(false);
-		
+		GO.sites.SiteDialog.superclass.initComponent.call(this);
 	},
 	buildForm : function () {
 		
 		this.propertiesPanel = new Ext.Panel({
-			title:GO.lang.strProperties,			
+			title:GO.lang.strProperties,
 			cls:'go-form-panel',
 			layout:'form',
 			labelWidth: 170,
@@ -92,6 +84,14 @@ GO.sites.SiteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 						maxLength: 100,
 						allowBlank:true,
 						fieldLabel: GO.sites.lang.siteRegisterUserGroups
+					},{
+						xtype: 'textfield',
+						name: 'language',
+						width:300,
+						anchor: '100%',
+						maxLength: 100,
+						allowBlank:true,
+						fieldLabel: GO.sites.lang.language
 					},{
 						xtype: 'xcheckbox',
 						name: 'ssl',

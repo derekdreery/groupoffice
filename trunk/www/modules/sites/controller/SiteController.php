@@ -21,7 +21,7 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 {
 	public function allowGuests()
 	{
-		return array('login','register','content','index','error','recoverpassword','resetpassword');
+		return array('login','register','content','index','error','recoverpassword','resetpassword', 'plupload');
 	}
 	
 	/**
@@ -29,6 +29,11 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 	 */
 	public function actionIndex(){
 		 $this->render('index'); 
+	}
+	
+	public function actionPlupload(){
+		$ctr = new GO_Core_Controller_Core();
+		$ctr->run('plupload', $_POST);// actionPlupload($_POST);
 	}
 	
 	/**
@@ -45,23 +50,25 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 	}
 	
 	/**
-	 * Register a new user 
+	 * Register a new user this controller can save User, Contact and Company
+	 * Only if attributes are provided by the POST request shall the model be saved
 	 */
 	public function actionRegister() {
 		$user = new GO_Base_Model_User();
 		$contact = new GO_Addressbook_Model_Contact();
+		$company = new GO_Addressbook_Model_Company();
 		
 		if(GO_Base_Util_Http::isPostRequest())
 		{
-			$user->setAttributes($_POST['GO_Base_Model_User']);
-			$contact->setAttributes($_POST['GO_Addressbook_Model_Contact']);
+			$user->setAttributes($_POST['User']);
+			$contact->setAttributes($_POST['Contact']);
 			if($user->validate() && $contact->validate())
 			{
 				GO::$ignoreAclPermissions = true; //Guest have no right to create users by default ignore this
 				if($user->save())
 				{
 					$contact = $user->createContact();
-					$contact->setAttributes($_POST['GO_Addressbook_Model_Contact']);
+					$contact->setAttributes($_POST['Contact']);
 					$user->addToGroups(GOS::site()->getSite()->getDefaultGroupNames()); // Default groups are in si_sites table
 					$addressbook = GO_Addressbook_Model_Addressbook::model()->getUsersAddressbook();
 					$contact->addressbook_id = $addressbook->id;
@@ -69,7 +76,7 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 					$contact->save();
 
 					// Automatically log the newly created user in.
-					if(GO::session()->login($user->username, $_POST['GO_Base_Model_User']['password']))
+					if(GO::session()->login($user->username, $_POST['User']['password']))
 						$this->redirect($this->getReturnUrl());
 					else
 						throw new Exception('Login after registreation failed.');
@@ -77,7 +84,7 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 			}
 		}
 		
-		$this->render('register', array('model'=>$user,'contact'=>$contact));
+		$this->render('register', array('user'=>$user,'contact'=>$contact,'company'=>$company));
 	}
 	
 	/**
@@ -125,8 +132,8 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 		{
 			if (GO_Base_Util_Http::isPostRequest())
 			{
-				$user->password = $_POST['GO_Base_Model_User']['password'];
-				$user->passwordConfirm = $_POST['GO_Base_Model_User']['passwordConfirm'];
+				$user->password = $_POST['User']['password'];
+				$user->passwordConfirm = $_POST['User']['passwordConfirm'];
 
 				GO::$ignoreAclPermissions = true; 
 				
@@ -149,8 +156,8 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 		$model = new GO_Base_Model_User();
 		
 		if (GO_Base_Util_Http::isPostRequest()) {
-			$model->username = $_POST['GO_Base_Model_User']['username'];
-			$password = $_POST['GO_Base_Model_User']['password'];
+			$model->username = $_POST['User']['username'];
+			$password = $_POST['User']['password'];
 
 			$user = GO::session()->login($model->username, $password);
 

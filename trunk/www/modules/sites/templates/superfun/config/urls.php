@@ -22,9 +22,9 @@ return array(
 		'register'=>'reservation/front/register',
 		'payment/*'=>'reservation/front/payment',
 		'paymentreturn/*'=>'reservation/front/paymentreturn',
+		'account'=>'reservation/front/account',
+		'reservering/<id:\d+>'=>'reservation/front/reservation',
 		'<action:(login|logout|account|recoverPassword|resetPassword)>' => 'sites/site/<action>',
-		'products'=>'webshop/front/products',
-		'<slug>.html'=>'sites/user/index',
 		//'<module:\w+>/<controller:\w+>/<action:\w+>/'=>*'<module>/<controller>/<action>'
 			
 );

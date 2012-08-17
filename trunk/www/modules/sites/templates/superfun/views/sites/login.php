@@ -2,7 +2,7 @@
 
 <h2>Aanmelden</h2>
 <p>Maakt u voor het eerst gebruik van ons reversering systeem klik dan hieronder om een account aan te maken</p>
-<a href="<?php echo $this->createUrl('/reservation/front/register'); ?>"><button>Aanmelden</button></a>
+<a class="btn btn-primary" href="<?php echo $this->createUrl('/reservation/front/register'); ?>">Aanmelden</a>
 
 <h2>Inloggen</h2>
 <p>Indien u al eerder gebruik heeft gemaakt van ons syteem kunt u zich hieronder inloggen</p>
@@ -24,8 +24,8 @@
 		</div>
 	<?php endif; ?>
 	<div class="row buttons">
-		<?php echo GO_Sites_Components_Html::submitButton('Inloggen'); ?>
-		<a href="<?php echo $this->createUrl('/sites/site/recoverpassword'); ?>">Wachtwoord vergeten?</a>
+		<?php echo GO_Sites_Components_Html::submitButton('Inloggen', array('class'=>'btn btn-primary')); ?>
+		<a class="btn" href="<?php echo $this->createUrl('/sites/site/recoverpassword'); ?>">Wachtwoord vergeten?</a>
 	</div>
 <?php echo GO_Sites_Components_Html::endForm(); ?>
 	

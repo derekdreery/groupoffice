@@ -11,7 +11,7 @@
  * @author Wesley Smits <wsmits@intermesh.nl>
  */
  
-GO.sites.PageDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
+GO.sites.ContentDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	
 	customFieldType : "GO_Sites_Model_Page",
 	

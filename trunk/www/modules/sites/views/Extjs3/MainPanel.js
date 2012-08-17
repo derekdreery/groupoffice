@@ -5,7 +5,7 @@ GO.sites.MainPanel = function(config){
 		config = {};
 	}
 	
-	this.centerPanel = new GO.sites.PagePanel({
+	this.centerPanel = new GO.sites.ContentPanel({
 		region:'center',
 		border:true
 	}); 
@@ -69,15 +69,15 @@ Ext.extend(GO.sites.MainPanel, Ext.Panel,{
 		
 		this.siteDialog.show(site_id);
 	},
-	showPageDialog: function(page_id){
-		if(!this.pageDialog){
-			this.pageDialog = new GO.sites.PageDialog();
-			this.pageDialog.on('hide', function(){
+	showContentDialog: function(page_id){
+		if(!this.contentDialog){
+			this.contentDialog = new GO.sites.ContentDialog();
+			this.contentDialog.on('hide', function(){
 				this.rebuildTree();
 			},this);
 		}
 		
-		this.pageDialog.show(page_id);
+		this.contentDialog.show(page_id);
 	},
 //	showModuleSettingsDialog: function(){
 //		if(!this.moduleSettingsDialog)

@@ -18,7 +18,7 @@ GO.sites.ModuleSettingsDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		Ext.apply(this, {
 			goDialogId:'sitesModuleSettings',
 			title:GO.sites.lang.moduleSettings,
-			formControllerUrl: 'sites/pageBackend'
+			formControllerUrl: 'sites/contentBackend'
 		});
 		
 		GO.sites.PageDialog.superclass.initComponent.call(this);	

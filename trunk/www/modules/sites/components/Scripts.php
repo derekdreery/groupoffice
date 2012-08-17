@@ -34,6 +34,7 @@ class GO_Sites_Components_Scripts
 	public $scriptMap = array();
 	protected $cssFiles = array();
 	protected $scriptFiles = array();
+	protected $gapiScripts = array();
 	protected $scripts = array();
 	protected $metaTags = array();
 	protected $hasScripts = false;
@@ -76,6 +77,11 @@ class GO_Sites_Components_Scripts
 		foreach ($this->cssFiles as $url => $media)
 			$html.=GO_Sites_Components_Html::cssFile($url, $media) . "\n";
 
+		if(isset($this->gapiScripts[self::POS_HEAD]))
+		{
+			foreach ($this->gapiScripts[self::POS_HEAD] as $gapiScript)
+				$html.=GO_Sites_Components_HTML::scriptFile($gapiScript) . "\n";
+		}
 		if (isset($this->scriptFiles[self::POS_HEAD]))
 		{
 			foreach ($this->scriptFiles[self::POS_HEAD] as $scriptFile)
@@ -181,6 +187,30 @@ class GO_Sites_Components_Scripts
 	{
 		$this->hasScripts = true;
 		$this->scriptFiles[$position][$url] = $url;
+		return $this;
+	}
+	
+	/**
+	 * Register a google api script
+	 * @param string $package can be jquery or jquery-ui
+	 * @param integer $position where to add the scriptfile
+	 * @return GO_Sites_Components_Scripts myself for chaining
+	 */
+	public function registerGapiScript($package, $position = self::POS_HEAD)
+	{
+		switch($package)
+		{
+			case 'jquery':
+				$this->gapiScripts[$position][$package] = 'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js';
+				break;
+			case 'jquery-ui':
+				$this->gapiScripts[$position][$package] = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js';
+				break;
+			default:
+				throw new Exception('unknown GapiScript');
+				break;
+		}
+		$this->hasScripts = true;
 		return $this;
 	}
 

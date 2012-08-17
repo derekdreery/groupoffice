@@ -1,31 +1,26 @@
 <?php
-
-require('../../GO.php');
-
-require('./components/GOS.php');
-
+//Copy this file to the root of your website
+$path_to_gos = '../modules/sites/components/GOS.php';
+require($path_to_gos);
 GOS::launch()->run();
 
 /**
  * EXAMPLE MOD_REWRITE RULE FOR A SITE
 
-
 <VirtualHost *:80>
-ServerName group-office.com
-ServerAlias testshop.group-office.com
-DocumentRoot /var/www/testshop.group-office.com/html
-RewriteLog "/var/log/apache2/rewrite.log"
-RewriteLogLevel 3
-<Directory /var/www/testshop.group-office.com/html>
-RewriteEngine On
-RewriteBase /
+	ServerName group-office.com
+	ServerAlias website.group-office.com
+	DocumentRoot /var/www/website.group-office.com/html
 
-RewriteRule ^index.php$ - [L]
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule (.*) /groupoffice/modules/sites/index.php?site_id=1&path=$1&%{QUERY_STRING} [L]
+	<Directory /var/www/website.group-office.com/html>
+		RewriteEngine On
+		RewriteBase /
 
-</Directory>
+		RewriteCond %{REQUEST_FILENAME} !-f
+		RewriteCond %{REQUEST_FILENAME} !-d
+		RewriteRule ^(.*)\?*$ index.php/$1 [L,QSA]
+
+	</Directory>
 </VirtualHost>
-
 
 */

@@ -1,17 +1,3 @@
-<div class="hoofd-kader-menu">
-
-			<div class="hoofd-tab-left">
-				<div class="hoofd-tab-right">
-					<a class="hoofd-tab-center" href="#">
-						Shopping cart
-					</a>
-				</div>
-			</div>
-
-		</div>		
-		<div class="hoofd-kader-top"></div>
-		<div class="hoofd-kader-center">
-
 <div class="subkader-small-top">
 	<div class="subkader-small-bottom">
 		<div class="subkader-small-center">				
@@ -101,8 +87,3 @@
 		</div>
 	</div>
 </div>
-
-
-
-		</div>
-	<div class="hoofd-kader-bottom"></div>	

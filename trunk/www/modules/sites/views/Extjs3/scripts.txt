@@ -1,7 +1,7 @@
-modules/sites/views/Extjs3/PageDialog.js
+modules/sites/views/Extjs3/ContentDialog.js
 modules/sites/views/Extjs3/SiteDialog.js
 
-modules/sites/views/Extjs3/PagePanel.js
+modules/sites/views/Extjs3/ContentPanel.js
 modules/sites/views/Extjs3/PagesContextMenu.js
 modules/sites/views/Extjs3/SitesContextMenu.js
 modules/sites/views/Extjs3/SitesTreePanel.js

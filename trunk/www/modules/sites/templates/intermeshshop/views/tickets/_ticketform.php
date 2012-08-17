@@ -1,123 +1,81 @@
-<?php GO_Base_Html_Form::renderBegin('tickets/site/createticket','createticket',true); ?>
+<?php echo GO_Sites_Components_Html::beginForm('', 'POST',array('name'=>'createticket')); ?>
 
 <?php if($ticket->isNew): ?>
 	<div class="subkader-small-top">
 		<div class="subkader-small-bottom">
 			<div class="subkader-small-center">	
-				<?php 
-					GO_Base_Html_Hidden::render(array(
-						"required" => false,
-						"label" => "",
-						"name" => "ticket_number",
-						"value" => 0
-					));
-
-					GO_Base_Html_Input::render(array(
-						"required" => true,
-						"label" => "Subject",
-						"name" => "subject",
-						"value" => $ticket->subject
-					));
-
-					GO_Base_Html_Select::render(array(
-						"required" => true,
-						"label" => "Type",
-						"name" => "type_id",
-						"value" => $ticket->type_id,
-						"options" => $tickettypes
-					));
-
-					GO_Base_Html_Input::render(array(
-							"required" => true,
-							"label" => "First Name",
-							"name" => "first_name",
-							"value" => $ticket->first_name
-						));
-
-					GO_Base_Html_Input::render(array(
-						"required" => false,
-						"label" => "Middle Name",
-						"name" => "middle_name",
-						"value" => $ticket->middle_name
-					));
-
-					GO_Base_Html_Input::render(array(
-						"required" => true,
-						"label" => "Last Name",
-						"name" => "last_name",
-						"value" => $ticket->last_name
-					));
-
-					GO_Base_Html_Input::render(array(
-						"required" => false,
-						"label" => "Address",
-						"name" => "address",
-						"value" => $ticket->address
-					));
-
-					GO_Base_Html_Input::render(array(
-						"required" => false,
-						"label" => "Address no",
-						"name" => "address_no",
-						"value" => $ticket->address_no
-					));
-
-					GO_Base_Html_Input::render(array(
-						"required" => false,
-						"label" => "Zipcode",
-						"name" => "zip",
-						"value" => $ticket->zip
-					));
-
-					GO_Base_Html_Input::render(array(
-						"required" => false,
-						"label" => "City",
-						"name" => "city",
-						"value" => $ticket->city
-					));
-
-					GO_Base_Html_Input::render(array(
-						"required" => false,
-						"label" => "State/Province",
-						"name" => "state",
-						"value" => $ticket->state
-					));
-
-					GO_Base_Html_Select::render(array(
-						"required" => true,
-						'label' => 'Country',
-						'value' => $ticket->country,
-						'name' => "country",
-						'options' => GO::language()->getCountries()
-					));
-
-					GO_Base_Html_Input::render(array(
-						"required" => true,
-						"label" => "Email",
-						"name" => "email",
-						"value" => $ticket->email
-					));
-
-					GO_Base_Html_Input::render(array(
-						"required" => false,
-						"label" => "Phone",
-						"name" => "phone",
-						"value" => $ticket->phone
-					));
-				?>
-				</div>
+				
+			 <div class="row">
+					<?php echo GO_Sites_Components_Html::activeLabelEx($ticket, 'subject'); ?>
+					<?php echo GO_SiteS_Components_Html::activeTextField($ticket, 'subject'); ?>
+					<?php echo GO_Sites_Components_Html::error($ticket, 'subject'); ?>
+			 </div>
+			<div class="row">
+					<?php echo GO_Sites_Components_Html::activeLabelEx($ticket, 'type_id'); ?>
+					<?php echo GO_SiteS_Components_Html::activeDropDownList($ticket, 'type_id', $tickettypes); ?>
+					<?php echo GO_Sites_Components_Html::error($ticket, 'type_id'); ?>
+			 </div>
+			<div class="row">
+					<?php echo GO_Sites_Components_Html::activeLabelEx($ticket, 'first_name'); ?>
+					<?php echo GO_SiteS_Components_Html::activeTextField($ticket, 'first_name'); ?>
+					<?php echo GO_Sites_Components_Html::error($ticket, 'first_name'); ?>
+			 </div>
+			<div class="row">
+					<?php echo GO_Sites_Components_Html::activeLabel($ticket, 'middle_name'); ?>
+					<?php echo GO_SiteS_Components_Html::activeTextField($ticket, 'middle_name'); ?>
+					<?php echo GO_Sites_Components_Html::error($ticket, 'middle_name'); ?>
+			 </div>
+			<div class="row">
+					<?php echo GO_Sites_Components_Html::activeLabelEx($ticket, 'last_name'); ?>
+					<?php echo GO_SiteS_Components_Html::activeTextField($ticket, 'last_name'); ?>
+					<?php echo GO_Sites_Components_Html::error($ticket, 'last_name'); ?>
+			 </div>
+			<div class="row">
+					<?php echo GO_Sites_Components_Html::activeLabel($ticket, 'address'); ?>
+					<?php echo GO_SiteS_Components_Html::activeTextField($ticket,'address'); ?>
+					<?php echo GO_Sites_Components_Html::error($ticket, 'address'); ?>
+			 </div>
+				<div class="row">
+					<?php echo GO_Sites_Components_Html::activeLabel($ticket, 'address_no'); ?>
+					<?php echo GO_SiteS_Components_Html::activeTextField($ticket,'address_no'); ?>
+					<?php echo GO_Sites_Components_Html::error($ticket, 'address_no'); ?>
+			  </div>
+				<div class="row">
+					<?php echo GO_Sites_Components_Html::activeLabel($ticket, 'zip'); ?>
+					<?php echo GO_SiteS_Components_Html::activeTextField($ticket,'zip'); ?>
+					<?php echo GO_Sites_Components_Html::error($ticket, 'zip'); ?>
+			  </div>
+				<div class="row">
+					<?php echo GO_Sites_Components_Html::activeLabel($ticket, 'city'); ?>
+					<?php echo GO_SiteS_Components_Html::activeTextField($ticket,'city'); ?>
+					<?php echo GO_Sites_Components_Html::error($ticket, 'city'); ?>
+			  </div>
+				<div class="row">
+					<?php echo GO_Sites_Components_Html::activeLabel($ticket, 'state'); ?>
+					<?php echo GO_SiteS_Components_Html::activeTextField($ticket,'state'); ?>
+					<?php echo GO_Sites_Components_Html::error($ticket, 'state'); ?>
+			  </div>
+				<div class="row">
+					<?php echo GO_Sites_Components_Html::activeLabelEx($ticket, 'country'); ?>
+					<?php echo GO_SiteS_Components_Html::activeDropDownList($ticket, 'country', GO::language()->getCountries()); ?>
+					<?php echo GO_Sites_Components_Html::error($ticket, 'country'); ?>
+			 </div>
+				<div class="row">
+					<?php echo GO_Sites_Components_Html::activeLabelEx($ticket, 'email'); ?>
+					<?php echo GO_SiteS_Components_Html::activeTextField($ticket,'email'); ?>
+					<?php echo GO_Sites_Components_Html::error($ticket, 'email'); ?>
+			  </div>
+				<div class="row">
+					<?php echo GO_Sites_Components_Html::activeLabel($ticket, 'phone'); ?>
+					<?php echo GO_SiteS_Components_Html::activeTextField($ticket,'phone'); ?>
+					<?php echo GO_Sites_Components_Html::error($ticket, 'phone'); ?>
+			  </div>
+				<?php echo GO_Sites_Components_Html::hiddenField('closeticket', 0); ?>
 			</div>
 		</div>
-		<?php include "sidebar_ticket.php";?>
-	<?php else:?>
-		<?php 
-			GO_Base_Html_Hidden::render(array(
-				"required" => true,
-				"label" => "",
-				"name" => "ticket_number",
-				"value" => $ticket->ticket_number
-			));
-		?>
+	</div>
+		<?php $this->renderPartial("sidebar_ticket"); ?>
+
 	<?php endif; ?>
 
 
@@ -127,34 +85,21 @@
 		<div class="subkader-big-bottom">
 			<div class="subkader-big-center">	
 				
-				<?php
-					
-					if($ticket->status_id != '-1'){
-						
-						echo "<b>Your Message</b>";
-						GO_Base_Html_Textarea::render(array(
-							"required" => true,
-							//"label" => "Message",
-							"name" => "message",
-							"value" => "",
-							"extra" => 'style="width:800px;"'
-						));
-
-						$uploader->render();
-
-						GO_Base_Html_Hidden::render(array(
-							"label" => "",
-							"name" => "submitticket",
-							"value" => 'Confirm',
-							"renderContainer" => false
-						));
-					}else{
-						echo "<p>".$this->t('tickets_ticketIsClosed')."</p><p></p>";
-					}
-				?>
+				<?php if($ticket->status_id != GO_Tickets_Model_Ticket::STATUS_CLOSED): ?>
+						<div class="row">
+							<b><?php echo $message->getAttributeLabel('content'); ?></b>
+							<?php echo GO_Sites_Components_Html::error($message, 'content'); ?>
+							<?php echo GO_Sites_Components_Html::activeTextArea($message,'content', array('style'=>'width:800px;', 'class'=>'textarea')); ?>
+						</div>
+						<div class="row">
+							<?php $uploader->render(); ?>
+						</div>
+					<?php else: ?>
+						<p><?php echo $this->t('tickets_ticketIsClosed'); ?></p><p></p>
+					<?php endif; ?>
 
 				
-				<?php if($ticket->status_id != '-1'): ?>
+				<?php if($ticket->status_id != GO_Tickets_Model_Ticket::STATUS_CLOSED): ?>
 					<div class="button-green" onmouseover="this.className='button-green-hover';"  onmouseout="this.className='button-green';" style="float:left; margin-right: 15px;">
 						<div class="button-green-right">
 							<a href="#" onclick="submitForm(false)" class="button-green-center"> 
@@ -171,11 +116,7 @@
 							var submit = true;
 
 							if(close==true){
-								var el = document.createElement("input");
-								el.type = "hidden";
-								el.name = "closeticket";
-								el.value = "true";
-								form.appendChild(el);
+								document.createticket.closeticket.value = true;
 
 								if(document.createticket.message.value.replace(/\s/g,"") != ""){
 									var answer = confirm("<?php echo GOS::t('tickets_ticketCloseQuestion'); ?>")
@@ -201,7 +142,7 @@
 					</div>
 				<?php endif; ?>
 				
-				<?php if($ticket->status_id != '-1' && !$ticket->isNew): ?>
+				<?php if($ticket->status_id != GO_Tickets_Model_Ticket::STATUS_CLOSED && !$ticket->isNew): ?>
 					<div class="button-green" onmouseover="this.className='button-green-hover';"  onmouseout="this.className='button-green';" style="float:right; ">
 						<div class="button-green-right">
 							<a href="#" onclick="submitForm(true)" class="button-green-center"> 
@@ -217,6 +158,6 @@
 		</div>
 	</div>
 </div>
-<?php GO_Base_Html_Form::renderEnd(); ?>
+<?php echo GO_Sites_Components_Html::endForm(); ?>
 
 

@@ -20,6 +20,7 @@
  * @property GO_Sites_Components_AbstractFrontController $controller The current accessed controller
  * @property GO_Sites_Components_Request $request The request component.
  * @property GO_Sites_Components_UrlManager $urlManager The URL manager component.
+ * @property GO_Sites_Components_Scripts $scripts Component for adden clientside scripts to the template
  * @property string $baseUrl The relative URL for the application.
  * @property string $route The homepage URL.
  * @property string $name Name of the website.
@@ -43,6 +44,7 @@ class GO_Sites_Components_Website
 	private $_language;
 	private $_scripts; // The clientscript manager
 	private $_notifier; // Notification object for page messeages
+	private $_assets; // Assets manager for published assets
 	
 	private $_route; // The route that the user inputted
 	
@@ -133,7 +135,7 @@ class GO_Sites_Components_Website
 				list($controller, $actionID) = $ca;
 				$controller->template = $this->_site->template;
 				$this->_controller = $controller;
-				$controller->run($actionID);
+				$controller->run($actionID, $_REQUEST);
 			}
 			else
 				throw new GO_Base_Exception_NotFound('Unable to resolve the request "' . $route . '".');
@@ -175,12 +177,12 @@ class GO_Sites_Components_Website
 		$classFile = GO::config()->root_path. 'modules/'.$module_id.'/controller' . DIRECTORY_SEPARATOR . ucfirst($controller_id) . 'Controller.php';
 
 		if (is_file($classFile)) {
-			if (is_subclass_of($className, 'GO_Sites_Components_AbstractFrontController')) {
+			//if (is_subclass_of($className, 'GO_Sites_Components_AbstractFrontController')) {
 				return array(
 						new $className($this),
 						$this->parseActionParams($action_id),
 				);
-			}
+			//}
 			//echo is_subclass_of($className, 'GO_Sites_Components_AbstractFrontController')  ? "is" : "not";
 			return null;
 		}
@@ -222,6 +224,13 @@ class GO_Sites_Components_Website
 			$this->_urlManager->init();
 		}
 		return $this->_urlManager;
+	}
+	
+	public function getAssets()
+	{
+		if($this->_assets==null)
+			$this->_assets=new GO_Sites_Components_Assets();
+		return $this->_assets;
 	}
 	
 	public function getNotifier()

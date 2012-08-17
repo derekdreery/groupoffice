@@ -998,7 +998,7 @@ class GO_Sites_Components_Html
 	public static function activeTextArea($model,$attribute,$htmlOptions=array())
 	{
 		self::resolveNameID($model,$attribute,$htmlOptions);
-		self::clientChange('change',$htmlOptions);
+		//self::clientChange('change',$htmlOptions);
 		if($model->hasValidationErrors($attribute))
 			self::addErrorCss($htmlOptions);
 		$text=self::resolveValue($model,$attribute);
@@ -1534,7 +1534,7 @@ class GO_Sites_Components_Html
 	 * Generates input name for a model attribute.
 	 * Note, the attribute name may be modified after calling this method if the name
 	 * contains square brackets (mainly used in tabular input) before the real attribute name.
-	 * @param CModel $model the data model
+	 * @param GO_Base_Model $model the data model
 	 * @param string $attribute the attribute
 	 * @return string the input name
 	 */
@@ -1543,31 +1543,30 @@ class GO_Sites_Components_Html
 		if(($pos=strpos($attribute,'['))!==false)
 		{
 			if($pos!==0)  // e.g. name[a][b]
-				return get_class($model).'['.substr($attribute,0,$pos).']'.substr($attribute,$pos);
+				return $model->getModelName().'['.substr($attribute,0,$pos).']'.substr($attribute,$pos);
 			if(($pos=strrpos($attribute,']'))!==false && $pos!==strlen($attribute)-1)  // e.g. [a][b]name
 			{
 				$sub=substr($attribute,0,$pos+1);
 				$attribute=substr($attribute,$pos+1);
-				return get_class($model).$sub.'['.$attribute.']';
+				return $model->getModelName().$sub.'['.$attribute.']';
 			}
 			if(preg_match('/\](\w+\[.*)$/',$attribute,$matches))
 			{
-				$name=get_class($model).'['.str_replace(']','][',trim(strtr($attribute,array(']['=>']','['=>']')),']')).']';
+				$name=$model->getModelName().'['.str_replace(']','][',trim(strtr($attribute,array(']['=>']','['=>']')),']')).']';
 				$attribute=$matches[1];
 				return $name;
 			}
 		}
-		return get_class($model).'['.$attribute.']';
+		return $model->getModelName().'['.$attribute.']';
 	}
 
 	/**
 	 * Evaluates the attribute value of the model.
 	 * This method can recognize the attribute name written in array format.
 	 * For example, if the attribute name is 'name[a][b]', the value "$model->name['a']['b']" will be returned.
-	 * @param CModel $model the data model
+	 * @param GO_Base_Model $model the data model
 	 * @param string $attribute the attribute name
 	 * @return mixed the attribute value
-	 * @since 1.1.3
 	 */
 	public static function resolveValue($model,$attribute)
 	{

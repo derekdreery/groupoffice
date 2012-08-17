@@ -99,7 +99,7 @@
 }
 
 .image-new-message{
-	background: url(images/newmsg.png) no-repeat top left;
+	background: url(../images/newmsg.png) no-repeat top left;
 	display:block;
 	width:16px;
 	height:16px;

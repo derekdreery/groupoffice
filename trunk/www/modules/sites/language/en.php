@@ -4,7 +4,7 @@ $l = array(
 		'name'=>'Websites',
 		'description'=>'A module to maintain websites and content',
 		
-		'noemail'=>'No email fiven!',
+		'noemail'=>'No email given!',
 		'invalidusertoken'=>'The provided usertoken is not valid!',
 		'invaliduser'=>'No user found with the given email address!',
 		'recoverEmailSent'=>'An email with recover instructions is send to the following email address:',
@@ -35,9 +35,10 @@ $l = array(
 		'siteDomain'=>'Domain of website',
 		'siteLoginPath'=>'Actionpath to login',
 		'siteTemplate'=>'Template folder name',
-		'siteSsl'=>'Site Secure Socket Layer',
-		'siteModRewrite'=>'Site Mod Rewrite',
-		'siteRegisterUserGroups'=>'Site Register User Groups',
+		'siteSsl'=>'Use SSL',
+		'siteModRewrite'=>'Use Mod Rewrite',
+		'siteRegisterUserGroups'=>'New user group',
+		'language'=>'Language',
 		
 		//Frontend languages
 		'login'=>'Login',

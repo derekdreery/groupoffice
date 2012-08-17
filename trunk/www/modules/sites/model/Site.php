@@ -16,6 +16,19 @@
  * @copyright Copyright Intermesh
  * @version $Id Site.php 2012-06-27 17:02:53 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
+ * 
+ * @property int $id
+ * @property string $name
+ * @property string $domain
+ * @property string $login_path
+ * @property string $template
+ * @property string $register_user_groups
+ * @property boolean $ssl
+ * @property boolean $mod_rewrite
+ * @property int $mtime
+ * @property int $ctime
+ * @property int $user_id
+ * @property string $language
  */
 class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 	

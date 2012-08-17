@@ -21,8 +21,8 @@
 		<?php echo GO_Sites_Components_Html::error($user, 'passwordConfirm'); ?>
   </div>
 	<div class="row">
-		<?php echo GO_Sites_Components_Html::submitButton('Wijzigen'); ?>
-		<?php echo GO_Sites_Components_Html::resetButton('Reset'); ?>
+		<?php echo GO_Sites_Components_Html::submitButton('Wijzigen', array('class'=>'btn btn-primary')); ?>
+		<?php echo GO_Sites_Components_Html::resetButton('Reset', array('class'=>'btn')); ?>
   </div>
 	<?php echo GO_Sites_Components_Html::endForm(); ?>
 	</div>

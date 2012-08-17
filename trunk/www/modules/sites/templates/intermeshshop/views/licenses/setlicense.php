@@ -1,4 +1,18 @@
-					<div class="subkader-big-top">
+<div class="hoofd-kader-menu">
+
+			<div class="hoofd-tab-left">
+				<div class="hoofd-tab-right">
+					<a class="hoofd-tab-center" href="#">
+						Set license details
+					</a>
+				</div>
+			</div>
+
+		</div>		
+		<div class="hoofd-kader-top"></div>
+		<div class="hoofd-kader-center">
+			
+			<div class="subkader-big-top">
 						<div class="subkader-big-bottom">
 							<div class="subkader-big-center">						
 								
@@ -6,60 +20,36 @@
 								<h1>Set license details</h1>
 								
 								<p>Fill in the form with the data that is provided in the gotest.php file.</p>
-<p>Download the gotest.php file <a href="">here</a></p>
+<p>Download the gotest.php file <a href="">here</a></p><br>
 								
-								<?php 
-								if(!empty($this->license)){
-									GO_Base_Html_Form::renderBegin('licenses/site/setLicense','confirm',true); 
+<?php if (!empty($license)): ?>
+<?php echo GO_Sites_Components_Html::form(); ?>
+<div class="row">
+	<?php echo GO_Sites_Components_Html::activeLabelEx($license, 'host'); ?>
+	<?php echo GO_Sites_Components_Html::activeTextField($license, 'host'); ?>
+	<?php echo GO_Sites_Components_Html::error($license, 'host'); ?>
+</div>
+<div class="row">
+	<?php echo GO_Sites_Components_Html::activeLabelEx($license, 'ip'); ?>
+	<?php echo GO_Sites_Components_Html::activeTextField($license, 'ip'); ?>
+	<?php echo GO_Sites_Components_Html::error($license, 'ip'); ?>
+</div>
+<div class="row">
+	<?php echo GO_Sites_Components_Html::label('Internal Ip-address', 'intip'); ?>
+	<?php echo GO_Sites_Components_Html::activeTextField($license,'intip'); ?>
+	<?php echo GO_Sites_Components_Html::error($license, 'intip'); ?>
+</div>
+<div class="row bottons">
+	<?php echo GO_Sites_Components_Html::submitButton('Save license'); ?>
+	<?php echo GO_Sites_Components_Html::resetButton('Cancel'); ?>
+</div>
+<?php echo GO_Sites_Components_Html::endForm(); ?>
 
-									GO_Base_Html_Input::render(array(
-										"required" => true,
-										"label" => "Hostname",
-										"name" => "host",
-										"value" => $this->license->host
-									));
-
-									GO_Base_Html_Input::render(array(
-											"required" => true,
-											"label" => "External Ip-address",
-											"name" => "ip",
-											"value" => $this->license->ip
-									));
-									
-									GO_Base_Html_Input::render(array(
-											"required" => false,
-											"label" => "Internal Ip-address",
-											"name" => "intip",
-											"value" => ""
-									));
-									
-									GO_Base_Html_Submit::render(array(
-										"label" => "",
-										"name" => "submitlicense",
-										"value" => 'Save license',
-										"renderContainer" => false
-									));
-									
-									GO_Base_Html_Reset::render(array(
-										"label" => "",
-										"name" => "reset",
-										"value" => 'Cancel',
-										"renderContainer" => false
-									));
-									
-									GO_Base_Html_Form::renderEnd();
-									
-								}else{
-									echo '<p>An error occurred!</p>';
-								}
-								?>
+<?php else: ?>
+		<p>An error occurred!</p>			
+<?php endif; ?>
 								
 							</div>
 						</div>
 
 					</div>
-<!--
-
-					<div class="subkader-right">
-						<?php // require($this->getRootTemplatePath().'sidebar.php'); ?>
-					</div>-->
