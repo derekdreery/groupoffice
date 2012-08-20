@@ -1,5 +1,6 @@
 
 ??-08-2012 4.0.90
+- Fixed en language in email module.
 - Fixed blinkTitle bug
 - Urldecode added to the store load function of the bookmark module
 - Bugfix: Event->delete() will ignore ACL permissions when it is a resource of the current user
