@@ -58,5 +58,16 @@ abstract class GO_Base_Model extends GO_Base_Observable{
 		self::$_models=array();
 	}
 	
+	/**
+	 * Get the name of the model in short
+	 * eg. GO_Base_Model_User will return 'User'
+	 * @return string Model name
+	 */
+	public function getModelName()
+	{
+		$classParts = explode('_',get_class($this));
+		return array_pop($classParts);
+	}
+	
 	
 }
