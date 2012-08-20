@@ -12,7 +12,7 @@
 		<link href="<?php echo $this->getTemplateUrl(); ?>css/style.css" rel="stylesheet" type="text/css" />
 		<link href="<?php echo $this->getTemplateUrl(); ?>css/bootstrap.css" rel="stylesheet" type="text/css" />
 		
-		<title><?php echo $this->getPageTitle(); ?></title>
+		<title><?php echo $this->getPageTitle() ." - ". GOS::site()->name; ?></title>
 	</head>
 
 	<body>
