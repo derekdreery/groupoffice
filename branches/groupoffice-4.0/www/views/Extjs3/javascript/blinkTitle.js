@@ -30,6 +30,7 @@ GO.blinkTitle={
 			if(this.running){
 				Ext.TaskMgr.stop(this.task);
 				document.title=this.originalDocTitle;
+				this.running = false;
 			}
 		}else
 		{
