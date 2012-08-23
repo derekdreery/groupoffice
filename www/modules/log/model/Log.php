@@ -20,6 +20,7 @@
  * The GO_Log_Model_Log model
  *
  * @package GO.modules.log.model
+ * @property int $id
  * @property int $user_id
  * @property string $username
  * @property string $model_id
