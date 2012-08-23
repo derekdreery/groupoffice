@@ -96,22 +96,29 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$imap = $account->openImapConnection($params["mailbox"]);
 		
 		if(!empty($params['delete_keys'])){
-			$uids = json_decode($params['delete_keys']);
 			
-			if(!empty($account->trash) && $params["mailbox"] != $account->trash) {
-				$imap->set_message_flag($uids, "\Seen");
-				$response['deleteSuccess']=$imap->move($uids,$account->trash);
-			}else {
+			// TODO: Fix this on the clientside so the user is unable to delete emails with the GUI when he has insufficient rights
+			// Check if the current user has at least Delete permissions for deleting.
+			if($account->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION)){
+				$uids = json_decode($params['delete_keys']);
 
-				$response['deleteSuccess']=$imap->delete($uids);
-			}
-			if(!$response['deleteSuccess']) {
-				$lasterror = $imap->last_error();
-				if(stripos($lasterror,'quota')!==false) {
-					$response['deleteFeedback']=GO::t('quotaError','email');
+				if(!empty($account->trash) && $params["mailbox"] != $account->trash) {
+					$imap->set_message_flag($uids, "\Seen");
+					$response['deleteSuccess']=$imap->move($uids,$account->trash);
 				}else {
-					$response['deleteFeedback']=GO::t('deleteError').":\n\n".$lasterror."\n\n".GO::t('disable_trash_folder','email');
+
+					$response['deleteSuccess']=$imap->delete($uids);
 				}
+				if(!$response['deleteSuccess']) {
+					$lasterror = $imap->last_error();
+					if(stripos($lasterror,'quota')!==false) {
+						$response['deleteFeedback']=GO::t('quotaError','email');
+					}else {
+						$response['deleteFeedback']=GO::t('deleteError').":\n\n".$lasterror."\n\n".GO::t('disable_trash_folder','email');
+					}
+				}
+			} else {
+				$response['deleteFeedback']=GO::t('strUnauthorizedText');
 			}
 		}
 		
