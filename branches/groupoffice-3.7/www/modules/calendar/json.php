@@ -678,7 +678,7 @@ try {
 						while($contact = $cal->next_record()) {
 							$name = String::format_name($contact['last_name'], $contact['first_name'], $contact['middle_name']);
 							$start_arr = explode('-',$contact['upcoming']);
-							$start_unixtime = mktime(0,0,0,$start_arr[1],$start_arr[2],$start_arr[1]);
+							$start_unixtime = mktime(0,0,0,$start_arr[1],$start_arr[2],$start_arr[0]);
 							
 							if(!in_array($contact['id'], $contacts))
 							{
