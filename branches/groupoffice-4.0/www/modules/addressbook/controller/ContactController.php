@@ -518,7 +518,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 				if ($readOnly)
 					$contactsAttr[] = $contact->getAttributes('formatted');
 			} catch (Exception $e) {
-				$summaryLog->addError($nr+1, $e->getMessage());
+				$summaryLog->addError($nr, $e->getMessage());
 			}
 			$summaryLog->add();
 		}
