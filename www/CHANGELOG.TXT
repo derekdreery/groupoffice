@@ -11,6 +11,7 @@
 - Bugfix: Email module MessageGrid will expand when it is collapsed and the visible email gets deleted.
 - Bugfix: Birthday was not showed for the correct year.
 - Bugfix: Added check for delete permission on the email account when a user tries to delete emails.(Only applied on the server side)
+- The customfield dialog can now be resized
 
 08-08-2012 4.0.89
 
