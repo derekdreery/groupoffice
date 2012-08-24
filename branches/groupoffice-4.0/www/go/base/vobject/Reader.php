@@ -283,9 +283,8 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 		//remove quoted printable line breaks
 		$data = GO_Base_Util_String::normalizeCrlf($data,"\n");
 		if(strpos($data,'QUOTED-PRINTABLE')){		
-			$data = str_replace("=\n", "=",$data);
+			$data = str_replace("=\n", "",$data);
 		}
-		
 		//workaround for funambol bug		
 		$data = str_replace('EXDATE: ', 'EXDATE:', $data);
 		
