@@ -12,6 +12,7 @@
 - Bugfix: Birthday was not showed for the correct year.
 - Bugfix: Added check for delete permission on the email account when a user tries to delete emails.(Only applied on the server side)
 - The customfield dialog can now be resized
+- Customfields: Hide permissionlevels for categories.
 
 08-08-2012 4.0.89
 
