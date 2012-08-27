@@ -1,5 +1,6 @@
 
 ??-08-2012 4.0.90
+- Missing feature: When adding a new project "Create new project type" wasn't working yet
 - Fixed en language in email module.
 - Fixed blinkTitle bug
 - Urldecode added to the store load function of the bookmark module
