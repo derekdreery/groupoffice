@@ -13,6 +13,7 @@
 - Bugfix: Added check for delete permission on the email account when a user tries to delete emails.(Only applied on the server side)
 - The customfield dialog can now be resized
 - Customfields: Hide permissionlevels for categories.
+- Calendar: Always ask to send invitation mail when adding participants (Don't check for the "add directly to the other calendars" checkbox anymore)
 
 08-08-2012 4.0.89
 
