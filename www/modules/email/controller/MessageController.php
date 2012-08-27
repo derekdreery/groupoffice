@@ -967,14 +967,16 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	 */
 	private function _handleAutoLinkTag(GO_Email_Model_ImapMessage $imapMessage, $params, $response) {
 		//seen flag is expensive because it can't be recovered from cache
-//		if(!$imapMessage->seen){
+//		if(!$imapMessage->seen){	
 
+		
+		if(GO::modules()->savemailas){
 			$tags = $this->_findAutoLinkTags($response['htmlbody']);
 
 			while($tag = array_shift($tags)){
 				if($tag['server']==$_SERVER['SERVER_NAME'] && $imapMessage->account->id == $tag['account_id']){
-					$linkModel = GO::getModel($tag['model'])->findByPk($tag['model_id']);
-					if($linkModel){
+					$linkModel = GO::getModel($tag['model'])->findByPk($tag['model_id'],false, true);
+					if($linkModel && $linkModel->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)){
 						GO_Savemailas_Model_LinkedEmail::model()->createFromImapMessage($imapMessage, $linkModel);
 
 						//we need this just to display a unified name
@@ -987,6 +989,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 					}
 				}
 			}
+		}
 //		}
 
 		return $response;
