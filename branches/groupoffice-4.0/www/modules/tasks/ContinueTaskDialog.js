@@ -29,22 +29,27 @@ GO.tasks.ContinueTaskDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	beforeSubmit: function(params){
 		this.formPanel.baseParams.remind_date = this.formPanel.baseParams.due_time;
 	},
+	
+	beforeLoad: function(remoteModelId,config) {
+		this.formPanel.baseParams.due_time=this.datePicker.getValue().format(GO.settings.date_format);
+	},
+	
 	buildForm : function () {
 
 		var now = new Date();
 		var tomorrow = now.add(Date.DAY, 1);
 		var eight = Date.parseDate(tomorrow.format('Y-m-d')+' 08:00', 'Y-m-d G:i' );
 
-		var datePicker = new Ext.DatePicker({
+		this.datePicker = new Ext.DatePicker({
 					xtype:'datepicker',
 					name:'due_time',
 					format: GO.settings.date_format,
 					fieldLabel:GO.lang.strDate
 				});
 
-		datePicker.setValue(tomorrow);
+		this.datePicker.setValue(tomorrow);
 
-		datePicker.on("select", function(DatePicker, DateObj){
+		this.datePicker.on("select", function(DatePicker, DateObj){
 				this.formPanel.baseParams.due_time=DateObj.format(GO.settings.date_format);		
 		},this);
 		this.propertiesPanel = new Ext.Panel({
@@ -54,7 +59,7 @@ GO.tasks.ContinueTaskDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			layout:'form',
 			waitMsgTarget:true,			
 			items:[{
-					items:datePicker,
+					items:this.datePicker,
 					width:220,
 					style:'margin:auto;'
 				},new GO.form.HtmlComponent({html:'<br />'}),{
