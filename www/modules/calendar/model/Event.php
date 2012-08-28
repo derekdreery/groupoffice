@@ -995,9 +995,21 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->importVObjectAttendee($this, $attendee, false);
 
 		if($vobject->exdate){
-			$exDateTimes = $vobject->exdate->getDateTimes();
-			foreach($exDateTimes as $dt){
-				$this->addException($dt->format('U'));
+			if (strpos($vobject->exdate,';')!==false) {
+				$timesArr = explode(';',$vobject->exdate->value);
+				$exDateTimes = array();
+				foreach ($timesArr as $time) {
+					list(
+							$dateType,
+							$dateTime
+					) =  Sabre_VObject_Property_DateTime::parseData($time,$vobject->exdate);
+					$this->addException($dateTime->format('U'));
+				}
+			} else {
+				$exDateTimes = $vobject->exdate->getDateTimes();
+				foreach($exDateTimes as $dt){
+					$this->addException($dt->format('U'));
+				}
 			}
 		}
 		
