@@ -1,3 +1,6 @@
+??-08-2012 3.7.56
+- Email: Fixed bug with semicolon in text_to_html function
+
 17-07-2012 3.7.55
 - Show folder ID in CMS.
 
