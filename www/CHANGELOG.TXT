@@ -17,6 +17,7 @@
 - Customfields: Hide permissionlevels for categories.
 - Calendar: Always ask to send invitation mail when adding participants (Don't check for the "add directly to the other calendars" checkbox anymore)
 - Email: Fixed bug with attachments that have an empty line that get corrupted when forwarding them.
+- Email: Fixed bug with semicolon in text_to_html function
 
 08-08-2012 4.0.89
 
