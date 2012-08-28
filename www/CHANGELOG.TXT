@@ -19,7 +19,7 @@
 - Email: Fixed bug with attachments that have an empty line that get corrupted when forwarding them.
 - Email: Fixed bug with semicolon in text_to_html function
 - LDAPAUTH: Fixed mapping for uid in LDAP authenticator
-
+- Email: Fixed save attachments as zip function
 
 08-08-2012 4.0.89
 
