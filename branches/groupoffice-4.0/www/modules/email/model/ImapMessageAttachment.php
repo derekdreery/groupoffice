@@ -83,6 +83,11 @@ class GO_Email_Model_ImapMessageAttachment extends GO_Email_Model_MessageAttachm
 			);
 		}
 		
+		$nameArr = explode('.',$this->name);
+		
+		if (GO::modules()->isInstalled('addressbook') && $nameArr[count($nameArr)-1]=='vcf')
+			return GO::url('addressbook/contact/handleAttachedVCard', $params);
+		
 		return GO::url('email/message/attachment', $params);
 	}
 }
