@@ -459,6 +459,31 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		return parent::beforeImport($params, $model, $attributes, $record);
 	}
 	
+	protected function actionHandleAttachedVCard($params) {
+		$outString = '';
+		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+		$imap = $account->openImapConnection($params['mailbox']);
+		$imap->get_message_part_start($params['uid'], $params['number']);
+		while ($line = $imap->get_message_part_line()) {
+			switch (strtolower($params['encoding'])) {
+				case 'base64':
+					$outString .= base64_decode($line);
+					break;
+				case 'quoted-printable':
+					$outString .= quoted_printable_decode($line);
+					break;
+				default:
+					$outString .= $line;
+					break;
+			}
+		}		
+		$tmpFile = new GO_Base_Fs_File(GO::config()->tmpdir.$params['filename']);
+		$tmpFile->tempFile(GO::config()->tmpdir.$params['filename'],'vcf');
+		$tmpFile->putContents($outString);
+		$abController = new GO_Addressbook_Controller_Contact();
+		$response = $abController->run('importVCard', array('file'=>$tmpFile->path(),'readOnly'=>true), false, true);
+		echo json_encode($response);
+	}
 	
 	/**
 	 * Function exporting addressbook contents to VCFs. Must be called from export.php.
