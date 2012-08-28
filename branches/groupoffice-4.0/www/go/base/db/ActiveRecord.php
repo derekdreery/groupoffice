@@ -1627,7 +1627,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					return  GO_Base_Util_Date::to_db_date($value);
 					break;		
 				case 'textfield':
-					return trim($value);
+					return (string) $value;
 					break;
 				default:
 					if($this->columns[$column]['type']==PDO::PARAM_INT)
