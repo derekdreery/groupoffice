@@ -1,3 +1,7 @@
+??-08-2012 4.0.91
+- Customfields: Fixed resize of customfieldsdialog optionsgrid
+
+
 28-08-2012 4.0.90
 - Fixed: GOTA crashed after java update 1.7.06
 - Fixed: When adding a link to an email the receiver does not have access to the mail could not be read. New behavior: will just not link the item.
