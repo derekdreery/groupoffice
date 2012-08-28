@@ -162,6 +162,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			
 		}else{
 			$model = new $modelName;
+			
+			//We need to set the attributes here so we can pass an addressbook_id for a contact for example.
+			//Without this attribute we can't check the permissions for the contact properly.
 			$model->setAttributes($params);
 		}
 		
