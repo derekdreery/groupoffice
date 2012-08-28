@@ -20,6 +20,7 @@
 - Email: Fixed bug with semicolon in text_to_html function
 - LDAPAUTH: Fixed mapping for uid in LDAP authenticator
 - Email: Fixed save attachments as zip function
+- Autocreate Group fixed in servermanager
 
 08-08-2012 4.0.89
 
