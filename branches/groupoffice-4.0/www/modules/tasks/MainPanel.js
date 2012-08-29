@@ -355,27 +355,32 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
                                              
 		},this);
 
-		var groupState = this.gridPanel.store.multiSortInfo.sorters[0];//this.gridPanel.store.getSortState();
+		var requests = {
+			tasklists:{r:"tasks/tasklist/store"},				
+			categories:{r:"tasks/category/store"}
+		}
+
+		if (!this.gridPanel.storeLoaded) {
+			var groupState = this.gridPanel.store.multiSortInfo.sorters[0];//this.gridPanel.store.getSortState();
+			requests['tasks'] = {
+														r:"tasks/task/store",
+														groupBy: groupState.field,
+														groupDir: groupState.dir
+													};
+		}
 
 		GO.request({
 			maskEl:this.getEl(),
 			url: "core/multiRequest",
 			params:{
-				requests:Ext.encode({
-					tasklists:{r:"tasks/tasklist/store"},				
-					categories:{r:"tasks/category/store"},
-					tasks:{
-                                            r:"tasks/task/store",
-                                            groupBy: groupState.field,
-                                            groupDir: groupState.dir
-                                        }
-				})
+				requests:Ext.encode(requests)
 			},
 			success: function(options, response, result)
 			{
 				GO.tasks.categoriesStore.loadData(result.categories);
 				this.taskListsStore.loadData(result.tasklists);				
-				this.gridPanel.store.loadData(result.tasks);
+				if (!GO.util.empty(result.tasks))
+					this.gridPanel.store.loadData(result.tasks);
 			},
 			scope:this
 		});               
