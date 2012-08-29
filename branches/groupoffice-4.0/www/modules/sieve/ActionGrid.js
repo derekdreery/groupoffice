@@ -79,6 +79,9 @@ GO.sieve.ActionGrid = function(config){
 };
 
 Ext.extend(GO.sieve.ActionGrid, GO.grid.GridPanel,{
+	
+	accountAliasesString : '',
+	
 	deleteSelected : function(){this.store.remove(this.getSelectionModel().getSelections());},
 
 	onNotifyDrop : function(dd, e, data)
@@ -167,6 +170,7 @@ Ext.extend(GO.sieve.ActionGrid, GO.grid.GridPanel,{
 		} else {
 			var record = new Ext.data.Record();
 			record.set('id',-1);
+			record.set('addresses',this.accountAliasesString);
 			this.actionCreatorDialog.show(record);
 		}
 	}

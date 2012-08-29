@@ -110,6 +110,10 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 		this._resetForm();
 		if (typeof(record)=='object') {
 			this._recordId = record.get('id');
+
+			if (this._recordId=-1)
+				this.txtEmailAddressOptional.setValue(record.get('addresses'));
+			
 			this.cmbAction.setValue(record.get('type'));
 			this._transForm(record.get('type'));
 			switch (record.get('type')) {
