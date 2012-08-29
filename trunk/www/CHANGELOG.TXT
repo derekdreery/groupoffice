@@ -1,3 +1,73 @@
+29-08-2012 4.0.91
+- Fixed: SyncML duplicated contacts on client when there were more than 200 contacts.
+- Fixed: Inline images were corrupted when switching e-mail templates
+- Optimized: speed in rendering custom field columns
+- Fixed: Fixed resize of customfieldsdialog optionsgrid
+- Updated Italian translation
+- Fixed: Digest authentication for WebDAV, CalDAV and CardDAV failed after changing password. Logging into Group-Office again re-enabled the login.
+- Improved: Advanced search improved with visual indication and it's translatable.
+- Fixed: Printing calendar, events have a black background 
+
+28-08-2012 4.0.90
+- Fixed: GOTA crashed after java update 1.7.06
+- Fixed: When adding a link to an email the receiver does not have access to the mail could not be read. New behavior: will just not link the item.
+- Missing feature: When adding a new project "Create new project type" wasn't working yet
+- Fixed en language in email module.
+- Fixed blinkTitle bug
+- Urldecode added to the store load function of the bookmark module
+- Bugfix: Event->delete() will ignore ACL permissions when it is a resource of the current user
+- Database fix for recurring events that could have been added when there was a bug in previous version.
+- Updated German language
+- Updated Italian language
+- Bugfix: No files got attached to the email composer when using "Send files" in the Files module when the users default template is 'None'
+- Bugfix: Email module MessageGrid will expand when it is collapsed and the visible email gets deleted.
+- Bugfix: Birthday was not showed for the correct year.
+- Bugfix: Added check for delete permission on the email account when a user tries to delete emails.(Only applied on the server side)
+- The customfield dialog can now be resized
+- Customfields: Hide permissionlevels for categories.
+- Calendar: Always ask to send invitation mail when adding participants (Don't check for the "add directly to the other calendars" checkbox anymore)
+- Email: Fixed bug with attachments that have an empty line that get corrupted when forwarding them.
+- Email: Fixed bug with semicolon in text_to_html function
+- LDAPAUTH: Fixed mapping for uid in LDAP authenticator
+- Email: Fixed save attachments as zip function
+- Autocreate Group fixed in servermanager
+
+08-08-2012 4.0.89
+
+- Fixed problem with default background color in events
+- Fix export orientation when exporting PDFs works again
+- Fix calendar:
+ -- update event with resource.
+ -- delete resource from event
+ -- select resource when only write permissions
+ -- send mail when deleting event to participants
+- Fixed label Agent when exporting tickets
+- Fixed hr translation in Links module. 
+- Fixed task bug in Caldav backend
+- User can enter IMAP password on IMAP connection failed.
+
+03-08-2012 4.0.88
+- Fixed bug: E-mail download link date one day off
+- Signed GOTA
+- Added aclModified check to activeRecord to determine if an Acl is changed.
+
+02-08-2012 4.0.87
+- Fixed Bug: Cannot export and import uuid in addressbook contacts. (Now the uuid field is available in export and import)
+- Fixed Language: Timeregistration translation in French for customfields is fixed
+- Updated German translation of GOTA
+- Fixed bug in SyncML
+
+02-08-2012 4.0.86
+- Fixed Bug: Timeregistration export table columns are on top of each other when having a long project name
+- Fixed bug: Settings->Synchronisation->Email-Account is not saved after panel submit
+- Fixed bug: Autocomplete in e-mail sometimes didn't work
+- Fixed bug: Funambol sync sometimes imported garbled characters.
+- Updated Norwegian and German translations
+
+01-08-2012 4.0.85
+- Updated German
+- Small bug fixes
+
 30-07-2012 4.0.83
 - Small bug fixes
 

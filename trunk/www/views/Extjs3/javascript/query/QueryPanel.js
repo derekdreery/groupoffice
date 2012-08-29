@@ -48,7 +48,7 @@ GO.query.QueryPanel = function(config){
 		columns:[	{
 			menuDisabled:true,
 			width: 40,
-			header: 'AND / OR',
+			header: GO.lang.queryAnd+' / '+GO.lang.queryOr,
 			dataIndex: 'andor',
 			editor:new GO.form.ComboBox({
 				store: new Ext.data.ArrayStore({
@@ -74,7 +74,7 @@ GO.query.QueryPanel = function(config){
 			id:'field',
 			menuDisabled:true,
 			width:150,
-			header: 'Field',
+			header: GO.lang.queryField,
 			dataIndex: 'field',
 			renderer:function(v, meta, record){
 			
@@ -105,7 +105,7 @@ GO.query.QueryPanel = function(config){
 		},{
 			menuDisabled:true,
 			width:50,
-			header: 'Comparator',
+			header: GO.lang.queryComparator,
 			dataIndex: 'comparator',
 			editor: new GO.form.ComboBox({
 				store: new Ext.data.ArrayStore({
@@ -133,7 +133,7 @@ GO.query.QueryPanel = function(config){
 		},{
 			menuDisabled:true,
 			width:200,
-			header: 'Value',
+			header: GO.lang.queryValue,
 			dataIndex: 'value',
 			renderer:function(v, meta, record){
 				if(!GO.util.empty(record.data.rawValue)){
@@ -149,7 +149,7 @@ GO.query.QueryPanel = function(config){
 		},
 		new GO.grid.CheckColumn({
 			menuDisabled:true,
-			header: 'Start group',
+			header: GO.lang.queryStartGroup,
 			width:100,
 			dataIndex: 'start_group'
 		})

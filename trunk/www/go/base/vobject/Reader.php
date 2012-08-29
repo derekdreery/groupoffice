@@ -222,7 +222,8 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 				if(isset($property['ENCODING']) && strtoupper($property['ENCODING'])=='QUOTED-PRINTABLE'){
 					$value = quoted_printable_decode($property->value);
 					$value = str_replace("\r","",$value);
-					$value = GO_Base_Util_String::to_utf8($value);
+//					GO::debug($value);
+//					$value = GO_Base_Util_String::to_utf8($value);
 					$property->setValue($value);				
 					unset($property['ENCODING']);
 				}
@@ -282,8 +283,10 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 		//remove quoted printable line breaks
 		$data = GO_Base_Util_String::normalizeCrlf($data,"\n");
 		if(strpos($data,'QUOTED-PRINTABLE')){		
-			$data = str_replace("=\n", "=",$data);
+			$data = str_replace("=\n", "",$data);
 		}
+		//workaround for funambol bug		
+		$data = str_replace('EXDATE: ', 'EXDATE:', $data);
 		
 		return parent::read($data);
 	}

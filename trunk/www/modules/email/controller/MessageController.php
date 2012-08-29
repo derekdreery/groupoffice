@@ -96,22 +96,29 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$imap = $account->openImapConnection($params["mailbox"]);
 		
 		if(!empty($params['delete_keys'])){
-			$uids = json_decode($params['delete_keys']);
 			
-			if(!empty($account->trash) && $params["mailbox"] != $account->trash) {
-				$imap->set_message_flag($uids, "\Seen");
-				$response['deleteSuccess']=$imap->move($uids,$account->trash);
-			}else {
+			// TODO: Fix this on the clientside so the user is unable to delete emails with the GUI when he has insufficient rights
+			// Check if the current user has at least Delete permissions for deleting.
+			if($account->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION)){
+				$uids = json_decode($params['delete_keys']);
 
-				$response['deleteSuccess']=$imap->delete($uids);
-			}
-			if(!$response['deleteSuccess']) {
-				$lasterror = $imap->last_error();
-				if(stripos($lasterror,'quota')!==false) {
-					$response['deleteFeedback']=GO::t('quotaError','email');
+				if(!empty($account->trash) && $params["mailbox"] != $account->trash) {
+					$imap->set_message_flag($uids, "\Seen");
+					$response['deleteSuccess']=$imap->move($uids,$account->trash);
 				}else {
-					$response['deleteFeedback']=GO::t('deleteError').":\n\n".$lasterror."\n\n".GO::t('disable_trash_folder','email');
+
+					$response['deleteSuccess']=$imap->delete($uids);
 				}
+				if(!$response['deleteSuccess']) {
+					$lasterror = $imap->last_error();
+					if(stripos($lasterror,'quota')!==false) {
+						$response['deleteFeedback']=GO::t('quotaError','email');
+					}else {
+						$response['deleteFeedback']=GO::t('deleteError').":\n\n".$lasterror."\n\n".GO::t('disable_trash_folder','email');
+					}
+				}
+			} else {
+				$response['deleteFeedback']=GO::t('strUnauthorizedText');
 			}
 		}
 		
@@ -134,9 +141,11 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				}
 				$record['from']=  htmlspecialchars(implode(',', $from), ENT_COMPAT, 'UTF-8');
 			}
-			
+					
 			if(empty($record['subject']))
 				$record['subject']=GO::t('no_subject','email');
+			else
+				$record['subject'] = htmlspecialchars($record['subject']);
 				
 				
 			
@@ -848,8 +857,14 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	}
 	
 	private function _getContact(GO_Email_Model_ImapMessage $imapMessage,$params, $response){
-		$response['sender_contact_id']=0;
-		if(!empty($params['get_contact_id']) && GO::modules()->addressbook && ($contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($response['sender']))) {
+		$response['sender_contact_id']=0;		
+//		if(!empty($params['get_contact_id']) && GO::modules()->addressbook && ($contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($response['sender']))) {
+//			$response['sender_contact_id']=$contact->id;
+//			$response['contact_name']=$contact->name;			
+//		}
+		
+		$contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($response['sender']);
+		if(!empty($contact)){
 			$response['sender_contact_id']=$contact->id;
 			$response['contact_name']=$contact->name;			
 		}
@@ -952,14 +967,16 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	 */
 	private function _handleAutoLinkTag(GO_Email_Model_ImapMessage $imapMessage, $params, $response) {
 		//seen flag is expensive because it can't be recovered from cache
-//		if(!$imapMessage->seen){
+//		if(!$imapMessage->seen){	
 
+		
+		if(GO::modules()->savemailas){
 			$tags = $this->_findAutoLinkTags($response['htmlbody']);
 
 			while($tag = array_shift($tags)){
 				if($tag['server']==$_SERVER['SERVER_NAME'] && $imapMessage->account->id == $tag['account_id']){
-					$linkModel = GO::getModel($tag['model'])->findByPk($tag['model_id']);
-					if($linkModel){
+					$linkModel = GO::getModel($tag['model'])->findByPk($tag['model_id'],false, true);
+					if($linkModel && $linkModel->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)){
 						GO_Savemailas_Model_LinkedEmail::model()->createFromImapMessage($imapMessage, $linkModel);
 
 						//we need this just to display a unified name
@@ -972,6 +989,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 					}
 				}
 			}
+		}
 //		}
 
 		return $response;
@@ -1040,7 +1058,6 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	public function actionAttachment($params) {
 		
 		$file = new GO_Base_Fs_File($params['filename']);
-		
 		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		//$imapMessage = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);

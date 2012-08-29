@@ -243,10 +243,12 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 						$action['text']=GO::t('copyto','sieve').' "'.$action['target'].'"';
 						break;
 					case 'redirect':
-						$action['text'] = GO::t('forwardto','sieve').' "'.$action['target'].'"';
-						break;
-					case 'redirect_copy':
-						$action['text'] = GO::t('sendcopyto','sieve').' "'.$action['target'].'"';
+						if (!empty($action['copy'])) {
+							$action['type'] = 'redirect_copy';
+							$action['text'] = GO::t('sendcopyto','sieve').' "'.$action['target'].'"';
+						} else {
+							$action['text'] = GO::t('forwardto','sieve').' "'.$action['target'].'"';
+						}
 						break;
 					case 'reject':
 						$action['text']=GO::t('refusewithmesssage','sieve').' "'.$action['target'].'"';

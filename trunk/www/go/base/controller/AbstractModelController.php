@@ -162,6 +162,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			
 		}else{
 			$model = new $modelName;
+			
+			//We need to set the attributes here so we can pass an addressbook_id for a contact for example.
+			//Without this attribute we can't check the permissions for the contact properly.
 			$model->setAttributes($params);
 		}
 		
@@ -795,15 +798,15 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		//define('EXPORTING', true);
 		//used by custom fields to format diffently
-		//if(GO::modules()->customfields)
-		//	GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=true;
+		if(GO::modules()->customfields)
+			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=true;
 		
 		
 		$showHeader = false;
   	$humanHeaders = true;
 		$orientation = false;
 		
-		if(!empty($params['exportOrientation']) && ($params['exportOrientation']=="Horizontaal"))
+		if(!empty($params['exportOrientation']) && ($params['exportOrientation']=="H"))
 			$orientation = 'L'; // Set the orientation to Landscape
 		else
 			$orientation = 'P'; // Set the orientation to Portrait

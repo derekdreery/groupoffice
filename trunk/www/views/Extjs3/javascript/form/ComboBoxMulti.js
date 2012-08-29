@@ -96,12 +96,19 @@ Ext.extend(GO.form.ComboBoxMulti, GO.form.ComboBox, {
             return;
         }
         var pad = (this.sep == ' ' ? '' : ' ');
-				var typedValue = v.substring(r.left, r.right).trim().toLowerCase();
-				if(value.toLowerCase().indexOf(typedValue)==-1){
-					//don't replace with different value
-					//return false;
-					value=typedValue;
-				}
+				var typedValue = v.substring(r.left, r.right).trim();			
+				
+				var parts = typedValue.toLowerCase().split(' ')
+				
+				for(var i=0;i<parts.length;i++){
+					if(value.toLowerCase().indexOf(parts[i])==-1){
+						//don't replace with different value
+						//return false;
+						value=typedValue;
+						break;
+					}
+				}				
+				
 				this.setValue(v.substring(0, r.left) + (r.left > 0 ? pad : '') + value + this.sep + pad + v.substring(r.right));
 				
         var p = r.left + value.length + 2 + pad.length;

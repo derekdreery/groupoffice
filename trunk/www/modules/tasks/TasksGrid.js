@@ -167,6 +167,7 @@ GO.tasks.TasksPanel = function(config)
 			{
 				alert(config.store.reader.jsonData.feedback);
 			}
+			this.storeLoaded = true;
 		},this)
 
 		config.view=new Ext.grid.GroupingView({
@@ -225,7 +226,9 @@ GO.tasks.TasksPanel = function(config)
 Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
 
 	saveListenerAdded : true,
-
+	
+	storeLoaded : false,
+	
 	renderIcon : function(src, p, record) {
 		if(record.data['priority'])
 		{

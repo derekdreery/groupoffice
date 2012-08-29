@@ -121,6 +121,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 //	}
 	
 	public function actionImportIcs($params) {
+		ini_set('max_execution_time',300);
 		$response = array( 'success' => true );
 		$count = 0;
 		if (!file_exists($_FILES['ical_file']['tmp_name'][0])) {

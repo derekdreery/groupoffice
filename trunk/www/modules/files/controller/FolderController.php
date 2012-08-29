@@ -253,11 +253,11 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			if ($params['share']==1 && $model->acl_id == 0) {
 				$model->visible = 1;
 
-				$acl = new GO_Base_Model_Acl();
-				$acl->description = $model->tableName() . '.' . $model->aclField();
-				$acl->user_id = GO::user() ? GO::user()->id : 1;
-				$acl->save();
-				$model->acl_id = $response['acl_id'] = $acl->id;
+//				$acl = new GO_Base_Model_Acl();
+//				$acl->description = $model->tableName() . '.' . $model->aclField();
+//				$acl->user_id = GO::user() ? GO::user()->id : 1;
+//				$acl->save();
+				$model->setNewAcl();
 			}
 
 			if ($params['share']==0 && $model->acl_id > 0) {
@@ -760,7 +760,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$folder->visible = 0;
 		$folder->readonly = 1;
 		$folder->systemSave = true;
-		$folder->save();
+		$folder->save(true);
 
 		return $folder->id;
 	}
@@ -772,7 +772,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	 * @return type
 	 */
 	protected function actionCheckModelFolder($params) {
-		$model = GO::getModel($params['model'])->findByPk($params['id']);
+		$model = GO::getModel($params['model'])->findByPk($params['id'],false, true);
 
 		$response['success'] = true;
 		$response['files_folder_id'] = $this->checkModelFolder($model, true, !empty($params['mustExist']));
@@ -784,7 +784,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		$folder = false;
 		if ($model->files_folder_id > 0)
-			$folder = GO_Files_Model_Folder::model()->findByPk($model->files_folder_id);
+			$folder = GO_Files_Model_Folder::model()->findByPk($model->files_folder_id, false, true);
 
 		if ($folder) {
 			$model->files_folder_id = $this->_checkExistingModelFolder($model, $folder, $mustExist);

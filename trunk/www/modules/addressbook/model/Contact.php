@@ -309,7 +309,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 * @param array $attributes Extra attributes to apply to the contact. Raw values should be past. No input formatting is applied.
 	 * @return GO_Addressbook_Model_Contact
 	 */
-	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array()) {
+	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array(),$saveToDb=true) {
 		//$event = new GO_Calendar_Model_Event();
 		$companyAttributes = array();
 		if (!empty($attributes['addressbook_id'])) {
@@ -512,15 +512,16 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			if (empty($company)) {
 				$company = new GO_Addressbook_Model_Company();
 				$company->setAttributes($companyAttributes,false);
-			} else {
-				$company->setAttribute('addressbook_id', $companyAttributes['addressbook_id']);
-			}
-			$company->save();
+			} 
+			$company->addressbook_id=$this->addressbook_id;
+			if (!empty($saveToDb))
+				$company->save();
 			$this->setAttribute('company_id',$company->id);			
 		}
 		
 		$this->cutAttributeLengths();
-		$this->save();
+		if (!empty($saveToDb))
+			$this->save();
 		
 		if (!empty($photoFile))
 			$this->setPhoto($photoFile->path());
@@ -768,12 +769,32 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 * @return GO_Base_Db_ActiveStatement 
 	 */
 	public function findSingleByEmail($email){
+		
+		
+		//		 $criteria = GO_Base_Db_FindCriteria::newInstance()
+		//         ->addCondition('email',$email)
+		//         ->addCondition('email2', $email,'=','t',false)
+		//         ->addCondition('email3', $email,'=','t',false);
+		//
+		//      return GO_Addressbook_Model_Contact::model()->find(GO_Base_Db_FindParams::newInstance()->single()->criteria($criteria));
+
+		
+		// TODO: Dit is een workaround omdat de ACL check op addressbook vanuit dit model het blijkbaar niet goed doet.
+		$addressbooks = GO_Addressbook_Model_Addressbook::model()->find();
+		
+		$addressbookListing =array();
+		while($addr = $addressbooks->fetch()){
+			$addressbookListing[] = $addr->id;
+		}
+		
 		$criteria = GO_Base_Db_FindCriteria::newInstance()
+			->addInCondition('addressbook_id', $addressbookListing)
 			->addCondition('email',$email)
 			->addCondition('email2', $email,'=','t',false)
 			->addCondition('email3', $email,'=','t',false);
+			
 
-		return GO_Addressbook_Model_Contact::model()->find(GO_Base_Db_FindParams::newInstance()->single()->criteria($criteria));		
+		return GO_Addressbook_Model_Contact::model()->findSingle(GO_Base_Db_FindParams::newInstance()->criteria($criteria));		
 	}
 	
 	protected function afterMergeWith(GO_Base_Db_ActiveRecord $model) {

@@ -350,20 +350,26 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		
 		foreach ($ids as $id) {
 			$model = GO_Addressbook_Model_Contact::model()->findByPk($id);
-			if (!empty($model->company)) {
-				$companyContr = new GO_Addressbook_Controller_Company();
-				$resp = $companyContr->run("changeAddressbook",array(
-					'items' => '["'.$model->company->id.'"]',
-					'book_id' => $params['book_id']
-				),false);
-				array_merge($response['failedToMove'],$resp['failedToMove']);
-			} else {
-				$failed_id = !($model->setAttribute( 'addressbook_id' , $params['book_id'] ) && $model->save()) ? $id : null;
-				if ($failed_id) {
-					$response['failedToMove'][] = $failed_id;
-					$response['success'] = false;
+			try{
+				
+				if ($model->company) {
+					//the company will move it's contact along too.
+					$model->company->addressbook_id=$params['book_id'];
+					$model->company->save();
+				} else {
+
+					$model->addressbook_id=$params['book_id'];
+					$model->save();				
 				}
+			}catch(GO_Base_Exception_AccessDenied $e){
+				$response['failedToMove'][]=$model->id;
 			}
+		}
+		$response['success']=empty($response['failedToMove']);
+		
+		if(!$response['success']){
+			$count = count($response['failedToMove']);
+			$response['feedback'] = sprintf(GO::t('cannotMoveError'),$count);
 		}
 		
 		return $response;
@@ -453,6 +459,31 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		return parent::beforeImport($params, $model, $attributes, $record);
 	}
 	
+	protected function actionHandleAttachedVCard($params) {
+		$outString = '';
+		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+		$imap = $account->openImapConnection($params['mailbox']);
+		$imap->get_message_part_start($params['uid'], $params['number']);
+		while ($line = $imap->get_message_part_line()) {
+			switch (strtolower($params['encoding'])) {
+				case 'base64':
+					$outString .= base64_decode($line);
+					break;
+				case 'quoted-printable':
+					$outString .= quoted_printable_decode($line);
+					break;
+				default:
+					$outString .= $line;
+					break;
+			}
+		}		
+		$tmpFile = new GO_Base_Fs_File(GO::config()->tmpdir.$params['filename']);
+		$tmpFile->tempFile(GO::config()->tmpdir.$params['filename'],'vcf');
+		$tmpFile->putContents($outString);
+		$abController = new GO_Addressbook_Controller_Contact();
+		$response = $abController->run('importVCard', array('file'=>$tmpFile->path(),'readOnly'=>true), false, true);
+		echo json_encode($response);
+	}
 	
 	/**
 	 * Function exporting addressbook contents to VCFs. Must be called from export.php.
@@ -477,6 +508,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		
 		$summaryLog = new GO_Base_Component_SummaryLog();
 		
+		$readOnly = !empty($params['readOnly']);
+		
 		if(isset($_FILES['files']['tmp_name'][0]))
 			$params['file'] = $_FILES['files']['tmp_name'][0];
 		
@@ -496,6 +529,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 //		GO::debug($vObjectsArray);
 		unset($params['file']);
 		$nr=0;
+		if ($readOnly)
+			$contactsAttr = array();
 		foreach($vaddressbook->vcard as $vObject) {
 			$nr++;
 			GO_Base_VObject_Reader::convertVCard21ToVCard30($vObject);
@@ -503,15 +538,20 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			
 			$contact = new GO_Addressbook_Model_Contact();
 			try {
-				if ($contact->importVObject($vObject, $params))
+				if ($contact->importVObject($vObject, $params, !$readOnly))
 					$summaryLog->addSuccessful();
+				if ($readOnly)
+					$contactsAttr[] = $contact->getAttributes('formatted');
 			} catch (Exception $e) {
-				$summaryLog->addError($nr+1, $e->getMessage());
+				$summaryLog->addError($nr, $e->getMessage());
 			}
 			$summaryLog->add();
 		}
 		
 		$response = $summaryLog->getErrorsJson();
+		if ($readOnly) {
+			$response['contacts'] = $contactsAttr;
+		}
 		$response['successCount'] = $summaryLog->getTotalSuccessful();
 		$response['totalCount'] = $summaryLog->getTotal();
 		$response['success']=true;

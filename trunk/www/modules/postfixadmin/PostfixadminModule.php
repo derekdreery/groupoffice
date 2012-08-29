@@ -19,6 +19,7 @@ class GO_Postfixadmin_PostfixadminModule extends GO_Base_Module {
 				$mailboxModel->domain_id=$domainModel->id;
 				$mailboxModel->username='admin@'.$domain;
 				$mailboxModel->password='admin';
+				$mailboxModel->name="System administrator";
 				$mailboxModel->save();				
 			}
 		}

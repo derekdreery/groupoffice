@@ -355,27 +355,32 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
                                              
 		},this);
 
-		var groupState = this.gridPanel.store.multiSortInfo.sorters[0];//this.gridPanel.store.getSortState();
+		var requests = {
+			tasklists:{r:"tasks/tasklist/store"},				
+			categories:{r:"tasks/category/store"}
+		}
+
+		if (!this.gridPanel.storeLoaded) {
+			var groupState = this.gridPanel.store.multiSortInfo.sorters[0];//this.gridPanel.store.getSortState();
+			requests['tasks'] = {
+														r:"tasks/task/store",
+														groupBy: groupState.field,
+														groupDir: groupState.dir
+													};
+		}
 
 		GO.request({
 			maskEl:this.getEl(),
 			url: "core/multiRequest",
 			params:{
-				requests:Ext.encode({
-					tasklists:{r:"tasks/tasklist/store"},				
-					categories:{r:"tasks/category/store"},
-					tasks:{
-                                            r:"tasks/task/store",
-                                            groupBy: groupState.field,
-                                            groupDir: groupState.dir
-                                        }
-				})
+				requests:Ext.encode(requests)
 			},
 			success: function(options, response, result)
 			{
 				GO.tasks.categoriesStore.loadData(result.categories);
 				this.taskListsStore.loadData(result.tasklists);				
-				this.gridPanel.store.loadData(result.tasks);
+				if (!GO.util.empty(result.tasks))
+					this.gridPanel.store.loadData(result.tasks);
 			},
 			scope:this
 		});               
@@ -456,6 +461,18 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 				})]
 			});
 
+			this.deleteCategoryButton = new Ext.Button({
+				iconCls: 'btn-delete',
+				text: GO.lang['cmdDelete'],
+				cls: 'x-btn-text-icon',
+				//disabled: !GO.settings.modules.tasks.write_permission,
+				handler: function(){
+					this.categoriesGrid.deleteSelected();
+				},
+				scope:this
+			});
+
+
 			this.categoriesGrid = new GO.grid.GridPanel( {
 				paging:true,
 				border:false,
@@ -487,20 +504,26 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 					handler: function(){
 						this.categoryDialog.show();
 					},
-					disabled: !GO.settings.modules.tasks.write_permission,
+					//disabled: !GO.settings.modules.tasks.write_permission,
 					scope: this
-				},{
-					iconCls: 'btn-delete',
-					text: GO.lang['cmdDelete'],
-					cls: 'x-btn-text-icon',
-					disabled: !GO.settings.modules.tasks.write_permission,
-					handler: function(){
-						this.categoriesGrid.deleteSelected();
-					},
-					scope:this
-				}]
+				},
+				this.deleteCategoryButton
+			]
 			});
 			
+			this.categoriesGridSelectionModel = this.categoriesGrid.getSelectionModel();
+			this.categoriesGridSelectionModel.on("selectionchange", function(selModel){
+				var disabled = false;
+				if(!GO.settings.modules.tasks.write_permission){
+					var selectedRows = selModel.getSelections();
+					for (var i = 0; i < selectedRows.length; i++) {
+						if(selectedRows[i].data.user_id != GO.settings.user_id && disabled !=true)
+							disabled = true;
+					}
+				}
+				this.deleteCategoryButton.setDisabled(disabled);
+			}, this);
+
 			this.tasklistsGrid.on("rowdblclick", function(grid, rowClicked, e){
 
 				this.tasklistDialog.show(grid.selModel.selections.keys[0]);

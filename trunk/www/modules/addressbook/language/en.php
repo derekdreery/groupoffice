@@ -363,3 +363,5 @@ $l['addresslistIdMustBePositive']='This panel expects an addresslist ID that is 
 $l['male']='Male';
 $l['female']='Female';
 $l['importing']='Importing';
+$l['contactUuid']='UUID';
+$l['nRemovedFromAddresslist']='%n contacts have been identified and removed from the selected address list.';

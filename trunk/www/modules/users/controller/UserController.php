@@ -53,6 +53,11 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 
 				$response['data'] = array_merge($attr, $response['data']);
 			}
+			
+			if(!empty($response['data']['date_separator'])&& !empty($response['data']['date_format'])){
+				$response['data']['dateformat'] = $response['data']['date_separator'].':'.$response['data']['date_format'];
+			}
+
 			unset($response['data']['password']);
 		}
 		
@@ -80,6 +85,13 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		if(empty($params['password'])){
 			unset($params['password']);
 		}
+		
+		if(!empty($params["dateformat"])){
+			$dateparts = explode(':',$params["dateformat"]);
+			$params['date_separator'] = $dateparts[0];
+			$params['date_format'] = $dateparts[1];
+		}
+		
 		
 		return parent::beforeSubmit($response, $model, $params);
 	}

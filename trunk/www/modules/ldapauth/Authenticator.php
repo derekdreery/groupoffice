@@ -289,7 +289,8 @@ class GO_Ldapauth_Authenticator {
 			}
 
 			if (!empty(GO::config()->ldap_use_uid_with_email_domain)) {
-				$default = strtolower($lowercase['uid'][0]) . '@' . GO::config()->ldap_use_uid_with_email_domain;
+				
+				$default = strtolower($lowercase[$mapping['username']][0]) . '@' . GO::config()->ldap_use_uid_with_email_domain;
 
 				if (!in_array($default, $validAddresses)) {
 					$validAddresses[] = $default;

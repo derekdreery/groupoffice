@@ -13,6 +13,16 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 		
 		GO.addressbook.AddressbookDialog.superclass.initComponent.call(this);	
 	},
+	
+	afterSubmit : function(action){
+		var modelCreated = action.result.id>0;
+		this.importPanel.setDisabled(!modelCreated);
+		if(GO.customfields){
+			this.disableContactsCategoriesPanel.setDisabled(!modelCreated);
+			this.disableCompaniesCategoriesPanel.setDisabled(!modelCreated);
+		}
+	},
+	
 	beforeSubmit : function(params) {		
 		this.formPanel.baseParams.importBaseParams = Ext.encode({'addressbook_id':this.remoteModelId});
 		
@@ -209,6 +219,10 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 			});
 			this.addPanel(this.disableCompaniesCategoriesPanel);
 		}
+	},
+	
+	beforeLoad : function(remoteModelId, config){
+		this.importPanel.setDisabled(!(remoteModelId>0));
 	},
 	
 	afterLoad : function(remoteModelId, config, action){

@@ -172,6 +172,7 @@ $l["htmlMarkup"]= 'Gebruik HTML opmaak';
 $l["confirmLostChanges"]= 'Uw wijzigingen gaan verloren. Weet u het zeker?';
 $l["manageAliases"]='Beheer afzendaliassen';
 $l["addSendersTo"]='Voeg afzenders toe aan...';
+$l["deleteSendersFrom"]='Verwijder afzenders van...';
 $l["defaultTemplate"]='Stel geselecteerd sjabloon in als standaard';
 $l["moving"]='Bezig met verplaatsen...';
 $l["alias"]="Alias";
@@ -225,3 +226,8 @@ $l["everythingBefore"]= 'Alle emails voor';
 $l["alsoChildren"]= 'Deze bewerking ook toepassen op emails in subfolders.';
 $l['failedRecipients']='Kon het bericht niet verzenden naar';
 $l['subscribeFolders']='Abonneren op mappen';
+
+$l['imapLoginFailed']='Authententicatie mislukt voor gebruiker "%username".';
+$l['tryNewCredentials']='Probeert u het a.u.b. met een andere IMAP wachtwoord.';
+
+$l['moveTo']='Verplaatsen naar';

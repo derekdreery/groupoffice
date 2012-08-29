@@ -77,6 +77,7 @@ $l['rightClickToCopy']='Gebruik de rechtermuisknop om de koppelingslocatie te ko
 $l['invitation']='Uitnodiging';
 $l['invitation_update']='Bijgewerkte uitnodiging';
 $l['cancellation']='Annulering';
+$l['cancelMessage']='De voglende afspraak waar u voor uitgenodigd bent is geannuleerd.';
 $l['non_selected'] = 'in niet-geselecteerde agenda';
 $l['linkIfCalendarNotSupported']='Gebruik onderstaande links alleen wanneer uw mail programma geen agenda functies ondersteund.';$l["addressbook"]='Adresboek';
 $l["appointment"]= 'Afspraak';
