@@ -3,6 +3,7 @@
 - Fixed: Inline images were corrupted when switching e-mail templates
 - Optimized: speed in rendering custom field columns
 - Fixed: Fixed resize of customfieldsdialog optionsgrid
+- Fixed: Printing calendar, events have a black background 
 
 28-08-2012 4.0.90
 - Fixed: GOTA crashed after java update 1.7.06
