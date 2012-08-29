@@ -735,7 +735,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.0.89';
+	var $version = '4.0.91';
 
 
 	/* The permissions mode to use when creating files
