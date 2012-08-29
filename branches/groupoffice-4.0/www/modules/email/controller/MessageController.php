@@ -221,11 +221,14 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 	private function _link($params, GO_Base_Mail_Message $message, $model=false) {
 
+		$autoLinkContacts=false;
 		if(!$model){
 			if (!empty($params['link'])) {
 				$linkProps = explode(':', $params['link']);
 				$model = GO::getModel($linkProps[0])->findByPk($linkProps[1]);
 			}
+			
+			$autoLinkContacts = GO::modules()->addressbook && GO::modules()->savemailas && !empty(GO::config()->email_autolink_contacts);
 		}else
 		{
 			//don't link the same model twice on sent. It parses the new autolink tag
@@ -235,7 +238,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				return false;
 		}
 
-		if ($model) {
+		if ($model || $autoLinkContacts) {
 
 			$path = 'email/' . date('mY') . '/sent_' . time() . '.eml';
 
@@ -246,30 +249,60 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$message->toByteStream($fbs);
 
 			if ($file->exists()) {
+				
+				$attributes = array();
 
-				$linkedEmail = new GO_Savemailas_Model_LinkedEmail();
+				
 
 				$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);
 
-				$linkedEmail->from = (string) GO_Base_Mail_EmailRecipients::createSingle($alias->email, $alias->name);
+				$attributes['from'] = (string) GO_Base_Mail_EmailRecipients::createSingle($alias->email, $alias->name);
 				if (isset($params['to']))
-					$linkedEmail->to = $params['to'];
+					$attributes['to'] = $params['to'];
 
 				if (isset($params['cc']))
-					$linkedEmail->cc = $params['cc'];
+					$attributes['cc'] = $params['cc'];
 
 				if (isset($params['bcc']))
-					$linkedEmail->bcc = $params['bcc'];
+					$attributes['bcc'] = $params['bcc'];
 
-				$linkedEmail->subject = !empty($params['subject']) ? $params['subject'] : GO::t('no_subject', 'email');
-				$linkedEmail->acl_id = $model->findAclId();
+				$attributes['subject'] = !empty($params['subject']) ? $params['subject'] : GO::t('no_subject', 'email');
+				//
 
 
-				$linkedEmail->path = $path;
+				$attributes['path'] = $path;
 
-				$linkedEmail->save();
+				
+				if($model){
+					
+					$linkedEmail = new GO_Savemailas_Model_LinkedEmail();
+					$linkedEmail->setAttributes($attributes);
+					$linkedEmail->acl_id = $model->findAclId();
+					$linkedEmail->save();
 
-				$linkedEmail->link($model);
+					$linkedEmail->link($model);
+				}
+				
+				
+				if($autoLinkContacts){
+					$to = new GO_Base_Mail_EmailRecipients($params['to'].",".$params['bcc']);
+					$to = $to->getAddresses();
+					
+//					var_dump($to);
+
+					foreach($to as $email=>$name){
+						$contact = GO_Addressbook_Model_Contact::model()->findByEmail($email, GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)->single());
+
+						if($contact){					
+							$linkedEmail = new GO_Savemailas_Model_LinkedEmail();
+							$linkedEmail->setAttributes($attributes);
+							$linkedEmail->acl_id = $contact->findAclId();
+							$linkedEmail->save();
+
+							$linkedEmail->link($contact);
+						}
+					}
+				}
 			}
 		}
 	}
@@ -452,18 +485,14 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$tags = $this->_findAutoLinkTags($params['content_type']=='html' ? $params['htmlbody'] : $params['plainbody']);
 		while($tag = array_shift($tags)){
 			if($tag['account_id']==$account->id){
-				try{
-					$linkModel = GO::getModel($tag['model'])->findByPk($tag['model_id']);
-					if($linkModel)
-						$this->_link($params,$message, $linkModel);
-				}
-				catch(GO_Base_Exception_AccessDenied $e){
-
-				}
+				$linkModel = GO::getModel($tag['model'])->findByPk($tag['model_id'], false, true);
+				if($linkModel && $linkModel->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
+					$this->_link($params,$message, $linkModel);				
 			}
 		}
 
 		$response['unknown_recipients'] = $this->_findUnknownRecipients($params);
+		
 
 		return $response;
 	}
@@ -838,6 +867,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 				$response = $this->_handleAutoLinkTag($imapMessage, $params, $response);
 				$response = $this->_handleInvitations($imapMessage, $params, $response);
+				$response = $this->_handleAutoContactLinkFromSender($imapMessage, $params, $response);
 			}
 		}
 		
@@ -994,6 +1024,35 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		return $response;
 	}
+	
+	
+	/**
+	 * When automatic contact linking is enabled this will link received messages to the sender in the addressbook
+	 *
+	 * @param GO_Email_Model_ImapMessage $imapMessage
+	 * @param type $params
+	 * @param string $response
+	 * @return string
+	 */
+	private function _handleAutoContactLinkFromSender(GO_Email_Model_ImapMessage $imapMessage, $params, $response) {
+		
+		if(GO::modules()->addressbook && GO::modules()->savemailas && !empty(GO::config()->email_autolink_contacts)){
+			$from = $imapMessage->from->getAddress();
+			$contact = GO_Addressbook_Model_Contact::model()->findByEmail($from['email'], GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)->single());
+			
+			if($contact){
+				GO_Savemailas_Model_LinkedEmail::model()->createFromImapMessage($imapMessage, $contact);
+
+				$response['htmlbody']='<div class="em-autolink-message">'.
+								sprintf(GO::t('autolinked','email'),'<span class="em-autolink-link" onclick="GO.linkHandlers[\'GO_Addressbook_Model_Contact\'].call(this, '.
+												$contact->id.');">'.$contact->name.'</div>').
+								$response['htmlbody'];
+			}
+		}
+			
+		return $response;
+	}
+
 
 	/**
 	 * Block external images if sender is not in addressbook.
