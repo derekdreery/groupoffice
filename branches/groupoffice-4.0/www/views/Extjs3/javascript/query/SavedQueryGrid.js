@@ -50,6 +50,12 @@ GO.query.SavedQueryGrid = function(config) {
 	}
 	
 	config.paging = true;
+	
+	this.searchField = new GO.form.SearchField({
+		store: config.store,
+		width:100
+	});
+	config.tbar = [GO.lang['strSearch'] + ':', this.searchField];
 
 	GO.query.SavedQueryGrid.superclass.constructor.call(this, config);
 	

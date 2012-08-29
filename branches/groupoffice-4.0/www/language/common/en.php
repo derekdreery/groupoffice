@@ -577,3 +577,10 @@ $l['numMinValue']="The minimum value for this field is {0}";
 $l['numMaxValue']="The maximum value for this field is {0}";
 
 $l['cannotMoveError']="%s item(s) cannot be moved, you do not have the right permissions.";
+
+$l['queryAnd'] = "And";
+$l['queryOr'] = "Or";
+$l['queryField'] = "Field";
+$l['queryComparator'] = "Comparator";
+$l['queryValue']="Value";
+$l['queryStartGroup']="Start group";
