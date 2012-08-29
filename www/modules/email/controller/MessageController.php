@@ -323,10 +323,15 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$imap = $account->openImapConnection($account->drafts);
 
 		$nextUid = $imap->get_uidnext();
-
-		if ($nextUid && $imap->append_message($account->drafts, $message->toString(), "\Seen")) {
+		$response=array('success'=>false);
+		if ($nextUid) {
 			$response['sendParams']['draft_uid'] = $nextUid;
 			$response['success'] = $response['sendParams']['draft_uid'] > 0;
+		}
+		
+		if(!$imap->append_message($account->drafts, $message->toString(), "\Seen")){
+			$response['success'] = false;
+			$response['feedback']=$imap->last_error();
 		}
 
 		if (!empty($params['draft_uid'])) {
@@ -335,7 +340,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$imap->delete(array($params['draft_uid']));
 		}
 
-		if (!$response['success']) {
+		if (!$nextUid) {
 			$account->drafts = '';
 			$account->save();
 
@@ -1343,7 +1348,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		$tmpFolder = GO_Base_Fs_Folder::tempFolder(uniqid(time()));
 		$atts = $message->getAttachments();
-		foreach($atts as $att){
+		while($att=array_shift($atts)){
 			if(!$att->isInline())
 				$att->saveToFile($tmpFolder);
 		}	
@@ -1354,6 +1359,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$cmd =GO::config()->cmd_zip.' -r "'.$zipfile->path().'" *';
 		exec($cmd, $output, $return);
 		
+//		throw new Exception(var_export($output, true));
+		
 		if($return>0)
 			throw new Exception(var_export($output, true));
 		
@@ -1361,8 +1368,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		readfile($zipfile->path());
 		
-		$tmpFolder->delete();
-		$zipfile->delete();
+//		$tmpFolder->delete();
+//		$zipfile->delete();
 		
 	}
 	

@@ -319,7 +319,7 @@ abstract class GO_Base_Mail_ImapBase {
 	}
 	/* determine if an imap response returned an "OK", returns
        true or false */
-	function check_response($data, $chunked=false) {
+	function check_response($data, $chunked=false, $trackErrors=true) {
 
 		$result = false;
 		if ($chunked) {
@@ -337,7 +337,7 @@ abstract class GO_Base_Mail_ImapBase {
 			if (preg_match("/^A".$this->command_count." OK/i", $line)) {
 				$result = true;
 			}
-			if(!$result)
+			if(!$result && $trackErrors)
 				$this->errors[]=$line;
 		}	
 		
