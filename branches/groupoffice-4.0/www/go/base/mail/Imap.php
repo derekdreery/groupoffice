@@ -1966,7 +1966,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			$res = $this->last_line;
 			$this->last_line = fgets($this->handle,1024);
 
-			if ($this->check_response(array($this->last_line))) {
+			if ($this->check_response(array($this->last_line), false, false)) {
 				$this->last_line = false;
 
 				if(substr(rtrim($res),-1, 1)==')')
