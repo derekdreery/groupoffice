@@ -357,12 +357,13 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	}
 	
 	public function getPlainBody($asHtml=false){
+
+		$inlineImages=array();
 		
 		if(!isset($this->_plainBody)){
 			$imap = $this->getImapConnection();		
 			$this->_loadBodyParts();
 
-			$inlineImages=array();
 			$this->_plainBody='';
 			if($this->_plainParts['text_found']){ //check if we found a plain body
 

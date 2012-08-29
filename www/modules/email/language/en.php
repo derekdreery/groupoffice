@@ -132,6 +132,7 @@ $l["email"]="Email";
 $l["signature"]="Signature";
 $l["manageAliases"]='Manage sender aliases';
 $l["addSendersTo"]='Add senders to...';
+$l["deleteSendersFrom"]='Delete senders from...';
 $l["defaultTemplate"]='Set selected template as default';
 $l["moving"]='Moving...';
 $l["orderFilters"]='You can change the order of filters by dragging.';
@@ -240,3 +241,8 @@ $l['spam']='Spam';
 $l['ignoreSentFolder']='Store replies in the same folder as the original message';
 $l['sourceAndTargetSame']="Source and target mailbox may not be the same";
 $l['subscribeFolders']='Subscribe to folders';
+
+$l['imapLoginFailed']='Authentication failed for user "%username".';
+$l['tryNewCredentials']='Please enter try with a different IMAP password.';
+
+$l['moveTo']='Move to';

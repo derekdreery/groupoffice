@@ -1180,17 +1180,18 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	},
 
 	emailFiles: function(records) {
-
+		var files = new Array();
 		Ext.each(records, function(record) {
 			var folderId = record.data.folder_id;
 			var id = record.data.id;
 
 			if (!Ext.isEmpty(folderId)) {
-				GO.email.emailFiles(record.data.path);
+				files.push(record.data.path);
 			} else {
 				GO.email.openFolderTree(id);
 			}
 		});
+		GO.email.emailFiles(files);
 	},
 
 	onDownloadLink : function(records,email){

@@ -35,7 +35,11 @@ GO.email.AccountsTree = function(config){
 		loader.baseParams.expandedNodes = Ext.encode(this.getExpandedNodes());
 	}, this);
 	
-	
+	config.loader.on('load',function(loader,node,response){
+		this._setErrorNodes(Ext.decode(response.responseText));
+		this._nodeId = 0;
+		this._handleFailedIMAPConnections();
+	},this);
 
 //	config.loader.on("load", function(treeLoader, node)
 //	{
@@ -317,7 +321,6 @@ GO.email.AccountsTree = function(config){
 //				complete  : this.afterEdit,
 //				startedit : function( editor, boundEl, value )
 //				{
-//					console.log(editor.editNode.attributes.mailbox);
 //					editor.setValue(editor.editNode.attributes.mailbox);
 //				},
 //				beforecomplete  : function( editor, value, startValue){
@@ -335,6 +338,9 @@ GO.email.AccountsTree = function(config){
 Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {	
 	
 	saveTreeState : false,
+	
+	_nodeId : 0,
+	_errorNodes : [],
 	
 	updateState : function(){
 		GO.request({
@@ -429,9 +435,86 @@ Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {
 		{
 			this.getRootNode().reload();
 		}
+	},
+	
+	_handleFailedIMAPConnections : function() {
+		if (typeof(this._errorNodes[this._nodeId])=='object') {
+			this.accountId = this._errorNodes[this._nodeId]['account_id'].replace('account_','');
+			if (!this.imapLoginFailedDialog)
+				this.imapLoginFailedDialog = new GO.Window({
+					title: GO.lang['strError'],
+					layout: 'fit',
+					width: 320,
+					height: 200,
+					cls : 'go-form-panel',
+					items: [this.imapLoginFailedFormPanel = new Ext.form.FormPanel({
+						items: [this.imapLoginFailedInfoField = new GO.form.PlainField({
+							value: GO.email.lang['imapLoginFailed'],
+							hideLabel: true,
+							height: 80,
+							anchor: '-20'
+						}), this.passwordField = new Ext.form.TextField({
+							fieldLabel : GO.lang.strPassword,
+							name : 'password',
+							inputType : 'password',
+							allowBlank : false,
+							anchor: '-20'
+						})],
+						buttons: [{
+							text : GO.lang.cmdOk,
+							handler : function() {
+								this.imapLoginFailedFormPanel.form.submit({
+									url: GO.url('email/account/savePassword'),
+									params: {
+										id: this.accountId
+									},
+									success : function(form, action) {
+										this.imapLoginFailedDialog.hide();
+										this.imapLoginFailedFormPanel.form.reset();
+										this.root.reload();
+									},
+									failure : function(form, action) {
+										var error = '';
+										if (action.failureType == 'client') {
+											error = GO.lang.strErrorsInForm;
+										} else if (action.result) {
+											error = action.result.feedback;
+										} else {
+											error = GO.lang.strRequestError;
+										}
+
+										Ext.MessageBox.alert(GO.lang.strError, error);
+									},
+									scope: this
+								});
+							},
+							scope : this
+						}, {
+							text : GO.lang.cmdClose,
+							handler : function() {
+								this.imapLoginFailedDialog.hide();
+								this.imapLoginFailedFormPanel.form.reset();
+								if (this._nodeId+1<this._errorNodes.length) {
+									this._nodeId++;
+									this._handleFailedIMAPConnections()
+								}
+							},
+							scope : this
+						}]
+					})]
+				});
+			this.imapLoginFailedInfoField.setValue(GO.email.lang['imapLoginFailed'].replace('%username',this._errorNodes[this._nodeId]['name'])+' '+GO.email.lang['tryNewCredentials']);
+			this.imapLoginFailedDialog.show();
+		}
+	},
+	
+	_setErrorNodes : function (nodes) {
+		this._errorNodes = [];
+		for (var nodeId in nodes) {
+			if (!nodes[nodeId].isAccount && !GO.util.empty(nodes[nodeId].hasError))
+				this._errorNodes.push(nodes[nodeId]);
+		}
 	}
-	
-	
 	
 //	afterEdit : function(editor, text, oldText ){
 //

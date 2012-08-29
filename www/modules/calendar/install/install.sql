@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `cal_events` (
   `start_time` int(11) NOT NULL DEFAULT '0',
   `end_time` int(11) NOT NULL DEFAULT '0',
   `all_day_event` tinyint(1) NOT NULL DEFAULT '0',
-  `name` varchar(100) DEFAULT NULL,
+  `name` varchar(150) DEFAULT NULL,
   `description` text,
   `location` varchar(100) DEFAULT NULL,
   `repeat_end_time` int(11) NOT NULL DEFAULT '0',

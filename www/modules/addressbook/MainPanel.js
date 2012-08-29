@@ -512,7 +512,7 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 
 	setAdvancedSearchNotification : function (store)
 	{
-		if(!GO.util.empty(store.baseParams.advancedQuery))
+		if(!GO.util.empty(store.baseParams.advancedQueryData))
 		{
 			this.searchPanel.queryField.setValue("[ "+GO.addressbook.lang.advancedSearch+" ]");
 			this.searchPanel.queryField.setDisabled(true);

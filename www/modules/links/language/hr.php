@@ -1,11 +1,8 @@
 <?php
-
-﻿;
 $l['name']='Opisi linkova';
 $l['description']='Upravljaj zadanim opisima linkova';
 $l['link_description']='Opis linka';
 $l['link_descriptions']='Opisi linkova';
-﻿;
 $l["links"]='Linkovi';
 $l["linkDescription"]="Opis linka";
 $l["linkDescriptions"]="Opisi linkova";

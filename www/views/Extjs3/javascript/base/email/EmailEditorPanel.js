@@ -372,7 +372,7 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 			var uploadItems = [];
 		
 			uploadItems.push(new GO.base.upload.PluploadMenuItem({
-					text:"Upload",
+					text:GO.lang.upload,
 					upload_config: {
 						listeners: {
 							scope:this,

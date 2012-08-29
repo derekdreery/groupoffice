@@ -1902,7 +1902,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$result = $this->get_response($max, true);
 		$status = $this->check_response($result, true);
 		$res = '';
-		foreach ($result as $vals) {
+		foreach ($result as $vals) {			
 			if ($vals[0] != '*') {
 				continue;
 			}
@@ -2008,7 +2008,6 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			return false;
 
 		while($line = $this->get_message_part_line()){
-			
 			switch(strtolower($encoding)) {
 				case 'base64':
 					$line=base64_decode($line);
@@ -2017,8 +2016,8 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 					$line= quoted_printable_decode($line);
 					break;
 			}
-			
-			if(!fputs($fp, $line))
+						
+			if($line != "" && !fputs($fp, $line))
 				return false;
 		}
 

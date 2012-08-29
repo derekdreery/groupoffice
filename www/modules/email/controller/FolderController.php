@@ -62,7 +62,17 @@ class GO_Email_Controller_Folder extends GO_Base_Controller_AbstractController {
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 				
 		$mailbox = new GO_Email_Model_ImapMailbox($account, array("name"=>$params["mailbox"]));
-		$success = $mailbox->truncate();
+                
+                
+                if(!empty($account->trash) && $params["mailbox"] != $account->trash) {
+                    $imap = $account->openImapConnection($params["mailbox"]);
+                    $uids = $imap->sort_mailbox();
+                    $imap->set_message_flag($uids, "\Seen");
+                    $success=$imap->move($uids,$account->trash);
+                }else {
+                    $success = $mailbox->truncate();
+                }
+                    
 		
 		return array("success"=>$success);
 	}

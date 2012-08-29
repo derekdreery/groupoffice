@@ -175,6 +175,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 							'name' => $alias->email,
 							'id' => $nodeId,
 							'isAccount'=>true,
+							'hasError'=>false,
 							'iconCls' => 'folder-account',
 							'expanded' => $this->_isExpanded($nodeId),
 							'noselect' => false,
@@ -186,20 +187,14 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 							//"acl_supported"=>false
 					);
 					try{
-						
+						$account->openImapConnection();
 						if($node['expanded'])
 							$node['children']=$this->_getMailboxTreeNodes($account->getRootMailboxes(true));
 						
-						
-						
 					}catch(Exception $e){
-						$node['text'] .= ' ('.GO::t('error').')';
-						$node['children']=array();
-						$node['expanded']=true;
-						$node['qtipCfg'] = array('title'=>GO::t('error'), 'text' =>htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8'));
+						$this->_checkImapConnectException($e,$node);
 					}
 					
-
 					$response[] = $node;
 				}
 			}
@@ -222,6 +217,19 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		}
 
 		return $response;
+	}
+	
+	private function _checkImapConnectException(Exception $e, &$node) {
+		if (strpos($e->getMessage(),'Authentication failed')==0) {
+			$node['isAccount'] = false;
+			$node['hasError'] = true;
+			$node['text'] .= ' ('.GO::t('error').')';
+			$node['children']=array();
+			$node['expanded']=true;
+			$node['qtipCfg'] = array('title'=>GO::t('error'), 'text' =>htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8'));	
+		} else {
+			throw $e;
+		}
 	}
 
 	private function _getMailboxTreeNodes($mailboxes, $subscribtions=false) {
@@ -381,4 +389,14 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		return $store->getData();
 	}
 
+	protected function actionSavePassword($params) {
+		
+		$accountModel = GO_Email_Model_Account::model()->findByPk($params['id']);
+		$accountModel->password = $params['password'];
+		$accountModel->save();
+		
+		return array('success'=>true);
+		
+	}
+	
 }

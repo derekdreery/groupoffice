@@ -35,7 +35,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		
 		this.bodyId = Ext.id();
 		this.attachmentsId = Ext.id();
-		
+				
 		var templateStr = '<div class="message-header">'+
 		'<table class="message-header-table">'+
 		'<tr><td style="width:70px"><b>'+GO.email.lang.from+'</b></td>'+			
@@ -67,7 +67,15 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		'<table style="padding-top:5px;">'+
 		'<tr><td><b>'+GO.email.lang.attachments+':</b></td></tr><tr><td id="'+this.attachmentsId+'">'+
 		'<tpl for="attachments">'+
-		'<a class="filetype-link filetype-{extension}" id="'+this.attachmentsId+'_{[xindex-1]}" href="#">{name} ({human_size})</a> '+
+			'<tpl if="extension==\'vcf\'">';
+			if (GO.addressbook)
+				templateStr += '<a class="filetype-link filetype-{extension}" id="'+this.attachmentsId+'_{[xindex-1]}" href="javascript:GO.email.readVCard(\'{url}&importVCard=1\');">{name} ({human_size})</a> ';
+			else
+				templateStr += '<a class="filetype-link filetype-{extension}" id="'+this.attachmentsId+'_{[xindex-1]}" href="#">{name} ({human_size})</a> ';
+			templateStr += '</tpl>'+
+			'<tpl if="extension!=\'vcf\'">'+
+			'<a class="filetype-link filetype-{extension}" id="'+this.attachmentsId+'_{[xindex-1]}" href="#">{name} ({human_size})</a> '+
+			'</tpl>'+
 		'</tpl>'+
 		'<tpl if="attachments.length&gt;1 && zip_of_attachments_url!=\'\'">'+
 		'<a class="filetype-link filetype-zip" href="{zip_of_attachments_url}" target="_blank">'+GO.email.lang.downloadAllAsZip+'</a>'+
@@ -494,3 +502,24 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		}
 	}
 });
+
+
+GO.email.readVCard = function(url) {
+	if (GO.addressbook)
+		Ext.Ajax.request({
+			url: url,
+			callback: function(options, success, response)
+			{	
+				var responseData = Ext.decode(response.responseText);
+				if(!success)
+				{
+					Ext.MessageBox.alert(GO.lang['strError'], responseData['feedback']);
+				} else {
+					if (!GO.util.empty(responseData.contacts[0])) {						
+						GO.addressbook.showContactDialog(0,{contactData : responseData.contacts[0]});
+					}
+				}
+			},
+			scope: this
+		});
+}

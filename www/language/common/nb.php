@@ -549,3 +549,5 @@ $l['decryptContent']= 'Dekryptere innhold';
 $l['clickHereToDecrypt']= 'Klikk her for å dekryptere og lese innholdet.';
 $l['passwordSubmissionError']='Det oppstod en feil! Endringene ble ikke lagret. Kontakt administrator og forklar trinnene som førte til denne meldingen.';
 $l['pleaseEnterQuery']="Angi søkebegrep";
+$l['numMinValue']="Minimumsverdien for dette feltet er {0}";
+$l['numMaxValue']="Maksimumsverdien for dette feltet er {0}";

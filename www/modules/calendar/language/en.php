@@ -188,6 +188,7 @@ $l['rightClickToCopy']='Right click to copy link location';
 $l['invitation']='Invitation';
 $l['invitation_update']='Updated invitation';
 $l['cancellation']='Cancellation';
+$l['cancelMessage']='The following event you have been invited for has been cancelled.';
 $l['non_selected'] = 'in non-selected calendar';
 $l['linkIfCalendarNotSupported']='Only use the links below if your mail client does not support calendaring functions.';
 $l['eventAccepted']='You have accepted the event.';

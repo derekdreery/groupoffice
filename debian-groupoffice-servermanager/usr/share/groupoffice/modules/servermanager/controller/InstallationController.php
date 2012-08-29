@@ -210,10 +210,16 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	 * @param array $permissions Array of permission options for the group
 	 */
 	private function _createGroup($name,$permissions){
-		$group = new GO_Base_Model_Group();
-		$group->name = $name;
+		
+		$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', $name);
+		
+		if(!$group){
+			$group = new GO_Base_Model_Group();
+			$group->name = $name;
+			$group->save();
+		}
 
-		if($group->save()){
+		if($group){
 			if(!empty($permissions['modules_read']))
 				$this->_setGroupRights($group,$permissions['modules_read'], 'read');
 			

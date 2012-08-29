@@ -115,6 +115,7 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 		$columnModel->formatColumn('category_name', '$model->category_name');
 		$columnModel->formatColumn('thumb', '$model->thumbURL');
 		$columnModel->formatColumn('permissionLevel', '$model->permissionLevel');
+		$columnModel->formatColumn('content', 'urlDecode($model->content)');
 	}
 
 	protected function remoteComboFields() {

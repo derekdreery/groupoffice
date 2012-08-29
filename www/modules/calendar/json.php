@@ -671,7 +671,9 @@ try {
 								'read_only'=> $event['read_only'] || ($event['private']=='1' && $GLOBALS['GO_SECURITY']->user_id != $event['user_id']) || $permission_levels[$event['calendar_id']]<GO_SECURITY::WRITE_PERMISSION ? true : false,
 								'username' => $username,
 								'duration' => $duration,
-								'has_other_participants' => $has_other_participants
+								'has_other_participants' => $has_other_participants,
+								
+								'category'=>!empty($event['category_id'])?$cal->get_category($event['category_id']):false
 				);
 				
 				if($event['mtime'] > $response['mtime'])
@@ -698,7 +700,7 @@ try {
 						while($contact = $cal->next_record()) {
 							$name = String::format_name($contact['last_name'], $contact['first_name'], $contact['middle_name']);
 							$start_arr = explode('-',$contact['upcoming']);
-							$start_unixtime = mktime(0,0,0,$start_arr[1],$start_arr[2],$start_arr[1]);
+							$start_unixtime = mktime(0,0,0,$start_arr[1],$start_arr[2],$start_arr[0]);
 							
 							if(!in_array($contact['id'], $contacts))
 							{

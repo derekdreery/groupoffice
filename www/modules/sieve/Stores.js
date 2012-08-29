@@ -43,7 +43,7 @@ GO.sieve.cmbActionStore = new Ext.data.ArrayStore({
 	data:[
   [GO.sieve.lang.fileintoLabel, 'fileinto'],
   [GO.sieve.lang.copytoLabel, 'copyto'],
-	[GO.sieve.lang.redirect, 'redirect_copy'],
+	[GO.sieve.lang.redirect_copy_to, 'redirect_copy'],
 	[GO.sieve.lang.redirect_to, 'redirect'],
 	[GO.sieve.lang.replyToMessage, 'vacation'],
 	[GO.sieve.lang.reject, 'reject'],

@@ -107,6 +107,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	protected $insertDelayed=false;
 	
+	private $_loadingFromDatabase=true;
+	
 	/**
 	 *
 	 * @var int Link type of this Model used for the link system. See also the linkTo function
@@ -305,6 +307,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @param int $primaryKey integer The primary key of the database table
 	 */
 	public function __construct($newRecord=true){			
+		
+		$this->_loadingFromDatabase=false;
 		
 		//$pk = $this->pk;
 
@@ -569,7 +573,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$criteria->addCondition($this->primaryKey(), $this->pk, '!=');
 		
 		$existing = $this->findSingle(GO_Base_Db_FindParams::newInstance()
-						->debugSql()
 						->criteria($criteria));
 		
 		return $existing;
@@ -612,6 +615,31 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			return false;
 		}
 	}
+	
+	
+	/**
+	 * Check if the acl field is modified.
+	 * 
+	 * Example: acl field is: addressbook.acl_id
+	 * Then this function fill search for the addressbook relation and checks if the key is changed in this relation.
+	 * If the key is changed then it will return true else it will return false.
+	 * 
+	 * @return boolean
+	 */
+	private function _aclModified(){
+		if (!$this->aclField())
+			return false;
+	
+		$arr = explode('.', $this->aclField());
+		
+		if(count($arr)==1)
+			return false;
+		
+		$relation = array_shift($arr);
+		$r = $this->getRelation($relation);
+		return $this->isModified($r['field']);
+	}
+	
 	
 	/**
 	 * Find the acl_id integer value that applies to this model.
@@ -1605,7 +1633,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					return  GO_Base_Util_Date::to_db_date($value);
 					break;		
 				case 'textfield':
-					return trim($value);
+					return (string) $value;
 					break;
 				default:
 					if($this->columns[$column]['type']==PDO::PARAM_INT)
@@ -2024,6 +2052,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			throw new GO_Base_Exception_AccessDenied($msg);
 		}
 		
+		if(!$this->isNew && $this->_aclModified() && !$this->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION)){
+			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : sprintf(GO::t('cannotMoveError'),'this');
+			throw new GO_Base_Exception_AccessDenied($msg);
+		}
+		
 		if(!$this->validate()){
 			return false;
 		}
@@ -2068,8 +2101,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 			if($this->aclField() && !$this->joinAclField && empty($this->{$this->aclField()})){
 				//generate acl id				
-
-				$this->setNewAcl(!empty($this->user_id) ? $this->user_id : 1);
+				if(!empty($this->user_id))
+					$this->setNewAcl($this->user_id);
+				else
+					$this->setNewAcl(GO::user() ? GO::user()->id : 1);
 			}				
 			
 			if ($this->hasFiles() && GO::modules()->isInstalled('files')) {
@@ -2121,8 +2156,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if ($this->customfieldsRecord){
 			//id is not set if this is a new record so we make sure it's set here.
 			$this->customfieldsRecord->model_id=$this->id;
-
+			
 			$this->customfieldsRecord->save();
+			
+//			if($this->customfieldsRecord->save())
+//				$this->touch(); // If the customfieldsRecord is saved then set the mtime of this record.
 		}
 		
 		$this->_log($wasNew ? GO_Log_Model_Log::ACTION_ADD : GO_Log_Model_Log::ACTION_UPDATE);
@@ -2863,6 +2901,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function setAttribute($name,$value, $format=false)
 	{	
+		if($this->_loadingFromDatabase){
+			//skip fancy features when loading from the database.
+			$this->_attributes[$name]=$value;	
+			return true;
+		}
+		
 		if($format)
 			$value = $this->formatInput($name, $value);
 		

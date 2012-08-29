@@ -218,6 +218,7 @@ $l['template']='Sjabloon';
 $l['addresslistIdMustBePositive']='Dit paneel verwacht een adreslijst ID die positief is, maar heeft zo een niet ontvangen. Neemt u a.u.b. contact op met de beheerder.';
 $l['male']='Man';
 $l['female']='Vrouw';
+
 $l['importing']='Importeren';
 
 $l["contactId"] = "ID";
@@ -254,3 +255,5 @@ $l["contactSalutation"] = "Aanhef";
 $l["contactEmail_allowed"] = "Email toegestaan";
 $l["contactFiles_folder_id"] = "Map";
 $l["contactGo_user_id"] = "Gebruiker";
+
+$l['nRemovedFromAddresslist']='%n contacten zijn herkend en verwijderd uit de geselecteerde adreslijst.';

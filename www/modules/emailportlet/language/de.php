@@ -7,4 +7,4 @@ $l["noEmailFolders"]='Kein Ordner hinzugefügt.';
 $l["folderAdded"]='Folder ist auf der Übersichtsseite hinzugefügt.';
 
 $l['name']='E-Mail Portlet';
-$l['description']='Plugin für E-Mail-Ordner auf der Übersichtsseite.';
+$l['description']='Plugin für E-Mail-Ordner auf der Übersichtsseite';
