@@ -82,7 +82,6 @@ GO.sieve.VacationDialog = Ext.extend(GO.dialog.TabbedFormDialog,{
 			this.startDate.setValue();
 			this.endDate.setValue();
 			responseData.data['actions'][0]['type']
-			console.log(responseData);
 		}
 	},
 	

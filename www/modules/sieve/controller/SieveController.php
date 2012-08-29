@@ -200,6 +200,18 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 		return $response;
 	}
 	
+	protected function actionAccountAliases($params) {
+		$response = array();
+		$aliasesStmt = GO_Email_Model_Alias::model()->findByAttribute('account_id',$params['account_id']);
+		$aliases = array();
+		while ($aliasModel = $aliasesStmt->fetch()) {
+			$aliases[] = $aliasModel->email;
+		}
+		$response['data']['aliases'] = implode(',',$aliases);
+		$response['success'] = true;
+		return $response;
+	}
+	
 	protected function actionRule($params) {
 		
 		$this->_sieveConnect($params['account_id']);
@@ -220,7 +232,7 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 
 		$response['data']['active']= !$current_rule['disabled'];
 		$response['data']['rule_name']=$current_rule['name'];
-
+	
 		foreach($current_rule['tests'] as $test)
 		{
 				//$test['test'];
