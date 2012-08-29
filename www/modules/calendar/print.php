@@ -78,6 +78,10 @@ function insert_events($calendars, $start_time, $end_time) {
 			}
 		}
 
+		// If background is empty then select the default color.
+		if(empty($event['background']))
+			$event['background'] = 'FFFFCC';
+		
 		$background = $event['background'];
 		
 		if(!empty($default_bg) && count($default_bg) > 1 && !empty($default_bg[$event['calendar_id']])) {
