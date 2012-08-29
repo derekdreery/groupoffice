@@ -568,3 +568,10 @@ $l['pleaseEnterQuery']="Voer een zoekterm in a.u.b.";
 
 $l['numMinValue']="De minimale waarde voor dit veld is {0}";
 $l['numMaxValue']="De maximale waarde voor dit veld is {0}";
+
+$l['queryAnd'] = "En";
+$l['queryOr'] = "Of";
+$l['queryField'] = "Veld";
+$l['queryComparator'] = "Vergelijking";
+$l['queryValue']="Waarde";
+$l['queryStartGroup']="Start groep";
