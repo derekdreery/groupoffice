@@ -103,7 +103,10 @@ $l["muteReminderSound"]='Silenzia i suoni dei promemoria';
 $l["showSmilies"]='Mostra faccine';
 $l['error_user']='L\'utente non può essere creato';
 $l['register_email_subject']='Dettagli del tuo account {product_name}';
-$l['register_email_body']='Un account {product_name} è stato creato per te su {url}';
+$l['register_email_body']='Un account {product_name} è stato creato per te su {url}
+I dettagli di accesso sono:
+Nome utente: {username};
+Password: {password}';
 $l['max_users_reached']='Il numero massimo di utenti è stato raggiunto per questo sistema.';
 $l['dashdmy']='Giorno-Mese-Anno';
 $l['slashmdy']='Mese/Giorno/Anno';
