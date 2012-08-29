@@ -163,6 +163,7 @@ GO.tasks.TasksPanel = function(config)
 
 		config.store.on('load', function()
 		{
+			this.store.groupBy(this.store.baseParams['groupBy'],true);
 			if(config.store.reader.jsonData.feedback)
 			{
 				alert(config.store.reader.jsonData.feedback);
