@@ -206,7 +206,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				
 				if(!$isNewEvent)
 					$resourceEvent = GO_Calendar_Model_Event::model()->findResourceForEvent($model->id, $resource_calendar_id);
-				if($resourceEvent == null)
+				if(empty($resourceEvent))
 					$resourceEvent = new GO_Calendar_Model_Event();
 
 				$resourceEvent->resource_event_id=$model->id;
