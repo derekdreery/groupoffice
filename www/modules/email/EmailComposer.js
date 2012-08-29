@@ -853,7 +853,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 //						this.emailEditor.hiddenCtField.setValue(ctFieldVal);
 //						this.emailEditor.hiddenInlineImagesField.setValue(inlineImgVal);
 						this.emailEditor.hiddenAttachmentsField.setValue(attachVal);
-						this.emailEditor.attachmentsView.store.loadData(attachments);
+						//console.log(attachments);
+						this.emailEditor.attachmentsView.store.loadData({results: attachments, total: attachments.length});
 						
 					},
 					scope : this
