@@ -105,6 +105,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	protected $insertDelayed=false;
 	
+	private $_loadingFromDatabase=true;
+	
 	/**
 	 *
 	 * @var int Link type of this Model used for the link system. See also the linkTo function
@@ -303,6 +305,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @param int $primaryKey integer The primary key of the database table
 	 */
 	public function __construct($newRecord=true){			
+		
+		$this->_loadingFromDatabase=false;
 		
 		//$pk = $this->pk;
 
@@ -566,7 +570,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$criteria->addCondition($this->primaryKey(), $this->pk, '!=');
 		
 		$existing = $this->findSingle(GO_Base_Db_FindParams::newInstance()
-						->debugSql()
 						->criteria($criteria));
 		
 		return $existing;
@@ -2869,6 +2872,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function setAttribute($name,$value, $format=false)
 	{	
+		if($this->_loadingFromDatabase){
+			//skip fancy features when loading from the database.
+			$this->_attributes[$name]=$value;	
+			return true;
+		}
+		
 		if($format)
 			$value = $this->formatInput($name, $value);
 		

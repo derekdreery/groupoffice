@@ -652,6 +652,8 @@ class GO{
 
 	
 	public static function debugCalledFrom($limit=1){
+		
+		GO::debug("--");
 		$trace = debug_backtrace(); 
 		for($i=0;$i<$limit;$i++){
 			if(isset($trace[$i+1])){
@@ -659,6 +661,7 @@ class GO{
 				GO::debug("Function: ".$call["function"]." called in file ".$call["file"]." line ".$call["line"]);
 			}
 		}
+		GO::debug("--");
 	}
 	
 	private static $_language;

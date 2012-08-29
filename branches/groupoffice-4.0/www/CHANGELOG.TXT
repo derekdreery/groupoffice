@@ -1,6 +1,8 @@
-??-08-2012 4.0.91
-- Customfields: Fixed resize of customfieldsdialog optionsgrid
-
+29-08-2012 4.0.91
+- Fixed: SyncML duplicated contacts on client when there were more than 200 contacts.
+- Fixed: Inline images were corrupted when switching e-mail templates
+- Optimized: speed in rendering custom field columns
+- Fixed: Fixed resize of customfieldsdialog optionsgrid
 
 28-08-2012 4.0.90
 - Fixed: GOTA crashed after java update 1.7.06
