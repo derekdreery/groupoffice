@@ -1,3 +1,6 @@
+??-08-2012 4.0.92
+- Calendar: removed GO version from calendar print
+
 29-08-2012 4.0.91
 - Fixed: SyncML duplicated contacts on client when there were more than 200 contacts.
 - Fixed: Inline images were corrupted when switching e-mail templates
