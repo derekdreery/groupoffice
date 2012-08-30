@@ -320,7 +320,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	
 	public function list_folders($listSubscribed=true, $withStatus=false, $namespace='', $pattern='*', $isRoot=false){
 		
-		GO::debug("list_folders($listSubscribed, $withStatus, $namespace, $pattern");
+		GO::debug("list_folders($listSubscribed, $withStatus, $namespace, $pattern)");
 		//$delim = false;
 		
 		//unset($this->_subscribedFoldersCache);
