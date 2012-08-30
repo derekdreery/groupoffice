@@ -302,16 +302,18 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	private $_subscribedFoldersCache;
 	
 	private function _isSubscribed($mailboxName, $flags){
+		
 		if($mailboxName=="INBOX"){
 			return true;
-		}elseif($this->has_capability("LIST-EXTENDED")){
-			return stristr($flags, 'subscribed');
+			//returning subscribed flag with list-extended doesn't work with public folders.
+			//that's why we disabled this code and use LSUB to determine the subscribtions more reliably.
+//		}elseif($this->has_capability("LIST-EXTENDED")){
+//			return stristr($flags, 'subscribed');
 		}else
 		{
 			if(!isset($this->_subscribedFoldersCache[$this->server.$this->username])){
 				$this->_subscribedFoldersCache[$this->server.$this->username] = $this->list_folders(true, false, '', '*');				
 			}
-			GO::debug(array_keys($this->_subscribedFoldersCache[$this->server.$this->username]));
 			return isset($this->_subscribedFoldersCache[$this->server.$this->username][$mailboxName]);
 		}
 	}
@@ -341,8 +343,8 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 //			$cmd .= ' RETURN (CHILDREN SUBSCRIBED STATUS (MESSAGES UNSEEN))';
 //		}
 		
-		if($this->has_capability("LIST-EXTENDED")){
-				$cmd .= ' RETURN (CHILDREN SUBSCRIBED';
+		if($this->has_capability("LIST-EXTENDED") && !$listSubscribed){
+				$cmd .= ' RETURN (CHILDREN';
 				
 				if($withStatus){
 					$cmd .= ' STATUS (MESSAGES UNSEEN)';
