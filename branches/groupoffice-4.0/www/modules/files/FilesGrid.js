@@ -17,7 +17,7 @@ GO.files.FilesGrid = function(config) {
 Ext.extend(GO.files.FilesGrid, GO.grid.GridPanel, {
 	applyStoredState : function(state){
 		delete state.sort;
-		this.stateful=false;
+		//this.stateful=false;
 
 		GO.files.FilesGrid.superclass.applyState.call(this, state);
 		if (this.rendered){
@@ -25,10 +25,10 @@ Ext.extend(GO.files.FilesGrid, GO.grid.GridPanel, {
 			this.getColumnModel().setColumnWidth(0,this.getColumnModel().getColumnWidth(0));
 		}
 
-		this.enableState.defer(500,this);
-	},
-
-	enableState : function(){
-		this.stateful=true;
+		//this.enableState.defer(500,this);
 	}
+
+//	enableState : function(){
+//		this.stateful=true;
+//	}
 });
