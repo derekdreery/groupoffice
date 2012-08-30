@@ -258,3 +258,4 @@ $updates["201206191425"][]="UPDATE `go_acl` SET `level`=50 WHERE `level`=4;";
 $updates["201206191755"][]="ALTER TABLE `go_acl` CHANGE `level` `level` TINYINT( 4 ) NOT NULL DEFAULT '10'";
 
 $updates["201206191755"][]="ALTER TABLE `go_users` ADD `digest` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `username`";
+$updates["201208300840"][]="ALTER TABLE `go_log` CHANGE `ip` `ip` VARCHAR( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
