@@ -844,8 +844,10 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 				success: function(options, response,result)
 				{
 					var record = this.messagesGrid.store.getById(uid);
-					record.set("seen", 1);
-					record.commit();
+					if(record){
+						record.set("seen", 1);
+						record.commit();
+					}
 
 					this.updateFolderStatus(this.mailbox, result.unseen);
 
