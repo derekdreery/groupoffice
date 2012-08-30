@@ -274,3 +274,5 @@ $l["importSuccessCount"]='Importerte poster:';
 $l['male']='Mann';
 $l['female']='Kvinne';
 $l['importing']='Importerer';
+$l['contactUuid']='UUID';
+$l['nRemovedFromAddresslist']='%n kontakter er identifisert, og fjernet fra valgte adresseliste.';
