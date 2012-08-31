@@ -23,3 +23,6 @@ modules/files/SelectFilesDialog.js
 modules/files/SelectFilesGrid.js
 modules/files/FileBrowserButton.js
 modules/files/SelectFolderDialog.js
+
+modules/files/RecentFilesGrid.js
+modules/files/Portlet.js

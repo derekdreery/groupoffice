@@ -117,3 +117,5 @@ $l['notifyFileDelete']= 'Bestand %s werd verwijderd door %s';
 $l['notifyFileUpdate']= 'Bestand %s werd bijgewerkt door %s';
 $l['notificationEmailSubject']= 'Updates in map';
 $l['downloadLinkExpired']= "Sorry, de download link is niet meer geldig";
+
+$l['recentFiles']="Bestanden gewijzigd in de afgelopen 7 dagen";
