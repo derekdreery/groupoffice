@@ -1,1 +1,0 @@
-5 * * * * root php /usr/share/groupoffice/groupofficecli.php -r=core/cron -c=/etc/groupoffice/config.php > /dev/null
