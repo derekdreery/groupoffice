@@ -97,7 +97,7 @@ class GO_Base_Db_Columns{
 
 				$default = $field['Default'];
 
-				//TODO: Why no default null value here???
+				//HACK: When a database may not be null and has no default value value is empty string
 				if($field['Null']=='NO' && is_null($default) && strpos($field['Extra'],'auto_increment')===false)
 					$default='';
 
