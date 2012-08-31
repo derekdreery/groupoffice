@@ -2,6 +2,7 @@
 - Forgetful FilesGrid now remembers its state
 - Calendar: removed GO version from calendar print
 - Change go_log ip field to 45 chars to support ipv6
+- Rollback of permission check by deleting shared mailbox messages
 
 29-08-2012 4.0.91
 - Fixed: SyncML duplicated contacts on client when there were more than 200 contacts.
