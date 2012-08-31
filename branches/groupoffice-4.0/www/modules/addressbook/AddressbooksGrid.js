@@ -11,8 +11,6 @@ GO.addressbook.AddresbooksGrid = function(config){
 	config.split=true;
 	if(!config.store)
 		config.store = GO.addressbook.readableAddressbooksStore;
-	config.ddGroup='AddressBooksDD';
-	config.enableDD=true;
 
 	Ext.apply(config, {
 		allowNoSelection:true,

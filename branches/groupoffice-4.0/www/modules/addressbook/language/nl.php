@@ -221,3 +221,7 @@ $l['female']='Vrouw';
 $l['importing']='Importeren';
 
 $l['nRemovedFromAddresslist']='%n contacten zijn herkend en verwijderd uit de geselecteerde adreslijst.';
+
+$l['addToAddresslist']='Toevoegen aan adreslijst %s';
+$l['addToAddresslistPrompt']='U staat op het punt om de geselecteerde items toe te voegen aan adreslijst %s. Wilt u deze items tevens verwijderen van alle overige adreslijsten?';
+$l['addAddresslistSuccess']='De items zijn met succes toegevoegd aan de adreslijst.';
