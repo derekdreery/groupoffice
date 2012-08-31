@@ -207,5 +207,19 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		
 		return $response;
 	}
+	
+	
+	public function actionRecent(){
+		$store = GO_Base_Data_Store::newInstance(GO_Files_Model_File::model());
+
+		$store->getColumnModel()->formatColumn('path', '$model->path', array(), array('first_name', 'last_name'));
+		$store->getColumnModel()->formatColumn('weekday', '$fullDays[date("w", $model->mtime)]." ".GO_Base_Util_Date::get_timestamp($model->mtime, false);', array('fullDays'=>GO::t('full_days')),array('first_name', 'last_name'));
+		
+		$store->setStatement (GO_Files_Model_File::model()->findRecent());
+
+		$response = $store->getData();
+				
+		return $response;
+	}
 }
 
