@@ -1,3 +1,6 @@
+31-08-2012 4.0.94
+- Bug: No temp file for inline attachment
+
 31-08-2012 4.0.93
 - Added new recently modified files portlet.
 
