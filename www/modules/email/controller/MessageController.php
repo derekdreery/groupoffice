@@ -99,7 +99,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			
 			// TODO: Fix this on the clientside so the user is unable to delete emails with the GUI when he has insufficient rights
 			// Check if the current user has at least Delete permissions for deleting.
-			if($account->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION)){
+	//		if($account->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION)){
 				$uids = json_decode($params['delete_keys']);
 
 				if(!empty($account->trash) && $params["mailbox"] != $account->trash) {
@@ -117,9 +117,9 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 						$response['deleteFeedback']=GO::t('deleteError').":\n\n".$lasterror."\n\n".GO::t('disable_trash_folder','email');
 					}
 				}
-			} else {
-				$response['deleteFeedback']=GO::t('strUnauthorizedText');
-			}
+	//		} else {
+	//			$response['deleteFeedback']=GO::t('strUnauthorizedText');
+	//		}
 		}
 		
 		/* @var $imap GO_Base_Mail_Imap */
