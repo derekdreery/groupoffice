@@ -162,8 +162,8 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 
 
 				if ($part->ctype_primary == 'text' && ($part->ctype_secondary == 'plain' || $part->ctype_secondary == 'html') && (!isset($part->disposition) || $part->disposition != 'attachment') && empty($part->d_parameters['filename'])) {
-								
-					$body = GO_Base_Util_String::clean_utf8($part->body);
+					$charset = isset($part->ctype_parameters['charset']) ? $part->ctype_parameters['charset'] : 'UTF-8';
+					$body = GO_Base_Util_String::clean_utf8($part->body, $charset);
 					
 					if (stripos($part->ctype_secondary, 'plain') !== false) {
 						$content_part = nl2br($body);
