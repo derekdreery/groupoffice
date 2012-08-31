@@ -328,11 +328,16 @@ GO.email.AccountDialog = function(config) {
 			hideLabel : true
 		})]
 	});
+	
+	var levelLabels={};
+	levelLabels[GO.permissionLevels.read]=GO.email.lang.useAccount;
 
 	this.permissionsTab = new GO.grid.PermissionsPanel({levels:[
 			GO.permissionLevels.read,
 			GO.permissionLevels.manage
-	]});
+	],
+	levelLabels:levelLabels
+	});
 
 	//this.permissionsTab.disabled = false;
 
