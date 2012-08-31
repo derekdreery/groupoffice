@@ -31,6 +31,7 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 	changed : false,
 	loaded : false,
 	managePermission : false,
+	levelLabels : [],
 
 	// private
 	initComponent : function() {
