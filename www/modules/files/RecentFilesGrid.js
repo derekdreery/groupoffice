@@ -13,7 +13,7 @@ GO.files.RecentFilesGrid = Ext.extend(GO.grid.GridPanel,{
 		var reader = new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
-			fields:["id","path","weekday","mtime"],
+			fields:["id","path","weekday","mtime","extension"],
 			id: 'id'
 		});
 		
