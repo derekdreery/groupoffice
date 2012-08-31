@@ -42,20 +42,20 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 		var levelData = [];
 		
 		if(!this.levels || this.levels.indexOf(GO.permissionLevels.read)!=-1)
-			levelData.push([GO.permissionLevels.read, GO.lang.permissionRead]);
+			levelData.push([GO.permissionLevels.read, this.levelLabels[GO.permissionLevels.read] ? this.levelLabels[GO.permissionLevels.read] : GO.lang.permissionRead]);
 		
 		if(!this.levels || this.levels.indexOf(GO.permissionLevels.create)!=-1)
-			levelData.push([GO.permissionLevels.create, GO.lang.permissionCreate]);
+			levelData.push([GO.permissionLevels.create, this.levelLabels[GO.permissionLevels.create] ? this.levelLabels[GO.permissionLevels.create] : GO.lang.permissionCreate]);
 		
 		if(!this.levels || this.levels.indexOf(GO.permissionLevels.write)!=-1)
-			levelData.push([GO.permissionLevels.write, GO.lang.permissionWrite]);		
+			levelData.push([GO.permissionLevels.write, this.levelLabels[GO.permissionLevels.write] ? this.levelLabels[GO.permissionLevels.write] : GO.lang.permissionWrite]);		
 		
 		
 		if(!this.levels || this.levels.indexOf(GO.permissionLevels.writeAndDelete)!=-1)
-			levelData.push([GO.permissionLevels.writeAndDelete, GO.lang.permissionDelete]);
+			levelData.push([GO.permissionLevels.writeAndDelete, this.levelLabels[GO.permissionLevels.writeAndDelete] ? this.levelLabels[GO.permissionLevels.writeAndDelete] : GO.lang.permissionDelete]);
 		
 		if(!this.levels || this.levels.indexOf(GO.permissionLevels.manage)!=-1)
-			levelData.push([GO.permissionLevels.manage, GO.lang.permissionManage]);
+			levelData.push([GO.permissionLevels.manage, this.levelLabels[GO.permissionLevels.manage] ? this.levelLabels[GO.permissionLevels.manage] : GO.lang.permissionManage]);
 		
 
 		this.showLevel = (this.hideLevel) ? false : true;			
