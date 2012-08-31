@@ -1349,7 +1349,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$tmpFolder = GO_Base_Fs_Folder::tempFolder(uniqid(time()));
 		$atts = $message->getAttachments();
 		while($att=array_shift($atts)){
-			if(!$att->isInline())
+			if(empty($att->content_id) || $att->disposition=='attachment')
 				$att->saveToFile($tmpFolder);
 		}	
 		

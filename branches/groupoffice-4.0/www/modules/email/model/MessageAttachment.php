@@ -120,8 +120,12 @@ class GO_Email_Model_MessageAttachment extends GO_Base_Model{
 	 * @return boolean 
 	 */
 	public function isInline(){
-		return !empty($this->content_id) && $this->disposition!='attachment';
+		
+		//these don't work because you won't get temporary files when sending a message.
+		//return !empty($this->content_id) && $this->disposition!='attachment';
 		//return $this->disposition=='inline';
+		
+		return !empty($this->content_id) || $this->disposition=='inline';
 	}
 	
 	/**
