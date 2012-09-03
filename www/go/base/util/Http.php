@@ -113,9 +113,8 @@ class GO_Base_Util_Http {
 			}
 		}
 		
-		if($file->exists()){
-			
-			if($file->exists()!='zip') //Don't set content lenght for zip files because gzip of apache will corrupt the download. http://www.heath-whyte.info/david/computers/corrupted-zip-file-downloads-with-php
+		if($file->exists()){			
+			if($file->extension()!='zip') //Don't set content lenght for zip files because gzip of apache will corrupt the download. http://www.heath-whyte.info/david/computers/corrupted-zip-file-downloads-with-php
 				header('Content-Length: ' . $file->size());
 			
 			header("Last-Modified: " . gmdate("D, d M Y H:i:s", $file->mtime())." GMT");
