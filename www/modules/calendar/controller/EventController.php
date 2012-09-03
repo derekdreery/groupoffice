@@ -292,11 +292,11 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					}
 				}
 
-				$new = $participant->isNew;
+		//	$new = $participant->isNew;
 
 				$participant->save();
 
-				if ($new)
+//				if ($new)
 					$newParticipantIds[] = $participant->id;
 
 
