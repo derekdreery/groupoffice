@@ -302,23 +302,25 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	private $_subscribedFoldersCache;
 	
 	private function _isSubscribed($mailboxName, $flags){
+		
 		if($mailboxName=="INBOX"){
 			return true;
-		}elseif($this->has_capability("LIST-EXTENDED")){
-			return stristr($flags, 'subscribed');
+			//returning subscribed flag with list-extended doesn't work with public folders.
+			//that's why we disabled this code and use LSUB to determine the subscribtions more reliably.
+//		}elseif($this->has_capability("LIST-EXTENDED")){
+//			return stristr($flags, 'subscribed');
 		}else
 		{
 			if(!isset($this->_subscribedFoldersCache[$this->server.$this->username])){
 				$this->_subscribedFoldersCache[$this->server.$this->username] = $this->list_folders(true, false, '', '*');				
 			}
-			GO::debug(array_keys($this->_subscribedFoldersCache[$this->server.$this->username]));
 			return isset($this->_subscribedFoldersCache[$this->server.$this->username][$mailboxName]);
 		}
 	}
 	
 	public function list_folders($listSubscribed=true, $withStatus=false, $namespace='', $pattern='*', $isRoot=false){
 		
-		GO::debug("list_folders($listSubscribed, $withStatus, $namespace, $pattern");
+		GO::debug("list_folders($listSubscribed, $withStatus, $namespace, $pattern)");
 		//$delim = false;
 		
 		//unset($this->_subscribedFoldersCache);
@@ -341,8 +343,8 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 //			$cmd .= ' RETURN (CHILDREN SUBSCRIBED STATUS (MESSAGES UNSEEN))';
 //		}
 		
-		if($this->has_capability("LIST-EXTENDED")){
-				$cmd .= ' RETURN (CHILDREN SUBSCRIBED';
+		if($this->has_capability("LIST-EXTENDED") && !$listSubscribed){
+				$cmd .= ' RETURN (CHILDREN';
 				
 				if($withStatus){
 					$cmd .= ' STATUS (MESSAGES UNSEEN)';
@@ -1966,7 +1968,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			$res = $this->last_line;
 			$this->last_line = fgets($this->handle,1024);
 
-			if ($this->check_response(array($this->last_line))) {
+			if ($this->check_response(array($this->last_line), false, false)) {
 				$this->last_line = false;
 
 				if(substr(rtrim($res),-1, 1)==')')

@@ -36,7 +36,7 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 		if(!empty($params['set_active_script_name']))
 			$this->_sieve->activate($params['set_active_script_name']);				
 
-		$response['active']=$this->_sieve->get_active();
+		$response['active']=$this->_sieve->get_active($params['account_id']);
 		$all_scripts = $this->_sieve->get_scripts();
 
 		$response['results'] = array();
@@ -64,7 +64,7 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 		if(!empty($params['script_name']))
 			$scriptName = $params['script_name'];
 		else
-			$scriptName = $this->_sieve->get_active();
+			$scriptName = $this->_sieve->get_active($params['account_id']);
 
 		$response['results']=array();
 
@@ -200,6 +200,18 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 		return $response;
 	}
 	
+	protected function actionAccountAliases($params) {
+		$response = array();
+		$aliasesStmt = GO_Email_Model_Alias::model()->findByAttribute('account_id',$params['account_id']);
+		$aliases = array();
+		while ($aliasModel = $aliasesStmt->fetch()) {
+			$aliases[] = $aliasModel->email;
+		}
+		$response['data']['aliases'] = implode(',',$aliases);
+		$response['success'] = true;
+		return $response;
+	}
+	
 	protected function actionRule($params) {
 		
 		$this->_sieveConnect($params['account_id']);
@@ -220,7 +232,7 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 
 		$response['data']['active']= !$current_rule['disabled'];
 		$response['data']['rule_name']=$current_rule['name'];
-
+	
 		foreach($current_rule['tests'] as $test)
 		{
 				//$test['test'];
@@ -297,7 +309,7 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 		$script = $this->_sieve->get_script($params['script_name']);
 		$sort_order = json_decode($params['sort_order'], true);
 
-		$this->_sieve->load($this->_sieve->get_active());
+		$this->_sieve->load($this->_sieve->get_active($params['account_id']));
 
 		$count=count($sort_order);
 

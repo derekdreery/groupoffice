@@ -535,4 +535,37 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	public function notifyUsers($folder_id, $type, $arg1, $arg2 = '') {
 		GO_Files_Model_FolderNotification::model()->storeNotification($folder_id, $type, $arg1, $arg2);
 	}
+	
+	
+	
+	public function findRecent(){
+		$storeParams = GO_Base_Db_FindParams::newInstance()->ignoreAcl();	
+
+		
+		$joinSearchCacheCriteria = GO_Base_Db_FindCriteria::newInstance()
+					->addRawCondition('`t`.`id`', '`sc`.`model_id`')
+					->addCondition('model_type_id', $this->modelTypeId(),'=','sc');
+		
+		$storeParams->join(GO_Base_Model_SearchCacheRecord::model()->tableName(), $joinSearchCacheCriteria, 'sc', 'INNER');
+		
+		
+		$aclJoinCriteria = GO_Base_Db_FindCriteria::newInstance()
+							->addRawCondition('a.acl_id', 'sc.acl_id','=', false);
+			
+		$aclWhereCriteria = GO_Base_Db_FindCriteria::newInstance()
+						->addCondition('user_id', GO::user()->id,'=','a', false)
+						->addInCondition("group_id", GO_Base_Model_User::getGroupIds(GO::user()->id),"a", false);
+
+		$storeParams->join(GO_Base_Model_AclUsersGroups::model()->tableName(), $aclJoinCriteria, 'a', 'INNER');
+
+		$storeParams->criteria(GO_Base_Db_FindCriteria::newInstance()
+								->addModel(GO_Files_Model_Folder::model())									
+								->mergeWith($aclWhereCriteria));
+	
+		$storeParams->group(array('t.id'))->order('mtime','DESC');
+		
+		$storeParams->getCriteria()->addCondition('mtime', GO_Base_Util_Date::date_add(GO_Base_Util_Date::clear_time(time()),-7),'>');
+				
+		return $this->find($storeParams);
+	}
 }

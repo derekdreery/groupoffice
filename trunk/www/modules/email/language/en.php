@@ -246,3 +246,5 @@ $l['imapLoginFailed']='Authentication failed for user "%username".';
 $l['tryNewCredentials']='Please enter try with a different IMAP password.';
 
 $l['moveTo']='Move to';
+
+$l['useAccount']='Use account';

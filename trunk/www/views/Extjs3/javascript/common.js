@@ -13,6 +13,11 @@
  
 Ext.namespace('GO.util');
 
+
+GO.util.isIpad=function(){
+	return navigator.userAgent.match(/iPad/i) != null;
+}
+
 GO.log = function(v){
 	if(console)
 		console.log(v);

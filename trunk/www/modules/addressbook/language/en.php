@@ -365,3 +365,7 @@ $l['female']='Female';
 $l['importing']='Importing';
 $l['contactUuid']='UUID';
 $l['nRemovedFromAddresslist']='%n contacts have been identified and removed from the selected address list.';
+
+$l['addToAddresslist']='Add to address list %s';
+$l['addToAddresslistPrompt']='You are about to add the selected items to the address list %s. Do you want these items to exist only in %s?';
+$l['addAddresslistSuccess']='The items have been successfully added to the address list.';

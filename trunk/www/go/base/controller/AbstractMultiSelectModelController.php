@@ -169,7 +169,7 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 		$linkModel = GO::getModel($this->linkModelName());
 		
 		$store = GO_Base_Data_Store::newInstance($model);
-		
+		$this->formatColumns($store->getColumnModel());
 		try {
 			if($this->beforeDelete($params)){
 				$store->processDeleteActions(
@@ -205,7 +205,7 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 		
 		$store->setStatement($selectedModels);
 		
-		$this->formatColumns($store->getColumnModel());
+		
 
 		$response = array_merge($response,$store->getData());
 		
