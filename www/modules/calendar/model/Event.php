@@ -435,9 +435,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		if(!$event){
 			$event = new GO_Calendar_Model_Event();
-			GO::debug("NEW EXCEPTION CREATED IN THE FINDEXCEPTION FUNCTION OF THE EVENT MODEL");			
+		//	GO::debug("NEW EXCEPTION CREATED IN THE FINDEXCEPTION FUNCTION OF THE EVENT MODEL");			
 		} else {
-			GO::debug("EXCEPTION FOUND IN THE FINDEXCEPTION FUNCTION OF THE EVENT MODEL. ID: ".$event->id);			
+		//	GO::debug("EXCEPTION FOUND IN THE FINDEXCEPTION FUNCTION OF THE EVENT MODEL. ID: ".$event->id);			
 		}
 	
 		return $event;		
