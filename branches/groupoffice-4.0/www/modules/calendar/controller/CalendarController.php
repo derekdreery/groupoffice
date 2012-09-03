@@ -21,6 +21,14 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 
 	protected $model = 'GO_Calendar_Model_Calendar';
 	
+	protected function allowGuests() {
+		return array('exportics');
+	}
+	
+	protected function ignoreAclPermissions() {
+		return array('exportics');
+	}
+
 	protected function getStoreParams($params) {
 		
 		$findParams =GO_Base_Db_FindParams::newInstance()
@@ -148,6 +156,9 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 	public function actionExportIcs($params){
 		
 		$calendar = GO_Calendar_Model_Calendar::model()->findByPk($params["calendar_id"]);
+		
+		if(!$calendar->public)
+			throw new GO_Base_Exception_AccessDenied();
 		
 		$c = new GO_Base_VObject_VCalendar();				
 		$c->add(new GO_Base_VObject_VTimezone());
