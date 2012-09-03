@@ -1,3 +1,6 @@
+?? 4.0.96
+-Switch to plain text mode when composing e-mail on an ipad
+
 03-09-2012 4.0.95
 - Missing content-lenght header caused GOTA problem.
 
