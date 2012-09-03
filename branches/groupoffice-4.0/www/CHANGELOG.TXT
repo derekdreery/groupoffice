@@ -1,3 +1,6 @@
+03-09-2012 4.0.95
+- Missing content-lenght header caused GOTA problem.
+
 31-08-2012 4.0.94
 - Bug: No temp file for inline attachment
 
