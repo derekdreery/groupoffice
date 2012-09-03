@@ -57,7 +57,8 @@ GO.email.EmailComposer = function(config) {
 		scope : this
 	},'-',this.htmlCheck = new Ext.menu.CheckItem({
 		text:GO.email.lang.htmlMarkup,
-		checked:GO.email.useHtmlMarkup,
+		disabled:GO.util.isIpad(),
+		checked:GO.email.useHtmlMarkup && !GO.util.isIpad(),
 		listeners : {
 			checkchange: function(check, checked) {
 								 	
@@ -690,9 +691,9 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			{
 				//remove attachments if not switching edit mode
 				this.emailEditor.setAttachments();				
-				this.emailEditor.setContentTypeHtml(GO.email.useHtmlMarkup);
+				this.emailEditor.setContentTypeHtml(GO.email.useHtmlMarkup && !GO.util.isIpad());
 				
-				this.htmlCheck.setChecked(GO.email.useHtmlMarkup, true);
+				this.htmlCheck.setChecked(GO.email.useHtmlMarkup && !GO.util.isIpad(), true);
 				if(this.encryptCheck)
 					this.encryptCheck.setChecked(false, true);
 			}			
