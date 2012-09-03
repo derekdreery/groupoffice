@@ -155,3 +155,6 @@ $updates["201208010855"][]="ALTER TABLE `cal_events` CHANGE `name` `name` VARCHA
 
 //database could have been corrupted by an earlier bug that was fixed. this query will take care of the issue.
 $updates['201208101000'][]="UPDATE `cal_events` SET `rrule` = replace(rrule, '=MONTHLY_DATE', '=MONTHLY')"; 
+
+//Fix to sync recurring events again, this is needed to fix the events on the phone
+$updates['201209031500'][]="UPDATE `cal_events` SET `mtime`= UNIX_TIMESTAMP() WHERE `rrule` != '';"; 
