@@ -63,7 +63,7 @@ class sieve {
 
 	public function __construct() {
 		$this->sieve = new Net_Sieve();
-		$this->sieve->setDebug(true, array($this, "debug_handler"));
+		//$this->sieve->setDebug(true, array($this, "debug_handler"));
 	}
 
 	private function rewrite_host($host) {
