@@ -867,6 +867,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function getDefaultFindSelectFields($single=false, $tableAlias='t'){
 		
+		//when upgrading we must refresh columns
+		if(GO_Base_Db_Columns::$forceLoad)
+			$this->columns = GO_Base_Db_Columns::getColumns ($this);
+		
 		if($single)
 			return $tableAlias.'.*';
 		
