@@ -90,7 +90,7 @@ GO.sieve.SieveDialog = function(config) {
 	this.actionGrid = new GO.sieve.ActionGrid();
 	this.actionGrid.on('rowdblclick', function(grid, index, e){
 		var record = this.actionGrid.store.getAt(index);
-		this.actionGrid.showActionCreatorDialog(index);
+		this.actionGrid.showActionCreatorDialog(index,this._accountId);
 	},this);
 	
 	this.currentScriptName = '';
@@ -143,6 +143,8 @@ GO.sieve.SieveDialog = function(config) {
 }
 Ext.extend(GO.sieve.SieveDialog, GO.Window, {
 
+	_accountId : 0,
+
 	focus : function(){
 		this.nameField.focus();
 	},
@@ -152,7 +154,7 @@ Ext.extend(GO.sieve.SieveDialog, GO.Window, {
 			GO.sieve.SieveDialog.superclass.show.call(this);
 			
 			this.formPanel.baseParams.script_index = script_index;
-			this.formPanel.baseParams.account_id = account_id;
+			this._accountId = this.formPanel.baseParams.account_id = account_id;
 			this.formPanel.baseParams.script_name = script_name;
 
 			if(script_index > -1)
@@ -164,7 +166,7 @@ Ext.extend(GO.sieve.SieveDialog, GO.Window, {
 					{
 						this.rgMethod.setValue(action.result.data.join);
 						this.actionGrid.store.loadData(action.result);
-						this.criteriumGrid.store.loadData(action.result);						
+						this.criteriumGrid.store.loadData(action.result);
 					},
 					failure:function(form, action)
 					{
@@ -172,7 +174,7 @@ Ext.extend(GO.sieve.SieveDialog, GO.Window, {
 					},
 					scope: this
 				});		
-			}
+			} 
 			else
 			{
 				this.title = GO.sieve.lang.newsieverule;
@@ -182,6 +184,18 @@ Ext.extend(GO.sieve.SieveDialog, GO.Window, {
 				});
 				this.resetGrids();
 				this.rgMethod.setValue('anyof');
+				
+				GO.request({
+					url: 'sieve/sieve/accountAliases',
+					params: {
+						'account_id' : account_id
+					},
+					success:function(options, response, result) {
+						this.actionGrid.accountAliasesString = result.data.aliases;
+					},
+					scope: this
+				});
+				
 			}
 	},
 	

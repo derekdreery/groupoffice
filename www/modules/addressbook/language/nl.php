@@ -255,5 +255,8 @@ $l["contactSalutation"] = "Aanhef";
 $l["contactEmail_allowed"] = "Email toegestaan";
 $l["contactFiles_folder_id"] = "Map";
 $l["contactGo_user_id"] = "Gebruiker";
-
 $l['nRemovedFromAddresslist']='%n contacten zijn herkend en verwijderd uit de geselecteerde adreslijst.';
+
+$l['addToAddresslist']='Toevoegen aan adreslijst %s';
+$l['addToAddresslistPrompt']='U staat op het punt om de geselecteerde items toe te voegen aan adreslijst %s. Wilt u dat deze items alleen voorkomen in %s?';
+$l['addAddresslistSuccess']='De items zijn met succes toegevoegd aan de adreslijst.';

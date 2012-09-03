@@ -35,7 +35,7 @@ class PDF extends TCPDF {
 		//$this->SetTitle($order['order_id']);
 		$this->SetSubject('Calendar print');
 		$this->SetAuthor($_SESSION['GO_SESSION']['name']);
-		$this->SetCreator($GLOBALS['GO_CONFIG']->product_name . ' ' . $GLOBALS['GO_CONFIG']->version);
+		//$this->SetCreator($GLOBALS['GO_CONFIG']->product_name . ' ' . $GLOBALS['GO_CONFIG']->version);
 		$this->SetKeywords('Calendar print');
 	}
 
@@ -46,7 +46,8 @@ class PDF extends TCPDF {
 		$this->SetFont($this->font, '', $this->font_size);
 		$this->SetY(-20);
 		$pW = $this->getPageWidth();
-		$this->Cell($pW / 2, 10, $GLOBALS['GO_CONFIG']->product_name . ' ' . $GLOBALS['GO_CONFIG']->version, 0, 0, 'L');
+		//$this->Cell($pW / 2, 10, $GLOBALS['GO_CONFIG']->product_name . ' ' . $GLOBALS['GO_CONFIG']->version, 0, 0, 'L');
+		$this->Cell($pW / 2, 10, '', 0, 0, 'L');
 		$this->Cell(($pW / 2) - $this->rMargin, 10, sprintf($lang['calendar']['printPage'], $this->getAliasNumPage(), $this->getAliasNbPages()), 0, 0, 'R');
 	}
 

@@ -117,3 +117,4 @@ $l['notifyFileUpdate'] = 'File %s was updated by %s';
 $l['notificationEmailSubject'] = 'Updates in folder';
 
 $l['downloadLinkExpired'] = "Sorry, the download link for this file has expired";
+$l['recentFiles']="Files modified in the past 7 days";

@@ -231,3 +231,5 @@ $l['imapLoginFailed']='Authententicatie mislukt voor gebruiker "%username".';
 $l['tryNewCredentials']='Probeert u het a.u.b. met een andere IMAP wachtwoord.';
 
 $l['moveTo']='Verplaatsen naar';
+
+$l['useAccount']='Account gebruiken';

@@ -252,6 +252,15 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			$this->acl->user_id=$this->id;
 			$this->acl->save();
 			
+			if(!empty(GO::config()->register_user_groups)){
+				$groups = explode(',',GO::config()->register_visible_user_groups);
+				foreach($groups as $groupName){
+					$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', trim($groupName));
+					if($group)
+						$group->addUser($this->id);
+				}
+			}
+			
 			$this->_setVisibility();
 		}		
 		
@@ -270,7 +279,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		if(!empty(GO::config()->register_visible_user_groups)){
 			$groups = explode(',',GO::config()->register_visible_user_groups);
 			foreach($groups as $groupName){
-				$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', $groupName);
+				$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', trim($groupName));
 				if($group)
 					$this->acl->addGroup($group->id, GO_Base_Model_Acl::MANAGE_PERMISSION);
 			}

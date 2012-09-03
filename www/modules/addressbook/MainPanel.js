@@ -232,14 +232,7 @@ GO.addressbook.MainPanel = function(config)
 //	if(GO.addressbook)
 //	{
 
-		this.mailingsFilterPanel= new GO.grid.MultiSelectGrid({
-			region:'center',
-			id:'ab-mailingsfilter-panel',
-			title:GO.addressbook.lang.filterMailings,
-			loadMask:true,
-			store:GO.addressbook.readableAddresslistsStore,
-			allowNoSelection:true
-		});
+		this.mailingsFilterPanel= new GO.addressbook.AddresslistsMultiSelectGrid();
 
 		this.mailingsFilterPanel.on('change', function(grid, addresslist_filter){
 			var panel = this.tabPanel.getActiveTab();

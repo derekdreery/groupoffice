@@ -86,11 +86,7 @@ class GO_Base_Util_Http {
 	 * @param array $extraHeaders  Key value array for extra headers
 	 */
 	public static function outputDownloadHeaders(GO_Base_Fs_File $file, $inline=true, $cache=false, $extraHeaders=array()) {
-		if($file->exists()){
-			header('Content-Length: ' . $file->size());
-			header("Last-Modified: " . gmdate("D, d M Y H:i:s", $file->mtime())." GMT");
-			header("ETag: " . $file->md5Hash());
-		}
+		
 		header('Content-Transfer-Encoding: binary');		
 		
 		$disposition = $inline ? 'inline' : 'attachment';
@@ -115,6 +111,14 @@ class GO_Base_Util_Http {
 			if (!$cache) {
 				header('Pragma: no-cache');
 			}
+		}
+		
+		if($file->exists()){			
+			if($file->extension()!='zip') //Don't set content lenght for zip files because gzip of apache will corrupt the download. http://www.heath-whyte.info/david/computers/corrupted-zip-file-downloads-with-php
+				header('Content-Length: ' . $file->size());
+			
+			header("Last-Modified: " . gmdate("D, d M Y H:i:s", $file->mtime())." GMT");
+			header("ETag: " . $file->md5Hash());
 		}
 		
 		foreach($extraHeaders as $header=>$value){
