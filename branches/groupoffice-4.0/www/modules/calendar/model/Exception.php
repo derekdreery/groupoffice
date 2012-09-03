@@ -60,6 +60,17 @@ class GO_Calendar_Model_Exception extends GO_Base_Db_ActiveRecord{
 	 * See the parent class for a more detailed description of the relations.
 	 */
 	 public function relations() {
-		 return array();
+		 return array(
+				 'event' => array('type' => self::BELONGS_TO, 'model' => 'GO_Calendar_Model_Event', 'field' => 'exception_event_id'),
+				 'mainevent' => array('type' => self::BELONGS_TO, 'model' => 'GO_Calendar_Model_Event', 'field' => 'event_id')
+		 );
+	 }
+	 
+	 
+	 protected function afterSave($wasNew) {
+		 
+		$this->mainevent->touch();
+		
+		 return parent::afterSave($wasNew);
 	 }
 }

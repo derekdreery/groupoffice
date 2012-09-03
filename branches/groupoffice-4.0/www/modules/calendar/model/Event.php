@@ -282,6 +282,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			}
 		}
 		
+		if($exceptionEvent = $this->_exceptionEvent){
+			$exceptionEvent->touch();
+		}
+		
 		//move exceptions if this event was moved in time
 		if(!$wasNew && !empty($this->rrule) && $this->isModified('start_time')){
 			$diffSeconds = $this->getOldAttributeValue('start_time')-$this->start_time;
@@ -416,6 +420,28 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 
 	private $_calculatedEvents;
+	
+	public function findException($startTime){
+		$startOfDay = GO_Base_Util_Date::clear_time($startTime);
+		$endOfDay = GO_Base_Util_Date::date_add($startOfDay, 1);
+		
+		$findParams = GO_Base_Db_FindParams::newInstance();
+		
+		$findParams->getCriteria()
+						->addCondition('start_time', $startOfDay,'>=')
+						->addCondition('end_time', $endOfDay,'<=');
+						
+		$event = GO_Calendar_Model_Event::model()->findSingle($findParams);
+		
+		if(!$event){
+			$event = new GO_Calendar_Model_Event();
+			GO::debug("NEW EXCEPTION CREATED IN THE FINDEXCEPTION FUNCTION OF THE EVENT MODEL");			
+		} else {
+			GO::debug("EXCEPTION FOUND IN THE FINDEXCEPTION FUNCTION OF THE EVENT MODEL. ID: ".$event->id);			
+		}
+	
+		return $event;		
+	}
 
 	/**
 	 * Find events for a given time period.
