@@ -36,7 +36,7 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 		if(!empty($params['set_active_script_name']))
 			$this->_sieve->activate($params['set_active_script_name']);				
 
-		$response['active']=$this->_sieve->get_active();
+		$response['active']=$this->_sieve->get_active($params['account_id']);
 		$all_scripts = $this->_sieve->get_scripts();
 
 		$response['results'] = array();
@@ -64,7 +64,7 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 		if(!empty($params['script_name']))
 			$scriptName = $params['script_name'];
 		else
-			$scriptName = $this->_sieve->get_active();
+			$scriptName = $this->_sieve->get_active($params['account_id']);
 
 		$response['results']=array();
 
@@ -309,7 +309,7 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 		$script = $this->_sieve->get_script($params['script_name']);
 		$sort_order = json_decode($params['sort_order'], true);
 
-		$this->_sieve->load($this->_sieve->get_active());
+		$this->_sieve->load($this->_sieve->get_active($params['account_id']));
 
 		$count=count($sort_order);
 

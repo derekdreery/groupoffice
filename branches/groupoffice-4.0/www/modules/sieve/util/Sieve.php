@@ -150,6 +150,7 @@ class GO_Sieve_Util_Sieve {
 		
 		$res = $this->sieve->installScript($name, $content);
 		if ($this->_PEAR->isError($res)) {
+			var_dump($res);
 			//var_dump($res);
 			return $this->_set_error(SIEVE_ERROR_INSTALL);
 		}
@@ -266,26 +267,26 @@ class GO_Sieve_Util_Sieve {
 	/**
 	 * Returns active script name
 	 */
-	public function get_active() {
+	public function get_active($accountId) {
+		$aliasEmails = array();
+		$aliasesStmt = GO_Email_Model_Alias::model()->findByAttribute('account_id',$accountId);
+		while ($aliasModel = $aliasesStmt->fetch())
+			$aliasEmails[] = $aliasModel->email;
+		
 		if (!$this->sieve)
 			return $this->_set_error(SIEVE_ERROR_INTERNAL);
 
 		$active = $this->sieve->getActive();
 		if (!$active) {
 
-			$content = "require [\"vacation\"];
-require [\"fileinto\"];
+			$content = "require [\"vacation\",\"fileinto\"];
 # rule:[".GO::t('standardvacation','sieve')."]
 if false # anyof (true)
-{".
-"vacation :days 3 text:\r\n".
-GO::t('standardvacationmessage','sieve')."\r\n".
-"\r\n".
-".\r\n".	
-";\r\n".
-"}\r\n";
-
-			$content .= "# rule:[Spam]
+{
+\tvacation :days 3 :addresses [\"".implode('","',$aliasEmails)."\"] \"".GO::t('standardvacationmessage','sieve')."\";
+\tstop;
+}
+# rule:[Spam]
 if anyof (header :contains \"X-Spam-Flag\" \"YES\")
 {
 	fileinto \"Spam\";
