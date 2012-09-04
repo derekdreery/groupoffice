@@ -116,3 +116,5 @@ $l['vacationEnd']='Last day of this message';
 
 $l['activateFilter']='Activate this filter';
 $l['active']='Active';
+
+$l['setRead']='Mark message as read';
