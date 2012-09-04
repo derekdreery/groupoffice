@@ -24,7 +24,7 @@ class GO_Base_Ldap_Result{
 	 * @return GO_Base_Ldap_Record 
 	 */
 	public function fetch(){
-		if(!isset($this->numEntry)){
+		if(!isset($this->_numEntry)){
 			$this->_numEntry=0;
 			$this->_entryId = ldap_first_entry( $this->_ldapConn->getLink(), $this->_searchId);
 		}else

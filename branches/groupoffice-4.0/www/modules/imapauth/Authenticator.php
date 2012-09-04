@@ -143,6 +143,8 @@ class GO_Imapauth_Authenticator {
 	}
 
 	public function getDomainConfig($domain) {
+		
+		GO::debug("IMAPAUTH: Finding config for domain: ".$domain);
 		if (!empty($domain)) {
 			$conf = str_replace('config.php', 'imapauth.config.php', GO::config()->get_config_file());
 
