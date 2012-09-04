@@ -4,7 +4,7 @@ header('Content-Type: text/html; charset=UTF-8');
 require('../../GO.php');
 
 
-$qs=strtolower(str_replace('mailto:','', $_SERVER['QUERY_STRING']));
+$qs=strtolower(str_replace('mailto:','', urldecode($_SERVER['QUERY_STRING'])));
 $qs=str_replace('?subject','&subject', $qs);
 
 parse_str($qs, $vars);
