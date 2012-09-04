@@ -6,6 +6,8 @@
 - Strict checking in setAttribute. Renaming 1 to 1.0 didn't work.
 - Correct log dir permissions after debian package upgrade
 - When a user uploaded the same attachment twice, a number was appended.
+- urldecode query string in mailto handler
+- Show correct owner in event dialog
 
 03-09-2012 4.0.95
 - Missing content-lenght header caused GOTA problem.
