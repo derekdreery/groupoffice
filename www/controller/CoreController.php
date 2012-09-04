@@ -612,17 +612,17 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		$fileName = GO_Base_Fs_File::stripInvalidChars($fileName);
 		
 // Make sure the fileName is unique but only if chunking is disabled
-		if ($chunks < 2 && file_exists($targetDir . DIRECTORY_SEPARATOR . $fileName)) {
-			$ext = strrpos($fileName, '.');
-			$fileName_a = substr($fileName, 0, $ext);
-			$fileName_b = substr($fileName, $ext);
-
-			$count = 1;
-			while (file_exists($targetDir . DIRECTORY_SEPARATOR . $fileName_a . '_' . $count . $fileName_b))
-				$count++;
-
-			$fileName = $fileName_a . '_' . $count . $fileName_b;
-		}
+//		if ($chunks < 2 && file_exists($targetDir . DIRECTORY_SEPARATOR . $fileName)) {
+//			$ext = strrpos($fileName, '.');
+//			$fileName_a = substr($fileName, 0, $ext);
+//			$fileName_b = substr($fileName, $ext);
+//
+//			$count = 1;
+//			while (file_exists($targetDir . DIRECTORY_SEPARATOR . $fileName_a . '_' . $count . $fileName_b))
+//				$count++;
+//
+//			$fileName = $fileName_a . '_' . $count . $fileName_b;
+//		}
 
 
 // Look for the content type header
