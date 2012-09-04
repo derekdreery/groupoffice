@@ -1,3 +1,7 @@
+BCC en cc in mailto: 
+https://mail.itsam.se/index.php?mail_to=mailto:?bcc=test1@test.se,test2@test.se
+
+
 Auto check andere mappen voor nieuwe mail
 
 2e mobile veld bij contacts
