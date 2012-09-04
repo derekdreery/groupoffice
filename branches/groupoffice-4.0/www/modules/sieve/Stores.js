@@ -41,6 +41,7 @@ GO.sieve.cmbActionStore = new Ext.data.ArrayStore({
 	idIndex: 1,
 	fields: ['field', 'value'],
 	data:[
+	[GO.sieve.lang.setRead, 'set_read'],
   [GO.sieve.lang.fileintoLabel, 'fileinto'],
   [GO.sieve.lang.copytoLabel, 'copyto'],
 	[GO.sieve.lang.redirect_copy_to, 'redirect_copy'],

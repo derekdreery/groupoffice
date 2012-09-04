@@ -248,6 +248,9 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 		{
 				switch($action['type'])
 				{
+					case 'set_read':
+						$action['text'] = GO::t('setRead','sieve');
+						break;
 					case 'fileinto':
 						$action['text'] = GO::t('fileinto','sieve').' "'.$action['target'].'"';
 						break;

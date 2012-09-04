@@ -114,3 +114,5 @@ $l['vacationEnd']='Laatste dag van dit bericht';
 
 $l['activateFilter']='Activeer deze filter';
 $l['active']='Actief';
+
+$l['setRead']='Markeer bericht als gelezen';
