@@ -2,6 +2,9 @@
 - Switch to plain text mode when composing e-mail on an ipad
 - Fixed syncing of recurring events and its exceptions
 - Debughandler for sieve removed in constructor, this interferes with the debug handler of z-push
+- Fixed upgrade 3.7 to 4.x crash when column layout changed in some cases.
+- If you don't click the permissions tab when creating a user, the defaults are not applied for the memberships.
+- Public ICS calendar export wasn't visisble without logging in.
 - IBAN was not shown on company info if bank no. was not entered
 - Strict checking in setAttribute. Renaming 1 to 1.0 didn't work.
 - Correct log dir permissions after debian package upgrade
