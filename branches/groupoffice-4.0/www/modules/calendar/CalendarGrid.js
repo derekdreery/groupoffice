@@ -816,7 +816,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 
 			var gridPrecision = 60/this.rowsPerHour;
 			var startMin = eventData.startDate.getMinutes();
-			startRow += Math.ceil(startMin/gridPrecision);
+			startRow += Math.floor(startMin/gridPrecision);
 
 			var endMin = eventData.endDate.getMinutes();
 			endRow += Math.ceil(endMin/gridPrecision);
