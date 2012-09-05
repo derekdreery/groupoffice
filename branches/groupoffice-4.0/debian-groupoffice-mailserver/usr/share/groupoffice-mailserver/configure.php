@@ -177,6 +177,10 @@ if(version_compare(2, $version)>0){
 	if(file_contains($filename, 'Group-Office'))$filename .= '.'.date('Ymd');
 	create_file($filename,'tpl/etc/dovecot/conf.d/20-imap.conf', $replacements);
 	
+	$filename = '/etc/dovecot/conf.d/90-quota.conf';
+	if(file_contains($filename, 'Group-Office'))$filename .= '.'.date('Ymd');
+	create_file($filename,'tpl/etc/dovecot/conf.d/90-quota.conf', $replacements);
+	
 	if(!file_contains('/etc/groupoffice/config.php', 'sieve_port'))
 		set_value('/etc/groupoffice/config.php', '$config[\'sieve_port\']="4190";');
 }
