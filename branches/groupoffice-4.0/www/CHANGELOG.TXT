@@ -13,6 +13,7 @@
 - Show correct owner in event dialog
 - LDAP user sync script added.
 - Added workflow support to the billing orders
+- Removed Apply button from ticket dialog
 
 03-09-2012 4.0.95
 - Missing content-lenght header caused GOTA problem.
