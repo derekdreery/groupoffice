@@ -47,7 +47,7 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 		}
 
 		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_User::model());
-		$store->getColumnModel()->formatColumn('name', '$model->name');
+		$store->getColumnModel()->formatColumn('name', '$model->name', array(), array('first_name', 'last_name'));
 
 		$storeParams = $store->getDefaultParams($params)->joinCustomFields(false);
 
