@@ -12,6 +12,7 @@
 - urldecode query string in mailto handler
 - Show correct owner in event dialog
 - LDAP user sync script added.
+- Added workflow support to the billing orders
 
 03-09-2012 4.0.95
 - Missing content-lenght header caused GOTA problem.
