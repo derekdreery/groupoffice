@@ -233,3 +233,6 @@ $l['tryNewCredentials']='Probeert u het a.u.b. met een andere IMAP wachtwoord.';
 $l['moveTo']='Verplaatsen naar';
 
 $l['useAccount']='Account gebruiken';
+
+$l['mailbox']='Mailbox';
+$l['checkUnseen']='Controleer deze map automatisch op nieuwe berichten';

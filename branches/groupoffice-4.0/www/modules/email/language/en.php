@@ -247,6 +247,10 @@ $l['tryNewCredentials']='Please enter try with a different IMAP password.';
 
 $l['moveTo']='Move to';
 
+$l['useAccount']='Use account';
+
+$l['mailbox']='Mail box';
+$l['checkUnseen']='Automatically check this folder for new messages';
 $l['noEmailFolders'] = 'No folders have been added.';
 $l['moveTo']='Move to';
 

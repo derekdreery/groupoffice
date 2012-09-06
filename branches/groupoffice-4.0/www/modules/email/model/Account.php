@@ -38,6 +38,7 @@
  * @property int $acl_id
  * @property int $user_id
  * @property int $id
+ * @property string $check_mailboxes
  * 
  * @property boolean $hasNewMessages
  * @property int $sieve_port

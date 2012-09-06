@@ -68,14 +68,16 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		GO::session()->closeWriting();
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()						
-						->ignoreAdminGroup();
+						->ignoreAdminGroup()->select('t.*');
 
 		$stmt = GO_Email_Model_Account::model()->find($findParams);
 
 		while ($account = $stmt->fetch()) {
 			try {
 				if($account->getDefaultAlias()){					
-					
+
+					$checkMailboxArray = explode(',',$account->check_mailboxes);
+
 					$imap = $account->openImapConnection();
 
 					$unseen = $imap->get_unseen();
@@ -83,8 +85,17 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					$response['email_status']['unseen'][]=array('account_id'=>$account->id,'mailbox'=>'INBOX', 'unseen'=>$unseen['count']);
 					$response['email_status']['total_unseen'] += $unseen['count'];
 					
+					foreach ($checkMailboxArray as $checkMailboxName) {
+						if (!empty($checkMailboxName)) {
+							$unseen = $imap->get_unseen($checkMailboxName);
+							$response['email_status']['unseen'][]=array('account_id'=>$account->id,'mailbox'=>$checkMailboxName, 'unseen'=>$unseen['count']);
+							$response['email_status']['total_unseen'] += $unseen['count'];							
+						}
+					}
+					
 					if(!isset($response['email_status']['has_new']) && $account->hasNewMessages)
-						$response['email_status']['has_new']=true;					
+						$response['email_status']['has_new']=true;
+					
 				}
 				
 			} catch (Exception $e) {
@@ -247,7 +258,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			$nodeId = 'f_' . $mailbox->getAccount()->id . '_' . $mailbox->name;
 			
 			$text = $mailbox->getDisplayName();
-			
+						
 			if(!$subscribtions){				
 				if ($mailbox->unseen > 0) {
 					$text .= '&nbsp;<span class="em-folder-status" id="status_' . $nodeId . '">(' . $mailbox->unseen . ')</span>';
@@ -257,7 +268,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			}
 
 			//$children = $this->_getMailboxTreeNodes($mailbox->getChildren());
-
+			
 			$node = array(
 					'text' => $text,
 					'mailbox' => $mailbox->name,
