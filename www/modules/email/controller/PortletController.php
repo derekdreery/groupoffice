@@ -204,12 +204,6 @@ class GO_Email_Controller_Portlet extends GO_Base_Controller_AbstractModelContro
 			
 			$text = $mailbox->getDisplayName();
 						
-			if ($mailbox->unseen > 0) {
-				$text .= '&nbsp;<span class="em-folder-status" id="status_' . $nodeId . '">(' . $mailbox->unseen . ')</span>';
-			} else {
-				$text .= '&nbsp;<span class="em-folder-status" id="status_' . $nodeId . '"></span>';
-			}
-
 			$node = array(
 					'text' => $text,
 					'mailbox' => $mailbox->name,
