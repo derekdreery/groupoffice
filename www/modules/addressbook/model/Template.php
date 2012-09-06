@@ -285,7 +285,7 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	 * @return string 
 	 */
 	public function replaceCustomTags($content, $attributes, $leaveEmptyTags=false){
-		return $this->_parse($content, $attributes, $leaveEmptyTags);
+		return $this->_parse($content, array_merge($this->_defaultTags, $attributes), $leaveEmptyTags);
 	}
 
 //	/**
