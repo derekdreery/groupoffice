@@ -1,4 +1,4 @@
-?? 4.0.96
+06-09-2012 4.0.96
 - Option to automatically check mailboxes for unread messages.
 - Keep the state of the fileDialog tree to the last selected folder, this is kept in the current session
 - Added an email portlet to the start page
