@@ -25,3 +25,6 @@ modules/email/ImapAclDialog.js
 modules/email/ImapAclUserDialog.js
 modules/email/MoveOldMailDialog.js
 modules/email/TreeContextMenu.js
+
+modules/email/FilterDialog.js
+modules/email/FilterGrid.js

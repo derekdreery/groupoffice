@@ -50,3 +50,5 @@ $updates["201207040933"][]="ALTER TABLE `em_links` ADD `uid` VARCHAR( 100 ) NOT 
 $updates["201207191730"][]="ALTER TABLE `em_accounts` ADD `sieve_port` int(11) NOT NULL;";
 $updates["201207191730"][]="ALTER TABLE `em_accounts` ADD `sieve_usetls` tinyint(1) NOT NULL DEFAULT '1';";
 $updates["201207191730"][]="UPDATE `em_accounts` SET `sieve_port`='2000'";
+
+$updates["201209060935"][]="ALTER TABLE `em_filters` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";

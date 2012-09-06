@@ -39,9 +39,44 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		}
 	}
 	
+	private function _filterMessages($mailbox, GO_Email_Model_Account $account) {
+
+		$filters = $account->filters->fetchAll();
+
+		if (count($filters)) {
+			$imap = $account->openImapConnection($mailbox);
+
+			$messages = array();
+			$headersSet = $imap->get_message_headers_set(0, 0, "ARRIVAL", false, "NEW");
+			foreach ($headersSet as $uid => $headers) {
+				$messages[] = GO_Email_Model_ImapMessage::model()->createFromHeaders($account, $mailbox, $uid, $headers);
+			}
+			if(count($messages)){
+				while ($filter = array_shift($filters)) {
+					$matches = array();
+					$notMatched = array();
+					while ($message = array_shift($messages)) {
+
+						if (stripos($message->{$filter->field}, $filter->keyword) !== false) {
+							$matches[] = $message->uid;
+						} else {
+							$notMatched[] = $message;
+						}
+					}
+					$messages = $notMatched;
+
+					if(count($matches)){
+						if ($filter->mark_as_read)
+							$imap->set_message_flag($matches, "\Seen");
+
+						$imap->move($matches, $filter->folder);
+					}
+				}
+			}
+		}
+	}
+	
 	protected function actionStore($params){
-		
-		
 		
 		if(!isset($params['start']))
 			$params['start']=0;
@@ -87,13 +122,15 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		/* @var $account GO_Email_Model_Account */
 		
+		$this->_filterMessages($params["mailbox"], $account);
+		
 		$imap = $account->openImapConnection($params["mailbox"]);
 		
 		$response['unseen']=array();
 		
 		$this->_moveMessages($imap, $params, $response);
 		
-		$imap = $account->openImapConnection($params["mailbox"]);
+//		$imap = $account->openImapConnection($params["mailbox"]);
 		
 		if(!empty($params['delete_keys'])){
 			
