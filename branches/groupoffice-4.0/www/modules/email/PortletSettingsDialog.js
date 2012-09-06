@@ -33,7 +33,7 @@ GO.email.PortletSettingsDialog = Ext.extend(GO.Window, {
 			text : GO.email.lang.root,
 			draggable : false,
 			id : 'root',
-			expanded : false
+			expanded : true
 		});
 		
 		this.foldersTree.setRootNode(this.rootNode);
@@ -45,20 +45,20 @@ GO.email.PortletSettingsDialog = Ext.extend(GO.Window, {
 		
 		this.foldersTree.on('checkchange', function(node, checked) {
 		
-		var route = checked ? 'email/portlet/enablePortletFolder' : 'email/portlet/disablePortletFolder';
-		
-		GO.request({
-			maskEl:this.body,
-			url : route,
-			params : {
-				account_id : node.attributes.account_id,
-				mailbox : node.attributes.mailbox
-			},
-			fail:function(){
-				this.foldersTree.getRootNode().reload();
-			},
-			scope : this
-		});
+			var route = checked ? 'email/portlet/enablePortletFolder' : 'email/portlet/disablePortletFolder';
+
+			GO.request({
+				maskEl:this.body,
+				url : route,
+				params : {
+					account_id : node.attributes.account_id,
+					mailbox : node.attributes.mailbox
+				},
+				fail:function(){
+					this.foldersTree.getRootNode().reload();
+				},
+				scope : this
+			});
 
 		}, this);
 		
