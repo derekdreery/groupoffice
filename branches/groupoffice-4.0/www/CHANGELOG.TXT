@@ -21,6 +21,11 @@
 - Added new portlet that shows files uploaded in the last 7 days.
 - Fixed: file does not exist: /themes errors in apache log
 - Subfolders of the sent, drafts and trash folders in the e-mail were not treated as such.
+- Serverclient did not update the mailbox in the servermanager	
+- Error on logging e-mail
+- {date} tag didn't work in document templates.
+- Document templates can work for other files like PDF as well. No tags will be replaced.
+- New mailto handler see http://wiki4.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client
 
 03-09-2012 4.0.95
 - Missing content-lenght header caused GOTA problem.

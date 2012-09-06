@@ -1,6 +1,35 @@
 <?php
 
 class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController {
+	
+	protected function allowGuests() {
+		return array("mailto");
+	}
+	/*
+	 * Example URL: http://localhost/groupoffice-4.0/www/?r=email/message/mailto&mailto=mailto:info@intermesh.nl&bcc=test@intermesh.nl&body=jaja&cc=cc@intermesh.nl&subject=subject
+	 */
+	protected function actionMailto($params){
+		$qs=strtolower(str_replace('mailto:','', urldecode($_SERVER['QUERY_STRING'])));
+		$qs=str_replace('?subject','&subject', $qs);
+
+		parse_str($qs, $vars);
+		
+
+		$vars['to']=isset($vars['mailto']) ? $vars['mailto'] : '';
+		unset($vars['mailto'], $vars['r']);
+
+		if(!isset($vars['subject']))
+			$vars['subject']='';
+
+		if(!isset($vars['body']))
+			$vars['body']='';
+		//
+//		var_dump($vars);
+//		exit();
+
+		header('Location: '.GO::createExternalUrl('email', 'showComposer', array('values'=>$vars)));
+		exit();
+	}
 		
 	protected function actionNotification($params){
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
@@ -547,7 +576,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$response['data'] = $message->toOutputArray(true, true);
 
 			$presetbody = isset($params['body']) ? $params['body'] : '';
-			if (!empty($presetbody) && strpos($response['data']['body'], '{body}') == false) {
+			if (!empty($presetbody) && strpos($response['data']['htmlbody'], '{body}') == false) {
 				$response['data']['htmlbody'] = $params['body'] . '<br />' . $response['data']['htmlbody'];
 			} else {
 				$response['data']['htmlbody'] = str_replace('{body}', $presetbody, $response['data']['htmlbody']);
