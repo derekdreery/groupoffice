@@ -722,6 +722,8 @@ class GO{
 	/**
 	 * Create a URL for an outside application. The URL will open Group-Office and
 	 * launch a function.
+	 * 
+	 * Controller external/index will be execured.
 	 *
 	 * @param string $module
 	 * @param function $function

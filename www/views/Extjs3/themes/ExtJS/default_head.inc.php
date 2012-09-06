@@ -2,7 +2,7 @@
 $root_path = $GLOBALS['GO_CONFIG']->root_path.'views/Extjs3/';
 $root_url = $GLOBALS['GO_CONFIG']->host.'views/Extjs3/';
 ?>
-<link href="<?php echo $root_url; ?>Default/images/groupoffice.ico?" rel="shortcut icon" type="image/x-icon">
+<link href="<?php echo $root_url; ?>themes/Default/images/groupoffice.ico?" rel="shortcut icon" type="image/x-icon">
 <title><?php echo GO::config()->title; ?></title>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 <?php
