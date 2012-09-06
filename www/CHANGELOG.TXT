@@ -17,6 +17,8 @@
 - Reimplemented e-mail filtering without sieve support
 - Added workflow support to the billing orders
 - Removed Apply button from ticket dialog
+- Added new portlet that shows files uploaded in the last 7 days.
+- Fixed: file does not exist: /themes errors in apache log
 
 03-09-2012 4.0.95
 - Missing content-lenght header caused GOTA problem.
