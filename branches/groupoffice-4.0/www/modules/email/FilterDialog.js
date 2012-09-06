@@ -4,10 +4,11 @@ GO.email.FilterDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 		Ext.apply(this, {
 			titleField:'keyword',
 			title:GO.email.lang.filter,			
-			formControllerUrl: 'email/filter'
+			formControllerUrl: 'email/filter',
+			height:200
 		});
 		
-		GO.notes.NoteDialog.superclass.initComponent.call(this);	
+		GO.email.FilterDialog.superclass.initComponent.call(this);	
 	},
 	
 	buildForm:function(){
@@ -18,7 +19,7 @@ GO.email.FilterDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 			},
 			defaultType : 'textfield',
 			labelWidth : 125,
-			autoHeight : true,
+			border : false,
 			cls : 'go-form-panel',
 			waitMsgTarget : true,
 			items : [new Ext.form.ComboBox({
