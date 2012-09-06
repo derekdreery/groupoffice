@@ -277,6 +277,17 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 				'account_id'=>$this->id
 		));
 	}
+	
+	/**
+	 * Get an array of mailboxes that should be checked periodically for new mail
+	 * 
+	 * @return array
+	 */
+	public function getAutoCheckMailboxes(){
+		$checkMailboxArray = empty($this->check_mailboxes) ? array() : explode(',',$this->check_mailboxes);
+		$checkMailboxArray[]="INBOX";
+		return $checkMailboxArray;
+	}
 
 
 	public function addAlias($email, $name, $signature='', $default=1){
