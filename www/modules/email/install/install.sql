@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS `em_accounts` (
 	`ignore_sent_folder` TINYINT( 1 ) NOT NULL DEFAULT '0',
 	`sieve_port` int(11) NOT NULL,
 	`sieve_usetls` tinyint(1) NOT NULL DEFAULT '1',
+  `check_mailboxes` TEXT,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;

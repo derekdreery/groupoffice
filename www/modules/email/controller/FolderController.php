@@ -178,4 +178,50 @@ class GO_Email_Controller_Folder extends GO_Base_Controller_AbstractController {
 			$response['feedback']=$imap->last_error();
 		return $response;
 	}
+	
+	protected function actionLoad($params) {
+		$response = array( 'success'=>true, 'data'=>array() );
+		
+		$mailboxPath = $params['mailboxPath'];
+		$accountId = $params['accountId'];
+		
+		$accountModel = GO_Email_Model_Account::model()->findByPk($accountId);
+		
+		$checkUnseenMailboxArray = explode(',',$accountModel->check_mailboxes);
+		
+		$response['data']['checkUnseen'] = in_array( $mailboxPath, $checkUnseenMailboxArray );
+		$response['data']['accountId'] = $accountId;
+		$response['data']['mailboxPath'] = $mailboxPath;
+		
+		return $response;
+	}
+	
+	protected function actionSubmit($params) {
+		$response = array( 'success' => true, 'id' => $params['accountId'] );
+		
+		$mailboxPath = $params['mailboxPath'];
+		$accountId = $params['accountId'];
+		$checkUnseen = !empty($params['checkUnseen']);
+		
+		$accountModel = GO_Email_Model_Account::model()->findByPk($accountId);
+		
+		$checkUnseenMailboxArray = explode(',',$accountModel->check_mailboxes);
+		
+		if ($checkUnseen && !in_array($mailboxPath,$checkUnseenMailboxArray)) {
+			$checkUnseenMailboxArray[] = $mailboxPath;
+			$accountModel->check_mailboxes = implode(',',$checkUnseenMailboxArray);
+		} elseif (!$checkUnseen && in_array($mailboxPath,$checkUnseenMailboxArray)) {
+			$arr = array();
+			foreach ($checkUnseenMailboxArray as $k => $v)
+				if ($v!=$mailboxPath)
+					$arr[] = $v;
+				
+			$accountModel->check_mailboxes = implode(',',$arr);
+		}
+		
+		$accountModel->save();
+		
+		return $response;
+	}
+	
 }
