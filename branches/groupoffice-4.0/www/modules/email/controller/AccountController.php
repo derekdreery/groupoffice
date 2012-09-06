@@ -87,8 +87,9 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 						
 						$unseen = $imap->get_unseen($checkMailboxName);
 						$cached = GO::cache()->get($sessionCacheKey);
-						if(!isset($response['email_status']['has_new']) && $cached != $unseen['count']){
-							GO::debug("New mail found ".$cached." != ".$unseen['count']);
+						
+						//caching is disabled when debugging.
+						if(!isset($response['email_status']['has_new']) && $cached != $unseen['count'] && !GO::config()->debug){							
 							$response['email_status']['has_new']=true;
 						}  
 						

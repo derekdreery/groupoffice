@@ -40,7 +40,6 @@
  * @property int $id
  * @property string $check_mailboxes
  * 
- * @property boolean $hasNewMessages
  * @property int $sieve_port
  * @property boolean $sieve_tls
  */
@@ -221,30 +220,30 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 			return false;
 	}
 	
-	private function _getCacheKey(){
-		$user_id = GO::user() ? GO::user()->id : 0;
-		return $user_id.':'.$this->id.':uidnext';
-	}
+//	private function _getCacheKey(){
+//		$user_id = GO::user() ? GO::user()->id : 0;
+//		return $user_id.':'.$this->id.':uidnext';
+//	}
 	
-	protected function getHasNewMessages(){
-		
-		GO::debug("getHasNewMessages UIDNext ".(isset($this->_imap->selected_mailbox['uidnext']) ? $this->_imap->selected_mailbox['uidnext'] : ""));
-		
-		if(isset($this->_imap->selected_mailbox['name']) && $this->_imap->selected_mailbox['name']=='INBOX' && !empty($this->_imap->selected_mailbox['uidnext'])){
-			
-			$cacheKey = $this->_getCacheKey();
-			
-			$uidnext = $value = GO::cache()->get($cacheKey);
-			
-			GO::cache()->set($cacheKey, $this->_imap->selected_mailbox['uidnext']);					
-			
-			if($uidnext!==false && $uidnext!=$this->_imap->selected_mailbox['uidnext']){
-				return true;
-			}			
-		}
-			
-		return false;
-	}
+//	protected function getHasNewMessages(){
+//		
+//		GO::debug("getHasNewMessages UIDNext ".(isset($this->_imap->selected_mailbox['uidnext']) ? $this->_imap->selected_mailbox['uidnext'] : ""));
+//		
+//		if(isset($this->_imap->selected_mailbox['name']) && $this->_imap->selected_mailbox['name']=='INBOX' && !empty($this->_imap->selected_mailbox['uidnext'])){
+//			
+//			$cacheKey = $this->_getCacheKey();
+//			
+//			$uidnext = $value = GO::cache()->get($cacheKey);
+//			
+//			GO::cache()->set($cacheKey, $this->_imap->selected_mailbox['uidnext']);					
+//			
+//			if($uidnext!==false && $uidnext!=$this->_imap->selected_mailbox['uidnext']){
+//				return true;
+//			}			
+//		}
+//			
+//		return false;
+//	}
 
 
 	/**
