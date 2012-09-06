@@ -128,6 +128,11 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		$response['unseen']=array();
 		
+		//special folder flags
+		$response['sent']=!empty($account->sent) && strpos($params['mailbox'],$account->sent)===0;
+		$response['drafts']=!empty($account->drafts) && strpos($params['mailbox'],$account->drafts)===0;
+		$response['trash']=!empty($account->trash) && strpos($params['mailbox'],$account->trash)===0;
+		
 		$this->_moveMessages($imap, $params, $response);
 		
 //		$imap = $account->openImapConnection($params["mailbox"]);
@@ -139,7 +144,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	//		if($account->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION)){
 				$uids = json_decode($params['delete_keys']);
 
-				if(!empty($account->trash) && $params["mailbox"] != $account->trash) {
+				if($response['trash']) {
 					$imap->set_message_flag($uids, "\Seen");
 					$response['deleteSuccess']=$imap->move($uids,$account->trash);
 				}else {
@@ -169,7 +174,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$record['account_id']=$account->id;
 			$record['mailbox']=$params["mailbox"];
 			
-			if($params["mailbox"]==$account->sent || $params["mailbox"]==$account->drafts){				
+			if($response['sent'] || $response['drafts']){				
 				$addresses = $message->to->getAddresses();
 				$from=array();
 				foreach($addresses as $email=>$personal)
@@ -192,12 +197,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$response['total'] = $imap->sort_count;
 		
 		$unseen = $imap->get_unseen($params['mailbox']);
-		$response['unseen'][$params['mailbox']]=$unseen['count'];
-		
-		//special folder flags
-		$response['sent']=$params['mailbox']==$account->sent;
-		$response['drafts']=$params['mailbox']==$account->drafts;
-		$response['trash']=$params['mailbox']==$account->trash;
+		$response['unseen'][$params['mailbox']]=$unseen['count'];		
 		
 		//deletes must be confirmed if no trash folder is used or when we are in the trash folder to delete permanently
 		$response['deleteConfirm']=empty($account->trash) || $account->trash==$params['mailbox'];
