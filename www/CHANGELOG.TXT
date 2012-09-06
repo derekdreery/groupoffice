@@ -27,6 +27,7 @@
 - {date} tag didn't work in document templates.
 - Document templates can work for other files like PDF as well. No tags will be replaced.
 - New mailto handler see http://wiki4.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client
+- New e-mail notifications were broken
 
 03-09-2012 4.0.95
 - Missing content-lenght header caused GOTA problem.
