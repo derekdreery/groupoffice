@@ -897,12 +897,12 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	}
 
 	/**
-	 * Function is only used if server doesn't support remote SORT
+	 * Search
 	 *
 	 * @param <type> $terms
 	 * @param <type> $sort
 	 * @param <type> $reverse
-	 * @return <type>
+	 * @return array uiids
 	 */
 	public function search($terms) {
 		//$this->clean($this->search_charset, 'charset');

@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `em_aliases` (
 
 DROP TABLE IF EXISTS `em_filters`;
 CREATE TABLE IF NOT EXISTS `em_filters` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) NOT NULL DEFAULT '0',
   `field` varchar(20) DEFAULT NULL,
   `keyword` varchar(100) DEFAULT NULL,

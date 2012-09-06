@@ -116,5 +116,5 @@ $l['vacationEnd']='Last day of this message';
 
 $l['activateFilter']='Activate this filter';
 $l['active']='Active';
-
+$l['sieveWarning']="If your IMAP server supports sieve filters. It's recommended to use those instead. Please try the 'Sieve filters' tab first.";
 $l['setRead']='Mark message as read';

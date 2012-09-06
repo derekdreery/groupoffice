@@ -61,7 +61,7 @@ GO.sieve.SieveGrid = function(config){
 	{
 		config = {};
 	}
-	config.title=GO.email.lang.filters;
+	config.title="Sieve "+GO.email.lang.filters;
 	config.layout='fit';
 	config.region='center';
 	config.autoScroll=true;

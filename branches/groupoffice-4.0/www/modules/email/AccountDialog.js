@@ -340,10 +340,13 @@ GO.email.AccountDialog = function(config) {
 	});
 
 	//this.permissionsTab.disabled = false;
+	
+	
+	this.filterGrid = new GO.email.FilterGrid();
 
 	var items = [propertiesTab,
 
-	this.foldersTab, this.permissionsTab];
+	this.foldersTab, this.permissionsTab,this.filterGrid];
 
 	if (GO.settings.modules.email.write_permission) {
 		items.splice(1, 0, incomingTab, outgoingTab);
@@ -552,5 +555,6 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 
 	setAccountId : function(account_id){
 		this.account_id = account_id;
+		this.filterGrid.setAccountId(account_id);
 	}
 });

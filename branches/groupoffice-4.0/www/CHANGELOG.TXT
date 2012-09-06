@@ -12,6 +12,8 @@
 - urldecode query string in mailto handler
 - Show correct owner in event dialog
 - LDAP user sync script added.
+- Sorting on name in groups module
+- Reimplemented e-mail filtering without sieve support
 - Added workflow support to the billing orders
 - Removed Apply button from ticket dialog
 
