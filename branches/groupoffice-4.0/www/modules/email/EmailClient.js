@@ -1379,16 +1379,15 @@ GO.mainLayout.onReady(function(){
 
 				if(result.email_status.has_new)
 				{
-					data.popup=true;
-					data.alarm=true;
-
 					data.getParams={
 						unseenEmails:result.email_status.total_unseen
 					}
 
-					if(!ep || !ep.isVisible())
+					if(!ep || !ep.isVisible()){
 						GO.email.notificationEl.setDisplayed(true);
-
+						data.popup=true;
+						data.alarm=true;
+					}
 
 					GO.email.notificationEl.update(result.email_status.total_unseen);
 				}
