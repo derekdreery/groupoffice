@@ -221,3 +221,12 @@ CREATE TABLE IF NOT EXISTS `go_links_em_links` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
+
+DROP TABLE IF EXISTS `em_portlet_folders`;
+CREATE TABLE IF NOT EXISTS `em_portlet_folders` (
+  `account_id` int(11) NOT NULL,
+	`folder_name` varchar(100) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `mtime` int(11) NOT NULL,
+  PRIMARY KEY (`account_id`,`folder_name`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
