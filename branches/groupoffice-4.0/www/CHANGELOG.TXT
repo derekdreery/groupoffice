@@ -1,4 +1,5 @@
 ?? 4.0.96
+- Keep the state of the fileDialog tree to the last selected folder, this is kept in the current session
 - Added an email portlet to the start page
 - Switch to plain text mode when composing e-mail on an ipad
 - Fixed syncing of recurring events and its exceptions
