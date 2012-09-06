@@ -43,8 +43,32 @@ class GO_Base_Mail_Mailer extends Swift_Mailer{
 		if(GO::config()->debug)
 			GO::debug("Sending e-mail to ".implode(",",array_keys($message->getTo())));
 		
-		if(GO::modules()->isInstalled("log"))
-			GO_Log_Model_Log::create ("email", $message->getSubject()." ".implode(",",array_keys($message->getFrom ()))." -> ".implode(",",array_keys($message->getTo())));
+		if(GO::modules()->isInstalled("log")){
+			
+			$str = $message->getSubject()." ";
+			
+			$from = $message->getFrom ();
+			if(!empty($from))
+				$str .= implode(",",array_keys($from));
+			else
+				$str .= "unknown";
+			
+			$str .= " -> ";
+			
+			$to = $message->getTo ();
+			if(!empty($to))
+				$str .= implode(",",array_keys($to));
+			
+			$to = $message->getCc ();
+			if(!empty($to))
+				$str .= implode(",",array_keys($to));
+			
+			$to = $message->getBcc ();
+			if(!empty($to))
+				$str .= implode(",",array_keys($to));
+			
+			GO_Log_Model_Log::create ("email", $str);
+		}
 		
 //		debug_print_backtrace();
 //		exit("NO MAIL");
