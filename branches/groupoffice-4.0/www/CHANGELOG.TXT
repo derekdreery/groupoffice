@@ -1,4 +1,5 @@
 ?? 4.0.96
+- Added an email portlet to the start page
 - Switch to plain text mode when composing e-mail on an ipad
 - Fixed syncing of recurring events and its exceptions
 - Debughandler for sieve removed in constructor, this interferes with the debug handler of z-push
