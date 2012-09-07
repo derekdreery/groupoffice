@@ -521,7 +521,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$file = new GO_Base_Fs_File($params['file']);
 		$file->convertToUtf8();
 
-		$data = "BEGIN:ADDRESSBOOK\n".$file->getContents()."END:ADDRESSBOOK";
+		$data = "BEGIN:ADDRESSBOOK\n".$file->getContents()."\nEND:ADDRESSBOOK";
 		GO::debug($data);
 		
 		$vaddressbook = GO_Base_VObject_Reader::read($data);
