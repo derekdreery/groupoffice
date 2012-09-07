@@ -315,6 +315,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$stmt->callOnEach('delete');
 		}
 
+		$send = $params['send_invitation'];
+		
 		if (!empty($params['send_invitation']))
 			$this->_sendInvitation($newParticipantIds, $event, $isNewEvent, $modifiedAttributes);
 	}
@@ -382,9 +384,14 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					$fromEmail = GO::user() ? GO::user()->email : $sendingParticipant->email;
 					$fromName = GO::user() ? GO::user()->name : $sendingParticipant->name;
 
-					$message = GO_Base_Mail_Message::newInstance(
-													$subject
-									)->setFrom($fromEmail, $fromName)
+					
+					$toEm = $participant->email;
+          $toName = $participant->name;
+
+          GO::debug("SEND EVENT INVITATION FROM: ".$fromEmail."(".$fromName.") TO: ".$toEm."(".$toName.")");
+
+					$message = GO_Base_Mail_Message::newInstance($subject)
+									->setFrom($fromEmail, $fromName)
 									->addTo($participant->email, $participant->name);
 
 					$ics=$event->toICS($method, $sendingParticipant);
