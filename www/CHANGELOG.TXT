@@ -1,4 +1,5 @@
 ?? 4.0.97
+- Change: the priority selectbox will be shown to customers, they can set the priority of there own tickets.
 - Fixed bug when using a different database port
 - Now the replacement of fields(%field%) is also working in the footer of a billing PDF
 - Updated Italian and Hungarian translation
@@ -46,6 +47,8 @@
 - Added new recently modified files portlet.
 
 31-08-2012 4.0.92
+- Change: CoreController->actionUsers will only return enabled user instead of all users
+- Fix: The column bs_orders in the billing module may now be NULL New Billing4.0 installation could not save Orders
 - Encoding characterset was not set when displaying saved email messages, didn't display russian characters
 - Forgetful FilesGrid now remembers its state
 - Calendar: removed GO version from calendar print
