@@ -467,7 +467,26 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		return $this->putContents(GO_Base_Util_String::clean_utf8($str, $enc));
 	}
 	
+	/**
+	 * Get the md5 hash from this file
+	 * 
+	 * @return string
+	 */
 	public function md5Hash(){
 		return md5_file($this->path);
 	}
+	
+	
+	/**
+	 * Compare this file with an other file.
+	 * 
+	 * @param GO_Base_Fs_File $file
+	 */
+	public function diff(GO_Base_Fs_File $file){
+		if($this->md5Hash() != $file->md5Hash())
+			return false;
+		else
+			return true;
+	}
+	
 }
