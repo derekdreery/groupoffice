@@ -113,3 +113,5 @@ $l['vacationStart']='Primo giorno di questo messaggio';
 $l['vacationEnd']='Ultimo giorno di questo messaggio';
 $l['activateFilter']='Attiva questo filtro';
 $l["redirect_copy_to"]= 'Copia su email';
+$l['sieveWarning']="Se il tuo server IMAP supporta i filtri sieve. Ti consigliamo di utilizzare questi filtri. Prova prima la scheda 'Filtri sieve'.";
+$l['setRead']='Marca il messaggio come letto';

@@ -109,3 +109,4 @@ $l['notifyFileDelete']= 'Il file %s è stato eliminato da %s';
 $l['notifyFileUpdate']= 'Il fle %s è stato aggiornato da %s';
 $l['notificationEmailSubject']= 'Aggiornamenti nella cartella';
 $l['downloadLinkExpired']= "Spiacenti, il collegamento per scaricare il file è scaduto";
+$l['recentFiles']="File modificati negli ultimi 7 giorni";
