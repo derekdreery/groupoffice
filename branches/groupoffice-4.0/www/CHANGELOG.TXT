@@ -1,6 +1,7 @@
 ?? 4.0.97
 - Fixed bug when using a different database port
 - Now the replacement of fields(%field%) is also working in the footer of a billing PDF
+- Added diff function to GO_Base_Fs_File class
 
 
 06-09-2012 4.0.96
