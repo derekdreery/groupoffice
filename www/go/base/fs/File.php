@@ -479,14 +479,29 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	
 	/**
 	 * Compare this file with an other file.
+	 * Returns true
 	 * 
 	 * @param GO_Base_Fs_File $file
+	 * @return bool True if the file is different, false if file is the same.
 	 */
 	public function diff(GO_Base_Fs_File $file){
 		if($this->md5Hash() != $file->md5Hash())
-			return false;
-		else
 			return true;
+		else
+			return false;
 	}
 	
+	
+	/**
+	 * Create the file
+	 * 
+	 * @param boolean $createPath Create the folders for this file also?
+	 * @return bool successfull
+	 */
+	public function touch($createPath=false){
+		if($createPath)
+			$this->parent()->create();
+		
+		return touch($this->path());
+	}
 }
