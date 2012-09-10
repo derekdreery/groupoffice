@@ -1701,7 +1701,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					return "";
 				
 				$date = new DateTime($value);
-				return $date->format(GO::user()->completeDateFormat);
+				return $date->format(GO::user()?GO::user()->completeDateFormat:GO::config()->getCompleteDateFormat());
 				
 				//return $value != '0000-00-00' ? GO_Base_Util_Date::get_timestamp(strtotime($value),false) : '';
 				break;
