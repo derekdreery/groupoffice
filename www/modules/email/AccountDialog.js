@@ -101,7 +101,13 @@ GO.email.AccountDialog = function(config) {
 				},
 				scope : this
 			}
-		}), new Ext.form.TextField({
+		}),new Ext.ux.form.XCheckbox({
+			boxLabel: GO.email.lang.storePassword,
+			checked: true,
+			name: 'store_password',
+			allowBlank: true,
+			hideLabel:true
+		}),new Ext.form.TextField({
 			fieldLabel : GO.lang.strPassword,
 			name : 'password',
 			inputType : 'password',

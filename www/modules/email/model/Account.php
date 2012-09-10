@@ -96,6 +96,9 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 			}
 		}
 
+		if (!empty($this->id) && !empty(GO::session()->values['emailModule']['accountPasswords'][$this->id]))
+			unset(GO::session()->values['emailModule']['accountPasswords'][$this->id]);
+		
 		if($this->isModified('smtp_password')){
 			$encrypted = GO_Base_Util_Crypt::encrypt($this->smtp_password);		
 			if($encrypted)
@@ -116,9 +119,25 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 			$this->_createDefaultFolder('drafts');	
 		}
 		
+		if (isset($this->store_password) && $this->store_password=='0') {
+			$this->session_password = $this->password;
+			$this->password = '';
+			$this->password_encrypted = 0;
+		}
+		
 		return parent::beforeSave();
 	}
 
+	protected function afterSave($wasNew) {
+		if (!empty($this->session_password)) {
+			if (!isset(GO::session()->values['emailModule']) || !is_array(GO::session()->values['emailModule']['accountPasswords'])) {
+				GO::session()->values['emailModule']['accountPasswords'] = array();
+			}
+			GO::session()->values['emailModule']['accountPasswords'][$this->id] = $this->session_password;
+		}
+		return parent::afterSave($wasNew);
+	}
+	
 	private $_mailboxes;
 
 	public function getMailboxes(){
@@ -167,7 +186,12 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 
 	public function decryptPassword(){
 		//return $this->password_encrypted==2 ? GO_Base_Util_Crypt::decrypt($this->password) : $this->password;
-		$decrypted = GO_Base_Util_Crypt::decrypt($this->password);
+		if (!empty(GO::session()->values['emailModule']['accountPasswords'][$this->id])) {
+			$decrypted = GO_Base_Util_Crypt::decrypt(GO::session()->values['emailModule']['accountPasswords'][$this->id]);
+		} else {
+			$decrypted = GO_Base_Util_Crypt::decrypt($this->password);
+		}
+		
 		return $decrypted ? $decrypted : $this->password;
 	}
 

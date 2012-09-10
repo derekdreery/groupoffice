@@ -248,3 +248,5 @@ $l['tryNewCredentials']='Please enter try with a different IMAP password.';
 $l['moveTo']='Move to';
 
 $l['useAccount']='Use account';
+
+$l['storePassword']='Permanently store password';
