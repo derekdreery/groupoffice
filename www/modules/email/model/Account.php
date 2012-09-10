@@ -284,7 +284,8 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	 */
 	public function getAutoCheckMailboxes(){
 		$checkMailboxArray = empty($this->check_mailboxes) ? array() : explode(',',$this->check_mailboxes);
-		$checkMailboxArray[]="INBOX";
+		if(!in_array("INBOX", $checkMailboxArray))
+			$checkMailboxArray[]="INBOX";
 		return $checkMailboxArray;
 	}
 
