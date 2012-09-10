@@ -310,6 +310,7 @@ class GO_Base_Db_FindParams{
 	
 	/**
 	 * Set to true to return a single model instead of a statement.
+	 * Permissions will not be checked when using this option!
 	 * 
 	 * @param boolean $value
 	 * @return GO_Base_Db_FindParams 
