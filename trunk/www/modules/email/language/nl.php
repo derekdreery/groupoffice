@@ -233,3 +233,5 @@ $l['tryNewCredentials']='Probeert u het a.u.b. met een andere IMAP wachtwoord.';
 $l['moveTo']='Verplaatsen naar';
 
 $l['useAccount']='Account gebruiken';
+
+$l['storePassword']='Wachtwoord permanent opslaan';

@@ -445,13 +445,13 @@ Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {
 					title: GO.lang['strError'],
 					layout: 'fit',
 					width: 320,
-					height: 200,
+					height: 220,
 					cls : 'go-form-panel',
 					items: [this.imapLoginFailedFormPanel = new Ext.form.FormPanel({
 						items: [this.imapLoginFailedInfoField = new GO.form.PlainField({
 							value: GO.email.lang['imapLoginFailed'],
 							hideLabel: true,
-							height: 80,
+//							height: 80,
 							anchor: '-20'
 						}), this.passwordField = new Ext.form.TextField({
 							fieldLabel : GO.lang.strPassword,
@@ -459,6 +459,12 @@ Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {
 							inputType : 'password',
 							allowBlank : false,
 							anchor: '-20'
+						}),new Ext.ux.form.XCheckbox({
+							boxLabel: GO.email.lang.storePassword,
+							checked: false,
+							name: 'store_password',
+							allowBlank: true,
+							hideLabel:true
 						})],
 						buttons: [{
 							text : GO.lang.cmdOk,
