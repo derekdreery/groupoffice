@@ -476,11 +476,9 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		return md5_file($this->path);
 	}
 	
-	
 	/**
 	 * Compare this file with an other file.
-	 * Returns true
-	 * 
+	 *
 	 * @param GO_Base_Fs_File $file
 	 * @return bool True if the file is different, false if file is the same.
 	 */
@@ -491,12 +489,11 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 			return false;
 	}
 	
-	
 	/**
 	 * Create the file
 	 * 
 	 * @param boolean $createPath Create the folders for this file also?
-	 * @return bool successfull
+	 * @return bool $successfull
 	 */
 	public function touch($createPath=false){
 		if($createPath)
