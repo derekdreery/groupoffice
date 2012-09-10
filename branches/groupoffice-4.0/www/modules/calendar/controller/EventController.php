@@ -751,7 +751,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	protected function actionImportIcs($params){
 		
 		$file = new GO_Base_Fs_File($params['file']);
-		
+		$file->convertToUtf8();
 		$data = $file->getContents();
 		
 		//var_dump($data);
