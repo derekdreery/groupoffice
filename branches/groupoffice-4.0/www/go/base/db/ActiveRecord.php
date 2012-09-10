@@ -825,6 +825,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	/**
 	 * Finds a single model by an attribute name and value.
+	 * This function does NOT check permissions.
 	 * 
 	 * @todo FindSingleByAttributes should use this function when this one uses the FindParams object too.
 	 * 

@@ -357,7 +357,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 //					var_dump($to);
 
 					foreach($to as $email=>$name){
-						$contact = GO_Addressbook_Model_Contact::model()->findByEmail($email, GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)->single());
+						//$contact = GO_Addressbook_Model_Contact::model()->findByEmail($email, GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)->single());
+						$stmt = GO_Addressbook_Model_Contact::model()->findByEmail($email, GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)->limit(1));
+						$contact = $stmt->fetch();
+			
 
 						if($contact){					
 							$linkedEmail = new GO_Savemailas_Model_LinkedEmail();
@@ -1109,7 +1112,9 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		if(GO::modules()->addressbook && GO::modules()->savemailas && !empty(GO::config()->email_autolink_contacts)){
 			$from = $imapMessage->from->getAddress();
-			$contact = GO_Addressbook_Model_Contact::model()->findByEmail($from['email'], GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)->single());
+
+			$stmt = GO_Addressbook_Model_Contact::model()->findByEmail($from['email'], GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)->limit(1));
+			$contact = $stmt->fetch();
 			
 			if($contact){
 				GO_Savemailas_Model_LinkedEmail::model()->createFromImapMessage($imapMessage, $contact);
