@@ -134,8 +134,8 @@ class GO{
 		return self::$db;
 	}
 
-	public static function setDbConnection($dbname=false, $dbuser=false, $dbpass=false, $dbhost=false){
-
+	public static function setDbConnection($dbname=false, $dbuser=false, $dbpass=false, $dbhost=false, $dbport=false, $options=array()){
+		
 		self::$db=null;
 
 		if($dbname===false)
@@ -149,10 +149,14 @@ class GO{
 
 		if($dbhost===false)
 			$dbhost=GO::config()->db_host;
+		
+		if($dbport===false)
+			$dbport=GO::config()->db_port;
+		
 
-//		GO::debug("Connect: mysql:host=$dbhost;dbname=$dbname, $dbuser, ***");
+//		GO::debug("Connect: mysql:host=$dbhost;dbname=$dbname, $dbuser, ***",$options);
 
-		self::$db = new GO_Base_Db_PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);
+		self::$db = new GO_Base_Db_PDO("mysql:host=$dbhost;dbname=$dbname;port=$dbport", $dbuser, $dbpass, $options);
 //		self::$db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 //		self::$db->setAttribute( PDO::ATTR_STATEMENT_CLASS, array( 'GO_Base_Db_ActiveStatement', array() ) );
 //
