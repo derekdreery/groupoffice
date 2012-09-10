@@ -46,10 +46,10 @@ GO.email.FilterGrid = Ext.extend(GO.grid.GridPanel,{
 				scope:this,
 				show:function(){
 					this.store.load();
-					if(GO.sieve && !this.sieveWarningShown){
-						this.sieveWarningShown=true;
-						alert(GO.sieve.lang.sieveWarning);
-					}
+//					if(GO.sieve && !this.sieveWarningShown){
+//						this.sieveWarningShown=true;
+//						alert(GO.sieve.lang.sieveWarning);
+//					}
 					
 					
 				},

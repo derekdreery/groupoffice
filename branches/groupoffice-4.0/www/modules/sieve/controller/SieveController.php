@@ -27,6 +27,18 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 			throw new Exception('Sorry, manage sieve filtering not supported on '.$accountModel->host.' using port '.$accountModel->sieve_port);				
 		}
 		
+		return true;
+		
+	}
+	
+	protected function actionIsSupported($params){
+		
+		try{
+			$supported=$this->_sieveConnect($params['account_id']);
+		}catch (Exception $e){
+			$supported=false;
+		}
+		return array('success'=>true, 'supported'=>$supported);
 	}
 	
 	protected function actionScripts($params) {
