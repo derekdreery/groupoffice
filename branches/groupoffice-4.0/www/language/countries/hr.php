@@ -242,3 +242,4 @@ $l['KP'] = 'Koreja, Sjeverna';
 $l['KR'] = 'Koreja, Južna';
 $l['RS'] = 'Srbija';
 $l['ME'] = 'Crna Gora';
+$l['IC'] = 'Kanarski otoci';

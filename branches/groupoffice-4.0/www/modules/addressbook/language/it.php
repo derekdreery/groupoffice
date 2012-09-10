@@ -274,3 +274,6 @@ $l["autoData"]= 'Dati automatici';
 $l["unsubscribeLink"]='Collegamento di cancellazione';
 $l["unsubscribeHref"]='href di cancellazione';
 $l['nRemovedFromAddresslist']='%n contatti sono stati identificati e rimossi dall\'elenco indirizzi selezionato.';
+$l['addToAddresslist']='Aggiungi all\'elenco indirizzi %s';
+$l['addToAddresslistPrompt']='Stai per aggiungere gli elementi selezionati all\'elenco indirizzi %s. Vuoi rimuovere anche questi elementi dagli altri elenchi indirizzi?';
+$l['addAddresslistSuccess']='Gli elementi sono stati aggiunti correttamente all\'elenco indirizzi.';

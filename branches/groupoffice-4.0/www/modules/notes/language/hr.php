@@ -1,6 +1,5 @@
 <?php
 
-;
 $l['name']='Bilješke';
 $l['description']='Modul za pravljenje bilješki.';
 $l['category']='Bilježnica';
