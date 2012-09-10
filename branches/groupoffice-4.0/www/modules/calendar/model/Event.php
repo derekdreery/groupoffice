@@ -903,6 +903,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->uuid = $uid;
 		
 		$this->name = (string) $vobject->summary;
+		if(empty($this->name))
+			$this->name = GO::t('unnamed');
 		$this->description = (string) $vobject->description;
 		$this->start_time = $vobject->dtstart->getDateTime()->format('U');
 		$this->end_time = $vobject->dtend->getDateTime()->format('U');
