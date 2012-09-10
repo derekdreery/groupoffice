@@ -81,23 +81,34 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					$imap = $account->openImapConnection();
 					$unseen = $imap->get_unseen();
 
+					$existingCheckMailboxArray = array();
+					
 					foreach ($checkMailboxArray as $checkMailboxName) {						
 						
 						$sessionCacheKey = GO::user()->id.':'.$account->id.':'.$checkMailboxName;
 						
 						$unseen = $imap->get_unseen($checkMailboxName);
-						$cached = GO::cache()->get($sessionCacheKey);
 						
-						//caching is disabled when debugging.
-						if(!isset($response['email_status']['has_new']) && $cached != $unseen['count'] && !GO::config()->debug){							
-							$response['email_status']['has_new']=true;
-						}  
-						
-						GO::cache()->set($sessionCacheKey, $unseen['count']);						
-						
-						$response['email_status']['unseen'][]=array('account_id'=>$account->id,'mailbox'=>$checkMailboxName, 'unseen'=>$unseen['count']);
-						$response['email_status']['total_unseen'] += $unseen['count'];
+						if ($unseen['count']!==null) {
+							$cached = GO::cache()->get($sessionCacheKey);
+
+							//caching is disabled when debugging.
+							if(!isset($response['email_status']['has_new']) && $cached != $unseen['count'] && !GO::config()->debug){							
+								$response['email_status']['has_new']=true;
+							}  
+
+							GO::cache()->set($sessionCacheKey, $unseen['count']);						
+
+							$response['email_status']['unseen'][]=array('account_id'=>$account->id,'mailbox'=>$checkMailboxName, 'unseen'=>$unseen['count']);
+							$response['email_status']['total_unseen'] += $unseen['count'];	
+							
+							$existingCheckMailboxArray[] = $checkMailboxName;							
+						}
 					}
+					
+					$account->check_mailboxes = implode(',',$existingCheckMailboxArray);
+					$account->save();
+					
 				}
 				
 			} catch (Exception $e) {
