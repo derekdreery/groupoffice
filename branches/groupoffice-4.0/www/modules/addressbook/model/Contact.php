@@ -759,10 +759,11 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		if(!$findParams)
 			$findParams = GO_Base_Db_FindParams::newInstance();
 		
-		$criteria = $findParams->getCriteria()
-			->addCondition('email',$email)
-			->addCondition('email2', $email,'=','t',false)
-			->addCondition('email3', $email,'=','t',false);
+		$findParams->getCriteria()->mergeWith(GO_Base_Db_FindCriteria::newInstance()
+										->addCondition('email', $email)
+										->addCondition('email2', $email, '=', 't', false)
+										->addCondition('email3', $email, '=', 't', false)
+		);
 
 		return GO_Addressbook_Model_Contact::model()->find($findParams);		
 	}
