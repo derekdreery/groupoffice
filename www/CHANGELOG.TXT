@@ -1,5 +1,6 @@
 ?? 4.0.98
-- Bugfix: PDF for an Invoice/Order will now accept the page format from the template 
+- Bugfix: PDF for Invoice/Order wouldn't print total prices when piece price or product price where not printed
+- Bugfix: PDF for Invoice/Order will now accept the page format from the template 
 
 11-09-2012 4.0.97
 - Important security problem fixed!
