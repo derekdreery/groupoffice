@@ -284,8 +284,8 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	 */
 	public function getAutoCheckMailboxes(){
 		$checkMailboxArray = empty($this->check_mailboxes) ? array() : explode(',',$this->check_mailboxes);
-		if(!in_array("INBOX", $checkMailboxArray))
-			$checkMailboxArray[]="INBOX";
+//		if(!in_array("INBOX", $checkMailboxArray))
+//			$checkMailboxArray[]="INBOX";
 		return $checkMailboxArray;
 	}
 
@@ -359,6 +359,8 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	
 	public function defaultAttributes() {
 		$attr = parent::defaultAttributes();
+		
+		$attr['check_mailboxes']="INBOX";
 //		if (GO::modules()->isInstalled('sieve')) {
 			$attr['sieve_port'] = !empty(GO::config()->sieve_port) ? GO::config()->sieve_port : '4190';
 			if (isset(GO::config()->sieve_usetls))
