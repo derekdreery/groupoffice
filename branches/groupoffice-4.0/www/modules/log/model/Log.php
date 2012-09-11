@@ -67,8 +67,7 @@ class GO_Log_Model_Log extends GO_Base_Db_ActiveRecord {
 	
 	public function validate() {
 		
-		if(strlen($this->message) > 255)
-			$this->message=substr($this->message, 0,255);
+		$this->cutAttributeLengths();
 			
 		return parent::validate();
 	}
