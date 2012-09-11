@@ -63,3 +63,5 @@ $updates["201209061100"][]="CREATE TABLE IF NOT EXISTS `em_portlet_folders` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
 $updates["201209061400"][]="ALTER TABLE `em_accounts` ADD `check_mailboxes` TEXT;";
+
+$updates["201209111400"][]="update `em_accounts` set check_mailboxes='INBOX';";
