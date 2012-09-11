@@ -173,7 +173,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	//		if($account->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION)){
 				$uids = json_decode($params['delete_keys']);
 
-				if($response['trash']) {
+				if(!$response['trash']) {
 					$imap->set_message_flag($uids, "\Seen");
 					$response['deleteSuccess']=$imap->move($uids,$account->trash);
 				}else {
