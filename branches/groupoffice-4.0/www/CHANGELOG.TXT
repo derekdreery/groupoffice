@@ -1,5 +1,9 @@
+?? 4.0.98
+- Bugfix: PDF for an Invoice/Order will now accept the page format from the template 
+
 11-09-2012 4.0.97
 - Important security problem fixed!
+- Change: the priority selectbox will be shown to customers, they can set the priority of there own tickets.
 - Fixed bug when using a different database port
 - Now the replacement of fields(%field%) is also working in the footer of a billing PDF
 - Added diff function to GO_Base_Fs_File class
