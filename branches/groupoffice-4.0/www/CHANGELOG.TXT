@@ -4,6 +4,8 @@
 - Added diff function to GO_Base_Fs_File class
 - Fixed date format bug in ActiveRecord when not logged in
 - Fixed temp folder bug in Config.php when not logged in
+- Added check for Amavis configuration file change so it will not be overwritten on every update.
+- Updated CLI only check
 
 
 06-09-2012 4.0.96
