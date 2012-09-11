@@ -187,6 +187,7 @@ if(version_compare(2, $version)>0){
 
 echo "Configuring amavis\n";
 $filename =  '/etc/amavis/conf.d/60-groupoffice_defaults';
+if(file_contains($filename, 'Group-Office'))$filename .= '.'.date('Ymd');
 create_file($filename,'tpl/etc/amavis/conf.d/60-groupoffice_defaults', $replacements);
 
 
