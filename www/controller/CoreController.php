@@ -788,8 +788,9 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
   * Replace STAR with a *.
   */
 	protected function actionCron($params){		
-		//set user as admin
-		GO::session()->setCurrentUser(1);
+		
+		$this->requireCli();
+		GO::session()->runAsRoot();
 		
 		$this->_emailReminders();
 		

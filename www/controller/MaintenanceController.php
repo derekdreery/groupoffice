@@ -475,9 +475,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	
 	
 	public function actionServermanagerReport($params){
-		if(!$this->isCli()){
-			trigger_error("This action must be ran on the command line", E_USER_ERROR);
-		}
+		$this->requireCli();
 		$this->fireEvent('servermanagerReport');
 	}
 	
