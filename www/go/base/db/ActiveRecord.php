@@ -2176,7 +2176,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$msg = $attr['name'];
 			if(isset($attr['description']))
 				$msg.="\n".$attr['description'];
-			return substr($msg,0,255);
+			return $msg;
 		}else
 			return false;
 	}
@@ -2438,7 +2438,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$keywords .= ','.$this->customfieldsRecord->getSearchCacheKeywords();
 		}
 		
-		return substr($keywords,0,255);
+		return GO_Base_Util_String::substr($keywords,0,255);
 	}
 	
 	protected function beforeSave(){
