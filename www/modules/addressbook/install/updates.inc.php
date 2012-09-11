@@ -208,8 +208,8 @@ $updates["201201170902"][]="CREATE TABLE IF NOT EXISTS `ab_email_templates` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
-$updates["201201170902"][]="update ab_email_templates set content=replace(content, '{salutation}','{contact:salutation}');";
-$updates["201201170902"][]="update ab_email_templates set content=replace(content, '{my_','{user:');";
+$updates["201201170902"][]="update ab_email_templates set content=replace(content, '{salutation}','{contact:salutation}') where type=0;";
+$updates["201201170902"][]="update ab_email_templates set content=replace(content, '{my_','{user:') where type=0;";
 
 
 $updates["201202011207"][]="CREATE TABLE IF NOT EXISTS `ab_addresslists` (
