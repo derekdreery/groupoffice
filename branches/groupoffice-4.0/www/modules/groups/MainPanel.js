@@ -37,7 +37,7 @@ GO.groups.MainPanel = function(config){
 		},
 		columns:[
         {header: GO.groups.lang.groups, dataIndex: 'name', width: 300},
-        {header: GO.groups.lang.owner, dataIndex: 'user_name'},
+        {header: GO.groups.lang.owner, dataIndex: 'user_name', sortable:false},
 				{header: GO.groups.lang.adminOnly, dataIndex: 'admin_only', renderer: function(value){return (value == 1)?GO.lang.cmdYes:GO.lang.cmdNo;}}
     ]
 	});  
