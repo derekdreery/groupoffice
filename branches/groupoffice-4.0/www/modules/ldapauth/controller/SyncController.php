@@ -32,11 +32,8 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 	protected function actionUsers($params){
 		
 		
-		if(!$this->isCli())
-			throw new Exception("This action may only be ran on the command line");
-		
-		//run as admin
-		GO::session()->setCurrentUser(1);
+		$this->requireCli();		
+		GO::session()->runAsRoot();
 		
 		
 		$la = new GO_Ldapauth_Authenticator();

@@ -101,8 +101,7 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 	
 	
 	protected function actionCacheUsage($params){
-		if(!$this->isCli())
-			throw new Exception("Not in CLI");
+		$this->requireCli();
 
 		if(!GO::modules()->isInstalled('postfixadmin'))
 			trigger_error('Postfixadmin module must be installed',E_USER_ERROR);

@@ -283,7 +283,29 @@ class GO_Base_Session extends GO_Base_Observable{
 	}
 	
 	/**
-	 * Sets current user. Use it wisely!
+	 * Run the current action as root. This function will close session writing to prevent
+	 * the user becoming root permanently. So you can't set session variables.
+	 */
+	public function runAsRoot(){
+		//Close session writing so that the user won't stay root in browser sessions.
+		GO::session()->closeWriting();
+		
+		GO::session()->setCurrentUser(1);
+	}
+	
+	/**
+	 * Run the current action as another user. This function will close session writing to prevent
+	 * the user becoming root permanently. So you can't set session variables.
+	 */
+	public function runAs($id){
+		//Close session writing so that the user won't stay root in browser sessions.
+		GO::session()->closeWriting();
+		
+		GO::session()->setCurrentUser($id);
+	}
+	
+	/**
+	 * Sets current user for the entire session. Use it wisely!
 	 * @param int $user_id
 	 */
 	public function setCurrentUser($user_id) {

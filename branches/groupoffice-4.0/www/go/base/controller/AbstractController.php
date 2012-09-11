@@ -436,6 +436,16 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	}
 	
 	/**
+	 * Check if action is ran on the Command Line Interface
+	 * 
+	 * @throws GO_Base_Exception_CliOnly
+	 */
+	public function requireCli(){
+		if(!$this->isCli())
+			throw new GO_Base_Exception_CliOnly();
+	}
+	
+	/**
 	 * Check if required controller parameters are present
 	 * 
 	 * @param array $requiredParams
