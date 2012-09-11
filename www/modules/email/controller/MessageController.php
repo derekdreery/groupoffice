@@ -193,6 +193,9 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	//		}
 		}
 		
+		//make sure we are connected to the right mailbox after move and delete operations
+		$imap = $account->openImapConnection($params["mailbox"]);
+		
 		/* @var $imap GO_Base_Mail_Imap */
 		$headersSet = $imap->get_message_headers_set($params['start'], $params['limit'], $sortField , $params['dir']!='ASC', $query);
 		$response["results"]=array();

@@ -10,6 +10,7 @@
 - Added check for Amavis configuration file change so it will not be overwritten on every update.
 - Updated CLI only check
 - Calendar import more memory efficient and fixed some bugs
+- When moving messages the folder switched to the folder messages were moved to.
 
 06-09-2012 4.0.96
 - Option to automatically check mailboxes for unread messages.
