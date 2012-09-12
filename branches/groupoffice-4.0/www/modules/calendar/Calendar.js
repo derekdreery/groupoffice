@@ -2230,7 +2230,8 @@ GO.calendar.showEvent = function(config){
 
 	config = config || {};
     
-	config.event_id = config.values.event_id;
+	if(config.values && config.values.event_id)
+		config.event_id = config.values.event_id;
 	//delete(config.values.event_id);
     
 	GO.calendar.showEventDialog(config);
