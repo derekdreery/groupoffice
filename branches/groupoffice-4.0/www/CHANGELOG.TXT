@@ -4,6 +4,7 @@
 - Bugfix: PDF for Invoice/Order wouldn't print total prices when piece price or product price where not printed
 - Bugfix: PDF for Invoice/Order will now accept the page format from the template 
 - Bugfix: Error with undefined variable in calendar invitation
+- Optimized code for recurrence calculations in the calendar so it will not calculate more than needed.
 
 11-09-2012 4.0.97
 - Important security problem fixed!
