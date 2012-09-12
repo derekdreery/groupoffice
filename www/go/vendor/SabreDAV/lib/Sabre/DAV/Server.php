@@ -244,7 +244,7 @@ class Sabre_DAV_Server {
             $this->httpResponse->sendStatus($httpCode);
             $this->httpResponse->setHeaders($headers);
             $this->httpResponse->sendBody($DOM->saveXML());
-						
+
 						GO::debug("SabreDAV Exception: ");
 						GO::debug((string) $e);
 
@@ -434,7 +434,7 @@ class Sabre_DAV_Server {
      * @return void
      */
     public function invokeMethod($method, $uri) {
-			
+
         $method = strtoupper($method);
 
         if (!$this->broadcastEvent('beforeMethod',array($method, $uri))) return;

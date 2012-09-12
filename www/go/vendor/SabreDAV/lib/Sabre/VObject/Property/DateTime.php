@@ -158,15 +158,9 @@ class Sabre_VObject_Property_DateTime extends Sabre_VObject_Property {
      */
     static public function parseData($propertyValue, Sabre_VObject_Property $property = null) {
 
-			
-			 if (is_null($propertyValue)) {
+        if (is_null($propertyValue)) {
             return array(null, null);
         }
-			
-//				// Bug is issued on sabreDav (This is occurring on a VCalendar 1.0 type)
-//        if (empty($propertyValue)) {
-//            return array(null, null);
-//        }
 
         $date = '(?P<year>[1-2][0-9]{3})(?P<month>[0-1][0-9])(?P<date>[0-3][0-9])';
         $time = '(?P<hour>[0-2][0-9])(?P<minute>[0-5][0-9])(?P<second>[0-5][0-9])';
