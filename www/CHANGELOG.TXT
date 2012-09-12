@@ -1,4 +1,6 @@
 ?? 4.0.98
+- Bugfix: Will not set default values for ActiveRecord set in the code when importing
+- Bugfix: Will not convert a date field when no date is set when importing
 - Bugfix: PDF for Invoice/Order wouldn't print total prices when piece price or product price where not printed
 - Bugfix: PDF for Invoice/Order will now accept the page format from the template 
 
