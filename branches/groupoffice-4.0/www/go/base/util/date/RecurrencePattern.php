@@ -48,6 +48,8 @@ class GO_Base_Util_Date_RecurrencePattern{
 	
 	protected $_days=array('SU','MO','TU','WE','TH','FR','SA');
 	
+	private $_maxTime = 0;
+	
 	public function __construct($params = array()){
 		$this->setParams($params);
 	}
@@ -121,13 +123,19 @@ class GO_Base_Util_Date_RecurrencePattern{
 	/**
 	 * Return the first valid occurrence time after the given startTime.
 	 * 
-	 * If $startTime is omitted it returns the next recurrence since last call or the first occurrence.
+	 * If $startTime is omitted it returns the next recurrence since last call or 
+	 * the first occurrence.
+	 * If $maxTime is given then the system will not search for recurrences after 
+	 * that given date (If there is no recurrence is found.
 	 * 
 	 * @param int $startTime Unix timstamp
+	 * @param int $maxTime Unix timstamp
 	 * @return int Unix timestamp 
 	 */
-	public function getNextRecurrence($startTime=false)
+	public function getNextRecurrence($startTime=false, $maxTime=0)
 	{		
+		$this->_maxTime = $maxTime;
+		
 		if(empty($this->_freq))
 			return false;
 		
@@ -163,7 +171,11 @@ class GO_Base_Util_Date_RecurrencePattern{
 							
 		$daysBetweenNextAndFirstEvent=$this->_findNumberOfDays($startTime, $this->_interval);
 		$recurrenceTime =  GO_Base_Util_Date::date_add($this->_eventstarttime,$daysBetweenNextAndFirstEvent);
-		return $recurrenceTime;
+		
+		if($this->_maxTime>0 && $recurrenceTime>$this->_maxTime)
+			return false;
+		else
+			return $recurrenceTime;
 		
 	}
 	
@@ -200,8 +212,12 @@ class GO_Base_Util_Date_RecurrencePattern{
 			$recurrenceTime = GO_Base_Util_Date::date_add($recurrenceTime,1);
 		}
 		
-	  //It did not fall in this week. Check the next week in the recurrence
-		return $this->_getNextRecurrenceWeekly(GO_Base_Util_Date::date_add($firstPossibleWeekStart,$period));
+		$nextStartTime = GO_Base_Util_Date::date_add($firstPossibleWeekStart,$period);
+		
+		if($this->_maxTime>0 && $nextStartTime>$this->_maxTime)
+			return false;
+		else
+			return $this->_getNextRecurrenceWeekly($nextStartTime); //It did not fall in this week. Check the next week in the recurrence 
 	}
 	
 	protected function _getNextRecurrenceMonthly_date($startTime){
@@ -244,10 +260,14 @@ class GO_Base_Util_Date_RecurrencePattern{
 				$currentMonth = date('m', $recurrenceTime);
 			}
 			
-			$nextDate = date('Y', $firstPossibleTime).'-'.($startMonth+$this->_interval).'-01';
+			//$nextDate = date('Y', $firstPossibleTime).'-'.($startMonth+$this->_interval).'-01';
 
 			//It did not fall in this month. Check the next month in the recurrence
-			return $this->_getNextRecurrenceMonthly(mktime(0,0,0,$startMonth+$this->_interval,1,date('Y',$firstPossibleTime)));
+			$nextStartTime = mktime(0,0,0,$startMonth+$this->_interval,1,date('Y',$firstPossibleTime));
+			if($this->_maxTime>0 && $nextStartTime>$this->_maxTime)
+				return false;
+			else
+				return $this->_getNextRecurrenceMonthly($nextStartTime);
 		}
 		
 		return $recurrenceTime;		
