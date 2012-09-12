@@ -453,6 +453,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 				));
 				$companyModel->save();
 			}
+			unset($model->country); //unset default country value when importing
 			$model->company_id = $companyModel->id;
 		}
 		
