@@ -971,6 +971,12 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 				
 				if($this->beforeImport($params, $model, $attributes, $record)){
+					
+					//Unset some default attributes set in the code
+					$defaultAttributes = $model->defaultAttributes();
+					foreach($defaultAttributes as $column => $value)
+						unset($model->{$column});
+					
 					$columns = $model->getColumns();
 					foreach($columns as $col=>$attr){
 						if(isset($attributes[$col])){
