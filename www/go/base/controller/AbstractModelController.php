@@ -1241,7 +1241,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$columns = $model->getColumns();
 		
 		foreach($columns as $attributeName => $column){
-			if(!empty($column['gotype']) && $column['gotype'] == 'date'){
+			if(!empty($column['gotype']) && $column['gotype'] == 'date' && !empty($model->$attributeName)){
 				$model->$attributeName = date('Y-m-d',strtotime($model->$attributeName));
 			}
 		}		
