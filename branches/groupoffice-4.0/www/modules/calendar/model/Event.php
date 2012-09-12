@@ -531,7 +531,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 			$origEventAttr = $event->getAttributes('formatted');
 
-			while ($occurenceStartTime = $rrule->getNextRecurrence()) {
+			while ($occurenceStartTime = $rrule->getNextRecurrence(false,$periodEndTime)) {
 
 				if ($occurenceStartTime > $periodEndTime)
 					break;
