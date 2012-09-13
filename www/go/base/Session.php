@@ -267,9 +267,13 @@ class GO_Base_Session extends GO_Base_Observable{
 		
 		require_once(GO::config()->root_path.'Group-Office.php');
 		
-		require_once(GO::config()->root_path.'classes/base/users.class.inc.php');
-		$GO_USERS = new GO_USERS();
-		$GO_USERS->update_session(GO::user()->getAttributes());
+		$user = GO_Base_Model_User::model()->findByPk(GO::user()->id); //Using GO::user() could give old data for setting theme
+		if($user != null)
+		{
+			require_once(GO::config()->root_path.'classes/base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+			$GO_USERS->update_session($user->getAttributes());
+		}
 	}
 	
 	/**
