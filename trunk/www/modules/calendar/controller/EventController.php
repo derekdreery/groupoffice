@@ -191,7 +191,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		 // Send the status and status background color with the response
 		$response['status_color'] = $model->getStatusColor();
 		$response['status'] = $model->status;
-
+		$response['is_organizer'] = $model->is_organizer?true:false;
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}
 
