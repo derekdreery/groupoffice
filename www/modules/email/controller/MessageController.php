@@ -995,47 +995,36 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		if(!GO::modules()->isInstalled('calendar'))
 			return $response;
+		
+		$vcalendar = $imapMessage->getInvitationVcalendar();
+		if($vcalendar){
+			$vevent = $vcalendar->vevent[0];
 
-		$atts = $imapMessage->getAttachments();
+			//is this an update for a specific recurrence?
+			$recurrenceDate = isset($vevent->{"recurrence-id"}) ? $vevent->{"recurrence-id"}->getDateTime()->format('U') : 0;
 
-		foreach ($atts as $a) {
-			if ($a->mime == 'text/calendar' || $a->getExtension() == 'ics') {
-				$imap = $imapMessage->getImapConnection();
+			//find existing event
+			$event = GO_Calendar_Model_Event::model()->findByUuid((string) $vevent->uid, GO::user()->id, 0, $recurrenceDate);
 
-				$data = $imap->get_message_part_decoded($imapMessage->uid, $a->number, $a->encoding);
-				try{
-					$vcalendar = GO_Base_VObject_Reader::read($data);
-					$vevent = $vcalendar->vevent[0];
-
-					//is this an update for a specific recurrence?
-					$recurrenceDate = isset($vevent->{"recurrence-id"}) ? $vevent->{"recurrence-id"}->getDateTime()->format('U') : 0;
-
-					//find existing event
-					$event = GO_Calendar_Model_Event::model()->findByUuid((string) $vevent->uid, GO::user()->id, 0, $recurrenceDate);
-
-					// invitation to a new event										
-					$response['iCalendar']['feedback'] = GO::t('iCalendar_event_invitation', 'email');
-					$response['iCalendar']['invitation'] = array(
-							'uuid' => (string) $vevent->uid,
-							'email_sender' => $response['sender'],
-							'email' => $imapMessage->account->getDefaultAlias()->email,
-							'event_declined' => $event && $event->status == 'DECLINED',
-							'event_id' => $event ? $event->id : 0,
-							'is_update' => $vcalendar->method == 'REPLY',
-							'is_invitation' => $vcalendar->method == 'REQUEST',
-							'is_cancellation' => $vcalendar->method == 'CANCEL'
-					);
-					switch ($vcalendar->method) {
-						case 'REPLY':
-
-							break;
-					}
-				}catch (Exception $e){
-					GO::debug((string) $e);
-				}
-			}
+			// invitation to a new event										
+			$response['iCalendar']['feedback'] = GO::t('iCalendar_event_invitation', 'email');
+			$response['iCalendar']['invitation'] = array(
+					'uuid' => (string) $vevent->uid,
+					'email_sender' => $response['sender'],
+					'email' => $imapMessage->account->getDefaultAlias()->email,
+					'event_declined' => $event && $event->status == 'DECLINED',
+					'event_id' => $event ? $event->id : 0,
+					'is_update' => $vcalendar->method == 'REPLY',
+					'is_invitation' => $vcalendar->method == 'REQUEST',
+					'is_cancellation' => $vcalendar->method == 'CANCEL'
+			);
+//			switch ($vcalendar->method) {
+//				case 'REPLY':
+//
+//					break;
+//			}
 		}
-
+				
 		return $response;
 	}
 
