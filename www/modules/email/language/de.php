@@ -231,3 +231,5 @@ $l['subscribeFolders']='Ordner abonnieren';
 $l['imapLoginFailed']='Authentifikation für den Nutzer "%username" fehlgeschlagen.';
 $l['tryNewCredentials']='Versuchen Sie ein alternatives IMAP-Kennwort einzugeben.';
 $l['moveTo']='Verschiebe nach';
+$l['noEmailFolders']= 'Keine Ordner hinzugefügt.';
+$l['checkUnseen']='Diesen Ordner automatisch auf neue Nachrichten prüfen';

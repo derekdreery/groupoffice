@@ -106,3 +106,7 @@ $l['activateFilter']='Filter aktivieren';
 $l['setAction']='Aktion bearbeiten';
 $l['setFilter']='Bedingung bearbeiten';
 $l['meetingTheseCriteria']='die diese Bedingungen erfüllen';
+$l["redirect_copy_to"]= 'Weiterleitung an';
+$l["toFolder"]= 'In Ordner';
+$l['pleaseSelectOne']='Bitte wählen';
+$l['setRead']='Markiere Nachricht als gelesen';
