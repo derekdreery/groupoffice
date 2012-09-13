@@ -1123,10 +1123,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 	protected function afterDuplicate(&$duplicate) {
 		
-		$this->duplicateRelation('participants', $duplicate);
-		
-		if($duplicate->isRecurring())
-			$this->duplicateRelation('exceptions', $duplicate);		
+		if (!$this->isNew) {
+			if (empty($duplicate->participants))
+				$this->duplicateRelation('participants', $duplicate);
+
+			if($duplicate->isRecurring() && $this->isRecurring())
+				$this->duplicateRelation('exceptions', $duplicate);		
+		}
 		
 		return parent::afterDuplicate($duplicate);
 	}

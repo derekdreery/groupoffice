@@ -33,8 +33,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 		
 		
-		if(!empty($params['duplicate']))
-			$model = $model->duplicate();
+//		if(!empty($params['duplicate']))
+//			$model = $model->duplicate();
 
 		if (!empty($params['exception_date'])) {
 			//$params['recurrenceExceptionDate'] is a unixtimestamp. We should return this event with an empty id and the exception date.			
@@ -101,7 +101,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		if(!$this->_checkConflicts($response, $model, $params)){
 			return false;
 		}
-		
+				
 		return parent::beforeSubmit($response, $model, $params);
 	}
 
@@ -471,6 +471,37 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$response['data']['has_other_participants']=$model->hasOtherParticipants(GO::user()->id);
 		
 		$response['data']['user_name']=$model->user ? $model->user->name : "Unknown";
+		
+		if(empty($params['id'])){
+			$calendar = $model->calendar;
+
+			$participant['user_id']=$calendar->user_id;
+			$participant['name']=$calendar->user->name;
+			$participant['email']=$calendar->user->email;
+			$participant['status']=  GO_Calendar_Model_Participant::STATUS_ACCEPTED."";
+			$participant['is_organizer']="1";
+			$participant['available']= true;//GO_Calendar_Model_Participant::userIsAvailable($params['start_time'],$params['end_time'],$calendar->user_id);
+			$participant['success']=true;
+
+			$response['participants']=array('results'=>array($participant),'total'=>1,'success'=>true);
+		}else
+		{
+			$particsStmt = GO_Calendar_Model_Participant::model()->findByAttribute('event_id',$params['id']);
+			$response['participants']=array('results'=>array(),'total'=>0,'success'=>true);
+
+			while ($participantModel = $particsStmt->fetch()) {
+
+				$record=$participantModel->getAttributes();
+				
+				if(!empty($params['exception_date']))
+					unset($record['id']);
+				
+				$record['available']=$participantModel->isAvailable();				
+				$response['participants']['results'][] = $record;
+				$response['participants']['total']+=1;
+			}
+		}
+		
 
 		return parent::afterLoad($response, $model, $params);
 	}
