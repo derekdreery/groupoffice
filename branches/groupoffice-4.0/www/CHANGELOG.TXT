@@ -5,6 +5,7 @@
 - Bugfix: PDF for Invoice/Order will now accept the page format from the template 
 - Bugfix: Error with undefined variable in calendar invitation
 - Optimized code for recurrence calculations in the calendar so it will not calculate more than needed.
+- Bugfix: Fixed problem with accepting invitations that have a different mime-type than 'text/calendar'
 
 11-09-2012 4.0.97
 - Important security problem fixed!
