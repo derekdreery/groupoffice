@@ -1,4 +1,5 @@
 ?? 4.0.98
+- Bugfix: Changing user settings will no longer place old user data into a session in setCompatibilitySessionVars() themes will get changed right away
 - Bugfix: Will not set default values for ActiveRecord set in the code when importing
 - Bugfix: Will not convert a date field when no date is set when importing
 - Bugfix: PDF for Invoice/Order wouldn't print total prices when piece price or product price where not printed
