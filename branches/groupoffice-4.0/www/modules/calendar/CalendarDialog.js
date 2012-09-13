@@ -116,7 +116,7 @@ GO.calendar.CalendarDialog = function(config)
 
 	this.propertiesTab.add([{
 			xtype:'plainfield',
-			fieldLabel:'Direct URL',
+			fieldLabel:GO.calendar.lang.directUrl,
 			name:'url',
 			anchor:'100%'
 		},{
