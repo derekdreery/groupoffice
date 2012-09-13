@@ -643,6 +643,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				
 				if(!GO.util.empty(action.result.status))
 					newEvent.status = action.result.status;
+				
+				if(!GO.util.empty(action.result.is_organizer))
+					newEvent.is_organizer = action.result.is_organizer;
 					
 				this.fireEvent('save', newEvent, this.oldDomId);
 				
