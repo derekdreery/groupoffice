@@ -640,28 +640,30 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		return $response;
 	}
 	
-	/**
-	 *
-	 * @param array $params
-	 * @return Sabre_VObject_Component 
-	 */
-	private function _getVObjectFromMail($params){
-		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
-		$message = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'],$params['uid']);
-
-		$attachments = $message->getAttachments();
-		
-		foreach($attachments as $attachment){
-			if($attachment->mime=='text/calendar'){
-				$data = $message->getImapConnection()->get_message_part_decoded($message->uid, $attachment->number, $attachment->encoding);
-				
-				$vcalendar = GO_Base_VObject_Reader::read($data);
-
-				return $vcalendar->vevent[0];
-			}
-		}
-		return false;
-	}
+//	/**
+//	 *
+//	 * @param array $params
+//	 * @return Sabre_VObject_Component 
+//	 */
+//	private function _getVObjectFromMail($params){
+//		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
+//		$message = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'],$params['uid']);
+//
+//		$attachments = $message->getAttachments();
+//			
+//		foreach($attachments as $attachment){			
+//			GO::debug($attachment->mime);
+//			if($attachment->mime=='text/calendar' || $attachment->getExtension() == 'ics'){
+//				GO::debug($attachment);
+//				$data = $message->getImapConnection()->get_message_part_decoded($message->uid, $attachment->number, $attachment->encoding);
+//				
+//				$vcalendar = GO_Base_VObject_Reader::read($data);
+//
+//				return $vcalendar->vevent[0];
+//			}
+//		}
+//		return false;
+//	}
 	
 	
 	protected function actionAcceptInvitation($params){
@@ -672,7 +674,11 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		//todo calendar should be associated with mail account!
 		//GO::user()->id must be replaced with $account->calendar->user_id
 
-		$vevent = $this->_getVObjectFromMail($params);
+//		$vevent = $this->_getVObjectFromMail($params);
+		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
+		$message = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'],$params['uid']);
+		$vcalendar = $message->getInvitationVcalendar();
+		$vevent = $vcalendar->vevent[0];
 		
 		//if a recurrence-id if passed then convert it to a unix time stamp.
 		//it is an update just for a particular occurrence.
