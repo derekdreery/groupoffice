@@ -9,6 +9,13 @@
 - Bugfix: Error with undefined variable in calendar invitation
 - Optimized code for recurrence calculations in the calendar so it will not calculate more than needed.
 - Bugfix: Fixed problem with accepting invitations that have a different mime-type than 'text/calendar'
+- Bugfix: Groups module could be opened twice
+- Bugfix: Custom field column cache was not cleared when modified.
+- Bugfix: Disable sorting on alias and mailboxes columns in postfixadmin
+- Updated German translation
+- Bugfix: Adding users and groups to manage permissions only got read permissions.
+- HTC deletes old appointments. We don't like that so we refuse to delete appointments older then 7 days with ActiveSync.
+- Updated Swedish translation
 
 11-09-2012 4.0.97
 - Important security problem fixed!

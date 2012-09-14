@@ -1,36 +1,11 @@
 <?php
-
-
-$l['name'] = 'Adressbok';
-$l['description'] = 'Modul för att hantera kontakter.';
-$l['allAddressbooks'] = 'Alla adressböcker';
-$l['notIncluded'] = 'Importera inte';
-$l['comment'] = 'Kommentar';
-$l['bankNo'] = 'Banknummer'; ;
-$l['vatNo'] = 'Momsreg.nummer';
-$l['contactsGroup'] = 'Grupp';
-$l['customers'] = 'Kunder';
-$l['suppliers'] = 'Leverantörer';
-$l['prospects'] = 'Övriga';
-$l['contacts'] = 'Kontakter';
-$l['companies'] = 'Företag';
-$l['newContactAdded']= 'Ny kontakt tillagd';
-$l['newContactFromSite']= 'En ny kontakt har lagts till via ett webb-formulär.';
-$l['clickHereToView']= 'Klicka här för att visa kontakten';
-$l['contactFromAddressbook']='Kontakt från %s';
-$l['companyFromAddressbook']='Företag från %s';
-$l['multipleSelected']='Flera addressböcker valda';
-$l['incomplete_delete_contacts']='Du har inte behörighet att radera alla valda kontakter';
-$l['incomplete_delete_companies']='Du har inte behörighet att radera alla valda företag';
-$l['emailAlreadyExists']='Denna kontakt har redan en e-postadress';
-$l['emailDoesntExists']='E-postadressen hittades inte';
-$l['imageNotSupported']='Bilden som laddades upp stöds inte. Bara gif-, png- och jpg-bilder går att använda.';
-
+$l['addresslists']='Adresslistor';
+$l['sendingEmailAllowed']= 'Det är tillåtet att skicka e-post till den här kontakten';
 $l["newSearch"]='Ny sökning';
 $l["executeQuery"]='Kör sökfråga';
 $l["savedQueries"]='Sparade sökfrågor';
 $l["selectField"]= 'Välj fält';
-$l["selectMailingGroup"]= 'Välj sändlista';
+$l["selectMailingGroup"]= 'Välj adresslista';
 $l["cmdFormLabelAddressBooks"]= 'Adressbok';
 $l["alphabet"]= 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,Å,Ä,Ö';
 $l["cmdAllFields"]= 'Alla fält';
@@ -66,6 +41,7 @@ $l["cmdCompanyDetailsFor"]= 'Detaljer för';
 $l["cmdPanelCompany"]= 'Företagsinformation';
 $l["cmdFormLabelBankNo"]= 'Banknummer';
 $l["cmdFormLabelVatNo"]= 'Momsreg.nummer';
+$l["cmdFormLabelInvoiceEmail"]= 'E-post för fakturering';
 $l["cmdFieldsetCompanyDetails"]= 'Företagsinformation';
 $l["cmdFieldsetVisitAddress"]= 'Besöksadress';
 $l["cmdFieldsetPostAddress"]= 'Postadress';
@@ -100,7 +76,8 @@ $l["noAddressbooks"]= 'Det finns inga adressböcker';
 $l["moveAll"]= 'Företaget, inklusive alla anställda, kommer att flyttas till den nya adressboken. Är du säker på att du vill göra detta?';
 $l["addressbook"]= 'Adressbok';
 $l["addressbooks"]= 'Adressböcker';
-$l["sendMailing"]= 'Skicka till sändlista';
+$l["sendMailing"]= 'Skicka till adresslista';
+$l["importSuccessCount"]='Importerade poster:';
 $l["importSuccess"]= 'Dataimport lyckades';
 $l["searchOnSender"]= 'Sök i adressbok';
 $l["confirmCreate"]='Kontakten existerar inte. Vill du skapa en ny kontakt?';
@@ -115,7 +92,7 @@ $l["enterSearchQueryName"]='Fyll i namnet på sökfrågan:';
 $l["photo"]= 'Foto';
 $l["deleteImage"]='Radera bild';
 $l["addAllSearchResults"]='Lägg till alla sökträffar';
-$l["confirmAddAllSearchResults"]='Är du säker på att du vill lägga till alla sökträffar i sändlistan?';
+$l["confirmAddAllSearchResults"]='Är du säker på att du vill lägga till alla sökträffar i adresslistan?';
 $l["moveEmployees"]='Flytta anställda';
 $l["emailAdded"]='E-postadressen för kontakten lades till';
 $l["exportWithCompanies"]='Med företag';
@@ -126,66 +103,105 @@ $l["iban"]='IBAN';
 $l["unknownEmail"]= 'Okänd e-postadress';
 $l["strUnknownEmail"]= 'Denna e-postadress är okänd. Vill du lägga till den och skapa en ny kontakt, addera den till en befintlig kontakt eller avbryta?';
 
-$l['addresslists']='Addresslistor';
 $l["globalsettings_templatelabel"]= 'Mall';
 $l["globalsettings_allchangelabel"]= 'Ändra alla?';
 $l["globalsettings_renameall"]= 'Döp om alla?';
 $l["createEmailSelected"]= 'Skapa e-post för markering';
+$l['name'] = 'Adressbok';
+$l['description'] = 'Modul för att hantera kontakter.';
+$l['allAddressbooks'] = 'Alla adressböcker';
+$l['notIncluded'] = 'Importera inte';
+$l['comment'] = 'Kommentar';
+$l['bankNo'] = 'Banknummer'; ;
+$l['vatNo'] = 'Momsreg.nummer';
+$l['contactsGroup'] = 'Grupp';
 $l['contact']= 'Kontakt';
 $l['company']= 'Företag';
+$l['customers'] = 'Kunder';
+$l['suppliers'] = 'Leverantörer';
+$l['prospects'] = 'Övriga';
+$l['contacts'] = 'Kontakter';
+$l['companies'] = 'Företag';
+$l['newContactAdded']= 'Ny kontakt tillagd';
+$l['newContactFromSite']= 'En ny kontakt har lagts till via ett webb-formulär.';
+$l['clickHereToView']= 'Klicka här för att visa kontakten';
+$l['contactFromAddressbook']='Kontakt från %s';
+$l['companyFromAddressbook']='Företag från %s';
 $l['defaultSalutationTpl']='Bästa [Herr/Fru] {middle_name} {last_name}';
-$l['no_addressbook_id']= 'Ogiltigt adressboks-id har skickats med en förfrågan till servern!';
+$l['multipleSelected']='Flera addressböcker valda';
+$l['incomplete_delete_contacts']='Du har inte behörighet att radera alla valda kontakter';
+$l['incomplete_delete_companies']='Du har inte behörighet att radera alla valda företag';
+$l['emailAlreadyExists']='Denna kontakt har redan en e-postadress';
+$l['emailDoesntExists']='E-postadressen hittades inte';
+$l['imageNotSupported']='Bilden som laddades upp stöds inte. Bara gif-, png- och jpg-bilder går att använda.';
+$l['no_addressbook_id']= 'Ogiltigt adressboks-id i begäran till servern!';
 $l['undefined']= '-';
 $l['createUser']='Skapa användare';
-$l['addresslist']= 'Addresslista';
-$l['addresslistContact']= 'Kontakt i adresslista';
-$l["emailTemplate"]= 'E-post-mallar';
+$l['addresslist']= 'Adresslista';
+$l['addresslistContact']= 'Adresslistekontakt';
+
+$l["emailTemplate"]= 'E-postmallar';
 $l["cmdPanelTemplate"]= 'Mallar';
-$l["cmdAddEmailTemplate"]= 'Lägg till e-post-mall';
+$l["cmdAddEmailTemplate"]= 'Lägg till e-postmall';
 $l["addDocumentTemplate"]='Lägg till dokumentmall';
 $l["documentTemplate"]='Dokumentmall';
-$l["unsubscribeLink"]='Avprenumerera länk';
-$l["unsubscribeHref"]='Avprenumerera href';
+$l["unsubscribeLink"]='Avregistrera-länk';
+$l["unsubscribeHref"]='Avregistrera-href';
 $l["autoDataMyName"]= 'Mitt namn';
+$l["autoDataBeginning"]= 'Start';
 $l["autoData"]= 'Autodata';
 $l["customContactFields"]='Egna kontaktfält';
 $l["customCompanyFields"]='Egna företagsfält';
 $l["customUserFields"]='Egna användarfält';
+
+
 $l["cmdAddOpenOfficeTemplate"]= 'Lägg till OpenOffice.org-mall';
 $l["cmdTemplateDialog"]= 'Redigera mall';
 $l["cmdFormLabelReadNotification"]= 'Begär att mottagaren ska skicka notifiering när meddelandet lästs';
 $l["cmdAddMailing"]= 'Lägg till adresslista';
-$l["cmdDeleteMailing"]= 'Radera addresslista';
-$l["cmdPanelMailings"]= 'Addresslistor';
-$l["cmdEditMailingWindow"]= 'Redigera addresslista';
+$l["cmdDeleteMailing"]= 'Radera adresslista';
+$l["cmdPanelMailings"]= 'Adresslistor';
+$l["cmdEditMailingWindow"]= 'Redigera adresslista';
 $l["SelectOODocument"]= 'Välj en mall';
 $l["SelectOODocumentWindowTitle"]= 'Välj ett OpenOffice-dokument';
-$l["sendingEmailAllowed"]= 'Sändande av e-post till denna adress är tillåtet';
-$l["enabledMailingGroups"]= 'Aktiverade addresslistor:';
+
+$l["sendingEmailAllowed"]= 'Det är tillåtet att skicka e-post till den här kontakten';
+$l["enabledMailingGroups"]= 'Aktiverade adresslistor:';
 $l["noMailingGroups"]='Du har inga adresslistor';
+
 $l["sentMailings"]='Skickade nyhetsbrev';
+
 $l["subject"]='Ämne';
 $l["status"]='Status';
 $l["sent"]='Skickat';
 $l["total"]='Totalt';
 $l["errors"]='Fel';
+
 $l["addEntireAddressbook"]='Lägg till hela adressboken';
 $l["selectAddressbook"]='Välj en adressbok';
+
 $l["defaultSalutationText"]='Ange en hälsning att använda när hälsningen för mottagaren är okänd';
+
 $l["filterMailings"]='Adresslistfilter';
 $l["enterName"]='Ange filnamn';
 $l["pleaseEnterName"]='Vänligen ange ett filnamn för det nya dokumentet';
 $l["noAddressLists"]='Inga adresslistor';
+
 $l["confirmAddEntireAddressbook"]='Är det säkert att du vill lägga till allt i adressboken till denna adresslista?';
+
 $l["noTemplate"]='Ingen mall';
+
 $l["newsletters"]='Nyhetsbrev';
-$l["addresslist"]='Addresslista';
+$l["addresslist"]='Adresslista';
 $l["viewLog"]='Visa logg';
 
 $l["viewMessage"]='Visa meddelande';
 $l["pauseMailing"]='Pausa sändning';
 $l["resumeMailing"]='Återuppta sändning';
+
 $l["copyingMessages"]='Kopierar meddelanden...';
+
+
 $l["companyId"]= "ID";
 $l["companyUser_id"]= "Användare";
 $l["companyAddressbook_id"]= "Adressbok";
@@ -198,7 +214,7 @@ $l["companyCity"]= "Ort";
 $l["companyState"]= "Stat";
 $l["companyCountry"]= "Land";
 $l["companyPost_address"]= "Postadress";
-$l["companyPost_address_no"]= "Postaddressnummer";
+$l["companyPost_address_no"]= "Postadressnummer";
 $l["companyPost_city"]= "Postort";
 $l["companyPost_state"]= "Poststat";
 $l["companyPost_country"]= "Postland";
@@ -214,10 +230,12 @@ $l["companyIban"]= "Iban";
 $l["companyCrn"]= "Crn";
 $l["companyCtime"]= "Skapad tid";
 $l["companyMtime"]= "Modifierad tid";
+$l["companyEmail_allowed"]= "E-post tillåtet";
 $l["companyFiles_folder_id"]= "Mapp";
+
 $l["contactId"]= "ID";
 $l["contactUser_id"]= "Användare";
-$l["contactAddressbook_id"]= "Addresbok";
+$l["contactAddressbook_id"]= "Adressbok";
 $l["contactFirst_name"]= "Förnamn";
 $l["contactMiddle_name"]= "Mellannamn";
 $l["contactLast_name"]= "Efternamn";
@@ -246,26 +264,38 @@ $l["contactComment"]= "Kommentarer";
 $l["contactCtime"]= "Skapad tid";
 $l["contactMtime"]= "Modifierad tid";
 $l["contactSalutation"]= "Hälsning";
+$l["contactEmail_allowed"]= "E-post tillåtet";
 $l["contactFiles_folder_id"]= "Mapp";
 $l["contactGo_user_id"]= "Användare";
+
 $l['mailingStatus'][0]="Väntar på att börja";
 $l['mailingStatus'][1]="Kör";
-$l['mailingStatus'][2]="Aslutad";
+$l['mailingStatus'][2]="Avslutad";
 $l['mailingStatus'][3]="Pausad";
+
 $l['status']='Status';
 $l['templateAlreadyExists']= 'Mallen du försöker skapa finns redan';
+$l['mailingAlreadyExists'] = 'Adresslistan du försöker skapa finns redan';
 $l['greet']='Vänliga hälsningar';
-$l['unsubscribe']='Avprenumerera';
-$l['unsubscription']='Klicka här för att avprenumerera ifrån adresslistan.';
-$l['r_u_sure']= 'Är du säker på att du vill avprenumerera ifrån adresslistan?';
-$l['delete_success']= 'Du är nu avprenumererad ifrån adresslistan.';
+$l['unsubscribe']='Avregistrera';
+$l['unsubscription']='Klicka här för att avregistreras ifrån adresslistan.';
+$l['r_u_sure']= 'Är du säker på att du vill avregistreras ifrån adresslistan?';
+$l['delete_success']= 'Du är nu avregistrerad ifrån adresslistan.';
 $l['setCurrentTemplateAsDefault']='Sätt nuvarande mall som standard';
+
 $l['contactCustomFields']='Egna kontaktfält';
 $l['companyCustomFields']='Egna företagsfält';
 $l['editUser']='Redigera användare';
+
 $l['templateContent']='Dokument';
 
-$l['sendingEmailAllowed']='Tillåts att ta emot e-post';
-$l["companyEmail_allowed"]= "E-post tillåtet";
-$l["contactEmail_allowed"]= "E-post tillåtet";
 $l['addresslistIdMustBePositive']='Denna panel förväntar sig ett adresslist-ID som är positivt, men tog inte emot något. Vänligen kontakta din administratör.';
+$l['male']='Man';
+$l['female']='Kvinna';
+$l['importing']='Importerar';
+$l['contactUuid']='UUID';
+
+$l['nRemovedFromAddresslist']='%n kontakter har identifierats och raderats ifrån den valda adresslistan.';
+$l['addToAddresslist']='Lägg till i adresslista %s';
+$l['addToAddresslistPrompt']='Du håller på att lägga till de valda objekten i adresslistan %s. Vill du att dessa objekt bara ska finnas i %s?';
+$l['addAddresslistSuccess']='Objekten har lagts till i adresslistan.';
