@@ -3130,10 +3130,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @param GO_Base_Db_FindParams $findParams
 	 * @return GO_Base_Db_ActiveStatement 
 	 */
-	public function findLinks($model, $findParams=false){
+	public function findLinks($model, $extraFindParams=false){
 		
-		if(!$findParams)
-			$findParams = GO_Base_Db_FindParams::newInstance ();
+		$findParams = GO_Base_Db_FindParams::newInstance ();
 		
 		$findParams->select('t.*,l.description AS link_description');
 		
@@ -3143,6 +3142,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 						->addCondition('model_type_id', $this->modelTypeId(),'=','l');
 		
 		$findParams->join("go_links_{$model->tableName()}", $joinCriteria, 'l');
+		
+		if($extraFindParams)
+			$findParams->mergeWith ($extraFindParams);
 		
 		return $this->find($findParams);
 	}
