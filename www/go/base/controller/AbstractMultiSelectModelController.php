@@ -158,8 +158,12 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 
 				foreach($ids as $id){
 					$linkModel = new $linkModelName();
+					
+					if(isset($params['addAttributes']) && ($attr = json_decode($params['addAttributes'], true)))
+						$linkModel->setAttributes($attr);					
+					
 					$linkModel->$linkmodelField = $id;
-					$linkModel->$remoteKey = $params['model_id'];
+					$linkModel->$remoteKey = $params['model_id'];					
 					$linkModel->save();
 				}
 			}

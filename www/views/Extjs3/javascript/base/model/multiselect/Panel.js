@@ -46,6 +46,7 @@ GO.base.model.multiselect.panel = function(config){
 		autoFill: true,
 		forceFit: true
 	});
+
 	
 
 	config.sm=new Ext.grid.RowSelectionModel();
@@ -62,18 +63,22 @@ GO.base.model.multiselect.panel = function(config){
 				if(!this.addDialog){
 					if(!config.selectColumns)
 						config.selectColumns = config.columns;
-					
+										
 					this.addDialog = new GO.base.model.multiselect.addDialog({
 						multiSelectPanel:this,
 						url: config.url,
 						fields: config.fields,
 						cm: config.selectColumns,
 						handler: function(grid, selected){ 
+							var params={add:Ext.encode(selected)};
+							
+							if(config.addAttributes){
+								params.addAttributes=Ext.encode(config.addAttributes)
+							}
+							
 							this.store.load({
-								params: {
-									add:Ext.encode(selected)
-								}
-							})
+								params: params
+							});
 						},
 						scope: this
 						
