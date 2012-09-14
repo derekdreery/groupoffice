@@ -22,7 +22,7 @@
 		
 		
 		
-		if($theme!='Default'){
+		if($theme!='Default' && file_exists(GO::config()->root_path."views/Extjs3/themes/".$theme."/external.css")){
 			?>
 			<link href="<?php echo GO::config()->host; ?>views/Extjs3/themes/<?php echo $theme; ?>/external.css" type="text/css" rel="stylesheet" />
 			<?php
