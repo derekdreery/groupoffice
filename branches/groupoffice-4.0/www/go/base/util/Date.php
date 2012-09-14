@@ -45,23 +45,23 @@ class GO_Base_Util_Date {
 			return true;
 		}else {
 
-			global $GO_CONFIG, $GO_LANGUAGE;
-			
-			$date = getdate($time);
-
-			$day_start = mktime(0,0,0,$date['mon'], $date['mday'], $date['year']);
-			$day_end =  mktime(0,0,0,$date['mon'], $date['mday']+1, $date['year']);
-
-			require_once(GO::config()->class_path.'holidays.class.inc.php');
-			$holidays = new holidays();
-
-			$region=$region ? $region : $GLOBALS['GO_LANGUAGE']->language;
-
-			$hd = new holidays();
-			$count = $hd->get_holidays_for_period($region, $day_start, $day_end);
-			if($count) {
-				return true;
-			}
+//			global $GO_CONFIG, $GO_LANGUAGE;
+//			
+//			$date = getdate($time);
+//
+//			$day_start = mktime(0,0,0,$date['mon'], $date['mday'], $date['year']);
+//			$day_end =  mktime(0,0,0,$date['mon'], $date['mday']+1, $date['year']);
+//
+//			require_once(GO::config()->class_path.'holidays.class.inc.php');
+//			$holidays = new holidays();
+//
+//			$region=$region ? $region : GO::config()->language;
+//
+//			$hd = new holidays();
+//			$count = $hd->get_holidays_for_period($region, $day_start, $day_end);
+//			if($count) {
+//				return true;
+//			}
 		}
 		return false;
 	}
