@@ -70,7 +70,6 @@ GO.groups.MainPanel = function(config){
 		]});
       
   config.layout='fit';
-  config.id='groups-grid-overview-groups';
 
   config.cm=columnModel;
   config.sm=new Ext.grid.RowSelectionModel({singleSelect: false});
