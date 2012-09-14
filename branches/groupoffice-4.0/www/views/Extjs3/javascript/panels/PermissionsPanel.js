@@ -75,6 +75,10 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 					selectOnFocus : true,
 					forceSelection : true
 				};
+				
+		
+		if(!this.addLevel)
+			this.addLevel = GO.permissionLevels.read;
 
 		var selectUsersPermissionLevel = new GO.form.ComboBox(permissionLevelConfig);
 		var selectGroupsPermissionLevel = new GO.form.ComboBox(permissionLevelConfig);
@@ -128,6 +132,7 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 				url:'aclGroup',
 				columns: groupColumns,
 				plugins: action,
+				addAttributes:{level:this.addLevel},
 				selectColumns:[{
 					header : GO.lang['strName'],
 					dataIndex : 'name',
@@ -191,6 +196,7 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 				autoExpandColumn:'name',
 				url:'aclUser',
 				columns: userColumns,
+				addAttributes:{level:this.addLevel},
 				selectColumns:[{
 					header : GO.lang['strName'],
 					dataIndex : 'name',
