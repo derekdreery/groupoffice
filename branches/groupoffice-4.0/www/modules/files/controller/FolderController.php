@@ -626,7 +626,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			//throw new Exception("Fs folder doesn't exist! ".$folder->fsFolder->path());
 			GO::debug("Deleting it because filesystem folder doesn't exist");
 			$folder->readonly = 1; //makes sure acl is not deleted
-			$folder->delete();
+			$folder->delete(true);
 			if($mustExist || isset($model->acl_id))
 				return $this->_createNewModelFolder($model);
 			else
