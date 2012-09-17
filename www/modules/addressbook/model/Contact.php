@@ -698,12 +698,12 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$e->add($p);
 		}
 		
-		if ($this->address) {
-			$p = new Sabre_VObject_Property('ADR',';;'.$this->address.' '.$this->address_no.';'.
+		//if ($this->address) {
+			$p = new Sabre_VObject_Property('ADR',';;'.$this->address,"\n".' '.$this->address_no.';'.
 				$this->city.';'.$this->state.';'.$this->zip.';'.$this->country);
 			$p->add('TYPE','HOME');
 			$e->add($p);
-		}
+		//}
 		
 		if(!empty($this->comment)){
 			$e->note=$this->comment;
