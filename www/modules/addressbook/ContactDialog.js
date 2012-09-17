@@ -303,6 +303,8 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 	
 	loadContact : function(id, config)
 	{
+		this.beforeLoad();
+		
 		this.formPanel.form.load({
 			url:GO.url('addressbook/contact/load'),
 			params:{
@@ -369,6 +371,10 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 	
 		
 	afterLoad  : function(action){
+		
+	},
+	
+	beforeLoad  : function(){
 		
 	},
 	
