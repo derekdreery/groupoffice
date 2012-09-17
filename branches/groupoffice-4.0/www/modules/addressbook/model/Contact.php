@@ -321,27 +321,27 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$attributes['uuid'] = $uid;
 		
 		$emails = array();
-		$remainingVcardProps = array(); // format: $remainingVcardProps[$integer] = array('name'=>$vobjName, 'parameters'=>$vobjParams, 'value'=>$vobjValue)
-		$deletedPropertiesPrefixes_nonGO = array(); // This is to keep track of the prefixes occurring in the current VCard.
+//		$remainingVcardProps = array(); // format: $remainingVcardProps[$integer] = array('name'=>$vobjName, 'parameters'=>$vobjParams, 'value'=>$vobjValue)
+//		$deletedPropertiesPrefixes_nonGO = array(); // This is to keep track of the prefixes occurring in the current VCard.
 																	// Every time a new prefix is encountered during the current sync,
 																	// all of this contact's properties starting with this prefix will
 																	// be removed to make place for the ones in the imported VCard.
 
 		// Remove this contact's non-GO VCard properties.
 		// (We assume they will be updated by the client during the current sync process).
-		if (!empty($this->id)) {
-			$nonGO_PropModels_toDelete = GO_Addressbook_Model_ContactVcardProperty::model()
-				->find(
-					GO_Base_Db_FindParams::newInstance()
-						->criteria(
-							GO_Base_Db_FindCriteria::newInstance()
-								->addCondition('contact_id',$this->id)
-								->addCondition('name','X-%','NOT LIKE')
-						)
-				);
-			while ($contactVcardProp = $nonGO_PropModels_toDelete->fetch())
-				$contactVcardProp->delete();
-		}
+//		if (!empty($this->id)) {
+//			$nonGO_PropModels_toDelete = GO_Addressbook_Model_ContactVcardProperty::model()
+//				->find(
+//					GO_Base_Db_FindParams::newInstance()
+//						->criteria(
+//							GO_Base_Db_FindCriteria::newInstance()
+//								->addCondition('contact_id',$this->id)
+//								->addCondition('name','X-%','NOT LIKE')
+//						)
+//				);
+//			while ($contactVcardProp = $nonGO_PropModels_toDelete->fetch())
+//				$contactVcardProp->delete();
+//		}
 		
 		foreach ($vobject->children as $vobjProp) {
 			switch ($vobjProp->name) {
