@@ -101,13 +101,16 @@ GO.email.AccountDialog = function(config) {
 				},
 				scope : this
 			}
-		}),new Ext.ux.form.XCheckbox({
+		}),
+		new Ext.ux.form.XCheckbox({
 			boxLabel: GO.email.lang.storePassword,
 			checked: true,
 			name: 'store_password',
 			allowBlank: true,
-			hideLabel:true
-		}),new Ext.form.TextField({
+			hideLabel:true,
+			hidden: true //this function only works with imap auth at the moment.
+		}),
+		new Ext.form.TextField({
 			fieldLabel : GO.lang.strPassword,
 			name : 'password',
 			inputType : 'password',
@@ -238,7 +241,15 @@ GO.email.AccountDialog = function(config) {
 		}), new Ext.form.TextField({
 			fieldLabel : GO.lang.strUsername,
 			name : 'smtp_username'
-		}), new Ext.form.TextField({
+		}),
+		new Ext.ux.form.XCheckbox({
+			checked: true,
+			name: 'store_smtp_password',
+			allowBlank: true,
+			hideLabel:true,
+			hidden: true
+		}),
+		new Ext.form.TextField({
 			fieldLabel : GO.lang.strPassword,
 			name : 'smtp_password',
 			inputType : 'password'
