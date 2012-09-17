@@ -1,4 +1,7 @@
 ?? 4.0.98
+- Bugfix: Ticket rates in Add/Edit ticket dialog will only be shown where there are ticket rates
+- Bugfix: Validate if the selected agent can be agent for the selected ticket type
+- Bugfix: Save button is shown in the Ticket administation dialog when adding rates
 - Automatic creation of call reminder task with newly created orders.
 - Bugfix: Changing user settings will no longer place old user data into a session in setCompatibilitySessionVars() themes will get changed right away
 - Bugfix: Will not set default values for ActiveRecord set in the code when importing
