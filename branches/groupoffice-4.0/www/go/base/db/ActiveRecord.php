@@ -302,9 +302,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	/**
 	 * Constructor for the model
 	 * 
-	 * @param int $primaryKey integer The primary key of the database table
+	 * @param boolean $newRecord true if this is a new model
+	 * @param boolean true if this is the static model returned by GO_Base_Model::model()
 	 */
-	public function __construct($newRecord=true){			
+	public function __construct($newRecord=true, $isStaticModel=false){			
 		
 		$this->_loadingFromDatabase=false;
 		
@@ -313,14 +314,23 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$this->columns=GO_Base_Db_Columns::getColumns($this);
 		$this->setIsNew($newRecord);
 		
-		if($this->isNew) 
-			$this->setAttributes($this->_getDefaultAttributes(),false);
-//		else
-//			$this->_cacheRelatedAttributes();
-				
 		$this->init();
 		
+		if($this->isNew) 
+			$this->setAttributes($this->_getDefaultAttributes(),false);
+		elseif(!$isStaticModel)
+			$this->afterLoad();
+//		else
+//			$this->_cacheRelatedAttributes();
+		
 		$this->_modifiedAttributes=array();
+	}
+	
+	/**
+	 * This function is called after the model is constructed by a find query
+	 */
+	protected function afterLoad(){
+		
 	}
 	
 	/**
