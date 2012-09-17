@@ -51,6 +51,29 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	 * @var boolean 
 	 */
 	public $checkImapConnectionOnSave=true;
+	
+	/**
+	 * Set to false if you want to keep the password in the session only.
+	 * 
+	 * @var boolean 
+	 */
+	public $store_password=true;
+	
+	/**
+	 * Set to false if, for example from the imapauth module, the smtp password
+	 * should not be stored in the database, only in the session.
+	 * @var boolean
+	 */
+	public $store_smtp_password=true;
+	
+	
+	/**
+	 * Holds the password temporaily while saving the account model without storing it in the database. ($this->store_password=false)
+	 * 
+	 * @var boolean 
+	 */
+	private $_session_password='';
+	private $_session_smtp_password='';
 
 	/**
 	 * Returns a static model of itself
@@ -86,7 +109,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		);
 	}
 
-
+	
 	protected function beforeSave() {
 		if($this->isModified('password')){
 			$encrypted = GO_Base_Util_Crypt::encrypt($this->password);		
@@ -119,25 +142,44 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 			$this->_createDefaultFolder('drafts');	
 		}
 		
-		if (isset($this->store_password) && $this->store_password=='0') {
-			$this->session_password = $this->password;
+		if (empty($this->store_password)) {
+			$this->_session_password = $this->password;
 			$this->password = '';
 			$this->password_encrypted = 0;
+		}
+		
+		if (empty($this->store_smtp_password)) {
+			$this->_session_smtp_password = $this->smtp_password;
+			$this->smtp_password = '';
+			$this->smtp_encrypted = 0;
 		}
 		
 		return parent::beforeSave();
 	}
 
+	protected function afterLoad() {		
+		$this->store_smtp_password = $this->store_password = !isset(GO::session()->values['emailModule']['accountPasswords'][$this->id]);
+		
+		return parent::afterLoad();
+	}
+	
 	protected function afterSave($wasNew) {
-		if (!empty($this->session_password)) {
-			if (!isset(GO::session()->values['emailModule']) || !is_array(GO::session()->values['emailModule']['accountPasswords'])) {
+		if (!empty($this->_session_password)) {
+			
+			if (!isset(GO::session()->values['emailModule']) || !isset(GO::session()->values['emailModule']['accountPasswords']) || !is_array(GO::session()->values['emailModule']['accountPasswords'])) {
 				GO::session()->values['emailModule']['accountPasswords'] = array();
 			}
-			GO::session()->values['emailModule']['accountPasswords'][$this->id] = $this->session_password;
+			GO::session()->values['emailModule']['accountPasswords'][$this->id] = $this->_session_password;
+		}
+		if (!empty($this->_session_smtp_password)) {
+			if (!isset(GO::session()->values['emailModule']) || !isset(GO::session()->values['emailModule']['smtpPasswords']) || !is_array(GO::session()->values['emailModule']['smtpPasswords'])) {
+				GO::session()->values['emailModule']['smtpPasswords'] = array();
+			}
+			GO::session()->values['emailModule']['smtpPasswords'][$this->id] = $this->_session_smtp_password;
 		}
 		return parent::afterSave($wasNew);
 	}
-	
+		
 	private $_mailboxes;
 
 	public function getMailboxes(){
@@ -196,7 +238,12 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	}
 
 	public function decryptSmtpPassword(){
-		$decrypted = GO_Base_Util_Crypt::decrypt($this->smtp_password);
+		if (!empty(GO::session()->values['emailModule']['smtpPasswords'][$this->id])) {
+			$decrypted = GO_Base_Util_Crypt::decrypt(GO::session()->values['emailModule']['smtpPasswords'][$this->id]);
+		} else {
+			$decrypted = GO_Base_Util_Crypt::decrypt($this->smtp_password);
+		}
+		
 		return $decrypted ? $decrypted : $this->smtp_password;
 	}
 	
