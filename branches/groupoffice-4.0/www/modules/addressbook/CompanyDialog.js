@@ -309,6 +309,8 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 
 	loadCompany : function(id)
 	{
+		this.beforeLoad();
+		
 		this.companyForm.form.load({
 			url:GO.url('addressbook/company/load'),
 			params: {
@@ -352,7 +354,10 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 	afterLoad  : function(action){
 		
 	},
-
+	
+	beforeLoad  : function(){
+		
+	},
 	
 	saveCompany : function(hide)
 	{	
