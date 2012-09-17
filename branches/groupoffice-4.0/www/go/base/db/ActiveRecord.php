@@ -1857,6 +1857,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		return $this->getPermissionLevel()>=$level;
 	}
 	
+	/**
+	 * Do some things before the model will be validated.
+	 */
+	protected function beforeValidate(){
+		
+	}
+	
 
 	/**
 	 * Validates all attributes of this model
@@ -1868,6 +1875,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	public function validate(){
 				
 		//foreach($this->columns as $field=>$attributes){
+		$this->beforeValidate();
 		
 		$fieldsToCheck = $this->isNew ? array_keys($this->columns) : array_keys($this->getModifiedAttributes());
 		
