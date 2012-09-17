@@ -46,7 +46,7 @@ abstract class GO_Base_Model extends GO_Base_Observable{
 			$model = self::$_models[$className];			
 		}else
 		{
-			$model=self::$_models[$className]=new $className(false);			
+			$model=self::$_models[$className]=new $className(false, true);			
 		}
 		return $model;
 	}
