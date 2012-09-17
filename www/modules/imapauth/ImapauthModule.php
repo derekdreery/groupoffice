@@ -9,30 +9,30 @@ class GO_Imapauth_ImapauthModule extends GO_Base_Module {
 		$controller->addListener('beforelogin', 'GO_Imapauth_ImapauthModule', 'beforeLogin');
 	}
 
-	public static function beforeControllerLogin($params, &$response) {
-		if (!isset($params['first_name'])) {
-			try {
-				$imap = new GO_Base_Mail_Imap();
-				$imap->connect(
-								$config['host'], $config['port'], $mail_username, $password, $config['ssl']);
-
-				GO::debug('IMAPAUTH: IMAP login succesful');
-				$imap->disconnect();
-
-				$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $go_username);
-				if (!$user) {
-					$response['needCompleteProfile'] = true;
-				}
-			} catch (Exception $e) {
-				GO::debug('IMAPAUTH: Authentication to IMAP server failed with Exception: ' . $e->getMessage() . ' IMAP error:' . $imap->last_error());
-				$imap->clear_errors();
-
-				GO::session()->logout(); //for clearing remembered password cookies
-
-				return false;
-			}
-		}
-	}
+//	public static function beforeControllerLogin($params, &$response) {
+//		if (!isset($params['first_name'])) {
+//			try {
+//				$imap = new GO_Base_Mail_Imap();
+//				$imap->connect(
+//								$config['host'], $config['port'], $mail_username, $password, $config['ssl']);
+//
+//				GO::debug('IMAPAUTH: IMAP login succesful');
+//				$imap->disconnect();
+//
+//				$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $go_username);
+//				if (!$user) {
+//					$response['needCompleteProfile'] = true;
+//				}
+//			} catch (Exception $e) {
+//				GO::debug('IMAPAUTH: Authentication to IMAP server failed with Exception: ' . $e->getMessage() . ' IMAP error:' . $imap->last_error());
+//				$imap->clear_errors();
+//
+//				GO::session()->logout(); //for clearing remembered password cookies
+//
+//				return false;
+//			}
+//		}
+//	}
 
 	
 	public static function beforeLogin($params, &$response) {
@@ -71,6 +71,7 @@ class GO_Imapauth_ImapauthModule extends GO_Base_Module {
 							
 							$user->checkDefaultModels();
 
+							//todo testen of deze regel nodig is om e-mail account aan te maken voor nieuwe gebruiker
 							$ia->createEmailAccount($user, $ia->config, $ia->imapUsername, $ia->imapPassword);
 						} catch (Exception $e) {
 							GO::debug('IMAPAUTH: Failed creating user ' .
