@@ -329,6 +329,9 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 				
 				
 				this.personalPanel.formAddressBooks.setRemoteText(action.result.remoteComboTexts.addressbook_id);
+				
+				
+				this.afterLoad(action);
 
 				GO.addressbook.CompanyDialog.superclass.show.call(this);
 						
@@ -344,6 +347,10 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 			},
 			scope: this
 		});			
+	},
+	
+	afterLoad  : function(action){
+		
 	},
 
 	

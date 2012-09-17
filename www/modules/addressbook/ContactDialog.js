@@ -358,11 +358,18 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 						this.personalPanel.formFunction.setValue(config.contactData['function']);
 					}
 					
+					this.afterLoad(action);
+					
 					GO.addressbook.ContactDialog.superclass.show.call(this);
 				//}
 			},
 			scope: this
 		});
+	},
+	
+		
+	afterLoad  : function(action){
+		
 	},
 	
 	saveContact : function(hide)
