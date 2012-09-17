@@ -88,14 +88,18 @@ class GO_Imapauth_Authenticator {
 					'host' => $host,
 					'username' => $imapUsername
 							));
-		$foundAccount = false;
+		$foundAccount = false;		
 		while ($account = $stmt->fetch()) {
 
 			if($account->user_id==$user->id)
 				$foundAccount=true;
-
+			
 			$account->password = $password;
+			$account->store_password = !isset($this->config['store_password']) || !empty($this->config['store_password']) ? 1 : 0;
+			$account->store_smtp_password = !empty($account->store_password) && !empty($this->config['smtp_use_login_credentials']) ? 1 : 0;
+			
 			if ($this->config['smtp_use_login_credentials']) {
+				$account->smtp_username = $imapUsername;
 				$account->smtp_password = $password;
 			}
 			$account->save();
@@ -129,7 +133,13 @@ class GO_Imapauth_Authenticator {
 			$account['use_ssl'] = empty($config['ssl']) ? 0 : 1;
 			$account['mbroot'] = $config['mbroot'];
 			$account['username'] = $username;
+			
+			$account['store_password']= !isset($config['store_password']) || !empty($config['store_password']) ? 1 : 0;
+			$account['store_smtp_password']= !empty($account['store_password']) && !empty($config['smtp_use_login_credentials']) ? 1 : 0;
 			$account['password'] = $password;
+
+			//set session pass.
+
 
 			$model = new GO_Email_Model_Account();
 			$model->setAttributes($account);
