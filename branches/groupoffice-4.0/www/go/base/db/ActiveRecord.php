@@ -2892,6 +2892,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				if(is_object($value) || is_array($value))
 					throw new Exception($this->className()."::setAttribute : Invalid attribute value for ".$name.". Type was: ".gettype($value));
 			}
+			
+			//normalize CRLF to prevent issues with exporting to vcard etc.
+			if($this->columns[$name]['gotype']=='textfield' || $this->columns[$name]['gotype']=='textarea')
+				$value=GO_Base_Util_String::normalizeCrlf($value, "\n");
+			
 			if((!isset($this->_attributes[$name]) || $this->_attributes[$name]!==$value) && !$this->isModified($name))
 				$this->_modifiedAttributes[$name]=isset($this->_attributes[$name]) ? $this->_attributes[$name] : false;
 			
@@ -3241,6 +3246,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			//ACL must be generated here.
 			$fc = new GO_Files_Controller_Folder();	
 			$this->files_folder_id = $fc->checkModelFolder($this);
+		}
+		
+		//normalize crlf
+		foreach($this->columns as $field=>$attr){
+			if(($attr['gotype']=='textfield' || $attr['gotype']=='textarea') && !empty($this->_attributes[$field])){				
+				$this->$field=GO_Base_Util_String::normalizeCrlf($this->_attributes[$field], "\n");
+			}
 		}
 		
 		$this->save();		
