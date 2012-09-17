@@ -312,9 +312,9 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array(),$saveToDb=true) {
 		//$event = new GO_Calendar_Model_Event();
 		$companyAttributes = array();
-		if (!empty($attributes['addressbook_id'])) {
-			$companyAttributes['addressbook_id'] = $attributes['addressbook_id'];
-		} 
+//		if (!empty($attributes['addressbook_id'])) {
+//			$companyAttributes['addressbook_id'] = $attributes['addressbook_id'];
+//		} 
 		
 		$uid = (string) $vobject->uid;
 		if(!empty($uid) && empty($attributes['uuid']))
