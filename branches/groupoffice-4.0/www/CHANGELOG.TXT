@@ -1,4 +1,4 @@
-?? 4.0.98
+17-09-2012 4.0.98
 - Bugfix: Ticket rates in Add/Edit ticket dialog will only be shown where there are ticket rates
 - Bugfix: Validate if the selected agent can be agent for the selected ticket type
 - Bugfix: Save button is shown in the Ticket administation dialog when adding rates
