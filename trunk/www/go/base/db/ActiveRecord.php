@@ -306,7 +306,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * 
 	 * @param int $primaryKey integer The primary key of the database table
 	 */
-	public function __construct($newRecord=true){			
+	public function __construct($newRecord=true, $isStaticModel=false){			
 		
 		$this->_loadingFromDatabase=false;
 		
@@ -315,15 +315,27 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$this->columns=GO_Base_Db_Columns::getColumns($this);
 		$this->setIsNew($newRecord);
 		
+		$this->init();
+		
 		if($this->isNew) 
 			$this->setAttributes($this->_getDefaultAttributes(),false);
+		elseif(!$isStaticModel)
+			$this->afterLoad();
 //		else
 //			$this->_cacheRelatedAttributes();
 				
-		$this->init();
+		
 		
 		$this->_modifiedAttributes=array();
 	}
+	
+	/**
+	 * This function is called after a model was constructed by a find query.
+	 */
+	protected function afterLoad(){
+		
+	}
+	
 	
 	/**
 	 * When a model is joined on a find action and we need it for permissions, We 
