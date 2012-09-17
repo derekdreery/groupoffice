@@ -18,6 +18,7 @@
 - HTC deletes old appointments. We don't like that so we refuse to delete appointments older then 7 days with ActiveSync.
 - Updated Swedish translation
 - Added beforeValidate function to the ActiveRecord
+- Tag "{weeknr}" for new projects' names, just like the tag "{autoid}".
 
 11-09-2012 4.0.97
 - Important security problem fixed!
