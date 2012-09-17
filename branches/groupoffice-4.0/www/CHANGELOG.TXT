@@ -20,8 +20,14 @@
 - Bugfix: Adding users and groups to manage permissions only got read permissions.
 - HTC deletes old appointments. We don't like that so we refuse to delete appointments older then 7 days with ActiveSync.
 - Updated Swedish translation
+- Bugfix: Normalize CRLF to LF in database to prevent sync issues.
+- Bugfix: Not all contacts were synced when sending multiple packages in syncml
+- Bugfix: Invalid XML in JNLP file caused GOTA to fail with OpenJDK
+- Bugfix: Browse comments in ticket didn't work
 - Added beforeValidate function to the ActiveRecord
 - Tag "{weeknr}" for new projects' names, just like the tag "{autoid}".
+- Added afterLoad function to the ActiveRecord
+- Updated Norwegian translation
 
 11-09-2012 4.0.97
 - Important security problem fixed!

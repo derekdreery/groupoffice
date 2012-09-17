@@ -109,3 +109,4 @@ $l['notifyFileDelete']= 'Filen %s ble slettet av %s';
 $l['notifyFileUpdate']= 'Filen %s ble endret av %s';
 $l['notificationEmailSubject']= 'Endringer i mappe';
 $l['downloadLinkExpired']= "Beklager, men denne nedlastningslenken er utløpt!";
+$l['recentFiles']="Filer som er endret siste 7 dager";
