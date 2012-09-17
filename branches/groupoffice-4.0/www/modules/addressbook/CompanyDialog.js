@@ -44,7 +44,9 @@ GO.addressbook.CompanyDialog = function(config)
 	this.personalPanel,
 	this.commentPanel];
 	      	
-	items.push(new GO.addressbook.SelectAddresslistsPanel());
+	this.selectAddresslistsPanel = new GO.addressbook.SelectAddresslistsPanel();
+					
+	items.push(this.selectAddresslistsPanel);
 	items.push(this.employeePanel);
   
 	if(GO.customfields && GO.customfields.types["GO_Addressbook_Model_Company"])
