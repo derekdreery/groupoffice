@@ -558,3 +558,5 @@ $l['queryField']= "Felt";
 $l['queryComparator']= "Operator";
 $l['queryValue']="Verdi";
 $l['queryStartGroup']="Start gruppe";
+$l['cliOnly']= "Dette skriptet kan bare kjøres via Group-Office Command Line Interface (CLI).";
+$l['unnamed']='Ikke navngitt';

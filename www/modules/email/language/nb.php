@@ -241,3 +241,7 @@ $l["deleteSendersFrom"]='Slett sendere fra...';
 $l['imapLoginFailed']='Autensitering feilet for bruker "%username".';
 $l['tryNewCredentials']='Forsøk et annet IMAP passord.';
 $l['moveTo']='Flytt til';
+$l['useAccount']='Bruk konto';
+$l['mailbox']='Mailboks';
+$l['checkUnseen']='Se automatisk etter nye meldinger i denne mappen';
+$l['noEmailFolders']= 'Ingen mapper er lagt til.';
