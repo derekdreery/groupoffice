@@ -314,14 +314,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$this->columns=GO_Base_Db_Columns::getColumns($this);
 		$this->setIsNew($newRecord);
 		
-		$this->init();
+		$this->init();	
 		
 		if($this->isNew) 
 			$this->setAttributes($this->_getDefaultAttributes(),false);
 		elseif(!$isStaticModel)
 			$this->afterLoad();
-//		else
-//			$this->_cacheRelatedAttributes();
 		
 		$this->_modifiedAttributes=array();
 	}
@@ -3432,8 +3430,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	private function _getDefaultAttributes(){
 		$attr=array();
-		foreach($this->getColumns() as $field => $colAttr)
-			$attr[$field]=$colAttr['default'];
+		foreach($this->getColumns() as $field => $colAttr){
+			if(isset($colAttr['default']))
+				$attr[$field]=$colAttr['default'];
+		}
 		
 		if(isset($this->columns['user_id']))
 			$attr['user_id']=GO::user() ? GO::user()->id : 1;
