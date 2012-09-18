@@ -413,7 +413,6 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		unset($attributes['t.company_id']);
 		//$attributes['name']=GO::t('strName');
 		$attributes['companies.name']=array('name'=>'companies.name','label'=>GO::t('company','addressbook'));
-		$attributes['contact_name']=array('name'=>'contact_name','label'=>GO::t('name'));
 		
 		return parent::afterAttributes($attributes, $response, $params, $model);
 	}

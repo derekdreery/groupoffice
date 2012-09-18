@@ -173,7 +173,8 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 												importBaseParams : { addressbook_id : this.remoteModelId },
 												controllerName : controllerName,
 												fileType: fileType,
-												excludedAttributes : ['ctime','mtime','user_id', 'contact_name','link_id','files_folder_id'],
+												excludedAttributes : ['ctime','mtime','user_id', 'contact_name','link_id','files_folder_id',
+													'user_id','email_allowed','go_user_id'],
 												modelContainerIdName : 'addressbook_id'
 											});
 										}
