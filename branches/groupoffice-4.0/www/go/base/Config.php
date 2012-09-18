@@ -908,6 +908,8 @@ class GO_Base_Config {
 	 */
 	var $zlib_compress = true;
 
+	
+	var $default_max_rows_list = 30;
 
 	var $product_name='Group-Office';
 
