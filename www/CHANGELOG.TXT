@@ -2,6 +2,7 @@
 - Updated Italian translation
 - Added config option "$config["default_max_rows_list"]" to set the default for new users. (max is 50)
 - Added Android detection for GOTA
+- Automatically fill in start date for new project
 
 17-09-2012 4.0.99
 - Somehow pro debian package was missing
