@@ -1,3 +1,6 @@
+- Updated Russian translation
+- Updated Italian translation
+
 17-09-2012 4.0.99
 - Somehow pro debian package was missing
 
