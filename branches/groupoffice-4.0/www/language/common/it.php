@@ -552,3 +552,5 @@ $l['queryField']= "Campo";
 $l['queryComparator']= "Confronto";
 $l['queryValue']="Valore";
 $l['queryStartGroup']="Gruppo iniziale";
+$l['cliOnly']= "Questo script può essere eseguito solo tramite l\'interfaccia a riga di comando (CLI) di Group-Office.";
+$l['unnamed']='Senza nome';
