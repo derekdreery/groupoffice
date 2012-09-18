@@ -9,6 +9,10 @@ class GO_Log_LogModule extends GO_Base_Module{
 		
 	}	
 	
+	public function adminModule() {
+		return true;
+	}
+	
 	public static function rotateLog(){
 		
 		echo "Running log rotate for ".GO::config()->id."\n";		
