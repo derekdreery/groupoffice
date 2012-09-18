@@ -59,6 +59,14 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 	
 	initComponent : function(){
 		
+		
+		if(!this.view){
+			this.view = new Ext.grid.GridView({
+				autoFill: true,
+				forceFit: true,
+				emptyText: GO.lang.strNoItems
+			});
+		}
 
 		if(!this.keys)
 		{
