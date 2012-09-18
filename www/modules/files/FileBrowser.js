@@ -1863,7 +1863,7 @@ GO.files.downloadFile = function (fileId){
 
 GO.files.editFile = function (fileId){
 
-	if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission)
+	if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission && !GO.util.isAndroid)
 	{
 		if(!deployJava.isWebStartInstalled('1.6.0'))
 		{
