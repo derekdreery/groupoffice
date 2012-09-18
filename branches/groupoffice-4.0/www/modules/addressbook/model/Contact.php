@@ -57,6 +57,7 @@
  * @property GO_Addressbook_Model_Addressbook $addressbook
  * @property GO_Addressbook_Model_Company $company
  * @property string $homepage
+ * @property string $uuid
  */
 class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		

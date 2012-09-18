@@ -22,6 +22,11 @@
  * @property string $signature
  * @property int $account_id
  * @property int $id
+ * @property string $field
+ * @property string $keyword
+ * @property string $folder
+ * @property int $priority
+ * @property boolean $mark_as_read
  */
 class GO_Email_Model_Filter extends GO_Base_Db_ActiveRecord {
 
