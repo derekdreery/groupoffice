@@ -587,3 +587,5 @@ $l['queryStartGroup']="Start group";
 
 $l['cliOnly'] = "This script can only run through the Group-Office Command Line Interface (CLI).";
 $l['unnamed']='Unnamed';
+
+$l['maxRowslistTooHigh']='The maximum number of rows in lists is too high. (max 50)';
