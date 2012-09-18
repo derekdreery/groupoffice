@@ -158,7 +158,7 @@ GO.files.FilesContextMenu = function(config)
 
 	config['items']=[this.downloadButton];
 
-	if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission)
+	if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission && !GO.util.isAndroid)
 	{
 		this.gotaButton = new Ext.menu.Item({
 			iconCls: 'btn-edit',
