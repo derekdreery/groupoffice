@@ -198,3 +198,4 @@ $l['updateReponses'][1]='%s ha accettato l\'evento %s';
 $l['updateReponses'][2]='%s ha rifiutato l\'evento %s';
 $l['updateReponses'][3]='%s ha marcato l\'evento %s come tentativo';
 $l['cancelMessage']='L\'evento seguente al quale eri stato invitato è stato annullato.';
+$l['directUrl']='URL diretto';
