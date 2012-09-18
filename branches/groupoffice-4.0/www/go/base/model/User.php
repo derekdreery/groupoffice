@@ -190,6 +190,9 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 
 	public function validate() {
 		
+		if($this->max_rows_list > 50)
+				$this->setValidationError('max_rows_list', GO::t('maxRowslistTooHigh'));
+		
 		if($this->isModified('password') && isset($this->passwordConfirm) && $this->passwordConfirm!=$this->password){
 			$this->setValidationError('passwordConfirm', GO::t('passwordMatchError'));
 		}
@@ -447,7 +450,8 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		$attr['thousands_separator']=GO::config()->default_thousands_separator;
 		$attr['time_format']=GO::config()->default_time_format;
 		$attr['sort_name']=GO::config()->default_sort_name;
-	
+		$attr['max_rows_list']=GO::config()->default_max_rows_list;
+		
 		
 		return $attr;
 	}
