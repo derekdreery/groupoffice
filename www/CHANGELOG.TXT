@@ -1,3 +1,6 @@
+??-09-2012 4.0.101
+- Bugfix: Creating a time-registration from a calendar event works now.
+
 19-09-2012 4.0.100
 - Invalid validation for agent in ticket
 - Quota display was divided by 1024
