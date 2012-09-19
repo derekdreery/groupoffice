@@ -1,3 +1,6 @@
+19-09-2012 4.0.100
+- Invalid validation for agent in ticket
+- Quota display was divided by 1024
 - Updated Russian translation
 - Updated Italian translation
 - Added config option "$config["default_max_rows_list"]" to set the default for new users. (max is 50)
