@@ -95,7 +95,7 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 		if(GO::$ignoreAclPermissions && $userId===false)
 			return self::MANAGE_PERMISSION;
 		
-		if(!$userId){
+		if($userId===false){
 			if(GO::user())
 				$userId=GO::user()->id;
 			else
