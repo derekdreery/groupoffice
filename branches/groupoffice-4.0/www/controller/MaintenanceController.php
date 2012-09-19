@@ -268,6 +268,10 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	
 	protected function actionUpgrade($params) {
 		
+		
+		if(!version_compare( phpversion(), "5.3", ">="))
+			exit("You are running a PHP version older than 5.3. PHP 5.3 or greater is required to run Group-Office ".GO::config()->version);
+		
 		GO::clearCache();
 		
 		GO_Base_Db_Columns::$forceLoad=true;
