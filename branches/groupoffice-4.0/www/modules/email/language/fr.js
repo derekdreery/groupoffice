@@ -12,9 +12,9 @@
 // @author Merijn Schering <mschering@intermesh.nl>
 //
 // French Translation
-// Version : 3.7.29 
-// Author : Lionel JULLIEN
-// Date : September, 27 2011
+// Version : 4.0.99
+// Author : Lionel JULLIEN / Boris HERBINIERE-SEVE
+// Date : September, 20 2012
 //
 /////////////////////////////////////////////////////////////////////////////////
  
@@ -178,15 +178,16 @@ GO.email.lang.readPerm='Lire';
 GO.email.lang.writePerm='Ecrire';
 GO.email.lang.deletePerm='supprimer';
 GO.email.lang.createMailboxPerm='Créer la boite de messagerie';
-GO.email.lang.deleteMailboxPerm='Supprimer la boite messagerie';
+GO.email.lang.deleteMailboxPerm='Supprimer la boite de messagerie';
 GO.email.lang.adminPerm='Administrer';
 
 GO.email.lang.deleteOldMails = 'Supprimer les anciens messages';
 GO.email.lang.deleteOldMailsInstructions = 'Sélectionnez une date. Si vous cliquez sur OK, tous les messages avec une date antérieure dans le dossier sélectionné seront supprimés.';
 GO.email.lang.folder = 'Dossier';
-GO.email.lang.deleteOldMailsSure1 = 'Cette action est irréversible. Etes-vous sûr de vouloir supprimer tous les messages remplissant la condition de date selectionnée ';
+GO.email.lang.deleteOldMailsSure1 = 'Cette action est irréversible. Êtes-vous sûr de vouloir supprimer tous les messages remplissant la condition de date selectionnée ';
 GO.email.lang.deleteOldMailsSure2 = '?'
 GO.email.lang.nDeletedMailsTxt = 'Le nombre de messages supprimés est';
 GO.email.lang.deletingEmails = 'Suppression des messages...';
 GO.email.lang.everythingBefore = 'Tous les messages avant';
 GO.email.lang.alsoChildren = 'Appliquer également cette condition aux sous-dossiers.';
+GO.email.lang.emailFiles='Envoyer par email';

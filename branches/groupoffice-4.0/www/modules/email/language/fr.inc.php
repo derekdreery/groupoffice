@@ -13,9 +13,9 @@
 // @author Merijn Schering <mschering@intermesh.nl>
 //
 // French Translation
-// Version : 3.7.29 
-// Author : Lionel JULLIEN
-// Date : September, 27 2011
+// Version : 4.0.99
+// Author : Lionel JULLIEN / Boris HERBINIERE-SEVE
+// Date : September, 20 2012
 //
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -73,3 +73,4 @@ $lang['email']['iCalendar_update_old']='Ce message contient un rendez-vous qui a
 $lang['email']['iCalendar_event_cancelled']='Ce message contient une annulation de rendez-vous.';
 $lang['email']['iCalendar_event_invitation_declined']='Ce message contient une invitation à un rendez-vous que vous avez décliné.';
 $lang['email']['untilDateError']='Une erreur est apparue ! Processus stoppé...';
+$lang['email']['autolinked']='Ce message a été automatiquement lié à %s';
