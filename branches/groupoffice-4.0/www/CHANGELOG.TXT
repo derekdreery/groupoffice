@@ -1,3 +1,6 @@
+20-09-2012 4.0.103
+- Billing PDF templates got unwanted extra columns
+
 20-09-2012 4.0.102
 - GOTA didn't launch
 - Bugfix: Copy/pasting products in the catalog of the billing module will work
