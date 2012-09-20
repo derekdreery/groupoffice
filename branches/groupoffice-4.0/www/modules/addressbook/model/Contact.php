@@ -506,18 +506,19 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$attributes['first_name']='unnamed';
 
 		$this->setAttributes($attributes, false);		
-		
+				
 		if (isset($companyAttributes['name'])) {
-			$stmt = GO_Addressbook_Model_Company::model()->findByAttribute('name', $companyAttributes['name']);
-			$company = $stmt->fetch();
-			if (empty($company)) {
+			$company = GO_Addressbook_Model_Company::model()->findSingleByAttributes(array('name' => $companyAttributes['name'], 'addressbook_id' => $this->addressbook_id));
+			if (!$company) {
 				$company = new GO_Addressbook_Model_Company();
-				$company->setAttributes($companyAttributes,false);
-			} 
-			$company->addressbook_id=$this->addressbook_id;
+				$company->setAttributes($companyAttributes, false);
+				$company->addressbook_id = $this->addressbook_id;
+			}
+
 			if (!empty($saveToDb))
 				$company->save();
-			$this->setAttribute('company_id',$company->id);			
+
+			$this->setAttribute('company_id', $company->id);
 		}
 		
 		$this->cutAttributeLengths();
