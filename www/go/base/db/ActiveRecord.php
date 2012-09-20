@@ -3388,6 +3388,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			//set new foreign key
 			$attributes[$field]=$duplicate->pk;
 			
+			// When an AR gets duplicated the primaryKey get unset
+			// If the primarykey of the related model is an array keep the key columns
+			$primaryKey = $model->primaryKey();
+			if(is_array($primaryKey)){
+				foreach($primaryKey as $key){
+					if(!isset($attributes[$key]))
+						$attributes[$key]=$model->$key;
+				}
+			}
+			
 			$duplicateRelatedModel = $model->duplicate($attributes);
 			$this->afterDuplicateRelation($relationName, $model, $duplicateRelatedModel);
 		}
