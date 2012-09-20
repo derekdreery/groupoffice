@@ -1415,10 +1415,11 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			if(empty($att->content_id) || $att->disposition=='attachment')
 				$att->saveToFile($tmpFolder);
 		}	
-		
+
 		$zipfile = $tmpFolder->parent()->createChild(GO::t('attachments','email').'.zip');						
-		
+
 		chdir($tmpFolder->path());
+
 		$cmd =GO::config()->cmd_zip.' -r "'.$zipfile->path().'" *';
 		exec($cmd, $output, $return);
 		
@@ -1431,8 +1432,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		readfile($zipfile->path());
 		
-//		$tmpFolder->delete();
-//		$zipfile->delete();
+		$tmpFolder->delete();
+		$zipfile->delete();
 		
 	}
 	
