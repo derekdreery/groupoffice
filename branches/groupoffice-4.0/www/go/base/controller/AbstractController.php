@@ -127,7 +127,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 						$_REQUEST['security_token']!=GO::session()->values['security_token']
 			){
 			//GO::session()->logout();			
-			trigger_error('Fatal error: Security token mismatch in route: '.$_REQUEST['r'], E_USER_ERROR);
+			throw new Exception('Security token mismatch in route: '.$_REQUEST['r']);
 		}
 	}	
 	
