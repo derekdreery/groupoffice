@@ -113,6 +113,15 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $default_country = "NL";
+	
+	
+	/**
+	 * Default VAT percentage
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $default_vat = 19;
 
 	/**
 	 * Default timezone

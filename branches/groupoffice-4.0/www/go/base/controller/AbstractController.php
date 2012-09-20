@@ -120,14 +120,15 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		// 3. A route to a controller has been given. Because we don't want to block the default page when entered manually.
 		
 		if(
-						!GO::config()->debug && 
+//						!GO::config()->debug && 
 						!GO::config()->disable_security_token_check && 
 //						GO::user() && No longer needed. We only check token when action requires a logged in user
 						!empty($_REQUEST['r']) && 
 						$_REQUEST['security_token']!=GO::session()->values['security_token']
 			){
 			//GO::session()->logout();			
-			throw new Exception('Security token mismatch in route: '.$_REQUEST['r']);
+			throw new GO_Base_Exception_SecurityTokenMismatch();
+
 		}
 	}	
 	
@@ -336,6 +337,9 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			$response['feedback'] .= $e->getMessage();
 			if($e instanceof GO_Base_Exception_AccessDenied)
 				$response['redirectToLogin']=empty(GO::session()->values['user_id']);
+			
+			if($e instanceof GO_Base_Exception_SecurityTokenMismatch)
+				$response['redirectToLogin']=true;
 
 			if(GO::config()->debug){
 				//$response['trace']=$e->getTraceAsString();
