@@ -1,0 +1,414 @@
+20-09-2012 4.0.103
+- Billing PDF templates got unwanted extra columns
+
+20-09-2012 4.0.102
+- GOTA didn't launch
+- Bugfix: Copy/pasting products in the catalog of the billing module will work
+- Duplicating active record relations will keep the primary key when it exists of more then one column
+
+19-09-2012 4.0.101
+- Default values for custom fields were not set correctly.
+- Check for php 5.3 or greater when upgrading
+- Bugfix: Creating a time-registration from a calendar event works now.
+
+
+19-09-2012 4.0.100
+- Invalid validation for agent in ticket
+- Quota display was divided by 1024
+- Updated Russian translation
+- Updated Italian translation
+- Added config option "$config["default_max_rows_list"]" to set the default for new users. (max is 50)
+- Added Android detection for GOTA
+- Automatically fill in start date for new project
+
+17-09-2012 4.0.99
+- Somehow pro debian package was missing
+
+17-09-2012 4.0.98
+- Bugfix: Ticket rates in Add/Edit ticket dialog will only be shown where there are ticket rates
+- Bugfix: Validate if the selected agent can be agent for the selected ticket type
+- Bugfix: Save button is shown in the Ticket administation dialog when adding rates
+- Automatic creation of call reminder task with newly created orders.
+- Bugfix: Changing user settings will no longer place old user data into a session in setCompatibilitySessionVars() themes will get changed right away
+- Bugfix: Will not set default values for ActiveRecord set in the code when importing
+- Bugfix: Will not convert a date field when no date is set when importing
+- Bugfix: PDF for Invoice/Order wouldn't print total prices when piece price or product price where not printed
+- Bugfix: PDF for Invoice/Order will now accept the page format from the template 
+- Upgraded SabreDAV library to 1.6.4
+- Allow underscores in custom ICS tags for importing.
+- Bugfix: Error with undefined variable in calendar invitation
+- Optimized code for recurrence calculations in the calendar so it will not calculate more than needed.
+- Bugfix: Fixed problem with accepting invitations that have a different mime-type than 'text/calendar'
+- Bugfix: Groups module could be opened twice
+- Bugfix: Custom field column cache was not cleared when modified.
+- Bugfix: Disable sorting on alias and mailboxes columns in postfixadmin
+- Updated German translation
+- Bugfix: Adding users and groups to manage permissions only got read permissions.
+- HTC deletes old appointments. We don't like that so we refuse to delete appointments older then 7 days with ActiveSync.
+- Updated Swedish translation
+- Bugfix: Normalize CRLF to LF in database to prevent sync issues.
+- Bugfix: Not all contacts were synced when sending multiple packages in syncml
+- Bugfix: Invalid XML in JNLP file caused GOTA to fail with OpenJDK
+- Bugfix: Browse comments in ticket didn't work
+- Added beforeValidate function to the ActiveRecord
+- Tag "{weeknr}" for new projects' names, just like the tag "{autoid}".
+- Added afterLoad function to the ActiveRecord
+- Updated Norwegian translation
+
+11-09-2012 4.0.97
+- Important security problem fixed!
+- Change: the priority selectbox will be shown to customers, they can set the priority of there own tickets.
+- Fixed bug when using a different database port
+- Now the replacement of fields(%field%) is also working in the footer of a billing PDF
+- Added diff function to GO_Base_Fs_File class
+- Import failed on events without name.
+- Trash folder in e-mail didn't work since last update
+- Fixed date format bug in ActiveRecord when not logged in
+- Fixed temp folder bug in Config.php when not logged in
+- Added check for Amavis configuration file change so it will not be overwritten on every update.
+- Updated CLI only check
+- Calendar import more memory efficient and fixed some bugs
+- When moving messages the folder switched to the folder messages were moved to.
+
+06-09-2012 4.0.96
+- Option to automatically check mailboxes for unread messages.
+- Keep the state of the fileDialog tree to the last selected folder, this is kept in the current session
+- Added an email portlet to the start page
+- Switch to plain text mode when composing e-mail on an ipad
+- Fixed syncing of recurring events and its exceptions
+- Debughandler for sieve removed in constructor, this interferes with the debug handler of z-push
+- Fixed upgrade 3.7 to 4.x crash when column layout changed in some cases.
+- If you don't click the permissions tab when creating a user, the defaults are not applied for the memberships.
+- Public ICS calendar export wasn't visisble without logging in.
+- IBAN was not shown on company info if bank no. was not entered
+- Strict checking in setAttribute. Renaming 1 to 1.0 didn't work.
+- Correct log dir permissions after debian package upgrade
+- When a user uploaded the same attachment twice, a number was appended.
+- urldecode query string in mailto handler
+- Show correct owner in event dialog
+- LDAP user sync script added.
+- Sorting on name in groups module
+- Reimplemented e-mail filtering without sieve support
+- Added workflow support to the billing orders
+- Removed Apply button from ticket dialog
+- Added new portlet that shows files uploaded in the last 7 days.
+- Fixed: file does not exist: /themes errors in apache log
+- Subfolders of the sent, drafts and trash folders in the e-mail were not treated as such.
+- Serverclient did not update the mailbox in the servermanager	
+- Error on logging e-mail
+- {date} tag didn't work in document templates.
+- Document templates can work for other files like PDF as well. No tags will be replaced.
+- New mailto handler see http://wiki4.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client
+- New e-mail notifications were broken
+
+03-09-2012 4.0.95
+- Missing content-lenght header caused GOTA problem.
+
+31-08-2012 4.0.94
+- Bug: No temp file for inline attachment
+
+31-08-2012 4.0.93
+- Added new recently modified files portlet.
+
+31-08-2012 4.0.92
+- Encoding characterset was not set when displaying saved email messages, didn't display russian characters
+- Forgetful FilesGrid now remembers its state
+- Calendar: removed GO version from calendar print
+- Change go_log ip field to 45 chars to support ipv6
+- Updated Norwegian language
+- Added experimental contact autolink option
+- Rollback of permission check by deleting shared mailbox messages
+- Fixed: Rounding error in billing module
+- Updated German language
+
+29-08-2012 4.0.91
+- Fixed: SyncML duplicated contacts on client when there were more than 200 contacts.
+- Fixed: Inline images were corrupted when switching e-mail templates
+- Optimized: speed in rendering custom field columns
+- Fixed: Fixed resize of customfieldsdialog optionsgrid
+- Updated Italian translation
+- Fixed: Digest authentication for WebDAV, CalDAV and CardDAV failed after changing password. Logging into Group-Office again re-enabled the login.
+- Improved: Advanced search improved with visual indication and it's translatable.
+- Fixed: Printing calendar, events have a black background 
+
+28-08-2012 4.0.90
+- Fixed: GOTA crashed after java update 1.7.06
+- Fixed: When adding a link to an email the receiver does not have access to the mail could not be read. New behavior: will just not link the item.
+- Missing feature: When adding a new project "Create new project type" wasn't working yet
+- Fixed en language in email module.
+- Fixed blinkTitle bug
+- Urldecode added to the store load function of the bookmark module
+- Bugfix: Event->delete() will ignore ACL permissions when it is a resource of the current user
+- Database fix for recurring events that could have been added when there was a bug in previous version.
+- Updated German language
+- Updated Italian language
+- Bugfix: No files got attached to the email composer when using "Send files" in the Files module when the users default template is 'None'
+- Bugfix: Email module MessageGrid will expand when it is collapsed and the visible email gets deleted.
+- Bugfix: Birthday was not showed for the correct year.
+- Bugfix: Added check for delete permission on the email account when a user tries to delete emails.(Only applied on the server side)
+- The customfield dialog can now be resized
+- Customfields: Hide permissionlevels for categories.
+- Calendar: Always ask to send invitation mail when adding participants (Don't check for the "add directly to the other calendars" checkbox anymore)
+- Email: Fixed bug with attachments that have an empty line that get corrupted when forwarding them.
+- Email: Fixed bug with semicolon in text_to_html function
+- LDAPAUTH: Fixed mapping for uid in LDAP authenticator
+- Email: Fixed save attachments as zip function
+- Autocreate Group fixed in servermanager
+
+08-08-2012 4.0.89
+
+- Fixed problem with default background color in events
+- Fix export orientation when exporting PDFs works again
+- Fix calendar:
+ -- update event with resource.
+ -- delete resource from event
+ -- select resource when only write permissions
+ -- send mail when deleting event to participants
+- Fixed label Agent when exporting tickets
+- Fixed hr translation in Links module. 
+- Fixed task bug in Caldav backend
+- User can enter IMAP password on IMAP connection failed.
+
+03-08-2012 4.0.88
+- Fixed bug: E-mail download link date one day off
+- Signed GOTA
+- Added aclModified check to activeRecord to determine if an Acl is changed.
+
+02-08-2012 4.0.87
+- Fixed Bug: Cannot export and import uuid in addressbook contacts. (Now the uuid field is available in export and import)
+- Fixed Language: Timeregistration translation in French for customfields is fixed
+- Updated German translation of GOTA
+- Fixed bug in SyncML
+
+02-08-2012 4.0.86
+- Fixed Bug: Timeregistration export table columns are on top of each other when having a long project name
+- Fixed bug: Settings->Synchronisation->Email-Account is not saved after panel submit
+- Fixed bug: Autocomplete in e-mail sometimes didn't work
+- Fixed bug: Funambol sync sometimes imported garbled characters.
+- Updated Norwegian and German translations
+
+01-08-2012 4.0.85
+- Updated German
+- Small bug fixes
+
+30-07-2012 4.0.83
+- Small bug fixes
+
+30-07-2012 4.0.82
+- Sync only selected addressbooks and calendars with CalDAV and CardDAV
+- Small bug fixes
+
+30-07-2012 4.0.81
+- Fixed file system permissions issue.
+
+30-07-2012 4.0.78
+- Bug in install.sql of addressbook that made new installations fail.
+- Bug in Hungarian language files
+- Bug in monthly recurring event.
+
+27-07-2012 4.0.77
+- Updated German
+- CardDAV didn't work on the Mac
+- Other small bug fixes.
+
+26-07-2012 4.0.76
+- Small bug fixes
+- Updated Norwegian
+- Manage SyncML devices
+
+26-07-2012 4.0.75
+- Fix for latest funambol client
+- Fix for iOS caldav and carddav connection
+
+25-07-2012 4.0.74
+- Bug in multiselect panels.
+
+25-07-2012 4.0.73
+- Better memory management in ActiveRecords
+- Updated German translation
+- Small usability improvements
+- Bug fix in SyncML (Outlook sync)
+- Small bug fixes
+- Username and password cookies were not encrypted
+- Security bug in calendar
+- Notes can be encrypted with a password now.
+- New encrypted custom field
+
+12-07-2012 4.0.72
+- Small bug fixes
+- Delete old mail replaced by move old mail so it can be used for archiving too.
+- Bug in connecting to postfix
+- Edit e-mail button opened GOTA. Now it launches the E-mail viewer.
+- Bug fix with selecting next mail after deleting one.
+
+12-07-2012 4.0.70
+- GOTA wasn't working on some servers
+- Some tags were missing in document templates.
+- New E-mail notify sometimes didn't show.
+
+10-07-2012 4.0.67
+- Strange characters from Romanian and Hungarian language files removed.
+- Bug in e-mail sync with some IMAP servers.
+- Folders with underscores didn't expand sometimes
+- All info panels show the type and name on top now. More consistent.
+- Workflow module has an icon now.
+
+09-07-2012 4.0.64
+- Various small bugfixes
+
+06-07-2012 4.0.63
+- Don't autolink Drafts, Sent Items and trash messages.
+- E-mail files function
+- Scanbox module included
+
+05-07-2012 4.0.62
+- Cache problem with reply all and language change
+
+04-07-2012 4.0.60
+- Speed optimizations in mail client
+- Sync unread flags bug
+- Small bug fixes
+
+03-07-2012 4.0.57
+- Cache problem that caused a lot of problems in the e-mail client
+
+02-07-2012 4.0.56
+- Bug in CalDAV with Applie ical fixed.
+- Bug in calendar invitations fixed.
+- Bug in announcement formatting.
+- Bug with changing fonts in E-mail composer. Font selection removed.
+
+26-06-2012 4.0.50
+- Lot's of bug fixes thanks to the beta testers!
+- SabreDAV upgraded to 1.6.3
+- SwiftMailer upgraded
+- Searching uses full text index now to achieve better performance
+- E-mail module no longer uses database cache. It connects to IMAP directly.
+
+11-04-2012 4.0.1 (beta)
+- Complete new MVC PHP framework
+- Extensive security audit by Cigitel.
+- Users are stored in the addressbook too.
+- Ticket groups for better permission management.
+- plupload used for file uploads
+- gnupg support dropped. smime still supported.
+- Filesearch module for deep searching files content.
+- Document workflow module.
+- SabreDAV upgraded to 1.5.6
+- Swift Mailer upgraded to 4.1.5
+- Project tasks have a relation now and have a percentage complete field
+- Photo support in sync.
+- Sync multiple calendars
+- Billing module can create MS word and open-office invoices, quotes and orders.
+- Billing module can handle purchase orders and stock.
+
+Addressbook
+- Batch edit in addressbook.
+- Merge companies and contacts
+- Easier and more secure advanced search.
+
+E-mail
+- Embed pasted images from firefox into mime mail for better memory management
+- Links in messages become relative links when cut & pasted. We make them absolute again on when the message is sent.
+- Automatic linking of e-mail replies when sent from a projects, contact, company etc.
+
+WARNINGS: 
+- Projects: batch report queries will not work anymore. They need to be reconfigured.
+- Billing: Custom fields in templates used to be %Name of customfield% This should be replaced by {col_1}
+
+
+
+06-01-2012 3.7.42
+- Bug fix in Russian reminders.
+- Small adjustments for customer customization module.
+- Some other small bugs where fixed.
+
+22-12-2011 3.7.41
+- Small bug fixes
+
+16-12-2011 3.7.40
+- Bug with mail headers on some servers
+
+07-12-2011 3.7.39
+- Create mail folders was broken
+- Download of email attachments bug
+
+01-12-2011 3.7.38
+- Bug in calendar events display with multiselect
+
+30-11-2011 3.7.37
+- Missing table on calendar bug.
+
+29-11-2011 3.7.36
+- GOTA was broken in latest releases.
+- Calendar colors with multiple selection can be defined by the user.
+- UID of calendar items got lost when syncing with ActiveSync. This caused problems with CalDAV.
+- Forwarding inline images that came from Apple imail failed sometimes.
+
+17-11-2011 3.7.35
+- Several small bug fixes
+- Added Vietnamese
+
+18-10-2011 3.7.34
+- Creating initial sieve script was broken
+- ldapauth and z-push could trigger an endless logout loop.
+
+10-10-2011 3.7.33
+- Worked around Funambol bug in client 10.0.1 where line wrapping is not supported.
+
+30-09-2011 3.7.32
+- Fixed sort bug in addressbook
+
+30-09-2011 3.7.31
+- Updated French and Russian.
+- Fixed several small bugs.
+- Added addressbook column to companies grid.
+
+26-09-2011 3.7.30
+- Various small bugfixes.
+
+02-09-2011 3.7.28
+- Fixed bug in ActiveSync with Android 2.3.3
+- Other small bug fixes.
+- Fixed bug in delete old mail
+- Bug fixes with webdav
+- New module for admins to become other users
+
+17-08-2011 3.7.27
+- WebDav locking is enabled
+- Fixed some webdav bugs.
+- TCPDF upgraded to latest version.
+- Bug in some e-mail display.
+- Smime decryption bugs fixed.
+- Syncml decoding error fixed.
+- Translation updates.
+- Better GUI for selecting tasklists, addressbooks and note categories in Settings -> Sync
+
+28-07-2011 3.7.26
+- Smiley's broke some e-mails and did not work case insensitive.
+
+26-07-2011 3.7.25
+- SMIME info on print
+- Disable beeps for e-mail separately
+- Context menu on event to Send mail to all participants	
+- Context menu on contacts to send mail to multiple
+- Simple smiley support in texts
+- Caldav iphone status bug. Imported status defaults to accepted now. iphone doesn't like the status needs-action.
+- Fixed SQL and command injections after extensive security testing.
+- New caldav_max_months_old config.php parameter to control the maximum age of synced events.
+- E-mail composer HTML editor fix for Chrome.
+- Updated german translation
+- When a download link is sent in the files module. Info about that should be shown in the info panel.
+- Set global vacation subject via configuration file
+- Bug fix: In some cases webdav only created 0 byte files
+
+23-06-2011 3.7.24
+- New config variable to set subject for sieve vacation messages.
+- Worked around php smime header bug.
+- Made a checkbox to enable the login screen text at the settings module. 
+  Don't forget to check this when you already have a text setup.
+- User groups list was showing less rows then it should.
+- User groups are searchable
+- Bug in calendar with removing a single instance from a recurring event.
+
+16/06/2011 3.7.23
