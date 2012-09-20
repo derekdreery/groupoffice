@@ -1,3 +1,7 @@
+??-09-2012 4.0.102
+- Bugfix: Copy/pasting products in the catalog of the billing module will work
+- Duplicating active record relations will keep the primarykey when it exists of more then one column
+
 19-09-2012 4.0.101
 - Default values for custom fields were not set correctly.
 - Check for php 5.3 or greater when upgrading
