@@ -1,8 +1,11 @@
 ??-09-2012 4.0.104
 - Bug fix: cached zip file reset after consecutive email attachment downloads by full zip.
+- Updated French translation
+- Find matching company on import in matching addressbook (import + syncml issue)
+- GOTA asks for password when session is expired or user logged out
 
 20-09-2012 4.0.103
-- Billing PDF templates got unwanted extra columns
+- Bugfix: Billing PDF templates got unwanted extra columns
 
 20-09-2012 4.0.102
 - GOTA didn't launch

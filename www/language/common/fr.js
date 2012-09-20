@@ -12,9 +12,9 @@
 // @author Merijn Schering <mschering@intermesh.nl>
 //
 // French Translation
-// Version : 3.7.29 
-// Author : Lionel JULLIEN
-// Date : September, 27 2011
+// Version : 4.0.99
+// Author : Lionel JULLIEN / Boris HERBINIERE-SEVE
+// Date : September, 20 2012
 //
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -366,7 +366,7 @@ GO.lang.confirmSelectLotsOfItems='Cette action va sélectionner {count} article(
 GO.lang.captcha='Code de sécurité';
 GO.lang.captchaEmpty='Le code de sécurité est vide';
 
-GO.lang.multiselectComboMaxItemsReachedWarning='Vous pouvez séléctionner au maximum {max} options';
+GO.lang.multiselectComboMaxItemsReachedWarning='Vous pouvez sélectionner au maximum {max} options';
 
 GO.lang.toScreen='Visu écran';
 
@@ -393,7 +393,7 @@ GO.lang.swfUploadPanelStrings = {
 		header_size: 'Taille',
 		header_status: 'Statut',
 		status: {
-			0: 'Liste d\'Attente',
+			0: 'Liste d\'attente',
 			1: 'En cours...',
 			2: 'Complété',
 			3: 'Erreur',
@@ -403,11 +403,11 @@ GO.lang.swfUploadPanelStrings = {
 		error_queue_slots_0: 'Il n\'y a plus d\'emplacement libre',
 		error_queue_slots_1: 'Il reste seulement un emplacement libre',
 		error_queue_slots_2: 'Il reste seuleument {0} emplacements libres',
-		error_size_exceeded: 'Le fichier sélectionné dépasse la limite autorisée de 1 MB.',
+		error_size_exceeded: 'Le fichier sélectionné dépasse la limite autorisée de 1 Mo.',
 		error_zero_byte_file: 'Fichier vide selectionné.',
 		error_invalid_filetype: 'Type de fichier invalide.',
 		error_file_not_found: 'Fichier non trouvé 404.',
-		error_security_error: 'Erreur de sécurité. Il n\'est pas autorisé de publier vers un URL différent.'
+		error_security_error: 'Erreur de sécurité. Il n\'est pas autorisé de publier vers une URL différent.'
 	};
 
 
@@ -418,12 +418,15 @@ GO.lang.landscape='Paysage';
 GO.lang.strName2= 'Nom 2';
 GO.lang.selectAll='Tout sélectionner';
 
-GO.lang.link='Link';
+GO.lang.link='Lien';
 
-GO.lang.savedQueries='Requètes sauvegardées';
-GO.lang.searchQueryName = 'Rechercher un nom de requète';
-GO.lang.enterSearchQueryName = 'Saisir un nom de requète à rechercher';
+GO.lang.savedQueries='Requêtes sauvegardées';
+GO.lang.searchQueryName = 'Rechercher un nom de requête';
+GO.lang.enterSearchQueryName = 'Saisir un nom de requête à rechercher';
 
 GO.lang.strUsersInGroup = 'Utilisateur membres du groupe';
 
 GO.lang.pleaseEnterASearchTerm='Veuillez saisir un terme à rechercher';
+
+GO.lang.showFirstDuplicateOnly='Ne montrer que le premier doublon';
+GO.lang.advancedSearch='Recherche avancée';

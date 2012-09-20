@@ -120,7 +120,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		// 3. A route to a controller has been given. Because we don't want to block the default page when entered manually.
 		
 		if(
-//						!GO::config()->debug && 
+						!GO::config()->debug && 
 						!GO::config()->disable_security_token_check && 
 //						GO::user() && No longer needed. We only check token when action requires a logged in user
 						!empty($_REQUEST['r']) && 
@@ -335,8 +335,12 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			
 			$response['feedback'] = !empty($response['feedback']) ? $response['feedback']."\r\n\r\n" : '';
 			$response['feedback'] .= $e->getMessage();
-			if($e instanceof GO_Base_Exception_AccessDenied)
+			if($e instanceof GO_Base_Exception_AccessDenied){
+				
+				header("HTTP/1.1 403 Forbidden");
+				
 				$response['redirectToLogin']=empty(GO::session()->values['user_id']);
+			}
 			
 			if($e instanceof GO_Base_Exception_SecurityTokenMismatch)
 				$response['redirectToLogin']=true;
