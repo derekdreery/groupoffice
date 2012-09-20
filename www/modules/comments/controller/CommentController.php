@@ -5,7 +5,7 @@ class GO_Comments_Controller_Comment extends GO_Base_Controller_AbstractModelCon
 
 
 	protected function getStoreParams($params){
-		
+
 		return GO_Base_Db_FindParams::newInstance()
 						->ignoreAcl()	
 						->select('t.*')
@@ -41,5 +41,37 @@ class GO_Comments_Controller_Comment extends GO_Base_Controller_AbstractModelCon
 		$params['model_type_id']=GO_Base_Model_ModelType::model()->findByModelName($params['model_name']);
 		
 		return parent::beforeSubmit($response, $model, $params);
+	}
+	
+	protected function actionCombinedStore($params) {
+		$response = array(
+			'success' => true,
+			'total' => 0,
+			'results' => array()
+		);
+
+		$cm = new GO_Base_Data_ColumnModel();
+		$cm->setColumnsFromModel(GO::getModel('GO_Comments_Model_Comment'));
+		
+		$store = GO_Base_Data_Store::newInstance($cm);
+		
+		$storeParams = $store->getDefaultParams($params)->mergeWith($this->getStoreParams($params));
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+			->select('t.*,type.model_name')
+			->joinModel(array(
+				'model' => 'GO_Base_Model_ModelType',
+				'localTableAlias' => 't',
+				'localField' => 'model_type_id',
+				'foreignField' => 'id',
+				'tableAlias' => 'type'
+			));
+
+		$findParams->mergeWith($storeParams);
+		
+		$store->setStatement(GO_Comments_Model_Comment::model()->find($findParams));
+		return $store->getData();
+//						
+//		return $response;
 	}
 }
