@@ -284,14 +284,14 @@ GO.addressbook.ContactProfilePanel = function(config)
 			this.setSalutation(true)
 		}, this);
 
-		this.addressbookFieldset =
+		this.addressbookFieldset = new Ext.form.FieldSet(
 		{
 			xtype: 'fieldset',
 			title: GO.addressbook.lang['cmdFieldsetSelectAddressbook'],
 			autoHeight: true,
 			collapsed: false,
 			items: this.formAddressBooks
-		}
+		});
 		
 	
 		this.personalFieldset = new Ext.form.FieldSet(
@@ -318,7 +318,7 @@ GO.addressbook.ContactProfilePanel = function(config)
 			this.formBirthday							
 			]);
 	
-		this.addressFieldset =
+		this.addressFieldset = new Ext.form.FieldSet(
 		{
 			xtype: 'fieldset',
 			title: GO.addressbook.lang['cmdFieldsetAddress'],
@@ -329,7 +329,7 @@ GO.addressbook.ContactProfilePanel = function(config)
 				anchor:'100%'
 			},
 			items: [this.formAddress,this.formAddressNo,this.formPostal,this.formCity,this.formState,this.formCountry]
-		}
+		});
 	
 		this.contactFieldset =new Ext.form.FieldSet(
 		{
@@ -351,7 +351,7 @@ GO.addressbook.ContactProfilePanel = function(config)
 		this.contactFieldset.add([this.formEmail2,this.formEmail3,this.formHomePhone,this.formFax,this.formCellular,this.formWorkPhone,this.formWorkFax,this.formHomepage]);
 		
 		
-		this.workFieldset =
+		this.workFieldset = new Ext.form.FieldSet(
 		{
 			xtype: 'fieldset',
 			title: GO.addressbook.lang['cmdFieldsetWork'],
@@ -362,7 +362,7 @@ GO.addressbook.ContactProfilePanel = function(config)
 				anchor:'100%'
 			},
 			items: [this.formCompany,this.formDepartment,this.formFunction]
-		}
+		});
  
 			var leftColItems = [];
 		
