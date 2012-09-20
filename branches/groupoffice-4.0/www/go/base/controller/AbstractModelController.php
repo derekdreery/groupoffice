@@ -253,8 +253,12 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$value='';
 			$eval = '$value = '.$map.';';
 			eval($eval);
-			
+						
 			$response['remoteComboTexts'][$property] = $value;
+			
+			//hack for comboboxes displaying 0 instead of the emptyText in extjs
+			if($response['data'][$property]==0)				
+				$response['data'][$property]="";
 		}
 		
 		error_reporting($oldLevel);
