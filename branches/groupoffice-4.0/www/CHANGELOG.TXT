@@ -1,3 +1,6 @@
+??-09-2012 4.0.104
+- Bug fix: cached zip file reset after consecutive email attachment downloads by full zip.
+
 20-09-2012 4.0.103
 - Billing PDF templates got unwanted extra columns
 
