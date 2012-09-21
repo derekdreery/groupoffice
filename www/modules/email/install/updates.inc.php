@@ -65,3 +65,5 @@ $updates["201209061100"][]="CREATE TABLE IF NOT EXISTS `em_portlet_folders` (
 $updates["201209061400"][]="ALTER TABLE `em_accounts` ADD `check_mailboxes` TEXT;";
 
 $updates["201209111400"][]="update `em_accounts` set check_mailboxes='INBOX';";
+
+$updates["201209211112"][]="ALTER TABLE `em_links` CHANGE `link_id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT";
