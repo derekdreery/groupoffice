@@ -787,7 +787,7 @@ class GO{
 	 * @param boolean $htmlspecialchars Set to true to escape special html characters. eg. & becomes &amp.
 	 * @return string
 	 */
-	public static function url($path='', $params=array(), $relative=true, $htmlspecialchars=false){
+	public static function url($path='', $params=array(), $relative=true, $htmlspecialchars=false, $appendSecurityToken=true){
 		$url = $relative ? GO::config()->host : GO::config()->full_url;
 
 		if(empty($path) && empty($params)){
@@ -818,7 +818,7 @@ class GO{
 
 		$amp = $htmlspecialchars ? '&amp;' : '&';
 
-		if(isset(GO::session()->values['security_token']))
+		if($appendSecurityToken && isset(GO::session()->values['security_token']))
 			$url .= $amp.'security_token='.GO::session()->values['security_token'];
 
 		return $url;
