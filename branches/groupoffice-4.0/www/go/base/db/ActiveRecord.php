@@ -213,9 +213,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * column in the database is required. You will probably 
 	 * need to override buildFilesPath() to make it work properly.
 	 * 
-	 * @return bool 
+	 * @return bool true if the Record has an files_folder_id column
 	 */
-	public function hasFiles(){return false;}
+	public function hasFiles(){
+		return isset($this->columns['files_folder_id']);
+	}
 	
 	/**
 	 * Set to true to enable links for this model. A table go_links_$this->tableName() must be created
@@ -3288,9 +3290,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	/**
 	 * Duplicates the current activerecord to a new one.
 	 * 
-	 * @param array $attributes Array of attributes that need to be set in the newly created activerecord as KEY => VALUE. Like: $params = array('attribute1'=>1,'attribute2'=>'Hello');
-	 *
-	 * @return Object The newly created object
+	 * @param array $attributes Array of attributes that need to be set in 
+	 * the newly created activerecord as KEY => VALUE. 
+	 * Like: $params = array('attribute1'=>1,'attribute2'=>'Hello');
+	 * @param boolean $save if the copy should be save when calling this function
+	 * @return mixed The newly created object or false if before or after duplicate fails
 	 * 
 	 * @todo Copy the linked items too.  Use __clone() ??
 	 * 
@@ -3299,7 +3303,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		//$copy = new GO_Base_Db_ActiveRecord(true);
 		$copy = clone $this;
-			
+		$copy->setIsNew(true);
+		
 		unset($copy->ctime);
 		
 		//unset the files folder
@@ -3307,19 +3312,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$copy->files_folder_id = 0;
 		
 		$pkField = $this->primaryKey();
-		if(is_array($pkField)) {
-			foreach($pkField as $key)
-				unset($copy->$key);
-		}
-		else {
+		if(!is_array($pkField))
 			unset($copy->$pkField);
-		}
 		
 		if(!$this->beforeDuplicate($copy)){
-			$copy->delete();
 			return false;
 		}
-		
 
 		foreach($attributes as $key=>$value) {
 			$copy->$key = $value;
@@ -3330,14 +3328,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$copy->setNewAcl($this->user_id);
 		}
 		
-		$copy->setIsNew(true);
-		
 		if($this->customFieldsRecord){
 			$copy->customFieldsRecord->setAttributes($this->customFieldsRecord->getAttributes('raw'), false);
 		}
-		
-		
-		
+
 		if($save)
 			$copy->save();
 		
@@ -3387,16 +3381,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 			//set new foreign key
 			$attributes[$field]=$duplicate->pk;
-			
-			// When an AR gets duplicated the primaryKey get unset
-			// If the primarykey of the related model is an array keep the key columns
-			$primaryKey = $model->primaryKey();
-			if(is_array($primaryKey)){
-				foreach($primaryKey as $key){
-					if(!isset($attributes[$key]))
-						$attributes[$key]=$model->$key;
-				}
-			}
 			
 			$duplicateRelatedModel = $model->duplicate($attributes);
 			$this->afterDuplicateRelation($relationName, $model, $duplicateRelatedModel);
