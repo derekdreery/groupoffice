@@ -26,7 +26,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 	 * @param String $eventstarttime The time the recurrence pattern starts. This is important to calculate the correct interval.
 	 * @param String $rrule 'FREQ=DAILY;UNTIL=22-02-2222;INTERVAL=2;
 	 */
-	public function readIcalendarRruleString($eventstarttime, $rrule) {
+	public function readIcalendarRruleString($eventstarttime, $rrule, $shiftDaysToLocal=false) {
 		if(!empty($rrule)){			
 			$this->_eventstarttime = $eventstarttime;
 			$rrule = str_replace('RRULE:', '', $rrule);
@@ -34,7 +34,11 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 				$this->_parseRruleIcalendarV1($rrule);
 			else
 				$this->_parseRruleIcalendar($rrule);
+			
+			if($shiftDaysToLocal)
+				$this->_byday = $this->shiftDays($this->_byday, false);
 		}
+		
 	}
 	
 		

@@ -198,7 +198,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		if(!empty($this->rrule)) {
 
 			$rrule = new GO_Base_Util_Icalendar_Rrule();
-			$rrule->readIcalendarRruleString($this->due_time, $this->rrule);
+			$rrule->readIcalendarRruleString($this->due_time, $this->rrule, true);
 			
 			$this->duplicate(array(
 				'completion_time'=>0,

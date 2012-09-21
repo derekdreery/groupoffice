@@ -45,7 +45,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		
 		if(!empty($model->rrule)) {
 			$rRule = new GO_Base_Util_Icalendar_Rrule();
-			$rRule->readIcalendarRruleString($model->start_time, $model->rrule);
+			$rRule->readIcalendarRruleString($model->due_time, $model->rrule);
 			$createdRule = $rRule->createJSONOutput();
 
 			$response['data'] = array_merge($response['data'],$createdRule);
@@ -84,7 +84,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		if(isset($params['freq']) && !empty($params['freq'])) {
 			$rRule = new GO_Base_Util_Icalendar_Rrule();
 			$rRule->readJsonArray($params);		
-			$model->rrule = $rRule->createRrule();
+			$model->rrule = $rRule->createRrule(false);
 		}
 			
 		if(isset($params['remind'])) // Check for a setted reminder
