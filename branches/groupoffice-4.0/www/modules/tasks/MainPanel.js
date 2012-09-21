@@ -35,6 +35,7 @@ GO.tasks.MainPanel = function(config){
 	this.taskListsPanel.on('drop', function(type)
 	{
 	    this.taskListsPanel.store.reload();
+			this.gridPanel.store.reload();
 	}, this);
 
 	this.taskListsPanel.on('change', function(grid, tasklists, records)

@@ -332,6 +332,37 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		header('Content-Type: text/plain');
 		echo $task->toICS();
 	}
-
+	
+	/**
+	 * Move the selected tasks to an other addressbook.
+	 * 
+	 * @param array $params
+	 * @return string $response
+	 */
+	protected function actionMove($params){
+		$response = array();
+		
+		if(!empty($params['items']) && !empty($params['tasklist_id'])){
+			$items = json_decode($params['items']);
+			
+			$num_updated = 0;
+			$success = true;
+			foreach($items as $taskId){
+				$task = GO_Tasks_Model_Task::model()->findByPk($taskId);
+				$task->tasklist_id = $params['tasklist_id'];
+				$success = $success&&$task->save();
+				
+				$num_updated++;
+			}
+			
+			if($num_updated > 0)
+				$response['reload_store'] = true;
+			
+			$response['success'] = $success;
+			
+		}		
+		
+		return $response;
+	}
 }
 	
