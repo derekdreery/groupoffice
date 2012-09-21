@@ -91,7 +91,7 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	 */
 	public static function getUserPermissionLevel($aclId, $userId=false, $checkGroupPermissionOnly=false) {
 		
-		//only ignore when no explicit user is checked.
+		//only ignore when no explicit user is checked. Otherwise you can never check the real permissionlevel when GO::$ignoreAclPermissions is set to true.
 		if(GO::$ignoreAclPermissions && $userId===false)
 			return self::MANAGE_PERMISSION;
 		
