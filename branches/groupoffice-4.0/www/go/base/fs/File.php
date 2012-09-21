@@ -263,7 +263,8 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 			}
 		}
 
-		if($this->exists()){
+		//if($this->exists()){ Don't use exists function becuase MemoryFile returns true but it does not exist on disk
+		if(file_exists($this->path())){
 			if(function_exists('finfo_open')){
 					$finfo    = finfo_open(FILEINFO_MIME);
 					$mimetype = finfo_file($finfo, $this->path());
