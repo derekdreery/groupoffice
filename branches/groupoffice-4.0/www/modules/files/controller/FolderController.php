@@ -258,6 +258,9 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 //				$acl->user_id = GO::user() ? GO::user()->id : 1;
 //				$acl->save();
 				$model->setNewAcl();
+				
+				//for enabling the acl permissions panel
+				$response['acl_id']=$model->acl_id;
 			}
 
 			if ($params['share']==0 && $model->acl_id > 0) {
