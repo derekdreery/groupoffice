@@ -819,9 +819,12 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 				);
 
 				while ($reminderModel = $remindersStmt->fetch()) {
-					$relatedModel = $reminderModel->getRelatedModel();
-					$modelName = !empty($relatedModel) ? $relatedModel->localizedName : GO::t('unknown');
-					$subject = GO::t('reminder').' - '.$modelName;
+//					$relatedModel = $reminderModel->getRelatedModel();
+					
+//					var_dump($relatedModel->name);
+					
+//					$modelName = $relatedModel ? $relatedModel->localizedName : GO::t('unknown');
+					$subject = GO::t('reminder').': '.$reminderModel->name;
 
 					$time = !empty($reminderModel->vtime) ? $reminderModel->vtime : $reminderModel->time;
 					$dateFormat = GO_Base_Util_Date::get_dateformat($userModel->date_format, $userModel->date_separator);
