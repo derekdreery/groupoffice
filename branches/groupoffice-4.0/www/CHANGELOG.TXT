@@ -2,8 +2,15 @@
 - Bug fix: cached zip file reset after consecutive email attachment downloads by full zip.
 - Comments module enhanced with categories and easier input fields.
 - Updated French translation
-- Find matching company on import in matching addressbook (import + syncml issue)
+- Bug fix: Find matching company on import in matching address book (import + syncml issue)
 - GOTA asks for password when session is expired or user logged out
+- Appended the subject of the appointment to all email subjects.
+- Updated Windows registry file for e-mail clients
+- Bug fix: E-mail filter dialog was broken in Internet Explorer
+- Reminders didn't include name in e-mail subject
+- Bug fix: Deleting e-mails failed when trash folder was disabled
+- Bug fix: Linking e-mails were always saved in the root folder even when selecting a different folder.
+- Bug fix: After enabling sharing in folder properties the permissions panel didn't activate immediately
 
 20-09-2012 4.0.103
 - Bugfix: Billing PDF templates got unwanted extra columns
