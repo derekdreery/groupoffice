@@ -53,30 +53,47 @@ Ext.extend(GO.tasks.TaskListsGrid, GO.grid.MultiSelectGrid, {
 						
 		if(tasklist_id > 0)
 		{
-			Ext.Ajax.request({
-				url: GO.settings.modules.tasks.url+'action.php',
-				params: {
-					task:'move_tasks',
+			GO.request({
+				url:'tasks/task/move',
+				params:{
+					//task:'move_tasks',
 					tasklist_id:tasklist_id,
 					items:Ext.encode(move_items)
 				},
-				callback: function(options, success, response)
-				{
-					var data = Ext.decode(response.responseText);
-
-					if(!data.success)
-					{
-						Ext.Msg.alert(GO.lang['strError'], data.feedback)
-					}else
-					{
-						if(data.reload_store)
+				success: function(options, response, result){
+					if(result.reload_store)
 						{
 							this.fireEvent('drop');
 						}
-					}
 				},
 				scope:this
-			});		
+			});
+//			
+//			
+//			Ext.Ajax.request({
+//				url: GO.settings.modules.tasks.url+'action.php',
+//				params: {
+//					task:'move_tasks',
+//					tasklist_id:tasklist_id,
+//					items:Ext.encode(move_items)
+//				},
+//				callback: function(options, success, response)
+//				{
+//					var data = Ext.decode(response.responseText);
+//
+//					if(!data.success)
+//					{
+//						Ext.Msg.alert(GO.lang['strError'], data.feedback)
+//					}else
+//					{
+//						if(data.reload_store)
+//						{
+//							this.fireEvent('drop');
+//						}
+//					}
+//				},
+//				scope:this
+//			});		
 			
 			return true;
 		}else
