@@ -1,4 +1,6 @@
 ??-09-2012 4.0.104
+- Change: behavior of ActiveRecord->duplicate() won't call delete() before it is saved and wont unset multicolumn PKs
+- Change ActiveRecord->hasFiles() will return true if column files_folder_id is in the database false otherwise
 - Bug fix: Invoice PDF was displaying the totals on the right side when not displaying any prices on invoice lines
 - Bug fix: cached zip file reset after consecutive email attachment downloads by full zip.
 - Comments module enhanced with categories and easier input fields.
