@@ -335,10 +335,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			
 			$response['feedback'] = !empty($response['feedback']) ? $response['feedback']."\r\n\r\n" : '';
 			$response['feedback'] .= $e->getMessage();
-			if($e instanceof GO_Base_Exception_AccessDenied){
-				
-				header("HTTP/1.1 403 Forbidden");
-				
+			if($e instanceof GO_Base_Exception_AccessDenied){				
 				$response['redirectToLogin']=empty(GO::session()->values['user_id']);
 			}
 			

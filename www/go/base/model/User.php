@@ -293,10 +293,12 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	 * Makes shure that this model's user has all the default models it should have.
 	 */
 	public function checkDefaultModels(){
+		$oldIgnore = GO::setIgnoreAclPermissions(true);
 	  $defaultModels = GO_Base_Model_AbstractUserDefaultModel::getAllUserDefaultModels($this->id);	
 		foreach($defaultModels as $model){
 			$model->getDefault($this);
-		}
+		}		
+		GO::setIgnoreAclPermissions($oldIgnore);
 	}
 	
 	protected function afterDelete() {
