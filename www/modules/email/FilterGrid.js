@@ -121,14 +121,6 @@ GO.email.FilterGrid = Ext.extend(GO.grid.GridPanel,{
 		{
 			filters[this.store.data.items[i].get('id')] = i;
 		}
-
-//		Ext.Ajax.request({
-//			url: GO.settings.modules.email.url+'action.php',
-//			params: {
-//				task: 'save_filters_sort_order',
-//				sort_order: Ext.encode(filters)
-//			}
-//		});
 		
 		GO.request({
 			url:'email/filter/saveSort',
