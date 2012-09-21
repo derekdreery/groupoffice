@@ -1,4 +1,4 @@
-??-09-2012 4.0.104
+21-09-2012 4.0.104
 - Change: behavior of ActiveRecord->duplicate() won't call delete() before it is saved and wont unset multicolumn PKs
 - Change ActiveRecord->hasFiles() will return true if column files_folder_id is in the database false otherwise
 - Bug fix: Invoice PDF was displaying the totals on the right side when not displaying any prices on invoice lines
@@ -14,6 +14,8 @@
 - Bug fix: Deleting e-mails failed when trash folder was disabled
 - Bug fix: Linking e-mails were always saved in the root folder even when selecting a different folder.
 - Bug fix: After enabling sharing in folder properties the permissions panel didn't activate immediately
+- Bug fix: Group management by non admin user didn't work right
+- Bug fix: Weekly recurring tasks shifted day
 
 20-09-2012 4.0.103
 - Bugfix: Billing PDF templates got unwanted extra columns
