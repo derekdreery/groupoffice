@@ -135,7 +135,7 @@ class GO_Base_Db_Connection
 	protected function initConnection($pdo)
 	{
 		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$pdo->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('GO_Base_Db_ActiveStatement', array()));
+		//$pdo->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('GO_Base_Db_ActiveStatement', array()));
 		$driver = strtolower($pdo->getAttribute(PDO::ATTR_DRIVER_NAME));
 
 		if ($this->emulatePrepare !== null && constant('PDO::ATTR_EMULATE_PREPARES'))

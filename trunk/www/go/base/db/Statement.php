@@ -11,7 +11,7 @@
 
 /**
  * This class is used to create the SQL statement that is executed against the database
- * It is usually create by the PDO::createCp,,amd fimctopm
+ * It is usually create by the PDO::createCommand function
  * 
  * To execute non-query SQL (insert, delete, update). call execute()
  * To execute a SQL statement that returns results (select) call query()
@@ -23,7 +23,7 @@
  * @version $Id Command.php 2012-06-14 10:22:40 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-class GO_Base_Db_Statement
+class GO_Base_Db_Statement implements IteratorAggregate
 {
 	private $_connection; //The database connection the belongs to this statement
 	private $_statement; //The PDOStatement for this DBCommand
@@ -41,6 +41,11 @@ class GO_Base_Db_Statement
 	public function __construct(GO_Base_Db_Connection $connection)
 	{
 		$this->_connection=$connection;
+	}
+	
+	public function setFetchMode($mode)
+	{
+		$this->_fetchMode = $mode;
 	}
 	
 	/**
@@ -78,7 +83,6 @@ class GO_Base_Db_Statement
 	/**
 		* Prepares the SQL statement to be executed.
 		* For complex SQL statement that is to be executed multiple times,
-		* this may improve performance.
 		* For SQL statement with binding parameters, this method is invoked
 		* automatically.
 		*/
@@ -112,6 +116,8 @@ class GO_Base_Db_Statement
 		try
 		{
 			$this->prepare();
+			//Set fetchmode before executing for feting in the stements iterator
+			call_user_func_array(array($this->_statement, 'setFetchMode'), $this->_fetchMode); 
 			if ($params === array())
 				$this->_statement->execute();
 			else
@@ -142,6 +148,8 @@ class GO_Base_Db_Statement
 	
 	public function totalRows()
 	{
+		if($this->_statement == null)
+			$this->execute($this->params);
 		if(!empty($this->_query['calc_found_rows'])){
 			$this->setText("SELECT FOUND_ROWS() as found"); //MYSQL only
 		  $record = $this->queryRow();
@@ -322,7 +330,7 @@ class GO_Base_Db_Statement
 	 * 
 	 * 
 	 * @param string $conditions the conditions that should be put in the WHERE part. (eg.: 'id=:id')
-	 * @param type $params the paremeters (name=>value) to be bound to the query
+	 * @param array $params the paremeters (name=>value) to be bound to the query
 	 * @return GO_Base_Db_Statement mysql for chaining
 	 */
 	public function where($conditions, $params = array())
@@ -557,6 +565,19 @@ class GO_Base_Db_Statement
 	{
 		$n = $this->setText("TRUNCATE TABLE ".$this->_connection->quoteTableName($table))->execute();
 		return $n;
+	}
+	
+	/**
+	 * Making the activefinder iterable
+	 * @return \IteratorIterator 
+	 */
+	public function getIterator()
+	{
+		if($this->_statement == null)
+			$this->execute($this->params);
+		//if($this->_statement instanceof PDOStatement)
+			//var_dump($this->_statement);
+		return new IteratorIterator($this->_statement);
 	}
 
 }
