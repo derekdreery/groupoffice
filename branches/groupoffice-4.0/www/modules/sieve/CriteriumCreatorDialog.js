@@ -447,7 +447,7 @@ Ext.extend(GO.sieve.CriteriumCreatorDialog, GO.Window,{
 						this.cmbOperator, 
 						this.txtCriterium,
 						this.numberCriterium,
-						this.rgSize,
+						this.rgSize
 					],
 					hideLabel: true
 				}
