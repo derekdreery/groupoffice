@@ -340,17 +340,17 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 									
 				if($shouldSend){
 					if($isNewEvent){
-						$subject = GO::t('invitation', 'calendar');
+						$subject = GO::t('invitation', 'calendar').': '.$event->subject;
 					}elseif($sendingParticipant)
 					{							
-						$updateReponses = GO::t('updateReponses','calendar');
+						$updateReponses = GO::t('updateReponses','calendar').': '.$event->subject;
 						$subject= sprintf($updateReponses[$sendingParticipant->status], $sendingParticipant->name, $event->name);
 					}elseif($method == 'CANCEL')
 					{
-						$subject = GO::t('cancellation','calendar');
+						$subject = GO::t('cancellation','calendar').': '.$event->subject;
 					}else
 					{
-						$subject = GO::t('invitation_update', 'calendar');
+						$subject = GO::t('invitation_update', 'calendar').': '.$event->subject;
 					}
 
 
