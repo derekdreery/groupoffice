@@ -121,7 +121,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	protected function getCacheAttributes() {
 		
 		return array(
-				'name' => $this->private ?  GO::t('privateEvent','calendar') : $this->name,
+				'name' => $this->private ?  GO::t('privateEvent','calendar') : $this->name,' '.GO_Base_Util_Date::get_timestamp($this->start_time, false).')',
 				'description' => $this->private ?  "" : $this->description
 		);
 	}
