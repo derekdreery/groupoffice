@@ -197,4 +197,9 @@ if(!file_exists('/etc/groupoffice/globalconfig.inc.php'))
 
 if(!file_contains('/etc/groupoffice/config.php', 'serverclient_domains'))
 	set_value('/etc/groupoffice/config.php', '$config[\'serverclient_domains\']="'.$domain.'";');
+
+
+
+if(file_exists($config['file_storage_path'].'key.txt'))
+	system('chown www-data:www-data '.$config['file_storage_path'].'key.txt');
 ?>
