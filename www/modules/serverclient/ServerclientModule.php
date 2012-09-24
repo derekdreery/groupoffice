@@ -18,6 +18,9 @@ class GO_Serverclient_ServerclientModule extends GO_Base_Module{
 	
 	public static function saveUser($user, $wasNew){
 		
+		if(!isset($user->serverclient_domains))
+			$user->serverclient_domains=array();
+		
 		$domains = $wasNew ? $user->serverclient_domains : self::getDomains();
 		
 		if(!empty($domains)){
