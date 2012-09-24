@@ -483,7 +483,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if (!$findParams)
 			$findParams = GO_Base_Db_FindParams::newInstance();
 
-		$findParams->order('start_time', 'ASC')->debugSql();
+		$findParams->order('start_time', 'ASC')->select("t.*");
 		
 //		if($periodEndTime)
 //			$findParams->getCriteria()->addCondition('start_time', $periodEndTime, '<');
