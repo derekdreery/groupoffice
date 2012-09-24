@@ -65,7 +65,7 @@ class GO_Ldapauth_Authenticator {
 
 		$mapping = $this->_getMapping();
 		
-		if(empty(GO::config()->ldap_host) || empty(GO::config()->ldap_port) || empty(GO::config()->ldap_basedn))
+		if(empty(GO::config()->ldap_host) || empty(GO::config()->ldap_port) || empty(GO::config()->ldap_peopledn))
 		{
 			GO::debug("LDAPAUTH: Aborting because one or more of the following ".
 				"required values is not set: \$config['ldap_host'], \$config['ldap_port'] and \$config['ldap_basedn'].");
@@ -89,7 +89,7 @@ class GO_Ldapauth_Authenticator {
 		else
 			$query = $mapping['username'] . '=' . $username;
 
-		$result = $ldapConn->search(GO::config()->ldap_basedn, $query);
+		$result = $ldapConn->search(GO::config()->ldap_peopledn, $query);
 		$record = $result->fetch();
 		
 		if(!$record){
