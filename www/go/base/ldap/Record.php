@@ -28,9 +28,10 @@ class GO_Base_Ldap_Record{
 			$attributes = ldap_get_attributes($this->_ldapConn->getLink(), $this->_entryId);
 			//var_dump($attributes);
 			for($i=0;$i<$attributes['count'];$i++){
-				//echo $attributes[$i]." : ".$attributes[$attributes[$i]][0]."\n";
+				//echo $attributes[$i]." : ".$attributes[$attributes[$i]]."\n";
 				$key = $keyToLowerCase ? strtolower($attributes[$i]) : $attributes[$i];
 				$this->_attributes[$key]=$attributes[$attributes[$i]];
+				unset($this->_attributes[$key]['count']);
 			}
 		}
 		
@@ -48,7 +49,12 @@ class GO_Base_Ldap_Record{
 	
 	public function __get($name){
 		$this->getAttributes();
-		return isset($this->_attributes[strtolower($name)][0]) ? $this->_attributes[strtolower($name)][0] : null;
+		$name = strtolower($name);
+		if(!isset($this->_attributes[$name][0])){
+			return null;
+		}  else {
+			return $this->_attributes[$name];
+		}
 	}
 	
 	public function __isset($name) {
