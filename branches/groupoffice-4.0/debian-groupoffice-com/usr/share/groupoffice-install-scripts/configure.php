@@ -108,5 +108,8 @@ if(is_dir($config['file_storage_path'].'cache'))
 
 if(is_dir($config['file_storage_path'].'log'))
 	system('chown -R www-data:www-data '.$config['file_storage_path'].'log');
+
+if(file_exists($config['file_storage_path'].'key.txt'))
+	system('chown www-data:www-data '.$config['file_storage_path'].'key.txt');
 echo "Done!\n\n";
 ?>
