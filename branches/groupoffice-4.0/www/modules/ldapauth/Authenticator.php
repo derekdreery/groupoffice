@@ -87,8 +87,10 @@ class GO_Ldapauth_Authenticator {
 			$query = str_replace('{username}', $username, GO::config()->ldap_search_template);
 		else
 			$query = $mapping['username'] . '=' . $username;
+		
+		GO::debug("LDAPAUTH: Search People DN: ".GO::config()->ldap_peopledn." Query: ". $query);
 
-		$result = $ldapConn->search(GO::config()->ldap_basedn, $query);
+		$result = $ldapConn->search(GO::config()->ldap_peopledn, $query);
 		$record = $result->fetch();
 
 		if (!$record) {
