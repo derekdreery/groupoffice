@@ -1,4 +1,5 @@
 ??? 4.0.105
+- Bugfix: Calendar resources can now be deleted 
 - Bugfix: project selectType and templateSelect dropdown is disabled when permission_level < writeAndDelete
 - Bugfix: modified attributes of ActiveRecord will work with types other then string
 - Drag and drop a task on a different tasklist now is in MVC style
