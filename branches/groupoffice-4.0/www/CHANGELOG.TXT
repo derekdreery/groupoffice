@@ -1,5 +1,6 @@
 ??? 4.0.105
 - Drag and drop a task on a different tasklist now is in MVC style
+- Fixed issue with Dismiss a reminder in the calendar module.
 
 21-09-2012 4.0.104
 - Change: behavior of ActiveRecord->duplicate() won't call delete() before it is saved and wont unset multicolumn PKs
