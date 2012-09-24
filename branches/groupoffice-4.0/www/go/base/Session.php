@@ -78,6 +78,26 @@ class GO_Base_Session extends GO_Base_Observable{
 	}
 	
 	/**
+	 * Return security token value that should be passed with each request.
+	 * 
+	 * eg. index.php?r=test&security_token=token
+	 * 
+	 * @return string
+	 */
+	public function securityToken(){
+		return $this->values['security_token'];
+	}
+	
+	/**
+	 * Return session ID
+	 * 
+	 * @return string
+	 */
+	public function id(){
+		return session_id();
+	}
+	
+	/**
 	 * Attemts to login with stored cookies on the client.
 	 * This function is called in index.php
 	 * 
