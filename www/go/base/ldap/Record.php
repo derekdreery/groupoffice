@@ -48,7 +48,7 @@ class GO_Base_Ldap_Record{
 	
 	public function __get($name){
 		$this->getAttributes();
-		return $this->_attributes[strtolower($name)][0];
+		return isset($this->_attributes[strtolower($name)][0]) ? $this->_attributes[strtolower($name)][0] : null;
 	}
 	
 	public function __isset($name) {
