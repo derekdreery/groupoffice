@@ -244,7 +244,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$nextTime = $rRule->getNextRecurrence();
 				
 				if($nextTime){
-					$event->addReminder($event->name, $nextTime-$event->reminder, $user_id);
+					$event->addReminder($event->name, $nextTime-$event->reminder, $userId);
 				}				
 			}			
 		}
