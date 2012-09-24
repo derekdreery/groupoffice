@@ -5,7 +5,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 	protected $model = 'GO_Addressbook_Model_SentMailing';
 
 	protected function allowGuests() {
-		return array("batchsend");
+		return array("batchsend","unsubscribe");
 	}
 	
 	
