@@ -2039,7 +2039,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	public function save($ignoreAcl=false){
 			
 		//GO::debug('save'.$this->className());
-			
+		
 		if(!$ignoreAcl && !$this->checkPermissionLevel($this->isNew?GO_Base_Model_Acl::CREATE_PERMISSION:GO_Base_Model_Acl::WRITE_PERMISSION)){
 			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : '';
 			throw new GO_Base_Exception_AccessDenied($msg);
@@ -2915,11 +2915,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			if($this->columns[$name]['gotype']=='textfield' || $this->columns[$name]['gotype']=='textarea')
 				$value=GO_Base_Util_String::normalizeCrlf($value, "\n");
 			
-			if((!isset($this->_attributes[$name]) || $this->_attributes[$name]!==$value) && !$this->isModified($name))
+			if((!isset($this->_attributes[$name]) || $this->_attributes[$name]!==(string)$value) && !$this->isModified($name))
 				$this->_modifiedAttributes[$name]=isset($this->_attributes[$name]) ? $this->_attributes[$name] : false;
 			
 			$this->_attributes[$name]=$value;
-
+			
 		}else{			
 			$setter = 'set'.$name;
 			
