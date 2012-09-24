@@ -143,6 +143,7 @@ class GO_Ldapauth_Authenticator {
 					unset($attr['email']);
 
 				$user->setAttributes($attr);
+				$user->cutAttributeLengths();
 
 				GO::debug('LDAPAUTH: updating user profile');
 				GO::debug($attr);
@@ -162,6 +163,7 @@ class GO_Ldapauth_Authenticator {
 
 			$user = new GO_Base_Model_User();
 			$user->setAttributes($attr);
+			$user->cutAttributeLengths();
 			$user->password = $password;
 
 			try {
@@ -187,18 +189,20 @@ class GO_Ldapauth_Authenticator {
 		if ($contact) {
 			GO::debug('LDAPAUTH: updating user contact');
 			$contact->setAttributes($attributes);
+			$contact->cutAttributeLengths();
 
 			if (!empty($attributes['company'])) {
 				$company = GO_Addressbook_Model_Company::model()->findSingleByAttributes(array(
 						'addressbook_id' => $contact->addressbook_id,
 						'name' => $attributes['company']
-								));
+								));				
 
 				if (!$company) {
 					GO::debug('LDAPAUTH: creating company for contact');
 					$company = new GO_Addressbook_Model_Company();
 					$company->name = $attributes['company'];
 					$company->addressbook_id = $contact->addressbook_id;
+					$company->cutAttributeLengths();
 					$company->save();
 				} else {
 					GO::debug('LDAPAUTH: found existing company for contact');
