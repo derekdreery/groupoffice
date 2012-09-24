@@ -7,6 +7,7 @@
 - Added German translation to the filesearch module
 - Bug fix: Unsubscribe link was broken
 - Bug fix: E-mail desktop integration didn't work with Internet Explorer
+- Bug fix: Time Registration save hours bug fixed
 
 21-09-2012 4.0.104
 - Change: behavior of ActiveRecord->duplicate() won't call delete() before it is saved and wont unset multicolumn PKs
