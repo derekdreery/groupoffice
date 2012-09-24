@@ -63,7 +63,8 @@ class GO{
 		
 		$serverName = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : "unknown";
 		
-		return GO::config()->id.'AT'.$serverName;
+		//added MD5 because IE doesn't like dots I suspect
+		return md5(GO::config()->id.'AT'.$serverName);
 	}
 	
 	/**
