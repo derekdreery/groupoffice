@@ -24,8 +24,8 @@ fi
 echo "Group-Office version: $VERSION"
 echo "Major version: $MAJORVERSION"
 
-if [ ! -e /var/www/release/packages/documents-$VERSION ]; then
-	echo /var/www/release/packages/documents-$VERSION bestaat niet. eerst createtag.sh draaien.
+if [ ! -e /root/packages/documents-$VERSION ]; then
+	echo /root/packages/documents-$VERSION bestaat niet. eerst createtag.sh draaien.
 	exit
 fi
 
@@ -42,7 +42,7 @@ svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-offi
 mv debian-groupoffice-documents groupoffice-documents-$VERSION
 
 for m in $PROMODULES; do
-	cp -R /var/www/release/packages/documents-$VERSION/$m groupoffice-documents-$VERSION/usr/share/groupoffice/modules/
+	cp -R /root/packages/documents-$VERSION/$m groupoffice-documents-$VERSION/usr/share/groupoffice/modules/
 done
 
 
