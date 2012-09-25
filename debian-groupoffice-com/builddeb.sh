@@ -29,7 +29,7 @@ cd groupoffice-com
 svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/branches/groupoffice-$MAJORVERSION/debian-groupoffice-com
 
 if [ "$1" == "real" ]; then
-	cp -R /var/www/release/packages/groupoffice-com-$VERSION debian-groupoffice-com/usr/share/groupoffice
+	cp -R /root/packages/groupoffice-com-$VERSION debian-groupoffice-com/usr/share/groupoffice
 	mv debian-groupoffice-com/usr/share/groupoffice/LICENSE.TXT debian-groupoffice-com
 fi
 
