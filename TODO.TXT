@@ -1,3 +1,19 @@
+Jeremie Voix
+
+
+Nieuwe files detecteren
+
+Testen op win: http://www.group-office.com/forum/viewtopic.php?f=5&t=9065
+
+
+Unique bool for custom fields
+
+- Verzenddatum niet tonen op bepaalde sjablonen (alleen op herinneringen)
+- BTW niet tonen op bepaalde sjablonen (wel tonen bij facturen, niet bij offertes)
+
+Mail kopieren met shift ingehouden
+Dubbelklik op verzonden item openen in composer
+
 Sort custom fields alphabetically and use autocomplete
 
 Persistent connections
