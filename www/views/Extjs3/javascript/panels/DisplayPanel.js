@@ -465,7 +465,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 	afterLoad : function() {
 	
 		if (GO.comments && this.data.comments.length>0)
-			this.newCommentPanel = new Ext.Panel({			
+			this.newCommentPanel = new Ext.form.FormPanel({			
 				renderTo: 'newCommentForModelDiv_'+this.model_id,
 				layout: 'form',
 				border: false,
@@ -475,6 +475,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 					anchor: '90%',
 					height: 70,
 					hideLabel:true,
+					allowBlank:false,
 					emptyText: GO.comments.lang['newCommentText']
 				}),
 
@@ -482,17 +483,17 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 						new Ext.Button({
 							text: GO.comments.lang['newComment'],
 							handler: function(){
-								GO.request({
-									url: 'comments/comment/submit',
+								this.newCommentPanel.form.submit({
+									url: GO.url('comments/comment/submit'),
 									params: {
-										comments : this.commentsField.getValue(),
-										category_id : this.categoriesCB.getValue(),
+//										comments : this.commentsField.getValue(),
+//										category_id : this.categoriesCB.getValue(),
 										model_id : this.model_id,
 										model_name : this.model_name
 									},
-									success: function(options, response, result) {
-										if (!GO.util.empty(result.feedback))
-											Ext.MessageBox.alert('', result.feedback);
+									success:function(form, action){
+										if (!GO.util.empty(action.result.feedback))
+											Ext.MessageBox.alert('', action.result.feedback);
 										this.load(this.model_id,true);
 									},
 									scope: this
