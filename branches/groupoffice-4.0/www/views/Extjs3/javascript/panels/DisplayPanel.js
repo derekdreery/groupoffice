@@ -159,19 +159,6 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 			return '<div class="collapsible-display-panel-header '+extraclassname+'"><div style="float:left">'+title+'</div><div class="x-tool x-tool-toggle" style="float:right;margin:0px;padding:0px;cursor:pointer" id="toggle-'+id+'">&nbsp;</div></div>';
 		}
 				
-		this.templateConfig.commentsAccordion = function(id,commentsText) {
-			if (commentsText.length<101) {
-				return '<div id="comment-'+id+'" class="comment-div">'+commentsText+'</div>';
-			} else {
-				return '<div id="comment-'+id+'" class="comment-div" style="display:none;">'+
-						'<a href="javascript:GO.comments.closeComment('+id+');"><img src="views/Extjs3/themes/Default/images/elbow-end-minus-nl.gif" style="margin-bottom:-4px;margin-right:3px;" /></a>'+
-							commentsText+'</div>'+
-				'<div id="shortComment-'+id+'" class="shortComment-div">'+
-						'<a href="javascript:GO.comments.openComment('+id+');"><img src="views/Extjs3/themes/Default/images/elbow-end-plus-nl.gif" style="margin-bottom:-4px;margin-right:3px;" /></a>'+
-							Ext.util.Format.ellipsis(commentsText,100)+'</div>';
-			}
-		}
-				
 		this.xtemplate = new Ext.XTemplate(this.template, this.templateConfig);
 		this.xtemplate.compile();
 		
@@ -475,20 +462,14 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		}		
 	},
 	
-	afterLoad : function(result) {
+	afterLoad : function() {
 	
-		if (GO.comments && result.data.comments.length>0)
+		if (GO.comments && this.data.comments.length>0)
 			this.newCommentPanel = new Ext.Panel({			
 				renderTo: 'newCommentForModelDiv_'+this.model_id,
 				layout: 'form',
 				border: false,
-			//	keys:[{
-			//		key: Ext.EventObject.ENTER,
-			//		fn : function() {
-			//			this._loadWithPassword();
-			//		},
-			//		scope : this
-			//	}],
+
 				items: [this.commentsField = new Ext.form.TextArea({
 					name: 'comments',
 					anchor: '90%',
@@ -496,21 +477,8 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 					hideLabel:true,
 					emptyText: GO.comments.lang['newCommentText']
 				}),
-	//			{
-	//				layout: 'column',
-	//				border: false,
-	//				items: [
-	//					{
-	//						xtype: 'plainfield',
-	//						value: GO.comments.lang.category+':\t\t',
-	//						width: 80
-	//					},
-						this.categoriesCB = new GO.comments.CategoriesComboBox(),
-	//					{
-	//						xtype: 'plainfield',
-	//						value: '\t\t\t',
-	//						width: 100
-	//					},
+
+					this.categoriesCB = new GO.comments.CategoriesComboBox(),
 						new Ext.Button({
 							text: GO.comments.lang['newComment'],
 							handler: function(){
@@ -532,8 +500,6 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 							},
 							scope: this
 						})
-	//				]
-	//			}
 				]
 			});
 		
@@ -566,7 +532,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 					
 					this.stopLoading.defer(300, this);
 					
-					this.afterLoad(result);
+					this.afterLoad();
 				},
 				scope: this			
 			});
