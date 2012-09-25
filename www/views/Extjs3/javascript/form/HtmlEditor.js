@@ -8,7 +8,9 @@ GO.form.HtmlEditor = function(config){
 	});
 		
 	config.plugins = config.plugins || [];
-		
+
+	if(!Ext.isArray(config.plugins))
+		config.plugins=[config.plugins];
 		
 	var spellcheckInsertPlugin = new GO.plugins.HtmlEditorSpellCheck(this);
 	var wordPastePlugin = new Ext.ux.form.HtmlEditor.Word();
