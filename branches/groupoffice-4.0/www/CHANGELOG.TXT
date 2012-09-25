@@ -1,7 +1,8 @@
 ??? 4.0.105
-- Bug fix: Calendar resources can now be deleted 
-- Bug fix: project selectType and templateSelect dropdown is disabled when permission_level < writeAndDelete
-- Bug fix: modified attributes of ActiveRecord will work with types other then string
+- Bugfix: Remove old line in italian language file of billing module that gave errors
+- Bugfix: Calendar resources can now be deleted 
+- Bugfix: project selectType and templateSelect dropdown is disabled when permission_level < writeAndDelete
+- Bugfix: modified attributes of ActiveRecord will work with types other then string
 - Drag and drop a task on a different tasklist now is in MVC style
 - Bug fix: Fixed issue with Dismiss a reminder in the calendar module.
 - Bug fix: Fixed "undefined function $this->escape...." bug in filesearch.
