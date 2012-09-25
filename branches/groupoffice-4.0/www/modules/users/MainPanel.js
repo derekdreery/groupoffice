@@ -95,7 +95,11 @@ GO.users.MainPanel = function(config)
 		  		iconCls: 'btn-delete', 
 		  		text: GO.lang['cmdDelete'], 
 		  		cls: 'x-btn-text-icon', 
-		  		handler: function(){this.deleteSelected();},
+		  		handler: function(){
+						Ext.Ajax.timeout = 180000; //3 minutes
+						this.deleteSelected();
+						Ext.Ajax.timeout = 30000; //30 seconds
+					},
 		  		scope: this
 		  	},{
 		  		iconCls: 'btn-upload',
