@@ -589,3 +589,6 @@ $l['cliOnly'] = "This script can only run through the Group-Office Command Line 
 $l['unnamed']='Unnamed';
 
 $l['maxRowslistTooHigh']='The maximum number of rows in lists is too high. (max 50)';
+
+$l['sir']='Sir';
+$l['madam']='Madam';

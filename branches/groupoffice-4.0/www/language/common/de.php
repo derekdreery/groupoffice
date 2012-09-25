@@ -541,3 +541,8 @@ $l['queryField']= "Feld";
 $l['queryComparator']= "Operator";
 $l['queryValue']="Wert";
 $l['queryStartGroup']="Startgruppe";
+
+
+
+$l['sir']='Herrn';
+$l['madam']='Frau';
