@@ -2,25 +2,26 @@
 class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 	
 	protected function allowGuests() {
-		return array("users");
+		return array("users", "lookupuser");
 	}
 	
-//	protected function ignoreAclPermissions() {
-//		return array("*");
-//	}
 	
-//	protected function actionTest($params){
-//		
-//		$la = new GO_Ldapauth_Authenticator();
-//		
-//		$ldapConn = GO_Base_Ldap_Connection::getDefault();
-//		
-//		$result = $ldapConn->search(GO::config()->ldap_basedn, 'uid=john');
-//		$record = $result->fetch();
-//		
-//		var_dump($record);
-//		
-//	}
+	protected function actionLookupUser($params){
+		
+		$this->requireCli();		
+		$this->checkRequiredParameters(array('uid'), $params);
+		
+		$la = new GO_Ldapauth_Authenticator();
+		
+		$ldapConn = GO_Base_Ldap_Connection::getDefault();
+		
+		$result = $ldapConn->search(GO::config()->ldap_basedn, 'uid='.$params['uid']);
+		$record = $result->fetch();
+		$attr = $record->getAttributes();
+		
+		var_dump($attr);
+		
+	}
 	
 	/**
 	 * 
