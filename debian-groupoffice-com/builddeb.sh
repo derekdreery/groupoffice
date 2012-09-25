@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# For setting up gnupg agent:
+# http://www.debian-administration.org/article/Gnu_Privacy_Guard_Agent_GPG/print
+
 PRG="$0"
 OLDPWD=`pwd`
 P=`dirname $PRG`
