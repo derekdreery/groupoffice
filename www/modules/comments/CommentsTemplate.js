@@ -16,7 +16,7 @@ GO.comments.displayPanelTemplate =
 					'</tr>'+
 					'<tr>'+
 						'<td colspan="2" style="padding-left:5px" id="comment-td-{id}">'+
-							'{[this.commentsAccordion(values.id,values.comments)]}'+
+							'{[GO.comments.commentsAccordion(values.id,values.comments)]}'+
 							'<hr />'+
 						'</td>'+
 					'</tr>'+
@@ -35,4 +35,17 @@ GO.comments.closeComment = function(commentId) {
 GO.comments.openComment = function(commentId) {
 	Ext.get('comment-'+commentId).setDisplayed(true);
 	Ext.get('shortComment-'+commentId).setDisplayed(false);
+}
+
+GO.comments.commentsAccordion = function(id,commentsText) {
+	if (commentsText.length<101) {
+		return '<div id="comment-'+id+'" class="comment-div">'+commentsText+'</div>';
+	} else {
+		return '<div id="comment-'+id+'" class="comment-div" style="display:none;">'+
+				'<a href="javascript:GO.comments.closeComment('+id+');"><img src="views/Extjs3/themes/Default/images/elbow-end-minus-nl.gif" style="margin-bottom:-4px;margin-right:3px;" /></a>'+
+					commentsText+'</div>'+
+		'<div id="shortComment-'+id+'" class="shortComment-div">'+
+				'<a href="javascript:GO.comments.openComment('+id+');"><img src="views/Extjs3/themes/Default/images/elbow-end-plus-nl.gif" style="margin-bottom:-4px;margin-right:3px;" /></a>'+
+					Ext.util.Format.ellipsis(commentsText,100)+'</div>';
+	}
 }
