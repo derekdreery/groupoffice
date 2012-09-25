@@ -15,7 +15,7 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 		
 		$ldapConn = GO_Base_Ldap_Connection::getDefault();
 		
-		$result = $ldapConn->search(GO::config()->ldap_basedn, 'uid='.$params['uid']);
+		$result = $ldapConn->search(GO::config()->ldap_peopledn, 'uid='.$params['uid']);
 		$record = $result->fetch();
 		$attr = $record->getAttributes();
 		
