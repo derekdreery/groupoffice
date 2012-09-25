@@ -290,30 +290,25 @@ class GO_Ldapauth_Authenticator {
 		else
 			return false;
 
-		if (is_string($val)) {
-			$val = array('count' => 1, '0' => $val);
+		$validAddresses = array();
+		for ($i = 0; $i < count($val); $i++) {
+			$validAddresses[] = strtolower($val[$i]);
 		}
-		if (is_array($val)) {
-			$validAddresses = array();
-			for ($i = 0; $i < $val['count']; $i++) {
-				$validAddresses[] = strtolower($val[$i]);
-			}
 
-			if (!empty(GO::config()->ldap_use_uid_with_email_domain)) {
+		if (!empty(GO::config()->ldap_use_uid_with_email_domain)) {
 
-				$default = strtolower($lowercase[$mapping['username']][0]) . '@' . GO::config()->ldap_use_uid_with_email_domain;
+			$default = strtolower($lowercase[$mapping['username']][0]) . '@' . GO::config()->ldap_use_uid_with_email_domain;
 
-				if (!in_array($default, $validAddresses)) {
-					$validAddresses[] = $default;
-				}
-			}
-
-			if (!in_array(strtolower($email), $validAddresses)) {
-				return false;
+			if (!in_array($default, $validAddresses)) {
+				$validAddresses[] = $default;
 			}
 		}
 
-		return true;
+		if (!in_array(strtolower($email), $validAddresses)) {
+			return false;
+		}else		
+		{
+			return true;
+		}
 	}
-
 }
