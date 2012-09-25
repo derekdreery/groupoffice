@@ -1,4 +1,5 @@
 25-09-2012 4.0.105
+- Change: Adding tasks using the quickadd bar will respect the default reminder settings of a user
 - Bugfix: Remove old line in italian language file of billing module that gave errors
 - Bugfix: Calendar resources can now be deleted 
 - Bugfix: project selectType and templateSelect dropdown is disabled when permission_level < writeAndDelete
