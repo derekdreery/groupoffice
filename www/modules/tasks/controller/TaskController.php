@@ -68,7 +68,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 							->select('count(*) AS count')
 							->single();
 			
-			$findParams->getCriteria()->addCondition('project_id', $params['project_id']);										
+			$findParams->getCriteria()->addCondition('project_id', $params['project_id']);
 			$record = GO_Tasks_Model_Task::model()->find($findParams);
 			
 			$response['data']['name']='['.($record->count+1).'] ';
@@ -89,8 +89,6 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 			
 		if(isset($params['remind'])) // Check for a setted reminder
 			$model->reminder= GO_Base_Util_Date::to_unixtime($params['remind_date'].' '.$params['remind_time']);
-		else 
-			$model->reminder = 0;
 		
 		return parent::beforeSubmit($response, $model, $params);
 	}
