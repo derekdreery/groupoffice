@@ -9,6 +9,9 @@
 - Added German translation to the filesearch module
 - Bug fix: Unsubscribe link was broken
 - Bug fix: E-mail desktop integration didn't work with Internet Explorer
+- Bug fix: Absolute positioned elements in e-mails could mess up layout
+- Added new tag for document templates: {contact:sirmadam} Sir or Madam depending on the gender.
+- Bug fix: Strange page breaking of PDF's in billing
 - Bug fix: Time Registration save hours bug fixed
 - On delete: set "max_execution_time" to 3 minutes because it can take a while to delete all relations of an object.
 
