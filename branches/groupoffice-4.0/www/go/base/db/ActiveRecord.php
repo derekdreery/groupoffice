@@ -2610,6 +2610,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function delete($ignoreAcl=false){
 		
+		ini_set('max_execution_time', 180); // Added this because the deletion of all relations sometimes takes a lot of time (3 minutes) 
+		
 		//GO::debug("Delete ".$this->className()." pk: ".$this->pk);
 		
 		if($this->isNew)
