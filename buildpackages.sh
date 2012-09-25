@@ -1,4 +1,5 @@
 #!/bin/bash
+svn up
 php ./createchangelogs.php
 svn commit -m 'Updated changelogs'
 
