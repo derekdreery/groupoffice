@@ -416,8 +416,17 @@ class GO_Base_Util_Date_RecurrencePattern{
 					$number = substr($day,0,1);
 					$dayStr = substr($day, 1);
 				}
-					
-				$shiftedDay = $this->_days[array_search($dayStr, $this->_days)+$shiftDay];
+
+				$dayIndex = array_search($dayStr, $this->_days);
+				$dayIndex+=$shiftDay;
+				
+				if($dayIndex== -1)
+					$dayIndex = 6;
+				
+				if($dayIndex== 7)
+					$dayIndex = 0;
+				
+				$shiftedDay = $this->_days[$dayIndex];
 				$newByDay[]=$number.$shiftedDay;
 			}						
 			return $newByDay;
