@@ -560,3 +560,6 @@ $l['queryValue']="Verdi";
 $l['queryStartGroup']="Start gruppe";
 $l['cliOnly']= "Dette skriptet kan bare kjøres via Group-Office Command Line Interface (CLI).";
 $l['unnamed']='Ikke navngitt';
+$l['maxRowslistTooHigh']='Maksimalt antall rader i lister er satt for høyt! (maks. 50)';
+$l['sir']='Herr';
+$l['madam']='Fr.';
