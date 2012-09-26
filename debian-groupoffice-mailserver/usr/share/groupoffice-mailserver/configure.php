@@ -150,36 +150,36 @@ if(version_compare(2, $version)>0){
 }else
 {
 	$filename = '/etc/dovecot/dovecot-sql.conf.ext';
-	if(file_contains($filename, 'Group-Office'))$filename .= '.'.date('Ymd');
-	create_file($filename,'tpl/etc/dovecot/dovecot-sql.conf.ext', $replacements);
+	if(!file_contains($filename, 'Group-Office'))
+		create_file($filename,'tpl/etc/dovecot/dovecot-sql.conf.ext', $replacements);
 	
 	$filename = '/etc/dovecot/conf.d/auth-sql.conf.ext';
-	if(file_contains($filename, 'Group-Office'))$filename .= '.'.date('Ymd');
-	create_file($filename,'tpl/etc/dovecot/conf.d/auth-sql.conf.ext', $replacements);
+	if(!file_contains($filename, 'Group-Office'))
+		create_file($filename,'tpl/etc/dovecot/conf.d/auth-sql.conf.ext', $replacements);
 	
 	$filename = '/etc/dovecot/conf.d/10-auth.conf';
-	if(file_contains($filename, 'Group-Office'))$filename .= '.'.date('Ymd');
-	create_file($filename,'tpl/etc/dovecot/conf.d/10-auth.conf', $replacements);
+	if(!file_contains($filename, 'Group-Office'))
+		create_file($filename,'tpl/etc/dovecot/conf.d/10-auth.conf', $replacements);
 	
 	$filename = '/etc/dovecot/conf.d/10-mail.conf';
-	if(file_contains($filename, 'Group-Office'))$filename .= '.'.date('Ymd');
-	create_file($filename,'tpl/etc/dovecot/conf.d/10-mail.conf', $replacements);
+	if(!file_contains($filename, 'Group-Office'))
+		create_file($filename,'tpl/etc/dovecot/conf.d/10-mail.conf', $replacements);
 	
 	$filename = '/etc/dovecot/conf.d/10-master.conf';
-	if(file_contains($filename, 'Group-Office'))$filename .= '.'.date('Ymd');
-	create_file($filename,'tpl/etc/dovecot/conf.d/10-master.conf', $replacements);
+	if(!file_contains($filename, 'Group-Office'))
+		create_file($filename,'tpl/etc/dovecot/conf.d/10-master.conf', $replacements);
 	
 	$filename = '/etc/dovecot/conf.d/15-lda.conf';
-	if(file_contains($filename, 'Group-Office'))$filename .= '.'.date('Ymd');
-	create_file($filename,'tpl/etc/dovecot/conf.d/15-lda.conf', $replacements);
+	if(!file_contains($filename, 'Group-Office'))
+		create_file($filename,'tpl/etc/dovecot/conf.d/15-lda.conf', $replacements);
 	
 	$filename = '/etc/dovecot/conf.d/20-imap.conf';
-	if(file_contains($filename, 'Group-Office'))$filename .= '.'.date('Ymd');
-	create_file($filename,'tpl/etc/dovecot/conf.d/20-imap.conf', $replacements);
+	if(!file_contains($filename, 'Group-Office'))
+		create_file($filename,'tpl/etc/dovecot/conf.d/20-imap.conf', $replacements);
 	
 	$filename = '/etc/dovecot/conf.d/90-quota.conf';
-	if(file_contains($filename, 'Group-Office'))$filename .= '.'.date('Ymd');
-	create_file($filename,'tpl/etc/dovecot/conf.d/90-quota.conf', $replacements);
+	if(!file_contains($filename, 'Group-Office'))
+		create_file($filename,'tpl/etc/dovecot/conf.d/90-quota.conf', $replacements);
 	
 	if(!file_contains('/etc/groupoffice/config.php', 'sieve_port'))
 		set_value('/etc/groupoffice/config.php', '$config[\'sieve_port\']="4190";');
@@ -187,8 +187,8 @@ if(version_compare(2, $version)>0){
 
 echo "Configuring amavis\n";
 $filename =  '/etc/amavis/conf.d/60-groupoffice_defaults';
-if(file_contains($filename, 'Group-Office'))$filename .= '.'.date('Ymd');
-create_file($filename,'tpl/etc/amavis/conf.d/60-groupoffice_defaults', $replacements);
+if(!file_contains($filename, 'Group-Office'))
+	create_file($filename,'tpl/etc/amavis/conf.d/60-groupoffice_defaults', $replacements);
 
 
 echo "Configuring groupoffice\n";
