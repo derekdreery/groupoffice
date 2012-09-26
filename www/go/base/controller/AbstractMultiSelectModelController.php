@@ -91,6 +91,8 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 			->addCondition($this->getRemoteKey(), $params['model_id'],'=','lt')
 			->addCondition($model->primaryKey(), 'lt.'.$this->linkModelField(), '=', 't', true, true);			
 		
+		$this->formatColumns($store->getColumnModel());
+		
 		$findParams = $store->getDefaultParams($params);
 		
 		if($this->uniqueSelection){
@@ -105,8 +107,6 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 		$availableModels = $model->find($findParams);
 		
 		$store->setStatement($availableModels);
-		
-		$this->formatColumns($store->getColumnModel());
 
 		return $store->getData();
 	}
