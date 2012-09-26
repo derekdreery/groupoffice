@@ -1,5 +1,6 @@
 ??? 4.0.107
 - Bugfix: Fixed undefined index "-1" error recurrences
+- Bugfix: Sort on column 'name' in Add User Permissions window.
 
 26-09-2012 4.0.106
 - Bugfix: HTML field with help text crashed
