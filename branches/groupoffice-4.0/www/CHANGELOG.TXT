@@ -1,5 +1,7 @@
-??-09-2012 4.0.106
-- Change: Adding tasks using the quickadd bar will respect the default reminder settings of a user
+26-09-2012 4.0.106
+- Bugfix: HTML field with help text crashed
+- Bugfix: Gota didn't open second document
+- Bugfix: Adding tasks using the quick add bar will respect the default reminder settings of a user
 
 25-09-2012 4.0.105
 - Bugfix: Remove old line in italian language file of billing module that gave errors
