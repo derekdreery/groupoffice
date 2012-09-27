@@ -40,7 +40,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 	 *
 	 * @var array eg. array('MO','WE') OR array('1MO') in case of the first monday
 	 */
-	protected $_byday;
+	protected $_byday=array();
 	protected $_bymonth;
 	protected $_bymonthday;
 	protected $_eventstarttime;
