@@ -25,9 +25,9 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		return array('exportics');
 	}
 	
-	protected function ignoreAclPermissions() {
-		return array('exportics');
-	}
+//	protected function ignoreAclPermissions() {
+//		return array('exportics');
+//	}
 
 	protected function getStoreParams($params) {
 		
@@ -157,9 +157,9 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 	
 	public function actionExportIcs($params){
 		
-		$calendar = GO_Calendar_Model_Calendar::model()->findByPk($params["calendar_id"]);
+		$calendar = GO_Calendar_Model_Calendar::model()->findByPk($params["calendar_id"],false, true);
 		
-		if(!$calendar->public)
+		if(!$calendar->public && !$calendar->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
 			throw new GO_Base_Exception_AccessDenied();
 		
 		$c = new GO_Base_VObject_VCalendar();				
@@ -175,11 +175,23 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		else
 			$stmt = GO_Calendar_Model_Event::model()->find($findParams);
 		
-		while($event = $stmt->fetch())
-			$c->add($event->toVObject());			
+		//todo optimize memory
+			
 		
 		GO_Base_Util_Http::outputDownloadHeaders(new GO_Base_FS_File($calendar->name.'.ics'));
-		echo $c->serialize();
-	}
-	
+		
+		echo "BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Intermesh//NONSGML ".GO::config()->product_name." ".GO::config()->version."//EN
+";
+		$t = new GO_Base_VObject_VTimezone();
+		echo $t->serialize();
+		
+		while($event = $stmt->fetch()){
+			$v = $event->toVObject();
+			echo $v->serialize();
+		}
+		
+		echo "END:VCALENDAR\n";
+	}	
 }
