@@ -209,22 +209,22 @@ class GO_Base_Db_FindCriteria {
 	 * @param Boolean $useNot True for 'NOT IN', false for 'IN'. Default: false.
 	 * @return GO_Base_Db_FindCriteria The complete GO_Base_Db_FindCriteria object is given as a return value.
 	 */
-	public function addInCondition($field, $value, $tableAlias='t', $useAnd=true, $useNot=false) {	
+	public function addInCondition($field, $values, $tableAlias='t', $useAnd=true, $useNot=false) {	
 				
-		if(!is_array($value))
+		if(!is_array($values))
 			throw new Exception("ERROR: Value for addInCondition must be an array");
 		
 //		if(!count($value))
 //			throw new Exception("ERROR: Value for addInCondition can't be empty");
 		
-		if(!count($value))
+		if(!count($values))
 				return $this;
 		
 		$this->_appendOperator($useAnd);
 		$comparator = $useNot ? 'NOT IN' : 'IN';
 		
 		$paramTags=array();
-		foreach($value as $val){
+		foreach($values as $val){
 			$paramTag = $this->_getParamTag();
 			$paramTags[]=$paramTag;
 			$this->_params[$paramTag]=array($val, $this->_getPdoType($tableAlias, $field));
