@@ -790,8 +790,34 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			return GO_Files_Model_Folder::model()->find($findParams);
 	}
 	
+	/**
+	 * Checks if this folder has child folders and checks permissions too.
+	 * @return boolean
+	 */
 	public function hasChildren(){
 		return $this->getSubFolders(GO_Base_Db_FindParams::newInstance()->single(), true);
+	}
+	
+	/**
+	 * Check if this folder has subfolders without checking permissions.
+	 * 
+	 * @return boolean
+	 */
+	public function hasFolders(){
+		$folder = GO_Files_Model_Folder::model()->findSingleByAttribute('parent_id', $this->id);
+		
+		return $folder!=false;
+	}
+	
+	/**
+	 * Check if this folder has files.
+	 * 
+	 * @return boolean
+	 */
+	public function hasFiles(){
+		$file = GO_Files_Model_File::model()->findSingleByAttribute('folder_id', $this->id);
+		
+		return $file!=false;
 	}
 	
 	/**
