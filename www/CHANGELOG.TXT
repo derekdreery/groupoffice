@@ -1,4 +1,6 @@
+
 ??? 4.0.107
+- Bugfix: in the task edit dialog Tasklists with create rights can be selected
 - Bugfix: Fixed undefined index "-1" error recurrences
 - Bugfix: Sort on column 'name' in Add User Permissions window.
 - ActiveSync: Always try to get a sender name when sending an email
@@ -7,6 +9,7 @@
 - Bugfix: HTML field with help text crashed
 - Bugfix: Gota didn't open second document
 - Bugfix: Adding tasks using the quick add bar will respect the default reminder settings of a user
+
 
 25-09-2012 4.0.105
 - Bugfix: Remove old line in italian language file of billing module that gave errors
