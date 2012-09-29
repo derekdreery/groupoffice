@@ -1008,8 +1008,24 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			//find existing event
 			$event = GO_Calendar_Model_Event::model()->findByUuid((string) $vevent->uid, GO::user()->id, 0, $recurrenceDate);
 
-			// invitation to a new event										
-			$response['iCalendar']['feedback'] = GO::t('iCalendar_event_invitation', 'email');
+			switch($vcalendar->method){
+				case 'CANCEL':					
+					$response['iCalendar']['feedback'] = GO::t('iCalendar_event_cancelled', 'email');
+					break;
+				
+				case 'REPLY':					
+					$response['iCalendar']['feedback'] = GO::t('iCalendar_update_available', 'email');
+					break;
+				
+				case 'REQUEST':					
+					$response['iCalendar']['feedback'] = GO::t('iCalendar_event_invitation', 'email');
+					break;
+			}
+			
+			if($vcalendar->method!='REQUEST' && !$event){
+				$response['iCalendar']['feedback'] = GO::t('iCalendar_event_not_found', 'email');
+			}
+			
 			$response['iCalendar']['invitation'] = array(
 					'uuid' => (string) $vevent->uid,
 					'email_sender' => $response['sender'],
