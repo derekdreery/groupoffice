@@ -2381,6 +2381,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 			$attr = array_merge($autoAttr, $attr);
 			
+			if($attr['description']==null)
+				$attr['description']="";
+			
 //			//make sure these attributes are not too long
 //			if(GO_Base_Util_String::length($attr['name'])>100)
 //				$attr['name']=substr($attr['name'], 0, 100);
