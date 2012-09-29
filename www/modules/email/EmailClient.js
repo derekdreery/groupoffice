@@ -1383,11 +1383,11 @@ GO.mainLayout.onReady(function(){
 						unseenEmails:result.email_status.total_unseen
 					}
 
-					if(!ep || !ep.isVisible()){
+//					if(!ep || !ep.isVisible()){
 						GO.email.notificationEl.setDisplayed(true);
 						data.popup=true;
 						data.alarm=true;
-					}
+//					}
 
 					GO.email.notificationEl.update(result.email_status.total_unseen);
 				}
