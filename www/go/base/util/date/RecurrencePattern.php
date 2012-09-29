@@ -390,7 +390,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 	 * 
 	 * @param boolean $toGmt Will be converted to GMT time (true) or from GMT time (false).
 	 */
-	protected function shiftDays($days, $toGmt=true){
+	public function shiftDays($toGmt=true){
 		$date = new DateTime(date('Y-m-d G:i', $this->_eventstarttime));
 		$timezoneOffset = $date->getOffset();
 				
@@ -405,6 +405,8 @@ class GO_Base_Util_Date_RecurrencePattern{
 		} else {
 			$shiftDay = 0;
 		}	
+		
+		$days = $this->_byday;
 	
 		$newByDay=array();
 		if($shiftDay!=0){
@@ -428,11 +430,8 @@ class GO_Base_Util_Date_RecurrencePattern{
 				
 				$shiftedDay = $this->_days[$dayIndex];
 				$newByDay[]=$number.$shiftedDay;
-			}						
-			return $newByDay;
-		}else
-		{
-			return $days;
+			}
+			$this->_byday = $newByDay;
 		}
 	}	
 }

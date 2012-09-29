@@ -36,7 +36,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 				$this->_parseRruleIcalendar($rrule);
 			
 			if($shiftDaysToLocal)
-				$this->_byday = $this->shiftDays($this->_byday, false);
+				$this->shiftDays(false);
 		}
 		
 	}
@@ -71,7 +71,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		
 		$this->setParams($parameters);
 		
-		$this->_byday = $this->shiftDays($this->_byday);			
+		$this->shiftDays();			
 	}
 	
 		
@@ -80,19 +80,17 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 	 * 
 	 * @return String $rrule eg.: 'FREQ=DAILY;UNTIL=22-02-2222;INTERVAL=2;
 	 */
-	public function createRrule($shiftDays=true) {
+	public function createRrule() {
 		
 		if(empty($this->_freq))
 			return "";
-		
-		$byday = $shiftDays ? $this->shiftDays($this->_byday, false) : $this->_byday;
 		
 		$rrule = 'RRULE:INTERVAL='.$this->_interval.';FREQ='.$this->_freq;
 
 		switch($this->_freq)
 		{
 			case 'WEEKLY':
-				$rrule .= ";BYDAY=".implode(',', $byday);
+				$rrule .= ";BYDAY=".implode(',', $this->_byday);
 			break;
 
 			case 'MONTHLY':				
@@ -103,7 +101,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 					if(!empty($this->_bysetpos))
 						$rrule .= ";BYSETPOS=".$this->_bysetpos;
 						
-					$rrule .= ';BYDAY='.implode(',', $byday);
+					$rrule .= ';BYDAY='.implode(',', $this->_byday);
 				}
 			break;
 		}
@@ -307,8 +305,8 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 	 */
 	public function createJSONOutput() {
 		
-		$days = $this->shiftDays($this->_byday, false);
-		//$days = $this->_byday;
+		$this->shiftDays(false);
+		$days = $this->_byday;
 		
 		$response = array();
 		if (isset($this->_freq)) {
