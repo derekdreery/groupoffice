@@ -134,9 +134,10 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 */
 	public function extension() {
 		$extension = '';
-		$pos = strrpos($this->path, '.');
+		$filename = $this->name();
+		$pos = strrpos($filename, '.');
 		if ($pos) {
-			$extension = substr($this->path, $pos +1, strlen($this->path));
+			$extension = substr($filename, $pos +1);
 		}
 		return trim(strtolower($extension));
 	}
