@@ -379,7 +379,8 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		
 		if($vobject->rrule){			
 			$rrule = new GO_Base_Util_Icalendar_Rrule();
-			$rrule->readIcalendarRruleString($this->start_time, (string) $vobject->rrule);			
+			$rrule->readIcalendarRruleString($this->start_time, (string) $vobject->rrule);	
+			$rrule->shiftDays(false);
 			$this->rrule = $rrule->createRrule();
 			
 			if(isset($rrule->until))

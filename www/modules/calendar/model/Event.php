@@ -794,7 +794,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 			$rRule = new GO_Base_Util_Icalendar_Rrule();
 			$rRule->readIcalendarRruleString($this->start_time, $this->rrule);
-			
+			$rRule->shiftDays(false);
 			$e->rrule=str_replace('RRULE:','',$rRule->createRrule());					
 			$stmt = $this->exceptions(GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('exception_event_id', 0)));
 			while($exception = $stmt->fetch()){
@@ -925,7 +925,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		if((string) $vobject->rrule != ""){			
 			$rrule = new GO_Base_Util_Icalendar_Rrule();
-			$rrule->readIcalendarRruleString($this->start_time, (string) $vobject->rrule);			
+			$rrule->readIcalendarRruleString($this->start_time, (string) $vobject->rrule);	
+			$rrule->shiftDays(true);
 			$this->rrule = $rrule->createRrule();
 			$this->repeat_end_time = $rrule->until;
 		}else
