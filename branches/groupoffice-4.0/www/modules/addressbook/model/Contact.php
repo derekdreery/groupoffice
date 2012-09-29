@@ -62,6 +62,12 @@
 class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		
 	/**
+	 * if user typed in a new company name manually we set this attribute so a new company will be autocreated.
+	 * 
+	 * @var string 
+	 */
+	public $company_name;
+	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
@@ -209,6 +215,24 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		if (strtolower($this->sex)==strtolower(GO::t('female','addressbook')))
 			$this->sex = 'F';
 		$this->sex = $this->sex=='M' || $this->sex=='F' ? $this->sex : 'M';
+		
+		//Auto create company if company_id is a String and can't be found.
+		if(!empty($this->company_name)){			
+			$company = GO_Addressbook_Model_Company::model()->findSingleByAttributes(array(
+				'addressbook_id'=>$this->addressbook_id,
+				'name'=>$this->company_name
+			));
+			
+			if(!$company)
+			{
+				$company = new GO_Addressbook_Model_Company();
+				$company->name=$this->company_name;
+				$company->addressbook_id=$this->addressbook_id;			
+				$company->save();
+			}			
+			
+			$this->company_id=$company->id;			
+		}
 		
 		return parent::beforeSave();
 	}

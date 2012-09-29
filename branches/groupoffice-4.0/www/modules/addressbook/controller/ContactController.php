@@ -32,25 +32,11 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			),false);
 		}
 		
-		if(!empty($params['company_id']) && $params['company_id']==$params['company']){			
-			$company = GO_Addressbook_Model_Company::model()->findSingleByAttributes(array(
-				'addressbook_id'=>$params['addressbook_id'],
-				'name'=>$params['company_id']
-			));
-			
-			if(!$company)
-			{
-				$company = new GO_Addressbook_Model_Company();
-				$company->name=$params['company_id'];
-				$company->addressbook_id=$params['addressbook_id'];			
-				$company->save();
-			}
-			
-			
-			$model->company_id=$company->id;
-			unset($params['company_id']);
-			
+		//if user typed in a new company name manually we set this attribute so a new company will be autocreated.
+		if(!is_numeric($params['company_id'])){
+			$model->company_name = $params['company_id'];
 		}
+		
 		
 		return parent::beforeSubmit($response, $model, $params);
 	}
