@@ -86,7 +86,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		if (!empty($params['freq'])) {
 			$rRule = new GO_Base_Util_Icalendar_Rrule();
 			$rRule->readJsonArray($params);
-			$model->rrule = $rRule->createRrule(false);
+			$model->rrule = $rRule->createRrule();
 		} elseif (isset($params['freq'])) {
 			$model->rrule = "";
 		}
@@ -347,10 +347,10 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 						$subject= sprintf($updateReponses[$sendingParticipant->status], $sendingParticipant->name, $event->name);
 					}elseif($method == 'CANCEL')
 					{
-						$subject = GO::t('cancellation','calendar').': '.$event->subject;
+						$subject = GO::t('cancellation','calendar').': '.$event->name;
 					}else
 					{
-						$subject = GO::t('invitation_update', 'calendar').': '.$event->subject;
+						$subject = GO::t('invitation_update', 'calendar').': '.$event->name;
 					}
 
 
