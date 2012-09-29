@@ -41,10 +41,17 @@ GO.email.AddressContextMenu = function(config)
 					values[pair[0]]=pair[1];
 				}
 			}
-
-			GO.email.showComposer({
+			
+			var composerConfig = {
 				values : values
-			});
+			};
+			
+			//if we're on the e-mail panel use the currently active account.			
+			var ep = GO.mainLayout.getModulePanel("email");			
+			if(ep && ep.isVisible())
+				composerConfig.account_id=ep.account_id;			
+
+			GO.email.showComposer(composerConfig);
 		},
 		scope: this
 	});
