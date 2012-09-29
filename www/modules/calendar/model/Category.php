@@ -61,4 +61,25 @@ class GO_Calendar_Model_Category extends GO_Base_Db_ActiveRecord{
 	 public function relations() {
 		 return array();
 	 }
+	 
+	 /**
+	  * Find a category by name. It searches the global and calendar categories
+	  * 
+	  * @param int $calendar_id
+	  * @param string $name
+	  * @return GO_Calendar_Model_Category
+	  */
+	 public function findByName($calendar_id, $name){
+		 
+		 $findParams = GO_Base_Db_FindParams::newInstance()->single();
+		 
+		 $findParams->getCriteria()
+						 ->addCondition('calendar_id', $name)
+						 ->mergeWith(GO_Base_Db_FindCriteria::newInstance()
+							->addCondition('calendar_id', $calendar_id)
+							->addCondition('calendar_id', 0,'=','t',false)
+										 );
+		 
+		 return GO_Calendar_Model_Category::model()->find($findParams);
+	 }
 }
