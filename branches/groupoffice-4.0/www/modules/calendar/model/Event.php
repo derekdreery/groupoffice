@@ -827,6 +827,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			}
 		}
 		
+		if($this->category){
+			$e->categories=$this->category->name;
+		}
+		
 		
 		//todo alarms
 		
@@ -1010,6 +1014,18 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			//echo $reminderTime->format('c');
 			$this->reminder = $this->start_time-$reminderTime->format('U');
 		}
+		
+		
+		if(!empty($vobject->categories)){
+			//Group-Office only supports a single category.
+			$cats = explode(',',$vobject->categories);
+			$categoryName = array_shift($cats);
+			$category = GO_Calendar_Model_Category::model()->findByName($this->calendar_id, $categoryName);
+			
+			if($category)
+				$this->category_id=$category->id;			
+		}
+		
 
 		$this->cutAttributeLengths();
 		
@@ -1046,7 +1062,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				}
 			}
 		}
-		
+				
 		
 
 		return $this;
