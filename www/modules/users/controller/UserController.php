@@ -22,7 +22,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 	protected function remoteComboFields() {
 		if(GO::modules()->isInstalled('addressbook')){
 			return array(
-					'addressbook_id' => '$model->contact->addressbook->name',
+//					'addressbook_id' => '$model->contact->addressbook->name',
 					'company_id' => '$model->contact->company->name'
 					);
 		}
@@ -52,6 +52,9 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 				$attr = $contact->getAttributes();
 
 				$response['data'] = array_merge($attr, $response['data']);
+				
+				if($response['data']['company_id']==0)
+					$response['data']['company_id']="";
 			}
 			
 			if(!empty($response['data']['date_separator'])&& !empty($response['data']['date_format'])){
@@ -92,6 +95,11 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			$params['date_format'] = $dateparts[1];
 		}
 		
+		
+		//if user typed in a new company name manually we set this attribute so a new company will be autocreated.
+		if(!is_numeric($params['company_id'])){
+			$model->company_name = $params['company_id'];
+		}
 		
 		return parent::beforeSubmit($response, $model, $params);
 	}
