@@ -53,7 +53,7 @@ GO.moduleManager.onModuleReady('email',function(){
 							// Hide the 'normal' panel and show this panel
 							this.tabPanel.hideTabStripItem(this.filterGrid);
 							this.tabPanel.unhideTabStripItem(this.sieveGrid);
-							this.sieveGrid.show();
+							this.sieveGrid.show();							
 						}
 						else
 						{
@@ -61,7 +61,7 @@ GO.moduleManager.onModuleReady('email',function(){
 							this.tabPanel.hideTabStripItem(this.sieveGrid);
 							this.tabPanel.unhideTabStripItem(this.filterGrid);
 							this.filterGrid.show();
-						}
+						}						
 					},
 					fail: function(response){
 						alert(GO.sieve.lang.checksieveerror);						
@@ -75,6 +75,11 @@ GO.moduleManager.onModuleReady('email',function(){
 			this.sieveCheckedAccountId=this.account_id;
 		},
 		setAccountId : GO.email.AccountDialog.prototype.setAccountId.createSequence(function(account_id){
+			this.tabPanel.unhideTabStripItem(this.sieveGrid);
+			this.tabPanel.hideTabStripItem(this.filterGrid);
+			
+			this.sieveCheckedAccountId=0;
+			
 			this.sieveGrid.setAccountId(account_id);
 		})
 	})

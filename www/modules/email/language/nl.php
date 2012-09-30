@@ -236,3 +236,5 @@ $l['useAccount']='Account gebruiken';
 
 $l['mailbox']='Mailbox';
 $l['checkUnseen']='Controleer deze map automatisch op nieuwe berichten';
+
+$l['sieveNote']='Niet alle functies worden ondersteund. Raadpleeg de handleiding.';
