@@ -1,9 +1,18 @@
-
 ??? 4.0.107
 - Bugfix: in the task edit dialog Tasklists with create rights can be selected
 - Bugfix: Fixed undefined index "-1" error recurrences
 - Bugfix: Sort on column 'name' in Add User Permissions window.
 - ActiveSync: Always try to get a sender name when sending an email
+- Bugfix: Old custom field tags didn't always work on the billing PDF
+- Upgraded plupload to version 1.5.4
+- Bugfix: invalid subject on event invitations
+- Also popup and play alarm when email panel is open. 
+- Improved calendar invitation messages in the e-mail client
+- Bugfix: Saving company in user dialog was broken
+- Calendar category import and export support
+- Bugfix: Import recurring events with days would shift.
+- Bugfix: Crash if filesearch moduule was loaded before files
+- Bugfix: Update could add duplicate admin e-mail accounts.
 
 26-09-2012 4.0.106
 - Bugfix: HTML field with help text crashed
