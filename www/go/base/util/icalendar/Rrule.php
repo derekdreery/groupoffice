@@ -85,7 +85,10 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		if(empty($this->_freq))
 			return "";
 		
-		$rrule = 'RRULE:INTERVAL='.$this->_interval.';FREQ='.$this->_freq;
+		$rrule = 'RRULE:FREQ='.$this->_freq;
+		
+		if($this->_interval>1)
+			$rrule .= ';INTERVAL='.$this->_interval;
 
 		switch($this->_freq)
 		{
@@ -287,6 +290,11 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		$this->_interval = !empty($rrule_arr['INTERVAL']) ? intval($rrule_arr['INTERVAL']) : 1;
 		$this->_bysetpos = !empty($rrule_arr['BYSETPOS']) ? intval($rrule_arr['BYSETPOS']) : 0;
 		
+		
+		//if rrule is passed like this: RRULE:INTERVAL=1;FREQ=WEEKLY;BYDAY=
+		//then assume days should be the event start time day.
+		if(isset($rrule_arr['BYDAY']) && empty($this->_byday))
+			$this->_byday=array($this->_days[date('w', $this->_eventstarttime)]);
 		
 		//figure out end time of event
 		//UNTESTED
