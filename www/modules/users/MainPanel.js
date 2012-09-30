@@ -34,7 +34,7 @@ GO.users.MainPanel = function(config)
 
 	if(GO.customfields)
 	{
-		GO.customfields.addColumns(8, fields);
+		GO.customfields.addColumns("GO_Base_Model_User", fields);
 	}
 
 	config.store = new GO.data.JsonStore({
