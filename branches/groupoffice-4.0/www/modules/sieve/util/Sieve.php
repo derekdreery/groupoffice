@@ -87,7 +87,7 @@ class GO_Sieve_Util_Sieve {
 
 		$host = $this->rewrite_host($host);
 
-		GO::debug("sieve::connect($username, ***, $host, $port, $auth_type, $usetls, $disabled)");
+		GO::debug("sieve::connect($username, ***, $host, $port, $auth_type, $usetls)");
 		
 		if ($this->_PEAR->isError($this->sieve->connect($host, $port, NULL, $usetls))) {
 			return $this->_set_error(SIEVE_ERROR_CONNECTION);
