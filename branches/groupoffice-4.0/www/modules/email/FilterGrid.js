@@ -4,6 +4,7 @@ GO.email.FilterGrid = Ext.extend(GO.grid.GridPanel,{
 		config=config||{};
 		
 		Ext.applyIf(config, {
+			tbar:[GO.email.lang.sieveNote],
 			standardTbar:true,
 			title : GO.email.lang.filters,
 			disabled:true,
