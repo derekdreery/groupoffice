@@ -52,6 +52,7 @@
  * @property int $addressbook_id
  * @property int $user_id
  * @property int $id
+ * @property int $age;
  * 
  * @property string $firstEmail Automatically returns the first filled in e-mail address.
  * @property GO_Addressbook_Model_Addressbook $addressbook
@@ -849,6 +850,17 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		}else{
 			return false;
 		}
+	}
+	
+	
+	protected function getAge(){
+		if(empty($this->birthday))
+			return "";
+		
+		$date = new DateTime($this->birthday);
+		$diff = $date->diff(new DateTime());
+		
+		return $diff->y;
 	}
 	
 }
