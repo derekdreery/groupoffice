@@ -264,6 +264,18 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 			}
 		}
 	}
+	
+	private function _splitDaysAndSetPos(){
+				
+		for($i=0;$i<count($this->_byday);$i++){
+			$day = $this->_byday[$i];
+			if(strlen($day)>2){
+				if(empty($this->_bysetpos))
+				$this->_bysetpos = $day[0];
+				$this->_byday[$i] = substr($day,1);
+			}
+		}			
+	}
 
 	/**
 	 * Convert a Rrule object from an Icalendar Rrule string.
@@ -291,10 +303,15 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		$this->_bysetpos = !empty($rrule_arr['BYSETPOS']) ? intval($rrule_arr['BYSETPOS']) : 0;
 		
 		
+		
+		$this->_splitDaysAndSetPos();
+		
 		//if rrule is passed like this: RRULE:INTERVAL=1;FREQ=WEEKLY;BYDAY=
 		//then assume days should be the event start time day.
 		if(isset($rrule_arr['BYDAY']) && empty($this->_byday))
 			$this->_byday=array($this->_days[date('w', $this->_eventstarttime)]);
+		
+		
 		
 		//figure out end time of event
 		//UNTESTED
