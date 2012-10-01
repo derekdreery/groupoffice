@@ -406,8 +406,9 @@ class GO_Base_Module extends GO_Base_Observable {
 					$subParts = explode('/', $subfolder);
 					$subParts=array_map("ucfirst", $subParts);
 					
-					$className = 'GO_'.ucfirst($this->id()).'_'.implode('_',$subParts).'_'.$item->nameWithoutExtension();					
-					$classes[] = new ReflectionClass($className);					
+					$className = 'GO_'.ucfirst($this->id()).'_'.implode('_',$subParts).'_'.$item->nameWithoutExtension();			
+					if(class_exists($className))
+						$classes[] = new ReflectionClass($className);					
 				}
 			}
 		}
