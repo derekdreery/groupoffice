@@ -294,7 +294,7 @@ abstract class GO_Base_Fs_Base{
 	 * @return boolean 
 	 */
 	public function isFile(){
-		return !is_dir($this->path);
+		return is_file($this->path);
 	}
 	
 	/**

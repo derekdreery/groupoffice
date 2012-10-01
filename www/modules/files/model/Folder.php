@@ -534,10 +534,15 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			$this->fsFolder->create();
 		}
 		
+		
+		//make sure no filesystem items are deleted. Sometimes folders are stored as files somehow.
+		GO_Files_Model_File::$deleteInDatabaseOnly=true;
+		GO_Files_Model_Folder::$deleteInDatabaseOnly=true;
+		
 		$stmt= $this->folders();
 		while($folder = $stmt->fetch()){
 			try{
-				if(!$folder->fsFolder->exists())
+				if(!$folder->fsFolder->exists() || $folder->fsFolder->isFile())
 					$folder->delete();
 			}catch(Exception $e){
 				echo $e->getMessage()."\n";
@@ -547,7 +552,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		$stmt= $this->files();
 		while($file = $stmt->fetch()){
 			try{
-				if(!$file->fsFile->exists())
+				if(!$file->fsFile->exists() || $file->fsFile->isFolder())
 					$file->delete();
 			}catch(Exception $e){
 				echo $e->getMessage()."\n";

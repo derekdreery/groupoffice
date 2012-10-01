@@ -17,10 +17,10 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		$oldAllowDeletes = GO_Base_Fs_File::setAllowDeletes(false);
 
-		GO::$ignoreAclPermissions=true; //allow this script access to all
 		GO::$disableModelCache=true; //for less memory usage
 		ini_set('max_execution_time', '0');
-		GO::session()->closeWriting();
+
+		GO::session()->runAsRoot();
 
 		$folders = array('users','projects','addressbook','notes','tickets');
 		
