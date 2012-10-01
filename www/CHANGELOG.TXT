@@ -1,3 +1,10 @@
+01-10-2012 4.0.108
+- Bugfix: Copy event in calendar moved the event
+- Bugfix: Comments didn't show text in browse all dialog.
+- Bugfix: Question for meeting request was asked when you put an event directly into someone else's calendar
+- Bugfix: Tickets buoy indicator showed invalid number for non-agents
+- Don't cache tickets files because there are permissions issues. Everyone has read access to the types but may not see other peoples files.
+
 01-10-2012 4.0.107
 - Bugfix: in the task edit dialog Tasklists with create rights can be selected
 - Bugfix: Fixed undefined index "-1" error recurrences
@@ -11,7 +18,7 @@
 - Bugfix: Saving company in user dialog was broken
 - Calendar category import and export support
 - Bugfix: Import recurring events with days would shift.
-- Bugfix: Crash if filesearch moduule was loaded before files
+- Bugfix: Crash if filesearch module was loaded before files
 - Bugfix: Update could add duplicate admin e-mail accounts.
 - Bugfix: Some recurrence patterns were not accepted by iOs with Caldav
 - Bugfix: Project template wasn't competely applied the second time
