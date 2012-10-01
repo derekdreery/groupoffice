@@ -13,3 +13,5 @@ $l['category']='Category';
 $l['noCategory']='No category';
 $l['newCommentText']='Enter new comment here ...';
 $l['newComment']='New comment';
+
+$l['readMore']="Read more";
