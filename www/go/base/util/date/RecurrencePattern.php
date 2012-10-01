@@ -273,26 +273,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 		return $recurrenceTime;		
 	}
 	
-	private function _splitDaysAndSetPos(){
-		
-		$response['days']=array();
-		$response['bysetpos']=array();
-		
-		foreach($this->_byday as $day){
-			if(strlen($day)>2){
-				$_day = substr($day,1);
-				$response['days'][]=$_day;
-				$response['bysetpos'][$_day]=$day[0];
-			}else
-			{
-				$response['days'][]=$day;
-				$response['bysetpos'][$day]=$this->_bysetpos;
-			}
-		}
-		
-		return $response;
-			
-	}
+	
 	
 	/**
 	 * Check if a weekday of a given time matches the recurrence pattern
@@ -313,8 +294,8 @@ class GO_Base_Util_Date_RecurrencePattern{
 		}else
 		{
 			//for every nth weekday in the month
-			$daysAndSetPos = $this->_splitDaysAndSetPos();
-			if(in_array($weekday, $daysAndSetPos['days']) && $bySetPos==$daysAndSetPos['bysetpos'][$weekday])
+//			$daysAndSetPos = $this->_splitDaysAndSetPos();
+			if(in_array($weekday, $this->_byday) && $bySetPos==$this->_bysetpos)
 				return true;
 		}
 		
