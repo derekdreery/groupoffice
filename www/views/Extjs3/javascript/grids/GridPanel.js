@@ -60,7 +60,7 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 	initComponent : function(){
 		
 		
-		if(!this.view){
+		if(!this.view && !this.viewConfig){
 			this.view = new Ext.grid.GridView({
 				autoFill: true,
 				forceFit: true,
