@@ -16,3 +16,5 @@ $l['noCategory']='Geen categorie';
 
 $l['newCommentText']='Voer hier nieuwe commentaar in ...';
 $l['newComment']='Nieuw commentaar';
+
+$l['readMore']="Lees meer";
