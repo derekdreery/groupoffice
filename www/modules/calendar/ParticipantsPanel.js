@@ -282,7 +282,7 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 		var records = this.store.getRange();
 		for(var i=0;i<records.length;i++)
 		{
-			if(records[i].data.user_id!=GO.settings.user_id)
+			if(!records[i].data.is_organizer)
 				return true;
 		}
 	
