@@ -146,7 +146,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	 * @return boolean 
 	 */
 	public function isLocked(){
-		return !empty($this->locked_user_id) && $this->locked_user_id!=GO::user()->id;
+		return !empty($this->locked_user_id) && (!GO::user() || $this->locked_user_id!=GO::user()->id);
 	}
 	
 	public function unlockAllowed(){
