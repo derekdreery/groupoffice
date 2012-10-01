@@ -38,7 +38,9 @@ GO.comments.openComment = function(commentId) {
 }
 
 GO.comments.commentsAccordion = function(id,commentsText) {
-	if (commentsText.length<101) {
+	
+	var maxLength = 300;
+	if (commentsText.length<maxLength) {
 		return '<div id="comment-'+id+'" class="comment-div">'+commentsText+'</div>';
 	} else {
 		return '<div id="comment-'+id+'" class="comment-div" style="display:none;">'+
@@ -46,6 +48,6 @@ GO.comments.commentsAccordion = function(id,commentsText) {
 					commentsText+'</div>'+
 		'<div id="shortComment-'+id+'" class="shortComment-div">'+
 				'<a href="javascript:GO.comments.openComment('+id+');"><img src="views/Extjs3/themes/Default/images/elbow-end-plus-nl.gif" style="margin-bottom:-4px;margin-right:3px;" /></a>'+
-					Ext.util.Format.ellipsis(commentsText,100)+'</div>';
+					Ext.util.Format.ellipsis(commentsText,maxLength)+'</div>';
 	}
 }
