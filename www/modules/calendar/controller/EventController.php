@@ -32,9 +32,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	function beforeSubmit(&$response, &$model, &$params) {
 
 		
-		
-//		if(!empty($params['duplicate']))
-//			$model = $model->duplicate();
+		//when duplicating in the calendar with right click
+		if(!empty($params['duplicate']))
+			$model = $model->duplicate();
 
 		if (!empty($params['exception_date'])) {
 			//$params['recurrenceExceptionDate'] is a unixtimestamp. We should return this event with an empty id and the exception date.			
