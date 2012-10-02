@@ -798,7 +798,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		}, this);
 
 		grid.on("rowdblclick", function(){
-			if(this.messagesGrid.store.reader.jsonData.drafts)
+			if(this.messagesGrid.store.reader.jsonData.drafts || this.messagesGrid.store.reader.jsonData.sent)
 			{
 				GO.email.showComposer({
 					uid: this.messagePanel.uid,
