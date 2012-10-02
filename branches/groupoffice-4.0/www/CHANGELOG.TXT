@@ -1,3 +1,6 @@
+??-10-2012 4.0.109
+- Bugfix: Save event time in Time Registration fixed.
+
 01-10-2012 4.0.108
 - Bugfix: Copy event in calendar moved the event
 - Bugfix: Comments didn't show text in browse all dialog.
