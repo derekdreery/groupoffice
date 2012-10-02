@@ -262,7 +262,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 				unset($p['id']);
 				$participant->setAttributes($p);
-				$participant->is_organizer = $event->user_id == $participant->user_id;
+//				$participant->is_organizer = $event->user_id == $participant->user_id;
 				$participant->event_id = $event->id;
 
 
