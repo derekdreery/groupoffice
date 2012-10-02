@@ -3,11 +3,11 @@
 echo 'Configuring Group-Office'."\n";
 
 $config_file = '/etc/groupoffice/config.php';
-if(file_exists($config_file))
-{
-	//don't overwrite an existing configuration. Create a file with date suffix.
-	$config_file = '/etc/groupoffice/config.php.'.date('Ymd');
-}
+//if(file_exists($config_file))
+//{
+//	//don't overwrite an existing configuration. Create a file with date suffix.
+//	$config_file = '/etc/groupoffice/config.php.'.date('Ymd');
+//}
 require('/etc/groupoffice/config-db.php');
 
 chdir(dirname(__FILE__));
@@ -78,7 +78,8 @@ function set_value($file, $str) {
 	file_put_contents($file, $data);
 }
 
-create_file($config_file, 'tpl/config.php', $replacements);
+if(!file_exists($config_file))
+	create_file($config_file, 'tpl/config.php', $replacements);
 
 
 chgrp('/etc/groupoffice/config.php', 'www-data');
@@ -102,8 +103,14 @@ if(is_dir($config['tmpdir'].'cache'))
 
 system('chown www-data:www-data '.$config['file_storage_path']);
 system('chown www-data:www-data '.$config['file_storage_path'].'*');
+
 if(is_dir($config['file_storage_path'].'cache'))
 	system('chown -R www-data:www-data '.$config['file_storage_path'].'cache');
 
+if(is_dir($config['file_storage_path'].'log'))
+	system('chown -R www-data:www-data '.$config['file_storage_path'].'log');
+
+if(file_exists($config['file_storage_path'].'key.txt'))
+	system('chown www-data:www-data '.$config['file_storage_path'].'key.txt');
 echo "Done!\n\n";
 ?>

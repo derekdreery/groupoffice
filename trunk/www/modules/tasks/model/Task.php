@@ -198,7 +198,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		if(!empty($this->rrule)) {
 
 			$rrule = new GO_Base_Util_Icalendar_Rrule();
-			$rrule->readIcalendarRruleString($this->due_time, $this->rrule);
+			$rrule->readIcalendarRruleString($this->due_time, $this->rrule, true);
 			
 			$this->duplicate(array(
 				'completion_time'=>0,
@@ -222,12 +222,14 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		
 		$defaults = array(
 				'status' => GO_Tasks_Model_Task::STATUS_NEEDS_ACTION,
-				'remind' => $settings->remind,
+				//'remind' => $settings->remind,
 				'start_time'=> time(),
 				'due_time'=> time(),
 				'tasklist_id'=>$settings->default_tasklist_id,
-				'reminder' =>$this->getDefaultReminder(time())
+				//'reminder' =>$this->getDefaultReminder(time())
 		);
+		if($settings->remind)
+			$defaults['reminder']=$this->getDefaultReminder(time());
 		
 		return $defaults;
 	}
@@ -377,7 +379,8 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		
 		if($vobject->rrule){			
 			$rrule = new GO_Base_Util_Icalendar_Rrule();
-			$rrule->readIcalendarRruleString($this->start_time, (string) $vobject->rrule);			
+			$rrule->readIcalendarRruleString($this->start_time, (string) $vobject->rrule);	
+			$rrule->shiftDays(false);
 			$this->rrule = $rrule->createRrule();
 			
 			if(isset($rrule->until))

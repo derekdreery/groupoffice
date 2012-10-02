@@ -12,9 +12,9 @@
 // @author Merijn Schering <mschering@intermesh.nl>
 //
 // French Translation
-// Version : 3.7.29 
-// Author : Lionel JULLIEN
-// Date : September, 27 2011
+// Version : 4.0.99
+// Author : Lionel JULLIEN / Boris HERBINIERE-SEVE
+// Date : September, 20 2012
 //
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -132,5 +132,8 @@ GO.calendar.lang.globalsettings_allchangelabel = 'Renommer tous les existants';
 GO.calendar.lang.globalsettings_renameall = 'Etes-vous sûr de vouloir renommer tous les calendriers par défaut des utilisateurs ?';
 GO.calendar.lang.publishICS='Publier un fichier iCalendar des événements du mois en cours et des mois futurs. Attention ! Le calendrier sera consultable par tout le monde.';
 GO.calendar.lang.addTimeRegistration='Importer dans la gestion du temps';
-GO.calendar.lang.showNotBusy='Ne pas montrer les nouvelles réservation comme occupée';
+GO.calendar.lang.showNotBusy='Ne pas montrer les nouvelles réservations comme occupées';
 GO.calendar.lang.sendEmailParticipants = 'Créer un email pour les participants';
+GO.calendar.lang.calendarColor= 'Couleur du Calendrier';
+GO.calendar.lang.colors= 'Couleurs';
+GO.calendar.lang.setColors= 'Définir les couleurs pour chaque calendrier';

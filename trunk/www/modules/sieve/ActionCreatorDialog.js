@@ -152,6 +152,12 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 
 		switch(this.cmbAction.getValue())
 		{
+			case 'set_read':
+				_copy		= false;
+				_type		= 'set_read';
+				_target = '';
+				_text		= GO.sieve.lang.setRead;
+				break;
 			case 'fileinto':
 				_copy		= false;
 				_type		= 'fileinto';
@@ -267,6 +273,7 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 				this._toggleComponentUse(this.txtDays,true);
 				this._toggleComponentUse(this.txtMessage,true);
 				break;
+			case 'set_read':
 			case 'discard':
 			case 'stop':
 				this._toggleComponentUse(this.cmbFolder,false);

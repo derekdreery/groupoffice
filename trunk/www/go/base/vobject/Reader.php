@@ -290,7 +290,7 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 		
 		return parent::read($data);
 	}
-	
+
 	/**
 	 * Converts a vcalendar 1.0 component to an icalendar 2.0 component.
 	 * 

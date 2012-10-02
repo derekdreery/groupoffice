@@ -32,25 +32,11 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			),false);
 		}
 		
-		if(!empty($params['company_id']) && $params['company_id']==$params['company']){			
-			$company = GO_Addressbook_Model_Company::model()->findSingleByAttributes(array(
-				'addressbook_id'=>$params['addressbook_id'],
-				'name'=>$params['company_id']
-			));
-			
-			if(!$company)
-			{
-				$company = new GO_Addressbook_Model_Company();
-				$company->name=$params['company_id'];
-				$company->addressbook_id=$params['addressbook_id'];			
-				$company->save();
-			}
-			
-			
-			$model->company_id=$company->id;
-			unset($params['company_id']);
-			
+		//if user typed in a new company name manually we set this attribute so a new company will be autocreated.
+		if(!is_numeric($params['company_id'])){
+			$model->company_name = $params['company_id'];
 		}
+		
 		
 		return parent::beforeSubmit($response, $model, $params);
 	}
@@ -158,6 +144,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$columnModel->formatColumn('name','$model->getName(GO::user()->sort_name)', array(),$sortAlias, GO::t('strName'));
 		$columnModel->formatColumn('company_name','$model->company_name', array(),'', GO::t('company','addressbook'));
 		$columnModel->formatColumn('ab_name','$model->ab_name', array(),'', GO::t('addressbook','addressbook'));
+		$columnModel->formatColumn('age', '$model->age', array(), 'birthday');
 		
 		$columnModel->formatColumn('cf', '$model->id.":".$model->name');//special field used by custom fields. They need an id an value in one.)
 		return parent::formatColumns($columnModel);
@@ -413,7 +400,6 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		unset($attributes['t.company_id']);
 		//$attributes['name']=GO::t('strName');
 		$attributes['companies.name']=array('name'=>'companies.name','label'=>GO::t('company','addressbook'));
-		$attributes['contact_name']=array('name'=>'contact_name','label'=>GO::t('name'));
 		
 		return parent::afterAttributes($attributes, $response, $params, $model);
 	}
@@ -521,7 +507,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$file = new GO_Base_Fs_File($params['file']);
 		$file->convertToUtf8();
 
-		$data = "BEGIN:ADDRESSBOOK\n".$file->getContents()."END:ADDRESSBOOK";
+		$data = "BEGIN:ADDRESSBOOK\n".$file->getContents()."\nEND:ADDRESSBOOK";
 		GO::debug($data);
 		
 		$vaddressbook = GO_Base_VObject_Reader::read($data);

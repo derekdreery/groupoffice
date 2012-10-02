@@ -583,3 +583,6 @@ $l['queryField'] = "Veld";
 $l['queryComparator'] = "Vergelijking";
 $l['queryValue']="Waarde";
 $l['queryStartGroup']="Start groep";
+$l['unnamed']='Naamloos';
+$l['sir']='Heer';
+$l['madam']='Mevrouw';

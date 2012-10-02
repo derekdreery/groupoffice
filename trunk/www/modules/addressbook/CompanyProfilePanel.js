@@ -225,6 +225,61 @@ GO.addressbook.CompanyProfilePanel = function(config)
 	}, this);	
 
 	
+	this.addressbookFieldset = new Ext.form.FieldSet({
+		title: GO.addressbook.lang['cmdFieldsetSelectAddressbook'],
+		autoHeight: true,
+		border: true,
+		collapsed: false,
+		items:this.formAddressBooks
+	});
+	
+	this.companyFieldset = new Ext.form.FieldSet({
+		title: GO.addressbook.lang['cmdFieldsetCompanyDetails'],
+		autoHeight: true,
+		collapsed: false,
+		border: true,
+		defaults: { border: false, anchor: '100%' },
+		items: [
+			this.formName,
+			this.formName2,
+			this.formPhone,
+			this.formFax,
+			this.formEmail,
+			this.formHomepage,
+			this.formBankNo,
+			{
+				xtype:'textfield',
+				fieldLabel:GO.addressbook.lang.iban,
+				name:'iban'
+			},{
+				xtype:'textfield',
+				fieldLabel:GO.addressbook.lang.crn,
+				name:'crn'
+			},
+			this.formVatNo,
+			this.formInvoiceEmail
+		]
+	});
+	
+	this.visitAddressFieldset = new Ext.form.FieldSet({
+		title: GO.addressbook.lang['cmdFieldsetVisitAddress'],
+		autoHeight: true,
+		collapsed: false,
+		border: true,
+		defaults: { border: false, anchor: '100%' },
+		items: [this.formAddress,this.formAddressNo,this.formZip,this.formCity,this.formState,this.formCountry]
+	});
+	
+	this.postAddressFieldset = new Ext.form.FieldSet({
+		title: GO.addressbook.lang['cmdFieldsetPostAddress'], 
+    		autoHeight: true,
+    		collapsed: false,
+    		border: true,
+	    	defaults: { border: false, anchor:'100%' },
+				items: [this.formPostAddress,this.formPostAddressNo,this.formPostZip,this.formPostCity,this.formPostState,this.formPostCountry]
+	});
+
+
 	this.title=GO.addressbook.lang['cmdPanelCompany'];
 				
 	this.labelWidth=120;
@@ -235,64 +290,16 @@ GO.addressbook.CompanyProfilePanel = function(config)
 	this.items=[
 		{	 
 			columnWidth: .5,
-	  	defaults: { border: false },
-			items: [{
-	  		xtype: 'fieldset',
-	  		title: GO.addressbook.lang['cmdFieldsetSelectAddressbook'],
-	  		autoHeight: true,
-	  		border: true,
-	  		collapsed: false,
-				items:this.formAddressBooks
-						
-			},{			    		
-	  		xtype: 'fieldset',
-	  		title: GO.addressbook.lang['cmdFieldsetCompanyDetails'],
-	  		autoHeight: true,
-	  		collapsed: false,
-	  		border: true,
-	    	defaults: { border: false, anchor: '100%' },
-				items: [
-					this.formName,
-					this.formName2,
-					this.formPhone,
-					this.formFax,
-					this.formEmail,
-					this.formHomepage,
-					this.formBankNo,
-					{
-						xtype:'textfield',
-						fieldLabel:GO.addressbook.lang.iban,
-						name:'iban'
-					},{
-						xtype:'textfield',
-						fieldLabel:GO.addressbook.lang.crn,
-						name:'crn'
-					},
-					this.formVatNo,
-					this.formInvoiceEmail
-				]
-	  	}]
+	  //	defaults: { border: false },
+			items: [
+				this.addressbookFieldset,
+				this.companyFieldset
+			]
 		},{
   		columnWidth: .5,
-    	defaults: { border: false },
+ //   	defaults: { border: false },
     	style: 'margin-left: 5px;',
-			items: [{			    		
-    		xtype: 'fieldset',
-    		title: GO.addressbook.lang['cmdFieldsetVisitAddress'],
-    		autoHeight: true,
-    		collapsed: false,
-    		border: true,
-	    	defaults: { border: false, anchor: '100%' },
-				items: [this.formAddress,this.formAddressNo,this.formZip,this.formCity,this.formState,this.formCountry]
-			},{			    		
-    		xtype: 'fieldset',
-    		title: GO.addressbook.lang['cmdFieldsetPostAddress'], 
-    		autoHeight: true,
-    		collapsed: false,
-    		border: true,
-	    	defaults: { border: false, anchor:'100%' },
-				items: [this.formPostAddress,this.formPostAddressNo,this.formPostZip,this.formPostCity,this.formPostState,this.formPostCountry]
-			}]
+			items: [this.visitAddressFieldset ,this.postAddressFieldset]
   	}];
 
 

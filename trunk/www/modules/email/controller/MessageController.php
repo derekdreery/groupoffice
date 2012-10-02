@@ -1,6 +1,35 @@
 <?php
 
 class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController {
+	
+	protected function allowGuests() {
+		return array("mailto");
+	}
+	/*
+	 * Example URL: http://localhost/groupoffice-4.0/www/?r=email/message/mailto&mailto=mailto:info@intermesh.nl&bcc=test@intermesh.nl&body=jaja&cc=cc@intermesh.nl&subject=subject
+	 */
+	protected function actionMailto($params){
+		$qs=strtolower(str_replace('mailto:','', urldecode($_SERVER['QUERY_STRING'])));
+		$qs=str_replace('?subject','&subject', $qs);
+
+		parse_str($qs, $vars);
+		
+
+		$vars['to']=isset($vars['mailto']) ? $vars['mailto'] : '';
+		unset($vars['mailto'], $vars['r']);
+
+		if(!isset($vars['subject']))
+			$vars['subject']='';
+
+		if(!isset($vars['body']))
+			$vars['body']='';
+		//
+//		var_dump($vars);
+//		exit();
+
+		header('Location: '.GO::createExternalUrl('email', 'showComposer', array('values'=>$vars)));
+		exit();
+	}
 		
 	protected function actionNotification($params){
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
@@ -39,9 +68,44 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		}
 	}
 	
+	private function _filterMessages($mailbox, GO_Email_Model_Account $account) {
+
+		$filters = $account->filters->fetchAll();
+
+		if (count($filters)) {
+			$imap = $account->openImapConnection($mailbox);
+
+			$messages = array();
+			$headersSet = $imap->get_message_headers_set(0, 0, "ARRIVAL", false, "NEW");
+			foreach ($headersSet as $uid => $headers) {
+				$messages[] = GO_Email_Model_ImapMessage::model()->createFromHeaders($account, $mailbox, $uid, $headers);
+			}
+			if(count($messages)){
+				while ($filter = array_shift($filters)) {
+					$matches = array();
+					$notMatched = array();
+					while ($message = array_shift($messages)) {
+
+						if (stripos($message->{$filter->field}, $filter->keyword) !== false) {
+							$matches[] = $message->uid;
+						} else {
+							$notMatched[] = $message;
+						}
+					}
+					$messages = $notMatched;
+
+					if(count($matches)){
+						if ($filter->mark_as_read)
+							$imap->set_message_flag($matches, "\Seen");
+
+						$imap->move($matches, $filter->folder);
+					}
+				}
+			}
+		}
+	}
+	
 	protected function actionStore($params){
-		
-		
 		
 		if(!isset($params['start']))
 			$params['start']=0;
@@ -51,8 +115,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		if(!isset($params['dir']))
 			$params['dir']="ASC";
-		
-		//TODO
+
 		$query=isset($params['query']) ? $params['query'] : "";
 		
 		//passed when only unread should be shown
@@ -87,13 +150,20 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		/* @var $account GO_Email_Model_Account */
 		
+		$this->_filterMessages($params["mailbox"], $account);
+		
 		$imap = $account->openImapConnection($params["mailbox"]);
 		
 		$response['unseen']=array();
 		
+		//special folder flags
+		$response['sent']=!empty($account->sent) && strpos($params['mailbox'],$account->sent)===0;
+		$response['drafts']=!empty($account->drafts) && strpos($params['mailbox'],$account->drafts)===0;
+		$response['trash']=!empty($account->trash) && strpos($params['mailbox'],$account->trash)===0;
+		
 		$this->_moveMessages($imap, $params, $response);
 		
-		$imap = $account->openImapConnection($params["mailbox"]);
+//		$imap = $account->openImapConnection($params["mailbox"]);
 		
 		if(!empty($params['delete_keys'])){
 			
@@ -102,7 +172,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	//		if($account->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION)){
 				$uids = json_decode($params['delete_keys']);
 
-				if(!empty($account->trash) && $params["mailbox"] != $account->trash) {
+				if(!$response['trash'] && !empty($account->trash)) {
 					$imap->set_message_flag($uids, "\Seen");
 					$response['deleteSuccess']=$imap->move($uids,$account->trash);
 				}else {
@@ -122,6 +192,9 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	//		}
 		}
 		
+		//make sure we are connected to the right mailbox after move and delete operations
+		$imap = $account->openImapConnection($params["mailbox"]);
+		
 		/* @var $imap GO_Base_Mail_Imap */
 		$headersSet = $imap->get_message_headers_set($params['start'], $params['limit'], $sortField , $params['dir']!='ASC', $query);
 		$response["results"]=array();
@@ -132,7 +205,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$record['account_id']=$account->id;
 			$record['mailbox']=$params["mailbox"];
 			
-			if($params["mailbox"]==$account->sent || $params["mailbox"]==$account->drafts){				
+			if($response['sent'] || $response['drafts']){				
 				$addresses = $message->to->getAddresses();
 				$from=array();
 				foreach($addresses as $email=>$personal)
@@ -145,7 +218,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			if(empty($record['subject']))
 				$record['subject']=GO::t('no_subject','email');
 			else
-				$record['subject'] = htmlspecialchars($record['subject']);
+				$record['subject'] = htmlspecialchars($record['subject'],ENT_COMPAT,'UTF-8');
 				
 				
 			
@@ -155,12 +228,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$response['total'] = $imap->sort_count;
 		
 		$unseen = $imap->get_unseen($params['mailbox']);
-		$response['unseen'][$params['mailbox']]=$unseen['count'];
-		
-		//special folder flags
-		$response['sent']=$params['mailbox']==$account->sent;
-		$response['drafts']=$params['mailbox']==$account->drafts;
-		$response['trash']=$params['mailbox']==$account->trash;
+		$response['unseen'][$params['mailbox']]=$unseen['count'];		
 		
 		//deletes must be confirmed if no trash folder is used or when we are in the trash folder to delete permanently
 		$response['deleteConfirm']=empty($account->trash) || $account->trash==$params['mailbox'];
@@ -291,7 +359,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 //					var_dump($to);
 
 					foreach($to as $email=>$name){
-						$contact = GO_Addressbook_Model_Contact::model()->findByEmail($email, GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)->single());
+						//$contact = GO_Addressbook_Model_Contact::model()->findByEmail($email, GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)->single());
+						$stmt = GO_Addressbook_Model_Contact::model()->findByEmail($email, GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)->limit(1));
+						$contact = $stmt->fetch();
+			
 
 						if($contact){					
 							$linkedEmail = new GO_Savemailas_Model_LinkedEmail();
@@ -510,7 +581,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$response['data'] = $message->toOutputArray(true, true);
 
 			$presetbody = isset($params['body']) ? $params['body'] : '';
-			if (!empty($presetbody) && strpos($response['data']['body'], '{body}') == false) {
+			if (!empty($presetbody) && strpos($response['data']['htmlbody'], '{body}') == false) {
 				$response['data']['htmlbody'] = $params['body'] . '<br />' . $response['data']['htmlbody'];
 			} else {
 				$response['data']['htmlbody'] = str_replace('{body}', $presetbody, $response['data']['htmlbody']);
@@ -852,6 +923,9 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		$imapMessage = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
 		
+		if(!$imapMessage)
+			throw new GO_Base_Exception_NotFound();
+		
 		//workaround for gmail. It doesn't flag messages as seen automatically.
 //		if (!$imapMessage->seen && stripos($account->host, 'gmail') !== false)
 //			$imapMessage->getImapConnection()->set_message_flag(array($imapMessage->uid), "\Seen");
@@ -923,47 +997,52 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		if(!GO::modules()->isInstalled('calendar'))
 			return $response;
+		
+		$vcalendar = $imapMessage->getInvitationVcalendar();
+		if($vcalendar){
+			$vevent = $vcalendar->vevent[0];
 
-		$atts = $imapMessage->getAttachments();
+			//is this an update for a specific recurrence?
+			$recurrenceDate = isset($vevent->{"recurrence-id"}) ? $vevent->{"recurrence-id"}->getDateTime()->format('U') : 0;
 
-		foreach ($atts as $a) {
-			if ($a->mime == 'text/calendar' || $a->getExtension() == 'ics') {
-				$imap = $imapMessage->getImapConnection();
+			//find existing event
+			$event = GO_Calendar_Model_Event::model()->findByUuid((string) $vevent->uid, GO::user()->id, 0, $recurrenceDate);
 
-				$data = $imap->get_message_part_decoded($imapMessage->uid, $a->number, $a->encoding);
-				try{
-					$vcalendar = GO_Base_VObject_Reader::read($data);
-					$vevent = $vcalendar->vevent[0];
-
-					//is this an update for a specific recurrence?
-					$recurrenceDate = isset($vevent->{"recurrence-id"}) ? $vevent->{"recurrence-id"}->getDateTime()->format('U') : 0;
-
-					//find existing event
-					$event = GO_Calendar_Model_Event::model()->findByUuid((string) $vevent->uid, GO::user()->id, 0, $recurrenceDate);
-
-					// invitation to a new event										
+			switch($vcalendar->method){
+				case 'CANCEL':					
+					$response['iCalendar']['feedback'] = GO::t('iCalendar_event_cancelled', 'email');
+					break;
+				
+				case 'REPLY':					
+					$response['iCalendar']['feedback'] = GO::t('iCalendar_update_available', 'email');
+					break;
+				
+				case 'REQUEST':					
 					$response['iCalendar']['feedback'] = GO::t('iCalendar_event_invitation', 'email');
-					$response['iCalendar']['invitation'] = array(
-							'uuid' => (string) $vevent->uid,
-							'email_sender' => $response['sender'],
-							'email' => $imapMessage->account->getDefaultAlias()->email,
-							'event_declined' => $event && $event->status == 'DECLINED',
-							'event_id' => $event ? $event->id : 0,
-							'is_update' => $vcalendar->method == 'REPLY',
-							'is_invitation' => $vcalendar->method == 'REQUEST',
-							'is_cancellation' => $vcalendar->method == 'CANCEL'
-					);
-					switch ($vcalendar->method) {
-						case 'REPLY':
-
-							break;
-					}
-				}catch (Exception $e){
-					GO::debug((string) $e);
-				}
+					break;
 			}
+			
+			if($vcalendar->method!='REQUEST' && !$event){
+				$response['iCalendar']['feedback'] = GO::t('iCalendar_event_not_found', 'email');
+			}
+			
+			$response['iCalendar']['invitation'] = array(
+					'uuid' => (string) $vevent->uid,
+					'email_sender' => $response['sender'],
+					'email' => $imapMessage->account->getDefaultAlias()->email,
+					'event_declined' => $event && $event->status == 'DECLINED',
+					'event_id' => $event ? $event->id : 0,
+					'is_update' => $vcalendar->method == 'REPLY',
+					'is_invitation' => $vcalendar->method == 'REQUEST',
+					'is_cancellation' => $vcalendar->method == 'CANCEL'
+			);
+//			switch ($vcalendar->method) {
+//				case 'REPLY':
+//
+//					break;
+//			}
 		}
-
+				
 		return $response;
 	}
 
@@ -1043,7 +1122,9 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		if(GO::modules()->addressbook && GO::modules()->savemailas && !empty(GO::config()->email_autolink_contacts)){
 			$from = $imapMessage->from->getAddress();
-			$contact = GO_Addressbook_Model_Contact::model()->findByEmail($from['email'], GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)->single());
+
+			$stmt = GO_Addressbook_Model_Contact::model()->findByEmail($from['email'], GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)->limit(1));
+			$contact = $stmt->fetch();
 			
 			if($contact){
 				GO_Savemailas_Model_LinkedEmail::model()->createFromImapMessage($imapMessage, $contact);
@@ -1352,10 +1433,11 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			if(empty($att->content_id) || $att->disposition=='attachment')
 				$att->saveToFile($tmpFolder);
 		}	
-		
+
 		$zipfile = $tmpFolder->parent()->createChild(GO::t('attachments','email').'.zip');						
-		
+
 		chdir($tmpFolder->path());
+
 		$cmd =GO::config()->cmd_zip.' -r "'.$zipfile->path().'" *';
 		exec($cmd, $output, $return);
 		
@@ -1368,8 +1450,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		readfile($zipfile->path());
 		
-//		$tmpFolder->delete();
-//		$zipfile->delete();
+		$tmpFolder->delete();
+		$zipfile->delete();
 		
 	}
 	

@@ -83,7 +83,7 @@ $l["sendcopyto"]= 'Forward a copy to';
 $l["forwardto"]= 'Forward to';
 $l["vacsendevery"]= 'Reply every';
 $l["vacsendevery2"]= 'day(s)';
-$l["vacAlsoMailTo"]= 'Also email message to';
+$l["vacAlsoMailTo"]= 'Autoreply is active for';
 $l["vacationmessage"]= 'Message:';
 $l["refusewithmesssage"]= 'Reject with message:';
 $l["spamflag"]= 'Spam flag';
@@ -116,3 +116,5 @@ $l['vacationEnd']='Last day of this message';
 
 $l['activateFilter']='Activate this filter';
 $l['active']='Active';
+$l['sieveWarning']="If your IMAP server supports sieve filters. It's recommended to use those instead. Please try the 'Sieve filters' tab first.";
+$l['setRead']='Mark message as read';

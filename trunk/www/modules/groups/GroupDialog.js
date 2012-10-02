@@ -82,6 +82,7 @@ GO.groups.GroupDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 
     this.permissionsPanel = new GO.grid.PermissionsPanel({
       title:GO.groups.lang.managePermissions,
+			addLevel: GO.permissionLevels.manage,
       hideLevel:true
     });
 

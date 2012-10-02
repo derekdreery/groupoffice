@@ -134,9 +134,10 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 */
 	public function extension() {
 		$extension = '';
-		$pos = strrpos($this->path, '.');
+		$filename = $this->name();
+		$pos = strrpos($filename, '.');
 		if ($pos) {
-			$extension = substr($this->path, $pos +1, strlen($this->path));
+			$extension = substr($filename, $pos +1);
 		}
 		return trim(strtolower($extension));
 	}
@@ -263,7 +264,8 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 			}
 		}
 
-		if($this->exists()){
+		//if($this->exists()){ Don't use exists function becuase MemoryFile returns true but it does not exist on disk
+		if(file_exists($this->path())){
 			if(function_exists('finfo_open')){
 					$finfo    = finfo_open(FILEINFO_MIME);
 					$mimetype = finfo_file($finfo, $this->path());
@@ -467,7 +469,38 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		return $this->putContents(GO_Base_Util_String::clean_utf8($str, $enc));
 	}
 	
+	/**
+	 * Get the md5 hash from this file
+	 * 
+	 * @return string
+	 */
 	public function md5Hash(){
 		return md5_file($this->path);
+	}
+	
+	/**
+	 * Compare this file with an other file.
+	 *
+	 * @param GO_Base_Fs_File $file
+	 * @return bool True if the file is different, false if file is the same.
+	 */
+	public function diff(GO_Base_Fs_File $file){
+		if($this->md5Hash() != $file->md5Hash())
+			return true;
+		else
+			return false;
+	}
+	
+	/**
+	 * Create the file
+	 * 
+	 * @param boolean $createPath Create the folders for this file also?
+	 * @return bool $successfull
+	 */
+	public function touch($createPath=false){
+		if($createPath)
+			$this->parent()->create();
+		
+		return touch($this->path());
 	}
 }

@@ -25,9 +25,9 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		return array('exportics');
 	}
 	
-	protected function ignoreAclPermissions() {
-		return array('exportics');
-	}
+//	protected function ignoreAclPermissions() {
+//		return array('exportics');
+//	}
 
 	protected function getStoreParams($params) {
 		
@@ -74,6 +74,8 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 			$params['permissionLevel']=GO_Base_Model_Acl::READ_PERMISSION;
 		
 		$store->getColumnModel()->formatColumn('permissionLevel', '$model->permissionLevel');
+		
+		$this->processStoreDelete($store, $params);
 		
 		$findParams = $store->getDefaultParams($params)
 						->join(GO_Calendar_Model_Group::model()->tableName(), GO_Base_Db_FindCriteria::newInstance()->addCondition('group_id', 'g.id', '=', 't', true, true),'g')
@@ -130,22 +132,22 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 	
 	public function actionImportIcs($params) {
 		ini_set('max_execution_time',300);
+		
+		GO::session()->closeWriting();
+		GO::$disableModelCache=true;
+		
 		$response = array( 'success' => true );
 		$count = 0;
 		if (!file_exists($_FILES['ical_file']['tmp_name'][0])) {
-			throw new Exception($lang['common']['noFileUploaded']);
+			throw new Exception(GO::t('noFileUploaded'));
 		}else {
 			$file = new GO_Base_Fs_File($_FILES['ical_file']['tmp_name'][0]);
-			$file->convertToUtf8();
-			$contents = $file->getContents();
-			$vcal = GO_Base_VObject_Reader::read($contents);
-			
-			if(!empty($vcal->vevent)){
-				foreach($vcal->vevent as $vevent) {
-					$event = new GO_Calendar_Model_Event();
-					$event->importVObject( $vevent, array('calendar_id'=>$params['calendar_id']) );
-					$count++;
-				}
+			$i = new GO_Base_Vobject_Iterator($file, "VEVENT");
+			foreach($i as $vevent){					
+
+				$event = new GO_Calendar_Model_Event();					
+				$event->importVObject( $vevent, array('calendar_id'=>$params['calendar_id']) );
+				$count++;
 			}
 		}
 		$response['feedback'] = sprintf(GO::t('import_success','calendar'), $count);
@@ -197,9 +199,9 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 	
 	public function actionExportIcs($params){
 		
-		$calendar = GO_Calendar_Model_Calendar::model()->findByPk($params["calendar_id"]);
+		$calendar = GO_Calendar_Model_Calendar::model()->findByPk($params["calendar_id"],false, true);
 		
-		if(!$calendar->public)
+		if(!$calendar->public && !$calendar->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
 			throw new GO_Base_Exception_AccessDenied();
 		
 		$c = new GO_Base_VObject_VCalendar();				
@@ -213,13 +215,24 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		if(!empty($params['months_in_past']))		
 			$stmt = GO_Calendar_Model_Event::model()->findForPeriod($findParams, GO_Base_Util_Date::date_add(time(), 0, -$months_in_past));
 		else
-			$stmt = GO_Calendar_Model_Event::model()->find($findParams);
-		
-		while($event = $stmt->fetch())
-			$c->add($event->toVObject());			
+			$stmt = GO_Calendar_Model_Event::model()->find($findParams);		
 		
 		GO_Base_Util_Http::outputDownloadHeaders(new GO_Base_FS_File($calendar->name.'.ics'));
-		echo $c->serialize();
-	}
+
+		
+		echo "BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Intermesh//NONSGML ".GO::config()->product_name." ".GO::config()->version."//EN
+";
+		$t = new GO_Base_VObject_VTimezone();
+		echo $t->serialize();
+		
+		while($event = $stmt->fetch()){
+			$v = $event->toVObject();
+			echo $v->serialize();
+		}
+		
+		echo "END:VCALENDAR\n";
+	}	
 
 }

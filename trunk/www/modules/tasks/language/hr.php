@@ -1,6 +1,5 @@
 <?php
 
-;
 $l['name']='Zadaci';
 $l['description']='Upravljanje zadacima i obvezama.';
 $lang['link_type'][12]=$l['task']='Zadatak';
@@ -45,7 +44,7 @@ $l["repeatForever"]= 'ponavljaj zauvijek';
 $l["recurrence"]= 'Ponavljanje';
 $l["remindMe"]= 'Podsjeti me';
 $l["options"]= 'Opcije';
-$l["createLink"]= 'Napravi link';
+$l["createLink"]= 'Napravi poveznicu';
 $l["startsAt"]='Počinje';
 $l["completedAt"]='Završava';
 $l["showInactiveTasks"]='Prikaži neaktivne zadatke';
@@ -74,3 +73,12 @@ $l["active"]='Aktivni';
 $l["globalsettings_templatelabel"]='Predložak zadatka';
 $l["globalsettings_allchangelabel"]='Promjeni postojeće?';
 $l["globalsettings_renameall"]= 'Preimenuj sve?';
+
+$l["taskName"]='Naziv';
+$l["taskCtime"]='Stvoreno';
+$l["taskMtime"]='Izmjenjeno';
+$l["taskDue_time"]='Dospjeva';
+$l["taskStatus"]='Status';
+$l["taskCompletion_time"]='Završeno';
+$l["taskProject_name"]='Projekt';
+$l['taskPercentage_complete']='Postotak završenosti';

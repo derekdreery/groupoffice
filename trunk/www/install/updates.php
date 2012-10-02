@@ -259,6 +259,9 @@ $updates["201206191755"][]="ALTER TABLE `go_acl` CHANGE `level` `level` TINYINT(
 $updates["201206191755"][]="ALTER TABLE `go_acl` CHANGE `level` `level` TINYINT( 4 ) NOT NULL DEFAULT '10'";
 $updates["201206191755"][]="ALTER TABLE `go_users` ADD `digest` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `username`";
 
-$updates["201208011029"][]="ALTER TABLE `go_holidays` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
-$updates["201208011029"][]="ALTER TABLE `go_holidays` CHANGE `region` `region` VARCHAR( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+$updates["201206191755"][]="ALTER TABLE `go_users` ADD `digest` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `username`";
 $updates["201208300840"][]="ALTER TABLE `go_log` CHANGE `ip` `ip` VARCHAR( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+$updates["201209141358"][]="update go_acl set level=50 where acl_id in (select acl_id from go_groups);";
+
+$updates["201210021548"][]="ALTER TABLE `go_holidays` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
+$updates["201210021548"][]="ALTER TABLE `go_holidays` CHANGE `region` `region` VARCHAR( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";

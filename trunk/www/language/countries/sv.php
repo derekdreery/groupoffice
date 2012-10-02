@@ -242,3 +242,4 @@ $l['KR'] = 'Sydkorea';
 $l['VN']= 'Vietnam';
 $l['RS']= 'Republiken  Serbien';
 $l['ME']= 'Republiken Montenegro';
+$l['IC']= 'Kanarieöarna';

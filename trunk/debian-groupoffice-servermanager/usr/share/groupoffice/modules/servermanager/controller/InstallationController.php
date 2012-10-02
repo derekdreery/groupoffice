@@ -79,8 +79,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	
 	public function actionRename($params){
 	
-		if(!$this->isCli())
-			throw new Exception("Action servermanager/installation/create may only be run by root on the command line");
+		$this->requireCli();
 		
 		$this->checkRequiredParameters(array("oldname","newname"), $params);		
 		
@@ -120,8 +119,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	}
 	
 	public function actionCreate($params){
-		if(!$this->isCli())
-			throw new Exception("Action servermanager/installation/create may only be run by root on the command line");
+		$this->requireCli();
 		
 		//todo check if we are root
 		
@@ -556,8 +554,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	
 	protected function actionUpgradeAll($params){
 		
-		if(!$this->isCli())
-			throw new Exception("This action may only be ran on the command line.");
+		$this->requireCli();
 		
 		$stmt = GO_Servermanager_Model_Installation::model()->find();
 		while($installation = $stmt->fetch()){
@@ -588,8 +585,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	
 	protected function actionRunOnAll($params){
 		
-		if(!$this->isCli())
-			throw new Exception("This action may only be ran on the command line.");
+		$this->requireCli();
 		
 		$stmt = GO_Servermanager_Model_Installation::model()->find();
 		while($installation = $stmt->fetch()){
@@ -617,8 +613,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$now = time();
 		$stmt = GO_ServerManager_Model_Installation::model()->find();
 		
-		if(!$this->isCli())
-			throw new Exception("You may only run this command on the command line");
+		$this->requireCli();
 		
 		$report = array(
 				'installations'=>array(),

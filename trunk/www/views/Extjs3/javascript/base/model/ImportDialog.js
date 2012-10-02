@@ -66,6 +66,7 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 	
 	show : function(modelContainerId) {
 		this.modelContainerIdField.setValue(modelContainerId);
+		this._importBaseParams[this._modelContainerIdName] = modelContainerId;
 		GO.base.model.ImportDialog.superclass.show.call(this);
 		this.fileSelector.clearQueue();
 	},
@@ -77,6 +78,7 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 		var controllerNameArr = config['controllerName'].split('_');
 		this._moduleName = controllerNameArr[1].toLowerCase();
 		this._modelName = controllerNameArr[3].toLowerCase();
+		this._modelContainerIdName = config['modelContainerIdName'];
 		this._fileType = config['fileType'];
 		this._excludedAttributes = config['excludedAttributes'];
 		for (var attrName in this._importBaseParams) {
@@ -89,6 +91,7 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 		if (!this._loadMask)
 			this._loadMask = new Ext.LoadMask(Ext.getBody(), {msg: GO.addressbook.lang.importing+'...'});
 		this._loadMask.show();
+
 		this.formPanel.form.submit({
 			url : GO.url(this._moduleName + '/' + this._modelName + '/import' + this._fileType),
 			params : {

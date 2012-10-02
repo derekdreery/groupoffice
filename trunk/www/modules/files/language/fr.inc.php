@@ -13,9 +13,9 @@
 // @author Merijn Schering <mschering@intermesh.nl>
 //
 // French Translation
-// Version : 3.7.29 
-// Author : Lionel JULLIEN
-// Date : September, 27 2011
+// Version : 4.0.99
+// Author : Lionel JULLIEN / Boris HERBINIERE-SEVE
+// Date : September, 20 2012
 //
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -56,3 +56,4 @@ $lang['files']['clickHereToDownload']= 'Cliquez ici pour télécharger ce fichie
 $lang['files']['copyPasteToDownload']= 'Cliquez sur le lien sécurisé ci-dessous ou copiez le dans la barre d\'adresse de votre navigateur pour télécharger le fichier.';
 $lang['files']['possibleUntil']= 'possible jusqu\'au';
 $lang['files']['fileNotFound']='Désolé, le fichier que vous essayez de télécharger est introuvable.';
+$lang['files']['no_folder_id']= 'Un id de répertoire invalide a été passé avec la requête !';

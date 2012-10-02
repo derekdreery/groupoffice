@@ -27,6 +27,18 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 			throw new Exception('Sorry, manage sieve filtering not supported on '.$accountModel->host.' using port '.$accountModel->sieve_port);				
 		}
 		
+		return true;
+		
+	}
+	
+	protected function actionIsSupported($params){
+		
+		try{
+			$supported=$this->_sieveConnect($params['account_id']);
+		}catch (Exception $e){
+			$supported=false;
+		}
+		return array('success'=>true, 'supported'=>$supported);
 	}
 	
 	protected function actionScripts($params) {
@@ -248,6 +260,9 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 		{
 				switch($action['type'])
 				{
+					case 'set_read':
+						$action['text'] = GO::t('setRead','sieve');
+						break;
 					case 'fileinto':
 						$action['text'] = GO::t('fileinto','sieve').' "'.$action['target'].'"';
 						break;
@@ -266,7 +281,7 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 						$action['text']=GO::t('refusewithmesssage','sieve').' "'.$action['target'].'"';
 						break;
 					case 'vacation':
-						$addressesText = !empty($action['addresses'])
+						$addressesText = !empty($action['addresses']) && is_array($action['addresses'])
 							? GO::t('vacAlsoMailTo','sieve').': '.implode(',',$action['addresses']).'. '
 							: '';
 						$action['text']=GO::t('vacsendevery','sieve').' '.$action['days'].' '.GO::t('vacsendevery2','sieve').'. '.$addressesText.GO::t('vacationmessage','sieve').' "'.$action['reason'].'"';

@@ -1,6 +1,5 @@
 <?php
 
-;
 $l['unknown'] = 'Nepoznata vrsta datoteke';
 $l['txt'] = 'Tekst datoteka';
 $l['sxw'] = 'OpenOffice.Org tekst';
@@ -65,7 +64,7 @@ $l['rtf'] = 'Rich Text Format';
 $l['swf'] = 'Macromedia Flash Movie';
 $l['fla'] = 'Macromedia Flash Dokument (izvorna datoteka)';
 $l['ai'] = 'Adobe Illustrator datoteka';
-$l['eml'] = 'E-mail poruka';
+$l['eml'] = 'Poruka e-pošte';
 $l['csv'] = 'Comma Separated Values';
 $l['js'] = 'Javascript';
 $l['sql'] = 'SQL izvoz baze podataka';

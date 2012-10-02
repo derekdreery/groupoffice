@@ -23,7 +23,7 @@ GO.comments.CommentDialog = function(config){
 	config.layout='fit';
 	config.modal=false;
 	config.resizable=false;
-	config.width=600;
+	config.width=630;
 	config.autoHeight=true;
 	
 	config.closeAction='hide';
@@ -105,7 +105,7 @@ Ext.extend(GO.comments.CommentDialog, Ext.Window,{
 //			params: {'task' : 'save_comment'},
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){
-				this.fireEvent('save', this);
+//				this.fireEvent('save', this);
 				if(hide)
 				{
 					this.hide();	
@@ -144,12 +144,14 @@ Ext.extend(GO.comments.CommentDialog, Ext.Window,{
 			cls:'go-form-panel',
 			baseParams: {id:0, model_name:''},				
 			items:[{
-				xtype: 'textarea',
-			  name: 'comments',
-				anchor: '100%',
-				height: 200,
-				hideLabel:true
-			}]				
+					xtype: 'textarea',
+					name: 'comments',
+					anchor: '100%',
+					height: 200,
+					hideLabel:true
+				},
+				this.categoriesCB = new GO.comments.CategoriesComboBox()
+			]				
 		});
 	}
 });

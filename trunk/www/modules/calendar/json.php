@@ -415,7 +415,7 @@ try {
 			$has_other_participants = 0;
 			$continue = true;
 			//$has_other_participants=$cal->get_participants($event['id']);
-			$has_other_participants = $cal->count_participants($event['id'], $GLOBALS['GO_SECURITY']->user_id) > 0 ? 1 : 0;
+			$has_other_participants = $cal->count_participants($event['id']) > 0 ? 1 : 0;
 			/*while($cal->next_record() && $continue)
 			{
 				if($cal->f('user_id') != $GLOBALS['GO_SECURITY']->user_id)
@@ -647,7 +647,7 @@ try {
 				$username = $GO_USERS->get_user_realname($event['user_id']);
 
 				//TODO could be more efficient by doing these queries only when deleting or updating
-				$has_other_participants = $cal->count_participants($event['id'], $GO_SECURITY->user_id) > 0 ? 1 : 0;
+				$has_other_participants = $cal->count_participants($event['id']) > 0 ? 1 : 0;
 	
 				$response['results'][] = array(
 								'id'=>$response['count']++,

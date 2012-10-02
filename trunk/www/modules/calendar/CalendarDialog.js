@@ -116,7 +116,7 @@ GO.calendar.CalendarDialog = function(config)
 
 	this.propertiesTab.add([{
 			xtype:'plainfield',
-			fieldLabel:'Direct URL',
+			fieldLabel:GO.calendar.lang.directUrl,
 			name:'url',
 			anchor:'100%'
 		},{
@@ -134,7 +134,8 @@ GO.calendar.CalendarDialog = function(config)
 			text:GO.lang.cmdExport,
 			disabled:true,
 			handler:function(){
-				document.location=GO.settings.modules.calendar.url+'export.php?calendar_id='+this.calendar_id;
+				//document.location=GO.settings.modules.calendar.url+'export.php?calendar_id='+this.calendar_id;
+				document.location=GO.url("calendar/calendar/exportIcs", {"calendar_id":this.calendar_id});
 			},
 			scope:this
 		})])

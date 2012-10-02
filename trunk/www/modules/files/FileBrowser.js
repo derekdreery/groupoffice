@@ -874,7 +874,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 	setRootID : function(rootID, folder_id)
 	{
-		//if(this.treePanel.getLoader().baseParams.root_folder_id!=rootID || (folder_id>0 && this.folder_id!=folder_id))
+		if(this.treePanel.getLoader().baseParams.root_folder_id!=rootID || (folder_id>0 && this.folder_id!=folder_id)){
+		
 				this.folder_id=folder_id;
 				this.treePanel.getLoader().baseParams.root_folder_id=rootID;
 				this.treePanel.getLoader().baseParams.expand_folder_id=folder_id;
@@ -884,6 +885,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 						},
 						scope:this
 				});
+		}
 	},
 
 	buildNewMenu : function(){
@@ -1861,7 +1863,7 @@ GO.files.downloadFile = function (fileId){
 
 GO.files.editFile = function (fileId){
 
-	if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission)
+	if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission && !GO.util.isAndroid())
 	{
 		if(!deployJava.isWebStartInstalled('1.6.0'))
 		{

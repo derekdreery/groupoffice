@@ -17,10 +17,10 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		$oldAllowDeletes = GO_Base_Fs_File::setAllowDeletes(false);
 
-		GO::$ignoreAclPermissions=true; //allow this script access to all
 		GO::$disableModelCache=true; //for less memory usage
 		ini_set('max_execution_time', '0');
-		GO::session()->closeWriting();
+
+		GO::session()->runAsRoot();
 
 		$folders = array('users','projects','addressbook','notes','tickets');
 		
@@ -258,6 +258,9 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 //				$acl->user_id = GO::user() ? GO::user()->id : 1;
 //				$acl->save();
 				$model->setNewAcl();
+				
+				//for enabling the acl permissions panel
+				$response['acl_id']=$model->acl_id;
 			}
 
 			if ($params['share']==0 && $model->acl_id > 0) {
@@ -626,7 +629,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			//throw new Exception("Fs folder doesn't exist! ".$folder->fsFolder->path());
 			GO::debug("Deleting it because filesystem folder doesn't exist");
 			$folder->readonly = 1; //makes sure acl is not deleted
-			$folder->delete();
+			$folder->delete(true);
 			if($mustExist || isset($model->acl_id))
 				return $this->_createNewModelFolder($model);
 			else

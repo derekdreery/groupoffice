@@ -59,6 +59,14 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 	
 	initComponent : function(){
 		
+		
+		if(!this.view && !this.viewConfig){
+			this.view = new Ext.grid.GridView({
+				autoFill: true,
+				forceFit: true,
+				emptyText: GO.lang.strNoItems
+			});
+		}
 
 		if(!this.keys)
 		{
@@ -143,17 +151,18 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 			this.sm=this.selModel=new Ext.grid.RowSelectionModel();
 	
 		if(this.standardTbar){
-			this.tbar = this.tbar ? this.tbar : [];
 
-			this.tbar.push({
-				itemId:'add',
-				iconCls: 'btn-add',							
-				text: GO.lang['cmdAdd'],
-				cls: 'x-btn-text-icon',
-				handler: this.btnAdd,
-				disabled:this.standardTbarDisabled,
-				scope: this
-			},{
+			this.tbar = this.tbar ? this.tbar : [];
+			if(!this.hideSearchField){
+				this.tbar.unshift(					
+					'-',
+					new GO.form.SearchField({
+						store: this.store,
+						width:150
+					})					
+				);
+			}
+			this.tbar.unshift({
 				itemId:'delete',
 				iconCls: 'btn-delete',
 				text: GO.lang['cmdDelete'],
@@ -163,17 +172,17 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 					this.deleteSelected();
 				},
 				scope: this
+			},{
+				itemId:'add',
+				iconCls: 'btn-add',							
+				text: GO.lang['cmdAdd'],
+				cls: 'x-btn-text-icon',
+				handler: this.btnAdd,
+				disabled:this.standardTbarDisabled,
+				scope: this
 			});
 			
-			if(!this.hideSearchField){
-				this.tbar.push(
-					'-',
-					new GO.form.SearchField({
-						store: this.store,
-						width:150
-					})
-				);
-			}
+			
 		}
 		
 		

@@ -13,9 +13,9 @@
 // @author Merijn Schering <mschering@intermesh.nl>
 //
 // French Translation
-// Version : 3.7.29 
-// Author : Lionel JULLIEN
-// Date : September, 27 2011
+// Version : 4.0.99
+// Author : Lionel JULLIEN / Boris HERBINIERE-SEVE
+// Date : September, 20 2012
 //
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -64,4 +64,6 @@ $lang['addressbook']['emailDoesntExists']='L\'adresse électronique n\'a pas ét
 
 $lang['addressbook']['imageNotSupported']='Le format de l\'image transférée n\'est pas supporté. Veuillez utiliser une image au format gif, png ou jpg.';
 
+$lang['addressbook']['no_addressbook_id']= 'Un id de carnet d\'adresse invalide a été passé avec la requête!';
+$lang['addressbook']['undefined']= '-';
 ?>

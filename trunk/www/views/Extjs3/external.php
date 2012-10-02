@@ -22,7 +22,7 @@ function launchGO(){
 
 	if(win.GO && win.GO.<?php echo $module; ?>)
 	{
-		win.GO.<?php echo $module; ?>.<?php echo $function; ?>.apply(this, <?php echo json_encode($funcParams); ?>);
+		win.GO.<?php echo $module; ?>.<?php echo $function; ?>.call(this, <?php echo json_encode($funcParams); ?>);
 
 	}else
 	{

@@ -190,6 +190,9 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 
 	public function validate() {
 		
+		if($this->max_rows_list > 50)
+				$this->setValidationError('max_rows_list', GO::t('maxRowslistTooHigh'));
+		
 		if($this->isModified('password') && isset($this->passwordConfirm) && $this->passwordConfirm!=$this->password){
 			$this->setValidationError('passwordConfirm', GO::t('passwordMatchError'));
 		}
@@ -253,7 +256,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			$this->acl->save();
 			
 			if(!empty(GO::config()->register_user_groups)){
-				$groups = explode(',',GO::config()->register_visible_user_groups);
+				$groups = explode(',',GO::config()->register_user_groups);
 				foreach($groups as $groupName){
 					$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', trim($groupName));
 					if($group)
@@ -290,10 +293,12 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	 * Makes shure that this model's user has all the default models it should have.
 	 */
 	public function checkDefaultModels(){
+		$oldIgnore = GO::setIgnoreAclPermissions(true);
 	  $defaultModels = GO_Base_Model_AbstractUserDefaultModel::getAllUserDefaultModels($this->id);	
 		foreach($defaultModels as $model){
 			$model->getDefault($this);
-		}
+		}		
+		GO::setIgnoreAclPermissions($oldIgnore);
 	}
 	
 	protected function afterDelete() {
@@ -463,7 +468,8 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		$attr['thousands_separator']=GO::config()->default_thousands_separator;
 		$attr['time_format']=GO::config()->default_time_format;
 		$attr['sort_name']=GO::config()->default_sort_name;
-	
+		$attr['max_rows_list']=GO::config()->default_max_rows_list;
+		
 		
 		return $attr;
 	}

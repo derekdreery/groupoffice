@@ -15,8 +15,7 @@ class GO_Log_Controller_Log extends GO_Base_Controller_AbstractModelController {
 
 	protected function actionRotate($params){
 		
-		if(!$this->isCli())
-			throw new Exception("This action may only be ran on the command line");
+		$this->requireCli();
 		
 		$findParams = GO_Base_Db_FindParams::newInstance();
 		

@@ -84,17 +84,18 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Return the permission level that a user has for this ACL.
 	 *  
+	 * @param in $acl_id The ID of the acl to check
 	 * @param int $userId If omitted then it will check the currently logged in user and return manage permission if GO::$ignoreAclPermissions is set.
 	 * @param bool $checkGroupPermissionOnly
 	 * @return int Permission level. See constants in GO_Base_Model_Acl for values. 
 	 */
 	public static function getUserPermissionLevel($aclId, $userId=false, $checkGroupPermissionOnly=false) {
 		
-		//only ignore when no explicit user is checked.
+		//only ignore when no explicit user is checked. Otherwise you can never check the real permissionlevel when GO::$ignoreAclPermissions is set to true.
 		if(GO::$ignoreAclPermissions && $userId===false)
 			return self::MANAGE_PERMISSION;
 		
-		if(!$userId){
+		if($userId===false){
 			if(GO::user())
 				$userId=GO::user()->id;
 			else

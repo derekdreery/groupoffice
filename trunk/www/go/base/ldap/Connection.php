@@ -14,6 +14,35 @@ class GO_Base_Ldap_Connection{
 	}
 	
 	/**
+	 * Connect to the LDAP server defined in config.php
+	 * 
+	 * @return \GO_Base_Ldap_Connection
+	 * @throws Exception
+	 */
+	public static function getDefault(){
+		
+		if(empty(GO::config()->ldap_host))
+			GO::config()->ldap_host='localhost';
+		
+		if(empty(GO::config()->ldap_port))
+			GO::config()->ldap_port=389;
+		
+		$ldapConn = new GO_Base_Ldap_Connection(GO::config()->ldap_host, GO::config()->ldap_port, !empty(GO::config()->ldap_tls));
+
+		//support old deprecated config.
+		if(!empty(GO::config()->ldap_user))
+			GO::config()->ldap_bind_rdn=GO::config()->ldap_user;
+		
+		if (!empty(GO::config()->ldap_bind_rdn)) {
+			$bound = $ldapConn->bind(GO::config()->ldap_bind_rdn, GO::config()->ldap_pass);
+			if (!$bound)
+				throw new Exception("Failed to bind to LDAP server with RDN: " . GO::config()->ldap_bind_rdn);
+		}
+		
+		return $ldapConn;
+	}
+	
+	/**
 	 * Establish the LDAP connection
 	 * 
 	 * @return boolean 

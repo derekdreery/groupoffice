@@ -26,7 +26,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 	 * @param String $eventstarttime The time the recurrence pattern starts. This is important to calculate the correct interval.
 	 * @param String $rrule 'FREQ=DAILY;UNTIL=22-02-2222;INTERVAL=2;
 	 */
-	public function readIcalendarRruleString($eventstarttime, $rrule) {
+	public function readIcalendarRruleString($eventstarttime, $rrule, $shiftDaysToLocal=false) {
 		if(!empty($rrule)){			
 			$this->_eventstarttime = $eventstarttime;
 			$rrule = str_replace('RRULE:', '', $rrule);
@@ -34,7 +34,11 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 				$this->_parseRruleIcalendarV1($rrule);
 			else
 				$this->_parseRruleIcalendar($rrule);
+			
+			if($shiftDaysToLocal)
+				$this->shiftDays(false);
 		}
+		
 	}
 	
 		
@@ -67,7 +71,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		
 		$this->setParams($parameters);
 		
-		$this->_byday = $this->shiftDays($this->_byday);			
+		$this->shiftDays();			
 	}
 	
 		
@@ -76,19 +80,20 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 	 * 
 	 * @return String $rrule eg.: 'FREQ=DAILY;UNTIL=22-02-2222;INTERVAL=2;
 	 */
-	public function createRrule($shiftDays=true) {
+	public function createRrule() {
 		
 		if(empty($this->_freq))
 			return "";
 		
-		$byday = $shiftDays ? $this->shiftDays($this->_byday, false) : $this->_byday;
+		$rrule = 'RRULE:FREQ='.$this->_freq;
 		
-		$rrule = 'RRULE:INTERVAL='.$this->_interval.';FREQ='.$this->_freq;
+		if($this->_interval>1)
+			$rrule .= ';INTERVAL='.$this->_interval;
 
 		switch($this->_freq)
 		{
 			case 'WEEKLY':
-				$rrule .= ";BYDAY=".implode(',', $byday);
+				$rrule .= ";BYDAY=".implode(',', $this->_byday);
 			break;
 
 			case 'MONTHLY':				
@@ -99,7 +104,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 					if(!empty($this->_bysetpos))
 						$rrule .= ";BYSETPOS=".$this->_bysetpos;
 						
-					$rrule .= ';BYDAY='.implode(',', $byday);
+					$rrule .= ';BYDAY='.implode(',', $this->_byday);
 				}
 			break;
 		}
@@ -259,6 +264,18 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 			}
 		}
 	}
+	
+	private function _splitDaysAndSetPos(){
+				
+		for($i=0;$i<count($this->_byday);$i++){
+			$day = $this->_byday[$i];
+			if(strlen($day)>2){
+				if(empty($this->_bysetpos))
+				$this->_bysetpos = $day[0];
+				$this->_byday[$i] = substr($day,1);
+			}
+		}			
+	}
 
 	/**
 	 * Convert a Rrule object from an Icalendar Rrule string.
@@ -286,6 +303,16 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		$this->_bysetpos = !empty($rrule_arr['BYSETPOS']) ? intval($rrule_arr['BYSETPOS']) : 0;
 		
 		
+		
+		$this->_splitDaysAndSetPos();
+		
+		//if rrule is passed like this: RRULE:INTERVAL=1;FREQ=WEEKLY;BYDAY=
+		//then assume days should be the event start time day.
+		if(isset($rrule_arr['BYDAY']) && empty($this->_byday))
+			$this->_byday=array($this->_days[date('w', $this->_eventstarttime)]);
+		
+		
+		
 		//figure out end time of event
 		//UNTESTED
 		if($this->_count>0 && empty($this->_until)){
@@ -303,8 +330,8 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 	 */
 	public function createJSONOutput() {
 		
-		$days = $this->shiftDays($this->_byday, false);
-		//$days = $this->_byday;
+		$this->shiftDays(false);
+		$days = $this->_byday;
 		
 		$response = array();
 		if (isset($this->_freq)) {

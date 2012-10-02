@@ -44,7 +44,9 @@ GO.addressbook.CompanyDialog = function(config)
 	this.personalPanel,
 	this.commentPanel];
 	      	
-	items.push(new GO.addressbook.SelectAddresslistsPanel());
+	this.selectAddresslistsPanel = new GO.addressbook.SelectAddresslistsPanel();
+					
+	items.push(this.selectAddresslistsPanel);
 	items.push(this.employeePanel);
   
 	if(GO.customfields && GO.customfields.types["GO_Addressbook_Model_Company"])
@@ -309,6 +311,8 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 
 	loadCompany : function(id)
 	{
+		this.beforeLoad();
+		
 		this.companyForm.form.load({
 			url:GO.url('addressbook/company/load'),
 			params: {
@@ -329,6 +333,9 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 				
 				
 				this.personalPanel.formAddressBooks.setRemoteText(action.result.remoteComboTexts.addressbook_id);
+				
+				
+				this.afterLoad(action);
 
 				GO.addressbook.CompanyDialog.superclass.show.call(this);
 						
@@ -345,7 +352,14 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 			scope: this
 		});			
 	},
-
+	
+	afterLoad  : function(action){
+		
+	},
+	
+	beforeLoad  : function(){
+		
+	},
 	
 	saveCompany : function(hide)
 	{	

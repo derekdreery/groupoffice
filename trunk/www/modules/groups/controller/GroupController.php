@@ -47,14 +47,14 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 		}
 
 		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_User::model());
-		$store->getColumnModel()->formatColumn('name', '$model->name');
+		$store->getColumnModel()->formatColumn('name', '$model->name', array(), array('first_name', 'last_name'));
 
 		$storeParams = $store->getDefaultParams($params)->joinCustomFields(false);
 
 
 		$delresponse = array();
 		//manually check permission here because this method may be accessed by any logged in user. allowWithoutModuleAccess is used above.
-		if (GO::modules()->groups->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)) {
+		if ($group->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION)) {
 
 			// The users in the group "everyone" cannot be deleted
 			if ($group->id != GO::config()->group_everyone) {
@@ -62,7 +62,8 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 			} else {
 				$delresponse['deleteSuccess'] = false;
 				$delresponse['deleteFeedback'] = 'Members of the group everyone cannot be deleted.';
-			}
+			}			
+			
 		}
 
 		$stmt = $group->users($storeParams);

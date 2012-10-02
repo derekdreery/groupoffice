@@ -118,6 +118,7 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 		
 		if(GO::user() && GO::user()->contact){
 			$attributes = array_merge($attributes, $this->_getModelAttributes(GO::user()->contact,'user:'));
+			$attributes['user:sirmadam']=GO::user()->contact->sex=="M" ? GO::t('cmdSir','addressbook') : GO::t('cmdMadam', 'addressbook');
 			if(GO::user()->contact->company){
 				$attributes = array_merge($attributes, $this->_getModelAttributes(GO::user()->contact->company,'usercompany:'));
 			}
@@ -150,6 +151,8 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 		
 		if(!empty($contact->salutation))
 			$attributes['salutation']=$contact->salutation;
+		
+		$attributes['contact:sirmadam']=$contact->sex=="M" ? GO::t('sir') : GO::t('madam');
 		
 		$attributes = array_merge($attributes, $this->_getModelAttributes($contact, 'contact:'));
 		if($contact->company)
@@ -285,7 +288,7 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	 * @return string 
 	 */
 	public function replaceCustomTags($content, $attributes, $leaveEmptyTags=false){
-		return $this->_parse($content, $attributes, $leaveEmptyTags);
+		return $this->_parse($content, array_merge($this->_defaultTags, $attributes), $leaveEmptyTags);
 	}
 
 //	/**

@@ -12,26 +12,40 @@ class GO_Serverclient_ServerclientModule extends GO_Base_Module{
 		
 	}
 	
+	public static function getDomains(){
+		return empty(GO::config()->serverclient_domains) ? array() : array_map('trim',explode(",", GO::config()->serverclient_domains));
+	}
+	
 	public static function saveUser($user, $wasNew){
 		
-		if(!empty($user->serverclient_domains)){
+		if(!isset($user->serverclient_domains))
+			$user->serverclient_domains=array();
+		
+		$domains = $wasNew ? $user->serverclient_domains : self::getDomains();
+		
+		if(!empty($domains)){
 
-			$httpClient = new GO_Serverclient_HttpClient();
-			try{
-				$httpClient->postfixLogin();
-			}catch(Exception $e){
-				throw new Exception("Could not login to postfixadmin module. Check the username and password in /etc/groupoffice/globalconfig.inc.php\n\nMessage from Postfixadmin:\n\n".$e->getMessage());
-			}
+			$httpClient = new GO_Serverclient_HttpClient();			
 
-			foreach ($user->serverclient_domains as $domain) {
-				if($wasNew){
+			foreach ($domains as $domain) {				
+				if($wasNew){					
+					try{
+						$httpClient->postfixLogin();
+					}catch(Exception $e){
+						throw new Exception("Could not login to postfixadmin module. Check the username and password in /etc/groupoffice/globalconfig.inc.php\n\nMessage from Postfixadmin:\n\n".$e->getMessage());
+					}
 					
 					self::_addMailbox($httpClient,$user,$domain);
 					self::_addAccount($user,$domain);
 				}else
-				{
-					
-					if($user->unencryptedPassword){
+				{					
+					if($user->unencryptedPassword){						
+						try{
+							$httpClient->postfixLogin();
+						}catch(Exception $e){
+							throw new Exception("Could not login to postfixadmin module. Check the username and password in /etc/groupoffice/globalconfig.inc.php\n\nMessage from Postfixadmin:\n\n".$e->getMessage());
+						}
+
 						self::_setMailboxPassword($httpClient, $user,$domain);
 					}
 				}
@@ -40,6 +54,8 @@ class GO_Serverclient_ServerclientModule extends GO_Base_Module{
 	}
 	
 	private static function _addMailbox($httpClient, $user, $domain){
+		
+		GO::debug("SERVERCLIENT: Adding mailbox for ".$user->username.'@'.$domain);
 		//domain is, for example "intermesh.dev".
 		$url = GO::config()->serverclient_server_url."?r=postfixadmin/mailbox/submit";
 		$response = $httpClient->request($url, array(
@@ -61,6 +77,8 @@ class GO_Serverclient_ServerclientModule extends GO_Base_Module{
 	
 	private static function _setMailboxPassword($httpClient, $user, $domain){
 		//domain is, for example "intermesh.dev".
+		
+		GO::debug("SERVERCLIENT: Updating password for mailbox ".$user->username.'@'.$domain);
 		
 		$username = $user->username;
 		if(empty(GO::config()->serverclient_dont_add_domain_to_imap_username))
@@ -96,6 +114,9 @@ class GO_Serverclient_ServerclientModule extends GO_Base_Module{
 	private static function _addAccount($user,$domainName) {
 		
 		if(GO::modules()->isInstalled('email')){
+			
+			GO::debug("SERVERCLIENT: Adding e-mail account for ".$user->username.'@'.$domainName);
+			
 			$accountModel = new GO_Email_Model_Account();
 			$accountModel->user_id=$user->id;
 			$accountModel->mbroot = GO::config()->serverclient_mbroot;
