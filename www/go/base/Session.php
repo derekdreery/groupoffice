@@ -78,6 +78,26 @@ class GO_Base_Session extends GO_Base_Observable{
 	}
 	
 	/**
+	 * Return security token value that should be passed with each request.
+	 * 
+	 * eg. index.php?r=test&security_token=token
+	 * 
+	 * @return string
+	 */
+	public function securityToken(){
+		return $this->values['security_token'];
+	}
+	
+	/**
+	 * Return session ID
+	 * 
+	 * @return string
+	 */
+	public function id(){
+		return session_id();
+	}
+	
+	/**
 	 * Attemts to login with stored cookies on the client.
 	 * This function is called in index.php
 	 * 
@@ -267,9 +287,13 @@ class GO_Base_Session extends GO_Base_Observable{
 		
 		require_once(GO::config()->root_path.'Group-Office.php');
 		
-		require_once(GO::config()->root_path.'classes/base/users.class.inc.php');
-		$GO_USERS = new GO_USERS();
-		$GO_USERS->update_session(GO::user()->getAttributes());
+		$user = GO_Base_Model_User::model()->findByPk(GO::user()->id); //Using GO::user() could give old data for setting theme
+		if($user != null)
+		{
+			require_once(GO::config()->root_path.'classes/base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+			$GO_USERS->update_session($user->getAttributes());
+		}
 	}
 	
 	/**
@@ -283,7 +307,29 @@ class GO_Base_Session extends GO_Base_Observable{
 	}
 	
 	/**
-	 * Sets current user. Use it wisely!
+	 * Run the current action as root. This function will close session writing to prevent
+	 * the user becoming root permanently. So you can't set session variables.
+	 */
+	public function runAsRoot(){
+		//Close session writing so that the user won't stay root in browser sessions.
+		GO::session()->closeWriting();
+		
+		GO::session()->setCurrentUser(1);
+	}
+	
+	/**
+	 * Run the current action as another user. This function will close session writing to prevent
+	 * the user becoming root permanently. So you can't set session variables.
+	 */
+	public function runAs($id){
+		//Close session writing so that the user won't stay root in browser sessions.
+		GO::session()->closeWriting();
+		
+		GO::session()->setCurrentUser($id);
+	}
+	
+	/**
+	 * Sets current user for the entire session. Use it wisely!
 	 * @param int $user_id
 	 */
 	public function setCurrentUser($user_id) {

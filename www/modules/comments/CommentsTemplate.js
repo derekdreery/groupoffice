@@ -4,16 +4,21 @@ GO.comments.displayPanelTemplate =
 '{[this.collapsibleSectionHeader(GO.comments.lang.recentComments, "comments-"+values.panelId, "comments")]}'+
 	
 			'<table cellpadding="0" cellspacing="0" border="0" class="display-panel" id="comments-{panelId}">'+
+				'<tr><td colspan="2"><div id="newCommentForModelDiv_{id}"></div></td></tr>'+
+				'<tr><td colspan="2"><hr /></td></tr>'+
 				'<tpl if="!comments.length">'+
 					'<tr><td colspan="3">'+GO.lang.strNoItems+'</td></tr>'+
 				'</tpl>'+
 				'<tpl for="comments">'+					
 					'<tr>'+
-						'<td><i>{user_name}</i></td>'+										
+						'<td><i>{user_name}</i> ({categoryName})</td>'+										
 						'<td style="text-align:right"><b>{ctime}</b></td>'+
 					'</tr>'+
 					'<tr>'+
-						'<td colspan="2" style="padding-left:5px">{comments}<hr /></td>'+
+						'<td colspan="2" style="padding-left:5px" id="comment-td-{id}">'+
+							'{[GO.comments.commentsAccordion(values.id,values.comments)]}'+
+							'<hr />'+
+						'</td>'+
 					'</tr>'+
 				'</tpl>'+
 
@@ -21,3 +26,30 @@ GO.comments.displayPanelTemplate =
 
 			'</table>'+
 	'</tpl>';
+
+GO.comments.closeComment = function(commentId) {
+	Ext.get('comment-'+commentId).setDisplayed(false);
+	Ext.get('shortComment-'+commentId).setDisplayed(true);
+}
+
+GO.comments.openComment = function(commentId) {
+	Ext.get('comment-'+commentId).setDisplayed(true);
+	Ext.get('shortComment-'+commentId).setDisplayed(false);
+}
+
+GO.comments.commentsAccordion = function(id,commentsText) {
+	
+	var maxLength = 300;
+	if (commentsText.length<maxLength) {
+		return '<div id="comment-'+id+'" class="comment-div">'+commentsText+'</div>';
+	} else {
+		return '<div id="comment-'+id+'" class="comment-div" style="display:none;">'+
+//				'<a href="javascript:GO.comments.closeComment('+id+');"><img src="views/Extjs3/themes/Default/images/elbow-end-minus-nl.gif" style="margin-bottom:-4px;margin-right:3px;" /></a>'+
+					commentsText+'</div>'+
+					'<div id="shortComment-'+id+'" class="shortComment-div">'+				
+					Ext.util.Format.ellipsis(commentsText,maxLength)+
+					'&nbsp;<a href="javascript:GO.comments.openComment('+id+');">'+GO.comments.lang.readMore+'</a>'+
+					'</div>';
+					
+	}
+}

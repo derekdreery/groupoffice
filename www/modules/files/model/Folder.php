@@ -534,10 +534,15 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			$this->fsFolder->create();
 		}
 		
+		
+		//make sure no filesystem items are deleted. Sometimes folders are stored as files somehow.
+		GO_Files_Model_File::$deleteInDatabaseOnly=true;
+		GO_Files_Model_Folder::$deleteInDatabaseOnly=true;
+		
 		$stmt= $this->folders();
 		while($folder = $stmt->fetch()){
 			try{
-				if(!$folder->fsFolder->exists())
+				if(!$folder->fsFolder->exists() || $folder->fsFolder->isFile())
 					$folder->delete();
 			}catch(Exception $e){
 				echo $e->getMessage()."\n";
@@ -547,7 +552,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		$stmt= $this->files();
 		while($file = $stmt->fetch()){
 			try{
-				if(!$file->fsFile->exists())
+				if(!$file->fsFile->exists() || $file->fsFile->isFolder())
 					$file->delete();
 			}catch(Exception $e){
 				echo $e->getMessage()."\n";
@@ -790,8 +795,34 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			return GO_Files_Model_Folder::model()->find($findParams);
 	}
 	
+	/**
+	 * Checks if this folder has child folders and checks permissions too.
+	 * @return boolean
+	 */
 	public function hasChildren(){
 		return $this->getSubFolders(GO_Base_Db_FindParams::newInstance()->single(), true);
+	}
+	
+	/**
+	 * Check if this folder has subfolders without checking permissions.
+	 * 
+	 * @return boolean
+	 */
+	public function hasFolderChildren(){
+		$folder = GO_Files_Model_Folder::model()->findSingleByAttribute('parent_id', $this->id);
+		
+		return $folder!=false;
+	}
+	
+	/**
+	 * Check if this folder has files.
+	 * 
+	 * @return boolean
+	 */
+	public function hasFilesChildren(){
+		$file = GO_Files_Model_File::model()->findSingleByAttribute('folder_id', $this->id);
+		
+		return $file!=false;
 	}
 	
 	/**
@@ -894,7 +925,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			//sort by path and only list top level shares		
 			$shares[$folder->path]=$folder;
 		}
-		ksort($shares);
+		ksort($shares, SORT_FLAG_CASE | SORT_STRING);
 		
 		$response=array();
 		foreach($shares as $path=>$folder){

@@ -17,15 +17,15 @@ fi
 
 VERSION=`cat ../www/go/base/Config.php | grep '$version' | sed -e 's/[^0-9\.]*//g'`
 
-if [[ $VERSION =~ ^([0-9]\.[0-9])\.[0-9]{1,2}$ ]]; then
+if [[ $VERSION =~ ^([0-9]\.[0-9])\.[0-9]{1,3}$ ]]; then
 	MAJORVERSION=${BASH_REMATCH[1]}
 fi
 
 echo "Group-Office version: $VERSION"
 echo "Major version: $MAJORVERSION"
 
-if [ ! -e /var/www/release/packages/billing-$VERSION ]; then
-	echo /var/www/release/packages/billing-$VERSION bestaat niet. eerst createtag.sh draaien.
+if [ ! -e /root/packages/billing-$VERSION ]; then
+	echo /root/packages/billing-$VERSION bestaat niet. eerst createtag.sh draaien.
 	exit
 fi
 
@@ -42,7 +42,7 @@ svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-offi
 mv debian-groupoffice-billing groupoffice-billing-$VERSION
 
 for m in $PROMODULES; do
-	cp -R /var/www/release/packages/billing-$VERSION/$m groupoffice-billing-$VERSION/usr/share/groupoffice/modules/
+	cp -R /root/packages/billing-$VERSION/$m groupoffice-billing-$VERSION/usr/share/groupoffice/modules/
 done
 
 

@@ -40,7 +40,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 	 *
 	 * @var array eg. array('MO','WE') OR array('1MO') in case of the first monday
 	 */
-	protected $_byday;
+	protected $_byday=array();
 	protected $_bymonth;
 	protected $_bymonthday;
 	protected $_eventstarttime;
@@ -123,9 +123,13 @@ class GO_Base_Util_Date_RecurrencePattern{
 	/**
 	 * Return the first valid occurrence time after the given startTime.
 	 * 
-	 * If $startTime is omitted it returns the next recurrence since last call or the first occurrence.
+	 * If $startTime is omitted it returns the next recurrence since last call or 
+	 * the first occurrence.
+	 * If $maxTime is given then the system will not search for recurrences after 
+	 * that given date (If there is no recurrence is found.
 	 * 
 	 * @param int $startTime Unix timstamp
+	 * @param int $maxTime Unix timstamp
 	 * @return int Unix timestamp 
 	 */
 	public function getNextRecurrence($startTime=false, $maxTime=0)
@@ -269,27 +273,6 @@ class GO_Base_Util_Date_RecurrencePattern{
 		return $recurrenceTime;		
 	}
 	
-	private function _splitDaysAndSetPos(){
-			
-		$response['days']=array();
-		$response['bysetpos']=array();
-		
-		foreach($this->_byday as $day){
-			if(strlen($day)>2){
-				$_day = substr($day,1);
-				$response['days'][]=$_day;
-				$response['bysetpos'][$_day]=$day[0];
-			}else
-			{
-				$response['days'][]=$day;
-				$response['bysetpos'][$day]=$this->_bysetpos;
-			}
-		}
-		
-		return $response;
-			
-	}
-	
 	/**
 	 * Check if a weekday of a given time matches the recurrence pattern
 	 * 
@@ -309,8 +292,8 @@ class GO_Base_Util_Date_RecurrencePattern{
 		}else
 		{
 			//for every nth weekday in the month
-			$daysAndSetPos = $this->_splitDaysAndSetPos();
-			if(in_array($weekday, $daysAndSetPos['days']) && $bySetPos==$daysAndSetPos['bysetpos'][$weekday])
+//			$daysAndSetPos = $this->_splitDaysAndSetPos();
+			if(in_array($weekday, $this->_byday) && $bySetPos==$this->_bysetpos)
 				return true;
 		}
 		
@@ -386,7 +369,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 	 * 
 	 * @param boolean $toGmt Will be converted to GMT time (true) or from GMT time (false).
 	 */
-	protected function shiftDays($days, $toGmt=true){
+	public function shiftDays($toGmt=true){
 		$date = new DateTime(date('Y-m-d G:i', $this->_eventstarttime));
 		$timezoneOffset = $date->getOffset();
 				
@@ -401,6 +384,8 @@ class GO_Base_Util_Date_RecurrencePattern{
 		} else {
 			$shiftDay = 0;
 		}	
+		
+		$days = $this->_byday;
 	
 		$newByDay=array();
 		if($shiftDay!=0){
@@ -412,14 +397,20 @@ class GO_Base_Util_Date_RecurrencePattern{
 					$number = substr($day,0,1);
 					$dayStr = substr($day, 1);
 				}
-					
-				$shiftedDay = $this->_days[array_search($dayStr, $this->_days)+$shiftDay];
+
+				$dayIndex = array_search($dayStr, $this->_days);
+				$dayIndex+=$shiftDay;
+				
+				if($dayIndex== -1)
+					$dayIndex = 6;
+				
+				if($dayIndex== 7)
+					$dayIndex = 0;
+				
+				$shiftedDay = $this->_days[$dayIndex];
 				$newByDay[]=$number.$shiftedDay;
-			}						
-			return $newByDay;
-		}else
-		{
-			return $days;
+			}
+			$this->_byday = $newByDay;
 		}
 	}	
 }

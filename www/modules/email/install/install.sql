@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS `em_accounts` (
 	`ignore_sent_folder` TINYINT( 1 ) NOT NULL DEFAULT '0',
 	`sieve_port` int(11) NOT NULL,
 	`sieve_usetls` tinyint(1) NOT NULL DEFAULT '1',
+  `check_mailboxes` TEXT,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
@@ -100,7 +101,7 @@ CREATE TABLE IF NOT EXISTS `em_aliases` (
 
 DROP TABLE IF EXISTS `em_filters`;
 CREATE TABLE IF NOT EXISTS `em_filters` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) NOT NULL DEFAULT '0',
   `field` varchar(20) DEFAULT NULL,
   `keyword` varchar(100) DEFAULT NULL,
@@ -221,3 +222,12 @@ CREATE TABLE IF NOT EXISTS `go_links_em_links` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
+
+DROP TABLE IF EXISTS `em_portlet_folders`;
+CREATE TABLE IF NOT EXISTS `em_portlet_folders` (
+  `account_id` int(11) NOT NULL,
+	`folder_name` varchar(100) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `mtime` int(11) NOT NULL,
+  PRIMARY KEY (`account_id`,`folder_name`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

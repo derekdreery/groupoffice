@@ -63,7 +63,8 @@ class GO{
 		
 		$serverName = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : "unknown";
 		
-		return GO::config()->id.'AT'.$serverName;
+		//added MD5 because IE doesn't like dots I suspect
+		return md5(GO::config()->id.'AT'.$serverName);
 	}
 	
 	/**
@@ -134,8 +135,8 @@ class GO{
 		return self::$db;
 	}
 
-	public static function setDbConnection($dbname=false, $dbuser=false, $dbpass=false, $dbhost=false){
-
+	public static function setDbConnection($dbname=false, $dbuser=false, $dbpass=false, $dbhost=false, $dbport=false, $options=array()){
+		
 		self::$db=null;
 
 		if($dbname===false)
@@ -149,10 +150,14 @@ class GO{
 
 		if($dbhost===false)
 			$dbhost=GO::config()->db_host;
+		
+		if($dbport===false)
+			$dbport=GO::config()->db_port;
+		
 
-//		GO::debug("Connect: mysql:host=$dbhost;dbname=$dbname, $dbuser, ***");
+//		GO::debug("Connect: mysql:host=$dbhost;dbname=$dbname, $dbuser, ***",$options);
 
-		self::$db = new GO_Base_Db_PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);
+		self::$db = new GO_Base_Db_PDO("mysql:host=$dbhost;dbname=$dbname;port=$dbport", $dbuser, $dbpass, $options);
 //		self::$db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 //		self::$db->setAttribute( PDO::ATTR_STATEMENT_CLASS, array( 'GO_Base_Db_ActiveStatement', array() ) );
 //
@@ -172,6 +177,8 @@ class GO{
 	 * Clears the GO::config()->file_storage_path/cache folder. This folder contains mainly cached javascripts.
 	 */
 	public static function clearCache(){
+		
+		//todo js should be cached in tmpdir
 		$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'cache');
 
 		//make sure it exists
@@ -180,6 +187,17 @@ class GO{
 		$items = $folder->ls();
 		foreach($items as $item)
 			$item->delete();
+		
+		
+		$folder = new GO_Base_Fs_Folder(GO::config()->orig_tmpdir.'cache');
+
+		//make sure it exists
+		$folder->create();
+
+		$items = $folder->ls();
+		foreach($items as $item)
+			$item->delete();
+		
 		GO::cache()->flush();
 
 		GO_Base_Model::clearCache();
@@ -722,6 +740,8 @@ class GO{
 	/**
 	 * Create a URL for an outside application. The URL will open Group-Office and
 	 * launch a function.
+	 * 
+	 * Controller external/index will be execured.
 	 *
 	 * @param string $module
 	 * @param function $function
@@ -768,7 +788,7 @@ class GO{
 	 * @param boolean $htmlspecialchars Set to true to escape special html characters. eg. & becomes &amp.
 	 * @return string
 	 */
-	public static function url($path='', $params=array(), $relative=true, $htmlspecialchars=false){
+	public static function url($path='', $params=array(), $relative=true, $htmlspecialchars=false, $appendSecurityToken=true){
 		$url = $relative ? GO::config()->host : GO::config()->full_url;
 
 		if(empty($path) && empty($params)){
@@ -799,7 +819,7 @@ class GO{
 
 		$amp = $htmlspecialchars ? '&amp;' : '&';
 
-		if(isset(GO::session()->values['security_token']))
+		if($appendSecurityToken && isset(GO::session()->values['security_token']))
 			$url .= $amp.'security_token='.GO::session()->values['security_token'];
 
 		return $url;

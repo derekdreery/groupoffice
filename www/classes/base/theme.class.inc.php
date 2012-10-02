@@ -114,7 +114,7 @@ class GO_THEME
 
 		//echo '<!-- '.$path.' -->'."\n";
 
-		go_debug('Adding stylesheet: '.$path);
+//		go_debug('Adding stylesheet: '.$path);
 
 		$this->stylesheets[]=$path;
 	}

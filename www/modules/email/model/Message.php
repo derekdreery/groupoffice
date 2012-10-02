@@ -265,7 +265,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		$from = $this->from->getAddresses();		
 
 		$response['notification'] = $this->disposition_notification_to;
-		$response['subject'] = $this->subject;
+		$response['subject'] = htmlspecialchars($this->subject,ENT_COMPAT,'UTF-8');
 		
 		//seen is expensive because it can't be recovered from cache.
 		// We'll use the grid to check if a message was seen or not.

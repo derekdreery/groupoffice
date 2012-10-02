@@ -34,7 +34,7 @@ GO.users.MainPanel = function(config)
 
 	if(GO.customfields)
 	{
-		GO.customfields.addColumns(8, fields);
+		GO.customfields.addColumns("GO_Base_Model_User", fields);
 	}
 
 	config.store = new GO.data.JsonStore({
@@ -95,7 +95,11 @@ GO.users.MainPanel = function(config)
 		  		iconCls: 'btn-delete', 
 		  		text: GO.lang['cmdDelete'], 
 		  		cls: 'x-btn-text-icon', 
-		  		handler: function(){this.deleteSelected();},
+		  		handler: function(){
+						Ext.Ajax.timeout = 180000; //3 minutes
+						this.deleteSelected();
+						Ext.Ajax.timeout = 30000; //30 seconds
+					},
 		  		scope: this
 		  	},{
 		  		iconCls: 'btn-upload',

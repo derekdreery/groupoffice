@@ -249,4 +249,13 @@ $l['moveTo']='Move to';
 
 $l['useAccount']='Use account';
 
+$l['mailbox']='Mail box';
+$l['checkUnseen']='Automatically check this folder for new messages';
+$l['noEmailFolders'] = 'No folders have been added.';
+$l['moveTo']='Move to';
+
+$l['useAccount']='Use account';
+
+$l['sieveNote']='Not all features are supported. Check the manual.';
+
 $l['storePassword']='Permanently store password';

@@ -108,3 +108,5 @@ $l['notifyFileDelete']= 'Datei %s wurde durch %s gelöscht';
 $l['notifyFileUpdate']= 'Datei %s wurde durch %s aktualisiert';
 $l['downloadLinkExpired']= "Der Downloadlink für diese Datei ist abgelaufen";
 $l['notificationEmailSubject']= 'Änderungen im Ordner';
+$l["fileLocked_user_id"]= "Gesperrt durch";
+$l['recentFiles']="Dateien, die in den letzten 7 Tagen verändert wurden";

@@ -215,9 +215,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * column in the database is required. You will probably 
 	 * need to override buildFilesPath() to make it work properly.
 	 * 
-	 * @return bool 
+	 * @return bool true if the Record has an files_folder_id column
 	 */
-	public function hasFiles(){return false;}
+	public function hasFiles(){
+		return isset($this->columns['files_folder_id']);
+	}
 	
 	/**
 	 * Set to true to enable links for this model. A table go_links_$this->tableName() must be created
@@ -304,7 +306,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	/**
 	 * Constructor for the model
 	 * 
-	 * @param int $primaryKey integer The primary key of the database table
+	 * @param boolean $newRecord true if this is a new model
+	 * @param boolean true if this is the static model returned by GO_Base_Model::model()
 	 */
 	public function __construct($newRecord=true, $isStaticModel=false){			
 		
@@ -315,27 +318,22 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$this->columns=GO_Base_Db_Columns::getColumns($this);
 		$this->setIsNew($newRecord);
 		
-		$this->init();
+		$this->init();	
 		
 		if($this->isNew) 
 			$this->setAttributes($this->_getDefaultAttributes(),false);
 		elseif(!$isStaticModel)
-			$this->afterLoad();
-//		else
-//			$this->_cacheRelatedAttributes();
-				
-		
+			$this->afterLoad();		
 		
 		$this->_modifiedAttributes=array();
 	}
 	
 	/**
-	 * This function is called after a model was constructed by a find query.
+	 * This function is called after the model is constructed by a find query
 	 */
 	protected function afterLoad(){
 		
 	}
-	
 	
 	/**
 	 * When a model is joined on a find action and we need it for permissions, We 
@@ -840,6 +838,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	/**
 	 * Finds a single model by an attribute name and value.
+	 * This function does NOT check permissions.
 	 * 
 	 * @todo FindSingleByAttributes should use this function when this one uses the FindParams object too.
 	 * 
@@ -1715,7 +1714,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					return "";
 				
 				$date = new DateTime($value);
-				return $date->format(GO::user()->completeDateFormat);
+				return $date->format(GO::user()?GO::user()->completeDateFormat:GO::config()->getCompleteDateFormat());
 				
 				//return $value != '0000-00-00' ? GO_Base_Util_Date::get_timestamp(strtotime($value),false) : '';
 				break;
@@ -1883,8 +1882,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		  if(!isset($this->columns[$attribute]))
 				return false;
 			return $this->columns[$attribute]['required'];
+	}	
+
+	/**
+	 * Do some things before the model will be validated.
+	 */
+	protected function beforeValidate(){
+		
 	}
-	
 
 	/**
 	 * Validates all attributes of this model
@@ -1896,6 +1901,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	public function validate(){
 				
 		//foreach($this->columns as $field=>$attributes){
+		$this->beforeValidate();
 		
 		$fieldsToCheck = $this->isNew ? array_keys($this->columns) : array_keys($this->getModifiedAttributes());
 		
@@ -2062,7 +2068,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	public function save($ignoreAcl=false){
 			
 		//GO::debug('save'.$this->className());
-			
+		
 		if(!$ignoreAcl && !$this->checkPermissionLevel($this->isNew?GO_Base_Model_Acl::CREATE_PERMISSION:GO_Base_Model_Acl::WRITE_PERMISSION)){
 			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : '';
 			throw new GO_Base_Exception_AccessDenied($msg);
@@ -2216,7 +2222,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$msg = $attr['name'];
 			if(isset($attr['description']))
 				$msg.="\n".$attr['description'];
-			return substr($msg,0,255);
+			return $msg;
 		}else
 			return false;
 	}
@@ -2403,6 +2409,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 			$attr = array_merge($autoAttr, $attr);
 			
+			if($attr['description']==null)
+				$attr['description']="";
+			
 //			//make sure these attributes are not too long
 //			if(GO_Base_Util_String::length($attr['name'])>100)
 //				$attr['name']=substr($attr['name'], 0, 100);
@@ -2478,7 +2487,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$keywords .= ','.$this->customfieldsRecord->getSearchCacheKeywords();
 		}
 		
-		return substr($keywords,0,255);
+		return GO_Base_Util_String::substr($keywords,0,255);
 	}
 	
 	protected function beforeSave(){
@@ -2631,6 +2640,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @return PDOStatement 
 	 */
 	public function delete($ignoreAcl=false){
+		
+		ini_set('max_execution_time', 180); // Added this because the deletion of all relations sometimes takes a lot of time (3 minutes) 
 		
 		//GO::debug("Delete ".$this->className()." pk: ".$this->pk);
 		
@@ -2932,11 +2943,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				if(is_object($value) || is_array($value))
 					throw new Exception($this->className()."::setAttribute : Invalid attribute value for ".$name.". Type was: ".gettype($value));
 			}
-			if((!isset($this->_attributes[$name]) || $this->_attributes[$name]!=$value) && !$this->isModified($name))
+			
+			//normalize CRLF to prevent issues with exporting to vcard etc.
+			if($this->columns[$name]['gotype']=='textfield' || $this->columns[$name]['gotype']=='textarea')
+				$value=GO_Base_Util_String::normalizeCrlf($value, "\n");
+			
+			if((!isset($this->_attributes[$name]) || $this->_attributes[$name]!==(string)$value) && !$this->isModified($name))
 				$this->_modifiedAttributes[$name]=isset($this->_attributes[$name]) ? $this->_attributes[$name] : false;
 			
 			$this->_attributes[$name]=$value;
-
+			
 		}else{			
 			$setter = 'set'.$name;
 			
@@ -3283,6 +3299,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$this->files_folder_id = $fc->checkModelFolder($this);
 		}
 		
+		//normalize crlf
+		foreach($this->columns as $field=>$attr){
+			if(($attr['gotype']=='textfield' || $attr['gotype']=='textarea') && !empty($this->_attributes[$field])){				
+				$this->$field=GO_Base_Util_String::normalizeCrlf($this->_attributes[$field], "\n");
+			}
+		}
+		
 		$this->save();		
 	}
 	
@@ -3300,9 +3323,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	/**
 	 * Duplicates the current activerecord to a new one.
 	 * 
-	 * @param array $attributes Array of attributes that need to be set in the newly created activerecord as KEY => VALUE. Like: $params = array('attribute1'=>1,'attribute2'=>'Hello');
-	 *
-	 * @return Object The newly created object
+	 * @param array $attributes Array of attributes that need to be set in 
+	 * the newly created activerecord as KEY => VALUE. 
+	 * Like: $params = array('attribute1'=>1,'attribute2'=>'Hello');
+	 * @param boolean $save if the copy should be save when calling this function
+	 * @return mixed The newly created object or false if before or after duplicate fails
 	 * 
 	 * @todo Copy the linked items too.  Use __clone() ??
 	 * 
@@ -3311,7 +3336,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		//$copy = new GO_Base_Db_ActiveRecord(true);
 		$copy = clone $this;
-			
+		$copy->setIsNew(true);
+		
 		unset($copy->ctime);
 		
 		//unset the files folder
@@ -3319,19 +3345,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$copy->files_folder_id = 0;
 		
 		$pkField = $this->primaryKey();
-		if(is_array($pkField)) {
-			foreach($pkField as $key)
-				unset($copy->$key);
-		}
-		else {
+		if(!is_array($pkField))
 			unset($copy->$pkField);
-		}
 		
 		if(!$this->beforeDuplicate($copy)){
-			$copy->delete();
 			return false;
 		}
-		
 
 		foreach($attributes as $key=>$value) {
 			$copy->$key = $value;
@@ -3342,14 +3361,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$copy->setNewAcl($this->user_id);
 		}
 		
-		$copy->setIsNew(true);
-		
 		if($this->customFieldsRecord){
 			$copy->customFieldsRecord->setAttributes($this->customFieldsRecord->getAttributes('raw'), false);
 		}
-		
-		
-		
+
 		if($save)
 			$copy->save();
 		
@@ -3442,8 +3457,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	private function _getDefaultAttributes(){
 		$attr=array();
-		foreach($this->getColumns() as $field => $colAttr)
-			$attr[$field]=$colAttr['default'];
+		foreach($this->getColumns() as $field => $colAttr){
+				$attr[$field]=$colAttr['default'];
+		}
 		
 		if(isset($this->columns['user_id']))
 			$attr['user_id']=GO::user() ? GO::user()->id : 1;

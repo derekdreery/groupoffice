@@ -85,7 +85,7 @@ $l["sendcopyto"]= 'Stuur kopie door naar';
 $l["forwardto"]= 'Stuur door naar ';
 $l["vacsendevery"]= 'Beantwoord iedere';
 $l["vacsendevery2"]= 'dag(en)';
-$l["vacAlsoMailTo"]= 'Stuur bericht ook naar';
+$l["vacAlsoMailTo"]= 'Autoreply is actief voor';
 $l["vacationmessage"]= 'Bericht:';
 $l["refusewithmesssage"]= 'Weigeren met bericht:';
 $l["discard"]= 'Ontvangen bericht verwijderen';
@@ -111,6 +111,7 @@ $l['meetingTheseCriteria']='die voldoen aan de volgende criteria';
 $l['pleaseSelectOne']='Maakt u a.u.b. een keuze';
 $l['vacationStart']='Eerste dag van dit bericht';
 $l['vacationEnd']='Laatste dag van dit bericht';
-
 $l['activateFilter']='Activeer deze filter';
 $l['active']='Actief';
+$l['setRead']='Markeer bericht als gelezen';
+$l['sieveWarning']="Als uw IMAP server sieve ondersteunt, dan word aanbevolen om de sieve filters te gebruiken. Probeer het tablad 'Sieve filters' eerst aub.";

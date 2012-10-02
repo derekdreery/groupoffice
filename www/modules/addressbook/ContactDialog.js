@@ -303,6 +303,8 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 	
 	loadContact : function(id, config)
 	{
+		this.beforeLoad();
+		
 		this.formPanel.form.load({
 			url:GO.url('addressbook/contact/load'),
 			params:{
@@ -358,11 +360,22 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 						this.personalPanel.formFunction.setValue(config.contactData['function']);
 					}
 					
+					this.afterLoad(action);
+					
 					GO.addressbook.ContactDialog.superclass.show.call(this);
 				//}
 			},
 			scope: this
 		});
+	},
+	
+		
+	afterLoad  : function(action){
+		
+	},
+	
+	beforeLoad  : function(){
+		
 	},
 	
 	saveContact : function(hide)

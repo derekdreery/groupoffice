@@ -1,26 +1,6 @@
 <?php
 
 
-$l['name'] = 'Användare';
-$l['description'] = 'Adminmodul för att hantera användarkonton i {product_name}.';
-$l['deletePrimaryAdmin'] = 'Du kan inte ta bort huvudadministratören';
-$l['deleteYourself'] = 'Du kan inte ta bort dig själv';
-$lang['link_type'][8]=$us_user = 'Användare';
-$l['error_username']= 'Du har ogiltiga tecken i användarnamnet';
-$l['error_username_exists']= 'Tyvärr, det användarnamnet finns redan';
-$l['error_email_exists']= 'Tyvärr, den e-postadressen är redan registrerad.';
-$l['error_match_pass']= 'Lösenorden matchade inte';
-$l['error_email']= 'Du har angett en ogiltig e-postadress';
-$l['error_user']='Användare kunde inte skapas';
-$l['imported']= 'Importerade %s användare';
-$l['failed']= 'Misslyckades';
-$l['incorrectFormat']= 'Filen var inte i korrekt CSV-format';
-$l['register_email_subject']='Detaljer för ditt konto i {product_name}';
-$l['register_email_body']='Ett konto har skapats åt dig i {product_name} på {url}
-Dina inloggningsuppgifter är:
-Användarnamn: {username};
-Lösenord: {password}';
-$l['max_users_reached']='Max antal användare för det här systemet har uppnåtts.';
 $l["cmdCheckColumnRead"]= 'Läsa';
 $l["cmdCheckColumnWrite"]= 'Skriva';
 $l["cmdHeaderColumnName"]= 'Modulnamn';
@@ -105,15 +85,39 @@ $l["firstName"]= 'Förnamn';
 $l["sendInvitation"]='Skicka inbjudan';
 $l["contactInfo"]='Kontaktinfo';
 $l["popupNotification"]='Visa ett popup-fönster för påminnelser och ny e-post';
-
-$l["muteNewMailSound"]='Tysta ljud vid ny e-post';
-$l["muteReminderSound"]='Tysta påminnelseljud';
+$l["muteNewMailSound"]='Stäng av ljud vid ny e-post';
+$l["muteReminderSound"]='Stäng av påminnelseljud';
 $l["showSmilies"]='Visa smilies';
+$l['name'] = 'Användare';
+$l['description'] = 'Adminmodul för att hantera användarkonton.';
+$l['deletePrimaryAdmin'] = 'Du kan inte ta bort huvudadministratören';
+$l['deleteYourself'] = 'Du kan inte ta bort dig själv';
+$lang['link_type'][8]=$us_user = 'Användare';
+$l['error_username']= 'Du har ogiltiga tecken i användarnamnet';
+$l['error_username_exists']= 'Tyvärr, det användarnamnet finns redan';
+$l['error_email_exists']= 'Tyvärr, den e-postadressen är redan registrerad.';
+$l['error_match_pass']= 'Lösenorden matchade inte';
+$l['error_email']= 'Du har angett en ogiltig e-postadress';
+$l['error_user']='Användare kunde inte skapas';
+$l['imported']= 'Importerade %s användare';
+$l['failed']= 'Misslyckades';
+$l['incorrectFormat']= 'Filen var inte i korrekt CSV-format';
+$l['register_email_subject']='Detaljer för ditt {product_name}konto';
+$l['register_email_body']='Ett {product_name}konto har skapats åt dig på {url}
+Dina inloggningsuppgifter är:
+Användarnamn: {username};
+Lösenord: {password}';
+$l['max_users_reached']='Max antal användare för det här systemet har uppnåtts.';
+
 $l['dashdmy']='Dag-Månad-År';
 $l['slashmdy']='Månad/Dag/År';
 $l['dotdmy']='Dag.Månad.År';
 $l['slashdmy']='Dag/Månad/År';
+
 $l['generatePassword']='Generera lösenord';
 $l['generatedPasswordIs']='Det genererade lösenordet är';
+
 $l['openContact']='Öppna kontakt';
-$l['updateExistingOnImport']='Uppdatera existerande användare (med användarnamn)';
+$l['showProUsers']='Visa pro-användare';
+
+$l['updateExistingOnImport']='Uppdatera existerande användare (efter användarnamn)';

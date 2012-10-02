@@ -380,6 +380,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 						this.tabPanel.hideTabStripItem('resources-panel');
 					else
 						this.tabPanel.unhideTabStripItem('resources-panel');
+					
+					
+					this.participantsPanel.store.loadData(action.result.participants);
 
 				},
 				failure : function(form, action) {
@@ -585,13 +588,13 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			'check_conflicts' : typeof(config.check_conflicts)!='undefined' ? config.check_conflicts : null
 		};
 
-		if(this.participantsPanel.store.loaded)
-		{
+//		if(this.participantsPanel.store.loaded)
+//		{
 			var gridData = this.participantsPanel.getGridData();
 			params.participants=Ext.encode(gridData);
 
 			this.has_other_participants = this.participantsPanel.invitationRequired();
-		}
+//		}
 		
 		if(this.has_other_participants>0)
 		{

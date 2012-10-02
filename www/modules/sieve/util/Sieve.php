@@ -87,7 +87,7 @@ class GO_Sieve_Util_Sieve {
 
 		$host = $this->rewrite_host($host);
 
-		GO::debug("sieve::connect($username, ***, $host, $port, $auth_type, $usetls, $disabled)");
+		GO::debug("sieve::connect($username, ***, $host, $port, $auth_type, $usetls)");
 		
 		if ($this->_PEAR->isError($this->sieve->connect($host, $port, NULL, $usetls))) {
 			return $this->_set_error(SIEVE_ERROR_CONNECTION);
@@ -604,6 +604,10 @@ class go_sieve_script {
 			// action(s)
 			foreach ($rule['actions'] as $action) {
 				switch ($action['type']) {
+					case 'set_read':
+						$script .= "\tsetflag \"\\\\seen\";\n";
+						array_push($exts, 'imap4flags');
+						break;
 					case 'fileinto':
 						array_push($exts, 'fileinto');
 						$script .= "\tfileinto ";

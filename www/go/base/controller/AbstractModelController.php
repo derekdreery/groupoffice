@@ -253,8 +253,12 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$value='';
 			$eval = '$value = '.$map.';';
 			eval($eval);
-			
+						
 			$response['remoteComboTexts'][$property] = $value;
+			
+			//hack for comboboxes displaying 0 instead of the emptyText in extjs
+			if(isset($response['data'][$property]) && $response['data'][$property]==0)				
+				$response['data'][$property]="";
 		}
 		
 		error_reporting($oldLevel);
@@ -663,8 +667,16 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	private function _processCommentsDisplay($model,$response){
 		$stmt = GO_Comments_Model_Comment::model()->find(GO_Base_Db_FindParams::newInstance()
 							->limit(5)
-							->select('t.*')
+							->select('t.*,cat.name AS categoryName')
 							->order('id','DESC')
+							->joinModel(array(
+								'model' => 'GO_Comments_Model_Category',
+								'localTableAlias' => 't',
+								'localField' => 'category_id',
+								'foreignField' => 'id',
+								'tableAlias' => 'cat',
+								'type' => 'LEFT'
+							))
 							->criteria(GO_Base_Db_FindCriteria::newInstance()
 							        ->addModel(GO_Comments_Model_Comment::model())
 											->addCondition('model_id', $model->id)
@@ -678,6 +690,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$columnModel->formatColumn('user_name','$model->user->name');
 
 		$data = $store->getData();
+		foreach ($data['results'] as $k => $v) {
+			$data['results'][$k]['categoryName'] = !empty($v['categoryName']) ? $v['categoryName'] : GO::t('noCategory','comments');
+		}
 		$response['data']['comments']=$data['results'];
 		
 		return $response;
@@ -971,6 +986,12 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 				
 				if($this->beforeImport($params, $model, $attributes, $record)){
+					
+					//Unset some default attributes set in the code
+					$defaultAttributes = $model->defaultAttributes();
+					foreach($defaultAttributes as $column => $value)
+						unset($model->{$column});
+					
 					$columns = $model->getColumns();
 					foreach($columns as $col=>$attr){
 						if(isset($attributes[$col])){
@@ -1241,7 +1262,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$columns = $model->getColumns();
 		
 		foreach($columns as $attributeName => $column){
-			if(!empty($column['gotype']) && $column['gotype'] == 'date'){
+			if(!empty($column['gotype']) && $column['gotype'] == 'date' && !empty($model->$attributeName)){
 				$model->$attributeName = date('Y-m-d',strtotime($model->$attributeName));
 			}
 		}		

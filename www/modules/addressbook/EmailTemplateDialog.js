@@ -125,8 +125,8 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 	submitForm : function(hide){
 
 		//won't toggle if not done twice...
-//		this.htmlEditPanel.getHtmlEditor().toggleSourceEdit(false);
-//		this.htmlEditPanel.getHtmlEditor().toggleSourceEdit(false);
+		this.htmlEditPanel.getHtmlEditor().toggleSourceEdit(false);
+		this.htmlEditPanel.getHtmlEditor().toggleSourceEdit(false);
 
 		this.formPanel.form.submit(
 		{

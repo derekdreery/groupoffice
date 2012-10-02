@@ -1,3 +1,23 @@
+1.6.4-stable (2012-08-02)
+	* Fixed: Issue 220: Calendar-query filters may fail when filtering on
+	  alarms, if an overridden event has it's alarm removed.
+	* Fixed: Compatibility for OS/X 10.8 iCal in the IMipHandler.
+	* Fixed: Issue 222: beforeWriteContent shouldn't be called for lock
+	  requests.
+	* Fixed: Problem with POST requests to the outbox if mailto: was not lower
+	  cased.
+	* Fixed: Yearly recurrence rule expansion on leap-days no behaves
+	  correctly.
+	* Fixed: Correctly checking if recurring, all-day events with no dtstart
+	  fall in a timerange if the start of the time-range exceeds the start of
+	  the instance of an event, but not the end.
+	* Fixed: All-day recurring events wouldn't match if an occurence ended
+	  exactly on the start of a time-range.
+	* Fixed: HTTP basic auth did not correctly deal with passwords containing
+	  colons on some servers.
+	* Fixed: Issue 228: DTEND is now non-inclusive for all-day events in the
+	  calendar-query REPORT and free-busy calculations.
+
 1.6.3-stable (2012-06-12)
 	* Added: It's now possible to specify in Sabre_DAV_Client which type of
 	  authentication is to be used.

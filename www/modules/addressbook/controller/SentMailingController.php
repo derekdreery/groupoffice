@@ -5,7 +5,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 	protected $model = 'GO_Addressbook_Model_SentMailing';
 
 	protected function allowGuests() {
-		return array("batchsend");
+		return array("batchsend","unsubscribe");
 	}
 	
 	
@@ -93,8 +93,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 
 	protected function actionBatchSend($params) {
 
-		if (PHP_SAPI != 'cli')
-			throw new Exception("This action may only be executed on the command line interace");
+		$this->requireCli();
 		
 		GO::$disableModelCache=true;
 
@@ -102,7 +101,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		if (!$mailing)
 			throw new Exception("Mailing not found!\n");
 
-		GO::session()->setCurrentUser($mailing->user_id);
+		GO::session()->runAs($mailing->user_id);
 		
 		echo 'Status: '.$mailing->status."\n";;
 		
@@ -112,7 +111,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		}elseif (!empty($params['restart'])) {
 			echo "Restarting mailing at ".GO_Base_Util_Date::get_timestamp(time())."\n";
 			$mailing->reset();
-		}elseif($mailing->status=GO_Addressbook_Model_SentMailing::STATUS_PAUSED){
+		}elseif($mailing->status==GO_Addressbook_Model_SentMailing::STATUS_PAUSED){
 			echo "Resuming mailing at ".GO_Base_Util_Date::get_timestamp(time())."\n";
 			$mailing->status=GO_Addressbook_Model_SentMailing::STATUS_RUNNING;
 			$mailing->save();

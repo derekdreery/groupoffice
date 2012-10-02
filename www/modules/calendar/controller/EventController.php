@@ -37,6 +37,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		if(!$model->is_organizer)
 			throw new GO_Base_Exception_AccessDenied();
 		
+		//when duplicating in the calendar with right click
 		if(!empty($params['duplicate']))
 			$model = $model->duplicate();
 
@@ -89,7 +90,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		if (!empty($params['freq'])) {
 			$rRule = new GO_Base_Util_Icalendar_Rrule();
 			$rRule->readJsonArray($params);
-			$model->rrule = $rRule->createRrule(false);
+			$model->rrule = $rRule->createRrule();
 		} elseif (isset($params['freq'])) {
 			$model->rrule = "";
 		}
@@ -104,7 +105,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		if(!$this->_checkConflicts($response, $model, $params)){
 			return false;
 		}
-		
+				
 		return parent::beforeSubmit($response, $model, $params);
 	}
 
@@ -267,7 +268,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 				unset($p['id']);
 				$participant->setAttributes($p);
-				$participant->is_organizer = $event->user_id == $participant->user_id;
+//				$participant->is_organizer = $event->user_id == $participant->user_id;
 				$participant->event_id = $event->id;
 
 
@@ -345,17 +346,17 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 									
 				if($shouldSend){
 					if($isNewEvent){
-						$subject = GO::t('invitation', 'calendar');
+						$subject = GO::t('invitation', 'calendar').': '.$event->name;
 					}elseif($sendingParticipant)
 					{							
 						$updateReponses = GO::t('updateReponses','calendar');
 						$subject= sprintf($updateReponses[$sendingParticipant->status], $sendingParticipant->name, $event->name);
 					}elseif($method == 'CANCEL')
 					{
-						$subject = GO::t('cancellation','calendar');
+						$subject = GO::t('cancellation','calendar').': '.$event->name;
 					}else
 					{
-						$subject = GO::t('invitation_update', 'calendar');
+						$subject = GO::t('invitation_update', 'calendar').': '.$event->name;
 					}
 
 
@@ -387,9 +388,14 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					$fromEmail = GO::user() ? GO::user()->email : $sendingParticipant->email;
 					$fromName = GO::user() ? GO::user()->name : $sendingParticipant->name;
 
-					$message = GO_Base_Mail_Message::newInstance(
-													$subject
-									)->setFrom($fromEmail, $fromName)
+					
+					$toEm = $participant->email;
+          $toName = $participant->name;
+
+          GO::debug("SEND EVENT INVITATION FROM: ".$fromEmail."(".$fromName.") TO: ".$toEm."(".$toName.")");
+
+					$message = GO_Base_Mail_Message::newInstance($subject)
+									->setFrom($fromEmail, $fromName)
 									->addTo($participant->email, $participant->name);
 
 					$ics=$event->toICS($method, $sendingParticipant);
@@ -469,6 +475,39 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$this->_loadResourceEvents($model, $response);
 		
 		$response['data']['has_other_participants']=$model->hasOtherParticipants(GO::user()->id);
+		
+		$response['data']['user_name']=$model->user ? $model->user->name : "Unknown";
+		
+		if(empty($params['id'])){
+			$calendar = $model->calendar;
+
+			$participant['user_id']=$calendar->user_id;
+			$participant['name']=$calendar->user->name;
+			$participant['email']=$calendar->user->email;
+			$participant['status']=  GO_Calendar_Model_Participant::STATUS_ACCEPTED."";
+			$participant['is_organizer']="1";
+			$participant['available']= true;//GO_Calendar_Model_Participant::userIsAvailable($params['start_time'],$params['end_time'],$calendar->user_id);
+			$participant['success']=true;
+
+			$response['participants']=array('results'=>array($participant),'total'=>1,'success'=>true);
+		}else
+		{
+			$particsStmt = GO_Calendar_Model_Participant::model()->findByAttribute('event_id',$params['id']);
+			$response['participants']=array('results'=>array(),'total'=>0,'success'=>true);
+
+			while ($participantModel = $particsStmt->fetch()) {
+
+				$record=$participantModel->getAttributes();
+				
+				if(!empty($params['exception_date']))
+					unset($record['id']);
+				
+				$record['available']=$participantModel->isAvailable();				
+				$response['participants']['results'][] = $record;
+				$response['participants']['total']+=1;
+			}
+		}
+		
 
 		return parent::afterLoad($response, $model, $params);
 	}
@@ -924,28 +963,30 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		return $response;
 	}
 	
-	/**
-	 *
-	 * @param array $params
-	 * @return Sabre_VObject_Component 
-	 */
-	private function _getVObjectFromMail($params){
-		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
-		$message = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'],$params['uid']);
-
-		$attachments = $message->getAttachments();
-		
-		foreach($attachments as $attachment){
-			if($attachment->mime=='text/calendar'){
-				$data = $message->getImapConnection()->get_message_part_decoded($message->uid, $attachment->number, $attachment->encoding);
-				
-				$vcalendar = GO_Base_VObject_Reader::read($data);
-
-				return $vcalendar->vevent[0];
-			}
-		}
-		return false;
-	}
+//	/**
+//	 *
+//	 * @param array $params
+//	 * @return Sabre_VObject_Component 
+//	 */
+//	private function _getVObjectFromMail($params){
+//		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
+//		$message = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'],$params['uid']);
+//
+//		$attachments = $message->getAttachments();
+//			
+//		foreach($attachments as $attachment){			
+//			GO::debug($attachment->mime);
+//			if($attachment->mime=='text/calendar' || $attachment->getExtension() == 'ics'){
+//				GO::debug($attachment);
+//				$data = $message->getImapConnection()->get_message_part_decoded($message->uid, $attachment->number, $attachment->encoding);
+//				
+//				$vcalendar = GO_Base_VObject_Reader::read($data);
+//
+//				return $vcalendar->vevent[0];
+//			}
+//		}
+//		return false;
+//	}
 	
 	
 	protected function actionAcceptInvitation($params){
@@ -956,7 +997,11 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		//todo calendar should be associated with mail account!
 		//GO::user()->id must be replaced with $account->calendar->user_id
 
-		$vevent = $this->_getVObjectFromMail($params);
+//		$vevent = $this->_getVObjectFromMail($params);
+		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
+		$message = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'],$params['uid']);
+		$vcalendar = $message->getInvitationVcalendar();
+		$vevent = $vcalendar->vevent[0];
 		
 		//if a recurrence-id if passed then convert it to a unix time stamp.
 		//it is an update just for a particular occurrence.
@@ -1064,7 +1109,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	protected function actionImportIcs($params){
 		
 		$file = new GO_Base_Fs_File($params['file']);
-		
+		$file->convertToUtf8();
 		$data = $file->getContents();
 		
 		//var_dump($data);

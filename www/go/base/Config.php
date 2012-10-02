@@ -113,6 +113,15 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $default_country = "NL";
+	
+	
+	/**
+	 * Default VAT percentage
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $default_vat = 19;
 
 	/**
 	 * Default timezone
@@ -722,7 +731,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.0.95';
+	var $version = '4.0.108';
 
 
 	/* The permissions mode to use when creating files
@@ -752,7 +761,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20120903';
+	var $mtime = '20121001-1';
 
 	#group configuration
 	/**
@@ -908,6 +917,8 @@ class GO_Base_Config {
 	 */
 	var $zlib_compress = true;
 
+	
+	var $default_max_rows_list = 30;
 
 	var $product_name='Group-Office';
 
@@ -1049,7 +1060,8 @@ class GO_Base_Config {
 	 * @return GO_Base_Fs_Folder
 	 */
 	public function getTempFolder(){
-		$folder = new GO_Base_Fs_Folder($this->orig_tmpdir.GO::user()->id);
+		$user_id = GO::user() ? GO::user()->id : 0;
+		$folder = new GO_Base_Fs_Folder($this->orig_tmpdir.$user_id);
 		$folder->create();
 		return $folder;
 	}

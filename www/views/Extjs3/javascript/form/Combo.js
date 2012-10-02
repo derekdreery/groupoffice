@@ -45,36 +45,39 @@ GO.form.ComboBox = Ext.extend(Ext.form.ComboBox, {
 	 */
 	setRemoteText : function(text)
 	{
-		var r = this.findRecord(this.valueField, this.value);
+		//console.log(this.value);
+		if(this.value && text){
+			var r = this.findRecord(this.valueField, this.value);
 
-		if(!r)
-		{
-			var comboRecord = Ext.data.Record.create([{
-				name: this.valueField
-			},{
-				name: this.displayField
-			}]);
+			if(!r)
+			{
+				var comboRecord = Ext.data.Record.create([{
+					name: this.valueField
+				},{
+					name: this.displayField
+				}]);
 
-			var recordData = {};
-			
-			if(this.store.fields && this.store.fields.keys){
-				for(var i=0;i<this.store.fields.keys.length;i++){
-					recordData[this.store.fields.keys[i]]="";
+				var recordData = {};
+
+				if(this.store.fields && this.store.fields.keys){
+					for(var i=0;i<this.store.fields.keys.length;i++){
+						recordData[this.store.fields.keys[i]]="";
+					}
 				}
-			}
-			
-			recordData[this.valueField]=this.value;
-			recordData[this.displayField]=text;
 
-			var currentRecord = new comboRecord(recordData);
-			this.store.add(currentRecord);
-            
-			
-		}else
-		{
-			r.set(this.displayField,text);
+				recordData[this.valueField]=this.value;
+				recordData[this.displayField]=text;
+
+				var currentRecord = new comboRecord(recordData);
+				this.store.add(currentRecord);
+
+
+			}else
+			{
+				r.set(this.displayField,text);
+			}
+			this.setValue(this.value);
 		}
-		this.setValue(this.value);
 	},
 
 	/*

@@ -18,6 +18,13 @@ GO.util.isIpad=function(){
 	return navigator.userAgent.match(/iPad/i) != null;
 }
 
+GO.util.isAndroid=function(){
+	var ua = navigator.userAgent.toLowerCase();
+	var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+	
+	return isAndroid;
+}
+
 GO.log = function(v){
 	if(console)
 		console.log(v);

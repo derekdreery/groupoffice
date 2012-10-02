@@ -13,9 +13,9 @@
 // @author Merijn Schering <mschering@intermesh.nl>
 //
 // French Translation
-// Version : 3.7.29 
-// Author : Lionel JULLIEN
-// Date : September, 27 2011
+// Version : 4.0.99
+// Author : Lionel JULLIEN / Boris HERBINIERE-SEVE
+// Date : September, 20 2012
 //
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -248,7 +248,7 @@ $countries['WF'] = 'Wallis et Futuna (Iles)';
 $countries['WS'] = 'Samoa Occidental';
 $countries['YE'] = 'Yémen';
 $countries['YT'] = 'Mayotte';
-$countries['YU'] = 'Serbie Monténegro';
+$countries['YU'] = 'Serbie Monténégro';
 $countries['ZA'] = 'Afrique du Sud';
 $countries['ZM'] = 'Zambie';
 $countries['ZR'] = 'Zaïre';
@@ -264,4 +264,7 @@ $countries['MY'] = 'Malaysie';
 $countries['CD'] = 'République Démocratique du Congo';
 $countries['KP'] = 'Corée, République populaire démocratique de';
 $countries['KR'] = 'Corée, République de';
+$countries['MY']= 'Malaisie';
+$countries['RS']= 'République de Serbie';
+$countries['ME']= 'République du Monténégro';
 ?>

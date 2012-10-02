@@ -243,3 +243,5 @@ $l['female']='Weiblich';
 $l['importing']='Importieren';
 $l['unsubscribe']='Austragen';
 $l["sendingEmailAllowed"]= 'Das Senden von E-Mails an diese E-Mailadresse gestatten';
+$l['contactCustomFields']='Zusatzfelder für Kontakte';
+$l['companyCustomFields']='Zusatzfelder für Firmen';

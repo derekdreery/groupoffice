@@ -1,3 +1,35 @@
+Jeremie Voix
+
+
+Nieuwe files detecteren
+
+Testen op win: http://www.group-office.com/forum/viewtopic.php?f=5&t=9065
+
+
+Unique bool for custom fields
+
+- Verzenddatum niet tonen op bepaalde sjablonen (alleen op herinneringen)
+- BTW niet tonen op bepaalde sjablonen (wel tonen bij facturen, niet bij offertes)
+
+Mail kopieren met shift ingehouden
+Dubbelklik op verzonden item openen in composer
+
+Sort custom fields alphabetically and use autocomplete
+
+Persistent connections
+
+
+PDF in document templates zonder processing
+
+
+BCC en cc in mailto: 
+https://mail.itsam.se/index.php?mail_to=mailto:?bcc=test1@test.se,test2@test.se
+
+
+Auto check andere mappen voor nieuwe mail
+
+2e mobile veld bij contacts
+
 BUg: http://www.group-office.com/forum/viewtopic.php?f=6&t=8317
 
 Iedereen mag views aanmaken in agenda

@@ -129,7 +129,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	protected function getCacheAttributes() {
 		
 		return array(
-				'name' => $this->private ?  GO::t('privateEvent','calendar') : $this->name,
+				'name' => $this->private ?  GO::t('privateEvent','calendar') : $this->name,' '.GO_Base_Util_Date::get_timestamp($this->start_time, false).')',
 				'description' => $this->private ?  "" : $this->description
 		);
 	}
@@ -284,7 +284,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$nextTime = $rRule->getNextRecurrence();
 				
 				if($nextTime){
-					$event->addReminder($event->name, $nextTime-$event->reminder, $user_id);
+					$event->addReminder($event->name, $nextTime-$event->reminder, $userId);
 				}				
 			}			
 		}
@@ -523,7 +523,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if (!$findParams)
 			$findParams = GO_Base_Db_FindParams::newInstance();
 
-		$findParams->order('start_time', 'ASC')->debugSql();
+		$findParams->order('start_time', 'ASC')->select("t.*");
 		
 //		if($periodEndTime)
 //			$findParams->getCriteria()->addCondition('start_time', $periodEndTime, '<');
@@ -798,6 +798,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 */
 	public function toVObject($method='REQUEST', $updateByParticipant=false){
 		$e=new Sabre_VObject_Component('vevent');
+		
+		if(empty($this->uuid)){
+			$this->uuid = GO_Base_Util_UUID::create('event', $this->id);
+			$this->save();
+		}
+			
 		$e->uid=$this->uuid;		
 		
 		if(isset($this->sequence))
@@ -875,7 +881,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 			$rRule = new GO_Base_Util_Icalendar_Rrule();
 			$rRule->readIcalendarRruleString($this->start_time, $this->rrule);
-			
+			$rRule->shiftDays(false);
 			$e->rrule=str_replace('RRULE:','',$rRule->createRrule());					
 			$stmt = $this->exceptions(GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('exception_event_id', 0)));
 			while($exception = $stmt->fetch()){
@@ -906,6 +912,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 				$e->add($p);
 			}
+		}
+		
+		if($this->category){
+			$e->categories=$this->category->name;
 		}
 		
 		
@@ -990,6 +1000,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->uuid = $uid;
 		
 		$this->name = (string) $vobject->summary;
+		if(empty($this->name))
+			$this->name = GO::t('unnamed');
 		$this->description = (string) $vobject->description;
 		$this->start_time = $vobject->dtstart->getDateTime()->format('U');
 		$this->end_time = $vobject->dtend->getDateTime()->format('U');
@@ -1000,7 +1012,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		if((string) $vobject->rrule != ""){			
 			$rrule = new GO_Base_Util_Icalendar_Rrule();
-			$rrule->readIcalendarRruleString($this->start_time, (string) $vobject->rrule);			
+			$rrule->readIcalendarRruleString($this->start_time, (string) $vobject->rrule);	
+			$rrule->shiftDays(true);
 			$this->rrule = $rrule->createRrule();
 			$this->repeat_end_time = $rrule->until;
 		}else
@@ -1089,6 +1102,18 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			//echo $reminderTime->format('c');
 			$this->reminder = $this->start_time-$reminderTime->format('U');
 		}
+		
+		
+		if(!empty($vobject->categories)){
+			//Group-Office only supports a single category.
+			$cats = explode(',',$vobject->categories);
+			$categoryName = array_shift($cats);
+			$category = GO_Calendar_Model_Category::model()->findByName($this->calendar_id, $categoryName);
+			
+			if($category)
+				$this->category_id=$category->id;			
+		}
+		
 
 		$this->cutAttributeLengths();
 		
@@ -1125,7 +1150,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				}
 			}
 		}
-		
+				
 		
 
 		return $this;
@@ -1208,10 +1233,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 	protected function afterDuplicate(&$duplicate) {
 		
-		$this->duplicateRelation('participants', $duplicate);
-		
-		if($duplicate->isRecurring())
-			$this->duplicateRelation('exceptions', $duplicate);		
+		if (!$this->isNew) {
+			if (empty($duplicate->participants))
+				$this->duplicateRelation('participants', $duplicate);
+
+			if($duplicate->isRecurring() && $this->isRecurring())
+				$this->duplicateRelation('exceptions', $duplicate);		
+		}
 		
 		return parent::afterDuplicate($duplicate);
 	}
@@ -1257,5 +1285,18 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$p = GO_Calendar_Model_Participant::model()->find($findParams);
 		
 		return $p ? true : false;
+	}
+	
+	public function checkDatabase() {
+		
+		//in some cases on old databases the repeat_end_time is set but the UNTIL property in the rrule is not. We correct that here.
+		if($this->repeat_end_time>0 && strpos($this->rrule,'UNTIL=')===false){
+			$rrule = new GO_Base_Util_Icalendar_Rrule();
+			$rrule->readIcalendarRruleString($this->start_time, $this->rrule);						
+			$rrule->until=$this->repeat_end_time;
+			$this->rrule= $rrule->createRrule();			
+		}
+		
+		return parent::checkDatabase();
 	}
 }

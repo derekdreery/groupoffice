@@ -255,23 +255,23 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 		//this.inviteCheckbox.setValue(false);
 		this.importCheckbox.setValue(false);
 
-		if(this.isVisible()){
-			this.store.reload();
-		}
+//		if(this.isVisible()){
+//			this.store.reload();
+//		}
 	},
 	
-	onShow : function() {
-		if (!this.store.loaded) {
-			if(this.store.baseParams.event_id > 0)
-			{
-				this.store.load();
-			}else
-			{
-				this.addDefaultParticipant();
-			}			
-		}
-		GO.calendar.ParticipantsPanel.superclass.onShow.call(this);
-	},
+//	onShow : function() {
+//		if (!this.store.loaded) {
+//			if(this.store.baseParams.event_id > 0)
+//			{
+//				this.store.load();
+//			}else
+//			{
+//				this.addDefaultParticipant();
+//			}			
+//		}
+//		GO.calendar.ParticipantsPanel.superclass.onShow.call(this);
+//	},
 	
 	invitationRequired : function(){
 		//invitation is required if there's a participant that is not the current user.
@@ -282,7 +282,7 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 		var records = this.store.getRange();
 		for(var i=0;i<records.length;i++)
 		{
-			if(records[i].data.user_id!=GO.settings.user_id)
+			if(!records[i].data.is_organizer)
 				return true;
 		}
 	

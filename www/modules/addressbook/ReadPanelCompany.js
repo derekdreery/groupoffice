@@ -209,7 +209,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 										'</tr>'+						
 									'</tpl>'+
 									
-									'<tpl if="!GO.util.empty(bank_no)">'+
+									'<tpl if="!GO.util.empty(iban)">'+
 										'<tr>'+
 											'<td>' + GO.addressbook.lang.iban+ ':</td><td>{iban}</td>'+
 										'</tr>'+						

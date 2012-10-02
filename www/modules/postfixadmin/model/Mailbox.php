@@ -72,10 +72,6 @@ class GO_Postfixadmin_Model_Mailbox extends GO_Base_Db_ActiveRecord {
 		return parent::afterSave($wasNew);
 	}
 
-	protected function afterLoad() {
-		$this->quota = GO_Base_Util_Number::localize($this->quota / 1024);
-	}
-
 //	public function defaultAttributes() {
 //		$attr = parent::defaultAttributes();
 //		$attr['quota']=$this->domain->default_quota;

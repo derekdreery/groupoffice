@@ -48,10 +48,12 @@ GO.postfixadmin.DomainsGrid = function(config){
 			dataIndex: 'description'
 		},		{
 			header: GO.postfixadmin.lang.aliases, 
-			dataIndex: 'alias_count'
+			dataIndex: 'alias_count',
+			sortable:false
 		},		{
 			header: GO.postfixadmin.lang.mailboxes, 
-			dataIndex: 'mailbox_count'
+			dataIndex: 'mailbox_count',
+			sortable:false
 		},			{
 			header: GO.postfixadmin.lang.quota, 
 			dataIndex: 'quota',

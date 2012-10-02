@@ -199,7 +199,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	},
 	focus : function(){		
 		var firstField = this.formPanel.form.items.find(function(item){
-			if(!item.disabled)
+			if(!item.disabled && item.isVisible())
 				return true;
 		});
 		if(firstField)

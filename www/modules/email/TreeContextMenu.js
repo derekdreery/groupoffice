@@ -236,7 +236,19 @@ GO.email.TreeContextMenu = Ext.extend(Ext.menu.Menu,{
 				var node = sm.getSelectedNode();
 				this.foldersDialog.show(node.attributes.account_id);
 			}
-		}];
+		},'-', this.propertiesBtn = new Ext.menu.Item({
+			iconCls: 'btn-edit',
+			text: GO.lang['strProperties'],
+			handler:function(a,b){
+				var sm = this.treePanel.getSelectionModel();
+				var node = sm.getSelectedNode();
+				
+				if (!GO.email.folderDialog)
+					GO.email.folderDialog = new GO.email.FolderDialog();
+				GO.email.folderDialog.show(node.attributes.account_id,{mailboxPath:node.attributes.mailbox});
+			},
+			scope:this
+		})];
 
 	
 		for(var i=0;i<GO.email.extraTreeContextMenuItems.length;i++)

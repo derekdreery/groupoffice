@@ -80,7 +80,15 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function getCacheAttributes() {
-		return array('name'=>$this->name, 'description'=>$this->path);
+		
+		$path = $this->path;
+		
+		//Don't cache tickets files because there are permissions issues. Everyone has read access to the types but may not see other peoples files.
+		if(strpos($path, 'tickets/')===0){
+			return false;
+		}
+		
+		return array('name'=>$this->name, 'description'=>$path);
 	}
 	
 	public function getLogMessage($action){
@@ -146,7 +154,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	 * @return boolean 
 	 */
 	public function isLocked(){
-		return !empty($this->locked_user_id) && $this->locked_user_id!=GO::user()->id;
+		return !empty($this->locked_user_id) && (!GO::user() || $this->locked_user_id!=GO::user()->id);
 	}
 	
 	public function unlockAllowed(){

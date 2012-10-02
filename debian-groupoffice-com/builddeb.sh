@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# For setting up gnupg agent:
+# http://www.debian-administration.org/article/Gnu_Privacy_Guard_Agent_GPG/print
+
 PRG="$0"
 OLDPWD=`pwd`
 P=`dirname $PRG`
@@ -13,7 +16,7 @@ fi
 
 VERSION=`cat ../www/go/base/Config.php | grep '$version' | sed -e 's/[^0-9\.]*//g'`
 
-if [[ $VERSION =~ ^([0-9]\.[0-9])\.[0-9]{1,2}$ ]]; then
+if [[ $VERSION =~ ^([0-9]\.[0-9])\.[0-9]{1,3}$ ]]; then
 	MAJORVERSION=${BASH_REMATCH[1]}
 fi
 
@@ -29,7 +32,7 @@ cd groupoffice-com
 svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/branches/groupoffice-$MAJORVERSION/debian-groupoffice-com
 
 if [ "$1" == "real" ]; then
-	cp -R /var/www/release/packages/groupoffice-com-$VERSION debian-groupoffice-com/usr/share/groupoffice
+	cp -R /root/packages/groupoffice-com-$VERSION debian-groupoffice-com/usr/share/groupoffice
 	mv debian-groupoffice-com/usr/share/groupoffice/LICENSE.TXT debian-groupoffice-com
 fi
 

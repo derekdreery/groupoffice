@@ -52,4 +52,9 @@ class GO_Comments_Model_Comment extends GO_Base_Db_ActiveRecord{
 	public function tableName(){
 		return 'co_comments';
 	}
+	
+	public function relations(){
+		return array(	
+			'category' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Comments_Model_Category', 'field'=>'category_id'),		);
+	}
 }

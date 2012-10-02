@@ -52,14 +52,22 @@
  * @property int $addressbook_id
  * @property int $user_id
  * @property int $id
+ * @property int $age;
  * 
  * @property string $firstEmail Automatically returns the first filled in e-mail address.
  * @property GO_Addressbook_Model_Addressbook $addressbook
  * @property GO_Addressbook_Model_Company $company
  * @property string $homepage
+ * @property string $uuid
  */
 class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		
+	/**
+	 * if user typed in a new company name manually we set this attribute so a new company will be autocreated.
+	 * 
+	 * @var string 
+	 */
+	public $company_name;
 	/**
 	 * Returns a static model of itself
 	 * 
@@ -105,7 +113,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	public function getFindSearchQueryParamFields($prefixTable = 't', $withCustomFields = true) {
 		//$fields = parent::getFindSearchQueryParamFields($prefixTable, $withCustomFields);
 		$fields=array(
-				"CONCAT(t.first_name,t.middle_name,t.last_name)", 
+				"CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)", 
 				$prefixTable.".email",
 				$prefixTable.".email2",
 				$prefixTable.".email3"				
@@ -208,6 +216,24 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		if (strtolower($this->sex)==strtolower(GO::t('female','addressbook')))
 			$this->sex = 'F';
 		$this->sex = $this->sex=='M' || $this->sex=='F' ? $this->sex : 'M';
+		
+		//Auto create company if company_id is a String and can't be found.
+		if(!empty($this->company_name)){			
+			$company = GO_Addressbook_Model_Company::model()->findSingleByAttributes(array(
+				'addressbook_id'=>$this->addressbook_id,
+				'name'=>$this->company_name
+			));
+			
+			if(!$company)
+			{
+				$company = new GO_Addressbook_Model_Company();
+				$company->name=$this->company_name;
+				$company->addressbook_id=$this->addressbook_id;			
+				$company->save();
+			}			
+			
+			$this->company_id=$company->id;			
+		}
 		
 		return parent::beforeSave();
 	}
@@ -312,36 +338,36 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array(),$saveToDb=true) {
 		//$event = new GO_Calendar_Model_Event();
 		$companyAttributes = array();
-		if (!empty($attributes['addressbook_id'])) {
-			$companyAttributes['addressbook_id'] = $attributes['addressbook_id'];
-		} 
+//		if (!empty($attributes['addressbook_id'])) {
+//			$companyAttributes['addressbook_id'] = $attributes['addressbook_id'];
+//		} 
 		
 		$uid = (string) $vobject->uid;
 		if(!empty($uid) && empty($attributes['uuid']))
 			$attributes['uuid'] = $uid;
 		
 		$emails = array();
-		$remainingVcardProps = array(); // format: $remainingVcardProps[$integer] = array('name'=>$vobjName, 'parameters'=>$vobjParams, 'value'=>$vobjValue)
-		$deletedPropertiesPrefixes_nonGO = array(); // This is to keep track of the prefixes occurring in the current VCard.
+//		$remainingVcardProps = array(); // format: $remainingVcardProps[$integer] = array('name'=>$vobjName, 'parameters'=>$vobjParams, 'value'=>$vobjValue)
+//		$deletedPropertiesPrefixes_nonGO = array(); // This is to keep track of the prefixes occurring in the current VCard.
 																	// Every time a new prefix is encountered during the current sync,
 																	// all of this contact's properties starting with this prefix will
 																	// be removed to make place for the ones in the imported VCard.
 
 		// Remove this contact's non-GO VCard properties.
 		// (We assume they will be updated by the client during the current sync process).
-		if (!empty($this->id)) {
-			$nonGO_PropModels_toDelete = GO_Addressbook_Model_ContactVcardProperty::model()
-				->find(
-					GO_Base_Db_FindParams::newInstance()
-						->criteria(
-							GO_Base_Db_FindCriteria::newInstance()
-								->addCondition('contact_id',$this->id)
-								->addCondition('name','X-%','NOT LIKE')
-						)
-				);
-			while ($contactVcardProp = $nonGO_PropModels_toDelete->fetch())
-				$contactVcardProp->delete();
-		}
+//		if (!empty($this->id)) {
+//			$nonGO_PropModels_toDelete = GO_Addressbook_Model_ContactVcardProperty::model()
+//				->find(
+//					GO_Base_Db_FindParams::newInstance()
+//						->criteria(
+//							GO_Base_Db_FindCriteria::newInstance()
+//								->addCondition('contact_id',$this->id)
+//								->addCondition('name','X-%','NOT LIKE')
+//						)
+//				);
+//			while ($contactVcardProp = $nonGO_PropModels_toDelete->fetch())
+//				$contactVcardProp->delete();
+//		}
 		
 		foreach ($vobject->children as $vobjProp) {
 			switch ($vobjProp->name) {
@@ -505,18 +531,19 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$attributes['first_name']='unnamed';
 
 		$this->setAttributes($attributes, false);		
-		
+				
 		if (isset($companyAttributes['name'])) {
-			$stmt = GO_Addressbook_Model_Company::model()->findByAttribute('name', $companyAttributes['name']);
-			$company = $stmt->fetch();
-			if (empty($company)) {
+			$company = GO_Addressbook_Model_Company::model()->findSingleByAttributes(array('name' => $companyAttributes['name'], 'addressbook_id' => $this->addressbook_id));
+			if (!$company) {
 				$company = new GO_Addressbook_Model_Company();
-				$company->setAttributes($companyAttributes,false);
-			} 
-			$company->addressbook_id=$this->addressbook_id;
+				$company->setAttributes($companyAttributes, false);
+				$company->addressbook_id = $this->addressbook_id;
+			}
+
 			if (!empty($saveToDb))
 				$company->save();
-			$this->setAttribute('company_id',$company->id);			
+
+			$this->setAttribute('company_id', $company->id);
 		}
 		
 		$this->cutAttributeLengths();
@@ -698,12 +725,12 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$e->add($p);
 		}
 		
-		if ($this->address) {
-			$p = new Sabre_VObject_Property('ADR',';;'.$this->address.' '.$this->address_no.';'.
+		//if ($this->address) {
+			$p = new Sabre_VObject_Property('ADR',';;'.$this->address,"\n".' '.$this->address_no.';'.
 				$this->city.';'.$this->state.';'.$this->zip.';'.$this->country);
 			$p->add('TYPE','HOME');
 			$e->add($p);
-		}
+		//}
 		
 		if(!empty($this->comment)){
 			$e->note=$this->comment;
@@ -759,10 +786,11 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		if(!$findParams)
 			$findParams = GO_Base_Db_FindParams::newInstance();
 		
-		$criteria = $findParams->getCriteria()
-			->addCondition('email',$email)
-			->addCondition('email2', $email,'=','t',false)
-			->addCondition('email3', $email,'=','t',false);
+		$findParams->getCriteria()->mergeWith(GO_Base_Db_FindCriteria::newInstance()
+										->addCondition('email', $email)
+										->addCondition('email2', $email, '=', 't', false)
+										->addCondition('email3', $email, '=', 't', false)
+		);
 
 		return GO_Addressbook_Model_Contact::model()->find($findParams);		
 	}
@@ -822,6 +850,17 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		}else{
 			return false;
 		}
+	}
+	
+	
+	protected function getAge(){
+		if(empty($this->birthday))
+			return "";
+		
+		$date = new DateTime($this->birthday);
+		$diff = $date->diff(new DateTime());
+		
+		return $diff->y;
 	}
 	
 }

@@ -12,9 +12,9 @@
 // @author Merijn Schering <mschering@intermesh.nl>
 //
 // French Translation
-// Version : 3.7.29 
-// Author : Lionel JULLIEN
-// Date : September, 27 2011
+// Version : 4.0.99
+// Author : Lionel JULLIEN / Boris HERBINIERE-SEVE
+// Date : September, 20 2012
 //
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -49,7 +49,14 @@ GO.files.lang.emailDownloadLink= 'Envoyer un lien de téléchargement';
 GO.files.lang.expireTime= 'Date d\'expiration du lien';
 GO.files.lang.newFolder = 'Nouveau dossier';
 GO.files.lang.applyState = 'Appliquer les paramètres de visualisation actuels à tout le monde.';
-GO.files.lang.stateLocked = 'Visualisation du dossier verrouiller par le proriétaire ou par l\'administrateur';
+GO.files.lang.stateLocked = 'Visualisation du dossier verrouillé par le proriétaire ou par l\'administrateur';
 GO.files.lang.strDownloadActive = 'Lien de téléchargement externe activé';
 GO.files.lang.downloadExpireTime='Le lien expirera après';
 GO.files.lang.downloadUrl='URL';
+GO.files.lang.categoriesFiles= 'Champs personnalisés pour les fichiers';
+GO.files.lang.applyToCurrentFolder= 'N\'appliquer les modifications ci-dessus qu\'au contenu du dossier courant';
+GO.files.lang.applyRecursively= 'Appliquer les modifications ci-dessus au contenu du dossier courant ainsi qu\'à ses sous-dossiers';
+GO.files.lang.applyRecursivelyRUSure= 'Êtes-vous sur de vouloir appliquer les paramètres de ce champ personnalisé au contenu de TOUS les sous dossiers ? Cela peut avoir une grande influence si ce dossier comporte de nombreux sous dossiers.';
+GO.files.lang.pleaseConfirm= 'Veuillez confirmer';
+GO.files.lang.applyLimits= 'Ne pas afficher toutes les catégories des champs personnalisés';
+GO.files.lang.undef= '-';

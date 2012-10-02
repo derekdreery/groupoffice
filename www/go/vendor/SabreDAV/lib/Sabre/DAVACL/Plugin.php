@@ -837,6 +837,7 @@ class Sabre_DAVACL_Plugin extends Sabre_DAV_ServerPlugin {
 
         }
         if (false !== ($index = array_search('{DAV:}current-user-principal', $requestedProperties))) {
+
             unset($requestedProperties[$index]);
             if ($url = $this->getCurrentUserPrincipal()) {
                 $returnedProperties[200]['{DAV:}current-user-principal'] = new Sabre_DAVACL_Property_Principal(Sabre_DAVACL_Property_Principal::HREF, $url . '/');

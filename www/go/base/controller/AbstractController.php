@@ -133,7 +133,8 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 						$_REQUEST['security_token']!=GO::session()->values['security_token']
 			){
 			//GO::session()->logout();			
-			trigger_error('Fatal error: Security token mismatch in route: '.$_REQUEST['r'], E_USER_ERROR);
+			throw new GO_Base_Exception_SecurityTokenMismatch();
+
 		}
 	}	
 	
@@ -348,8 +349,16 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			
 			$response['feedback'] = !empty($response['feedback']) ? $response['feedback']."\r\n\r\n" : '';
 			$response['feedback'] .= $e->getMessage();
-			if($e instanceof GO_Base_Exception_AccessDenied)
+			if($e instanceof GO_Base_Exception_AccessDenied){
+				
+				//doesn't work well with extjs
+//				header("HTTP/1.1 403 Forbidden");
+				
 				$response['redirectToLogin']=empty(GO::session()->values['user_id']);
+			}
+			
+			if($e instanceof GO_Base_Exception_SecurityTokenMismatch)
+				$response['redirectToLogin']=true;
 
 			if(GO::config()->debug){
 				//$response['trace']=$e->getTraceAsString();
@@ -448,6 +457,16 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 */
 	public function isCli(){
 		return PHP_SAPI=='cli';
+	}
+	
+	/**
+	 * Check if action is ran on the Command Line Interface
+	 * 
+	 * @throws GO_Base_Exception_CliOnly
+	 */
+	public function requireCli(){
+		if(!$this->isCli())
+			throw new GO_Base_Exception_CliOnly();
 	}
 	
 	/**

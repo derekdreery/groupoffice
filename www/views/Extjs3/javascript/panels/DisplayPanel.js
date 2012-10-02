@@ -462,7 +462,49 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		}		
 	},
 	
-	afterLoad : function(result) {},
+	afterLoad : function() {
+	
+		if (GO.comments && this.data.comments.length>0)
+			this.newCommentPanel = new Ext.form.FormPanel({			
+				renderTo: 'newCommentForModelDiv_'+this.model_id,
+				layout: 'form',
+				border: false,
+
+				items: [this.commentsField = new Ext.form.TextArea({
+					name: 'comments',
+					anchor: '90%',
+					height: 70,
+					hideLabel:true,
+					allowBlank:false,
+					emptyText: GO.comments.lang['newCommentText']
+				}),
+
+					this.categoriesCB = new GO.comments.CategoriesComboBox(),
+						new Ext.Button({
+							text: GO.comments.lang['newComment'],
+							handler: function(){
+								this.newCommentPanel.form.submit({
+									url: GO.url('comments/comment/submit'),
+									params: {
+//										comments : this.commentsField.getValue(),
+//										category_id : this.categoriesCB.getValue(),
+										model_id : this.model_id,
+										model_name : this.model_name
+									},
+									success:function(form, action){
+										if (!GO.util.empty(action.result.feedback))
+											Ext.MessageBox.alert('', action.result.feedback);
+										this.load(this.model_id,true);
+									},
+									scope: this
+								});
+							},
+							scope: this
+						})
+				]
+			});
+		
+	},
 	
 	load : function(id, reload)
 	{
@@ -491,7 +533,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 					
 					this.stopLoading.defer(300, this);
 					
-					this.afterLoad(result);
+					this.afterLoad();
 				},
 				scope: this			
 			});
