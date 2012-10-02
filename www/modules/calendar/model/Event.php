@@ -1196,4 +1196,17 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		return $p ? true : false;
 	}
+	
+	public function checkDatabase() {
+		
+		//in some cases on old databases the repeat_end_time is set but the UNTIL property in the rrule is not. We correct that here.
+		if($this->repeat_end_time>0 && strpos($this->rrule,'UNTIL=')===false){
+			$rrule = new GO_Base_Util_Icalendar_Rrule();
+			$rrule->readIcalendarRruleString($this->start_time, $this->rrule);						
+			$rrule->until=$this->repeat_end_time;
+			$this->rrule= $rrule->createRrule();			
+		}
+		
+		return parent::checkDatabase();
+	}
 }
