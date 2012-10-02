@@ -1,5 +1,6 @@
 ??-10-2012 4.0.109
 - Bugfix: Save event time in Time Registration fixed.
+- Bugfix: Opening advanced search dialog from SelectContactDialog / SelectCompanyDialog.
 
 01-10-2012 4.0.108
 - Bugfix: Copy event in calendar moved the event
