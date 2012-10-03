@@ -1188,6 +1188,12 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		if($retVar!=0)
 			throw new Exception("TNEF extraction failed: ".implode("\n", $output));		
 		$tmpFile->delete();
+		
+		$items = $tmpFolder->ls();
+		if(!count($items)){
+			$this->render("Plain",GO::t('winmailNoFiles', 'email'));
+			exit();
+		}
 
 		exec(GO::config()->cmd_zip.' -r "winmail.zip" *', $output, $retVar);
 		if($retVar!=0)
