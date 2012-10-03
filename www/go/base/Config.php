@@ -559,6 +559,15 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $smtp_local_domain = '';
+	
+	
+	/**
+	 * A special Swift preference to escape dots. For some buggy SMTP servers this
+	 * is necessary.
+	 * 
+	 * @var boolean 
+	 */
+	var $swift_qp_dot_escape=false;
 
 	/**
 	 * A comma separated list of smtp server IP addresses that you
