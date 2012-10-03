@@ -1,4 +1,12 @@
-??-10-2012 4.0.109
+03-10-2012 4.0.109
+- Bugfix: Attach files button in ticket dialog didn't work the second time.
+- Bugfix: Database check could delete recurrence end time in very rare cases
+- Changed: Open composer for sent items when you double click
+- Added a special Swift preference to escape dots. For some buggy SMTP servers 
+  this is necessary.
+- Bugfix: Import category color for appointments
+- Feature: Create read only custom field categories. So you can make sure people 
+  can view them but not alter them. 
 - Bugfix: Save event time in Time Registration fixed.
 - Bugfix: Opening advanced search dialog from SelectContactDialog / SelectCompanyDialog.
 
