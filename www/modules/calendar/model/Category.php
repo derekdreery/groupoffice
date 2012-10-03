@@ -18,7 +18,7 @@
  *
  * @property int $id
  * @property String $name
- * @property String $color
+ * @property String $color eg. "EBF1E2"
  * @property int $calendar_id
  */
 

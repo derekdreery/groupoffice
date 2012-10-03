@@ -19,7 +19,7 @@
  * @property int $category_id
  * @property boolean $read_only
  * @property int $files_folder_id
- * @property string $background
+ * @property string $background eg. "EBF1E2"
  * @property string $rrule
  * @property boolean $private
  * @property int $resource_event_id
@@ -1023,8 +1023,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$categoryName = array_shift($cats);
 			$category = GO_Calendar_Model_Category::model()->findByName($this->calendar_id, $categoryName);
 			
-			if($category)
+			if($category){
 				$this->category_id=$category->id;			
+				$this->background=$category->color;
+			}
 		}
 		
 
