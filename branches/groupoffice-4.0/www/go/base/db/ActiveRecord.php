@@ -309,7 +309,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function __construct($newRecord=true, $isStaticModel=false){			
 		
-		$this->_loadingFromDatabase=false;
+		
 		
 		//$pk = $this->pk;
 
@@ -318,10 +318,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$this->init();	
 		
-		if($this->isNew) 
+		if($this->isNew){
 			$this->setAttributes($this->_getDefaultAttributes(),false);
-		elseif(!$isStaticModel)
+			$this->_loadingFromDatabase=false;
+		}elseif(!$isStaticModel){
 			$this->afterLoad();
+			$this->_loadingFromDatabase=false;
+		}
 		
 		$this->_modifiedAttributes=array();
 	}
@@ -2177,6 +2180,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 		$this->cacheSearchRecord();
 
+		GO::debug("CLearing modified attributes for ".$this->className());
 		$this->_modifiedAttributes = array();
 
 		return true;
@@ -2899,7 +2903,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @see hasAttribute
 	 */
 	public function setAttribute($name,$value, $format=false)
-	{	
+	{
 		if($this->_loadingFromDatabase){
 			//skip fancy features when loading from the database.
 			$this->_attributes[$name]=$value;	
@@ -2920,8 +2924,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			if($this->columns[$name]['gotype']=='textfield' || $this->columns[$name]['gotype']=='textarea')
 				$value=GO_Base_Util_String::normalizeCrlf($value, "\n");
 			
-			if((!isset($this->_attributes[$name]) || $this->_attributes[$name]!==(string)$value) && !$this->isModified($name))
+			if((!isset($this->_attributes[$name]) || $this->_attributes[$name]!==(string)$value) && !$this->isModified($name)){
 				$this->_modifiedAttributes[$name]=isset($this->_attributes[$name]) ? $this->_attributes[$name] : false;
+//				GO::debug("Setting modified attribute $name to ".$this->_modifiedAttributes[$name]);
+//				GO::debugCalledFrom(5);
+			}
 			
 			$this->_attributes[$name]=$value;
 			
