@@ -1004,6 +1004,13 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 							}
 						}
 					}
+					
+					foreach ($attributes as $name => $value) {
+						$attributes[$name] = trim($value);
+						if (empty($attributes[$name])) {
+							unset($attributes[$name]);
+						}
+					}
 
 					// True is set because import needs to be checked by the model.
 					$model->setAttributes($attributes, true);
