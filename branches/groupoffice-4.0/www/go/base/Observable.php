@@ -115,7 +115,7 @@ class GO_Base_Observable{
 		if(isset(self::$listeners[$className][$eventName])){
 			foreach(self::$listeners[$className][$eventName] as $listener)
 			{
-				GO::debug('Firing listener: '.$listener[0].'::'.$listener[1]);
+				GO::debug('Firing listener for class '.$className.' event '.$eventName.': '.$listener[0].'::'.$listener[1]);
 
 				$method = !empty($listener[0]) ? array($listener[0], $listener[1]) : $listener[1];
 				$return = call_user_func_array($method, $params);
