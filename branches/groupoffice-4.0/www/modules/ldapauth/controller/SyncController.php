@@ -25,7 +25,7 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 	
 	/**
 	 * 
-	 * php /var/www/groupoffice-4.0/www/groupofficecli.php -r=ldapauth/sync/users --delete=1 --max_delete_percentage=34
+	 * php /var/www/groupoffice-4.0/www/groupofficecli.php -r=ldapauth/sync/users --delete=1 --max_delete_percentage=34 --dry=1
 	 * 
 	 * @param type $params
 	 * @throws Exception
@@ -36,6 +36,10 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 		$this->requireCli();		
 		GO::session()->runAsRoot();
 		
+		$dryRun = !empty($params['dry']);
+		
+		if($dryRun)
+			echo "Dry run enabled.\n\n";
 		
 		$la = new GO_Ldapauth_Authenticator();
 	
@@ -52,7 +56,9 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 			$i++;
 			
 			try{
-				$user = $la->syncUserWithLdapRecord($record);			
+				if(!$dryRun)
+					$user = $la->syncUserWithLdapRecord($record);			
+				
 				echo "Synced ".$user->username."\n";
 			} catch(Exception $e){
 				echo "ERROR:\n";
@@ -62,7 +68,8 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 				var_dump($record->getAttributes());
 			}
 			
-			$this->fireEvent("ldapsyncuser", array($user, $record));
+			if(!$dryRun)
+				$this->fireEvent("ldapsyncuser", array($user, $record));
 			
 			$usersInLDAP[]=$user->id;
 			
@@ -91,10 +98,13 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 			while($user = $stmt->fetch()){
 				if(!in_array($user->id, $usersInLDAP)){
 					echo "Deleting ".$user->username."\n";
-					$user->delete();
+					if(!$dryRun)
+						$user->delete();
 				}
 			}			
 		}
+		
+		echo "Done\n\n";
 		
 		//var_dump($attr);
 		
