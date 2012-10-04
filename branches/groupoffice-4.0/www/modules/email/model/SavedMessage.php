@@ -86,7 +86,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 //		
 //		GO::debug($structure->headers);
 //		
-		if(preg_match("/([^\/]*\/[^;]*)(.*)/", $structure->headers['content-type'], $matches)){
+		if(isset($structure->headers['content-type']) && preg_match("/([^\/]*\/[^;]*)(.*)/", $structure->headers['content-type'], $matches)){
 			$attributes['content_type_attributes']=array();
 			$attributes['content_type']=$matches[1];
 			$atts = trim($matches[2], ' ;');							
