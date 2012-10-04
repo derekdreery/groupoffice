@@ -1,4 +1,5 @@
 03-10-2012 4.0.109
+- Bugfix: Remove spaces at beginning and end of fields before CSV-importing them.
 - Bugfix: Attach files button in ticket dialog didn't work the second time.
 - Bugfix: Database check could delete recurrence end time in very rare cases
 - Changed: Open composer for sent items when you double click
