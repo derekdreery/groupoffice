@@ -687,7 +687,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 			$html .= '<table>';
 			
-			$html .= '<tr><td colspan="2"><br /><b>Participants</b></td></tr>';
+			$html .= '<tr><td colspan="2"><br /><b>'.GO::t('participants','calendar').'</b></td></tr>';
 			while($participant = $stmt->fetch()){
 				$html .= '<tr><td colspan="2">'.$participant->name.'</td></tr>';
 			}
