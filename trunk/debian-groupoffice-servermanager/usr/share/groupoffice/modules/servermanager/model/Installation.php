@@ -18,42 +18,39 @@
  
 /**
  * The GO_ServerManager_Model_Installation model
+ * TODO: build in cost that post to billing, build modules and user usage statistics
  *
  * @package GO.modules.servermanager.model
  * @property int $id
+ * @property string $name Usually the domain name 
+ * @property int $ctime
  * @property int $mtime
  * @property int $max_users
- * @property int $count_users
- * @property int $install_time
+ * @property int $trial_days
  * @property int $lastlogin
- * @property int $total_logins
- * @property int $database_usage
- * @property int $file_storage_usage
- * @property int $mailbox_usage
- * @property int $report_ctime
  * @property string $comment
  * @property string $features
  * @property string $mail_domains
  * @property string $admin_email
  * @property string $admin_name
- * @property string $admin_salutation
- * @property string $admin_country
- * @property string $date_format
- * @property string $thousands_separator
- * @property string $decimal_separator
- * @property boolean $billing
- * @property boolean $professional
  * @property int $status_change_time
  * @property string $configPath
  * @property string $installPath
+ * @property string $token
  * 
  * @property string $url
- * @property string $config_file
- * @property string $token
  */
 
 class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 
+	private $_config; //the config array of this installation
+	
+	private $_total_logins;
+	private $_count_users;
+	private $_modules; //an array of InstallationModule objects
+	private $_currentHistory; //GO_ServerManager_Model_UsageHistory object with latest usagedata
+	private $_installationUsers; //Saves installation users loaded from external database will be saved in afterSave()
+	
 	const STATUS_TRIAL ='trial';
 	const STATUS_ACTIVE ='ignore';
 	/**
@@ -62,21 +59,9 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	 * @var boolean 
 	 */
 	public $ignoreExistingForImport=false;
-	/**
-	 * Returns a static model of itself
-	 * 
-	 * @param String $className
-	 * @return GO_ServerManager_Model_Installation
-	 */
+
 	public static function model($className = __CLASS__) {
 		return parent::model($className);
-	}
-
-	/**
-	 * Returns the table name
-	 */
-	public function tableName() {
-		return 'sm_installations';
 	}
 	
 	protected function init() {
@@ -87,17 +72,92 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		$this->columns['max_users']['required']=true;
 		
 		$this->columns['lastlogin']['gotype']='unixtimestamp';
-		$this->columns['install_time']['gotype']='unixtimestamp';
+		$this->columns['ctime']['gotype']='unixtimestamp';
 		
 		return parent::init();
 	}
+
+	/**
+	 * Returns the table name
+	 */
+	public function tableName() {
+		return 'sm_installations';
+	}
 	
+	public function getDatabaseUsageText()
+	{
+		if($this->currentusage != null)
+			return $this->currentusage->databaseUsageText;
+		else
+			return '-';
+	}
+	public function getFileStorageUsageText()
+	{
+		if($this->currentusage != null)
+			return $this->currentusage->getFileStorageUsageText();
+		else
+			return '-';
+	}
+	public function getMailboxUsageText()
+	{
+		if($this->currentusage != null)
+			return $this->currentusage->getMailboxUsageText();
+		else
+			return '-';
+	}
+	public function getTotalUsageText()
+	{
+		if($this->currentusage != null)
+			return $this->currentusage->getTotalUsageText();
+		else
+			return '-';
+	}
+	public function getLastUsageCheckDate()
+	{
+		if($this->currentusage != null)
+			return $this->currentusage->ctime;
+		else
+			return 'Never';
+	}
+	public function getTotalLogins()
+	{
+		if($this->currentusage != null)
+			return $this->currentusage->total_logins;
+		else
+			return '-';
+	}
+	public function getCountUsers()
+	{
+		if($this->currentusage != null)
+			return $this->currentusage->count_users;
+		else
+			return '-';
+	}
+	
+	public function relations() {
+		return array(
+			'histories' => array('type' => self::HAS_MANY, 'model' => 'GO_ServerManager_Model_UsageHistory', 'field' => 'installation_id','delete'=>true),
+			'currentusage'=> array('type' => self::HAS_ONE, 'model' => 'GO_ServerManager_Model_UsageHistory', 'field' => 'installation_id', 'findParams'=>array('order'=>'id','orderDirection'=>'DESC','limit'=>1)),
+			'users' => array('type'=>self::HAS_MANY, 'model'=>'GO_ServerManager_Model_InstallationUser', 'field'=>'installation_id','delete'=>true, 'findParams'=>array('fields'=>'t.*')),
+			'modules' => array('type'=>self::HAS_MANY, 'model'=>'GO_ServerManager_Model_InstallationModule', 'field'=>'installation_id','delete'=>true),
+			'automaticInvoice'=>array('type'=>self::HAS_ONE, 'model'=>'GO_ServerManager_Model_AutomaticInvoice', 'field'=>'installation_id','delete'=>true),
+		);
+	}
+	
+	/**
+	 * Get the DB name for this installation
+	 * @return String the Db name based in the installation name
+	 */
 	protected function getDbName(){
 		$name=strtolower(trim($this->name));
 		$name=str_replace(array('.','-'),'_',$name);
 		return $name;
 	}
 	
+	/**
+	 * Get the db username from db name cut of at 16 character if needed
+	 * @return String the DB username based in the dbName
+	 */
 	protected function getDbUser(){
 		return substr($this->dbName,0,16);
 	}
@@ -109,13 +169,130 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		return '/home/govhosts/'.$this->name.'/';
 	}
 	
+	/**
+	 * read the list with allows modules from this config file of the installation
+	 * and explore is to an array
+	 * @return array $allowedModules an array with allowed module keys
+	 */
+	public function getAllowedModules()
+	{
+		$allowedModules = array();
+		if(!isset($this->config['allowed_modules']))
+			$this->_config['allowed_modules']="";
+
+		$allowedModules = explode(',', $this->config['allowed_modules']);
+		return $allowedModules;
+	}
+	
+	/**
+	 * Returns all available modules that can be activated
+	 * Find InstallationModules that are saved in the database and merge them with the rest
+	 * @return array(GO_ServerManager_Model_InstallationModule) 
+	 */
+	public function getModulesList()
+	{
+		$result = array();
+		
+		$allModules = GO::modules()->getAvailableModules(true);
+		foreach($allModules as $moduleClass)
+		{
+			$module = new $moduleClass;
+
+			$installationModule = new GO_ServerManager_Model_InstallationModule();
+			$installationModule->installation_id = $this->id;
+			$installationModule->installation = $this;
+			$installationModule->name = $module->id();
+			
+			if(!$installationModule->isHidden()){
+				$result[$installationModule->name] = $installationModule;
+			}
+		}
+		
+		$databaseModules = $this->modules->fetchAll();
+		foreach($databaseModules as $dbmodule)
+		{
+			$result[$dbmodule->name] = $dbmodule;
+		}
+		
+		return $result;
+	}
+	
+	/**
+	 * Set all database action for Installation modules
+	 * All excisting modules should be changed
+	 * All none excisting module that are set should be added
+	 * 
+	 * @param array $modules array of module name strings
+	 */
+	public function setModules($modules)
+	{
+		if(!isset($this->_modules)) //load modules from database if not done yet
+		{
+			$this->_modules = array();
+			$stmt = $this->modules;
+			while($module = $stmt->fetch())
+				$this->_modules[$module->name] = $module;
+		}
+		
+		//set posted modules to true
+		foreach($this->_modules as &$module)
+		{
+			if(in_array($module->name, $modules))
+				$module->enabled = true;
+			else
+				$module->enabled = false;
+		}
+		
+		//add all new modules that are not yet in db
+		foreach($modules as $modulename)
+		{
+			if(!isset($this->_modules[$modulename]))
+			{
+				$module = new GO_ServerManager_Model_InstallationModule();
+				$module->enabled = true;
+				$module->name = $modulename;
+				$this->_modules[$modulename] = $module;
+			}
+		}
+	}
+	
+	/**
+	 * Get the path to the config file of an installation
+	 * 
+	 * @return string path to config file
+	 */
 	protected function getConfigPath(){		
 		return '/etc/groupoffice/'.$this->name.'/config.php';
 	}
 	
+	/**
+	 * The url of the installation
+	 * @return string URL
+	 */
 	protected function getUrl(){
 		$protocol = empty(GO::config()->servermanager_ssl) ? 'http' : 'https';
 		return $protocol.'://'.$this->name;
+	}
+	
+	/**
+	 * Get the content of config file of this installation
+	 * If file not exisits return false;
+	 * @return mixed $config array in config.php or false if not exists 
+	 */
+	public function getConfig(){
+		if($this->_config!==null)
+			return $this->_config; 
+		else
+		{
+			if(!file_exists($this->configPath)){
+				return false;
+			} else {
+				$config=array();
+				require($this->configPath);
+				$this->_config = $config;
+				return $this->_config;
+			}
+		}
 	}
 	
 	public function validate() {
@@ -125,6 +302,10 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		if($this->isNew && !$this->ignoreExistingForImport){
 			if(file_exists('/var/lib/mysql/'.$this->dbName) || file_exists('/etc/apache2/sites-enabled/'.$this->name) || is_dir($this->installPath))
 				$this->setValidationError ('name', GO::t('duplicateHost','servermanager'));
+		}
+		
+		if (!$this->isNew && empty($this->modules)) {
+			$this->setValidationError ('modules',"Please select the allowed modules");
 		}
 							
 		return parent::validate();
@@ -138,6 +319,13 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		return $attr;
 	}
 
+	/**
+	 * Before the installation gets deleted from the database we'll do some cleanup
+	 * cleanup is done on the commandprompt with root access.
+	 * It will delete the database and remove the symlinks to the installation
+	 * @return boolean true
+	 * @throws Exception if the executed command fails we'll throw an exeption
+	 */
 	protected function beforeDelete() {
 		
 		if(file_exists($this->configPath)){
@@ -146,12 +334,9 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 			$cmd = 'sudo TERM=dumb '.GO::config()->root_path.
 							'groupofficecli.php -r=servermanager/installation/destroy'.
 							' -c='.GO::config()->get_config_file().
-							' --name='.$this->name;
+							' --id='.$this->id;
 
-	//		GO::debug($cmd);
-	//		throw new Exception($cmd);
-
-			exec($cmd, $output, $return_var);		
+			exec($cmd, $output, $return_var);	
 
 			if($return_var!=0){
 				throw new Exception(implode("\n", $output));
@@ -172,23 +357,105 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		}
 	}
 	
-	public function report(){
-		if(!file_exists($this->configPath))
+	/**
+	 * check if the installation is expired
+	 * @return boolean true of installation is more then 30 old and in trial status. 
+	 */
+	public function getIsExpired()
+	{
+		return ($this->status == GO_ServerManager_Model_Installation::STATUS_TRIAL && 
+						$this->ctime<GO_Base_Util_Date::date_add(time(),-30));
+
+	}
+	
+	/**
+	 * check is installation is suspended
+	 * @return boolean true if the installation enabled value in config is set tot false
+	 */
+	public function getIsSuspended()
+	{
+		return !$this->config['enabled'];
+	}
+	
+	/**
+	 * will write enabled=false to the config file
+	 * @return boolean true is installation was suspended
+	 */
+	public function suspend()
+	{
+		if(!$this->isSuspended) //if not already suspended
+		{
+			$this->_config['enabled']=false;
+			//save in before/afterSave()
+			//GO_Base_Util_ConfigEditor::save(new GO_Base_Fs_File($this->configPath), $this->config);
+			return true;
+		} 
+		else
+			return false;
+	}
+	
+	/**
+	 * Will create and save a new UsageHistory object and load current usage data 
+	 * This should be called once a day by actionReport()
+	 */
+	public function loadUsageData()
+	{
+		if($this->isNew)
+			throw new Exception('Can not load usage data for a new installation');
+		if(!$this->config)
 			return false;
 		
-		require($this->configPath);
+		//if(isset($this->config['max_users']))
+			//$this->max_users=$this->config['max_users'];
 		
-		if(isset($config['max_users']))
-			$this->max_users=$config['max_users'];
+		$history = new GO_ServerManager_Model_UsageHistory();
+		$history->installation_id = $this->id;
+		//recalculated the size of the file folder
+		$folder = new GO_Base_Fs_Folder($this->config['file_storage_path']);
+		$history->file_storage_usage = $folder->calculateSize()/1024;
+		//Recalculate the size of the database and mailbox
+		$history->database_usage = $this->_calculateDatabaseSize();
+		$history->mailbox_usage = $this->_calculateMailboxUsage();
 		
-		$folder = new GO_Base_Fs_Folder($config['file_storage_path']);
-		$this->file_storage_usage=$folder->calculateSize()/1024;
+		//TODO: save user data with modules
+		//$installationUsers = $this->_loadUserData(); //get latest user usage data from installation
+		$this->_loadFromInstallationDatabase();
+		//TODO: $this->_loadModuleData(); //get latest module install data from installation
+		$history->count_users = $this->_count_users;
+		$history->total_logins = $this->_total_logins;
 		
-		$this->_calculateDatabaseSize($config['db_name']);
-		$this->_calculateMailboxUsage($config);
-		$this->_calculateInstallationUsage($config);
-		
-		$this->save();
+		$this->_currentHistory = $history;
+
+		return true;
+	}
+	
+	public function getHistoryAttributes()
+	{
+		if(!isset($this->_currentHistory))
+			throw new Exception('no new usage data loaded');
+		return $this->_currentHistory->getAttributes();
+	}
+	
+	public function _loadModuleData()
+	{
+		// conect to installation database
+		// reconnect to servermanager database
+		// set data from db
+
+		//load modules from installation database with ctime
+		$modules = GO_Base_Model_Module::model()->find(GO_Base_Db_FindParams::newInstance()->ignoreAcl());
+		foreach($modules as $module)
+		{
+			if(empty($this->first_installation_time))
+				$this->first_installation_time = $module->ctime;
+		}
+	}
+	
+	/**
+	 * Returns an array with latest usage data
+	 * @return array usage data
+	 */
+	public function report(){
 		
 		$report = $this->getAttributes();
 		
@@ -208,123 +475,317 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		return $report;
 	}
 	
-	private function _calculateInstallationUsage($config){
+	/**
+	 * TODO: return JSON data for creating an invoice in external installation 
+	 */
+	public function createBillData(){
+		//find out if there is an ext installation
+		//test connection
+		//find automatic invoice object
+	}
+	
+	/**
+	 * Load data from the installations database
+	 * this will load the users used and the modules they have access to
+	 * this will load the installed module with there ctime
+	 * this will load last login, total users and total logins
+	 * @return $installationUsers Array(GO_ServerManager_Model_InstallationUser)
+	 * @throws Exception 
+	 */
+	private function _loadFromInstallationDatabase()
+	{
+		if($this->isNew)
+			throw new Exception('Can not load userdata for a new installation');
+		
+		//dummy object for SHOW COLUMN from servermanager database
+		$installationUser = new GO_ServerManager_Model_InstallationUser();
+		
 		//prevent model caching and switch to installation database.
-		GO::$disableModelCache=true;		
+		GO::$disableModelCache=true;
 		try{
 			GO::setDbConnection(
-							$config['db_name'], 
-							$config['db_user'], 
-							$config['db_pass'], 
-							$config['db_host']
-							);
+					$this->config['db_name'], 
+					$this->config['db_user'], 
+					$this->config['db_pass'], 
+					$this->config['db_host']
+				);
 
-			$adminUser = GO_Base_Model_User::model()->findByPk(1);
+			$adminUser = GO_Base_Model_User::model()->findByPk(1); //find admin user
 			$this->admin_email=$adminUser->email;
 			$this->admin_name=$adminUser->name;
-			$this->install_time = $adminUser->ctime;
 
 			$findParams = GO_Base_Db_FindParams::newInstance()
-							->select('count(*) as count, max(lastlogin) AS lastlogin');
-			$record = GO_Base_Model_User::model()->findSingle($findParams);						
-
+							->select('count(*) as count, max(lastlogin) AS lastlogin, sum(logins) as total_logins');
+			$record = GO_Base_Model_User::model()->findSingle($findParams);	//find lastlogin, usercount and total login					
 			$this->lastlogin = intval($record->lastlogin);
-			$this->count_users = intval($record->count);		
-
-			$allowedModules = empty($config['allowed_modules']) ? array() : explode(',', $config['allowed_modules']);
-			$iUsers=array();
+			$this->_count_users = intval($record->count);		
+			$this->_total_logins = intval($record->total_logins);
+			
+			$allowedModules = empty($this->config['allowed_modules']) ? array() : explode(',', $this->config['allowed_modules']);
+			$this->_installationUsers=array();
 			$stmt = GO_Base_Model_User::model()->find(GO_Base_Db_FindParams::newInstance()->ignoreAcl());
 			
 			while($user = $stmt->fetch()){
-				$iUser = $user->getAttributes('raw');
-				$iUser['modules']=array();
+				$installationUser = new GO_ServerManager_Model_InstallationUser();
+				$installationUser->installation_id=$this->id;
+				$installationUser->setAttributesFromUser($user);
+				
 				$oldIgnore = GO::setIgnoreAclPermissions(false);
+				
 				$modStmt = GO_Base_Model_Module::model()->find(GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::READ_PERMISSION, $user->id));
 				while($module = $modStmt->fetch()){			
 					if(empty($allowedModules) || in_array($module->id, $allowedModules))
-						$iUser['modules'][]=$module->id;				
+						$installationUser->addModule($module->id);				
 				}
 				$modStmt=null;
 				
 				GO::setIgnoreAclPermissions($oldIgnore);
 
-				$iUsers[]=$iUser;
+				$this->_installationUsers[]=$installationUser;
 			}
 			//unset stmt to clean up connections
 			$stmt=null;
-			GO::config()->save_setting('mailbox_usage', $this->mailbox_usage);
-			GO::config()->save_setting('file_storage_usage', $this->file_storage_usage);
-			GO::config()->save_setting('database_usage', $this->database_usage);
+			//GO::config()->save_setting('mailbox_usage', $this->mailbox_usage);
+			//GO::config()->save_setting('file_storage_usage', $this->file_storage_usage);
+			//GO::config()->save_setting('database_usage', $this->database_usage);
 		}catch(Exception $e){
 			GO::setDbConnection();
 			$stmt=null;
 			$modStmt=null;
-			
 			if(isset($oldIgnore))
 				GO::setIgnoreAclPermissions($oldIgnore);
 			throw new Exception($e->getMessage());
 		}
-		//var_dump($iUsers);
-		
-		
-		//GO::debug($this->getAttributes());
 		
 		//reconnect to servermanager database
 		GO::setDbConnection();
-		
-		$this->save();
-		
-		GO_ServerManager_Model_InstallationUser::model()->deleteByAttribute('installation_id', $this->id);
-		
-		while($attributes = array_shift($iUsers)){
-			$iUser = new GO_ServerManager_Model_InstallationUser();
-			
-			$modules = $attributes['modules'];
-			unset($attributes['id'],$attributes['modules']);
-			
-			$iUser->setAttributes($attributes, false);
-			$iUser->installation_id=$this->id;
-			$iUser->save();
-			while($module = array_shift($modules)){
-				$iModule = new GO_ServerManager_Model_InstallationUserModule();
-				$iModule->user_id=$iUser->id;
-				$iModule->module_id=$module;
-				$iModule->save();
-			}
-		}
-		
-		
+
 	}
 	
-	private function _calculateMailboxUsage($config){
-		$this->mailbox_usage=0;
-		$this->mail_domains=isset($config['serverclient_domains']) ? $config['serverclient_domains'] : '';
+	/**
+	 * calculate the size of the mailboxes if they are used.
+	 * @return double the mailbox size in Mbs?
+	 */
+	private function _calculateMailboxUsage(){
+		$mailbox_usage=0;
+		$this->mail_domains=isset($this->config['serverclient_domains']) ? $this->config['serverclient_domains'] : '';
 		
-		if(!empty(GO::config()->serverclient_server_url) && !empty($config['serverclient_domains'])) {
+		if(!empty(GO::config()->serverclient_server_url) && !empty($this->config['serverclient_domains'])) {
 			$c = new GO_Serverclient_HttpClient();
 			$c->postfixLogin();
 			
 			$response = $c->request(
 					GO::config()->serverclient_server_url."?r=postfixadmin/domain/getUsage", 
-					array('domains'=>json_encode(explode(",",$config['serverclient_domains'])))
+					array('domains'=>json_encode(explode(",",$this->config['serverclient_domains'])))
 			);
 			
 			$result = json_decode($response);
-			$this->mailbox_usage=$result->usage;			
+			$mailbox_usage=$result->usage;			
+		}
+		return $mailbox_usage;
+	}
+
+	/**
+	 * Calculate the database size of the database name in config file of installation
+	 * @return int Database size in MBs
+	 */
+	private function _calculateDatabaseSize(){
+		$stmt =GO::getDbConnection()->query("SHOW TABLE STATUS FROM `".$this->config["db_name"]."`;");
+
+		$database_usage=0;
+		while($r=$stmt->fetch()){
+			$database_usage+=$r['Data_length'];
+			$database_usage+=$r['Index_length'];
+		}
+		$database_usage/=1024; //convert to MBs
+		
+		return $database_usage;
+	}
+	
+	
+	/**
+	 * Find all automatic email that should be send and send the ones that should be send today
+	 * This function should be called once a day by a cronjob for every installation
+	 * @param int $nowUnixTime time()?
+	 * @return boolean $success true if all mails successfull send
+	 */
+	public function sendAutomaticEmails($nowUnixTime=false) {
+		if (!is_int($nowUnixTime))
+			$nowUnixTime = time();
+		
+		$autoEmailsStmt = GO_ServerManager_Model_AutomaticEmail::model()
+			->find(
+				GO_Base_Db_FindParams::newInstance()
+					->select('t.*')
+					->criteria(
+						GO_Base_Db_FindCriteria::newInstance()
+							->addCondition('active','1')
+					)
+			);
+		
+		$success = true;
+		
+		while ($autoEmailModel = $autoEmailsStmt->fetch()) {
+			
+			//Send the mail only if the creation time of the installation + the number of days is today.
+			$dayStart = GO_Base_Util_Date::date_add($nowUnixTime,-$autoEmailModel->days);
+			$dayStart = GO_Base_Util_Date::clear_time($dayStart);
+			$dayEnd = GO_Base_Util_Date::date_add($dayStart,1);			
+			
+//			echo $autoEmailModel->name.' '.date('c', $dayStart).' - '.date('c', $dayEnd)."\n";
+			
+//			echo "Installation time: ".date('c', $installationModel->ctime)."\n";
+			
+			if (!empty($autoEmailModel->active) && $this->ctime>=$dayStart && $this->ctime<$dayEnd) {
+				
+				echo "Sending message ".$autoEmailModel->name." to ".$this->admin_email."\n";
+				
+				$message = GO_Base_Mail_Message::newInstance()
+					->loadMimeMessage($autoEmailModel->mime)
+					->addTo($this->admin_email, $this->admin_name)
+					->setFrom(GO::config()->webmaster_email, 'Servermanager Administrator');
+
+				$body = $this->_parseTags(
+					$message->getBody(),
+					array('installation'=>$this,'automaticemail'=>$autoEmailModel)
+				);
+				
+				$message->setBody($body);
+
+				$success = $success && GO_Base_Mail_Mailer::newGoInstance()->send($message);
+			}
+		}
+		return $success;
+	}
+	
+	private function getTrialUsers()
+	{
+		$trialUsers = array();
+		foreach($this->getUsers() as $user)
+		{
+			if($user->isTrial())
+				$trialUsers[] = $user;
+		}
+		return $trialUsers;
+	}
+	private function getPayedUsers()
+	{
+		$payedUsers = array();
+		foreach($this->getUsers() as $user)
+		{
+			if(!$user->isTrial())
+				$payedUsers[] = $user;
+		}
+		return $payedUsers;
+	}
+	
+	/**
+	 * Returns the amount that should be payed for the user account 
+	 */
+	public function getUserPrice()
+	{
+		$userprices = GO_ServerManager_Model_UserPrice::findAll();
+		$highest_count = 0;
+		$price = 0;
+		foreach($userprices as $userprice)
+		{
+			if($userprice->max_users <= $this->getPayedUsers() && $userprice->max_users > $highest_count)
+			{
+				$highest_count = $userprice->max_users;
+				$price = $userprice->price_per_month;
+			}
+		}
+		return $price;
+	}
+	
+	/**
+	 * Save the config file of in the installation if it has been modified 
+	 * Save module information is it has been set
+	 * Save history object if it has been build
+	 * @return boolean true if all got saved
+	 */
+	protected function afterSave($wasnew)
+	{
+		//throw new Exception('afterSave');
+		$success= true;
+		if(!$wasnew)
+		{
+			// NOTE: write the config is done in afterSubmit() calling an controller action as root
+			//$success=GO_Base_Util_ConfigEditor::save(new GO_Base_Fs_File($this->configPath), $this->config);
+
+			//save module information
+			if(is_array($this->_modules))
+			{
+				foreach($this->_modules as $module)
+				{
+					$module->installation_id = $this->id;
+					$success = $success && $module->save();
+				}
+			}
+		
+			//save new user data of an installation
+			if(is_array($this->_installationUsers))
+			{
+				//Drop all installation user for this installation and insert the new ones base on loaded data
+				GO_ServerManager_Model_InstallationUser::model()->deleteByAttribute('installation_id', $this->id);
+				foreach($this->_installationUsers as $user){
+					$user->installation_id = $this->id;
+					$success = $success && $user->save();
+				}
+			}
+			
+			//save latest usage history if exists
+			if($this->_currentHistory != null)
+				$success=$success && $this->_currentHistory->save();
+			
+			//save automatic invoicing setting
+			if(isset($this->_autoInvoice))
+			{
+				$success=$success && $this->_autoInvoice->save();
+			}
+		}
+		return $success;
+	}
+	
+	private $_autoInvoice;
+	public function setAutoInvoice(GO_ServerManager_Model_AutomaticInvoice $value)
+	{
+		$this->_autoInvoice = $value;
+	}
+	
+	/**
+	 * Send an email when a userprice threshold will be excided when all trials
+	 * expire. 
+	 * Explaining that they have to pay more when this periode expires 
+	 */
+	public function sendUserTrialStartMail()
+	{
+		//get user count
+		//get trial user count
+		$usercount = count($this->getUsers());
+		
+		//TODO: load all prices from database
+		//$criteria = GO_Base_Db_FindCriteria::newInstance()->addCondition('max_users', $usercount, '<=');
+
+		$trialusers=$this->getTrialUsers();
+		if(count($trialusers)>0)
+		{
+			//TODO: send email to $this->admin_email
 		}
 		
 	}
 	
-	private function _calculateDatabaseSize($dbName){
-		$stmt =GO::getDbConnection()->query("SHOW TABLE STATUS FROM `".$dbName."`;");
-
-		$this->database_usage=0;
-		while($r=$stmt->fetch()){
-			$this->database_usage+=$r['Data_length'];
-			$this->database_usage+=$r['Index_length'];
-		}
-		$this->database_usage/=1024;
+	public function sendModuleTrialStartMail()
+	{
+		
 	}
 	
+	/**
+	 * A mail gets send to the customer when the trial periode is almost ended 
+	 */
+	public function sendEndTrialPeriodeMail()
+	{
+		
+	}
 	
 }

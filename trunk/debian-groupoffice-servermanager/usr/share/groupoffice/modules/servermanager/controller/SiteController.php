@@ -10,6 +10,8 @@
 
 /**
  * The GO_Addressbook_Controller_Site controller
+ * This controller was made for frontend actions
+ * Usage requires the Sites module to be installed
  *
  * @package GO.modules.Addressbook
  * @version $Id: SiteContoller.php 7607 2011-09-20 10:07:50Z wsmits $
@@ -60,7 +62,11 @@ class GO_Servermanager_Controller_Site extends GO_Sites_Controller_Site{
 		GO_Base_Mail_Mailer::newGoInstance()->send($message);
 	}
 	
-	protected function actionNewTrial($params){
+	/**
+	 * Render a page for creating new trail installation
+	 * @throws Exception calling when trails are disabled in config when no wildcard domain is specified
+	 */
+	protected function actionNewTrial(){
 		
 		if(empty(GO::config()->servermanager_trials_enabled))
 			throw new Exception("Trials are not enabled. Set \$config['servermanager_trials_enabled']=true;");
@@ -73,10 +79,10 @@ class GO_Servermanager_Controller_Site extends GO_Sites_Controller_Site{
 			
 			GO_Base_Html_Error::checkRequired();			
 				
-			GO_Base_Html_Error::checkEmailInput($params);
+			GO_Base_Html_Error::checkEmailInput($_REQUEST);
 			
 			$newTrial =  new GO_ServerManager_Model_NewTrial();
-			$newTrial->setAttributes($params);
+			$newTrial->setAttributes($_REQUEST);
 			
 			GO_Base_Html_Error::validateModel($newTrial);
 						
@@ -85,7 +91,7 @@ class GO_Servermanager_Controller_Site extends GO_Sites_Controller_Site{
 					
 			if(!GO_Base_Html_Error::hasErrors()){
 			
-				$this->_writeAddressbookEntries($params);
+				$this->_writeAddressbookEntries($_REQUEST);
 				
 				$newTrial->save();
 				
@@ -95,7 +101,7 @@ class GO_Servermanager_Controller_Site extends GO_Sites_Controller_Site{
 			}
 		}		
 		
-		$this->renderPage($params);
+		$this->renderPage($_REQUEST);
 	}
 	
 	public function actionTrialCreated($params){

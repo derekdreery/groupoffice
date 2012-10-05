@@ -74,3 +74,23 @@ $l['autoEmail']='Automatic email';
 $l['autoEmails']='Automatic emails';
 $l['nDays']='Send mail this many days after installation';
 $l['days']='Days';
+
+$l['automaticInvoice'] = "Automatic Invoice";
+$l['customerVat'] = "Vat Number";
+$l['invoiceTimespan'] = "Invoicing timespan";
+$l['discountPrice']='Discount price';
+$l['discountPercentage']='Discount percentage';
+$l['discountDescription']='Discount description';
+$l['nextInvoiceOn']='Next invoice on';
+$l['trialDays']='Trial period in days';
+
+$l['usageHistory'] = "Usage history";
+$l['pricing'] = "Pricing";
+$l['users'] = "Users";
+$l['space'] = "Space";
+$l['price'] = "Price";
+$l['mbsIncluded'] = "MBs Included";
+$l['extraMbs'] = "Extra MBs";
+$l['perHour'] = "per hour";
+$l['perMonth'] = 'per month';
+$l['perUser'] = 'per user';

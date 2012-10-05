@@ -125,10 +125,17 @@ Ext.extend(GO.servermanager.InstallationDialog, GO.Window,{
 		this.formPanel.form.baseParams['id']=installation_id;
 		this.installation_id=installation_id;
 
-		if(this.modulesGrid.store.baseParams.installation_id!=installation_id){
-			this.modulesGrid.store.baseParams.installation_id=installation_id;
-			this.modulesGrid.store.removeAll();
-			this.modulesGrid.store.loaded=false;
+		this.modulesGrid.setInstallationId(installation_id);
+		
+		if(this.usersGrid.store.baseParams.installation_id!=installation_id){
+			this.usersGrid.store.baseParams.installation_id=installation_id;
+			this.usersGrid.store.removeAll();
+			this.usersGrid.store.loaded=false;
+		}
+		if(this.usageHistoryGrid.store.baseParams.installation_id!=installation_id){
+			this.usageHistoryGrid.store.baseParams.installation_id=installation_id;
+			this.usageHistoryGrid.store.removeAll();
+			this.usageHistoryGrid.store.loaded=false;
 		}
 		
 		this.formPanel.form.findField('admin_password1').allowBlank=installation_id>0;
@@ -273,6 +280,13 @@ Ext.extend(GO.servermanager.InstallationDialog, GO.Window,{
 						forceSelection: true,
 						anchor: '-20'
 				}),{
+					xtype: 'numberfield',
+					decimals: 0,
+				  name: 'trial_days',
+					anchor: '-20',
+				  allowBlank:false,
+				  fieldLabel: GO.servermanager.lang.trialDays
+				},{
 					xtype: 'textfield',
 				  name: 'name',
 					anchor: '-20',
@@ -527,6 +541,10 @@ Ext.extend(GO.servermanager.InstallationDialog, GO.Window,{
 
 		//this.modulesGrid = new GO.servermanager.ModulesGrid();
 
+		this.usersGrid = new GO.servermanager.UsersGrid();
+		this.usageHistoryGrid = new GO.servermanager.UsageHistoryGrid();
+		this.autoInvoiceTab = new GO.servermanager.AutomaticInvoiceTab();
+
 		this.modulesGrid = new GO.grid.MultiSelectGrid({
 			id:'sm-modules',
 			title:GO.servermanager.lang.availableModules,
@@ -537,7 +555,7 @@ Ext.extend(GO.servermanager.InstallationDialog, GO.Window,{
 				baseParams: {
 					installation_id:0
 				},
-				fields: ['id','name','installed','checked', "usercount"]
+				fields: ['id','name','checked','usercount', 'ctime']
 			}),
 			showHeaders:true,
 			noSingleSelect:true,
@@ -545,17 +563,31 @@ Ext.extend(GO.servermanager.InstallationDialog, GO.Window,{
 					header:'Users',
 					dataIndex:'usercount',
 					width:60
-			}]
+			},
+			{
+				header: 'Available since',
+				dataIndex: 'ctime',
+				width: 160
+			}],
+			setInstallationId : function(installation_id){
+				if(this.store.baseParams.installation_id!=installation_id){
+					this.store.baseParams.installation_id=installation_id;
+					this.store.removeAll();
+					
+				}
+				this.store.loaded=false;
+			}
 		});
 		
-		this.modulesGrid.on('show',function(){			
+		this.modulesGrid.on('show',function(){	
+			if(!this.modulesGrid.store.loaded)
 				this.modulesGrid.store.load();
 		},this);
 
-		var items  = [this.propertiesPanel, this.modulesGrid];
+		var items  = [this.propertiesPanel, this.modulesGrid, this.usersGrid, this.usageHistoryGrid, this.autoInvoiceTab];
 		
     
-    
+
     
 		
 		//Create the standard GO linkspanel

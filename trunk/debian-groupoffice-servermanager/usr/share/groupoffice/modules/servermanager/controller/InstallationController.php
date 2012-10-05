@@ -12,6 +12,11 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		return array('create','destroy', 'report');
 	}
 	
+	/**
+	 * Loop through all config directories in /etc/groupoffice
+	 * If it is not found in the database create a new one and call report() function
+	 * @param array $params $_REQUEST object
+	 */
 	protected function actionImport($params){
 		$folder = new GO_Base_Fs_Folder('/etc/groupoffice');
 		$items = $folder->ls();
@@ -23,7 +28,8 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 					echo "Importing ".$item->name()."\n";
 					$installation = new GO_ServerManager_Model_Installation();
 					$installation->ignoreExistingForImport=true;
-					$installation->name=$item->name();					
+					$installation->name=$item->name();
+					//$installation->save(); ??
 					$installation->report();					
 				}
 			}
@@ -31,11 +37,17 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		echo "Done\n\n";
 	}
 	
+	/**
+	 * Command line action that will delete the database and remove symlinks
+	 * This will be executed by Installation->beforeDelete()
+	 * @param array $params the $_REQUEST[]
+	 * @throws Exception 
+	 */
 	public function actionDestroy($params){
 		if(PHP_SAPI!='cli')
 			throw new Exception("Action servermanager/installation/delete may only be run by root on the command line");
 		
-		$installation = GO_ServerManager_Model_Installation::model()->findSingleByAttribute('name', $params['name']);
+		$installation = GO_ServerManager_Model_Installation::model()->findByPk($params['id']);
 		
 		if($installation->name=='servermanager'){
 			throw new Exception("You can't delete the servermanager installation");
@@ -79,7 +91,8 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	
 	public function actionRename($params){
 	
-		$this->requireCli();
+		if(!$this->isCli())
+			throw new Exception("Action servermanager/installation/create may only be run by root on the command line");
 		
 		$this->checkRequiredParameters(array("oldname","newname"), $params);		
 		
@@ -115,34 +128,42 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		
 		system('mv "'.$installationFolder->path().'" "'.$newInstallPath.'"');
 		
-		echo "Installation ".$params['oldname']." was renamed to ".$params['newname']."\n";		
+		echo "Installation ".$params['oldname']." was renamed to ".$params['newname']."\n";
 	}
 	
+	/**
+	 * Create database, dbuser, symlinks and configfile
+	 * Only run this action as root on the commandline
+	 * 
+	 * @param string $params[name] name is installation to create
+	 * @param string $params[tmp_config] path to temp config file
+	 * @param string $params[adminpassword] ??
+	 * @throws Exception if not called from CLI
+	 * @throws Exception if installation is not found
+	 */
 	public function actionCreate($params){
-		$this->requireCli();
+		if(!$this->isCli())
+			throw new Exception("Action servermanager/installation/create may only be run by root on the command line");
 		
 		//todo check if we are root
-		
-		
 		
 		$installation = GO_ServerManager_Model_Installation::model()->findSingleByAttribute('name', $params['name']);
 		
 		if(!$installation)
 			throw new Exception("Installation ".$params['name']." not found!");
 		
-		
 		$configFile = new GO_Base_Fs_File($installation->configPath);
 		
 		//if config file already exists then include it so we will keep the manually added config values.
 		if($configFile->exists())
-			$existingConfig = $this->_getConfigFromFile($configFile->path());
+			$existingConfig = $installation->config;
 		else
 			$existingConfig = array();
 		
 		//create config file
-		$newConfig = $this->_getConfigFromFile($params['tmp_config']);
+		require($params['tmp_config']);
+		$newConfig = $config;
 		unlink($params['tmp_config']);
-		
 		$existingConfig=array_merge($existingConfig, $newConfig);		
 
 		$this->_createFolderStructure($existingConfig, $installation);
@@ -169,90 +190,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 
 		if($return_var!=0)
 			throw new Exception(implode("\n", $output));
-		
-		// Create the groups for this installation that are given in the config file.
-		if(!empty(GO::config()->servermanager_auto_groups)){
-			GO::setDbConnection(
-							$config['db_name'], 
-							$config['db_user'], 
-							$config['db_pass'], 
-							$config['db_host']
-							);
-			
-			foreach(GO::config()->servermanager_auto_groups as $group=>$permissions){
-				$this->_createGroup($group, $permissions);
-			}
-
-			GO::setDbConnection();
-		}
 	}
-	
-	/**
-	 * Create the new group for this installation
-	 * 
-	 * Example array for in the config file.
-	 * 
-	 * $config['servermanager_auto_groups']=array(
-	 *	'Group1'=>array(
-	 *		'modules_read'=>'addressbook,calendar',
-	 *		'modules_manage'=>'tickets'
-	 *	),
-	 *	'Group2'=>array(
-	 *		'modules_read'=>'addressbook',
-	 *		'modules_manage'=>'tickets,calendar'
-	 *	)
-	 * );
-	 * 
-	 * 
-	 * @param string $name The name of the new group
-	 * @param array $permissions Array of permission options for the group
-	 */
-	private function _createGroup($name,$permissions){
-		
-		$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', $name);
-		
-		if(!$group){
-			$group = new GO_Base_Model_Group();
-			$group->name = $name;
-			$group->save();
-		}
-
-		if($group){
-			if(!empty($permissions['modules_read']))
-				$this->_setGroupRights($group,$permissions['modules_read'], 'read');
-			
-			if(!empty($permissions['modules_manage']))
-				$this->_setGroupRights($group,$permissions['modules_manage'],'manage');
-		}
-	}
-	
-	/**
-	 * Set the rights for the created group.
-	 * 
-	 * @param GO_Base_Model_Group $group The group to set the rights for.
-	 * @param string $modules A comma separated string with the module names.
-	 * @param string $type Permission type, possible values: 'read','manage' defaults to 'read'.
-	 */
-	private function _setGroupRights($group,$modules,$type='read'){
-		$modules =  explode(',',$modules);
-		
-		$permission = GO_Base_Model_Acl::READ_PERMISSION;
-		
-		switch($type){
-			case 'manage':		
-				$permission = GO_Base_Model_Acl::MANAGE_PERMISSION;
-			break;
-			case 'read':
-			default:
-				$permission = GO_Base_Model_Acl::READ_PERMISSION;
-		}
-		
-		foreach($modules as $moduleName){
-			if(GO::modules()->$moduleName)
-				GO::modules()->$moduleName->acl->addGroup($group->id,$permission);
-		}
-	}
-	
 	
 	private function _createFolderStructure($config, $installation){
 		
@@ -269,8 +207,6 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		
 		if(!file_exists($installation->installPath.'groupoffice'))
 			symlink(GO::config()->root_path, $installation->installPath.'groupoffice');
-		
-
 	}
 	
 	private function _createDatabase($params, $installation, $config){
@@ -314,55 +250,58 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		GO::getDbConnection()->query('FLUSH PRIVILEGES');		
 	}
 	
+	/**
+	 * Load data from config file to response array to fill form fields
+	 * @param type $response
+	 * @param type $model
+	 * @param type $params
+	 * @return type 
+	 */
 	protected function afterLoad(&$response, &$model, &$params) {
 		
 		if(file_exists($model->configPath))
 		{
-			require($model->configPath);
-			if(isset($config))
-			{
-				$response['data']['enabled']=empty($config['id']) || !empty($config['enabled']);
-				$response['data']['max_users'] = GO_Base_Util_Number::unlocalize($config['max_users']);
+			$response['data']['enabled']=empty($model->config['id']) || !empty($model->config['enabled']);
+			$response['data']['max_users'] = GO_Base_Util_Number::unlocalize($model->config['max_users']);
 
-				$response['data']['webmaster_email'] = $config['webmaster_email'];
-				$response['data']['title'] = $config['title'];
-				$response['data']['default_country'] = $config['default_country'];
-				$response['data']['language'] = $config['language'];
-				$response['data']['default_timezone'] = $config['default_timezone'];
-				$response['data']['default_currency'] = $config['default_currency'];
-				$response['data']['default_time_format'] = $config['default_time_format'];
-				$response['data']['default_date_format'] = $config['default_date_format'];
-				$response['data']['default_date_separator'] = $config['default_date_separator'];
-				$response['data']['default_thousands_separator'] = $config['default_thousands_separator'];
-				$response['data']['theme'] = $config['theme'];
+			$response['data']['webmaster_email'] = $model->config['webmaster_email'];
+			$response['data']['title'] = $model->config['title'];
+			$response['data']['default_country'] = $model->config['default_country'];
+			$response['data']['language'] = $model->config['language'];
+			$response['data']['default_timezone'] = $model->config['default_timezone'];
+			$response['data']['default_currency'] = $model->config['default_currency'];
+			$response['data']['default_time_format'] = $model->config['default_time_format'];
+			$response['data']['default_date_format'] = $model->config['default_date_format'];
+			$response['data']['default_date_separator'] = $model->config['default_date_separator'];
+			$response['data']['default_thousands_separator'] = $model->config['default_thousands_separator'];
+			$response['data']['theme'] = $model->config['theme'];
 
-				$response['data']['default_decimal_separator'] = $config['default_decimal_separator'];
-				$response['data']['first_weekday'] = $config['first_weekday'];
+			$response['data']['default_decimal_separator'] = $model->config['default_decimal_separator'];
+			$response['data']['first_weekday'] = $model->config['first_weekday'];
 
 
-				$response['data']['allow_themes'] = !empty($config['allow_themes']);
-				$response['data']['allow_password_change'] = !empty($config['allow_password_change']);
+			$response['data']['allow_themes'] = !empty($model->config['allow_themes']);
+			$response['data']['allow_password_change'] = !empty($model->config['allow_password_change']);
 
-				$response['data']['quota'] = GO_Base_Util_Number::localize($config['quota']/1024/1024);
-				$response['data']['restrict_smtp_hosts'] = $config['restrict_smtp_hosts'];
-				$response['data']['serverclient_domains'] = $config['serverclient_domains'];
-			}
+			$response['data']['quota'] = GO_Base_Util_Number::localize($model->config['quota']/1024/1024/1024); //in gigabytes
+			$response['data']['restrict_smtp_hosts'] = $model->config['restrict_smtp_hosts'];
+			$response['data']['serverclient_domains'] = $model->config['serverclient_domains'];
 		}
+		
+		if($model->automaticInvoice == null)
+			$model->automaticInvoice = new GO_ServerManager_Model_AutomaticInvoice();
+		
+		$response['data'] = array_merge($response['data'], $model->automaticInvoice->getAttributes());
 		
 		return parent::afterLoad($response, $model, $params);
 	}
 
+	/**
+	 * Create a temparory config file and call the create action as root
+	 */
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
 		
 		$tmpConfigFile = $this->_createConfig($params, $model);
-		
-		if(!empty($params['admin_password1']))
-		{
-			if($params['admin_password1']!=$params['admin_password2'])
-			{
-				throw new Exception('The passwords didn\'t match. Please try again');
-			}
-		}	
 				
 		$cmd = 'sudo TERM=dumb '.GO::config()->root_path.
 						'groupofficecli.php -r=servermanager/installation/create'.
@@ -380,15 +319,42 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}
 	
+	
 	protected function beforeSubmit(&$response, &$model, &$params) {
 		
-		$modules = isset($params['modules']) ? json_decode($params['modules'], true) : false;
-		if (empty($params['id']) && empty($modules)) {
-			throw new Exception("Please select the allowed modules");
+		if(!empty($params['admin_password1']))
+		{
+			if($params['admin_password1']!=$params['admin_password2'])
+			{
+				throw new Exception('The passwords didn\'t match. Please try again');
+			}
 		}
+		
+		if(isset($params['enable_invoicing']) && $params['enable_invoicing']=='on')
+		{
+			if($model->automaticInvoice != null)
+				$autoInvoice = $model->automaticInvoice;
+			else
+				$autoInvoice = new GO_ServerManager_Model_AutomaticInvoice();
+			
+			$autoInvoice->setAttributes($params);
+			
+			$autoInvoice->enable_invoicing = true;
+			$model->setAutoInvoice($autoInvoice);
+		}
+		elseif($model->automaticInvoice != null)
+		{
+			$autoInvoice = $model->automaticInvoice;
+			$autoInvoice->enable_invoicing = false;
+			$model->setAutoInvoice($autoInvoice);
+		}
+		
+		if(isset($params['modules']))
+			$model->setModules( json_decode($params['modules'], true) );
 		
 		return parent::beforeSubmit($response, $model, $params);
 	}
+
 	private function _createConfig($params, $model) {
 		if (isset($params['modules'])) {
 			$modules = json_decode($params['modules']);
@@ -461,118 +427,97 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		
 		return $tmpFile;
 	}
-	
-	protected function afterStore(&$response, &$params, &$store, $storeParams) {
-		
-		$response['max_users']=0;
-		$response['total_users']=0;
-		
-		return parent::afterStore($response, $params, $store, $storeParams);
-	}
-	
-	
+
 	public function formatStoreRecord($record, $model, $store) {
 		
-		$record['total_usage']= GO_Base_Util_Number::formatSize(($record['file_storage_usage']+$record['database_usage']+$record['mailbox_usage'])*1024);
-		$record['file_storage_usage']= GO_Base_Util_Number::formatSize($record['file_storage_usage']*1024);
-		$record['database_usage']= GO_Base_Util_Number::formatSize($record['database_usage']*1024);
-		$record['mailbox_usage']= GO_Base_Util_Number::formatSize($record['mailbox_usage']*1024);
-		
+		$record['total_usage']= $model->totalUsageText;
+		$record['file_storage_usage']= $model->fileStorageUsageText;
+		$record['database_usage']= $model->databaseUsageText;
+		$record['mailbox_usage']= $model->mailboxUsageText;
+		$record['count_users'] = $model->countUsers;
+		$record['total_logins'] = $model->totalLogins;
 		
 		if(file_exists($model->configPath))
 		{
-			require($model->configPath);
-			if(isset($config))
-			{
-				$record['enabled']=isset($config['enabled']) ? $config['enabled'] : true;
-				$record['title']=$config['title'];
-				$record['webmaster_email']=$config['webmaster_email'];
-				$record['max_users']=isset($config['max_users']) ? $config['max_users'] : 0;
-				$record['serverclient_domains']=isset($config['serverclient_domains']) ? $config['serverclient_domains'] : '';
-			}
+			$record['enabled']=isset($model->config['enabled']) ? $model->config['enabled'] : true;
+			$record['title']=$model->config['title'];
+			$record['webmaster_email']=$model->config['webmaster_email'];
+			$record['max_users']=isset($model->config['max_users']) ? $model->config['max_users'] : 0;
+			$record['serverclient_domains']=$model->config['serverclient_domains'];
 		}
 		
 		return parent::formatStoreRecord($record, $model, $store);
 	}
-	
+	/*
 	private function _countModuleUsers($installation_id, $module_id){
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()
 						->select('count(*) AS usercount')
-						->joinModel(array('model'=>'GO_ServerManager_Model_InstallationUser',  'localField'=>'user_id','tableAlias'=>'u'))
+						->joinModel(array('model'=>'GO_ServerManager_Model_InstallationUser', 'localField'=>'user_id','tableAlias'=>'u'))
 						->single()
 						->debugSql()
 						->criteria(
-										GO_Base_Db_FindCriteria::newInstance()
-										->addCondition('installation_id', $installation_id,'=','u')
-										->addCondition('module_id', $module_id)
-										);
+									GO_Base_Db_FindCriteria::newInstance()
+									->addCondition('installation_id', $installation_id,'=','u')
+									->addCondition('module_id', $module_id)
+								);
 		
 		$record = GO_ServerManager_Model_InstallationUserModule::model()->find($findParams);
 		return $record->usercount;
 	}
+	*/
 	
-	
+	/**
+	 * Returns a list with all modules availible for installation
+	 * Get executed when clicking Modules tab in installationdialog
+	 * @param array $params the $_REQUEST
+	 * @return string JSON encode array for extjs datagrid
+	 */
 	protected function actionModules($params){
 
-		$modules = GO::modules()->getAvailableModules(true);
+		$installation = GO_ServerManager_Model_Installation::model()->findByPk($params['installation_id']);
+		if($installation == null)
+			$installation = new GO_ServerManager_Model_Installation();
+
+		$moduleList = $installation->getModulesList();
+
+		$results=array();
+		foreach($moduleList as $module)
+			$results[$module->name] = $module->toArray();
 		
-		$allowedModules = array();
-		if(!empty($params['installation_id']) && ($installation=  GO_ServerManager_Model_Installation::model()->findByPk($params['installation_id']))){
-			require($installation->configPath);
-			
-			if(!isset($config['allowed_modules']))
-				$config['allowed_modules']="";
-			
-			$allowedModules = explode(',', $config['allowed_modules']);
-		}
+		ksort($results); //Sort modules by name
 		
-		$hideModules = array('servermanager','serverclient','users','groups','modules','postfixadmin');
-		$availableModules=array();
-		foreach($modules as $moduleClass){
-			
-			$module = new $moduleClass;//call_user_func($moduleClase();
-			if(!in_array($module->id(), $hideModules)){
-				$availableModules[$module->name()] = array(
-						'id'=>$module->id(),
-						'name'=>$module->name(),
-						'description'=>$module->description(),
-						'checked'=>in_array($module->id(), $allowedModules),
-						'usercount'=>!empty($params['installation_id']) ? $this->_countModuleUsers($params['installation_id'], $module->id()) : '-'
-				);
-			}
-		}
-		
-		ksort($availableModules);		
-		
-		$response['results']=array_values($availableModules);
+		$response['results']=array_values($results);
 		
 		$response['total']=count($response['results']);
 		
 		return $response;		
 	}
 	
+	/**
+	 * Run maintenance/upgrade and clear cache for every installation
+	 * @throws Exception when not run from commandline
+	 */
 	protected function actionUpgradeAll($params){
 		
-		$this->requireCli();
+		if(!$this->isCli())
+			throw new Exception("This action may only be ran on the command line.");
 		
 		$stmt = GO_Servermanager_Model_Installation::model()->find();
 		while($installation = $stmt->fetch()){
 			
 			echo "Upgrading ".$installation->name."\n";
 			
-			if(!file_exists($installation->configPath)){
+			if(!$installation->config){
 				echo "\nERROR: Config file ".$installation->configPath." not found\n\n";
 				continue;
 			}
-			
-			require($installation->configPath);
 			
 			$cmd = GO::config()->root_path.'groupofficecli.php -r=maintenance/upgrade -c="'.$installation->configPath.'"';
 			
 			system($cmd);		
 			
-			exec('chown -R www-data:www-data '.$config['file_storage_path'].'cache');
+			exec('chown -R www-data:www-data '.$installation->config['file_storage_path'].'cache');
 
 //			if($return_var!=0){
 //				echo "ERROR: ".implode("\n", $output);
@@ -585,7 +530,8 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	
 	protected function actionRunOnAll($params){
 		
-		$this->requireCli();
+		if(!$this->isCli())
+			throw new Exception("This action may only be ran on the command line.");
 		
 		$stmt = GO_Servermanager_Model_Installation::model()->find();
 		while($installation = $stmt->fetch()){
@@ -601,77 +547,95 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			
 			$cmd = GO::config()->root_path.'groupofficecli.php -r="'.$params["route"].'" -c="'.$installation->configPath.'"';
 			
-			system($cmd);		
+			system($cmd);
 						
 			echo "Done\n\n";
 			
 		}
 	}	
 	
-	
+	/**
+	 * This action will be called by a cronjob that runs daily
+	 * Loop through all installations see if config file excists and is enabled
+	 * Check if (trail) installation is expired if not execute maintenance/servermanagerReport
+	 * Send automatic email for every installation
+	 * TODO: Send reports for automatic invoicing
+	 * @param array $params content of $_REQUEST (empty)
+	 * @throws Exception When this action is not called from Commandline
+	 */
 	protected function actionReport($params){
-		$now = time();
-		$stmt = GO_ServerManager_Model_Installation::model()->find();
 		
-		$this->requireCli();
+		if(!$this->isCli())
+			throw new Exception("You may only run this command on the command line");
 		
 		$report = array(
 				'installations'=>array(),
 				'id'=>GO::config()->id,
 				'hostname'=>getHostName(),
 				'ip'=>  gethostbyname(getHostName()),
+				'name'=>GO::config()->title,
+				'version'=>GO::config()->version,
 				'uname'=>  php_uname()
 		);
+
 		
-		$installations = $stmt->fetchAll();
-		$stmt = null;
-		
-		while($installation = array_shift($installations)){			
-			if(!file_exists($installation->configPath)){
+		$installations = GO_ServerManager_Model_Installation::model()->find()->fetchAll();
+		foreach($installations as $installation)
+		{			
+			
+			if(!$installation->config){
 				echo "Config file does not exist for ".$installation->name."\n";
 				continue;
 			}
-			
-			$config=array();
-			require($installation->configPath);
-			if(isset($config['enabled']) && $config['enabled']==false)
-			{
+			if(isset($installation->config['enabled']) && $installation->config['enabled']==false) {
 				echo "Installation ".$installation->name." is suspended\n";
 				continue;
 			}
 			
-			$suspended=false;
-			
 			echo "Creating report for ".$installation->name."\n";
 			try{
-				$report['installations'][]=$installation->report();
+				if($installation->loadUsageData())
+					$report['installations'][]=array_merge($installation->getAttributes(), $installation->getHistoryAttributes());
+				else
+					echo "Unable to fetch data for ".$installation->name."\n";
 				
-				if($installation->status == GO_ServerManager_Model_Installation::STATUS_TRIAL && $installation->install_time<GO_Base_Util_Date::date_add(time(),-30)){
-					$this->_suspend($installation, $config);
-					$suspended=true;
+				//check if installation is expired and suspend if so
+				if($installation->isExpired){
+					if($installation->suspend())
+						echo "Installation ".$installation->name." will be suspended\n";
 				}
+				
+				if($installation->save())
+					echo "Installation was updated\n";
+				else
+					echo "ERROR: failed to save new installation information\n";
 				
 			}catch(Exception $e){
 				echo $e->getMessage()."\n";
 				$report['errors']=(string) $e;
 			}
 			
-			//run tasks for installation like log rotation and filesearch index update.
-			if(!$suspended){
+			if(!$installation->isSuspended)
+			{
+				//run tasks for installation like log rotation and filesearch index update.
 				echo "Running daily tasks for installation\n";
 				$cmd ='/usr/share/groupoffice/groupofficecli.php -r=maintenance/servermanagerReport -c="'.$installation->configPath.'"  2>&1';				
 				system($cmd);
 			}
+
+			//send automatic email for every installation in report??
+			$installation->sendAutomaticEmails();
 			
-			
-			$this->_sendAutomaticEmails($installation,$now);
-		
+			//send automatic invoices if enabled
+			if($installation->automaticInvoice != null && $installation->automaticInvoice->enable_invoicing && $installation->automaticInvoice->shouldCreateOrder())
+			{	
+				if($installation->automaticInvoice->sendOrder())
+					echo "Order was posted to billing successfull\n";
+				else
+					echo "ERROR: Failed sending order to billing\n";
+			}
 		}
-		
-		
-		
-		
-		
+
 //		if(class_exists('GO_Professional_LicenseCheck')){
 //			
 //			if(!isset(GO::config()->license_name)){
@@ -679,19 +643,24 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 //			}
 //			
 //			$report['license_name']=GO::config()->license_name;
-//			
-//			$c = new GO_Base_Util_HttpClient();
-//			$response = $c->request('http://localhost/groupoffice/?r=licenses/license/report', array(
-//					'report'=>json_encode($report)
-//			));
-//			
-//			var_dump($response);
 //		}
+//		
+
+		//var_dump($report['installations']);
+			//post the report to intermesh
 		
-	
-	
-		
-				
+			$c = new GO_Base_Util_HttpClient();
+			$response = $c->request('http://trunk.loc/?r=licenses/server/report', array(
+					'report'=>json_encode($report)
+			));
+			
+			$response = json_decode($response, true);
+			
+			if($response['success'])
+				echo "Report was send to intermesh\n";
+			else
+				echo "ERROR: sending report to intermesh\n";
+
 //		$message = GO_Base_Mail_Message::newInstance();
 //		$message->setSubject("Servermanager report for ". $report['hostname']);
 //
@@ -705,58 +674,63 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		echo "Done\n\n";
 	}
 	
-	private function _suspend(GO_ServerManager_Model_Installation $installation,$config){
-		echo "Suspending installation ".$installation->name."\n";
-		$config['enabled']=false;
-		GO_Base_Util_ConfigEditor::save(new GO_Base_Fs_File($installation->configPath), $config);
+	/**
+	 * Save the remote invoice connection parameters with database and try to connection
+	 * @param array $params the $_REQUEST object
+	 * @return boolean true if the connection was established with the remote host
+	 */
+	public function actionRemoteInvoiceConnection($params)
+	{
+		//Set the settings from params
+		GO::config()->save_setting('servermanager_invoice_host', $params['remote_invoice_host']);
+		GO::config()->save_setting('servermanager_invoice_username', $params['remote_invoice_username']);
+		GO::config()->save_setting('servermanager_invoice_password', $params['remote_invoice_password']);
+		
+		
+		$response['success'] = GO_ServerManager_Model_AutomaticInvoice::canConnect();
+		return $response;
 	}
-
-	private function _sendAutomaticEmails(GO_Servermanager_Model_Installation $installationModel, $nowUnixTime=false) {
-		if (!is_int($nowUnixTime))
-			$nowUnixTime = time();
+	
+	/**
+	 * Returns a list of InstallationUsers's to display on the usage tab of an installation
+	 * @param type $params 
+	 */
+	public function actionUsersStore($params)
+	{
+		$cm =  new GO_Base_Data_ColumnModel();
+		$cm->setColumnsFromModel(GO_ServerManager_Model_InstallationUser::model());
 		
-		$autoEmailsStmt = GO_ServerManager_Model_AutomaticEmail::model()
-			->find(
-				GO_Base_Db_FindParams::newInstance()
-					->select('t.*')
-					->criteria(
-						GO_Base_Db_FindCriteria::newInstance()
-							->addCondition('active','1')
-					)
-			);
+		$store = new GO_Base_Data_Store($cm);
+		$storeParams = $store->getDefaultParams($params);
+		$storeParams = $storeParams->select('t.*'); //makes sure field of type TEXT get loaded
+		$criteria = GO_Base_Db_FindCriteria::newInstance()->addCondition('installation_id', $params['installation_id']);
+		$storeParams->mergeWith(GO_Base_Db_FindParams::newInstance()->criteria($criteria));
+		$store->setStatement(GO_ServerManager_Model_InstallationUser::model()->find($storeParams));
 		
-		while ($autoEmailModel = $autoEmailsStmt->fetch()) {
-			
-			//Send the mail only if the creation time of the installation + the number of days is today.
-			$dayStart = GO_Base_Util_Date::date_add($nowUnixTime,-$autoEmailModel->days);
-			$dayStart = GO_Base_Util_Date::clear_time($dayStart);
-			$dayEnd = GO_Base_Util_Date::date_add($dayStart,1);			
-			
-//			echo $autoEmailModel->name.' '.date('c', $dayStart).' - '.date('c', $dayEnd)."\n";
-			
-//			echo "Installation time: ".date('c', $installationModel->install_time)."\n";
-			
-			if (!empty($autoEmailModel->active) && $installationModel->install_time>=$dayStart && $installationModel->install_time<$dayEnd) {
-				
-				echo "Sending message ".$autoEmailModel->name." to ".$installationModel->admin_email."\n";
-				
-				$message = GO_Base_Mail_Message::newInstance()
-					->loadMimeMessage($autoEmailModel->mime)
-					->addTo($installationModel->admin_email, $installationModel->admin_name)
-					->addBcc(GO::config()->webmaster_email)
-					->setFrom(GO::config()->webmaster_email, GO::config()->title);
-
-				$body = $this->_parseTags(
-					$message->getBody(),
-					array('installation'=>$installationModel,'automaticemail'=>$autoEmailModel)
-				);
-				
-				$message->setBody($body);
-
-				GO_Base_Mail_Mailer::newGoInstance()->send($message);
-			}
-		}
+		$response=array("success"=>true,"results"=>array());
+		$response = array_merge($response, $store->getData());
 		
+		return $response;
+	}
+	
+	public function actionHistoryStore($params)
+	{
+		$cm =  new GO_Base_Data_ColumnModel();
+		$cm->setColumnsFromModel(GO_ServerManager_Model_UsageHistory::model());
+		$cm->formatColumn('total_usage', 'GO_Base_Util_Number::formatSize($model->totalUsage*1024)');
+		$cm->formatColumn('database_usage', '$model->databaseUsageText');
+		$cm->formatColumn('file_storage_usage', 'GO_Base_Util_Number::formatSize($model->file_storage_usage*1024)');
+
+		$store = new GO_Base_Data_Store($cm);
+		$storeParams = $store->getDefaultParams($params);
+		$criteria = GO_Base_Db_FindCriteria::newInstance()->addCondition('installation_id', $params['installation_id']);
+		$storeParams->mergeWith(GO_Base_Db_FindParams::newInstance()->criteria($criteria));
+		$store->setStatement(GO_ServerManager_Model_UsageHistory::model()->find($storeParams));
+		
+		$response=array("success"=>true,"results"=>array());
+		$response = array_merge($response, $store->getData());
+		
+		return $response;
 	}
 	
 	/**

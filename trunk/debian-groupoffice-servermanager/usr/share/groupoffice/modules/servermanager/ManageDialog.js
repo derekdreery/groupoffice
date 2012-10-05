@@ -12,7 +12,7 @@
 
 GO.servermanager.ManageDialog = Ext.extend(GO.dialog.TabbedFormDialog,{
 
-	enableOkButton : false,
+	//enableOkButton : false,
 	enableApplyButton : false,
 
 	initComponent : function() {
@@ -92,12 +92,16 @@ GO.servermanager.ManageDialog = Ext.extend(GO.dialog.TabbedFormDialog,{
 			this.showAutoEmailDialog(grid.store.getAt(rowIndex).data.id);
 		},this);
 		
+		this.pricePanel = new GO.servermanager.PricePanel();
+		
+		this.addPanel(this.pricePanel);
 		this.addPanel(this.autoEmailGrid);
 		
 	},
 
 	afterLoad : function(remoteModelId, config, action) {
 		this.autoEmailGrid.store.load();
+		//this.pricePanel.store.load();
 		GO.servermanager.ManageDialog.superclass.afterLoad(this,remoteModelId,config,action);
 	},
 
@@ -109,6 +113,10 @@ GO.servermanager.ManageDialog = Ext.extend(GO.dialog.TabbedFormDialog,{
 			},this);
 		}
 		this.autoEmailDialog.show(remoteModelId);
+	},
+	
+	submitForm : function(hide){
+		this.pricePanel.priceGrid.save(this.getEl());
 	}
-
+	
 });	
