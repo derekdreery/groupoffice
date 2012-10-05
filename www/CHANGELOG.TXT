@@ -1,3 +1,9 @@
+? 4.0.110
+- Bugfix: Email message priority was not shown
+- Bugfix: Changes to e-mail templates were not saved
+- Updated German translation
+- Bugfix: Auto link text misplaced in some languages.
+
 03-10-2012 4.0.109
 - Bugfix: Remove spaces at beginning and end of fields before CSV-importing them.
 - Bugfix: Attach files button in ticket dialog didn't work the second time.
@@ -10,6 +16,7 @@
   can view them but not alter them. 
 - Bugfix: Save event time in Time Registration fixed.
 - Bugfix: Opening advanced search dialog from SelectContactDialog / SelectCompanyDialog.
+- More elegant error message for empty winmail.dat files
 
 01-10-2012 4.0.108
 - Bugfix: Copy event in calendar moved the event

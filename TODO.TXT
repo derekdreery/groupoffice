@@ -1,7 +1,18 @@
+Migratie script interlokaal
+
+Totaal rates in ticket export
+
 Jeremie Voix
 
+Erik thier
 
-Nieuwe files detecteren
+Prode
+
+Humbolt
+Egil
+
+
+Enable save appointment directly by default
 
 Testen op win: http://www.group-office.com/forum/viewtopic.php?f=5&t=9065
 
@@ -12,7 +23,6 @@ Unique bool for custom fields
 - BTW niet tonen op bepaalde sjablonen (wel tonen bij facturen, niet bij offertes)
 
 Mail kopieren met shift ingehouden
-Dubbelklik op verzonden item openen in composer
 
 Sort custom fields alphabetically and use autocomplete
 
@@ -26,8 +36,6 @@ BCC en cc in mailto:
 https://mail.itsam.se/index.php?mail_to=mailto:?bcc=test1@test.se,test2@test.se
 
 
-Auto check andere mappen voor nieuwe mail
-
 2e mobile veld bij contacts
 
 BUg: http://www.group-office.com/forum/viewtopic.php?f=6&t=8317
@@ -40,8 +48,6 @@ Bug: http://www.group-office.com/forum/viewtopic.php?f=1&t=8409&p=28295#p28295
 Bij alle omgebouwde modules .php zoeken in *.js files zodat oude php code uiteindelijk weg kan.
 
 Arjen mul: 1 uur voor korting
-
-Search Co: autolink 8 uur.
 
 
 Billing systeem servermanager
@@ -59,7 +65,6 @@ Note sync bij syncml. Funambol outlook ondersteund dit.
 
 reminder als licentie verloopt
 
-Password prompt on imap logon failure
 
 Z-push 2.0
 
@@ -71,11 +76,9 @@ resize vcard photo's
 
 Add max_file_storage setting to servermanager
 
-recurly (simon zimmo) (Wilmar)
 
 Koba
 
-LDAP Sync
 
 Sieve MVC en redesign vakantie. Automatisch vullen aliasen
 

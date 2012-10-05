@@ -245,3 +245,8 @@ $l['unsubscribe']='Austragen';
 $l["sendingEmailAllowed"]= 'Das Senden von E-Mails an diese E-Mailadresse gestatten';
 $l['contactCustomFields']='Zusatzfelder für Kontakte';
 $l['companyCustomFields']='Zusatzfelder für Firmen';
+
+$l['nRemovedFromAddresslist']='%n Kontakte wurden gefunden und von der gewählten Adressliste entfernt.';
+$l['addToAddresslist']='Hinzugefügt zur Adressliste %s';
+$l['addToAddresslistPrompt']='Sie fügen die ausgewählten Einträge zur Adressliste %s hinzu. Sollen diese Einträge nur in %s existieren?';
+$l['addAddresslistSuccess']='Die Einträge wurden erfolgreich zur Adressliste hinzugefügt.';
