@@ -3,6 +3,7 @@
 - Bugfix: Changes to e-mail templates were not saved
 - Updated German translation
 - Bugfix: Auto link text misplaced in some languages.
+- Bugfix: Initial sorting of tasks was incorrect.
 
 03-10-2012 4.0.109
 - Bugfix: Remove spaces at beginning and end of fields before CSV-importing them.
