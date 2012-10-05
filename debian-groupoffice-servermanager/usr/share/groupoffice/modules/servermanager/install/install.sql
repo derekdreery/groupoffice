@@ -1,100 +1,151 @@
--- phpMyAdmin SQL Dump
--- version 3.4.5deb1
--- http://www.phpmyadmin.net
---
--- Machine: localhost
--- Genereertijd: 11 apr 2012 om 16:20
--- Serverversie: 5.1.61
--- PHP-Versie: 5.3.6-13ubuntu3.6
+-- -----------------------------------------------------
+-- Table `sm_user_prices`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `sm_user_prices` (
+  `max_users` INT NOT NULL ,
+  `price_per_month` DOUBLE NOT NULL ,
+  PRIMARY KEY (`max_users`) )
+ENGINE = InnoDB;
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
 
---
--- Database: `groupofficecomoud`
---
+-- -----------------------------------------------------
+-- Table `sm_installations`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `sm_installations` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `name` VARCHAR(100) NOT NULL ,
+  `ctime` INT NOT NULL ,
+  `mtime` INT NOT NULL ,
+  `max_users` INT NOT NULL ,
+  `trial_days` INT NOT NULL DEFAULT 30 ,
+  `lastlogin` INT NULL ,
+  `comment` TEXT NULL ,
+  `features` VARCHAR(255) NULL ,
+  `mail_domains` VARCHAR(255) NULL ,
+  `admin_email` VARCHAR(100) NULL ,
+  `admin_name` VARCHAR(100) NULL ,
+  `status` VARCHAR(50) NOT NULL DEFAULT 'ignore' ,
+  `token` VARCHAR(100) NOT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB;
 
--- --------------------------------------------------------
 
---
--- Tabelstructuur voor tabel `sm_installations`
---
+-- -----------------------------------------------------
+-- Table `sm_usage_history`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `sm_usage_history` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `ctime` INT NOT NULL ,
+  `count_users` INT NOT NULL ,
+  `database_usage` DOUBLE NOT NULL ,
+  `file_storage_usage` DOUBLE NOT NULL ,
+  `mailbox_usage` DOUBLE NOT NULL ,
+  `total_logins` INT NOT NULL DEFAULT 0 ,
+  `installation_id` INT NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `fk_sm_usage_history_sm_installations1` (`installation_id` ASC) ,
+  CONSTRAINT `fk_sm_usage_history_sm_installations1`
+    FOREIGN KEY (`installation_id` )
+    REFERENCES `sm_installations` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
-DROP TABLE IF EXISTS `sm_installations`;
-CREATE TABLE IF NOT EXISTS `sm_installations` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) DEFAULT NULL,
-  `ctime` int(11) NOT NULL,
-  `mtime` int(11) NOT NULL,
-  `max_users` int(11) NOT NULL,
-  `count_users` int(11) NOT NULL DEFAULT '0',
-  `install_time` int(11) NOT NULL DEFAULT '0',
-  `lastlogin` int(11) NOT NULL DEFAULT '0',
-  `total_logins` int(11) NOT NULL DEFAULT '0',
-  `database_usage` int(11) NOT NULL DEFAULT '0',
-  `file_storage_usage` int(11) NOT NULL DEFAULT '0',
-  `mailbox_usage` int(11) DEFAULT NULL,
-  `report_ctime` int(11) NOT NULL DEFAULT '0',
-  `comment` text,
-  `features` varchar(255) DEFAULT NULL,
-  `mail_domains` varchar(255) DEFAULT NULL,
-  `admin_email` varchar(100) DEFAULT NULL,
-  `admin_name` varchar(100) DEFAULT NULL,
-  `admin_salutation` varchar(100) DEFAULT NULL,
-  `admin_country` char(2) NOT NULL DEFAULT '',
-  `date_format` varchar(20) DEFAULT NULL,
-  `thousands_separator` char(1) DEFAULT NULL,
-  `decimal_separator` char(1) DEFAULT NULL,
-  `billing` tinyint(1) NOT NULL DEFAULT '0',
-  `professional` tinyint(1) NOT NULL DEFAULT '0',
-  `status` varchar(50) NOT NULL DEFAULT 'ignore',
-  `status_change_time` int(11) NOT NULL DEFAULT '0',
-  `config_file` varchar(255) NOT NULL DEFAULT '',
-  `token` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=36 ;
 
--- --------------------------------------------------------
+-- -----------------------------------------------------
+-- Table `sm_module_prices`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `sm_module_prices` (
+  `module_name` VARCHAR(45) NOT NULL ,
+  `price_per_month` DOUBLE NOT NULL DEFAULT 0 ,
+  PRIMARY KEY (`module_name`) )
+ENGINE = InnoDB;
 
---
--- Tabelstructuur voor tabel `sm_installation_users`
---
 
-DROP TABLE IF EXISTS `sm_installation_users`;
-CREATE TABLE IF NOT EXISTS `sm_installation_users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `installation_id` int(11) NOT NULL,
-  `first_name` varchar(100) NOT NULL,
-  `middle_name` varchar(100) NOT NULL,
-  `last_name` varchar(100) NOT NULL,
-  `username` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL DEFAULT '',
-  `ctime` int(11) NOT NULL,
-  `lastlogin` int(11) NOT NULL,
-  `enabled` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `installation_id` (`installation_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=146 ;
+-- -----------------------------------------------------
+-- Table `sm_installation_users`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `sm_installation_users` (
+  `user_id` INT NOT NULL ,
+  `installation_id` INT NOT NULL ,
+  `used_modules` TEXT NOT NULL ,
+  `ctime` INT NOT NULL ,
+  `lastlogin` INT NULL ,
+  `enabled` TINYINT(1) NULL ,
+  PRIMARY KEY (`user_id`, `installation_id`) ,
+  INDEX `fk_sm_installation_users_sm_installations1` (`installation_id` ASC) ,
+  CONSTRAINT `fk_sm_installation_users_sm_installations1`
+    FOREIGN KEY (`installation_id` )
+    REFERENCES `sm_installations` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
--- --------------------------------------------------------
 
---
--- Tabelstructuur voor tabel `sm_installation_user_modules`
---
+-- -----------------------------------------------------
+-- Table `sm_automatic_invoices`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `sm_automatic_invoices` (
+  `id` INT NOT NULL ,
+  `enable_invoicing` TINYINT(1) NOT NULL DEFAULT 0 ,
+  `discount_price` DOUBLE NOT NULL DEFAULT 0 ,
+  `discount_description` VARCHAR(255) NULL DEFAULT 'Discount' ,
+  `discount_percentage` DOUBLE NOT NULL DEFAULT 0 ,
+  `invoice_timespan` INT NOT NULL DEFAULT 1 ,
+  `next_invoice_time` INT NOT NULL ,
+  `customer_name` VARCHAR(255) NOT NULL ,
+  `customer_address` VARCHAR(255) NOT NULL ,
+  `customer_address_no` VARCHAR(10) NOT NULL ,
+  `customer_zip` VARCHAR(45) NOT NULL ,
+  `customer_state` VARCHAR(255) NULL ,
+  `customer_country` VARCHAR(45) NOT NULL ,
+  `customer_vat` VARCHAR(255) NULL ,
+  `customer_city` VARCHAR(255) NOT NULL ,
+  `installation_id` INT NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `fk_sm_automatic_invoices_sm_installations1` (`installation_id` ASC) ,
+  CONSTRAINT `fk_sm_automatic_invoices_sm_installations1`
+    FOREIGN KEY (`installation_id` )
+    REFERENCES `sm_installations` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
-DROP TABLE IF EXISTS `sm_installation_user_modules`;
-CREATE TABLE IF NOT EXISTS `sm_installation_user_modules` (
-  `user_id` int(11) NOT NULL,
-  `module_id` varchar(100) NOT NULL,
-  PRIMARY KEY (`user_id`,`module_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
+-- -----------------------------------------------------
+-- Table `sm_auto_email`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `sm_auto_email` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `name` VARCHAR(50) NOT NULL ,
+  `days` INT NOT NULL DEFAULT 0 ,
+  `mime` TEXT NULL ,
+  `active` TINYINT(1) NOT NULL DEFAULT 0 ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB;
 
---
--- Tabelstructuur voor tabel `sm_new_trials`
---
 
+-- -----------------------------------------------------
+-- Table `sm_installation_modules`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `sm_installation_modules` (
+  `name` VARCHAR(100) NOT NULL ,
+  `installation_id` INT NOT NULL ,
+  `ctime` INT NOT NULL ,
+  `mtime` INT NOT NULL ,
+  `enabled` TINYINT(1) NOT NULL DEFAULT 1 ,
+  INDEX `fk_sm_installation_modules_sm_installations1` (`installation_id` ASC) ,
+  PRIMARY KEY (`name`, `installation_id`) ,
+  CONSTRAINT `fk_sm_installation_modules_sm_installations1`
+    FOREIGN KEY (`installation_id` )
+    REFERENCES `sm_installations` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `sm_new_trial` (was never changes)
+-- -----------------------------------------------------
 DROP TABLE IF EXISTS `sm_new_trials`;
 CREATE TABLE IF NOT EXISTS `sm_new_trials` (
   `name` varchar(50) NOT NULL DEFAULT '',
@@ -109,18 +160,9 @@ CREATE TABLE IF NOT EXISTS `sm_new_trials` (
   KEY `key` (`key`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- Tabelstructuur voor tabel `sm_auto_email`
---
-
-DROP TABLE IF EXISTS `sm_auto_email`;
-CREATE TABLE IF NOT EXISTS `sm_auto_email` (
-	`id` INT( 11 ) NOT NULL AUTO_INCREMENT,
-	`name` varchar(50) NOT NULL DEFAULT '',
-	`days` int(5) NOT NULL DEFAULT '0',
-	`mime` TEXT,
-	`active` tinyint(1) NOT NULL DEFAULT '0',
-	PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+INSERT INTO `sm_user_prices` (`max_users`, `price_per_month`) VALUES
+	(1, 10),
+	(2, 19),
+	(3, 28),
+	(4, 36),
+	(5, 43);
