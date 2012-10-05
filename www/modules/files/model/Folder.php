@@ -819,7 +819,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @return boolean
 	 */
-	public function hasFilesChildren(){
+	public function hasFileChildren(){
 		$file = GO_Files_Model_File::model()->findSingleByAttribute('folder_id', $this->id);
 		
 		return $file!=false;
