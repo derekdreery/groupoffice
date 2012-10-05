@@ -1098,7 +1098,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 						$response['htmlbody']='<div class="em-autolink-message">'.
 										sprintf(GO::t('autolinked','email'),'<span class="em-autolink-link" onclick="GO.linkHandlers[\''.$tag['model'].'\'].call(this, '.
-														$tag['model_id'].');">'.$searchCacheModel->name.'</div>').
+														$tag['model_id'].');">'.$searchCacheModel->name.'</span>').'</div>'.
 										$response['htmlbody'];
 					}
 				}
