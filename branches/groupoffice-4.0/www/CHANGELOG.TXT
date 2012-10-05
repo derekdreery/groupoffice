@@ -4,6 +4,8 @@
 - Updated German translation
 - Bugfix: Auto link text misplaced in some languages.
 - Bugfix: Initial sorting of tasks was incorrect.
+- Bugfix: Only show module permissions tab in group dialog when you have access to the module management module.
+- Feature: Close inactive tickets through cron job and exclude a status
 
 03-10-2012 4.0.109
 - Bugfix: Remove spaces at beginning and end of fields before CSV-importing them.
