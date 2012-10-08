@@ -449,6 +449,29 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 //	}
 	
 	/**
+	 * Get the finder object for finding active records
+	 * @param mixed $args if array treath as configureation else threath as pk value
+	 * @return GO_Base_Db_ActiveFinder the finder object
+	 */
+	public static function finder($args=null)
+	{
+		//when functions like primaryKey() and tableName() are static this shouldn't be nessasary
+		$ar = GO::getModel(get_called_class());
+		
+		$finder = new GO_Base_Db_ActiveFinder($ar);
+		if(is_array($args))
+		{
+			//do something with arg
+		} else if(!empty($args)) //use arg as the pk
+		{
+			
+			$finder = $finder->where($ar->primaryKey()."=".$args);
+		}
+		
+		return $finder;
+	}
+	
+	/**
 	 * Can be overriden to initialize the model. Useful for setting attribute
 	 * validators in the columns property for example.
 	 */
@@ -1563,9 +1586,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 		}elseif($r[$name]['type']==self::HAS_ONE){			
 			//We can't put this in the related cache because there's no reliable way to check if the situation has changed.
-		
+			$params = array_merge($r[$name]['findParams'], array('relation'=>$name));
 			//In a has one to relation ship the primary key of this model is stored in the "field" attribute of the related model.					
-			return empty($this->pk) ? false : GO::getModel($model)->findSingleByAttribute($r[$name]['field'], $this->pk, array('relation'=>$name,'debugSql'=>true));			
+			return empty($this->pk) ? false : GO::getModel($model)->findSingleByAttribute($r[$name]['field'], $this->pk, $params);			
 		}elseif($r[$name]['type']==self::HAS_MANY)
 		{									
 			$remoteFieldThatHoldsMyPk = $r[$name]['field'];
@@ -1778,6 +1801,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$relations = $this->relations();
 		
 		foreach($attributes as $key=>$value){
+			//skip setting the primarykey when not new in debug mode when posting multiple models
+			if(GO::config()->debug && !$this->isNew && $key == $this->primaryKey())
+				continue;
+			
 			//don't set a value for a relation. Otherwise getting the relation won't
 			//work anymore.
 			if(!isset($relations[$key]))
@@ -2056,6 +2083,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$this->mtime=time();
 		return $this->_dbUpdate();
 	}
+	
+	/**
+	 * Return true if an update qwery for this record is require override if needed
+	 * @return boolean true if dbupdate if required
+	 */
+	protected function dbUpdateRequired(){
+		return $this->_forceSave || $this->isNew || $this->isModified();// || ($this->customfieldsRecord  !$this->customfieldsRecord->isModified());
+	}
 
 
 	/**
@@ -2082,20 +2117,19 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(!$this->validate()){
 			return false;
 		}
-		
-		//Don't do anything if nothing has been modified.
-		if(!$this->_forceSave && !$this->isNew && !$this->isModified() && (!$this->customfieldsRecord || !$this->customfieldsRecord->isModified()))
-			return true;
-
+	
 
 		/*
 		 * Set some common column values
 		*/
 //GO::debug($this->mtime);
-		if(isset($this->columns['mtime']) && (!$this->isModified('mtime') || empty($this->mtime)))//Don't update if mtime was manually set.
-			$this->mtime=time();
-		if(isset($this->columns['ctime']) && empty($this->ctime)){
-			$this->ctime=time();
+		
+		if($this->dbUpdateRequired()){
+			if(isset($this->columns['mtime']) && (!$this->isModified('mtime') || empty($this->mtime)))//Don't update if mtime was manually set.
+				$this->mtime=time();
+			if(isset($this->columns['ctime']) && empty($this->ctime)){
+				$this->ctime=time();
+			}
 		}
 
 		//user id is set by defaultAttributes now.
@@ -2170,7 +2204,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}
 
 
-			if(!$this->_dbUpdate())
+			if($this->dbUpdateRequired() && !$this->_dbUpdate())
 				return false;
 		}
 
