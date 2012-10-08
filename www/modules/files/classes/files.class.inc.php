@@ -757,7 +757,7 @@ class files extends db {
 		{
 			go_debug('Timestamp on disk didn\'t match the database so starting sync for: '.$path);
 
-			ini_set('memory_limit','1000M');
+//			ini_set('memory_limit','1000M');
 			
 			$this->sync_folder($folder);
 
