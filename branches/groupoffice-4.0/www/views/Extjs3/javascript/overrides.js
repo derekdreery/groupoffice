@@ -15,6 +15,15 @@
  *When upgrading extjs don't forget to check htmleditor overrides in E-mail composer
  */
 
+Ext.override(Ext.grid.Column,{
+	renderer:function(value, metaData, record, rowIndex, colIndex, store){
+		//console.log(this);
+		if(this.editor && !this.dontAddEditClass)
+			metaData.css='go-editable-col';
+		return value;
+	}	
+})
+
 
 /*testing
 Ext.TaskMgr.start({
