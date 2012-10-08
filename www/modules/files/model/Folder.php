@@ -925,7 +925,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			//sort by path and only list top level shares		
 			$shares[$folder->path]=$folder;
 		}
-		ksort($shares, SORT_FLAG_CASE | SORT_STRING);
+		ksort($shares, SORT_STRING);
 		
 		$response=array();
 		foreach($shares as $path=>$folder){
