@@ -1,11 +1,17 @@
 ? 4.0.110
 - Bugfix: Email message priority was not shown
 - Bugfix: Changes to e-mail templates were not saved
-- Updated German translation
+- Updated German and Norwegian translation
 - Bugfix: Auto link text misplaced in some languages.
 - Bugfix: Initial sorting of tasks was incorrect.
 - Bugfix: Only show module permissions tab in group dialog when you have access to the module management module.
 - Feature: Close inactive tickets through cron job and exclude a status
+- Feature: Pass beforeLogin $params by reference to modify in modules
+- Bugfix: Read only custom fields could not be enabled in grids
+- Bugfix: Don't crash on permission error for e-mail account in sync
+- Bugfix: New comment form rendered twice sometimes
+- Feature: Database check will set empty properties with default values when they're empty.
+- Feature: Entering an empty string into a custom field will result in a null value in the database.
 
 03-10-2012 4.0.109
 - Bugfix: Remove spaces at beginning and end of fields before CSV-importing them.

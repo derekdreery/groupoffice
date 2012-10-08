@@ -61,8 +61,11 @@ GO.form.NumberField = Ext.extend(Ext.form.TextField, {
 		this.fixPrecision();
 	},
 	fixPrecision : function(){
-		var number = GO.util.unlocalizeNumber(this.getValue());
-		this.setValue(GO.util.numberFormat(number, this.decimals));
+//		console.log(this.getValue());
+		if(this.getValue()!=""){
+			var number = GO.util.unlocalizeNumber(this.getValue());
+			this.setValue(GO.util.numberFormat(number, this.decimals));
+		}
 	},
 	
 	
