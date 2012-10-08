@@ -1651,8 +1651,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					return (string) $value;
 					break;
 				default:
-					if($this->columns[$column]['type']==PDO::PARAM_INT)
-						$value = intval($value);
+					if($this->columns[$column]['type']==PDO::PARAM_INT){
+						if($this->columns[$column]['null'] && $value=="")
+							$value=null;
+						else
+							$value = intval($value);
+					}
 					
 					return  $value;
 					break;
