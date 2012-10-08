@@ -1,4 +1,4 @@
-? 4.0.110
+08-10-2012 4.0.110
 - Bugfix: Email message priority was not shown
 - Bugfix: Changes to e-mail templates were not saved
 - Updated German and Norwegian translation
