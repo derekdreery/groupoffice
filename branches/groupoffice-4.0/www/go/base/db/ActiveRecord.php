@@ -1638,7 +1638,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					return  GO_Base_Util_Date::to_unixtime($value);
 					break;			
 				case 'number':
-					return  GO_Base_Util_Number::unlocalize($value);
+					$value= GO_Base_Util_Number::unlocalize($value);
+					
+					if($value===null && !$this->columns[$column]['null'])
+						$value=0;
+					
+					return $value;
 					break;
 				case 'boolean':
 					$ret= empty($value) || $value==="false" ? 0 : 1; 
