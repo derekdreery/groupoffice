@@ -179,6 +179,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		$this->columns['first_name']['required'] = true;
 
 		$this->columns['last_name']['required'] = true;
+		$this->columns['timezone']['required']=true;
 		
 		$this->columns['lastlogin']['gotype']='unixtimestamp';
 		return parent::init();

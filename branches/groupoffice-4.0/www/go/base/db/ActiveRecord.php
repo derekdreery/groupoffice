@@ -319,7 +319,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$this->init();	
 		
 		if($this->isNew){
-			$this->setAttributes($this->_getDefaultAttributes(),false);
+			$this->setAttributes($this->defaultAttributes(),false);
 			$this->_loadingFromDatabase=false;
 		}elseif(!$isStaticModel){
 			$this->afterLoad();
@@ -3284,8 +3284,20 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				$this->$field=GO_Base_Util_String::normalizeCrlf($this->_attributes[$field], "\n");
 			}
 		}
+				
+		//fill in empty required attributes that have defaults
+		$defaults=$this->defaultAttributes();
+		foreach($this->columns as $field=>$attr){
+			if($attr['required'] && empty($this->$field) && isset($defaults[$field])){
+				$this->$field=$defaults[$field];
+				
+				echo "Setting default value ".$this->className().":".$this->id." $field=".$defaults[$field]."\n";
+				
+			}
+		}
 		
-		$this->save();		
+		if($this->isModified())
+			$this->save();		
 	}
 	
 	
@@ -3434,17 +3446,17 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	
-	private function _getDefaultAttributes(){
-		$attr=array();
-		foreach($this->getColumns() as $field => $colAttr){
-				$attr[$field]=$colAttr['default'];
-		}
-		
-		if(isset($this->columns['user_id']))
-			$attr['user_id']=GO::user() ? GO::user()->id : 1;
-		
-		return array_merge($attr, $this->defaultAttributes());
-	}
+//	private function _getDefaultAttributes(){
+//		$attr=array();
+//		foreach($this->getColumns() as $field => $colAttr){
+//				$attr[$field]=$colAttr['default'];
+//		}
+//		
+//		if(isset($this->columns['user_id']))
+//			$attr['user_id']=GO::user() ? GO::user()->id : 1;
+//		
+//		return array_merge($attr, $this->defaultAttributes());
+//	}
 	
 	/**
 	 * Array of default attributes to set
@@ -3454,7 +3466,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @return Array An empty array.
 	 */
 	public function defaultAttributes() {
-		return array();
+		$attr=array();
+		foreach($this->getColumns() as $field => $colAttr){
+				$attr[$field]=$colAttr['default'];
+		}
+		
+		if(isset($this->columns['user_id']))
+			$attr['user_id']=GO::user() ? GO::user()->id : 1;
+		
+		return $attr;
 	}
 	
 	
