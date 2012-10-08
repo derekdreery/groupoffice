@@ -284,6 +284,10 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 						$addressesText = !empty($action['addresses']) && is_array($action['addresses'])
 							? GO::t('vacAlsoMailTo','sieve').': '.implode(',',$action['addresses']).'. '
 							: '';
+						
+						if(empty($action['days']))
+							$action['days']=7;
+						
 						$action['text']=GO::t('vacsendevery','sieve').' '.$action['days'].' '.GO::t('vacsendevery2','sieve').'. '.$addressesText.GO::t('vacationmessage','sieve').' "'.$action['reason'].'"';
 						break;
 					case 'discard':
