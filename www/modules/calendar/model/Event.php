@@ -527,7 +527,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$rrule = new GO_Base_Util_Icalendar_Rrule();
 			$rrule->readIcalendarRruleString($event->start_time, $event->rrule);
 
-			$rrule->setRecurpositionStartTime($periodStartTime);
+			$rrule->setRecurPositionStartTime($periodStartTime);
 
 			$origEventAttr = $event->getAttributes('formatted');
 
