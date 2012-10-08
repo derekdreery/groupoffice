@@ -1949,6 +1949,8 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			$size = $matches[1];
 		}
 		
+		$this->last_line=false;
+		
 		if(!$size)
 			return false;
 
