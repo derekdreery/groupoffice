@@ -129,7 +129,7 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 		
 		$response = array();
 		
-		if(!$this->fireEvent('beforelogin', array($params, &$response)))
+		if(!$this->fireEvent('beforelogin', array(&$params, &$response)))
 			return $response;		
 		
 		$user = GO::session()->login($params['username'], $params['password']);
