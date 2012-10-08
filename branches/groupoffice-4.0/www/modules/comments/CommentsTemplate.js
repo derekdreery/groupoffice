@@ -4,7 +4,7 @@ GO.comments.displayPanelTemplate =
 '{[this.collapsibleSectionHeader(GO.comments.lang.recentComments, "comments-"+values.panelId, "comments")]}'+
 	
 			'<table cellpadding="0" cellspacing="0" border="0" class="display-panel" id="comments-{panelId}">'+
-				'<tr><td colspan="2"><div id="newCommentForModelDiv_{id}"></div></td></tr>'+
+				'<tr><td colspan="2"><div id="newCommentForModelDiv_{model}_{id}"></div></td></tr>'+
 				'<tr><td colspan="2"><hr /></td></tr>'+
 				'<tpl if="!comments.length">'+
 					'<tr><td colspan="3">'+GO.lang.strNoItems+'</td></tr>'+

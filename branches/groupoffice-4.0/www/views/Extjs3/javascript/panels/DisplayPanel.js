@@ -466,7 +466,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 	
 		if (GO.comments && this.data.comments.length>0)
 			this.newCommentPanel = new Ext.form.FormPanel({			
-				renderTo: 'newCommentForModelDiv_'+this.model_id,
+				renderTo: 'newCommentForModelDiv_'+this.data.model+'_'+this.data.id,
 				layout: 'form',
 				border: false,
 
@@ -481,7 +481,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 
 					this.categoriesCB = new GO.comments.CategoriesComboBox(),
 						new Ext.Button({
-							text: GO.comments.lang['newComment'],
+							text: GO.lang.cmdAdd,
 							handler: function(){
 								this.newCommentPanel.form.submit({
 									url: GO.url('comments/comment/submit'),
