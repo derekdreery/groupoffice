@@ -762,18 +762,23 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		GO::session()->closeWriting();
 
 		$values = json_decode($params['values'], true);
+		
+		if(!is_array($values)){
+			trigger_error ("Invalid value for GO_Core_Controller_Core::actionSaveState: ".var_export($params, true), E_USER_NOTICE);
+		}else
+		{
+			foreach($values as $name=>$value){
 
-		foreach($values as $name=>$value){
-			
-			$state = GO_Base_Model_State::model()->findByPk(array('name'=>$name,'user_id'=>GO::user()->id));
-			
-			if(!$state){
-				$state = new GO_Base_Model_State();
-				$state->name=$name;
+				$state = GO_Base_Model_State::model()->findByPk(array('name'=>$name,'user_id'=>GO::user()->id));
+
+				if(!$state){
+					$state = new GO_Base_Model_State();
+					$state->name=$name;
+				}
+
+				$state->value=$value;
+				$state->save();
 			}
-			
-			$state->value=$value;
-			$state->save();
 		}
 		$response['success']=true;
 		echo json_encode($response);
