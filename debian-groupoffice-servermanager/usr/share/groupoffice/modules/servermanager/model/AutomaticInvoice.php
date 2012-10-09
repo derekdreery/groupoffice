@@ -68,7 +68,9 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord{
 	public function beforeSave()
 	{
 		if($this->isNew) //set next_invoice time of an new object to end of trial period
-			$this->next_invoice_time = strtotime('today') + $this->getTrailTimeInSeconds();
+		{
+			$this->next_invoice_time = GO_Base_Util_Date::dateTime_add(strtotime('today'), 0, 0, 0, $this->installation->trial_days);
+		}
 		return true;
 	}
 	
@@ -148,14 +150,33 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord{
 			$order['customer_name'] = $this->customer_name;
 			$order['reference'] = 'GroupOffice hosted server';
 			$order['items'] = array();
-			$order['items'][] = array('description'=>'Hosted Groupoffice ('.$this->installation->currentusage->count_users.' users)', 'unit_price'=>$userCountPrice, 'amount'=>$this->invoice_timespan);
+			$order['items'][] = array(
+					'description'=>'Hosted Groupoffice ('.$this->installation->currentusage->count_users.' users)', 
+					'unit_price'=>$userCountPrice, 
+					'amount'=>$this->invoice_timespan,
+					'discount'=>$this->discount_percentage,
+			);
 			foreach($this->installation->modules as $module)
 			{
 				if($module->name == 'billing') //TODO: Don't hardcode, look into table for prices
-					$order['items'][] = array('description'=>'Billing module', 'unit_price'=>20, 'amount'=>$this->invoice_timespan);
+				{
+					$order['items'][] = array(
+							'description'=>'Billing module', 
+							'unit_price'=>20, 
+							'amount'=>$this->invoice_timespan,
+							'discount'=>$this->discount_percentage,
+					);
+				}
 			}
 			if(!empty($this->discount_price) && $this->discount_price > 0) //add discount to order
-				$order['items'][] = array('description'=>$this->discount_description, 'unit_price'=>0-$this->discount_price, 'amount'=>$this->invoice_timespan);
+			{
+				$order['items'][] = array(
+						'description'=>$this->discount_description, 
+						'unit_price'=>0-$this->discount_price, 
+						'amount'=>$this->invoice_timespan,
+						'discount'=>$this->discount_percentage,
+						);
+			}
 
 			return $order;
 	}
@@ -180,7 +201,7 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord{
 			));
 			//return the response status curl returns (true if invoice was created)
 			$result = json_decode($response,true);
-			var_dump($result);
+
 			if($result['success'])
 			{
 				$this->next_invoice_time = $this->calcNextInvoiceTime();
