@@ -1,3 +1,5 @@
+link rules email
+
 Migratie script interlokaal
 
 Totaal rates in ticket export
