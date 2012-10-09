@@ -92,8 +92,8 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 							}
 							$mailbox->snoozeAlarm();
 							
-							$response['email_status']['unseen'][]=array('account_id'=>$account->id,'mailbox'=>$checkMailboxName, 'unseen'=>$mailbox->unseen['count']);
-							$response['email_status']['total_unseen'] += $mailbox->unseen['count'];	
+							$response['email_status']['unseen'][]=array('account_id'=>$account->id,'mailbox'=>$checkMailboxName, 'unseen'=>$mailbox->unseen);
+							$response['email_status']['total_unseen'] += $mailbox->unseen;	
 
 							$existingCheckMailboxArray[] = $checkMailboxName;	
 							

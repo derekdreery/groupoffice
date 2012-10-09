@@ -63,7 +63,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$imap->move($messages, $params['to_mailbox']);		
 			
 			//return possible changed unseen status
-			$unseen = $imap->get_unseen($params['to_mailbox']);
+			$unseen = $imap->get_unseen($params['to_mailbox']);	
 			$response['unseen'][$params['to_mailbox']]=$unseen['count'];
 		}
 	}
@@ -232,7 +232,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$mailbox = new GO_Email_Model_ImapMailbox($account, array('name'=>$params['mailbox']));
 		$mailbox->snoozeAlarm();
 		
-		$response['unseen'][$params['mailbox']]=$mailbox->unseen['count'];		
+		$response['unseen'][$params['mailbox']]=$mailbox->unseen;		
 		
 		//deletes must be confirmed if no trash folder is used or when we are in the trash folder to delete permanently
 		$response['deleteConfirm']=empty($account->trash) || $account->trash==$params['mailbox'];
@@ -253,7 +253,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$mailbox = new GO_Email_Model_ImapMailbox($account, array('name'=>$params['mailbox']));
 		$mailbox->snoozeAlarm();
 		
-		$response['unseen']=$mailbox->unseen['count'];
+		$response['unseen']=$mailbox->unseen;
 		
 		return $response;
 	}
