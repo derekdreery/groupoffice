@@ -1265,6 +1265,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	protected function actionSaveAttachment($params){
 		$folder = GO_Files_Model_Folder::model()->findByPk($params['folder_id']);
 		
+		if(!$folder){
+			trigger_error("GO_Email_Controller_Message::actionSaveAttachment(".$params['folder_id'].") folder not found", E_USER_WARNING);
+			throw new GO_Base_Exception_NotFound("Specified folder not found");
+		}
 		
 		$params['filename'] = GO_Base_Fs_File::stripInvalidChars($params['filename']);
 		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.$folder->path.'/'.$params['filename']);
