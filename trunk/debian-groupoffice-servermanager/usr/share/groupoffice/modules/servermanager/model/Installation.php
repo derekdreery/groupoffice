@@ -741,6 +741,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 			//save automatic invoicing setting
 			if(isset($this->_autoInvoice))
 			{
+				$this->_autoInvoice->installation_id = $this->id;
 				$success=$success && $this->_autoInvoice->save();
 			}
 		}

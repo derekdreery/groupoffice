@@ -111,13 +111,19 @@ GO.servermanager.AutomaticInvoiceTab = function(config){
 				name: 'customer_address_no',
 				anchor: '-20',
 				allowBlank:false,
-				fieldLabel: GO.lang.strHouseNo
+				fieldLabel: GO.lang.strAddressNo
 			},{
 				xtype: 'textfield',
 				name: 'customer_zip',
 				anchor: '-20',
 				allowBlank:false,
 				fieldLabel: GO.lang.strZip
+			},{
+				xtype: 'textfield',
+				name: 'customer_city',
+				anchor: '-20',
+				allowBlank:false,
+				fieldLabel: GO.lang.strCity
 			},{
 				xtype: 'textfield',
 				name: 'customer_state',
