@@ -37,7 +37,10 @@ class GO_Base_Component_MultiSelectGrid {
 
 		$this->_requestParamName = $requestParamName;
 		$this->_store = $store;
-		$this->_modelName = $modelName;				
+		$this->_modelName = $modelName;			
+		
+		if(GO::config()->debug && !class_exists($modelName))
+			throw new Exception("Invalid argument \$modelName for GO_Base_Component_MultiSelectGrid. Class $modelName does not exist.");
 		
 		if(empty($requestParams['noMultiSelectFilter']))
 			$this->_setSelectedIds($requestParams);
@@ -81,10 +84,13 @@ class GO_Base_Component_MultiSelectGrid {
 			$this->_save();
 		} else {
 			$this->selectedIds = GO::config()->get_setting('ms_' . $this->_requestParamName, GO::session()->values['user_id']);
+
 			$this->selectedIds = $this->selectedIds!==false && $this->selectedIds !=""  ? explode(',', $this->selectedIds) : array();
+
 			//this will validate the selection
 			$this->_getModels();
 		}
+		//GO::debug($this->selectedIds);
 	}
 	
 	/**
@@ -118,14 +124,14 @@ class GO_Base_Component_MultiSelectGrid {
 			
 			$this->_models=array();
 			foreach ($this->selectedIds as $modelId) {
-				try{
+//				try{
 					$model = GO::getModel($this->_modelName)->findByPk($modelId);				
 					if($model)
 						$this->_models[]=$model;
-				}
-				catch(Exception $e){
-					$errors=true;
-				}
+//				}
+//				catch(Exception $e){
+//					$errors=true;
+//				}
 			}
 			
 			if($errors){
