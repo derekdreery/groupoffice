@@ -256,4 +256,37 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 	public function __toString() {
 		return $this->_attributes['name'];
 	}
+	
+	private function _getCacheKey(){
+		$user_id = GO::user() ? GO::user()->id : 0;
+		return $user_id.':'.$this->_account->id.':'.$this->name;
+	}
+	
+	private $_unseen;
+	
+	public function getUnseen(){
+		if(!isset($this->_unseen)){
+			$this->_unseen=$this->getAccount()->openImapConnection()->get_unseen($this->name);
+		}
+		return $this->_unseen;
+	}
+	
+	public function hasAlarm(){
+		//caching is required. We don't use the session because we need to close 
+		//session writing when checking email accounts. Otherwise it can block the 
+		//session to long.
+		if(GO::cache() instanceof GO_Base_Cache_None)
+			return false;
+		
+		$cached = GO::cache()->get($this->_getCacheKey());
+		GO::debug($cached.' = '.$this->unseen['count']);
+		return ($cached != $this->unseen['count']);			
+	}
+	
+	/**
+	 * Set's the cache to the number of unseen messages
+	 */
+	public function snoozeAlarm(){
+		GO::cache()->set($this->_getCacheKey(), $this->unseen['count']);	
+	}
 }
