@@ -262,13 +262,13 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		return $user_id.':'.$this->_account->id.':'.$this->name;
 	}
 	
-	private $_unseen;
-	
+
 	public function getUnseen(){
-		if(!isset($this->_unseen)){
-			$this->_unseen=$this->getAccount()->openImapConnection()->get_unseen($this->name);
+		if(!isset($this->_attributes['unseen'])){
+			$unseen=$this->getAccount()->openImapConnection()->get_unseen($this->name);
+			$this->_attributes['unseen']=$unseen['count'];
 		}
-		return $this->_unseen;
+		return $this->_attributes['unseen'];
 	}
 	
 	public function hasAlarm(){
@@ -279,14 +279,14 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 			return false;
 		
 		$cached = GO::cache()->get($this->_getCacheKey());
-		GO::debug($cached.' = '.$this->unseen['count']);
-		return ($cached != $this->unseen['count']);			
+		GO::debug($cached.' = '.$this->unseen);
+		return ($cached != $this->unseen);			
 	}
 	
 	/**
 	 * Set's the cache to the number of unseen messages
 	 */
 	public function snoozeAlarm(){
-		GO::cache()->set($this->_getCacheKey(), $this->unseen['count']);	
+		GO::cache()->set($this->_getCacheKey(), $this->unseen);	
 	}
 }
