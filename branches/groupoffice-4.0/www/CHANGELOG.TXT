@@ -1,3 +1,9 @@
+? 4.0.111
+- Bugfix: Saved attachments could end up in the root folder in rare cases.
+- Bugfix: E-mail reminder popped up too much
+- Bugfix: Mute e-mail sound alone didn't work
+- Updated Italian translation
+
 08-10-2012 4.0.110
 - Bugfix: Email message priority was not shown
 - Bugfix: Changes to e-mail templates were not saved

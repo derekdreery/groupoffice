@@ -245,3 +245,5 @@ $l['useAccount']='Usa account';
 $l['mailbox']='Casella postale';
 $l['checkUnseen']='Controlla automaticamente la presenza di nuovi messaggi in questa cartella';
 $l['noEmailFolders']= 'Non è stata aggiunta alcuna cartella.';
+$l['sieveNote']='Non tutte le funzionalità sono supportate. Controlla il manuale.';
+$l['winmailNoFiles']="Questo allegato winmail non contiene alcun file.";
