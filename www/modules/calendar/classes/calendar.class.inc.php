@@ -3392,24 +3392,28 @@ class calendar extends db {
 
 	public function has_freebusy_access($requesting_user_id, $target_user_id){
 
-		global $GO_EVENTS;
-
+		
 		//Only show availability if user has access to the default calendar
-//		if(!empty($GLOBALS['GO_CONFIG']->require_calendar_access_for_freebusy)){
+//		if(!empty($GO_CONFIG->require_calendar_access_for_freebusy)){
 //			$default_calendar = $cal2->get_default_calendar($user['id']);
-//			$permission = $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $default_calendar['acl_id']);
+//			$permission = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $default_calendar['acl_id']);
 //		}else
 //		{
 //			$permission=true;
 //		}
 
 		$permission=true;
+		
+		require_once($GLOBALS['GO_CONFIG']->root_path.'GO.php');
 
-		$GLOBALS['GO_EVENTS']->fire_event('has_freebusy_access', array($requesting_user_id, $target_user_id, &$permission));
+//		$GO_EVENTS->fire_event('has_freebusy_access', array($requesting_user_id, $target_user_id, &$permission));
+		
+//		if(GO::modules()->isInstalled("freebusypermissions")){
+			$permission = GO_Freebusypermissions_FreebusypermissionsModule::hasFreebusyAccess($requesting_user_id, $target_user_id)>0;
+//		}
 
 		return $permission;
 
 	}
-
 }
 
