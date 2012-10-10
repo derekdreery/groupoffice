@@ -437,6 +437,8 @@ class GO{
 
 		GO::session();
 		
+		GO::debug("Session started with ID: ".GO::session()->id);
+		
 		//get cached autoload classes
 		$classes = GO::cache()->get('autoload_classes');
 		if($classes)
