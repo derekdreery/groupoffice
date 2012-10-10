@@ -74,7 +74,7 @@ class GO_Calendar_Model_Category extends GO_Base_Db_ActiveRecord{
 		 $findParams = GO_Base_Db_FindParams::newInstance()->single();
 		 
 		 $findParams->getCriteria()
-						 ->addCondition('calendar_id', $name)
+						 ->addCondition('name', $name)
 						 ->mergeWith(GO_Base_Db_FindCriteria::newInstance()
 							->addCondition('calendar_id', $calendar_id)
 							->addCondition('calendar_id', 0,'=','t',false)

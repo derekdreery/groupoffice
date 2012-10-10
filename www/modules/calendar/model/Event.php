@@ -1021,12 +1021,17 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			//Group-Office only supports a single category.
 			$cats = explode(',',$vobject->categories);
 			$categoryName = array_shift($cats);
-			$category = GO_Calendar_Model_Category::model()->findByName($this->calendar_id, $categoryName);
 			
-			if($category){
-				$this->category_id=$category->id;			
-				$this->background=$category->color;
-			}
+			$category = GO_Calendar_Model_Category::model()->findByName($this->calendar_id, $categoryName);
+			if(!$category){
+				$category = new GO_Calendar_Model_Category();
+				$category->name=$categoryName;
+				$category->calendar_id=$this->calendar_id;
+				$category->save();
+			}			
+
+			$this->category_id=$category->id;			
+			$this->background=$category->color;
 		}
 		
 
