@@ -93,7 +93,7 @@ GO.groups.GroupDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		this.addPanel(this.borderPanel);
     this.addPanel(this.permissionsPanel);
 		
-		if(GO.settings.modules.modules.permissionLevel){
+		if(GO.settings.modules.modules.permission_level){
 			this.modulePermissionsGrid = new GO.grid.ModulePermissionsGrid({
 				title: GO.groups.lang['modulePermissions'],
 				storeUrl: GO.url('modules/module/permissionsStore'),
