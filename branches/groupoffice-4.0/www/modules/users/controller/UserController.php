@@ -53,7 +53,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 
 				$response['data'] = array_merge($attr, $response['data']);
 				
-				if($response['data']['company_id']==0)
+				if(empty($response['data']['company_id']))
 					$response['data']['company_id']="";
 			}
 			
