@@ -340,8 +340,18 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	 *
 	 * @return String Full formatted name of the user
 	 */
-	public function getName() {
-		return GO_Base_Util_String::format_name($this->last_name, $this->first_name, $this->middle_name,'first_name');
+	public function getName($sort=false) {
+		
+		if(!$sort){
+			if(GO::user()){
+				$sort = GO::user()->sort_name;
+			}else
+			{
+				$sort = 'first_name';
+			}
+		}
+		
+		return GO_Base_Util_String::format_name($this->last_name, $this->first_name, $this->middle_name,$sort);
 	}
 
 	/**
