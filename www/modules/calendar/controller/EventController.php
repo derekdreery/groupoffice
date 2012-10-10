@@ -45,8 +45,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			unset($params['id']);
 		}
 
-		if (isset($params['subject']))
-			$params['name'] = $params['subject'];
+//		if (isset($params['subject']))
+//			$params['name'] = $params['subject'];
 
 		if (isset($params['start_date'])) {
 			if (!empty($params['all_day_event'])) {
@@ -431,7 +431,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 	public function afterLoad(&$response, &$model, &$params) {
 
-		$response['data']['subject'] = $response['data']['name'];
+//		if (isset($response['data']['name']))
+//			$response['data']['subject'] = $response['data']['name'];
 
 		$response = self::reminderSecondsToForm($response);
 

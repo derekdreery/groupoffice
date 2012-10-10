@@ -767,7 +767,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		this.selectLinkField = new GO.form.SelectLink({});
 
 		this.subjectField = new Ext.form.TextField({
-			name : 'subject',
+			//name : 'subject',
+			name : 'name',
 			allowBlank : false,
 			fieldLabel : GO.lang.strSubject
 		});
