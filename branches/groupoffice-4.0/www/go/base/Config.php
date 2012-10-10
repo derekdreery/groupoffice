@@ -374,6 +374,14 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $max_users = 0;
+	
+	/**
+	 * If set, user queries will only return this maximum number of users.
+	 * Useful in large environments where you don't want users to scroll through all,
+	 * 
+	 * @var int 
+	 */
+	var $limit_usersearch=0;
 
 	/**
 	 * The maximum number KB this Group-Office installation may use. 0 will allow unlimited usage of disk space.
