@@ -184,6 +184,16 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		$this->columns['lastlogin']['gotype']='unixtimestamp';
 		return parent::init();
 	}
+	
+	public function getFindSearchQueryParamFields($prefixTable = 't', $withCustomFields = true) {
+		//$fields = parent::getFindSearchQueryParamFields($prefixTable, $withCustomFields);
+		$fields=array(
+				"CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)", 
+				$prefixTable.".email"		
+				);
+		
+		return $fields;
+	}
 
 	private function _maxUsersReached() {
 		return GO::config()->max_users > 0 && $this->count() >= GO::config()->max_users;
