@@ -127,24 +127,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				$query.= ' UNSEEN';
 		}
 		
-		$sort=isset($params['sort']) ? $params['sort'] : 'from';
-
-		switch($sort) {
-			case 'from':
-				$sortField='FROM';
-				break;
-			case 'date':
-				$sortField='DATE';
-				break;
-			case 'subject':
-				$sortField='SUBJECT';
-				break;
-			case 'size':
-				$sortField='SIZE';
-				break;
-			default:
-				$sortField='DATE';
-		}
+		
 			
 		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
@@ -163,6 +146,26 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		$this->_moveMessages($imap, $params, $response);
 		
+		
+		$sort=isset($params['sort']) ? $params['sort'] : 'from';
+
+		switch($sort) {
+			case 'from':
+				$sortField=$response['sent'] ? 'TO' : 'FROM';
+				break;
+			case 'date':
+				$sortField='DATE';
+				break;
+			case 'subject':
+				$sortField='SUBJECT';
+				break;
+			case 'size':
+				$sortField='SIZE';
+				break;
+			default:
+				$sortField='DATE';
+		}
+
 //		$imap = $account->openImapConnection($params["mailbox"]);
 		
 		if(!empty($params['delete_keys'])){
