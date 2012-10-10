@@ -437,7 +437,7 @@ class GO{
 
 		GO::session();
 		
-		GO::debug("Session started with ID: ".GO::session()->id);
+		GO::debug("Session started with ID: ".GO::session()->id());
 		GO::debug("Request params: ".var_export($_REQUEST, true));
 		
 		//get cached autoload classes
