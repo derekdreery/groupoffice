@@ -234,7 +234,7 @@ class GO{
 				$cacheKey = 'GO_Base_Model_User:'.GO::session()->values['user_id'];
 				$cachedUser = GO::cache()->get($cacheKey);
 				
-				if($cachedUser){
+				if($cachedUser instanceof GO_Base_Model_User){
 					self::$_user=$cachedUser;
 				}else
 				{

@@ -342,6 +342,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 				
 				$report = 
 								"Access denied\n".
+								"User ID: ".GO::session()->values['user_id']."\n".
 								"controller: ".get_class($this)." action: ".$action."\n".
 								"params: ".var_export($params, true)."\n".
 								(string) $e;
