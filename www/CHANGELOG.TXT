@@ -1,5 +1,5 @@
 ? 4.0.111
-- Bugfix: tickettypes store will show tickettypes with the user has create permission to rather than write permissions
+- Bugfix: tickettypes permissions can no longer be "read and create"
 - Bugfix: important fix from bug in previous version, to enable the adding of users
 - Bugfix: When creating a new order from a Contact or Company in the addressbook the Contact or Company will be selected in the new order dialog as well
 - Bugfix: Saved attachments could end up in the root folder in rare cases.
