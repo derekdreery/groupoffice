@@ -1,4 +1,5 @@
 - Update: Dutch translation for billing module
+- Bugfix: Regex handling of customfields didn't work properly when there was no flag given.
 - Bugfix: Order PDF template will show item group totals for every item group not just the last one
 - Bugfix: in PHP 5.4, ReflectionProperty::getName() sometimes erroneously returned false.
 - Bugfix: Portlet folders were not deleted along with account.
