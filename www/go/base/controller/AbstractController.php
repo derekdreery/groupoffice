@@ -341,9 +341,9 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 //				header("HTTP/1.1 403 Forbidden");
 				
 				$report = 
-								"Access denied\n".
-								"User ID: ".GO::session()->values['user_id']."\n".
+								"Access denied\n".								
 								"controller: ".get_class($this)." action: ".$action."\n".
+								"Session: ".var_export(GO::session()->values, true)."\n".
 								"params: ".var_export($params, true)."\n".
 								(string) $e;
 				
