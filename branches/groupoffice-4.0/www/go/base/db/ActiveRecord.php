@@ -319,7 +319,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$this->init();	
 		
 		if($this->isNew){
-			$this->setAttributes($this->defaultAttributes(),false);
+			$this->setAttributes($this->getDefaultAttributes(),false);
 			$this->_loadingFromDatabase=false;
 		}elseif(!$isStaticModel){
 			$this->afterLoad();
@@ -3295,7 +3295,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 				
 		//fill in empty required attributes that have defaults
-		$defaults=$this->defaultAttributes();
+		$defaults=$this->getDefaultAttributes();
 		foreach($this->columns as $field=>$attr){
 			if($attr['required'] && empty($this->$field) && isset($defaults[$field])){
 				$this->$field=$defaults[$field];
@@ -3454,27 +3454,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		return $this->getDbConnection()->query($sql);
 	}
 	
-	
-//	private function _getDefaultAttributes(){
-//		$attr=array();
-//		foreach($this->getColumns() as $field => $colAttr){
-//				$attr[$field]=$colAttr['default'];
-//		}
-//		
-//		if(isset($this->columns['user_id']))
-//			$attr['user_id']=GO::user() ? GO::user()->id : 1;
-//		
-//		return array_merge($attr, $this->defaultAttributes());
-//	}
-	
 	/**
-	 * Array of default attributes to set
+	 * Get's all the default attributes. The defaults coming from the database and
+	 * the programmed ones defined in defaultAttributes().
 	 * 
-	 * This function can be overridden in the model.
-	 * 
-	 * @return Array An empty array.
+	 * @return array
 	 */
-	public function defaultAttributes() {
+	public function getDefaultAttributes(){
 		$attr=array();
 		foreach($this->getColumns() as $field => $colAttr){
 				$attr[$field]=$colAttr['default'];
@@ -3483,7 +3469,19 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(isset($this->columns['user_id']))
 			$attr['user_id']=GO::user() ? GO::user()->id : 1;
 		
-		return $attr;
+		return array_merge($attr, $this->defaultAttributes());
+	}
+	
+	/**
+	 * 
+	 * Get the extra default attibutes not determined from the database.
+	 * 
+	 * This function can be overridden in the model.
+	 * 
+	 * @return Array An empty array.
+	 */
+	protected function defaultAttributes() {
+		return array();
 	}
 	
 	
