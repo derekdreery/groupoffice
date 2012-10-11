@@ -1831,8 +1831,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			foreach($publicProperties as $prop){
 				//$att[$prop->getName()]=$prop->getValue($this);
 				//$prop = new ReflectionProperty();
-				if(!$prop->isStatic())
-					$this->_magicAttributeNames[]=$prop->getName();
+				if(!$prop->isStatic()) {
+					//$this->_magicAttributeNames[]=$prop->getName();
+					$this->_magicAttributeNames[]=$prop->name;
+				}
 			}
 			
 //			$methods = $r->getMethods();
