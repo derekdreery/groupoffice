@@ -1,6 +1,7 @@
 - Bugfix: in PHP 5.4, ReflectionProperty::getName() sometimes erroneously returned false.
 - Bugfix: Portlet folders were not deleted along with account.
 - Bugfix: Projects portlet double click didn't work
+- Bugfix: GOTA didn't work with servers that used chunked encoding
 
 11-10-2012 4.0.111
 - Bugfix: tickettypes permissions can no longer be "read and create"
