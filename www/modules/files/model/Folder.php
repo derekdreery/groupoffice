@@ -923,10 +923,9 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			$folder->checkFsSync();
 			
 			//sort by path and only list top level shares		
-			$shares[$folder->path]=$folder;
+			$shares[$folder->name]=$folder;
 		}
 		ksort($shares);
-		
 		$response=array();
 		foreach($shares as $path=>$folder){
 			$isSubDir = isset($lastPath) && strpos($path.'/', $lastPath.'/')===0;
