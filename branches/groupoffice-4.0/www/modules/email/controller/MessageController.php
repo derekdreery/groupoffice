@@ -131,6 +131,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			
 		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+		if(!$account)
+			throw new GO_Base_Exception_NotFound();
 		/* @var $account GO_Email_Model_Account */
 		
 		$this->_filterMessages($params["mailbox"], $account);
