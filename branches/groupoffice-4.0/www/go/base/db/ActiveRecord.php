@@ -2374,12 +2374,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			//if model doesn't have an acl we use the acl of the module it belongs to.
 			if(!$acl_id)
 				$acl_id = GO::modules()->{$this->getModule ()}->acl_id;
+				
+			$defaultUserId = isset(GO::session()->values['user_id']) ? GO::session()->values['user_id'] : 1;
 			
 			//GO::debug($model);
 			$autoAttr = array(
 				'model_id'=>$this->pk,
 				'model_type_id'=>$this->modelTypeId(),
-				'user_id'=>isset($this->user_id) ? $this->user_id : GO::session()->values['user_id'],
+				'user_id'=>isset($this->user_id) ? $this->user_id : $defaultUserId,
 				'module'=>$this->module,
 				'model_name'=>$this->className(),
 				'name' => '',
