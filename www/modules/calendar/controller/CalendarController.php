@@ -31,8 +31,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 
 	protected function getStoreParams($params) {
 		
-		$findParams =GO_Base_Db_FindParams::newInstance()
-						->order('name');
+		$findParams =GO_Base_Db_FindParams::newInstance();
 		
 		$c = $findParams->getCriteria();
 		
@@ -102,6 +101,11 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		$columnModel->formatColumn('user_name','$model->user->name');
 		
 		return parent::formatColumns($columnModel);
+	}
+	
+	protected function beforeStore(&$response, &$params, &$store) {
+		$store->setDefaultSortOrder('name','ASC');
+		return parent::beforeStore($response, $params, $store);
 	}
 	
 	public function formatStoreRecord($record, $model, $store) {

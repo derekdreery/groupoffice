@@ -37,6 +37,11 @@ class GO_Notes_Controller_Category extends GO_Base_Controller_AbstractModelContr
 		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
 	}
 
+	protected function beforeStore(&$response, &$params, &$store) {
+		$store->setDefaultSortOrder('name','ASC');
+		return parent::beforeStore($response, $params, $store);
+	}
+	
 	
 	/**
 	 * List all fields that require a remote text to load for a remote combobox.

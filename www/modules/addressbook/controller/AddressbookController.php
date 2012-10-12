@@ -2,7 +2,7 @@
 class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractModelController{
 	
 	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
-		
+		$storeParams->debugSql();
 		$multiSel = new GO_Base_Component_MultiSelectGrid(
 						'books', 
 						"GO_Addressbook_Model_Addressbook",$store, $params);		
@@ -11,20 +11,16 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 		
 		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
 	}
-
 	
 	protected $model = 'GO_Addressbook_Model_Addressbook';
 	
 	protected function remoteComboFields() {
 		return array('user_id'=>'$model->user->name');
 	}
-	
-	protected function getStoreParams($params) {
-		
-		if(empty($params['sort']))
-			return array('order' => array('name'));
-		else
-			return parent::getStoreParams($params);
+
+	protected function beforeStore(&$response, &$params, &$store) {
+		$store->setDefaultSortOrder('name','ASC');
+		return parent::beforeStore($response, $params, $store);
 	}
 	
 	protected function actionSearchSender($params) {
