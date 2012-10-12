@@ -56,10 +56,16 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 			$i++;
 			
 			try{
-				if(!$dryRun)
+				if(!$dryRun){
 					$user = $la->syncUserWithLdapRecord($record);			
+					$username = $user->username;
+				}else
+				{
+					$userArr = $la->getUserAttributes($record);
+					$username = $userArr['username'];
+				}
 				
-				echo "Synced ".$user->username."\n";
+				echo "Synced ".$username."\n";
 			} catch(Exception $e){
 				echo "ERROR:\n";
 				echo (string) $e;
