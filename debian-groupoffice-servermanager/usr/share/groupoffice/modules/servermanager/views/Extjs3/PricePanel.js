@@ -17,23 +17,18 @@ GO.servermanager.PricePanel = function(config)
 
 	config.border=true;
 	config.hideLabel=true;
-	config.title = GO.servermanager.lang.pricing;
+	config.title = GO.servermanager.lang.userPricing;
 	config.layout='border';
 //	config.defaults={
 //		anchor:'100%'
 //	};
 	config.labelWidth=140;
 	
-	this.priceGrid = new GO.servermanager.UserPriceGrid({
-		layout:'fit',
-		region:'center'
-	});
-	
 	config.items=[{
 			xtype:'panel',
 			region:'north',
 			title:GO.servermanager.lang.space,
-			height:200,
+			height:80,
 			bodyStyle: 'padding:5px',
 			items:[
 			{
@@ -48,8 +43,10 @@ GO.servermanager.PricePanel = function(config)
 				},
 
 				{
-					xtype:'textfield',
+					xtype:'numberfield',
 					name:'mbs_included',
+					value: GO.settings.servermanager_mbs_included,
+					decimals:0,
 					width:100
 				},
 
@@ -66,37 +63,65 @@ GO.servermanager.PricePanel = function(config)
 				items: [
 				{
 					xtype:'label',
-					text:'€',
+					text: GO.settings.currency ,
 					width:10
 				},
-
 				{
-					xtype:'textfield',
+					xtype:'numberfield',
 					name:'extra_mbs',
 					width:100
 				},
-
 				{
 					xtype:'label',
 					text:GO.servermanager.lang.perMonth+'/GB'
-					}
+				}
 				]
 			}
 			]
 		},
-	this.priceGrid
-	,{
+	this.userPriceGrid= new GO.servermanager.UserPriceGrid({
+		region:'center'
+	}),
+	this.modulePriceGrid= new GO.servermanager.ModulePriceGrid({
 		region:'east',
-		xtype:'panel',
 		title:"Module prices",
-		layout:'fit',
-		width:300,
-		html:'todo'
-	}];
+		width:300
+	})];
 	
 	GO.servermanager.PricePanel.superclass.constructor.call(this, config);	
 }
 
 Ext.extend(GO.servermanager.PricePanel, Ext.Panel,{
+	
+	afterRender: function(){
+		
+		GO.servermanager.PricePanel.superclass.afterRender.call(this);
+		
+		var requests = {
+			moduleprices:{r:"servermanager/price/moduleStore"},				
+			userprices:{r:"servermanager/price/userStore"}
+			//space: {r:"servermanager/price/options"}
+		}
+
+		GO.request({
+
+			url: "core/multiRequest",
+			params:{
+				requests:Ext.encode(requests)
+			},
+			success: function(options, response, result)
+			{
+				this.userPriceGrid.store.loadData(result.userprices);
+				this.modulePriceGrid.store.loadData(result.moduleprices);
+				
+				/*GO.tasks.categoriesStore.loadData(result.categories);
+				this.taskListsStore.loadData(result.tasklists);				
+				if (!GO.util.empty(result.tasks))
+					this.gridPanel.store.loadData(result.tasks);*/
+			},
+			scope:this
+		});    
+		
+	}
 	
 	});

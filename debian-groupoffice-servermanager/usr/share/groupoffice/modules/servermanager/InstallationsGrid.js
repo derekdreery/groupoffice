@@ -164,6 +164,21 @@ GO.servermanager.InstallationsGrid = function(config){
 			scope: this
 		},
 		'-',
+		{
+			iconCls: 'btn-add',
+			text: 'Test billing connection',
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				var reqconf = { 
+					url: 'servermanager/installation/testBilling',
+					success: function() { alert(GO.servermanager.lang["testBillingConnection"]); }
+				};
+
+				GO.request(reqconf);
+			},
+			scope: this
+		},
+		'-',
 		GO.lang['strSearch']+': ', ' ',this.searchField]		
 	});
 		    			    		

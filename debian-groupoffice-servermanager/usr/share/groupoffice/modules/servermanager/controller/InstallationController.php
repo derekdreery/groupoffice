@@ -342,7 +342,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			$autoInvoice->enable_invoicing = true;
 			$model->setAutoInvoice($autoInvoice);
 		}
-		elseif($model->automaticInvoice != null)
+		elseif($model->automaticInvoice != null) //turn off if exists
 		{
 			$autoInvoice = $model->automaticInvoice;
 			$autoInvoice->enable_invoicing = false;
@@ -475,7 +475,9 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	 */
 	protected function actionModules($params){
 
-		$installation = GO_ServerManager_Model_Installation::model()->findByPk($params['installation_id']);
+		$installation=null;
+		if(isset($params['installation_id']))
+			$installation = GO_ServerManager_Model_Installation::model()->findByPk($params['installation_id']);
 		if($installation == null)
 			$installation = new GO_ServerManager_Model_Installation();
 
@@ -553,6 +555,19 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			
 		}
 	}	
+	
+	/**
+	 * This will test the connection with the billing module
+	 * Will return succes when connection succeeds
+	 * @param array $parmas the $_REQUEST object 
+	 */
+	protected function actionTestBilling($parmas){
+		
+		$response = array(
+				'success'=>GO_ServerManager_Model_AutomaticInvoice::canConnect()
+		);
+		return $response;
+	}
 	
 	/**
 	 * This action will be called by a cronjob that runs daily
@@ -682,10 +697,11 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	public function actionRemoteInvoiceConnection($params)
 	{
 		//Set the settings from params
+		/*
 		GO::config()->save_setting('servermanager_invoice_host', $params['remote_invoice_host']);
 		GO::config()->save_setting('servermanager_invoice_username', $params['remote_invoice_username']);
 		GO::config()->save_setting('servermanager_invoice_password', $params['remote_invoice_password']);
-		
+		*/
 		
 		$response['success'] = GO_ServerManager_Model_AutomaticInvoice::canConnect();
 		return $response;

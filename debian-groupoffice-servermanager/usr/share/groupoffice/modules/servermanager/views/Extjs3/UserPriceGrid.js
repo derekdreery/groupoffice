@@ -21,7 +21,7 @@ GO.servermanager.UserPriceGrid = function(config){
 
 	config.title=GO.servermanager.lang.users;
 	config.store = new GO.data.JsonStore({
-		url : GO.url('servermanager/price/store'),
+		url : GO.url('servermanager/price/userStore'),
 		fields:['max_users','price_per_month']
 	});
 
@@ -84,7 +84,7 @@ GO.servermanager.UserPriceGrid = function(config){
 		    if (typeof(this.selectedIndex)!='undefined') {
 					if (this.store.getAt(this.selectedIndex).data.id!='0') {
 						Ext.Ajax.request({
-							url : GO.url('servermanager/price/delete'),
+							url : GO.url('servermanager/price/userDelete'),
 							params : {
 									'id' : this.store.getAt(this.selectedIndex).data.id
 							},
@@ -106,10 +106,6 @@ GO.servermanager.UserPriceGrid = function(config){
 	}];
 
 	config.listeners={
-		render:function(){
-		    if(GO.settings.modules.servermanager.write_permission && !this.store.loaded)
-					this.store.load();
-		},
 		rowclick: function(sm,i,record) {
 		    this.selectedIndex = i;
 		},
@@ -159,7 +155,7 @@ Ext.extend(GO.servermanager.UserPriceGrid, Ext.grid.EditorGridPanel,{
 		if(this.store.getModifiedRecords().length>0 || this.deletedRecords){
 			
 			Ext.Ajax.request({
-			    url : GO.url('servermanager/price/submitPrices'),
+			    url : GO.url('servermanager/price/submitUsers'),
 			    params:params,
 			    callback:function(options, success, response){
 						this.store.commitChanges();

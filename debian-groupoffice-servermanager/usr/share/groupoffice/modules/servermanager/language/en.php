@@ -63,6 +63,8 @@ $l["confirmAdminPassword"]='Confirm';
 $l["allowed"]='Allowed';
 $l["installed"]='Installed';
 $l["modules"]='Modules';
+$l['modulePrice'] = "Module price";
+$l['moduleName'] = "Module name";
 
 $l["billing"]='Billing module';
 
@@ -84,8 +86,10 @@ $l['discountDescription']='Discount description';
 $l['nextInvoiceOn']='Next invoice on';
 $l['trialDays']='Trial period in days';
 
+$l['testBillingConnection'] = "Connection to billing was succesfull";
 $l['usageHistory'] = "Usage history";
 $l['pricing'] = "Pricing";
+$l['userPricing'] = "Pricing per user";
 $l['users'] = "Users";
 $l['space'] = "Space";
 $l['price'] = "Price";
