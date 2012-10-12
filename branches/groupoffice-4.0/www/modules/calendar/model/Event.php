@@ -95,7 +95,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				'start_time'=> GO_Base_Util_Date::roundQuarters(time()), 
 				'end_time'=>GO_Base_Util_Date::roundQuarters(time()+3600),
 				'reminder' => $settings->reminder,
-				'calendar_id'=>$settings->calendar_id
+				'calendar_id'=>$settings->calendar_id,
+				'background'=>$settings->background
 		);
 		
 		return $defaults;
