@@ -1,4 +1,4 @@
-
+- Changed the classname for MultiSelectGrid in projects to: GO_Projects_Model_Status
 - In PHP 5.4, ReflectionProperty::getName() sometimes erroneously returned false.
 - Portlet folders were not deleted along with account.
 - Projects portlet double click didn't work
