@@ -3408,9 +3408,9 @@ class calendar extends db {
 
 //		$GO_EVENTS->fire_event('has_freebusy_access', array($requesting_user_id, $target_user_id, &$permission));
 		
-//		if(GO::modules()->isInstalled("freebusypermissions")){
+		if(GO::modules()->isInstalled("freebusypermissions")){
 			$permission = GO_Freebusypermissions_FreebusypermissionsModule::hasFreebusyAccess($requesting_user_id, $target_user_id)>0;
-//		}
+		}
 
 		return $permission;
 
