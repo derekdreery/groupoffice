@@ -87,17 +87,24 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function defaultAttributes() {
-		$settings = GO_Calendar_Model_Settings::model()->getDefault(GO::user());
+		
 		
 		$defaults = array(
 				//'description'=>'DIT IS DE BESCHRIJVING DIE STANDAARD WORDT INGEVULD',
 				'status' => "NEEDS-ACTION",
 				'start_time'=> GO_Base_Util_Date::roundQuarters(time()), 
-				'end_time'=>GO_Base_Util_Date::roundQuarters(time()+3600),
+				'end_time'=>GO_Base_Util_Date::roundQuarters(time()+3600)				
+		);
+		
+		
+		$settings = GO_Calendar_Model_Settings::model()->getDefault(GO::user());
+		if($settings){		
+			$defaults = array_merge($defaults, array(
 				'reminder' => $settings->reminder,
 				'calendar_id'=>$settings->calendar_id,
 				'background'=>$settings->background
-		);
+						));
+		}
 		
 		return $defaults;
 	}
