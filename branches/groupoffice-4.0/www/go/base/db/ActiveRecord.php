@@ -2191,7 +2191,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 		$this->cacheSearchRecord();
 
-		GO::debug("CLearing modified attributes for ".$this->className());
 		$this->_modifiedAttributes = array();
 
 		return true;
@@ -2902,7 +2901,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function __unset($name)
 	{		
-		GO::debug("Unset: ".$name);
 		unset($this->_attributes[$name]);		
 	}
 	
