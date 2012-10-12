@@ -46,6 +46,8 @@ class GO_Base_Util_Date_RecurrencePattern{
 	protected $_eventstarttime;
 	protected $_bysetpos;
 	
+	protected $_recurPositionStartTime;
+	
 	protected $_days=array('SU','MO','TU','WE','TH','FR','SA');
 	
 	private $_maxTime = 0;
@@ -114,9 +116,16 @@ class GO_Base_Util_Date_RecurrencePattern{
 		$this->_freq=$freq;
 	}
 	
-	protected $_recurPositionStartTime;
 	
-	public function setRecurpositionStartTime($startTime){
+	/**
+	 * Set's the startposition of getNextRecurrence. eg. When you have a weekly 
+	 * recurrence starting on 08-10-2012. You might want to calculate the 
+	 * occurence falling in a week one year later. Then you set the start time one
+	 * year forward.
+	 * 
+	 * @param int $startTime Unix timestamp
+	 */
+	public function setRecurPositionStartTime($startTime){
 		$this->_recurPositionStartTime=$startTime;
 	}
 

@@ -127,6 +127,7 @@ GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			title:GO.lang['strProperties'],
 			cls:'go-form-panel',
 			layout:'form',
+			labelWidth:160,
 			items:[{
 				xtype: 'textfield',
 				name: 'name',

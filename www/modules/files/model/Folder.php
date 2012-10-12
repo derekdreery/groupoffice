@@ -819,7 +819,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @return boolean
 	 */
-	public function hasFilesChildren(){
+	public function hasFileChildren(){
 		$file = GO_Files_Model_File::model()->findSingleByAttribute('folder_id', $this->id);
 		
 		return $file!=false;
@@ -923,10 +923,9 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			$folder->checkFsSync();
 			
 			//sort by path and only list top level shares		
-			$shares[$folder->path]=$folder;
+			$shares[$folder->name]=$folder;
 		}
-		ksort($shares, SORT_FLAG_CASE | SORT_STRING);
-		
+		ksort($shares);
 		$response=array();
 		foreach($shares as $path=>$folder){
 			$isSubDir = isset($lastPath) && strpos($path.'/', $lastPath.'/')===0;

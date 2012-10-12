@@ -204,3 +204,5 @@ $l['directUrl']='Direct URL';
 
 $l['errorOrganizerOnly'] = 'You are not authorised to edit this event because you are not the organizer.';
 $l['errorOrganizerOnlyTitle'] = 'You are not the organizer';
+
+$l['cantRemoveOrganizer']="You can't remove the organizer";

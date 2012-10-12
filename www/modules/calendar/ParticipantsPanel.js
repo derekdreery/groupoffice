@@ -97,7 +97,7 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 				selectedRows[i].commit();
 				
 				if(selectedRows[i].data.is_organizer){
-					alert("You can't remove the organizer");
+					alert(GO.calendar.lang.cantRemoveOrganizer);
 					return;
 				}
 				

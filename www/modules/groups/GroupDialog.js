@@ -28,7 +28,8 @@ GO.groups.GroupDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 
 	beforeLoad : function(remoteModelId, config){
 		this.userGrid.setGroupId(remoteModelId);
-		this.modulePermissionsGrid.setIdParam(remoteModelId);
+		if(this.modulePermissionsGrid)
+			this.modulePermissionsGrid.setIdParam(remoteModelId);
     if(remoteModelId <= 0)
       this.userGrid.setDisabled(true);
     else
@@ -36,7 +37,8 @@ GO.groups.GroupDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	},
 	
 	beforeSubmit : function(params) {
-		this.formPanel.form.baseParams['permissions'] = this.modulePermissionsGrid.getPermissionData();		
+		if(this.modulePermissionsGrid)
+			this.formPanel.form.baseParams['permissions'] = this.modulePermissionsGrid.getPermissionData();		
 	},
 	
 	buildForm : function () {
@@ -86,14 +88,18 @@ GO.groups.GroupDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
       hideLevel:true
     });
 
-		this.modulePermissionsGrid = new GO.grid.ModulePermissionsGrid({
-			title: GO.groups.lang['modulePermissions'],
-			storeUrl: GO.url('modules/module/permissionsStore'),
-			paramIdType: 'groupId'
-		});
+		
 
 		this.addPanel(this.borderPanel);
     this.addPanel(this.permissionsPanel);
-		this.addPanel(this.modulePermissionsGrid);
+		
+		if(GO.settings.modules.modules.permission_level){
+			this.modulePermissionsGrid = new GO.grid.ModulePermissionsGrid({
+				title: GO.groups.lang['modulePermissions'],
+				storeUrl: GO.url('modules/module/permissionsStore'),
+				paramIdType: 'groupId'
+			});
+			this.addPanel(this.modulePermissionsGrid);
+		}
 	}
 });

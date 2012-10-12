@@ -14,4 +14,4 @@ $l['manageCategories']='Kategorien verwalten';
 $l['category']='Kategorie';
 $l['noCategory']='Keine Kategorie';
 $l['newCommentText']='Hier einen neuen Kommentar eingeben ...';
-$l['newComment']='Neuer Kommentar';
+$l['readMore']="Mehr lesen";

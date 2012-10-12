@@ -179,9 +179,20 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		$this->columns['first_name']['required'] = true;
 
 		$this->columns['last_name']['required'] = true;
+		$this->columns['timezone']['required']=true;
 		
 		$this->columns['lastlogin']['gotype']='unixtimestamp';
 		return parent::init();
+	}
+	
+	public function getFindSearchQueryParamFields($prefixTable = 't', $withCustomFields = true) {
+		//$fields = parent::getFindSearchQueryParamFields($prefixTable, $withCustomFields);
+		$fields=array(
+				"CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)", 
+				$prefixTable.".email"		
+				);
+		
+		return $fields;
 	}
 
 	private function _maxUsersReached() {
@@ -329,8 +340,18 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	 *
 	 * @return String Full formatted name of the user
 	 */
-	public function getName() {
-		return GO_Base_Util_String::format_name($this->last_name, $this->first_name, $this->middle_name,'first_name');
+	public function getName($sort=false) {
+		
+		if(!$sort){
+			if(GO::user()){
+				$sort = GO::user()->sort_name;
+			}else
+			{
+				$sort = 'first_name';
+			}
+		}
+		
+		return GO_Base_Util_String::format_name($this->last_name, $this->first_name, $this->middle_name,$sort);
 	}
 	
 	/**

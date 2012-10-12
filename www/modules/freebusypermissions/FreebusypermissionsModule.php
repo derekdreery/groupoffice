@@ -10,23 +10,17 @@ class GO_Freebusypermissions_FreebusypermissionsModule extends GO_Base_Module{
 	}
 	
 	
-	public static function has_freebusy_access($request_user_id, $target_user_id, &$permission){
+	public static function hasFreebusyAccess($request_user_id, $target_user_id){
 		
-		$fbAcl = GO_Freebusypermissions_FreebusypermissionsModule::get_fb_acl($target_user_id);
+		$fbAcl = GO_Freebusypermissions_FreebusypermissionsModule::getFreeBusyAcl($target_user_id);
 		
 
-		return GO_Base_Model_Acl::getUserPermissionLevel($fbAcl, $request_user_id) > 0;
-	
-//		if(!$GLOBALS['GO_SECURITY']->has_permission($request_user_id, $acl_id)){
-//			$permission=false;
-//		}  else {
-//			$permission=true;
-//		}
+		return GO_Base_Model_Acl::getUserPermissionLevel($fbAcl->acl_id, $request_user_id) > 0;
 	}
 
 	public static function loadSettings(&$settingsController, &$params, &$response, $user) {
 		
-		$acl = GO_Freebusypermissions_FreebusypermissionsModule::get_fb_acl($user->id);
+		$acl = GO_Freebusypermissions_FreebusypermissionsModule::getFreeBusyAcl($user->id);
 		
 		if(!empty($acl))
 			$response['data']['freebusypermissions_acl_id']=$acl->acl_id;
@@ -34,7 +28,7 @@ class GO_Freebusypermissions_FreebusypermissionsModule extends GO_Base_Module{
 		return parent::loadSettings($settingsController, $params, $response, $user);
 	}
 	
-	public static function get_fb_acl($userId){
+	public static function getFreeBusyAcl($userId){
 		
 		$fbAcl = GO_Freebusypermissions_Model_FreeBusyAcl::model()->findSingleByAttribute('user_id', $userId);
 		

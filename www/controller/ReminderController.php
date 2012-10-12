@@ -18,7 +18,8 @@ class GO_Core_Controller_Reminder extends GO_Base_Controller_AbstractController 
 		
 		foreach($reminderIds as $id){
 			$r=GO_Base_Model_Reminder::model()->findByPk($id);
-			$r->removeUser(GO::user()->id);
+			if($r)
+				$r->removeUser(GO::user()->id);
 		}
 		$response['success']=true;
 		

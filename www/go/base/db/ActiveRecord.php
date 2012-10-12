@@ -311,7 +311,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function __construct($newRecord=true, $isStaticModel=false){			
 		
-		$this->_loadingFromDatabase=false;
+		
 		
 		//$pk = $this->pk;
 
@@ -320,10 +320,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$this->init();	
 		
-		if($this->isNew) 
-			$this->setAttributes($this->_getDefaultAttributes(),false);
-		elseif(!$isStaticModel)
+		if($this->isNew){
+			$this->setAttributes($this->getDefaultAttributes(),false);
+			$this->_loadingFromDatabase=false;
+		}elseif(!$isStaticModel){
 			$this->afterLoad();		
+			$this->_loadingFromDatabase=false;
+		}
 		
 		$this->_modifiedAttributes=array();
 	}
@@ -1661,7 +1664,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					return  GO_Base_Util_Date::to_unixtime($value);
 					break;			
 				case 'number':
-					return  GO_Base_Util_Number::unlocalize($value);
+					$value= GO_Base_Util_Number::unlocalize($value);
+					
+					if($value===null && !$this->columns[$column]['null'])
+						$value=0;
+					
+					return $value;
 					break;
 				case 'boolean':
 					$ret= empty($value) || $value==="false" ? 0 : 1; 
@@ -1674,8 +1682,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					return (string) $value;
 					break;
 				default:
-					if($this->columns[$column]['type']==PDO::PARAM_INT)
-						$value = intval($value);
+					if($this->columns[$column]['type']==PDO::PARAM_INT){
+						if($this->columns[$column]['null'] && $value=="")
+							$value=null;
+						else
+							$value = intval($value);
+					}
 					
 					return  $value;
 					break;
@@ -1849,8 +1861,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			foreach($publicProperties as $prop){
 				//$att[$prop->getName()]=$prop->getValue($this);
 				//$prop = new ReflectionProperty();
-				if(!$prop->isStatic())
-					$this->_magicAttributeNames[]=$prop->getName();
+				if(!$prop->isStatic()) {
+					//$this->_magicAttributeNames[]=$prop->getName();
+					$this->_magicAttributeNames[]=$prop->name;
+				}
 			}
 			
 //			$methods = $r->getMethods();
@@ -2423,12 +2437,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			//if model doesn't have an acl we use the acl of the module it belongs to.
 			if(!$acl_id)
 				$acl_id = GO::modules()->{$this->getModule ()}->acl_id;
+				
+			$defaultUserId = isset(GO::session()->values['user_id']) ? GO::session()->values['user_id'] : 1;
 			
 			//GO::debug($model);
 			$autoAttr = array(
 				'model_id'=>$this->pk,
 				'model_type_id'=>$this->modelTypeId(),
-				'user_id'=>isset($this->user_id) ? $this->user_id : GO::session()->values['user_id'],
+				'user_id'=>isset($this->user_id) ? $this->user_id : $defaultUserId,
 				'module'=>$this->module,
 				'model_name'=>$this->className(),
 				'name' => '',
@@ -2947,7 +2963,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function __unset($name)
 	{		
-		GO::debug("Unset: ".$name);
 		unset($this->_attributes[$name]);		
 	}
 	
@@ -2961,7 +2976,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @see hasAttribute
 	 */
 	public function setAttribute($name,$value, $format=false)
-	{	
+	{
 		if($this->_loadingFromDatabase){
 			//skip fancy features when loading from the database.
 			$this->_attributes[$name]=$value;	
@@ -2982,8 +2997,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			if($this->columns[$name]['gotype']=='textfield' || $this->columns[$name]['gotype']=='textarea')
 				$value=GO_Base_Util_String::normalizeCrlf($value, "\n");
 			
-			if((!isset($this->_attributes[$name]) || $this->_attributes[$name]!==(string)$value) && !$this->isModified($name))
+			if((!isset($this->_attributes[$name]) || $this->_attributes[$name]!==(string)$value) && !$this->isModified($name)){
 				$this->_modifiedAttributes[$name]=isset($this->_attributes[$name]) ? $this->_attributes[$name] : false;
+//				GO::debug("Setting modified attribute $name to ".$this->_modifiedAttributes[$name]);
+//				GO::debugCalledFrom(5);
+			}
 			
 			$this->_attributes[$name]=$value;
 			
@@ -3339,8 +3357,20 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				$this->$field=GO_Base_Util_String::normalizeCrlf($this->_attributes[$field], "\n");
 			}
 		}
+				
+		//fill in empty required attributes that have defaults
+		$defaults=$this->getDefaultAttributes();
+		foreach($this->columns as $field=>$attr){
+			if($attr['required'] && empty($this->$field) && isset($defaults[$field])){
+				$this->$field=$defaults[$field];
+				
+				echo "Setting default value ".$this->className().":".$this->id." $field=".$defaults[$field]."\n";
+				
+			}
+		}
 		
-		$this->save();		
+		if($this->isModified())
+			$this->save();		
 	}
 	
 	
@@ -3488,8 +3518,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		return $this->getDbConnection()->query($sql);
 	}
 	
-	
-	private function _getDefaultAttributes(){
+	/**
+	 * Get's all the default attributes. The defaults coming from the database and
+	 * the programmed ones defined in defaultAttributes().
+	 * 
+	 * @return array
+	 */
+	public function getDefaultAttributes(){
 		$attr=array();
 		foreach($this->getColumns() as $field => $colAttr){
 				$attr[$field]=$colAttr['default'];
@@ -3502,13 +3537,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	/**
-	 * Array of default attributes to set
+	 * 
+	 * Get the extra default attibutes not determined from the database.
 	 * 
 	 * This function can be overridden in the model.
 	 * 
 	 * @return Array An empty array.
 	 */
-	public function defaultAttributes() {
+	protected function defaultAttributes() {
 		return array();
 	}
 	

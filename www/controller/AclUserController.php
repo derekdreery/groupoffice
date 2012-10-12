@@ -73,6 +73,29 @@ class GO_Core_Controller_AclUser extends GO_Base_Controller_AbstractMultiSelectM
 		return $response;
 	}
 	
+	protected function actionSelectNewStore($params) {
+		if(GO::user()->isAdmin())
+			GO::config()->limit_usersearch=0;
+//		echo GO::config()->limit_usersearch;
+			// Check for the value "limit_usersearch" in the group-office config file and then add the limit.
+		if(!empty(GO::config()->limit_usersearch)){
+			if($params['limit']>GO::config()->limit_usersearch)
+				$params['limit'] = GO::config()->limit_usersearch;			
+			
+			$params['start']=isset($params['start']) ? $params['start'] : 0;
+			
+			if($params['start']+$params['limit']>GO::config()->limit_usersearch)
+				$params['start']=0;
+		}
+		
+		$response = parent::actionSelectNewStore($params);
+		
+		if(!empty(GO::config()->limit_usersearch) && $response['total']>GO::config()->limit_usersearch)
+			$response['total']=GO::config()->limit_usersearch;	
+		
+		return $response;
+	}
+	
 	protected function beforeAdd(array $params) {
 		$addKeys = !empty($params['add']) ? json_decode($params['add']) : array();
 		if (!empty($addKeys)) {

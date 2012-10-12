@@ -50,7 +50,7 @@ GO.addressbook.SelectCompanyDialog = function(config){
 	}, this);
 
 		
-	this.grid = new GO.addressbook.CompaniesGrid({
+	this.grid = this.companiesGrid = new GO.addressbook.CompaniesGrid({
 		region:'center',
 		tbar: [
     GO.lang['strSearch']+': ', ' ', this.searchField,{
@@ -61,14 +61,14 @@ GO.addressbook.SelectCompanyDialog = function(config){
 						this.advancedSearchWindow = GO.addressbook.advancedSearchWindow = new GO.addressbook.AdvancedSearchWindow();
 						this.advancedSearchWindow.on('ok', function(win){
 
-						this.grid.store.baseParams.advancedQuery=GO.addressbook.searchQueryPanel.queryField.getValue();
+//						this.grid.store.baseParams.advancedQuery=this.searchField.getValue();
 						this.searchField.setValue("[ "+GO.addressbook.lang.advancedSearch+" ]");
 						this.searchField.setDisabled(true);
 						this.grid.store.load();
 
 						}, this)
 					}
-					this.advancedSearchWindow.show('companies');
+					this.advancedSearchWindow.show({dataType:'companies',masterPanel : this });
 				},
 				text: GO.addressbook.lang.advancedSearch,
 				scope: this,
@@ -77,7 +77,7 @@ GO.addressbook.SelectCompanyDialog = function(config){
 				handler: function()
 				{
 					this.searchField.setValue("");
-					delete this.grid.store.baseParams.advancedQuery;
+//					delete this.grid.store.baseParams.advancedQuery;
 					this.searchField.setDisabled(false);
 					this.grid.store.load();
 				},

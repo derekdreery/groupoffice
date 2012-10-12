@@ -285,14 +285,14 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 		//str += '<br />';
 		}
 		
-		if(record.data['priority'])
+		if(record.data['x_priority'])
 		{
-			if(record.data['priority'] < 3)
+			if(record.data['x_priority'] < 3)
 			{
 				str += '<div class="email-grid-icon btn-high-priority"></div>';
 			}
 			
-			if(record.data['priority'] > 3)
+			if(record.data['x_priority'] > 3)
 			{
 				str += '<div class="email-grid-icon btn-low-priority"></div>';
 			}
