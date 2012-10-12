@@ -17,7 +17,7 @@ To upgrade to 4.0 you must upgrade your previous version to at least 3.7.41 firs
 
 DEBIAN PACKAGES:
 Change your apt sources.list and change the Group-Office repository into:
-deb http://repos.groupoffice.eu/ fourseven main
+deb http://repos.groupoffice.eu/ fourzero main
 
 Then run:
 apt-get update
@@ -40,7 +40,7 @@ You can't upgrade from version 2.0 directly. Upgrade to 3.7 first.
 
 SYSTEM REQUIREMENTS
 -Linux, Mac OS X, Windows
--PHP5.2 or higher.
+-PHP 5.3 or higher.
 -MySQL 5 or higher
 
 Good luck!
