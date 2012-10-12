@@ -58,14 +58,13 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 			try{
 				if(!$dryRun){
 					$user = $la->syncUserWithLdapRecord($record);			
-					$username = $user->username;
 				}else
 				{
-					$userArr = $la->getUserAttributes($record);
-					$username = $userArr['username'];
+					$attr = $la->getUserAttributes($record);		
+					$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $attr['username']);
 				}
 				
-				echo "Synced ".$username."\n";
+				echo "Synced ".$user->username."\n";
 			} catch(Exception $e){
 				echo "ERROR:\n";
 				echo (string) $e;
@@ -99,7 +98,7 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 			$maxDeletePercentage = isset($params['max_delete_percentage']) ? intval($params['max_delete_percentage']) : 5;
 
 			if($percentageToDelete>$maxDeletePercentage)
-				throw new Exception("Delete Aborted because script was about to delete more then $maxDeletePercentage% of the users (".$percentageToDelete."%, ".($totalInGO-$totalInLDAP)." users)");
+				die("Delete Aborted because script was about to delete more then $maxDeletePercentage% of the users (".$percentageToDelete."%, ".($totalInGO-$totalInLDAP)." users)\n");
 
 			while($user = $stmt->fetch()){
 				if(!in_array($user->id, $usersInLDAP)){
