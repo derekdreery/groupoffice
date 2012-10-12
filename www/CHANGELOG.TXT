@@ -1,137 +1,140 @@
-- Update: Dutch translation for billing module
-- Bugfix: Regex handling of customfields didn't work properly when there was no flag given.
-- Bugfix: Order PDF template will show item group totals for every item group not just the last one
-- Bugfix: in PHP 5.4, ReflectionProperty::getName() sometimes erroneously returned false.
-- Bugfix: Portlet folders were not deleted along with account.
-- Bugfix: Projects portlet double click didn't work
-- Bugfix: GOTA didn't work with servers that used chunked encoding
+
+- In PHP 5.4, ReflectionProperty::getName() sometimes erroneously returned false.
+- Portlet folders were not deleted along with account.
+- Projects portlet double click didn't work
+- GOTA didn't work with servers that used chunked encoding
+- Updated German translation
+- Sorting of shares fixed.
+- Dutch translation for billing module
+- Regex handling of customfields didn't work properly when there was no flag given.
+- Order PDF template will show item group totals for every item group not just the last one
 
 11-10-2012 4.0.111
-- Bugfix: tickettypes permissions can no longer be "read and create"
-- Bugfix: important fix from bug in previous version, to enable the adding of users
-- Bugfix: When creating a new order from a Contact or Company in the addressbook the Contact or Company will be selected in the new order dialog as well
-- Bugfix: Saved attachments could end up in the root folder in rare cases.
-- Bugfix: E-mail reminder popped up too much
-- Bugfix: Mute e-mail sound alone didn't work
+- Tickettypes permissions can no longer be "read and create"
+- Important fix from bug in previous version, to enable the adding of users
+- When creating a new order from a Contact or Company in the addressbook the Contact or Company will be selected in the new order dialog as well
+- Saved attachments could end up in the root folder in rare cases.
+- E-mail reminder popped up too much
+- Mute e-mail sound alone didn't work
 - Updated Italian translation
-- Bugfix: Funambol fields changed after syncing and phone numbers could get lost.
+- Funambol fields changed after syncing and phone numbers could get lost.
 - Implemented freebusy permissions
-- Bugfix: limit_usersearch didn't apply in acl permissions panel.
-- Bugfix: Find users on full name didn't work
-- Bugfix: Inconsistent sorting of full user or names. John Doe or Doe, John.
+- limit_usersearch didn't apply in acl permissions panel.
+- Find users on full name didn't work
+- Inconsistent sorting of full user or names. John Doe or Doe, John.
 - Auto create calendar categories when importing or syncing
 - Sort by TO field in sent items
-- Bugfix: Visibile tasklist selection was broken
-- Bugfix: Default user id was not set anymore since last update.
+- Visibile tasklist selection was broken
+- Default user id was not set anymore since last update.
 
 08-10-2012 4.0.110
-- Bugfix: Email message priority was not shown
-- Bugfix: Changes to e-mail templates were not saved
+- Email message priority was not shown
+- Changes to e-mail templates were not saved
 - Updated German and Norwegian translation
-- Bugfix: Auto link text misplaced in some languages.
-- Bugfix: Initial sorting of tasks was incorrect.
-- Bugfix: Only show module permissions tab in group dialog when you have access to the module management module.
-- Feature: Close inactive tickets through cron job and exclude a status
-- Feature: Pass beforeLogin $params by reference to modify in modules
-- Bugfix: Read only custom fields could not be enabled in grids
-- Bugfix: Don't crash on permission error for e-mail account in sync
-- Bugfix: New comment form rendered twice sometimes
-- Feature: Database check will set empty properties with default values when they're empty.
-- Feature: Entering an empty string into a custom field will result in a null value in the database.
+- Auto link text misplaced in some languages.
+- Initial sorting of tasks was incorrect.
+- Only show module permissions tab in group dialog when you have access to the module management module.
+- Close inactive tickets through cron job and exclude a status
+- Pass beforeLogin $params by reference to modify in modules
+- Read only custom fields could not be enabled in grids
+- Don't crash on permission error for e-mail account in sync
+- New comment form rendered twice sometimes
+- Database check will set empty properties with default values when they're empty.
+- Entering an empty string into a custom field will result in a null value in the database.
 
 03-10-2012 4.0.109
-- Bugfix: Remove spaces at beginning and end of fields before CSV-importing them.
-- Bugfix: Attach files button in ticket dialog didn't work the second time.
-- Bugfix: Database check could delete recurrence end time in very rare cases
+- Remove spaces at beginning and end of fields before CSV-importing them.
+- Attach files button in ticket dialog didn't work the second time.
+- Database check could delete recurrence end time in very rare cases
 - Changed: Open composer for sent items when you double click
 - Added a special Swift preference to escape dots. For some buggy SMTP servers 
   this is necessary.
-- Bugfix: Import category color for appointments
-- Feature: Create read only custom field categories. So you can make sure people 
+- Import category color for appointments
+- Create read only custom field categories. So you can make sure people 
   can view them but not alter them. 
-- Bugfix: Save event time in Time Registration fixed.
-- Bugfix: Opening advanced search dialog from SelectContactDialog / SelectCompanyDialog.
+- Save event time in Time Registration fixed.
+- Opening advanced search dialog from SelectContactDialog / SelectCompanyDialog.
 - More elegant error message for empty winmail.dat files
 
 01-10-2012 4.0.108
-- Bugfix: Copy event in calendar moved the event
-- Bugfix: Comments didn't show text in browse all dialog.
-- Bugfix: Question for meeting request was asked when you put an event directly into someone else's calendar
-- Bugfix: Tickets buoy indicator showed invalid number for non-agents
+- Copy event in calendar moved the event
+- Comments didn't show text in browse all dialog.
+- Question for meeting request was asked when you put an event directly into someone else's calendar
+- Tickets buoy indicator showed invalid number for non-agents
 - Don't cache tickets files because there are permissions issues. Everyone has read access to the types but may not see other peoples files.
 
 01-10-2012 4.0.107
-- Bugfix: in the task edit dialog Tasklists with create rights can be selected
-- Bugfix: Fixed undefined index "-1" error recurrences
-- Bugfix: Sort on column 'name' in Add User Permissions window.
+- in the task edit dialog Tasklists with create rights can be selected
+- Fixed undefined index "-1" error recurrences
+- Sort on column 'name' in Add User Permissions window.
 - ActiveSync: Always try to get a sender name when sending an email
-- Bugfix: Old custom field tags didn't always work on the billing PDF
+- Old custom field tags didn't always work on the billing PDF
 - Upgraded plupload to version 1.5.4
-- Bugfix: invalid subject on event invitations
+- invalid subject on event invitations
 - Also popup and play alarm when email panel is open. 
 - Improved calendar invitation messages in the e-mail client
-- Bugfix: Saving company in user dialog was broken
+- Saving company in user dialog was broken
 - Calendar category import and export support
-- Bugfix: Import recurring events with days would shift.
-- Bugfix: Crash if filesearch module was loaded before files
-- Bugfix: Update could add duplicate admin e-mail accounts.
-- Bugfix: Some recurrence patterns were not accepted by iOs with Caldav
-- Bugfix: Project template wasn't competely applied the second time
+- Import recurring events with days would shift.
+- Crash if filesearch module was loaded before files
+- Update could add duplicate admin e-mail accounts.
+- Some recurrence patterns were not accepted by iOs with Caldav
+- Project template wasn't competely applied the second time
 
 26-09-2012 4.0.106
-- Bugfix: HTML field with help text crashed
-- Bugfix: Gota didn't open second document
-- Bugfix: Adding tasks using the quick add bar will respect the default reminder settings of a user
+- HTML field with help text crashed
+- Gota didn't open second document
+- Adding tasks using the quick add bar will respect the default reminder settings of a user
 
 
 25-09-2012 4.0.105
-- Bugfix: Remove old line in italian language file of billing module that gave errors
-- Bugfix: Calendar resources can now be deleted 
-- Bugfix: project selectType and templateSelect dropdown is disabled when permission_level < writeAndDelete
-- Bugfix: modified attributes of ActiveRecord will work with types other then string
+- Remove old line in italian language file of billing module that gave errors
+- Calendar resources can now be deleted 
+- project selectType and templateSelect dropdown is disabled when permission_level < writeAndDelete
+- modified attributes of ActiveRecord will work with types other then string
 - Drag and drop a task on a different tasklist now is in MVC style
-- Bug fix: Fixed issue with Dismiss a reminder in the calendar module.
-- Bug fix: Fixed "undefined function $this->escape...." bug in filesearch.
+- Fixed issue with Dismiss a reminder in the calendar module.
+- Fixed "undefined function $this->escape...." bug in filesearch.
 - Added German translation to the filesearch module
-- Bug fix: Unsubscribe link was broken
-- Bug fix: E-mail desktop integration didn't work with Internet Explorer
-- Bug fix: Absolute positioned elements in e-mails could mess up layout
+- Unsubscribe link was broken
+- E-mail desktop integration didn't work with Internet Explorer
+- Absolute positioned elements in e-mails could mess up layout
 - Added new tag for document templates: {contact:sirmadam} Sir or Madam depending on the gender.
-- Bug fix: Strange page breaking of PDF's in billing
-- Bug fix: Time Registration save hours bug fixed
+- Strange page breaking of PDF's in billing
+- Time Registration save hours bug fixed
 - On delete: set "max_execution_time" to 3 minutes because it can take a while to delete all relations of an object.
 
 21-09-2012 4.0.104
 - Change: behavior of ActiveRecord->duplicate() won't call delete() before it is saved and wont unset multicolumn PKs
 - Change ActiveRecord->hasFiles() will return true if column files_folder_id is in the database false otherwise
-- Bug fix: Invoice PDF was displaying the totals on the right side when not displaying any prices on invoice lines
-- Bug fix: cached zip file reset after consecutive email attachment downloads by full zip.
+- Invoice PDF was displaying the totals on the right side when not displaying any prices on invoice lines
+- cached zip file reset after consecutive email attachment downloads by full zip.
 - Comments module enhanced with categories and easier input fields.
 - Updated French translation
-- Bug fix: Find matching company on import in matching address book (import + syncml issue)
+- Find matching company on import in matching address book (import + syncml issue)
 - GOTA asks for password when session is expired or user logged out
 - Appended the subject of the appointment to all email subjects.
 - Updated Windows registry file for e-mail clients
-- Bug fix: E-mail filter dialog was broken in Internet Explorer
+- E-mail filter dialog was broken in Internet Explorer
 - Reminders didn't include name in e-mail subject
-- Bug fix: Deleting e-mails failed when trash folder was disabled
-- Bug fix: Linking e-mails were always saved in the root folder even when selecting a different folder.
-- Bug fix: After enabling sharing in folder properties the permissions panel didn't activate immediately
-- Bug fix: Group management by non admin user didn't work right
-- Bug fix: Weekly recurring tasks shifted day
+- Deleting e-mails failed when trash folder was disabled
+- Linking e-mails were always saved in the root folder even when selecting a different folder.
+- After enabling sharing in folder properties the permissions panel didn't activate immediately
+- Group management by non admin user didn't work right
+- Weekly recurring tasks shifted day
 
 20-09-2012 4.0.103
-- Bugfix: Billing PDF templates got unwanted extra columns
+- Billing PDF templates got unwanted extra columns
 
 20-09-2012 4.0.102
 - GOTA didn't launch
-- Bugfix: Copy/pasting products in the catalog of the billing module will work
+- Copy/pasting products in the catalog of the billing module will work
 - Duplicating active record relations will keep the primary key when it exists of more then one column
 
 19-09-2012 4.0.101
 - Default values for custom fields were not set correctly.
 - Check for php 5.3 or greater when upgrading
-- Bugfix: Creating a time-registration from a calendar event works now.
+- Creating a time-registration from a calendar event works now.
 
 
 19-09-2012 4.0.100
@@ -147,31 +150,31 @@
 - Somehow pro debian package was missing
 
 17-09-2012 4.0.98
-- Bugfix: Ticket rates in Add/Edit ticket dialog will only be shown where there are ticket rates
-- Bugfix: Validate if the selected agent can be agent for the selected ticket type
-- Bugfix: Save button is shown in the Ticket administation dialog when adding rates
+- Ticket rates in Add/Edit ticket dialog will only be shown where there are ticket rates
+- Validate if the selected agent can be agent for the selected ticket type
+- Save button is shown in the Ticket administation dialog when adding rates
 - Automatic creation of call reminder task with newly created orders.
-- Bugfix: Changing user settings will no longer place old user data into a session in setCompatibilitySessionVars() themes will get changed right away
-- Bugfix: Will not set default values for ActiveRecord set in the code when importing
-- Bugfix: Will not convert a date field when no date is set when importing
-- Bugfix: PDF for Invoice/Order wouldn't print total prices when piece price or product price where not printed
-- Bugfix: PDF for Invoice/Order will now accept the page format from the template 
+- Changing user settings will no longer place old user data into a session in setCompatibilitySessionVars() themes will get changed right away
+- Will not set default values for ActiveRecord set in the code when importing
+- Will not convert a date field when no date is set when importing
+- PDF for Invoice/Order wouldn't print total prices when piece price or product price where not printed
+- PDF for Invoice/Order will now accept the page format from the template 
 - Upgraded SabreDAV library to 1.6.4
 - Allow underscores in custom ICS tags for importing.
-- Bugfix: Error with undefined variable in calendar invitation
+- Error with undefined variable in calendar invitation
 - Optimized code for recurrence calculations in the calendar so it will not calculate more than needed.
-- Bugfix: Fixed problem with accepting invitations that have a different mime-type than 'text/calendar'
-- Bugfix: Groups module could be opened twice
-- Bugfix: Custom field column cache was not cleared when modified.
-- Bugfix: Disable sorting on alias and mailboxes columns in postfixadmin
+- Fixed problem with accepting invitations that have a different mime-type than 'text/calendar'
+- Groups module could be opened twice
+- Custom field column cache was not cleared when modified.
+- Disable sorting on alias and mailboxes columns in postfixadmin
 - Updated German translation
-- Bugfix: Adding users and groups to manage permissions only got read permissions.
+- Adding users and groups to manage permissions only got read permissions.
 - HTC deletes old appointments. We don't like that so we refuse to delete appointments older then 7 days with ActiveSync.
 - Updated Swedish translation
-- Bugfix: Normalize CRLF to LF in database to prevent sync issues.
-- Bugfix: Not all contacts were synced when sending multiple packages in syncml
-- Bugfix: Invalid XML in JNLP file caused GOTA to fail with OpenJDK
-- Bugfix: Browse comments in ticket didn't work
+- Normalize CRLF to LF in database to prevent sync issues.
+- Not all contacts were synced when sending multiple packages in syncml
+- Invalid XML in JNLP file caused GOTA to fail with OpenJDK
+- Browse comments in ticket didn't work
 - Added beforeValidate function to the ActiveRecord
 - Tag "{weeknr}" for new projects' names, just like the tag "{autoid}".
 - Added afterLoad function to the ActiveRecord
@@ -260,14 +263,14 @@
 - Fixed en language in email module.
 - Fixed blinkTitle bug
 - Urldecode added to the store load function of the bookmark module
-- Bugfix: Event->delete() will ignore ACL permissions when it is a resource of the current user
+- Event->delete() will ignore ACL permissions when it is a resource of the current user
 - Database fix for recurring events that could have been added when there was a bug in previous version.
 - Updated German language
 - Updated Italian language
-- Bugfix: No files got attached to the email composer when using "Send files" in the Files module when the users default template is 'None'
-- Bugfix: Email module MessageGrid will expand when it is collapsed and the visible email gets deleted.
-- Bugfix: Birthday was not showed for the correct year.
-- Bugfix: Added check for delete permission on the email account when a user tries to delete emails.(Only applied on the server side)
+- No files got attached to the email composer when using "Send files" in the Files module when the users default template is 'None'
+- Email module MessageGrid will expand when it is collapsed and the visible email gets deleted.
+- Birthday was not showed for the correct year.
+- Added check for delete permission on the email account when a user tries to delete emails.(Only applied on the server side)
 - The customfield dialog can now be resized
 - Customfields: Hide permissionlevels for categories.
 - Calendar: Always ask to send invitation mail when adding participants (Don't check for the "add directly to the other calendars" checkbox anymore)
@@ -522,7 +525,7 @@ WARNINGS:
 - Updated german translation
 - When a download link is sent in the files module. Info about that should be shown in the info panel.
 - Set global vacation subject via configuration file
-- Bug fix: In some cases webdav only created 0 byte files
+- In some cases webdav only created 0 byte files
 
 23-06-2011 3.7.24
 - New config variable to set subject for sieve vacation messages.
