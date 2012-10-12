@@ -38,6 +38,11 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
 	}
 	
+	protected function beforeStore(&$response, &$params, &$store) {
+		$store->setDefaultSortOrder('name','ASC');
+		return parent::beforeStore($response, $params, $store);
+	}
+	
 	protected function remoteComboFields(){
 		return array(
 				'user_name'=>'$model->user->name'
