@@ -916,8 +916,16 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if(empty($this->name))
 			$this->name = GO::t('unnamed');
 		$this->description = (string) $vobject->description;
-		$this->start_time = $vobject->dtstart->getDateTime()->format('U');
-		$this->end_time = $vobject->dtend->getDateTime()->format('U');
+		
+		if($vobject->dtstart)
+			$this->start_time = $vobject->dtstart->getDateTime()->format('U');
+		else
+			$this->start_time=time();		
+		
+		if($vobject->dtend)
+			$this->end_time = $vobject->dtend->getDateTime()->format('U');
+		else
+			$this->end_time=$this->start_time+1800;
 		
 		//TODO needs improving
 		if(isset($vobject->dtend['VALUE']) && $vobject->dtend['VALUE']=='DATE')
