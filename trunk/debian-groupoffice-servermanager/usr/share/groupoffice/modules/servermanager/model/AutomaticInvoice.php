@@ -43,12 +43,7 @@
  * @property string $customer_city The customers city
  * @property integer $installation_id foreingkey of installation
  */
-class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord{
-	
-	const BILLING_HOST = 'http://trunk.loc/'; //where do we post our invoiceing data to
-	const BILLING_USERNAME = 'admin';
-	const BILLING_PASSWORD = 'admin';
-	const BILLING_BOOK_ID = 2; //default order book id = 2
+class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord {
 	
 	public function tableName()
 	{
@@ -88,9 +83,10 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord{
 	 */
 	public static function canConnect()
 	{
-		$host = self::BILLING_HOST; // GO::config()->get_setting('servermanager_invoice_host');
-		$username = self::BILLING_USERNAME; //GO::config()->get_setting('servermanager_invoice_username');
-		$password = self::BILLING_PASSWORD; //GO::config()->get_setting('servermanager_invoice_password');
+		//echo GO::config()->servermanager_billing_bookid;
+		$host = GO::config()->servermanager_billing_host;
+		$username = GO::config()->servermanager_billing_user;
+		$password = GO::config()->servermanager_billing_pass;
 		if(!isset($host) || !isset($username) || !isset($password))
 			return false;
 		
@@ -124,6 +120,51 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord{
 		return $uprice;
 	}
 	
+	private $_module_prices;
+	/**
+	 * Get the price of a module from the sm_module_prices table
+	 * @param string $module_name the name of the module directory is found in the database
+	 * @return double price_per_month as specified in the database 
+	 */
+	protected function _getModulePrice($module_name)
+	{
+		if(!isset($this->_module_prices))
+			$this->_module_prices = GO_ServerManager_Model_ModulePrice::model()->find()->fetchAll();
+
+		foreach($this->_module_prices as $modulePrice)
+		{
+			if($modulePrice->module_name == $module_name)
+				return $modulePrice->price_per_month;
+		}
+		return 0;
+	}
+	
+	/**
+	 * Return data in MBs of extra data use 
+	 * Returns 0 if there is no installation or nu current usage for an installation
+	 * @return integer extra mbs used
+	 */
+	protected function _getExtraMbsUsed()
+	{
+		$extra_mbs = 0;
+		if(isset($this->installation) && isset($this->installation->currentusage))
+		{
+			$mbs_used = $this->installation->currentusage->getTotalUsage();
+			$extra_mbs = $mbs_used - (GO::config()->get_setting('sm_mbs_included') * $this->installation->currentusage->count_users);
+		}
+		return $extra_mbs;
+	}
+	
+	/**
+	 * Return the prices of the extra MBs that are used
+	 * The price is the config is per gigabyte so we need to devide by 1024
+	 * @return double price
+	 */
+	protected function _getExtraMbsUsedPrice()
+	{
+		return ($this->_getExtraMbsUsed()/1024) * GO::config()->get_setting('sm_price_extra_gb');
+	}
+	
 	/**
 	 * This method is responsabgle for creating an new invoice in the billin module
 	 * We send JSONdata to antoher server using CURL
@@ -135,7 +176,7 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord{
 
 			//create jsondata to send
 			$order = array();
-			$order['book_id'] = self::BILLING_BOOK_ID;
+			$order['book_id'] = isset(GO::config()->servermanger_billing_bookid) ? GO::config()->servermanger_billing_bookid : 2;
 			//$order['btime'] = time(); //behaves strange in billing
 			$order['customer_address'] = $this->customer_address;
 			$order['customer_address_no'] = $this->customer_address_no;
@@ -158,11 +199,12 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord{
 			);
 			foreach($this->installation->modules as $module)
 			{
-				if($module->name == 'billing') //TODO: Don't hardcode, look into table for prices
+				$price = $this->_getModulePrice($module->name);
+				if($price > 0)
 				{
 					$order['items'][] = array(
-							'description'=>'Billing module', 
-							'unit_price'=>20, 
+							'description'=>GO::t('name', $module->name). " Module",
+							'unit_price'=>$price, 
 							'amount'=>$this->invoice_timespan,
 							'discount'=>$this->discount_percentage,
 					);
@@ -176,6 +218,16 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord{
 						'amount'=>$this->invoice_timespan,
 						'discount'=>$this->discount_percentage,
 						);
+			}
+			//TODO: add extra MB
+			if($this->_getExtraMbsUsedPrice() > 0)
+			{
+				$order['items'][] = array(
+						'description'=>'Extra MBs Used ('.$this->_getExtraMbsUsed().')',
+						'unit_price'=>$this->_getExtraMbsUsedPrice(),
+						'amount'=>$this->invoice_timespan,
+						'discount'=>$this->discount_percentage,
+				);
 			}
 
 			return $order;
@@ -192,11 +244,13 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord{
 		if(self::canConnect())
 		{
 			$orderData = $this->createOrderData();
-
+			$host = GO::config()->servermanager_billing_host;
+			$username = GO::config()->servermanager_billing_user;
+			$password = GO::config()->servermanager_billing_pass;
 		  //send the data to billing module using curl
 			$c = new GO_Base_Util_HttpClient();
-			$c->groupofficeLogin(self::BILLING_HOST, self::BILLING_USERNAME, self::BILLING_PASSWORD);
-			$response = $c->request(self::BILLING_HOST.'?r=billing/order/remoteAutoInvoice', array(
+			$c->groupofficeLogin($host, $username, $password);
+			$response = $c->request($host.'?r=billing/order/remoteAutoInvoice', array(
 					'data'=>json_encode($orderData)
 			));
 			//return the response status curl returns (true if invoice was created)

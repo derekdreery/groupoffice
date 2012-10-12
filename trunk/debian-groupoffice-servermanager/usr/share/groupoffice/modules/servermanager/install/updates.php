@@ -229,3 +229,6 @@ $updates['201210051200'][]="INSERT INTO `sm_user_prices` (`max_users`, `price_pe
 	(40, 146),
 	(45, 148),
 	(50, 150);";
+
+$updates['201210051200'][]="INSERT INTO `sm_module_prices` (`module_name` ,`price_per_month`) VALUES 
+	('billing', '20');";

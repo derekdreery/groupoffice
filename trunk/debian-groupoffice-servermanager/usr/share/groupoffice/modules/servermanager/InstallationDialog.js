@@ -285,7 +285,8 @@ Ext.extend(GO.servermanager.InstallationDialog, GO.Window,{
 				  name: 'trial_days',
 					anchor: '-20',
 				  allowBlank:false,
-				  fieldLabel: GO.servermanager.lang.trialDays
+				  fieldLabel: GO.servermanager.lang.trialDays,
+					value: '30'
 				},{
 					xtype: 'textfield',
 				  name: 'name',

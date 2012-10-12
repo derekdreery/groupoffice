@@ -708,21 +708,21 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	{
 		//throw new Exception('afterSave');
 		$success= true;
+		
+		// NOTE: write the config is done in afterSubmit() calling an controller action as root
+		
+		//save module information
+		if(is_array($this->_modules))
+		{
+			foreach($this->_modules as $module)
+			{
+				$module->installation_id = $this->id;
+				$success = $success && $module->save();
+			}
+		}
+		
 		if(!$wasnew)
 		{
-			// NOTE: write the config is done in afterSubmit() calling an controller action as root
-			//$success=GO_Base_Util_ConfigEditor::save(new GO_Base_Fs_File($this->configPath), $this->config);
-
-			//save module information
-			if(is_array($this->_modules))
-			{
-				foreach($this->_modules as $module)
-				{
-					$module->installation_id = $this->id;
-					$success = $success && $module->save();
-				}
-			}
-		
 			//save new user data of an installation
 			if(is_array($this->_installationUsers))
 			{
@@ -737,14 +737,15 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 			//save latest usage history if exists
 			if($this->_currentHistory != null)
 				$success=$success && $this->_currentHistory->save();
-			
-			//save automatic invoicing setting
-			if(isset($this->_autoInvoice))
-			{
-				$this->_autoInvoice->installation_id = $this->id;
-				$success=$success && $this->_autoInvoice->save();
-			}
 		}
+		
+		//save automatic invoicing setting
+		if(isset($this->_autoInvoice))
+		{
+			$this->_autoInvoice->installation_id = $this->id;
+			$success=$success && $this->_autoInvoice->save();
+		}
+		
 		return $success;
 	}
 	
