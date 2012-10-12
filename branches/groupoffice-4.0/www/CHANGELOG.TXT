@@ -1,3 +1,7 @@
+12-10-2012 4.0.112
+- First ticket by customer did not send an autoreply message
+- Workaround IE DST bug in month grid of calendar
+- Reimplemented show from others in ticketsystem
 - Changed the classname for MultiSelectGrid in projects to: GO_Projects_Model_Status
 - In PHP 5.4, ReflectionProperty::getName() sometimes erroneously returned false.
 - Portlet folders were not deleted along with account.
@@ -8,6 +12,9 @@
 - Dutch translation for billing module
 - Regex handling of customfields didn't work properly when there was no flag given.
 - Order PDF template will show item group totals for every item group not just the last one
+- Added homepage to contact info
+- Set default sort order for tasklists
+- Disable APC cache temporarily because it seems to cause random logouts
 
 11-10-2012 4.0.111
 - Tickettypes permissions can no longer be "read and create"
