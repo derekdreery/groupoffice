@@ -1,4 +1,5 @@
 12-10-2012 4.0.112
+- Email validation will no longer accept 2 dots right after each other in domain part
 - First ticket by customer did not send an autoreply message
 - Workaround IE DST bug in month grid of calendar
 - Reimplemented show from others in ticketsystem
