@@ -349,9 +349,10 @@ Ext.override(Ext.ToolTip,{
 
 Ext.apply(Ext.form.VTypes, {
     emailAddress:  function(v) {
-		var email = /^[a-z0-9\._\-+]+@[a-z0-9\.\-_]+\.[a-z]{2,6}$/i;
+		var email = /^[_a-z0-9\-+]+(\.[_a-z0-9\-+]+)*@[a-z0-9\-]+(\.[a-z0-9\-]+)*(\.[a-z]{2,100})$/i;
         return email.test(v);
     },
     emailAddressText: Ext.form.VTypes.emailText,
     emailAddressMask: /[a-z0-9_\.\-@\+]/i
 });
+
