@@ -39,9 +39,13 @@ class GO_Base_VObject_VTimezone extends Sabre_VObject_Component {
 
 		$STANDARD_RRULE = '';
 		$DAYLIGHT_RRULE = '';
-
+		
 		for ($i = 0, $max = count($transitions); $i < $max; $i++) {
 			if ($transitions[$i]['ts'] > $start_of_year) {
+				
+				$weekday1 = $this->_getDay($transitions[$i]['time']);
+				$weekday2 = $this->_getDay($transitions[$i+1]['time']);
+				
 				$dst_end = $transitions[$i];
 				$dst_start = $transitions[$i + 1];
 
@@ -51,8 +55,8 @@ class GO_Base_VObject_VTimezone extends Sabre_VObject_Component {
 				$DAYLIGHT_TZOFFSETFROM = $this->_formatVtimezoneTransitionHour($dst_start['offset'] / 3600);
 				$DAYLIGHT_TZOFFSETTO = $this->_formatVtimezoneTransitionHour($dst_end['offset'] / 3600);
 
-				$DAYLIGHT_RRULE = "FREQ=YEARLY;BYDAY=-1SU;BYMONTH=" . date('n', $dst_end['ts']);
-				$STANDARD_RRULE = "FREQ=YEARLY;BYDAY=-1SU;BYMONTH=" . date('n', $dst_start['ts']);
+				$DAYLIGHT_RRULE = "FREQ=YEARLY;BYDAY=$weekday1;BYMONTH=" . date('n', $dst_end['ts']);
+				$STANDARD_RRULE = "FREQ=YEARLY;BYDAY=$weekday2;BYMONTH=" . date('n', $dst_start['ts']);
 
 
 				break;
@@ -77,6 +81,18 @@ class GO_Base_VObject_VTimezone extends Sabre_VObject_Component {
 		$s->tzoffsetto = $STANDARD_TZOFFSETFROM . "00";
 
 		$this->add($s);
+	}
+	
+	private function _getDay($date){
+		$time = new DateTime($date);				
+		$dayOfMonth = $time->format('n');				
+		$nth = ceil($dayOfMonth/7);				
+		if($nth>2)
+			$weekday = '-1SU';
+		else
+			$weekday = $nth.'SU';
+
+		return $weekday;
 	}
 	
 	private function _formatVtimezoneTransitionHour($hour){		
