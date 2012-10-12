@@ -181,6 +181,12 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 											'</tr>'+						
 										'</tpl>'+
 										
+										'<tpl if="!GO.util.empty(homepage)">'+
+											'<tr>'+
+												'<td class="contactCompanyLabelWidth">' + GO.addressbook.lang['companyHomepage'] + ':</td><td><a href="{homepage}" target="_blank">{homepage}</a></td>'+
+											'</tr>'+						
+										'</tpl>'+
+										
 									'</table>'+							
 								'</td>'+
 							
