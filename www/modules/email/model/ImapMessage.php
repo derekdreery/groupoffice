@@ -82,7 +82,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	 * @param GO_Email_Model_Account $account
 	 * @param int $uid 
 	 */
-	public function findByUid($account, $mailbox, $uid) {
+	public function findByUid(GO_Email_Model_Account $account, $mailbox, $uid) {
 
 		$cacheKey='email:'.$account->id.':'.$mailbox.':'.$uid;
 		
