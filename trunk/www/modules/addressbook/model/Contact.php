@@ -151,7 +151,16 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 *
 	 * @return String Full formatted name of the user
 	 */
-	public function getName($sort_name="first_name"){
+	public function getName($sort_name=false){
+		
+		if(!$sort_name){
+			if(GO::user()){
+				$sort_name = GO::user()->sort_name;
+			}else
+			{
+				$sort_name = 'first_name';
+			}
+		}
 		
 		return GO_Base_Util_String::format_name($this->last_name, $this->first_name, $this->middle_name,$sort_name);
 	}
@@ -406,26 +415,27 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 //					$attributes['title'] = !empty($vobjProp->value) ? $vobjProp->value : null;
 //					break;
 				case 'TEL':
-					$types = array();
-					foreach ($vobjProp->parameters as $param) {
-						if ($param->name=='TYPE')
-							$types = explode(',',strtolower($param->value));							
+					if(!empty($vobjProp->value)){
+						$types = array();
+						foreach ($vobjProp->parameters as $param) {
+							if ($param->name=='TYPE')
+								$types = explode(',',strtolower($param->value));							
+						}
+						if(in_array('work',$types) && ( in_array('voice',$types) || count($types)==1 ) ) {
+							$attributes['work_phone'] = $vobjProp->value;
+							$companyAttributes['phone'] = $vobjProp->value;
+						}
+						if(in_array('cell',$types) && ( in_array('voice',$types) || count($types)==1 ) )
+							$attributes['cellular'] = $vobjProp->value;
+						if(in_array('fax',$types) && in_array('home',$types))
+							$attributes['fax'] = $vobjProp->value;
+						if(in_array('fax',$types) && in_array('work',$types)) {
+							$companyAttributes['fax'] = $vobjProp->value;
+							$attributes['work_fax'] = $vobjProp->value;
+						}
+						if(in_array('home',$types) && ( in_array('voice',$types) || count($types)==1 ) )
+							$attributes['home_phone'] = $vobjProp->value;
 					}
-					if(in_array('work',$types) && ( in_array('voice',$types) || count($types)==1 ) ) {
-						$attributes['work_phone'] = $vobjProp->value;
-						$companyAttributes['phone'] = $vobjProp->value;
-					}
-					if(in_array('cell',$types) && ( in_array('voice',$types) || count($types)==1 ) )
-						$attributes['cellular'] = $vobjProp->value;
-					if(in_array('fax',$types) && in_array('home',$types))
-						$attributes['fax'] = $vobjProp->value;
-					if(in_array('fax',$types) && in_array('work',$types)) {
-						$companyAttributes['fax'] = $vobjProp->value;
-						$attributes['work_fax'] = $vobjProp->value;
-					}
-					if(in_array('home',$types) && ( in_array('voice',$types) || count($types)==1 ) )
-						$attributes['home_phone'] = $vobjProp->value;
-					
 //					foreach ($vobjProp->parameters as $param) {
 //						if ($param['name']=='TYPE') {
 //							switch (susbstr($param['value'],0,4)) {
@@ -489,7 +499,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 //					} else {
 //						$attributes['email'] = $vobjProp->value;
 //					}
-					$emails[]=$vobjProp->value;
+					if(!empty($vobjProp->value))
+						$emails[]=$vobjProp->value;
 					break;
 				case 'TITLE':
 					$attributes['function'] = $vobjProp->value;
@@ -509,7 +520,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 					foreach ($vobjProp->parameters as $param) {
 						$paramsArr[] = $param->serialize();
 					}
-					$remainingVcardProps[] = array('name' => $vobjProp->name, 'parameters'=>implode(';',$paramsArr), 'value'=>$vobjProp->value);					
+//					$remainingVcardProps[] = array('name' => $vobjProp->name, 'parameters'=>implode(';',$paramsArr), 'value'=>$vobjProp->value);					
 					break;
 			}
 		}
@@ -521,6 +532,15 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 				$attributes['email2']=$email;
 			elseif(!isset($attributes['email3']))
 				$attributes['email3']=$email;
+		}
+		
+		//some attributes can be specified with multiple values like tel and email.
+		//We don't know which value is going to map to which exact GO attribute because every client handles this differently.
+		//Clear the values if they haven't been found at all.
+		$attributesMultiple=array('home_phone','work_phone','fax', 'work_fax','cellular','email','email2','email3');
+		foreach($attributesMultiple as $attributeName){
+			if(!isset($attributes[$attributeName]))
+				$attributes[$attributeName]="";
 		}
 		
 		$attributes=array_map('trim',$attributes);
@@ -671,7 +691,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		
 		if (!empty($this->email)) {
 			$p = new Sabre_VObject_Property('EMAIL',$this->email);
-			$p->add(new GO_Base_VObject_Parameter('TYPE','WORK,INTERNET'));
+			$p->add(new GO_Base_VObject_Parameter('TYPE','INTERNET'));
 			$e->add($p);
 		}
 		if (!empty($this->email2)) {
@@ -681,7 +701,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		}
 		if (!empty($this->email3)) {
 			$p = new Sabre_VObject_Property('EMAIL',$this->email3);
-			$p->add(new GO_Base_VObject_Parameter('TYPE','INTERNET'));
+			$p->add(new GO_Base_VObject_Parameter('TYPE','WORK,INTERNET'));
 			$e->add($p);
 		}
 		

@@ -109,7 +109,8 @@ class GO_Base_Db_Columns{
 						'length'=>$length,
 						'gotype'=>$gotype,
 						'default'=>$default,
-						'dbtype'=>$type
+						'dbtype'=>$type,
+						'null'=>$field['Null']=='YES'
 				);
 
 			}

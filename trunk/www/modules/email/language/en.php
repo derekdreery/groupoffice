@@ -256,6 +256,6 @@ $l['moveTo']='Move to';
 
 $l['useAccount']='Use account';
 
-$l['sieveNote']='Not all features are supported. Check the manual.';
-
 $l['storePassword']='Permanently store password';
+$l['sieveNote']='Not all features are supported. Check the manual.';
+$l['winmailNoFiles']="This winmail attachment does not contain any files.";

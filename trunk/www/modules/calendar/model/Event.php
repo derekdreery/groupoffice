@@ -19,7 +19,7 @@
  * @property int $category_id
  * @property boolean $read_only
  * @property int $files_folder_id
- * @property string $background
+ * @property string $background eg. "EBF1E2"
  * @property string $rrule
  * @property boolean $private
  * @property int $resource_event_id
@@ -95,16 +95,24 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function defaultAttributes() {
-		$settings = GO_Calendar_Model_Settings::model()->getDefault(GO::user());
+		
 		
 		$defaults = array(
 				//'description'=>'DIT IS DE BESCHRIJVING DIE STANDAARD WORDT INGEVULD',
 				'status' => "NEEDS-ACTION",
 				'start_time'=> GO_Base_Util_Date::roundQuarters(time()), 
-				'end_time'=>GO_Base_Util_Date::roundQuarters(time()+3600),
-				'reminder' => $settings->reminder,
-				'calendar_id'=>$settings->calendar_id
+				'end_time'=>GO_Base_Util_Date::roundQuarters(time()+3600)				
 		);
+		
+		
+		$settings = GO_Calendar_Model_Settings::model()->getDefault(GO::user());
+		if($settings){		
+			$defaults = array_merge($defaults, array(
+				'reminder' => $settings->reminder,
+				'calendar_id'=>$settings->calendar_id,
+				'background'=>$settings->background
+						));
+		}
 		
 		return $defaults;
 	}
@@ -570,6 +578,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$rrule->readIcalendarRruleString($localEvent->getEvent()->start_time, $localEvent->getEvent()->rrule);
 
 			$rrule->setRecurpositionStartTime($localEvent->getPeriodStartTime());
+//			$rrule->setRecurPositionStartTime($periodStartTime);
 
 			$origEventAttr = $localEvent->getEvent()->getAttributes('formatted');
 
@@ -774,7 +783,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 			$html .= '<table>';
 			
-			$html .= '<tr><td colspan="2"><br /><b>Participants</b></td></tr>';
+			$html .= '<tr><td colspan="2"><br /><b>'.GO::t('participants','calendar').'</b></td></tr>';
 			while($participant = $stmt->fetch()){
 				$html .= '<tr><td colspan="2">'.$participant->name.'</td></tr>';
 			}
@@ -1003,8 +1012,16 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if(empty($this->name))
 			$this->name = GO::t('unnamed');
 		$this->description = (string) $vobject->description;
-		$this->start_time = $vobject->dtstart->getDateTime()->format('U');
-		$this->end_time = $vobject->dtend->getDateTime()->format('U');
+		
+		if($vobject->dtstart)
+			$this->start_time = $vobject->dtstart->getDateTime()->format('U');
+		else
+			$this->start_time=time();		
+		
+		if($vobject->dtend)
+			$this->end_time = $vobject->dtend->getDateTime()->format('U');
+		else
+			$this->end_time=$this->start_time+1800;
 		
 		//TODO needs improving
 		if(isset($vobject->dtend['VALUE']) && $vobject->dtend['VALUE']=='DATE')
@@ -1108,10 +1125,17 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			//Group-Office only supports a single category.
 			$cats = explode(',',$vobject->categories);
 			$categoryName = array_shift($cats);
-			$category = GO_Calendar_Model_Category::model()->findByName($this->calendar_id, $categoryName);
 			
-			if($category)
-				$this->category_id=$category->id;			
+			$category = GO_Calendar_Model_Category::model()->findByName($this->calendar_id, $categoryName);
+			if(!$category){
+				$category = new GO_Calendar_Model_Category();
+				$category->name=$categoryName;
+				$category->calendar_id=$this->calendar_id;
+				$category->save();
+			}			
+
+			$this->category_id=$category->id;			
+			$this->background=$category->color;
 		}
 		
 

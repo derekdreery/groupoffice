@@ -299,8 +299,9 @@ class GO{
 		if (!isset(self::$_cache)) {
 			if(GO::config()->debug || !GO::isInstalled())
 				self::$_cache=new GO_Base_Cache_None();
-			elseif(function_exists("apc_store"))
-				self::$_cache=new GO_Base_Cache_Apc();
+//			Disable apc cache temporarily because it seems to cause the random logouts
+//			elseif(function_exists("apc_store"))
+//				self::$_cache=new GO_Base_Cache_Apc();
 			else
 				self::$_cache=new GO_Base_Cache_Disk();
 		}
@@ -436,6 +437,9 @@ class GO{
 		spl_autoload_register(array('GO', 'autoload'));	
 
 		GO::session();
+		
+//		GO::debug("Session started with ID: ".GO::session()->id());
+//		GO::debug("Request params: ".var_export($_REQUEST, true));
 		
 		//get cached autoload classes
 		$classes = GO::cache()->get('autoload_classes');

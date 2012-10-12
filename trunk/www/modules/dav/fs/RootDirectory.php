@@ -33,6 +33,8 @@ class GO_Dav_Fs_RootDirectory extends Sabre_DAV_FS_Directory implements Sabre_DA
 		$children = array();
 		$children[] = new GO_Dav_Fs_Directory('users/' . GO::user()->username);
 		$children[] = new GO_Dav_Fs_SharedDirectory();
+		$children[] = new GO_Dav_Fs_Directory('projects');
+		$children[] = new GO_Dav_Fs_Directory('addressbook');
 
 
 		return $children;
@@ -46,12 +48,22 @@ class GO_Dav_Fs_RootDirectory extends Sabre_DAV_FS_Directory implements Sabre_DA
      * @return Sabre_DAV_INode 
      */
     public function getChild($name) {
-			if($name=='Shared')
-				return new GO_Dav_Fs_SharedDirectory();
-			elseif($name==GO::user()->username)
-				return new GO_Dav_Fs_Directory('users/' . GO::user()->username);
-			else
-				return false;
+			
+			$children = $this->getChildren();
+			
+			foreach($children as $child)
+			{
+				if($child->getName()==$name)
+					return $child;
+			}
+			return false;
+			
+//			if($name=='Shared')
+//				return new GO_Dav_Fs_SharedDirectory();
+//			elseif($name==GO::user()->username)
+//				return new GO_Dav_Fs_Directory('users/' . GO::user()->username);
+//			else
+//				return false;
 		}
 
 	/**

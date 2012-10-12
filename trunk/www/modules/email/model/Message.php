@@ -126,6 +126,8 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		$this->attributes['bcc'] = new GO_Base_Mail_EmailRecipients($this->attributes['bcc']);
 		$this->attributes['from'] = new GO_Base_Mail_EmailRecipients($this->attributes['from']);
 		$this->attributes['reply_to'] = new GO_Base_Mail_EmailRecipients($this->attributes['reply_to']);
+		
+		$this->attributes['x_priority']= isset($this->attributes['x_priority']) ? intval($this->attributes['x_priority']) : 3;
 	}
 
 	/**

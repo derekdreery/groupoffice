@@ -25,7 +25,7 @@ GO.email.EmailClient = function(config){
 		root: 'results',
 		totalProperty: 'total',
 		id: 'uid',
-		fields:['uid','icon','flagged','has_attachments','seen','subject','from','sender','size','date', 'priority','answered','forwarded','account_id','mailbox'],
+		fields:['uid','icon','flagged','has_attachments','seen','subject','from','sender','size','date', 'x_priority','answered','forwarded','account_id','mailbox'],
 		remoteSort: true
 	});
 
@@ -1385,8 +1385,11 @@ GO.mainLayout.onReady(function(){
 
 //					if(!ep || !ep.isVisible()){
 						GO.email.notificationEl.setDisplayed(true);
+						
 						data.popup=true;
-						data.alarm=true;
+						
+						if(!GO.settings.mute_new_mail_sound)
+							data.alarm=true;
 //					}
 
 					GO.email.notificationEl.update(result.email_status.total_unseen);

@@ -25,7 +25,7 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 	
 	/**
 	 * 
-	 * php /var/www/groupoffice-4.0/www/groupofficecli.php -r=ldapauth/sync/users --delete=1 --max_delete_percentage=34
+	 * php /var/www/groupoffice-4.0/www/groupofficecli.php -r=ldapauth/sync/users --delete=1 --max_delete_percentage=34 --dry=1
 	 * 
 	 * @param type $params
 	 * @throws Exception
@@ -36,6 +36,10 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 		$this->requireCli();		
 		GO::session()->runAsRoot();
 		
+		$dryRun = !empty($params['dry']);
+		
+		if($dryRun)
+			echo "Dry run enabled.\n\n";
 		
 		$la = new GO_Ldapauth_Authenticator();
 	
@@ -52,7 +56,14 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 			$i++;
 			
 			try{
-				$user = $la->syncUserWithLdapRecord($record);			
+				if(!$dryRun){
+					$user = $la->syncUserWithLdapRecord($record);			
+				}else
+				{
+					$attr = $la->getUserAttributes($record);		
+					$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $attr['username']);
+				}
+				
 				echo "Synced ".$user->username."\n";
 			} catch(Exception $e){
 				echo "ERROR:\n";
@@ -62,7 +73,8 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 				var_dump($record->getAttributes());
 			}
 			
-			$this->fireEvent("ldapsyncuser", array($user, $record));
+			if(!$dryRun)
+				$this->fireEvent("ldapsyncuser", array($user, $record));
 			
 			$usersInLDAP[]=$user->id;
 			
@@ -86,15 +98,18 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 			$maxDeletePercentage = isset($params['max_delete_percentage']) ? intval($params['max_delete_percentage']) : 5;
 
 			if($percentageToDelete>$maxDeletePercentage)
-				throw new Exception("Delete Aborted because script was about to delete more then $maxDeletePercentage% of the users (".$percentageToDelete."%, ".($totalInGO-$totalInLDAP)." users)");
+				die("Delete Aborted because script was about to delete more then $maxDeletePercentage% of the users (".$percentageToDelete."%, ".($totalInGO-$totalInLDAP)." users)\n");
 
 			while($user = $stmt->fetch()){
 				if(!in_array($user->id, $usersInLDAP)){
 					echo "Deleting ".$user->username."\n";
-					$user->delete();
+					if(!$dryRun)
+						$user->delete();
 				}
 			}			
 		}
+		
+		echo "Done\n\n";
 		
 		//var_dump($attr);
 		

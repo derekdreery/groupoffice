@@ -63,7 +63,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$imap->move($messages, $params['to_mailbox']);		
 			
 			//return possible changed unseen status
-			$unseen = $imap->get_unseen($params['to_mailbox']);
+			$unseen = $imap->get_unseen($params['to_mailbox']);	
 			$response['unseen'][$params['to_mailbox']]=$unseen['count'];
 		}
 	}
@@ -127,27 +127,12 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				$query.= ' UNSEEN';
 		}
 		
-		$sort=isset($params['sort']) ? $params['sort'] : 'from';
-
-		switch($sort) {
-			case 'from':
-				$sortField='FROM';
-				break;
-			case 'date':
-				$sortField='DATE';
-				break;
-			case 'subject':
-				$sortField='SUBJECT';
-				break;
-			case 'size':
-				$sortField='SIZE';
-				break;
-			default:
-				$sortField='DATE';
-		}
+		
 			
 		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+		if(!$account)
+			throw new GO_Base_Exception_NotFound();
 		/* @var $account GO_Email_Model_Account */
 		
 		$this->_filterMessages($params["mailbox"], $account);
@@ -163,6 +148,26 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		$this->_moveMessages($imap, $params, $response);
 		
+		
+		$sort=isset($params['sort']) ? $params['sort'] : 'from';
+
+		switch($sort) {
+			case 'from':
+				$sortField=$response['sent'] ? 'TO' : 'FROM';
+				break;
+			case 'date':
+				$sortField='DATE';
+				break;
+			case 'subject':
+				$sortField='SUBJECT';
+				break;
+			case 'size':
+				$sortField='SIZE';
+				break;
+			default:
+				$sortField='DATE';
+		}
+
 //		$imap = $account->openImapConnection($params["mailbox"]);
 		
 		if(!empty($params['delete_keys'])){
@@ -227,8 +232,12 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	
 		$response['total'] = $imap->sort_count;
 		
-		$unseen = $imap->get_unseen($params['mailbox']);
-		$response['unseen'][$params['mailbox']]=$unseen['count'];		
+		//$unseen = $imap->get_unseen($params['mailbox']);
+		
+		$mailbox = new GO_Email_Model_ImapMailbox($account, array('name'=>$params['mailbox']));
+		$mailbox->snoozeAlarm();
+		
+		$response['unseen'][$params['mailbox']]=$mailbox->unseen;		
 		
 		//deletes must be confirmed if no trash folder is used or when we are in the trash folder to delete permanently
 		$response['deleteConfirm']=empty($account->trash) || $account->trash==$params['mailbox'];
@@ -246,8 +255,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		$response['success']=$imap->set_message_flag($messages, "\\".$params["flag"], !empty($params["clear"]));
 		
-		$unseen = $imap->get_unseen($params['mailbox']);
-		$response['unseen']=$unseen['count'];
+		$mailbox = new GO_Email_Model_ImapMailbox($account, array('name'=>$params['mailbox']));
+		$mailbox->snoozeAlarm();
+		
+		$response['unseen']=$mailbox->unseen;
 		
 		return $response;
 	}
@@ -1098,7 +1109,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 						$response['htmlbody']='<div class="em-autolink-message">'.
 										sprintf(GO::t('autolinked','email'),'<span class="em-autolink-link" onclick="GO.linkHandlers[\''.$tag['model'].'\'].call(this, '.
-														$tag['model_id'].');">'.$searchCacheModel->name.'</div>').
+														$tag['model_id'].');">'.$searchCacheModel->name.'</span>').'</div>'.
 										$response['htmlbody'];
 					}
 				}
@@ -1188,6 +1199,12 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		if($retVar!=0)
 			throw new Exception("TNEF extraction failed: ".implode("\n", $output));		
 		$tmpFile->delete();
+		
+		$items = $tmpFolder->ls();
+		if(!count($items)){
+			$this->render("Plain",GO::t('winmailNoFiles', 'email'));
+			exit();
+		}
 
 		exec(GO::config()->cmd_zip.' -r "winmail.zip" *', $output, $retVar);
 		if($retVar!=0)
@@ -1259,6 +1276,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	protected function actionSaveAttachment($params){
 		$folder = GO_Files_Model_Folder::model()->findByPk($params['folder_id']);
 		
+		if(!$folder){
+			trigger_error("GO_Email_Controller_Message::actionSaveAttachment(".$params['folder_id'].") folder not found", E_USER_WARNING);
+			throw new GO_Base_Exception_NotFound("Specified folder not found");
+		}
 		
 		$params['filename'] = GO_Base_Fs_File::stripInvalidChars($params['filename']);
 		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.$folder->path.'/'.$params['filename']);

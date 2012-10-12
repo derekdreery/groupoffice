@@ -194,7 +194,10 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		for(var day=0;day<this.days;day++)
 		{
 			var dt = this.startDate.add(Date.DAY, day);
-
+			
+			//workaround IE bug:
+			if(dt.format('H')==23) dt = dt.add(Date.HOUR, 2);
+		
 			if(day == 0 || dt.format('j')==1)
 			{
 				dateFormat = 'j F';
@@ -591,7 +594,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 						delete event.domId;
 
 						if(calendar_visible)
-						{
+						{							
 							event.startDate = Date.parseDate(event.start_time, this.dateTimeFormat).add(Date.DAY, obj.offset);
 							event.endDate = Date.parseDate(event.end_time, this.dateTimeFormat).add(Date.DAY, obj.offset);
 							event.start_time=event.startDate.format(this.dateTimeFormat);

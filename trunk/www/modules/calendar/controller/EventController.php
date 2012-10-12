@@ -50,8 +50,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			unset($params['id']);
 		}
 
-		if (isset($params['subject']))
-			$params['name'] = $params['subject'];
+//		if (isset($params['subject']))
+//			$params['name'] = $params['subject'];
 
 		if (isset($params['start_date'])) {
 			if (!empty($params['all_day_event'])) {
@@ -437,7 +437,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 	public function afterLoad(&$response, &$model, &$params) {
 
-		$response['data']['subject'] = $response['data']['name'];
+//		if (isset($response['data']['name']))
+//			$response['data']['subject'] = $response['data']['name'];
 
 		$response = self::reminderSecondsToForm($response);
 
@@ -462,9 +463,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		
 		if(!$model->id){
-			$settings = GO_Calendar_Model_Settings::model()->findByPk($model->calendar->user_id);
-			if($settings)
-				$response['data']['background']=$settings->background;
+			
 			
 			$days = array('SU','MO','TU','WE','TH','FR','SA');
 			

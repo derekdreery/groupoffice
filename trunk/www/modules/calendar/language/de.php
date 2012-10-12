@@ -197,3 +197,5 @@ $l['updateReponses'][1]='%s hat den Termin %s akzeptiert';
 $l['updateReponses'][2]='%s hat den Termin %s abgewiesen';
 $l['updateReponses'][3]='%s hat den Termin %s als vorläufig markiert';
 $l['cancelMessage']='Der folgende Termin, zu dem Sie eingeladen waren, wurde abgesagt.';
+$l['directUrl']='Direktlink';
+$l['cantRemoveOrganizer']="Sie können den Organisator nicht löschen.";

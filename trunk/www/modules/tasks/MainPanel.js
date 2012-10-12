@@ -363,10 +363,13 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 
 		if (!this.gridPanel.storeLoaded) {
 			var groupState = this.gridPanel.store.multiSortInfo.sorters[0];//this.gridPanel.store.getSortState();
+			var sortState = this.gridPanel.store.getSortState();
 			requests['tasks'] = {
 														r:"tasks/task/store",
 														groupBy: groupState.field,
-														groupDir: groupState.dir
+														groupDir: groupState.dir,
+														sort: sortState.field,
+														dir: sortState.direction														
 													};
 		}
 

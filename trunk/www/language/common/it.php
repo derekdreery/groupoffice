@@ -554,3 +554,6 @@ $l['queryValue']="Valore";
 $l['queryStartGroup']="Gruppo iniziale";
 $l['cliOnly']= "Questo script può essere eseguito solo tramite l\'interfaccia a riga di comando (CLI) di Group-Office.";
 $l['unnamed']='Senza nome';
+$l['maxRowslistTooHigh']='Il numero massimo di righe negli elenchi è troppo alto. (max 50)';
+$l['sir']='Signor';
+$l['madam']='Signora';

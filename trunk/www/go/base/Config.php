@@ -374,6 +374,14 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $max_users = 0;
+	
+	/**
+	 * If set, user queries will only return this maximum number of users.
+	 * Useful in large environments where you don't want users to scroll through all,
+	 * 
+	 * @var int 
+	 */
+	var $limit_usersearch=0;
 
 	/**
 	 * The maximum number KB this Group-Office installation may use. 0 will allow unlimited usage of disk space.
@@ -559,6 +567,15 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $smtp_local_domain = '';
+	
+	
+	/**
+	 * A special Swift preference to escape dots. For some buggy SMTP servers this
+	 * is necessary.
+	 * 
+	 * @var boolean 
+	 */
+	var $swift_qp_dot_escape=false;
 
 	/**
 	 * A comma separated list of smtp server IP addresses that you
@@ -731,7 +748,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.0.108';
+	var $version = '4.0.112';
 
 
 	/* The permissions mode to use when creating files
@@ -761,7 +778,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20121001-1';
+	var $mtime = '20121012';
 
 	#group configuration
 	/**

@@ -107,6 +107,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		return array(
 				'aliases' => array('type'=>self::HAS_MANY, 'model'=>'GO_Email_Model_Alias', 'field'=>'account_id','delete'=>true),
 				'filters' => array('type'=>self::HAS_MANY, 'model'=>'GO_Email_Model_Filter', 'field'=>'account_id','delete'=>true, 'findParams'=>  GO_Base_Db_FindParams::newInstance()->order("priority")),
+				'portletFolders' => array('type'=>self::HAS_MANY, 'model'=>'GO_Email_Model_PortletFolder', 'field'=>'account_id','delete'=>true)
 		);
 	}
 

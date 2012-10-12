@@ -15,3 +15,4 @@ $l['category']='Kategori';
 $l['noCategory']='Ingen kategori';
 $l['newCommentText']='Skriv ny kommentar her ...';
 $l['newComment']='Ny kommentar';
+$l['readMore']="Les mer";

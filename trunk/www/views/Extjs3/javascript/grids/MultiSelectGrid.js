@@ -93,6 +93,7 @@ GO.grid.MultiSelectGrid = function (config){
 			//if(records.length){
 				this.relatedStore.baseParams[this.id] = Ext.encode(categories);
 				this.relatedStore.reload();
+				delete this.relatedStore.baseParams[this.id];
 			//}
 		}, this);
 
@@ -101,6 +102,7 @@ GO.grid.MultiSelectGrid = function (config){
 			{
 				this.relatedStore.baseParams[this.id] = Ext.encode(this.getSelected());
 				this.relatedStore.load();		
+				delete this.relatedStore.baseParams[this.id];
 			}, this);
 		}
 	}
@@ -255,7 +257,7 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 		this.selectedAll = (records.length == this.store.data.items.length) ? true : false;
 		if(this.allowNoSelection)
 		{						
-			var text = (this.selectedAll) ? GO.lang.deselectAll : GO.lang.selectAll;			
+//			var text = (this.selectedAll) ? GO.lang.deselectAll : GO.lang.selectAll;			
 			//this.selectButton.setText(text);
 		}
 		
