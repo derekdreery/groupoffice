@@ -160,7 +160,10 @@ class GO_Ldapauth_Authenticator {
 			GO::debug("LDAPAUTH: Group-Office user does not exist. Attempting to create it.");
 
 			$attr = $this->getUserAttributes($record);
-
+			
+			//sometimes users mapped the password. Unset it here to make sure the hash is not used for password in the user.
+			unset($attr['password']);
+			
 			GO::debug($attr);
 
 			$user = new GO_Base_Model_User();
