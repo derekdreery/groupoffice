@@ -343,7 +343,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				$response['data']['allow_themes'] = !empty($config['allow_themes']);
 				$response['data']['allow_password_change'] = !empty($config['allow_password_change']);
 
-				$response['data']['quota'] = GO_Base_Util_Number::localize($config['quota']/1024/1024);
+				$response['data']['quota'] = GO_Base_Util_Number::localize($config['quota']/1024/1024/1024);
 				$response['data']['restrict_smtp_hosts'] = $config['restrict_smtp_hosts'];
 				$response['data']['serverclient_domains'] = $config['serverclient_domains'];
 			}
