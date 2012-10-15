@@ -161,6 +161,10 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		return ($this->locked_user_id==GO::user()->id || GO::user()->isAdmin()) && $this->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION);
 	}
 	
+	/**
+	 * 
+	 * @return \GO_Base_Fs_File
+	 */
 	private function _getOldFsFile(){
 		$filename = $this->isModified('name') ? $this->getOldAttributeValue('name') : $this->name;
 		if($this->isModified('folder_id')){
@@ -200,7 +204,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		
 		//check permissions on the filesystem
 		if($this->isNew || $this->isModified('name') || $this->isModified('folder_id')){
-			if(!$this->fsFile->isWritable())
+			if(!$this->_getOldFsFile()->isWritable())
 				throw new Exception("File ".$this->path." is read only on the filesystem. Please check the file system permissions (hint: chmod -R www-data:www-data /home/groupoffice)");
 		}
 		
