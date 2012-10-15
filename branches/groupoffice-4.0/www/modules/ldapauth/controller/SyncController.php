@@ -58,13 +58,15 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 			try{
 				if(!$dryRun){
 					$user = $la->syncUserWithLdapRecord($record);			
+					$username = $user->username;
 				}else
 				{
 					$attr = $la->getUserAttributes($record);		
+					$username = $attr['username'];
 					$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $attr['username']);
 				}
 				
-				echo "Synced ".$user->username."\n";
+				echo "Synced ".$username."\n";
 			} catch(Exception $e){
 				echo "ERROR:\n";
 				echo (string) $e;
@@ -76,7 +78,8 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 			if(!$dryRun)
 				$this->fireEvent("ldapsyncuser", array($user, $record));
 			
-			$usersInLDAP[]=$user->id;
+			if($user)
+				$usersInLDAP[]=$user->id;
 			
 //			if($i==100)
 //				exit("Reached 100. Exitting");
