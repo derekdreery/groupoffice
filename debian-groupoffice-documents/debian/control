@@ -10,7 +10,6 @@ Homepage: http://www.group-office.com
 Package: groupoffice-documents
 Architecture: all
 Depends: groupoffice-com,
-	groupoffice-pro,
 	libapache2-mod-php5,
 	mysql-server,
 	php5-mysql | php5-mysqli,
