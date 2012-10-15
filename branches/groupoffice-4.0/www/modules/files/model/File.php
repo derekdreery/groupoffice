@@ -166,6 +166,10 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	 * @return \GO_Base_Fs_File
 	 */
 	private function _getOldFsFile(){
+		
+		if($this->isNew)
+			return $this->fsFile;
+		
 		$filename = $this->isModified('name') ? $this->getOldAttributeValue('name') : $this->name;
 		if($this->isModified('folder_id')){
 			//file will be moved so we need the old folder path.
@@ -203,9 +207,16 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	protected function beforeSave() {		
 		
 		//check permissions on the filesystem
-		if($this->isNew || $this->isModified('name') || $this->isModified('folder_id')){
-			if(!$this->_getOldFsFile()->isWritable())
-				throw new Exception("File ".$this->path." is read only on the filesystem. Please check the file system permissions (hint: chmod -R www-data:www-data /home/groupoffice)");
+		if($this->isNew){
+			if(!$this->folder->fsFolder->isWritable()){
+				throw new Exception("Folder ".$this->folder->path." is read only on the filesystem. Please check the file system permissions (hint: chmod -R www-data:www-data /home/groupoffice)");
+			}
+		}else
+		{
+			if($this->isModified('name') || $this->isModified('folder_id')){
+				if(!$this->_getOldFsFile()->isWritable())
+					throw new Exception("File ".$this->path." is read only on the filesystem. Please check the file system permissions (hint: chmod -R www-data:www-data /home/groupoffice)");
+			}
 		}
 		
 		if(!$this->isNew){
