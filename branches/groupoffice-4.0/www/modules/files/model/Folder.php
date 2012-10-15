@@ -187,12 +187,31 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		return parent::validate();
 	}
 	
+	/**
+	 * 
+	 * @return \GO_Base_Fs_Folder
+	 */
+	private function _getOldFsFolder(){
+		$filename = $this->isModified('name') ? $this->getOldAttributeValue('name') : $this->name;
+		if($this->isModified('parent_id')){
+			//file will be moved so we need the old folder path.
+			$oldFolderId = $this->getOldAttributeValue('parent_id');
+			$oldFolder = GO_Files_Model_Folder::model()->findByPk($oldFolderId);				
+			$oldRelPath = $oldFolder->path;				
+			$oldPath = GO::config()->file_storage_path . $oldRelPath . '/' . $filename;
+
+		}else{
+			$oldPath = GO::config()->file_storage_path . $this->parent->path.'/'.$filename;
+		}
+		return new GO_Base_Fs_Folder($oldPath);
+	}
+	
 	protected function beforeSave() {
 		
 		
 		//check permissions on the filesystem
 		if($this->isNew || $this->isModified('name') || $this->isModified('parent_id')){
-			if(!$this->fsFolder->isWritable())
+			if(!$this->_getOldFsFolder()->isWritable())
 				throw new Exception("Folder ".$this->path." is read only on the filesystem. Please check the file system permissions (hint: chmod -R www-data:www-data /home/groupoffice)");
 		}
 
