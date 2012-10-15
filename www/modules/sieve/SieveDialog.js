@@ -89,7 +89,7 @@ GO.sieve.SieveDialog = function(config) {
 	// Make action Grid and Panel
 	this.actionGrid = new GO.sieve.ActionGrid();
 	this.actionGrid.on('rowdblclick', function(grid, index, e){
-		var record = this.actionGrid.store.getAt(index);
+//		var record = this.actionGrid.store.getAt(index);
 		this.actionGrid.showActionCreatorDialog(index,this._accountId);
 	},this);
 	
