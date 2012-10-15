@@ -116,6 +116,7 @@ Ext.extend(GO.sieve.ActionGrid, GO.grid.GridPanel,{
 	
 	_saveActionRecord : function( values ) {
 		var record;
+	
 		if(values.id<0)
 		{
 			record = new GO.sieve.ActionRecord(values);
