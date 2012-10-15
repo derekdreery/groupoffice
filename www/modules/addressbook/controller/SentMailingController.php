@@ -244,9 +244,6 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		
 		$typestring = $model instanceof GO_Addressbook_Model_Company ? 'company' : 'contact';
 		
-		$error = 0;
-		$sent = 0;
-		
 		if($typestring=='contact'){
 			$email = $model->firstEmail;
 		}else
@@ -256,10 +253,10 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 
 		if(!$model->email_allowed){
 			echo "Skipping $typestring ".$email." because newsletter sending is disabled in the addresslists tab.\n\n";
-			$error = 1;
+			$mailing->errors++;
 		}elseif(empty($email)){
 			echo "Skipping $typestring ".$model->name." no e-mail address was set.\n\n";
-			$error = 1;
+			$mailing->errors++;
 		}else
 		{		
 			echo "Sending to " . $typestring . " id: " . $model->id . " email: " . $email . "\n";
@@ -282,12 +279,14 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 				echo $status . "\n";
 				echo "---------\n";
 
-				$error = 1;
+				$mailing->errors++;
 				unset($status);
 			} else {
-				$sent = 1;
+				$mailing->sent++;
 			}
 		}
+		
+		$mailing->save();
 
 		if ($typestring == 'contact') {
 			$mailing->removeManyMany('contacts', $model->id);
@@ -295,11 +294,11 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			$mailing->removeManyMany('companies', $model->id);			
 		}
 		
-		$mailing->setAttributes(array(
-				"sent" => $sent + $mailing->sent,
-				"errors" => $error + $mailing->errors
-		));
-		$mailing->save();
+//		$mailing->setAttributes(array(
+//				"sent" => $sent + $mailing->sent,
+//				"errors" => $error + $mailing->errors
+//		));
+		
 	}
 	
 	protected function getStoreParams($params) {
