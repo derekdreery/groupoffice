@@ -194,23 +194,15 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 			return true;
 		}
 	}
-	
-//	public function validate() {
-//		
-//		if(GO::config()->convert_utf8_filenames_to_ascii){
-//			$newName = GO_Base_Util_String::utf8ToASCII($this->name);
-//			if($newName!=$this->name){
-//				if($this->fsFile->exists())
-//					$this->fsFile->rename ($newName);
-//				
-//				$this->name = $newName;
-//			}
-//		}
-//		
-//		return parent::validate();
-//	}
+
 	
 	protected function beforeSave() {		
+		
+		//check permissions on the filesystem
+		if($this->isNew || $this->isModified('name') || $this->isModified('folder_id')){
+			if(!$this->fsFile->isWritable())
+				throw new Exception("File ".$this->path." is read only on the filesystem. Please check the file system permissions (hint: chmod -R www-data:www-data /home/groupoffice)");
+		}
 		
 		if(!$this->isNew){
 			
