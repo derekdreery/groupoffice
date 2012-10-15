@@ -1576,7 +1576,7 @@ GO.email.getTaskShowConfig = function(item) {
 
 	return taskShowConfig;
 }
-
+//files is array of relative paths
 GO.email.emailFiles = function(files, item) {
 	if (!Ext.isArray(files)) {
 		files = new Array(files);
