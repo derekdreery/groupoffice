@@ -188,6 +188,13 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function beforeSave() {
+		
+		
+		//check permissions on the filesystem
+		if($this->isNew || $this->isModified('name') || $this->isModified('parent_id')){
+			if(!$this->fsFolder->isWritable())
+				throw new Exception("Folder ".$this->path." is read only on the filesystem. Please check the file system permissions (hint: chmod -R www-data:www-data /home/groupoffice)");
+		}
 
 		if(!$this->systemSave && !$this->isNew && $this->readonly){
 			if($this->isModified('name') || $this->isModified('folder_id'))
