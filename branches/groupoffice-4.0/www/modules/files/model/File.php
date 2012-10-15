@@ -33,6 +33,8 @@
  * 
  * @property String $thumbURL
  * 
+ * @property String $downloadUrl
+ * 
  * @property String $path
  * @property GO_Base_Fs_File $fsFile
  * @property GO_Files_Model_Folder $folder
