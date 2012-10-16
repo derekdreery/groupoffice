@@ -10,18 +10,18 @@
  * @copyright Copyright Intermesh
  * @author Michael de Hart <mdhart@intermesh.nl>
  */
-GO.servermanager.ModulePriceDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
+GO.servermanager.UserPriceDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 
 	initComponent : function(){
 		
 		Ext.apply(this, {
-			goDialogId:'modulePrice',
+			goDialogId:'sm-userPrice',
 			layout:'fit',
-			title:GO.servermanager.lang.modulePrice,
+			title:GO.servermanager.lang.users,
 			width: 400,
 			height: 120,
 			resizable:false,
-			formControllerUrl: 'servermanager/modulePrice'
+			formControllerUrl: 'servermanager/userPrice'
 		});
 		
 		GO.servermanager.ModulePriceDialog.superclass.initComponent.call(this);	
@@ -35,22 +35,15 @@ GO.servermanager.ModulePriceDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			labelWidth:100,
 			items: [
 				{
-					xtype: 'combo',
-					fieldLabel: GO.servermanager.lang['moduleName'],
-					mode: 'remote',
-					autoLoad: true,
-					triggerAction: 'all',
-					hiddenName: 'module_name',
-					store: new GO.data.JsonStore({
-						url : GO.url('servermanager/installation/modules'),
-						fields : ['id','name']
-					}),
-					valueField: 'id',
-					displayField: 'name'
+					xtype: 'numberfield',
+					fieldLabel: GO.servermanager.lang.users,
+					name: 'max_users',
+					allowBlank: false,
+					decimals: 0
 				},
 				{
 					xtype: 'numberfield',
-					fieldLabel: GO.servermanager.lang['modulePrice'],
+					fieldLabel: GO.servermanager.lang.price,
 					name: 'price_per_month',
 					allowBlank:false
 				}

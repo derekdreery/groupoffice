@@ -24,13 +24,13 @@
  * @version $Id UsageHistory.php 2012-09-03 10:13:14 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  * 
- * @property int $id
- * @property int $ctime
- * @property string $user_count
- * @property double $database_usage
- * @property double $file_storage_usage
- * @property double $mailbox_usage
- * @property int $total_logins
+ * @property int $id PK
+ * @property int $ctime the time this usage data was created
+ * @property string $user_count the amount of users in the system (trial and payed)
+ * @property double $database_usage mailbox size in bytes
+ * @property double $file_storage_usage file storage folder size in bytes
+ * @property double $mailbox_usage mailbox folder size i nbytes
+ * @property int $total_logins the amount of logins into the system
  */
 class GO_ServerManager_Model_UsageHistory extends GO_Base_Db_ActiveRecord
 {
@@ -48,23 +48,24 @@ class GO_ServerManager_Model_UsageHistory extends GO_Base_Db_ActiveRecord
 	
 	public function getDatabaseUsageText()
 	{
-		return GO_Base_Util_Number::formatSize($this->database_usage*1024);
+		return GO_Base_Util_Number::formatSize($this->database_usage);
 	}
 	public function getFileStorageUsageText()
 	{
-		return GO_Base_Util_Number::formatSize($this->file_storage_usage*1024);
+		return GO_Base_Util_Number::formatSize($this->file_storage_usage);
 	}
 	public function getMailboxUsageText()
 	{
-		return GO_Base_Util_Number::formatSize($this->mailbox_usage*1024);
+		return GO_Base_Util_Number::formatSize($this->mailbox_usage);
 	}
 	public function getTotalUsageText()
 	{
-		return GO_Base_Util_Number::formatSize($this->getTotalUsage()*1024);
+		return GO_Base_Util_Number::formatSize($this->getTotalUsage());
 	}
 	
 	/**
-	 * get the total usage of database, files and mailbox
+	 * Get the total usage of database, files and mailbox
+	 * Size is in bytes
 	 * @return double $totalUsage 
 	 */
 	public function getTotalUsage()

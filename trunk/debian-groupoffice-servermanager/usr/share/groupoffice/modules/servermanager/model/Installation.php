@@ -39,6 +39,9 @@
  * @property string $token
  * 
  * @property string $url
+ * 
+ * @property GO_ServerManager_Model_AutomaticInvoice automaticInvoice the automatic invoice object if exists
+ * @property GO_ServerManager_Model_UsageHistory currentusage the latest created usagehistory object
  */
 
 class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
@@ -386,8 +389,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		if(!$this->isSuspended) //if not already suspended
 		{
 			$this->_config['enabled']=false;
-			//save in before/afterSave()
-			//GO_Base_Util_ConfigEditor::save(new GO_Base_Fs_File($this->configPath), $this->config);
+			//saves config in before/afterSave()
 			return true;
 		} 
 		else
@@ -412,15 +414,13 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		$history->installation_id = $this->id;
 		//recalculated the size of the file folder
 		$folder = new GO_Base_Fs_Folder($this->config['file_storage_path']);
-		$history->file_storage_usage = $folder->calculateSize()/1024;
+		$history->file_storage_usage = $folder->calculateSize();
 		//Recalculate the size of the database and mailbox
 		$history->database_usage = $this->_calculateDatabaseSize();
 		$history->mailbox_usage = $this->_calculateMailboxUsage();
 		
-		//TODO: save user data with modules
-		//$installationUsers = $this->_loadUserData(); //get latest user usage data from installation
 		$this->_loadFromInstallationDatabase();
-		//TODO: $this->_loadModuleData(); //get latest module install data from installation
+		
 		$history->count_users = $this->_count_users;
 		$history->total_logins = $this->_total_logins;
 		
@@ -436,7 +436,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		return $this->_currentHistory->getAttributes();
 	}
 	
-	public function _loadModuleData()
+	private function _loadModuleData()
 	{
 		// conect to installation database
 		// reconnect to servermanager database
@@ -473,15 +473,6 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		$report['modules']=$stmt->fetchAll(PDO::FETCH_ASSOC);
 		
 		return $report;
-	}
-	
-	/**
-	 * TODO: return JSON data for creating an invoice in external installation 
-	 */
-	public function createBillData(){
-		//find out if there is an ext installation
-		//test connection
-		//find automatic invoice object
 	}
 	
 	/**
@@ -564,7 +555,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	
 	/**
 	 * calculate the size of the mailboxes if they are used.
-	 * @return double the mailbox size in Mbs?
+	 * @return double the mailbox size in bytes?
 	 */
 	private function _calculateMailboxUsage(){
 		$mailbox_usage=0;
@@ -587,7 +578,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 
 	/**
 	 * Calculate the database size of the database name in config file of installation
-	 * @return int Database size in MBs
+	 * @return double Database size in bytes
 	 */
 	private function _calculateDatabaseSize(){
 		$stmt =GO::getDbConnection()->query("SHOW TABLE STATUS FROM `".$this->config["db_name"]."`;");
@@ -597,7 +588,6 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 			$database_usage+=$r['Data_length'];
 			$database_usage+=$r['Index_length'];
 		}
-		$database_usage/=1024; //convert to MBs
 		
 		return $database_usage;
 	}
@@ -658,20 +648,22 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		return $success;
 	}
 	
-	private function getTrialUsers()
+	public function getTrialUsers()
 	{
 		$trialUsers = array();
-		foreach($this->getUsers() as $user)
+		$stmt = $this->users;
+		foreach($stmt>fetch() as $user)
 		{
 			if($user->isTrial())
 				$trialUsers[] = $user;
 		}
 		return $trialUsers;
 	}
-	private function getPayedUsers()
+	public function getPayedUsers()
 	{
 		$payedUsers = array();
-		foreach($this->getUsers() as $user)
+		$stmt = $this->users;
+		foreach($stmt->fetchAll() as $user)
 		{
 			if(!$user->isTrial())
 				$payedUsers[] = $user;
@@ -706,10 +698,9 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	 */
 	protected function afterSave($wasnew)
 	{
-		//throw new Exception('afterSave');
 		$success= true;
 		
-		// NOTE: write the config is done in afterSubmit() calling an controller action as root
+		//NOTE: write the config is done in afterSubmit() calling an controller action as root
 		
 		//save module information
 		if(is_array($this->_modules))
@@ -779,7 +770,21 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	
 	public function sendModuleTrialStartMail()
 	{
+		$message = GO_Base_Mail_Message::newInstance();
+		$message->setSubject("Module trial period has started");
 		
+		$fromName = GO::config()->title;
+	
+		$parts = explode('@', GO::config()->webmaster_email);
+		$fromEmail = 'noreply@'.$parts[1];
+
+		$emailBody = GO::t('lost_password_body','base','lostpassword');
+		//$emailBody = sprintf($emailBody,$this->contact->salutation, $this->username, $url);
+		
+		$message->setBody($emailBody);
+		$message->addFrom($fromEmail,$fromName);
+		$message->addTo($this->admin_email);
+		return GO_Base_Mail_Mailer::newGoInstance()->send($message);
 	}
 	
 	/**

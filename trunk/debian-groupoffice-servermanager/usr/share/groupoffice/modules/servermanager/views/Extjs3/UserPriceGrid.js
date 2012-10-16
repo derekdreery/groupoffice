@@ -18,11 +18,14 @@ GO.servermanager.UserPriceGrid = function(config){
 	config.layout='fit';
 	config.autoScroll=true;
 	config.split=true;
+	
+	config.editDialogClass = GO.servermanager.UserPriceDialog;
 
 	config.title=GO.servermanager.lang.users;
 	config.store = new GO.data.JsonStore({
-		url : GO.url('servermanager/price/userStore'),
-		fields:['max_users','price_per_month']
+		url : GO.url('servermanager/userPrice/store'),
+		fields:['max_users','price_per_month'],
+		id: 'max_users'
 	});
 
 	var columnModel =  new Ext.grid.ColumnModel({
@@ -53,27 +56,13 @@ GO.servermanager.UserPriceGrid = function(config){
 	});
 	config.sm=new Ext.grid.RowSelectionModel( {singleSelect : true} );
 	config.loadMask=true;
-	config.clicksToEdit=1;
-
-	var UserPrice = Ext.data.Record.create([
-		{name: 'max_users',				type:'string'},
-		{name: 'price_per_month',	type:'string'}
-	]);
-
 
 	config.tbar=[{
 		iconCls: 'btn-add',
 		text: GO.lang['cmdAdd'],
 		cls: 'x-btn-text-icon',
 		handler: function(){
-			var e = new UserPrice({
-				id: '0',
-				max_users:'',
-				price: GO.util.numberFormat("0")
-			});
-			this.stopEditing();
-			this.store.insert(0, e);
-			this.startEditing(0, 0);
+			this.showEditDialog();
 		},
 		scope: this
 	},{
@@ -81,92 +70,14 @@ GO.servermanager.UserPriceGrid = function(config){
 		text: GO.lang['cmdDelete'],
 		cls: 'x-btn-text-icon',
 		handler: function(){
-		    if (typeof(this.selectedIndex)!='undefined') {
-					if (this.store.getAt(this.selectedIndex).data.id!='0') {
-						Ext.Ajax.request({
-							url : GO.url('servermanager/price/userDelete'),
-							params : {
-									'id' : this.store.getAt(this.selectedIndex).data.id
-							},
-							callback:function(options, success, response){
-								var result = Ext.decode(response.responseText);
-								if (!success || !result.success) {
-									if (result.responseText.feedback) {
-										Ext.MessageBox.alert(GO.lang.strError,result.responseText.feedback);
-									}
-								}
-							},
-							scope:this
-						});
-					}
-					this.store.removeAt(this.selectedIndex);
-		    }
+		    this.deleteSelected()
 		},
 		scope: this
 	}];
 
-	config.listeners={
-		rowclick: function(sm,i,record) {
-		    this.selectedIndex = i;
-		},
-		scope:this
-	}
-
 	GO.servermanager.UserPriceGrid.superclass.constructor.call(this, config);
 
 };
-Ext.extend(GO.servermanager.UserPriceGrid, Ext.grid.EditorGridPanel,{
-	
-	setCompanyId : function(company_id) {
-	    this.store.baseParams.company_id = this.company_id = company_id;
-	},
-	
-	getGridData : function(){
+Ext.extend(GO.servermanager.UserPriceGrid, GO.grid.GridPanel,{
 
-		var data = {};
-
-		for (var i = 0; i < this.store.data.items.length;  i++)
-		{
-			var r = this.store.data.items[i].data;
-
-			data[i]={};
-
-			for(var key in r)
-			{
-				data[i][key]=r[key];
-			}
-		}
-
-		return data;
-	},
-	setIds : function(ids)
-	{
-		for(var index in ids)
-		{
-			if(index!="remove")
-			{
-				this.store.getAt(index).set('id', ids[index]);
-			}
-		}
-	},
-	save : function(maskEl){
-		var params = {rates:Ext.encode(this.getGridData())}
-		
-		if(this.store.getModifiedRecords().length>0 || this.deletedRecords){
-			
-			Ext.Ajax.request({
-			    url : GO.url('servermanager/price/submitUsers'),
-			    params:params,
-			    callback:function(options, success, response){
-						this.store.commitChanges();
-						var result = Ext.decode(response.responseText);
-						if(result.new_rates)
-								this.setIds(result.new_rates);
-						this.deletedRecords=false;
-			    },
-			    scope:this
-			});
-			
-		}
-	}
 });

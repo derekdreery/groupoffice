@@ -18,7 +18,7 @@ GO.servermanager.ManageDialog = Ext.extend(GO.dialog.TabbedFormDialog,{
 	initComponent : function() {
 		Ext.apply(this, {
 			title: GO.lang.administration,
-			formControllerUrl: 'servermanager/automaticEmail', // change this if new panels are added
+			formControllerUrl: 'servermanager/price', // change this if new panels are added
 			width:700,
 			height:440,
 			forceTabs:true
@@ -113,10 +113,10 @@ GO.servermanager.ManageDialog = Ext.extend(GO.dialog.TabbedFormDialog,{
 			},this);
 		}
 		this.autoEmailDialog.show(remoteModelId);
-	},
-	
-	submitForm : function(hide){
-		this.pricePanel.priceGrid.save(this.getEl());
 	}
+	/*
+	submitForm : function(hide){
+		this.pricePanel.save(this.getEl());
+	}*/
 	
 });	

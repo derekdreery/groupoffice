@@ -659,22 +659,20 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 //			
 //			$report['license_name']=GO::config()->license_name;
 //		}
-//		
 
-		//var_dump($report['installations']);
-			//post the report to intermesh
-		
-			$c = new GO_Base_Util_HttpClient();
-			$response = $c->request('http://trunk.loc/?r=licenses/server/report', array(
-					'report'=>json_encode($report)
-			));
-			
-			$response = json_decode($response, true);
-			
-			if($response['success'])
-				echo "Report was send to intermesh\n";
-			else
-				echo "ERROR: sending report to intermesh\n";
+		//Post the report to intermesh
+		//TODO: replace trunk.loc to intermesh.nl when rolling out
+		$c = new GO_Base_Util_HttpClient();
+		$response = $c->request('http://trunk.loc/?r=licenses/server/report', array(
+				'report'=>json_encode($report)
+		));
+
+		$response = json_decode($response, true);
+
+		if($response['success'])
+			echo "Report was send to intermesh\n";
+		else
+			echo "ERROR: sending report to intermesh\n";
 
 //		$message = GO_Base_Mail_Message::newInstance();
 //		$message->setSubject("Servermanager report for ". $report['hostname']);
@@ -715,6 +713,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	{
 		$cm =  new GO_Base_Data_ColumnModel();
 		$cm->setColumnsFromModel(GO_ServerManager_Model_InstallationUser::model());
+		$cm->formatColumn('trialDaysLeft','$model->trialDaysLeft');
 		
 		$store = new GO_Base_Data_Store($cm);
 		$storeParams = $store->getDefaultParams($params);
@@ -733,9 +732,10 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	{
 		$cm =  new GO_Base_Data_ColumnModel();
 		$cm->setColumnsFromModel(GO_ServerManager_Model_UsageHistory::model());
-		$cm->formatColumn('total_usage', 'GO_Base_Util_Number::formatSize($model->totalUsage*1024)');
+		$cm->formatColumn('total_usage', '$model->totalUsageText');
+		$cm->formatColumn('mailbox_usage', '$model->mailboxUsageText');
 		$cm->formatColumn('database_usage', '$model->databaseUsageText');
-		$cm->formatColumn('file_storage_usage', 'GO_Base_Util_Number::formatSize($model->file_storage_usage*1024)');
+		$cm->formatColumn('file_storage_usage', '$model->fileStorageUsageText');
 
 		$store = new GO_Base_Data_Store($cm);
 		$storeParams = $store->getDefaultParams($params);
@@ -781,4 +781,3 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	}
 	
 }
-
