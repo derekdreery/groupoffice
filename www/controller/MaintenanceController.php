@@ -38,6 +38,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	
 	protected function actionRemoveDuplicates($params){
 		
+		$this->lockAction();
+		
 		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
 		
 		$checkModels = array(
@@ -124,6 +126,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	 */
 	protected function actionBuildSearchCache($params) {
 		
+		$this->lockAction();
+		
 		if(!headers_sent())
 			header('Content-Type: text/plain; charset=UTF-8');
 		
@@ -167,6 +171,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	 * @return array 
 	 */
 	protected function actionCheckDatabase($params) {
+		
+		$this->lockAction();
+		
 		$response = array();
 		
 		$oldAllowDeletes = GO_Base_Fs_File::setAllowDeletes(false);
@@ -271,6 +278,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		if(!version_compare( phpversion(), "5.3", ">="))
 			exit("You are running a PHP version older than 5.3. PHP 5.3 or greater is required to run Group-Office ".GO::config()->version);
+		
+		$this->lockAction();
 		
 		GO::clearCache();
 		
