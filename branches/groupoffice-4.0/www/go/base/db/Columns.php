@@ -100,6 +100,14 @@ class GO_Base_Db_Columns{
 				//HACK: When a database may not be null and has no default value value is empty string
 				if($field['Null']=='NO' && is_null($default) && strpos($field['Extra'],'auto_increment')===false)
 					$default='';
+				
+				//workaround for old boolean fields as enums. Should be using bool now.
+				
+				if($type=="enum('0','1')"){
+					$gotype='boolean';
+					$default='0';
+				}
+				
 
 				//$required = is_null($default) && $field['Null']=='NO' && strpos($field['Extra'],'auto_increment')===false;
 
