@@ -1,3 +1,11 @@
+16-10-2012 4.0.113
+- Wrong timezone info in vcalendar export
+- Check filesystem permissions before chaing file or folder models
+- Copy paste in same files folder appends a number eg. test becomes test (1)
+- Editing sieve actions resulted in duplication
+- Controller actions can be locked to only one user.
+- Custom fields were disabled in last version.
+
 12-10-2012 4.0.112
 - Email validation will no longer accept 2 dots right after each other in domain part
 - First ticket by customer did not send an autoreply message
@@ -32,7 +40,7 @@
 - Inconsistent sorting of full user or names. John Doe or Doe, John.
 - Auto create calendar categories when importing or syncing
 - Sort by TO field in sent items
-- Visibile tasklist selection was broken
+- Visible tasklist selection was broken
 - Default user id was not set anymore since last update.
 
 08-10-2012 4.0.110
