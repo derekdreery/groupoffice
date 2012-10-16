@@ -7,7 +7,7 @@
 class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractController {
 	
 	protected function allowGuests() {
-		return array('upgrade','checkdatabase','servermanagerreport','test','getlatest');
+		return array('upgrade','checkdatabase','servermanagerreport','test','downloadfromshop');
 	}
 	
 	//don't check token in this controller
@@ -24,7 +24,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	}
 	
 	
-	protected function actionGetLatest($params){
+	protected function actionDownloadFromShop($params){
 		
 		$this->requireCli();
 		
@@ -32,7 +32,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		$shopUrl = 'https://shop.group-office.com/groupoffice/';
 		
-		$packages = array('documents-4.0', 'billing-4.0', 'groupoffice-pro-4.0');
+		$packages = isset($params['packages']) ? explode(",", $params['packages']) : array('documents-4.0', 'billing-4.0', 'groupoffice-pro-4.0');
 		
 		foreach($packages as $package_name){
 			
