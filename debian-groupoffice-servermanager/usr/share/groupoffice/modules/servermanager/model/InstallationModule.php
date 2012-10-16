@@ -30,6 +30,8 @@
  * @property int $ctime a unix timestamp that shown when the module was activated for the first time
  * @property int $mtime a unix timestamp that shows when the module was changed for the last time
  * @property boolean $enabled true if the module is used by the installation
+ * 
+ * @property GO_ServerManager_Model_Installation $installation the installation this module was installed for
  */
 class GO_ServerManager_Model_InstallationModule extends GO_Base_Db_ActiveRecord 
 {
@@ -122,9 +124,24 @@ class GO_ServerManager_Model_InstallationModule extends GO_Base_Db_ActiveRecord
 	 */
 	public function isTrial()
 	{
-		//trail day time 24hours times 60 minutes times 60 seconds
-		$trial_time_in_seconds = time()-($this->installation->automaticInvoice->trial_days * 24 * 60 * 60);
-		return ($this->ctime > $trial_time_in_seconds );
+		return $this->trialDaysLeft > 0;
+	}
+	
+	/**
+	 * @return int the amount of days the trial period has left.
+	 */
+	public function getTrialDaysLeft()
+	{
+		if(empty($this->ctime)) 
+			return $this->installation->trial_days;
+		$trial_end_stamp = GO_Base_Util_Date::date_add($this->ctime, $this->installation->trial_days);
+		
+		$seconds_to_go = $trial_end_stamp - time();
+		$days_to_go = $seconds_to_go / 60 / 60 / 24;
+		
+		$days_left = ($days_to_go > 0) ? ceil($days_to_go) : 0;
+		
+		return $days_left;
 	}
 	
 	/**
@@ -137,7 +154,9 @@ class GO_ServerManager_Model_InstallationModule extends GO_Base_Db_ActiveRecord
 				'name'=>$this->getModuleName(),
 				'usercount'=>$this->getUsercount(),
 				'checked'=>$this->getChecked(),
-				'ctime'=>$this->getAttribute('ctime', 'formatted')
+				'ctime'=>$this->getAttribute('ctime', 'formatted'),
+				'isTrial'=>$this->isTrial(),
+				'trialDaysLeft'=>$this->trialDaysLeft
 		);
 	}
 }

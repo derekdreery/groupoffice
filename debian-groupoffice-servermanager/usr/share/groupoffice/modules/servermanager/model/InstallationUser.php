@@ -30,6 +30,8 @@
  * @property int $ctime
  * @property int $lastlogin
  * @property boolean $enabled
+ * 
+ * @property GO_ServerManager_Model_Installation $installation the installation this module was installed for
  */
 
 class GO_ServerManager_Model_InstallationUser extends GO_Base_Db_ActiveRecord {
@@ -66,11 +68,19 @@ class GO_ServerManager_Model_InstallationUser extends GO_Base_Db_ActiveRecord {
 		$this->lastlogin = $user->lastlogin;
 		$this->enabled = $user->enabled;
 		$this->username = $user->username;
+		$this->ctime = $user->ctime;
 	}
 	
 	public function allowedToModule($module_id)
 	{
 		return in_array($module_id, $this->modules);
+	}
+	
+	public function relations()
+	{
+		return array(
+				'installation'=>array('type'=>self::BELONGS_TO, 'model'=>'GO_ServerManager_Model_Installation', 'field'=>'installation_id'),
+		);
 	}
 
 	/**
@@ -86,9 +96,24 @@ class GO_ServerManager_Model_InstallationUser extends GO_Base_Db_ActiveRecord {
 	 */
 	public function isTrial()
 	{
-		//trail day time 24hours times 60 minutes times 60 seconds
-		$trail_time_in_seconds = time()-$this->installation->automaticInvoice->trailTimeInSeconds;
-		return ($this->ctime > $trail_time_in_seconds );
+		return $this->trialDaysLeft > 0;
+	}
+	
+	/**
+	 * @return int the amount of days the trial period has left.
+	 */
+	public function getTrialDaysLeft()
+	{
+		if(empty($this->ctime)) 
+			return $this->installation->trial_days;
+		$trial_end_stamp = GO_Base_Util_Date::date_add($this->ctime, $this->installation->trial_days);
+		
+		$seconds_to_go = $trial_end_stamp - time();
+		$days_to_go = $seconds_to_go / 60 / 60 / 24;
+		
+		$days_left = ($days_to_go > 0) ? ceil($days_to_go) : 0;
+		
+		return $days_left;
 	}
 
 }

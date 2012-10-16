@@ -19,9 +19,6 @@ GO.servermanager.PricePanel = function(config)
 	config.hideLabel=true;
 	config.title = GO.servermanager.lang.userPricing;
 	config.layout='border';
-//	config.defaults={
-//		anchor:'100%'
-//	};
 	config.labelWidth=140;
 	
 	config.items=[{
@@ -41,15 +38,11 @@ GO.servermanager.PricePanel = function(config)
 					text:' ',
 					width:10
 				},
-
-				{
-					xtype:'numberfield',
+				this.mbsIncluded = new Ext.form.NumberField({
 					name:'mbs_included',
-					value: GO.settings.servermanager_mbs_included,
 					decimals:0,
 					width:100
-				},
-
+				}),
 				{
 					xtype:'label',
 					text: 'MB '+GO.servermanager.lang.perUser
@@ -66,11 +59,10 @@ GO.servermanager.PricePanel = function(config)
 					text: GO.settings.currency ,
 					width:10
 				},
-				{
-					xtype:'numberfield',
-					name:'extra_mbs',
+				this.priceExtraGb = new Ext.form.NumberField({
+					name:'price_extra_gb',
 					width:100
-				},
+				}),
 				{
 					xtype:'label',
 					text:GO.servermanager.lang.perMonth+'/GB'
@@ -98,9 +90,9 @@ Ext.extend(GO.servermanager.PricePanel, Ext.Panel,{
 		GO.servermanager.PricePanel.superclass.afterRender.call(this);
 		
 		var requests = {
-			moduleprices:{r:"servermanager/price/moduleStore"},				
-			userprices:{r:"servermanager/price/userStore"}
-			//space: {r:"servermanager/price/options"}
+			moduleprices:{r:"servermanager/modulePrice/store"},				
+			userprices:{r:"servermanager/userPrice/store"},
+			space: {r:"servermanager/price/load"}
 		}
 
 		GO.request({
@@ -114,10 +106,8 @@ Ext.extend(GO.servermanager.PricePanel, Ext.Panel,{
 				this.userPriceGrid.store.loadData(result.userprices);
 				this.modulePriceGrid.store.loadData(result.moduleprices);
 				
-				/*GO.tasks.categoriesStore.loadData(result.categories);
-				this.taskListsStore.loadData(result.tasklists);				
-				if (!GO.util.empty(result.tasks))
-					this.gridPanel.store.loadData(result.tasks);*/
+				this.mbsIncluded.setValue(result.space.data.mbs_included);
+				this.priceExtraGb.setValue(result.space.data.price_extra_gb);
 			},
 			scope:this
 		});    

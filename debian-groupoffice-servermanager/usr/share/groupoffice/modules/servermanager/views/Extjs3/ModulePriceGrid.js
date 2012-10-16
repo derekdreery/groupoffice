@@ -18,10 +18,12 @@ GO.servermanager.ModulePriceGrid = function(config){
 	config.layout='fit';
 	config.autoScroll=true;
 	config.split=true;
+	
+	config.editDialogClass = GO.servermanager.ModulePriceDialog;
 
 	config.title=GO.servermanager.lang["modules"];
 	config.store = new GO.data.JsonStore({
-		url : GO.url('servermanager/price/moduleStore'),
+		url : GO.url('servermanager/modulePrice/store'),
 		fields:['module_name','price_per_month'],
 		id: 'module_name'
 	});
@@ -55,16 +57,12 @@ GO.servermanager.ModulePriceGrid = function(config){
 	config.sm=new Ext.grid.RowSelectionModel( {singleSelect : true} );
 	config.loadMask=true;
 
-	this.modulePriceDialog = new GO.servermanager.ModulePriceDialog();
-
 	config.tbar=[{
 		iconCls: 'btn-add',
 		text: GO.lang['cmdAdd'],
 		cls: 'x-btn-text-icon',
 		handler: function(){
-			
-			//TODO add button funct
-			this.modulePriceDialog.show();	
+			this.showEditDialog();
 		},
 		scope: this
 	},{
@@ -73,7 +71,6 @@ GO.servermanager.ModulePriceGrid = function(config){
 		cls: 'x-btn-text-icon',
 		handler: function(){
 			this.deleteSelected();
-			this.changed=true;
 		},
 		scope: this
 	}];
@@ -82,5 +79,5 @@ GO.servermanager.ModulePriceGrid = function(config){
 };
 
 Ext.extend(GO.servermanager.ModulePriceGrid, GO.grid.GridPanel,{
-	changed : false,
+
 });

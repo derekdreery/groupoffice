@@ -25,7 +25,7 @@
 			baseParams: {
 				installation_id:0
 			},
-			fields: ['id','used_modules','username','enabled','lastlogin','ctime','user_id', 'installation_id'],
+			fields: ['id','used_modules','username','enabled','lastlogin','ctime','user_id','trialDaysLeft', 'installation_id'],
 			remoteSort: true
 		});
 		
@@ -37,7 +37,8 @@
 			{dataIndex:'used_modules', header:GO.servermanager.lang['modules']},
 			{dataIndex:'enabled',header:GO.servermanager.lang['enabled'],width:100},
 			{dataIndex:'lastlogin',header:GO.servermanager.lang['lastlogin']},
-			{dataIndex:'ctime',header:GO.lang.strCtime}
+			{dataIndex:'ctime',header:GO.lang.strCtime},
+			{dataIndex:'trialDaysLeft',header:'Trial days left'}
 		];
 		
 		config.listeners={

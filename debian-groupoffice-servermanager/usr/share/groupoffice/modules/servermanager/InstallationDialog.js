@@ -556,7 +556,7 @@ Ext.extend(GO.servermanager.InstallationDialog, GO.Window,{
 				baseParams: {
 					installation_id:0
 				},
-				fields: ['id','name','checked','usercount', 'ctime']
+				fields: ['id','name','checked','usercount', 'ctime', 'trialDaysLeft']
 			}),
 			showHeaders:true,
 			noSingleSelect:true,
@@ -568,6 +568,11 @@ Ext.extend(GO.servermanager.InstallationDialog, GO.Window,{
 			{
 				header: 'Available since',
 				dataIndex: 'ctime',
+				width: 160
+			},
+			{
+				header: 'Trial days left',
+				dataIndex: 'trialDaysLeft',
 				width: 160
 			}],
 			setInstallationId : function(installation_id){

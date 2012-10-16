@@ -112,7 +112,7 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord {
 		$uprice = 0;
 		foreach($staffelprices as $price)
 		{
-			if($price->max_users <= $this->installation->currentusage->count_users)
+			if($price->max_users <= count($this->installation->getPayedUsers()))
 				$uprice = $price->price_per_month;
 			else
 				break;
@@ -149,10 +149,19 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord {
 		$extra_mbs = 0;
 		if(isset($this->installation) && isset($this->installation->currentusage))
 		{
-			$mbs_used = $this->installation->currentusage->getTotalUsage();
+			$mbs_used = $this->installation->currentusage->getTotalUsage()/1024/1024;
 			$extra_mbs = $mbs_used - (GO::config()->get_setting('sm_mbs_included') * $this->installation->currentusage->count_users);
 		}
 		return $extra_mbs;
+	}
+	
+	/**
+	 * Convert MBs to GBs and ceil up to hole numbers
+	 * @return type 
+	 */
+	protected function _getExtraGbsUsed()
+	{
+		return ceil($this->_getExtraMbsUsed()/1024);
 	}
 	
 	/**
@@ -160,9 +169,9 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord {
 	 * The price is the config is per gigabyte so we need to devide by 1024
 	 * @return double price
 	 */
-	protected function _getExtraMbsUsedPrice()
+	protected function _getExtraGbsUsedPrice()
 	{
-		return ($this->_getExtraMbsUsed()/1024) * GO::config()->get_setting('sm_price_extra_gb');
+		return $this->_getExtraGbsUsed() * GO::config()->get_setting('sm_price_extra_gb');
 	}
 	
 	/**
@@ -177,7 +186,6 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord {
 			//create jsondata to send
 			$order = array();
 			$order['book_id'] = isset(GO::config()->servermanger_billing_bookid) ? GO::config()->servermanger_billing_bookid : 2;
-			//$order['btime'] = time(); //behaves strange in billing
 			$order['customer_address'] = $this->customer_address;
 			$order['customer_address_no'] = $this->customer_address_no;
 			$order['customer_city'] = $this->customer_city;
@@ -191,16 +199,18 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord {
 			$order['customer_name'] = $this->customer_name;
 			$order['reference'] = 'GroupOffice hosted server';
 			$order['items'] = array();
+			// Add amount of Users price
 			$order['items'][] = array(
-					'description'=>'Hosted Groupoffice ('.$this->installation->currentusage->count_users.' users)', 
+					'description'=>'Hosted Groupoffice ('.count($this->installation->getPayedUsers()).' users)', 
 					'unit_price'=>$userCountPrice, 
 					'amount'=>$this->invoice_timespan,
 					'discount'=>$this->discount_percentage,
 			);
+			// Add payed modules prices to order
 			foreach($this->installation->modules as $module)
 			{
 				$price = $this->_getModulePrice($module->name);
-				if($price > 0)
+				if($price > 0 && !$module->isTrial())
 				{
 					$order['items'][] = array(
 							'description'=>GO::t('name', $module->name). " Module",
@@ -210,7 +220,8 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord {
 					);
 				}
 			}
-			if(!empty($this->discount_price) && $this->discount_price > 0) //add discount to order
+			// Add discount to order
+			if(!empty($this->discount_price) && $this->discount_price > 0)
 			{
 				$order['items'][] = array(
 						'description'=>$this->discount_description, 
@@ -219,12 +230,12 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord {
 						'discount'=>$this->discount_percentage,
 						);
 			}
-			//TODO: add extra MB
-			if($this->_getExtraMbsUsedPrice() > 0)
+			// Add extra GBs price
+			if($this->_getExtraGbsUsed() > 0)
 			{
 				$order['items'][] = array(
-						'description'=>'Extra MBs Used ('.$this->_getExtraMbsUsed().')',
-						'unit_price'=>$this->_getExtraMbsUsedPrice(),
+						'description'=>'Extra diskspace used ('.$this->_getExtraGbsUsed().'GB)',
+						'unit_price'=>$this->_getExtraGbsUsedPrice(),
 						'amount'=>$this->invoice_timespan,
 						'discount'=>$this->discount_percentage,
 				);
@@ -268,11 +279,11 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord {
 		} else
 			throw new Exception('Could not connect to the billing host');
 	}
-	
+		
 	/**
-	 * send a partial invoice for new users/modules when trial periode is over 
+	 * send a partial order for new users/modules when trial periode is over 
 	 */
-	public function sendPartInvoice()
+	public function sendPartialOrder()
 	{
 		//TODO
 	}
@@ -286,12 +297,6 @@ class GO_ServerManager_Model_AutomaticInvoice extends GO_Base_Db_ActiveRecord {
 		return GO_Base_Util_Date::date_add($this->next_invoice_time, 0, $this->invoice_timespan);
 		//$timestring = "+".$this->invoice_timespan." month";
 		//return strtotime($timestring,$this->next_invoice_time);
-	}
-	
-	public function getTrailTimeInSeconds()
-	{
-		//days * hours * minutes * seconds
-		return ($this->installation->trial_days * 24 * 60 * 60);
 	}
 	
 	/**
