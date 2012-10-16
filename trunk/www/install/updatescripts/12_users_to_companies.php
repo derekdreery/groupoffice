@@ -1,5 +1,5 @@
 <?php
-if(GO_Base_Db_Utils::fieldExists('go_users', 'company')){
+if(GO_Base_Db_Utils::fieldExists('go_users', 'company') && GO::modules()->addressbook){
 	$ab = GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('users', '1');//GO::t('users','base'));
 
 	$pdo = GO::getDbConnection();

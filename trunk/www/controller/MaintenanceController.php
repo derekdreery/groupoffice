@@ -7,7 +7,7 @@
 class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractController {
 	
 	protected function allowGuests() {
-		return array('upgrade','checkdatabase','servermanagerreport','test');
+		return array('upgrade','checkdatabase','servermanagerreport','test','downloadfromshop');
 	}
 	
 	//don't check token in this controller
@@ -20,6 +20,55 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		ini_set('display_errors','on');
 		error_reporting(E_ALL);
 		
+		
+	}
+	
+	
+	protected function actionDownloadFromShop($params){
+		
+		$this->requireCli();
+		
+		$this->checkRequiredParameters(array('shopuser','shoppass'), $params);
+		
+		$shopUrl = 'https://shop.group-office.com/groupoffice/';
+		
+		$packages = isset($params['packages']) ? explode(",", $params['packages']) : array('documents-4.0', 'billing-4.0', 'groupoffice-pro-4.0');
+		
+		foreach($packages as $package_name){
+			
+			echo "\nGetting latest ".$package_name."\n";
+		
+			$packageUrl = 'https://shop.group-office.com/groupoffice/?r=licenses/package/downloadPackageFile&package_name='.$package_name;
+			
+
+			$c = new GO_Base_Util_HttpClient();
+			if(!$c->groupofficeLogin($shopUrl, $params['shopuser'],$params['shoppass']))
+				exit("Bad user name or password for shop");
+			else
+				echo "Shop login successful\n";
+
+			$tmpDir = new GO_Base_Fs_Folder(getcwd());
+			if(!$tmpDir->isWritable())
+				exit("Error: ".$tmpDir->path ()." is not writable!\n");
+
+			$file = $tmpDir->createChild($package_name.'.tar.gz');
+			echo "Downloading file from shop...\n";
+			if(!$c->downloadFile($packageUrl, $file))		
+				exit("Error: Failed to download file");
+			
+			$file->rename($c->getLastDownloadedFilename());
+			
+			//echo "Filename: ".$c->getLastDownloadedFilename()."\n";
+
+			echo "File saved in ".$file->path()."\n";
+//			chdir($tmpDir->path());
+
+//			echo "Unpacking ".$file->name()."\n";
+//			system('tar zxf '.$file->name());
+
+		}
+		
+		echo "All done\n";
 		
 	}
 	
@@ -37,6 +86,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	}
 	
 	protected function actionRemoveDuplicates($params){
+		
+		$this->lockAction();
 		
 		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
 		
@@ -124,6 +175,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	 */
 	protected function actionBuildSearchCache($params) {
 		
+		$this->lockAction();
+		
 		if(!headers_sent())
 			header('Content-Type: text/plain; charset=UTF-8');
 		
@@ -167,6 +220,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	 * @return array 
 	 */
 	protected function actionCheckDatabase($params) {
+		
+		$this->lockAction();
+		
 		$response = array();
 		
 		$oldAllowDeletes = GO_Base_Fs_File::setAllowDeletes(false);
@@ -271,6 +327,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		if(!version_compare( phpversion(), "5.3", ">="))
 			exit("You are running a PHP version older than 5.3. PHP 5.3 or greater is required to run Group-Office ".GO::config()->version);
+		
+		$this->lockAction();
 		
 		GO::clearCache();
 		

@@ -187,7 +187,44 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		return parent::validate();
 	}
 	
+	/**
+	 * 
+	 * @return \GO_Base_Fs_Folder
+	 */
+	private function _getOldFsFolder(){
+		
+		if($this->isNew)
+			return $this->fsFolder;
+		
+		$filename = $this->isModified('name') ? $this->getOldAttributeValue('name') : $this->name;
+		if($this->isModified('parent_id')){
+			//file will be moved so we need the old folder path.
+			$oldFolderId = $this->getOldAttributeValue('parent_id');
+			$oldFolder = GO_Files_Model_Folder::model()->findByPk($oldFolderId);				
+			$oldRelPath = $oldFolder->path;				
+			$oldPath = GO::config()->file_storage_path . $oldRelPath . '/' . $filename;
+
+		}else{
+			$oldPath = GO::config()->file_storage_path . $this->parent->path.'/'.$filename;
+		}
+		return new GO_Base_Fs_Folder($oldPath);
+	}
+	
 	protected function beforeSave() {
+		
+		
+		//check permissions on the filesystem
+		if($this->isNew){
+			if(!$this->parent->fsFolder->isWritable()){
+				throw new Exception("Folder ".$this->parent->path." is read only on the filesystem. Please check the file system permissions (hint: chmod -R www-data:www-data /home/groupoffice)");
+			}
+		}else
+		{
+			if($this->isModified('name') || $this->isModified('parent_id')){
+				if(!$this->_getOldFsFolder()->isWritable())
+					throw new Exception("Folder ".$this->path." is read only on the filesystem. Please check the file system permissions (hint: chmod -R www-data:www-data /home/groupoffice)");
+			}
+		}
 
 		if(!$this->systemSave && !$this->isNew && $this->readonly){
 			if($this->isModified('name') || $this->isModified('folder_id'))
@@ -213,7 +250,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	}
 			
 	protected function afterSave($wasNew) {
-
+		
 		if ($wasNew) {
 			
 			$this->fsFolder->create();
@@ -721,19 +758,26 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * @param GO_Files_Model_Folder $destinationFolder
 	 * @return boolean 
 	 */
-	public function copy($destinationFolder){
+	public function copy($destinationFolder, $newName=false){
 		
 		if(GO::config()->debug)
 			GO::debug("Copy folder ".$this->path." to ".$destinationFolder->path);
 		
-		$existing = $destinationFolder->hasFolder($this->name);
+		if(!$newName)
+			$newName=$this->name;
+		
+		$existing = $destinationFolder->hasFolder($newName);
 		if(!$existing){
-			$copy = $this->duplicate(array("parent_id"=>$destinationFolder->id));
+			$copy = $this->duplicate(array("parent_id"=>$destinationFolder->id,'name'=>$newName));
+			
 			//$copy->parent_id=$destinationFolder->id;
 			if(!$copy)
 				return false;
+			
+			$destinationFsFolder = $copy->fsFolder->parent();
+//			$copy->fsFolder->delete();
 
-			if(!$this->fsFolder->copy($copy->fsFolder->parent()))
+			if(!$this->fsFolder->copy($destinationFsFolder, $newName))
 				return false;
 		}else
 		{

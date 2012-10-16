@@ -623,14 +623,19 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		this.showConfig=config;
 		
 		if (!this.rendered) {
+			
+			var requests = {				
+				aliases:{r:'email/alias/store'}
+			};
+			
+			if(GO.addressbook){
+				requests.templates={r:'addressbook/template/emailSelection'};
+			}
 				
 			GO.request({
 				url: 'core/multiRequest',
 				params:{
-					requests:Ext.encode({
-						templates:{r:'addressbook/template/emailSelection'},
-						aliases:{r:'email/alias/store'}
-					})
+					requests:Ext.encode(requests)
 				},
 				success: function(options, response, result)
 				{

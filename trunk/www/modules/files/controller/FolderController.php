@@ -166,6 +166,9 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 			default:
 				$folder = GO_Files_Model_Folder::model()->findByPk($params['node']);
+				if(!$folder)
+					return false;
+				
 				$folder->checkFsSync();
 
 				$stmt = $folder->getSubFolders(GO_Base_Db_FindParams::newInstance()
@@ -384,13 +387,22 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		while ($folder_id = array_shift(GO::session()->values['files']['pasteIds']['folders'])) {
 			$folder = GO_Files_Model_Folder::model()->findByPk($folder_id);
+			
+			if($params['paste_mode']=='copy' && $folder->parent_id==$destinationFolder->id){
+				//pasting in the same folder. Append (1).
+				$fsFolder = $folder->fsFolder;
+				$fsFolder->appendNumberToNameIfExists();
+				$folderName=$fsFolder->name();				
+			}  else {
+				$folderName = $folder->name;
+			}
 
-			$existingFolder = $destinationFolder->hasFolder($folder->name);
+			$existingFolder = $destinationFolder->hasFolder($folderName);
 			if ($existingFolder) {
 				switch ($params['overwrite']) {
 					case 'ask':
 						array_unshift(GO::session()->values['files']['pasteIds']['folders'], $folder_id);
-						$response['fileExists'] = $folder->name;
+						$response['fileExists'] = $folderName;
 						return $response;
 						break;
 
@@ -417,7 +429,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				if (!$folder->move($destinationFolder))
 					throw new Exception("Could not move " . $folder->name);
 			}else {
-				if (!$folder->copy($destinationFolder))
+				if (!$folder->copy($destinationFolder, $folderName))
 					throw new Exception("Could not copy " . $folder->name);
 			}
 		}

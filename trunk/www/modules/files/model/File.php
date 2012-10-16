@@ -33,6 +33,8 @@
  * 
  * @property String $thumbURL
  * 
+ * @property String $downloadUrl
+ * 
  * @property String $path
  * @property GO_Base_Fs_File $fsFile
  * @property GO_Files_Model_Folder $folder
@@ -161,7 +163,15 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		return ($this->locked_user_id==GO::user()->id || GO::user()->isAdmin()) && $this->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION);
 	}
 	
+	/**
+	 * 
+	 * @return \GO_Base_Fs_File
+	 */
 	private function _getOldFsFile(){
+		
+		if($this->isNew)
+			return $this->fsFile;
+		
 		$filename = $this->isModified('name') ? $this->getOldAttributeValue('name') : $this->name;
 		if($this->isModified('folder_id')){
 			//file will be moved so we need the old folder path.
@@ -194,23 +204,22 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 			return true;
 		}
 	}
-	
-//	public function validate() {
-//		
-//		if(GO::config()->convert_utf8_filenames_to_ascii){
-//			$newName = GO_Base_Util_String::utf8ToASCII($this->name);
-//			if($newName!=$this->name){
-//				if($this->fsFile->exists())
-//					$this->fsFile->rename ($newName);
-//				
-//				$this->name = $newName;
-//			}
-//		}
-//		
-//		return parent::validate();
-//	}
+
 	
 	protected function beforeSave() {		
+		
+		//check permissions on the filesystem
+		if($this->isNew){
+			if(!$this->folder->fsFolder->isWritable()){
+				throw new Exception("Folder ".$this->folder->path." is read only on the filesystem. Please check the file system permissions (hint: chmod -R www-data:www-data /home/groupoffice)");
+			}
+		}else
+		{
+			if($this->isModified('name') || $this->isModified('folder_id')){
+				if(!$this->_getOldFsFile()->isWritable())
+					throw new Exception("File ".$this->path." is read only on the filesystem. Please check the file system permissions (hint: chmod -R www-data:www-data /home/groupoffice)");
+			}
+		}
 		
 		if(!$this->isNew){
 			

@@ -64,6 +64,15 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			
 	);
 	
+	/**
+	 * The currently running action in lowercase without the action prefix.
+	 * @var string 
+	 */
+	private $_currentAction;
+	
+	private $_actionLocked=false;
+	
+	
 	public function __construct() {
 		
 		if (!GO::config()->enabled) {
@@ -76,6 +85,35 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	
 	protected function init(){
 		
+	}
+	
+	
+	/**
+	 * Lock the action. When locked it's made sure that the action is only ran by one user at a time.
+	 * Useful for maintenance scripts.
+	 * 
+	 * @throws Exception
+	 */
+	protected function lockAction(){
+		$this->_actionLocked=true;
+		
+		$lockedConfig = 'locked_action_'.$this->_currentAction;
+		
+		if(GO::config()->get_setting($lockedConfig)){
+			throw new Exception("Action locked. Another user is currently running this action.");
+		}else
+		{
+			GO::config()->save_setting($lockedConfig,1);
+		}
+		
+		//GO::config()->delete_setting('locked_action_'.$this->_currentAction));
+	}
+	
+	private function _unlockAction(){
+		if($this->_actionLocked){
+			$lockedConfig = 'locked_action_'.$this->_currentAction;
+			GO::config()->delete_setting($lockedConfig);
+		}
 	}
 	
 	/**
@@ -297,6 +335,8 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			else
 				$this->_action=$action=strtolower($action);
 			
+			$this->_currentAction=$action;
+			
 			if($checkPermissions && !$this->_checkPermission($action)){
 				throw new GO_Base_Exception_AccessDenied();
 			}
@@ -330,6 +370,8 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			unset($params['security_token'], $params['r']);
 
 			$response =  $this->$methodName($params);
+			
+			$this->_unlockAction();
 
 			if($render && isset($response))
 				$this->render($action, $response);
@@ -341,6 +383,9 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			return $response;
 			
 		} catch (Exception $e) {
+			
+			
+			$this->_unlockAction();
 			
 			GO::debug("EXCEPTION: ".(string) $e);
 			
