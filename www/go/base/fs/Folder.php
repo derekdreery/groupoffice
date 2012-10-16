@@ -171,20 +171,23 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 * @param GO_Base_Fs_Folder $destinationFolder 
 	 * @return boolean
 	 */
-	public function copy($destinationFolder){
+	public function copy($destinationFolder, $newFolderName=false){
 		$this->_validateSrcAndDestPath($destinationFolder->path(), $this->path());
 		
-		GO::debug('folder::copy: '.$this->path().' > '.$destinationFolder->path());
+		if(!$newFolderName)
+			$newFolderName=$this->name();
 		
-		$copiedFolder = new GO_Base_Fs_Folder($destinationFolder->path().'/'.$this->name());
+		GO::debug('folder::copy: '.$this->path().' > '.$destinationFolder->path().'/'.$newFolderName);
+		
+		$copiedFolder = new GO_Base_Fs_Folder($destinationFolder->path().'/'.$newFolderName);
 		if(!$copiedFolder->create())
 			throw new Exception ("Could not create ".$destinationFolder->path());
 		
 		$ls = $this->ls(true);
 		foreach($ls as $fsObject){
 			if($fsObject->isFolder()){				
-				$newDestinationFolder= new GO_Base_Fs_Folder($destinationFolder->path().'/'.$this->name());				
-				$fsObject->copy($newDestinationFolder);
+				//$newDestinationFolder= new GO_Base_Fs_Folder($destinationFolder->path().'/'.$this->name());				
+				$fsObject->copy($copiedFolder);
 			}else
 			{
 				$fsObject->copy($copiedFolder);

@@ -381,8 +381,13 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		$newPath = $destinationFolder->path().'/'.$newFileName;
 		GO::debug('copy: '.$this->path.' > '.$newPath);
 		
-		if(!copy($this->path, $newPath))
-			throw new Exception("Could not copy ".$this->name());
+		if(!copy($this->path, $newPath)){
+			
+			$old = str_replace(GO::config()->file_storage_path, '', $this->path);
+			$new = str_replace(GO::config()->file_storage_path, '', $newPath);
+			
+			throw new Exception("Could not copy ".$old." to ".$new);
+		}
 				
 		chmod($newPath, GO::config()->file_create_mode);
 		if(GO::config()->file_change_group)

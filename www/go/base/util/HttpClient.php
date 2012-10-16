@@ -77,12 +77,8 @@ class GO_Base_Util_HttpClient{
 	 */
 	public function request($url, $params=array()){
 		
-		$params = array_merge($this->baseParams, $params);
+		$this->_initRequest($url, $params);
 		
-		curl_setopt($this->_curl, CURLOPT_URL,$url);
-		curl_setopt($this->_curl, CURLOPT_POST, !empty($params));
-		if(!empty($params))
-			curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $params);
 		@curl_setopt($this->_curl, CURLOPT_RETURNTRANSFER, true);
 		
 		$response = curl_exec($this->_curl);
@@ -93,6 +89,75 @@ class GO_Base_Util_HttpClient{
 		
 		return $response;		
 	}	
+	
+	public $lastHeaders=array();
+	
+	
+	public function readHeader($ch, $header){
+		if(preg_match('/([\w-]+): (.*)/i', $header, $matches))		
+			$this->lastHeaders[$matches[1]]=$matches[2];
+		
+		return strlen($header);
+	}
+	
+	private function _initRequest($url, $params){
+		$params = array_merge($this->baseParams, $params);
+		
+		$this->lastHeaders=array();
+		
+		curl_setopt($this->_curl, CURLOPT_URL,$url);
+		curl_setopt($this->_curl, CURLOPT_POST, !empty($params));
+		if(!empty($params))
+			curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $params);
+	}
+	
+	public function getLastDownloadedFilename(){
+		if(!isset($this->lastHeaders['Content-Disposition'])){
+			return false;
+		}
+		
+		//echo $this->lastHeaders['Content-Disposition']."\n";
+		
+		if(!preg_match('/filename="(.*)"/', $this->lastHeaders['Content-Disposition'], $matches))
+			return false;
+		
+		return $matches[1];
+		
+	}
+	
+	/**
+	 * Download a file
+	 * 
+	 * @param stirng $url
+	 * @param GO_Base_Fs_File $outputFile
+	 * @param array $params
+	 * @return boolean
+	 */
+	public function downloadFile($url, GO_Base_Fs_File $outputFile, $params=array()){
+		
+		$this->_initRequest($url, $params);
+		
+		$fp = fopen($outputFile->path(), 'w');			
+		
+
+		curl_setopt($this->_curl, CURLOPT_FILE, $fp);
+		
+		curl_setopt($this->_curl, CURLOPT_HEADERFUNCTION, array($this,'readHeader'));
+
+		
+		$response = curl_exec($this->_curl);
+		
+		fclose($fp);
+
+		
+		if($outputFile->size())
+		{
+			return true;
+		}else
+		{
+			return false;
+		}
+	}
 	
 	public function getHttpCode(){
 		return curl_getinfo($this->_curl, CURLINFO_HTTP_CODE);		

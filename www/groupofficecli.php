@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 $root = dirname(__FILE__) . '/';
-chdir($root);
+//chdir($root);
 //on the command line you can pass -c=/path/to/config.php to set the config file.
 
 require_once($root . 'go/base/util/Cli.php');
