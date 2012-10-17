@@ -1,6 +1,10 @@
+17-10-2012 4.0.115
+- PDF error in billing
+
 17-10-2012 4.0.114
 - Invalid weekly recurrence rule for funambol
 - Error Call to a member function isWritable() on a non-object in /usr/share/groupoffice/modules/files/model/Folder.php fixed.
+- Removed call to the htmleditor's syncValue() function when the editor is in sourceEdit mode.
 
 16-10-2012 4.0.113
 - Wrong timezone info in vcalendar export
@@ -9,7 +13,6 @@
 - Editing sieve actions resulted in duplication
 - Controller actions can be locked to only one user.
 - Custom fields were disabled in last version.
-- Removed call to the htmleditor's syncValue() function when the editor is in sourceEdit mode.
 
 12-10-2012 4.0.112
 - Email validation will no longer accept 2 dots right after each other in domain part
