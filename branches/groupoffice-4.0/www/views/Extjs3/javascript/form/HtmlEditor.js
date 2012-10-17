@@ -36,6 +36,12 @@ GO.form.HtmlEditor = function(config){
 
 Ext.extend(GO.form.HtmlEditor,Ext.form.HtmlEditor, {
 	
+	syncValue: function(){
+		//In BasicForm.js this method is called by EXT
+		// When using the editor in sourceEdit then it may not call the syncValue function
+		if(!this.sourceEditMode)
+			GO.form.HtmlEditor.superclass.syncValue.call(this);
+	},	
 	onFirstFocus : function(){
 		this.activated = true;
 		this.disableItems(this.readOnly);
