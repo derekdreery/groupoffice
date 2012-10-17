@@ -28,12 +28,15 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		$this->requireCli();
 		
+		$proPackageName = 'groupoffice-pro-4.0';
+		
 		$this->checkRequiredParameters(array('shopuser','shoppass'), $params);
 		
 		$shopUrl = 'https://shop.group-office.com/groupoffice/';
 		
 		$packages = isset($params['packages']) ? explode(",", $params['packages']) : array('documents-4.0', 'billing-4.0', 'groupoffice-pro-4.0');
 		
+		$downloads=array();
 		foreach($packages as $package_name){
 			
 			echo "\nGetting latest ".$package_name."\n";
@@ -58,14 +61,41 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			
 			$file->rename($c->getLastDownloadedFilename());
 			
+			
+			$downloads[]=$file;
+			
 			//echo "Filename: ".$c->getLastDownloadedFilename()."\n";
 
 			echo "File saved in ".$file->path()."\n";
-//			chdir($tmpDir->path());
 
-//			echo "Unpacking ".$file->name()."\n";
-//			system('tar zxf '.$file->name());
+			if(!empty($params['unpack'])){
+				echo "Unpacking ".$file->name()."\n";
+				system('tar zxf '.$file->name());
+			}
 
+		}
+		
+		if(!empty($params['unpack']) && in_array($proPackageName, $packages) && count($packages)>1){
+			foreach($downloads as $download){
+				if(strpos($download->name(), $proPackageName)!==false){
+					$proDownload=$download;
+					break;
+				}
+			}
+			
+			echo "Moving modules into pro package\n";
+			
+			foreach($downloads as $download){
+				if(strpos($download->name(), $proPackageName)===false){
+					
+					$modPackageName = str_replace('.tar.gz','', $download->name());
+					
+					system('rm -Rf '.$modPackageName.'/professional');
+					system('mv '.$modPackageName.'/* '.str_replace('.tar.gz','', $proDownload->name()).'/modules/');
+					system('rm -Rf '.$modPackageName.'*');
+					$proDownload->delete();
+				}
+			}
 		}
 		
 		echo "All done\n";
