@@ -160,6 +160,8 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 			'success'=>true,
 		);
 		
+		$nAddedContacts = 0;
+		
 		if (!empty($params['contactIds'])) {
 			// Only contact ids are sent from the client
 			$contactIds = json_decode($params['contactIds']);
@@ -181,9 +183,18 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 
 			foreach($senders as $senderEmail => $senderNameArr){
 				$contactNameArr = GO_Base_Util_String::split_name($senderNameArr);
-				$contactModel = GO_Addressbook_Model_Contact::model()->findSingleByAttribute('email', $senderEmail);
+				$contactStmt = GO_Addressbook_Model_Contact::model()
+					->find(
+						GO_Base_Db_FindParams::newInstance()
+							->criteria(
+								GO_Base_Db_FindCriteria::newInstance()
+									->addCondition('email', $senderEmail, '=', 't', false)
+									->addCondition('email2', $senderEmail, '=', 't', false)
+									->addCondition('email3', $senderEmail, '=', 't', false)
+							)
+					);//->findSingleByAttribute('email', $senderEmail);
 
-				if (empty($contactModel) && empty($unknownSenders[$senderEmail])) {
+				if (empty($contactStmt) && empty($unknownSenders[$senderEmail])) {
 					// Keep track of contacts not found in database.
 					$unknownSenders[] = array(
 						'email'=>$senderEmail,
@@ -193,13 +204,27 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 						'last_name'=>$contactNameArr['last_name']
 					);
 				} else {
-					// add contact to addresslist
-					$contactModel->first_name = $contactNameArr['first_name'];
-					$contactModel->middle_name = $contactNameArr['middle_name'];
-					$contactModel->last_name = $contactNameArr['last_name'];
-					$addresslistModel->addManyMany('contacts', $contactModel->id);
+					// add contact to addresslist, but ensure only one email per addresslist
+					$emailAlreadyInAddresslist = false;
+					$linkableContactModel = false;
+					while ($contactModel = $contactStmt->fetch()) {
+						if ($addresslistModel->hasManyMany('contacts',$contactModel->id))
+							$emailAlreadyInAddresslist = true;
+						else
+							$linkableContactModel = $contactModel;
+					}
+					if (!empty($linkableContactModel) && !$emailAlreadyInAddresslist) {
+						$linkableContactModel->first_name = $contactNameArr['first_name'];
+						$linkableContactModel->middle_name = $contactNameArr['middle_name'];
+						$linkableContactModel->last_name = $contactNameArr['last_name'];
+						$linkableContactModel->save();
+						$addresslistModel->addManyMany('contacts', $linkableContactModel->id);
+						$nAddedContacts++;
+					}
 				}
 			}
+			
+			$response['addedSenders'] = $nAddedContacts;
 			
 			if (count($unknownSenders)) {
 				$response['success'] = false;
@@ -222,8 +247,17 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 		$senderEmails = json_decode($params['senderEmails']);
 
 		foreach($senderEmails as $senderEmail){
-			$contactModel = GO_Addressbook_Model_Contact::model()->findSingleByAttribute('email',$senderEmail);
-			if (!empty($contactModel)) {
+			$contactStmt = GO_Addressbook_Model_Contact::model()
+				->find(
+						GO_Base_Db_FindParams::newInstance()
+							->criteria(
+								GO_Base_Db_FindCriteria::newInstance()
+									->addCondition('email', $senderEmail, '=', 't', false)
+									->addCondition('email2', $senderEmail, '=', 't', false)
+									->addCondition('email3', $senderEmail, '=', 't', false)
+							)
+					);//->findSingleByAttribute('email',$senderEmail);
+			while ($contactModel = $contactStmt->fetch()) {
 				if ($addresslistModel->hasManyMany('contacts', $contactModel->id)) {
 					$removed = $addresslistModel->removeManyMany('contacts', $contactModel->id);
 					if ($removed)
