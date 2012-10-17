@@ -215,8 +215,8 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		
 		//check permissions on the filesystem
 		if($this->isNew){
-			if(!$this->parent->fsFolder->isWritable()){
-				throw new Exception("Folder ".$this->parent->path." is read only on the filesystem. Please check the file system permissions (hint: chmod -R www-data:www-data /home/groupoffice)");
+			if(!$this->fsFolder->parent()->isWritable()){
+				throw new Exception("Folder ".$this->fsFolder->parent()->stripFileStoragePath()." is read only on the filesystem. Please check the file system permissions (hint: chmod -R www-data:www-data /home/groupoffice)");
 			}
 		}else
 		{
