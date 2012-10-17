@@ -203,5 +203,40 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 		$this->post_country=$this->country;
 		$this->post_state=$this->state;
 	}
+	
+	
+	/**
+	 * Get the full address formatted according to the country standards.
+	 * 
+	 * @return string
+	 */
+	public function getFormattedAddress()
+	{
+		return GO_Base_Util_Common::formatAddress(
+						$this->country, 
+						$this->address, 
+						$this->address_no,
+						$this->zip, 
+						$this->city, 
+						$this->state
+						);
+	}
+	
+	/**
+	 * Get the full post address formatted according to the country standards.
+	 * 
+	 * @return string
+	 */
+	public function getFormattedPostAddress()
+	{
+		return GO_Base_Util_Common::formatAddress(
+						$this->post_country, 
+						$this->post_address, 
+						$this->post_address_no,
+						$this->post_zip, 
+						$this->post_city, 
+						$this->post_state
+						);
+	}
 
 }
