@@ -605,7 +605,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		foreach($this->getTrialUsers() as $user)
 		{
 			if ($user->trialDaysLeft == 30 || $user->trialDaysLeft == 7)
-			$user->sendTrialTimeLeftMail();
+				$user->sendTrialTimeLeftMail();
 		}
 	}
 	
@@ -672,7 +672,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	{
 		$trialUsers = array();
 		$stmt = $this->users;
-		foreach($stmt>fetch() as $user)
+		foreach($stmt->fetchAll() as $user)
 		{
 			if($user->isTrial())
 				$trialUsers[] = $user;

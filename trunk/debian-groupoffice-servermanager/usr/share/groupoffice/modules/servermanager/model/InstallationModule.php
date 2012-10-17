@@ -170,7 +170,8 @@ class GO_ServerManager_Model_InstallationModule extends GO_Base_Db_ActiveRecord
 			return true;
 		
 		$message = GO_Base_Mail_Message::newInstance();
-		$message->setSubject(vsprintf("Trial period for %s module",array($this->getModuleName()) )); //TODO: translate
+		$subject = vsprintf(GO::t('module_trial_email_title','servermanager'),array($this->getModuleName()));
+		$message->setSubject($subject);
 		
 		$fromName = GO::config()->title;
 	
