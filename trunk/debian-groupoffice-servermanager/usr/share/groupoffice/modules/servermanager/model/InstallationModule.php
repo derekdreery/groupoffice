@@ -37,17 +37,7 @@ class GO_ServerManager_Model_InstallationModule extends GO_Base_Db_ActiveRecord
 {
 
 	public $_usercount; //count of user that are using this module
-	/*
-	public function __construct($module, $installation)
-	{
-		$this->module_name = $module->id();
-		$this->_module = $module;
-		$this->installation_id = $installation->id;
-		//$this->enabled = in_array($module->id(), $installation->getAllowedModules());
-		
-		parent::__construct();
-	}
-	*/
+
 	public function tableName()
 	{
 		return 'sm_installation_modules';
@@ -65,16 +55,10 @@ class GO_ServerManager_Model_InstallationModule extends GO_Base_Db_ActiveRecord
 	
 	public function getModuleName()
 	{
-		$module = GO_Base_Module::findByModuleId($this->name);
-		return $module->name();
+		return GO::t('name', $this->name);
+		//$module = GO_Base_Module::findByModuleId($this->name);
+		//return $module->name();
 	}
-	/*
-	public function getInstalledSinceText()
-	{
-		if(empty($this->ctime))
-			return "Never";
-		return $this->ctime;
-	}*/
 	
 	public function getChecked()
 	{
@@ -85,6 +69,7 @@ class GO_ServerManager_Model_InstallationModule extends GO_Base_Db_ActiveRecord
 	}
 	/**
 	 * Some installation modules should not be shown in the list of available modules
+	 * 
 	 * @return boolean returns true if the module with this name should be marked hidden
 	 */
 	public function isHidden()
@@ -97,11 +82,13 @@ class GO_ServerManager_Model_InstallationModule extends GO_Base_Db_ActiveRecord
 	{
 		return array(
 				'installation'=>array('type'=>self::BELONGS_TO, 'model'=>'GO_ServerManager_Model_Installation', 'field'=>'installation_id'),
+				'modulePrice'=>array('type'=>self::BELONGS_TO, 'model'=>'GO_ServerManager_Model_ModulePrice', 'field'=>'name'),
 		);
 	}
 	
 	/**
 	 * Loop through installation users and count all users that have access to this module
+	 * 
 	 * @return int amount of user with access to this module
 	 */
 	public function getUsercount()
@@ -120,14 +107,24 @@ class GO_ServerManager_Model_InstallationModule extends GO_Base_Db_ActiveRecord
 	}
 	
 	/**
-	 * @return boolean true is this module is still in trail use
+	 * Is this installation module in trial use?
+	 * 
+	 * @return boolean true is this module is payed and still in trail use
 	 */
 	public function isTrial()
 	{
-		return $this->trialDaysLeft > 0;
+		if($this->modulePrice != null && $this->modulePrice->price_per_month > 0)
+			return $this->trialDaysLeft > 0;
+		else
+			return false;
+		
 	}
 	
 	/**
+	 * Get the amount of days this module can be used in trial mode
+	 * If the installation time is lower than today minus the specified trial days
+	 * the method will return 0
+	 * 
 	 * @return int the amount of days the trial period has left.
 	 */
 	public function getTrialDaysLeft()
@@ -145,7 +142,8 @@ class GO_ServerManager_Model_InstallationModule extends GO_Base_Db_ActiveRecord
 	}
 	
 	/**
-	 * returns this object as an array for json store
+	 * Returns this object as an array for json store
+	 * 
 	 * @return type 
 	 */
 	public function toArray(){
@@ -158,5 +156,36 @@ class GO_ServerManager_Model_InstallationModule extends GO_Base_Db_ActiveRecord
 				'isTrial'=>$this->isTrial(),
 				'trialDaysLeft'=>$this->trialDaysLeft
 		);
+	}
+	
+	/**
+	 * Send an email to the installations admin_email
+	 * Will not send an email when nog in trial mode
+	 * 
+	 * @return boolean true if mail was send correctly
+	 */
+	public function sendTrialTimeLeftMail()
+	{
+		if(!$this->isTrial())
+			return true;
+		
+		$message = GO_Base_Mail_Message::newInstance();
+		$message->setSubject(vsprintf("Trial period for %s module",array($this->getModuleName()) )); //TODO: translate
+		
+		$fromName = GO::config()->title;
+	
+		$parts = explode('@', GO::config()->webmaster_email);
+		$fromEmail = 'noreply@'.$parts[1];
+		
+		$toEmail = $this->installation->config['webmaster_email'];
+
+		$emailBody = GO::t('module_trial_email_body','servermanager'); //TODO: add to translation
+		$emailBody = vsprintf($emailBody,array($this->getModuleName(), $this->trialDaysLeft));
+		
+		$message->setBody($emailBody);
+		$message->addFrom($fromEmail,$fromName);
+		$message->addTo($toEmail);
+		
+		return GO_Base_Mail_Mailer::newGoInstance()->send($message);
 	}
 }

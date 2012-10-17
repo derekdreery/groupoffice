@@ -122,7 +122,27 @@ $updates["201207051558"][]="UPDATE sm_installations set status='trial' where sta
 
 //From here the servermanager will support auto invoicing and logging
 
-$updates["201210051200"][]="ALTER TABLE `sm_installations` ENGINE = InnoDB , DROP COLUMN `config_file` , DROP COLUMN `status_change_time` , DROP COLUMN `professional` , DROP COLUMN `billing` , DROP COLUMN `decimal_separator` , DROP COLUMN `thousands_separator` , DROP COLUMN `date_format` , DROP COLUMN `admin_country` , DROP COLUMN `admin_salutation` , DROP COLUMN `report_ctime` , DROP COLUMN `mailbox_usage` , DROP COLUMN `file_storage_usage` , DROP COLUMN `database_usage` , DROP COLUMN `total_logins` , DROP COLUMN `lastlogin` , DROP COLUMN `install_time` , DROP COLUMN `count_users` , ADD COLUMN `trial_days` INT(11) NOT NULL DEFAULT 30  AFTER `max_users` , ADD COLUMN `lastlogin` INT(11) NULL DEFAULT NULL  AFTER `trial_days` , CHANGE COLUMN `name` `name` VARCHAR(100) NOT NULL;";
+$updates["201210051200"][]="ALTER TABLE `sm_installations` ENGINE = InnoDB , 
+	DROP COLUMN `config_file` , 
+	DROP COLUMN `status_change_time` , 
+	DROP COLUMN `professional` , 
+	DROP COLUMN `billing` , 
+	DROP COLUMN `decimal_separator` , 
+	DROP COLUMN `thousands_separator` , 
+	DROP COLUMN `date_format` , 
+	DROP COLUMN `admin_country` , 
+	DROP COLUMN `admin_salutation` , 
+	DROP COLUMN `report_ctime` , 
+	DROP COLUMN `mailbox_usage` , 
+	DROP COLUMN `file_storage_usage` , 
+	DROP COLUMN `database_usage` , 
+	DROP COLUMN `total_logins` , 
+	DROP COLUMN `lastlogin` , 
+	DROP COLUMN `install_time` , 
+	DROP COLUMN `count_users` , 
+	ADD COLUMN `trial_days` INT(11) NOT NULL DEFAULT 30  AFTER `max_users` , 
+	ADD COLUMN `lastlogin` INT(11) NULL DEFAULT NULL  AFTER `trial_days` , 
+	CHANGE COLUMN `name` `name` VARCHAR(100) NOT NULL;";
 
 $updates["201210051200"][]="ALTER TABLE `sm_installation_users` ENGINE = InnoDB , DROP COLUMN `email` , DROP COLUMN `last_name` , DROP COLUMN `middle_name` , DROP COLUMN `first_name` , DROP COLUMN `id` , ADD COLUMN `user_id` INT(11) NOT NULL  FIRST , ADD COLUMN `used_modules` TEXT NOT NULL  AFTER `installation_id` , CHANGE COLUMN `lastlogin` `lastlogin` INT(11) NULL DEFAULT NULL  , CHANGE COLUMN `enabled` `enabled` TINYINT(1) NULL DEFAULT NULL  , 
   ADD CONSTRAINT `fk_sm_installation_users_sm_installations1`

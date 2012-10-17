@@ -593,6 +593,23 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	}
 	
 	
+	private function _sendTrialtimeMails()
+	{
+		$module_stmt = $this->modules;
+		foreach($module_stmt as $module)
+		{
+			if ($module->trialDaysLeft == 30 || $module->trialDaysLeft == 7)
+				$module->sendTrialTimeLeftMail();
+		}
+
+		foreach($this->getTrialUsers() as $user)
+		{
+			if ($user->trialDaysLeft == 30 || $user->trialDaysLeft == 7)
+			$user->sendTrialTimeLeftMail();
+		}
+	}
+	
+	
 	/**
 	 * Find all automatic email that should be send and send the ones that should be send today
 	 * This function should be called once a day by a cronjob for every installation
@@ -600,6 +617,9 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	 * @return boolean $success true if all mails successfull send
 	 */
 	public function sendAutomaticEmails($nowUnixTime=false) {
+		
+		$this->_sendTrialtimeMails();
+		
 		if (!is_int($nowUnixTime))
 			$nowUnixTime = time();
 		
@@ -744,55 +764,6 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	public function setAutoInvoice(GO_ServerManager_Model_AutomaticInvoice $value)
 	{
 		$this->_autoInvoice = $value;
-	}
-	
-	/**
-	 * Send an email when a userprice threshold will be excided when all trials
-	 * expire. 
-	 * Explaining that they have to pay more when this periode expires 
-	 */
-	public function sendUserTrialStartMail()
-	{
-		//get user count
-		//get trial user count
-		$usercount = count($this->getUsers());
-		
-		//TODO: load all prices from database
-		//$criteria = GO_Base_Db_FindCriteria::newInstance()->addCondition('max_users', $usercount, '<=');
-
-		$trialusers=$this->getTrialUsers();
-		if(count($trialusers)>0)
-		{
-			//TODO: send email to $this->admin_email
-		}
-		
-	}
-	
-	public function sendModuleTrialStartMail()
-	{
-		$message = GO_Base_Mail_Message::newInstance();
-		$message->setSubject("Module trial period has started");
-		
-		$fromName = GO::config()->title;
-	
-		$parts = explode('@', GO::config()->webmaster_email);
-		$fromEmail = 'noreply@'.$parts[1];
-
-		$emailBody = GO::t('lost_password_body','base','lostpassword');
-		//$emailBody = sprintf($emailBody,$this->contact->salutation, $this->username, $url);
-		
-		$message->setBody($emailBody);
-		$message->addFrom($fromEmail,$fromName);
-		$message->addTo($this->admin_email);
-		return GO_Base_Mail_Mailer::newGoInstance()->send($message);
-	}
-	
-	/**
-	 * A mail gets send to the customer when the trial periode is almost ended 
-	 */
-	public function sendEndTrialPeriodeMail()
-	{
-		
 	}
 	
 }
