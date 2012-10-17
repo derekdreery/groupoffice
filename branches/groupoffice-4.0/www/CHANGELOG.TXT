@@ -1,14 +1,7 @@
-17-10-2012 4.0.115
-- PDF error in billing
-
-17-10-2012 4.0.114
-- Invalid weekly recurrence rule for funambol
-- Error Call to a member function isWritable() on a non-object in /usr/share/groupoffice/modules/files/model/Folder.php fixed.
-- Removed call to the htmleditor's syncValue() function when the editor is in sourceEdit mode.
-
 16-10-2012 4.0.113
+- When adding / deleting contacts from address list thru the email message list, the system looks also for the second and third email addresses of contacts.
 - Wrong timezone info in vcalendar export
-- Check filesystem permissions before changing file or folder models
+- Check filesystem permissions before change file or folder models
 - Copy paste in same files folder appends a number eg. test becomes test (1)
 - Editing sieve actions resulted in duplication
 - Controller actions can be locked to only one user.
