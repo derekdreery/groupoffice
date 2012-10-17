@@ -127,9 +127,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$response['data']['google_maps_link']=GO_Base_Util_Common::googleMapsLink(
 						$model->address, $model->address_no,$model->city, $model->country);
 		
-		$response['data']['formatted_address']=nl2br(GO_Base_Util_Common::formatAddress(
-						$model->country, $model->address, $model->address_no,$model->zip, $model->city, $model->state
-						));
+		$response['data']['formatted_address']=nl2br($model->getFormattedAddress());
 		
 		
 		

@@ -17,16 +17,12 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		$response['data']['google_maps_link'] = GO_Base_Util_Common::googleMapsLink(
 										$model->address, $model->address_no, $model->city, $model->country);
 
-		$response['data']['formatted_address'] = nl2br(GO_Base_Util_Common::formatAddress(
-										$model->country, $model->address, $model->address_no, $model->zip, $model->city, $model->state
-						));
+		$response['data']['formatted_address'] = nl2br($model->getFormattedAddress());
 
 		$response['data']['post_google_maps_link'] = GO_Base_Util_Common::googleMapsLink(
 										$model->post_address, $model->post_address_no, $model->post_city, $model->post_country);
 
-		$response['data']['post_formatted_address'] = nl2br(GO_Base_Util_Common::formatAddress(
-										$model->post_country, $model->post_address, $model->post_address_no, $model->post_zip, $model->post_city, $model->post_state
-						));
+		$response['data']['post_formatted_address'] = nl2br($model->getFormattedPostAddress());
 
 		$response['data']['employees'] = array();
 		$sortAlias = GO::user()->sort_name=="first_name" ? array('first_name','last_name') : array('last_name','first_name');
