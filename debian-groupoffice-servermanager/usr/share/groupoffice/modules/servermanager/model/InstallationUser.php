@@ -115,5 +115,34 @@ class GO_ServerManager_Model_InstallationUser extends GO_Base_Db_ActiveRecord {
 		
 		return $days_left;
 	}
+	/**
+	 * Send an email to the installations admin_email
+	 * @return boolean true if mail was send correctly
+	 */
+	public function sendTrialTimeLeftMail()
+	{
+		if(!$this->isTrial())
+			return true;
+		
+		$message = GO_Base_Mail_Message::newInstance();
+		$message->setSubject(vsprintf("Trial period for user %s",array($this->username) )); //TODO: translate
+		
+		$fromName = GO::config()->title;
+	
+		$parts = explode('@', GO::config()->webmaster_email);
+		$fromEmail = 'noreply@'.$parts[1];
+		
+		$toEmail = $this->installation->config['webmaster_email'];
+
+		$emailBody = GO::t('user_trial_email_body','servermanager'); //TODO: add to translation
+		$emailBody = vsprintf($emailBody,array($this->username, $this->trialDaysLeft));
+		
+		$message->setBody($emailBody);
+		$message->addFrom($fromEmail,$fromName);
+		$message->addTo($toEmail);
+		
+		return GO_Base_Mail_Mailer::newGoInstance()->send($message);
+	}
+	
 
 }
