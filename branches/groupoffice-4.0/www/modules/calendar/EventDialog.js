@@ -964,11 +964,13 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					scope:this,
 					change:function(sc, newValue, oldValue){
 						var record = sc.store.getById(newValue);
-						GO.customfields.disableTabs(this.tabPanel, record.data);
+						if(record)
+							GO.customfields.disableTabs(this.tabPanel, record.data);
 						this.selectCategory.setCalendarId(newValue);
 						this.selectCategory.reset();
 						// Set the permissionlevel so we know if we have the right permissions
-						this.setPermissionLevel(record.data.permissionLevel);
+						if(record)
+							this.setPermissionLevel(record.data.permissionLevel);
 					}
 				}
 			}),
