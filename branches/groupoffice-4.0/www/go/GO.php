@@ -477,6 +477,7 @@ class GO{
 		if(!defined('GO_LOADED')){ //check if old Group-Office.php was loaded
 
 			if(GO::config()->debug || GO::config()->debug_log){
+				
 				$username = GO::user() ? GO::user()->username : 'nobody';
 
 				$log = '['.date('Y-m-d G:i').']['.$username.'] Start of new request: ';
@@ -636,38 +637,41 @@ class GO{
 			|| self::config()->debug_log
 			|| self::config()->firephp
 		) {
-
-			if (self::config()->firephp) {
-				if (class_exists('FB')) {
-					ob_start();
-					FB::send($text);
-				}
-			}
-
-			if (self::config()->debug_log) {
-
-				if (!is_string($text)) {
-					$text = var_export($text, true);
+			
+			if(empty(GO::config()->debug_log_remote_ip) || (isset($_SERVER['REMOTE_ADDR']) && GO::config()->debug_log_remote_ip==$_SERVER['REMOTE_ADDR']))
+			{
+				if (self::config()->firephp) {
+					if (class_exists('FB')) {
+						ob_start();
+						FB::send($text);
+					}
 				}
 
-				if ($text == '')
-					$text = '(empty string)';
+				if (self::config()->debug_log) {
 
-				//$username=GO::user() ? GO::user()->username : 'nobody';
+					if (!is_string($text)) {
+						$text = var_export($text, true);
+					}
 
-				//$trace = debug_backtrace();
+					if ($text == '')
+						$text = '(empty string)';
 
-				//$prefix = "\n[".date("Ymd G:i:s")."][".$trace[0]['file'].":".$trace[0]['line']."]\n";
+					//$username=GO::user() ? GO::user()->username : 'nobody';
 
-				//$lines = explode("\n", $text);
+					//$trace = debug_backtrace();
 
-				//$text = $prefix.$text;
-				
-				$user = isset(GO::session()->values['username']) ? GO::session()->values['username'] : 'notloggedin';
-				
-				$text = "[$user] ".str_replace("\n","\n[$user] ", $text);
+					//$prefix = "\n[".date("Ymd G:i:s")."][".$trace[0]['file'].":".$trace[0]['line']."]\n";
 
-				file_put_contents(self::config()->file_storage_path . 'debug.log', $text . "\n", FILE_APPEND);
+					//$lines = explode("\n", $text);
+
+					//$text = $prefix.$text;
+
+					$user = isset(GO::session()->values['username']) ? GO::session()->values['username'] : 'notloggedin';
+
+					$text = "[$user] ".str_replace("\n","\n[$user] ", $text);
+
+					file_put_contents(self::config()->file_storage_path . 'debug.log', $text . "\n", FILE_APPEND);
+				}
 			}
 		}
 	}
