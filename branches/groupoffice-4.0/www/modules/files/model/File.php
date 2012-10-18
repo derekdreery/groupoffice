@@ -269,6 +269,9 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		
 
 		$this->extension = $this->fsFile->extension();
+		//make sure extension is not too long
+		$this->cutAttributeLength("extension");
+		
 		$this->size = $this->fsFile->size();
 		$this->ctime = $this->fsFile->ctime();
 		$this->mtime = $this->fsFile->mtime();
