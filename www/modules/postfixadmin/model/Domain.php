@@ -65,6 +65,10 @@ class GO_Postfixadmin_Model_Domain extends GO_Base_Db_ActiveRecord {
 		);
 	}
 	
+	public function getLogMessage($action) {		
+		return $this->domain;
+	}
+	
 	public function defaultAttributes() {
 		$attr = parent::defaultAttributes();
 		$attr['total_quota']=1024*1024*10;//10 GB of quota per domain by default.
