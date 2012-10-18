@@ -60,6 +60,15 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $debug = false;
+	
+	
+	/**
+	 * Only log debug messages for this remote IP address.
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $debug_log_remote_ip = "";
 
 	/**
 	 * Just enable the debug log.
