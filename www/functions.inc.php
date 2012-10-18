@@ -357,30 +357,30 @@ function set_debug_log($file)
 function go_debug($text, $config=false)
 {
 
-	if(!$config)
-		$config=$GLOBALS['GO_CONFIG'];
-
-	if($config->debug || $config->debug_log)
-	{
-		if(!is_string($text))
-		{
-			$text = var_export($text, true);
-		}
-
-		if($text=='')
-			$text = '(empty string)';
-
-//		if(PHP_SAPI=='cli')
+//	if(!$config)
+//		$config=$GLOBALS['GO_CONFIG'];
+//
+//	if($config->debug || $config->debug_log)
+//	{
+//		if(!is_string($text))
 //		{
-//			echo 'DEBUG: '.$text."\n\n";
-//			return;
+//			$text = var_export($text, true);
 //		}
-
-		if(!isset($_SESSION['GO_SESSION']['debug_log']))
-		$_SESSION['GO_SESSION']['debug_log']=$config->file_storage_path.'debug.log';
-
-		file_put_contents($_SESSION['GO_SESSION']['debug_log'], $text."\n", FILE_APPEND);
-	}
+//
+//		if($text=='')
+//			$text = '(empty string)';
+//
+////		if(PHP_SAPI=='cli')
+////		{
+////			echo 'DEBUG: '.$text."\n\n";
+////			return;
+////		}
+//
+//		if(!isset($_SESSION['GO_SESSION']['debug_log']))
+//		$_SESSION['GO_SESSION']['debug_log']=$config->file_storage_path.'debug.log';
+//
+//		file_put_contents($_SESSION['GO_SESSION']['debug_log'], $text."\n", FILE_APPEND);
+//	}
 }
 
 
