@@ -216,7 +216,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		//check permissions on the filesystem
 		if($this->isNew){
 			if(!$this->fsFolder->parent()->isWritable()){
-				throw new Exception("Folder ".$this->fsFolder->parent()->stripFileStoragePath()." (Creating ".$this->path.") is read only on the filesystem. Please check the file system permissions (hint: chown -R www-data:www-data /home/groupoffice)");
+				throw new Exception("Folder ".$this->fsFolder->parent()->stripFileStoragePath()." (Creating ".$this->name.") is read only on the filesystem. Please check the file system permissions (hint: chown -R www-data:www-data /home/groupoffice)");
 			}
 		}else
 		{
@@ -381,8 +381,6 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		if (substr($relpath, -1) == '/') {
 			$relpath = substr($relpath, 0, -1);
 		}
-		
-		GO::debug($relpath);
 		
 		$parts = explode('/', $relpath);
 		$parent_id = 0;
