@@ -2843,7 +2843,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					return $this->_getRelated($name);
 				elseif($triggerError){
 					if(!isset($this->columns[$name]))
-						trigger_error ("Access to undefined property $name in ".$this->className());
+						return null;
+						//trigger_error ("Access to undefined property $name in ".$this->className());
 //					else 
 //						GO::debug("Column $name is NULL in ".$this->className());				
 				}
