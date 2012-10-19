@@ -2758,6 +2758,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$acl->delete();
 		}	
 		
+		if ($this->customfieldsRecord)
+			$this->customfieldsRecord->delete();
+		
 		$this->_deleteLinks();
 
 		if(!$this->afterDelete())
