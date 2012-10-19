@@ -1,4 +1,10 @@
 <?php
+
+if(GO::modules()->addressbook){
+	
+	GO::getDbConnection()->query("ALTER TABLE `fs_folders` DROP `path`");
+}
+
 if(GO::modules()->addressbook){
 	$ab = GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('users', '1');//GO::t('users','base'));
 	if(!$ab){
