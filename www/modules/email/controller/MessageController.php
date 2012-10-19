@@ -1047,6 +1047,20 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 					'is_invitation' => $vcalendar->method == 'REQUEST',
 					'is_cancellation' => $vcalendar->method == 'CANCEL'
 			);
+			
+			$subject = (string) $vevent->summary;
+			if(!empty($subject) && strpos($response['htmlbody'], $subject)===false){
+				if(!$event){
+					$event = new GO_Calendar_Model_Event();
+					$event->importVObject($vevent, array(), true);
+				}
+
+				$response['htmlbody'].='<div style="border: 1px solid black;margin-top:10px">'.
+								'<div style="font-weight:bold;margin:2px;">'.GO::t('attachedAppointmentInfo','email').'</div>'.
+								$event->toHtml().
+								'</div>';
+			}
+			
 //			switch ($vcalendar->method) {
 //				case 'REPLY':
 //

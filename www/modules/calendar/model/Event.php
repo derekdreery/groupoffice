@@ -655,6 +655,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$html = '<table>' .
 						'<tr><td>' . GO::t('subject', 'calendar') . ':</td>' .
 						'<td>' . $this->name . '</td></tr>';
+		
+		$html .= '<tr><td>' . GO::t('startsAt', 'calendar') . ':</td>' .
+						'<td>' . GO_Base_Util_Date::get_timestamp($this->start_time, empty($this->all_day_event)) . '</td></tr>' .
+						'<tr><td>' . GO::t('endsAt', 'calendar') . ':</td>' .
+						'<td>' . GO_Base_Util_Date::get_timestamp($this->end_time, empty($this->all_day_event)) . '</td></tr>';
 
 		$html .= '<tr><td>' . GO::t('status', 'calendar') . ':</td>' .
 						'<td>' . $this->getLocalizedStatus() . '</td></tr>';
@@ -683,10 +688,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 		$html .= '<tr><td colspan="2">&nbsp;</td></tr>';
 
-		$html .= '<tr><td>' . GO::t('startsAt', 'calendar') . ':</td>' .
-						'<td>' . GO_Base_Util_Date::get_timestamp($this->start_time, empty($this->all_day_event)) . '</td></tr>' .
-						'<tr><td>' . GO::t('endsAt', 'calendar') . ':</td>' .
-						'<td>' . GO_Base_Util_Date::get_timestamp($this->end_time, empty($this->all_day_event)) . '</td></tr>';
+		
 		
 		$html .= '</table>';
 		
@@ -913,9 +915,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @param Sabre_VObject_Component $vobject
 	 * @param array $attributes Extra attributes to apply to the event. Raw values should be past. No input formatting is applied.
+	 * @param boolean $dontSave. Don't save the event. WARNING. Event can't be fully imported this way because participants and exceptions need an ID. This option is useful if you want to display info about an ICS file.
 	 * @return GO_Calendar_Model_Event 
 	 */
-	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array()){
+	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array(), $dontSave=false){
 		//$event = new GO_Calendar_Model_Event();
 		$uid = (string) $vobject->uid;
 		if(!empty($uid))
@@ -1052,38 +1055,42 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 		
 
-		$this->cutAttributeLengths();
 		
-		$this->save();
 		
-		if(!empty($exception)){			
-			//save the exception we found by recurrence-id
-			$exception->exception_event_id=$this->id;
-			$exception->save();
-		}		
-	
-		if($vobject->organizer)
-			$this->importVObjectAttendee($this, $vobject->organizer, true);
-		
-		$attendees = $vobject->select('attendee');
-		foreach($attendees as $attendee)
-			$this->importVObjectAttendee($this, $attendee, false);
+		if(!$dontSave){
+			$this->cutAttributeLengths();
+			
+			$this->save();
 
-		if($vobject->exdate){
-			if (strpos($vobject->exdate,';')!==false) {
-				$timesArr = explode(';',$vobject->exdate->value);
-				$exDateTimes = array();
-				foreach ($timesArr as $time) {
-					list(
-							$dateType,
-							$dateTime
-					) =  Sabre_VObject_Property_DateTime::parseData($time,$vobject->exdate);
-					$this->addException($dateTime->format('U'));
-				}
-			} else {
-				$exDateTimes = $vobject->exdate->getDateTimes();
-				foreach($exDateTimes as $dt){
-					$this->addException($dt->format('U'));
+			if(!empty($exception)){			
+				//save the exception we found by recurrence-id
+				$exception->exception_event_id=$this->id;
+				$exception->save();
+			}		
+
+			if($vobject->organizer)
+				$this->importVObjectAttendee($this, $vobject->organizer, true);
+
+			$attendees = $vobject->select('attendee');
+			foreach($attendees as $attendee)
+				$this->importVObjectAttendee($this, $attendee, false);
+
+			if($vobject->exdate){
+				if (strpos($vobject->exdate,';')!==false) {
+					$timesArr = explode(';',$vobject->exdate->value);
+					$exDateTimes = array();
+					foreach ($timesArr as $time) {
+						list(
+								$dateType,
+								$dateTime
+						) =  Sabre_VObject_Property_DateTime::parseData($time,$vobject->exdate);
+						$this->addException($dateTime->format('U'));
+					}
+				} else {
+					$exDateTimes = $vobject->exdate->getDateTimes();
+					foreach($exDateTimes as $dt){
+						$this->addException($dt->format('U'));
+					}
 				}
 			}
 		}
