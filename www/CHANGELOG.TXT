@@ -1,3 +1,20 @@
+19-10-2012 4.0.116
+- Also show disabled users in selectuser
+- Correct key.txt permissions on fresh install
+- Check if project folders are available in webdav
+- Better error reporting for LDAP auth and sync
+- Log about changes to postfix mailboxes and domains
+- Fixed upgrade from 3 to 4 issues
+- Custom field records were not deleted
+
+17-10-2012 4.0.115
+- PDF error in billing
+
+17-10-2012 4.0.114
+- Invalid weekly recurrence rule for funambol
+- Error Call to a member function isWritable() on a non-object in /usr/share/groupoffice/modules/files/model/Folder.php fixed.
+- Removed call to the htmleditor's syncValue() function when the editor is in sourceEdit mode.
+
 16-10-2012 4.0.113
 - When adding / deleting contacts from address list thru the email message list, the system looks also for the second and third email addresses of contacts.
 - Wrong timezone info in vcalendar export
