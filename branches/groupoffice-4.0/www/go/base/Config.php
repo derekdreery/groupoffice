@@ -1343,7 +1343,7 @@ class GO_Base_Config {
 		$attributes['user_id']=$user_id;
 
 		$setting = GO_Base_Model_Setting::model()->findSingleByAttributes($attributes);
-		return $setting->delete();
+		return $setting ? $setting->delete() : true;
 	}
 
 
