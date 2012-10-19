@@ -191,8 +191,9 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		$name = $this->name;
 		if($this->company)
 			$name .= ' ('.$this->company->name.')';
-			
-		$name .= ' ('.$this->addressbook->name.')';
+
+		if($this->addressbook)
+			$name .= ' ('.$this->addressbook->name.')';
 			
 		return array(
 				'name' => $name
