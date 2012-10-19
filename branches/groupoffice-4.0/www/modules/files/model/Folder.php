@@ -381,6 +381,9 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		if (substr($relpath, -1) == '/') {
 			$relpath = substr($relpath, 0, -1);
 		}
+		
+		GO::debug($relpath);
+		
 		$parts = explode('/', $relpath);
 		$parent_id = 0;
 		while ($folderName = array_shift($parts)) {
