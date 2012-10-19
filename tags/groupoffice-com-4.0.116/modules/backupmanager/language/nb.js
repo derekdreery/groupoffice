@@ -1,0 +1,19 @@
+
+GO.backupmanager.lang.backupmanager='Backupmodul';
+GO.backupmanager.lang.rmachine='Ekstern maskin';
+GO.backupmanager.lang.rport='Port';
+GO.backupmanager.lang.rtarget='Målkatalog';
+GO.backupmanager.lang.sources='Kildekataloger';
+GO.backupmanager.lang.rotations='Rotasjoner';
+GO.backupmanager.lang.quiet='Stille';
+GO.backupmanager.lang.emailaddresses='E-postadresse';
+GO.backupmanager.lang.emailsubject='E-postemne';
+GO.backupmanager.lang.rhomedir='Ekstern homekatalog';
+GO.backupmanager.lang.rpassword='Passord';
+GO.backupmanager.lang.publish='Publiser';
+GO.backupmanager.lang.enablebackup='Start backup';
+GO.backupmanager.lang.disablebackup='Stopp backup';
+GO.backupmanager.lang.successdisabledbackup='Backup er deaktivert!';
+GO.backupmanager.lang.publishkey='Aktiver backup';
+GO.backupmanager.lang.publishSuccess='Backup er aktivert!';
+GO.backupmanager.lang.helpText='Denne modulen vil sikkerhetskopiere filer og alle MySQL databaser (pass på at du inkluderer /home/mysqlbackup i kildekatalogene) til en ekstern server, med rsync og SSH. Når du aktiverer backup vil den sende den offentlige SSH nøkkelen til serveren og den vil sjekke at målkatalogen eksisterer. Pass derfor først på at målkatalogen eksisterer på den den eksterne serveren. Som standard kjøres backupjobben ved midnatt. Du kan endre dette i filen /etc/cron.d/groupoffice-backup. Du kan opprette filen hvis den ikke finnes. Du kan også kjøre backup manuelt ved å skrive "php /usr/share/groupoffice/modules/backupmanager/cron.php" i terminalvinduet.';
