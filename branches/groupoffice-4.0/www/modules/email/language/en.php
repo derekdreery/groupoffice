@@ -258,3 +258,4 @@ $l['useAccount']='Use account';
 
 $l['sieveNote']='Not all features are supported. Check the manual.';
 $l['winmailNoFiles']="This winmail attachment does not contain any files.";
+$l['attachedAppointmentInfo']="Attached appointment information";
