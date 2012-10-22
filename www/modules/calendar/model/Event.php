@@ -474,6 +474,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 	}
 
+	/**
+	 *
+	 * @var GO_Calendar_Model_LocalEvent
+	 */
 	private $_calculatedEvents;
 	
 	public function findException($startTime){
@@ -498,7 +502,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		return $event;		
 	}
 	
-	
+	/**
+	 * 
+	 * @param int $exception_for_event_id
+	 * @return GO_Calendar_Model_LocalEvent
+	 */
 	public function getConflictingEvents($exception_for_event_id=0){
 		
 		$conflictEvents=array();
@@ -516,10 +524,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		while($conflictEvent = array_shift($conflictingEvents)) {
 			
-			GO::debug("Conflict: ".$conflictEvent['id']." ".$conflictEvent['name']." ".GO_Base_Util_Date::get_timestamp($conflictEvent['start_unixtime'])." - ".GO_Base_Util_Date::get_timestamp($conflictEvent['end_unixtime']));
+			GO::debug("Conflict: ".$conflictEvent->getEvent()->id." ".$conflictEvent->getName()." ".GO_Base_Util_Date::get_timestamp($conflictEvent->getAlternateStartTime())." - ".GO_Base_Util_Date::get_timestamp($conflictEvent->getAlternateEndTime()));
 			//check if time conflicts
-			if($conflictEvent['start_unixtime']<$this->end_time && $conflictEvent['end_unixtime']>$this->start_time){
-				if($conflictEvent["id"]!=$this->id && (empty($exception_for_event_id) || $exception_for_event_id!=$conflictEvent["id"])){
+			if($conflictEvent->getAlternateStartTime()<$this->end_time && $conflictEvent->getAlternateEndTime()>$this->start_time){
+				if($conflictEvent->getEvent()->id!=$this->id && (empty($exception_for_event_id) || $exception_for_event_id!=$conflictEvent->getEvent()->id)){
 					$conflictEvents[]=$conflictEvent;
 					//throw new Exception('Ask permission');
 				}
@@ -538,7 +546,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @param int $periodStartTime
 	 * @param int $periodEndTime
 	 * @param boolean $onlyBusyEvents
-	 * @return array Note, this are not models but arrays of attributes.
+	 * 
+	 * @return GO_Calendar_Model_LocalEvent  
 	 */
 	public function findCalculatedForPeriod($findParams, $periodStartTime, $periodEndTime, $onlyBusyEvents=false) {
 
