@@ -224,7 +224,7 @@ class GO_Ldapauth_Authenticator {
 			$domain = isset($arr[1]) ? trim($arr[1]) : '';
 
 			$imapauth = new GO_Imapauth_Authenticator();
-			$config = $imapauth->getDomainConfig($domain);
+			$config = $imapauth->config = $imapauth->getDomainConfig($domain);
 
 			if (!$config) {
 				GO::debug('LDAPAUTH: No E-mail configuration found for domain: ' . $domain);
