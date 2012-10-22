@@ -968,7 +968,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			$folder->checkFsSync();
 			
 			//sort by path and only list top level shares		
-			$shares[$folder->name]=$folder;
+			$shares[$folder->path]=$folder;
 		}
 		ksort($shares);
 		$response=array();
@@ -976,11 +976,14 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			$isSubDir = isset($lastPath) && strpos($path.'/', $lastPath.'/')===0;
 			
 			if(!$isSubDir){
-				$response[]=$folder;			
+				$response[$folder->name]=$folder;			
 				$lastPath=$path;
 			}
 		}
 		
-		return $response;
+		//now sort on folder name
+		ksort($response);
+		
+		return array_values($response);
 	}
 }
