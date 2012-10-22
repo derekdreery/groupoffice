@@ -62,6 +62,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	protected function init() {
 
 		$this->columns['start_time']['gotype'] = 'unixtimestamp';
+		$this->columns['end_time']['greater'] = 'start_time';
 		$this->columns['end_time']['gotype'] = 'unixtimestamp';
 		$this->columns['repeat_end_time']['gotype'] = 'unixtimestamp';
 
@@ -174,11 +175,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			case GO_Calendar_Model_Event::STATUS_CONFIRMED:
 				$color = '32CD32'; //LimeGreen
 			break;
-			case GO_Calendar_Model_Event::STATUS_NEEDS_ACTION:
-				$color = 'FF8C00'; //DarkOrange
-			break;
 			case GO_Calendar_Model_Event::STATUS_DELEGATED:
 				$color = '0000CD'; //MediumBlue
+			break;
+		
+			default:
+			case GO_Calendar_Model_Event::STATUS_NEEDS_ACTION:
+				$color = 'FF8C00'; //DarkOrange
 			break;
 		}
 		
@@ -193,8 +196,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public function getDiff() {
 		$startDateTime = new GO_Base_Util_Date_DateTime(date('c', $this->start_time));
 		$endDateTime = new GO_Base_Util_Date_DateTime(date('c', $this->end_time));
-		
-		return $startDateTime->getDiffCompat($endDateTime);
+
+		return $startDateTime->diff($endDateTime);
 	}
 
 	/**
@@ -231,13 +234,17 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$att['start_time'] = strtotime($d . ' ' . $t);
 
 		$endTime = new GO_Base_Util_Date_DateTime(date('c', $att['start_time']));
-		$endTime->addDiffCompat($diff);
+		$endTime->add($diff);
 		$att['end_time'] = $endTime->format('U');
 		
 		return $this->duplicate($att, false);
 	}
 	
 	protected function beforeSave() {
+		
+		
+		if(!$this->is_organizer && $this->isModified(array("start_time","end_time","location","description","calendar_id")))
+			throw new GO_Base_Exception_AccessDenied();
 		
 		//Don't set reminders for the superadmin
 		if($this->calendar->user_id==1 && !GO::config()->debug)
@@ -490,6 +497,37 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 		return $event;		
 	}
+	
+	
+	public function getConflictingEvents($exception_for_event_id=0){
+		
+		$conflictEvents=array();
+		
+		$findParams = GO_Base_Db_FindParams::newInstance();
+		$findParams->getCriteria()->addCondition("calendar_id", $this->calendar_id);
+		if(!$this->isNew)
+			$findParams->getCriteria()->addCondition("resource_event_id", $this->id, '<>');
+		
+		//find all events including repeating events that occur on that day.
+		$conflictingEvents = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, 
+						GO_Base_Util_Date::clear_time($this->start_time)-1, 
+						GO_Base_Util_Date::clear_time(GO_Base_Util_Date::date_add($this->end_time,1)),
+						true);
+		
+		while($conflictEvent = array_shift($conflictingEvents)) {
+			
+			GO::debug("Conflict: ".$conflictEvent['id']." ".$conflictEvent['name']." ".GO_Base_Util_Date::get_timestamp($conflictEvent['start_unixtime'])." - ".GO_Base_Util_Date::get_timestamp($conflictEvent['end_unixtime']));
+			//check if time conflicts
+			if($conflictEvent['start_unixtime']<$this->end_time && $conflictEvent['end_unixtime']>$this->start_time){
+				if($conflictEvent["id"]!=$this->id && (empty($exception_for_event_id) || $exception_for_event_id!=$conflictEvent["id"])){
+					$conflictEvents[]=$conflictEvent;
+					//throw new Exception('Ask permission');
+				}
+			}
+		}
+		
+		return $conflictEvents;
+	}
 
 	/**
 	 * Find events for a given time period.
@@ -505,7 +543,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public function findCalculatedForPeriod($findParams, $periodStartTime, $periodEndTime, $onlyBusyEvents=false) {
 
 		
-		$stmt = $this->findForPeriod($findParams, $periodStartTime, $periodEndTime);
+		$stmt = $this->findForPeriod($findParams, $periodStartTime, $periodEndTime, $onlyBusyEvents);
 
 		$this->_calculatedEvents = array();
 
@@ -568,7 +606,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 
 	private function _calculateRecurrences($event, $periodStartTime, $periodEndTime) {
-		
+
 		$localEvent = new GO_Calendar_Model_LocalEvent($event, $periodStartTime, $periodEndTime);
 		
 		if(!$localEvent->isRepeating()){
@@ -592,7 +630,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$diff = $event->getDiff();
 
 				$endTime = new GO_Base_Util_Date_DateTime(date('c', $occurenceStartTime));
-				$endTime->addDiffCompat($diff);
+				$endTime->add($diff);
+				
 				$localEvent->setAlternateEndTime($endTime->format('U'));
 
 				$this->_calculatedEvents[$occurenceStartTime . '-' . $origEventAttr['id']] = $localEvent;
@@ -742,6 +781,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$html = '<table>' .
 						'<tr><td>' . GO::t('subject', 'calendar') . ':</td>' .
 						'<td>' . $this->name . '</td></tr>';
+		
+		$html .= '<tr><td>' . GO::t('startsAt', 'calendar') . ':</td>' .
+						'<td>' . GO_Base_Util_Date::get_timestamp($this->start_time, empty($this->all_day_event)) . '</td></tr>' .
+						'<tr><td>' . GO::t('endsAt', 'calendar') . ':</td>' .
+						'<td>' . GO_Base_Util_Date::get_timestamp($this->end_time, empty($this->all_day_event)) . '</td></tr>';
 
 		$html .= '<tr><td>' . GO::t('status', 'calendar') . ':</td>' .
 						'<td>' . $this->getLocalizedStatus() . '</td></tr>';
@@ -770,10 +814,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 		$html .= '<tr><td colspan="2">&nbsp;</td></tr>';
 
-		$html .= '<tr><td>' . GO::t('startsAt', 'calendar') . ':</td>' .
-						'<td>' . GO_Base_Util_Date::get_timestamp($this->start_time, empty($this->all_day_event)) . '</td></tr>' .
-						'<tr><td>' . GO::t('endsAt', 'calendar') . ':</td>' .
-						'<td>' . GO_Base_Util_Date::get_timestamp($this->end_time, empty($this->all_day_event)) . '</td></tr>';
+		
 		
 		$html .= '</table>';
 		
@@ -1000,9 +1041,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @param Sabre_VObject_Component $vobject
 	 * @param array $attributes Extra attributes to apply to the event. Raw values should be past. No input formatting is applied.
+	 * @param boolean $dontSave. Don't save the event. WARNING. Event can't be fully imported this way because participants and exceptions need an ID. This option is useful if you want to display info about an ICS file.
 	 * @return GO_Calendar_Model_Event 
 	 */
-	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array()){
+	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array(), $dontSave=false){
 		//$event = new GO_Calendar_Model_Event();
 		$uid = (string) $vobject->uid;
 		if(!empty($uid))
@@ -1139,38 +1181,42 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 		
 
-		$this->cutAttributeLengths();
 		
-		$this->save();
 		
-		if(!empty($exception)){			
-			//save the exception we found by recurrence-id
-			$exception->exception_event_id=$this->id;
-			$exception->save();
-		}		
-	
-		if($vobject->organizer)
-			$this->importVObjectAttendee($this, $vobject->organizer, true);
-		
-		$attendees = $vobject->select('attendee');
-		foreach($attendees as $attendee)
-			$this->importVObjectAttendee($this, $attendee, false);
+		if(!$dontSave){
+			$this->cutAttributeLengths();
+			
+			$this->save();
 
-		if($vobject->exdate){
-			if (strpos($vobject->exdate,';')!==false) {
-				$timesArr = explode(';',$vobject->exdate->value);
-				$exDateTimes = array();
-				foreach ($timesArr as $time) {
-					list(
-							$dateType,
-							$dateTime
-					) =  Sabre_VObject_Property_DateTime::parseData($time,$vobject->exdate);
-					$this->addException($dateTime->format('U'));
-				}
-			} else {
-				$exDateTimes = $vobject->exdate->getDateTimes();
-				foreach($exDateTimes as $dt){
-					$this->addException($dt->format('U'));
+			if(!empty($exception)){			
+				//save the exception we found by recurrence-id
+				$exception->exception_event_id=$this->id;
+				$exception->save();
+			}		
+
+			if($vobject->organizer)
+				$this->importVObjectAttendee($this, $vobject->organizer, true);
+
+			$attendees = $vobject->select('attendee');
+			foreach($attendees as $attendee)
+				$this->importVObjectAttendee($this, $attendee, false);
+
+			if($vobject->exdate){
+				if (strpos($vobject->exdate,';')!==false) {
+					$timesArr = explode(';',$vobject->exdate->value);
+					$exDateTimes = array();
+					foreach ($timesArr as $time) {
+						list(
+								$dateType,
+								$dateTime
+						) =  Sabre_VObject_Property_DateTime::parseData($time,$vobject->exdate);
+						$this->addException($dateTime->format('U'));
+					}
+				} else {
+					$exDateTimes = $vobject->exdate->getDateTimes();
+					foreach($exDateTimes as $dt){
+						$this->addException($dt->format('U'));
+					}
 				}
 			}
 		}

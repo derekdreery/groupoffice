@@ -90,6 +90,8 @@ class GO_Imapauth_Authenticator {
 							));
 		$foundAccount = false;		
 		while ($account = $stmt->fetch()) {
+			
+			GO::debug("IMAPAUTH: Updating account ".$account->id);
 
 			if($account->user_id==$user->id)
 				$foundAccount=true;
@@ -99,6 +101,7 @@ class GO_Imapauth_Authenticator {
 			$account->store_smtp_password = !empty($account->store_password) && !empty($this->config['smtp_use_login_credentials']) ? 1 : 0;
 			
 			if ($this->config['smtp_use_login_credentials']) {
+				GO::debug("IMAPAUTH: Setting SMTP password too");
 				$account->smtp_username = $imapUsername;
 				$account->smtp_password = $password;
 			}

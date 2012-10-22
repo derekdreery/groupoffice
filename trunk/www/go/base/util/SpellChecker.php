@@ -1,11 +1,11 @@
 <?php
-
 /**
  * Description of SpellChecker
  *
  * @author Shaun Forsyth <shaun@rpm-solutions.co.uk>
- * @author Michal Charvát
+ * @author Michal Charvát <michal.charvat@zdeno.net>
  */
+
 class GO_Base_Util_SpellChecker {
 
     private static $_pLink;
@@ -26,23 +26,39 @@ class GO_Base_Util_SpellChecker {
     public static function replaceMisspeltWords($mispeltwords, $text) {
         $tokens = preg_split('/(<|>)/', $text, NULL, PREG_SPLIT_DELIM_CAPTURE);
         $inhtml = false;
-        foreach ($tokens as $key => $token){
-            if ($token == '<'){
-                $inhtml = true;
-                continue;
-            }elseif($token == '>'){
+        $ignorCheck = 0;
+
+        foreach ($tokens as $key => $token) {
+
+            if ($token == '>') {
                 $inhtml = false;
                 continue;
-            }else{
-                if (!$inhtml){
-                    foreach ($mispeltwords as $word => $sugestions){
-                        //not sure how to fix this in one go so will use another regex to add another space between repeat words
-                        $tokens[$key] = preg_replace('/(\b(\w+)(\b\s)*\2\b)/','\2\3\3\2',$tokens[$key]);
-                        $tokens[$key] = mb_ereg_replace(
-                            '(^|[._,\'"-]|&lt;|\s)'.preg_quote($word).'(\s|[._,@\'"-]|&gt;|$)','\1'.
-                            self::_inlineSpellSystem($word,$sugestions,'\2').'\2',$tokens[$key], "m"
-                        );
-                    }
+            }
+
+            if ($token == '<') {
+                $inhtml = true;
+                continue;
+            }
+
+            if ($inhtml) {
+                if (strstr($token, '/blockquote') > -1) {
+                    --$ignorCheck;
+                    continue;
+                }
+                if (strstr($token, 'blockquote') > -1) {
+                    ++$ignorCheck;
+                    continue;
+                }
+            }
+
+            if (!$inhtml && !$ignorCheck) {
+                foreach ($mispeltwords as $word => $sugestions){
+                    //not sure how to fix this in one go so will use another regex to add another space between repeat words
+                    $tokens[$key] = preg_replace('/(\b(\w+)(\b\s)*\2\b)/','\2\3\3\2',$tokens[$key]);
+                    $tokens[$key] = mb_ereg_replace(
+                        '(^|[._,\'"-]|&lt;|\s)'.preg_quote($word).'(\s|[._,@\'"-]|&gt;|$)','\1'.
+                        self::_inlineSpellSystem($word,$sugestions,'\2').'\2',$tokens[$key], "m"
+                    );
                 }
             }
         }

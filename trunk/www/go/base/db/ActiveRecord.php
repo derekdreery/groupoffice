@@ -2366,7 +2366,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * Check is this model or model attribute name has modifications not saved to
 	 * the database yet.
 	 * 
-	 * @param type $attributeName
+	 * @param string/array $attributeName
 	 * @return boolean 
 	 */
 	public function isModified($attributeName=false){
@@ -2374,7 +2374,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			return count($this->_modifiedAttributes)>0;
 		}else
 		{
-			return isset($this->_modifiedAttributes[$attributeName]);
+			if(is_array($attributeName)){
+				foreach($attributeName as $a){
+					if(isset($this->_modifiedAttributes[$attributeName]))
+					{
+						return true;
+					}
+				}
+				return false;
+			}else
+			{
+				return isset($this->_modifiedAttributes[$attributeName]);
+			}
 		}
 	}
 
@@ -2486,10 +2497,22 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function cutAttributeLengths(){
 		$attr = $this->getModifiedAttributes();
-		foreach($attr as $attribute=>$oldVal){
-			if(!empty($this->columns[$attribute]['length']) && GO_Base_Util_String::length($this->_attributes[$attribute])>$this->columns[$attribute]['length']){
-				$this->_attributes[$attribute]=GO_Base_Util_String::substr($this->_attributes[$attribute], 0, $this->columns[$attribute]['length']);
-			}
+		foreach($attr as $attributeName=>$oldVal){
+//			if(!empty($this->columns[$attribute]['length']) && GO_Base_Util_String::length($this->_attributes[$attribute])>$this->columns[$attribute]['length']){
+//				$this->_attributes[$attribute]=GO_Base_Util_String::substr($this->_attributes[$attribute], 0, $this->columns[$attribute]['length']);
+//			}
+			$this->cutAttributeLength($attributeName);
+		}
+	}
+	
+	/**
+	 * Cut an attribute's value to it's maximum length in the database.
+	 * 
+	 * @param string $attributeName
+	 */
+	public function cutAttributeLength($attributeName){
+		if(!empty($this->columns[$attributeName]['length']) && GO_Base_Util_String::length($this->_attributes[$attributeName])>$this->columns[$attributeName]['length']){
+			$this->_attributes[$attributeName]=GO_Base_Util_String::substr($this->_attributes[$attributeName], 0, $this->columns[$attributeName]['length']);
 		}
 	}
 	
@@ -2808,6 +2831,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$acl->delete();
 		}	
 		
+		if ($this->customfieldsRecord)
+			$this->customfieldsRecord->delete();
+		
 		$this->_deleteLinks();
 
 		if(!$this->afterDelete())
@@ -2893,7 +2919,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					return $this->_getRelated($name);
 				elseif($triggerError){
 					if(!isset($this->columns[$name]))
-						trigger_error ("Access to undefined property $name in ".$this->className());
+						return null;
+						//trigger_error ("Access to undefined property $name in ".$this->className());
 //					else 
 //						GO::debug("Column $name is NULL in ".$this->className());				
 				}

@@ -160,3 +160,7 @@ $updates['201208101000'][]="UPDATE `cal_events` SET `rrule` = replace(rrule, '=M
 $updates['201209031500'][]="UPDATE `cal_events` SET `mtime`= UNIX_TIMESTAMP() WHERE `rrule` != '';"; 
 
 $updates['201211241425'][]="update cal_events set mtime=unix_timestamp() where description!='' and id in (select id from dav_events);";
+
+$updates['201210161843'][]="update cal_events set rrule='' where rrule='RRULE'";
+
+$updates['201210161843'][]="insert ignore into cal_groups (id,name, user_id) values (1, 'Calendars', 1)";

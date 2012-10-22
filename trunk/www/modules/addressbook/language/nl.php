@@ -259,4 +259,7 @@ $l['nRemovedFromAddresslist']='%n contacten zijn herkend en verwijderd uit de ge
 
 $l['addToAddresslist']='Toevoegen aan adreslijst %s';
 $l['addToAddresslistPrompt']='U staat op het punt om de geselecteerde items toe te voegen aan adreslijst %s. Wilt u dat deze items alleen voorkomen in %s?';
+
 $l['addAddresslistSuccess']='De items zijn met succes toegevoegd aan de adreslijst.';
+
+$l['addContactsSuccess'] = '%i contacten zijn met succes toegevoegd aan de adreslijst.';

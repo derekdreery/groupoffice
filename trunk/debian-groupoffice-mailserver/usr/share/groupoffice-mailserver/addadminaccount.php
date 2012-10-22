@@ -37,6 +37,10 @@ try {
 					$accountModel->addAlias($accountModel->username, GO::user()->name);			
 				}
 			}
+			
+			
+			if(file_exists($config['file_storage_path'].'key.txt'))
+				system('chown www-data:www-data '.$config['file_storage_path'].'key.txt');
 		}
 
 	}

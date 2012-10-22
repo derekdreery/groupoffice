@@ -132,7 +132,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 				$rrule .= 'D'.$this->_interval;
 				break;
 			case 'WEEKLY':
-				$rrule .= "W".$this->_interval." ".implode(',', $this->_byday);
+				$rrule .= "W".$this->_interval." ".implode(' ', $this->_byday);
 			break;
 
 			case 'MONTHLY':				

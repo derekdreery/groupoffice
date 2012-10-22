@@ -106,9 +106,10 @@ class GO_Ldapauth_Authenticator {
 		} else {
 			GO::debug("LDAPAUTH: LDAP authentication SUCCESS for " . $username);
 
-			
 			$user = $this->syncUserWithLdapRecord($record, $password);
-
+			if(!$user){
+				return false;
+			}
 
 			$this->_checkEmailAccounts($user, $password);
 
@@ -125,53 +126,46 @@ class GO_Ldapauth_Authenticator {
 	public function syncUserWithLdapRecord(GO_Base_Ldap_Record $record, $password = null) {
 
 		$attr = $this->getUserAttributes($record);
-		
-		$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $attr['username']);
-		if ($user) {
-			GO::debug("LDAPAUTH: Group-Office user already exists.");
-			if (isset($password) && !$user->checkPassword($password)) {
-				GO::debug('LDAPAUTH: LDAP password has been changed. Updating Group-Office database');
+		try {
+			$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $attr['username']);
+			if ($user) {
+				GO::debug("LDAPAUTH: Group-Office user already exists.");
+				if (isset($password) && !$user->checkPassword($password)) {
+					GO::debug('LDAPAUTH: LDAP password has been changed. Updating Group-Office database');
 
-				$user->password = $password;
-			}
+					$user->password = $password;
+				}
 
-			if (empty(GO::config()->ldap_auth_dont_update_profiles)) {
-				//never update the e-mail address because the user
-				//can't change it to something invalid.
+				if (empty(GO::config()->ldap_auth_dont_update_profiles)) {
+					//never update the e-mail address because the user
+					//can't change it to something invalid.
 
-				
 
-				if ($this->validateUserEmail($record, $user->email))
-					unset($attr['email']);
 
-				$user->setAttributes($attr);
-				$user->cutAttributeLengths();
+					if ($this->validateUserEmail($record, $user->email))
+						unset($attr['email']);
 
-				GO::debug('LDAPAUTH: updating user profile');
+					$user->setAttributes($attr);
+					$user->cutAttributeLengths();
+
+					GO::debug('LDAPAUTH: updating user profile');
+					GO::debug($attr);
+
+					$this->_updateContact($user, $attr);
+				}else {
+					GO::debug('LDAPAUTH: Profile updating from LDAP is disabled');
+				}
+
+				$user->save();
+			} else {
+				GO::debug("LDAPAUTH: Group-Office user does not exist. Attempting to create it.");
 				GO::debug($attr);
 
-				$this->_updateContact($user, $attr);
-			}else {
-				GO::debug('LDAPAUTH: Profile updating from LDAP is disabled');
-			}
+				$user = new GO_Base_Model_User();
+				$user->setAttributes($attr);
+				$user->cutAttributeLengths();
+				$user->password = $password;
 
-			$user->save();
-		} else {
-			GO::debug("LDAPAUTH: Group-Office user does not exist. Attempting to create it.");
-
-			$attr = $this->getUserAttributes($record);
-			
-			//sometimes users mapped the password. Unset it here to make sure the hash is not used for password in the user.
-			unset($attr['password']);
-			
-			GO::debug($attr);
-
-			$user = new GO_Base_Model_User();
-			$user->setAttributes($attr);
-			$user->cutAttributeLengths();
-			$user->password = $password;
-
-			try {
 				$user->save();
 				if (!empty(GO::config()->ldap_groups))
 					$user->addToGroups(explode(',', GO::config()->ldap_groups));
@@ -179,13 +173,16 @@ class GO_Ldapauth_Authenticator {
 				$this->_updateContact($user, $attr);
 
 				$user->checkDefaultModels();
-			} catch (Exception $e) {
+			}
+		
+		} catch (Exception $e) {
 				GO::debug('LDAPAUTH: Failed creating user ' .
 								$attr['username'] .
 								' Exception: ' .
 								$e->getMessage(), E_USER_WARNING);
+				
+				return false;
 			}
-		}
 		return $user;
 	}
 
@@ -227,7 +224,7 @@ class GO_Ldapauth_Authenticator {
 			$domain = isset($arr[1]) ? trim($arr[1]) : '';
 
 			$imapauth = new GO_Imapauth_Authenticator();
-			$config = $imapauth->getDomainConfig($domain);
+			$config = $imapauth->config = $imapauth->getDomainConfig($domain);
 
 			if (!$config) {
 				GO::debug('LDAPAUTH: No E-mail configuration found for domain: ' . $domain);
@@ -270,6 +267,10 @@ class GO_Ldapauth_Authenticator {
 
 		if (!empty(GO::config()->ldap_use_uid_with_email_domain))
 			$userAttributes['email'] = $userAttributes['username'] . '@' . GO::config()->ldap_use_uid_with_email_domain;
+		
+		
+		//sometimes users mapped the password. Unset it here to make sure the hash is not used for password in the user.
+		unset($userAttributes['password']);
 
 		return $userAttributes;
 	}

@@ -582,9 +582,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		$attachments = $this->getAttachments();
 			
 		foreach($attachments as $attachment){			
-			GO::debug($attachment->mime);
-			if($attachment->mime=='text/calendar' || $attachment->getExtension() == 'ics'){
-				GO::debug($attachment);
+			if($attachment->isVcalendar()){
 				$data = $this->getImapConnection()->get_message_part_decoded($this->uid, $attachment->number, $attachment->encoding);
 				
 				$vcalendar = GO_Base_VObject_Reader::read($data);

@@ -111,13 +111,17 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function getFindSearchQueryParamFields($prefixTable = 't', $withCustomFields = true) {
-		//$fields = parent::getFindSearchQueryParamFields($prefixTable, $withCustomFields);
 		$fields=array(
 				"CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)", 
 				$prefixTable.".email",
 				$prefixTable.".email2",
 				$prefixTable.".email3"				
 				);
+		
+		if($withCustomFields && $this->customfieldsRecord)
+		{
+			$fields = array_merge($fields, $this->customfieldsRecord->getFindSearchQueryParamFields('cf'));
+		}
 		
 		return $fields;
 	}
@@ -164,14 +168,32 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		
 		return GO_Base_Util_String::format_name($this->last_name, $this->first_name, $this->middle_name,$sort_name);
 	}
+	
+	/**
+	 * Get the full address formatted according to the country standards.
+	 * 
+	 * @return string
+	 */
+	public function getFormattedAddress()
+	{
+		return GO_Base_Util_Common::formatAddress(
+						$this->country, 
+						$this->address, 
+						$this->address_no,
+						$this->zip, 
+						$this->city, 
+						$this->state
+						);
+	}
 
 	protected function getCacheAttributes() {
 		
 		$name = $this->name;
 		if($this->company)
 			$name .= ' ('.$this->company->name.')';
-			
-		$name .= ' ('.$this->addressbook->name.')';
+
+		if($this->addressbook)
+			$name .= ' ('.$this->addressbook->name.')';
 			
 		return array(
 				'name' => $name

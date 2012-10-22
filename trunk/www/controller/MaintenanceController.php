@@ -28,12 +28,15 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		$this->requireCli();
 		
+		$proPackageName = 'groupoffice-pro-4.0';
+		
 		$this->checkRequiredParameters(array('shopuser','shoppass'), $params);
 		
 		$shopUrl = 'https://shop.group-office.com/groupoffice/';
 		
 		$packages = isset($params['packages']) ? explode(",", $params['packages']) : array('documents-4.0', 'billing-4.0', 'groupoffice-pro-4.0');
 		
+		$downloads=array();
 		foreach($packages as $package_name){
 			
 			echo "\nGetting latest ".$package_name."\n";
@@ -58,14 +61,41 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			
 			$file->rename($c->getLastDownloadedFilename());
 			
+			
+			$downloads[]=$file;
+			
 			//echo "Filename: ".$c->getLastDownloadedFilename()."\n";
 
 			echo "File saved in ".$file->path()."\n";
-//			chdir($tmpDir->path());
 
-//			echo "Unpacking ".$file->name()."\n";
-//			system('tar zxf '.$file->name());
+			if(!empty($params['unpack'])){
+				echo "Unpacking ".$file->name()."\n";
+				system('tar zxf '.$file->name());
+			}
 
+		}
+		
+		if(!empty($params['unpack']) && in_array($proPackageName, $packages) && count($packages)>1){
+			foreach($downloads as $download){
+				if(strpos($download->name(), $proPackageName)!==false){
+					$proDownload=$download;
+					break;
+				}
+			}
+			
+			echo "Moving modules into pro package\n";
+			
+			foreach($downloads as $download){
+				if(strpos($download->name(), $proPackageName)===false){
+					
+					$modPackageName = str_replace('.tar.gz','', $download->name());
+					
+					system('rm -Rf '.$modPackageName.'/professional');
+					system('mv '.$modPackageName.'/* '.str_replace('.tar.gz','', $proDownload->name()).'/modules/');
+					system('rm -Rf '.$modPackageName.'*');
+					$proDownload->delete();
+				}
+			}
 		}
 		
 		echo "All done\n";
@@ -177,8 +207,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		$this->lockAction();
 		
-		if(!headers_sent())
-			header('Content-Type: text/plain; charset=UTF-8');
+		if(!$this->isCli()){
+			echo '<pre>';
+		}
 		
 		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
 		
@@ -194,10 +225,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		}catch(Exception $e){
 			echo $e->getMessage()."\n";
 		}
-		
-		if(!headers_sent())
-			header('Content-Type: text/plain; charset=UTF-8');
-		
+				
 		$models=GO::findClasses('model');
 		foreach($models as $model){
 			if($model->isSubclassOf("GO_Base_Db_ActiveRecord") && !$model->isAbstract()){
@@ -213,6 +241,10 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		GO::getDbConnection()->query("ALTER TABLE `go_search_cache` ADD FULLTEXT ft_keywords(`name` ,`keywords`);");
 		
 		echo "\n\nAll done!\n\n";
+		
+		if(!$this->isCli()){
+			echo '</pre>';
+		}
 	}
 
 	/**
@@ -324,11 +356,16 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	
 	protected function actionUpgrade($params) {
 		
+		if(!$this->isCli()){
+			echo '<pre>';
+		}
 		
 		if(!version_compare( phpversion(), "5.3", ">="))
 			exit("You are running a PHP version older than 5.3. PHP 5.3 or greater is required to run Group-Office ".GO::config()->version);
 		
 		$this->lockAction();
+		
+		GO::session()->runAsRoot();
 		
 		GO::clearCache();
 		
@@ -337,9 +374,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		//don't be strict in upgrade process
 		GO::getDbConnection()->query("SET sql_mode=''");
 		
-		if(php_sapi_name() != 'cli'){
-			echo '<pre>';
-		}
+		
 		
 		$v3 = $this->_checkV3();
 		
@@ -518,12 +553,19 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			$versioningFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'versioning');
 			if($versioningFolder->exists())
 				$versioningFolder->rename("versioning_backup_3_7");
+			
+			if(!$this->isCli()){
+				echo '</pre>';
+			}
 				
 			echo "Building search cache after version 3.7 upgrade.\n";
 			ob_flush();
-			$this->actionBuildSearchCache($params);
-			echo "Done\n\n";
+			$this->run("buildsearchcache",$params);
 			ob_flush();
+			
+			if(!$this->isCli()){
+				echo '<pre>';
+			}
 		}		
 		
 		echo "All Done!\n";		

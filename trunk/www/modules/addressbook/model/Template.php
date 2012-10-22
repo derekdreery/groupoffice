@@ -103,6 +103,14 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	
 	private function _getModelAttributes($model, $tagPrefix=''){
 		$attributes = $model->getAttributes('formatted');		
+		
+		if(method_exists($model, 'getFormattedAddress')){
+			$attributes['formatted_address']=$model->getFormattedAddress();
+		}
+		
+		if(method_exists($model, 'getFormattedPostAddress')){
+			$attributes['formatted_post_address']=$model->getFormattedPostAddress();
+		}
 				
 		if($model->customfieldsRecord){
 			$attributes = array_merge($attributes, $model->customfieldsRecord->getAttributes('formatted'));

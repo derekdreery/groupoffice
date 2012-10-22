@@ -43,6 +43,10 @@ class GO_Postfixadmin_Model_Mailbox extends GO_Base_Db_ActiveRecord {
 
 		return parent::init();
 	}
+	
+	public function getLogMessage($action) {		
+		return $this->username;
+	}
 
 	protected function beforeSave() {
 

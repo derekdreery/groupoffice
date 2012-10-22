@@ -215,14 +215,14 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		
 		//check permissions on the filesystem
 		if($this->isNew){
-			if(!$this->parent->fsFolder->isWritable()){
-				throw new Exception("Folder ".$this->parent->path." is read only on the filesystem. Please check the file system permissions (hint: chmod -R www-data:www-data /home/groupoffice)");
+			if(!$this->fsFolder->parent()->isWritable()){
+				throw new Exception("Folder ".$this->fsFolder->parent()->stripFileStoragePath()." (Creating ".$this->name.") is read only on the filesystem. Please check the file system permissions (hint: chown -R www-data:www-data /home/groupoffice)");
 			}
 		}else
 		{
 			if($this->isModified('name') || $this->isModified('parent_id')){
 				if(!$this->_getOldFsFolder()->isWritable())
-					throw new Exception("Folder ".$this->path." is read only on the filesystem. Please check the file system permissions (hint: chmod -R www-data:www-data /home/groupoffice)");
+					throw new Exception("Folder ".$this->path." is read only on the filesystem. Please check the file system permissions (hint: chown -R www-data:www-data /home/groupoffice)");
 			}
 		}
 
@@ -381,6 +381,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		if (substr($relpath, -1) == '/') {
 			$relpath = substr($relpath, 0, -1);
 		}
+		
 		$parts = explode('/', $relpath);
 		$parent_id = 0;
 		while ($folderName = array_shift($parts)) {
@@ -967,7 +968,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			$folder->checkFsSync();
 			
 			//sort by path and only list top level shares		
-			$shares[$folder->name]=$folder;
+			$shares[$folder->path]=$folder;
 		}
 		ksort($shares);
 		$response=array();
@@ -975,11 +976,14 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			$isSubDir = isset($lastPath) && strpos($path.'/', $lastPath.'/')===0;
 			
 			if(!$isSubDir){
-				$response[]=$folder;			
+				$response[$folder->name]=$folder;			
 				$lastPath=$path;
 			}
 		}
 		
-		return $response;
+		//now sort on folder name
+		ksort($response);
+		
+		return array_values($response);
 	}
 }

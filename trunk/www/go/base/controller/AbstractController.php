@@ -70,7 +70,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 */
 	private $_currentAction;
 	
-	private $_actionLocked=false;
+	private $_lockedActions=array();
 	
 	
 	public function __construct() {
@@ -95,12 +95,12 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * @throws Exception
 	 */
 	protected function lockAction(){
-		$this->_actionLocked=true;
+		$this->_lockedActions[]=$this->_currentAction;;
 		
 		$lockedConfig = 'locked_action_'.$this->_currentAction;
 		
 		if(GO::config()->get_setting($lockedConfig)){
-			throw new Exception("Action locked. Another user is currently running this action.");
+			throw new Exception("Action ".$this->_currentAction." locked. Another user is currently running this action.");
 		}else
 		{
 			GO::config()->save_setting($lockedConfig,1);
@@ -110,8 +110,8 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	}
 	
 	private function _unlockAction(){
-		if($this->_actionLocked){
-			$lockedConfig = 'locked_action_'.$this->_currentAction;
+		foreach($this->_lockedActions as $a){
+			$lockedConfig = 'locked_action_'.$a;
 			GO::config()->delete_setting($lockedConfig);
 		}
 	}
