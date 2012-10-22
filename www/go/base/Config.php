@@ -60,6 +60,15 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $debug = false;
+	
+	
+	/**
+	 * Only log debug messages for this remote IP address.
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $debug_log_remote_ip = "";
 
 	/**
 	 * Just enable the debug log.
@@ -748,7 +757,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.0.113';
+	var $version = '4.0.116';
 
 
 	/* The permissions mode to use when creating files
@@ -778,7 +787,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20121016';
+	var $mtime = '20121019';
 
 	#group configuration
 	/**
@@ -1334,7 +1343,7 @@ class GO_Base_Config {
 		$attributes['user_id']=$user_id;
 
 		$setting = GO_Base_Model_Setting::model()->findSingleByAttributes($attributes);
-		return $setting->delete();
+		return $setting ? $setting->delete() : true;
 	}
 
 

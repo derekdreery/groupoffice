@@ -58,10 +58,10 @@ class GO_Base_Util_Date_DateTime extends DateTime {
 //		return array('days'=>$this->getDaysElapsed($dateTime),'hours'=>$hours, 'mins'=>$mins);
 //	}
 
-	public function getDiffCompat($dateTime) {
-		
-		return $this->_date_diff($this->format('U'), $dateTime->format('U'));
-	}
+//	public function getDiffCompat($dateTime) {
+//		
+//		return $this->_date_diff($this->format('U'), $dateTime->format('U'));
+//	}
 
 	/**
 	 * Calculate differences between two dates with precise semantics. Based on PHPs DateTime::diff()
@@ -174,25 +174,6 @@ class GO_Base_Util_Date_DateTime extends DateTime {
 	}
 
 	/**
-	 * Add a diff array returned by getDiffCompat
-	 * 
-	 * @param array $diff
-	 * @return GO_Base_Util_Date_DateTime 
-	 */
-	public function addDiffCompat($diff) {
-//		$unixtime = GO_Base_Util_Date::date_add($this->format('U'), $diff['days']);
-//		$unixtime += (($diff['hours']*60)+$diff['mins'])*60;
-
-		if ($diff['d'] > 0)
-			$this->setDate($this->format('Y'), $this->format('n'), $this->format('j') + $diff['days']);
-
-		if ($diff['h'] > 0 || $diff['i'] > 0)
-			$this->setTime($this->format('G') + $diff['h'], $this->format('i')+$diff['i'], $this->format('s'));
-
-		return $this;
-	}
-
-	/**
 	 * Convert a diff array to a readable string
 	 * 
 	 * @param array $diff
@@ -201,20 +182,20 @@ class GO_Base_Util_Date_DateTime extends DateTime {
 	public static function diffToString($diff) {
 		$string = '';
 
-		if (!empty($diff['y']))
-			$string .= $diff['y'] . ' ' . GO::t('strYears') . ', ';
+		if (!empty($diff->y))
+			$string .= $diff->y . ' ' . GO::t('strYears') . ', ';
 
-		if (!empty($diff['m']))
-			$string .= $diff['m'] . ' ' . GO::t('strMonths') . ', ';
+		if (!empty($diff->m))
+			$string .= $diff->m . ' ' . GO::t('strMonths') . ', ';
 
-		if (!empty($diff['d']))
-			$string .= $diff['d'] . ' ' . GO::t('strDays') . ', ';
+		if (!empty($diff->d))
+			$string .= $diff->d . ' ' . GO::t('strDays') . ', ';
 
-		if (!empty($diff['h']))
-			$string .= $diff['h'] . ' ' . GO::t('strHours') . ', ';
+		if (!empty($diff->h))
+			$string .= $diff->h . ' ' . GO::t('strHours') . ', ';
 
-		if (!empty($diff['i']))
-			$string .= $diff['i'] . ' ' . GO::t('strMinutes');
+		if (!empty($diff->i))
+			$string .= $diff->i . ' ' . GO::t('strMinutes');
 
 //		if(!empty($diff['s']))
 //			$string .= $diff['s'].' '.GO::t('strSeconds');

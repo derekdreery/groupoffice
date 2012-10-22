@@ -1267,7 +1267,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 					var responseParams = Ext.decode(response.responseText);
 					if(responseParams.success)
 					{
-
+						Ext.MessageBox.alert(GO.lang['strSuccess'],GO.addressbook.lang['addContactsSuccess'].replace('%i',responseParams['addedSenders']));
 					}else
 					{
 						if (!GO.util.empty(responseParams.unknownSenders)) {

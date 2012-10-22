@@ -60,24 +60,27 @@ GO.base.email.EmailEditorPanel = function(config){
 			}
 		}, this);		
 		
-		formPanel.form.on('beforeaction', function(form, action){
-			if(action.type=='submit'){
-				
-				//make sure we are in wysiwyg mode.
-				//won't toggle if not done twice...
-//				if(this.sourceEditMode){
-//					this.htmlEditor.toggleSourceEdit(false);
-//					this.htmlEditor.toggleSourceEdit(false);
-//				}else
-//					{
-//						//extra syncvalue because we disable it on every keypress.
-//						this.htmlEditor.syncValue();	
-//					}
+// EXT ALREADY DOES THIS IN BasicForm.js
+//		formPanel.form.on('beforeaction', function(form, action){
+//			if(action.type=='submit'){
 //				
-				//extra syncvalue because we disable it on every keypress.
-				this.htmlEditor.syncValue();				
-			}
-		}, this);		
+//				//make sure we are in wysiwyg mode.
+//				//won't toggle if not done twice...
+////				if(this.sourceEditMode){
+////					this.htmlEditor.toggleSourceEdit(false);
+////					this.htmlEditor.toggleSourceEdit(false);
+////				}else
+////					{
+////						//extra syncvalue because we disable it on every keypress.
+////						this.htmlEditor.syncValue();	
+////					}
+////				
+//				//extra syncvalue because we disable it on every keypress.
+//				if(!this.htmlEditor.sourceEditMode){
+//					this.htmlEditor.syncValue();
+//				}
+//			}
+//		}, this);		
 			
 	}, this);
 	

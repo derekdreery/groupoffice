@@ -242,3 +242,5 @@ $l['sieveNote']='Niet alle functies worden ondersteund. Raadpleeg de handleiding
 $l['useAccount']='Account gebruiken';
 
 $l['storePassword']='Wachtwoord permanent opslaan';
+
+$l['attachedAppointmentInfo']="Informatie over bijgevoegde afspraak";

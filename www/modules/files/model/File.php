@@ -211,13 +211,13 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		//check permissions on the filesystem
 		if($this->isNew){
 			if(!$this->folder->fsFolder->isWritable()){
-				throw new Exception("Folder ".$this->folder->path." is read only on the filesystem. Please check the file system permissions (hint: chmod -R www-data:www-data /home/groupoffice)");
+				throw new Exception("Folder ".$this->folder->path." is read only on the filesystem. Please check the file system permissions (hint: chown -R www-data:www-data /home/groupoffice)");
 			}
 		}else
 		{
 			if($this->isModified('name') || $this->isModified('folder_id')){
 				if(!$this->_getOldFsFile()->isWritable())
-					throw new Exception("File ".$this->path." is read only on the filesystem. Please check the file system permissions (hint: chmod -R www-data:www-data /home/groupoffice)");
+					throw new Exception("File ".$this->path." is read only on the filesystem. Please check the file system permissions (hint: chown -R www-data:www-data /home/groupoffice)");
 			}
 		}
 		
@@ -269,6 +269,9 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		
 
 		$this->extension = $this->fsFile->extension();
+		//make sure extension is not too long
+		$this->cutAttributeLength("extension");
+		
 		$this->size = $this->fsFile->size();
 		$this->ctime = $this->fsFile->ctime();
 		$this->mtime = $this->fsFile->mtime();

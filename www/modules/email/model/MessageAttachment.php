@@ -167,4 +167,9 @@ class GO_Email_Model_MessageAttachment extends GO_Base_Model{
 		$file = new GO_Base_Fs_File($this->name);
 		return $file->extension();
 	}
+	
+	
+	public function isVcalendar(){
+		return $this->mime=='text/calendar' || $this->getExtension() == 'ics';
+	}
 }
