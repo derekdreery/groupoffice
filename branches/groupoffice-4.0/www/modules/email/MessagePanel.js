@@ -440,14 +440,14 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				eval(cmd); 
 			}else
 			{
-				if (target.href && target.href.indexOf('#') != -1 && target.pathname == document.location.pathname){
-				//internal link, do default
-					
-				}else
-				{
-					e.preventDefault();
-					this.fireEvent('linkClicked', href);
-				}
+//				if (target.href && target.href.indexOf('#') != -1 && target.pathname == document.location.pathname){
+//				//internal link, do default
+//					
+//				}else
+//				{
+//					e.preventDefault();
+//					this.fireEvent('linkClicked', href);
+//				}
 			}
 		}		
 	},
