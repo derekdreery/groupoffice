@@ -717,10 +717,10 @@ GO.email.EmailClient = function(config){
 	}, this);
 
 
-	this.messagePanel.on('linkClicked', function(href){
-		var win = window.open(href);
-		win.focus();
-	}, this);
+//	this.messagePanel.on('linkClicked', function(href){
+//		var win = window.open(href);
+//		win.focus();
+//	}, this);
 
 	this.messagePanel.on('attachmentClicked', this.openAttachment, this);
 	//this.messagePanel.on('zipOfAttachmentsClicked', this.openZipOfAttachments, this);
