@@ -155,7 +155,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public function getDiff() {
 		$startDateTime = new GO_Base_Util_Date_DateTime(date('c', $this->start_time));
 		$endDateTime = new GO_Base_Util_Date_DateTime(date('c', $this->end_time));
-		return $startDateTime->getDiffCompat($endDateTime);
+		return $startDateTime->diff($endDateTime);
 	}
 
 	/**
@@ -192,7 +192,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$att['start_time'] = strtotime($d . ' ' . $t);
 
 		$endTime = new GO_Base_Util_Date_DateTime(date('c', $att['start_time']));
-		$endTime->addDiffCompat($diff);
+		$endTime->add($diff);
 		$att['end_time'] = $endTime->format('U');
 		
 		return $this->duplicate($att, false);
@@ -451,6 +451,37 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 		return $event;		
 	}
+	
+	
+	public function getConflictingEvents($exception_for_event_id=0){
+		
+		$conflictEvents=array();
+		
+		$findParams = GO_Base_Db_FindParams::newInstance();
+		$findParams->getCriteria()->addCondition("calendar_id", $this->calendar_id);
+		if(!$this->isNew)
+			$findParams->getCriteria()->addCondition("resource_event_id", $this->id, '<>');
+		
+		//find all events including repeating events that occur on that day.
+		$conflictingEvents = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, 
+						GO_Base_Util_Date::clear_time($this->start_time)-1, 
+						GO_Base_Util_Date::clear_time(GO_Base_Util_Date::date_add($this->end_time,1)),
+						true);
+		
+		while($conflictEvent = array_shift($conflictingEvents)) {
+			
+			GO::debug("Conflict: ".$conflictEvent['id']." ".$conflictEvent['name']." ".GO_Base_Util_Date::get_timestamp($conflictEvent['start_unixtime'])." - ".GO_Base_Util_Date::get_timestamp($conflictEvent['end_unixtime']));
+			//check if time conflicts
+			if($conflictEvent['start_unixtime']<$this->end_time && $conflictEvent['end_unixtime']>$this->start_time){
+				if($conflictEvent["id"]!=$this->id && (empty($exception_for_event_id) || $exception_for_event_id!=$conflictEvent["id"])){
+					$conflictEvents[]=$conflictEvent;
+					//throw new Exception('Ask permission');
+				}
+			}
+		}
+		
+		return $conflictEvents;
+	}
 
 	/**
 	 * Find events for a given time period.
@@ -466,7 +497,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public function findCalculatedForPeriod($findParams, $periodStartTime, $periodEndTime, $onlyBusyEvents=false) {
 
 		
-		$stmt = $this->findForPeriod($findParams, $periodStartTime, $periodEndTime);
+		$stmt = $this->findForPeriod($findParams, $periodStartTime, $periodEndTime, $onlyBusyEvents);
 
 		$this->_calculatedEvents = array();
 
@@ -527,11 +558,14 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 		return $this->find($findParams);
 	}
-
+	//todo return models
 	private function _calculateRecurrences($event, $periodStartTime, $periodEndTime) {
 		if (empty($event->rrule)) {
 			//not a recurring event
-			$this->_calculatedEvents[] = $event->getAttributes('formatted');
+			$origEventAttr = $event->getAttributes('formatted');
+			$origEventAttr['start_unixtime']=$event->start_time;
+			$origEventAttr['end_unixtime']=$event->end_time;
+			$this->_calculatedEvents[] = $origEventAttr;
 		} else {
 			$rrule = new GO_Base_Util_Icalendar_Rrule();
 			$rrule->readIcalendarRruleString($event->start_time, $event->rrule);
@@ -546,11 +580,15 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 					break;
 
 				$origEventAttr['start_time'] = GO_Base_Util_Date::get_timestamp($occurenceStartTime);
+				$origEventAttr['start_unixtime']=$occurenceStartTime;
 
-				$diff = $this->getDiff();
-
+				$diff = $event->getDiff();
 				$endTime = new GO_Base_Util_Date_DateTime(date('c', $occurenceStartTime));
-				$endTime->addDiffCompat($diff);
+				$endTime->add($diff);
+				
+				
+				
+				$origEventAttr['end_unixtime']=$endTime->format('U');
 				$origEventAttr['end_time'] = GO_Base_Util_Date::get_timestamp($endTime->format('U'));
 
 				$this->_calculatedEvents[$occurenceStartTime . '-' . $origEventAttr['id']] = $origEventAttr;

@@ -113,26 +113,31 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		if(empty($params["check_conflicts"]))
 			return true;
 		
-		
-		/* Check for conflicts with other events in the calendar */		
-		$findParams = GO_Base_Db_FindParams::newInstance();
-		$findParams->getCriteria()->addCondition("calendar_id", $event->calendar_id);
-		if(!$event->isNew)
-			$findParams->getCriteria()->addCondition("resource_event_id", $event->id, '<>');
-		
-		$conflictingEvents = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, $event->start_time, $event->end_time, true);
-		
-		while($conflictEvent = array_shift($conflictingEvents)) {
-
-			if($conflictEvent["id"]!=$event->id && (empty($params['exception_for_event_id']) || $params['exception_for_event_id']!=$conflictEvent["id"])){
-				throw new Exception('Ask permission');
-			}
-		}
+		$params['exception_for_event_id']=empty($params['exception_for_event_id']) ? 0 : $params['exception_for_event_id'];
+		if(count($event->getConflictingEvents($params['exception_for_event_id'])))
+			throw new Exception('Ask permission');
+//		
+//		/* Check for conflicts with other events in the calendar */		
+//		$findParams = GO_Base_Db_FindParams::newInstance();
+//		$findParams->getCriteria()->addCondition("calendar_id", $event->calendar_id);
+//		if(!$event->isNew)
+//			$findParams->getCriteria()->addCondition("resource_event_id", $event->id, '<>');
+//		
+//		$conflictingEvents = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, $event->start_time, $event->end_time, true);
+//		
+//		while($conflictEvent = array_shift($conflictingEvents)) {
+//			
+//			GO::debug("Conflict: ".$event->id." ".$event->name);
+//
+//			if($conflictEvent["id"]!=$event->id && (empty($params['exception_for_event_id']) || $params['exception_for_event_id']!=$conflictEvent["id"])){
+//				throw new Exception('Ask permission');
+//			}
+//		}
 		
 		
 		/* Check for conflicts regarding resources */
 		if (!$event->isResource() && isset($params['resources'])) {
-			
+			//TODO code does not work right. Should be refactored in 4.1
 			$resources=array();
 			foreach ($params['resources'] as $resource_calendar_id => $enabled) {
 				if($enabled=='on')
