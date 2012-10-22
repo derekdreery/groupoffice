@@ -202,3 +202,4 @@ $l['updateReponses'][3]='%s has marked the event %s as tentative';
 
 $l['directUrl']='Direct URL';
 $l['cantRemoveOrganizer']="You can't remove the organizer";
+$l['calendarColor']='Calendar color';
