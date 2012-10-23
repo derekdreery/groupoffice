@@ -265,7 +265,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			
 			$this->company_id=$company->id;			
 		}
-		
+				
 		return parent::beforeSave();
 	}
 	
@@ -366,7 +366,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 * @param array $attributes Extra attributes to apply to the contact. Raw values should be past. No input formatting is applied.
 	 * @return GO_Addressbook_Model_Contact
 	 */
-	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array(),$saveToDb=true) {
+	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array(),$saveToDb=true,$ignoreInvalidProperties=true) {
 		//$event = new GO_Calendar_Model_Event();
 		$companyAttributes = array();
 //		if (!empty($attributes['addressbook_id'])) {
@@ -589,6 +589,11 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		}
 		
 		$this->cutAttributeLengths();
+		
+		if($ignoreInvalidProperties){
+			$this->ignoreInvalidProperties();
+		}
+		
 		if (!empty($saveToDb))
 			$this->save();
 		
