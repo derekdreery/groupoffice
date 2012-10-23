@@ -23,6 +23,8 @@
  * @property int $user_id
  * @property int $acl_id
  * @property bool $admin_only
+ * 
+ * @method GO_Base_Model_User users
  *
  */
 class GO_Base_Model_Group extends GO_Base_Db_ActiveRecord {
