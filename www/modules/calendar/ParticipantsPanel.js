@@ -24,6 +24,9 @@ GO.calendar.Participant = Ext.data.Record.create([
 	name : 'email',
 	type : 'string'
 }, {
+	name : 'create_permission',
+	type : 'string'
+},{
 	name : 'available',
 	type : 'string'
 }, {
@@ -76,7 +79,7 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 		baseParams : {
 			task : "participants"
 		},
-		fields : ['id', 'name', 'email', 'available','status', 'user_id', 'is_organizer']
+		fields : ['id', 'name', 'email', 'available','status', 'user_id', 'is_organizer','create_permission']
 	});
 		
 	var tbar = [{
@@ -123,34 +126,33 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 		hideLabel:true		
 	})
 	*/
-	this.importCheckbox = new Ext.form.Checkbox({
-		name:'add_to_participant_calendars',
-		boxLabel:GO.calendar.lang.importToCalendar,
-		hideLabel:true		
-	})
+//	this.importCheckbox = new Ext.form.Checkbox({
+//		name:'add_to_participant_calendars',
+//		boxLabel:GO.calendar.lang.importToCalendar,
+//		hideLabel:true		
+//	})
 	
-	this.checkPanel = new Ext.Panel({
-		border : true,
-		region:'north',
-		height:40,
-		layout:'column',
-		defaults:{
-			border:false,
-			bodyStyle:'padding:5px'
-		},
-		items:[{
-			columnWidth:.5,
-			items:[this.importCheckbox]
-		}]
-	});
+//	this.checkPanel = new Ext.Panel({
+//		border : true,
+//		region:'north',
+//		height:40,
+//		layout:'column',
+//		defaults:{
+//			border:false,
+//			bodyStyle:'padding:5px'
+//		},
+//		items:[{
+//			columnWidth:.5,
+//			items:[this.importCheckbox]
+//		}]
+//	});
 	
 	this.gridPanel = new GO.grid.GridPanel(
 	{
 		layout:'fit',
 		split:true,
-		store: config.store,
-		border : true,
-		region:'center',
+		store: config.store,		
+//		region:'center',
 		columns : [{
 			header : GO.lang.strName,
 			dataIndex : 'name'
@@ -191,6 +193,15 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 				return '<div class="' + className + '"></div>';
 			}
 		}, {
+			header : "Create permission",
+			dataIndex : 'create_permission',
+			renderer : function(v) {
+
+				var className = v ? 'img-available' : 'img-unavailable';
+				
+				return '<div class="' + className + '"></div>';
+			}
+		}, {
 			header : GO.calendar.lang.isOrganizer,
 			dataIndex : 'is_organizer',
 			renderer : function(v) {
@@ -214,8 +225,9 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 		title : GO.calendar.lang.participants,
 		border : false,
 		tbar:tbar,
-		layout : 'border',
-		items:[this.checkPanel, this.gridPanel]
+		layout : 'fit',
+		items:[this.gridPanel]
+//		items:[this.checkPanel, this.gridPanel]
 	});
 
 	config.store.setDefaultSort('name', 'ASC');
@@ -253,7 +265,7 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 		}
 		this.newId=0;		
 		//this.inviteCheckbox.setValue(false);
-		this.importCheckbox.setValue(false);
+//		this.importCheckbox.setValue(false);
 
 //		if(this.isVisible()){
 //			this.store.reload();

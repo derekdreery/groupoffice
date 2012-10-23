@@ -31,6 +31,23 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	protected function ignoreAclPermissions() {
 		return array('invitation');
 	}
+	
+	private function _changeTimeParams(&$params){
+		if (isset($params['start_date'])) {
+			if (!empty($params['all_day_event'])) {
+				$params['all_day_event'] = '1';
+				$start_time = "00:00";
+				$end_time = '23:59';
+			} else {
+				$params['all_day_event'] = '0';
+				$start_time = $params['start_time'];
+				$end_time = $params['end_time'];
+			}
+
+			$params['start_time'] = $params['start_date'] . ' ' . $start_time;
+			$params['end_time'] = $params['end_date'] . ' ' . $end_time;
+		}
+	}
 
 	function beforeSubmit(&$response, &$model, &$params) {
 
@@ -49,21 +66,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 //		if (isset($params['subject']))
 //			$params['name'] = $params['subject'];
-
-		if (isset($params['start_date'])) {
-			if (!empty($params['all_day_event'])) {
-				$params['all_day_event'] = '1';
-				$start_time = "00:00";
-				$end_time = '23:59';
-			} else {
-				$params['all_day_event'] = '0';
-				$start_time = $params['start_time'];
-				$end_time = $params['end_time'];
-			}
-
-			$params['start_time'] = $params['start_date'] . ' ' . $start_time;
-			$params['end_time'] = $params['end_date'] . ' ' . $end_time;
-		}
+		
+		$this->_changeTimeParams($params);
 
 		//Grid sends move request
 		if (isset($params['offset'])) {
@@ -274,17 +278,25 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 
 				//Add new event for the participant if requested. Set the status to accepted automatically.
-				if (!empty($params['add_to_participant_calendars']) && $participant->user_id > 0 && $participant->user_id != $event->user_id) {
-					$calendar = GO_Calendar_Model_Calendar::model()->findDefault($participant->user_id);
+				if ($participant->user_id > 0 && $participant->user_id != $event->user_id) {
+					
+					
+					//find related participant event. UUID and user_id of calendar must match
+					$participantEvent = $participant->getParticipantEvent();
+					
+					if(!$participantEvent){
+						
+						//create event in participant's default calendar if the current user has the permission to do that
+						$calendar = $participant->getDefaultCalendar();
+						if ($calendar && GO_Base_Model_Acl::hasPermission($calendar->getPermissionLevel(),GO_Base_Model_Acl::CREATE_PERMISSION)) {
 
-					if ($calendar && GO_Base_Model_Acl::hasPermission($calendar->getPermissionLevel(),GO_Base_Model_Acl::CREATE_PERMISSION)) {
-
-						$participantEvent = GO_Calendar_Model_Event::model()->findByUuid($event->uuid,0,$calendar->id);
-						if (!$participantEvent)
-							$participantEvent = $event->duplicate(array('calendar_id' => $calendar->id,'user_id'=>$participant->user_id,'is_organiser'=>false));
-
-						//TODO: Do we want this?
-						//$participant->status=GO_Calendar_Model_Participant::STATUS_ACCEPTED;
+							$participantEvent = $event->duplicate(array(
+									'calendar_id' => $calendar->id,
+									'user_id'=>$participant->user_id,
+									'is_organiser'=>false, 
+									'status'=>  GO_Calendar_Model_Event::STATUS_NEEDS_ACTION)
+											);
+						}
 					}
 				}
 
@@ -421,6 +433,13 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		return parent::beforeDisplay($response, $model, $params);
 	}
+	
+	protected function actionLoad($params) {
+		
+		$this->_changeTimeParams($params);
+		
+		return parent::actionLoad($params);
+	}
 
 	protected function beforeLoad(&$response, &$model, &$params) {
 		
@@ -479,17 +498,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$response['data']['user_name']=$model->user ? $model->user->name : "Unknown";
 		
 		if(empty($params['id'])){
-			$calendar = $model->calendar;
+			$participantModel = $model->getDefaultOrganizerParticipant();
 
-			$participant['user_id']=$calendar->user_id;
-			$participant['name']=$calendar->user->name;
-			$participant['email']=$calendar->user->email;
-			$participant['status']=  GO_Calendar_Model_Participant::STATUS_ACCEPTED."";
-			$participant['is_organizer']="1";
-			$participant['available']= true;//GO_Calendar_Model_Participant::userIsAvailable($params['start_time'],$params['end_time'],$calendar->user_id);
-			$participant['success']=true;
-
-			$response['participants']=array('results'=>array($participant),'total'=>1,'success'=>true);
+			$response['participants']=array('results'=>array($participantModel->toJsonArray($model->start_time, $model->end_time)),'total'=>1,'success'=>true);
 		}else
 		{
 			$particsStmt = GO_Calendar_Model_Participant::model()->findByAttribute('event_id',$params['id']);
@@ -497,13 +508,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 			while ($participantModel = $particsStmt->fetch()) {
 
-				$record=$participantModel->getAttributes();
+				$record=$participantModel->toJsonArray($model->start_time, $model->end_time);
 				
 				if(!empty($params['exception_date']))
 					unset($record['id']);
 				
-				$record['available']=$participantModel->isAvailable();				
-				$response['participants']['results'][] = $record;
+					$response['participants']['results'][] = $record;
 				$response['participants']['total']+=1;
 			}
 		}
