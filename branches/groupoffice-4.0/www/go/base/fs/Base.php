@@ -58,6 +58,20 @@ abstract class GO_Base_Fs_Base{
 	}
 	
 	/**
+	 * Find the first existing parent folder.
+	 * 
+	 * @return GO_Base_Fs_Folder
+	 */
+	public function firstExistingParent(){
+		$parent=$this;
+		while($parent = $parent->parent()){
+			if($parent->exists())
+				return $parent;
+		}
+		return false;
+	}
+	
+	/**
 	 * Get a child file or folder.
 	 * 
 	 * @param string $filename
