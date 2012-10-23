@@ -316,17 +316,15 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				i = '00';
 			}
 
-//			if (!params.start_date)
-//				params['start_date'] = new Date();
-//			if (!params.start_time)
-//				params['start_time'] = date.format(GO.settings.time_format);
-//
-//			if (!params.end_date)
-//				params['end_date'] = new Date();
-//			if (!params.end_time)
-//				params['end_time'] = date.add(Date.HOUR, 1).format(GO.settings.time_format);
 
-		}
+//			console.log(config.values);
+			if(config.values && config.values.start_date){
+				params.start_date=config.values.start_date.format(GO.settings.date_format);				
+				params.start_time=config.values.start_date.format(GO.settings.time_format);				
+				params.end_date=config.values.end_date.format(GO.settings.date_format);				
+				params.end_time=config.values.end_date.format(GO.settings.time_format);				
+			}
+		}		
 		
 		//These parameters are present when a user edits a single occurence of a repeating event
 		params.exception_date=config.exception_date;

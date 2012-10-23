@@ -99,8 +99,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		
 		$defaults = array(
-				//'description'=>'DIT IS DE BESCHRIJVING DIE STANDAARD WORDT INGEVULD',
-				'status' => "NEEDS-ACTION",
+				'status' => self::STATUS_ACCEPTED,
 				'start_time'=> GO_Base_Util_Date::roundQuarters(time()), 
 				'end_time'=>GO_Base_Util_Date::roundQuarters(time()+3600)				
 		);
@@ -518,19 +517,14 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		//find all events including repeating events that occur on that day.
 		$conflictingEvents = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, 
-						GO_Base_Util_Date::clear_time($this->start_time)-1, 
-						GO_Base_Util_Date::clear_time(GO_Base_Util_Date::date_add($this->end_time,1)),
+						$this->start_time, 
+						$this->end_time,
 						true);
 		
-		while($conflictEvent = array_shift($conflictingEvents)) {
-			
-			GO::debug("Conflict: ".$conflictEvent->getEvent()->id." ".$conflictEvent->getName()." ".GO_Base_Util_Date::get_timestamp($conflictEvent->getAlternateStartTime())." - ".GO_Base_Util_Date::get_timestamp($conflictEvent->getAlternateEndTime()));
-			//check if time conflicts
-			if($conflictEvent->getAlternateStartTime()<$this->end_time && $conflictEvent->getAlternateEndTime()>$this->start_time){
-				if($conflictEvent->getEvent()->id!=$this->id && (empty($exception_for_event_id) || $exception_for_event_id!=$conflictEvent->getEvent()->id)){
-					$conflictEvents[]=$conflictEvent;
-					//throw new Exception('Ask permission');
-				}
+		while($conflictEvent = array_shift($conflictingEvents)) {			
+			//GO::debug("Conflict: ".$conflictEvent->getEvent()->id." ".$conflictEvent->getName()." ".GO_Base_Util_Date::get_timestamp($conflictEvent->getAlternateStartTime())." - ".GO_Base_Util_Date::get_timestamp($conflictEvent->getAlternateEndTime()));
+			if($conflictEvent->getEvent()->id!=$this->id && (empty($exception_for_event_id) || $exception_for_event_id!=$conflictEvent->getEvent()->id)){
+				$conflictEvents[]=$conflictEvent;
 			}
 		}
 		
@@ -538,7 +532,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 
 	/**
-	 * Find events for a given time period.
+	 * Find events that occur in a given time period. 
 	 * 
 	 * Recurring events are calculated and added to the array.
 	 * 
@@ -551,6 +545,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 */
 	public function findCalculatedForPeriod($findParams, $periodStartTime, $periodEndTime, $onlyBusyEvents=false) {
 
+		GO::debug("findCalculatedForPeriod ".date('c', $periodStartTime)." - ".date('c', $periodEndTime));
 		
 		$stmt = $this->findForPeriod($findParams, $periodStartTime, $periodEndTime, $onlyBusyEvents);
 
@@ -615,6 +610,14 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 
 	private function _calculateRecurrences($event, $periodStartTime, $periodEndTime) {
+		
+		$origPeriodStartTime=$periodStartTime;
+		$origPeriodEndTime=$periodEndTime;
+		
+		//recurrences can only be calculated correctly if we use the start of the day and the end of the day.
+		//we'll use the original times later to check if they really overlap.
+		$periodStartTime= GO_Base_Util_Date::clear_time($this->start_time)-1;
+		$periodEndTime= GO_Base_Util_Date::clear_time(GO_Base_Util_Date::date_add($this->end_time,1));
 
 		$localEvent = new GO_Calendar_Model_LocalEvent($event, $periodStartTime, $periodEndTime);
 		
@@ -643,7 +646,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				
 				$localEvent->setAlternateEndTime($endTime->format('U'));
 
-				$this->_calculatedEvents[$occurenceStartTime . '-' . $origEventAttr['id']] = $localEvent;
+				if($localEvent->getAlternateStartTime()<$origPeriodEndTime && $localEvent->getAlternateEndTime()>$origPeriodStartTime){
+					$this->_calculatedEvents[$occurenceStartTime . '-' . $origEventAttr['id']] = $localEvent;
+				}
 				
 				$localEvent = new GO_Calendar_Model_LocalEvent($event, $periodStartTime, $periodEndTime);
 			}
@@ -1337,6 +1342,26 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			'is_organizer'=>false
 		));
 		
+	}
+	
+	
+	/**
+	 * Get the default participant model for a new event
+	 * 
+	 * @return \GO_Calendar_Model_Participant
+	 */
+	public function getDefaultOrganizerParticipant(){
+		$calendar = $this->calendar;
+		
+		$participant = new GO_Calendar_Model_Participant();
+		$participant->event_id=$this->id;
+		$participant->user_id=$calendar->user_id;
+		$participant->name=$calendar->user->name;
+		$participant->email=$calendar->user->email;
+		$participant->status=GO_Calendar_Model_Participant::STATUS_ACCEPTED;
+		$participant->is_organizer=1;
+		
+		return $participant;
 	}
 	
 	/**

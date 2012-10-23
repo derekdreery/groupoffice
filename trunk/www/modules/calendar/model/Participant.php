@@ -85,13 +85,26 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * Returns a questionmark if the particiant is not a user.
 	 * 
+	 * @param int $start_time If empty then the related event will be used.
+	 * @param int $end_time If empty then the related event will be used.
+	 * 
 	 * @return boolean/?
 	 */
-	public function isAvailable() {
+	public function isAvailable($start_time=false, $end_time=false) {
 		if (empty($this->user_id) || !$this->_hasFreeBusyAccess()) {
 			return '?';
 		} else {
-			return self::userIsAvailable($this->event->start_time, $this->event->end_time, $this->user_id, $this->event);
+			
+			if(!$start_time && $this->event)
+				$start_time=$this->event->start_time;
+			
+			if(!$end_time && $this->event)
+				$end_time=$this->event->end_time;
+			
+			if($start_time && $end_time)				
+				return self::userIsAvailable($start_time, $end_time, $this->user_id, $this->event);
+			else
+				return '?';
 		}
 	}
 
@@ -133,6 +146,10 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 
 		$events = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, $periodStartTime, $periodEndTime, true);
 
+		foreach($events as $event){
+			GO::debug($event->getName());
+		}
+		
 		return count($events) == 0;
 	}
 
@@ -164,6 +181,38 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 				return GO::t('notRespondedYet','calendar');
 				break;
 		}
+	}
+	
+	
+	/**
+	 * Get related participant event. UUID and user_id of calendar must match. 
+	 * Returns false if it doesn't exists.
+	 * 
+	 * @return GO_Calendar_Model_Event
+	 */
+	public function getParticipantEvent(){
+		return GO_Calendar_Model_Event::model()->findByUuid($this->event->uuid,$this->user_id);
+	}
+	
+	/**
+	 * Get's the participant's default calendar if it has one.
+	 * @return GO_Calendar_Model_Calendar
+	 */
+	public function getDefaultCalendar(){
+		if(empty($this->user_id))
+			return false;
+		
+		return GO_Calendar_Model_Calendar::model()->findDefault($this->user_id);
+	}
+	
+	
+	public function toJsonArray($start_time=false, $end_time=false){
+		$record=$this->getAttributes();
+	
+		$record['available']=$this->isAvailable($start_time, $end_time);				
+		$calendar = $this->getDefaultCalendar();
+		$record['create_permission']=$calendar ? GO_Base_Model_Acl::hasPermission($calendar->getPermissionLevel(),GO_Base_Model_Acl::CREATE_PERMISSION) : false;
+		return $record;
 	}
 
 }
