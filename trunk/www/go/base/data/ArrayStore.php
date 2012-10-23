@@ -22,6 +22,7 @@ class GO_Base_Data_ArrayStore extends GO_Base_Data_AbstractStore {
 
 	
 	public function getData() {
+		$this->response['success']=true;
 		$this->response['total']=$this->getTotal();
 		return $this->response;
 	}
