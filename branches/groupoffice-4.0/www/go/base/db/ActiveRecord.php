@@ -1980,7 +1980,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	/**
 	 * Return all validation errors of this model
 	 * 
-	 * @return type 
+	 * @return array 
 	 */
 	public function getValidationErrors(){
 		return $this->_validationErrors;
@@ -3757,4 +3757,26 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	protected function afterMergeWith(GO_Base_Db_ActiveRecord $model){}
 
+	/**
+	 * This function will unset the invalid properties so they will not be saved.
+	 */
+	public function ignoreInvalidProperties(){
+		$this->validate();
+		
+		foreach($this->_validationErrors as $attrib=>$error){
+			GO::debug('Atribute not successfully validated, unsetting '.$attrib);
+			$this->_unsetAttribute($attrib);
+		}
+	}
+	
+	private function _unsetAttribute($attribute){
+		unset($this->$attribute);
+		
+		if(isset($this->_validationErrors[$attribute]))
+			unset($this->_validationErrors[$attribute]);
+		
+		if(isset($this->_modifiedAttributes[$attribute]))
+			unset($this->_modifiedAttributes[$attribute]);
+	}
+	
 }
