@@ -960,4 +960,37 @@ class GO_Base_Util_Date {
 		}
 	}
 	
+	public static function getNextSaturday($unixTime) {
+		$lastSunday = self::get_last_sunday($unixTime);
+		return self::date_add($lastSunday,6);
+	}
+	
+//	/**
+//	 * Returns the Unix timestamp of the start of $unixTime's week. The beginning is
+//	 * defined as Monday 00:00:00.
+//	 * @param int $unixTime
+//	 * @return int
+//	 */
+//	public static function getWeekStart($unixTime) {
+//		$year = date('Y',$unixTime);
+//		$month = date('n',$unixTime);
+//		$day = date('j',$unixTime);
+//		$unixTime = mktime(0,0,0,$month,$day,$year);
+//		while (date('D',$unixTime)!='Mon')
+//			$unixTime = GO_Base_Util_Date::date_add($unixTime,-1);
+//
+//		return $unixTime;
+//	}
+//	
+//	public static function getWeekEnd($unixTime) {
+//		$year = date('Y',$unixTime);
+//		$month = date('n',$unixTime);
+//		$day = date('j',$unixTime);
+//		$unixTime = mktime(0,0,0,$month,$day,$year);
+//		while (date('D',$unixTime)!='Sun')
+//			$unixTime = GO_Base_Util_Date::date_add($unixTime,1);
+//
+//		return $unixTime;
+//	}
+		
 }
