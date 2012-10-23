@@ -1,6 +1,7 @@
 4.0.117
 - Links in emailwindow on startpage open in new browser tab.
 - Unset invalid attributes while using importVObject function in Contact model.
+- Throw a fileNotFound exception when a file that needs to be downloaded is not found on the server.
 
 19-10-2012 4.0.116
 - Also show disabled users in selectuser
