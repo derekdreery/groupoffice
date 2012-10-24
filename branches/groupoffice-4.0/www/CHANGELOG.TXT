@@ -1,4 +1,4 @@
-4.0.117
+24-10-2012 4.0.117
 - Option to open/close a selected week for all users (Billing, Time Registration, Hours Approval).
 - Reminders were not synced with Outlook
 - Links were not clickable from e-mail portlet
