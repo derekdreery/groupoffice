@@ -198,6 +198,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$response['status_color'] = $model->getStatusColor();
 		$response['status'] = $model->status;
 		$response['is_organizer'] = $model->is_organizer?true:false;
+		
+		
+		if($model->is_organizer && !empty($params['send_invitation'])){
+			$model->sendMeetingRequest();
+		}
+		
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}
 
@@ -251,14 +257,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$stmt->callOnEach('delete');
 	}
 
-	private function _saveParticipants($params, $event, $isNewEvent, $modifiedAttributes) {
+	private function _saveParticipants($params, GO_Calendar_Model_Event $event, $isNewEvent, $modifiedAttributes) {
 
 		$ids = array();
 
 		$newParticipantIds = array();
 		if (!empty($params['participants'])) {
-
-			$newParticipantIds = array();
 
 			$participants = json_decode($params['participants'], true);
 
@@ -275,30 +279,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				$participant->setAttributes($p);
 //				$participant->is_organizer = $event->user_id == $participant->user_id;
 				$participant->event_id = $event->id;
-
-
-				//Add new event for the participant if requested. Set the status to accepted automatically.
-				if ($participant->user_id > 0 && $participant->user_id != $event->user_id) {
-					
-					
-					//find related participant event. UUID and user_id of calendar must match
-					$participantEvent = $participant->getParticipantEvent();
-					
-					if(!$participantEvent){
-						
-						//create event in participant's default calendar if the current user has the permission to do that
-						$calendar = $participant->getDefaultCalendar();
-						if ($calendar && GO_Base_Model_Acl::hasPermission($calendar->getPermissionLevel(),GO_Base_Model_Acl::CREATE_PERMISSION)) {
-
-							$participantEvent = $event->duplicate(array(
-									'calendar_id' => $calendar->id,
-									'user_id'=>$participant->user_id,
-									'is_organiser'=>false, 
-									'status'=>  GO_Calendar_Model_Event::STATUS_NEEDS_ACTION)
-											);
-						}
-					}
-				}
+			
 
 				if ($isNewEvent || !empty($modifiedAttributes)) {
 					//reset status on when event is modified or new
@@ -311,14 +292,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					}
 				}
 
-		//	$new = $participant->isNew;
 
 				$participant->save();
-
-//				if ($new)
-					$newParticipantIds[] = $participant->id;
-
-
 				$ids[] = $participant->id;
 			}
 
@@ -332,10 +307,24 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 											)
 			);
 			$stmt->callOnEach('delete');
+			
+			
+			
+			//create events for the participants that are GO users
+			$stmt = $event->participants;			
+			foreach($stmt as $participant){			
+				//Add new event for the participant if requested. Set the status to accepted automatically.
+				if ($participant->user_id > 0 && $participant->user_id != $event->user_id) {
+					
+					//find related participant event. UUID and user_id of calendar must match
+					$participantEvent = $participant->getParticipantEvent();
+					
+					if(!$participantEvent){						
+						$event->createCopyForParticipant($participant);
+					}
+				}
+			}			
 		}
-
-		if (!empty($params['send_invitation']))
-			$this->_sendInvitation($newParticipantIds, $event, $isNewEvent, $modifiedAttributes);
 	}
 	/**
 	 *
@@ -1175,7 +1164,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		if($participant->user){
 			//if it's a GO user then put the event in it's default calendar.
-			$event = $participant->event->getCopyForParticipant($participant->user);
+			$event = $participant->event->createCopyForParticipant($participant);
 			
 			//notify organizer
 			$this->_sendInvitation(array(), $event, false, array(), 'REPLY', $participant);

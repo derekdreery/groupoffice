@@ -38,6 +38,8 @@
  * @property int $calendar_id
  * @property string $uuid
  * 
+ * @property GO_Calendar_Model_Participant $participants
+ * 
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  * @author Wesley Smits <wsmits@intermesh.nl>
@@ -241,9 +243,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 	protected function beforeSave() {
 		
-		
-		if(!$this->is_organizer && $this->isModified(array("start_time","end_time","location","description","calendar_id")))
-			throw new GO_Base_Exception_AccessDenied();
+		//if this is not the organizer event it may only be modified by the organizer
+		if($this->isModified(array("start_time","end_time","location","description","calendar_id"))){		
+			$organizerEvent = $this->getOrganizerEvent();
+			if($organizerEvent && $organizerEvent->user_id!=GO::user()->id){
+				throw new GO_Base_Exception_AccessDenied();
+			}			
+		}
 		
 		//Don't set reminders for the superadmin
 		if($this->calendar->user_id==1 && !GO::config()->debug)
@@ -281,6 +287,15 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	protected function afterDelete() {
 		
 		$this->deleteReminders();
+		
+		if($this->is_organizer){
+			//delete participant events							
+			$stmt = GO_Calendar_Model_Event::model()->findByAttribute("uuid", $this->uuid);
+			
+			foreach($stmt as $event){
+				$event->delete(true);
+			}
+		}			
 		
 		return parent::afterDelete();
 	}
@@ -1318,7 +1333,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	protected function afterDuplicate(&$duplicate) {
 		
 		if (!$this->isNew) {
-			if (empty($duplicate->participants))
+			
+			$stmt = $duplicate->participants;
+			
+			if (!$stmt->rowCount())
 				$this->duplicateRelation('participants', $duplicate);
 
 			if($duplicate->isRecurring() && $this->isRecurring())
@@ -1330,17 +1348,37 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 	/**
 	 * 
-	 * @param GO_Base_Model_User $user
-	 * @return type 
+	 * @param GO_Calendar_Model_Participant $participant
+	 * @return GO_Calendar_Model_Event 
 	 */
-	public function getCopyForParticipant(GO_Base_Model_User $user){
-		$calendar = GO_Calendar_Model_Calendar::model()->getDefault($user);
+	public function createCopyForParticipant(GO_Calendar_Model_Participant $participant){
+//		$calendar = GO_Calendar_Model_Calendar::model()->getDefault($user);
+//		
+//		return $this->duplicate(array(
+//			'user_id'=>$user->id,
+//			'calendar_id'=>$calendar->id,
+//			'is_organizer'=>false
+//		));
 		
-		return $this->duplicate(array(
-			'user_id'=>$user->id,
-			'calendar_id'=>$calendar->id,
-			'is_organizer'=>false
-		));
+		//create event in participant's default calendar if the current user has the permission to do that
+		$calendar = $participant->getDefaultCalendar();
+		if ($calendar && GO_Base_Model_Acl::hasPermission($calendar->getPermissionLevel(),GO_Base_Model_Acl::CREATE_PERMISSION)) {
+
+			$participantEvent = $this->duplicate(array(
+					'calendar_id' => $calendar->id,
+					'user_id'=>$participant->user_id,
+					'is_organizer'=>false, 
+					'status'=>  GO_Calendar_Model_Event::STATUS_NEEDS_ACTION)
+							);
+			
+			return $participantEvent;
+		}else
+		{
+			return false;
+		}
+		
+		
+		
 		
 	}
 	
@@ -1362,6 +1400,18 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$participant->is_organizer=1;
 		
 		return $participant;
+	}
+	
+	/**
+	 * Get's the organizer's event if this event belongs to a meeting.
+	 * 
+	 * @return GO_Calendar_Model_Event
+	 */
+	public function getOrganizerEvent(){
+		if($this->is_organizer)
+			return false;
+		
+		return GO_Calendar_Model_Event::model()->findSingleByAttributes(array('uuid'=>$this->uuid, 'is_organizer'=>1));
 	}
 	
 	/**
@@ -1402,5 +1452,121 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 		
 		return parent::checkDatabase();
+	}
+	
+	
+	
+//	public function sendReply(){
+//		if($this->is_organizer)
+//			throw new Exception("Meeting reply can only be send from the organizer's event");
+//	}	
+	
+	public function reply($status, $sendMessage=false){
+		
+		if($this->is_organizer)
+			throw new Exception("Meeting reply can only be send from the organizer's event");
+		
+		$this->status=$status;
+		$this->save();
+		
+		
+		//update all participants with this user and event uuid in the system
+		
+		$findParams = GO_Base_Db_FindParams::newInstance();
+		
+		$findParams->joinModel(array(
+				'model'=>'GO_Calendar_Model_Event',						  
+	 			'localTableAlias'=>'t', //defaults to "t"
+	 			'localField'=>'event_id', //defaults to "id"	  
+	 			'foreignField'=>'id', //defaults to primary key of the remote model
+	 			'tableAlias'=>'e', //Optional table alias	  
+	 			));
+		
+		$findParams->getCriteria()
+						->addCondition('user_id', $this->user_id)
+						->addCondition('uuid', $this->uuid,'=','e');
+		
+		$stmt = GO_Calendar_Model_Participant::model()->find($findParams);
+		
+		foreach($stmt as $participant){
+			$participant->status=$status;
+			$participant->save();
+		}
+		
+		if($sendMessage){
+			
+		}
+	}
+	
+	
+	public function sendMeetingRequest(){		
+		
+		if(!$this->is_organizer)
+			throw new Exception("Meeting request can only be send from the organizer's event");
+		
+		$stmt = $this->participants;
+
+			while ($participant = $stmt->fetch()) {		
+				//don't invite organizer
+				if($participant->is_organizer)
+					continue;
+				
+
+				//if participant status is pending then send a new inviation subject. Otherwise send it as update
+				if($participant->status == GO_Calendar_Model_Participant::STATUS_PENDING){
+					$subject = GO::t('invitation', 'calendar').': '.$this->name;
+				}else
+				{
+					$subject = GO::t('invitation_update', 'calendar').': '.$this->name;
+				}				
+				
+				//create e-mail message
+				$message = GO_Base_Mail_Message::newInstance($subject)
+									->setFrom($this->user->email, $this->user->name)
+									->addTo($participant->email, $participant->name);
+				
+
+				//check if we have a Group-Office event. If so, we can handle accepting and declining in Group-Office. Otherwise we'll use ICS calendar objects by mail
+				$participantEvent = $participant->getParticipantEvent();
+				
+				if($participantEvent){					
+					$body = '<p>The following event was scheduled in your calendar: </p>'.$this->toHtml();					
+				}else
+				{	
+					//build message for external program
+					$acceptUrl = GO::url("calendar/event/invitation",array("id"=>$this->id,'accept'=>1,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
+					$declineUrl = GO::url("calendar/event/invitation",array("id"=>$this->id,'accept'=>0,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
+
+					if($participant->status == GO_Calendar_Model_Participant::STATUS_PENDING){
+						$body = '<p>' . GO::t('invited', 'calendar') . '</p>' .
+										$this->toHtml() .
+										'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
+										'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
+										'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
+										'&nbsp;|&nbsp;' .
+										'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
+					}else // on update event
+					{
+						$body = '<p>' . GO::t('invitation_update', 'calendar') . '</p>' .
+										$this->toHtml() .
+										'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
+										'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
+										'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
+										'&nbsp;|&nbsp;' .
+										'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
+					}
+					
+					
+					$ics=$this->toICS("REQUEST");				
+					$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="'.$method.'"');
+					$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+					$a->setDisposition("inline");
+					$message->attach($a);
+				}
+				
+				$message->setHtmlAlternateBody($body);
+
+				GO_Base_Mail_Mailer::newGoInstance()->send($message);
+			}
 	}
 }

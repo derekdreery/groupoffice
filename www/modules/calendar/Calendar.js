@@ -1701,7 +1701,14 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		if(!event.is_organizer){
 			// You are not authorised to edit this event because you are not the organizer.
 			// Show message to the user
-			Ext.Msg.alert(GO.calendar.lang.errorOrganizerOnlyTitle, GO.calendar.lang.errorOrganizerOnly);
+			//Ext.Msg.alert(GO.calendar.lang.errorOrganizerOnlyTitle, GO.calendar.lang.errorOrganizerOnly);
+			
+			if(!this.attendanceWindow){
+				this.attendanceWindow = new GO.calendar.AttendanceWindow ();
+			}			
+			console.log(event.event_id);
+			this.attendanceWindow.show(event.event_id);
+			
 		}else 
 		if(event.repeats && actionData.singleInstance)
 		{
