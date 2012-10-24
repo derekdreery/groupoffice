@@ -164,3 +164,10 @@ $updates['201211241425'][]="update cal_events set mtime=unix_timestamp() where d
 $updates['201210161843'][]="update cal_events set rrule='' where rrule='RRULE'";
 
 $updates['201210161843'][]="insert ignore into cal_groups (id,name, user_id) values (1, 'Calendars', 1)";
+
+$updates['201210241730'][]="ALTER TABLE `cal_participants` CHANGE `status` `status` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'NEEDS-ACTION'";
+
+$updates['201210241730'][]="update cal_participants set status='NEEDS-ACTION' where status='0';";
+$updates['201210241730'][]="update cal_participants set status='ACCEPTED' where status='1';";
+$updates['201210241730'][]="update cal_participants set status='DECLINED' where status='2';";
+$updates['201210241730'][]="update cal_participants set status='TENTATIVE' where status='3';";

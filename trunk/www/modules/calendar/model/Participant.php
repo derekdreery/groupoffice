@@ -34,11 +34,11 @@
  */
 class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 
-	const STATUS_TENTATIVE = 3;
-	const STATUS_DECLINED = 2;
-	const STATUS_ACCEPTED = 1;
-	const STATUS_PENDING = 0;
-
+	const STATUS_TENTATIVE = "TENTATIVE";
+	const STATUS_DECLINED = "DECLINED";
+	const STATUS_ACCEPTED = "ACCEPTED";
+	const STATUS_PENDING = "NEEDS-ACTION";
+	
 	/**
 	 * Returns a static model of itself
 	 * 
@@ -90,18 +90,18 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @return boolean/?
 	 */
-	public function isAvailable($start_time=false, $end_time=false) {
+	public function isAvailable($start_time = false, $end_time = false) {
 		if (empty($this->user_id) || !$this->_hasFreeBusyAccess()) {
 			return '?';
 		} else {
-			
-			if(!$start_time && $this->event)
-				$start_time=$this->event->start_time;
-			
-			if(!$end_time && $this->event)
-				$end_time=$this->event->end_time;
-			
-			if($start_time && $end_time)				
+
+			if (!$start_time && $this->event)
+				$start_time = $this->event->start_time;
+
+			if (!$end_time && $this->event)
+				$end_time = $this->event->end_time;
+
+			if ($start_time && $end_time)
 				return self::userIsAvailable($start_time, $end_time, $this->user_id, $this->event);
 			else
 				return '?';
@@ -146,10 +146,10 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 
 		$events = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, $periodStartTime, $periodEndTime, true);
 
-		foreach($events as $event){
+		foreach ($events as $event) {
 			GO::debug($event->getName());
 		}
-		
+
 		return count($events) == 0;
 	}
 
@@ -166,52 +166,63 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	public function getStatusName() {
 		switch ($this->status) {
 			case self::STATUS_TENTATIVE :
-				return GO::t('tentative','calendar');
+				return GO::t('tentative', 'calendar');
 				break;
 
 			case self::STATUS_DECLINED :
-				return GO::t('declined','calendar');
+				return GO::t('declined', 'calendar');
 				break;
 
 			case self::STATUS_ACCEPTED :
-				return GO::t('accepted','calendar');
+				return GO::t('accepted', 'calendar');
 				break;
 
 			default:
-				return GO::t('notRespondedYet','calendar');
+				return GO::t('notRespondedYet', 'calendar');
 				break;
 		}
 	}
-	
-	
+
 	/**
 	 * Get related participant event. UUID and user_id of calendar must match. 
 	 * Returns false if it doesn't exists.
 	 * 
 	 * @return GO_Calendar_Model_Event
 	 */
-	public function getParticipantEvent(){
-		return GO_Calendar_Model_Event::model()->findByUuid($this->event->uuid,$this->user_id);
+	public function getParticipantEvent() {
+		return GO_Calendar_Model_Event::model()->findByUuid($this->event->uuid, $this->user_id);
 	}
-	
+
+	/**
+	 * Get related participant event. UUID and user_id of calendar must match. 
+	 * Returns false if it doesn't exists.
+	 * 
+	 * @return GO_Calendar_Model_Event
+	 */
+	public function getOrganizerEvent() {
+		if ($this->is_organizer)
+			return $this->event;
+		else
+			return GO_Calendar_Model_Event::model()->findSingleByAttributes(array('uuid' => $this->event->uuid, 'is_organizer' => 1));
+	}
+
 	/**
 	 * Get's the participant's default calendar if it has one.
 	 * @return GO_Calendar_Model_Calendar
 	 */
-	public function getDefaultCalendar(){
-		if(empty($this->user_id))
+	public function getDefaultCalendar() {
+		if (empty($this->user_id))
 			return false;
-		
+
 		return GO_Calendar_Model_Calendar::model()->findDefault($this->user_id);
 	}
-	
-	
-	public function toJsonArray($start_time=false, $end_time=false){
-		$record=$this->getAttributes();
-	
-		$record['available']=$this->isAvailable($start_time, $end_time);				
+
+	public function toJsonArray($start_time = false, $end_time = false) {
+		$record = $this->getAttributes();
+
+		$record['available'] = $this->isAvailable($start_time, $end_time);
 		$calendar = $this->getDefaultCalendar();
-		$record['create_permission']=$calendar ? GO_Base_Model_Acl::hasPermission($calendar->getPermissionLevel(),GO_Base_Model_Acl::CREATE_PERMISSION) : false;
+		$record['create_permission'] = $calendar ? GO_Base_Model_Acl::hasPermission($calendar->getPermissionLevel(), GO_Base_Model_Acl::CREATE_PERMISSION) : false;
 		return $record;
 	}
 
