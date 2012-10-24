@@ -245,6 +245,12 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 					$show_completed=false;				
 					$show_future=true;
 					break;
+                  
+                case 'incomplete':
+					$start_time = 0;
+					$end_time = 0;
+					$show_completed=false;
+					break;
 
 				case 'active':
 				case 'portlet':

@@ -92,6 +92,10 @@ GO.tasks.MainPanel = function(config){
 					name: 'show',
 					inputValue: 'overdue'
 				},{
+					boxLabel: GO.tasks.lang.incompleteTasks,
+					name: 'show',
+					inputValue: 'incomplete'
+				},{
 					boxLabel: GO.tasks.lang.completed,
 					name: 'show',
 					inputValue: 'completed'
