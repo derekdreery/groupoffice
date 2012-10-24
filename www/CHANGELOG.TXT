@@ -7,9 +7,10 @@
 - Shared folders could appear twice in the shares tree
 - Create folder permission check failed if a parent folder didn't exist
 - Added Incomplete filter to the tasks list
-- Links in emailwindow on startpage open in new browser tab.
+- Links in email window on startpage didn't work
 - Unset invalid attributes while using importVObject function in Contact model.
 - Throw a fileNotFound exception when a file that needs to be downloaded is not found on the server.
+- Updated German translation
 
 19-10-2012 4.0.116
 - Also show disabled users in selectuser
