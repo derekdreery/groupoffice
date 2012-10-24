@@ -1,5 +1,5 @@
 .ticket-top-container td{
-	min-width: 70px;
+	min-width: 60px;
 }
 
 .ticket-message-attachment{
@@ -96,6 +96,9 @@
 
 .ticketmodel-row td {
 	padding: 3px;
+  width: 805px;
+  max-width: 805px;
+  word-wrap: break-word;
 }
 
 .image-new-message{
