@@ -2376,7 +2376,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		{
 			if(is_array($attributeName)){
 				foreach($attributeName as $a){
-					if(isset($this->_modifiedAttributes[$attributeName]))
+					if(isset($this->_modifiedAttributes[$a]))
 					{
 						return true;
 					}
