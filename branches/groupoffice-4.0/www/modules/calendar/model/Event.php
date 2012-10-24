@@ -894,10 +894,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$trigger = new Sabre_VObject_Property('trigger','-PT'.($this->reminder/60).'M');
 			$trigger['VALUE']='DURATION';
 			$a->add($trigger);
-			$a->description="Default description";
+			$a->description="Alarm";
 			
 			$e->add($a);
-			
+						
+			//for funambol compatibility, the GO_Base_VObject_Reader class use this to convert it to a vcalendar 1.0 aalarm tag.
+			$e->{"X-GO-REMINDER-TIME"}=date('Ymd\THis', $this->start_time-$this->reminder);
 		}
 		
 		return $e;
@@ -1016,8 +1018,18 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->end_time-=60;
 		}
 		
-		if($vobject->valarm){
+		if($vobject->valarm && $vobject->valarm->trigger){
 			
+			$duration = GO_Base_VObject_Reader::parseDuration($vobject->valarm->trigger);
+			$this->reminder = $duration*-1;
+			
+		}elseif($vobject->aalarm){ //funambol sends old vcalendar 1.0 format
+			$aalarm = explode(';', (string) $vobject->aalarm);
+			if(isset($aalarm[0])) {				
+				$p = Sabre_VObject_Property_DateTime::parseData($aalarm[0]);
+				$this->reminder = $this->start_time-$p[1]->format('U');
+			}
+		
 		}else
 		{
 			$this->reminder=0;
