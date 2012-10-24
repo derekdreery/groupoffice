@@ -1,4 +1,5 @@
 4.0.117
+- Added Incomplete filter to the tasks list
 - Links in emailwindow on startpage open in new browser tab.
 - Unset invalid attributes while using importVObject function in Contact model.
 - Throw a fileNotFound exception when a file that needs to be downloaded is not found on the server.
