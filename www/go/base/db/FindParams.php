@@ -87,6 +87,18 @@ class GO_Base_Db_FindParams{
 	}
 	
 	/**
+	 * Join the table that contains the ACL field. For example ab_addressbook AS addressbook for the contact model.
+	 * 
+	 * @param boolean $value
+	 * @return \GO_Base_Db_FindParams
+	 */
+	public function joinAclFieldTable($value=true){
+		$this->_params['joinAclFieldTable']=$value;
+		return $this;
+	}
+	
+	
+	/**
 	 * Set to true if you want to ignore permissions by admin group. This is used
 	 * for e-mail accounts for example. The admin has access to all accounts but
 	 * for display will only show them when an admin has access by user to prevent
