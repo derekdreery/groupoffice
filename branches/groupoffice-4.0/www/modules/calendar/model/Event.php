@@ -92,7 +92,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		$defaults = array(
 				//'description'=>'DIT IS DE BESCHRIJVING DIE STANDAARD WORDT INGEVULD',
-				'status' => "NEEDS-ACTION",
+				'status' => "ACCEPTED",
 				'start_time'=> GO_Base_Util_Date::roundQuarters(time()), 
 				'end_time'=>GO_Base_Util_Date::roundQuarters(time()+3600)				
 		);
