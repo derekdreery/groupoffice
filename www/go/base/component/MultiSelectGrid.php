@@ -49,6 +49,13 @@ class GO_Base_Component_MultiSelectGrid {
 			$this->_setSelectedIds($requestParams);
 	}
 	
+	/**
+	 * Enable permission checking on this model. This makes sure that only 
+	 * readbable addressbooks are used with contacts for example.
+	 * This will disable acl checking for the contacts query which improves performance.
+	 * 
+	 * @param boolan $value
+	 */
 	public function checkPermissions($value=true){
 		$this->_checkPermissions=$value;
 	}
