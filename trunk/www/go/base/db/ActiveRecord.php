@@ -974,6 +974,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(!empty($params['debugSql'])){
 			$this->_debugSql=true;
 			//GO::debug($params);
+		}else
+		{
+			$this->_debugSql=false;
 		}
 		
 		
@@ -990,7 +993,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$aclJoin['join']='';
 		$aclJoin['fields']='';
 		
-		if($this->aclField() && empty($params['ignoreAcl'])){
+		if($this->aclField() && (empty($params['ignoreAcl']) || !empty($params['joinAclFieldTable']))){
 			$ret = $this->_joinAclTable();
 			if($ret)
 				$aclJoin=$ret;
@@ -2023,7 +2026,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	/**
 	 * Return all validation errors of this model
 	 * 
-	 * @return type 
+	 * @return array 
 	 */
 	public function getValidationErrors(){
 		return $this->_validationErrors;
@@ -2850,19 +2853,20 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if($this->hasLinks()){
 			$stmt = GO_Base_Model_ModelType::model()->find();
 			while($modelType = $stmt->fetch()){
-				
-				$model = GO::getModel($modelType->model_name);
-				if($model->hasLinks()){
+				if(class_exists($modelType->model_name)){
+					$model = GO::getModel($modelType->model_name);
+					if($model->hasLinks()){
 
-					$linksTable = "go_links_".$model->tableName();
+						$linksTable = "go_links_".$model->tableName();
 
-					$sql = "DELETE FROM $linksTable WHERE model_type_id=".intval($this->modelTypeId()).' AND model_id='.intval($this->pk);
-					$this->getDbConnection()->query($sql);
+						$sql = "DELETE FROM $linksTable WHERE model_type_id=".intval($this->modelTypeId()).' AND model_id='.intval($this->pk);
+						$this->getDbConnection()->query($sql);
 
-					$linksTable = "go_links_".$this->tableName();
+						$linksTable = "go_links_".$this->tableName();
 
-					$sql = "DELETE FROM $linksTable WHERE id=".intval($this->pk);
-					$this->getDbConnection()->query($sql);			
+						$sql = "DELETE FROM $linksTable WHERE id=".intval($this->pk);
+						$this->getDbConnection()->query($sql);			
+					}
 				}
 			}
 		}
@@ -3830,4 +3834,26 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	protected function afterMergeWith(GO_Base_Db_ActiveRecord $model){}
 
+	/**
+	 * This function will unset the invalid properties so they will not be saved.
+	 */
+	public function ignoreInvalidProperties(){
+		$this->validate();
+		
+		foreach($this->_validationErrors as $attrib=>$error){
+			GO::debug('Atribute not successfully validated, unsetting '.$attrib);
+			$this->_unsetAttribute($attrib);
+		}
+	}
+	
+	private function _unsetAttribute($attribute){
+		unset($this->$attribute);
+		
+		if(isset($this->_validationErrors[$attribute]))
+			unset($this->_validationErrors[$attribute]);
+		
+		if(isset($this->_modifiedAttributes[$attribute]))
+			unset($this->_modifiedAttributes[$attribute]);
+	}
+	
 }

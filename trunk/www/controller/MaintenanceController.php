@@ -7,7 +7,7 @@
 class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractController {
 	
 	protected function allowGuests() {
-		return array('upgrade','checkdatabase','servermanagerreport','test','downloadfromshop');
+		return array('upgrade','checkdatabase','servermanagerreport','test','downloadfromshop', 'removeduplicates');
 	}
 	
 	//don't check token in this controller
@@ -117,6 +117,13 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	
 	protected function actionRemoveDuplicates($params){
 		
+		GO::session()->runAsRoot();
+		
+		if(!$this->isCli() && !GO::modules()->tools)
+			throw new GO_Base_Exception_AccessDenied();
+		
+		GO_Base_Fs_File::setAllowDeletes(false);
+		
 		$this->lockAction();
 		
 		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
@@ -180,8 +187,15 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 					echo '</tr>';
 
 					if(!$first){
-						if(!empty($params['delete']))
-							$model->delete();
+						if(!empty($params['delete'])){
+							
+							if($model->countLinks()){
+								echo '<tr><td colspan="99">Skipped delete because model has links</td></tr>';
+							}else
+							{
+								$model->delete();
+							}
+						}
 
 						$count++;
 					}
@@ -253,13 +267,17 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	 */
 	protected function actionCheckDatabase($params) {
 		
+		
+		$this->run("upgrade",$params);		
+		
 		$this->lockAction();
+		
+		
 		
 		$response = array();
 		
 		$oldAllowDeletes = GO_Base_Fs_File::setAllowDeletes(false);
 		
-		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
 				
 		if(!headers_sent())
 			header('Content-Type: text/plain; charset=UTF-8');

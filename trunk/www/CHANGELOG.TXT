@@ -1,3 +1,23 @@
+4.0.119
+- Table load speed optimization with multiselectgrid for addressbook, tickets, notes. tasks and billing
+
+25-10-2012 4.0.118
+- E-mail showing malicious content bug
+
+24-10-2012 4.0.117
+- Option to open/close a selected week for all users (Billing, Time Registration, Hours Approval).
+- Reminders were not synced with Outlook
+- Links were not clickable from e-mail portlet
+- Conflicting events check didn't work with busy flag and repeating events
+- SMTP password wasn't updated on LDAP login
+- Shared folders could appear twice in the shares tree
+- Create folder permission check failed if a parent folder didn't exist
+- Added Incomplete filter to the tasks list
+- Links in email window on startpage didn't work
+- Unset invalid attributes while using importVObject function in Contact model.
+- Throw a fileNotFound exception when a file that needs to be downloaded is not found on the server.
+- Updated German translation
+
 19-10-2012 4.0.116
 - Also show disabled users in selectuser
 - Correct key.txt permissions on fresh install

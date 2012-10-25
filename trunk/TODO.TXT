@@ -1,3 +1,9 @@
+move private check to first tab in event dialog
+
+resource conflict check in 4.1
+
+op ics klikken opent event dialog
+
 link rules email
 
 Migratie script interlokaal
@@ -11,7 +17,6 @@ Erik thier
 Prode
 
 Humbolt
-Egil
 
 
 Enable save appointment directly by default
