@@ -1105,11 +1105,6 @@ class GO_Base_Util_String {
 		//$html = preg_replace($regexp, "<a target=$1main$1 class=$1blue$1 href=$1".GO::config()->host."$2$3>", $html);
 
 		$html =str_replace(GO::config()->full_url, GO::config()->host, $html);
-
-		if (GO::modules()->email) {
-			$html = preg_replace("/(href=([\"']?)mailto:)([\w\.\-]+)(@)([\w\.\-\"]+)\b/i",
-			"href=\"javascript:this.showComposer({values: {to : '$3$4$5'}});", $html);
-		}
 		
 		return $html;
 	}
