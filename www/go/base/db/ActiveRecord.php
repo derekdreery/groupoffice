@@ -948,6 +948,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(!empty($params['debugSql'])){
 			$this->_debugSql=true;
 			//GO::debug($params);
+		}else
+		{
+			$this->_debugSql=false;
 		}
 		
 		
@@ -2777,19 +2780,20 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if($this->hasLinks()){
 			$stmt = GO_Base_Model_ModelType::model()->find();
 			while($modelType = $stmt->fetch()){
-				
-				$model = GO::getModel($modelType->model_name);
-				if($model->hasLinks()){
+				if(class_exists($modelType->model_name)){
+					$model = GO::getModel($modelType->model_name);
+					if($model->hasLinks()){
 
-					$linksTable = "go_links_".$model->tableName();
+						$linksTable = "go_links_".$model->tableName();
 
-					$sql = "DELETE FROM $linksTable WHERE model_type_id=".intval($this->modelTypeId()).' AND model_id='.intval($this->pk);
-					$this->getDbConnection()->query($sql);
+						$sql = "DELETE FROM $linksTable WHERE model_type_id=".intval($this->modelTypeId()).' AND model_id='.intval($this->pk);
+						$this->getDbConnection()->query($sql);
 
-					$linksTable = "go_links_".$this->tableName();
+						$linksTable = "go_links_".$this->tableName();
 
-					$sql = "DELETE FROM $linksTable WHERE id=".intval($this->pk);
-					$this->getDbConnection()->query($sql);			
+						$sql = "DELETE FROM $linksTable WHERE id=".intval($this->pk);
+						$this->getDbConnection()->query($sql);			
+					}
 				}
 			}
 		}
