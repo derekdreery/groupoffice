@@ -136,6 +136,13 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 		
 		$response['description'] = nl2br(htmlspecialchars(GO_Base_Util_String::cut_string($this->_event->description, 800), ENT_COMPAT, 'UTF-8'));
 		$response['private'] = $this->isPrivate();
+		
+		if($response['private']){
+			$response['name']=GO::t('private','calendar');
+			$response['description']="";
+			$response['location']="";
+		}
+		
 		$response['status_color'] = $this->_event->getStatusColor();
 		
 		if(!empty($this->_event->description))
@@ -368,12 +375,15 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 	}
 	
 	/**
-	 * Is this a private event
+	 * Is this a private event for the current user. If the event or the calendar
+	 * is owned by the current user it will not be displayed as private.
 	 * 
 	 * @return boolean 
 	 */
 	public function isPrivate(){
-		return $this->_event->private && (GO::user()->id != $this->_event->user_id);
+		return $this->_event->private && 
+				(GO::user()->id != $this->_event->user_id) && 
+				GO::user()->id!=$this->_event->calendar->user_id;	
 	}
 	
 	/**
