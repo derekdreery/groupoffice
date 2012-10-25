@@ -118,6 +118,18 @@ class GO_Base_Router{
 		$controllerClass.='Controller_'.$controller;
 		
 		$this->_action=$action;		
+		
+		if(!class_exists($controllerClass)){
+			header("HTTP/1.0 404 Not Found");
+      header("Status: 404 Not Found");
+			
+			echo '<h1>404 Not found</h1>';
+			echo '<p>Sorry the URL you requested was not found on this server.</p>';
+			
+			trigger_error("Controller not found: ".$_SERVER['QUERY_STRING']." ".var_export($_REQUEST, true), E_USER_WARNING);
+			exit();
+		}
+		
 		$this->_controller = new $controllerClass;
 		$this->_controller->run($action, $params);		
 	}
