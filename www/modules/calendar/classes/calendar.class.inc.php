@@ -3291,6 +3291,8 @@ class calendar extends db {
 				if (count($name_exploded)>1) array_pop($name_exploded);
 				$chosen_events[$merged_event_nr]['name'] = implode('(',$name_exploded);
 				$chosen_events[$merged_event_nr]['name'] .= ' ('.String::get_first_letters($calendar_names[$chosen_events[$merged_event_nr]['calendar_id']]).')';
+				
+				$chosen_events[$merged_event_nr]['read_only']=true;
 			}
 			if (count($uuid_array[$merge_index])>=2) {
 				$merged_event_nr = $uuid_array[$merge_index][0];
@@ -3298,6 +3300,8 @@ class calendar extends db {
 				$chosen_events[$merged_event_nr]['calendar_name'] .= '; '.$calendar_names[$current_event['calendar_id']];
 				$chosen_events[$merged_event_nr]['name'] = substr($chosen_events[$merged_event_nr]['name'],0,-1);
 				$chosen_events[$merged_event_nr]['name'] .= ','.String::get_first_letters($calendar_names[$current_event['calendar_id']]).')';
+				
+				$chosen_events[$merged_event_nr]['read_only']=true;
 				//$chosen_events[$merged_event_nr]['name'] .= ', '.$participating_calendar['name'];
 				//if ($current_event['invitation_uuid']=='') {
 					//$chosen_events[$merged_event_nr]['username'] = $GO_USERS->get_user_realname($current_event['user_id']);
