@@ -12,7 +12,7 @@ class GO_Calendar_Controller_Attendance extends GO_Base_Controller_AbstractContr
 		$response = array("success"=>true);
 		
 		$event = GO_Calendar_Model_Event::model()->findByPk($params['id']);
-		$event->reply($params['status']);
+		$event->replyToOrganizer($params['status'], !empty($params['notify_organizer']));
 		
 		return $response;
 	}

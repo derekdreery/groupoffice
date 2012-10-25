@@ -1694,10 +1694,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	},
 	  
 	onDblClick : function(grid, event, actionData){
-
-		if(event.read_only && !event.contact_id && !event.task_id)
-			return false;
-
+		
+		
 		if(!event.is_organizer){
 			// You are not authorised to edit this event because you are not the organizer.
 			// Show message to the user
@@ -1705,11 +1703,18 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			
 			if(!this.attendanceWindow){
 				this.attendanceWindow = new GO.calendar.AttendanceWindow ();
+				this.attendanceWindow.on('save', function(){
+					this.refresh();
+				}, this);
 			}			
-			console.log(event.event_id);
 			this.attendanceWindow.show(event.event_id);
-			
-		}else 
+			return;
+		}
+
+		if(event.read_only && !event.contact_id && !event.task_id)
+			return false;
+
+	
 		if(event.repeats && actionData.singleInstance)
 		{
 
