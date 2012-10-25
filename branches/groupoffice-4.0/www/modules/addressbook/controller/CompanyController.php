@@ -99,7 +99,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 			$abMultiSel = new GO_Base_Component_MultiSelectGrid(
 							'books', 
 							"GO_Addressbook_Model_Addressbook",$store, $params);		
-			$abMultiSel->addSelectedToFindCriteria($storeParams->getCriteria(), 'addressbook_id');
+			$abMultiSel->addSelectedToFindCriteria($storeParams, 'addressbook_id');
 			//$abMultiSel->setButtonParams($response);
 			//$abMultiSel->setStoreTitle();
 
@@ -109,7 +109,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 
 			if(count($addresslistMultiSel->selectedIds))
 			{
-				$addresslistMultiSel->addSelectedToFindCriteria($storeParams->getCriteria(), 'addresslist_id','ac');
+				$addresslistMultiSel->addSelectedToFindCriteria($storeParams, 'addresslist_id','ac');
 
 				//we need to join the addresslist link model if a filter for the addresslist is enabled.
 				$storeParams->join(
@@ -153,6 +153,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		$storeParams = GO_Base_Db_FindParams::newInstance()
 						->export("company")
 						->criteria($criteria)
+						->joinAclFieldTable()
 						->select('t.*, addressbook.name AS addressbook_name');
 //						->joinModel(array(
 //				'model' => 'GO_Addressbook_Model_Addressbook',

@@ -967,7 +967,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$aclJoin['join']='';
 		$aclJoin['fields']='';
 		
-		if($this->aclField() && empty($params['ignoreAcl'])){
+		if($this->aclField() && (empty($params['ignoreAcl']) || !empty($params['joinAclFieldTable']))){
 			$ret = $this->_joinAclTable();
 			if($ret)
 				$aclJoin=$ret;
