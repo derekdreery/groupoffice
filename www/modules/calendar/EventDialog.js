@@ -1080,7 +1080,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				checked : false,
 				width : 'auto',
 				hideLabel : true,
-				laelSeperator : ''
+				labelSeperator : ''
 			});
 		}
 

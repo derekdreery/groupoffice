@@ -261,8 +261,8 @@ GO.dialog.SelectEmail = function(config) {
 				sm : new Ext.grid.RowSelectionModel()
 			});
 			this.mailingsGrid.on('show', function() {
-				if(!GO.addressbook.readableMailingsStore.loaded)
-					GO.addressbook.readableMailingsStore.load();
+				if(!GO.addressbook.readableAddresslistsStore.loaded)
+					GO.addressbook.readableAddresslistsStore.load();
 			}, this);
 			this.mailingsGrid.on('rowdblclick', function(){
 				this.callHandler(true);

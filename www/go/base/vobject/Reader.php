@@ -105,6 +105,12 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 //		return $outParams;
 //	}
 	
+	/**
+	 * Convert a vcalendar 2.0 duration into seconds.
+	 * 
+	 * @param string $duration
+	 * @return int Seconds
+	 */
 	public static function parseDuration($duration){
 		preg_match('/(-?)P([0-9]+[WD])?T?([0-9]+H)?([0-9]+M)?([0-9]+S)?/', (string) $duration, $matches);
 
@@ -202,6 +208,11 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 						$rrule = new GO_Base_Util_Icalendar_Rrule();
 						$rrule->readIcalendarRruleString($child->dtstart->getDateTime()->format('U'), (string) $child->rrule);			
 						$child->rrule = str_replace('RRULE:','',$rrule->createVCalendarRrule());
+					}
+					
+					if(isset($child->{"X-GO-REMINDER-TIME"})){
+						unset($child->valarm);
+						$child->aalarm=(string) $child->{"X-GO-REMINDER-TIME"}.";;0;";
 					}
 				}
 			}

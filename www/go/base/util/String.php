@@ -1092,10 +1092,9 @@ class GO_Base_Util_String {
 	 * @return string HTML formatted string
 	 */
 
-	public static function convert_links($html)
+	public static function convertLinks($html)
 	{
-		global $GO_CONFIG, $GO_MODULES;
-
+	
 		$html = str_replace("\r", '', $html);
 		$html = str_replace("\n",' ', $html);
 
@@ -1106,11 +1105,6 @@ class GO_Base_Util_String {
 		//$html = preg_replace($regexp, "<a target=$1main$1 class=$1blue$1 href=$1".GO::config()->host."$2$3>", $html);
 
 		$html =str_replace(GO::config()->full_url, GO::config()->host, $html);
-
-		if ($GLOBALS['GO_MODULES']->modules['email'] && $GLOBALS['GO_MODULES']->modules['email']['read_permission']) {
-			$html = preg_replace("/(href=([\"']?)mailto:)([\w\.\-]+)(@)([\w\.\-\"]+)\b/i",
-			"href=\"javascript:this.showComposer({values: {to : '$3$4$5'}});", $html);
-		}
 		
 		return $html;
 	}

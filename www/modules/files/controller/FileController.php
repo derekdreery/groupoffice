@@ -113,6 +113,9 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 			$file = GO_Files_Model_File::model()->findByPk($params['id'], false, true);
 		}
 		
+		if(!$file)
+			throw new GO_Base_Exception_NotFound();
+		
 		if(!empty($params['random_code'])){
 			if($file->random_code!=$params['random_code'])
 				throw new GO_Base_Exception_NotFound();
