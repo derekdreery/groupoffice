@@ -836,7 +836,7 @@ class GO_Base_Util_String {
 		//sometimes things like this happen <style> </ style >
 		
 		$body_startpos = stripos($html, '<body');
-		$body_endpos = stripos($html, '</body');
+		$body_endpos = strripos($html, '</body');
 		if($body_startpos){
 			if($body_endpos)
 				$html = substr($html, $body_startpos, $body_endpos-$body_startpos);
