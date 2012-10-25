@@ -352,3 +352,7 @@ $updates["201207241127"][]="ALTER TABLE `ab_contacts` ADD `homepage` VARCHAR( 25
 
 $updates["201207271144"][]="ALTER TABLE `ab_contacts` ADD `uuid` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `id` ,
 ADD INDEX ( `uuid` ) ";
+
+
+$updates["201210251115"][]="ALTER TABLE `ab_contacts` CHANGE `last_name` `last_name` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+$updates["201210251115"][]="ALTER TABLE `ab_contacts` CHANGE `first_name` `first_name` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
