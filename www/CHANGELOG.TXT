@@ -1,3 +1,6 @@
+4.0.119
+- Table load speed optimization with multiselectgrid for addressbook, tickets, notes. tasks and billing
+
 25-10-2012 4.0.118
 - E-mail showing malicious content bug
 
