@@ -1467,13 +1467,25 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 	
 	
+	/**
+	 * Get the organizer model of this event
+	 * 
+	 * @return GO_Calendar_Model_Participant
+	 */
+	public function getOrganizer(){
+		return GO_Calendar_Model_Participant::model()->findSingleByAttributes(array(
+				'is_organizer'=>true,
+				'event_id'=>$this->id
+		));
+	}
+	
 	
 //	public function sendReply(){
 //		if($this->is_organizer)
 //			throw new Exception("Meeting reply can only be send from the organizer's event");
 //	}	
 	
-	public function reply($status, $sendMessage=false){
+	public function replyToOrganizer($status, $sendMessage=false){
 		
 		if($this->is_organizer)
 			throw new Exception("Meeting reply can only be send from the organizer's event");
@@ -1482,8 +1494,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$this->save();
 		
 		
-		//update all participants with this user and event uuid in the system
-		
+		//update all participants with this user and event uuid in the system		
 		$findParams = GO_Base_Db_FindParams::newInstance();
 		
 		$findParams->joinModel(array(
@@ -1498,15 +1509,57 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 						->addCondition('user_id', $this->user_id)
 						->addCondition('uuid', $this->uuid,'=','e');
 		
-		$stmt = GO_Calendar_Model_Participant::model()->find($findParams);
+		$stmt = GO_Calendar_Model_Participant::model()->find($findParams);		
 		
-		foreach($stmt as $participant){
+		
+		//we need to pass the sending participant to the toIcs function. 
+		//Only the organizer and current participant should be included
+		$sendingParticipant = false;
+			
+		foreach($stmt as $participant){				
+			
+			if($participant->event_id==$this->id)
+				$sendingParticipant=$participant;
+			
 			$participant->status=$status;
 			$participant->save();
 		}
 		
+		
+		//send reply message
 		if($sendMessage){
 			
+			
+			if(!$sendingParticipant)
+				throw new Exception("Could not find your participant model");
+			
+			$organizer = $this->getOrganizer();
+			if(!$organizer)
+				throw new Exception("Could not find organizer to send message to!");
+			
+			$updateReponses = GO::t('updateReponses','calendar');
+			$subject= sprintf($updateReponses[$status], $this->user->name, $this->name);
+			
+			
+			//create e-mail message
+			$message = GO_Base_Mail_Message::newInstance($subject)
+								->setFrom($this->user->email, $this->user->name)
+								->addTo($organizer->email, $organizer->name);
+				
+			$body = '<p>'.$subject.': </p>'.$this->toHtml();
+			
+			if(!$this->getOrganizerEvent()){
+				//organizer is not a Group-Office user with event. We must send a message to him an ICS attachment
+				$ics=$this->toICS("REPLY", $sendingParticipant);				
+				$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REPLY"');
+				$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+				$a->setDisposition("inline");
+				$message->attach($a);
+			}
+			
+			$message->setHtmlAlternateBody($body);
+
+			GO_Base_Mail_Mailer::newGoInstance()->send($message);
 		}
 	}
 	

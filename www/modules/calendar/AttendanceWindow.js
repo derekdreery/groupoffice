@@ -18,6 +18,8 @@ GO.calendar.AttendanceWindow = Ext.extend(GO.dialog.TabbedFormDialog, {
 	buildForm : function(){
 		
 		this.addPanel({
+			cls:'go-form-panel',
+			layout:'form',
 			items:[{
 				xtype:'radiogroup',
 				hideLabel:true,
@@ -33,6 +35,11 @@ GO.calendar.AttendanceWindow = Ext.extend(GO.dialog.TabbedFormDialog, {
 					inputValue: 'DECLINED'
 				}
 				]
+			},{
+				hideLabel:true,
+				name:'notify_organizer',
+				xtype:'xcheckbox',
+				boxLabel:"Notify organizer by e-mail about my decision"
 			}]
 		});
 	}

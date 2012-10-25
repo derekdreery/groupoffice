@@ -196,9 +196,9 @@ $l['eventScheduledIn']='The event has been scheduled in your calendar named %s w
 $l['eventDeclined']="You have declined the event.";
 $l['eventUpdatedIn']='The event in calendar %s has been updated with status %s';
 
-$l['updateReponses'][1]='%s has accepted the event %s';
-$l['updateReponses'][2]='%s has declined the event %s';
-$l['updateReponses'][3]='%s has marked the event %s as tentative';
+$l['updateReponses']["ACCEPTED"]='%s has accepted the event %s';
+$l['updateReponses']["DECLINED"]='%s has declined the event %s';
+$l['updateReponses']["TENTATIVE"]='%s has marked the event %s as tentative';
 
 $l['directUrl']='Direct URL';
 

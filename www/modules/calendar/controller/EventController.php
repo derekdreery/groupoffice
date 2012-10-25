@@ -875,9 +875,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 * @param string $endTime
 	 * @return array 
 	 */
-	private function _getEventResponseForPeriod($response,$calendar,$startTime,$endTime){
-		$events = array();
-		
+	private function _getEventResponseForPeriod($response,$calendar,$startTime,$endTime){	
 		$resultCount = 0;
 	
 		// Get all the localEvent models between the given time period

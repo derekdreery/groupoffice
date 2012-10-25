@@ -393,6 +393,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 	 */
 	public function isReadOnly(){
 		return $this->_event->read_only || 
+						!$this->_event->is_organizer || 
 						$this->isPrivate() && GO::user()->id != $this->_event->user_id || 
 						$this->_event->permissionLevel < GO_Base_Model_Acl::WRITE_PERMISSION;
 	}
