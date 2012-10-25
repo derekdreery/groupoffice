@@ -16,6 +16,9 @@ class GO_Base_Component_MultiSelectGrid {
 	 * @var GO_Base_Data_AbstractStore 
 	 */
 	private $_store;
+	
+	
+	private $_checkPermissions=false;
 
 	/**
 	 * A component for a MultiSelectGrid. eg. Select multiple addressbooks to display contacts.
@@ -44,6 +47,10 @@ class GO_Base_Component_MultiSelectGrid {
 		
 		if(empty($requestParams['noMultiSelectFilter']))
 			$this->_setSelectedIds($requestParams);
+	}
+	
+	public function checkPermissions($value=true){
+		$this->_checkPermissions=$value;
 	}
 	
 	/**
@@ -98,7 +105,7 @@ class GO_Base_Component_MultiSelectGrid {
 		//in the addSelectedToFindCriteria() function. The permissions are checked by 
 		//the following query.
 		
-		if(empty($this->selectedIds)){
+		if($this->_checkPermissions && empty($this->selectedIds)){
 			$stmt = GO::getModel($this->_modelName)->find();
 			foreach($stmt as $model){
 				$this->selectedIds[]=$model->pk;
@@ -125,7 +132,8 @@ class GO_Base_Component_MultiSelectGrid {
 	public function addSelectedToFindCriteria(GO_Base_Db_FindParams $findParams, $columnName, $tableAlias = 't', $useAnd = true, $useNot = false) {
 		
 		//ignore here. Permissions are checked in by _setSelectedIds.
-		$findParams->ignoreAcl();
+		if($this->_checkPermissions)
+			$findParams->ignoreAcl();
 		
 		$findParams->getCriteria()->addInCondition($columnName, $this->selectedIds, $tableAlias, $useAnd, $useNot);
 	}
