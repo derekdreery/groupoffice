@@ -155,6 +155,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			$abMultiSel = new GO_Base_Component_MultiSelectGrid(
 							'books', 
 							"GO_Addressbook_Model_Addressbook",$store, $params);		
+			$abMultiSel->checkPermissions();
 			$abMultiSel->addSelectedToFindCriteria($storeParams, 'addressbook_id');
 	//		$abMultiSel->setButtonParams($response);
 	//		$abMultiSel->setStoreTitle();

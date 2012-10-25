@@ -134,6 +134,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		$multiSel = new GO_Base_Component_MultiSelectGrid(
 						'ta-taskslists', 
 						"GO_Tasks_Model_Tasklist",$store, $params);		
+		$multiSel->checkPermissions();
 		$multiSel->addSelectedToFindCriteria($storeParams, 'tasklist_id');
 		$multiSel->setButtonParams($response);
 		$multiSel->setStoreTitle();
