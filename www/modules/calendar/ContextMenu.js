@@ -116,7 +116,14 @@ Ext.extend(GO.calendar.ContextMenu, Ext.menu.Menu, {
 
 		this.actionCopy.setDisabled(this.event.read_only);
 		this.actionCut.setDisabled(this.event.read_only);
-		this.actionDelete.setDisabled(this.event.read_only);
+		
+		var deleteEnabled=false;
+		if(typeof(this.event.is_organizer)!='undefined' && !this.event.is_organizer)
+			deleteEnabled=true;
+		else
+			deleteEnabled=!this.event.read_only;
+		
+		this.actionDelete.setDisabled(!deleteEnabled);
 		
 		this.actionInfo.setDisabled(!event.event_id);
 		if(this.actionAddTimeRegistration)

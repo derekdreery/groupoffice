@@ -611,3 +611,12 @@ a.x-monthGrid-cell-day-text:hover{
 	margin-top: 1px;
 	width: 8px;
 }
+
+
+.cal-event-status-DECLINED{
+	opacity: .4;
+}
+
+.cal-event-status-NEEDS-ACTION{
+	border: 2px dashed orange;
+}

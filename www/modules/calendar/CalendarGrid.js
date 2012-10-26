@@ -1044,7 +1044,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			var domId = this.lastDomId = eventData.domId = Ext.id();
 			this.registerEvent(domId, eventData);
 
-			var cls = "x-calGrid-all-day-event-container";
+			var cls = "x-calGrid-all-day-event-container cal-event-status-"+eventData.status;
 
 			if(eventData.link_count>0){
 				cls +=' cal-has-links'
@@ -1169,7 +1169,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		{
 			tag: 'div',
 			id: domId,
-			cls: "x-calGrid-event-container",
+			cls: "x-calGrid-event-container cal-event-status-"+eventData.status,
 			style:"background-color:#"+eventData.background,
 			"ext:qtip": GO.calendar.formatQtip(eventData),
 			"ext:qtitle":eventData.name,

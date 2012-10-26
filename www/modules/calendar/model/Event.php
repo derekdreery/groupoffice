@@ -295,7 +295,15 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			foreach($stmt as $event){
 				$event->delete(true);
 			}
-		}			
+		}else
+		{
+			$participants = $this->getParticipantsForUser();
+			
+			foreach($participants as $participant){
+				$participant->status=GO_Calendar_Model_Participant::STATUS_DECLINED;
+				$participant->save();
+			}
+		}
 		
 		return parent::afterDelete();
 	}
@@ -380,8 +388,48 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$this->addReminder($this->name, $remindTime, $this->calendar->user_id);
 			}
 		}	
+		
+		//update events that belong to this organizer event
+		if($this->is_organizer){
+			$updateAttr = array(
+					'start_time'=>$this->start_time, 
+					'end_time'=>$this->end_time, 
+					'location'=>$this->location,
+					'description'=>$this->description
+							);
+			
+			
+			$events = $this->getRelatedParticipantEvents();
+
+			foreach($events as $event){
+				$event->setAttributes($updateAttr, false);
+				$event->save(true);
+
+				$stmt = $event->participants;
+				$stmt->callOnEach('delete');
+
+				$this->duplicateRelation('participants', $event);
+			}
+		}
 
 		return parent::afterSave($wasNew);
+	}
+	
+	/**
+	 * Get's all related events that are in the participant's calendars.
+	 * 
+	 * @return GO_Calendar_Model_Event
+	 */
+	public function getRelatedParticipantEvents(){
+		$findParams = GO_Base_Db_FindParams::newInstance()->ignoreAcl();
+		
+		$findParams->getCriteria()
+						->addCondition("uuid", $this->uuid)
+						->addCondition('id', $this->id, '!=');
+						
+		$stmt = GO_Calendar_Model_Event::model()->find($findParams);
+		
+		return $stmt;
 	}
 	
 	/**
@@ -1479,21 +1527,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		));
 	}
 	
-	
-//	public function sendReply(){
-//		if($this->is_organizer)
-//			throw new Exception("Meeting reply can only be send from the organizer's event");
-//	}	
-	
-	public function replyToOrganizer($status, $sendMessage=false){
-		
-		if($this->is_organizer)
-			throw new Exception("Meeting reply can only be send from the organizer's event");
-		
-		$this->status=$status;
-		$this->save();
-		
-		
+	/**
+	 * Returns all participant models for this event and all the related events for a meeting.
+	 * 
+	 * @return GO_Calendar_Model_Participant
+	 */
+	public function getParticipantsForUser(){
 		//update all participants with this user and event uuid in the system		
 		$findParams = GO_Base_Db_FindParams::newInstance();
 		
@@ -1509,14 +1548,31 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 						->addCondition('user_id', $this->user_id)
 						->addCondition('uuid', $this->uuid,'=','e');
 		
-		$stmt = GO_Calendar_Model_Participant::model()->find($findParams);		
+		return GO_Calendar_Model_Participant::model()->find($findParams);			
 		
+	}
+	
+	
+//	public function sendReply(){
+//		if($this->is_organizer)
+//			throw new Exception("Meeting reply can only be send from the organizer's event");
+//	}	
+	
+	public function replyToOrganizer($status, $sendMessage=false){
+		
+		if($this->is_organizer)
+			throw new Exception("Meeting reply can only be send from the organizer's event");
+		
+		$this->status=$status;
+		$this->save();
+			
+		$participants = $this->getParticipantsForUser();
 		
 		//we need to pass the sending participant to the toIcs function. 
 		//Only the organizer and current participant should be included
 		$sendingParticipant = false;
 			
-		foreach($stmt as $participant){				
+		foreach($participants as $participant){	
 			
 			if($participant->event_id==$this->id)
 				$sendingParticipant=$participant;
