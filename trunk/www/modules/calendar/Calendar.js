@@ -391,7 +391,7 @@ GO.calendar.MainPanel = function(config){
 	this.calendarListPanel.add(this.viewsList);
 	this.calendarListPanel.add(this.resourcesList);
 	
-	var storeFields=['id','event_id','name','start_time','end_time','description', 'repeats', 'private','status','location', 'background', 'status_color', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','all_day_event','username','duration', 'link_count', 'has_other_participants','participant_ids','ctime','is_organizer'];
+	var storeFields=['id','event_id','name','start_time','end_time','description', 'repeats', 'private','status','location', 'background', 'status_color', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','all_day_event','username','duration', 'link_count', 'has_other_participants','participant_ids','ctime','is_organizer', 'status'];
 
 	this.daysGridStore = new GO.data.JsonStore({
 		//url: GO.settings.modules.calendar.url+'json.php',
@@ -1096,7 +1096,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				break;
 		}
 									
-		if(event && !event.read_only && !event.task_id & !event.contact_id)
+		if(event && (!event.read_only || !event.is_organizer) && !event.task_id & !event.contact_id)
 		{
 			this.deleteEvent(event, callback);
 		}
