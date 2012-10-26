@@ -257,7 +257,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$response['remoteComboTexts'][$property] = $value;
 			
 			//hack for comboboxes displaying 0 instead of the emptyText in extjs
-			if(isset($response['data'][$property]) && $response['data'][$property]==0)				
+			if(isset($response['data'][$property]) && $response['data'][$property]===0)
 				$response['data'][$property]="";
 		}
 		
