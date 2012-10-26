@@ -163,6 +163,14 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 				);
 			}
 			this.tbar.unshift({
+				itemId:'add',
+				iconCls: 'btn-add',							
+				text: GO.lang['cmdAdd'],
+				cls: 'x-btn-text-icon',
+				handler: this.btnAdd,
+				disabled:this.standardTbarDisabled,
+				scope: this
+			},{
 				itemId:'delete',
 				iconCls: 'btn-delete',
 				text: GO.lang['cmdDelete'],
@@ -171,14 +179,6 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 				handler: function(){
 					this.deleteSelected();
 				},
-				scope: this
-			},{
-				itemId:'add',
-				iconCls: 'btn-add',							
-				text: GO.lang['cmdAdd'],
-				cls: 'x-btn-text-icon',
-				handler: this.btnAdd,
-				disabled:this.standardTbarDisabled,
 				scope: this
 			});
 			
