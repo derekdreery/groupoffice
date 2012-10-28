@@ -171,3 +171,5 @@ $updates['201210241730'][]="update cal_participants set status='NEEDS-ACTION' wh
 $updates['201210241730'][]="update cal_participants set status='ACCEPTED' where status='1';";
 $updates['201210241730'][]="update cal_participants set status='DECLINED' where status='2';";
 $updates['201210241730'][]="update cal_participants set status='TENTATIVE' where status='3';";
+
+$updates["201210281753"][]="ALTER TABLE `cal_events` DROP `owner_status`";
