@@ -200,11 +200,23 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$response['is_organizer'] = $model->is_organizer?true:false;
 		
 		
-		if($model->is_organizer && !empty($params['send_invitation'])){
-			$model->sendMeetingRequest();
+		if($model->is_organizer){
+			//$model->sendMeetingRequest();
+			
+			if($model->hasOtherParticipants())// && isset($modifiedAttributes['start_time']))
+			{			
+				$response['askForMeetingRequest']=true;
+			}
 		}
 		
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
+	}
+	
+	protected function actionSendMeetingRequest($params){
+		$event = GO_Calendar_Model_Event::model()->findByPk($params['event_id']);
+		$response['success']=$event->sendMeetingRequest();
+		
+		return $response;
 	}
 
 	/**
@@ -482,7 +494,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		if(!$model->isResource() && $model->id>0)
 			$this->_loadResourceEvents($model, $response);
 		
-		$response['data']['has_other_participants']=$model->hasOtherParticipants(GO::user()->id);
+//		$response['data']['has_other_participants']=$model->hasOtherParticipants(GO::user()->id);
 		
 		$response['data']['user_name']=$model->user ? $model->user->name : "Unknown";
 		
