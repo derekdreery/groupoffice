@@ -372,7 +372,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					if(action.result.data.category_name)
 						this.selectCategory.setRemoteText(action.result.data.category_name);
 
-					this.has_other_participants=action.result.data.has_other_participants;					
+//					this.has_other_participants=action.result.data.has_other_participants;					
 					
 					if(this.resourceGroupsStore.data.items.length == 0 || action.result.group_id != '1')
 						this.tabPanel.hideTabStripItem('resources-panel');
@@ -570,7 +570,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		this.formPanel.form.setValues(formValues);
 	},
 
-	has_other_participants:0,
+//	has_other_participants:0,
 	submitForm : function(hide, config) {
 
 		if(!config)
@@ -591,15 +591,15 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			var gridData = this.participantsPanel.getGridData();
 			params.participants=Ext.encode(gridData);
 
-			this.has_other_participants = this.participantsPanel.invitationRequired();
+//			this.has_other_participants = this.participantsPanel.invitationRequired();
 //		}
 		
-		if(this.has_other_participants>0)
-		{
-			var invitationMessage = (this.event_id) ? GO.calendar.lang.sendInvitationUpdate : GO.calendar.lang.sendInvitationInitial;
-		
-			params.send_invitation = (confirm(invitationMessage)) ? 1 : 0;
-		}
+//		if(this.has_other_participants>0)
+//		{
+//			var invitationMessage = (this.event_id) ? GO.calendar.lang.sendInvitationUpdate : GO.calendar.lang.sendInvitationInitial;
+//		
+//			params.send_invitation = (confirm(invitationMessage)) ? 1 : 0;
+//		}
 		
 		this.formPanel.form.submit({
 			//url : GO.settings.modules.calendar.url + 'action.php',
@@ -635,8 +635,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					repeats : this.formPanel.form.findField('freq')
 					.getValue() !="",
 					'private' : false,
-					exception_event_id : this.formPanel.form.baseParams['exception_event_id'],
-					has_other_participants: this.participantsPanel.invitationRequired()
+					exception_event_id : this.formPanel.form.baseParams['exception_event_id']
+//					has_other_participants: this.participantsPanel.invitationRequired()
 				};
 
 				if(!GO.util.empty(action.result.status_color))
@@ -665,6 +665,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				if (config && config.callback) {
 					config.callback.call(this, this, true);
 				}
+				
+				
+				GO.calendar.handleMeetingRequest(action.result);
 
 			},
 			failure : function(form, action) {

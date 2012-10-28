@@ -1166,10 +1166,10 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 						id: this.currentDeleteEvent.event_id
 					};
 
-					if(event.has_other_participants)
-					{
-						params.send_cancellation = (confirm(GO.calendar.lang.sendCancellation)) ? 1 : 0;
-					}
+//					if(event.has_other_participants)
+//					{
+//						params.send_cancellation = (confirm(GO.calendar.lang.sendCancellation)) ? 1 : 0;
+//					}
 					
 					this.sendDeleteRequest(params, this.currentDeleteCallback, this.currentDeleteEvent);
 
@@ -1182,10 +1182,10 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 						id: this.currentDeleteEvent.event_id
 					};
 
-					if(event.has_other_participants)
-					{
-						params.send_cancellation = (confirm(GO.calendar.lang.sendCancellation)) ? 1 : 0;
-					}
+//					if(event.has_other_participants)
+//					{
+//						params.send_cancellation = (confirm(GO.calendar.lang.sendCancellation)) ? 1 : 0;
+//					}
 					
 					this.sendDeleteRequest(params, this.currentDeleteCallback, this.currentDeleteEvent, true);
 
@@ -1209,10 +1209,10 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 						id: event.event_id
 					};
 					
-					if(event.has_other_participants)
-					{
-						params.send_cancellation = (confirm(GO.calendar.lang.sendCancellation)) ? 1 : 0;
-					}
+//					if(event.has_other_participants)
+//					{
+//						params.send_cancellation = (confirm(GO.calendar.lang.sendCancellation)) ? 1 : 0;
+//					}
 					
 					this.sendDeleteRequest(params, callback, event);
 				}
@@ -1558,8 +1558,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				duration_end_time : actionData.end_time
 			};
 
-			if(event.has_other_participants)
-				params.send_invitation=confirm(GO.calendar.lang.sendInvitationUpdate) ? 1 : 0;
+//			if(event.has_other_participants)
+//				params.send_invitation=confirm(GO.calendar.lang.sendInvitationUpdate) ? 1 : 0;
 			
 			if(actionData.singleInstance)
 			{				
@@ -1581,6 +1581,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 						{
 							grid.store.reload();
 						}
+						
+						GO.calendar.handleMeetingRequest(responseParams);
 					}
 				}
 			});
@@ -1649,8 +1651,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				id : event['event_id']
 			};
 
-			if(event.has_other_participants)
-				params.send_invitation=confirm(GO.calendar.lang.sendInvitationUpdate) ? 1 : 0;
+//			if(event.has_other_participants)
+//				params.send_invitation=confirm(GO.calendar.lang.sendInvitationUpdate) ? 1 : 0;
 			
 			if(actionData.offset)
 				params['offset']=actionData.offset;
@@ -1686,6 +1688,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 						{
 							grid.setNewEventId(domIds, responseParams.new_event_id);
 						}
+						
+						GO.calendar.handleMeetingRequest(responseParams);
 					}
 				}
 			});	  		
@@ -1773,8 +1777,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			params['calendar_id']=actionData.calendar_id;
 		}
 
-		if(event.has_other_participants)
-			params.send_invitation=confirm(GO.calendar.lang.sendInvitationUpdate) ? 1 : 0;
+//		if(event.has_other_participants)
+//			params.send_invitation=confirm(GO.calendar.lang.sendInvitationUpdate) ? 1 : 0;
 
 		Ext.Ajax.request({
 			url: GO.url('calendar/event/submit'),
@@ -1794,6 +1798,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					{
 						grid.setNewEventId(domIds, responseParams.new_event_id);
 					}
+					
+					GO.calendar.handleMeetingRequest(responseParams);
 				}
 			}
 		});
@@ -2324,4 +2330,28 @@ GO.calendar.openCalendar = function(displayConfig){
 		});
 	}
 	
+}
+
+
+GO.calendar.handleMeetingRequest=function(responseResult){
+	console.log(responseResult);
+	if(responseResult.askForMeetingRequest){
+		Ext.Msg.show({
+			title:'Notify participants?',
+			msg: 'Would you like to notify the participants about this change by e-mail?',
+			buttons: Ext.Msg.YESNO,
+			fn: function(buttonId, text, config){
+				if(buttonId=='yes'){
+					GO.request({
+						url:"calendar/event/sendMeetingRequest",
+						params:{
+							event_id:responseResult.id
+						}
+					})
+				}
+			},
+			//animEl: 'elId',
+			icon: Ext.MessageBox.QUESTION
+	 });
+	}
 }

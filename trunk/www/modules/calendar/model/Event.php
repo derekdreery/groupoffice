@@ -955,17 +955,19 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
     $e->summary = (string) $this->name;
 		
-		switch($this->owner_status){
-			case GO_Calendar_Model_Participant::STATUS_ACCEPTED:
-				$e->status = "CONFIRMED";
-				break;
-			case GO_Calendar_Model_Participant::STATUS_DECLINED:
-				$e->status = "CANCELLED";
-				break;
-			default:
-				$e->status = "TENTATIVE";
-				break;			
-		}
+//		switch($this->owner_status){
+//			case GO_Calendar_Model_Participant::STATUS_ACCEPTED:
+//				$e->status = "CONFIRMED";
+//				break;
+//			case GO_Calendar_Model_Participant::STATUS_DECLINED:
+//				$e->status = "CANCELLED";
+//				break;
+//			default:
+//				$e->status = "TENTATIVE";
+//				break;			
+//		}
+		
+		$e->status = $this->status;
 		
 		
 		$dateType = $this->all_day_event ? Sabre_VObject_Element_DateTime::DATE : Sabre_VObject_Element_DateTime::LOCALTZ;
@@ -1679,7 +1681,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 					
 					
 					$ics=$this->toICS("REQUEST");				
-					$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="'.$method.'"');
+					$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REQUEST"');
 					$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 					$a->setDisposition("inline");
 					$message->attach($a);
@@ -1689,5 +1691,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 				GO_Base_Mail_Mailer::newGoInstance()->send($message);
 			}
+			
+			return true;
 	}
 }

@@ -131,7 +131,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 		$response['end_time'] = date('Y-m-d H:i',  $this->getAlternateEndTime());	
 		$response['ctime'] = date('Y-m-d H:i',  $this->_event->ctime);
 		$response['event_id'] = $this->_event->id;
-		$response['has_other_participants'] = $this->hasOtherParticipants();
+		//$response['has_other_participants'] = $this->hasOtherParticipants();
 		$response['link_count'] = $this->getLinkCount();
 		
 		$response['description'] = nl2br(htmlspecialchars(GO_Base_Util_String::cut_string($this->_event->description, 800), ENT_COMPAT, 'UTF-8'));
