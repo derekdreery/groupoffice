@@ -296,7 +296,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		{
 			acceptInvitationEl.on('click', function()
 			{
-				this.processInvitation(1);
+				this.processInvitation("ACCEPTED");
 			}, this);
 		}
 		var declineInvitationEl = Ext.get('em-icalendar-decline-invitation');
@@ -304,7 +304,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		{
 			declineInvitationEl.on('click', function()
 			{
-				this.processInvitation(2);
+				this.processInvitation("DECLINED");
 			}, this);
 		}
 		var tentativeInvitationEl = Ext.get('em-icalendar-tentative-invitation');
@@ -312,7 +312,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		{
 			tentativeInvitationEl.on('click', function()
 			{
-				this.processInvitation(3);
+				this.processInvitation("TENTATIVE");
 			}, this);
 		}
 		var icalDeleteEventEl = Ext.get('em-icalendar-delete-event');

@@ -943,30 +943,32 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		$event = GO_Calendar_Model_Event::model()->findByPk($params['id']);
 		
-		if(!empty($params['send_cancellation']))
-		{
-			if($event->is_organizer)
-				$this->_sendInvitation(array(), $event, false, array(),'CANCEL');
-			else
-			{
-				$participant = GO_Calendar_Model_Participant::model()
-							->findSingleByAttributes(array('event_id'=>$event->id, 'user_id'=>$event->user_id));
-				if($participant){
-					$participant->status=GO_Calendar_Model_Participant::STATUS_DECLINED;
-					$participant->save();
-					$this->_sendInvitation(array(), $event, false, array(),'REPLY',$participant);
-				}				
+		
+		if(!isset($params['send_cancel_notice']) && $event->hasOtherParticipants()){
+			return array(
+					'askForCancelNotice'=>true,
+					'is_organizer'=>$event->is_organizer,
+					'success'=>true
+			);
+		}  else {
+			if($event->hasOtherParticipants()){
+				if($event->is_organizer){
+					$event->sendCancelNotice();
+				}else
+				{
+					$event->replyToOrganizer(GO_Calendar_Model_Participant::STATUS_DECLINED, !empty($params['send_cancel_notice']));
+				}
+			}
+			
+			//TODO handle this in cancellation notice.
+			if(!empty($params['exception_date'])){
+				$event->addException($params['exception_date']);
+			}else
+			{			
+				$event->delete();
 			}
 		}
-		
-		if(!empty($params['exception_date'])){
-			$event->addException($params['exception_date']);
-		}else
-		{			
-			if($event)
-				$event->delete();
-		}
-		
+
 		$response['success']=true;
 		
 		return $response;
@@ -1080,9 +1082,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			
 			//import it
 			$event = new GO_Calendar_Model_Event();
-			if(!empty($params['status'])){
-				$importAttributes['owner_status']=$params['status'];
-			}
+//			if(!empty($params['status'])){
+//				$importAttributes['owner_status']=$params['status'];
+//			}
 			$event->importVObject($vevent, $importAttributes);
 			
 			if(!empty($params['status'])){
@@ -1100,8 +1102,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				$participant->status=$params['status'];
 				$participant->save();
 
-				//When the status changes we should notify the organizer.
-				$this->_sendInvitation(array(), $event, false, array(), 'REPLY', $participant);
+				$event->replyToOrganizer($params['status'], true);
 			}
 		}
 		
@@ -1147,7 +1148,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		}
 	}
 	
-	
+	//TODO Still support this?
 	public function actionInvitation($params){
 		
 		$participant = GO_Calendar_Model_Participant::model()->findSingleByAttributes(array(

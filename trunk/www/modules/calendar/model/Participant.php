@@ -222,7 +222,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 
 		$record['available'] = $this->isAvailable($start_time, $end_time);
 		$calendar = $this->getDefaultCalendar();
-		$record['create_permission'] = $calendar ? GO_Base_Model_Acl::hasPermission($calendar->getPermissionLevel(), GO_Base_Model_Acl::CREATE_PERMISSION) : false;
+		$record['create_permission'] = $calendar->userHasCreatePermission();
 		return $record;
 	}
 

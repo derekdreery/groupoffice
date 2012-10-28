@@ -3422,12 +3422,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * the newly created activerecord as KEY => VALUE. 
 	 * Like: $params = array('attribute1'=>1,'attribute2'=>'Hello');
 	 * @param boolean $save if the copy should be save when calling this function
+	 * @param boolean $ignoreAclPermissions
 	 * @return mixed The newly created object or false if before or after duplicate fails
 	 * 
-	 * @todo Copy the linked items too.  Use __clone() ??
-	 * 
 	 */
-	public function duplicate($attributes = array(), $save=true) {
+	public function duplicate($attributes = array(), $save=true, $ignoreAclPermissions=false) {
 		
 		//$copy = new GO_Base_Db_ActiveRecord(true);
 		$copy = clone $this;
@@ -3461,10 +3460,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 
 		if($save)
-			$copy->save();
+			$copy->save($ignoreAclPermissions);
 		
 		if(!$this->afterDuplicate($copy)){
-			$copy->delete();
+			$copy->delete(true);
 			return false;
 		}
 

@@ -1424,26 +1424,23 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		//create event in participant's default calendar if the current user has the permission to do that
 		$calendar = $participant->getDefaultCalendar();
-		if ($calendar && GO_Base_Model_Acl::hasPermission($calendar->getPermissionLevel(),GO_Base_Model_Acl::CREATE_PERMISSION)) {
-
+		if ($calendar->userHasCreatePermission()){
+			
+			//ignore acl permissions because we allow users to schedule events directly when they have access through
+			//the special freebusypermissions module.			
 			$participantEvent = $this->duplicate(array(
 					'calendar_id' => $calendar->id,
 					'user_id'=>$participant->user_id,
 					'is_organizer'=>false, 
-					'status'=>  GO_Calendar_Model_Event::STATUS_NEEDS_ACTION)
-							);
+					'status'=>  GO_Calendar_Model_Event::STATUS_NEEDS_ACTION),
+							true,true);
 			
 			return $participantEvent;
 		}else
 		{
 			return false;
-		}
-		
-		
-		
-		
+		}		
 	}
-	
 	
 	/**
 	 * Get the default participant model for a new event
@@ -1560,6 +1557,14 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 //			throw new Exception("Meeting reply can only be send from the organizer's event");
 //	}	
 	
+	/**
+	 * Update's the participant status on all related meeting events and optionally sends a notification by e-mail to the organizer.
+	 * This function has to be called on an event that belongs to the participant and not the organizer.
+	 * 
+	 * @param int $status Participant status, See GO_Calendar_Model_Participant::STATUS_*
+	 * @param boolean $sendMessage
+	 * @throws Exception
+	 */
 	public function replyToOrganizer($status, $sendMessage=false){
 		
 		if($this->is_organizer)
@@ -1622,6 +1627,58 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 	
 	
+	public function sendCancelNotice(){
+		if(!$this->is_organizer)
+			throw new Exception("Meeting request can only be send from the organizer's event");
+		
+		$stmt = $this->participants;
+
+		while ($participant = $stmt->fetch()) {		
+			//don't invite organizer
+			if($participant->is_organizer)
+				continue;
+
+
+			$subject =  GO::t('cancellation','calendar').': '.$this->name;
+
+			//create e-mail message
+			$message = GO_Base_Mail_Message::newInstance($subject)
+								->setFrom($this->user->email, $this->user->name)
+								->addTo($participant->email, $participant->name);
+
+
+			//check if we have a Group-Office event. If so, we can handle accepting and declining in Group-Office. Otherwise we'll use ICS calendar objects by mail
+			$participantEvent = $participant->getParticipantEvent();
+
+			$body = '<p>The following event was cancelled by the organizer: </p>'.$this->toHtml();					
+			
+			if(!$participantEvent){
+				
+
+				$ics=$this->toICS("CANCEL");				
+				$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="CANCEL"');
+				$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+				$a->setDisposition("inline");
+				$message->attach($a);
+			}
+
+			$message->setHtmlAlternateBody($body);
+
+			GO_Base_Mail_Mailer::newGoInstance()->send($message);
+		}
+
+		return true;
+		
+	}
+	
+	/**
+	 * Sends a meeting request to all participants. If the participant is not a Group-Office user
+	 * or the organizer has no permissions to schedule an event it will include an
+	 * icalendar attachment so the calendar software can schedule it.
+	 * 
+	 * @return boolean
+	 * @throws Exception
+	 */
 	public function sendMeetingRequest(){		
 		
 		if(!$this->is_organizer)

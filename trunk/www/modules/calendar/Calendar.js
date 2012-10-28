@@ -1226,13 +1226,34 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			maskEl:this.getEl(),
 			url: 'calendar/event/delete',
 			params: params,
-			success:function(options, response,result){				
+			success:function(options, response,result){
 				if(!result.success)
 				{
 					Ext.MessageBox.alert(GO.lang.strError, result.feedback);
 				}else
-				{
-					callback.call(this, event, refresh);
+				{					
+					if(result.askForCancelNotice){
+						
+						var msg = result.is_organizer ? 
+							'Would you like to send a cancellation notice to the participants?' :
+							'Would you like to notify the organizer that you will not attend by e-mail?'
+						
+						Ext.Msg.show({
+							title:'Send notification?',
+							msg: msg,
+							buttons: Ext.Msg.YESNO,
+							fn: function(buttonId, text, config){
+								params.send_cancel_notice=buttonId=='yes'?1:0;
+								this.sendDeleteRequest(params, callback, event, refresh);
+							},
+							//animEl: 'elId',
+							icon: Ext.MessageBox.QUESTION,
+							scope:this
+					 });
+					}else
+					{
+						callback.call(this, event, refresh);
+					}				
 				}
 			},
 			scope:this
@@ -2334,7 +2355,6 @@ GO.calendar.openCalendar = function(displayConfig){
 
 
 GO.calendar.handleMeetingRequest=function(responseResult){
-	console.log(responseResult);
 	if(responseResult.askForMeetingRequest){
 		Ext.Msg.show({
 			title:'Notify participants?',
@@ -2355,3 +2375,4 @@ GO.calendar.handleMeetingRequest=function(responseResult){
 	 });
 	}
 }
+
