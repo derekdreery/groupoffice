@@ -628,9 +628,18 @@ class GO{
 		return false;
 	}
 	
-	
+	/**
+	 * Writes a string to the Group-Office error log
+	 * 
+	 * @param string $errorMsg
+	 */
 	public static function logError($errorMsg){		
-		file_put_contents(GO::config()->file_storage_path . 'log/error.log', $errorMsg . "\n", FILE_APPEND);
+		$logDir = GO::config()->file_storage_path . 'log';
+		
+		if(!is_dir($logDir))
+			mkdir($logDir,0755, true);
+		
+		file_put_contents($logDir. '/error.log', $errorMsg . "\n", FILE_APPEND);
 	}
 
 
