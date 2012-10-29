@@ -158,6 +158,16 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 							$response[] = $node;
 						}
 					}
+					
+					if(GO::user()->isAdmin()){
+						$logFolder = GO_Files_Model_Folder::model()->findByPath('log', true);
+						$logFolder->syncFilesystem();
+						
+						$node = $this->_folderToNode($logFolder, $expandFolderIds, false, $showFiles);
+						$node['text']=GO::t('logFiles');
+						
+						$response[]=$node;
+					}
 				}
 
 
