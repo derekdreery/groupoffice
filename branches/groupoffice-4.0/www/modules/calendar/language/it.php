@@ -199,3 +199,5 @@ $l['updateReponses'][2]='%s ha rifiutato l\'evento %s';
 $l['updateReponses'][3]='%s ha marcato l\'evento %s come tentativo';
 $l['cancelMessage']='L\'evento seguente al quale eri stato invitato è stato annullato.';
 $l['directUrl']='URL diretto';
+$l['cantRemoveOrganizer']="Impossibile rimuovere l\'agenda";
+$l['calendarColor']='Colore del calendario';
