@@ -1,4 +1,7 @@
--Make relative image urls absolute in rss feeds
+29-10-2012 4.0.121
+- New log file contained too much info.
+- Make relative image urls absolute in rss feeds
+- Updated Italian translation
 
 29-10-2012 4.0.120
 - Changed order of the add and delete button in the standard T-bar of the gridPanels
