@@ -1,9 +1,15 @@
+29-10-2012 4.0.121
+- New log file contained too much info.
+- Make relative image urls absolute in rss feeds
+- Updated Italian translation
+
 29-10-2012 4.0.120
 - Changed order of the add and delete button in the standard T-bar of the gridPanels
 - Make title of exportDialog translatable
 - Added more space between the product amount and the tax per line in the Billing PDF
 - MoreData support in syncml
 - Errors logged to Group-Office log file accessible with file manager by admins
+- Fixed deleting of old versioned files
 
 25-10-2012 4.0.119
 - Table load speed optimization with multiselectgrid for addressbook, tickets, notes. tasks and billing

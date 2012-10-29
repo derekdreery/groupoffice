@@ -557,3 +557,5 @@ $l['unnamed']='Senza nome';
 $l['maxRowslistTooHigh']='Il numero massimo di righe negli elenchi è troppo alto. (max 50)';
 $l['sir']='Signor';
 $l['madam']='Signora';
+$l['exportDialog']='Finestra di esportazione';
+$l['logFiles']='File di log';
