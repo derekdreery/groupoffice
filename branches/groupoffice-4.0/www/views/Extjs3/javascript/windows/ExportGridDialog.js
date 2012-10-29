@@ -119,7 +119,7 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 		
 		Ext.apply(this, {
 			goDialogId:'export',
-			title:'ExportDialog',
+			title:GO.lang['exportDialog'],
 			autoHeight:true,
 			width:400,
 			items: [this.formPanel],
