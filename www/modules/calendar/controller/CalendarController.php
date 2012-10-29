@@ -238,5 +238,21 @@ PRODID:-//Intermesh//NONSGML ".GO::config()->product_name." ".GO::config()->vers
 		
 		echo "END:VCALENDAR\n";
 	}	
-
+	
+	public function actionEmpty($params){
+		$calendar = GO_Calendar_Model_Calendar::model()->findByPk($params['calendar_id']);
+		
+		if(!$calendar)
+			throw new GO_Base_Exception_NotFound();
+		
+		$events = $calendar->events;
+		
+		foreach($events as $event){
+			$event->delete();
+		}
+		
+		$response['success']=true;
+		
+		return $response;
+	}
 }

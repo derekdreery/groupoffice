@@ -517,13 +517,15 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		if ($success) {
 			if (!empty($params['reply_uid'])) {
 				//set \Answered flag on IMAP message
-				$imap = $account->openImapConnection($params['reply_mailbox']);
+				$replyAccount = GO_Email_Model_Account::model()->findByPk($params['reply_account_id']);
+				$imap = $replyAccount->openImapConnection($params['reply_mailbox']);
 				$imap->set_message_flag(array($params['reply_uid']), "\Answered");
 			}
 
 			if (!empty($params['forward_uid'])) {
 				//set forwarded flag on IMAP message
-				$imap = $account->openImapConnection($params['forward_mailbox']);
+				$forwardAccount = GO_Email_Model_Account::model()->findByPk($params['forward_account_id']);
+				$imap = $forwardAccount->openImapConnection($params['forward_mailbox']);
 				$imap->set_message_flag(array($params['forward_uid']), "\$Forwarded");
 			}
 
@@ -786,6 +788,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		if($message instanceof GO_Email_Model_ImapMessage){
 			$response['sendParams']['reply_uid'] = $message->uid;
 			$response['sendParams']['reply_mailbox'] = $params['mailbox'];
+			$response['sendParams']['reply_account_id'] = $params['account_id'];
 		}
 
 		$this->_keepHeaders($response, $params);
@@ -907,6 +910,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			//for saving sent items in actionSend
 			$response['sendParams']['forward_uid'] = $message->uid;
 			$response['sendParams']['forward_mailbox'] = $params['mailbox'];
+			$response['sendParams']['forward_account_id'] = $params['account_id'];
 		}
 
 		$this->_keepHeaders($response, $params);
