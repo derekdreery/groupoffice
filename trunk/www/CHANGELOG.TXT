@@ -1,5 +1,15 @@
-4.0.119
+29-10-2012 4.0.120
+- Changed order of the add and delete button in the standard T-bar of the gridPanels
+- Make title of exportDialog translatable
+- Added more space between the product amount and the tax per line in the Billing PDF
+- MoreData support in syncml
+- Errors logged to Group-Office log file accessible with file manager by admins
+
+25-10-2012 4.0.119
 - Table load speed optimization with multiselectgrid for addressbook, tickets, notes. tasks and billing
+- Default status of calendar event is accepted
+- Disable editing and deleting of merged events when viewing multiple calendars
+- Fixed html display of emails with multiple body tags
 
 25-10-2012 4.0.118
 - E-mail showing malicious content bug

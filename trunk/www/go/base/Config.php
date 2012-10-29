@@ -757,7 +757,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.0.118';
+	var $version = '4.0.120';
 
 
 	/* The permissions mode to use when creating files
@@ -787,7 +787,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20121025';
+	var $mtime = '20121029';
 
 	#group configuration
 	/**
@@ -1100,10 +1100,7 @@ class GO_Base_Config {
 			GO::debug('Page load took: '.(GO_Base_Util_Date::getmicrotime()-$this->loadstart).'ms', $this);
 			GO::debug('Peak memory usage:'.round(memory_get_peak_usage()/1048576,2).'MB', $this);
 			GO::debug("--------------------\n", $this);
-		}
-		
-		GO::endRequest();
-		
+		}		
 //		$this->_logSlowRequest();
 	}
 	

@@ -51,7 +51,7 @@ function exitBackup {
 #EXCLUDE_FILE="/root/scripts/exclude"
 
 # Comment out the following line to disable verbose output
-#VERBOSE="-v"
+VERBOSE="-v"
 
 #######################################
 ########DO_NOT_EDIT_BELOW_THIS_POINT#########
