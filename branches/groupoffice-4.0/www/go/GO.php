@@ -442,11 +442,13 @@ class GO{
 		self::$initialized=true;
 		
 		//register our custom error handler here
-		set_error_handler(array('GO','errorHandler'), E_ALL | E_STRICT);
+		error_reporting(E_ALL | E_STRICT);
+		set_error_handler(array('GO','errorHandler'));
 		register_shutdown_function(array('GO','shutdown'));
 				
 		spl_autoload_register(array('GO', 'autoload'));	
 
+		//Start session here
 		GO::session();
 		
 //		GO::debug("Session started with ID: ".GO::session()->id());
@@ -560,6 +562,10 @@ class GO{
 	 * @return boolean
 	 */
 	public static function errorHandler($errno, $errstr, $errfile, $errline) {
+		
+		//log only errors that are in error_reporting
+		$error_reporting = ini_get('error_reporting');
+		if (!($error_reporting & $errno)) return;
 
 		$type="Unknown error";
 
