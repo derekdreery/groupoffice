@@ -592,3 +592,5 @@ $l['maxRowslistTooHigh']='The maximum number of rows in lists is too high. (max 
 
 $l['sir']='Sir';
 $l['madam']='Madam';
+
+$l['exportDialog']='Export Dialog';
