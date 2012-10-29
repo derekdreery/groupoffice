@@ -581,3 +581,5 @@ $l['unnamed']='Naamloos';
 
 $l['sir']='Heer';
 $l['madam']='Mevrouw';
+
+$l['exportDialog']='Exporteren';
