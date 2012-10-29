@@ -1,0 +1,2545 @@
+29-10-2012 4.0.120
+- Changed order of the add and delete button in the standard T-bar of the gridPanels
+- Make title of exportDialog translatable
+- Added more space between the product amount and the tax per line in the Billing PDF
+- MoreData support in syncml
+- Errors logged to Group-Office log file accessible with file manager by admins
+
+25-10-2012 4.0.119
+- Table load speed optimization with multiselectgrid for addressbook, tickets, notes. tasks and billing
+- Default status of calendar event is accepted
+- Disable editing and deleting of merged events when viewing multiple calendars
+- Fixed html display of emails with multiple body tags
+
+25-10-2012 4.0.118
+- E-mail showing malicious content bug
+
+24-10-2012 4.0.117
+- Option to open/close a selected week for all users (Billing, Time Registration, Hours Approval).
+- Reminders were not synced with Outlook
+- Links were not clickable from e-mail portlet
+- Conflicting events check didn't work with busy flag and repeating events
+- SMTP password wasn't updated on LDAP login
+- Shared folders could appear twice in the shares tree
+- Create folder permission check failed if a parent folder didn't exist
+- Added Incomplete filter to the tasks list
+- Links in email window on startpage didn't work
+- Unset invalid attributes while using importVObject function in Contact model.
+- Throw a fileNotFound exception when a file that needs to be downloaded is not found on the server.
+- Updated German translation
+
+19-10-2012 4.0.116
+- Also show disabled users in selectuser
+- Correct key.txt permissions on fresh install
+- Check if project folders are available in webdav
+- Better error reporting for LDAP auth and sync
+- Log about changes to postfix mailboxes and domains
+- Fixed upgrade from 3 to 4 issues
+- Custom field records were not deleted
+
+17-10-2012 4.0.115
+- PDF error in billing
+
+17-10-2012 4.0.114
+- Invalid weekly recurrence rule for funambol
+- Error Call to a member function isWritable() on a non-object in /usr/share/groupoffice/modules/files/model/Folder.php fixed.
+- Removed call to the htmleditor's syncValue() function when the editor is in sourceEdit mode.
+
+16-10-2012 4.0.113
+- When adding / deleting contacts from address list thru the email message list, the system looks also for the second and third email addresses of contacts.
+- Wrong timezone info in vcalendar export
+- Check filesystem permissions before change file or folder models
+- Copy paste in same files folder appends a number eg. test becomes test (1)
+- Editing sieve actions resulted in duplication
+- Controller actions can be locked to only one user.
+- Custom fields were disabled in last version.
+
+12-10-2012 4.0.112
+- Email validation will no longer accept 2 dots right after each other in domain part
+- First ticket by customer did not send an autoreply message
+- Workaround IE DST bug in month grid of calendar
+- Reimplemented show from others in ticketsystem
+- Changed the classname for MultiSelectGrid in projects to: GO_Projects_Model_Status
+- In PHP 5.4, ReflectionProperty::getName() sometimes erroneously returned false.
+- Portlet folders were not deleted along with account.
+- Projects portlet double click didn't work
+- GOTA didn't work with servers that used chunked encoding
+- Updated German translation
+- Sorting of shares fixed.
+- Dutch translation for billing module
+- Regex handling of customfields didn't work properly when there was no flag given.
+- Order PDF template will show item group totals for every item group not just the last one
+- Added homepage to contact info
+- Set default sort order for tasklists
+- Disable APC cache temporarily because it seems to cause random logouts
+
+11-10-2012 4.0.111
+- Tickettypes permissions can no longer be "read and create"
+- Important fix from bug in previous version, to enable the adding of users
+- When creating a new order from a Contact or Company in the addressbook the Contact or Company will be selected in the new order dialog as well
+- Saved attachments could end up in the root folder in rare cases.
+- E-mail reminder popped up too much
+- Mute e-mail sound alone didn't work
+- Updated Italian translation
+- Funambol fields changed after syncing and phone numbers could get lost.
+- Implemented freebusy permissions
+- limit_usersearch didn't apply in acl permissions panel.
+- Find users on full name didn't work
+- Inconsistent sorting of full user or names. John Doe or Doe, John.
+- Auto create calendar categories when importing or syncing
+- Sort by TO field in sent items
+- Visible tasklist selection was broken
+- Default user id was not set anymore since last update.
+
+08-10-2012 4.0.110
+- Email message priority was not shown
+- Changes to e-mail templates were not saved
+- Updated German and Norwegian translation
+- Auto link text misplaced in some languages.
+- Initial sorting of tasks was incorrect.
+- Only show module permissions tab in group dialog when you have access to the module management module.
+- Close inactive tickets through cron job and exclude a status
+- Pass beforeLogin $params by reference to modify in modules
+- Read only custom fields could not be enabled in grids
+- Don't crash on permission error for e-mail account in sync
+- New comment form rendered twice sometimes
+- Database check will set empty properties with default values when they're empty.
+- Entering an empty string into a custom field will result in a null value in the database.
+
+03-10-2012 4.0.109
+- Remove spaces at beginning and end of fields before CSV-importing them.
+- Attach files button in ticket dialog didn't work the second time.
+- Database check could delete recurrence end time in very rare cases
+- Changed: Open composer for sent items when you double click
+- Added a special Swift preference to escape dots. For some buggy SMTP servers 
+  this is necessary.
+- Import category color for appointments
+- Create read only custom field categories. So you can make sure people 
+  can view them but not alter them. 
+- Save event time in Time Registration fixed.
+- Opening advanced search dialog from SelectContactDialog / SelectCompanyDialog.
+- More elegant error message for empty winmail.dat files
+
+01-10-2012 4.0.108
+- Copy event in calendar moved the event
+- Comments didn't show text in browse all dialog.
+- Question for meeting request was asked when you put an event directly into someone else's calendar
+- Tickets buoy indicator showed invalid number for non-agents
+- Don't cache tickets files because there are permissions issues. Everyone has read access to the types but may not see other peoples files.
+
+01-10-2012 4.0.107
+- in the task edit dialog Tasklists with create rights can be selected
+- Fixed undefined index "-1" error recurrences
+- Sort on column 'name' in Add User Permissions window.
+- ActiveSync: Always try to get a sender name when sending an email
+- Old custom field tags didn't always work on the billing PDF
+- Upgraded plupload to version 1.5.4
+- invalid subject on event invitations
+- Also popup and play alarm when email panel is open. 
+- Improved calendar invitation messages in the e-mail client
+- Saving company in user dialog was broken
+- Calendar category import and export support
+- Import recurring events with days would shift.
+- Crash if filesearch module was loaded before files
+- Update could add duplicate admin e-mail accounts.
+- Some recurrence patterns were not accepted by iOs with Caldav
+- Project template wasn't competely applied the second time
+
+26-09-2012 4.0.106
+- HTML field with help text crashed
+- Gota didn't open second document
+- Adding tasks using the quick add bar will respect the default reminder settings of a user
+
+
+25-09-2012 4.0.105
+- Remove old line in italian language file of billing module that gave errors
+- Calendar resources can now be deleted 
+- project selectType and templateSelect dropdown is disabled when permission_level < writeAndDelete
+- modified attributes of ActiveRecord will work with types other then string
+- Drag and drop a task on a different tasklist now is in MVC style
+- Fixed issue with Dismiss a reminder in the calendar module.
+- Fixed "undefined function $this->escape...." bug in filesearch.
+- Added German translation to the filesearch module
+- Unsubscribe link was broken
+- E-mail desktop integration didn't work with Internet Explorer
+- Absolute positioned elements in e-mails could mess up layout
+- Added new tag for document templates: {contact:sirmadam} Sir or Madam depending on the gender.
+- Strange page breaking of PDF's in billing
+- Time Registration save hours bug fixed
+- On delete: set "max_execution_time" to 3 minutes because it can take a while to delete all relations of an object.
+
+21-09-2012 4.0.104
+- Change: behavior of ActiveRecord->duplicate() won't call delete() before it is saved and wont unset multicolumn PKs
+- Change ActiveRecord->hasFiles() will return true if column files_folder_id is in the database false otherwise
+- Invoice PDF was displaying the totals on the right side when not displaying any prices on invoice lines
+- cached zip file reset after consecutive email attachment downloads by full zip.
+- Comments module enhanced with categories and easier input fields.
+- Updated French translation
+- Find matching company on import in matching address book (import + syncml issue)
+- GOTA asks for password when session is expired or user logged out
+- Appended the subject of the appointment to all email subjects.
+- Updated Windows registry file for e-mail clients
+- E-mail filter dialog was broken in Internet Explorer
+- Reminders didn't include name in e-mail subject
+- Deleting e-mails failed when trash folder was disabled
+- Linking e-mails were always saved in the root folder even when selecting a different folder.
+- After enabling sharing in folder properties the permissions panel didn't activate immediately
+- Group management by non admin user didn't work right
+- Weekly recurring tasks shifted day
+
+20-09-2012 4.0.103
+- Billing PDF templates got unwanted extra columns
+
+20-09-2012 4.0.102
+- GOTA didn't launch
+- Copy/pasting products in the catalog of the billing module will work
+- Duplicating active record relations will keep the primary key when it exists of more then one column
+
+19-09-2012 4.0.101
+- Default values for custom fields were not set correctly.
+- Check for php 5.3 or greater when upgrading
+- Creating a time-registration from a calendar event works now.
+
+
+19-09-2012 4.0.100
+- Invalid validation for agent in ticket
+- Quota display was divided by 1024
+- Updated Russian translation
+- Updated Italian translation
+- Added config option "$config["default_max_rows_list"]" to set the default for new users. (max is 50)
+- Added Android detection for GOTA
+- Automatically fill in start date for new project
+
+17-09-2012 4.0.99
+- Somehow pro debian package was missing
+
+17-09-2012 4.0.98
+- Ticket rates in Add/Edit ticket dialog will only be shown where there are ticket rates
+- Validate if the selected agent can be agent for the selected ticket type
+- Save button is shown in the Ticket administation dialog when adding rates
+- Automatic creation of call reminder task with newly created orders.
+- Changing user settings will no longer place old user data into a session in setCompatibilitySessionVars() themes will get changed right away
+- Will not set default values for ActiveRecord set in the code when importing
+- Will not convert a date field when no date is set when importing
+- PDF for Invoice/Order wouldn't print total prices when piece price or product price where not printed
+- PDF for Invoice/Order will now accept the page format from the template 
+- Upgraded SabreDAV library to 1.6.4
+- Allow underscores in custom ICS tags for importing.
+- Error with undefined variable in calendar invitation
+- Optimized code for recurrence calculations in the calendar so it will not calculate more than needed.
+- Fixed problem with accepting invitations that have a different mime-type than 'text/calendar'
+- Groups module could be opened twice
+- Custom field column cache was not cleared when modified.
+- Disable sorting on alias and mailboxes columns in postfixadmin
+- Updated German translation
+- Adding users and groups to manage permissions only got read permissions.
+- HTC deletes old appointments. We don't like that so we refuse to delete appointments older then 7 days with ActiveSync.
+- Updated Swedish translation
+- Normalize CRLF to LF in database to prevent sync issues.
+- Not all contacts were synced when sending multiple packages in syncml
+- Invalid XML in JNLP file caused GOTA to fail with OpenJDK
+- Browse comments in ticket didn't work
+- Added beforeValidate function to the ActiveRecord
+- Tag "{weeknr}" for new projects' names, just like the tag "{autoid}".
+- Added afterLoad function to the ActiveRecord
+- Updated Norwegian translation
+
+11-09-2012 4.0.97
+- Important security problem fixed!
+- Change: the priority selectbox will be shown to customers, they can set the priority of there own tickets.
+- Fixed bug when using a different database port
+- Now the replacement of fields(%field%) is also working in the footer of a billing PDF
+- Added diff function to GO_Base_Fs_File class
+- Import failed on events without name.
+- Trash folder in e-mail didn't work since last update
+- Fixed date format bug in ActiveRecord when not logged in
+- Fixed temp folder bug in Config.php when not logged in
+- Added check for Amavis configuration file change so it will not be overwritten on every update.
+- Updated CLI only check
+- Calendar import more memory efficient and fixed some bugs
+- When moving messages the folder switched to the folder messages were moved to.
+
+06-09-2012 4.0.96
+- Option to automatically check mailboxes for unread messages.
+- Keep the state of the fileDialog tree to the last selected folder, this is kept in the current session
+- Added an email portlet to the start page
+- Switch to plain text mode when composing e-mail on an ipad
+- Fixed syncing of recurring events and its exceptions
+- Debughandler for sieve removed in constructor, this interferes with the debug handler of z-push
+- Fixed upgrade 3.7 to 4.x crash when column layout changed in some cases.
+- If you don't click the permissions tab when creating a user, the defaults are not applied for the memberships.
+- Public ICS calendar export wasn't visisble without logging in.
+- IBAN was not shown on company info if bank no. was not entered
+- Strict checking in setAttribute. Renaming 1 to 1.0 didn't work.
+- Correct log dir permissions after debian package upgrade
+- When a user uploaded the same attachment twice, a number was appended.
+- urldecode query string in mailto handler
+- Show correct owner in event dialog
+- LDAP user sync script added.
+- Sorting on name in groups module
+- Reimplemented e-mail filtering without sieve support
+- Added workflow support to the billing orders
+- Removed Apply button from ticket dialog
+- Added new portlet that shows files uploaded in the last 7 days.
+- Fixed: file does not exist: /themes errors in apache log
+- Subfolders of the sent, drafts and trash folders in the e-mail were not treated as such.
+- Serverclient did not update the mailbox in the servermanager	
+- Error on logging e-mail
+- {date} tag didn't work in document templates.
+- Document templates can work for other files like PDF as well. No tags will be replaced.
+- New mailto handler see http://wiki4.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client
+- New e-mail notifications were broken
+
+03-09-2012 4.0.95
+- Missing content-lenght header caused GOTA problem.
+
+31-08-2012 4.0.94
+- Bug: No temp file for inline attachment
+
+31-08-2012 4.0.93
+- Added new recently modified files portlet.
+
+31-08-2012 4.0.92
+- Encoding characterset was not set when displaying saved email messages, didn't display russian characters
+- Forgetful FilesGrid now remembers its state
+- Calendar: removed GO version from calendar print
+- Change go_log ip field to 45 chars to support ipv6
+- Updated Norwegian language
+- Added experimental contact autolink option
+- Rollback of permission check by deleting shared mailbox messages
+- Fixed: Rounding error in billing module
+- Updated German language
+
+29-08-2012 4.0.91
+- Fixed: SyncML duplicated contacts on client when there were more than 200 contacts.
+- Fixed: Inline images were corrupted when switching e-mail templates
+- Optimized: speed in rendering custom field columns
+- Fixed: Fixed resize of customfieldsdialog optionsgrid
+- Updated Italian translation
+- Fixed: Digest authentication for WebDAV, CalDAV and CardDAV failed after changing password. Logging into Group-Office again re-enabled the login.
+- Improved: Advanced search improved with visual indication and it's translatable.
+- Fixed: Printing calendar, events have a black background 
+
+28-08-2012 4.0.90
+- Fixed: GOTA crashed after java update 1.7.06
+- Fixed: When adding a link to an email the receiver does not have access to the mail could not be read. New behavior: will just not link the item.
+- Missing feature: When adding a new project "Create new project type" wasn't working yet
+- Fixed en language in email module.
+- Fixed blinkTitle bug
+- Urldecode added to the store load function of the bookmark module
+- Event->delete() will ignore ACL permissions when it is a resource of the current user
+- Database fix for recurring events that could have been added when there was a bug in previous version.
+- Updated German language
+- Updated Italian language
+- No files got attached to the email composer when using "Send files" in the Files module when the users default template is 'None'
+- Email module MessageGrid will expand when it is collapsed and the visible email gets deleted.
+- Birthday was not showed for the correct year.
+- Added check for delete permission on the email account when a user tries to delete emails.(Only applied on the server side)
+- The customfield dialog can now be resized
+- Customfields: Hide permissionlevels for categories.
+- Calendar: Always ask to send invitation mail when adding participants (Don't check for the "add directly to the other calendars" checkbox anymore)
+- Email: Fixed bug with attachments that have an empty line that get corrupted when forwarding them.
+- Email: Fixed bug with semicolon in text_to_html function
+- LDAPAUTH: Fixed mapping for uid in LDAP authenticator
+- Email: Fixed save attachments as zip function
+- Autocreate Group fixed in servermanager
+
+08-08-2012 4.0.89
+
+- Fixed problem with default background color in events
+- Fix export orientation when exporting PDFs works again
+- Fix calendar:
+ -- update event with resource.
+ -- delete resource from event
+ -- select resource when only write permissions
+ -- send mail when deleting event to participants
+- Fixed label Agent when exporting tickets
+- Fixed hr translation in Links module. 
+- Fixed task bug in Caldav backend
+- User can enter IMAP password on IMAP connection failed.
+
+03-08-2012 4.0.88
+- Fixed bug: E-mail download link date one day off
+- Signed GOTA
+- Added aclModified check to activeRecord to determine if an Acl is changed.
+
+02-08-2012 4.0.87
+- Fixed Bug: Cannot export and import uuid in addressbook contacts. (Now the uuid field is available in export and import)
+- Fixed Language: Timeregistration translation in French for customfields is fixed
+- Updated German translation of GOTA
+- Fixed bug in SyncML
+
+02-08-2012 4.0.86
+- Fixed Bug: Timeregistration export table columns are on top of each other when having a long project name
+- Fixed bug: Settings->Synchronisation->Email-Account is not saved after panel submit
+- Fixed bug: Autocomplete in e-mail sometimes didn't work
+- Fixed bug: Funambol sync sometimes imported garbled characters.
+- Updated Norwegian and German translations
+
+01-08-2012 4.0.85
+- Updated German
+- Small bug fixes
+
+30-07-2012 4.0.83
+- Small bug fixes
+
+30-07-2012 4.0.82
+- Sync only selected addressbooks and calendars with CalDAV and CardDAV
+- Small bug fixes
+
+30-07-2012 4.0.81
+- Fixed file system permissions issue.
+
+30-07-2012 4.0.78
+- Bug in install.sql of addressbook that made new installations fail.
+- Bug in Hungarian language files
+- Bug in monthly recurring event.
+
+27-07-2012 4.0.77
+- Updated German
+- CardDAV didn't work on the Mac
+- Other small bug fixes.
+
+26-07-2012 4.0.76
+- Small bug fixes
+- Updated Norwegian
+- Manage SyncML devices
+
+26-07-2012 4.0.75
+- Fix for latest funambol client
+- Fix for iOS caldav and carddav connection
+
+25-07-2012 4.0.74
+- Bug in multiselect panels.
+
+25-07-2012 4.0.73
+- Better memory management in ActiveRecords
+- Updated German translation
+- Small usability improvements
+- Bug fix in SyncML (Outlook sync)
+- Small bug fixes
+- Username and password cookies were not encrypted
+- Security bug in calendar
+- Notes can be encrypted with a password now.
+- New encrypted custom field
+
+12-07-2012 4.0.72
+- Small bug fixes
+- Delete old mail replaced by move old mail so it can be used for archiving too.
+- Bug in connecting to postfix
+- Edit e-mail button opened GOTA. Now it launches the E-mail viewer.
+- Bug fix with selecting next mail after deleting one.
+
+12-07-2012 4.0.70
+- GOTA wasn't working on some servers
+- Some tags were missing in document templates.
+- New E-mail notify sometimes didn't show.
+
+10-07-2012 4.0.67
+- Strange characters from Romanian and Hungarian language files removed.
+- Bug in e-mail sync with some IMAP servers.
+- Folders with underscores didn't expand sometimes
+- All info panels show the type and name on top now. More consistent.
+- Workflow module has an icon now.
+
+09-07-2012 4.0.64
+- Various small bugfixes
+
+06-07-2012 4.0.63
+- Don't autolink Drafts, Sent Items and trash messages.
+- E-mail files function
+- Scanbox module included
+
+05-07-2012 4.0.62
+- Cache problem with reply all and language change
+
+04-07-2012 4.0.60
+- Speed optimizations in mail client
+- Sync unread flags bug
+- Small bug fixes
+
+03-07-2012 4.0.57
+- Cache problem that caused a lot of problems in the e-mail client
+
+02-07-2012 4.0.56
+- Bug in CalDAV with Applie ical fixed.
+- Bug in calendar invitations fixed.
+- Bug in announcement formatting.
+- Bug with changing fonts in E-mail composer. Font selection removed.
+
+26-06-2012 4.0.50
+- Lot's of bug fixes thanks to the beta testers!
+- SabreDAV upgraded to 1.6.3
+- SwiftMailer upgraded
+- Searching uses full text index now to achieve better performance
+- E-mail module no longer uses database cache. It connects to IMAP directly.
+
+11-04-2012 4.0.1 (beta)
+- Complete new MVC PHP framework
+- Extensive security audit by Cigitel.
+- Users are stored in the addressbook too.
+- Ticket groups for better permission management.
+- plupload used for file uploads
+- gnupg support dropped. smime still supported.
+- Filesearch module for deep searching files content.
+- Document workflow module.
+- SabreDAV upgraded to 1.5.6
+- Swift Mailer upgraded to 4.1.5
+- Project tasks have a relation now and have a percentage complete field
+- Photo support in sync.
+- Sync multiple calendars
+- Billing module can create MS word and open-office invoices, quotes and orders.
+- Billing module can handle purchase orders and stock.
+
+Addressbook
+- Batch edit in addressbook.
+- Merge companies and contacts
+- Easier and more secure advanced search.
+
+E-mail
+- Embed pasted images from firefox into mime mail for better memory management
+- Links in messages become relative links when cut & pasted. We make them absolute again on when the message is sent.
+- Automatic linking of e-mail replies when sent from a projects, contact, company etc.
+
+WARNINGS: 
+- Projects: batch report queries will not work anymore. They need to be reconfigured.
+- Billing: Custom fields in templates used to be %Name of customfield% This should be replaced by {col_1}
+
+
+
+06-01-2012 3.7.42
+- Bug fix in Russian reminders.
+- Small adjustments for customer customization module.
+- Some other small bugs where fixed.
+
+22-12-2011 3.7.41
+- Small bug fixes
+
+16-12-2011 3.7.40
+- Bug with mail headers on some servers
+
+07-12-2011 3.7.39
+- Create mail folders was broken
+- Download of email attachments bug
+
+01-12-2011 3.7.38
+- Bug in calendar events display with multiselect
+
+30-11-2011 3.7.37
+- Missing table on calendar bug.
+
+29-11-2011 3.7.36
+- GOTA was broken in latest releases.
+- Calendar colors with multiple selection can be defined by the user.
+- UID of calendar items got lost when syncing with ActiveSync. This caused problems with CalDAV.
+- Forwarding inline images that came from Apple imail failed sometimes.
+
+17-11-2011 3.7.35
+- Several small bug fixes
+- Added Vietnamese
+
+18-10-2011 3.7.34
+- Creating initial sieve script was broken
+- ldapauth and z-push could trigger an endless logout loop.
+
+10-10-2011 3.7.33
+- Worked around Funambol bug in client 10.0.1 where line wrapping is not supported.
+
+30-09-2011 3.7.32
+- Fixed sort bug in addressbook
+
+30-09-2011 3.7.31
+- Updated French and Russian.
+- Fixed several small bugs.
+- Added addressbook column to companies grid.
+
+26-09-2011 3.7.30
+- Various small bugfixes.
+
+02-09-2011 3.7.28
+- Fixed bug in ActiveSync with Android 2.3.3
+- Other small bug fixes.
+- Fixed bug in delete old mail
+- Bug fixes with webdav
+- New module for admins to become other users
+
+17-08-2011 3.7.27
+- WebDav locking is enabled
+- Fixed some webdav bugs.
+- TCPDF upgraded to latest version.
+- Bug in some e-mail display.
+- Smime decryption bugs fixed.
+- Syncml decoding error fixed.
+- Translation updates.
+- Better GUI for selecting tasklists, addressbooks and note categories in Settings -> Sync
+
+28-07-2011 3.7.26
+- Smiley's broke some e-mails and did not work case insensitive.
+
+26-07-2011 3.7.25
+- SMIME info on print
+- Disable beeps for e-mail separately
+- Context menu on event to Send mail to all participants	
+- Context menu on contacts to send mail to multiple
+- Simple smiley support in texts
+- Caldav iphone status bug. Imported status defaults to accepted now. iphone doesn't like the status needs-action.
+- Fixed SQL and command injections after extensive security testing.
+- New caldav_max_months_old config.php parameter to control the maximum age of synced events.
+- E-mail composer HTML editor fix for Chrome.
+- Updated german translation
+- When a download link is sent in the files module. Info about that should be shown in the info panel.
+- Set global vacation subject via configuration file
+- In some cases webdav only created 0 byte files
+
+23-06-2011 3.7.24
+- New config variable to set subject for sieve vacation messages.
+- Worked around php smime header bug.
+- Made a checkbox to enable the login screen text at the settings module. 
+  Don't forget to check this when you already have a text setup.
+- User groups list was showing less rows then it should.
+- User groups are searchable
+- Bug in calendar with removing a single instance from a recurring event.
+
+16/06/2011 3.7.23
+- Fixed bug with etags in caldav
+- New ticket message template tags and attach files when saving an e-mail as ticket
+- Check if SMIME certificate address matches the sender address
+- Fixed some SQL injection vulnarabilites.
+
+06/06/2011 3.7.22
+- Timer in timeregistration didn't add values.
+- You can now download attached file from the composer.
+- Small bug fixes
+
+31/05/2011 3.7.21
+- Worked around PHP bug in smime functions for older php versions.
+- Calendar tooltip was broken due to ExtJS upgrade
+
+25/05/2011 3.7.20
+- All day events that repeated were shown with one day too much.
+
+25/05/2011 3.7.19
+- Fixed SMIME bugs and enhanced it with icons.
+- Problem with CalDAV not sending some appointments to the client.
+- Small bug fixes.
+- ExtJS upgrade to 3.3.3
+
+19/05/2011 3.7.18
+- SMIME didn't work with attachments.
+- Other small SMIME bug fixes.
+- Updated Norwegian language pack
+- Calendar list background color match the event colors when you select multiple
+  calendars.
+- Tasks counter and indicator appears when new tasks are created for you.
+
+
+17/05/2011 3.7.17
+- SMIME didn't work on some MySQL servers
+- SMIME enhancements and bug fixes.
+- Other small bug fixes.
+
+16/05/2011 3.7.16
+- Downloading attachments was broken
+- Changing the smime preferences didn't work properly.
+
+13/05/2011 3.7.15
+- Removed nagging about adding new customer to addressbook in the billing modules
+- Minified script of smime was missing.
+
+13/05/2011 3.7.14
+- When using the timer in the timeregistration it now adds the time to existing 
+  entries.
+- New module for SMIME signing and encryption
+- Template and permission type can only be changed if you have manage permission.
+- Projects couldn't be dragged to the top level
+- Created new config option nav_page_size to set the number of displayed 
+  calendars, notebooks, tasklists etc. per page.
+- Added report parameters to PDF export at Projects report
+- Invitations for occurences of a recurring event didn't work right.
+- Problems with CalDAV and recurring events fixed.
+- Upgrade SabreDAV vendor software to version 1.4.3
+- New log/info.log in home directory that currently logs logouts, successful- 
+  and failed logins.
+
+29/04/2011 3.7.13
+- Unpacked archives didn't show contents in the file manager
+- Users with manage permissions for a file folder can manage the permissions now.
+- SMTP password wasn't updated if LDAP or IMAP password changed and
+  'smtp_use_login_credentials'=>true in imapauth.config.php
+- Add billing order was broken in IE
+- Hide empty sections in information panels
+- IE9 and Chrome style issues fixed
+- Project reports depended on Custom fields
+- Delete permission is respected in the calendar
+- Participants status copied when using the links from an external mail client.
+- Bug in PDF printing
+
+27/04/2011 3.7.12
+- E-mail editor was behaving strange in Internet Explorer
+- Sorting in projects detailed report grid.
+- New TCPDF version required cache folder for PNG files.
+- IMAP ACL enabled in Debian packages
+- Small bug fixes
+
+22/04/2011 3.7.10
+- Group-Office wouldn't start if local_listeners.php wasn't there.
+- Bookmarks module imports favicons and it uses 16x16 icons now so we can use
+  those in the start menu too.
+
+22/04/2011 3.7.9
+- IMAP ACL support
+- New local_listeners.php script that can be put into the config directory to add
+  custom listeners. See: http://www.group-office.com/w/index.php/Event_handling#Adding_event_listeners_in_a_simple_way
+- Several bug fixes
+
+07/04/2011 3.7.8
+- Upgraded TCPDF to version 5.9.065
+- Bug where ID of a permission type was shown instead of name in the projects module.
+- German translation updated.
+- Norwegian translation updated.
+- Small bug fixes
+- Bookmarks can be set as module tabs
+
+06/04/2011 3.7.7
+- Resource busy status for unconfirmed booking is configurable per group
+- Fixed security token mismatch error in IE.
+- Fixed bug in saving statuses displayed in the Projects portlet on the summary page.
+- Maintenance text on login screen can be added in the settings module.
+- File versioning on Windows servers didn't work right.
+- Some e-mail messages containing garbage characters didn't display for the second time.
+- Small misalignment of amount in pdf invoices fixed.
+- Clicking on links in ticket dialog works now
+- Updated Norwegian translation
+- Change default font size in e-mail
+- New module to limit freebusy info access
+- Bug with shared accounts and inaccessible attachments fixed
+- Option to disable security token check $config['disable_security_token_check']=true;
+
+01/04/2011 3.7.6
+- Timeregistration and calllog had the same link id for customfields.
+- Small bug fixes
+
+29/03/2011 3.7.5
+- Fixed problem with adding mail accounts to the postfixmanager.
+- Small bug fixes
+
+25/03/2011 3.7.4
+- Merged all bug fixes from 3.6 into 3.7
+
+15/03/2011 3.7.2
+- Various small bug fixes reported at Sourceforge.
+- Prevent Cross-site request forgeries: http://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
+
+10/03/2011 3.7.1
+- Public icalendar file
+- Sieve e-mail filtering support
+- Optimized for very large installations 20.000 users.
+- Sharing of e-mail accounts
+- LDAP authenticaton has more flexible mapping
+- Automatic project name with id number
+- Standard timeregistration entries selectable from a list.
+- Custom fields for timeregistration entries in Multiple day mode.
+- Preset the folder view for other users.
+- Standard e-mail folders are created in English on the IMAP server and are
+  translated by Group-Office. This provides better consistency.
+
+16/03/2011 3.6.30
+- Removed cross site request security measure because it causes problems in IE.
+
+15/03/2011 3.6.29
+- Various small bug fixes reported at Sourceforge.
+- Prevent Cross-site request forgeries: http://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
+
+08/03/2011 3.6.28
+- Corrected corrupt Thai translation file.
+
+02/03/2011 3.6.27
+- Autocomplete for contacts in billing module works again.
+- Bug with monthly recurring event.
+- Updated Polish translation
+
+28/02/2011 3.6.26
+- Availability check fix
+- Java upload applet upgrade to fix Czech translation issue.
+- Calendar entries could be corrupted by changing the end time of a recurring item.
+- Other small bug fixes.
+
+23/02/2011 3.6.25
+- Updated Norwegian
+- Console.log function was causing an error in projects.
+- Added some Czech translation files.
+
+22/02/2011 3.6.24
+- Tasks recur on due time and only the due date is shown in the calendar.
+- Problem with logging in to the phpbb3 admin panel is fixed.
+- Custom fields in tickets weren't formatted.
+- User custom field is in the grids now.
+- Don't send invitation to the calendar user that the appointment is created in.
+- Client side sort array mismatch bug fix
+- Translation updates: Czech, German and Swedish
+
+11/02/2011 3.6.23
+- ExtJS upgraded to 3.3.1 (Fixed grid state restore issue)
+- Z-push 1.5 compatibility
+- Invitations without e-mail module work better now
+- Various small bug fixes
+
+01/02/2011 3.6.22
+- Problem with adding tasks with ActiveSync fixed.
+- Reminders bug fixed. Some snoozed reminders wouldn't come up again.
+- Don't ask to send invitation when "Add directly to calendars" is checked.
+
+27/01/2011 3.6.21
+- Thunderbird SyncML bug fix
+- Small bug fixes
+
+18/01/2011 3.6.20
+- RTF parsing bug
+- Fixed force_login_url
+
+17/01/2011 3.6.19
+- Attaching files was broken
+
+17/01/2011 3.6.18
+- Bug fix in e-mail display
+- Bug fix with inline images in e-mail
+- Bug fix in contact synchronization
+- Translation updates
+
+03/01/2011 3.6.16
+- Feature to specify a maximum number of users in the license
+
+31/12/2010 3.6.15
+- Templates bug in community version fixed
+
+28/12/2010 3.6.14
+- Unicode bug with inititals in the calendar
+- Send invitation updates when changing events in grid.
+- Timeregistration bug in the last days of the year.
+
+22/12/2010 3.6.13
+- Install bug in servermanager
+
+22/12/2010 3.6.12
+- Small bug fixes
+- Brought back Java upload to e-mail composer.
+
+10/12/2010 3.6.11
+- Updated German, Norwegian, Italian and Estornian translations
+- Small bug fixes
+
+08/12/2010 3.6.9
+- New config.php option to turn off Flash uploader as it's not working with self-signed
+  certificates. The option is 'disable_flash_upload'.
+- Bug fix in outlook sync with recurrence rules.
+- Added second name field to companies.
+
+03/12/2010 3.6.8
+- Timeregistration bug
+
+03/12/2010 3.6.7
+- Delete files was broken
+- Updated Norwegian translation
+
+02/12/2010 3.6.6
+- CalDAV didn't work on PHP 5.2.
+
+02/12/2010 3.6.5
+- Performance improvements in the new ExtJS 3.3 update.
+- Performance improvements by combining a lot requests to the server and load as
+  little objects as possible.
+- New bookmarks module.
+- New calllog module for simple administration of phone calls.
+- New module to schedule popup reminders for users or groups with a text page.
+- WebDAV and CalDAV support with FreeBusy info (http://www.group-office.com/wiki/CalDAV).
+- Collapsible sections in all information panels.
+- Separated tasks and events from other links in the information panels.
+- Instead of blocking a user after 5 bad logins it presents a CAPTCHA now.
+- Export of contacts can be disabled for users.
+- Many improvements to the custom fields:
+  1. Option to make a field required.
+  2. Add small help text to the fields.
+  3. Better editing of select fields and an import function for the options.
+  4. New option to allow a multiple selection with select fields.
+  5. New treeselect field. This can be multiple related select fields. The data
+     of the next select field depends on the selection of the other.
+- Linked items show a link icon if they have links attached too.
+- Reminders can be snoozed more easily.
+- Add new link directly from "New" menu.
+- New Wordpress bridge module.
+- New Mediawiki bridge module.
+
+Files
+- New secure download link feature. Send a download link to someone by mail so
+  the receiver can download this file securely.
+
+
+Calendar and Tasks
+- Better support for calendar invitations from other clients such as Outlook and
+  Thunderbird.
+- Drag and drop tasks in tasklists.
+- Project calendars.
+- Improved appearance.
+- List view shows quarters.
+- Show weekdays in the calender month view.
+- Added categories to tasks and events.
+- Automatic holidays to calendar.
+
+E-mail
+- Added e-mail templates, addreslists and newsletters to the community version.
+  We separated document templates and save e-mail as into new pro modules
+- When composing an e-mail the user is no longer asked to select a template each
+  time. It starts with the user selected default template and can be changed in
+  the composer if necessary.
+- Remind collapsed/expanded folders and accounts in the tree.
+- Easier adding of attachments and inline images.
+- Remind enabled CC/BCC fields.
+- Option to always reply to a read confirmation and always request a read
+  confirmation.
+- When a message is sent to an unknown recipient you can also add the e-mail
+  address to an existing contact. There's also an option to disable adding
+  unknown recipients.
+- New e-mail portlet that can display e-mail folders in different tabs.
+- Linking multiple messages is shown in a progress bar and handled in multiple
+  requests if this operation takes a long time.
+
+Billing
+- The scheduled call for quotes skips weekend and holidays.
+- Added a total column for rows and a markup function.
+
+Projects
+- Export function
+
+2010/11/17 3.5.41
+- Fixed small bug in new Document from template feature when you had a company
+  and a contact linked to a project.
+
+2010/11/12 3.5.40
+- GOTA bug in terminal server environment
+- Minor bug in ActiveSync fixed.
+- Upgraded jupload applet to v5 and fixed multiple folder upload
+- Authenticate on about.php
+- Autoscrolling on mailbox domains in add user dialog.
+
+2010/11/08 3.5.39
+- Faster moves in file manager
+- Fixed hangs in gnupg module
+
+2010/11/02 3.5.38
+- Mailings sent duplicate body
+- Escaping value problem in projects billing template
+- 0% VAT line with a manual page break
+
+2010/10/19 3.5.37
+- Bug in adding contacts
+- Better way of syncing the second address line with Outlook
+- GOTA uses home dir for temporary files now instead of the temp dir.
+
+2010/10/19 3.5.36
+- Duplicate inline attachment bug
+
+2010/10/18 3.5.35
+- Some debug code was left
+
+
+2010/10/15 3.5.34
+- Some small bugs were fixed
+- Margins in PDF reports for projects
+
+
+2010/10/08 3.5.33
+- Some messages couldn't be saved in Group-Office.
+
+2010/10/08 3.5.32
+- Removed thousands separator from export in CSV
+- Sync mappings for funambol outlook and blackberry improved
+- Sorting of view calendars
+
+2010/10/07 3.5.31
+- Export projects function
+- Bug where some folders where not available to users.
+
+2010/10/05 3.5.30
+- Z-push push function never pushed data anymore
+- Project reports gave an error on some mysql versions
+
+
+2010/10/01 3.5.29
+- Some features required for a special import
+
+2010/09/27 3.5.28
+- Fixed Blackberry contacts field mapping
+- z-push checks changes every minute on the server now and not every 5 seconds
+  which is z-push's default.
+- Resources were only loaded when customfields module is installed.
+- Reset password with servermanager was broken
+
+2010/09/23 3.5.27
+- Wrong config.php was included
+
+2010/09/22 3.5.26
+- Updated Norwegian translation
+- Added some tags to templates for e-mail.
+- Updated z-push config file in sync module.
+- Fixed blackberry sync issue with latest funambol client
+
+2010/09/17 3.5.25
+- Some fixes in z-push backend
+- Fixed password corruption in postfix module when updating settings
+- Fixed small bugs
+
+2010/08/20 3.5.24
+- Some events were added for a custom sync script
+- Updated Thai and Norwegian translation
+
+2010/08/16 3.5.23
+- Small bug fixes
+
+2010/08/16 3.5.22
+- Time shift bug in timeregistration using alternative method fixed.
+
+2010/08/16 3.5.21
+- Task recurrence bug
+
+2010/08/12 3.5.20
+- Sync with Symbian phones was broken
+- Remind login didn't work without php mcrypt extension
+
+2010/08/10 3.5.19
+- Sync supports latest Funambol clients for Outlook and TB3 beta client.
+- Sync supports SyncEvolution
+- Note sync supported
+- Read only addressbooks,tasklists and note categories can be synced now too.
+- E-mail window remembers size
+
+2010/08/06 3.5.18
+- Update for Debian packages only because of invalid php_value in apache config.
+
+2010/08/06 3.5.17
+- TLS support for LDAP
+- Automatically add e-mail account from LDAP credentials
+- Bug with shifting days in timeregistration
+- Bug with invalid attachments in some e-mail templates.
+
+2010/08/02 3.5.16
+- inefficient hoursapproval queries
+- Import PST script
+
+2010/07/27 3.5.14
+- Small security issue fixed and some bug fixes
+- Print buttons in timeregistration and hoursapproval module
+- Updated Estonian translation
+
+2010/07/19 3.5.13
+- Hoursapproval view in chrome and safari fixed
+- Updated German Brazilian portugese and Spanish
+
+2010/07/19 3.5.12
+- Broken print button in e-mail
+
+2010/07/16 3.5.11
+- Updated Norwegian, Swedish and Brazilian Portugese translation
+- Important bug fixes
+
+2010/07/06 3.5.10
+- Search for companies only searched on name field. Now it searches on all again.
+
+2010/07/05 3.5.9
+- Bug fixes and translations update
+
+2010/06/21 3.5.8
+- Added totals report to projects
+- Fixed small bugs
+
+2010/06/16 3.5.7
+- Updated Norwegian translation
+- Fixed small bugs
+
+2010/06/08 3.5.6
+- Updated Spanish translation
+- E-mail charset decoding failed on some server configurations
+- Limit appointments older then x days server side for activesync too because
+  android always wants to sync all appointments
+- Small bug fixes
+
+2010/06/01 3.5.5
+- Updated German, Norwegian and Czech translation
+- Bug where event owners would get resource e-mails
+- E-mail display bugs
+- Security fixes
+- Small bug fixes
+
+2010/05/26 3.5.4
+- Bug fix in searching some IMAP servers.
+- American time format bug in calendar
+- Bug fix for attachment filenames without encoding specification
+
+2010/05/25 3.5.3
+- IMAP authentication was broken
+
+2010/05/24 3.5.2
+- Improved security. E-mail passwords are encrypted in the database now and
+  with the new blacklist module remote IP addresses are blocked after 5 consecutive
+  login failures.
+- Small bug fixes
+
+2010/05/14 3.5.1
+- A lot of bug fixes and improvements to the tickets module. Customers can login
+  through the Group-Office interface now too.
+  !!! Important !!! all ticket agents need manage permissions now. Only
+  members of the admin usergroup can change settings
+
+- Wrote custom IMAP library that replaces the php-imap extension. It's much
+  faster, has more features and now the php extension is no longer required.
+  There's really a huge performance improvement especially when connecting to
+  remote IMAP servers.
+
+  !!! IMPORTANT !!! POP-3 is no longer supported in this release. POP-3 doesn't
+  really make sence for a webmail client so we didn't implement it in the new
+  lib.
+
+- Upgraded to ExtJS 3.2.1
+- Dialogs are now only rendered on demand so Group-Office will start faster
+- Reminders and new e-mail popup when you are not working in Group-Office. This
+  way you'll have a visual on screen.
+- Document templates work for Office 2007 files now too.
+- Easier filtering on links and search results
+- A lot of small enhancements everywhere.
+
+2010/05/04 3.4.23
+- Some bugs with participants were fixed
+- Subject of message as filename for zip of attachments
+
+2010/04/26 3.4.22
+- GOTA opens office 2007 files by default now.
+- License check with billing module only fixed.
+
+2010/04/16 3.4.21
+- custom fields in templates
+- More export functions in projects / timetracking
+- Easier type filtering in global search and link browser window.
+- Small bug fixes
+
+2010/04/14 3.4.20
+- text_to_html function was broken
+
+2010/04/13 3.4.19
+- A lot of small bug fixes
+
+2010/04/12 3.4.18
+- Fixed calendar sync bug with z-push.
+- Better logging with z-push
+
+2010/03/29 3.4.16
+- z-push timezone bug fixed.
+- callto: links can be customized in config.php with callto_template
+- Better title in dialog for invoices, quotes and orders.
+- Improved calendar import so it can handler larger files.
+- Small bug fixes
+
+2010/03/29 3.4.15
+- Improved remove duplicates script
+
+2010/03/29 3.4.14
+- Error in empty mail folders
+
+2010/03/22 3.4.13
+- TinyMCE was broken
+- Fullscreen mode was loading very long
+- Attachment decoding failed with non-ascii characters
+- Fit windows when larger then the viewport
+
+2010/03/18 3.4.12
+- Send button could dissapear sometimes.
+- Updated Norwegian translation
+
+2010/03/17 3.4.11
+- Manual page break in quotes or invoices
+- Added size column to E-mail messages grid
+- Small bug fixes
+
+2010/03/15 3.4.10
+- Fixed issues with IMAP cache
+- Easier error reporting in syncml
+
+2010/03/08 3.4.9
+- Updated Norwegian and Czech translation
+- Browser doesn't ask to open GOTA anymore. It launches automatically.
+- Fixed printing of merged calendar views
+- Added calendar name to event tooltip in merged calendar view
+- Fixed bug in z-push ActiveSync when deleting items from phone to GO.
+- Fixed bug where cursor in Firefox would jump up in the e-mail composer the
+	first time.
+- Fixed small bugs
+
+2010/03/04 3.4.8
+- tmpdir wasn't always present.
+- Crash on empty to field in e-mail bug
+
+2010/03/02 3.4.7
+- Select participants needed addressbook and e-mail module. Now it works without
+  too.
+- Fixed files folder problem with addressbook import
+- Sending newsletters was broken due to new license check system.
+- Small bug fixes
+
+2010/03/02 3.4.6
+- Fixed license invalid error.
+
+2010/03/01 3.4.3
+- Fixed sendmail bug, subfolders and non-ascii characters bug in z-push
+- Fixes for iphone sync.
+- Fixed bug where calendar would crash if you had access to a calendar with
+  tasklists in it that you didn't have access too.
+
+2010/02/25 3.4.1
+- Corrected z-push instructions
+
+2010/02/23 3.4.0
+General
+- Microsoft ActiveSync support for sync with iphone, android, Nokia etc.
+- Maximize window automatically when the window is larger then the current
+  screen resolution.
+- Create links from files
+- Created a copy function in the billing catalog
+- Improved browsing of links and global searcing. The linkbrowser shows a
+  preview on the right just like e-mail works. This way it's much easier to
+  browse links and search results.
+- Possible to predefine some default link folders. They will automatically be
+  created when you create a new project for example.
+
+Calendar
+- Add user groups and addresslist to appointments at once.
+- Compose e-mail from the New menu at contacts, companies and project which will
+  be linked automatically.
+- Conflict checking on the server when adding appointments
+- Button to jump to own calendar
+- Created a merged view in the calendar to view appointments from multiple persons
+  in one grid.
+
+E-mail
+- Cache mail body to improve speed and reduce load on the IMAP server
+- Show addressbook when selecting contacts in autocomplete and addressbook dialog
+- Added spellcheck
+- Added buttons for indenting and clear formatting.
+
+Addressbook & Addresslists
+- Advanced search improved. You can build any SQL query.
+- Added image to contacts
+- Easier adding of contacts to addresslists. You can add an entire result of an
+  advanced search query.
+- More control over sent mailings. There's one central status screen where you
+  can see all sent mailings. From there it's possible to pause and start them
+	again. You can also view the log and message from the status window.
+
+Projects
+- Automatic rounding of timeregistration entries to 15 or 30 minutes for example.
+
+2010/02/19 3.3.21
+- Small bug fixes
+
+2010/02/11 3.3.20
+- Small bug fixes
+
+2010/02/08 3.3.19
+- Updated Russian translation
+- Speed up the typing in the e-mail composer
+
+2010/02/05 3.3.18
+- Fixed popen warning that occured on some shared hosting setups.
+
+2010/02/01 3.3.17
+- Small feature enhancements in the hours approval module
+- Updated Norwegian translation
+
+2010/01/29 3.3.16
+- Small bug fixes
+
+2010/01/21 3.3.14
+- Bug fixes and fixed a strange segmentation fault in apache when using Ioncube
+
+2010/01/18 3.3.12
+- Bugs fixed
+
+2010/01/14 3.3.11
+- Bug in sync fixed
+- Bug in OO templates creation fixed
+
+2010/01/13 3.3.10
+- Added session_inactiviy_timeout config option to automatically logout inactive
+  users.
+- Synchronize multiple tasklists
+- Delete sync devices
+- Bug fixes
+
+2010/01/04 3.3.9
+- Debian package groupoffice-mailserver conflicted with vacation package
+- Updated quota query for Dovecot 1.1
+- Bug fixes
+
+2009/12/21 3.3.8
+- Fixed bug in function to strip dangerous elements in HTML
+
+2009/12/18 3.3.7
+- Updated Czech, Norwegian and German translations.
+- Fixed Synchronization problems
+- Improved invitation system and scheduling of appointments for multiple users
+	directly.
+- Fixed bugs in the resources system
+- Fixed other small bugs
+
+2009/12/10 3.3.6
+- The package in 3.3.5 seemed to be 3.3.4.
+
+2009/12/10 3.3.5
+- Save module permissions at user properties was broken
+- Fixed bug in outlook sync. Phone numbers were not correctly sent from Outlook
+  to Group-Office
+
+2009/12/09 3.3.4
+- Mailings didn't start automatically
+- Added config option to disable profile editing in the settings dialog.
+- Fixed small bugs
+
+2009/12/08 3.3.3
+- Drag and drop e-mail messages was broken
+
+2009/12/07 3.3.2
+- Brought back upgrade2to3.php with it's own function libs
+- Updated Norwegian translation
+- Reorder e-mail accounts by dragging them around in the e-mail treeview so
+	we can sort on e-mail address in the administration dialog.
+- Small bugs fixed
+
+2009/12/03 3.3.1
+- Sort IMAP folders for mbroot detection
+- Small bug in calendar
+- Removed upgrade2to3.php because it doesn't work anymore. Upgrades from 2.18
+	must first be done with version 3.2 and then from 3.2 to 3.3.
+- Small installation issues fixed
+
+2009/12/01 3.3.0
+- Added zlib compression to increase startup speed. It loads much faster now.
+- Resource management in the calendar to manage meeting rooms for example.
+- Enhancements to the projects module
+- Multiple calendars and tasklists on the summary page.
+- Create invoices from projects and timeregistration
+- Separated timeregistration into it's own module.
+- Hours approval module so that managers can approve the timeregistrations
+- 2 different styles of entering timeregistration. Besides the week grid there's
+  also a form for multiple entries per project per day.
+- Added custom fields to billing templates, tasks and calendar events.
+- Changed ACL system to impove overall performance on large installations
+- Birthday calendar
+- Systemusers module to automatically create Linux system users with
+  Group-Office accounts and generate .forward files for vacation replies in the 
+  e-mail module
+- Automatically perform system update when new sources are replaced.
+- E-mail reminders
+- Tickets module
+
+
+2009/11/30 3.2.50
+- Small bug fixes
+
+2009/11/19 3.2.49
+- Fixed corrupted CHANGELOG.TXT
+- Small bug fixes
+
+2009/11/13 3.2.48
+- Small notice fix
+- Missing line break in calendar export
+
+2009/11/12 3.2.47
+- Sync could overwrite contacts with another one!
+
+2009/11/11 3.2.46
+-	In a rare occasion attachments could stay in the e-mail composer after sending
+	the e-mail.
+
+2009/11/10 3.2.45
+- Improved SyncML server. Some issues with Funambol Outlook client were fixed
+	and Thunderbird contact sync works perfectly. The calendar still crashes
+	every once in a while.
+
+2009/11/05 3.2.44
+- Fixed small bugs
+
+2009/11/04 3.2.43
+- Better way of sending mailings
+- Thai language entry was missing
+
+2009/11/04 3.2.42
+- Better error reporting when linking e-mail messages.
+
+2009/10/26 3.2.41
+- Fixed Synchronization issues where times would shift by an hour and GO
+	supports the MoreData command properly now.
+
+2009/10/23 3.2.40
+- Removed absolute paths from javascripts
+
+2009/10/20 3.2.39
+- Updated Russian translation
+- Calendar time was changed when setting a repeat interval later
+- Custom fields sort order bug
+- Show tasklist title in the list
+- Module write permission cache bug
+
+2009/10/14 3.2.38
+- Added Hungarian translation
+- Fixed bugs
+
+2009/10/07 3.2.37
+- Updated French and Thai translation
+- Fixed bugs
+
+2009/09/24 3.2.36
+- Javascript error in IE7 fixed and some other minor bug fixes
+- Unzip and zip with special characters failed
+- Folder structure messed up with Jupload when uploading with windows
+
+2009/09/21 3.2.35
+- Problem with some queries not paging anymore.
+- Small bug fixes
+
+2009/09/16 3.2.34
+- Fixed broken calendar view in IE6
+- Small bug fixes
+
+2009/09/03 3.2.32
+- Put all the relevant scripts together in the database check to make it simpler
+- Fixed bug where hmailserver didn't add body to reply#
+- Small bug fixes
+
+2009/08/28 3.2.31
+- Detect import encoding in addressbook, calendar and tasks
+- Fixed small bugs
+
+2009/08/27 3.2.30
+- Upgraded to Swift 4.0.4
+- Rewrote newsletter mailer
+
+2009/08/26 3.2.29
+- Several small bug fixes
+
+2009/08/24 3.2.28
+- Fixed bug in billing module where country was incorrectly saved
+
+2009/08/21 3.2.26
+- New report for billing that shows the total turnover per customer
+- Synchronization supports multiple addressbooks now.
+- Saved e-mails and templates were not displayed again.
+- More efficient database connection
+- More efficient script loading
+
+2009/08/18 3.2.25
+- Fixed bug which prevented saved e-mails from displaying.
+
+2009/08/18 3.2.24
+- Adding attachments to mailings works on windows now too.
+- Fixed icalendar import bug
+- Added support for multiple RSS feeds on the start page.
+- Modules can be closed with right mouseclick.
+- Calendar printing was off one day in some timezones
+- Address formats for all countries now.
+
+
+2009/08/13 3.2.21
+- Too large padding on first grid cells
+- Move e-mail to another IMAP account.
+- Larger timeout when sending e-mail
+- Added missing licenses from components
+- Updated TCPDF to version 4.6.024
+- Updated PhpThumb to 1.7.9
+- Updated TinyMCE to 3.2.5
+- Added new address formats option for contacts so you can localize the display
+	of addresses in Group-Office.
+- No confirm of deleting mails when they will be moved to the trash folder.
+- Small bug fixes
+
+2009/08/06 3.2.20
+- Function to clean invalid UTF-8 strings that caused unreadable e-mails
+- Updated Norsk translation
+- Added custom fields functions to users
+- Compatible with 5.3. There are still a lot of deprecation warnings though.
+- Fixed destroyed htmleditor in e-mail composer when it was collapsed
+
+2009/08/04 3.2.19
+- Invalid iconv call bug on attachments
+- Updated Czech
+
+2009/08/04 3.2.18
+- Time registration column header bug
+- Windows compatibility with Open-Office templates
+
+2009/07/29 3.2.17
+- Problem with search query for contacts
+
+2009/07/29 3.2.16
+- Upgrade to ExtJS 2.3
+- Confirmation e-mail added to web form processing
+- Better SMTP error reporting in e-mail
+- Override newsletter mailing smtp server to always use a specific e-mail server
+	for mailings.
+- Smarter search function in projects
+
+2009/07/28 3.2.15
+- Automatically sync filesystem with files database for easier external access
+	of files.
+- Fixed some issues in preparation to move to ExtJS 3
+- E-mail filter bug. Adding a filter to a second account failed.
+- Updated German, Czech and French translation
+- Added Norwegian Bokmål translation
+- Other bug fixes
+- Debianized the package.
+
+2009/07/10 3.02-stable-12
+- IMAP auth module was broken
+- Read notification didn't send correct alias
+- Alarm sound didn't play anymore
+- File templates bug
+- Project template bug
+
+2009/07/09 3.02-stable-9
+- License check for pro version was still in the comments module.
+
+2009/07/08 3.02-stable-8
+- Moved comments to Community version
+- Bug fixes
+
+2009/07/07 3.02-stable-5
+- Project templates extended with subprojects and tasks
+- A responsible user can be selected at a project and you can filter on that.
+- Script to sync files with the filesystem was added.
+- Changed lost password procedure. Now an e-mail is sent with a link to click on
+	where the user can change the password. This method is more secure because
+	with the old method is was possible to change someone's password if you knew
+	the e-mail address.
+
+2009/07/06 3.02-stable-4
+- Various bugfixes
+- Updated German translation
+
+2009/06/24 3.02-stable-1
+- Changed files module. All the modules store the files in logical paths now.
+  eg. The files of a contact are in contacts/Addressbook name/S/Merijn Schering
+	All the filesystem entries are stored in the database now for better performance.
+	The downside is that the database needs to be synced when changes on the
+	filesystem are made by another program like Samba, FTP, WebDAV etc.
+
+- Multiple e-mail sender aliases per mailbox can be defined now.
+- Store a default e-mail template so it always shows on top.
+- PDF export / mail function for the addressbook and billing module
+- Projects treeview for easier navigation
+- Add event to multiple calendars without sending an invitation
+- A lot of Windows enhancements. libwbxml, zip and unzip work now and the
+  installation is improved for Windows too.
+- GOTA didn't always report failure. Error handling is improved.
+
+2009/04/28 Version 3.01-stable-34
+- Added Greek translation
+- Minor bug fixes
+
+2009/04/17 Version 3.01-stable-33
+- Some e-mails could affect the Group-Office CSS styles
+
+2009/04/16 Version 3.01-stable-32
+- User delete didn't work correctly. Module items were not removed.
+- Empty search panels bug
+- Sometimes comboboxes lost their size
+
+2009/04/15 Version 3.01-stable-31
+- URL rewrite didn't work for plain text
+
+2009/04/15 Version 3.01-stable-30
+- LDAP authentication module
+- htmlspecialchars was accidently removed from plain text e-mails
+
+2009/04/14 Version 3.01-stable-28
+- Small bug fixes
+
+2009/04/10 Version 3.01-stable-27
+- E-mail quote style improved
+- Updated German translation
+- Better switching between editing modes in e-mail client
+
+2009/04/09 Version 3.01-stable-26
+- E-mail content type preference was not saved correctly.
+
+2009/04/08 Version 3.01-stable-25
+- Fixed error in German GnuPG translation
+- E-mail signature in plain text mode
+
+2009/04/07 Version 3.01-stable-24
+- IE 8 compatibility
+- Small bug fixes
+
+2009/04/03 Version 3.01-stable-23
+- SMTP with SSL or TLS didn't work anymore
+
+2009/04/01 Version 3.01-stable-20
+- Small bug fixes
+- Weeknumbers in calendar monthview
+
+2009/03/31 Version 3.01-stable-19
+- Plain text e-mail option
+- GnuPG encryption
+- Show new files uploaded by others in the files module
+- Folder templates in projects module
+- Upgrade SwiftMailer to version 4.0.3
+- Updated German and Czech translations
+- Bug fixes
+
+2009/03/24 Version 3.01-stable-18
+- Small bug fixes
+
+2009/03/18 Version 3.01-stable-17
+- New module to process forms from website that can add contacts and send mails.
+
+2009/03/17 Version 3.01-stable-16
+- Fixed bug that caused strange behaviour when you have a lot of all day events on
+	some screen resolutions
+
+2009/03/17 Version 3.01-stable-15
+- Fixed bug that caused sync to fail
+
+2009/03/16 Version 3.01-stable-14
+- Configure Group-Office as the default e-mail program
+- Fixed errors in Romanian translation
+- Bug with dragging all day events fixed
+- Some attachments attached by IE were not found when sending the mail.
+- New PHP events system
+- Bug fixes
+
+2009/03/10 Version 3.01-stable-13
+- Problem with synchronization in stable-9 fixed
+- Link descriptions added
+- Problem with creating appointments in the calendar
+
+2009/03/09 Version 3.01-stable-9
+- Fixed bug in PDF printing
+- Default reminder and background color for appointments and tasks
+- When a new OpenOffice document is created from a template in the addressbook it is
+  saved at the contact and the GOTA is launched.
+- Calendar scale with 15 minute interval
+- Compose multiple e-mails at once
+- Autosave. When an e-mail is saved to drafts it will replace the existing draft and is removed when sent.
+	Every 2 minutes the mail will automatically be saved to drafts.
+- PhpBB3 module: The PhpBB3 module will integrate PhpBB3 into Group-Office. When a
+	Group-Office user goes to phpbb3 it will automatically copy the user and log the
+	user in.
+- Log module. View all delete, update and add actions done by users.
+
+2009/03/03 Version 3.01-stable-5
+- Updated Czech translation
+- New PDF print in calendar module
+- Search trough all custom fields in addressbook module
+- Various bug fixes.
+
+2009/02/18 Version 3.01-stable-4
+- Fixed problem with IMAP connections. Some people were having trouble connecting to
+  an IMAP server. GO would get in an endless loop because these servers returned the
+  INBOX folder as a child of itself.
+
+2009/02/16 Version 3.01-stable-2
+- Use GO as complete mailserver solution for multiple domains and with vacation support
+  see: http://www.group-office.com/wiki/Mailserver for instructions
+
+- Save e-mail as file, task, appointment and note (pro version)
+- Improved inviting participants. It now sends a mail automatically.
+
+2009/02/06 Version 3.00-stable-18
+- Problem in billing module that asked for book selection each time
+- Autofill values when you create an invoice from a contact or company
+
+2009/02/05 Version 3.00-stable-17
+- Check for global config file caused error with open_basedir set
+- Better error reporting dialog.
+- Upgraded to ExtJS 2.2.1
+- Fixed minor bugs
+
+
+2009/02/04 Version 3.00-stable-16
+- Added extra customer information field at invoices
+- Links didn't work in IE
+- Added Danish translation
+- Added Finnish - Suomi translation
+- Support for quota on the entire installation
+- Fixed some minor bugs
+
+2009/01/30 Version 3.00-stable-15
+- A lot of bugs in the projects module were fixed
+- Better navigation in calendar views
+- Fixed bug in event invitations
+- Events in participants calendars get updated when you change the master event.
+- Added Polish translation
+- Fixed bugs with file linking and searching
+- Better state preservation in the file manager.
+- Other small bugs were fixed
+
+2009/01/20 Version 3.00-stable-13
+- Opening links and some attachments was broken. A quick new release.
+
+2009/01/20 Version 3.00-stable-11
+- Filter on types (Contact, Company, Project etc.) when searching
+- Bug fixes
+
+2009/01/15 Version 3.00-stable-8
+- Czech language was missing
+- Corruption in some German language files
+- If you didn't have access to the parent project of a project you had permission to book hours on, you couldn't access the project.
+
+2009/01/14 Version 3.00-stable-7
+- A bug was causing the e-mail to fail in other languages then Dutch.
+
+2009/01/13 Version 3.00-stable-6
+- Select addresslist from e-mail composer window
+- Simple e-mail signature
+- E-mail menu with options to lookup in addressbook, compose and search
+- Works with Gmail now, but the IMAP connection is often slow
+- Support for UUencoded e-mail attachments
+- New timesheet in projects module for easier time registration
+- Better display of project information and subprojects
+- Sort project statuses by drag and drop
+- Portlets on the summary page autorefresh
+- Browse project files from file manager
+- Bug fixes
+
+2008/12/18 Version 3.00-stable-5
+- Dragging in calendar caused errors sometimes
+- Rightclick menu on e-mail tree folder was broken
+- Small problem with HTML to text conversion in e-mail
+
+2008/12/16 Version 3.00-stable-4
+- Detailed report printing in Projects module
+- Improved support for Nexthaus syncml clients
+- icalendar import for tasks and calendar
+- message panel horizontal or vertical as preference
+- Improved month view
+- Import icalendar attachments in e-mail
+- Right click menu added on e-mail addresses in email module with useful options
+- Right click on e-mail attachment offers Save as option in the files module
+- Bug fixes
+
+2008/12/03 Version 3.00-stable-2
+- Bug fixes
+- Import/export of custom fields in addressbook (pro)
+- Add /delete mail folders by right clicking the tree menu
+- Added Spanish translation
+- Added Brazilan Portugese translation
+
+2008/11/24 Version 3.00-stable-1
+- Last known bugs were fixed
+- New caching system for the e-mail to impove performance.
+
+2008/11/07 Version 3.00-unstable-19
+Lot's of bugs were fixed from version 1 till 19. This should be the
+last "unstable" release.
+
+- Changed to MySQLi improved PHP mysql extension
+- Removed smart_addslashes and smart_stripslashes functions. GO runs best
+  with magic_quotes_gpc=off now and escaping values that go into the database
+  is done at the lowest level. Either by the MySQLi extension or in the
+  GO database class. This makes GO safer and programmers don't have to worry about
+  it anymore.
+
+- Added thumbnail view and Image viewer in files module
+- E-mail blocks remote images for unknown senders
+- Image attachments in e-mail can be viewed directly in GO with the image viewer (files mod required)
+- Projects module was improved so it supports all 2.x features
+- New Schedule call option at quotes, contacts and companies
+- Support for all unicode characters in the filesystem module
+- All filesystem paths are stored relative to the filesystem path configured in config.ph
+  This makes it easier to move an installations and safe's space in the database.
+
+
+2008/09/03 Version 3.00-unstable-1
+-Complete rewrite of Group-Office with ExtJS (www.extjs.com).
+
+2008/02/20 Version 2.18-stable-19
+- Bug fixes
+- Synchronization with some Sony Ericsson models fixed
+
+2008/01/14 Version 2.18-stable-15
+-Removed contact color lookup in email client because it slows down email the e-mail
+ display with large addressbooks
+-Fixed HTML display in e-mail client from certain clients
+-Created modulair reminder plugins. So all modules can use the reminder system
+-Prevent GOTA to start with certain extensions such as PDF, jpg etc.
+-Small bug fixes
+-Created public calendar featurein pro version
+
+
+2007/11/22 Version 2.18-stable-6
+-FIxed bug with IMAP authentication
+
+2007/11/21 Version 2.18-stable-5
+-Forward e-mail support for local accounts
+-Small bug fixes
+-File upload notifications per folder
+-IMAP authentication works better together with creating system users
+-Fixed upgrade from 2.13
+
+2007/10/26 Version 2.18-stable-2
+-Brought back the old mailing list feature by request of some customers
+-Cleaned up code in GOTA
+-Funambol 6.0 clients supported for Synchronization
+-Various bug fixes
+-Added support for  MySQL in utf8
+
+2007/10/26 Version 2.18-stable-1
+-Group-Office Transfer Agent (GOTA). A small Java program that saves documents.
+ back to Group-Office when you edit them on your PC. (Pro version only)
+-Helpdesk module (Pro version only)
+-Reports module is now called Address lists and is more user friendly (Pro version only).
+-Updated various translations
+
+2007/09/10 Version 2.17-stable-13
+-Added Arabic translation
+-Small bug fixes
+
+2007/08/21 Version 2.17-stable-12
+-Fixed table configuration bug with register globals enabled
+-Fixed small bugs
+
+2007/08/01 Version 2.17-stable-11
+-Out of office reply didn't work if e-mail mailbox was different then the e-mail
+ name.
+-404 error of base64.js
+
+2007/07/22 Version 2.17-stable-10
+-It was impossible to create an e-mail without a template in previous version
+-Fixed FCKeditor bugs in filesystem module
+-Sorted treeview by name
+-Made bank number field larger in addressbook
+
+2007/07/20 Version 2.17-stable-9
+-Better import for sync
+-Updated Czech language
+-Implemented new version of jupload
+
+2007/07/08 Version 2.17-stable-8
+-Problem with auto_check in email for new users.
+
+2007/07/05 Version 2.17-stable-7
+-Added out of office reply for local e-mail accounts. No cron job is needed
+ anymore but you need to setup sudo.
+-Fixed problem in synchronization with strange characters
+-Brought back e-mail popup notification
+-Automatic e-mail check can be enabled per account
+-Updated Czech language
+-Updated Slovenian language
+
+2007/06/18 Version 2.17-stable-6
+-fixed bug with inline e-mail attachments
+-Fixed display of link e-mail button in Community version
+
+2007/06/12 Version 2.17-stable-5
+-Better character set conversion in e-mail messages
+-Filesystem shares bug with invalid tree structures
+-Display inline e-mail attachments
+-Other small bugs
+
+2007/06/07 Version 2.17-stable-4
+-Added the last 10 uploaded files to the summary
+-Calendar and task reminder beeps only once if it's not dismissed.
+-E-mail account save bug if you don't have admin permissions
+-Custom fields class outputted a blank line which caused an header already sent error
+
+2007/05/31 Version 2.17-stable-3
+-E-mail status indicator was missing in all themes except default
+-Fixed an issue with strange characters in filenames
+-Fixed printing e-mails from a folder with strange characters
+-Fixed other small bugs
+
+2007/05/21 Version 2.17-stable-1
+-Added Slovenian language
+-Updated Turkish language
+-Changed e-mail permissions behaviour
+-Fixed update procedure error
+
+
+
+2007/05/07 Version 2.17-testing-1
+-Full support for Microsoft Windows
+-Move module theme items to module dir
+-Modular select dialog (Done with global search).
+-Select and sort columns to display in tables
+-global search
+-Easier linking with global search
+-link email (Pro only)
+-Better auto add contacts in mail
+-TNEF (Winmail.dat) support
+-Reports module to show different queries on addressbook. Can also be used to send
+ mailings with MS Office, Open-Office and the GO e-mail client. Replaces old mailing
+ system (Pro only)
+-New e-mail counter always in top menu bar and beep can be disabled when new mail
+ arrives
+-Option to show attachment paperclips and priorities in e-mail client. Slows it down when
+ enabled!
+-Don't create a personal addressbook by default for everyone.
+-Edit multiple contacts at once
+-Show month name on top of calendar print
+-Adminstrative tools: check database, backup database, users import
+-Help button leads to right page at docs.group-office.com
+-Table configuration which allows you to reorder and select the columns you want in tables
+
+
+
+CHANGELOG
+2007/05/02 Version 2.16-14
+-Added update client
+-Fixed problem with quotes in e-mail names
+-Don't encode language files for translating
+-Small bug with newlines and translate module
+
+
+2007/04/03 Version 2.16-13
+-Security issue: A logged in user could read another user's e-mail with some tricks
+-Saved e-mails couldn't be read (Pro version)
+-Calendar admins always have access to events
+-Updated Catalan language
+
+
+2007/03/08 Version 2.16-12
+-Fixed mailto links in e-mail
+-Don't set session.save_path because PHP garbage collection doesnt work then
+ anymore. This resulted in a lot of session files in the tmp dir at some distro's
+-Autocomplete users only put in a , in the text field. Also an Invalid XML bug was fixed.
+-You didn't fill in all required fields bug at registration and profile update
+
+Language updates:
+-German language update
+-Added Turkish language
+
+2007/02/05 Version 2.16-11
+-Fixed some corrupt files
+
+2007/02/05 Version 2.16-10
+
+Bug fixes:
+-Files with quotes went wrong in filesystem
+-Missing image for adding users
+-html chars in pulldown of email module
+-Allow duplicate email addresses with differt names in autocomplete
+-Sync recurrence 1 day minus bug
+-Double file properties bug
+-E-mail attachment character encoding
+-Email addresses character encoding
+-Double frame on user profile close
+
+Languages updated:
+-Spanish
+-French
+-Catalan
+-Hungarian
+-Italian
+
+2006/11/29 Version 2.16-4
+-Translation module
+-Speed optimizations
+
+
+
+2006/11/01 Version 2.16-FINAL
+-Disable user fields in admin mode
+-Create pulldown menu's in custom fields. (Professional version)
+-Custom fields for users (Professional version)
+-Configure welcome e-mail on user registration
+-Notify admin on user sign up
+-Disable/enable fields for registration
+-Book overlapping times in projects module
+-Improved installer
+-make compatible with register_globals=on
+
+2006/09/13 Version 2.16-FC
+-Small bug fixes
+-Introduction of Gallery module
+
+2006/08/31 Version 2.16-RC1
+-Quotes/Invoices module (Professional version)
+-Save e-mail to filesystem and link it to anything (Professional version)
+-Improved linking interface
+-Add local system users and (Postfix) e-mail aliases with sudo
+-Bug fixes
+
+2006/07/12 Version 2.15-FINAL-9
+-Save email attachments to a project
+-Security fixes
+-Background colors in calendar
+-One day calendar view in emerged group view
+-Events that got accepted were not synced.
+-FCKeditor upgraded to 2.3
+-Project fees are only visible by name not by the amount.
+-Projects print function
+
+2006/06/21 Version 2.15-FINAL-8
+-Access denied bug in tasks module.
+-Small bug fixes.
+
+2006/05/24 Version 2.15-FINAL-7
+-Compatibility release for Quotes/Invoices module.
+-Security fix for calendar module
+-Websites module can have inline php in templates and can have a template per page.
+
+2006/05/22 Version 2.15-FINAL-6
+-Websites module uses FCKeditor
+-Websites module can have a different template per file.
+
+2006/05/07 Version 2.15-FINAL-5
+-Task sync (Professional version)
+-Exceptions in recurring events/tasks get synced (Professional version)
+-Only part of the calendar can be synced. For example only appoinments newer then
+ 30 days old and happen within the next 90 days.
+-Company fields of contacts are synced too now.
+-E-mail notification on file upload can be enabled/disabled.
+-Bug fixes
+
+2006/05/07 Version 2.15-FINAL-4
+-Added adodb-time library for support for dates before 1970 and after 2037
+-Added halfhour timezone differences
+-Fixed addressbook install bug
+-Fixed small bugs
+
+2006/05/04 Version 2.15-FINAL-3
+-Improved performance by removing calendar ACL entries. The table was getting way
+ to large.
+-Improved performance by removing all dropdown boxes of calendars and addressbooks
+ and replace them with popup select windows.
+-Improved performance by caching common queries and caching the autocomplete
+ feature in the e-mail composer.
+-Improved resource booking
+-Option to disable preview in E-mail module
+-Synthesis clients support for Synchronization (Palm client too!) (Pro version)
+-Improved SyncML support. Better support for slow sync and recovery when something
+ goes wrong (Pro version)
+-Custom fields for projects too. Moved custom fields into a separate module. (Pro version)
+-Mailing groups can be selected from the composer screen (Pro version)
+-Small GUI enhancements
+-A lot of small bug fixes
+
+
+2006/03/10 Version 2.15-FINAL-2
+-Select project/company/contact files from file select.
+-File linking
+-Print  working hours per user for all users
+-Many bugs fixed
+
+2006/03/21 Version 2.15
+-Resource booking
+-Calendar shows private event as private
+-Event owners get an e-mail if somebody else modifies, deletes, accepts or declines an
+ event.
+-Event search
+-More flexible date formats
+-letter click in select control doesn't search on name only
+-pagination in select control
+-Multiple e-mails for contacts
+-Letter click pagination does not work
+-relate project to itself bug
+-Project folders by ID not name
+-Moving files doesn't move notes
+-FCKEditor integration
+-display holidays
+-Dig in mail folder structure for new mail
+-Don't preload images in e-mail automatically
+-custom login/logout URL in config.php
+-Calendar grid configurable per calendar
+-expand/collapse note bodies
+-Filter option to mark as read
+-e-mail notify on file upload
+-filter closed tasks
+-Appointment e-mail reminder daemon
+-Send company data to client at sync (Professional version)
+-English end user documentation
+-English administrator documentation
+-Multiple linking. Create as many links from one item to another that you like.
+-Automatic spam filter in e-mail account. (Messages need to be tagged by a server-side
+ spam filter.
+-Better IMAP server detection
+
+
+2005/11/02 Version 2.14
+-Only bug fixes and small improvements
+
+2005/09/08 Version 2.14 FC
+-Sharable calendar views
+-The merged calendar view has a legend and colors per user are settable
+-Admin can create all the user calendars at once with right permissions
+
+2005/09/08 Version 2.14 RC2
+-Todo templates for projects. When you create a project you can select a set of
+ predefined todo's.
+-Many, many bug fixes
+
+2005/08/23 Version 2.14 RC1
+-Complete new development toolkit
+ A whole new set of PHP classes designed to build Group-Office modules.
+ These classes make it extremely easy to create standard controls in pages such as:
+ 	- Tab strips
+ 	- Sorted tables
+ 	- Treeview structures
+ 	- Activitity listings (Listing of related items)
+ 	- Button menu's
+ 	- Select dropdown lists
+ 	- Radio buttons
+ 	- Checkboxes
+ 	The classes make it possible to create pages without using a single line of HTML code.
+ 	Pages will be programmed in pure PHP. Output of menu's, tables, tabstrips treeviews
+ 	will always look and behave the same.
+ 	The folliwng modules have been completely recoded:
+ 	-Filesystem
+ 	-Addresbook
+ 	-Todos
+ 	-Notes
+ 	-Projects
+ 	-Summary
+ 	The others have been made compatible with the new framework but need to be
+ 	recoded someday.
+- Admins are really admins now. They have access to all the users calendars,
+	addressbooks etc. and can set up the permissions for them.
+- Recurring todo's. Todo's are stored in the same way as appointments and can recur
+	now.
+- More controls over the todo sharing. They are shared in the same way calendars are
+  shared.
+- Files can be attached to projects
+- Calendar and todo reminders are set for all calendar owners and participants
+-	New cron job PHP script to set vacation files for Sendmail Postfix or other mail server
+ 	that uses .forward files. The Out of office message can be set at the email configuration
+ 	page.
+- Calendar view is impoved. Overlapping events are now displayed next to eachother.
+
+
+2005/05/30 Version 2.13
+-Added snooze dismiss to reminders
+-Fixed ICS and VCF import
+-Added contact colors in mail client
+-Added preview frame in e-mail client
+-Multiple selection can be done with SHIFT and CTRL in the e-mail client
+-Header of an e-mail is smaller for the preview. It can be expanded to view more details.
+-You can download all mail attachments in a ZIP file.
+-Administrator tools are modules now too.
+-Calendar event saving fixed
+-New treeview control
+-Language setting is stored in cookie
+-Added system password changing
+-Saving of todo's
+-Javascript error with very long request URI in calendar module
+-Adding new contacts to companies
+-Illegal module name specified
+-Konqueror compatibility with new e-mail module
+-GUI improvements to e-mail module
+-Admins always see all groups. Regular users see only the groups where they are
+ member of.
+-Fixed a lot of small bugs
+
+2005/03/12 Version 2.12c
+-Fixed wrong folder encoding in e-mail client due to PHP Bug
+-Fixed Illegal module name specified bug
+
+2005/03/12 Version 2.12b
+-Fixed the disappearing of some calendar events after upgrading to 2.12
+-Some e-mail messages that didn't contain a content type got chopped off at the
+ first unknown character. It now ignores them.
+-The To field in e-mail client was not encoded to UTF-8
+-Fixed UTF-8 in javascript dialog boxes. Changed to htmlspecialchars instead of
+ htmlentities.
+ -Addressbook checks for a duplicate entry when creating a new contact or company.
+
+2005/03/12 Version 2.12
+-Database doesn't use persistant connections anymore
+-Configuration options are moved from Group-Office.php to config.php. This way it's easier
+ to separate source from local configuration options with symlinks.
+-Added password recovery
+-Fixed issue with PHP < 4.2. People could not delete objects.
+
+2005/01/24 Version 2.11
+-Save as draft option in e-mail client
+-Support for multiple languages/sections in the CMS module
+-Sort folders and files through eachother in the CMS module
+-ImageManager plugin for HTMLArea in the CMS module
+-Function to copy contacts/companies to other addressbooks
+-HTML Editor integrated in files module
+-Fixed UTF-8 bug with javascript escape funtion. This was a problem for languages such as
+ vietnamese
+-Added new Default theme. Theme's structure changed. Each module has it's own CSS style.
+ The CSS was also cleaned up.
+-Added JUpload java applet to Group-Office controls. It allows to upload multiple files at once
+ and shows a progressbar. It's integrated into the email and filesystem module.
+-Changed the way attachments are handled in the e-mail module. They now load into a separate
+ popup window so you can keep on typing while attaching files.
+
+2004/11/11 version 2.10
+-Availability checking in calendar
+-Bug fixes
+
+2004/11/01 version 2.09
+-After 2.08 there was a major bug discovered in timezone handling. When the
+ clock went to winter time all appointments were shifted one hour.
+-Participants in a new event were not seen as a member of Group-Office
+-Included mime.types file for OS that do not have this file.
+-Fixed bug with notes permissions
+
+2004/10/28 version 2.08
+-Only admins can manage user groups now.
+-Filetypes are handled per theme and per language and are no longer stored in
+ the database.
+-Updated month view in the Calendar
+-E-mail module asks to add unknown senders to your addressbook if you enable
+ this in the configuration.
+-Implemented latest PhpSysInfo 2.3 in a much better way then before so that it
+ works on all supported operating systems.
+-Used iconv to recode e-mails to UTF-8 to display them properly.
+ If iconv is not compiled into PHP there could be trouble with displaying some
+ messages correctly. Iconv is standard in PHP 5
+-Some contributions and ideas to email, filesystem, calendar and addressbook by
+ Robert Widuch. Thanks a lot.
+-Autocompletion of e-mail addresses when typing them in the 'To' field of the
+ e-mail composer. Also the names are included as well now when sending e-mail
+ to someone from the addressbook.
+-The name display order (firstname, lastname) can now be chosen
+ in preferences.
+-Changed tasks to be a real module with links to contacts, companies and projects
+-Fixed bug with e-mail printing
+-Companies, Contacts and Projects have a new activities page where you can
+ view all related notes, tasks, projects and appointments.
+-Removed todo's from calendar and made a real todo's module.
+-Module icons in menu are sortable now by the admin
+-Notes module simplified. Now it's just a plain text note and nothing else. You
+ can attach them to contacts, companies, projects and files.
+
+2004/10/05 version 2.07
+-!!!WARNING!!! Removed permissions for contacts. Only permissions for the
+ addressbooks can be set. Contact permissions will be REMOVED with this upgrade.
+-Fixed bug with international characters in e-mail module.
+-Added automatic selection of country, state, street, city based on zipcode.
+ You will have to import your own zipcode table though.
+-Day view modified. On viewing a calendar-view containing multiple calendars
+ up to 5 calendars are displayed in a row.
+-New month view in the calendar module.
+-E-mail module automatically adds unknown senders and reciepents to addresbook.
+-Fixed a bug with importing iCalendar files
+-More small bug fixes
+
+2004/09/02 version 2.06
+-Fixed a lot of smaller bugs that were spotted by the community forum users.
+ Thanks a lot everyone.
+-Mailing lists improved
+-Contact select improved. Now you can add contacts and companies from the select
+ screen.
+-New helpdesk module by Meir Michanie
+-Modules upgrade individually at installation
+-iCalendar import/export calendar completed
+-iCalendar (*.ics) file attached with meeting requests
+-Merged and emerged team views in the calendar
+-Fixed bug in import from CSV in the addressbook
+-Security bugs fixed. When running with magic_quotes_gpc=off GO users could
+ delete some data that belonged to other users.
+-vCard import/export addressbook completed
+-vCard (*.vcf) file attached with personal data
+-SSL Support in e-mail client
+
+2004/05/23 version 2.05
+-New authentication mechnism to make it very easy to use external servers
+ to authenticate or manage users.
+-New summary module that sums up all module info and announcements
+-New language system falls back on English if language misses strings.
+-New directory structure that puts all module files in one place and allows
+ users to install/uninstall modules including the database tables.
+-E-mail module is much faster
+-Powerfull search function in the e-mail module
+-Modules no longer use cookies to store settings like sorting of tables
+-Time automatically adjusts to Daylight savings time
+-vCard support added to addressbooks (currently only import possible)
+
+2004/03/24 version 2.04
+-Group-Office had problems with characters like & " > < sometimes. This
+ is fixed everywhere in the program.
+-Todo's in the calendar
+-A lot of bug fixes with many thanks to the ones posting on Sourceforge!
+
+2004/03/17 version 2.03
+-Improved bookmarks module. Bookmarks are sharable and can be ordered in
+ catagories.
+-iCal import/export support for the calendar
+-Projects module bugs solved
+-Cyrus IMAP server had problems with sent items folder.
+-Mail folders with an ' didn't work
+-HTMLArea is now smarter. It returns textfields when browser is not supported
+
+2004/03/10 version 2.02
+-Improved IMAP server support
+-Fixed installer bug
+-Small feauture addon to the e-mail client.
+-Fixed bug in calendar that didn't display first day of the week in some months
+-Fixed bug in calendar that always added the current calendar to an event.
+
+2004/03/08 version 2.01
+-Implemented PHPMailer to handle all mail transport. Fixes issues with scrambled
+ emails in other mail clinets.
+-Email client in HTML mode sends alternative text body too.
+-Better attachment handling
+-Improved IMAP server support (Courier, Cyrus UW-IMAP all work the same now
+ even without setting the root mailbox.
+-Fixed email pagination
+-Added first day of week preference.
+-Fixed bug in client selection in projects module.heeey
+-Fixed wron Accept and decline links in calendar module
+-Fixed shared files wrong hierarchy
+
+2004/02/28 version 2.0
+-Solved bug in email client. Only first account worked properly. Filters got
+ deleted when you saved an account.
+-Solved bug in adding users. They weren't able to set thier privacy settings.
+-When you created a note the note wasn't always readable for the responsible
+ user.
+-Removed menu javascript that isn't needed anymore. seems that htmlarea got
+ more stable by doing this.(no more HTMLArea.I??? is undefined).
+-Added history at contacts.
+-Bug in addressbook selection tool solved
+-Fixed bug in mail checker.
+-Solved bug in opening email attachments.
+-Fixed parse error when adding companies.
+-Fixed more small bugs.
+
+2004/02/18 version 1.98
+-Works with relative URL now. So you can access GO by multiple hostnames.
+-Selection tool for addressbook can select contacts, companies and users
+ now in one or all addressbooks.
+-Optimized SQL for better performance.
+-Fixed a lot of small bugs
+-HTMLArea resizes on window resize now thanks to Gianluca B.
+
+2004/02/11 version 1.97
+-Completely restyled interface
+-Automatically checks for reminders and email now and pops up a new window.
+-Addressbook redesigned and separated companies from contacts
+-Bug with email account creation fixed.
+
+2004/01/25 version 1.96
+-Fixed double menu in older Netscape or Mozilla functions
+-Fixed bug in calendar that told user the times were wrong
+-Fixed bug with deleting calendar events
+-Updated theme icons
+-Implemented latest HTMLArea 3.0
+-Added new functionality to the projects module
+-Implemented Holidays functionality in calendar module
+-Fixed install bugs.
+-Passwords use md5 encryption now
+-Fixed small security bug. Only GO users could have modified some acl's from
+ other users.
+-You can now set up indivdual permissions for each contact.
+
+2004/01/19 version 1.95
+-Bugs introduced with the conversion to work without register_globals fixed
+-New compression tool in the file manager
+-Addressbook starts in search mode and search mode extended with clickable
+ letters of the alphabet
+-Added timezone preference
+-Added new fields to user table and addressbook: sex, first name, middle name,
+ last name, birthday
+-A completely renewed calendar module feauturing:
+	-Customizable views (day, x days, week, month)
+	-Greater flexibility in planning recurring events
+	-Timezones are adjusted
+	-Better user interface
+-Projects module enhanced.
+	-Now able to set status, start date and end date.
+	-Better performance
+-Better mime building with email client
+
+2003/11/22 version 1.94
+-register_globals no longer needed
+-Bug fixes
+
+2003/10/25 version 1.93
+-Huge performance improvements. Rewrote a lot of functions to improve
+ performance with a high number of users.
+-New permission dialogs to cope with high numbers of users
+-CMS module improved
+-Fixed bugs with IMAP authentication
+-Administrators can set wheter users can modify or add email accounts
+-Added trash folder to email client
+-Completely removed contacts module
+
+2003/09/21 version 1.91 (GO2 alpha release)
+-Group-Office still sometimes used the old contacts module. It is completely
+ removed now.
+-Fixed bug that caused wierd results when selecting from large addressbooks
+-Smaller bugfixes
+
+2003/09/21 version 1.9 (GO2 alpha release)
+-LDAP Authentication
+-IMAP Authentication
+-Sharable addressbooks
+-Many improvements to the CMS module
+-Works with disabled magic_quotes_gpc in php.ini now
+-Solved bug that caused errors when Group-Office had more then 6 users or so
+-HTMLarea 3.0 beta implemented and ability to restrict it to styles in a
+ stylesheet.
+-Group-Office will be released with only the English and Dutch language. Other
+ language packs will be released separately.
+
+2003/08/07 version 1.12
+-Added Portugese and Spanish
+-Added new theme Lush
+-Major Scheduler bugs fixed
+-Scheduler events can now planned in interval of days, weeks or months
+-Authorisation scheme changed, Autorisation code removed and now user can request
+ autorisation by typing just the users
+ email address. The user will recieve an e-mail and can accept or decline the
+ request with that e-mail
+-Signature option at e-mail accounts
+-Added option with adding email accounts to set the root folder like mail/ or
+ INBOX. instead  of the servertype selection
+-Shared folders are highlighted in the filesytem module. Removed sharing on
+ individual files to avoid confusion
+-Added support for manuals in different languages in the 'Help' menu. If a
+ manual is presentin the user's language then it will be displayed instantly.
+  If it's not then the user can select an avialable language.
+-Added dutch manual
+-Updated English manual thanks to Casey Ruark
+
+
+2003/07/24 version 1.11
+-Added new themes Nuvola
+-Minor bugs from 1.1 fixed
+-Improved scheduler view and navigation
+
+2003/07/18 version 1.1
+-Restructured the files and modularised the search function and the addressbook
+ so they can be removed from the program.
+	-All the administrator apps are now in the folder administrator
+	-All the user configuration apps are in the folder configuration
+	-Moved user profile page (user.php), group members page (group.php),
+	 and filetype icon (icon.php) to the controls directory
+-Chinese language support thanks to Ricky Chan
+-Swedish language support thanks to Martin Östlund
+-Added XML Xpath parser class: http://sourceforge.net/projects/phpxpath/
+-Custom settings can be stored using the config class
+-New administrator tools:
+	-configure startup moodule
+	-configure menu's
+	-automatic bookmarks when a user is created
+	-create custom date formats
+-imap sub folder support in email module
+-HTMLarea 3.0 added as control and integrated into the mail composer so now
+ Mozilla can send HTML mail too.
+-notification function in scheduler
+-New fancy installer that guides you through the whole process. Everybody can
+ install it now.
+-removed deprecated secret question and answer
+-projects module works according to standards now. Everybody can create
+ projects and users can subscribe to them if they have at least read
+ permissions.
+-new option to set a time interval that certain pages like the scheduler
+ refresh.
+-Contacts can have colors so they stand out
+-Completely new Website management module
+-Holidays support in scheduler module
+-Crystal theme partially redesigned
+
+-Improved view in scheduler and option to set background color of an event
+
+
+2003/06/18 version 1.06
+- From now on all changes are made by Georg Lorenz and Merijn Schering
+- New functionality in e-mail module thanks to Georg Lorenz
+- New theme Crystal thanks to Georg Lorenz
+- Italian translation thanks to Filippo Maguolo
+- French translation thanks to Hervé Thouzard
+- Image display in e-mail messages that I screwed up in 1.05 fixed.
+- Added some missing vars which screwed up the mail composer in English
+  language file.
+- Better folder handling in e-mail module thanks to Georg Lorenz
+
+2003/06/03 version 1.05
+- End user manual added in different formats thanks to Casey Ruark
+- Danish language support thanks to Allan Hansen
+- German language support thanks to Georg Lorenz
+- Bug in new themes fixed that would cause menu to fail when you added a
+  bookmark with a single quote.
+- Bug in filesystem module that made it impossible to delete a file with
+  dubble quotes in the name.
+- Title can be easily modified in install.php without removing the name
+  Group-Office from some places.
+- Added option to send as text or html in e-mail client
+- Cyrus IMAP support thanks to Georg Lorenz
+- Removed themes that used the menu that was not GPL
+- Fixed bug in email composer that made it impossible to attach files
+  with the Opera browser
+
+2003/05/17 version 1.04
+- Fixed bug in e-mail module that caused problems with multiple accounts
+- Fixed bug that made it impossible to add an event if you had only one
+  scheduler
+- Small bug fixes
+- Added groups import in addressbook
+
+2003/05/08 version 1.03
+- Changed menu script to JSCookMenu by Heng Yuan because of change to
+  incompatible license in the old menu
+- Translation bugs by Casey
+- Translation for projects module by Casey and Merijn Schering
+- Small bug fixes
+- added new option to 'Group-Office.php' so you can specify the local
+  hostname of the email server and add options to it
+  for example 'localhost/notls'when using a redhat server that requires
+  the notls option.
+
+2003/04/26 version 1.02
+
+FRAMEWORK:
+- Fixed bug in install script that created illegal file and directory
+  create modes
+- changed default file storage path to '/home/groupoffice/<username>'
+  instead of '/usr/groupoffice/<username>'
+- Make the module configuration more user friendly by listing the folders in
+  the modules folder.
+- Language autodetects when not set
+- At system information you can view PHP information
+- I declare the framework stable (including contact manager)
+- Added FAQ file
+
+FILESYSTEM MODULE:
+- Search for files and folders added filesystem
+- Security bug solved
+- Sharing bug solved
+- It's now possible to set permissions for files too.
+- Some small bug fixes
+
+SCHEDULER MODULE:
+- There are small changes in the database structure. some columns were removed.
+- Removed the location scheduler function and instead of that
+  I added the feature to add an event to multiple schedulers at once.
+- Invited users can unsubscribe events
+  (delete events from thier schedulers without really deleting the event).
+- Added buttons for day and week view.
+- List all events for a scheduler in a table.
+
+E-MAIL MODULE:
+- Removed '/novalidate-cert' option from connect function. This option is
+  needed with some Redhat distro's because of a bug in
+  the redhat php-imap package. If you have a redhat server add: '/notls'
+  after the host part in Group-Office.
+- Fixed bug:when adding or modifying an account it was impossible to navigate
+  to the mailboxes.
+
+PROJECTS MODULE:
+- Nothing done this is quite useless unless you are dutch speaking.
+
+
+2003/04/08 version 1.01
+- Several small bug fixes
+- Fixed sharing in filesystem module
+
+
+2003/03/21 version 1.0:
+First release including:
+- Base system
+- Filesystem client
+- E-mail client
+- Addressbook
+- Scheduler
+- Project management (alpha)﻿
