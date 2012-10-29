@@ -380,24 +380,24 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			
 			$response['feedback'] = !empty($response['feedback']) ? $response['feedback']."\r\n\r\n" : '';
 			$response['feedback'] .= $e->getMessage();
-//			if($e instanceof GO_Base_Exception_AccessDenied){
-//				
-//				//doesn't work well with extjs
-////				header("HTTP/1.1 403 Forbidden");
-//				
-//				$report = 
-//								"Access denied\n".								
-//								"controller: ".get_class($this)." action: ".$action."\n".
-//								"Session: ".var_export(GO::session()->values, true)."\n".
-//								"params: ".var_export($params, true)."\n".
-//								(string) $e;
-//				
-//				GO::debug($report);
-//				
+			if($e instanceof GO_Base_Exception_AccessDenied){
+				
+				//doesn't work well with extjs
+//				header("HTTP/1.1 403 Forbidden");
+				
+				$report = 
+								"Access denied\n".								
+								"controller: ".get_class($this)." action: ".$action."\n".
+								"Session: ".var_export(GO::session()->values, true)."\n".
+								"params: ".var_export($params, true)."\n".
+								(string) $e;
+				
+				GO::debug($report);
+				
 //				trigger_error($report, E_USER_WARNING);
-//				
-//				$response['redirectToLogin']=empty(GO::session()->values['user_id']);
-//			}
+				
+				$response['redirectToLogin']=empty(GO::session()->values['user_id']);
+			}
 			
 			if($e instanceof GO_Base_Exception_SecurityTokenMismatch)
 				$response['redirectToLogin']=true;
