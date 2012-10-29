@@ -247,3 +247,4 @@ $l['checkUnseen']='Controlla automaticamente la presenza di nuovi messaggi in qu
 $l['noEmailFolders']= 'Non è stata aggiunta alcuna cartella.';
 $l['sieveNote']='Non tutte le funzionalità sono supportate. Controlla il manuale.';
 $l['winmailNoFiles']="Questo allegato winmail non contiene alcun file.";
+$l['attachedAppointmentInfo']="Informazioni sull\'appuntamento allegato";

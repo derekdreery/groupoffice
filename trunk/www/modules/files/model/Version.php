@@ -101,7 +101,7 @@ class GO_Files_Model_Version extends GO_Base_Db_ActiveRecord {
 		
 		GO::config()->save_setting("file_storage_usage", GO::config()->get_setting('file_storage_usage')+$file->size());
 		
-		$this->_deleteOld();
+		$this->_deleteOld(); 
 		
 		return parent::afterSave($wasNew);
 	}
@@ -130,7 +130,11 @@ class GO_Files_Model_Version extends GO_Base_Db_ActiveRecord {
 
 			$stmt = $this->find($params);
 
-			$stmt->callOnEach('delete');
+			foreach($stmt as $version){
+				$version->delete(true);
+			}
+				
+		//	$stmt->callOnEach('delete');
 		}
 	}
 }

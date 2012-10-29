@@ -108,8 +108,7 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_Interface{
 		
 		unset($this->_ttls[$key]);
 		$this->_ttlsDirty=true;
-		if(file_exists($this->_dir.$key))
-			unlink($this->_dir.$key);
+		@unlink($this->_dir.$key);
 	}
 	/**
 	 * Flush all values 

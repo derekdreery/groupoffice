@@ -44,6 +44,9 @@ class GO{
 	 * @var array 
 	 */
 	private static $_errorLogCallbacks=array();
+	
+	
+	private static $_lastReportedError=false;
 
 
 	/**
@@ -534,7 +537,10 @@ class GO{
 	public static function shutdown(){
 		$error = error_get_last();		
 		if($error){
-			self::errorHandler($error['type'], $error['message'], $error['file'], $error['line']);
+			
+			//z-push uses a lot of ugly @fputs etc to suppresss errors. We don't want to log those.
+			if(!isset($GLOBALS['zpush_version']))
+				self::errorHandler($error['type'], $error['message'], $error['file'], $error['line']);
 		}  else {
 			//cli may resolve symlinks and apache doesn't this causes double includes
 			if(self::$_classesIsDirty && PHP_SAPI!='cli')
@@ -566,6 +572,12 @@ class GO{
 		//log only errors that are in error_reporting
 		$error_reporting = ini_get('error_reporting');
 		if (!($error_reporting & $errno)) return;
+		
+		//prevent that the shutdown function will log this error again.
+		if(self::$_lastReportedError == $errno.$errfile.$errline)
+			return;
+		
+		self::$_lastReportedError = $errno.$errfile.$errline;
 
 		$type="Unknown error";
 
@@ -593,6 +605,9 @@ class GO{
 		$ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'unknown';
 		
 		$errorMsg .= "\nUser: ".$user." Agent: ".$agent." IP: ".$ip."\n";
+		
+		if(isset($_SERVER['QUERY_STRING']))
+			$errorMsg .= "Query: ".$_SERVER['QUERY_STRING']."\n";
 			
 		
 		$backtrace = debug_backtrace();
