@@ -1611,7 +1611,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		}
 
 		foreach ($struct as $id => $vals) {
-			if(isset($vals['type']) && $vals['type']=='message' && strtolower($struct['subtype'])=='alternative'){
+			if(isset($vals['type']) && $vals['type']=='message' && isset($struct['subtype']) && strtolower($struct['subtype'])=='alternative'){
 				return true;
 			}elseif (isset($vals['subs']) && (!isset($vals['subtype']) || $vals['subtype']!='rfc822')){
 				if($this->has_alternative_body($vals['subs'])){
