@@ -40,6 +40,12 @@ if($feed != '' && strpos($feed, 'http') === 0){
 	
 	if($xml)
 	{		
+		
+		//fix relative images
+		preg_match('/(.*:\/\/[^\/]+)\//',$feed, $matches);				
+		$baseUrl = $matches[1];				
+		$xml = str_replace('src=&quot;/', 'src=&quot;'.$baseUrl.'/', $xml);
+
 		$xml = str_replace('<content:encoded>', '<content>', $xml);
 		$xml = str_replace('</content:encoded>', '</content>', $xml);
 		$xml = str_replace('</dc:creator>', '</author>', $xml);
