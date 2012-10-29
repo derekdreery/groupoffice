@@ -1100,10 +1100,7 @@ class GO_Base_Config {
 			GO::debug('Page load took: '.(GO_Base_Util_Date::getmicrotime()-$this->loadstart).'ms', $this);
 			GO::debug('Peak memory usage:'.round(memory_get_peak_usage()/1048576,2).'MB', $this);
 			GO::debug("--------------------\n", $this);
-		}
-		
-		GO::endRequest();
-		
+		}		
 //		$this->_logSlowRequest();
 	}
 	
