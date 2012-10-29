@@ -37,6 +37,13 @@ class GO{
 	 * @var boolean
 	 */
 	public static $ignoreAclPermissions=false;
+	
+	
+	/**
+	 * Use registerErrorLogCallback to register a custom function to log errors
+	 * @var array 
+	 */
+	private static $_errorLogCallbacks=array();
 
 
 	/**
@@ -417,11 +424,11 @@ class GO{
 	/**
 	 * Called by GO_Base_Config::__destruct() so we can do stuff at the end 
 	 */
-	public static function endRequest(){
-		//cli may resolve symlinks and apache doesn't this causes double includes
-		if(self::$_classesIsDirty && PHP_SAPI!='cli')
-			@GO::cache()->set('autoload_classes', self::$_classes);
-	}
+//	public static function endRequest(){
+//		//cli may resolve symlinks and apache doesn't this causes double includes
+//		if(self::$_classesIsDirty && PHP_SAPI!='cli')
+//			@GO::cache()->set('autoload_classes', self::$_classes);
+//	}
 
 	/**
 	 * This function inititalizes Group-Office.
@@ -433,6 +440,10 @@ class GO{
 			throw new Exception("Group-Office was already initialized");
 		}
 		self::$initialized=true;
+		
+		//register our custom error handler here
+		set_error_handler(array('GO','errorHandler'), E_ALL | E_STRICT);
+		register_shutdown_function(array('GO','shutdown'));
 				
 		spl_autoload_register(array('GO', 'autoload'));	
 
@@ -453,26 +464,6 @@ class GO{
 				require_once 'FirePHPCore/fb.php';
 			}
 		}
-
-//		if (!defined('GO_NO_SESSION')) {
-//			//start session
-//			session_name('groupoffice');
-//			if (isset($_REQUEST['session_id']) && isset($_REQUEST['auth_token'])) {
-//				session_id($_REQUEST['session_id']);
-//			}
-//			session_start();
-//			if (isset($_REQUEST['auth_token'])) {
-//				if ($_REQUEST['auth_token'] != GO::session()->values['auth_token']) {
-//					session_destroy();
-//					die('Invalid auth_token supplied');
-//				} else {
-//					GO::session()->values['auth_token'] = GO_Base_Util_String::random_password('a-z,1-9', '', 30);
-//					//redirect to URL without session_id
-//					header('Location: ' . $_SERVER['PHP_SELF']);
-//					exit();
-//				}
-//			}
-//		}
 
 		if(!defined('GO_LOADED')){ //check if old Group-Office.php was loaded
 
@@ -525,15 +516,7 @@ class GO{
 				require_once(GO::config()->root_path . 'modules/professional/check.php');
 				check_license();
 			}
-
-
-			//require($GLOBALS['GO_LANGUAGE']->get_base_language_file('common'));
-
-			if (GO::config()->log) {
-				$username = isset(GO::session()->values['username']) ? GO::session()->values['username'] : 'notloggedin';
-				openlog('[Group-Office][' . date('Ymd G:i') . '][' . $username . ']', LOG_PERROR, LOG_USER);
-			}
-
+			
 			if (function_exists('mb_internal_encoding'))
 				mb_internal_encoding("UTF-8");
 		}
@@ -541,32 +524,107 @@ class GO{
 		if (!empty(self::session()->values['user_id'])) {
 			self::config()->tmpdir = self::config()->tmpdir . self::session()->values['user_id'] . '/';
 		}
-
-		if (GO::config()->debug) {
-
-//			$_SESSION['connect_count'] = 0;
-//			$_SESSION['query_count'] = 0;
-
-			//Don't do this for old lib
-			if(!isset($GLOBALS['GO_CONFIG']))
-				error_reporting(E_ALL | E_STRICT);
-
-			ini_set('display_errors','on');
-			ini_set('log_errors','on');
-			//ini_set('memory_limit','32M');
-			//ini_set('max_execution_time',10);
-			//set_error_handler(array('GO','errorHandler'), E_ALL | E_STRICT);
-		}
 	}
 
+	/**
+	 * Called when PHP exits.
+	 */
+	public static function shutdown(){
+		$error = error_get_last();		
+		if($error){
+			self::errorHandler($error['type'], $error['message'], $error['file'], $error['line']);
+		}  else {
+			//cli may resolve symlinks and apache doesn't this causes double includes
+			if(self::$_classesIsDirty && PHP_SAPI!='cli')
+				@GO::cache()->set('autoload_classes', self::$_classes);
+		}
+	}
+	
+	/**
+	 * Register a callback function when an error occurs. It will be called with
+	 * the error message as string
+	 * 
+	 * @param string|array $func
+	 */
+	public static function registerErrorLogCallback($func){
+		self::$_errorLogCallbacks[]=$func;
+	}
 
-	public static function errorHandler($errno, $errstr, $errfile, $errline, $errcontext) {
+	/**
+	 * Custom error handler that logs to our own error log
+	 * 
+	 * @param int $errno
+	 * @param string $errstr
+	 * @param string $errfile
+	 * @param int $errline
+	 * @return boolean
+	 */
+	public static function errorHandler($errno, $errstr, $errfile, $errline) {
 
-		$err_str = "PHP error: $errfile:$errline $errstr ($errno)";
-//		if(GO::config()->debug)
-//			echo $err_str."\n";
+		$type="Unknown error";
 
-	GO::debug($err_str);
+		switch ($errno) {
+			case E_ERROR:
+			case E_USER_ERROR:
+					$type='Fatal error';
+					break;
+
+			case E_WARNING:
+			case E_USER_WARNING:
+					$type = 'Warning';
+					break;
+
+			case E_NOTICE:
+			case E_USER_NOTICE:
+					$type='Notice';
+					break;
+		}		
+		
+		$errorMsg="[".date("Ymd G:i:s")."] PHP $type: $errstr in $errfile on line $errline";
+		
+		$user = isset(GO::session()->values['username']) ? GO::session()->values['username'] : 'notloggedin';
+		$agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
+		$ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'unknown';
+		
+		$errorMsg .= "\nUser: ".$user." Agent: ".$agent." IP: ".$ip."\n";
+			
+		
+		$backtrace = debug_backtrace();
+		array_shift($backtrace); //first item is this function which we don't have to see
+		
+		$errorMsg .= "Backtrace:\n";
+		foreach($backtrace as $o){
+			
+			if(!isset($o['class']))
+				$o['class']='global';
+			
+			if(!isset($o['function']))
+				$o['function']='global';
+			
+			if(!isset($o['file']))
+				$o['file']='unknown';
+			
+			if(!isset($o['line']))
+				$o['line']='unknown';
+			
+			$errorMsg .= $o['class'].'::'.$o['function'].' in file '.$o['file'].' on line '.$o['line']."\n";			
+		}
+		$errorMsg .= "----------------";
+		
+		GO::debug($errorMsg);
+		GO::logError($errorMsg);	
+		
+		foreach(self::$_errorLogCallbacks as $callback){
+			call_user_func($callback, $errorMsg);
+		}
+		
+		/* Execute PHP internal error handler too */
+		return false;
+	}
+	
+	
+	public static function logError($errorMsg){		
+		file_put_contents(GO::config()->file_storage_path . 'log/error.log', $errorMsg . "\n", FILE_APPEND);
 	}
 
 
@@ -579,12 +637,12 @@ class GO{
 	 * @return void
 	 */
 	public static function log($level, $message) {
-		if (self::config()->log) {
-			$messages = str_split($message, 500);
-			for ($i = 0; $i < count($messages); $i++) {
-				syslog($level, $messages[$i]);
-			}
-		}
+//		if (self::config()->log) {
+//			$messages = str_split($message, 500);
+//			for ($i = 0; $i < count($messages); $i++) {
+//				syslog($level, $messages[$i]);
+//			}
+//		}
 	}
 
 	public static function infolog($message) {
@@ -670,7 +728,7 @@ class GO{
 
 					$text = "[$user] ".str_replace("\n","\n[$user] ", $text);
 
-					file_put_contents(self::config()->file_storage_path . 'debug.log', $text . "\n", FILE_APPEND);
+					file_put_contents(self::config()->file_storage_path . 'log/debug.log', $text . "\n", FILE_APPEND);
 				}
 			}
 		}
