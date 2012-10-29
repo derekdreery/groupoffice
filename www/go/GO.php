@@ -44,6 +44,9 @@ class GO{
 	 * @var array 
 	 */
 	private static $_errorLogCallbacks=array();
+	
+	
+	private static $_lastReportedError=false;
 
 
 	/**
@@ -569,6 +572,12 @@ class GO{
 		//log only errors that are in error_reporting
 		$error_reporting = ini_get('error_reporting');
 		if (!($error_reporting & $errno)) return;
+		
+		//prevent that the shutdown function will log this error again.
+		if(self::$_lastReportedError == $errno.$errfile.$errline)
+			return;
+		
+		self::$_lastReportedError = $errno.$errfile.$errline;
 
 		$type="Unknown error";
 
