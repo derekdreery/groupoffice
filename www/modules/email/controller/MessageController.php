@@ -1018,10 +1018,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$vevent = $vcalendar->vevent[0];
 
 			//is this an update for a specific recurrence?
-			$recurrenceDate = isset($vevent->{"recurrence-id"}) ? $vevent->{"recurrence-id"}->getDateTime()->format('U') : 0;
+			//$recurrenceDate = isset($vevent->{"recurrence-id"}) ? $vevent->{"recurrence-id"}->getDateTime()->format('U') : 0;
 
 			//find existing event
-			$event = GO_Calendar_Model_Event::model()->findByUuid((string) $vevent->uid, GO::user()->id, 0, $recurrenceDate);
+			$event = GO_Calendar_Model_Event::model()->findByUuid((string) $vevent->uid, GO::user()->id, 0);
 
 			switch($vcalendar->method){
 				case 'CANCEL':					
@@ -1046,14 +1046,14 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 					'email_sender' => $response['sender'],
 					'email' => $imapMessage->account->getDefaultAlias()->email,
 					'event_declined' => $event && $event->status == 'DECLINED',
-					'event_id' => $event ? $event->id : 0,
+					//'event_id' => $event ? $event->id : 0,
 					'is_update' => $vcalendar->method == 'REPLY',
 					'is_invitation' => $vcalendar->method == 'REQUEST',
 					'is_cancellation' => $vcalendar->method == 'CANCEL'
 			);
 			
-			$subject = (string) $vevent->summary;
-			if(!empty($subject) && strpos($response['htmlbody'], $subject)===false){
+//			$subject = (string) $vevent->summary;
+//			if(!empty($subject) && strpos($response['htmlbody'], $subject)===false){
 				if(!$event){
 					$event = new GO_Calendar_Model_Event();
 					$event->importVObject($vevent, array(), true);
@@ -1063,7 +1063,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 								'<div style="font-weight:bold;margin:2px;">'.GO::t('attachedAppointmentInfo','email').'</div>'.
 								$event->toHtml().
 								'</div>';
-			}
+//			}
 			
 //			switch ($vcalendar->method) {
 //				case 'REPLY':
