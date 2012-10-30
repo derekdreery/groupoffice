@@ -13,8 +13,13 @@ GO.calendar.AttendanceWindow = Ext.extend(GO.dialog.TabbedFormDialog, {
 
 		GO.calendar.AttendanceWindow.superclass.initComponent.call(this);
 		
-	}
-	,
+	},
+	setExceptionDate : function(date){
+		if(!date)
+			delete this.formPanel.baseParams.exception_date;
+		else
+			this.formPanel.baseParams.exception_date=date;
+	},
 	buildForm : function(){
 		
 		this.addPanel({

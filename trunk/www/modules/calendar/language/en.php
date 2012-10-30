@@ -206,3 +206,4 @@ $l['errorOrganizerOnly'] = 'You are not authorised to edit this event because yo
 $l['errorOrganizerOnlyTitle'] = 'You are not the organizer';
 $l['cantRemoveOrganizer']="You can't remove the organizer";
 $l['calendarColor']='Calendar color';
+$l['eventDeleted']="The event was deleted from your calendar";

@@ -903,10 +903,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		foreach($events as $event){
 		
 			// Check for a double event, and merge them if they are double
-			if(array_key_exists($event->getUuid(), $this->_uuidEvents))
-				$this->_uuidEvents[$event->getUuid()]->mergeWithEvent($event);
-			else
-				$this->_uuidEvents[$event->getUuid()] = $event;
+//			if(array_key_exists($event->getUuid().$event->getAlternateStartTime(), $this->_uuidEvents))
+//				$this->_uuidEvents[$event->getUuid()]->mergeWithEvent($event);
+//			else
+//				$this->_uuidEvents[$event->getUuid()] = $event;
+			
+			$this->_uuidEvents[]=$event;
 			
 			// If you are showing more than one calendar, then change the display 
 			// color of the current event to the color of the calendar it belongs to.
@@ -956,7 +958,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					$event->sendCancelNotice();
 				}else
 				{
-					$event->replyToOrganizer(GO_Calendar_Model_Participant::STATUS_DECLINED, !empty($params['send_cancel_notice']));
+					$event->replyToOrganizer(GO_Calendar_Model_Participant::STATUS_DECLINED, !empty($params['send_cancel_notice']), $params['exception_date']);
 				}
 			}
 			
@@ -999,6 +1001,129 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 //		return false;
 //	}
 	
+	/**
+	 * Handle's reply from an attendee when the current user is the organizer.
+	 * 
+	 * @param Sabre_VObject_Component $vevent
+	 * @param type $recurrenceDate
+	 * @return boolean
+	 * @throws GO_Base_Exception_NotFound
+	 */
+	private function _handleIcalendarReply(Sabre_VObject_Component $vevent, $recurrenceDate){
+		//find existing event
+		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
+		if(!$masterEvent)
+			throw new GO_Base_Exception_NotFound();
+		
+		if($recurrenceDate){
+			$event = $masterEvent->findException($recurrenceDate);
+			
+			//create it
+			if(!$event)
+				$event = $masterEvent->createExceptionEvent($recurrenceDate);
+		}else
+		{
+			$event = $masterEvent;
+		}
+		
+		$participant = $event->importVObjectAttendee($event, $vevent->attendee);
+
+		$response['feedback']=sprintf(GO::t('eventUpdatedIn','calendar'), $event->calendar->name, $participant->statusName);
+		$response['success']=true;
+		
+		return $response;
+	}
+	
+	/**
+	 * Handle's a request from an organizer from another externals system
+	 * 
+	 * @param Sabre_VObject_Component $vevent
+	 * @param type $recurrenceDate
+	 * @return boolean
+	 * @throws GO_Base_Exception_NotFound
+	 */
+	private function _handleIcalendarRequest(Sabre_VObject_Component $vevent, $recurrenceDate, $status){
+		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
+		
+		
+		
+		//delete existing data		
+		if(!$recurrenceDate){
+			//if no recurring instance was given delete the master event
+			if($masterEvent)
+				$masterEvent->delete();
+		}  else {
+			$exceptionEvent = $masterEvent->findException($recurrenceDate);
+			if($exceptionEvent)
+				$exceptionEvent->delete();
+			
+			$exception = $masterEvent->hasException($recurrenceDate);
+			if($exception)
+				$exception->delete();
+		}
+		
+		$eventUpdated=!$recurrenceDate && $masterEvent || $recurrenceDate && !empty($exceptionEvent);
+		
+		$importAttributes=array('is_organizer'=>false);
+		
+		//import it
+		$event = new GO_Calendar_Model_Event();
+		$event->importVObject($vevent, $importAttributes);
+
+		if($status){
+			$event->replyToOrganizer($status, true);
+		}
+		
+		//Get the participant
+		$participant = GO_Calendar_Model_Participant::model()
+						->findSingleByAttributes(array('event_id'=>$event->id, 'user_id'=>$event->calendar->user_id));
+
+		if(!$participant)
+		{
+			//this is a bad situation. The import thould have detected a user for one of the participants.
+			//It uses the E-mail account aliases to determine a user. See GO_Calendar_Model_Event::importVObject
+			$participant = new GO_Calendar_Model_Participant();
+			$participant->event_id=$event->id;
+			$participant->user_id=$event->calendar->user_id;
+			$participant->email=$event->calendar->user->email;
+			if($status)
+				$participant->status=$status;
+			$participant->save();		
+		}
+		
+		
+		$langKey = $eventUpdated ? 'eventUpdatedIn' : 'eventScheduledIn';
+		
+		$response['feedback']=sprintf(GO::t($langKey,'calendar'), $event->calendar->name, $participant->statusName);
+		$response['success']=true;
+		
+		return $response;
+	}
+	
+	private function _handleIcalendarCancel(Sabre_VObject_Component $vevent, $recurrenceDate){
+		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
+				
+		//delete existing data		
+		if(!$recurrenceDate){
+			//if no recurring instance was given delete the master event
+			if($masterEvent)
+				$masterEvent->delete();
+		}  else {
+			$exceptionEvent = $masterEvent->findException($recurrenceDate);
+			if($exceptionEvent)
+				$exceptionEvent->delete();
+			
+			$exception = $masterEvent->hasException($recurrenceDate);
+			if(!$exception)
+				$masterEvent->addException($recurrenceDate);
+		}
+		
+		
+		$response['feedback']=sprintf(GO::t('eventDeleted','calendar'));
+		$response['success']=true;
+		
+		return $response;
+	}
 	
 	protected function actionAcceptInvitation($params){
 		
@@ -1012,6 +1137,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
 		$message = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'],$params['uid']);
 		$vcalendar = $message->getInvitationVcalendar();
+		
+	
 		$vevent = $vcalendar->vevent[0];
 		
 		//if a recurrence-id if passed then convert it to a unix time stamp.
@@ -1027,12 +1154,38 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$recurrenceDate=$firstMatch->getDateTime()->format('U');
 		}
 		
+		
+		switch($vcalendar->method){
+			case 'REPLY':
+				return $this->_handleIcalendarReply($vevent, $recurrenceDate);
+				break;
+			
+			case 'REQUEST':
+				$status = !empty($params['status']) ? $params['status'] : false;
+				return $this->_handleIcalendarRequest($vevent, $recurrenceDate, $status);
+				break;
+			
+			case 'CANCEL':
+				return $this->_handleIcalendarCancel($vevent, $recurrenceDate);
+				break;
+			
+			default:
+				throw new Exception("Unsupported method: ".$vcalendar->method);
+				
+		}
+		
+		
+		
 		//find existing event
-		$event = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id, 0, $recurrenceDate);				
+		$event = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
+		
+		if($recurrenceDate){
+			$event = 0;
+		}
 
 		$eventUpdated = false;
 		
-		$userIsOrganizer=false;
+		$userIsOrganizer=$vcalendar->method=='REPLY';
 		if($event){
 			
 			$eventUpdated = true;
