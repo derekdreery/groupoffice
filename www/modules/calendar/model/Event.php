@@ -217,6 +217,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 	/**
 	 * This Event needs to be reinitialized to become an Exception of its own on the given Unix timestamp.
+	 * It will not save the event and doesn't copy participants. Use createExcetionEvent for that.
 	 * 
 	 * @param int $exceptionDate Unix timestamp
 	 */
@@ -239,6 +240,22 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$att['end_time'] = $endTime->format('U');
 		
 		return $this->duplicate($att, false);
+	}
+	
+	/**
+	 * Create an exception for a recurring series.
+	 * 
+	 * @param int $exceptionDate
+	 * @return GO_Calendar_Model_Event
+	 */
+	public function createExceptionEvent($exceptionDate){
+		$event = $this->getExceptionEvent($exceptionDate);
+		$event->save();
+		$this->addException($exceptionDate, $event->id);
+		
+		$this->duplicateRelation('participants', $event);
+		
+		return $event;
 	}
 	
 	protected function beforeSave() {
@@ -289,8 +306,16 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$this->deleteReminders();
 		
 		if($this->is_organizer){
-			//delete participant events							
-			$stmt = GO_Calendar_Model_Event::model()->findByAttribute("uuid", $this->uuid);
+			
+//			//delete participant events							
+//			$findParams = GO_Base_Db_FindParams::newInstance()->ignoreAcl();
+//			$findParams->getCriteria()
+//							->addCondition("uuid", $this->uuid)
+//							->addCondition("start_time", $this->start_time)
+//							->addCondition("exception_for_event_id", $this->exception_for_event_id);
+//							//->addCondition('calendar_id', $this->calendar_id, '!=');
+//							
+			$stmt = $this->getRelatedParticipantEvents();
 			
 			foreach($stmt as $event){
 				$event->delete(true);
@@ -344,20 +369,22 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 			$newExeptionEvent = GO_Calendar_Model_Event::model()->findByPk($this->exception_for_event_id);
 			$newExeptionEvent->addException($this->exception_date, $this->id);
-			
-			//copy particpants to new exception
-			$stmt = $newExeptionEvent->participants();
-			while($participant = $stmt->fetch()){
-				$newParticipant = new GO_Calendar_Model_Participant();
-				$newParticipant->setAttributes($participant->getAttributes());
-				unset($newParticipant->id);
-				$newParticipant->event_id=$this->id;
-				if(!$newParticipant->is_organizer){
-					$newParticipant->status=GO_Calendar_Model_Participant::STATUS_PENDING;
-				}
-				$newParticipant->save();
-			}
 		}
+		
+//			
+//			//copy particpants to new exception
+//			$stmt = $newExeptionEvent->participants();
+//			while($participant = $stmt->fetch()){
+//				$newParticipant = new GO_Calendar_Model_Participant();
+//				$newParticipant->setAttributes($participant->getAttributes());
+//				unset($newParticipant->id);
+//				$newParticipant->event_id=$this->id;
+//				if(!$newParticipant->is_organizer){
+//					$newParticipant->status=GO_Calendar_Model_Participant::STATUS_PENDING;
+//				}
+//				$newParticipant->save();
+//			}
+//		}
 		
 		if($exceptionEvent = $this->_exceptionEvent){
 			$exceptionEvent->touch();
@@ -398,17 +425,18 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 					'description'=>$this->description
 							);
 			
-			
-			$events = $this->getRelatedParticipantEvents();
+			if(!$wasNew){
+				$events = $this->getRelatedParticipantEvents();
 
-			foreach($events as $event){
-				$event->setAttributes($updateAttr, false);
-				$event->save(true);
+				foreach($events as $event){
+					$event->setAttributes($updateAttr, false);
+					$event->save(true);
 
-				$stmt = $event->participants;
-				$stmt->callOnEach('delete');
+					$stmt = $event->participants;
+					$stmt->callOnEach('delete');
 
-				$this->duplicateRelation('participants', $event);
+					$this->duplicateRelation('participants', $event);
+				}
 			}
 		}
 
@@ -423,8 +451,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public function getRelatedParticipantEvents(){
 		$findParams = GO_Base_Db_FindParams::newInstance()->ignoreAcl();
 		
+		$start_time = $this->isModified('start_time') ? $this->getOldAttributeValue('start_time') : $this->start_time;
+		
 		$findParams->getCriteria()
 						->addCondition("uuid", $this->uuid)
+						->addCondition('start_time', $start_time)
+						->addCondition("exception_for_event_id", $this->exception_for_event_id)
 						->addCondition('id', $this->id, '!=');
 						
 		$stmt = GO_Calendar_Model_Event::model()->find($findParams);
@@ -542,26 +574,32 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 */
 	private $_calculatedEvents;
 	
+	
+	/**
+	 * Finds a specific occurence for a date.
+	 * 
+	 * @param int $startTime
+	 * @return GO_Calendar_Model_Event
+	 * @throws Exception
+	 */
 	public function findException($startTime){
+		
+		if($this->exception_for_event_id!=0)
+			throw new Exception("This is not a master event");
+			
 		$startOfDay = GO_Base_Util_Date::clear_time($startTime);
 		$endOfDay = GO_Base_Util_Date::date_add($startOfDay, 1);
 		
 		$findParams = GO_Base_Db_FindParams::newInstance();
 		
 		$findParams->getCriteria()
+						->addCondition('exception_for_event_id', $this->id)
 						->addCondition('start_time', $startOfDay,'>=')
 						->addCondition('end_time', $endOfDay,'<=');
 						
 		$event = GO_Calendar_Model_Event::model()->findSingle($findParams);
 		
-		if(!$event){
-			$event = new GO_Calendar_Model_Event();
-		//	GO::debug("NEW EXCEPTION CREATED IN THE FINDEXCEPTION FUNCTION OF THE EVENT MODEL");			
-		} else {
-		//	GO::debug("EXCEPTION FOUND IN THE FINDEXCEPTION FUNCTION OF THE EVENT MODEL. ID: ".$event->id);			
-		}
-	
-		return $event;		
+		return $event;
 	}
 	
 	/**
@@ -679,10 +717,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		//recurrences can only be calculated correctly if we use the start of the day and the end of the day.
 		//we'll use the original times later to check if they really overlap.
-		$periodStartTime= GO_Base_Util_Date::clear_time($this->start_time)-1;
-		$periodEndTime= GO_Base_Util_Date::clear_time(GO_Base_Util_Date::date_add($this->end_time,1));
+		$periodStartTime= GO_Base_Util_Date::clear_time($periodStartTime)-1;
+		$periodEndTime= GO_Base_Util_Date::clear_time(GO_Base_Util_Date::date_add($periodEndTime,1));
 
-		$localEvent = new GO_Calendar_Model_LocalEvent($event, $periodStartTime, $periodEndTime);
+		$localEvent = new GO_Calendar_Model_LocalEvent($event, $origPeriodStartTime, $origPeriodEndTime);
 		
 		if(!$localEvent->isRepeating()){
 			$this->_calculatedEvents[] = $localEvent;
@@ -694,8 +732,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 //			$rrule->setRecurPositionStartTime($periodStartTime);
 
 			$origEventAttr = $localEvent->getEvent()->getAttributes('formatted');
+			
+			
 
 			while ($occurenceStartTime = $rrule->getNextRecurrence(false,$periodEndTime)) {
+				
+				GO::debug($event->name.' '.date('c', $occurenceStartTime));
 
 				if ($occurenceStartTime > $localEvent->getPeriodEndTime())
 					break;
@@ -710,12 +752,16 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$localEvent->setAlternateEndTime($endTime->format('U'));
 
 				if($localEvent->getAlternateStartTime()<$origPeriodEndTime && $localEvent->getAlternateEndTime()>$origPeriodStartTime){
-					$this->_calculatedEvents[$occurenceStartTime . '-' . $origEventAttr['id']] = $localEvent;
+					if(!$event->hasException($occurenceStartTime))
+						$this->_calculatedEvents[$occurenceStartTime . '-' . $origEventAttr['id']] = $localEvent;
 				}
 				
 				$localEvent = new GO_Calendar_Model_LocalEvent($event, $periodStartTime, $periodEndTime);
 			}
 		}
+		
+		
+	
 		
 		
 //		if (empty($event->rrule)) {
@@ -747,6 +793,26 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 //
 //			ksort($this->_calculatedEvents);
 //		}
+	}
+	
+	/**
+	 * Check if this event has an exception for a given day.
+	 * 
+	 * @param int $time
+	 * @return GO_Calendar_Model_Exception
+	 */
+	public function hasException($time){
+		$startDay = GO_Base_Util_Date::clear_time($time);
+		$endDay = GO_Base_Util_Date::date_add($startDay, 1);
+
+		$findParams = GO_Base_Db_FindParams::newInstance();
+		$findParams->getCriteria()
+						->addCondition('event_id', $this->id)
+						->addCondition('time', $startDay,'>=')
+						->addCondition('time', $endDay, '<');
+
+		return GO_Calendar_Model_Exception::model()->findSingle($findParams);
+
 	}
 	
 	/**
@@ -921,9 +987,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @param string $method REQUEST, REPLY or CANCEL
 	 * @param GO_Calendar_Model_Participant $updateByParticipant The participant that is generating this ICS for a response.
+	 * @param int $recurrenceTime Export for a specific recurrence time for the recurrence-id. 
+	 * If this event is an occurence and has a exception_for_event_id it will automatically determine this value. 
+	 * This option is only useful for cancelling a single occurence. Because in that case there is no event model for the occurrence. There's just an exception.
+	 * 
 	 * @return Sabre_VObject_Component 
 	 */
-	public function toVObject($method='REQUEST', $updateByParticipant=false){
+	public function toVObject($method='REQUEST', $updateByParticipant=false, $recurrenceTime=false){
 		$e=new Sabre_VObject_Component('vevent');
 		
 		if(empty($this->uuid)){
@@ -978,13 +1048,16 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if($this->exception_for_event_id>0){
 			//this is an exception
 			
-			$exception = $this->recurringEventException();
+			$exception = $this->recurringEventException(); //get master event from relation
 			if($exception){
-				$recurrenceId =new Sabre_VObject_Element_DateTime("recurrence-id",$dateType);
-				$dt = GO_Base_Util_Date_DateTime::fromUnixtime($exception->time);
-				$recurrenceId->setDateTime($dt);
-				$e->add($recurrenceId);
+				$recurrenceTime=$exception->time;				
 			}
+		}
+		if($recurrenceTime){
+			$recurrenceId =new Sabre_VObject_Element_DateTime("recurrence-id",$dateType);
+			$dt = GO_Base_Util_Date_DateTime::fromUnixtime($recurrenceTime);
+			$recurrenceId->setDateTime($dt);
+			$e->add($recurrenceId);
 		}
 		
 		
@@ -1079,6 +1152,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @param string $method REQUEST, REPLY or CANCEL
 	 * @param GO_Calendar_Model_Participant $updateByParticipant The participant that is generating this ICS for a response.
+	 * @param int $recurrenceTime Export for a specific recurrence time for the recurrence-id. 
+	 * If this event is an occurence and has a exception_for_event_id it will automatically determine this value. 
+	 * This option is only useful for cancelling a single occurence. Because in that case there is no event model for the occurrence. There's just an exception.
 	 * 
 	 * Set this to a unix timestamp of the start of an occurence if it's an update
 	 * for a particular recurrence date.
@@ -1086,14 +1162,14 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @return type 
 	 */
 	
-	public function toICS($method='REQUEST', $updateByParticipant=false) {		
+	public function toICS($method='REQUEST', $updateByParticipant=false, $recurrenceTime=false) {		
 		
 		$c = new GO_Base_VObject_VCalendar();		
 		$c->method=$method;
 		
 		$c->add(new GO_Base_VObject_VTimezone());
 		
-		$c->add($this->toVObject($method, $updateByParticipant));		
+		$c->add($this->toVObject($method, $updateByParticipant, $recurrenceTime));		
 		return $c->serialize();		
 	}
 	
@@ -1235,16 +1311,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				//exception was not found for this recurrence. Find the recurring series and add the exception.
 				$recurringEvent = GO_Calendar_Model_Event::model()->findByUuid($this->uuid, 0, $this->calendar_id);
 				if($recurringEvent){
+					//aftersave will create GO_Calendar_Model_Exception
 					$this->exception_for_event_id=$recurringEvent->id;
 					$this->exception_date=strtotime(date('Y-m-d', $this->start_time).' '.date('G:i', $recurringEvent->start_time));
-									
-//					$exception = new GO_Calendar_Model_Exception();
-//					$exception->event_id=$this->exception_for_event_id;
-//					$exception->time=$this->start_time;
-//					//$exception->save();
 				}
-			}
-			
+			}			
 		}
 		
 		if($vobject->valarm){
@@ -1394,7 +1465,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 	protected function afterDuplicate(&$duplicate) {
 		
-		if (!$this->isNew) {
+		if (!$duplicate->isNew) {
 			
 			$stmt = $duplicate->participants;
 			
@@ -1563,9 +1634,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @param int $status Participant status, See GO_Calendar_Model_Participant::STATUS_*
 	 * @param boolean $sendMessage
+	 * @param int $recurrenceTime Export for a specific recurrence time for the recurrence-id
 	 * @throws Exception
 	 */
-	public function replyToOrganizer($status, $sendMessage=false){
+	public function replyToOrganizer($status, $sendMessage=false, $recurrenceTime=false){
 		
 		if($this->is_organizer)
 			throw new Exception("Meeting reply can only be send from the organizer's event");
@@ -1613,7 +1685,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 			if(!$this->getOrganizerEvent()){
 				//organizer is not a Group-Office user with event. We must send a message to him an ICS attachment
-				$ics=$this->toICS("REPLY", $sendingParticipant);				
+				$ics=$this->toICS("REPLY", $sendingParticipant, $recurrenceTime);				
 				$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REPLY"');
 				$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 				$a->setDisposition("inline");

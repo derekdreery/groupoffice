@@ -1733,6 +1733,13 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				}, this);
 			}			
 			this.attendanceWindow.show(event.event_id);
+			if(event.repeats && actionData.singleInstance)
+			{
+				this.attendanceWindow.setExceptionDate(event['startDate'].format("U"));
+			}else
+			{
+				this.attendanceWindow.setExceptionDate(false);
+			}
 			return;
 		}
 
