@@ -448,7 +448,15 @@ class GO{
 		error_reporting(E_ALL | E_STRICT);
 		set_error_handler(array('GO','errorHandler'));
 		register_shutdown_function(array('GO','shutdown'));
-				
+		
+		//Start session here. Important that it's called before GO::config().
+		GO::session();
+		
+		if(GO::config()->debug)
+			ini_set("display_errors","On");
+		else
+			ini_set("display_errors","Off");
+		
 		spl_autoload_register(array('GO', 'autoload'));	
 
 		//Start session here
