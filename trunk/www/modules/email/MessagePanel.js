@@ -106,7 +106,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				'</tpl>'+
 				'<a class="normal-link" id="em-icalendar-tentative-invitation" href="#">'+GO.email.lang.icalendarTentativeInvitation+'</a> '+
 			'</tpl>'+
-			'<tpl if="iCalendar.invitation.is_cancellation && iCalendar.invitation.event_id">'+
+			'<tpl if="iCalendar.invitation.is_cancellation">'+
 				'<a class="normal-link" id="em-icalendar-delete-event" href="#">'+GO.email.lang.icalendarDeleteEvent+'</a>'+
 			'</tpl>'+
 			'<tpl if="iCalendar.invitation.is_update">'+
@@ -320,7 +320,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		{
 			icalDeleteEventEl.on('click', function()
 			{
-				this.deleteEvent();
+				this.processInvitation();
 			}, this);
 		}
 		var icalUpdateEventEl = Ext.get('em-icalendar-update-event');
@@ -478,29 +478,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				this.loadMessage();
 			}
 		});
-	},
-	
-	deleteEvent : function()
-	{		
-		if(confirm(GO.email.lang.icalendarDeleteEventConfirm))
-		{			
-			GO.request({
-				url: "calendar/event/delete",
-				params: {
-					id: this.data.iCalendar.invitation.event_id					
-				},
-				scope: this,
-				success: function(options, response, result)
-				{
-					if(result.success)
-					{
-						this.deleted = true;
-						this.loadMessage();
-					}
-				}
-			});
-		}
-	}
+	}	
 });
 
 
