@@ -249,19 +249,33 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @return GO_Calendar_Model_Event
 	 */
 	public function createExceptionEvent($exceptionDate){
-		$event = $this->getExceptionEvent($exceptionDate);
-		$event->save();
-		$this->addException($exceptionDate, $event->id);
 		
-		$this->duplicateRelation('participants', $event);
-		
-		return $event;
+		$returnEvent = false;
+		$stmt = $this->getRelatedParticipantEvents(true);
+		foreach($stmt as $event){
+			$exceptionEvent = $event->getExceptionEvent($exceptionDate);
+			$exceptionEvent->save();
+			$event->addException($exceptionDate, $event->id);
+
+			$event->duplicateRelation('participants', $exceptionEvent);
+			
+			if($event->id==$this->id)
+				$returnEvent=$exceptionEvent;
+		}
+				
+		return $returnEvent;
 	}
 	
 	protected function beforeSave() {
 		
+		if($this->rrule != ""){			
+			$rrule = new GO_Base_Util_Icalendar_Rrule();
+			$rrule->readIcalendarRruleString($this->start_time, $this->rrule);						
+			$this->repeat_end_time = $rrule->until;
+		}
+		
 		//if this is not the organizer event it may only be modified by the organizer
-		if($this->isModified(array("start_time","end_time","location","description","calendar_id"))){		
+		if($this->isModified(array("name","start_time","end_time","location","description","calendar_id","rrule","repeat_end_time"))){		
 			$organizerEvent = $this->getOrganizerEvent();
 			if($organizerEvent && $organizerEvent->user_id!=GO::user()->id){
 				throw new GO_Base_Exception_AccessDenied();
@@ -280,12 +294,6 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			{
 				$this->background='FF6666';
 			}
-		}
-		
-		if($this->rrule != ""){			
-			$rrule = new GO_Base_Util_Icalendar_Rrule();
-			$rrule->readIcalendarRruleString($this->start_time, $this->rrule);						
-			$this->repeat_end_time = $rrule->until;
 		}
 		
 		return parent::beforeSave();
@@ -419,10 +427,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		//update events that belong to this organizer event
 		if($this->is_organizer){
 			$updateAttr = array(
+					'name'=>$this->name,
 					'start_time'=>$this->start_time, 
 					'end_time'=>$this->end_time, 
 					'location'=>$this->location,
-					'description'=>$this->description
+					'description'=>$this->description,
+					'rrule'=>$this->rrule,
+					'repeat_end_time'=>$this->repeat_end_time
 							);
 			
 			if(!$wasNew){
@@ -448,16 +459,18 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @return GO_Calendar_Model_Event
 	 */
-	public function getRelatedParticipantEvents(){
+	public function getRelatedParticipantEvents($includeThisEvent=false){
 		$findParams = GO_Base_Db_FindParams::newInstance()->ignoreAcl();
 		
 		$start_time = $this->isModified('start_time') ? $this->getOldAttributeValue('start_time') : $this->start_time;
 		
 		$findParams->getCriteria()
-						->addCondition("uuid", $this->uuid)
-						->addCondition('start_time', $start_time)
-						->addCondition("exception_for_event_id", $this->exception_for_event_id)
-						->addCondition('id', $this->id, '!=');
+						->addCondition("uuid", $this->uuid) //recurring series and participants all share the same uuid
+						->addCondition('start_time', $start_time) //make sure start time matches for recurring series
+						->addCondition("exception_for_event_id", 0, $this->exception_for_event_id==0 ? '=' : '!='); //the master event or a single occurrence can start at the same time. Therefore we must check if exception event has a value or is 0.
+		
+		if(!$includeThisEvent)
+			$findParams->getCriteria()->addCondition('id', $this->id, '!=');
 						
 		$stmt = GO_Calendar_Model_Event::model()->find($findParams);
 		
@@ -1616,7 +1629,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		$findParams->getCriteria()
 						->addCondition('user_id', $this->user_id)
-						->addCondition('uuid', $this->uuid,'=','e');
+						->addCondition('uuid', $this->uuid,'=','e')  //recurring series and participants all share the same uuid
+						->addCondition('start_time', $this->start_time,'=','e') //make sure start time matches for recurring series
+						->addCondition("exception_for_event_id", 0, $this->exception_for_event_id==0 ? '=' : '!=','e');//the master event or a single occurrence can start at the same time. Therefore we must check if exception event has a value or is 0.
 		
 		return GO_Calendar_Model_Participant::model()->find($findParams);			
 		
