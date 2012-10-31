@@ -159,7 +159,7 @@ Ext.extend(GO.tasks.AddTaskPanel, Ext.FormPanel,{
 						tasklist_id: tasklist_id,
 						name: taskname,
 					//	link: link,
-						start_time: new Date().format(GO.settings.date_format),
+						start_time: due.format(GO.settings.date_format), //new Date().format(GO.settings.date_format),
 						due_time: due.format(GO.settings.date_format)
 					},
 					callback: function(options, success, response)
