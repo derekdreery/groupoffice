@@ -3,8 +3,9 @@ class GO_Calendar_Controller_Attendance extends GO_Base_Controller_AbstractContr
 	protected function actionLoad($params){
 		
 		$event = GO_Calendar_Model_Event::model()->findByPk($params['id']);
+		$participant=$event->getParticipantOfCalendar();
 		
-		$response = array("success"=>true, 'data'=>array('status'=>$event->status));		
+		$response = array("success"=>true, 'data'=>array('status'=>$participant->status));		
 		return $response;
 	}
 	
@@ -18,7 +19,13 @@ class GO_Calendar_Controller_Attendance extends GO_Base_Controller_AbstractContr
 			$event = $event->createExceptionEvent($params['exception_date']);
 		}
 		
-		$event->replyToOrganizer($params['status'], !empty($params['notify_organizer']));
+		$participant=$event->getParticipantOfCalendar();
+		$participant->status=$params['status'];
+//		$participant->notifyOrganizer=!empty($params['notify_organizer']);
+		$participant->save();
+		
+		if(!empty($params['notify_organizer']))
+			$event->replyToOrganizer();
 		
 		return $response;
 	}

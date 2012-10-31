@@ -155,6 +155,11 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 		$response['model_name'] = $this->_event->className();
 		
 		
+		if($participant = $this->_event->getParticipantOfCalendar()){
+			$response['partstatus']=$participant->status;
+		}
+		
+		
 		$duration = $this->getDurationInMinutes();
 
 		if($duration >= 60){
