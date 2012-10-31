@@ -995,7 +995,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				requests:Ext.encode({
 					views:{r:"calendar/view/store"},				
 					calendars:{r:"calendar/calendar/store"},
-					resources:{r:"calendar/group/groupsWithResources"}
+					resources:{r:"calendar/calendar/calendarsWithGroup","resourcesOnly":1}
 //					project_calendars:{r:"calendar/group/groupsWithResources"}
 				})
 			},
@@ -2326,17 +2326,17 @@ GO.linkPreviewPanels["GO_Calendar_Model_Event"]=function(config){
 
 
 
-GO.calendar.showEvent = function(config){
-
-	config = config || {};
-    
-	if(config.values && config.values.event_id)
-		config.event_id = config.values.event_id;
-	//delete(config.values.event_id);
-    
-	GO.calendar.showEventDialog(config);
-
-};
+//GO.calendar.showEvent = function(config){
+//
+//	config = config || {};
+//    
+////	if(config.values && config.values.event_id)
+////		config.event_id = config.values.event_id;
+//	//delete(config.values.event_id);
+//    
+//	GO.calendar.showEventDialog(config);
+//
+//};
 
 GO.calendar.openCalendar = function(displayConfig){
 	if(GO.mainLayout.rendered){

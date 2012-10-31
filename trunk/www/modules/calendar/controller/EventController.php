@@ -256,17 +256,18 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 				$ids[] = $resourceEvent->id;
 			}
+		
+			//delete all other resource events
+			$stmt = GO_Calendar_Model_Event::model()->find(
+							GO_Base_Db_FindParams::newInstance()
+											->criteria(
+															GO_Base_Db_FindCriteria::newInstance()
+															->addInCondition('id', $ids, 't', true, true)
+															->addCondition('resource_event_id', $model->id)
+											)
+			);
+			$stmt->callOnEach('delete');
 		}
-		//delete all other resource events
-		$stmt = GO_Calendar_Model_Event::model()->find(
-						GO_Base_Db_FindParams::newInstance()
-										->criteria(
-														GO_Base_Db_FindCriteria::newInstance()
-														->addInCondition('id', $ids, 't', true, true)
-														->addCondition('resource_event_id', $model->id)
-										)
-		);
-		$stmt->callOnEach('delete');
 	}
 
 	private function _saveParticipants($params, GO_Calendar_Model_Event $event, $isNewEvent, $modifiedAttributes) {

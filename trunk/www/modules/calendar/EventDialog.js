@@ -269,6 +269,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 		/*if(!GO.calendar.categoriesStore.loaded)
 			GO.calendar.categoriesStore.load();*/
+		
+		
         
 		if (config.oldDomId) {
 			this.oldDomId = config.oldDomId;
@@ -373,7 +375,6 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 						this.selectCategory.setRemoteText(action.result.data.category_name);
 
 //					this.has_other_participants=action.result.data.has_other_participants;					
-					
 					if(this.resourceGroupsStore.data.items.length == 0 || action.result.group_id != '1')
 						this.tabPanel.hideTabStripItem('resources-panel');
 					else
@@ -381,6 +382,12 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					
 					
 					this.participantsPanel.store.loadData(action.result.participants);
+					
+					//hide participants for resources
+					if(action.result.group_id != '1')
+						this.tabPanel.hideTabStripItem(this.participantsPanel);
+					else
+						this.tabPanel.unhideTabStripItem(this.participantsPanel);
 
 				},
 				failure : function(form, action) {
@@ -539,7 +546,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			}
 		}
 	},
-	setEventId : function(event_id) {
+	setEventId : function(event_id) {		
 		this.formPanel.form.baseParams['id'] = event_id;
 		
 		delete this.formPanel.form.baseParams['exception_for_event_id'];
