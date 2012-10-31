@@ -613,10 +613,10 @@ a.x-monthGrid-cell-day-text:hover{
 }
 
 
-.cal-event-status-DECLINED{
-	opacity: .4;
+.cal-event-partstatus-DECLINED{
+	opacity: 0.5;
 }
 
-.cal-event-status-NEEDS-ACTION{
+.cal-event-partstatus-NEEDS-ACTION{
 	border: 2px dashed orange;
 }

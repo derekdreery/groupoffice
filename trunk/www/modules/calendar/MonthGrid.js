@@ -666,7 +666,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 					text += eventData.startDate.format(GO.settings.time_format)+'&nbsp;';
 				}
 				text += eventData['name'];
-				var cls = "x-calGrid-month-event-container cal-event-status-"+eventData.status;
+				var cls = "x-calGrid-month-event-container cal-event-partstatus-"+eventData.partstatus;
 
 				if(eventData.link_count>0){
 					cls +=' cal-has-links'

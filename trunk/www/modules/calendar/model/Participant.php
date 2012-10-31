@@ -39,6 +39,14 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	const STATUS_ACCEPTED = "ACCEPTED";
 	const STATUS_PENDING = "NEEDS-ACTION";
 	
+	public $notifyOrganizer=false;
+	
+	
+	public $updateRelatedParticipants=true;
+	
+	
+	public $notifyRecurrenceTime=false;
+	
 	/**
 	 * Returns a static model of itself
 	 * 
@@ -224,6 +232,93 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 		$calendar = $this->getDefaultCalendar();
 		$record['create_permission'] = $calendar ? $calendar->userHasCreatePermission() : false;
 		return $record;
+	}
+	
+	
+	protected function afterSave($wasNew) {
+		
+		
+		if(!$this->isNew && $this->updateRelatedParticipants && $this->isModified('status')){
+			$stmt = $this->getRelatedParticipants();
+			
+			foreach($stmt as $participant){
+				
+				$participant->updateRelatedParticipants=false;//prevent endless loop. Because it will also process this aftersave
+				
+				$participant->status=$this->status;
+				$participant->save();				
+			}
+		}
+		
+//		if($this->notifyOrganizer){
+//			$this->_notifyOrganizer();
+//		}
+		
+		return parent::afterSave($wasNew);
+	}
+	
+//	private function _notifyOrganizer(){
+//
+////		if(!$sendingParticipant)
+////			throw new Exception("Could not find your participant model");
+//
+//		$organizer = $this->event->getOrganizer();
+//		if(!$organizer)
+//			throw new Exception("Could not find organizer to send message to!");
+//
+//		$updateReponses = GO::t('updateReponses','calendar');
+//		$subject= sprintf($updateReponses[$this->status], $this->user->name, $this->event->name);
+//
+//
+//		//create e-mail message
+//		$message = GO_Base_Mail_Message::newInstance($subject)
+//							->setFrom($this->user->email, $this->user->name)
+//							->addTo($organizer->email, $organizer->name);
+//
+//		$body = '<p>'.$subject.': </p>'.$this->event->toHtml();
+//
+//		if(!$this->event->getOrganizerEvent()){
+//			//organizer is not a Group-Office user with event. We must send a message to him an ICS attachment
+//			$ics=$this->event->toICS("REPLY", $this, $this->notifyRecurrenceTime);				
+//			$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($this->event->name) . '.ics', 'text/calendar; METHOD="REPLY"');
+//			$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+//			$a->setDisposition("inline");
+//			$message->attach($a);
+//		}
+//
+//		$message->setHtmlAlternateBody($body);
+//
+//		GO_Base_Mail_Mailer::newGoInstance()->send($message);
+//		
+//	}
+	
+	
+	/**
+	 * Returns all participant models for this event and all the related events for a meeting.
+	 * 
+	 * @return GO_Calendar_Model_Participant
+	 */
+	public function getRelatedParticipants(){
+		//update all participants with this user and event uuid in the system		
+		$findParams = GO_Base_Db_FindParams::newInstance();
+		
+		$findParams->joinModel(array(
+				'model'=>'GO_Calendar_Model_Event',						  
+	 			'localTableAlias'=>'t', //defaults to "t"
+	 			'localField'=>'event_id', //defaults to "id"	  
+	 			'foreignField'=>'id', //defaults to primary key of the remote model
+	 			'tableAlias'=>'e', //Optional table alias	  
+	 			));
+		
+		$findParams->getCriteria()
+						->addCondition('id', $this->id, '!=')
+						->addCondition('email', $this->email)
+						->addCondition('uuid', $this->event->uuid,'=','e')  //recurring series and participants all share the same uuid
+						->addCondition('start_time', $this->event->start_time,'=','e') //make sure start time matches for recurring series
+						->addCondition("exception_for_event_id", 0, $this->event->exception_for_event_id==0 ? '=' : '!=','e');//the master event or a single occurrence can start at the same time. Therefore we must check if exception event has a value or is 0.
+		
+		return GO_Calendar_Model_Participant::model()->find($findParams);			
+		
 	}
 
 }

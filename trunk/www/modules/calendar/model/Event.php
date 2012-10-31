@@ -275,7 +275,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 		
 		//if this is not the organizer event it may only be modified by the organizer
-		if($this->isModified(array("name","start_time","end_time","location","description","calendar_id","rrule","repeat_end_time"))){		
+		if(!$this->isNew && $this->isModified(array("name","start_time","end_time","location","description","calendar_id","rrule","repeat_end_time"))){		
 			$organizerEvent = $this->getOrganizerEvent();
 			if($organizerEvent && $organizerEvent->user_id!=GO::user()->id){
 				throw new GO_Base_Exception_AccessDenied();
@@ -984,7 +984,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 			$html .= '<tr><td colspan="2"><br /><b>'.GO::t('participants','calendar').'</b></td></tr>';
 			while($participant = $stmt->fetch()){
-				$html .= '<tr><td colspan="2">'.$participant->name.'</td></tr>';
+				$html .= '<tr><td>'.$participant->name.'&nbsp;</td><td>'.$participant->statusName.'</td></tr>';
 			}
 			$html .='</table>';
 		}
@@ -1518,7 +1518,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 					'calendar_id' => $calendar->id,
 					'user_id'=>$participant->user_id,
 					'is_organizer'=>false, 
-					'status'=>  GO_Calendar_Model_Event::STATUS_NEEDS_ACTION),
+//					'status'=>  GO_Calendar_Model_Event::STATUS_NEEDS_ACTION
+					),
 							true,true);
 			
 			return $participantEvent;
@@ -1612,6 +1613,19 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		));
 	}
 	
+	
+	/**
+	 * Get the participant model where the user matches the calendar user
+	 * 
+	 * @return GO_Calendar_Model_Participant
+	 */
+	public function getParticipantOfCalendar(){
+		return GO_Calendar_Model_Participant::model()->findSingleByAttributes(array(
+				'user_id'=>$this->calendar->user_id,
+				'event_id'=>$this->id
+		));
+	}
+	
 	/**
 	 * Returns all participant models for this event and all the related events for a meeting.
 	 * 
@@ -1654,65 +1668,48 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @param int $recurrenceTime Export for a specific recurrence time for the recurrence-id
 	 * @throws Exception
 	 */
-	public function replyToOrganizer($status, $sendMessage=false, $recurrenceTime=false){
+	public function replyToOrganizer($recurrenceTime=false){
 		
 		if($this->is_organizer)
 			throw new Exception("Meeting reply can only be send from the organizer's event");
 		
-		$this->status=$status;
-		$this->save();
-			
-		$participants = $this->getParticipantsForUser();
-		
+
 		//we need to pass the sending participant to the toIcs function. 
 		//Only the organizer and current participant should be included
-		$sendingParticipant = false;
+		$sendingParticipant = $this->getParticipantOfCalendar();
 			
-		foreach($participants as $participant){	
-			
-			if($participant->event_id==$this->id)
-				$sendingParticipant=$participant;
-			
-			$participant->status=$status;
-			$participant->save();
-		}
-		
-		
-		//send reply message
-		if($sendMessage){
-			
-			
-			if(!$sendingParticipant)
-				throw new Exception("Could not find your participant model");
-			
-			$organizer = $this->getOrganizer();
-			if(!$organizer)
-				throw new Exception("Could not find organizer to send message to!");
-			
-			$updateReponses = GO::t('updateReponses','calendar');
-			$subject= sprintf($updateReponses[$status], $this->user->name, $this->name);
-			
-			
-			//create e-mail message
-			$message = GO_Base_Mail_Message::newInstance($subject)
-								->setFrom($this->user->email, $this->user->name)
-								->addTo($organizer->email, $organizer->name);
-				
-			$body = '<p>'.$subject.': </p>'.$this->toHtml();
-			
-			if(!$this->getOrganizerEvent()){
-				//organizer is not a Group-Office user with event. We must send a message to him an ICS attachment
-				$ics=$this->toICS("REPLY", $sendingParticipant, $recurrenceTime);				
-				$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REPLY"');
-				$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
-				$a->setDisposition("inline");
-				$message->attach($a);
-			}
-			
-			$message->setHtmlAlternateBody($body);
 
-			GO_Base_Mail_Mailer::newGoInstance()->send($message);
+		if(!$sendingParticipant)
+			throw new Exception("Could not find your participant model");
+
+		$organizer = $this->getOrganizer();
+		if(!$organizer)
+			throw new Exception("Could not find organizer to send message to!");
+
+		$updateReponses = GO::t('updateReponses','calendar');
+		$subject= sprintf($updateReponses[$sendingParticipant->status], $this->user->name, $this->name);
+
+
+		//create e-mail message
+		$message = GO_Base_Mail_Message::newInstance($subject)
+							->setFrom($this->user->email, $this->user->name)
+							->addTo($organizer->email, $organizer->name);
+
+		$body = '<p>'.$subject.': </p>'.$this->toHtml();
+
+		if(!$this->getOrganizerEvent()){
+			//organizer is not a Group-Office user with event. We must send a message to him an ICS attachment
+			$ics=$this->toICS("REPLY", $sendingParticipant, $recurrenceTime);				
+			$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REPLY"');
+			$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+			$a->setDisposition("inline");
+			$message->attach($a);
 		}
+
+		$message->setHtmlAlternateBody($body);
+
+		GO_Base_Mail_Mailer::newGoInstance()->send($message);
+
 	}
 	
 	

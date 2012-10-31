@@ -958,8 +958,19 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				if($event->is_organizer){
 					$event->sendCancelNotice();
 				}else
-				{
-					$event->replyToOrganizer(GO_Calendar_Model_Participant::STATUS_DECLINED, !empty($params['send_cancel_notice']), $params['exception_date']);
+				{					
+					if(!empty($params['send_cancel_notice'])){
+						
+						//update the participant status for the decline message
+						$participant = $event->getParticipantOfCalendar();
+						$participant->status=GO_Calendar_Model_Participant::STATUS_DECLINED;
+						$participant->save();
+						
+						if(!isset($params['exception_date']))
+							$params['exception_date']=false;
+
+						$event->replyToOrganizer($params['exception_date']);
+					}
 				}
 			}
 			
@@ -1070,14 +1081,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		//import it
 		$event = new GO_Calendar_Model_Event();
 		$event->importVObject($vevent, $importAttributes);
-
-		if($status){
-			$event->replyToOrganizer($status, true);
-		}
-		
-		//Get the participant
-		$participant = GO_Calendar_Model_Participant::model()
-						->findSingleByAttributes(array('event_id'=>$event->id, 'user_id'=>$event->calendar->user_id));
+			
+		//notify orgnizer
+		$participant = $event->getParticipantOfCalendar();
 
 		if(!$participant)
 		{
@@ -1086,11 +1092,14 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$participant = new GO_Calendar_Model_Participant();
 			$participant->event_id=$event->id;
 			$participant->user_id=$event->calendar->user_id;
-			$participant->email=$event->calendar->user->email;
-			if($status)
+			$participant->email=$event->calendar->user->email;			
+		}		
+		
+		if($status)
 				$participant->status=$status;
-			$participant->save();		
-		}
+			$participant->save();
+		
+		$event->replyToOrganizer();
 		
 		
 		$langKey = $eventUpdated ? 'eventUpdatedIn' : 'eventScheduledIn';
@@ -1243,8 +1252,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			
 			if(!empty($params['status'])){
 				//Update participant status.
-				$participant = GO_Calendar_Model_Participant::model()
-								->findSingleByAttributes(array('event_id'=>$event->id, 'user_id'=>$event->calendar->user_id));
+				$participant = $event->getParticipantOfCalendar();
 				
 				if(!$participant)
 				{
@@ -1256,7 +1264,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				$participant->status=$params['status'];
 				$participant->save();
 
-				$event->replyToOrganizer($params['status'], true);
+				$event->replyToOrganizer();
 			}
 		}
 		
