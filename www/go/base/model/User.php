@@ -360,7 +360,8 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	 * @return Array 
 	 */
 	public static function getGroupIds($userId) {
-		if (!GO::$disableModelCache && GO::user() && $userId == GO::user()->id) {
+		$user = GO::user();
+		if ($user && $userId == $user->id) {
 			if (!isset(GO::session()->values['user_groups'])) {
 				GO::session()->values['user_groups'] = array();
 
