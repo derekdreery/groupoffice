@@ -779,7 +779,16 @@ class GO{
 		for($i=0;$i<$limit;$i++){
 			if(isset($trace[$i+1])){
 				$call = $trace[$i+1];
-				GO::debug("Function: ".$call["function"]." called in file ".$call["file"]." line ".$call["line"]);
+				
+				if(!isset($call["file"]))
+								$call["file"]='unknown';
+				if(!isset($call["function"]))
+								$call["function"]='unknown';
+				
+				if(!isset($call["line"]))
+								$call["line"]='unknown';
+				
+				GO::debug("Function: ".$call["function"]." called in file ".$call["file"]." on line ".$call["line"]);
 			}
 		}
 		GO::debug("--");

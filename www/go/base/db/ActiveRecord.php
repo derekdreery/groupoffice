@@ -324,6 +324,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$this->setAttributes($this->getDefaultAttributes(),false);
 			$this->_loadingFromDatabase=false;
 		}elseif(!$isStaticModel){
+			$this->_castMySqlValues();
 			$this->afterLoad();		
 			$this->_loadingFromDatabase=false;
 		}
@@ -2997,6 +2998,34 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		unset($this->_attributes[$name]);		
 	}
 	
+	/**
+	 * Mysql always returns strings. We want strict types in our model to clearly
+	 * detect modifications
+	 * 
+	 * @param string $column
+	 * @param mixed $value
+	 * @return mixed
+	 */
+	private function _castMySqlValues(){
+		foreach($this->columns as $column=>$attr){
+			if(isset($this->_attributes[$column])){
+				switch ($this->columns[$column]['dbtype']) {
+						case 'int':
+						case 'tinyint':
+						case 'bigint':
+							$this->_attributes[$column]=intval($this->_attributes[$column]);
+							break;		
+
+						case 'float':
+						case 'double':
+						case 'decimal':
+							$this->_attributes[$column]=floatval($this->_attributes[$column]);
+							break;
+				}
+			}
+		}
+	}
+	
 	
 	/**
 	 * Sets the named attribute value.
@@ -3007,12 +3036,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @see hasAttribute
 	 */
 	public function setAttribute($name,$value, $format=false)
-	{
+	{		
 		if($this->_loadingFromDatabase){
 			//skip fancy features when loading from the database.
-			$this->_attributes[$name]=$value;	
+			$this->_attributes[$name]=$value;			
 			return true;
 		}
+		
+		if($name=='start_time')
+			GO::debug("Set start_time = ".var_export($value, true));
 		
 		if($format)
 			$value = $this->formatInput($name, $value);
@@ -3028,7 +3060,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			if($this->columns[$name]['gotype']=='textfield' || $this->columns[$name]['gotype']=='textarea')
 				$value=GO_Base_Util_String::normalizeCrlf($value, "\n");
 			
-			if((!isset($this->_attributes[$name]) || $this->_attributes[$name]!==(string)$value) && !$this->isModified($name)){
+			if((!isset($this->_attributes[$name]) || $this->_attributes[$name]!==$value) && !$this->isModified($name)){
 				$this->_modifiedAttributes[$name]=isset($this->_attributes[$name]) ? $this->_attributes[$name] : false;
 //				GO::debug("Setting modified attribute $name to ".$this->_modifiedAttributes[$name]);
 //				GO::debugCalledFrom(5);
