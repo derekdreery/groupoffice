@@ -3043,9 +3043,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			return true;
 		}
 		
-		if($name=='start_time')
-			GO::debug("Set start_time = ".var_export($value, true));
-		
 		if($format)
 			$value = $this->formatInput($name, $value);
 		
