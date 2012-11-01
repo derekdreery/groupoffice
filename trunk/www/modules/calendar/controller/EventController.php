@@ -59,7 +59,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			//$params['recurrenceExceptionDate'] is a unixtimestamp. We should return this event with an empty id and the exception date.			
 			//this parameter is sent by the view when it wants to edit a single occurence of a repeating event.
 			$recurringEvent = GO_Calendar_Model_Event::model()->findByPk($params['exception_for_event_id']);
-			$model = $recurringEvent->createExceptionEvent($params['exception_date']);
+			$model = $recurringEvent->createExceptionEvent($params['exception_date'], array(), true);
 			unset($params['exception_date']);
 			unset($params['id']);
 		}
@@ -956,7 +956,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		}  else {
 			if($event->hasOtherParticipants()){
 				if($event->is_organizer){
-					$event->sendCancelNotice();
+					if(!empty($params['send_cancel_notice']))
+						$event->sendCancelNotice();
 				}else
 				{					
 					if(!empty($params['send_cancel_notice'])){
@@ -969,12 +970,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 						if(!isset($params['exception_date']))
 							$params['exception_date']=false;
 
-						$event->replyToOrganizer($params['exception_date']);
+						if(!empty($params['send_cancel_notice']))
+							$event->replyToOrganizer($params['exception_date']);
 					}
 				}
 			}
 			
-			//TODO handle this in cancellation notice.
 			if(!empty($params['exception_date'])){
 				$event->addException($params['exception_date']);
 			}else

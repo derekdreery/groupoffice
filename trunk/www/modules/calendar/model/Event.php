@@ -22,7 +22,7 @@
  * @property string $background eg. "EBF1E2"
  * @property string $rrule
  * @property boolean $private
- * @property int $resource_event_id
+ * @property int $resource_event_id Set this for a resource event. This is the personal event this resource belongs to.
  * @property boolean $busy
  * @property int $mtime
  * @property int $ctime
@@ -61,6 +61,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 */
 	public $exception_date;
 
+	public $dontSendEmails=false;
+	
+	public $sequence;
+	
 	protected function init() {
 
 		$this->columns['start_time']['gotype'] = 'unixtimestamp';
@@ -208,11 +212,14 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @param Int $for_event_id The event id of the event where the exception belongs to
 	 */
 	public function addException($date, $exception_event_id=0) {
-		$exception = new GO_Calendar_Model_Exception();
-		$exception->event_id = $this->id;
-		$exception->time = mktime(date('G',$this->start_time),date('i',$this->start_time),0,date('n',$date),date('j',$date),date('Y',$date)); // Needs to be a unix timestamp
-		$exception->exception_event_id=$exception_event_id;
-		$exception->save();
+		
+		if(!$this->hasException($date)){
+			$exception = new GO_Calendar_Model_Exception();
+			$exception->event_id = $this->id;
+			$exception->time = mktime(date('G',$this->start_time),date('i',$this->start_time),0,date('n',$date),date('j',$date),date('Y',$date)); // Needs to be a unix timestamp
+			$exception->exception_event_id=$exception_event_id;
+			$exception->save();
+		}
 	}
 
 	/**
@@ -248,21 +255,47 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @param int $exceptionDate
 	 * @return GO_Calendar_Model_Event
 	 */
-	public function createExceptionEvent($exceptionDate){
-		
+	public function createExceptionEvent($exceptionDate, $attributes=array(), $dontSendEmails=false){
+		$oldIgnore = GO::setIgnoreAclPermissions();
 		$returnEvent = false;
-		$stmt = $this->getRelatedParticipantEvents(true);
+		if($this->isResource())
+			$stmt = array($this); //resource is never a group of events
+		else
+			$stmt = $this->getRelatedParticipantEvents(true);//A meeting can be multiple related events sharing the same uuid
+		
+		$resources = array();
+		
 		foreach($stmt as $event){
+			
+			GO::debug("Creating exception for related participant event ".$event->name." (".$event->id.")");
+			
 			$exceptionEvent = $event->getExceptionEvent($exceptionDate);
+			$exceptionEvent->dontSendEmails = $dontSendEmails;
+			$exceptionEvent->setAttributes($attributes);
 			$exceptionEvent->save();
-			$event->addException($exceptionDate, $event->id);
+			$event->addException($exceptionDate, $exceptionEvent->id);
 
 			$event->duplicateRelation('participants', $exceptionEvent);
+			
+			
+			if(!$event->isResource() && $event->is_organizer){
+				$stmt = $event->resources();		
+				foreach($stmt as $resource){
+					$resources[]=$resource;
+				}
+				$resourceExceptionEvent = $exceptionEvent;
+			}
 			
 			if($event->id==$this->id)
 				$returnEvent=$exceptionEvent;
 		}
-				
+		
+		foreach($resources as $resource){
+			GO::debug("Creating exception for resource: ".$resource->name);
+			$resource->createExceptionEvent($exceptionDate, array('resource_event_id'=>$resourceExceptionEvent->id), $dontSendEmails);
+		}		
+
+		GO::setIgnoreAclPermissions($oldIgnore);
 		return $returnEvent;
 	}
 	
@@ -271,13 +304,15 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if($this->rrule != ""){			
 			$rrule = new GO_Base_Util_Icalendar_Rrule();
 			$rrule->readIcalendarRruleString($this->start_time, $this->rrule);						
-			$this->repeat_end_time = $rrule->until;
+			$this->repeat_end_time = intval($rrule->until);
 		}
 		
 		//if this is not the organizer event it may only be modified by the organizer
 		if(!$this->isNew && $this->isModified(array("name","start_time","end_time","location","description","calendar_id","rrule","repeat_end_time"))){		
 			$organizerEvent = $this->getOrganizerEvent();
 			if($organizerEvent && $organizerEvent->user_id!=GO::user()->id){
+				GO::debug($this->getModifiedAttributes());
+				GO::debug($this->_attributes);
 				throw new GO_Base_Exception_AccessDenied();
 			}			
 		}
@@ -373,11 +408,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	protected function afterSave($wasNew) {
 		
 		//add exception model for the original recurring event
-		if ($wasNew && $this->exception_for_event_id > 0 && !empty($this->exception_date)) {
-			
-			$newExeptionEvent = GO_Calendar_Model_Event::model()->findByPk($this->exception_for_event_id);
-			$newExeptionEvent->addException($this->exception_date, $this->id);
-		}
+//		if ($wasNew && $this->exception_for_event_id > 0 && !empty($this->exception_date)) {
+//			
+//			$newExeptionEvent = GO_Calendar_Model_Event::model()->findByPk($this->exception_for_event_id);
+//			$newExeptionEvent->addException($this->exception_date, $this->id);
+//		}
 		
 //			
 //			//copy particpants to new exception
@@ -394,6 +429,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 //			}
 //		}
 		
+		//if this event belongs to a recurring series we must touch the master event 
+		//too or it won't be synchronized with z-push or caldav
 		if($exceptionEvent = $this->_exceptionEvent){
 			$exceptionEvent->touch();
 		}
@@ -425,7 +462,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}	
 		
 		//update events that belong to this organizer event
-		if($this->is_organizer){
+		if($this->is_organizer && !$wasNew && !$this->isResource()){
 			$updateAttr = array(
 					'name'=>$this->name,
 					'start_time'=>$this->start_time, 
@@ -435,19 +472,19 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 					'rrule'=>$this->rrule,
 					'repeat_end_time'=>$this->repeat_end_time
 							);
-			
-			if(!$wasNew){
-				$events = $this->getRelatedParticipantEvents();
 
-				foreach($events as $event){
-					$event->setAttributes($updateAttr, false);
-					$event->save(true);
+			$events = $this->getRelatedParticipantEvents();
 
-					$stmt = $event->participants;
-					$stmt->callOnEach('delete');
+			foreach($events as $event){
+				GO::debug("updating related event: ".$event->id);
+				
+				$event->setAttributes($updateAttr, false);
+				$event->save(true);
 
-					$this->duplicateRelation('participants', $event);
-				}
+				$stmt = $event->participants;
+				$stmt->callOnEach('delete');
+
+				$this->duplicateRelation('participants', $event);
 			}
 		}
 
@@ -471,6 +508,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		if(!$includeThisEvent)
 			$findParams->getCriteria()->addCondition('id', $this->id, '!=');
+		
 						
 		$stmt = GO_Calendar_Model_Event::model()->find($findParams);
 		
@@ -514,7 +552,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 	private function _sendResourceNotification($wasNew){
 		
-		if($this->hasModificationsForParticipants()){			
+		if(!$this->dontSendEmails && $this->hasModificationsForParticipants()){			
 			$url = GO::createExternalUrl('calendar', 'showEventDialog', array('event_id' => $this->id));		
 
 			$stmt = $this->calendar->group->admins;
@@ -743,12 +781,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$rrule = new GO_Base_Util_Icalendar_Rrule();
 			$rrule->readIcalendarRruleString($localEvent->getEvent()->start_time, $localEvent->getEvent()->rrule);
 
-			$rrule->setRecurpositionStartTime($localEvent->getPeriodStartTime());
-//			$rrule->setRecurPositionStartTime($periodStartTime);
+			$rrule->setRecurpositionStartTime($periodStartTime);
 
 			$origEventAttr = $localEvent->getEvent()->getAttributes('formatted');
-			
-			
 
 			while ($occurenceStartTime = $rrule->getNextRecurrence(false,$periodEndTime)) {
 				
@@ -1218,6 +1253,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 */
 	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array(), $dontSave=false){
 		//$event = new GO_Calendar_Model_Event();
+		GO::debug("importVObject");
 		$uid = (string) $vobject->uid;
 		if(!empty($uid))
 			$this->uuid = $uid;
@@ -1225,15 +1261,17 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$this->name = (string) $vobject->summary;
 		if(empty($this->name))
 			$this->name = GO::t('unnamed');
-		$this->description = (string) $vobject->description;
+		
+		if($vobject->description)
+			$this->description = (string) $vobject->description;
 		
 		if($vobject->dtstart)
-			$this->start_time = $vobject->dtstart->getDateTime()->format('U');
+			$this->start_time =intval($vobject->dtstart->getDateTime()->format('U'));
 		else
 			$this->start_time=time();		
-		
+	
 		if($vobject->dtend)
-			$this->end_time = $vobject->dtend->getDateTime()->format('U');
+			$this->end_time = intval($vobject->dtend->getDateTime()->format('U'));
 		else
 			$this->end_time=$this->start_time+1800;
 		
@@ -1254,7 +1292,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 			
 		if($vobject->dtstamp)
-			$this->mtime=$vobject->dtstamp->getDateTime()->format('U');
+			$this->mtime=intval($vobject->dtstamp->getDateTime()->format('U'));
 		
 		if($vobject->location)
 			$this->location=(string) $vobject->location;
@@ -1268,7 +1306,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->end_time = $this->start_time+$duration;
 		}
 		
-		$this->all_day_event = isset($vobject->dtstart['VALUE']) && $vobject->dtstart['VALUE']=='DATE';
+		$this->all_day_event = isset($vobject->dtstart['VALUE']) && $vobject->dtstart['VALUE']=='DATE' ? 1 : 0;
 		
 		//funambol sends this special parameter
 		if($vobject->{"X-FUNAMBOL-ALLDAY"}=="1"){
@@ -1362,7 +1400,6 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		if(!$dontSave){
 			$this->cutAttributeLengths();
-			
 			$this->save();
 
 			if(!empty($exception)){			
