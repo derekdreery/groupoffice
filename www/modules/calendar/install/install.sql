@@ -74,7 +74,6 @@ CREATE TABLE IF NOT EXISTS `cal_events` (
   `files_folder_id` int(11) NOT NULL,
   `read_only` tinyint(1) NOT NULL DEFAULT '0',
   `category_id` int(11) NULL,
-  `sequence` int(11) NOT NULL DEFAULT '0',
   `exception_for_event_id` int(11) NOT NULL DEFAULT '0',
   `recurrence_id` varchar(20) NOT NULL DEFAULT '',
 	`is_organizer` BOOLEAN NOT NULL DEFAULT '1',
