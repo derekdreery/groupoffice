@@ -146,7 +146,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 		$this->_maxTime = $maxTime;
 		
 		if(empty($this->_freq))
-			return false;
+			return 0;
 		
 		if(!isset($this->_recurPositionStartTime) || $this->_recurPositionStartTime<$this->_eventstarttime)
 			$this->_recurPositionStartTime=$this->_eventstarttime;
@@ -172,7 +172,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 		}else
 		{
 			unset($this->_recurPositionStartTime);
-			return false;
+			return 0;
 		}
 	}
 	
