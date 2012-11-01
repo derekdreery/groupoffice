@@ -95,7 +95,7 @@
 							<?php $uploader->render(); ?>
 						</div>
 					<?php else: ?>
-						<p><?php echo $this->t('tickets_ticketIsClosed'); ?></p><p></p>
+						<p><?php echo GOS::t('tickets_ticketIsClosed'); ?></p><p></p>
 					<?php endif; ?>
 
 				

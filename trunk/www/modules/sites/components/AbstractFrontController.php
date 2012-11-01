@@ -268,6 +268,11 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 			else
 				$this->_action = $action = strtolower($action);
 
+			$ignoreAcl = in_array($action, $this->ignoreAclPermissions()) || in_array('*', $this->ignoreAclPermissions());
+			if($ignoreAcl){		
+				$oldIgnore = GO::setIgnoreAclPermissions(true);				
+			}
+			
 			if (!$this->_checkPermission($action))
 				throw new GO_Base_Exception_AccessDenied();
 
@@ -275,6 +280,10 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 			
 			$methodName = 'action' . $action;
 			$this->$methodName();
+			
+			//restore old value for acl permissions if this method was allowed for guests.
+			if(isset($oldIgnore))
+				GO::setIgnoreAclPermissions($oldIgnore);
 		}
 		catch (GO_Base_Exception_AccessDenied $e)
 		{
@@ -284,16 +293,16 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 			$this->redirect(array($loginpath));
 			//$this->render('error', array('error'=>$e));
 		}
-		catch (GO_Base_Exception_NotFound $e)
+		catch (Exception $e)
 		{
 			$controller = new GO_Sites_Controller_Site();
 			$controller->template = $this->template;
 			$controller->render('error', array('error' => $e));
 		}
-		catch(Exception $e)
-		{
-			echo $e->getMessage();
-		}
+//		catch(Exception $e)
+//		{
+//			echo $e->getMessage();
+//		}
 	}
 	
 	/**

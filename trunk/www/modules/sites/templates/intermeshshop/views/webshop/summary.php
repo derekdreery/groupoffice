@@ -6,14 +6,14 @@
 				<p>Please check if the data below is correct.</p>
 				<p>&nbsp;</p>
 				<div class="formrow"><b>Billing address</b></div>
-				<div class="formrow"><div class="formlabel">Name:</div><div class="cell"><?php echo $customer->post_name; ?></div></div>	
-				<div class="formrow"><div class="formlabel">Email:</div><div class="cell"><?php echo $customer->email; ?></div></div>
-				<div class="formrow"><div class="formlabel">Address:</div><div class="cell"><?php echo $customer->post_address; ?></div></div>
-				<div class="formrow"><div class="formlabel">Address no:</div><div class="cell"><?php echo $customer->post_address_no; ?></div></div>
-				<div class="formrow"><div class="formlabel">Zip:</div><div class="cell"><?php echo $customer->post_zip; ?></div></div>
-				<div class="formrow"><div class="formlabel">City:</div><div class="cell"><?php echo $customer->post_city; ?></div></div>
-				<div class="formrow"><div class="formlabel">Country:</div><div class="cell"><?php echo $customer->post_country; ?></div></div>
-				<div class="formrow"><div class="formlabel">VAT number:</div><div class="cell"><?php echo $customer->vat_no; ?></div></div><br/>
+				<div class="formrow"><div class="formlabel">Name:</div><div class="cell"><?php echo $shoporder->post_name; ?></div></div>	
+				<div class="formrow"><div class="formlabel">Email:</div><div class="cell"><?php echo $shoporder->email; ?></div></div>
+				<div class="formrow"><div class="formlabel">Address:</div><div class="cell"><?php echo $shoporder->post_address; ?></div></div>
+				<div class="formrow"><div class="formlabel">Address no:</div><div class="cell"><?php echo $shoporder->post_address_no; ?></div></div>
+				<div class="formrow"><div class="formlabel">Zip:</div><div class="cell"><?php echo $shoporder->post_zip; ?></div></div>
+				<div class="formrow"><div class="formlabel">City:</div><div class="cell"><?php echo $shoporder->post_city; ?></div></div>
+				<div class="formrow"><div class="formlabel">Country:</div><div class="cell"><?php echo $shoporder->post_country; ?></div></div>
+				<div class="formrow"><div class="formlabel">VAT number:</div><div class="cell"><?php echo $shoporder->vat_no; ?></div></div><br/>
 				<p>Note: If you have an European Vat number, please make sure that you have filled the Vat number field. Otherwise we must add Vat to the invoice.</p>
 
 
@@ -70,7 +70,7 @@
 			</table>
 								
 								<?php
-									GO_Base_Html_Form::renderBegin('webshop/cart/checkout','confirmSummary',true); 
+									GO_Base_Html_Form::renderBegin('webshop/site/summary','confirmSummary',true); 
 									
 									GO_Base_Html_Hidden::render(array(
 										"label" => "",

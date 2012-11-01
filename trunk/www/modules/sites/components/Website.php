@@ -130,7 +130,7 @@ class GO_Sites_Components_Website
 	 */
 	public function runController($route) {
 		$this->_route = $route;
-		try{
+//		try{
 			if (($ca = $this->createController($route)) !== null) {
 				list($controller, $actionID) = $ca;
 				$controller->template = $this->_site->template;
@@ -139,13 +139,13 @@ class GO_Sites_Components_Website
 			}
 			else
 				throw new GO_Base_Exception_NotFound('Unable to resolve the request "' . $route . '".');
-		} catch (Exception $e)
-		{
-			$controller = new GO_Sites_Controller_Site($this);
-			$controller->template = $this->_site->template;
-			$this->_controller = $controller;
-			$controller->render('error', array('error'=>$e));
-		}
+//		} catch (Exception $e)
+//		{
+//			$controller = new GO_Sites_Controller_Site($this);
+//			$controller->template = $this->_site->template;
+//			$this->_controller = $controller;
+//			$controller->render('error', array('error'=>$e));
+//		}
 	}
 	
 	/**

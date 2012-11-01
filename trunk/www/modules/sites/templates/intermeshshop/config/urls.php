@@ -17,7 +17,7 @@
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
 return array(
-		''=>'billing/site/products',
+		''=>'webshop/site/products',
 		'invoices'=> 'billing/site/invoices', //TODO
 		'orderfromtrail'=>'billing/site/orderfromtrail', //TODO
 		

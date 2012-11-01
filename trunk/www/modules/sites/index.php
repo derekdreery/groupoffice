@@ -1,6 +1,6 @@
 <?php
 //Copy this file to the root of your website
-$path_to_gos = '../modules/sites/components/GOS.php';
+$path_to_gos = '/var/www/trunk/www/modules/sites/components/GOS.php';
 require($path_to_gos);
 GOS::launch()->run();
 

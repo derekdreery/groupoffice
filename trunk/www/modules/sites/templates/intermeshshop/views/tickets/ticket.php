@@ -1,18 +1,7 @@
-<div class="hoofd-kader-menu">
 
-			<div class="hoofd-tab-left">
-				<div class="hoofd-tab-right">
-					<a class="hoofd-tab-center" href="#">
-						Ticket
-					</a>
-				</div>
-			</div>
-
-		</div>		
-		<div class="hoofd-kader-top"></div>
-
-		<div class="hoofd-kader-center">
-
+<?php
+GOS::site()->scripts->registerCssFile($this->getTemplateUrl().'css/ticket.css');
+?>
 <?php if (!$ticket->isNew) : ?>
 	<div class="feature-large">
 		<div class="ticket-top-container">
@@ -182,5 +171,3 @@
 
 <?php endif; ?>
 
-</div>
-	<div class="hoofd-kader-bottom"></div>	
