@@ -3057,7 +3057,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			if($this->columns[$name]['gotype']=='textfield' || $this->columns[$name]['gotype']=='textarea')
 				$value=GO_Base_Util_String::normalizeCrlf($value, "\n");
 			
-			if((!isset($this->_attributes[$name]) || $this->_attributes[$name]!==$value) && !$this->isModified($name)){
+			if((!isset($this->_attributes[$name]) || (string)$this->_attributes[$name]!==(string)$value) && !$this->isModified($name)){
 				$this->_modifiedAttributes[$name]=isset($this->_attributes[$name]) ? $this->_attributes[$name] : false;
 //				GO::debug("Setting modified attribute $name to ".$this->_modifiedAttributes[$name]);
 //				GO::debugCalledFrom(5);
