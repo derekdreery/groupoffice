@@ -106,7 +106,7 @@ class GO_Sites_Components_Assets
 		if(($basePath=realpath($value))!==false && is_dir($basePath) && is_writable($basePath))
 			$this->_basePath=$basePath;
 		else
-			throw new Exception('Assets.basePath "'.$basePath.'" is invalid. Please make sure the directory exists and is writable by the Web server process.');
+			throw new Exception('Assets.basePath "'.getcwd().'/' .$value.'" is invalid. Please make sure the directory exists and is writable by the Web server process.');
 	}
 
 	/**

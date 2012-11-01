@@ -1,17 +1,6 @@
-<div class="hoofd-kader-menu">
-
-			<div class="hoofd-tab-left">
-				<div class="hoofd-tab-right">
-					<a class="hoofd-tab-center" href="#">
-						Support
-					</a>
-				</div>
-			</div>
-
-		</div>		
-		<div class="hoofd-kader-top"></div>
-
-		<div class="hoofd-kader-center">
+<?php
+GOS::site()->scripts->registerCssFile($this->getTemplateUrl().'css/ticket.css');
+?>
 <?php if(GO::modules()->tickets): ?>
 	<div class="subkader-small-top">
 		<div class="subkader-small-bottom">
@@ -76,7 +65,7 @@
 							</td>
 							<td width="100px" style="white-space: nowrap;">
 								<?php echo $linktoticket; ?>
-								<?php echo $ticket->ctime; ?>
+								<?php echo $ticket->getAttribute("ctime","formatted"); ?>
 								</a>
 							</td>
 						</tr>
@@ -111,5 +100,3 @@
 	</div>
 <?php endif;?>		
 	
-</div>
-<div class="hoofd-kader-bottom"></div>	
