@@ -198,3 +198,5 @@ $l['updateReponses'][2]='%s har avvist hendelsen %s';
 $l['updateReponses'][3]='%s har merket hendelsen %s som tentativ';
 $l['cancelMessage']='Følgende hendelse som du er invitert til er blitt kansellert.';
 $l['directUrl']='Direkte URL';
+$l['cantRemoveOrganizer']="Du kan ikke fjerne organisatoren";
+$l['calendarColor']='Kalenderfarge';
