@@ -245,6 +245,7 @@ class GO{
 				$cachedUser = GO::cache()->get($cacheKey);
 				
 				if($cachedUser){
+					GO::debug("Returned cached user");
 					self::$_user=$cachedUser;
 				}else
 				{
