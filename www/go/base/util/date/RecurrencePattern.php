@@ -46,7 +46,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 	protected $_eventstarttime;
 	protected $_bysetpos;
 	
-	protected $_recurPositionStartTime;
+	protected $_recurPositionStartTime=0;
 	
 	protected $_days=array('SU','MO','TU','WE','TH','FR','SA');
 	
@@ -171,7 +171,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 			return $next;
 		}else
 		{
-			unset($this->_recurPositionStartTime);
+			$this->_recurPositionStartTime=0;
 			return false;
 		}
 	}
