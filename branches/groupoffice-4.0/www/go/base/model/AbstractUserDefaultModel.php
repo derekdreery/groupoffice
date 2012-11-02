@@ -104,8 +104,8 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 			}else
 			{
 				$pk = $settingsModel->{$this->settingsPkAttribute()};
-				$defaultModel = $this->findByPk($pk);
-				if($defaultModel)
+				$defaultModel = $this->findByPk($pk, false, true);
+				if($defaultModel && $defaultModel->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
 					return $defaultModel;
 			}
 		}
