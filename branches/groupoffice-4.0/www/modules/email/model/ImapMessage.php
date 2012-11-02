@@ -325,7 +325,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 						if(!empty($this->_htmlBody))
 							$this->_htmlBody.= '<br />';
 
-						$this->_htmlBody .= GO_Base_Util_String::convertLinks(GO_Base_Util_String::sanitizeHtml($imap->get_message_part_decoded($this->uid, $htmlPart['number'],$htmlPart['encoding'], $htmlPart['charset'],$this->peek,512000)));
+						$this->_htmlBody .= GO_Base_Util_String::sanitizeHtml(GO_Base_Util_String::convertLinks($imap->get_message_part_decoded($this->uid, $htmlPart['number'],$htmlPart['encoding'], $htmlPart['charset'],$this->peek,512000)));
 					}else //if($this->isAttachment($htmlPart['number']))
 					{
 						$attachment =& $this->getAttachment($htmlPart['number']);
