@@ -94,7 +94,15 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_Interface{
 		}else
 		{
 			$data = file_get_contents($this->_dir.$key);
-			return unserialize($data);
+			$unserialized = unserialize($data);
+			
+			if(!$unserialized){
+				trigger_error("Could not unserialize key data from file ".$this->_dir.$key);
+				return false;
+			}else
+			{			
+				return $unserialized;
+			}
 		}
 	}
 	
