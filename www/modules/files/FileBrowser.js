@@ -1659,10 +1659,10 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 		if(selections.length==0)
 		{
-			Ext.Msg.alert(GO.lang['strError'], GO.lang['noItemSelected']);
+			GO.errorDialog.show(GO.lang['noItemSelected']);
 		}else if(selections.length>1)
 		{
-			Ext.Msg.alert(GO.lang['strError'], GO.files.lang.errorOneItem);
+			GO.errorDialog.show(GO.files.lang.errorOneItem);
 		}else
 		{
 			this.showPropertiesDialog(selections[0]);

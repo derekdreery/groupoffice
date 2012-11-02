@@ -280,7 +280,7 @@ GO.CheckerPanel = Ext.extend(function(config){
 			GO.linkHandlers[record.data.model_name].call(this, record.data.model_id);
 		}else
 		{
-			Ext.Msg.alert(GO.lang['strError'], 'No handler definded for link type: '+record.data.model_name);
+			GO.errorDialog.show('No handler definded for link type: '+record.data.model_name);
 		}
 	}, this);
 	
