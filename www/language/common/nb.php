@@ -563,3 +563,5 @@ $l['unnamed']='Ikke navngitt';
 $l['maxRowslistTooHigh']='Maksimalt antall rader i lister er satt for høyt! (maks. 50)';
 $l['sir']='Herr';
 $l['madam']='Fr.';
+$l['exportDialog']='Eksport';
+$l['logFiles']='Loggfiler';
