@@ -402,14 +402,10 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 				$report = 
 								"Access denied\n".								
 								"controller: ".get_class($this)." action: ".$action."\n".
-								"Session: ".var_export(GO::session()->values, true)."\n".
 								"params: ".var_export($params, true)."\n".
 								(string) $e;
-				
-				GO::debug($report);
 			
-				if(!GO::config()->debug)
-					trigger_error($report, E_USER_WARNING);
+				trigger_error($report, E_USER_WARNING);
 				
 				$response['redirectToLogin']=empty(GO::session()->values['user_id']);
 			}
