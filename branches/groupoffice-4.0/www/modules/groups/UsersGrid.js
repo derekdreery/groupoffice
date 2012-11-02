@@ -56,6 +56,7 @@ GO.groups.UsersGrid = Ext.extend(GO.grid.GridPanel,{
   setGroupId : function(group_id){
     this.userStore.baseParams.id=group_id;
     this.userStore.load();
+		this.setDisabled(!group_id);
   },
 	
 	btnAdd : function(){				
