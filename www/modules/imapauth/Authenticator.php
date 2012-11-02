@@ -97,7 +97,7 @@ class GO_Imapauth_Authenticator {
 				$foundAccount=true;
 
 			$account->password = $password;
-			if ($this->config['smtp_use_login_credentials']) {
+			if (!empty($this->config['smtp_use_login_credentials'])) {
 				
 				GO::debug("IMAPAUTH: Setting SMTP password too");
 				
