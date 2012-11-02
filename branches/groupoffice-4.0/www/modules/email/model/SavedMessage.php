@@ -242,8 +242,8 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 				$this->extractUuencodedAttachments($text_part);
 				$text_part = nl2br($text_part);
 			} 
-			
-			$text_part = GO_Base_Util_String::clean_utf8($text_part);
+			$charset = isset($structure->ctype_parameters['charset']) ? $structure->ctype_parameters['charset'] : 'UTF-8';
+			$text_part = GO_Base_Util_String::clean_utf8($text_part,$charset);
 			$this->_loadedBody .= $text_part;
 		}
 	}
