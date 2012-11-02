@@ -83,7 +83,7 @@ Ext.extend(GO.tasks.TaskListsGrid, GO.grid.MultiSelectGrid, {
 //
 //					if(!data.success)
 //					{
-//						Ext.Msg.alert(GO.lang['strError'], data.feedback)
+//						GO.errorDialog.show(data.feedback)
 //					}else
 //					{
 //						if(data.reload_store)

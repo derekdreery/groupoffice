@@ -155,7 +155,7 @@ GO.grid.SearchPanel = function(config){
 				GO.linkHandlers[record.data.link_type].call(this, record.data.id, record);
 			}else
 			{
-				Ext.Msg.alert(GO.lang['strError'], 'No handler definded for link type: '+record.data.link_type);
+				GO.errorDialog.show('No handler definded for link type: '+record.data.link_type);
 			}*/
 		}, this);
 

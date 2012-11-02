@@ -1,3 +1,6 @@
+
+vink voor verzenddatum op factuur.
+
 =========================================================================
 
 Is it possible to refresh the ticket list upon clicking on the ticket module tab? 

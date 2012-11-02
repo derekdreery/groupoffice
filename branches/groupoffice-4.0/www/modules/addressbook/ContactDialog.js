@@ -315,7 +315,7 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 				
 //				if(!action.result.data.write_permission)
 //				{
-//					Ext.Msg.alert(GO.lang['strError'], GO.lang['strNoWritePermissions']);						
+//					GO.errorDialog.show(GO.lang['strNoWritePermissions']);						
 //				}else
 //				{		
 
