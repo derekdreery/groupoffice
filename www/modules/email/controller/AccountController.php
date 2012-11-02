@@ -189,8 +189,10 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		
 
 		$response = array();
-
-		if ($params['node'] == 'root') {
+		
+		if(!isset($params['node'])){
+			return $response;
+		}elseif ($params['node'] == 'root') {
 			
 			$findParams = GO_Base_Db_FindParams::newInstance()
 						->select('t.*')
@@ -243,6 +245,8 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			}
 		} else {
 //			$this->_setExpanded($params['node']);
+			
+			$params['node']=base64_decode($params['node']);
 
 			$parts = explode('_', $params['node']);
 			$type = array_shift($parts);
@@ -287,7 +291,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 //			if (!$mailbox->subscribed)
 //				continue;
 
-			$nodeId = 'f_' . $mailbox->getAccount()->id . '_' . $mailbox->name;
+			$nodeId = base64_encode('f_' . $mailbox->getAccount()->id . '_' . $mailbox->name);
 			
 			$text = $mailbox->getDisplayName();
 						
@@ -298,6 +302,8 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					$text .= '&nbsp;<span class="em-folder-status" id="status_' . $nodeId . '"></span>';
 				}
 			}
+			
+//			GO::debug($mailbox);
 
 			//$children = $this->_getMailboxTreeNodes($mailbox->getChildren());
 			
@@ -318,6 +324,8 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 							//'children'=>$children,
 							//'expanded' => !count($children),
 			);
+			
+			GO::debug($node);
 			
 			if($mailbox->name=='INBOX'){
 				$node['usage']=$this->_getUsage($mailbox->getAccount());

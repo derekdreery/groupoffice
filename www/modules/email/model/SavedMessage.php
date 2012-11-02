@@ -148,9 +148,14 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 
 	private function _getParts($structure, $part_number_prefix='') {
 		if (isset($structure->parts)) {
+			$structure->ctype_primary = strtolower($structure->ctype_primary);
+			$structure->ctype_secondary = strtolower($structure->ctype_secondary);
 			//$part_number=0;
 			foreach ($structure->parts as $part_number => $part) {
-
+				
+				$part->ctype_primary = strtolower($part->ctype_primary);
+				$part->ctype_secondary = strtolower($part->ctype_secondary);
+				
 				//text part and no attachment so it must be the body
 				if ($structure->ctype_primary == 'multipart' && $structure->ctype_secondary == 'alternative' &&
 								$part->ctype_primary == 'text' && $part->ctype_secondary == 'plain') {
@@ -237,8 +242,8 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 				$this->extractUuencodedAttachments($text_part);
 				$text_part = nl2br($text_part);
 			} 
-			
-			$text_part = GO_Base_Util_String::clean_utf8($text_part);
+			$charset = isset($structure->ctype_parameters['charset']) ? $structure->ctype_parameters['charset'] : 'UTF-8';
+			$text_part = GO_Base_Util_String::clean_utf8($text_part,$charset);
 			$this->_loadedBody .= $text_part;
 		}
 	}

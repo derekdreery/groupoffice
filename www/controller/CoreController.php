@@ -762,24 +762,26 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	protected function actionSaveState($params){
 		//close writing to session so other concurrent requests won't be locked out.
 		GO::session()->closeWriting();
-
-		$values = json_decode($params['values'], true);
 		
-		if(!is_array($values)){
-			trigger_error ("Invalid value for GO_Core_Controller_Core::actionSaveState: ".var_export($params, true), E_USER_NOTICE);
-		}else
-		{
-			foreach($values as $name=>$value){
+		if(isset($params['values'])){
+			$values = json_decode($params['values'], true);
 
-				$state = GO_Base_Model_State::model()->findByPk(array('name'=>$name,'user_id'=>GO::user()->id));
+			if(!is_array($values)){
+				trigger_error ("Invalid value for GO_Core_Controller_Core::actionSaveState: ".var_export($params, true), E_USER_NOTICE);
+			}else
+			{
+				foreach($values as $name=>$value){
 
-				if(!$state){
-					$state = new GO_Base_Model_State();
-					$state->name=$name;
+					$state = GO_Base_Model_State::model()->findByPk(array('name'=>$name,'user_id'=>GO::user()->id));
+
+					if(!$state){
+						$state = new GO_Base_Model_State();
+						$state->name=$name;
+					}
+
+					$state->value=$value;
+					$state->save();
 				}
-
-				$state->value=$value;
-				$state->save();
 			}
 		}
 		$response['success']=true;

@@ -79,7 +79,7 @@ Ext.extend(GO.users.SettingsDialog, Ext.Window,{
 			},
 			failure:function(form, action)
 			{
-				Ext.Msg.alert(GO.lang['strError'], action.result.feedback)
+				GO.errorDialog.show(action.result.feedback)
 			},
 			scope: this
 		});		

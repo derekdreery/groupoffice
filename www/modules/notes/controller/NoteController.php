@@ -82,7 +82,7 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 		return parent::beforeSubmit($response, $model, $params);
 	}
 	
-	protected function beforeLoad(&$response, &$model, &$params) {
+	protected function beforeLoad(&$response, &$model, &$params) {		
 		if (isset($params['userInputPassword'])) {
 			if (!$model->decrypt($params['userInputPassword']))
 				throw new Exception(GO::t('badPassword'));						

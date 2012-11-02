@@ -1094,12 +1094,25 @@ class GO_Base_Util_String {
 
 	public static function convertLinks($html)
 	{
+		$baseUrl = '';
+		if(preg_match('/base href="([^"]+)"/', $html, $matches)){
+			if(isset($matches[1]))
+			{
+				$baseUrl = $matches[1];
+			}
+		}
+//		throw new Exception($baseUrl);
 	
 		$html = str_replace("\r", '', $html);
 		$html = str_replace("\n",' ', $html);
 
 		$regexp="/<a[^>]*href=([\"']?)(http|https|ftp|bf2)(:\/\/)(.+?)>/i";
 		$html = preg_replace($regexp, "<a target=$1_blank$1 class=$1blue$1 href=$1$2$3$4>", $html);
+		
+		if(!empty($baseUrl)){
+			$regexp="/<a[^>]*href=('|\")(?![a-z]+:)/i";
+			$html = preg_replace($regexp, "<a target=$1_blank$1 class=$1blue$1 href=$1".$baseUrl, $html);
+		}
 
 		//$regexp="/<a.+?href=([\"']?)".str_replace('/','\\/', GO::config()->full_url)."(.+?)>/i";
 		//$html = preg_replace($regexp, "<a target=$1main$1 class=$1blue$1 href=$1".GO::config()->host."$2$3>", $html);

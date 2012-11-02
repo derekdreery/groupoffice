@@ -247,3 +247,4 @@ $l['checkUnseen']='Se automatisk etter nye meldinger i denne mappen';
 $l['noEmailFolders']= 'Ingen mapper er lagt til.';
 $l['sieveNote']='Ikke alle funksjoner støttes. Se brukermanualen.';
 $l['winmailNoFiles']="Dette winmail-vedlegget inneholder ingen filer!.";
+$l['attachedAppointmentInfo']="Vedlagt avtaleinformasjon";

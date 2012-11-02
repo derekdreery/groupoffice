@@ -101,9 +101,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			$this->send_command($command);
 			$this->state = 'disconnected';
 			$result = $this->get_response();
-			GO::debug($this->commands);
-
-			//GO::debug($this->responses);
+//			GO::debug($this->commands);
+//
+//			GO::debug($this->responses);
 
 			fclose($this->handle);
 
@@ -325,7 +325,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		
 		//unset($this->_subscribedFoldersCache);
 		
-		$listStatus = $this->has_capability('LIST-STATUS');
+//		$listStatus = $this->has_capability('LIST-STATUS');
 		
 		$listCmd = $listSubscribed ? 'LSUB' : 'LIST';
 		
