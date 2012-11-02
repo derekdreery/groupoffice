@@ -797,7 +797,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 					failure:function(form, action)
 					{
 						Ext.getBody().unmask();
-						Ext.Msg.alert(GO.lang['strError'], action.result.feedback)
+						GO.errorDialog.show(action.result.feedback)
 					},
 					success : function(form, action) {
 
@@ -846,7 +846,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 					failure:function(form, action)
 					{
 						Ext.getBody().unmask();
-						Ext.Msg.alert(GO.lang['strError'], action.result.feedback)
+						GO.errorDialog.show(action.result.feedback)
 					},
 					success : function(form, action) {
 						

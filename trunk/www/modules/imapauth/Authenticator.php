@@ -100,7 +100,7 @@ class GO_Imapauth_Authenticator {
 			$account->store_password = !isset($this->config['store_password']) || !empty($this->config['store_password']) ? 1 : 0;
 			$account->store_smtp_password = !empty($account->store_password) && !empty($this->config['smtp_use_login_credentials']) ? 1 : 0;
 			
-			if ($this->config['smtp_use_login_credentials']) {
+			if (!empty($this->config['smtp_use_login_credentials'])) {
 				GO::debug("IMAPAUTH: Setting SMTP password too");
 				$account->smtp_username = $imapUsername;
 				$account->smtp_password = $password;

@@ -100,9 +100,14 @@ class GO_Ldapauth_Authenticator {
 
 		$authenticated = $ldapConn->bind($record->getDn(), $password);
 		if (!$authenticated) {
+		
 			GO::debug("LDAPAUTH: LDAP authentication FAILED for " . $username);
 			GO::session()->logout();
-			return false;
+			
+			//block user from logging in. If we don't throw the exception here normal Group-Office login will continue.
+			throw new Exception(GO::t('badLogin').' (LDAP)');
+			
+			//return false;
 		} else {
 			GO::debug("LDAPAUTH: LDAP authentication SUCCESS for " . $username);
 

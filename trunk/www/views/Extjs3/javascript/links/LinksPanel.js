@@ -476,7 +476,7 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 
 		}else
 		{
-			Ext.Msg.alert(GO.lang['strError'], 'No handler definded for link type: '+record.data.model_name);
+			GO.errorDialog.show('No handler definded for link type: '+record.data.model_name);
 		}*/
 	},
 

@@ -149,7 +149,7 @@ Ext.extend(GO.cms.FileCategoriesGrid, GO.grid.EditorGridPanel,{
 			callback : function (options, success,response) {
 				var responseParams = Ext.decode(response.responseText);
 				if (!success) {
-					Ext.Msg.alert(GO.lang['strError'], responseParams.feedback)
+					GO.errorDialog.show(responseParams.feedback)
 				}
 				else
 				{
