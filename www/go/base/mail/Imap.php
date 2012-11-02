@@ -325,7 +325,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		
 		//unset($this->_subscribedFoldersCache);
 		
-		$listStatus = $this->has_capability('LIST-STATUS');
+//		$listStatus = $this->has_capability('LIST-STATUS');
 		
 		$listCmd = $listSubscribed ? 'LSUB' : 'LIST';
 		
