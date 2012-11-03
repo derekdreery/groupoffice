@@ -4,8 +4,9 @@ class GO_Calendar_Controller_Attendance extends GO_Base_Controller_AbstractContr
 		
 		$event = GO_Calendar_Model_Event::model()->findByPk($params['id']);
 		$participant=$event->getParticipantOfCalendar();
+		$organizer = $event->getOrganizer();
 		
-		$response = array("success"=>true, 'data'=>array('status'=>$participant->status));		
+		$response = array("success"=>true, 'data'=>array('status'=>$participant->status, 'organizer'=>$organizer->name));		
 		return $response;
 	}
 	

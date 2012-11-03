@@ -214,6 +214,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 */
 	public function addException($date, $exception_event_id=0) {
 		
+		if(!$this->isRecurring())
+			throw new Exception("This is not a recurring event");
+		
 		if(!$this->hasException($date)){
 			$exception = new GO_Calendar_Model_Exception();
 			$exception->event_id = $this->id;
@@ -248,6 +251,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$att['end_time'] = $endTime->format('U');
 		
 		return $this->duplicate($att, false);
+	}
+	
+	public function createException($exceptionDate){
+		$stmt = $this->getRelatedParticipantEvents(true);//A meeting can be multiple related events sharing the same uuid
+		foreach($stmt as $event){			
+			$event->addException($exceptionDate, 0);
+		}
 	}
 	
 	/**
@@ -1774,7 +1784,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			//check if we have a Group-Office event. If so, we can handle accepting and declining in Group-Office. Otherwise we'll use ICS calendar objects by mail
 			$participantEvent = $participant->getParticipantEvent();
 
-			$body = '<p>The following event was cancelled by the organizer: </p>'.$this->toHtml();					
+			$body = '<p>'.GO::t('cancelMessage','calendar').': </p>'.$this->toHtml();					
 			
 			if(!$participantEvent){
 				
@@ -1819,9 +1829,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				//if participant status is pending then send a new inviation subject. Otherwise send it as update
 				if($participant->status == GO_Calendar_Model_Participant::STATUS_PENDING){
 					$subject = GO::t('invitation', 'calendar').': '.$this->name;
+					$bodyLine = GO::t('invited', 'calendar');
 				}else
 				{
 					$subject = GO::t('invitation_update', 'calendar').': '.$this->name;
+					$bodyLine = GO::t('eventUpdated', 'calendar');
 				}				
 				
 				//create e-mail message
@@ -1833,33 +1845,21 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				//check if we have a Group-Office event. If so, we can handle accepting and declining in Group-Office. Otherwise we'll use ICS calendar objects by mail
 				$participantEvent = $participant->getParticipantEvent();
 				
-				if($participantEvent){					
-					$body = '<p>The following event was scheduled in your calendar: </p>'.$this->toHtml();					
-				}else
-				{	
-					//build message for external program
-					$acceptUrl = GO::url("calendar/event/invitation",array("id"=>$this->id,'accept'=>1,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
-					$declineUrl = GO::url("calendar/event/invitation",array("id"=>$this->id,'accept'=>0,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
+				$body = '<p>'.$bodyLine.': </p>'.$this->toHtml();	
+				
+				if(!$participantEvent){					
 
-					if($participant->status == GO_Calendar_Model_Participant::STATUS_PENDING){
-						$body = '<p>' . GO::t('invited', 'calendar') . '</p>' .
-										$this->toHtml() .
-										'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
-										'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
-										'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
-										'&nbsp;|&nbsp;' .
-										'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
-					}else // on update event
-					{
-						$body = '<p>' . GO::t('invitation_update', 'calendar') . '</p>' .
-										$this->toHtml() .
-										'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
-										'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
-										'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
-										'&nbsp;|&nbsp;' .
-										'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
-					}
-					
+					//build message for external program
+//					$acceptUrl = GO::url("calendar/event/invitation",array("id"=>$this->id,'accept'=>1,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
+//					$declineUrl = GO::url("calendar/event/invitation",array("id"=>$this->id,'accept'=>0,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
+//
+//						$body = '<p>' . $bodyLine. '</p>' .
+//							$this->toHtml() .
+//							'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
+//							'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
+//							'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
+//							'&nbsp;|&nbsp;' .
+//							'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
 					
 					$ics=$this->toICS("REQUEST");				
 					$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REQUEST"');
