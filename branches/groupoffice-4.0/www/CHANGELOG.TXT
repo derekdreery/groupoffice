@@ -8,6 +8,7 @@
 - When using LDAP authentication it will not fall back to Group-Office login when LDAP authentication fails.
 - Smarter address and housenumber handling with ActiveSync
 - Use <base> html tag to correct relative links in HTML e-mails
+- Multiple resources were not saved
 
 29-10-2012 4.0.121
 - New log file contained too much info.
