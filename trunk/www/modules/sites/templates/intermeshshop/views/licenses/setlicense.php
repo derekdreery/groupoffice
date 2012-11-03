@@ -1,17 +1,4 @@
-<div class="hoofd-kader-menu">
-
-			<div class="hoofd-tab-left">
-				<div class="hoofd-tab-right">
-					<a class="hoofd-tab-center" href="#">
-						Set license details
-					</a>
-				</div>
-			</div>
-
-		</div>		
-		<div class="hoofd-kader-top"></div>
-		<div class="hoofd-kader-center">
-			
+		
 			<div class="subkader-big-top">
 						<div class="subkader-big-bottom">
 							<div class="subkader-big-center">						

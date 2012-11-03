@@ -121,6 +121,11 @@ class GO_Sites_Widgets_Pager extends GO_Sites_Widgets_Component {
 		return $this->_stmt;
 	}
 	
+	private function getPageUrl($pageNum){
+		$params = array_merge($this->getAdditionalParams(),array($this->getRequestParam()=>$pageNum));
+		return GOS::site()->getController()->createUrl(GOS::site()->route, $params);
+	}
+	
 	/**
 	 * Render the pagination table.
 	 */
@@ -147,14 +152,14 @@ class GO_Sites_Widgets_Pager extends GO_Sites_Widgets_Component {
 					if($this->_currentPageNumber == 1)
 						echo '<<';
 					else
-						echo '<a href="'.$this->_page->getUrl(array_merge($this->getAdditionalParams(),array($this->getRequestParam()=>1))).'"><<</a>';
+						echo '<a href="'.$this->getPageUrl(1).'"><<</a>';
 				echo '</td>';
 				
 				echo '<td class="pager-block pager-inactive">';
 					if($this->_currentPageNumber == 1)
 						echo '<';
 					else
-						echo '<a href="'.$this->_page->getUrl(array_merge($this->getAdditionalParams(),array($this->getRequestParam()=>$previous))).'"><</a>';
+						echo '<a href="'.$this->getPageUrl($previous).'"><</a>';
 				echo '</td>';
 				// END: RENDER THE PAGER PREVIOUS ARROWS
 				
@@ -173,8 +178,8 @@ class GO_Sites_Widgets_Pager extends GO_Sites_Widgets_Component {
 				}
 
 				for($page=$offsetStart;$page<=$offsetEnd;$page++){
-					$params = array_merge($this->getAdditionalParams(),array($this->getRequestParam()=>$page));
-						$url = GOS::site()->getController()->createUrl(GOS::site()->route, $params);
+		
+					$url = $this->getPageUrl($page);
 					if($page == $this->_currentPageNumber) {
 						echo '<td class="pager-block pager-active"><a href="'.$url.'">'.$page.'</a></td>';
 					} else
@@ -187,14 +192,14 @@ class GO_Sites_Widgets_Pager extends GO_Sites_Widgets_Component {
 					if($this->_currentPageNumber == $this->_totalPages)
 						echo '>';
 					else
-						echo '<a href="'.GOS::site()->getController()->createUrl(array_merge($this->getAdditionalParams(),array($this->getRequestParam()=>$next))).'">></a>';
+						echo '<a href="'.$this->getPageUrl($next).'">></a>';
 				echo '</td>';
 				
 				echo '<td class="pager-block pager-inactive">';
 					if($this->_currentPageNumber == $this->_totalPages)
 						echo '>>';
 					else
-						echo '<a href="'.GOS::site()->getController()->createUrl(array_merge($this->getAdditionalParams(),array($this->getRequestParam()=>$this->_totalPages))).'">>></a>';
+						echo '<a href="'.$this->getPageUrl($this->_totalPages).'">>></a>';
 				echo '</td>';
 				// END: RENDER THE PAGER NEXT ARROWS
 				

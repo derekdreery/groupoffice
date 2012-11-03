@@ -287,10 +287,16 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 		}
 		catch (GO_Base_Exception_AccessDenied $e)
 		{
-			//Path the page you tried to visit into lastPath session for redirecting after login
-			GO::session()->values['sites']['returnUrl'] = GOS::site()->getRequest()->getRequestUri();
-			$loginpath = !empty(GOS::site()->getSite()->login_url) ? GOS::site()->getSite()->login_url : '/sites/site/login';
-			$this->redirect(array($loginpath));
+			if(!GO::user()){
+				//Path the page you tried to visit into lastPath session for redirecting after login
+				GO::session()->values['sites']['returnUrl'] = GOS::site()->getRequest()->getRequestUri();
+				$loginpath = !empty(GOS::site()->getSite()->login_url) ? GOS::site()->getSite()->login_url : '/sites/site/login';
+				$this->redirect(array($loginpath));
+			}  else {
+				$controller = new GO_Sites_Controller_Site();
+				$controller->template = $this->template;
+				$controller->render('error', array('error' => $e));
+			}
 			//$this->render('error', array('error'=>$e));
 		}
 		catch (Exception $e)

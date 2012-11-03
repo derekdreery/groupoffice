@@ -38,6 +38,10 @@ class GO_Sites_Components_Website
 		*/
 	public $layout='main';
 	
+	/**
+	 *
+	 * @var GO_Sites_Components_AbstractFrontController 
+	 */
 	private $_controller; //To current controllers that was called
 	private $_request;
 	private $_urlManager;
@@ -204,7 +208,10 @@ class GO_Sites_Components_Website
 		else
 			return $pathInfo;
 	}
-	
+	/**
+	 * 
+	 * @return GO_Sites_Components_AbstractFrontController
+	 */
 	public function getController()
 	{
 		return $this->_controller;
