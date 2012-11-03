@@ -240,7 +240,7 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 			$route = isset($url[0]) ? $url[0] : '';
 			$url = $this->createUrl($route, array_splice($url, 1));
 		}
-		GOS::site()->getRequest()->redirect($url, false, $statusCode);
+		GOS::site()->getRequest()->redirect($url, true, $statusCode);
 	}
 
 	/**

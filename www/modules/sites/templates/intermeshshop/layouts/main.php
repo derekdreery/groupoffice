@@ -36,9 +36,9 @@
 					<div id="topmenu-item-center_43" class="topmenu-item-center topmenu-item-center_0">						
 				
 						
-						<div class="topmenu-item-left <?php if(GOS::site()->route=='billing/site/products')echo 'selected'; ?>">
+						<div class="topmenu-item-left <?php if(GOS::site()->route=='webshop/site/products')echo 'selected'; ?>">
 							<div class="topmenu-item-right">
-								<a class="topmenu-item-center" href="<?php echo $this->createUrl('/billing/site/products'); ?>">Products</a>
+								<a class="topmenu-item-center" href="/">Products</a>
 							</div>
 						</div>
 						<div class="topmenu-item-left <?php if(GOS::site()->route=='billing/site/invoices')echo 'selected'; ?>">

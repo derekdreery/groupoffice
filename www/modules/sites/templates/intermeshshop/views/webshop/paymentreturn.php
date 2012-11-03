@@ -6,7 +6,7 @@
 								<p><br /></p>
 								
 								<?php
-								echo GO_Billing_Utils::replaceOrderFields($this->order->status->getLanguage($this->order->language_id)->screen_template,$this->order);
+								echo $this->order->replaceTemplateTags($this->order->status->getLanguage($this->order->language_id)->screen_template);
 //								switch($this->paymentStatus) {
 //								 case GO_Webshop_Payment_PaymentProvider::STATUS_PENDING :
 //									 echo '<p>Your order is PENDING.</p>';
