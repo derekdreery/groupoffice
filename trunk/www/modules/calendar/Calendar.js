@@ -1235,8 +1235,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					if(result.askForCancelNotice){
 						
 						var msg = result.is_organizer ? 
-							'Would you like to send a cancellation notice to the participants?' :
-							'Would you like to notify the organizer that you will not attend by e-mail?'
+							GO.calendar.lang.notifyCancelParticipants :
+							GO.calendar.lang.notifyCancelOrganizer
 						
 						Ext.Msg.show({
 							title:'Send notification?',
@@ -2364,8 +2364,8 @@ GO.calendar.openCalendar = function(displayConfig){
 GO.calendar.handleMeetingRequest=function(responseResult){
 	if(responseResult.askForMeetingRequest){
 		Ext.Msg.show({
-			title:'Notify participants?',
-			msg: 'Would you like to notify the participants about this change by e-mail?',
+			title:GO.calendar.lang.notifyParticipants,
+			msg: GO.calendar.lang.sendNotification,
 			buttons: Ext.Msg.YESNO,
 			fn: function(buttonId, text, config){
 				if(buttonId=='yes'){
@@ -2377,7 +2377,6 @@ GO.calendar.handleMeetingRequest=function(responseResult){
 					})
 				}
 			},
-			//animEl: 'elId',
 			icon: Ext.MessageBox.QUESTION
 	 });
 	}

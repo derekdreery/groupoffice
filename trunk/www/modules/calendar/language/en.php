@@ -188,7 +188,7 @@ $l['rightClickToCopy']='Right click to copy link location';
 $l['invitation']='Invitation';
 $l['invitation_update']='Updated invitation';
 $l['cancellation']='Cancellation';
-$l['cancelMessage']='The following event you have been invited for has been cancelled.';
+$l['cancelMessage']='The following event has been cancelled by the organizer';
 $l['non_selected'] = 'in non-selected calendar';
 $l['linkIfCalendarNotSupported']='Only use the links below if your mail client does not support calendaring functions.';
 $l['eventAccepted']='You have accepted the event.';
@@ -207,3 +207,19 @@ $l['errorOrganizerOnlyTitle'] = 'You are not the organizer';
 $l['cantRemoveOrganizer']="You can't remove the organizer";
 $l['calendarColor']='Calendar color';
 $l['eventDeleted']="The event was deleted from your calendar";
+
+$l['attendance']='Attendance';
+$l['organizer']='Organizer';
+$l['notifyOrganizer']="Notify the organizer by e-mail about my decision";
+
+$l['iWillAttend']="I will attend";
+$l['iMightAttend']="I might attend";
+$l['iWillNotAttend']="I will not attend";
+$l['iWillDecideLater']="I haven't decided yet";
+
+$l['eventUpdated']="The following event has been updated by the organizer";
+
+$l['notifyCancelParticipants']='Would you like to send a cancellation notice to the participants?';
+$l['notifyCancelOrganizer']='Would you like to notify the organizer that you will not attend by e-mail?';
+$l['notifyParticipants']='Notify participants?';
+$l['sendNotification']='Would you like to notify the participants by e-mail?';

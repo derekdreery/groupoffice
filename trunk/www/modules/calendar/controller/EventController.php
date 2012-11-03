@@ -205,6 +205,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			
 			if($model->hasOtherParticipants())// && isset($modifiedAttributes['start_time']))
 			{			
+				$response['isNewEvent']=$isNewEvent;
 				$response['askForMeetingRequest']=true;
 			}
 		}
@@ -332,7 +333,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					//find related participant event. UUID and user_id of calendar must match
 					$participantEvent = $participant->getParticipantEvent();
 					
-					if(!$participantEvent){						
+					if(!$participantEvent && $participant->status!=GO_Calendar_Model_Participant::STATUS_DECLINED){						
 						$event->createCopyForParticipant($participant);
 					}
 				}
@@ -953,35 +954,23 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					'is_organizer'=>$event->is_organizer,
 					'success'=>true
 			);
-		}  else {
-			if($event->hasOtherParticipants()){
-				if($event->is_organizer){
-					if(!empty($params['send_cancel_notice']))
-						$event->sendCancelNotice();
-				}else
-				{					
-					if(!empty($params['send_cancel_notice'])){
-						
-						//update the participant status for the decline message
-						$participant = $event->getParticipantOfCalendar();
-						$participant->status=GO_Calendar_Model_Participant::STATUS_DECLINED;
-						$participant->save();
-						
-						if(!isset($params['exception_date']))
-							$params['exception_date']=false;
-
-						if(!empty($params['send_cancel_notice']))
-							$event->replyToOrganizer($params['exception_date']);
-					}
-				}
-			}
+		}  else {			
+			if(!empty($params['exception_date']))
+				$event = $event->createExceptionEvent($params['exception_date']);
 			
-			if(!empty($params['exception_date'])){
-				$event->addException($params['exception_date']);
-			}else
-			{			
-				$event->delete();
-			}
+			if(!empty($params['send_cancel_notice'])){
+				if($event->is_organizer){
+					$event->sendCancelNotice();
+				}else{
+					
+					$participant = $event->getParticipantOfCalendar();
+					$participant->status=GO_Calendar_Model_Participant::STATUS_DECLINED;
+					$participant->save();
+					
+					$event->replyToOrganizer();
+				}
+			}				
+			$event->delete();			
 		}
 
 		$response['success']=true;
@@ -1312,46 +1301,32 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	}
 	
 	//TODO Still support this?
-	public function actionInvitation($params){
-		
-		$participant = GO_Calendar_Model_Participant::model()->findSingleByAttributes(array(
-				'event_id'=>$params['id'],
-				'email'=>$params['email']
-		));
-		
-		if(!$participant){
-			throw new Exception("Could not find the event");
-		}
-		
-		if($participant->getSecurityToken()!=$params['participantToken']){
-			throw new Exception("Invalid request");
-		}
-		
-		if(empty($params['accept']))		
-			$participant->status=GO_Calendar_Model_Participant::STATUS_DECLINED;
-		else
-			$participant->status=GO_Calendar_Model_Participant::STATUS_ACCEPTED;
-		
-		//save will be handled by organizer when he get's an email
-		$participant->save();
-		
-		
-		if($participant->user){
-			//if it's a GO user then put the event in it's default calendar.
-			$event = $participant->event->createCopyForParticipant($participant);
-			
-			//notify organizer
-			$this->_sendInvitation(array(), $event, false, array(), 'REPLY', $participant);
-		}else
-		{
-			$event = false;
-			//notify organizer
-			$this->_sendInvitation(array(), $participant->event, false, array(), 'REPLY', $participant);
-		}
-		
-		
-		$this->render('invitation', array('participant'=>$participant, 'event'=>$event));
-	}
+//	public function actionInvitation($params){
+//		
+//		$participant = GO_Calendar_Model_Participant::model()->findSingleByAttributes(array(
+//				'event_id'=>$params['id'],
+//				'email'=>$params['email']
+//		));
+//		
+//		if(!$participant){
+//			throw new Exception("Could not find the event");
+//		}
+//		
+//		if($participant->getSecurityToken()!=$params['participantToken']){
+//			throw new Exception("Invalid request");
+//		}
+//		
+//		if(empty($params['accept']))		
+//			$participant->status=GO_Calendar_Model_Participant::STATUS_DECLINED;
+//		else
+//			$participant->status=GO_Calendar_Model_Participant::STATUS_ACCEPTED;
+//		
+//		//save will be handled by organizer when he get's an email
+//		$participant->save();
+//		
+//		
+//		$this->render('invitation', array('participant'=>$participant, 'event'=>$event));
+//	}
 	
 	/**
 	 * Get the birthdays of the contacts in the given addressbooks between 

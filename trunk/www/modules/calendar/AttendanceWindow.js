@@ -3,9 +3,10 @@ GO.calendar.AttendanceWindow = Ext.extend(GO.dialog.TabbedFormDialog, {
 		
 		
 		Ext.apply(this, {
-			title:"Attendance",
-			height: 150,
-			width: 300,
+			title:GO.calendar.lang.attendance,
+			height: 220,
+			width: 340,
+			modal:true,
 			enableApplyButton:false,
 			formControllerUrl: 'calendar/attendance'
 		});
@@ -31,20 +32,32 @@ GO.calendar.AttendanceWindow = Ext.extend(GO.dialog.TabbedFormDialog, {
 				columns:1,
 				items:[
 				{
-					boxLabel: "I will attend",
+					boxLabel: GO.calendar.lang.iWillAttend,
 					name: 'status',
 					inputValue: 'ACCEPTED'
 				},{
-					boxLabel: "I will not attend",
+					boxLabel: GO.calendar.lang.iWillNotAttend,
 					name: 'status',
 					inputValue: 'DECLINED'
+				},{
+					boxLabel: GO.calendar.lang.iMightAttend,
+					name: 'status',
+					inputValue: 'TENTATIVE'
+				},{
+					boxLabel: GO.calendar.lang.iWillDecideLater,
+					name: 'status',
+					inputValue: 'NEEDS-ACTION'
 				}
 				]
 			},{
 				hideLabel:true,
 				name:'notify_organizer',
 				xtype:'xcheckbox',
-				boxLabel:"Notify organizer by e-mail about my decision"
+				boxLabel:GO.calendar.lang.notifyOrganizer
+			},{
+				xtype:'plainfield',
+				fieldLabel:GO.calendar.lang.organizer,
+				name:'organizer'
 			}]
 		});
 	}
