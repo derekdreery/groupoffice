@@ -2,25 +2,25 @@
 						<div class="subkader-small-bottom">
 							<div class="subkader-small-center">						
 								<?php if($this->formok): ?>
-									<h1><?php echo $this->t('resetPasswordSuccessTitle'); ?></h1>								
-									<p><?php echo $this->t('resetPasswordSuccess'); ?></p>
+									<h1><?php echo GOS::t('resetPasswordSuccessTitle'); ?></h1>								
+									<p><?php echo GOS::t('resetPasswordSuccess'); ?></p>
 								<?php else: ?>
-									<h1><?php echo $this->t('resetPassword'); ?></h1>								
-									<p><?php echo $this->t('resetPasswordText'); ?></p>
+									<h1><?php echo GOS::t('resetPassword'); ?></h1>								
+									<p><?php echo GOS::t('resetPasswordText'); ?></p>
 								
 								<?php 
 									GO_Base_Html_Form::renderBegin('sites/user/recover','resetpassword',true);
 								
 									GO_Base_Html_Password::render(array(
 										"required" => true,
-										"label" => $this->t('password'),
+										"label" => GOS::t('password'),
 										"name" => "password",
 										"value" => ''
 									));
 									
 									GO_Base_Html_Password::render(array(
 										"required" => true,
-										"label" => $this->t('confirm'),
+										"label" => GOS::t('confirm'),
 										"name" => "confirm",
 										"value" => ''
 									));

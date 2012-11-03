@@ -1,0 +1,5 @@
+Hoe pakken we title's en description aan?
+
+Er staat veel overbodige YII code in het framework
+
+Notifier?

@@ -18,23 +18,23 @@
  */
 return array(
 		''=>'webshop/site/products',
-		'invoices'=> 'billing/site/invoices', //TODO
+		'invoices'=> 'billing/site/invoices',
 		'orderfromtrail'=>'billing/site/orderfromtrail', //TODO
 		
-		'support' => 'tickets/site/ticketlist', //TODO
-		'createticket' => 'tickets/site/createticket', //TODO
-		'ticket'=>'tickets/site/ticket', //TODO
+		'support' => 'tickets/site/ticketlist',
+		'createticket' => 'tickets/site/createticket',
+		'ticket'=>'tickets/site/ticket',
 		
-		'products'=>'billing/site/products', //TODO
-		'cart'=>'webshop/site/cart', //TODO
-		'checkout' => 'webshop/site/checkout', //TODO
-		'payment'=>'webshop/site/payment', //TODO
-		'summery'=>'webshop/site/summery', //TODO
-		'paymentreturn' => 'webshop/site/paymentreturn', //TODO
+		'products'=>'billing/site/products',
+		'cart'=>'webshop/site/cart',
+		'checkout' => 'webshop/site/checkout',
+		'payment'=>'webshop/site/payment',
+		'summery'=>'webshop/site/summery',
+		'paymentreturn' => 'webshop/site/paymentreturn',
 		
-		'setlicense'=>'licenses/site/setlicense', //TODO
-		'download' => 'licenses/site/licenseList', //TODO : listenselist
-		'viewlicense' => 'licenses/site/viewlicense', //TODO
+		'setlicense'=>'licenses/site/setlicense', 
+		'download' => 'licenses/site/licenseList',
+		'viewlicense' => 'licenses/site/viewlicense',
 		'<action:(login|logout|register|profile|recover|resetpassword)>' => 'sites/user/<action>',//TODO: login, logout, profile resetpassword, register, recover/lostpassword
 		'<slug>'=>'sites/site/content', //TODO: requirements, contact	
 		

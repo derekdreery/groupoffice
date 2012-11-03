@@ -299,6 +299,15 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 			}
 			//$this->render('error', array('error'=>$e));
 		}
+		catch (GO_Base_Exception_NotFound $e){
+			header("HTTP/1.0 404 Not Found");
+      header("Status: 404 Not Found");
+			
+			$controller = new GO_Sites_Controller_Site();
+			$controller->template = $this->template;
+			$controller->setPageTitle("404 Not found");
+			$controller->render('404');
+		}
 		catch (Exception $e)
 		{
 			$controller = new GO_Sites_Controller_Site();

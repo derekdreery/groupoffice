@@ -43,8 +43,10 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 	public function actionContent() {
 		$content = GO_Sites_Model_Content::model()->findSingleByAttribute('slug', $_GET['slug']);
 		
-		if($content == null)
+		if(!$content)
 			throw new GO_Base_Exception_NotFound('404 Page not found');
+		
+		$this->setPageTitle($content->title);
 		
 		$this->render('content', array('content'=>$content));
 	}
@@ -191,6 +193,74 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 		GO::session()->logout();
 		GO::session()->start();
 		$this->redirect(GOS::site()->getLoginUrl());
+	}
+	
+	protected function actionProfile(){
+		
+		$user = GO::user();
+		$contact = $user->contact;
+		
+		if($contact->company)
+			$company = $contact->company;
+		else{
+			$company = new GO_Addressbook_Model_Company();
+			$company->addressbook_id=$contact->addressbook_id;
+		}
+		
+		if (GO_Base_Util_Http::isPostRequest()) {
+			if(!empty($_POST['GO_Base_Model_User']['password']))
+			{
+				if(!$user->checkPassword($_POST['currentPassword'])){
+					GOS::site()->notifier->setMessage('error', "Huidig wachtwoord onjuist");
+				}else{
+					$user->password = $_POST['GO_Base_Model_User']['password'];
+					$user->passwordConfirm = $_POST['GO_Base_Model_User']['passwordConfirm'];
+				}
+			}else{
+				unset($_POST['GO_Base_Model_User']['password']);
+				unset($_POST['GO_Base_Model_User']['passwordConfirm']);
+			}
+				
+			$contact->attributes = $_POST['GO_Addressbook_Model_Contact'];
+			$user->attributes = $_POST['GO_Base_Model_User'];
+			$company->attributes = $_POST['GO_Addressbook_Model_Company'];
+			
+			if(!empty($_POST['post_address_is_address']))
+				$company->setPostAddressFromVisitAddress();
+
+			GO_Base_Html_Error::validateModel($user);
+			GO_Base_Html_Error::validateModel($contact);
+			GO_Base_Html_Error::validateModel($company);
+			
+			if(!GO_Base_Html_Error::hasErrors()){
+				$user->save();
+
+				$company->save();
+				$contact->company_id = $company->id;				
+				$contact->save();
+				GOS::site()->notifier->setMessage('success', GOS::t('formEditSuccess'));
+				$this->pageRedirect($this->getPage()->path);
+			}
+		}
+
+		$company->post_address_is_address = false;
+	
+		if($company->address==$company->post_address && 
+			 $company->address_no==$company->post_address_no &&
+			 $company->city==$company->post_city
+			){
+			 $company->post_address_is_address = true;
+		}
+				
+		$params['user'] = $user;
+		$params['contact'] = $contact;
+		$params['company'] = $company;
+
+		GOS::site()->scripts->registerScriptFile($this->getTemplatePath() .'assets/js/jquery-1.7.2.min.js');
+		GOS::site()->scripts->registerScriptFile($this->getTemplatePath().'assets/js/profileToggle.js');
+		
+		$this->render('profile', array('user'=>$user,'contact'=>$contact));
+
 	}
 }
 ?>
