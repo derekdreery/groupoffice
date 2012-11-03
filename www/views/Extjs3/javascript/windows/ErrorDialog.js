@@ -9,7 +9,7 @@ GO.ErrorDialog = function(config) {
 		border : false,
 		closable : true,
 		title : GO.lang.strError,
-		modal : false,
+		modal : false, 
 		
 		layout:'fit',
 		items : [
@@ -41,6 +41,9 @@ Ext.extend(GO.ErrorDialog, GO.Window, {
 				
 		if(!error)
 			error = "No error message given";
+		
+		if(details)
+			error += "<br /><br />"+details;
 
 		this.messagePanel.body.update(error);
 				
