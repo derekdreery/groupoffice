@@ -2,8 +2,8 @@
 						<div class="subkader-small-bottom">
 							<div class="subkader-small-center">						
 
-								<h1><?php echo $this->t('profileTitle'); ?></h1>								
-								<p><?php echo $this->t('profileText'); ?></p>
+								<h1><?php echo GOS::t('profileTitle'); ?></h1>								
+								<p><?php echo GOS::t('profileText'); ?></p>
 								
 								<?php echo $this->notifications->render('profile'); ?>
 								
@@ -12,7 +12,7 @@
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
-										"label" => $this->t('firstName'),
+										"label" => GOS::t('firstName'),
 										"model" => $contact,
 										"name" => "first_name"
 									));
@@ -20,73 +20,73 @@
 									GO_Base_Html_Input::render(array(
 										"required" => false,
 										"model" => $contact,
-										"label" => $this->t('middleName'),
+										"label" => GOS::t('middleName'),
 										"name" => "middle_name"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"model" => $contact,
-										"label" => $this->t('lastName'),
+										"label" => GOS::t('lastName'),
 										"name" => "last_name"
 									));
 									
 									GO_Base_Html_Radio::render(array(
 										"required" => true,
-										"label" => $this->t('gender'),
+										"label" => GOS::t('gender'),
 										"model" => $contact,
 										"name" => "sex",
 										"options" => array(
-												array("label"=>$this->t('male'),"value"=>"M"),
-												array("label"=>$this->t('female'),"value"=>"F")
+												array("label"=>GOS::t('male'),"value"=>"M"),
+												array("label"=>GOS::t('female'),"value"=>"F")
 										)
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
-										"label" => $this->t('email'),
+										"label" => GOS::t('email'),
 										"model" => $contact,
 										"name" => "email",
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
-										"label" => $this->t('address'),
+										"label" => GOS::t('address'),
 										"model" => $contact,
 										"name" => "address"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
-										"label" => $this->t('housenumber'),
+										"label" => GOS::t('housenumber'),
 										"model" => $contact,
 										"name" => "address_no"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
-										"label" => $this->t('zip'),
+										"label" => GOS::t('zip'),
 										"model" => $contact,
 										"name" => "zip"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
-										"label" => $this->t('city'),
+										"label" => GOS::t('city'),
 										"model" => $contact,
 										"name" => "city"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => false,
-										"label" => $this->t('state'),
+										"label" => GOS::t('state'),
 										"model" => $contact,
 										"name" => "state"
 									));
 									
 									GO_Base_Html_Select::render(array(
 										"required" => true,
-										"label" => $this->t('country'),
+										"label" => GOS::t('country'),
 										"model" => $contact,
 										'name' => "country",
 										'options' => GO::language()->getCountries()
@@ -95,50 +95,50 @@
 									GO_Base_Html_Input::render(array(
 										"required" => false,
 										"model" => $contact,
-										"label" => $this->t('phone'),
+										"label" => GOS::t('phone'),
 										"name" => "home_phone"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => false,
 										"model" => $contact,
-										"label" => $this->t('mobile'),
+										"label" => GOS::t('mobile'),
 										"name" => "cellular"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"model" => $company,
-										"label" => $this->t('company'),
+										"label" => GOS::t('company'),
 										"name" => "name"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => false,
 										"model" => $contact,
-										"label" => $this->t('department'),
+										"label" => GOS::t('department'),
 										"name" => "department"
 									));
 									
 									GO_Base_Html_Input::render(array(
 										"required" => false,
 										"model" => $contact,
-										"label" => $this->t('function'),
+										"label" => GOS::t('function'),
 										"name" => "function"
 									));
 																
 									GO_Base_Html_Input::render(array(
 										"required" => false,
 										"model" => $company,
-										"label" => $this->t('vat'),
+										"label" => GOS::t('vat'),
 										"name" => "vat_no"
 									));
 									echo "<br /><hr />";
-									echo '<h1>'.$this->t('yourlogincredentials').'</h1>';
+									echo '<h1>'.GOS::t('yourlogincredentials').'</h1>';
 									
 									GO_Base_Html_Password::render(array(
 										"required" => false,
-										"label" => $this->t('currentPassword'),
+										"label" => GOS::t('currentPassword'),
 										"name" => "currentPassword",
 										"value" => ''
 									));
@@ -146,14 +146,14 @@
 									GO_Base_Html_Input::render(array(
 										"required" => false, // False because it cannot be changed so it will not be posted because this is a disabled field
 										"model" => $user,
-										"label" => $this->t('username'),
+										"label" => GOS::t('username'),
 										"name" => "username",
 										"extra" => "disabled"
 									));
 
 									GO_Base_Html_Password::render(array(
 										"required" => false,
-										"label" => $this->t('password'),
+										"label" => GOS::t('password'),
 										"model" => $user,
 										"name" => "password",
 										"value" => ''
@@ -161,7 +161,7 @@
 									
 									GO_Base_Html_Password::render(array(
 										"required" => false,
-										"label" => $this->t('confirm'),
+										"label" => GOS::t('confirm'),
 										"name" => "passwordConfirm",
 										"value" => ''
 									));
