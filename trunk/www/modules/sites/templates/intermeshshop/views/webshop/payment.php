@@ -11,7 +11,6 @@
 
 				echo $provider->getPaymentLinkHtml($order);
 			}
-
 			?>								
 
 		</div>

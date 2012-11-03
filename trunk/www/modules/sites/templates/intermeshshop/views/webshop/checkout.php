@@ -6,7 +6,7 @@
 			<h1>Order confirmation</h1>
 			<p>Please check if the data below is correct.</p>								
 
-			<?php echo GO_Sites_Components_Html::beginForm('', 'post', array('id' => 'confirmCheckout')); ?>
+			<?php echo GO_Sites_Components_Html::beginForm('', 'post', array('name' => 'confirmCheckout')); ?>
 			<div class="row">
 				<?php echo GO_Sites_Components_Html::activeLabel($order, 'post_name'); ?>
 				<?php echo GO_Sites_Components_Html::activeTextField($order, 'post_name'); ?>
@@ -104,7 +104,13 @@
 				<?php echo GO_Sites_Components_Html::error($order, 'agreeTerms'); ?>
 			</div>
 			<div class="row-buttons">
-				<?php echo GO_Sites_Components_Html::submitButton('Continue'); ?>
+				<div class="button-green" onmouseover="this.className='button-green-hover';"  onmouseout="this.className='button-green';" style="float:left; margin-right: 15px;">
+					<div class="button-green-right">
+						<a href="#" onclick="document.confirmCheckout.submit()" class="button-green-center"> 
+							Continue
+						</a>
+					</div>	
+				</div>
 
 				<div class="button-green-side" onmouseover="this.className='button-green-side-hover';"  onmouseout="this.className='button-green-side';" style="float:left;">
 					<div class="button-green-side-right">
