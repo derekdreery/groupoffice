@@ -92,13 +92,11 @@ class GO_Email_Model_MessageAttachment extends GO_Base_Model{
 	 * @return boolean 
 	 */
 	public function hasTempFile(){
-		if(!isset($this->_tmp_file))
+		if(empty($this->_tmp_file))
 			return false;
-		
-		if($this->_tmp_file instanceof GO_Base_Fs_File)
-			return $this->_tmp_file->exists();
-		else
-			return false;
+		else {
+			return file_exists(GO::config()->tmpdir.$this->_tmp_file);
+		}
 	}
 	
 	

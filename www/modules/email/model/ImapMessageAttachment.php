@@ -65,6 +65,8 @@ class GO_Email_Model_ImapMessageAttachment extends GO_Email_Model_MessageAttachm
 			}
 			$this->setTempFile($tmpFile);
 		}
+		
+		return $this->getTempFile();
 	}
 	
 	public function getUrl(){
