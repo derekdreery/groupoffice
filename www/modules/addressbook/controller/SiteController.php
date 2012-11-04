@@ -42,7 +42,7 @@ class GO_Addressbook_Controller_Site extends GO_Sites_Controller_Site{
 			// This checks the 2 email fields
 			if(isset($params['confirm_email']) && isset($params['email'])){
 				if($params['email'] != $params['confirm_email'])
-					GO_Base_Html_Error::setError($this->t('compareEmailError'), 'confirm_email');
+					GO_Base_Html_Error::setError(GOS::t('compareEmailError'), 'confirm_email');
 			}
 
 			$ok = GO_Base_Html_Error::checkRequired();
@@ -50,7 +50,7 @@ class GO_Addressbook_Controller_Site extends GO_Sites_Controller_Site{
 			
 			if(!GO_Base_Html_Error::hasErrors() && $ok){
 				$this->contact->save();
-				$this->notifications->addNotification('addcontact', $this->t('formSubmitNotification'), GO_Sites_NotificationsObject::NOTIFICATION_OK);
+				$this->notifications->addNotification('addcontact', GOS::t('formSubmitNotification'), GO_Sites_NotificationsObject::NOTIFICATION_OK);
 				$this->pageRedirect('addcontact');
 			}
 		}			
