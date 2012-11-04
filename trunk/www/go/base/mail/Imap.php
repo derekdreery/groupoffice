@@ -1,5 +1,13 @@
 <?php
 class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
+	
+	const SORT_NAME='NAME';
+	const SORT_FROM='FROM';
+	const SORT_TO='TO';
+	const SORT_DATE='DATE';
+	const SORT_ARRIVAL='ARRIVAL';
+	const SORT_SUBJECT='SUBJECT';
+	const SORT_SIZE='SIZE';
 
 	var $handle=false;
 

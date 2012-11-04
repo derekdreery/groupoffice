@@ -77,6 +77,34 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	{	
 		return parent::model($className);
 	}
+	
+	/**
+	 * Find's meesages in a given mailbox
+	 * 
+	 * @param GO_Email_Model_Account $account
+	 * @param string $mailbox
+	 * @param int $start
+	 * @param int $limit
+	 * @param sring $sortField See constants in GO_Base_Mail_Imap::SORT_*
+	 * @param boolean $descending Sort descending
+	 * @param string $query
+	 * @return array
+	 */
+	public function find(GO_Email_Model_Account $account, $mailbox="INBOX", $start=0, $limit=50, $sortField=GO_Base_Mail_Imap::SORT_DATE , $descending=true, $query='ALL'){
+		$imap = $account->openImapConnection($mailbox);
+		$headersSet = $imap->get_message_headers_set($start, $limit, $sortField , $descending, $query);
+		$results=array();
+		foreach($headersSet as $uid=>$headers){
+			$message = GO_Email_Model_ImapMessage::model()->createFromHeaders(
+							$account, $mailbox, $headers);			
+		
+			$results[]=$message;
+		}
+		
+		return $results;
+		
+	}
+	
 	/**
 	 *
 	 * @param GO_Email_Model_Account $account
@@ -127,11 +155,11 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	}
 	
 	
-	public function createFromHeaders($account, $mailbox, $uid, $headers){
+	public function createFromHeaders($account, $mailbox, $headers){
 		$imapMessage = new GO_Email_Model_ImapMessage();
-		$attributes['uid']=$uid;
-		$attributes['account'] = $account;
-		$attributes['mailbox'] = $mailbox;
+		
+		$headers['account'] = $account;
+		$headers['mailbox'] = $mailbox;
 
 		$imapMessage->setAttributes($headers);
 

@@ -75,11 +75,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		if (count($filters)) {
 			$imap = $account->openImapConnection($mailbox);
 
-			$messages = array();
-			$headersSet = $imap->get_message_headers_set(0, 0, "ARRIVAL", false, "NEW");
-			foreach ($headersSet as $uid => $headers) {
-				$messages[] = GO_Email_Model_ImapMessage::model()->createFromHeaders($account, $mailbox, $uid, $headers);
-			}
+			$messages = GO_Email_Model_ImapMessage::model()->find($account, $mailbox,0, 0, GO_Base_Mail_Imap::SORT_ARRIVAL, false, "NEW");
 			if(count($messages)){
 				while ($filter = array_shift($filters)) {
 					$matches = array();
@@ -153,19 +149,19 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		switch($sort) {
 			case 'from':
-				$sortField=$response['sent'] ? 'TO' : 'FROM';
+				$sortField=$response['sent'] ? GO_Base_Mail_Imap::SORT_TO : GO_Base_Mail_Imap::SORT_FROM;
 				break;
 			case 'date':
-				$sortField='DATE';
+				$sortField=GO_Base_Mail_Imap::SORT_DATE;
 				break;
 			case 'subject':
-				$sortField='SUBJECT';
+				$sortField=GO_Base_Mail_Imap::SORT_SUBJECT;
 				break;
 			case 'size':
-				$sortField='SIZE';
+				$sortField=GO_Base_Mail_Imap::SORT_SIZE;
 				break;
 			default:
-				$sortField='DATE';
+				$sortField=GO_Base_Mail_Imap::SORT_DATE;
 		}
 
 //		$imap = $account->openImapConnection($params["mailbox"]);
@@ -198,14 +194,20 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		}
 		
 		//make sure we are connected to the right mailbox after move and delete operations
-		$imap = $account->openImapConnection($params["mailbox"]);
+//		$imap = $account->openImapConnection($params["mailbox"]);
 		
-		/* @var $imap GO_Base_Mail_Imap */
-		$headersSet = $imap->get_message_headers_set($params['start'], $params['limit'], $sortField , $params['dir']!='ASC', $query);
+		$messages = GO_Email_Model_ImapMessage::model()->find(
+						$account, 
+						$params['mailbox'],
+						$params['start'], 
+						$params['limit'], 
+						$sortField , 
+						$params['dir']!='ASC', 
+						$query);
+		
 		$response["results"]=array();
-		foreach($headersSet as $uid=>$headers){
-			$message = GO_Email_Model_ImapMessage::model()->createFromHeaders($account, $params["mailbox"], $uid, $headers);			
-			
+		foreach($messages as $message){
+				
 			$record = $message->getAttributes(true);
 			$record['account_id']=$account->id;
 			$record['mailbox']=$params["mailbox"];
