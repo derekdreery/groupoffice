@@ -587,3 +587,16 @@ $l['unnamed']='Naamloos';
 $l['sir']='Heer';
 $l['madam']='Mevrouw';
 $l['exportDialog']='Exporteren';
+
+
+$l['month_times'][1]='de eerste';
+$l['month_times'][2]='de tweede';
+$l['month_times'][3]='de derde';
+$l['month_times'][4]='de vierde';
+$l['month_times'][5]='de vijfde';
+$l['and']='en';
+$l['repeats']= 'Herhaalt elke %s';
+$l['repeats_at']= 'Herhaalt elke %s op %s';//eg. Repeats every month at the first monday;
+$l['repeats_at_not_every']= 'Herhaalt elke %s %s op %s';//eg. Repeats every 2 weeks at monday;
+$l['repeats_not_every'] = 'Herhaalt elke %s %s';
+$l['until']='tot';

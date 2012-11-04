@@ -1004,6 +1004,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$html .= '<tr><td style="vertical-align:top">' . GO::t('strDescription') . ':</td>' .
 							'<td>' . GO_Base_Util_String::text_to_html($this->description) . '</td></tr>';
 		}
+		
+		if($this->isRecurring()){
+			$html .= '<tr><td colspan="2">' .$this->getRecurrencePattern()->getAsText().'</td></tr>';;
+		}
 
 		//don't calculate timezone offset for all day events
 //		$timezone_offset_string = GO_Base_Util_Date::get_timezone_offset($this->start_time);
@@ -1040,6 +1044,22 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 
 		return $html;
+	}
+	
+	/**
+	 * Get the recurrence pattern object
+	 * 
+	 * @return GO_Base_Util_Icalendar_Rrule
+	 */
+	public function getRecurrencePattern(){
+		
+		if(!$this->isRecurring())
+			return false;
+		
+		$rRule = new GO_Base_Util_Icalendar_Rrule();
+		$rRule->readIcalendarRruleString($this->start_time, $this->rrule);
+		
+		return $rRule;
 	}
 	
 	
@@ -1142,8 +1162,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 		if(!empty($this->rrule)){
 			
-			$rRule = new GO_Base_Util_Icalendar_Rrule();
-			$rRule->readIcalendarRruleString($this->start_time, $this->rrule);
+			$rRule = $this->getRecurrencePattern();
 			$rRule->shiftDays(false);
 			$e->rrule=str_replace('RRULE:','',$rRule->createRrule());					
 			$stmt = $this->exceptions(GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('exception_event_id', 0)));

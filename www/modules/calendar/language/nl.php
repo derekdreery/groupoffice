@@ -32,12 +32,7 @@ $l['accept_mail_subject']= 'Uitnodiging voor \'%s\' geaccepteerd';
 $l['accept_mail_body']= '%s heeft uw uitnodiging geaccepteerd voor:';
 $l['decline_mail_subject']= 'Uitnodiging voor \'%s\' afgewezen';
 $l['decline_mail_body']= '%s heeft uw uitnodiging afgewezen voor:';
-$l['and']='en';
-$l['repeats']= 'Herhaalt elke %s';
-$l['repeats_at']= 'Herhaalt elke %s op %s';//eg. Repeats every month at the first monday;
-$l['repeats_at_not_every']= 'Herhaalt elke %s %s op %s';//eg. Repeats every 2 weeks at monday;
-$l['repeats_not_every'] = 'Herhaalt elke %s %s';
-$l['until']='tot';
+
 $l['not_invited']='U bent niet uitgenodigd voor deze gebeurtenis. U moet wellicht inloggen als een andere gebruiker.';
 $l['accept_title']='Geaccepteerd';
 $l['accept_confirm']='De eigenaar zal op de hoogte gebracht worden van uw acceptatie voor deze gebeurtenis';
@@ -68,11 +63,7 @@ $l['birthday_name']='Verjaardag: {NAME}';
 $l['birthday_desc']='{NAME} is vandaag {AGE} geworden';
 $l['unauthorized_participants_write']='U heeft onvoldoende toegangsrechten om afspraken te plannen voor de volgende gebruikers:<br /><br />{NAMES}<br /><br />Wellicht wilt u nog een uitnodiging versturen zodat zij de afspraak kunnen accepteren en inplannen.';
 $l['noCalSelected'] = 'Er is geen agenda geselecteerd voor deze overzicht. Selecteer minstens een agenda bij Beheer.';
-$l['month_times'][1]='de eerste';
-$l['month_times'][2]='de tweede';
-$l['month_times'][3]='de derde';
-$l['month_times'][4]='de vierde';
-$l['month_times'][5]='de vijfde';
+
 $l['rightClickToCopy']='Gebruik de rechtermuisknop om de koppelingslocatie te kopiëren';
 $l['invitation']='Uitnodiging';
 $l['invitation_update']='Bijgewerkte uitnodiging';
