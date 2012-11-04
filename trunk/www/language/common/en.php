@@ -603,3 +603,17 @@ $l['sir']='Sir';
 $l['madam']='Madam';
 $l['exportDialog']='Export Dialog';
 $l['logFiles']='Log files';
+
+
+$l['and']='and';
+$l['repeats'] = 'Repeats every %s';
+$l['repeats_at'] = 'Repeats every %s at %s';//eg. Repeats every month at the first monday;
+$l['repeats_at_not_every'] = 'Repeats every %s %s at %s';//eg. Repeats every 2 weeks at monday;
+$l['repeats_not_every'] = 'Repeats every %s %s';
+$l['until']='until'; ;
+
+$l['month_times'][1]='the first';
+$l['month_times'][2]='the second';
+$l['month_times'][3]='the third';
+$l['month_times'][4]='the fourth';
+$l['month_times'][5]='the fifth';
