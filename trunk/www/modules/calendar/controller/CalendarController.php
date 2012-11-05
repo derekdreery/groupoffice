@@ -107,7 +107,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		$store->setDefaultSortOrder('name','ASC');
 		return parent::beforeStore($response, $params, $store);
 	}
-	
+		
 	public function formatStoreRecord($record, $model, $store) {
 		
 		$record['group_name']= !empty($model->group) ? $model->group->name : '';
