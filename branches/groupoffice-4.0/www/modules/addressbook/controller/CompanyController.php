@@ -109,7 +109,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 							'addresslist_filter', 
 							"GO_Addressbook_Model_Addresslist",$store, $params);				
 
-			if(count($addresslistMultiSel->selectedIds))
+			if(count($addresslistMultiSel->selectedIds) && !empty($params['addresslist_filters']))
 			{
 				$addresslistMultiSel->addSelectedToFindCriteria($storeParams, 'addresslist_id','ac');
 

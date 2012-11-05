@@ -223,5 +223,8 @@ GO.addressbook.ContactsGrid = function(config){
 
 
 Ext.extend(GO.addressbook.ContactsGrid, GO.grid.GridPanel, {
-
+    applyAddresslistFilters : function()
+    {
+      this.store.setBaseParam('addresslist_filters', 1);
+    }
 });
