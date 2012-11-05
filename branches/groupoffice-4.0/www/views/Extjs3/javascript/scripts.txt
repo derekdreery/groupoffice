@@ -168,3 +168,5 @@ views/Extjs3/javascript/base/util/MD5.js
 views/Extjs3/javascript/grids/RowEditor.js
 views/Extjs3/javascript/base/QuickEditDialog.js
 views/Extjs3/javascript/base/model/ImportDialog.js
+
+views/Extjs3/javascript/Base64.js
