@@ -252,14 +252,11 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 			 $company->post_address_is_address = true;
 		}
 				
-		$params['user'] = $user;
-		$params['contact'] = $contact;
-		$params['company'] = $company;
-
-		GOS::site()->scripts->registerScriptFile($this->getTemplatePath() .'assets/js/jquery-1.7.2.min.js');
-		GOS::site()->scripts->registerScriptFile($this->getTemplatePath().'assets/js/profileToggle.js');
 		
-		$this->render('profile', array('user'=>$user,'contact'=>$contact));
+		GOS::site()->scripts->registerScriptFile($this->getTemplateUrl() .'js/jquery-1.7.2.min.js');
+		GOS::site()->scripts->registerScriptFile($this->getTemplateUrl().'js/profileToggle.js');
+		
+		$this->render('profile', array('user'=>$user,'contact'=>$contact, 'company'=>$company));
 
 	}
 }

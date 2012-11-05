@@ -132,7 +132,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		return GO::t($lastPart, $module);
 	}
-	
+
 	
 	/**
 	 * 
@@ -1935,7 +1935,29 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	protected function beforeValidate(){
 		
 	}
-
+	
+	/**
+	 * Add a custom validation rule for a column.
+	 * 
+	 * Examples of rules:
+	 * 
+	 * 'required'=>true, //Will be true automatically if field in database may not be null and doesn't have a default value
+	 * 'length'=><max length of the value>, //Autodetected from db
+	 * 'validator'=><a function to call to validate the value>,
+	 * 'gotype'=>'number|textfield|textarea|unixtimestamp|unixdate|user', //Autodetected from db as far as possible. See loadColumns()
+	 * 'decimals'=>2//only for gotype=number)
+	 * 'regex'=>'A preg_match expression for validation',
+	 * 'unique'=>false //true to enforce a unique value
+	 * 'greater'=>'start_time' //this column must be greater than column start time
+	 * 'greaterorequal'=>'start_time' //this column must be greater or equal to column start time
+	 * 
+	 * @param string $columnName
+	 * @param string $ruleName
+	 * @param mixed $value
+	 */
+	public function setValidationRule($columnName, $ruleName, $value){
+		$this->columns[$columnName][$ruleName]=$value;
+	}
 	/**
 	 * Validates all attributes of this model
 	 * 

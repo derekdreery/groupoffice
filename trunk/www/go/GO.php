@@ -239,7 +239,8 @@ class GO{
 			return false;
 		}else{		
 			
-			if(!isset(self::$_user)){
+			//also check if the user_id matches because GO::session()->runAsRoot() may haver changed it.
+			if(!isset(self::$_user) || self::$_user->id!=GO::session()->values['user_id']){
 				
 				$cacheKey = 'GO_Base_Model_User:'.GO::session()->values['user_id'];
 				$cachedUser = GO::cache()->get($cacheKey);
