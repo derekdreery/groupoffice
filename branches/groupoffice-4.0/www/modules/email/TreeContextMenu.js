@@ -117,6 +117,39 @@ GO.email.TreeContextMenu = Ext.extend(Ext.menu.Menu,{
 			scope:this
 		}),'-',	new Ext.menu.Item({
 			iconCls: 'btn-delete',
+			text:GO.email.lang.markAsRead,
+			cls: 'x-btn-text-icon',
+			scope:this,
+			handler: function()
+			{
+				var sm = this.treePanel.getSelectionModel();
+				var node = sm.getSelectedNode();
+
+				var t = new Ext.Template(GO.email.lang.markFolderReadConfirm);
+
+				Ext.MessageBox.confirm(GO.lang['strConfirm'], t.applyTemplate({name:node.attributes.text}), function(btn){
+					if(btn=='yes')
+					{
+						GO.request({
+							maskEl:GO.mainLayout.getModulePanel("email").getEl(),
+							url: "email/folder/markAsRead",
+							params:{
+								account_id: node.attributes.account_id,
+								mailbox: node.attributes.mailbox
+							},
+							success:function(){
+								if(node.attributes.mailbox==GO.mainLayout.getModulePanel("email").messagesGrid.store.baseParams.mailbox)
+								{
+									GO.mainLayout.getModulePanel("email").messagesGrid.store.load();
+								}
+							},
+							scope: this
+						});
+					}
+				}, this);
+			}
+		}),	new Ext.menu.Item({
+			iconCls: 'btn-delete',
 			text:GO.email.lang.moveOldMails,
 			cls: 'x-btn-text-icon',
 			scope:this,
