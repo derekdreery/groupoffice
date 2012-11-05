@@ -1,4 +1,4 @@
-00-00-2012 4.0.122
+05-11-2012 4.0.122
 - Create new user group: able to add new users immediately after group has been created.
 - Latest versions of PHP 5.4 demand that email messages encodings are explicitly defined in GO, and so they are now.
 - RecurrencePattern could go into endless loop
@@ -8,6 +8,8 @@
 - When using LDAP authentication it will not fall back to Group-Office login when LDAP authentication fails.
 - Smarter address and housenumber handling with ActiveSync
 - Use <base> html tag to correct relative links in HTML e-mails
+- Multiple resources were not saved
+- E-mail folder with a " sign was not selectable
 
 29-10-2012 4.0.121
 - New log file contained too much info.

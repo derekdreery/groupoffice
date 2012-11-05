@@ -5,7 +5,13 @@
 								<h1><?php echo GOS::t('profileTitle'); ?></h1>								
 								<p><?php echo GOS::t('profileText'); ?></p>
 								
-								<?php echo $this->notifications->render('profile'); ?>
+								<?php 
+								if(GOS::site()->notifier->hasMessage('success')){
+									echo GOS::site()->notifier->getMessage('success');
+								}  else if(GOS::site()->notifier->hasMessage('error')) {
+									echo '<div class="notification notice-error">'.GOS::site()->notifier->getMessage('error').'</div>';
+								}								
+								?>
 								
 								<?php 
 									GO_Base_Html_Form::renderBegin('sites/user/profile','profile',true);
@@ -48,7 +54,11 @@
 										"model" => $contact,
 										"name" => "email",
 									));
-									
+									?>
+									<?php echo GO_Sites_Components_Html::activeLabelEx($contact, 'email'); ?>
+									<?php echo GO_Sites_Components_Html::activeTextField($contact, 'email'); ?>
+									<?php echo GO_Sites_Components_Html::error($contact, 'email'); ?>
+									<?php
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => GOS::t('address'),

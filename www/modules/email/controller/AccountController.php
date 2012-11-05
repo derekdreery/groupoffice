@@ -213,7 +213,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 
 				$alias = $account->getDefaultAlias();
 				if($alias){
-					$nodeId='account_' . $account->id;
+					$nodeId=base64_encode('account_' . $account->id);
 					
 					$node = array(
 							'text' => $alias->email,

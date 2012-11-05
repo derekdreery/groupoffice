@@ -1,17 +1,4 @@
-<div class="hoofd-kader-menu">
 
-			<div class="hoofd-tab-left">
-				<div class="hoofd-tab-right">
-					<a class="hoofd-tab-center" href="#">
-						Register
-					</a>
-				</div>
-			</div>
-
-		</div>		
-		<div class="hoofd-kader-top"></div>
-
-		<div class="hoofd-kader-center">
 
 <div class="subkader-small-top">
 						<div class="subkader-small-bottom">
@@ -153,5 +140,3 @@
 						<p>SSL secured connection verified by Equifax Secure Inc. </p>
 					</div>
 	
-	</div>
-	<div class="hoofd-kader-bottom"></div>
