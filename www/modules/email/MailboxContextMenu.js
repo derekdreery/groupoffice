@@ -1,4 +1,4 @@
-GO.email.TreeContextMenu = Ext.extend(Ext.menu.Menu,{
+GO.email.MailboxContextMenu = Ext.extend(Ext.menu.Menu,{
 	
 	hasAcl : function(node){
 		
@@ -289,7 +289,7 @@ GO.email.TreeContextMenu = Ext.extend(Ext.menu.Menu,{
 			this.items.push(GO.email.extraTreeContextMenuItems[i]);
 		}
 		
-		GO.email.TreeContextMenu.superclass.initComponent.call(this);
+		GO.email.MailboxContextMenu.superclass.initComponent.call(this);
 		
 
 	}
