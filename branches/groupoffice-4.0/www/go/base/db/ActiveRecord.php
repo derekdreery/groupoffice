@@ -1744,7 +1744,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				return $value;
 				break;
 			default:
-				return $html ? htmlspecialchars($value, ENT_COMPAT,'UTF-8') : $value;
+				if($this->columns[$attributeName]['dbtype']=='int')
+					return intval($value);
+				else 
+					return $html ? htmlspecialchars($value, ENT_COMPAT,'UTF-8') : $value;
 				break;
 		}		
 	}
