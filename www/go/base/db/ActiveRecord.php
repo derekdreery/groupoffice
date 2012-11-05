@@ -3611,6 +3611,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	public function getDefaultAttributes(){
 		$attr=array();
 		foreach($this->getColumns() as $field => $colAttr){
+			if(isset($colAttr['default']))
 				$attr[$field]=$colAttr['default'];
 		}
 		
