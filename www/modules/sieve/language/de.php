@@ -110,3 +110,4 @@ $l["redirect_copy_to"]= 'Leite Kopie weiter an';
 $l["toFolder"]= 'In Ordner';
 $l['pleaseSelectOne']='Bitte wählen';
 $l['setRead']='Markiere Nachricht als gelesen';
+$l["vacAlsoMailTo"]= 'Abwesenheitsnotiz aktiv für';

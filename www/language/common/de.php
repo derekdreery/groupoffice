@@ -551,3 +551,5 @@ $l['numMaxValue']="Der maximale Wert für dieses Feld ist {0}";
 $l['cannotMoveError']="%s Einträge können nicht verschoben werden, da Sie keine Schreibrechte besitzen.";
 $l['queued']="Anstehend";
 $l['uploadQueueEmpty']="Warteschlange für Uploads ist leer";
+$l['logFiles']='Logdateien';
+$l['cliOnly']= "Das Skript kann nur durch das Group-Office Command Line Interface (CLI) ausgeführt werden.";
