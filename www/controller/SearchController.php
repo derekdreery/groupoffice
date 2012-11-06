@@ -173,7 +173,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 //			}
 //		}
 		
-		$storeParams = $store->getDefaultParams($params);
+		$storeParams = $store->getDefaultParams($params)->select("t.*,l.description AS link_description");
 		
 		//if(!empty($params['folder_id']))
 		$storeParams->getCriteria ()->addCondition ('folder_id', $params['folder_id'],'=','l');
