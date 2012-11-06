@@ -62,6 +62,10 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_Interface{
 	 */
 	public function set($key, $value, $ttl=0){
 		
+		//don't set false values because unserialize returns false on failure.
+		if($key===false)
+			return true;
+		
 		$key = GO_Base_Fs_File::stripInvalidChars($key,'-');
 						
 		if($ttl){
@@ -69,9 +73,7 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_Interface{
 			$this->_ttlsDirty=true;
 		}
 		
-		file_put_contents($this->_dir.$key, serialize($value));
-		
-		
+		return file_put_contents($this->_dir.$key, serialize($value));
 		
 	}
 	
@@ -96,7 +98,7 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_Interface{
 			$data = file_get_contents($this->_dir.$key);
 			$unserialized = unserialize($data);
 			
-			if(!$unserialized){
+			if($unserialized===false){
 				trigger_error("Could not unserialize key data from file ".$this->_dir.$key);
 				return false;
 			}else
