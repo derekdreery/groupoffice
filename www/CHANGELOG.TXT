@@ -1,6 +1,7 @@
 06-11-2012 4.0.123 
 - Addresslist filters in the Addressbook module will only apply to the grid next to it.
 - Fixed status message problem in ticket panel
+- Sort the files in the projects displaypanel on mtime DESC
 - Mark complete e-mail folder as read function added
 - Separate context menu for e-mail account
 - Prevent deletion of special folders in e-mail like Sent items, Trash and Drafts
