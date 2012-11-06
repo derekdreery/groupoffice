@@ -90,6 +90,7 @@ $l["read"]='Read';
 $l["NA"]='N/A';
 $l["emptyFolder"]='Empty folder';
 $l["emptyFolderConfirm"]='Are you sure you want to EMPTY \'{name}\'?';
+$l["markFolderReadConfirm"]='Are you sure you want to mark all messages in folder \'{name}\' as read?';
 $l["addUnknownRecipients"]='Add unknown recipients';
 $l["addUnknownRecipientsText"]='You just sent an e-mail to one or more recipients that are not in your addressbook. Click on a name if you want to add that person or close this window.';
 $l["addUnknownSenders"]='Add unknown senders';

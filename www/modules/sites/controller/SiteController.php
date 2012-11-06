@@ -56,20 +56,32 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 	 * Only if attributes are provided by the POST request shall the model be saved
 	 */
 	public function actionRegister() {
-		$user = new GO_Base_Model_User();
+		$user = new GO_Base_Model_User();		
 		$contact = new GO_Addressbook_Model_Contact();
-		$company = new GO_Addressbook_Model_Company();
+		
+		//set additional required fields
+		$contact->setValidationRule('address', 'required', true);
+		$contact->setValidationRule('zip', 'required', true);
+		$contact->setValidationRule('city', 'required', true);
+		
+		$user->setValidationRule('passwordConfirm', 'required', true);
+		$company = new GO_Addressbook_Model_Company();		
 		
 		if(GO_Base_Util_Http::isPostRequest())
 		{
 			$user->setAttributes($_POST['User']);
 			$contact->setAttributes($_POST['Contact']);
-			if($user->validate() && $contact->validate())
-			{
-				GO::$ignoreAclPermissions = true; //Guest have no right to create users by default ignore this
+			$company->setAttributes($_POST['Company']);
+			if($user->validate() && $contact->validate() && $company->validate())
+			{				
+				$company->save();
+				
+				GO::setIgnoreAclPermissions(); //allow guest to creatr user
+				
 				if($user->save())
 				{
 					$contact = $user->createContact();
+					$contact->company_id=$company->id;
 					$contact->setAttributes($_POST['Contact']);
 					$user->addToGroups(GOS::site()->getSite()->getDefaultGroupNames()); // Default groups are in si_sites table
 					$addressbook = GO_Addressbook_Model_Addressbook::model()->getUsersAddressbook();

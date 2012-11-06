@@ -25,6 +25,7 @@ GO.addressbook.MainPanel = function(config)
 		region: 'center',
 		id: 'ab-contacts-grid-panel'
 	});
+    this.contactsGrid.applyAddresslistFilters();
 
 	this.contactsGrid.on("delayedrowselect",function(grid, rowIndex, r){
 		//this.contactsGrid.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
@@ -57,6 +58,7 @@ GO.addressbook.MainPanel = function(config)
 		region: 'center',
 		id: 'ab-company-grid-panel'
 	});
+    this.companiesGrid.applyAddresslistFilters();
 
 	this.companiesGrid.on("delayedrowselect",function(grid, rowIndex, r){
 		this.companyEastPanel.load(r.get('id'));

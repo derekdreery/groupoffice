@@ -502,7 +502,7 @@ div.subkader-block{
 
 .formlabel, label{
 	float:left;
-	width:130px;
+	width:150px;
 }
 label.checkbox, .buttonList label { width: auto; margin-right: 10px; float: none; }
 .buttonList {min-height: 22px;}
@@ -536,10 +536,10 @@ span.required {
 	padding:2px;
 }
 
-.formrow input[type="text"], .formrow textarea, .formrow select, .formrow file{
+.formrow input[type="text"],input[type="password"] .formrow textarea, .formrow select, .formrow file{
 	width:250px;
 }
-.row input[type="text"], .row textarea, .row select, .row file{
+.row input[type="text"],input[type="password"], .row textarea, .row select, .row file{
 	width:250px;
 }
 

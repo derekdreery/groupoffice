@@ -160,6 +160,12 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		return $attr;
 	}
 	
+	public function attributeLabels() {
+		$labels = parent::attributeLabels();
+		$labels['passwordConfirm']=GO::t("passwordConfirm");
+		return $labels;
+	}
+	
 	/**
 	 * Getter function for the ACL function
 	 * @return int 

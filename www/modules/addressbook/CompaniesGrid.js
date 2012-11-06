@@ -225,5 +225,8 @@ GO.addressbook.CompaniesGrid = function(config){
 
 
 Ext.extend(GO.addressbook.CompaniesGrid, GO.grid.GridPanel, {	
-	
+	applyAddresslistFilters : function()
+    {
+      this.store.setBaseParam('addresslist_filters', 1);
+    }
 });

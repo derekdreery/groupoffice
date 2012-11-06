@@ -77,6 +77,18 @@ class GO_Email_Controller_Folder extends GO_Base_Controller_AbstractController {
 		return array("success"=>$success);
 	}
 	
+	protected function actionMarkAsRead($params){
+		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+				
+		/* @var $imap GO_Base_Mail_Imap */	
+		
+		$imap = $account->openImapConnection($params["mailbox"]);
+		$uids = $imap->search("unseen");
+		$success=$imap->set_message_flag($uids, "\Seen");
+		
+		return array("success"=>$success);
+	}
+	
 	protected function actionMove($params){
 		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
