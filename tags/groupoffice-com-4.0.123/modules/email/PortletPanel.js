@@ -1,0 +1,146 @@
+GO.email.PortletPanel = Ext.extend(Ext.Panel, {
+
+	height:400,
+	//autoHeight:true,	
+		
+	initComponent : function(){	
+		
+		Ext.applyIf(this, {
+				// Configuration for this Panel
+				layout:"border"
+		});
+		
+		this.tabPanel = new Ext.TabPanel({
+			region:'north',
+			title:'test',
+			border:false,
+			items:[{title:"dummy"}]
+		});
+		
+		this.folderStore = new GO.data.JsonStore({
+			url:GO.url('email/portlet/portletFoldersByUser'),
+			root: 'results',
+			totalProperty: 'total',
+			fields:['account_id','folder_name','user_id','mtime','name'],
+			remoteSort: true
+		});
+		
+		this.messageStore = new GO.data.JsonStore({
+			url:GO.url('email/message/store'),
+//			baseParams: {
+//				task: 'messages'
+//			},
+			root: 'results',
+			totalProperty: 'total',
+			id: 'uid',
+			fields:['uid','icon','flagged','attachments','new','subject','from','sender','size','date', 'priority','answered','forwarded'],
+			remoteSort: true
+		});
+		
+		this.messagesGrid = new GO.email.MessagesGrid({
+			id:'emp-messagesgrid',
+			store:this.messageStore,
+			hideSearch:true,
+			region:"center"
+		});
+		
+		this.messagesGrid.on('rowdblclick', function(grid, rowIndex)
+		{
+			var record = grid.getStore().getAt(rowIndex);
+
+			if(!GO.email.messagePortletDialog)
+			{
+				GO.email.messagePortletDialog = new GO.email.MessageDialog({});
+			}
+			
+			GO.email.messagePortletDialog.show(record.id, record.store.baseParams.mailbox, record.store.baseParams.account_id);
+		
+		}, this);
+		
+		this.folderStore.on('load', function()
+		{
+			// Remove all tabs
+			this.tabPanel.removeAll(true);
+//			
+			if(!this.folderStore.data.length || this.folderStore.data.length == 0)
+			{
+//				// Add an empty tab to the panel
+				this.tabPanel.add(new Ext.Panel({
+					title:GO.email.lang.noEmailFolders
+				}));
+			}
+			else
+			{
+				for(var i=0; i<this.folderStore.data.length; i++)
+				{
+					var folder = this.folderStore.data.items[i].data;
+					
+					var panel = new Ext.Panel({
+						id:'account_'+folder.account_id+':'+folder.name,
+						account_id:folder.account_id,
+						folder_id:folder.folder_name,
+						title:folder.name,
+						mailbox:folder.folder_name,
+						layout:'fit',
+						closable:true
+					});
+					
+					panel.on('show', function(e)
+					{
+						this.loadMessagepanel(e);
+					},this);
+
+					panel.on('close', function(e)
+					{
+						var record = this.folderStore.getAt(e.index);
+						this.folderStore.remove(record);
+						
+						GO.request({
+							url : 'email/portlet/disablePortletFolder',
+							params : {
+								account_id : e.account_id,
+								mailbox : e.mailbox
+							},
+							fail:function(){
+								this.folderStore.reload();
+							},
+							success:function(){
+								this.folderStore.reload();
+							},
+							scope : this
+						});
+
+					},this);
+
+					this.tabPanel.add(panel);
+				}				
+			}
+
+			this.tabPanel.setActiveTab(0);
+			this.tabPanel.doLayout();
+			
+		}, this);
+				
+		
+		
+		// Add the tabpanel and messageGrid to the Portlet panel
+		this.items=[this.tabPanel,this.messagesGrid];
+
+		GO.email.PortletPanel.superclass.initComponent.call(this);
+		
+		this.on("render",function(){
+			this.folderStore.load();
+		}, this);
+		
+		
+	},
+	loadMessagepanel : function(e){
+		this.messagesGrid.store.baseParams.account_id = e.account_id;
+		this.messagesGrid.store.baseParams.folder_name = e.folder_name;
+		this.messagesGrid.store.baseParams.mailbox = e.mailbox;
+
+		this.messagesGrid.store.load();
+	}
+	
+	
+});
