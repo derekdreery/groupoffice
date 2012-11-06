@@ -85,9 +85,9 @@
 	</div>
 	
 	<div class="row">
-		<?php echo GO_Sites_Components_Html::activeLabelEx($contact, 'company'); ?>
-		<?php echo GO_Sites_Components_Html::activeTextField($contact, 'company'); ?>
-		<?php echo GO_Sites_Components_Html::error($contact, 'company'); ?>
+		<?php echo GO_Sites_Components_Html::label('Company', "Company_name", array('required'=>true)); ?>
+		<?php echo GO_Sites_Components_Html::activeTextField($company, 'name'); ?>
+		<?php echo GO_Sites_Components_Html::error($company, 'name'); ?>
 	</div>
 	
 	<div class="row">
@@ -107,6 +107,8 @@
 		<?php echo GO_Sites_Components_Html::activeTextField($company, 'vat_no'); ?>
 		<?php echo GO_Sites_Components_Html::error($company, 'vat_no'); ?>
 	</div>
+	
+	<div class="row"><br /></div>
 	
 	<div class="row">
 		<?php echo GO_Sites_Components_Html::activeLabelEx($user, 'username'); ?>

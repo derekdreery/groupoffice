@@ -134,7 +134,13 @@ GO.email.AccountsTree = function(config){
 	
 	
 	
-	this.treeContextMenu = new GO.email.TreeContextMenu({		
+	this.mailboxContextMenu = new GO.email.MailboxContextMenu({		
+		treePanel:this,
+		messagesGrid:this.messagesGrid
+	});
+	
+	
+	this.accountContextMenu = new GO.email.AccountContextMenu({		
 		treePanel:this,
 		messagesGrid:this.messagesGrid
 	});
@@ -153,9 +159,15 @@ GO.email.AccountsTree = function(config){
 		
 		var coords = e.getXY();
 
-		this.treeContextMenu.setNode(node);
-
-		this.treeContextMenu.showAt([coords[0], coords[1]]);
+		if(node.attributes.isAccount){
+			this.accountContextMenu.setNode(node);
+			this.accountContextMenu.showAt([coords[0], coords[1]]);
+		}else
+		{
+			this.mailboxContextMenu.setNode(node);
+			this.mailboxContextMenu.showAt([coords[0], coords[1]]);
+		}
+		
 	}, this);
 	
 	
