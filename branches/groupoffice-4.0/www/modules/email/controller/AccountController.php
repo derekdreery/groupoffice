@@ -150,7 +150,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		if ($params['node'] == 'root') 
 			return $this->_getMailboxTreeNodes($rootMailboxes, true);
 		else{
-			$parts = explode('_', $params['node']);
+			$parts = explode('_', base64_decode($params['node']));
 			$type = array_shift($parts);
 			$accountId = array_shift($parts);
 			$mailboxName = implode('_', $parts);
