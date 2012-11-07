@@ -836,8 +836,11 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		
 //		var ctFieldVal = this.emailEditor.hiddenCtField.getValue();
 //		var inlineImgVal = this.emailEditor.hiddenInlineImagesField.getValue();
-		var attachVal = this.emailEditor.hiddenAttachmentsField.getValue(); // remember attachment
+//		var attachVal = this.emailEditor.hiddenAttachmentsField.getValue(); // remember attachment
+		var attachmentmentsData=[];
 		var attachments = this.emailEditor.attachmentsView.store.getRange(); 
+		for(var i=0;i<attachments.length;i++)
+			attachmentmentsData.push(attachments[i].data);
 		
 		this.formPanel.form.load({
 					url : url,
@@ -855,11 +858,15 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 						if(action.result.sendParams)
 							Ext.apply(this.sendParams, action.result.sendParams);
 						
+						//add attachments to result so emailEditor will set this after form load.
+						action.result.attachments=attachments;
+						
 //						this.emailEditor.hiddenCtField.setValue(ctFieldVal);
 //						this.emailEditor.hiddenInlineImagesField.setValue(inlineImgVal);
-						this.emailEditor.hiddenAttachmentsField.setValue(attachVal);
-						//console.log(attachments);
-						this.emailEditor.attachmentsView.store.loadData({results: attachments, total: attachments.length});
+//						this.emailEditor.hiddenAttachmentsField.setValue(attachVal);
+//						this.emailEditor.attachmentsView.store.loadData({results: attachments, total: attachments.length});
+						
+						this.emailEditor.setAttachments(attachmentmentsData);
 						
 					},
 					scope : this
