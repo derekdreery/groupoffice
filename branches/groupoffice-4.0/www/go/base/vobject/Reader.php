@@ -112,9 +112,9 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 	 * @return int Seconds
 	 */
 	public static function parseDuration($duration){
-		preg_match('/(-?)P([0-9]+[WD])?T?([0-9]+H)?([0-9]+M)?([0-9]+S)?/', (string) $duration, $matches);
-
-
+		if(!preg_match('/(-?)P([0-9]+[WD])?T?([0-9]+H)?([0-9]+M)?([0-9]+S)?/', (string) $duration, $matches))
+			return false;
+		
 		$negative = $matches[1]=='-' ? -1 : 1;
 
 		$days = 0;
