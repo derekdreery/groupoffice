@@ -230,7 +230,14 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	}
 	
 	public function has_capability($str){
-		return stripos($this->get_capability(), $str)!==false;
+		$has = stripos($this->get_capability(), $str)!==false;
+		
+		//We stumbled upon a dovecot server that crashed when sending a command
+		//using LIST-EXTENDED. With this option we can workaround that issue.
+		if($has && stripos(GO::config()->disable_imap_capabilities, $str)!==false)
+			$has=false;		
+		
+		return $has;
 	}
 
 

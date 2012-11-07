@@ -585,6 +585,14 @@ class GO_Base_Config {
 	 * @var boolean 
 	 */
 	var $swift_qp_dot_escape=false;
+	
+	/**
+	 * We stumbled upon a dovecot server that crashed when sending a command 
+	 * using LIST-EXTENDED. With this option we can workaround that issue.
+	 * 
+	 * @var string 
+	 */
+	var $disable_imap_capabilities="";
 
 	/**
 	 * A comma separated list of smtp server IP addresses that you
