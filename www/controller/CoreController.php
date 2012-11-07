@@ -43,6 +43,15 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 
 		return $response;
 	}
+	
+	protected function actionUpdateLink($params){
+		$model1 = GO::getModel($params['model_name1'])->findByPk($params['model_id1']);
+		$model2 = GO::getModel($params['model_name2'])->findByPk($params['model_id2']);
+		$model1->updateLink($model2, array('description'=>$params['description']));
+		$model2->updateLink($model1, array('description'=>$params['description']));
+		
+		return array('success'=>true);
+	}
 
 	/**
 	 * Get users

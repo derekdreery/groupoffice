@@ -98,7 +98,7 @@ class GO_Base_Util_Http {
 		}
 		if (GO_Base_Util_Http::isInternetExplorer()) {
 			header('Content-Type: application/download');
-			header('Content-Disposition: '.$disposition.'; filename="' . $file->name() . '"');
+			header('Content-Disposition: '.$disposition.'; filename="' .rawurlencode($file->name()). '"');
 
 			if (!$cache) {
 				header('Cache-Control: must-revalidate, post-check=0, pre-check=0');

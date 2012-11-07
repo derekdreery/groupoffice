@@ -150,7 +150,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		if ($params['node'] == 'root') 
 			return $this->_getMailboxTreeNodes($rootMailboxes, true);
 		else{
-			$parts = explode('_', $params['node']);
+			$parts = explode('_', base64_decode($params['node']));
 			$type = array_shift($parts);
 			$accountId = array_shift($parts);
 			$mailboxName = implode('_', $parts);
@@ -382,8 +382,9 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			$state = GO::config()->get_setting("email_accounts_tree", GO::user()->id);
 			
 			if(empty($state)){
+				$decoded = base64_decode($nodeId);
 				//account and inbox nodes are expanded by default
-				if((stristr($nodeId, 'account') || substr($nodeId,-6)=='_INBOX')){
+				if((stristr($decoded, 'account') || substr($decoded,-6)=='_INBOX')){
 					return true;
 				}else
 				{

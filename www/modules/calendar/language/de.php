@@ -190,3 +190,4 @@ $l['updateReponses']["TENTATIVE"]='%s hat den Termin %s als vorläufig markiert'
 $l['cancelMessage']='Der folgende Termin, zu dem Sie eingeladen waren, wurde abgesagt.';
 $l['directUrl']='Direktlink';
 $l['cantRemoveOrganizer']="Sie können den Organisator nicht löschen.";
+$l['calendarColor']='Kalenderfarbe';
