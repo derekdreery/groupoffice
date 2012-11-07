@@ -1,5 +1,22 @@
-???? 4.0.123 
+07-11-2012 4.0.124
+- E-mail Inbox and account nodes expanded by default again
+- Remember attachments when switching e-mail template
+- Added some more options to e-mail account context menu
+- Add senders to addresslist displayed addresslists twice sometimes
+- Updated Norwegian translation
+- Fixed UTF8 problem in IE with downloads
+
+06-11-2012 4.0.123 
 - Addresslist filters in the Addressbook module will only apply to the grid next to it.
+- Fixed status message problem in ticket panel
+- Sort the files in the projects displaypanel on mtime DESC
+- Mark complete e-mail folder as read function added
+- Separate context menu for e-mail account
+- Prevent deletion of special folders in e-mail like Sent items, Trash and Drafts
+- Continue to next page on billing could not be unchecked
+- Updated German translation
+- Link descriptions implemented
+- Fixed "Could not unserialize key data from file" notices in log
 
 05-11-2012 4.0.122
 - Create new user group: able to add new users immediately after group has been created.

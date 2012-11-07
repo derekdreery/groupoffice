@@ -104,6 +104,15 @@ class GO_Ldapauth_Authenticator {
 			GO::debug("LDAPAUTH: LDAP authentication FAILED for " . $username);
 			GO::session()->logout();
 			
+			
+			$str = "LOGIN FAILED" ;		
+			$str .= " for user: \"" . $username . "\" from IP: ";
+			if(isset($_SERVER['REMOTE_ADDR']))
+				$str .= $_SERVER['REMOTE_ADDR'];
+			else
+				$str .= 'unknown';
+			GO::infolog($str);
+			
 			//block user from logging in. If we don't throw the exception here normal Group-Office login will continue.
 			throw new Exception(GO::t('badLogin').' (LDAP)');
 			

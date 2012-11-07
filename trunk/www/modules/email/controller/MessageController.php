@@ -75,7 +75,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		if (count($filters)) {
 			$imap = $account->openImapConnection($mailbox);
 
-			$messages = GO_Email_Model_ImapMessage::model()->find($account, $mailbox,0, 0, GO_Base_Mail_Imap::SORT_ARRIVAL, false, "NEW");
+			$messages = GO_Email_Model_ImapMessage::model()->find($account, $mailbox,0, 0, GO_Base_Mail_Imap::SORT_ARRIVAL, false, "UNSEEN");
 			if(count($messages)){
 				while ($filter = array_shift($filters)) {
 					$matches = array();
@@ -653,7 +653,11 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	private function _keepHeaders(&$response, $params) {
 		if (!empty($params['keepHeaders'])) {
 			unset(
-							$response['data']['to'], $response['data']['cc'], $response['data']['bcc'], $response['data']['subject']
+							$response['data']['to'], 
+							$response['data']['cc'], 
+							$response['data']['bcc'], 
+							$response['data']['subject'],
+							$response['data']['attachments']
 			);
 		}
 	}

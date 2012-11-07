@@ -41,8 +41,8 @@ GO.grid.LinksGrid = function(config){
 		url: GO.url('search/links'),			
 		baseParams: {
 			task: "links",
-			link_id: this.link_id,
-			link_type: this.link_type,
+			model_id: this.model_id,
+			model_name: this.model_name,
 			folder_id: this.folder_id,
 			type_filter:'true',
 			no_filter_save: config.noFilterSave
@@ -50,7 +50,7 @@ GO.grid.LinksGrid = function(config){
 		root: 'results',
 		totalProperty: 'total',
 		id: 'model_name_and_id',
-		fields: ['icon','id', 'model_name','name','model_type_id','type','mtime','model_id','module', 'description', 'name_and_type', 'model_name_and_id'],
+		fields: ['icon','id', 'model_name','name','model_type_id','type','mtime','model_id','module', 'description', 'name_and_type', 'model_name_and_id','link_description'],
 		remoteSort: true
 
 	});
@@ -169,14 +169,13 @@ Ext.extend(GO.grid.LinksGrid, GO.grid.EditorGridPanel, {
 		
 		this.on('afteredit', function(e) {
 			
-			Ext.Ajax.request({
-				url:GO.settings.config.host+'action.php',
+			GO.request({
+				url:"core/updateLink",
 				params:{
-					task:'updatelink',
-					link_id1: this.store.baseParams.link_id,
-					link_type1: this.store.baseParams.link_type,
-					link_id2:e.record.get("id"),
-					link_type2:e.record.get("link_type"),
+					model_id1: this.store.baseParams.model_id,
+					model_name1: this.store.baseParams.model_name,
+					model_id2:e.record.get("model_id"),
+					model_name2:e.record.get("model_name"),
 					description:e.record.get("link_description")
 				},
 				success: function(response, options)

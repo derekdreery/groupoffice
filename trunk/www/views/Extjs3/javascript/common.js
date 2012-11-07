@@ -300,7 +300,8 @@ GO.deleteItems = function(config)
 							callback = config.failure.createDelegate(config.scope);
 							callback.call(config.scope, config);
 						}
-						alert( this.reader.jsonData.deleteFeedback);
+						Ext.MessageBox.alert(GO.lang.strError,this.reader.jsonData.deleteFeedback);
+//						alert( this.reader.jsonData.deleteFeedback);
 					}else
 					{
 						if(config.success)
@@ -357,7 +358,8 @@ GO.deleteItems = function(config)
 							callback = config.failure.createDelegate(config.scope);
 							callback.call(this, responseParams);
 						}
-						alert( responseParams.feedback);
+//						alert( responseParams.feedback);
+						Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
 					}else
 					{
 						if(config.success)

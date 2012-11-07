@@ -289,4 +289,17 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 	public function snoozeAlarm(){
 		GO::cache()->set($this->_getCacheKey(), $this->unseen);	
 	}
+	
+	/**
+	 * Returns true if this is the sent, trash or drafts folder.
+	 * 
+	 * @return boolean
+	 */
+	public function isSpecial(){
+		return (
+						$this->name==$this->account->sent ||
+						$this->name==$this->account->trash ||
+						$this->name==$this->account->drafts 
+						);
+	}
 }

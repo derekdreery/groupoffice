@@ -97,8 +97,12 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 	originalValue : "",
 	
 	afterLoad : function(action){
-		this.setInlineAttachments(action.result.data.inlineAttachments);
-		this.setAttachments(action.result.data.attachments);		
+		
+		if(action.result.data.inlineAttachments)
+			this.setInlineAttachments(action.result.data.inlineAttachments);
+		
+		if(action.result.data.attachments)
+			this.setAttachments(action.result.data.attachments);		
 		
 		this.setOriginalValue();
 	},
@@ -342,7 +346,6 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 	},
 	
 	setAttachments : function(attachments){
-		
 		this.attachments=[];
 		
 		if(attachments){

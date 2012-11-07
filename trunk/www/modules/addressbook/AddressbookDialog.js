@@ -56,7 +56,7 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 				items:[{
 					border:false,
 					layout:'form',
-					columnWidth:.9,
+					columnWidth:.8,
 					items:{
 						xtype:'textfield',
 						fieldLabel: GO.addressbook.lang['defaultSalutation'],
@@ -66,7 +66,7 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 						value:GO.addressbook.lang.defaultSalutationExpression
 					}
 				},{
-					columnWidth:.1,
+					columnWidth:.2,
 					border:false,
 					items:{
 						xtype:'button',

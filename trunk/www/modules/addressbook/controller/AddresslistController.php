@@ -35,7 +35,11 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 	}
 
 	public function formatStoreRecord($record, $model, $store) {
-		$record['text'] = $record['name'];
+		if (!empty($_POST['forContextMenu'])) {
+			$record['text'] = $record['name'];
+			$record['addresslist_id']=$record['id'];
+			unset($record['id']);
+		}
 		return $record;
 	}
 	

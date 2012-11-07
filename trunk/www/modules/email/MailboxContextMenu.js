@@ -116,7 +116,7 @@ GO.email.MailboxContextMenu = Ext.extend(Ext.menu.Menu,{
 			},
 			scope:this
 		}),'-',	new Ext.menu.Item({
-			iconCls: 'btn-delete',
+//			iconCls: 'btn-delete',
 			text:GO.email.lang.markAsRead,
 			cls: 'x-btn-text-icon',
 			scope:this,
@@ -149,7 +149,7 @@ GO.email.MailboxContextMenu = Ext.extend(Ext.menu.Menu,{
 				}, this);
 			}
 		}),	new Ext.menu.Item({
-			iconCls: 'btn-delete',
+			iconCls: 'btn-cut',
 			text:GO.email.lang.moveOldMails,
 			cls: 'x-btn-text-icon',
 			scope:this,
@@ -232,9 +232,6 @@ GO.email.MailboxContextMenu = Ext.extend(Ext.menu.Menu,{
 								if(GO.emailportlet){
 									GO.emailportlet.foldersStore.load();
 								}
-							}else
-							{
-								Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
 							}
 						},
 						count: 1,

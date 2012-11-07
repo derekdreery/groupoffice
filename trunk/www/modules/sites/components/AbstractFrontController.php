@@ -20,22 +20,22 @@
  */
 abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Controller_AbstractController
 {
-	/**
-	 * Frontend action can be accessed without moduel access
-	 * @return array actions that can be accessed withou module access 
-	 */
-	protected function allowWithoutModuleAccess()
-	{
-		return array('*');
-	}
-	/**
-	 * By default allow guest to the frontend
-	 * Override again of pages requere login
-	 * @return array action that can be accessed as guest 
-	 */
-	protected function allowGuests() {
-		return array('*');
-	}
+//	/**
+//	 * Frontend action can be accessed without moduel access
+//	 * @return array actions that can be accessed withou module access 
+//	 */
+//	protected function allowWithoutModuleAccess()
+//	{
+//		return array('*');
+//	}
+//	/**
+//	 * By default allow guest to the frontend
+//	 * Override again of pages requere login
+//	 * @return array action that can be accessed as guest 
+//	 */
+//	protected function allowGuests() {
+//		return array('*');
+//	}
 	
 	/**
 	 * @var string the name of the layout to be applied to this controller's views.

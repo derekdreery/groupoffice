@@ -46,6 +46,7 @@ GO.dialog.LinksDialog = function(config){
 		listeners : {
 			show:function(){
 				this.grid.load();
+				this.grid.linkDescriptionField.reset();
 			},
 			scope:this
 		},
@@ -176,6 +177,7 @@ Ext.extend(GO.dialog.LinksDialog, Ext.Window, {
 				{
 					this.fireEvent('link');
 					this.grid.searchGrid.getSelectionModel().clearSelections();
+					
 					this.hide();
 				}
 			},

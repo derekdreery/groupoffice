@@ -451,7 +451,7 @@ class GO{
 		set_error_handler(array('GO','errorHandler'));
 		register_shutdown_function(array('GO','shutdown'));
 
-   		spl_autoload_register(array('GO', 'autoload'));	
+   	spl_autoload_register(array('GO', 'autoload'));	
 
 		//Start session here. Important that it's called before GO::config().
 		GO::session();
@@ -660,10 +660,12 @@ class GO{
 	public static function logError($errorMsg){		
 		$logDir = GO::config()->file_storage_path . 'log';
 		
-		if(!is_dir($logDir))
-			mkdir($logDir,0755, true);
-		
-		file_put_contents($logDir. '/error.log', $errorMsg . "\n", FILE_APPEND);
+		if(is_writable(GO::config()->file_storage_path)){
+			if(!is_dir($logDir))
+				mkdir($logDir,0755, true);
+
+			file_put_contents($logDir. '/error.log', $errorMsg . "\n", FILE_APPEND);
+		}
 	}
 
 

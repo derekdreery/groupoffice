@@ -76,7 +76,7 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 			{				
 				$company->save();
 				
-				GO::setIgnoreAclPermissions(); //allow guest to creatr user
+				GO::setIgnoreAclPermissions(); //allow guest to create user
 				
 				if($user->save())
 				{
@@ -210,7 +210,16 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 	protected function actionProfile(){
 		
 		$user = GO::user();
+		
 		$contact = $user->contact;
+		
+		//set additional required fields
+		$contact->setValidationRule('address', 'required', true);
+		$contact->setValidationRule('zip', 'required', true);
+		$contact->setValidationRule('city', 'required', true);
+		
+//		$user->setValidationRule('passwordConfirm', 'required', false);
+		$user->setValidationRule('password', 'required', false);
 		
 		if($contact->company)
 			$company = $contact->company;
@@ -220,38 +229,37 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 		}
 		
 		if (GO_Base_Util_Http::isPostRequest()) {
-			if(!empty($_POST['GO_Base_Model_User']['password']))
+			$user->setAttributes($_POST['User']);
+			
+			if(!empty($_POST['User']['password']))
 			{
-				if(!$user->checkPassword($_POST['currentPassword'])){
+				if(!$user->checkPassword($_POST['User']['password'])){
 					GOS::site()->notifier->setMessage('error', "Huidig wachtwoord onjuist");
-				}else{
-					$user->password = $_POST['GO_Base_Model_User']['password'];
-					$user->passwordConfirm = $_POST['GO_Base_Model_User']['passwordConfirm'];
 				}
 			}else{
 				unset($_POST['GO_Base_Model_User']['password']);
 				unset($_POST['GO_Base_Model_User']['passwordConfirm']);
 			}
 				
-			$contact->attributes = $_POST['GO_Addressbook_Model_Contact'];
-			$user->attributes = $_POST['GO_Base_Model_User'];
-			$company->attributes = $_POST['GO_Addressbook_Model_Company'];
+			$contact->setAttributes($_POST['Contact']);
+			$company->setAttributes($_POST['Company']);
 			
 			if(!empty($_POST['post_address_is_address']))
 				$company->setPostAddressFromVisitAddress();
-
-			GO_Base_Html_Error::validateModel($user);
-			GO_Base_Html_Error::validateModel($contact);
-			GO_Base_Html_Error::validateModel($company);
 			
-			if(!GO_Base_Html_Error::hasErrors()){
+			if($user->validate() && $contact->validate() && $company->validate())
+			{	
+				GO::setIgnoreAclPermissions(); //allow guest to create user
+				
 				$user->save();
-
 				$company->save();
 				$contact->company_id = $company->id;				
 				$contact->save();
-				GOS::site()->notifier->setMessage('success', GOS::t('formEditSuccess'));
-				$this->pageRedirect($this->getPage()->path);
+				
+				GOS::site()->notifier->setMessage('success', GOS::t('formEditSuccess'));				
+			}else
+			{
+				GOS::site()->notifier->setMessage('failed', "Please check the form for errors");
 			}
 		}
 
@@ -262,14 +270,13 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 			 $company->city==$company->post_city
 			){
 			 $company->post_address_is_address = true;
-		}
-				
+		}				
 		
-		GOS::site()->scripts->registerScriptFile($this->getTemplateUrl() .'js/jquery-1.7.2.min.js');
-		GOS::site()->scripts->registerScriptFile($this->getTemplateUrl().'js/profileToggle.js');
+		//clear values for form	
+		$user->password="";
+		$user->passwordConfirm="";
 		
 		$this->render('profile', array('user'=>$user,'contact'=>$contact, 'company'=>$company));
-
 	}
 }
 ?>
