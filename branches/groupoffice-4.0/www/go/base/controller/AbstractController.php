@@ -89,17 +89,17 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * @throws Exception
 	 */
 	protected function lockAction(){
-		$this->_lockedActions[]=$this->_currentAction;;
-		
-		$lockedConfig = 'locked_action_'.$this->_currentAction;
-		
-		if(GO::config()->get_setting($lockedConfig)){
-			throw new Exception("Action ".$this->_currentAction." locked. Another user is currently running this action.");
-		}else
-		{
-			GO::config()->save_setting($lockedConfig,1);
-		}
-		
+//		$this->_lockedActions[]=$this->_currentAction;;
+//		
+//		$lockedConfig = 'locked_action_'.$this->_currentAction;
+//		
+//		if(GO::config()->get_setting($lockedConfig)){
+//			throw new Exception("Action ".$this->_currentAction." locked. Another user is currently running this action.");
+//		}else
+//		{
+//			GO::config()->save_setting($lockedConfig,1);
+//		}
+//		
 		//GO::config()->delete_setting('locked_action_'.$this->_currentAction));
 	}
 	
