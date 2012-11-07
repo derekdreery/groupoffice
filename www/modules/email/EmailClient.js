@@ -203,13 +203,13 @@ GO.email.EmailClient = function(config){
 						permissionLevel: GO.permissionLevels.write,
 						forContextMenu: true
 					},
-					fields: ['id', 'text'],
+					fields: ['addresslist_id', 'text'],
 					remoteSort: true
 				}),
 				listeners:{
 					scope:this,
 					itemclick : function(item, e ) {
-						this.addSendersToAddresslist(item.id);
+						this.addSendersToAddresslist(item.addresslist_id);
 						return false;
 					}
 				}
@@ -232,13 +232,13 @@ GO.email.EmailClient = function(config){
 						permissionLevel: GO.permissionLevels.write,
 						forContextMenu: true
 					},
-					fields: ['id', 'text'],
+					fields: ['addresslist_id', 'text'],
 					remoteSort: true
 				}),
 				listeners:{
 					scope:this,
 					itemclick : function(item, e ) {
-						this.deleteSendersFromAddresslist(item.id);
+						this.deleteSendersFromAddresslist(item.addresslist_id);
 						return false;
 					}
 				}
