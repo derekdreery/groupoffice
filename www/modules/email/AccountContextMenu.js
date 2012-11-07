@@ -60,7 +60,7 @@ GO.email.AccountContextMenu = Ext.extend(Ext.menu.Menu,{
 				if(!this.accountDialog){
 					this.accountDialog = new GO.email.AccountDialog();
 					this.accountDialog.on('save', function(){
-						this.store.reload();
+						GO.mainLayout.getModulePanel("email").refresh();
 						if(GO.email.aliasesStore.loaded)
 						{
 							GO.email.aliasesStore.reload();
