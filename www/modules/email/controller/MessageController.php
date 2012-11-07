@@ -76,7 +76,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$imap = $account->openImapConnection($mailbox);
 
 			$messages = array();
-			$headersSet = $imap->get_message_headers_set(0, 0, "ARRIVAL", false, "UNSEEN");
+			$headersSet = $imap->get_message_headers_set(0, 50, "ARRIVAL", false, "UNSEEN");
 			foreach ($headersSet as $uid => $headers) {
 				$messages[] = GO_Email_Model_ImapMessage::model()->createFromHeaders($account, $mailbox, $uid, $headers);
 			}
