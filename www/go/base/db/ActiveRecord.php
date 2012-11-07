@@ -1959,6 +1959,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @param mixed $value
 	 */
 	public function setValidationRule($columnName, $ruleName, $value){
+		if(!isset($this->columns[$columnName]))
+			throw new Exception("Column $columnName is unknown");
 		$this->columns[$columnName][$ruleName]=$value;
 	}
 	/**
