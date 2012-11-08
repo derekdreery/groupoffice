@@ -36,7 +36,7 @@
 
 						<tr  class="model-row <?php echo $style; ?>" style="border-collapse: collapse;">
 							<td><?php echo $license->name; ?></td>
-							<td colspan="1"><?php echo empty($license->upgrades)?"Allways":$license->getAttribute('upgrades','raw')>time()?$license->upgrades:'Expired'; ?></td>
+							<td colspan="1"><?php echo empty($license->upgrades)?"Allways":$license->getAttribute('upgrades','raw')>time()?$license->getAttribute("upgrades","formatted"):'Expired'; ?></td>
 							<td colspan="2">
 								<?php  if($license->new):?>										
 									<a href="<?php echo $this->createUrl('/licenses/site/setLicense',array('license_id'=>$license->id)); ?>"><b style="color:red; text-decoration:underline;">Set license details first</b></a>

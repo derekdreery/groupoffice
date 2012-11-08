@@ -28,7 +28,7 @@
 </div>
 <div class="row bottons">
 	<?php echo GO_Sites_Components_Html::submitButton('Save license'); ?>
-	<?php echo GO_Sites_Components_Html::resetButton('Cancel'); ?>
+	<?php echo GO_Sites_Components_Html::button('Cancel', array("onclick"=>"document.location='".$this->createUrl("/licenses/site/licenselist")."';")); ?>
 </div>
 <?php echo GO_Sites_Components_Html::endForm(); ?>
 

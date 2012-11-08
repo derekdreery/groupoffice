@@ -10,7 +10,7 @@
 class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	
 	protected function allowGuests() {
-		return array('plupload','compress','cron');
+		return array('compress','cron');
 	}
 	
 	protected function ignoreAclPermissions() {
@@ -595,105 +595,8 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	
 	protected function actionPlupload($params) {
 		
-		if(!GO::user() && !GO_Base_Authorized_Actions::isAuthorized('plupload')){
-			throw new GO_Base_Exception_AccessDenied();
-		}
 		
-		$tmpFolder = new GO_Base_Fs_Folder(GO::config()->tmpdir . 'uploadqueue');
-		//$tmpFolder->delete();
-		$tmpFolder->create();
-
-//		$files = GO_Base_Fs_File::moveUploadedFiles($_FILES['attachments'], $tmpFolder);
-//		GO::session()->values['files']['uploadqueue'] = array();
-//		foreach ($files as $file) {
-//			GO::session()->values['files']['uploadqueue'][] = $file->path();
-//		}
-
-		if(!isset(GO::session()->values['files']['uploadqueue']))
-			GO::session()->values['files']['uploadqueue'] = array();	
-
-		$targetDir=$tmpFolder->path();
-
-		// Get parameters
-		$chunk = isset($params["chunk"]) ? $params["chunk"] : 0;
-		$chunks = isset($params["chunks"]) ? $params["chunks"] : 0;
-		$fileName = isset($params["name"]) ? $params["name"] : '';
-
-// Clean the fileName for security reasons
-		$fileName = GO_Base_Fs_File::stripInvalidChars($fileName);
-		
-// Make sure the fileName is unique but only if chunking is disabled
-//		if ($chunks < 2 && file_exists($targetDir . DIRECTORY_SEPARATOR . $fileName)) {
-//			$ext = strrpos($fileName, '.');
-//			$fileName_a = substr($fileName, 0, $ext);
-//			$fileName_b = substr($fileName, $ext);
-//
-//			$count = 1;
-//			while (file_exists($targetDir . DIRECTORY_SEPARATOR . $fileName_a . '_' . $count . $fileName_b))
-//				$count++;
-//
-//			$fileName = $fileName_a . '_' . $count . $fileName_b;
-//		}
-
-
-// Look for the content type header
-		if (isset($_SERVER["HTTP_CONTENT_TYPE"]))
-			$contentType = $_SERVER["HTTP_CONTENT_TYPE"];
-
-		if (isset($_SERVER["CONTENT_TYPE"]))
-			$contentType = $_SERVER["CONTENT_TYPE"];
-		
-		if(!in_array($targetDir . DIRECTORY_SEPARATOR . $fileName, GO::session()->values['files']['uploadqueue']))
-				GO::session()->values['files']['uploadqueue'][]=$targetDir . DIRECTORY_SEPARATOR . $fileName;
-		
-		$file = new GO_Base_Fs_File($targetDir . DIRECTORY_SEPARATOR . $fileName);
-		if ($file->exists() && $file->size() > GO::config()->max_file_size)
-			throw new Exception("File too large");
-
-// Handle non multipart uploads older WebKit versions didn't support multipart in HTML5
-		if (strpos($contentType, "multipart") !== false) {
-			
-			if (isset($_FILES['file']['tmp_name']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
-				
-				// Open temp file
-				$out = fopen($targetDir . DIRECTORY_SEPARATOR . $fileName, $chunk == 0 ? "wb" : "ab");
-				if ($out) {
-					// Read binary input stream and append it to temp file
-					$in = fopen($_FILES['file']['tmp_name'], "rb");
-
-					if ($in) {
-						while ($buff = fread($in, 4096))
-							fwrite($out, $buff);
-					} else
-						die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
-					fclose($in);
-					fclose($out);
-					@unlink($_FILES['file']['tmp_name']);
-				} else
-					die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
-			} else
-				die('{"jsonrpc" : "2.0", "error" : {"code": 103, "message": "Failed to move uploaded file."}, "id" : "id"}');
-		} else {
-			// Open temp file
-			$out = fopen($targetDir . DIRECTORY_SEPARATOR . $fileName, $chunk == 0 ? "wb" : "ab");
-			if ($out) {
-				// Read binary input stream and append it to temp file
-				$in = fopen("php://input", "rb");
-
-				if ($in) {
-					while ($buff = fread($in, 4096))
-						fwrite($out, $buff);
-				} else
-					die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
-
-				fclose($in);
-				fclose($out);
-			} else
-				die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
-		}
-
-// Return JSON-RPC response
-		die('{"jsonrpc" : "2.0", "result": null, "success":true, "id" : "id"}');
+		GO_Base_Component_Plupload::handleUpload();
 
 		//return array('success' => true);
 	}

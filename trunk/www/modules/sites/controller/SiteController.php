@@ -32,8 +32,7 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 	}
 	
 	public function actionPlupload(){
-		$ctr = new GO_Core_Controller_Core();
-		$ctr->run('plupload', $_POST);// actionPlupload($_POST);
+		GO_Base_Component_Plupload::handleUpload();
 	}
 	
 	/**
@@ -46,7 +45,8 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 		if(!$content)
 			throw new GO_Base_Exception_NotFound('404 Page not found');
 		
-		$this->setPageTitle($content->title);
+		$this->setPageTitle($content->meta_title);
+		$this->description=$content->meta_description;
 		
 		$this->render('content', array('content'=>$content));
 	}
@@ -64,7 +64,7 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 		$contact->setValidationRule('zip', 'required', true);
 		$contact->setValidationRule('city', 'required', true);
 		
-		$user->setValidationRule('passwordConfirm', 'required', true);
+//		$user->setValidationRule('passwordConfirm', 'required', true);
 		$company = new GO_Addressbook_Model_Company();		
 		
 		if(GO_Base_Util_Http::isPostRequest())
@@ -170,11 +170,14 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 		$model = new GO_Base_Model_User();
 		
 		if (GO_Base_Util_Http::isPostRequest()) {
+			
+			
+			
 			$model->username = $_POST['User']['username'];
+			
 			$password = $_POST['User']['password'];
 
 			$user = GO::session()->login($model->username, $password);
-
 			if (!$user) {
 				GOS::site()->notifier->setMessage('error', GO::t('badLogin')); // set the correct login failure message
 			} else {
@@ -229,25 +232,27 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 		}
 		
 		if (GO_Base_Util_Http::isPostRequest()) {
-			$user->setAttributes($_POST['User']);
 			
-			if(!empty($_POST['User']['password']))
+			if(!empty($_POST['currentPassword']) && !empty($_POST['User']['password']))
 			{
-				if(!$user->checkPassword($_POST['User']['password'])){
+				if(!$user->checkPassword($_POST['currentPassword'])){
 					GOS::site()->notifier->setMessage('error', "Huidig wachtwoord onjuist");
+					unset($_POST['User']['password']);
+					unset($_POST['User']['passwordConfirm']);
 				}
 			}else{
-				unset($_POST['GO_Base_Model_User']['password']);
-				unset($_POST['GO_Base_Model_User']['passwordConfirm']);
+				unset($_POST['User']['password']);
+				unset($_POST['User']['passwordConfirm']);
 			}
-				
+			
+			$user->setAttributes($_POST['User']);				
 			$contact->setAttributes($_POST['Contact']);
 			$company->setAttributes($_POST['Company']);
 			
 			if(!empty($_POST['post_address_is_address']))
 				$company->setPostAddressFromVisitAddress();
 			
-			if($user->validate() && $contact->validate() && $company->validate())
+			if(!GOS::site()->notifier->hasMessage('error') && $user->validate() && $contact->validate() && $company->validate())
 			{	
 				GO::setIgnoreAclPermissions(); //allow guest to create user
 				

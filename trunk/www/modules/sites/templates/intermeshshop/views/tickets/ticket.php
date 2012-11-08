@@ -27,7 +27,7 @@ GOS::site()->scripts->registerCssFile($this->getTemplateUrl().'css/ticket.css');
 							<td>Priority:</td><td><?php echo $ticket->priority ? 'Yes' : 'No'; ?></td>
 						</tr>
 						<tr>
-							<td>Created:</td><td><?php echo $ticket->ctime; ?></td>
+							<td>Created:</td><td><?php echo $ticket->getAttribute("ctime","formatted"); ?></td>
 						</tr>
 					</table>
 				</div>
@@ -131,7 +131,7 @@ GOS::site()->scripts->registerCssFile($this->getTemplateUrl().'css/ticket.css');
 						?>
 						<tr class="ticketmodel-row <?php echo $style; ?>">
 							<td><b><?php echo $message->posterName; ?></b> <?php echo GOS::t('tickets_messageSaid'); ?>:</td>
-							<td align="right"><b><?php echo $message->ctime ;?></b></td>
+							<td align="right"><b><?php echo $message->getAttribute("ctime","formatted"); ?></b></td>
 						</tr>
 						<tr class="ticketmodel-row <?php echo $style; ?>">
 							<td colspan="2"><?php echo $message->content; ?></td>
@@ -142,7 +142,7 @@ GOS::site()->scripts->registerCssFile($this->getTemplateUrl().'css/ticket.css');
 								<td colspan="2">
 									<div class="ticket-message-attachment"><b><?php echo GOS::t('tickets_messageFiles'); ?>:</b></div>
 									<?php foreach ($files as $file => $obj): ?>
-										<div class="ticket-message-attachment"><a target="_blank" href="<?php echo $this->createUrl('tickets/siteModule/downloadAttachment',array('file'=>$obj->id,'ticket_number'=>$ticket->ticket_number,'ticket_verifier'=>$ticket->ticket_verifier)); ?>">
+										<div class="ticket-message-attachment"><a target="_blank" href="<?php echo $this->createUrl('tickets/site/downloadAttachment',array('file'=>$obj->id,'ticket_number'=>$ticket->ticket_number,'ticket_verifier'=>$ticket->ticket_verifier)); ?>">
 												<?php echo $file; ?>
 											</a></div>
 									<?php endforeach; ?>

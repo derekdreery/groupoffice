@@ -1,9 +1,11 @@
 <?php echo GO_Sites_Components_Html::beginForm('', 'POST',array('name'=>'createticket')); ?>
-
+<?php echo GO_SiteS_Components_Html::activeHiddenField($ticket, 'ticket_number'); ?>
 <?php if($ticket->isNew): ?>
 	<div class="subkader-small-top">
 		<div class="subkader-small-bottom">
 			<div class="subkader-small-center">	
+				
+			
 				
 			 <div class="row">
 					<?php echo GO_Sites_Components_Html::activeLabelEx($ticket, 'subject'); ?>
@@ -77,7 +79,7 @@
 		<?php $this->renderPartial("sidebar_ticket"); ?>
 
 	<?php endif; ?>
-
+<input type="hidden" name="closeticket" value="0"/>
 
 <div style="clear:both"></div>
 
@@ -111,14 +113,14 @@
 					<script type="text/javascript">
 						function submitForm(close){
 
-							var form = document.forms['createticket'];
+							var form = document.forms['0'];
 
 							var submit = true;
 
 							if(close==true){
-								document.createticket.closeticket.value = true;
+								form.closeticket.value = "1";
 
-								if(document.createticket.message.value.replace(/\s/g,"") != ""){
+								if(form.elements['Message[content]'].value.replace(/\s/g,"") != ""){
 									var answer = confirm("<?php echo GOS::t('tickets_ticketCloseQuestion'); ?>")
 									if(!answer)
 										submit=false;
