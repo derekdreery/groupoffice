@@ -3395,17 +3395,26 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 	}
 	
+	private $_acl=false;
+	
 	/**
 	 * Get's the Acces Control List for this model if it has one.
 	 * 
 	 * @return GO_Base_Model_Acl 
 	 */
 	public function getAcl(){
-		$aclId = $this->findAclId();
-		if($aclId)
-			return GO_Base_Model_Acl::model()->findByPk($aclId);
-		else
-			return false;
+		if($this->_acl){
+			return $this->_acl;
+		}else
+		{		
+			$aclId = $this->findAclId();
+			if($aclId){
+				$this->_acl=GO_Base_Model_Acl::model()->findByPk($aclId);
+				return $this->_acl;
+			}else{
+				return false;
+			}
+		}
 	}
 	
 	/**
