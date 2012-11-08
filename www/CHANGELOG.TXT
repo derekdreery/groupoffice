@@ -1,3 +1,6 @@
+4.0.125
+- Added possibility to add the customfields of a user to an email template like {user:col_**}
+
 07-11-2012 4.0.124
 - E-mail Inbox and account nodes expanded by default again
 - Remember attachments when switching e-mail template
