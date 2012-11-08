@@ -24,7 +24,7 @@
 					</tr>
 					<?php $i = 0; ?>
 					<?php foreach($pager->models as $invoice): ?>
-						<?php if(!empty($invoice->status)): ?>
+						
 							<?php
 								if($i%2!=0)
 									$style = 'greytable-odd';
@@ -34,18 +34,18 @@
 							?>
 							<tr class="model-row <?php echo $style; ?>" style="border-collapse: collapse;">
 								<td><?php echo $invoice->order_id; ?></td>
-								<td><?php echo $invoice->btime; ?></td>
-								<td><?php echo $invoice->status->getName(1); //2 is language id of webshop ?></td>
+								<td><?php echo $invoice->getAttribute("ptime", "formatted"); ?></td>
+								<td><?php if($invoice->status)echo $invoice->status->getName(1); //2 is language id of webshop ?></td>
 								<td>
 									<?php if(!empty($invoice->ptime)): ?>
-										<?php echo $invoice->ptime; ?>
+										<?php echo $invoice->getAttribute("ptime","formatted"); ?>
 									<?php else: ?>
 										<a href="<?php echo $this->createUrl('webshop/site/payment', array('order_id'=>$invoice->id)); ?>">Pay</a>
 									<?php endif; ?>
 								</td>
 								<td><a target="_blank" href="<?php echo $this->createUrl('billing/order/sitePdf',array('id'=>$invoice->id)); ?>">Download</a></td>
 							</tr>
-						<?php endif; ?>
+		
 					<?php endforeach; ?>
 				</table>
 			</div>

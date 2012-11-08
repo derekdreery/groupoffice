@@ -12,7 +12,7 @@
 									echo '<p><br /></p>';
 									
 									if($license->getAttribute('upgrades','raw') > time())
-										echo '<p>This license is available till: <b>'. $license->upgrades.'</b></p>';
+										echo '<p>This license is available till: <b>'. $license->getAttribute("upgrades","formatted").'</b></p>';
 									else
 											echo '<p>The support contract for this license is <b><font color="red">expired</font></b>. Go to the <a href="'.$this->createUrl('/billing/site/invoices').'">Invoices</a> page to renew your support contract.</p>';
 									
@@ -38,6 +38,10 @@
 									echo '<p></p>';
 								}
 								?>
+								<br />
+								<div class="row bottons">
+									<?php echo GO_Sites_Components_Html::button('Back', array("onclick"=>"document.location='".$this->createUrl("/licenses/site/licenselist")."';")); ?>
+								</div>
 								
 							</div>
 						</div>

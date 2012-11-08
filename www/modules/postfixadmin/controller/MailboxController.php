@@ -118,5 +118,50 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 
 	}
 	
+	
+//	protected function actionImport($params){
+//		
+//		$source=array(
+//				'host'=>'imap.imfoss.nl',
+//				'port'=>993,
+//				'username'=>'test@intermesh.nl',
+//				'password'=>'test',
+//				'ssl'=>true
+//		);
+//		
+//		$localUsername="import@intermesh.dev";
+//		
+//		$imap = new GO_Base_Mail_Imap();
+//		if(!$imap->connect($source['host'], $source['port'], $source['username'], $source['password'], $source['ssl']))
+//				throw new Exception("Could not connect to source host");
+//		
+//		$folders = $imap->list_folders(true, false, "", "*");
+//		if(!is_array($folders))
+//			throw new Exception("Failed to fetch folder list");
+//		
+//		$folderNames = array_keys($folders);
+//		if(!in_array('INBOX', $folderNames))
+//			$folderNames[]='INBOX';
+//		
+//		$list = implode(',', $folderNames);
+//				
+//    $fetchmailRc = 
+//			"poll ".$source['host']."\n".
+//			"proto imap\n".
+//			"user ".$source['username']."\n".
+//			"pass ".$source['password']."\n".
+//			"is ".$localUsername."\n".
+//			"limit 20480000\n".
+//			"folder $list\n".
+//			"keep\n".
+//			"dropdelivered";
+//		 
+//		
+//		file_put_contents('/tmp/importFetchmailRc', $fetchmailRc);
+//		chmod('/tmp/importFetchmailRc',0700);
+//		
+//		system('fetchmail -r /tmp/importFetchmailRc -v');
+//	}
+	
 }
 

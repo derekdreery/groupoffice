@@ -12,7 +12,7 @@ GOS::site()->scripts->registerScriptFile($this->getTemplateUrl().'js/profileTogg
 
 			<?php
 			if (GOS::site()->notifier->hasMessage('success')) {
-				echo GOS::site()->notifier->getMessage('success');
+				echo '<div class="notification notice-ok">' .GOS::site()->notifier->getMessage('success').'</div>';
 			} else if (GOS::site()->notifier->hasMessage('error')) {
 				echo '<div class="notification notice-error">' . GOS::site()->notifier->getMessage('error') . '</div>';
 			}
@@ -125,8 +125,12 @@ GOS::site()->scripts->registerScriptFile($this->getTemplateUrl().'js/profileTogg
 
 				<div class="row">
 					<?php echo GO_Sites_Components_Html::activeLabelEx($user, 'username'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($user, 'username'); ?>
+					<?php echo GO_Sites_Components_Html::activeTextField($user, 'username', array('disabled'=>'on')); ?>
 					<?php echo GO_Sites_Components_Html::error($user, 'username'); ?>
+				</div>
+				<div class="row">
+					<?php echo GO_Sites_Components_Html::label('Current password', 'currentPassword'); ?>
+					<?php echo GO_Sites_Components_Html::passwordField('currentPassword', "",array('autocomplete'=>'off')); ?>
 				</div>
 				<div class="row">
 					<?php echo GO_Sites_Components_Html::activeLabelEx($user, 'password'); ?>
@@ -135,7 +139,7 @@ GOS::site()->scripts->registerScriptFile($this->getTemplateUrl().'js/profileTogg
 				</div>
 				<div class="row">
 					<?php echo GO_Sites_Components_Html::activeLabelEx($user, 'passwordConfirm'); ?>
-					<?php echo GO_Sites_Components_Html::activePasswordField($user, 'passwordConfirm'); ?>
+					<?php echo GO_Sites_Components_Html::activePasswordField($user, 'passwordConfirm', array('autocomplete'=>'off')); ?>
 					<?php echo GO_Sites_Components_Html::error($user, 'passwordConfirm'); ?>
 				</div>
 

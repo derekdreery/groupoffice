@@ -63,6 +63,8 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 	 * @var string name of runned action 
 	 */
 	private $_actionId ='';
+	
+	protected $description="";
 
 	public function getPageTitle()
 	{
@@ -70,7 +72,7 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 			return $this->_pageTitle;
 		else
 		{
-				return $this->_pageTitle = ucfirst($this->_action);
+			return $this->_pageTitle = ucfirst($this->_action);
 		}
 	}
 

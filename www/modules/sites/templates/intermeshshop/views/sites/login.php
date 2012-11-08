@@ -6,6 +6,12 @@
 				<h1><?php echo GOS::t('firstTime'); ?></h1>								
 				<a href="<?php echo $this->createUrl("/sites/site/register"); ?>"><?php echo GOS::t('registerOnceClick'); ?></a>
 				<h1><?php echo GOS::t('registeredLogin'); ?></h1>
+				
+				<?php
+				if (GOS::site()->notifier->hasMessage('error')) {
+					echo '<div class="notification notice-error">' . GOS::site()->notifier->getMessage('error') . '</div>';
+				}
+				?>
 
 				<?php echo GO_Sites_Components_Html::beginForm(); ?>	
 
