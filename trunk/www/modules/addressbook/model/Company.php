@@ -97,6 +97,14 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 		);
 	}
 	
+	public function attributeLabels() {
+		$attr = parent::attributeLabels();
+		
+		$attr['postAddressIsEqual']="Post address is equal to visit address";
+		
+		return $attr;
+	}
+	
 	public function validate() {
 		if(!empty($this->vat_no) && GO_Base_Util_Validate::isEuCountry($this->post_country)){
 			
@@ -208,6 +216,20 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 		$this->post_city=$this->city;
 		$this->post_country=$this->country;
 		$this->post_state=$this->state;
+	}
+	
+	
+	/**
+	 * Used on website registration form
+	 * @return boolean
+	 */
+	protected function getPostAddressIsEqual(){
+		return ($this->post_address==$this->address &&
+		$this->post_address_no==$this->address_no &&
+		$this->post_zip==$this->zip &&
+		$this->post_city==$this->city &&
+		$this->post_country==$this->country &&
+		$this->post_state==$this->state);
 	}
 	
 	

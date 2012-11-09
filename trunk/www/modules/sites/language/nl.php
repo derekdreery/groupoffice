@@ -52,6 +52,6 @@ $l = array(
 		'changePasswordText'=>'Gebruik het onderstaande formulier om uw wachtwoord te wijzigen',
 		'alreadySignedupText'=>'Als u zich al eerder heeft geregistreerd kunt u onderstaand formulier gebruiken om in te loggen.',
 		'forgotPasswordText'=>'Vul uw email adres in het onderstaande formulier in en u ontvangt een link om uw wachtwoord te herstellen binnen enkele minuten.',
-		'submit'=>'Verzenden',
+		'submit'=>'Verzenden'
 		);
 ?>
