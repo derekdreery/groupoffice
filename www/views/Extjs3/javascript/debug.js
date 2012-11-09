@@ -88,6 +88,10 @@ GO.DebugWindow = Ext.extend(GO.Window, {
 					this.scrolledToBottom=true;
 				}
 			},
+			fail:function(){
+				Ext.TaskMgr.stop(this.taskConfig);
+				this.hide();
+			},
 			scope:this
 		});
 	}
