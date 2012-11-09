@@ -1,4 +1,7 @@
-
+<?php
+GOS::site()->scripts->registerScriptFile($this->getTemplateUrl() . 'js/jquery-1.7.2.min.js');
+GOS::site()->scripts->registerScriptFile($this->getTemplateUrl() . 'js/profileToggle.js');
+?>
 
 <div class="subkader-small-top">
 	<div class="subkader-small-bottom">
@@ -10,7 +13,7 @@
 			<div class="form">
 				<?php echo GO_Sites_Components_Html::beginForm(); ?>
 
-				<div class="row">
+								<div class="row">
 					<?php echo GO_Sites_Components_Html::activeLabelEx($user, 'first_name'); ?>
 					<?php echo GO_Sites_Components_Html::activeTextField($user, 'first_name'); ?>
 					<?php echo GO_Sites_Components_Html::error($user, 'first_name'); ?>
@@ -28,7 +31,7 @@
 				<div class="row">
 					<?php echo GO_Sites_Components_Html::activeLabelEx($contact, 'sex'); ?>
 					<div class="buttonList">
-						<?php echo GO_Sites_Components_Html::activeRadioButtonList($contact, 'sex', array('male' => GOS::t('male'), 'female' => GOS::t('female')), array('separator' => '')); ?>
+						<?php echo GO_Sites_Components_Html::activeRadioButtonList($contact, 'sex', array('M' => GOS::t('male'), 'F' => GOS::t('female')), array('separator' => '')); ?>
 					</div>
 					<?php echo GO_Sites_Components_Html::error($contact, 'sex'); ?>
 				</div>
@@ -38,45 +41,9 @@
 					<?php echo GO_Sites_Components_Html::error($user, 'email'); ?>
 				</div>
 
-				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($contact, 'address'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($contact, 'address'); ?>
-					<?php echo GO_Sites_Components_Html::error($contact, 'address'); ?>
-				</div>
-				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($contact, 'address_no'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($contact, 'address_no'); ?>
-					<?php echo GO_Sites_Components_Html::error($contact, 'address_no'); ?>
-				</div>
-				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($contact, 'zip'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($contact, 'zip'); ?>
-					<?php echo GO_Sites_Components_Html::error($contact, 'zip'); ?>
-				</div>
 
-				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($contact, 'city'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($contact, 'city'); ?>
-					<?php echo GO_Sites_Components_Html::error($contact, 'city'); ?>
-				</div>
 
-				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($contact, 'state'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($contact, 'state'); ?>
-					<?php echo GO_Sites_Components_Html::error($contact, 'state'); ?>
-				</div>
-
-				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($contact, 'country'); ?>
-					<?php echo GO_Sites_Components_Html::activeDropDownList($contact, 'country', GO::language()->getCountries()); ?>
-					<?php echo GO_Sites_Components_Html::error($contact, 'country'); ?>
-				</div>
-
-				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($contact, 'home_phone'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($contact, 'home_phone'); ?>
-					<?php echo GO_Sites_Components_Html::error($contact, 'home_phone'); ?>
-				</div>
+				
 
 				<div class="row">
 					<?php echo GO_Sites_Components_Html::activeLabelEx($contact, 'cellular'); ?>
@@ -84,10 +51,20 @@
 					<?php echo GO_Sites_Components_Html::error($contact, 'cellular'); ?>
 				</div>
 
+				<br /><hr />
+				<h1>Company details</h1>
+				
+				
 				<div class="row">
 					<?php echo GO_Sites_Components_Html::label('Company', "Company_name", array('required' => true)); ?>
 					<?php echo GO_Sites_Components_Html::activeTextField($company, 'name'); ?>
 					<?php echo GO_Sites_Components_Html::error($company, 'name'); ?>
+				</div>
+				
+				<div class="row">
+					<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'vat_no'); ?>
+					<?php echo GO_Sites_Components_Html::activeTextField($company, 'vat_no'); ?>
+					<?php echo GO_Sites_Components_Html::error($company, 'vat_no'); ?>
 				</div>
 
 				<div class="row">
@@ -101,12 +78,99 @@
 					<?php echo GO_Sites_Components_Html::activeTextField($contact, 'function'); ?>
 					<?php echo GO_Sites_Components_Html::error($contact, 'function'); ?>
 				</div>
+				
+				<div class="row">
+					<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'phone'); ?>
+					<?php echo GO_Sites_Components_Html::activeTextField($company, 'phone'); ?>
+					<?php echo GO_Sites_Components_Html::error($company, 'phone'); ?>
+				</div>
+				
+				
+				<br /><hr />
+				<h2><?php echo GOS::t('addressDetails'); ?></h2>
+					
+				<div class="row">
+					<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'address'); ?>
+					<?php echo GO_Sites_Components_Html::activeTextField($company, 'address'); ?>
+					<?php echo GO_Sites_Components_Html::error($company, 'address'); ?>
+				</div>
+				<div class="row">
+					<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'address_no'); ?>
+					<?php echo GO_Sites_Components_Html::activeTextField($company, 'address_no'); ?>
+					<?php echo GO_Sites_Components_Html::error($company, 'address_no'); ?>
+				</div>
+				<div class="row">
+					<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'zip'); ?>
+					<?php echo GO_Sites_Components_Html::activeTextField($company, 'zip'); ?>
+					<?php echo GO_Sites_Components_Html::error($company, 'zip'); ?>
+				</div>
 
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'vat_no'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($company, 'vat_no'); ?>
-					<?php echo GO_Sites_Components_Html::error($company, 'vat_no'); ?>
+					<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'city'); ?>
+					<?php echo GO_Sites_Components_Html::activeTextField($company, 'city'); ?>
+					<?php echo GO_Sites_Components_Html::error($company, 'city'); ?>
 				</div>
+
+				<div class="row">
+					<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'state'); ?>
+					<?php echo GO_Sites_Components_Html::activeTextField($company, 'state'); ?>
+					<?php echo GO_Sites_Components_Html::error($company, 'state'); ?>
+				</div>
+
+				<div class="row">
+					<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'country'); ?>
+					<?php echo GO_Sites_Components_Html::activeDropDownList($company, 'country', GO::language()->getCountries()); ?>
+					<?php echo GO_Sites_Components_Html::error($company, 'country'); ?>
+				</div>
+				
+				<div class="row">
+					<?php echo GO_Sites_Components_Html::activeLabelEx($company, "postAddressIsEqual"); ?>
+					<?php echo GO_Sites_Components_Html::activeCheckBox($company, 'postAddressIsEqual'); ?>
+				</div>
+
+				<div class="post-address">
+					<br /><hr />
+					<h2><?php echo GOS::t('postAddressDetails'); ?></h2>
+
+
+
+
+					<div class="row">
+						<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'post_address'); ?>
+						<?php echo GO_Sites_Components_Html::activeTextField($company, 'post_address'); ?>
+						<?php echo GO_Sites_Components_Html::error($company, 'post_address'); ?>
+					</div>
+					<div class="row">
+						<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'post_address_no'); ?>
+						<?php echo GO_Sites_Components_Html::activeTextField($company, 'post_address_no'); ?>
+						<?php echo GO_Sites_Components_Html::error($company, 'post_address_no'); ?>
+					</div>
+					<div class="row">
+						<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'post_zip'); ?>
+						<?php echo GO_Sites_Components_Html::activeTextField($company, 'post_zip'); ?>
+						<?php echo GO_Sites_Components_Html::error($company, 'post_zip'); ?>
+					</div>
+
+					<div class="row">
+						<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'post_city'); ?>
+						<?php echo GO_Sites_Components_Html::activeTextField($company, 'post_city'); ?>
+						<?php echo GO_Sites_Components_Html::error($company, 'post_city'); ?>
+					</div>
+
+					<div class="row">
+						<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'post_state'); ?>
+						<?php echo GO_Sites_Components_Html::activeTextField($company, 'post_state'); ?>
+						<?php echo GO_Sites_Components_Html::error($company, 'post_state'); ?>
+					</div>
+
+					<div class="row">
+						<?php echo GO_Sites_Components_Html::activeLabelEx($company, 'post_country'); ?>
+						<?php echo GO_Sites_Components_Html::activeDropDownList($company, 'post_country', GO::language()->getCountries()); ?>
+						<?php echo GO_Sites_Components_Html::error($company, 'post_country'); ?>
+					</div>
+
+				</div>
+
 
 				<br /><hr />
 				<h1><?php echo GOS::t('yourlogincredentials'); ?></h1>
@@ -114,17 +178,17 @@
 
 				<div class="row">
 					<?php echo GO_Sites_Components_Html::activeLabelEx($user, 'username'); ?>
-					<?php echo GO_Sites_Components_Html::activeTextField($user, 'username'); ?>
+					<?php echo GO_Sites_Components_Html::activeTextField($user, 'username', array('autocomplete'=>'off')); ?>
 					<?php echo GO_Sites_Components_Html::error($user, 'username'); ?>
 				</div>
 				<div class="row">
 					<?php echo GO_Sites_Components_Html::activeLabelEx($user, 'password'); ?>
-					<?php echo GO_Sites_Components_Html::activePasswordField($user, 'password'); ?>
+					<?php echo GO_Sites_Components_Html::activePasswordField($user, 'password', array('autocomplete'=>'off')); ?>
 					<?php echo GO_Sites_Components_Html::error($user, 'password'); ?>
 				</div>
 				<div class="row">
 					<?php echo GO_Sites_Components_Html::activeLabelEx($user, 'passwordConfirm'); ?>
-					<?php echo GO_Sites_Components_Html::activePasswordField($user, 'passwordConfirm'); ?>
+					<?php echo GO_Sites_Components_Html::activePasswordField($user, 'passwordConfirm', array('autocomplete'=>'off')); ?>
 					<?php echo GO_Sites_Components_Html::error($user, 'passwordConfirm'); ?>
 				</div>
 

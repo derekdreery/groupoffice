@@ -59,34 +59,49 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 		$user = new GO_Base_Model_User();		
 		$contact = new GO_Addressbook_Model_Contact();
 		
-		//set additional required fields
-		$contact->setValidationRule('address', 'required', true);
-		$contact->setValidationRule('zip', 'required', true);
-		$contact->setValidationRule('city', 'required', true);
+		
+		
+		
+		
 		
 //		$user->setValidationRule('passwordConfirm', 'required', true);
 		$company = new GO_Addressbook_Model_Company();		
+		
+		//set additional required fields
+		$company->setValidationRule('address', 'required', true);
+		$company->setValidationRule('zip', 'required', true);
+		$company->setValidationRule('city', 'required', true);
+		$company->setValidationRule('state', 'required', true);
+		$company->setValidationRule('country', 'required', true);
 		
 		if(GO_Base_Util_Http::isPostRequest())
 		{
 			$user->setAttributes($_POST['User']);
 			$contact->setAttributes($_POST['Contact']);
+			
 			$company->setAttributes($_POST['Company']);
+		
+			if(!empty($_POST['Company']['postAddressIsEqual']))
+				$company->setPostAddressFromVisitAddress();
+			
 			if($user->validate() && $contact->validate() && $company->validate())
 			{				
-				$company->save();
 				
 				GO::setIgnoreAclPermissions(); //allow guest to create user
 				
+				
+				
 				if($user->save())
 				{
-					$contact = $user->createContact();
-					$contact->company_id=$company->id;
-					$contact->setAttributes($_POST['Contact']);
 					$user->addToGroups(GOS::site()->getSite()->getDefaultGroupNames()); // Default groups are in si_sites table
-					$addressbook = GO_Addressbook_Model_Addressbook::model()->getUsersAddressbook();
-					$contact->addressbook_id = $addressbook->id;
-					$contact->user_id = $user->id;
+					
+					
+					$contact = $user->createContact();
+					$company->addressbook_id=$contact->addressbook_id;
+					$company->save();
+					
+					$contact->company_id=$company->id;
+					$contact->setAttributes($_POST['Contact']);					
 					$contact->save();
 
 					// Automatically log the newly created user in.
@@ -95,8 +110,17 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 					else
 						throw new Exception('Login after registreation failed.');
 				}
+			}else {
+				var_dump($user->getValidationErrors());
+				var_dump($contact->getValidationErrors());
+				var_dump($company->getValidationErrors());
 			}
 		}
+		
+		$user->password="";
+		$user->passwordConfirm="";
+		
+		
 		
 		$this->render('register', array('user'=>$user,'contact'=>$contact,'company'=>$company));
 	}
@@ -249,7 +273,7 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 			$contact->setAttributes($_POST['Contact']);
 			$company->setAttributes($_POST['Company']);
 			
-			if(!empty($_POST['post_address_is_address']))
+			if(!empty($_POST['Company']['postAddressIsEqual']))
 				$company->setPostAddressFromVisitAddress();
 			
 			if(!GOS::site()->notifier->hasMessage('error') && $user->validate() && $contact->validate() && $company->validate())
@@ -264,7 +288,7 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 				GOS::site()->notifier->setMessage('success', GOS::t('formEditSuccess'));				
 			}else
 			{
-				GOS::site()->notifier->setMessage('failed', "Please check the form for errors");
+				GOS::site()->notifier->setMessage('error', "Please check the form for errors");
 			}
 		}
 

@@ -3,6 +3,9 @@
 
 <?php if(GO::config()->debug): ?>
 
+
+<pre><?php echo (string) $error; ?></pre>
+
 <?php echo "<h1>".get_class($error)."</h1>";
 //A lot of crap for pretty stack traces
 function highlightSource($fileName, $lineNumber, $showLines)

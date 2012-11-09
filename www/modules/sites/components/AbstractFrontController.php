@@ -260,6 +260,26 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 		else
 			return GO::config()->host; //Homepage
 	}
+	
+	/**
+	 * Checks if a user is logged in, if the user has permission to the module and if the user has access to a specific action.
+	 * 
+	 * @param string $action
+	 * @return boolean boolean
+	 */
+	protected function _checkPermission($action){
+		
+		$allowGuests = $this->allowGuests();
+		
+		if(!in_array($action, $allowGuests) && !in_array('*', $allowGuests)){			
+			//check for logged in user
+			if(!GO::user())
+				return false;			
+		}
+		
+		return true;
+		
+	}
 
 	public function run($action = '', $params = array(), $render = true, $checkPermissions = true)
 	{

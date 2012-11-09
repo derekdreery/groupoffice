@@ -80,3 +80,5 @@ $l['tickets_ticketYourInformation']='Your information';
 $l['tickets_ticketYourAgent']='Your ticket agent';
 $l['tickets_ticketNoAgent']='We will help you as soon as possible.<br />Please be patient.';
 
+$l['postAddressDetails']='Post address';
+$l['addressDetails']='Address';
