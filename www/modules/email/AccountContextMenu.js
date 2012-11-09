@@ -10,6 +10,7 @@ GO.email.AccountContextMenu = Ext.extend(Ext.menu.Menu,{
 		this.addFolderButton = new Ext.menu.Item({
 			iconCls: 'btn-add',
 			text: GO.email.lang.addFolder,
+			scope:this,
 			handler: function(){
 				Ext.MessageBox.prompt(GO.lang.strName, GO.email.lang.enterFolderName, function(button, text){
 					if(button=='ok')
