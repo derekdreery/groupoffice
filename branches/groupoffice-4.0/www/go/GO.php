@@ -489,14 +489,14 @@ class GO{
 				if(isset($_SERVER['REQUEST_URI']))
 					$log .= $_SERVER['REQUEST_URI'];
 
-				GO::debug($log);
-
-				if(PHP_SAPI!='cli')
-					GO::debug("User agent: ".(isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "unknown")." IP: ".$_SERVER['REMOTE_ADDR']);
-				else
-					GO::debug("User agent: CLI");
-
-				GO::debug("Config file: ".GO::config()->get_config_file());
+					GO::debug($log);
+	//
+	//				if(PHP_SAPI!='cli')
+	//					GO::debug("User agent: ".(isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "unknown")." IP: ".$_SERVER['REMOTE_ADDR']);
+	//				else
+	//					GO::debug("User agent: CLI");
+	//
+	//				GO::debug("Config file: ".GO::config()->get_config_file());
 			}
 			//undo magic quotes if magic_quotes_gpc is enabled. It should be disabled!
 			if (get_magic_quotes_gpc()) {
@@ -735,9 +735,12 @@ class GO{
 		if (   self::config()->debug
 			|| self::config()->debug_log
 			|| self::config()->firephp
+			|| !empty(GO::session()->values['debug'])
 		) {
 			
-			if(empty(GO::config()->debug_log_remote_ip) || (isset($_SERVER['REMOTE_ADDR']) && GO::config()->debug_log_remote_ip==$_SERVER['REMOTE_ADDR']))
+	
+			
+			if(isset($_REQUEST['r']) && $_REQUEST['r']!='core/debug')
 			{
 				if (self::config()->firephp) {
 					if (class_exists('FB')) {
@@ -746,7 +749,7 @@ class GO{
 					}
 				}
 
-				if (self::config()->debug_log) {
+//				if (self::config()->debug_log) {
 
 					if (!is_string($text)) {
 						$text = var_export($text, true);
@@ -770,7 +773,7 @@ class GO{
 					$text = "[$user] ".str_replace("\n","\n[$user] ", $text);
 
 					file_put_contents(self::config()->file_storage_path . 'log/debug.log', $text . "\n", FILE_APPEND);
-				}
+//				}
 			}
 		}
 	}
