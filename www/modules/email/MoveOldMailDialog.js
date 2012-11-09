@@ -123,7 +123,6 @@ Ext.extend(GO.email.MoveOldMailDialog, Ext.Window,{
 			icon: Ext.MessageBox.WARNING,
 			msg: GO.email.lang.moveOldMailsSure.replace("{date}", this.untilDate.value).replace("{source}", this.folderNameField.getValue()).replace("{target}", this.selectMailbox.getValue()),
 			buttons: Ext.Msg.YESNO,
-			animEl: 'elId',
 			fn: function(btn) {
 				if (btn=='yes') {
 					this.formPanel.form.submit({

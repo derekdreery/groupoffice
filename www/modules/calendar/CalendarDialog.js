@@ -138,7 +138,36 @@ GO.calendar.CalendarDialog = function(config)
 				document.location=GO.url("calendar/calendar/exportIcs", {"calendar_id":this.calendar_id});
 			},
 			scope:this
-		})])
+		})
+		,{
+				style:'margin-top:10px',
+				xtype:'button',
+				text:GO.lang.deleteAllItems,
+				handler:function(){
+					Ext.Msg.show({
+						title: GO.lang.deleteAllItems,
+						icon: Ext.MessageBox.WARNING,
+						msg: GO.lang.deleteAllItemsAreYouSure,
+						buttons: Ext.Msg.YESNO,
+						scope:this,
+						fn: function(btn) {
+							if (btn=='yes') {
+								GO.request({
+									timeout:300000,
+									maskEl:Ext.getBody(),
+									url:'calendar/calendar/truncate',
+									params:{
+										calendar_id:this.calendar_id
+									},
+									scope:this
+								});
+							}
+						}
+					});
+				},
+				scope:this
+			}
+		])
 
 	this.readPermissionsTab = new GO.grid.PermissionsPanel({	
 	});

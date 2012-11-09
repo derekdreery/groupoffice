@@ -594,3 +594,6 @@ $l['sir']='Sir';
 $l['madam']='Madam';
 $l['exportDialog']='Export Dialog';
 $l['logFiles']='Log files';
+
+$l['deleteAllItems']='Delete all items';
+$l['deleteAllItemsAreYouSure']='Are you sure you want to delete all items?';

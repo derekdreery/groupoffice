@@ -121,23 +121,13 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 	}
 	
 	
-	public function actionEmpty($params){
+	public function actionTruncate($params){
 		$addressbook = GO_Addressbook_Model_Addressbook::model()->findByPk($params['addressbook_id']);
 		
 		if(!$addressbook)
 			throw new GO_Base_Exception_NotFound();
 		
-		$contacts = $addressbook->contacts;
-		
-		foreach($contacts as $contact){
-			$contact->delete();
-		}
-		
-		$companies = $addressbook->companies;
-		
-		foreach($companies as $company){
-			$company->delete();
-		}
+		$addressbook->truncate();
 		
 		$response['success']=true;
 		

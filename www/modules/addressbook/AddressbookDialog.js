@@ -101,6 +101,36 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 							'<br />'+GO.lang.strMiddleName+
 							'<br />'+GO.lang.strLastName
 				}]
+			},{
+				xtype:'panel',
+				border:false,
+				items:{
+					xtype:'button',
+					text:GO.lang.deleteAllItems,
+					handler:function(){
+						Ext.Msg.show({
+							title: GO.lang.deleteAllItems,
+							icon: Ext.MessageBox.WARNING,
+							msg: GO.lang.deleteAllItemsAreYouSure,
+							buttons: Ext.Msg.YESNO,
+							scope:this,
+							fn: function(btn) {
+								if (btn=='yes') {
+									GO.request({
+										timeout:300000,
+										maskEl:Ext.getBody(),
+										url:'addressbook/addressbook/truncate',
+										params:{
+											addressbook_id:this.remoteModelId
+										},
+										scope:this
+									});
+								}
+							}
+						});
+					},
+					scope:this
+				}
 			}
 			]
 		});

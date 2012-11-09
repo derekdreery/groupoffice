@@ -71,17 +71,13 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 	}
 	
 	
-	public function actionEmpty($params){
+	public function actionTruncate($params){
 		$tasklist = GO_Tasks_Model_Tasklist::model()->findByPk($params['tasklist_id']);
 		
 		if(!$tasklist)
 			throw new GO_Base_Exception_NotFound();
 		
-		$tasks = $tasklist->tasks;
-		
-		foreach($tasks as $task){
-			$task->delete();
-		}
+		$tasklist->truncate();
 		
 		$response['success']=true;
 		

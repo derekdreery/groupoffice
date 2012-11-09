@@ -238,3 +238,5 @@ $l['useAccount']='Verwende Account';
 $l['sieveNote']='Nicht alle Feature werden unterstützt. Prüfen Sie die Anleitung.';
 $l['winmailNoFiles']="Dieser winmail Anhang enthält keine Dateien.";
 $l['mailbox']='Postfach';
+$l["markFolderReadConfirm"]='Möchten Sie alle Nachrichten im Ordner \'{name}\' als gelesen markieren?';
+$l['cantDeleteSpecialFolder']="Sie können die Ordner Papierkorb, Gesendet und Entwürfe nicht löschen";

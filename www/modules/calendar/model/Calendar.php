@@ -97,4 +97,15 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	public function settingsPkAttribute() {
 		return 'calendar_id';
 	}
+	
+	/**
+	 * Remove all events
+	 */
+	public function truncate(){
+		$events = $this->events;
+		
+		foreach($events as $event){
+			$event->delete();
+		}
+	}
 }
