@@ -52,10 +52,12 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 		$folders = $folder->ls();
 		$modules = array();
 		foreach($folders as $folder){
-			$ucfirst = ucfirst($folder->name());
-			$moduleClass = $folder->path().'/'.$ucfirst.'Module.php';
-			if(file_exists($moduleClass) && $this->_isAllowed($folder->name()) && ($returnInstalled || !GO_Base_Model_Module::model()->findByPk($folder->name(), false, true))){
-				$modules[]='GO_'.$ucfirst.'_'.$ucfirst.'Module';
+			if($folder->isFolder()){
+				$ucfirst = ucfirst($folder->name());
+				$moduleClass = $folder->path().'/'.$ucfirst.'Module.php';
+				if(file_exists($moduleClass) && $this->_isAllowed($folder->name()) && ($returnInstalled || !GO_Base_Model_Module::model()->findByPk($folder->name(), false, true))){
+					$modules[]='GO_'.$ucfirst.'_'.$ucfirst.'Module';
+				}
 			}
 		}
 		
