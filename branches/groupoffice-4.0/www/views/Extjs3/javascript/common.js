@@ -82,7 +82,7 @@ GO.request = function(config){
 			var result = Ext.decode(response.responseText);
 			if(!result.success)
 			{
-				alert(result.feedback);
+				Ext.Msg.alert(GO.lang.strError, result.feedback);
 				if(config.fail)
 					config.fail.call(config.scope, response, options, result);
 			}else 

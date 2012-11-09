@@ -24,7 +24,14 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	}
 	
 	protected function actionDebug($params){
-		GO::session()->values['debug']=true;
+		
+		if(empty(GO::session()->values['debug'])){
+			if(!GO::user()->isAdmin())
+				throw new GO_Base_Exception_AccessDenied("Debugging can only be enabled by an admin");
+		
+			GO::session()->values['debug']=true;
+		}
+		
 		
 		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'log/debug.log');
 		
@@ -32,6 +39,11 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	}
 	
 	protected function actionInfo($params){
+		
+		if(empty(GO::session()->values['debug'])){
+			throw new GO_Base_Exception_AccessDenied("Debugging can only be enabled by an admin");
+		}
+			
 		$response = array('success'=>true, 'info'=>'');
 		
 		$info = $_SERVER;

@@ -6,7 +6,7 @@ GO.admin2userlogin.UsersGrid = function(config){
 	}
 
 	var fields ={
-		fields : ['id','username','name','lastlogin','registration_time','enabled'],
+		fields : ['id','username','name','lastlogin','ctime','enabled'],
 		columns :[{
 			header: GO.admin2userlogin.lang.userId,
 			dataIndex: 'id',
@@ -29,19 +29,14 @@ GO.admin2userlogin.UsersGrid = function(config){
 			width:110
 		},{
 			header: GO.admin2userlogin.lang.registrationtime,
-			dataIndex: 'registration_time',
-			id:'registration_time',
+			dataIndex: 'ctime',
+			id:'ctime',
 			width:110
 		}]
 	};
 	
-		this.store = new GO.data.JsonStore({
-		url: GO.settings.modules.admin2userlogin.url+ 'json.php',
-		baseParams: {
-			task: 'usersgrid'    	
-		},
-		root: 'results',
-		id: 'id',
+	this.store = new GO.data.JsonStore({
+		url: GO.url('core/users'),
 		totalProperty:'total',
 		fields: fields.fields,
 		remoteSort: true
@@ -81,7 +76,10 @@ GO.admin2userlogin.UsersGrid = function(config){
 	});
 	
 	config.sm=new Ext.grid.RowSelectionModel();
-	config.tbar = new Ext.Toolbar({items:[GO.lang['strSearch']+': ', ' ',this.searchField],cls:'go-head-tb'});
+	config.tbar = new Ext.Toolbar({
+		items:[GO.lang['strSearch']+': ', ' ',this.searchField],
+		cls:'go-head-tb'
+	});
 	config.loadMask=true;
 
 
@@ -100,7 +98,7 @@ GO.admin2userlogin.UsersGrid = function(config){
 	// dubbelklik, edit bookmark
 	this.on('rowdblclick', function(grid, rowIndex){
 		var rec = grid.getStore().getAt(rowIndex).data;	
-		document.location=GO.settings.modules.admin2userlogin.url+'changeUser.php?id='+rec.id;
+		document.location=GO.url('admin2userlogin/switch/switch/',{user_id: rec.id});
 	},this)
 	
 	
@@ -108,4 +106,4 @@ GO.admin2userlogin.UsersGrid = function(config){
 
 Ext.extend(GO.admin2userlogin.UsersGrid, GO.grid.GridPanel,{
 
-});
+	});
