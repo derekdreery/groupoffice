@@ -27,7 +27,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		
 		if(empty(GO::session()->values['debug'])){
 			if(!GO::user()->isAdmin())
-				throw new GO_Base_Exception_AccessDenied("Debugging can only be enabled by an admin");
+				throw new GO_Base_Exception_AccessDenied("Debugging can only be enabled by an admin. Tip: You can enable it as admin and switch to any user with the 'Switch user' module.");
 		
 			GO::session()->values['debug']=true;
 		}
