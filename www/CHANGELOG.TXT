@@ -5,6 +5,7 @@
 - Enable debug mode with CTRL+F7
 - Added possibility to add the customfields of a user to an email template like {user:col_**}
 - Added "Delete all items" buttons to tasklist, calendar and addressbook administration dialog
+- Create folder on root level of e-mail tree
 
 07-11-2012 4.0.124
 - E-mail Inbox and account nodes expanded by default again
