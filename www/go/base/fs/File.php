@@ -508,4 +508,39 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		
 		return touch($this->path());
 	}
+	
+	
+	/**
+	 * Get the end of a text file.
+	 * 
+	 * @param int $lines Number of lines
+	 * @return string
+	 */
+	public function tail($lines=20) {
+    //global $fsize;
+    $handle = fopen($this->path(), "r");
+    $linecounter = $lines;
+    $pos = -2;
+    $beginning = false;
+    $text = array();
+    while ($linecounter > 0) {
+        $t = " ";
+        while ($t != "\n") {
+            if(fseek($handle, $pos, SEEK_END) == -1) {
+                $beginning = true;
+                break;
+            }
+            $t = fgetc($handle);
+            $pos --;
+        }
+        $linecounter --;
+        if ($beginning) {
+            rewind($handle);
+        }
+        $text[$lines-$linecounter-1] = fgets($handle);
+        if ($beginning) break;
+    }
+    fclose ($handle);
+    return implode("",array_reverse($text));
+}
 }

@@ -28,7 +28,7 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_Interface{
 	private $_time;
 	
 	public function __construct(){
-		GO::debug("Using GO_Base_Cache_Disk cache");
+//		GO::debug("Using GO_Base_Cache_Disk cache");
 		
 		$this->_dir = GO::config()->tmpdir.'diskcache/';
 		

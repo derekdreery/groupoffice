@@ -23,6 +23,38 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		return $response;
 	}
 	
+	protected function actionDebug($params){
+		GO::session()->values['debug']=true;
+		
+		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'log/debug.log');
+		
+		return array('success'=>true, 'log'=>nl2br($file->tail(300)));
+	}
+	
+	protected function actionInfo($params){
+		$response = array('success'=>true, 'info'=>'');
+		
+		$info = $_SERVER;
+		$info['username']=GO::user()->username;
+		$info['config']=GO::config()->get_config_file();
+		
+		$response['info']='<table>';
+		
+		foreach($info as $key=>$value)
+			$response['info'] .= '<tr><td>'.$key.':</td><td>'.$value.'</td></tr>';
+		
+		$response['info'].='</table>';
+		
+		ob_start();
+		phpinfo();
+		$phpinfo = ob_get_contents();
+		ob_get_clean();
+		
+		$response['info'].= GO_Base_Util_String::sanitizeHtml($phpinfo);
+		return $response;
+		
+	}
+	
 	protected function actionLink($params) {
 
 		$fromLinks = json_decode($params['fromLinks'], true);
