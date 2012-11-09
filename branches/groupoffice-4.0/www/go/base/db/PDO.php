@@ -3,7 +3,7 @@ class GO_Base_Db_PDO extends PDO{
 //	private $_dsn;
 	public function __construct($dsn, $username, $passwd, $options=null) {
 		
-		GO::debug("Connect: $dsn, $username, ***");
+//		GO::debug("Connect: $dsn, $username, ***");
 		
 //		GO::debugCalledFrom(2);
 		

@@ -21,10 +21,10 @@
 class GO_Base_Cache_None implements GO_Base_Cache_Interface{
 	
 	
-	public function __construct() {
-		GO::debug("Using GO_Base_Cache_None cache");
-		
-	}
+//	public function __construct() {
+//		GO::debug("Using GO_Base_Cache_None cache");
+//		
+//	}
 
 	/**
 	 * Store any value in the cache
