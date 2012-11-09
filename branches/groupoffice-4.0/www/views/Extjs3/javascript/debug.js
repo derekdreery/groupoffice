@@ -1,4 +1,4 @@
-Ext.onReady(function(){
+GO.mainLayout.onReady(function(){
 	
 	Ext.getBody().addKeyListener({ctrl:true, key:Ext.EventObject.F7}, function(e){
 	
@@ -46,12 +46,12 @@ GO.DebugWindow = Ext.extend(GO.Window, {
 				hide:function(){
 					Ext.TaskMgr.stop(this.taskConfig);
 				},
-				scope:this,
-        deactivate: function(self) {
-            self.toFront();
-
-        },
-        delay: 1
+				scope:this
+//        deactivate: function(self) {
+//            self.toFront();
+//
+//        },
+//        delay: 1
 			}
 		});
 		
