@@ -66,4 +66,16 @@ class GO_Tasks_Model_Tasklist extends GO_Base_Model_AbstractUserDefaultModel {
 	public function hasFiles(){
 		return true;
 	}
+	
+	/**
+	 * Remove all tasks
+	 */
+	public function truncate(){
+			
+		$tasks = $this->tasks;
+		
+		foreach($tasks as $task){
+			$task->delete();
+		}
+	}
 }

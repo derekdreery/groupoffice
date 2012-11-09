@@ -106,4 +106,20 @@
 		return $attr;
 	}
 
+	/**
+	 * Remove all contacts and companies from the addressbook
+	 */
+	public function truncate(){
+		$contacts = $this->contacts;
+		
+		foreach($contacts as $contact){
+			$contact->delete();
+		}
+		
+		$companies = $this->companies;
+		
+		foreach($companies as $company){
+			$company->delete();
+		}
+	}
 }
