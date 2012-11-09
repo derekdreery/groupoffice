@@ -246,7 +246,7 @@ class GO{
 				$cachedUser = GO::cache()->get($cacheKey);
 				
 				if($cachedUser){
-					GO::debug("Returned cached user");
+//					GO::debug("Returned cached user");
 					self::$_user=$cachedUser;
 				}else
 				{
@@ -456,6 +456,9 @@ class GO{
 		//Start session here. Important that it's called before GO::config().
 		GO::session();
 		
+		if(!empty(GO::session()->values['debug']))
+			GO::config()->debug=true;
+		
 		if(GO::config()->debug)
 			ini_set("display_errors","On");
 		else
@@ -555,6 +558,8 @@ class GO{
 			if(self::$_classesIsDirty && PHP_SAPI!='cli')
 				@GO::cache()->set('autoload_classes', self::$_classes);
 		}
+		
+		GO::debug("--------------------\n");
 	}
 	
 	/**
@@ -735,7 +740,6 @@ class GO{
 		if (   self::config()->debug
 			|| self::config()->debug_log
 			|| self::config()->firephp
-			|| !empty(GO::session()->values['debug'])
 		) {
 			
 	
