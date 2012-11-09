@@ -119,7 +119,7 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 		else
 			return false;
 	}
-	
+
 	/**
 	 * Check if the current user may create events in this calendar. Here we deviate
 	 * from the standard if the "freebusypermissions" module is installed. When a 
@@ -134,6 +134,17 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 			return GO_Freebusypermissions_FreebusypermissionsModule::hasFreebusyAccess(GO::user()->id, $this->user_id);
 		}  else {
 			return false;
+		}
+	}
+
+	/**
+	 * Remove all events
+	 */
+	public function truncate(){
+		$events = $this->events;
+		
+		foreach($events as $event){
+			$event->delete();
 		}
 	}
 }

@@ -284,7 +284,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		foreach ($mailboxes as $mailbox) {
 			
 			//skip mailboxes with nonexistent flags if we're not listing subscribtions
-			if(!$subscribtions && !$mailbox->subscribed && !$mailbox->haschildren)
+			if(!$subscribtions && !$mailbox->isVisible())// && !$mailbox->haschildren)
 				continue;
 			
 			/* @var $mailbox GO_Email_Model_ImapMailbox */
@@ -325,7 +325,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 							//'expanded' => !count($children),
 			);
 			
-			GO::debug($node);
+//			GO::debug($node);
 			
 			if($mailbox->name=='INBOX'){
 				$node['usage']=$this->_getUsage($mailbox->getAccount());

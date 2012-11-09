@@ -23,6 +23,52 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		return $response;
 	}
 	
+	protected function actionDebug($params){
+		
+		if(empty(GO::session()->values['debug'])){
+			if(!GO::user()->isAdmin())
+				throw new GO_Base_Exception_AccessDenied("Debugging can only be enabled by an admin. Tip: You can enable it as admin and switch to any user with the 'Switch user' module.");
+		
+			GO::session()->values['debug']=true;
+		}
+		
+		
+		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'log/debug.log');
+		if(!$file->exists())
+			$file->touch(true);
+		
+		return array('success'=>true, 'log'=>nl2br(str_replace('['.GO::user()->username.'] ','',$file->tail(300))));
+	}
+	
+	protected function actionInfo($params){
+		
+		if(empty(GO::session()->values['debug'])){
+			throw new GO_Base_Exception_AccessDenied("Debugging can only be enabled by an admin");
+		}
+			
+		$response = array('success'=>true, 'info'=>'');
+		
+		$info = $_SERVER;
+		$info['username']=GO::user()->username;
+		$info['config']=GO::config()->get_config_file();
+		
+		$response['info']='<table>';
+		
+		foreach($info as $key=>$value)
+			$response['info'] .= '<tr><td>'.$key.':</td><td>'.$value.'</td></tr>';
+		
+		$response['info'].='</table>';
+		
+		ob_start();
+		phpinfo();
+		$phpinfo = ob_get_contents();
+		ob_get_clean();
+		
+		$response['info'].= GO_Base_Util_String::sanitizeHtml($phpinfo);
+		return $response;
+		
+	}
+	
 	protected function actionLink($params) {
 
 		$fromLinks = json_decode($params['fromLinks'], true);

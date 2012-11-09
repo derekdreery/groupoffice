@@ -26,8 +26,8 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 		
 		$multiSel = new GO_Base_Component_MultiSelectGrid(
 						'no-multiselect', 
-						"GO_Notes_Model_Category",$store, $params);		
-		$multiSel->checkPermissions();
+						"GO_Notes_Model_Category",$store, $params, true);		
+		
 		$multiSel->addSelectedToFindCriteria($storeParams, 'category_id');
 		$multiSel->setButtonParams($response);
 		$multiSel->setStoreTitle();

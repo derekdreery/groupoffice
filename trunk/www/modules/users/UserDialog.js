@@ -81,7 +81,6 @@
 	},
 	
 	afterLoad : function(remoteModelId, config, action){		
-		this.formPanel.baseParams.contact_id=action.result.data.contact_id;
 		this.fireEvent('set_id', this);
 	},
 	
@@ -143,7 +142,11 @@
 				bodyStyle:'padding-left:5px',
 				items:[this.loginTab],
 				border:false
-			})]
+			}),{
+				xtype:'hidden',
+				name:'contact_id',
+				value:''
+			}]
 		});
 		
 		this.addPanel(this.profileTab);

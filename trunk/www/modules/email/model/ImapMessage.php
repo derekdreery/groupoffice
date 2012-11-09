@@ -150,7 +150,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		if($this->cacheOnDestruct){
 			$cacheKey=$this->cacheOnDestruct;
 			$this->cacheOnDestruct=false;
-			GO::cache()->set($cacheKey, $this, 3600*24*3);
+			GO::cache()->set($cacheKey, $this, 3600*24*2);
 		}
 	}
 	

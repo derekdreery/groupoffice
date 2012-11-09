@@ -130,6 +130,8 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 			if(GO::user()->contact->company){
 				$attributes = array_merge($attributes, $this->_getModelAttributes(GO::user()->contact->company,'usercompany:'));
 			}
+			
+			$attributes = array_merge($attributes, $this->_getModelAttributes(GO::user(),'user:'));			
 		}
 		return $attributes;
 	}

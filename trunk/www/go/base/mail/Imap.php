@@ -327,7 +327,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		}else
 		{
 			if(!isset($this->_subscribedFoldersCache[$this->server.$this->username])){
-				$this->_subscribedFoldersCache[$this->server.$this->username] = $this->list_folders(true, false, '', '*');				
+				$this->_subscribedFoldersCache[$this->server.$this->username] = $this->list_folders(true, false, '', '*');	
+				
+				GO::debug(array_keys($this->_subscribedFoldersCache));
 			}
 			return isset($this->_subscribedFoldersCache[$this->server.$this->username][$mailboxName]);
 		}
@@ -368,7 +370,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			$cmd .= ')';
 		}
 		
-//		GO::debug($cmd);
+		GO::debug($cmd);
 		
 		$cmd .= "\r\n";
 		
@@ -532,6 +534,8 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		}
 
 		ksort($folders);
+		
+		GO::debug($folders);
 
 		return $folders;
 	}

@@ -145,9 +145,16 @@ GO.email.AccountsTree = function(config){
 		messagesGrid:this.messagesGrid
 	});
 	
+	this.on('beforeclick', function(node){
+		if(node.attributes.noselect==1)
+			return false;
+	});
 	
 	this.on('contextmenu', function(node, e){
 		e.stopEvent();
+		
+		if(node.attributes.noselect==1)
+			return false;
 
 		var selModel = this.getSelectionModel();
 		
