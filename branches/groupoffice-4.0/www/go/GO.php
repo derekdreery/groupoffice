@@ -488,11 +488,14 @@ class GO{
 				
 				$username = GO::user() ? GO::user()->username : 'nobody';
 
-				$log = '['.date('Y-m-d G:i').']['.$username.'] Start of new request: ';
-				if(isset($_SERVER['REQUEST_URI']))
-					$log .= $_SERVER['REQUEST_URI'];
+				$log = '['.date('Y-m-d G:i').'] r=';
+				if(isset($_REQUEST['r']))
+					$log .= $_REQUEST['r'];
+				else 
+					$log = 'undefined';
+				
 
-					GO::debug($log);
+				GO::debug($log);
 	//
 	//				if(PHP_SAPI!='cli')
 	//					GO::debug("User agent: ".(isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "unknown")." IP: ".$_SERVER['REMOTE_ADDR']);
