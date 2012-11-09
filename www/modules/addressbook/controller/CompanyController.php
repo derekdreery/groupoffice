@@ -98,8 +98,8 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		if(!empty($params['filters'])){
 			$abMultiSel = new GO_Base_Component_MultiSelectGrid(
 							'books', 
-							"GO_Addressbook_Model_Addressbook",$store, $params);		
-			$abMultiSel->checkPermissions();
+							"GO_Addressbook_Model_Addressbook",$store, $params, true);		
+			
 			$abMultiSel->addSelectedToFindCriteria($storeParams, 'addressbook_id');
 			
 			//$abMultiSel->setButtonParams($response);
