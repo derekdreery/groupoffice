@@ -30,13 +30,11 @@ class GO_Base_Component_MultiSelectGrid {
 	 * @param string $requestParamName The name of the request parameter. It's the id of the MultiSelectGrid in the ExtJS view.
 	 * @param string $modelName Name of the model that the selected ID's belong to.
 	 * @param array $requestParams The request parameters
-	 * @param GO_Base_Db_FindCriteria $findCriteria
-	 * @param string $columnName
-	 * @param string $tableAlias
-	 * @param boolean $useAnd
-	 * @param boolean $useNot 
+	 * @param boolean $checkPermission  Enable permission checking on this model. This makes sure that only 
+	 * readbable addressbooks are used with contacts for example.
+	 * This will disable acl checking for the contacts query which improves performance.
 	 */
-	public function __construct($requestParamName, $modelName, GO_Base_Data_AbstractStore $store, array $requestParams) {
+	public function __construct($requestParamName, $modelName, GO_Base_Data_AbstractStore $store, array $requestParams, $checkPermissions=false) {
 
 		$this->_requestParamName = $requestParamName;
 		$this->_store = $store;
@@ -45,19 +43,10 @@ class GO_Base_Component_MultiSelectGrid {
 		if(GO::config()->debug && !class_exists($modelName))
 			throw new Exception("Invalid argument \$modelName for GO_Base_Component_MultiSelectGrid. Class $modelName does not exist.");
 		
+		$this->_checkPermissions=$checkPermissions;
+		
 		if(empty($requestParams['noMultiSelectFilter']))
 			$this->_setSelectedIds($requestParams);
-	}
-	
-	/**
-	 * Enable permission checking on this model. This makes sure that only 
-	 * readbable addressbooks are used with contacts for example.
-	 * This will disable acl checking for the contacts query which improves performance.
-	 * 
-	 * @param boolan $value
-	 */
-	public function checkPermissions($value=true){
-		$this->_checkPermissions=$value;
 	}
 	
 	/**
