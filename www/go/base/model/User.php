@@ -189,7 +189,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		$fields=array(
 				"CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)", 
 				$prefixTable.".email",
-				$prefixTable."username"
+				$prefixTable.".username"
 				);
 		
 		if($withCustomFields && $this->customfieldsRecord)
