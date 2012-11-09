@@ -617,3 +617,6 @@ $l['month_times'][2]='the second';
 $l['month_times'][3]='the third';
 $l['month_times'][4]='the fourth';
 $l['month_times'][5]='the fifth';
+
+$l['deleteAllItems']='Delete all items';
+$l['deleteAllItemsAreYouSure']='Are you sure you want to delete all items?';

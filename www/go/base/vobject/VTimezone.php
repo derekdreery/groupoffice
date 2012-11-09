@@ -70,22 +70,23 @@ class GO_Base_VObject_VTimezone extends Sabre_VObject_Component {
 		$s->dtstart = "16010101T000000";
 		$s->rrule = $STANDARD_RRULE;
 		$s->tzoffsetfrom = $STANDARD_TZOFFSETFROM . "00";
-		$s->tzoffsetto = $STANDARD_TZOFFSETFROM . "00";
+		$s->tzoffsetto = $STANDARD_TZOFFSETTO . "00";
 
 		$this->add($s);
 
 		$s = new Sabre_VObject_Component("daylight");
 		$s->dtstart = "16010101T000000";
 		$s->rrule = $DAYLIGHT_RRULE;
-		$s->tzoffsetfrom = $DAYLIGHT_TZOFFSETTO . "00";
-		$s->tzoffsetto = $STANDARD_TZOFFSETFROM . "00";
+		$s->tzoffsetfrom = $DAYLIGHT_TZOFFSETFROM . "00";
+		$s->tzoffsetto = $DAYLIGHT_TZOFFSETTO . "00";
 
 		$this->add($s);
 	}
 	
 	private function _getDay($date){
+		echo $date."\n";
 		$time = new DateTime($date);				
-		$dayOfMonth = $time->format('n');				
+		$dayOfMonth = $time->format('j');				
 		$nth = ceil($dayOfMonth/7);				
 		if($nth>2)
 			$weekday = '-1SU';

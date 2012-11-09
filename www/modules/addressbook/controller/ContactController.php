@@ -154,8 +154,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		if(!empty($params['filters'])){
 			$abMultiSel = new GO_Base_Component_MultiSelectGrid(
 							'books', 
-							"GO_Addressbook_Model_Addressbook",$store, $params);		
-			$abMultiSel->checkPermissions();
+							"GO_Addressbook_Model_Addressbook",$store, $params, true);		
+			
 			$abMultiSel->addSelectedToFindCriteria($storeParams, 'addressbook_id');
 	//		$abMultiSel->setButtonParams($response);
 	//		$abMultiSel->setStoreTitle();
@@ -206,19 +206,15 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 				
 			$criteria->mergeWith($queryCrit);
 		}
-	
+		
+		$searchFields = GO_Addressbook_Model_Contact::model()->getFindSearchQueryParamFields();
+		$searchFields[]="c.name";
+		
 		$storeParams = GO_Base_Db_FindParams::newInstance()
 			->export("contact")
 			->joinAclFieldTable()
 			->criteria($criteria)		
-			->searchFields(array(
-				"CONCAT(t.first_name,t.middle_name,t.last_name)", 
-				"t.email",
-				"t.email2",
-				"t.email3",			
-                "t.address",
-				"c.name",
-				))
+			->searchFields($searchFields)
 			->joinModel(array(
 				'model'=>'GO_Addressbook_Model_Company',					
 	 			'foreignField'=>'id', //defaults to primary key of the remote model

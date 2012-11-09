@@ -121,15 +121,16 @@ GO.addressbook.SelectCompanyDialog = function(config){
 					this.callHandler(false);
 				},
 				scope:this
-			},{
-				text: GO.addressbook.lang.addAllSearchResults,
-				handler: function (){
-					if(confirm(GO.addressbook.lang.confirmAddAllSearchResults)){
-						this.callHandler(true, true);
-					}
-				},
-				scope:this
 			},
+//			{
+//				text: GO.addressbook.lang.addAllSearchResults,
+//				handler: function (){
+//					if(confirm(GO.addressbook.lang.confirmAddAllSearchResults)){
+//						this.callHandler(true, true);
+//					}
+//				},
+//				scope:this
+//			},
 			{
 				text: GO.lang['cmdClose'],
 				handler: function(){this.hide();},

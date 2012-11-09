@@ -765,7 +765,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.0.124';
+	var $version = '4.0.125';
 
 
 	/* The permissions mode to use when creating files
@@ -795,7 +795,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20121107';
+	var $mtime = '20121109';
 
 	#group configuration
 	/**
@@ -1060,15 +1060,15 @@ class GO_Base_Config {
 		if($this->debug)
 			$this->debug_log=true;
 
-		if($this->debug_log){// || $this->log_slow_requests) {			
-
-			list ($usec, $sec) = explode(" ", microtime());
-			$this->loadstart = ((float) $usec + (float) $sec);
-			
-//			$dat = getrusage();
-//			define('PHP_TUSAGE', microtime(true));
-//			define('PHP_RUSAGE', $dat["ru_utime.tv_sec"]*1e6+$dat["ru_utime.tv_usec"]);
-		}
+//		if($this->debug_log){// || $this->log_slow_requests) {			
+//
+//			list ($usec, $sec) = explode(" ", microtime());
+//			$this->loadstart = ((float) $usec + (float) $sec);
+//			
+////			$dat = getrusage();
+////			define('PHP_TUSAGE', microtime(true));
+////			define('PHP_RUSAGE', $dat["ru_utime.tv_sec"]*1e6+$dat["ru_utime.tv_usec"]);
+//		}
 
 		if(is_string($this->file_create_mode)) {
 			$this->file_create_mode=octdec($this->file_create_mode);
@@ -1101,16 +1101,16 @@ class GO_Base_Config {
 	}
 
 
-	function __destruct() {
-		if($this->debug_log) {
-			//GO::debug('Performed '.$GLOBALS['query_count'].' database queries', $this);
-
-			GO::debug('Page load took: '.(GO_Base_Util_Date::getmicrotime()-$this->loadstart).'ms', $this);
-			GO::debug('Peak memory usage:'.round(memory_get_peak_usage()/1048576,2).'MB', $this);
-			GO::debug("--------------------\n", $this);
-		}		
-//		$this->_logSlowRequest();
-	}
+//	function __destruct() {
+//		if($this->debug_log) {
+//			//GO::debug('Performed '.$GLOBALS['query_count'].' database queries', $this);
+//
+//			GO::debug('Page load took: '.(GO_Base_Util_Date::getmicrotime()-$this->loadstart).'ms', $this);
+//			GO::debug('Peak memory usage:'.round(memory_get_peak_usage()/1048576,2).'MB', $this);
+//			
+//		}		
+////		$this->_logSlowRequest();
+//	}
 	
 //	private function _logSlowRequest(){
 //		if($this->log_slow_requests){

@@ -9,7 +9,7 @@ GO.smime.PublicCertsGrid = function(config){
 	config.autoScroll=true;
 	config.split=true;
 	config.store = new GO.data.JsonStore({
-		url: GO.settings.modules.smime.url+ 'json.php',
+		url: GO.url("smime/publicCertificate/store"),
 		baseParams: {
 			task: 'public_certs'	    	
 		},
@@ -43,7 +43,12 @@ GO.smime.PublicCertsGrid = function(config){
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
 	
-	config.tbar=[{
+	this.searchField = new GO.form.SearchField({
+		store: config.store,
+		width:220
+	});
+		    	
+	config.tbar = [{
 		iconCls: 'btn-delete',
 		text: GO.lang['cmdDelete'],
 		cls: 'x-btn-text-icon',
@@ -51,7 +56,9 @@ GO.smime.PublicCertsGrid = function(config){
 			this.deleteSelected();
 		},
 		scope: this
-	}];
+	},'-',GO.lang['strSearch'] + ':', this.searchField];
+	
+	
 	config.listeners={
 		scope:this,
 		rowdblclick:function(grid, rowIndex){
@@ -122,6 +129,7 @@ GO.smime.PublicCertsWindow = Ext.extend(GO.Window, {
 GO.moduleManager.onModuleReady('email',function(){
 	Ext.override(GO.email.EmailClient, {
 		initComponent : GO.email.EmailClient.prototype.initComponent.createSequence(function(){
+			this.settingsMenu.add('-');
 			this.settingsMenu.add({
 				iconCls:'btn-pub-certs',
 				text:GO.smime.lang.pubCerts,

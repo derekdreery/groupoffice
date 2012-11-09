@@ -37,7 +37,35 @@ GO.tasks.TasklistDialog = function(config)
 					document.location=GO.settings.modules.tasks.url+'export.php?tasklist_id='+this.tasklist_id;
 				},
 				scope:this
-			})
+			}),
+			{
+				style:'margin-top:10px',
+				xtype:'button',
+				text:GO.lang.deleteAllItems,
+				handler:function(){
+					Ext.Msg.show({
+						title: GO.lang.deleteAllItems,
+						icon: Ext.MessageBox.WARNING,
+						msg: GO.lang.deleteAllItemsAreYouSure,
+						buttons: Ext.Msg.YESNO,
+						scope:this,
+						fn: function(btn) {
+							if (btn=='yes') {
+								GO.request({
+									timeout:300000,
+									maskEl:Ext.getBody(),
+									url:'tasks/tasklist/truncate',
+									params:{
+										tasklist_id:this.tasklist_id
+									},
+									scope:this
+								});
+							}
+						}
+					});
+				},
+				scope:this
+			}
 		]
 	});
 

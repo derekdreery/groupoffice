@@ -404,9 +404,10 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 								"controller: ".get_class($this)." action: ".$action."\n".
 								"params: ".var_export($params, true)."\n".
 								(string) $e;
-			
-				trigger_error($report, E_USER_WARNING);
 				
+				if(!GO::config()->debug)
+					trigger_error($report, E_USER_WARNING);
+
 				$response['redirectToLogin']=empty(GO::session()->values['user_id']);
 			}
 			
