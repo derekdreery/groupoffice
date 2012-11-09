@@ -414,12 +414,7 @@ GO.email.EmailClient = function(config){
 //			return false;
 //	}, this);
 
-	this.treePanel.on('beforeclick', function(node){
-			if(node.attributes.noselect==1)
-			{
-				return false;
-			}
-	});
+	
 
 	this.treePanel.getSelectionModel().on('selectionchange', function(sm, node)	{
 //		if(node.attributes.mailbox>0)

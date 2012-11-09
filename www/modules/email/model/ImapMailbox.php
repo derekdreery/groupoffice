@@ -302,4 +302,14 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 						$this->name==$this->account->drafts 
 						);
 	}
+	
+	/**
+	 * Return true if this mailbox should be displayed in the main tree.
+	 * Only subscribed folders should be visible. But some folders can't be subscribed like shared namespaces.
+	 * If they have children then they must be displayd too.
+	 * @return boolean
+	 */
+	public function isVisible(){
+		return $this->subscribed || ($this->nonexistent && $this->haschildren);
+	}
 }
