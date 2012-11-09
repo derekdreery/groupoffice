@@ -40,7 +40,7 @@ GO.comments.openComment = function(commentId) {
 GO.comments.commentsAccordion = function(id,commentsText) {
 	
 	var maxLength = 300;
-	if (commentsText.length<maxLength) {
+	if (commentsText.length<maxLength || GO.comments.enableReadMore == "0") {
 		return '<div id="comment-'+id+'" class="comment-div">'+commentsText+'</div>';
 	} else {
 		return '<div id="comment-'+id+'" class="comment-div" style="display:none;">'+
