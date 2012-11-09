@@ -1,3 +1,6 @@
+4.0.126
+- Added option to disable "Read more" links in the comments
+
 09-11-2012 4.0.125
 - VTIMEZONE export was incorrect
 - Root folders with subfolders still showed even when unsubscribed
