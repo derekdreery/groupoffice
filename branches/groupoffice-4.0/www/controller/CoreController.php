@@ -34,6 +34,8 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		
 		
 		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'log/debug.log');
+		if(!$file->exists())
+			$file->touch(true);
 		
 		return array('success'=>true, 'log'=>nl2br(str_replace('['.GO::user()->username.'] ','',$file->tail(300))));
 	}
