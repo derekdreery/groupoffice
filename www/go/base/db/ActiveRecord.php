@@ -87,7 +87,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 //	 */
 //	private static $db;
 	
-	private $_validationErrors = array();
+	
 
 	private $_attributeLabels;	
 	
@@ -2003,12 +2003,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$this->_validateUniqueColumns();
 		
-		$errors = $this->getValidationErrors();
-		if(!empty($errors)){
-			return false;
-		}
-		
-		return true;
+		return !$this->hasValidationErrors();
 	}
 	
 	private function _validateUniqueColumns(){
@@ -2051,51 +2046,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 	}
 	
-	/**
-	 * Return all validation errors of this model
-	 * 
-	 * @return array 
-	 */
-	public function getValidationErrors(){
-		return $this->_validationErrors;
-	}
-	
-	/**
-	 * Get the validationError for the given attribute
-	 * If the attribute has no error then fals will be returned
-	 * 
-	 * @param string $attribute
-	 * @return mixed 
-	 */
-	public function getValidationError($attribute){
-		if(!empty($this->_validationErrors[$attribute]))
-			return $this->_validationErrors[$attribute];
-		else
-			return false;
-	}
-	
-	/**
-	 * Set a validation error for the given field.
-	 * 
-	 * @param string $attribute Set to 'form' for a general form error.
-	 * @param string $message 
-	 */
-	protected function setValidationError($attribute,$message) {
-		$this->_validationErrors[$attribute] = $message;
-	}
-	
-	/**
-		* Returns a value indicating whether there is any validation error.
-		* @param string $attribute attribute name. Use null to check all attributes.
-		* @return boolean whether there is any error.
-		*/
-	public function hasValidationErrors($attribute=null)
-	{
-		if ($attribute === null)
-			return $this->_validationErrors !== array();
-		else
-			return isset($this->_validationErrors[$attribute]);
-	}
+
 	
 	
 //	public function getFilesFolder(){
