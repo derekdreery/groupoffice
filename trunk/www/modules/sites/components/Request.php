@@ -132,7 +132,7 @@ class GO_Sites_Components_Request
 	//public function getBaseUrl($absolute=false)
 	public function getBaseUrl()
 	{
-		return ""; //TODO: return the base url
+		//return ""; //TODO: return the base url
 		if ($this->_baseUrl === null)
 			$this->_baseUrl = rtrim(dirname($this->getScriptUrl()), '\\/');
 		return $this->_baseUrl;
