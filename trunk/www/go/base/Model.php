@@ -34,7 +34,7 @@ abstract class GO_Base_Model extends GO_Base_Observable{
 	protected $_validationErrors = array();
 	
 	private static $_models=array();			// class name => model
-
+	
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Every child of this class must override it.
