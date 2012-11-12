@@ -132,7 +132,6 @@ class GO_Sites_Components_Request
 	//public function getBaseUrl($absolute=false)
 	public function getBaseUrl()
 	{
-		//return ""; //TODO: return the base url
 		if ($this->_baseUrl === null)
 			$this->_baseUrl = rtrim(dirname($this->getScriptUrl()), '\\/');
 		return $this->_baseUrl;
@@ -164,12 +163,20 @@ class GO_Sites_Components_Request
 		if ($this->_hostInfo === null)
 		{
 			$http = 'http'; //TODO: https if secure connection
+			$https = (isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == "1")) || !empty($_SERVER["HTTP_X_SSL_REQUEST"]);
+			
+			if($https)
+				$http.='s';
+			
 			if (isset($_SERVER['HTTP_HOST']))
 				$this->_hostInfo = $http . '://' . $_SERVER['HTTP_HOST'];
 			else
 			{
 				$this->_hostInfo = $http . '://' . $_SERVER['SERVER_NAME'];
 			}
+			
+			if ((!$https && $_SERVER["SERVER_PORT"] != "80") || ($https && $_SERVER["SERVER_PORT"] != "443")) 
+				$this->_hostInfo .= ":".$_SERVER["SERVER_PORT"];
 		}
 		return $this->_hostInfo;
 	}
