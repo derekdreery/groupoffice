@@ -20,15 +20,23 @@ class GO_Sites_Components_Language{
 	public function setLanguage($isoCode=false){
 		$oldIso = $this->_langIso;
 		
-		if(!$isoCode)
-			$this->_langIso=GO::user() ? GO::user()->language : GO::config()->language;
-		else
+		if(!$isoCode){
+			
+			$goIso = GO::user() ? GO::user()->language : GO::config()->language;
+			
+			$this->_langIso=$this->hasLanguage($goIso) ? $goIso : 'en';
+		}else
 			$this->_langIso=$isoCode;
 		
 		if($oldIso!=$this->_langIso)
 			$this->_lang=array();
-		
+				
 		return $oldIso;
+	}
+	
+	public function hasLanguage($iso){
+		$file = $this->_templatePath.'language/'.$iso.'.php';
+		return file_exists($file);
 	}
 
 	public function getTranslation($name){
@@ -52,8 +60,8 @@ class GO_Sites_Components_Language{
 		$file = $this->_templatePath.'language/'.$this->_langIso.'.php';
 		if(file_exists($file))
 			return $file;
-		else
-			return false;
+		
+		return false;
 	}
 	
 	
