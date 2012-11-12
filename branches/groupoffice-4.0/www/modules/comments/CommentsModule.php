@@ -21,6 +21,10 @@ class GO_Comments_CommentsModule extends GO_Base_Module{
 			return $readMore;
 	}
 	
+	public static function commentsRequired(){
+		return isset(GO::config()->comments_category_required)?GO::config()->comments_category_required:false;
+	} 
+	
 	
 	public static function loadSettings(&$settingsController, &$params, &$response, $user) {
 		
