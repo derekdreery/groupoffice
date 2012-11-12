@@ -111,8 +111,8 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 			if(substr($this->vat_no,0,2)!=$this->post_country)			
 				$this->vat_no = $this->post_country.' '.$this->vat_no;
 			
-			if($this->checkVatNumber && !GO_Base_Util_Validate::checkVat($this->post_country, $this->vat_no))
-				$this->setValidationError('vat_no', 'European VAT (Country:'.$this->post_country.', No.:'.$this->vat_no.') number is invalid according to VIES. Please check <a target="_blank" href="http://ec.europa.eu/taxation_customs/vies/" target="_blank">here</a> to check it on their website.');
+			if($this->checkVatNumber && ($this->isModified('vat_no') || $this->isModified('post_country')) && !GO_Base_Util_Validate::checkVat($this->post_country, $this->vat_no))
+				$this->setValidationError('vat_no', 'European VAT (Country:'.$this->post_country.', No.:'.$this->vat_no.') number is invalid according to VIES. Please click <a target="_blank" href="http://ec.europa.eu/taxation_customs/vies/" target="_blank">here</a> to check it on their website.');
 		}
 		
 		return parent::validate();
