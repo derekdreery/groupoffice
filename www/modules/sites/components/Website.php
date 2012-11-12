@@ -60,11 +60,15 @@ class GO_Sites_Components_Website
 	{
 		 GOS::setSite($this);
 
+		  // Find the website model from its domainname
 			$site = GO_Sites_Model_Site::model()->findSingleByAttribute('domain',$domain);
 			
 			if($site==null)
 				throw new GO_Base_Exception_NotFound('Website not found in database');
 			$this->_site = $site;
+			
+			// Set the language of GO itself to the same language as the website.
+			GO::language()->setLanguage($this->_site->language);
 	}
 	
 	/**
