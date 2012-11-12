@@ -51,6 +51,8 @@ class GO_Tasks_Controller_Portlet extends GO_Base_Controller_AbstractMultiSelect
 	 */
 	protected function actionPortletGrid($params) {
 		
+		$now = GO_Base_Util_Date::date_add(mktime(0,0,0),1);
+		
 		if(isset($params['completed_task_id'])) {
 			$updateTask = GO_Tasks_Model_Task::model()->findByPk($params['completed_task_id']);
 			
@@ -65,6 +67,7 @@ class GO_Tasks_Controller_Portlet extends GO_Base_Controller_AbstractMultiSelect
 		$store = GO_Base_Data_Store::newInstance(GO_Tasks_Model_Task::model());
 		
 		$findCriteria = GO_Base_Db_FindCriteria::newInstance()
+						->addCondition('start_time', $now, '<')
 						->addCondition('status',  GO_Tasks_Model_Task::STATUS_COMPLETED , '<>', 't');
 		
 		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
