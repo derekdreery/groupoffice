@@ -71,7 +71,6 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 		$company->setValidationRule('address', 'required', true);
 		$company->setValidationRule('zip', 'required', true);
 		$company->setValidationRule('city', 'required', true);
-		$company->setValidationRule('state', 'required', true);
 		$company->setValidationRule('country', 'required', true);
 		
 		if(GO_Base_Util_Http::isPostRequest())
@@ -272,6 +271,7 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 			$user->setAttributes($_POST['User']);				
 			$contact->setAttributes($_POST['Contact']);
 			$company->setAttributes($_POST['Company']);
+			$company->checkVatNumber=true;
 			
 			if(!empty($_POST['Company']['postAddressIsEqual']))
 				$company->setPostAddressFromVisitAddress();

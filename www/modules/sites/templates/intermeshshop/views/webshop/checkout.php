@@ -10,40 +10,49 @@
 			<div class="row">
 				<?php echo GO_Sites_Components_Html::activeLabel($order, 'post_name'); ?>
 				<?php echo GO_Sites_Components_Html::activeTextField($order, 'post_name'); ?>
+				<?php echo GO_Sites_Components_Html::error($order, 'post_name'); ?>
 			</div>
 			<div class="row">
 				<?php echo GO_Sites_Components_Html::activeLabel($order, 'email'); ?>
 				<?php echo GO_Sites_Components_Html::activeTextField($order, 'email'); ?>
+				<?php echo GO_Sites_Components_Html::error($order, 'email'); ?>
 			</div>
 			<div class="row">
 				<?php echo GO_Sites_Components_Html::activeLabel($order, 'post_address'); ?>
 				<?php echo GO_Sites_Components_Html::activeTextField($order, 'post_address'); ?>
+				<?php echo GO_Sites_Components_Html::error($order, 'post_address'); ?>
 			</div>
 			<div class="row">
 				<?php echo GO_Sites_Components_Html::activeLabel($order, 'post_address_no'); ?>
 				<?php echo GO_Sites_Components_Html::activeTextField($order, 'post_address_no'); ?>
+				<?php echo GO_Sites_Components_Html::error($order, 'post_address_no'); ?>
 			</div>
 			<div class="row">
 				<?php echo GO_Sites_Components_Html::activeLabel($order, 'post_zip'); ?>
 				<?php echo GO_Sites_Components_Html::activeTextField($order, 'post_zip'); ?>
+				<?php echo GO_Sites_Components_Html::error($order, 'post_zip'); ?>
 			</div>
 			<div class="row">
 				<?php echo GO_Sites_Components_Html::activeLabel($order, 'post_city'); ?>
 				<?php echo GO_Sites_Components_Html::activeTextField($order, 'post_city'); ?>
+				<?php echo GO_Sites_Components_Html::error($order, 'post_city'); ?>
 			</div>
 			<div class="row">
 				<?php echo GO_Sites_Components_Html::activeLabel($order, 'post_state'); ?>
 				<?php echo GO_Sites_Components_Html::activeTextField($order, 'post_state'); ?>
+				<?php echo GO_Sites_Components_Html::error($order, 'post_state'); ?>
 			</div>
 			<div class="row">
 				<?php echo GO_Sites_Components_Html::activeLabel($order, 'post_country'); ?>
 				<?php echo GO_Sites_Components_Html::activeDropDownList($order, 'post_country', GO::language()->getCountries()); ?>
+				<?php echo GO_Sites_Components_Html::error($order, 'post_country'); ?>
 			</div>
 
 			<p>Only enter the following field if you don't live in the Netherlands and you have a valid European Union VAT number.</p>
 			<div class="row">
 				<?php echo GO_Sites_Components_Html::activeLabel($order, 'vat_no'); ?>
 				<?php echo GO_Sites_Components_Html::activeTextField($order, 'vat_no'); ?>	
+				<?php echo GO_Sites_Components_Html::error($order, 'vat_no'); ?>
 			</div>
 			<h1>Selected products</h1>
 

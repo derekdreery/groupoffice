@@ -19,112 +19,74 @@
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
 abstract class GO_Sites_Components_FormModel extends GO_Base_Model {
-	
-	private $_validationErrors = array();
+
 	protected $requiredAttributes = array();
-	
+
 	/**
-		* Returns the attribute labels.
-		* Attribute labels are mainly used in error messages of validation.
-		* By default an attribute label is generated using {@link generateAttributeLabel}.
-		* This method allows you to explicitly specify attribute labels.
-		*
-		* @return array attribute labels (name=>label)
-		* @see generateAttributeLabel
-		*/
-	public function attributeLabels()
-	{
-				return array();
+	 * Returns the attribute labels.
+	 * Attribute labels are mainly used in error messages of validation.
+	 * By default an attribute label is generated using {@link generateAttributeLabel}.
+	 * This method allows you to explicitly specify attribute labels.
+	 *
+	 * @return array attribute labels (name=>label)
+	 * @see generateAttributeLabel
+	 */
+	public function attributeLabels() {
+		return array();
 	}
 
 	/**
-		* Generates a user friendly attribute label.
-		* This is done by replacing underscores or dashes with blanks and
-		* changing the first letter of each word to upper case.
-		* For example, 'department_name' or 'DepartmentName' becomes 'Department Name'.
-		* @param string $name the column name
-		* @return string the attribute label
-		*/
-	public function generateAttributeLabel($name)
-	{
-				return ucwords(trim(strtolower(str_replace(array('-','_','.'),' ',preg_replace('/(?<![A-Z])[A-Z]/', ' \0', $name)))));
+	 * Generates a user friendly attribute label.
+	 * This is done by replacing underscores or dashes with blanks and
+	 * changing the first letter of each word to upper case.
+	 * For example, 'department_name' or 'DepartmentName' becomes 'Department Name'.
+	 * @param string $name the column name
+	 * @return string the attribute label
+	 */
+	public function generateAttributeLabel($name) {
+		return ucwords(trim(strtolower(str_replace(array('-', '_', '.'), ' ', preg_replace('/(?<![A-Z])[A-Z]/', ' \0', $name)))));
 	}
-	
-	/**
-		* Returns the text label for the specified attribute.
-		* @param string $attribute the attribute name
-		* @return string the attribute label
-		* @see generateAttributeLabel
-		* @see attributeLabels
-		*/
-	public function getAttributeLabel($attribute)
-	{
-					$labels=$this->attributeLabels();
-					if(isset($labels[$attribute]))
-									return $labels[$attribute];
-					else
-									return $this->generateAttributeLabel($attribute);
-	}
-	
-	/**
-		* Returns a value indicating whether the attribute is required.
-		* This is determined by checking if the attribute is associated with a
-		* {@link CRequiredValidator} validation rule in the current {@link scenario}.
-		* @param string $attribute attribute name
-		* @return boolean whether the attribute is required
-		*/
-	public function isAttributeRequired($attribute)
-	{
-		  if(!isset($this->$attribute))
-				return false;
-			return in_array($attribute, $this->requiredAttributes);
-	}
-	
 
 	/**
-		* Returns a value indicating whether there is any validation error.
-		* @param string $attribute attribute name. Use null to check all attributes.
-		* @return boolean whether there is any error.
-		*/
-	public function hasValidationErrors($attribute=null)
-	{
-				if($attribute===null)
-								return $this->_validationErrors!==array();
-				else
-								return isset($this->_validationErrors[$attribute]);
-	}
-	/**
-	 * Return all validation errors of this model
-	 * 
-	 * @return type 
+	 * Returns the text label for the specified attribute.
+	 * @param string $attribute the attribute name
+	 * @return string the attribute label
+	 * @see generateAttributeLabel
+	 * @see attributeLabels
 	 */
-	public function getValidationErrors(){
-		return $this->_validationErrors;
-	}
-	
-	/**
-	 * Get the validationError for the given attribute
-	 * If the attribute has no error then fals will be returned
-	 * 
-	 * @param string $attribute
-	 * @return mixed 
-	 */
-	public function getValidationError($attribute){
-		if(!empty($this->_validationErrors[$attribute]))
-			return $this->_validationErrors[$attribute];
+	public function getAttributeLabel($attribute) {
+		$labels = $this->attributeLabels();
+		if (isset($labels[$attribute]))
+			return $labels[$attribute];
 		else
-			return false;
+			return $this->generateAttributeLabel($attribute);
 	}
-	
+
 	/**
-	 * Set a validation error for the given field.
-	 * 
-	 * @param string $attribute Set to 'form' for a general form error.
-	 * @param string $message 
+	 * Returns a value indicating whether the attribute is required.
+	 * This is determined by checking if the attribute is associated with a
+	 * {@link CRequiredValidator} validation rule in the current {@link scenario}.
+	 * @param string $attribute attribute name
+	 * @return boolean whether the attribute is required
 	 */
-	protected function setValidationError($attribute,$message) {
-		$this->_validationErrors[$attribute] = $message;
+	public function isAttributeRequired($attribute) {
+		if (!isset($this->$attribute))
+			return false;
+		return in_array($attribute, $this->requiredAttributes);
 	}
 	
+	
+	public function validate()
+	{
+		foreach($this->requiredAttributes as $attributeName){
+
+			if(empty($this->$attributeName))
+				$this->setValidationError($attributeName, sprintf(GO::t('attributeRequired'),$this->getAttributeLabel($attributeName)));
+		}
+
+		return !$this->hasValidationErrors();
+	}
+
 }
+
 ?>
