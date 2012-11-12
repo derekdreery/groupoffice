@@ -21,6 +21,7 @@ class GO_Base_VObject_VTimezone extends Sabre_VObject_Component {
 		$tz = new DateTimeZone(GO::user() ? GO::user()->timezone : date_default_timezone_get());
 		//$tz = new DateTimeZone("Europe/Amsterdam");
 		$transitions = $tz->getTransitions();
+		
 
 		$start_of_year = mktime(0, 0, 0, 1, 1);
 
@@ -42,21 +43,27 @@ class GO_Base_VObject_VTimezone extends Sabre_VObject_Component {
 		
 		for ($i = 0, $max = count($transitions); $i < $max; $i++) {
 			if ($transitions[$i]['ts'] > $start_of_year) {
-				
+	
 				$weekday1 = $this->_getDay($transitions[$i]['time']);
 				$weekday2 = $this->_getDay($transitions[$i+1]['time']);
 				
-				$dst_end = $transitions[$i];
-				$dst_start = $transitions[$i + 1];
+				if($transitions[$i]['isdst']){
+					$dst_start = $transitions[$i];
+					$dst_end = $transitions[$i + 1];
+				}else
+				{
+					$dst_end = $transitions[$i];
+					$dst_start = $transitions[$i + 1];
+				}
 
-				$STANDARD_TZOFFSETFROM = $this->_formatVtimezoneTransitionHour($dst_end['offset'] / 3600);
-				$STANDARD_TZOFFSETTO = $this->_formatVtimezoneTransitionHour($dst_start['offset'] / 3600);
+				$STANDARD_TZOFFSETFROM = $this->_formatVtimezoneTransitionHour($dst_start['offset'] / 3600);
+				$STANDARD_TZOFFSETTO = $this->_formatVtimezoneTransitionHour($dst_end['offset'] / 3600);
 
-				$DAYLIGHT_TZOFFSETFROM = $this->_formatVtimezoneTransitionHour($dst_start['offset'] / 3600);
-				$DAYLIGHT_TZOFFSETTO = $this->_formatVtimezoneTransitionHour($dst_end['offset'] / 3600);
+				$DAYLIGHT_TZOFFSETFROM = $this->_formatVtimezoneTransitionHour($dst_end['offset'] / 3600);
+				$DAYLIGHT_TZOFFSETTO = $this->_formatVtimezoneTransitionHour($dst_start['offset'] / 3600);
 
-				$DAYLIGHT_RRULE = "FREQ=YEARLY;BYDAY=$weekday1;BYMONTH=" . date('n', $dst_end['ts']);
-				$STANDARD_RRULE = "FREQ=YEARLY;BYDAY=$weekday2;BYMONTH=" . date('n', $dst_start['ts']);
+				$DAYLIGHT_RRULE = "FREQ=YEARLY;BYDAY=$weekday1;BYMONTH=" . date('n', $dst_start['ts']);
+				$STANDARD_RRULE = "FREQ=YEARLY;BYDAY=$weekday2;BYMONTH=" . date('n', $dst_end['ts']);
 
 
 				break;
@@ -84,7 +91,7 @@ class GO_Base_VObject_VTimezone extends Sabre_VObject_Component {
 	}
 	
 	private function _getDay($date){
-		echo $date."\n";
+//		echo $date."\n";
 		$time = new DateTime($date);				
 		$dayOfMonth = $time->format('j');				
 		$nth = ceil($dayOfMonth/7);				
