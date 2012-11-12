@@ -45,6 +45,8 @@ class GO_Comments_Model_Comment extends GO_Base_Db_ActiveRecord{
 	protected function init() {
 		$this->columns['model_id']['required']=true;
 		$this->columns['model_type_id']['required']=true;
+		$this->columns['category_id']['required']=GO_Comments_CommentsModule::commentsRequired();
+		
 		return parent::init();
 	}
 
