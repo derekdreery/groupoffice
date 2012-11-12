@@ -263,7 +263,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	 */
 	protected function actionCheckDatabase($params) {
 		
-		
+
 		$this->run("upgrade",$params);		
 		
 		$this->lockAction();
@@ -274,10 +274,10 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		$oldAllowDeletes = GO_Base_Fs_File::setAllowDeletes(false);
 		
+        if(!$this->isCli()){
+            echo '<pre>';
+        }
 				
-		if(!headers_sent())
-			header('Content-Type: text/plain; charset=UTF-8');
-		
 		if(!empty($params['module'])){
 			if($params['module']=='base'){
 				$this->_checkCoreModels();
@@ -295,6 +295,10 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		echo "All Done!\n";
 		
+        if(!$this->isCli()){
+            echo '</pre>';
+        }
+        
 		GO_Base_Fs_File::setAllowDeletes($oldAllowDeletes);
 		
 		return $response;
