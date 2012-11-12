@@ -258,7 +258,7 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 			return $returnUrl;
 		}
 		else
-			return GO::config()->host; //Homepage
+			return GOS::site()->getHomeUrl(); //Homepage
 	}
 	
 	/**

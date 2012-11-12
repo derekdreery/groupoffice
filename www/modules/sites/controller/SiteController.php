@@ -109,11 +109,12 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 					else
 						throw new Exception('Login after registreation failed.');
 				}
-			}else {
-				var_dump($user->getValidationErrors());
-				var_dump($contact->getValidationErrors());
-				var_dump($company->getValidationErrors());
 			}
+//			else {
+//				var_dump($user->getValidationErrors());
+//				var_dump($contact->getValidationErrors());
+//				var_dump($company->getValidationErrors());
+//			}
 		}
 		
 		$user->password="";
@@ -230,7 +231,7 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 	public function actionLogout(){
 		GO::session()->logout();
 		GO::session()->start();
-		$this->redirect(GOS::site()->getLoginUrl());
+		$this->redirect(GOS::site()->getHomeUrl());
 	}
 	
 	protected function actionProfile(){

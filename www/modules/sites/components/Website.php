@@ -103,6 +103,10 @@ class GO_Sites_Components_Website
 		return $this->getUrlManager()->createUrl($this->_site->login_path);
 	}
 	
+	public function getHomeUrl(){
+		return $this->request->getBaseUrl().'/';
+	}
+	
 	public function getName()
 	{
 		return $this->_site->name;
