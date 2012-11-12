@@ -1,6 +1,6 @@
 4.0.126
 - Added option to disable "Read more" links in the comments
-- Fixed display of tasks in the startpage, now only showing active tasks instead of active and upcoming.
+- Changed display of tasks in the startpage, now only showing active tasks instead of active and upcoming.
 - Added config option for comment category selection to be required. This can be managed by the server admin in the config.php file ($config['comments_category_required'] = true;).
 - Added config option for the calendar's event category selection to be required. This can be managed by the server admin in the config.php file ($config['calendar_category_required'] = true;).
 
