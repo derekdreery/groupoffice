@@ -57,7 +57,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$this->columns['end_time']['greater'] = 'start_time';
 		$this->columns['end_time']['gotype'] = 'unixtimestamp';
 		$this->columns['repeat_end_time']['gotype'] = 'unixtimestamp';
-
+		$this->columns['category_id']['required'] = GO_Calendar_CalendarModule::commentsRequired();
+		
 		parent::init();
 	}
 

@@ -33,6 +33,10 @@ class GO_Calendar_CalendarModule extends GO_Base_Module{
 		return $calendar;
 	}
 	
+	public static function commentsRequired(){
+		return isset(GO::config()->calendar_category_required)?GO::config()->calendar_category_required:false;
+	} 
+	
 	public static function initListeners() {		
 		GO_Base_Model_Reminder::model()->addListener('dismiss', "GO_Calendar_Model_Event", "reminderDismissed");
 	}

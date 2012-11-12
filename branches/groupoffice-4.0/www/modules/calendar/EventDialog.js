@@ -907,6 +907,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			editable:false,
 			selectOnFocus:true,
 			forceSelection:true,
+			allowBlank: !GO.calendar.categoryRequired,
 			setCalendarId : function(calendar_id){
 				this.clearLastSearch();
 				this.store.baseParams.calendar_id=calendar_id;
