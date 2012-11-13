@@ -10,3 +10,9 @@ $l["comment"]= 'Kommentar';
 $l["comments"]= 'Kommentarer';
 $l["recentComments"]='Senaste kommentarerna';
 $l["browseComments"]= 'Bläddra bland kommentarer';
+
+$l['manageCategories']='Hantera kategorier';
+$l['category']='Kategori';
+$l['noCategory']='Ingen kategori';
+$l['newCommentText']='Ange ny kommentar här ...';
+$l['readMore']="Läs mer";

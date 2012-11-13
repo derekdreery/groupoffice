@@ -21,7 +21,8 @@ GO.comments.CategoriesComboBox = Ext.extend(GO.form.ComboBox, {
 			triggerAction: 'all',
 			editable: false,
 			selectOnFocus:true,
-			forceSelection: false
+			forceSelection: GO.comments.categoryRequired,
+			allowBlank: !GO.comments.categoryRequired
 //					,
 //					pageSize: parseInt(GO.settings.max_rows_list),
 //					disabled:!GO.settings.modules.projects.write_permission

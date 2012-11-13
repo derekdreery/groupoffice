@@ -1,6 +1,6 @@
 <?php
 
-
+$l['task']='Taak';
 $l['name']='Taken';
 $l['description']='Taken module';
 $l['status']='Status';

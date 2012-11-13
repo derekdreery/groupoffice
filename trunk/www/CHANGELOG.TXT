@@ -1,3 +1,19 @@
+4.0.127
+- Fixed problem with Heading custom field in combination with event resources panel.
+- Updated Swedish translation
+- Use spam icon for INBOX.Spam too
+- Updated Dutch translation
+- Fixed problem with resources when $config['calendar_category_required'] is set to true
+
+
+12-11-2012 4.0.126
+- Added option to disable "Read more" links in the comments
+- Changed display of tasks in the startpage, now only showing active tasks instead of active and upcoming.
+- Added config option for comment category selection to be required. This can be managed by the server admin in the config.php file ($config['comments_category_required'] = true;).
+- Added config option for the calendar's event category selection to be required. This can be managed by the server admin in the config.php file ($config['calendar_category_required'] = true;).
+- Session not entirely cleared when switching user
+- VTIMEZONE export was incorrect
+
 09-11-2012 4.0.125
 - VTIMEZONE export was incorrect
 - Root folders with subfolders still showed even when unsubscribed

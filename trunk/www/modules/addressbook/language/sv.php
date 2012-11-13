@@ -299,3 +299,5 @@ $l['nRemovedFromAddresslist']='%n kontakter har identifierats och raderats ifrå
 $l['addToAddresslist']='Lägg till i adresslista %s';
 $l['addToAddresslistPrompt']='Du håller på att lägga till de valda objekten i adresslistan %s. Vill du att dessa objekt bara ska finnas i %s?';
 $l['addAddresslistSuccess']='Objekten har lagts till i adresslistan.';
+
+$l['addContactsSuccess']= '%i kontakter har lagts till i adresslistan.';
