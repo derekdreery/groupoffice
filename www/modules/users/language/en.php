@@ -92,7 +92,6 @@ $l['name'] = 'Users';
 $l['description'] = 'Admin module. Managing system users.';
 $l['deletePrimaryAdmin'] = 'You can\'t delete the primary administrator';
 $l['deleteYourself'] = 'You can\'t delete yourself';
-$lang['link_type'][8]=$us_user = 'User';
 $l['error_username']='You have invalid characters in the username';
 $l['error_username_exists']='Sorry, that username already exists';
 $l['error_email_exists']='Sorry, that e-mail address is already registered here.';
@@ -120,4 +119,4 @@ $l['generatedPasswordIs']='The generated password is';
 $l['openContact']='Open contact';
 $l['showProUsers']='Show pro users';
 
-$l['updateExistingOnImport']='Update existing users (by username)';
+$l['updateExistingOnImport']='Update existing users by username';

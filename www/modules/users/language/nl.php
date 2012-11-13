@@ -5,7 +5,7 @@ $l['name'] = 'Gebruikers';
 $l['description'] = 'Beheren van de gebruikers';
 $l['deletePrimaryAdmin'] = 'U kunt de primaire Administrator niet verwijderen';
 $l['deleteYourself'] = 'U kunt zichzelf niet verwijderen';
-$lang['link_type'][8]=$us_user = 'Gebruiker';
+
 $l['error_username']='Er staan ongeldige tekens in de gebruikersnaam';
 $l['error_username_exists']='Sorry, die gebruikersnaam bestaat al';
 $l['error_email_exists']='Sorry, dat e-mail adres staat hier al geregistreerd.';
@@ -19,7 +19,8 @@ $l['register_email_subject']='Uw {product_name} account gegevens';
 $l['register_email_body']='Er is een {product_name} account voor u aangemaakt op {url}
 Uw inloggegevens zijn:
 Gebruikersnaam: {username};
-Wachtwoord: {password}';$l["cmdCheckColumnRead"]= 'Lezen';
+Wachtwoord: {password}';
+$l["cmdCheckColumnRead"]= 'Lezen';
 $l["cmdCheckColumnWrite"]= 'Schrijven';
 $l["cmdHeaderColumnName"]= 'Module naam';
 $l["cmdHeaderGridUserHasAccess"]= 'Gebruiker heeft toegang tot';
@@ -110,3 +111,13 @@ $l["showSmilies"]='Toon smilies';
 $l['openContact']='Open contactpersoon';
 
 $l['showProUsers']='Toon pro grebruikers';
+
+
+$l['max_users_reached']='Het maximale aantal gebruikers is bereikt voor dit systeem.';
+$l['dashdmy']='Dag-Maand-Jaar';
+$l['slashmdy']='Maand/Dag/Jaar';
+$l['dotdmy']='Dag.Maand.Jaar';
+$l['slashdmy']='Dag/Maand/Jaar';
+$l['generatePassword']='Genereer wachtwoord';
+$l['generatedPasswordIs']='Het gegenereerde wachtwoord is';
+$l['updateExistingOnImport']='Werk bestaande gebruikers bij op basis van username';

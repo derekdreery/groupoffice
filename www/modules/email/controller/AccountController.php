@@ -362,6 +362,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					$node['iconCls'] = 'email-folder-drafts';
 					$sortIndex = 2;
 					break;
+				case 'INBOX.Spam':
 				case 'Spam':
 					$node['iconCls'] = 'email-folder-spam';
 					$sortIndex = 4;

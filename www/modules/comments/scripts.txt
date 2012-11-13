@@ -7,3 +7,4 @@ modules/comments/ManageCategoriesGrid.js
 modules/comments/ManageCategoriesDialog.js
 modules/comments/CategoryDialog.js
 modules/comments/CategoriesComboBox.js
+modules/comments/Settings.js

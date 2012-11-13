@@ -24,17 +24,6 @@ Migratie script interlokaal
 
 Totaal rates in ticket export
 
-Jeremie Voix
-
-Erik thier
-
-Prode
-
-Humbolt
-
-
-Enable save appointment directly by default
-
 Testen op win: http://www.group-office.com/forum/viewtopic.php?f=5&t=9065
 
 

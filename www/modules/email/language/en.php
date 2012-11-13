@@ -118,7 +118,7 @@ $l["toggleWindowPosition"]= 'Toggle message window position';
 $l["closeUploadDialog"]='Close the upload dialog first or wait for the upload to finish';
 $l["signature"]='Signature';
 $l["defaultProgram"]='Default e-mail program';
-$l["defaultProgramInstructions"] ='<p>To set {product_name} as your default e-mail program please <a class="normal-link" href="http://www.{product_name}.com/wiki/E-mail#Set_{product_name}_as_your_default_e-mail_client" target="_blank">read the instructions</a>.</p><p>Then if you are using Windows you must download and run <a class="normal-link" href="{url}">this register file</a></p>';
+$l["defaultProgramInstructions"] ='<p>To set {product_name} as your default e-mail program on Windows you can download and run <a class="normal-link" href="{url}">this register file</a></p>';
 $l["htmlMarkup"]= 'Use HTML markup';
 $l["confirmLostChanges"]= 'Changes will be lost. Are you sure?';
 $l["alias"]="Alias";

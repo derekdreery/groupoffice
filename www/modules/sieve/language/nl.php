@@ -1,5 +1,6 @@
 <?php
-
+$l['name']='Sieve e-mail filters';
+$l['description']='Beheer e-mail filters met het sieve protocol';
 
 $l['active']='actief';
 $l['standardvacation']='Standaard vakantieregel';
