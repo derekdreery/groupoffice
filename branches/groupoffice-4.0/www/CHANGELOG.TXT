@@ -1,3 +1,6 @@
+4.0.127
+- Fixed problem with Heading custom field in combination with event resources panel.
+
 12-11-2012 4.0.126
 - Added option to disable "Read more" links in the comments
 - Changed display of tasks in the startpage, now only showing active tasks instead of active and upcoming.
