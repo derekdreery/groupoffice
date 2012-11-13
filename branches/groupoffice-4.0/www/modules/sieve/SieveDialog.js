@@ -70,6 +70,7 @@ GO.sieve.SieveDialog = function(config) {
 		style:'padding:5px;',
 		autoHeight:true,
 		border:false,
+		labelWidth:200,
 		url: GO.url('sieve/sieve/rule'),
 		baseParams:{},
 		items:[this.nameField,{
