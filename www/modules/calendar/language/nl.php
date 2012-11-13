@@ -188,3 +188,16 @@ $l["publishICS"]='Publiceer iCalendar bestand voor afgelopen maand en toekomstig
 $l["addTimeRegistration"]='Invoeren als tijdsregistratie';
 $l["showNotBusy"]='Nieuwe boekingen niet als bezet tonen';
 $l["sendEmailParticipants"]= 'Email opstellen voor deelnemers';
+
+$l["addressbook"]='Adresboek';
+$l["confirmed"]= 'Bevestigd';
+$l['eventAccepted']='U heeft de afspraak geaccepteerd';
+$l['eventScheduledIn']='De afsrpaak is opgeslagen in uw agenda %s met status %s.';
+$l['eventDeclined']="U heeft de afspraak afgewezen";
+$l['eventUpdatedIn']='De afspraak in uw agenda %s is bijgewerkt met status %s';
+$l['updateReponses'][1]='%s heeft de afspraak %s geaccepteerd';
+$l['updateReponses'][2]='%s heeft de afspraak %s geweigerd';
+$l['updateReponses'][3]='%s weet nog niet of hij/zij afspraak %s accepteerd';
+$l['directUrl']='Directe URL';
+$l['cantRemoveOrganizer']="U kunt de organisator niet verwijderen";
+$l['calendarColor']='Agendakleur';

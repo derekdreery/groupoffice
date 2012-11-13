@@ -1,7 +1,4 @@
 <?php
-
-
-$l["customcss"]='Custom CSS and Javascript';
 $l["selectFile"]='Select file';
 
 $l['name']='Custom CSS styles and scripts';

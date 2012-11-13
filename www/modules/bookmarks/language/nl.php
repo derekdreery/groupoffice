@@ -20,3 +20,5 @@ $l["showAll"]='Toon alles';
 $l["sharedCategory"]='Gedeelde categorie';
 $l["behaveAsModule"]='Gedraag als een module (Browser herladen vereist)';
 $l["confirmDelete"]='Weet je zeker dat je deze bladwijzer wilt verwijderen?';
+
+$l["bookmarks"]='Favorieten';

@@ -13,3 +13,5 @@ $l["tools"]='Systeembeheer';
 $l["description"]='Klik op een van de scripts hieronder om deze uit te voeren.';
 $l["scripts"]='Scripts';
 $l["scriptOutput"]='Script uitvoer';
+
+$l['resetState']='Alle vensters en tabellen terugzetten naar fabrieksinstellingen';

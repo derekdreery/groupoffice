@@ -56,7 +56,7 @@ $l["globalsettings_renameall"]= 'Rename all?';
 $l['name']='Tasks';
 $l['description']='A simple tasks module.';
 
-$lang['link_type'][12]=$l['task']='Task';
+$l['task']='Task';
 $l['status']='Status';
 $l['scheduled_call']='Scheduled call at %s';
 $l['statuses']['NEEDS-ACTION'] = 'Needs action';
