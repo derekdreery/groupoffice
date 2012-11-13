@@ -31,7 +31,8 @@ GO.DebugWindow = Ext.extend(GO.Window, {
 			items:{
 				xtype:'tabpanel',
 				items:[
-					this.outputPanel = new Ext.Panel({title:'Log',autoScroll:true}),
+					this.outputPanel = new GO.LogPanel({title:'Log'}),
+					this.errorPanel = new GO.LogPanel({title:'Errors'}),
 					this.infoPanel = new Ext.Panel({title:'Info',autoScroll:true, listeners:{show:this.loadInfo, scope:this}}),
 				],
 				activeTab:0
@@ -74,19 +75,11 @@ GO.DebugWindow = Ext.extend(GO.Window, {
 			url:'core/debug',
 			success:function(response, options, result){
 				
-				var d = this.outputPanel.body.dom;
 				
-				var isAtBottom = d.scrollTop >= d.scrollHeight - d.offsetHeight;
+				this.outputPanel.setLog(result.debugLog);
+				this.errorPanel.setLog(result.errorLog);
 				
-				this.outputPanel.update(result.log);
-				
-				//scroll to bottom
-				if(!this.scrolledToBottom || isAtBottom){
-					
-					d.scrollTop = d.scrollHeight - d.offsetHeight;
-					
-					this.scrolledToBottom=true;
-				}
+	
 			},
 			fail:function(){
 				Ext.TaskMgr.stop(this.taskConfig);
@@ -96,3 +89,23 @@ GO.DebugWindow = Ext.extend(GO.Window, {
 		});
 	}
 });
+
+
+GO.LogPanel = Ext.extend(Ext.Panel,{
+	autoScroll:true,
+	setLog : function(str){
+		var d = this.body.dom;
+				
+		var isAtBottom = d.scrollTop >= d.scrollHeight - d.offsetHeight;
+
+		this.update(str);
+
+		//scroll to bottom
+		if(!this.scrolledToBottom || isAtBottom){
+
+			d.scrollTop = d.scrollHeight - d.offsetHeight;
+
+			this.scrolledToBottom=true;
+		}
+	}
+})
