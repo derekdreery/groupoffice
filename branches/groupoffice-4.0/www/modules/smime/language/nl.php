@@ -26,3 +26,5 @@ $l["pkcs12CertInfo"]="Om een nieuw PCSK12 certificaat te uploaden, moet u uw {pr
 $l["pubCerts"]="Openbare SMIME certificaten";
 $l["youHaveAcert"]='U heeft al een certificaat opgeslagen. SMIME ondersteuning is ingeschakeld voor deze account.';
 $l["downloadCert"]='Download certificaat';
+
+$l["enterPassword"]="Voer het wachtwoord van uw SMIME certificaat in aub.";

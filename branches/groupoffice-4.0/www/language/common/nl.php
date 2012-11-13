@@ -177,7 +177,6 @@ $l['alert']='Attentie';
 $l['theFolderAlreadyExists']='Er bestaat al een map met deze naam';
 $l['other']='Overig';
 $l['none']='Geen';
-$l['copy']='kopie';
 $l['upload_file_to_big']='Het bestand dat u probeerde te uploaden was groter dan de maximaal toegestane grootte van %s.';
 $l["exportHiddenColumns"]='Exporteer verborgen kolommen ook';
 $l["searchQuery"]='zoekterm';
@@ -583,3 +582,10 @@ $l['sir']='Heer';
 $l['madam']='Mevrouw';
 
 $l['exportDialog']='Exporteren';
+
+$l['cannotMoveError']="%s item(s) konden niet worden verplaatst, u heeft onvoldoende toegangsrechten.";
+$l['cliOnly']= "Dit script kan alleen worden uitgevoerd met de Group-Office Command Line Interface (CLI).";
+$l['maxRowslistTooHigh']='Het maximum aantal rijen voor lijsten mag maximaal 50 zijn';
+$l['logFiles']='Logbestanden';
+$l['deleteAllItems']='Verwijder alle items';
+$l['deleteAllItemsAreYouSure']='Weet u zeker dat u alle items wilt verwijderen?';

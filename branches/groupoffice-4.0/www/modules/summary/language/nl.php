@@ -25,3 +25,4 @@ $l["type"]='Type';
 $l["summaryType"]='Samenvatting';
 $l["rssFeeds"]='Rss Feeds';
 $l["noRssFeeds"]='Er zijn nog geen RSS feeds toegevoegd.<br />Klik op het instellingen knopje rechtsboven in dit venster om feeds toe te voegen.';
+$l["summary"]= 'Startpagina';
