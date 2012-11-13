@@ -244,3 +244,7 @@ $l['useAccount']='Använd konto';
 $l['mailbox']='E-postlåda';
 $l['checkUnseen']='Kontrollera automatiskt denna mapp för nya meddelanden';
 $l['noEmailFolders']= 'Inga mappar har lagts till.';
+
+$l['sieveNote']='Stöd saknas för vissa nya funktioner. Läs mer i manualen.';
+$l['winmailNoFiles']="Denna bilaga av typen 'winmail' innehåller inga filer.";
+$l['attachedAppointmentInfo']="Bifogad mötesinformation";
