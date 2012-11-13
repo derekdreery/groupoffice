@@ -199,3 +199,7 @@ $l['eventUpdatedIn']='Händelsen i kalendern %s har uppdaterats med status %s';
 $l['updateReponses'][1]='%s har accepterat händelsen %s';
 $l['updateReponses'][2]='%s har avböjt händelsen %s';
 $l['updateReponses'][3]='%s har markerat händelsen %s som preliminär';
+
+$l['directUrl']='Direktadress';
+$l['cantRemoveOrganizer']="Du kan inte ta bort organisatören";
+$l['calendarColor']='Kalenderfärg';

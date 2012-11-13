@@ -586,3 +586,9 @@ $l['queryValue']="Värde";
 $l['queryStartGroup']="Startgrupp";
 $l['cliOnly']= "Detta skript kan bara köras genom Group-Office Command Line Interface (CLI).";
 $l['unnamed']='Namnlös';
+
+$l['maxRowslistTooHigh']='Högsta antal rader i listor är för högt. (max 50)';
+$l['sir']='Herr';
+$l['madam']='Fru';
+$l['logFiles']='Logfiler';
+$l['exportDialog']='Export';
