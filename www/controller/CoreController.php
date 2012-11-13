@@ -33,11 +33,19 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		}
 		
 		
-		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'log/debug.log');
-		if(!$file->exists())
-			$file->touch(true);
+		$debugFile = new GO_Base_Fs_File(GO::config()->file_storage_path.'log/debug.log');
+		if(!$debugFile->exists())
+			$debugFile->touch(true);
 		
-		return array('success'=>true, 'log'=>nl2br(str_replace('['.GO::user()->username.'] ','',$file->tail(300))));
+		$errorFile = new GO_Base_Fs_File(GO::config()->file_storage_path.'log/error.log');
+		if(!$errorFile->exists())
+			$errorFile->touch(true);
+		
+		return array(
+				'success'=>true, 
+				'debugLog'=>nl2br(str_replace('['.GO::user()->username.'] ','',$debugFile->tail(300))),
+				'errorLog'=>nl2br($errorFile->tail(300))
+				);
 	}
 	
 	protected function actionInfo($params){
@@ -48,9 +56,19 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 			
 		$response = array('success'=>true, 'info'=>'');
 		
-		$info = $_SERVER;
 		$info['username']=GO::user()->username;
 		$info['config']=GO::config()->get_config_file();
+		
+		$modules = GO::modules()->getAllModules();		
+		foreach($modules as $module){
+			if(!isset($info['modules']))
+				$info['modules']=$module->id;
+			else
+				$info['modules'].=', '.$module->id;
+		}
+		
+		$info = array_merge($info,$_SERVER);
+		
 		
 		$response['info']='<table>';
 		

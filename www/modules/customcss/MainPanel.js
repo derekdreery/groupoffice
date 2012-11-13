@@ -71,7 +71,7 @@ Ext.extend(GO.customcss.MainPanel, Ext.form.FormPanel, {
 
 
 GO.moduleManager.addModule('customcss', GO.customcss.MainPanel, {
-	title : GO.customcss.lang.customcss,
+	title : GO.customcss.lang.name,
 	iconCls : 'go-tab-icon-customcss',
 	admin:true
 });
