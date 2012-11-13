@@ -57,7 +57,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$this->columns['end_time']['greater'] = 'start_time';
 		$this->columns['end_time']['gotype'] = 'unixtimestamp';
 		$this->columns['repeat_end_time']['gotype'] = 'unixtimestamp';
-		$this->columns['category_id']['required'] = GO_Calendar_CalendarModule::commentsRequired();
+		//$this->columns['category_id']['required'] = GO_Calendar_CalendarModule::commentsRequired();
 		
 		parent::init();
 	}
@@ -212,7 +212,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			}else
 			{
 				$this->background='FF6666';
-			}
+			}			
 		}
 		
 		if($this->rrule != ""){			
@@ -355,7 +355,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$resourceEvent->rrule=$this->rrule;
 			$resourceEvent->repeat_end_time=$this->repeat_end_time;				
 			$resourceEvent->status="NEEDS-ACTION";
-			$resourceEvent->user_id=$this->user_id;	
+			$resourceEvent->user_id=$this->user_id;
 			$resourceEvent->save();
 		}
 	}
