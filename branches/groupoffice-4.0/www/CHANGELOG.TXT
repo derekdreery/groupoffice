@@ -1,5 +1,6 @@
 4.0.127
 - Fixed problem with Heading custom field in combination with event resources panel.
+- Fixed problem with resources when $config['calendar_category_required'] is set to true
 
 12-11-2012 4.0.126
 - Added option to disable "Read more" links in the comments
