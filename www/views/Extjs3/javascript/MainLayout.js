@@ -464,22 +464,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 					scope:this,
 					keypress:function(field, e){
 						if(e.getKey()==Ext.EventObject.ENTER){
-							//this.addSearchPanel(field.getValue());
-							if(!this.searchPanel){
-								this.searchPanel = new GO.grid.SearchPanel(
-									{
-										query: field.getValue(),
-										id:'go-search-panel'
-									}
-								);
-								this.tabPanel.add(this.searchPanel);
-							}else
-							{
-								this.searchPanel.query=field.getValue();
-								this.searchPanel.load();
-							}
-							this.tabPanel.unhideTabStripItem(this.searchPanel);
-							this.searchPanel.show();
+							this.search(field.getValue());
 						}
 					},
 					blur:function(field){
@@ -508,6 +493,24 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 
    	
    	this.removeLoadMask();
+	},
+	
+	search : function(query){
+		if(!this.searchPanel){
+			this.searchPanel = new GO.grid.SearchPanel(
+				{
+					query: query,
+					id:'go-search-panel'
+				}
+			);
+			this.tabPanel.add(this.searchPanel);
+		}else
+		{
+			this.searchPanel.query=query;
+			this.searchPanel.load();
+		}
+		this.tabPanel.unhideTabStripItem(this.searchPanel);
+		this.searchPanel.show();
 	},
 
 	initModule : function(moduleName){
