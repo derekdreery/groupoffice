@@ -128,6 +128,35 @@ Ext.extend(GO.form.HtmlEditor,Ext.form.HtmlEditor, {
 			};
 		}
 	}(),
+        
+    //Overwritten to fix font size bug in chrome
+    adjustFont: function(btn){
+        var adjust = btn.getItemId() == 'increasefontsize' ? 1 : -1,
+            doc = this.getDoc(),
+            v = parseInt(doc.queryCommandValue('FontSize') || 2, 10);
+        if(Ext.isAir){
+            
+            
+            if(v <= 10){
+                v = 1 + adjust;
+            }else if(v <= 13){
+                v = 2 + adjust;
+            }else if(v <= 16){
+                v = 3 + adjust;
+            }else if(v <= 18){
+                v = 4 + adjust;
+            }else if(v <= 24){
+                v = 5 + adjust;
+            }else {
+                v = 6 + adjust;
+            }
+            v = v.constrain(1, 6);
+        }else{
+            v = Math.max(1, v+adjust);
+        }
+        this.execCmd('FontSize', v);
+    },      
+          
 	updateToolbar: function(){
 
 		/*
