@@ -1,4 +1,5 @@
 4.0.127
+- Increasing font-size with the HTML editor will works Chrome.
 - Fixed problem with Heading custom field in combination with event resources panel.
 - Account selectbox on IMAP mailbox sharing now loads the accounts better.
 - Updated Swedish, Dutch and German translation
