@@ -1,15 +1,17 @@
 GO.mainLayout.onReady(function(){
 	
-	Ext.getBody().addKeyListener({shift:true, key:Ext.EventObject.F7}, function(e){
-	
-		
-		if(!GO.debugWindow){
-			GO.debugWindow =  new GO.DebugWindow();
-		}
-		
-		GO.debugWindow.show();
-		
-	});
+	var map = new Ext.KeyMap(document, {
+		stopEvent:true,
+		key:Ext.EventObject.F7,
+		ctrl:true,
+		fn:function(){
+				if(!GO.debugWindow){
+					GO.debugWindow =  new GO.DebugWindow();
+				}
+
+				GO.debugWindow.show();
+			}
+		});
 });
 
 GO.DebugWindow = Ext.extend(GO.Window, {
@@ -33,7 +35,7 @@ GO.DebugWindow = Ext.extend(GO.Window, {
 				items:[
 					this.outputPanel = new GO.LogPanel({title:'Log'}),
 					this.errorPanel = new GO.LogPanel({title:'Errors'}),
-					this.infoPanel = new Ext.Panel({title:'Info',autoScroll:true, listeners:{show:this.loadInfo, scope:this}}),
+					this.infoPanel = new Ext.Panel({title:'Info',autoScroll:true, listeners:{show:this.loadInfo, scope:this}})
 				],
 				activeTab:0
 			},
@@ -48,11 +50,6 @@ GO.DebugWindow = Ext.extend(GO.Window, {
 					Ext.TaskMgr.stop(this.taskConfig);
 				},
 				scope:this
-//        deactivate: function(self) {
-//            self.toFront();
-//
-//        },
-//        delay: 1
 			}
 		});
 		
