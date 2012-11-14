@@ -342,17 +342,18 @@ class formprocessor{
 				$contactCfModel->save();
 			}
 
-			foreach($_POST['mailings'] as $mailingName)
-			{
-				if(!empty($mailingName))
+			if(isset($_POST['mailings'])){
+				foreach($_POST['mailings'] as $mailingName)
 				{
-					$addresslistModel = GO_Addressbook_Model_Addresslist::model()->findSingleByAttribute('name', $mailingName);
-					if(empty($addresslistModel))
-						throw new Exception('Addresslist not found!');
-					$addresslistModel->addManyMany('contacts', $contactId);
+					if(!empty($mailingName))
+					{
+						$addresslistModel = GO_Addressbook_Model_Addresslist::model()->findSingleByAttribute('name', $mailingName);
+						if(empty($addresslistModel))
+							throw new Exception('Addresslist not found!');
+						$addresslistModel->addManyMany('contacts', $contactId);
+					}
 				}
 			}
-
 
 			if ($this->contact_id > 0) {
 				if (isset($_FILES['photo']['tmp_name']) && is_uploaded_file($_FILES['photo']['tmp_name'])) {

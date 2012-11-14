@@ -1,15 +1,17 @@
 GO.mainLayout.onReady(function(){
 	
-	Ext.getBody().addKeyListener({ctrl:true, key:Ext.EventObject.F7}, function(e){
-	
-		
-		if(!GO.debugWindow){
-			GO.debugWindow =  new GO.DebugWindow();
-		}
-		
-		GO.debugWindow.show();
-		
-	});
+	var map = new Ext.KeyMap(document, {
+		stopEvent:true,
+		key:Ext.EventObject.F7,
+		ctrl:true,
+		fn:function(){
+				if(!GO.debugWindow){
+					GO.debugWindow =  new GO.DebugWindow();
+				}
+
+				GO.debugWindow.show();
+			}
+		});
 });
 
 GO.DebugWindow = Ext.extend(GO.Window, {
@@ -31,14 +33,14 @@ GO.DebugWindow = Ext.extend(GO.Window, {
 			items:{
 				xtype:'tabpanel',
 				items:[
-					this.outputPanel = new Ext.Panel({title:'Log',autoScroll:true}),
-					this.infoPanel = new Ext.Panel({title:'Info',autoScroll:true, listeners:{show:this.loadInfo, scope:this}}),
+					this.outputPanel = new GO.LogPanel({title:'Log'}),
+					this.errorPanel = new GO.LogPanel({title:'Errors'}),
+					this.infoPanel = new Ext.Panel({title:'Info',autoScroll:true, listeners:{show:this.loadInfo, scope:this}})
 				],
 				activeTab:0
 			},
 			listeners:{
-				show:function(){
-					this.scrolledToBottom=false;
+				show:function(){					
 					Ext.TaskMgr.start(this.taskConfig);
 					
 					this.alignTo(Ext.getBody(),'tr-tr');
@@ -47,11 +49,6 @@ GO.DebugWindow = Ext.extend(GO.Window, {
 					Ext.TaskMgr.stop(this.taskConfig);
 				},
 				scope:this
-//        deactivate: function(self) {
-//            self.toFront();
-//
-//        },
-//        delay: 1
 			}
 		});
 		
@@ -74,19 +71,11 @@ GO.DebugWindow = Ext.extend(GO.Window, {
 			url:'core/debug',
 			success:function(response, options, result){
 				
-				var d = this.outputPanel.body.dom;
 				
-				var isAtBottom = d.scrollTop >= d.scrollHeight - d.offsetHeight;
+				this.outputPanel.setLog(result.debugLog);
+				this.errorPanel.setLog(result.errorLog);
 				
-				this.outputPanel.update(result.log);
-				
-				//scroll to bottom
-				if(!this.scrolledToBottom || isAtBottom){
-					
-					d.scrollTop = d.scrollHeight - d.offsetHeight;
-					
-					this.scrolledToBottom=true;
-				}
+	
 			},
 			fail:function(){
 				Ext.TaskMgr.stop(this.taskConfig);
@@ -96,3 +85,33 @@ GO.DebugWindow = Ext.extend(GO.Window, {
 		});
 	}
 });
+
+
+GO.LogPanel = Ext.extend(Ext.Panel,{
+	
+	show : function(){
+		this.scrolledToBottom=false;
+		GO.LogPanel.superclass.show.call(this);
+	},
+	
+	autoScroll:true,
+	setLog : function(str){
+		if(this.body){
+			var d = this.body.dom;
+				
+			var isAtBottom = d.scrollTop >= d.scrollHeight - d.offsetHeight;
+		
+
+			this.update(str);
+
+	
+			//scroll to bottom
+			if(!this.scrolledToBottom || isAtBottom){
+
+				d.scrollTop = d.scrollHeight - d.offsetHeight;
+
+				this.scrolledToBottom=true;
+			}
+		}
+	}
+})
