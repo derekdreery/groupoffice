@@ -1,6 +1,6 @@
 GO.mainLayout.onReady(function(){
 	
-	Ext.getBody().addKeyListener({ctrl:true, key:Ext.EventObject.F7}, function(e){
+	Ext.getBody().addKeyListener({shift:true, key:Ext.EventObject.F7}, function(e){
 	
 		
 		if(!GO.debugWindow){
@@ -94,18 +94,22 @@ GO.DebugWindow = Ext.extend(GO.Window, {
 GO.LogPanel = Ext.extend(Ext.Panel,{
 	autoScroll:true,
 	setLog : function(str){
-		var d = this.body.dom;
+		if(this.body){
+			var d = this.body.dom;
 				
-		var isAtBottom = d.scrollTop >= d.scrollHeight - d.offsetHeight;
+			var isAtBottom = d.scrollTop >= d.scrollHeight - d.offsetHeight;
+		
 
-		this.update(str);
+			this.update(str);
 
-		//scroll to bottom
-		if(!this.scrolledToBottom || isAtBottom){
+	
+			//scroll to bottom
+			if(!this.scrolledToBottom || isAtBottom){
 
-			d.scrollTop = d.scrollHeight - d.offsetHeight;
+				d.scrollTop = d.scrollHeight - d.offsetHeight;
 
-			this.scrolledToBottom=true;
+				this.scrolledToBottom=true;
+			}
 		}
 	}
 })
