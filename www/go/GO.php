@@ -85,7 +85,11 @@ class GO{
 	 */
 	public static $disableModelCache=false;
 
-	private static $_classesIsDirty=false;
+	/**
+	 * Commonly used classes indexed for faster autoloading
+	 * 
+	 * @var array 
+	 */
 	private static $_classes = array (
 		'GO_Base_Observable' => 'go/base/Observable.php',
 		'GO_Base_Session' => 'go/base/Session.php',
@@ -369,10 +373,6 @@ class GO{
 				$baseClassFile = dirname(dirname(__FILE__)) . '/'.$location;
 				require($baseClassFile);
 
-				//store it in the classes array so we can cache that for faster loading next time.
-				self::$_classesIsDirty=true;
-				self::$_classes[$className]=$location;
-
 			}  else {
 				//$orgClassName = $className;
 				$forGO = substr($className,0,3)=='GO_';
@@ -413,10 +413,6 @@ class GO{
 						return false;
 					}
 					
-					//store it in the classes array so we can cache that for faster loading next time.
-					self::$_classes[$className]=$file;
-					self::$_classesIsDirty=true;
-
 					require($fullPath);
 				}
 			}
@@ -424,20 +420,10 @@ class GO{
 	}
 
 	private static $initialized=false;
-	
-	
-	/**
-	 * Called by GO_Base_Config::__destruct() so we can do stuff at the end 
-	 */
-//	public static function endRequest(){
-//		//cli may resolve symlinks and apache doesn't this causes double includes
-//		if(self::$_classesIsDirty && PHP_SAPI!='cli')
-//			@GO::cache()->set('autoload_classes', self::$_classes);
-//	}
 
 	/**
-	 * This function inititalizes Group-Office.
-	 *
+	 * This function inititalizes Group-Office. It starts the session,registers
+	 * error logging functions, class autoloading and set's PHP defaults.
 	 */
 	public static function init() {
 
@@ -463,16 +449,6 @@ class GO{
 			ini_set("display_errors","On");
 		else
 			ini_set("display_errors","Off");
-		
-
-		
-//		GO::debug("Session started with ID: ".GO::session()->id());
-//		GO::debug("Request params: ".var_export($_REQUEST, true));
-		
-		//get cached autoload classes
-		$classes = GO::cache()->get('autoload_classes');
-		if($classes)
-			self::$_classes=$classes;
 
 		date_default_timezone_set(GO::user() ? GO::user()->timezone : GO::config()->default_timezone);
 
@@ -485,64 +461,55 @@ class GO{
 		if(!defined('GO_LOADED')){ //check if old Group-Office.php was loaded
 
 			if(GO::config()->debug || GO::config()->debug_log){
-				
-				$username = GO::user() ? GO::user()->username : 'nobody';
-
 				$log = '['.date('Y-m-d G:i').'] r=';
 				if(isset($_REQUEST['r']))
 					$log .= $_REQUEST['r'];
 				else 
-					$log = 'undefined';
-				
+					$log = 'undefined';				
 
 				GO::debug($log);
-	//
-	//				if(PHP_SAPI!='cli')
-	//					GO::debug("User agent: ".(isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "unknown")." IP: ".$_SERVER['REMOTE_ADDR']);
-	//				else
-	//					GO::debug("User agent: CLI");
-	//
-	//				GO::debug("Config file: ".GO::config()->get_config_file());
-			}
-			//undo magic quotes if magic_quotes_gpc is enabled. It should be disabled!
-			if (get_magic_quotes_gpc()) {
-
-				function stripslashes_array($data) {
-					if (is_array($data)) {
-						foreach ($data as $key => $value) {
-							$data[$key] = stripslashes_array($value);
-						}
-						return $data;
-					} else {
-						return stripslashes($data);
-					}
-				}
-
-				$_REQUEST = stripslashes_array($_REQUEST);
-				$_GET = stripslashes_array($_GET);
-				$_POST = stripslashes_array($_POST);
-				$_COOKIE = stripslashes_array($_COOKIE);
-				if(isset($_FILES))
-					$_FILES = stripslashes_array($_FILES);
-			}
-
-			umask(0);
-
-			/*
-			 * License checking for pro modules. Don't remove it or Group-Office will fail
-			 * to load!
-			 */
-			if (PHP_SAPI != 'cli' && file_exists(GO::config()->root_path . 'modules/professional/check.php')) {
-				require_once(GO::config()->root_path . 'modules/professional/check.php');
-				check_license();
 			}
 			
+			$this->_undoMagicQuotes();
+
+			//set umask to 0 so we can create new files with mask defined in GO::config()->file_create_mode
+			umask(0);
+			
+			//We use UTF8 by default.
 			if (function_exists('mb_internal_encoding'))
 				mb_internal_encoding("UTF-8");
 		}
 
+		//Every logged on user get's a personal temp dir.
 		if (!empty(self::session()->values['user_id'])) {
 			self::config()->tmpdir = self::config()->tmpdir . self::session()->values['user_id'] . '/';
+		}
+	}
+	
+	/**
+	 * undo magic quotes if magic_quotes_gpc is enabled. It should be disabled!
+	 */
+	private function _undoMagicQuotes(){
+		
+		if (get_magic_quotes_gpc()) {
+
+			function stripslashes_array($data) {
+				if (is_array($data)) {
+					foreach ($data as $key => $value) {
+						$data[$key] = stripslashes_array($value);
+					}
+					return $data;
+				} else {
+					return stripslashes($data);
+				}
+			}
+
+			$_REQUEST = stripslashes_array($_REQUEST);
+			$_GET = stripslashes_array($_GET);
+			$_POST = stripslashes_array($_POST);
+			$_COOKIE = stripslashes_array($_COOKIE);
+			if(isset($_FILES))
+				$_FILES = stripslashes_array($_FILES);
 		}
 	}
 
@@ -551,15 +518,10 @@ class GO{
 	 */
 	public static function shutdown(){
 		$error = error_get_last();		
-		if($error){
-			
+		if($error){			
 			//z-push uses a lot of ugly @fputs etc to suppresss errors. We don't want to log those.
 			if(!isset($GLOBALS['zpush_version']))
 				self::errorHandler($error['type'], $error['message'], $error['file'], $error['line']);
-		}  else {
-			//cli may resolve symlinks and apache doesn't this causes double includes
-			if(self::$_classesIsDirty && PHP_SAPI!='cli')
-				@GO::cache()->set('autoload_classes', self::$_classes);
 		}
 		
 		GO::debug("--------------------\n");
