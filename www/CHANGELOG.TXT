@@ -1,4 +1,4 @@
-4.0.127
+14-11-2012 4.0.127
 - Increasing font-size with the HTML editor will works Chrome.
 - Fixed problem with Heading custom field in combination with event resources panel.
 - Account selectbox on IMAP mailbox sharing now loads the accounts better.
@@ -7,6 +7,8 @@
 - Fixed problem with resources when $config['calendar_category_required'] is set to true
 - Don't cache autoload classes because it caused cache slam and it doesn't have a performance impact.
 - E-mail account sorting was no longer possible
+- Billing PDF could sometimes add empty page
+- Debug with CTRL+F7 didn't work in internet explorer.
 
 12-11-2012 4.0.126
 - Added option to disable "Read more" links in the comments
