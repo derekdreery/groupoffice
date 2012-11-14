@@ -470,7 +470,7 @@ class GO{
 				GO::debug($log);
 			}
 			
-			$this->_undoMagicQuotes();
+			self::_undoMagicQuotes();
 
 			//set umask to 0 so we can create new files with mask defined in GO::config()->file_create_mode
 			umask(0);
@@ -489,7 +489,7 @@ class GO{
 	/**
 	 * undo magic quotes if magic_quotes_gpc is enabled. It should be disabled!
 	 */
-	private function _undoMagicQuotes(){
+	private static function _undoMagicQuotes(){
 		
 		if (get_magic_quotes_gpc()) {
 
