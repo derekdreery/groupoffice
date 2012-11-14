@@ -565,3 +565,7 @@ $l['repeats']='Wiederhole alle %s';
 $l['repeats_at']='Wiederhole alle %s am %s';
 $l['repeats_at_not_every']='Wiederhole alle %s %s am %s';
 $l['until']='bis';
+
+$l['deleteAllItems']='Alle Einträge löschen';
+$l['deleteAllItemsAreYouSure']='Sind Sie sicher, dass Sie alle Einträge löschen möchten?';
+

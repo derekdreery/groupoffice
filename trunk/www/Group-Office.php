@@ -223,6 +223,8 @@ umask(0);
 
 //todo this would be the new code:
 
-//$root = dirname(__FILE__).'/';
-//require_once($root.'go/GO.php');
-//GO::init();
+//if(!class_exists('GO')){
+//	$root = dirname(__FILE__).'/';
+//	require_once($root.'go/GO.php');
+//	GO::init();
+//}
