@@ -107,8 +107,10 @@ GO.email.AccountsTree = function(config){
 	{		
 		if(e.dropNode)
 		{
+			var dragId = GO.util.Base64.decode(e.source.dragData.node.id);
+			var targetId = GO.util.Base64.decode(e.target.id);
 			//drag within tree
-			if(e.source.dragData.node.id.indexOf('account')>-1 && e.target.id.indexOf('account')>-1){
+			if(dragId.indexOf('account')>-1 && targetId.indexOf('account')>-1){
 				if(e.point!='append')
 					return true;
 				else
@@ -184,7 +186,9 @@ GO.email.AccountsTree = function(config){
 	
 	
 	this.on('startdrag', function(tree, node, e){
-		if(node.id.indexOf('account')>-1){
+		
+		var dragId = GO.util.Base64.decode(node.id);
+		if(dragId.indexOf('account')>-1){
 			tree.dropZone.appendOnly=false;
 		}else
 		{
@@ -300,7 +304,10 @@ GO.email.AccountsTree = function(config){
 	this.on('nodedrop', function(e){
 		if(e.dropNode)
 		{
-			if(e.source.dragData.node.id.indexOf('account')>-1 && e.target.id.indexOf('account')>-1 && e.point!='append'){
+			var dragId = GO.util.Base64.decode(e.source.dragData.node.id);
+			var targetId = GO.util.Base64.decode(e.target.id);
+			
+			if(dragId.indexOf('account')>-1 && targetId.indexOf('account')>-1 && e.point!='append'){
 				var sortorder=[];
 				var c = this.getRootNode().childNodes;
 
