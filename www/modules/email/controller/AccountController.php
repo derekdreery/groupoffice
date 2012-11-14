@@ -433,10 +433,30 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 	
 	protected function actionUsernames($params){
 		
-		$store = GO_Base_Data_Store::newInstance(GO_Email_Model_Account::model());
+//		$store = GO_Base_Data_Store::newInstance(GO_Email_Model_Account::model());
+//		$findParams= $store->getDefaultParams($params)->group('username');
 		
-		$findParams= $store->getDefaultParams($params)->group('username');
-		$stmt = GO_Email_Model_Account::model()->find($findParams);
+		
+		
+		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_User::model());
+		$findParams= $store->getDefaultParams($params);
+		$findParams->joinModel(array( 
+					'model'=>'GO_Email_Model_Account',
+					'localTableAlias'=>'t', //defaults to "t" 
+					'localField'=>'id', //defaults to "id"  
+					'foreignField'=>'user_id', //defaults to primary key of the remote model 
+					'tableAlias'=>'acc', //Optional table alias  
+					'type'=>'INNER', //defaults to INNER, 
+				//	'criteria'=>'' //GO_Base_Db_FindCriteria Optional extra join parameters
+			));
+		
+		$findParams->select('acc.username');
+		$findParams->joinCustomFields(false);
+		$findParams->group(array('acc.username'));
+		
+		$stmt = GO_Base_Model_User::model()->find($findParams);
+		
+		//$stmt = GO_Email_Model_Account::model()->find($findParams);
 		$store->setStatement($stmt);
 		
 		return $store->getData();
