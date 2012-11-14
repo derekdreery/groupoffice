@@ -1,5 +1,6 @@
 4.0.127
 - Fixed problem with Heading custom field in combination with event resources panel.
+- Account selectbox on IMAP mailbox sharing now loads the accounts better.
 - Updated Swedish, Dutch and German translation
 - Use spam icon for INBOX.Spam too
 - Fixed problem with resources when $config['calendar_category_required'] is set to true
