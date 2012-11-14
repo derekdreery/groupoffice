@@ -1,10 +1,10 @@
 4.0.127
 - Fixed problem with Heading custom field in combination with event resources panel.
-- Updated Swedish translation
+- Updated Swedish, Dutch and German translation
 - Use spam icon for INBOX.Spam too
-- Updated Dutch translation
 - Fixed problem with resources when $config['calendar_category_required'] is set to true
-
+- Don't cache autoload classes because it caused cache slam and it doesn't have a performance impact.
+- E-mail account sorting was no longer possible
 
 12-11-2012 4.0.126
 - Added option to disable "Read more" links in the comments
@@ -12,7 +12,8 @@
 - Added config option for comment category selection to be required. This can be managed by the server admin in the config.php file ($config['comments_category_required'] = true;).
 - Added config option for the calendar's event category selection to be required. This can be managed by the server admin in the config.php file ($config['calendar_category_required'] = true;).
 - Session not entirely cleared when switching user
-- VTIMEZONE export was incorrect
+- VTIMEZONE export was incorrect.
+- VTIMEZONE fix in .125 broke caldav, calendar export and calendar invitations!
 
 09-11-2012 4.0.125
 - VTIMEZONE export was incorrect
