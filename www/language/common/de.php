@@ -553,3 +553,5 @@ $l['queued']="Anstehend";
 $l['uploadQueueEmpty']="Warteschlange für Uploads ist leer";
 $l['logFiles']='Logdateien';
 $l['cliOnly']= "Das Skript kann nur durch das Group-Office Command Line Interface (CLI) ausgeführt werden.";
+$l['deleteAllItems']='Alle Einträge löschen';
+$l['deleteAllItemsAreYouSure']='Sind Sie sicher, dass Sie alle Einträge löschen möchten?';
