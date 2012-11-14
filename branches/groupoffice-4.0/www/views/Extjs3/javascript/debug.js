@@ -40,8 +40,7 @@ GO.DebugWindow = Ext.extend(GO.Window, {
 				activeTab:0
 			},
 			listeners:{
-				show:function(){
-					this.scrolledToBottom=false;
+				show:function(){					
 					Ext.TaskMgr.start(this.taskConfig);
 					
 					this.alignTo(Ext.getBody(),'tr-tr');
@@ -89,6 +88,12 @@ GO.DebugWindow = Ext.extend(GO.Window, {
 
 
 GO.LogPanel = Ext.extend(Ext.Panel,{
+	
+	show : function(){
+		this.scrolledToBottom=false;
+		GO.LogPanel.superclass.show.call(this);
+	},
+	
 	autoScroll:true,
 	setLog : function(str){
 		if(this.body){
