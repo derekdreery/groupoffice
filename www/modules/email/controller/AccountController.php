@@ -3,6 +3,23 @@
 class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelController {
 
 	protected $model = "GO_Email_Model_Account";
+	
+	
+//	protected function actionTest($params){
+//		
+//		GO::$disableModelCache=true;
+//		
+//		for($i=0;$i<1000;$i++){
+//			
+//			echo $i."<br>";
+//			${"account".$i} = GO_Email_Model_Account::model()->findSingle();
+//			
+//			${"account".$i}->openImapConnection("INBOX");
+//		}
+//		
+//		
+//		
+//	}
 
 	protected function getStoreParams($params) {
 

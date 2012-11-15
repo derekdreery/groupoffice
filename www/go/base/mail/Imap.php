@@ -101,11 +101,17 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			$this->send_command($command);
 			$this->state = 'disconnected';
 			$result = $this->get_response();
+			$this->check_response($result);
 //			GO::debug($this->commands);
 //
 //			GO::debug($this->responses);
 
 			fclose($this->handle);
+			
+			
+			foreach($this->errors as $error){
+				trigger_error("IMAP error: ".$error);
+			}
 
 			$this->handle=false;
 			$this->selected_mailbox=false;
@@ -186,6 +192,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				$this->state = 'authed';
 			}else
 			{
+				$this->errors[]=$response;
 				throw new GO_Base_Mail_ImapAuthenticationFailedException($response);
 				//$this->errors[]=$response;
 			}
