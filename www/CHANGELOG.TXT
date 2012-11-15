@@ -1,3 +1,6 @@
+4.0.129
+- Ticketsgrid refreshes when displaying the tickets tab
+
 15-11-2012 4.0.128
 - Better reporting for IMAP errors
 - Billing Order.php sent output on some apache servers
