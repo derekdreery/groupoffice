@@ -330,6 +330,10 @@ abstract class GO_Base_Mail_ImapBase {
 						$result = true;
 					}
 				}
+				
+				if(!$result){
+					$this->errors[]=implode(' ', $data);
+				}
 			}
 		}
 		else {
