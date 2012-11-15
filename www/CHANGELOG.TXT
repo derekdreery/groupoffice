@@ -13,6 +13,7 @@
 - E-mail account sorting was no longer possible
 - Billing PDF could sometimes add empty page
 - Debug with CTRL+F7 didn't work in internet explorer.
+- Brought back public SMIME certificates window.
 
 12-11-2012 4.0.126
 - Added option to disable "Read more" links in the comments
