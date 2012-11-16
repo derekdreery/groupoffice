@@ -1384,7 +1384,7 @@ GO.mainLayout.onReady(function(){
 						
 						data.popup=true;
 						
-						if(!GO.settings.mute_new_mail_sound)
+						if(GO.util.empty(GO.settings.mute_new_mail_sound))
 							data.alarm=true;
 //					}
 
