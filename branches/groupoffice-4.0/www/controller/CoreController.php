@@ -58,6 +58,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		
 		$info['username']=GO::user()->username;
 		$info['config']=GO::config()->get_config_file();
+		$info['database']=GO::config()->db_name;
 		
 		$modules = GO::modules()->getAllModules();		
 		foreach($modules as $module){
