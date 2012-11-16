@@ -464,10 +464,16 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 //				case 'LABEL':
 				case 'ADR':
 					$types = array();
+					
+					
+					
+					
 					foreach ($vobjProp->parameters as $param) {
 						if ($param->name=='TYPE')
 							$types = explode(',',strtolower($param->value));						
 					}
+					
+					
 					if(in_array('work',$types)) {
 						$addrArr = explode(';',$vobjProp->value);
 						if(isset($addrArr[2]))
@@ -493,6 +499,22 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 							$attributes['zip'] = $addrArr[5];
 						if(isset($addrArr[6]))
 							$attributes['country'] = $addrArr[6];
+					}
+					
+					
+					
+					if(empty($types)){
+						$addrArr = explode(';',$vobjProp->value);
+						if(isset($addrArr[2]))
+							$companyAttributes['post_address'] = $addrArr[2];
+						if(isset($addrArr[3]))
+							$companyAttributes['post_city'] = $addrArr[3];
+						if(isset($addrArr[4]))
+							$companyAttributes['post_state'] = $addrArr[4];
+						if(isset($addrArr[5]))
+							$companyAttributes['post_zip'] = $addrArr[5];						
+						if(isset($addrArr[6]))
+							$companyAttributes['post_country'] = $addrArr[6];
 					}
 					break;
 				case 'EMAIL':
@@ -760,14 +782,17 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 				$this->company->city.';'.$this->company->state.';'.$this->company->zip.';'.$this->company->country);
 			$p->add('TYPE','WORK');
 			$e->add($p);
+			
+			
+			$p = new Sabre_VObject_Property('ADR',';;'.$this->company->post_address.' '.$this->company->post_address_no.';'.
+				$this->company->post_city.';'.$this->company->post_state.';'.$this->company->post_zip.';'.$this->company->post_country);
+			$e->add($p);
 		}
 		
-		//if ($this->address) {
-			$p = new Sabre_VObject_Property('ADR',';;'.$this->address,"\n".' '.$this->address_no.';'.
-				$this->city.';'.$this->state.';'.$this->zip.';'.$this->country);
-			$p->add('TYPE','HOME');
-			$e->add($p);
-		//}
+		$p = new Sabre_VObject_Property('ADR',';;'.$this->address.' '.$this->address_no.';'.
+			$this->city.';'.$this->state.';'.$this->zip.';'.$this->country);
+		$p->add('TYPE','HOME');
+		$e->add($p);
 		
 		if(!empty($this->comment)){
 			$e->note=$this->comment;
