@@ -179,7 +179,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		
 		$this->_checkParentId();
 		
-		if($this->parent_id==0){
+		if($this->parent_id==0 && $this->acl_id==0){
 			//top level folders are readonly to everyone.
 			$this->readonly=1;
 			$this->acl_id=GO::modules()->files->acl_id;			
