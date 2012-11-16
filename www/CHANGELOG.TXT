@@ -1,4 +1,5 @@
 4.0.129
+- Email notification sounds will work again
 - Ticketsgrid refreshes when displaying the tickets tab
 
 15-11-2012 4.0.128
