@@ -32,6 +32,8 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 			GO::session()->values['debug']=true;
 		}
 		
+		GO::session()->values['debugSql']=!empty($params['debugSql']);
+		
 		
 		$debugFile = new GO_Base_Fs_File(GO::config()->file_storage_path.'log/debug.log');
 		if(!$debugFile->exists())
