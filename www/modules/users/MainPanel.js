@@ -28,7 +28,8 @@ GO.users.MainPanel = function(config)
         {header: GO.users.lang.numberOfLogins, dataIndex: 'logins', width: 100, align:"right"},
         {header: GO.users.lang['cmdFormLabelLastLogin'], dataIndex: 'lastlogin', width: 100},
         {header: GO.users.lang['cmdFormLabelRegistrationTime'], dataIndex: 'ctime', width: 100},      
-        {header: GO.lang['strEmail'], dataIndex: 'email',  hidden: false, width: 150}       
+        {header: GO.lang['strEmail'], dataIndex: 'email',  hidden: false, width: 150},
+				{header: GO.users.lang['cmdBoxLabelEnabled'], dataIndex: 'enabled',  hidden: false, width: 100} 
     ]
 	};
 
