@@ -1,6 +1,11 @@
-4.0.129
+16-11-2012 4.0.129
+- Task dialog didn't render without access to calendar module.
+- Better address handling with syncml
+- Case insensitive check of SMIME e-mail address
+- Log files were readable to all users
 - Email notification sounds will work again
 - Ticketsgrid refreshes when displaying the tickets tab
+- Debug SQL queries with CTRL+F7
 
 15-11-2012 4.0.128
 - Better reporting for IMAP errors

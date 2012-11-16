@@ -15,6 +15,9 @@ GO.mainLayout.onReady(function(){
 });
 
 GO.DebugWindow = Ext.extend(GO.Window, {
+	
+	baseParams : {},
+	
 	initComponent : function(){
 		
 		this.taskConfig={
@@ -33,7 +36,18 @@ GO.DebugWindow = Ext.extend(GO.Window, {
 			items:{
 				xtype:'tabpanel',
 				items:[
-					this.outputPanel = new GO.LogPanel({title:'Log'}),
+					this.outputPanel = new GO.LogPanel({
+						title:'Log',
+						tbar:[{
+								enableToggle:true,								
+								pressed:false,
+								text:"Debug SQL",
+								toggleHandler:function(item, pressed){
+									this.baseParams.debugSql=pressed ? '1' : '0';
+								},
+								scope:this
+						}]
+					}),
 					this.errorPanel = new GO.LogPanel({title:'Errors'}),
 					this.infoPanel = new Ext.Panel({title:'Info',autoScroll:true, listeners:{show:this.loadInfo, scope:this}})
 				],
@@ -69,6 +83,7 @@ GO.DebugWindow = Ext.extend(GO.Window, {
 	loadLog : function(){
 		GO.request({
 			url:'core/debug',
+			params:this.baseParams,
 			success:function(response, options, result){
 				
 				
