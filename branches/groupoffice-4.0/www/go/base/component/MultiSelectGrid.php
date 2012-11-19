@@ -91,7 +91,8 @@ class GO_Base_Component_MultiSelectGrid {
 			$this->selectedIds = $this->selectedIds!==false && $this->selectedIds !=""  ? explode(',', $this->selectedIds) : array();
 
 			//this will validate the selection
-			$this->_validateSelection();
+			if($this->_checkPermissions)
+				$this->_validateSelection();
 		}
 		
 		
