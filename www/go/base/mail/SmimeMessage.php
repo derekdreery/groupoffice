@@ -194,7 +194,7 @@ class GO_Base_Mail_SmimeMessage extends GO_Base_Mail_Message
 			$this->_doEncrypt();
 		}
 
-		return file_get_contents($this->tempout);
+		return GO_Base_Util_String::normalizeCrlf(file_get_contents($this->tempout));
 	}
 	
   /**
@@ -225,6 +225,8 @@ class GO_Base_Mail_SmimeMessage extends GO_Base_Mail_Message
 			throw new Exception('Could not read tempout file');
 			
 		while($line = fgets($fp)){			
+			$line = GO_Base_Util_String::normalizeCrlf($line);
+			
 			$is->write($line);
 		}
 		fclose($fp);	
