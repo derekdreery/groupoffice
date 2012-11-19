@@ -278,6 +278,10 @@ abstract class GO_Base_Mail_ImapBase {
 				}
 			}
 		} while (substr($result[$n], 0, strlen('A'.$this->command_count)) != 'A'.$this->command_count);
+		
+		if(!empty(GO::session()->values['debugSql']))
+			GO::debug($result);
+		
 		$this->responses[] = $result;
 		if ($chunked) {
 			$result = $chunked_result;
@@ -314,7 +318,9 @@ abstract class GO_Base_Mail_ImapBase {
 		}
 		
 
-		//GO::debug($command);
+		if(!empty(GO::session()->values['debugSql']))
+			GO::debug($command);
+		
 		$this->commands[trim($command)] = GO_Base_Util_Date::getmicrotime();
 	}
 	/* determine if an imap response returned an "OK", returns
