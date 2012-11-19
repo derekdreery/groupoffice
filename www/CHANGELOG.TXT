@@ -1,4 +1,7 @@
-4.0.130
+19-11-2012 4.0.130
+- Ticket status open and closed were not saved
+- Added IMAP commands to debugging window
+- Sometimes not all phone numbers were included in Outlook sync
 - Fixed charset problem with russian characters in the item description of a bill when creating an ODF file.
 - Added option to set the {order_id} in the odf file name in the billing module.
 

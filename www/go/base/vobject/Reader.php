@@ -312,21 +312,23 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 		$qpProperies=array('NOTE','FN','N');
 		
 		if($vobject->version=='3.0'){
-			$vobject->version='2.1';
-			foreach($qpProperies as $propName){
-				self::_quotedPrintableEncode($vobject, $propName);
-			}
 			
 			//vcard 3.0 uses EMAIL;TYPE=INTERNET,HOME:mschering@intermesh.nl
-			//We must convert that into EMAIL;INTERNET;HOME:mschering@intermesh.nl for 2.1
-			foreach($vobject->children() as $property)
-			{
+			//We must convert that into EMAIL;INTERNET;HOME:mschering@intermesh.nl for 2.1			
+			$children = $vobject->children();
+			foreach($children as $property)
+			{		
 				if(!empty($property['TYPE'])){										
 					$types =explode(',',$property['TYPE']);					
 					$property->name.=';'.implode(';',$types);								
 					unset($property['TYPE']);
-				}							
-			}
+				}				
+			}			
+			
+			$vobject->version='2.1';
+			foreach($qpProperies as $propName){
+				self::_quotedPrintableEncode($vobject, $propName);
+			}			
 		}	
 	}
 	
