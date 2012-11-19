@@ -41,7 +41,7 @@ GO.DebugWindow = Ext.extend(GO.Window, {
 						tbar:[{
 								enableToggle:true,								
 								pressed:false,
-								text:"Debug SQL",
+								text:"Debug SQL and IMAP",
 								toggleHandler:function(item, pressed){
 									this.baseParams.debugSql=pressed ? '1' : '0';
 								},
