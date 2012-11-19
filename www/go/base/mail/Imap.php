@@ -211,23 +211,30 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 */
 
 	public function get_capability() {
-//		if (isset(GO::session()->values['GO_IMAP'][$this->server]['imap_capability'])) {
-//			$this->capability=GO::session()->values['GO_IMAP'][$this->server]['imap_capability'];
-//		}else {
+		if (isset(GO::session()->values['GO_IMAP'][$this->server]['imap_capability'])) {
+			$this->capability=GO::session()->values['GO_IMAP'][$this->server]['imap_capability'];
+		}else {
 			if(!isset($this->capability)){
 				$command = "CAPABILITY\r\n";
 				$this->send_command($command);
 				$response = $this->get_response();
 				$this->capability = implode(' ', $response);
 			}
-//			$this->capability = GO::session()->values['GO_IMAP'][$this->server]['imap_capability'] = implode(' ', $response);			
-//		}
+			$this->capability = GO::session()->values['GO_IMAP'][$this->server]['imap_capability'] = implode(' ', $response);			
+		}
 		
 //		GO::debug('IMAP capability: '.$this->capability);
 		
 		return $this->capability;
 	}
 	
+	/**
+	 * Check if the IMAP server has a particular capability.
+	 * eg. QUOTA, ACL, LIST-EXTENDED etc.
+	 * 
+	 * @param string $str
+	 * @return boolean
+	 */
 	public function has_capability($str){
 		return stripos($this->get_capability(), $str)!==false;
 	}
@@ -1502,6 +1509,10 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 * @return <type>
 	 */
 	public function get_quota() {
+		
+		if(!$this->has_capability("QUOTA"))
+			return false;
+		
 		$command = "GETQUOTAROOT \"INBOX\"\r\n";
 
 		$this->send_command($command);
