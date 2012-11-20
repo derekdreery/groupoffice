@@ -107,7 +107,7 @@ class GO_Smime_Controller_Certificate extends GO_Base_Controller_AbstractControl
 				while ($msg = openssl_error_string())
 					$response['html'] .= $msg . "<br />\n";
 				$response['html'] .= '</p>';
-			} else if ($email != $params['email']) {
+			} else if (strtolower($email) != strtolower($params['email'])) {
 
 				$response['cls'] = 'smi-certemailmismatch';
 				$response['text'] = GO::t('certEmailMismatch', 'smime');

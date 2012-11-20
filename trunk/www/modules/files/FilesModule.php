@@ -43,6 +43,13 @@ class GO_Files_FilesModule extends GO_Base_Module{
 			
 		}
 		
+		$folder = GO_Files_Model_Folder::model()->findByPath("log");
+		if(!$folder->acl){
+			$folder->setNewAcl();
+			$folder->readonly=1;
+			$folder->save();
+		}
+		
 		parent::checkDatabase($response);
 	}
 	

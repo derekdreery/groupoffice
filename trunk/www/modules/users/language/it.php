@@ -75,7 +75,6 @@ $l['name'] = 'Utenti';
 $l['description'] = 'Modulo Admin; Gestione sistema utenti.';
 $l['deletePrimaryAdmin'] = 'Non puoi eliminare l\'amministratore principale';
 $l['deleteYourself'] = 'Non puoi eliminare te stesso';
-$lang['link_type'][8]=$us_user = 'Utente';
 $l['error_username']='Ci sono caratteri non validi nel nome utente';
 $l['error_username_exists']='Questo nome utente esiste già';
 $l['error_email_exists']='Questo indirizzo email è già registrato. Puoi utilizzare la procedura di recupero per ripristinare la tua password.';

@@ -3,6 +3,23 @@
 class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelController {
 
 	protected $model = "GO_Email_Model_Account";
+	
+	
+//	protected function actionTest($params){
+//		
+//		GO::$disableModelCache=true;
+//		
+//		for($i=0;$i<1000;$i++){
+//			
+//			echo $i."<br>";
+//			${"account".$i} = GO_Email_Model_Account::model()->findSingle();
+//			
+//			${"account".$i}->openImapConnection("INBOX");
+//		}
+//		
+//		
+//		
+//	}
 
 	protected function getStoreParams($params) {
 
@@ -67,7 +84,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		
 		GO::session()->closeWriting();
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()						
+		$findParams = GO_Base_Db_FindParams::newInstance()
 						->ignoreAdminGroup()
 						->select('t.*');
 
@@ -125,14 +142,15 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					if($account->isModified("check_mailboxes"))
 						$account->save();
 					
+					if(($imap = $account->getImapConnection())){
+						$imap->disconnect();
+					}
+					
 				}
 				
 			} catch (Exception $e) {
 				GO::debug($e->getMessage());
 			}
-			
-			if(!empty($imap))
-				$imap->disconnect();			
 		}
 		
 		GO::debug("Total unseen: ".$response['email_status']['total_unseen']);

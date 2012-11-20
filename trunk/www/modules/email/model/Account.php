@@ -270,7 +270,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 			}
 		}
 		if(!$this->_imap->select_mailbox($mailbox))
-			throw new Exception ("Could not open IMAP mailbox $mailbox");
+			throw new Exception ("Could not open IMAP mailbox $mailbox\nIMAP error: ".$this->_imap->last_error());
 	
 		return $this->_imap;
 	}
