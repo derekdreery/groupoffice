@@ -310,8 +310,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @param boolean true if this is the static model returned by GO_Base_Model::model()
 	 */
 	public function __construct($newRecord=true, $isStaticModel=false){			
-		
-		
+				
+		if(!empty(GO::session()->values['debugSql']))
+			$this->_debugSql=true;
 		
 		//$pk = $this->pk;
 

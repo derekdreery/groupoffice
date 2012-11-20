@@ -109,11 +109,17 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			$this->send_command($command);
 			$this->state = 'disconnected';
 			$result = $this->get_response();
+			$this->check_response($result);
 //			GO::debug($this->commands);
 //
 //			GO::debug($this->responses);
 
 			fclose($this->handle);
+			
+			
+			foreach($this->errors as $error){
+				trigger_error("IMAP error: ".$error);
+			}
 
 			$this->handle=false;
 			$this->selected_mailbox=false;
@@ -194,6 +200,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				$this->state = 'authed';
 			}else
 			{
+				$this->errors[]=$response;
 				throw new GO_Base_Mail_ImapAuthenticationFailedException($response);
 				//$this->errors[]=$response;
 			}
@@ -212,23 +219,30 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 */
 
 	public function get_capability() {
-//		if (isset(GO::session()->values['GO_IMAP'][$this->server]['imap_capability'])) {
-//			$this->capability=GO::session()->values['GO_IMAP'][$this->server]['imap_capability'];
-//		}else {
+		if (isset(GO::session()->values['GO_IMAP'][$this->server]['imap_capability'])) {
+			$this->capability=GO::session()->values['GO_IMAP'][$this->server]['imap_capability'];
+		}else {
 			if(!isset($this->capability)){
 				$command = "CAPABILITY\r\n";
 				$this->send_command($command);
 				$response = $this->get_response();
 				$this->capability = implode(' ', $response);
 			}
-//			$this->capability = GO::session()->values['GO_IMAP'][$this->server]['imap_capability'] = implode(' ', $response);			
-//		}
+			$this->capability = GO::session()->values['GO_IMAP'][$this->server]['imap_capability'] = implode(' ', $response);			
+		}
 		
 //		GO::debug('IMAP capability: '.$this->capability);
 		
 		return $this->capability;
 	}
 	
+	/**
+	 * Check if the IMAP server has a particular capability.
+	 * eg. QUOTA, ACL, LIST-EXTENDED etc.
+	 * 
+	 * @param string $str
+	 * @return boolean
+	 */
 	public function has_capability($str){
 		$has = stripos($this->get_capability(), $str)!==false;
 		
@@ -329,7 +343,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			if(!isset($this->_subscribedFoldersCache[$this->server.$this->username])){
 				$this->_subscribedFoldersCache[$this->server.$this->username] = $this->list_folders(true, false, '', '*');	
 				
-				GO::debug(array_keys($this->_subscribedFoldersCache));
+//				GO::debug(array_keys($this->_subscribedFoldersCache));
 			}
 			return isset($this->_subscribedFoldersCache[$this->server.$this->username][$mailboxName]);
 		}
@@ -370,7 +384,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			$cmd .= ')';
 		}
 		
-		GO::debug($cmd);
+//		GO::debug($cmd);
 		
 		$cmd .= "\r\n";
 		
@@ -535,7 +549,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 		ksort($folders);
 		
-		GO::debug($folders);
+//		GO::debug($folders);
 
 		return $folders;
 	}
@@ -1510,6 +1524,10 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 * @return <type>
 	 */
 	public function get_quota() {
+		
+		if(!$this->has_capability("QUOTA"))
+			return false;
+		
 		$command = "GETQUOTAROOT \"INBOX\"\r\n";
 
 		$this->send_command($command);

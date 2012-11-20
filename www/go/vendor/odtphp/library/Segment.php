@@ -139,7 +139,7 @@ class Segment implements IteratorAggregate, Countable
      * @throws SegmentException
      * @return Segment
      */
-    public function setVars($key, $value, $encode = true, $charset = 'ISO-8859')
+    public function setVars($key, $value, $encode = true, $charset = 'UTF-8')
     {		
         if (strpos($this->xml, $this->odf->getConfig('DELIMITER_LEFT') . $key . $this->odf->getConfig('DELIMITER_RIGHT')) === false) {
             //throw new SegmentException("var $key not found in {$this->getName()}");

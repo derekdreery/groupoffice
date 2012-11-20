@@ -561,7 +561,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		});
 
 		this.recurrencePanel = new Ext.Panel({
-			title : GO.calendar.lang.recurrence,
+			title : GO.tasks.lang.recurrence,
 			bodyStyle : 'padding: 5px',
 			layout : 'form',
 			hideMode : 'offsets',
@@ -570,15 +570,15 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 				border:false
 			},
 			items : [{
-				fieldLabel : GO.calendar.lang.repeatEvery,
+				fieldLabel : GO.tasks.lang.repeatEvery,
 				xtype : 'compositefield',
 				items : [this.repeatEvery,this.repeatType]
 			}, {
 				xtype : 'compositefield',
-				fieldLabel : GO.calendar.lang.atDays,
+				fieldLabel : GO.tasks.lang.atDays,
 				items : [this.monthTime,this.cb[1],this.cb[2],this.cb[3],this.cb[4],this.cb[5],this.cb[6],this.cb[0]]
 			}, {
-				fieldLabel : GO.calendar.lang.repeatUntil,
+				fieldLabel : GO.tasks.lang.repeatUntil,
 				xtype : 'compositefield',
 				items : [this.repeatEndDate,this.repeatForever]
 			}

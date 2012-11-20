@@ -122,3 +122,6 @@ $updates["201206121503"][]="CREATE TABLE IF NOT EXISTS `fs_notification_messages
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`, `status`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+
+$updates["201211161231"][]='script:1_set_log_dir.php';

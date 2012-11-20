@@ -29,6 +29,7 @@
  */
 class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 
+	private $_moduleManager;
 	/**
 	 * Returns a static model of itself
 	 * 

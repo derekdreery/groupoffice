@@ -91,7 +91,8 @@ class GO_Base_Component_MultiSelectGrid {
 			$this->selectedIds = $this->selectedIds!==false && $this->selectedIds !=""  ? explode(',', $this->selectedIds) : array();
 
 			//this will validate the selection
-			$this->_getModels();
+			if($this->_checkPermissions)
+				$this->_validateSelection();
 		}
 		
 		
@@ -133,39 +134,47 @@ class GO_Base_Component_MultiSelectGrid {
 		
 		$findParams->getCriteria()->addInCondition($columnName, $this->selectedIds, $tableAlias, $useAnd, $useNot);
 	}
+	
+	/**
+	 * Checks if all selected id's are accessible. If not it removes the models 
+	 * from the selection. 
+	 */
+	private function _validateSelection(){
+		$models = $this->_getSelectedModels();
+		
+		if(count($models) != count($this->selectedIds)){
+			//one of the selections could not be fetched. This may happen when something is
+			//deleted or a user doesn't have permissions anymore.
+			//remove the id's from the selection.
+			$this->selectedIds=array();
+			foreach($this->_models as $model){
+				$this->selectedIds[]=$model->pk;
+			}
+			$this->_save();
+		}
+	}
 
 	/**
 	 * Get all selected models
 	 * 
 	 * @return GO_Base_Db_ActiveRecord[] 
 	 */
-	private function _getModels(){
+	private function _getSelectedModels(){
 		if(!isset($this->_models))
-		{
-			$errors = false;
-			
+		{			
 			$this->_models=array();
 			foreach ($this->selectedIds as $modelId) {
-//				try{
+				try{
 					$model = GO::getModel($this->_modelName)->findByPk($modelId);				
 					if($model)
 						$this->_models[]=$model;
-//				}
-//				catch(Exception $e){
-//					$errors=true;
-//				}
-			}
-			
-			if($errors){
-				//one of the selections could not be fetched. This may happen when something is
-				//deleted or a user doesn't have permissions anymore.
-				//remove the id's from the selection.
-				$this->selectedIds=array();
-				foreach($this->_models as $model){
-					$this->selectedIds[]=$model->pk;
+
 				}
-				$this->_save();
-			}
+				catch(Exception $e){
+					//might happen when a user no longer has access to a selected model
+				}
+			}		
+			
 		}
 		return $this->_models;
 	}
@@ -180,7 +189,7 @@ class GO_Base_Component_MultiSelectGrid {
 	 */
 	public function setStoreTitle( $titleAttribute = 'name') {
 		$titleArray = array();
-		$models = $this->_getModels();
+		$models = $this->_getSelectedModels();
 		foreach ($models as $model) 
 			$titleArray[] = $model->$titleAttribute;
 		
@@ -194,7 +203,7 @@ class GO_Base_Component_MultiSelectGrid {
 	 * @param array $response 
 	 */
 	public function setButtonParams(&$response){
-		$models = $this->_getModels();
+		$models = $this->_getSelectedModels();
 		foreach ($models as $model) {		
 			if(!isset($response['buttonParams']) && GO_Base_Model_Acl::hasPermission($model->getPermissionLevel(),GO_Base_Model_Acl::CREATE_PERMISSION)){
 

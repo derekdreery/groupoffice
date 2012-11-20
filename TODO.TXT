@@ -1,3 +1,5 @@
+Bij batch status in billing nieuw item toevoegen. Bv. herinneringskosten. Percentage of bedrag.
+
 busy flag bij nieuwe resources
 
 vink voor verzenddatum op factuur.

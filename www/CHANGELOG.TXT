@@ -1,5 +1,33 @@
+20-11-2012 4.0.131
+- Better error message when PDF template is missing for order
+- Regex field was not enabled for custom text fields initially
+- Subfolders with / as delimiter didn't sync with ActiveSync
+
+19-11-2012 4.0.130
+- Ticket status open and closed were not saved
+- Added IMAP commands to debugging window
+- Sometimes not all phone numbers were included in Outlook sync
+- Fixed charset problem with russian characters in the item description of a bill when creating an ODF file.
+- Added option to set the {order_id} in the odf file name in the billing module.
+- Check if IMAP server supports quota before executing that command.
+- Normalize CRLF for SMIME output because it failed on some SMTP servers
+
+19-11-2012 4.0.129
+- Task dialog didn't render without access to calendar module.
+- Better address handling with syncml
+- Case insensitive check of SMIME e-mail address
+- Log files were readable to all users
+- Email notification sounds will work again
+- Ticketsgrid refreshes when displaying the tickets tab
+- Debug SQL queries with CTRL+F7
+- Added enabled column to users grid
+
+15-11-2012 4.0.128
+- Better reporting for IMAP errors
+- Billing Order.php sent output on some apache servers
+
 14-11-2012 4.0.127
-- Increasing font-size with the HTML editor will works Chrome.
+- Increasing font-size with the HTML editor works Chrome.
 - Fixed problem with Heading custom field in combination with event resources panel.
 - Account selectbox on IMAP mailbox sharing now loads the accounts better.
 - Updated Swedish, Dutch and German translation
@@ -9,6 +37,7 @@
 - E-mail account sorting was no longer possible
 - Billing PDF could sometimes add empty page
 - Debug with CTRL+F7 didn't work in internet explorer.
+- Brought back public SMIME certificates window.
 
 12-11-2012 4.0.126
 - Added option to disable "Read more" links in the comments
