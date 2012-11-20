@@ -109,3 +109,7 @@
 	width: 800px !important;
 	height:100px;
 }
+
+.button-close-ticket{
+	float:right;
+}
