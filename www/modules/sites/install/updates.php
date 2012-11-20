@@ -1,1 +1,0 @@
-ALTER TABLE `si_sites` ENGINE = InnoDB DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci
