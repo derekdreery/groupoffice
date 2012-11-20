@@ -338,7 +338,11 @@ abstract class GO_Base_Mail_ImapBase {
 				}
 				
 				if(!$result){
-					$this->errors[]=implode(' ', $data);
+					foreach($data as $vals){
+						if (strtoupper($vals[1]) != 'OK') {
+							$this->errors[]=implode(' ', $vals);
+						}
+					}
 				}
 			}
 		}
