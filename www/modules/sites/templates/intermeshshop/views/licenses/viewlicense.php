@@ -1,4 +1,6 @@
-	
+<?php
+$this->setPageTitle("License");
+?>	
 			<div class="subkader-big-top">
 						<div class="subkader-big-bottom">
 							<div class="subkader-big-center">						
