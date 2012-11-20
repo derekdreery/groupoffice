@@ -44,6 +44,14 @@ class GO_Sites_Components_Website
 	 */
 	private $_controller; //To current controllers that was called
 	private $_request;
+	
+	/**
+	 * The config object
+	 * 
+	 * @var GO_Sites_Components_Config 
+	 */
+	private $_siteconfig;
+	
 	private $_urlManager;
 	private $_language;
 	private $_scripts; // The clientscript manager
@@ -116,12 +124,18 @@ class GO_Sites_Components_Website
 		return $this->_site->name;
 	}
 	
+	public function getConfig()
+	{
+		return $this->_siteconfig;
+	}
+	
 	public function getRoute()
 	{
 		return $this->_route;
 	}
 	
-	public function run() {
+	public function run($siteconfig = array()) {
+		$this->_siteconfig = new GO_Sites_Components_Config($siteconfig);		
 		$this->processRequest();
 	}
 	
