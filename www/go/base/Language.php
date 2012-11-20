@@ -149,7 +149,7 @@ class GO_Base_Language{
 				require($file);
 			
 			//$langcode = GO::user() ? GO::user()->language : GO::config()->language;
-			$defaultLang=$l;
+			$defaultLang=isset($l) ? $l : array();
 			unset($l);
 			
 			if($this->_langIso!='en')
