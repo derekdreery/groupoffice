@@ -149,25 +149,38 @@ class GO_Base_Language{
 				require($file);
 			
 			//$langcode = GO::user() ? GO::user()->language : GO::config()->language;
+			$defaultLang=$l;
+			unset($l);
+			
 			if($this->_langIso!='en')
 			{
 				$file = $this->_find_file($this->_langIso, $module, $basesection);
-				if($file)
+				if($file){
 					require($file);
+					if(isset($l)){
+						$defaultLang = array_merge($defaultLang, $l);
+						unset($l);
+					}
+				}
 			}		
 			
 			$file = $this->_find_override_file($this->_langIso, $module, $basesection);
-			if($file)
+			if($file){
 				require($file);
-			
-			if(isset($l)){
-				if($module=='base'){
-					$this->_lang[$module][$basesection]=$this->_replaceProductName($l);
-				}else
-				{
-					$this->_lang[$module]=$this->_replaceProductName($l);
+				if(isset($l)){
+					$defaultLang = array_merge($defaultLang, $l);
+					unset($l);
 				}
 			}
+			
+
+			if($module=='base'){
+				$this->_lang[$module][$basesection]=$this->_replaceProductName($defaultLang);
+			}else
+			{
+				$this->_lang[$module]=$this->_replaceProductName($defaultLang);
+			}
+			
 		}
 	}
 	
