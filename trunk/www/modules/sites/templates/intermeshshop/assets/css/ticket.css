@@ -104,3 +104,8 @@
 	width:16px;
 	height:16px;
 }
+
+.message-field {
+	width: 800px !important;
+	height:100px;
+}
