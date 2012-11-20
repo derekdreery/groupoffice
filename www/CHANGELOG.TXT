@@ -1,3 +1,8 @@
+20-11-2012 4.0.131
+- Better error message when PDF template is missing for order
+- Regex field was not enabled for custom text fields initially
+- Subfolders with / as delimiter didn't sync with ActiveSync
+
 19-11-2012 4.0.130
 - Ticket status open and closed were not saved
 - Added IMAP commands to debugging window
