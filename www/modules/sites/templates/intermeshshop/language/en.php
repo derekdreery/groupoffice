@@ -80,5 +80,8 @@ $l['tickets_ticketYourInformation']='Your information';
 $l['tickets_ticketYourAgent']='Your ticket agent';
 $l['tickets_ticketNoAgent']='We will help you as soon as possible.<br />Please be patient.';
 
+$l['tickets_CreateWithoutLogin']='Create ticket without logging in.';
+$l['tickets_ClickCreateWithoutLogin']='Please click <a href="%s">here</a> to create a ticket without logging in';
+
 $l['postAddressDetails']='Post address';
 $l['addressDetails']='Address';
