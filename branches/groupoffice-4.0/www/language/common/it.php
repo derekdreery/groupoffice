@@ -559,3 +559,5 @@ $l['sir']='Signor';
 $l['madam']='Signora';
 $l['exportDialog']='Finestra di esportazione';
 $l['logFiles']='File di log';
+$l['deleteAllItems']='Elimina tutti gli elementi';
+$l['deleteAllItemsAreYouSure']='Sei sicuro di voler eliminare tutti gli elementi?';
