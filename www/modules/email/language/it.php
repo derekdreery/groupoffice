@@ -248,3 +248,5 @@ $l['noEmailFolders']= 'Non è stata aggiunta alcuna cartella.';
 $l['sieveNote']='Non tutte le funzionalità sono supportate. Controlla il manuale.';
 $l['winmailNoFiles']="Questo allegato winmail non contiene alcun file.";
 $l['attachedAppointmentInfo']="Informazioni sull\'appuntamento allegato";
+$l["markFolderReadConfirm"]='Sei sicuro di voler marcare tutti i messaggi nella cartella \'{name}\' come letti?';
+$l['cantDeleteSpecialFolder']="Non puoi eliminare il cestino, la cartella della posta inviata o delle bozze";
