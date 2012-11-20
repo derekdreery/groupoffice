@@ -62,7 +62,7 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 	 * the name of the action that is running. Empty string if none
 	 * @var string name of runned action 
 	 */
-	private $_actionId ='';
+	private $_action ='';
 	
 	protected $description="";
 
@@ -169,9 +169,12 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 		return GO::config()->root_path . 'modules/sites/templates/' . $this->template . '/';
 	}
 
-	private function getViewPath()
+	private function getViewPath($viewName = false)
 	{
-		return $this->getTemplatePath() . 'views/' . $this->getModule()->id . '/';
+		if(isset($viewName) && (substr($viewName, 0, 2) == '//'))
+			return $this->getTemplatePath() . 'views/';
+		else
+			return $this->getTemplatePath() . 'views/' . $this->getModule()->id . '/';
 	}
 
 	/**
@@ -203,8 +206,8 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 	 * @return string path of the viewfile
 	 */
 	public function getViewFile($viewName)
-	{
-		$theme_view_file = $this->getViewPath() . $viewName . '.php';
+	{	
+		$theme_view_file = $this->getViewPath($viewName) . $viewName . '.php';
 		if(file_exists($theme_view_file))
 			return $theme_view_file;
 		return GO::config()->root_path . 'modules/'. $this->getModule()->id . '/views/site/' . $viewName . '.php';
@@ -277,8 +280,8 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 				return false;			
 		}
 		
-		return true;
-		
+		$module = $this->getModule();
+		return GO::modules()->isInstalled($module->id);
 	}
 
 	public function run($action = '', $params = array(), $render = true, $checkPermissions = true)
