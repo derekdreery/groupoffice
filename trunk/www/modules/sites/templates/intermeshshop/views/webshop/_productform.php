@@ -1,9 +1,8 @@
 <div class="product">
-	
-	<?php $DEFAULT_SHOP_LANG = 1; ?>
 
-	<h2><?php echo $product->getLanguage($DEFAULT_SHOP_LANG)->name; ?></h2>
-	<p><?php echo $product->getLanguage($DEFAULT_SHOP_LANG)->description; ?></p>
+
+	<h2><?php echo $product->getLanguage($webshop->language_id)->name; ?></h2>
+	<p><?php echo $product->getLanguage($webshop->language_id)->description; ?></p>
 
 
 	<p class="price"><b>&euro; <?php echo $product->list_price; ?></b></p>

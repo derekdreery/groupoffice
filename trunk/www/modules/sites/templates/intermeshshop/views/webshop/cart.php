@@ -22,7 +22,7 @@
 					<td>
 						<?php echo GO_Sites_Components_Html::textField("product[".$product->getId()."]", $product->getAmount(), array('size'=>5)); ?>
 					</td>
-					<td><?php echo $product->getItem()->getLanguage(2)->name; ?></td>
+					<td><?php echo $product->getItem()->getLanguage($webshop->language_id)->name; ?></td>
 					<td align="right"><?php echo $product->getSumPriceText(); ?></td>
 				</tr>
 				<?php endforeach; ?>
