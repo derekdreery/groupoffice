@@ -83,5 +83,12 @@ $l['tickets_ticketNoAgent']='We will help you as soon as possible.<br />Please b
 $l['tickets_CreateWithoutLogin']='Create ticket without logging in.';
 $l['tickets_ClickCreateWithoutLogin']='Please click <a href="%s">here</a> to create a ticket without logging in';
 
+$l['tickets_filter_progress']='In progress';
+$l['tickets_filter_closed']='Closed';
+$l['tickets_filter_all']='All';
+$l['tickets_filter_open']='Open';
+$l['tickets_filter_openprogress']='Open and in progress';
+$l['tickets_filter']='Filter';
+
 $l['postAddressDetails']='Post address';
 $l['addressDetails']='Address';
