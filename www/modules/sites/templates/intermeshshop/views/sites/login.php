@@ -31,7 +31,7 @@
 				</div>
 				<?php echo GO_Sites_Components_Html::endForm(); ?>
 				<div style="clear:both;"></div>
-					<a href="<?php echo $this->createUrl('/sites/site/resetpassword'); ?>"><?php echo GOS::t('lostPassword'); ?>?</a>
+					<a href="<?php echo $this->createUrl('/sites/site/recoverpassword'); ?>"><?php echo GOS::t('lostPassword'); ?>?</a>
 			</div>
 		</div>
 
