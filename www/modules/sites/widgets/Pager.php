@@ -123,6 +123,9 @@ class GO_Sites_Widgets_Pager extends GO_Sites_Widgets_Component {
 	
 	private function getPageUrl($pageNum){
 		$params = array_merge($this->getAdditionalParams(),array($this->getRequestParam()=>$pageNum));
+		
+		$params = array_merge($_GET,$params);
+		
 		return GOS::site()->getController()->createUrl(GOS::site()->route, $params);
 	}
 	
