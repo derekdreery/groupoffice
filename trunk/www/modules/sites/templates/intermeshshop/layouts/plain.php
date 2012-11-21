@@ -5,7 +5,6 @@
 		<meta name="robots" content="all,index,follow" />
 		<meta name="description" content="<?php echo $this->description; ?>" />
 		<title><?php echo $this->getPageTitle() . " - " . GOS::site()->getName(); ?></title>
-		<link href="<?php echo $this->getTemplateUrl(); ?>css/stylesheet.css" rel="stylesheet" type="text/css" />
 	</head>
 
 	<body>
