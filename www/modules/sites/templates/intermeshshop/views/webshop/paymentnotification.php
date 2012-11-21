@@ -3,3 +3,4 @@
 <?php
 echo $order->replaceTemplateTags($order->status->getLanguage($order->language_id)->screen_template);
 ?>
+<a href="https://shop.group-office.com">Return to shop.group-office.com</a>
