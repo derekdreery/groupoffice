@@ -36,7 +36,7 @@ return array(
 		'setlicense'=>'licenses/site/setlicense', 
 		'download' => 'licenses/site/licenseList',
 		'viewlicense' => 'licenses/site/viewlicense',
-		'<action:(login|logout|register|profile|recover|resetpassword)>' => 'sites/user/<action>',//TODO: login, logout, profile resetpassword, register, recover/lostpassword
+		'<action:(login|logout|register|profile|resetpassword|recoverpassword)>' => 'sites/site/<action>',//TODO: login, logout, profile resetpassword, register, recover/lostpassword
 		'<slug>'=>'sites/site/content', //TODO: requirements, contact	
 		
 		'<module:\w+>/<controller:\w+>/<action:\w+>'=>'<module>/<controller>/<action>'
