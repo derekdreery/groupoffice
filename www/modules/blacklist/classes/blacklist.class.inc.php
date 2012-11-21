@@ -95,6 +95,7 @@ class blacklist extends db {
 
 			$user_id = $bl->get_user_id($username);
 			$bl->delete_ip($_SERVER['REMOTE_ADDR'], $user_id);
+			$bl->delete_ip($_SERVER['REMOTE_ADDR'], 0);
 		}
 	}
 	/**
