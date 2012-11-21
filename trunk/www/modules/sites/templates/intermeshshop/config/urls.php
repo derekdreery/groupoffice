@@ -22,8 +22,8 @@ return array(
 		'orderfromtrail'=>'billing/site/orderfromtrail', //TODO
 		
 		'support' => 'tickets/site/ticketlist',
-		'createticket' => 'tickets/site/createticket',
-		'ticket'=>'tickets/site/ticket',
+		'createticket' => 'tickets/site/createTicket',
+		'ticket'=>'tickets/site/showTicket',
 		
 		'products'=>'billing/site/products',
 		'cart'=>'webshop/site/cart',
