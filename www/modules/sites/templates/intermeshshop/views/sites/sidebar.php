@@ -10,7 +10,7 @@
 			<?php foreach($cart->getItems() as $product): ?>
 				<tr>
 					<td><?php echo $product->getAmount(); ?></td>
-					<td><?php echo $product->getItem()->getLanguage(1)->name; ?></td>
+					<td><?php echo $product->getItem()->getLanguage($webshop->language_id)->name; ?></td>
 					<td align="right"><?php echo $product->getSumPriceText(); ?></td>
 				</tr>
 			<?php endforeach; ?>

@@ -6,7 +6,7 @@
 				<?php
 					foreach($products as $product)
 					{
-						$this->renderPartial('_productform', array('product'=>$product));
+						$this->renderPartial('_productform', array('product'=>$product, 'webshop'=>$webshop));
 					}
 				?>
 
