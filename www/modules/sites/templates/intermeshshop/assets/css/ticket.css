@@ -113,3 +113,21 @@
 .button-close-ticket{
 	float:right;
 }
+
+.filter-list{
+	float:right;
+}
+
+.filter-list ul{
+	padding:0px;
+	margin:0px;
+}
+
+.filter-list li {
+	list-style: none;
+	display:inline-block;
+}
+
+.filter-list li a {
+	color: #666;
+}
