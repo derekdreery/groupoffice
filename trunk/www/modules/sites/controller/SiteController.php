@@ -164,7 +164,7 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 		if(!$user)
 			throw new Exception(GO::t("invaliduser","sites"));
 		
-		GO::language()->setLanguage($user->language);
+//		GO::language()->setLanguage($user->language);
 
 		if(isset($_GET['usertoken']) && $_GET['usertoken'] == $user->getSecurityToken())
 		{
@@ -202,6 +202,8 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 			$password = $_POST['User']['password'];
 
 			$user = GO::session()->login($model->username, $password);
+			//reset language after login
+			GO::language()->setLanguage(GOS::site()->site->language);
 			if (!$user) {
 				GOS::site()->notifier->setMessage('error', GO::t('badLogin')); // set the correct login failure message
 			} else {
