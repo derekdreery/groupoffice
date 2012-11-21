@@ -192,9 +192,11 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				$this->state = 'authed';
 			}else
 			{
-				$this->errors[]=$response;
+				if(!GO::config()->debug)
+					$this->errors[]=$response;
+				
 				throw new GO_Base_Mail_ImapAuthenticationFailedException($response);
-				//$this->errors[]=$response;
+
 			}
 		}
 		return $authed;
