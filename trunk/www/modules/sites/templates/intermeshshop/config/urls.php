@@ -31,6 +31,7 @@ return array(
 		'payment'=>'webshop/site/payment',
 		'summery'=>'webshop/site/summery',
 		'paymentreturn' => 'webshop/site/paymentreturn',
+		'paymentnotification' => 'webshop/site/paymentnotification',
 		
 		'setlicense'=>'licenses/site/setlicense', 
 		'download' => 'licenses/site/licenseList',
