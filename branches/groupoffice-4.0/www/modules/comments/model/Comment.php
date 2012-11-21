@@ -59,4 +59,20 @@ class GO_Comments_Model_Comment extends GO_Base_Db_ActiveRecord{
 		return array(	
 			'category' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Comments_Model_Category', 'field'=>'category_id'),		);
 	}
+	
+	public function getAttachedObject(){
+		
+		$modelType = GO_Base_Model_ModelType::model()->findByPk($this->model_type_id);
+		
+		if($modelType){
+			$obj = GO::getModel($modelType->model_name)->findByPk($this->model_id);
+			
+			if($obj)
+				return $obj;
+		}
+		
+		return false;
+	}
+	
+	
 }
