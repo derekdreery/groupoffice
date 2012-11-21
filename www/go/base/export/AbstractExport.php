@@ -121,7 +121,7 @@ abstract class GO_Base_Export_AbstractExport {
 		$frecord = array();
 		
 		foreach($c as $key){
-			$frecord[$key] = $record[$key];
+			$frecord[$key] = html_entity_decode($record[$key]);
 		}
 
 		return $frecord;
