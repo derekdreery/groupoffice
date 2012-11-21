@@ -2,10 +2,10 @@
 
 
 	<h2><?php echo $product->getLanguage($webshop->language_id)->name; ?></h2>
-	<p><?php echo $product->getLanguage($webshop->language_id)->description; ?></p>
+	<p><?php echo $product->getLanguage($webshop->language_id)->getAttribute("description","html"); ?></p>
 
 
-	<p class="price"><b>&euro; <?php echo $product->list_price; ?></b></p>
+	<p class="price"><b>&euro; <?php echo $product->getAttribute("list_price","formatted"); ?></b></p>
 
 	<div class="button-green" onmouseover="this.className='button-green-hover';"  onmouseout="this.className='button-green';">
 		<div class="button-green-right">
