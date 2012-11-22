@@ -1,8 +1,6 @@
 <?php
 $l['name']='Servermanager';
 $l['description']='Manage multiple Group-Office installations on a Debian or Ubuntu server.';
-$l['installation']='Installation';
-$l['installations']='Installations';
 $l['invalidEmail']='Please enter a valid e-mail address';
 $l['noHost']='Please enter a hostname';
 $l['invalidHost']='The hostname may only contain the charachters a to z';
@@ -48,7 +46,6 @@ $l["mailboxUsage"]='Mailbox usage';
 $l["totalUsage"]='Total usage';
 $l["strComment"]='Comment';
 
-$l["mailDomains"]='Mail domains';
 $l["features"]='Features';
 
 $l["configEditor"]='Config editor';
