@@ -168,14 +168,14 @@ $updates['201210161843'][]="insert ignore into cal_groups (id,name, user_id) val
 $updates['201210300847'][]="ALTER TABLE `cal_events` CHANGE `location` `location` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 $updates['201210300847'][]="ALTER TABLE `cal_events` CHANGE `name` `name` VARCHAR( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ";
 
-$updates['201210241730'][]="ALTER TABLE `cal_participants` CHANGE `status` `status` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'NEEDS-ACTION'";
+$updates['201211222127'][]="ALTER TABLE `cal_participants` CHANGE `status` `status` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'NEEDS-ACTION'";
 
-$updates['201210241730'][]="update cal_participants set status='NEEDS-ACTION' where status='0';";
-$updates['201210241730'][]="update cal_participants set status='ACCEPTED' where status='1';";
-$updates['201210241730'][]="update cal_participants set status='DECLINED' where status='2';";
-$updates['201210241730'][]="update cal_participants set status='TENTATIVE' where status='3';";
+$updates['201211222127'][]="update cal_participants set status='NEEDS-ACTION' where status='0';";
+$updates['201211222127'][]="update cal_participants set status='ACCEPTED' where status='1';";
+$updates['201211222127'][]="update cal_participants set status='DECLINED' where status='2';";
+$updates['201211222127'][]="update cal_participants set status='TENTATIVE' where status='3';";
 
-$updates["201210281753"][]="ALTER TABLE `cal_events` DROP `owner_status`";
+$updates["201211222127"][]="ALTER TABLE `cal_events` DROP `owner_status`";
 
 
-$updates["201211011721"][]="ALTER TABLE `cal_events` DROP `sequence`";
+$updates["201211222127"][]="ALTER TABLE `cal_events` DROP `sequence`";
