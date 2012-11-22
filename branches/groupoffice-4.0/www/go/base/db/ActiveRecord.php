@@ -3675,7 +3675,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function mergeWith(GO_Base_Db_ActiveRecord $model, $mergeAttributes=true, $deleteModel=true){
 		
-		if($model->id==$this->id && $this->className()==$model->className())
+		if(!($this instanceof GO_Customfields_Model_AbstractCustomFieldsRecord) && $model->id==$this->id && $this->className()==$model->className())
 			return false;
 				
 		//copy attributes if models are of the same type.
@@ -3690,10 +3690,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				unset($attributes[$this->primaryKey()]);
 
 			unset($attributes['files_folder_id']);
-
+			
 			foreach($attributes as $name=>$value){
 				$isset = isset($this->columns[$name]);
-
+					
 				if($isset && !empty($value)){
 					if($this->columns[$name]['gotype']=='textarea'){
 						$this->$name .= "\n\n-- merge --\n\n".$value;
