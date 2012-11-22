@@ -831,6 +831,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			
 			$newData = implode("\$l", array_reverse($newData));
 			
+			if(eval($newData)===false)
+				throw new Exception("Parse error in generated data for ".$file->path());
+			
 			$file->putContents($newData);
 		}
 	}
