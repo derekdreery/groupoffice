@@ -34,12 +34,12 @@ class GO_Base_Mail_EmailRecipients{
 	 * @param string $email
 	 * @param string $personal 
 	 */
-	public function addRecipient($email, $personal=''){
+	public function addRecipient($email, $personal=null){
 		//echo $email.' '.$personal.'<br />';
 		if(empty($email))
 			return false;
 
-		$this->_addresses[trim($email)]=trim($personal);
+		$this->_addresses[trim($email)]=!empty($personal) ? trim($personal) : null;
 	}
 	
 	/**
