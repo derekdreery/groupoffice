@@ -1,3 +1,6 @@
+4.0.132
+- Added a check to show the "Show mine only" checkbox in the ticket grid. From now it will only be showed when you have manage persmissions on one of the ticket types
+
 20-11-2012 4.0.131
 - Better error message when PDF template is missing for order
 - Regex field was not enabled for custom text fields initially
