@@ -3,11 +3,7 @@
 
 $l['name']='Poznámky';
 $l['description']='Slouží k uchování rychlých zpráv.';
-$l['category']='Kategorie';
-$l['categories']='Kategorie';
-$lang['link_type'][4]=$l['note']='Poznámka';
-$l['notes']='Poznámky';
-$l['general'] = 'Obecné';
+$lang['link_type'][4]=$l['general'] = 'Obecné';
 $l['incomplete_delete']='Nemáte oprávnění pro smazání všech vybraných poznámek';
 $l['multipleCategoriesSelected']='Vybráno více kategorií';
 

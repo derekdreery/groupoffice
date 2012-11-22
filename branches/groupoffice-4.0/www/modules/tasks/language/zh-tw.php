@@ -3,8 +3,7 @@
 
 $l['name']='工作';
 $l['description']='在這裡寫上說明';
-$lang['link_type'][12]=$l['task']='工作';
-$l['status']='狀態';
+$lang['link_type'][12]=$l['status']='狀態';
 $l['statuses']['NEEDS-ACTION'] = '需要做的';
 $l['statuses']['ACCEPTED'] = '接受';
 $l['statuses']['DECLINED'] = '拒絕';

@@ -2,7 +2,6 @@
 
 
 $l["addressbook"]='Addressbook';
-$l["appointment"]= 'Appointment';
 $l["appointments"]= 'Appointments';
 $l["recurrence"]= 'Recurrence';
 $l["options"]= 'Options';
@@ -21,7 +20,6 @@ $l["deleteRecurringEvent"]= 'Do you want to delete a single instance or all inst
 $l["singleOccurence"]= 'Single occurence';
 $l["entireSeries"]= 'Entire series';
 $l["calendar"]= 'Calendar';
-$l["calendars"]= 'Calendars';
 $l["views"]= 'Views';
 $l["administration"]= 'Administration';
 $l["needsAction"]= 'Needs action';
@@ -56,13 +54,9 @@ $l["closeWindow"]= 'The appointment has been accepted and scheduled. You can clo
 $l["list"]='List';
 $l["editRecurringEvent"]='Do you want to edit this occurence or the entire series?';
 $l["selectIcalendarFile"]='Select an icalendar (*.ics) file';
-$l["location"]='Location';
-$l["startsAt"]='Starts at';
-$l["endsAt"]='Ends at';
 $l["eventDefaults"]='Defaults settings for appointments';
 $l["importToCalendar"]='Add appointment directly to the calendars';
 $l["default_calendar"]='Default calendar';
-$l["status"]='Status';
 $l["resource_groups"]='Resource groups';
 $l["resource_group"]='Resource group';
 $l["resources"]='Resources';
@@ -121,7 +115,6 @@ $l['endsAt']='Ends at';
 $l['exceptionNoCalendarID'] = 'FATAL: No calendar ID!';
 $l['appointment'] = 'Appointment';
 $l['allTogether'] = 'All together';
-$l['location']='Location';
 $l['invited']='You are invited for the following event';
 $l['acccept_question']='Do you accept this event?';
 $l['accept']='Accept';

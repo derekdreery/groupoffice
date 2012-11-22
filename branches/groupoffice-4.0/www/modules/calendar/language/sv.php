@@ -2,7 +2,6 @@
 
 
 $l["addressbook"]= 'Adressbok';
-$l["appointment"]= 'Möte';
 $l["appointments"]= 'Möten';
 $l["recurrence"]= 'Återkommande';
 $l["options"]= 'Alternativ';
@@ -21,7 +20,6 @@ $l["deleteRecurringEvent"]= 'Vill du radera en enstaka eller alla förekomster a
 $l["singleOccurence"]= 'Enstaka förekomst';
 $l["entireSeries"]= 'Hela serien';
 $l["calendar"]= 'Kalender';
-$l["calendars"]= 'Kalendrar';
 $l["views"]= 'Vyer';
 $l["administration"]= 'Administration';
 $l["needsAction"]= 'Åtgärd krävs';
@@ -56,13 +54,9 @@ $l["closeWindow"]= 'Mötet har godkänts och schemalagts. Du kan stänga detta f
 $l["list"]= 'Lista';
 $l["editRecurringEvent"]= 'Vill du redigera denna händelse eller hela serien?';
 $l["selectIcalendarFile"]= 'Välj en iCalendar (*.ics)-fil';
-$l["location"]= 'Plats';
-$l["startsAt"]= 'Börjar vid';
-$l["endsAt"]= 'Slutar vid';
 $l["eventDefaults"]='Standardinställning för bokningar';
 $l["importToCalendar"]='Lägg till bokning direkt i kalendrarna';
 $l["default_calendar"]='Standardkalender';
-$l["status"]='Status';
 $l["resource_groups"]='Resursgrupper';
 $l["resource_group"]='Resursgrupp';
 $l["resources"]='Resurser';
@@ -121,7 +115,6 @@ $l['endsAt']= 'Slutar vid';
 $l['exceptionNoCalendarID'] = 'STOP: Inget kalender-ID!';
 $l['appointment'] = 'Möte:';
 $l['allTogether'] = 'Alla tillsammans';
-$l['location']= 'Plats';
 $l['invited']= 'Du är inbjuden till följande händelse';
 $l['acccept_question']= 'Accepterar du denna händelse?';
 $l['accept']= 'Acceptera';

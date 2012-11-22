@@ -1,7 +1,6 @@
 <?php
 
 
-$l["task"]= 'Tâche';
 $l["noTask"]= 'Aucune tâche à afficher';
 $l["tasks"]= 'Tâches';
 $l["addTask"]= 'Ajouter une tâche...';
@@ -29,7 +28,6 @@ $l["startsAt"]='Débute le';
 $l["showInactiveTasks"]='Afficher les tâches inactives';
 $l["remindMe"]= 'Ajouter un rappel';
 $l["scheduleCall"]='Planifier un appel téléphonique';
-$l["call"]='Appel';
 $l["taskDefaults"]='Paramètres par défaut pour les tâches';
 $l["daysBeforeStart"]='Rappel en jours avant l\'échéance';
 $l["defaultTasklist"]='Afficher par défaut les tâches de';

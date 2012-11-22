@@ -2,7 +2,6 @@
 
 
 $l["addressbook"]='Contatos';
-$l["appointment"]= 'Compromisso';
 $l["appointments"]= 'Compromissos';
 $l["recurrence"]= 'Periodicidade';
 $l["options"]= 'Opções';
@@ -21,7 +20,6 @@ $l["deleteRecurringEvent"]= 'Você quer apagar um evento simples ou toda a séri
 $l["singleOccurence"]= 'Evento simples';
 $l["entireSeries"]= 'Série de eventos';
 $l["calendar"]= 'Calendário';
-$l["calendars"]= 'Calendários';
 $l["views"]= 'Visualizações';
 $l["administration"]= 'Administração';
 $l["needsAction"]= 'Necessita de ação';
@@ -55,13 +53,9 @@ $l["closeWindow"]= 'O compromisso foi aceito e agendado. Você pode fechar essa 
 $l["list"]='Lista';
 $l["editRecurringEvent"]='Você deseja editar este evento ou a série de eventos?';
 $l["selectIcalendarFile"]='Selecione um arquivo icalendar (*.ics)';
-$l["location"]='Localização';
-$l["startsAt"]='Inicia em';
-$l["endsAt"]='Termina em';
 $l["eventDefaults"]='Configurações padrões para compromissos';
 $l["importToCalendar"]='Adicionar um compromisso diretamente no calendário';
 $l["default_calendar"]='Calendário padrão';
-$l["status"]='Status';
 $l["resource_groups"]='Grupos de recursos';
 $l["resource_group"]='Grupo de recursos';
 $l["resources"]='Recursos';
@@ -95,7 +89,6 @@ $l['endsAt']='Termina em';
 $l['exceptionNoCalendarID'] = 'FATAL: Sem identificação do calendário!';
 $l['appointment'] = 'Compromisso: ';
 $l['allTogether'] = 'Tudo junto';
-$l['location']='Localização';
 $l['invited']='Você foi convidado para o seguinte evento';
 $l['acccept_question']='Você aceita esse evento?';
 $l['accept']='Aceitar';

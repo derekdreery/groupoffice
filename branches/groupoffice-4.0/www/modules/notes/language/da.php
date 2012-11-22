@@ -1,10 +1,6 @@
 <?php
 
 
-$l["category"]="Kategori";
-$l["categories"]="Kategorier";
-$l["note"]="Note";
-$l["notes"]="Noter";
 $l["category_id"]="Kategori ID";
 $l["content"]="Indhold";
 $l["manageCategories"]="Rediger kategorier";

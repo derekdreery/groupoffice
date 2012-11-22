@@ -1,8 +1,6 @@
 <?php
 
 
-$l["comment"]="코멘트";
-$l["comments"]="코멘트";
 $l["recentComments"]='최근 코멘트';
 $l["browseComments"]= 'Browse comments';
 $l['name']='코멘트';

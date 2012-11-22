@@ -1,7 +1,6 @@
 <?php
 
 $l["tools"]='Yönetim araçları';
-$l["description"]='Aşağıdaki betiklerden birini çalıştırmak için seçiniz.';
 $l["scripts"]='Betikler';
 $l["scriptOutput"]='Betik çıktısı';
 $l['name']='Araçlar';

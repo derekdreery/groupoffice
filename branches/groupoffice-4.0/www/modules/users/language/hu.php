@@ -46,7 +46,6 @@ $l["cmdFormLabelThousandSeperator"]= 'Ezres elválasztó';
 $l["cmdFormLabelDecimalSeperator"]= 'Tizes elválasztó';
 $l["cmdFormLabelCurrency"]= 'Pénznem';
 $l["account"]= 'Account';
-$l["confirmPassword"]= 'Jelszó még egyszer';
 $l["companyProfile"]= 'Cég profil';
 $l["loginInfo"]= 'Belépési információk';
 $l["changePassword"]= 'Jelszó változtatás';

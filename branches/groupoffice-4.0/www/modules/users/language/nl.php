@@ -65,7 +65,6 @@ $l["cmdFormLabelThousandSeperator"]= 'Duizendtal scheidingsteken';
 $l["cmdFormLabelDecimalSeperator"]= 'Decimaal scheidingsteken';
 $l["cmdFormLabelCurrency"]= 'Valuta';
 $l["account"]= 'Account';
-$l["confirmPassword"]= 'Wachtwoord bevestigen';
 $l["companyProfile"]= 'Bedrijfsprofiel';
 $l["loginInfo"]= 'Login informatie';
 $l["changePassword"]= 'Wachtwoord veranderen';

@@ -1,6 +1,5 @@
 <?php
 
-$l["task"]='Aufgabe';
 $l["noTask"]='Keine Aufgaben zum Anzeigen';
 $l["tasks"]='Aufgaben';
 $l["addTask"]='Aufgabe hinzufügen...';
@@ -29,7 +28,6 @@ $l["startsAt"]='Beginnt am';
 $l["completedAt"]='Beendet am';
 $l["showInactiveTasks"]='offen (inaktiv)';
 $l["scheduleCall"]='Erinnnerungsruf';
-$l["call"]='Anruf';
 $l["taskDefaults"]='Standardeinstellungen für Aufgaben';
 $l["daysBeforeStart"]= 'Tag(e) vorher';
 $l["defaultTasklist"]='Standard Aufgabenliste';

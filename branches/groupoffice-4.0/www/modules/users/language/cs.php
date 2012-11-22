@@ -66,7 +66,6 @@ $l["cmdFormLabelThousandSeperator"]= 'Tisícinný oddělovač';
 $l["cmdFormLabelDecimalSeperator"]= 'Desetinný oddělovač';
 $l["cmdFormLabelCurrency"]= 'Měna';
 $l["account"]= 'Účet';
-$l["confirmPassword"]= 'Potvrzení hesla';
 $l["companyProfile"]= 'Společnost';
 $l["loginInfo"]= 'Informace o přihlášení';
 $l["changePassword"]= 'Změna hesla';

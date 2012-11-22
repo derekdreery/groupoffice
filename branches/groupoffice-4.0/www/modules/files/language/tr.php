@@ -19,7 +19,6 @@ $l["fileBrowser"]= 'Dosya gezgini';
 $l["thumbnails"]= 'küçükResimler';
 $l["saveFile"]='Dosyayı kaydet';
 $l["confirmOverwrite"]='{filename} zaten mevcut, dosyayı üzerine yazmak istermisiniz?';
-$l["file"]='Dosya';
 $l["emptyList"]='Boş liste';
 $l["newFiles"]='Yeni';
 $l['name'] = 'Dosyalar';

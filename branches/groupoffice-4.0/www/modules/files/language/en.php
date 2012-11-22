@@ -1,7 +1,6 @@
 <?php
 
 
-$l["files"]='Files';
 $l["template"]= 'Template';
 $l["manageTemplates"]= 'Manage templates';
 $l["downloadTemplate"]= 'Download template';
@@ -19,7 +18,6 @@ $l["fileBrowser"]= 'File browser';
 $l["thumbnails"]= 'Thumbnails';
 $l["saveFile"]='Save file';
 $l["confirmOverwrite"]='{filename} already exists, do you want to overwrite the file?';
-$l["file"]='File';
 $l["emptyList"]='Empty list';
 $l["newFiles"]='New';
 $l["olderVersions"]='Older versions';
@@ -46,7 +44,6 @@ $l["undef"]= '-';
 $l['name'] = 'Files';
 $l['description'] = 'Files module; Module for sharing files.';
 
-$l['fileNotFound'] = 'File not found';
 $l['folderExists'] = 'The folder already exists';
 $l['filenameExists'] = 'Filename %s already exists';
 $l['uploadedSucces'] = 'File uploaded successfully';

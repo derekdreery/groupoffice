@@ -18,7 +18,6 @@ $l['ots'] = 'Modelo de Planilha de cálculo  do OpenOffice.Org';
 $l['odt'] = 'Documento de texto do OpenOffice.Org';
 $l['odm'] = 'Modelo de documento de texto do OpenOffice.Org';
 $l['oth'] = 'Página web do OpenOffice.Org';
-$l['doc'] = 'Documento de texto do Microsoft Word';
 $l['docx']= 'Documento de texto do Microsoft Word';
 $l['doc'] = 'Modelo de texto do Microsoft Word';
 $l['xls'] = 'Planilha de cálculo de Microsoft Excel';

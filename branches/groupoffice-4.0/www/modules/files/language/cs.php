@@ -23,9 +23,7 @@ Byly provedeny následující změny %s:
 $l['modified']='Změněno';
 $l['new']='Nový';
 $l['deleted']='Smazáno';
-$l['file']='Soubor';
 $l['folder']='Složka';
-$l['files']='Soubory';
 $l['emptyFile']='Prázdný soubor';
 $l['downloadLink'] = 'Odkaz pro stažení';
 $l['clickHereToDownload'] = 'Klikněte zde pro stažení souboru pomocí zabezpečeného odkazu';

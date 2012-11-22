@@ -1,6 +1,5 @@
 <?php
 
-$l["task"]= 'Tarea';
 $l["noTask"]= 'No hay tareas para mostrar';
 $l["tasks"]= 'Tareas';
 $l["addTask"]= 'Añadir tarea...';
@@ -28,7 +27,6 @@ $l["startsAt"]='Inicio';
 $l["showInactiveTasks"]='Mostrar tareas inactivas';
 $l["remindMe"]= 'Recordatorio';
 $l["scheduleCall"]='Agendar una llamada telefónica';
-$l["call"]='Llamada telefónica';
 $l["selectIcalendarFile"]='Seleccione un archivo de icalendar (*.ics)';
 $l["completedAt"]='Completado el';
 $l["taskDefaults"]='Seteos por defecto para las tareas';

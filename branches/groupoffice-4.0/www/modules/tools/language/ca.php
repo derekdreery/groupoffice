@@ -2,7 +2,6 @@
 
 
 $l['name']='Eines';
-$l['description']='Mòdul per realitzar tasques administratives.';
 $l['dbcheck']='Comprovar la base de dades';
 $l['rm_duplicates']='Eliminar els contactes i esdeveniments duplicats';
 $l['backupdb']='Còpia de seguretat de base de dades';

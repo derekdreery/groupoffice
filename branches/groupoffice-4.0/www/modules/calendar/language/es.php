@@ -1,7 +1,6 @@
 <?php
 
 $l["addressbook"]='Contactos';
-$l["appointment"]= 'Cita';
 $l["appointments"]= 'Citas';
 $l["recurrence"]= 'Repetición';
 $l["options"]= 'Opciones';
@@ -20,7 +19,6 @@ $l["deleteRecurringEvent"]= '¿Desea borrar solamente este o tods la serie del e
 $l["singleOccurence"]= 'Solamente este';
 $l["entireSeries"]= 'Toda la serie';
 $l["calendar"]= 'Calendario';
-$l["calendars"]= 'Calendarios';
 $l["views"]= 'Vistas';
 $l["administration"]= 'Administración';
 $l["needsAction"]= 'Deben intervenir';
@@ -58,7 +56,6 @@ $l["visibleCalendars"]='Calendarios visibles';
 $l["visible"]='Visible';
 $l["importToCalendar"]='Agregar cita al calendario';
 $l["default_calendar"]='Calendario por defecto';
-$l["status"]='Estado';
 $l["group"]='Grupo';
 $l["no_status"]='Nuevo';
 $l["no_custom_fields"]='No hay opciones extras.';
@@ -67,9 +64,6 @@ $l["show_tasks"]='Mostrar actividades de lista de actividades';
 $l["myCalendar"]='Mi calendario';
 $l["merge"]='Unir';
 $l["ownColor"]='Cada calendario con su color';
-$l["location"]='Lugar';
-$l["startsAt"]='Comienza el';
-$l["endsAt"]='Finaliza el';
 $l["eventDefaults"]='Seteos por defecto para las citas';
 $l["resource_groups"]='Grupos de recursos';
 $l["resource_group"]='Grupo de recursos';

@@ -1,7 +1,6 @@
 <?php
 
 
-$l["files"]='파일';
 $l["template"]= '템플릿';
 $l["manageTemplates"]= '템플릿 관리';
 $l["downloadTemplate"]= '템플릿 다운로드';
@@ -19,7 +18,6 @@ $l["fileBrowser"]= '파일 브라우저';
 $l["thumbnails"]= 'Thumbnails';
 $l["saveFile"]='파일 저장';
 $l["confirmOverwrite"]='{filename} already exists, do you want to overwrite the file?';
-$l["file"]='파일';
 $l["emptyList"]='Empty list';
 $l["newFiles"]='새 파일';
 $l["olderVersions"]='이전 버전';
@@ -38,7 +36,6 @@ $l['name'] = '파일';
 $l['description'] = 'Files module; Module for sharing files.';
 $lang['link_type'][6]='파일';
 $lang['link_type'][17]='폴더';
-$l['fileNotFound'] = '파일을 찾을 수 없습니다';
 $l['folderExists'] = '폴더가 이미 존재합니다';
 $l['filenameExists'] = '파일 이름이 이미 존재합니다';
 $l['uploadedSucces'] = '파일 업로드에 성공했습니다';

@@ -1,10 +1,6 @@
 <?php
 
 
-$l["category"]="노트북";
-$l["categories"]="노트북";
-$l["note"]="노트";
-$l["notes"]="노트";
 $l["category_id"]="노트북";
 $l["content"]="내용";
 $l["manageCategories"]="노트북 관리";
