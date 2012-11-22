@@ -1,7 +1,6 @@
 <?php
 
 
-$l["task"]= 'Görev';
 $l["noTask"]= 'Görüntülenecek Görev yok';
 $l["tasks"]= 'Görevler';
 $l["addTask"]= 'Görev ekle...';
@@ -29,7 +28,6 @@ $l["createLink"]= 'Bir bağlantı oluştur';
 $l["startsAt"]='Başlama saati';
 $l["showInactiveTasks"]='Aktif olmayan görevleri göster';
 $l["scheduleCall"]='Bir arama kur';
-$l["call"]='Ara';
 $l["taskDefaults"]='Görevler için varsayılan ayarlar';
 $l['name']='Görevler';
 $l['description']='Buraya bir açıklama koyunuz';

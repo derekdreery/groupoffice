@@ -1,7 +1,5 @@
 <?php
 
-$l["comment"]="Commento";
-$l["comments"]="Commenti";
 $l["browseComments"]= 'Sfoglia commenti';
 
 $l['name']='Commenti';

@@ -1,7 +1,6 @@
 <?php
 
 
-$l["appointment"]= 'Rendez-vous';
 $l["appointments"]= 'Rendez-vous';
 $l["recurrence"]= 'Récurrence';
 $l["options"]= 'Options';
@@ -20,7 +19,6 @@ $l["deleteRecurringEvent"]= 'Voulez-vous supprimer une seule occurrence ou toute
 $l["singleOccurence"]= 'Occurrence simple';
 $l["entireSeries"]= 'Toute la série';
 $l["calendar"]= 'Calendrier';
-$l["calendars"]= 'Calendriers';
 $l["views"]= 'Vues';
 $l["administration"]= 'Administration';
 $l["needsAction"]= 'Action nécessaire';
@@ -54,13 +52,9 @@ $l["closeWindow"]= 'Le rendez-vous a été accepté et programmé. Vous pouvez f
 $l["list"]='Liste';
 $l["editRecurringEvent"]='Voulez-vous éditer cette occurrence ou la série complète ?';
 $l["selectIcalendarFile"]='Sélectionner un fichier icalendar (*.ics)';
-$l["location"]='Lieu';
-$l["startsAt"]='Débute à';
-$l["endsAt"]='Se termine à';
 $l["eventDefaults"]='Paramètres par défaut pour les rendez-vous';
 $l["importToCalendar"]='Ajouter directement ce rendez-vous';
 $l["default_calendar"]='Calendrier par défaut';
-$l["status"]='Statut';
 $l["resource_groups"]='Groupes de ressources';
 $l["resource_group"]='Groupe de ressources';
 $l["resources"]='Ressources';
@@ -112,7 +106,6 @@ $l['endsAt']='Termine à';
 $l['exceptionNoCalendarID'] = 'ERREUR FATALE : calendrier sans ID !';
 $l['appointment'] = 'Rendez-vous : ';
 $l['allTogether'] = 'Tous ensemble';
-$l['location']='Lieu';
 $l['invited']='Vous êtes invité à l\'évènement suivant';
 $l['acccept_question']='Acceptez vous cet évènement ?';
 $l['accept']='Accepter';

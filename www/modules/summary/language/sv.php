@@ -5,9 +5,6 @@ $l['name']= 'Översikt';
 $l['description']= 'Visar en översikt från utvalda moduler.';
 $l['default_rss_url']= 'http://www.dn.se/m/rss/toppnyheter';
 $l['default_rss_title']='Nyheter från DN';
-$l['announcement']= 'Meddelande';
-$l['announcements']= 'Meddelanden';
-
 $l["summary"]= 'Översikt';
 $l["noItems"]= 'Finns inga moduler att visa på din översikt.';
 $l["selectPortlet"]= 'Välj portlet';

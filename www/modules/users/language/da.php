@@ -46,7 +46,6 @@ $l["cmdFormLabelThousandSeperator"]= 'Tusinde separator';
 $l["cmdFormLabelDecimalSeperator"]= 'Decimal separator';
 $l["cmdFormLabelCurrency"]= 'Valuta';
 $l["account"]= 'Konto';
-$l["confirmPassword"]= 'Bekræft kodeord';
 $l["companyProfile"]= 'Virksomhedsprofil';
 $l["loginInfo"]= 'Login information';
 $l["changePassword"]= 'Skift kodeord';

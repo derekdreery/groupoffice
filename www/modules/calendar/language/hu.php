@@ -2,7 +2,6 @@
 
 
 $l["addressbook"]='Címjegyzék';
-$l["appointment"]= 'Esemény';
 $l["appointments"]= 'Események';
 $l["recurrence"]= 'Ismétlődés';
 $l["options"]= 'Options';
@@ -55,13 +54,9 @@ $l["closeWindow"]= 'Az esemény el lett fogadva és be lett jegyezve a naptárba
 $l["list"]='Lista';
 $l["editRecurringEvent"]='Csak ezt az eseményt módosítod, vagy az egész sorozatot?';
 $l["selectIcalendarFile"]='Válassz (*.ics) fájlt';
-$l["location"]='Helyszín';
-$l["startsAt"]='Kezdődik:';
-$l["endsAt"]='Befejeződik:';
 $l["eventDefaults"]='Alapértelmezett beállítások for appointments';
 $l["importToCalendar"]='Új bejegyzés közvetlenül a naptárba';
 $l["default_calendar"]='Alapértelmezett naptár';
-$l["status"]='Állapot';
 $l['name'] = 'Naptár';
 $l['description'] = 'naptár modul; Every user can add, edit or delete appointments Also appointments from other users can be viewed and if necessary it can be changed.';
 $lang['link_type'][1]='Esemény';
@@ -72,7 +67,6 @@ $l['endsAt']='Befejeződik';
 $l['exceptionNoCalendarID'] = 'HIBA: Nincs naptár ID!';
 $l['appointment'] = 'Esemény: ';
 $l['allTogether'] = 'Mindenki együtt';
-$l['location']='Helyszín';
 $l['invited']='Meghívtak a következő eseményre';
 $l['acccept_question']='Elfogadod a meghívást?';
 $l['accept']='Elfogadom';

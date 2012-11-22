@@ -4,9 +4,6 @@
 $l['name']='概要';
 $l['description']='在這裡輸入說明';
 $l['default_rss_url']='http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml';
-$l['announcement']='公告';
-$l['announcements']='公告';
-
 $l["summary"]= '摘要';
 $l["noItems"]= '您的首頁沒有項目.';
 $l["selectPortlet"]= '請選擇portlet';

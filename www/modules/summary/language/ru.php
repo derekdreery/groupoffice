@@ -5,9 +5,6 @@ $l['name']='Начальная страница';
 $l['description']='Модуль для отображения обобщенной информации.';
 $l['default_rss_url']='http://static.feed.rbc.ru/rbc/internal/rss.rbc.ru/rbc.ru/news.rss';
 $l['default_rss_title']='Новости';
-$l['announcement']='Анонс';
-$l['announcements']='Анонсы';
-
 $l["summary"]= 'Резюме';
 $l["noItems"]= 'У Вас нет блоков на Вашей заглавной странице.';
 $l["selectPortlet"]= 'Выберите блок';

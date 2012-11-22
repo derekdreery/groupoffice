@@ -3,8 +3,7 @@
 
 $l['name']= 'Uppgifter';
 $l['description']= 'Modul för hantering av uppgifter i en uppgiftslista. Kan ex. kopplas till kalenderhändelser, e-postmeddelanden eller projekt.';
-$lang['link_type'][12]=$l['task']= 'Uppgift';
-$l['status']= 'Status';
+$lang['link_type'][12]=$l['status']= 'Status';
 $l['scheduled_call']= 'Planerat in samtal vid %s';
 $l['statuses']['NEEDS-ACTION'] = 'Åtgärd krävs';
 $l['statuses']['ACCEPTED'] = 'Accepterad';
@@ -14,7 +13,6 @@ $l['statuses']['DELEGATED'] = 'Delegerad';
 $l['statuses']['COMPLETED'] = 'Avslutad';
 $l['statuses']['IN-PROCESS'] = 'Pågående';
 $l['import_success']= '%s uppgifter importerades';
-$l['call']= 'Ring';
 $l['dueAtdate']='Förfaller vid %s';
 $l['list']='Uppgiftslista';
 $l['tasklistChanged']="* Uppgiftslista ändrad från '%s' till '%s'";

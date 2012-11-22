@@ -45,7 +45,6 @@ $l["cmdFormLabelThousandSeperator"]='Tausendertrennzeichen';
 $l["cmdFormLabelDecimalSeperator"]='Dezimaltrennzeichen';
 $l["cmdFormLabelCurrency"]='Währung';
 $l["account"]='Benutzerdaten';
-$l["confirmPassword"]='Kennwort bestätigen';
 $l["companyProfile"]='Firmendaten';
 $l["loginInfo"]='Loginstatistik';
 $l["changePassword"]='Kennwort ändern';

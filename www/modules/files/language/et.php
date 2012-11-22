@@ -22,9 +22,7 @@ Muudatused tegi %s:
 $l['modified']='Muudetud';
 $l['new']='Uus';
 $l['deleted']='Kustutatud';
-$l['file']='Fail';
 $l['folder']='Kaust';
-$l['files']='Failid';
 $lang['link_type'][17]='Kaust';
 $l['emptyFile']='Tühi fail';
 

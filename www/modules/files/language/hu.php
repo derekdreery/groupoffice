@@ -19,7 +19,6 @@ $l["fileBrowser"]= 'Fájl böngésző';
 $l["thumbnails"]= 'Előnézeti képek';
 $l["saveFile"]='Fájl mentése';
 $l["confirmOverwrite"]='{filename} már létezik. Felül akarod írni?';
-$l["file"]='Fájl';
 $l["emptyList"]='Üres lista';
 $l["newFiles"]='Új';
 $l["olderVersions"]='Régebbi verziók';

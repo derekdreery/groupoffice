@@ -2,7 +2,6 @@
 
 
 $l["tools"]='Adminisztrációs eszközök';
-$l["description"]='Kattints az alábbi szkriptek egyikére annak végrehajtásához.';
 $l["scripts"]='Szkriptek';
 $l["scriptOutput"]='Végeredmény';
 $l['name']='Eszközök';

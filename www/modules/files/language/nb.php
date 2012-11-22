@@ -21,9 +21,7 @@ Følgende endringer er foretatt av %s:
 $l['modified']='Endret';
 $l['new']='Ny';
 $l['deleted']='Slettet';
-$l['file']='Fil';
 $l['folder']='Mappe';
-$l['files']='Filer';
 $l['emptyFile']='Tom fil';
 $l['downloadLink']= 'Nedlastingslenke';
 $l['clickHereToDownload']= 'Klikk her for å laste ned filen via en sikker lenke';

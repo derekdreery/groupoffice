@@ -21,9 +21,7 @@ Els següents canvis han estat realitzats per %s:
 $l['modified']='Modificat';
 $l['new']='Nou';
 $l['deleted']='Eliminats';
-$l['file']='Arxiu';
 $l['folder']='Carpeta';
-$l['files']='Arxius';
 $lang['link_type'][6]='Arxiu';
 $lang['link_type'][17]='Carpeta';
 $l['emptyFile']='Arxiu buit';

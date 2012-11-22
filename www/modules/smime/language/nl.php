@@ -11,8 +11,7 @@ $l['smime_pass_empty']="Uw SMIME sleutel heeft geen wachtwoord. Dit is uit bevei
 $l['invalidCert']="Dit certificaat is ongeldig!";
 $l['validCert']="Geldig certificaat";
 $l['certEmailMismatch']="Geldig certificaat maar het e-mail adres van het certificaat komt niet overeen met de afzender van deze e-mail.";
-$l['decryptionFailed']='SMIME decodering van dit bericht is mislukt.';$l["enterPassword"]="Voer aub het wachtwoord in voor uw SMIME certificaat.";
-$l["messageEncrypted"]="Dit bericht is versleuteld aan u verstuurd.";
+$l['decryptionFailed']='SMIME decodering van dit bericht is mislukt.';$l["messageEncrypted"]="Dit bericht is versleuteld aan u verstuurd.";
 $l["messageSigned"]="Dit bericht is digitaal ondertekend. Klik hier om de handtekening te verifiëren en het publieke certificaat te importeren.";
 $l["smimeCert"]="SMIME Certificaat";
 $l["sign"]="Onderteken met SMIME";

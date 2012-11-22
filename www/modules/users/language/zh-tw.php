@@ -57,7 +57,6 @@ $l["cmdFormLabelThousandSeperator"]= '千位分隔符';
 $l["cmdFormLabelDecimalSeperator"]= '小數點';
 $l["cmdFormLabelCurrency"]= '貨幣';
 $l["account"]= '帳號';
-$l["confirmPassword"]= '確認密碼';
 $l["companyProfile"]= '公司資料';
 $l["loginInfo"]= '登錄信息';
 $l["changePassword"]= '更改密碼';

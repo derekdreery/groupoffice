@@ -49,7 +49,6 @@ $l["cmdFormLabelThousandSeperator"]= 'Separador de miles';
 $l["cmdFormLabelDecimalSeperator"]= 'Separador decimal';
 $l["cmdFormLabelCurrency"]= 'Moneda';
 $l["account"]= 'Cuenta';
-$l["confirmPassword"]= 'Confirmar contraseña';
 $l["companyProfile"]= 'Perfil de la Compañía';
 $l["loginInfo"]= 'Acerca de acceso';
 $l["changePassword"]= 'Cambiar contraseña';

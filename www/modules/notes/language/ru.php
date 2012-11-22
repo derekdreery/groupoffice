@@ -3,11 +3,7 @@
 
 $l['name']='Заметки';
 $l['description']='Модуль для ведения заметок';
-$l['category']='Категория';
-$l['categories']='Категории';
-$lang['link_type'][4]=$l['note']='Заметка';
-$l['notes']='Заметки';
-$l['general'] = 'Общие';
+$lang['link_type'][4]=$l['general'] = 'Общие';
 $l['incomplete_delete']='У Вас недостаточно прав для удаления выбранных заметок';
 $l['multipleCategoriesSelected']='Выбрано несколько категорий';
 $l["category"]="Категория";

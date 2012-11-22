@@ -1,7 +1,6 @@
 <?php
 
 
-$l["files"]='Pliki';
 $l["template"]= 'Szablon';
 $l["manageTemplates"]= 'Zarządzanie szablonami';
 $l["downloadTemplate"]= 'Pobierz szablon';
@@ -19,7 +18,6 @@ $l["fileBrowser"]= 'Przeglądarka plików';
 $l["thumbnails"]= 'Miniatury';
 $l["saveFile"]='Zapisz plik';
 $l["confirmOverwrite"]='{filename} już istnieje, czy chcesz nadpisać ten plik?';
-$l["file"]='Plik';
 $l["emptyList"]='Pusta lista';
 $l["newFiles"]='Nowy';
 $l["olderVersions"]='Starsze wersje';

@@ -1,15 +1,10 @@
 <?php
 
 
-$l["category"]="Kategoria";
-$l["categories"]="Kategorie";
-$l["note"]="Notatka";
-$l["notes"]="Notatki";
 $l["category_id"]="ID kategorii";
 $l["content"]="Zawartość";
 $l["manageCategories"]="Zarządzaj kategoriami";
 
-$l['note']='Notatka';
 $l['name']='Notatki';
 $l['description']='Proszę wprowadzić opis';
 $l['category']='Kategoria';

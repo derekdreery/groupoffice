@@ -1,7 +1,6 @@
 <?php
 
 
-$l["task"]= 'Zadanie';
 $l["noTask"]= 'Brak zadań do wyświetlenia';
 $l["tasks"]= 'Zadania';
 $l["addTask"]= 'Dodaj zadanie ...';
@@ -29,7 +28,6 @@ $l["createLink"]= 'Uwtórz link';
 $l["startsAt"]='Rozpoczecie';
 $l["showInactiveTasks"]='Pokaż nieaktywne zadania';
 $l["scheduleCall"]='Planowe wywołanie';
-$l["call"]='Wywołanie';
 $l["completedAt"]='Zakończone o';
 $l["taskDefaults"]='Domślne ustawienia dla zadań';
 $l["daysBeforeStart"]='Dni przed startem';

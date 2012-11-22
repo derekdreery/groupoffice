@@ -1,9 +1,5 @@
 <?php
 
-$l["category"]='Kategorie';
-$l["categories"]='Kategorien';
-$l["note"]='Notiz';
-$l["notes"]='Notizen';
 $l["category_id"]='Kategorie ID';
 $l["content"]='Inhalt';
 $l["manageCategories"]='Kategorien verwalten';

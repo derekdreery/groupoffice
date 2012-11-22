@@ -1,7 +1,6 @@
 <?php
 
 
-$l["task"]= 'Tarefas';
 $l["noTask"]= 'Sem tarefas para exibir';
 $l["tasks"]= 'Tarefas';
 $l["addTask"]= 'Adicionar tarefa...';
@@ -29,7 +28,6 @@ $l["createLink"]= 'Criar link';
 $l["startsAt"]='Começar em';
 $l["showInactiveTasks"]='Mostrar tarefas inativas';
 $l["scheduleCall"]='Agendar chamada';
-$l["call"]='Chamada';
 $l["taskDefaults"]='Configurações padrão para tarefas';
 $l["daysBeforeStart"]='Dias antes de iniciar';
 $l["defaultTasklist"]='Lista de Tarefas padrão';

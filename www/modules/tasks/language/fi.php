@@ -1,7 +1,6 @@
 <?php
 
 
-$l["task"]= 'Tehtävä';
 $l["noTask"]= 'Ei tehtäviä';
 $l["tasks"]= 'Tehtävät';
 $l["addTask"]= 'Lisää tehtävä...';
@@ -29,7 +28,6 @@ $l["createLink"]= 'Luo linkki';
 $l["startsAt"]='Alkaa';
 $l["showInactiveTasks"]='Näytä ei aktiiviset työt';
 $l["scheduleCall"]='Ajasta puhelu';
-$l["call"]='Puhelu';
 $l['name']='Tehtävät';
 $l['description']='Laita kuvaus tähän';
 $lang['link_type'][12]=$l['task']='Tehtävä';

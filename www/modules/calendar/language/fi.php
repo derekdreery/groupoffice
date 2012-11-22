@@ -2,7 +2,6 @@
 
 
 $l["addressbook"]='Osoitekirja';
-$l["appointment"]= 'Kalenterimerkintä';
 $l["appointments"]= 'Kalenterimerkinnät';
 $l["recurrence"]= 'Toistuminen';
 $l["options"]= 'Vaihtoehdot';
@@ -55,10 +54,6 @@ $l["closeWindow"]= 'Tapahtuma on hyväksytty ja ajastettu. You can close this wi
 $l["list"]='Luettelo';
 $l["editRecurringEvent"]='Haluatko muokata tätä tapahtumaa vai kokonaista tapahtumasarjaa?';
 $l["selectIcalendarFile"]='Valitse icalendar (*.ics) tiedosto';
-$l["location"]='Sijainti';
-$l["startsAt"]='Alkaa';
-$l["endsAt"]='Päättyy';
-
 $l['name'] = 'Kalenteri';
 $l['description'] = 'Kalenteri moduuli; Jokainen käyttäjä voi lisätä, muokata tai poistaa merkintöjä. Myös muiden kalenterin käyttäjien merkintöjä voidaan selata tai tarvittaessa muuttaa.';
 $lang['link_type'][1]='Merkinnät';
@@ -69,7 +64,6 @@ $l['endsAt']='Päättyy';
 $l['exceptionNoCalendarID'] = 'FATAALI: Ei kalenteri ID:tä!';
 $l['appointment'] = 'Merkintä: ';
 $l['allTogether'] = 'Kaikki yhdessä';
-$l['location']='Sijainti';
 $l['invited']='Teidät on kutsuttu seuraavaan tapahtumaan';
 $l['acccept_question']='Hyväksytkö tämän tapahtuman?';
 $l['accept']='Hyväksy';

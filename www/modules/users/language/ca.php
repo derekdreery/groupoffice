@@ -70,7 +70,6 @@ $l["cmdFormLabelThousandSeperator"]= 'Separador de milers';
 $l["cmdFormLabelDecimalSeperator"]= 'Separador decimal';
 $l["cmdFormLabelCurrency"]= 'Moneda';
 $l["account"]= 'Compte';
-$l["confirmPassword"]= 'Confirmar contrasenya';
 $l["companyProfile"]= 'Perfil de la Companyia';
 $l["loginInfo"]= 'Sobre accés';
 $l["changePassword"]= 'Canviar contrasenya';

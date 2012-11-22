@@ -2,7 +2,6 @@
 
 
 $l["tools"]='Herramientas de administración';
-$l["description"]='Haga clic en una de las secuencia de comandos para ejecutarlo.';
 $l["scripts"]='Script';
 $l["scriptOutput"]='Script de salida';
 $l['name']='Herramientas';

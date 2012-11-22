@@ -3,22 +3,18 @@
 
 $l["postfixadmin"]='E-mail domeinen';
 $l["alias"]="Alias";
-$l["aliases"]="Aliasen";
 $l['maxAliases'] = 'Max aliasen';
 $l["address"]="Adres";
 $l["goto_address"]="Ga naar";
-$l["domain"]="Domein";
 $l["domains"]="Domeinen";
 $l["domain"]="Domein";
 $l["aliases"]="Aliasen";
-$l["mailboxes"]="Mailboxen";
 $l['maxMailboxes'] = 'Max mailboxen';
 $l["maxquota"]="Max quota (MB)";
 $l["transport"]="Transport";
 $l["backupmx"]="Backup MX";
 $l["fetchmailConfig"]="Fetchmail config";
 $l["fetchmailConfigs"]="Fetchmail configs";
-$l["mailbox"]="Mailbox";
 $l["srcServer"]="Src server";
 $l["srcAuth"]="Src auth";
 $l["srcUser"]="Src user";

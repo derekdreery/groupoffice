@@ -59,7 +59,6 @@ $l["cmdFormLabelThousandSeperator"]= 'Separator de mii';
 $l["cmdFormLabelDecimalSeperator"]= 'Separator de zecimi';
 $l["cmdFormLabelCurrency"]= 'Valută';
 $l["account"]= 'Cont';
-$l["confirmPassword"]= 'Confirmă password';
 $l["companyProfile"]= 'Profil firmă';
 $l["loginInfo"]= 'Informaţii despre acces';
 $l["changePassword"]= 'Modifică parola';

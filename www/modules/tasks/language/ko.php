@@ -1,7 +1,6 @@
 <?php
 
 
-$l["task"]= '작업';
 $l["noTask"]= '표시할 작업이 없음';
 $l["tasks"]= '작업';
 $l["addTask"]= '작업 추가...';
@@ -30,7 +29,6 @@ $l["startsAt"]='시작';
 $l["completedAt"]='완료';
 $l["showInactiveTasks"]='Show inactive tasks';
 $l["scheduleCall"]='Schedule call';
-$l["call"]='Call';
 $l["taskDefaults"]='Defaults settings for tasks';
 $l["daysBeforeStart"]='Days before start';
 $l["defaultTasklist"]='Default tasklist';

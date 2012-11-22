@@ -3,8 +3,7 @@
 
 $l['name']='Задачи';
 $l['description']='Введите описание';
-$lang['link_type'][12]=$l['task']='Задача';
-$l['status']='Cтaтyc';
+$lang['link_type'][12]=$l['status']='Cтaтyc';
 $l['scheduled_call']='Запланировать звонок в %s';
 $l['statuses']['NEEDS-ACTION'] = 'Необходимы действия';
 $l['statuses']['ACCEPTED'] = 'Принято';
@@ -14,7 +13,6 @@ $l['statuses']['DELEGATED'] = 'Делегировано';
 $l['statuses']['COMPLETED'] = 'Выполнено';
 $l['statuses']['IN-PROCESS'] = 'В процессе';
 $l['import_success']='%s задач импортированно';
-$l['call']='Позвонить';
 $l['dueAtdate']='До %s';
 $l['list']='Список задач';
 $l['tasklistChanged']="* Список задач изменен с '%s' - '%s'";

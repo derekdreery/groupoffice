@@ -1,6 +1,5 @@
 <?php
 
-$l["files"]='Dateien';
 $l["template"]='Vorlage';
 $l["manageTemplates"]='Vorlagen verwalten';
 $l["downloadTemplate"]='Vorlage herunterladen';
@@ -18,7 +17,6 @@ $l["fileBrowser"]='Dateibrowser';
 $l["thumbnails"]='Miniaturansicht';
 $l["saveFile"]='Datei speichern';
 $l["confirmOverwrite"]='{filename} existiert bereits. Möchten Sie die Datei überschreiben?';
-$l["file"]='Datei';
 $l["emptyList"]='Liste leeren';
 $l["newFiles"]='Neu';
 $l["olderVersions"]='Ältere Versionen';
@@ -38,7 +36,6 @@ $l["stateLocked"]= 'Ordneranzeige durch Besitzer/Administrator gesperrt';
 
 $l['name']='Dateien';
 $l['description']='Modul zum Verwalten und Freigeben von Dateien';
-$l['fileNotFound']='Datei nicht gefunden';
 $l['folderExists']='Der Ordner ist bereits vorhanden';
 $l['filenameExists']='Dateiname existiert bereits';
 $l['uploadedSucces']='Datei erfolgreich hochgeladen';
