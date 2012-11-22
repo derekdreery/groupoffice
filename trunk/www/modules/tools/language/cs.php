@@ -2,7 +2,6 @@
 
 
 $l['name']='Nástroje';
-$l['description']='Prostředí pro vykonávání administrativních příkazů.';
 $l['dbcheck']='Kontrola databáze';
 $l['rm_duplicates']='Smazat duplicitní kontakty a události';
 $l['backupdb']='Záloha databáze';

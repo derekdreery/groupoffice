@@ -1,7 +1,6 @@
 <?php
 
 
-$l["appointment"]= '约会';
 $l["appointments"]= '约会';
 $l["recurrence"]= '重复';
 $l["options"]= '选项';
@@ -64,7 +63,6 @@ $l['endsAt']='结束于';
 $l['exceptionNoCalendarID'] = '错误: 没有日程 ID!';
 $l['appointment'] = '日程: ';
 $l['allTogether'] = '一起';
-$l['location']='位置';
 $l['invited']='邀请您参加下列活动';
 $l['acccept_question']='你要接受此安排？';
 $l['accept']='接受';

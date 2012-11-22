@@ -1,6 +1,4 @@
 <?php
-$l["comment"]="Comment";
-$l["comments"]="Comments";
 $l["recentComments"]='Recent comments';
 $l["browseComments"]= 'Browse comments';
 $l['name']='Comments';

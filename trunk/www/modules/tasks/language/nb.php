@@ -3,8 +3,7 @@
 
 $l['name']='Arbeidsoppgaver';
 $l['description']='Angi en beskrivelse';
-$lang['link_type'][12]=$l['task']='Oppgave';
-$l['status']='Status';
+$lang['link_type'][12]=$l['status']='Status';
 $l['scheduled_call']='Avtalt samtale den %s';
 $l['statuses']['NEEDS-ACTION'] = 'Trenger oppfølging';
 $l['statuses']['ACCEPTED'] = 'Akseptert';
@@ -14,7 +13,6 @@ $l['statuses']['DELEGATED'] = 'Delegert';
 $l['statuses']['COMPLETED'] = 'Fullført';
 $l['statuses']['IN-PROCESS'] = 'Under behandling';
 $l['import_success']='%s oppgaver er importert';
-$l['call']='Telefon';
 $l['dueAtdate']='Frist %s';
 $l['list']='Oppgaveliste';
 $l['tasklistChanged']="* Oppgaveliste endret fra '%s' til '%s'";

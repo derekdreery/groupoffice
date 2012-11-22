@@ -3,11 +3,7 @@
 
 $l['name']='Notater';
 $l['description']='En modul for å lage notater';
-$l['category']='Kategori';
-$l['categories']='Kategorier';
-$lang['link_type'][4]=$l['note']='Notat';
-$l['notes']='Notater';
-$l['general'] = 'Generell';
+$lang['link_type'][4]=$l['general'] = 'Generell';
 $l['incomplete_delete']='Du har ikke rettigheter til å slette alle valgte notater';
 $l['multipleCategoriesSelected']='Flere notatkategoeier er valgt';
 

@@ -1,7 +1,6 @@
 <?php
 
 
-$l["files"]='Archivos';
 $l["template"]= 'Modelo';
 $l["manageTemplates"]= 'Administrar modelos';
 $l["downloadTemplate"]= 'Descargar modelo';
@@ -19,7 +18,6 @@ $l["fileBrowser"]= 'Explorador de archivos';
 $l["thumbnails"]= 'Muestra';
 $l["saveFile"]='Guardar archivo';
 $l["confirmOverwrite"]='El archivo {filename} ya existe, ¿desea sobreescribirlo?';
-$l["file"]='Archivo';
 $l["emptyList"]='Vaciar lista';
 $l["newFiles"]='Nuevos';
 $l["olderVersions"]='Versiones anteriores';

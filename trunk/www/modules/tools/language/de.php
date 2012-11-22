@@ -1,7 +1,6 @@
 <?php
 
 $l["tools"]='Werkzeuge';
-$l["description"]='Zum Ausführen klicken Sie auf eines der Skripte.';
 $l["scripts"]='Skripte';
 $l["scriptOutput"]='Skriptausgabe';
 

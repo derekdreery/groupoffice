@@ -2,7 +2,6 @@
 
 
 $l['name']='Tööriistad';
-$l['description']='Admin ülesannete teostamise moodul.';
 $l['dbcheck']='Andmebaasi kontroll';
 $l['rm_duplicates']='eemalda dubleeritud kontaktid ja sündmused';
 $l['backupdb']='Andmebaasi varundamine';

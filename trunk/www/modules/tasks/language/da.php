@@ -29,7 +29,6 @@ $l["createLink"]= 'Opret link';
 $l["startsAt"]='Starter';
 $l["showInactiveTasks"]='Vis inaktive opgaver';
 $l["scheduleCall"]='Planlæg opringning';
-$l["call"]='Ring';
 $l['name']='Opgaver';
 $l['description']='Angiv beskrivelse her';
 $lang['link_type'][12]=$lang['opgaver']['opgave']='Opgave';

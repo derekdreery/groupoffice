@@ -2,7 +2,6 @@
 
 
 $l["addressbook"]='주소록';
-$l["appointment"]= '약속';
 $l["appointments"]= '약속';
 $l["recurrence"]= '반복';
 $l["options"]= '옵션';
@@ -21,7 +20,6 @@ $l["deleteRecurringEvent"]= 'Do you want to delete a single instance or all inst
 $l["singleOccurence"]= 'Single occurence';
 $l["entireSeries"]= 'Entire series';
 $l["calendar"]= '캘린더';
-$l["calendars"]= '캘린더';
 $l["views"]= 'Views';
 $l["administration"]= 'Administration';
 $l["needsAction"]= 'Needs action';
@@ -55,13 +53,9 @@ $l["closeWindow"]= 'The appointment has been accepted and scheduled. You can clo
 $l["list"]='리스트';
 $l["editRecurringEvent"]='Do you want to edit this occurence or the entire series?';
 $l["selectIcalendarFile"]='Select an icalendar (*.ics) file';
-$l["location"]='장소';
-$l["startsAt"]='시작';
-$l["endsAt"]='끝';
 $l["eventDefaults"]='Defaults settings for appointments';
 $l["importToCalendar"]='캘린더에 약속을 바로 추가';
 $l["default_calendar"]='기본 캘린더';
-$l["status"]='상태';
 $l["resource_groups"]='리소스 그룹';
 $l["resource_group"]='리소스 그룹';
 $l["resources"]='리소스';
@@ -124,7 +118,6 @@ $l['endsAt']='끝';
 $l['exceptionNoCalendarID'] = 'FATAL: No calendar ID!';
 $l['appointment'] = '약속: ';
 $l['allTogether'] = 'All together';
-$l['location']='장소';
 $l['invited']='You are invited for the following event';
 $l['acccept_question']='Do you accept this event?';
 $l['accept']='Accept';

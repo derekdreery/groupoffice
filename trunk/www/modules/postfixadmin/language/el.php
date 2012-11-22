@@ -1,21 +1,13 @@
 <?php
 
 
-$l["alias"]="Ψευδώνυμο";
-$l["aliases"]="Ψευδώνυμα";
 $l["address"]="Διεύθυνση";
 $l["goto_address"]="Προς";
-$l["domain"]="Τομέας";
-$l["domains"]="Τομείς";
-$l["domain"]="Τομέας";
-$l["aliases"]="Ψευδώνυμα";
-$l["mailboxes"]="Γραμματοκιβώτια";
 $l["maxquota"]="Μέγιστο μερίδιο (MB)";
 $l["transport"]="Μεταφορά";
 $l["backupmx"]="Backup MX";
 $l["fetchmailConfig"]="Αρχείο ρυθμίσεων Fetchmail";
 $l["fetchmailConfigs"]="Αρχεία ρυθμίσεων Fetchmail";
-$l["mailbox"]="Γραμματοκιβώτιο";
 $l["srcServer"]="Εξυπηρετητής προέλευσης";
 $l["srcAuth"]="Πιστοποίηση προέλευσης";
 $l["srcUser"]="Χρήστης προέλευσης";
@@ -29,14 +21,11 @@ $l["extraOptions"]="Επιπλέον επιλογές";
 $l["returnedText"]="Επιστρεφόμενο κείμενο";
 $l["mda"]="Mda";
 $l["date"]="Ημερομηνίας";
-$l["mailbox"]="Γραμματοκιβώτιο";
-$l["mailboxes"]="Γραμματοκιβώτια";
 $l["username"]="Όνομα χρήστη";
 $l["password"]="Συνθηματικό";
 $l["confirmPassword"]='Επιβεβαίωση συνθηματικού';
 $l["maildir"]="Maildir";
 $l["quota"]="Μερίδιο (MB)";
-$l["domain"]="Τομέας";
 $l["active"]="Ενεργό";
 $l["vacation"]="Αυτοματοποιημένη απάντηση";
 $l["vacationActive"]="Ενεργοποίηση αυτοματοποιημένη απάντησης";
@@ -44,7 +33,6 @@ $l["email"]="Ηλεκτρονικό ταχυδρομείο";
 $l["subject"]="Θέμα";
 $l["body"]="Σώμα";
 $l["cache"]="Λανθάνουσα μνήμη";
-$l["domain"]="Τομέας";
 $l["defaultQuota"]='Προεπιλογή μεριδίου (MB)';
 
 $l['name']='Διαχείριση Postfix';

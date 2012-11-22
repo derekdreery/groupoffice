@@ -1,17 +1,12 @@
 <?php
 
 
-$l["category"]="Luokka";
-$l["categories"]="Luokat";
-$l["note"]="Muistiinpano";
-$l["notes"]="Muistiinpanot";
 $l["category_id"]="Luokka-id";
 $l["content"]="Sisältö";
 $l["manageCategories"]="Hallitse luokkia";
 
 $modules['notes']['name']='Muistiinpanot';
 $modules['notes']['description']='Laita kuvaus tähän';
-$l['note']='Muistiinpano';
 $l['name']='Muistiinpanot';
 $l['description']='Laita kuvaus tähän';
 $l['category']='Luokka';

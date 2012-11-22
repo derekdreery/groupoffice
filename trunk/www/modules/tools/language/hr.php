@@ -1,7 +1,6 @@
 <?php
 
 $l['name']='Alati';
-$l['description']='Modul za obavljanje administrativnih zadataka.';
 $l['dbcheck']='Provjera baze podataka';
 $l['rm_duplicates']='Ukloni duple kontakte i događaje';
 $l['backupdb']='Backup baze podataka';

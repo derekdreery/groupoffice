@@ -1,10 +1,6 @@
 <?php
 
 
-$l["category"]="Note book";
-$l["categories"]="Note books";
-$l["note"]="Note";
-$l["notes"]="Notes";
 $l["category_id"]="Note book";
 $l["content"]="Content";
 $l["manageCategories"]="Manage note books";

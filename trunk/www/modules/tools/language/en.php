@@ -2,7 +2,6 @@
 
 
 $l["tools"]='Admin tools';
-$l["description"]='Click on one of the scripts below to execute it.';
 $l["scripts"]='Scripts';
 $l["scriptOutput"]='Script output';
 $l['name']='Tools';

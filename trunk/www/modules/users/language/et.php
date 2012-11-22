@@ -66,7 +66,6 @@ $l["cmdFormLabelThousandSeperator"]= 'Tuhandete eraldamine';
 $l["cmdFormLabelDecimalSeperator"]= 'Kümnendike eraldamine';
 $l["cmdFormLabelCurrency"]= 'Rahaühik';
 $l["account"]= 'Konto';
-$l["confirmPassword"]= 'Kinnita parool ';
 $l["companyProfile"]= 'Ettevõtte profiil';
 $l["loginInfo"]= 'Sisenemise info';
 $l["changePassword"]= 'Muuda parooli';

@@ -1,19 +1,13 @@
 <?php
 
 $l["postfixadmin"]='Postfix';
-$l["alias"]='Alias';
-$l["aliases"]='Aliase';
 $l["address"]='Adresse';
 $l["goto_address"]='Gehe zu';
-$l["domain"]='Domäne';
-$l["domains"]='Domänen';
-$l["mailboxes"]='Mailboxen';
 $l["maxquota"]='Max. Quota (MB)';
 $l["transport"]='Transport';
 $l["backupmx"]='Backup MX';
 $l["fetchmailConfig"]='Fetchmail (config)';
 $l["fetchmailConfigs"]='Fetchmail (configs)';
-$l["mailbox"]='Mailbox';
 $l["srcServer"]='SRC-Server';
 $l["srcAuth"]='SRC-Auth';
 $l["srcUser"]='SRC-Benutzer';

@@ -46,7 +46,6 @@ $l["cmdFormLabelThousandSeperator"]= 'Tuhansien kenttäerotin';
 $l["cmdFormLabelDecimalSeperator"]= 'Desimaalierotin';
 $l["cmdFormLabelCurrency"]= 'Valuutta';
 $l["account"]= 'Tili';
-$l["confirmPassword"]= 'Vahvista salasana';
 $l["companyProfile"]= 'Yrityksen profiili';
 $l["loginInfo"]= 'Kirjautumistiedot';
 $l["changePassword"]= 'Muokkaa salasanaa';

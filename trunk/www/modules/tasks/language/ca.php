@@ -3,8 +3,7 @@
 
 $l['name']='Tasques';
 $l['description']='Per favor, introduïu una descripció';
-$lang['link_type'][12]=$l['task']='Tasca';
-$l['status']='Estat';
+$lang['link_type'][12]=$l['status']='Estat';
 $l['statuses']['NEEDS-ACTION']= 'Sol·licitud d\'Acció';
 $l['statuses']['ACCEPTED']= 'Acceptada';
 $l['statuses']['DECLINED']= 'Rebutjada';
@@ -13,7 +12,6 @@ $l['statuses']['DELEGATED']= 'Delegat';
 $l['statuses']['COMPLETED']= 'Complert';
 $l['statuses']['IN-PROCESS']= 'En curs';
 $l['scheduled_call']='Trucada agendada per a %s';
-$l['call']='Trucada';
 $l['import_success']='%s tasques han estat importades';
 $l['dueAtdate']='Venç en %s';
 $l['list']='Llistat de tasques';

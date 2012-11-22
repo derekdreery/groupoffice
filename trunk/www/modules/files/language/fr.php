@@ -1,7 +1,6 @@
 <?php
 
 
-$l["files"]='Fichiers';
 $l["template"]= 'Modèle';
 $l["manageTemplates"]= 'Gérer les modèles';
 $l["downloadTemplate"]= 'Télécharger le modèle';
@@ -19,7 +18,6 @@ $l["fileBrowser"]= 'Explorateur de fichiers';
 $l["thumbnails"]= 'Miniatures';
 $l["saveFile"]='Sauvegarder le fichier';
 $l["confirmOverwrite"]='Le fichier "{filename}" existe déjà, voulez vous l\'écraser ?';
-$l["file"]='Fichier';
 $l["emptyList"]='Liste vide';
 $l["newFiles"]='Nouveau';
 $l["olderVersions"]='Versions antérieures';

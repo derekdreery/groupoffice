@@ -2,7 +2,6 @@
 
 
 $l["tools"]='Admin værktøjer';
-$l["description"]='Klik på et script nedenfor for at udføre det.';
 $l["scripts"]='Scripts';
 $l["scriptOutput"]='Script resultat';
 $l['name']='Værktøjer';

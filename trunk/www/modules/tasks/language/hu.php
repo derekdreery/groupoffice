@@ -1,6 +1,5 @@
 <?php
 
-$l["task"] = 'Feladat';
 $l["noTask"]= 'Nincs feladat';
 $l["tasks"]= 'Feladatok';
 $l["addTask"]= 'Új feladat...';
@@ -28,7 +27,6 @@ $l["createLink"]= 'Link létrehozása';
 $l["startsAt"]='Kezdet';
 $l["showInactiveTasks"]='Az inaktív feladatokat is';
 $l["scheduleCall"]='Schedule call';
-$l["call"]='Hívás';
 $l["taskDefaults"]='Alapértelmezett beállítások for tasks';
 $l["daysBeforeStart"]='Napok a kezdetig';
 $l["defaultTasklist"]='Alapértelmezett feladatlista';

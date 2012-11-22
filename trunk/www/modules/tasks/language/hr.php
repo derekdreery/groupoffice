@@ -2,8 +2,7 @@
 
 $l['name']='Zadaci';
 $l['description']='Upravljanje zadacima i obvezama.';
-$lang['link_type'][12]=$l['task']='Zadatak';
-$l['status']='Status';
+$lang['link_type'][12]=$l['status']='Status';
 $l['scheduled_call']='Zakazani poziv u %s';
 $l['statuses']['NEEDS-ACTION'] = 'Potrebno djelovati';
 $l['statuses']['ACCEPTED'] = 'Prihvaćeno';
@@ -13,7 +12,6 @@ $l['statuses']['DELEGATED'] = 'Delegirano';
 $l['statuses']['COMPLETED'] = 'Završeno';
 $l['statuses']['IN-PROCESS'] = 'U procesu';
 $l['import_success']='%s zadataka je uvezeno';
-$l['call']='Poziv';
 $l['dueAtdate']='Dospijeva %s';
 $l['list']='Lista zadataka';
 $l['tasklistChanged']="* Lista zadataka promjenjena iz '%s' u '%s'";

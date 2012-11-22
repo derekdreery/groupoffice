@@ -64,7 +64,6 @@ $l["cmdFormLabelThousandSeperator"]= 'คั่นด้วยเครื่อ
 $l["cmdFormLabelDecimalSeperator"]= 'คั่นด้วยทศนิยม';//Decimal Seperator;
 $l["cmdFormLabelCurrency"]= 'สกุลเงิน';
 $l["account"]= 'ชื่อบัญชี';
-$l["confirmPassword"]= 'ยืนยัน รหัสผ่าน';
 $l["companyProfile"]= 'ประวัติบริษัท';
 $l["loginInfo"]= 'ข้อมูลการเข้าสู่ระบบ';
 $l["changePassword"]= 'เปลี่ยนรหัสผ่าน';

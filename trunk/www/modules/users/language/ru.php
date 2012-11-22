@@ -66,7 +66,6 @@ $l["cmdFormLabelThousandSeperator"]= 'Разделитель тысяч';
 $l["cmdFormLabelDecimalSeperator"]= 'Разделитель дробной части';
 $l["cmdFormLabelCurrency"]= 'Валюта';
 $l["account"]= 'Учетная запись';
-$l["confirmPassword"]= 'Подтверждение пароля';
 $l["companyProfile"]= 'Профиль компании';
 $l["loginInfo"]= 'Информация о входе';
 $l["changePassword"]= 'Изменить пароль';

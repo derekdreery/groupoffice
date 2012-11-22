@@ -2,7 +2,6 @@
 
 
 $l["tools"]='Narzędzia administracyjne';
-$l["description"]='Kliknij jeden z poniższych skryptów aby go wykonać.';
 $l["scripts"]='Skrypty';
 $l["scriptOutput"]='Wyjście skryptu';
 $l['name']='Narzędzia';

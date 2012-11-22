@@ -2,7 +2,6 @@
 
 
 $l["addressbook"]='Adressebog';
-$l["appointment"]= 'Aftale';
 $l["appointments"]= 'Aftaler';
 $l["recurrence"]= 'Gentagelse';
 $l["options"]= 'Funktioner';
@@ -66,7 +65,6 @@ $l['endsAt']='Slutter';
 $l['exceptionNoCalendarID'] = 'FATALT: Ingen kalender ID!';
 $l['appointment'] = 'Aftale: ';
 $l['allTogether'] = 'Alle sammen';
-$l['location']='Lokation';
 $l['invited']='Du er inviteret til følgende hændelse';
 $l['acccept_question']='Accepterer du denne hændelse?';
 $l['accept']='Accepter';

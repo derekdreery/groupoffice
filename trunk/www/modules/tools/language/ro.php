@@ -2,7 +2,6 @@
 
 ;
 $l['name']='Instrumente';
-$l['description']='Un modul pentru a executa operaţii administrative.';
 $l['dbcheck']='Controleaza database';
 $l['rm_duplicates']='Şterge contactele si evenimentele duble';
 $l['backupdb']='Backup database';
