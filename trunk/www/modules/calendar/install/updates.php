@@ -170,6 +170,8 @@ $updates['201210300847'][]="ALTER TABLE `cal_events` CHANGE `name` `name` VARCHA
 
 $updates['201211222127'][]="ALTER TABLE `cal_participants` CHANGE `status` `status` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'NEEDS-ACTION'";
 
+$updates['201211222127'][]="ALTER TABLE `cal_participants` CHANGE `status` `status` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'NEEDS-ACTION'";
+
 $updates['201211222127'][]="update cal_participants set status='NEEDS-ACTION' where status='0';";
 $updates['201211222127'][]="update cal_participants set status='ACCEPTED' where status='1';";
 $updates['201211222127'][]="update cal_participants set status='DECLINED' where status='2';";
