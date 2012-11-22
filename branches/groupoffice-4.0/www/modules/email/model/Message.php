@@ -244,7 +244,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	private function _convertRecipientArray($r){
 		$new = array();
 		foreach($r as $email=>$personal)
-			$new[]=array('email'=>$email, 'personal'=>$personal);
+			$new[]=array('email'=>$email, 'personal'=>(string) $personal);
 		
 		return $new;
 	}
