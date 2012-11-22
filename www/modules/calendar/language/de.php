@@ -1,7 +1,6 @@
 <?php
 
 $l["addressbook"]='Adressbuch';
-$l["appointment"]='Termin';
 $l["appointments"]='Termine';
 $l["recurrence"]='Wiederholung';
 $l["options"]='Optionen';
@@ -20,7 +19,6 @@ $l["deleteRecurringEvent"]='Möchten Sie nur diesen Termin oder die ganze Termin
 $l["singleOccurence"]='Einzelner Termin';
 $l["entireSeries"]='Ganze Terminserie';
 $l["calendar"]='Kalender';
-$l["calendars"]='Kalender';
 $l["views"]='Ansichten';
 $l["administration"]='Administration';
 $l["needsAction"]='Handlungsbedarf';
@@ -54,13 +52,9 @@ $l["closeWindow"]='Der Termin wurde akzeptiert und eingetragen. Sie können das 
 $l["list"]='Liste';
 $l["editRecurringEvent"]='Möchten Sie die Wiederholung oder den gesamten Termin bearbeiten?';
 $l["selectIcalendarFile"]='Wählen Sie eine iCalendar (*.ics) Datei';
-$l["location"]='Ort';
-$l["startsAt"]='Beginnt am';
-$l["endsAt"]='Endet am';
 $l["eventDefaults"]='Standardeinstellungen für Termine';
 $l["importToCalendar"]='Ohne Einladung direkt in zugehörige Kalender eintragen';
 $l["default_calendar"]='Standardkalender';
-$l["status"]='Status';
 $l["resource_groups"]='Ressourcengruppen';
 $l["resource_group"]='Ressourcengruppe';
 $l["resources"]='Ressourcen';
@@ -117,7 +111,6 @@ $l['startsAt']='Beginnt am';
 $l['endsAt']='Endet am';
 $l['exceptionNoCalendarID']='ACHTUNG: Keine Kalender-ID!';
 $l['allTogether']='Alle zusammen';
-$l['location']='Ort';
 $l['invited']='Sie sind zu folgendem Termin eingeladen';
 $l['acccept_question']='Möchten Sie diesen Termin wahrnehmen?';
 $l['accept']='Annehmen';

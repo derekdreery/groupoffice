@@ -2,21 +2,13 @@
 
 
 $l["postfixadmin"]='Domeny e-mail';
-$l["alias"]="Alias";
-$l["aliases"]="Aliases";
 $l["address"]="Address";
 $l["goto_address"]="Goto";
-$l["domain"]="Domena";
-$l["domains"]="Domeny";
-$l["domain"]="Domena";
-$l["aliases"]="Aliasy";
-$l["mailboxes"]="Skrzynki pocztowe";
 $l["maxquota"]="Max pojemność skrzynki (MB)";
 $l["transport"]="Transport";
 $l["backupmx"]="Backup MX";
 $l["fetchmailConfig"]="Konfiguracja Fetchmail";
 $l["fetchmailConfigs"]="Konfiguracje Fetchmail";
-$l["mailbox"]="Skrzynka pocztowa";
 $l["srcServer"]="Src server";
 $l["srcAuth"]="Src auth";
 $l["srcUser"]="Src user";
@@ -30,14 +22,11 @@ $l["extraOptions"]="Dodatkowe opcje";
 $l["returnedText"]="Returned text";
 $l["mda"]="Mda";
 $l["date"]="Data";
-$l["mailbox"]="Skrzynka pocztowa";
-$l["mailboxes"]="Skrzynki pocztowe";
 $l["username"]="Nazwa użytkownika";
 $l["password"]="Hasło";
 $l["confirmPassword"]='Powtórz hasło';
 $l["maildir"]="Katalog skrzynki";
 $l["quota"]="Pojemność skrzynki (MB)";
-$l["domain"]="Domena";
 $l["active"]="Aktywny";
 $l["vacation"]="Automatyczna odpowiedź";
 $l["vacationActive"]="Włącz domyślną odpowiedź";
@@ -45,7 +34,6 @@ $l["email"]="Email";
 $l["subject"]="Temat";
 $l["body"]="Treść";
 $l["cache"]="Cache";
-$l["domain"]="Domena";
 $l["usage"]="Usage";
 $l["defaultQuota"]='Domyślna pojemność skrzynki (MB)';
 

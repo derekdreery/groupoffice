@@ -4,8 +4,6 @@
 $l['name']='Oversikt';
 $l['description']='Viser en oversikt over aktuelle elementer';
 $l['default_rss_url']='http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml';
-$l['announcement']='Kunngjøring';
-$l['announcements']='Kunngjøringer';
 $l['default_rss_title']='Nyheter';
 
 $l["summary"]= 'Oversikt';

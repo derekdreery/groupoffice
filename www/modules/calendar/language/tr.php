@@ -1,7 +1,6 @@
 <?php
 
 $l["addressbook"]= 'AdresDefteri';
-$l["appointment"]= 'Davet';
 $l["appointments"]= 'Davetler';
 $l["recurrence"]= 'Tekrarlama';
 $l["options"]= 'Seçenekler';
@@ -54,9 +53,6 @@ $l["closeWindow"]= 'Davet kabul edilmiş ve ajendaya alınmıştır. Pencereyi k
 $l["list"]= 'Liste';
 $l["editRecurringEvent"]= 'Bu Aktivitenin veya Aktivite serisinin oluş zamanını düzenlemek istermisiniz?';
 $l["selectIcalendarFile"]= 'Bir (*.ics) dosyası seçiniz';
-$l["location"]= 'Yer';
-$l["startsAt"]= 'Başlangıç';
-$l["endsAt"]= 'Bitiş';
 $l["eventDefaults"]= 'Davetler için varsayılan ayarlar';
 $l['name'] = 'Takvim';
 $l['description'] = 'Takvim modülü; Tüm kullanıcılar davet gönderip ekleyebilirler, ayrıca gönderilmiş davetleri açıp kaydedebilir veya silebilirler.';
@@ -68,7 +64,6 @@ $l['endsAt']='Bitiş';
 $l['exceptionNoCalendarID'] = 'HATA: Takvim TN yoktur!';
 $l['appointment'] = 'Davet: ';
 $l['allTogether'] = 'Hepsi Birlikte';
-$l['location']='Yer';
 $l['invited']='Belirtilen Aktiviteye davetlisiniz';
 $l['acccept_question']='Bu aktiviteyi onaylıyormusunuz?';
 $l['accept']='Kabul Et';

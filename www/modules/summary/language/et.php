@@ -5,9 +5,6 @@ $l['name']='Esileht';
 $l['description']='Näita erinevate kirjete ülevaateid';
 $l['default_rss_url']='http://postimees.ee/rss/';
 $l['default_rss_title']='Uudised';
-$l['announcement']='Teadaanne';
-$l['announcements']='Teadaanded';
-
 $l["summary"]= 'Ülevaade';
 $l["noItems"]= 'Esilehel kirjed puuduvad.';
 $l["selectPortlet"]= 'Vali moodul';

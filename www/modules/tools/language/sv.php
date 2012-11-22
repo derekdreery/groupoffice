@@ -2,7 +2,6 @@
 
 
 $l['name']= 'Verktyg';
-$l['description']= 'En modul för att utföra administrativa uppgifter, bl a databasunderhåll.';
 $l['dbcheck']= 'Databaskontroll';
 $l['rm_duplicates']= 'Ta bort dubbla kontakter och händelser';
 $l['backupdb']= 'Backup av databas';

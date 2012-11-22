@@ -1,5 +1,4 @@
 <?php
-$l["task"]= 'Task';
 $l["noTask"]= 'No Tasks to display';
 $l["tasks"]= 'Tasks';
 $l["addTask"]= 'Add a task...';
@@ -28,7 +27,6 @@ $l["startsAt"]='Starts at';
 $l["completedAt"]='Completed at';
 $l["showInactiveTasks"]='Show inactive tasks';
 $l["scheduleCall"]='Schedule call';
-$l["call"]='Call';
 $l["taskDefaults"]='Defaults settings for tasks';
 $l["daysBeforeStart"]='Days before start';
 $l["defaultTasklist"]='Default tasklist';

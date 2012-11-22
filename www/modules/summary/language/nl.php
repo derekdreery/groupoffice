@@ -5,8 +5,6 @@ $l['name']='Startpagina';
 $l['description']='Een startpagina met een overzicht van verschillende actuele zaken';
 $l['default_rss_url']='http://headlines.nos.nl/rss.php/list_activetopics?ReactID=83b0934b7116fe1226283e93c3e9c82a';
 $l['default_rss_title']='Nieuws';
-$l['announcement']='Aankondiging';
-$l['announcements']='Aankondigingen';$l["summary"]= 'Startpagina';
 $l["noItems"]= 'U heeft geen items op de startpagina.';
 $l["selectPortlet"]= 'Selecteer portlet';
 $l["hotTopics"]= 'Nieuws';

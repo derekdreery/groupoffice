@@ -1,10 +1,6 @@
 <?php
 
 
-$l["category"]="Catégorie";
-$l["categories"]="Catégories";
-$l["note"]="Note";
-$l["notes"]="Notes";
 $l["category_id"]="ID de la catégorie";
 $l["content"]="Contenu";
 $l["manageCategories"]="Gérer les catégories";

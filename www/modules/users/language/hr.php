@@ -65,7 +65,6 @@ $l["cmdFormLabelThousandSeperator"]= 'Razdjelnik tisućica';
 $l["cmdFormLabelDecimalSeperator"]= 'Decimalni razdjelnik';
 $l["cmdFormLabelCurrency"]= 'Valuta';
 $l["account"]= 'Račun';
-$l["confirmPassword"]= 'Potvrdi lozinku';
 $l["companyProfile"]= 'Profil tvrtke';
 $l["loginInfo"]= 'Podaci za prijavu';
 $l["changePassword"]= 'Promjeni lozinku';

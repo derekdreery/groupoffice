@@ -1,7 +1,5 @@
 <?php
 
-$l["comment"]='Kommentar';
-$l["comments"]='Kommentare';
 $l["browseComments"]='Kommentare durchschauen';
 $l["recentComments"]='Letzte Kommentare';
 

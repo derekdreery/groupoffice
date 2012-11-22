@@ -2,7 +2,6 @@
 
 
 $l["tools"]='Outils d\'administration';
-$l["description"]='Cliquez sur un des liens ci-dessous pour l\'exécuter.';
 $l["scripts"]='Scripts';
 $l["scriptOutput"]='Informations de sortie du script';
 

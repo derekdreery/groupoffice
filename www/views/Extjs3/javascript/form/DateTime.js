@@ -111,6 +111,7 @@ Ext.ux.form.DateTime = Ext.extend(Ext.form.Field, {
             ,width:this.timeWidth
             ,selectOnFocus:this.selectOnFocus
             ,validator:this.dateValidator
+						,allowBlank:this.allowBlank
             ,listeners:{
                   blur:{scope:this, fn:this.onBlur}
                  ,focus:{scope:this, fn:this.onFocus}
@@ -127,6 +128,7 @@ Ext.ux.form.DateTime = Ext.extend(Ext.form.Field, {
             ,width:this.timeWidth
             ,selectOnFocus:this.selectOnFocus
             ,validator:this.timeValidator
+						,allowBlank:this.allowBlank
             ,listeners:{
                   blur:{scope:this, fn:this.onBlur}
                  ,focus:{scope:this, fn:this.onFocus}

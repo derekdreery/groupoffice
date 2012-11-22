@@ -46,7 +46,6 @@ $l["cmdFormLabelThousandSeperator"]= 'Διαχωριστής χιλιάδων';
 $l["cmdFormLabelDecimalSeperator"]= 'Διαχωριστής δεκαδικών';
 $l["cmdFormLabelCurrency"]= 'Νόμισμα';
 $l["account"]= 'Λογαριασμός';
-$l["confirmPassword"]= 'Επιβεβαίωση συνθηματικού';
 $l["companyProfile"]= 'Προφίλ εταιρείας';
 $l["loginInfo"]= 'Πληροφορίες εισόδου';
 $l["changePassword"]= 'Αλλαγή συνθηματικού';

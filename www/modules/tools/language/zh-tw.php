@@ -2,7 +2,6 @@
 
 
 $l['name']='工具';
-$l['description']='執行管理任務的模組.';
 $l['dbcheck']='資料庫檢查';
 $l['rm_duplicates']='刪除重複的連絡人和事件';
 $l['backupdb']='備份資料庫';

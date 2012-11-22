@@ -2,7 +2,6 @@
 
 $l['name'] = 'Datoteke';
 $l['description'] = 'Datotečni modul. Modul za dijeljenje datoteka.';
-$l['fileNotFound'] = 'Datoteka nije pronađena';
 $l['folderExists'] = 'Direktorij već postoji';
 $l['filenameExists'] = 'Datoteka već postoji';
 $l['uploadedSucces'] = 'Datotena prenesena uspješno';
@@ -20,9 +19,7 @@ Slijedeće promjene su napravljene od strane %s:
 $l['modified']='Promjenjeno';
 $l['new']='Novo';
 $l['deleted']='Izbrisano';
-$l['file']='Datoteka';
 $l['folder']='Direktorij';
-$l['files']='Datoteke';
 $l['emptyFile']='Prazna datoteka';
 $l['downloadLink'] = 'Poveznica za preuzimanje';
 $l['clickHereToDownload'] = 'Kliknite ovdje kako biste preuzeli datoteku preko sigurne poveznice';

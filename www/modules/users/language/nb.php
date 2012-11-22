@@ -67,7 +67,6 @@ $l["cmdFormLabelThousandSeperator"]= 'Tusenskille';
 $l["cmdFormLabelDecimalSeperator"]= 'Desimalskille';
 $l["cmdFormLabelCurrency"]= 'Valuta';
 $l["account"]= 'Konto';
-$l["confirmPassword"]= 'Bekreft passord';
 $l["companyProfile"]= 'Firmaprofil';
 $l["loginInfo"]= 'Innloggingsinformasjon';
 $l["changePassword"]= 'Endre passord';

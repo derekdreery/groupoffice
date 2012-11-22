@@ -46,7 +46,6 @@ $l["cmdFormLabelThousandSeperator"]= 'Tusentalsavgränsare';
 $l["cmdFormLabelDecimalSeperator"]= 'Decimaltecken';
 $l["cmdFormLabelCurrency"]= 'Valuta';
 $l["account"]= 'Konto';
-$l["confirmPassword"]= 'Bekräfta lösenord';
 $l["companyProfile"]= 'Företagsprofil';
 $l["loginInfo"]= 'Inloggningsuppgifter';
 $l["changePassword"]= 'Byt lösenord';

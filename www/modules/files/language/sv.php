@@ -1,7 +1,6 @@
 <?php
 
 
-$l["files"]= 'Filer';
 $l["template"]= 'Mall';
 $l["manageTemplates"]= 'Hantera mallar';
 $l["downloadTemplate"]= 'Ladda ner mallen';
@@ -19,7 +18,6 @@ $l["fileBrowser"]= 'Filhanterare';
 $l["thumbnails"]= 'Miniatyrer';
 $l["saveFile"]= 'Spara fil';
 $l["confirmOverwrite"]= '{filename} finns redan, vill du skriva över filen?';
-$l["file"]='Fil';
 $l["emptyList"]='Töm lista';
 $l["newFiles"]='Ny';
 $l["olderVersions"]='Äldre versioner';

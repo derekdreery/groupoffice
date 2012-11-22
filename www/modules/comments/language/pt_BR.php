@@ -1,8 +1,6 @@
 <?php
 
 
-$l["comment"]="Comentário";
-$l["comments"]="Comentários";
 $l["recentComments"]='Comentários recentes';
 $l["browseComments"]= 'Verificar comentários';
 $l['name']='Comentários';

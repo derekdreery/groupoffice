@@ -45,7 +45,6 @@ $l["cmdFormLabelThousandSeperator"]= 'Binler Ayıracı';
 $l["cmdFormLabelDecimalSeperator"]= 'Ondalık Ayıraç';
 $l["cmdFormLabelCurrency"]= 'Kur(para)';
 $l["account"]= 'Hesap';
-$l["confirmPassword"]= 'Şifreyi onayla';
 $l["companyProfile"]= 'Şirket profili';
 $l["loginInfo"]= 'Giriş bilgisi';
 $l["changePassword"]= 'Şifre değiştir';

@@ -3,8 +3,7 @@
 
 $l['name']='Úkoly';
 $l['description']='Můžete zaznamenávat důležité akce.';
-$lang['link_type'][12]=$l['task']='Úkol';
-$l['status']='Stav';
+$lang['link_type'][12]=$l['status']='Stav';
 $l['scheduled_call']='Plánované připomenutí %s';
 $l['statuses']['NEEDS-ACTION'] = 'Vyžaduje akci';
 $l['statuses']['ACCEPTED'] = 'Přijatý';
@@ -14,7 +13,6 @@ $l['statuses']['DELEGATED'] = 'Delegovaný';
 $l['statuses']['COMPLETED'] = 'Dokončený';
 $l['statuses']['IN-PROCESS'] = 'V procesu';
 $l['import_success']='%s úkolů bylo importováno';
-$l['call']='Připomenutí';
 $l['dueAtdate']='Vzhledem k %s';
 $l['list']='Přehled úkolů';
 $l['tasklistChanged']="* Seznam úkolů byl změněn z '%s' na '%s'";

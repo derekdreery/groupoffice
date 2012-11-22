@@ -1,22 +1,13 @@
 <?php
 
 
-$l["alias"]="Alias";
-$l["aliases"]="Alias";
 $l["address"]="Addresse";
 $l["goto_address"]="Envoyé à";
-$l["domain"]="Domaine";
-$l["domains"]="Domaines";
-$l["domain"]="Domaine";
-$l["aliases"]="Aliases";
-$l["mailboxes"]="Boites aux lettres";
 $l["maxquota"]="Quota Max";
-$l["quota"]="Quota";
 $l["transport"]="Transport";
 $l["backupmx"]="Backupmx";
 $l["fetchmailConfig"]="Configuration Fetchmail";
 $l["fetchmailConfigs"]="Configurations Fetchmail";
-$l["mailbox"]="Boites aux lettres";
 $l["srcServer"]="Serveur SRC";
 $l["srcAuth"]="Authentification SRC";
 $l["srcUser"]="Utilisateur SRC";
@@ -30,14 +21,11 @@ $l["extraOptions"]="Options - Extra";
 $l["returnedText"]="Texte retourné";
 $l["mda"]="Mda";
 $l["date"]="Date";
-$l["mailbox"]="Boite aux lettres";
-$l["mailboxes"]="Boites aux lettres";
 $l["username"]="Nom d\'utilisateur";
 $l["password"]="Mot de passe";
 $l["confirmPassword"]='Confirmer le mot de passe';
 $l["maildir"]="Maildir";
 $l["quota"]="Quota";
-$l["domain"]="Domaine";
 $l["active"]="Actif";
 $l["vacation"]="Réponse automatique";
 $l["vacationActive"]="Activer la réponse automatique";
@@ -45,7 +33,6 @@ $l["email"]="E-mail";
 $l["subject"]="Sujet";
 $l["body"]="Corps du message";
 $l["cache"]="Cache";
-$l["domain"]="Domaine";
 $l["defaultQuota"]='Quota par défaut (MB)';
 
 $l['name']='PostfixAdmin';

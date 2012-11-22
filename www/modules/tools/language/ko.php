@@ -2,7 +2,6 @@
 
 
 $l["tools"]='관리 도구';
-$l["description"]='Click on one of the scripts below to execute it.';
 $l["scripts"]='스크립트';
 $l["scriptOutput"]='스크립트 출력';
 $l['name']='도구';

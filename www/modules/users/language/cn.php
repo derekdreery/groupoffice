@@ -46,7 +46,6 @@ $l["cmdFormLabelThousandSeperator"]= '千位分隔符';
 $l["cmdFormLabelDecimalSeperator"]= '小数点';
 $l["cmdFormLabelCurrency"]= '货币';
 $l["account"]= '账号';
-$l["confirmPassword"]= '确认密码';
 $l["companyProfile"]= '公司设置';
 $l["loginInfo"]= '登录信息';
 $l["changePassword"]= '更改密码';

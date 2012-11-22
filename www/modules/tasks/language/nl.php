@@ -1,6 +1,5 @@
 <?php
 
-$l['task']='Taak';
 $l['name']='Taken';
 $l['description']='Taken module';
 $l['status']='Status';
@@ -12,7 +11,6 @@ $l['statuses']['TENTATIVE']='Voorlopig';
 $l['statuses']['DELEGATED']='Gedelegeerd';
 $l['statuses']['COMPLETED']='Voltooid';
 $l['statuses']['IN-PROCESS']='Wordt aan gewerkt';
-$l['call']='Bellen';
 $l['import_success']='%s taken werden geïmporteerd';
 $l['dueAtdate']='Verloopt op %s';
 $l['list']='Takenlijst';

@@ -2,7 +2,6 @@
 
 
 $l['name']='Verktøy';
-$l['description']='En modul for å utføre administrative oppgaver.';
 $l['dbcheck']='Databasekontroll';
 $l['rm_duplicates']='Fjern duplikate kontakter og hendelser';
 $l['backupdb']='Sikkerhetskopier database';

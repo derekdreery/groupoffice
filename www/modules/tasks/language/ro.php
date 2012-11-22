@@ -3,8 +3,7 @@
 
 $l['name']='Activitate';
 $l['description']='Intrudu aici o descriere';
-$lang['link_type'][12]=$l['task']='Activitate';
-$l['status']='Stato';
+$lang['link_type'][12]=$l['status']='Stato';
 $l['statuses']['NEEDS-ACTION']= 'Cerere Acţiune';
 $l['statuses']['ACCEPTED']= 'Acceptat';
 $l['statuses']['DECLINED']= 'Refuzat';

@@ -601,6 +601,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		$this->fireEvent('servermanagerReport');
 	}
 	
+
+	
 	/**
 	 * Action to be called from browser address bar. It compares all the language
 	 * fields of lang1 and lang2 in the current Group-Office installation, and
@@ -751,6 +753,86 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			}
 		}
 		return $outputString;
+	}
+	
+	
+	private function _getAllLanguageFiles(){
+		
+		$files=array();
+		
+		$languages = array_keys(GO::language()->getLanguages());
+		
+		$commonLangFolder = new GO_Base_Fs_Folder(GO::config()->root_path.'language/');
+		$folders = $commonLangFolder->ls();
+		
+		$modules = GO::modules()->getAllModules();
+		foreach($modules as $module){
+			$folder = new GO_Base_Fs_Folder($module->path.'language');
+			if($folder->exists())
+				$folders[]=$folder;
+		}
+		
+		foreach($folders as $folder){
+			foreach($languages as $language){
+				if($file = $folder->child($language.'.php')){
+					$files[]=$file;
+				}
+			}
+		}
+		
+		return $files;
+	
+	}
+	
+	
+	protected function actionRemoveOldLangKeys($params){
+		
+		$files = $this->_getAllLanguageFiles();
+		
+		foreach($files as $file){
+			
+			echo "Processing: ".$file->path()."\n";
+		
+			$data = $file->contents();
+
+			$entries = explode("\$l", $data);
+
+			//to find duplicate keys we'll reverse the lines becuase the last definition is used.
+			$entries = array_reverse($entries);
+
+			$processedKeys = array();
+
+			$newData=array();
+
+			foreach($entries as $entry){
+
+				if(preg_match('/^\[(\'|")([a-z_-]+)(\'|")\][^[]/i', $entry, $matches)){
+
+					$key = $matches[2];
+
+
+					if(!in_array($key, $processedKeys)){
+						$newData[]=$entry;
+						$processedKeys[]=$key;
+					}  else {
+						echo "Skipping duplicate key : ".$key."\n";
+					}
+
+				}else
+				{
+					$newData[] = $entry;
+				}			
+			}
+			
+			$newData = implode("\$l", array_reverse($newData));
+			
+//			echo $newData;
+			
+			if(eval(str_replace('<?php', '', $newData))===false)
+				throw new Exception("Parse error in generated data for ".$file->path());
+			
+			$file->putContents($newData);
+		}
 	}
 	
 	/**

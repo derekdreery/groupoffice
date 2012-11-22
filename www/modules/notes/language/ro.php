@@ -3,14 +3,9 @@
 ;
 $modules['notes']['name']='Note';
 $modules['notes']['description']='Intrudu aici descrierea';
-$l['note']='Notă';
 $l['name']='Note';
 $l['description']='Intrudu aici descrierea';
-$l['category']='Categoria';
-$l['categories']='Categorie';
-$lang['link_type'][4]=$l['note']='Nota';
-$l['notes']='Note';
-$l['general'] = 'General';
+$lang['link_type'][4]=$l['general'] = 'General';
 ;
 $l["category"]="Categorie";
 $l["categories"]="Categorii";

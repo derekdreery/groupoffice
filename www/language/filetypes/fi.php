@@ -4,8 +4,6 @@
 $l['unknown'] = 'Tuntematon tiedosto tyyppi';
 $l['txt'] = 'Tekstitiedosto';
 $l['sxw'] = 'OpenOffice.Org Writer tiedosto';
-$l['doc'] = 'Microsoft Word tiedosto';
-$l['xls'] = 'Microsoft Excel tiedosto';
 $l['mdb'] = 'Microsoft Access tietokanta';
 $l['ppt'] = $l['pps'] = 'Microsoft Powerpoint tiedosto';
 $l['sxc'] = 'OpenOffice.Org Calc tiedosto';
@@ -14,7 +12,6 @@ $l['zip'] = 'ZIP pakattu tiedosto';
 $l['rar'] = 'RAR pakattu tiedosto';
 $l['gz'] = $l['tgz'] = 'GZIP pakattu tiedosto';
 $l['bz2'] = 'BZIP2 pakattu tiedosto'; ;
-$l['pdf'] = 'PDF tiedosto';
 $l['exe'] = 'Windows exe tiedosto';
 $l['ttf'] = 'True type fontti tiedosto';
 $l['html'] = $l['htm'] = 'HTML tiedosto';

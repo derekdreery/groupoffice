@@ -2,7 +2,6 @@
 
 
 $l["tools"]='管理工具';
-$l["description"]='点击一个脚本运行。';
 $l["scripts"]='脚本';
 $l["scriptOutput"]='脚本输出';
 

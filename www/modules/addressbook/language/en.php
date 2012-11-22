@@ -1,11 +1,12 @@
 <?php
+$l['name'] = 'Address book';
+$l['description'] = 'Module to manage all contacts.';
+
 $l['addresslists']='Address Lists';
-$l['sendingEmailAllowed']='Allowed to receive mailings';
 $l["newSearch"]='New search';
 $l["executeQuery"]='Execute search query';
 $l["savedQueries"]='Saved search queries';
 $l["selectField"]= 'Select field';
-$l["selectMailingGroup"]='Select mailing group';
 $l["cmdFormLabelAddressBooks"]= 'Address Book';
 $l["alphabet"]= 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z';
 $l["cmdAllFields"]= 'All fields';
@@ -28,23 +29,18 @@ $l["cmdFieldsetContact"]= 'Contact details';
 $l["cmdFieldsetWork"]= 'Work';
 $l["cmdPanelContact"]= 'Contact details';
 $l["cmdPanelComments"]= 'Comments';
-$l["cmdContactDialog"]= 'Edit contact';
-$l["contact"]= 'Contact';
 $l["cmdSalutation"]= 'Dear';
 $l["cmdMadam"]= 'madam';
 $l["cmdSir"]= 'sir';
 $l["btnDownloadTextDocument"]= 'Download TextDocument';
 $l["cmdContactDetailsFor"]= 'Personal details for';
 $l["cmdLInkFieldset"]= 'Links';
-$l["company"]= 'Company';
 $l["cmdCompanyDetailsFor"]= 'Details for';
 $l["cmdPanelCompany"]= 'Company details';
 $l["cmdFormLabelBankNo"]= 'Bank number';
 $l["cmdFormLabelVatNo"]= 'VAT number';
 $l["cmdFormLabelInvoiceEmail"]= 'Invoicing email';
 $l["cmdFieldsetCompanyDetails"]= 'Company details';
-$l["cmdFieldsetVisitAddress"]= 'Visit address';
-$l["cmdFieldsetPostAddress"]= 'Post address';
 $l["cmdCompanyDialog"]= 'Edit company';
 $l["cmdPanelEmployees"]= 'Employees';
 $l["cmdPanelEmployee"]= 'Employee';
@@ -66,9 +62,6 @@ $l["cmdFormLabelLinesEnded"]= 'Lines ended by';
 $l["cmdUpload"]= 'Upload';
 $l["cmdImport"]= 'Import';
 $l["cmdExport"]= 'Export';
-$l["cmdType"]= 'Type';
-$l["contacts"]= 'Contacts';
-$l["companies"]= 'Companies';
 $l["users"]= 'Users';
 $l["strSelectContact"]= 'Select contact';
 $l["strSelectCompany"]= 'Select company';
@@ -106,8 +99,7 @@ $l["globalsettings_templatelabel"]= 'Template';
 $l["globalsettings_allchangelabel"]= 'Change all?';
 $l["globalsettings_renameall"]= 'Rename all?';
 $l["createEmailSelected"]= 'Create email for selection';
-$l['name'] = 'Address book';
-$l['description'] = 'Module to manage all contacts.';
+
 $l['allAddressbooks'] = 'All Address books';
 $l['notIncluded'] = 'Do not import';
 $l['comment'] = 'Comment';
@@ -135,89 +127,7 @@ $l['emailDoesntExists']='E-mail address wasn\'t found';
 $l['imageNotSupported']='The image you uploaded is not supported. Only gif, png and jpg images are supported.';
 $l['no_addressbook_id'] = 'Invalid address book id has been passed with the request to the server!';
 $l['undefined'] = '-';
-$l['createUser'] = 'Create user';
-$l['addresslist'] = 'Address list';
 $l['addresslistContact'] = 'Address list contact';
-
-$l["emailTemplate"]= 'E-mail template';
-$l["cmdPanelTemplate"]= 'Templates';
-$l["cmdAddEmailTemplate"]= 'Add e-mail template';
-$l["addDocumentTemplate"]='Add document template';
-$l["documentTemplate"]='Document template';
-$l["cmdType"]= 'Type';
-$l["unsubscribeLink"]='Unsubscribe link';
-$l["unsubscribeHref"]='Unsubscribe href';
-$l["autoDataMyName"]= 'My Name';
-$l["autoDataBeginning"]= 'Beginning';
-$l["autoData"]= 'Autodata';
-$l["customContactFields"]='Custom contact fields';
-$l["customCompanyFields"]='Custom company fields';
-$l["customUserFields"]='Custom user fields';
-
-
-$l["cmdPanelTemplate"] = 'Templates';
-$l["cmdAddEmailTemplate"]= 'Add e-mail template';
-$l["cmdAddOpenOfficeTemplate"]= 'Add OpenOffice.org template';
-$l["cmdType"]= 'Type';
-$l["cmdTemplateDialog"]= 'Edit template';
-$l["cmdFormLabelReadNotification"]= 'Request the recipient to send a read notification';
-$l["cmdAddMailing"]= 'Add addresslist';
-$l["cmdDeleteMailing"]= 'Delete addresslist';
-$l["cmdPanelMailings"]= 'Addresslists';
-$l["cmdEditMailingWindow"]= 'Edit addresslist';
-$l["SelectOODocument"]= 'Select a template';
-$l["SelectOODocumentWindowTitle"]= 'Select OpenOffice document';
-$l["autoDataMyName"] = 'My Name';
-$l["autoDataBeginning"] = 'Beginning';
-$l["emailTemplate"] = 'E-mail template';
-
-$l["sendingEmailAllowed"] = 'Sending e-mails to this e-mail address is allowed';
-$l["enabledMailingGroups"] = 'Enabled addresslists:';
-$l["autoData"] = 'Autodata';
-$l["selectMailingGroup"]='Select an addresslist';
-$l["noMailingGroups"]='You don\'t have any addresslist';
-
-$l["sentMailings"]='Sent newsletters';
-
-$l["subject"]='Subject';
-$l["status"]='Status';
-$l["sent"]='Sent';
-$l["total"]='Total';
-$l["errors"]='Errors';
-
-$l["addEntireAddressbook"]='Add entire addresbook';
-$l["selectAddressbook"]='Select an addressbook';
-
-$l["defaultSalutationText"]='Enter a salutation that is used when the salutation for the recipient is unknown';
-
-$l["filterMailings"]='Addresslist filter';
-$l["enterName"]='Enter filename';
-$l["pleaseEnterName"]='Please enter a filename for the new document';
-$l["noAddressLists"]='No addresslists';
-
-$l["confirmAddEntireAddressbook"]='Are you sure you want to add everything in this addressbook to this addresslist?';
-
-$l["noTemplate"]='No template';
-
-$l["customContactFields"]='Custom contact fields';
-$l["customCompanyFields"]='Custom company fields';
-$l["customUserFields"]='Custom user fields';
-$l["newsletters"]='Newsletters';
-
-$l["addresslist"]='Addresslist';
-
-$l["viewLog"]='View log';
-$l["viewMessage"]='View message';
-$l["pauseMailing"]='Pause sending';
-$l["resumeMailing"]='Resume sending';
-$l["unsubscribeLink"]='Unsubscribe link';
-$l["unsubscribeHref"]='Unsubscribe href';
-
-$l["addDocumentTemplate"]='Add document template';
-$l["documentTemplate"]='Document template';
-
-$l["copyingMessages"]='Copying messages...';
-
 
 $l["companyId"] = "ID";
 $l["companyUser_id"] = "User";

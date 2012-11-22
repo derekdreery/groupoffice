@@ -2,7 +2,6 @@
 
 
 $l["addressbook"]='Książka adresowa';
-$l["appointment"]= 'Termin';
 $l["appointments"]= 'Terminy';
 $l["recurrence"]= 'Powtarzanie';
 $l["options"]= 'Opcje';
@@ -21,7 +20,6 @@ $l["deleteRecurringEvent"]= 'Czy chcesz usunąć pojedyńcze wystąpienie czy ws
 $l["singleOccurence"]= 'Pojedyńcze wystąpienie';
 $l["entireSeries"]= 'Cała seria';
 $l["calendar"]= 'Kalendarz';
-$l["calendars"]= 'Kalendarze';
 $l["views"]= 'Widoki';
 $l["administration"]= 'Administrowanie';
 $l["needsAction"]= 'Wymaga akcji';
@@ -55,13 +53,9 @@ $l["closeWindow"]= 'Termin został zaakceptowany i zaplanowany. Możesz zamknąc
 $l["list"]='Lista';
 $l["editRecurringEvent"]='Chcesz poprawiać tylko to wystapienie czy całą serię?';
 $l["selectIcalendarFile"]='Wybierz plik typu icalendar (*.ics)';
-$l["location"]='Lokalizacja';
-$l["startsAt"]='Początek o';
-$l["endsAt"]='Koniec o';
 $l["eventDefaults"]='Domyślne ustawienia dla zdarzeń';
 $l["importToCalendar"]='Dodaj termin bezpośrednio do kalendarzy';
 $l["default_calendar"]='Domyślny kalendarz';
-$l["status"]='Status';
 $l["resources"]='Zasoby';
 $l["resource"]='Zasób';
 $l["admins"]='Administratorzy';
@@ -118,7 +112,6 @@ $l['endsAt']='Kończy się';
 $l['exceptionNoCalendarID'] = 'FATALNY BŁAD: Brak identyfikatora kalendarza!';
 $l['appointment'] = 'Termin: ';
 $l['allTogether'] = 'Wszystko razem';
-$l['location']='Lokalizacja';
 $l['invited']='Zaproszono Cię do następującego zdarzenia';
 $l['acccept_question']='Akceptujesz to zdarzenie?';
 $l['accept']='Akceptuj';

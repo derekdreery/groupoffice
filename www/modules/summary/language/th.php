@@ -4,8 +4,6 @@
 $l['name']='หน้าหลัก';
 $l['description']='แสดงรายการเมนูต่างๆ.';
 $l['default_rss_url']='http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml';
-$l['announcement']='ประกาศ';
-$l['announcements']='ประกาศ';
 $l['default_rss_title']='ข่าว';
 
 $l["summary"]= 'หน้าหลัก';

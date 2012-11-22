@@ -3,8 +3,7 @@
 
 $l['name']='Ülesanded';
 $l['description']='Lisa siia kirjeldus';
-$lang['link_type'][12]=$l['task']='Ülesanne';
-$l['status']='Staatus';
+$lang['link_type'][12]=$l['status']='Staatus';
 $l['scheduled_call']='Planeeritud telefonikõne %s';
 $l['statuses']['NEEDS-ACTION'] = 'Vajab tegevust';
 $l['statuses']['ACCEPTED'] = 'Vastu võetud';
@@ -14,7 +13,6 @@ $l['statuses']['DELEGATED'] = 'Delegeeritud';
 $l['statuses']['COMPLETED'] = 'Lõpetatud';
 $l['statuses']['IN-PROCESS'] = 'Pooleli';
 $l['import_success']='%s ülesannet imporditud';
-$l['call']='Telefonikõne';
 $l['dueAtdate']='Tähtaeg %s';
 $l['list']='Ülesannete nimekiri';
 $l['tasklistChanged']="* Nimekiri muudetud. Enne oli '%s', nüüd on '%s'";

@@ -3,8 +3,7 @@
 
 $l['name']='งาน';
 $l['description']='แสดงรายการงานที่ต้องปฏิบัติ เพื่อความสะดวกในการช่วยเตือนและการจัดลำดับงานที่ต้องปฏิบัติเพื่อให้การทำงานที่ได้ประสิทธิภาพยิ่งขึ้น';
-$lang['link_type'][12]=$l['task']='งาน';
-$l['status']='สถานนะ';
+$lang['link_type'][12]=$l['status']='สถานนะ';
 $l['scheduled_call']='การเรียกใช้ %s';
 $l['statuses']['NEEDS-ACTION'] = 'เร่งดำเนินการ';//Needs action;
 $l['statuses']['ACCEPTED'] = 'ตอบรับ';
@@ -14,7 +13,6 @@ $l['statuses']['DELEGATED'] = 'ลบ';
 $l['statuses']['COMPLETED'] = 'เสร็จสิ้น';
 $l['statuses']['IN-PROCESS'] = 'กำลังดำเนินการ';
 $l['import_success']='%s งานที่นำเข้า';
-$l['call']='เรียกใช้';
 $l['dueAtdate']='Due at %s';
 $l['list']='รายการงาน';
 $l['tasklistChanged']="* รายการงานเปลี่ยนจาก '%s' ถึง '%s'";
