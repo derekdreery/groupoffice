@@ -63,3 +63,4 @@ $l['mailbox']='Mailbox';
 $l['mailboxes']='Mailboxes';
 $l['vacation_config']='Vacation config';
 $l['vacation_configs']='Vacation configs';
+$l['aliasHelp']="For multiple recipients use a comma separated list eg. alias1@domain.com,alias2@domain.com";

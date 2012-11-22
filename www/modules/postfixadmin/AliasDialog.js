@@ -98,7 +98,8 @@ GO.postfixadmin.AliasDialog = Ext.extend(GO.dialog.TabbedFormDialog,{
 			  name: 'goto',
 				anchor: '-20',
 			  allowBlank:true,
-			  fieldLabel: GO.postfixadmin.lang.goto_address
+			  fieldLabel: GO.postfixadmin.lang.goto_address,
+				plugins:[new Ext.ux.FieldHelp(GO.postfixadmin.lang.aliasHelp)]
 			},{
 				xtype: 'xcheckbox',
 			  name: 'active',
