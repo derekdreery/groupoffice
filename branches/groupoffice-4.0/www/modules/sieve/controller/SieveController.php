@@ -155,6 +155,10 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 					unset($rule['actions'][$i]['vacationStart']);
 					unset($rule['actions'][$i]['vacationEnd']);
 				}
+				
+				if($rule['actions'][$i]['type'] == 'stop' && $i < $c-1){
+					Throw new GO_Base_Exception_Save(GO::t('stopEndError','sieve'));
+				}
 			}
 
 			if($join == 'allof') {
@@ -207,7 +211,7 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 			}
 		} catch (Exception $e) {
 			// you can change the feedback when debugging
-			$response['feedback'] = $e->getTraceAsString();
+			$response['feedback'] = nl2br($e->getMessage()); //.'<br>'.$e->getTraceAsString();
 		}
 		return $response;
 	}
