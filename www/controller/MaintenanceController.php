@@ -806,18 +806,13 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 
 			foreach($entries as $entry){
 
-				
-//				$entry = substr(trim($entry),1,1)=='[' ? '$l'.$entry : $entry;
-
-	//			echo $entry."\n";
-
-				if(preg_match('/\$l\[(\'|")([a-z_-]+)(\'|")\][^[]/i', $entry, $matches)){
+				if(preg_match('/^\[(\'|")([a-z_-]+)(\'|")\][^[]/i', $entry, $matches)){
 
 					$key = $matches[2];
 
 
 					if(!in_array($key, $processedKeys)){
-						$newData .= $entry;
+						$newData[]=$entry;
 						$processedKeys[]=$key;
 					}  else {
 						echo "Skipping duplicate key : ".$key."\n";
@@ -831,7 +826,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			
 			$newData = implode("\$l", array_reverse($newData));
 			
-			if(eval($newData)===false)
+//			echo $newData;
+			
+			if(eval(str_replace('<?php', '', $newData))===false)
 				throw new Exception("Parse error in generated data for ".$file->path());
 			
 			$file->putContents($newData);
