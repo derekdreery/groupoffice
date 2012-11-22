@@ -228,7 +228,7 @@ class GO_Base_Session extends GO_Base_Observable{
 			if($countLogin){
 				$user->lastlogin=time();
 				$user->logins++;
-				$user->save();
+				$user->save(true);
 				
 				$this->clearUserTempFiles();
 			}
