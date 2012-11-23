@@ -480,7 +480,8 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 		}
 	},
 	
-	showEditDialog : function(id){
+	showEditDialog : function(id, config){
+        config = config || {};
 		if(!this.editDialog){
 			this.editDialog = new this.editDialogClass;
 
@@ -493,7 +494,7 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 		if(this.relatedGridParamName)
 			this.editDialog.formPanel.baseParams[this.relatedGridParamName]=this.store.baseParams[this.relatedGridParamName];
 		
-		this.editDialog.show(id);	  
+		this.editDialog.show(id, config);	  
 	}
 	
 });

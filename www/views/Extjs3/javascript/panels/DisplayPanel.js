@@ -158,7 +158,9 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 			
 			return '<div class="collapsible-display-panel-header '+extraclassname+'"><div style="float:left">'+title+'</div><div class="x-tool x-tool-toggle" style="float:right;margin:0px;padding:0px;cursor:pointer" id="toggle-'+id+'">&nbsp;</div></div>';
 		}
-				
+		
+		this.modifyTemplate();
+
 		this.xtemplate = new Ext.XTemplate(this.template, this.templateConfig);
 		this.xtemplate.compile();
 		
@@ -175,6 +177,11 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 			}
 		}, this);
 	},
+	
+	modifyTemplate : function(){
+		// Can be overridden so the template can be edited outside this object
+	},
+	
 	
 	afterRender : function(){		
 		
