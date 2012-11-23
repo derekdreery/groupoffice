@@ -951,7 +951,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			//GO::debug($params);
 		}else
 		{
-			$this->_debugSql=false;
+			$this->_debugSql=!empty(GO::session()->values['debugSql']);
 		}
 		
 		
