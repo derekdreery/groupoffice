@@ -715,7 +715,8 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 
 					if(event['repeats'] && this.writePermission)
 					{
-						this.handleRecurringEvent("eventDblClick", event, {});
+						if(!event.read_only)
+							this.handleRecurringEvent("eventDblClick", event, {});
 					}else
 					{
 						this.fireEvent("eventDblClick", this, event, {

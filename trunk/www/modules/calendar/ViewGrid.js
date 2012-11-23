@@ -668,7 +668,8 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 					
 					if(event['repeats'] && event['write_permission'])
 					{
-						this.handleRecurringEvent("eventDblClick", event, {});
+						if(!event.read_only)
+							this.handleRecurringEvent("eventDblClick", event, {});
 					}else
 					{
 						
