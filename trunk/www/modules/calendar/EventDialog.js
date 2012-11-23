@@ -21,13 +21,7 @@ GO.calendar.EventDialog = function(calendar) {
 	this.goDialogId='event';
 
 	this.resourceGroupsStore = new GO.data.JsonStore({
-		url: GO.settings.modules.calendar.url+ 'json.php',
-		baseParams: {
-			task: 'resources'
-		},
-		root: 'results',
-		id: 'id',
-		totalProperty:'total',
+		url:GO.url('calendar/group/groupsWithResources'),
 		fields: ['id','resources','name','customfields'],
 		remoteSort: true
 	});
@@ -68,12 +62,9 @@ GO.calendar.EventDialog = function(calendar) {
 
 	this.formPanel = new Ext.form.FormPanel({
 		waitMsgTarget : true,
-		//url : GO.settings.modules.calendar.url + 'json.php',
 		url : GO.url('calendar/event/load'),
 		border : false,
-		baseParams : {
-//			task : 'event'
-		},
+		baseParams : {},
 		items : this.tabPanel
 	});
 
@@ -201,76 +192,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				},
 				scope:this
 			});
-			
-//			this.win.getEl().mask(GO.lang.waitMsgLoad);
-//			Ext.Ajax.request({
-//				url: GO.settings.modules.calendar.url+'json.php',
-//				params:{
-//					task:'init_event_window'
-//				},
-//				callback: function(options, success, response)
-//				{
-//
-//					if(!success)
-//					{
-//						alert( GO.lang['strRequestError']);
-//					}else
-//					{
-//						var jsonData = Ext.decode(response.responseText);
-//
-//						GO.calendar.groupsStore.loadData(jsonData.groups);
-//						//this.selectCalendar.store.loadData(jsonData.writable_calendars);
-//						this.resourceGroupsStore.loadData(jsonData.resources);
-//
-//						if(!GO.calendar.categoriesStore.loaded)
-//							GO.calendar.categoriesStore.loadData(jsonData.categories);
-//						
-//						this.win.getEl().unmask();
-//
-//						this.initialized=true;
-//						this.show(config);
-//
-//					}
-//				},
-//				scope:this
-//			});
 			return false;
-		}
-
-		/*if(!GO.calendar.groupsStore.loaded){
-			GO.calendar.groupsStore.load({
-				callback:function(){
-					this.show(config);
-				},
-				scope:this
-			});
-			return false;
-		}
-
-		if(!this.selectCalendar.store.loaded){
-			this.selectCalendar.store.load({
-				callback:function(){
-					this.show(config);
-				},
-				scope:this
-			});
-			return false;
-		}
-        
-		if(!this.resourceGroupsStore.loaded){
-			this.resourceGroupsStore.load({
-				callback:function(){
-					this.show(config);
-				},
-				scope:this
-			});
-			return false;
-		}*/
-
-		/*if(!GO.calendar.categoriesStore.loaded)
-			GO.calendar.categoriesStore.load();*/
-		
-		
+		}		
         
 		if (config.oldDomId) {
 			this.oldDomId = config.oldDomId;
@@ -290,12 +213,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 		if (!config.event_id) {
 			config.event_id = 0;
-		}
-		
-		
+		}		
 
-		this.setEventId(config.event_id);
-		
+		this.setEventId(config.event_id);	
 		
 		var params = {};
 		
@@ -334,7 +254,6 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 		//if (config.event_id > 0) {
 			this.formPanel.load({
-				//url : GO.settings.modules.calendar.url + 'json.php',
 				params:params,
 				url : GO.url('calendar/event/load'),
 				waitMsg:GO.lang.waitMsgLoad,
@@ -425,86 +344,86 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		}
 	},
 	
-	updateResourcePanel : function()
-	{
-		var values = {};
-		var checked = [];		
-		
-		// save values before all items are removed (checkboxes + statuses)
-		if(this.win.isVisible())
-		{
-			if(GO.customfields && GO.customfields.types["GO_Calendar_Model_Event"])
-			{
-				for(var i=0; i<this.resourceGroupsStore.data.items.length; i++)
-				{
-					var record = this.resourceGroupsStore.data.items[i].data;
-					var resources = record.resources;
-
-					for(var j=0; j<resources.length; j++)
-					{
-						var calendar_id = resources[j].id;
-						values['status_'+calendar_id] = this.formPanel.form.findField('status_'+calendar_id).getValue();
-
-						var p = this.resourcesPanel.getComponent('group_'+record.id);
-						var c = p.getComponent('resource_'+calendar_id);
-						if(!c.collapsed)
-						{
-							checked.push(calendar_id);
-						}
-
-						for(var k=0; k<record.fields.length; k++)
-						{
-							var field = record.fields[k];
-							if(field)
-							{
-								for(var l=0; l<GO.customfields.types["1"].panels.length; l++)
-								{
-									var cfield = 'cf_category_'+GO.customfields.types["1"].panels[l].category_id;
-									if(cfield == field)
-									{
-										var cf = GO.customfields.types["1"].panels[l].customfields;
-										for(var m=0; m<cf.length; m++)
-										{
-											var name = 'resource_options['+calendar_id+']['+cf[m].dataname+']';
-											var value = this.formPanel.form.findField(name).getValue();
-
-											values[name] = value;
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-        
-		this.resourceGroupsStore.load({
-			callback:function()
-			{
-				if(this.win.isVisible())
-				{
-					if(checked)
-					{
-						this.toggleFieldSets(checked);
-					}
-
-					// after reload store set the values we saved earlier
-					this.setValues(values);
-
-					if(this.resourceGroupsStore.data.items.length == 0)
-					{
-						this.tabPanel.hideTabStripItem('resources-panel');
-						this.tabPanel.setActiveTab(0);
-					} else
-{
-						this.tabPanel.unhideTabStripItem('resources-panel');												
-					}
-				}
-			},
-			scope:this
-		});
-	},
+//	updateResourcePanel : function()
+//	{
+//		var values = {};
+//		var checked = [];		
+//		
+//		// save values before all items are removed (checkboxes + statuses)
+//		if(this.win.isVisible())
+//		{
+//			if(GO.customfields && GO.customfields.types["GO_Calendar_Model_Event"])
+//			{
+//				for(var i=0; i<this.resourceGroupsStore.data.items.length; i++)
+//				{
+//					var record = this.resourceGroupsStore.data.items[i].data;
+//					var resources = record.resources;
+//
+//					for(var j=0; j<resources.length; j++)
+//					{
+//						var calendar_id = resources[j].id;
+//						values['status_'+calendar_id] = this.formPanel.form.findField('status_'+calendar_id).getValue();
+//
+//						var p = this.resourcesPanel.getComponent('group_'+record.id);
+//						var c = p.getComponent('resource_'+calendar_id);
+//						if(!c.collapsed)
+//						{
+//							checked.push(calendar_id);
+//						}
+//
+//						for(var k=0; k<record.fields.length; k++)
+//						{
+//							var field = record.fields[k];
+//							if(field)
+//							{
+//								for(var l=0; l<GO.customfields.types["1"].panels.length; l++)
+//								{
+//									var cfield = 'cf_category_'+GO.customfields.types["1"].panels[l].category_id;
+//									if(cfield == field)
+//									{
+//										var cf = GO.customfields.types["1"].panels[l].customfields;
+//										for(var m=0; m<cf.length; m++)
+//										{
+//											var name = 'resource_options['+calendar_id+']['+cf[m].dataname+']';
+//											var value = this.formPanel.form.findField(name).getValue();
+//
+//											values[name] = value;
+//										}
+//									}
+//								}
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
+//        
+//		this.resourceGroupsStore.load({
+//			callback:function()
+//			{
+//				if(this.win.isVisible())
+//				{
+//					if(checked)
+//					{
+//						this.toggleFieldSets(checked);
+//					}
+//
+//					// after reload store set the values we saved earlier
+//					this.setValues(values);
+//
+//					if(this.resourceGroupsStore.data.items.length == 0)
+//					{
+//						this.tabPanel.hideTabStripItem('resources-panel');
+//						this.tabPanel.setActiveTab(0);
+//					} else
+//{
+//						this.tabPanel.unhideTabStripItem('resources-panel');												
+//					}
+//				}
+//			},
+//			scope:this
+//		});
+//	},
 	toggleFieldSets : function(resources_checked)
 	{
 		for(var i=0; i<this.resourceGroupsStore.data.items.length; i++)
@@ -597,19 +516,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 //		{
 			var gridData = this.participantsPanel.getGridData();
 			params.participants=Ext.encode(gridData);
-
-//			this.has_other_participants = this.participantsPanel.invitationRequired();
-//		}
-		
-//		if(this.has_other_participants>0)
-//		{
-//			var invitationMessage = (this.event_id) ? GO.calendar.lang.sendInvitationUpdate : GO.calendar.lang.sendInvitationInitial;
-//		
-//			params.send_invitation = (confirm(invitationMessage)) ? 1 : 0;
-//		}
 		
 		this.formPanel.form.submit({
-			//url : GO.settings.modules.calendar.url + 'action.php',
 			url : GO.url('calendar/event/submit'),
 			params : params,
 			waitMsg : GO.lang.waitMsgSave,

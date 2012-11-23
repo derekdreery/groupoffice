@@ -235,13 +235,10 @@ GO.calendar.SettingsPanel = function(config) {
 							anchor : '-20',
 							emptyText : GO.lang.strPleaseSelect,
 							store : new GO.data.JsonStore({
-								url : GO.settings.modules.calendar.url + 'json.php',
+								url : GO.url("calendar/calendar/store"),
 								baseParams : {
-									task : 'writable_calendars'
+									permissionLevel:GO.permissionLevels.write
 								},
-								root : 'results',
-								id : 'id',
-								totalProperty : 'total',
 								fields : ['id', 'name'],
 								remoteSort : true
 							}),

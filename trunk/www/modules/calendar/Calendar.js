@@ -109,34 +109,11 @@ GO.calendar.MainPanel = function(config){
 	},this);
 		
 	GO.calendar.calendarsStore = this.calendarsStore = new GO.data.JsonStore({
-//		url: GO.settings.modules.calendar.url+'json.php',
-//		baseParams: {
-//			'task': 'calendars',
-//			limit:parseInt(GO.settings['max_rows_list'])
-//		},
-//		root: 'results',
-//		totalProperty: 'total',
-//		id: 'id',
 		url:GO.url("calendar/calendar/store"),
 		fields:['id','name','comment','user_name','group_id', 'group_name','checked', 'project_id'],
 		remoteSort:true
 	});
 
-//	if(GO.projects){
-//		this.projectCalendarsStore = new GO.data.JsonStore({
-//			url: GO.settings.modules.calendar.url+'json.php',
-//			baseParams: {
-//				'task': 'calendars',
-//				'project_calendars':1,
-//				limit:parseInt(GO.settings['max_rows_list'])
-//			},
-//			root: 'results',
-//			totalProperty: 'total',
-//			id: 'id',
-//			fields:['id','name','comment','user_name','group_id', 'group_name','checked', 'project_id'],
-//			remoteSort:true
-//		});
-//	}
 
 	this.viewsStore = new GO.data.JsonStore({
 		url: GO.url('calendar/view/store'),
@@ -390,12 +367,7 @@ GO.calendar.MainPanel = function(config){
 	var storeFields=['id','event_id','name','start_time','end_time','description', 'repeats', 'private','status','location', 'background', 'status_color', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','all_day_event','username','duration', 'link_count', 'has_other_participants','participant_ids','ctime','is_organizer', 'partstatus'];
 
 	this.daysGridStore = new GO.data.JsonStore({
-		//url: GO.settings.modules.calendar.url+'json.php',
 		url:GO.url('calendar/event/store'),
-		
-//		baseParams: {
-//			task: 'events'
-//		},
 		root: 'results',
 		id: 'id',
 		fields:storeFields
@@ -404,15 +376,8 @@ GO.calendar.MainPanel = function(config){
 	this.daysGridStore.on('load', this.setCalendarBackgroundColors, this);
 	
 	this.monthGridStore = new GO.data.JsonStore({
-	//	url: GO.settings.modules.calendar.url+'json.php',
 		url:GO.url('calendar/event/store'),
-//		baseParams: {
-//			task: 'events'
-//		},
-		root: 'results',
-		id: 'id',
 		fields:storeFields
-		//fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','username','duration','link_count', 'has_other_participants','participant_ids','ctime']
 	});
 	
 	this.monthGridStore.on('load', this.setCalendarBackgroundColors, this);
@@ -985,21 +950,14 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		this.getEl().mask(GO.lang.waitMsgLoad);
 
 		Ext.Ajax.request({
-//			url:GO.url('calendar/calendar/startup'),
 			url: GO.url("core/multiRequest"),
 			params:{
 				requests:Ext.encode({
 					views:{r:"calendar/view/store"},				
 					calendars:{r:"calendar/calendar/store"},
 					resources:{r:"calendar/calendar/calendarsWithGroup","resourcesOnly":1}
-//					project_calendars:{r:"calendar/group/groupsWithResources"}
 				})
 			},
-
-//			url: GO.settings.modules.calendar.url+'json.php',
-//			params:{
-//				task:'startup'				
-//			},
 			
 			callback: function(options, success, response)
 			{
@@ -1014,26 +972,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					this.calendarsStore.loadData(jsonData.calendars);
 					this.viewsStore.loadData(jsonData.views);
 					this.resourcesStore.loadData(jsonData.resources);
-//					if(this.projectCalendarsList)
-//						this.projectCalendarsStore.loadData(jsonData.project_calendars);
-//					GO.calendar.categoriesStore.loadData(jsonData.categories);
-
-					this.getEl().unmask();
-					
+					this.getEl().unmask();					
 				}
 			},
 			scope:this
 		});
-
-
-
-		/*this.calendarsStore.load();
-		this.viewsStore.load();
-		this.resourcesStore.load();
-		this.projectCalendarsStore.load();
-
-		if(!GO.calendar.categoriesStore.loaded)
-			GO.calendar.categoriesStore.load();*/
 	},
 	
 	deleteHandler : function(){
@@ -1851,10 +1794,6 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			this.writableViewsStore = new GO.data.JsonStore({
 				
 				url: GO.url("calendar/view/store"),
-//				url: GO.settings.modules.calendar.url+'json.php',
-//				baseParams: {
-//					'task': 'writable_views'
-//				},
 				root: 'results',
 				totalProperty: 'total',
 				id: 'id',
@@ -1993,56 +1932,12 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				this.calendarDialog.show(grid.selModel.selections.keys[0], false);
 			}, this);
 			
-
-			
 			this.viewDialog = new GO.calendar.ViewDialog();
 			
 			this.viewDialog.on('save', function(){
 				this.writableViewsStore.reload();
 				this.adminDialog.madeChanges=true;
 			}, this);
-
-//			this.mergeColumn = new GO.grid.CheckColumn({
-//				header: GO.calendar.lang.merge,
-//				dataIndex: 'merge',
-//				width: 55
-//			});
-//
-//			this.mergeColumn.on('change', function(grid, merge)
-//			{
-//				var items = grid.store.data.items;
-//				for (var i in items) {
-//					if(!isNaN(i)) {
-//						Ext.Ajax.request({
-//							url: GO.settings.modules.calendar.url+'action.php',
-//							params: {
-//								task : 'change_merge',
-//								view_id : items[i].id,
-//								merge : items[i].data.merge
-//							},
-//							callback:function(options, success, response){
-//
-//								if(!success)
-//								{
-//									Ext.MessageBox.alert(GO.lang.strError, GO.lang.strRequestError);
-//								}else
-//								{
-//									var responseParams = Ext.decode(response.responseText);
-//									if(!responseParams.success)
-//									{
-//										Ext.MessageBox.alert(GO.lang.strError, responseParams.feedback);
-//									}else
-//									{
-//										this.writableViewsStore.reload();
-//										this.viewsStore.reload();
-//									}
-//								}
-//							},
-//							scope:this
-//						});
-//					}
-//				}
-//			}, this);
 
 			this.viewsGrid = new GO.grid.GridPanel( {
 				title: GO.calendar.lang.views,
@@ -2063,16 +1958,12 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					header:GO.lang.strOwner,
 					dataIndex: 'user_name'
 				}
-//				,this.mergeColumn
 				],
 				view:new  Ext.grid.GridView({
 					autoFill:true
 				}),
 				sm: new Ext.grid.RowSelectionModel(),
 				loadMask: true,
-				plugins : [
-//					this.mergeColumn
-				],
 				tbar: [{					
 					iconCls: 'btn-add',
 					text: GO.lang.cmdAdd,
@@ -2146,11 +2037,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				items.push(this.groupsGrid);
 			}
 
-//			if(GO.settings.modules.calendar.write_permission)
-//			{
-				items.push(this.resourcesGrid);
-				items.push(this.categoriesGrid);
-//			}
+			items.push(this.resourcesGrid);
+			items.push(this.categoriesGrid);
             
 			this.adminDialog = new Ext.Window({
 				title: GO.calendar.lang.administration,
@@ -2178,18 +2066,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 
 			this.adminDialog.on('hide', function(){
 				if(this.adminDialog.madeChanges){
-					/*this.viewsStore.reload();
-					this.resourcesStore.reload();
-					this.calendarsStore.reload();
-					if(this.projectCalendarsList)
-						this.projectCalendarsStore.reload();*/
 
 					this.init();
 
 					if(GO.calendar.eventDialog){
 						GO.calendar.eventDialog.initialized=false;
-						//GO.calendar.eventDialog.updateResourcePanel();
-						//GO.calendar.eventDialog.selectCalendar.store.reload();
 					}					
 					this.adminDialog.madeChanges=false;
 				}
@@ -2318,21 +2199,6 @@ GO.linkPreviewPanels["GO_Calendar_Model_Event"]=function(config){
 	var config = config || {};
 	return new GO.calendar.EventPanel(config);
 }
-
-
-
-
-//GO.calendar.showEvent = function(config){
-//
-//	config = config || {};
-//    
-////	if(config.values && config.values.event_id)
-////		config.event_id = config.values.event_id;
-//	//delete(config.values.event_id);
-//    
-//	GO.calendar.showEventDialog(config);
-//
-//};
 
 GO.calendar.openCalendar = function(displayConfig){
 	if(GO.mainLayout.rendered){

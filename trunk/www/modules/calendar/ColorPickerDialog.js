@@ -67,11 +67,8 @@ Ext.extend(GO.calendar.ColorPickerDialog, Ext.Window, {
 	{
 		this.formPanel.form.submit(
 		{
-			//var griddata = 
 			url : GO.url('calendar/calendar/submitColors'),
-//			url:GO.settings.modules.calendar.url+'action.php',
 			params: {
-//				task:'save_calendar_colors',
 				griddata: Ext.encode(this.getGridData())
 			},
 			waitMsg:GO.lang['waitMsgSave'],
@@ -287,14 +284,6 @@ Ext.extend(GO.calendar.ColorPickerDialog, Ext.Window, {
 
 		var store = new GO.data.JsonStore({
 			url : GO.url('calendar/calendar/loadColors'),
-			
-//			url: GO.settings.modules.calendar.url+ 'json.php',
-//			baseParams: {
-//				task: 'load_calendar_colors'
-//			},
-			root: 'results',
-			id: 'id',
-			totalProperty:'total',
 			fields: fields.fields,
 			remoteSort: true
 		});

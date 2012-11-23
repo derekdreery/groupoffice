@@ -47,31 +47,6 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 		config = {};
 	}
 
-	/*if (GO.email) {
-		tbar.push({
-			iconCls : 'btn-invite',
-			text : GO.calendar.lang.sendInvitation,
-			cls : 'x-btn-text-icon',
-			handler : function() {
-				if (!GO.settings.modules.email) {
-					Ext.Msg.alert(GO.lang.strError,
-							GO.calendar.lang.emailSendingNotConfigured);
-				} else {
-					GO.email.Composer.show({
-						loadUrl : GO.settings.modules.calendar.url + 'json.php',
-						loadParams : {
-							task : 'invitation',
-							event_id : this.event_id
-						},
-						template_id : 0
-					});
-				}
-
-			},
-			scope : this
-		});
-	}*/
-
 	config.hideMode = 'offsets';
 
 	config.store = new GO.data.JsonStore({
