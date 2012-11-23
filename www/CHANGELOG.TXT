@@ -4,6 +4,7 @@
 - E-mail without name in header appeared as "" <email@domain.com>
 - GOTA didn't run on Java 6.
 - Unable to save contacts or companies when a required custom field was on a disabled tab
+- Close database connection after z-push ping so the number of open mysql connections will be much lower.
 
 20-11-2012 4.0.131
 - Better error message when PDF template is missing for order
