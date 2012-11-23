@@ -653,7 +653,20 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$endTime = date('Y-m-d h:m',strtotime(date("Y-m-d", strtotime($startTime)) . " +3 months"));
 		
 		// Check for the given calendars if they have events in the given period
-		$calendars = json_decode($params['calendars']);
+		if(!empty($params['view_id'])){
+				$view = GO_Calendar_Model_View::model()->findByPk($params['view_id']);
+				if(!$view)
+					throw new GO_Base_Exception_NotFound();
+				
+				$calendarModels = $view->calendars;
+				$calendars=array();
+				foreach($calendarModels as $calendar){
+					$calendars[]=$calendar->id;
+				}
+		}else
+		{
+			$calendars = json_decode($params['calendars']);
+		}
 		
 		
 		$colorIndex = 0;
