@@ -19,36 +19,6 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		ini_set('memory_limit','512M');
 		ini_set('display_errors','on');
 	}
-	
-	
-	
-//	protected function actionTest($params){
-//		
-////		for($i=0;$i<1;$i++){
-//			
-//			GO::session()->login('admin','admin');
-//			
-//			$settings = GO_Sync_Model_Settings::model()->findForUser(GO::user());
-//			$account = GO_Email_Model_Account::model()->findByPk($settings->account_id);
-//			
-//			
-//			$handle = stream_socket_client("tcp://localhost:143");
-//			$login = 'A1 LOGIN "admin@intermesh.dev" "admin"'."\r\n";
-//			fputs($handle, $login);
-////			while (!feof($handle)) {
-////					echo fgets($handle, 128);
-////			}
-//			fclose($handle);
-//			$handle=null;
-//			
-//			
-//			echo "Test\n";
-//			
-//			GO::unsetDbConnection();
-//			sleep(10);
-////		}
-//		
-//	}
 		
 	protected function actionDownloadFromShop($params){
 		
