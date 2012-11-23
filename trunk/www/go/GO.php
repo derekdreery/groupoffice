@@ -148,9 +148,37 @@ class GO{
 		}
 		return self::$db;
 	}
+	
+	/**
+	 * Close the database connection. Beware that all active PDO statements must be set to null too
+	 * in the current scope.
+	 * 
+	 * Wierd things happen when using fsockopen. This test case leaves the conneciton open. When removing the fputs call it seems to work.
+	 * 
+	 * 			
+	    GO::session()->login('admin','admin');
+			
+			$settings = GO_Sync_Model_Settings::model()->findForUser(GO::user());
+			$account = GO_Email_Model_Account::model()->findByPk($settings->account_id);
+			
+			
+			$handle = stream_socket_client("tcp://localhost:143");
+			$login = 'A1 LOGIN "admin@intermesh.dev" "admin"'."\r\n";
+			fputs($handle, $login);
+			fclose($handle);
+			$handle=null;			
+			
+			echo "Test\n";
+			
+			GO::unsetDbConnection();
+			sleep(10);
+	 */
+	public static function unsetDbConnection(){
+		self::$db=null;
+	}
 
 	public static function setDbConnection($dbname=false, $dbuser=false, $dbpass=false, $dbhost=false, $dbport=false, $options=array()){
-		
+				
 		self::$db=null;
 
 		if($dbname===false)
@@ -709,7 +737,7 @@ class GO{
 			
 	
 			
-			if(isset($_REQUEST['r']) && $_REQUEST['r']!='core/debug')
+			if(!isset($_REQUEST['r']) || $_REQUEST['r']!='core/debug')
 			{
 				if (self::config()->firephp) {
 					if (class_exists('FB')) {
