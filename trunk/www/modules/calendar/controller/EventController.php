@@ -592,21 +592,14 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$response['data']['calendar_name'] = $model->calendar->name;
 
 		return parent::afterDisplay($response, $model, $params);
-	}
-
-//	protected function getStoreMultiSelectProperties(){
-//		return array(
-//				'requestParam'=>'calendars',
-//				'permissionsModel'=>'GO_Calendar_Model_Calendar',
-//				'titleAttribute'=>'name'
-//				);
-//	}	
-	
+	}	
 	
 	protected function actionViewStore($params){
 		$view = GO_Calendar_Model_View::model()->findByPk($params['view_id']);
 		if(!$view)
 			throw new GO_Base_Exception_NotFound();
+		
+		unset($params['view_id']);
 		
 		$calendars = $view->calendars;
 		
