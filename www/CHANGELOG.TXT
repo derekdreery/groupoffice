@@ -1,4 +1,4 @@
-4.0.132
+23-11-2012 4.0.132
 - Added a check to show the "Show mine only" checkbox in the ticket grid. From now it will only be showed when you have manage persmissions on one of the ticket types
 - Throw an error when the "Stop" action in a sieve rule is not the last action.
 - E-mail without name in header appeared as "" <email@domain.com>
