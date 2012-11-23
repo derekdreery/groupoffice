@@ -51,6 +51,9 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	 * @var boolean 
 	 */
 	public $checkImapConnectionOnSave=true;
+	
+	
+	private $_imap;
 
 	/**
 	 * Returns a static model of itself
@@ -165,7 +168,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		}
 	}
 
-	private $_imap;
+	
 
 	public function decryptPassword(){
 		//return $this->password_encrypted==2 ? GO_Base_Util_Crypt::decrypt($this->password) : $this->password;
@@ -204,9 +207,19 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		return $this->_imap;
 	}
 	
+	/**
+	 * Close the connection to imap
+	 */
+	public function closeImapConnection(){
+		if(!empty($this->_imap)){
+			$this->_imap->disconnect();
+			$this->_imap=null;		
+		}
+	}
+	
 	public function __wakeup() {
 		//reestablish imap connection after deserialization
-		$this->_imap=false;
+		$this->_imap=null;
 	}
 	
 	/**

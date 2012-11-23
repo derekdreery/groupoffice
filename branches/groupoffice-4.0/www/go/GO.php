@@ -148,9 +148,17 @@ class GO{
 		}
 		return self::$db;
 	}
+	
+	/**
+	 * Close the database connection. Beware that all active PDO statements must be set to null too
+	 * in the current scope.
+	 */
+	public static function unsetDbConnection(){
+		self::$db=null;
+	}
 
 	public static function setDbConnection($dbname=false, $dbuser=false, $dbpass=false, $dbhost=false, $dbport=false, $options=array()){
-		
+				
 		self::$db=null;
 
 		if($dbname===false)
@@ -709,7 +717,7 @@ class GO{
 			
 	
 			
-			if(isset($_REQUEST['r']) && $_REQUEST['r']!='core/debug')
+			if(!isset($_REQUEST['r']) || $_REQUEST['r']!='core/debug')
 			{
 				if (self::config()->firephp) {
 					if (class_exists('FB')) {
