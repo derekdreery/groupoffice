@@ -78,18 +78,6 @@ GO.calendar.CalendarDialog = function(config)
       model_id:0
     });
 		
-		
-		
-		
-		
-		
-		
-		
-		
-//		this.tasklistsTab = new GO.calendar.TasklistsGrid({
-//			title:GO.tasks.lang.visibleTasklists
-//		});
-
 		this.selectTasklist = new GO.form.ComboBoxReset({
 			fieldLabel:'CalDAV '+GO.tasks.lang.tasklist,
 				store:new GO.data.JsonStore({
@@ -134,7 +122,6 @@ GO.calendar.CalendarDialog = function(config)
 			text:GO.lang.cmdExport,
 			disabled:true,
 			handler:function(){
-				//document.location=GO.settings.modules.calendar.url+'export.php?calendar_id='+this.calendar_id;
 				document.location=GO.url("calendar/calendar/exportIcs", {"calendar_id":this.calendar_id});
 			},
 			scope:this
@@ -203,7 +190,7 @@ GO.calendar.CalendarDialog = function(config)
 			handler: function(){
 				this.formPanel.form.submit({
 					waitMsg:GO.lang.waitMsgUpload,
-					url: GO.url('calendar/calendar/importIcs'),//GO.settings.modules.calendar.url+'action.php',
+					url: GO.url('calendar/calendar/importIcs'),
 					params: {
 //						task: 'import',
 						calendar_id:this.calendar_id

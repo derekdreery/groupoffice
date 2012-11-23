@@ -47,11 +47,7 @@ GO.calendar.ListGrid = function(config)
 			'ctime'
 			]
 		}),
-//		baseParams: {
-//			task:'events'
-//		},
 		proxy: new Ext.data.HttpProxy({
-		//	url: GO.settings.modules.calendar.url+'json.php'
 			url:GO.url('calendar/event/store')
 		}),
 		groupField:'day',
