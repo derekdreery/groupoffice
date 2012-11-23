@@ -601,6 +601,27 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 //				'titleAttribute'=>'name'
 //				);
 //	}	
+	
+	
+	protected function actionViewStore($params){
+		$view = GO_Calendar_Model_View::model()->findByPk($params['view_id']);
+		if(!$view)
+			throw new GO_Base_Exception_NotFound();
+		
+		$calendars = $view->calendars;
+		
+		$response['success']=true;
+		$response['results']=array();
+		
+		foreach($calendars as $calendar){
+			$params['calendars']='['.$calendar->id.']';
+			
+			$response['results'][]=$this->actionStore($params);
+		}
+		
+		return $response;
+		
+	}
 
 	/**
 	 *
@@ -632,10 +653,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$endTime = date('Y-m-d h:m',strtotime(date("Y-m-d", strtotime($startTime)) . " +3 months"));
 		
 		// Check for the given calendars if they have events in the given period
-		if(!empty($params['calendars']))
-			$calendars = json_decode($params['calendars']);
-		else
-			$calendars = $params['calendar_id'];
+		$calendars = json_decode($params['calendars']);
+		
 		
 		$colorIndex = 0;
 		
@@ -903,6 +922,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 								strtotime($startTime), 
 								strtotime($endTime)
 							);
+		
+		$this->_uuidEvents=array();
 
 		// Loop through each event and prepare the view for it.
 		foreach($events as $event){

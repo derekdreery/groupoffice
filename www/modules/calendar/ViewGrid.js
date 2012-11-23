@@ -224,7 +224,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 		//for(var calendar_id in this.jsonData)
 		for(var i=0,max=this.jsonData.results.length;i<max;i++)
 		{
-			var calendar_id=this.jsonData.results[i].id;
+			var calendar_id=this.jsonData.results[i].calendar_id;
 			var gridRow =  Ext.DomHelper.append(this.tbody,
 			{
 				tag: 'tr'
@@ -243,7 +243,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 				id: 'view_cal_'+calendar_id,
 				href:'#',
 				cls:'normal-link',
-				html:this.jsonData.results[i].name
+				html:this.jsonData.results[i].calendar_name
 			}, true);
 			
 			link.on('click', function(e, target){			
@@ -280,7 +280,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 
 	getCalendar : function(id){		
 		for(var i=0;i<this.jsonData.results.length;i++){
-			if(this.jsonData.results[i].id==id)
+			if(this.jsonData.results[i].calendar_id==id)
 				return this.jsonData.results[i];
 		}
 		return false;
@@ -834,64 +834,54 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 		{
 			params={};
 		}
-		params['task']='view_events';
+
 		params['view_id']=this.view_id;
 		params['start_time']=this.startDate.format(this.dateTimeFormat);
 		params['end_time']=this.endDate.format(this.dateTimeFormat);
-  	
-		this.mask();
-		Ext.Ajax.request({
-			url: GO.settings.modules.calendar.url+'json.php',
+
+		GO.request({
+			maskEl:this.body,
+			url: "calendar/event/viewStore",
 			params: params,
-			callback: function(options, success, response)
-			{
+			success: function(options, response, result)
+			{								
+				this.jsonData = result;
 
-				if(!success)
+				this.clearGrid();
+
+				this.renderView();
+
+
+				var total=0;
+				var mtime=0;
+				//for(var calendar_id in this.jsonData)
+				for(var n=0;n<this.jsonData.results.length;n++)
 				{
-					Ext.MessageBox.alert(GO.lang.strError, response.result.feedback);
-				}else
-				{					
-					this.jsonData = Ext.decode(response.responseText);
-					
-					this.clearGrid();
-					
-					this.renderView();
-					
-					
-					var total=0;
-					var mtime=0;
-					//for(var calendar_id in this.jsonData)
-					for(var n=0;n<this.jsonData.results.length;n++)
+					var events = this.jsonData.results[n].results;
+
+					total += events.length;
+					for(var i=0; i< events.length;i++)
 					{
-						
-						var events = this.jsonData.results[n].events;
+						var eventData = events[i];
+						eventData['startDate'] = Date.parseDate(events[i]['start_time'], this.dateTimeFormat);
+						eventData['endDate'] = Date.parseDate(events[i]['end_time'], this.dateTimeFormat);
 
-						total += events.length;
-						for(var i=0; i< events.length;i++)
+						this.addViewGridEvent(eventData);
+
+						if(eventData['mtime'] > mtime)
 						{
-							var eventData = events[i];
-							eventData['startDate'] = Date.parseDate(events[i]['start_time'], this.dateTimeFormat);
-							eventData['endDate'] = Date.parseDate(events[i]['end_time'], this.dateTimeFormat);
-							
-							this.addViewGridEvent(eventData);
-
-							if(eventData['mtime'] > mtime)
-							{
-								mtime = eventData['mtime'];
-							}
+							mtime = eventData['mtime'];
 						}
 					}
-
-					this.nextId = total;					
-
-					this.fireEvent("storeload", this, total, mtime, params, response);
 				}
-				this.unmask();
+
+				this.nextId = total;					
+
+				this.fireEvent("storeload", this, total, mtime, params, response);
+
 			},
 			scope:this		
 		});
-
-  
 	},
 	/**
    * An array of domId=>database ID should be kept so that we can figure out

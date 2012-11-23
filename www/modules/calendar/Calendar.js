@@ -139,14 +139,10 @@ GO.calendar.MainPanel = function(config){
 //	}
 
 	this.viewsStore = new GO.data.JsonStore({
-		url: GO.settings.modules.calendar.url+'json.php',
+		url: GO.url('calendar/view/store'),
 		baseParams: {
-			'task': 'views',
 			limit:parseInt(GO.settings['max_rows_list'])
 		},
-		root: 'results',
-		totalProperty: 'total',
-		id: 'id',
 		fields:['id','name','user_name','merge','owncolor'],
 		remoteSort:true
 	});
