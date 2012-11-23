@@ -908,12 +908,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		foreach($events as $event){
 		
 			// Check for a double event, and merge them if they are double
-//			if(array_key_exists($event->getUuid().$event->getAlternateStartTime(), $this->_uuidEvents))
-//				$this->_uuidEvents[$event->getUuid()]->mergeWithEvent($event);
-//			else
-//				$this->_uuidEvents[$event->getUuid()] = $event;
+			if(array_key_exists($event->getUuid().$event->getAlternateStartTime(), $this->_uuidEvents))
+				$this->_uuidEvents[$event->getUuid().$event->getAlternateStartTime()]->mergeWithEvent($event);
+			else
+				$this->_uuidEvents[$event->getUuid().$event->getAlternateStartTime()] = $event;
 			
-			$this->_uuidEvents[]=$event;
+//			$this->_uuidEvents[]=$event;
 			
 			// If you are showing more than one calendar, then change the display 
 			// color of the current event to the color of the calendar it belongs to.
