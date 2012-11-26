@@ -5,7 +5,7 @@
  * value is the string that will be displayed in your view
  */
 $l = array(
-	'name' => ' Presidents', //this name will appear in the Start menu -> modules section
+	'name' => 'Presidents', //this name will appear in the Start menu -> modules section
 	'description' => 'A simple test module', //this description will appear in the Start menu -> modules section
 
 	'presidents' => 'Presidents',
