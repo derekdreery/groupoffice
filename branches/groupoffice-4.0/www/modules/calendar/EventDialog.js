@@ -990,29 +990,12 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		});
 		// Start of recurrence tab
 
-		var data = new Array();
-
-		for(var i=1;i<31;i++)
-		{
-			data.push([i]);
-		}
-
-		this.repeatEvery = new Ext.form.ComboBox({
-			name : 'repeat_every_text',
-			hiddenName : 'interval',
-			triggerAction : 'all',
-			editable : false,
-			selectOnFocus : true,
+		this.repeatEvery = new GO.form.NumberField({
+			decimals:0,
+			name : 'interval',
+			minValue:1,
 			width : 50,
-			forceSelection : true,
-			mode : 'local',
-			value : '1',
-			valueField : 'value',
-			displayField : 'value',
-			store : new Ext.data.SimpleStore({
-				fields : ['value'],
-				data : data
-			})
+			value : '1'
 		});
 
 		this.repeatType = new Ext.form.ComboBox({
