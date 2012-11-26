@@ -24,6 +24,7 @@ GO.addressbook.CompaniesGrid = function(config){
 		},{
 			header: GO.lang['strName2'],
 			dataIndex: 'name2',
+			hidden:true,
 			width:200,
 			id: 'name2'
 		},
@@ -31,7 +32,6 @@ GO.addressbook.CompaniesGrid = function(config){
 			header: GO.lang['strEmail'],
 			dataIndex: 'email',
 			width: 150,
-			hidden:true,
 			id: 'email'
 		},
 		{
@@ -185,7 +185,8 @@ GO.addressbook.CompaniesGrid = function(config){
 	config.store = new GO.data.JsonStore({
 		url: GO.url('addressbook/company/store'),
 		baseParams: {
-			filters:1
+			filters:1,
+			addresslist_filters:1
 		},
 		root: 'results',
 		id: 'id',

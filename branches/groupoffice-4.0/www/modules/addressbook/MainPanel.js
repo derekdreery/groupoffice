@@ -152,7 +152,7 @@ GO.addressbook.MainPanel = function(config)
 
 
 	this.addressbooksGrid = new GO.addressbook.AddresbooksGrid({
-		region:'west',
+		region:'north',
 		id:'ab-addressbook-grid',
 		width:180,
 		height:250
@@ -234,7 +234,9 @@ GO.addressbook.MainPanel = function(config)
 //	if(GO.addressbook)
 //	{
 
-		this.mailingsFilterPanel= new GO.addressbook.AddresslistsMultiSelectGrid();
+		this.mailingsFilterPanel= new GO.addressbook.AddresslistsMultiSelectGrid({
+			id: 'ab-mailingsfilter-panel'
+		});
 
 		this.mailingsFilterPanel.on('change', function(grid, addresslist_filter){
 			var panel = this.tabPanel.getActiveTab();
@@ -251,7 +253,6 @@ GO.addressbook.MainPanel = function(config)
 			}
 		}, this);
 
-		this.addressbooksGrid.region='north';
 		var westPanel = new Ext.Panel({
 			layout:'border',
 			border:false,

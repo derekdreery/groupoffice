@@ -165,11 +165,19 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			), true);
 			
 			try{
-				$message->setTo($contact->firstEmail, $contact->name);
-				$message->setBody(GO_Addressbook_Model_Template::model()->replaceContactTags($body, $contact));
-				$this->_sendmail($message, $contact, $mailer, $mailing);			
+				if(!$contact->email_allowed){
+					echo "Skipping contact ".$contact->firstEmail." because newsletter sending is disabled in the addresslists tab.\n\n";
+				}elseif(empty($contact->firstEmail)){
+					echo "Skipping contact ".$contact->name." no e-mail address was set.\n\n";
+				}else
+				{		
+					$message->setTo($contact->firstEmail, $contact->name);
+					$message->setBody(GO_Addressbook_Model_Template::model()->replaceContactTags($body, $contact));
+					$this->_sendmail($message, $contact, $mailer, $mailing);			
+				}
 			}catch(Exception $e){
 				echo "Error for ".$contact->firstEmail.": ".$e->getMessage()."\n";
+//				$mailing->errors++;
 			}
 		}
 
@@ -189,11 +197,20 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			), true);
 			
 			try{
-				$message->setTo($company->email, $company->name);
-				$message->setBody(GO_Addressbook_Model_Template::model()->replaceModelTags($body, $company));
-				$this->_sendmail($message, $company, $mailer, $mailing);			
+				if(!$company->email_allowed){
+					echo "Skipping company ".$company->email." because newsletter sending is disabled in the addresslists tab.\n\n";
+				}elseif(empty($company->email)){
+					echo "Skipping company ".$company->name." no e-mail address was set.\n\n";
+				}else
+				{		
+					$message->setTo($company->email, $company->name);
+					$message->setBody(GO_Addressbook_Model_Template::model()->replaceModelTags($body, $company));
+					$this->_sendmail($message, $company, $mailer, $mailing);			
+				}
+					
 			}catch(Exception $e){
 				echo "Error for ".$company->email.": ".$e->getMessage()."\n";
+//				$mailing->errors++;
 			}
 		}
 
@@ -250,41 +267,33 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		{
 			$email = $model->email;
 		}
+		
+		echo "Sending to " . $typestring . " id: " . $model->id . " email: " . $email . "\n";
 
-		if(!$model->email_allowed){
-			echo "Skipping $typestring ".$email." because newsletter sending is disabled in the addresslists tab.\n\n";
-			$mailing->errors++;
-		}elseif(empty($email)){
-			echo "Skipping $typestring ".$model->name." no e-mail address was set.\n\n";
-			$mailing->errors++;
-		}else
-		{		
-			echo "Sending to " . $typestring . " id: " . $model->id . " email: " . $email . "\n";
-
-			$mailing = GO_Addressbook_Model_SentMailing::model()->findByPk($mailing->id, array(), true, true);
-			if($mailing->status==GO_Addressbook_Model_SentMailing::STATUS_PAUSED)
-			{
-				echo "Mailing paused. Exiting.";
-				exit();
-			}
-
-			try {
-				$mailer->send($message);
-			} catch (Exception $e) {
-				$status = $e->getMessage();
-			}
-			if (!empty($status)) {
-				echo "---------\n";
-				echo "Failed!\n";
-				echo $status . "\n";
-				echo "---------\n";
-
-				$mailing->errors++;
-				unset($status);
-			} else {
-				$mailing->sent++;
-			}
+		$mailing = GO_Addressbook_Model_SentMailing::model()->findByPk($mailing->id, array(), true, true);
+		if($mailing->status==GO_Addressbook_Model_SentMailing::STATUS_PAUSED)
+		{
+			echo "Mailing paused. Exiting.";
+			exit();
 		}
+
+		try {
+			$mailer->send($message);
+		} catch (Exception $e) {
+			$status = $e->getMessage();
+		}
+		if (!empty($status)) {
+			echo "---------\n";
+			echo "Failed!\n";
+			echo $status . "\n";
+			echo "---------\n";
+
+//			$mailing->errors++;
+			unset($status);
+		} else {
+			$mailing->sent++;
+		}
+
 		
 		$mailing->save();
 
@@ -333,6 +342,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 	public function formatStoreRecord($record, $model, $store) {
 		$record['addresslist'] = !empty($model->addresslist) ? $model->addresslist->name : '';
 		$record['user_name'] = !empty($model->user) ? $model->user->name : '';
+		$record['errors']=$model->errors;
 		return parent::formatStoreRecord($record, $model, $store);
 	}
 	
