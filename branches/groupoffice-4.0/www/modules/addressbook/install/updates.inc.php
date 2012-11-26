@@ -357,4 +357,6 @@ ADD INDEX ( `uuid` ) ";
 $updates["201210251115"][]="ALTER TABLE `ab_contacts` CHANGE `last_name` `last_name` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 $updates["201210251115"][]="ALTER TABLE `ab_contacts` CHANGE `first_name` `first_name` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 
-$updates["201211261235"][]="ALTER TABLE `ab_sent_mailings` DROP `errors`";
+$updates["201211261235"][]=""; //dummy don not remove
+$updates["201211261235"][]="ALTER TABLE `ab_sent_mailings` ADD `errors` INT NOT NULL DEFAULT '0'";
+$updates["201211261235"][]="update `ab_sent_mailings` set `errors`=total-sent where errors=0;";
