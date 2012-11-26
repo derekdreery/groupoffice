@@ -3,6 +3,8 @@
 class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractModelController {
 
 	protected $model = 'GO_Addressbook_Model_SentMailing';
+	
+	protected $dry=false;
 
 	protected function allowGuests() {
 		return array("batchsend","unsubscribe");
@@ -278,7 +280,11 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		}
 
 		try {
-			$mailer->send($message);
+			if($this->dry){
+				echo "Not sending because dry is true\n";
+			}else{
+				$mailer->send($message);
+			}
 		} catch (Exception $e) {
 			$status = $e->getMessage();
 		}
