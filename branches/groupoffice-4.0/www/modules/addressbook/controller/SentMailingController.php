@@ -301,7 +301,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			
 			if($this->smtpFailCount==3){
 				echo "Pausing mailing because there were 3 send errors in a row\n";
-				$mailing->status==GO_Addressbook_Model_SentMailing::STATUS_PAUSED;
+				$mailing->status=GO_Addressbook_Model_SentMailing::STATUS_PAUSED;
 				$mailing->save();
 				exit();				
 			}
