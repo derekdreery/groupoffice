@@ -51,6 +51,10 @@ class GO_Addressbook_Model_SentMailing extends GO_Base_Db_ActiveRecord {
 				'companies' => array('type'=>self::MANY_MANY, 'model'=>'GO_Addressbook_Model_Company', 'field'=>'company_id', 'linkModel' => 'GO_Addressbook_Model_SentMailingCompany')
 		);
 	}
+	
+	protected function getErrors(){
+		return $this->total-$this->sent;
+	}
 
 	/**
 	 * Clears or initializes the sending status of the mailing.
@@ -64,11 +68,8 @@ class GO_Addressbook_Model_SentMailing extends GO_Base_Db_ActiveRecord {
 		// Add company recipients to this list and count them
 		$stmt = GO_Addressbook_Model_Addresslist::model()->findByPk($this->addresslist_id)->companies();
 		while ($company = $stmt->fetch()) {
-			// Check if the company has an email address, if so -> add him to the receipient list
-			if(!empty($company->email)){
-				$this->addManyMany('companies', $company->id);			
-				$nMailsToSend++;
-			}
+			$this->addManyMany('companies', $company->id);			
+			$nMailsToSend++;			
 		}
 
 		// Clear list of contact recipients to send to, if there are any in this list
@@ -77,11 +78,8 @@ class GO_Addressbook_Model_SentMailing extends GO_Base_Db_ActiveRecord {
 		// Add contact recipients to this list and count them
 		$stmt = GO_Addressbook_Model_Addresslist::model()->findByPk($this->addresslist_id)->contacts();
 		while ($contact = $stmt->fetch()) {
-			// Check if the contact has an email address, if so -> add him to the receipient list
-			if(!empty($contact->firstEmail)){
-				$this->addManyMany('contacts', $contact->id);			
-				$nMailsToSend++;
-			}
+			$this->addManyMany('contacts', $contact->id);			
+			$nMailsToSend++;			
 		}
 
 		$this->setAttributes(

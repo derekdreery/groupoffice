@@ -356,3 +356,5 @@ ADD INDEX ( `uuid` ) ";
 
 $updates["201210251115"][]="ALTER TABLE `ab_contacts` CHANGE `last_name` `last_name` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 $updates["201210251115"][]="ALTER TABLE `ab_contacts` CHANGE `first_name` `first_name` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+
+$updates["201211261235"][]="ALTER TABLE `ab_sent_mailings` DROP `errors`";
