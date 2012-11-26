@@ -241,3 +241,5 @@ $l['addToAddresslist']='Hinzugefügt zur Adressliste %s';
 $l['addToAddresslistPrompt']='Sie fügen die ausgewählten Einträge zur Adressliste %s hinzu. Sollen diese Einträge nur in %s existieren?';
 $l['addAddresslistSuccess']='Die Einträge wurden erfolgreich zur Adressliste hinzugefügt.';
 $l['addContactsSuccess']= '%i Kontakte wurden erfolgreich zur Adressliste hinzugefügt.';
+$l["contactAddress"]= "Adresse";
+$l["contactAddress_no"]= "Hausnummer";
