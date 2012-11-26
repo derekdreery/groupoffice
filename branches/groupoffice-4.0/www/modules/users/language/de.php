@@ -90,7 +90,6 @@ $l['name']='Benutzer';
 $l['description']='Modul zur Benutzerverwaltung';
 $l['deletePrimaryAdmin']='Sie können den primären Administrator nicht löschen';
 $l['deleteYourself']='Sie können sich nicht selbst löschen';
-$lang['link_type'][8]=$us_user='Benutzer';
 $l['error_username']='Ihr Benutzername enthält ungültige Zeichen';
 $l['error_username_exists']='Der Benutzername ist bereits registriert';
 $l['error_email_exists']='Die E-Mail-Adresse ist bereits registriert.';

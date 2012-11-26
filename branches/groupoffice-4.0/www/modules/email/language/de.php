@@ -151,7 +151,6 @@ $l["adminPerm"]='Verwalten';
 
 $l['name']='E-Mail';
 $l['description']='Modul zum Verwalten von E-Mail-Konten und -Nachrichten';
-$lang['link_type'][9]='E-Mail';
 $l['feedbackNoReciepent']='Sie haben keinen Empfänger eingegeben';
 $l['feedbackSMTPProblem']='Es gab ein Problem bei der SMTP-Kommunikation: ';
 $l['feedbackUnexpectedError']='Es gab ein unerwartetes Problem bei Erstellung der Nachricht: ';
