@@ -1156,7 +1156,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				fields : ['value', 'text'],
 				data : [['60', GO.lang.strMinutes],
 				['3600', GO.lang.strHours],
-				['86400', GO.lang.strDays]
+				['86400', GO.lang.strDays],
+				['604800', GO.lang.strWeeks]
 
 				]
 			}),
