@@ -4,7 +4,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 
 	protected $model = 'GO_Addressbook_Model_SentMailing';
 	
-	protected $dry=false;
+	protected $dry=true;
 
 	protected function allowGuests() {
 		return array("batchsend","unsubscribe");
@@ -258,6 +258,8 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			$this->render('unsubscribe',$params);
 		}
 	}
+	
+	private $smtpFailCount=0;
 
 	private function _sendmail($message, $model, $mailer, $mailing) {
 		
@@ -275,7 +277,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		$mailing = GO_Addressbook_Model_SentMailing::model()->findByPk($mailing->id, array(), true, true);
 		if($mailing->status==GO_Addressbook_Model_SentMailing::STATUS_PAUSED)
 		{
-			echo "Mailing paused. Exiting.";
+			echo "Mailing paused by user. Exiting.";
 			exit();
 		}
 
@@ -293,11 +295,22 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			echo "Failed!\n";
 			echo $status . "\n";
 			echo "---------\n";
+			
+			
+			$this->smtpFailCount++;
+			
+			if($this->smtpFailCount==3){
+				echo "Pausing mailing because there were 3 send errors in a row\n";
+				$mailing->status==GO_Addressbook_Model_SentMailing::STATUS_PAUSED;
+				$mailing->save();
+				exit();				
+			}
 
 //			$mailing->errors++;
 			unset($status);
 		} else {
 			$mailing->sent++;
+			$this->smtpFailCount=0;
 		}
 
 		
