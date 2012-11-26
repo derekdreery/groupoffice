@@ -903,10 +903,10 @@ class GO{
 		}
 
 		if(empty($path)){
-			$amp = '?';
+			$amp = 'index.php?';
 		}else
 		{
-			$url .= '?r='.$path;
+			$url .= 'index.php?r='.$path;
 
 			$amp = $htmlspecialchars ? '&amp;' : '&';
 		}
