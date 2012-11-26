@@ -210,6 +210,7 @@ CREATE TABLE IF NOT EXISTS `ab_sent_mailings` (
   `status` tinyint(4) DEFAULT '0',
   `total` int(11) DEFAULT '0',
   `sent` int(11) DEFAULT '0',
+	`errors` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

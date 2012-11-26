@@ -51,10 +51,6 @@ class GO_Addressbook_Model_SentMailing extends GO_Base_Db_ActiveRecord {
 				'companies' => array('type'=>self::MANY_MANY, 'model'=>'GO_Addressbook_Model_Company', 'field'=>'company_id', 'linkModel' => 'GO_Addressbook_Model_SentMailingCompany')
 		);
 	}
-	
-	protected function getErrors(){
-		return $this->total-$this->sent;
-	}
 
 	/**
 	 * Clears or initializes the sending status of the mailing.
