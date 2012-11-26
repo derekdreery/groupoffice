@@ -447,8 +447,9 @@ if(count($load_modules)) {
 	}
 
 	//two modules may include the same script
+	$scripts = array_map('trim',$scripts);
 	$scripts=array_unique($scripts);
-
+	
 	//include config file location because in some cases different URL's point to
 	//the same database and this can break things if the settings are cached.
 	$file = $user_id.'-'.md5(GO::config()->mtime.GO::config()->get_config_file().':'.GO::language()->getLanguage().':'.$modulesCacheStr).'.js';
