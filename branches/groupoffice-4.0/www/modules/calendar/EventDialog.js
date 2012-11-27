@@ -1122,23 +1122,13 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		for (var i = 1; i < 60; i++) {
 			reminderValues.push([i, i]);
 		}
-
-		this.reminderValue = new Ext.form.ComboBox({
-			
-			hiddenName : 'reminder_value',
-			triggerAction : 'all',
-			editable : false,
-			selectOnFocus : true,
-			width : 148,
-			forceSelection : true,
-			mode : 'local',
-			value : GO.calendar.defaultReminderValue,
-			valueField : 'value',
-			displayField : 'text',
-			store : new Ext.data.SimpleStore({
-				fields : ['value', 'text'],
-				data : reminderValues
-			})
+		
+		this.reminderValue = new GO.form.NumberField({
+			decimals:0,
+			name : 'reminder_value',
+			minValue:1,
+			width : 50,
+			value : GO.calendar.defaultReminderValue
 		});
 
 		this.reminderMultiplier = new Ext.form.ComboBox({

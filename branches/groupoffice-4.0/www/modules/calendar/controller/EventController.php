@@ -556,7 +556,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 		$response['data']['reminder_multiplier'] = 60;
 		$response['data']['reminder_value'] = 0;
-
+		
 		if (!empty($response['data']['reminder'])) {
 			for ($i = 0; $i < count($multipliers); $i++) {
 				$devided = $response['data']['reminder'] / $multipliers[$i];
