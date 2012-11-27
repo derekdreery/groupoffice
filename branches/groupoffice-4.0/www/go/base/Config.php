@@ -519,6 +519,13 @@ class GO_Base_Config {
 	 */
 	var $file_storage_path = '/home/groupoffice/';
 	
+	/**
+	 * List of extensions that should not be edited with GOTA by default.
+	 * 
+	 * @var array 
+	 */
+	var $gota_blacklist_extensions=array('log','pdf','zip','tar','gz');
+	
 	
 	/**
 	 * Convert non ASCII characters to ASCII codes when uploaded to Group-Office.
