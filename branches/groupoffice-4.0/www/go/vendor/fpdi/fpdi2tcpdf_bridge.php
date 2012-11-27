@@ -26,7 +26,6 @@
  * 
  * It'll be loaded and extended by FPDF_TPL.
  */
-require_once(GO::config()->class_path.'tcpdf/tcpdf.php');
 
 class FPDF extends TCPDF {
     
