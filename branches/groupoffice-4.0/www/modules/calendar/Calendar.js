@@ -2050,11 +2050,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				items.push(this.groupsGrid);
 			}
 
-//			if(GO.settings.modules.calendar.write_permission)
-//			{
-				items.push(this.resourcesGrid);
+			items.push(this.resourcesGrid);
+			if(GO.settings.modules.calendar.write_permission)
+			{				
 				items.push(this.categoriesGrid);
-//			}
+			}
             
 			this.adminDialog = new Ext.Window({
 				title: GO.calendar.lang.administration,
