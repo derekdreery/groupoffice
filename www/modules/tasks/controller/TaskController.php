@@ -167,6 +167,8 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		$columnModel->formatColumn('category_name','$model->category->name',array(),'category_id');
 		$columnModel->formatColumn('tasklist_name','$model->tasklist_name');
 		$columnModel->formatColumn('late','$model->isLate();');
+		$columnModel->formatColumn('user_name','$model->user->name');
+		
 		//$colModel->formatColumn('project_name','$model->project->name'); TODO: Implement the project from the ID and not from the name
 		return parent::formatColumns($columnModel);
 	}
