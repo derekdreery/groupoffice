@@ -93,7 +93,7 @@ if (!defined('K_TCPDF_EXTERNAL_CONFIG')) {
 	 */
 	//define ('K_PATH_CACHE', K_PATH_MAIN.'cache/');
 	define ('K_PATH_CACHE', GO::config()->file_storage_path.'tcpdfcache/');
-	
+
 	$f = new GO_Base_Fs_Folder(K_PATH_CACHE);
 	$f->create();
 	
@@ -223,7 +223,7 @@ if (!defined('K_TCPDF_EXTERNAL_CONFIG')) {
 	define('HEAD_MAGNIFICATION', 1.1);
 
 	/**
-	 * height of cell repect font height
+	 * height of cell respect font height
 	 */
 	define('K_CELL_HEIGHT_RATIO', 1.25);
 
