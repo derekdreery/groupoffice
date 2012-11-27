@@ -1738,6 +1738,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				break;
 			
 			case 'boolean':
+				if($html)
+					return !empty($value) ? GO::t('yes') : GO::t('no');				
+				else					
 					return !empty($value);				
 				break;
 			
