@@ -124,7 +124,9 @@ class GO_Base_Mail_SmimeMessage extends GO_Base_Mail_Message
 		if(!$this->signed){					
 			openssl_pkcs12_read ($this->pkcs12_data, $certs, $this->passphrase);
 			if(!is_array($certs)){
-				throw new Exception("Could not decrypt key");
+				
+				//unfortunately exceptions are catched by swift and it leads to an SMTP timeout somehow.
+				trigger_error("Could not decrypt key. Invalid passphrase?", E_USER_ERROR);
 			}
 			
 
@@ -137,7 +139,7 @@ class GO_Base_Mail_SmimeMessage extends GO_Base_Mail_Message
 				//$this->extra_certs=array_merge($this->extra_certs,$certs['extracerts']);
 			
 			if(!file_exists($this->tempin))
-				throw new Exception('Failed to sign. Temp file disappeared');
+				trigger_error('Failed to sign. Temp file disappeared', E_USER_ERROR);
 
 			if(!isset($extraCertsFile)){
 				openssl_pkcs7_sign($this->tempin, $this->tempout,$certs['cert'], array($certs['pkey'], $this->passphrase), $this->saved_headers, PKCS7_DETACHED);
@@ -159,7 +161,7 @@ class GO_Base_Mail_SmimeMessage extends GO_Base_Mail_Message
 
 				$fp = fopen($this->tempout, 'r');
 				if(!$fp)
-					throw new Exception('Could not read tempout file');
+					trigger_error('Could not read tempout file', E_USER_ERROR);
 
 				while($line = fgets($fp)){			
 					//fix header name bug in php
@@ -222,7 +224,7 @@ class GO_Base_Mail_SmimeMessage extends GO_Base_Mail_Message
 		
 		$fp = fopen($this->tempout, 'r');
 		if(!$fp)
-			throw new Exception('Could not read tempout file');
+			trigger_error('Could not read tempout file', E_USER_ERROR);
 			
 		while($line = fgets($fp)){			
 			$line = GO_Base_Util_String::normalizeCrlf($line);
