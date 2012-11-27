@@ -19,3 +19,5 @@ $updates["201211201622"][]="CREATE TABLE IF NOT EXISTS `si_content` (
   KEY `fk_si_content_si_content1` (`parent_id`),
   KEY `fk_si_content_si_sites1` (`site_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
+
+$updates["201211271539"][]="ALTER TABLE `si_sites` ADD `base_path` VARCHAR( 100 ) NOT NULL DEFAULT ''";

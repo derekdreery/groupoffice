@@ -62,6 +62,14 @@ GO.sites.SiteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 						fieldLabel: GO.sites.lang.siteDomain
 					},{
 						xtype: 'textfield',
+						name: 'base_path',
+						width:300,
+						anchor: '100%',
+						maxLength: 100,
+						allowBlank:false,
+						fieldLabel: GO.sites.lang.siteBase_path
+					},{
+						xtype: 'textfield',
 						name: 'template',
 						width:300,
 						anchor: '100%',

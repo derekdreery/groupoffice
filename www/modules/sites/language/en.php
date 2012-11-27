@@ -38,6 +38,7 @@ $l = array(
 		'siteSsl'=>'Use SSL',
 		'siteModRewrite'=>'Use Mod Rewrite',
 		'siteRegisterUserGroups'=>'New user group',
+		'siteBase_path'=>'Base path',
 		'language'=>'Language',
 		
 		//Frontend languages

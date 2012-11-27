@@ -47,11 +47,12 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 	function defaultAttributes() {
 		return array(
 				'domain'=>$_SERVER['SERVER_NAME'],
-				'template'=>'template_folder',
+				'base_path'=>GO::config()->host.'modules/sites',
+				'template'=>'Example',
 				'ssl'=>false,
 				'mod_rewrite'=>false,
 				'login_path'=>'/sites/site/login',
-				'register_user_groups '=>'Website Users',
+				'register_user_groups '=>'',
 				'user_id'=>GO::user()->id
 			);
 	}
@@ -63,8 +64,7 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 	 */
 	public function relations() {
 		return array(
-				'content' => array('type' => self::HAS_MANY, 'model' => 'GO_Sites_Model_Content', 'field' => 'site_id', 'findParams'=>  GO_Base_Db_FindParams::newInstance()->order('sort')->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('parent_id', null)->addCondition('hidden',0)), 'delete' => false),
-				'allcontent' => array('type' => self::HAS_MANY, 'model' => 'GO_Sites_Model_Content', 'field' => 'site_id', 'delete' => true)
+				'content' => array('type' => self::HAS_MANY, 'model' => 'GO_Sites_Model_Content', 'field' => 'site_id', 'delete' => true)
 			);
 	}	
 	
@@ -96,6 +96,13 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 	protected function afterSave($wasNew) {		
 		$this->_createDefaultGroups();		
 		return parent::afterSave($wasNew);
+	}
+	
+	public function getBaseUrl(){
+		$url = $this->ssl ? 'https://' : 'http://';
+		$url .= $this->domain.rtrim($this->base_path,'/');
+		
+		return $url;
 	}
 }
 ?>
