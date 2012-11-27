@@ -280,7 +280,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * 'type'=>PDO::PARAM_INT, //Autodetected
 	 * 'required'=>true, //Will be true automatically if field in database may not be null and doesn't have a default value
 	 * 'length'=><max length of the value>, //Autodetected from db
-	 * 'validator'=><a function to call to validate the value>,
+	 * 'validator'=><a function to call to validate the value>, This may be an array: array("Class", "method", "error message")
 	 * 'gotype'=>'number|textfield|textarea|unixtimestamp|unixdate|user', //Autodetected from db as far as possible. See loadColumns()
 	 * 'decimals'=>2//only for gotype=number)
 	 * 'regex'=>'A preg_match expression for validation',
@@ -1947,7 +1947,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * 
 	 * 'required'=>true, //Will be true automatically if field in database may not be null and doesn't have a default value
 	 * 'length'=><max length of the value>, //Autodetected from db
-	 * 'validator'=><a function to call to validate the value>,
+	 * 'validator'=><a function to call to validate the value>, This may be an array: array("Class", "method", "error message").
 	 * 'gotype'=>'number|textfield|textarea|unixtimestamp|unixdate|user', //Autodetected from db as far as possible. See loadColumns()
 	 * 'decimals'=>2//only for gotype=number)
 	 * 'regex'=>'A preg_match expression for validation',
@@ -1963,6 +1963,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(!isset($this->columns[$columnName]))
 			throw new Exception("Column $columnName is unknown");
 		$this->columns[$columnName][$ruleName]=$value;
+		
+		//set modified because otherwise it might not revalidate.
+		$this->_modifiedAttributes[$columnName]=$this->$columnName;
 	}
 	/**
 	 * Validates all attributes of this model
@@ -1990,21 +1993,39 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}elseif(!empty($attributes['regex']) && !empty($this->_attributes[$field]) && !preg_match($attributes['regex'], $this->_attributes[$field]))
 			{
 				$this->setValidationError($field, sprintf(GO::t('attributeIncorrectFormat'),$this->getAttributeLabel($field)));
-			}elseif(!empty($attributes['validator']) && !empty($this->_attributes[$field]) && !call_user_func($attributes['validator'], $this->_attributes[$field]))
-			{
-				$this->setValidationError($field, sprintf(GO::t('attributeInvalid'),$this->getAttributeLabel($field)));
 			}elseif(!empty($attributes['greater']) && !empty($this->_attributes[$field])){
 				if($this->_attributes[$field]<=$this->_attributes[$attributes['greater']])
 					$this->setValidationError($field, sprintf(GO::t('attributeGreater'), $this->getAttributeLabel($field), $this->getAttributeLabel($attributes['greater'])));
 			}elseif(!empty($attributes['greaterorequal']) && !empty($this->_attributes[$field])){
 				if($this->_attributes[$field]<$this->_attributes[$attributes['greaterorequal']])
 					$this->setValidationError($field, sprintf(GO::t('attributeGreaterOrQueal'), $this->getAttributeLabel($field), $this->getAttributeLabel($attributes['greaterorequal'])));
+			}else {
+				$this->_validateValidatorFunc ($attributes, $field);
 			}
 		}
 		
 		$this->_validateUniqueColumns();
 		
 		return !$this->hasValidationErrors();
+	}
+	
+	private function _validateValidatorFunc($attributes, $field){
+		$valid=true;
+		if(!empty($attributes['validator']) && !empty($this->_attributes[$field]))
+		{
+			if(is_array($attributes['validator']) && count($attributes['validator'])==3){
+				$errorMsg = array_pop($attributes['validator']);					
+			}else
+			{
+				$errorMsg = GO::t('attributeInvalid');
+			}
+
+			$valid = call_user_func($attributes['validator'], $this->_attributes[$field]);
+			if(!$valid)
+				$this->setValidationError($field, sprintf($errorMsg,$this->getAttributeLabel($field)));
+		}
+		
+		return $valid;
 	}
 	
 	private function _validateUniqueColumns(){
