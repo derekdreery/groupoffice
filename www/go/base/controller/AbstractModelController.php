@@ -1103,6 +1103,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$columns = $model->customfieldsRecord->getColumns();
 			foreach($columns as $name=>$attr){
 				if($name != 'model_id'
+								&& isset($attr['customfield'])
 								&& !in_array($name, $params['exclude'])
 								&& (empty($params['hide_unknown_gotypes']) || !empty($attr['gotype']))
 								&& !in_array($attr['customfield']->datatype,$params['exclude_cf_datatypes']))
