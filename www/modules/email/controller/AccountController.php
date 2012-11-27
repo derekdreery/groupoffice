@@ -64,7 +64,10 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		} else {
 			$alias = $model->getDefaultAlias();
 			$alias->name = $params['name'];
-			$alias->email = $params['email'];
+			
+			if(isset($params['email']))
+				$alias->email = $params['email'];
+			
 			$alias->signature = $params['signature'];
 			$alias->save();
 		}
