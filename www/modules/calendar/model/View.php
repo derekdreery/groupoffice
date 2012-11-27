@@ -63,6 +63,49 @@ class GO_Calendar_Model_View extends GO_Base_Db_ActiveRecord{
 	 public function tableName() {
 		 return 'cal_views';
 	 }
+     
+     public function getGroupCalendars()
+     {
+        $findParams = GO_Base_Db_FindParams::newInstance()
+                ->select('t.*')
+                ->criteria(GO_Base_Db_FindCriteria::newInstance()
+				->addCondition('view_id', $this->id,'=', 'vgr'));	
+        
+        $findParams->joinModel(array(
+            'model'=>'GO_Base_Model_User',  
+            'localField'=>'user_id',
+            'tableAlias'=>'usr', 
+            
+        ));
+        
+        $findParams->joinModel(array(
+            'model'=>'GO_Base_Model_UserGroup',  
+            'localField'=>'user_id',
+            'foreignField'=>'user_id',
+            'tableAlias'=>'usg', 
+            
+        ));
+        
+		$findParams->joinModel(array(
+            'model'=>'GO_Base_Model_Group',  
+            'localField'=>'group_id',
+            'localTableAlias'=>'usg',
+            'tableAlias'=>'grp', 
+		));
+        
+        $findParams->joinModel(array(
+            'model'=>'GO_Calendar_Model_ViewGroup',  
+            'localField'=>'id',
+            'localTableAlias'=>'grp',
+            'foreignField'=>'group_id',
+            'tableAlias'=>'vgr', 
+            'criteria'=> GO_Base_Db_FindCriteria::newInstance()
+				->addCondition('view_id', $this->id,'=', 'vgr')
+		));
+        
+		
+        return GO_Calendar_Model_Calendar::model()->find($findParams);
+     }
 
 	/**
 	 * Here you can define the relations of this model with other models.
@@ -70,7 +113,22 @@ class GO_Calendar_Model_View extends GO_Base_Db_ActiveRecord{
 	 */
 	 public function relations() {
 		 return array(
-				 'calendars' => array('type' => self::MANY_MANY, 'model' => 'GO_Calendar_Model_Calendar', 'linkModel'=>'GO_Calendar_Model_ViewCalendar', 'field'=>'view_id', 'linksTable' => 'cal_views_calendars', 'remoteField'=>'calendar_id')
-		 );
+            'calendars' => array(
+                'type' => self::MANY_MANY, 
+                'model' => 'GO_Calendar_Model_Calendar', 
+                'linkModel'=>'GO_Calendar_Model_ViewCalendar', 
+                'field'=>'view_id', 
+                'linksTable' => 'cal_views_calendars', 
+                'remoteField'=>'calendar_id'
+            ),
+           'groups' => array(
+               'type' => self::MANY_MANY, 
+               'model' => 'GO_Calendar_Model_Calendar', 
+               'linkModel'=>'GO_Calendar_Model_ViewGroup', 
+               'field'=>'view_id', 
+               'linksTable' => 'cal_views_groups', 
+               'remoteField'=>'group_id'
+            )
+         );
 	 }
 }

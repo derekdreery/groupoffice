@@ -242,6 +242,16 @@ CREATE TABLE IF NOT EXISTS `cal_calendar_user_colors` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
+-- Tablestructure for table `cal_views_groups`
+--
+
+CREATE  TABLE IF NOT EXISTS `cal_views_groups` (
+  `view_id` INT NOT NULL ,
+  `group_id` VARCHAR(45) NOT NULL ,
+  PRIMARY KEY (`view_id`, `group_id`) )
+ENGINE = InnoDB
+
+--
 -- Tabelstructuur voor tabel `cf_cal_calendars`
 --
 

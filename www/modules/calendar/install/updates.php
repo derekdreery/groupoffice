@@ -181,3 +181,9 @@ $updates["201211222127"][]="ALTER TABLE `cal_events` DROP `owner_status`";
 
 
 $updates["201211222127"][]="ALTER TABLE `cal_events` DROP `sequence`";
+
+$updates['201211271416'][] ="CREATE  TABLE IF NOT EXISTS `cal_views_groups` (
+  `view_id` INT NOT NULL ,
+  `group_id` VARCHAR(45) NOT NULL ,
+  PRIMARY KEY (`view_id`, `group_id`) )
+ENGINE = InnoDB";

@@ -593,6 +593,13 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 		return parent::afterDisplay($response, $model, $params);
 	}	
+    
+    protected function actionTestGroup($params){
+      $view = GO_Calendar_Model_View::model()->findByPk(1);
+      $cals = $view->getGroupCalendars();
+      
+      print_r($cals->fetchAll());
+    }
 	
 	protected function actionViewStore($params){
 		$view = GO_Calendar_Model_View::model()->findByPk($params['view_id']);
@@ -601,16 +608,19 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		unset($params['view_id']);
 		
-		$calendars = $view->calendars;
-		
+		//$calendars = $view->calendars;
+        $calendars = array_merge($view->getGroupCalendars()->fetchAll(), $view->calendars->fetchAll());
+           
 		$response['success']=true;
 		$response['results']=array();
 		
+        $results = array();
 		foreach($calendars as $calendar){
 			$params['calendars']='['.$calendar->id.']';
-			
-			$response['results'][]=$this->actionStore($params);
+			if(!isset($results[$calendar->id]))
+              $results[$calendar->id]=$this->actionStore($params);
 		}
+        $response['results'] = array_values($results);
 		
 		return $response;
 		

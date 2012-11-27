@@ -114,7 +114,8 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 			else
 				$response['time'] =  $this->getFormattedTime();
 		}
-		
+		$response['time_of_day'] = $this->getTimeOfDay();
+        
 		$response['status'] = $this->_event->status;
 		$response['username'] = $this->_event->user->getName();
 		
@@ -176,6 +177,26 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 	public function getName(){
 		return $this->_displayName;
 	}
+    
+    /**
+     * Get the time of day the event occurs.
+     * If event is not set or there is no start_time we return "FullDay"
+     * @return string (morning|afternoon|evening|fullday)
+     */
+    public function getTimeOfDay()
+    {
+      if(!isset($this->_event) && empty($this->_event->start_time)) 
+        return "fullday";
+      $hour = date('G', $this->_event->start_time); //0 - 23
+      
+      if($hour >= 0 && $hour < 12)
+        return "morning";
+      elseif($hour >= 12 && $hour < 18)
+        return "afternoon";
+      elseif($hour >= 18)
+        return "evening";
+    }
+	
 	
 	public function mergeWithEvent($event){
 		

@@ -20,8 +20,8 @@ GO.calendar.ViewDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			titleField:'name',
 			title:GO.calendar.lang.view,
 			formControllerUrl: 'calendar/view',
-      width: 440,
-      height: 500
+            width: 440,
+            height: 500
 		});
 		
 		GO.calendar.ViewDialog.superclass.initComponent.call(this);	
@@ -31,6 +31,7 @@ GO.calendar.ViewDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	{
 		GO.calendar.ViewDialog.superclass.setRemoteModelId.call(this,remoteModelId);
 		this.calendarsGrid.setModelId(remoteModelId, true);
+        this.groups.setModelId(remoteModelId);
 	},
 	
 	buildForm : function () {
@@ -94,6 +95,36 @@ GO.calendar.ViewDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		});
 
 		this.addPanel(this.propertiesPanel);
+        
+        var groupColumns = [{
+			header : GO.lang['strName'],
+			dataIndex : 'name',
+			menuDisabled:true,
+			sortable: true
+		}];
+        
+        this.addPanel (this.groups = new GO.base.model.multiselect.panel({
+            title: GO.lang.strSelectGroups,
+				anchor: '100% 50%',
+				forceLayout:true,
+				autoExpandColumn:'name',
+				url:'calendar/viewGroup',
+				columns: [{
+                  header : GO.lang['strName'],
+                  dataIndex : 'name',
+                  menuDisabled:true,
+                  sortable: true
+              }],
+				/* selectColumns:[{
+					header : GO.lang['strName'],
+					dataIndex : 'name',
+					menuDisabled:true,
+					sortable: true
+				}], */
+				fields:['id','name']
+				//model_id: this.view_id //GO.settings.user_id
+			})
+          );
 		this.addPermissionsPanel(new GO.grid.PermissionsPanel());
 	}
 });
