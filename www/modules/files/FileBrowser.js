@@ -1759,6 +1759,29 @@ GO.files.openFilePath = function (path){
 	GO.files.openFile(record);
 }
 
+GO.files.showImageViewer = function(imagesParams){
+	if(!this.imageViewer)
+	{
+		this.imageViewer = new GO.files.ImageViewer({
+			closeAction:'hide'
+		});
+	}
+
+	
+	imagesParams["thumbParams"]=Ext.encode({lw:this.imageViewer.width-20,ph:this.imageViewer.height-100});
+	
+	
+	GO.request({
+		url:"files/folder/images",
+		params:imagesParams,
+		maskEl:Ext.getBody(),
+		success:function(response, options, result){
+			this.imageViewer.show(result.images, result.index);
+		},
+		scope:this
+	});
+}
+
 GO.files.openFile = function(record, store,e)
 {
 
@@ -1779,30 +1802,16 @@ GO.files.openFile = function(record, store,e)
 			case 'jpeg':
 			case 'xmind':
 
-				if(!this.imageViewer)
-				{
-					this.imageViewer = new GO.files.ImageViewer({
-						closeAction:'hide'
-					});
-				}
-
 				var imagesParams = {};
 				imagesParams[index]=record.data[index];
-				imagesParams["thumbParams"]=Ext.encode({lw:this.imageViewer.width-20,ph:this.imageViewer.height-100});
 				if(store && store.sortInfo){
 					imagesParams["sort"]=store.sortInfo.field;
 					imagesParams["dir"]=store.sortInfo.direction;
 				}
+				
+				GO.files.showImageViewer(imagesParams);
 
-				GO.request({
-					url:"files/folder/images",
-					params:imagesParams,
-					maskEl:Ext.getBody(),
-					success:function(response, options, result){
-						this.imageViewer.show(result.images, result.index);
-					},
-					scope:this
-				})
+				
 
 
 //				this.imageViewer.show([{
@@ -1845,7 +1854,7 @@ GO.files.openFile = function(record, store,e)
 				}
 
 			default:
-				if(GO.util.empty(record.get('locked'))){
+				if(GO.util.empty(record.get('locked')) && GO.settings.config.gota_blacklist_extensions.indexOf(record.data.extension)==-1){
 					GO.files.editFile(record.data.id);
 				}else
 				{
