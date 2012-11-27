@@ -1,4 +1,5 @@
 4.0.134
+- Customfield-headers will not be shown if they are not followed by none empty customfields
 - Added a SystemMessage object for creating emails that need to be sent from the GO system
 - Let the ticket module make use of the new SystemMessage object for sending the ticket emails
 
