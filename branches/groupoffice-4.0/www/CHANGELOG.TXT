@@ -1,3 +1,7 @@
+4.0.134
+- Added a SystemMessage object for creating emails that need to be sent from the GO system
+- Let the ticket module make use of the new SystemMessage object for sending the ticket emails
+
 26-11-2012 4.0.133
 - Better error handling for newsletters and include addresslist filter in select dialogs
 - Updated German translation
