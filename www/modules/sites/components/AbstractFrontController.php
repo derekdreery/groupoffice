@@ -238,6 +238,12 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 		return GOS::site()->getUrlManager()->createUrl($route, $params);
 	}
 
+	/**
+	 * Redirect to another page.
+	 * 
+	 * @param mixed $url String or array with route and params.
+	 * @param int $statusCode HTTP Status code
+	 */
 	protected function redirect($url = '', $statusCode = 302)
 	{
 		if (is_array($url))
