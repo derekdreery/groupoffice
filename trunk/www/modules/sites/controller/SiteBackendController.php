@@ -4,6 +4,15 @@ class GO_Sites_Controller_SiteBackend extends GO_Base_Controller_AbstractModelCo
 
 	protected $model = 'GO_Sites_Model_Site';
 	
+	
+	protected function actionRedirectToFront($params){
+		
+		$site = GO_Sites_Model_Site::model()->findByPk($params['id']);
+		
+		header("Location: ".$site->getBaseUrl());
+		exit();
+	}
+	
 	protected function actionSiteTree($params) {
 
 		$response=array();
@@ -17,7 +26,7 @@ class GO_Sites_Controller_SiteBackend extends GO_Base_Controller_AbstractModelCo
 
 				$children = $this->_buildPagesTree($site->id, 0);
 
-				$siteNode = array('id' => 'site_' . $site->id, 'iconCls' => 'go-model-icon-GO_Sites_Model_Site', 'text' => $site->name, 'expanded' => true, 'children' => $children);
+				$siteNode = array('id' => 'site_' . $site->id,  'site_id'=>$site->id, 'iconCls' => 'go-model-icon-GO_Sites_Model_Site', 'text' => $site->name, 'expanded' => true, 'children' => $children);
 
 				$response[] = $siteNode;
 			}

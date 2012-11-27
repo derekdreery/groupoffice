@@ -41,7 +41,18 @@ GO.sites.SitesContextMenu = function(config){
 			this.deleteSite();
 		}
 	});
+	
 	config.items.push(this.actionDeleteSite);
+	
+	config.items.push({
+		iconCls: 'btn-view',
+		text: GO.lang.strView,
+		cls: 'x-btn-text-icon',
+		handler:function(){
+			window.open(GO.url('sites/siteBackend/redirectToFront', {id: this.selected[0].attributes.site_id}));			
+		},
+		scope:this
+	});
 
 	GO.sites.SitesContextMenu.superclass.constructor.call(this,config);
 
@@ -86,18 +97,15 @@ Ext.extend(GO.sites.SitesContextMenu, Ext.menu.Menu, {
 	deleteSite : function() {
 		var site_id = this.selected[0].id.substring(5,this.selected[0].id.length);
 		
-		Ext.MessageBox.confirm(GO.sites.lang.deleteSite, GO.sites.lang.deleteSiteText, function(btn){
+		Ext.MessageBox.confirm(GO.sites.lang.deleteSite, GO.sites.lang.deleteSiteConfirm, function(btn){
 			if(btn == 'yes'){
-				Ext.Ajax.request({
-					url: GO.url('sites/siteBackend/delete'),
+				GO.request({
+					url: 'sites/siteBackend/delete',
 					params: {
 						id: site_id
 					},
 					success: function(){
 						GO.mainLayout.getModulePanel('sites').rebuildTree();
-					},
-					failure: function(){
-						
 					},
 					scope: this
 				});

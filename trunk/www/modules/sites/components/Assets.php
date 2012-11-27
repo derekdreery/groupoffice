@@ -117,7 +117,7 @@ class GO_Sites_Components_Assets
 	{
 		if($this->_baseUrl===null)
 		{
-			$this->setBaseUrl(GO::config()->host.self::DEFAULT_BASEPATH);
+			$this->setBaseUrl(GOS::site()->urlManager->getBaseUrl().'/'.self::DEFAULT_BASEPATH);
 		}
 		return $this->_baseUrl;
 	}

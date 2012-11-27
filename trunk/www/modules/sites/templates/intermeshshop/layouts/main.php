@@ -29,22 +29,25 @@
 				<div class="topmenu-container">
 					<div id="topmenu-item-center_43" class="topmenu-item-center topmenu-item-center_0">						
 				
-						
+						<?php if(GO::modules()->isInstalled("webshop")): ?>
 						<div class="topmenu-item-left <?php if(GOS::site()->route=='webshop/site/products')echo 'selected'; ?>">
 							<div class="topmenu-item-right">
-								<a class="topmenu-item-center" href="/">Products</a>
+								<a class="topmenu-item-center" href="<?php echo $this->createUrl('/webshop/site/products'); ?>">Products</a>
 							</div>
 						</div>
-						<div class="topmenu-item-left <?php if(GOS::site()->route=='billing/site/invoices')echo 'selected'; ?>">
-							<div class="topmenu-item-right">
-								<a class="topmenu-item-center" href="<?php echo $this->createUrl('/billing/site/invoices'); ?>">Invoices</a>
+		
+						
+							<div class="topmenu-item-left <?php if(GOS::site()->route=='billing/site/invoices')echo 'selected'; ?>">
+								<div class="topmenu-item-right">
+									<a class="topmenu-item-center" href="<?php echo $this->createUrl('/billing/site/invoices'); ?>">Invoices</a>
+								</div>
 							</div>
-						</div>
-						<div class="topmenu-item-left <?php if(GOS::site()->route=='licenses/site/licenseList')echo 'selected'; ?>">
-							<div class="topmenu-item-right">
-								<a class="topmenu-item-center" href="<?php echo $this->createUrl('/licenses/site/licenseList'); ?>">Download</a>
+							<div class="topmenu-item-left <?php if(GOS::site()->route=='licenses/site/licenseList')echo 'selected'; ?>">
+								<div class="topmenu-item-right">
+									<a class="topmenu-item-center" href="<?php echo $this->createUrl('/licenses/site/licenseList'); ?>">Download</a>
+								</div>
 							</div>
-						</div>
+						<?php endif; ?>
 						
 						<div class="topmenu-item-left <?php if(isset($_GET['slug']) && $_GET['slug']=='requirements')echo 'selected'; ?>">
 							<div class="topmenu-item-right">

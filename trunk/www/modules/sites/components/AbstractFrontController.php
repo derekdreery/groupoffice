@@ -186,14 +186,18 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 	 */
 	public function getTemplateUrl()
 	{
+		
+		
 		$template_url = $this->template."/";
 
 		if(file_exists($template_url)) //look in root/[templatename]
 			return GO::config()->host . $template_url;
-		
-		$template_url = GO::config()->host . 'modules/sites/templates/' . $this->template . '/assets/';
-		if(file_exists($template_url)) //look in sites module
-			return $template_url;
+		else
+			return GO::config()->host . 'modules/sites/templates/' . $this->template . '/assets/';
+				
+//		$template_url = GO::config()->host . 'modules/sites/templates/' . $this->template . '/assets/';
+//		if(file_exists($template_url)) //look in sites module
+//			return $template_url;
 
 		throw new GO_Base_Exception_NotFound('Could not find the template directory '. $template_url);
 	}
@@ -287,7 +291,7 @@ abstract class GO_Sites_Components_AbstractFrontController extends GO_Base_Contr
 		}
 		
 		$module = $this->getModule();
-		return GO::modules()->isInstalled($module->id);
+		return !$module || GO::modules()->isInstalled($module->id);
 	}
 
 	public function run($action = '', $params = array(), $render = true, $checkPermissions = true)
