@@ -24,9 +24,9 @@ $this->setPageTitle("New license");
 	<?php echo GO_Sites_Components_Html::error($license, 'ip'); ?>
 </div>
 <div class="row">
-	<?php echo GO_Sites_Components_Html::label('Internal Ip-address', 'intip'); ?>
-	<?php echo GO_Sites_Components_Html::activeTextField($license,'intip'); ?>
-	<?php echo GO_Sites_Components_Html::error($license, 'intip'); ?>
+	<?php echo GO_Sites_Components_Html::label('Internal Ip-address', 'internal_ip'); ?>
+	<?php echo GO_Sites_Components_Html::activeTextField($license,'internal_ip'); ?>
+	<?php echo GO_Sites_Components_Html::error($license, 'internal_ip'); ?>
 </div>
 <div class="row bottons">
 	<?php echo GO_Sites_Components_Html::submitButton('Save license'); ?>

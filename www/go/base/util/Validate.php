@@ -33,7 +33,7 @@ class GO_Base_Util_Validate {
 				$isInternal = true;
 		}
 
-		return $isInternal;
+		return $isInternal && GO_Base_Util_Validate::ip($ip);
 	}
 	
 /**

@@ -160,9 +160,13 @@ class GO_Base_Util_Http {
 	 * 
 	 * @return boolean 
 	 */
-	public static function isAjaxRequest(){
+	public static function isAjaxRequest($withExtjsIframeHack=true){
 		//dirty hack with $_FILES for extjs iframe file upload
-		return !empty($_POST['ajax']) || !empty($_FILES) || (isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest");  
+		
+		if($withExtjsIframeHack && !empty($_POST['ajax']) || !empty($_FILES))
+			return true;
+		
+		return isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest";  
 	}
 	
 	/**
