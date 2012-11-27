@@ -209,3 +209,7 @@ $l['notifyCancelParticipants']='Would you like to send a cancellation notice to 
 $l['notifyCancelOrganizer']='Would you like to notify the organizer that you will not attend by e-mail?';
 $l['notifyParticipants']='Notify participants?';
 $l['sendNotification']='Would you like to notify the participants by e-mail?';
+
+$l['morning'] = "Morning";
+$l['afternoon'] = "Afternoon";
+$l['evening'] = "Evening";

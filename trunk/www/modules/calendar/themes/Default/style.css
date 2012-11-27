@@ -532,8 +532,7 @@ a.x-monthGrid-cell-day-text:hover{
 }
 .x-viewGrid-calendar-name-cell {
 	text-align:right;
-	font-weight:bold;
-	height:60px;	
+	font-weight:bold;	
 	padding:6px;
 	background-color:#F0F1F3;
 }

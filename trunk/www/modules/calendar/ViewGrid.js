@@ -157,7 +157,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 			tag: 'tr',
 			children:{
 				tag:'td',
-				style:'width:147px',
+				style:'width:200px',
 				cls: "x-calGrid-heading"
 			}
 		}, true);
@@ -177,7 +177,8 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 				cls: "x-calGrid-heading",
 				style: "width:"+(columnWidth)+"px",
 				html: dt.format(dateFormat)
-			});
+			}
+          );
 		}
 		
 
@@ -214,65 +215,89 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 			
 		},true);
 		
-	
 		this.tbody = Ext.DomHelper.append(this.gridTable,
 		{
 			tag: 'tbody'
 		}, true);
 		
 		this.gridCells = {};
+        var gridRow =  Ext.DomHelper.append(this.tbody,
+        {
+            tag: 'tr'
+        });
 		//for(var calendar_id in this.jsonData)
 		for(var i=0,max=this.jsonData.results.length;i<max;i++)
 		{
 			var calendar_id=this.jsonData.results[i].calendar_id;
-			var gridRow =  Ext.DomHelper.append(this.tbody,
-			{
-				tag: 'tr'
-			});
-			
-			
-			
-			var cell = Ext.DomHelper.append(gridRow, {
-				tag: 'td', 
-				cls: 'x-viewGrid-calendar-name-cell',				
-				style:'width:150px'
-			}, true);			
-			
-			var link = Ext.DomHelper.append(cell, {
-				tag: 'a', 
-				id: 'view_cal_'+calendar_id,
-				href:'#',
-				cls:'normal-link',
-				html:this.jsonData.results[i].calendar_name
-			}, true);
-			
-			link.on('click', function(e, target){			
-				e.preventDefault();
-				var calendar_id = target.id.substring(9);
+            
 
-				var calendar =this.getCalendar(calendar_id);
+            var cell = Ext.DomHelper.append(gridRow, {
+                tag: 'td', 
+                cls: 'x-viewGrid-calendar-name-cell',
+                rowspan: 3,
+                style:'width:150px'
+            }, true);	
+            
+            var link = Ext.DomHelper.append(cell, {
+                tag: 'a', 
+                id: 'view_cal_'+calendar_id,
+                href:'#',
+                cls:'normal-link',
+                html:this.jsonData.results[i].calendar_name
+            }, true);
 
-				this.fireEvent('zoom', {
-					group_id: calendar.group_id,
-					calendar_id: calendar_id,
-					calendar_name:target.innerHTML,
-					title:target.innerHTML
-				});
-			}, this);
-			
-			this.gridCells[calendar_id]={};
-			
-			for(var day=0;day<this.days;day++)
-			{	
-				var dt = this.startDate.add(Date.DAY, day)
-				
-				this.gridCells[calendar_id][dt.format('Ymd')]= Ext.DomHelper.append(gridRow,{
-					tag: 'td', 
-					id: 'cal'+calendar_id+'_day'+dt.format('Ymd'), 
-					cls: 'x-viewGrid-cell',
-					style:'width:'+columnWidth+'px'
-				}, true);
-			}			
+            link.on('click', function(e, target){			
+                e.preventDefault();
+                var calendar_id = target.id.substring(9);
+
+                var calendar =this.getCalendar(calendar_id);
+
+                this.fireEvent('zoom', {
+                    group_id: calendar.group_id,
+                    calendar_id: calendar_id,
+                    calendar_name:target.innerHTML,
+                    title:target.innerHTML
+                });
+            }, this);
+            //The keys of this array is jsons time_of_day value the value the language
+            var timeFormat = (GO.settings.time_format === 'g:i a') ? 'ga'  : GO.settings.time_format;
+            var timeOfDay = {
+              'morning': '&nbsp;', //GO.calendar.lang['morning'], 
+              'afternoon': Date.parseDate("12:00","H:i").format(timeFormat), //GO.calendar.lang['afternoon'], 
+              'evening': Date.parseDate("18:00","H:i").format(timeFormat) //GO.calendar.lang['evening']
+            };
+            this.gridCells[calendar_id]={};
+            
+            for(var time in timeOfDay) {
+
+              var borderStyle = 'border:0; border-bottom:1px dashed #ddd; border-right:1px solid #ddd;';
+              if(time === 'evening')
+                borderStyle='border-top:0;';
+
+              Ext.DomHelper.append(gridRow, {
+                tag: 'td', 
+                cls: 'x-viewGrid-calendar-name-cell',
+                style:'width:25px; color: #666; padding: 2px; '+borderStyle,
+                html: timeOfDay[time]
+              }, true);
+
+              for(var day=0;day<this.days;day++)
+              {	
+                  var dt = this.startDate.add(Date.DAY, day)
+
+                  this.gridCells[calendar_id][dt.format('Ymd')+time] = Ext.DomHelper.append(gridRow,{
+                      tag: 'td', 
+                      id: 'cal'+calendar_id+'_day'+dt.format('Ymd')+'_time'+time, 
+                      cls: 'x-viewGrid-cell x-viewGrid-cell-'+time,
+                      style:'width:'+columnWidth+'px; '+borderStyle
+                  }, true);
+
+              }	
+              gridRow =  Ext.DomHelper.append(this.tbody,
+              {
+                  tag: 'tr'
+              });
+            }
 		}
 		
 		
@@ -380,7 +405,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 			onNotifyDrop : function(dd, e, data) {
         		
 				//number of seconds moved
-	    		
+	    		console.log(data);
 				var dragTime = data.dragDate.format('U');
 				var dropTime = data.dropDate.format('U');
 	    		
@@ -596,8 +621,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 		//ceil required because of DST changes!
 		var daySpan = Math.round((eventEndTime-eventStartTime)/86400)+1;
 		
-		var domIds=[];
-
+		var domIds=[];;
 		for(var i=0;i<daySpan;i++)
 		{
 			var date = eventStartDay.add(Date.DAY, i);
@@ -617,7 +641,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 				this.domIds[eventData.id].push(domId);
 			}
 			
-			var col = this.gridCells[eventData['calendar_id']][date.format('Ymd')];
+			var col = this.gridCells[eventData['calendar_id']][date.format('Ymd')+eventData.time_of_day];
 			
 			if(col)
 			{
@@ -1041,16 +1065,19 @@ Ext.extend(GO.calendar.dd.ViewDragZone, Ext.dd.DragZone, {
 			var dateIndex = td.id.indexOf('_day')+4;
 			var calendar_id = td.id.substr(3,dateIndex-7);
 			var calendar = this.viewGrid.getCalendar(calendar_id);
+            
+            var event = this.viewGrid.remoteEvents[target.id];
 			
-			if(!this.viewGrid.remoteEvents[target.id]['private'] && calendar.write_permission)
+			if(!event['private'] && calendar.write_permission)
 			{
-				var dateStr = td.id.substr(dateIndex);
+				var dateStr = td.id.substr(dateIndex,8);
 				var dragDate = Date.parseDate(dateStr,'Ymd');
 		    
 	     
 				return {
 					ddel:this.ddel,
-					item:target,
+					item:target, //DOM node
+                    event:event, //Event properties
 					dragDate: dragDate
 				};
 			}
@@ -1083,7 +1110,7 @@ Ext.extend(GO.calendar.dd.ViewDropTarget, Ext.dd.DropTarget, {
 		}
 	 		
 	        
-		var dateStr = td.id.substr(dateIndex);
+		var dateStr = td.id.substr(dateIndex,8);
 		data.dropDate = Date.parseDate(dateStr,'Ymd');
 	    
 		data.calendar_id=td.id.substr(3,dateIndex-7);
@@ -1108,7 +1135,7 @@ Ext.extend(GO.calendar.dd.ViewDropTarget, Ext.dd.DropTarget, {
 	},
     
 	notifyOver : function(dd, e, data){
-		var tdOver = Ext.get(e.getTarget()).findParent('td.x-viewGrid-cell', 10, true);
+		var tdOver = Ext.get(e.getTarget()).findParent('td.x-viewGrid-cell-'+data.event.time_of_day, 10, true);
          
 		if(tdOver)
 		{
@@ -1116,7 +1143,7 @@ Ext.extend(GO.calendar.dd.ViewDropTarget, Ext.dd.DropTarget, {
 			var calendar_id = tdOver.id.substr(3,dateIndex-3);
 
 			var calendar = this.scope.getCalendar(calendar_id);
-
+                        
 			if(calendar && calendar.write_permission)
 			{
 				if(dd.lastTdOverId!=tdOver.id)
@@ -1126,7 +1153,7 @@ Ext.extend(GO.calendar.dd.ViewDropTarget, Ext.dd.DropTarget, {
 					{
 						if(currentTd)
 						{
-							var nextTd = currentTd.prev('td.x-viewGrid-cell');
+							var nextTd = currentTd.prev('td.x-viewGrid-cell-'+data.event.time_of_day);
 							currentTd = nextTd;
 						}
 						if(nextTd)
@@ -1155,7 +1182,7 @@ Ext.extend(GO.calendar.dd.ViewDropTarget, Ext.dd.DropTarget, {
 					{
 						if(currentTd)
 						{
-							var nextTd = currentTd.next('td.x-viewGrid-cell');
+							var nextTd = currentTd.next('td.x-viewGrid-cell-'+data.event.time_of_day);
 							currentTd = nextTd;
 						}
 		        		
