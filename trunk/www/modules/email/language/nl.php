@@ -43,7 +43,8 @@ $l['iCalendar_update_available']='Dit bericht bevat een update voor een bestaand
 $l['iCalendar_update_old']='Dit bericht bevat een afspraak die al is verwerkt.';
 $l['iCalendar_event_cancelled']='Dit bericht bevat een annulering voor een afspraak.';
 $l['iCalendar_event_invitation_declined']='Dit bericht bevat een door u geweigerde uitnodiging voor een afspraak.';
-$l['untilDateError']='Ik probeerde de volgende "Tot-Datum" te verwerken, maar de verwerking ervan is gestopt omdat er een fout optrad';$l["messages"]='Berichten';
+$l['untilDateError']='Ik probeerde de volgende "Tot-Datum" te verwerken, maar de verwerking ervan is gestopt omdat er een fout optrad';
+$l["messages"]='Berichten';
 $l["message"]='Bericht';
 $l["inbox"]='Postvak in';
 $l["accounts"]='Accounts';
