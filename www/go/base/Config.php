@@ -761,6 +761,17 @@ class GO_Base_Config {
 
 	var $nav_page_size=50;
 	
+	
+	/**
+	 * If you are behind a proxy you can set it here for all CURL operations Group-Office performs.
+	 * 
+	 * This curl function will be used:
+	 * curl_setopt($ch, CURLOPT_PROXY, "http://proxy.com:8080");
+	 * 
+	 * @var string 
+	 */
+	var $curl_proxy="";
+	
 //	/**
 //	 * Enable logging of slow requests
 //	 * 
