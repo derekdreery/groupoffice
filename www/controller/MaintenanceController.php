@@ -708,7 +708,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 						$first_equal = strpos($line,'=');
 						if($first_equal != 0)
 						{
-							$key = trim(substr($line, 0, $first_equal));
+							$key = str_replace('"','\'',trim(substr($line, 0, $first_equal)));
 							$contentArr[$key] = trim(substr($line, $first_equal, strlen($line)-1));
 						}
 					}
