@@ -576,16 +576,16 @@ class GO{
 	 */
 	public static function errorHandler($errno, $errstr, $errfile, $errline) {
 		
-		//log only errors that are in error_reporting
-		$error_reporting = ini_get('error_reporting');
-		if (!($error_reporting & $errno)) return;
-		
 		//prevent that the shutdown function will log this error again.
 		if(self::$_lastReportedError == $errno.$errfile.$errline)
 			return;
 		
 		self::$_lastReportedError = $errno.$errfile.$errline;
-
+		
+		//log only errors that are in error_reporting
+		$error_reporting = ini_get('error_reporting');
+		if (!($error_reporting & $errno)) return;
+		
 		$type="Unknown error";
 
 		switch ($errno) {
