@@ -434,29 +434,14 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 				
 
 		// Start of recurrence tab
-		this.repeatEvery = new Ext.form.ComboBox({					
-			name : 'repeat_every_text',
-			//hiddenName : 'repeat_every',
-			hiddenName : 'interval',
-			triggerAction : 'all',
-			editable : false,
-			selectOnFocus : true,
+		this.repeatEvery = new GO.form.NumberField({
+			decimals:0,
+			name : 'interval',
+			minValue:1,
 			width : 50,
-			forceSelection : true,
-			mode : 'local',
-			value : '1',
-			valueField : 'value',
-			displayField : 'text',
-
-			store : new Ext.data.SimpleStore({
-				fields : ['value', 'text'],
-				data : [['1', '1'], ['2', '2'], ['3', '3'],
-				['4', '4'], ['5', '5'], ['6', '6'],
-				['7', '7'], ['8', '8'], ['9', '9'],
-				['10', '10'], ['11', '11'],
-				['12', '12']]
-			})
+			value : '1'
 		});
+
 
 		this.repeatType = new Ext.form.ComboBox({
 			hiddenName : 'freq',

@@ -590,11 +590,20 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				$categories[$field->category->id]['name']=$field->category->name;
 				$categories[$field->category->id]['fields']=array();
 			}
-			if(!empty($customAttributes[$field->columnName()]) || $field->datatype == "GO_Customfields_Customfieldtype_Heading"){
-				$categories[$field->category->id]['fields'][]=array(
-						'name'=>$field->name,
-						'value'=>$customAttributes[$field->columnName()]
-				);				
+            if($field->datatype == "GO_Customfields_Customfieldtype_Heading")
+            {
+              $header = array('name'=>$field->name,'value'=>$customAttributes[$field->columnName()]);
+            }
+			if(!empty($customAttributes[$field->columnName()]) ){
+              if(!empty($header) )
+              {
+                $categories[$field->category->id]['fields'][] = $header;
+                $header = null;
+              }
+              $categories[$field->category->id]['fields'][]=array(
+                  'name'=>$field->name,
+                  'value'=>$customAttributes[$field->columnName()]
+              );				
 			}
 		}
 
@@ -1107,6 +1116,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$columns = $model->customfieldsRecord->getColumns();
 			foreach($columns as $name=>$attr){
 				if($name != 'model_id'
+								&& isset($attr['customfield'])
 								&& !in_array($name, $params['exclude'])
 								&& (empty($params['hide_unknown_gotypes']) || !empty($attr['gotype']))
 								&& !in_array($attr['customfield']->datatype,$params['exclude_cf_datatypes']))

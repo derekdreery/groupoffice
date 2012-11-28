@@ -28,7 +28,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		$this->checkRequiredParameters(array('shopuser','shoppass'), $params);
 		
-		$shopUrl = 'https://shop.group-office.com/groupoffice/';
+		$shopUrl = 'https://intermesh.group-office.com/';
 		
 		$packages = isset($params['packages']) ? explode(",", $params['packages']) : array('documents-4.0', 'billing-4.0', 'groupoffice-pro-4.0');
 		
@@ -37,7 +37,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			
 			echo "\nGetting latest ".$package_name."\n";
 		
-			$packageUrl = 'https://shop.group-office.com/groupoffice/?r=licenses/package/downloadPackageFile&package_name='.$package_name;
+			$packageUrl = $shopUrl.'?r=licenses/package/downloadPackageFile&package_name='.$package_name;
 			
 
 			$c = new GO_Base_Util_HttpClient();

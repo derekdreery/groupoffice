@@ -39,8 +39,8 @@ GO.addressbook.SelectCompanyDialog = function(config){
   });
 
 	this.addressbooksGrid = new GO.addressbook.AddresbooksGrid({
-		region:'west',
-		width:180
+		region:'north',
+		height:250
 	});
 
 	this.addressbooksGrid.getSelectionModel().on('rowselect', function(sm, rowIndex, r){
@@ -48,6 +48,26 @@ GO.addressbook.SelectCompanyDialog = function(config){
 		this.grid.store.baseParams.books='["'+record.get("id")+'"]';
 		this.grid.store.load();
 	}, this);
+	
+	
+	this.mailingsFilterPanel= new GO.addressbook.AddresslistsMultiSelectGrid({
+		id: 'ab-scom-mailingsfilter-panel'
+	});
+
+	this.mailingsFilterPanel.on('change', function(grid, addresslist_filter){	
+		this.grid.store.baseParams.addresslist_filter = Ext.encode(addresslist_filter);
+		this.grid.store.load();		
+	}, this);
+
+
+	var westPanel = new Ext.Panel({
+		layout:'border',
+		border:false,
+		region:'west',
+		width:180,
+		split:true,
+		items:[this.addressbooksGrid,this.mailingsFilterPanel]
+	});
 
 		
 	this.grid = this.companiesGrid = new GO.addressbook.CompaniesGrid({
@@ -102,11 +122,11 @@ GO.addressbook.SelectCompanyDialog = function(config){
     layout: 'border',
     focus: focusSearchField.createDelegate(this),
 		modal:false,
-		height:400,
-		width:750,
+		height:600,
+		width:800,
 		closeAction:'hide',
 		title: GO.addressbook.lang['strSelectCompany'],
-		items: [this.addressbooksGrid ,this.grid],
+		items: [westPanel,this.grid],
 		buttons: [
 			{
 				text: GO.lang['cmdOk'],

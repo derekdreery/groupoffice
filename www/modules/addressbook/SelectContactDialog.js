@@ -38,8 +38,8 @@ GO.addressbook.SelectContactDialog = function(config){
   });
 
 	this.addressbooksGrid = new GO.addressbook.AddresbooksGrid({
-		region:'west',
-		width:180,
+		region:'north',
+		height:250,
 		store:new GO.data.JsonStore({
 			url: GO.url('addressbook/addressbook/store'),
 			baseParams: {
@@ -53,20 +53,32 @@ GO.addressbook.SelectContactDialog = function(config){
 		})
 	});
 
-	/*this.addressbooksGrid.getSelectionModel().on('rowselect', function(sm, rowIndex, r){
-		var record = this.addressbooksGrid.getStore().getAt(rowIndex);
-		this.grid.store.baseParams.addressbook_id=record.get("id");
-		this.grid.store.load();
-	}, this);*/
-
 	this.addressbooksGrid.on('change', function(grid, abooks, records)
 	{
 		var books = Ext.encode(abooks);
 		this.grid.store.baseParams.books=books;
 		this.grid.store.load();
-		//delete this.grid.store.baseParams.books;
-
 	}, this);
+	
+	
+	this.mailingsFilterPanel= new GO.addressbook.AddresslistsMultiSelectGrid({
+		id: 'ab-sc-mailingsfilter-panel'
+	});
+
+	this.mailingsFilterPanel.on('change', function(grid, addresslist_filter){	
+		this.grid.store.baseParams.addresslist_filter = Ext.encode(addresslist_filter);
+		this.grid.store.load();		
+	}, this);
+
+
+	var westPanel = new Ext.Panel({
+		layout:'border',
+		border:false,
+		region:'west',
+		width:180,
+		split:true,
+		items:[this.addressbooksGrid,this.mailingsFilterPanel]
+	});
 
 
 	this.grid = this.contactsGrid = new GO.addressbook.ContactsGrid({
@@ -121,11 +133,11 @@ GO.addressbook.SelectContactDialog = function(config){
     layout: 'border',
 		modal:false,
 		focus: focusSearchField.createDelegate(this),
-		height:400,
-		width:750,
+		height:600,
+		width:800,
 		closeAction:'hide',
 		title: GO.addressbook.lang['strSelectContact'],
-		items: [this.addressbooksGrid, this.grid],
+		items: [westPanel, this.grid],
 		buttons: [
 			{
 				text: GO.lang['cmdOk'],

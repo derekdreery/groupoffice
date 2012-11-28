@@ -212,7 +212,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 
 	public function validate() {
 		
-		if($this->max_rows_list > 50)
+		if($this->max_rows_list > 250)
 				$this->setValidationError('max_rows_list', GO::t('maxRowslistTooHigh'));
 		
 		if($this->isModified('password') && isset($this->passwordConfirm) && $this->passwordConfirm!=$this->password){

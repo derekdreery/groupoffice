@@ -46,6 +46,34 @@ class GO_Base_Config {
 	var $enabled = true;
 
 	/**
+	 * Enable sending system emails with an email account from the email module
+	 * Needs to be the id of the wanted mail account
+	 * 
+	 * @var int 
+	 */
+	var $smtp_account_id = false;
+	
+	/**
+	 * Enable Smime for outgoing system emails.
+	 * Note: this only works when a mailaccount is used to send the system emails
+	 *			 (Please see: $smtp_account_id)
+	 * 
+	 * @var boolean 
+	 */
+	var $smtp_account_smime_sign = false;
+	
+	/**
+	 * The password that is needed to sign the Smime certificate for outgoing system emails
+	 * Note: this is only needed when a mailaccount is used to send the system emails
+	 *			 (Please see: $smtp_account_id)
+	 *			 and when $smtp_account_smime_sign is set to true
+	 *
+	 * @var string
+	 */
+	var $smtp_account_smime_password = "";
+	
+	
+	/**
 	 * The Group-Office server ID
 	 *
 	 * @var     string
@@ -491,6 +519,13 @@ class GO_Base_Config {
 	 */
 	var $file_storage_path = '/home/groupoffice/';
 	
+	/**
+	 * List of extensions that should not be edited with GOTA by default.
+	 * 
+	 * @var array 
+	 */
+	var $gota_blacklist_extensions=array('log','pdf','zip','tar','gz');
+	
 	
 	/**
 	 * Convert non ASCII characters to ASCII codes when uploaded to Group-Office.
@@ -734,6 +769,17 @@ class GO_Base_Config {
 
 	var $nav_page_size=50;
 	
+	
+	/**
+	 * If you are behind a proxy you can set it here for all CURL operations Group-Office performs.
+	 * 
+	 * This curl function will be used:
+	 * curl_setopt($ch, CURLOPT_PROXY, "http://proxy.com:8080");
+	 * 
+	 * @var string 
+	 */
+	var $curl_proxy="";
+	
 //	/**
 //	 * Enable logging of slow requests
 //	 * 
@@ -765,7 +811,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.0.131';
+	var $version = '4.0.133';
 
 
 	/* The permissions mode to use when creating files
@@ -795,7 +841,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20121120';
+	var $mtime = '20121128';
 
 	#group configuration
 	/**

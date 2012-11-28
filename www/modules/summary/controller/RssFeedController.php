@@ -71,23 +71,9 @@ class GO_Summary_Controller_RssFeed extends GO_Base_Controller_AbstractModelCont
 		if ($feed != '' && strpos($feed, 'http') === 0) {
 			header('Content-Type: text/xml');
 
-			if (function_exists('curl_init')) {
-				$ch = curl_init();
-
-				curl_setopt($ch, CURLOPT_URL, $feed);
-				curl_setopt($ch, CURLOPT_HEADER, 0);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-				//for self-signed certificates
-				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-				curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-
-				//suppress warning:
-				//PHP Warning: curl_setopt() [<a href='function.curl-setopt'>function.curl-setopt</a>]:
-				//CURLOPT_FOLLOWLOCATION cannot be activated when in safe_mode or an open_basedir is set in feed_proxy.php on line 29
-				@curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
-
-				$xml = curl_exec($ch);
+			if (function_exists('curl_init')) {				
+				$httpclient = new GO_Base_Util_HttpClient();
+				$xml = $httpclient->request($feed);
 			} else {
 				if (!GO_Base_Fs_File::checkPathInput($feed))
 					throw new Exception("Invalid request");

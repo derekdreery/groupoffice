@@ -48,10 +48,8 @@ $l["overDue"]='Überfällig';
 $l["futureTasks"]='Zukünftige Aufgaben';
 $l["all"]='Alle';
 $l["active"]='Aktiv';
-
 $l['name']='Aufgaben';
 $l['description']='Modul zum Verwalten von Aufgaben';
-$lang['link_type'][12]=$l['task']='Aufgabe';
 $l['status']='Status';
 $l['scheduled_call']='Geplanter Anruf um %s';
 $l['statuses']['NEEDS-ACTION']='Aktion erforderlich';
@@ -69,7 +67,6 @@ $l['tasklistChanged']="* Aufgabenliste geändert von '%s' zu '%s'";
 $l['statusChanged']="* Status geändert von '%s' zu '%s'";
 $l['multipleSelected']='Mehrere Aufgabenlisten gewählt';
 $l['incomplete_delete']='Keine Berechtigung um alle gewählten Aufgaben zu löschen.';
-
 $l["globalsettings_templatelabel"]='Aufgabenvorlage';
 $l["globalsettings_allchangelabel"]='Vorhandene ändern?';
 $l["globalsettings_renameall"]= 'Alle umbennen?';
@@ -80,3 +77,4 @@ $l["taskStatus"]='Status';
 $l["taskCompletion_time"]='Beendet am';
 $l["taskProject_name"]='Projekt';
 $l['taskPercentage_complete']='Fortschritt';
+$l['task']='Aufgabe';

@@ -64,6 +64,9 @@ GO.form.NumberField = Ext.extend(Ext.form.TextField, {
 //		console.log(this.getValue());
 		if(this.getValue()!=""){
 			var number = GO.util.unlocalizeNumber(this.getValue());
+			if(!number && this.minValue!=Number.NEGATIVE_INFINITY){
+				number = this.minValue;
+			}
 			this.setValue(GO.util.numberFormat(number, this.decimals));
 		}
 	},
