@@ -1,3 +1,5 @@
+- Added $config['curl_proxy'] config option
+
 28-11-2012 4.0.133
 - Customfield-headers will not be shown if they are not followed by none empty customfields
 - Added a SystemMessage object for creating emails that need to be sent from the GO system
