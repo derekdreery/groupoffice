@@ -206,3 +206,6 @@ $l['notifyCancelOrganizer']='Wilt u de organisator op de hoogte brengen over dat
 $l['notifyParticipants']='Deelnemers op de hoogte stellen?';
 $l['sendNotificationTitle']='Bericht versturen?';
 $l['sendNotification']='Wilt u de deelnemers per e-mail op de hoogte brengen?';
+
+$l['months']= 'maanden';
+$l['appointment']= 'Afspraak';

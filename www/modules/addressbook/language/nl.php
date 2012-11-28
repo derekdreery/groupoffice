@@ -4,13 +4,13 @@
 $l['name'] = 'Adresboek';
 $l['description'] = 'Module om alle contacten te beheren.';
 $l['allAddressbooks'] = 'Alle Adresboeken';
-$lang['common']['addressbookAlreadyExists'] = 'Het adresboek wat je probeert te maken bestaat al';
+$l['addressbookAlreadyExists'] = 'Het adresboek wat je probeert te maken bestaat al';
 $l['notIncluded'] = 'Niet importeren';
 $l['comment'] = 'Opmerking';
 $l['bankNo'] = 'Bankrekeningnummer'; ;
 $l['vatNo'] = 'BTW-nummer';
 $l['contactsGroup'] = 'Groep';
-$lang['link_type'][2]=$lang['link_type'][3]=$l['customers'] = 'Klanten';
+$l['customers'] = 'Klanten';
 $l['suppliers'] = 'Leveranciers';
 $l['prospects'] = 'Potentiële klanten';
 $l['newContactAdded']='Nieuw contactpersoon toegevoegd';
@@ -317,3 +317,6 @@ $l['contactCustomFields']='Extra velden van contactpersonen';
 $l['companyCustomFields']='Extra velden van bedrijven';
 $l['templateContent']='Document';
 $l['contactUuid']='UUID';
+
+$l['companyCtime']= "Datum gemaakt";
+$l['companyMtime']= "Datum gewijzigd";

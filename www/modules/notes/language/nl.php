@@ -2,7 +2,7 @@
 
 
 //require_once($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('notes'));
-$lang['link_type'][4]=$l['name']='Notities';
+$l['name']='Notities';
 $l['description']='Een module om notities te maken in verschillende notitieblokken.';
 $l['general'] = 'General';
 $l['incomplete_delete']='U heeft niet voldoende rechten om alle geselecteerde notities te verwijderen';
