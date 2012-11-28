@@ -297,7 +297,6 @@ $l["permissionsLevel"]='Level';
 $l["permissionRead"]='Nur Lesen';
 $l["permissionWrite"]='Schreiben';
 $l["permissionDelete"]='Schreiben und löschen';
-$l["permissionManage"]='Verwalten';
 $l["spellcheck"]= 'Rechtschreibprüfung';
 $l["spellcheckdetails"]= 'Rechtschreibung prüfen';
 $l["spellcheckNoError"]= 'Keine Fehler gefunden';

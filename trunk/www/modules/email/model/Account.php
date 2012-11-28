@@ -51,6 +51,9 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	 * @var boolean 
 	 */
 	public $checkImapConnectionOnSave=true;
+	
+	
+	private $_imap;
 
 	/**
 	 * Set to false if you want to keep the password in the session only.
@@ -75,7 +78,6 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	private $_session_password='';
 	private $_session_smtp_password='';
 	
-	private $_imap;
 
 	/**
 	 * Returns a static model of itself

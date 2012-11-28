@@ -49,11 +49,6 @@
 		return true;
 	}
 	
-	protected function init() {
-		$this->columns['name']['unique']=true;
-		return parent::init();
-	}
-	
 	public function relations(){
 		return array(
 				'contacts' => array('type'=>self::HAS_MANY, 'model'=>'GO_Addressbook_Model_Contact', 'field'=>'addressbook_id', 'delete'=>true),

@@ -73,8 +73,7 @@ GO.addressbook.ContactsGrid = function(config){
 		{
 			header: GO.lang['strEmail'],
 			dataIndex: 'email',
-			width: 150,
-			hidden:true
+			width: 150
 		},
 		{
 			header: GO.lang['strEmail'] + ' 2',
@@ -184,7 +183,8 @@ GO.addressbook.ContactsGrid = function(config){
 	config.store = new GO.data.JsonStore({
 		url: GO.url('addressbook/contact/store'),
 		baseParams: {
-			filters:1
+			filters:1,
+			addresslist_filters:1
 		},
 		root: 'results',
 		id: 'id',

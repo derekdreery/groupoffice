@@ -214,8 +214,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		
 		if(GO::modules()->addressbook){
 			$findParams = GO_Base_Db_FindParams::newInstance()
-							->debugSql()
-							->searchQuery($query)
+							->searchQuery($query,array("CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)",'t.email','t.email2','t.email3'))
 							->select('t.*, addressbook.name AS ab_name')
 							->limit(10);
 			

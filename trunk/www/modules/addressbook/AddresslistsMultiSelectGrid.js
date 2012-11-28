@@ -2,7 +2,6 @@ GO.addressbook.AddresslistsMultiSelectGrid = function(config) {
 	var config = config || {};
 	
 	config.region = 'center';
-	config.id = 'ab-mailingsfilter-panel';
 	config.title = GO.addressbook.lang.filterMailings;
 	config.loadMask = true;
 	config.store = GO.addressbook.readableAddresslistsStore;

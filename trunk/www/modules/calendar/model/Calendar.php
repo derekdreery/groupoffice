@@ -54,11 +54,6 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 		return parent::model($className);
 	}
 	
-	protected function init() {
-		$this->columns['name']['unique']=true;
-		return parent::init();
-	}
-	
 	public function aclField() {
 		return 'acl_id';
 	}

@@ -3,6 +3,13 @@
 class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractModelController {
 
 	protected $model = 'GO_Addressbook_Model_SentMailing';
+	
+	/**
+	 * Disable email sending
+	 * 
+	 * @var boolean 
+	 */
+	protected $dry=false;
 
 	protected function allowGuests() {
 		return array("batchsend","unsubscribe");
@@ -151,6 +158,8 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 
 		foreach ($mailing->contacts as $contact) {			
 			
+			$errors=1;
+			
 			$unsubscribeHref=GO::url('addressbook/sentMailing/unsubscribe', 
 							array(
 									'addresslist_id'=>$mailing->addresslist_id, 
@@ -165,15 +174,31 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			), true);
 			
 			try{
-				$message->setTo($contact->firstEmail, $contact->name);
-				$message->setBody(GO_Addressbook_Model_Template::model()->replaceContactTags($body, $contact));
-				$this->_sendmail($message, $contact, $mailer, $mailing);			
+				if(!$contact->email_allowed){
+					echo "Skipping contact ".$contact->firstEmail." because newsletter sending is disabled in the addresslists tab.\n\n";
+				}elseif(empty($contact->firstEmail)){
+					echo "Skipping contact ".$contact->name." no e-mail address was set.\n\n";					
+				}else
+				{		
+					$message->setTo($contact->firstEmail, $contact->name);
+					$message->setBody(GO_Addressbook_Model_Template::model()->replaceContactTags($body, $contact));
+					$this->_sendmail($message, $contact, $mailer, $mailing);
+					$errors=0;
+					
+				}
 			}catch(Exception $e){
 				echo "Error for ".$contact->firstEmail.": ".$e->getMessage()."\n";
+			}
+			
+			if($errors){
+				$mailing->errors++;
+				$mailing->save();
 			}
 		}
 
 		foreach ($mailing->companies as $company) {
+			
+			$errors=1;
 			
 			$unsubscribeHref=GO::url('addressbook/sentMailing/unsubscribe', 
 							array(
@@ -189,11 +214,25 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			), true);
 			
 			try{
-				$message->setTo($company->email, $company->name);
-				$message->setBody(GO_Addressbook_Model_Template::model()->replaceModelTags($body, $company));
-				$this->_sendmail($message, $company, $mailer, $mailing);			
+				if(!$company->email_allowed){
+					echo "Skipping company ".$company->email." because newsletter sending is disabled in the addresslists tab.\n\n";
+				}elseif(empty($company->email)){
+					echo "Skipping company ".$company->name." no e-mail address was set.\n\n";
+				}else
+				{		
+					$message->setTo($company->email, $company->name);
+					$message->setBody(GO_Addressbook_Model_Template::model()->replaceModelTags($body, $company));
+					$this->_sendmail($message, $company, $mailer, $mailing);	
+					$errors=0;
+				}
+					
 			}catch(Exception $e){
 				echo "Error for ".$company->email.": ".$e->getMessage()."\n";
+			}
+			
+			if($errors){
+				$mailing->errors++;
+				$mailing->save();
 			}
 		}
 
@@ -239,6 +278,8 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			$this->render('unsubscribe',$params);
 		}
 	}
+	
+	private $smtpFailCount=0;
 
 	private function _sendmail($message, $model, $mailer, $mailing) {
 		
@@ -250,40 +291,46 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		{
 			$email = $model->email;
 		}
+		
+		echo "Sending to " . $typestring . " id: " . $model->id . " email: " . $email . "\n";
 
-		if(!$model->email_allowed){
-			echo "Skipping $typestring ".$email." because newsletter sending is disabled in the addresslists tab.\n\n";
-			$mailing->errors++;
-		}elseif(empty($email)){
-			echo "Skipping $typestring ".$model->name." no e-mail address was set.\n\n";
-			$mailing->errors++;
-		}else
-		{		
-			echo "Sending to " . $typestring . " id: " . $model->id . " email: " . $email . "\n";
+		$mailing = GO_Addressbook_Model_SentMailing::model()->findByPk($mailing->id, array(), true, true);
+		if($mailing->status==GO_Addressbook_Model_SentMailing::STATUS_PAUSED)
+		{
+			echo "Mailing paused by user. Exiting.";
+			exit();
+		}
 
-			$mailing = GO_Addressbook_Model_SentMailing::model()->findByPk($mailing->id, array(), true, true);
-			if($mailing->status==GO_Addressbook_Model_SentMailing::STATUS_PAUSED)
-			{
-				echo "Mailing paused. Exiting.";
-				exit();
-			}
-
-			try {
+		try {
+			if($this->dry){
+				echo "Not sending because dry is true\n";
+			}else{
 				$mailer->send($message);
-			} catch (Exception $e) {
-				$status = $e->getMessage();
 			}
-			if (!empty($status)) {
-				echo "---------\n";
-				echo "Failed!\n";
-				echo $status . "\n";
-				echo "---------\n";
-
-				$mailing->errors++;
-				unset($status);
-			} else {
-				$mailing->sent++;
+		} catch (Exception $e) {
+			$status = $e->getMessage();
+		}
+		if (!empty($status)) {
+			echo "---------\n";
+			echo "Failed!\n";
+			echo $status . "\n";
+			echo "---------\n";
+			
+			$mailing->errors++;		
+			
+			$this->smtpFailCount++;
+			
+			if($this->smtpFailCount==3){
+				echo "Pausing mailing because there were 3 send errors in a row\n";
+				$mailing->status=GO_Addressbook_Model_SentMailing::STATUS_PAUSED;
+				$mailing->save();
+				exit();				
 			}
+			
+			unset($status);
+		} else {
+			$mailing->sent++;
+			$this->smtpFailCount=0;
 		}
 		
 		$mailing->save();
@@ -294,10 +341,6 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			$mailing->removeManyMany('companies', $model->id);			
 		}
 		
-//		$mailing->setAttributes(array(
-//				"sent" => $sent + $mailing->sent,
-//				"errors" => $error + $mailing->errors
-//		));
 		
 	}
 	
