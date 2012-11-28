@@ -177,9 +177,9 @@ $l['eventAccepted']='U heeft de afspraak geaccepteerd';
 $l['eventScheduledIn']='De afsrpaak is opgeslagen in uw agenda %s met status %s.';
 $l['eventDeclined']="U heeft de afspraak afgewezen";
 $l['eventUpdatedIn']='De afspraak in uw agenda %s is bijgewerkt met status %s';
-$l['updateReponses'][1]='%s heeft de afspraak %s geaccepteerd';
-$l['updateReponses'][2]='%s heeft de afspraak %s geweigerd';
-$l['updateReponses'][3]='%s weet nog niet of hij/zij afspraak %s accepteerd';
+$l['updateReponses']["ACCEPTED"]='%s heeft de afspraak %s geaccepteerd';
+$l['updateReponses']["DECLINED"]='%s heeft de afspraak %s geweigerd';
+$l['updateReponses']["TENTATIVE"]='%s weet nog niet of hij/zij afspraak %s accepteerd';
 $l['directUrl']='Directe URL';
 $l['cantRemoveOrganizer']="U kunt de organisator niet verwijderen";
 $l['calendarColor']='Agendakleur';
@@ -187,3 +187,22 @@ $l["sendEmailParticipants"]= 'Email opstellen voor deelnemers';
 
 $l['errorOrganizerOnly'] = 'Alleen de organisator mag deze afspraak bewerken.';
 $l['errorOrganizerOnlyTitle'] = 'U bent niet de organisator';
+
+$l['eventDeleted']="De afspraak is verwijderd uit uw agenda";
+
+$l['attendance']='Deelname';
+$l['organizer']='Organisator';
+$l['notifyOrganizer']="Breng de organisator op de hoogte over mijn beslissing";
+
+$l['iWillAttend']="Ik ben aanwezig";
+$l['iMightAttend']="Misschien ben ik aanwezig";
+$l['iWillNotAttend']="Ik ben niet aanwezig";
+$l['iWillDecideLater']="Ik moet nog beslissen";
+
+$l['eventUpdated']="De volgende afspraak is door de organisator bijgewerkt";
+
+$l['notifyCancelParticipants']='Wilt u de deelnemers per e-mail op de hoogte brengen van de annulering?';
+$l['notifyCancelOrganizer']='Wilt u de organisator op de hoogte brengen over dat u niet aanwezig zult zijn?';
+$l['notifyParticipants']='Deelnemers op de hoogte stellen?';
+$l['sendNotificationTitle']='Bericht versturen?';
+$l['sendNotification']='Wilt u de deelnemers per e-mail op de hoogte brengen?';

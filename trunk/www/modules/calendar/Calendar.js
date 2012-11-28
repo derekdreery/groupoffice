@@ -1178,7 +1178,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 							GO.calendar.lang.notifyCancelOrganizer
 						
 						Ext.Msg.show({
-							title:'Send notification?',
+							title:GO.calendar.lang.sendNotificationTitle,
 							msg: msg,
 							buttons: Ext.Msg.YESNO,
 							fn: function(buttonId, text, config){
