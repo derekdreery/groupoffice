@@ -68,13 +68,17 @@ GO.email.PortletPanel = Ext.extend(Ext.Panel, {
 				this.tabPanel.add(new Ext.Panel({
 					title:GO.email.lang.noEmailFolders
 				}));
+				
+				this.messagesGrid.store.removeAll();
 			}
 			else
 			{
+				
 				for(var i=0; i<this.folderStore.data.length; i++)
 				{
-					var folder = this.folderStore.data.items[i].data;
 					
+					var folder = this.folderStore.data.items[i].data;
+//					console.log(folder);
 					var panel = new Ext.Panel({
 						id:'account_'+folder.account_id+':'+folder.name,
 						account_id:folder.account_id,
@@ -85,21 +89,21 @@ GO.email.PortletPanel = Ext.extend(Ext.Panel, {
 						closable:true
 					});
 					
-					panel.on('show', function(e)
+					panel.on('show', function(p)
 					{
-						this.loadMessagepanel(e);
+						this.loadMessagepanel(p);
 					},this);
 
-					panel.on('close', function(e)
+					panel.on('close', function(p)
 					{
-						var record = this.folderStore.getAt(e.index);
+						var record = this.folderStore.getAt(p.index);
 						this.folderStore.remove(record);
 						
 						GO.request({
 							url : 'email/portlet/disablePortletFolder',
 							params : {
-								account_id : e.account_id,
-								mailbox : e.mailbox
+								account_id : p.account_id,
+								mailbox : p.mailbox
 							},
 							fail:function(){
 								this.folderStore.reload();
@@ -116,6 +120,7 @@ GO.email.PortletPanel = Ext.extend(Ext.Panel, {
 				}				
 			}
 
+			
 			this.tabPanel.setActiveTab(0);
 			this.tabPanel.doLayout();
 			
