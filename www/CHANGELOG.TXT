@@ -1,15 +1,19 @@
-4.0.134
+28-11-2012 4.0.133
 - Customfield-headers will not be shown if they are not followed by none empty customfields
 - Added a SystemMessage object for creating emails that need to be sent from the GO system
 - Let the ticket module make use of the new SystemMessage object for sending the ticket emails
-
-26-11-2012 4.0.133
 - Better error handling for newsletters and include addresslist filter in select dialogs
 - Updated German translation
 - Repeat every x number of days/weeks/months is now a number input field instead of a combobox
 - Week was missing from reminder selection in event dialog
 - Added "Created by" column to tasks grid
 - Format boolean columns as Yes and No
+- Global categories are only accessible for calendar admins
+- Command line download from shop update tool was broken
+- Name doesn't have to be unique of addressbook, tasklist and calendar
+- Added $config['gota_blacklist_extensions'] option to prevent GOTA to be used on certain file extensions
+- Updated TCPDF
+- Clear messages grid on portlet when last folder was removed
 
 23-11-2012 4.0.132
 - Added a check to show the "Show mine only" checkbox in the ticket grid. From now it will only be showed when you have manage persmissions on one of the ticket types
