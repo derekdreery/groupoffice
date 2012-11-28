@@ -1,5 +1,6 @@
 - Added $config['curl_proxy'] config option
 - Fixed bug with the check if a user is a manager for a ticket type
+- Now the search for known email addresses in the email composer will only search for the contact name, email, email2, email3
 
 28-11-2012 4.0.133
 - Customfield-headers will not be shown if they are not followed by none empty customfields
