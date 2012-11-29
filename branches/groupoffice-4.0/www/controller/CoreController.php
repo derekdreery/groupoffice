@@ -352,10 +352,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		$file = new GO_Base_Fs_File(GO::config()->file_storage_path . $params['src']);
 		
 		if (is_dir(GO::config()->file_storage_path . $params['src'])) {
-			
-			$foldericon = isset($params['foldericon']) ? $params['foldericon'] : 'folder.png';
-			
-			$src = $dir . $foldericon;
+			$src = $dir . 'folder.png';
 		} else {
 
 			switch ($file->extension()) {
@@ -915,11 +912,13 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 					$subject = GO::t('reminder').': '.$reminderModel->name;
 
 					$time = !empty($reminderModel->vtime) ? $reminderModel->vtime : $reminderModel->time;
-					$dateFormat = GO_Base_Util_Date::get_dateformat($userModel->date_format, $userModel->date_separator);
-					$timeFormat = $userModel->time_format;
+			
+					date_default_timezone_set($userModel->timezone);
 					
-					$body = GO::t('time').': '.date($dateFormat.' '.$timeFormat,$time)."\n";
+					$body = GO::t('time').': '.date($userModel->completeDateFormat.' '.$userModel->time_format,$time)."\n";
 					$body .= GO::t('name').': '.str_replace('<br />',',',$reminderModel->name)."\n";
+			
+//					date_default_timezone_set(GO::user()->timezone);
 					
 					$message = GO_Base_Mail_Message::newInstance($subject, $body);
 					$message->addFrom(GO::config()->webmaster_email,GO::config()->title);
@@ -934,6 +933,8 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 					$reminderUserModelSend->mail_sent = 1;
 					$reminderUserModelSend->save();
 				}
+				
+				date_default_timezone_set(GO::user()->timezone);
 			}
 		}
 	}
