@@ -46,7 +46,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 	{
 		$parameters = array();
 		
-		$parameters['interval'] = intval($json['interval']);
+		$parameters['interval'] = GO_Base_Util_Number::unlocalize($json['interval']);
 		$parameters['freq'] = strtoupper($json['freq']);
 		if($parameters['freq']=='MONTHLY_DATE')
 			$parameters['freq']='MONTHLY';
