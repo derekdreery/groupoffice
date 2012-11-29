@@ -1202,11 +1202,10 @@ class GO_Base_Config {
 	 * The first location is more secure because the sensitive information is kept
 	 * outside the document root.
 	 *
-	 * @access public
 	 * @return string Path to configuration file
 	 */
 
-	function get_config_file() {
+	public function get_config_file() {
 		if(defined('GO_CONFIG_FILE'))
 			return GO_CONFIG_FILE;
 
@@ -1291,10 +1290,8 @@ class GO_Base_Config {
 	 *
 	 * This function checks wether or not Group-Office runs on a
 	 * default http or https port and stores the full url in a variable
-	 *
-	 * @access public
 	 */
-	function set_full_url() {
+	public function set_full_url() {
 		//full_url may be configured permanent in config.php. If not then
 		//autodetect it and put it in the session. It can be used by wordpress for
 		//example.
@@ -1328,12 +1325,13 @@ class GO_Base_Config {
 	 * Gets a custom saved setting from the database
 	 *
 	 * @param  string $name Configuration key name
-	 * @access public
-	 * @return string Configuration key value
+     * @param integer $user_id Id of the user you want to get a setting from
+     * defaults to 0 for the default setting,
+	 * @return mixed Configuration value
 	 */
-	function get_setting($name, $user_id=0) {
+	public function get_setting($name, $user_id=0) {
 		$attributes['name']=$name;
-		$attributes['user_id']=$user_id;
+          $attributes['user_id']=$user_id;
 
 		$setting = GO_Base_Model_Setting::model()->findSingleByAttributes($attributes);
 		if ($setting) {
@@ -1341,18 +1339,30 @@ class GO_Base_Config {
 		}
 		return false;
 	}
-
-
+    
+    /**
+     * Get all settings with the same key for the settings table
+     * @param string $name the key of the setting
+     * @return array all settings in user_id value pairs
+     *
+    public function get_settings($name) {
+      $params = GO_Base_Db_FindParams::newInstance()->select('*');
+      $params->getCriteria()->addCondition('name',$name);
+      return GO_Base_Model_Setting::model()->find($params)->fetchAll();
+    }
+     * 
+     */
 
 	/**
 	 * Saves a custom setting to the database
 	 *
 	 * @param 	string $name Configuration key name
 	 * @param 	string $value Configuration key value
-	 * @access public
+	 * @param integer $user_id Id of user you want to load the setting for
+     * defaults to 0 for the default setting (not user specific)
 	 * @return bool Returns true on succes
 	 */
-	function save_setting( $name, $value, $user_id=0) {
+	public function save_setting( $name, $value, $user_id=0) {
 
 		$attributes['name']=$name;
 		$attributes['user_id']=$user_id;
@@ -1365,25 +1375,22 @@ class GO_Base_Config {
 
 		$setting->value=$value;
 		return $setting->save();
-
-
-//		if ( $this->get_setting($name, $user_id) === false ) {
-//			return $this->db->query("INSERT INTO go_settings (name, value, user_id) VALUES ('".$this->db->escape($name)."', '".$this->db->escape($value)."', ".intval($user_id).")");
-//		} else {
-//			return $this->db->query("UPDATE go_settings SET value='".$this->db->escape($value)."' WHERE name='".$this->db->escape($name)."' AND user_id='".$this->db->escape($user_id)."'");
-//		}
 	}
 
 	/**
 	 * Deletes a custom setting from the database
 	 *
 	 * @param 	string $name Configuration key name
+     * @params integer $user_id The is of the user you want to delete a setting from
+     * defaults to 0 for the default setting, 
+     * if set to false settings for every user inclusing default will be deleted
 	 * @access public
 	 * @return bool Returns true on succes
 	 */
 	function delete_setting( $name , $user_id=0) {
 		$attributes['name']=$name;
-		$attributes['user_id']=$user_id;
+        if($user_id!==false)
+          $attributes['user_id']=$user_id;
 
 		$setting = GO_Base_Model_Setting::model()->findSingleByAttributes($attributes);
 		return $setting ? $setting->delete() : true;
