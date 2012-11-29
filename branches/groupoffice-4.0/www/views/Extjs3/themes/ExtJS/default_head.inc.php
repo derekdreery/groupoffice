@@ -14,4 +14,6 @@ $GLOBALS['GO_THEME']->load_module_stylesheets();
 $GLOBALS['GO_THEME']->get_cached_css();
 
 $GLOBALS['GO_EVENTS']->fire_event('head');
+
+$this->fireEvent('head');
 ?>
