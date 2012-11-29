@@ -499,6 +499,20 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	}
 	
 	/**
+	 * Add an uploaded file
+	 * 
+	 * @param array $filesArrayItem Item from the $_FILES array
+	 * @return boolean
+	 */
+	public function addUploadedFile($filesArrayItem){
+		
+		$fsFile = new GO_Base_Fs_File($filesArrayItem['tmp_name']);
+		$fsFile->move($this->fsFolder, $filesArrayItem['name'], true, true);
+		
+		return $this->addFile($fsFile->name());
+	}
+	
+	/**
 	 * Add a subfolder.
 	 * 
 	 * @param String $name
@@ -801,8 +815,18 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		return true;
 	}
 	
-	protected function getThumbURL() {
-		return GO::url('core/thumb', 'src=' . urlencode($this->path) . '&lw=100&ph=100&zc=1&filemtime=' . $this->fsFolder->mtime());
+	protected function getThumbURL() {			
+		
+		$params = array(
+				'src'=>$this->path,
+				'foldericon'=> $this->acl_id ? 'folder_public.png' : 'folder.png',
+				'lw'=>100,
+				'ph'=>100,
+				'zc'=>1,
+				'filemtime'=>$this->fsFolder->mtime()
+				);
+		
+		return GO::url('core/thumb', $params);
 	}
 	
 	/**
