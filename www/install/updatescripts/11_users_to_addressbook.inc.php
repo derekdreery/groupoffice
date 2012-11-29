@@ -1,8 +1,11 @@
 <?php
 
 if(GO::modules()->addressbook){
-	
-	GO::getDbConnection()->query("ALTER TABLE `fs_folders` DROP `path`");
+	try{
+      GO::getDbConnection()->query("ALTER TABLE `fs_folders` DROP `path`");
+    } catch(PDOException $e) {
+      //NOP: if column doesn't exists we don't want to hold
+    }
 }
 
 if(GO::modules()->addressbook){

@@ -29,6 +29,7 @@ class GO_Base_Component_MultiSelectGrid {
 	 * 
 	 * @param string $requestParamName The name of the request parameter. It's the id of the MultiSelectGrid in the ExtJS view.
 	 * @param string $modelName Name of the model that the selected ID's belong to.
+     * @param GO_Base_Data_AbstractStore $store the store that should be filtered
 	 * @param array $requestParams The request parameters
 	 * @param boolean $checkPermission  Enable permission checking on this model. This makes sure that only 
 	 * readbable addressbooks are used with contacts for example.
@@ -84,6 +85,11 @@ class GO_Base_Component_MultiSelectGrid {
 	private function _setSelectedIds(array $requestParams) {
 		if (isset($requestParams[$this->_requestParamName])) {
 			$this->selectedIds = json_decode($requestParams[$this->_requestParamName], true);
+            
+            //this will validate the selection
+			if($this->_checkPermissions) //will check if models to filter for aren't deleted as well
+				$this->_validateSelection();
+            
 			$this->_save();
 		} else {
 			$this->selectedIds = GO::config()->get_setting('ms_' . $this->_requestParamName, GO::session()->values['user_id']);
@@ -94,8 +100,8 @@ class GO_Base_Component_MultiSelectGrid {
 			if($this->_checkPermissions)
 				$this->_validateSelection();
 		}
-		
-		
+        
+        
 		//add all the allowed models if it's empty. It's faster to find all allowed 
 		//addressbooks then too join the acl table.
 		//That's why this component add's ignoreAcl() to the findParams automatically 
@@ -108,7 +114,6 @@ class GO_Base_Component_MultiSelectGrid {
 				$this->selectedIds[]=$model->pk;
 			}
 		}
-		//GO::debug($this->selectedIds);
 	}
 	
 	/**
@@ -173,8 +178,8 @@ class GO_Base_Component_MultiSelectGrid {
 				catch(Exception $e){
 					//might happen when a user no longer has access to a selected model
 				}
-			}		
-			
+			}
+	
 		}
 		return $this->_models;
 	}

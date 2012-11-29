@@ -218,6 +218,9 @@ Ext.extend(GO.bookmarks.BookmarkContextMenu, Ext.menu.Menu,{
 
 	setRecord : function (record){
 		this.record = record;
+		
+		this.editButton.setDisabled(record.data.permissionLevel<GO.permissionLevels.write);
+		this.deleteButton.setDisabled(record.data.permissionLevel<GO.permissionLevels.writeAndDelete);
 	}
 	
 			
