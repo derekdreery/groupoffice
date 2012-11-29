@@ -555,7 +555,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$multipliers[] = 60;
 
 		$response['data']['reminder_multiplier'] = 60;
-		$response['data']['reminder_value'] = 0;
+		$response['data']['reminder_value'] = "";
 		
 		if (!empty($response['data']['reminder'])) {
 			for ($i = 0; $i < count($multipliers); $i++) {
