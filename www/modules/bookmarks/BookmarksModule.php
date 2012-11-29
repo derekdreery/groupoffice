@@ -9,7 +9,7 @@ class GO_Bookmarks_BookmarksModule extends GO_Base_Module{
 		$c->addListener('head', "GO_Bookmarks_BookmarksModule", "head");
 	}
 	
-	public function head(){
+	public static function head(){
 		echo '<style>';
 
 		$findParams = GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('behave_as_module', 1));
