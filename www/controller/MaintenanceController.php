@@ -21,10 +21,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	}
 		
 	protected function actionDownloadFromShop($params){
-		
 		$this->requireCli();
 		
-		$proPackageName = 'groupoffice-pro-4.0';
+		$proPackageName = 'groupoffice-pro';
 		
 		$this->checkRequiredParameters(array('shopuser','shoppass'), $params);
 		
@@ -60,6 +59,10 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			
 			$downloads[]=$file;
 			
+			
+			if(!empty($params['replacefolder']))
+				$params['unpack']=1;
+			
 			//echo "Filename: ".$c->getLastDownloadedFilename()."\n";
 
 			echo "File saved in ".$file->path()."\n";
@@ -71,7 +74,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 
 		}
 		
-		if(!empty($params['unpack']) && in_array($proPackageName, $packages) && count($packages)>1){
+		
+		
+		if(!empty($params['unpack'])){
 			foreach($downloads as $download){
 				if(strpos($download->name(), $proPackageName)!==false){
 					$proDownload=$download;
@@ -79,7 +84,17 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 				}
 			}
 			
+			if(empty($proDownload)){
+				exit("Error: Can't unpack. Group-Office Professional was not part of the downloads\n");
+			}
+			
 			echo "Moving modules into pro package\n";
+			
+			$downloadFolder = str_replace('.tar.gz','', $proDownload->name());
+			
+			$newFolder = new GO_Base_Fs_Folder(getcwd().'/'.$downloadFolder);
+			if(!$newFolder->exists())
+				exit("Download folder ".$newFolder->path()." does not exist.\n");
 			
 			foreach($downloads as $download){
 				if(strpos($download->name(), $proPackageName)===false){
@@ -87,13 +102,43 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 					$modPackageName = str_replace('.tar.gz','', $download->name());
 					
 					system('rm -Rf '.$modPackageName.'/professional');
-					system('mv '.$modPackageName.'/* '.str_replace('.tar.gz','', $proDownload->name()).'/modules/');
+					system('mv '.$modPackageName.'/* '.$downloadFolder.'/modules/');
 					system('rm -Rf '.$modPackageName.'*');
 					$proDownload->delete();
 				}
+			}			
+		
+			if(!empty($params['replacefolder'])){			
+
+				$params['replacefolder']=realpath($params['replacefolder']);
+
+				echo "Replacing: ".$params['replacefolder']."\n";
+
+				$replaceFolder = new GO_Base_Fs_Folder($params['replacefolder']);
+
+				$origFolderName = $replaceFolder->name();
+
+				$backupName = $origFolderName.'_bak_'.date('YmdGis');
+
+				echo "Creating backup in ".$backupName."\n";
+
+
+				if(!$replaceFolder->exists()){
+					exit("Error: Folder ".$params['replacefolder']." does not exist!\n");
+				}
+				if(!$replaceFolder->rename($backupName))
+					die("Failed to rename ".$replaceFolder->path()."\n");
+
+//				$newFolder = new GO_Base_Fs_Folder(getcwd().'/'.$downloadFolder);
+				if(!$newFolder->rename($origFolderName))
+					die("Failed to rename ".$newFolder->path()."\n");
+
+				//there might be a config file or license file in the directory
+				echo "Copying possible config and license files\n";
+				system('cp '.$replaceFolder->path().'/config.php '.$replaceFolder->path().'/*license.txt '.$newFolder->path().'/');
+
 			}
 		}
-		
 		echo "All done\n";
 		
 	}

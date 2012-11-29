@@ -97,7 +97,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		}
 
 		if (isset($params['reminder_value']) && isset($params['reminder_multiplier']))
-			$model->reminder = $params['reminder_value'] * $params['reminder_multiplier'];
+			$model->reminder = GO_Base_Util_Number::unlocalize ($params['reminder_value']) * $params['reminder_multiplier'];
 //		else
 //			$model->reminder = 0;
 
@@ -570,7 +570,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$multipliers[] = 60;
 
 		$response['data']['reminder_multiplier'] = 60;
-		$response['data']['reminder_value'] = 0;
+		$response['data']['reminder_value'] = "";
 		
 		if (!empty($response['data']['reminder'])) {
 			for ($i = 0; $i < count($multipliers); $i++) {
