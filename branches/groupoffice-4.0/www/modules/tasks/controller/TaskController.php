@@ -139,8 +139,12 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		$multiSel->setStoreTitle();
 		
 		$catMultiSel = new GO_Base_Component_MultiSelectGrid(
-						'categories', 
-						"GO_Tasks_Model_Category",$store, $params);		
+            'categories', 
+            "GO_Tasks_Model_Category",
+            $store, 
+            $params, 
+            true
+        );		
 		$catMultiSel->addSelectedToFindCriteria($storeParams, 'category_id');
 		
 		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
