@@ -1,3 +1,6 @@
+4.0.135
+- While loading the events and recurrences, use the shiftdays parameter to get the correct display of the recurring events.
+
 29-11-2012 4.0.134
 - Added $config['curl_proxy'] config option
 - Ignore different quotes in check language
