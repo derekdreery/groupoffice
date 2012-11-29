@@ -815,8 +815,18 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		return true;
 	}
 	
-	protected function getThumbURL() {
-		return GO::url('core/thumb', 'src=' . urlencode($this->path) . '&lw=100&ph=100&zc=1&filemtime=' . $this->fsFolder->mtime());
+	protected function getThumbURL() {			
+		
+		$params = array(
+				'src'=>$this->path,
+				'foldericon'=> $this->acl_id ? 'folder_public.png' : 'folder.png',
+				'lw'=>100,
+				'ph'=>100,
+				'zc'=>1,
+				'filemtime'=>$this->fsFolder->mtime()
+				);
+		
+		return GO::url('core/thumb', $params);
 	}
 	
 	/**

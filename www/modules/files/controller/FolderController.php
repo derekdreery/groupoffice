@@ -629,6 +629,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$record['type'] = GO::t('folder', 'files');
 			$record['size'] = '-';
 			$record['extension'] = 'folder';
+			$record['readonly']=$model->readonly;
 		} else {
 			$record['type_id'] = 'f:' . $model->id;
 			$record['type'] = $model->fsFile->typeDescription();
