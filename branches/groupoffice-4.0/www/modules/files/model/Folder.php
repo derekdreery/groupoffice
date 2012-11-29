@@ -499,6 +499,20 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	}
 	
 	/**
+	 * Add an uploaded file
+	 * 
+	 * @param array $filesArrayItem Item from the $_FILES array
+	 * @return boolean
+	 */
+	public function addUploadedFile($filesArrayItem){
+		
+		$fsFile = new GO_Base_Fs_File($filesArrayItem['tmp_name']);
+		$fsFile->move($this->fsFolder, $filesArrayItem['name'], true, true);
+		
+		return $this->addFile($fsFile->name());
+	}
+	
+	/**
 	 * Add a subfolder.
 	 * 
 	 * @param String $name
