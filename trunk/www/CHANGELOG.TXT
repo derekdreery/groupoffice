@@ -5,6 +5,7 @@
 - Improved GUI of the calendar view
 - User groups can be added to a calendar view
 - Normal users can no longer edit e-mail addresses associated to an account.
+- Billing module can import payments from an MT940 file
 
 
 30-11-2012 4.0.135
