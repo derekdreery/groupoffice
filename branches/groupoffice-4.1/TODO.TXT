@@ -1,0 +1,151 @@
+folder bookmarks
+search in filebrowser
+
+Bij batch status in billing nieuw item toevoegen. Bv. herinneringskosten. Percentage of bedrag.
+
+busy flag bij nieuwe resources
+
+vink voor verzenddatum op factuur.
+
+=========================================================================
+
+Is it possible to refresh the ticket list upon clicking on the ticket module tab? 
+To see new tickets i have to referesh the list manually, when i switch to this module. 
+If i forget it newly created tickets are "invisable" until the next cronjob runs.
+
+This can be added to all the tabs, so they will all be refreshed when opened
+
+=========================================================================
+
+move private check to first tab in event dialog
+
+resource conflict check in 4.1
+
+op ics klikken opent event dialog
+
+link rules email
+
+Migratie script interlokaal
+
+Totaal rates in ticket export
+
+Testen op win: http://www.group-office.com/forum/viewtopic.php?f=5&t=9065
+
+
+Unique bool for custom fields
+
+- Verzenddatum niet tonen op bepaalde sjablonen (alleen op herinneringen)
+- BTW niet tonen op bepaalde sjablonen (wel tonen bij facturen, niet bij offertes)
+
+Mail kopieren met shift ingehouden
+
+Sort custom fields alphabetically and use autocomplete
+
+Persistent connections
+
+
+PDF in document templates zonder processing
+
+
+BCC en cc in mailto: 
+https://mail.itsam.se/index.php?mail_to=mailto:?bcc=test1@test.se,test2@test.se
+
+
+2e mobile veld bij contacts
+
+BUg: http://www.group-office.com/forum/viewtopic.php?f=6&t=8317
+
+Iedereen mag views aanmaken in agenda
+
+Bug: http://www.group-office.com/forum/viewtopic.php?f=1&t=8409&p=28295#p28295
+
+
+Bij alle omgebouwde modules .php zoeken in *.js files zodat oude php code uiteindelijk weg kan.
+
+Arjen mul: 1 uur voor korting
+
+
+Billing systeem servermanager
+
+Ticket groepen werken niet daniel malmgren
+
+Automatisch ticket maken van support@intermesh.nl
+
+
+http://www.group-office.com/forum/viewtopic.php?f=3&t=8353
+
+VCF import via mail
+
+Note sync bij syncml. Funambol outlook ondersteund dit.
+
+reminder als licentie verloopt
+
+
+Z-push 2.0
+
+Geafactureerd type ook als gesloten beschouwen
+
+GOTA moet weten of file gelocked of niet is.
+
+resize vcard photo's
+
+Add max_file_storage setting to servermanager
+
+
+Koba
+
+
+Sieve MVC en redesign vakantie. Automatisch vullen aliasen
+
+CMS compatible (Wilmar)
+
+karakter encoding: koi8-r
+
+Document conversion
+
+Product opties bij billing
+
+Group-Office 100 users 600 euro, 150 users 700 euro etc.
+
+
+*** Lage prio:
+
+Save all attachments.
+
+Twinfield
+VOIP
+
+Licentie checks per module
+
+Servermanager bestelfunctie
+
+overige modules mvc
+sticky user group that is shared with all items members create
+
+Freebusy support in sabredav 1.6
+
+Feature requests voting system
+
+Bij bedrijf -> displaypanel -> New -> Contact
+
+
+Billing MVC
+
+UCF for deb pkgs
+http://www.group-office.com/forum/viewtopic.php?f=6&t=8083
+
+Drag & drop contacts:
+http://www.group-office.com/forum/viewtopic.php?f=5&t=8351
+
+
+Docs:
+
+- Sieve
+- Workflow
+- Smime
+- Bookmarks
+- Notes (Encryption)
+
+PHPdocs netjes en online op api.group-office.com
+
+- Alles even nalopen
