@@ -5,7 +5,7 @@ GO.calendar.AttendanceWindow = Ext.extend(GO.dialog.TabbedFormDialog, {
 		Ext.apply(this, {
 			title:GO.calendar.lang.attendance,
 			height: 220,
-			width: 340,
+			width: 400,
 			modal:true,
 			enableApplyButton:false,
 			formControllerUrl: 'calendar/attendance'
