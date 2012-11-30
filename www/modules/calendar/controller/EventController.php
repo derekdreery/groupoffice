@@ -661,7 +661,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				if(!$view)
 					throw new GO_Base_Exception_NotFound();
 				
-				$calendarModels = $view->calendars;
+				//$calendarModels = $view->calendars;
+                $calendarModels = array_merge($view->getGroupCalendars()->fetchAll(), $view->calendars->fetchAll());
 				$calendars=array();
 				foreach($calendarModels as $calendar){
 					$calendars[]=$calendar->id;
