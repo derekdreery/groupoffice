@@ -1216,7 +1216,6 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		{
 			config = {};
 		}
-
 		if(config.calendar_id)
 			config.calendars=[config.calendar_id];
 
@@ -1232,48 +1231,12 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 
 		config.title = '';
 		var record;
-		//determine title and comments
-		if(config.calendars){			
-
-			/*for (var i=0,max=config.calendars.length;i<max;i++) {
-				
-				if (i>0)
-					config.title = config.title+' & ';
-
-				if(this.group_id>1)
-					record =this.resourcesStore.getById(config.calendars[i]);
-				else if(this.project_id>0)
-					record = this.projectCalendarsStore.getById(config.calendars[i])
-				else
-					record = this.calendarsStore.getById(config.calendars[i]);
-				
-				if(!config.group_id)
-					config.group_id=record.get('group_id');
-
-				if(!config.calendar_name)
-					config.calendar_name=record.get('name');
-
-				config.title = config.title+record.data.name;
-			}
-			
-			if(config.calendars.length==1)
-				config.comment=record.data.comment;*/
-			
-		}else if(config.view_id){
+		if(config.view_id){
 			record = this.viewsStore.getById(config.view_id);
 
-			//config.title=record.get('name');
-			//config.comment='';
 			config.merge=record.get('merge');
 			config.owncolor=record.get('owncolor');
 		}
-
-		/*if(config.title && config.title.length){
-			this.calendarComments.setText(config.comment || '');
-
-			this.calendarTitle.setText(config.title);
-		}*/
-
 
 		if(config.displayType)
 		{							
@@ -1291,10 +1254,6 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 
 		var saveState = config.days && config.days!=this.state.days || config.displayType && config.displayType!=this.state.displayType;
 
-		//when refresh is clicked remember state
-		//Ext.apply(this.state, config);
-		
-		
 		this.state.displayType=this.displayType;
 			
 		if(this.displayType!='view')
