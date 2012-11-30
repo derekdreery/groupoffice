@@ -1,9 +1,10 @@
-??-2012 4.0.135
+30-11-2012 4.0.135
 - Bookmarks icon in start menu
 - Bookmark context menu respects permissions
 - Added large public folder icon
 - When opening a draft it always used the first alias and not the original one 
   if you have multiple.
+- Formatting booleans as yes/no broke some functions like calendar views
 
 
 29-11-2012 4.0.134
