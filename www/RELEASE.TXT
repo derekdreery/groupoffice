@@ -1,3 +1,9 @@
+2012/11/30 4.1.0
+We're proud to announce version 4.1! This version comes with an enhanced calendar.
+The invitation system has been greatly improved. Now events are scheduled directly
+into the users' calendars and the status of the event is directly visual. This
+provides a much better user experience. The group view has been improved as well.
+
 2012/07/02 4.0.56
 After long series of beta testing it's finally complete! 
 
