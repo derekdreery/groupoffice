@@ -1636,7 +1636,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	onDblClick : function(grid, event, actionData){
 		
 		
-		if(!event.is_organizer){
+		if(!event.is_organizer && event.model_name=="GO_Calendar_Model_Event"){
 			// You are not authorised to edit this event because you are not the organizer.
 			// Show message to the user
 			//Ext.Msg.alert(GO.calendar.lang.errorOrganizerOnlyTitle, GO.calendar.lang.errorOrganizerOnly);

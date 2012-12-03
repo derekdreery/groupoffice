@@ -848,7 +848,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					'start_time'=>date('Y-m-d',$holiday->date).' 00:00',
 					'end_time'=>date('Y-m-d',$holiday->date).' 23:59',
 					//'background'=>$calendar->displayColor,
-					'background'=>'EBF1E2',
+					'background'=>'f1f1f1',
+					'model_name'=>'',
 					'day'=>$dayString[date('w', $holiday->date)].' '.GO_Base_Util_Date::get_timestamp($holiday->date,false),
 					'read_only'=>true
 					);
