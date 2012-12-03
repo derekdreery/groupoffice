@@ -57,7 +57,7 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		return $this->_attributes[$name];
 	}
 	
-	public function getHasChildren(){
+	public function getHasChildren($asSubscribedMailbox=false){
 		
 		if($this->isRootMailbox())
 			return false;
@@ -79,7 +79,7 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		//GO::debug($this->_attributes['haschildren'])	;
 		
 		//oh oh, bad mailserver can't tell us if it has children. Let's find out the expensive way
-		$folders = $this->getAccount()->openImapConnection()->list_folders(false, false,"",$this->name.$this->delimiter.'%');
+		$folders = $this->getAccount()->openImapConnection()->list_folders($asSubscribedMailbox, false,"",$this->name.$this->delimiter.'%');
 		//store values for caching
 		$this->_attributes['haschildren']= count($folders)>0;
 		$this->_attributes['hasnochildren']= count($folders)==0;
@@ -160,6 +160,12 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		return $this->name.$this->delimiter==$this->getAccount()->mbroot;
 	}
 
+	/**
+	 * 
+	 * @param boolean $subscribed Only get subscribed folders
+	 * @param boolean $withStatus Get the status of the folder (Unseen and message count)
+	 * @return type
+	 */
 	public function getChildren($subscribed=false, $withStatus=true) {
 		if(!isset($this->_children)){
 
@@ -310,6 +316,8 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 	 * @return boolean
 	 */
 	public function isVisible(){
-		return $this->subscribed || ($this->nonexistent && $this->haschildren);
+//		return $this->subscribed || ($this->nonexistent && $this->haschildren);
+		
+		return $this->subscribed ||  $this->getHasChildren(true);
 	}
 }
