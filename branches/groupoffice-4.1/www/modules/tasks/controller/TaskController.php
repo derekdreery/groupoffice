@@ -142,8 +142,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
             'categories', 
             "GO_Tasks_Model_Category",
             $store, 
-            $params, 
-            true
+            $params
         );		
 		$catMultiSel->addSelectedToFindCriteria($storeParams, 'category_id');
 		
@@ -252,7 +251,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 					$show_future=true;
 					break;
                   
-                case 'incomplete':
+        case 'incomplete':
 					$start_time = 0;
 					$end_time = 0;
 					$show_completed=false;
