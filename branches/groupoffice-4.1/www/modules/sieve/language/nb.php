@@ -115,3 +115,4 @@ $l['activateFilter']='Aktiver dette filteret';
 $l["redirect_copy_to"]= 'Kopier til e-post';
 $l['sieveWarning']="Hvis IMAP serveren støtter sievefiltere bør du bruke disse i stedet. Forsøk fanen 'Sieve filtere' først.";
 $l['setRead']='Sett meldingen som lest';
+$l['stopEndError']= 'Stopp må være siste handling!';

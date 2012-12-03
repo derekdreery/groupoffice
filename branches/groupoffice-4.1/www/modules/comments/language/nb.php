@@ -12,3 +12,4 @@ $l['category']='Kategori';
 $l['noCategory']='Ingen kategori';
 $l['newCommentText']='Skriv ny kommentar her ...';
 $l['readMore']="Les mer";
+$l['enableReadMore']="Bruk les mer-lenker ";

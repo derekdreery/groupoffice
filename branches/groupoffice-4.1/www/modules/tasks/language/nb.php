@@ -3,7 +3,6 @@
 
 $l['name']='Arbeidsoppgaver';
 $l['description']='Angi en beskrivelse';
-$lang['link_type'][12]=$l['status']='Status';
 $l['scheduled_call']='Avtalt samtale den %s';
 $l['statuses']['NEEDS-ACTION'] = 'Trenger oppfølging';
 $l['statuses']['ACCEPTED'] = 'Akseptert';
@@ -81,3 +80,4 @@ $l["taskStatus"]='Status';
 $l["taskCompletion_time"]='Fullført';
 $l["taskProject_name"]='Prosjekt';
 $l['taskPercentage_complete']='Prosent fullført';
+$l['status']='Status';

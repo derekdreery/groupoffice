@@ -9,8 +9,8 @@ $l['multipleCategoriesSelected']='Flere notatkategoeier er valgt';
 
 $l["category"]="Kategori";
 $l["categories"]="Kategorier";
-$l["note"]="Notat";
 $l["notes"]="Notater";
 $l["category_id"]="Kategori ID";
 $l["content"]="Innehold";
 $l["manageCategories"]="Behandle kategorier";
+$l['general']= 'Notat';
