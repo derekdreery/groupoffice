@@ -360,3 +360,4 @@ $updates["201210251115"][]="ALTER TABLE `ab_contacts` CHANGE `first_name` `first
 $updates["201211261235"][]=""; //dummy don not remove
 $updates["201211261235"][]="ALTER TABLE `ab_sent_mailings` ADD `errors` INT NOT NULL DEFAULT '0'";
 $updates["201211261235"][]="update `ab_sent_mailings` set `errors`=total-sent where errors=0;";
+$updates['201212031617'][]="update fs_folders set acl_id =(select acl_id from go_modules where id='files') where name='addressbook' and parent_id=0;";
