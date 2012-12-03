@@ -765,18 +765,20 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			width : 148,
 			forceSelection : true,			
 			mode : 'local',
-			value : 'ACCEPTED',
+			value : 'CONFIRMED',
 			valueField : 'value',
 			displayField : 'text',
 			store : new Ext.data.SimpleStore({
 				fields : ['value', 'text'],
 				data : [
-				['NEEDS-ACTION', GO.calendar.lang.needsAction],
-				['ACCEPTED', GO.calendar.lang.accepted],
-				['CONFIRMED', GO.calendar.lang.confirmed],
-				['DECLINED', GO.calendar.lang.declined],
-				['TENTATIVE',	GO.calendar.lang.tentative],
-				['DELEGATED',	GO.calendar.lang.delegated]]
+				['NEEDS-ACTION', GO.calendar.lang.statuses["NEEDS-ACTION"]],
+				//['ACCEPTED', GO.calendar.lang.accepted],
+				['CONFIRMED', GO.calendar.lang.statuses["CONFIRMED"]],
+				//['DECLINED', GO.calendar.lang.declined],
+				['TENTATIVE',	GO.calendar.lang.statuses["TENTATIVE"]],
+				['CANCELLED',	GO.calendar.lang.statuses["CANCELLED"]]
+//				['DELEGATED',	GO.calendar.lang.delegated]
+			]
 			}),
 			listeners: {
 				scope:this,
