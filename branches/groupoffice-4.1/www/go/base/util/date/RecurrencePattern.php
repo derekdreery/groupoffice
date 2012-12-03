@@ -459,7 +459,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 				if ($this->_interval > 1) {
 					$html .= sprintf(GO::t('repeats_at_not_every'), $this->_interval, GO::t('days'));
 				} else {
-					$html .= sprintf(GO::t('repeats_at'), GO::t('day'));
+					$html .= sprintf(GO::t('repeats'), GO::t('day'));
 				}
 				break;
 
@@ -468,7 +468,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 					if ($this->_interval > 1) {
 						$html .= sprintf(GO::t('repeats_at_not_every'), $this->_interval, GO::t('months'));
 					} else {
-						$html .= sprintf(GO::t('repeats_at'), GO::t('month'));
+						$html .= sprintf(GO::t('repeats'), GO::t('month'));
 					}
 				} else {
 
@@ -493,7 +493,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 				if ($this->_interval > 1) {
 					$html .= sprintf(GO::t('repeats_at_not_every'), $this->_interval, GO::t('years'));
 				} else {
-					$html .= sprintf(GO::t('repeats_at'), GO::t('year'));
+					$html .= sprintf(GO::t('repeats'), GO::t('year'));
 				}
 				break;
 		}
