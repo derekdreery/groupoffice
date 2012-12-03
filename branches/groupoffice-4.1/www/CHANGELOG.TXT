@@ -1,5 +1,8 @@
 4.1.1
 - Fixed the email tree display of  public namespace folders that are subscribed or have subscribed children
+- Strange call to another controller action removed in contactcontroller
+- It was possible to set addressbook to 0 for contacts
+- new curl_proxy option didn't work
 
 30-11-2012 4.1.0
 - New calendar invitation system
@@ -8,6 +11,13 @@
 - User groups can be added to a calendar view
 - Normal users can no longer edit e-mail addresses associated to an account.
 - Billing module can import payments from an MT940 file
+- Ticket system can be setup for non-users too through the new sites module.
+- Sites module refactored completely.
+
+03-12-2012 4.0.136
+- Strange call to another controller action removed in contactcontroller
+- It was possible to set addressbook to 0 for contacts
+- new curl_proxy option didn't work
 
 30-11-2012 4.0.135
 - Bookmarks icon in start menu

@@ -65,6 +65,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	
 	protected function init() {
 		$this->columns['name']['required']=true;
+		$this->columns['tasklist_id']['required']=true;
 		
 		$this->columns['start_time']['gotype']='unixdate';
 		$this->columns['due_time']['gotype']='unixdate';

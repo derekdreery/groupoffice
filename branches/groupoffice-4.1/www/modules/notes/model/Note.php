@@ -43,6 +43,14 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 		return parent::model($className);
 	}
 	
+	protected function init() {
+		
+		$this->columns['name']['required']=true;
+		$this->columns['category_id']['required']=true;
+		
+		return parent::init();
+	}
+	
 	public function getLocalizedName(){
 		return GO::t('note','notes');
 	}
