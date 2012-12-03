@@ -1,3 +1,8 @@
+03-12-2012 4.0.136
+- Strange call to another controller action removed in contactcontroller
+- It was possible to set addressbook to 0 for contacts
+- new curl_proxy option didn't work
+
 30-11-2012 4.0.135
 - Bookmarks icon in start menu
 - Bookmark context menu respects permissions
