@@ -413,9 +413,6 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			}
 
 			$this->render('Exception', $response);
-			
-
-			//exit();
 		}
 	}
 	
