@@ -1,3 +1,7 @@
+03-12-2012 4.0.137
+- Tasks did not show in 4.0.136
+- Custom time registation fields were not editable afterwards
+
 03-12-2012 4.0.136
 - Strange call to another controller action removed in contactcontroller
 - It was possible to set addressbook to 0 for contacts
