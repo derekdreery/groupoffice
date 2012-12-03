@@ -23,15 +23,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		return array('photo');
 	}
 		
-	protected function beforeSubmit(&$response, &$model, &$params) {
-		
-		if (!empty($model->id) && !empty($model->addressbook) && $model->addressbook->id != $params['addressbook_id']) {
-			$this->run("changeAddressbook",array(
-				'items'	=> '["'.$model->id.'"]',
-				'book_id' => $params['addressbook_id']
-			),false);
-		}
-		
+	protected function beforeSubmit(&$response, &$model, &$params) {		
 		//if user typed in a new company name manually we set this attribute so a new company will be autocreated.
 		if(!is_numeric($params['company_id'])){
 			$model->company_name = $params['company_id'];
