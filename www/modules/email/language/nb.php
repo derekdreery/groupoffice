@@ -3,7 +3,6 @@
 
 $l['name'] = 'E-post';
 $l['description'] = 'Fullverdig e-postklient. Hver bruker kan sende og motta e-post.';
-$lang['link_type'][9]='E-post';
 $l['feedbackNoReciepent'] = 'Du må angi en mottager!';
 $l['feedbackSMTPProblem'] = 'Problemer med kommunikasjon med SMTP: ';
 $l['feedbackUnexpectedError'] = 'Uventet problem ved bygging av e-post: ';
@@ -232,3 +231,4 @@ $l['winmailNoFiles']="Dette winmail-vedlegget inneholder ingen filer!.";
 $l['attachedAppointmentInfo']="Vedlagt avtaleinformasjon";
 $l["markFolderReadConfirm"]='Er du sikker på at du vil merke alle e-poster i mappen \'{name}\' som lest?';
 $l['cantDeleteSpecialFolder']="Du kan ikke slette mappene Papirkurv, Sendt eller Utkast!";
+$l['storePassword']='Lagre passordet permanent';
