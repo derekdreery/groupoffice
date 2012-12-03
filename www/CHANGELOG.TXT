@@ -1,3 +1,7 @@
+4.1.1
+- Fixed the email tree display of  public namespace folders that are subscribed or have subscribed children
+
+
 30-11-2012 4.1.0
 - New calendar invitation system
 - When using imap or ldap auth you can choose not to store passwords in the database.
