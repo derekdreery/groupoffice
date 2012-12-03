@@ -194,6 +194,8 @@ $l["contactSalutation"] = "Salutation";
 $l["contactEmail_allowed"] = "Email allowed";
 $l["contactFiles_folder_id"] = "Folder";
 $l["contactGo_user_id"] = "User";
+$l["contactSuffix"] = "Suffix";
+$l["contactHomepage"] = "Homepage";
 
 $l['mailingStatus'][0]="Waiting to start";
 $l['mailingStatus'][1]="Running";
