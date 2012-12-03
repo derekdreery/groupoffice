@@ -106,7 +106,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		
 		$defaults = array(
-				'status' => self::STATUS_ACCEPTED,
+				'status' => self::STATUS_CONFIRMED,
 				'start_time'=> GO_Base_Util_Date::roundQuarters(time()), 
 				'end_time'=>GO_Base_Util_Date::roundQuarters(time()+3600)				
 		);

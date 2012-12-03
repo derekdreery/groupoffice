@@ -13,7 +13,6 @@ $l['acccept_question']='Accepteert u de uitnodiging?';
 $l['accept']='Accepteren';
 $l['decline']='Afwijzen';
 $l['bad_event']='De afspraak bestaat niet meer';
-$lang['link_type'][1]='Afspraak';
 $l['subject']='Onderwerp';
 $l['statuses']['NEEDS-ACTION']= 'Heeft actie nodig';
 $l['statuses']['ACCEPTED']= 'Geaccepteerd';
@@ -23,6 +22,8 @@ $l['statuses']['DELEGATED']= 'Gedelegeerd';
 $l['statuses']['COMPLETED']= 'Afgerond';
 $l['statuses']['IN-PROCESS']= 'Bezig';
 $l['statuses']['CONFIRMED'] = 'Bevestigd';
+$l['statuses']['CANCELLED'] = 'Geannuleerd';
+
 $l['accept_mail_subject']= 'Uitnodiging voor \'%s\' geaccepteerd';
 $l['accept_mail_body']= '%s heeft uw uitnodiging geaccepteerd voor:';
 $l['decline_mail_subject']= 'Uitnodiging voor \'%s\' afgewezen';

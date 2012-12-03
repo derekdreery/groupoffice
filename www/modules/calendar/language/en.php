@@ -132,6 +132,7 @@ $l['statuses']['DELEGATED'] = 'Delegated';
 $l['statuses']['COMPLETED'] = 'Completed';
 $l['statuses']['IN-PROCESS'] = 'In process';
 $l['statuses']['CONFIRMED'] = 'Confirmed';
+$l['statuses']['CANCELLED'] = 'Cancelled';
 $l['accept_mail_subject'] = 'Invitation for \'%s\' accepted';
 $l['accept_mail_body'] = '%s has accepted your invitation for:';
 $l['decline_mail_subject'] = 'Invitation for \'%s\' declined';
