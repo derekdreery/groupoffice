@@ -1,3 +1,7 @@
+4.0.138
+- Added the "company_id" field to the batch editor of a contact
+- Removed the UUID field from the batch editor of a contact
+
 03-12-2012 4.0.137
 - New class GO_Files_Fs_UserLogFile to create log files inside the current user's personal folder.
 - Tasks did not show in 4.0.136
