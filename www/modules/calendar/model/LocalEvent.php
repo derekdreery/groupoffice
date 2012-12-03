@@ -88,6 +88,12 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 		
 		$this->_calendar = $this->_event->calendar;	
 		
+		// If there is no user attached to this event (user_id = 0) then create a temporary user object
+		if(!$event->user){
+			$event->user = new GO_Base_Model_User();
+			$event->user->first_name = GO::t('unknown').' '.GO::t('user');
+		}
+		
 		$this->_initials[] = $event->user->getShortName();
 		$this->_calendarNames[] = $this->_calendar->name;
 	}
