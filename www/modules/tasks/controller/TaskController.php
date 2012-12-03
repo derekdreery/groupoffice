@@ -142,8 +142,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
             'categories', 
             "GO_Tasks_Model_Category",
             $store, 
-            $params, 
-            true
+            $params
         );		
 		$catMultiSel->addSelectedToFindCriteria($storeParams, 'category_id');
 		
