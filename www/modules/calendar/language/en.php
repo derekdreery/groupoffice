@@ -211,3 +211,5 @@ $l['notifyCancelOrganizer']='Would you like to notify the organizer that you wil
 $l['notifyParticipants']='Notify participants?';
 $l['sendNotificationTitle']='Send notification?';
 $l['sendNotification']='Would you like to notify the participants by e-mail?';
+
+$l['openCalendar']='Open calendar';

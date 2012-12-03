@@ -210,3 +210,5 @@ $l['sendNotification']='Wilt u de deelnemers per e-mail op de hoogte brengen?';
 
 $l['months']= 'maanden';
 $l['appointment']= 'Afspraak';
+
+$l['openCalendar']='Open agenda';
