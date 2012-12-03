@@ -254,8 +254,10 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					);
 					try{
 						$account->openImapConnection();
-						if($node['expanded'])
-							$node['children']=$this->_getMailboxTreeNodes($account->getRootMailboxes(true));
+						if($node['expanded']){
+							$rootMailboxes = $account->getRootMailboxes(true);
+							$node['children']=$this->_getMailboxTreeNodes($rootMailboxes);
+						}
 						
 					}catch(Exception $e){
 						$this->_checkImapConnectException($e,$node);
@@ -300,12 +302,18 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		}
 	}
 
-	private function _getMailboxTreeNodes($mailboxes, $subscribtions=false) {
+	/**
+	 * 
+	 * @param type $mailboxes
+	 * @param boolean $fetchAllWithSubscribedFlag Get all children with the "Subscribed" flag
+	 * @return type
+	 */
+	private function _getMailboxTreeNodes($mailboxes, $fetchAllWithSubscribedFlag=false) {
 		$nodes = array();
 		foreach ($mailboxes as $mailbox) {
 			
 			//skip mailboxes with nonexistent flags if we're not listing subscribtions
-			if(!$subscribtions && !$mailbox->isVisible())// && !$mailbox->haschildren)
+			if(!$fetchAllWithSubscribedFlag && !$mailbox->isVisible())// && !$mailbox->haschildren)
 				continue;
 			
 			/* @var $mailbox GO_Email_Model_ImapMailbox */
@@ -316,7 +324,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			
 			$text = $mailbox->getDisplayName();
 						
-			if(!$subscribtions){				
+			if(!$fetchAllWithSubscribedFlag){				
 				if ($mailbox->unseen > 0) {
 					$text .= '&nbsp;<span class="em-folder-status" id="status_' . $nodeId . '">(' . $mailbox->unseen . ')</span>';
 				} else {
@@ -335,7 +343,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					'iconCls' => 'folder-default',
 					'id' => $nodeId,
 					'noselect' => $mailbox->noselect,
-					'disabled' =>$subscribtions && $mailbox->noselect,
+					'disabled' =>$fetchAllWithSubscribedFlag && $mailbox->noselect,
 					'noinferiors' => $mailbox->noinferiors,
 					'children' => !$mailbox->haschildren ? array() : null,
 					'expanded' => !$mailbox->haschildren,
@@ -354,11 +362,11 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			}
 
 			if ($mailbox->haschildren && $this->_isExpanded($nodeId)) {
-				$node['children'] = $this->_getMailboxTreeNodes($mailbox->getChildren(false, !$subscribtions),$subscribtions);
+				$node['children'] = $this->_getMailboxTreeNodes($mailbox->getChildren(false, !$fetchAllWithSubscribedFlag),$fetchAllWithSubscribedFlag);
 				$node['expanded'] = true;
 			}
 			
-			if($subscribtions){
+			if($fetchAllWithSubscribedFlag){
 				$node['checked']=$mailbox->subscribed;
 			}
 
