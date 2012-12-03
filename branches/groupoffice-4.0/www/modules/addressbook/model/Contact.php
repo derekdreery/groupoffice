@@ -103,6 +103,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	
 	protected function init() {
 		
+		$this->columns['addressbook_id']['required']=true;
 		$this->columns['email']['regex']=GO_Base_Util_String::get_email_validation_regex();
 		$this->columns['email2']['regex']=GO_Base_Util_String::get_email_validation_regex();
 		$this->columns['email3']['regex']=GO_Base_Util_String::get_email_validation_regex();
