@@ -36,7 +36,7 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 		
 		var colName = record.get('name');
 		if(this.editors[colName])
-			var editor = new this.editors[colName];
+			var editor = new this.editors[colName](config);
 		else 
 			var editor = GO.base.form.getFormFieldByType(record.get('gotype'), record.get('name'), config);
 		
