@@ -224,22 +224,6 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			if(!GO.util.empty(config.calendar_id))
 				params.calendar_id=config.calendar_id;
 
-			var date = new Date();
-
-			var i = parseInt(date.format("i"));
-
-			if (i > 45) {
-				i = '45';
-			} else if (i > 30) {
-				i = '30';
-			} else if (i > 15) {
-				i = '15';
-			} else {
-				i = '00';
-			}
-
-
-//			console.log(config.values);
 			if(config.values && config.values.start_date){
 				params.start_date=config.values.start_date.format(GO.settings.date_format);				
 				params.start_time=config.values.start_date.format(GO.settings.time_format);				

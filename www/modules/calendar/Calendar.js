@@ -1530,15 +1530,25 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			
 		this.monthGrid.on("create", function(grid, date){
 
-			var now = new Date();
-				
+			var now = new Date.parseDate(new Date().format("H"), "H");
+			
+			var i = parseInt(new Date().format("i"));
+			if (i > 30) {
+				i = 45;
+			} else if (i > 15) {
+				i = 30;
+			} else if (i > 0) {
+				i = 15;
+			} else {
+				i = 0;
+			}			
+			now = now.add(Date.MINUTE, i);
+			
 			var formValues={
 				start_date: date,
 				end_date: date,
-				start_hour: now.format('H'),
-				end_hour: now.add(Date.HOUR, 1).format('H'),
-				start_min: '00',
-				end_min: '00'
+				start_time: now.format(GO.settings.time_format),
+				end_time: now.add(Date.HOUR, 1).format(GO.settings.time_format)				
 			};
 				
 			GO.calendar.showEventDialog({
