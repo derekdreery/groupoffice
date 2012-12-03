@@ -907,6 +907,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 
 		if(GO.calendar.openState){
 			this.state=GO.calendar.openState;
+			if(!this.state.calendars && !this.state.view_id)
+				this.state.calendars=[GO.calendar.defaultCalendar.id];
 		}else
 		{
 			this.state = Ext.state.Manager.get('calendar-state');
@@ -1216,6 +1218,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		{
 			config = {};
 		}
+		
 		if(config.calendar_id)
 			config.calendars=[config.calendar_id];
 
@@ -1323,6 +1326,10 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			this.daysGridStore.baseParams['view_id']=null;
 			this.monthGridStore.baseParams['view_id']=null;
 			this.listGrid.store.baseParams['view_id']=null;			
+		}
+		
+		if(config.unixtime){
+			config.date = Date.parseDate(config.unixtime,'U');
 		}
 
 		if(config.date)
@@ -2173,7 +2180,6 @@ GO.linkPreviewPanels["GO_Calendar_Model_Event"]=function(config){
 }
 
 GO.calendar.openCalendar = function(displayConfig){
-	if(GO.mainLayout.rendered){
 		var mp = GO.mainLayout.initModule('calendar');
 		displayConfig.applyFilter=true;
 		if(mp.rendered){
@@ -2184,13 +2190,13 @@ GO.calendar.openCalendar = function(displayConfig){
 			GO.calendar.openState=displayConfig;
 			mp.show();
 		}
-	}else
-	{
-		GO.calendar.openState=displayConfig;
-		GO.mainLayout.on('render', function(){
-			 GO.mainLayout.openModule('calendar');
-		});
-	}
+//	}else
+//	{
+//		GO.calendar.openState=displayConfig;
+//		GO.mainLayout.on('render', function(){
+//			 GO.mainLayout.openModule('calendar');
+//		});
+//	}
 	
 }
 

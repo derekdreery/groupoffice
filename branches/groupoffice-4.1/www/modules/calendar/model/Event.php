@@ -1042,7 +1042,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 		
 		
-
+		$url = GO::createExternalUrl('calendar', 'openCalendar', array(
+				'unixtime'=>$this->start_time
+				));
+		
+		$html .= '<br /><a href="'.$url.'">'.GO::t('openCalendar','calendar').'</a>';
 		
 
 		return $html;
