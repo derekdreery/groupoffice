@@ -1041,13 +1041,6 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$html .='</table>';
 		}
 		
-		
-		$url = GO::createExternalUrl('calendar', 'openCalendar', array(
-				'unixtime'=>$this->start_time
-				));
-		
-		$html .= '<br /><a href="'.$url.'">'.GO::t('openCalendar','calendar').'</a>';
-		
 
 		return $html;
 	}
@@ -1769,6 +1762,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 							->addTo($organizer->email, $organizer->name);
 
 		$body = '<p>'.$subject.': </p>'.$this->toHtml();
+		
+		$url = GO::createExternalUrl('calendar', 'openCalendar', array(
+					'unixtime'=>$this->start_time
+				));
+		
+		$body .= '<br /><a href="'.$url.'">'.GO::t('openCalendar','calendar').'</a>';
 
 		if(!$this->getOrganizerEvent()){
 			//organizer is not a Group-Office user with event. We must send a message to him an ICS attachment
@@ -1871,6 +1870,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$participantEvent = $participant->getParticipantEvent();
 				
 				$body = '<p>'.$bodyLine.': </p>'.$this->toHtml();	
+				
+				$url = GO::createExternalUrl('calendar', 'openCalendar', array(
+					'unixtime'=>$this->start_time
+				));
+		
+				$body .= '<br /><a href="'.$url.'">'.GO::t('openCalendar','calendar').'</a>';
 				
 				if(!$participantEvent){					
 
