@@ -223,7 +223,7 @@ GO.addressbook.ContactProfilePanel = function(config)
 			store: GO.addressbook.writableAddressbooksStore,			
 			selectOnFocus:true,
 			forceSelection: true,
-			allowBlank: true,
+			allowBlank: false,
 			anchor:'100%'
 		});
 		
