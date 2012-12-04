@@ -899,6 +899,11 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		if($this->go_user_id>0)
 			$model->go_user_id=0;
 		
+		if(!$this->photo && $model->photo){
+			rename($model->photo, $this->_getPhotoPath());
+		}
+		
+		
 		return parent::afterMergeWith($model);
 	}
 	
@@ -925,5 +930,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		
 		return $diff->y;
 	}
+	
+	
+	
 	
 }

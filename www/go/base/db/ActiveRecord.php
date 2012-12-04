@@ -3873,6 +3873,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	/**
 	 * Override this if you need to do extra stuff after merging.
 	 * Move relations for example.
+	 * 
+	 * @param GO_Base_Db_ActiveRecord $model The model that will be deleted after merging.
 	 */
 	protected function afterMergeWith(GO_Base_Db_ActiveRecord $model){}
 

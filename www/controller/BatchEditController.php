@@ -91,7 +91,7 @@ class GO_Core_Controller_BatchEdit extends GO_Base_Controller_AbstractController
 		$tmpModel = new $params['model_name']();
 		$columns = $tmpModel->getColumns();
 		
-		$params['excludeColumns']=array('ctime','mtime','company_id','model_id');
+		$params['excludeColumns']=array('ctime','mtime','model_id');
 		
 		if(isset($params['exclude']))
 			$params['excludeColumns']=  array_merge($params['excludeColumns'],explode(',', $params['exclude']));
@@ -99,14 +99,14 @@ class GO_Core_Controller_BatchEdit extends GO_Base_Controller_AbstractController
 		$rows = array();
 		foreach($columns as $key=>$value) {
 
-			if(!in_array($key, $params['excludeColumns']) && !empty($value['gotype'])) {
+			if(!in_array($key, $params['excludeColumns'])) {
 				$row = array();
 
 				$row['name']= $key;
 				$row['label']= $tmpModel->getAttributeLabel($key);
 				$row['value']='';
 				$row['edit']='';
-				$row['gotype']=$value['gotype'];
+				$row['gotype']=!empty($value['gotype'])?$value['gotype']:'';
 				if(!empty($value['regex'])){
 					$regexDelimiter = substr($value['regex'], 0,1);
 					$parts = explode($regexDelimiter, $value['regex']);

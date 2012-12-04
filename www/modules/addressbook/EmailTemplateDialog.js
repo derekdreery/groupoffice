@@ -226,6 +226,8 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 		['{user:email}',GO.lang['strEmail']+' ('+GO.lang.strUser+')'],
 		['{user:home_phone}',GO.lang['strPhone']+' ('+GO.lang.strUser+')'],
 		['{user:fax}',GO.lang['strFax']+' ('+GO.lang.strUser+')'],
+		['{user:work_phone}',GO.lang['strWorkPhone']+' ('+GO.lang.strUser+')'],
+		['{user:work_fax}',GO.lang['strWorkFax']+' ('+GO.lang.strUser+')'],
 		['{user:cellular}',GO.lang['strCellular']+' ('+GO.lang.strUser+')'],
 		['{user:address}',GO.lang['strAddress']+' ('+GO.lang.strUser+')'],
 		['{user:address_no}',GO.lang['strAddressNo']+' ('+GO.lang.strUser+')'],
