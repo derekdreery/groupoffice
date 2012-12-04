@@ -166,24 +166,28 @@ $updates['201210161843'][]="update cal_events set rrule='' where rrule='RRULE'";
 $updates['201210161843'][]="insert ignore into cal_groups (id,name, user_id) values (1, 'Calendars', 1)";
 
 $updates['201210300847'][]="ALTER TABLE `cal_events` CHANGE `location` `location` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+
 $updates['201210300847'][]="ALTER TABLE `cal_events` CHANGE `name` `name` VARCHAR( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ";
 
-$updates['201211222127'][]="ALTER TABLE `cal_participants` CHANGE `status` `status` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'NEEDS-ACTION'";
+$updates['201212031644'][]="update cal_events set rrule='FREQ=YEARLY' WHERE rrule='RRULE:YM1 #0';";
 
-$updates['201211222127'][]="ALTER TABLE `cal_participants` CHANGE `status` `status` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'NEEDS-ACTION'";
+$updates['201212040946'][]="ALTER TABLE `cal_participants` CHANGE `status` `status` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'NEEDS-ACTION'";
 
-$updates['201211222127'][]="update cal_participants set status='NEEDS-ACTION' where status='0';";
-$updates['201211222127'][]="update cal_participants set status='ACCEPTED' where status='1';";
-$updates['201211222127'][]="update cal_participants set status='DECLINED' where status='2';";
-$updates['201211222127'][]="update cal_participants set status='TENTATIVE' where status='3';";
+$updates['201212040946'][]="ALTER TABLE `cal_participants` CHANGE `status` `status` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'NEEDS-ACTION'";
 
-$updates["201211222127"][]="ALTER TABLE `cal_events` DROP `owner_status`";
+$updates['201212040946'][]="update cal_participants set status='NEEDS-ACTION' where status='0';";
+$updates['201212040946'][]="update cal_participants set status='ACCEPTED' where status='1';";
+$updates['201212040946'][]="update cal_participants set status='DECLINED' where status='2';";
+$updates['201212040946'][]="update cal_participants set status='TENTATIVE' where status='3';";
 
+$updates["201212040946"][]="ALTER TABLE `cal_events` DROP `owner_status`";
 
-$updates["201211222127"][]="ALTER TABLE `cal_events` DROP `sequence`";
+$updates["201212040946"][]="ALTER TABLE `cal_events` DROP `sequence`";
 
-$updates['201211271416'][] ="CREATE  TABLE IF NOT EXISTS `cal_views_groups` (
+$updates['201212040946'][] ="CREATE  TABLE IF NOT EXISTS `cal_views_groups` (
   `view_id` INT NOT NULL ,
   `group_id` VARCHAR(45) NOT NULL ,
   PRIMARY KEY (`view_id`, `group_id`) )
 ENGINE = InnoDB";
+
+$updates['201212040946'][]="update cal_events set rrule='FREQ=YEARLY' WHERE rrule='RRULE:YM1 #0';";

@@ -1,10 +1,11 @@
-03-12-2012 4.1.1
+04-12-2012 4.1.1
 - Fixed the email tree display of  public namespace folders that are subscribed or have subscribed children
 - Strange call to another controller action removed in contactcontroller
 - It was possible to set addressbook to 0 for contacts
 - new curl_proxy option didn't work
 - Enabled custom field tabs were not showing
 - Item not found error when clicking non events in calendar
+- event description without htmlentities
 
 30-11-2012 4.1.0
 - New calendar invitation system
@@ -16,7 +17,17 @@
 - Ticket system can be setup for non-users too through the new sites module.
 - Sites module refactored completely.
 
+04-12-2012 4.0.138
+- Creating orders from contacts didn't work
+- When we merge two contacts the contact photo is not merged.
+- Merge contact photo too
+- addressbook permissions caused error in webdav on some installs
+- Tags "{user:work_phone}" and "{user:work_fax}" are now selectable in Email Template Dialog.
+- Added the "company_id" field to the batch editor of a contact
+- Removed the UUID field from the batch editor of a contact
+
 03-12-2012 4.0.137
+- New class GO_Files_Fs_UserLogFile to create log files inside the current user's personal folder.
 - Tasks did not show in 4.0.136
 - Custom time registation fields were not editable afterwards
 

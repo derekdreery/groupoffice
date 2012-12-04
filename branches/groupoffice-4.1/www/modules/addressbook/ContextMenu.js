@@ -87,7 +87,8 @@ Ext.extend(GO.addressbook.ContextMenu, Ext.menu.Menu, {
 		}
 		
 		GO.base.model.showBatchEditModelDialog(this.model_name, ids, this.grid, {
-			sex:GO.addressbook.SexCombobox
-		});
+			sex:GO.addressbook.SexCombobox,
+			company_id:GO.addressbook.SelectCompany
+		},['uuid']);
 	}
 });
