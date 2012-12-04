@@ -26,11 +26,9 @@ GO.calendar.EventPanel = Ext.extend(GO.DisplayPanel,{
 		
 		GO.calendar.EventPanel.superclass.updateToolbar.call(this);
 		
-		if(!this.data.is_organizer){
-			var tbar = this.getTopToolbar();
-			if(tbar)
-				tbar.setDisabled(true);
-		}
+		
+		this.editButton.setDisabled(!this.data.is_organizer);
+		
 	},
 	
 	initComponent : function(){

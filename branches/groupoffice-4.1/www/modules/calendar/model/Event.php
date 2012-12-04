@@ -1635,7 +1635,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public function hasOtherParticipants($user_id=0){
 		
 		if(empty($user_id))
-			$user_id=GO::user()->id;
+			$user_id=$this->calendar->user_id;
 		
 		if(empty($this->id))
 			return false;

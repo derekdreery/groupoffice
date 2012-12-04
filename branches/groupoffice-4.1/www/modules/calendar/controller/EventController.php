@@ -1423,4 +1423,22 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$pdf->setParams($response);
 		$pdf->Output(GO_Base_Fs_File::stripInvalidChars($response['title']).'.pdf');
 	}
+	
+	
+	
+	public function actionParticipantEmailRecipients($params){
+		$event = GO_Calendar_Model_Event::model()->findByPk($params['event_id']);
+		$participants = $event->participants;
+		
+		$to = new GO_Base_Mail_EmailRecipients();
+		
+		while($participant = $participants->fetch()){
+			$to->addRecipient($participant->email, $participant->name);
+		}
+		
+		$response['success']=true;
+		$response['to']=(string) $to;
+		
+		return $response;
+	}
 }
