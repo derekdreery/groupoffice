@@ -130,8 +130,8 @@ Ext.extend(GO.calendar.ContextMenu, Ext.menu.Menu, {
 			this.actionAddTimeRegistration.setDisabled(!event.event_id);
 		
 
-		if (GO.email)
-			this.actionCreateMail.setDisabled(event.has_other_participants==0);
+//		if (GO.email)
+//			this.actionCreateMail.setDisabled(event.has_other_participants==0);
 
 		this.newMenuItem.setLinkConfig({
 			model_name:"GO_Calendar_Model_Event",
@@ -142,31 +142,16 @@ Ext.extend(GO.calendar.ContextMenu, Ext.menu.Menu, {
 	
 	showCreateMailDialog : function() {
 		if (GO.email) {
-			Ext.Ajax.request({
-				url: GO.settings.modules.calendar.url + 'json.php',
+			GO.request({
+				url: 'calendar/event/participantEmailRecipients',
 				params : {
-					'task' : 'participant_email_addresses',
 					'event_id': this.event.event_id
 				},
-				success : function(response,options) {
-					var responseText = Ext.decode(response.responseText);
-					var participants = responseText.results;
-
-					var emails = [];
-					for (var i = 0; i < participants.length; i++) {
-						emails.push('"' + participants[i].name + '" <'
-							+ participants[i].email + '>');
-					}
-
-					if (emails.length>0)
-						var str = emails.join(', ');
-					else
-						var str = '';
-
-					var composer = GO.email.showComposer({
+				success : function(response,options, result) {
+					GO.email.showComposer({
 						account_id: GO.moduleManager.getPanel('email').account_id,
 						values:{
-							to:str
+							to:result.to
 						}
 					});
 
