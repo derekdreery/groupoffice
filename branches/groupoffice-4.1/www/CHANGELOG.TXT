@@ -1,3 +1,6 @@
+04-12-2012 4.1.2
+- Small bug fixes
+
 04-12-2012 4.1.1
 - Fixed the email tree display of  public namespace folders that are subscribed or have subscribed children
 - Strange call to another controller action removed in contactcontroller
