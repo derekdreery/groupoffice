@@ -905,12 +905,12 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		},this);
 		
 
-		if(GO.calendar.openState){
-			this.state=GO.calendar.openState;
-			if(!this.state.calendars && !this.state.view_id)
-				this.state.calendars=[GO.calendar.defaultCalendar.id];
-		}else
-		{
+//		if(GO.calendar.openState){
+//			this.state=GO.calendar.openState;
+//			if(!this.state.calendars && !this.state.view_id)
+//				this.state.calendars=[GO.calendar.defaultCalendar.id];
+//		}else
+//		{
 			this.state = Ext.state.Manager.get('calendar-state');
 			if(!this.state)
 			{
@@ -931,7 +931,10 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			this.state.calendars=[GO.calendar.defaultCalendar.id];
 			this.state.view_id=0;
 			this.state.group_id=1;
-		}
+//		}
+
+		if(GO.calendar.openState)
+			this.state = Ext.apply(this.state, GO.calendar.openState);
 
 		/*this.state.applyFilter=true;
 		this.calendarsStore.on('load', function(){
