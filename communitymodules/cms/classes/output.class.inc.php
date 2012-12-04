@@ -156,23 +156,23 @@ class cms_output extends cms {
 
 		$item = $this->resolve_url($path,$this->site['root_folder_id']);
 
-		if(!$item) {
-			
+		// Just create a file in the CMS called "404" in root folder "status" and
+		// that file will be used in 404 errors.
+		if (!$item) {
 			header("HTTP/1.0 404 Not Found");
-      header("Status: 404 Not Found");
-			
+			header("Status: 404 Not Found");		
+			$item = $this->resolve_url('status/404',$this->site['root_folder_id']);
+		}
+		
+		if(!$item) {
+
 			echo '<h1>404 Not found</h1>';
 			echo '<p>Sorry the page you requested was not found on this server.</p>';
-			
+
 			echo '<a href="'.$this->create_href_by_path("").'">Go to the website</a>';
 			
 			exit();
-			
-			
-			$this->find_file($this->site['root_folder_id']);
-			if($this->file) {
-				$this->file['path']=$this->file['name'];
-			}
+
 		}else {
 			if(isset($item['parent_id'])) {
 				$this->folder=$item;
