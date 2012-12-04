@@ -76,19 +76,13 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 			$params['username'] .= '@'.$domainModel->domain;
 		
 		if ($model->getIsNew()) {
-			// Create new alias
-			$now = time();
 			$aliasModel = GO_Postfixadmin_Model_Alias::model()->findSingleByAttribute('address', $params['username']);
 			if (empty($aliasModel)) {
 				$aliasModel = GO_Postfixadmin_Model_Alias::model();
-				$aliasModel->setIsNew(true);
 			}
 			$aliasModel->domain_id = $params['domain_id'];
 			$aliasModel->address = $params['username'];
 			$aliasModel->goto = $params['username'];
-			$aliasModel->ctime = $now;
-			$aliasModel->mtime = $now;
-			$aliasModel->active = 1;
 			$aliasModel->save();
 		}
 	}
