@@ -1869,13 +1869,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				//check if we have a Group-Office event. If so, we can handle accepting and declining in Group-Office. Otherwise we'll use ICS calendar objects by mail
 				$participantEvent = $participant->getParticipantEvent();
 				
-				$body = '<p>'.$bodyLine.': </p>'.$this->toHtml();	
+				$body = '<p>'.$bodyLine.': </p>'.$this->toHtml();			
 				
-				$url = GO::createExternalUrl('calendar', 'openCalendar', array(
-					'unixtime'=>$this->start_time
-				));
-		
-				$body .= '<br /><a href="'.$url.'">'.GO::t('openCalendar','calendar').'</a>';
 				
 				if(!$participantEvent){					
 
@@ -1896,6 +1891,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 					$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 					$a->setDisposition("inline");
 					$message->attach($a);
+				}else
+				{
+					$url = GO::createExternalUrl('calendar', 'openCalendar', array(
+					'unixtime'=>$this->start_time
+					));
+
+					$body .= '<br /><a href="'.$url.'">'.GO::t('openCalendar','calendar').'</a>';
 				}
 				
 				$message->setHtmlAlternateBody($body);
