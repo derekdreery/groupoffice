@@ -169,7 +169,7 @@ $l["viewLog"]='Logdaten ansehen';
 $l["viewMessage"]='Nachricht ansehen';
 $l["pauseMailing"]='Senden unterbrochen';
 $l["resumeMailing"]='Senden fortgesetzt';
-$l["copyingMessages"]='Kopiere Nachrichten...';
+
 $l["companyId"]= "ID";
 $l["companyUser_id"]= "Benutzer";
 $l["companyAddressbook_id"]= "Adressbuch";

@@ -177,7 +177,7 @@ $l["viewLog"]='Vis logg';
 $l["viewMessage"]='Vis melding';
 $l["pauseMailing"]='Pause utsendelse';
 $l["resumeMailing"]='Fortsett utsendelse';
-$l["copyingMessages"]='Kopierer meldinger...';
+
 $l["companyId"]= "ID";
 $l["companyUser_id"]= "Bruker";
 $l["companyAddressbook_id"]= "Adressebok";

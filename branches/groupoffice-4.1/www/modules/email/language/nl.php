@@ -247,3 +247,5 @@ $l['useAccount']='Account gebruiken';
 $l['storePassword']='Wachtwoord permanent opslaan';
 
 $l['attachedAppointmentInfo']="Informatie over bijgevoegde afspraak";
+
+$l["copyingMessages"]='Bezig met kopiëren van berichten...';
