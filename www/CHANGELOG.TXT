@@ -1,4 +1,8 @@
-4.0.138
+04-12-2012 4.0.138
+- Creating orders from contacts didn't work
+- When we merge two contacts the contact photo is not merged.
+- Merge contact photo too
+- addressbook permissions caused error in webdav on some installs
 - Tags "{user:work_phone}" and "{user:work_fax}" are now selectable in Email Template Dialog.
 - Added the "company_id" field to the batch editor of a contact
 - Removed the UUID field from the batch editor of a contact
