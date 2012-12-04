@@ -364,7 +364,7 @@ GO.calendar.MainPanel = function(config){
 	this.calendarListPanel.add(this.viewsList);
 	this.calendarListPanel.add(this.resourcesList);
 	
-	var storeFields=['id','event_id','name','start_time','end_time','description', 'repeats', 'private','status','location', 'background', 'status_color', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','all_day_event','username','duration', 'link_count', 'has_other_participants','participant_ids','ctime','is_organizer', 'partstatus'];
+	var storeFields=['id','event_id','name','start_time','end_time','description', 'repeats', 'private','status','location', 'background', 'status_color', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','all_day_event','username','duration', 'link_count', 'has_other_participants','participant_ids','ctime','is_organizer', 'partstatus','model_name'];
 
 	this.daysGridStore = new GO.data.JsonStore({
 		url:GO.url('calendar/event/store'),
