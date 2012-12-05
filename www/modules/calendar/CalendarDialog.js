@@ -218,11 +218,11 @@ GO.calendar.CalendarDialog = function(config)
 							this.fireEvent('calendarimport', this);
 						}else
 						{
-							Ext.MessageBox.alert(GO.lang.strError,action.result.feedback);
+							GO.errorDialog.show("<pre>"+GO.lang.strError,action.result.feedback+"</pre>");
 						}
 					},
 					failure: function(form, action) {
-						Ext.MessageBox.alert(GO.lang.strError, action.result.feedback);
+						GO.errorDialog.show(action.result.feedback);
 					},
 					scope: this
 				});
