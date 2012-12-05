@@ -1343,6 +1343,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->end_time-=60;
 		}
 		
+		if($this->end_time<=$this->start_time)
+			$this->end_time=$this->start_time+3600;
+		
 		if($vobject->valarm && $vobject->valarm->trigger){
 			
 			$duration = GO_Base_VObject_Reader::parseDuration($vobject->valarm->trigger);
