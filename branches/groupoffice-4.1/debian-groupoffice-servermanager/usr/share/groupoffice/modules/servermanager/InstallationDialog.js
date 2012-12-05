@@ -437,7 +437,7 @@ Ext.extend(GO.servermanager.InstallationDialog, GO.Window,{
 							name: 'date_format',
 							store: dateFormatData,
 							displayField: 'date_format',
-							value: GO.settings.date_format.replace(new RegExp(GO.settings.date_separator, "g"), ""),
+							value: GO.settings.date_format.replace(new RegExp(GO.settings.date_separator=="." ? '\\.' : GO.settings.date_separator , "g"), ""),
 							valueField: 'id',
 							hiddenName: 'default_date_format',
 							mode: 'local',
