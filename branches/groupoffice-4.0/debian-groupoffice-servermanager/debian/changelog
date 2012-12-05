@@ -1,5 +1,5 @@
-groupoffice-servermanager (4.0.139) fourzero; urgency=low
+groupoffice-servermanager (4.0.140) fourzero; urgency=low
 
   * Changes can be found in /usr/share/groupoffice/CHANGELOG.TXT
 
- -- Merijn Schering <mschering@intermesh.nl>  Tue, 4 Dec 2012 12:58:36 +0100
+ -- Merijn Schering <mschering@intermesh.nl>  Wed, 5 Dec 2012 17:07:09 +0100
