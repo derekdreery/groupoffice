@@ -9,6 +9,9 @@ class GO_Freebusypermissions_FreebusypermissionsModule extends GO_Base_Module{
 		GO_Calendar_Model_Event::model()->addListener('load', 'GO_Freebusypermissions_FreebusypermissionsModule', 'has_freebusy_access');
 	}
 	
+	public function autoInstall() {
+		return true;
+	}
 	
 	public static function hasFreebusyAccess($request_user_id, $target_user_id){
 		
