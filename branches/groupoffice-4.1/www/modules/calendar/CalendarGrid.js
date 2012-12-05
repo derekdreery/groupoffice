@@ -175,7 +175,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		{
 			//lose time
 			var date = new Date();
-			this.startDate=Date.parseDate(date.format(this.dateFormat), this.dateFormat);
+			this.startDate=date.clearTime();		
 		}
 
 
@@ -1639,6 +1639,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		{
 			this.days=days;
 		}
+		
+		date = date.clearTime();
 
 		this.configuredDate = date;
 
