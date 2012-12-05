@@ -23,6 +23,12 @@ abstract class GO_Base_Fs_Base{
 	
 	const INVALID_CHARS = '/[\/:\*\?"<>|\\\]/';
 
+	/**
+	 * Constructor of a file or folder
+	 * 
+	 * @param string $path The absolute path must be suplied
+	 * @throws Exception
+	 */
 	public function __construct($path) {
 		if(empty($path))
 			throw new Exception("Path may not be empty in GO_Base_Fs_Base");
