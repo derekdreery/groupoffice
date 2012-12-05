@@ -142,6 +142,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		
 		$response = array( 'success' => true );
 		$count = 0;
+		$failed=array();
 		if (!file_exists($_FILES['ical_file']['tmp_name'][0])) {
 			throw new Exception(GO::t('noFileUploaded'));
 		}else {
@@ -149,12 +150,21 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 			$i = new GO_Base_Vobject_Iterator($file, "VEVENT");
 			foreach($i as $vevent){					
 
-				$event = new GO_Calendar_Model_Event();					
-				$event->importVObject( $vevent, array('calendar_id'=>$params['calendar_id']) );
-				$count++;
+				$event = new GO_Calendar_Model_Event();
+				try{
+					$event->importVObject( $vevent, array('calendar_id'=>$params['calendar_id']) );
+					$count++;
+				}catch(Exception $e){
+					$failed[]=$e->getMessage();
+				}
 			}
 		}
 		$response['feedback'] = sprintf(GO::t('import_success','calendar'), $count);
+		
+		if(count($failed)){
+			$response['feedback'] .= "\n\n".count($failed)." events failed: ".implode('\n', $failed);
+		}
+		
 		return $response;
 	}
 	
