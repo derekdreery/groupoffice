@@ -126,6 +126,9 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 
 
 		this.aclGroupsGrid = new GO.base.model.multiselect.panel({
+			title:GO.lang.strAuthorizedGroups,
+			plain:true,
+			style:'margin:4px',
 				anchor: '100% 50%',
 				forceLayout:true,
 				autoExpandColumn:'name',
@@ -191,6 +194,9 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 		}
 
 		this.aclUsersGrid = new GO.base.model.multiselect.panel({
+			title:GO.lang.strAuthorizedUsers,
+			plain:true,
+			style:'margin:4px',
 				anchor: '100% 50%',
 				forceLayout:true,
 				autoExpandColumn:'name',
