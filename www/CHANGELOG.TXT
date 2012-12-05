@@ -25,6 +25,14 @@
 - Ticket system can be setup for non-users too through the new sites module.
 - Sites module refactored completely.
 
+05-12-2012 4.0.140
+- Salutations were not used in newsletters
+- Added russian translation to GOTA
+- Updated German
+
+04-12-2012 4.0.139
+- Package build error for 4.0.138
+
 04-12-2012 4.0.138
 - Creating orders from contacts didn't work
 - When we merge two contacts the contact photo is not merged.
