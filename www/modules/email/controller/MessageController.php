@@ -1055,9 +1055,9 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			if($vcalendar->method!='REQUEST' && !$event){
 				$response['iCalendar']['feedback'] = GO::t('iCalendar_event_not_found', 'email');
 			}
-			
+			$uuid = (string) $vevent->uid;
 			$response['iCalendar']['invitation'] = array(
-					'uuid' => (string) $vevent->uid,
+					'uuid' => $uuid,
 					'email_sender' => $response['sender'],
 					'email' => $imapMessage->account->getDefaultAlias()->email,
 					'event_declined' => $event && $event->status == 'DECLINED',
@@ -1068,7 +1068,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			);
 			
 //			$subject = (string) $vevent->summary;
-//			if(!empty($subject) && strpos($response['htmlbody'], $subject)===false){
+			if(empty($uuid) || strpos($response['htmlbody'], $uuid)===false){
 				if(!$event){
 					$event = new GO_Calendar_Model_Event();
 					$event->importVObject($vevent, array(), true);
@@ -1078,7 +1078,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 								'<div style="font-weight:bold;margin:2px;">'.GO::t('attachedAppointmentInfo','email').'</div>'.
 								$event->toHtml().
 								'</div>';
-//			}
+			}
 			
 //			switch ($vcalendar->method) {
 //				case 'REPLY':
