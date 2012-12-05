@@ -984,7 +984,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @return string 
 	 */
 	public function toHtml() {
-		$html = '<table>' .
+		$html = '<table id="event-'.$this->uuid.'">' .
 						'<tr><td>' . GO::t('subject', 'calendar') . ':</td>' .
 						'<td>' . $this->name . '</td></tr>';
 		
