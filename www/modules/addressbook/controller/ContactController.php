@@ -393,7 +393,13 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		return parent::afterAttributes($attributes, $response, $params, $model);
 	}
 	
-		
+    /**
+     * Before importing a contact in the database first check if the company name of this contact
+     * Is a company that excists in the database. If not create a company. After this set the id
+     * of the create company to the contact we insert.
+     * 
+     * If the email addres set to a contact does not validate. Remove it so import wont fail
+     */
 	protected function beforeImport($params, &$model, &$attributes, $record) {	
 		
 		$impBasParams = json_decode($params['importBaseParams'],true);
@@ -430,7 +436,14 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			}
 			$model->company_id = $companyModel->id;
 		}
-		
+        
+        if(!GO_Base_Util_String::validate_email($model->email))
+          $model->email = '';
+        if(!GO_Base_Util_String::validate_email($model->email2))
+          $model->email2 = '';
+        if(!GO_Base_Util_String::validate_email($model->email3))
+          $model->email3 = '';
+        
 		return parent::beforeImport($params, $model, $attributes, $record);
 	}
 	
