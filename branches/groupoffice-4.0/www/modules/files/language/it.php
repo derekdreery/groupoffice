@@ -1,6 +1,7 @@
 <?php
 
 
+$l["files"]='File';
 $l["template"]= 'Modello';
 $l["manageTemplates"]= 'Gestisci modelli';
 $l["downloadTemplate"]= 'Scarica modello';
@@ -39,6 +40,7 @@ $l['deleted']='Eliminato';
 $l["thumbnails"]= 'Miniature';
 $l["saveFile"]='Salva il file';
 $l["confirmOverwrite"]='{filename} esiste già, vuoi sovrascrivere il file?';
+$l["file"]='File';
 $l["emptyList"]='Elenco vuoto';
 $l["newFiles"]='Nuovo';
 $l["olderVersions"]='Vecchie versioni';
