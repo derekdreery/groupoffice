@@ -358,7 +358,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function afterDelete() {
-		
+
 		$this->deleteReminders();
 		
 		if($this->is_organizer){
