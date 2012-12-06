@@ -937,6 +937,23 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		$tmpFile->delete();
 	}
 	
+	protected function actionCheckDefaultModels(){
+		
+		GO::session()->closeWriting();
+		
+		if(!$this->isCli())			
+			echo '<pre>';
+		
+		$stmt = GO_Base_Model_User::model()->find();
+		
+		foreach($stmt as $user){
+			echo "Checking ".$user->username."\n";
+			$user->checkDefaultModels();
+		}
+		
+		echo "Done\n\n";
+	}
+	
 	
 	protected function actionRemoveEmptyStuff($params){
 		
