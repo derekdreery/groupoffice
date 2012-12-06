@@ -1,3 +1,6 @@
+4.1.4 (beta)
+- Folder bookmarks. Very handy when you regularly use a handful of folders out of hundreds.
+
 05-12-2012 4.1.3 (beta)
 - Problem with recurrence exceptions fixed in ActiveSync
 - Event attendance could not be selected
