@@ -137,6 +137,26 @@ GO.files.FilesContextMenu = function(config)
 		}
 	})
 
+	this.bookmarkButton = new Ext.menu.Item({
+		iconCls: 'btn-copy',
+		text: GO.files.lang['bookmarkFolder'],
+		cls: 'x-btn-text-icon',
+		scope:this,
+		handler: function(){
+			GO.request({
+				url:'files/bookmark/submit',
+				params:{
+					folder_id: this.records[0].data.id
+				},
+				success:function(action, response, result){
+					this.fireEvent('addBookmark',this,this.records[0].data.id);
+				},
+				scope:this
+			})
+		}
+	})
+
+
 	this.compressButton = new Ext.menu.Item({
 		iconCls: 'btn-compress',
 		text: GO.lang.compress,
@@ -183,6 +203,8 @@ GO.files.FilesContextMenu = function(config)
 		},
 		scope:this
 	});
+
+	config['items'].push(this.bookmarkButton);
 
 	config['items'].push(new Ext.menu.Separator());
 	config['items'].push(this.cutButton);
@@ -241,7 +263,8 @@ GO.files.FilesContextMenu = function(config)
 		'compress' : true,
 		'decompress' : true,
 		'download_link' : true,
-		'email_files' : true
+		'email_files' : true,
+		'addBookmark' : true
 
 	});
 
@@ -282,6 +305,9 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 					
 					if(this.emailFilesButton)
 						this.emailFilesButton.show();
+					
+					this.bookmarkButton.hide();
+					
 					break;
 
 				case '':
@@ -306,8 +332,12 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 						if(this.emailFilesButton)
 							this.emailFilesButton.show();
 					}
+					
+					this.bookmarkButton.hide();
+					
 					break;
 				case 'folder':
+					
 					this.lockButton.hide();
 					this.unlockButton.setVisible(false);
 					this.downloadButton.hide();
@@ -324,6 +354,8 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 					
 					if(this.emailFilesButton)
 						this.emailFilesButton.hide();
+
+					this.bookmarkButton.show();
 
 					break;
 
@@ -350,6 +382,9 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 					
 					if(this.emailFilesButton)
 						this.emailFilesButton.show();
+					
+					this.bookmarkButton.hide();
+					
 					break;
 			}
 		}else
