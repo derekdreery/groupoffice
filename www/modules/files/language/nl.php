@@ -114,3 +114,9 @@ $l['notificationEmailSubject']= 'Updates in map';
 $l['downloadLinkExpired']= "Sorry, de download link is niet meer geldig";
 
 $l['recentFiles']="Bestanden gewijzigd in de afgelopen 7 dagen";
+
+$l['bookmarkFolder']="Bladwijzer maken";
+$l['bookmarks']="Bladwijzers";
+$l['bookmarkAlreadyExists']="Bladwijzer van folder '%fn' bestaat al voor de huidige gebruiker.";
+$l['removeBookmark']="Bladwijzer verwijderen";
+$l['removeBookmarkQuestion']="Folder '%fn' verwijderen uit uw bladwijzerlijst?";

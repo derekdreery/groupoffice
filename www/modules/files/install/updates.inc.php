@@ -125,3 +125,9 @@ $updates["201206121503"][]="CREATE TABLE IF NOT EXISTS `fs_notification_messages
 
 
 $updates["201211161231"][]='script:1_set_log_dir.php';
+
+$updates["201212061000"][]='CREATE TABLE IF NOT EXISTS `fs_bookmarks` (
+	`folder_id` int(11) NOT NULL,
+	`user_id` int(11) NOT NULL,
+	PRIMARY KEY (`folder_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;';

@@ -46,13 +46,17 @@ GO.files.SelectFolderDialog = Ext.extend(GO.Window, {
 			selModel: new Ext.tree.DefaultSelectionModel()
 		});
 		
-		this.items=[this.foldersTree];
+		this.bookmarksGrid = new GO.files.BookmarksGrid({
+			region: 'south'
+		});
+		
+		this.items=[this.foldersTree,this.bookmarksGrid];
 		
 		GO.files.SelectFolderDialog.superclass.initComponent.call(this);
 	},
 	
 	show : function(){
-		
+		console.log('GO.files.SelectFolderDialog::show()');
 		GO.files.SelectFolderDialog.superclass.show.call(this);
 	}
 	

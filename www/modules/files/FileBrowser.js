@@ -62,18 +62,28 @@ GO.files.FileBrowser = function(config){
 		config.id=Ext.id();
 
 
-	this.treePanel = new GO.files.TreePanel({
-		region:'west',
-		split:true,
+	this.westPanel = {
+		region: 'west',
+		layout: 'border',
 		width: 200,
-		collapsed: config.treeCollapsed,
-		collapsible:true,
-		collapseMode:'mini',
-		header:false,
-		ddAppendOnly: true,
-		ddGroup : 'FilesDD',
-		enableDD:true
-	});
+		items : [
+			this.treePanel = new GO.files.TreePanel({
+				region:'center',
+				split:true,
+				width: 200,
+				collapsed: config.treeCollapsed,
+				collapsible:true,
+				collapseMode:'mini',
+				header:false,
+				ddAppendOnly: true,
+				ddGroup : 'FilesDD',
+				enableDD:true
+			}),
+			this.bookmarksGrid = new GO.files.BookmarksGrid({
+				region: 'south'
+			})
+		]
+	};
 
 
 
@@ -319,6 +329,10 @@ GO.files.FileBrowser = function(config){
 
 	this.filesContextMenu.on('email_files', function(menu, records){
 		this.emailFiles(records);
+	}, this);
+	
+	this.filesContextMenu.on('addBookmark', function(menu, folderId){
+		this.bookmarksGrid.store.load();
 	}, this);
 
 	this.gridPanel.on('rowcontextmenu', this.onGridRowContextMenu, this);
@@ -682,10 +696,11 @@ GO.files.FileBrowser = function(config){
 	this.eastPanel.add(this.folderPanel);
 
 
-	config['items']=[this.locationPanel, this.treePanel,this.cardPanel,this.eastPanel];
+	config['items']=[this.locationPanel, this.westPanel,this.cardPanel,this.eastPanel];
 
 	GO.files.FileBrowser.superclass.constructor.call(this, config);
 
+	this.bookmarksGrid.store.load();
 
 	this.addEvents({
 		fileselected : true,
@@ -710,6 +725,9 @@ GO.files.FileBrowser = function(config){
 
 	}, this);
 
+	this.bookmarksGrid.on('bookmarkClicked', function(bookmarksGrid,bookmarkRecord){
+		this.setFolderID(bookmarkRecord.data['folder_id']);
+	},this);
 
 }
 

@@ -242,3 +242,10 @@ CREATE TABLE IF NOT EXISTS `fs_notification_messages` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`, `status`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `fs_bookmarks`;
+CREATE TABLE IF NOT EXISTS `fs_bookmarks` (
+	`folder_id` int(11) NOT NULL,
+	`user_id` int(11) NOT NULL,
+	PRIMARY KEY (`folder_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
