@@ -65,9 +65,8 @@ class GO_Base_Component_MultiSelectGrid {
 				
 				$findParamsCopy->limit(1)->single();
 				$model = GO::getModel($this->_modelName)->find($findParamsCopy);
-
-				$this->selectedIds=array($model->pk);		
-				GO::debug($this->selectedIds);
+				if($model)
+					$this->selectedIds=array($model->pk);		
 			}else{
 				$stmt = GO::getModel($this->_modelName)->find($findParamsCopy);
 				while($model = $stmt->fetch()){
@@ -134,10 +133,11 @@ class GO_Base_Component_MultiSelectGrid {
 	public function addSelectedToFindCriteria(GO_Base_Db_FindParams $findParams, $columnName, $tableAlias = 't', $useAnd = true, $useNot = false) {
 		
 		//ignore here. Permissions are checked in by _setSelectedIds.
-		if($this->_checkPermissions)
+		if($this->_checkPermissions && count($this->selectedIds))
 			$findParams->ignoreAcl();
 		
-		$findParams->getCriteria()->addInCondition($columnName, $this->selectedIds, $tableAlias, $useAnd, $useNot);
+		if(count($this->selectedIds))
+			$findParams->getCriteria()->addInCondition($columnName, $this->selectedIds, $tableAlias, $useAnd, $useNot);
 	}
 	
 	/**
