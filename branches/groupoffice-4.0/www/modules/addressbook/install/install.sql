@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `ab_companies` (
   `name` varchar(100) DEFAULT '',
   `name2` varchar(100) DEFAULT '',
   `address` varchar(100) DEFAULT '',
-  `address_no` varchar(10) DEFAULT '',
+  `address_no` varchar(100) DEFAULT '',
   `zip` varchar(10) DEFAULT '',
   `city` varchar(50) DEFAULT '',
   `state` varchar(50) DEFAULT '',
