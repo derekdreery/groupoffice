@@ -319,6 +319,13 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		}
 	}
 	
+	protected function beforeRun($action, $params, $render){
+		return true;
+	}
+	protected function afterRun($action, $params, $render){
+		return true;
+	}
+	
 	/**
 	 * Runs a method of this controller. If $action is save then it will run
 	 * actionSave of your extended class.
@@ -368,8 +375,12 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			
 			//Unset some system parameters not intended for the controller action.
 			unset($params['security_token'], $params['r']);
+			
+			$this->beforeRun($action, $params, $render);
 
 			$response =  $this->$methodName($params);
+			
+			$this->afterRun($action, $params, $render);
 			
 			$this->_unlockAction();
 
@@ -399,14 +410,13 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 				//doesn't work well with extjs
 //				header("HTTP/1.1 403 Forbidden");
 				
-				$report = 
-								"Access denied\n".								
-								"controller: ".get_class($this)." action: ".$action."\n".
-								"params: ".var_export($params, true)."\n".
-								(string) $e;
-				
-				if(!GO::config()->debug)
-					trigger_error($report, E_USER_WARNING);
+//				$report = 
+//								"Access denied\n".								
+//								"controller: ".get_class($this)." action: ".$action."\n".
+//								"params: ".var_export($params, true)."\n".
+//								(string) $e;
+//				if(!GO::config()->debug)
+//					trigger_error($report, E_USER_WARNING);
 
 				$response['redirectToLogin']=empty(GO::session()->values['user_id']);
 			}
@@ -499,7 +509,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		if($action!='')
 			$route .= '/'.$action;
 		
-		return $route;
+		return strtolower($route);
 	}	
 	
 	/**

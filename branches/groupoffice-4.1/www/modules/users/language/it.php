@@ -44,6 +44,7 @@ $l["cmdFormLabelThousandSeperator"]= 'Separatore delle migliaia';
 $l["cmdFormLabelDecimalSeperator"]= 'Separatore dei decimali';
 $l["cmdFormLabelCurrency"]= 'Valuta';
 $l["account"]= 'Account';
+$l["confirmPassword"]= 'Conferma password';
 $l["companyProfile"]= 'Profilo azienda';
 $l["loginInfo"]= 'Informazioni sull\'accesso';
 $l["changePassword"]= 'Modifica password';
