@@ -892,7 +892,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		this.periodDisplay=this.configuredDate.format('F, Y');
 
 
-		if(!oldEndDate || !oldStartDate || oldEndDate.getElapsed(this.endDate)!=0 || oldStartDate.getElapsed(this.startDate)!=0)
+		if(this.loadRequired || (!oldEndDate || !oldStartDate || oldEndDate.getElapsed(this.endDate)!=0 || oldStartDate.getElapsed(this.startDate)!=0))
 		{
 			if(load)
 			{

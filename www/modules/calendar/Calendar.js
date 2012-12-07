@@ -951,11 +951,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	
 	init : function(){
 
-
-		this.getEl().mask(GO.lang.waitMsgLoad);
-
-		Ext.Ajax.request({
-			url: GO.url("core/multiRequest"),
+		GO.request({
+			maskEl:this.getEl(),
+			url: "core/multiRequest",
 			params:{
 				requests:Ext.encode({
 					views:{r:"calendar/view/store"},				
@@ -964,21 +962,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				})
 			},
 			
-			callback: function(options, success, response)
+			success: function(options, response, result)
 			{
-
-				if(!success)
-				{
-					alert( GO.lang['strRequestError']);
-				}else
-				{
-					var jsonData = Ext.decode(response.responseText);
-
-					this.calendarsStore.loadData(jsonData.calendars);
-					this.viewsStore.loadData(jsonData.views);
-					this.resourcesStore.loadData(jsonData.resources);
-					this.getEl().unmask();					
-				}
+				this.calendarsStore.loadData(result.calendars);
+				this.viewsStore.loadData(result.views);
+				this.resourcesStore.loadData(result.resources);				
 			},
 			scope:this
 		});
@@ -1362,9 +1350,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			{
 				this.days=config.days;
 			}
-
+			
 			switch(this.displayType)
-			{
+			{				
 				case 'month':
 					this.monthGridStore.reload();
 					break;
