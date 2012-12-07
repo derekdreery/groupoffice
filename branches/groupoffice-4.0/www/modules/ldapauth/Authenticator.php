@@ -125,7 +125,12 @@ class GO_Ldapauth_Authenticator {
 				return false;
 			}
 
-			$this->_checkEmailAccounts($user, $password);
+			try{
+				$this->_checkEmailAccounts($user, $password);
+			}catch(Exception $e){
+//				GO::debug("LDAPAUTH: Failed to create or update e-mail account!\n\n".(string) $e);
+				trigger_error("LDAPAUTH: Failed to create or update e-mail account for user ".$user->username."\n\n".$e->getMessage());
+			}
 
 			GO::setIgnoreAclPermissions($oldIgnoreAcl);
 		}
