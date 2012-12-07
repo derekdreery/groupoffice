@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $l['addresslists']='Адресни листи';
 $l['sendingEmailAllowed']='Разрешение за получаване на групови съобщения';
 $l["newSearch"]='Ново търсене';

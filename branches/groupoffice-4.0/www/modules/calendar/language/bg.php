@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 
 $l["addressbook"]='Адресна книга';
@@ -167,7 +167,7 @@ $l['calendars']='Календари';
 $l['open_resource']='Отваряне ангажименти';
 $l['resource_mail_subject']='Ресурсът \'%s\' ангажиран за \'%s\' на \'%s\'';//%s is resource name, %s is event name, %s is start date;
 $l['resource_mail_body']='%s записа ангажимент за този ресурс \'%s\'. Вие сте поддръжката на този ресурс. Моля проверете си ангажиментите, за да го отхвърлите или одобрите.'; //First %s is the name of the person who created the event. Second is the calendar name;
-$l['resource_modified_mail_subject']='Ресурс \'%s\' е ангажиран на \'%s\' \'%s\ променен'';//%s is resource name, %s is event name, %s is start date;
+$l['resource_modified_mail_subject']='Ресурс \'%s\' е ангажиран на \'%s\' \'%s\' променен';//%s is resource name, %s is event name, %s is start date;
 $l['resource_modified_mail_body']='\'%s\' бе променен и ангажиран за ресурс \'%s\'. Вие сте отговорен за този ресурс. Моля проверете си ангажиментите, за да го отхвърлите или одобрите.'; //First %s is the name of the person who created the event. Second is the calendar name;
 $l['your_resource_modified_mail_subject']='Вашият ангажимент за \'%s\' на \'%s\' със статус \'%s\' е променен';//is resource name, %s is event name, %s is start date;
 $l['your_resource_modified_mail_body']='%s промени Вашият ангажимент за ресурс \'%s\'.';

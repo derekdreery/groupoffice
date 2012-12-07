@@ -1,8 +1,8 @@
-﻿<?php
+<?php
 
 $l["exportHiddenColumns"]='Експорт и на скритите колони';
 $l["searchQuery"]='заявка за търсене';
-$l["pleaseApplyFirst"]='Моля, първо запишете чрез кликване на Приложи'';
+$l["pleaseApplyFirst"]='Моля, първо запишете чрез кликване на Приложи';
 $l["passwordMatchError"]='Паролата не съвпада';
 $l["serverError"]='Възникна грешка в уебсървъра. Съобщете на администратора и приложете детайлите на грешката.';
 $l["errorDetails"]='Детайли на грешката';
@@ -366,7 +366,7 @@ $l['address_format']='Адрес формат';
 $l['state'] = 'Област';
 $l['city'] = 'Град';
 $l['zip'] = 'Пощенски код';
-$l['Адрес'] = 'Адрес';
+$l['address'] = 'Адрес';
 $l['email'] = 'E-mail';
 $l['phone'] = 'Телефон';
 $l['workphone'] = 'Телефон (работа)';
@@ -418,8 +418,8 @@ $l['full_days'][6] = "Събота";
 $l['default']='По подразбиране';
 $l['description']='Описание';
 $l['date']='Дата';
-$l['default_salutation_M']='Уважаеми г-н;
-$l['default_salutation_F']='Уважаема г-жа;
+$l['default_salutation_M']='Уважаеми г-н';
+$l['default_salutation_F']='Уважаема г-жа';
 $l['default_salutation_unknown']='Уважаеми г-жа/г-не';
 $l['dear']='Уважаеми';
 $l['mins'] = 'Минути';

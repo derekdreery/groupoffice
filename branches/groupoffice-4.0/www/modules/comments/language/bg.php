@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $l["comment"]="Коментар";
 $l["comments"]="Коментари";
 $l["recentComments"]='Скорошни коментари';
