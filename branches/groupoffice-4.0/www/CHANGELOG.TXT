@@ -1,3 +1,4 @@
+- allow AR->find() to search for NULL value (change default operator from "=" to "IS" if value is NULL
 - Included index time in filesearch preview
 - Tool to create missing default calendars, tasklists etc.
 - Added Bulgarian translation
@@ -8,6 +9,7 @@
 - Updated German and Italian
 
 04-12-2012 4.0.139
+- Before importing contacts invalid email adresses will be remove so that the rest of the record is imported
 - Package build error for 4.0.138
 
 04-12-2012 4.0.138
