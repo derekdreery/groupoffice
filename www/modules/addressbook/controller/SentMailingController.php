@@ -124,6 +124,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			$mailing->save();
 		}
 			
+		$htmlToText = new GO_Base_Util_Html2Text();
 		
 
 		//$addresslist = GO_Addressbook_Model_Addresslist::model()->findByPk($mailing->addresslist_id);
@@ -180,8 +181,16 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 					echo "Skipping contact ".$contact->name." no e-mail address was set.\n\n";					
 				}else
 				{		
+					$body = GO_Addressbook_Model_Template::model()->replaceContactTags($body, $contact);
 					$message->setTo($contact->firstEmail, $contact->name);
-					$message->setBody(GO_Addressbook_Model_Template::model()->replaceContactTags($body, $contact));
+					$message->setBody($body);
+					
+					$plainTextPart = $message->findPlainTextBody();
+					if($plainTextPart){
+						$htmlToText->set_html($body);
+						$plainTextPart->setBody($htmlToText->get_text());
+					}
+					
 					$this->_sendmail($message, $contact, $mailer, $mailing);
 					$errors=0;
 					
@@ -220,8 +229,16 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 					echo "Skipping company ".$company->name." no e-mail address was set.\n\n";
 				}else
 				{		
+					$body = GO_Addressbook_Model_Template::model()->replaceModelTags($body, $company);
 					$message->setTo($company->email, $company->name);
-					$message->setBody(GO_Addressbook_Model_Template::model()->replaceModelTags($body, $company));
+					$message->setBody($body);
+					
+					$plainTextPart = $message->findPlainTextBody();
+					if($plainTextPart){
+						$htmlToText->set_html($body);
+						$plainTextPart->setBody($htmlToText->get_text());
+					}
+					
 					$this->_sendmail($message, $company, $mailer, $mailing);	
 					$errors=0;
 				}
