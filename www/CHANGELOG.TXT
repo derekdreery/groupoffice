@@ -1,7 +1,11 @@
+07-12-2012 4.0.141
 - allow AR->find() to search for NULL value (change default operator from "=" to "IS" if value is NULL
 - Included index time in filesearch preview
 - Tool to create missing default calendars, tasklists etc.
 - Added Bulgarian translation
+- Failed e-mail account creation for LDAP login blocked login completely.
+- Plain text version auto data tags were not replaced in newsletters
+- Use search query in quick edit window for projects
 
 05-12-2012 4.0.140
 - Salutations were not used in newsletters
