@@ -1747,7 +1747,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			this.writableCalendarsStore = new GO.data.JsonStore({
 				url: GO.url("calendar/calendar/store"),
 				baseParams: {
-					'level': GO.permissionLevels.writeAndDelete
+					permissionLevel: GO.permissionLevels.write
 				},
 				fields:['id','name','user_name'],
 				remoteSort:true,
@@ -1761,9 +1761,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			this.writableViewsStore = new GO.data.JsonStore({
 				
 				url: GO.url("calendar/view/store"),
-				root: 'results',
-				totalProperty: 'total',
-				id: 'id',
+				baseParams:{
+					permissionLevel:GO.permissionLevels.write
+				},
 				fields:['id','name','user_name','merge'],
 				remoteSort:true,
 				sortInfo: {
