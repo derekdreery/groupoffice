@@ -106,28 +106,62 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 //		boxLabel:GO.calendar.lang.importToCalendar,
 //		hideLabel:true		
 //	})
+
+	this.selectContact = new GO.addressbook.SelectContact ({
+		name: 'quick_add_contact',
+		anchor: '100%',
+		fieldLabel:GO.lang.cmdAdd,
+		remoteSort: true
+	});
+			
+	this.selectContact.on('select', function(combo, record)
+	{
+		if(record.data.go_user_id){
+			GO.request({
+					url:"calendar/participant/getUsers",
+					params:{
+						users: Ext.encode([record.data.go_user_id]),
+						start_time : this.eventDialog.getStartDate().format('U'),
+						end_time : this.eventDialog.getEndDate().format('U')
+					},
+					success:function(response, options, result){
+						this.store.loadData(result, true);
+					},
+					scope:this
+				});					
+		}else
+		{
+			GO.request({
+				url:"calendar/participant/getContacts",
+				params:{
+					contacts: Ext.encode([record.data.id]),
+					start_time : this.eventDialog.getStartDate().format('U'),
+					end_time : this.eventDialog.getEndDate().format('U')
+				},
+				success:function(response, options, result){
+					this.store.loadData(result, true);
+				},
+				scope:this
+			});	
+		}
+		combo.reset();
+	}, this);
 	
-//	this.checkPanel = new Ext.Panel({
-//		border : true,
-//		region:'north',
-//		height:40,
-//		layout:'column',
-//		defaults:{
-//			border:false,
-//			bodyStyle:'padding:5px'
-//		},
-//		items:[{
-//			columnWidth:.5,
-//			items:[this.importCheckbox]
-//		}]
-//	});
+	this.checkPanel = new Ext.Panel({
+		border : true,
+		region:'north',
+		height:30,
+		bodyStyle:'padding:3px',
+		layout:'form',
+		items:[this.selectContact]
+	});
 	
 	this.gridPanel = new GO.grid.GridPanel(
 	{
 		layout:'fit',
 		split:true,
 		store: config.store,		
-//		region:'center',
+		region:'center',
 		columns : [{
 			header : GO.lang.strName,
 			dataIndex : 'name'
@@ -200,9 +234,9 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 		title : GO.calendar.lang.participants,
 		border : false,
 		tbar:tbar,
-		layout : 'fit',
-		items:[this.gridPanel]
-//		items:[this.checkPanel, this.gridPanel]
+		layout : 'border',
+//		items:[this.gridPanel]
+		items:[this.checkPanel, this.gridPanel]
 	});
 
 	config.store.setDefaultSort('name', 'ASC');
