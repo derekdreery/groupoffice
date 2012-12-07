@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $l['admin2userlogin']='Смяна с потребител';
 $l['userId']="ID";
 $l['name']="Смяна потребител";

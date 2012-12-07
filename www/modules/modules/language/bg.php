@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $l["modules"]='Модули';
 $l["cmdSaveChanges"]= 'Запис на промените';
 $l["cmdInstall"]= 'Инсталиране';

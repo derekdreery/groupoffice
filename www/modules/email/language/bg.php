@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 
 $l["forwardTo"]='Препращане на E-mail към';

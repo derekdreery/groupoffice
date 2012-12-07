@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 
 $l["cmdCheckColumnRead"]= 'Употреба';
