@@ -231,7 +231,8 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 
 			while($contact = $stmt->fetch()){
 				$record['name']=$contact->name;
-
+				$record['contact_id']=$contact->id;
+				$record['user_id']=$contact->go_user_id;
 				if($contact->email!=""){
 					$l = new GO_Base_Mail_EmailRecipients();
 					$l->addRecipient($contact->email, $record['name']);
@@ -277,6 +278,9 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 
 				while($company = $stmt->fetch()){
 					$record['name']=$company->name;
+					
+					$record['company_id']=$company->id;
+				
 
 					$l = new GO_Base_Mail_EmailRecipients();
 					$l->addRecipient($company->email, $record['name']);
@@ -304,6 +308,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 
 			while($user = $stmt->fetch()){
 				$record['name']=$user->name;
+				$record['user_id']=$user->id;
 
 				$l = new GO_Base_Mail_EmailRecipients();
 				$l->addRecipient($user->email, $record['name']);
