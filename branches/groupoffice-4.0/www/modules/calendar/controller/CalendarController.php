@@ -149,7 +149,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 			$file = new GO_Base_Fs_File($_FILES['ical_file']['tmp_name'][0]);
 			$i = new GO_Base_Vobject_Iterator($file, "VEVENT");
 			foreach($i as $vevent){					
-
+			
 				$event = new GO_Calendar_Model_Event();
 				try{
 					$event->importVObject( $vevent, array('calendar_id'=>$params['calendar_id']) );
