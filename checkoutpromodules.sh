@@ -24,3 +24,4 @@ svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/
 svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/scanbox
 svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/carddav
 svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/z-push2
+svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/googledrive
