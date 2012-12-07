@@ -34,3 +34,7 @@ $updates["201204251500"][] = "update pa_aliases set active=1 where active=2;";
 $updates["201204251500"][] = "script:1_disable_vacation.php";
 
 $updates["201208030852"][] = "ALTER TABLE `pa_mailboxes` DROP `domain`;";
+
+$updates["201212071039"][] = "ALTER TABLE `pa_mailboxes` CHANGE `username` `username` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+$updates["201212071039"][] = "ALTER TABLE `pa_mailboxes` CHANGE `password` `password` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+$updates["201212071039"][] = "ALTER TABLE `pa_mailboxes` CHANGE `name` `name` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
