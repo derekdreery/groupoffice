@@ -111,9 +111,9 @@ class GO_Base_Db_FindCriteria {
 		
 		$this->_validateComparator($comparator);
 		
-		if(is_null($value)){
-            if($comparator == "=")
-              $comparator = "IS";
+		if (is_null($value)) {
+			if ($comparator == "=")
+				$comparator = "IS";
 			$paramTag = "NULL";
 		}elseif(!$valueIsColumn){
 			$paramTag = $this->_getParamTag();		
