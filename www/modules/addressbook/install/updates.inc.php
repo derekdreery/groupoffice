@@ -361,3 +361,4 @@ $updates["201211261235"][]=""; //dummy don not remove
 $updates["201211261235"][]="ALTER TABLE `ab_sent_mailings` ADD `errors` INT NOT NULL DEFAULT '0'";
 $updates["201211261235"][]="update `ab_sent_mailings` set `errors`=total-sent where errors=0;";
 $updates['201212031617'][]="update fs_folders set acl_id =(select acl_id from go_modules where id='files') where name='addressbook' and parent_id=0;";
+$updates['201212061709'][]="ALTER TABLE `ab_companies` CHANGE `address_no` `address_no` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";

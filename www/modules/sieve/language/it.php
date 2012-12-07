@@ -115,3 +115,4 @@ $l['activateFilter']='Attiva questo filtro';
 $l["redirect_copy_to"]= 'Copia su email';
 $l['sieveWarning']="Se il tuo server IMAP supporta i filtri sieve. Ti consigliamo di utilizzare questi filtri. Prova prima la scheda 'Filtri sieve'.";
 $l['setRead']='Marca il messaggio come letto';
+$l['stopEndError']= 'Lo stop deve essere alla fine!';

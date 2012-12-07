@@ -26,5 +26,6 @@ $languages['sv']='Svenska';
 $languages['tr']='Türkçe';
 $languages['th']='ไทย';
 $languages['vi']='Tiếng Việt';
+$languages['bg']="български";
 
 $language_aliases['no']='nb';

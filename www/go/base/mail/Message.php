@@ -133,25 +133,23 @@ class GO_Base_Mail_Message extends Swift_Message{
 		//add text version of the HTML body
 		$htmlToText = new GO_Base_Util_Html2Text($htmlBody);
 		$this->addPart($htmlToText->get_text(), 'text/plain','UTF-8');
-
-//		if(isset($this->text_part_body)){
-//			//the body was already set so find the text version and replace it.
-//			$children = (array) $this->message->getChildren();
-//			foreach($children as $child){
-//
-//				if($child->getBody()==$this->text_part_body){
-//					$this->text_part_body = $htmlToText->get_text();
-//					$child->setBody($this->text_part_body);
-//					break;
-//				}					
-//			}
-//			//$this->text_body->setBody($htmlToText->get_text());
-//		}else
-//		{
-//			$this->text_part_body =$htmlToText->get_text();
-//			$this->message->addPart($this->text_part_body, 'text/plain','UTF-8');
-//		}
+	}
+	
+	/**
+	 * 
+	 * @return Swift_MimePart
+	 */
+	public function findPlainTextBody(){
 		
+		//the body was already set so find the text version and replace it.
+		$children = (array) $this->getChildren();
+		foreach($children as $child){
+
+			if($child->getContentType()=='text/plain'){
+				return $child;
+			}					
+		}
+		return false;
 	}
 	
 	private function _getParts($structure, $part_number_prefix='')

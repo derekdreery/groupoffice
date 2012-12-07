@@ -1,6 +1,7 @@
 <?php
 
 
+$l["task"]= 'Attività';
 $l["noTask"]= 'Non ci sono attività da visualizzare';
 $l["tasks"]= 'Attività';
 $l["addTask"]= 'Aggiungi un\'attività...';
@@ -28,6 +29,7 @@ $l["startsAt"]='Inizia a';
 $l["showInactiveTasks"]='Mostra attività inattive';
 $l["remindMe"]= 'Promemoria';
 $l["scheduleCall"]='Pianifica telefonata';
+$l["call"]='Telefonata';
 $l['name']='Attività';
 $l['description']='Inserisci qui una descrizione';
 $l['status']='Stato';

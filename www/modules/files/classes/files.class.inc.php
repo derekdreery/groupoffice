@@ -635,20 +635,22 @@ class files extends db {
 	function add_file($file) {
 		global $GO_CONFIG, $GO_EVENTS, $GO_MODULES;
 
-		$file['id']=$this->nextid('fs_files');
+//		$file['id']=$this->nextid('fs_files');
 		$file['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 		$file['extension']=File::get_extension($file['name']);
 		$this->insert_row('fs_files', $file);
 
 		$this->cache_file($file);
-
-		if(isset($GO_MODULES->modules['newfiles'])
-				&& (!empty($GO_MODULES->modules['newfiles']['read_permission'])
-						|| !empty($GO_MODULES->modules['newfiles']['write_permission'])
-					)
-			) {
-			$this->add_new_filelink($file);
-		}
+//
+//		if(isset($GO_MODULES->modules['newfiles'])
+//				&& (!empty($GO_MODULES->modules['newfiles']['read_permission'])
+//						|| !empty($GO_MODULES->modules['newfiles']['write_permission'])
+//					)
+//			) {
+//			$this->add_new_filelink($file);
+//		}
+		
+		$file['id']=$this->insert_id();
 
 		$GLOBALS['GO_EVENTS']->fire_event('add_file', $params=array($file));
 
@@ -875,13 +877,15 @@ class files extends db {
 	}
 
 	function add_folder($folder) {
-		$folder['id']=$this->nextid('fs_folders');
+//		$folder['id']=$this->nextid('fs_folders');
 		if(!isset($folder['user_id'])) {
 			global $GO_SECURITY;
 			$folder['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 		}
 
 		$this->insert_row('fs_folders', $folder);
+		
+		$folder['id']=$this->insert_id();
 
 		$this->cache_folder($folder);
 
