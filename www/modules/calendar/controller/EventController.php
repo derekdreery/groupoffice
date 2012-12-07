@@ -593,37 +593,30 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 		return parent::afterDisplay($response, $model, $params);
 	}	
-    
-    protected function actionTestGroup($params){
-      $view = GO_Calendar_Model_View::model()->findByPk(1);
-      $cals = $view->getGroupCalendars();
-      
-      print_r($cals->fetchAll());
-    }
 	
-	protected function actionViewStore($params){
+	protected function actionViewStore($params) {
 		$view = GO_Calendar_Model_View::model()->findByPk($params['view_id']);
-		if(!$view)
+		if (!$view)
 			throw new GO_Base_Exception_NotFound();
-		
+
 		unset($params['view_id']);
-		
+
 		//$calendars = $view->calendars;
-        $calendars = array_merge($view->getGroupCalendars()->fetchAll(), $view->calendars->fetchAll());
-           
-		$response['success']=true;
-		$response['results']=array();
-		
-        $results = array();
-		foreach($calendars as $calendar){
-			$params['calendars']='['.$calendar->id.']';
-			if(!isset($results[$calendar->id]))
-              $results[$calendar->id]=$this->actionStore($params);
+		$calendars = array_merge($view->getGroupCalendars()->fetchAll(), $view->calendars->fetchAll());
+
+		$response['success'] = true;
+		$response['results'] = array();
+
+		$results = array();
+		foreach ($calendars as $calendar) {
+			$params['calendars'] = '[' . $calendar->id . ']';
+			$params['events_only']=true;
+			if (!isset($results[$calendar->id]))
+				$results[$calendar->id] = $this->actionStore($params);
 		}
-        $response['results'] = array_values($results);
-		
+		$response['results'] = array_values($results);
+
 		return $response;
-		
 	}
 
 	/**
@@ -662,7 +655,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					throw new GO_Base_Exception_NotFound();
 				
 				//$calendarModels = $view->calendars;
-                $calendarModels = array_merge($view->getGroupCalendars()->fetchAll(), $view->calendars->fetchAll());
+				$calendarModels = array_merge($view->getGroupCalendars()->fetchAll(), $view->calendars->fetchAll());
 				$calendars=array();
 				foreach($calendarModels as $calendar){
 					$calendars[]=$calendar->id;
@@ -683,50 +676,56 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		foreach($calendars as $calendarId){
 			// Get the calendar model that is used for these events
-			$calendar = GO_Calendar_Model_Calendar::model()->findByPk($calendarId);
-			
-			// Set the colors for each calendar
-			$calendar->displayColor = $colors[$colorIndex];
-			if($colorIndex < count($colors))
-				$colorIndex++;
-			else
-				$colorIndex=0;
-			
-			
-			if($response['calendar_count'] > 1){
-				$background = $calendar->getColor(GO::user()->id);
+			try{
+				$calendar = GO_Calendar_Model_Calendar::model()->findByPk($calendarId);
+
+				// Set the colors for each calendar
+				$calendar->displayColor = $colors[$colorIndex];
+				if($colorIndex < count($colors))
+					$colorIndex++;
+				else
+					$colorIndex=0;
 
 
-				if(empty($background)){
-					$background = $calendar->displayColor;
+				if($response['calendar_count'] > 1){
+					$background = $calendar->getColor(GO::user()->id);
+
+
+					if(empty($background)){
+						$background = $calendar->displayColor;
+					}
+					$response['backgrounds'][$calendar->id]=$background;
 				}
-				$response['backgrounds'][$calendar->id]=$background;
+
+
+				$response['title'] .= $calendar->name.' & ';
+
+				// Set the first calendarId to the response // MAYBE DEPRECATED??
+				if(empty($response['calendar_id'])){
+					$response['calendar_id']=$calendar->id;
+					$response['write_permission']= $calendar->permissionLevel >= GO_Base_Model_Acl::WRITE_PERMISSION?true:false;
+					$response['calendar_name']=$calendar->name;
+					$response['permission_level']=$calendar->permissionLevel;
+					$response['count']=0;
+					$response['comment']=$calendar->comment;
+
+					if(empty($params['events_only'])){
+						if($calendar->show_bdays && GO::modules()->addressbook){
+							$response = $this->_getBirthdayResponseForPeriod($response,$calendar,$startTime,$endTime);
+						}
+
+						$response = $this->_getHolidayResponseForPeriod($response,$calendar,$startTime,$endTime);
+
+						if(GO::modules()->tasks){
+							$response = $this->_getTaskResponseForPeriod($response,$calendar,$startTime,$endTime);
+						}
+					}
+				}
+
+				$response = $this->_getEventResponseForPeriod($response,$calendar,$startTime,$endTime);
+			}	catch(GO_Base_Exception_AccessDenied $e){
+				//skip calendars without permission
 			}
-			
-			
-			$response['title'] .= $calendar->name.' & ';
-
-			// Set the first calendarId to the response // MAYBE DEPRECATED??
-			if(empty($response['calendar_id'])){
-				$response['calendar_id']=$calendar->id;
-				$response['write_permission']= $calendar->permissionLevel >= GO_Base_Model_Acl::WRITE_PERMISSION?true:false;
-				$response['calendar_name']=$calendar->name;
-				$response['permission_level']=$calendar->permissionLevel;
-				$response['count']=0;
-				$response['comment']=$calendar->comment;
-				
-				if($calendar->show_bdays && GO::modules()->addressbook){
-					$response = $this->_getBirthdayResponseForPeriod($response,$calendar,$startTime,$endTime);
-				}
-
-				$response = $this->_getHolidayResponseForPeriod($response,$calendar,$startTime,$endTime);
-
-				if(GO::modules()->tasks){
-					$response = $this->_getTaskResponseForPeriod($response,$calendar,$startTime,$endTime);
-				}
-			}
-
-			$response = $this->_getEventResponseForPeriod($response,$calendar,$startTime,$endTime);
 			
 		}
 
@@ -851,7 +850,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					'background'=>'f1f1f1',
 					'model_name'=>'',
 					'day'=>$dayString[date('w', $holiday->date)].' '.GO_Base_Util_Date::get_timestamp($holiday->date,false),
-					'read_only'=>true
+					'read_only'=>true,
+					'calendar_id'=>$calendar->id
 					);
 			}
 			
