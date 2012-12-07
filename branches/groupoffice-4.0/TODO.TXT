@@ -7,15 +7,6 @@ busy flag bij nieuwe resources
 
 vink voor verzenddatum op factuur.
 
-=========================================================================
-
-Is it possible to refresh the ticket list upon clicking on the ticket module tab? 
-To see new tickets i have to referesh the list manually, when i switch to this module. 
-If i forget it newly created tickets are "invisable" until the next cronjob runs.
-
-This can be added to all the tabs, so they will all be refreshed when opened
-
-=========================================================================
 
 move private check to first tab in event dialog
 
@@ -25,7 +16,6 @@ op ics klikken opent event dialog
 
 link rules email
 
-Migratie script interlokaal
 
 Totaal rates in ticket export
 

@@ -1,5 +1,5 @@
-<?php
+﻿<?php
 
 
-$l['name']='WebDAV server';
-$l['description']='Access your files from your desktop with the WebDAV server. The DAV services are built using the SabreDAV library.';
+$l['name']='WebDAV сървър';
+$l['description']='Достъп до Вашите файлове директно от десктопа, чрез ползване на WebDAV сървър. Услугите на DAV са изградени чрез използване на SabreDAV библиотеки.';
