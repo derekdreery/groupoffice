@@ -305,6 +305,13 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		}
 	}
 	
+	protected function beforeRun($action, $params, $render){
+		return true;
+	}
+	protected function afterRun($action, $params, $render){
+		return true;
+	}
+	
 	/**
 	 * Runs a method of this controller. If $action is save then it will run
 	 * actionSave of your extended class.
@@ -354,8 +361,12 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			
 			//Unset some system parameters not intended for the controller action.
 			unset($params['security_token'], $params['r']);
+			
+			$this->beforeRun($action, $params, $render);
 
 			$response =  $this->$methodName($params);
+			
+			$this->afterRun($action, $params, $render);
 			
 			$this->_unlockAction();
 
