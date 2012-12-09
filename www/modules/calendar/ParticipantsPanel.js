@@ -93,34 +93,35 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 		scope : this
 	}];
 
+	if(GO.addressbook){
+		this.selectContact = new GO.addressbook.SelectContact ({
+			name: 'quick_add_contact',
+			anchor: '100%',
+			fieldLabel:GO.lang.cmdAdd,
+			remoteSort: true
+		});
 
-	/*
-	this.inviteCheckbox = new Ext.form.Checkbox({
-		name:'invitation',
-		boxLabel:GO.calendar.lang.sendInvitation,
-		hideLabel:true		
-	})
-	*/
-//	this.importCheckbox = new Ext.form.Checkbox({
-//		name:'add_to_participant_calendars',
-//		boxLabel:GO.calendar.lang.importToCalendar,
-//		hideLabel:true		
-//	})
-
-	this.selectContact = new GO.addressbook.SelectContact ({
-		name: 'quick_add_contact',
-		anchor: '100%',
-		fieldLabel:GO.lang.cmdAdd,
-		remoteSort: true
-	});
-			
-	this.selectContact.on('select', function(combo, record)
-	{
-		if(record.data.go_user_id){
-			GO.request({
-					url:"calendar/participant/getUsers",
+		this.selectContact.on('select', function(combo, record)
+		{
+			if(record.data.go_user_id){
+				GO.request({
+						url:"calendar/participant/getUsers",
+						params:{
+							users: Ext.encode([record.data.go_user_id]),
+							start_time : this.eventDialog.getStartDate().format('U'),
+							end_time : this.eventDialog.getEndDate().format('U')
+						},
+						success:function(response, options, result){
+							this.store.loadData(result, true);
+						},
+						scope:this
+					});					
+			}else
+			{
+				GO.request({
+					url:"calendar/participant/getContacts",
 					params:{
-						users: Ext.encode([record.data.go_user_id]),
+						contacts: Ext.encode([record.data.id]),
 						start_time : this.eventDialog.getStartDate().format('U'),
 						end_time : this.eventDialog.getEndDate().format('U')
 					},
@@ -128,33 +129,20 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 						this.store.loadData(result, true);
 					},
 					scope:this
-				});					
-		}else
-		{
-			GO.request({
-				url:"calendar/participant/getContacts",
-				params:{
-					contacts: Ext.encode([record.data.id]),
-					start_time : this.eventDialog.getStartDate().format('U'),
-					end_time : this.eventDialog.getEndDate().format('U')
-				},
-				success:function(response, options, result){
-					this.store.loadData(result, true);
-				},
-				scope:this
-			});	
-		}
-		combo.reset();
-	}, this);
-	
-	this.checkPanel = new Ext.Panel({
-		border : true,
-		region:'north',
-		height:30,
-		bodyStyle:'padding:3px',
-		layout:'form',
-		items:[this.selectContact]
-	});
+				});	
+			}
+			combo.reset();
+		}, this);
+
+		this.selectContactPanel = new Ext.Panel({
+			border : true,
+			region:'north',
+			height:30,
+			bodyStyle:'padding:3px',
+			layout:'form',
+			items:[this.selectContact]
+		});
+	}
 	
 	this.gridPanel = new GO.grid.GridPanel(
 	{
@@ -234,9 +222,8 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 		title : GO.calendar.lang.participants,
 		border : false,
 		tbar:tbar,
-		layout : 'border',
-//		items:[this.gridPanel]
-		items:[this.checkPanel, this.gridPanel]
+		layout : GO.addressbook ? 'border' : 'fit',
+		items: GO.addressbook ? [this.selectContactPanel, this.gridPanel] : [this.gridPanel]
 	});
 
 	config.store.setDefaultSort('name', 'ASC');
