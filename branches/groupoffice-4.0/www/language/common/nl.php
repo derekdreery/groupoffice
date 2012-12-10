@@ -545,7 +545,7 @@ $l["personalDetailsFor"]= 'Persoonlijke gegevens voor';
 $l["fieldsetWork"]= 'Werk';
 $l["fieldsetAddress"]= 'Adres';
 $l["fieldsetContact"]= 'Contactgegevens';
-$l["attributeGreater"]="Veld '%s' moet groter zijn dan'%s'";
+$l["attributeGreater"]="Veld '%s' moet groter zijn dan '%s'";
 $l["attributeGreaterOrEqual"]="Veld '%s' moet groter of gelijk zijn aan '%s'";
 $l['pleaseEnterQuery']="Voer een zoekterm in a.u.b.";
 
