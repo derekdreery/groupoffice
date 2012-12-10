@@ -1,4 +1,11 @@
-To deploy a site:
+QUICK AND DIRTY DEPLOYMENT
+
+1. chmod 777 modules/sites/assets
+2. Create a site in the module. Just fill in the name and leave the defaults.
+3. Right click the site and click view.
+
+
+DEPLOY WITH NICE URLS:
 
 1. Create apache virtual host for example.com
 2. Copy modules/sites/index.php in document root of example.com's document root. eg. /var/www/example.com/html/index.php.

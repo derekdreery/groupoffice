@@ -36,6 +36,15 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 		return parent::model($className);
 	}
 	
+	protected function init() {
+		parent::init();
+		
+		$this->columns['name']['required']=true;
+		$this->columns['base_path']['required']=true;
+		$this->columns['template']['required']=true;
+		$this->columns['language']['required']=true;
+	}
+	
 	/**
 	 * Get the tablename of this model
 	 * @return string The tablename of this model
@@ -49,7 +58,7 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 				'domain'=>$_SERVER['SERVER_NAME'],
 				'base_path'=>GO::config()->host.'modules/sites',
 				'template'=>'Example',
-				'language'=>GO::language()->getLanguage(),
+				'language'=>'en',
 				'ssl'=>false,
 				'mod_rewrite'=>false,
 				'login_path'=>'/sites/site/login',
