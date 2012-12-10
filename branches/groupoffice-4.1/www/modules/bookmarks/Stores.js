@@ -63,12 +63,7 @@ GO.bookmarks.comboCategoriesStore = new GO.data.JsonStore({
 // store voor public icons, bestandsnamen
 	GO.bookmarks.thumbstore = new GO.data.JsonStore(
 	{
-			url: GO.url('bookmarks/bookmark/thumbs'),
-		
-//		url: GO.settings.modules.bookmarks.url+ 'json.php',
-//		baseParams: {
-//			task: 'thumbdir'
-//		}	,
+		url: GO.url('bookmarks/bookmark/thumbs'),
 		fields: ['filename']
 	});
 

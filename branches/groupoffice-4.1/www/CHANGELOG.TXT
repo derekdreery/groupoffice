@@ -28,6 +28,13 @@
 - Ticket system can be setup for non-users too through the new sites module.
 - Sites module refactored completely.
 
+10-12-2012 4.0.142
+- Validation check repeat end time for events
+- Bookmark upload was broken
+- Countries were not translated always.
+- Prevent IMAP error: A5 NO Client tried to access nonexistent namespace. ( Mailbox name should probably be prefixed with: INBOX.
+- Tree custom fields were missing on export
+
 07-12-2012 4.0.141
 - allow AR->find() to search for NULL value (change default operator from "=" to "IS" if value is NULL
 - Included index time in filesearch preview

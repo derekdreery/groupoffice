@@ -115,7 +115,7 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 		$columnModel->formatColumn('category_name', '$model->category_name');
 		$columnModel->formatColumn('thumb', '$model->thumbURL');
 		$columnModel->formatColumn('permissionLevel', '$model->permissionLevel');
-		$columnModel->formatColumn('content', 'urlDecode($model->content)');
+		$columnModel->formatColumn('content', 'urldecode($model->content)');
 	}
 
 	protected function remoteComboFields() {
@@ -133,6 +133,26 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 		}	
 		$response['success']=true;
 
+		return $response;
+	}
+	
+	protected function actionUpload($params) {
+
+	
+		$relpath = 'public/bookmarks/';
+		
+		$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.$relpath);
+		$folder->create();
+		
+		
+		$files= GO_Base_Fs_File::moveUploadedFiles($_FILES['attachments'], $folder);
+		$file= $files[0];
+		$file->rename($params['thumb_id'].'.'.$file->extension());
+		
+		$response['logo'] = $file->stripFileStoragePath();
+
+		$response['success'] = true;
+		
 		return $response;
 	}
 }

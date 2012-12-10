@@ -147,7 +147,7 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 		if(typeof(this.loadMask)=='undefined')
 			this.loadMask=true;
 	
-		if(!this.sm)
+		if(!this.sm && !this.disableSelection)
 			this.sm=this.selModel=new Ext.grid.RowSelectionModel();
 	
 		if(this.standardTbar){
