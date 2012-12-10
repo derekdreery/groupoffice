@@ -10,7 +10,7 @@ CREATE  TABLE IF NOT EXISTS `si_sites` (
   `mtime` INT NOT NULL ,
   `ctime` INT NOT NULL ,
   `user_id` INT NOT NULL ,
-  `language_id` INT NOT NULL ,
+  `language` VARCHAR(10) NOT NULL DEFAULT 'en' ,
 	`base_path` VARCHAR( 100 ) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;

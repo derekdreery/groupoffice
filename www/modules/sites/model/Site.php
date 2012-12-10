@@ -49,6 +49,7 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 				'domain'=>$_SERVER['SERVER_NAME'],
 				'base_path'=>GO::config()->host.'modules/sites',
 				'template'=>'Example',
+				'language'=>GO::language()->getLanguage(),
 				'ssl'=>false,
 				'mod_rewrite'=>false,
 				'login_path'=>'/sites/site/login',
