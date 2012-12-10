@@ -107,10 +107,10 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 				$this->smtp_password = $encrypted;
 		}
 		
-		if(
-				($this->isNew || $this->isModified("host") || $this->isModified("port") || $this->isModified("username")  || $this->isModified("password")) 
-				&& $this->checkImapConnectionOnSave
-			){
+//		if(
+//				($this->isNew || $this->isModified("host") || $this->isModified("port") || $this->isModified("username")  || $this->isModified("password")) 
+//				&& $this->checkImapConnectionOnSave
+//			){
 
 			$imap = $this->openImapConnection();
 			$this->mbroot=$imap->check_mbroot($this->mbroot);
@@ -119,7 +119,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 			$this->_createDefaultFolder('trash');
 			//	$this->_createDefaultFolder('spam');
 			$this->_createDefaultFolder('drafts');	
-		}
+//		}
 		
 		return parent::beforeSave();
 	}
@@ -150,24 +150,22 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 
 		$mailboxes = $this->getMailboxes();
 		
-		//throw new Exception(var_export($mailboxes, true));
-		
-		if(!isset($mailboxes[$this->$name])){
-//			throw new Exception($this->$name);
-			if(!$this->openImapConnection()->create_folder($this->$name)){
-//				if(isset($mailboxes[0])){
-					$this->mbroot= $this->openImapConnection()->check_mbroot("INBOX");
+		if(!isset($mailboxes[$this->$name])){			
+			$imap = $this->openImapConnection();
+			if(!$imap->create_folder($this->$name)){
+				//clear errors like:
+				//A5 NO Client tried to access nonexistent namespace. ( Mailbox name should probably be prefixed with: INBOX. )
+				$imap->clear_errors();
+				$this->mbroot= $this->openImapConnection()->check_mbroot("INBOX");
 
-					$this->$name = $this->mbroot.$this->$name;
+				$this->$name = $this->mbroot.$this->$name;
 
-					if(!in_array($this->$name, $mailboxes)){
-						 $this->openImapConnection()->create_folder($this->$name);
-					}
-//				}
+				if(!isset($mailboxes[$this->$name])){
+					$imap->create_folder($this->$name);
+				}
 			}
 		}
 	}
-
 	
 
 	public function decryptPassword(){
