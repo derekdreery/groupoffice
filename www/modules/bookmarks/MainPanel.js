@@ -16,7 +16,7 @@ Ext.namespace('GO.bookmarks');
 GO.bookmarks.getThumbUrl= function(logo, pub){
 	
 	if(GO.util.empty(pub)){
-		return BaseHref+"controls/thumb.php?src="+logo+"&h=16&w=16&pub=0";
+		return GO.url('core/thumb', {src:logo, h:16,w:16,pub:0});
 	}else
 	{
 		return GO.settings.modules.bookmarks.url+logo;

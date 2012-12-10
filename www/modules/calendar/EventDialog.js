@@ -655,9 +655,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				this.endTime.setValue(sT.add(Date.HOUR, 1).format(GO.settings.time_format))
 			}
 		}
-
-		if (this.repeatType.getValue() > 0) {
-			if (this.repeatEndDate.getValue() == '') {
+		
+		if (this.repeatType.getValue() != "") {
+			if (GO.util.empty(this.repeatEndDate.getValue())) {
 				this.repeatForever.setValue(true);
 			} else {
 

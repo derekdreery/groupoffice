@@ -45,7 +45,7 @@ Ext.extend(GO.addressbook.AddresslistsMultiSelectGrid, GO.grid.MultiSelectGrid, 
 		
 		Ext.Msg.show({
 			title: GO.addressbook.lang['addToAddresslist'].replace('%s',list_name),
-			msg: GO.addressbook.lang['addToAddresslistPrompt'].replace('%s',list_name),
+			msg: GO.addressbook.lang['addToAddresslistPrompt'].replace('/%s/g',list_name),
 			buttons: Ext.Msg.YESNOCANCEL,
 			scope: this,
 			fn: function(btn) {

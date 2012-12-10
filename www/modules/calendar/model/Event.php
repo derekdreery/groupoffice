@@ -72,6 +72,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$this->columns['end_time']['greater'] = 'start_time';
 		$this->columns['end_time']['gotype'] = 'unixtimestamp';
 		$this->columns['repeat_end_time']['gotype'] = 'unixtimestamp';
+		
+		$this->columns['repeat_end_time']['greater'] = 'start_time';
 		//$this->columns['category_id']['required'] = GO_Calendar_CalendarModule::commentsRequired();
 		
 		parent::init();
@@ -255,6 +257,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		return $this->duplicate($att, false);
 	}
 	
+
 	public function createException($exceptionDate){
 		$stmt = $this->getRelatedParticipantEvents(true);//A meeting can be multiple related events sharing the same uuid
 		foreach($stmt as $event){			
@@ -311,7 +314,24 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		GO::setIgnoreAclPermissions($oldIgnore);
 		return $returnEvent;
 	}
+
+	public function attributeLabels() {
+		$attr = parent::attributeLabels();
+		$attr['repeat_end_time']=GO::t('repeatUntil','calendar');
+		$attr['start_time']=GO::t('startsAt','calendar');
+		$attr['end_time']=GO::t('endsAt','calendar');
+		return $attr;
+	}
 	
+	public function validate() {
+		if($this->rrule != ""){			
+			$rrule = new GO_Base_Util_Icalendar_Rrule();
+			$rrule->readIcalendarRruleString($this->start_time, $this->rrule);						
+			$this->repeat_end_time = $rrule->until;
+		}		
+		return parent::validate();
+	}
+
 	protected function beforeSave() {
 		
 		if($this->rrule != ""){			
@@ -342,7 +362,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			{
 				$this->background='FF6666';
 			}			
-		}
+		}	
 		
 		return parent::beforeSave();
 	}
@@ -1432,8 +1452,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		if(!$dontSave){
 			$this->cutAttributeLengths();
-			$this->save();
-
+			try {
+				$this->save();
+			} catch (Exception $e) {
+				throw new Exception($this->name.' ['.GO_Base_Util_Date::get_timestamp($this->start_time).' - '.GO_Base_Util_Date::get_timestamp($this->end_time).'] '.$e->getMessage());
+			}
+			
 			if(!empty($exception)){			
 				//save the exception we found by recurrence-id
 				$exception->exception_event_id=$this->id;

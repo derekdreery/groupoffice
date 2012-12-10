@@ -44,7 +44,9 @@ class GO_Base_Observable{
 		
 		$dir = GO::config()->orig_tmpdir.'cache/listeners/';
 		if(GO::config()->debug){
-			exec('rm -Rf '.$dir);
+			$folder = new GO_Base_Fs_Folder($dir);
+			$folder->delete();
+			//exec('rm -Rf '.$dir);
 		}
 		$dirExists = is_dir($dir);
 		if(!$dirExists){
