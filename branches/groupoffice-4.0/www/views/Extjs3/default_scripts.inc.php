@@ -186,8 +186,7 @@ if(GO::user()) {
 $extjsLang = GO::t('extjs_lang');
 if($extjsLang=='extjs_lang')
 	$extjsLang = GO::language()->getLanguage();
-
-$file = 'base-'.md5($settings['language'].GO::config()->mtime).'.js';
+$file = 'base-'.md5($extjsLang.GO::config()->mtime).'.js';
 $path = GO::config()->file_storage_path.'cache/'.$file;
 
 
@@ -246,13 +245,10 @@ if(GO::config()->debug || !file_exists($path)) {
 	//Put all lang vars in js
 	$language = new GO_Base_Language();
 	$l = $language->getAllLanguage();
-	
+
 	fwrite($fp,'GO.lang='.json_encode($l['base']['common']).';');
 	fwrite($fp,'GO.lang.countries='.json_encode($l['base']['countries']).';');
 	unset($l['base']);
-	
-	
-	
 	
 	
 	
@@ -264,38 +260,15 @@ if(GO::config()->debug || !file_exists($path)) {
 		$dynamic_debug_script=GO::config()->file_storage_path.'cache/languages.js';		
 		$scripts[]=GO::url("core/compress", array('file'=>'languages.js', 'mtime'=>filemtime($dynamic_debug_script)));	
 	}
-
-	include($GLOBALS['GO_LANGUAGE']->get_base_language_file('countries'));
-	//array_multisort($countries);
-	$fp=fopen(GO::config()->file_storage_path.'cache/countries.js','w');
-	if(!$fp){
-		die('Could not write to cache directory');
-	}
-
-	foreach($countries as $key=>$country) {
-		fwrite($fp,'GO.lang.countries["'.$key.'"] = "'.$country.'";');
-	}
-	fclose($fp);
-	if(!GO::config()->debug){
-		$scripts[]=GO::config()->file_storage_path.'cache/countries.js';
-	}else
-	{
-		$dynamic_debug_script=GO::config()->file_storage_path.'cache/countries.js';
-		$scripts[]=GO::url("core/compress", array('file'=>'countries.js', 'mtime'=>filemtime($dynamic_debug_script)));			
-	}
-
 	
-		$data = file_get_contents(GO::config()->root_path.'views/Extjs3/javascript/scripts.txt');
-		$lines = explode("\n", $data);
-		foreach($lines as $line) {
-			if(!empty($line)) {
-				$scripts[]=$root_uri.$line;
-			}
+	$data = file_get_contents(GO::config()->root_path.'views/Extjs3/javascript/scripts.txt');
+	$lines = explode("\n", $data);
+	foreach($lines as $line) {
+		if(!empty($line)) {
+			$scripts[]=$root_uri.$line;
 		}
+	}
 	
-
-	
-
 	if(!GO::config()->debug) {
 		foreach($scripts as $script) {
 			file_put_contents($path,"\n\n".file_get_contents($script),FILE_APPEND);
@@ -447,8 +420,9 @@ if(count($load_modules)) {
 	}
 
 	//two modules may include the same script
+	$scripts = array_map('trim',$scripts);
 	$scripts=array_unique($scripts);
-
+	
 	//include config file location because in some cases different URL's point to
 	//the same database and this can break things if the settings are cached.
 	$file = $user_id.'-'.md5(GO::config()->mtime.GO::config()->get_config_file().':'.GO::language()->getLanguage().':'.$modulesCacheStr).'.js';
