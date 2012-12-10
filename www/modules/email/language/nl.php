@@ -17,7 +17,6 @@ $l['drafts']='Concepten';
 $l['no_subject']='Geen onderwerp';
 $l['no_recipients']='Vertrouwelijke ontvangers';
 $l['original_message']='--- Origineel bericht volgt ---';
-$lang['link_type'][9]='E-mail';
 $l['notification_subject']='Gelezen: %s';
 $l['notification_body']='Uw bericht met onderwerp "%s" is getoond op %s';
 $l['errorGettingMessage']='Kon bericht niet ophalen van server';
@@ -230,7 +229,7 @@ $l['attachedAppointmentInfo']="Informatie over bijgevoegde afspraak";
 
 $l["forwardTo"]='Mail doorsturen aan';
 $l["markFolderReadConfirm"]='Weet u zeker dat u alle berichten in map \'{name}\' als gelezen wilt markeren?';
-$l["moveOldMails"]= 'Verplaats oude berictehn';
+$l["moveOldMails"]= 'Verplaats oude berichten';
 $l["moveOldMailsInstructions"]= 'Selecteer een datum. Wanneer u vervolgens op OK klikt, worden alle berichten voor die datum naar de doelmap verplaatst.';
 $l["moveOldMailsSure"]= 'Weet u zeker dat u alle berichten ouder dan {date} van "{source}" naar "{target}" wilt verplaatsen?';
 $l["nMovedMailsTxt"]= 'Het aantal verplaatste berichten: ';
