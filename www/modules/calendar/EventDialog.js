@@ -68,11 +68,9 @@ GO.calendar.EventDialog = function(calendar) {
 
 	this.formPanel = new Ext.form.FormPanel({
 		waitMsgTarget : true,
-		//url : GO.settings.modules.calendar.url + 'json.php',
 		url : GO.url('calendar/event/load'),
 		border : false,
 		baseParams : {
-//			task : 'event'
 		},
 		items : this.tabPanel
 	});
@@ -747,9 +745,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				this.endTime.setValue(sT.add(Date.HOUR, 1).format(GO.settings.time_format))
 			}
 		}
-
-		if (this.repeatType.getValue() > 0) {
-			if (this.repeatEndDate.getValue() == '') {
+		
+		if (this.repeatType.getValue() != "") {
+			if (GO.util.empty(this.repeatEndDate.getValue())) {
 				this.repeatForever.setValue(true);
 			} else {
 

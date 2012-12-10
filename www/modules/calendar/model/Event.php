@@ -58,6 +58,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$this->columns['end_time']['greater'] = 'start_time';
 		$this->columns['end_time']['gotype'] = 'unixtimestamp';
 		$this->columns['repeat_end_time']['gotype'] = 'unixtimestamp';
+		
+		$this->columns['repeat_end_time']['greater'] = 'start_time';
 		//$this->columns['category_id']['required'] = GO_Calendar_CalendarModule::commentsRequired();
 		
 		parent::init();
@@ -200,6 +202,23 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		return $this->duplicate($att, false);
 	}
 	
+	public function attributeLabels() {
+		$attr = parent::attributeLabels();
+		$attr['repeat_end_time']=GO::t('repeatUntil','calendar');
+		$attr['start_time']=GO::t('startsAt','calendar');
+		$attr['end_time']=GO::t('endsAt','calendar');
+		return $attr;
+	}
+	
+	public function validate() {
+		if($this->rrule != ""){			
+			$rrule = new GO_Base_Util_Icalendar_Rrule();
+			$rrule->readIcalendarRruleString($this->start_time, $this->rrule);						
+			$this->repeat_end_time = $rrule->until;
+		}		
+		return parent::validate();
+	}
+	
 	protected function beforeSave() {
 		
 		//Don't set reminders for the superadmin
@@ -214,13 +233,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			{
 				$this->background='FF6666';
 			}			
-		}
-		
-		if($this->rrule != ""){			
-			$rrule = new GO_Base_Util_Icalendar_Rrule();
-			$rrule->readIcalendarRruleString($this->start_time, $this->rrule);						
-			$this->repeat_end_time = $rrule->until;
-		}
+		}	
 		
 		return parent::beforeSave();
 	}
