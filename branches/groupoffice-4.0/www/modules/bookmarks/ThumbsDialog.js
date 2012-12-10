@@ -115,7 +115,6 @@ GO.bookmarks.ThumbsDialog = function(config){
 		waitMsgTarget : true,
 		autoScroll:true,
 		baseParams: {
-			task: 'upload'
 		},
 		items : [this.uploadFile]
 	});
@@ -182,7 +181,7 @@ Ext.extend(GO.bookmarks.ThumbsDialog, Ext.Window, {
   // kopie / aanpassing uit Files module
 	uploadHandler : function(){
 		this.uploadForm.form.submit({
-			url:GO.settings.modules.bookmarks.url+'action.php',
+			url:GO.url("bookmarks/bookmark/upload"),
 			waitMsg : GO.lang.waitMsgUpload,
 			params:{
 				thumb_id:   this.thumb_id,

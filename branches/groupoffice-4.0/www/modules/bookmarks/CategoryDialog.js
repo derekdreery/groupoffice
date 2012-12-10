@@ -27,7 +27,6 @@ GO.bookmarks.CategoryDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	buildForm : function () {
 
 		this.propertiesPanel = new Ext.Panel({
-			url: GO.settings.modules.notes.url+'action.php',
 			border: false,
 			baseParams: {task: 'category'},			
 			title:GO.lang['strProperties'],			
