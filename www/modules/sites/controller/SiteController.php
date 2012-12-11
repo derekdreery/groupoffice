@@ -59,11 +59,7 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 		$user = new GO_Base_Model_User();		
 		$contact = new GO_Addressbook_Model_Contact();
 		
-		
-		
-		
-		
-		
+				
 //		$user->setValidationRule('passwordConfirm', 'required', true);
 		$company = new GO_Addressbook_Model_Company();		
 		
@@ -82,6 +78,8 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 		
 			if(!empty($_POST['Company']['postAddressIsEqual']))
 				$company->setPostAddressFromVisitAddress();
+			
+			$contact->addressbook_id=$company->addressbook_id=1;//just for validating
 			
 			if($user->validate() && $contact->validate() && $company->validate())
 			{				
@@ -110,11 +108,11 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 						throw new Exception('Login after registreation failed.');
 				}
 			}
-//			else {
-//				var_dump($user->getValidationErrors());
-//				var_dump($contact->getValidationErrors());
-//				var_dump($company->getValidationErrors());
-//			}
+			else {
+				var_dump($user->getValidationErrors());
+				var_dump($contact->getValidationErrors());
+				var_dump($company->getValidationErrors());
+			}
 		}
 		
 		$user->password="";
