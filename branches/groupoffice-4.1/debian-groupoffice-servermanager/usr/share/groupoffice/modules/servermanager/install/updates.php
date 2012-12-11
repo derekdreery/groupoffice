@@ -167,7 +167,7 @@ $updates["201210051200"][]="CREATE  TABLE IF NOT EXISTS `sm_usage_history` (
   `count_users` INT NOT NULL ,
   `database_usage` DOUBLE NOT NULL ,
   `file_storage_usage` DOUBLE NOT NULL ,
-  `mailbox_usage` DOUBLE NOT NULL ,
+  `mailbox_usage` DOUBLE NOT NULL DEFAULT 0,
   `total_logins` INT NOT NULL DEFAULT 0 ,
   `installation_id` INT NOT NULL ,
   PRIMARY KEY (`id`) ,
@@ -252,3 +252,42 @@ $updates['201210051200'][]="INSERT INTO `sm_user_prices` (`max_users`, `price_pe
 
 $updates['201210051200'][]="INSERT INTO `sm_module_prices` (`module_name` ,`price_per_month`) VALUES 
 	('billing', '20');";
+
+
+$updates['201212111333'][]="ALTER TABLE  `sm_usage_history` CHANGE  `mailbox_usage`  `mailbox_usage` DOUBLE NOT NULL DEFAULT  '0'";
+$updates['201212111333'][]="ALTER TABLE  `sm_usage_history` CHANGE  `database_usage`  `database_usage` DOUBLE NOT NULL DEFAULT  '0'";
+$updates['201212111333'][]="ALTER TABLE  `sm_usage_history` CHANGE  `file_storage_usage`  `file_storage_usage
+	ALTER TABLE  `sm_usage_history` CHANGE  `count_users`  `count_users` INT( 11 ) NOT NULL DEFAULT  '0'
+` DOUBLE NOT NULL DEFAULT  '0'";
+
+$updates['201212111333'][]="DROP TABLE sm_installation_users";
+$updates['201212111333'][]="CREATE  TABLE IF NOT EXISTS `sm_installation_users` (
+  `user_id` INT NOT NULL ,
+	`username` VARCHAR(100) NOT NULL,
+  `installation_id` INT NOT NULL ,
+  `used_modules` TEXT NOT NULL ,
+  `ctime` INT NOT NULL ,
+  `lastlogin` INT NULL ,
+  `enabled` TINYINT(1) NULL ,
+  PRIMARY KEY (`user_id`, `installation_id`) ,
+  INDEX `fk_sm_installation_users_sm_installations1` (`installation_id` ASC) ,
+  CONSTRAINT `fk_sm_installation_users_sm_installations1`
+    FOREIGN KEY (`installation_id` )
+    REFERENCES `sm_installations` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;";
+
+
+$updates['201212111333'][]="CREATE TABLE `li_servers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `host` varchar(255) NOT NULL,
+  `ip` varchar(45) DEFAULT NULL,
+  `ctime` int(11) NOT NULL,
+  `mtime` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `uname` varchar(100) DEFAULT NULL,
+  `version` varchar(45) NOT NULL DEFAULT '-',
+  `active` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8";
