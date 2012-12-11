@@ -594,7 +594,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		);
 
 		
-		$installations = GO_ServerManager_Model_Installation::model()->find()->fetchAll();
+		$installations = empty($params['installation']) ? GO_ServerManager_Model_Installation::model()->find()->fetchAll() : GO_ServerManager_Model_Installation::model()->findByAttribute('name',$params['installation'])->fetchAll();
 		foreach($installations as $installation)
 		{			
 			
@@ -642,7 +642,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			$installation->sendAutomaticEmails();
 			
 			//send automatic invoices if enabled
-			if($installation->automaticInvoice != null && $installation->automaticInvoice->enable_invoicing && $installation->automaticInvoice->shouldCreateOrder())
+			if(!empty($installation->automaticInvoice) && $installation->automaticInvoice->enable_invoicing && $installation->automaticInvoice->shouldCreateOrder())
 			{	
 				if($installation->automaticInvoice->sendOrder())
 					echo "Order was posted to billing successfull\n";
@@ -663,7 +663,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		//Post the report to intermesh
 		//TODO: replace trunk.loc to intermesh.nl when rolling out
 		$c = new GO_Base_Util_HttpClient();
-		$response = $c->request('http://trunk.loc/?r=licenses/server/report', array(
+		$response = $c->request('https://intermesh.group-office.com/?r=licenses/server/report', array(
 				'report'=>json_encode($report)
 		));
 
@@ -671,8 +671,10 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 
 		if($response['success'])
 			echo "Report was send to intermesh\n";
-		else
+		else{
 			echo "ERROR: sending report to intermesh\n";
+			var_dump($response);
+		}
 
 //		$message = GO_Base_Mail_Message::newInstance();
 //		$message->setSubject("Servermanager report for ". $report['hostname']);
