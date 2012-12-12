@@ -121,3 +121,4 @@ $l['bookmarks']="Bookmarks";
 $l['bookmarkAlreadyExists']="Folder '%fn' already has a bookmark for the current user.";
 $l['removeBookmark']="Remove bookmark";
 $l['removeBookmarkQuestion']="Remove folder '%fn' from your bookmarks list?";
+$l['notInSearchMode']="Can not do this when in search mode.";

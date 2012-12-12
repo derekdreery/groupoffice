@@ -230,6 +230,9 @@ GO.files.FileBrowser = function(config){
 //		root: 'results',
 //		totalProperty: 'total',
 		url:GO.url("files/folder/list"),
+                baseParams: {
+                  'query' : ''
+                },
 		id: 'type_id',
 		fields:fields.fields,
 		remoteSort:true
@@ -349,22 +352,44 @@ GO.files.FileBrowser = function(config){
 		menu: this.newMenu
 	});
 
-	this.locationTextField = new Ext.form.TextField({
-		fieldLabel:GO.lang.strLocation,
-		name:'files-location',
-		anchor:'100%'
-	});
-
 	this.locationPanel = new Ext.Panel({
 		region:'north',
-		layout:'form',
 		border:false,
 		baseCls:'x-plain',
 		height:32,
 		labelWidth:75,
 		plain:true,
-		cls:'go-files-location-panel',
-		items:this.locationTextField
+                layout: 'form',
+//		cls:'go-files-location-panel',
+                split:false,
+//		height:40,
+		forceLayout:true,
+                padding: '5px',
+		items: [{
+                      xtype: 'compositefield',
+                      border: false,
+                      anchor: '100%',
+                      fieldLabel:GO.lang.strLocation,
+                      items: [
+                        this.locationTextField = new Ext.form.TextField({
+                                name:'files-location',
+                                flex : 1
+                        }),
+                        this.searchField = new GO.form.SearchField({
+                            store: this.gridStore,
+                            width: 230,
+                            listeners: {
+                              scope : this,
+                              search : function() {
+                                this.fireEvent('search');
+                              },
+                              reset : function() {
+                                this.fireEvent('refresh');
+                              }
+                            }
+                          })
+                      ]
+                    }]
 	});
 
 	this.upButton = new Ext.Button({
@@ -372,7 +397,10 @@ GO.files.FileBrowser = function(config){
 		text: GO.lang.up,
 		cls: 'x-btn-text-icon',
 		handler: function(){
-			this.setFolderID(this.parentID);
+                    if (GO.util.empty(this.gridStore.baseParams['query']))
+                        this.setFolderID(this.parentID);
+                    else
+                        Ext.MessageBox.alert('',GO.files.lang['notInSearchMode']);
 		},
 		scope: this,
 		disabled:true
@@ -465,6 +493,7 @@ GO.files.FileBrowser = function(config){
 		iconCls: 'btn-upload',
 		text : GO.lang.largeUpload,
 		handler : function() {
+                    if ( GO.util.empty(this.gridStore.baseParams['query']) ) {
 			GO.currentFilesStore=this.gridStore;
 
 			if (!deployJava.isWebStartInstalled('1.5.0')) {
@@ -481,6 +510,9 @@ GO.files.FileBrowser = function(config){
 					allwaysOnTop:true // Not working!!
 				});
 			}
+                    } else {
+                        Ext.MessageBox.alert('',GO.files.lang['notInSearchMode']);
+                    }
 		},
 		scope : this
 	});
@@ -510,6 +542,7 @@ GO.files.FileBrowser = function(config){
 		iconCls: "btn-refresh",
 		text:GO.lang.cmdRefresh,
 		handler: function(){
+                    
 			this.refresh(true);
 		},
 		scope:this
@@ -704,7 +737,11 @@ GO.files.FileBrowser = function(config){
 
 	this.addEvents({
 		fileselected : true,
-		filedblclicked : true
+		filedblclicked : true,
+                refresh : true,
+                folderIdSet : true,
+                rootIdSet : true,
+                search : true
 	});
 
 	this.on('fileselected',function(grid, r){
@@ -728,6 +765,34 @@ GO.files.FileBrowser = function(config){
 	this.bookmarksGrid.on('bookmarkClicked', function(bookmarksGrid,bookmarkRecord){
 		this.setFolderID(bookmarkRecord.data['folder_id']);
 	},this);
+        
+        this.on('folderIdSet',function(){
+            
+          // turn on buttons
+          if (!GO.util.empty(this.gridStore.reader.jsonData))
+            this.setWritePermission(this.gridStore.reader.jsonData.permission_level);
+          this.searchField.setValue('');
+          delete this.gridStore.baseParams['query'];
+          this._enableFilesContextMenuButtons(true);
+        },this);
+        
+        this.on('refresh',function(){
+            
+          // turn on buttons
+          if (!GO.util.empty(this.gridStore.reader.jsonData))
+            this.setWritePermission(this.gridStore.reader.jsonData.permission_level);
+          this.searchField.setValue('');
+          delete this.gridStore.baseParams['query'];
+          this._enableFilesContextMenuButtons(true);
+        },this);
+        
+        this.on('search',function(){
+            
+          // turn off buttons
+          this._enableFilesContextMenuButtons(false);
+          this.setWritePermission(0);
+
+        },this);
 
 }
 
@@ -742,6 +807,23 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	pasteMode : 'cut',
 
 	path : '',
+
+        _enableFilesContextMenuButtons : function(enable) {
+            this.filesContextMenu.cutButton.setDisabled(!enable);
+            this.filesContextMenu.copyButton.setDisabled(!enable);
+            this.filesContextMenu.compressButton.setDisabled(!enable);
+            this.filesContextMenu.decompressButton.setDisabled(!enable);
+            this.filesContextMenu.createDownloadLinkButton.setDisabled(!enable);
+            
+            if (!GO.util.empty(this.filesContextMenu.gotaButton))
+                this.filesContextMenu.gotaButton.setDisabled(!enable);
+            
+            if (!GO.util.empty(this.filesContextMenu.downloadLinkButton))
+                this.filesContextMenu.downloadLinkButton.setDisabled(!enable);
+            
+            if (!GO.util.empty(this.filesContextMenu.emailFilesButton))
+                this.filesContextMenu.emailFilesButton.setDisabled(!enable);
+        },
 
 	saveCMState: function(state) {
 		GO.request({
@@ -904,6 +986,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 						scope:this
 				});
 		}
+                
+                this.fireEvent('folderIdSet');
 	},
 
 	buildNewMenu : function(){
@@ -1017,6 +1101,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 	onDecompress : function(records){
 
+            if (GO.util.empty(this.gridStore.baseParams['query'])) {
+
 		var decompress_sources = [];
 		for(var i=0;i<records.length;i++)
 		{
@@ -1040,10 +1126,16 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				}
 			});
 		}
+               
+            } else {
+                Ext.MessageBox.alert('', GO.files.lang['notInSearchMode']);
+            }
 	},
 
 	onCompress : function(records, filename)
 	{
+
+            if (GO.util.empty(this.gridStore.baseParams['query'])) {
 
 		var params = {
 			compress_sources: [],
@@ -1084,6 +1176,10 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				}
 			});
 		}
+
+            } else {
+                Ext.MessageBox.alert('', GO.files.lang['notInSearchMode']);
+            }
 
 	},
 
@@ -1132,7 +1228,10 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	},
 
 	onPaste : function(){
+            if (GO.util.empty(this.gridStore.baseParams['query']))
 		this.paste(this.pasteMode, this.folder_id, this.pasteSelections);
+            else
+                Ext.MessageBox.alert('', GO.files.lang['notInSearchMode']);
 	},
 
 	onDelete : function(clickedAt){
@@ -1387,7 +1486,12 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		if(syncFilesystemWithDatabase)
 			delete this.treePanel.getLoader().baseParams.sync_folder_id;
 
+                this.searchField.setValue('');
+                delete this.gridStore.baseParams['query'];
+
 		this.filePanel.reload();
+                
+                this.fireEvent('refresh');
 	},
 
 	sendOverwrite : function(params){
@@ -1549,6 +1653,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 	promptNewFolder : function(){
 
+            if (GO.util.empty(this.gridStore.baseParams['query'])) {
+	
 		if(!this.newFolderWindow)
 		{
 			this.newFolderWindow = new GO.files.NewFolderDialog();
@@ -1568,6 +1674,10 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			},this);
 		}
 		this.newFolderWindow.show(this.folder_id);
+            	
+            } else {
+                Ext.MessageBox.alert('', GO.files.lang['notInSearchMode']);
+            }
 	},
 
 	onGridDoubleClick : function(grid, rowClicked, e){
@@ -1609,6 +1719,9 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		this.deleteButton.setDisabled(!deletePermission);
 		this.uploadButton.setDisabled(!createPermission);
 		this.cutButton.setDisabled(!deletePermission);
+                
+                this.copyButton.setDisabled(permissionLevel<=0);
+                
 		this.pasteButton.setDisabled(!writePermission || !this.pasteSelections.length);
 
 	//this.filesContextMenu.deleteButton.setDisabled(!writePermission);
@@ -1645,6 +1758,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			scope:this
 		});
 
+
+                this.fireEvent('folderIdSet');
 
 	},
 
