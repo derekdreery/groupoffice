@@ -163,6 +163,29 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		return ($this->locked_user_id==GO::user()->id || GO::user()->isAdmin()) && $this->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION);
 	}
 	
+        public function getJsonData() {
+            return array(
+                'id' => $this->model_id,
+                'name' => $this->name,
+                'ctime' => GO_Base_Util_Date::get_timestamp($this->ctime),
+                'mtime' => GO_Base_Util_Date::get_timestamp($this->mtime),
+                'extension' => $this->extension,
+                'size' => $this->size,
+                'user_id' => $this->user_id,
+                'type' => $this->type,
+                'folder_id' => $this->folder_id,
+                'type_id' => 'f:'.$this->id,
+                'acl_id' => $this->acl_id,
+                'path' => !empty($this->folder) ? $this->folder->path.'/'.$this->name : $this->name,
+                'locked' => $this->isLocked(),
+                'locked_user_id' => $this->locked_user_id,
+                'unlock_allowed' => $this->unlockAllowed(),
+                'expire_time' => $this->expire_time > 0 ? GO_Base_Util_Date::get_timestamp($this->expire_time,false) : '',
+                'thumbs' => 0,
+                'thumb_url' => $this->getThumbURL()
+              );
+        }        
+        
 	/**
 	 * 
 	 * @return \GO_Base_Fs_File

@@ -120,3 +120,4 @@ $l['bookmarks']="Bladwijzers";
 $l['bookmarkAlreadyExists']="Bladwijzer van folder '%fn' bestaat al voor de huidige gebruiker.";
 $l['removeBookmark']="Bladwijzer verwijderen";
 $l['removeBookmarkQuestion']="Folder '%fn' verwijderen uit uw bladwijzerlijst?";
+$l['notInSearchMode']="Dit is niet mogelijk in het zoekmodus.";
