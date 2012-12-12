@@ -1,3 +1,6 @@
+4.0.143
+- Solved Access denied exception when using an Smime email account for system messages
+
 10-12-2012 4.0.142
 - Validation check repeat end time for events
 - Bookmark upload was broken
