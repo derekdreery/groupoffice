@@ -175,7 +175,6 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
                 'type' => $this->type,
                 'folder_id' => $this->folder_id,
                 'type_id' => 'f:'.$this->id,
-                'acl_id' => $this->acl_id,
                 'path' => !empty($this->folder) ? $this->folder->path.'/'.$this->name : $this->name,
                 'locked' => $this->isLocked(),
                 'locked_user_id' => $this->locked_user_id,
