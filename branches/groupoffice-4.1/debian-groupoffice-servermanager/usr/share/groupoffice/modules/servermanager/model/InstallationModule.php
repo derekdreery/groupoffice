@@ -87,26 +87,6 @@ class GO_ServerManager_Model_InstallationModule extends GO_Base_Db_ActiveRecord
 	}
 	
 	/**
-	 * Loop through installation users and count all users that have access to this module
-	 * 
-	 * @return int amount of user with access to this module
-	 */
-	public function getUsercount()
-	{
-		if($this->isNew)
-			return 0;
-		if($this->_usercount !== null)
-			return $this->_usercount;
-		$this->_usercount = 0;
-		foreach($this->installation->users as $user)
-		{
-			if($user->allowedToModule($this->name))
-				$this->_usercount++;
-		}
-		return $this->_usercount;
-	}
-	
-	/**
 	 * Is this installation module in trial use?
 	 * 
 	 * @return boolean true is this module is payed and still in trail use
@@ -150,7 +130,7 @@ class GO_ServerManager_Model_InstallationModule extends GO_Base_Db_ActiveRecord
 		return array(
 				'id'=>$this->name,
 				'name'=>$this->getModuleName(),
-				'usercount'=>$this->getUsercount(),
+				'usercount'=>$this->usercount,
 				'checked'=>$this->getChecked(),
 				'ctime'=>$this->getAttribute('ctime', 'formatted'),
 				'isTrial'=>$this->isTrial(),
@@ -166,27 +146,27 @@ class GO_ServerManager_Model_InstallationModule extends GO_Base_Db_ActiveRecord
 	 */
 	public function sendTrialTimeLeftMail()
 	{
-		if(!$this->isTrial())
-			return true;
-		
-		$message = GO_Base_Mail_Message::newInstance();
-		$subject = vsprintf(GO::t('module_trial_email_title','servermanager'),array($this->getModuleName()));
-		$message->setSubject($subject);
-		
-		$fromName = GO::config()->title;
-	
-		$parts = explode('@', GO::config()->webmaster_email);
-		$fromEmail = 'noreply@'.$parts[1];
-		
-		$toEmail = $this->installation->config['webmaster_email'];
-
-		$emailBody = GO::t('module_trial_email_body','servermanager'); //TODO: add to translation
-		$emailBody = vsprintf($emailBody,array($this->getModuleName(), $this->trialDaysLeft));
-		
-		$message->setBody($emailBody);
-		$message->addFrom($fromEmail,$fromName);
-		$message->addTo($toEmail);
-		
-		return GO_Base_Mail_Mailer::newGoInstance()->send($message);
+//		if(!$this->isTrial())
+//			return true;
+//		
+//		$message = GO_Base_Mail_Message::newInstance();
+//		$subject = vsprintf(GO::t('module_trial_email_title','servermanager'),array($this->getModuleName()));
+//		$message->setSubject($subject);
+//		
+//		$fromName = GO::config()->title;
+//	
+//		$parts = explode('@', GO::config()->webmaster_email);
+//		$fromEmail = 'noreply@'.$parts[1];
+//		
+//		$toEmail = $this->installation->config['webmaster_email'];
+//
+//		$emailBody = GO::t('module_trial_email_body','servermanager'); //TODO: add to translation
+//		$emailBody = vsprintf($emailBody,array($this->getModuleName(), $this->trialDaysLeft));
+//		
+//		$message->setBody($emailBody);
+//		$message->addFrom($fromEmail,$fromName);
+//		$message->addTo($toEmail);
+//		
+//		return GO_Base_Mail_Mailer::newGoInstance()->send($message);
 	}
 }
