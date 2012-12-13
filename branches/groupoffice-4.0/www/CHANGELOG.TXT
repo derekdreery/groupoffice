@@ -1,4 +1,4 @@
-12-12-2012 4.0.143
+13-12-2012 4.0.143
 - Type label for ExportGridDialog will be translated
 - Sync contacts with ActiveSync when company changes too
 - Solved Access denied exception when using an SMIME email account for system messages
@@ -6,6 +6,8 @@
 - Better display of multi day events in month grid.
 - Tasklist refresh button didn't refresh list
 - Chrome grid render bug fixed
+- Incorrect margin on P tags in e-mail display
+- Translated file search labels
 
 10-12-2012 4.0.142
 - Validation check repeat end time for events
