@@ -1466,7 +1466,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if($this->_debugSql)
 				GO::debug($sql);
 		
-		//try{
+		try{
 			$result = $this->getDbConnection()->query($sql);
 			$result->model=$this;
 			$result->findParams=$findParams;
@@ -1475,29 +1475,22 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 			$models =  $result->fetchAll();
 			$model = isset($models[0]) ? $models[0] : false;
+		}catch(PDOException $e){
+			$msg = $e->getMessage()."\n\nFull SQL Query: ".$sql;			
 		
-			//todo check read permissions
-			if($model && !$ignoreAcl && !$model->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION)){
-				$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : '';
-				throw new GO_Base_Exception_AccessDenied($msg);
-			}
-
-			if($model)
-				GO::modelCache()->add($this->className(), $model);
-
-			return $model;
-//		}
-//		Can't do this because an access denied exception must remain an accessdenied exception.
-//		catch(Exception $e){
-//			$msg = $e->getMessage()."\n\nFull SQL Query: ".$sql;			
-//		
-//			throw new Exception($msg);
-//		}
+			throw new Exception($msg);
+		}
 		
-		/**
-		 * Useful event for modules. For example custom fields can be loaded or a files folder.
-		 */
-		//$GLOBALS['GO_EVENTS']->fire_event('loadactiverecord',array(&$this));
+		//todo check read permissions
+		if($model && !$ignoreAcl && !$model->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION)){
+			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : '';
+			throw new GO_Base_Exception_AccessDenied($msg);
+		}
+
+		if($model)
+			GO::modelCache()->add($this->className(), $model);
+
+		return $model;		
 	}
 	
 	/**
