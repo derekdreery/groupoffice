@@ -1,7 +1,11 @@
-4.0.143
+12-12-2012 4.0.143
 - Type label for ExportGridDialog will be translated
 - Sync contacts with ActiveSync when company changes too
-- Solved Access denied exception when using an Smime email account for system messages
+- Solved Access denied exception when using an SMIME email account for system messages
+- Updated Bulgarian
+- Better display of multi day events in month grid.
+- Tasklist refresh button didn't refresh list
+- Chrome grid render bug fixed
 
 10-12-2012 4.0.142
 - Validation check repeat end time for events
@@ -25,7 +29,7 @@
 - Updated German and Italian
 
 04-12-2012 4.0.139
-- Before importing contacts invalid email adresses will be remove so that the rest of the record is imported
+- Before importing contacts invalid email addresses will be remove so that the rest of the record is imported
 - Package build error for 4.0.138
 
 04-12-2012 4.0.138
@@ -40,7 +44,7 @@
 03-12-2012 4.0.137
 - New class GO_Files_Fs_UserLogFile to create log files inside the current user's personal folder.
 - Tasks did not show in 4.0.136
-- Custom time registation fields were not editable afterwards
+- Custom time registration fields were not editable afterwards
 
 03-12-2012 4.0.136
 - Strange call to another controller action removed in contactcontroller
