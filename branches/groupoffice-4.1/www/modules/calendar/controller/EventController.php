@@ -627,11 +627,13 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	protected function actionStore($params) {
 		
 		$colors = array(
-		'F0AE67','FFCC00','FFFF00','CCFF00','66FF00',
-		'00FFCC','00CCFF','0066FF','95C5D3','6704FB',
-		'CC00FF','FF00CC','CC99FF','FB0404','FF6600',
-		'C43B3B','996600','66FF99','999999','00FFFF'
-	);
+			'F0AE67','FFCC00','FFFF00','CCFF00','66FF00',
+			'00FFCC','00CCFF','0066FF','95C5D3','6704FB',
+			'CC00FF','FF00CC','CC99FF','FB0404','FF6600',
+			'C43B3B','996600','66FF99','999999','00FFFF'
+		);
+		
+		$this->_uuidEvents=array();
 		
 		$response = array();
 		$response['calendar_id']='';
@@ -941,16 +943,20 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 								strtotime($endTime)
 							);
 		
-		$this->_uuidEvents=array();
+		
 
 		// Loop through each event and prepare the view for it.
 		foreach($events as $event){
-		
+			
 			// Check for a double event, and merge them if they are double
-			if(array_key_exists($event->getUuid().$event->getAlternateStartTime(), $this->_uuidEvents))
-				$this->_uuidEvents[$event->getUuid().$event->getAlternateStartTime()]->mergeWithEvent($event);
-			else
-				$this->_uuidEvents[$event->getUuid().$event->getAlternateStartTime()] = $event;
+			$key = $event->getUuid().$event->getAlternateStartTime();
+		
+			if(isset($this->_uuidEvents[$key]))
+			{
+				$this->_uuidEvents[$key]->mergeWithEvent($event);
+			}else{
+				$this->_uuidEvents[$key] = $event;
+			}
 			
 //			$this->_uuidEvents[]=$event;
 			
@@ -974,7 +980,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$response['results'][$this->_getIndex($response['results'],$uuidEvent->getAlternateStartTime(),$uuidEvent->getName())]=$uuidEvent->getResponseData();
 		
 		$response['count_events_only'] = $resultCount; // Set the count of the events
-		
+
 		return $response;
 	}
 		

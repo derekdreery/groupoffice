@@ -343,7 +343,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		//if this is not the organizer event it may only be modified by the organizer
 		if(!$this->isNew && $this->isModified(array("name","start_time","end_time","location","description","calendar_id","rrule","repeat_end_time"))){		
 			$organizerEvent = $this->getOrganizerEvent();
-			if($organizerEvent && $organizerEvent->user_id!=GO::user()->id){
+			if($organizerEvent && $organizerEvent->user_id!=GO::user()->id || !$organizerEvent && !$this->is_organizer){
 				GO::debug($this->getModifiedAttributes());
 				GO::debug($this->_attributes);
 				throw new GO_Base_Exception_AccessDenied();
@@ -1447,8 +1447,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->background=$category->color;
 		}
 		
-
-		
+		//set is_organizer flag
+		if($vobject->organizer){
+			$organizerEmail = str_replace('mailto:','', strtolower((string) $vobject->organizer));
+			$this->is_organizer=$organizerEmail == $this->calendar->user->email;
+		}		
 		
 		if(!$dontSave){
 			$this->cutAttributeLengths();

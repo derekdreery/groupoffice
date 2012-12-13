@@ -112,7 +112,7 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 
 		foreach($ids as $user_id){
 
-			$user=GO_Base_Model_User::model()->findByPk($user_id);
+			$user=GO_Base_Model_User::model()->findByPk($user_id, false,  true);
 
 			$participant = new GO_Calendar_Model_Participant();
 			$participant->user_id=$user->id;
