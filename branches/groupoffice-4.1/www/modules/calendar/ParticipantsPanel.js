@@ -190,8 +190,9 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 				return '<div class="' + className + '"></div>';
 			}
 		}, {
-			header : "Create permission",
+			header : GO.calendar.lang.createPermission,
 			dataIndex : 'create_permission',
+			width:140,
 			renderer : function(v) {
 
 				var className = v ? 'img-available' : 'img-unavailable';

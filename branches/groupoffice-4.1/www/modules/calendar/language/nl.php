@@ -212,3 +212,4 @@ $l['months']= 'maanden';
 $l['appointment']= 'Afspraak';
 
 $l['openCalendar']='Open agenda';
+$l['createPermission']="Toegang aanmaken";

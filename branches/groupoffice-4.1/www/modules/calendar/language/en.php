@@ -213,3 +213,4 @@ $l['sendNotificationTitle']='Send notification?';
 $l['sendNotification']='Would you like to notify the participants by e-mail?';
 
 $l['openCalendar']='Open calendar';
+$l['createPermission']="Create permission";
