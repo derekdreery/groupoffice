@@ -7,6 +7,7 @@ GO.tasks.TasksPanel = function(config)
 
 
 		this.checkColumn = new GO.grid.CheckColumn({
+			id:'completed',
 			dataIndex: 'completed',
 			width: 30,
 			hideInExport:true,
@@ -34,6 +35,7 @@ GO.tasks.TasksPanel = function(config)
 		var fields ={
 			fields:['id', 'icon', 'name','completed','due_time', 'late', 'description', 'status', 'ctime', 'mtime', 'start_time', 'completion_time','disabled','tasklist_name','category_name','priority','project_name','percentage_complete','user_name'],
 			columns:[this.checkColumn,{
+					id:'icon',
 				header:"&nbsp;",
 				width:23,
 				dataIndex: 'icon',
