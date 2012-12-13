@@ -310,6 +310,10 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		if (!$this->isNew && empty($this->modules)) {
 			$this->setValidationError ('modules',"Please select the allowed modules");
 		}
+		
+		if(class_exists('GO_Professional_LicenseCheck')){
+			
+		}
 							
 		return parent::validate();
 	}
@@ -419,6 +423,10 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		$history->database_usage = $this->_calculateDatabaseSize();
 		$history->mailbox_usage = $this->_calculateMailboxUsage();
 		
+		GO::config()->save_setting('mailbox_usage', $history->mailbox_usage);
+		GO::config()->save_setting('file_storage_usage', $history->file_storage_usage);
+		GO::config()->save_setting('database_usage', $history->database_usage);
+		
 		$this->_loadFromInstallationDatabase();
 		
 		$history->count_users = $this->_count_users;
@@ -436,44 +444,44 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		return $this->_currentHistory->getAttributes();
 	}
 	
-	private function _loadModuleData()
-	{
-		// conect to installation database
-		// reconnect to servermanager database
-		// set data from db
-
-		//load modules from installation database with ctime
-		$modules = GO_Base_Model_Module::model()->find(GO_Base_Db_FindParams::newInstance()->ignoreAcl());
-		foreach($modules as $module)
-		{
-			if(empty($this->first_installation_time))
-				$this->first_installation_time = $module->ctime;
-		}
-	}
+//	private function _loadModuleData()
+//	{
+//		// conect to installation database
+//		// reconnect to servermanager database
+//		// set data from db
+//
+//		//load modules from installation database with ctime
+//		$modules = GO_Base_Model_Module::model()->find(GO_Base_Db_FindParams::newInstance()->ignoreAcl());
+//		foreach($modules as $module)
+//		{
+//			if(empty($this->first_installation_time))
+//				$this->first_installation_time = $module->ctime;
+//		}
+//	}
 	
-	/**
-	 * Returns an array with latest usage data
-	 * @return array usage data
-	 */
-	public function report(){
-		
-		$report = $this->getAttributes();
-		
-		$findParams = GO_Base_Db_FindParams::newInstance()
-						->select('module_id, count(*) AS usercount')
-						->joinModel(array('model'=>'GO_ServerManager_Model_InstallationUser',  'localField'=>'user_id','tableAlias'=>'u'))
-						->group(array('module_id'))
-						->criteria(
-										GO_Base_Db_FindCriteria::newInstance()
-										->addCondition('installation_id', $this->id,'=','u')										
-										);
-		
-		$stmt = GO_ServerManager_Model_InstallationUserModule::model()->find($findParams);
-		
-		$report['modules']=$stmt->fetchAll(PDO::FETCH_ASSOC);
-		
-		return $report;
-	}
+//	/**
+//	 * Returns an array with latest usage data
+//	 * @return array usage data
+//	 */
+//	public function report(){
+//		
+//		$report = $this->getAttributes();
+//		
+//		$findParams = GO_Base_Db_FindParams::newInstance()
+//						->select('module_id, count(*) AS usercount')
+//						->joinModel(array('model'=>'GO_ServerManager_Model_InstallationUser',  'localField'=>'user_id','tableAlias'=>'u'))
+//						->group(array('module_id'))
+//						->criteria(
+//										GO_Base_Db_FindCriteria::newInstance()
+//										->addCondition('installation_id', $this->id,'=','u')										
+//										);
+//		
+//		$stmt = GO_ServerManager_Model_InstallationUserModule::model()->find($findParams);
+//		
+//		$report['modules']=$stmt->fetchAll(PDO::FETCH_ASSOC);
+//		
+//		return $report;
+//	}
 	
 	/**
 	 * Load data from the installations database
@@ -483,6 +491,9 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	 * @return $installationUsers Array(GO_ServerManager_Model_InstallationUser)
 	 * @throws Exception 
 	 */
+	
+	private $_moduleUserCount = array();
+	
 	private function _loadFromInstallationDatabase()
 	{
 		if($this->isNew)
@@ -525,15 +536,24 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 				
 				$modStmt = GO_Base_Model_Module::model()->find(GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::READ_PERMISSION, $user->id));
 				while($module = $modStmt->fetch()){			
-					if(empty($allowedModules) || in_array($module->id, $allowedModules))
-						$installationUser->addModule($module->id);				
+					if(empty($allowedModules) || in_array($module->id, $allowedModules)){
+						$installationUser->addModule($module->id);
+						
+						if(!isset($this->_moduleUserCount[$module->id]))
+							$this->_moduleUserCount[$module->id]=0;
+						
+						$this->_moduleUserCount[$module->id]++;
+					}
 				}
 				$modStmt=null;
+				
 				
 				GO::setIgnoreAclPermissions($oldIgnore);
 
 				$this->_installationUsers[]=$installationUser;
 			}
+			
+			
 			//unset stmt to clean up connections
 			$stmt=null;
 			//GO::config()->save_setting('mailbox_usage', $this->mailbox_usage);
@@ -550,6 +570,9 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		
 		//reconnect to servermanager database
 		GO::setDbConnection();
+		
+		//force saving because the modules and users must be saved in aftersave
+		$this->forceSave();
 
 	}
 	
@@ -618,7 +641,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	 */
 	public function sendAutomaticEmails($nowUnixTime=false) {
 		
-		$this->_sendTrialtimeMails();
+//		$this->_sendTrialtimeMails();
 		
 		if (!is_int($nowUnixTime))
 			$nowUnixTime = time();
@@ -711,6 +734,16 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	}
 	
 	/**
+	 * 
+	 * @return GO_ServerManager_Model_UsageHistory
+	 */
+	public function getLastHistory(){
+		$fp = GO_Base_Db_FindParams::newInstance()
+						->single()->order('id','DESC');
+		return GO_ServerManager_Model_UsageHistory::model()->find($fp);
+	}
+	
+	/**
 	 * Save the config file of in the installation if it has been modified 
 	 * Save module information is it has been set
 	 * Save history object if it has been build
@@ -732,6 +765,8 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 			}
 		}
 		
+//		var_dump($this->_moduleUserCount);
+		
 		if(!$wasnew)
 		{
 			//save new user data of an installation
@@ -745,9 +780,43 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 				}
 			}
 			
+			foreach($this->_moduleUserCount as $module_id=>$usercount){
+				$module = GO_ServerManager_Model_InstallationModule::model()->findSingleByAttributes(array(
+						'name'=>$module_id,
+						'installation_id'=>$this->id
+				));
+				
+				if(!$module)
+				{
+					$module = new GO_ServerManager_Model_InstallationModule();
+					$module->name=$module_id;
+					$module->installation_id=$this->id;
+					$module->enabled=true;
+				}
+				$module->usercount=$usercount;
+				$module->save();
+				
+			}
+			
 			//save latest usage history if exists
-			if($this->_currentHistory != null)
+			if($this->_currentHistory != null){
+				
+//				$insert = true;
+//				$lastHistory = $this->getLastHistory();
+//				if($lastHistory){
+//					$lastAtt = $lastHistory->getAttributes('raw');
+//					$newAtt = $this->_currentHistory->getAttributes('raw');
+//					unset($lastAtt['id'],$lastAtt['ctime'],$lastAtt['mtime']);
+//					unset($newAtt['id'],$newAtt['ctime'],$newAtt['mtime']);
+//					$insert = $lastAtt != $newAtt;
+//					
+//					var_dump($lastAtt);
+//					var_dump($newAtt);
+//					
+//				}
+//				
 				$success=$success && $this->_currentHistory->save();
+			}
 		}
 		
 		//save automatic invoicing setting

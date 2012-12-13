@@ -135,6 +135,7 @@ CREATE  TABLE IF NOT EXISTS `sm_installation_modules` (
   `ctime` INT NOT NULL ,
   `mtime` INT NOT NULL ,
   `enabled` TINYINT(1) NOT NULL DEFAULT 1 ,
+	`usercount` INT NOT NULL DEFAULT  '0',
   INDEX `fk_sm_installation_modules_sm_installations1` (`installation_id` ASC) ,
   PRIMARY KEY (`name`, `installation_id`) ,
   CONSTRAINT `fk_sm_installation_modules_sm_installations1`

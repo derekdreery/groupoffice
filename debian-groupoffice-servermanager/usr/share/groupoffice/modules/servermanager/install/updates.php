@@ -291,3 +291,6 @@ $updates['201212111333'][]="CREATE TABLE `li_servers` (
   `active` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+
+
+$updates['201212111333'][]="ALTER TABLE  `sm_installation_modules` ADD  `usercount` INT NOT NULL DEFAULT  '0'";

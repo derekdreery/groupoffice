@@ -29,8 +29,8 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 					$installation = new GO_ServerManager_Model_Installation();
 					$installation->ignoreExistingForImport=true;
 					$installation->name=$item->name();
-					//$installation->save(); ??
-					$installation->report();					
+					$installation->loadUsageData();					
+					$installation->save();
 				}
 			}
 		}
@@ -590,7 +590,8 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				'ip'=>  gethostbyname(getHostName()),
 				'name'=>GO::config()->title,
 				'version'=>GO::config()->version,
-				'uname'=>  php_uname()
+				'uname'=>  php_uname(),
+				'moduleCounts'=>array()
 		);
 
 		
@@ -650,6 +651,20 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 					echo "ERROR: Failed sending order to billing\n";
 			}
 		}
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->select('name, count(name) AS count')
+						->group('name');
+		
+		$stmt = GO_ServerManager_Model_InstallationModule::model()->find($findParams);
+		foreach($stmt as $module){
+			$report['moduleCounts'][$module->name]=intval($module->count);
+		}
+		
+		var_dump($report);
+		
+		//$report['moduleCounts']=
+		
 
 //		if(class_exists('GO_Professional_LicenseCheck')){
 //			
@@ -661,19 +676,22 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 //		}
 
 		//Post the report to intermesh
-		//TODO: replace trunk.loc to intermesh.nl when rolling out
-		$c = new GO_Base_Util_HttpClient();
-		$response = $c->request('https://intermesh.group-office.com/?r=licenses/server/report', array(
-				'report'=>json_encode($report)
-		));
+		if(class_exists('GO_Professional_LicenseCheck')){
+			$c = new GO_Base_Util_HttpClient();
+			$url = 'https://intermesh.group-office.com/index.php?r=licenses/server/report';
+//			$url = 'http://intermesh.intermesh.dev/index.php?r=licenses/server/report';
+			$response = $c->request($url, array(
+					'report'=>json_encode($report)
+			));
 
-		$response = json_decode($response, true);
+			$response = json_decode($response, true);
 
-		if($response['success'])
-			echo "Report was send to intermesh\n";
-		else{
-			echo "ERROR: sending report to intermesh\n";
-			var_dump($response);
+			if($response['success'])
+				echo "Report was sent to Intermesh\n";
+			else{
+				echo "ERROR: sending report to Intermesh\n";
+				var_dump($response);
+			}
 		}
 
 //		$message = GO_Base_Mail_Message::newInstance();
