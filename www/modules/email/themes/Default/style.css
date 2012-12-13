@@ -229,8 +229,8 @@ margin:5px 2px;
 	padding: 8px;	
 	position: relative;
 }
-.em-message p, .em-composer p{
-	margin:0px;
+.message-body p, .em-message p, .em-composer p{
+	margin:0px !important;
 }
 
 

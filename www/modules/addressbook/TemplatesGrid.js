@@ -29,6 +29,7 @@ GO.addressbook.TemplatesGrid = function(config)
 		iconCls: 'btn-add',
 		text: GO.addressbook.lang['cmdAddEmailTemplate'],
 		cls: 'x-btn-text-icon',
+		disabled:!GO.settings.modules.addressbook.write_permission,
 		handler: function(){
 
 			this.showEmailTemplateDialog();
@@ -38,6 +39,7 @@ GO.addressbook.TemplatesGrid = function(config)
 	{
 		iconCls: 'btn-add',
 		text: GO.addressbook.lang.addDocumentTemplate,
+		disabled:!GO.settings.modules.addressbook.write_permission,
 		cls: 'x-btn-text-icon',
 		handler: function(){
 			this.showOOTemplateDialog();
@@ -48,6 +50,7 @@ GO.addressbook.TemplatesGrid = function(config)
 		iconCls: 'btn-delete',
 		text: GO.lang['cmdDelete'],
 		cls: 'x-btn-text-icon',
+		disabled:!GO.settings.modules.addressbook.write_permission,
 		handler: function(){
 			this.deleteSelected();
 		},
@@ -137,7 +140,7 @@ Ext.extend(GO.addressbook.TemplatesGrid, GO.grid.GridPanel,{
 	showOOTemplateDialog : function(template_id){
 
 		if(!GO.documenttemplates){
-			alert(GO.lang.moduleRequired.replace('{module}', 'Document templates'));
+			alert(GO.lang.moduleRequired.replace('%s', 'Document templates'));
 			return false;
 		}
 

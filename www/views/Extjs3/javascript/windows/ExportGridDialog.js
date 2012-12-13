@@ -38,7 +38,7 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 		});
 	
 		this.radioGroup = new Ext.form.RadioGroup({
-			fieldLabel : 'Type',
+			fieldLabel : GO.lang['strType'],
 			name       : 'exportFormat',
 			columns: 1,
 			items: []

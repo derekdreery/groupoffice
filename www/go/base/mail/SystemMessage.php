@@ -4,7 +4,7 @@ class GO_Base_Mail_SystemMessage extends GO_Base_Mail_SmimeMessage {
 
 	private $_account;
 	private $_alias;
-	
+		
 	public function __construct($subject = null, $body = null, $contentType = null, $charset = null) {
 		parent::__construct($subject, $body, $contentType, $charset);
 		
@@ -26,7 +26,9 @@ class GO_Base_Mail_SystemMessage extends GO_Base_Mail_SmimeMessage {
 	 * @throws GO_Base_Exception_NotFound
 	 */
 	private function _setAccount(){
-		$this->_account = GO_Email_Model_Account::model()->findByPk(GO::config()->smtp_account_id);
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()->ignoreAcl();
+		$this->_account = GO_Email_Model_Account::model()->findByPk(GO::config()->smtp_account_id,$findParams,true);
 			
 		if(!$this->_account)
 			throw new GO_Base_Exception_NotFound('The mailaccount given in the Group-Office config file cannot be found');

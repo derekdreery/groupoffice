@@ -154,9 +154,6 @@
    margin:10px 0px;  
  }
 
- .go-html-formatted p {
-   margin:10px 0px;
- }
 .go-html-formatted a:link, .go-html-formatted a:visited, .go-html-formatted a:active{
 	text-decoration:underline;
 	color:#3764A0;
@@ -2060,4 +2057,13 @@ body.ext-ie6 .x-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em
 
 .go-editable-col{
 	background-color:#f1f1f1;
+}
+
+
+/* chrome grid bug (http://www.sencha.com/forum/archive/index.php/t-229980.html?s=0f1f78ffdc1ad0e8f9c6a34a57a8ceaa) */
+@media screen and (-webkit-min-device-pixel-ratio:0) { .x-grid3-cell, /* normal grid cell */
+.x-grid3-gcell /* grouped grid cell (esp. in head)*/
+{
+box-sizing: border-box;
+}
 }

@@ -1,3 +1,6 @@
+13-12-2012 4.1.5 (beta)
+- File search in the filebrowser
+
 07-12-2012 4.1.4 (beta)
 - Folder bookmarks. Very handy when you regularly use a handful of folders out of hundreds.
 
@@ -28,6 +31,17 @@
 - Ticket system can be setup for non-users too through the new sites module.
 - Sites module refactored completely.
 
+13-12-2012 4.0.143
+- Type label for ExportGridDialog will be translated
+- Sync contacts with ActiveSync when company changes too
+- Solved Access denied exception when using an SMIME email account for system messages
+- Updated Bulgarian
+- Better display of multi day events in month grid.
+- Tasklist refresh button didn't refresh list
+- Chrome grid render bug fixed
+- Incorrect margin on P tags in e-mail display
+- Translated file search labels
+
 10-12-2012 4.0.142
 - Validation check repeat end time for events
 - Bookmark upload was broken
@@ -50,7 +64,7 @@
 - Updated German and Italian
 
 04-12-2012 4.0.139
-- Before importing contacts invalid email adresses will be remove so that the rest of the record is imported
+- Before importing contacts invalid email addresses will be remove so that the rest of the record is imported
 - Package build error for 4.0.138
 
 04-12-2012 4.0.138
@@ -65,7 +79,7 @@
 03-12-2012 4.0.137
 - New class GO_Files_Fs_UserLogFile to create log files inside the current user's personal folder.
 - Tasks did not show in 4.0.136
-- Custom time registation fields were not editable afterwards
+- Custom time registration fields were not editable afterwards
 
 03-12-2012 4.0.136
 - Strange call to another controller action removed in contactcontroller
