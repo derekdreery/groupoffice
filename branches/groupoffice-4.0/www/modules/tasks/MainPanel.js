@@ -312,6 +312,7 @@ GO.tasks.MainPanel = function(config){
 				cls: 'x-btn-text-icon',
 				handler: function(){
 					this.taskListsStore.load();
+					this.gridPanel.store.load();
 				},
 				scope: this
 			}
