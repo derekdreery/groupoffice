@@ -657,11 +657,24 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 			if(col)
 			{
 				var text = '';
-				if(eventData.startDate.format('G')!='0')
+				if(daySpan==1){
+					if(eventData.startDate.format('G')!='0')
+					{
+						text += eventData.startDate.format(GO.settings.time_format)+'&nbsp;';
+					}
+					text += eventData['name'];
+				}else
 				{
-					text += eventData.startDate.format(GO.settings.time_format)+'&nbsp;';
+					if(i==0 && eventData.startDate.format('G')!='0'){
+						text += '&larr;&nbsp;'+eventData.startDate.format(GO.settings.time_format)+'&nbsp;'+eventData['name'];
+					}else if(i==daySpan-1 && eventData.endDate.format('G')!='0' ){
+						text += '&rarr;&nbsp;'+eventData['name']+'&nbsp;'+eventData.endDate.format(GO.settings.time_format);
+					}else
+					{
+						text = '&harr;&nbsp;'+eventData['name'];
+					}
 				}
-				text += eventData['name'];
+				
 				var cls = "x-calGrid-month-event-container";
 
 				if(eventData.link_count>0){
