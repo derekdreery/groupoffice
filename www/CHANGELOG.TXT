@@ -1,4 +1,5 @@
 4.0.143
+- Type label for ExportGridDialog will be translated
 - Sync contacts with ActiveSync when company changes too
 - Solved Access denied exception when using an Smime email account for system messages
 
