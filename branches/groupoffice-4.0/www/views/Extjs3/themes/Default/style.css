@@ -154,9 +154,6 @@
    margin:10px 0px;  
  }
 
- .go-html-formatted p {
-   margin:10px 0px;
- }
 .go-html-formatted a:link, .go-html-formatted a:visited, .go-html-formatted a:active{
 	text-decoration:underline;
 	color:#3764A0;
