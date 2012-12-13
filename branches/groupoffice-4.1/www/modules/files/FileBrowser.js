@@ -766,33 +766,46 @@ GO.files.FileBrowser = function(config){
 		this.setFolderID(bookmarkRecord.data['folder_id']);
 	},this);
         
-        this.on('folderIdSet',function(){
-            
-          // turn on buttons
-          if (!GO.util.empty(this.gridStore.reader.jsonData))
-            this.setWritePermission(this.gridStore.reader.jsonData.permission_level);
-          this.searchField.setValue('');
-          delete this.gridStore.baseParams['query'];
-          this._enableFilesContextMenuButtons(true);
-        },this);
-        
-        this.on('refresh',function(){
-            
-          // turn on buttons
-          if (!GO.util.empty(this.gridStore.reader.jsonData))
-            this.setWritePermission(this.gridStore.reader.jsonData.permission_level);
-          this.searchField.setValue('');
-          delete this.gridStore.baseParams['query'];
-          this._enableFilesContextMenuButtons(true);
-        },this);
-        
-        this.on('search',function(){
-            
-          // turn off buttons
-          this._enableFilesContextMenuButtons(false);
-          this.setWritePermission(0);
+    this.on('beforeFolderIdSet',function(){
 
-        },this);
+      this.searchField.setValue('');
+      delete this.gridStore.baseParams['query'];
+
+      // turn on buttons
+      if (!GO.util.empty(this.gridStore.reader.jsonData))
+        this.setWritePermission(this.gridStore.reader.jsonData.permission_level);
+      this._enableFilesContextMenuButtons(true);
+    },this);
+
+    this.on('folderIdSet',function(){
+
+      this.searchField.setValue('');
+      delete this.gridStore.baseParams['query'];
+
+      // turn on buttons
+      if (!GO.util.empty(this.gridStore.reader.jsonData))
+        this.setWritePermission(this.gridStore.reader.jsonData.permission_level);
+      this._enableFilesContextMenuButtons(true);
+    },this);
+
+    this.on('refresh',function(){
+
+      this.searchField.setValue('');
+      delete this.gridStore.baseParams['query'];
+
+      // turn on buttons
+      if (!GO.util.empty(this.gridStore.reader.jsonData))
+        this.setWritePermission(this.gridStore.reader.jsonData.permission_level);
+      this._enableFilesContextMenuButtons(true);
+    },this);
+
+    this.on('search',function(){
+
+      // turn off buttons
+      this._enableFilesContextMenuButtons(false);
+      this.setWritePermission(0);
+
+    },this);
 
 }
 
@@ -1729,6 +1742,9 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 	setFolderID : function(id, expand)
 	{
+      
+      this.fireEvent('beforeFolderIdSet');
+      
 		this.folder_id = id;
 		//this.gridStore.baseParams['id']=this.thumbsStore.baseParams['id']=id;
 		this.gridStore.baseParams['folder_id']=id;
@@ -1757,9 +1773,6 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			},
 			scope:this
 		});
-
-
-                this.fireEvent('folderIdSet');
 
 	},
 
