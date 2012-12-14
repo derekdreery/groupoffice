@@ -46,8 +46,15 @@ class GO_Files_Controller_Bookmark extends GO_Base_Controller_AbstractModelContr
 	
 	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
 		$storeParams
-			->getCriteria()
-			->addCondition('user_id',GO::user()->id);
+            ->select('`t`.`folder_id`,`t`.`user_id`,`f`.`name`')
+            ->joinModel(array(
+              'model'=>'GO_Files_Model_Folder',
+              'localTableAlias'=>'t',
+              'localField'=>'folder_id',
+              'foreignField'=>'id',
+              'tableAlias'=>'f'
+            ))
+			->getCriteria()->addCondition('user_id',GO::user()->id);
 		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
 	}
 	
