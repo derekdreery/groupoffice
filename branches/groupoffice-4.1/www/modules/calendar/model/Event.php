@@ -65,6 +65,15 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 	public $sequence;
 	
+	/**
+	 * Flag used when importing. On import we allow participant events to be 
+	 * modified even when they are not the organizer. Because a meeting request
+	 * coming from the organizer must be procesed by the participant.
+	 * 
+	 * @var boolean 
+	 */
+	private $_isImport=false;
+	
 	protected function init() {
 
 		$this->columns['calendar_id']['required']=true;
@@ -341,7 +350,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 		
 		//if this is not the organizer event it may only be modified by the organizer
-		if(!$this->isNew && $this->isModified(array("name","start_time","end_time","location","description","calendar_id","rrule","repeat_end_time"))){		
+		if(!$this->_isImport && !$this->isNew && $this->isModified(array("name","start_time","end_time","location","description","calendar_id","rrule","repeat_end_time"))){		
 			$organizerEvent = $this->getOrganizerEvent();
 			if($organizerEvent && $organizerEvent->user_id!=GO::user()->id || !$organizerEvent && !$this->is_organizer){
 				GO::debug($this->getModifiedAttributes());
@@ -1456,7 +1465,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if(!$dontSave){
 			$this->cutAttributeLengths();
 			try {
+				$this->_isImport=true;
 				$this->save();
+				$this->_isImport=false;
 			} catch (Exception $e) {
 				throw new Exception($this->name.' ['.GO_Base_Util_Date::get_timestamp($this->start_time).' - '.GO_Base_Util_Date::get_timestamp($this->end_time).'] '.$e->getMessage());
 			}
