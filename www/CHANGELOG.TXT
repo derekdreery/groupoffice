@@ -1,3 +1,8 @@
+14-12-2012 4.1.6 (beta)
+- Updated Norwegian
+- Fix disappearing panel in files
+- Fixed invitation update problem
+
 13-12-2012 4.1.5 (beta)
 - File search in the filebrowser
 
