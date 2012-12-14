@@ -116,9 +116,9 @@ $l['notificationEmailSubject'] = 'Updates in folder';
 $l['downloadLinkExpired'] = "Sorry, the download link for this file has expired";
 $l['recentFiles']="Files modified in the past 7 days";
 
-$l['bookmarkFolder']="Bookmark folder";
-$l['bookmarks']="Bookmarks";
-$l['bookmarkAlreadyExists']="Folder '%fn' already has a bookmark for the current user.";
-$l['removeBookmark']="Remove bookmark";
-$l['removeBookmarkQuestion']="Remove folder '%fn' from your bookmarks list?";
+$l['bookmarkFolder']="Add to favorites";
+$l['bookmarks']="Favorites";
+$l['bookmarkAlreadyExists']="Folder '%fn' already has a favorite for the current user.";
+$l['removeBookmark']="Remove favorite";
+$l['removeBookmarkQuestion']="Remove folder '%fn' from your favorites list?";
 $l['notInSearchMode']="Can not do this when in search mode.";
