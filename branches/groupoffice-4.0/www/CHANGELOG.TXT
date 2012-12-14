@@ -1,3 +1,6 @@
+4.0.144
+- Folders are no longer selectable in search.
+
 13-12-2012 4.0.143
 - Type label for ExportGridDialog will be translated
 - Sync contacts with ActiveSync when company changes too
