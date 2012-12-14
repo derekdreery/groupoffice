@@ -66,8 +66,8 @@ GO.files.FileBrowser = function(config){
 		region: 'west',
 		layout: 'border',
 		width: 200,
-        split: true,
-        id: 'fs-tree-bookmarks-panel',
+		split: true,
+		id: 'fs-tree-bookmarks-panel-'+config.id,
 		items : [
 			this.treePanel = new GO.files.TreePanel({
 				region:'center',
