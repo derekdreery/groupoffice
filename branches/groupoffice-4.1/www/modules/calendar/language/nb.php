@@ -215,3 +215,4 @@ $l['sendNotificationTitle']='Send beskjed?';
 $l['sendNotification']='Vil du sende en e-post til deltagerne';
 $l['openCalendar']='Åpne kalenderen';
 $l['statuses']['CANCELLED']= 'Avlyst';
+$l['createPermission']="Skrivetillatelse";
