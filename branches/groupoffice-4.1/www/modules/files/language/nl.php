@@ -115,9 +115,9 @@ $l['downloadLinkExpired']= "Sorry, de download link is niet meer geldig";
 
 $l['recentFiles']="Bestanden gewijzigd in de afgelopen 7 dagen";
 
-$l['bookmarkFolder']="Bladwijzer maken";
-$l['bookmarks']="Bladwijzers";
-$l['bookmarkAlreadyExists']="Bladwijzer van folder '%fn' bestaat al voor de huidige gebruiker.";
-$l['removeBookmark']="Bladwijzer verwijderen";
-$l['removeBookmarkQuestion']="Folder '%fn' verwijderen uit uw bladwijzerlijst?";
-$l['notInSearchMode']="Dit is niet mogelijk in het zoekmodus.";
+$l['bookmarkFolder']="Aan favorieten toevoegen";
+$l['bookmarks']="Favorieten";
+$l['bookmarkAlreadyExists']="Favoriet van folder '%fn' bestaat al voor de huidige gebruiker.";
+$l['removeBookmark']="Uit favorieten verwijderen";
+$l['removeBookmarkQuestion']="Folder '%fn' verwijderen uit favorieten?";
+$l['notInSearchMode']="Dit is niet mogelijk in de zoekmodus.";
