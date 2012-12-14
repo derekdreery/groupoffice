@@ -30,7 +30,14 @@ if (!$configFile) {
 	try {
 		if (!empty($_POST['submitted'])) {
 			
-			GO::config()->title='Group-Office';
+			//A default config.php can be put in the install folder.
+			$config=array();
+			if(file_exists('config.php')){				
+				require('config.php');
+			}
+			
+			if(empty(GO::config()->title))
+				GO::config()->title='Group-Office';
 
 			$f = new GO_Base_Fs_Folder($_POST['file_storage_path']);
 			if (!$f->exists())
@@ -47,7 +54,7 @@ if (!$configFile) {
 				GO_Base_Html_Input::setError("tmpdir", "Temporary folder must be writable for the webserver user.");
 
 			GO::config()->tmpdir = $f->path() . '/';
-			GO::config()->save();
+			GO::config()->save($config);
 
 			if (!GO_Base_Html_Input::hasErrors())
 				redirect("regional.php");

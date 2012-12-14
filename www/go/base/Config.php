@@ -174,7 +174,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $default_currency='â‚¬';
+	var $default_currency='€';
 
 	/**
 	 * Default date format
@@ -1411,7 +1411,7 @@ class GO_Base_Config {
 	 *
 	 * @return boolean
 	 */
-	public function save() {
+	public function save($extraConfig=array()) {
 
 		$values = get_object_vars(GO::config());
 		$config=array();
@@ -1428,6 +1428,7 @@ class GO_Base_Config {
 				$config[$key]=$value;
 			}
 		}
+		$config = array_merge($config, $extraConfig);
 
 		return GO_Base_Util_ConfigEditor::save(new GO_Base_Fs_File(GO::config()->get_config_file()), $config);
 	}
