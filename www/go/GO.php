@@ -64,6 +64,21 @@ class GO{
 
 		return $oldValue;
 	}
+	
+	/**
+	 * Set the max execution time only if the current max execution time is lower than the given value.
+	 * @param int $seconds
+	 * @return boolean
+	 */
+	public static function setMaxExecutionTime($seconds){
+		$max = ini_get("max_execution_time");
+		if($max != 0 && ($seconds==0 || $seconds>$max)){
+			return ini_set("max_execution_time", $seconds);
+		}else
+		{
+			return true;
+		}
+	}
 
 	/**
 	 * Get a unique ID for Group-Office. It's mainly used for the javascript window id.
