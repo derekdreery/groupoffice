@@ -15,7 +15,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	
 	protected function init() {
 		GO::$disableModelCache=true; //for less memory usage
-		ini_set('max_execution_time', '0'); //allow long runs		
+		GO::setMaxExecutionTime(0); //allow long runs		
 		ini_set('memory_limit','512M');
 		ini_set('display_errors','on');
 	}
