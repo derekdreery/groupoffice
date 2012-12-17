@@ -991,7 +991,9 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	{
 		
 		rootID ? this.searchField.hide() : this.searchField.show();
+		rootID ? this.bookmarksGrid.hide() : this.bookmarksGrid.show();
 		
+				
 		if(this.treePanel.getLoader().baseParams.root_folder_id!=rootID || (folder_id>0 && this.folder_id!=folder_id)){
 		
 				this.folder_id=folder_id;
