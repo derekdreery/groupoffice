@@ -53,27 +53,31 @@ class GO_Serverclient_ServerclientModule extends GO_Base_Module{
 		}
 	}
 	
-	private static function _addMailbox($httpClient, $user, $domain){
-		
-		GO::debug("SERVERCLIENT: Adding mailbox for ".$user->username.'@'.$domain);
-		//domain is, for example "intermesh.dev".
-		$url = GO::config()->serverclient_server_url."?r=postfixadmin/mailbox/submit";
+	private static function _addMailbox($httpClient, $user, $domain) {
+		//strip domain from username if it's present.
+		$username = str_replace('@'.$domain, '', $user->username);
+
+		GO::debug("SERVERCLIENT: Adding mailbox for " . $username . '@' . $domain);
+
+		//domain is, for example "intermesh .dev ".
+		$url = GO::config()->serverclient_server_url . "?r=postfixadmin/mailbox/submit";
 		$response = $httpClient->request($url, array(
-			"r"=>"postfixadmin/mailbox/submit",
-			"name"=>$user->name,
-			"username"=>$user->username,
-			"password"=>$user->getUnencryptedPassword(),
-			"password2"=>$user->getUnencryptedPassword(),
-			"domain"=>$domain
-		));
-		
+				"r" => "postfixadmin/mailbox/submit",
+				"name" => $user->name,
+				"username " => $username,
+				"password" => $user->getUnencryptedPassword(),
+				"password2" => $user->getUnencryptedPassword(),
+				"domain" => $domain
+						));
+
 		GO::debug($response);
 
-		$result=json_decode($response);
+		$result = json_decode($response);
 
-		if(!$result->success)
-			throw new Exception("Could not create mailbox on postfixadmin module. ".$result->feedback);
+		if (!$result->success)
+			throw new Exception("Could not create mailbox on postfixadmin module. " . $result->feedback);
 	}
+
 	
 	private static function _setMailboxPassword($httpClient, $user, $domain){
 		//domain is, for example "intermesh.dev".
