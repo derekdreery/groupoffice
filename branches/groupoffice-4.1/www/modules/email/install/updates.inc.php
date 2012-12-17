@@ -67,3 +67,5 @@ $updates["201209061400"][]="ALTER TABLE `em_accounts` ADD `check_mailboxes` TEXT
 $updates["201209111400"][]="update `em_accounts` set check_mailboxes='INBOX';";
 
 $updates["201209211112"][]="ALTER TABLE `em_links` CHANGE `link_id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT";
+
+$updates["201212171547"][]="ALTER TABLE  `em_links` CHANGE  `uid`  `uid` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  ''";
