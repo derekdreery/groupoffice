@@ -18,7 +18,12 @@ GO.form.SelectLink = function(config){
 	config.store = new GO.data.JsonStore({				
 		url: GO.url('search/store'),
 		fields:['model_id','model_name','name_and_type', 'model_name_and_id'],
-		remoteSort: true				
+		remoteSort: true,
+		baseParams:{
+			start:0,
+			limit:10,
+			dont_calculate_total:1
+		}
 	});
 
 	config.forceSelection=true;
@@ -29,7 +34,7 @@ GO.form.SelectLink = function(config){
 	config.width=400;
 	config.selectOnFocus=false;
 	config.fieldLabel=GO.lang.cmdLink;
-	config.pageSize=20;//parseInt(GO.settings['max_rows_list']);
+//	config.pageSize=20;//parseInt(GO.settings['max_rows_list']);
 	GO.form.SelectLink.superclass.constructor.call(this, config);
 	
 }
