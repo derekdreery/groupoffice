@@ -259,10 +259,13 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 //			$sort[$i] = $this->getColumnModel()->getSortColumn($sort[$i]);
 //		}
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()
-						->calcFoundRows()
+		$findParams = GO_Base_Db_FindParams::newInstance()						
 						->joinCustomFields()
 						->order($sort, $dir);
+		
+		if(empty($requestParams['dont_calculate_total'])){
+			$findParams->calcFoundRows();
+		}
 		
 		//do not prefix search query with a wildcard by default. 
 		//When you start a query with a wildcard mysql can't use indexes.
