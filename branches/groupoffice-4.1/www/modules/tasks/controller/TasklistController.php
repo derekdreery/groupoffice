@@ -52,6 +52,7 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 	public function actionImportIcs($params) {
 		$response = array( 'success' => true );
 		$count = 0;
+		$failed=array();
 		if (!file_exists($_FILES['ical_file']['tmp_name'][0])) {
 			throw new Exception($lang['common']['noFileUploaded']);
 		}else {
@@ -61,12 +62,21 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 			$vcal = GO_Base_VObject_Reader::read($contents);
 			GO_Base_VObject_Reader::convertVCalendarToICalendar($vcal);
 			foreach($vcal->vtodo as $vtask) {
-				$event = new GO_Tasks_Model_Task();
-				$event->importVObject( $vtask, array('tasklist_id'=>$params['tasklist_id']) );
-				$count++;
+				$event = new GO_Tasks_Model_Task();			
+				try{
+					$event->importVObject( $vtask, array('tasklist_id'=>$params['tasklist_id']) );
+		
+					$count++;
+				}catch(Exception $e){
+					$failed[]=$e->getMessage();
+				}
 			}
 		}
 		$response['feedback'] = sprintf(GO::t('import_success','tasks'), $count);
+		
+		if(count($failed)){
+			$response['feedback'] .= "\n\n".count($failed)." tasks failed: ".implode('\n', $failed);
+		}
 		return $response;
 	}
 	
