@@ -166,7 +166,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
         public function getJsonData() {
             return array(
                 'id' => $this->model_id,
-                'name' => $this->name,
+                'name' => $this->path,
                 'ctime' => GO_Base_Util_Date::get_timestamp($this->ctime),
                 'mtime' => GO_Base_Util_Date::get_timestamp($this->mtime),
                 'extension' => $this->extension,
@@ -175,7 +175,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
                 'type' => $this->type,
                 'folder_id' => $this->folder_id,
                 'type_id' => 'f:'.$this->id,
-                'path' => !empty($this->folder) ? $this->folder->path.'/'.$this->name : $this->name,
+                'path' => $this->path,
                 'locked' => $this->isLocked(),
                 'locked_user_id' => $this->locked_user_id,
                 'unlock_allowed' => $this->unlockAllowed(),
