@@ -21,7 +21,7 @@ GO.form.SelectLink = function(config){
 		remoteSort: true,
 		baseParams:{
 			start:0,
-			limit:10,
+			limit:20,
 			dont_calculate_total:1
 		}
 	});
