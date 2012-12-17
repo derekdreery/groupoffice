@@ -61,6 +61,8 @@ GO.grid.SearchPanel = function(config){
 		remoteSort: true
 	});
 	
+	
+	
 	this.searchField = new GO.form.SearchField({
 		store: this.store,
 		width:320
@@ -103,7 +105,7 @@ GO.grid.SearchPanel = function(config){
 		}],
 		autoExpandMax:2500,
 		autoExpandColumn:'name',
-		paging:true,
+		
 		layout:'fit',
 		view:new Ext.grid.GridView({
 			enableRowBody:true,
@@ -131,6 +133,17 @@ GO.grid.SearchPanel = function(config){
 		sm:new Ext.grid.RowSelectionModel({single:config.singleSelect})
 	};
 	
+	if(config.noOpenLinks)
+	{
+		this.store.baseParams.dont_calculate_total=1;
+		this.store.baseParams.limit=20;
+		this.store.baseParams.start=0;
+		gridConfig.paging=false;
+	}else
+	{
+		gridConfig.paging=true;
+	}
+		
 	this.searchGrid = new GO.grid.GridPanel(gridConfig);
 	
 	this.searchGrid.store.setDefaultSort('mtime', 'desc');
