@@ -161,8 +161,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				$resourceConlictsFound=false;
 			
 				foreach ($conflictingEvents as $conflictEvent) {
-					if ($conflictEvent['id'] != $event->id) {
-						$resourceCalendar = GO_Calendar_Model_Calendar::model()->findByPk($conflictEvent['calendar_id']);
+					if ($conflictEvent->getEvent()->id != $event->id) {
+						$resourceCalendar = $conflictEvent->getEvent()->calendar;
 						$resourceConlictsFound=true;
 						$response['resources'][] = $resourceCalendar->name;						
 					}
