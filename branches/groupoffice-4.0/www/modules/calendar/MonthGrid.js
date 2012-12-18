@@ -657,7 +657,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 			if(col)
 			{
 				var text = '';
-				if(daySpan==1){
+				if(daySpan==1 || !GO.util.empty(eventData.all_day_event)){
 					if(eventData.startDate.format('G')!='0')
 					{
 						text += eventData.startDate.format(GO.settings.time_format)+'&nbsp;';
