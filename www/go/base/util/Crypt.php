@@ -62,7 +62,7 @@ class GO_Base_Util_Crypt {
 		if (empty($k)) {
 			$k = self::getKey();
 			if (empty($k)) {
-				throw new Exception('Could not generate private key');
+				throw new Exception('Could not generate private encryption key. Please check the file permissions of the folder defined as $config[\'file_storage_path\'] in your config.php and the file key.txt in it.');
 			}
 		}		
 
@@ -179,7 +179,6 @@ class GO_Base_Util_Crypt {
 	}
 
 	private static function getKey() {
-		global $GO_CONFIG;
 
 		$key_file = GO::config()->file_storage_path . 'key.txt';
 

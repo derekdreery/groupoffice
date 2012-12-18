@@ -77,6 +77,15 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 			$model = GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslist_id']);
 			foreach ($add_keys as $add_key)
 				$model->addManyMany('contacts', $add_key);
+		}elseif(!empty($params['add_search_result'])){
+			$findParams = GO::session()->values["contact"]['findParams'];
+			$findParams->limit(0)->select('t.id');
+			
+			$model = GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslist_id']);
+			$stmt = GO_Addressbook_Model_Contact::model()->find($findParams);
+			foreach ($stmt as $contact)
+				$model->addManyMany('contacts', $contact->id);
+			
 		}
 
 		$stmt = GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslist_id'])->contacts($store->getDefaultParams($params));
@@ -109,6 +118,16 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 			$model = !isset($model) ? GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslist_id']) : $model;
 			foreach ($add_keys as $add_key)
 				$model->addManyMany('companies', $add_key);
+		}elseif(!empty($params['add_search_result'])){
+			$findParams = GO::session()->values["company"]['findParams'];
+			$findParams->limit(0)->select('t.id');
+			
+			$model = GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslist_id']);
+			
+			$stmt = GO_Addressbook_Model_Company::model()->find($findParams);
+			foreach ($stmt as $contact)
+				$model->addManyMany('companies', $contact->id);
+			
 		}
 
 		$stmt = GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslist_id'])->companies($store->getDefaultParams($params));

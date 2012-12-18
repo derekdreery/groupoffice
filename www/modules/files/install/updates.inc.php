@@ -41,13 +41,13 @@ VALUES (
 '6', 'GO_Files_Model_File'
 );";
 
-$updates["201108301656"][]="INSERT INTO `go_model_types` (
-`id` ,
-`model_name`
-)
-VALUES (
-'17', 'GO_Files_Model_Folder'
-);";
+//$updates["201108301656"][]="INSERT INTO `go_model_types` (
+//`id` ,
+//`model_name`
+//)
+//VALUES (
+//'17', 'GO_Files_Model_Folder'
+//);";
 
 
 $updates["201109271656"][]="ALTER TABLE `fs_folders` CHANGE `cm_state` `cm_state` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL;";
@@ -123,11 +123,15 @@ $updates["201206121503"][]="CREATE TABLE IF NOT EXISTS `fs_notification_messages
   KEY `user_id` (`user_id`, `status`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
+$updates["201212141445"][]="DELETE FROM `go_model_types` WHERE `model_name`='GO_Files_Model_Folder';";
 
-$updates["201211161231"][]='script:1_set_log_dir.php';
+$updates["201212141445"][]='script:1_set_log_dir.php';
 
-$updates["201212061000"][]='CREATE TABLE IF NOT EXISTS `fs_bookmarks` (
+$updates["201212141445"][]='CREATE TABLE IF NOT EXISTS `fs_bookmarks` (
 	`folder_id` int(11) NOT NULL,
 	`user_id` int(11) NOT NULL,
 	PRIMARY KEY (`folder_id`,`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;';
+$updates["201212141445"][]='script:1_set_log_dir.php';
+$updates["201212141445"][]="DELETE FROM `go_model_types` WHERE `model_name`='GO_Files_Model_Folder';";
+
