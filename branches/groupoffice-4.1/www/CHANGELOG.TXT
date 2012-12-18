@@ -1,6 +1,7 @@
 17-12-2012 4.1.7
 - Resource conflict check fixed
 - 4.0.143 and 4.0.144 fixes merged
+- Deleted participant events are set to cancelled and not deleted automatically.
 
 14-12-2012 4.1.6 (beta)
 - Updated Norwegian
