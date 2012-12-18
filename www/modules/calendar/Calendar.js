@@ -387,7 +387,7 @@ GO.calendar.MainPanel = function(config){
 		},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','username','duration','link_count', 'has_other_participants','participant_ids','ctime']
+		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','username','duration','link_count', 'has_other_participants','participant_ids','ctime','all_day_event']
 	});
 	
 	this.monthGridStore.on('load', this.setCalendarBackgroundColors, this);
