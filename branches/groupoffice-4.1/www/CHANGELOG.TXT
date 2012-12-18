@@ -1,3 +1,7 @@
+17-12-2012 4.1.7
+- Resource conflict check fixed
+- 4.0.143 and 4.0.144 fixes merged
+
 14-12-2012 4.1.6 (beta)
 - Updated Norwegian
 - Fix disappearing panel in files
@@ -35,6 +39,15 @@
 - Billing module can import payments from an MT940 file
 - Ticket system can be setup for non-users too through the new sites module.
 - Sites module refactored completely.
+
+18-12-2012 4.0.144
+- Speedup link search by removing pagination
+- Removed "Delete old events checkbox" from sync settings because it has no effect anymore.
+- Add all search results to addresslist button
+- Wrong display of arrows in all day multiday month event
+- Custom fields were not copied when invoicing tickets
+- Use custom from name when using SMIME for signing ticket messages
+- Folders are no longer selectable in search.
 
 13-12-2012 4.0.143
 - Type label for ExportGridDialog will be translated

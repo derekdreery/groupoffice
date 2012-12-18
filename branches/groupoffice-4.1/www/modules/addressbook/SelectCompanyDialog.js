@@ -97,7 +97,7 @@ GO.addressbook.SelectCompanyDialog = function(config){
 				handler: function()
 				{
 					this.searchField.setValue("");
-//					delete this.grid.store.baseParams.advancedQuery;
+					delete this.grid.store.baseParams.advancedQueryData;
 					this.searchField.setDisabled(false);
 					this.grid.store.load();
 				},
@@ -142,15 +142,15 @@ GO.addressbook.SelectCompanyDialog = function(config){
 				},
 				scope:this
 			},
-//			{
-//				text: GO.addressbook.lang.addAllSearchResults,
-//				handler: function (){
-//					if(confirm(GO.addressbook.lang.confirmAddAllSearchResults)){
-//						this.callHandler(true, true);
-//					}
-//				},
-//				scope:this
-//			},
+			{
+				text: GO.addressbook.lang.addAllSearchResults,
+				handler: function (){
+					if(confirm(GO.addressbook.lang.confirmAddAllSearchResults)){
+						this.callHandler(true, true);
+					}
+				},
+				scope:this
+			},
 			{
 				text: GO.lang['cmdClose'],
 				handler: function(){this.hide();},
@@ -163,6 +163,9 @@ GO.addressbook.SelectCompanyDialog = function(config){
 Ext.extend(GO.addressbook.SelectCompanyDialog, Ext.Window, {
 
 	show : function(){
+		
+		this.mailingsFilterPanel.store.load();
+		
 		if(!this.grid.store.loaded)
 		{
 			this.grid.store.load();
