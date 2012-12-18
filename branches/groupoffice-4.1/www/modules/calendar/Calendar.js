@@ -42,26 +42,11 @@ GO.calendar.formatQtip = function(data)
 	{
 		str += '<br />'+GO.calendar.lang.status+': ';
 		
-		switch(data.status)
+		if(GO.calendar.lang.statuses[data.status]){
+			str+=GO.calendar.lang.statuses[data.status];
+		}else
 		{
-			case 'NEEDS-ACTION':
-				str+=GO.calendar.lang.needsAction;
-			break;
-			case 'ACCEPTED':
-				str+=GO.calendar.lang.accepted;
-			break;
-			case 'CONFIRMED':
-				str+=GO.calendar.lang.confirmed;
-			break;
-			case 'DECLINED':
-				str+=GO.calendar.lang.declined;
-			break;
-			case 'TENTATIVE':
-				str+=GO.calendar.lang.tentative;
-			break;
-			case 'DELEGATED':
-				str+=GO.calendar.lang.delegated;
-			break;
+			str+=data.status;
 		}
 	}
 

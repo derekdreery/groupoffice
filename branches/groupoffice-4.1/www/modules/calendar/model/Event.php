@@ -49,6 +49,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	const STATUS_TENTATIVE = 'TENTATIVE';
 	const STATUS_DECLINED = 'DECLINED';
 	const STATUS_ACCEPTED = 'ACCEPTED';
+	const STATUS_CANCELLED = 'CANCELLED';
 	const STATUS_CONFIRMED = 'CONFIRMED';
 	const STATUS_NEEDS_ACTION = 'NEEDS-ACTION';
 	const STATUS_DELEGATED = 'DELEGATED';
@@ -403,7 +404,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$stmt = $this->getRelatedParticipantEvents();
 			
 			foreach($stmt as $event){
-				$event->delete(true);
+				//$event->delete(true);
+				$event->status=self::STATUS_CANCELLED;
+				$event->save(true);
 			}
 		}else
 		{
@@ -512,6 +515,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 					'location'=>$this->location,
 					'description'=>$this->description,
 					'rrule'=>$this->rrule,
+					'status'=>$this->status,
 					'repeat_end_time'=>$this->repeat_end_time
 							);
 
