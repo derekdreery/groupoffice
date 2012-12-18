@@ -133,6 +133,14 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		this.autoScroll=true;
 		this.split=true;
 		var tbar = this.createTopToolbar();
+	
+		if(Ext.isArray(tbar)){
+			tbar = new Ext.Toolbar({				
+				enableOverflow:true,
+				items:tbar
+			});
+		}
+		
 		if(tbar)
 			this.tbar = tbar;
 
