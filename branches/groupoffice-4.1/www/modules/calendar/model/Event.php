@@ -392,15 +392,6 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$this->deleteReminders();
 		
 		if($this->is_organizer){
-			
-//			//delete participant events							
-//			$findParams = GO_Base_Db_FindParams::newInstance()->ignoreAcl();
-//			$findParams->getCriteria()
-//							->addCondition("uuid", $this->uuid)
-//							->addCondition("start_time", $this->start_time)
-//							->addCondition("exception_for_event_id", $this->exception_for_event_id);
-//							//->addCondition('calendar_id', $this->calendar_id, '!=');
-//							
 			$stmt = $this->getRelatedParticipantEvents();
 			
 			foreach($stmt as $event){
@@ -1863,6 +1854,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 				$a->setDisposition("inline");
 				$message->attach($a);
+			}else{
+				$url = GO::createExternalUrl('calendar', 'openCalendar', array(
+				'unixtime'=>$this->start_time
+				));
+
+				$body .= '<br /><a href="'.$url.'">'.GO::t('openCalendar','calendar').'</a>';
 			}
 
 			$message->setHtmlAlternateBody($body);
