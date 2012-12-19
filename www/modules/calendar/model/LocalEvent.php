@@ -157,15 +157,13 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 		$response['read_only'] = $this->isReadOnly();
 		$response['model_name'] = $this->_event->className();
 		
-		if($response['status']==GO_Calendar_Model_Event::STATUS_CANCELLED){
+		$response['partstatus']="none";
+		if(isset($response['status']) && $response['status']==GO_Calendar_Model_Event::STATUS_CANCELLED){
 			//hack to make it transparent on cancelled status too in the view.
 			$response['partstatus']=  GO_Calendar_Model_Participant::STATUS_DECLINED;
 		}else{
 			if($participant = $this->_event->getParticipantOfCalendar()){
 				$response['partstatus']=$participant->status;
-			}else
-			{
-				$response['partstatus']="none";
 			}
 		}
 		
