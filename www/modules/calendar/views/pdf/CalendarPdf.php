@@ -317,8 +317,10 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 						
 						$this->Cell($pW, 10, $text, 0, 1);
 						if (!empty($event['description'])) {
+							$event['description'] = str_replace("<br />\n<br />","\n",$event['description']);
+							$event['description'] = str_replace("<br />","\n",$event['description']);
 							$this->ln(4);
-							$this->MultiCell($pW, 10, str_replace('<br />',"\n",$event['description']), 0, 'L', 0, 1);
+							$this->MultiCell($pW, 10, $event['description'], 0, 'L', 0, 1);
 						}
 
 						$this->ln(10);
