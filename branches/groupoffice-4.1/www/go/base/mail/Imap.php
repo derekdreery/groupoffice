@@ -87,15 +87,13 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$server = $this->ssl ? 'ssl://'.$this->server : $this->server;
 		
 
-		$this->handle = @fsockopen($server, $this->port, $errorno, $errorstr, 30);
+		$this->handle = @pfsockopen($server, $this->port, $errorno, $errorstr, 30);
 		if (!is_resource($this->handle)) {
 			throw new Exception('Failed to open socket #'.$errorno.'. '.$errorstr);
 		}
 
 		return $this->authenticate($username, $password);
 	}
-
-
 
 	/**
 	 * Disconnect from the IMAP server
@@ -104,18 +102,13 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 */
 
 	public function disconnect() {
-		if (is_resource($this->handle)) {
+		if (is_resource($this->handle)) {			
 			$command = "LOGOUT\r\n";
 			$this->send_command($command);
 			$this->state = 'disconnected';
 			$result = $this->get_response();
 			$this->check_response($result);
-//			GO::debug($this->commands);
-//
-//			GO::debug($this->responses);
-
 			fclose($this->handle);
-			
 			
 			foreach($this->errors as $error){
 				trigger_error("IMAP error: ".$error);
@@ -1941,7 +1934,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$this->send_command($command);
 
 		$result = $this->get_response($max, true);
-		$status = $this->check_response($result, true);
+		
+		$status = $this->check_response($result, true, false);
+		
 		$res = '';
 		foreach ($result as $vals) {			
 			if ($vals[0] != '*') {

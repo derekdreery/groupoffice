@@ -205,13 +205,7 @@ abstract class GO_Base_Mail_ImapBase {
 		}
 		return array($literal_data, $left_over);
 	}
-	/* loop through "lines" returned from imap and parse
-       them with parse_line() and read_literal. it can return
-       the lines in a raw format, or parsed into atoms. It also
-       supports a maximum number of lines to return, in case we
-       did something stupid like list a loaded unix homedir
-       in UW
-	*/
+
 	function get_response($max=false, $chunked=false, $line_length=8192, $sort=false) {
 		$result = array();
 		$current_size = 0;
@@ -242,7 +236,7 @@ abstract class GO_Base_Mail_ImapBase {
 				$result[$n] .= fgets($this->handle, $line_length);
 				$current_size += strlen($result[$n]);
 				if ($max && $current_size > $max) {
-					$this->max_read = true;
+					$this->max_read = true;		
 					break 2;
 				}
 			}
@@ -337,7 +331,7 @@ abstract class GO_Base_Mail_ImapBase {
 					}
 				}
 				
-				if(!$result){
+				if(!$result && $trackErrors){
 					foreach($data as $vals){
 						if (strtoupper($vals[1]) != 'OK') {
 							$this->errors[]=implode(' ', $vals);
@@ -351,8 +345,9 @@ abstract class GO_Base_Mail_ImapBase {
 			if (preg_match("/^A".$this->command_count." OK/i", $line)) {
 				$result = true;
 			}
-			if(!$result && $trackErrors)
+			if(!$result && $trackErrors){
 				$this->errors[]=$line;
+			}
 		}	
 		
 		return $result;
