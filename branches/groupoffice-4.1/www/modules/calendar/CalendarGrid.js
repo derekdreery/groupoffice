@@ -1030,13 +1030,16 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		//var snap = this.getSnap();
 		var text = '';
 
+		if(!GO.util.empty(eventData.status_color))
+			text += '<span class="x-calGrid-event-status" style="background-color:#'+eventData.status_color+';"></span>';
+
 		if(startDay!=endDay)
 		{
 			var format = GO.settings.date_format+' '+GO.settings.time_format;
-			text = eventData.startDate.format(format)+'&nbsp;'+eventData.name;
+			text += eventData.startDate.format(format)+'&nbsp;'+eventData.name;
 		}else
 		{
-			text=eventData.name;
+			text+=eventData.name;
 		}
 
 		for (var i=startDay;i<=endDay;i++)

@@ -674,7 +674,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 						text += '&rarr;&nbsp;'+eventData['name']+'&nbsp;'+eventData.endDate.format(GO.settings.time_format);
 					}else
 					{
-						text = '&harr;&nbsp;'+eventData['name'];
+						text += '&harr;&nbsp;'+eventData['name'];
 					}
 				}
 				
@@ -683,7 +683,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				if(eventData.link_count>0){
 					cls +=' cal-has-links'
 				}
-								
+
 				var event = Ext.DomHelper.append(col,
 				{
 					tag: 'div',
