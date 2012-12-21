@@ -53,6 +53,10 @@ class GO_Base_Model_ModelCache{
 	
 	private function _formatCacheKey($cacheKey){
 		
+		//convert numbers to strings so they are equal. Primary key string "2" is the same as Primary key number 2
+		if(is_scalar($cacheKey))
+			$cacheKey = (string) $cacheKey;
+		
 		$cacheKey=md5(serialize($cacheKey));
 		
 		return $cacheKey;
