@@ -1454,6 +1454,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		//Use cache so identical findByPk calls are only executed once per script request
 		if(!$noCache){
 			$cachedModel =  GO::modelCache()->get($this->className(), $primaryKey);
+//			GO::debug("Cached : ".$this->className()."::findByPk($primaryKey)");
 			if($cachedModel)
 				return $cachedModel;
 		}

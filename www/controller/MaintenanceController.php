@@ -19,7 +19,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		ini_set('memory_limit','512M');
 		ini_set('display_errors','on');
 	}
-		
+	
 	protected function actionDownloadFromShop($params){
 		$this->requireCli();
 		

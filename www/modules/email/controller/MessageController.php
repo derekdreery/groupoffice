@@ -519,15 +519,16 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		if ($success) {
 			if (!empty($params['reply_uid'])) {
 				//set \Answered flag on IMAP message
-				$replyAccount = GO_Email_Model_Account::model()->findByPk($params['reply_account_id']);
-				$imap = $replyAccount->openImapConnection($params['reply_mailbox']);
+				GO::debug("Reply");
+				$account2 = GO_Email_Model_Account::model()->findByPk($params['reply_account_id']);
+				$imap = $account2->openImapConnection($params['reply_mailbox']);
 				$imap->set_message_flag(array($params['reply_uid']), "\Answered");
 			}
 
 			if (!empty($params['forward_uid'])) {
 				//set forwarded flag on IMAP message
-				$forwardAccount = GO_Email_Model_Account::model()->findByPk($params['forward_account_id']);
-				$imap = $forwardAccount->openImapConnection($params['forward_mailbox']);
+				$account2 = GO_Email_Model_Account::model()->findByPk($params['forward_account_id']);
+				$imap = $account2->openImapConnection($params['forward_mailbox']);
 				$imap->set_message_flag(array($params['forward_uid']), "\$Forwarded");
 			}
 
@@ -540,6 +541,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			
 		
 			if ($account->sent) {
+				
+				GO::debug("Sent");
 				//if a sent items folder is set in the account then save it to the imap folder
 				$imap = $account->openImapConnection($account->sent);
 				if(!$imap->append_message($account->sent, $message->toString(), "\Seen")){
