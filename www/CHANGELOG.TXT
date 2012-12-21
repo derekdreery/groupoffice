@@ -1,3 +1,6 @@
+4.1.8
+- Forward email with attachments that have the same names.
+
 17-12-2012 4.1.7
 - Resource conflict check fixed
 - 4.0.143 and 4.0.144 fixes merged
