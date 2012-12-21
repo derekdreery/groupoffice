@@ -46,7 +46,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	 * To avoid memory problems we truncate extreme body lengths
 	 * @var int 
 	 */
-	public $maxBodySize=56000;
+	public $maxBodySize=256000;
 	
 	
 //	/**
