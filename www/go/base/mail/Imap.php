@@ -87,7 +87,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$server = $this->ssl ? 'ssl://'.$this->server : $this->server;
 		
 
-		$this->handle = @pfsockopen($server, $this->port, $errorno, $errorstr, 30);
+		$this->handle = @fsockopen($server, $this->port, $errorno, $errorstr, 30);
 		if (!is_resource($this->handle)) {
 			throw new Exception('Failed to open socket #'.$errorno.'. '.$errorstr);
 		}
