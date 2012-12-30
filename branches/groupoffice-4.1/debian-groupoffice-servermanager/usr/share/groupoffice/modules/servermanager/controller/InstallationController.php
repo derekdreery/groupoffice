@@ -5,7 +5,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	protected $model = 'GO_Servermanager_Model_Installation';
 	
 	protected function allowGuests() {
-		return array('create','destroy', 'report','upgradeall','rename');
+		return array('create','destroy', 'report','upgradeall','rename','fixquota');
 	}
 	
 	protected function ignoreAclPermissions() {
@@ -524,6 +524,33 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 //			if($return_var!=0){
 //				echo "ERROR: ".implode("\n", $output);
 //			}
+			
+			echo "Done\n\n";
+			
+		}
+	}	
+	
+	/**
+	 * Run maintenance/upgrade and clear cache for every installation
+	 * @throws Exception when not run from commandline
+	 */
+	protected function actionFixQuota($params){
+		
+		if(!$this->isCli())
+			throw new Exception("This action may only be ran on the command line.");
+		
+		$stmt = GO_Servermanager_Model_Installation::model()->find();
+		while($installation = $stmt->fetch()){
+			
+			echo "Processing ".$installation->name."\n";
+			
+			if(!$installation->config){
+				echo "\nERROR: Config file ".$installation->configPath." not found\n\n";
+				continue;
+			}
+			
+			if(isset($installation->config['quota']))
+				$installation->setConfigVariable('quota', $installation->config['quota']*1024);
 			
 			echo "Done\n\n";
 			
