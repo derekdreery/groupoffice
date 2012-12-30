@@ -37,7 +37,7 @@ mkdir groupoffice-billing
 
 cd groupoffice-billing
 
-svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/branches/groupoffice-$MAJORVERSION/debian-groupoffice-billing
+svn export https://mschering@svn.code.sf.net/p/group-office/code/branches/groupoffice-$MAJORVERSION/debian-groupoffice-billing
 
 mv debian-groupoffice-billing groupoffice-billing-$VERSION
 
