@@ -29,7 +29,7 @@ rm -Rf groupoffice-com
 mkdir groupoffice-com
 cd groupoffice-com
 
-svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/branches/groupoffice-$MAJORVERSION/debian-groupoffice-com
+svn export https://mschering@svn.code.sf.net/p/group-office/code/branches/groupoffice-$MAJORVERSION/debian-groupoffice-com
 
 if [ "$1" == "real" ]; then
 	cp -R /root/packages/groupoffice-com-$VERSION debian-groupoffice-com/usr/share/groupoffice
