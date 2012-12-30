@@ -1,5 +1,6 @@
-4.1.8
-- Forward email with attachments that have the same names.
+30-12-2012 4.1.8
+- Incorrect data type for default numeric mysql fields
+- Fix for servermanager quota's divided by 1024
 
 17-12-2012 4.1.7
 - Resource conflict check fixed
