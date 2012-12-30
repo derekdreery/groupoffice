@@ -298,6 +298,24 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		}
 	}
 	
+	/**
+	 * Set a config.php variable for this installation
+	 * 
+	 * @param string $name
+	 * @param mixed $value
+	 * @return booleam
+	 */
+	public function setConfigVariable($name, $value){
+		
+		$this->getConfig();
+		
+		$file = new GO_Base_Fs_File($this->configPath);
+		
+		$this->_config[$name]=$value;
+		
+		return GO_Base_Util_ConfigEditor::save($file, $this->_config);
+	}
+	
 	public function validate() {
 		if(empty($this->dbName))
 			$this->setValidationError('name','Name is invalid');
