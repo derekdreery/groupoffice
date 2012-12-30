@@ -515,13 +515,15 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			foreach($events as $event){
 				GO::debug("updating related event: ".$event->id);
 				
-				$event->setAttributes($updateAttr, false);
-				$event->save(true);
+				if($event->id!=$this->id){ //this should never happen but to prevent an endless loop it's here.
+					$event->setAttributes($updateAttr, false);
+					$event->save(true);
 
-				$stmt = $event->participants;
-				$stmt->callOnEach('delete');
+					$stmt = $event->participants;
+					$stmt->callOnEach('delete');
 
-				$this->duplicateRelation('participants', $event);
+					$this->duplicateRelation('participants', $event);
+				}
 			}
 		}
 
