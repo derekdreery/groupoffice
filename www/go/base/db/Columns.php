@@ -37,10 +37,11 @@ class GO_Base_Db_Columns{
 					$type = $field['Type'];
 					$length = 0;
 				}
-
+				
 				$required=false;
 				$gotype = 'textfield';
-
+				$default = $field['Default'];
+				
 				$pdoType = PDO::PARAM_STR;
 				switch ($type) {
 					case 'int':
@@ -54,6 +55,8 @@ class GO_Base_Db_Columns{
 							$gotype = '';
 
 						$length = 0;
+						
+						$default = intval($default);
 
 						break;		
 
@@ -63,6 +66,7 @@ class GO_Base_Db_Columns{
 						$pdoType = PDO::PARAM_STR;
 						$length = 0;
 						$gotype = 'number';
+						$default = floatval($default);
 						break;
 
 					case 'mediumtext':
@@ -95,7 +99,7 @@ class GO_Base_Db_Columns{
 						break;
 				}
 
-				$default = $field['Default'];
+				
 
 				//HACK: When a database may not be null and has no default value value is empty string
 				if($field['Null']=='NO' && is_null($default) && strpos($field['Extra'],'auto_increment')===false)
