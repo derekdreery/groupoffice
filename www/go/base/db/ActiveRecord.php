@@ -1221,7 +1221,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				$msg .= "\n\n".$e->getTraceAsString();
 
 				GO::debug($msg);
+			}			
+			
+			//SQLSTATE[42S22]: Column not found: 1054 Unknown column 'progress' in 'order clause			
+			if(strpos($msg, 'order clause')!==false && strpos($msg, 'Unknown column')!==false)
+			{
+				$msg = GO::t('sortOrderError');
 			}
+			
 			throw new Exception($msg);
 		}
 

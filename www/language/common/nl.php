@@ -589,3 +589,4 @@ $l['maxRowslistTooHigh']='Het maximum aantal rijen voor lijsten mag maximaal 50 
 $l['logFiles']='Logbestanden';
 $l['deleteAllItems']='Verwijder alle items';
 $l['deleteAllItemsAreYouSure']='Weet u zeker dat u alle items wilt verwijderen?';
+$l['sortOrderError']="Sorry, u kunt niet op deze kolom sorteren. Klik aub. op een andere kolom van de tabel om te sorteren.";
