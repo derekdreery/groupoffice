@@ -29,6 +29,8 @@ views/Extjs3/javascript/windows/AboutDialog.js
 views/Extjs3/javascript/windows/LoginDialog.js
 
 views/Extjs3/javascript/data/JsonStore.js
+views/Extjs3/javascript/data/GroupingStore.js
+
 views/Extjs3/javascript/grids/GridPanel.js
 views/Extjs3/javascript/grids/NotifyDrop.js
 views/Extjs3/javascript/grids/MultiSelectGrid.js

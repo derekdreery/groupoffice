@@ -153,7 +153,7 @@ GO.tasks.TasksPanel = function(config)
 			id: 'id'
 		});
 
-		config.store = new Ext.data.GroupingStore({
+		config.store = new GO.data.GroupingStore({
 			url: GO.url('tasks/task/store'),
 //			baseParams: {
 //				'show': 'all'
