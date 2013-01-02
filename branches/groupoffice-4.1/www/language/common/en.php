@@ -600,3 +600,4 @@ $l['month_times'][5]='the fifth';
 
 $l['deleteAllItems']='Delete all items';
 $l['deleteAllItemsAreYouSure']='Are you sure you want to delete all items?';
+$l['sortOrderError']="Sorry, you can't sort on that column. Please click on another column header in the grid for sorting.";
