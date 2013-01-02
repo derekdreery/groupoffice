@@ -267,7 +267,6 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		$from = $this->from->getAddresses();		
 
 		$response['notification'] = $this->disposition_notification_to;
-		$response['subject'] = htmlspecialchars($this->subject,ENT_COMPAT,'UTF-8');
 		
 		//seen is expensive because it can't be recovered from cache.
 		// We'll use the grid to check if a message was seen or not.
@@ -299,10 +298,13 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 
 		$response['inlineAttachments'] = array();
 
-		if($html)
+		if($html) {
 			$response['htmlbody'] = $this->getHtmlBody();
-		else
+			$response['subject'] = htmlspecialchars($this->subject,ENT_COMPAT,'UTF-8');
+		} else {
 			$response['plainbody'] =$this->getPlainBody();
+			$response['subject'] = $this->subject;
+		}
 
 		$response['smime_signed'] = isset($this->content_type_attributes['smime-type']) && $this->content_type_attributes['smime-type']=='signed-data';	
 
