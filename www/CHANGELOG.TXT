@@ -3,7 +3,7 @@
 - Default task reminders will be set based on the given start_time when added from the quickbar
 - Time registration in the first week was impossible
 - Date saved when creating new expenses for projects in Projects module.
-- Left panel in Notes module is collapsible.
+- Left and right panels in Notes module are collapsible.
 
 18-12-2012 4.0.144
 - Speedup link search by removing pagination
