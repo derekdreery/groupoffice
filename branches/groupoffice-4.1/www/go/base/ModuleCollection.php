@@ -98,17 +98,23 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 		GO::setIgnoreAclPermissions($oldIgnore);
 	}
 	
+	private $_modules;
+	
 	public function __get($name) {
 		
-		if(!$this->_isAllowed($name))
-			return false;
+		if(!isset($this->_modules[$name])){		
+			if(!$this->_isAllowed($name))
+				return false;
+
+			$model = parent::__get($name);
+
+			if(!$model || !is_dir($model->path))
+				$model=false;
+
+			$this->_modules[$name]=$model;
+		}
 		
-		$model = parent::__get($name);
-		
-		if(!$model || !is_dir($model->path))
-						return false;
-		
-		return $model;
+		return $this->_modules[$name];
 	}
 	
 	/**
@@ -130,11 +136,9 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	
 	
 	public function __isset($name){
-		if(!$this->_isAllowed($name))
-			return false;
-		
 		try{
-			return $this->model->findByPk($name)!==false;
+			$module = $this->$name;
+			return isset($module);
 		}catch(GO_Base_Exception_AccessDenied $e){
 			return false;
 		}

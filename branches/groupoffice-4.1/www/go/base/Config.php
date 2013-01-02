@@ -158,7 +158,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $default_vat = 19;
+	var $default_vat = 21;
 
 	/**
 	 * Default timezone
