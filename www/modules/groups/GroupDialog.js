@@ -80,10 +80,13 @@ GO.groups.GroupDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
       items:[this.propertiesPanel, this.userGrid]
     });
 
+		var levelLabels = {};
+		levelLabels[GO.permissionLevels.read]="Use";
+
     this.permissionsPanel = new GO.grid.PermissionsPanel({
       title:GO.groups.lang.managePermissions,
-			addLevel: GO.permissionLevels.manage,
-      hideLevel:true
+			levels:[GO.permissionLevels.read,GO.permissionLevels.manage],
+			levelLabels:levelLabels
     });
 
 		
@@ -95,7 +98,8 @@ GO.groups.GroupDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			this.modulePermissionsGrid = new GO.grid.ModulePermissionsGrid({
 				title: GO.groups.lang['modulePermissions'],
 				storeUrl: GO.url('modules/module/permissionsStore'),
-				paramIdType: 'groupId'
+				paramIdType: 'groupId',
+				disabled:true
 			});
 			this.addPanel(this.modulePermissionsGrid);
 		}

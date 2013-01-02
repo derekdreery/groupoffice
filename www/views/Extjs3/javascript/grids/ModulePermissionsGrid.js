@@ -114,8 +114,11 @@ GO.grid.ModulePermissionsGrid = function(config)
 
 
 Ext.extend(GO.grid.ModulePermissionsGrid, GO.grid.GridPanel,{
-		
+	
 	setIdParam : function(id) {
+		
+		this.setDisabled(!id);
+		
 		this.store.baseParams['id'] = id;
 		this.store.baseParams['paramIdType'] = this.paramIdType;
 		this.store.commitChanges();

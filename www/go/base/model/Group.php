@@ -66,6 +66,15 @@ class GO_Base_Model_Group extends GO_Base_Db_ActiveRecord {
 		}
 		return parent::beforeDelete();
 	}
+	
+	protected function afterSave($wasNew) {
+		
+		if($wasNew){
+			$this->acl->addGroup($this->id, GO_Base_Model_Acl::READ_PERMISSION);
+		}
+		
+		return parent::afterSave($wasNew);
+	}
   
 //  public function searchFields() {
 //    return array(

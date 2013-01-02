@@ -105,7 +105,7 @@ Ext.extend(GO.groups.MainPanel, GO.grid.GridPanel, {
     {
       this.groupDialog = new GO.groups.GroupDialog();
       this.groupDialog.on('save', function(dlg, id){
-        this.store.load();
+        this.store.reload();
       },this);
     }
 
