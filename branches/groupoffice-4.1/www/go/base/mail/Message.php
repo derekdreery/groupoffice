@@ -429,6 +429,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 				if ($tmpFile->exists()) {
 					$file = Swift_Attachment::fromPath($tmpFile->path());
 					$file->setContentType($tmpFile->mimeType());
+					$file->setFilename($att->fileName);
 					$this->attach($file);
 					
 					//$tmpFile->delete();
