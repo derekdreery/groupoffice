@@ -135,3 +135,9 @@ $updates["201212141445"][]='CREATE TABLE IF NOT EXISTS `fs_bookmarks` (
 $updates["201212141445"][]='script:1_set_log_dir.php';
 $updates["201212141445"][]="DELETE FROM `go_model_types` WHERE `model_name`='GO_Files_Model_Folder';";
 
+$updates["201212141445"][]='CREATE TABLE IF NOT EXISTS `fs_bookmarks` (
+	`folder_id` int(11) NOT NULL,
+	`user_id` int(11) NOT NULL,
+	PRIMARY KEY (`folder_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;';
+
