@@ -50,8 +50,10 @@
 - Ticket system can be setup for non-users too through the new sites module.
 - Sites module refactored completely.
 
- 4.0.145
+02-01-2013 4.0.145
+- Fixed bug (Couldn't save alias: Field aliasAddress is required Field aliasGoto is required.) in serverclient module creating a user and adding a mailbox.
 - Default task reminders will be set based on the given start_time when added from the quickbar
+- Time registration in the first week was impossible
 
 18-12-2012 4.0.144
 - Speedup link search by removing pagination
