@@ -30,7 +30,7 @@ mkdir groupoffice-servermanager
 
 cd groupoffice-servermanager
 
-svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/branches/groupoffice-$MAJORVERSION/debian-groupoffice-servermanager
+svn export https://mschering@svn.code.sf.net/p/group-office/branches/groupoffice-$MAJORVERSION/debian-groupoffice-servermanager
 
 mv debian-groupoffice-servermanager groupoffice-servermanager-$VERSION
 

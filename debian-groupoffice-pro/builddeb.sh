@@ -37,7 +37,7 @@ mkdir groupoffice-pro
 
 cd groupoffice-pro
 
-svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/branches/groupoffice-$MAJORVERSION/debian-groupoffice-pro
+svn export https://mschering@svn.code.sf.net/p/group-office/branches/groupoffice-$MAJORVERSION/debian-groupoffice-pro
 
 mv debian-groupoffice-pro groupoffice-pro-$VERSION
 
