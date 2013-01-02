@@ -46,6 +46,19 @@ GO.DebugWindow = Ext.extend(GO.Window, {
 									this.baseParams.debugSql=pressed ? '1' : '0';
 								},
 								scope:this
+						},{
+								enableToggle:true,								
+								pressed:false,
+								text:"Pause",
+								toggleHandler:function(item, pressed){
+									if(pressed){
+										Ext.TaskMgr.stop(this.taskConfig);
+									}else
+									{
+										Ext.TaskMgr.start(this.taskConfig);
+									}
+								},
+								scope:this
 						}]
 					}),
 					this.errorPanel = new GO.LogPanel({title:'Errors'}),
