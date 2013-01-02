@@ -29,7 +29,7 @@ mkdir groupoffice-mailserver
 
 cd groupoffice-mailserver
 
-svn export https://mschering@svn.code.sf.net/p/group-office/branches/groupoffice-$MAJORVERSION/debian-groupoffice-mailserver
+svn export https://mschering@svn.code.sf.net/p/group-office/code/branches/groupoffice-$MAJORVERSION/debian-groupoffice-mailserver
 
 mv debian-groupoffice-mailserver groupoffice-mailserver-$VERSION
 
