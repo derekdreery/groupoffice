@@ -224,7 +224,8 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 					for(var i=0;i<records.length;i++)
 						this.attachments.push({
 							tmp_file:records[i].data.tmp_file,
-							from_file_storage: records[i].data.from_file_storage
+							from_file_storage: records[i].data.from_file_storage,
+							fileName:records[i].data.name
 						});
 					
 					this.hiddenAttachmentsField.setValue(Ext.encode(this.attachments));
@@ -352,7 +353,8 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 			for(var i=0;i<attachments.length;i++)
 				this.attachments.push({
 					tmp_file: attachments[i].tmp_file,
-					from_file_storage:false
+					from_file_storage:false,
+					fileName: attachments[i].name
 				});
 
 			this.attachmentsView.store.loadData({
