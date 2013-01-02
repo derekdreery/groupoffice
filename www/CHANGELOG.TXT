@@ -1,3 +1,8 @@
+02-01-2012 4.1.8
+- Merged fixes from 4.0.145
+- Better grid sorting error.
+- Better error message for scanbox when linking to items that do not support files.
+
 30-12-2012 4.1.8
 - Incorrect data type for default numeric mysql fields
 - Fix for servermanager quota's divided by 1024
@@ -44,6 +49,9 @@
 - Billing module can import payments from an MT940 file
 - Ticket system can be setup for non-users too through the new sites module.
 - Sites module refactored completely.
+
+ 4.0.145
+- Default task reminders will be set based on the given start_time when added from the quickbar
 
 18-12-2012 4.0.144
 - Speedup link search by removing pagination
