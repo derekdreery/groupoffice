@@ -77,6 +77,8 @@ GO.notes.MainPanel = function(config){
 		region:'east',
 		id:'no-east-panel',
 		width:440,
+		collapsible:true,
+		collapseMode:'mini',
 		border:true
 	});
 	
