@@ -23,6 +23,7 @@
  * @property string $login_path
  * @property string $template
  * @property string $register_user_groups
+ * @property string $base_path (Deprecated)
  * @property boolean $ssl
  * @property boolean $mod_rewrite
  * @property int $mtime
