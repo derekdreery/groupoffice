@@ -2,7 +2,7 @@ GO.base.email.EmailEditorAttachmentsView = function(config){
 		config=config||{};
 		config.store = new GO.data.JsonStore({
 			url:GO.url('core/pluploads'),
-			fields : ['tmp_file', 'name', 'size', 'type', 'extension', 'human_size','from_file_storage'],
+			fields : ['tmp_file', 'name', 'size', 'type', 'extension', 'human_size','from_file_storage','fileName'],
 			id : 'tmp_file'
 		});
 		
