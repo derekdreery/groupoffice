@@ -803,7 +803,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.0.144';
+	var $version = '4.0.145';
 
 
 	/* The permissions mode to use when creating files
@@ -833,7 +833,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20121218';
+	var $mtime = '20130102';
 
 	#group configuration
 	/**
