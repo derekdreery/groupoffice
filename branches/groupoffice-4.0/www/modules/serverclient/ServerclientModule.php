@@ -64,7 +64,7 @@ class GO_Serverclient_ServerclientModule extends GO_Base_Module{
 		$response = $httpClient->request($url, array(
 				"r" => "postfixadmin/mailbox/submit",
 				"name" => $user->name,
-				"username " => $username,
+				"username" => $username,
 				"password" => $user->getUnencryptedPassword(),
 				"password2" => $user->getUnencryptedPassword(),
 				"domain" => $domain
