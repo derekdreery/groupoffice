@@ -121,4 +121,4 @@ $l['bookmarks']="Favorites";
 $l['bookmarkAlreadyExists']="Folder '%fn' already has a favorite for the current user.";
 $l['removeBookmark']="Remove favorite";
 $l['removeBookmarkQuestion']="Remove folder '%fn' from your favorites list?";
-$l['notInSearchMode']="Can not do this when in search mode.";
+$l['notInSearchMode']="Can't do this when in search mode.";
