@@ -621,6 +621,15 @@ class GO_Base_Config {
 	 */
 	var $swift_qp_dot_escape=false;
 	
+	
+	/**
+	 * Set to true to prevent users from changing their e-mail aliases in the email module.
+	 * 
+	 * @var boolean 
+	 */
+	var $email_disable_aliases=false;
+	
+	
 	/**
 	 * We stumbled upon a dovecot server that crashed when sending a command 
 	 * using LIST-EXTENDED. With this option we can workaround that issue.

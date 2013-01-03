@@ -159,7 +159,7 @@ GO.email.AccountDialog = function(config) {
 		fieldLabel : GO.lang.strEmail,
 		name : 'email',
 		allowBlank : false,
-		disabled:!GO.settings.modules.email.write_permission,
+		disabled:!GO.settings.modules.email.write_permission && GO.email.disableAliases,
 		listeners : {
 			change : function() {
 				this.refreshNeeded = true;
@@ -187,7 +187,7 @@ GO.email.AccountDialog = function(config) {
 		scope : this
 	})
 
-	if(GO.settings.modules.email.write_permission)
+	if(GO.settings.modules.email.write_permission || !GO.email.disableAliases)
 		properties_items.push(this.aliasesButton);
 
 	var propertiesTab = {
