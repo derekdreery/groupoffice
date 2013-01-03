@@ -231,6 +231,10 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 		$record['available'] = $this->isAvailable($start_time, $end_time);
 		$calendar = $this->getDefaultCalendar();
 		$record['create_permission'] = $calendar ? $calendar->userHasCreatePermission() : false;
+		
+		if($this->isNew){
+			unset($record['id']);//otherwise it replaces new participants
+		}
 		return $record;
 	}
 	
