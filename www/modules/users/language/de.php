@@ -113,3 +113,6 @@ $l['slashdmy']='Tag/Monat/Jahr';
 $l['generatePassword']='Erzeuge Kennwort';
 $l['generatedPasswordIs']='Das zeugte Kennwort lautet';
 $l['updateExistingOnImport']='Vorhandene Nutzer aktualisieren (per Nutzername)';
+
+$l['openContact']='Kontakt öffnen';
+$l['showProUsers']='Zeige Professional-Benutzer';

@@ -553,3 +553,10 @@ $l['until']='bis';
 $l['deleteAllItems']='Alle Einträge löschen';
 $l['deleteAllItemsAreYouSure']='Sind Sie sicher, dass Sie alle Einträge löschen möchten?';
 
+$l['permissionManage']= 'Verwalten';
+$l['userFirst_name']='Vorname';
+$l['userMiddle_name']='2. Vorname';
+$l['userLast_name']='Nachname';
+$l['userPassword']='Kennwort';
+$l['userEmail']='E-Mailadresse';
+$l['userUsername']='Benutzername';
