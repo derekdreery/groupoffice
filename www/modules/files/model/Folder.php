@@ -209,7 +209,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		if($this->isModified('parent_id')){
 			//file will be moved so we need the old folder path.
 			$oldFolderId = $this->getOldAttributeValue('parent_id');
-			$oldFolder = GO_Files_Model_Folder::model()->findByPk($oldFolderId);				
+			$oldFolder = GO_Files_Model_Folder::model()->findByPk($oldFolderId, false, true);				
 			$oldRelPath = $oldFolder->path;				
 			$oldPath = GO::config()->file_storage_path . $oldRelPath . '/' . $filename;
 
@@ -287,7 +287,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 				if($this->isModified('parent_id')){
 					//file will be moved so we need the old folder path.
 					$oldFolderId = $this->getOldAttributeValue('parent_id');
-					$oldFolder = GO_Files_Model_Folder::model()->findByPk($oldFolderId);				
+					$oldFolder = GO_Files_Model_Folder::model()->findByPk($oldFolderId, false, true);				
 					$oldRelPath = $oldFolder->path;
 					
 					$oldName = $this->isModified('name') ? $this->getOldAttributeValue('name') : $this->name;

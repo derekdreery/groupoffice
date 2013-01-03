@@ -515,7 +515,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			foreach($events as $event){
 				GO::debug("updating related event: ".$event->id);
 				
-				if($event->id!=$this->id){ //this should never happen but to prevent an endless loop it's here.
+				if($event->id!=$this->id && $this->is_organizer!=$event->is_organizer){ //this should never happen but to prevent an endless loop it's here.
 					$event->setAttributes($updateAttr, false);
 					$event->save(true);
 
