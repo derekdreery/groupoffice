@@ -1,5 +1,10 @@
 4.1.11
 - Added ticket template files to the Example template of the sites module.
+- Add use permissions to members of a group by default and a small bugfix
+- Get a direct link to open a folder in the file browser
+- Bug in adding participants
+- Server error when doing old library requests
+- Updated German language
 
 02-01-2012 4.1.10
 - 4.1.9 was not build from new repository.
