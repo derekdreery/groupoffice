@@ -111,7 +111,8 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 			
 		if ($this->_until>0)
 		{
-			$rrule .= ";UNTIL=".gmdate('Ymd\\THis\\Z', $this->_until);
+			//$rrule .= ";UNTIL=".gmdate('Ymd\\THis\\Z', $this->_until);
+			$rrule .= ";UNTIL=".date('Ymd\\THis', $this->_until);
 		}
 		return $rrule;
 	}
@@ -151,7 +152,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 			
 		if ($this->_until>0)
 		{
-			$rrule .= " ".date('Ymd\THis', $this->_until);
+			$rrule .= " ".date('Ymd\THis', GO_Base_Util_Date::date_add($this->_until, 1)).$time;
 		}else
 		{
 			$rrule .= " #0";
