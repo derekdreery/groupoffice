@@ -3816,7 +3816,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 			//copy custom fields
 			if($model->customfieldsRecord)
-				$this->customfieldsRecord->mergeWith($model->customfieldsRecord);
+				$this->customfieldsRecord->mergeWith($model->customfieldsRecord, $mergeAttributes, $deleteModel);
 		}
 		
 		$model->copyLinks($this);
