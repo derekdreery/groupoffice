@@ -140,6 +140,15 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		return $this->_path;
 	}	
 	
+	/**
+	 * Get a URL to show the folder directy in the files module.
+	 * 
+	 * @return string
+	 */
+	public function getExternalURL(){
+		return GO::createExternalUrl("files", "showFolder", array($this->id));
+	}
+	
 	public function getFolderIdsInPath($folder_id){
 		$ids=array();
 		$currentFolder = GO_Files_Model_Folder::model()->findByPk($folder_id);

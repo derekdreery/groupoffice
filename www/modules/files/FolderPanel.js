@@ -59,6 +59,11 @@ GO.files.FolderPanel = Ext.extend(GO.DisplayPanel,{
 						'<td>'+GO.lang.strMtime+':</td>'+
 						'<td>{mtime}</td>'+
 					'</tr>'+
+					
+					'<tr>'+
+						'<td>URL:</td>'+
+						'<td><a target="_blank" href="{url}">{url}</a></td>'+
+					'</tr>'+
 
 					'<tpl if="!GO.util.empty(comment)">'+
 						'<tr>'+
