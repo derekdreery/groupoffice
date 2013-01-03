@@ -446,39 +446,24 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 	
 	reloadAvailability : function(){
 		
-		var selections = this.store.getRange();
-		if(selections.length)
-		{
-			var participants = [];
-			for (var i = 0; i < selections.length; i++) {
-				participants.push(selections[i].get('email'));
-			}
-			
-			Ext.Ajax.request({
-				url : GO.settings.modules.calendar.url + 'json.php',
-				params : {
-					task : 'check_availability',
-					emails : participants.join(','),
-					start_time : this.eventDialog.getStartDate().format('U'),
-					end_time : this.eventDialog.getEndDate().format('U')
-				},
-				callback : function(options, success, response) {
-					if (!success) {
-						Ext.MessageBox.alert(GO.lang['strError'],
-							GO.lang['strRequestError']);
-					} else {
-						var responseParams = Ext.decode(response.responseText);
-	
-						for (var i = 0; i < selections.length; i++) {
-							selections[i].set('available', responseParams[selections[i].get('email')]);
-								
-						}
-						this.store.commitChanges();
-					}
-				},
-				scope : this
-			});
-		}
+
+		GO.request({
+			url : "calendar/participant/reload",
+			params : {
+				event_id:this.event_id,
+				participants : Ext.encode(this.getGridData()),
+				start_time : this.eventDialog.getStartDate().format('U'),
+				end_time : this.eventDialog.getEndDate().format('U')
+			},
+			success : function(options, response, result) {
+				for (var i = 0; i < result.results.length; i++) {
+					this.store.getAt(i).set('available', result.results[i]['available']);
+				}
+				this.store.commitChanges();
+			},
+			scope : this
+		});
+		
 	},
 	
 	checkAvailability : function() {

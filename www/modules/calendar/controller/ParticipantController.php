@@ -58,6 +58,25 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 //		
 //		return $response;
 //	}
+	
+	public function actionReload($params){
+		$event = empty($params['event_id']) ? false : GO_Calendar_Model_Event::model()->findByPk($params['event_id']);
+
+		$participantAttrs=json_decode($params['participants']);
+
+		$store = new GO_Base_Data_ArrayStore();
+		
+		foreach($participantAttrs as $participantAttr) {
+			$participant = new GO_Calendar_Model_Participant();
+			$participant->setAttributes($participantAttr);
+			if($event)
+				$participant->event_id=$event->id;
+			
+			$store->addRecord($participant->toJsonArray($params['start_time'], $params['end_time']));
+		}
+		
+		return $store->getData();
+	}
 
 	public function actionGetContacts($params){
 		$ids = json_decode($params['contacts']);
