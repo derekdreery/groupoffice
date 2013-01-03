@@ -137,7 +137,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 			break;
 
 			case 'MONTHLY':				
-				if($this->_bymonthday){
+				if(empty($this->_byday)){
 					$rrule .= 'MD'.$this->_interval.' '.date('j', $this->_eventstarttime);
 				}else
 				{
