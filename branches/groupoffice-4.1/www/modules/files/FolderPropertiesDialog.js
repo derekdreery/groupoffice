@@ -39,6 +39,11 @@ GO.files.FolderPropertiesDialog = function(config){
 			fieldLabel: GO.lang.strLocation,
 			name: 'path'
 		},
+		{
+			xtype: 'plainfield',
+			fieldLabel: "URL",
+			name: 'url'
+		},
 		new GO.form.HtmlComponent({
 			html:'<hr />'
 		}),

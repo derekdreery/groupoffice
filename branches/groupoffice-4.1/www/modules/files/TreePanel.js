@@ -24,11 +24,9 @@ GO.files.TreePanel = function (config){
 		var el =this.getEl();
 		if(el){
 			el.unmask();
-		}
+		}		
+		this.getLoader().baseParams.expand_folder_id=0;
 	}, this);
-	
-	
-	
 		
 	Ext.applyIf(config, {
 		layout:'fit',
@@ -57,7 +55,12 @@ GO.files.TreePanel = function (config){
 	
 	
 Ext.extend(GO.files.TreePanel, Ext.tree.TreePanel,{
-	
+	/**
+	 * Expand the folder server side
+	 */
+	setExpandFolderId : function(folder_id){
+		this.getLoader().baseParams.expand_folder_id=folder_id;
+	}
 	
 	});
 	

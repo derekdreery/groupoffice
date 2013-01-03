@@ -133,10 +133,15 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 							'allowDrop' => false,
 							'parent_id'=>0,
 							'iconCls' => 'folder-shares',
-							'path'=>$folder->path
-									//                      'expanded'=>true,
-									//                      'children'=>array()
+							'path'=>"shared"							
 					);
+					
+					//expand shares for non admins only. Admin may see too many folders.
+					if(!GO::user()->isAdmin()){
+						$node['expanded']=true;
+						$node['children']=$this->_buildSharedTree($expandFolderIds);
+					}
+					
 					$response[] = $node;
 
 					if (GO::modules()->addressbook) {
@@ -312,6 +317,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$response['data']['path'] = $model->path;
 		$response['data']['notify'] = $model->hasNotifyUser(GO::user()->id);
 		$response['data']['is_someones_home_dir'] = $model->isSomeonesHomeFolder();
+		
+		$response['data']['url']=$model->externalUrl;
 
 		return parent::afterLoad($response, $model, $params);
 	}
@@ -319,6 +326,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	protected function afterDisplay(&$response, &$model, &$params) {
 		$response['data']['path'] = $model->path;
 		$response['data']['type'] = GO::t('folder', 'files');
+		
+		$response['data']['url']=$model->externalUrl;
 
 		return parent::afterDisplay($response, $model, $params);
 	}
