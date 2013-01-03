@@ -390,7 +390,7 @@ $updates[]= "CREATE TABLE `go_holidays` (
   `region` varchar(4) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `region` (`region`)
-) TYPE=MyISAM DEFAULT CHARSET=utf8;";
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
 
 $updates[]= "ALTER TABLE  `go_reminders` ADD  `snooze_time` INT NOT NULL";
