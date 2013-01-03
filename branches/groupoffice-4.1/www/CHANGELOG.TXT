@@ -1,3 +1,7 @@
+03-01-2012 4.1.12
+- New parameter for disabling editing of e-mail aliases $config['email_disable_aliases']=true;
+- Reverted fix for forwarding duplicate attachment names
+
 03-01-2012 4.1.11
 - Added ticket template files to the Example template of the sites module.
 - Add use permissions to members of a group by default and a small bugfix

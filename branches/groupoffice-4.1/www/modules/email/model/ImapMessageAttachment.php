@@ -58,8 +58,13 @@ class GO_Email_Model_ImapMessageAttachment extends GO_Email_Model_MessageAttachm
 	public function createTempFile() {
 		
 		if(!$this->hasTempFile()){
-			$file = new GO_Base_Fs_File($this->name);
-			$tmpFile = new GO_Base_Fs_File($this->getTempDir().uniqid(time()).'.'.$file->extension());
+			
+			$tmpFile = new GO_Base_Fs_File($this->getTempDir().GO_Base_Fs_File::stripInvalidChars($this->name));	
+//			This fix for duplicate filenames in forwards caused screwed up attachment names!
+//			A possible new fix should be made in GO_Email_Model_ImapMessage->getAttachments()
+//			
+//			$file = new GO_Base_Fs_File($this->name);
+//			$tmpFile = new GO_Base_Fs_File($this->getTempDir().uniqid(time()).'.'.$file->extension());
 			if(!$tmpFile->exists()){
 				$imap = $this->account->openImapConnection($this->mailbox);
 				$imap->save_to_file($this->uid, $tmpFile->path(),  $this->number, $this->encoding, true);
