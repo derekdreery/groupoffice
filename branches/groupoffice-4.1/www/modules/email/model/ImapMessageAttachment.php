@@ -98,4 +98,10 @@ class GO_Email_Model_ImapMessageAttachment extends GO_Email_Model_MessageAttachm
 		
 		return GO::url('email/message/attachment', $params);
 	}
+	
+
+	public function __wakeup() {	
+		//refresh the account model because the password may have been changed
+		$this->account = GO_Email_Model_Account::model()->findByPk($this->account->id);
+	}
 }
