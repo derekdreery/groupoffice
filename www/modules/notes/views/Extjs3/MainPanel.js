@@ -34,6 +34,8 @@ GO.notes.MainPanel = function(config){
 		width: 210,
 		split:true,
 		allowNoSelection:true,
+		collapsible:true,
+		collapseMode:'mini',
 		bbar: new GO.SmallPagingToolbar({
 			items:[this.searchField = new GO.form.SearchField({
 				store: GO.notes.readableCategoriesStore,
@@ -75,6 +77,8 @@ GO.notes.MainPanel = function(config){
 		region:'east',
 		id:'no-east-panel',
 		width:440,
+		collapsible:true,
+		collapseMode:'mini',
 		border:true
 	});
 	
