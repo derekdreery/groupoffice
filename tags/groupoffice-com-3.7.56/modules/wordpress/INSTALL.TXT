@@ -1,0 +1,12 @@
+This module put's the Wordpress administration page in a Group-Office tab and
+automatically copies users to Wordpress and logs them in.
+
+To install this feature take the following steps:
+
+1. First install Wordpress on the same server as Group-Office.
+2. Copy modules/wordpress/plugin/GroupOffice to <wordpressdir>/wp-content/plugins
+3. Install the plugin in Wordpress.
+4. Login to Group-Office and install the wordpress module.
+5. Refresh Group-Office and go to the wordpress module.
+6. Click at "Settings" and enter the full URL to the Wordpress site.
+7. Click at "Administrate" and the wordpress admin panel will load.

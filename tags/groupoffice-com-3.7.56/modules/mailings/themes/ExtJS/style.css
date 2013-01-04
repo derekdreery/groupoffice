@@ -1,0 +1,6 @@
+.go-module-icon-mailings , .go-menu-icon-mailings , .go-tab-icon-mailings {
+	background:url('images/mailings.png');
+}
+.ml-btn-mailings{
+	background-image:url('images/mailings.png') !important;
+}

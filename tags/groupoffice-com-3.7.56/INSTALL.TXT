@@ -1,0 +1,79 @@
+Thank you for installing Group-Office! We hope you will enjoy it.
+
+INSTALLATION
+To install Group-Office open a browser and go to the URL where you put the 
+Group-Office files and follow instructions.
+
+Also have a look at: http://www.group-office.com/wiki/Installation_manual
+
+If you are using the Professional version you also need to install the free
+Ioncube loaders. Download them from:
+
+http://www.ioncube.com/loaders.php
+
+
+UPGRADE FROM VERSION 3.0 TO FUTURE VERSIONS:
+http://www.group-office.com/wiki/Upgrading
+ 
+
+UPGRADING FROM VERSION 2.x
+
+First backup your database!
+
+Upgrading from version 2 is a little bit trickier. There is a special upgrade script 
+for version 2.18 to 3.x only. So if you run a version prior to version 2.18 you must first
+download 2.18 and 3.x from Sourceforge:
+
+https://sourceforge.net/project/showfiles.php?group_id=76359&package_id=77805
+
+and upgrade to that version. It doesn't matter if you 
+use the Professional or the Community version. You can always use the 2.18 Community 
+version for the upgrade purpose.
+
+After this you must check your database encoding. Older MySQL versions did not 
+support UTF8 encoding. Therefore the database from older Group-Office installations
+does not handle non-ascii characters very well. We created a script to correct this 
+database. Check with PhpMyAdmin or another tool if your database uses the right encoding.
+You should see utf8_general_ci encoding and not latin1_swedish_ci or any other.
+To convert latin encoding to utf8 run the script install/convertDbToUTF8.sh
+
+eg.: 
+./convertDbToUTF8.sh databasename "-u root --password=yourmysqlpass"
+
+This should convert it for you.
+
+Now your database can be converted to a Group-Office 3.x database.
+
+Put your old config.php file in the root of the new Group-Office 3.x directory. Adjust the paths in the file if necessary.
+
+Then it's wise to create another backup in case anything goes wrong in the upgrade2to3.php script.
+
+Run install/upgrade2to3/upgrade2to3.php in your browser.
+
+This will take some time.
+
+If you see errors because of a duplicate entry like this:
+
+MySQL Error: 1062 (Duplicate entry ...) or Table or Column already exist.
+
+Then you can ignore them. Any other error can not be ignored.
+
+Now run install/index.php
+
+Login to Group-Office and run a database check at Start menu -> System tools.
+If system tools is not there install the module.
+
+Now it should be done!
+
+
+
+
+
+SYSTEM REQUIREMENTS
+-Linux, Mac OS X, Windows
+-PHP5.2 compiled with:
+	-IMAP extension for e-mail module and IMAP authentication
+	-MySQL extension
+-MySQL 5 or higher
+
+Good luck!
