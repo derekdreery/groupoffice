@@ -24,8 +24,8 @@ fi
 echo "Group-Office version: $VERSION"
 echo "Major version: $MAJORVERSION"
 
-if [ ! -e /var/www/release/packages/groupoffice-pro-$VERSION ]; then
-	echo /var/www/release/packages/groupoffice-pro-$VERSION bestaat niet. eerst createtag.sh draaien.
+if [ ! -e /root/packages/groupoffice-pro-$VERSION ]; then
+	echo /root/release/packages/groupoffice-pro-$VERSION bestaat niet. eerst createtag.sh draaien.
 	exit
 fi
 
@@ -42,10 +42,10 @@ svn export https://mschering@svn.code.sf.net/p/group-office/code/branches/groupo
 mv debian-groupoffice-pro groupoffice-pro-$VERSION
 
 for m in $PROMODULES; do
-	cp -R /var/www/release/packages/groupoffice-pro-$VERSION/modules/$m groupoffice-pro-$VERSION/usr/share/groupoffice/modules/
+	cp -R /root/packages/groupoffice-pro-$VERSION/modules/$m groupoffice-pro-$VERSION/usr/share/groupoffice/modules/
 done
 
-cp -R /var/www/release/packages/billing-$VERSION/billing groupoffice-pro-$VERSION/usr/share/groupoffice/modules
+cp -R /root/packages/billing-$VERSION/billing groupoffice-pro-$VERSION/usr/share/groupoffice/modules
 
 cd groupoffice-pro-$VERSION
 
