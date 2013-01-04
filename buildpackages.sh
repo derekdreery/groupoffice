@@ -1,4 +1,7 @@
 #!/bin/bash
+
+eval "$(gpg-agent --daemon)"
+
 php ./createchangelogs.php
 
 svn commit -m 'Updated changelogs'
