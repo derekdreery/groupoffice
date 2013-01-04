@@ -175,19 +175,43 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 	* @return array 
 	*/	
 	public function actionLoadColors($params){
-		$store = GO_Base_Data_Store::newInstance(GO_Calendar_Model_CalendarUserColor::model());
+		$store = GO_Base_Data_Store::newInstance(GO_Calendar_Model_Calendar ::model());
 
 		$findParams = $store->getDefaultParams($params)
-						->join(GO_Calendar_Model_Calendar::model()->tableName(), GO_Base_Db_FindCriteria::newInstance()->addCondition('calendar_id', 'cal.id', '=', 't', true, true),'cal')
-						->order(array('cal.name'))						
-						->select('t.*,cal.name AS name,cal.id as id');
+						->join(GO_Calendar_Model_CalendarUserColor::model()->tableName(), GO_Base_Db_FindCriteria::newInstance()->addCondition('id', 'col.calendar_id', '=', 't', true, true),'col','LEFT')
+						->order(array('t.name'))						
+						->select('col.*,name,id');
 		
-		$stmt = GO_Calendar_Model_CalendarUserColor::model()->find($findParams);
+		$stmt = GO_Calendar_Model_Calendar::model()->find($findParams);
 		
 		$store->setStatement($stmt);
 
+		$store->getColumnModel()->setFormatRecordFunction(array($this,'getCalendarColor'));
+		
 		return $store->getData();
 	}
+	
+	private $_colors = array(
+		'F0AE67','FFCC00','FFFF00','CCFF00','66FF00',
+		'00FFCC','00CCFF','0066FF','95C5D3','6704FB',
+		'CC00FF','FF00CC','CC99FF','FB0404','FF6600',
+		'C43B3B','996600','66FF99','999999','00FFFF'
+	);
+	private $_colorIndex = 0;
+	
+	public function getCalendarColor($formattedrecord,$model,$controller){
+				
+		if(empty($model->color)){
+			if($this->_colorIndex >= count($this->_colors))
+				$this->_colorIndex = 0;
+			
+			$formattedrecord['color'] = $this->_colors[$this->_colorIndex];
+			$this->_colorIndex++;
+		}
+		
+		return $formattedrecord;
+	}
+	
 	
 	/**
 	 * Save the user_calendar_colors
@@ -200,8 +224,14 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		
 		foreach($params as $cC){			
 			$calendarColor = GO_Calendar_Model_CalendarUserColor::model()->findByPk(array('calendar_id'=>$cC->id,'user_id'=>GO::user()->id));
-			if($calendarColor)
-				$calendarColor->color = $cC->color;
+			
+			if(!$calendarColor){
+				$calendarColor = new GO_Calendar_Model_CalendarUserColor();
+				$calendarColor->user_id = GO::user()->id;
+				$calendarColor->calendar_id = $cC->id;
+			}
+			
+			$calendarColor->color = $cC->color;
 			
 			$calendarColor->save();
 		}
