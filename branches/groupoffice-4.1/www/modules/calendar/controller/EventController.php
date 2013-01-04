@@ -550,7 +550,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$stmt = $event->resources();		
 		while($resourceEvent = $stmt->fetch()){
 			$response['data']['resources'][$resourceEvent->calendar->id] = array();
-			$response['data']['status_'.$resourceEvent->calendar->id] = $resourceEvent->status;
+			$response['data']['status_'.$resourceEvent->calendar->id] = $resourceEvent->localizedStatus;
 			$response['data']['resources_checked'][] = $resourceEvent->calendar->id;
 			
 			if(GO::modules()->customfields){
