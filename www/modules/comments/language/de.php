@@ -13,3 +13,4 @@ $l['category']='Kategorie';
 $l['noCategory']='Keine Kategorie';
 $l['newCommentText']='Hier einen neuen Kommentar eingeben ...';
 $l['readMore']="Mehr lesen";
+$l['enableReadMore']="Aktiviere \"Mehr lesen\"-Links";
