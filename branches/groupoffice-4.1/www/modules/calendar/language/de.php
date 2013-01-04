@@ -185,7 +185,7 @@ $l['cantRemoveOrganizer']="Sie können den Organisator nicht löschen.";
 $l['calendarColor']='Kalenderfarbe';
 
 $l['months']= 'Monate';
-$l['statuses']['CANCELLED']= 'Abgebrochen';
+$l['statuses']['CANCELLED']= 'Abgelehnt';
 $l['errorOrganizerOnly']= 'Sie sind nicht berechtigt, diesen Termin zu bearbeiten, da Sie nicht der Organisator sind.';
 $l['errorOrganizerOnlyTitle']= 'Sie sind nicht der Organisator';
 $l['eventDeleted']="Der Termin wurde aus Ihrem Kalender gelöscht";
@@ -202,3 +202,4 @@ $l['notifyParticipants']='Teilnehmer benachrichtigen?';
 $l['sendNotificationTitle']='Benachrichtigung senden?';
 $l['sendNotification']='Möchten Sie die Teilnehmer per E-Mail informieren?';
 $l['openCalendar']='Kalender öffnen';
+$l['attendance']='Teilnahme';
