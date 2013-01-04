@@ -285,6 +285,9 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	public function __wakeup() {
 		unset($this->seen);
 		unset($this->flag);
+		
+		//refresh the account model because the password may have been changed
+		$this->account = GO_Email_Model_Account::model()->findByPk($this->account->id);
 	}
 	
 	protected function getSeen(){
