@@ -125,9 +125,8 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 		$response['status'] = $this->_event->status;
 		$response['username'] = $this->_event->user->getName();
 		
-		if($this->_event->status==GO_Calendar_Model_Event::STATUS_CANCELLED){
-			$statusLang = GO::t('statuses','calendar');
-			$response['name'] .= ' ('.$statusLang['CANCELLED'].')';
+		if($this->_event->status==GO_Calendar_Model_Event::STATUS_CANCELLED){			
+			$response['name'] .= ' ('.$this->_event->localizedStatus.')';
 		}
 		
 		if($this->_isMerged){
