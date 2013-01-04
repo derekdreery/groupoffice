@@ -66,8 +66,41 @@ if [ $QUIET -eq 0 ]
   then tail -f $LOGFILE >&3 &     # run tail in bg
 fi
 
-# backup mysql databases
-perl mysql_backup.pl $MYSQL_USER $MYSQL_PASS
+echo Backing up MySQL databases
+#perl mysql_backup.pl $MYSQL_USER $MYSQL_PASS
+
+
+OUTPUTDIR="/home/mysql_backup"
+
+mkdir -p $OUTPUTDIR
+
+MYSQLDUMP="/usr/bin/mysqldump"
+MYSQL="/usr/bin/mysql"
+
+# clean up any old backups - save space
+rm "$OUTPUTDIR/*bak" > /dev/null 2>&1
+
+# get a list of databases
+databases=`$MYSQL --user=$MYSQL_USER --password=$MYSQL_PASS \
+ -e "SHOW DATABASES;" | tr -d "| " | grep -v Database`
+
+cd $OUTPUTDIR
+
+# dump each database in turn
+for db in $databases; do
+    echo "Dumping $db"
+    $MYSQLDUMP --force --opt --user=$MYSQL_USER --password=$MYSQL_PASS \
+    --databases $db > "$db.sql"
+
+		echo "Compressing $db"
+
+		tar czf $db.tar.gz $db.sql
+		rm $db.sql
+done
+
+echo "Done with MySQL backup"
+
+
 
 if [ ! -f $RKEY ]; then
 echo "Couldn't find ssh keyfile!"
