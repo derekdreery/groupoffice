@@ -1667,13 +1667,15 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Check if this event has other participant then the given user id.
 	 * 
-	 * @param int $user_id
+	 * @param int|array $user_id
 	 * @return boolean 
 	 */
 	public function hasOtherParticipants($user_id=0){
 		
 		if(empty($user_id))
-			$user_id=$this->calendar->user_id;
+			$user_id=array($this->calendar->user_id,GO::user()->id);
+		elseif(!is_array($user_id))
+			$user_id = array($user_id);
 		
 		if(empty($this->id))
 			return false;
@@ -1682,7 +1684,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 						->single();
 		
 		$findParams->getCriteria()
-						->addCondition('user_id', $user_id,'!=')
+						->addInCondition('user_id', $user_id,'t', true, true)
 						->addCondition('event_id', $this->id);
 						
 		
