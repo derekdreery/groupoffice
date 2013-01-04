@@ -130,6 +130,9 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 			$response['calendar_name'] = implode('; ',$this->_calendarNames);
 			unset($response['status']); // unset this, it is not relevant to show this in merge view
 			unset($response['username']); // unset this, it is not relevant to show this in merge view.
+		}else
+		{
+			$response['calendar_name']=$this->_calendarNames[0];
 		}
 		
 		$response['id'] = $this->displayId;
