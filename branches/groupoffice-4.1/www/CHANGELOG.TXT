@@ -1,4 +1,5 @@
-
+04-01-2012 4.1.13
+- Wrong mails for resource confirmation
 - Use mysqldump for backing up mysql databases now. Old script skipped databases with a hyphen in the name.
 - Colors in calendar are working again.
 - Color choose dialog checks ACL.
@@ -7,7 +8,7 @@
 - Updated German
 - Hide portlet panel for emails when no folders are selected
 - Request only first page of calendars in init
-- Add cancelled text to subject in event
+- Cancelled events show red dot
 
 03-01-2012 4.1.12
 - New parameter for disabling editing of e-mail aliases $config['email_disable_aliases']=true;
