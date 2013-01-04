@@ -560,3 +560,5 @@ $l['userLast_name']='Nachname';
 $l['userPassword']='Kennwort';
 $l['userEmail']='E-Mailadresse';
 $l['userUsername']='Benutzername';
+$l['repeats_not_every']= 'Wiederholt alle %s %s';
+$l['sortOrderError']="Sie können nicht nach dieser Spalte sortieren. Klicken Sie auf einen anderen Spaltenkopf.";

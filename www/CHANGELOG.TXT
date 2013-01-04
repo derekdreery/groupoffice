@@ -1,3 +1,7 @@
+- Refresh account in cached e-mail messages
+- Monthly recurring events could jump to 0:00 hours on Debian but not on Ubuntu
+- Updated German
+
 03-01-2012 4.1.12
 - New parameter for disabling editing of e-mail aliases $config['email_disable_aliases']=true;
 - Reverted fix for forwarding duplicate attachment names

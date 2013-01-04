@@ -243,3 +243,4 @@ $l['addAddresslistSuccess']='Die Einträge wurden erfolgreich zur Adressliste hi
 $l['addContactsSuccess']= '%i Kontakte wurden erfolgreich zur Adressliste hinzugefügt.';
 $l["contactAddress"]= "Adresse";
 $l["contactAddress_no"]= "Hausnummer";
+$l['contactHomepage']= "Homepage";
