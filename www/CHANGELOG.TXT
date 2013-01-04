@@ -1,3 +1,5 @@
+- Colors in calendar are working again.
+- Color choose dialog checks ACL.
 - Refresh account in cached e-mail messages
 - Monthly recurring events could jump to 0:00 hours on Debian but not on Ubuntu
 - Updated German
