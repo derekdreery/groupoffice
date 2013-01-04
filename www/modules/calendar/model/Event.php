@@ -621,42 +621,50 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 					GO_Base_Mail_Mailer::newGoInstance()->send($message);
 				}
+			}
 			
-				if($this->user_id!=GO::user()->id){
-					//todo send update to user
-					if($this->isModified('status')){				
-						if($this->status=='ACCEPTED'){
-							$body = sprintf(GO::t('your_resource_accepted_mail_body','calendar'),$user->name,$this->calendar->name).'<br /><br />'
-										. $this->toHtml();
-										//. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
+			
+			//send update to user
+			if($this->user_id!=GO::user()->id){
+				if($this->isModified('status')){				
+					if($this->status==GO_Calendar_Model_Event::STATUS_CONFIRMED){
+						$body = sprintf(GO::t('your_resource_accepted_mail_body','calendar'),GO::user()->name,$this->calendar->name).'<br /><br />'
+								. $this->toHtml();
+								//. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
 
-							$subject = sprintf(GO::t('your_resource_accepted_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
-						}else
-						{
-								$body = sprintf(GO::t('your_resource_declined_mail_body','calendar'),$user->name,$this->calendar->name).'<br /><br />'
-										. $this->toHtml();
-										//. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
-
-							$subject = sprintf(GO::t('your_resource_declined_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
-						}
+						$subject = sprintf(GO::t('your_resource_accepted_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
 					}else
 					{
-						$body = sprintf(GO::t('your_resource_modified_mail_body','calendar'),$user->name,$this->calendar->name).'<br /><br />'
-									. $this->toHtml()
-									. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
-						$subject = sprintf(GO::t('your_resource_modified_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
+						$body = sprintf(GO::t('your_resource_declined_mail_body','calendar'),GO::user()->name,$this->calendar->name).'<br /><br />'
+								. $this->toHtml();
+								//. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
+
+						$subject = sprintf(GO::t('your_resource_declined_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
 					}
-
-					$message = GO_Base_Mail_Message::newInstance(
-										$subject
-										)->setFrom(GO::user()->email, GO::user()->name)
-										->addTo($this->user->email, $this->user->name);
-
-					$message->setHtmlAlternateBody($body);					
-
-					GO_Base_Mail_Mailer::newGoInstance()->send($message);
+				}else
+				{
+					$body = sprintf(GO::t('your_resource_modified_mail_body','calendar'),$user->name,$this->calendar->name).'<br /><br />'
+								. $this->toHtml();
+//								. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
+					$subject = sprintf(GO::t('your_resource_modified_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
 				}
+				
+				$url = GO::createExternalUrl('calendar', 'openCalendar', array(
+					'unixtime'=>$this->start_time
+				));
+		
+				$body .= '<br /><a href="'.$url.'">'.GO::t('openCalendar','calendar').'</a>';
+
+				$message = GO_Base_Mail_Message::newInstance(
+									$subject
+									)->setFrom(GO::user()->email, GO::user()->name)
+									->addTo($this->user->email, $this->user->name);
+
+				$message->setHtmlAlternateBody($body);					
+
+				GO_Base_Mail_Mailer::newGoInstance()->send($message);
 			}
+
 		}
 	}
 
