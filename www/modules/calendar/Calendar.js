@@ -941,9 +941,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			url: "core/multiRequest",
 			params:{
 				requests:Ext.encode({
-					views:{r:"calendar/view/store"},				
-					calendars:{r:"calendar/calendar/store"},
-					resources:{r:"calendar/calendar/calendarsWithGroup","resourcesOnly":1}
+					views:{r:"calendar/view/store", start:0, limit:GO.settings.config.nav_page_size},				
+					calendars:{r:"calendar/calendar/store", start:0, limit:GO.settings.config.nav_page_size},
+					resources:{r:"calendar/calendar/calendarsWithGroup","resourcesOnly":1, start:0, limit:GO.settings.config.nav_page_size}
 				})
 			},
 			
