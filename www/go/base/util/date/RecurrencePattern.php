@@ -246,7 +246,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 		{
 
 			//set event start to first day of month for calculation of the number of periods.
-			$this->_eventstarttime=mktime(0,0,0,date('m',$this->_eventstarttime),1,date('Y',$this->_eventstarttime));
+			$this->_eventstarttime=mktime(date('H',$this->_eventstarttime),date('i',$this->_eventstarttime),0,date('m',$this->_eventstarttime),1,date('Y',$this->_eventstarttime));
 			
 			//eg. 3rd monday of the month
 			$monthBetweenNextAndFirstEvent=$this->_findNumberOfMonths($startTime, $this->_interval, false);
