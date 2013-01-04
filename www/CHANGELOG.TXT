@@ -1,5 +1,6 @@
 4.0.146
 - Fixed displaying of a red row when the user is disabled
+- Companies and Contacts will still be imported if the email is invalid but without email-address
 
 02-01-2013 4.0.145
 - Fixed bug (Couldn't save alias: Field aliasAddress is required Field aliasGoto is required.) in serverclient module creating a user and adding a mailbox.
