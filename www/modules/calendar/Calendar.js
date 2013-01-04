@@ -778,8 +778,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			
 			var rowIndex;
 			
-			for(var cal_id in store.reader.jsonData.backgrounds){							
-				rowIndex = this.calendarList.store.indexOfId(cal_id);		
+			for(var cal_id in store.reader.jsonData.backgrounds){					
+				rowIndex = this.calendarList.store.indexOfId(parseInt(cal_id));		
 				if(rowIndex>-1){
 					var rowEl = Ext.get(view.getRow(rowIndex));		
 					if(rowEl)
