@@ -59,7 +59,7 @@ GO.users.MainPanel = function(config)
  
 	config.view = new Ext.grid.GridView({
 		getRowClass : function(record, rowIndex, p, store){
-			if(GO.util.empty(record.data.enabled)){
+			if(record.data.enabled == GO.lang['no']){
 				return 'user-disabled';
 			}
 		}
