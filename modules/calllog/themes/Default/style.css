@@ -1,0 +1,7 @@
+.go-module-icon-calllog , .go-menu-icon-calllog {
+	background-image: url('images/calllog.png') !important;
+}
+
+.go-tab-icon-calllog {
+	background-image: none !important;
+}

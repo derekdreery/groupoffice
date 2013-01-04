@@ -1,0 +1,87 @@
+/** 
+ * Copyright Intermesh
+ * 
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ * 
+ * If you have questions write an e-mail to info@intermesh.nl
+ * 
+ * @copyright Copyright Intermesh
+ * @version $Id: en.js 7708 2011-07-06 14:13:04Z wilmar1980 $
+ * @author Dat Pham <datpx@fab.vn> +84907382345
+ */
+ 
+tinyMCE.addI18n('vi.table_dlg',{
+general_tab:"Chung",
+advanced_tab:"Chi tiết",
+general_props:"Thuộc tính chung",
+advanced_props:"Thuộc tính chi tiết",
+rowtype:"Hàng trong bảng",
+title:"Thêm sửa bảng",
+width:"Rộng",
+height:"Cao",
+cols:"Số cột",
+rows:"Số hàng",
+cellspacing:"Dãn ô",
+cellpadding:"Dãn ô",
+border:"Khung",
+align:"Căn lề",
+align_default:"Ngầm định",
+align_left:"Trái",
+align_right:"Phải",
+align_middle:"Giữa",
+row_title:"Thuộc tính hàng",
+cell_title:"Thuộc tính ô",
+cell_type:"Kiểu ô",
+valign:"Căn hàng",
+align_top:"Trên",
+align_bottom:"Dưới",
+bordercolor:"Màu khung",
+bgcolor:"Màu nền",
+merge_cells_title:"Ghép ô bảng",
+id:"Id",
+style:"Kiểu",
+langdir:"Hướng ngôn ngữ",
+langcode:"Mã ngôn ngữ",
+mime:"Kiểu MIME đích",
+ltr:"Trái sang phải",
+rtl:"Phải sang trái",
+bgimage:"Ảnh nền",
+summary:"Tổng quát",
+td:"Dữ liệu",
+th:"Tiêu đề",
+cell_cell:"Cập nhật ô hiện thời",
+cell_row:"Cập nhất các ô trong hàng",
+cell_all:"Cập nhật các ô trong bảng",
+row_row:"Cập nhật hàng hiện tại",
+row_odd:"Cập nhật hàng chẵn",
+row_even:"Cập nhật hàng lẻ",
+row_all:"Cập nhật các hàng",
+thead:"Tiêu đề bảng",
+tbody:"Nội dung bảng",
+tfoot:"Dưới bảng",
+scope:"Phạm vi",
+rowgroup:"Nhóm hàng",
+colgroup:"Nhóm cột",
+col_limit:"Bạn đã dùng tối đa số cột {$cols}.",
+row_limit:"Bạn dùng tối đa số hàng {$rows}.",
+cell_limit:"Bạn đã dùng tối đa số ô {$cells}.",
+missing_scope:"Bạn có chắc tiếp tục không chỉ ra phạm vi các ô tiêu đề, sẽ khó cho một số người không biết phân biệt đâu là tiêu đề, đâu là nội dung.",
+caption:"Nhãn bảng",
+frame:"Khung",
+frame_none:"Không",
+frame_groups:"nhóm",
+frame_rows:"hàng",
+frame_cols:"cột",
+frame_all:"tất cả",
+rules:"Thước",
+rules_void:"trống",
+rules_above:"trên",
+rules_below:"dưới",
+rules_hsides:"thước dọc",
+rules_lhs:"lhs",
+rules_rhs:"rhs",
+rules_vsides:"thước ngang",
+rules_box:"ô",
+rules_border:"Khung"
+});

@@ -1,0 +1,31 @@
+.go-module-icon-mailings , .go-menu-icon-mailings {
+	background-image:url('images/mailings.png') !important;
+}
+
+.go-tab-icon-mailings {
+	background-image: none !important;
+}
+
+.ml-btn-mailings{
+	background-image:url('images/new_mailing.png') !important;
+}
+
+
+.ml-template-default-spacer {
+	border-bottom:1px solid #D0D0D0 !important;
+	margin:10px 0px !important;
+}
+.ml-btn-pause{
+	background-image:url('images/pause.png') !important;
+}
+.ml-btn-play{
+	background-image:url('images/play.png') !important;
+}
+
+.ml-btn-view-log{
+	background-image:url('images/log.png') !important;
+}
+
+.ml-btn-view{
+	background-image:url('images/view.png') !important;
+}
