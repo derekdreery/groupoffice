@@ -125,10 +125,10 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 		$response['status'] = $this->_event->status;
 		$response['username'] = $this->_event->user->getName();
 		
-		if($this->_event->status==GO_Calendar_Model_Event::STATUS_CANCELLED){			
-			$response['name'] .= ' ('.$this->_event->localizedStatus.')';
-		}
-		
+//		if($this->_event->status==GO_Calendar_Model_Event::STATUS_CANCELLED){			
+//			$response['name'] .= ' ('.$this->_event->localizedStatus.')';
+//		}
+//		
 		if($this->_isMerged){
 			$response['name'] = $response['name'] .' ('.implode(',',$this->_initials).')';
 			$response['calendar_name'] = implode('; ',$this->_calendarNames);
