@@ -70,10 +70,11 @@ GO.email.PortletPanel = Ext.extend(Ext.Panel, {
 				}));
 				
 				this.messagesGrid.store.removeAll();
+				this.messagesGrid.hide();
 			}
 			else
 			{
-				
+				this.messagesGrid.show();
 				for(var i=0; i<this.folderStore.data.length; i++)
 				{
 					
