@@ -186,12 +186,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			case GO_Calendar_Model_Event::STATUS_TENTATIVE:
 				$color = 'FFFF00'; //Yellow
 			break;
-			case GO_Calendar_Model_Event::STATUS_DECLINED:
+			case GO_Calendar_Model_Event::STATUS_CANCELLED:
 				$color = 'FF0000'; //Red			
 			break;
-			case GO_Calendar_Model_Event::STATUS_ACCEPTED:
-				$color = '00FF00'; //Lime
-			break;
+//			case GO_Calendar_Model_Event::STATUS_ACCEPTED:
+//				$color = '00FF00'; //Lime
+//			break;
 			case GO_Calendar_Model_Event::STATUS_CONFIRMED:
 				$color = '32CD32'; //LimeGreen
 			break;
