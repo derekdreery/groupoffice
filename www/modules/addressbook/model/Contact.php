@@ -307,13 +307,13 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Set the photo
 	 * 
-	 * @param String $tmpFile 
+	 * @param String $srcFileName The source image file name.
 	 */
-	public function setPhoto($tmpFile){
+	public function setPhoto($srcFileName){
 
 		$destination = GO::config()->file_storage_path.'contacts/contact_photos/'.$this->id.'.jpg';
 		
-		if(empty($tmpFile))
+		if(empty($srcFileName))
 		{
 			$file = new GO_Base_Fs_File($this->_getPhotoPath());
 			return !$file->exists() || $file->delete();
@@ -325,13 +325,13 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 
 
 			$img = new GO_Base_Util_Image();
-			if(!$img->load($tmpFile)){
+			if(!$img->load($srcFileName)){
 				throw new Exception(GO::t('imageNotSupported','addressbook'));
 			}
 
 			$img->zoomcrop(90,120);
 			if(!$img->save($destination, IMAGETYPE_JPEG))
-				throw new Exception("Could not save photo at ".$destination." from ".$tmpFile);
+				throw new Exception("Could not save photo at ".$destination." from ".$srcFileName);
 		}
 	}
 	
