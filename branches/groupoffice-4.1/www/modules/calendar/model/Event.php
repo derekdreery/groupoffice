@@ -376,7 +376,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		return parent::beforeSave();
 	}
-	
+
 	protected function afterDbInsert() {
 		if(empty($this->uuid)){
 			$this->uuid = GO_Base_Util_UUID::create('event', $this->id);
@@ -1701,17 +1701,23 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		return $p ? true : false;
 	}
 	
+	/**
+	 * When checking all Event models make sure there is a UUID if not create one
+	 */
 	public function checkDatabase() {
-		
+
+	  if(empty($this->uuid))
+		$this->uuid = GO_Base_Util_UUID::create('event', $this->id);
+	  
 		//in some cases on old databases the repeat_end_time is set but the UNTIL property in the rrule is not. We correct that here.
 		if($this->repeat_end_time>0 && strpos($this->rrule,'UNTIL=')===false){
 			$rrule = new GO_Base_Util_Icalendar_Rrule();
 			$rrule->readIcalendarRruleString($this->start_time, $this->rrule);						
 			$rrule->until=$this->repeat_end_time;
-			$this->rrule= $rrule->createRrule();			
+			$this->rrule= $rrule->createRrule();	
 		}
 		
-		return parent::checkDatabase();
+		parent::checkDatabase();
 	}
 	
 	

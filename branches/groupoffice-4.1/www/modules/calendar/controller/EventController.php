@@ -711,7 +711,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					$response['permission_level']=$calendar->permissionLevel;
 					$response['count']=0;
 					$response['comment']=$calendar->comment;
-
+			
 					if(empty($params['events_only'])){
 						if($calendar->show_bdays && GO::modules()->addressbook){
 							$response = $this->_getBirthdayResponseForPeriod($response,$calendar,$startTime,$endTime);
@@ -719,10 +719,11 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 						$response = $this->_getHolidayResponseForPeriod($response,$calendar,$startTime,$endTime);
 
-						if(GO::modules()->tasks){
-							$response = $this->_getTaskResponseForPeriod($response,$calendar,$startTime,$endTime);
-						}
 					}
+				}
+					
+				if(GO::modules()->tasks && empty($params['events_only'])){
+					$response = $this->_getTaskResponseForPeriod($response,$calendar,$startTime,$endTime);
 				}
 
 				$response = $this->_getEventResponseForPeriod($response,$calendar,$startTime,$endTime);
@@ -765,18 +766,19 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		$tasklists = $calendar->visible_tasklists;
 
-		$lists = array();
+		$this->_tasklists = array();
 		while($tasklist = $tasklists->fetch()){
-			$lists[] = $tasklist->id;
+			$lists[$tasklist->id] = $tasklist->name;
 		}
 		if(!empty($lists)){
 			
+		  
 			$taskFindCriteria = GO_Base_Db_FindCriteria::newInstance()
 							->addCondition('due_time', strtotime($startTime),'>=')
 							->addCondition('due_time', strtotime($endTime), '<=');
 
 		
-			$taskFindCriteria->addInCondition('tasklist_id', $lists);
+			$taskFindCriteria->addInCondition('tasklist_id', array_keys($lists));
 	
 
 			$taskFindParams = GO_Base_Db_FindParams::newInstance()
@@ -794,11 +796,11 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				
 
 
-				$response['results'][$this->_getIndex($response['results'],(int)$task->due_time,$task->name)] = array(
+				$response['results']['task'.$task->id] = array(
 					'id'=>$response['count']++,
 					'link_count'=>$task->countLinks(),
 					'name'=>$task->name,
-					'description'=>$task->description,
+					'description'=>$lists[$task->tasklist_id],
 					'time'=>'00:00',
 					'start_time'=>$startTime,
 					'end_time'=>$endTime,
