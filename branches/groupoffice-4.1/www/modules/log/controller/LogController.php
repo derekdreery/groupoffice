@@ -19,7 +19,7 @@ class GO_Log_Controller_Log extends GO_Base_Controller_AbstractModelController {
 		
 		$findParams = GO_Base_Db_FindParams::newInstance();
 		
-		$findParams->getCriteria()->addCondition('ctime', GO_Base_Util_Date::date_add(time(),-14), '<');
+		$findParams->getCriteria()->addCondition('ctime', GO_Base_Util_Date::date_add(time(),-GO::config()->log_max_days), '<');
 		
 		$stmt = GO_Log_Model_Log::model()->find($findParams);
 		
