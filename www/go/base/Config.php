@@ -103,6 +103,14 @@ class GO_Base_Config {
 	 * @var bool
 	 */
 	var $debug_log = false;
+	
+	
+	/**
+	 * Set the number of days the database log will contain until it will be dumped to a CSV file on disk.
+	 * 
+	 * @var int
+	 */
+	var $log_max_days=14;
 
 	/**
 	 * Enable FirePhp
