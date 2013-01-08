@@ -45,7 +45,7 @@ class GO_Base_Mail_Mailer extends Swift_Mailer{
 		
 		if(GO::modules()->isInstalled("log")){
 			
-			$str = $message->getSubject()." ";
+			$str = "";
 			
 			$from = $message->getFrom ();
 			if(!empty($from))
