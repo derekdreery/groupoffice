@@ -70,17 +70,7 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 		text : GO.lang.cmdDelete,
 		cls : 'x-btn-text-icon',
 		handler : function() {
-			var selectedRows = this.gridPanel.selModel.getSelections();
-			for (var i = 0; i < selectedRows.length; i++) {
-				selectedRows[i].commit();
-				
-				if(selectedRows[i].data.is_organizer){
-					alert(GO.calendar.lang.cantRemoveOrganizer);
-					return;
-				}
-				
-				this.store.remove(selectedRows[i]);
-			}
+			this.gridPanel.deleteSelected();
 		},
 		scope : this
 	}, {
@@ -215,7 +205,20 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 		loadMask : {
 			msg : GO.lang.waitMsgLoad
 		},
-		sm : new Ext.grid.RowSelectionModel()
+		sm : new Ext.grid.RowSelectionModel(),
+		deleteSelected : function(){
+			var selectedRows = this.selModel.getSelections();
+			for (var i = 0; i < selectedRows.length; i++) {
+				selectedRows[i].commit();
+				
+				if(selectedRows[i].data.is_organizer){
+					alert(GO.calendar.lang.cantRemoveOrganizer);
+					return;
+				}
+				
+				this.store.remove(selectedRows[i]);
+			}
+		}
 	});
 		
 	
