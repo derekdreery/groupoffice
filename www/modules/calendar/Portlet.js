@@ -44,7 +44,7 @@ GO.calendar.SummaryGroupPanel = function(config)
 			'portlet' : true
 		},
 		proxy: new Ext.data.HttpProxy({
-			url: GO.settings.modules.calendar.url+'json.php'
+			url: GO.url("calendar/portlet/portletGrid")
 		}),
 		groupField:'day',
 		sortInfo: {
@@ -166,57 +166,75 @@ GO.mainLayout.onReady(function(){
 			tools: [{
 				id: 'gear',
 				handler: function(){
-					if(!this.manageCalsWindow)
+					if(!this.selectCalendarWin)
 					{
-						this.manageCalsWindow = new Ext.Window({
-							layout:'fit',
-							items:this.PortletSettings =  new GO.calendar.PortletSettings(),
-							width:700,
-							height:400,
+						this.selectCalendarWin = new GO.base.model.multiselect.dialog({
+							url:'calendar/portlet',
+							columns:[{ header: GO.lang['strName'], dataIndex: 'name', sortable: true }],
+							fields:['id','name'],
 							title:GO.calendar.lang.visibleCalendars,
-							closeAction:'hide',
-							buttons:[{
-								text: GO.lang.cmdSave,
-								handler: function(){
-									var params={
-										'task' : 'save_portlet'
-									};
-									if(this.PortletSettings.store.loaded){
-										params['calendars']=Ext.encode(this.PortletSettings.getGridData());
-									}
-									Ext.Ajax.request({
-										url: GO.settings.modules.calendar.url+'action.php',
-										params: params,
-										callback: function(options, success, response){
-											if(!success)
-											{
-												Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
-											}else
-											{
-												//var responseParams = Ext.decode(response.responseText);
-												this.PortletSettings.store.reload();
-												this.manageCalsWindow.hide();
-
-												calGrid.store.reload();
-											}
-										},
-										scope:this
-									});
-								},
-								scope: this
-							}],
+							model_id:GO.settings.user_id,
 							listeners:{
-								show: function(){
-									if(!this.PortletSettings.store.loaded)
-									{
-										this.PortletSettings.store.load();
-									}
+								hide:function(){
+									calGrid.store.reload();
 								},
 								scope:this
 							}
 						});
 					}
-					this.manageCalsWindow.show();
+					this.selectCalendarWin.show();
+					
+//					if(!this.manageCalsWindow)
+//					{
+//						this.manageCalsWindow = new Ext.Window({
+//							layout:'fit',
+//							items:this.PortletSettings =  new GO.calendar.PortletSettings(),
+//							width:700,
+//							height:400,
+//							title:GO.calendar.lang.visibleCalendars,
+//							closeAction:'hide',
+//							buttons:[{
+//								text: GO.lang.cmdSave,
+//								handler: function(){
+//									var params={
+//										'task' : 'save_portlet'
+//									};
+//									if(this.PortletSettings.store.loaded){
+//										params['calendars']=Ext.encode(this.PortletSettings.getGridData());
+//									}
+//									Ext.Ajax.request({
+//										url: GO.settings.modules.calendar.url+'action.php',
+//										params: params,
+//										callback: function(options, success, response){
+//											if(!success)
+//											{
+//												Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
+//											}else
+//											{
+//												//var responseParams = Ext.decode(response.responseText);
+//												this.PortletSettings.store.reload();
+//												this.manageCalsWindow.hide();
+//
+//												calGrid.store.reload();
+//											}
+//										},
+//										scope:this
+//									});
+//								},
+//								scope: this
+//							}],
+//							listeners:{
+//								show: function(){
+//									if(!this.PortletSettings.store.loaded)
+//									{
+//										this.PortletSettings.store.load();
+//									}
+//								},
+//								scope:this
+//							}
+//						});
+//					}
+//					this.manageCalsWindow.show();
 				}
 			},{
 				id:'close',

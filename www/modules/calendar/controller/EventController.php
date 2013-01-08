@@ -974,7 +974,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			
 			// Set the id of the event, this is a count of the displayed events 
 			// in the view.
-			$event->displayId = $response['count']++;
+//			$event->displayId = $response['count']++;
 
 			$resultCount++; // Add one to the global result count;
 		}

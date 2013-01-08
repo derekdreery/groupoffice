@@ -139,7 +139,8 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 			$response['calendar_name']=$this->_calendarNames[0];
 		}
 		
-		$response['id'] = $this->displayId;
+//		$response['id'] = $this->displayId;
+		$response['id'] = $this->_event->id.':'.$this->getAlternateStartTime(); // a unique id for the data store. Is not really used.
 		$response['background'] = $this->_backgroundColor;
 		$response['start_time'] = date('Y-m-d H:i', $this->getAlternateStartTime());
 		$response['end_time'] = date('Y-m-d H:i',  $this->getAlternateEndTime());	

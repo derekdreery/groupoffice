@@ -3,6 +3,9 @@
 - Event store will display the tasklists of all selected calendars 
 - In the email template dialog the button to add the company name to a template is fixed
 - Added support for contact template tags in the email template from the ticket system
+- Removed text from read/unread button in ticket panel to save space on the toolbar
+- Added $config['log_max_days'] option for the maximum number of days in the log module
+- Calendar portlet refactored
 
 04-01-2012 4.1.13
 - Wrong mails for resource confirmation
