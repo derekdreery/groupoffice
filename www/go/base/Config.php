@@ -107,6 +107,7 @@ class GO_Base_Config {
 	
 	/**
 	 * Set the number of days the database log will contain until it will be dumped to a CSV file on disk.
+	 * The log module must be installed.
 	 * 
 	 * @var int
 	 */
