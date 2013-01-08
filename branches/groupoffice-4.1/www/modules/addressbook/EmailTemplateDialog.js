@@ -235,7 +235,7 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 		['{user:city}',GO.lang['strCity']+' ('+GO.lang.strUser+')'],
 		['{user:state}',GO.lang['strState']+' ('+GO.lang.strUser+')'],
 		['{user:country}',GO.lang['strCountry']+' ('+GO.lang.strUser+')'],
-		['{user:name}',GO.lang['strCompany']+' ('+GO.lang.strUser+')'],
+		['{usercompany:name}',GO.lang['strCompany']+' ('+GO.lang.strUser+')'],
 		['{user:department}',GO.lang['strDepartment']+' ('+GO.lang.strUser+')'],
 		['{user:function}',GO.lang['strFunction']+' ('+GO.lang.strUser+')'],
 		['{usercompany:phone}',GO.lang['strWorkPhone']+' ('+GO.lang.strUser+')'],
