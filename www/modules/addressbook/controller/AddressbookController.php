@@ -134,6 +134,24 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 		return $response;
 	}
 	
+	
+	protected function actionCheck($params){
+		$model = GO::getModel($this->model)->findByPk($params["id"]);
+		$model->checkDatabase();
+		
+		$stmt = $model->contacts;
+		
+		foreach($stmt as $contact)
+			$contact->checkDatabase();
+		
+		$stmt = $model->companies;
+		
+		foreach($stmt as $company)
+			$contact->checkDatabase();
+		
+		echo "Done\n";
+	}
+	
 	/**
 	 * Imports VCF file.
 	 * Example command line call: /path/to/groupoffice/groupoffice addressbook/addressbook/importVcf --file=filename.txt --addressbook_id=1

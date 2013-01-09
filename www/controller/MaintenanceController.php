@@ -318,10 +318,10 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		$response = array();
 		
 		$oldAllowDeletes = GO_Base_Fs_File::setAllowDeletes(false);
-		
-        if(!$this->isCli()){
-            echo '<pre>';
-        }
+
+		if(!$this->isCli()){
+				echo '<pre>';
+		}
 				
 		if(!empty($params['module'])){
 			if($params['module']=='base'){
@@ -340,9 +340,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		echo "All Done!\n";
 		
-        if(!$this->isCli()){
-            echo '</pre>';
-        }
+		if(!$this->isCli()){
+				echo '</pre>';
+		}
         
 		GO_Base_Fs_File::setAllowDeletes($oldAllowDeletes);
 		
