@@ -3808,8 +3808,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				if($isset && !empty($value)){
 					if($this->columns[$name]['gotype']=='textarea'){
 						$this->$name .= "\n\n-- merge --\n\n".$value;
-					}elseif(empty($this->$name))
+					}elseif($this->columns[$name]['gotype']='date' && $value == '0000-00-00')
+					  $this->$name=""; //Don't copy old 0000-00-00 that might still be in the database
+					elseif(empty($this->$name))
 						$this->$name=$value;
+					
 				}
 			}		
 			$this->save();				

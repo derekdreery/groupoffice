@@ -260,5 +260,16 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		$response['success'] = true;
 		return $response;
 	}
+	
+	/**
+	 * Remove the invalid emails from records to be imported
+	 */
+	protected function beforeImport($params, &$model, &$attributes, $record) {	
+	  if(isset($attributes['email']) && !GO_Base_Util_String::validate_email($attributes['email']))
+          unset($attributes['email']);
+        
+	  return parent::beforeImport($params, $model, $attributes, $record);
+	}
+	
 }
 

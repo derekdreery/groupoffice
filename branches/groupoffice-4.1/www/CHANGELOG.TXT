@@ -1,4 +1,4 @@
-??-01-2013 4.1.14
+09-01-2013 4.1.14
 - Events will create a UUID on databaseCheck()
 - Event store will display the tasklists of all selected calendars 
 - In the email template dialog the button to add the company name to a template is fixed
@@ -6,6 +6,7 @@
 - Removed text from read/unread button in ticket panel to save space on the toolbar
 - Added $config['log_max_days'] option for the maximum number of days in the log module
 - Calendar portlet refactored
+- Updated Italian and German
 
 04-01-2012 4.1.13
 - Wrong mails for resource confirmation
@@ -90,8 +91,13 @@
 - Ticket system can be setup for non-users too through the new sites module.
 - Sites module refactored completely.
 
-4.0.146
+
+4.0.147
+- Merging 2 records will unset fields with type 'date' and value '0000-00-00'
+
+09-01-2013 4.0.146
 - Fixed displaying of a red row when the user is disabled
+- Companies and Contacts will still be imported if the email is invalid but without email-address
 
 02-01-2013 4.0.145
 - Fixed bug (Couldn't save alias: Field aliasAddress is required Field aliasGoto is required.) in serverclient module creating a user and adding a mailbox.

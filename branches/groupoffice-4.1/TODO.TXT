@@ -13,7 +13,6 @@ op ics klikken opent event dialog
 
 link rules email
 
-Migratie script interlokaal
 
 Totaal rates in ticket export
 
