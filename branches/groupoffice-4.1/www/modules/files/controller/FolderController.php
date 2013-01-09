@@ -216,6 +216,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		);
 
 		if ($expanded) {
+			$node['children'] = array();
 			$stmt = $folder->getSubFolders(GO_Base_Db_FindParams::newInstance()
 							->limit(100)//not so nice hardcoded limit
 							->order('name','ASC'));
@@ -224,8 +225,6 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			}
 
 			if ($withFiles) {
-				if (!isset($node['children']))
-					$node['children'] = array();
 				$node['children'] = array_merge($node['children'], $this->_addFileNodes($folder));
 			}
 		} else {
