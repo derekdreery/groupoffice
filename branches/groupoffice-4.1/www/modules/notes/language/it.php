@@ -8,7 +8,6 @@ $l["category_id"]="ID categoria";
 $l["content"]="Contenuto";
 $l["manageCategories"]="Gestisci categorie";
 
-$l["note"]="Nota";
 $l['name']='Note';
 $l['description']='Inserisci qui la descrizione';
 $l['category']='Categoria';

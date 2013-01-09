@@ -112,7 +112,6 @@ $l["viewLog"]='Visualizza il log';
 $l["viewMessage"]='Visualizza il messaggio';
 $l["pauseMailing"]='Sospendi l\'invio';
 $l["resumeMailing"]='Riprendi l\'invio';
-$l["copyingMessages"]='Copia dei messaggi in corso...';
 $l["companyId"]= "ID";
 $l["companyUser_id"]= "Utente";
 $l["companyAddressbook_id"]= "Rubrica";
