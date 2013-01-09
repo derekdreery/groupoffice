@@ -95,10 +95,14 @@ GO.files.FileBrowser = function(config){
 			this.folder_id=node.childNodes[0].id;
 		}
 		this.setFolderID(this.folder_id);
-		
-		this.updateLocation();
-
 	}, this, {single:true});
+	
+	
+	this.treePanel.getLoader().on('load', function()
+	{		
+		this.updateLocation();
+	}, this);
+	
 
 	this.treePanel.on('click', function(node)	{
 		this.setFolderID(node.id, true);
@@ -229,9 +233,9 @@ GO.files.FileBrowser = function(config){
 //		root: 'results',
 //		totalProperty: 'total',
 		url:GO.url("files/folder/list"),
-                baseParams: {
-                  'query' : ''
-                },
+		baseParams: {
+			'query' : ''
+		},
 		id: 'type_id',
 		fields:fields.fields,
 		remoteSort:true
@@ -732,7 +736,7 @@ GO.files.FileBrowser = function(config){
 
 	GO.files.FileBrowser.superclass.constructor.call(this, config);
 
-	this.bookmarksGrid.store.load();
+	
 
 	this.addEvents({
 		fileselected : true,
@@ -979,7 +983,10 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				}
 			}
 		}
-
+		
+		if(!this.treePanel.getLoader().baseParams.root_folder_id)
+			this.bookmarksGrid.store.load();
+		
 		this.buildNewMenu();
 	},
 
@@ -990,12 +997,15 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		rootID ? this.searchField.hide() : this.searchField.show();
 		rootID ? this.bookmarksGrid.hide() : this.bookmarksGrid.show();
 		
+		
 				
 		if(this.treePanel.getLoader().baseParams.root_folder_id!=rootID || (folder_id>0 && this.folder_id!=folder_id)){
 		
 				this.folder_id=folder_id;
 				this.treePanel.getLoader().baseParams.root_folder_id=rootID;
 				this.treePanel.setExpandFolderId(folder_id);
+				if(folder_id)
+					this.refresh();
 		}
                 
     this.fireEvent('folderIdSet');
@@ -1474,7 +1484,6 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 
 	refresh : function(syncFilesystemWithDatabase){
-
 		
 		this.treePanel.setExpandFolderId(this.folder_id);
 		
@@ -1741,18 +1750,17 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 		this.getActiveGridStore().load({
 			callback:function(){
-				var activeNode = this.treePanel.getNodeById(id);
-				
+			
 				if(expand)
 				{
+					var activeNode = this.treePanel.getNodeById(id);
+						
 					if(activeNode){
 						activeNode.expand();
-						this.updateLocation();
+//						this.updateLocation();
 					}else{
 						this.treePanel.setExpandFolderId(id);
-						this.treePanel.getRootNode().reload(function(){
-								this.updateLocation();
-							},this);	
+						this.treePanel.getRootNode().reload();	
 					}
 				}
 
@@ -2023,7 +2031,6 @@ GO.files.openFolder = function(id, folder_id)
 		GO.files.fileBrowser=new GO.files.FileBrowser({
 			id:'popupfb',
 			border:false,
-			treeRootVisible:true,
 			filePanelCollapsed:true
 		});
 		GO.files.fileBrowserWin = new GO.Window({
@@ -2038,6 +2045,10 @@ GO.files.openFolder = function(id, folder_id)
 			items: GO.files.fileBrowser
 		});
 	}
+	
+	if(!folder_id)
+		folder_id=id;
+	
 	GO.files.fileBrowser.setRootID(id, folder_id);
 	GO.files.fileBrowserWin.show();
 

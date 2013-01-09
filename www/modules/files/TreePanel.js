@@ -10,6 +10,7 @@ GO.files.TreePanel = function (config){
 			expand_folder_id:0
 		},
 		preloadChildren:true
+		
 	});
 
 
