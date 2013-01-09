@@ -249,3 +249,5 @@ $l['winmailNoFiles']="Questo allegato winmail non contiene alcun file.";
 $l['attachedAppointmentInfo']="Informazioni sull\'appuntamento allegato";
 $l["markFolderReadConfirm"]='Sei sicuro di voler marcare tutti i messaggi nella cartella \'{name}\' come letti?';
 $l['cantDeleteSpecialFolder']="Non puoi eliminare il cestino, la cartella della posta inviata o delle bozze";
+$l['storePassword']='Memorizza la password in modo permanente';
+$l['copyingMessages']='Copia dei messaggi in corso...';
