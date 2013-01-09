@@ -1622,7 +1622,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		//create event in participant's default calendar if the current user has the permission to do that
 		$calendar = $participant->getDefaultCalendar();
-		if ($calendar->userHasCreatePermission()){
+		if ($calendar && $calendar->userHasCreatePermission()){
 			
 			//ignore acl permissions because we allow users to schedule events directly when they have access through
 			//the special freebusypermissions module.			
