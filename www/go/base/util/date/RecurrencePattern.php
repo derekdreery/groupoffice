@@ -151,6 +151,9 @@ class GO_Base_Util_Date_RecurrencePattern{
 		if(!isset($this->_recurPositionStartTime) || $this->_recurPositionStartTime<$this->_eventstarttime)
 			$this->_recurPositionStartTime=$this->_eventstarttime;
 		
+		
+		GO::debug(date('c', $this->_recurPositionStartTime));
+		
 		if(!$startTime)
 			$startTime=$this->_recurPositionStartTime;
 
@@ -313,13 +316,12 @@ class GO_Base_Util_Date_RecurrencePattern{
 	protected function _getNextRecurrenceYearly($startTime){
 		$monthsBetweenNextAndFirstEvent=$this->_findNumberOfMonths($startTime, $this->_interval*12);
 		$recurrenceTime =  GO_Base_Util_Date::date_add($this->_eventstarttime, 0, $monthsBetweenNextAndFirstEvent);
-		
 		return $recurrenceTime;
 	}
 	
 	
 	protected function _findNumberOfMonths($startTime, $interval, $ceil=true){
-		
+				
 		$intervalYears = date('Y', $startTime)-date('Y', $this->_eventstarttime);
 		$intervalMonths = date('n', $startTime)-date('n', $this->_eventstarttime);
 		$intervalMonths = 12*$intervalYears+$intervalMonths;
@@ -331,7 +333,9 @@ class GO_Base_Util_Date_RecurrencePattern{
 		$periodsBetweenNextAndFirstEvent = $interval*$rounded;
 		
 		if($ceil){
-			if($periodsBetweenNextAndFirstEvent == $intervalMonths)
+			
+			$recurrenceTime =  GO_Base_Util_Date::date_add($this->_eventstarttime, 0, $periodsBetweenNextAndFirstEvent);
+			if($recurrenceTime<$startTime)
 				$periodsBetweenNextAndFirstEvent+=$interval;
 		}
 		

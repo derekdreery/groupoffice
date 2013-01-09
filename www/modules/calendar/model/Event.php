@@ -827,15 +827,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		} else {
 			$rrule = new GO_Base_Util_Icalendar_Rrule();
 			$rrule->readIcalendarRruleString($localEvent->getEvent()->start_time, $localEvent->getEvent()->rrule, true);
-
 			$rrule->setRecurpositionStartTime($periodStartTime);
 
 			$origEventAttr = $localEvent->getEvent()->getAttributes('formatted');
 
 			while ($occurenceStartTime = $rrule->getNextRecurrence(false,$periodEndTime)) {
-				
-				GO::debug($event->name.' '.date('c', $occurenceStartTime));
-
 				if ($occurenceStartTime > $localEvent->getPeriodEndTime())
 					break;
 
@@ -848,7 +844,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				
 				$localEvent->setAlternateEndTime($endTime->format('U'));
 
-				if($localEvent->getAlternateStartTime()<$origPeriodEndTime && $localEvent->getAlternateEndTime()>$origPeriodStartTime){
+				if($localEvent->getAlternateStartTime()<$origPeriodEndTime && $localEvent->getAlternateEndTime()>=$origPeriodStartTime){
 					if(!$event->hasException($occurenceStartTime))
 						$this->_calculatedEvents[$occurenceStartTime . '-' . $origEventAttr['id']] = $localEvent;
 				}
