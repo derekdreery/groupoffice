@@ -1,0 +1,15 @@
+** LinkedIn module installation & Product registration **
+
+1) Go to http://developer.linkedin.com/. Log in using your
+LinkedIn account, click on 'API keys' in the account menu. You can then register
+your Group-Office installation there by adding an application. Note that in the
+registration form, you do not need to fill in the fields under OAuth User
+Agreement for the intended LinkedIn contact import function to work. During
+registration, you receive the API key and Secret key specific for your
+Group-Office installation.
+
+2) In your Group-Office config.php, create the lines
+$config['linkedin_api_key'] = 'abcd123456';
+$config['linkedin_secret_key'] = 'efgh987654';
+and replace the values by the API key and Secret key from the previous
+registration step.
