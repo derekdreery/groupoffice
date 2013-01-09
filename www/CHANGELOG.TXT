@@ -1,4 +1,4 @@
-4.0.146
+09-01-2013 4.0.146
 - Fixed displaying of a red row when the user is disabled
 - Companies and Contacts will still be imported if the email is invalid but without email-address
 
