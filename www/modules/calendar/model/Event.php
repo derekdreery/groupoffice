@@ -1819,14 +1819,14 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		$body .= '<br /><a href="'.$url.'">'.GO::t('openCalendar','calendar').'</a>';
 
-		if(!$this->getOrganizerEvent()){
+//		if(!$this->getOrganizerEvent()){
 			//organizer is not a Group-Office user with event. We must send a message to him an ICS attachment
 			$ics=$this->toICS("REPLY", $sendingParticipant, $recurrenceTime);				
 			$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REPLY"');
 			$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 			$a->setDisposition("inline");
 			$message->attach($a);
-		}
+//		}
 
 		$message->setHtmlAlternateBody($body);
 
@@ -1860,7 +1860,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 			$body = '<p>'.GO::t('cancelMessage','calendar').': </p>'.$this->toHtml();					
 			
-			if(!$participantEvent){
+//			if(!$participantEvent){
 				
 
 				$ics=$this->toICS("CANCEL");				
@@ -1868,7 +1868,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 				$a->setDisposition("inline");
 				$message->attach($a);
-			}else{
+//			}else{
+			if($participantEvent){
 				$url = GO::createExternalUrl('calendar', 'openCalendar', array(
 				'unixtime'=>$this->start_time
 				));
@@ -1928,7 +1929,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$body = '<p>'.$bodyLine.': </p>'.$this->toHtml();			
 				
 				
-				if(!$participantEvent){					
+//				if(!$participantEvent){					
 
 					//build message for external program
 //					$acceptUrl = GO::url("calendar/event/invitation",array("id"=>$this->id,'accept'=>1,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
@@ -1947,8 +1948,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 					$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 					$a->setDisposition("inline");
 					$message->attach($a);
-				}else
-				{
+//				}else
+				if($participantEvent){
 					$url = GO::createExternalUrl('calendar', 'openCalendar', array(
 					'unixtime'=>$this->start_time
 					));
