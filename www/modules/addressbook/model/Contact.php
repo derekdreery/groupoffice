@@ -128,7 +128,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			'addressbook' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Addressbook_Model_Addressbook', 'field'=>'addressbook_id'),
 			'company' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Addressbook_Model_Company', 'field'=>'company_id'),
 			'addresslists' => array('type'=>self::MANY_MANY, 'model'=>'GO_Addressbook_Model_Addresslist', 'field'=>'contact_id', 'linkModel' => 'GO_Addressbook_Model_AddresslistContact'),
-			'vcardProperties' => array('type'=>self::HAS_MANY, 'model'=>'GO_Addressbook_Model_ContactVcardProperty', 'field'=>'contact_id', 'delete'=> true)
+			'vcardProperties' => array('type'=>self::HAS_MANY, 'model'=>'GO_Addressbook_Model_ContactVcardProperty', 'field'=>'contact_id', 'delete'=> true),
+			'linkedinProfile' => array( 'type'=>self::HAS_ONE, 'model'=>'GO_Linkedin_Model_Profile', 'field'=>'contact_id', 'delete'=>true)
 		);
 	}
 	
