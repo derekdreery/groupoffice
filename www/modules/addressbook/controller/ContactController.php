@@ -436,13 +436,13 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			}
 			$model->company_id = $companyModel->id;
 		}
-        
-        if(!GO_Base_Util_String::validate_email($model->email))
-          $model->email = '';
-        if(!GO_Base_Util_String::validate_email($model->email2))
-          $model->email2 = '';
-        if(!GO_Base_Util_String::validate_email($model->email3))
-          $model->email3 = '';
+		
+        if(isset($attributes['email']) && !GO_Base_Util_String::validate_email($attributes['email']))
+          unset($attributes['email']);
+        if(isset($attributes['email2']) && !GO_Base_Util_String::validate_email($attributes['email2']))
+          unset($attributes['email2']);
+        if(isset($attributes['email3']) && !GO_Base_Util_String::validate_email($attributes['email3']))
+          unset($attributes['email3']);
         
 		return parent::beforeImport($params, $model, $attributes, $record);
 	}
