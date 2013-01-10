@@ -24,11 +24,8 @@ class GO_Core_Controller_Developer extends GO_Base_Controller_AbstractController
 				$user->first_name = $prefix;
 				$user->last_name = $i;
 				$user->save();
+				$user->checkDefaultModels();
 			}
-			
-			$user->checkDefaultModels();
-
-
 
 			if (GO::modules()->isInstalled('email') && GO::modules()->isInstalled('postfixadmin')) {
 
