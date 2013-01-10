@@ -1,3 +1,6 @@
+10-01-2013 4.1.15
+- Problem with deleting contacts
+
 09-01-2013 4.1.14
 - Events will create a UUID on databaseCheck()
 - Event store will display the tasklists of all selected calendars 
