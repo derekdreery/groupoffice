@@ -369,6 +369,12 @@ class GO_Base_Config {
 //	 */
 //
 //	var $force_login_url = false;
+	
+	/**
+	 * Force an HTTPS conneciton
+	 * @var boolean 
+	 */
+	var $force_ssl=false;
 
 	/**
 	 * Full URL to reach Group-Office with slash on end. This value is determined
