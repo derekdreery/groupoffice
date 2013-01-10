@@ -1558,6 +1558,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				
 		$model = $r[$name]['model'];
 		
+		if(!class_exists($model)) //could be a missing module
+			return false;
+		
 		if(!isset($r[$name]['findParams']))
 			$r[$name]['findParams']=array();
 		
@@ -2760,7 +2763,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}
 			
 			//clean up link models for many_many relations
-			if($attr['type']==self::MANY_MANY){
+			if($attr['type']==self::MANY_MANY && !class_exists($attr['linkModel'])){
 				$stmt = GO::getModel($attr['linkModel'])->find(
 				 GO_Base_Db_FindParams::newInstance()							
 								->criteria(GO_Base_Db_FindCriteria::newInstance()
