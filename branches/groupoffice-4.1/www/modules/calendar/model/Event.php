@@ -1623,21 +1623,24 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$calendar = $participant->getDefaultCalendar();
 		if ($calendar && $calendar->userHasCreatePermission()){
 			
-			//ignore acl permissions because we allow users to schedule events directly when they have access through
-			//the special freebusypermissions module.			
-			$participantEvent = $this->duplicate(array(
-					'calendar_id' => $calendar->id,
-					'user_id'=>$participant->user_id,
-					'is_organizer'=>false, 
-//					'status'=>  GO_Calendar_Model_Event::STATUS_NEEDS_ACTION
-					),
-							true,true);
+			$existing = GO_Calendar_Model_Event::model()->findSingleByAttributes(array('calendar_id'=>$calendar->id, 'uuid'=>$this->uuid));
 			
-			return $participantEvent;
-		}else
-		{
-			return false;
-		}		
+			if(!$existing){
+				//ignore acl permissions because we allow users to schedule events directly when they have access through
+				//the special freebusypermissions module.			
+				$participantEvent = $this->duplicate(array(
+						'calendar_id' => $calendar->id,
+						'user_id'=>$participant->user_id,
+						'is_organizer'=>false, 
+	//					'status'=>  GO_Calendar_Model_Event::STATUS_NEEDS_ACTION
+						),
+								true,true);			
+				return $participantEvent;
+			}
+			
+		}
+		return false;
+				
 	}
 	
 	/**
