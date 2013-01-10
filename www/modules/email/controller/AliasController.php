@@ -20,10 +20,13 @@ class GO_Email_Controller_Alias extends GO_Base_Controller_AbstractModelControll
 									'model' => 'GO_Email_Model_AccountSort',
 									'foreignField' => 'account_id', //defaults to primary key of the remote model
 									'localField' => 'account_id', //defaults to primary key of the model
-									'type' => 'LEFT'
+									'type' => 'LEFT',
+									'tableAlias'=>'sor'
 							))
 							->ignoreAdminGroup()
 							->order(array('order','default'), array('DESC','DESC'));
+			
+			$findParams->getCriteria()->addCondition('user_id', GO::user()->id,"=", "sor");
 		}else
 		{
 			$findParams = GO_Base_Db_FindParams::newInstance();
