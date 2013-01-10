@@ -1111,7 +1111,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 
 					if(event['repeats'] && this.writePermission)
 					{
-						if(!event['read_only'])
+//						if(!event['read_only'])
 							this.handleRecurringEvent("eventDblClick", event, {});
 					}else
 					{
@@ -1229,7 +1229,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 
 			if(this.remoteEvents[this.clickedEventId]['repeats'] && this.writePermission)
 			{
-				if(!event['read_only'])
+//				if(!event['read_only'])
 					this.handleRecurringEvent("eventDblClick", event, actionData);
 			}else
 			{
