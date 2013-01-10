@@ -102,7 +102,7 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 							end_time : this.eventDialog.getEndDate().format('U')
 						},
 						success:function(response, options, result){
-							this.store.loadData(result, true);
+							this.addParticipants(result);
 						},
 						scope:this
 					});					
@@ -116,7 +116,7 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 						end_time : this.eventDialog.getEndDate().format('U')
 					},
 					success:function(response, options, result){
-						this.store.loadData(result, true);
+						this.addParticipants(result);
 					},
 					scope:this
 				});	
@@ -335,7 +335,7 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 										end_time : this.eventDialog.getEndDate().format('U')
 									},
 									success:function(response, options, result){
-										this.store.loadData(result, true);
+										this.addParticipants(result);
 									},
 									scope:this
 								});								
@@ -350,7 +350,7 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 										end_time : this.eventDialog.getEndDate().format('U')
 									},
 									success:function(response, options, result){
-										this.store.loadData(result, true);
+										this.addParticipants(result);
 									},
 									scope:this
 								});	
@@ -365,7 +365,7 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 										end_time : this.eventDialog.getEndDate().format('U')
 									},
 									success:function(response, options, result){
-										this.store.loadData(result, true);
+										this.addParticipants(result);
 									},
 									scope:this
 								});	
@@ -380,7 +380,7 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 										end_time : this.eventDialog.getEndDate().format('U')
 									},
 									success:function(response, options, result){
-										this.store.loadData(result, true);
+										this.addParticipants(result);
 									},
 									scope:this
 								});	
@@ -395,7 +395,7 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 										end_time : this.eventDialog.getEndDate().format('U')
 									},
 									success:function(response, options, result){
-										this.store.loadData(result, true);
+										this.addParticipants(result);
 									},
 									scope:this
 								});				
@@ -410,6 +410,20 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 			});
 		}
 		this.addParticipantsDialog.show();
+	},
+	
+	
+	addParticipants : function(result){		
+		var filtered=[];
+		for(var i=0;i<result.results.length;i++){
+			var email = result.results[i].email;
+			var record = this.store.find("email", email);
+			if(record==-1){
+				filtered.push(result.results[i]);
+			}
+		}
+		result.results=filtered;
+		this.store.loadData(result, true);
 	},
 	
 //	addDefaultParticipant : function(){
