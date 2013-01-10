@@ -395,9 +395,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$stmt = $this->getRelatedParticipantEvents();
 			
 			foreach($stmt as $event){
-				//$event->delete(true);
-				$event->status=self::STATUS_CANCELLED;
-				$event->save(true);
+				$event->delete(true);
+//				$event->status=self::STATUS_CANCELLED;
+//				$event->save(true);
 			}
 		}else
 		{
