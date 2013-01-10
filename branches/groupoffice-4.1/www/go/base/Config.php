@@ -371,7 +371,8 @@ class GO_Base_Config {
 //	var $force_login_url = false;
 	
 	/**
-	 * Force an HTTPS conneciton
+	 * Force an HTTPS connection in the main /index.php
+	 * 
 	 * @var boolean 
 	 */
 	var $force_ssl=false;
