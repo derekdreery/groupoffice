@@ -1,6 +1,7 @@
 <?php
 
 
+$l["task"]= 'Tarefas';
 $l["noTask"]= 'Sem tarefas para exibir';
 $l["tasks"]= 'Tarefas';
 $l["addTask"]= 'Adicionar tarefa...';
@@ -28,6 +29,7 @@ $l["createLink"]= 'Criar link';
 $l["startsAt"]='Começar em';
 $l["showInactiveTasks"]='Mostrar tarefas inativas';
 $l["scheduleCall"]='Agendar chamada';
+$l["call"]='Chamada';
 $l["taskDefaults"]='Configurações padrão para tarefas';
 $l["daysBeforeStart"]='Dias antes de iniciar';
 $l["defaultTasklist"]='Lista de Tarefas padrão';
@@ -44,14 +46,42 @@ $l['status']='Status';
 $l['scheduled_call']='Agendar chamada em %s';
 $l['statuses']['NEEDS-ACTION'] = 'Necessita ação';
 $l['statuses']['ACCEPTED'] = 'Aceito';
-$l['statuses']['DECLINED'] = 'Negado';
-$l['statuses']['TENTATIVE'] = 'Tentativas';
+$l['statuses']['DECLINED'] = 'Recusado';
+$l['statuses']['TENTATIVE'] = 'Em avaliação';
 $l['statuses']['DELEGATED'] = 'Delegado';
 $l['statuses']['COMPLETED'] = 'Concluído';
-$l['statuses']['IN-PROCESS'] = 'Em processo';
+$l['statuses']['IN-PROCESS'] = 'Em andamento';
 $l['import_success']='%s tarefas foram importadas';
 $l['call']='Chamada';
 $l['dueAtdate']='Fazer até %s';
 $l['list']='Lista de Tarefas';
 $l['tasklistChanged']="* Lista de Tarefas alterada de '%s' para '%s'";
 $l['statusChanged']="* Status alterado de '%s' para '%s'";
+$l['multipleSelected']='Multiple tasklists selected';
+$l['incomplete_delete']='Você não tem autorização para apagar tarefas';
+						      
+$l["taskName"]='Atividade';
+$l["taskCtime"]='Criada em';
+$l["taskMtime"]='Atualizada em';
+$l["taskDue_time"]='Até';
+$l["taskStatus"]='Situação';
+$l["taskCompletion_time"]='Finalizado em';
+$l["taskProject_name"]='Projeto associado';
+
+$l['taskPercentage_complete']='Porcentagem concluída';
+$l["categories"]='Categorias';
+$l["category"]='Categoria';
+$l["selectCategory"]='Selecionar categoria';
+$l["noTasklistSelected"]='Você deve esclher ao menos uma lista de tarefas.';
+$l["selectAllTasklists"]='Selecionar todas as listas de tarefas';
+$l["globalCategory"]='Categoria global';
+$l["showFutureTasks"]='Mostrar tarefas futuras';
+$l["incompleteTasks"]='Tarefas incompletas';
+$l["dueInSevenDays"]='Terminar nesta semana';
+$l["overDue"]='Overdue';
+$l["futureTasks"]='Future tasks';
+$l["all"]='Todas';
+$l["active"]='Ativas';
+$l["globalsettings_templatelabel"]='Modelo de tarefa';
+$l["globalsettings_allchangelabel"]='Alterar as já existentes?';
+$l["globalsettings_renameall"]= 'Renomear todas?';
