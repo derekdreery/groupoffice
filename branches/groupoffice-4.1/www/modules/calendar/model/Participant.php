@@ -254,11 +254,37 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 			}
 		}
 		
+		if($wasNew && $this->event->is_organizer){
+			$stmt = $this->event->getRelatedParticipantEvents();
+			
+			foreach($stmt as $event){
+				$p = new GO_Calendar_Model_Participant();
+				$p->setAttributes($this->getAttributes('raw'), false);
+				$p->event_id=$event->id;
+				$p->id=null;
+				$p->save();
+			}
+		}
+		
 //		if($this->notifyOrganizer){
 //			$this->_notifyOrganizer();
 //		}
 		
 		return parent::afterSave($wasNew);
+	}
+	
+	protected function afterDelete(){
+		
+		
+		if($this->event->is_organizer){
+			$stmt = $this->getRelatedParticipants();
+			
+			foreach($stmt as $participant){
+				$participant->delete();
+			}
+		}
+		
+		return parent::afterDelete();
 	}
 	
 //	private function _notifyOrganizer(){

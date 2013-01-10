@@ -509,20 +509,23 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 					'status'=>$this->status,
 					'repeat_end_time'=>$this->repeat_end_time
 							);
+			
+			if($this->isModified(array_keys($updateAttr))){
 
-			$events = $this->getRelatedParticipantEvents();
+				$events = $this->getRelatedParticipantEvents();
 
-			foreach($events as $event){
-				GO::debug("updating related event: ".$event->id);
-				
-				if($event->id!=$this->id && $this->is_organizer!=$event->is_organizer){ //this should never happen but to prevent an endless loop it's here.
-					$event->setAttributes($updateAttr, false);
-					$event->save(true);
+				foreach($events as $event){
+					GO::debug("updating related event: ".$event->id);
 
-					$stmt = $event->participants;
-					$stmt->callOnEach('delete');
+					if($event->id!=$this->id && $this->is_organizer!=$event->is_organizer){ //this should never happen but to prevent an endless loop it's here.
+						$event->setAttributes($updateAttr, false);
+						$event->save(true);
 
-					$this->duplicateRelation('participants', $event);
+//						$stmt = $event->participants;
+//						$stmt->callOnEach('delete');
+//	
+//						$this->duplicateRelation('participants', $event);
+					}
 				}
 			}
 		}
