@@ -502,7 +502,7 @@ div.subkader-block{
 
 .formlabel, label{
 	float:left;
-	width:150px;
+	width:180px;
 }
 label.checkbox, .buttonList label { width: auto; margin-right: 10px; float: none; }
 .buttonList {min-height: 22px;}
