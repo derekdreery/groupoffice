@@ -845,8 +845,12 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 						switch(this.displayType)
 						{
 							case 'month':
-								if(newEvent.calendar_id==this.calendar_id)
-									GO.calendar.eventDialog.oldDomId=this.monthGrid.addMonthGridEvent(newEvent);
+								if(newEvent.calendar_id==this.calendar_id){
+									
+									var domIds = this.monthGrid.addMonthGridEvent(newEvent);
+									
+									GO.calendar.eventDialog.oldDomId=domIds[0];
+								}
 								break;
 							case 'days':								
 								for(var i=0,found=false; i<this.calendars.length && !found; i++)
