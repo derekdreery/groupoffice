@@ -246,7 +246,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 							'expanded' => $this->_isExpanded($nodeId),
 							'noselect' => false,
 							'account_id' => $account->id,
-							'mailbox' => '',							
+							'mailbox' => rtrim($account->mbroot,"./"),							
 							'noinferiors' => false,
 							//'inbox_new' => 0,
 							//'usage' => "",
