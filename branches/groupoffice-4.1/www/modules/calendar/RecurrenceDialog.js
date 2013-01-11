@@ -14,7 +14,7 @@ GO.calendar.RecurrenceDialog = function(config){
 	config.closable=false;
 	config.title=GO.calendar.lang.recurringEvent;
 	config.modal=false;
-	config.html=GO.calendar.lang.editRecurringEvent;
+	config.html=config.forDelete ? GO.calendar.lang.deleteRecurringEvent : GO.calendar.lang.editRecurringEvent;
 	config.focus=function(){
 		this.getFooterToolbar().items.get('single').focus();
 	};

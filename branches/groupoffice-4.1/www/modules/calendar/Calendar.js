@@ -1074,7 +1074,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				
 			if(!this.recurrenceDialog)
 			{
-				this.recurrenceDialog = new GO.calendar.RecurrenceDialog();
+				this.recurrenceDialog = new GO.calendar.RecurrenceDialog({
+					forDelete:true
+				});
 
 				this.recurrenceDialog.on('single', function()
 				{
