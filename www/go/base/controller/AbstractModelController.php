@@ -1094,18 +1094,25 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		$attributes = array();
 		
+		$unsorted = array();
 		$columns = $model->getColumns();
 		foreach($columns as $name=>$attr){
 			if(!in_array($name, $params['exclude'])
 							&& (empty($params['hide_unknown_gotypes']) || !empty($attr['gotype']))
 							&& !in_array($name,$params['exclude_attributes'])
 				)
-				$attributes['t.'.$name]=array('name'=>'t.'.$name,'label'=>$model->getAttributeLabel($name),'gotype'=>$attr['gotype']);				
+				$unsorted[$model->getAttributeLabel($name)]=array('name'=>'t.'.$name,'label'=>$model->getAttributeLabel($name),'gotype'=>$attr['gotype']);				
+		}
+		
+		ksort($unsorted);
+		foreach($unsorted as $a){
+			$attributes[$a['name']]=$a;
 		}
 		
 		$this->afterAttributes($attributes, $response, $params, $model);
 		
-		asort($attributes);
+		
+//		asort($attributes);
 		
 		if($model->customfieldsRecord){
 			$customAttributes = array();
@@ -1117,12 +1124,14 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 								&& (empty($params['hide_unknown_gotypes']) || !empty($attr['gotype']))
 								&& !in_array($attr['customfield']->datatype,$params['exclude_cf_datatypes']))
 				{					
-					$customAttributes['cf.'.$name]=array('name'=>'cf.'.$name, 'label'=>$model->customfieldsRecord->getAttributeLabel($name),'gotype'=>'customfield');					
+					$customAttributes[$model->customfieldsRecord->getAttributeLabel($name)]=array('name'=>'cf.'.$name, 'label'=>$model->customfieldsRecord->getAttributeLabel($name),'gotype'=>'customfield');					
 				}
 			}
-			asort($attributes);
-			
-			$attributes=array_merge($attributes, $customAttributes);
+			ksort($customAttributes);
+			foreach($customAttributes as $a){
+				$attributes[$a['name']]=$a;
+			}
+//			$attributes=array_merge($attributes, $customAttributes);
 		}
 		
 		foreach($attributes as $field=>$attr)
