@@ -630,7 +630,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 	},
 	startSelection : function (e){
 		//check if we are not dragging an event, check for left button		
-		if(this.writePermission && !this.dragEvent && (e.button == '0'))
+		if(this.permissionLevel>GO.permissionLevels.read && !this.dragEvent && (e.button == '0'))
 		{
 			var coords = e.getXY();
 
@@ -1683,6 +1683,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		var records = this.store.getRange();
 
 		this.writePermission = this.store.reader.jsonData.write_permission;
+		this.permissionLevel = this.store.reader.jsonData.permission_level;
 
 		this.clearGrid();
 
