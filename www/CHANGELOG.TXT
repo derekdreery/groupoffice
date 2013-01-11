@@ -1,9 +1,7 @@
-4.1.17
-- Updated Scanbox module so it can handle files without an extension
-
 11-01-2013 4.1.16
 - Creating folders with mailbox root set resulted in empty error message.
 - Various calendar / participants fixes
+- Updated Scanbox module so it can handle files without an extension
 
 10-01-2013 4.1.15
 - Updated Portugese Brazilian translation
