@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `no_categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `acl_id` int(11) NOT NULL,
-  `name` varchar(50) DEFAULT NULL,
+  `name` varchar(100) NOT NULL,
   `files_folder_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
