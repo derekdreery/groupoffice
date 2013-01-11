@@ -1,5 +1,9 @@
-4.0.147
+11-01-2013 4.0.147
 - Merging 2 records will unset fields with type 'date' and value '0000-00-00'
+- Some invalid UTF8 strings could cause an empty mail display
+- Custom fields contain empty strings instead of null values by default now. 
+  A database check must be performed to correct old columns.
+- Fields were not sorted in advanced search dropdown
 
 09-01-2013 4.0.146
 - Fixed displaying of a red row when the user is disabled
