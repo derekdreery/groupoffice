@@ -730,7 +730,7 @@ class GO_Sites_Components_Html
 			$htmlOptions['id']=self::getIdByName($name);
 		else if($htmlOptions['id']===false)
 			unset($htmlOptions['id']);
-		self::clientChange('change',$htmlOptions);
+		//self::clientChange('change',$htmlOptions);
 		$options="\n".self::listOptions($select,$data,$htmlOptions);
 		return self::tag('select',$htmlOptions,$options);
 	}
