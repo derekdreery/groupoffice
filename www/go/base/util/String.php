@@ -955,7 +955,7 @@ class GO_Base_Util_String {
 		foreach ($emoticons as $emoticon => $img) {
 			
 			$rel = 'views/Extjs3/themes/' . GO::user()->theme . '/images/emoticons/normal/' . $img;
-			if(!file_exist(GO::config()->root_path.$rel))
+			if(!file_exists(GO::config()->root_path.$rel))
 				$rel = 'views/Extjs3/themes/Default/images/emoticons/normal/' . $img;
 			
 			$imgpath = GO::config()->host . $rel;
