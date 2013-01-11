@@ -1246,8 +1246,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			//sort so that :param1 does not replace :param11 first.
 			arsort($criteriaObjectParams);	
 			
-			foreach($criteriaObjectParams as $param=>$value)
-				$sql = str_replace($param, '"'.$value[0].'"', $sql);									
+			foreach($criteriaObjectParams as $param=>$value){
+				$sql = preg_replace('/'.$param.'([^0-9])/', '"'.$value[0].'"$1', $sql);
+				
+//				$sql = str_replace($param, '"'.$value[0].'"', $sql);									
+			}
 		}
 		
 		if(isset($params['bindParams'])){		
@@ -1255,8 +1258,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			//sort so that :param1 does not replace :param11 first.
 			arsort($params['bindParams']);			
 			
-			foreach($params['bindParams'] as $key=>$value)
-				$sql = str_replace(':'.$key, '"'.$value.'"', $sql);
+			foreach($params['bindParams'] as $key=>$value){
+//				$sql = str_replace(':'.$key, '"'.$value.'"', $sql);
+				$sql = preg_replace('/:'.$key.'[^0-9]/', '"'.$value.'"', $sql);
+			}
 		}
 		
 		GO::debug($sql);				

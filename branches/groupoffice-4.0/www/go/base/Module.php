@@ -359,12 +359,12 @@ class GO_Base_Module extends GO_Base_Observable {
 					
 
 				$m = GO::getModel($model->getName());
-				if($m->hasFiles()){
+//				if($m->hasFiles()){
 					$stmt = $m->find(array(
 							'ignoreAcl'=>true
 					));
 					$stmt->callOnEach('checkDatabase');
-				}
+//				}
 			}
 		}
 	}
