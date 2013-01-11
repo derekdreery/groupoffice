@@ -953,7 +953,12 @@ class GO_Base_Util_String {
 		);
 
 		foreach ($emoticons as $emoticon => $img) {
-			$imgpath = GO::config()->host . 'views/Extjs3/themes/' . GO::user()->theme . '/images/emoticons/normal/' . $img;
+			
+			$rel = 'views/Extjs3/themes/' . GO::user()->theme . '/images/emoticons/normal/' . $img;
+			if(!file_exist(GO::config()->root_path.$rel))
+				$rel = 'views/Extjs3/themes/Default/images/emoticons/normal/' . $img;
+			
+			$imgpath = GO::config()->host . $rel;
 			$imgstring = '<img src="' . $imgpath . '" alt="' . $emoticon . '" />';
 			if ($html)
 				$string = GO_Base_Util_String::htmlReplace($emoticon, $imgstring, $string);
