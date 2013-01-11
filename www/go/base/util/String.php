@@ -177,6 +177,26 @@ class GO_Base_Util_String {
 			return iconv($from_charset, 'UTF-8//IGNORE', $str);
 		}
 	}
+	
+//	public static function stripInvalidUtf8($utf8string){
+//		$utf8string = preg_replace('/[\x00-\x08\x10\x0B\x0C\x0E-\x19\x7F]'.
+//
+//			'|(?<=^|[\x00-\x7F])[\x80-\xBF]+'.
+//
+//			'|([\xC0\xC1]|[\xF0-\xFF])[\x80-\xBF]*'.
+//
+//			'|[\xC2-\xDF]((?![\x80-\xBF])|[\x80-\xBF]{2,})'.
+//
+//			'|[\xE0-\xEF](([\x80-\xBF](?![\x80-\xBF]))|(?![\x80-\xBF]{2})|[\x80-\xBF]{3,})/',
+//
+//			'�', $utf8string );
+//
+//
+//		$utf8string = preg_replace('/\xE0[\x80-\x9F][\x80-\xBF]'.
+//						'|\xED[\xA0-\xBF][\x80-\xBF]/S','?', $utf8string );
+//		
+//		return $utf8string;
+//	}
 
 	public static function clean_utf8($str, $source_charset='UTF-8') {
 		
@@ -206,9 +226,7 @@ class GO_Base_Util_String {
 			}
 			
 			if($from_charset!=$source_charset)
-				return self::clean_utf8($str, $from_charset);
-			else
-				return $str;
+				$str = self::clean_utf8($str, $from_charset);			
 		}
 		//Check if preg validates it as UTF8
 		if(preg_match('/^.{1}/us', $str)){
@@ -781,8 +799,7 @@ class GO_Base_Util_String {
 	 * @return string HTML formatted string
 	 */
 	public static function text_to_html($text, $convert_links=true) {
-		global $GO_CONFIG, $GO_MODULES;
-
+	
 		if($convert_links)
 		{
 			$text = preg_replace("/\b(https?:\/\/[\pL0-9\.&\-\/@#;`~=%?:_\+,\)\(]+)\b/ui", '{lt}a href={quot}$1{quot} target={quot}_blank{quot} class={quot}normal-link{quot}{gt}$1{lt}/a{gt}', $text."\n");
@@ -805,7 +822,7 @@ class GO_Base_Util_String {
 		$text = str_replace("{lt}", "<", $text);
 		$text = str_replace("{gt}", ">", $text);
 
-		return ($text);
+		return $text;
 	}
 
 	public static function html_to_text($text, $link_list=true){
@@ -1005,7 +1022,8 @@ class GO_Base_Util_String {
 	public static function detectXSS($string) {
 		
 		if (!is_string($string)) {
-			throw new Exception(__('Passed parameter is not a string.'));
+			GO::debug($string);
+			throw new Exception('Passed parameter is not a string.');
 		}
 
 // Keep a copy of the original string before cleaning up
