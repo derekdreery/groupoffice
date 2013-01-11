@@ -28,19 +28,19 @@ abstract class GO_Base_Mail_ImapBase {
 	var $default_charset='';
 	
 	
-	public function last_error(){
+	public function last_error($clear=true){
 		$count=count($this->errors);
 		//GO::debug($this->errors);
-		if($count)
-			return $this->errors[$count-1];
-		else
+		if($count){
+			
+			return $clear ? array_pop($this->errors) : $this->errors[$count-1];
+		}else
 			return false;
 	}
 
 	public function clear_errors(){
 		$this->errors=array();
 	}
-
 
 
 	function input_validate($val, $type) {

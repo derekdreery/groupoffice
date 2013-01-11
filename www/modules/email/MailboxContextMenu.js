@@ -34,7 +34,7 @@ GO.email.MailboxContextMenu = Ext.extend(Ext.menu.Menu,{
 				
 						GO.request({
 							url: "email/folder/create",
-							maskEl: Ext.getBody(),
+							maskEl: GO.mainLayout.getModulePanel("email").getEl(),
 							params: {
 								parent: node.attributes.mailbox,
 								account_id: node.attributes.account_id,
@@ -213,6 +213,7 @@ GO.email.MailboxContextMenu = Ext.extend(Ext.menu.Menu,{
 					Ext.MessageBox.alert(GO.lang.strError, GO.email.lang.cantDeleteInboxFolder);
 				}else
 				{
+					GO.mainLayout.getModulePanel("email").getEl().mask(GO.lang.cmdDelete);
 					GO.deleteItems({
 						url: GO.url("email/folder/delete"),
 						params: {					
@@ -221,6 +222,8 @@ GO.email.MailboxContextMenu = Ext.extend(Ext.menu.Menu,{
 						},
 						callback: function(responseParams)
 						{
+							GO.mainLayout.getModulePanel("email").getEl().unmask();
+							
 							if(responseParams.success)
 							{
 								node.remove();

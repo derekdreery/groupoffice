@@ -6,10 +6,14 @@ class GO_Email_Controller_Folder extends GO_Base_Controller_AbstractController {
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 				
 		$mailbox = new GO_Email_Model_ImapMailbox($account, array("name"=>$params["parent"]));
-		$success = $mailbox->createChild($params["name"]);
+		$response['success'] = $mailbox->createChild($params["name"]);
 		
+		if(!$response['success'])
+		{
+			$response['feedback']=$account->openImapConnection()->last_error();
+		}
 		
-		return array("success"=>$success);
+		return $response;
 	}
 	
 	protected function actionRename($params){
