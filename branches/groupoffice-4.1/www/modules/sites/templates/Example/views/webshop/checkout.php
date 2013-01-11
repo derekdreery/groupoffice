@@ -69,7 +69,7 @@
 						<td>
 							<?php echo $product->getAmount(); ?>
 						</td>
-						<td><?php echo $product->getItem()->getLanguage(2)->name; ?></td>
+						<td><?php echo $product->getName(); ?></td>
 						<td align="right"><?php echo $product->getSumPriceText(); ?></td>
 					</tr>
 				<?php endforeach; ?>

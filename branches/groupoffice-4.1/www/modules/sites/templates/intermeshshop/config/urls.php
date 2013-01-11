@@ -19,7 +19,7 @@
 return array(
 		''=>'webshop/site/products',
 		'invoices'=> 'billing/site/invoices',
-		'orderfromtrail'=>'billing/site/orderfromtrail', //TODO
+		'orderfromtrial'=>'billing/site/orderfromtrial', //TODO
 		
 		'support' => 'tickets/site/ticketlist',
 		'createticket' => 'tickets/site/createTicket',
