@@ -39,7 +39,7 @@ class GO_Base_Util_Date_DateTime extends DateTime {
 	{
 	  if($format===null)
 		return parent::format(GO::user()?GO::user()->completeDateFormat:GO::config()->getCompleteDateFormat());
-	  return parent::format($foramt);
+	  return parent::format($format);
 	}
 
 	/**
