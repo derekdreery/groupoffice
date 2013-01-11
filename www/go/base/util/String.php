@@ -206,9 +206,8 @@ class GO_Base_Util_String {
 			}
 			
 			if($from_charset!=$source_charset)
-				return self::clean_utf8($str, $from_charset);
-			else
-				return $str;
+				$str=self::clean_utf8($str, $from_charset);
+			
 		}
 		//Check if preg validates it as UTF8
 		if(preg_match('/^.{1}/us', $str)){
