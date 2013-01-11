@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS `ab_addressbooks`;
 CREATE TABLE IF NOT EXISTS `ab_addressbooks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL DEFAULT '0',
-  `name` varchar(50) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
   `acl_id` int(11) NOT NULL DEFAULT '0',
   `default_salutation` varchar(255) NOT NULL,
   `files_folder_id` int(11) NOT NULL DEFAULT '0',
