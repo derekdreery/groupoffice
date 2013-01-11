@@ -684,7 +684,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 				// Set the colors for each calendar
 				$calendar->displayColor = $colors[$colorIndex];
-				if($colorIndex < count($colors))
+				if($colorIndex < count($colors)-1)
 					$colorIndex++;
 				else
 					$colorIndex=0;
