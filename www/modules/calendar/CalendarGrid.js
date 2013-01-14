@@ -716,27 +716,30 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 					}
 				}
 
+				console.log(obj);
+				console.log(new_event_id);
+
 				if(obj.isCopy)
 				{
 					if(calendar_visible)
 					{
-						if(event.repeats)
-						{
+//						if(event.repeats)
+//						{
 							this.store.reload();
-						}else
-						{
-							var newEvent = GO.util.clone(event);
-
-							delete(newEvent.id);
-
-							newEvent.event_id = new_event_id;
-							newEvent.startDate = Date.parseDate(newEvent.start_time, this.dateTimeFormat).add(Date.DAY, obj.offset);
-							newEvent.endDate = Date.parseDate(newEvent.end_time, this.dateTimeFormat).add(Date.DAY, obj.offset);
-							newEvent.start_time=newEvent.startDate.format(this.dateTimeFormat);
-							newEvent.end_time=newEvent.endDate.format(this.dateTimeFormat);
-
-							this.addDaysGridEvent(newEvent, true);
-						}
+//						}else
+//						{
+//							var newEvent = GO.util.clone(event);
+//
+//							delete(newEvent.id);
+//
+//							newEvent.event_id = new_event_id;
+//							newEvent.startDate = Date.parseDate(newEvent.start_time, this.dateTimeFormat).add(Date.DAY, obj.offset);
+//							newEvent.endDate = Date.parseDate(newEvent.end_time, this.dateTimeFormat).add(Date.DAY, obj.offset);
+//							newEvent.start_time=newEvent.startDate.format(this.dateTimeFormat);
+//							newEvent.end_time=newEvent.endDate.format(this.dateTimeFormat);
+//
+//							this.addDaysGridEvent(newEvent, true);
+//						}
 					}
 				}else
 				{
