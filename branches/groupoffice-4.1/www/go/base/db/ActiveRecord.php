@@ -2207,8 +2207,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 			$this->_dbInsert();
 			
-			if(!is_array($this->primaryKey()) && empty($this->pk))
+			if(!is_array($this->primaryKey()) && empty($this->pk)){
 				$this->{$this->primaryKey()} = $this->getDbConnection()->lastInsertId();
+				$this->_castMySqlValues(array($this->primaryKey()));
+			}
 
 			if(!$this->pk)
 				return false;
@@ -3015,12 +3017,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * Mysql always returns strings. We want strict types in our model to clearly
 	 * detect modifications
 	 * 
-	 * @param string $column
-	 * @param mixed $value
-	 * @return mixed
+	 * @param array $columns
+	 * @return void
 	 */
-	private function _castMySqlValues(){
-		foreach($this->columns as $column=>$attr){
+	private function _castMySqlValues($columns=false){
+		
+		if(!$columns)
+			$columns = array_keys($this->columns);
+		
+		foreach($columns as $column){
 			if(isset($this->_attributes[$column])){
 				switch ($this->columns[$column]['dbtype']) {
 						case 'int':
