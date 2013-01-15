@@ -443,7 +443,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			$record['title']=$model->config['title'];
 			$record['webmaster_email']=$model->config['webmaster_email'];
 			$record['max_users']=isset($model->config['max_users']) ? $model->config['max_users'] : 0;
-			$record['serverclient_domains']=$model->config['serverclient_domains'];
+			$record['serverclient_domains']=isset($model->config['serverclient_domains']) ? $model->config['serverclient_domains'] : '';
 		}
 		
 		return parent::formatStoreRecord($record, $model, $store);

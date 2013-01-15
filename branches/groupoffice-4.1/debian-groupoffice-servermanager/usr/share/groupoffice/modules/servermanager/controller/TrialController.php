@@ -4,7 +4,7 @@ class GO_Servermanager_Controller_Trial extends GO_Base_Controller_AbstractContr
 
 	protected $newTrial;
 	
-	protected function allowGuests() {
+	public function allowGuests() {
 		return array('create');
 	}
 
@@ -13,6 +13,8 @@ class GO_Servermanager_Controller_Trial extends GO_Base_Controller_AbstractContr
 		if(empty(GO::config()->servermanager_trials_enabled))
 			throw new Exception("Trials are not enabled. Set \$config['servermanager_trials_enabled']=true;");
 
+		GO::setView('Extjs3');
+		
 		$this->newTrial = GO_ServerManager_Model_NewTrial::model()->findSingleByAttribute('key', $params['key']);
 
 		if (GO_Base_Util_Http::isPostRequest()) {
