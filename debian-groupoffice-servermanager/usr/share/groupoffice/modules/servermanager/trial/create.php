@@ -133,7 +133,7 @@ if(!$new_trial)
 			<td>Timezone:</td>
 			<td><?php
 			$select = new select('timezone', $timezone);
-			require('../timezones.inc.php');
+			require('timezones.inc.php');
 			foreach($timezones as $tz)
 			{
 				$select->add_value($tz, $tz);
