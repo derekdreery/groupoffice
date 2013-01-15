@@ -1,3 +1,7 @@
+15-01-2013 4.1.17
+- Fixed incorrect sorting on startpage
+- Updated German
+
 11-01-2013 4.1.16
 - Creating folders with mailbox root set resulted in empty error message.
 - Various calendar / participants fixes
