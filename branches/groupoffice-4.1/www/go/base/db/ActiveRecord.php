@@ -3072,7 +3072,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}
 			
 			//normalize CRLF to prevent issues with exporting to vcard etc.
-			if($this->columns[$name]['gotype']=='textfield' || $this->columns[$name]['gotype']=='textarea')
+			if(isset($this->columns[$name]['gotype']) && ($this->columns[$name]['gotype']=='textfield' || $this->columns[$name]['gotype']=='textarea'))
 				$value=GO_Base_Util_String::normalizeCrlf($value, "\n");
 			
 			if((!isset($this->_attributes[$name]) || (string)$this->_attributes[$name]!==(string)$value) && !$this->isModified($name)){
