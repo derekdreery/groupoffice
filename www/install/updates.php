@@ -265,3 +265,7 @@ $updates["201209141358"][]="update go_acl set level=50 where acl_id in (select a
 
 $updates["201210021548"][]="ALTER TABLE `go_holidays` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
 $updates["201210021548"][]="ALTER TABLE `go_holidays` CHANGE `region` `region` VARCHAR( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+
+
+$updates["201201150948"][]="ALTER TABLE `go_holidays` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
+$updates["201201150948"][]="ALTER TABLE `go_holidays` CHANGE `region` `region` VARCHAR( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";

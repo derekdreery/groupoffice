@@ -122,10 +122,10 @@ CREATE TABLE IF NOT EXISTS `go_groups` (
 
 DROP TABLE IF EXISTS `go_holidays`;
 CREATE TABLE IF NOT EXISTS `go_holidays` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
   `date` int(10) NOT NULL DEFAULT '0',
   `name` varchar(100) NOT NULL DEFAULT '',
-  `region` varchar(4) NOT NULL DEFAULT '',
+  `region` varchar(10) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `region` (`region`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
