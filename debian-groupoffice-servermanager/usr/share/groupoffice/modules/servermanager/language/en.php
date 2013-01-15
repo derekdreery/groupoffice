@@ -100,3 +100,6 @@ $l['module_trial_email_body'] = "Your trial time for the module %s will expire i
 $l['module_trial_email_title'] = "Trial period for %s module"; //%s=modulename
 $l['user_trial_email_body'] = "Your trial time for user '%s' will expire in %d days"; //%s=username, %d=days
 $l['user_trial_email_title'] = "Trial period for user %s"; //%s=username
+
+$l['newtrialTitle']="Title";
+$l['domainName']="Domain name";
