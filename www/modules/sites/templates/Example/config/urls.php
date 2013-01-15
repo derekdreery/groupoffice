@@ -22,6 +22,9 @@ return array(
 		'createticket' => 'tickets/site/createTicket',
 		'ticket'=>'tickets/site/showTicket',
 		
+		'newtrial'=>'servermanager/site/newTrial',
+		'trialcreated'=>'servermanager/site/trialCreated',
+		
 		'<action:(login|logout|register|profile|resetpassword|recoverpassword)>' => 'sites/site/<action>',//TODO: login, logout, profile resetpassword, register, recover/lostpassword
 		'<slug>'=>'sites/site/content', //TODO: requirements, contact	
 		

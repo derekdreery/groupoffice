@@ -1,52 +1,67 @@
-<?php echo $this->getPage()->content; ?>
+					
+<div class="subkader-small-top">
+		<div class="subkader-small-bottom">
+			<div class="subkader-small-center">						
 
-<?php GO_Base_Html_Form::renderBegin('servermanager/site/newtrial', 'newtrial', true); ?>
+					
+				<?php
+				if (GOS::site()->notifier->hasMessage('error')) {
+					echo '<div class="notification notice-error">' . GOS::site()->notifier->getMessage('error') . '</div>';
+				}
+				?>
 
-<?php echo $this->notifications->render('newtrial'); ?>
+				<?php echo GO_Sites_Components_Html::beginForm(); ?>	
 
-<?php
+				<div class="row formrow">					
+					<?php echo GO_Sites_Components_Html::activeLabelEx($model, 'name'); ?>
+					<?php echo GO_Sites_Components_Html::activeTextField($model, 'name'); ?>
+					<span >.<?php echo GO::config()->servermanager_wildcard_domain; ?></span>
+					<?php echo GO_Sites_Components_Html::error($model, 'name'); ?>
+				</div>
+				<div class="row formrow">
+					<?php echo GO_Sites_Components_Html::activeLabelEx($model, 'title'); ?>
+					<?php echo GO_Sites_Components_Html::activeTextField($model, 'title'); ?>
+					<?php echo GO_Sites_Components_Html::error($model, 'title'); ?>
+				</div>		
+				
+				<div class="row formrow">
+					<?php echo GO_Sites_Components_Html::activeLabelEx($model, 'first_name'); ?>
+					<?php echo GO_Sites_Components_Html::activeTextField($model, 'first_name'); ?>
+					<?php echo GO_Sites_Components_Html::error($model, 'first_name'); ?>
+				</div>	
+				
+				<div class="row formrow">
+					<?php echo GO_Sites_Components_Html::activeLabelEx($model, 'middle_name'); ?>
+					<?php echo GO_Sites_Components_Html::activeTextField($model, 'middle_name'); ?>
+					<?php echo GO_Sites_Components_Html::error($model, 'middle_name'); ?>
+				</div>	
+				
+				<div class="row formrow">
+					<?php echo GO_Sites_Components_Html::activeLabelEx($model, 'last_name'); ?>
+					<?php echo GO_Sites_Components_Html::activeTextField($model, 'last_name'); ?>
+					<?php echo GO_Sites_Components_Html::error($model, 'last_name'); ?>
+				</div>	
+				
+				<div class="row formrow">
+					<?php echo GO_Sites_Components_Html::activeLabelEx($model, 'email'); ?>
+					<?php echo GO_Sites_Components_Html::activeTextField($model, 'email'); ?>
+					<?php echo GO_Sites_Components_Html::error($model, 'email'); ?>
+				</div>	
+	
+				<div class="row buttons">
+					<?php echo GO_Sites_Components_Html::submitButton('Create trial!'); ?>
+					<?php echo GO_Sites_Components_Html::resetButton('Reset'); ?>
+				</div>
+				
+				<div style="clear:both"></div>
+				<?php echo GO_Sites_Components_Html::endForm(); ?>
+			
+		</div>
+		</div>
+	</div>
 
-GO_Base_Html_Input::render(array(
-		"label" => "Domain name",
-		"name" => "name",
-		"required" => true
-));
 
-GO_Base_Html_Input::render(array(
-		"label" => "Title",
-		"name" => "title",
-		"required" => true
-));
-
-
-GO_Base_Html_Input::render(array(
-		"label" => "First name",
-		"name" => "first_name",
-		"required" => true
-));
-
-GO_Base_Html_Input::render(array(
-		"label" => "Middle name",
-		"name" => "middle_name",
-		"required" => true
-));
-
-GO_Base_Html_Input::render(array(
-		"label" => "Last name",
-		"name" => "last_name",
-		"required" => true
-));
-
-GO_Base_Html_Input::render(array(
-		"label" => "E-mail",
-		"name" => "email",
-		"required" => true
-));
-
-GO_Base_Html_Submit::render(array(
-		"name" => "submit",
-		"value" => "Create trial!"
-));
-?>
-
-<?php GO_Base_Html_Form::renderEnd(); ?>
+	<div class="subkader-right">
+		<h1>Secure login</h1>
+		<p>SSL secured connection verified by Equifax Secure Inc. </p>
+	</div>
