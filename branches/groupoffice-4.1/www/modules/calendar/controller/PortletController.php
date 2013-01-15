@@ -71,15 +71,13 @@ class GO_Calendar_Controller_Portlet extends GO_Base_Controller_AbstractMultiSel
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()
 						->select('t.*, tl.name AS calendar_name')
-						->order(array('calendar_name', 'start_time'))
 						->ignoreAcl()
 						->join(GO_Calendar_Model_PortletCalendar::model()->tableName(),$joinCriteria,'pt')
 						->join(GO_Calendar_Model_Calendar::model()->tableName(), $calendarJoinCriteria,'tl');
 		
 			
 		$events = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, $periodStartTime, $periodEndTime);
-		
-		GO::debug(date('c', $today_end));
+
 		$store = new GO_Base_Data_ArrayStore();
 		
 		foreach($events as $event){

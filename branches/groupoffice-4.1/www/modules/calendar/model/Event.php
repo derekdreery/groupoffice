@@ -758,6 +758,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		while ($event = $stmt->fetch()) {
 			$this->_calculateRecurrences($event, $periodStartTime, $periodEndTime);
 		}
+		
+		ksort($this->_calculatedEvents);
 
 		return array_values($this->_calculatedEvents);
 	}
@@ -826,7 +828,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$localEvent = new GO_Calendar_Model_LocalEvent($event, $origPeriodStartTime, $origPeriodEndTime);
 		
 		if(!$localEvent->isRepeating()){
-			$this->_calculatedEvents[] = $localEvent;
+			$this->_calculatedEvents[$event->start_time.'-'.$event->id] = $localEvent;
 		} else {
 			$rrule = new GO_Base_Util_Icalendar_Rrule();
 			$rrule->readIcalendarRruleString($localEvent->getEvent()->start_time, $localEvent->getEvent()->rrule, true);
