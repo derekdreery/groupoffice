@@ -14,7 +14,27 @@ $this->setPageTitle("Support");
 				<a href="http://www.group-office.com/wiki/Troubleshooting">http://www.group-office.com/wiki/Troubleshooting</a><br>
 
 				<p>&nbsp;</p>
-				<p>Click <a href="<?php echo $this->createUrl("tickets/site/newTicket"); ?>">here</a> to create a new ticket.</p>
+				<?php
+				
+				//check if user may access the ticket system
+				$hasActiveLicense = GO_Licenses_Model_License::model()->hasActive(GO::user()->id);
+
+				if(!$hasActiveLicense && GO::user()->contact->customfieldsRecord){
+					$date = GO::user()->contact->customfieldsRecord->getValueByName('Support tot');
+					if(!empty($date) && strtotime($date)>time()){
+						$hasActiveLicense=true;
+					}					
+				}
+				
+				if($hasActiveLicense) :				
+				?>
+					<p>Click <a href="<?php echo $this->createUrl("tickets/site/newTicket"); ?>">here</a> to create a new ticket.</p>
+				<?php else: ?>
+					<p>You don't have an active Group-Office license. Please renew support to get access to tickets and software updates.</p>
+				<?php
+				endif;
+				?>
+				
 				<p>&nbsp;</p>
 			</div>
 		</div>
