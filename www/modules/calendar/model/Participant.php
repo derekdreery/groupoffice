@@ -280,6 +280,11 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 			$stmt = $this->getRelatedParticipants();
 			
 			foreach($stmt as $participant){
+				if($event = $participant->getParticipantEvent())
+				{
+					if($event->calendar->userHasCreatePermission())
+						$event->delete();
+				}
 				$participant->delete();
 			}
 		}
