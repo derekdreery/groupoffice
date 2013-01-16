@@ -264,12 +264,8 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		
 		if(empty($this->_imap)){
 			$this->_imap = new GO_Base_Mail_Imap();
+			$this->_imap->connect($this->host, $this->port, $this->username, $this->decryptPassword(), $this->use_ssl);
 
-			try{
-				$this->_imap->connect($this->host, $this->port, $this->username, $this->decryptPassword(), $this->use_ssl);
-			}catch(GO_Base_Mail_ImapAuthenticationFailedException $e){
-				throw new Exception('Authententication failed for user '.$this->username.' on IMAP server '.$this->host.' '.$e->getMessage());
-			}
 		}
 		if(!$this->_imap->select_mailbox($mailbox))
 			throw new Exception ("Could not open IMAP mailbox $mailbox\nIMAP error: ".$this->_imap->last_error());
