@@ -3380,7 +3380,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function getCustomfieldsRecord(){
 		
-		if($this->customfieldsModel() && GO::modules()->customfields){			
+		if($this->customfieldsModel() && GO::modules()->isInstalled('customfields')){			
 			if(!isset($this->_customfieldsRecord)){// && !empty($this->pk)){
 				$customFieldModelName=$this->customfieldsModel();
 				$this->_customfieldsRecord = GO::getModel($customFieldModelName)->findByPk($this->pk);
