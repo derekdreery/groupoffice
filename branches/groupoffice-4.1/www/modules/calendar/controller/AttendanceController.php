@@ -7,7 +7,12 @@ class GO_Calendar_Controller_Attendance extends GO_Base_Controller_AbstractContr
 			throw new GO_Base_Exception_NotFound();
 		
 		$participant=$event->getParticipantOfCalendar();
+		if(!$participant)
+			throw new Exception("The participant of this event is missing");
+		
 		$organizer = $event->getOrganizer();
+		if(!$participant)
+			throw new Exception("The organizer of this event is missing");
 		
 		$response = array("success"=>true, 'data'=>array('status'=>$participant->status, 'organizer'=>$organizer->name));		
 		return $response;
