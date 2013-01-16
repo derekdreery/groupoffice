@@ -494,7 +494,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			
 			$days = array('SU','MO','TU','WE','TH','FR','SA');
 			
-			$response['data'][$days[date('w')]]=1;
+			$response['data'][$days[date('w', $model->start_time)]]=1;
 		}
 		
 		if(!$model->isResource() && $model->id>0)
