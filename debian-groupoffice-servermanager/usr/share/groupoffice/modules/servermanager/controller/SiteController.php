@@ -22,6 +22,11 @@
 class GO_Servermanager_Controller_Site extends GO_Sites_Controller_Site{
 	
 
+	public function allowGuests()
+	{
+		return array('newtrial','trialcreated');
+	}
+	
 	/**
 	 * Render a page for creating new trail installation
 	 * @throws Exception calling when trails are disabled in config when no wildcard domain is specified
