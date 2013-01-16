@@ -36,7 +36,6 @@ $l["monthsByDate"]= 'months by date';
 $l["monthsByDay"]= 'months by day';
 $l["years"]= 'years';
 $l["months"]= 'months';
-$l["month"]= 'month';
 $l["atDays"]= 'At days';
 $l["noReminder"]= 'No reminder';
 $l["reminder"]='Reminder';
