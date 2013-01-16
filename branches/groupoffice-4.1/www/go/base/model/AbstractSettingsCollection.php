@@ -27,25 +27,30 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 	 * @var int
 	 */
 	private $_userId = 0;
-	
-	/**
-	 * Load the settings to this object.
-	 * If a userId is given then it loads the settings for the given user
-	 * 
-	 * @param int $userId
-	 */
+
 	public function __construct($userId=0) {
-		
-		if(!empty($userId))
-			$this->_userId = $userId;
-		
-		$this->load();
+		$this->_userId = $userId;
 	}
 	
 	/**
 	 * Load function to load the setting values to the properties
+	 * 
+	 * @return GO_Base_Model_AbstractSettingsCollection Description
 	 */
-	public function load(){
+	public static function load($userId=0){
+		// PHP >= 5.3 only
+//		$class = get_called_class();
+//		$self = new $class($userId);
+		
+		// PHP >= 5.3 only
+		$self = new static($userId);
+		
+		$self->loadData();
+		return $self;
+	}
+	
+	public function loadData(){
+		
 		$refClass = $this->_getReflectionClass();
 		$properties = $this->get_parent_properties_diff($refClass);
 		
@@ -53,7 +58,8 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 				$key = $property->name;
 				$this->{$key} = GO::config()->get_setting($key,$this->_userId);
 		}
-	}
+	} 
+	
 	
 	/**
 	 * Determine which properties are of the childs class. 
