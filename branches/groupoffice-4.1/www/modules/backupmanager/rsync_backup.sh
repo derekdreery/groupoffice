@@ -88,6 +88,8 @@ cd $OUTPUTDIR
 
 # dump each database in turn
 for db in $databases; do
+
+	if [ "$db" != "information_schema" ]; then
     echo "Dumping $db"
     $MYSQLDUMP --force --opt --user=$MYSQL_USER --password=$MYSQL_PASS \
     --databases $db > "$db.sql"
@@ -96,6 +98,7 @@ for db in $databases; do
 
 		tar czf $db.tar.gz $db.sql
 		rm $db.sql
+	fi
 done
 
 echo "Done with MySQL backup"
