@@ -55,7 +55,7 @@
 					?>					
 				</div>
 
-				<p>512MB per user for a mailbox is included. You'll need some additional space to store files in Group-Office. Diskspace costs € 2,- per GB per month.</p>
+				<p> You'll need diskspace for files and or e-mail. It costs € 0.50 per GB per month.</p>
 
 				<div class="row">
 					<?php echo GO_Sites_Components_Html::label("Amount of diskspace (GB)", 'number_of_users'); ?>
