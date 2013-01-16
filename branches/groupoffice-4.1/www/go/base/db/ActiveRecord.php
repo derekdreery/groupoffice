@@ -1068,8 +1068,34 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(isset($params['join']))
 			$sql .= "\n".$params['join'];
 		
-		//quick and dirty way to use and in next sql build blocks
-		$sql .= "\nWHERE 1 ";
+		
+		
+		//testing with subquery
+//		if($this->aclField() && empty($params['ignoreAcl'])){
+//			//quick and dirty way to use and in next sql build blocks
+//			$sql .= "\nWHERE ";
+//		
+//			$sql .= "\nEXISTS (SELECT level FROM go_acl WHERE `".$aclJoin['table']."`.`".$aclJoin['aclField']."` = go_acl.acl_id";
+//			if(isset($params['permissionLevel']) && $params['permissionLevel']>GO_Base_Model_Acl::READ_PERMISSION){
+//				$sql .= " AND go_acl.level>=".intval($params['permissionLevel']);
+//			}
+//
+//			$groupIds = GO_Base_Model_User::getGroupIds($params['userId']);
+//
+//			if(!empty($params['ignoreAdminGroup'])){
+//				$key = array_search(GO::config()->group_root, $groupIds);
+//				if($key!==false)
+//					unset($groupIds[$key]);
+//			}
+//
+//
+//			$sql .= " AND (go_acl.user_id=".intval($params['userId'])." OR go_acl.group_id IN (".implode(',',$groupIds)."))) ";		
+//		}else
+//		{
+			$sql .= "\nWHERE 1 ";
+//		}
+		
+
 
     
 		if(isset($params['criteriaObject'])){
