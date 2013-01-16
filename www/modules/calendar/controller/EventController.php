@@ -665,6 +665,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				}
 		}else
 		{
+			if(!isset($params['calendars']))
+				throw new Exception("Missing parameter 'calendars'");
+			
 			$calendars = json_decode($params['calendars']);
 		}
 		
