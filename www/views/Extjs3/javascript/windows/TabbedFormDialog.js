@@ -91,6 +91,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	
 	enableCloseButton : true,
 	
+	loadData : false,
+	
 	initComponent : function(){
 		
 		Ext.applyIf(this, {
@@ -371,6 +373,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 					if(config && config.values)
 						this.formPanel.form.setValues(config.values);
 
+					this.loadData = action.result.data;
 					GO.dialog.TabbedFormDialog.superclass.show.call(this);
 					this.afterLoad(remoteModelId, config, action);
 					
