@@ -47,8 +47,14 @@ $this->setPageTitle("Download");
 									<a href="<?php echo $this->createUrl('/licenses/site/viewLicense',array('license_id'=>$license->id)); ?>">View details</a>
 								<?php endif; ?>
 							</td><td>	
-									<?php if($license->upgrades < time() && !empty($license->getUpgradePackages())): ?>
+									<?php if($license->upgrades < time()): ?>
+										<?php
+										$p = $license->getUpgradePackages();
+										
+										if(!empty($p)):
+										?>
 										<a style="font-weight:bold" href="<?php echo $this->createUrl("licenses/site/upgrade",array('license_id'=>$license->id),true,true); ?>">UPGRADE LICENSE</a>
+										<?php endif;?>
 									<?php endif;?>
 							
 							</td>
