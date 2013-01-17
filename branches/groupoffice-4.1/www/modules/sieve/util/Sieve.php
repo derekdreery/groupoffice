@@ -462,7 +462,8 @@ class go_sieve_script {
 		'ereject',
 		'copy', // RFC3894
 		'vacation', // RFC5230
-		'date'
+		'date',
+		'setflag'
 			// TODO: (most wanted first) body, imapflags, notify, regex
 	);
 
@@ -786,14 +787,17 @@ GO::debug($tests);
 		}
 		if (in_array('vacation', $this->supported))
 			$patterns[] = '^\s*vacation\s+(.*?[^\\\]);';
+		
+		if (in_array('setflag', $this->supported))
+			$patterns[] = '^\s*setflag\s+(.*?[^\\\]);';
 
 		$pattern = '/(' . implode('$)|(', $patterns) . '$)/ms';
 
 		// parse actions body
-		if (preg_match_all($pattern, $content, $mm, PREG_SET_ORDER)) {
+		if (preg_match_all($pattern, $content, $mm, PREG_SET_ORDER)) {			
 			foreach ($mm as $m) {
 				$content = trim($m[0]);
-
+				
 				if (preg_match('/^(discard|keep|stop)/', $content, $matches)) {
 					$result[] = array('type' => $matches[1]);
 				} else if (preg_match('/^fileinto/', $content)) {
@@ -852,6 +856,9 @@ GO::debug($tests);
 					$vacation['reason'] = $this->_parse_string($content);
 
 					$result[] = $vacation;
+				} else if (preg_match('/^setflag\s+(.*);$/sm', $content, $matches)) {			
+					if (strtolower($matches[1])=='"\\\\seen"')
+						$result[] = array('type' => 'set_read');
 				}
 			}
 		}
