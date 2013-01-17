@@ -81,7 +81,7 @@ GO.groups.GroupDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
     });
 
 		var levelLabels = {};
-		levelLabels[GO.permissionLevels.read]="Use";
+		levelLabels[GO.permissionLevels.read]=GO.groups.lang.use;
 
     this.permissionsPanel = new GO.grid.PermissionsPanel({
       title:GO.groups.lang.managePermissions,
