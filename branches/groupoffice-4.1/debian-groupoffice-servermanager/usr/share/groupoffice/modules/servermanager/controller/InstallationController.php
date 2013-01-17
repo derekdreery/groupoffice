@@ -666,17 +666,16 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				system($cmd);
 			}
 
-			//send automatic email for every installation in report??
 			$installation->sendAutomaticEmails();
 			
 			//send automatic invoices if enabled
-			if(!empty($installation->automaticInvoice) && $installation->automaticInvoice->enable_invoicing && $installation->automaticInvoice->shouldCreateOrder())
-			{	
-				if($installation->automaticInvoice->sendOrder())
-					echo "Order was posted to billing successfull\n";
-				else
-					echo "ERROR: Failed sending order to billing\n";
-			}
+//			if(!empty($installation->automaticInvoice) && $installation->automaticInvoice->enable_invoicing && $installation->automaticInvoice->shouldCreateOrder())
+//			{	
+//				if($installation->automaticInvoice->sendOrder())
+//					echo "Order was posted to billing successfull\n";
+//				else
+//					echo "ERROR: Failed sending order to billing\n";
+//			}
 		}
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()
@@ -688,7 +687,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			$report['moduleCounts'][$module->name]=intval($module->count);
 		}
 		
-		var_dump($report);
+//		var_dump($report);
 		
 		//$report['moduleCounts']=
 		
@@ -796,35 +795,6 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		return $response;
 	}
 	
-	/**
-	 * Parses string using tag combinations of the form:
-	 * 'modelname:attributename' replaced by the value of $model->attribute
-	 * @param String $string String to be parsed
-	 * @param array $models Array of ActiveRecords. Keys will be the prefixes (the
-	 * modelname part mentioned above).
-	 * @return String Parsed string.
-	 */
-	private function _parseTags($string,array $models) {
-		$attributes = array();
-		foreach ($models as $tagPrefix => $model) {
-			$attributes = array_merge($attributes,$this->_addPrefixToKeys($model->getAttributes(),$tagPrefix.':'));
-		}
-		$templateParser = new GO_Base_Util_TemplateParser();
-		return $templateParser->parse($string, $attributes);
-	}
 	
-	/**
-	 * Puts the prefix $tagPrefix before each key in the $array.
-	 * @param array $array
-	 * @param string $tagPrefix
-	 * @return array
-	 */
-	private function _addPrefixToKeys(array $array,$tagPrefix) {
-		$outputArray = array();
-		foreach ($array as $k => $v) {
-			$outputArray[$tagPrefix.$k] = $v;
-		}
-		return $outputArray;
-	}
 	
 }
