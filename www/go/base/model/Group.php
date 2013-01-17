@@ -22,7 +22,7 @@
  * @property String $name
  * @property int $user_id
  * @property int $acl_id
- * @property bool $admin_only
+ * @property bool $admin_only Obsolete!
  * 
  * @method GO_Base_Model_User users
  *

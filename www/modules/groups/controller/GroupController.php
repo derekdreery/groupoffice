@@ -4,18 +4,6 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 
 	protected $model = 'GO_Base_Model_Group';
 
-//  /**
-//   * Add the username field to this default grid.
-//   * 
-//   * @param GO_Base_Data_Store $store
-//   * @return GO_Base_Data_Store
-//   */
-//  protected function prepareStore(GO_Base_Data_Store $store){
-//    $store->formatColumn('user_name','$model->user->name');
-//    return $store;
-//  }
-
-
 	protected function allowWithoutModuleAccess() {
 		return array('getusers', 'getrecipientsasstring');
 	}
@@ -75,53 +63,7 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 
 		return $response;
 	}
-//
-//	/**
-//	 * Add the given user to the given group.
-//	 * 
-//	 * @param int $group_id
-//	 * @param int $user_id
-//	 * @return bool $success 
-//	 */
-//	protected function actionAddUserToGroup($group_id, $user_id) {
-//		$group = new GO_Base_Model_Group();
-//		$group->addUser($user_id);
-//		return $userGroup->save();
-//	}
 
-	/**
-	 * Update the params of a given Group
-	 * 
-	 * @param int $id
-	 * @param String $name
-	 * @param bool $admin_only
-	 * @return bool $success 
-	 */
-	protected function actionUpdateGroup($id, $name, $admin_only=-1) {
-		$group = $this->model->findByPk($id);
-
-		$group->id = $id;
-		$group->name = $name;
-		$group->admin_only = $admin_only;
-
-		return $group->save();
-	}
-
-	/**
-	 *  Create a new group
-	 * 
-	 * @param int $user_id
-	 * @param String $name
-	 * @param bool $admin_only
-	 * @return bool $success 
-	 */
-	protected function actionSaveGroup() {
-		$group = new GO_Base_Model_Group();
-		$group->setAttributes($_POST);
-		$group->user_id = GO::user()->id;
-
-		return $group->save();
-	}
 
 	protected function beforeSubmit(&$response, &$model, &$params) {
 		if (!empty($params['permissions'])) {
