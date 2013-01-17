@@ -18,3 +18,4 @@ $l['noDeleteEveryone'] = 'You can\'t delete the group Everyone';
 $l['groupNameAlreadyExists'] = 'The group you are trying to create already exists';
 $l['dontRemoveAdmin']='You can\'t remove the primary administrator from the administrator group';
 $l['modulePermissions'] = 'Module Permissions';
+$l['use']='Use';
