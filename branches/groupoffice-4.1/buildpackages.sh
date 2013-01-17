@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#dependencies:
+#sudo apt-get install gnupg-agent pinentry-curses pbuilder php5-cli php5-curl
+
 eval "$(gpg-agent --daemon)"
 
 svn up

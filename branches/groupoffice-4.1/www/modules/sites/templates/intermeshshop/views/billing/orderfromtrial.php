@@ -17,6 +17,8 @@
 
 			<div class="form">
 				<?php echo GO_Sites_Components_Html::beginForm(); ?>
+				
+				<?php echo GO_Sites_Components_Html::hiddenField('reference', $reference); ?>
 
 				<div class="row">
 					<?php echo GO_Sites_Components_Html::label("Payment period", 'payment_period'); ?>
