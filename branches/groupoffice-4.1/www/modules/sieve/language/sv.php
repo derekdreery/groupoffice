@@ -119,3 +119,5 @@ $l['active']='Aktiv';
 
 $l['sieveWarning']="Om din IMAP-server har stöd för sieve-filter är det rekommenderat att använda dessa istället. Vänligen använd då fliken 'Filter' istället.";
 $l['setRead']='Markera meddelandet som läst';
+
+$l['stopEndError']= 'Åtgärden \"Stanna\" måste vara sist i ordningen!';

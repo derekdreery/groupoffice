@@ -16,13 +16,15 @@
 	<body>
 		<div class="main-container">
 
-			<div id="login">
-				<?php if(!GO::user()) : ?>
-					<a href="<?php echo $this->createUrl("/sites/site/login"); ?>"><?php echo GOS::t('login'); ?></a> | <a href="<?php echo $this->createUrl("sites/site/register"); ?>"><?php echo GOS::t('register'); ?></a>
-				<?php else: ?>
-					Welcome <?php echo GO::user()->name; ?> | <a href="<?php echo $this->createUrl('/sites/site/profile'); ?>"><?php echo GOS::t('youraccount'); ?></a> | <a href="<?php echo $this->createUrl('/sites/site/logout'); ?>"><?php echo GOS::t('logout'); ?></a>
-				<?php endif; ?>
-			</div>
+			<?php if($this->getAction()!='newtrial') : ?>
+				<div id="login">
+					<?php if(!GO::user()) : ?>
+						<a href="<?php echo $this->createUrl("/sites/site/login"); ?>"><?php echo GOS::t('login'); ?></a> | <a href="<?php echo $this->createUrl("sites/site/register"); ?>"><?php echo GOS::t('register'); ?></a>
+					<?php else: ?>
+						Welcome <?php echo GO::user()->name; ?> | <a href="<?php echo $this->createUrl('/sites/site/profile'); ?>"><?php echo GOS::t('youraccount'); ?></a> | <a href="<?php echo $this->createUrl('/sites/site/logout'); ?>"><?php echo GOS::t('logout'); ?></a>
+					<?php endif; ?>
+				</div>
+			<?php endif; ?>
 			
 			<div class="header">
 				<!--		<div class="language">EN | NL</div> -->
@@ -48,13 +50,13 @@
 								</div>
 							</div>
 						<?php endif; ?>
-						
-						<div class="topmenu-item-left <?php if(GOS::site()->route=='tickets/site/ticketlist' || GOS::site()->route=='tickets/site/ticket') echo 'selected'; ?>">
-							<div class="topmenu-item-right">
-								<a class="topmenu-item-center" href="<?php echo GO::user() ? $this->createUrl('tickets/site/ticketlist'): $this->createUrl('tickets/site/ticketLogin'); ?>">Support</a>
+						<?php if(GO::modules()->isInstalled("tickets")): ?>
+							<div class="topmenu-item-left <?php if(GOS::site()->route=='tickets/site/ticketlist' || GOS::site()->route=='tickets/site/ticket') echo 'selected'; ?>">
+								<div class="topmenu-item-right">
+									<a class="topmenu-item-center" href="<?php echo GO::user() ? $this->createUrl('tickets/site/ticketlist'): $this->createUrl('tickets/site/ticketLogin'); ?>">Support</a>
+								</div>
 							</div>
-						</div>
-
+						<?php endif; ?>
 				
 					</div>
 				</div>

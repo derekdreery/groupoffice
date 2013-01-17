@@ -3,7 +3,7 @@
 
 $l['name']= 'Uppgifter';
 $l['description']= 'Modul för hantering av uppgifter i en uppgiftslista. Kan ex. kopplas till kalenderhändelser, e-postmeddelanden eller projekt.';
-$lang['link_type'][12]=$l['status']= 'Status';
+$l['status']= 'Status';
 $l['scheduled_call']= 'Planerat in samtal vid %s';
 $l['statuses']['NEEDS-ACTION'] = 'Åtgärd krävs';
 $l['statuses']['ACCEPTED'] = 'Accepterad';
@@ -19,7 +19,7 @@ $l['tasklistChanged']="* Uppgiftslista ändrad från '%s' till '%s'";
 $l['statusChanged']="* Status ändrad från '%s' till '%s'";
 $l['multipleSelected']='Flera uppgiftslistor valda';
 $l['incomplete_delete']='Du har inte behörighet att radera alla de valda uppgifterna';
-$l["task"]= 'Uppgift';
+$l['task']= 'Uppgift';
 $l["noTask"]= 'Inga uppgifter att visa';
 $l["tasks"]= 'Uppgifter';
 $l["addTask"]= 'Lägg till en uppgift...';
@@ -48,7 +48,7 @@ $l["startsAt"]= 'Startar vid';
 $l["completedAt"]='Slutförd vid';
 $l["showInactiveTasks"]= 'Visa inaktiva uppgifter';
 $l["scheduleCall"]= 'Planera in samtal';
-$l["call"]= 'Ring';
+$l['call']= 'Ring';
 $l["taskDefaults"]='Standardinställningar för uppgifter';
 $l["daysBeforeStart"]='Dagar före start';
 $l["defaultTasklist"]='Standarduppgiftslista';

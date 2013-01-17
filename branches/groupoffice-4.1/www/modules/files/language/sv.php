@@ -116,3 +116,10 @@ $l['notificationEmailSubject']= 'Uppdateringar i mapp';
 $l['downloadLinkExpired']= "Tyvärr, nedladdningslänkens giltighetstid har löpt ut";
 
 $l['recentFiles']="Filer förändrade de senaste 7 dagarna";
+
+$l['bookmarkFolder']="Lägg till i favoriter";
+$l['bookmarks']="Favoriter";
+$l['bookmarkAlreadyExists']="Mappen '%fn' har redan en favorit för nuvarande användare.";
+$l['removeBookmark']="Radera favorit";
+$l['removeBookmarkQuestion']="Radera mappen '%fn' från dina favoriter?";
+$l['notInSearchMode']="Kan inte göra detta i sökläget.";

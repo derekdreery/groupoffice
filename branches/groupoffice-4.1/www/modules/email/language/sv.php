@@ -1,6 +1,5 @@
 <?php
 
-
 $l["forwardTo"]='Vidarebefordra meddelande till';
 $l["messages"]= 'Meddelanden';
 $l["message"]= 'Meddelande';
@@ -163,7 +162,6 @@ $l["alsoChildren"]= 'Tillämpa detta även på meddelanden i undermappar.';
 
 $l['name'] = 'E-post';
 $l['description'] = 'Funktionsrik, webbaserad e-postklient. Användare kan sända och ta emot e-post.';
-$lang['link_type'][9]= 'E-post';
 $l['feedbackNoReciepent'] = 'Du angav ingen mottagare';
 $l['feedbackSMTPProblem'] = 'Ett problem uppstod i kommunikationen med SMTP-servern:';
 $l['feedbackUnexpectedError'] = 'Ett oväntat problem uppstod vid skapandet av e-post:';
@@ -235,3 +233,9 @@ $l['noEmailFolders']= 'Inga mappar har lagts till.';
 $l['sieveNote']='Stöd saknas för vissa nya funktioner. Läs mer i manualen.';
 $l['winmailNoFiles']="Denna bilaga av typen 'winmail' innehåller inga filer.";
 $l['attachedAppointmentInfo']="Bifogad mötesinformation";
+
+$l["markFolderReadConfirm"]='Är du säker på att du vill markera alla meddelanden i mappen \'{name}\' som lästa?';
+$l['cantDeleteSpecialFolder']="Du kan inte radera mapparna Papperskorgen, Utkast eller Skickat";
+
+$l['storePassword']='Lagra lösenordet permanent';
+$l['copyingMessages']='Kopierar meddelanden...';

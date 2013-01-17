@@ -572,3 +572,25 @@ $l['sir']='Herr';
 $l['madam']='Fru';
 $l['logFiles']='Logfiler';
 $l['exportDialog']='Export';
+
+$l['deleteAllItems']='Radera alla objekt';
+$l['deleteAllItemsAreYouSure']='Är du säker på att du vill radera alla objekt?';
+
+$l['userFirst_name']='Förnamn';
+$l['userMiddle_name']='Mellannamn';
+$l['userLast_name']='Efternamn';
+$l['userPassword']='Lösenord';
+$l['userEmail']='E-postadress';
+$l['userUsername']='Användarnamn';
+$l['and']='och';
+$l['repeats']= 'Repeterar varje %s';
+$l['repeats_at']= 'Repeterar varje %s vid %s';//eg. Repeats every month at the first monday;
+$l['repeats_at_not_every']= 'Repeterar var %s %s vid %s';//eg. Repeats every 2 weeks at monday;
+$l['repeats_not_every']= 'Repeterar var %s %s';
+$l['until']='till'; ;
+$l['month_times'][1]='den första';
+$l['month_times'][2]='den andra';
+$l['month_times'][3]='den tredje';
+$l['month_times'][4]='den fjärde';
+$l['month_times'][5]='den femte';
+$l['sortOrderError']="Du kan tyvärr inte sortera på den kolumnen. Vänligen klicka på en annan kolumnrubrik för sortering.";
