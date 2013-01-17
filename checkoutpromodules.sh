@@ -25,3 +25,4 @@ svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/
 svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/carddav
 svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/z-push2
 svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/googledrive
+svn co svn+ssh://mschering@svn.code.sf.net/p/group-office/code/branches/groupoffice-4.1/debian-groupoffice-servermanager/usr/share/groupoffice/modules/servermanager
