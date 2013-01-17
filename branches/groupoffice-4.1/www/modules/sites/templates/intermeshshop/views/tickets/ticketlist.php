@@ -30,7 +30,7 @@ $this->setPageTitle("Support");
 				?>
 					<p>Click <a href="<?php echo $this->createUrl("tickets/site/newTicket"); ?>">here</a> to create a new ticket.</p>
 				<?php else: ?>
-					<p>You don't have an active Group-Office license. <a href="<?php echo $this->createUrl("licenses/site/licenseList"); ?>">Please upgrade your license for a year of support and software updates.</a></p>
+					<p style="color:red">You don't have an active Group-Office license. <a href="<?php echo $this->createUrl("licenses/site/licenseList"); ?>">Please upgrade your license for a year of support and software updates.</a></p>
 				<?php
 				endif;
 				?>
