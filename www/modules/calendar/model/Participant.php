@@ -198,7 +198,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	 * @return GO_Calendar_Model_Event
 	 */
 	public function getParticipantEvent() {
-		return GO_Calendar_Model_Event::model()->findByUuid($this->event->uuid, $this->user_id);
+		return $this->event ? GO_Calendar_Model_Event::model()->findByUuid($this->event->uuid, $this->user_id) : false;
 	}
 
 	/**
@@ -255,6 +255,13 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 		}
 		
 		if($wasNew && $this->event->is_organizer){
+			
+			
+			if ($this->user_id > 0 && $this->user_id != $this->event->user_id) {
+				$this->event->createCopyForParticipant($this);					
+			}
+			
+			
 			$stmt = $this->event->getRelatedParticipantEvents();
 			
 			foreach($stmt as $event){
@@ -276,7 +283,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	protected function afterDelete(){
 		
 		
-		if($this->event->is_organizer){
+		if($this->event && $this->event->is_organizer){
 			$stmt = $this->getRelatedParticipants();
 			
 			foreach($stmt as $participant){
