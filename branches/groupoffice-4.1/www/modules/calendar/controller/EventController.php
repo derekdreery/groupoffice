@@ -278,10 +278,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	private function _saveParticipants($params, GO_Calendar_Model_Event $event, $isNewEvent, $modifiedAttributes) {
 
 		$ids = array();
-
-		$newParticipantIds = array();
 		if (!empty($params['participants'])) {
-
 			$participants = json_decode($params['participants'], true);
 
 			foreach ($participants as $p) {
@@ -295,26 +292,10 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 				unset($p['id']);
 				$participant->setAttributes($p);
-//				$participant->is_organizer = $event->user_id == $participant->user_id;
 				$participant->event_id = $event->id;
-			
-
-				if ($isNewEvent || !empty($modifiedAttributes)) {
-					//reset status on when event is modified or new
-					if($participant->is_organizer){
-						$participant->status = GO_Calendar_Model_Participant::STATUS_ACCEPTED;
-					}else
-					{
-						//don't reset status because this will screw things up when organizer is just confirming the appointment.
-						//$participant->status = GO_Calendar_Model_Participant::STATUS_PENDING;
-					}
-				}
-
-
 				$participant->save();
 				$ids[] = $participant->id;
 			}
-
 
 			$stmt = GO_Calendar_Model_Participant::model()->find(
 							GO_Base_Db_FindParams::newInstance()
@@ -325,23 +306,6 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 											)
 			);
 			$stmt->callOnEach('delete');
-			
-			
-			
-			//create events for the participants that are GO users
-			$stmt = $event->participants;			
-			foreach($stmt as $participant){			
-				//Add new event for the participant if requested. Set the status to accepted automatically.
-				if ($participant->user_id > 0 && $participant->user_id != $event->user_id) {
-					
-					//find related participant event. UUID and user_id of calendar must match
-					$participantEvent = $participant->getParticipantEvent();
-					
-					if(!$participantEvent && $participant->status!=GO_Calendar_Model_Participant::STATUS_DECLINED){						
-						$event->createCopyForParticipant($participant);
-					}
-				}
-			}			
 		}
 	}
 	/**
