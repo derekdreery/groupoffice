@@ -23,9 +23,9 @@ GO.moduleManager.onModuleReady('addressbook',function(){
 		},
 		setAccessCodeFields : function() {
 			
-			console.log(this.autoImportSetCB.getValue());
-			console.log(typeof(this.autoImportSetCB.getValue()));
-			
+//			console.log(this.autoImportSetCB.getValue());
+//			console.log(typeof(this.autoImportSetCB.getValue()));
+//			
 			this.accessCodeFields1.setDisabled(this.autoImportSetCB.getValue()==true);
 			this.accessCodeFields1.setVisible(this.autoImportSetCB.getValue()!=true);
 //			this.authenticateInfo.container.up('div.x-form-item').setDisplayed(this.autoImportSetCB.getValue()!=true);
