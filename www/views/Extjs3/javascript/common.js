@@ -13,6 +13,14 @@
  
 Ext.namespace('GO.util');
 
+/**
+ * Strpos function for js 
+ */
+GO.util.strpos=function(haystack, needle, offset) {
+	var i = haystack.indexOf(needle, (offset || 0));
+	return i === -1 ? false : i;
+}
+
 
 GO.util.isIpad=function(){
 	return navigator.userAgent.match(/iPad/i) != null;
