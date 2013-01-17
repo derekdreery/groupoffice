@@ -25,7 +25,7 @@ $this->setPageTitle("Download");
 
 				<table class="ticket-models-table" style="border-collapse: collapse;" width="100%">
 					<tr>
-						<th align="left" width="250">Name</th><th align="left" width="120">Upgrades until</th><th align="left" width="180">Details</th><th align="left"></th>
+						<th align="left" width="250">Name</th><th align="left" width="120">Support until</th><th align="left" width="180">Details</th><th align="left"></th>
 					</tr>
 					<?php $i = 0; ?>
 					<?php foreach($pager->models as $license): ?>
@@ -39,13 +39,18 @@ $this->setPageTitle("Download");
 
 						<tr  class="model-row <?php echo $style; ?>" style="border-collapse: collapse;">
 							<td><?php echo $license->name; ?></td>
-							<td colspan="1"><?php echo empty($license->upgrades)?"Allways":$license->getAttribute('upgrades','raw')>time()?$license->getAttribute("upgrades","formatted"):'Expired'; ?></td>
-							<td colspan="2">
+							<td colspan="1"><?php echo empty($license->upgrades)?"Allways":$license->getAttribute('upgrades','raw')>time()?$license->getAttribute("upgrades","formatted"):'<span style="color:red">Expired</span>'; ?></td>
+							<td>
 								<?php  if($license->new):?>										
 									<a href="<?php echo $this->createUrl('/licenses/site/setLicense',array('license_id'=>$license->id)); ?>"><b style="color:red; text-decoration:underline;">Set license details first</b></a>
 								<?php else: ?>
 									<a href="<?php echo $this->createUrl('/licenses/site/viewLicense',array('license_id'=>$license->id)); ?>">View details</a>
 								<?php endif; ?>
+							</td><td>	
+									<?php if($license->upgrades < time()): ?>
+										<a style="font-weight:bold" href="<?php echo $this->createUrl("licenses/site/upgrade",array('license_id'=>$license->id),true,true); ?>">UPGRADE LICENSE</a>
+									<?php endif;?>
+							
 							</td>
 						</tr>
 
@@ -61,6 +66,8 @@ $this->setPageTitle("Download");
 										<a target="_blank" href="<?php echo GO::url('licenses/license/downloadLicenseFile',array('package_id'=>$package->id,'license_id'=>$license->id),true,true); ?>">Download license</a> |
 									<?php endif; ?>
 										<a target="_blank" href="<?php echo GO::url("licenses/package/downloadPackageFile",array('package_id'=>$package->id),true,true); ?>">Download package</a>
+										
+									
 								</td>
 							</tr>
 						<?php endwhile; ?>

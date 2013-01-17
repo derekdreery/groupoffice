@@ -44,7 +44,7 @@
 
 				<tr>
 					<td colspan="2" align="right"><b>Vat:</b></td>
-					<td align="right"><b><?php echo $cart->getVatText(); ?></b></td>
+					<td align="right"><b><?php echo $cart->getTotalVatText(); ?></b></td>
 				</tr>
 				<?php endif; ?>
 
