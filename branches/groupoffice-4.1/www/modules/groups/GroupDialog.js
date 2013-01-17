@@ -59,16 +59,16 @@ GO.groups.GroupDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			]				
 		});
 
-    if(GO.settings.has_admin_permission) {
-      this.adminOnlyCheckBox = new Ext.ux.form.XCheckbox({
-          name: 'admin_only',
-          checked: false,
-          boxLabel: GO.groups.lang.adminOnlyLabel,
-          hideLabel:true
-      });
-      this.propertiesPanel.height=60;
-      this.propertiesPanel.add(this.adminOnlyCheckBox);
-    }
+//    if(GO.settings.has_admin_permission) {
+//      this.adminOnlyCheckBox = new Ext.ux.form.XCheckbox({
+//          name: 'admin_only',
+//          checked: false,
+//          boxLabel: GO.groups.lang.adminOnlyLabel,
+//          hideLabel:true
+//      });
+//      this.propertiesPanel.height=60;
+//      this.propertiesPanel.add(this.adminOnlyCheckBox);
+//    }
     
     this.userGrid = new GO.groups.UsersGrid({
       region:'center'

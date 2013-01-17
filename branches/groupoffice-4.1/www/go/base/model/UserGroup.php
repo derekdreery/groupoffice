@@ -20,11 +20,7 @@
  * 
  * @package GO.base.model
  * 
- * @property int $id
- * @property String $name
  * @property int $user_id
- * @property int $acl_id
- * @property bool $admin_only
  * @property int $group_id
  */
 class GO_Base_Model_UserGroup extends GO_Base_Db_ActiveRecord {
