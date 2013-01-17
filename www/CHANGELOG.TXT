@@ -1,3 +1,6 @@
+4.1.19
+- Changed the extension function in the fs_file class so it will not change capital letters to lower letters
+
 15-01-2013 4.1.18
 - Various small calendar fixes
 - Removed admin_only flag from user groups as it is replaced by permissions.
