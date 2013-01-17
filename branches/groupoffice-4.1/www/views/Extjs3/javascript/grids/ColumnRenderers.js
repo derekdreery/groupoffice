@@ -7,9 +7,51 @@ GO.grid.ColumnRenderers = {
 			return GO.lang.no;
 		else
 			return val;
+	},
+
+	/**
+	 * To override the maxLength, cutWholeWords, showTooltip params you need 
+	 * to add the following to the column.
+	 * renderer: {
+	 *	fn: GO.grid.ColumnRenderers.Text,
+	 *	scope: this
+	 * },
+	 * 
+	 * After that you can set the variables in the grid.
+	 * Eg: this.maxLength = 20;
+	 * this.cutWholeWords = false;
+	 * this.showTooltip = false;
+	 * 
+	 */
+	Text : function(val, meta, record, rowIndex, columnIndex, store){
+		var maxLength = 10;
+		var cutWholeWords = true;
+		var showTooltip = true;
+		
+		if(this.showTooltip)
+			showTooltip = this.showTooltip;
+			
+		if(showTooltip)	
+			meta.attr = 'ext:qtip="' + val + '"';
+		
+		if(this.maxLength)
+			maxLength = this.maxLength;
+		
+		if(this.cutWholeWords)
+			cutWholeWords = this.cutWholeWords;
+		
+		if(val.length > maxLength){
+			
+			val = val.substr(0,maxLength);
+			
+			if(cutWholeWords){
+				var pos = GO.util.strpos(val,' ');
+				val = val.substr(0,maxLength,pos);
+			}
+			
+			val = val+' ...';
+		}
+		
+		return val;
 	}
-	
-	
-	
-	
 }
