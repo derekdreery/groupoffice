@@ -687,14 +687,15 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 			
 //			echo "Installation time: ".date('c', $installationModel->ctime)."\n";
 			
-			if (!empty($autoEmailModel->active) && $this->ctime>=$dayStart && $this->ctime<$dayEnd) {
+			if ($this->ctime>=$dayStart && $this->ctime<$dayEnd) {
 				
 				echo "Sending message ".$autoEmailModel->name." to ".$this->admin_email."\n";
 				
 				$message = GO_Base_Mail_Message::newInstance()
 					->loadMimeMessage($autoEmailModel->mime)
 					->addTo($this->admin_email, $this->admin_name)
-					->setFrom(GO::config()->webmaster_email, 'Servermanager Administrator');
+					->addBcc(GO::config()->webmaster_email, GO::config()->title)
+					->setFrom(GO::config()->webmaster_email, GO::config()->title);
 
 				$body = $this->_parseTags(
 					$message->getBody(),
@@ -707,6 +708,37 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 			}
 		}
 		return $success;
+	}
+	
+	/**
+	 * Parses string using tag combinations of the form:
+	 * 'modelname:attributename' replaced by the value of $model->attribute
+	 * @param String $string String to be parsed
+	 * @param array $models Array of ActiveRecords. Keys will be the prefixes (the
+	 * modelname part mentioned above).
+	 * @return String Parsed string.
+	 */
+	private function _parseTags($string,array $models) {
+		$attributes = array();
+		foreach ($models as $tagPrefix => $model) {
+			$attributes = array_merge($attributes,$this->_addPrefixToKeys($model->getAttributes(),$tagPrefix.':'));
+		}
+		$templateParser = new GO_Base_Util_TemplateParser();
+		return $templateParser->parse($string, $attributes);
+	}
+	
+	/**
+	 * Puts the prefix $tagPrefix before each key in the $array.
+	 * @param array $array
+	 * @param string $tagPrefix
+	 * @return array
+	 */
+	private function _addPrefixToKeys(array $array,$tagPrefix) {
+		$outputArray = array();
+		foreach ($array as $k => $v) {
+			$outputArray[$tagPrefix.$k] = $v;
+		}
+		return $outputArray;
 	}
 	
 	public function getTrialUsers()
