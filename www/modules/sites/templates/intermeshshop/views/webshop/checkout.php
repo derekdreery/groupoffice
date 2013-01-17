@@ -82,22 +82,10 @@
 					</tr>
 				<?php endif; ?>
 
-				<?php if ($cart->vatApplicable()): ?>
-
-					<tr>
-						<td colspan="2" align="right" class="minicart_total"><b><?php echo GO::t('subtotal', 'webshop'); ?>:</b></td>
-						<td align="right" class="minicart_total"><b><?php echo $cart->getSubTotalTexT(); ?></b></td>
-					</tr>
-
-					<tr>
-						<td colspan="2" align="right"><b>Vat:</b></td>
-						<td align="right"><b><?php echo $cart->getVatText(); ?></b></td>
-					</tr>
-				<?php endif; ?>
 
 				<tr>
 					<td colspan="2" align="right" class="minicart_total"><b><?php echo GO::t('total', 'webshop'); ?>:</b></td>
-					<td align="right" class="minicart_total"><b><?php echo $cart->getTotalTexT(); ?></b></td>
+					<td align="right" class="minicart_total"><b><?php echo $cart->getSubTotalTexT(); ?></b></td>
 				</tr>
 
 				<tr>

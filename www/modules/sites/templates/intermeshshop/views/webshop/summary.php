@@ -40,7 +40,7 @@
 				<?php if($cart->getDiscountPercentage() > 0): ?>
 				<tr>
 					<td>&nbsp;</td>
-					<td><?php echo $cart->getDiscountPercentage(); ?>% reseller discount.</td>
+					<td><?php echo $cart->getDiscountDescription(); ?></td>
 					<td align="right"><?php echo $cart->getDiscountText(); ?></td>
 				</tr>
 				<?php endif; ?>
@@ -53,8 +53,8 @@
 				</tr>
 
 				<tr>
-					<td colspan="2" align="right"><b>Vat:</b></td>
-					<td align="right"><b><?php echo $cart->getVatText(); ?></b></td>
+					<td colspan="2" align="right"><b>VAT:</b></td>
+					<td align="right"><b><?php echo $cart->getTotalVatText(); ?></b></td>
 				</tr>
 				<?php endif; ?>
 
