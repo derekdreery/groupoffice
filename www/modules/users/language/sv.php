@@ -91,7 +91,6 @@ $l['name'] = 'Användare';
 $l['description'] = 'Adminmodul för att hantera användarkonton.';
 $l['deletePrimaryAdmin'] = 'Du kan inte ta bort huvudadministratören';
 $l['deleteYourself'] = 'Du kan inte ta bort dig själv';
-$lang['link_type'][8]=$us_user = 'Användare';
 $l['error_username']= 'Du har ogiltiga tecken i användarnamnet';
 $l['error_username_exists']= 'Tyvärr, det användarnamnet finns redan';
 $l['error_email_exists']= 'Tyvärr, den e-postadressen är redan registrerad.';

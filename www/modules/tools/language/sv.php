@@ -11,6 +11,6 @@ $l['checkmodules']='Kontrollera moduler';
 $l['resetState']='Nollställ fönsterpositioner, rutsystem etc.';
 
 $l["tools"]= 'Adminverktyg';
-$l["description"]= 'Klicka på ett av skripten för att köra det.';
+$l['description']= 'Klicka på ett av skripten för att köra det.';
 $l["scripts"]= 'Skript';
 $l["scriptOutput"]= 'Skript-utdata';

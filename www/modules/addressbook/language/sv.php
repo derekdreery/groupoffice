@@ -189,9 +189,6 @@ $l["viewMessage"]='Visa meddelande';
 $l["pauseMailing"]='Pausa sändning';
 $l["resumeMailing"]='Återuppta sändning';
 
-$l["copyingMessages"]='Kopierar meddelanden...';
-
-
 $l["companyId"]= "ID";
 $l["companyUser_id"]= "Användare";
 $l["companyAddressbook_id"]= "Adressbok";
@@ -291,3 +288,6 @@ $l['addToAddresslistPrompt']='Du håller på att lägga till de valda objekten i
 $l['addAddresslistSuccess']='Objekten har lagts till i adresslistan.';
 
 $l['addContactsSuccess']= '%i kontakter har lagts till i adresslistan.';
+
+$l['contactSuffix']= "Suffix";
+$l['contactHomepage']= "Hemsida";
