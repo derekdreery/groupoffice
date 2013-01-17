@@ -139,7 +139,8 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		if ($pos) {
 			$extension = substr($filename, $pos +1);
 		}
-		return trim(strtolower($extension));
+		//return trim(strtolower($extension)); // Does not work when extension on disk is in capital letters (.PDF, .XLSX)
+		return trim($extension);
 	}
 	
 	/**
