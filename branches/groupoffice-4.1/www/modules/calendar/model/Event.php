@@ -81,8 +81,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$this->columns['start_time']['gotype'] = 'unixtimestamp';
 		$this->columns['end_time']['greater'] = 'start_time';
 		$this->columns['end_time']['gotype'] = 'unixtimestamp';
-		$this->columns['repeat_end_time']['gotype'] = 'unixtimestamp';
-		
+		$this->columns['repeat_end_time']['gotype'] = 'unixtimestamp';		
 		$this->columns['repeat_end_time']['greater'] = 'start_time';
 		//$this->columns['category_id']['required'] = GO_Calendar_CalendarModule::commentsRequired();
 		
@@ -1468,11 +1467,18 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->is_organizer=$organizerEmail == $this->calendar->user->email;
 		}		
 		
+		
 		if(!$dontSave){
 			$this->cutAttributeLengths();
 			try {
 				$this->_isImport=true;
-				$this->save();
+				
+				//make sure no duplicates are imported.
+				$this->setValidationRule('uuid', 'unique', array('calendar_id','start_time'));
+				
+				if(!$this->save()){
+					throw new GO_Base_Exception_Validation(implode("\n", $this->getValidationErrors())."\n");
+				}
 				$this->_isImport=false;
 			} catch (Exception $e) {
 				throw new Exception($this->name.' ['.GO_Base_Util_Date::get_timestamp($this->start_time).' - '.GO_Base_Util_Date::get_timestamp($this->end_time).'] '.$e->getMessage());
@@ -1485,11 +1491,23 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			}		
 
 			if($vobject->organizer)
-				$this->importVObjectAttendee($this, $vobject->organizer, true);
+				$p = $this->importVObjectAttendee($this, $vobject->organizer, true);
 
+			$calendarParticipantFound=$p->user_id==$this->calendar->user_id;
 			$attendees = $vobject->select('attendee');
-			foreach($attendees as $attendee)
-				$this->importVObjectAttendee($this, $attendee, false);
+			foreach($attendees as $attendee){
+				$p = $this->importVObjectAttendee($this, $attendee, false);
+				
+				if($p->user_id==$this->calendar->user_id){
+					$calendarParticipantFound=true;
+				}
+			}
+			
+			//if the calendar owner is not in the participants then we should chnage the is_organizer flag because otherwise the event can't be opened or accepted.
+			if(!$calendarParticipantFound){
+				$this->is_organizer=true;
+				$this->save();
+			}
 
 			if($vobject->exdate){
 				if (strpos($vobject->exdate,';')!==false) {
