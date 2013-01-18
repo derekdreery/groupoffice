@@ -1,4 +1,5 @@
-1.1.19
+19-01-2013 4.1.19
+- Error when you didn't have access to custom fields.
 - Added search fields to addresslist and templates grid in administration panel of the addressbook module
 - Added search fields to views, resource groups and resources grid in administration panel of the calendar module
 
