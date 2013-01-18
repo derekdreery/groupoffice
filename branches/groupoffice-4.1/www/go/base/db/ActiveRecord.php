@@ -1426,7 +1426,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				$fields[]='`'.$prefixTable.'`.`'.$field.'`';
 		}
 		
-		if($withCustomFields && $this->customfieldsRecord)
+		if($withCustomFields && GO::modules()->customfields && $this->customfieldsRecord)
 		{
 			$fields = array_merge($fields, $this->customfieldsRecord->getFindSearchQueryParamFields('cf'));
 		}
