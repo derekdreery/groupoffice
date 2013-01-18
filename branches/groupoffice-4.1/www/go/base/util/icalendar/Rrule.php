@@ -152,7 +152,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 			
 		if ($this->_until>0)
 		{
-			$rrule .= " ".date('Ymd\THis', GO_Base_Util_Date::date_add($this->_until, 1)).$time;
+			$rrule .= " ".date('Ymd\THis', GO_Base_Util_Date::date_add($this->_until, 1));
 		}else
 		{
 			$rrule .= " #0";
