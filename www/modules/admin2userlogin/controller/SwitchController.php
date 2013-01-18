@@ -1,9 +1,9 @@
 <?php
 class GO_Admin2userlogin_Controller_Switch extends GO_Base_Controller_AbstractController {
 	protected function actionSwitch($params){
-		
-		if(!GO::user()->isAdmin())
-			throw new Exception("This feature is for admins only!");
+//		
+//		if(!GO::user()->isAdmin())
+//			throw new Exception("This feature is for admins only!");
 		
 		$debug = !empty(GO::session()->values['debug']);
 		
