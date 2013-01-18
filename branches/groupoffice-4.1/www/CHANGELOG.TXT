@@ -1,3 +1,7 @@
+1.1.19
+- Added search fields to addresslist and templates grid in administration panel of the addressbook module
+- Added search fields to views, resource groups and resources grid in administration panel of the calendar module
+
 18-01-2013 4.1.18
 - Changed the extension function in the fs_file class so it will not change capital letters to lower letters
 - In the email message grid added a row class for seen and unseen messages (.ml-seen-row and .ml-unseen-row)
