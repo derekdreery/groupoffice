@@ -349,7 +349,7 @@ GO.calendar.MainPanel = function(config){
 	this.calendarListPanel.add(this.viewsList);
 	this.calendarListPanel.add(this.resourcesList);
 	
-	var storeFields=['id','event_id','name','start_time','end_time','description', 'repeats', 'private','status','location', 'background', 'status_color', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','all_day_event','username','duration', 'link_count', 'has_other_participants','participant_ids','ctime','is_organizer', 'partstatus','model_name'];
+	var storeFields=['id','event_id','name','start_time','end_time','description', 'repeats', 'private','status','location', 'background', 'status_color', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','all_day_event','username','duration', 'link_count', 'has_other_participants','participant_ids','ctime','is_organizer', 'partstatus','model_name','permission_level'];
 
 	this.daysGridStore = new GO.data.JsonStore({
 		url:GO.url('calendar/event/store'),
@@ -1617,6 +1617,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	  
 	onDblClick : function(grid, event, actionData){
 		
+		if(event.permission_level<GO.permissionLevels.write)
+			return;
 		
 		if(!event.is_organizer && event.model_name=="GO_Calendar_Model_Event"){
 			// You are not authorised to edit this event because you are not the organizer.

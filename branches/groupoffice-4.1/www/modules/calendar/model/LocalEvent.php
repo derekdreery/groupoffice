@@ -158,6 +158,8 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 			$response['location']="";
 		}
 		
+		$response['permission_level']=$this->_event->permissionLevel;
+		
 		$response['status_color'] = $this->_event->getStatusColor();		
 		$response['repeats'] = $this->isRepeating();
 		$response['all_day_event'] = $this->isAllDay();
