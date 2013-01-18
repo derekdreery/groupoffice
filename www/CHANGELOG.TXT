@@ -1,8 +1,6 @@
-4.1.19
+18-01-2013 4.1.18
 - Changed the extension function in the fs_file class so it will not change capital letters to lower letters
 - In the email message grid added a row class for seen and unseen messages (.ml-seen-row and .ml-unseen-row)
-
-15-01-2013 4.1.18
 - Various small calendar fixes
 - Removed admin_only flag from user groups as it is replaced by permissions.
 - Updated Swedish
