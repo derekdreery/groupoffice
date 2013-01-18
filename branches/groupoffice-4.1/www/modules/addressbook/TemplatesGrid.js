@@ -24,6 +24,23 @@ GO.addressbook.TemplatesGrid = function(config)
 		singleSelect:false
 	});
 	config.title= GO.addressbook.lang['cmdPanelTemplate'];
+	
+	config.store = new GO.data.JsonStore({
+		url: GO.url('addressbook/template/store'),
+		baseParams: {
+			permissionLevel: GO.permissionLevels.write
+		},
+		root: 'results',
+		id: 'id',
+		fields: ['id', 'user_id', 'owner', 'name', 'type', 'acl_id','extension'],
+		remoteSort: true
+	});
+	config.store.setDefaultSort('name', 'ASC');
+	config.store.on('load', function(){
+		if(GO.documenttemplates)
+			GO.documenttemplates.ooTemplatesStore.load();
+	}, this);
+	
 	config.tbar= [
 	{
 		iconCls: 'btn-add',
@@ -55,7 +72,14 @@ GO.addressbook.TemplatesGrid = function(config)
 			this.deleteSelected();
 		},
 		scope: this
-	}
+	},
+	'-'
+	,
+		this.searchField = new GO.form.SearchField({
+			store: config.store,
+			width:150,
+			emptyText: GO.lang.strSearch
+		})
 	];
 	
 	var columnModel =  new Ext.grid.ColumnModel({
@@ -100,21 +124,6 @@ GO.addressbook.TemplatesGrid = function(config)
 		scope: this
 	};
 	
-	config.store = new GO.data.JsonStore({
-		url: GO.url('addressbook/template/store'),
-		baseParams: {
-			permissionLevel: GO.permissionLevels.write
-		},
-		root: 'results',
-		id: 'id',
-		fields: ['id', 'user_id', 'owner', 'name', 'type', 'acl_id','extension'],
-		remoteSort: true
-	});
-	config.store.setDefaultSort('name', 'ASC');
-	config.store.on('load', function(){
-		if(GO.documenttemplates)
-			GO.documenttemplates.ooTemplatesStore.load();
-	}, this);
 	
 	GO.addressbook.TemplatesGrid.superclass.constructor.call(this, config);
 	
