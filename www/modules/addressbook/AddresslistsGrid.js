@@ -22,6 +22,9 @@ GO.addressbook.AddresslistsGrid = function(config)
 	config.title= GO.addressbook.lang['cmdPanelMailings'];
 	config.layout= 'fit';
 	config.border=false;
+	
+	config.store=GO.addressbook.writableAddresslistsStore;
+	
 	config.tbar=[
 	{
 		iconCls: 'btn-add',
@@ -42,11 +45,18 @@ GO.addressbook.AddresslistsGrid = function(config)
 		},
 		disabled: !GO.settings.modules.addressbook.write_permission,
 		scope: this
-	}
+	},
+	'-'
+	,
+		this.searchField = new GO.form.SearchField({
+			store: config.store,
+			width:150,
+			emptyText: GO.lang.strSearch
+		})
 	];
 	config.paging=false;
 	//	config.id= 'ab-mailings-grid';
-	config.store=GO.addressbook.writableAddresslistsStore;
+	//config.store=GO.addressbook.writableAddresslistsStore;
 
 	config.view=new Ext.grid.GridView({
 		autoFill: true,
