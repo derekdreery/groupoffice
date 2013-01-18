@@ -1,5 +1,5 @@
 4.0.148
-- fixed problem with daylight saving when moving events
+- fixed problem with daylight saving when copying events
 
 11-01-2013 4.0.147
 - Merging 2 records will unset fields with type 'date' and value '0000-00-00'
