@@ -603,6 +603,8 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 			echo "{\n";
 			
 			//$router = new GO_Base_Router();
+			
+			$this->checkRequiredParameters(array('requests'), $params);
 
 			$requests = json_decode($params['requests'], true);
 			if(is_array($requests)){
