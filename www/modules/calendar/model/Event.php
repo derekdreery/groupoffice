@@ -848,7 +848,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				
 				$localEvent->setAlternateEndTime($endTime->format('U'));
 
-				if($localEvent->getAlternateStartTime()<$origPeriodEndTime && $localEvent->getAlternateEndTime()>=$origPeriodStartTime){
+				if($localEvent->getAlternateStartTime()<$origPeriodEndTime && $localEvent->getAlternateEndTime()>$origPeriodStartTime){
 					if(!$event->hasException($occurenceStartTime))
 						$this->_calculatedEvents[$occurenceStartTime . '-' . $origEventAttr['id']] = $localEvent;
 				}
