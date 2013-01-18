@@ -82,4 +82,16 @@ class GO_Calendar_Model_Category extends GO_Base_Db_ActiveRecord{
 		 
 		 return GO_Calendar_Model_Category::model()->find($findParams);
 	 }
+	 
+	 protected function afterSave($wasNew) {
+		 
+		 $c = new GO_Base_Db_Connection();		 
+		 $c->createStatement()->update(
+						 GO_Calendar_Model_Event::model()->tableName(), 
+						 array('background'=>$this->color),
+						 'category_id=:category_id',
+						 array('category_id'=>$this->id));
+		 
+		 return parent::afterSave($wasNew);
+	 }
 }

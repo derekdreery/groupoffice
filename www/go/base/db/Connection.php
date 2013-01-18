@@ -87,12 +87,12 @@ class GO_Base_Db_Connection
 	{
 		if ($this->_pdo === null)
 		{
-			if (empty($this->connectionString))
-				throw new GO_Base_Exception_Database('Connection.connectionString cannot be empty.');
+//			if (empty($this->connectionString))
+//				throw new GO_Base_Exception_Database('Connection.connectionString cannot be empty.');
 			try
 			{
 				$this->_pdo = $this->createPdoInstance();
-				$this->initConnection($this->_pdo);
+				//$this->initConnection($this->_pdo);
 				$this->_active = true;
 			}
 			catch (PDOException $e)
@@ -121,38 +121,39 @@ class GO_Base_Db_Connection
 	 */
 	protected function createPdoInstance()
 	{
-		if (($pos = strpos($this->connectionString, ':')) !== false)
-			$driver = strtolower(substr($this->connectionString, 0, $pos));
-		return new PDO($this->connectionString, $this->username, $this->password);
+		if(empty($this->connectionString))
+			return GO::getDbConnection ();
+		else	
+			return new GO_Base_Db_PDO($this->connectionString, $this->username, $this->password);
 	}
 
-	/**
-	 * Initializes the open db connection.
-	 * This method is invoked right after the db connection is established.
-	 * The default implementation is to set the charset for MySQL and PostgreSQL database connections.
-	 * @param PDO $pdo the PDO instance
-	 */
-	protected function initConnection($pdo)
-	{
-		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		//$pdo->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('GO_Base_Db_ActiveStatement', array()));
-		$driver = strtolower($pdo->getAttribute(PDO::ATTR_DRIVER_NAME));
-
-		if ($this->emulatePrepare !== null && constant('PDO::ATTR_EMULATE_PREPARES'))
-			$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, $this->emulatePrepare);
-		if ($this->charset !== null)
-		{
-			if (in_array($driver, array('pgsql', 'mysql', 'mysqli')))
-				$pdo->exec('SET NAMES ' . $pdo->quote($this->charset));
-		}
-
-		if (in_array($driver, array('mysql', 'mysqli')))
-			$this->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true); //todo: needed for foundRows
-		if (GO::config()->debug)
-		{
-			$pdo->exec("SET sql_mode='TRADITIONAL'");
-		}
-	}
+//	/**
+//	 * Initializes the open db connection.
+//	 * This method is invoked right after the db connection is established.
+//	 * The default implementation is to set the charset for MySQL and PostgreSQL database connections.
+//	 * @param PDO $pdo the PDO instance
+//	 */
+//	protected function initConnection($pdo)
+//	{
+//		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+//		//$pdo->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('GO_Base_Db_ActiveStatement', array()));
+//		$driver = strtolower($pdo->getAttribute(PDO::ATTR_DRIVER_NAME));
+//
+//		if ($this->emulatePrepare !== null && constant('PDO::ATTR_EMULATE_PREPARES'))
+//			$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, $this->emulatePrepare);
+//		if ($this->charset !== null)
+//		{
+//			if (in_array($driver, array('pgsql', 'mysql', 'mysqli')))
+//				$pdo->exec('SET NAMES ' . $pdo->quote($this->charset));
+//		}
+//
+//		if (in_array($driver, array('mysql', 'mysqli')))
+//			$this->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true); //todo: needed for foundRows
+//		if (GO::config()->debug)
+//		{
+//			$pdo->exec("SET sql_mode='TRADITIONAL'");
+//		}
+//	}
 
 	/**
 	 * Returns the PDO instance.
