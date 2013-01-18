@@ -1462,7 +1462,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 		
 		//set is_organizer flag
-		if($vobject->organizer){
+		if($vobject->organizer && $this->calendar){
 			$organizerEmail = str_replace('mailto:','', strtolower((string) $vobject->organizer));
 			$this->is_organizer=$organizerEmail == $this->calendar->user->email;
 		}		
