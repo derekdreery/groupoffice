@@ -61,14 +61,16 @@ GO.email.MessagesGrid = function(config){
 				renderer:Ext.util.Format.fileSize
 			}]
 		});
-		config.view=new Ext.grid.GridView({
-			emptyText: GO.lang['strNoItems'],
-			getRowClass:function(row, index) {
-				if (row.data['seen'] == '0') {
-					return 'ml-new-row';
-				}
-			}
-		});
+//		config.view=new Ext.grid.GridView({
+//			emptyText: GO.lang['strNoItems'],
+//			getRowClass:function(row, index) {				
+//				if (row.data.seen == '0') {
+//					return 'ml-new-row';
+//				} else {
+//					return 'ml-readed-row';
+//				}
+//			}
+//		});
 	
 	}else
 	{
@@ -118,10 +120,21 @@ GO.email.MessagesGrid = function(config){
 				
 		config.autoExpandColumn='message';
 		
-		config.view=new Ext.grid.GridView({
-			emptyText: GO.lang['strNoItems']
-		});
+//		config.view=new Ext.grid.GridView({
+//			emptyText: GO.lang['strNoItems']
+//		});
 	}
+	
+	config.view=new Ext.grid.GridView({
+			emptyText: GO.lang['strNoItems'],
+			getRowClass:function(row, index) {				
+				if (row.data.seen == '0') {
+					return 'ml-seen-row';
+				} else {
+					return 'ml-unseen-row';
+				}
+			}
+		});
 	
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
