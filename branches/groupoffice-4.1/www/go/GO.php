@@ -215,19 +215,6 @@ class GO{
 //		GO::debug("Connect: mysql:host=$dbhost;dbname=$dbname, $dbuser, ***",$options);
 
 		self::$db = new GO_Base_Db_PDO("mysql:host=$dbhost;dbname=$dbname;port=$dbport", $dbuser, $dbpass, $options);
-//		self::$db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
-//		self::$db->setAttribute( PDO::ATTR_STATEMENT_CLASS, array( 'GO_Base_Db_ActiveStatement', array() ) );
-//
-//		//todo needed for foundRows
-//		self::$db->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY,true); 
-//
-//		self::$db->query("SET NAMES utf8");
-//
-//		if(GO::config()->debug){
-//			//GO::debug("Setting MySQL sql_mode to TRADITIONAL");
-//			self::$db->query("SET sql_mode='TRADITIONAL'");
-//		}
-
 	}
 
 	/**
