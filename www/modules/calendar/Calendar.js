@@ -1942,7 +1942,13 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 						this.viewsGrid.deleteSelected();
 					},
 					scope:this
-				}]
+				},
+				'-',
+						this.searchField = new GO.form.SearchField({
+							store: this.writableViewsStore,
+							width:150,
+							emptyText: GO.lang.strSearch
+						})]
 			});
 			
 			this.viewsGrid.on("rowdblclick", function(grid, rowClicked, e){

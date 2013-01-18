@@ -55,7 +55,15 @@ GO.calendar.GroupsGrid = function(config){
 			this.deleteSelected();
 		},
 		scope: this
-	}];
+	},
+	'-'
+	,
+		this.searchField = new GO.form.SearchField({
+			store: config.store,
+			width:150,
+			emptyText: GO.lang.strSearch
+		})
+	];
 
 	GO.calendar.GroupsGrid.superclass.constructor.call(this, config);
 

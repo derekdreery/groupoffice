@@ -52,7 +52,15 @@ GO.calendar.ResourcesGrid = function(config){
 			this.deleteSelected();
 		},
 		scope:this
-	}];
+	},
+	'-'
+	,
+		this.searchField = new GO.form.SearchField({
+			store: config.store,
+			width:150,
+			emptyText: GO.lang.strSearch
+		})
+	];
 
 
 	GO.calendar.ResourcesGrid.superclass.constructor.call(this, config);
