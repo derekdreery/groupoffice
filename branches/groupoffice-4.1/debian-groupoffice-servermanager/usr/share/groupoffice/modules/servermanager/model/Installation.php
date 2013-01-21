@@ -458,9 +458,9 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		
 		$this->_currentHistory = $history;
 		
-		var_dump($this->columns);
-		
-		var_dump($this->getModifiedAttributes());
+//		var_dump($this->columns);
+//		
+//		var_dump($this->getModifiedAttributes());
 
 		return true;
 	}
