@@ -290,7 +290,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 				if($event = $participant->getParticipantEvent())
 				{
 					if(!$event->is_organizer && $event->calendar->userHasCreatePermission())
-						$event->delete();
+						$event->delete(true);
 				}
 				$participant->delete();
 			}
