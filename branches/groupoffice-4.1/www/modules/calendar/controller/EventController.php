@@ -185,7 +185,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$isNewEvent = empty($params['id']);
 
 		if (!$model->isResource()) {
-			$this->_saveParticipants($params, $model, $isNewEvent, $modifiedAttributes);
+			$response['participants']=$this->_saveParticipants($params, $model, $isNewEvent, $modifiedAttributes);
 			$this->_saveResources($params, $model, $isNewEvent, $modifiedAttributes);
 		}
 		
@@ -277,6 +277,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 	private function _saveParticipants($params, GO_Calendar_Model_Event $event, $isNewEvent, $modifiedAttributes) {
 
+		$response = array();
+		
 		$ids = array();
 		if (!empty($params['participants'])) {
 			$participants = json_decode($params['participants'], true);
@@ -295,6 +297,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				$participant->event_id = $event->id;
 				$participant->save();
 				$ids[] = $participant->id;
+				
+				$response[]=$participant->toJsonArray($event->start_time, $event->end_time);
 			}
 
 			$stmt = GO_Calendar_Model_Participant::model()->find(
@@ -307,6 +311,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			);
 			$stmt->callOnEach('delete');
 		}
+		
+		return $response;
 	}
 	/**
 	 *
