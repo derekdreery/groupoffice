@@ -33,7 +33,7 @@ GO.servermanager.InstallationsGrid = function(config){
 		root: 'results',
 		id: 'id',
 		totalProperty:'total',
-		fields: ['id','status','name','webmaster_email','title','default_country','language','default_timezone','default_currency','default_date_format','default_date_separator','default_thousands_separator','theme','allow_themes','allow_password_change','allow_registration','allow_duplicate_email','auto_activate_accounts','notify_admin_of_registration','registration_fields','required_registration_fields','register_modules_read','register_modules_write','register_user_groups','register_visible_user_groups','max_users','ctime','mtime','count_users', 'install_time','lastlogin','total_logins','database_usage','file_storage_usage','mailbox_usage','total_usage', 'comment', 'ctime', 'serverclient_domains', 'features', 'enabled'],
+		fields: ['id','status','name','webmaster_email','title','default_country','language','default_timezone','default_currency','default_date_format','default_date_separator','default_thousands_separator','theme','allow_themes','allow_password_change','allow_registration','allow_duplicate_email','auto_activate_accounts','notify_admin_of_registration','registration_fields','required_registration_fields','register_modules_read','register_modules_write','register_user_groups','register_visible_user_groups','max_users','ctime','mtime','count_users', 'install_time','lastlogin','total_logins','database_usage','file_storage_usage','mailbox_usage','total_usage', 'comment', 'ctime', 'serverclient_domains', 'features', 'enabled','quota'],
 		remoteSort: true
 	});
 	
@@ -85,6 +85,10 @@ GO.servermanager.InstallationsGrid = function(config){
 		{
 			header: GO.servermanager.lang.fileStorageUsage,
 			dataIndex: 'file_storage_usage',
+			align:'right'
+		},{
+			header: GO.servermanager.lang.quota,
+			dataIndex: 'quota',
 			align:'right'
 		},
 		{

@@ -544,7 +544,7 @@ Ext.extend(GO.servermanager.InstallationDialog, GO.Window,{
 
 		this.usersGrid = new GO.servermanager.UsersGrid();
 		this.usageHistoryGrid = new GO.servermanager.UsageHistoryGrid();
-		this.autoInvoiceTab = new GO.servermanager.AutomaticInvoiceTab();
+//		this.autoInvoiceTab = new GO.servermanager.AutomaticInvoiceTab();
 
 		this.modulesGrid = new GO.grid.MultiSelectGrid({
 			id:'sm-modules',
@@ -590,38 +590,13 @@ Ext.extend(GO.servermanager.InstallationDialog, GO.Window,{
 				this.modulesGrid.store.load();
 		},this);
 
-		var items  = [this.propertiesPanel, this.modulesGrid, this.usersGrid, this.usageHistoryGrid, this.autoInvoiceTab];
-		
-    
-
-    
-		
-		//Create the standard GO linkspanel
-		/*this.linksPanel = new GO.grid.LinksPanel({title: GO.lang['strLinks']});
-		items.push(this.linksPanel);
-		if(GO.customfields && GO.customfields.types["13"])
-		{
-			for(var i=0;i<GO.customfields.types["13"].panels.length;i++)
-			{			  	
-				items.push(GO.customfields.types["13"].panels[i]);
-			}
-		}*/
-		
-		
-		/*this.configPanel = new Ext.Panel({
-			title: GO.servermanager.lang.configEditor, 
-			layout: 'fit',
-			border:false,
-			disabled:true,
-			items: [ new Ext.form.TextArea({
-				name: 'config',
-				fieldLabel: '',
-				hideLabel: true,
-				anchor:'100% 100%'
-			})
-			]
-		});
-		items.push(this.configPanel);*/
+		var items  = [
+			this.propertiesPanel, 
+			this.modulesGrid, 
+			this.usersGrid, 
+			this.usageHistoryGrid
+			//, this.autoInvoiceTab
+			];
 		
  
     this.tabPanel = new Ext.TabPanel({

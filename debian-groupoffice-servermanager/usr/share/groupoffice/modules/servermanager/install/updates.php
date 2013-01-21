@@ -294,3 +294,10 @@ $updates['201212111333'][]="CREATE TABLE `li_servers` (
 
 
 $updates['201212111333'][]="ALTER TABLE  `sm_installation_modules` ADD  `usercount` INT NOT NULL DEFAULT  '0'";
+
+
+$updates['201301211616'][]="ALTER TABLE `sm_installations` ADD `file_storage_usage` INT NOT NULL DEFAULT '0',
+ADD `database_usage` BIGINT NOT NULL DEFAULT '0',
+ADD `mailbox_usage` BIGINT NOT NULL DEFAULT '0',
+ADD `quota` BIGINT NOT NULL DEFAULT '0',
+ADD `total_logins` BIGINT NOT NULL DEFAULT '0'";
