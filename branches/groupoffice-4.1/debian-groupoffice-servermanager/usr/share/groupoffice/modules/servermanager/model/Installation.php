@@ -89,31 +89,19 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	
 	public function getDatabaseUsageText()
 	{
-		if($this->currentusage != null)
-			return $this->currentusage->databaseUsageText;
-		else
-			return '-';
+		return GO_Base_Util_Number::formatSize($this->database_usage);
 	}
 	public function getFileStorageUsageText()
 	{
-		if($this->currentusage != null)
-			return $this->currentusage->getFileStorageUsageText();
-		else
-			return '-';
+		return GO_Base_Util_Number::formatSize($this->file_storage_usage);
 	}
 	public function getMailboxUsageText()
 	{
-		if($this->currentusage != null)
-			return $this->currentusage->getMailboxUsageText();
-		else
-			return '-';
+		return GO_Base_Util_Number::formatSize($this->mailbox_usage);
 	}
 	public function getTotalUsageText()
 	{
-		if($this->currentusage != null)
-			return $this->currentusage->getTotalUsageText();
-		else
-			return '-';
+		return GO_Base_Util_Number::formatSize($this->database_usage + $this->file_storage_usage + $this->mailbox_usage);
 	}
 	public function getLastUsageCheckDate()
 	{
@@ -452,10 +440,12 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		$history->installation_id = $this->id;
 		//recalculated the size of the file folder
 		$folder = new GO_Base_Fs_Folder($this->config['file_storage_path']);
-		$history->file_storage_usage = $folder->calculateSize();
+		$this->file_storage_usage = $history->file_storage_usage = $folder->calculateSize();
 		//Recalculate the size of the database and mailbox
-		$history->database_usage = $this->_calculateDatabaseSize();
-		$history->mailbox_usage = $this->_calculateMailboxUsage();
+		$this->database_usage = $history->database_usage = $this->_calculateDatabaseSize();
+		$this->mailbox_usage = $history->mailbox_usage = $this->_calculateMailboxUsage();
+		
+		$this->quota = $this->config['quota'];
 		
 		GO::config()->save_setting('mailbox_usage', $history->mailbox_usage);
 		GO::config()->save_setting('file_storage_usage', $history->file_storage_usage);
@@ -467,6 +457,10 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		$history->total_logins = $this->_total_logins;
 		
 		$this->_currentHistory = $history;
+		
+		var_dump($this->columns);
+		
+		var_dump($this->getModifiedAttributes());
 
 		return true;
 	}
@@ -621,15 +615,16 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		if(!empty(GO::config()->serverclient_server_url) && !empty($this->config['serverclient_domains'])) {
 			$c = new GO_Serverclient_HttpClient();
 			$c->postfixLogin();
-			
+
 			$response = $c->request(
 					GO::config()->serverclient_server_url."?r=postfixadmin/domain/getUsage", 
 					array('domains'=>json_encode(explode(",",$this->config['serverclient_domains'])))
 			);
-			
+
 			$result = json_decode($response);
 			$mailbox_usage=$result->usage;			
 		}
+
 		return $mailbox_usage;
 	}
 

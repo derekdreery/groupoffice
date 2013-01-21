@@ -26,6 +26,11 @@ CREATE  TABLE IF NOT EXISTS `sm_installations` (
   `admin_name` VARCHAR(100) NULL ,
   `status` VARCHAR(50) NOT NULL DEFAULT 'ignore' ,
   `token` VARCHAR(100) NOT NULL ,
+  `file_storage_usage` BIGINT NOT NULL DEFAULT '0',
+  `database_usage` BIGINT NOT NULL DEFAULT '0',
+  `mailbox_usage` BIGINT NOT NULL DEFAULT '0',
+  `quota` BIGINT NOT NULL DEFAULT '0',
+  `total_logins` INT NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 

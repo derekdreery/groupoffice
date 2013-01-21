@@ -23,15 +23,18 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		
 		foreach($items as $item){
 			if($item->isFolder() && $item->child('config.php')){
-				$installation = GO_ServerManager_Model_Installation::model()->findSingleByAttribute('name', $item->name());
-				if(!$installation){
-					echo "Importing ".$item->name()."\n";
-					$installation = new GO_ServerManager_Model_Installation();
-					$installation->ignoreExistingForImport=true;
-					$installation->name=$item->name();
-					$installation->save();
-					$installation->loadUsageData();					
-					
+				
+				if(is_dir('/home/govhosts/'.$item->name())){
+					$installation = GO_ServerManager_Model_Installation::model()->findSingleByAttribute('name', $item->name());
+					if(!$installation){
+						echo "Importing ".$item->name()."\n";
+						$installation = new GO_ServerManager_Model_Installation();
+						$installation->ignoreExistingForImport=true;
+						$installation->name=$item->name();
+						$installation->save();
+						$installation->loadUsageData();			
+
+					}
 				}
 			}
 		}
@@ -125,7 +128,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			trigger_error("Could not remove mysql user ".$installation->dbUser,E_USER_WARNING);
 		}
 		try{
-			
+			GO::getDbConnection()->query("DROP DATABASE `".$installation->dbName."`");
 		}catch(Exception $e){
 			trigger_error("Could not remove mysql database ".$installation->dbName,E_USER_WARNING);
 		}		
@@ -488,14 +491,17 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		return $tmpFile;
 	}
 
+
 	public function formatStoreRecord($record, $model, $store) {
 		
 		$record['total_usage']= $model->totalUsageText;
 		$record['file_storage_usage']= $model->fileStorageUsageText;
+		
 		$record['database_usage']= $model->databaseUsageText;
 		$record['mailbox_usage']= $model->mailboxUsageText;
 		$record['count_users'] = $model->countUsers;
 		$record['total_logins'] = $model->totalLogins;
+		$record['quota']=GO_Base_Util_Number::formatSize($model->quota);
 		
 		if(file_exists($model->configPath))
 		{
@@ -722,11 +728,13 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			
 			echo "Creating report for ".$installation->name."\n";
 			try{
-				if($installation->loadUsageData())
+				if($installation->loadUsageData()){
+					
 					$report['installations'][]=array_merge($installation->getAttributes(), $installation->getHistoryAttributes());
-				else
+				}else{
 					echo "Unable to fetch data for ".$installation->name."\n";
-				
+				}
+
 				//check if installation is expired and suspend if so
 				if($installation->isExpired){
 					if($installation->suspend())
@@ -739,6 +747,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 					echo "ERROR: failed to save new installation information\n";
 				
 			}catch(Exception $e){
+				echo "ERROR:\n";
 				echo $e->getMessage()."\n";
 				$report['errors']=(string) $e;
 			}
