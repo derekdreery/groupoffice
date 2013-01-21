@@ -393,7 +393,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	public function getIsExpired()
 	{
 		return ($this->status == GO_ServerManager_Model_Installation::STATUS_TRIAL && 
-						$this->ctime<GO_Base_Util_Date::date_add(time(),-30));
+						$this->ctime<GO_Base_Util_Date::date_add(time(),-40));
 
 	}
 	
