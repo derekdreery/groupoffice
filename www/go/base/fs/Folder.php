@@ -123,7 +123,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 * @param boolean $appendNumberToNameIfDestinationExists Rename the folder like "folder (1)" if it already exists.	 * 
 	 * @return GO_Base_Fs_Folder $destinationFolder
 	 */
-	public function move($destinationFolder,$newFolderName=false,$appendNumberToNameIfDestinationExists=false){
+	public function move(GO_Base_Fs_Folder $destinationFolder, $newFolderName=false,$appendNumberToNameIfDestinationExists=false){
 		if(!$this->exists())
 			return false;
 		
