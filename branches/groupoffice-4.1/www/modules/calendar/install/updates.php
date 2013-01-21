@@ -191,3 +191,6 @@ $updates['201212040946'][] ="CREATE  TABLE IF NOT EXISTS `cal_views_groups` (
 ENGINE = InnoDB";
 
 $updates['201212040946'][]="update cal_events set rrule='FREQ=YEARLY' WHERE rrule='RRULE:YM1 #0';";
+
+
+$updates['201301211137'][]="delete FROM `cal_participants` WHERE event_id=0;";
