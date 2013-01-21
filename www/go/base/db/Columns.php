@@ -42,6 +42,8 @@ class GO_Base_Db_Columns{
 				$gotype = 'textfield';
 				$default = $field['Default'];
 				
+				$ai =  strpos($field['Extra'],'auto_increment')!==false;
+				
 				$pdoType = PDO::PARAM_STR;
 				switch ($type) {
 					case 'int':
@@ -56,7 +58,7 @@ class GO_Base_Db_Columns{
 
 						$length = 0;
 						
-						$default = intval($default);
+						$default = $ai ? null : intval($default);
 
 						break;		
 
@@ -102,7 +104,7 @@ class GO_Base_Db_Columns{
 				
 
 				//HACK: When a database may not be null and has no default value value is empty string
-				if($field['Null']=='NO' && is_null($default) && strpos($field['Extra'],'auto_increment')===false)
+				if($field['Null']=='NO' && is_null($default) && !$ai)
 					$default='';
 				
 				//workaround for old boolean fields as enums. Should be using bool now.
