@@ -110,6 +110,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	private $_loadingFromDatabase=true;
 	
 	/**
+	 * Set this property in the child class too tablename of AR
+	 * @var string
+	 */
+	protected static $tableName = false;
+	
+	/**
 	 *
 	 * @var int Link type of this Model used for the link system. See also the linkTo function
 	 */
@@ -175,9 +181,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * 
 	 * @var string The database table name
 	 */
-	
 	public function tableName(){
-		return false;
+		return static::$tableName;
+	}
+	
+	/**
+	 * Get a static model of child for AR find functions
+	 * @return GO_Base_Db_ActiveRecord the static instanse of childclass
+	 * @since GroupOffice 4.1 (PHP 5.3)
+	 */
+	public static function model()
+	{	
+		return new static();
 	}
 	
 	/**
