@@ -112,5 +112,22 @@ abstract class GO_Base_Data_AbstractStore {
 		$this->response['results'][]=$attributes;
 	}
 
+	/**
+	 * Set a title response
+	 * @param String $title 
+	 */
+	public function setTitle($title){
+		$this->response['title'] = $title;
+	}
+	/**
+	 * Return title from response
+	 * @return string Title of store's response
+	 */
+	public function getTitle(){
+	  if(isset($this->response['title']))
+		return $this->response['title'];
+	  else
+		return "";
+	}
 	
 }

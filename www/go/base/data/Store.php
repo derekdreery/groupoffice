@@ -59,19 +59,6 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 		$this->_defaultSortOrder=$order;
 		$this->_defaultSortDirection=$direction;
 	}
-	
-	
-	/**
-	 * Set a title response
-	 * 
-	 * @param String $title 
-	 */
-	public function setTitle($title){
-		$this->response['title'] = $title;
-	}
-	
-	
-	
 
 	/**
 	 * Set the statement that contains the models for the grid data.
