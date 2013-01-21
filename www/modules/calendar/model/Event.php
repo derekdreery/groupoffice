@@ -1306,6 +1306,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 	
 	
+	public $importedParticiants=array();
+	
+	
 	/**
 	 * Import an event from a VObject 
 	 * 
