@@ -28,6 +28,19 @@ class GO_Base_Util_Date_DateTime extends DateTime {
 	public static function fromUnixtime($unixtime) {
 		return new self(date('Y-m-d H:i:s', $unixtime), new DateTimeZone(date_default_timezone_get()));
 	}
+	
+	/**
+	 * Format the datetime to the format given
+	 * If there is no format specified the default user specified format will be used
+	 * @param string $format the format the date should be returned
+	 * @return string formatted date
+	 */
+	public function format($format=null)
+	{
+	  if($format===null)
+		return GO_Base_Util_Date::get_timestamp($this->getTimestamp());
+	  return parent::format($format);
+	}
 
 	/**
 	 * Get the number of days elapsed. We could not use DateTime::diff() because it's only
