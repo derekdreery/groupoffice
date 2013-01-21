@@ -82,17 +82,17 @@ class GO_Base_Util_Number {
 			return 0;
 		
 		switch ($size) {
-			case ($size > 1073741824) :
+			case ($size >= 1073741824) :
 				$size = self::localize($size / 1073741824, $decimals);
 				$size .= " G";
 				break;
 
-			case ($size > 1048576) :
+			case ($size >= 1048576) :
 				$size = self::localize($size / 1048576, $decimals);
 				$size .= " M";
 				break;
 
-			case ($size > 1024) :
+			case ($size >= 1024) :
 				$size = self::localize($size / 1024, $decimals);
 				$size .= " K";
 				break;
