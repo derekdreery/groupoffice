@@ -566,6 +566,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				}
 				
 				
+				this.participantsPanel.store.loadData({results:action.result.participants});
+				
+				
 				GO.calendar.handleMeetingRequest(action.result);
 
 			},
