@@ -184,16 +184,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	public function tableName(){
 		return static::$tableName;
 	}
-	
-	/**
-	 * Get a static model of child for AR find functions
-	 * @return GO_Base_Db_ActiveRecord the static instanse of childclass
-	 * @since GroupOffice 4.1 (PHP 5.3)
-	 */
-	public static function model()
-	{	
-		return new static();
-	}
+//	
+//	/**
+//	 * Get a static model of child for AR find functions
+//	 * @return GO_Base_Db_ActiveRecord the static instanse of childclass
+//	 * @since GroupOffice 4.1 (PHP 5.3)
+//	 */
+//	public static function model($className=__CLASS__)
+//	{	
+//		return new static();
+//	}
 	
 	/**
 	 * 
