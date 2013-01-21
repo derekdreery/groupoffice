@@ -129,9 +129,9 @@ GO.email.MessagesGrid = function(config){
 			emptyText: GO.lang['strNoItems'],
 			getRowClass:function(row, index) {				
 				if (row.data.seen == '0') {
-					return 'ml-seen-row';
-				} else {
 					return 'ml-unseen-row';
+				} else {
+					return 'ml-seen-row';
 				}
 			}
 		});
