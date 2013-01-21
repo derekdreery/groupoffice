@@ -917,7 +917,6 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		if (!$destinationFolder->checkPermissionLevel(GO_Base_Model_Acl::CREATE_PERMISSION))
 			throw new GO_Base_Exception_AccessDenied();
 
-		GO::debug(GO::session()->values['files']['uploadqueue']);
 
 		while ($tmpfile = array_shift(GO::session()->values['files']['uploadqueue'])) {
 
