@@ -298,6 +298,22 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		}
 	}
 	
+	
+	public function mysqldump($outputDir){
+		$c = $this->getConfig();
+		
+		$outputFile=rtrim($outputDir,'/')."/".$c['db_name'].".sql";
+	
+		$cmd = "mysqldump --force --opt --user=".$c['db_user']." --password=".$c['db_pass']." --databases ".$c['db_name']." > \"$outputFile\"";
+		GO::debug($cmd);
+		exec($cmd, $output,$retVar);
+		
+		if($retVar != 0)
+			throw new Exception("Mysqldump error: ".implode("\n", $output));
+		
+		return file_exists($outputFile);
+	}
+	
 	/**
 	 * Set a config.php variable for this installation
 	 * 

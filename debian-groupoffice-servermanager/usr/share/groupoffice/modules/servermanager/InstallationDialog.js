@@ -186,9 +186,9 @@ Ext.extend(GO.servermanager.InstallationDialog, GO.Window,{
 			failure: function(form, action) {
 				if(action.failureType == 'client')
 				{					
-					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strErrorsInForm']);			
+					GO.errorDialog.show(GO.lang['strErrorsInForm']);			
 				} else {
-					Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
+					GO.errorDialog.show(action.result.feedback);
 				}
 			},
 			scope: this

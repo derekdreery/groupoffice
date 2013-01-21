@@ -29,12 +29,56 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 					$installation = new GO_ServerManager_Model_Installation();
 					$installation->ignoreExistingForImport=true;
 					$installation->name=$item->name();
-					$installation->loadUsageData();					
 					$installation->save();
+					$installation->loadUsageData();					
+					
 				}
 			}
 		}
 		echo "Done\n\n";
+	}
+	
+	
+	public function actionUndestroy($params){
+		
+		$this->checkRequiredParameters(array('name'), $params);
+		
+		$trashFolderGovhosts = new GO_Base_Fs_Folder('/home/gotrash/govhosts/'.$params['name']);
+		if(!$trashFolderGovhosts->exists())
+			throw new Exception($trashFolderGovhosts->path().' does not exist');
+		
+		$trashFolderConfig = new GO_Base_Fs_Folder('/home/gotrash/etc/groupoffice/'.$params['name']);
+		if(!$trashFolderConfig->exists())
+			throw new Exception($trashFolderConfig->path().' does not exist');
+		
+		echo "Retoring files...\n";
+		$trashFolderGovhosts->move(new GO_Base_Fs_Folder('/home/govhosts'));	
+		$trashFolderConfig->move(new GO_Base_Fs_Folder('/etc/groupoffice'));
+		
+		exec('chown www-data:www-data -R '.$trashFolderGovhosts->path());
+		
+		
+
+		require_once('/etc/groupoffice/'.$params['name'].'/config.php');
+		
+		
+		GO::getDbConnection()->query("CREATE DATABASE IF NOT EXISTS `".$config['db_name']."`");	
+		
+		$this->_createDbUser($config);
+		
+		echo "Retoring database...\n";
+		$cmd = 'mysql --user='.$config['db_user'].' --password='.$config['db_pass'].' '.$config['db_name'].' < /home/gotrash/mysqldump/'.$config['db_name'].'.sql';
+		system($cmd);
+		
+		echo "Creating installation in servermanager...\n";
+		$installation = new GO_ServerManager_Model_Installation();
+		$installation->ignoreExistingForImport=true;
+		$installation->name=$params['name'];
+		$installation->save();
+		$installation->loadUsageData();					
+		
+		echo "Restore done!\n";
+		
 	}
 	
 	/**
@@ -44,7 +88,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	 * @throws Exception 
 	 */
 	public function actionDestroy($params){
-		if(PHP_SAPI!='cli')
+		if(!$this->isCli())
 			throw new Exception("Action servermanager/installation/delete may only be run by root on the command line");
 		
 		$installation = GO_ServerManager_Model_Installation::model()->findByPk($params['id']);
@@ -62,14 +106,18 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$trashFolderGovhosts = new GO_Base_Fs_Folder('/home/gotrash/govhosts');
 		$trashFolderGovhosts->create();
 		
-		$installationFolder = new GO_Base_Fs_Folder($installation->installPath);
-		$installationFolder->move($trashFolderGovhosts);
-		
 		$trashFolderConfig = new GO_Base_Fs_Folder('/home/gotrash/etc/groupoffice');
 		$trashFolderConfig->create();
 		
-		$configFolder = new GO_Base_Fs_Folder('/etc/groupoffice/'.$installation->name);
-		$configFolder->move($trashFolderConfig);
+		$trashFolderMysql = new GO_Base_Fs_Folder('/home/gotrash/mysqldump');
+		$trashFolderMysql->create();
+		
+		try{
+			$installation->mysqldump('/home/gotrash/mysqldump');
+		}catch(Exception $e){
+			trigger_error("Failed to backup MySQL. Skipped drop of database ".$installation->dbName,E_USER_WARNING);
+		}
+		
 		
 		try{
 			GO::getDbConnection()->query("DROP USER '".$installation->dbUser."'@'".GO::config()->db_host."'");		
@@ -77,10 +125,17 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			trigger_error("Could not remove mysql user ".$installation->dbUser,E_USER_WARNING);
 		}
 		try{
-			GO::getDbConnection()->query("DROP DATABASE `".$installation->dbName."`");
+			
 		}catch(Exception $e){
 			trigger_error("Could not remove mysql database ".$installation->dbName,E_USER_WARNING);
-		}
+		}		
+		
+		$installationFolder = new GO_Base_Fs_Folder($installation->installPath);
+		$installationFolder->move($trashFolderGovhosts);
+		
+		$configFolder = new GO_Base_Fs_Folder('/etc/groupoffice/'.$installation->name);
+		$configFolder->move($trashFolderConfig);
+		
 	}	
 	
 	private function _getConfigFromFile($path){
@@ -198,6 +253,11 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$dataFolder->create(0755);
 		$dataFolder->chown('www-data');
 		$dataFolder->chgrp('www-data');
+		
+		$log = new GO_Base_Fs_Folder($installation->installPath.'data/log');
+		$log->create(0755);
+		$log->chown('www-data');
+		$log->chgrp('www-data');
 				
 		$tmpFolder = new GO_Base_Fs_Folder('/tmp/'.$installation->name);
 		$tmpFolder->create(0777);
@@ -582,6 +642,31 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			
 		}
 	}	
+	
+	
+	protected function removeSuspendedAndUnused($params){
+		
+		if(!$this->isCli())
+			throw new Exception("This action may only be ran on the command line.");
+		
+		//unused for two months
+		$lastlogin = GO_Base_Util_Date::date_add(time(), 0, -2);
+		
+		
+		$fp = GO_Base_Db_FindParams::newInstance();
+		$fp->getCriteria()->addCondition('lastlogin', 0,'>')->addCondition('lastlogin', $lastlogin,'<');
+		
+		$stmt = GO_Servermanager_Model_Installation::model()->findByAttribute('lastlogin', GO_Base_Util);
+		while($installation = $stmt->fetch()){
+			echo "Deleting ".$installation->name."\n";
+			
+			if(!empty($params['really']))
+				$installation->delete();
+		}
+		
+		echo "Done\n\n";
+	}
+	
 	
 	/**
 	 * This will test the connection with the billing module
