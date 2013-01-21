@@ -650,7 +650,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	}	
 	
 	
-	protected function removeSuspendedAndUnused($params){
+	protected function actionRemoveSuspendedAndUnused($params){
 		
 		if(!$this->isCli())
 			throw new Exception("This action may only be ran on the command line.");
@@ -660,9 +660,9 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		
 		
 		$fp = GO_Base_Db_FindParams::newInstance();
-		$fp->getCriteria()->addCondition('lastlogin', 0,'>')->addCondition('lastlogin', $lastlogin,'<');
+		$fp->getCriteria()->addCondition('lastlogin', $lastlogin,'<');
 		
-		$stmt = GO_Servermanager_Model_Installation::model()->findByAttribute('lastlogin', GO_Base_Util);
+		$stmt = GO_Servermanager_Model_Installation::model()->find($fp);
 		while($installation = $stmt->fetch()){
 			echo "Deleting ".$installation->name."\n";
 			
