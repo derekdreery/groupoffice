@@ -129,7 +129,7 @@ class GO_Base_Session extends GO_Base_Observable{
 	 */
 	public function clearUserTempFiles(){
 		if(GO::user()){					
-			GO::config()->getTempFolder()->delete();
+			GO::config()->getTempFolder(false)->delete();
 			GO::config()->getTempFolder();
 		}
 	}
@@ -178,6 +178,9 @@ class GO_Base_Session extends GO_Base_Observable{
 		
 		if(!empty(GO::session()->values['countLogin']))
 			$this->_log(GO_Log_Model_Log::ACTION_LOGOUT);
+		
+		//clear temp folder
+		GO::config()->getTempFolder(false)->delete();
 	}
 	
 	/**
