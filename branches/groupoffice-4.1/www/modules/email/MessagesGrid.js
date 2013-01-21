@@ -41,6 +41,7 @@ GO.email.MessagesGrid = function(config){
 			},{
 				header: GO.email.lang.from,
 				dataIndex: 'from',
+				renderer: this.renderMessageNorth,
 				id:'from',
 				width:200
 			},{
@@ -269,6 +270,15 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 		}else
 		{
 			return String.format('<div id="sbj_'+record.data['uid']+'" class="Subject">{0}</div>{1}', value, record.data['subject']);
+		}
+	},
+	renderMessageNorth : function(value, p, record){
+		if(record.data['seen']=='0')
+		{
+			return String.format('<div id="sbj_'+record.data['uid']+'" class="NewSubject">{0}</div>', value);
+		}else
+		{
+			return String.format('<div id="sbj_'+record.data['uid']+'" class="Subject">{0}</div>', value);
 		}
 	},
 	renderIcon : function(src, p, record){
