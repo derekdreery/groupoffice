@@ -660,7 +660,9 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		
 		
 		$fp = GO_Base_Db_FindParams::newInstance();
-		$fp->getCriteria()->addCondition('lastlogin', $lastlogin,'<');
+		$fp->getCriteria()->addCondition('lastlogin', $lastlogin,'<')->addCondition('lastlogin', null, 'IS','t',false);
+		
+		$count=0;
 		
 		$stmt = GO_Servermanager_Model_Installation::model()->find($fp);
 		while($installation = $stmt->fetch()){
@@ -668,7 +670,11 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			
 			if(!empty($params['really']))
 				$installation->delete();
+			
+			$count++;
 		}
+		
+		echo "Deleted ".$count." trials\n\n";
 		
 		echo "Done\n\n";
 	}
@@ -735,16 +741,19 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 					echo "Unable to fetch data for ".$installation->name."\n";
 				}
 
-				//check if installation is expired and suspend if so
-				if($installation->isExpired){
-					if($installation->suspend())
-						echo "Installation ".$installation->name." will be suspended\n";
-				}
+				
 				
 				if($installation->save())
 					echo "Installation was updated\n";
 				else
 					echo "ERROR: failed to save new installation information\n";
+				
+				
+				//check if installation is expired and suspend if so
+				if($installation->isExpired){
+					if($installation->delete())
+						echo "Installation ".$installation->name." was deleted\n";
+				}
 				
 			}catch(Exception $e){
 				echo "ERROR:\n";
