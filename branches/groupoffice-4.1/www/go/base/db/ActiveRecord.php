@@ -1493,8 +1493,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(!$noCache){
 			$cachedModel =  GO::modelCache()->get($this->className(), $primaryKey);
 //			GO::debug("Cached : ".$this->className()."::findByPk($primaryKey)");
-			if($cachedModel)
+			if($cachedModel){
+				
+				if($cachedModel && !$ignoreAcl && !$cachedModel->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION)){
+					$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : '';
+					throw new GO_Base_Exception_AccessDenied($msg);
+				}
+				
 				return $cachedModel;
+			}
 		}
 		
 		$sql = "SELECT * FROM `".$this->tableName()."` WHERE ";
@@ -1519,8 +1526,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 			throw new Exception($msg);
 		}
-		
-		//todo check read permissions
+
 		if($model && !$ignoreAcl && !$model->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION)){
 			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : '';
 			throw new GO_Base_Exception_AccessDenied($msg);
