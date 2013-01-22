@@ -89,7 +89,10 @@ GO.postfixadmin.MailboxesGrid = function(config){
 			text: GO.lang['cmdAdd'],
 			cls: 'x-btn-text-icon',
 			handler: function(){				
-	    	this.mailboxDialog.show(0, {loadParams:{domain_id:this.store.baseParams.domain_id}});
+	    	this.mailboxDialog.show(0, {
+					loadParams:{domain_id:this.store.baseParams.domain_id
+					}
+				});
 			},
 			scope: this
 		},{

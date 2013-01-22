@@ -19,7 +19,7 @@ class GO_Postfixadmin_Controller_Domain extends GO_Base_Controller_AbstractModel
 		$domainInfo = GO_Postfixadmin_Model_Mailbox::model()->find(
 			GO_Base_Db_FindParams::newInstance()
 				->single()
-				->select('COUNT(*) AS mailbox_count, SUM(`usage`) AS `usage`')
+				->select('COUNT(*) AS mailbox_count, SUM(`usage`) AS `usage`, SUM(`quota`) AS `quota`')
 				->criteria(
 					GO_Base_Db_FindCriteria::newInstance()
 						->addCondition('domain_id', $model->id)
@@ -36,6 +36,7 @@ class GO_Postfixadmin_Controller_Domain extends GO_Base_Controller_AbstractModel
 		);
 		$record['usage'] = GO_Base_Util_Number::formatSize( $domainInfo->usage * 1024 );
 		$record['quota'] = GO_Base_Util_Number::formatSize( $model->total_quota * 1024 );
+		$record['used_quota'] = GO_Base_Util_Number::formatSize( $domainInfo->quota * 1024 );
 		$record['mailbox_count'] = $domainInfo->mailbox_count.' / '.$model->max_mailboxes;
 		$record['alias_count'] = $domainInfo2->alias_count.' / '.$model->max_aliases;
 		return $record;

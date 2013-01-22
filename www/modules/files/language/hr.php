@@ -105,3 +105,11 @@ $l['notifyFileDelete']= 'Datoteka %s je obrisana od %s';
 $l['notifyFileUpdate']= 'Datoteka %s je promjenjena od %s';
 $l['notificationEmailSubject']= 'Promjene u direktoriju';
 $l['downloadLinkExpired']= "Žao nam je, poveznica za preuzimanje za ovu datoteku je istekla";
+
+$l['recentFiles']="Datoteke izmjenjene u zadnjih 7 dana";
+$l['bookmarkFolder']="Dodaj u favorite";
+$l['bookmarks']="Favoriti";
+$l['bookmarkAlreadyExists']="Direktorij '%fn' već ima favorita za postojećeg korisnika.";
+$l['removeBookmark']="Ukloni favorita";
+$l['removeBookmarkQuestion']="Ukloni direktorij '%fn' iz popisa favorita?";
+$l['notInSearchMode']="Nije moguće uraditi ovo dok ste u načinu pretraživanja.";

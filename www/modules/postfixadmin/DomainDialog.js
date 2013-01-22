@@ -94,6 +94,9 @@ GO.postfixadmin.DomainDialog = Ext.extend(GO.dialog.TabbedFormDialog,{
 //			GO.postfixadmin.defaultQuota = action.result.data.quota;
 //			GO.postfixadmin.domain=action.result.data.domain;
 		this.setBackupMX(action.result.data.backupmx=='1');
+		
+		if(!GO.settings.modules.postfixadmin.write_permission)
+			this.mailboxesGrid.store.load();
 	},
 
 	afterSubmit : function(action){
@@ -223,6 +226,8 @@ GO.postfixadmin.DomainDialog = Ext.extend(GO.dialog.TabbedFormDialog,{
 	
 	buildForm : function () {
 
+		this.mailboxesGrid = new GO.postfixadmin.MailboxesGrid();   
+
 		if(GO.settings.modules.postfixadmin.write_permission){
 			this.propertiesPanel = new Ext.Panel({
 				title:GO.lang['strProperties'],
@@ -303,30 +308,17 @@ GO.postfixadmin.DomainDialog = Ext.extend(GO.dialog.TabbedFormDialog,{
 			});
 			
 			this.addPanel(this.propertiesPanel);
-		}		
+		}
     
-    this.mailboxesGrid = new GO.postfixadmin.MailboxesGrid();   
+    
 		this.addPanel(this.mailboxesGrid, 'domain_id');
     
 		this.aliasesGrid = new GO.postfixadmin.AliasesGrid();   
 		this.addPanel(this.aliasesGrid,'domain_id');		
 
-		this.addPermissionsPanel(new GO.grid.PermissionsPanel());
-
-//    this.tabPanel = new Ext.TabPanel({
-//      activeTab: 0,      
-//      deferredRender: false,
-//    	border: false,
-//      items: items,
-//      anchor: '100% 100%'
-//    }) ;    
-    
-//    this.formPanel = new Ext.form.FormPanel({
-//    	waitMsgTarget:true,
-//			url: GO.url('postfixadmin/domain/load'),
-//			border: false,
-//			baseParams: {task: 'domain'},				
-//			items:this.tabPanel				
-//		});    
+		this.addPermissionsPanel(new GO.grid.PermissionsPanel({
+			hideLevel:true,
+			addLevel: GO.permissionLevels.writeAndDelete
+		})); 
 	}
 });
