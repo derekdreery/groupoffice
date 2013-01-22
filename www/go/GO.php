@@ -568,7 +568,6 @@ class GO{
 		//clear temp files etc.
 		if(PHP_SAPI=="CLI" && GO::user()){
 			GO::session()->logout();
-			GO::config()->getTempFolder(false)->delete();
 		}
 		
 		
