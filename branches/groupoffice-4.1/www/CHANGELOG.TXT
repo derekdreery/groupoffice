@@ -1,3 +1,8 @@
+21-01-2013 4.1.23
+- Fixes in e-mail domains management
+- Updated Hungarian language
+- Tempfiles cleared bug
+
 21-01-2013 4.1.22
 - Broken 21 build
 
