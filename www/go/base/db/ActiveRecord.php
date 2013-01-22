@@ -338,10 +338,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$this->_modifiedAttributes=array();
 	}
 	
-	public function __clone() {
-		$this->_relatedCache=array();
-	}
-	
 	/**
 	 * This function is called after the model is constructed by a find query
 	 */
@@ -3524,11 +3520,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * 
 	 */
 	public function duplicate($attributes = array(), $save=true, $ignoreAclPermissions=false) {
-		
-		//$copy = new GO_Base_Db_ActiveRecord(true);
-		$copy = clone $this;
-		$copy->setIsNew(true);
-		
+				
+		$copy = new static();
+		$copy->setAttributes($this->getAttributes('raw'),false);
 		unset($copy->ctime);
 		
 		//unset the files folder
