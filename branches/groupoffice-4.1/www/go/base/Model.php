@@ -41,8 +41,10 @@ abstract class GO_Base_Model extends GO_Base_Observable{
 	 * 
 	 * @return GO_Base_Model the static model class
 	 */
-	public static function model($className=__CLASS__)
+	public static function model($className=null)
 	{		
+		if(!isset($className))
+		  $className = get_called_class();
 		if(isset(self::$_models[$className])){
 			$model = self::$_models[$className];			
 		}else
