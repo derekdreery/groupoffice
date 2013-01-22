@@ -435,13 +435,14 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		if(this.titleField)
 		{
 			var f=this.formPanel.form.findField(this.titleField);
-			
-			if(!this.origTitle)
-				this.origTitle=this.title;
-					
-			var titleSuffix = this.remoteModelId > 0 ? f.getValue() : GO.lang.cmdNew;
+			if(f){
+				if(!this.origTitle)
+					this.origTitle=this.title;
 
-			this.setTitle(this.origTitle+": "+titleSuffix);
+				var titleSuffix = this.remoteModelId > 0 ? f.getValue() : GO.lang.cmdNew;
+
+				this.setTitle(this.origTitle+": "+titleSuffix);
+			}
 		}
 	},
 

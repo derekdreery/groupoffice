@@ -2,7 +2,7 @@
 
 $l['name']='Zadaci';
 $l['description']='Upravljanje zadacima i obvezama.';
-$lang['link_type'][12]=$l['status']='Status';
+$l['status']='Status';
 $l['scheduled_call']='Zakazani poziv u %s';
 $l['statuses']['NEEDS-ACTION'] = 'Potrebno djelovati';
 $l['statuses']['ACCEPTED'] = 'Prihvaćeno';

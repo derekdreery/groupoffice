@@ -4,7 +4,6 @@ $l['name'] = 'Korisnici';
 $l['description'] = 'Administratorski modul. Upravljanje sa korisnicima programa.';
 $l['deletePrimaryAdmin'] = 'Ne možete obrisati primarnog administratora';
 $l['deleteYourself'] = 'Ne možete obrisati sebe';
-$lang['link_type'][8]=$us_user = 'Korisnik';
 $l['error_username']='Imate nedopuštene znakove u korisničkom imenu';
 $l['error_username_exists']='Žao nam je, korisnik sa tim korisničkim imenom već postoji';
 $l['error_email_exists']='Adresa e-pošte je već registrirana u programu.';

@@ -46,3 +46,4 @@ $l["defaultQuota"]='Standaard quota (MB)';
 $l['name']='E-mail domeinen';
 $l['description']='A module to manage virtual postfix users in the {product_name} database';
 $l['aliasHelp']="Vul voor meerdere ontvangers een met komma's gescheiden lijst in bv. alias1@domain.com,alias2@domain.com";
+$l['usedQuota']='Quota gebruikt';
