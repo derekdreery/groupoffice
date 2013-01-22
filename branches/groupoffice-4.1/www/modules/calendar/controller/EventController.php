@@ -54,6 +54,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		//when duplicating in the calendar with right click
 		if(!empty($params['duplicate'])){
 			$model = $model->duplicate(array('uuid'=>null));
+			$params['id']=$model->id;
 		}
 
 		if (!empty($params['exception_date'])) {

@@ -1872,8 +1872,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		foreach($attributes as $key=>$value){
 			//skip setting the primarykey when not new in debug mode when posting multiple models
-			if(GO::config()->debug && !$this->isNew && $key == $this->primaryKey())
-				continue;
+			//22-01-2013: Why were we doing this?
+//			if(GO::config()->debug && !$this->isNew && $key == $this->primaryKey())
+//				continue;
 			
 			//don't set a value for a relation. Otherwise getting the relation won't
 			//work anymore.
@@ -3522,16 +3523,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	public function duplicate($attributes = array(), $save=true, $ignoreAclPermissions=false) {
 				
 		$copy = new static();
-		$copy->setAttributes($this->getAttributes('raw'),false);
-		unset($copy->ctime);
-		
-		//unset the files folder
-		if($this->hasFiles())
-			$copy->files_folder_id = 0;
-		
+		$copiedAttrs = $this->getAttributes('raw');
+		unset($copiedAttrs['ctime'],$copiedAttrs['files_folder_id']);
 		$pkField = $this->primaryKey();
 		if(!is_array($pkField))
-			unset($copy->$pkField);
+			unset($copiedAttrs[$pkField]);
+		
+		$copiedAttrs = array_merge($copiedAttrs, $attributes);
+		
+		$copy->setAttributes($copiedAttrs,false);
 		
 		if(!$this->beforeDuplicate($copy)){
 			return false;
