@@ -565,12 +565,6 @@ class GO{
 	 */
 	public static function shutdown(){
 		
-		//clear temp files etc.
-		if(PHP_SAPI=="CLI" && GO::user()){
-			GO::session()->logout();
-		}
-		
-		
 		$error = error_get_last();		
 		if($error){			
 			//z-push uses a lot of ugly @fputs etc to suppresss errors. We don't want to log those.
