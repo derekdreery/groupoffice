@@ -716,9 +716,6 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 					}
 				}
 
-				console.log(obj);
-				console.log(new_event_id);
-
 				if(obj.isCopy)
 				{
 					if(calendar_visible)
