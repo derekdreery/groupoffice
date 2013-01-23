@@ -637,6 +637,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			echo '</pre><br /><br />';
 			echo '<a href="'.GO::config()->host.'">'.GO::t('cmdContinue').'</a>';
 		}
+		
+		ob_end_flush();
 		//return $response;
 	}
 	
