@@ -1,6 +1,7 @@
 23-01-2013 4.1.25
 - New tags in invoice items for the recurrence period.
 - Prevent moving of special e-mail folders like drafts, trash and sent items
+- Added googledrive connection module to Documents package. You can edit documents directly in Google docs.
 
 21-01-2013 4.1.24
 - Temp file problem
