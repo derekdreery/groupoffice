@@ -419,7 +419,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 
 		});
 		
-		if(GO.projects){
+		if(GO.moduleManager.userHasModule("projects")){
 			descAnchor-=20;
 			this.selectProject = new GO.projects.SelectProject();
 			propertiesPanel.add(this.selectProject);
