@@ -199,14 +199,10 @@ GO.calendar.CalendarDialog = function(config)
 					{
 						uploadFile.clearQueue();
 
-						if(action.result.success)
-						{
-							Ext.MessageBox.alert(GO.lang.strSuccess,action.result.feedback);
-							this.fireEvent('calendarimport', this);
-						}else
-						{
-							GO.errorDialog.show("<pre>"+GO.lang.strError,action.result.feedback+"</pre>");
-						}
+
+						GO.errorDialog.show("<pre>"+action.result.feedback+"</pre>", GO.lang.strSuccess);
+						this.fireEvent('calendarimport', this);
+						
 					},
 					failure: function(form, action) {
 						GO.errorDialog.show(action.result.feedback);
