@@ -5,7 +5,7 @@ GO.files.SelectFolderDialog = Ext.extend(GO.Window, {
 		if(!this.scope)
 			this.scope=this;
 		
-		this.layout='border';
+		this.layout='fit';
 		this.title=GO.files.lang.selectFolder;
 		this.height=500;
 		this.width=500;
@@ -37,7 +37,6 @@ GO.files.SelectFolderDialog = Ext.extend(GO.Window, {
 		];
 		
 		this.foldersTree = new GO.files.TreePanel({
-			region:'center',
 			border:false,
 			loadDelayed:true,
 			hideActionButtons:true,
@@ -46,18 +45,9 @@ GO.files.SelectFolderDialog = Ext.extend(GO.Window, {
 			selModel: new Ext.tree.DefaultSelectionModel()
 		});
 		
-		this.bookmarksGrid = new GO.files.BookmarksGrid({
-			region: 'south'
-		});
-		
-		this.items=[this.foldersTree,this.bookmarksGrid];
+		this.items=[this.foldersTree];
 		
 		GO.files.SelectFolderDialog.superclass.initComponent.call(this);
-	},
-	
-	show : function(){
-		console.log('GO.files.SelectFolderDialog::show()');
-		GO.files.SelectFolderDialog.superclass.show.call(this);
 	}
 	
 });
