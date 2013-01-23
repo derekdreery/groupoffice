@@ -234,13 +234,13 @@ $l["moveOldMailsSure"]= 'Weet u zeker dat u alle berichten ouder dan {date} van 
 $l["nMovedMailsTxt"]= 'Het aantal verplaatste berichten: ';
 $l['autolinked']='Dit bericht is automatisch gekoppeld aan %s';
 $l['defaultProgramInstructions']='<p>Om {product_name} als uw standaard e-mail programma in te stellen voor Windows kunt u dit <a class="normal-link" href="{url}">registerbestand</a> uitvoeren.</p>';
-$l['xssDetected']="This message may contain malicious content. Click here to view the filtered message anyway.";
-$l['xssMessageHidden']='Message hidden for security reasons';
+$l['xssDetected']="Dit bericht bevat mogelijk schadelijke inhoud. Klik hier om dit bericht toch weer te geven.";
+$l['xssMessageHidden']='Berciht verborgen om veiligheidsredenen';
 $l['ignoreSentFolder']='Store replies in the same folder as the original message';
-$l['sourceAndTargetSame']="Source and target mailbox may not be the same";
-$l['noEmailFolders']= 'No folders have been added.';
-$l['winmailNoFiles']="This winmail attachment does not contain any files.";
-$l['cantDeleteSpecialFolder']="You can't delete the trash, sent items or drafts folder";
+$l['sourceAndTargetSame']="De bron en doelmap mogen niet dezelfde zijn";
+$l['noEmailFolders']= 'Er zijn geen mappen toegevoegd.';
+$l['winmailNoFiles']="Deze winmail bijlage bevat geen bestanden";
+$l['cantDeleteSpecialFolder']="U kunt de prullenbak, concepten of verzonden items map niet verwijderen";
 $l['useAccount']='Account gebruiken';
 
 $l['storePassword']='Wachtwoord permanent opslaan';
@@ -248,3 +248,4 @@ $l['storePassword']='Wachtwoord permanent opslaan';
 $l['attachedAppointmentInfo']="Informatie over bijgevoegde afspraak";
 
 $l["copyingMessages"]='Bezig met kopiëren van berichten...';
+$l['cantMoveSpecialFolder']="U kunt de prullenbak, concepten of verzonden items map niet verplaatsen";
