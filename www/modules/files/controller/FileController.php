@@ -24,8 +24,8 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 
 		$response['data']['path'] = $model->path;
 		$response['data']['size'] = GO_Base_Util_Number::formatSize($model->fsFile->size());
-		$response['data']['extension'] = $model->fsFile->extension();
-		$response['data']['type'] = GO::t($model->fsFile->extension(), 'base', 'filetypes');
+		$response['data']['extension'] = strtolower($model->fsFile->extension());
+		$response['data']['type'] = GO::t($response['data']['extension'], 'base', 'filetypes');
 		
 		$response['data']['locked_user_name']=$model->lockedByUser ? $model->lockedByUser->name : '';
 		$response['data']['locked']=$model->isLocked();
@@ -78,8 +78,8 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 
 		$response['data']['path'] = $model->path;
 		$response['data']['size'] = GO_Base_Util_Number::formatSize($model->fsFile->size());
-		$response['data']['extension'] = $model->fsFile->extension();
-		$response['data']['type'] = GO::t($model->fsFile->extension(), 'base', 'filetypes');
+		$response['data']['extension'] = strtolower($model->fsFile->extension());
+		$response['data']['type'] = GO::t($response['data']['extension'], 'base', 'filetypes');
 		
 		$response['data']['name']=$model->fsFile->nameWithoutExtension();
 		

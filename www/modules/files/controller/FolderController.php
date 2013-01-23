@@ -254,7 +254,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				'draggable' => false,
 				'leaf' => true,
 				'path'=> $folder->path . '/' . $file->name,
-				'iconCls' => 'filetype-' . $file->extension,
+				'iconCls' => 'filetype-' . strtolower($file->extension),
 				'checked' => false
 			);
 
@@ -1021,7 +1021,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		while ($filePath = array_shift($sources)) {
 			$file = new GO_Base_Fs_File(GO::config()->file_storage_path.$filePath);
-			switch($file->extension()) {
+			switch(strtolower($file->extension())) {
 				case 'zip':
 					$cmd = GO::config()->cmd_unzip.' -n "'.$file->path().'"';
 					break;

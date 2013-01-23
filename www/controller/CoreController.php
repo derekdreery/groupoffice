@@ -358,7 +358,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 			$src = $dir . 'folder.png';
 		} else {
 
-			switch ($file->extension()) {
+			switch (strtolower($file->extension())) {
 
 				case 'ico':
 				case 'jpg':

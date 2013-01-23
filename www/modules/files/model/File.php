@@ -530,7 +530,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	 * @return boolean 
 	 */
 	public function isImage(){
-		switch($this->extension){
+		switch(strtolower($this->extension)){
 			case 'ico':
 			case 'jpg':
 			case 'jpeg':
