@@ -163,7 +163,7 @@ class GO_Email_Model_MessageAttachment extends GO_Base_Model{
 	 */
 	public function getExtension(){
 		$file = new GO_Base_Fs_File($this->name);
-		return $file->extension();
+		return strtolower($file->extension());
 	}
 	
 	
