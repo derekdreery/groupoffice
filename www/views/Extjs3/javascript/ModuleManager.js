@@ -142,6 +142,10 @@ GO.ModuleManager = Ext.extend(function(){
 			configs.push(this.panelConfigs[this.sortOrder[i]]);
 		}
 		return configs;
+	},
+	
+	userHasModule : function(module){
+		return module in this.modules;
 	}
 				
 });
