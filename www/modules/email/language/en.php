@@ -238,3 +238,4 @@ $l['winmailNoFiles']="This winmail attachment does not contain any files.";
 $l['attachedAppointmentInfo']="Attached appointment information";
 $l['cantDeleteSpecialFolder']="You can't delete the trash, sent items or drafts folder";
 $l["copyingMessages"]='Copying messages...';
+$l['cantMoveSpecialFolder']="You can't move the trash, sent items or drafts folder";
