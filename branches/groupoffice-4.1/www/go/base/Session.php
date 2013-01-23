@@ -312,8 +312,9 @@ class GO_Base_Session extends GO_Base_Observable{
 	 */
 	public function runAsRoot(){
 		//Close session writing so that the user won't stay root in browser sessions.
-		GO::session()->closeWriting();
 		
+		GO::session()->closeWriting();
+		GO::session()->values=array();
 		GO::session()->setCurrentUser(1);
 	}
 	
