@@ -1496,7 +1496,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			if($vobject->organizer)
 				$p = $this->importVObjectAttendee($this, $vobject->organizer, true);
 
-			$calendarParticipantFound=$p->user_id==$this->calendar->user_id;
+			$calendarParticipantFound=isset($p) && $p->user_id==$this->calendar->user_id;
+			
 			$attendees = $vobject->select('attendee');
 			foreach($attendees as $attendee){
 				$p = $this->importVObjectAttendee($this, $attendee, false);

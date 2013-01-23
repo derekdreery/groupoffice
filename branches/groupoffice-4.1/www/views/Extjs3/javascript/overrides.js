@@ -307,7 +307,7 @@ Ext.decode = Ext.util.JSON.decode = function(json){
 
 			default:
 				json += '<br /><br />Ext.decode exception occurred';
-				GO.errorDialog.show(GO.lang.serverError, json);
+				GO.errorDialog.show(GO.lang.serverError+'<br /><br />'+json);
 				break;
 		}
 	}

@@ -107,7 +107,7 @@ GO.data.JsonStore = function(config) {
 					{
 						msg = GO.lang.serverError;
 						msg += '<br /><br />JsonStore load exception occurred';
-						GO.errorDialog.show(msg, response.responseText);
+						GO.errorDialog.show(msg);
 					}
 				}					
 			}
