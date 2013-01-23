@@ -311,11 +311,7 @@ class GO_Base_Session extends GO_Base_Observable{
 	 * the user becoming root permanently. So you can't set session variables.
 	 */
 	public function runAsRoot(){
-		//Close session writing so that the user won't stay root in browser sessions.
-		
-		GO::session()->closeWriting();
-		GO::session()->values=array();
-		GO::session()->setCurrentUser(1);
+		self::runAs(1);
 	}
 	
 	/**
@@ -325,7 +321,7 @@ class GO_Base_Session extends GO_Base_Observable{
 	public function runAs($id){
 		//Close session writing so that the user won't stay root in browser sessions.
 		GO::session()->closeWriting();
-		
+		GO::session()->values=array();
 		GO::session()->setCurrentUser($id);
 	}
 	
