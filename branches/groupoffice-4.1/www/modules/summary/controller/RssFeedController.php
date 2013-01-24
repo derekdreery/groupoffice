@@ -86,6 +86,10 @@ class GO_Summary_Controller_RssFeed extends GO_Base_Controller_AbstractModelCont
 				preg_match('/(.*:\/\/[^\/]+)\//',$feed, $matches);				
 				$baseUrl = $matches[1];				
 				$xml = str_replace('src=&quot;/', 'src=&quot;'.$baseUrl.'/', $xml);
+				$xml = str_replace('src="/', 'src=&quot;'.$baseUrl.'/', $xml);
+				
+				$xml = str_replace('href=&quot;/', 'href=&quot;'.$baseUrl.'/', $xml);
+				$xml = str_replace('href="/', 'href="'.$baseUrl.'/', $xml);
 				
 				$xml = str_replace('<content:encoded>', '<content>', $xml);
 				$xml = str_replace('</content:encoded>', '</content>', $xml);
