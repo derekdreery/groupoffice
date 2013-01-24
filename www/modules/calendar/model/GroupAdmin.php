@@ -43,15 +43,7 @@ class GO_Calendar_Model_GroupAdmin extends GO_Base_Db_ActiveRecord{
 	public function primaryKey() {
 		return array('group_id','user_id');
 	}
-
-
-	/**
-	 * Enable this function if you want this model to check the acl's automatically.
-	 */
-	// public function aclField(){
-	//	 return 'acl_id';	
-	// }
-
+	
 	/**
 	 * Returns the table name
 	 */
@@ -64,6 +56,19 @@ class GO_Calendar_Model_GroupAdmin extends GO_Base_Db_ActiveRecord{
 	 * See the parent class for a more detailed description of the relations.
 	 */
 	 public function relations() {
-		 return array();
+		 return array(
+			 'group' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Calendar_Model_Group', 'field'=>'group_id')
+		 );
+	 }
+	 
+	 protected function afterSave($wasNew) {
+		 
+		 $stmt = $this->group->calendars;
+		 
+		 foreach($stmt as $calendar){
+			 $calendar->acl->addUser($this->user_id, GO_Base_Model_Acl::DELETE_PERMISSION);
+		 }
+		 
+		 return parent::afterSave($wasNew);
 	 }
 }

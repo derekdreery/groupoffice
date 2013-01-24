@@ -131,6 +131,18 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 			return false;
 		}
 	}
+	
+	protected function afterSave($wasNew) {
+		
+		if($wasNew && $this->group){
+			$stmt = $this->group->admins;
+		 
+		 foreach($stmt as $user){
+			 $this->acl->addUser($user->user_id, GO_Base_Model_Acl::DELETE_PERMISSION);
+		 }
+		}
+		return parent::afterSave($wasNew);
+	}
 
 	/**
 	 * Remove all events
