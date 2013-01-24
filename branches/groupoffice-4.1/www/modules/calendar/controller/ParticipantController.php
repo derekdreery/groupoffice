@@ -44,20 +44,18 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 	}
 	
 	
-//	public function actionLoadOrganizer($params){
-//		
-//		$calendar = GO_Calendar_Model_Calendar::model()->findByPk($params['calendar_id']);
-//		
-//		$response['user_id']=$calendar->user_id;
-//		$response['name']=$calendar->user->name;
-//		$response['email']=$calendar->user->email;
-//		$response['status']=  GO_Calendar_Model_Participant::STATUS_ACCEPTED."";
-//		$response['is_organizer']="1";
-//		$response['available']= GO_Calendar_Model_Participant::userIsAvailable($params['start_time'],$params['end_time'],$calendar->user_id);
-//		$response['success']=true;
-//		
-//		return $response;
-//	}
+	public function actionLoadOrganizer($params){
+		
+		$calendar = GO_Calendar_Model_Calendar::model()->findByPk($params['calendar_id']);		
+		
+		$participant = new GO_Calendar_Model_Participant();
+		$participant->user_id=$calendar->user->id;
+		$participant->name=$calendar->user->name;
+		$participant->email=$calendar->user->email;
+		$participant->is_organizer=true;
+		
+		return array('success'=>true, 'organizer'=>$participant->toJsonArray($params['start_time'],$params['end_time']));
+	}
 	
 	public function actionReload($params){
 		$event = empty($params['event_id']) ? false : GO_Calendar_Model_Event::model()->findByPk($params['event_id']);
@@ -137,6 +135,7 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 			$participant->user_id=$user->id;
 			$participant->name=$user->name;
 			$participant->email=$user->email;
+			$participant->is_organizer=!empty($params['is_organizer']);
 
 			$store->addRecord($participant->toJsonArray($params['start_time'], $params['end_time']));
 		}

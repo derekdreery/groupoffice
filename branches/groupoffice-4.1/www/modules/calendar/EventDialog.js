@@ -885,6 +885,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 						// Set the permissionlevel so we know if we have the right permissions
 						if(record)
 							this.setPermissionLevel(record.data.permissionLevel);
+						
+						this.participantsPanel.reloadOrganizer();
 					}
 				}
 			}),
