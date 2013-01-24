@@ -1318,8 +1318,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @return GO_Calendar_Model_Event 
 	 */
 	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array(), $dontSave=false){
-		//$event = new GO_Calendar_Model_Event();
-		GO::debug("importVObject");
+
 		$uid = (string) $vobject->uid;
 		if(!empty($uid))
 			$this->uuid = $uid;
@@ -1816,8 +1815,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 */
 	public function replyToOrganizer($recurrenceTime=false){
 		
-		if($this->is_organizer)
-			throw new Exception("Meeting reply can only be send from the organizer's event");
+//		if($this->is_organizer)
+//			throw new Exception("Meeting reply can't be send from the organizer's event");
 		
 
 		//we need to pass the sending participant to the toIcs function. 
@@ -1866,8 +1865,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 	
 	public function sendCancelNotice(){
-		if(!$this->is_organizer)
-			throw new Exception("Meeting request can only be send from the organizer's event");
+//		if(!$this->is_organizer)
+//			throw new Exception("Meeting request can only be send from the organizer's event");
 		
 		$stmt = $this->participants;
 
