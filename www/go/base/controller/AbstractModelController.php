@@ -1033,13 +1033,24 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 					$this->_parseImportDates($model);
 					
 					try{
-						$model->save();
-						$summarylog->addSuccessful();
+						if($model->save()){
+							$summarylog->addSuccessful();
+						} else {
+							$summarylog->addError($record[0], implode('<br />', $model->getValidationErrors()));
+						}
 					}
 					catch(Exception $e){
 						$summarylog->addError($record[0], $e->getMessage());
 					}
-					$summarylog->add();
+					
+//					try{
+//						$model->save();
+//						$summarylog->addSuccessful();
+//					}
+//					catch(Exception $e){
+//						$summarylog->addError($record[0], $e->getMessage());
+//					}
+				//	$summarylog->add();
 				}
 			}
 			
@@ -1076,7 +1087,6 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	
 	
 	protected function actionAttributes($params){
-		
 		if(!isset($params['exclude']))
 			$params['exclude']=array();
 		else
