@@ -163,7 +163,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 
 	public function defaultAttributes() {
 		$attr = parent::defaultAttributes();
-		$attr['user_id'] = 0;
+		$attr['user_id'] = null;
 		return $attr;
 	}
 
@@ -249,9 +249,13 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 				
 				$participant->updateRelatedParticipants=false;//prevent endless loop. Because it will also process this aftersave
 				
+				$participant->event->touch(); // Touch the event to update its mtime.
+				
 				$participant->status=$this->status;
 				$participant->save();				
 			}
+			
+			//$this->event->touch(); // Touch the event to update the modification date.
 		}
 		
 		if($wasNew && $this->event->is_organizer){
@@ -362,5 +366,16 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 		return GO_Calendar_Model_Participant::model()->find($findParams);			
 		
 	}
-
+	
+	protected function beforeSave() {
+		
+		// Check for a user with this email address
+		if($this->isNew && $this->user_id === null){
+			$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $this->email);
+			if($user)
+				$this->user_id = $user->id;
+		}
+		
+		return parent::beforeSave();
+	}
 }
