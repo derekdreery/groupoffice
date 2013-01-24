@@ -36,6 +36,23 @@ GO.form.HtmlEditor = function(config){
 
 Ext.extend(GO.form.HtmlEditor,Ext.form.HtmlEditor, {
 	
+	setValue: function(value){
+		
+		if(this.win && Ext.isChrome){
+			
+			//set cursor position on top
+			var range = this.win.document.createRange();
+			range.setStart(this.win.document.body, 0);
+			range.setEnd(this.win.document.body, 0);
+			
+			var sel = this.win.document.getSelection();
+			
+			sel.removeAllRanges();
+			sel.addRange(range);
+		}
+		GO.form.HtmlEditor.superclass.setValue.call(this, value);
+	},
+	
 	syncValue: function(){
 		//In BasicForm.js this method is called by EXT
 		// When using the editor in sourceEdit then it may not call the syncValue function
