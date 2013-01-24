@@ -239,11 +239,13 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		}
 	}
 
-	protected function afterAttributes(&$attributes, &$response, &$params, GO_Base_Db_ActiveRecord $model) {
-		//unset($attributes['t.company_id']);
-		$attributes['employees.name'] = array('name'=>'employees.name','label'=>GO::t('cmdPanelEmployee', 'addressbook'));
-		return parent::afterAttributes($attributes, $response, $params, $model);
-	}
+// This breaks the company combobox selections (replaces t.name for employees.name (both have the name as ext))
+// 
+//	protected function afterAttributes(&$attributes, &$response, &$params, GO_Base_Db_ActiveRecord $model) {
+//		//unset($attributes['t.company_id']);
+//		$attributes['employees.name'] = array('name'=>'employees.name','label'=>GO::t('cmdPanelEmployee', 'addressbook'));
+//		return parent::afterAttributes($attributes, $response, $params, $model);
+//	}
 	
 	/**
 	 * The actual call to the import CSV function
@@ -272,4 +274,3 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 	}
 	
 }
-
