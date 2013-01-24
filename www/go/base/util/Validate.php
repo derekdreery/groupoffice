@@ -190,4 +190,113 @@ class GO_Base_Util_Validate {
 		return $ret->valid;
 	}
 	
+	const PASSWORD_ERROR_LEN=-1;
+	const PASSWORD_ERROR_UC=-2;
+	const PASSWORD_ERROR_LC=-3;
+	const PASSWORD_ERROR_NUM=-4;
+	const PASSWORD_ERROR_SC=-5;
+	const PASSWORD_ERROR_UNIQ=-6;
+	
+	/**
+	 * Validate a password according to the following rules:
+	 * 
+	 * 1. Minimum of 8 characters
+	 * 2. Require at least one uppercase char
+	 * 3. Require at least one lowercase char
+	 * 4. Require at least one special char
+	 * 5. Require at least 5 unique chars
+	 * 
+	 * @param string $password
+	 * @return boolean
+	 */
+	public static function strongPassword($password){
+		$minLength=GO::config()->password_min_length;
+		$requireUpperCase=GO::config()->password_require_uc;
+		$requireLowerCase=GO::config()->password_require_lc;
+		$requireNumber=GO::config()->password_require_num;
+		$requireSpecialChars=GO::config()->password_require_sc;
+		$minUniqueChars=GO::config()->password_require_uniq;
+		
+		if($minLength && strlen($password)<$minLength){
+			return false;
+			return self::PASSWORD_ERROR_LEN;
+		}
+		
+		if($requireUpperCase && !preg_match('/[A-Z]/', $password)){
+			return false;
+			return self::PASSWORD_ERROR_UC;
+		}
+		
+		if($requireLowerCase && !preg_match('/[a-z]/', $password)){
+			return false;
+			return self::PASSWORD_ERROR_LC;
+		}
+		
+		if($requireNumber && !preg_match('/[0-9]/', $password)){
+			return false;
+			return self::PASSWORD_ERROR_NUM;
+		}
+		
+		if($requireSpecialChars && !preg_match('/[^\da-zA-Z]/', $password)){
+			return false;
+			return self::PASSWORD_ERROR_SC;
+		}
+		
+		if($minUniqueChars){
+			$arr = str_split($password);
+			$arr = array_unique($arr);
+			
+			if(count($arr)<$minUniqueChars){
+				return false;
+				return self::PASSWORD_ERROR_UNIQ;
+			}
+		}
+		
+		return true;
+		
+	}
+	
+	public static function getPasswordErrorString($password){
+		
+		$minLength=GO::config()->password_min_length;
+		$requireUpperCase=GO::config()->password_require_uc;
+		$requireLowerCase=GO::config()->password_require_lc;
+		$requireNumber=GO::config()->password_require_num;
+		$requireSpecialChars=GO::config()->password_require_sc;
+		$minUniqueChars=GO::config()->password_require_uniq;
+		
+		
+		$str = GO::t('passwordIsWeak')."\n\n";
+		
+		if($minLength && strlen($password)<$minLength){
+			$str .=  sprintf(GO::t('passwordMinLength'),$minLength)."\n";
+		}
+		
+		if($requireUpperCase && !preg_match('/[A-Z]/', $password)){
+			$str .=  GO::t('passwordRequireUc')."\n";
+		}
+		
+		if($requireLowerCase && !preg_match('/[a-z]/', $password)){
+			$str .=  GO::t('passwordRequireLc')."\n";
+		}
+		
+		if($requireNumber && !preg_match('/[0-9]/', $password)){
+			$str .=  GO::t('passwordRequireNum')."\n";
+		}
+		
+		if($requireSpecialChars && !preg_match('/[^\da-zA-Z]/', $password)){
+			$str .=  GO::t('passwordRequireSc')."\n";
+		}
+		
+		if($minUniqueChars){
+			$arr = str_split($password);
+			$arr = array_unique($arr);
+			
+			if(count($arr)<$minUniqueChars){
+				$str .=  sprintf(GO::t('passwordUnique'),$minLength)."\n";
+			}
+		}
+		return $str;
+	}
+	
 }

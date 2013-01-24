@@ -45,6 +45,10 @@ class GO_Imapauth_Authenticator {
 	 */
 	
 	public function imapAuthenticate() {
+		
+		//disable password validation because we can't control the external passwords
+		GO::config()->password_validate=false;
+		
 		$imap = new GO_Base_Mail_Imap();
 		try {
 			$imap->connect(
