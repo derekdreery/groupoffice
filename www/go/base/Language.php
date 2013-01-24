@@ -158,7 +158,7 @@ class GO_Base_Language{
 				if($file){
 					require($file);
 					if(isset($l)){
-						$defaultLang = array_merge($defaultLang, $l);
+						$defaultLang = GO_Base_Util_Array::mergeRecurive($defaultLang, $l);
 						unset($l);
 					}
 				}
@@ -168,7 +168,7 @@ class GO_Base_Language{
 			if($file){
 				require($file);
 				if(isset($l)){
-					$defaultLang = array_merge($defaultLang, $l);
+					$defaultLang = GO_Base_Util_Array::mergeRecurive($defaultLang, $l);
 					unset($l);
 				}
 			}
