@@ -37,6 +37,7 @@ class GO_Base_Component_SummaryLog {
 	
 	public function addSuccessful($count=1){
 		$this->_totalSuccess = $this->_totalSuccess+$count;
+		$this->add();
 	}
 	
 	/**
@@ -65,6 +66,7 @@ class GO_Base_Component_SummaryLog {
 	 */
 	public function addError($itemIdentifier, $message){
 		$this->_errors[]= array('name'=>$itemIdentifier,'message'=>$message);
+		$this->add();
 	}
 	
 	/**
