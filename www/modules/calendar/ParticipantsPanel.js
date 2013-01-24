@@ -426,43 +426,30 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 		this.store.loadData(result, true);
 	},
 	
-//	addDefaultParticipant : function(){
-//				
-//		GO.request({
-//			maskEl:this.body,
-//			url :'calendar/participant/loadOrganizer',
-//			params : {
-//				calendar_id : this.eventDialog.selectCalendar.getValue(),
-//				start_time : this.eventDialog.getStartDate().format('U'),
-//				end_time : this.eventDialog.getEndDate().format('U')
-//			},
-//			success : function(options, response, result) {
-//			
-//				this.addParticipant({
-//					name : result.name,
-//					email : result.email,
-//					status :  result.status,
-//					user_id : result.user_id,
-//					available : result.available,
-//					is_organizer : result.is_organizer
-//				});
-//				
-//			},
-//			scope : this
-//		});
-//	},
-//	
-//	addParticipant : function(config)
-//	{
-//		config.id='new_'+this.newId;
-//		var p = new GO.calendar.Participant(config);
-//		this.store.insert(this.store.getCount(), p);
-//		this.newId++;
-//		this.store.loaded=true;
-//	},
+	reloadOrganizer : function(){
+				
+		GO.request({
+			maskEl:this.eventDialog.win.getEl(),
+			url :'calendar/participant/loadOrganizer',
+			params : {
+				calendar_id : this.eventDialog.selectCalendar.getValue(),
+				start_time : this.eventDialog.getStartDate().format('U'),
+				end_time : this.eventDialog.getEndDate().format('U')
+			},
+			success : function(options, response, result) {
+			
+				var index = this.store.find("is_organizer", true);
+				
+				this.store.removeAt(index);
+			
+				this.store.loadData({results:[result.organizer]}, true);
+				
+			},
+			scope : this
+		});
+	},
 	
 	reloadAvailability : function(){
-		
 
 		GO.request({
 			url : "calendar/participant/reload",

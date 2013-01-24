@@ -815,6 +815,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$resultCount = 0;
 		$dayString = GO::t('full_days');
 		
+		if(!$calendar->user)
+			return $response;
+		
 		$holidays = GO_Base_Model_Holiday::model()->getHolidaysInPeriod($startTime, $endTime, $calendar->user->language);
 			
 			while($holiday = $holidays->fetch()){
