@@ -2,6 +2,8 @@
 - When a standardTask contains a code or description this will be added to the time entries description field when selected it
 - Automatically search for user_id in calendar participants (Based on email)
 - Calendar: Touch(update mtime) the event when a participant is updated.
+- Fixed sieve filter "set mail as read".
+- Fixed required custom fields of type ContactsSelect and CompaniesSelect.
 
 23-01-2013 4.1.25
 - New tags in invoice items for the recurrence period.
