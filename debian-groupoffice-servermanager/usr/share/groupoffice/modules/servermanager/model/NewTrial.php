@@ -68,6 +68,15 @@ class GO_ServerManager_Model_NewTrial extends GO_Base_Db_ActiveRecord {
 		return parent::init();
 	}
 	
+	protected function defaultAttributes() {
+		
+		$attr = parent::defaultAttributes();
+		
+		$attr['title']=GO::config()->product_name;
+		
+		return $attr;
+	}
+	
 	public function attributeLabels() {
 		return array_merge(parent::attributeLabels(), array(
 				'name'=>GO::t("domainName", "servermanager"),
