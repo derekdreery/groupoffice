@@ -60,6 +60,9 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 		
 		GO::config()->save();
 		
+		//disable password validation
+		GO::config()->password_validate=false;	
+		
 		$admin->save();
 
 		$adminGroup->addUser($admin->id);

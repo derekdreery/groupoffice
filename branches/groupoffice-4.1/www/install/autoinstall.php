@@ -108,6 +108,9 @@ $admin->email = GO::config()->webmaster_email = $args['adminemail'];
 
 GO::config()->save();
 
+//disable password validation
+GO::config()->password_validate=false;		
+
 $admin->save();
 
 $admin->checkDefaultModels();

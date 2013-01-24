@@ -755,6 +755,55 @@ class GO_Base_Config {
 	 * @var int
 	 */
 	var $default_password_length=6;
+	
+	/**
+	 * Required length of passwords.
+	 * 
+	 * @var boolean 
+	 */
+	var $password_validate=true;
+	
+	/**
+	 * Required length of passwords.
+	 * 
+	 * @var int 
+	 */
+	var $password_min_length=6;
+	
+	/**
+	 * Require an uppercase char
+	 * 
+	 * @var boolean 
+	 */
+	var $password_require_uc=true;
+	
+	/**
+	 * Require a lowercase char
+	 * 
+	 * @var boolean 
+	 */
+	var $password_require_lc=true;
+	
+	/**
+	 * Require numbers
+	 * 
+	 * @var boolean 
+	 */
+	var $password_require_num=true;
+	
+	/**
+	 * Require a special char
+	 * 
+	 * @var boolean 
+	 */
+	var $password_require_sc=true;
+	
+	/**
+	 * Required unique chars
+	 * 
+	 * @var int 
+	 */
+	var $password_require_uniq=3;
 
 	/**
 	 * Automatically log a user out after n seconds of inactivity
@@ -1266,6 +1315,10 @@ class GO_Base_Config {
 			$script = php_sapi_name()=='cli' ? __FILE__ : $_SERVER['SCRIPT_FILENAME'];
 
 			$config_dir = dirname($script).'/';
+			
+			if($config_dir==$this->root_path.'install/'){
+				$config_dir = $this->root_path;
+			}
 
 			/*
 			 * z-push also has a config.php. Don't detect that.

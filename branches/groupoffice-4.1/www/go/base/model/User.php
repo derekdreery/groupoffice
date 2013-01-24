@@ -218,6 +218,12 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		if($this->isModified('password') && isset($this->passwordConfirm) && $this->passwordConfirm!=$this->password){
 			$this->setValidationError('passwordConfirm', GO::t('passwordMatchError'));
 		}
+		
+		if(GO::config()->password_validate && $this->isModified('password')){
+			if(!GO_Base_Util_Validate::strongPassword($this->password)){
+				$this->setValidationError('password', GO_Base_Util_Validate::getPasswordErrorString($this->password));
+			}
+		}
 
 		if ($this->isNew && $this->_maxUsersReached())				
 			$this->setValidationError('form', GO::t('max_users_reached', 'users'));

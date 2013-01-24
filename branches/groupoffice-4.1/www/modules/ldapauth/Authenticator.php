@@ -143,6 +143,10 @@ class GO_Ldapauth_Authenticator {
 	 * @return \GO_Base_Model_User
 	 */
 	public function syncUserWithLdapRecord(GO_Base_Ldap_Record $record, $password = null) {
+		
+		//disable password validation because we can't control the external passwords
+		GO::config()->password_validate=false;
+		
 
 		$attr = $this->getUserAttributes($record);
 		try {

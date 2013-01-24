@@ -39,6 +39,12 @@ class GO_Core_Controller_Settings extends GO_Base_Controller_AbstractController 
 		
 		$response['success']=$user->save();
 		
+		if(!$response['success']){
+			$response['feedback']=nl2br(implode("<br />", $user->getValidationErrors())."\n");			
+			
+			$response['validationErrors']=$user->getValidationErrors();
+		}
+		
 		GO::modules()->callModuleMethod('submitSettings', array(&$this, &$params, &$response, $user), false);
 		
 
