@@ -107,24 +107,32 @@ Ext.extend( GO.base.model.ImportDialog, GO.Window, {
 						errorsText = errorsText + GO.lang.item + ' ' + response.result.summarylog.errors[i].name + ': ' +
 													response.result.summarylog.errors[i].message + '<br />';
 					}
-					Ext.MessageBox.alert(GO.lang.strError,errorsText);
+					//Ext.MessageBox.alert(GO.lang.strError,errorsText);
 				}
 
 				if (!response.result.success) {
 					Ext.MessageBox.alert(GO.lang.strError,result.feedback);
 				} else {
-					if (response.result.totalCount)
-						Ext.MessageBox.alert(
-							'',
-							GO.addressbook.lang['importSuccessCount']+' '+response.result.successCount+'/'+response.result.totalCount
-							+ errorsText
-						);
-					else
+					if (response.result.totalCount){
+						if(response.result.totalCount != response.result.successCount){
+							GO.errorDialog.show(
+								errorsText,
+								GO.addressbook.lang['importSuccessCount']+' '+response.result.successCount+'/'+response.result.totalCount
+							);
+						} else {
+							Ext.MessageBox.alert(
+								'',
+								GO.addressbook.lang['importSuccessCount']+' '+response.result.successCount+'/'+response.result.totalCount
+								+ errorsText
+							);
+						}
+					}else{
 						Ext.MessageBox.alert(
 							'',
 							GO.addressbook.lang['importSuccess']
 							+ errorsText
 						);
+					}
 						
 					this.hide();
 					if (!GO.util.empty(this._csvFieldDialog))
