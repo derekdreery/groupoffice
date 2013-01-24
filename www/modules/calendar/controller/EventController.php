@@ -254,6 +254,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				$resourceEvent->status = "NEEDS-ACTION";
 				$resourceEvent->user_id = $model->user_id;
 				
+				$resourceEvent->busy=!$resourceEvent->calendar->group->show_not_as_busy;
+				
 
 				if (GO::modules()->customfields && isset($params['resource_options'][$resource_calendar_id]))
 					$resourceEvent->customfieldsRecord->setAttributes($params['resource_options'][$resource_calendar_id]);

@@ -153,7 +153,7 @@ Ext.extend(GO.calendar.GroupDialog, GO.Window, {
 				anchor : '100%',
 				fieldLabel : GO.lang.strName
 			},{
-				xtype:'checkbox',
+				xtype:'xcheckbox',
 				name:'show_not_as_busy',
 				hideLabel: true,
 				boxLabel:GO.calendar.lang.showNotBusy
