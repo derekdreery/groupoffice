@@ -253,7 +253,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		
 		$months_in_past = isset($params['months_in_past']) ? intval($params['months_in_past']) : 0;
 		
-		$findParams = GO_Base_Db_FindParams::newInstance();
+		$findParams = GO_Base_Db_FindParams::newInstance()->select("t.*");
 		$findParams->getCriteria()->addCondition("calendar_id", $params["calendar_id"]);
 		
 		if(!empty($params['months_in_past']))		
