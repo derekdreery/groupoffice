@@ -1629,6 +1629,19 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 	
 	/**
+	 * Add a participant to this calendar
+	 * 
+	 * This function sets the event_id for the participant and saves it.
+	 * 
+	 * @param GO_Calendar_Model_Participant $participant
+	 * @return bool Save of participant is successfull
+	 */
+	public function addParticipant($participant){
+		$participant->event_id = $this->id;
+		return $participant->save();
+	}
+	
+	/**
 	 * 
 	 * @param GO_Calendar_Model_Participant $participant
 	 * @return GO_Calendar_Model_Event 
