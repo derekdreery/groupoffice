@@ -207,7 +207,9 @@ class GO_Base_Data_Column {
 			eval('$result=' . $this->_format . ';');
 			return $result;
 		} elseif (isset($model->{$this->_dataindex})) {
+		  if($model instanceof GO_Base_Db_ActiveRecord)
 			return $model->getAttribute($this->_dataindex,$this->_modelFormatType);
+		  return $model->{$this->_dataindex};
 		} else {
 			return "";
 		}

@@ -27,11 +27,18 @@ class GO_Base_Data_ArrayStore extends GO_Base_Data_AbstractStore {
 		return $this->response;
 	}
 	
+	public function getRecords() {
+	  return $this->response['results'];
+	}
+	
 	public function getTotal() {
 		return count($this->response['results']);
 	}
 	
 	public function nextRecord() {
-		return next($this->response['results']);
+	  $record = next($this->response['results']);;
+	  if($record && is_a($record, 'GO_Base_Model'))
+		$record = $this->_columnModel->formatModel($record);
+	  return $record;
 	}
 }

@@ -71,11 +71,10 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
   public $query = '';
   
   /**
-   * This indicateds if the data was loaded from database
-   * Will be set back to false of statement changes
-   * @var boolean 
+   * Contains the loaded records from the database or empty if not loaded
+   * @var array 
    */
-  protected $_loaded = false;
+  protected $_record = false;
   
   /**
    * The name of the model this db store contains record from
@@ -101,6 +100,12 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
    */
   protected $_deleteRecords = array();
   
+  /**
+   * The request params passed by the controller
+   * @var array 
+   */
+  protected $_requestParams = array();
+  
   // --- Methods ---
   
   /**
@@ -114,16 +119,17 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 
 	$this->_modelClass = $modelClass;
 	$this->_columnModel = $columnModel;
-	$this->setStoreParams($requestParams);
+	$this->_requestParams = $requestParams;
+	//$this->setStoreParams($requestParams);
 	if($findParams instanceof GO_Base_Db_FindParams)
 	  $this->_extraFindParams = $findParams;
 	else
 	  $this->_extraFindParams = GO_Base_Db_FindParams::newInstance();
   }
-
+  
   /**
-   * Walk through the params and set the data that the store can use
-   * Valid config options: 
+   * Read all parameters that are usable by the store from the actions $params array
+   * The following parametes are accepted:
    * 'sort:string'
    * 'dir:string'
    * 'limit:integer'
@@ -131,31 +137,30 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
    * 'delete_keys:array'
    * 'advancedQueryData:array'
    * 'forEditing:boolean'
-   * @param array $params the data to set
    */
-  public function setStoreParams($params) {
-	if (isset($params['sort']))
-	  $this->sort = $params['sort'];
+  private function _readRequestParams() {
+	if (isset($this->_requestParams['sort']))
+	  $this->sort = $this->_requestParams['sort'];
 	
-	if (isset($params['dir']))
-	  $this->direction =  $params['dir'];
+	if (isset($this->_requestParams['dir']))
+	  $this->direction =  $this->_requestParams['dir'];
 	
-	if(isset($params['limit']))
-	  $this->limit = $params['limit'];
+	if(isset($this->_requestParams['limit']))
+	  $this->limit = $this->_requestParams['limit'];
 	
-	if(isset($params['start']))
-	  $this->start = $params['start'];
+	if(isset($this->_requestParams['start']))
+	  $this->start = $this->_requestParams['start'];
 	
-	if(isset($params['query']))
-	  $this->query = $params['query'];
+	if(isset($this->_requestParams['query']))
+	  $this->query = $this->_requestParams['query'];
 	
-	if (isset($params['delete_keys'])) // will be deleted just before loading.
-	  $this->_deleteRecords = json_decode($params['delete_keys']);
+	if (isset($this->_requestParams['delete_keys'])) // will be deleted just before loading.
+	  $this->_deleteRecords = json_decode($this->_requestParams['delete_keys']);
 	
-	if (!empty($params['advancedQueryData']))
-	  $this->_handleAdvancedQuery($params['advancedQueryData'], $storeParams);
+	if (!empty($this->_requestParams['advancedQueryData']))
+	  $this->_handleAdvancedQuery($this->_requestParams['advancedQueryData']);
 
-	if (!empty($params["forEditing"]))
+	if (!empty($this->_requestParams["forEditing"]))
 	  $this->_columnModel->setModelFormatType("formatted");
   }
 
@@ -164,9 +169,9 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
    * @param array $advancedQueryData the query data to be set to the store
    * @param array $storeParams store params to be modied by advancedQuery
    */
-  private function _handleAdvancedQuery($advancedQueryData, &$storeParams) {
+  private function _handleAdvancedQuery($advancedQueryData) {
 	$advancedQueryData = is_string($advancedQueryData) ? json_decode($advancedQueryData, true) : $advancedQueryData;
-	$findCriteria = $storeParams->getCriteria();
+	$findCriteria = $this->_extraFindParams->getCriteria();
 
 	$criteriaGroup = GO_Base_Db_FindCriteria::newInstance();
 	$criteriaGroupAnd = true;
@@ -232,18 +237,35 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
    */
   protected function createFindParams()
   {
-	if(empty($this->sort))
-	  $this->sort = $this->defaultSort;
+
+	$sort = !empty($this->_requestParams['sort']) ? $this->_requestParams['sort'] : $this->defaultSort;
+	$dir = !empty($this->_requestParams['dir']) ? $this->_requestParams['dir'] : $this->defaultDirection;
 	
-	if(empty($this->direction))
-	  $this->direction = $this->defaultDirection;
+	if (!is_array($sort))
+		$sort=empty($sort) ? array() : array($sort);
+
+	if(isset($this->_requestParams['groupBy']))
+		array_unshift ($sort, $this->_requestParams['groupBy']);
+
+	if (!is_array($dir))
+		$dir=count($sort) ? array($dir) : array();
+
+	if(isset($this->_requestParams['groupDir']))
+		array_unshift ($dir, $this->_requestParams['groupDir']);
+
+	$sort = $this->getColumnModel()->getSortColumns($sort);
+
+	$sortCount = count($sort);
+	$dirCount = count($dir);
+	for($i=0;$i<$sortCount-$dirCount;$i++)
+		$dir[]=$dir[0];
+	
 	
 	$findParams = GO_Base_Db_FindParams::newInstance()						
 	  ->joinCustomFields()
 	  ->order($this->sort, $this->direction);
 	
-	//FIXME: save in model of rows should be calculated
-	if(empty($requestParams['dont_calculate_total'])){
+	if(empty($this->_requestParams['dont_calculate_total'])){
 		$findParams->calcFoundRows();
 	}
 		
@@ -263,31 +285,96 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 		$findParams->start ($this->start);
 
 	//TODO: check if this is still used by any actionStore()
-	if(isset($requestParams['permissionLevel']))
-		$findParams->permissionLevel ($requestParams['permissionLevel']);
+	if(isset($this->_requestParams['permissionLevel']))
+		$findParams->permissionLevel ($this->_requestParams['permissionLevel']);
 		
 	if(isset($this->_extraFindParams))
 			$findParams->mergeWith($this->_extraFindParams);
 	
 	return $findParams;
   }
+  
+  public function createDefaultParams() {
+	$sort = !empty($requestParams['sort']) ? $requestParams['sort'] : $this->_defaultSortOrder;
+		$dir = !empty($requestParams['dir']) ? $requestParams['dir'] : $this->_defaultSortDirection;
+		
+		if (!is_array($sort))
+			$sort=empty($sort) ? array() : array($sort);
+		
+		if(isset($requestParams['groupBy']))
+			array_unshift ($sort, $requestParams['groupBy']);
+
+		if (!is_array($dir))
+			$dir=count($sort) ? array($dir) : array();
+		
+		if(isset($requestParams['groupDir']))
+			array_unshift ($dir, $requestParams['groupDir']);
+		
+		$sort = $this->getColumnModel()->getSortColumns($sort);
+		
+		$sortCount = count($sort);
+		$dirCount = count($dir);
+		for($i=0;$i<$sortCount-$dirCount;$i++){
+			$dir[]=$dir[0];
+		}
+		
+		$sort = array_merge($sort, $this->_extraSortColumnNames);
+		$dir = array_merge($dir, $this->_extraSortDirections);
+		
+//		for($i=0;$i<count($sort);$i++){
+//			$sort[$i] = $this->getColumnModel()->getSortColumn($sort[$i]);
+//		}
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()						
+						->joinCustomFields()
+						->order($sort, $dir);
+		
+		if(empty($requestParams['dont_calculate_total'])){
+			$findParams->calcFoundRows();
+		}
+		
+		//do not prefix search query with a wildcard by default. 
+		//When you start a query with a wildcard mysql can't use indexes.
+		//Correction: users can't live without the wildcard at the start.
+		
+		if(!empty($requestParams['query']))
+			$findParams->searchQuery ('%'.preg_replace ('/[\s*]+/','%', $requestParams['query']).'%');
+		
+		if(isset($requestParams['limit']))
+			$findParams->limit ($requestParams['limit']);
+		else
+			$findParams->limit =0;//(GO::user()->max_rows_list);
+		
+		if(!empty($requestParams['start']))
+			$findParams->start ($requestParams['start']);
+		
+		if(isset($requestParams['permissionLevel']))
+			$findParams->permissionLevel ($requestParams['permissionLevel']);
+		
+		if($extraFindParams)
+			$findParams->mergeWith($extraFindParams);
+		
+		return $findParams;
+  }
 
   /**
    * This method will be called internally before getData().
    * It will delete all record that has the pk in $_deleteprimaryKey array
-   * @param array $primaryKeys array of value to be passen to findByPk()
    * @see: GO_Base_Db_Store::processDeleteActions()
+   * @return boolean $success true if all went well
    */
   protected function processDeleteActions() {
-	if ($this->_loaded)
+	if (isset($this->_records))
 	  throw new Exception("deleteRecord should be called before loading data. If you run the statement before the deletes then the deleted items will still be in the result.");
 	if(empty($this->_deleteRecords))
 	  return true;
 	
 	$success = true;
-	$stmt = GO::getModel($this->_modelClass)->findByPk($this->_deleteRecords);
-	foreach ($stmt as $model)
-	  $success = $success && $model->delete();
+	foreach ($this->_deleteRecords as $modelPk) {
+	  $model = GO::getModel($this->_modelClass)->findByPk($modelPk);
+	  if (!empty($model))
+		$success = $success && $model->delete();
+	}
 
 	if ($success)
 	  $this->_deleteRecords = array();
@@ -323,6 +410,8 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
    */
   public function getData() {
 
+	$this->_readRequestParams();
+	
 	$this->processDeleteActions();
 	
 	if (!isset($this->_stmt))
@@ -334,15 +423,28 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	if (empty($columns))
 	  throw new Exception('No columns given for this store');
 	
-	$results = array();
+	$this->_records = array();
 	while ($record = $this->nextRecord())
-	  $results[] = $record;
+	  $this->_records[] = $record;
 
-	return $results;
+	$this->response['success']=true;
+	$this->response['total']=$this->getTotal();
+	$this->response['results']=$this->_records;
+	return $this->response;
+  }
+  
+  /**
+   * Returns an array with the stores records
+   * @return array records
+   */
+  public function getRecords() {
+	$response = $this->getData();
+	return $response['results'];
   }
   
   /**
    * Select Items that belong to one of the selected Models
+   * Call this in the grids that get filterable by other selectable stores
    * @param string $requestParamName That key that will hold the seleted item in go_setting table
    * @param string $selectClassName Name of the related model (eg. GO_Notes_Model_Category)
    * @param string $foreignKey column name to match the realed models PK (eg. category_id)
@@ -353,7 +455,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 		$requestParamName,
 		$selectClassName,
 		$this,
-		$_POST, //quickfix
+		$this->_requestParams,
 		$checkPermissions
 	);
 	$multiSel->addSelectedToFindCriteria($this->_extraFindParams, $foreignKey);
@@ -366,12 +468,11 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
   }
   
   /**
-   * Call this in the selectable stores that effect other grid by selecting values
-   * @param string $requestParamName 
-   * @param string $selectClassName
+   * Call this in the selectable stores that effect other grids by selecting values
+   * @param string $requestParamName
    */
-  public function multiSelectable($requestParamName, $selectClassName) {
-	$multiSel = new GO_Base_Component_MultiSelectGrid($requestParamName, $selectClassName, $this, $_POST);
+  public function multiSelectable($requestParamName) {
+	$multiSel = new GO_Base_Component_MultiSelectGrid($requestParamName, $this->_modelClass, $this, $this->_requestParams);
 	$multiSel->setFindParamsForDefaultSelection($this->_extraFindParams);
 	$multiSel->formatCheckedColumn();
   }

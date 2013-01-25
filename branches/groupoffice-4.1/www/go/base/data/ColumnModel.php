@@ -260,7 +260,9 @@ class GO_Base_Data_ColumnModel {
 
 		$oldLevel = error_reporting(E_ERROR); //suppress errors in the eval'd code
 		
-		$formattedRecord = $model->getAttributes($this->_modelFormatType);
+		$formattedRecord = array();
+		if($model instanceof GO_Base_Db_ActiveRecord)
+		  $formattedRecord = $model->getAttributes($this->_modelFormatType);
 		$columns = $this->getColumns();
 
 		foreach($columns as $column){	

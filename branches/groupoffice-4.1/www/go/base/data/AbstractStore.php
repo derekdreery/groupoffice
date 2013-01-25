@@ -79,6 +79,7 @@ abstract class GO_Base_Data_AbstractStore {
 	}
 	
 	/**
+	 * DEPRICATED
 	 * Return an array with all the records and the total number of rows in the store.
 	 * 
 	 * array('results'=>array(),'total'=>0);
@@ -86,6 +87,13 @@ abstract class GO_Base_Data_AbstractStore {
 	 * @return array
 	 */
 	abstract public function getData();
+	
+	/**
+	 * Return an array with the stores records
+	 * Every item is an array of key value pairs
+	 * @return array
+	 */
+	abstract public function getRecords();
 	
 	/**
 	 * 

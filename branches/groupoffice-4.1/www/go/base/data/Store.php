@@ -190,6 +190,11 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 
     return $this->response;
   }
+  
+  public function getRecords() {
+	$response = $this->getData();
+	return $response['results'];
+  }
 	
 	private $_extraSortColumnNames=array();
 	private $_extraSortDirections=array();
