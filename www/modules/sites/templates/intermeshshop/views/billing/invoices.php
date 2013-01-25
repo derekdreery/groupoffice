@@ -35,7 +35,7 @@
 							<tr class="model-row <?php echo $style; ?>" style="border-collapse: collapse;">
 								<td><?php echo $invoice->order_id; ?></td>
 								<td><?php echo $invoice->getAttribute("ptime", "formatted"); ?></td>
-								<td><?php if($invoice->status)echo $invoice->status->getName(1); //2 is language id of webshop ?></td>
+								<td><?php if($invoice->status)echo $invoice->status->getName($invoice->language_id); ?></td>
 								<td>
 									<?php if(!empty($invoice->ptime)): ?>
 										<?php echo $invoice->getAttribute("ptime","formatted"); ?>
