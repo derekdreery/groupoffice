@@ -491,8 +491,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		this.hide = hide;
 
 		var params = {
-			'task' : 'save_event'
-			,
+			'task' : 'save_event',
+			'submitresources':true,
 			'check_conflicts' : typeof(config.check_conflicts)!='undefined' ? config.check_conflicts : null
 		};
 

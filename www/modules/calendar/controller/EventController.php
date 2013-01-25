@@ -231,50 +231,53 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 * @param type $modifiedAttributes 
 	 */
 	private function _saveResources($params, $model, $isNewEvent, $modifiedAttributes) {
-		$ids = array();
-		if (isset($params['resources'])) {
-			
-			foreach ($params['resources'] as $resource_calendar_id => $enabled) {
-				
-				if(!$isNewEvent)
-					$resourceEvent = GO_Calendar_Model_Event::model()->findResourceForEvent($model->id, $resource_calendar_id);
-				else
-					$resourceEvent=false;
-				
-				if(empty($resourceEvent))
-					$resourceEvent = new GO_Calendar_Model_Event();
+		if (isset($params['submitresources'])) {
+			$ids = array();
 
-				$resourceEvent->resource_event_id=$model->id;
-				$resourceEvent->calendar_id = $resource_calendar_id;
-				$resourceEvent->name = $model->name;
-				$resourceEvent->start_time = $model->start_time;
-				$resourceEvent->end_time = $model->end_time;
-				$resourceEvent->rrule = $model->rrule;
-				$resourceEvent->repeat_end_time = $model->repeat_end_time;
-				$resourceEvent->status = "NEEDS-ACTION";
-				$resourceEvent->user_id = $model->user_id;
-				
-				$resourceEvent->busy=!$resourceEvent->calendar->group->show_not_as_busy;
-				
+			if (isset($params['resources'])) {
 
-				if (GO::modules()->customfields && isset($params['resource_options'][$resource_calendar_id]))
-					$resourceEvent->customfieldsRecord->setAttributes($params['resource_options'][$resource_calendar_id]);
-				
-				$resourceEvent->save(true);
+				foreach ($params['resources'] as $resource_calendar_id => $enabled) {
 
-				$ids[] = $resourceEvent->id;
-			}			
+					if (!$isNewEvent)
+						$resourceEvent = GO_Calendar_Model_Event::model()->findResourceForEvent($model->id, $resource_calendar_id);
+					else
+						$resourceEvent = false;
+
+					if (empty($resourceEvent))
+						$resourceEvent = new GO_Calendar_Model_Event();
+
+					$resourceEvent->resource_event_id = $model->id;
+					$resourceEvent->calendar_id = $resource_calendar_id;
+					$resourceEvent->name = $model->name;
+					$resourceEvent->start_time = $model->start_time;
+					$resourceEvent->end_time = $model->end_time;
+					$resourceEvent->rrule = $model->rrule;
+					$resourceEvent->repeat_end_time = $model->repeat_end_time;
+					$resourceEvent->status = "NEEDS-ACTION";
+					$resourceEvent->user_id = $model->user_id;
+
+					$resourceEvent->busy = !$resourceEvent->calendar->group->show_not_as_busy;
+
+
+					if (GO::modules()->customfields && isset($params['resource_options'][$resource_calendar_id]))
+						$resourceEvent->customfieldsRecord->setAttributes($params['resource_options'][$resource_calendar_id]);
+
+					$resourceEvent->save(true);
+
+					$ids[] = $resourceEvent->id;
+				}
+			}
+			//delete all other resource events
+			$stmt = GO_Calendar_Model_Event::model()->find(
+							GO_Base_Db_FindParams::newInstance()
+											->criteria(
+															GO_Base_Db_FindCriteria::newInstance()
+															->addInCondition('id', $ids, 't', true, true)
+															->addCondition('resource_event_id', $model->id)
+											)
+			);
+			$stmt->callOnEach('delete');
 		}
-		//delete all other resource events
-		$stmt = GO_Calendar_Model_Event::model()->find(
-						GO_Base_Db_FindParams::newInstance()
-										->criteria(
-														GO_Base_Db_FindCriteria::newInstance()
-														->addInCondition('id', $ids, 't', true, true)
-														->addCondition('resource_event_id', $model->id)
-										)
-		);
-		$stmt->callOnEach('delete');
 	}
 
 	private function _saveParticipants($params, GO_Calendar_Model_Event $event, $isNewEvent, $modifiedAttributes) {
