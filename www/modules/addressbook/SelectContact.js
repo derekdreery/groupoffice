@@ -29,13 +29,10 @@ GO.addressbook.SelectContact = function(config){
 	}
 	
 	config.store = new GO.data.JsonStore({
-	    url: GO.url("addressbook/contact/store"),
+	    url: GO.url("addressbook/contact/selectContact"),
 	    baseParams: {	    	
-				addressbook_id : config.addressbook_id,
-				noMultiSelectFilter:true
+				addressbook_id : config.addressbook_id
 			},
-	    root: 'results',
-	    id: 'id',
 	    totalProperty:'total',	    
       fields: fields.fields,
 	    remoteSort: true
@@ -45,7 +42,7 @@ GO.addressbook.SelectContact = function(config){
 
 	config.triggerAction='all';
 	config.selectOnFocus=true;
-	config.pageSize=parseInt(GO.settings['max_rows_list']);
+	//config.pageSize=parseInt(GO.settings['max_rows_list']);
 
 	GO.addressbook.SelectContact.superclass.constructor.call(this,config);
 	

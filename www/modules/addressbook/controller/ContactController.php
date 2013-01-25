@@ -563,6 +563,94 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		return $response;
 	}
 	
+	
+	protected function actionSelectContact($params){
+		
+		$response = array('total'=>0, 'results'=>array());
+		
+		$query = preg_replace ('/[\s*]+/','%', $params['query']).'%'; 
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->searchQuery($query,array("CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)",'t.email','t.email2','t.email3','t.last_name'))
+						->joinModel(array(
+				'model'=>'GO_Addressbook_Model_Company',					
+	 			'foreignField'=>'id', //defaults to primary key of the remote model
+	 			'localField'=>'company_id', //defaults to "id"
+	 			'tableAlias'=>'c', //Optional table alias
+	 			'type'=>'LEFT' //defaults to INNER,
+	 			
+			))			
+			->select('t.*,c.name AS company_name, addressbook.name AS ab_name, CONCAT_WS(\' \',`t`.`first_name`,`t`.`middle_name`,`t`.`last_name`) AS name')
+			->limit(10);
+		
+		if(!empty($params['addressbook_id']))
+			$findParams->getCriteria ()->addCondition ('addressbook_id', $params['addressbook_id']);
+		
+		$stmt = GO_Addressbook_Model_Contact::model()->find($findParams);
+		
+		$user_ids=array();
+		foreach($stmt as $contact){
+			$record =$contact->getAttributes();
+			//$record['name']=$contact->name;
+			$record['cf']=$contact->id.":".$contact->name;
+			
+			$response['results'][]=$record;
+			$response['total']++;			
+			
+			if($contact->go_user_id)
+				$user_ids[]=$contact->go_user_id;
+		}
+		
+		if(count($response['results'])<10 && empty($params['addressbook_id'])) {
+			$aclJoinCriteria = GO_Base_Db_FindCriteria::newInstance()->addRawCondition('a.acl_id', 'u.acl_id', '=', false);
+
+			$aclWhereCriteria = GO_Base_Db_FindCriteria::newInstance()
+					->addCondition('user_id', GO::user()->id, '=', 'a', false)
+					->addInCondition("group_id", GO_Base_Model_User::getGroupIds(GO::user()->id), "a", false);
+
+			$findParams = GO_Base_Db_FindParams::newInstance()
+					->searchQuery($query,array("CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)",'t.email','t.email2','t.email3','t.last_name'))
+					->select('t.*, "User" AS ab_name,c.name AS company_name, CONCAT_WS(\' \',`t`.`first_name`,`t`.`middle_name`,`t`.`last_name`) AS name')
+					->group('t.id')
+					->limit(10-count($response['results']))
+					->ignoreAcl()
+					->joinModel(array(
+						'model'=>'GO_Base_Model_User',
+						'localTableAlias'=>'t',
+						'localField'=>'go_user_id',
+						'foreignField'=>'id',
+						'tableAlias'=>'u'
+					))
+					->joinModel(array(
+						'model'=>'GO_Addressbook_Model_Company',					
+						'foreignField'=>'id', //defaults to primary key of the remote model
+						'localField'=>'company_id', //defaults to "id"
+						'tableAlias'=>'c', //Optional table alias
+						'type'=>'LEFT' //defaults to INNER,
+
+					))			
+					->join(GO_Base_Model_AclUsersGroups::model()->tableName(), $aclJoinCriteria, 'a', 'INNER');
+			
+			$findParams->getCriteria()->addInCondition('id', $user_ids,'t',true,true)
+							->mergeWith($aclWhereCriteria);
+			
+			$stmt = GO_Addressbook_Model_Contact::model()->find($findParams);
+		
+			foreach($stmt as $contact){
+				$record =$contact->getAttributes();
+				$record['name']=$contact->name;
+				$record['cf']=$contact->id.":".$contact->name;
+
+				$response['results'][]=$record;
+				$response['total']++;			
+			}
+					
+		}
+		
+		return $response;
+		
+	}
+	
 	protected function actionSearchEmail($params) {
 		
 		$response['success']=true;
