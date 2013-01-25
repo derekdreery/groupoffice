@@ -2404,6 +2404,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		return $this->_modifiedAttributes;
 	}
 	
+	/**
+	 * Set a new ACL for this model
+	 * 
+	 * @param string $user_id
+	 * @return \GO_Base_Model_Acl
+	 */
 	public function setNewAcl($user_id=0){
 		
 		if(!$user_id)
@@ -2416,7 +2422,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 		$this->{$this->aclField()}=$acl->id;
 		
-		return $acl->id;
+		return $acl;
 	}
 	
 	/**
@@ -3600,7 +3606,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			//set new foreign key
 			$attributes[$field]=$duplicate->pk;
 			
+//			var_dump(array_merge($model->getAttributes('raw'),$attributes));
+			
 			$duplicateRelatedModel = $model->duplicate($attributes);
+							
 			$this->afterDuplicateRelation($relationName, $model, $duplicateRelatedModel);
 		}
 		
