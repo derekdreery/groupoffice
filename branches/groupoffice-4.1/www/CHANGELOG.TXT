@@ -4,6 +4,7 @@
 - Calendar: Touch(update mtime) the event when a participant is updated.
 - Fixed sieve filter "set mail as read".
 - Fixed required custom fields of type ContactsSelect and CompaniesSelect.
+- Set time registration status filters for all users in administration.
 
 23-01-2013 4.1.25
 - New tags in invoice items for the recurrence period.
