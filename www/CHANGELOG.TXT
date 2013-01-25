@@ -1,15 +1,26 @@
-4.1.26
+25-01-2013 4.1.26
+- Added strong password checks.
+- Added Google Drive connection module to Documents package. You can edit documents directly in Google docs.
 - When a standardTask contains a code or description this will be added to the time entries description field when selected it
+- Bug on setting disabled custom fields on new addressbook
+- Move cursor to top on Chrome in Html editor
+- Fix for relative rss links
+- Show as busy flag for resources works again
+- Event description missing in export
+- Automatically add resource group admins to resource calendar permissions
+- Change calendar organizer when you change calendar selection.
 - Automatically search for user_id in calendar participants (Based on email)
 - Calendar: Touch(update mtime) the event when a participant is updated.
 - Fixed sieve filter "set mail as read".
 - Fixed required custom fields of type ContactsSelect and CompaniesSelect.
+- Better way to search for contact or user
+- Last all day event of repeating series not shown in day view
+- Generate new ACL for old project calendars so it doesn't delete project permissions when it's deleted
 - Set time registration status filters for all users in administration.
 
 23-01-2013 4.1.25
 - New tags in invoice items for the recurrence period.
 - Prevent moving of special e-mail folders like drafts, trash and sent items
-- Added Google Drive connection module to Documents package. You can edit documents directly in Google docs.
 - Database check didn't flush output anymore
 
 21-01-2013 4.1.24
