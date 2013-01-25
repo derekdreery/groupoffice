@@ -26,7 +26,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
    * @param array $data the data that need to be rendered as json
    */
   public function renderJson($data) {
-	$this->setJsonHeaders();
+	$this->setHeaders();
 	echo json_encode($data);
   }
 
@@ -48,7 +48,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
    * @return string JSON render when $return=true
    * @throws GO_Base_Exception_AccessDenied
    */
-  public function renderForm($model, $remoteComboFields, $return=false) {
+  public function renderForm($model, $remoteComboFields=array(), $return=false) {
 
 	$response = array('data'=>array(),'success'=>true);
 
@@ -66,23 +66,8 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 	if(GO::user()->getModulePermissionLevel('customfields') && $model->customfieldsRecord)
 		$response['data'] = array_merge($response['data'], $model->customfieldsRecord->getAttributes());	
 
-	/**
-	 * List all fields that require a remote text to load for a remote combobox.
-	 * eg. with a model you want to provide the category name so that that the
-	 * category combo store does not need to be loaded to show it.
-	 * 
-	 * You would list that like this:
-	 * 
-	 * 'category_id'=>array('category','name')
-	 * 
-	 * The category name would be looked up in the model model ->category->name.
-	 * A relation for this must be defined. See ActiveRecord->relations.
-	 * 
-	 * 
-	 * @var array remote combo mappings 
-	 */
 	if(!empty($remoteComboFields))
-	  $response = $this->_loadComboTexts($response, $remoteComboFields);
+	  $response = $this->_loadComboTexts($model, $remoteComboFields, $response);
 
 	if ($return)
 	  return $response;
@@ -207,7 +192,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 	
 	$response = array(
 	  "success"=>true,
-	  "results"=>$store->getData(), 
+	  "results"=>$store->getRecords(), 
 	  'total'=>$store->getTotal()
 	);
 	
@@ -230,11 +215,11 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
    * Render the headers of the generated response
    * If headers are not set already. Set them to application/json
    */
-  protected function setJsonHeaders() {
+  protected function setHeaders() {
 	if (headers_sent())
 	  return;
 
-	header('Cache-Control: no-cache, must-revalidate'); //prevent caching
+	header('Cache-Control: no-cache, must-revalidate, post-check=0, pre-check=0'); //prevent caching
 	header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); //resolves problem with IE GET requests
 	header('Content-type: application/json; charset=UTF-8'); //tell the browser we are returning json
   }
@@ -264,7 +249,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
    * @return string modified response data
    * @throws Exception if no valid key defined
    */
-  private function _loadComboTexts($response, $combofields) {
+  private function _loadComboTexts($model, $combofields, $response) {
 
 	  $response['remoteComboTexts'] = array();
 
