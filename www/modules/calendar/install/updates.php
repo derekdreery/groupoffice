@@ -194,3 +194,5 @@ $updates['201212040946'][]="update cal_events set rrule='FREQ=YEARLY' WHERE rrul
 
 
 $updates['201301211137'][]="delete FROM `cal_participants` WHERE event_id=0;";
+
+$updates["201301251628"][]="script:2_fix_project_calendars.php";
