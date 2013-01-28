@@ -369,7 +369,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 //			$cmd .= ' RETURN (CHILDREN SUBSCRIBED STATUS (MESSAGES UNSEEN))';
 //		}
 		
-		if(false && $this->has_capability("LIST-EXTENDED") && !$listSubscribed){
+		if($this->has_capability("LIST-EXTENDED") && !$listSubscribed){
 				$cmd .= ' RETURN (CHILDREN';
 				
 				if($withStatus){
