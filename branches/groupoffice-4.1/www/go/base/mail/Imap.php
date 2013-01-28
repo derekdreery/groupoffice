@@ -369,7 +369,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 //			$cmd .= ' RETURN (CHILDREN SUBSCRIBED STATUS (MESSAGES UNSEEN))';
 //		}
 		
-		if($this->has_capability("LIST-EXTENDED") && !$listSubscribed){
+		if(false && $this->has_capability("LIST-EXTENDED") && !$listSubscribed){
 				$cmd .= ' RETURN (CHILDREN';
 				
 				if($withStatus){
@@ -534,7 +534,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 						$folders[$name]['unseen']=0;
 					}else
 					{
-						$status = $this->get_status($name);				
+						$status = $this->get_status($folder["name"]);				
 						$folders[$name]['messages']=$status['messages'];
 						$folders[$name]['unseen']=$status['unseen'];
 					}
