@@ -23,17 +23,18 @@ function launchGO(){
 	if(win.GO && win.GO.<?php echo $module; ?>)
 	{
 		win.GO.<?php echo $module; ?>.<?php echo $function; ?>.call(this, <?php echo json_encode($funcParams); ?>);
-
+		self.close();
 	}else
 	{
+		win.close();
 		//the parameters will be handled in default_scripts.inc.php
 		<?php
 		GO::setAfterLoginUrl(GO::createExternalUrl($module,$function, $funcParams, true));
 		?>
-		win.location.href="<?php echo GO::config()->host; ?>";
+		self.location.href="<?php echo GO::config()->host; ?>";
 	}
 
-	self.close();
+	//self.close();
 	//win.focus();
 
 }

@@ -900,7 +900,7 @@ class GO{
 
 		$r = $toLoginDialog ? '' : 'external/index';
 
-		$url = GO::config()->orig_full_url.'?r='.$r.'&f='.urlencode(GO_Base_Util_Crypt::encrypt($p));
+		$url = GO::config()->orig_full_url.'?r='.$r.'&f='.urlencode(base64_encode(json_encode($p)));
 		return $url;
 	}
 
