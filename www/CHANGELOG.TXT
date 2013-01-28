@@ -1,3 +1,6 @@
+4.1.27
+- Event/store will return results in the order of starting time for correct List display in calendar
+
 28-01-2013 4.1.26
 - Added strong password checks.
 - Added Google Drive connection module to Documents package. You can edit documents directly in Google docs.
