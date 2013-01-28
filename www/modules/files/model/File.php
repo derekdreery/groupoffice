@@ -402,8 +402,8 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @return string 
 	 */
-	protected function getDownloadURL() {
-		return GO::url('files/file/download', array('id'=>$this->id), false);		
+	public function getDownloadURL($inline=true) {
+		return GO::url('files/file/download', array('id'=>$this->id, 'inline'=>$inline?'false':'true'), false);		
 	}
 
 	
@@ -611,5 +611,9 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		$storeParams->getCriteria()->addCondition('mtime', GO_Base_Util_Date::date_add(GO_Base_Util_Date::clear_time(time()),-7),'>');
 				
 		return $this->find($storeParams);
+	}
+	
+	public function getHandlers(){
+		
 	}
 }

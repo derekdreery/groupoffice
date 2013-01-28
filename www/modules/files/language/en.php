@@ -122,3 +122,10 @@ $l['bookmarkAlreadyExists']="Folder '%fn' already has a favorite for the current
 $l['removeBookmark']="Remove favorite";
 $l['removeBookmarkQuestion']="Remove folder '%fn' from your favorites list?";
 $l['notInSearchMode']="Can't do this when in search mode.";
+
+$l['openInBrowser']='Open in browser';
+
+$l['selectApplication']="Select application to open this file...";
+$l['rememberFileHandler']="Remember my decision for this file type";
+$l['alwaysAsk']="Always ask";
+$l['openWith']='Open with';

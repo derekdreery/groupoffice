@@ -249,3 +249,11 @@ CREATE TABLE IF NOT EXISTS `fs_bookmarks` (
 	`user_id` int(11) NOT NULL,
 	PRIMARY KEY (`folder_id`,`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `fs_filehandlers`;
+CREATE TABLE IF NOT EXISTS `fs_filehandlers` (
+  `user_id` int(11) NOT NULL,
+  `extension` varchar(20) NOT NULL,
+  `cls` varchar(100) NOT NULL,
+  PRIMARY KEY (`user_id`,`extension`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

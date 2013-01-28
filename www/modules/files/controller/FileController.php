@@ -85,6 +85,21 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		
 		if (GO::modules()->customfields)
 			$response['customfields'] = GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Files_Model_File", $model->folder_id);
+		
+		
+		$fh = GO_Files_Model_FileHandler::model()->findByPk(
+						array('extension'=>$model->extension, 'user_id'=>GO::user()->id));
+		if($fh){
+			$fileHandler = new $fh->cls;
+			
+			$response['data']['handlerCls']=$fh->cls;
+			$response['data']['handlerName']=$fileHandler->getName();
+		}else
+		{
+			$response['data']['handlerCls']="";
+			$response['data']['handlerName']="";
+		}
+		
 
 		return parent::afterLoad($response, $model, $params);
 	}
@@ -99,8 +114,84 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 			$model->locked_user_id=empty($params['lock']) ? 0 : GO::user()->id;
 		}
 		
+		
+		$fh = GO_Files_Model_FileHandler::model()->findByPk(
+						array('extension'=>strtolower($model->extension), 'user_id'=>GO::user()->id));
+		
+		if(!$fh)
+			$fh = new GO_Files_Model_FileHandler();
+		
+		$fh->extension=strtolower($model->extension);
+		$fh->cls=$params['handlerCls'];
+		if(empty($params['handlerCls']))
+			$fh->delete();
+		else
+			$fh->save();
+		
 		return parent::beforeSubmit($response, $model, $params);
 	}
+	
+	protected function actionHandlers($params){
+		if(!empty($params['path'])){
+			$folder = GO_Files_Model_Folder::model()->findByPath(dirname($params['path']));
+			$file = $folder->hasFile(GO_Base_Fs_File::utf8Basename($params['path']));
+		}else
+		{
+			$file = GO_Files_Model_File::model()->findByPk($params['id'], false, true);
+		}
+		
+		if(empty($params['all'])){
+			$fh = GO_Files_Model_FileHandler::model()->findByPk(
+						array('extension'=>strtolower($file->extension), 'user_id'=>GO::user()->id));
+		}else
+		{
+			$fh = false;
+		}
+		if($fh){
+			$classes=array(new ReflectionClass($fh->cls));
+		}else{
+			$modules = GO::modules()->getAllModules();
+
+			$classes=array();
+			foreach($modules as $module){
+				$classes = array_merge($classes, $module->moduleManager->findClasses('filehandler'));
+			}
+		}
+		
+		$store = new GO_Base_Data_ArrayStore();
+		
+		foreach($classes as $class){
+			/* @var $class ReflectionClass */
+			
+			$fileHandler = new $class->name;
+			if($fileHandler->fileIsSupported($file)){
+				$store->addRecord(array(
+						'name'=>$fileHandler->getName(),
+						'handler'=>$fileHandler->getHandler($file),
+						'iconCls'=>$fileHandler->getIconCls(),
+						'cls'=>$class->name,
+						'extension'=>$file->extension
+				));
+			}
+		}
+		
+		return $store->getData();		
+	}
+	
+	protected function actionSaveHandler($params){
+//		GO::config()->save_setting('fh_'.$, $value)
+		
+		$fh = GO_Files_Model_FileHandler::model()->findByPk(
+						array('extension'=>strtolower($params['extension']), 'user_id'=>GO::user()->id));
+		
+		if(!$fh)
+			$fh = new GO_Files_Model_FileHandler();
+		
+		$fh->extension=strtolower($params['extension']);
+		$fh->cls=$params['cls'];
+		return array('success'=>empty($params['cls']) ? $fh->delete() : $fh->save());
+	}
+	
 
 	protected function actionDownload($params) {
 		GO::session()->closeWriting();

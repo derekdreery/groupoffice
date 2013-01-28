@@ -37,9 +37,6 @@ GO.grid.SimpleSelectList = function(config){
 		config.tpl = new Ext.XTemplate( 
 			tpl		
 		);
-	}else
-	{
-		var tpl = config.tpl;
 	}
 	
 	config.singleSelect=true;

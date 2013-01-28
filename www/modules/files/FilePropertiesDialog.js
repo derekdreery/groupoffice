@@ -63,7 +63,24 @@ GO.files.FilePropertiesDialog = function(config){
 			xtype: 'plainfield',
 			fieldLabel: GO.lang.strSize,
 			name: 'size'
-		}
+		},this.selectHandler = new GO.form.ComboBoxReset({
+			xtype:'comboboxreset',
+			emptyText:GO.files.lang.alwaysAsk,
+			store:new GO.data.JsonStore({
+				url:GO.url('files/file/handlers'),
+				fields:['name','cls','handler','iconCls','extension'],
+				baseParams:{
+					id:0,
+					all:1
+				}
+			}),
+			displayField:'name',
+			valueField:'cls',
+			mode:'remote',
+			triggerAction:'all',
+			hiddenName:'handlerCls',
+			fieldLabel:GO.files.lang.openWith
+		})
 		]
 	});
 		
@@ -243,6 +260,12 @@ Ext.extend(GO.files.FilePropertiesDialog, GO.Window, {
 				
 				if(GO.customfields)
 					GO.customfields.disableTabs(this.tabPanel, action.result);	
+				
+				
+				this.selectHandler.store.baseParams.id=action.result.data.id;
+				this.selectHandler.clearLastSearch();
+				this.selectHandler.setRemoteText(action.result.data.handlerName);
+				
 				
 				GO.files.FilePropertiesDialog.superclass.show.call(this);
 			},

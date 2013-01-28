@@ -141,3 +141,10 @@ $updates["201212141445"][]='CREATE TABLE IF NOT EXISTS `fs_bookmarks` (
 	PRIMARY KEY (`folder_id`,`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;';
 
+
+$updates["201301281613"][]='CREATE TABLE IF NOT EXISTS `fs_filehandlers` (
+  `user_id` int(11) NOT NULL,
+  `extension` varchar(20) NOT NULL,
+  `cls` varchar(100) NOT NULL,
+  PRIMARY KEY (`user_id`,`extension`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;';
