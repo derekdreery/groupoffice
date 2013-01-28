@@ -130,3 +130,5 @@ $l['rememberFileHandler']="Onthoud mijn keuze voor dit bestandstype";
 $l['alwaysAsk']="Altijd vragen";
 
 $l['openWith']='Open met';
+
+$l['open']='Openen';
