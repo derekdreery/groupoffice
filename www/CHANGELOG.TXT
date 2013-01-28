@@ -4,6 +4,7 @@
 - Fixed bold subject in email.
 - Double IMAP UTF7 encoding for status calls
 - Event/store will return results in the order of starting time for correct List display in calendar
+- New file handler system so users can choose their application of preference
 
 
 28-01-2013 4.1.26
