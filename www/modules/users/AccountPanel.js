@@ -106,13 +106,29 @@ GO.users.AccountPanel = function(config)
 
 Ext.extend(GO.users.AccountPanel, Ext.form.FieldSet,{
 	randomPassword : function(length){
-		var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+		var charsets = [
+			"abcdefghijklmnopqrstuvwxyz",
+			"ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+			"1234567890",
+			"!@#$%^&*()<>,."];
+		
 		var pass = "";
 		var i;
+		
+		//take one from each
+		for(var x=0;x<charsets.length;x++){
+			i = Math.floor(Math.random() * charsets[x].length);
+			pass += charsets[x].charAt(i);
+		}
+		
+		var combined = charsets.join("");
+	
+		length-=charsets.length;
+		
 		for(var x=0;x<length;x++)
 		{
-			i = Math.floor(Math.random() * 62);
-			pass += chars.charAt(i);
+			i = Math.floor(Math.random() * combined.length);
+			pass += combined.charAt(i);
 		}
 		return pass;
 	},
