@@ -717,7 +717,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		ksort($response['results']);
 		
 		//Remove the index from the response array
-		$response['results']=  array_values($response['results']);
+		$response['results']= array_values($response['results']);
 		
 		$response['success']=true;
 		
@@ -773,8 +773,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				$resultCount++;
 				
 
-
-				$response['results']['task'.$task->id] = array(
+				$response['results'][$this->_getIndex($response['results'], $task->due_time).'task'.$task->id] = array(
 					'id'=>$response['count']++,
 					'link_count'=>$task->countLinks(),
 					'name'=>$task->name,
@@ -822,9 +821,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		$holidays = GO_Base_Model_Holiday::model()->getHolidaysInPeriod($startTime, $endTime, $calendar->user->language);
 			
-			while($holiday = $holidays->fetch()){
+			while($holiday = $holidays->fetch()){ 
 				$resultCount++;
-				$response['results'][$this->_getIndex($response['results'],strtotime(date(GO::user()->time_format, $holiday->date)))] = array(
+				$response['results'][$this->_getIndex($response['results'],$holiday->date)] = array(
 					'id'=>$response['count']++,
 					'name'=>htmlspecialchars($holiday->name, ENT_COMPAT, 'UTF-8'),
 					'description'=>'',
