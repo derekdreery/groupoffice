@@ -39,6 +39,14 @@ class GO_Base_Model_AclUsersGroups extends GO_Base_Db_ActiveRecord {
 	public function tableName() {
 		return 'go_acl';
 	}
+	
+	/**
+	 * The ACL record itself never has an ACL field so always return false
+	 * @return boolean
+	 */
+	public function aclField() {
+	  return false;
+	}
   
   public function primaryKey() {
     return array('acl_id','user_id','group_id');
