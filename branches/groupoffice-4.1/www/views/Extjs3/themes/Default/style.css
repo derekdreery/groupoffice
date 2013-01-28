@@ -570,7 +570,7 @@ a.normal-link:hover{
 
 .go-grid-icon{
 	background-repeat:no-repeat;
-	padding-left:20px;
+	padding-left:20px !important;
 	line-height:16px;
 	display:block;
 	height:auto !important;

@@ -121,3 +121,12 @@ $l['bookmarkAlreadyExists']="Favoriet van folder '%fn' bestaat al voor de huidig
 $l['removeBookmark']="Uit favorieten verwijderen";
 $l['removeBookmarkQuestion']="Folder '%fn' verwijderen uit favorieten?";
 $l['notInSearchMode']="Dit is niet mogelijk in de zoekmodus.";
+
+
+$l['openInBrowser']='Open in browser';
+
+$l['selectApplication']="Selecteer applicatie om dit bestand te openen...";
+$l['rememberFileHandler']="Onthoud mijn keuze voor dit bestandstype";
+$l['alwaysAsk']="Altijd vragen";
+
+$l['openWith']='Open met';

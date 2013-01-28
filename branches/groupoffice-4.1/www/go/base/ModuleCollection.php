@@ -143,18 +143,12 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 			return false;
 		}
 	}
+	
 	/**
 	 * Query all modules.
 	 * 
 	 * @return GO_Base_Model_Module[]
 	 */
-//	public function getAllModules($enabledOnly=true){
-//		$findParams = GO_Base_Db_FindParams::newInstance();
-//		if($enabledOnly)
-//			$findParams->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('enabled', 1));
-//			
-//		$stmt = $this->model->find($findParams);
-		
 	public function getAllModules($ignoreAcl=false){
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()->order("sort_order");

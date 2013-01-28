@@ -1915,82 +1915,59 @@ GO.files.openFile = function(record, store,e)
 {
 
 	if(GO.files.filesObservable.fireEvent('beforeopenfile', record, store,e)){
-		var index = record.data.id ? 'id' : 'path';
-
-		var params = {};
-		params[index]=record.data[index];
-		var url = GO.url('files/file/download',params);
-
-		switch(record.data.extension)
-		{
-			case 'png':
-			case 'bmp':
-			case 'png':
-			case 'gif':
-			case 'jpg':
-			case 'jpeg':
-			case 'xmind':
-
-				var imagesParams = {};
-				imagesParams[index]=record.data[index];
-				if(store && store.sortInfo){
-					imagesParams["sort"]=store.sortInfo.field;
-					imagesParams["dir"]=store.sortInfo.direction;
-				}
-				
-				GO.files.showImageViewer(imagesParams);
-
-				
-
-
-//				this.imageViewer.show([{
-//						name: record.data['name'],
-//						src: GO.url("core/thumb",{src:record.data.path,lw:this.imageViewer.width-20,ph:this.imageViewer.height-100}),
-//						download_path: url
-//					}]);
-
-				break;
-
-//			case 'php':
-//			case 'js':
-//			case 'docx':
-//			case 'xlsx':
-//			case 'pptx':
-//			case 'dwg':
-//			case 'doc':
-//			case 'odt':
-//			case 'ods':
-//			case 'xls':
-//			case 'ppt':
-//			case 'odp':
-//			case 'txt':
-//
-//			case 'sxw':
-//			case 'sxc':
-//
-//				
-//
-//				break;
-			case 'mht':
-			case 'eml':
-				if(GO.savemailas)
-				{
-					GO.linkHandlers["GO_Savemailas_Model_LinkedEmail"].call(this, record.data.id, {
-						action:'file'
-
-					});
-					break;
-				}
-
-			default:
-				if(GO.util.empty(record.get('locked')) && GO.settings.config.gota_blacklist_extensions.indexOf(record.data.extension)==-1){
-					GO.files.editFile(record.data.id);
-				}else
-				{
-					window.open(url);
-				}
-				break;
+		//var index = record.data.id ? 'id' : 'path';
+		
+		if(!GO.files.openFileWindow){
+			GO.files.openFileWindow =  new GO.files.OpenFileWindow();
+			
 		}
+		GO.files.openFileWindow.show(record.data);
+		
+
+//		var params = {};
+//		params[index]=record.data[index];
+//		var url = GO.url('files/file/download',params);
+//
+//		switch(record.data.extension)
+//		{
+//			case 'png':
+//			case 'bmp':
+//			case 'png':
+//			case 'gif':
+//			case 'jpg':
+//			case 'jpeg':
+//			case 'xmind':
+//
+//				var imagesParams = {};
+//				imagesParams[index]=record.data[index];
+//				if(store && store.sortInfo){
+//					imagesParams["sort"]=store.sortInfo.field;
+//					imagesParams["dir"]=store.sortInfo.direction;
+//				}
+//				
+//				GO.files.showImageViewer(imagesParams);
+//				break;
+//
+//			case 'mht':
+//			case 'eml':
+//				if(GO.savemailas)
+//				{
+//					GO.linkHandlers["GO_Savemailas_Model_LinkedEmail"].call(this, record.data.id, {
+//						action:'file'
+//
+//					});
+//					break;
+//				}
+//
+//			default:
+//				if(GO.util.empty(record.get('locked')) && GO.settings.config.gota_blacklist_extensions.indexOf(record.data.extension)==-1){
+//					GO.files.editFile(record.data.id);
+//				}else
+//				{
+//					window.open(url);
+//				}
+//				break;
+//		}
 	}
 }
 

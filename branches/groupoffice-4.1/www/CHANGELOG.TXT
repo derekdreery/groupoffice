@@ -1,5 +1,10 @@
-4.1.27
+28-01-2013 4.1.27
+- Updated Hrvatski language
+- Added AntiFloodPlugin to newsletter sender
+- Fixed bold subject in email.
+- Double IMAP UTF7 encoding for status calls
 - Event/store will return results in the order of starting time for correct List display in calendar
+
 
 28-01-2013 4.1.26
 - Added strong password checks.

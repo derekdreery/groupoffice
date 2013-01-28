@@ -25,3 +25,4 @@ modules/files/RecentFilesGrid.js
 modules/files/Portlet.js
 modules/files/FileBrowser.js
 modules/files/BookmarksGrid.js
+modules/files/OpenFileWindow.js

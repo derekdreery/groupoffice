@@ -43,14 +43,14 @@ cursor:pointer;
 	text-decoration:none;
 }
 
-/*
+
 .btn-download {
 	background-image:url('images/download.png') !important;
 }
 
 .btn-download-gota {
 	background-image:url('images/gota.gif') !important;
-}*/
+}
 
 .btn-copy {
 	background-image:url('images/copy.png') !important;
@@ -169,6 +169,13 @@ cursor:pointer;
 	background-image:url('images/fit_image.png') !important;
 }
 
+.fs-imageviewer{
+	background-image:url('images/imageviewer.png') !important;
+}
+
+.fs-browser{
+	background-image:url('images/browser.png') !important;
+}
 
 .fs-grid-locked{
 	background-repeat:no-repeat;
@@ -185,4 +192,11 @@ cursor:pointer;
 	background-position: 80px 84px;
 	height:100px;
 	width:100px;
+}
+
+
+.fs-handler-icon{
+	background-repeat:no-repeat;
+	padding-left:24px !important;	
+	background-position: 0px 4px;
 }
