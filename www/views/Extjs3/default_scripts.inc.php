@@ -562,7 +562,10 @@ if(file_exists($GLOBALS['GO_THEME']->theme_path.'MainLayout.js')) {
 //a dialog.
 if(isset($_REQUEST['f']))
 {
-	$fp = GO_Base_Util_Crypt::decrypt($_REQUEST['f']);
+	if(substr($_REQUEST['f'],0,9)=='{GOCRYPT}')
+		$fp = GO_Base_Util_Crypt::decrypt($_REQUEST['f']);
+	else
+		$fp = json_decode(base64_decode($_REQUEST['f']),true);
 	
 	GO::debug("External function parameters:");
 	GO::debug($fp);
