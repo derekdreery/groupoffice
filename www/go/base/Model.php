@@ -39,7 +39,7 @@ abstract class GO_Base_Model extends GO_Base_Observable{
 	 * Returns the static model of the specified AR class.
 	 * Every child of this class must override it.
 	 * 
-	 * @return GO_Base_Model the static model class
+	 * @return GO_Base_Db_ActiveRecord the static model class
 	 */
 	public static function model($className=null)
 	{		
