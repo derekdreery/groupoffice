@@ -10,7 +10,7 @@ class GO_Base_Util_Pdf extends TCPDF {
 		$this->init();
 	}
 	
-	protected $font = 'helvetica';
+	protected $font = 'dejavusans';
 	protected $font_size=9;
 	
 	protected $title="Export";
