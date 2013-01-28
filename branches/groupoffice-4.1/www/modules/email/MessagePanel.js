@@ -93,9 +93,9 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		'<tpl if="!GO.util.empty(values.iCalendar)">'+
 		'<tpl if="iCalendar.feedback">'+
 		'<div class="message-icalendar">'+
-		'<span class="message-icalendar-icon go-model-icon-GO_Calendar_Model_Event"></span>'+
-		'{[values.iCalendar.feedback]}'+
-		'<span class="message-icalendar-actions">'+
+		'<div class="go-model-icon-GO_Calendar_Model_Event message-icalendar-icon ">'+
+		'{[values.iCalendar.feedback]}</div>'+
+		'<div class="message-icalendar-actions">'+
 		'<tpl if="iCalendar.invitation">'+
 			'<tpl if="iCalendar.invitation.is_invitation">'+
 			//'<tpl if="!iCalendar.invitation.event_id || iCalendar.invitation.event_declined == true">'+
@@ -113,7 +113,8 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				'<a class="normal-link" id="em-icalendar-update-event" href="#">'+GO.email.lang.icalendarUpdateEvent+'</a>'+
 			'</tpl>'+
 		'</tpl>'+
-		'</span>'+
+		'</div>'+
+		'<div style="clear:both"></div>'+
 		'</div>'+
 		'</tpl>'+
 		'</tpl>'+
