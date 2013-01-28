@@ -41,7 +41,6 @@ GO.email.MessagesGrid = function(config){
 			},{
 				header: GO.email.lang.from,
 				dataIndex: 'from',
-				renderer: this.renderMessageNorth,
 				id:'from',
 				width:200
 			},{
@@ -62,16 +61,16 @@ GO.email.MessagesGrid = function(config){
 				renderer:Ext.util.Format.fileSize
 			}]
 		});
-//		config.view=new Ext.grid.GridView({
-//			emptyText: GO.lang['strNoItems'],
-//			getRowClass:function(row, index) {				
-//				if (row.data.seen == '0') {
-//					return 'ml-new-row';
-//				} else {
-//					return 'ml-readed-row';
-//				}
-//			}
-//		});
+		config.view=new Ext.grid.GridView({
+			emptyText: GO.lang['strNoItems'],
+			getRowClass:function(row, index) {				
+				if (row.data.seen == '0') {
+					return 'ml-unseen-row';
+				} else {
+					return 'ml-seen-row';
+				}
+			}
+		});
 	
 	}else
 	{
@@ -270,15 +269,6 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 		}else
 		{
 			return String.format('<div id="sbj_'+record.data['uid']+'" class="Subject">{0}</div>{1}', value, record.data['subject']);
-		}
-	},
-	renderMessageNorth : function(value, p, record){
-		if(record.data['seen']=='0')
-		{
-			return String.format('<div id="sbj_'+record.data['uid']+'" class="NewSubject">{0}</div>', value);
-		}else
-		{
-			return String.format('<div id="sbj_'+record.data['uid']+'" class="Subject">{0}</div>', value);
 		}
 	},
 	renderIcon : function(src, p, record){
