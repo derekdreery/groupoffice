@@ -20,6 +20,7 @@
 - Invitation links were not clickable with a very small screen
 - Changed default PDF font to dejavusans to support UTF-8
 - Added optional php5-mysqlnd dependency
+- Made date sent on invoice PDF a template option
 
 23-01-2013 4.1.25
 - New tags in invoice items for the recurrence period.
