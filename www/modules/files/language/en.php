@@ -129,3 +129,5 @@ $l['selectApplication']="Select application to open this file...";
 $l['rememberFileHandler']="Remember my decision for this file type";
 $l['alwaysAsk']="Always ask";
 $l['openWith']='Open with';
+
+$l['open']='Open';

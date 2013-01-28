@@ -32,14 +32,19 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 		{
 			this.editHandler.defer(200, this);
 		}else
-		{				
-			GO.files.editFile(this.model_id);
-			
+		{			
+			if(!GO.files.openFileWindow){
+				GO.files.openFileWindow =  new GO.files.OpenFileWindow();
+			}
+			GO.files.openFileWindow.show(this.data);
+
 		}
 	},
 
 	createTopToolbar : function(){
 		var tbar = GO.files.FilePanel.superclass.createTopToolbar.call(this);
+		
+		this.editButton.setText(GO.files.lang.open);
 
 		tbar.splice(1,0,this.downloadButton= new Ext.Button({
 			iconCls: 'btn-save',
