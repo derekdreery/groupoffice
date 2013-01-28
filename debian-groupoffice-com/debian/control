@@ -11,7 +11,7 @@ Package: groupoffice-com
 Architecture: all
 Depends: libapache2-mod-php5 (>= 5.3),
 	mysql-server,
-	php5-mysql | php5-mysqli,
+	php5-mysql | php5-mysqli | php5-mysqlnd,
 	php5-gd,
 	php5-cli,
 	php5-curl,
