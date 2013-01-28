@@ -17,3 +17,4 @@ $l["adminOnlyLabel"]= 'Samo administratori mogu koristiti ovu grupu kako bi dodj
 $l["groupMembers"]='Članovi grupe';
 $l["managePermissions"]= 'Upravljanje dozvolama';
 $l['modulePermissions']= 'Dozvole modula';
+$l['use']='Koristi';
