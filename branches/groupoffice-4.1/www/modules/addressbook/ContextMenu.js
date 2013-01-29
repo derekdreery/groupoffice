@@ -1,9 +1,7 @@
 GO.addressbook.ContextMenu = function(config){
 
 	if(!config)
-	{
 		config = {};
-	}
 
 	config.items=[];
 
@@ -15,7 +13,12 @@ GO.addressbook.ContextMenu = function(config){
 			scope:this,
 			handler: function()
 			{
-				this.showCreateMailDialog();
+				var selected = this.getSelected();
+				
+				if(!GO.util.empty(selected[0].data.id))
+					this.showCreateMailDialog({contact_id:selected[0].data.id});
+				else
+					this.showCreateMailDialog();
 			}
 		});
 		config.items.push(this.actionCreateMail);
@@ -55,8 +58,12 @@ Ext.extend(GO.addressbook.ContextMenu, Ext.menu.Menu, {
 			return this.selected;
 	},
 
-	showCreateMailDialog : function() {
+	showCreateMailDialog : function(config) {		
 		if (GO.email) {
+			
+			if(!config)
+				config = {};
+			
 			var emails = [];
 			var selected = this.getSelected();
 			for (var i = 0; i < selected.length; i++) {
@@ -69,12 +76,20 @@ Ext.extend(GO.addressbook.ContextMenu, Ext.menu.Menu, {
 			else
 				var str = '';
 
-			GO.email.showComposer({
+			Ext.apply(config, {
 				account_id: GO.moduleManager.getPanel('email').account_id,
 				values:{
 					to: str
 				}				
 			});
+
+			GO.email.showComposer(config);
+//			GO.email.showComposer({
+//				account_id: GO.moduleManager.getPanel('email').account_id,
+//				values:{
+//					to: str
+//				}				
+//			});
 		}
 	},
 	
