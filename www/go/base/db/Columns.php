@@ -58,7 +58,7 @@ class GO_Base_Db_Columns{
 
 						$length = 0;
 						
-						$default = $ai ? null : intval($default);
+						$default = $ai || !isset($field['Default']) ? null : intval($default);
 
 						break;		
 
