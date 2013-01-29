@@ -429,9 +429,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 					}else
 					{
 						if(GO.files){
-							var record = new GO.files.FileRecord(file);
-							//GO.files.showFilePropertiesDialog(record.get('id'));
-							GO.files.openFile(record);
+							GO.files.openFile({id:file.id});
 						}else
 						{
 							window.open(GO.url("files/file/download",{id:file.id}));
