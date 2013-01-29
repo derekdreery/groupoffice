@@ -324,31 +324,33 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		
 		if(file_exists($model->configPath))
 		{
-			$response['data']['enabled']=empty($model->config['id']) || !empty($model->config['enabled']);
-			$response['data']['max_users'] = GO_Base_Util_Number::unlocalize($model->config['max_users']);
+			$c = $model->getConfigWithGlobals();
 
-			$response['data']['webmaster_email'] = $model->config['webmaster_email'];
-			$response['data']['title'] = $model->config['title'];
-			$response['data']['default_country'] = $model->config['default_country'];
-			$response['data']['language'] = $model->config['language'];
-			$response['data']['default_timezone'] = $model->config['default_timezone'];
-			$response['data']['default_currency'] = $model->config['default_currency'];
-			$response['data']['default_time_format'] = $model->config['default_time_format'];
-			$response['data']['default_date_format'] = $model->config['default_date_format'];
-			$response['data']['default_date_separator'] = $model->config['default_date_separator'];
-			$response['data']['default_thousands_separator'] = $model->config['default_thousands_separator'];
-			$response['data']['theme'] = $model->config['theme'];
+			$response['data']['enabled']=empty($c['id']) || !empty($c['enabled']);
+			$response['data']['max_users'] = GO_Base_Util_Number::unlocalize($c['max_users']);
 
-			$response['data']['default_decimal_separator'] = $model->config['default_decimal_separator'];
-			$response['data']['first_weekday'] = $model->config['first_weekday'];
+			$response['data']['webmaster_email'] = $c['webmaster_email'];
+			$response['data']['title'] = $c['title'];
+			$response['data']['default_country'] = $c['default_country'];
+			$response['data']['language'] = $c['language'];
+			$response['data']['default_timezone'] = $c['default_timezone'];
+			$response['data']['default_currency'] = $c['default_currency'];
+			$response['data']['default_time_format'] = $c['default_time_format'];
+			$response['data']['default_date_format'] = $c['default_date_format'];
+			$response['data']['default_date_separator'] = $c['default_date_separator'];
+			$response['data']['default_thousands_separator'] = $c['default_thousands_separator'];
+			$response['data']['theme'] = $c['theme'];
+
+			$response['data']['default_decimal_separator'] = $c['default_decimal_separator'];
+			$response['data']['first_weekday'] = $c['first_weekday'];
 
 
-			$response['data']['allow_themes'] = !empty($model->config['allow_themes']);
-			$response['data']['allow_password_change'] = !empty($model->config['allow_password_change']);
+			$response['data']['allow_themes'] = !empty($c['allow_themes']);
+			$response['data']['allow_password_change'] = !empty($c['allow_password_change']);
 
-			$response['data']['quota'] = GO_Base_Util_Number::localize($model->config['quota']/1024/1024/1024); //in gigabytes
-			$response['data']['restrict_smtp_hosts'] = $model->config['restrict_smtp_hosts'];
-			$response['data']['serverclient_domains'] = $model->config['serverclient_domains'];
+			$response['data']['quota'] = GO_Base_Util_Number::localize($c['quota']/1024/1024/1024); //in gigabytes
+			$response['data']['restrict_smtp_hosts'] = $c['restrict_smtp_hosts'];
+			$response['data']['serverclient_domains'] = $c['serverclient_domains'];
 		}
 		
 		if($model->automaticInvoice == null)
@@ -501,15 +503,17 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$record['mailbox_usage']= $model->mailboxUsageText;
 		$record['count_users'] = $model->countUsers;
 		$record['total_logins'] = $model->totalLogins;
-		$record['quota']=GO_Base_Util_Number::formatSize($model->quota);
+		//$record['quota']=GO_Base_Util_Number::formatSize($model->quota*1024);
 		
 		if(file_exists($model->configPath))
 		{
-			$record['enabled']=isset($model->config['enabled']) ? $model->config['enabled'] : true;
-			$record['title']=$model->config['title'];
-			$record['webmaster_email']=$model->config['webmaster_email'];
-			$record['max_users']=isset($model->config['max_users']) ? $model->config['max_users'] : 0;
-			$record['serverclient_domains']=isset($model->config['serverclient_domains']) ? $model->config['serverclient_domains'] : '';
+			$c = $model->getConfigWithGlobals();
+			$record['quota']=GO_Base_Util_Number::formatSize($c['quota']);
+			$record['enabled']=isset($c['enabled']) ? $c['enabled'] : true;
+			$record['title']=$c['title'];
+			$record['webmaster_email']=$c['webmaster_email'];
+			$record['max_users']=isset($c['max_users']) ? $c['max_users'] : 0;
+			$record['serverclient_domains']=isset($c['serverclient_domains']) ? $c['serverclient_domains'] : '';
 		}
 		
 		return parent::formatStoreRecord($record, $model, $store);

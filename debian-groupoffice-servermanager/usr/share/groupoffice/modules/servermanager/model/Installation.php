@@ -286,6 +286,22 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		}
 	}
 	
+	/**
+	 * Get the configuration values merged with the globalconfig.inc.php values
+	 * 
+	 * @return array
+	 */
+	public function getConfigWithGlobals(){
+		$c = $this->config;
+		if(file_exists('/etc/groupoffice/globalconfig.inc.php')){
+			require('/etc/groupoffice/globalconfig.inc.php');
+			if(isset($config))
+				$c = array_merge($config, $c);
+		}
+		
+		return $c;
+	}
+	
 	
 	public function mysqldump($outputDir){
 		$c = $this->getConfig();
