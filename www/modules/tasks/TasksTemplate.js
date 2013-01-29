@@ -1,6 +1,6 @@
 GO.tasks.TaskTemplate =
 		'<tpl if="values.tasks && values.tasks.length">'+
-		'{[this.collapsibleSectionHeader(GO.tasks.lang.tasks, "tasks-"+values.panelId, "tasks")]}'+
+		'{[this.collapsibleSectionHeader(GO.tasks.lang.incompleteTasks, "tasks-"+values.panelId, "tasks")]}'+
 		
 			'<table class="display-panel" cellpadding="0" cellspacing="0" border="0" id="tasks-{panelId}">'+
 			'<tr>'+
