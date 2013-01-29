@@ -25,15 +25,10 @@ GO.files.FilesContextMenu = function(config)
 		text: GO.files.lang.openWith,
 		cls: 'x-btn-text-icon',
 		handler: function(){
-				
-			if(!GO.files.openFileWindow){
-				GO.files.openFileWindow =  new GO.files.OpenFileWindow();			
-			}
-			GO.files.openFileWindow.show({
+			GO.files.openFile({
 				id:this.records[0].data.id,
 				all:'1'
 			});
-			
 		},
 		scope: this
 	});

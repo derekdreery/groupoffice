@@ -138,46 +138,6 @@ GO.files.FilePropertiesDialog = function(config){
 		items:this.tabPanel
 	});
 
-
-//	var tbar = [this.linkBrowseButton = new Ext.Button({
-//		iconCls : 'btn-link',
-//		cls : 'x-btn-text-icon',
-//		text : GO.lang.cmdBrowseLinks,
-//		disabled : true,
-//		handler : function() {
-//			if(!GO.linkBrowser){
-//				GO.linkBrowser = new GO.LinkBrowser();
-//			}
-//				
-//			GO.linkBrowser.show({
-//				model_id : this.file_id,
-//				model_name : "GO_Files_Model_File",
-//				folder_id : "0"
-//			});
-//		},
-//		scope : this
-//	}),{
-//		iconCls: 'btn-save',
-//		text: GO.lang.download,
-//		cls: 'x-btn-text-icon',
-//		handler: function(){
-//			GO.files.downloadFile(this.file_id);
-//		},
-//		scope: this
-//	}];
-//				
-//	if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission)
-//	{
-//		tbar.push({
-//			iconCls: 'btn-edit',
-//			text: GO.lang.cmdEdit,
-//			cls: 'x-btn-text-icon',
-//			handler: function(){
-//				GO.files.editFile(this.file_id);
-//			},
-//			scope: this
-//		});
-//	}
 		
 	GO.files.FilePropertiesDialog.superclass.constructor.call(this,{
 		title:GO.lang['strProperties'],
