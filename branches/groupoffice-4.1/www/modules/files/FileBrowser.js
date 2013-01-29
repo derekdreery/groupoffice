@@ -663,7 +663,7 @@ GO.files.FileBrowser = function(config){
 				this.fileClickHandler.call(this.scope, record);
 			}else
 			{
-				GO.files.openFile(record, this.getActiveGridStore(), e);
+				GO.files.openFile({id:record.data.id});
 			}
 		}
 	}, this);
@@ -1108,8 +1108,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 						callback: function(){
 							if(result.id)
 							{
-								//var record = store.getById('f:'+result.id);
-								GO.files.editFile(result.id);
+								GO.files.openFile({id: result.id});
 							}
 						},
 						scope: this
@@ -1714,8 +1713,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 					this.onGridDoubleClick.defer(200, this, [grid, rowClicked, e]);
 				}else
 				{
-					GO.files.openFile(record, this.getActiveGridStore(), e);
-					//GO.files.editFile(record.data.id);
+					GO.files.openFile({id:record.data.id});
 				}
 			}
 		}
@@ -1870,24 +1868,6 @@ Ext.extend(GO.files.FilesObservable, Ext.util.Observable);
 
 GO.files.filesObservable = new GO.files.FilesObservable();
 
-GO.files.openFilePath = function (path){
-
-	var extension='';
-
-	var dotpos = path.lastIndexOf('.');
-	if(dotpos){
-		extension = path.substring(dotpos, path.length);
-	}
-
-	var record = {
-		data:{
-			path:path,
-			extension:extension
-		}
-	}
-	GO.files.openFile(record);
-}
-
 GO.files.showImageViewer = function(imagesParams){
 	if(!this.imageViewer)
 	{
@@ -1895,12 +1875,10 @@ GO.files.showImageViewer = function(imagesParams){
 			closeAction:'hide'
 		});
 	}
-
 	
 	imagesParams["thumbParams"]=Ext.encode({lw:this.imageViewer.width-20,ph:this.imageViewer.height-100});
-	
-	
-	GO.request({
+
+GO.request({
 		url:"files/folder/images",
 		params:imagesParams,
 		maskEl:Ext.getBody(),
@@ -1911,64 +1889,12 @@ GO.files.showImageViewer = function(imagesParams){
 	});
 }
 
-GO.files.openFile = function(record, store,e)
-{
-
-	if(GO.files.filesObservable.fireEvent('beforeopenfile', record, store,e)){
-		//var index = record.data.id ? 'id' : 'path';
-		
-		if(!GO.files.openFileWindow){
-			GO.files.openFileWindow =  new GO.files.OpenFileWindow();
-			
-		}
-		GO.files.openFileWindow.show(record.data);
-		
-
-//		var params = {};
-//		params[index]=record.data[index];
-//		var url = GO.url('files/file/download',params);
-//
-//		switch(record.data.extension)
-//		{
-//			case 'png':
-//			case 'bmp':
-//			case 'png':
-//			case 'gif':
-//			case 'jpg':
-//			case 'jpeg':
-//			case 'xmind':
-//
-//				var imagesParams = {};
-//				imagesParams[index]=record.data[index];
-//				if(store && store.sortInfo){
-//					imagesParams["sort"]=store.sortInfo.field;
-//					imagesParams["dir"]=store.sortInfo.direction;
-//				}
-//				
-//				GO.files.showImageViewer(imagesParams);
-//				break;
-//
-//			case 'mht':
-//			case 'eml':
-//				if(GO.savemailas)
-//				{
-//					GO.linkHandlers["GO_Savemailas_Model_LinkedEmail"].call(this, record.data.id, {
-//						action:'file'
-//
-//					});
-//					break;
-//				}
-//
-//			default:
-//				if(GO.util.empty(record.get('locked')) && GO.settings.config.gota_blacklist_extensions.indexOf(record.data.extension)==-1){
-//					GO.files.editFile(record.data.id);
-//				}else
-//				{
-//					window.open(url);
-//				}
-//				break;
-//		}
+GO.files.openFile = function(config)
+{		
+	if(!GO.files.openFileWindow){
+		GO.files.openFileWindow =  new GO.files.OpenFileWindow();
 	}
+	GO.files.openFileWindow.show(config);
 }
 
 
@@ -1976,21 +1902,21 @@ GO.files.downloadFile = function (fileId){
 	window.open(GO.url("files/file/download",{id:fileId,inline:false}));
 }
 
-GO.files.editFile = function (fileId){
-
-	if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission && !GO.util.isAndroid())
-	{
-		if(!deployJava.isWebStartInstalled('1.6.0'))
-		{
-			Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);
-		}else
-		{
-			document.location.href=GO.url('gota/file/edit&id='+fileId);
-			return;
-		}
-	}
-	GO.files.downloadFile(fileId);
-}
+//GO.files.editFile = function (fileId){
+//
+//	if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission && !GO.util.isAndroid())
+//	{
+//		if(!deployJava.isWebStartInstalled('1.6.0'))
+//		{
+//			Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);
+//		}else
+//		{
+//			document.location.href=GO.url('gota/file/edit&id='+fileId);
+//			return;
+//		}
+//	}
+//	GO.files.downloadFile(fileId);
+//}
 
 //for external links
 GO.files.showFolder = function(folder_id){
