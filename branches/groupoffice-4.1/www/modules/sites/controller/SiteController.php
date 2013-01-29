@@ -45,7 +45,7 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 		if(!$content)
 			throw new GO_Base_Exception_NotFound('404 Page not found');
 		
-		$this->setPageTitle($content->meta_title);
+		$this->setPageTitle($content->title);
 		$this->description=$content->meta_description;
 		
 		$this->render('content', array('content'=>$content));

@@ -51,3 +51,5 @@ $updates["201211201622"][]="CREATE TABLE IF NOT EXISTS `si_content` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
 
 $updates["201211271539"][]="ALTER TABLE `si_sites` ADD `base_path` VARCHAR( 100 ) NOT NULL DEFAULT ''";
+
+$updates["201301291408"][]="ALTER TABLE  `si_content` ADD  `sort_order` INT NOT NULL DEFAULT  '0'";

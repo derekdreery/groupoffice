@@ -33,6 +33,7 @@ CREATE  TABLE IF NOT EXISTS `si_content` (
   `status` INT NOT NULL DEFAULT 1 ,
   `parent_id` INT NULL ,
   `site_id` INT NOT NULL ,
+  `sort_order` INT NOT NULL DEFAULT  '0',
   PRIMARY KEY (`id`) ,
   UNIQUE INDEX `slug_UNIQUE` (`slug` ASC, `site_id` ASC) ,
   INDEX `fk_si_content_si_content1` (`parent_id` ASC) ,

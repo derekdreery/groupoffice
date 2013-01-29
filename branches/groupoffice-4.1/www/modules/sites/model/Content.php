@@ -53,14 +53,21 @@ class GO_Sites_Model_Content extends GO_Base_Db_ActiveRecord {
 	
 	public function relations() {
 		return array(
-				'children' => array('type' => self::HAS_MANY, 'model' => 'GO_Sites_Model_Content', 'field' => 'parent_id', 'delete' => true),
+//				'children' => array('type' => self::HAS_MANY, 'model' => 'GO_Sites_Model_Content', 'field' => 'parent_id', 'delete' => true, GO_Base_Db_FindParams::newInstance()->order('sort_order')),
 				'site'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Sites_Model_Site", 'field'=>'site_id'),
-				'parent'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Sites_Model_Content", 'field'=>'parent_id')
+//				'parent'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Sites_Model_Content", 'field'=>'parent_id')
 				);
 	}
 	
 	public function getUrl($action='/sites/default/content',$relative=true){		
 		return GOS::site()->getController()->createUrl($action, array('slug'=>$this->slug), $relative);
+	}
+	
+	protected function beforeSave() {
+		if($this->isNew)
+			$this->sort_order=$this->count();		
+		
+		return parent::beforeSave();
 	}
 	
 }

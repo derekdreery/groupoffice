@@ -49,11 +49,11 @@
 							</div>
 						<?php endif; ?>
 						
-						<div class="topmenu-item-left <?php if(isset($_GET['slug']) && $_GET['slug']=='requirements')echo 'selected'; ?>">
+<!--						<div class="topmenu-item-left <?php if(isset($_GET['slug']) && $_GET['slug']=='requirements')echo 'selected'; ?>">
 							<div class="topmenu-item-right">
 								<a class="topmenu-item-center" href="<?php echo $this->createUrl('/sites/site/content', array('slug'=>'requirements')); ?>">Requirements</a>
 							</div>
-						</div>
+						</div>-->
 						
 						<div class="topmenu-item-left <?php if(GOS::site()->route=='tickets/site/ticketlist' || GOS::site()->route=='tickets/site/ticket') echo 'selected'; ?>">
 							<div class="topmenu-item-right">
@@ -61,11 +61,23 @@
 							</div>
 						</div>
 											
-						<div class="topmenu-item-left <?php if(isset($_GET['slug']) && $_GET['slug']=='contact')echo 'selected'; ?>">
+<!--						<div class="topmenu-item-left <?php if(isset($_GET['slug']) && $_GET['slug']=='contact')echo 'selected'; ?>">
 							<div class="topmenu-item-right">
 								<a class="topmenu-item-center" href="<?php echo $this->createUrl('/sites/site/content', array('slug'=>'contact')); ?>">Contact</a>
 							</div>
-						</div>
+						</div>-->
+						
+						
+						<?php
+						$stmt = GOS::site()->getSite()->content();
+						foreach($stmt as $contentModel):						
+						?>						
+							<div class="topmenu-item-left <?php if(isset($_REQUEST['slug']) && $_REQUEST['slug']==$contentModel->slug) echo 'selected'; ?>">
+								<div class="topmenu-item-right">
+									<a class="topmenu-item-center" href="<?php echo $this->createUrl('sites/site/content', array('slug'=>$contentModel->slug)); ?>"><?php echo $contentModel->title; ?></a>
+								</div>
+							</div>						
+						<?php endforeach; ?>	
 				
 					</div>
 				</div>

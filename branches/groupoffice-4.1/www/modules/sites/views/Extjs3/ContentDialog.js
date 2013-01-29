@@ -84,14 +84,12 @@ GO.sites.ContentDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		
 		this.contentPanel = new Ext.Panel({
 			title:GO.sites.lang.contentContent,			
-			cls:'go-form-panel',
 			layout:'form',
 			items:[
-					new Ext.form.HtmlEditor({
+					new GO.form.HtmlEditor({
 						hideLabel:true,
 						name: 'content',
-						height: 230,
-						anchor: '100%',
+						anchor: '100% 100%',
 						allowBlank:true
 					})
 				]
