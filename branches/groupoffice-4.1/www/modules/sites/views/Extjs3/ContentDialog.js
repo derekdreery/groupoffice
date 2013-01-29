@@ -20,7 +20,9 @@ GO.sites.ContentDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		Ext.apply(this, {
 			goDialogId:'content',
 			title:GO.sites.lang.content,
-			formControllerUrl: 'sites/content'
+			formControllerUrl: 'sites/content',
+			height:600,
+			width:900
 		});
 		
 		GO.sites.ContentDialog.superclass.initComponent.call(this);	
