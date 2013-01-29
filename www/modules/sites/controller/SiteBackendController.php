@@ -31,14 +31,16 @@ class GO_Sites_Controller_SiteBackend extends GO_Base_Controller_AbstractModelCo
 					'text' => 'Content', 
 					'expanded' => true, 
 					'children' => array()
-			),array(
-					'id' => 'menus_' . $site->id,  
-					'site_id'=>$site->id, 
-					'iconCls' => 'go-model-icon-GO_Sites_Model_Menu', 
-					'text' => 'Menus', 
-					'expanded' => true, 
-					'children' => array()
-			));
+			)
+//					,array(
+//					'id' => 'menus_' . $site->id,  
+//					'site_id'=>$site->id, 
+//					'iconCls' => 'go-model-icon-GO_Sites_Model_Menu', 
+//					'text' => 'Menus', 
+//					'expanded' => true, 
+//					'children' => array()
+//			)
+					);
 
 			$siteNode = array(
 					'id' => 'site_' . $site->id,  
