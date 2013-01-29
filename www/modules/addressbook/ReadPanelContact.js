@@ -477,5 +477,9 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 				});
 			}
 		}
+		
+		
+		this.newMenuButton.menu.taskShowConfig= {contact_id:this.data.id};
+		
 	}	
 });			
