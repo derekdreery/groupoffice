@@ -24,9 +24,10 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 		$this->relpath = $path;
 		$path = GO::config()->file_storage_path . $path;
 		
-		if(!$this->_getFolder()->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
-				throw new Sabre_DAV_Exception_Forbidden ();
-
+		if(!$this->_getFolder()->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION)){
+			GO::debug("DAV: User ".GO::user()->username." doesn't have write permission for ".$this->relpath);
+			throw new Sabre_DAV_Exception_Forbidden ("DAV: User ".GO::user()->username." doesn't have write permission for folder '".$this->relpath.'"');
+		}
 		parent::__construct($path);
 	}
 

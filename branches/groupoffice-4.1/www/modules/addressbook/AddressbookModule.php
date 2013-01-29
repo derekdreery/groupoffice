@@ -62,19 +62,19 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 			$company = new GO_Addressbook_Model_Company();
 			$company->setAttributes(array(
 				'addressbook_id' => $addressbook->id,
-				'name' => 'Intermesh',
-				'address' => 'Reitscheweg',
-				'address_no' => '37',
-				'zip' => '5232 BX',
+				'name' => 'Intermesh BV',
+				'address' => 'Zuid Willemsvaart',
+				'address_no' => '35',
+				'zip' => '5211 SB',
 				'city' => '\'s-Hertogenbosch',
 				'state' => 'Noord-Brabant',
 				'country' => 'NL',
 				'iso_address_format' => $default_language,
-				'post_address' => 'Reitscheweg',
-				'post_address_no' => '37',
-				'post_zip' => '5232 BX',
+				'post_address' => 'Zuid Willemsvaart',
+				'post_address_no' => '35',
+				'post_zip' => '5211 SB',
 				'post_city' => '\'s-Hertogenbosch',
-				'post_state' => 'Intermesh',
+				'post_state' => 'Noord-Brabant',
 				'post_country' => 'NL',
 				'post_iso_address_format' => $default_language,
 				'phone' => '+31 (0) 73 - 644 55 08',
@@ -126,5 +126,18 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		));
 		$template->save();
 		$template->acl->addGroup(GO::config()->group_internal);
+	}
+	
+	
+	public function checkDatabase(&$response) {
+		
+		if(GO::modules()->isInstalled('files')){
+			$folder = GO_Files_Model_Folder::model()->findByPath('projects');
+			$folder->acl_id=GO::modules()->projects->acl_id;
+			$folder->readonly=1;
+			$folder->save();
+		}
+		
+		return parent::checkDatabase($response);
 	}
 }
