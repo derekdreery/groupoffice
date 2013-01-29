@@ -51,6 +51,13 @@ $l = array(
 		'changePasswordText'=>'Use the below form to change your password',
 		'alreadySignedupText'=>'If you already have a username and password use this form to login.',
 		'forgotPasswordText'=>'Fill in your email address in the form below, and you\'ll recieve a link to recover your password within minuts.',
-		'submit'=>'Submit'
+		'submit'=>'Submit',
+		
+		'contentTitle'=>'Title',
+		'contentSlug'=>'Slug',
+		'contentContent'=>'Content',
+		'contentMeta_description'=>'Meta description',
+		'contentMeta_keywords'=>'Meta keywords'
+		
 		
 );

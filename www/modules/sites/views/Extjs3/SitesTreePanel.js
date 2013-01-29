@@ -28,6 +28,7 @@ GO.sites.SitesTreePanel = function (config){
 		listeners:{
 			contextmenu: function(node,event){
 				node.select();
+				console.log(node);
 				
 				if(this.isSiteNode(node)){				
 					this.sitesContextMenu.setSelected(this,'GO_Sites_Model_Site');

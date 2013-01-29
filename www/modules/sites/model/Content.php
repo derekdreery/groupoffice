@@ -38,16 +38,7 @@ class GO_Sites_Model_Content extends GO_Base_Db_ActiveRecord {
 	const STATUS_OFFLINE = 3;
 	const STATUS_DRAFT = 2;
 	
-	/**
-	 * Returns a static model of itself
-	 * 
-	 * @param String $className
-	 * @return GO_Sites_Model_Content
-	 */
-	public static function model($className=__CLASS__)
-	{	
-		return parent::model($className);
-	}
+	
 	
 	public function defaultAttributes()
 	{
@@ -62,7 +53,7 @@ class GO_Sites_Model_Content extends GO_Base_Db_ActiveRecord {
 	
 	public function relations() {
 		return array(
-				'content' => array('type' => self::HAS_MANY, 'model' => 'GO_Sites_Model_Content', 'field' => 'parent_id', 'delete' => true),
+				'children' => array('type' => self::HAS_MANY, 'model' => 'GO_Sites_Model_Content', 'field' => 'parent_id', 'delete' => true),
 				'site'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Sites_Model_Site", 'field'=>'site_id'),
 				'parent'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Sites_Model_Content", 'field'=>'parent_id')
 				);

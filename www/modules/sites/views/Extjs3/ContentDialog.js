@@ -13,17 +13,17 @@
  
 GO.sites.ContentDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	
-	customFieldType : "GO_Sites_Model_Page",
+	customFieldType : "GO_Sites_Model_Content",
 	
 	initComponent : function(){
 		
 		Ext.apply(this, {
-			goDialogId:'page',
-			title:GO.sites.lang.page,
+			goDialogId:'content',
+			title:GO.sites.lang.content,
 			formControllerUrl: 'sites/content'
 		});
 		
-		GO.sites.PageDialog.superclass.initComponent.call(this);	
+		GO.sites.ContentDialog.superclass.initComponent.call(this);	
 	},
 	
 	buildForm : function () {
@@ -33,99 +33,30 @@ GO.sites.ContentDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			layout:'form',
 			items:[{
 	  		xtype: 'fieldset',
-	  		title: GO.sites.lang.pageProperties,
+	  		title: GO.lang.strProperties,
 	  		autoHeight: true,
 	  		border: true,
 	  		collapsed: false,
 				items:[{
-					xtype: 'textfield',
-					name: 'name',
-					width:300,
-					anchor: '100%',
-					maxLength: 100,
-					allowBlank:false,
-					fieldLabel: GO.sites.lang.pageName
-				},{
 					xtype: 'textfield',
 					name: 'title',
 					width:300,
 					anchor: '100%',
 					maxLength: 100,
 					allowBlank:false,
-					fieldLabel: GO.sites.lang.pageTitle
+					fieldLabel: GO.sites.lang.contentTitle
 				},{
 					xtype: 'textfield',
-					name: 'path',
-					width:300,
-					anchor: '100%',
-					maxLength: 100,
-					allowBlank:true,
-					fieldLabel: GO.sites.lang.pagePath
-				},{
-					xtype: 'textfield',
-					name: 'template',
-					width:300,
-					anchor: '100%',
-					maxLength: 100,
-					allowBlank:true,
-					fieldLabel: GO.sites.lang.pageTemplate
-				},{
-					xtype: 'textfield',
-					name: 'controller',
+					name: 'slug',
 					width:300,
 					anchor: '100%',
 					maxLength: 100,
 					allowBlank:false,
-					fieldLabel: GO.sites.lang.pageController
-				},{
-					xtype: 'textfield',
-					name: 'controller_action',
-					width:300,
-					anchor: '100%',
-					maxLength: 100,
-					allowBlank:false,
-					fieldLabel: GO.sites.lang.pageControllerAction
-				},{
-					xtype: 'xcheckbox',
-					name:'login_required',
-					fieldLabel: "Login required"
+					fieldLabel: GO.sites.lang.contentSlug
 				}]
-			}]
-		});
-
-		this.addPanel(this.propertiesPanel);
-		
-		this.contentPanel = new Ext.Panel({
-			title:GO.sites.lang.pageContent,			
-			cls:'go-form-panel',
-			layout:'form',
-			items:[{
+			},{
 	  		xtype: 'fieldset',
-	  		title: GO.sites.lang.pagePageContent,
-	  		autoHeight: true,
-	  		border: true,
-	  		collapsed: false,
-				items:[
-					new Ext.form.HtmlEditor({
-						hideLabel:true,
-						name: 'content',
-						height: 230,
-						anchor: '100%',
-						allowBlank:true
-					})
-				]
-			}]
-		});
-
-		this.addPanel(this.contentPanel);
-		
-		this.metaPanel = new Ext.Panel({
-			title:GO.sites.lang.pageMetaData,			
-			cls:'go-form-panel',
-			layout:'form',
-			items:[{
-	  		xtype: 'fieldset',
-	  		title: GO.sites.lang.pagePageMetaData,
+	  		title: GO.sites.lang.metaData,
 	  		autoHeight: true,
 	  		border: true,
 	  		collapsed: false,
@@ -136,7 +67,7 @@ GO.sites.ContentDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 					anchor: '100%',
 					maxLength: 100,
 					allowBlank:true,
-					fieldLabel: GO.sites.lang.pageDescription
+					fieldLabel: GO.sites.lang.contentMeta_description
 				},{
 					xtype: 'textfield',
 					name: 'keywords',
@@ -144,35 +75,30 @@ GO.sites.ContentDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 					anchor: '100%',
 					maxLength: 100,
 					allowBlank:true,
-					fieldLabel: GO.sites.lang.pageKeywords
-				}]
-			},{
-	  		xtype: 'fieldset',
-	  		title: GO.sites.lang.timeStamps,
-	  		autoHeight: true,
-	  		border: true,
-	  		collapsed: false,
-				items:[{
-					xtype: 'plainfield',
-					name: 'mtime',
-					width:300,
-					anchor: '100%',
-					maxLength: 100,
-					allowBlank:false,
-					fieldLabel: GO.sites.lang.pageMtime
-				},{
-					xtype: 'plainfield',
-					name: 'ctime',
-					width:300,
-					anchor: '100%',
-					maxLength: 100,
-					allowBlank:false,
-					fieldLabel: GO.sites.lang.pageCtime
+					fieldLabel: GO.sites.lang.contentMeta_keywords
 				}]
 			}]
 		});
 
-		this.addPanel(this.metaPanel);
+		this.addPanel(this.propertiesPanel);
+		
+		this.contentPanel = new Ext.Panel({
+			title:GO.sites.lang.contentContent,			
+			cls:'go-form-panel',
+			layout:'form',
+			items:[
+					new Ext.form.HtmlEditor({
+						hideLabel:true,
+						name: 'content',
+						height: 230,
+						anchor: '100%',
+						allowBlank:true
+					})
+				]
+	
+		});
+
+		this.addPanel(this.contentPanel);
 		
 	},
 	
