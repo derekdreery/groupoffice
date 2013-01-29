@@ -1,4 +1,4 @@
-28-01-2013 4.1.27
+29-01-2013 4.1.27
 - Updated Hrvatski language
 - Added AntiFloodPlugin to newsletter sender
 - Fixed bold subject in email.
@@ -6,10 +6,14 @@
 - Event/store will return results in the order of starting time for correct List display in calendar
 - New file handler system so users can choose their application of preference
 - Only show incomplete tasks in display panels
+- Added simple content editing to sites module
+- Fixed status=0 when creating event in outlook and synced with Funambol
+- Updated Norwegian language
+- Show correct quota in servermanager
 
 
 28-01-2013 4.1.26
-- Added strong password checks.
+- Added strong password checks. (See http://wiki4.group-office.com/wiki/Configuration_file)
 - Added Google Drive connection module to Documents package. You can edit documents directly in Google docs.
 - When a standardTask contains a code or description this will be added to the time entries description field when selected it
 - Bug on setting disabled custom fields on new addressbook
