@@ -39,6 +39,10 @@ class GO_Calendar_Model_Category extends GO_Base_Db_ActiveRecord{
 		$this->columns['name']['unique']=array("calendar_id");
 		return parent::init();
 	}
+	
+	public function getLogMessage($action) {		
+		return $this->name;
+	}
 
 	/**
 	 * Enable this function if you want this model to check the acl's automatically.
