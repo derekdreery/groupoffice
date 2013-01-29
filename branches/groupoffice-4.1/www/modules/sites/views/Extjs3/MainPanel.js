@@ -5,14 +5,12 @@ GO.sites.MainPanel = function(config){
 		config = {};
 	}
 	
-	this.centerPanel = new GO.sites.ContentPanel({
+	this.centerPanel = new Ext.Panel({
 		region:'center',
 		border:true,
 		layout:'card',
-		items:[new Ext.Panel({
-				id:'sites-content',
-				html:'content'
-		}),new Ext.Panel({
+		items:[new GO.sites.ContentPanel(),
+			new Ext.Panel({
 				id:'sites-menus',
 				html:'menus'
 		})]
@@ -63,7 +61,10 @@ Ext.extend(GO.sites.MainPanel, Ext.Panel,{
 		var arr = node.id.split('_');
 		if(arr[0]!='site'){
 			var centerPanelId = 'sites-'+arr[0];
-			this.centerPanel.getLayout().setActiveItem(centerPanelId);
+			var item = this.centerPanel.getComponent(centerPanelId);
+				
+			this.centerPanel.getLayout().setActiveItem(item);
+			item.load(arr[1]);
 		}
 	},
 
