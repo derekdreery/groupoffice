@@ -9,7 +9,7 @@ class GO_Files_Filehandler_Inline implements GO_Files_Filehandler_Interface{
 	}
 	
 	public function fileIsSupported(GO_Files_Model_File $file){
-		return $file->isImage() || in_array(strtolower($file->extension),array('pdf','html','htm','txt','xml'));
+		return $file->isImage() || in_array(strtolower($file->extension),array('pdf','html','htm','txt','xml','log'));
 	}
 	
 	public function getIconCls(){
