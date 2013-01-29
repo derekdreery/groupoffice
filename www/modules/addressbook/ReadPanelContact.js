@@ -317,7 +317,8 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 			isWorkPhoneFieldset : function(values)
 			{
 				if(!GO.util.empty(values['work_phone']) ||
-					!GO.util.empty(values['work_fax']) )
+					!GO.util.empty(values['work_fax'])  ||
+					!GO.util.empty(values['homepage']) )
 				{
 					return true;
 				} else {
