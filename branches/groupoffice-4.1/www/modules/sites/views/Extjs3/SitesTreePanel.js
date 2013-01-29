@@ -33,10 +33,10 @@ GO.sites.SitesTreePanel = function (config){
 					this.sitesContextMenu.setSelected(this,'GO_Sites_Model_Site');
 					this.sitesContextMenu.showAt(event.xy);
 				}
-				else {
-					this.pagesContextMenu.setSelected(this,'GO_Sites_Model_Page');
-					this.pagesContextMenu.showAt(event.xy);
-				}
+//				else {
+//					this.pagesContextMenu.setSelected(this,'GO_Sites_Model_Page');
+//					this.pagesContextMenu.showAt(event.xy);
+//				}
 			},
 			scope:this
 		},

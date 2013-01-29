@@ -233,3 +233,4 @@ $l["markFolderReadConfirm"]='Er du sikker på at du vil merke alle e-poster i ma
 $l['cantDeleteSpecialFolder']="Du kan ikke slette mappene Papirkurv, Sendt eller Utkast!";
 $l['storePassword']='Lagre passordet permanent';
 $l["copyingMessages"]='Kopierer meldinger...';
+$l['cantMoveSpecialFolder']="Du kan ikke flytte mappene Papirkurv, Sendt eller Utkast! ";
