@@ -71,7 +71,15 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 		
 		if(GO_Base_Util_Http::isPostRequest())
 		{
+			//if username is deleted from form then use the e-mail adres as username
+			if(!isset($_POST['User']['username']))
+				$_POST['User']['username']=$_POST['User']['email'];
+			
+			
 			$user->setAttributes($_POST['User']);
+			
+			
+			
 			$contact->setAttributes($_POST['Contact']);
 			
 			$company->setAttributes($_POST['Company']);
@@ -109,9 +117,9 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 				}
 			}
 			else {
-				var_dump($user->getValidationErrors());
-				var_dump($contact->getValidationErrors());
-				var_dump($company->getValidationErrors());
+//				var_dump($user->getValidationErrors());
+//				var_dump($contact->getValidationErrors());
+//				var_dump($company->getValidationErrors());
 			}
 		}
 		
