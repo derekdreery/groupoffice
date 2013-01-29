@@ -25,22 +25,6 @@ GO.sites.SitesTreePanel = function (config){
 	this.pagesContextMenu = new GO.sites.PagesContextMenu();
 
 	Ext.applyIf(config, {
-		listeners:{
-			contextmenu: function(node,event){
-				node.select();
-				console.log(node);
-				
-				if(this.isSiteNode(node)){				
-					this.sitesContextMenu.setSelected(this,'GO_Sites_Model_Site');
-					this.sitesContextMenu.showAt(event.xy);
-				}
-//				else {
-//					this.pagesContextMenu.setSelected(this,'GO_Sites_Model_Page');
-//					this.pagesContextMenu.showAt(event.xy);
-//				}
-			},
-			scope:this
-		},
 		layout:'fit',
 		split:true,
 		autoScroll:true,
@@ -64,6 +48,9 @@ GO.sites.SitesTreePanel = function (config){
 	});
 
 	this.setRootNode(this.rootNode);
+	
+	
+	this.on('contextmenu',this.onContextMenu, this);
 }
 	
 	
@@ -82,6 +69,18 @@ Ext.extend(GO.sites.SitesTreePanel, Ext.tree.TreePanel,{
 	},
 	getRootNode: function(){
 		return this.rootNode;
+	},
+	onContextMenu: function(node,event){
+		node.select();
+				
+		if(this.isSiteNode(node)){				
+			this.sitesContextMenu.setSelected(this,'GO_Sites_Model_Site');
+			this.sitesContextMenu.showAt(event.xy);
+		}
+	//				else {
+	//					this.pagesContextMenu.setSelected(this,'GO_Sites_Model_Page');
+	//					this.pagesContextMenu.showAt(event.xy);
+	//				}
 	}
 });
 	

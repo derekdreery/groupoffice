@@ -57,7 +57,17 @@
 								</div>
 							</div>
 						<?php endif; ?>
-				
+						
+						<?php
+						$stmt = GOS::site()->getSite()->content();
+						foreach($stmt as $contentModel):						
+						?>						
+							<div class="topmenu-item-left <?php if(isset($_REQUEST['slug']) && $_REQUEST['slug']==$contentModel->slug) echo 'selected'; ?>">
+								<div class="topmenu-item-right">
+									<a class="topmenu-item-center" href="<?php echo $this->createUrl('sites/site/content', array('slug'=>$contentModel->slug)); ?>"><?php echo $contentModel->title; ?></a>
+								</div>
+							</div>						
+						<?php endforeach; ?>				
 					</div>
 				</div>
 			</div>

@@ -41,5 +41,23 @@ class GO_Sites_Controller_Content extends GO_Base_Controller_AbstractModelContro
 		exit();
 	}
 	
+	protected function getStoreParams($params) {
+		return GO_Base_Db_FindParams::newInstance()->order('sort_order');
+	}
+	
+	
+	protected function actionSaveSort($params){		
+		$items = json_decode($params['content'], true);
+		$sort = 0;
+		foreach ($items as $item) {
+			$model = GO_Sites_Model_Content::model()->findByPk($item['id']);
+			$model->sort_order=$sort;
+			$model->save();
+			$sort++;
+		}		
+		
+		return array('success'=>true);
+	}	
+	
 }
 ?>
