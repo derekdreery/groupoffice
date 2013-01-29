@@ -47,8 +47,8 @@
 class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 	const STATUS_TENTATIVE = 'TENTATIVE';
-	const STATUS_DECLINED = 'DECLINED';
-	const STATUS_ACCEPTED = 'ACCEPTED';
+//	const STATUS_DECLINED = 'DECLINED';
+//	const STATUS_ACCEPTED = 'ACCEPTED';
 	const STATUS_CANCELLED = 'CANCELLED';
 	const STATUS_CONFIRMED = 'CONFIRMED';
 	const STATUS_NEEDS_ACTION = 'NEEDS-ACTION';
@@ -86,6 +86,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		//$this->columns['category_id']['required'] = GO_Calendar_CalendarModule::commentsRequired();
 		
 		parent::init();
+	}
+	
+	public function isValidStatus($status){
+		return ($status==self::STATUS_CANCELLED || $status==self::STATUS_CONFIRMED || $status==self::STATUS_DELEGATED || $status==self::STATUS_TENTATIVE || $status==self::STATUS_NEEDS_ACTION);			
 	}
 
 	/**
@@ -1363,8 +1367,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->location=(string) $vobject->location;
 		
 		//var_dump($vobject->status);
-		if($vobject->status)
-			$this->status=(string) $vobject->status;
+		if($vobject->status){
+			$status = (string) $vobject->status;
+			if($this->isValidStatus($status))
+				$this->status=$status;			
+		}
 		
 		if($vobject->duration){
 			$duration = GO_Base_VObject_Reader::parseDuration($vobject->duration);
