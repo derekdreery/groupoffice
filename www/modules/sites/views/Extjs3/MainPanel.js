@@ -7,13 +7,25 @@ GO.sites.MainPanel = function(config){
 	
 	this.centerPanel = new GO.sites.ContentPanel({
 		region:'center',
-		border:true
+		border:true,
+		layout:'card',
+		items:[new Ext.Panel({
+				id:'sites-content',
+				html:'content'
+		}),new Ext.Panel({
+				id:'sites-menus',
+				html:'menus'
+		})]
 	}); 
 	
 	this.treePanel = new GO.sites.SitesTreePanel({
 		region:'west',
 		width:300,
-		border:true
+		border:true,
+		listeners:{
+			click:this.treeNodeClick,
+			scope:this
+		}
 	});
 	
 	this.newSiteButton = new Ext.Button({
@@ -27,16 +39,6 @@ GO.sites.MainPanel = function(config){
 		this.showSiteDialog(0); // The parameter 0 will generate a new site object.
 	},this);
 	
-//	this.settingsButton = new Ext.Button({
-//		iconCls: 'btn-settings',
-//		itemId:'settings',
-//		text: GO.sites.lang.moduleSettings,
-//		cls: 'x-btn-text-icon'
-//	});
-//	
-//	this.settingsButton.on("click", function(){
-//		this.showModuleSettingsDialog();
-//	},this);
 	
 	config.layout='border';
 	
@@ -49,8 +51,6 @@ GO.sites.MainPanel = function(config){
 			cls:'go-head-tb',
 			items: [
 				this.newSiteButton
-//				"-",
-//				this.settingsButton
 			]
 	});
 	
@@ -58,6 +58,14 @@ GO.sites.MainPanel = function(config){
 }
 
 Ext.extend(GO.sites.MainPanel, Ext.Panel,{
+	
+	treeNodeClick: function(node){
+		var arr = node.id.split('_');
+		if(arr[0]!='site'){
+			var centerPanelId = 'sites-'+arr[0];
+			this.centerPanel.getLayout().setActiveItem(centerPanelId);
+		}
+	},
 
 	showSiteDialog: function(site_id){
 		if(!this.siteDialog){
@@ -69,22 +77,17 @@ Ext.extend(GO.sites.MainPanel, Ext.Panel,{
 		
 		this.siteDialog.show(site_id);
 	},
-	showContentDialog: function(page_id){
-		if(!this.contentDialog){
-			this.contentDialog = new GO.sites.ContentDialog();
-			this.contentDialog.on('hide', function(){
-				this.rebuildTree();
-			},this);
-		}
-		
-		this.contentDialog.show(page_id);
-	},
-//	showModuleSettingsDialog: function(){
-//		if(!this.moduleSettingsDialog)
-//			this.moduleSettingsDialog = new GO.sites.ModuleSettingsDialog();
+//	showContentDialog: function(page_id){
+//		if(!this.contentDialog){
+//			this.contentDialog = new GO.sites.ContentDialog();
+//			this.contentDialog.on('hide', function(){
+//				this.rebuildTree();
+//			},this);
+//		}
 //		
-//		this.moduleSettingsDialog.show();
+//		this.contentDialog.show(page_id);
 //	},
+
 	rebuildTree: function(){
 		this.treePanel.getLoader().load(this.treePanel.getRootNode());
 	}

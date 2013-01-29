@@ -52,3 +52,4 @@ $l["postfixadmin"]='E-post domener';
 $l['maxAliases']= 'Maks. aliaser';
 $l['maxMailboxes']= 'Maks. mailbokser';
 $l['aliasHelp']="For flere mottagere kan du lage en kommaseparert liste, for eksempel alias1@domain.com,alias2@domain.com";
+$l['usedQuota']='Brukt kvote';

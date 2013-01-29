@@ -19,3 +19,4 @@ $l["adminOnlyLabel"]= 'Kun administratorer kan ha tilgang til denne gruppen for 
 $l["groupMembers"]='Gruppemedlemmer';
 $l["managePermissions"]= 'Behandle tillatelser';
 $l['modulePermissions']= 'Modulrettigheter';
+$l['use']='Bruk';
