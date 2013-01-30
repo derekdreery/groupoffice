@@ -702,7 +702,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		} else {
 			$record['type_id'] = 'f:' . $model->id;
 			$record['type'] = $model->fsFile->typeDescription();
-			$record['extension'] = $model->extension;
+			$record['extension'] = strtolower($model->extension);
 			$record['size']=$model->size;
 			$record['permission_level']=$this->_listFolderPermissionLevel;
 			$record['unlock_allowed']=$model->unlockAllowed();
