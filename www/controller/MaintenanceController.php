@@ -956,6 +956,13 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		echo "Done\n\n";
 	}
 	
+	protected function actionResetState($params){
+		
+		GO::getDbConnection()->query("DELETE FROM go_state WHERE name!='summary-active-portlets' AND user_id=".intval($params['user_id']));
+
+		return array('success'=>true);
+	}
+	
 	
 	protected function actionRemoveEmptyStuff($params){
 		
