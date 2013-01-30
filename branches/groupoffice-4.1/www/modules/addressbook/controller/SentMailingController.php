@@ -152,7 +152,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		$mailer->registerPlugin(new Swift_Plugins_ThrottlerPlugin(GO::config()->mailing_messages_per_minute, Swift_Plugins_ThrottlerPlugin::MESSAGES_PER_MINUTE));
 		
 		// Use AntiFlood to re-connect after 50 emails
-		$mailer->registerPlugin(new Swift_Plugins_AntiFloodPlugin(50));
+		$mailer->registerPlugin(new Swift_Plugins_AntiFloodPlugin(GO::config()->mailing_messages_per_minute));
 
 		echo 'Sending a maximum of ' . GO::config()->mailing_messages_per_minute . ' messages per minute' . "\n";
 
