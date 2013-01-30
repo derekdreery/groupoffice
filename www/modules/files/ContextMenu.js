@@ -19,6 +19,18 @@ GO.files.FilesContextMenu = function(config)
 	}
 	config['shadow']='frame';
 	config['minWidth']=180;
+	
+	this.openButton = new Ext.menu.Item({
+		iconCls: 'btn-save',
+		text: GO.files.lang.open,
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			GO.files.openFile({
+				id:this.records[0].data.id
+			});
+		},
+		scope: this
+	});
 
 	this.downloadButton = new Ext.menu.Item({
 		iconCls: 'btn-save',
@@ -176,7 +188,7 @@ GO.files.FilesContextMenu = function(config)
 		scope: this
 	});
 
-	config['items']=[this.downloadButton];
+	config['items']=[this.openButton, this.downloadButton];
 
 	config['items'].push(this.lockButton);
 	config['items'].push(this.unlockButton);
@@ -282,6 +294,7 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 				case 'tgz':
 				case 'gz':
 					this.downloadButton.show();
+					this.openButton.show();
 
 					this.decompressButton.show();
 					this.compressButton.hide();
@@ -296,35 +309,29 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 					
 					break;
 
-				case '':
-					if (records[0].data.type=='Map') {
-						this.downloadButton.hide();
-
-						this.decompressButton.hide();
-						this.compressButton.show();
-						if(this.downloadLinkButton)
-							this.downloadLinkButton.hide();
-					} else {
-						this.downloadButton.show();
-
-						this.decompressButton.show();
-						this.compressButton.hide();
-						if(this.downloadLinkButton)
-							this.downloadLinkButton.show();
-						this.createDownloadLinkButton.show();
-						
-						if(this.emailFilesButton)
-							this.emailFilesButton.show();
-					}
-					
-					this.bookmarkButton.hide();
-					
-					break;
+//				case '':
+//					
+//					this.downloadButton.show();
+//
+//					this.decompressButton.show();
+//					this.compressButton.hide();
+//					if(this.downloadLinkButton)
+//						this.downloadLinkButton.show();
+//					this.createDownloadLinkButton.show();
+//
+//					if(this.emailFilesButton)
+//						this.emailFilesButton.show();
+//
+//					
+//					this.bookmarkButton.hide();
+//					
+//					break;
 				case 'folder':
 					
 					this.lockButton.hide();
 					this.unlockButton.setVisible(false);
 					this.downloadButton.hide();
+					this.openButton.hide();
 
 					this.decompressButton.hide();
 					clickedAt == 'tree' ? this.compressButton.hide() : this.compressButton.show();
@@ -352,6 +359,8 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 
 		
 					this.downloadButton.show();
+					this.openButton.show();
+					
 					clickedAt == 'tree' ? this.compressButton.hide() : this.compressButton.show();
 					this.decompressButton.hide();
 					
@@ -373,6 +382,8 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 			clickedAt == 'tree' ? this.compressButton.hide() : this.compressButton.show();
 			this.decompressButton.hide();
 			this.downloadButton.hide();
+			this.openButton.hide();
+			
 			this.createDownloadLinkButton.hide();
 
 			if(this.emailFilesButton)
