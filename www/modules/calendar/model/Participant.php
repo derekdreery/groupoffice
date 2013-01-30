@@ -198,7 +198,30 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	 * @return GO_Calendar_Model_Event
 	 */
 	public function getParticipantEvent() {
-		return $this->event ? GO_Calendar_Model_Event::model()->findByUuid($this->event->uuid, $this->user_id) : false;
+
+		if(!$this->event || !$this->user_id)
+			return false;
+		
+		
+		$params = GO_Base_Db_FindParams::newInstance()
+						->ignoreAcl()
+						->single();		
+		
+		$params->getCriteria()
+						->addCondition('uuid', $this->event->uuid)
+						->addCondition('start_time', $this->event->start_time) //make sure start time matches for recurring series
+						->addCondition("exception_for_event_id", 0, $this->event->exception_for_event_id==0 ? '=' : '!='); //the master event or a single occurrence can start at the same time. Therefore we must check if exception event has a value or is 0.
+
+
+		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
+						->addCondition('calendar_id', 'c.id','=','t',true, true)
+						->addCondition('user_id', $this->user_id,'=','c');
+
+		$params->join(GO_Calendar_Model_Calendar::model()->tableName(), $joinCriteria, 'c');
+		
+						
+		return GO_Calendar_Model_Event::model()->find($params);
+	
 	}
 
 	/**

@@ -560,6 +560,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		return $stmt;
 	}
 	
+	
+	
 	/**
 	 * If this is a resource of the current user ignore ACL permissions when deleting 
 	 */
