@@ -18,7 +18,7 @@
 			<?php if($cart->getDiscount() > 0): ?>
 				<tr>
 					<td>-1</td>
-					<td><?php echo $cart->getDiscountPercentage(); ?>% reseller discount.</td>
+					<td><?php echo $cart->getDiscountDescription(); ?></td>
 					<td align="right"><?php echo $cart->getDiscountText(); ?></td>
 				</tr>
 			<?php endif; ?>
