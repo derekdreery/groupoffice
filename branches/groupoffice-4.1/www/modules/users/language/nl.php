@@ -120,3 +120,5 @@ $l['slashdmy']='Dag/Maand/Jaar';
 $l['generatePassword']='Genereer wachtwoord';
 $l['generatedPasswordIs']='Het gegenereerde wachtwoord is';
 $l['updateExistingOnImport']='Werk bestaande gebruikers bij op basis van username';
+$l['resetState']="Reset vensters en tabellen";
+$l['resetStateConfirm']='Weet u zeker dat u alle vensters, tabelkollomen en paneelafmetingen wilt terugzetten naar de fabrieksinstellingen?';
