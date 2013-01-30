@@ -606,9 +606,17 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	
 	
 	
-	
+	/**
+	 * Get the source of this message
+	 * 
+	 * @return String
+	 */
 	public function getSource(){
+		$imap = $this->getImapConnection();
+		$header = $imap->get_message_part($this->uid, 'HEADER', true) . "\r\n\r\n";
+		$body = $imap->get_message_part($this->uid, 'TEXT', true);
 		
+		return $header.$body;
 	}
 	
 	/**
