@@ -926,7 +926,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 								strtotime($endTime)
 							);
 		
-		
+		$this->_uuidEvents = array();
 
 		// Loop through each event and prepare the view for it.
 		foreach($events as $event){
