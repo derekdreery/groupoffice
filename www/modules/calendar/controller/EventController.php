@@ -287,23 +287,26 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$ids = array();
 		if (!empty($params['participants'])) {
 			$participants = json_decode($params['participants'], true);
+			
+			//don't save a single organizer participant
+			if(count($participants)>1){				
+				foreach ($participants as $p) {
 
-			foreach ($participants as $p) {
+					$participant = false;
+					if (substr($p['id'], 0, 4) != 'new_') {
+						$participant = GO_Calendar_Model_Participant::model()->findByPk($p['id']);
+					}
+					if (!$participant)
+						$participant = new GO_Calendar_Model_Participant();
 
-				$participant = false;
-				if (substr($p['id'], 0, 4) != 'new_') {
-					$participant = GO_Calendar_Model_Participant::model()->findByPk($p['id']);
+					unset($p['id']);
+					$participant->setAttributes($p);
+					$participant->event_id = $event->id;
+					$participant->save();
+					$ids[] = $participant->id;
+
+					$response[]=$participant->toJsonArray($event->start_time, $event->end_time);
 				}
-				if (!$participant)
-					$participant = new GO_Calendar_Model_Participant();
-
-				unset($p['id']);
-				$participant->setAttributes($p);
-				$participant->event_id = $event->id;
-				$participant->save();
-				$ids[] = $participant->id;
-				
-				$response[]=$participant->toJsonArray($event->start_time, $event->end_time);
 			}
 
 			$stmt = GO_Calendar_Model_Participant::model()->find(
@@ -497,6 +500,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				
 					$response['participants']['results'][] = $record;
 				$response['participants']['total']+=1;
+			}
+			
+			if($response['participants']['total']==0){
+				$participantModel = $model->getDefaultOrganizerParticipant();
+
+				$response['participants']=array('results'=>array($participantModel->toJsonArray($model->start_time, $model->end_time)),'total'=>1,'success'=>true);
 			}
 		}
 		

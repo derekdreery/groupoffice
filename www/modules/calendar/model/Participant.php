@@ -285,25 +285,23 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 			
 			
 			if ($this->user_id > 0 && $this->user_id != $this->event->user_id) {
-				$this->event->createCopyForParticipant($this);					
+				$newEvent = $this->event->createCopyForParticipant($this);					
 			}
 			
 			
 			$stmt = $this->event->getRelatedParticipantEvents();
 			
 			foreach($stmt as $event){
-				$p = new GO_Calendar_Model_Participant();
-				$p->setAttributes($this->getAttributes('raw'), false);
-				$p->event_id=$event->id;
-				$p->id=null;
-				$p->save();
+				if($event->id!=$newEvent->id){
+					$p = new GO_Calendar_Model_Participant();
+					$p->setAttributes($this->getAttributes('raw'), false);
+					$p->event_id=$event->id;
+					$p->id=null;
+					$p->save();
+				}
 			}
 		}
-		
-//		if($this->notifyOrganizer){
-//			$this->_notifyOrganizer();
-//		}
-		
+
 		return parent::afterSave($wasNew);
 	}
 	
