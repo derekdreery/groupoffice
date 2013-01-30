@@ -194,6 +194,13 @@ GO.users.LookAndFeelPanel = function(config)
 			hideLabel: true,
 			boxLabel: GO.users.lang.showSmilies,
 			name: 'show_smilies'
+		},{
+			xtype:'button',
+			style:'margin-top:20px',
+			handler:this.resetState,
+			scope:this,
+			text:GO.users.lang.resetState,
+			anchor:''
 		});
 	
 	
@@ -202,7 +209,21 @@ GO.users.LookAndFeelPanel = function(config)
 
 
 Ext.extend(GO.users.LookAndFeelPanel, Ext.Panel,{
-	
+	resetState : function(){
+		if(confirm(GO.users.lang.resetStateConfirm)){
+			GO.request({
+				maskEl:Ext.getBody(),
+				url:'maintenance/resetState',
+				params:{
+					user_id:this.ownerCt.ownerCt.ownerCt.remoteModelId
+				},
+				success:function(){
+					document.location.reload();
+				},
+				scope:this
+			});
+		}
+	},
 	onLoadSettings : function(action){
 		this.startModuleField.setRemoteText(action.result.data.start_module_name);
 	}
