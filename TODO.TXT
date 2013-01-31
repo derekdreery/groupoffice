@@ -4,14 +4,11 @@ Copy e0-mail
 
 Bij batch status in billing nieuw item toevoegen. Bv. herinneringskosten. Percentage of bedrag.
 
-busy flag bij nieuwe resources
-
 vink voor verzenddatum op factuur.
 
 
 move private check to first tab in event dialog
 
-resource conflict check in 4.1
 
 op ics klikken opent event dialog
 
@@ -53,12 +50,6 @@ Bug: http://www.group-office.com/forum/viewtopic.php?f=1&t=8409&p=28295#p28295
 
 Bij alle omgebouwde modules .php zoeken in *.js files zodat oude php code uiteindelijk weg kan.
 
-Arjen mul: 1 uur voor korting
-
-
-Billing systeem servermanager
-
-Ticket groepen werken niet daniel malmgren
 
 Automatisch ticket maken van support@intermesh.nl
 
@@ -85,10 +76,6 @@ Add max_file_storage setting to servermanager
 
 Koba
 
-
-Sieve MVC en redesign vakantie. Automatisch vullen aliasen
-
-CMS compatible (Wilmar)
 
 karakter encoding: koi8-r
 
