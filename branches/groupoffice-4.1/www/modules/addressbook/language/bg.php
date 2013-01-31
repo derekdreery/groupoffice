@@ -7,7 +7,7 @@ $l["savedQueries"]='Записани заявки за търсене';
 $l["selectField"]= 'Поле за търсене';
 $l["selectMailingGroup"]='Избор на групи за групови съобщения';
 $l["cmdFormLabelAddressBooks"]= 'Адресна книга';
-$l["alphabet"]= 'А,Б,В,Г,Д,Е,Ж,З,И,Й,К,Л,М,Н,О,П,Р,С,Т,У,Ф,Х,Ц,Ш,Щ,Ъ,Ь,Ю,Я';
+$l["alphabet"]= 'А,Б,В,Г,Д,Е,Ж,З,И,Й,К,Л,М,Н,О,П,Р,С,Т,У,Ф,Х,Ц,Ч,Ш,Щ,Ъ,Ь,Ю,Я';
 $l["cmdAllFields"]= 'Всички полета';
 $l["btnAddContact"]= 'Добави контакт'	;
 $l["btnAddCompany"]= 'Добави фирма';
@@ -284,6 +284,8 @@ $l["contactSalutation"] = "Поздрав";
 $l["contactEmail_allowed"] = "E-mail е позволен";
 $l["contactFiles_folder_id"] = "Папка";
 $l["contactGo_user_id"] = "Потребител";
+$l["contactSuffix"] = "Суфикс";
+$l["contactHomepage"] = "Уеб страница";
 
 $l['mailingStatus'][0]="Изчакване за започване";
 $l['mailingStatus'][1]="В ход";
