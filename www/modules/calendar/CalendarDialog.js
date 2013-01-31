@@ -59,6 +59,11 @@ GO.calendar.CalendarDialog = function(config)
 			boxLabel:GO.calendar.lang.show_bdays,
 			hideLabel:true
 		},{
+			xtype:'xcheckbox',
+			name:'show_holidays',
+			boxLabel:GO.calendar.lang.show_holidays,
+			hideLabel:true
+		},{
 			xtype:'textarea',
 			fieldLabel:GO.lang.strComment,
 			name:'comment',

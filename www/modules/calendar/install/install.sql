@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS `cal_calendars` (
   `project_id` int(11) NOT NULL DEFAULT '0',
   `tasklist_id` int(11) NOT NULL DEFAULT '0',
   `files_folder_id` int(11) NOT NULL DEFAULT '0',
+	`show_holidays` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `group_id` (`group_id`),
   KEY `project_id` (`project_id`)
