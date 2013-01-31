@@ -28,7 +28,9 @@ GO.base.form.getFormFieldByType = function(gotype, colName, config){
 			}
 			
 			editor = new GO.customfields.getFormField(GO.customfields.columnMap[colName], config);
-			//editor = new Ext.form.Checkbox();
+			if (editor.xtype=='xcheckbox')			
+				editor = GO.customfields.dataTypes['GO_Customfields_Customfieldtype_BinaryCombobox'].getFormField(GO.customfields.columnMap[colName], config);
+			
 			break;
 
 		default:
