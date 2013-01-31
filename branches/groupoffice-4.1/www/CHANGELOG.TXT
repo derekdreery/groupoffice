@@ -1,3 +1,8 @@
+- Bug with deleting participant events in recurring series
+- Updated Norwegian
+- Updated Bulgarian
+- newlines in <pre> tags were deleted when viewing mail
+
 29-01-2013 4.1.27
 - Updated Hrvatski language
 - Added AntiFloodPlugin to newsletter sender
