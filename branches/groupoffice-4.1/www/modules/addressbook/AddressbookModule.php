@@ -132,10 +132,12 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 	public function checkDatabase(&$response) {
 		
 		if(GO::modules()->isInstalled('files')){
-			$folder = GO_Files_Model_Folder::model()->findByPath('projects');
-			$folder->acl_id=GO::modules()->projects->acl_id;
-			$folder->readonly=1;
-			$folder->save();
+			$folder = GO_Files_Model_Folder::model()->findByPath('addressbook', true);
+			if($folder){
+				$folder->acl_id=GO::modules()->addressbook->acl_id;
+				$folder->readonly=1;
+				$folder->save();
+			}
 		}
 		
 		return parent::checkDatabase($response);
