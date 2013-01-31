@@ -255,7 +255,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$mailbox = $this->utf7_encode($this->_escape( $mailbox));
 		$this->clean($mailbox, 'mailbox');
 
-		$command = "GETACL $mailbox\r\n";
+		$command = "GETACL \"$mailbox\"\r\n";
 		$this->send_command($command);
 		$response = $this->get_response(false, true);
 		
@@ -278,7 +278,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$mailbox = $this->utf7_encode($this->_escape( $mailbox));
 		$this->clean($mailbox, 'mailbox');
 
-		$command = "SETACL $mailbox $identifier $permissions\r\n";
+		$command = "SETACL \"$mailbox\" $identifier $permissions\r\n";
 		//throw new Exception($command);
 		$this->send_command($command);
 
@@ -288,7 +288,10 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	}
 
 	public function delete_acl($mailbox, $identifier){
-		$command = "DELETEACL $mailbox $identifier\r\n";
+		$mailbox = $this->utf7_encode($this->_escape( $mailbox));
+		$this->clean($mailbox, 'mailbox');
+		
+		$command = "DELETEACL \"$mailbox\" $identifier\r\n";
 		$this->send_command($command);
 		$response = $this->get_response();
 		return $this->check_response($response);
