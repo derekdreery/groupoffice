@@ -703,16 +703,13 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				
 				var eventBefore = false;
 				
-				console.log(eventData);
 				if(eventData.all_day_event){
-					console.log('jo');
 					for(var x=0;x<this.gridEvents[dateStr].length;x++){
 						var domId = this.gridEvents[dateStr][x].id;
 						var existingEvent = this.remoteEvents[domId];
 	//					console.log(d.name+" "+d.startDate+' > '+eventData.name+" "+eventData.startDate);
 						if(existingEvent.name>eventData.name){
 							eventBefore=Ext.get(domId);
-							console.log('ja');
 							break;
 						}
 					}
