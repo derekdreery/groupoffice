@@ -534,6 +534,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					repeats : this.formPanel.form.findField('freq')
 					.getValue() !="",
 					'private' : false,
+					all_day_event:this.formPanel.form.findField('all_day_event').getValue(),
 					exception_event_id : this.formPanel.form.baseParams['exception_event_id']
 //					has_other_participants: this.participantsPanel.invitationRequired()
 				};
