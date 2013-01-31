@@ -1124,10 +1124,11 @@ class GO_Base_Util_String {
 				$baseUrl = $matches[1];
 			}
 		}
-//		throw new Exception($baseUrl);
-	
-		$html = str_replace("\r", '', $html);
-		$html = str_replace("\n",' ', $html);
+
+		
+//		Don't strip new lines or it will mess up <pre> tags
+//		$html = str_replace("\r", '', $html);
+//		$html = str_replace("\n",' ', $html);
 
 		$regexp="/<a[^>]*href=([\"']?)(http|https|ftp|bf2)(:\/\/)(.+?)>/i";
 		$html = preg_replace($regexp, "<a target=$1_blank$1 class=$1blue$1 href=$1$2$3$4>", $html);
