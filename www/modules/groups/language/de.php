@@ -19,3 +19,4 @@ $l["adminOnlyLabel"]= 'Nur Administratoren können diese Gruppen zur Rechteverga
 $l["groupMembers"]='Gruppenmitglieder';
 $l["managePermissions"]= 'Verwaltungsrechte';
 $l['modulePermissions']= 'Modulrechte';
+$l['use']='Verwenden';

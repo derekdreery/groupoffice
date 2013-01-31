@@ -1,7 +1,9 @@
 - Bug with deleting participant events in recurring series
-- Updated Norwegian
-- Updated Bulgarian
+- Updated Norwegian, Bulgarian and German
 - newlines in <pre> tags were deleted when viewing mail
+- Database check repairs webdav permissions if they're broken
+- Serverclient domains box was very small in height with more than one domain
+- Sort all day events alphabetically in the calendar Month view
 
 29-01-2013 4.1.27
 - Updated Hrvatski language
