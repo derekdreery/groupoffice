@@ -1,3 +1,4 @@
+31-01-2013 4.1.28
 - Bug with deleting participant events in recurring series
 - Updated Norwegian, Bulgarian and German
 - newlines in <pre> tags were deleted when viewing mail
