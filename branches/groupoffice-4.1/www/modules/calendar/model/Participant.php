@@ -292,7 +292,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 			$stmt = $this->event->getRelatedParticipantEvents();
 			
 			foreach($stmt as $event){
-				if($event->id!=$newEvent->id){
+				if(empty($newEvent) || $event->id!=$newEvent->id){
 					$p = new GO_Calendar_Model_Participant();
 					$p->setAttributes($this->getAttributes('raw'), false);
 					$p->event_id=$event->id;
