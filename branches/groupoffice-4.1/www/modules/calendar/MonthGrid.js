@@ -683,9 +683,8 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				if(eventData.link_count>0){
 					cls +=' cal-has-links'
 				}
-
-				var event = Ext.DomHelper.append(col,
-				{
+				
+				var domCfg = {
 					tag: 'div',
 					id: eventData.domId,
 					cls: cls,
@@ -694,13 +693,32 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 					"ext:qtip": GO.calendar.formatQtip(eventData),
 					"ext:qtitle":eventData.name,
 					tabindex:0//tabindex is needed for focussing and events
-				}, true);
-
+				};
+				
 				var dateStr = date.format('Ymd');
 				if(!this.gridEvents[dateStr])
 				{
 					this.gridEvents[dateStr]=[];
 				}
+				
+				var eventBefore = false;
+				
+				
+//				for(var x=0;x<this.gridEvents[dateStr].length;x++){
+//					var domId = this.gridEvents[dateStr][x].id;
+//					var d = this.remoteEvents[domId];
+////					console.log(d.name+" "+d.startDate+' > '+eventData.name+" "+eventData.startDate);
+//					if(d.startDate<eventData.startDate){
+//						eventBefore=Ext.get(domId);
+////						console.log('ja');
+//						break;
+//					}
+//				}
+				
+				
+				var event = eventBefore ? Ext.DomHelper.insertBefore(eventBefore,	domCfg, true) : Ext.DomHelper.append(col,	domCfg, true);
+
+				
 
 				this.gridEvents[dateStr].push(event);
 
