@@ -4,6 +4,7 @@
 - Database check repairs webdav permissions if they're broken
 - Serverclient domains box was very small in height with more than one domain
 - Sort all day events alphabetically in the calendar Month view
+- Show week 1 of 2013 in Hours Approval module.
 
 29-01-2013 4.1.27
 - Updated Hrvatski language
