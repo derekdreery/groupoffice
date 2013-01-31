@@ -113,6 +113,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	
 	public function getFindSearchQueryParamFields($prefixTable = 't', $withCustomFields = true) {
 		$fields = parent::getFindSearchQueryParamFields($prefixTable, $withCustomFields);
+		$fields[]="t.id";
 		$fields[]="CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)";	
 		return $fields;
 	}
