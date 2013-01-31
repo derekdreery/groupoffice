@@ -47,6 +47,7 @@ $this->setPageTitle("Support");
 		<div class="subkader-big-top">
 			<div class="subkader-big-bottom">
 				<div class="subkader-big-center">		
+					<?php $this->renderPartial('_filtermenu'); ?>
 					<table class="ticket-models-table">
 						<th></th><th>Ticket-no</th><th>Name</th><th>Status</th><th>Agent</th><th>Created</th>
 						<?php $i = 0; ?>
@@ -70,7 +71,7 @@ $this->setPageTitle("Support");
 						</tr>
 						<?php endforeach; ?>
 					</table>
-						<?php $this->renderPartial('_filtermenu'); ?>
+
 				</div>
 			</div>
 		</div>
