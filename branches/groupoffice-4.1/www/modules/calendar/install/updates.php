@@ -198,3 +198,5 @@ $updates['201301211137'][]="delete FROM `cal_participants` WHERE event_id=0;";
 $updates["201301251628"][]="script:2_fix_project_calendars.php";
 
 $updates["201301291507"][]="UPDATE `cal_events` SET `status`='CONFIRMED' WHERE `status`='ACCEPTED';";
+
+$updates["201301311600"][]="ALTER TABLE `cal_calendars` ADD `show_holidays` tinyint(1) NOT NULL DEFAULT '1';";

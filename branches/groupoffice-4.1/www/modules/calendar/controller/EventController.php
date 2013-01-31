@@ -828,8 +828,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		if(!$calendar->user)
 			return $response;
 		
-		$holidays = GO_Base_Model_Holiday::model()->getHolidaysInPeriod($startTime, $endTime, $calendar->user->language);
-			
+		if (!empty($calendar->show_holidays)) {
+			$holidays = GO_Base_Model_Holiday::model()->getHolidaysInPeriod($startTime, $endTime, $calendar->user->language);
+
 			while($holiday = $holidays->fetch()){ 
 				$resultCount++;
 				$response['results'][$this->_getIndex($response['results'],$holiday->date)] = array(
@@ -848,9 +849,10 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					'calendar_id'=>$calendar->id
 					);
 			}
-			
+
 			// Set the count of the holidays
 			$response['count_holidays_only'] = $resultCount;
+		}
 		
 		return $response;
 	}

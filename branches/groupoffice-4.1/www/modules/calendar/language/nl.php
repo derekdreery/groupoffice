@@ -213,3 +213,5 @@ $l['appointment']= 'Afspraak';
 
 $l['openCalendar']='Open agenda';
 $l['createPermission']="Toegang aanmaken";
+
+$l['show_holidays']="Feestdagen tonen";

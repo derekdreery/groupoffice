@@ -13,27 +13,6 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-/**
- * 
- * The Category model
- * 
- * @property String $name The name of the category
- * @property int $files_folder_id
- * @property int $tasklist_id
- * @property int $project_id
- * @property string $comment
- * @property boolean $show_bdays
- * @property boolean $shared_acl
- * @property boolean $public
- * @property int $time_interval
- * @property string $background
- * @property int $end_hour
- * @property int $start_hour
- * @property int $acl_id
- * @property int $user_id
- * @property int $group_id
- * @property int $acl_write
- */
 class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel {
 	
 	/**
