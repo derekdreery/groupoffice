@@ -2,7 +2,7 @@
 	
 <ul>
 	<li><?php echo GOS::t('tickets_filter'); ?></li>:
-	<li><a href="<?php echo GOS::site()->urlManager->createUrl('tickets/site/ticketlist'); ?>"><?php echo GOS::t('tickets_filter_all'); ?></a></li>
+	<li><a href="<?php echo GOS::site()->urlManager->createUrl('tickets/site/ticketlist',array('filter'=>'all')); ?>"><?php echo GOS::t('tickets_filter_all'); ?></a></li>
 	-
 	<li><a href="<?php echo GOS::site()->urlManager->createUrl('tickets/site/ticketlist',array('filter'=>'openprogress')); ?>"><?php echo GOS::t('tickets_filter_openprogress'); ?></a></li>
 	-
