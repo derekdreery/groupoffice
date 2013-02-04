@@ -31,6 +31,7 @@
  * @property string $state
  * @property string $country
  * @property string $cellular
+ * @property string $cellular2
  * @property string $work_fax
  * @property string $fax
  * @property string $work_phone
@@ -440,8 +441,12 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 							$attributes['work_phone'] = $vobjProp->value;
 							$companyAttributes['phone'] = $vobjProp->value;
 						}
-						if(in_array('cell',$types) && ( in_array('voice',$types) || count($types)==1 ) )
-							$attributes['cellular'] = $vobjProp->value;
+						if(in_array('cell',$types) && ( in_array('voice',$types) || count($types)==1 ) ) {
+							if (empty($attributes['cellular']))
+								$attributes['cellular'] = $vobjProp->value;
+							elseif (empty($attributes['cellular2']))
+								$attributes['cellular2'] = $vobjProp->value;
+						}
 						if(in_array('fax',$types) && in_array('home',$types))
 							$attributes['fax'] = $vobjProp->value;
 						if(in_array('fax',$types) && in_array('work',$types)) {
@@ -772,6 +777,11 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		}
 		if (!empty($this->cellular)) {
 			$p = new Sabre_VObject_Property('TEL',$this->cellular);
+			$p->add(new GO_Base_VObject_Parameter('TYPE','CELL,VOICE'));
+			$e->add($p);	
+		}
+		if (!empty($this->cellular2)) {
+			$p = new Sabre_VObject_Property('TEL',$this->cellular2);
 			$p->add(new GO_Base_VObject_Parameter('TYPE','CELL,VOICE'));
 			$e->add($p);	
 		}

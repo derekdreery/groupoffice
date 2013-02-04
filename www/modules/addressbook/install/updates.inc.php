@@ -364,3 +364,5 @@ $updates['201212031617'][]="update fs_folders set acl_id =(select acl_id from go
 $updates['201212061709'][]="ALTER TABLE `ab_companies` CHANGE `address_no` `address_no` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 
 $updates['201301111135'][]="ALTER TABLE `ab_addressbooks` CHANGE `name` `name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ";
+
+$updates['201302040945'][]="ALTER TABLE `ab_contacts` ADD `cellular2` varchar(30) NOT NULL DEFAULT '' ";
