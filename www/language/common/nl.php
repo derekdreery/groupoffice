@@ -43,6 +43,7 @@ $l['address']='Adres';
 $l['phone']='Tel.';
 $l['workphone']='Tel. (werk)';
 $l['cellular']='Mobiel';
+$l['cellular2'] = '2e mobiel';
 $l['company']='Bedrijf';
 $l['department']='Afdeling';
 $l['function']='Functie';
