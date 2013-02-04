@@ -136,6 +136,7 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
   `fax` varchar(30) NOT NULL DEFAULT '',
   `work_fax` varchar(30) NOT NULL DEFAULT '',
   `cellular` varchar(30) NOT NULL DEFAULT '',
+	`cellular2` varchar(30) NOT NULL DEFAULT '',
 	`homepage` VARCHAR(255) DEFAULT NULL,
   `country` varchar(50) NOT NULL DEFAULT '',
   `state` varchar(50) NOT NULL DEFAULT '',

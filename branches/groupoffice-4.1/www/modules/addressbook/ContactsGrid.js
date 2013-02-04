@@ -9,7 +9,7 @@ GO.addressbook.ContactsGrid = function(config){
 	config.border=false;
 	
 	var fields ={
-		fields : ['id','uuid','name','company_name','first_name','middle_name','last_name','title','initials','sex','birthday','age','email','email2','email3','home_phone','work_phone','work_fax','cellular','fax','address','address_no','zip','city','state','country','function','department','salutation','ab_name','ctime','mtime'],
+		fields : ['id','uuid','name','company_name','first_name','middle_name','last_name','title','initials','sex','birthday','age','email','email2','email3','home_phone','work_phone','work_fax','cellular','cellular2','fax','address','address_no','zip','city','state','country','function','department','salutation','ab_name','ctime','mtime'],
 		columns : [
 		{
 			header: GO.addressbook.lang.id,
@@ -106,6 +106,11 @@ GO.addressbook.ContactsGrid = function(config){
 		{
 			header: GO.lang['strCellular'],
 			dataIndex: 'cellular',
+			width: 100
+		},
+		{
+			header: GO.lang['cellular2'],
+			dataIndex: 'cellular2',
 			width: 100
 		},
 		{
