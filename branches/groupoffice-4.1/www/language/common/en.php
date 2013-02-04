@@ -355,6 +355,7 @@ $l['address'] = 'Address';
 $l['phone'] = 'Phone';
 $l['workphone'] = 'Phone (work)';
 $l['cellular'] = 'Mobile';
+$l['cellular2'] = '2nd mobile';
 $l['company'] = 'Company';
 $l['department'] = 'Department';
 $l['function'] = 'Function';
