@@ -42,7 +42,11 @@ class GO_Sites_Controller_Content extends GO_Base_Controller_AbstractModelContro
 	}
 	
 	protected function getStoreParams($params) {
-		return GO_Base_Db_FindParams::newInstance()->order('sort_order');
+		$fp = GO_Base_Db_FindParams::newInstance()->order('sort_order');
+		
+		$fp->getCriteria()->addCondition('site_id', $params['site_id']);
+		
+		return $fp;
 	}
 	
 	
