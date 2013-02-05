@@ -23,8 +23,10 @@ class csv_export_query extends base_export_query
 	{
 		parent::__construct();
 
-		$this->list_separator=$_SESSION['GO_SESSION']['list_separator'];
-		$this->text_separator=$_SESSION['GO_SESSION']['text_separator'];
+		if (isset($_SESSION['GO_SESSION']['list_separator']))
+			$this->list_separator=$_SESSION['GO_SESSION']['list_separator'];
+		if (isset($_SESSION['GO_SESSION']['text_separator']))
+			$this->text_separator=$_SESSION['GO_SESSION']['text_separator'];
 	}
 
 	function download_headers()
