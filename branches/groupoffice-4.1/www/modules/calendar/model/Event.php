@@ -1462,15 +1462,17 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$categoryName = array_shift($cats);
 			
 			$category = GO_Calendar_Model_Category::model()->findByName($this->calendar_id, $categoryName);
-			if(!$category){
+			if(!$category && !$dontSave && $this->calendar_id){
 				$category = new GO_Calendar_Model_Category();
 				$category->name=$categoryName;
 				$category->calendar_id=$this->calendar_id;
 				$category->save();
 			}			
-
-			$this->category_id=$category->id;			
-			$this->background=$category->color;
+			
+			if($category){
+				$this->category_id=$category->id;			
+				$this->background=$category->color;
+			}
 		}
 		
 		//set is_organizer flag
