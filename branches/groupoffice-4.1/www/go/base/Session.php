@@ -147,15 +147,14 @@ class GO_Base_Session extends GO_Base_Observable{
 	 */
 	public function logout() {
 		
-		$username = isset(self::$username) ? self::$username : 'notloggedin';
-		
+//		$username = isset(self::$username) ? self::$username : 'notloggedin';		
+		$username = GO::user()->username;				
 		
 		GO::debug("Logout called for ".$username);
-		//go_log(LOG_DEBUG, 'LOGOUT Username: '.$username.'; IP: '.$_SERVER['REMOTE_ADDR']);
-		GO::infolog("LOGOUT for user: \"".$username."\" from IP: ".$_SERVER['REMOTE_ADDR']);
 
 		$old_session = $_SESSION;
 		unset($_SESSION);
+		$this->values=&$_SESSION;
 		
 		if (ini_get("session.use_cookies") && !headers_sent()) {
 			//rRemove session cookie. PHP does not remove this automatically.
@@ -178,6 +177,8 @@ class GO_Base_Session extends GO_Base_Observable{
 		
 		if(!empty(GO::session()->values['countLogin']))
 			$this->_log(GO_Log_Model_Log::ACTION_LOGOUT);
+		
+		GO::infolog("LOGOUT for user: \"".$username."\" from IP: ".$_SERVER['REMOTE_ADDR']);
 	}
 	
 	/**
