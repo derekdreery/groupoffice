@@ -27,6 +27,8 @@ abstract class GO_Base_Mail_ImapBase {
 	 */
 	var $default_charset='';
 	
+	public $lastCommand;
+	
 	
 	public function last_error($clear=true){
 		$count=count($this->errors);
@@ -305,6 +307,8 @@ abstract class GO_Base_Mail_ImapBase {
 		if (!is_resource($this->handle)){
 				throw new Exception("Lost connection to ".$this->server);
 		}
+		
+		$this->lastCommand=$command;
 
 		if(!fputs($this->handle, $command)){
 			throw new Exception("Lost connection to ".$this->server);
@@ -334,7 +338,7 @@ abstract class GO_Base_Mail_ImapBase {
 				if(!$result && $trackErrors){
 					foreach($data as $vals){
 						if (strtoupper($vals[1]) != 'OK') {
-							$this->errors[]=implode(' ', $vals);
+							$this->errors[]=implode(' ', $vals)."\n\nLast command: ".$this->lastCommand;
 						}
 					}
 				}
@@ -346,7 +350,7 @@ abstract class GO_Base_Mail_ImapBase {
 				$result = true;
 			}
 			if(!$result && $trackErrors){
-				$this->errors[]=$line;
+				$this->errors[]=$line."\n\nLast command: ".$this->lastCommand;
 			}
 		}	
 		
