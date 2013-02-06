@@ -26,4 +26,8 @@ class GO_Calendar_Controller_View extends GO_Base_Controller_AbstractModelContro
 		return parent::formatColumns($columnModel);
 	}
 	
+	protected function beforeStore(&$response, &$params, &$store) {
+		$store->setDefaultSortOrder('name','ASC');
+	}
+	
 }
