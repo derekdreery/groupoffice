@@ -15,6 +15,12 @@ password: {password}
 
 Enjoy your trial! You will be notified automatically when your trial expires.
 
+If you'd like to sign up, you can do so at:
+
+https://shop.group-office.com/orderfromtrial
+
+After signing up we will contact you to move your trial to a faster and SSL secured server.
+
 With kind regards,
 
 The {product_name} team
