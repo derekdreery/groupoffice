@@ -1,4 +1,7 @@
 - IMAP folders not escaped in ACL commands
+- small bug in  logout message in infolog
+- Improved style for adjusting paragraph tag margins
+- Fixed bug that added global categories when viewing an e-mail with icalendar attachment
 
 31-01-2013 4.1.29
 - Start time instead of mtime for calendar search results.
