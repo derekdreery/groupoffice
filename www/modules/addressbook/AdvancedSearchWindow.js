@@ -20,6 +20,9 @@ GO.addressbook.AdvancedSearchWindow = function(config){
 //	config.height=600;
 	config.border=false;
 	config.collapsible=true;
+	
+	config.stateId = 'ab-adv-search-window';
+	
 	config.layout='card';
 		config.layoutConfig={
 			deferredRender:false,
