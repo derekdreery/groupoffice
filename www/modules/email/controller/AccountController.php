@@ -252,22 +252,23 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 							//'usage' => "",
 							//"acl_supported"=>false
 					);
-					try{
-						$account->openImapConnection();
-						if($node['expanded']){
-							$rootMailboxes = $account->getRootMailboxes(true);
-							$node['children']=$this->_getMailboxTreeNodes($rootMailboxes);
-						}
-						
-					}catch(GO_Base_Mail_ImapAuthenticationFailedException $e){
-						//$this->_checkImapConnectException($e,$node);
-						$node['isAccount'] = false;
-						$node['hasError'] = true;
-						$node['text'] .= ' ('.GO::t('error').')';
-						$node['children']=array();
-						$node['expanded']=true;
-						$node['qtipCfg'] = array('title'=>GO::t('error'), 'text' =>htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8'));	
-					}
+		
+//					try{						
+//						if($node['expanded']){
+//							$account->openImapConnection();
+//							$rootMailboxes = $account->getRootMailboxes(true);
+//							$node['children']=$this->_getMailboxTreeNodes($rootMailboxes);
+//						}
+//						
+//					}catch(GO_Base_Mail_ImapAuthenticationFailedException $e){
+//						//$this->_checkImapConnectException($e,$node);
+//						$node['isAccount'] = false;
+//						$node['hasError'] = true;
+//						$node['text'] .= ' ('.GO::t('error').')';
+//						$node['children']=array();
+//						$node['expanded']=true;
+//						$node['qtipCfg'] = array('title'=>GO::t('error'), 'text' =>htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8'));	
+//					}
 					
 					$response[] = $node;
 				}
@@ -340,7 +341,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			
 //			GO::debug($mailbox);
 
-			//$children = $this->_getMailboxTreeNodes($mailbox->getChildren());
+//			$children = $this->_getMailboxTreeNodes($mailbox->getChildren());
 			
 			$node = array(
 					'text' => $text,
