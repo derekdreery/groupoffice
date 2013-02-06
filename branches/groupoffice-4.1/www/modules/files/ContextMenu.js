@@ -21,7 +21,6 @@ GO.files.FilesContextMenu = function(config)
 	config['minWidth']=180;
 	
 	this.openButton = new Ext.menu.Item({
-		iconCls: 'btn-save',
 		text: GO.files.lang.open,
 		cls: 'x-btn-text-icon',
 		handler: function(){
@@ -34,6 +33,15 @@ GO.files.FilesContextMenu = function(config)
 
 	this.downloadButton = new Ext.menu.Item({
 		iconCls: 'btn-save',
+		text: GO.lang.download,
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			window.open(GO.url("files/file/download",{id:this.records[0].data.id,inline:false}));
+		},
+		scope: this
+	});
+	
+	this.openWithButton = new Ext.menu.Item({
 		text: GO.files.lang.openWith,
 		cls: 'x-btn-text-icon',
 		handler: function(){
@@ -188,7 +196,7 @@ GO.files.FilesContextMenu = function(config)
 		scope: this
 	});
 
-	config['items']=[this.openButton, this.downloadButton];
+	config['items']=[this.openButton, this.openWithButton, this.downloadButton,'-'];
 
 	config['items'].push(this.lockButton);
 	config['items'].push(this.unlockButton);
@@ -295,6 +303,7 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 				case 'gz':
 					this.downloadButton.show();
 					this.openButton.show();
+					this.openWithButton.show(); 
 
 					this.decompressButton.show();
 					this.compressButton.hide();
@@ -331,6 +340,7 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 					this.lockButton.hide();
 					this.unlockButton.setVisible(false);
 					this.downloadButton.hide();
+					this.openWithButton.hide();
 					this.openButton.hide();
 
 					this.decompressButton.hide();
@@ -359,6 +369,7 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 
 		
 					this.downloadButton.show();
+					this.openWithButton.show();
 					this.openButton.show();
 					
 					clickedAt == 'tree' ? this.compressButton.hide() : this.compressButton.show();
@@ -382,6 +393,7 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 			clickedAt == 'tree' ? this.compressButton.hide() : this.compressButton.show();
 			this.decompressButton.hide();
 			this.downloadButton.hide();
+			this.openWithButton.hide();
 			this.openButton.hide();
 			
 			this.createDownloadLinkButton.hide();
