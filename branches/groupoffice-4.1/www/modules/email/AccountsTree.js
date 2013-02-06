@@ -81,26 +81,28 @@ GO.email.AccountsTree = function(config){
 	
 	root.on("beforeload", function(){
 		//stop state saving when loading entire tree
-		this.saveTreeState=false;
+		this.disableStateSave();
 	}, this);
 	
 	this.setRootNode(root);
 	
 	
 	this.on('collapsenode', function(node)
-	{
+	{		
 		if(this.saveTreeState && node.childNodes.length)
 			this.updateState();		
 	},this);
 
 	this.on('expandnode', function(node)
-	{
-		//if root node is expanded then we are done loading the entire tree. After that we must start saving states
-		if(node.id=="root")
-			this.saveTreeState=true;
-		
+	{		
 		if(node.id!="root" && this.saveTreeState && node.childNodes.length)
 			this.updateState();
+		
+		
+		//if root node is expanded then we are done loading the entire tree. After that we must start saving states
+		if(node.id=="root"){			
+			this.enableStateSave();
+		}
 	},this);
 
 	this.on('nodedragover', function(e)
@@ -367,6 +369,27 @@ Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {
 	
 	_nodeId : 0,
 	_errorNodes : [],
+	
+	enableStateSave : function(){
+		if(Ext.Ajax.isLoading(this.getLoader().transId)){
+			this.enableStateSave.defer(100, this);
+			this.loadingDone=false;
+		}else
+		{
+			if(!this.loadingDone){
+				this.loadingDone=true;
+				this.enableStateSave.defer(100, this);
+			}else{
+				this.saveTreeState=true;
+			}
+			console.log('enable');
+		}
+	},
+	
+	disableStateSave : function(){
+		this.loadingDone=false;
+		this.saveTreeState=false;
+	},
 	
 	updateState : function(){
 		GO.request({
