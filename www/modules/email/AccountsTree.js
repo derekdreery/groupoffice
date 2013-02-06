@@ -382,7 +382,6 @@ Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {
 			}else{
 				this.saveTreeState=true;
 			}
-			console.log('enable');
 		}
 	},
 	
