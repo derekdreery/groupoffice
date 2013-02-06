@@ -586,6 +586,15 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		if(!empty($params['addressbook_id']))
 			$findParams->getCriteria ()->addCondition ('addressbook_id', $params['addressbook_id']);
 		
+		if(!empty($params['requireEmail'])){
+			$criteria = GO_Base_Db_FindCriteria::newInstance()
+							->addCondition("email", "","!=")
+							->addCondition("email2", "","!=",'t',false)
+							->addCondition("email3", "","!=",'t',false);
+
+			$findParams->getCriteria()->mergeWith($criteria);
+		}
+		
 		$stmt = GO_Addressbook_Model_Contact::model()->find($findParams);
 		
 		$user_ids=array();
