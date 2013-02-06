@@ -88,7 +88,8 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 			name: 'quick_add_contact',
 			anchor: '100%',
 			fieldLabel:GO.lang.cmdAdd,
-			remoteSort: true
+			remoteSort: true,
+			requireEmail:true
 		});
 
 		this.selectContact.on('select', function(combo, record)
