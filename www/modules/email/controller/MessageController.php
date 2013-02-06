@@ -248,6 +248,9 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	}
 	
 	protected function actionSetFlag($params){
+		
+		GO::session()->closeWriting();
+		
 		$messages = json_decode($params['messages']);
 		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
@@ -949,6 +952,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	}
 
 	public function actionView($params) {
+		
+		GO::session()->closeWriting();
 
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		if(!$account)
