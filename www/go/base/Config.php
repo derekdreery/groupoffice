@@ -26,6 +26,11 @@
  *
  * To edit these options use install.php.
  *
+ * All options can also be found at:
+ * 
+ * http://wiki4.group-office.com/wiki/Configuration_file
+ * 
+ *
  * @license AGPL/Proprietary http://www.group-office.com/LICENSE.TXT
  * @link http://www.group-office.com
  * @author Merijn Schering <mschering@intermesh.nl>
@@ -82,7 +87,9 @@ class GO_Base_Config {
 	var $id = 'groupoffice';
 
 	/**
-	 * Enable debugging mode
+	 * Enable debugging mode. This will log much info to 
+	 * /home/groupoffice/log/debug.log and will use uncompressed javascripts. 
+	 * You can also enable this as admin in Group-Office by pressing CTRL+F7.
 	 *
 	 * @var     bool
 	 * @access  public
@@ -90,13 +97,13 @@ class GO_Base_Config {
 	var $debug = false;
 	
 	
-	/**
-	 * Only log debug messages for this remote IP address.
-	 *
-	 * @var     string
-	 * @access  public
-	 */
-	var $debug_log_remote_ip = "";
+//	/**
+//	 * Only log debug messages for this remote IP address.
+//	 *
+//	 * @var     string
+//	 * @access  public
+//	 */
+//	var $debug_log_remote_ip = "";
 
 	/**
 	 * Just enable the debug log.
@@ -127,22 +134,22 @@ class GO_Base_Config {
 	 */
 	var $info_log = "";
 
-	/**
-	 * Output errors in debug mode
-	 *
-	 * @var     bool
-	 * @access  public
-	 */
-	var $debug_display_errors=true;
+//	/**
+//	 * Output errors in debug mode
+//	 *
+//	 * @var     bool
+//	 * @access  public
+//	 */
+//	var $debug_display_errors=true;
 
-	/**
-	 * Enable syslog
-	 *
-	 * @var     bool
-	 * @access  public
-	 */
-
-	var $log = false;
+//	/**
+//	 * Enable syslog
+//	 *
+//	 * @var     bool
+//	 * @access  public
+//	 */
+//
+//	var $log = false;
 
 	/**
 	 * Default language
@@ -282,13 +289,13 @@ class GO_Base_Config {
 	 */
 	var $allow_profile_edit = true;
 
-	/**
-	 * Enable user registration by everyone
-	 *
-	 * @var     bool
-	 * @access  public
-	 */
-	var $allow_registration = false;
+//	/**
+//	 * Enable user registration by everyone
+//	 *
+//	 * @var     bool
+//	 * @access  public
+//	 */
+//	var $allow_registration = false;
 
 
 
@@ -308,23 +315,23 @@ class GO_Base_Config {
 	public $html_editor_font = "font-size:13px; font-family:Arial, Helvetica, sans-serif;";
 
 
-	/**
-	 * Grant read permissions for these modules to new self-registered users.
-	 * Module names are separated by a comma.
-	 *
-	 * @var     string
-	 * @access  public
-	 */
-	var $register_modules_read = '';
-
-	/**
-	 * Grant write permissions for these modules to new self-registered users.
-	 * Module names are separated by a comma.
-	 *
-	 * @var     string
-	 * @access  public
-	 */
-	var $register_modules_write = '';
+//	/**
+//	 * Grant read permissions for these modules to new self-registered users.
+//	 * Module names are separated by a comma.
+//	 *
+//	 * @var     string
+//	 * @access  public
+//	 */
+//	var $register_modules_read = '';
+//
+//	/**
+//	 * Grant write permissions for these modules to new self-registered users.
+//	 * Module names are separated by a comma.
+//	 *
+//	 * @var     string
+//	 * @access  public
+//	 */
+//	var $register_modules_write = '';
 
 	/**
 	 * Comma separated list of allowed modules. Leave empty to allow all modules.
@@ -378,7 +385,7 @@ class GO_Base_Config {
 	var $force_ssl=false;
 
 	/**
-	 * Full URL to reach Group-Office with slash on end. This value is determined
+	 * Full URL to reach Group-Office with trailing slash. This value is determined
 	 * automatically if not set in config.php
 	 *
 	 * @var     string
@@ -404,7 +411,7 @@ class GO_Base_Config {
 
 
 	/**
-	 * The path to the root of Group-Office with slash on end
+	 * The path to the root of Group-Office with trailing slash.
 	 *
 	 * @var     string
 	 * @access  public
@@ -412,7 +419,7 @@ class GO_Base_Config {
 	var $root_path = '';
 
 	/**
-	 * The path to store temporary files with a slash on end
+	 * The path to store temporary files with trailing slash.
 	 * Leave to ../ for installation
 	 *
 	 * @var     string
@@ -534,13 +541,6 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $file_storage_path = '/home/groupoffice/';
-	
-	/**
-	 * List of extensions that should not be edited with GOTA by default.
-	 * 
-	 * @var array 
-	 */
-	var $gota_blacklist_extensions=array('log','pdf','zip','tar','gz');
 	
 	
 	/**
@@ -668,13 +668,13 @@ class GO_Base_Config {
 	var $restrict_smtp_hosts = '';
 
 	/**
-	 * The maximum size of e-mail attachments the browser attempts to upload.
-	 * Be aware that the php.ini file must be set accordingly (http://www.php.net).
-	 *
+	 * The maximum size of e-mail attachments in bytes Group-Office will accept. 
+	 * Note that the php.ini file must be set accordingly (http://www.php.net).
+	 * 
 	 * @var     string
 	 * @access  public
 	 */
-	var $max_attachment_size = '10000000';
+	var $max_attachment_size = 10000000;
 
 
 	//External programs
@@ -810,7 +810,6 @@ class GO_Base_Config {
 	 *
 	 * @var int
 	 */
-
 	var $session_inactivity_timeout = 0;
 
 	/**
@@ -818,13 +817,6 @@ class GO_Base_Config {
 	 */
 
 	var $callto_template='callto:{phone}';
-
-
-	/**
-	 * Don't use flash to upload. In some cases it doesn't work like when
-	 * using a self-signed certificate.
-	 */
-	var $disable_flash_upload=false;
 
 	/**
 	 * Disable security check for cross domain forgeries
@@ -878,17 +870,32 @@ class GO_Base_Config {
 	/*//////////////////////////////////////////////////////////////////////////////
 	 //////////      Variables that are not touched by the installer   /////////////
 	 //////////////////////////////////////////////////////////////////////////////*/
-
+	
+	
 	/**
-	 * The Group-Office version number
+	 * Enable zlib compression for faster downloading of scripts and css
 	 *
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.1.29';
+	var $zlib_compress = true;
 
+	/**
+	 * Default list page size
+	 * 
+	 * @var int 
+	 */
+	var $default_max_rows_list = 30;
+	
+	/**
+	 * Product name. If changed all Group-Office references will disappear.
+	 * @var string 
+	 */
 
-	/* The permissions mode to use when creating files
+	var $product_name='Group-Office';
+	
+	
+		/* The permissions mode to use when creating files
 	 *
 	 * @var     string
 	 * @access  public
@@ -901,14 +908,26 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $folder_create_mode = '0755';
-
+	
 	/* The permissions mode to use when creating folders
 	 *
 	 * @var     string
 	 * @access  public
 	 */
 	var $file_change_group = '';
+	
+	/*////////////////////////////////////////////////
+	 * Variables below this should not be changed
+	 *////////////////////////////////////////////////	
 
+	/**
+	 * The Group-Office version number
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $version = '4.1.29';
+	
 	/**
 	 * Modification date
 	 *
@@ -1063,21 +1082,10 @@ class GO_Base_Config {
 	 */
 	var $db;
 
-	/**
-	 * Enable zlib compression for faster downloading of scripts and css
-	 *
-	 * @var     string
-	 * @access  public
-	 */
-	var $zlib_compress = true;
-
 	
-	var $default_max_rows_list = 30;
-
-	var $product_name='Group-Office';
 
 	/**
-	 * Full original URL to reach Group-Office with slash on end
+	 * Full original URL to reach Group-Office with trailing slash
 	 *
 	 * @var     string
 	 * @access  public

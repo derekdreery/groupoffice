@@ -84,8 +84,6 @@ $settings['config']['help_link']=GO::config()->help_link;
 $settings['config']['nav_page_size']=intval(GO::config()->nav_page_size);
 
 $settings['config']['default_country'] = GO::config()->default_country;
-$settings['config']['gota_blacklist_extensions']=json_encode(GO::config()->gota_blacklist_extensions);
-
 
 
 $root_uri = GO::config()->debug ? GO::config()->host : GO::config()->root_path;
