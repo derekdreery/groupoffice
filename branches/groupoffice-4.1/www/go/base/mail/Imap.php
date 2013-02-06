@@ -75,6 +75,10 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 //			GO::session()->values['imap'][$server]=gethostbyname($server);
 //		}
 		
+		if(empty($password)){
+			throw new GO_Base_Mail_ImapAuthenticationFailedException('Authententication failed for user '.$username.' on IMAP server '.$this->server);
+		}
+		
 		$this->ssl = $ssl;
 		$this->starttls = $starttls;
 		$this->auth = strtolower($auth);
