@@ -68,7 +68,7 @@ class GO_Base_Db_Columns{
 						$pdoType = PDO::PARAM_STR;
 						$length = 0;
 						$gotype = 'number';
-						$default = floatval($default);
+						$default = $default==null ? null : floatval($default);
 						break;
 
 					case 'mediumtext':
