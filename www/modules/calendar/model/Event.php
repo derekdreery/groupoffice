@@ -1376,6 +1376,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$this->status=$status;			
 		}
 		
+		if(isset($vobject->class)){
+			$this->private = strtoupper($voject->class)!='PUBLIC';
+		}
+		
 		if($vobject->duration){
 			$duration = GO_Base_VObject_Reader::parseDuration($vobject->duration);
 			$this->end_time = $this->start_time+$duration;
