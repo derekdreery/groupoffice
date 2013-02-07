@@ -534,10 +534,12 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					repeats : this.formPanel.form.findField('freq')
 					.getValue() !="",
 					'private' : false,
-					all_day_event:this.formPanel.form.findField('all_day_event').getValue(),
+					all_day_event:this.formPanel.form.findField('all_day_event').getValue() ? 1 : 0,
 					exception_event_id : this.formPanel.form.baseParams['exception_event_id']
 //					has_other_participants: this.participantsPanel.invitationRequired()
 				};
+				
+				console.log(newEvent);
 
 				if(!GO.util.empty(action.result.status_color))
 					newEvent.status_color = action.result.status_color;
@@ -623,18 +625,18 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 	getStartDate : function() {
 
 		var startDate = this.startDate.getValue();
-		if (!this.formPanel.form.findField('all_day_event').getValue()) {
+//		if (!this.formPanel.form.findField('all_day_event').getValue()) {
 			startDate = Date.parseDate(startDate.format('Y-m-d')+' '+this.formPanel.form.findField('start_time').getValue(),'Y-m-d '+GO.settings.time_format);
-		}
+//		}
 
 		return startDate;
 	},
 
 	getEndDate : function() {
 		var endDate = this.endDate.getValue();
-		if (!this.formPanel.form.findField('all_day_event').getValue()) {
+//		if (!this.formPanel.form.findField('all_day_event').getValue()) {
 			endDate = Date.parseDate(endDate.format('Y-m-d')+' '+this.formPanel.form.findField('end_time').getValue(),'Y-m-d '+GO.settings.time_format);
-		}
+//		}
 		return endDate;
 	},
 
