@@ -1,3 +1,4 @@
+- Billing ODT and PDF template now support {customer_countryname} tag to display the full country name
 - Billing PDF templates can now use %project:xxx% template vars when a project is set in the order.
 - Templates: Clear %xxx:xxx% template tags too when leaveEmptyTags is set to false.
 - Fixed "Access denied" problem when having multiple calendars selected and you don't have write permission to the first one when adding new event.
