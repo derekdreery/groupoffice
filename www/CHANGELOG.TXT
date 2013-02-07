@@ -1,3 +1,4 @@
+07-02-2013 4.1.30
 - Billing ODT and PDF template now support {customer_countryname} tag to display the full country name
 - Billing PDF templates can now use %project:xxx% template vars when a project is set in the order.
 - Templates: Clear %xxx:xxx% template tags too when leaveEmptyTags is set to false.
@@ -7,8 +8,16 @@
 - small bug in  logout message in infolog
 - Improved style for adjusting paragraph tag margins
 - Fixed bug that added global categories when viewing an e-mail with icalendar attachment
+- It was possible to invite contacts to appointments without an e-mail address
+- Sort the calendar views alphabetically.
+- Context menu on ticket messages
+- Load e-mail accounts in separate threads so it won't hang on a slow account
 - Set decimals of Number custom fields.
 - Advanced search: tree panel custom field support.
+- Added 2nd mobile field to contacts
+- Added download option to file context menu
+- Automatically add surrounding wildcards to global search query
+- Import private attribute with caldav and icalendar import
 - Email module: copy emails between mailboxes and between accounts.
 
 31-01-2013 4.1.29
