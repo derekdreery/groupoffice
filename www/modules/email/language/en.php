@@ -239,3 +239,8 @@ $l['attachedAppointmentInfo']="Attached appointment information";
 $l['cantDeleteSpecialFolder']="You can't delete the trash, sent items or drafts folder";
 $l["copyingMessages"]='Copying messages...';
 $l['cantMoveSpecialFolder']="You can't move the trash, sent items or drafts folder";
+
+$l['copyMailTo']="Copy email to...";
+$l['copyMailToTxt']="Select a folder to copy the email to";
+$l['copyMailToRUSure']="Are you sure you want to copy the selected email message to this mailbox folder?";
+$l['copyMailsToRUSure']="Are you sure you want to copy the selected email messages to this mailbox folder?";
