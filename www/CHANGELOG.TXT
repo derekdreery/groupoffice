@@ -4,6 +4,7 @@
 - Fixed bug that added global categories when viewing an e-mail with icalendar attachment
 - Set decimals of Number custom fields.
 - Advanced search: tree panel custom field support.
+- Email module: copy emails between mailboxes and between accounts.
 
 31-01-2013 4.1.29
 - Start time instead of mtime for calendar search results.
