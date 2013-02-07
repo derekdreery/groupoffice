@@ -663,11 +663,13 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		// Set the count of the total activated calendars in the response.
 		$response['calendar_count'] = count($calendars);
-		
+		$response['first_writable_calendar_id']=false;
+		$calendarModels=array();
 		foreach($calendars as $calendarId){
 			// Get the calendar model that is used for these events
 			try{
 				$calendar = GO_Calendar_Model_Calendar::model()->findByPk($calendarId);
+				$calendarModels[]=$calendar;
 
 				// Set the colors for each calendar
 				$calendar->displayColor = $colors[$colorIndex];
@@ -692,10 +694,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 				// Set the first calendarId to the response // MAYBE DEPRECATED??
 				if(empty($response['calendar_id'])){
-					$response['calendar_id']=$calendar->id;
-					$response['write_permission']= $calendar->permissionLevel >= GO_Base_Model_Acl::WRITE_PERMISSION?true:false;
-					$response['calendar_name']=$calendar->name;
-					$response['permission_level']=$calendar->permissionLevel;
+					
 					$response['count']=0;
 					$response['comment']=$calendar->comment;
 			
@@ -717,9 +716,23 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			}	catch(GO_Base_Exception_AccessDenied $e){
 				//skip calendars without permission
 			}
-			
 		}
-
+		
+		// Get the best default calendar to add new events
+		$defaultWritableCalendar = $this->_getDefaultWritableCalendar($calendarModels);
+		if($defaultWritableCalendar){
+			$response['calendar_id']=$defaultWritableCalendar->id;
+			$response['write_permission']= $defaultWritableCalendar->permissionLevel >= GO_Base_Model_Acl::WRITE_PERMISSION?true:false;
+//			$response['calendar_name']=$defaultWritableCalendar->name;
+			$response['permission_level']=$defaultWritableCalendar->permissionLevel;
+		}else
+		{
+			$response['calendar_id']=0;
+			$response['write_permission']= false;
+//			$response['calendar_name']=$defaultWritableCalendar->name;
+			$response['permission_level']=false;
+		}
+		
 		//Sanitize the title so there is no & on the end.
 		$response['title'] = trim($response['title'],' &');
 
@@ -735,6 +748,27 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$this->_createPdf($response);
 				
 		return $response;
+	}
+	
+	/**
+	 * Get the best writable calendar for the current user/view
+	 * @param array $calendarModels
+	 * @return Go_Calendar_Model_Calendar
+	 */
+	private function _getDefaultWritableCalendar(array $calendarModels){
+		
+		$defaultCalendar = GO_Calendar_Model_Calendar::model()->findDefault(GO::user()->id);
+		$calendar = false;
+		
+		foreach($calendarModels as $cal){
+			if($cal->id == $defaultCalendar->id)
+				return $cal;
+			
+			if(empty($calendar) && $cal->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
+				$calendar = $cal;
+		}
+		
+		return $calendar;
 	}
 	
 	/**
