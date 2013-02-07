@@ -25,6 +25,8 @@ return array(
 		'newtrial'=>'servermanager/site/newTrial',
 		'trialcreated'=>'servermanager/site/trialCreated',
 		
+		'contact'=>'addressbook/site/contact',
+		
 		'<action:(login|logout|register|profile|resetpassword|recoverpassword)>' => 'sites/site/<action>',//TODO: login, logout, profile resetpassword, register, recover/lostpassword
 		'<slug>'=>'sites/site/content', //TODO: requirements, contact	
 		
