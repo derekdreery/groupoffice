@@ -1,3 +1,5 @@
+- Billing PDF templates can now use %project:xxx% template vars when a project is set in the order.
+- Templates: Clear %xxx:xxx% template tags too when leaveEmptyTags is set to false.
 - Fixed "Access denied" problem when having multiple calendars selected and you don't have write permission to the first one when adding new event.
 - Filesystem check will keep running after an error on one of the items
 - IMAP folders not escaped in ACL commands
