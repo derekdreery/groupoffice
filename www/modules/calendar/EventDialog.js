@@ -538,8 +538,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					exception_event_id : this.formPanel.form.baseParams['exception_event_id']
 //					has_other_participants: this.participantsPanel.invitationRequired()
 				};
-				
-				console.log(newEvent);
+
 
 				if(!GO.util.empty(action.result.status_color))
 					newEvent.status_color = action.result.status_color;
