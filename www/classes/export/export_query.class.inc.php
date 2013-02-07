@@ -59,13 +59,17 @@ class base_export_query{
 	function __construct(){
 
 		$this->db = new db();
-		$this->query_name=$_REQUEST['query'];
-		$this->q = $_SESSION['GO_SESSION']['export_queries'][$_REQUEST['query']];
+		
+		if(isset($_REQUEST['query'])){
+			$this->query_name=$_REQUEST['query'];
+			$this->q = $_SESSION['GO_SESSION']['export_queries'][$_REQUEST['query']];
+		}
 
 		if(!isset($this->q['totalize_columns']))
 			$this->q['totalize_columns']=array();
 		
-		$this->title = $_REQUEST['title'];
+		if(isset($_REQUEST['title']))
+			$this->title = $_REQUEST['title'];
 	}
 
 	function download_headers()
