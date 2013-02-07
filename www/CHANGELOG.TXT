@@ -1,3 +1,4 @@
+- Fixed "Access denied" problem when having multiple calendars selected and you don't have write permission to the first one when adding new event.
 - Filesystem check will keep running after an error on one of the items
 - IMAP folders not escaped in ACL commands
 - small bug in  logout message in infolog
