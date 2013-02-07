@@ -13,8 +13,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			return parent::allowGuests();
 	}
 
-	protected function actionSyncFilesystem($params){
-
+	protected function actionSyncFilesystem($params){	
+		
 		$oldAllowDeletes = GO_Base_Fs_File::setAllowDeletes(false);
 
 		GO::$disableModelCache=true; //for less memory usage
@@ -27,20 +27,24 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$billingFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'billing');
 		if($billingFolder->exists()){
 			$bFolders = $billingFolder->ls();
-
-			foreach($bFolders as $folder){
-				if($folder->isFolder() && $folder->name()!='notifications'){
-					$folders[]=$folder->name();
-				}
+			
+			foreach($bFolders as $folder){		
+					if($folder->isFolder() && $folder->name()!='notifications'){
+						$folders[]=$folder->name();
+					}
 			}		
 		}
 
 		echo "<pre>";
 		foreach($folders as $name){
 			echo "Syncing ".$name."\n";
-
-			$folder = GO_Files_Model_Folder::model()->findByPath($name, true);
-			$folder->syncFilesystem(true);
+			try{
+				$folder = GO_Files_Model_Folder::model()->findByPath($name, true);
+				$folder->syncFilesystem(true);
+			}
+			catch(Exception $e){
+				echo "<span style='color:red;'>".$e->getMessage()."</span>\n";
+			}
 		}
 
 		echo "Done\n";
@@ -50,14 +54,17 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		foreach($folders as $name){
 
-				echo "Deleting ".$name."\n";
-				
-				GO_Files_Model_Folder::$deleteInDatabaseOnly=true;
-				GO_Files_Model_File::$deleteInDatabaseOnly=true;
-
+			echo "Deleting ".$name."\n";
+			GO_Files_Model_Folder::$deleteInDatabaseOnly=true;
+			GO_Files_Model_File::$deleteInDatabaseOnly=true;
+			try{
 				$folder = GO_Files_Model_Folder::model()->findByPath($name);
 				if($folder)
 						$folder->delete();
+			}
+			catch(Exception $e){
+				echo "<span style='color:red;'>".$e->getMessage()."</span>\n";
+			}
 		}
 	}
 

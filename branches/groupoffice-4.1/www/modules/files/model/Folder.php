@@ -568,26 +568,29 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		if($this->fsFolder->exists()){
 			$items = $this->fsFolder->ls();
 			
-
 			foreach ($items as $item) {
+				try{
 				//GO::debug("FS SYNC: Adding fs ".$item->name()." to database");
-				if ($item->isFile()) {
-					$file = $this->hasFile($item->name());
-					
-					if (!$file)
-						$this->addFile($item->name());
+					if ($item->isFile()) {
+						$file = $this->hasFile($item->name());
+						if (!$file)
+							$this->addFile($item->name());
 
-				}else
-				{
-					
-					$willSync = $recurseOneLevel || $recurseAll;
-					
-					$folder = $this->hasFolder($item->name());
-					if(!$folder)
-						$folder = $this->addFolder($item->name(), false, !$willSync);
+					}else
+					{
 
-					if($willSync)
-						$folder->syncFilesystem($recurseAll, false);				
+						$willSync = $recurseOneLevel || $recurseAll;
+
+						$folder = $this->hasFolder($item->name());
+						if(!$folder)
+							$folder = $this->addFolder($item->name(), false, !$willSync);
+
+						if($willSync)
+							$folder->syncFilesystem($recurseAll, false);				
+					}
+				}
+				catch(Exception $e){
+					echo "<span style='color:red;'>".$e->getMessage()."</span>\n";
 				}
 			}
 		}else
@@ -606,7 +609,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 				if(!$folder->fsFolder->exists() || $folder->fsFolder->isFile())
 					$folder->delete();
 			}catch(Exception $e){
-				echo $e->getMessage()."\n";
+				echo "<span style='color:red;'>".$e->getMessage()."</span>\n";
 			}
 		}
 		
@@ -616,7 +619,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 				if(!$file->fsFile->exists() || $file->fsFile->isFolder())
 					$file->delete();
 			}catch(Exception $e){
-				echo $e->getMessage()."\n";
+				echo "<span style='color:red;'>".$e->getMessage()."</span>\n";
 			}
 		}
 		
