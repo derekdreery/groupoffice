@@ -44,7 +44,7 @@ GO.addressbook.MainPanel = function(config)
 			{
 				if(typeof(this.contactsGrid.contextMenu)=='undefined')
 				{
-					this.contactsGrid.contextMenu = new GO.addressbook.ContextMenu();
+					this.contactsGrid.contextMenu = new GO.addressbook.ContextMenu({type:'contact'});
 				}
 				this.contactsGrid.contextMenu.setSelected(grid, "GO_Addressbook_Model_Contact");
 				e.stopEvent();
@@ -72,7 +72,7 @@ GO.addressbook.MainPanel = function(config)
 			{
 				if(typeof(this.companiesGrid.contextMenu)=='undefined')
 				{
-					this.companiesGrid.contextMenu = new GO.addressbook.ContextMenu();
+					this.companiesGrid.contextMenu = new GO.addressbook.ContextMenu({type:'company'});
 				}
 				this.companiesGrid.contextMenu.setSelected(grid, "GO_Addressbook_Model_Company");
 				e.stopEvent();
