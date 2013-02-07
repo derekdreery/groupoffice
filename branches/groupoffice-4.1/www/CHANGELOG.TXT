@@ -1,3 +1,4 @@
+- Filesystem check will keep running after an error on one of the items
 - IMAP folders not escaped in ACL commands
 - small bug in  logout message in infolog
 - Improved style for adjusting paragraph tag margins
