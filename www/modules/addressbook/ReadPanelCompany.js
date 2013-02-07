@@ -486,5 +486,6 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 				});
 			}
 		}
+		this.newMenuButton.menu.taskShowConfig= {company_id:this.data.id};
 	}
 });

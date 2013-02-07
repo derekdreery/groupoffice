@@ -3,6 +3,9 @@ GO.addressbook.ContextMenu = function(config){
 	if(!config)
 		config = {};
 
+	if(!config.type)
+		config.type='contact';
+
 	config.items=[];
 
 	if (GO.email) {
@@ -15,10 +18,15 @@ GO.addressbook.ContextMenu = function(config){
 			{
 				var selected = this.getSelected();
 				
-				if(!GO.util.empty(selected[0].data.id))
-					this.showCreateMailDialog({contact_id:selected[0].data.id});
-				else
+				if(!GO.util.empty(selected[0].data.id)){
+					
+					if(config.type == 'contact')
+						this.showCreateMailDialog({contact_id:selected[0].data.id});
+					else
+						this.showCreateMailDialog({company_id:selected[0].data.id});
+				}else{
 					this.showCreateMailDialog();
+				}
 			}
 		});
 		config.items.push(this.actionCreateMail);
