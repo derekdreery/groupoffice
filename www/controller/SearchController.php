@@ -83,7 +83,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		$str='+'.preg_replace('/[\s]+/',' +', $params['match']);		
 		
 		//$str=str_replace('-','*',$str);
-		throw new Exception($str);
+//		throw new Exception($str);
 		
 		$subCriteria = GO_Base_Db_FindCriteria::newInstance()
 						//->addMatchCondition(array('name','keywords'), $params['match'],'t',true,'NATURAL');
