@@ -110,8 +110,12 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function getBaseUrl(){
-		$url = $this->ssl ? 'https://' : 'http://';
-		$url .= $this->domain.rtrim($this->base_path,'/');
+		if($this->mod_rewrite){
+			$url = $this->ssl ? 'https://' : 'http://';
+			$url .= $this->domain.rtrim($this->base_path,'/');
+		}  else {
+			$url = GO::config()->full_url.'modules/sites/index.php?site_id='.$this->id;
+		}
 		
 		return $url;
 	}
