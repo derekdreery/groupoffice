@@ -297,6 +297,17 @@ GO.email.EmailClient = function(config){
 		scope: this
 	},'-',
 	{
+		iconCls: 'btn-copy',
+		text: GO.email.lang['copyMailTo'],
+		cls: 'x-btn-text-icon',
+		handler: function(a,b,c){
+			var selectedEmails = this.messagesGrid.getSelectionModel().getSelections();
+			this.showCopyMailToDialog(selectedEmails);
+		},
+		scope: this,
+		multiple:true
+	},
+	{
 		iconCls: 'btn-delete',
 		text: GO.lang.cmdDelete,
 		cls: 'x-btn-text-icon',
@@ -1134,6 +1145,17 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 			}, this);
 		}
 		this.accountsDialog.show();
+	},
+
+	showCopyMailToDialog : function(selectedEmailMessages) {
+		if (!this._copyMailToDialog) {
+			this._copyMailToDialog = new GO.email.CopyMailToDialog();
+			this._copyMailToDialog.on('copy_email',function(){
+				this.messagesGrid.store.reload();
+			},this);			
+		}
+		
+		this._copyMailToDialog.show(selectedEmailMessages);
 	},
 
 	flagMessages : function (flag, clear){

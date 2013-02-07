@@ -249,3 +249,8 @@ $l['attachedAppointmentInfo']="Informatie over bijgevoegde afspraak";
 
 $l["copyingMessages"]='Bezig met kopiëren van berichten...';
 $l['cantMoveSpecialFolder']="U kunt de prullenbak, concepten of verzonden items map niet verplaatsen";
+
+$l['copyMailTo']="Kopieer email naar...";
+$l['copyMailToTxt']="Selecteer een map om de email naartoe te kopiëren";
+$l['copyMailToRUSure']="Weet u zeker dat u het geselecteerde emailbericht wilt kopiëren naar deze mailboxmap?";
+$l['copyMailsToRUSure']="Weet u zeker dat u het geselecteerde emailberichten wilt kopiëren naar deze mailboxmap?";

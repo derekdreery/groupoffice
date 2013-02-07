@@ -32,3 +32,4 @@ modules/email/FilterGrid.js
 modules/email/PortletPanel.js
 modules/email/PortletSettingsDialog.js
 modules/email/Portlet.js
+modules/email/CopyMailToDialog.js
