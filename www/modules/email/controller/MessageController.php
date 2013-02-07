@@ -101,6 +101,82 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		}
 	}
 	
+	protected function actionTestSearch(){
+		
+		$imapSearch = new GO_Email_Model_ImapSearchQuery();
+		
+//		$imapSearch->addSearchWord('test', GO_Email_Model_ImapSearchQuery::TO);
+//		$imapSearch->addSearchWord('test2', GO_Email_Model_ImapSearchQuery::TO);
+//		
+//		$imapSearch->addSearchWord('test', GO_Email_Model_ImapSearchQuery::BCC);
+//		$imapSearch->addSearchWord('test2', GO_Email_Model_ImapSearchQuery::BCC);
+//		
+	//	$imapSearch->addSearchWord('test', GO_Email_Model_ImapSearchQuery::CC);
+//		$imapSearch->addSearchWord('test2', GO_Email_Model_ImapSearchQuery::CC);
+//		
+//		$imapSearch->addSearchWord('test', GO_Email_Model_ImapSearchQuery::FROM);
+//		$imapSearch->addSearchWord('test2', GO_Email_Model_ImapSearchQuery::FROM);
+//		
+//		$imapSearch->addSearchWord('test', GO_Email_Model_ImapSearchQuery::BODY);
+//		$imapSearch->addSearchWord('test2', GO_Email_Model_ImapSearchQuery::BODY);
+//		
+		$imapSearch->addSearchWord('test', GO_Email_Model_ImapSearchQuery::SUBJECT);
+		$imapSearch->addSearchWord('test2', GO_Email_Model_ImapSearchQuery::SUBJECT);
+//		
+//		$imapSearch->addSearchWord('test', GO_Email_Model_ImapSearchQuery::TEXT);
+//		$imapSearch->addSearchWord('test2', GO_Email_Model_ImapSearchQuery::TEXT);
+//		
+//		$imapSearch->addSearchWord('test', GO_Email_Model_ImapSearchQuery::KEYWORD);
+//		$imapSearch->addSearchWord('test2', GO_Email_Model_ImapSearchQuery::KEYWORD);
+		
+//		$imapSearch->addSearchWord('test', GO_Email_Model_ImapSearchQuery::UNKEYWORD);
+//		$imapSearch->addSearchWord('test2', GO_Email_Model_ImapSearchQuery::UNKEYWORD);
+		
+	//		$imapSearch->searchAll();
+//		$imapSearch->searchAnswered();
+//		$imapSearch->searchDeleted();
+//		$imapSearch->searchFlagged();
+//		$imapSearch->searchNew();
+		$imapSearch->searchOld();
+//		$imapSearch->searchRecent();
+//		$imapSearch->searchSeen();
+//		$imapSearch->searchUnDeleted();
+//		$imapSearch->searchUnFlagged();
+//		$imapSearch->searchUnSeen();
+//		$imapSearch->searchUnanswered();
+		
+//		$imapSearch->searchSince();
+//		$imapSearch->searchOn();
+//		$imapSearch->searchBefore();
+						
+		$command = $imapSearch->getImapSearchQuery();
+		
+		echo $command."</br>";
+		
+		$account = GO_Email_Model_Account::model()->findByPk(145);
+		$imap = $account->openImapConnection('INBOX');
+		
+		$messages = GO_Email_Model_ImapMessage::model()->find(
+						$account, 
+						'INBOX',
+						0, 
+						50, 
+						GO_Base_Mail_Imap::SORT_DATE , 
+						'ASC', 
+						$command);
+		
+		$response["results"]=array();
+		foreach($messages as $message){
+			$record = $message->getAttributes(true);
+			$record['subject'] = htmlspecialchars($record['subject'],ENT_COMPAT,'UTF-8');
+			$response["results"][]=$record;
+		}
+	
+		$response['total'] = $imap->sort_count;
+		
+		return $response;
+	}
+
 	protected function actionStore($params){
 		
 		if(!isset($params['start']))
@@ -613,7 +689,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			//keep template tags for mailings to addresslists
 			if (empty($params['addresslist_id'])) {
 				//if contact_id is not set but email is check if there's contact info available
-				if (!empty($params['to']) || !empty($params['contact_id'])) {
+				if (!empty($params['to']) || !empty($params['contact_id']) || !empty($params['company_id'])) {
 
 					if (!empty($params['contact_id'])) {
 						$contact = GO_Addressbook_Model_Contact::model()->findByPk($params['contact_id']);
@@ -622,6 +698,14 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 						$contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($email);
 					}
 
+					$company = false;
+					if(!empty($params['company_id']))
+						$company = GO_Addressbook_Model_Company::model()->findByPk($params['company_id']);
+					
+					if($company){
+						$response['data']['htmlbody'] = GO_Addressbook_Model_Template::model()->replaceModelTags($response['data']['htmlbody'], $company,'company:',true);
+					}
+					
 					if ($contact) {
 						$response['data']['htmlbody'] = GO_Addressbook_Model_Template::model()->replaceContactTags($response['data']['htmlbody'], $contact);
 					} else {

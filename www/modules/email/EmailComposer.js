@@ -744,6 +744,10 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			//for directly loading a contact in a template
 			if(config.contact_id)
 				params.contact_id=config.contact_id;
+			
+			//for directly loading a company in a template
+			if(config.company_id)
+				params.company_id=config.company_id;
 
 			params.to = this.toCombo.getValue();		
 			
