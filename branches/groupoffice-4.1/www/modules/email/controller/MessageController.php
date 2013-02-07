@@ -1129,36 +1129,37 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 			//find existing event
 			$event = GO_Calendar_Model_Event::model()->findByUuid((string) $vevent->uid, GO::user()->id, 0);
+//			var_dump($event);
+			if(!$event || $event->is_organizer){
+				switch($vcalendar->method){
+					case 'CANCEL':					
+						$response['iCalendar']['feedback'] = GO::t('iCalendar_event_cancelled', 'email');
+						break;
 
-			switch($vcalendar->method){
-				case 'CANCEL':					
-					$response['iCalendar']['feedback'] = GO::t('iCalendar_event_cancelled', 'email');
-					break;
-				
-				case 'REPLY':					
-					$response['iCalendar']['feedback'] = GO::t('iCalendar_update_available', 'email');
-					break;
-				
-				case 'REQUEST':					
-					$response['iCalendar']['feedback'] = GO::t('iCalendar_event_invitation', 'email');
-					break;
+					case 'REPLY':					
+						$response['iCalendar']['feedback'] = GO::t('iCalendar_update_available', 'email');
+						break;
+
+					case 'REQUEST':					
+						$response['iCalendar']['feedback'] = GO::t('iCalendar_event_invitation', 'email');
+						break;
+				}
+
+				if($vcalendar->method!='REQUEST' && $vcalendar->method!='PUBLISH' && !$event){
+					$response['iCalendar']['feedback'] = GO::t('iCalendar_event_not_found', 'email');
+				}
+				$uuid = (string) $vevent->uid;
+				$response['iCalendar']['invitation'] = array(
+						'uuid' => $uuid,
+						'email_sender' => $response['sender'],
+						'email' => $imapMessage->account->getDefaultAlias()->email,
+						//'event_declined' => $event && $event->status == 'DECLINED',
+						//'event_id' => $event ? $event->id : 0,
+						'is_update' => $vcalendar->method == 'REPLY',
+						'is_invitation' => $vcalendar->method == 'REQUEST',
+						'is_cancellation' => $vcalendar->method == 'CANCEL'
+				);
 			}
-			
-			if($vcalendar->method!='REQUEST' && !$event){
-				$response['iCalendar']['feedback'] = GO::t('iCalendar_event_not_found', 'email');
-			}
-			$uuid = (string) $vevent->uid;
-			$response['iCalendar']['invitation'] = array(
-					'uuid' => $uuid,
-					'email_sender' => $response['sender'],
-					'email' => $imapMessage->account->getDefaultAlias()->email,
-					'event_declined' => $event && $event->status == 'DECLINED',
-					//'event_id' => $event ? $event->id : 0,
-					'is_update' => $vcalendar->method == 'REPLY',
-					'is_invitation' => $vcalendar->method == 'REQUEST',
-					'is_cancellation' => $vcalendar->method == 'CANCEL'
-			);
-			
 //			$subject = (string) $vevent->summary;
 			if(empty($uuid) || strpos($response['htmlbody'], $uuid)===false){
 				if(!$event){
