@@ -179,7 +179,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 //					this.declined = false;
 //				}
 				
-				if(this.icalendarFeedback){
+				if(data.iCalendar && this.icalendarFeedback){
 					data.iCalendar.feedback = this.icalendarFeedback;			
 					delete this.icalendarFeedback;
 				}
