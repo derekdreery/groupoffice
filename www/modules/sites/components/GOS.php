@@ -66,7 +66,7 @@ class GOS
 		//Go up 3 dirs (components, sites, modules) to find GO.php
 		require(dirname(__FILE__).'/../../../GO.php');
 
-		return new GO_Sites_Components_Website($_SERVER["SERVER_NAME"]);
+		return new GO_Sites_Components_Website();
 	}
 }
 ?>
