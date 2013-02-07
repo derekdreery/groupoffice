@@ -4,30 +4,19 @@ Copy e0-mail
 
 Bij batch status in billing nieuw item toevoegen. Bv. herinneringskosten. Percentage of bedrag.
 
-vink voor verzenddatum op factuur.
-
-
-move private check to first tab in event dialog
-
 
 op ics klikken opent event dialog
 
 link rules email
 
-
 Totaal rates in ticket export
 
 Testen op win: http://www.group-office.com/forum/viewtopic.php?f=5&t=9065
 
-
 Unique bool for custom fields
-
-- Verzenddatum niet tonen op bepaalde sjablonen (alleen op herinneringen)
-- BTW niet tonen op bepaalde sjablonen (wel tonen bij facturen, niet bij offertes)
 
 Mail kopieren met shift ingehouden
 
-Sort custom fields alphabetically and use autocomplete
 
 Persistent connections
 
