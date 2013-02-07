@@ -1377,7 +1377,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 		
 		if(isset($vobject->class)){
-			$this->private = strtoupper($voject->class)!='PUBLIC';
+			$this->private = strtoupper($vobject->class)!='PUBLIC';
 		}
 		
 		if($vobject->duration){
