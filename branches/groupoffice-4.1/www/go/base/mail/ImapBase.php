@@ -70,8 +70,9 @@ abstract class GO_Base_Mail_ImapBase {
 					$valid = true;
 				}
 				break;
-			case 'uid_list';
-				if (preg_match("/^(\d+\s*,*\s*|(\d+|\*):(\d+|\*))+$/", $val)) {
+			case 'uid_list';				
+				//if (preg_match("/^(\d+\s*,*\s*|(\d+|\*):(\d+|\*))+$/", $val)) {
+				if (preg_match("/^(?:\d+:\d+|\*:\d+|\d+:\*|\d+)(?:,(?:\d+:\d+|\*:\d+|\d+:\*|\d+))*$/", $val)) {
 					$valid = true;
 				}
 				break;
