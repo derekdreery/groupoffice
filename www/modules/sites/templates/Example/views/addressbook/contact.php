@@ -13,6 +13,7 @@ $form = new GO_Sites_Widgets_Form();
 					<p>Thank you! We received your details</p>
 
 				<?php else: ?>
+					<p>Please fill in the form to contact us.</p>
 			<div class="form">
 				<?php echo GO_Sites_Components_Html::beginForm(); ?>
 

@@ -58,6 +58,14 @@
 							</div>
 						<?php endif; ?>
 						
+						<?php if(GO::modules()->isInstalled("addressbook")): ?>
+							<div class="topmenu-item-left <?php if(GOS::site()->route=='addressbook/site/contact' || GOS::site()->route=='tickets/site/ticket') echo 'selected'; ?>">
+								<div class="topmenu-item-right">
+									<a class="topmenu-item-center" href="<?php echo $this->createUrl('addressbook/site/contact'); ?>">Contact</a>
+								</div>
+							</div>
+						<?php endif; ?>
+						
 						<?php
 						$stmt = GOS::site()->getSite()->content();
 						foreach($stmt as $contentModel):						
