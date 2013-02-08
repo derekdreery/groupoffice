@@ -1029,6 +1029,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 						'<tr><td>' . GO::t('subject', 'calendar') . ':</td>' .
 						'<td>' . $this->name . '</td></tr>';
 		
+		if($this->calendar){
+			$html .= '<tr><td>' . GO::t('calendar', 'calendar') . ':</td>' .
+						'<td>' . $this->calendar->name . '</td></tr>';
+		}
+		
 		$html .= '<tr><td>' . GO::t('startsAt', 'calendar') . ':</td>' .
 						'<td>' . GO_Base_Util_Date::get_timestamp($this->start_time, empty($this->all_day_event)) . '</td></tr>' .
 						'<tr><td>' . GO::t('endsAt', 'calendar') . ':</td>' .
@@ -1063,7 +1068,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 //			$gmt_string = '(\G\M\T)';
 //		}
 
-		$html .= '<tr><td colspan="2">&nbsp;</td></tr>';
+		//$html .= '<tr><td colspan="2">&nbsp;</td></tr>';
 
 		
 		
@@ -1075,9 +1080,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 			$html .= '<table>';
 			
-			$html .= '<tr><td colspan="2"><br /><b>'.GO::t('participants','calendar').'</b></td></tr>';
+			$html .= '<tr><td colspan="3"><br /></td></tr>';
+			$html .= '<tr><td><b>'.GO::t('participant','calendar').'</b></td><td><b>'.GO::t('status','calendar').'</b></td><td><b>'.GO::t('organizer','calendar').'</b></td></tr>';
 			while($participant = $stmt->fetch()){
-				$html .= '<tr><td>'.$participant->name.'&nbsp;</td><td>'.$participant->statusName.'</td></tr>';
+				$html .= '<tr><td>'.$participant->name.'&nbsp;</td><td>'.$participant->statusName.'&nbsp;</td><td>'.($participant->is_organizer ? GO::t('yes') : '').'</td></tr>';
 			}
 			$html .='</table>';
 		}
