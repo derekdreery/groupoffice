@@ -1,3 +1,6 @@
+08-02-2013 4.1.31
+- Fix broken e-mail template images
+
 07-02-2013 4.1.30
 - Billing ODT and PDF template now support {customer_countryname} tag to display the full country name
 - Billing PDF templates can now use %project:xxx% template vars when a project is set in the order.
