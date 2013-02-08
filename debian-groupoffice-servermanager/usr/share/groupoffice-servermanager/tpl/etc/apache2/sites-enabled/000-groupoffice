@@ -1,0 +1,16 @@
+#Default DocumentRoot. Otherwise we'll get a lot of
+#[client ::1] File does not exist: /htdocs errors
+DocumentRoot /var/www
+
+<VirtualHost *:80>
+<Directory />
+Options -Indexes FollowSymLinks
+AllowOverride None
+</Directory>
+
+ServerName {domain}
+ServerAlias *.{domain}
+ErrorLog /var/log/apache2/groupoffice_error.log
+CustomLog /var/log/apache2/groupoffice_access.log combined
+VirtualDocumentRoot /home/govhosts/%0/groupoffice
+</VirtualHost>
