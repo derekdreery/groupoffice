@@ -178,7 +178,7 @@ class GO_Base_Util_TemplateParser
 		
 		if(!$leaveEmptyTags){
 			$content = preg_replace('/{([^}]*)}/U','',$content);
-			$content = preg_replace('/%([^%]*)%/U','',$content);
+			//$content = preg_replace('/%([^%]*)%/U','',$content); //breaks email templates!
 		}		
 		return $content;
 	}
