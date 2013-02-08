@@ -663,13 +663,20 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		// Set the count of the total activated calendars in the response.
 		$response['calendar_count'] = count($calendars);
-		$response['first_writable_calendar_id']=false;
+
 		$calendarModels=array();
 		foreach($calendars as $calendarId){
 			// Get the calendar model that is used for these events
 			try{
 				$calendar = GO_Calendar_Model_Calendar::model()->findByPk($calendarId);
 				$calendarModels[]=$calendar;
+				
+				
+				if(!isset($response['view_calendar_id'])){
+					$response['view_calendar_id']=$calendar->id;
+					$response['view_calendar_name']=$calendar->name;
+				}
+				
 
 				// Set the colors for each calendar
 				$calendar->displayColor = $colors[$colorIndex];
@@ -692,8 +699,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 				$response['title'] .= $calendar->name.' & ';
 
-				// Set the first calendarId to the response // MAYBE DEPRECATED??
-				if(empty($response['calendar_id'])){
+				if(!isset($response['comment'])){
 					
 					$response['count']=0;
 					$response['comment']=$calendar->comment;

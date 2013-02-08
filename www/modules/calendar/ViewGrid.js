@@ -228,7 +228,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 		//for(var calendar_id in this.jsonData)
 		for(var i=0,max=this.jsonData.results.length;i<max;i++)
 		{
-			var calendar_id=this.jsonData.results[i].calendar_id;
+			var calendar_id=this.jsonData.results[i].view_calendar_id;
             
 
             var cell = Ext.DomHelper.append(gridRow, {
@@ -243,7 +243,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
                 id: 'view_cal_'+calendar_id,
                 href:'#',
                 cls:'normal-link',
-                html:this.jsonData.results[i].calendar_name
+                html:this.jsonData.results[i].view_calendar_name
             }, true);
 
             link.on('click', function(e, target){			
