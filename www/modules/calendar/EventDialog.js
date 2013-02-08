@@ -235,6 +235,22 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		//These parameters are present when a user edits a single occurence of a repeating event
 		params.exception_date=config.exception_date;
 		
+		
+			// if the newMenuButton from another passed a linkTypeId then set this
+		// value in the select link field
+		if (config.link_config) {
+			this.link_config = config.link_config;
+			if (config.link_config.modelNameAndId) {
+				this.selectLinkField.setValue(config.link_config.modelNameAndId);
+				this.selectLinkField.setRemoteText(config.link_config.text);
+			}		
+
+			//if(this.subjectField.getValue()=='')
+				//this.subjectField.setValue(config.link_config.text);
+				
+			params.name=config.link_config.text;
+		}
+		
 
 		//if (config.event_id > 0) {
 			this.formPanel.load({
@@ -302,18 +318,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		
 					
 		
-		// if the newMenuButton from another passed a linkTypeId then set this
-		// value in the select link field
-		if (config.link_config) {
-			this.link_config = config.link_config;
-			if (config.link_config.modelNameAndId) {
-				this.selectLinkField.setValue(config.link_config.modelNameAndId);
-				this.selectLinkField.setRemoteText(config.link_config.text);
-			}		
-
-			if(this.subjectField.getValue()=='')
-				this.subjectField.setValue(config.link_config.text);
-		}
+	
 
 
 		this.fireEvent('show', this);
