@@ -690,7 +690,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 				
 				$result = array(						
 						'human_size'=>$file->humanSize(),
-						'extension'=>$file->extension(),
+						'extension'=>strtolower($file->extension()),
 						'size'=>$file->size(),
 						'type'=>$file->mimeType(),
 						'name'=>$file->name()
