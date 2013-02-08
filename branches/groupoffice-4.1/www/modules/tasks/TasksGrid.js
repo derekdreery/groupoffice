@@ -115,10 +115,12 @@ GO.tasks.TasksPanel = function(config)
 					return value+"%";
 				}
 			},{
+				id:'user_name',
 				header: GO.lang.createdBy,
 				dataIndex: 'user_name',
 				hidden:true,
-				width:150
+				width:150,
+				sortable:false
 			},{
 				header: GO.lang.strCtime,
 				dataIndex: 'ctime',
