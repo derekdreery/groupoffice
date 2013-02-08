@@ -3,7 +3,10 @@
 - .ml-unseen-row and .ml-seen-row classes in vertical view of email message list fixed
 - Update Norwegian and German
 - Disabled IMAP message cache because it used a lot of diskspace and performance gain is questionable.
-
+- Added MS Outlook style to client to fix some strange negative text indents.
+- Set participant status from email
+- Preset appointment name when creating it as a link
+- Reimplemented accept and decline links for external programs
 
 08-02-2013 4.1.31
 - Fix broken e-mail template images

@@ -1387,34 +1387,34 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$event->importVObject($vevent);		
 		}
 	}
-	
-	//TODO Still support this?
-//	public function actionInvitation($params){
-//		
-//		$participant = GO_Calendar_Model_Participant::model()->findSingleByAttributes(array(
-//				'event_id'=>$params['id'],
-//				'email'=>$params['email']
-//		));
-//		
-//		if(!$participant){
-//			throw new Exception("Could not find the event");
-//		}
-//		
-//		if($participant->getSecurityToken()!=$params['participantToken']){
-//			throw new Exception("Invalid request");
-//		}
-//		
-//		if(empty($params['accept']))		
-//			$participant->status=GO_Calendar_Model_Participant::STATUS_DECLINED;
-//		else
-//			$participant->status=GO_Calendar_Model_Participant::STATUS_ACCEPTED;
-//		
-//		//save will be handled by organizer when he get's an email
-//		$participant->save();
-//		
-//		
-//		$this->render('invitation', array('participant'=>$participant, 'event'=>$event));
-//	}
+
+	public function actionInvitation($params){
+		
+		$participant = GO_Calendar_Model_Participant::model()->findSingleByAttributes(array(
+				'event_id'=>$params['id'],
+				'email'=>$params['email']
+		));
+		
+		if(!$participant){
+			throw new Exception("Could not find the event");
+		}
+		
+		if($participant->getSecurityToken()!=$params['participantToken']){
+			throw new Exception("Invalid request");
+		}
+		
+		if(empty($params['accept']))		
+			$participant->status=GO_Calendar_Model_Participant::STATUS_DECLINED;
+		else
+			$participant->status=GO_Calendar_Model_Participant::STATUS_ACCEPTED;
+		
+		//save will be handled by organizer when he get's an email
+		$participant->save();
+		
+		$event = $participant->getParticipantEvent();
+		
+		$this->render('invitation', array('participant'=>$participant, 'event'=>$event));
+	}
 	
 	/**
 	 * Get the birthdays of the contacts in the given addressbooks between 

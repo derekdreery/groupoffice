@@ -95,7 +95,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			templateStr += '<tpl if="!GO.util.empty(values.attendance_event_id)">'+
 			'<div class="message-icalendar"><a class="go-model-icon-GO_Calendar_Model_Event" style="padding-left:20px;background-repeat:no-repeat;" href="#" class="go-model-icon-GO_Calendar_Model_Event message-icalendar-icon" onclick="GO.email.showAttendanceWindow({attendance_event_id});">'+GO.calendar.lang.clickForAttendance+'</a></div>'+
 			'</tpl>';
-		}		
+			
 		
 		
 		templateStr += '<tpl if="!GO.util.empty(values.iCalendar)">'+
@@ -121,15 +121,14 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				'<a class="normal-link" id="em-icalendar-update-event" href="#">'+GO.email.lang.icalendarUpdateEvent+'</a>'+
 			'</tpl>'+
 		'</tpl>'+
-		'</div>'+
-		
-		
-		
+		'</div>'+		
 		'<div style="clear:both"></div>'+
 		'</div>'+
 		'</tpl>'+
-		'</tpl>'+
-		'<div id="'+this.bodyId+'" class="message-body go-html-formatted">{htmlbody}</div>';
+		'</tpl>';
+	}
+	
+		templateStr += '<div id="'+this.bodyId+'" class="message-body go-html-formatted">{htmlbody}</div>';
 		
 		this.template = new Ext.XTemplate(templateStr,{
 			addSlashes : function(str)

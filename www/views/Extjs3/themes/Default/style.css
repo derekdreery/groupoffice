@@ -2068,3 +2068,9 @@ body.ext-ie6 .x-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em
 box-sizing: border-box;
 }
 }
+
+
+
+.go-hidden{
+	display:none;
+}
