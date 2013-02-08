@@ -215,3 +215,6 @@ $l['openCalendar']='Open agenda';
 $l['createPermission']="Toegang aanmaken";
 
 $l['show_holidays']="Feestdagen tonen";
+
+$l['participant']='Deelnemer';
+$l['clickForAttendance']='Klik hier om uw status voor deelname aan te geven';

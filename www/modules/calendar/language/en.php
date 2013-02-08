@@ -215,3 +215,5 @@ $l['openCalendar']='Open calendar';
 $l['createPermission']="Create permission";
 
 $l['show_holidays']="Show holidays";
+$l['participant']='Participant';
+$l['clickForAttendance']='Click here to set your attendance status';

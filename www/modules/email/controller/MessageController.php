@@ -1159,6 +1159,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 						'is_invitation' => $vcalendar->method == 'REQUEST',
 						'is_cancellation' => $vcalendar->method == 'CANCEL'
 				);
+			}elseif($event){
+				$response['attendance_event_id']=$event->id;
 			}
 //			$subject = (string) $vevent->summary;
 			if(empty($uuid) || strpos($response['htmlbody'], $uuid)===false){
