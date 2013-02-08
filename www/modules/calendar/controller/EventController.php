@@ -587,7 +587,13 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		unset($params['view_id']);
 
 		//$calendars = $view->calendars;
-		$calendars = array_merge($view->getGroupCalendars()->fetchAll(), $view->calendars->fetchAll());
+		$calendars=array();
+		$unsortedCalendars = array_merge($view->getGroupCalendars()->fetchAll(), $view->calendars->fetchAll());
+		foreach($unsortedCalendars as $calendar){
+			$calendars[$calendar->name]=$calendar;
+		}
+		ksort($calendars);
+		$calendars = array_values($calendars);
 
 		$response['success'] = true;
 		$response['results'] = array();
