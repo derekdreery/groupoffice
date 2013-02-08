@@ -1995,24 +1995,32 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				
 //				if(!$participantEvent){					
 
-					//build message for external program
-//					$acceptUrl = GO::url("calendar/event/invitation",array("id"=>$this->id,'accept'=>1,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
-//					$declineUrl = GO::url("calendar/event/invitation",array("id"=>$this->id,'accept'=>0,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
-//
-//						$body = '<p>' . $bodyLine. '</p>' .
-//							$this->toHtml() .
-//							'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
-//							'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
-//							'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
-//							'&nbsp;|&nbsp;' .
-//							'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
+				//build message for external program
+				$acceptUrl = GO::url("calendar/event/invitation",array("id"=>$this->id,'accept'=>1,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
+				$declineUrl = GO::url("calendar/event/invitation",array("id"=>$this->id,'accept'=>0,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
+
+				if($participantEvent){	
+					//hide confusing buttons if user has a GO event.
+					$body .= '<div class="go-hidden">';
+				}
+				$body .= 
 					
-					$ics=$this->toICS("REQUEST");				
-					$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REQUEST"');
-					$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
-					$a->setDisposition("inline");
-					$message->attach($a);
-//				}else
+						'<p><br /><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
+						'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
+						'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
+						'&nbsp;|&nbsp;' .
+						'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
+				
+				if($participantEvent){	
+					$body .= '</div>';
+				}
+
+				$ics=$this->toICS("REQUEST");				
+				$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REQUEST"');
+				$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+				$a->setDisposition("inline");
+				$message->attach($a);
+
 				if($participantEvent){
 					$url = GO::createExternalUrl('calendar', 'openCalendar', array(
 					'unixtime'=>$this->start_time
