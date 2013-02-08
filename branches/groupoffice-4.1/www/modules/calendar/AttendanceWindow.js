@@ -4,7 +4,8 @@ GO.calendar.AttendanceWindow = Ext.extend(GO.dialog.TabbedFormDialog, {
 		
 		Ext.apply(this, {
 			title:GO.calendar.lang.attendance,
-			height: 220,
+			height: 460,
+			
 			width: 400,
 			modal:true,
 			enableApplyButton:false,
@@ -21,11 +22,19 @@ GO.calendar.AttendanceWindow = Ext.extend(GO.dialog.TabbedFormDialog, {
 		else
 			this.formPanel.baseParams.exception_date=date;
 	},
+	
+	afterLoad : function(remoteModelId, config, action){
+		this.infoPanel.update(action.result.data.info)
+	},
 	buildForm : function(){
 		
 		this.addPanel({
 			cls:'go-form-panel',
 			layout:'form',
+			autoScroll:true,
+			defaults:{
+				anchor:'-20'
+			},
 			items:[{
 				xtype:'radiogroup',
 				hideLabel:true,
@@ -54,11 +63,15 @@ GO.calendar.AttendanceWindow = Ext.extend(GO.dialog.TabbedFormDialog, {
 				name:'notify_organizer',
 				xtype:'xcheckbox',
 				boxLabel:GO.calendar.lang.notifyOrganizer
-			},{
-				xtype:'plainfield',
-				fieldLabel:GO.calendar.lang.organizer,
-				name:'organizer'
-			}]
+			}
+//			{
+//				xtype:'plainfield',
+//				fieldLabel:GO.calendar.lang.organizer,
+//				name:'organizer'
+//			}
+			,this.infoPanel = new Ext.form.FieldSet({
+				title:GO.calendar.lang.eventInfo
+			})]
 		});
 	}
 });

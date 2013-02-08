@@ -89,8 +89,16 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		'<tpl if="xssDetected">'+
 		'<div class="go-warning-msg em-blocked"><a id="em-filterxss" href="#" class="normal-link">'+GO.email.lang.xssDetected+'</a></div>'+
 		'</tpl>'+	
-		'</div>'+
-		'<tpl if="!GO.util.empty(values.iCalendar)">'+
+		'</div>';
+		
+		if(GO.calendar){
+			templateStr += '<tpl if="!GO.util.empty(values.attendance_event_id)">'+
+			'<div class="message-icalendar"><a class="go-model-icon-GO_Calendar_Model_Event" style="padding-left:20px;background-repeat:no-repeat;" href="#" class="go-model-icon-GO_Calendar_Model_Event message-icalendar-icon" onclick="GO.email.showAttendanceWindow({attendance_event_id});">'+GO.calendar.lang.clickForAttendance+'</a></div>'+
+			'</tpl>';
+		}		
+		
+		
+		templateStr += '<tpl if="!GO.util.empty(values.iCalendar)">'+
 		'<tpl if="iCalendar.feedback">'+
 		'<div class="message-icalendar">'+
 		'<div class="go-model-icon-GO_Calendar_Model_Event message-icalendar-icon ">'+
@@ -114,6 +122,9 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			'</tpl>'+
 		'</tpl>'+
 		'</div>'+
+		
+		
+		
 		'<div style="clear:both"></div>'+
 		'</div>'+
 		'</tpl>'+

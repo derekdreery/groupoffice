@@ -1723,3 +1723,11 @@ GO.email.showMessageAttachment = function(id, remoteMessage){
 	GO.email.linkedMessageWin.show();
 	GO.email.linkedMessagePanel.load(id, remoteMessage);
 }
+
+
+GO.email.showAttendanceWindow=function(event_id){
+	if(!GO.email.attendanceWindow){
+		GO.email.attendanceWindow = new GO.calendar.AttendanceWindow ();
+	}			
+	GO.email.attendanceWindow.show(event_id);
+}
