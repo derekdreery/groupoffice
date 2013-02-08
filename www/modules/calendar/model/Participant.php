@@ -284,7 +284,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 		if($wasNew && $this->event->is_organizer){
 			
 			
-			if ($this->user_id > 0 && $this->user_id != $this->event->user_id) {
+			if ($this->user_id > 0 && !$this->is_organizer) {
 				$newEvent = $this->event->createCopyForParticipant($this);					
 			}
 			
