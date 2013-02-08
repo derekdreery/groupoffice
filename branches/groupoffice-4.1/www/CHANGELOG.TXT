@@ -1,5 +1,9 @@
 4.1.32
+- Sort view calendars
 - .ml-unseen-row and .ml-seen-row classes in vertical view of email message list fixed
+- Update Norwegian and German
+- Disabled IMAP message cache because it used a lot of diskspace and performance gain is questionable.
+
 
 08-02-2013 4.1.31
 - Fix broken e-mail template images
