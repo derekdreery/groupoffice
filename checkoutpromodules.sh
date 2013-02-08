@@ -1,28 +1,30 @@
 #!/bin/bash
-VERSION=4.1
+REPOROOT=svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/trunk/modules
+
 cd `dirname "$0"`/www/modules
 
-svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/scanbox
-svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/sync
-svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/billing
-svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/professional
-svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/projects
-svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/webshop
-svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/gota
-svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/customfields
-svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/licenses
-svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/hoursapproval
-svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/timeregistration
-svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/documenttemplates
-svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/savemailas
-svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/tickets
-svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/z-push
-svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/filesearch
-svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/caldav
-svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/syncml
-svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/workflow
-svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/scanbox
-svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/carddav
-svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/z-push2
-svn co svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-$VERSION/googledrive
-svn co svn+ssh://mschering@svn.code.sf.net/p/group-office/code/branches/groupoffice-4.1/debian-groupoffice-servermanager/usr/share/groupoffice/modules/servermanager
+svn co $REPOROOT/scanbox
+svn co $REPOROOT/sync
+svn co $REPOROOT/billing
+svn co $REPOROOT/professional
+svn co $REPOROOT/projects
+svn co $REPOROOT/webshop
+svn co $REPOROOT/gota
+svn co $REPOROOT/customfields
+svn co $REPOROOT/licenses
+svn co $REPOROOT/hoursapproval
+svn co $REPOROOT/timeregistration
+svn co $REPOROOT/documenttemplates
+svn co $REPOROOT/savemailas
+svn co $REPOROOT/tickets
+svn co $REPOROOT/z-push
+svn co $REPOROOT/filesearch
+svn co $REPOROOT/caldav
+svn co $REPOROOT/syncml
+svn co $REPOROOT/workflow
+svn co $REPOROOT/scanbox
+svn co $REPOROOT/carddav
+svn co $REPOROOT/z-push2
+svn co $REPOROOT/googledrive
+
+svn co svn+ssh://mschering@svn.code.sf.net/p/group-office/code/trunk/debian-groupoffice-servermanager/usr/share/groupoffice/modules/servermanager
