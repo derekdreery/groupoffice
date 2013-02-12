@@ -536,6 +536,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 			case 'jpeg':
 			case 'png':
 			case 'gif':
+			case 'bmp':
 			case 'xmind':
 
 				return true;
