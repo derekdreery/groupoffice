@@ -926,7 +926,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.1.31';
+	var $version = '4.1.32';
 	
 	/**
 	 * Modification date
@@ -934,7 +934,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20130208';
+	var $mtime = '20130212';
 
 	#group configuration
 	/**
@@ -1158,7 +1158,7 @@ class GO_Base_Config {
 
 			$lc = localeconv();
 
-			$this->default_currency=empty($lc['currency_symbol']) ? 'â‚¬' : $lc['currency_symbol'];
+			$this->default_currency=empty($lc['currency_symbol']) ? '€' : $lc['currency_symbol'];
 			$this->default_decimal_separator=empty($lc['decimal_point']) ? '.' : $lc['decimal_point'];
 			$this->default_thousands_separator=$this->default_decimal_separator == '.' ? ',' : '.';//$lc['thousands_sep'];
 		}
