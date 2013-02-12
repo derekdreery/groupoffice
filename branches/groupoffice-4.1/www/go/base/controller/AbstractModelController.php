@@ -824,17 +824,35 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 */
 	protected function actionExport($params) {	
 		
+		$orientation = false;
+		
+		$showHeader = false;
+  	$humanHeaders = true;
+		$includeHidden = false;
+		
+		if(!empty($params['includeHeaders']))
+			$showHeader = true;
+		
+		if(!empty($params['humanHeaders']))
+			$humanHeaders = false;
+		
+		if(!empty($params['includeHidden']))
+			$includeHidden = true;		
+		
+		$checkboxSettings = array(
+			'export_include_headers'=>$showHeader,
+			'export_human_headers'=>!$humanHeaders,
+			'export_include_hidden'=>$includeHidden
+		);
+		
+		$settings =  GO_Base_Export_Settings::load();
+		$settings->saveFromArray($checkboxSettings);
 		
 		//define('EXPORTING', true);
 		//used by custom fields to format diffently
 		if(GO::modules()->customfields)
 			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=true;
-		
-		
-		$showHeader = false;
-  	$humanHeaders = true;
-		$orientation = false;
-		
+
 		if(!empty($params['exportOrientation']) && ($params['exportOrientation']=="H"))
 			$orientation = 'L'; // Set the orientation to Landscape
 		else
@@ -844,13 +862,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$title = $params['documentTitle'];
 		else
 			$title = GO::session()->values[$params['name']]['name'];
-	
-		if(!empty($params['includeHeaders']))
-			$showHeader = true;
-		
-		if(!empty($params['humanHeaders']))
-			$humanHeaders = false;
-		
+			
 		$findParams = GO::session()->values[$params['name']]['findParams'];
 		$findParams->limit(0); // Let the export handle all found records without a limit
 		$model = GO::getModel(GO::session()->values[$params['name']]['model']);
