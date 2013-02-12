@@ -445,7 +445,15 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 			
 				var index = this.store.find("is_organizer", true);
 				
-				this.store.removeAt(index);
+				if(this.store.getCount()>1){
+					//with more then one participant don't remove any participant.
+					//with only one organizer the user didn't make any changes so we can replace it.
+					var record = this.store.getAt(index);
+					record.set('is_organizer',false);				
+				}else
+				{
+					this.store.removeAt(index);
+				}
 				
 				var index = this.store.find("email", result.organizer.email);
 				if(index>-1)
