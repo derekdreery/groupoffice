@@ -1,4 +1,5 @@
 4.1.32
+- Remember checkbox values from the export dialog
 - "email_on_new" functionality now contains ticket message in email body.
 - Sort view calendars
 - .ml-unseen-row and .ml-seen-row classes in vertical view of email message list fixed
