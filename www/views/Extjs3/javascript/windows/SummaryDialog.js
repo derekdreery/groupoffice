@@ -94,7 +94,7 @@ GO.dialog.SummaryDialog = Ext.extend(GO.Window, {
 		GO.dialog.SummaryDialog.superclass.show.call(this);
 		
 		this.xTemplate.overwrite(this.templatePanel.body, {
-			importCount: this.summaryLog.total,
+			importCount: this.summaryLog.total - this.summaryLog.errorCount,
 			errorCount: this.summaryLog.errorCount,
 			errors: this.summaryLog.errors
 		});
