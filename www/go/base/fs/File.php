@@ -189,9 +189,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 */
 	public function putContents($data, $flags=null, $context=null){
 		if(file_put_contents($this->path, $data, $flags, $context)){
-			@chmod($this->path, GO::config()->file_create_mode);
-			if(GO::config()->file_change_group)
-				@chgrp ($this->path, GO::config()->file_change_group);
+			$this->setDefaultPermissions();
 			return true;
 		}else
 		{
@@ -390,7 +388,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 			throw new Exception("Could not copy ".$old." to ".$new);
 		}
 				
-		chmod($newPath, GO::config()->file_create_mode);
+		chmod($newPath, octdec(GO::config()->file_create_mode));
 		if(GO::config()->file_change_group)
 			chgrp($newPath, GO::config()->file_change_group);
 						
@@ -433,9 +431,9 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 * Set's default permissions and group ownership
 	 */
 	public function setDefaultPermissions(){
-		chmod($this->path, GO::config()->file_create_mode);
+		@chmod($this->path, octdec(GO::config()->file_create_mode));
 		if(!empty(GO::config()->file_change_group))
-			chgrp($this->path, GO::config()->file_change_group);
+			@chgrp($this->path, GO::config()->file_change_group);
 	}
 	
 	/**
