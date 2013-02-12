@@ -244,3 +244,4 @@ $l['copyMailTo']="Copy email to...";
 $l['copyMailToTxt']="Select a folder to copy the email to";
 $l['copyMailToRUSure']="Are you sure you want to copy the selected email message to this mailbox folder?";
 $l['copyMailsToRUSure']="Are you sure you want to copy the selected email messages to this mailbox folder?";
+$l['selectValidMailFolder']="Please select a valid email folder to copy to.";
