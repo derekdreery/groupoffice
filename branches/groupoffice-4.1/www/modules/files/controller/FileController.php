@@ -140,9 +140,14 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 			$file = GO_Files_Model_File::model()->findByPk($params['id'], false, true);
 		}
 		
+		$returnDefault = false;
 		if(empty($params['all'])){
 			$fh = GO_Files_Model_FileHandler::model()->findByPk(
 						array('extension'=>strtolower($file->extension), 'user_id'=>GO::user()->id));
+			
+			if(!$fh){
+				$returnDefault=true;
+			}
 		}else
 		{
 			$fh = false;
@@ -164,7 +169,7 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 			/* @var $class ReflectionClass */
 			
 			$fileHandler = new $class->name;
-			if($fileHandler->fileIsSupported($file)){
+			if($fileHandler->fileIsSupported($file) && (!$returnDefault || $fileHandler->isDefault($file))){
 				$store->addRecord(array(
 						'name'=>$fileHandler->getName(),
 						'handler'=>$fileHandler->getHandler($file),
@@ -172,7 +177,20 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 						'cls'=>$class->name,
 						'extension'=>$file->extension
 				));
+				if($returnDefault)
+					break;
 			}
+		}
+		
+		if(!$store->getTotal()){
+			$fileHandler = new GO_Files_Filehandler_Download();
+			$store->addRecord(array(
+						'name'=>$fileHandler->getName(),
+						'handler'=>$fileHandler->getHandler($file),
+						'iconCls'=>$fileHandler->getIconCls(),
+						'cls'=>"GO_Files_Filehandler_Download",
+						'extension'=>$file->extension
+				));
 		}
 		
 		return $store->getData();		
