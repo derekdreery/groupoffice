@@ -1013,10 +1013,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				
 				if($this->beforeImport($params, $model, $attributes, $record)){
 					
-					//Unset some default attributes set in the code
-					$defaultAttributes = $model->defaultAttributes();
-					foreach($defaultAttributes as $column => $value)
-						unset($model->{$column});
+//					//Unset some default attributes set in the code
+//					$defaultAttributes = $model->defaultAttributes();
+//					foreach($defaultAttributes as $column => $value)
+//						unset($model->{$column});
 					
 					$columns = $model->getColumns();
 					foreach($columns as $col=>$attr){
@@ -1047,6 +1047,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 					
 					try{
 						if($model->save()){
+							$this->afterImport($model, $attributes, $record);
 							$summarylog->addSuccessful();
 						} else {
 							$summarylog->addError($record[0], implode('<br />', $model->getValidationErrors()));
@@ -1066,9 +1067,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				//	$summarylog->add();
 				}
 			}
-			
-			
-			$this->afterImport($model, $attributes, $record);
+						
 		} else {
 			//$summarylog->addError('NO FILE FOUND', 'There is no file found that can be imported!');
 		}
