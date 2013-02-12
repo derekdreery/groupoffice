@@ -36,12 +36,13 @@ class GO_Calendar_Controller_Attendance extends GO_Base_Controller_AbstractContr
 		}
 		
 		$participant=$event->getParticipantOfCalendar();
-		$participant->status=$params['status'];
-//		$participant->notifyOrganizer=!empty($params['notify_organizer']);
-		$participant->save();
+		if($params['status']!=$participant->status){
+			$participant->status=$params['status'];
+			$participant->save();
 		
-		if(!empty($params['notify_organizer']))
-			$event->replyToOrganizer();
+			if(!empty($params['notify_organizer']))
+				$event->replyToOrganizer();
+		}
 		
 		
 		
