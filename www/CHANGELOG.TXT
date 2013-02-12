@@ -1,4 +1,4 @@
-4.1.32
+12-02-2013 4.1.32
 - Remember checkbox values from the export dialog
 - "email_on_new" functionality now contains ticket message in email body.
 - Sort view calendars
@@ -8,7 +8,11 @@
 - Added MS Outlook style to client to fix some strange negative text indents.
 - Set participant status from email
 - Preset appointment name when creating it as a link
-- Reimplemented accept and decline links for external programs
+- Re-implemented accept and decline links for external programs
+- Implemented default handlers so people don't have to make a choice
+- Edited ticket messages turned into notes
+- Removed pdf from google drive support
+- octal problem with file_create_mode and folder_create_mode that prevented installation in some cases.
 
 08-02-2013 4.1.31
 - Fix broken e-mail template images
