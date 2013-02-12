@@ -15,6 +15,7 @@ class GO_Calendar_Controller_Attendance extends GO_Base_Controller_AbstractContr
 			throw new Exception("The organizer of this event is missing");
 		
 		$response = array("success"=>true, 'data'=>array(
+				'notify_organizer'=>true,
 				'status'=>$participant->status, 
 				'organizer'=>$organizer->name,
 				'info'=>$event->toHtml()

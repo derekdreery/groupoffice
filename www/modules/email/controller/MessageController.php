@@ -1132,6 +1132,9 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			//find existing event
 			$event = GO_Calendar_Model_Event::model()->findByUuid((string) $vevent->uid, GO::user()->id, 0);
 //			var_dump($event);
+			
+			$uuid = (string) $vevent->uid;
+			
 			if(!$event || $event->is_organizer){
 				switch($vcalendar->method){
 					case 'CANCEL':					
@@ -1150,7 +1153,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				if($vcalendar->method!='REQUEST' && $vcalendar->method!='PUBLISH' && !$event){
 					$response['iCalendar']['feedback'] = GO::t('iCalendar_event_not_found', 'email');
 				}
-				$uuid = (string) $vevent->uid;
+				
 				$response['iCalendar']['invitation'] = array(
 						'uuid' => $uuid,
 						'email_sender' => $response['sender'],
@@ -1171,7 +1174,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 					$event->importVObject($vevent, array(), true);
 				}
 
-				$response['htmlbody'].='<div style="border: 1px solid black;margin-top:10px">'.
+				$response['htmlbody'].= '<div style="border: 1px solid black;margin-top:10px">'.
 								'<div style="font-weight:bold;margin:2px;">'.GO::t('attachedAppointmentInfo','email').'</div>'.
 								$event->toHtml().
 								'</div>';
