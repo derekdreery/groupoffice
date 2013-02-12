@@ -1132,7 +1132,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 * @return boolean
 	 * @throws GO_Base_Exception_NotFound
 	 */
-	private function _handleIcalendarRequest(Sabre_VObject_Component $vevent, $recurrenceDate, $status){
+	private function _handleIcalendarRequest(Sabre_VObject_Component $vevent, $recurrenceDate){
 		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
 		
 		
@@ -1173,15 +1173,16 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$participant->email=$event->calendar->user->email;			
 		}		
 		
-		if($status)
-				$participant->status=$status;
-			$participant->save();
+//		if($status)
+//				$participant->status=$status;
+//			$participant->save();
 		
-		$event->replyToOrganizer();
+//		$event->replyToOrganizer();
 		
 		
 		$langKey = $eventUpdated ? 'eventUpdatedIn' : 'eventScheduledIn';
 		
+		$response['attendance_event_id']=$event->id;
 		$response['feedback']=sprintf(GO::t($langKey,'calendar'), $event->calendar->name, $participant->statusName);
 		$response['success']=true;
 		
@@ -1249,8 +1250,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				break;
 			
 			case 'REQUEST':
-				$status = !empty($params['status']) ? $params['status'] : false;
-				return $this->_handleIcalendarRequest($vevent, $recurrenceDate, $status);
+				//$status = !empty($params['status']) ? $params['status'] : false;
+				return $this->_handleIcalendarRequest($vevent, $recurrenceDate);
 				break;
 			
 			case 'CANCEL':

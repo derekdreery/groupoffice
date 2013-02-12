@@ -93,40 +93,46 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		
 		if(GO.calendar){
 			templateStr += '<tpl if="!GO.util.empty(values.attendance_event_id)">'+
-			'<div class="message-icalendar"><a class="go-model-icon-GO_Calendar_Model_Event" style="padding-left:20px;background-repeat:no-repeat;" href="#" class="go-model-icon-GO_Calendar_Model_Event message-icalendar-icon" onclick="GO.email.showAttendanceWindow({attendance_event_id});">'+GO.calendar.lang.clickForAttendance+'</a></div>'+
+			'<div class="message-icalendar"><a class="go-model-icon-GO_Calendar_Model_Event normal-link" style="padding-left:20px;background-repeat:no-repeat;" href="#" class="go-model-icon-GO_Calendar_Model_Event message-icalendar-icon" onclick="GO.email.showAttendanceWindow({attendance_event_id});">'+GO.calendar.lang.clickForAttendance+'</a></div>'+
 			'</tpl>';
 			
 		
 		
-		templateStr += '<tpl if="!GO.util.empty(values.iCalendar)">'+
-		'<tpl if="iCalendar.feedback">'+
-		'<div class="message-icalendar">'+
-		'<div class="go-model-icon-GO_Calendar_Model_Event message-icalendar-icon ">'+
-		'{[values.iCalendar.feedback]}</div>'+
-		'<div class="message-icalendar-actions">'+
-		'<tpl if="iCalendar.invitation">'+
-			'<tpl if="iCalendar.invitation.is_invitation">'+
-			//'<tpl if="!iCalendar.invitation.event_id || iCalendar.invitation.event_declined == true">'+
-				'<a class="normal-link" id="em-icalendar-accept-invitation" href="#">'+GO.email.lang.icalendarAcceptInvitation+'</a> '+
-			//'</tpl>'+
-				'<tpl if="iCalendar.invitation.event_declined == false">'+
-				'<a class="normal-link" id="em-icalendar-decline-invitation" href="#">'+GO.email.lang.icalendarDeclineInvitation+'</a> '+
+			templateStr += '<tpl if="!GO.util.empty(values.iCalendar)">'+
+				'<tpl if="iCalendar.feedback">'+
+				'<div class="message-icalendar">'+
+				
+				
+				
+				'<tpl if="iCalendar.invitation">'+
+					'<tpl if="iCalendar.invitation.is_invitation">'+
+		
+								'<a id="em-icalendar-accept-invitation" class="go-model-icon-GO_Calendar_Model_Event normal-link" style="padding-left:20px;background-repeat:no-repeat;" href="#" class="go-model-icon-GO_Calendar_Model_Event message-icalendar-icon">'+GO.calendar.lang.clickForAttendance+'</a>'+
+						
+					'</tpl>'+
+					
+					'<tpl if="iCalendar.invitation.is_cancellation">'+
+						'<div class="go-model-icon-GO_Calendar_Model_Event message-icalendar-icon ">'+
+						'{[values.iCalendar.feedback]}</div>'+
+						'<div class="message-icalendar-actions">'+
+							'<a class="normal-link" id="em-icalendar-delete-event" href="#">'+GO.email.lang.icalendarDeleteEvent+'</a>'+
+							'</div>'+
+					'</tpl>'+
+					
+					'<tpl if="iCalendar.invitation.is_update">'+
+						'<div class="go-model-icon-GO_Calendar_Model_Event message-icalendar-icon ">'+
+						'{[values.iCalendar.feedback]}</div>'+
+						'<div class="message-icalendar-actions">'+
+							'<a class="normal-link" id="em-icalendar-update-event" href="#">'+GO.email.lang.icalendarUpdateEvent+'</a>'+
+							'</div>'+
+					'</tpl>'+				
+						
 				'</tpl>'+
-				'<a class="normal-link" id="em-icalendar-tentative-invitation" href="#">'+GO.email.lang.icalendarTentativeInvitation+'</a> '+
-			'</tpl>'+
-			'<tpl if="iCalendar.invitation.is_cancellation">'+
-				'<a class="normal-link" id="em-icalendar-delete-event" href="#">'+GO.email.lang.icalendarDeleteEvent+'</a>'+
-			'</tpl>'+
-			'<tpl if="iCalendar.invitation.is_update">'+
-				'<a class="normal-link" id="em-icalendar-update-event" href="#">'+GO.email.lang.icalendarUpdateEvent+'</a>'+
-			'</tpl>'+
-		'</tpl>'+
-		'</div>'+		
-		'<div style="clear:both"></div>'+
-		'</div>'+
-		'</tpl>'+
-		'</tpl>';
-	}
+				'<div style="clear:both"></div>'+
+				'</div>'+
+				'</tpl>'+
+				'</tpl>';
+		}
 	
 		templateStr += '<div id="'+this.bodyId+'" class="message-body go-html-formatted">{htmlbody}</div>';
 		
@@ -307,25 +313,25 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		{
 			acceptInvitationEl.on('click', function()
 			{
-				this.processInvitation("ACCEPTED");
+				this.processInvitation();
 			}, this);
 		}
-		var declineInvitationEl = Ext.get('em-icalendar-decline-invitation');
-		if(declineInvitationEl)
-		{
-			declineInvitationEl.on('click', function()
-			{
-				this.processInvitation("DECLINED");
-			}, this);
-		}
-		var tentativeInvitationEl = Ext.get('em-icalendar-tentative-invitation');
-		if(tentativeInvitationEl)
-		{
-			tentativeInvitationEl.on('click', function()
-			{
-				this.processInvitation("TENTATIVE");
-			}, this);
-		}
+//		var declineInvitationEl = Ext.get('em-icalendar-decline-invitation');
+//		if(declineInvitationEl)
+//		{
+//			declineInvitationEl.on('click', function()
+//			{
+//				this.processInvitation("DECLINED");
+//			}, this);
+//		}
+//		var tentativeInvitationEl = Ext.get('em-icalendar-tentative-invitation');
+//		if(tentativeInvitationEl)
+//		{
+//			tentativeInvitationEl.on('click', function()
+//			{
+//				this.processInvitation("TENTATIVE");
+//			}, this);
+//		}
 		var icalDeleteEventEl = Ext.get('em-icalendar-delete-event');
 		if(icalDeleteEventEl)
 		{
@@ -469,14 +475,14 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 	updated:false,
 	deleted:false,
 	declined:false,
-	processInvitation : function(status_id)
+	processInvitation : function()
 	{
-		this.status_id = status_id || 0;
+//		this.status_id = status_id || 0;
 			
 		GO.request({
 			url: 'calendar/event/acceptInvitation',
 			params: {
-				status: this.status_id,
+//				status: this.status_id,
 				account_id: this.account_id,
 				mailbox: this.mailbox,
 				uid: this.uid
@@ -484,7 +490,11 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			scope: this,
 			success: function(options, response, data)
 			{
-				this.icalendarFeedback = data.feedback;				
+				this.icalendarFeedback = data.feedback;			
+				
+				if(data.attendance_event_id){
+					GO.email.showAttendanceWindow(data.attendance_event_id);
+				}
 					
 				this.loadMessage();
 			}
