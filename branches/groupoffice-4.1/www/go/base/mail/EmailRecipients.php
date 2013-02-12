@@ -225,6 +225,9 @@ class GO_Base_Mail_EmailRecipients{
 	*/
 	private function _addBuffer()
 	{
+		if(!empty($this->_personal) && empty($this->_buffer)){
+			$this->_buffer = 'noaddress';
+		}
 		if(!empty($this->_buffer))
 		{
 			$this->addRecipient($this->_buffer, $this->_personal);
