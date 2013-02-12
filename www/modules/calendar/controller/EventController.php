@@ -1329,8 +1329,10 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 //			}
 			$event->importVObject($vevent, $importAttributes);
 			
-			if(!empty($params['status'])){
+			//if(!empty($params['status'])){
 				//Update participant status.
+			
+				//make sure there's a participant for the user.
 				$participant = $event->getParticipantOfCalendar();
 				
 				if(!$participant)
@@ -1340,11 +1342,11 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					$participant->user_id=$event->calendar->user_id;
 					$participant->email=$event->calendar->user->email;
 				}
-				$participant->status=$params['status'];
+				//$participant->status=$params['status'];
 				$participant->save();
 
-				$event->replyToOrganizer();
-			}
+				//$event->replyToOrganizer();
+			//}
 		}
 		
 		$langKey = $eventUpdated ? 'eventUpdatedIn' : 'eventScheduledIn';
