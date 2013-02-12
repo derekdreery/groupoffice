@@ -1198,13 +1198,13 @@ class GO_Base_Config {
 ////			define('PHP_RUSAGE', $dat["ru_utime.tv_sec"]*1e6+$dat["ru_utime.tv_usec"]);
 //		}
 
-		if(is_string($this->file_create_mode)) {
-			$this->file_create_mode=octdec($this->file_create_mode);
-		}
-
-		if(is_string($this->folder_create_mode)) {
-			$this->folder_create_mode=octdec($this->folder_create_mode);
-		}
+//		if(is_string($this->file_create_mode)) {
+//			$this->file_create_mode=octdec($this->file_create_mode);
+//		}
+//
+//		if(is_string($this->folder_create_mode)) {
+//			$this->folder_create_mode=octdec($this->folder_create_mode);
+//		}
 
 		if($this->debug_log) {
 			$this->log=true;
