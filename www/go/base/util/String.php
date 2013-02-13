@@ -150,7 +150,7 @@ class GO_Base_Util_String {
 		if(empty($str))
 			return $str;
 				
-		if($from_charset=='UTF-8'){
+		if(strtoupper($from_charset)=='UTF-8'){
 			return $str;
 		}else{
 			
@@ -174,7 +174,7 @@ class GO_Base_Util_String {
 			if(substr($from_charset,0,5)=='x-mac')
 				return GO_Base_Util_Charset_Xmac::toUtf8($str, $from_charset);
 			
-			return iconv($from_charset, 'UTF-8//IGNORE', $str);
+				return iconv($from_charset, 'UTF-8//IGNORE', $str);
 		}
 	}
 	
