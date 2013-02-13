@@ -24,7 +24,7 @@ GO.calendar.EventTemplate =
 			'</tpl>'+
 			'</table>'+
 		'</tpl>'+
-		'<tpl if="values.events && values.past_events.length">'+
+		'<tpl if="values.past_events && values.past_events.length">'+
 		'{[this.collapsibleSectionHeader(GO.calendar.lang.pastAppointments, "pastEvents-"+values.panelId, "past_events")]}'+
 			'<table class="display-panel" cellpadding="0" cellspacing="0" border="0" id="pastEvents-{panelId}">'+
 			'<tr>'+
