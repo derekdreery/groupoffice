@@ -312,7 +312,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			$email = $model->email;
 		}
 		
-		echo "Sending to " . $typestring . " id: " . $model->id . " email: " . $email . "\n";
+		echo '['.GO_Base_Util_Date::get_timestamp(time())."] Sending to " . $typestring . " id: " . $model->id . " email: " . $email . "\n";
 
 		$mailing = GO_Addressbook_Model_SentMailing::model()->findByPk($mailing->id, array(), true, true);
 		if($mailing->status==GO_Addressbook_Model_SentMailing::STATUS_PAUSED)
@@ -332,7 +332,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		}
 		if (!empty($status)) {
 			echo "---------\n";
-			echo "Failed!\n";
+			echo "Failed at ".GO_Base_Util_Date::get_timestamp(time())."\n";
 			echo $status . "\n";
 			echo "---------\n";
 			
