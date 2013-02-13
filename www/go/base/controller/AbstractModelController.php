@@ -732,6 +732,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	private function _processTasksDisplay($model,$response){
 		//$startOfDay = GO_Base_Util_Date::clear_time(time());
 
+		// Process linked tasks that are not completed.
 		$findParams = GO_Base_Db_FindParams::newInstance()->order('due_time','DESC');
 		//$findParams->getCriteria()->addCondition('start_time', $startOfDay, '<=')->addCondition('status', GO_Tasks_Model_Task::STATUS_COMPLETED, '!=');						
 		$findParams->getCriteria()->addCondition('status', GO_Tasks_Model_Task::STATUS_COMPLETED, '!=');						
@@ -750,6 +751,26 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		$data = $store->getData();
 		$response['data']['tasks']=$data['results'];
+		
+		// Process linked tasks that are completed.
+		$findParams = GO_Base_Db_FindParams::newInstance()->order('due_time','DESC');
+		//$findParams->getCriteria()->addCondition('start_time', $startOfDay, '<=')->addCondition('status', GO_Tasks_Model_Task::STATUS_COMPLETED, '!=');						
+		$findParams->getCriteria()->addCondition('status', GO_Tasks_Model_Task::STATUS_COMPLETED, '=');						
+
+		$stmt = GO_Tasks_Model_Task::model()->findLinks($model, $findParams);		
+
+		$store = GO_Base_Data_Store::newInstance(GO_Tasks_Model_Task::model());
+		$store->setStatement($stmt);
+
+		$store->getColumnModel()
+						->setFormatRecordFunction(array($this, 'formatTaskLinkRecord'))
+						->formatColumn('late','$model->due_time<time() ? 1 : 0;')
+						->formatColumn('tasklist_name', '$model->tasklist->name')
+						->formatColumn('link_count','$model->countLinks()')
+						->formatColumn('link_description','$model->link_description');		
+
+		$data = $store->getData();
+		$response['data']['completed_tasks']=$data['results'];
 		
 		return $response;
 	}
