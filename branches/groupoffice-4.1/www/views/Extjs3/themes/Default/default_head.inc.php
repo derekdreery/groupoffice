@@ -1,10 +1,10 @@
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 <?php
 $favicon = !empty($GO_CONFIG->favicon) ? $GO_CONFIG->favicon : $GO_CONFIG->theme_url."Default/images/groupoffice.ico?";
 ?>
 <meta name="robots" content="noindex" />
 <link href="<?php echo $favicon; ?>" rel="shortcut icon" type="image/x-icon">
 <title><?php echo GO::config()->title; ?></title>
-<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 <?php
 
 $root_path = $GLOBALS['GO_CONFIG']->root_path.'views/Extjs3/';
