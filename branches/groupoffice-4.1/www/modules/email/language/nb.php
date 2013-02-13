@@ -238,3 +238,4 @@ $l['copyMailTo']="Kopier e-post til...";
 $l['copyMailToTxt']="Velg en mappe å kopiere meldingen(e) til";
 $l['copyMailToRUSure']="Er du sikker på at du vil kopiere valgte melding til denne mappen?";
 $l['copyMailsToRUSure']="Er du sikker på at du vil kopiere valgte meldinger til denne mappen?";
+$l['selectValidMailFolder']="Du må velge en gyldig e-postmappe å kopiere meldingen(e) til!";

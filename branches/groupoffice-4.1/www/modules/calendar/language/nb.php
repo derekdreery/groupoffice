@@ -217,3 +217,5 @@ $l['openCalendar']='Åpne kalenderen';
 $l['statuses']['CANCELLED']= 'Avlyst';
 $l['createPermission']="Skrivetillatelse";
 $l['show_holidays']="Vis høytidsdager";
+$l['participant']='Deltager';
+$l['clickForAttendance']='Klikk her for å angi status for din deltagelse';
