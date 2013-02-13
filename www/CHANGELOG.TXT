@@ -1,3 +1,5 @@
+- Show linked past appointments as well as linked future appointments in Display Panel.
+
 12-02-2013 4.1.32
 - Remember checkbox values from the export dialog
 - "email_on_new" functionality now contains ticket message in email body.
