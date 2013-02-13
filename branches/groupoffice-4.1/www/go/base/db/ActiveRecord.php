@@ -179,28 +179,27 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * This is defined as a function because it's a only property that can be set
 	 * by child classes.
 	 * 
-	 * @var string The database table name
+	 * @return string The database table name
 	 */
 	public function tableName(){
 		return static::$tableName;
 	}
 	
 	/**
-	 * 
-	 * @return int ACL to check for permissions.
+	 * The name of the column that has the foreignkey the the ACL record
+	 * If column 'acl_id' exists it default to this
+	 * You can use field of a relation separated by a dot (eg: 'category.acl_id')
+	 * @return string ACL to check for permissions.
 	 */
 	public function aclField(){
-		return false;
+		return false; //return isset($this->columns['acl_id']) ? 'acl_id' : false;
 	}
-	
 		
 	/**
-	 * 
-	 * Returns the primary key of the database table of this model
-	 * 
-	 * @var mixed Primary key of database table. Can be a field name string or an array of fieldnames
+	 * Returns the fieldname that contains primary key of the database table of this model
+	 * Can be an array of column names if the PK has more then one column
+	 * @return mixed Primary key of database table. Can be a field name string or an array of fieldnames
 	 */
-		
 	public function primaryKey()
 	{
 		return 'id';
@@ -930,7 +929,26 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		return "`$tableAlias`.`".implode('`, `'.$tableAlias.'`.`', $fields)."`";
 	}
 	
-
+	/**
+	 * Create or find an ActiveRecord
+	 * when there is no PK supplied a new instance of the called class will be returned
+	 * else it will pass the PK value to findByPk()
+	 * @param array $params PK or record to search for
+	 * @return GO_Base_Db_ActiveRecord the called class
+	 * @throws GO_Base_Exception_NotFound when no record found with supplied PK
+	 */
+	public function createOrFindByParams($params) {
+	  $pk = $params[$this->primaryKey()];
+	  if (empty($params[$this->primaryKey()]))
+		$model = new static();
+	  else {
+		$model = $this->findByPk($pk);
+		if (!$model)
+		  throw new GO_Base_Exception_NotFound();
+	  }
+	  return $model;
+	}
+	
 	/**
 	 * Find models
 	 * 
