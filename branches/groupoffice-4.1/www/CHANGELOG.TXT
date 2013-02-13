@@ -1,6 +1,7 @@
 - Update English language for email module
 - Show linked past appointments as well as linked future appointments in Display Panel.
 - Show linked completed tasks as well as linked incomplete tasks in Display Panel.
+- Display description of linked tasks and appointments (events) in Display Panel;
 
 12-02-2013 4.1.32
 - Remember checkbox values from the export dialog
