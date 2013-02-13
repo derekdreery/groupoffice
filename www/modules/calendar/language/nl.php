@@ -165,6 +165,7 @@ $l["sendInvitationInitial"]='Wilt u uitnodigingen voor de bijeenkomst naar de de
 $l["sendInvitationUpdate"]='Wilt u de vernieuwde informatie over de bijeenkomst naar de deelnemers sturen?';
 $l["sendCancellation"]='Wilt u alle deelnemers een annuleringsbericht sturen?';
 $l["forthcomingAppointments"]='Toekomstige afspraken';
+$l["pastAppointments"]='Oude afspraken';
 $l["quarterShort"]= 'K';
 $l["globalsettings_templatelabel"]= 'Naam template';
 $l["globalsettings_allchangelabel"]= 'Bestaande agenda\'s hernoemen?';
