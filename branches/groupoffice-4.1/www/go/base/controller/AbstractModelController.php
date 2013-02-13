@@ -658,6 +658,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	private function _processEventsDisplay($model,$response){
 		$startOfDay = GO_Base_Util_Date::clear_time(time());
 			
+		// Process future events
 		$findParams = GO_Base_Db_FindParams::newInstance()->order('start_time','DESC');
 		$findParams->getCriteria()->addCondition('start_time', $startOfDay, '>=');						
 
@@ -673,6 +674,23 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		$data = $store->getData();
 		$response['data']['events']=$data['results'];
+		
+		// Process past events
+		$findParams = GO_Base_Db_FindParams::newInstance()->order('start_time','DESC');
+		$findParams->getCriteria()->addCondition('start_time', $startOfDay, '<');						
+
+		$stmt = GO_Calendar_Model_Event::model()->findLinks($model, $findParams);		
+
+		$store = GO_Base_Data_Store::newInstance(GO_Calendar_Model_Event::model());
+		$store->setStatement($stmt);
+
+		$columnModel = $store->getColumnModel();			
+		$columnModel->formatColumn('calendar_name','$model->calendar->name');
+		$columnModel->formatColumn('link_count','$model->countLinks()');
+		$columnModel->formatColumn('link_description','$model->link_description');
+
+		$data = $store->getData();
+		$response['data']['past_events']=$data['results'];
 		
 		return $response;
 	}
