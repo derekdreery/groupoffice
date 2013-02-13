@@ -62,6 +62,7 @@ $l["selectAllTasklists"]='Selecteer alle takenlijsten';
 $l["globalCategory"]='Globale category';
 $l["showFutureTasks"]='Toon toekomstige taken';
 $l["incompleteTasks"]='Onvoltooide taken';
+$l['completedTasks']='Voltooide taken';
 $l["dueInSevenDays"]='Eindigt komende week';
 $l["overDue"]='Te laat';
 $l["futureTasks"]='Toekomstige taken';
