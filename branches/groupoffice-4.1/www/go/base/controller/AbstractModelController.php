@@ -124,7 +124,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				$response['success']=false;
 				//can't use <br /> tags in response because this goes wrong with the extjs fileupload hack with an iframe.
 				$response['feedback']=sprintf(GO::t('validationErrorsFound'),strtolower($model->localizedName))."\n\n" . implode("\n", $model->getValidationErrors())."\n";			
-				if(GO_Base_Util_Http::isAjaxRequest(false)){
+				if(empty($_FILES)){ //if you return html when using the extjs iframe file upload hack it throws a json exception
 					$response['feedback']=nl2br($response['feedback']);
 				}
 				
