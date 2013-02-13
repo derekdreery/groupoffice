@@ -99,6 +99,7 @@ $l["sendInvitationInitial"]='Would you like to send meeting invitations to parti
 $l["sendInvitationUpdate"]='Would you like to send updated meeting information to participants?';
 $l["sendCancellation"]='Would you like to send all the participants a cancelation notice?';
 $l["forthcomingAppointments"]='Forthcoming appointments';
+$l["pastAppointments"]='Past appointments';
 $l["quarterShort"]= 'Q';
 $l["globalsettings_templatelabel"]= 'Template';
 $l["globalsettings_allchangelabel"]= 'Rename all existing';
