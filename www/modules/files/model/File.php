@@ -483,8 +483,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 				
 		$fsFile->move($this->folder->fsFolder,$this->name, $isUploadedFile);
 		
-		$this->mtime=$fsFile->mtime();
-	
+		$this->mtime=$fsFile->mtime();	
 		$this->save();
 	}
 	
@@ -493,7 +492,9 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 //		if(!GO_Files_Model_File::checkQuota(strlen($data)))
 //			throw new GO_Base_Exception_InsufficientDiskSpace();
 		
-		$this->fsFile->putContents($data);
+		$this->fsFile->putContents($data);		
+		$this->mtime=$this->fsFile->mtime();	
+		$this->save();
 	}
 	
 	/**
