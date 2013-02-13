@@ -924,6 +924,10 @@ table.display-panel a:active
 	margin:0px;
 }
 
+.display-panel-link-even{
+	background-color: #fcfcfc;
+}
+
 .display-panel-browse{
 	margin-top:5px;display:block;
 }
