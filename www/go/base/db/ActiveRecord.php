@@ -3471,6 +3471,23 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	/**
+	 * Check if it's necessary to run a database check for this model.
+	 * If it has an ACL, Files or an overrided method it returns true.
+	 * @return boolean
+	 */
+	public function checkDatabaseSupported(){
+		
+		if($this->aclField())
+			return true;
+		
+		if($this->hasFiles() && GO::modules()->isInstalled('files'))
+			return true;
+		
+		$class = new GO_Base_Util_ReflectionClass($this->className());
+		return $class->methodIsOverridden('checkDatabase');		
+	}
+	
+	/**
 	 * A function that checks the consistency with the database.
 	 * Generally this is called by r=maintenance/checkDabase
 	 */
