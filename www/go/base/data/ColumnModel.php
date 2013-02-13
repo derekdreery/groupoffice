@@ -253,7 +253,7 @@ class GO_Base_Data_ColumnModel {
 
 	/**
 	 *
-	 * @param GO_Base_Db_ActiveRecord $model
+	 * @param GO_Base_Model $model
 	 * @return array formatted grid row key value array
 	 */
 	public function formatModel($model) {
