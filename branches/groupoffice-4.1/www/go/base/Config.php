@@ -129,7 +129,8 @@ class GO_Base_Config {
 	var $firephp = false;
 
 	/**
-	 * Info log location. If empty it will be in <file_storage_path>/log/info.log
+	 * Info log location. Disabled when left empty.
+	 * 
 	 * @var bool
 	 */
 	var $info_log = "";
@@ -1117,8 +1118,8 @@ class GO_Base_Config {
 			$this->$key=$value;
 		}
 
-		if($this->info_log=="")
-			$this->info_log =$this->file_storage_path.'log/info.log';
+//		if($this->info_log=="")
+//			$this->info_log =$this->file_storage_path.'log/info.log';
 
 		//this can be used in some cases where you don't want the dynamically
 		//determined full URL. This is done in set_full_url below.
