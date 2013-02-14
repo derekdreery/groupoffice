@@ -3,6 +3,28 @@
 class GO_Base_Util_ReflectionClass extends ReflectionClass {
 
 	/**
+	 * Determine which properties are of the childs class. 
+	 * Return them as an array.
+	 * 
+	 * @return array
+	 */
+	public function getParentPropertiesDiff(){
+		$parent = $this->getParentClass();
+    return array_diff($this->getProperties(),$parent->getProperties());
+	}
+	
+	/**
+	 * Determine which methods are of the childs class. 
+	 * Return them as an array.
+	 * 
+	 * @return array
+	 */
+	public function getParentMethodsDiff(){
+		$parent = $this->getParentClass();
+    return array_diff($this->getMethods(),$parent->getMethods());
+	}
+	
+	/**
 	 * Returns all methods that override a parent method.
 	 * 
 	 * @return array
