@@ -664,7 +664,7 @@ GO.files.FileBrowser = function(config){
 			}else
 			{
 				//GO.files.openFile({id:record.data.id});
-				eval(record.data.handler);
+				record.data.handler.call(this);
 			}
 		}
 	}, this);
@@ -1709,14 +1709,14 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			}else
 			{
 				//browsers don't like loading a json request and download dialog at the same time.'
-				if(this.filePanel.loading)
-				{
-					this.onGridDoubleClick.defer(200, this, [grid, rowClicked, e]);
-				}else
-				{
+//				if(this.filePanel.loading)
+//				{
+//					this.onGridDoubleClick.defer(200, this, [grid, rowClicked, e]);
+//				}else
+//				{
 //					GO.files.openFile({id:record.data.id});
-					eval(record.data.handler);
-				}
+					record.data.handler.call(this);
+//				}
 			}
 		}
 	},
