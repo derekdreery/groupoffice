@@ -6,10 +6,13 @@ Copyright (c) 2003-{current_year}, {company_name}<br />
 Všechna práva vyhrazena.<br />
 Tento program je chráněn autorským zákonem a {product_name} licencí.<br />
 ';
+$l['totals']='Součty';
 $l['printPage']='Strana %s z %s';
 $l['htmldirection']= 'ltr';
 $l['quotaExceeded']='Bohužel už nemáte žádné volné místo. Prosím smažte některé soubory nebo se obraťte na Vašeho poskytovatele.';
+$l['youAreUsing']='Používáte %s z %s';
 $l['errorsInForm'] = 'Vyskytly se problémy ve formuláři. Opravte jej a zkuste to znovu.';
+$l['moduleRequired']='Modul %s je potřebný pro tuto funkci.';
 $l['loadingCore']= 'Nahravání systému';
 $l['loadingLogin'] = 'Nahrávání přihlašovacího dialogu';
 $l['renderInterface']='Zobrazování rozhraní';
@@ -17,11 +20,14 @@ $l['loadingModules']='Nahrávání modulů';
 $l['loadingModule'] = 'Nahrávání modulů';
 $l['loggedInAs'] = "Přihlášen jako ";
 $l['search']='Hledat';
+$l['settings']='Nastavení';
+$l['adminMenu']='Administrace';
 $l['startMenu']='Nabídka start';
 $l['help']='Nápověda';
 $l['logout']='Odhlásit';
 $l['badLogin'] = 'Špatné uživatelské jméno nebo heslo';
 $l['badPassword'] = 'Zadali jste špatné heslo';
+$l['passwordMatchError']='Hesla se neshodují';
 $l['accessDenied']='Přístup zamítnut';
 $l['saveError']='Chyba při ukládání dat';
 $l['deleteError']='Chyba při vymazávání dat';
@@ -67,6 +73,7 @@ $l['state'] = 'Kraj';
 $l['city'] = 'Město';
 $l['zip'] = 'PSČ';
 $l['address'] = 'Ulice';
+$l['email'] = 'E-mail';
 $l['phone'] = 'Telefon';
 $l['workphone'] = 'Telefon (pracovní)';
 $l['cellular'] = 'Mobil';
@@ -83,8 +90,10 @@ $l['workZip'] = 'PSČ (pracovní)';
 $l['workCountry'] = 'Země (pracovní)';
 $l['workState'] = 'Kraj (pracovní)';
 $l['workCity'] = 'Město (pracovní)';
+$l['today'] = 'Dnes';
 $l['tomorrow'] = 'Zítra';
 $l['SearchAll'] = 'Všechna pole';
+$l['total'] = 'celkem';
 $l['results'] = 'výsledky';
 $l['months'][1]='Leden';
 $l['months'][2]='Únor';
@@ -115,9 +124,9 @@ $l['full_days'][6] = "Sobota";
 $l['default']='Výchozí';
 $l['description']='Popis';
 $l['date']='Datum';
-$l['default_salutation']['M']='Milý pane';
-$l['default_salutation']['F']='Milá paní';
-$l['default_salutation']['unknown']='Milý pane / Milá paní';
+$l['default_salutation_M']='Milý pane';
+$l['default_salutation_F']='Milá paní';
+$l['default_salutation_unknown']='Milý pane / Milá paní';
 $l['dear']='Milý(á)';
 $l['mins'] = 'Min';
 $l['hour'] = 'hodina';
@@ -127,6 +136,7 @@ $l['days'] = 'dny';
 $l['week'] = 'týden';
 $l['weeks'] = 'týdny';
 $l['month'] = 'měsíc';
+$l['strMonths'] = 'měsíců';
 $l['group_everyone']='Všichni';
 $l['group_admins']='Administrátoři';
 $l['group_internal']='Lokální';
@@ -138,6 +148,7 @@ $l['usage_text']='Tato instalace sady {product_name} používá';
 $l['database']='Databáze';
 $l['files']='Soubory';
 $l['email']='E-mail';
+$l['total']='Celkem';
 $l['confirm_leave']='Pokud opustíte {product_name}, neuložené změny budou ztraceny';
 $l['dataSaved']='Data byla v pořádku uložena';
 $l['uploadMultipleFiles'] = 'Klikněte na \'Přidat z počítače\' pro výběr souboru a/nebo složky z Vašeho počítače. Klikněte na \'Přidat z pošty\' pro přenos souborů z {product_name}. Okno bude automaticky zavřeno po kompletním přenosu.';
@@ -154,6 +165,7 @@ $l['reminder']='Připomínka';
 $l['unknown']='Neznámé';
 $l['time']='Čas';
 $l['dontChangeAdminsPermissions']='Nemůžete měnit práva v administrátorské skupině';
+$l['dontChangeAdminPermissions']='Nemůžete měnit práva administrátora';
 $l['dontChangeOwnersPermissions']='Nemůžete měnit práva vlastníka';
 $l['running_sys_upgrade']='Running required system update';
 $l['sys_upgrade_text']='Vyčkejte prosím. Všechny výstupy budou přihlášeny.';
@@ -162,10 +174,13 @@ $l['parentheses_invalid_error']='Závorky ve Vašem dotazu jsou neplatné. Pros�
 $l['nReminders']='%s připomínek';
 $l['oneReminder']='1 připomínka';
 $l['youHaveReminders']='Máte %s v %s.';
+$l['createdBy']='Vytvořil';
+$l['none']='Žádné';
 $l['alert']='Upozornění';
 $l['theFolderAlreadyExists']='Složka s tímto názvem již existuje';
 $l['other']='Ostatní';
 $l['upload_file_to_big']='Soubor, který jste se pokusili nahrát je větší než maximální povolená velikost %s.';
+
 $l["exportHiddenColumns"]='Exportovat i skryté sloupce';
 $l["searchQuery"]='hledat dotaz';
 $l["pleaseApplyFirst"]='Prosím nejdříve uložte pomocí kliknutí na \'Použít\'';
@@ -194,6 +209,8 @@ $l["strUsage"]='Statistika využití ';
 $l["strName"]= 'Jméno';
 $l["strName2"]= 'Jméno 2';
 $l["strDescription"]= 'Popis';
+$l["strEmail"]= 'E-mail';
+$l["strUser"]= 'Uživatel';
 $l["users"]= 'Uživatelé';
 $l["strOwner"]= 'Vlastník';
 $l["strContacts"]= 'Kontakt';
@@ -206,7 +223,8 @@ $l["strFirstName"]= 'Křestní jméno';
 $l["strMiddleName"]= 'Prostřední jméno';
 $l["strNo"]= 'Čí.';
 $l["strLastName"]= 'Příjmení';
-$l["strTitle"]= 'Titul';
+$l["strTitle"]= 'Titul před jménem';
+$l["strSuffix"]= 'Titul za jménem';
 $l["strInitials"]= 'Iniciály';
 $l["strSex"]= 'Pohlaví';
 $l["strBirthday"]= 'Narozeniny';
@@ -222,6 +240,7 @@ $l["strState"]= 'Kraj';
 $l["strCountry"]= 'Země';
 $l["strAddressFormat"]= 'Formát adresy';
 $l["strHomepage"]= 'WWW stránka';
+$l["strContact"]= 'Kontakt';
 $l["strCompany"]= 'Společnost';
 $l["strDepartment"]= 'Oddělení';
 $l["strFunction"]= 'Funkce';
@@ -278,6 +297,7 @@ $l["cmdPrint"]='Tisk';
 $l["cmdImport"]='Importovat';
 $l["cmdInsert"]='Vložit';
 $l["cmdActions"]= 'Akce';
+$l["cmdContinue"]='Pokračovat';
 $l["cmdNext"]='Následující';
 $l["cmdPrevious"]='Předchozí';
 $l["cmdNew"]= 'Nový';
@@ -400,11 +420,12 @@ $l["rightClickToClose"]='Pravé kliknutní na hlavičce panelu slouží k zavře
 $l["adminMenu"]= 'Administrace';
 $l["administration"]='Administrace';
 $l["extra"]='Extra';
-$l["permissionsLevel"]='Úroveň';
-$l["permissionRead"]='Pouze čtení';
+$l["permissionsLevel"]='Úroveň oprávnění';
+$l["permissionRead"]='Čtení';
+$l["permissionCreate"]='Čtení a vytvoření';
 $l["permissionWrite"]='Zápis';
 $l["permissionDelete"]='Zápis a smazání';
-$l["permissionManage"]='Upravit';
+$l["permissionManage"]='Správa';
 $l["spellcheck"]= 'Kontrola pravopisu';
 $l["spellcheckdetails"]= 'Kontrola pravopisu';
 $l["spellcheckNoError"]= 'Nebyly nalezeny žádné chyby';
@@ -445,3 +466,129 @@ $l["orientation"]='Orientace';
 $l["portrait"]='Na výšku  ';
 $l["landscape"]='Na šířku';
 $l["link"]='Odkaz';
+
+$l["savedQueries"]='Uložené dotazy';
+$l["searchQueryName"]= 'Vyhledat název dotazu';
+$l["enterSearchQueryName"]= 'Vložte název hledaného dotazu';
+$l["pleaseEnterASearchTerm"]='Prosím, vložte text pro hledání';
+$l["strUsersInGroup"]= 'Uživatelé ve skupině';
+$l["matchDuplicates"]='Duplikáty';
+$l["showFirstDuplicateOnly"]='Zobrazit pouze první duplikát';
+$l["advancedSearch"]='Pokročilé vyhledání';
+
+$l["batchEdit"]="Upravit dávků";
+$l["batchSelectOne"]="Vyberte nejméně jednu položku";
+$l["batchSelectionError"]="Nebyla vybrána žádná položka";
+$l["label"]="Označení";
+
+$l["validationErrorsFound"]="Nelze uložit %s:";//eg. Couldn't save project
+$l['attachFiles']='Přílohy';
+
+$l['gridMissingParams'] = 'Prosím sdělte {product_name} administrátorovi, že okno, které obsahuje mřížku, očekává následující parametry, které nedostalo';
+$l['permissionNone'] = 'Žádná oprávnění';
+$l['permissionUse'] = 'Používání';
+$l['permissionManage'] = 'Správa';
+
+$l["changePassword"]= 'Změnit heslo';
+$l["changePasswordText"]= 'Prosím vyplňte následující formulář pro obnovu Vašeho hesla.';
+$l["changePasswordSuccess"]= 'Vaše heslo bylo úspěšně změněno';
+$l["changePasswordSuccessTitle"]= 'Heslo bylo změněno';
+
+$l["noEmailGiven"]= 'Nebyla vložena e-mailová adresa';
+$l["usertokenInvalid"]= 'Nebyl vložen uživatelský klíč!';
+$l["noUserFoundWithEmail"]="Omlouváme se, ale nebyl nalezen žádný uživatel s touto e-mailovou adresou";
+
+$l["viesDownException"]='Služba VIES je momentálně mimo provoz. Vaše objednávka byla provedena, ale zaplatit ji můžete pouze po naší ruční kontrole Vašeho VIES čísla.';
+
+$l['advSearch']='Pokročilé vyhledávání';
+$l['alreadyExists']='%s "%s" již existuje'; //eg. Project "Some name" already exists.
+$l['merge']='Sloučit';
+$l['mergeDeleteItems']='Smazat vybrané položky po sjednocení';
+$l['mergeAttributes']='Sloučit data pouze pokud cílová jsou prázdná.';
+
+$l['missingRemoteModelId'] = 'Název modelu není správný vůči dialogu.';
+$l['executeQuery'] = 'Spustit dotaz';
+$l['savedQuery'] = 'Uložený dotaz';
+$l['strNew'] = 'Nový';
+
+$l['attributeRequired']='Pole %s je povinné';
+$l['attributeTooLong']='Pole %s je delší než je maximální počet (%s) znaků';
+$l['attributeIncorrectFormat']='Pole %s má špatný formát';
+$l['attributeInvalid']='Pole %s je neplatné';
+$l['operationStopped']='Operace ukončeno.';
+$l['delimiter']='Oddělovač';
+$l['enclosure']='Ohraničení';
+
+$l['notFound']='Požadovaná položka nebyla nalezena.';
+
+$l['groupofficeDisabled']="<p>Tento {product_name} účet byl zakázán.</p><p>Prosím kontaktujte správce systému.</p>";
+
+$l['summarylogImportText']="Naimportováno {importCount} položen.";
+$l['summarylogErrorText']="Během importu se vyskytlo několik chyb";
+$l['summarylogSuccessText']="Import proběhl v pořádku";
+
+$l['exportIncludeHidden'] = 'Exportovat i skryté sloupce';
+$l['exportHumanHeaders'] = 'Použít názvy sloupců z databáze jako hlavičky';
+$l['exportIncludeHeaders'] = 'Exportovate také hlavičky';
+$l['exportOrientation'] = 'Orientace';
+
+$l['remove']="Odstranit";
+$l['removeSelected']="Odstranit vybrané";
+$l['removeUpload']="Remove upload";
+$l['removeAll']="Odstranit vše";
+$l['queued']="Fronta";
+$l['uploading']='Nahrávání ({0}%)';
+$l['failed']='Chyba';
+$l['done']='Dokončeno';
+$l['tooBig']='Příliš velké';
+$l['invalidFileType']='Špatný typ souboru';
+$l['uploadQueueEmpty']="Fronta je prázdná";
+$l['dropFilesHere']="Prosím přesuňte sem soubory, které chcete nahrát";
+$l['pluploadProgressText']="{0}/{1} ({3} chybných) ({5}/s)";
+
+$l['quickEdit'] = "Rychlá úprava";
+$l["personalDetailsFor"]= 'Osobní podrobnosti pro';
+$l["fieldsetWork"]= 'Práce';
+$l["fieldsetAddress"]= 'Adresa';
+$l["fieldsetContact"]= 'Podrobnosti kontaktu';
+
+$l["unused"]='Nepoužité';
+
+$l["attributeGreater"]="Pole '%s' musí být větší než '%s'";
+$l["attributeGreaterOrEqual"]="Pole '%s' musí být větší nebo rovno než '%s'";
+
+$l["failedImportItems"]="Selhání importu položek";
+
+$l["birthdayFormatMustBe"]="Narozeniny musí být v následujícím formátu";
+
+$l["pointForText"]="Najeďte kurzorem sem a přečtěte si záznam";
+$l["encryptContent"]="Šifrovat obsah";
+$l["contentEncrypted"]="Obsah je šifrován.";
+$l['passwordConfirm'] = 'Potvrzení hesla';
+$l['decryptContent'] = 'Dešifrovat obsah';
+$l['clickHereToDecrypt'] = 'Klikněte sem pro dešifrování obsahu a přečtěte si obsah.';
+$l['passwordSubmissionError']='Došlo k chybě s heslem. Žádné změny nebyly provedeny. Prosím kontaktujte správce systému.';
+
+$l['pleaseEnterQuery']="Prosím zadajte text pro vyhledávání";
+
+$l['numMinValue']="Minimální hodnota pro pole je {0}";
+$l['numMaxValue']="Maximální hodnota pro pole je {0}";
+
+$l['cannotMoveError']="%s položek nemohlo být přesunuto, protože nemáte pro tyto položky oprávnění.";
+
+$l['queryAnd'] = "A";
+$l['queryOr'] = "Nebo";
+$l['queryField'] = "Pole";
+$l['queryComparator'] = "Comparator";
+$l['queryValue']="Hodnota";
+$l['queryStartGroup']="Start group";
+
+$l['cliOnly'] = "Tento skript může být spuštěn pouze z příkazové řádky Group-Office (CLI).";
+$l['unnamed']='Nepojmenové';
+
+$l['maxRowslistTooHigh']='Maximální počet řádek je přiliš velký. (max. 50)';
+
+$l['sir']='Pan';
+$l['madam']='Paní';
+$l['exportDialog']='Export';
+$l['logFiles']='Soubory pro záznam';
