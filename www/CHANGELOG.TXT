@@ -1,7 +1,17 @@
+- Filesearch does not index new files on the fly when opening them because it 
+  can use too many server resources.
+- Filesearch supports PDF with scanned image too now.
+- Filesearch OCR language configurable now. See http://wiki4.group-office.com/wiki/Configuration_file#Filesystem_settings
+- Set file mtime when updating with webdav
+- Skip models in the database check that don't really need to be checked.
 - Update English language for email module
 - Show linked past appointments as well as linked future appointments in Display Panel.
 - Show linked completed tasks as well as linked incomplete tasks in Display Panel.
 - Display description of linked tasks and appointments (events) in Display Panel;
+- Don't enable info log automatically. Only log when it's set.
+- Disappearing event in calendar group view
+- Editing recurring event always edited entire series in calendar group view
+- Added -q option to cli to be quiet
 
 12-02-2013 4.1.32
 - Remember checkbox values from the export dialog

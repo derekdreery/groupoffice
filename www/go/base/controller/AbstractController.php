@@ -206,7 +206,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * Default headers to send. 
 	 */
 	protected function headers(){
-		header('Content-Type: text/html; charset=UTF-8');
+		header('Content-Type: application/json; charset=UTF-8');
 	}
 	
 	/**
