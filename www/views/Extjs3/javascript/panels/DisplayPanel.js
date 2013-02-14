@@ -433,7 +433,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 					{
 						if(GO.files){
 							//GO.files.openFile({id:file.id});
-							eval(file.handler);
+							file.handler.call(this);
 						}else
 						{
 							window.open(GO.url("files/file/download",{id:file.id}));
