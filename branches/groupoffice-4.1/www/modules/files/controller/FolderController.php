@@ -713,6 +713,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$record['size']=$model->size;
 			$record['permission_level']=$this->_listFolderPermissionLevel;
 			$record['unlock_allowed']=$model->unlockAllowed();
+			$record['handler']=$model->getDefaultHandler()->getHandler($model);
 		}
 		$record['thumb_url'] = $model->thumbURL;
 

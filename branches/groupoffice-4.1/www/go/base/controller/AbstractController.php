@@ -206,7 +206,13 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * Default headers to send. 
 	 */
 	protected function headers(){
-		header('Content-Type: application/json; charset=UTF-8');
+		//iframe hack for file uploads fails with application/json
+		if(!empty($_FILES)){
+			header('Content-Type: text/html; charset=UTF-8');
+		}else
+		{
+			header('Content-Type: application/json; charset=UTF-8');
+		}
 	}
 	
 	/**
