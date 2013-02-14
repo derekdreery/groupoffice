@@ -616,6 +616,55 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function getHandlers(){
+		$handlers=array();
+		$classes = GO_Files_FilesModule::getAllFileHandlers();
+		foreach($classes as $class){
+			/* @var $class ReflectionClass */
+
+			$fileHandler = new $class->name;
+			if($fileHandler->fileIsSupported($this)){
+				$handlers[]= $fileHandler;
+			}
+		}
+		
+		return $handlers;
+	}
+	
+	
+	public static $defaultHandlers;
+	/**
+	 * 
+	 * @return GO_Files_Filehandler_Interface
+	 */
+	public function getDefaultHandler(){
+		
+		$ex = strtolower($this->extension);
+		
+		if(!isset(self::$defaultHandlers[$ex])){
+			$fh = GO_Files_Model_FileHandler::model()->findByPk(
+						array('extension'=>$ex, 'user_id'=>GO::user()->id));
+			
+			if($fh){
+				self::$defaultHandlers[$ex]=new $fh->cls;
+			}else{
+				$classes = GO_Files_FilesModule::getAllFileHandlers();
+				foreach($classes as $class){
+					/* @var $class ReflectionClass */
+
+					$fileHandler = new $class->name;
+					if($fileHandler->isDefault($this)){
+						self::$defaultHandlers[$ex]= $fileHandler;
+						break;
+					}
+				}
+				
+				if(!isset(self::$defaultHandlers[$ex]))
+					self::$defaultHandlers[$ex]=new GO_Files_Filehandler_Download();
+			}
+		}
+		
+		return self::$defaultHandlers[$ex];
+		
 		
 	}
 }
