@@ -706,7 +706,7 @@ class GO{
 
 	public static function infolog($message) {
 
-		if (self::config()->log) {
+		if (!empty(self::config()->info_log)) {
 
 			if (empty(GO::session()->values["logdircheck"])) {
 				$folder = new GO_Base_Fs_Folder(dirname(self::config()->info_log));
