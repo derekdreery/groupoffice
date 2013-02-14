@@ -48,20 +48,25 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		try{
 			if(GO::modules()->filesearch){
 				$filesearch = GO_Filesearch_Model_Filesearch::model()->findByPk($model->id);
-				if(!$filesearch){
-					$filesearch = GO_Filesearch_Model_Filesearch::model()->createFromFile($model);
-				}
+//				if(!$filesearch){
+//					$filesearch = GO_Filesearch_Model_Filesearch::model()->createFromFile($model);
+//				}
+				if($filesearch){
+					$response['data']=array_merge($filesearch->getAttributes('formatted'), $response['data']);
+				
 
-				$response['data']=array_merge($filesearch->getAttributes('formatted'), $response['data']);
+					if (!empty($params['query_params'])) {
+						$qp = json_decode($params['query_params'], true);
+						if (isset($qp['content_all'])){
 
-				if (!empty($params['query_params'])) {
-					$qp = json_decode($params['query_params'], true);
-					if (isset($qp['content_all'])){
+							$c = new GO_Filesearch_Controller_Filesearch();
 
-						$c = new GO_Filesearch_Controller_Filesearch();
-
-						$response['data']['text'] = $c->highlightSearchParams($qp, $response['data']['text']);
+							$response['data']['text'] = $c->highlightSearchParams($qp, $response['data']['text']);
+						}
 					}
+				}else
+				{
+					$response['data']['text'] = GO::t('notIndexedYet','filesearch');
 				}
 			}
 		}
