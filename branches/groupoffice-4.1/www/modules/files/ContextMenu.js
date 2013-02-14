@@ -29,7 +29,7 @@ GO.files.FilesContextMenu = function(config)
 //				id:this.records[0].data.id
 //			});
 
-			records[0].data.handler.call(this);
+			this.records[0].data.handler.call(this);
 		},
 		scope: this
 	});
