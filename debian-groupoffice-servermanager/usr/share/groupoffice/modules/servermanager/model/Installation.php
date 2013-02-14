@@ -168,10 +168,15 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	public function getAllowedModules()
 	{
 		$allowedModules = array();
-		if(!isset($this->config['allowed_modules']))
-			$this->_config['allowed_modules']="";
+		
+		$c = $this->getConfigWithGlobals();
+//		var_dump($c);
+//		exit();
+	
+		if(!isset($c['allowed_modules']))
+			$c['allowed_modules']="";
 
-		$allowedModules = explode(',', $this->config['allowed_modules']);
+		$allowedModules = explode(',', $c['allowed_modules']);
 		return $allowedModules;
 	}
 	
@@ -253,7 +258,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	 * @return string path to config file
 	 */
 	protected function getConfigPath(){		
-		return '/etc/groupoffice/'.$this->name.'/config.php';
+		return !empty($this->name) ? '/etc/groupoffice/'.$this->name.'/config.php' : false;
 	}
 	
 	/**
@@ -275,7 +280,8 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 			return $this->_config; 
 		else
 		{
-			if(!file_exists($this->configPath)){
+//			var_dump($this->configPath);
+			if(!$this->configPath || !file_exists($this->configPath)){
 				return false;
 			} else {
 				$config=array();
@@ -296,7 +302,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		if(file_exists('/etc/groupoffice/globalconfig.inc.php')){
 			require('/etc/groupoffice/globalconfig.inc.php');
 			if(isset($config))
-				$c = array_merge($config, $c);
+				$c = $c ? array_merge($config, $c) : $config;
 		}
 		
 		return $c;

@@ -653,6 +653,47 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		}
 	}	
 	
+	protected function actionSetAllowed($params){
+		
+		if(!$this->isCli())
+			throw new Exception("This action may only be ran on the command line.");
+		
+		$this->checkRequiredParameters(array('module'), $params);
+		
+		if(!isset($params['allow'])){
+			exit("--allow is required");
+		}
+		
+//		if(!empty($allow)){
+//			exit("--allow is required");
+//		}
+		
+		$allow = !empty($params['allow']);	
+		
+		$stmt = GO_Servermanager_Model_Installation::model()->find();
+		while($installation = $stmt->fetch()){
+			echo "Setting ".$installation->name."\n";
+			$c = $installation->getConfigWithGlobals();
+			if($c){
+				$allowed = explode(',',$c['allowed_modules']);
+				$newAllowed = array();
+				
+				if(!$allow){					
+					foreach($allowed as $module){
+						if($module!=$params['module'])
+							$newAllowed[]=$module;
+					}
+				}else
+				{
+					$allowed[]=$params['module'];
+					$newAllowed = array_unique($allowed);
+				}
+				
+				$installation->setConfigVariable('allowed_modules',implode(',',$newAllowed));
+			}		
+		}
+	}	
+	
 	
 	protected function actionRemoveSuspendedAndUnused($params){
 		
