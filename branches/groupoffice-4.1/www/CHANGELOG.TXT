@@ -1,5 +1,7 @@
+14-02-2013 4.1.33
 - Filesearch does not index new files on the fly when opening them because it 
   can use too many server resources.
+- Filesearch didn't index files with () in the filename.
 - Filesearch supports PDF with scanned image too now.
 - Filesearch OCR language configurable now. See http://wiki4.group-office.com/wiki/Configuration_file#Filesystem_settings
 - Set file mtime when updating with webdav
@@ -12,6 +14,7 @@
 - Disappearing event in calendar group view
 - Editing recurring event always edited entire series in calendar group view
 - Added -q option to cli to be quiet
+- Send file handler straight away to avoid browser security measures
 
 12-02-2013 4.1.32
 - Remember checkbox values from the export dialog

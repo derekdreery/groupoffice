@@ -25,9 +25,11 @@ GO.files.FilesContextMenu = function(config)
 		iconCls: 'btn-edit',
 		cls: 'x-btn-text-icon',
 		handler: function(){
-			GO.files.openFile({
-				id:this.records[0].data.id
-			});
+//			GO.files.openFile({
+//				id:this.records[0].data.id
+//			});
+
+			records[0].data.handler.call(this);
 		},
 		scope: this
 	});
