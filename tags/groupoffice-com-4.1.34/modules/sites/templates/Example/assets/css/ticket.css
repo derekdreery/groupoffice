@@ -1,0 +1,133 @@
+.ticket-top-container td{
+	min-width: 70px;
+}
+
+.ticket-message-attachment{
+	float:left;
+	padding-right: 6px;
+	margin:2px;
+}
+
+.ticket-details {
+	width: 250px;
+	margin-right: 10px;
+	overflow: hidden;
+}
+
+.ticket-details-title{
+	text-align:left;
+	padding:2px;
+	padding-left:5px;
+	font-weight: bold;
+}
+
+.ticket-details-text{
+	text-align:left;
+	padding:2px;
+	padding-left:3px;
+}
+
+.ticket-user-info {
+	width: 250px;
+	overflow: hidden;
+}
+
+.ticket-user-title{
+	text-align:left;
+	padding:2px;
+	padding-left:5px;
+	font-weight: bold;
+}
+
+.ticket-user-text{
+	text-align:left;
+	padding:2px;
+	padding-left:3px;
+}
+
+.ticket-agent-info{
+	text-align:center;
+	width: 250px;
+	overflow: hidden;
+}
+
+.ticket-agent-title{
+	text-align:left;
+	padding:2px;
+	padding-left:5px;
+	font-weight: bold;
+}
+
+.ticket-agent-photo{
+	border:3px solid #FFF;
+	width:90px;
+	height:120px;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top:10px;
+}
+
+.ticket-agent-photo img{
+	margin: 0px;
+	width:90px;
+	height:120px;
+}
+
+.ticket-agent-text{
+	display:block;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+.ticket-models-table {
+	width:805px;
+	margin-top:10px;
+	margin-bottom:10px;
+	border-collapse: collapse;
+}
+
+.ticket-models-table th {
+	text-align:left;
+}
+
+.ticketmodel-row {
+	
+}
+
+.ticketmodel-row td {
+	padding: 3px;
+}
+
+.image-new-message{
+	background: url(../images/newmsg.png) no-repeat top left;
+	display:block;
+	width:16px;
+	height:16px;
+}
+
+.message-field {
+	width: 800px !important;
+	height:100px;
+}
+
+.button-close-ticket{
+	float:right;
+}
+
+.filter-list{
+	float:right;
+}
+
+.filter-list ul{
+	padding:0px;
+	margin:0px;
+}
+
+.filter-list li {
+	list-style: none;
+	display:inline-block;
+}
+
+.filter-list li a {
+	color: #666;
+}
