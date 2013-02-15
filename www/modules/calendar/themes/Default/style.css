@@ -619,3 +619,19 @@ a.x-monthGrid-cell-day-text:hover{
 .cal-event-partstatus-NEEDS-ACTION{
 	border: 2px dashed orange;
 }
+
+.cal-arrow-left{
+	display:inline;
+	padding:0px 14px 0px 0px;
+	background:url(images/arrowleft.png) no-repeat center center;
+}
+.cal-arrow-right{
+	display:inline;
+	padding:0px 14px 0px 0px;
+	background:url(images/arrowright.png) no-repeat center center;
+}
+.cal-arrows{
+	display:inline;
+	padding:0px 13px 0px 0px;
+	background:url(images/arrows.png) no-repeat center center;
+}

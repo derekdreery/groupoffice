@@ -129,7 +129,8 @@ class GO_Base_Config {
 	var $firephp = false;
 
 	/**
-	 * Info log location. If empty it will be in <file_storage_path>/log/info.log
+	 * Info log location. Disabled when left empty.
+	 * 
 	 * @var bool
 	 */
 	var $info_log = "";
@@ -926,7 +927,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.1.31';
+	var $version = '4.1.34';
 	
 	/**
 	 * Modification date
@@ -934,7 +935,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20130208';
+	var $mtime = '20130215';
 
 	#group configuration
 	/**
@@ -1117,8 +1118,8 @@ class GO_Base_Config {
 			$this->$key=$value;
 		}
 
-		if($this->info_log=="")
-			$this->info_log =$this->file_storage_path.'log/info.log';
+//		if($this->info_log=="")
+//			$this->info_log =$this->file_storage_path.'log/info.log';
 
 		//this can be used in some cases where you don't want the dynamically
 		//determined full URL. This is done in set_full_url below.
@@ -1158,7 +1159,7 @@ class GO_Base_Config {
 
 			$lc = localeconv();
 
-			$this->default_currency=empty($lc['currency_symbol']) ? 'â‚¬' : $lc['currency_symbol'];
+			$this->default_currency=empty($lc['currency_symbol']) ? '€' : $lc['currency_symbol'];
 			$this->default_decimal_separator=empty($lc['decimal_point']) ? '.' : $lc['decimal_point'];
 			$this->default_thousands_separator=$this->default_decimal_separator == '.' ? ',' : '.';//$lc['thousands_sep'];
 		}
@@ -1198,13 +1199,13 @@ class GO_Base_Config {
 ////			define('PHP_RUSAGE', $dat["ru_utime.tv_sec"]*1e6+$dat["ru_utime.tv_usec"]);
 //		}
 
-		if(is_string($this->file_create_mode)) {
-			$this->file_create_mode=octdec($this->file_create_mode);
-		}
-
-		if(is_string($this->folder_create_mode)) {
-			$this->folder_create_mode=octdec($this->folder_create_mode);
-		}
+//		if(is_string($this->file_create_mode)) {
+//			$this->file_create_mode=octdec($this->file_create_mode);
+//		}
+//
+//		if(is_string($this->folder_create_mode)) {
+//			$this->folder_create_mode=octdec($this->folder_create_mode);
+//		}
 
 		if($this->debug_log) {
 			$this->log=true;

@@ -65,7 +65,7 @@ GO.files.FilePropertiesDialog = function(config){
 			name: 'size'
 		},this.selectHandler = new GO.form.ComboBoxReset({
 			xtype:'comboboxreset',
-			emptyText:GO.files.lang.alwaysAsk,
+			emptyText:GO.lang.strDefault,
 			store:new GO.data.JsonStore({
 				url:GO.url('files/file/handlers'),
 				fields:['name','cls','handler','iconCls','extension'],

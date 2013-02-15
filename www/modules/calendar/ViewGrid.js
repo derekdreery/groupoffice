@@ -405,7 +405,6 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 			onNotifyDrop : function(dd, e, data) {
         		
 				//number of seconds moved
-	    		console.log(data);
 				var dragTime = data.dragDate.format('U');
 				var dropTime = data.dropDate.format('U');
 	    		
@@ -603,6 +602,18 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 		this.contextMenu.showAt(e.getXY());
 	},
 	
+	getTimeOfDay : function(eventData){
+
+		var hour = eventData.startDate.format('G');
+
+		if(hour >= 0 && hour < 12)
+			return "morning";
+		else if(hour >= 12 && hour < 18)
+			return "afternoon";
+		else if(hour >= 18)
+			return "evening";
+	},
+	
 	addViewGridEvent : function (eventData)
 	{
 		if(eventData.id  == undefined)
@@ -641,7 +652,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 				this.domIds[eventData.id].push(domId);
 			}
 			
-			var col = this.gridCells[eventData['calendar_id']][date.format('Ymd')+eventData.time_of_day];
+			var col = this.gridCells[eventData['calendar_id']][date.format('Ymd')+this.getTimeOfDay(eventData)];
 			
 			if(col)
 			{
@@ -690,7 +701,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 					//this.eventDoubleClicked=true;
 					var event = this.elementToEvent(this.clickedEventId);
 					
-					if(event['repeats'] && event['write_permission'])
+					if(event['repeats'] && event.permission_level>=GO.permissionLevels.write)
 					{
 						if(!event.read_only)
 							this.handleRecurringEvent("eventDblClick", event, {});
@@ -698,7 +709,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 					{
 						
 						this.fireEvent("eventDblClick", this, event, {
-							singleInstance : event['write_permission']
+							singleInstance : event.permission_level>=GO.permissionLevels.write
 						});
 					}
 					
@@ -1135,7 +1146,7 @@ Ext.extend(GO.calendar.dd.ViewDropTarget, Ext.dd.DropTarget, {
 	},
     
 	notifyOver : function(dd, e, data){
-		var tdOver = Ext.get(e.getTarget()).findParent('td.x-viewGrid-cell-'+data.event.time_of_day, 10, true);
+		var tdOver = Ext.get(e.getTarget()).findParent('td.x-viewGrid-cell-'+this.getTimeOfDay(data.event), 10, true);
          
 		if(tdOver)
 		{
@@ -1153,7 +1164,7 @@ Ext.extend(GO.calendar.dd.ViewDropTarget, Ext.dd.DropTarget, {
 					{
 						if(currentTd)
 						{
-							var nextTd = currentTd.prev('td.x-viewGrid-cell-'+data.event.time_of_day);
+							var nextTd = currentTd.prev('td.x-viewGrid-cell-'+this.getTimeOfDay(data.event));
 							currentTd = nextTd;
 						}
 						if(nextTd)
@@ -1182,7 +1193,7 @@ Ext.extend(GO.calendar.dd.ViewDropTarget, Ext.dd.DropTarget, {
 					{
 						if(currentTd)
 						{
-							var nextTd = currentTd.next('td.x-viewGrid-cell-'+data.event.time_of_day);
+							var nextTd = currentTd.next('td.x-viewGrid-cell-'+this.getTimeOfDay(data.event));
 							currentTd = nextTd;
 						}
 		        		

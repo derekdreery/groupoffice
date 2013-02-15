@@ -14,7 +14,12 @@ class GO_Calendar_Controller_Attendance extends GO_Base_Controller_AbstractContr
 		if(!$participant)
 			throw new Exception("The organizer of this event is missing");
 		
-		$response = array("success"=>true, 'data'=>array('status'=>$participant->status, 'organizer'=>$organizer->name));		
+		$response = array("success"=>true, 'data'=>array(
+				'notify_organizer'=>true,
+				'status'=>$participant->status, 
+				'organizer'=>$organizer->name,
+				'info'=>$event->toHtml()
+						));		
 		return $response;
 	}
 	
@@ -31,12 +36,15 @@ class GO_Calendar_Controller_Attendance extends GO_Base_Controller_AbstractContr
 		}
 		
 		$participant=$event->getParticipantOfCalendar();
-		$participant->status=$params['status'];
-//		$participant->notifyOrganizer=!empty($params['notify_organizer']);
-		$participant->save();
+		if($params['status']!=$participant->status){
+			$participant->status=$params['status'];
+			$participant->save();
 		
-		if(!empty($params['notify_organizer']))
-			$event->replyToOrganizer();
+			if(!empty($params['notify_organizer']))
+				$event->replyToOrganizer();
+		}
+		
+		
 		
 		return $response;
 	}

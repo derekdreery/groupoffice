@@ -56,6 +56,7 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 	
 	lastSelectedIndex : false,
 	currentSelectedIndex : false,
+	primaryKey : 'id', //Set this value if your record has a PK of multiple columns (eg ['user_id','project_id'])
 	
 	initComponent : function(){
 		
@@ -360,12 +361,23 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 		{
 			config['deleteParam']='delete_keys';
 		}
-
-		//var selectedRows = this.selModel.selections.keys;
-
+		
 		var params={}
-		params[config.deleteParam]=Ext.encode(this.selModel.selections.keys);
-
+		//if Primary key is array
+		if(Ext.isArray(this.primaryKey)){
+		  var pkeys = [];
+		  var records = this.selModel.getSelections();
+		  for (var i=0;i<this.selModel.selections.keys.length;i++) {
+			var pk = {};
+			for (var j=0;j<this.primaryKey.length;j++)
+			  pk[this.primaryKey[j]] = records[i].data[this.primaryKey[j]];
+			pkeys.push(pk);
+		  }
+		  params[config.deleteParam] = Ext.encode(pkeys);
+		} else {
+		  params[config.deleteParam]=Ext.encode(this.selModel.selections.keys);
+		}
+		  
 		var deleteItemsConfig = {
 			store:this.store,
 			grid: this,
@@ -476,11 +488,11 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 	
 	dblClick : function(grid, record, rowIndex){
 		if(this.editDialogClass){
-			this.showEditDialog(record.id);
+			this.showEditDialog(record.id, {}, record);
 		}
 	},
 	
-	showEditDialog : function(id, config){
+	showEditDialog : function(id, config, record){
         config = config || {};
 		if(!this.editDialog){
 			this.editDialog = new this.editDialogClass;
@@ -490,7 +502,12 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 				this.changed=true;
 			}, this);	
 		}
-	
+		
+		if(Ext.isArray(this.primaryKey) && record) {
+		  for (var j=0;j<this.primaryKey.length;j++)
+			this.editDialog.formPanel.baseParams[this.primaryKey[j]] = record[this.primaryKey[j]];
+		}
+		
 		if(this.relatedGridParamName)
 			this.editDialog.formPanel.baseParams[this.relatedGridParamName]=this.store.baseParams[this.relatedGridParamName];
 		

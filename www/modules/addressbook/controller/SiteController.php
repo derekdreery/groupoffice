@@ -34,6 +34,8 @@ class GO_Addressbook_Controller_Site extends GO_Sites_Components_AbstractFrontCo
 		$contact = new GO_Addressbook_Model_Contact();
 		$contact->setValidationRule('first_name', 'required', true);
 		$contact->setValidationRule('last_name', 'required', true);
+		$contact->setValidationRule('email', 'required', true);
+		$contact->setValidationRule('comment', 'required', true);
 		
 		//GOS::site()->config->contact_addressbook_id;	
 		

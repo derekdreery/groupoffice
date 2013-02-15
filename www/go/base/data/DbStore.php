@@ -155,7 +155,16 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	  $this->query = $this->_requestParams['query'];
 	
 	if (isset($this->_requestParams['delete_keys'])) // will be deleted just before loading.
-	  $this->_deleteRecords = json_decode($this->_requestParams['delete_keys']);
+	{
+	  $this->_deleteRecords = json_decode($this->_requestParams['delete_keys'], true);
+	  foreach($this->_deleteRecords as $i => $modelPk) {
+		if(is_array($modelPk)) {
+		  foreach($modelPk as $col => $val) //format input columnvalues to database
+			$modelPk[$col] = GO::getModel($this->_modelClass)->formatInput ($col, $val);
+		  $this->_deleteRecords[$i] = $modelPk;
+		}
+	  }
+	}
 	
 	if (!empty($this->_requestParams['advancedQueryData']))
 	  $this->_handleAdvancedQuery($this->_requestParams['advancedQueryData']);
@@ -366,8 +375,6 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
   protected function processDeleteActions() {
 	if (isset($this->_records))
 	  throw new Exception("deleteRecord should be called before loading data. If you run the statement before the deletes then the deleted items will still be in the result.");
-	if(empty($this->_deleteRecords))
-	  return true;
 	
 	$success = true;
 	foreach ($this->_deleteRecords as $modelPk) {
@@ -412,7 +419,8 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 
 	$this->_readRequestParams();
 	
-	$this->processDeleteActions();
+	if(!empty($this->_deleteRecords))
+	  $this->response['deleteSuccess'] = $this->processDeleteActions();
 	
 	if (!isset($this->_stmt))
 	  $this->_stmt = $this->createStatement();
@@ -431,6 +439,10 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	$this->response['total']=$this->getTotal();
 	$this->response['results']=$this->_records;
 	return $this->response;
+  }
+  
+  public function getDeleteSuccess() {
+	return isset($this->response['deleteSuccess']) ? $this->response['deleteSuccess'] : null;
   }
   
   /**
