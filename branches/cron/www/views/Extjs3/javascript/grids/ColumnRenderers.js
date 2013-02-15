@@ -8,6 +8,20 @@ GO.grid.ColumnRenderers = {
 		else
 			return val;
 	},
+	
+	coloredYesNo : function(val, meta, record, rowIndex, columnIndex, store){
+		if(val == 1){
+			meta.css = 'cellbg-green';
+			return GO.lang.yes;
+		}else if(val == 0){
+			meta.css = 'cellbg-red';
+			return GO.lang.no;
+		}else{
+			meta.css = 'cellbg-blue';
+			return val;
+		}
+	},
+	
 
 	/**
 	 * To override the maxLength, cutWholeWords, showTooltip params you need 
