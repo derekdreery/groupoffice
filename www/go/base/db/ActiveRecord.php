@@ -933,20 +933,41 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * Create or find an ActiveRecord
 	 * when there is no PK supplied a new instance of the called class will be returned
 	 * else it will pass the PK value to findByPk()
+	 * When a multi column key is used it will create when not found
 	 * @param array $params PK or record to search for
 	 * @return GO_Base_Db_ActiveRecord the called class
 	 * @throws GO_Base_Exception_NotFound when no record found with supplied PK
 	 */
 	public function createOrFindByParams($params) {
-	  $pk = $params[$this->primaryKey()];
-	  if (empty($params[$this->primaryKey()]))
-		$model = new static();
+	  
+	  $pkColumn= $this->primaryKey();
+	  if(is_array($pkColumn)) { //if primaryKey excists of multiple columns
+		$pk=array();
+		foreach($pkColumn as $column)
+		{
+		  if(isset($params[$column]))
+			$pk[$column] = $this->formatInput($column, $params[$column]);
+		}
+		if (empty($pk))
+		  $model = new static();
+		else {
+		  $model = $this->findByPk($pk);
+		  if (!$model)
+			$model = new static(); 
+		}
+		return $model;
+	  } 
 	  else {
-		$model = $this->findByPk($pk);
-		if (!$model)
-		  throw new GO_Base_Exception_NotFound();
+		$pk = $params[$this->primaryKey()];
+		if (empty($pk))
+		  $model = new static();
+		else {
+		  $model = $this->findByPk($pk);
+		  if (!$model)
+			throw new GO_Base_Exception_NotFound();
+		}
+		return $model;
 	  }
-	  return $model;
 	}
 	
 	/**
