@@ -2078,3 +2078,15 @@ box-sizing: border-box;
 .go-hidden{
 	display:none;
 }
+
+.cellbg-blue{
+	background-color: #99CCFF;
+}
+
+.cellbg-green{
+	background-color: #CCFFCC;
+}
+
+.cellbg-red{
+	background-color: #FFCCCC;
+}
