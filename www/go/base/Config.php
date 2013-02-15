@@ -1433,7 +1433,7 @@ class GO_Base_Config {
 		if ($setting) {
 			return $setting->value;
 		}
-		return false;
+		return null;
 	}
     
     /**
