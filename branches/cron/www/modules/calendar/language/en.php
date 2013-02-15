@@ -99,6 +99,7 @@ $l["sendInvitationInitial"]='Would you like to send meeting invitations to parti
 $l["sendInvitationUpdate"]='Would you like to send updated meeting information to participants?';
 $l["sendCancellation"]='Would you like to send all the participants a cancelation notice?';
 $l["forthcomingAppointments"]='Forthcoming appointments';
+$l["pastAppointments"]='Past appointments';
 $l["quarterShort"]= 'Q';
 $l["globalsettings_templatelabel"]= 'Template';
 $l["globalsettings_allchangelabel"]= 'Rename all existing';
@@ -215,3 +216,5 @@ $l['openCalendar']='Open calendar';
 $l['createPermission']="Create permission";
 
 $l['show_holidays']="Show holidays";
+$l['participant']='Participant';
+$l['clickForAttendance']='Click here to set your attendance status';

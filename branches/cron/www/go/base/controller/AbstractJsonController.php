@@ -44,11 +44,12 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 	* The category name would be looked up in the model model ->category->name.
    * A relation for this must be defined. See ActiveRecord->relations.
    * @see GO_Base_Controller_AbstractModelController::remoteComboFields()
+   * @param array $extraFields the extra fields that should be attached to the data array as key => value
    * @param boolean $return defaults to false, if true the JSON data is returned as string
    * @return string JSON render when $return=true
    * @throws GO_Base_Exception_AccessDenied
    */
-  public function renderForm($model, $remoteComboFields=array(), $return=false) {
+  public function renderForm($model, $remoteComboFields=array(), $extraFields=array(), $return=false) {
 
 	$response = array('data'=>array(),'success'=>true);
 
@@ -57,10 +58,9 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 		throw new GO_Base_Exception_AccessDenied();
 
 	//Init data array
-	$response['data'] = $model->getAttributes();
+	$response['data'] = array_merge($extraFields, $model->getAttributes());
 	$response['data']['permission_level']=$model->getPermissionLevel();
 	$response['data']['write_permission']=true;
-
 
 	//Add the customerfields to the data array
 	if(GO::user()->getModulePermissionLevel('customfields') && $model->customfieldsRecord)
@@ -192,7 +192,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 	
 	$response = array(
 	  "success"=>true,
-	  "results"=>$store->getRecords(), 
+	  "results"=>$store->getRecords(),
 	  'total'=>$store->getTotal()
 	);
 	
@@ -202,6 +202,8 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 	  
 	if($store instanceof GO_Base_Data_DbStore)
 	{
+	  if($store->getDeleteSuccess()!==null)
+		$response['deleteSuccess'] = $store->getDeleteSuccess();
 	  $buttonParams = $store->getButtonParams();
 	  if(!empty($buttonParams))
 		$response['buttonParams'] = $buttonParams;

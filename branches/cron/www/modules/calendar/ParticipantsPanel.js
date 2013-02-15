@@ -428,12 +428,16 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 	},
 	
 	reloadOrganizer : function(){
-				
+		
+		var calendar_id = this.eventDialog.selectCalendar.getValue();
+		if(!calendar_id)
+			return;
+		
 		GO.request({
 			maskEl:this.eventDialog.win.getEl(),
 			url :'calendar/participant/loadOrganizer',
 			params : {
-				calendar_id : this.eventDialog.selectCalendar.getValue(),
+				calendar_id : calendar_id,
 				start_time : this.eventDialog.getStartDate().format('U'),
 				end_time : this.eventDialog.getEndDate().format('U')
 			},
@@ -441,7 +445,19 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 			
 				var index = this.store.find("is_organizer", true);
 				
-				this.store.removeAt(index);
+				if(this.store.getCount()>1){
+					//with more then one participant don't remove any participant.
+					//with only one organizer the user didn't make any changes so we can replace it.
+					var record = this.store.getAt(index);
+					record.set('is_organizer',false);				
+				}else
+				{
+					this.store.removeAt(index);
+				}
+				
+				var index = this.store.find("email", result.organizer.email);
+				if(index>-1)
+					this.store.removeAt(index);
 			
 				this.store.loadData({results:[result.organizer]}, true);
 				

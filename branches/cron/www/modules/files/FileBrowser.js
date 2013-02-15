@@ -14,37 +14,37 @@
 
 Ext.namespace("GO.files");
 
-GO.files.FileRecord = Ext.data.Record.create([
-{
-	name: 'type_id',
-	type: 'string'
-},
-{
-	name: 'id',
-	type: 'string'
-},
-{
-	name: 'name',
-	type: 'string'
-},
-{
-	name: 'type',
-	type: 'string'
-},
-{
-	name: 'mtime'
-},
-{
-	name: 'extension'
-},
-{
-	name: 'timestamp'
-},
-{
-	name: 'thumb_url',
-	type: 'string'
-}
-]);
+//GO.files.FileRecord = Ext.data.Record.create([
+//{
+//	name: 'type_id',
+//	type: 'string'
+//},
+//{
+//	name: 'id',
+//	type: 'string'
+//},
+//{
+//	name: 'name',
+//	type: 'string'
+//},
+//{
+//	name: 'type',
+//	type: 'string'
+//},
+//{
+//	name: 'mtime'
+//},
+//{
+//	name: 'extension'
+//},
+//{
+//	name: 'timestamp'
+//},
+//{
+//	name: 'thumb_url',
+//	type: 'string'
+//}
+//]);
 
 /*
  *
@@ -184,7 +184,7 @@ GO.files.FileBrowser = function(config){
 
 
 	var fields ={
-		fields:['type_id', 'id','name','type', 'size', 'mtime', 'extension', 'timestamp', 'thumb_url','path','acl_id','locked_user_id','locked','folder_id','permission_level','readonly','unlock_allowed'],
+		fields:['type_id', 'id','name','type', 'size', 'mtime', 'extension', 'timestamp', 'thumb_url','path','acl_id','locked_user_id','locked','folder_id','permission_level','readonly','unlock_allowed','handler'],
 		columns:[{
 			id:'name',
 			header:GO.lang['strName'],
@@ -663,7 +663,8 @@ GO.files.FileBrowser = function(config){
 				this.fileClickHandler.call(this.scope, record);
 			}else
 			{
-				GO.files.openFile({id:record.data.id});
+				//GO.files.openFile({id:record.data.id});
+				record.data.handler.call(this);
 			}
 		}
 	}, this);
@@ -1708,13 +1709,14 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			}else
 			{
 				//browsers don't like loading a json request and download dialog at the same time.'
-				if(this.filePanel.loading)
-				{
-					this.onGridDoubleClick.defer(200, this, [grid, rowClicked, e]);
-				}else
-				{
-					GO.files.openFile({id:record.data.id});
-				}
+//				if(this.filePanel.loading)
+//				{
+//					this.onGridDoubleClick.defer(200, this, [grid, rowClicked, e]);
+//				}else
+//				{
+//					GO.files.openFile({id:record.data.id});
+					record.data.handler.call(this);
+//				}
 			}
 		}
 	},

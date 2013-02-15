@@ -7,6 +7,8 @@ GO.email.CopyMailToDialog = Ext.extend(GO.Window, {
 	width: 300,
 	
 	height: 400,
+	
+	layout: 'fit',
 		
 	initComponent : function(){	
 		
@@ -66,9 +68,26 @@ GO.email.CopyMailToDialog = Ext.extend(GO.Window, {
 //
 //		}, this);
 		
-		this.foldersTree.on('dblclick',function(node,event){
-			this._copyMail(node.attributes.account_id,node.attributes.mailbox);
-		},this);
+//		this.foldersTree.on('dblclick',function(node,event){
+//			this._copyMail(node.attributes.account_id,node.attributes.mailbox);
+//		},this);
+
+		this.buttons = [new Ext.Button({
+			text : GO.lang['cmdOk'],
+			handler : function() {
+				var node = this.foldersTree.getSelectionModel().getSelectedNode();
+				if (!GO.util.empty(node))
+				this._copyMail(node.attributes.account_id,node.attributes.mailbox);
+				this.hide();
+			},
+			scope : this
+		}),new Ext.Button({
+			text : GO.lang['cmdCancel'],
+			handler : function() {
+				this.hide();
+			},
+			scope : this
+		})];
 
 		GO.email.CopyMailToDialog.superclass.initComponent.call(this);
 		
@@ -89,43 +108,47 @@ GO.email.CopyMailToDialog = Ext.extend(GO.Window, {
 	
 	_copyMail : function(targetAccountId,targetMailboxPath) {
 		
-		if (this._selectedEmailMessages.length>1)
-			var messageStr = GO.email.lang['copyMailsToRUSure'];
-		else
-			var messageStr = GO.email.lang['copyMailToRUSure'];
-		
-		Ext.Msg.show({
-			title: GO.email.lang['copyMailTo'],
-			msg: messageStr,
-			buttons: Ext.Msg.YESNO,
-			fn: function(btn) {
-				if (btn=='yes') {
-					var srcMessages = [];
-					for (var i=0; i<this._selectedEmailMessages.length;i++) {
-						srcMessages.push({
-							accountId : this._selectedEmailMessages[i].data.account_id,
-							mailboxPath : this._selectedEmailMessages[i].data.mailbox,
-							mailUid : this._selectedEmailMessages[i].data.uid
+		if (GO.util.empty(targetAccountId) || GO.util.empty(targetMailboxPath)) {
+			Ext.MessageBox.alert(GO.lang['strError'],GO.email.lang['selectValidMailFolder']);
+		} else {
+			if (this._selectedEmailMessages.length>1)
+				var messageStr = GO.email.lang['copyMailsToRUSure'];
+			else
+				var messageStr = GO.email.lang['copyMailToRUSure'];
+
+			Ext.Msg.show({
+				title: GO.email.lang['copyMailTo'],
+				msg: messageStr,
+				buttons: Ext.Msg.YESNO,
+				fn: function(btn) {
+					if (btn=='yes') {
+						var srcMessages = [];
+						for (var i=0; i<this._selectedEmailMessages.length;i++) {
+							srcMessages.push({
+								accountId : this._selectedEmailMessages[i].data.account_id,
+								mailboxPath : this._selectedEmailMessages[i].data.mailbox,
+								mailUid : this._selectedEmailMessages[i].data.uid
+							});
+						}
+						GO.request({
+							url : "email/account/copyMailTo",
+							params : {
+								'srcMessages' : Ext.encode(srcMessages),
+								'targetAccountId' : targetAccountId,
+								'targetMailboxPath' : targetMailboxPath
+							},
+							success:function(options, response, result){
+								this.fireEvent('copy_email');
+								Ext.Msg.hide();
+								this.hide();
+							},
+							scope:this
 						});
 					}
-					GO.request({
-						url : "email/account/copyMailTo",
-						params : {
-							'srcMessages' : Ext.encode(srcMessages),
-							'targetAccountId' : targetAccountId,
-							'targetMailboxPath' : targetMailboxPath
-						},
-						success:function(options, response, result){
-							this.fireEvent('copy_email');
-							Ext.Msg.hide();
-							this.hide();
-						},
-						scope:this
-					});
-				}
-			},
-			scope : this
-		});
+				},
+				scope : this
+			});
+		}
 	}
 	
 });

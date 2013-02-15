@@ -150,7 +150,7 @@ class GO_Base_Util_String {
 		if(empty($str))
 			return $str;
 				
-		if($from_charset=='UTF-8'){
+		if(strtoupper($from_charset)=='UTF-8'){
 			return $str;
 		}else{
 			
@@ -174,7 +174,7 @@ class GO_Base_Util_String {
 			if(substr($from_charset,0,5)=='x-mac')
 				return GO_Base_Util_Charset_Xmac::toUtf8($str, $from_charset);
 			
-			return iconv($from_charset, 'UTF-8//IGNORE', $str);
+				return iconv($from_charset, 'UTF-8//IGNORE', $str);
 		}
 	}
 	
@@ -208,6 +208,10 @@ class GO_Base_Util_String {
 		if($source_charset=='ISO-8859-1' || $source_charset=='ISO-8859-15' || $source_charset=='WINDOWS-1252')
 			$str = str_replace("\x80","€", $str);
 
+		// UNICODE IS NOT A VALID CHARSET SO WE USE THE UTF-8 
+		if($source_charset == 'UNICODE')
+			$source_charset = 'UTF-8';
+		
 		//Does not always work. We suppress the:
 		//Notice:  iconv() [function.iconv]: Detected an illegal character in input string in /var/www/community/trunk/www/classes/String.class.inc.php on line 31		
 		$old_lvl = error_reporting (E_ALL ^ E_NOTICE);

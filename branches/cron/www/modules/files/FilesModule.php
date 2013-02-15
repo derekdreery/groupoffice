@@ -79,4 +79,21 @@ class GO_Files_FilesModule extends GO_Base_Module{
 		return true;
 	}
 	
+	private static $fileHandlers;
+	/**
+	 * 
+	 * @return GO_Files_Filehandler_Interface
+	 */
+	public static function getAllFileHandlers(){
+		if(!isset(self::$fileHandlers)){
+			$modules = GO::modules()->getAllModules();
+
+			self::$fileHandlers=array();
+			foreach($modules as $module){
+				self::$fileHandlers = array_merge(self::$fileHandlers, $module->moduleManager->findClasses('filehandler'));
+			}
+		}
+		return self::$fileHandlers;
+	}
+	
 }
