@@ -249,7 +249,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		if($this->extension()!='')
 		{			
 
-			$pos = strpos($types, ' '.$this->extension());
+			$pos = stripos($types, ' '.$this->extension());
 
 			if($pos)
 			{
