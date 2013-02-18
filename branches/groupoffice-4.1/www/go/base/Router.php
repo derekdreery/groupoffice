@@ -126,6 +126,9 @@ class GO_Base_Router{
 			echo '<h1>404 Not found</h1>';
 			echo '<p>Sorry the URL you requested was not found on this server.</p>';
 			
+			if(empty($_SERVER['QUERY_STRING']))
+				$_SERVER['QUERY_STRING']="[EMPTY QUERY_STRING]";
+			
 			trigger_error("Controller('".$controllerClass."') not found: ".$_SERVER['QUERY_STRING']." ".var_export($_REQUEST, true), E_USER_WARNING);
 			exit();
 		}
