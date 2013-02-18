@@ -1158,21 +1158,21 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		//import it
 		$event = new GO_Calendar_Model_Event();
-		$event->importVObject($vevent, $importAttributes);
+		$event->importVObject($vevent, $importAttributes,false,true);
 			
 		//notify orgnizer
 		$participant = $event->getParticipantOfCalendar();
 
-		if(!$participant)
-		{
-			//this is a bad situation. The import thould have detected a user for one of the participants.
-			//It uses the E-mail account aliases to determine a user. See GO_Calendar_Model_Event::importVObject
-			$participant = new GO_Calendar_Model_Participant();
-			$participant->event_id=$event->id;
-			$participant->user_id=$event->calendar->user_id;
-			$participant->email=$event->calendar->user->email;	
-			$participant->save();
-		}		
+//		if(!$participant)
+//		{
+//			//this is a bad situation. The import thould have detected a user for one of the participants.
+//			//It uses the E-mail account aliases to determine a user. See GO_Calendar_Model_Event::importVObject
+//			$participant = new GO_Calendar_Model_Participant();
+//			$participant->event_id=$event->id;
+//			$participant->user_id=$event->calendar->user_id;
+//			$participant->email=$event->calendar->user->email;	
+//			$participant->save();
+//		}		
 		
 //		if($status)
 //				$participant->status=$status;
