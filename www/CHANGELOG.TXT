@@ -1,3 +1,6 @@
+- All models are searchable by ID
+- Restrict maintenance tasks to command line or tools module access.
+
 15-02-2013 4.1.34
 - File module errors fixed.
 
