@@ -1019,7 +1019,10 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $help_link = 'http://wiki4.group-office.com/wiki/';
+	var $help_link = array(
+			'en'=>'http://wiki4.group-office.com/wiki/'
+		);
+	
 	
 	/**
 	 * Relative path to the classes directory with no slash at start and end
