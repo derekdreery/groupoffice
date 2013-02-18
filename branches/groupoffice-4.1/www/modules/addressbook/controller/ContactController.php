@@ -571,7 +571,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$query = preg_replace ('/[\s*]+/','%', $params['query']).'%'; 
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()
-						->searchQuery($query,array("CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)",'t.email','t.email2','t.email3','t.last_name'))
+						->searchQuery($query,
+										array("CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)",'t.email','t.email2','t.email3','t.last_name'))
 						->joinModel(array(
 				'model'=>'GO_Addressbook_Model_Company',					
 	 			'foreignField'=>'id', //defaults to primary key of the remote model
@@ -618,7 +619,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 					->addInCondition("group_id", GO_Base_Model_User::getGroupIds(GO::user()->id), "a", false);
 
 			$findParams = GO_Base_Db_FindParams::newInstance()
-					->searchQuery($query,array("CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)",'t.email','t.email2','t.email3','t.last_name'))
+					->searchQuery($query,
+									array("CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)",'t.email','t.email2','t.email3','t.last_name'))
 					->select('t.*, "User" AS ab_name,c.name AS company_name, CONCAT_WS(\' \',`t`.`first_name`,`t`.`middle_name`,`t`.`last_name`) AS name')
 					->group('t.id')
 					->limit(10-count($response['results']))
@@ -642,6 +644,16 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			
 			$findParams->getCriteria()->addInCondition('id', $user_ids,'t',true,true)
 							->mergeWith($aclWhereCriteria);
+			
+			
+			if(!empty($params['requireEmail'])){
+				$criteria = GO_Base_Db_FindCriteria::newInstance()
+								->addCondition("email", "","!=")
+								->addCondition("email2", "","!=",'t',false)
+								->addCondition("email3", "","!=",'t',false);
+
+				$findParams->getCriteria()->mergeWith($criteria);
+			}
 			
 			$stmt = GO_Addressbook_Model_Contact::model()->find($findParams);
 		
