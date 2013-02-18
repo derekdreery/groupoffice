@@ -1330,7 +1330,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @param boolean $dontSave. Don't save the event. WARNING. Event can't be fully imported this way because participants and exceptions need an ID. This option is useful if you want to display info about an ICS file.
 	 * @return GO_Calendar_Model_Event 
 	 */
-	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array(), $dontSave=false){
+	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array(), $dontSave=false, $makeSureUserParticipantExists=false){
 
 		$uid = (string) $vobject->uid;
 		if(!empty($uid))
@@ -1530,8 +1530,20 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 			//if the calendar owner is not in the participants then we should chnage the is_organizer flag because otherwise the event can't be opened or accepted.
 			if(!$calendarParticipantFound){
-				$this->is_organizer=true;
-				$this->save();
+				
+				if($makeSureUserParticipantExists){
+					//this is a bad situation. The import thould have detected a user for one of the participants.
+					//It uses the E-mail account aliases to determine a user. See GO_Calendar_Model_Event::importVObject
+					$participant = new GO_Calendar_Model_Participant();
+					$participant->event_id=$this->id;
+					$participant->user_id=$this->calendar->user_id;
+					$participant->email=$this->calendar->user->email;	
+					$participant->save();
+				}else
+				{
+					$this->is_organizer=true;
+					$this->save();
+				}
 			}
 
 			if($vobject->exdate){
