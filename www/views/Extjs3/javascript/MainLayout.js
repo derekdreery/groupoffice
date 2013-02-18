@@ -363,8 +363,9 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	    			iconCls:'btn-help',
 	    			text:GO.lang.strHelpContents,
 	    			handler:function(){	    				
-	    				var win = window.open(GO.settings.config.help_link);
-	    				win.focus();
+//	    				var win = window.open(GO.settings.config.help_link);
+//	    				win.focus();
+							GO.openHelp('');
 	    			},
 	    			scope:this	    			
 	    		}]    		
