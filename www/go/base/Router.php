@@ -65,7 +65,8 @@ class GO_Base_Router{
 	}
 	
 	/**
-	 * Get the currently processing controller action in lowercase.
+	 * Get the currently processing controller action in lowercase and without the
+	 * action prefix.
 	 * 
 	 * @return string
 	 */
