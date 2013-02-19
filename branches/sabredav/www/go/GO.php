@@ -447,13 +447,11 @@ class GO{
 					require($fullPath);
 				}elseif(strpos($className,'Sabre\VObject')===0) {
 					$classFile = self::config()->root_path . 'go/vendor/VObject/lib/'.str_replace('\\','/',$className).'.php';
-					
 					require $classFile;
 					return true;
 				}elseif(strpos($className,'Sabre')===0) {
-					//include self::config()->root_path . 'go/vendor/SabreDAV/lib/Sabre/' . str_replace('_','/',substr($className,6)) . '.php';
-					//return true;
-					throw new Exception("Sabre include todo");
+					require self::config()->root_path . 'go/vendor/SabreDAV/lib/'.str_replace('\\','/',$className). '.php';
+					return true;					
 				}else	if (0 === strpos($className, 'Swift'))
 				{
 					require_once self::config()->root_path.'go/vendor/swift/lib/classes/Swift.php';
