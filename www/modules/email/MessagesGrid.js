@@ -257,29 +257,29 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 	
 	renderNorthMessageRow : function(value, p, record){
 		if(record.data['seen']=='0')
-			return String.format('<div id="sbj_'+record.data['uid']+'" class="NewSubject">{0}</div>', value);
+			return String.format('<div id="sbj_'+record.data['uid']+'" class="NewMail">{0}</div>', value);
 		else
-			return String.format('<div id="sbj_'+record.data['uid']+'" class="Subject">{0}</div>', value);
+			return String.format('<div id="sbj_'+record.data['uid']+'" class="Mail">{0}</div>', value);
 	},
 	
 	renderMessageSmallRes : function(value, p, record){
 		
 		if(record.data['seen']=='0')
 		{
-			return String.format('<div id="sbj_'+record.data['uid']+'" class="NewSubject">{0}</div>{1}', value, record.data['subject']);
+			return String.format('<div id="sbj_'+record.data['uid']+'" class="NewFrom">{0}</div><div class="NewSubject">{1}</div>', value, record.data['subject']);
 		}else
 		{
-			return String.format('<div id="sbj_'+record.data['uid']+'" class="Subject">{0}</div>{1}', value, record.data['subject']);
+			return String.format('<div id="sbj_'+record.data['uid']+'" class="From">{0}</div><div class="Subject">{1}</div>', value, record.data['subject']);
 		}
 	},
 	
 	renderMessage : function(value, p, record){
 		if(record.data['seen']=='0')
 		{
-			return String.format('<div id="sbj_'+record.data['uid']+'" class="NewSubject">{0}</div>{1}', value, record.data['subject']);
+			return String.format('<div id="sbj_'+record.data['uid']+'" class="NewFrom">{0}</div><div class="NewSubject">{1}</div>', value, record.data['subject']);
 		}else
 		{
-			return String.format('<div id="sbj_'+record.data['uid']+'" class="Subject">{0}</div>{1}', value, record.data['subject']);
+			return String.format('<div id="sbj_'+record.data['uid']+'" class="From">{0}</div><div class="Subject">{1}</div>', value, record.data['subject']);
 		}
 	},
 	renderIcon : function(src, p, record){
