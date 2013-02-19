@@ -15,7 +15,7 @@
  * @author Evert Pot (http://www.rooftopsolutions.nl/) 
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class GO_Dav_DavAcl_PrincipalBackend implements Sabre\DAVACL\IPrincipalBackend {
+class GO_Dav_DavAcl_PrincipalBackend implements Sabre\DAVACL\PrincipalBackend\BackendInterface {
 
 	private function _modelToDAVUser(GO_Base_Model_User $user){
 
