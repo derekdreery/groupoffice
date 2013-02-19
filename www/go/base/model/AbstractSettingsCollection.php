@@ -51,8 +51,7 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 	
 	public function loadData(){
 		
-		$refClass = $this->_getReflectionClass();
-		$properties = $this->get_parent_properties_diff($refClass);
+		$properties = $this->_getReflectionClass()->getParentPropertiesDiff();
 		
 		foreach($properties as $property){
 				$key = $property->name;
@@ -68,10 +67,10 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 	 * @param ReflectionClass $obj
 	 * @return array
 	 */
-	public function get_parent_properties_diff( $obj) {
-    $parent = $obj->getParentClass();
-    return array_diff($obj->getProperties(),$parent->getProperties());
-}
+//	public function get_parent_properties_diff( $obj) {
+//    $parent = $obj->getParentClass();
+//    return array_diff($obj->getProperties(),$parent->getProperties());
+//}
 	
 	
 	public function save(){
@@ -79,8 +78,7 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 		if(!$this->validate())
 			return false;
 		
-		$refClass = $this->_getReflectionClass();
-		$properties = $this->get_parent_properties_diff($refClass);
+		$properties = $this->_getReflectionClass()->getParentPropertiesDiff();
 		$success = true;
 		foreach($properties as $property){
 			$key = $property->name;
@@ -107,8 +105,7 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 	 */
 	public function saveFromArray($data){
 		
-		$refClass = $this->_getReflectionClass();
-		$properties = $this->get_parent_properties_diff($refClass);
+		$properties = $this->_getReflectionClass()->getParentPropertiesDiff();
 		
 		foreach($properties as $property){
 			$key = $property->name;
@@ -125,7 +122,7 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 	 * @return \ReflectionClass
 	 */
 	private function _getReflectionClass(){
-		return new ReflectionClass($this);
+		return new GO_Base_Util_ReflectionClass($this);
 	}
 	
 	/**
@@ -136,8 +133,7 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 	public function getArray(){
 		
 		$data = array();
-		$refClass = $this->_getReflectionClass();
-		$properties = $this->get_parent_properties_diff($refClass);
+		$properties = $this->_getReflectionClass()->getParentPropertiesDiff();
 		
 		foreach($properties as $property){
 			$key = $property->name;	  

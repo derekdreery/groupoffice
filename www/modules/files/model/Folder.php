@@ -492,6 +492,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			throw new GO_Base_Exception_InsufficientDiskspace();
 		
 		$file->move($this->fsFolder);
+		$file->setDefaultPermissions();
 		return $this->addFile($file->name());
 	}
 	

@@ -20,8 +20,7 @@ try{
 				$response['results'][]=array('name'=>$lang['tools']['buildsearchcache'], 'script'=>GO::url('maintenance/buildSearchCache'));
 				$response['results'][]=array('name'=>$lang['tools']['rm_duplicates'], 'script'=>GO::url('maintenance/removeDuplicates'));
 				//$response['results'][]=array('name'=>$lang['tools']['rm_duplicates'], 'script'=>$GLOBALS['GO_MODULES']->modules['tools']['url'].'rm_duplicates.php');
-				$response['results'][]=array('name'=>$lang['tools']['resetState'], 'script'=>$GLOBALS['GO_MODULES']->modules['tools']['url'].'reset_state.php');
-				
+					
 				if(isset($GLOBALS['GO_MODULES']->modules['files']))
 				{
 					//$response['results'][]=array('name'=>'Remove duplicate folders and files', 'script'=>$GLOBALS['GO_MODULES']->modules['files']['url'].'scripts/removeduplicatefolders.php');

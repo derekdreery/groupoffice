@@ -43,6 +43,15 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	forceTabs : false,
 
 	/**
+	 * This option can be set to create a helplink in the toolbar of this dialog.
+	 * When you want to enable this then pass a string of the correct helplink id.
+	 * 
+	 * Example 'zpushadmin_settings'
+	 *
+	 */
+	helppage : false,
+
+	/**
 	 * The controller will be called with this post parameter.
 	 *
 	 * $_POST['id'];
@@ -105,6 +114,22 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			height:400,
 			closeAction:'hide'
 		});
+		
+		if(this.helppage !== false){
+			if(!this.tools){
+				this.tools=[];
+
+				this.tools.push({
+					id:'help',
+					qtip: GO.lang['help'],
+					handler: function(event, toolEl, panel){
+						GO.openHelp(this.helppage);
+					},
+					scope:this
+				});
+			}
+		}
+		
 		
 		var buttons = [];
 		

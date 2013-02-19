@@ -669,12 +669,12 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				}else
 				{
 					if(i==0 && eventData.startDate.format('G')!='0'){
-						text += '&larr;&nbsp;'+eventData.startDate.format(GO.settings.time_format)+'&nbsp;'+eventData['name'];
+						text += '<div class="cal-arrow-left"></div>'+eventData.startDate.format(GO.settings.time_format)+'&nbsp;'+eventData['name'];
 					}else if(i==daySpan-1 && eventData.endDate.format('G')!='0' ){
-						text += '&rarr;&nbsp;'+eventData['name']+'&nbsp;'+eventData.endDate.format(GO.settings.time_format);
+						text += eventData['name']+'&nbsp;'+eventData.endDate.format(GO.settings.time_format)+'<div class="cal-arrow-right"></div>';
 					}else
 					{
-						text += '&harr;&nbsp;'+eventData['name'];
+						text += '<div class="cal-arrows"></div>&nbsp;'+eventData['name'];
 					}
 				}
 				

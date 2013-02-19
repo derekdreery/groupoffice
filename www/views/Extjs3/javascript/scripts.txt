@@ -84,6 +84,7 @@ views/Extjs3/javascript/form/XCheckbox.js
 views/Extjs3/javascript/form/HtmlEditor.js
 views/Extjs3/javascript/form/DateTime.js
 views/Extjs3/javascript/form/DateTimeField.js
+views/Extjs3/javascript/form/TimeField.js
 
 views/Extjs3/javascript/form/HtmlComponent.js
 views/Extjs3/javascript/form/NumberField.js

@@ -3,7 +3,8 @@
 
 $l['name']='Úkoly';
 $l['description']='Můžete zaznamenávat důležité akce.';
-$lang['link_type'][12]=$l['status']='Stav';
+$lang['link_type'][12]=$l['task']='Úkol';
+$l['status']='Stav';
 $l['scheduled_call']='Plánované připomenutí %s';
 $l['statuses']['NEEDS-ACTION'] = 'Vyžaduje akci';
 $l['statuses']['ACCEPTED'] = 'Přijatý';
@@ -13,6 +14,7 @@ $l['statuses']['DELEGATED'] = 'Delegovaný';
 $l['statuses']['COMPLETED'] = 'Dokončený';
 $l['statuses']['IN-PROCESS'] = 'V procesu';
 $l['import_success']='%s úkolů bylo importováno';
+$l['call']='Připomenutí';
 $l['dueAtdate']='Vzhledem k %s';
 $l['list']='Přehled úkolů';
 $l['tasklistChanged']="* Seznam úkolů byl změněn z '%s' na '%s'";
@@ -69,3 +71,17 @@ $l["overDue"]='Vypršelé';
 $l["futureTasks"]='Nadcházející';
 $l["all"]='Vše';
 $l["active"]='Aktivní';
+
+$l["globalsettings_templatelabel"]='Šablona';
+$l["globalsettings_allchangelabel"]='Přejmenovat již existující?';
+$l["globalsettings_renameall"]= 'Opravdu chete přejmenovat všechny uživatelské přehledy úkolů?';
+
+$l["taskName"]='Název';
+$l["taskCtime"]='Vytvořen v';
+$l["taskMtime"]='Změněno v';
+$l["taskDue_time"]='Vzhledem';
+$l["taskStatus"]='Stav';
+$l["taskCompletion_time"]='Dokončeno v';
+$l["taskProject_name"]='Projekt';
+
+$l['taskPercentage_complete']='Dokončeno v %';

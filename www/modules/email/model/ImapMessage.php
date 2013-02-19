@@ -68,7 +68,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 //	public $createTempFilesForAttachments=false;
 	
 	
-	public $cacheOnDestruct=false;
+//	public $cacheOnDestruct=false;
 	
 	
 	private $_cache;
@@ -121,12 +121,12 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 
 		$cacheKey='email:'.$account->id.':'.$mailbox.':'.$uid;
 		
-		$cachedMessage = isset($this->_cache[$cacheKey]) ? $this->_cache[$cacheKey] : GO::cache()->get($cacheKey);
-		
+		$cachedMessage = isset($this->_cache[$cacheKey]) ? $this->_cache[$cacheKey] : false;//GO::cache()->get($cacheKey);
+//		
 		if($cachedMessage)
 		{
-			GO::debug("Returning message $cacheKey from cache");
-			$cachedMessage->cacheOnDestruct=$cacheKey;
+//			GO::debug("Returning message $cacheKey from cache");
+//			$cachedMessage->cacheOnDestruct=$cacheKey;
 			
 			$imap = $cachedMessage->account->openImapConnection($mailbox);
 			return $cachedMessage;
@@ -147,7 +147,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 
 			$imapMessage->setAttributes($attributes);
 
-			$imapMessage->cacheOnDestruct=$cacheKey;
+//			$imapMessage->cacheOnDestruct=$cacheKey;
 			
 			$this->_cache[$cacheKey]=$imapMessage;
 			
@@ -155,13 +155,13 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		}		
 	}
 	
-	public function __destruct() {
-		if($this->cacheOnDestruct){
-			$cacheKey=$this->cacheOnDestruct;
-			$this->cacheOnDestruct=false;
-			GO::cache()->set($cacheKey, $this, 3600*24*2);
-		}
-	}
+//	public function __destruct() {
+//		if($this->cacheOnDestruct){
+//			$cacheKey=$this->cacheOnDestruct;
+//			$this->cacheOnDestruct=false;
+//			GO::cache()->set($cacheKey, $this, 3600*24*2);
+//		}
+//	}
 	
 	
 	public function createFromHeaders($account, $mailbox, $headers){

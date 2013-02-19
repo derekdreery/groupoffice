@@ -42,6 +42,7 @@ $l["selectAllTasklists"]='Select all tasklists';
 $l["globalCategory"]='Global category';
 $l["showFutureTasks"]='Show future tasks';
 $l["incompleteTasks"]='Incomplete tasks';
+$l['completedTasks']='Completed tasks';
 $l["dueInSevenDays"]='Due in seven days';
 $l["overDue"]='Overdue';
 $l["futureTasks"]='Future tasks';

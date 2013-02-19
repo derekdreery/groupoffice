@@ -515,13 +515,11 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		foreach ($srcMessages as $srcMessageInfo) {
 			$srcAccountModel = GO_Email_Model_Account::model()->findByPk($srcMessageInfo->accountId);
 			$srcImapMessage = GO_Email_Model_ImapMessage::model()->findByUid($srcAccountModel, $srcMessageInfo->mailboxPath, $srcMessageInfo->mailUid);
-			$srcMessage = new GO_Base_Mail_Message();
-			$srcMessage->loadMimeMessage($srcImapMessage->getSource());
-
+			
 			$targetAccountModel = GO_Email_Model_Account::model()->findByPk($params['targetAccountId']);
 			$targetImapConnection = $targetAccountModel->openImapConnection($params["targetMailboxPath"]);
 
-			$targetImapConnection->append_message($params['targetMailboxPath'], $srcMessage->toString());
+			$targetImapConnection->append_message($params['targetMailboxPath'], $srcImapMessage->getSource());
 		}
 		
 		return array('success'=>true);

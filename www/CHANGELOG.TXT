@@ -1,5 +1,42 @@
-4.1.32
+- All models are searchable by ID
+- Restrict maintenance tasks to command line or tools module access.
+
+15-02-2013 4.1.34
+- File module errors fixed.
+
+14-02-2013 4.1.33
+- Filesearch does not index new files on the fly when opening them because it 
+  can use too many server resources.
+- Filesearch didn't index files with () in the filename.
+- Filesearch supports PDF with scanned image too now.
+- Filesearch OCR language configurable now. See http://wiki4.group-office.com/wiki/Configuration_file#Filesystem_settings
+- Set file mtime when updating with webdav
+- Skip models in the database check that don't really need to be checked.
+- Update English language for email module
+- Show linked past appointments as well as linked future appointments in Display Panel.
+- Show linked completed tasks as well as linked incomplete tasks in Display Panel.
+- Display description of linked tasks and appointments (events) in Display Panel;
+- Don't enable info log automatically. Only log when it's set.
+- Disappearing event in calendar group view
+- Editing recurring event always edited entire series in calendar group view
+- Added -q option to cli to be quiet
+- Send file handler straight away to avoid browser security measures
+
+12-02-2013 4.1.32
+- Remember checkbox values from the export dialog
+- "email_on_new" functionality now contains ticket message in email body.
+- Sort view calendars
 - .ml-unseen-row and .ml-seen-row classes in vertical view of email message list fixed
+- Update Norwegian and German
+- Disabled IMAP message cache because it used a lot of diskspace and performance gain is questionable.
+- Added MS Outlook style to client to fix some strange negative text indents.
+- Set participant status from email
+- Preset appointment name when creating it as a link
+- Re-implemented accept and decline links for external programs
+- Implemented default handlers so people don't have to make a choice
+- Edited ticket messages turned into notes
+- Removed pdf from google drive support
+- octal problem with file_create_mode and folder_create_mode that prevented installation in some cases.
 
 08-02-2013 4.1.31
 - Fix broken e-mail template images

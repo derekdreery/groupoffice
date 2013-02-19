@@ -179,28 +179,27 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * This is defined as a function because it's a only property that can be set
 	 * by child classes.
 	 * 
-	 * @var string The database table name
+	 * @return string The database table name
 	 */
 	public function tableName(){
 		return static::$tableName;
 	}
 	
 	/**
-	 * 
-	 * @return int ACL to check for permissions.
+	 * The name of the column that has the foreignkey the the ACL record
+	 * If column 'acl_id' exists it default to this
+	 * You can use field of a relation separated by a dot (eg: 'category.acl_id')
+	 * @return string ACL to check for permissions.
 	 */
 	public function aclField(){
-		return false;
+		return false; //return isset($this->columns['acl_id']) ? 'acl_id' : false;
 	}
-	
 		
 	/**
-	 * 
-	 * Returns the primary key of the database table of this model
-	 * 
-	 * @var mixed Primary key of database table. Can be a field name string or an array of fieldnames
+	 * Returns the fieldname that contains primary key of the database table of this model
+	 * Can be an array of column names if the PK has more then one column
+	 * @return mixed Primary key of database table. Can be a field name string or an array of fieldnames
 	 */
-		
 	public function primaryKey()
 	{
 		return 'id';
@@ -930,7 +929,47 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		return "`$tableAlias`.`".implode('`, `'.$tableAlias.'`.`', $fields)."`";
 	}
 	
-
+	/**
+	 * Create or find an ActiveRecord
+	 * when there is no PK supplied a new instance of the called class will be returned
+	 * else it will pass the PK value to findByPk()
+	 * When a multi column key is used it will create when not found
+	 * @param array $params PK or record to search for
+	 * @return GO_Base_Db_ActiveRecord the called class
+	 * @throws GO_Base_Exception_NotFound when no record found with supplied PK
+	 */
+	public function createOrFindByParams($params) {
+	  
+	  $pkColumn= $this->primaryKey();
+	  if(is_array($pkColumn)) { //if primaryKey excists of multiple columns
+		$pk=array();
+		foreach($pkColumn as $column)
+		{
+		  if(isset($params[$column]))
+			$pk[$column] = $this->formatInput($column, $params[$column]);
+		}
+		if (empty($pk))
+		  $model = new static();
+		else {
+		  $model = $this->findByPk($pk);
+		  if (!$model)
+			$model = new static(); 
+		}
+		return $model;
+	  } 
+	  else {
+		$pk = $params[$this->primaryKey()];
+		if (empty($pk))
+		  $model = new static();
+		else {
+		  $model = $this->findByPk($pk);
+		  if (!$model)
+			throw new GO_Base_Exception_NotFound();
+		}
+		return $model;
+	  }
+	}
+	
 	/**
 	 * Find models
 	 * 
@@ -1126,10 +1165,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(!empty($params['searchQuery'])){
 			$sql .= " \nAND (";
 			
-			if(empty($params['searchQueryFields']))
+			if(empty($params['searchQueryFields'])){
 				$fields = $this->getFindSearchQueryParamFields('t',$joinCf);
-			else
+			}else{
 				$fields = $params['searchQueryFields'];
+			}
 			
 			
 			if(empty($fields))
@@ -1146,8 +1186,23 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					$sql .= ' OR ';
 				}
 				$sql .= $field.' LIKE '.$this->getDbConnection()->quote($params['searchQuery'], PDO::PARAM_STR);
-			}			
+			}	
 			
+			if($this->primaryKey()=='id'){
+				//Searc on exact ID match too.
+				$idQuery = trim($params['searchQuery'],'% ');
+
+				if((int) $idQuery == $idQuery){
+					if($first){
+						$first=false;
+					}else
+					{
+						$sql .= ' OR ';
+					}
+
+					$sql .= 't.id='.intval($idQuery);
+				}									
+			}
 			
 			$sql .= ') ';
 		}
@@ -3450,6 +3505,23 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				return false;
 			}
 		}
+	}
+	
+	/**
+	 * Check if it's necessary to run a database check for this model.
+	 * If it has an ACL, Files or an overrided method it returns true.
+	 * @return boolean
+	 */
+	public function checkDatabaseSupported(){
+		
+		if($this->aclField())
+			return true;
+		
+		if($this->hasFiles() && GO::modules()->isInstalled('files'))
+			return true;
+		
+		$class = new GO_Base_Util_ReflectionClass($this->className());
+		return $class->methodIsOverridden('checkDatabase');		
 	}
 	
 	/**

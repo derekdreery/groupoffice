@@ -322,7 +322,7 @@ class formprocessor{
 						{
 							$fsFile = new GO_Base_Fs_File($file['tmp_name']);
 							$fsFile->move(new GO_Base_Fs_Folder($full_path),$file['name'], false,true);
-							$fsFile->chmod(GO::config()->file_create_mode);
+							$fsFile->setDefaultPermissions();
 			
 							GO_Files_Model_File::importFromFilesystem($fsFile);
 						}

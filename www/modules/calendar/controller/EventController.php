@@ -1132,7 +1132,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 * @return boolean
 	 * @throws GO_Base_Exception_NotFound
 	 */
-	private function _handleIcalendarRequest(Sabre_VObject_Component $vevent, $recurrenceDate, $status){
+	private function _handleIcalendarRequest(Sabre_VObject_Component $vevent, $recurrenceDate){
 		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
 		
 		
@@ -1158,30 +1158,32 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		//import it
 		$event = new GO_Calendar_Model_Event();
-		$event->importVObject($vevent, $importAttributes);
+		$event->importVObject($vevent, $importAttributes,false,true);
 			
 		//notify orgnizer
 		$participant = $event->getParticipantOfCalendar();
 
-		if(!$participant)
-		{
-			//this is a bad situation. The import thould have detected a user for one of the participants.
-			//It uses the E-mail account aliases to determine a user. See GO_Calendar_Model_Event::importVObject
-			$participant = new GO_Calendar_Model_Participant();
-			$participant->event_id=$event->id;
-			$participant->user_id=$event->calendar->user_id;
-			$participant->email=$event->calendar->user->email;			
-		}		
+//		if(!$participant)
+//		{
+//			//this is a bad situation. The import thould have detected a user for one of the participants.
+//			//It uses the E-mail account aliases to determine a user. See GO_Calendar_Model_Event::importVObject
+//			$participant = new GO_Calendar_Model_Participant();
+//			$participant->event_id=$event->id;
+//			$participant->user_id=$event->calendar->user_id;
+//			$participant->email=$event->calendar->user->email;	
+//			$participant->save();
+//		}		
 		
-		if($status)
-				$participant->status=$status;
-			$participant->save();
+//		if($status)
+//				$participant->status=$status;
+//			$participant->save();
 		
-		$event->replyToOrganizer();
+//		$event->replyToOrganizer();
 		
 		
 		$langKey = $eventUpdated ? 'eventUpdatedIn' : 'eventScheduledIn';
 		
+		$response['attendance_event_id']=$event->id;
 		$response['feedback']=sprintf(GO::t($langKey,'calendar'), $event->calendar->name, $participant->statusName);
 		$response['success']=true;
 		
@@ -1249,8 +1251,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				break;
 			
 			case 'REQUEST':
-				$status = !empty($params['status']) ? $params['status'] : false;
-				return $this->_handleIcalendarRequest($vevent, $recurrenceDate, $status);
+				//$status = !empty($params['status']) ? $params['status'] : false;
+				return $this->_handleIcalendarRequest($vevent, $recurrenceDate);
 				break;
 			
 			case 'CANCEL':
@@ -1261,100 +1263,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				throw new Exception("Unsupported method: ".$vcalendar->method);
 				
 		}
-		
-		
-		
-		//find existing event
-		$event = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
-		
-		if($recurrenceDate){
-			$event = 0;
-		}
-
-		$eventUpdated = false;
-		
-		$userIsOrganizer=$vcalendar->method=='REPLY';
-		if($event){
-			
-			$eventUpdated = true;
-
-			$participant = GO_Calendar_Model_Participant::model()
-							->findSingleByAttributes(array('event_id'=>$event->id, 'user_id'=>GO::user()->id));
-			if($participant)
-				$userIsOrganizer = $participant->is_organizer;
-
-			//If the user is not the organizer simply delete the old event and
-			//import the update. If it's the organizer then we must update just the
-			//participant status.
-			if(!$userIsOrganizer)
-				$event->delete();
-		}				
-
-		if($userIsOrganizer)
-		{
-			//because it's the organizer the event should be there. Wheter it's a recurrence or
-			//a normal event.
-			if(!$event)
-				throw new Exception("The event wasn't found in your calendar");
-			
-			$participant = $event->importVObjectAttendee($event, $vevent->attendee);			
-			
-			//todo should we send update to other participants?
-
-		}else
-		{	
-			$importAttributes=array('is_organizer'=>false);
-			if($recurrenceDate){
-				//if a particular recurrence-id was send then we queried for that particular
-				//recurrence. We need to get the master event to add a new exception.
-				$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);				
-				if($masterEvent){
-					$importAttributes=array(
-							'exception_for_event_id'=>$masterEvent->id,
-							'exception_date'=>$recurrenceDate
-					);
-					
-					//old exception might be there. Delete it because it will be recreated by the import.
-					$exception = GO_Calendar_Model_Exception::model()->findSingleByAttributes(array('event_id'=>$masterEvent->id, 'time'=>$recurrenceDate));
-					if($exception)
-						$exception->delete();
-				}
-			}
-			
-			//import it
-			$event = new GO_Calendar_Model_Event();
-//			if(!empty($params['status'])){
-//				$importAttributes['owner_status']=$params['status'];
-//			}
-			$event->importVObject($vevent, $importAttributes);
-			
-			if(!empty($params['status'])){
-				//Update participant status.
-				$participant = $event->getParticipantOfCalendar();
-				
-				if(!$participant)
-				{
-					$participant = new GO_Calendar_Model_Participant();
-					$participant->event_id=$event->id;
-					$participant->user_id=$event->calendar->user_id;
-					$participant->email=$event->calendar->user->email;
-				}
-				$participant->status=$params['status'];
-				$participant->save();
-
-				$event->replyToOrganizer();
-			}
-		}
-		
-		$langKey = $eventUpdated ? 'eventUpdatedIn' : 'eventScheduledIn';
-		
-		$response['feedback']=sprintf(GO::t($langKey,'calendar'), $event->calendar->name, $participant->statusName);
-		$response['success']=true;
-		
-		return $response;
 	}
-	
-	
 	
 	protected function actionImportIcs($params){
 		
@@ -1387,34 +1296,34 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$event->importVObject($vevent);		
 		}
 	}
-	
-	//TODO Still support this?
-//	public function actionInvitation($params){
-//		
-//		$participant = GO_Calendar_Model_Participant::model()->findSingleByAttributes(array(
-//				'event_id'=>$params['id'],
-//				'email'=>$params['email']
-//		));
-//		
-//		if(!$participant){
-//			throw new Exception("Could not find the event");
-//		}
-//		
-//		if($participant->getSecurityToken()!=$params['participantToken']){
-//			throw new Exception("Invalid request");
-//		}
-//		
-//		if(empty($params['accept']))		
-//			$participant->status=GO_Calendar_Model_Participant::STATUS_DECLINED;
-//		else
-//			$participant->status=GO_Calendar_Model_Participant::STATUS_ACCEPTED;
-//		
-//		//save will be handled by organizer when he get's an email
-//		$participant->save();
-//		
-//		
-//		$this->render('invitation', array('participant'=>$participant, 'event'=>$event));
-//	}
+
+	public function actionInvitation($params){
+		
+		$participant = GO_Calendar_Model_Participant::model()->findSingleByAttributes(array(
+				'event_id'=>$params['id'],
+				'email'=>$params['email']
+		));
+		
+		if(!$participant){
+			throw new Exception("Could not find the event");
+		}
+		
+		if($participant->getSecurityToken()!=$params['participantToken']){
+			throw new Exception("Invalid request");
+		}
+		
+		if(empty($params['accept']))		
+			$participant->status=GO_Calendar_Model_Participant::STATUS_DECLINED;
+		else
+			$participant->status=GO_Calendar_Model_Participant::STATUS_ACCEPTED;
+		
+		//save will be handled by organizer when he get's an email
+		$participant->save();
+		
+		$event = $participant->getParticipantEvent();
+		
+		$this->render('invitation', array('participant'=>$participant, 'event'=>$event));
+	}
 	
 	/**
 	 * Get the birthdays of the contacts in the given addressbooks between 

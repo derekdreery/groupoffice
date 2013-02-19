@@ -1,6 +1,4 @@
-Holidays disable calendar
-
-Copy e0-mail
+Search in subfolders with mail
 
 Bij batch status in billing nieuw item toevoegen. Bv. herinneringskosten. Percentage of bedrag.
 

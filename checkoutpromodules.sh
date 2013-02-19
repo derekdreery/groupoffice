@@ -1,5 +1,5 @@
 #!/bin/bash
-REPOROOT=svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/trunk/modules
+REPOROOT=svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-4.1
 
 cd `dirname "$0"`/www/modules
 
@@ -27,4 +27,4 @@ svn co $REPOROOT/carddav
 svn co $REPOROOT/z-push2
 svn co $REPOROOT/googledrive
 
-svn co svn+ssh://mschering@svn.code.sf.net/p/group-office/code/trunk/debian-groupoffice-servermanager/usr/share/groupoffice/modules/servermanager
+svn co svn+ssh://mschering@svn.code.sf.net/p/group-office/code/branches/groupoffice-4.1/debian-groupoffice-servermanager/usr/share/groupoffice/modules/servermanager

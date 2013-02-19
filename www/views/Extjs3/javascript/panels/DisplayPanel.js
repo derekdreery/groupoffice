@@ -423,13 +423,15 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 				{
 					var index = href.substr(pos+7, href.length);
 					var file = this.data.files[index];
+
 					if(file.extension=='folder')
 					{
 						GO.files.openFolder(this.data.files_folder_id, file.id);
 					}else
 					{
 						if(GO.files){
-							GO.files.openFile({id:file.id});
+							//GO.files.openFile({id:file.id});
+							file.handler.call(this);
 						}else
 						{
 							window.open(GO.url("files/file/download",{id:file.id}));

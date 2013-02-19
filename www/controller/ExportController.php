@@ -22,13 +22,23 @@
 class GO_Core_Controller_Export extends GO_Base_Controller_AbstractController { 
 
 	/**
-	 * Get the exporttypes that can be used
+	 * Get the exporttypes that can be used and get the data for the checkboxes
 	 * 
 	 * @param array $params
 	 * @return array 
 	 */
-	protected function actionTypes($params) {		
+	protected function actionLoad($params){
 		$response = array();		
+		$response['data'] = array();
+		
+		$settings =  GO_Base_Export_Settings::load();
+		$data = $settings->getArray();
+		
+		// retreive checkbox settings
+		$response['data']['includeHeaders'] = $data['export_include_headers'];
+		$response['data']['humanHeaders'] = $data['export_human_headers'];
+		$response['data']['includeHidden'] = $data['export_include_hidden'];
+		
 		$response['outputTypes'] = $this->_getExportTypes(GO::config()->root_path.'go/base/export/');
 		
 		if(!empty($params['exportClassPath']))
@@ -38,6 +48,24 @@ class GO_Core_Controller_Export extends GO_Base_Controller_AbstractController {
 		return $response;
 	}
 	
+//	
+//	/**
+//	 * Get the exporttypes that can be used
+//	 * 
+//	 * @param array $params
+//	 * @return array 
+//	 */
+//	protected function actionTypes($params) {
+//		$response = array();		
+//		$response['outputTypes'] = $this->_getExportTypes(GO::config()->root_path.'go/base/export/');
+//		
+//		if(!empty($params['exportClassPath']))
+//			$response['outputTypes'] = array_merge($response['outputTypes'], $this->_getExportTypes(GO::config()->root_path.$params['exportClassPath']));
+//		
+//		$response['success'] =true;
+//		return $response;
+//	}
+//	
 
 	
 	/**
@@ -64,7 +92,7 @@ class GO_Core_Controller_Export extends GO_Base_Controller_AbstractController {
 		foreach($contents as $exporter) {
 			if(is_file($exporter->path())) {
 				$classname = $classPath.$exporter->nameWithoutExtension();
-				if($classname != 'GO_Base_Export_ExportInterface')
+				if($classname != 'GO_Base_Export_ExportInterface' && $classname != 'GO_Base_Export_Settings')
 				{
 					//$export = new $classname('temp');
 					
