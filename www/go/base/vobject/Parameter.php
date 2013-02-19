@@ -8,7 +8,10 @@
 //require vendor lib SabreDav vobject
 //require_once(GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/VObject/includes.php');
 
-class GO_Base_VObject_Parameter extends Sabre_VObject_Parameter {
+/**
+ * Used by contact export. It doesn't escape the comma so it supports old vcalendar 1.0 exports
+ */
+class GO_Base_VObject_Parameter extends Sabre\VObject\Parameter {
 
     /**
      * Turns the object back into a serialized blob. 
