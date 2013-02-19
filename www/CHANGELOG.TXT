@@ -1,3 +1,5 @@
+- limit description of links to 500 chars.
+- Upgraded SabreDAV to 1.8.2
 - All models are searchable by ID
 - Restrict maintenance tasks to command line or tools module access.
 
