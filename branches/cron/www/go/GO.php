@@ -508,12 +508,7 @@ class GO{
 		if(!defined('GO_LOADED')){ //check if old Group-Office.php was loaded
 
 			if(GO::config()->debug || GO::config()->debug_log){
-				$log = '['.date('Y-m-d G:i').'] r=';
-				if(isset($_REQUEST['r']))
-					$log .= $_REQUEST['r'];
-				else 
-					$log = 'undefined';				
-
+				$log = '['.date('Y-m-d G:i').'] INIT';
 				GO::debug($log);
 			}
 			
@@ -571,6 +566,10 @@ class GO{
 			if(!isset($GLOBALS['zpush_version']))
 				self::errorHandler($error['type'], $error['message'], $error['file'], $error['line']);
 		}
+		
+		//clear temp files on the command line because we may run as root
+		if(PHP_SAPI=='cli')
+			GO::session()->clearUserTempFiles();
 		
 		GO::debug("--------------------\n");
 	}
@@ -775,6 +774,10 @@ class GO{
 					if ($text == '')
 						$text = '(empty string)';
 
+					
+					if ($text == 'undefined')
+						throw new Exception();
+					
 					//$username=GO::user() ? GO::user()->username : 'nobody';
 
 					//$trace = debug_backtrace();
