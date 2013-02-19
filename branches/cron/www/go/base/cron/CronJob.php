@@ -1,0 +1,267 @@
+<?php
+
+/**
+ * Copyright Intermesh
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @version $Id: CronJob.php 7607 2011-06-15 09:17:42Z wsmits $
+ * @copyright Copyright Intermesh
+ * @author Wesley Smits <wsmits@intermesh.nl>
+ */
+
+/**
+ * The CronJob model
+ * 
+ * @property int $id
+ * @property string $name
+ * @property int $active
+ * @property int $runonce
+ * @property string $minutes
+ * @property string $hours
+ * @property string $monthdays
+ * @property string $months
+ * @property string $weekdays
+ * @property string $years
+ * @property string $job
+ * @property int $nextrun // timestamp of the next run
+ * @property int $lastrun // timestamp of the latest run
+ * 
+ */
+class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
+		
+	
+	/**
+	 * Returns a static model of itself
+	 * 
+	 * @param String $className
+	 * @return GO_Notes_Model_Note 
+	 */
+	public static function model($className=__CLASS__)
+	{	
+		return parent::model($className);
+	}
+	
+	protected function init() {
+		$this->columns['name']['unique']=true;
+		$this->columns['nextrun']['gotype']='unixtimestamp';
+		$this->columns['lastrun']['gotype']='unixtimestamp';
+		return parent::init();
+	}
+	
+	public function tableName(){
+		return 'go_cron';
+	}
+	
+	public function primaryKey() {
+		return 'id';
+	}
+	
+	/**
+	 * Validate the inputfields
+	 * 
+	 * @return boolean
+	 */
+	public function validate() {
+		
+		if(!$this->_validateExpression('minutes'))
+			$this->setValidationError('minutes', GO::t('minutesNotMatch','cron'));
+		
+		if(!$this->_validateExpression('hours'))
+			$this->setValidationError('hours', GO::t('hoursNotMatch','cron'));
+		
+		if(!$this->_validateExpression('monthdays'))
+			$this->setValidationError('monthdays', GO::t('monthdaysNotMatch','cron'));
+		
+		if(!$this->_validateExpression('months'))
+			$this->setValidationError('months', GO::t('monthsNotMatch','cron'));
+		
+		if(!$this->_validateExpression('weekdays'))
+			$this->setValidationError('weekdays', GO::t('weekdaysNotMatch','cron'));
+		
+		if(!$this->_validateExpression('years'))
+			$this->setValidationError('years', GO::t('yearsNotMatch','cron'));
+		
+		if($this->hasValidationErrors())
+			$this->setValidationError('active', '<br /><br />'.$this->_getExampleFormats());
+
+		return parent::validate();
+	}
+	
+	/**
+	 * Function for creating the pattern for checking the correct values
+	 * 
+	 *		*
+	 *		0,10
+	 *		* /5
+	 *		1,3,5
+	 *		1-5
+	 * 
+	 * 
+	 * @var string $field
+	 * @return string The regular expression
+	 */
+	private function _getValidationRegex($field){
+		$regex = '/';
+		switch($field){
+			case 'minutes':
+				$regex .= '([0-6][0-9]?[- ]?|\*)*,*';
+				break;
+			case 'hours':
+				$regex .= '([0-2][0-9]?[- ]?|\*)*,*';
+				break;
+			case 'monthdays':
+				$regex .= '([1-3][0-9]?[- ]?|\*)*,*';
+				break;
+			case 'months':
+				$regex .= '([1-9][0-9]?[- ]?|\*)*,*';
+				break;
+			case 'weekdays':
+				$regex .= '([0-6][- ]?|\*)*,*';
+				break;
+			case 'years':
+				$regex .= '(([1-9][0-9]{3}[- ]?|\*)*),*';
+				break;
+		}
+		$regex .= '/';
+		
+		return $regex;
+	}
+		
+	private function _validateExpression($field){
+		return preg_match($this->_getValidationRegex($field), $this->{$field});
+	}
+	
+	private function _getExampleFormats(){
+		return GO::t('exampleFormats','cron').
+			'<table>'.
+				'<tr><td>*</td><td>'.GO::t('exampleFormat1Explanation','cron').'</td></tr>'.
+				'<tr><td>1</td><td>'.GO::t('exampleFormat2Explanation','cron').'</td></tr>'.
+				'<tr><td>1-5</td><td>'.GO::t('exampleFormat3Explanation','cron').'</td></tr>'.
+				'<tr><td>0-23/2</td><td>'.GO::t('exampleFormat4Explanation','cron').'</td></tr>'.
+				'<tr><td>1,2,3,13,22</td><td>'.GO::t('exampleFormat5Explanation','cron').'</td></tr>'.
+				'<tr><td>0-4,8-12</td><td>'.GO::t('exampleFormat6Explanation','cron').'</td></tr>'.
+			'<table>';
+	}
+	
+	/**
+	 * Build the cron expresssion from the attributes of this model 
+	 * 
+	 * *    *    *    *    *		 *
+   * -    -    -    -    -    -
+   * |    |    |    |    |    |
+   * |    |    |    |    |    + year [optional]
+   * |    |    |    |    +----- day of week (0 - 7) (Sunday=0 or 7)
+   * |    |    |    +---------- month (1 - 12)
+   * |    |    +--------------- day of month (1 - 31)
+   * |    +-------------------- hour (0 - 23)
+   * +------------------------- min (0 - 59)
+	 *	
+	 * 
+	 * @return string The complete expression 
+	 */
+	private function _buildExpression(){
+		$expression = '';
+	
+		if(!empty($this->minutes))
+			$expression .= $this->minutes;
+		else
+			$expression .= '*';
+		$expression .= ' ';
+		
+		if(!empty($this->hours))
+			$expression .= $this->hours;
+		else
+			$expression .= '*';
+		$expression .= ' ';
+		
+		if(!empty($this->monthdays))
+			$expression .= $this->monthdays;
+		else
+			$expression .= '*';
+		$expression .= ' ';
+		
+		if(!empty($this->months))
+			$expression .= $this->months;
+		else
+			$expression .= '*';
+		$expression .= ' ';
+		if(!empty($this->weekdays))
+			$expression .= $this->weekdays;
+		else
+			$expression .= '*';
+//		$expression .= ' ';
+		
+//		if(!empty($this->years))
+//			$expression .= $this->years;
+//		else
+//			$expression .= '*';
+		
+		return $expression;
+	}
+	
+	/**
+	 * Function to calculate the next running time for this cronjob
+	 * 
+	 * @return int The next run time (timestamp)
+	 */
+	private function _calculateNextRun(){
+
+		$completeExpression = new GO_Base_Util_Cron($this->_buildExpression());
+//		echo '<hr />';
+//		echo 'Cron name: '.$this->name;
+//		echo '<br />'.'Cron class: '.$this->job;
+//		echo '<br />'.'Expression: '.$completeExpression->getExpression();
+//		echo '<br />'.'Next run is: '.$completeExpression->getNextRunDate()->format('d-m-Y H:i');
+//		echo '<br />'.'Active: ';
+//		if($this->active)
+//			echo 'Yes';
+//		else
+//			echo 'No';
+//		
+//		echo '<hr />';
+//		echo '<br />';
+//		echo '<br />';
+
+		return $completeExpression->getNextRunDate()->getTimestamp();
+	}
+	
+	public function run(){
+		GO::debug('CRONJOB ('.$this->name.') START : '.date('d-m-Y H:i:s'));
+		
+		// Run the specified cron file code
+		$cronFile = new $this->job;
+		$cronFile->run();
+		GO::debug('CRONJOB ('.$this->name.') FINISHED : '.date('d-m-Y H:i:s'));
+		return $this->_finishRun();
+	}
+	
+	protected function beforeSave() {
+		$this->nextrun = $this->_calculateNextRun();
+		return parent::beforeSave();
+	}
+	
+	
+	/**
+	 * This function needs to be called on the end of the run of this cronjob.
+	 * It calculates the next run time and sets the last run time.
+	 * 
+	 * @param boolean $save
+	 * @return boolean
+	 */
+	private function _finishRun($save=true) {
+		$this->lastrun = time();
+		$this->nextrun = $this->_calculateNextRun();
+		GO::debug('CRONJOB ('.$this->name.') NEXTRUN : '.$this->getAttribute('nextrun','formatted'));
+		if($save)
+			return $this->save();
+		else
+			return true;
+	}
+	
+	
+	
+}
