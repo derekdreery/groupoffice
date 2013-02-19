@@ -46,6 +46,17 @@ Ext.extend(GO.form.ComboBoxMulti, GO.form.ComboBox, {
 		//private
 		focused : false,
 		
+		
+		// private
+//    onViewClick : function(doFocus){
+//			
+//			//don't autoselect on tab. But do this on enter only.
+//			if(doFocus === false)
+//				return this.collapse();
+//			else
+//				return GO.form.ComboBoxMulti.superclass.onViewClick.call(this, doFocus);
+//    },
+		
     getCursorPosition: function(){
 		
 	    if (document.selection) { // IE
@@ -96,18 +107,20 @@ Ext.extend(GO.form.ComboBoxMulti, GO.form.ComboBox, {
             return;
         }
         var pad = (this.sep == ' ' ? '' : ' ');
-				var typedValue = v.substring(r.left, r.right).trim();			
+//				
+//				This code messed up names with utf8
+//				var typedValue = v.substring(r.left, r.right).trim();			
 				
-				var parts = typedValue.toLowerCase().split(' ')
+//				var parts = typedValue.toLowerCase().split(' ')
 				
-				for(var i=0;i<parts.length;i++){
-					if(value.toLowerCase().indexOf(parts[i])==-1){
-						//don't replace with different value
-						//return false;
-						value=typedValue;
-						break;
-					}
-				}				
+//				for(var i=0;i<parts.length;i++){
+//					if(value.toLowerCase().indexOf(parts[i])==-1){
+//						//don't replace with different value
+//						//return false;
+//						value=typedValue;
+//						break;
+//					}
+//				}				
 				
 				this.setValue(v.substring(0, r.left) + (r.left > 0 ? pad : '') + value + this.sep + pad + v.substring(r.right));
 				
