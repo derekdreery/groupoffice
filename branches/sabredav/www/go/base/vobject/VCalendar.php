@@ -2,7 +2,7 @@
 //require vendor lib SabreDav vobject
 //require_once(GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/VObject/includes.php');
 		
-class GO_Base_VObject_VCalendar extends Sabre_VObject_Component {
+class GO_Base_VObject_VCalendar extends Sabre\VObject\Component {
 
 	/**
 	 * Creates a new component.
@@ -13,7 +13,7 @@ class GO_Base_VObject_VCalendar extends Sabre_VObject_Component {
 	 * @param string $name 
 	 * @param Sabre_VObject_ElementList $iterator
 	 */
-	public function __construct($name='VCALENDAR', Sabre_VObject_ElementList $iterator = null) {
+	public function __construct($name='VCALENDAR', Sabre\VObject\ElementList $iterator = null) {
 
 		parent::__construct($name, $iterator);
 		
