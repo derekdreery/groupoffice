@@ -369,7 +369,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$tmpConfigFile = $this->_createConfig($params, $model);
 				
 		$cmd = 'sudo TERM=dumb '.GO::config()->root_path.
-						'groupofficecli.php -r=servermanager/installation/create'.
+						'groupofficecli.php -q -r=servermanager/installation/create'.
 						' -c='.GO::config()->get_config_file().
 						' --tmp_config='.$tmpConfigFile->path().
 						' --name='.$model->name.	
@@ -585,7 +585,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				continue;
 			}
 			
-			$cmd = GO::config()->root_path.'groupofficecli.php -r=maintenance/upgrade -c="'.$installation->configPath.'"';
+			$cmd = GO::config()->root_path.'groupofficecli.php -q -r=maintenance/upgrade -c="'.$installation->configPath.'"';
 			
 			system($cmd);		
 			
@@ -644,7 +644,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			
 			require($installation->configPath);
 			
-			$cmd = GO::config()->root_path.'groupofficecli.php -r="'.$params["route"].'" -c="'.$installation->configPath.'"';
+			$cmd = GO::config()->root_path.'groupofficecli.php -q -r="'.$params["route"].'" -c="'.$installation->configPath.'"';
 			
 			system($cmd);
 						
@@ -810,7 +810,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			{
 				//run tasks for installation like log rotation and filesearch index update.
 				echo "Running daily tasks for installation\n";
-				$cmd ='/usr/share/groupoffice/groupofficecli.php -r=maintenance/servermanagerReport -c="'.$installation->configPath.'"  2>&1';				
+				$cmd ='/usr/share/groupoffice/groupofficecli.php -q -r=maintenance/servermanagerReport -c="'.$installation->configPath.'"  2>&1';				
 				system($cmd);
 			}
 

@@ -455,6 +455,9 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		if(!$this->config)
 			return false;
 		
+		if(!isset($this->config['file_storage_path']))
+			return false;
+		
 		//if(isset($this->config['max_users']))
 			//$this->max_users=$this->config['max_users'];
 		

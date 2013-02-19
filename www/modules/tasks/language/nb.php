@@ -81,3 +81,4 @@ $l["taskCompletion_time"]='Fullført';
 $l["taskProject_name"]='Prosjekt';
 $l['taskPercentage_complete']='Prosent fullført';
 $l['status']='Status';
+$l['completedTasks']='Fullførte oppgaver';

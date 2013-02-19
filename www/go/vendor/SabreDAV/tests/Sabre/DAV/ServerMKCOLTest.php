@@ -1,10 +1,14 @@
 <?php
 
+namespace Sabre\DAV;
+
+use Sabre\HTTP;
+
 require_once 'Sabre/HTTP/ResponseMock.php';
 require_once 'Sabre/DAV/AbstractServer.php';
 require_once 'Sabre/DAV/Exception.php';
 
-class Sabre_DAV_ServerMKCOLTest extends Sabre_DAV_AbstractServer {
+class ServerMKCOLTest extends AbstractServer {
 
     function testMkcol() {
 
@@ -13,7 +17,7 @@ class Sabre_DAV_ServerMKCOLTest extends Sabre_DAV_AbstractServer {
             'REQUEST_METHOD' => 'MKCOL',
         );
 
-        $request = new Sabre_HTTP_Request($serverVars);
+        $request = new HTTP\Request($serverVars);
         $request->setBody("");
         $this->server->httpRequest = ($request);
         $this->server->exec();
@@ -38,7 +42,7 @@ class Sabre_DAV_ServerMKCOLTest extends Sabre_DAV_AbstractServer {
             'REQUEST_METHOD' => 'MKCOL',
         );
 
-        $request = new Sabre_HTTP_Request($serverVars);
+        $request = new HTTP\Request($serverVars);
         $request->setBody("Hello");
         $this->server->httpRequest = ($request);
         $this->server->exec();
@@ -62,7 +66,7 @@ class Sabre_DAV_ServerMKCOLTest extends Sabre_DAV_AbstractServer {
             'HTTP_CONTENT_TYPE' => 'application/xml',
         );
 
-        $request = new Sabre_HTTP_Request($serverVars);
+        $request = new HTTP\Request($serverVars);
         $request->setBody("Hello");
         $this->server->httpRequest = ($request);
         $this->server->exec();
@@ -86,7 +90,7 @@ class Sabre_DAV_ServerMKCOLTest extends Sabre_DAV_AbstractServer {
             'HTTP_CONTENT_TYPE' => 'application/xml',
         );
 
-        $request = new Sabre_HTTP_Request($serverVars);
+        $request = new HTTP\Request($serverVars);
         $request->setBody('<?xml version="1.0"?><html></html>');
         $this->server->httpRequest = ($request);
         $this->server->exec();
@@ -110,7 +114,7 @@ class Sabre_DAV_ServerMKCOLTest extends Sabre_DAV_AbstractServer {
             'HTTP_CONTENT_TYPE' => 'application/xml',
         );
 
-        $request = new Sabre_HTTP_Request($serverVars);
+        $request = new HTTP\Request($serverVars);
         $request->setBody('<?xml version="1.0"?>
 <mkcol xmlns="DAV:">
   <set>
@@ -141,7 +145,7 @@ class Sabre_DAV_ServerMKCOLTest extends Sabre_DAV_AbstractServer {
             'HTTP_CONTENT_TYPE' => 'application/xml',
         );
 
-        $request = new Sabre_HTTP_Request($serverVars);
+        $request = new HTTP\Request($serverVars);
         $request->setBody('<?xml version="1.0"?>
 <mkcol xmlns="DAV:">
   <set>
@@ -172,7 +176,7 @@ class Sabre_DAV_ServerMKCOLTest extends Sabre_DAV_AbstractServer {
             'HTTP_CONTENT_TYPE' => 'application/xml',
         );
 
-        $request = new Sabre_HTTP_Request($serverVars);
+        $request = new HTTP\Request($serverVars);
         $request->setBody('<?xml version="1.0"?>
 <mkcol xmlns="DAV:">
   <set>
@@ -192,7 +196,6 @@ class Sabre_DAV_ServerMKCOLTest extends Sabre_DAV_AbstractServer {
 
     }
 
-
     /**
      * @depends testMKCOLIncorrectResourceType2
      */
@@ -204,7 +207,7 @@ class Sabre_DAV_ServerMKCOLTest extends Sabre_DAV_AbstractServer {
             'HTTP_CONTENT_TYPE' => 'application/xml',
         );
 
-        $request = new Sabre_HTTP_Request($serverVars);
+        $request = new HTTP\Request($serverVars);
         $request->setBody('<?xml version="1.0"?>
 <mkcol xmlns="DAV:">
   <set>
@@ -224,6 +227,38 @@ class Sabre_DAV_ServerMKCOLTest extends Sabre_DAV_AbstractServer {
 
     }
 
+    /**
+     * @depends testMKCOLIncorrectResourceType2
+     */
+    function testMKCOLWhiteSpaceResourceType() {
+
+        $serverVars = array(
+            'REQUEST_URI'    => '/testcol',
+            'REQUEST_METHOD' => 'MKCOL',
+            'HTTP_CONTENT_TYPE' => 'application/xml',
+        );
+
+        $request = new HTTP\Request($serverVars);
+        $request->setBody('<?xml version="1.0"?>
+<mkcol xmlns="DAV:">
+  <set>
+    <prop>
+        <resourcetype>
+            <collection />
+        </resourcetype>
+    </prop>
+  </set>
+</mkcol>');
+        $this->server->httpRequest = ($request);
+        $this->server->exec();
+
+        $this->assertEquals(array(
+            'Content-Length' => '0',
+        ),$this->response->headers);
+
+        $this->assertEquals('HTTP/1.1 201 Created',$this->response->status,'Wrong statuscode received. Full response body: ' .$this->response->body);
+
+    }
 
     /**
      * @depends testMKCOLIncorrectResourceType2
@@ -235,7 +270,7 @@ class Sabre_DAV_ServerMKCOLTest extends Sabre_DAV_AbstractServer {
             'REQUEST_METHOD' => 'MKCOL',
         );
 
-        $request = new Sabre_HTTP_Request($serverVars);
+        $request = new HTTP\Request($serverVars);
         $request->setBody('');
 
         $this->server->httpRequest = ($request);
@@ -259,7 +294,7 @@ class Sabre_DAV_ServerMKCOLTest extends Sabre_DAV_AbstractServer {
             'REQUEST_METHOD' => 'MKCOL',
         );
 
-        $request = new Sabre_HTTP_Request($serverVars);
+        $request = new HTTP\Request($serverVars);
         $request->setBody('');
 
         $this->server->httpRequest = ($request);
@@ -283,7 +318,7 @@ class Sabre_DAV_ServerMKCOLTest extends Sabre_DAV_AbstractServer {
             'REQUEST_METHOD' => 'MKCOL',
         );
 
-        $request = new Sabre_HTTP_Request($serverVars);
+        $request = new HTTP\Request($serverVars);
         $request->setBody('');
 
         $this->server->httpRequest = ($request);
@@ -310,7 +345,7 @@ class Sabre_DAV_ServerMKCOLTest extends Sabre_DAV_AbstractServer {
             'HTTP_CONTENT_TYPE' => 'application/xml',
         );
 
-        $request = new Sabre_HTTP_Request($serverVars);
+        $request = new HTTP\Request($serverVars);
         $request->setBody('<?xml version="1.0"?>
 <mkcol xmlns="DAV:">
   <set>

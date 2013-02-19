@@ -45,6 +45,8 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		else
 			$response['data']['thumbnail_url'] = "";
 		
+		$response['data']['handler']='startjs:function(){'.$model->getDefaultHandler()->getHandler($model).'}:endjs';
+		
 		try{
 			if(GO::modules()->filesearch){
 				$filesearch = GO_Filesearch_Model_Filesearch::model()->findByPk($model->id);

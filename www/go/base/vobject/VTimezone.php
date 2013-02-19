@@ -3,7 +3,7 @@
 //require_once(GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/VObject/includes.php');
 		
 
-class GO_Base_VObject_VTimezone extends Sabre_VObject_Component {
+class GO_Base_VObject_VTimezone extends Sabre\VObject\Component {
 
 	/**
 	 * Creates a new component.
@@ -12,9 +12,9 @@ class GO_Base_VObject_VTimezone extends Sabre_VObject_Component {
 	 * be overridden with the iterator argument
 	 * 
 	 * @param string $name 
-	 * @param Sabre_VObject_ElementList $iterator
+	 * @param Sabre\VObject\ElementList $iterator
 	 */
-	public function __construct($name='VTIMEZONE', Sabre_VObject_ElementList $iterator = null) {
+	public function __construct($name='VTIMEZONE', Sabre\VObject\ElementList $iterator = null) {
 
 		parent::__construct($name, $iterator);
 
@@ -73,7 +73,7 @@ class GO_Base_VObject_VTimezone extends Sabre_VObject_Component {
 		$this->tzid = $tz->getName();
 		$this->add("last-modified", "19870101T000000Z");
 
-		$s = new Sabre_VObject_Component("standard");
+		$s = new Sabre\VObject\Component("standard");
 		$s->dtstart = "16010101T000000";
 		$s->rrule = $STANDARD_RRULE;
 		$s->tzoffsetfrom = $STANDARD_TZOFFSETFROM . "00";
@@ -81,7 +81,7 @@ class GO_Base_VObject_VTimezone extends Sabre_VObject_Component {
 
 		$this->add($s);
 
-		$s = new Sabre_VObject_Component("daylight");
+		$s = new Sabre\VObject\Component("daylight");
 		$s->dtstart = "16010101T000000";
 		$s->rrule = $DAYLIGHT_RRULE;
 		$s->tzoffsetfrom = $DAYLIGHT_TZOFFSETFROM . "00";

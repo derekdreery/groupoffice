@@ -1,19 +1,25 @@
 <?php
 
+namespace Sabre\DAV;
+
+use Sabre\HTTP;
+
 require_once 'Sabre/HTTP/ResponseMock.php';
 
-class Sabre_DAV_ServerCopyMoveTest extends PHPUnit_Framework_TestCase {
+class ServerCopyMoveTest extends \PHPUnit_Framework_TestCase {
 
     private $response;
-    private $request;
+    /**
+     * @var Server
+     */
     private $server;
 
     function setUp() {
 
-        $this->response = new Sabre_HTTP_ResponseMock();
-        $dir = new Sabre_DAV_FS_Directory(SABRE_TEMPDIR);
-        $tree = new Sabre_DAV_ObjectTree($dir);
-        $this->server = new Sabre_DAV_Server($tree);
+        $this->response = new HTTP\ResponseMock();
+        $dir = new FS\Directory(SABRE_TEMPDIR);
+        $tree = new ObjectTree($dir);
+        $this->server = new Server($tree);
         $this->server->debugExceptions = true;
         $this->server->httpResponse = $this->response;
         file_put_contents(SABRE_TEMPDIR . '/test.txt', 'Test contents');
@@ -50,7 +56,7 @@ class Sabre_DAV_ServerCopyMoveTest extends PHPUnit_Framework_TestCase {
             'HTTP_DESTINATION' => '/test2.txt',
         );
 
-        $request = new Sabre_HTTP_Request($serverVars);
+        $request = new HTTP\Request($serverVars);
         $this->server->httpRequest = ($request);
         $this->server->exec();
 
@@ -73,7 +79,7 @@ class Sabre_DAV_ServerCopyMoveTest extends PHPUnit_Framework_TestCase {
             'HTTP_DESTINATION' => '/test.txt',
         );
 
-        $request = new Sabre_HTTP_Request($serverVars);
+        $request = new HTTP\Request($serverVars);
         $this->server->httpRequest = ($request);
         $this->server->exec();
 
@@ -90,7 +96,7 @@ class Sabre_DAV_ServerCopyMoveTest extends PHPUnit_Framework_TestCase {
             'HTTP_DESTINATION' => '/test.txt',
         );
 
-        $request = new Sabre_HTTP_Request($serverVars);
+        $request = new HTTP\Request($serverVars);
         $this->server->httpRequest = ($request);
         $this->server->exec();
 
@@ -107,7 +113,7 @@ class Sabre_DAV_ServerCopyMoveTest extends PHPUnit_Framework_TestCase {
             'HTTP_DESTINATION' => '/test2.txt',
         );
 
-        $request = new Sabre_HTTP_Request($serverVars);
+        $request = new HTTP\Request($serverVars);
         $this->server->httpRequest = ($request);
         $this->server->exec();
 
@@ -132,7 +138,7 @@ class Sabre_DAV_ServerCopyMoveTest extends PHPUnit_Framework_TestCase {
             'HTTP_OVERWRITE'   => 'F',
         );
 
-        $request = new Sabre_HTTP_Request($serverVars);
+        $request = new HTTP\Request($serverVars);
         $this->server->httpRequest = ($request);
         $this->server->exec();
 
@@ -157,7 +163,7 @@ class Sabre_DAV_ServerCopyMoveTest extends PHPUnit_Framework_TestCase {
             'HTTP_OVERWRITE'   => 'F',
         );
 
-        $request = new Sabre_HTTP_Request($serverVars);
+        $request = new HTTP\Request($serverVars);
         $this->server->httpRequest = ($request);
         $this->server->exec();
 
@@ -180,7 +186,7 @@ class Sabre_DAV_ServerCopyMoveTest extends PHPUnit_Framework_TestCase {
             'HTTP_OVERWRITE'   => 'SURE!',
         );
 
-        $request = new Sabre_HTTP_Request($serverVars);
+        $request = new HTTP\Request($serverVars);
         $this->server->httpRequest = ($request);
         $this->server->exec();
 
@@ -196,7 +202,7 @@ class Sabre_DAV_ServerCopyMoveTest extends PHPUnit_Framework_TestCase {
             'HTTP_DESTINATION' => '/col2',
         );
 
-        $request = new Sabre_HTTP_Request($serverVars);
+        $request = new HTTP\Request($serverVars);
         $this->server->httpRequest = ($request);
         $this->server->exec();
 
@@ -219,7 +225,7 @@ class Sabre_DAV_ServerCopyMoveTest extends PHPUnit_Framework_TestCase {
             'HTTP_DESTINATION' => '/test3.txt',
         );
 
-        $request = new Sabre_HTTP_Request($serverVars);
+        $request = new HTTP\Request($serverVars);
         $this->server->httpRequest = ($request);
         $this->server->exec();
 
@@ -242,7 +248,7 @@ class Sabre_DAV_ServerCopyMoveTest extends PHPUnit_Framework_TestCase {
             'HTTP_DESTINATION' => '/col2',
         );
 
-        $request = new Sabre_HTTP_Request($serverVars);
+        $request = new HTTP\Request($serverVars);
         $this->server->httpRequest = ($request);
         $this->server->exec();
 

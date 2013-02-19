@@ -1066,40 +1066,16 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		return $response;
 	}
 	
-//	/**
-//	 *
-//	 * @param array $params
-//	 * @return Sabre_VObject_Component 
-//	 */
-//	private function _getVObjectFromMail($params){
-//		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
-//		$message = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'],$params['uid']);
-//
-//		$attachments = $message->getAttachments();
-//			
-//		foreach($attachments as $attachment){			
-//			GO::debug($attachment->mime);
-//			if($attachment->mime=='text/calendar' || $attachment->getExtension() == 'ics'){
-//				GO::debug($attachment);
-//				$data = $message->getImapConnection()->get_message_part_decoded($message->uid, $attachment->number, $attachment->encoding);
-//				
-//				$vcalendar = GO_Base_VObject_Reader::read($data);
-//
-//				return $vcalendar->vevent[0];
-//			}
-//		}
-//		return false;
-//	}
 	
 	/**
 	 * Handle's reply from an attendee when the current user is the organizer.
 	 * 
-	 * @param Sabre_VObject_Component $vevent
+	 * @param Sabre\VObject\Component $vevent
 	 * @param type $recurrenceDate
 	 * @return boolean
 	 * @throws GO_Base_Exception_NotFound
 	 */
-	private function _handleIcalendarReply(Sabre_VObject_Component $vevent, $recurrenceDate){
+	private function _handleIcalendarReply(Sabre\VObject\Component $vevent, $recurrenceDate){
 		//find existing event
 		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
 		if(!$masterEvent)
@@ -1127,12 +1103,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	/**
 	 * Handle's a request from an organizer from another externals system
 	 * 
-	 * @param Sabre_VObject_Component $vevent
+	 * @param Sabre\VObject\Component $vevent
 	 * @param type $recurrenceDate
 	 * @return boolean
 	 * @throws GO_Base_Exception_NotFound
 	 */
-	private function _handleIcalendarRequest(Sabre_VObject_Component $vevent, $recurrenceDate){
+	private function _handleIcalendarRequest(Sabre\VObject\Component $vevent, $recurrenceDate){
 		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
 		
 		
@@ -1158,21 +1134,21 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		//import it
 		$event = new GO_Calendar_Model_Event();
-		$event->importVObject($vevent, $importAttributes);
+		$event->importVObject($vevent, $importAttributes,false,true);
 			
 		//notify orgnizer
 		$participant = $event->getParticipantOfCalendar();
 
-		if(!$participant)
-		{
-			//this is a bad situation. The import thould have detected a user for one of the participants.
-			//It uses the E-mail account aliases to determine a user. See GO_Calendar_Model_Event::importVObject
-			$participant = new GO_Calendar_Model_Participant();
-			$participant->event_id=$event->id;
-			$participant->user_id=$event->calendar->user_id;
-			$participant->email=$event->calendar->user->email;	
-			$participant->save();
-		}		
+//		if(!$participant)
+//		{
+//			//this is a bad situation. The import thould have detected a user for one of the participants.
+//			//It uses the E-mail account aliases to determine a user. See GO_Calendar_Model_Event::importVObject
+//			$participant = new GO_Calendar_Model_Participant();
+//			$participant->event_id=$event->id;
+//			$participant->user_id=$event->calendar->user_id;
+//			$participant->email=$event->calendar->user->email;	
+//			$participant->save();
+//		}		
 		
 //		if($status)
 //				$participant->status=$status;
@@ -1190,7 +1166,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		return $response;
 	}
 	
-	private function _handleIcalendarCancel(Sabre_VObject_Component $vevent, $recurrenceDate){
+	private function _handleIcalendarCancel(Sabre\VObject\Component $vevent, $recurrenceDate){
 		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
 				
 		//delete existing data		
