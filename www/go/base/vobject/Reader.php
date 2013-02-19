@@ -12,8 +12,8 @@
 		
 class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 	
-  const REGEX_ELEMENT_STRING = "/^(?P<name>[A-Z0-9-\.]+)(?:;(?P<params>([^:^\"]|\"([^\"]*)\")*))?:(?P<value>.*)$/i";
-	const REGEX_PARAM_STRING = '/(?<=^|;)(?P<paramName>[A-Z0-9-]+)(=(?P<paramValue>[^\"^;]*|"[^"]*")(?=$|;))?/i';
+//  const REGEX_ELEMENT_STRING = "/^(?P<name>[A-Z0-9-\.]+)(?:;(?P<params>([^:^\"]|\"([^\"]*)\")*))?:(?P<value>.*)$/i";
+//	const REGEX_PARAM_STRING = '/(?<=^|;)(?P<paramName>[A-Z0-9-]+)(=(?P<paramValue>[^\"^;]*|"[^"]*")(?=$|;))?/i';
 				
 //	public static function prepareData($dataString) {
 //		$outputVObjects = array();
@@ -151,13 +151,13 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 	 * 
 	 * @param Sabre_VObject_Component $vobject 
 	 */
-	public static function convertVCalendarToICalendar(Sabre_VObject_Component $vobject){
+	public static function convertVCalendarToICalendar(Sabre\VObject\Component $vobject){
 		
 		if($vobject->version=='1.0'){
 			$vobject->version='2.0';
 			foreach($vobject->children() as $child)
 			{
-				if($child instanceof Sabre_VObject_Component){				
+				if($child instanceof Sabre\VObject\Component){				
 					
 					for($i=0;$i<count($child->children);$i++){
 						$property = $child->children[$i];
@@ -192,14 +192,14 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 	 * 
 	 * @param Sabre_VObject_Component $vobject 
 	 */
-	public static function convertICalendarToVCalendar(Sabre_VObject_Component $vobject){
+	public static function convertICalendarToVCalendar(Sabre\VObject\Component $vobject){
 		
 		$qpProperies = array('location', 'summary', 'description');
 		if($vobject->version=='2.0'){
 			$vobject->version='1.0';
 			foreach($vobject->children() as $child)
 			{
-				if($child instanceof Sabre_VObject_Component){
+				if($child instanceof Sabre\VObject\Component){
 					foreach($qpProperies as $propName){
 						self::_quotedPrintableEncode($child, $propName);
 					}
@@ -224,7 +224,7 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 	 * 
 	 * @param Sabre_VObject_Component $vobject 
 	 */
-	public static function convertVCard21ToVCard30(Sabre_VObject_Component $vobject){
+	public static function convertVCard21ToVCard30(Sabre\VObject\Component $vobject){
 		
 		if($vobject->version=='2.1'){
 			$vobject->version='3.0';
@@ -307,7 +307,7 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 	 * 
 	 * @param Sabre_VObject_Component $vobject 
 	 */
-	public static function convertVCard30toVCard21(Sabre_VObject_Component $vobject){
+	public static function convertVCard30toVCard21(Sabre\VObject\Component $vobject){
 		
 		$qpProperies=array('NOTE','FN','N');
 		
