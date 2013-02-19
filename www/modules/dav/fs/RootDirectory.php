@@ -11,7 +11,7 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-class GO_Dav_Fs_RootDirectory extends Sabre_DAV_FS_Directory implements Sabre_DAV_ICollection, Sabre_DAV_IQuota {
+class GO_Dav_Fs_RootDirectory extends Sabre\DAV\FS\Directory implements Sabre\DAV\ICollection, Sabre\DAV\IQuota {
 
 	public function __construct($path='') {		
 		$this->path = $path;
@@ -26,7 +26,7 @@ class GO_Dav_Fs_RootDirectory extends Sabre_DAV_FS_Directory implements Sabre_DA
 	/**
 	 * Returns an array with all the child nodes
 	 *
-	 * @return Sabre_DAV_INode[]
+	 * @return Sabre\DAV\INode[]
 	 */
 	public function getChildren() {
 		
@@ -48,8 +48,8 @@ class GO_Dav_Fs_RootDirectory extends Sabre_DAV_FS_Directory implements Sabre_DA
      * Returns a specific child node, referenced by its name 
      * 
      * @param string $name 
-     * @throws Sabre_DAV_Exception_NotFound
-     * @return Sabre_DAV_INode 
+     * @throws Sabre\DAV\Exception\NotFound
+     * @return Sabre\DAV\INode 
      */
     public function getChild($name) {
 			
@@ -81,7 +81,7 @@ class GO_Dav_Fs_RootDirectory extends Sabre_DAV_FS_Directory implements Sabre_DA
 	 */
 	public function createFile($name, $data = null) {
 
-		throw new Sabre_DAV_Exception_Forbidden();
+		throw new Sabre\DAV\Exception\Forbidden();
 	}
 
 	/**
@@ -92,7 +92,7 @@ class GO_Dav_Fs_RootDirectory extends Sabre_DAV_FS_Directory implements Sabre_DA
 	 */
 	public function createDirectory($name) {
 
-		throw new Sabre_DAV_Exception_Forbidden();
+		throw new Sabre\DAV\Exception\Forbidden();
 	}
 
 	/**
@@ -102,7 +102,7 @@ class GO_Dav_Fs_RootDirectory extends Sabre_DAV_FS_Directory implements Sabre_DA
 	 */
 	public function delete() {
 
-		throw new Sabre_DAV_Exception_Forbidden();
+		throw new Sabre\DAV\Exception\Forbidden();
 	}
 
 	/**

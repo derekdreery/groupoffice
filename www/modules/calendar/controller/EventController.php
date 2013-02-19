@@ -1066,40 +1066,16 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		return $response;
 	}
 	
-//	/**
-//	 *
-//	 * @param array $params
-//	 * @return Sabre_VObject_Component 
-//	 */
-//	private function _getVObjectFromMail($params){
-//		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
-//		$message = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'],$params['uid']);
-//
-//		$attachments = $message->getAttachments();
-//			
-//		foreach($attachments as $attachment){			
-//			GO::debug($attachment->mime);
-//			if($attachment->mime=='text/calendar' || $attachment->getExtension() == 'ics'){
-//				GO::debug($attachment);
-//				$data = $message->getImapConnection()->get_message_part_decoded($message->uid, $attachment->number, $attachment->encoding);
-//				
-//				$vcalendar = GO_Base_VObject_Reader::read($data);
-//
-//				return $vcalendar->vevent[0];
-//			}
-//		}
-//		return false;
-//	}
 	
 	/**
 	 * Handle's reply from an attendee when the current user is the organizer.
 	 * 
-	 * @param Sabre_VObject_Component $vevent
+	 * @param Sabre\VObject\Component $vevent
 	 * @param type $recurrenceDate
 	 * @return boolean
 	 * @throws GO_Base_Exception_NotFound
 	 */
-	private function _handleIcalendarReply(Sabre_VObject_Component $vevent, $recurrenceDate){
+	private function _handleIcalendarReply(Sabre\VObject\Component $vevent, $recurrenceDate){
 		//find existing event
 		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
 		if(!$masterEvent)
@@ -1127,12 +1103,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	/**
 	 * Handle's a request from an organizer from another externals system
 	 * 
-	 * @param Sabre_VObject_Component $vevent
+	 * @param Sabre\VObject\Component $vevent
 	 * @param type $recurrenceDate
 	 * @return boolean
 	 * @throws GO_Base_Exception_NotFound
 	 */
-	private function _handleIcalendarRequest(Sabre_VObject_Component $vevent, $recurrenceDate){
+	private function _handleIcalendarRequest(Sabre\VObject\Component $vevent, $recurrenceDate){
 		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
 		
 		
@@ -1190,7 +1166,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		return $response;
 	}
 	
-	private function _handleIcalendarCancel(Sabre_VObject_Component $vevent, $recurrenceDate){
+	private function _handleIcalendarCancel(Sabre\VObject\Component $vevent, $recurrenceDate){
 		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
 				
 		//delete existing data		
