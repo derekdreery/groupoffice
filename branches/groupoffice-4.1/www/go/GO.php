@@ -572,6 +572,10 @@ class GO{
 				self::errorHandler($error['type'], $error['message'], $error['file'], $error['line']);
 		}
 		
+		//clear temp files on the command line because we may run as root
+		if(PHP_SAPI=='cli')
+			GO::session()->clearUserTempFiles();
+		
 		GO::debug("--------------------\n");
 	}
 	
