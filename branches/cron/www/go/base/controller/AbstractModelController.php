@@ -671,6 +671,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$columnModel->formatColumn('calendar_name','$model->calendar->name');
 		$columnModel->formatColumn('link_count','$model->countLinks()');
 		$columnModel->formatColumn('link_description','$model->link_description');
+		
+		$columnModel->formatColumn('description','GO_Base_Util_string::cut_string($model->description,500)');
 
 		$data = $store->getData();
 		$response['data']['events']=$data['results'];
@@ -688,6 +690,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$columnModel->formatColumn('calendar_name','$model->calendar->name');
 		$columnModel->formatColumn('link_count','$model->countLinks()');
 		$columnModel->formatColumn('link_description','$model->link_description');
+		$columnModel->formatColumn('description','GO_Base_Util_string::cut_string($model->description,500)');
 
 		$data = $store->getData();
 		$response['data']['past_events']=$data['results'];
@@ -747,6 +750,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 						->formatColumn('late','$model->due_time<time() ? 1 : 0;')
 						->formatColumn('tasklist_name', '$model->tasklist->name')
 						->formatColumn('link_count','$model->countLinks()')
+						->formatColumn('description','GO_Base_Util_string::cut_string($model->description,500)')
 						->formatColumn('link_description','$model->link_description');		
 
 		$data = $store->getData();
@@ -767,7 +771,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 						->formatColumn('late','$model->due_time<time() ? 1 : 0;')
 						->formatColumn('tasklist_name', '$model->tasklist->name')
 						->formatColumn('link_count','$model->countLinks()')
+						->formatColumn('description','GO_Base_Util_string::cut_string($model->description,500)')
 						->formatColumn('link_description','$model->link_description');		
+		
 
 		$data = $store->getData();
 		$response['data']['completed_tasks']=$data['results'];

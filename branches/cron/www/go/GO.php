@@ -392,24 +392,8 @@ class GO{
 			require(dirname(dirname(__FILE__)) . '/'.self::$_classes[$className]);
 		}else
 		{
-//			GO::debug("Autoloading: ".$className);
-			//For SabreDAV
-			if(strpos($className,'Sabre_')===0) {
-        include self::config()->root_path . 'go/vendor/SabreDAV/lib/Sabre/' . str_replace('_','/',substr($className,6)) . '.php';
-				return true;
-			}
+//			echo "Autoloading: ".$className."\n";
 			
-			//Don't interfere with other autoloaders
-			if (0 === strpos($className, 'Swift'))
-			{
-				require_once self::config()->root_path.'go/vendor/swift/lib/classes/Swift.php';
-				//Load the init script to set up dependency injection
-				require_once self::config()->root_path.'go/vendor/swift/lib/swift_init.php';
-
-				$path = self::config()->root_path.'go/vendor/swift/lib/classes/'.str_replace('_', '/', $className).'.php';
-				require_once $path;
-				return true;
-			}
 
 			if(substr($className,0,7)=='GO_Base'){
 				$arr = explode('_', $className);
@@ -461,6 +445,22 @@ class GO{
 					}
 					
 					require($fullPath);
+				}elseif(strpos($className,'Sabre\VObject')===0) {
+					$classFile = self::config()->root_path . 'go/vendor/VObject/lib/'.str_replace('\\','/',$className).'.php';
+					require $classFile;
+					return true;
+				}elseif(strpos($className,'Sabre')===0) {
+					require self::config()->root_path . 'go/vendor/SabreDAV/lib/'.str_replace('\\','/',$className). '.php';
+					return true;					
+				}else	if (0 === strpos($className, 'Swift'))
+				{
+					require_once self::config()->root_path.'go/vendor/swift/lib/classes/Swift.php';
+					//Load the init script to set up dependency injection
+					require_once self::config()->root_path.'go/vendor/swift/lib/swift_init.php';
+
+					$path = self::config()->root_path.'go/vendor/swift/lib/classes/'.str_replace('_', '/', $className).'.php';
+					require_once $path;
+					return true;
 				}
 			}
 		}

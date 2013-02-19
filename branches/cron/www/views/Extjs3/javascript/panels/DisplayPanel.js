@@ -364,8 +364,6 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 
 	
 	onBodyClick :  function(e, target){
-		
-		console.log(target);
 
 		this.fireEvent('bodyclick', this, target, e);
 
@@ -425,7 +423,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 				{
 					var index = href.substr(pos+7, href.length);
 					var file = this.data.files[index];
-					console.log(file);
+
 					if(file.extension=='folder')
 					{
 						GO.files.openFolder(this.data.files_folder_id, file.id);

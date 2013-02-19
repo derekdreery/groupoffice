@@ -1165,10 +1165,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(!empty($params['searchQuery'])){
 			$sql .= " \nAND (";
 			
-			if(empty($params['searchQueryFields']))
+			if(empty($params['searchQueryFields'])){
 				$fields = $this->getFindSearchQueryParamFields('t',$joinCf);
-			else
+			}else{
 				$fields = $params['searchQueryFields'];
+			}
 			
 			
 			if(empty($fields))
@@ -1185,8 +1186,23 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					$sql .= ' OR ';
 				}
 				$sql .= $field.' LIKE '.$this->getDbConnection()->quote($params['searchQuery'], PDO::PARAM_STR);
-			}			
+			}	
 			
+			if($this->primaryKey()=='id'){
+				//Searc on exact ID match too.
+				$idQuery = trim($params['searchQuery'],'% ');
+
+				if((int) $idQuery == $idQuery){
+					if($first){
+						$first=false;
+					}else
+					{
+						$sql .= ' OR ';
+					}
+
+					$sql .= 't.id='.intval($idQuery);
+				}									
+			}
 			
 			$sql .= ') ';
 		}
