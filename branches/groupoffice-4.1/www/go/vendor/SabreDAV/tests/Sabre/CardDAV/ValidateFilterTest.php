@@ -1,8 +1,10 @@
 <?php
 
+namespace Sabre\CardDAV;
+
 require_once 'Sabre/CardDAV/AbstractPluginTest.php';
 
-class Sabre_CardDAV_ValidateFilterTest extends Sabre_CardDAV_AbstractPluginTest {
+class ValidateFilterTest extends AbstractPluginTest {
 
     /**
      * @dataProvider data
@@ -152,8 +154,6 @@ HELLO;
         $filter18 = $filter17;
         $filter18['text-matches'][0]['negate-condition'] = true;
 
-        // TODO: Does this self assignment make sense?
-        $filter18 = $filter18;
         $filter18['test'] = 'allof';
 
         return array(

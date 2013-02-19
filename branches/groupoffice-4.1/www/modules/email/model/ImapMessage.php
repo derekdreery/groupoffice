@@ -624,7 +624,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	/**
 	 * Get the VCALENDAR object as SabreDav vobject component
 	 * 
-	 * @return Sabre_VObject_Component 
+	 * @return Sabre\VObject\Component 
 	 */
 	public function getInvitationVcalendar(){
 

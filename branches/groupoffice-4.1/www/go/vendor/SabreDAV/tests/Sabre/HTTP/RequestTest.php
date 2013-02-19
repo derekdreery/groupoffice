@@ -1,10 +1,15 @@
 <?php
 
-/**
- * @covers Sabre_HTTP_Request
- */
-class Sabre_HTTP_RequestTest extends PHPUnit_Framework_TestCase {
+namespace Sabre\HTTP;
 
+/**
+ * @covers Sabre\HTTP\Request
+ */
+class RequestTest extends \PHPUnit_Framework_TestCase {
+
+    /**
+     * @var Sabre\HTTP\Request
+     */
     private $request;
 
     function setUp() {
@@ -16,7 +21,7 @@ class Sabre_HTTP_RequestTest extends PHPUnit_Framework_TestCase {
             'CONTENT_TYPE'   => 'text/xml',
         );
 
-        $this->request = new Sabre_HTTP_Request($server);
+        $this->request = new Request($server);
 
     }
 
@@ -84,11 +89,11 @@ class Sabre_HTTP_RequestTest extends PHPUnit_Framework_TestCase {
         fwrite($h,'testing');
         rewind($h);
 
-        $previousValue = Sabre_HTTP_Request::$defaultInputStream;
-        Sabre_HTTP_Request::$defaultInputStream = $h;
+        $previousValue = Request::$defaultInputStream;
+        Request::$defaultInputStream = $h;
 
         $this->assertEquals('testing',$this->request->getBody(true),'We didn\'t get our testbody back');
-        Sabre_HTTP_Request::$defaultInputStream = $previousValue;
+        Request::$defaultInputStream = $previousValue;
 
     }
 
@@ -99,7 +104,7 @@ class Sabre_HTTP_RequestTest extends PHPUnit_Framework_TestCase {
             'REQUEST_URI' => '/foo'
         );
 
-        $r = new Sabre_HTTP_Request($s);
+        $r = new Request($s);
 
         $this->assertEquals('http://sabredav.org/foo', $r->getAbsoluteUri());
 
@@ -109,7 +114,7 @@ class Sabre_HTTP_RequestTest extends PHPUnit_Framework_TestCase {
             'HTTPS'       => 'on',
         );
 
-        $r = new Sabre_HTTP_Request($s);
+        $r = new Request($s);
 
         $this->assertEquals('https://sabredav.org/foo', $r->getAbsoluteUri());
 
@@ -121,12 +126,12 @@ class Sabre_HTTP_RequestTest extends PHPUnit_Framework_TestCase {
             'QUERY_STRING' => 'bla',
         );
 
-        $r = new Sabre_HTTP_Request($s);
+        $r = new Request($s);
         $this->assertEquals('bla', $r->getQueryString());
 
         $s = array();
 
-        $r = new Sabre_HTTP_Request($s);
+        $r = new Request($s);
         $this->assertEquals('', $r->getQueryString());
 
     }
@@ -136,7 +141,7 @@ class Sabre_HTTP_RequestTest extends PHPUnit_Framework_TestCase {
         $post = array(
             'bla' => 'foo',
         );
-        $r = new Sabre_HTTP_Request(array(),$post);
+        $r = new Request(array(),$post);
         $this->assertEquals($post, $r->getPostVars('bla'));
 
     }

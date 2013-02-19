@@ -12,7 +12,7 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-class GO_Dav_Auth_Backend extends Sabre_DAV_Auth_Backend_AbstractDigest {
+class GO_Dav_Auth_Backend extends Sabre\DAV\Auth\Backend\AbstractDigest {
 	
 	private $_user_id;
 	
@@ -27,7 +27,7 @@ class GO_Dav_Auth_Backend extends Sabre_DAV_Auth_Backend_AbstractDigest {
 		}
 	}	
 	
-	public function authenticate(\Sabre_DAV_Server $server, $realm) {		
+	public function authenticate(\Sabre\DAV\Server $server, $realm) {		
 		if(parent::authenticate($server, $realm)){
 			GO::session()->setCurrentUser($this->_user_id);
 			return true;

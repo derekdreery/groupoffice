@@ -11,7 +11,7 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-class GO_Dav_ObjectTree extends Sabre_DAV_ObjectTree{
+class GO_Dav_ObjectTree extends Sabre\DAV\ObjectTree{
 	/**
      * Moves a file from one location to another
      *
