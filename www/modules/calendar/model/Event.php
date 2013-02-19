@@ -1118,10 +1118,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * If this event is an occurence and has a exception_for_event_id it will automatically determine this value. 
 	 * This option is only useful for cancelling a single occurence. Because in that case there is no event model for the occurrence. There's just an exception.
 	 * 
-	 * @return Sabre_VObject_Component 
+	 * @return Sabre\VObject\Component 
 	 */
 	public function toVObject($method='REQUEST', $updateByParticipant=false, $recurrenceTime=false){
-		$e=new Sabre_VObject_Component('vevent');
+		$e=new Sabre\VObject\Component('vevent');
 		
 		if(empty($this->uuid)){
 			$this->uuid = GO_Base_Util_UUID::create('event', $this->id);
@@ -1133,20 +1133,20 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if(isset($this->sequence))
 			$e->sequence=$this->sequence;
 		
-		$dtstamp = new Sabre_VObject_Element_DateTime('dtstamp');
-		$dtstamp->setDateTime(new DateTime(), Sabre_VObject_Element_DateTime::UTC);		
+		$dtstamp = new Sabre\VObject\Property\DateTime('dtstamp');
+		$dtstamp->setDateTime(new DateTime(), Sabre\VObject\Property\DateTime::UTC);		
 		//$dtstamp->offsetUnset('VALUE');
 		$e->add($dtstamp);
 		
 		$mtimeDateTime = new DateTime('@'.$this->mtime);
-		$lm = new Sabre_VObject_Element_DateTime('LAST-MODIFIED');
-		$lm->setDateTime($mtimeDateTime, Sabre_VObject_Element_DateTime::UTC);		
+		$lm = new Sabre\VObject\Property\DateTime('LAST-MODIFIED');
+		$lm->setDateTime($mtimeDateTime, Sabre\VObject\Property\DateTime::UTC);		
 		//$lm->offsetUnset('VALUE');
 		$e->add($lm);
 		
 		$ctimeDateTime = new DateTime('@'.$this->mtime);
-		$ct = new Sabre_VObject_Element_DateTime('created');
-		$ct->setDateTime($ctimeDateTime, Sabre_VObject_Element_DateTime::UTC);		
+		$ct = new Sabre\VObject\Property\DateTime('created');
+		$ct->setDateTime($ctimeDateTime, Sabre\VObject\Property\DateTime::UTC);		
 		//$ct->offsetUnset('VALUE');
 		$e->add($ct);
 		
@@ -1167,7 +1167,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$e->status = $this->status;
 		
 		
-		$dateType = $this->all_day_event ? Sabre_VObject_Element_DateTime::DATE : Sabre_VObject_Element_DateTime::LOCALTZ;
+		$dateType = $this->all_day_event ? Sabre\VObject\Property\DateTime::DATE : Sabre\VObject\Property\DateTime::LOCALTZ;
 		
 		if($this->all_day_event)
 			$e->{"X-FUNAMBOL-ALLDAY"}=1;
@@ -1181,21 +1181,21 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			}
 		}
 		if($recurrenceTime){
-			$recurrenceId =new Sabre_VObject_Element_DateTime("recurrence-id",$dateType);
+			$recurrenceId =new Sabre\VObject\Property\DateTime("recurrence-id",$dateType);
 			$dt = GO_Base_Util_Date_DateTime::fromUnixtime($recurrenceTime);
 			$recurrenceId->setDateTime($dt);
 			$e->add($recurrenceId);
 		}
 		
 		
-		$dtstart = new Sabre_VObject_Element_DateTime('dtstart',$dateType);
+		$dtstart = new Sabre\VObject\Property\DateTime('dtstart',$dateType);
 		$dtstart->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->start_time), $dateType);		
 		//$dtstart->offsetUnset('VALUE');
 		$e->add($dtstart);
 		
 		$end_time = $this->all_day_event ? $this->end_time+60 : $this->end_time;
 		
-		$dtend = new Sabre_VObject_Element_DateTime('dtend',$dateType);
+		$dtend = new Sabre\VObject\Property\DateTime('dtend',$dateType);
 		$dtend->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($end_time), $dateType);		
 		//$dtend->offsetUnset('VALUE');
 		$e->add($dtend);
@@ -1213,7 +1213,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$e->rrule=str_replace('RRULE:','',$rRule->createRrule());					
 			$stmt = $this->exceptions(GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('exception_event_id', 0)));
 			while($exception = $stmt->fetch()){
-				$exdate = new Sabre_VObject_Element_DateTime('exdate',Sabre_VObject_Element_DateTime::DATE);
+				$exdate = new Sabre\VObject\Property\DateTime('exdate',Sabre\VObject\Property\DateTime::DATE);
 				$exdate->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($exception->time));		
 				$e->add($exdate);
 			}
@@ -1226,10 +1226,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			if($participant->is_organizer || $method=='REQUEST' || ($updateByParticipant && $updateByParticipant->id==$participant->id)){
 				//var_dump($participant->email);
 				if($participant->is_organizer){
-					$p = new Sabre_VObject_Property('organizer','mailto:'.$participant->email);				
+					$p = new Sabre\VObject\Property('organizer','mailto:'.$participant->email);				
 				}else
 				{
-					$p = new Sabre_VObject_Property('attendee','mailto:'.$participant->email);				
+					$p = new Sabre\VObject\Property('attendee','mailto:'.$participant->email);				
 				}
 				$p['CN']=$participant->name;
 				$p['RSVP']="true";
@@ -1255,9 +1255,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 //TRIGGER;VALUE=DURATION:-PT5M
 //DESCRIPTION:Default Mozilla Description
 //END:VALARM
-			$a=new Sabre_VObject_Component('valarm');
+			$a=new Sabre\VObject\Component('valarm');
 			$a->action='DISPLAY';
-			$trigger = new Sabre_VObject_Property('trigger','-PT'.($this->reminder/60).'M');
+			$trigger = new Sabre\VObject\Property('trigger','-PT'.($this->reminder/60).'M');
 			$trigger['VALUE']='DURATION';
 			$a->add($trigger);
 			$a->description="Alarm";
@@ -1325,12 +1325,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Import an event from a VObject 
 	 * 
-	 * @param Sabre_VObject_Component $vobject
+	 * @param Sabre\VObject\Component $vobject
 	 * @param array $attributes Extra attributes to apply to the event. Raw values should be past. No input formatting is applied.
 	 * @param boolean $dontSave. Don't save the event. WARNING. Event can't be fully imported this way because participants and exceptions need an ID. This option is useful if you want to display info about an ICS file.
 	 * @return GO_Calendar_Model_Event 
 	 */
-	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array(), $dontSave=false, $makeSureUserParticipantExists=false){
+	public function importVObject(Sabre\VObject\Component $vobject, $attributes=array(), $dontSave=false, $makeSureUserParticipantExists=false){
 
 		$uid = (string) $vobject->uid;
 		if(!empty($uid))
@@ -1410,7 +1410,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}elseif($vobject->aalarm){ //funambol sends old vcalendar 1.0 format
 			$aalarm = explode(';', (string) $vobject->aalarm);
 			if(isset($aalarm[0])) {				
-				$p = Sabre_VObject_Property_DateTime::parseData($aalarm[0]);
+				$p = Sabre\VObject\Property_DateTime::parseData($aalarm[0]);
 				$this->reminder = $this->start_time-$p[1]->format('U');
 			}
 		
@@ -1554,7 +1554,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 						list(
 								$dateType,
 								$dateTime
-						) =  Sabre_VObject_Property_DateTime::parseData($time,$vobject->exdate);
+						) =  Sabre\VObject\Property_DateTime::parseData($time,$vobject->exdate);
 						$this->addException($dateTime->format('U'));
 					}
 				} else {
@@ -1577,11 +1577,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * already exists it will update it.
 	 * 
 	 * @param GO_Calendar_Model_Event $event
-	 * @param Sabre_VObject_Property $vattendee
+	 * @param Sabre\VObject\Property $vattendee
 	 * @param boolean $isOrganizer
 	 * @return GO_Calendar_Model_Participant 
 	 */
-	public function importVObjectAttendee(GO_Calendar_Model_Event $event, Sabre_VObject_Property $vattendee, $isOrganizer=false){
+	public function importVObjectAttendee(GO_Calendar_Model_Event $event, Sabre\VObject\Property $vattendee, $isOrganizer=false){
 			
 		$attributes = $this->_vobjectAttendeeToParticipantAttributes($vattendee);
 		$attributes['is_organizer']=$isOrganizer;
@@ -1614,7 +1614,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		return $p;
 	}
 	
-	private function _vobjectAttendeeToParticipantAttributes(Sabre_VObject_Property $vattendee){
+	private function _vobjectAttendeeToParticipantAttributes(Sabre\VObject\Property $vattendee){
 		return array(
 				'name'=>(string) $vattendee['CN'],
 				'email'=>str_replace('mailto:','', strtolower((string) $vattendee)),

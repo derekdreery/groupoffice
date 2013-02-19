@@ -10,7 +10,7 @@
 //require vendor lib SabreDav vobject
 //require_once(GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/VObject/includes.php');
 		
-class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
+class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 	
   const REGEX_ELEMENT_STRING = "/^(?P<name>[A-Z0-9-\.]+)(?:;(?P<params>([^:^\"]|\"([^\"]*)\")*))?:(?P<value>.*)$/i";
 	const REGEX_PARAM_STRING = '/(?<=^|;)(?P<paramName>[A-Z0-9-]+)(=(?P<paramValue>[^\"^;]*|"[^"]*")(?=$|;))?/i';
@@ -289,7 +289,7 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 		}
 	}
 	
-	public static function read($data) {
+	public static function read($data, $options = 0) {
 		
 		//remove quoted printable line breaks
 		$data = GO_Base_Util_String::normalizeCrlf($data,"\n");
@@ -299,7 +299,7 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 		//workaround for funambol bug		
 		$data = str_replace('EXDATE: ', 'EXDATE:', $data);
 		
-		return parent::read($data);
+		return parent::read($data, $options);
 	}
 
 	/**
