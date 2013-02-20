@@ -1191,8 +1191,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			if($this->primaryKey()=='id'){
 				//Searc on exact ID match too.
 				$idQuery = trim($params['searchQuery'],'% ');
-
-				if((int) $idQuery == $idQuery){
+				if(intval($idQuery)."" === $idQuery){
 					if($first){
 						$first=false;
 					}else
