@@ -161,24 +161,35 @@ margin:5px 2px;
 	background-image:url('images/16x16/attach.png') !important;
 }
 
-.NewMail{
+.ml-seen-mail{
+}
+
+.ml-unseen-mail{
 	margin:0px;
 	margin-bottom:4px;
 	font-weight:bold;
 }
 
-.NewSubject{
+.ml-seen-from{
+}
+
+.ml-unseen-from{
 	margin:0px;
 	margin-bottom:4px;
 	font-weight:bold;
 }
 
-.Subject{
+.ml-unseen-subject{
 	margin:0px;
 	margin-bottom:4px;
 	font-weight:normal;
 }
 
+.ml-seen-subject{
+	margin:0px;
+	margin-bottom:4px;
+	font-weight:normal;
+}
 
 .message-header{
 	font-family:tahoma,arial,helvetica,sans-serif;
