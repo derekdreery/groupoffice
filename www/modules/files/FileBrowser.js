@@ -1757,7 +1757,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 						
 					if(activeNode){
 						activeNode.expand();
-//						this.updateLocation();
+						this.updateLocation();
 					}else{
 						this.treePanel.setExpandFolderId(id);
 						this.treePanel.getRootNode().reload();	
