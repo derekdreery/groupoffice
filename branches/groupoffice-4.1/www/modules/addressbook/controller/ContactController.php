@@ -568,11 +568,11 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		
 		$response = array('total'=>0, 'results'=>array());
 		
-		$query = preg_replace ('/[\s*]+/','%', $params['query']).'%'; 
+		$query = '%'.preg_replace ('/[\s*]+/','%', $params['query']).'%'; 
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()
 						->searchQuery($query,
-										array("CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)",'t.email','t.email2','t.email3','t.last_name'))
+										array("CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)",'t.email','t.email2','t.email3'))
 						->joinModel(array(
 				'model'=>'GO_Addressbook_Model_Company',					
 	 			'foreignField'=>'id', //defaults to primary key of the remote model
@@ -581,7 +581,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	 			'type'=>'LEFT' //defaults to INNER,
 	 			
 			))			
-			->select('t.*,c.name AS company_name, addressbook.name AS ab_name, CONCAT_WS(\' \',`t`.`first_name`,`t`.`middle_name`,`t`.`last_name`) AS name')
+			->select('t.*,c.name AS company_name, addressbook.name AS ab_name')
 			->limit(10);
 		
 		if(!empty($params['addressbook_id']))
@@ -620,8 +620,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 
 			$findParams = GO_Base_Db_FindParams::newInstance()
 					->searchQuery($query,
-									array("CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)",'t.email','t.email2','t.email3','t.last_name'))
-					->select('t.*, "User" AS ab_name,c.name AS company_name, CONCAT_WS(\' \',`t`.`first_name`,`t`.`middle_name`,`t`.`last_name`) AS name')
+									array("CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)",'t.email','t.email2','t.email3'))
+					->select('t.*, "'.addslashes(GO::t('strUser')).'" AS ab_name,c.name AS company_name')
 					->group('t.id')
 					->limit(10-count($response['results']))
 					->ignoreAcl()
