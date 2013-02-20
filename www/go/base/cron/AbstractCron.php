@@ -23,27 +23,22 @@
 abstract class GO_Base_Cron_AbstractCron extends GO_Base_Model{
 	
 	/**
-	 * An unique name for the cronjob.
-	 * This Property needs to be overridden by the parent class.
-	 *
-	 * @var string
-	 */
-	public $uniqueName = 'AbstractCron';
-	
-	/**
-	 * Get the unique name of the Cronjob
+	 * Get the label of this Cronjob
 	 * 
 	 * @return String
 	 */
-	public function getName(){
-		return $this->uniqueName;
-	}
+	public abstract function getLabel();
+	
+	/**
+	 * Get the description of this Cronjob
+	 * 
+	 * @return String
+	 */
+	public abstract function getDescription();
 	
 	/**
 	 * The code that needs to be called when the cron is running
 	 */
-	public static function run(){
-		echo "RUN THIS CRON";
-	}
+	public abstract function run();
 
 }

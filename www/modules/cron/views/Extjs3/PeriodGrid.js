@@ -43,13 +43,13 @@ GO.cron.PeriodGrid = Ext.extend(GO.grid.GridPanel,{
 					header: GO.cron.lang.name,
 					dataIndex: 'name',
 					sortable: true,
-					width:250
+					width:100
 				},
 				{
 					header: GO.cron.lang.job,
 					dataIndex: 'job',
 					sortable: true,
-					width:250
+					width:180
 				},
 				{
 					header: GO.cron.lang.nextrun,
