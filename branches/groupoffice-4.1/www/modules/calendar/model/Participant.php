@@ -99,7 +99,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	 * @return boolean/?
 	 */
 	public function isAvailable($start_time = false, $end_time = false) {
-		if (empty($this->user_id) || !$this->_hasFreeBusyAccess()) {
+		if (!$this->_hasFreeBusyAccess()) {
 			return '?';
 		} else {
 
@@ -116,11 +116,13 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 		}
 	}
 
-	/**
-	 * @todo
-	 */
 	private function _hasFreeBusyAccess() {
-		return true;
+		
+		$permission=!empty($this->user_id);
+		if($permission && GO::modules()->isInstalled("freebusypermissions")){
+			$permission = GO_Freebusypermissions_FreebusypermissionsModule::hasFreebusyAccess(GO::user()->id, $this->user_id);
+		}
+		return $permission;
 	}
 
 	/**
