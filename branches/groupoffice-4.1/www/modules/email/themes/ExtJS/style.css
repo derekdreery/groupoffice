@@ -49,20 +49,31 @@
 	background-image:url('images/16x16/toggle_window.png') !important;
 }
 
+.ml-seen-mail{
+}
 
-.NewMail{
+.ml-unseen-mail{
 	margin:0px;
 	margin-bottom:4px;
 	font-weight:bold;
 }
 
-.NewSubject{
+.ml-seen-from{
+}
+
+.ml-unseen-from{
 	margin:0px;
 	margin-bottom:4px;
 	font-weight:bold;
 }
 
-.Subject{
+.ml-unseen-subject{
+	margin:0px;
+	margin-bottom:4px;
+	font-weight:normal;
+}
+
+.ml-seen-subject{
 	margin:0px;
 	margin-bottom:4px;
 	font-weight:normal;
