@@ -54,6 +54,9 @@ class GO_Base_Model_SearchCacheRecord extends GO_Base_Db_ActiveRecord {
 		return array('model_id', 'model_type_id');					
 	}
 	
+	public function checkDatabaseSupported() {
+		return false;
+	}
 	
 	/**
 	 * Find all links of this model type to a given model. 
