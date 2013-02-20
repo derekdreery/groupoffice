@@ -225,25 +225,39 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 //		echo '<hr />';
 //		echo '<br />';
 //		echo '<br />';
-
+//			$nowPlusOneMinute = new GO_Base_Util_Date_DateTime();
+//			$nowPlusOneMinute->add(DateInterval::createFromDateString('PT1M'));
+		
 		return $completeExpression->getNextRunDate()->getTimestamp();
 	}
 	
 	public function run(){
 		GO::debug('CRONJOB ('.$this->name.') START : '.date('d-m-Y H:i:s'));
 		
-		// Run the specified cron file code
-		$cronFile = new $this->job;
-		$cronFile->run();
-		GO::debug('CRONJOB ('.$this->name.') FINISHED : '.date('d-m-Y H:i:s'));
-		return $this->_finishRun();
+		if($this->_prepareRun()){
+			// Run the specified cron file code
+			$cronFile = new $this->job;
+			$cronFile->run();
+			GO::debug('CRONJOB ('.$this->name.') FINISHED : '.date('d-m-Y H:i:s'));
+			
+			if($this->runonce){
+				GO::debug('CRONJOB ('.$this->name.') HAS RUNONCE OPTION, DISABLING NOW');
+				$this->active = false;
+				$this->save();
+			}
+			
+			return true;
+		} else {
+			GO::debug('CRONJOB ('.$this->name.') FAILED TO RUN : '.date('d-m-Y H:i:s'));
+			return false;
+		}
 	}
 	
 	protected function beforeSave() {
 		$this->nextrun = $this->_calculateNextRun();
+		GO::debug('CRONJOB ('.$this->name.') NEXTRUN : '.$this->getAttribute('nextrun','formatted'));
 		return parent::beforeSave();
 	}
-	
 	
 	/**
 	 * This function needs to be called on the end of the run of this cronjob.
@@ -252,10 +266,8 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 	 * @param boolean $save
 	 * @return boolean
 	 */
-	private function _finishRun($save=true) {
+	private function _prepareRun($save=true) {
 		$this->lastrun = time();
-		$this->nextrun = $this->_calculateNextRun();
-		GO::debug('CRONJOB ('.$this->name.') NEXTRUN : '.$this->getAttribute('nextrun','formatted'));
 		if($save)
 			return $this->save();
 		else

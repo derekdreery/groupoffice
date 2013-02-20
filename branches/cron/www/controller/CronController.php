@@ -113,6 +113,7 @@ class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 			->criteria(GO_Base_Db_FindCriteria::newInstance()
 				->addCondition('nextrun', $till->getTimestamp(),'<')
 				->addCondition('nextrun', $from->getTimestamp(),'>')
+				->addCondition('active', 1,'=')
 			);
 		
 		$colModel = new GO_Base_Data_ColumnModel(GO_Base_Cron_CronJob::model());
@@ -135,37 +136,39 @@ class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 	 * 
 	 * TODO: Check if 1 minute doesn't set the server under heavy load.
 	 */
-	protected function actionRun(){
+	protected function actionRun($params){
 		
 		$this->requireCli();
 
 		$currentTime = new GO_Base_Util_Date_DateTime();
-		$currentMinusTime = new GO_Base_Util_Date_DateTime();
-		$currentMinusTime->sub(new DateInterval('PT1H'));
-//		
-//		echo 'KLEINER DAN: '.$currentTime->getTimestamp() .' ('.$currentTime->format('d-m-Y H:i').')';
-//		echo '<br />';
-//		echo 'GROTER DAN:  '.$currentMinusTime->getTimestamp() .' ('.$currentMinusTime->format('d-m-Y H:i').')';
-//		echo '<br />';
-//		
-//		$crons = GO_Base_Cron_CronJob::model()->find();
-//		foreach($crons as $c){
-//			echo $c->name;
-//			echo ' | ';
-//			echo 'NEXT RUN : '.$c->nextrun.' ('.date('d-m-Y H:i',$c->nextrun).')';
-//			echo '<br />';
-//		}
-//		
-//		
-//		
+//		$currentMinusTime = new GO_Base_Util_Date_DateTime();
+//		$currentMinusTime->sub(new DateInterval('PT1H'));
+
 		$findParams = GO_Base_Db_FindParams::newInstance()
 			->calcFoundRows()
 			->criteria(GO_Base_Db_FindCriteria::newInstance()
 				->addCondition('nextrun', $currentTime->getTimestamp(),'<')
-				->addCondition('nextrun', $currentMinusTime->getTimestamp(),'>')
+			//	->addCondition('nextrun', $currentMinusTime->getTimestamp(),'>')
 			);
 		
 		$cronsToHandle = GO_Base_Cron_CronJob::model()->find($findParams);
+		
+		//		
+		//		echo 'KLEINER DAN: '.$currentTime->getTimestamp() .' ('.$currentTime->format('d-m-Y H:i').')';
+		//		echo '<br />';
+		//		echo 'GROTER DAN:  '.$currentMinusTime->getTimestamp() .' ('.$currentMinusTime->format('d-m-Y H:i').')';
+		//		echo '<br />';
+		//		
+		//		$crons = GO_Base_Cron_CronJob::model()->find();
+		//		foreach($crons as $c){
+		//			echo $c->name;
+		//			echo ' | ';
+		//			echo 'NEXT RUN : '.$c->nextrun.' ('.date('d-m-Y H:i',$c->nextrun).')';
+		//			echo '<br />';
+		//		}
+		//		
+		//		
+		//		
 		
 		GO::debug('CRONJOB START');
 		
@@ -186,7 +189,7 @@ class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 	 * 
 	 * @return array
 	 */
-	protected function actionAvailableCronCollection(){
+	protected function actionAvailableCronCollection($params){
 		$response = array();
 		$response['results'] = array();
 		
@@ -194,8 +197,8 @@ class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 		
 		$cronfiles = $cronJobCollection->getAllCronJobClasses();
 		$response['total'] = count($cronfiles);
-		foreach($cronfiles as $name=>$c){
-			$response['results'][] = array('name'=>$name,'class'=>$c);
+		foreach($cronfiles as $c=>$label){
+			$response['results'][] = array('name'=>$label,'class'=>$c);
 		}
 		
 		$response['success'] = true;

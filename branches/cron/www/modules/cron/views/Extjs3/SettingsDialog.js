@@ -4,12 +4,12 @@ GO.cron.SettingsDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		
 		Ext.apply(this, {
 			goDialogId:'cronsettings',
-			title:GO.cron.lang.settings,
+			title:GO.cron.lang.cronSettings,
 			formControllerUrl: 'core/cron',
 			submitAction : 'submitSettings',
 			loadAction : 'loadSettings',
-			height:600,
-			width:800
+			height:350,
+			width:500
 		});
 		
 		GO.cron.SettingsDialog.superclass.initComponent.call(this);	

@@ -40,7 +40,7 @@ $l['exampleFormat6Explanation'] = '(Between 0 and 4 and between 8 and 12)';
 $l['exampleFormats'] = 'Please use one of these formats (eg. hour, no spaces):';
 
 $l['timeFieldSetTitle'] = 'Time';
-
+$l['cronSettings'] = 'Cron Settings';
 $l['period'] = 'Period';
 $l['runUpcoming'] = 'Upcoming Cron-Jobs';
 $l['lastrun'] = 'Last run';

@@ -54,8 +54,39 @@ class GO_Base_Cron_CronCollection extends GO_Base_Model {
 			$foundCronJobClasses = array_merge($this->getModuleCronJobClasses($module),$foundCronJobClasses);
 		}
 		
+		$foundCronJobClasses = array_merge($this->getFileStorageCronJobClasses(),$foundCronJobClasses);
+		
 		return $foundCronJobClasses;
 	}
+	
+	public function getFileStorageCronJobClasses($folderName='cron'){
+		$foundCronJobClasses=array();
+		$folderPath = GO::config()->file_storage_path.'/'.$folderName;
+		
+		$folder = new GO_Base_Fs_Folder($folderPath);
+		
+		if($folder->exists()){
+			$items = $folder->ls();
+			$reflectionClasses = array();
+			foreach($items as $item){
+				if(is_file($item)){
+					$className = 'GOFS_Cron_'.$item->nameWithoutExtension();
+					$reflectionClasses[] = new ReflectionClass($className);
+				}
+			}
+			
+			foreach($reflectionClasses as $reflectionClass){
+				if($this->_checkIsCronJobClassFile($reflectionClass)){
+					$cronJob = new $reflectionClass->name();
+					$foundCronJobClasses[$reflectionClass->name] = $cronJob->getLabel();
+				}
+			}
+		}
+		
+		return $foundCronJobClasses;
+	}
+	
+	
 	
 	/**
 	 * Get an array of all cronjobs that are available for the given module.
@@ -81,7 +112,7 @@ class GO_Base_Cron_CronCollection extends GO_Base_Model {
 			if($this->_checkIsCronJobClassFile($reflectionClass)){
 				
 				$cronJob = new $reflectionClass->name();
-				$foundCronJobClasses[$cronJob->getName()] = $reflectionClass->name;
+				$foundCronJobClasses[$reflectionClass->name] = $cronJob->getLabel();
 								
 			}
 		}

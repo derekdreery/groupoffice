@@ -1494,7 +1494,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		if(!$dontSave){
 			$this->cutAttributeLengths();
-			try {
+//			try {
 				$this->_isImport=true;
 				
 				//make sure no duplicates are imported.
@@ -1504,9 +1504,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 					throw new GO_Base_Exception_Validation(implode("\n", $this->getValidationErrors())."\n");
 				}
 				$this->_isImport=false;
-			} catch (Exception $e) {
-				throw new Exception($this->name.' ['.GO_Base_Util_Date::get_timestamp($this->start_time).' - '.GO_Base_Util_Date::get_timestamp($this->end_time).'] '.$e->getMessage());
-			}
+//			} catch (Exception $e) {
+//				throw new Exception($this->name.' ['.GO_Base_Util_Date::get_timestamp($this->start_time).' - '.GO_Base_Util_Date::get_timestamp($this->end_time).'] '.$e->getMessage());
+//			}
 			
 			if(!empty($exception)){			
 				//save the exception we found by recurrence-id
