@@ -1,3 +1,7 @@
+4.1.36
+- Don't sync private events anymore on shared calendars with z-push
+- Fixed error messages in the task module
+
 20-02-2013 4.1.35
 - Read only calendars work in CalDAV
 - Implemented free busy access check in participants grid
