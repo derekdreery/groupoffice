@@ -27,7 +27,10 @@ class GO_Core_Controller_Developer extends GO_Base_Controller_AbstractController
 				$user->password = $prefix . $i;
 				$user->first_name = $prefix;
 				$user->last_name = $i;
-				$user->save();
+				if(!$user->save()){
+					var_dump($user->getValidationErrors());
+					exit();
+				}
 				$user->checkDefaultModels();
 			}
 
