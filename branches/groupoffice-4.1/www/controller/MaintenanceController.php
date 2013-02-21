@@ -7,7 +7,7 @@
 class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractController {
 	
 	protected function allowGuests() {
-		return array('upgrade','checkdatabase','servermanagerreport','test','downloadfromshop', 'removeduplicates');
+		return array('upgrade','checkdatabase','servermanagerreport','test','downloadfromshop', 'removeduplicates','buildsearchcache');
 	}
 	
 	//don't check token in this controller
@@ -157,11 +157,11 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	}
 	
 	protected function actionRemoveDuplicates($params){
+				
+		if(!GO::modules()->tools)
+			throw new GO_Base_Exception_AccessDenied();
 		
 		GO::session()->runAsRoot();
-		
-		if(!$this->isCli() && !GO::modules()->tools)
-			throw new GO_Base_Exception_AccessDenied();
 		
 		GO_Base_Fs_File::setAllowDeletes(false);
 		//VERY IMPORTANT:
