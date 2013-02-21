@@ -391,6 +391,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 
 				$m = GO::getModel($model->getName());
 
+				if($m->checkDatabaseSupported()){		
 					$stmt = $m->find(array(
 							'ignoreAcl'=>true
 					));
@@ -398,6 +399,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 				}
 			}
 		}
+	}
 	
 	private function _checkV3(){
 		
