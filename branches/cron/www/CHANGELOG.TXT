@@ -1,3 +1,6 @@
+20-02-2013 4.1.35
+- Read only calendars work in CalDAV
+- Implemented free busy access check in participants grid
 - limit description of links to 500 chars.
 - Upgraded SabreDAV to 1.8.2
 - All models are searchable by ID
