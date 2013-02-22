@@ -440,3 +440,25 @@ CREATE TABLE IF NOT EXISTS `go_advanced_searches` (
 	`model_name` VARCHAR(100) NOT NULL DEFAULT '',
 	PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+--
+-- Table structure for table `go_cron`
+--
+DROP TABLE IF EXISTS `go_cron`;
+CREATE TABLE IF NOT EXISTS `go_cron` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT '1',
+  `minutes` varchar(100) DEFAULT NULL,
+  `hours` varchar(100) DEFAULT NULL,
+  `monthdays` varchar(100) DEFAULT NULL,
+  `months` varchar(100) DEFAULT NULL,
+  `weekdays` varchar(100) DEFAULT NULL,
+  `years` varchar(100) DEFAULT NULL,
+  `job` varchar(255) NOT NULL,
+  `runonce` tinyint(1) NOT NULL DEFAULT '0',
+  `nextrun` int(11) NOT NULL DEFAULT '0',
+  `lastrun` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;

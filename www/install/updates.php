@@ -270,3 +270,21 @@ $updates["201210021548"][]="ALTER TABLE `go_holidays` CHANGE `region` `region` V
 $updates["201201150948"][]="ALTER TABLE `go_holidays` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
 $updates["201201150948"][]="ALTER TABLE `go_holidays` CHANGE `region` `region` VARCHAR( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 $updates["201301170847"][]="DELETE FROM go_modules WHERE id='z-push';";
+
+$updates["201302221100"][]="DROP TABLE IF EXISTS `go_cron`;";
+$updates["201302221101"][]="CREATE TABLE IF NOT EXISTS `go_cron` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT '1',
+  `minutes` varchar(100) DEFAULT NULL,
+  `hours` varchar(100) DEFAULT NULL,
+  `monthdays` varchar(100) DEFAULT NULL,
+  `months` varchar(100) DEFAULT NULL,
+  `weekdays` varchar(100) DEFAULT NULL,
+  `years` varchar(100) DEFAULT NULL,
+  `job` varchar(255) NOT NULL,
+  `runonce` tinyint(1) NOT NULL DEFAULT '0',
+  `nextrun` int(11) NOT NULL DEFAULT '0',
+  `lastrun` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
