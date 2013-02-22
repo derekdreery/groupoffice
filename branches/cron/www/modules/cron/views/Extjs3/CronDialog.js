@@ -35,7 +35,7 @@ GO.cron.CronDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			anchor: '100%',
 			maxLength: 100,
 			allowBlank:false,
-			fieldLabel: GO.cron.lang.name
+			fieldLabel: GO.cron.lang.cronName
 		});
 		
 		this.jobCombo = new GO.form.ComboBox({
