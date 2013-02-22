@@ -580,8 +580,11 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	 * 
 	 */
 	protected function actionDownloadTempfile($params){		
+		
+		$inline = !isset($params['inline']) || !empty($params['inline']);
+		
 		$file = new GO_Base_Fs_File(GO::config()->tmpdir.$params['path']);
-		GO_Base_Util_Http::outputDownloadHeaders($file, false, !empty($params['cache']));
+		GO_Base_Util_Http::outputDownloadHeaders($file, $inline, !empty($params['cache']));
 		$file->output();		
 	}
 	

@@ -67,7 +67,7 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 										->addCondition('user_id', $userId,'=','s'),
 										's');
 		
-		return $this->find($findParams);		
+		return $this->find($findParams);
 	}
 	
 	
