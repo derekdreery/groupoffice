@@ -1,4 +1,6 @@
-4.1.36
+22-02-2013 4.1.36
+- Fixed caldav problem with tasks
+- Updated German
 - Don't sync private events anymore on shared calendars with z-push
 - Fixed error messages in the task module
 
