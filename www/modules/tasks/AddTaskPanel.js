@@ -167,7 +167,7 @@ Ext.extend(GO.tasks.AddTaskPanel, Ext.FormPanel,{
 						var reponseParams = Ext.decode(response.responseText);
 						if(!reponseParams.success)
 						{
-							alert(reponseParams.feedback);
+							GO.errorDialog.show(reponseParams.feedback);
 						}else
 						{
 

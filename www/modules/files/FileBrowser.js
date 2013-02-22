@@ -917,8 +917,12 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			this.upButton.setDisabled(false);
 		}
 
-		if(this.filePanel.link_id>0 && !store.getById('f:'+this.filePanel.link_id)){
+		if(this.filePanel.model_id>0 && !store.getById('f:'+this.filePanel.model_id)){
 			this.filePanel.reset();
+		}
+
+		if(this.folderPanel.model_id>0 && !store.getById('d:'+this.folderPanel.model_id)){
+			this.folderPanel.reset();
 		}
 
 	},

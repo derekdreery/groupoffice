@@ -61,10 +61,10 @@ class GO_Base_Cron_CronCollection extends GO_Base_Model {
 	
 	public function getFileStorageCronJobClasses($folderName='cron'){
 		$foundCronJobClasses=array();
-		$folderPath = GO::config()->file_storage_path.'/'.$folderName;
+		$folderPath = GO::config()->file_storage_path.'php/'.$folderName;
 		
 		$folder = new GO_Base_Fs_Folder($folderPath);
-		
+		GO::debug("CRONFILE SEARCH IN FOLDER: ".$folder->path());
 		if($folder->exists()){
 			$items = $folder->ls();
 			$reflectionClasses = array();
@@ -77,6 +77,7 @@ class GO_Base_Cron_CronCollection extends GO_Base_Model {
 			
 			foreach($reflectionClasses as $reflectionClass){
 				if($this->_checkIsCronJobClassFile($reflectionClass)){
+					GO::debug("CRONFILE FOUND: ".$reflectionClass->name);
 					$cronJob = new $reflectionClass->name();
 					$foundCronJobClasses[$reflectionClass->name] = $cronJob->getLabel();
 				}

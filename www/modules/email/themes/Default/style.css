@@ -171,6 +171,8 @@ margin:5px 2px;
 }
 
 .ml-seen-from{
+	margin:0px;
+	margin-bottom:4px;
 }
 
 .ml-unseen-from{
@@ -181,13 +183,11 @@ margin:5px 2px;
 
 .ml-unseen-subject{
 	margin:0px;
-	margin-bottom:4px;
 	font-weight:normal;
 }
 
 .ml-seen-subject{
 	margin:0px;
-	margin-bottom:4px;
 	font-weight:normal;
 }
 
