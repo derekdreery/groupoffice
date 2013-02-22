@@ -65,6 +65,13 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	
 	protected $defaultCharset='UTF-8';
 	
+	/**
+	 * True iff the actual message's body is larger than the maximum allowed. See
+	 * also how GO_Base_Mail_Imap::max_read is used.
+	 * @var boolean
+	 */
+	protected $_bodyTruncated;
+	
 	public function __construct() {
 		$this->attributes['to'] = new GO_Base_Mail_EmailRecipients($this->attributes['to']);
 		$this->attributes['cc'] = new GO_Base_Mail_EmailRecipients($this->attributes['cc']);
@@ -262,7 +269,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	 * 
 	 * @return Array
 	 */
-	public function toOutputArray($html=true, $recipientsAsString=false) {
+	public function toOutputArray($html=true, $recipientsAsString=false, $noMaxBodySize=false) {
 
 		$from = $this->from->getAddresses();		
 
@@ -297,15 +304,17 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		$response['zip_of_attachments_url']=$this->getZipOfAttachmentsUrl();
 
 		$response['inlineAttachments'] = array();
-
+		
 		if($html) {
-			$response['htmlbody'] = $this->getHtmlBody();
+			$response['htmlbody'] = $this->getHtmlBody(false,$noMaxBodySize);
 			$response['subject'] = htmlspecialchars($this->subject,ENT_COMPAT,'UTF-8');
 		} else {
-			$response['plainbody'] =$this->getPlainBody();
+			$response['plainbody'] =$this->getPlainBody(false,$noMaxBodySize);
 			$response['subject'] = $this->subject;
 		}
 
+		$response['body_truncated'] = $this->bodyIsTruncated();
+		
 		$response['smime_signed'] = isset($this->content_type_attributes['smime-type']) && $this->content_type_attributes['smime-type']=='signed-data';	
 
 		$attachments = $this->getAttachments();
@@ -340,6 +349,13 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 
 		return $response;
 	}
-
+	
+	/**
+	 * Returns true iff message body has exceeded maximum size.
+	 * @return boolean
+	 */
+	public function bodyIsTruncated() {
+		return $this->_bodyTruncated;
+	}
 	
 }
