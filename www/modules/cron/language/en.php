@@ -4,7 +4,7 @@ $l['description'] = 'Module to manage cronjobs inside Group-Office.';
 
 $l['cronManager'] = 'Cron manager';
 
-$l['name'] = 'Name';
+$l['cronName'] = 'Name';
 $l['minutes'] = 'Minutes';
 $l['hours'] = 'Hours';
 $l['monthdays'] = 'Monthdays';
