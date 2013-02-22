@@ -836,7 +836,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			if($message instanceof GO_Email_Model_ImapMessage)
 				$message->createTempFilesForAttachments(true);
 
-			$oldMessage = $message->toOutputArray(true);
+			$oldMessage = $message->toOutputArray(true,false,true);
 
 			$response['data']['htmlbody'] .= '<br /><br />' .
 							htmlspecialchars($replyText, ENT_QUOTES, 'UTF-8') .
@@ -957,7 +957,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		{
 			$message = GO_Email_Model_SavedMessage::model()->createFromMimeFile($params['path']);
 		}
-
+		
 		return $this->_messageToForwardResponse($params, $message);
 	}
 
@@ -980,7 +980,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$message->createTempFilesForAttachments();
 		}
 
-		$oldMessage = $message->toOutputArray($html);
+		$oldMessage = $message->toOutputArray($html,false,true);
 
 		// Fix for array_merge functions on lines below when the $response['data']['inlineAttachments'] and $response['data']['attachments'] do not exist
 		if(empty($response['data']['inlineAttachments']))
@@ -1041,6 +1041,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		GO::session()->closeWriting();
 
+		$params['no_max_body_size'] = !empty($params['no_max_body_size']) && $params['no_max_body_size']!=='false' ? true : false;
+		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		if(!$account)
 			throw new GO_Base_Exception_NotFound();
@@ -1059,7 +1061,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		$plaintext = !empty($params['plaintext']);
 		
-		$response = $imapMessage->toOutputArray(!$plaintext);
+		$response = $imapMessage->toOutputArray(!$plaintext,false,$params['no_max_body_size']);
+		$response['uid'] = intval($params['uid']);
+		$response['mailbox'] = $params['mailbox'];
+		$response['account_id'] = intval($params['account_id']);
 		
 		if(!$plaintext){
 			

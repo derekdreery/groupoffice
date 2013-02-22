@@ -93,13 +93,25 @@ GO.email.MessageDialog = function(config){
 
 Ext.extend(GO.email.MessageDialog, Ext.Window,{
 		
-	show : function(uid, mailbox, account_id)
+	show : function(uid, mailbox, account_id, no_max_body_size)
 	{
 		if(!this.rendered)
 			this.render(Ext.getBody());
 
-		this.messagePanel.loadMessage(uid, mailbox, account_id);
+		this.messagePanel.loadMessage(uid, mailbox, account_id, false, no_max_body_size);
 				
 		GO.email.MessageDialog.superclass.show.call(this);
 	}
 });
+
+GO.email.showMessageDialog = function(uid,mailbox,account_id,no_max_body_size) {
+	
+	// no_max_body must be boolean. If true, the email body is not truncated when
+	// it exceeds the maximum size.
+	
+	if (!GO.email.messageDialog)
+		GO.email.messageDialog = new GO.email.MessageDialog();
+	
+	GO.email.messageDialog.show(uid,mailbox,account_id,no_max_body_size);
+	
+}
