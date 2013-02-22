@@ -89,6 +89,12 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
   protected $_extraFindParams;
   
   /**
+   * Taken from old store to add a value to the primary key to search for
+   * @var array keys and value to attach to the pk to look for when deleting 
+   */
+  public $extraDeletePk=null;
+  
+  /**
    * Will be set for multi select stores @see multiSelect()
    * @var array  attache to response if set
    */
@@ -378,6 +384,17 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	
 	$success = true;
 	foreach ($this->_deleteRecords as $modelPk) {
+	  if($this->extraDeletePk!==null) {           
+		$primaryKeyNames = GO::getModel($this->_modelClass)->primaryKey(); //get the primary key names of the delete model in an array
+		$newPk=array();
+		foreach($primaryKeyNames as $name) {
+		  if(isset($extraPkValue[$name])) //pk is supplied in the extra values
+			$newPk[$name]=$extraPkValue[$name];
+		  else //it's not set in the extra values so it must be the key passed in the request
+			$newPk[$name]=$modelPk;
+		}
+		$modelPk=$newPk;
+	  }
 	  $model = GO::getModel($this->_modelClass)->findByPk($modelPk);
 	  if (!empty($model))
 		$success = $success && $model->delete();
