@@ -1,3 +1,6 @@
+4.1.37
+- Fixed problem with .(dot) date separator in the calendar headers
+
 22-02-2013 4.1.36
 - Fixed caldav problem with tasks
 - Updated German
