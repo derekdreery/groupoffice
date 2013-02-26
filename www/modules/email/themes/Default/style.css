@@ -357,8 +357,3 @@ margin:5px 2px;
 	background-image:url(images/16x16/spam.png) !important;
 }
 
-
-/*Include MS style to fix strange negative text-indents*/
-.MsoListParagraph{
-	margin-left:36px !important;
-}
