@@ -1410,7 +1410,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}elseif($vobject->aalarm){ //funambol sends old vcalendar 1.0 format
 			$aalarm = explode(';', (string) $vobject->aalarm);
 			if(isset($aalarm[0])) {				
-				$p = Sabre\VObject\Property_DateTime::parseData($aalarm[0]);
+				$p = Sabre\VObject\Property\DateTime::parseData($aalarm[0]);
 				$this->reminder = $this->start_time-$p[1]->format('U');
 			}
 		
@@ -1554,7 +1554,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 						list(
 								$dateType,
 								$dateTime
-						) =  Sabre\VObject\Property_DateTime::parseData($time,$vobject->exdate);
+						) =  Sabre\VObject\Property\DateTime::parseData($time,$vobject->exdate);
 						$this->addException($dateTime->format('U'));
 					}
 				} else {
