@@ -1,5 +1,6 @@
 4.1.37
 - Fixed problem with .(dot) date separator in the calendar headers
+- Fixed event copy with daylight saving. (Events that didn't last a full day where not copied to the correct date selected when copied from a summertime to wintertime date.)
 
 22-02-2013 4.1.36
 - Fixed caldav problem with tasks
