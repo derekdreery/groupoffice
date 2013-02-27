@@ -228,6 +228,73 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 		
 		return $store->getData();
 	}
+	
+	
+	
+	public function actionFreeBusyInfo($params) {
 
+		$event_id = empty($params['event_id']) ? 0 : $params['event_id'];
+		$emails = json_decode($params['emails'], true);
+		$names = isset($params['names']) ? json_decode($params['names'], true) : $emails;
+
+		$date=getdate(GO_Base_Util_Date::to_unixtime($params['date']));
+
+		$daystart = mktime(0,0,0,$date['mon'], $date['mday'], $date['year']);
+		$dayend = mktime(0,0,0,$date['mon'], $date['mday']+1, $date['year']);
+
+		$merged_free_busy = array();
+		for ($i = 0; $i < 1440; $i+=15) {
+			$merged_free_busy[$i] = 0;
+		}
+
+		$response['results'] = array();
+		$response['success'] = true;
+		while ($email = array_shift($emails)) {
+			$participant['name'] = array_shift($names);
+			$participant['email'] = $email;
+			$participant['freebusy'] = array();
+
+			$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $email);
+			if ($user) {
+
+				$participantModel = new GO_Calendar_Model_Participant();
+				$participantModel->user_id=$user->id;
+				$participantModel->name=$user->name;
+				$participantModel->email=$user->email;
+				$participantModel->event_id=$event_id;
+				
+				
+
+				if ($participantModel->hasFreeBusyAccess()) {
+
+					$freebusy = $participantModel->getFreeBusyInfo($daystart, $dayend);
+					foreach ($freebusy as $min => $busy) {
+						if ($busy == 1) {
+							$merged_free_busy[$min] = 1;
+						}
+						$participant['freebusy'][] = array(
+								'time' => date('G:i', mktime(0, $min)),
+								'busy' => $busy);
+					}
+				}
+			}
+			$response['results'][] = $participant;
+		}
+
+
+		$participant['name'] = GO::t('allTogether','calendar');
+		$participant['email'] = '';
+		$participant['freebusy'] = array();
+
+		foreach ($merged_free_busy as $min => $busy) {
+			$participant['freebusy'][] = array(
+					'time' => date($_SESSION['GO_SESSION']['time_format'], mktime(0, $min)),
+					'busy' => $busy);
+		}
+
+		$response['results'][] = $participant;
+		
+		return $response;
+	}
 
 }
