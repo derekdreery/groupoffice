@@ -1140,7 +1140,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			
 			$uuid = (string) $vevent->uid;
 			
-			if(!$event || $event->is_organizer){
+//			if(!$event || $event->is_organizer){
 				switch($vcalendar->method){
 					case 'CANCEL':					
 						$response['iCalendar']['feedback'] = GO::t('iCalendar_event_cancelled', 'email');
@@ -1165,13 +1165,15 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 						'email' => $imapMessage->account->getDefaultAlias()->email,
 						//'event_declined' => $event && $event->status == 'DECLINED',
 						//'event_id' => $event ? $event->id : 0,
-						'is_update' => $vcalendar->method == 'REPLY',
-						'is_invitation' => $vcalendar->method == 'REQUEST',
+						'is_update' => $vcalendar->method == 'REPLY' || ($vcalendar->method == 'REQUEST' && $event),
+						'is_invitation' => $vcalendar->method == 'REQUEST' && !$event,
 						'is_cancellation' => $vcalendar->method == 'CANCEL'
 				);
-			}elseif($event){
-				$response['attendance_event_id']=$event->id;
-			}
+//			}elseif($event){
+				
+//			if($event){
+//				$response['attendance_event_id']=$event->id;
+//			}
 //			$subject = (string) $vevent->summary;
 			if(empty($uuid) || strpos($response['htmlbody'], $uuid)===false){
 				if(!$event){
@@ -1184,12 +1186,6 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 								$event->toHtml().
 								'</div>';
 			}
-			
-//			switch ($vcalendar->method) {
-//				case 'REPLY':
-//
-//					break;
-//			}
 		}
 				
 		return $response;
