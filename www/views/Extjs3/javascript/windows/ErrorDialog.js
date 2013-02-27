@@ -3,13 +3,13 @@ GO.ErrorDialog = function(config) {
 
 	Ext.apply(config, {
 		width : 550,
-		height : 300,
+		height : 120,
 		closeAction : 'hide',
 		plain : true,
 		border : false,
 		closable : true,
 		title : GO.lang.strError,
-		modal : false, 
+		modal : true, 
 		
 		layout:'fit',
 		items : [
@@ -51,6 +51,9 @@ Ext.extend(GO.ErrorDialog, GO.Window, {
 		if(!error)
 			error = "No error message given";
 		
+		
+		this.setHeight(120);
+		
 //		if(details)
 //			error += "<br /><br />"+details;
 
@@ -66,6 +69,13 @@ Ext.extend(GO.ErrorDialog, GO.Window, {
 		//				}
 
 		GO.ErrorDialog.superclass.show.call(this);
+		
+//		console.log(this.messagePanel.getEl().isScrollable());
+		if(this.messagePanel.body.isScrollable()){
+			this.setHeight(this.messagePanel.body.dom.scrollHeight);
+			this.autoSize();			
+		}
+		this.center();
 	}
 });
 GO.errorDialog = new GO.ErrorDialog();

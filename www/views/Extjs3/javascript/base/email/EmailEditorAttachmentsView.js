@@ -11,6 +11,9 @@ GO.base.email.EmailEditorAttachmentsView = function(config){
 				this.show();
 			else
 				this.hide();
+			if(this.maxSizeExceeded()){
+				this.fireEvent('maxsizeexceeded',this, this.maxSize, this.getTotalSize());
+			}
 			
 			this.fireEvent('attachmentschanged', this);
 		}, this);
@@ -51,6 +54,28 @@ GO.base.email.EmailEditorAttachmentsView = function(config){
 				}, this);
 	}
 Ext.extend(GO.base.email.EmailEditorAttachmentsView, Ext.DataView, {
+	
+	maxSize:0,
+	
+	maxSizeExceeded : function(){
+		return this.maxSize && this.maxSize<this.getTotalSize();
+	},
+	
+	getMaxSizeExceededErrorMsg : function(){
+		return GO.lang.maxAttachmentsSizeExceeded
+						.replace('{max}',Ext.util.Format.fileSize(this.maxSize))
+						.replace('{total}',Ext.util.Format.fileSize(this.getTotalSize()));
+	},
+	
+	getTotalSize : function(){
+		var records = this.store.getRange();
+		var totalSize = 0;
+		for(var i=0;i<records.length;i++){
+			totalSize+=records[i].get('size');
+		}
+		
+		return totalSize;
+	},
 	
 	afterUpload : function(loadParams){
 		var params = {add:true, params:loadParams};

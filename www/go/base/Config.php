@@ -669,14 +669,14 @@ class GO_Base_Config {
 	var $restrict_smtp_hosts = '';
 
 	/**
-	 * The maximum size of e-mail attachments in bytes Group-Office will accept. 
-	 * Note that the php.ini file must be set accordingly (http://www.php.net).
+	 * The maximum summed size of e-mail attachments in a message in bytes 
+	 * Group-Office will accept. 
 	 * 
-	 * @var     string
+	 * @var     int
 	 * @access  public
 	 */
-	var $max_attachment_size = 10000000;
-
+	var $max_attachment_size = 20971520;
+	
 
 	//External programs
 
