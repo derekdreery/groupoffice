@@ -839,6 +839,16 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		{			
 			this.colorField.setValue(record.data.color);
 		}, this);
+		
+		
+		this.privateCB = new Ext.ux.form.XCheckbox({
+			boxLabel : GO.calendar.lang.privateEvent,
+			name : 'private',
+			checked : false,
+			width : 'auto',
+			labelSeparator : '',
+			hideLabel : true
+		});
 
 		this.propertiesPanel = new Ext.Panel({
 			hideMode : 'offsets',
@@ -868,7 +878,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				xtype : 'compositefield',
 				fieldLabel : GO.calendar.lang.status,
 				items : [
-				this.eventStatus,this.busy
+				this.eventStatus,
+				this.busy,
+				this.privateCB
 				]
 			},
 			this.selectCalendar = new GO.calendar.SelectCalendar({
@@ -898,11 +910,12 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				}
 			}),
 			this.selectCategory,
-			new GO.form.PlainField({
-				fieldLabel: GO.lang.strOwner,
-				value: GO.settings.name,
-				name:'user_name'
-			}),{
+//			new GO.form.PlainField({
+//				fieldLabel: GO.lang.strOwner,
+//				value: GO.settings.name,
+//				name:'user_name'
+//			}),
+			{
 				xtype:'textarea',
 				fieldLabel:GO.lang.strDescription,
 				name : 'description',
@@ -1080,14 +1093,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		this.participantsPanel = new GO.calendar.ParticipantsPanel(this);
 
 
-		this.privateCB = new Ext.ux.form.XCheckbox({
-			boxLabel : GO.calendar.lang.privateEvent,
-			name : 'private',
-			checked : false,
-			width : 'auto',
-			labelSeparator : '',
-			hideLabel : true
-		});
+		
 
 		this.optionsPanel = new Ext.Panel({
 			layout:"form",
@@ -1239,8 +1245,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				/* Line 16 */
 				'FFFFFF', '949494', '808080', '6B6B6B',
 				'545454', '404040', '292929', '000000']
-			}),
-			this.privateCB]
+			})]
 		});
 
 		this.resourcesPanel = new Ext.Panel({
