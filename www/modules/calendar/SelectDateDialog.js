@@ -76,7 +76,7 @@ Ext.extend(GO.calendar.SelectDateDialog, Ext.Window, {
 	beforeSubmit : function()
 	{
 		// use daylight saving times	
-		this.offset = this.datePicker.getValue().calculateDaysBetweenDates(new Date(this.event.startDate));
+		this.offset = this.datePicker.getValue().calculateDaysBetweenDates(new Date(this.event.startDate.clearTime()));
 				
 		// This one does not check daylight saving times
 		//this.offset = Math.ceil((this.datePicker.getValue() - this.event.startDate) / (86400000));
