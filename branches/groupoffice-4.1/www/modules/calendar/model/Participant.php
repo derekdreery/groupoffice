@@ -99,7 +99,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	 * @return boolean/?
 	 */
 	public function isAvailable($start_time = false, $end_time = false) {
-		if (!$this->_hasFreeBusyAccess()) {
+		if (!$this->hasFreeBusyAccess()) {
 			return '?';
 		} else {
 
@@ -116,7 +116,12 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 		}
 	}
 
-	private function _hasFreeBusyAccess() {
+	/**
+	 * Check if the current user has free busy access.
+	 * 
+	 * @return boolean
+	 */
+	public function hasFreeBusyAccess() {
 		
 		$permission=!empty($this->user_id);
 		if($permission && GO::modules()->isInstalled("freebusypermissions")){
@@ -161,6 +166,83 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 		}
 
 		return count($events) == 0;
+	}
+	
+	/**
+	 * Get free busy information in specified interval blocks of minutes
+	 * 
+	 * @param int $starttime
+	 * @param int $endtime
+	 * @param int $intervalMinutes
+	 * @return array
+	 */
+	public function getFreeBusyInfo($starttime, $endtime, $intervalMinutes=15){
+		
+
+		$freebusy=array();
+		$startTimeMin = $starttime/60;
+		$endTimeMin = $endtime/60;
+		
+		for($i=$startTimeMin;$i<$endTimeMin;$i+=$intervalMinutes) {
+			$freebusy[$i-$startTimeMin]=0;
+		}
+		
+		if(empty($this->user_id))
+			return $freebusy;
+
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->ignoreAcl();
+
+		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
+						->addRawCondition('t.calendar_id', 'c.id');
+
+		$findParams->join(GO_Calendar_Model_Calendar::model()->tableName(), $joinCriteria, 'c');
+
+		$findParams->getCriteria()->addCondition('user_id', $this->user_id, '=', 'c');
+		
+		$events = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, $starttime, $endtime, true);
+
+
+
+		foreach($events as $localEvent) {
+			
+//			echo $localEvent->getName()."\n";
+	
+			if($localEvent->getEvent()->id!=$this->event_id) {
+				
+				$eventEndTime=$localEvent->getAlternateEndTime();
+				if($eventEndTime > $endtime) {
+					$eventEndTime=$endtime-1;					
+				}
+				
+				$eventStartTime=$localEvent->getAlternateStartTime();
+				if($eventStartTime < $starttime) {
+					$eventStartTime=$starttime;
+				}
+
+				$event_start = getdate($eventStartTime);
+				$event_end = getdate($eventEndTime);
+				
+				$mod = $event_start['minutes'] % $intervalMinutes;
+				if($mod>0)
+					$event_start['minutes']+=(15-$mod);
+				
+				$mod = $event_end['minutes'] % $intervalMinutes;
+				if($mod>0)
+					$event_end['minutes']+=(15-$mod);
+
+				
+				$start_minutes = $event_start['minutes']+($event_start['hours']*60);
+				$end_minutes = $event_end['minutes']+($event_end['hours']*60);
+				
+//				echo $start_minutes.' - > '.$end_minutes."\n";
+
+				for($i=$start_minutes;$i<$end_minutes;$i+=$intervalMinutes) {
+					$freebusy[$i]=1;
+				}
+			}
+		}
+		return $freebusy;
 	}
 
 	public function defaultAttributes() {

@@ -93,12 +93,10 @@ GO.calendar.AvailabilityCheckWindow = function(config) {
 			});
 
 	this.dataView = new Ext.DataView({
-				store : new Ext.data.JsonStore({
-							url : GO.settings.modules.calendar.url + 'json.php',
-							root : 'participants',
+				store : new GO.data.JsonStore({
+							url : GO.url('calendar/participant/freeBusyInfo'),						
 							fields : ['name', 'email', 'freebusy'],
 							baseParams : {
-								task : 'availability',
 								emails:'',
 								names:'',
 								event_id:0,
