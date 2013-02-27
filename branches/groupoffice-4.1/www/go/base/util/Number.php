@@ -79,7 +79,7 @@ class GO_Base_Util_Number {
 	public static function formatSize($size, $decimals = 1) {
 		
 		if($size==0)
-			return 0;
+			return "0 bytes";
 		
 		switch ($size) {
 			case ($size >= 1073741824) :
