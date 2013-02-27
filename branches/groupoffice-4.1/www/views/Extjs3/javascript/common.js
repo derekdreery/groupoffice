@@ -51,7 +51,7 @@ GO.openHelp = function(page){
 		baseUrl = GO.settings.config.help_link[language];
 	}
 
-	GO.util.popup({width:1024,height:768,focus:true,url:baseUrl+page})
+	GO.util.popup({width:1024,height:768,focus:true,url:baseUrl+page,toolbar:"yes",location:"yes",status:"yes",menubar:"yes",target:'gohelp'})
 }
 
 
@@ -607,6 +607,8 @@ GO.util.popup = function (c)
 			options+=','+key+'='+config[key];
 	}
 	options=options.substring(1, options.length);
+	
+//	console.log(options);
 
 	var popup = window.open(config.url, config.target, options);
 	
