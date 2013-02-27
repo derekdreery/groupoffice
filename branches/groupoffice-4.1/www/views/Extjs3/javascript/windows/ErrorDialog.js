@@ -37,6 +37,10 @@ Ext.extend(GO.ErrorDialog, GO.Window, {
 		if(!title)
 			title = GO.lang.strError;
 		
+		var now = new Date();
+		
+		title += ' - '+now.format("Y-m-d G:i");
+		
 		this.setTitle(title);
 
 		if (!this.rendered)
