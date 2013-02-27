@@ -610,3 +610,6 @@ $l['passwordRequireLc']='It must contain a lowercase character';
 $l['passwordRequireNum']='It must contain a number';
 $l['passwordRequireSc']='It must contain a special character';
 $l['passwordUnique']='It must contain %s unique characters';
+
+
+$l['maxAttachmentsSizeExceeded']="The total size of your attachments ({total}) exceeds the maximum ({max}).";
