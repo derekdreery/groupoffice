@@ -941,6 +941,10 @@ table.display-panel a:active
     display:none;
 }
 
+.go-grid-row-inactive {
+  color: #aaa;
+}
+
 /* End Ext grid addons */
 
 /*.x-tab-strip-top{
@@ -1035,6 +1039,16 @@ table.display-panel a:active
 	background: none !important;
 	padding-left:22px !important;
 }
+.go-icon-warning .x-grid3-cell-inner{
+	background: url('images/16x16/important.png') no-repeat !important;
+	padding-left:22px !important;
+}
+
+.go-icon-exclamation .x-grid3-cell-inner{
+	background: url('images/16x16/exclamation.png') no-repeat !important;
+	padding-left:22px !important;
+}
+
 
 
 /*IE somtimes clipped first form field somehow*/
