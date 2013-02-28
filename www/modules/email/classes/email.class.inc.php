@@ -17,28 +17,7 @@ class email extends db {
 	var $last_error;
 	var $mail;
 
-	public function __on_load_listeners($events) {
-//		$events->add_listener('user_delete', __FILE__, 'email', 'user_delete');
-//		$events->add_listener('build_search_index', __FILE__, 'email', 'build_search_index');
-//		$events->add_listener('save_settings', __FILE__, 'email', 'save_settings');
-//		$events->add_listener('check_database', __FILE__, 'email', 'check_database');
-//		$events->add_listener('login', __FILE__, 'email', 'login');
-//		$events->add_listener('checker', __FILE__, 'email', 'check_mail');
-//		$events->add_listener('key_changed', __FILE__, 'email', 'key_changed');
-		$events->add_listener('head', __FILE__, 'email', 'head');
-	}
 
-	public static function head(){
-
-		$font_size = GO::user() ? GO::config()->get_setting('email_font_size', GO::user()->id) : false;
-		if(!$font_size)
-			$font_size='12px';
-
-		echo'<style>'.
-		'.message-body,.message-body p, .message-body li, .go-html-formatted td, .em-composer .em-plaintext-body-field{'.
-			'font-size: '.$font_size.';!important'.
-		'}</style>';
-	}
 
 
 	function get_servermanager_mailbox_info($account) {
