@@ -20,8 +20,22 @@
  */
 class GO_Base_Util_Date_DateTime extends DateTime {
 
+  /**
+   * Overwrite constructor to used groupoffice default timezone and not systems default timezone
+   * @param string $time
+   * @param DateTimeZone $timezone
+   */
+  public function __construct($time="now", $timezone=null) {
+	if($timezone===null) {
+	  $tz = GO::user() ? GO::user()->timezone : GO::config()->default_timezone;
+	  $timezone = new DateTimeZone($tz);
+	}
+	parent::__construct($time, $timezone);
+  }
+  
 	/**
 	 * Create a date time object with timezone information with a unixtime stamp
+	 * @depricated DateTime('@'.$unixtime) works as well
 	 * @param int $unixtime
 	 * @return GO_Base_Util_Date_DateTime 
 	 */
@@ -32,20 +46,43 @@ class GO_Base_Util_Date_DateTime extends DateTime {
 	/**
 	 * Format the datetime to the format given
 	 * If there is no format specified the default user specified format will be used
+	 * @todo fix timezone issue
 	 * @param string $format the format the date should be returned
 	 * @return string formatted date
 	 */
 	public function format($format=null)
 	{
-	  if($format===null)
+	  if($format===null) {
+		//$format = GO::user() ? GO::user()->date_format . " " . GO::user()->time_format : GO::config()->default_date_format . " " . GO::config()->default_time_format;
 		return GO_Base_Util_Date::get_timestamp($this->getTimestamp());
+	  }
 	  return parent::format($format);
+	}
+	
+	/**
+	 * Format the DateTime object in a GO::user respected time format
+	 * @param DateTimeZone $timezone
+	 * @return string The formatted time
+	 */
+	public function formatTime() {
+	  $timeFormat = GO::user() ? GO::user()->time_format : GO::config()->default_time_format;
+	  return parent::format($timeFormat);
+	}
+	
+	/**
+	 * Format the DateTime object in a GO::user respected date format
+	 * @param DateTimeZone $timezone
+	 * @return string The formatted time
+	 */
+	public function formatDate() {
+	  $dateFormat = GO::user() ? GO::user()->completeDateFormat : GO::config()->getCompleteDateFormat();
+	  return parent::format($dateFormat);
 	}
 
 	/**
 	 * Get the number of days elapsed. We could not use DateTime::diff() because it's only
 	 * compatible with PHP 5.3
-	 * 
+	 * @deprecated since version 4.1
 	 * @param GO_Base_Util_Date_DateTime $dateTime
 	 * @return int 
 	 */
