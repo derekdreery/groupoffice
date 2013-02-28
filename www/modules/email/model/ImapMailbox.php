@@ -224,6 +224,10 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 	public function createChild($name, $subscribe=true){
 		$newMailbox = empty($this->name) ? $name : $this->name.$this->delimiter.$name;
 		
+		if(preg_match('/[.\/]/', $name)){
+			throw new Exception(sprintf(GO::t('illegalCharsError'),': . /'));
+		}
+		
 		//throw new Exception($newMailbox);
 		
 		return $this->getAccount()->openImapConnection()->create_folder($newMailbox, $subscribe);
