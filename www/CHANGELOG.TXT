@@ -1,3 +1,7 @@
+- Repeating exception event creation happened before conflict check which caused invalid duplicates.
+- Don't create mailboxes with . or / chars in them
+- Upgrade process created temp folder with root permissions.
+
 27-02-2013 4.1.37
 - Fixed problem with .(dot) date separator in the calendar headers
 - Refactored free busy info in event dialog
