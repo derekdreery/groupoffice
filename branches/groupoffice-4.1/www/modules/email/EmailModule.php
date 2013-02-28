@@ -25,10 +25,25 @@ class GO_Email_EmailModule extends GO_Base_Module{
 		$c = new GO_Core_Controller_Reminder();
 		$c->addListener('reminderdisplay', "GO_Email_EmailModule", "reminderDisplay");
 		
+		$c = new GO_Core_Controller_Auth();
+		$c->addListener('head', 'GO_Email_EmailModule', 'head');
+		
 		return parent::initListeners();
 	}
 	public function autoInstall() {
 		return true;
+	}
+	
+	public static function head(){
+
+		$font_size = GO::user() ? GO::config()->get_setting('email_font_size', GO::user()->id) : false;
+		if(!$font_size)
+			$font_size='12px';
+
+		echo "\n<!-- Inserted by GO_Email_EmailModule::head() -->\n<style>\n".
+		'.message-body,.message-body p, .message-body li, .go-html-formatted td, .em-composer .em-plaintext-body-field{'.
+			'font-size: '.$font_size.';!important'.
+		"}\n</style>\n<!-- End GO_Email_EmailModule::head() -->\n";
 	}
 	
 	
