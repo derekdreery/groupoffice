@@ -45,3 +45,7 @@ $l['period'] = 'Period';
 $l['runUpcoming'] = 'Upcoming Cron-Jobs';
 $l['lastrun'] = 'Last run';
 $l['nextrun'] = 'Next run';
+
+$l['parameters'] = 'Params';
+$l['usersAndGroups'] = 'Users and Groups';
+$l['limitUserGroups'] = 'Limit to selected Users and Groups';

@@ -48,28 +48,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$params['end_time'] = $params['end_date'] . ' ' . $end_time;
 		}
 	}
-
-	function beforeSubmit(&$response, &$model, &$params) {
-
-		//when duplicating in the calendar with right click
-		if(!empty($params['duplicate'])){
-			$model = $model->duplicate(array('uuid'=>null));
-			$params['id']=$model->id;
-		}
-
-		if (!empty($params['exception_date'])) {
-			//$params['recurrenceExceptionDate'] is a unixtimestamp. We should return this event with an empty id and the exception date.			
-			//this parameter is sent by the view when it wants to edit a single occurence of a repeating event.
-			$recurringEvent = GO_Calendar_Model_Event::model()->findByPk($params['exception_for_event_id']);
-			$model = $recurringEvent->createExceptionEvent($params['exception_date'], array(), true);
-			unset($params['exception_date']);
-			unset($params['id']);
-		}
-
-//		if (isset($params['subject']))
-//			$params['name'] = $params['subject'];
+	
+	private function _setEventAttributes($model, $params){
 		
-		$this->_changeTimeParams($params);
 
 		//Grid sends move request
 		if (isset($params['offset'])) {
@@ -104,9 +85,34 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 //			$model->reminder = 0;
 
 		$model->setAttributes($params);
+	}
+
+	protected function beforeSubmit(&$response, &$model, &$params) {
+
+		//when duplicating in the calendar with right click
+		if(!empty($params['duplicate'])){
+			$model = $model->duplicate(array('uuid'=>null));
+			$params['id']=$model->id;
+		}
+		
+		$this->_changeTimeParams($params);
+
+		$this->_setEventAttributes($model, $params);
 		
 		if(!$this->_checkConflicts($response, $model, $params)){
 			return false;
+		}
+		
+		
+		if (!empty($params['exception_date'])) {
+			//$params['recurrenceExceptionDate'] is a unixtimestamp. We should return this event with an empty id and the exception date.			
+			//this parameter is sent by the view when it wants to edit a single occurence of a repeating event.
+			$recurringEvent = GO_Calendar_Model_Event::model()->findByPk($params['exception_for_event_id']);
+			$model = $recurringEvent->createExceptionEvent($params['exception_date'], array(), true);
+			unset($params['exception_date']);
+			unset($params['id']);
+			
+			$this->_setEventAttributes($model, $params);
 		}
 				
 		return parent::beforeSubmit($response, $model, $params);

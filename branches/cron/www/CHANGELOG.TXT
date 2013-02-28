@@ -1,4 +1,18 @@
-4.1.36
+27-02-2013 4.1.37
+- Fixed problem with .(dot) date separator in the calendar headers
+- Refactored free busy info in event dialog
+- Show usage in about dialog in servermanager installations
+- Moved private checkbox to first page of event dialog
+- Include time in the error dialog so you can lookup relevant errors in the error log
+- Outlook SyncML error fixed
+- Check if the attachments in the e-mail composer exceed the max_attachment_size config value
+- Fixed event copy with daylight saving. (Events that didn't last a full day where not copied to the correct date selected when copied from a summertime to wintertime date.)
+- Cache folders for searching again. Rebuild search index is required to make current folders show up.
+- Update appointments from icalendar invitation
+
+22-02-2013 4.1.36
+- Fixed caldav problem with tasks
+- Updated German
 - Don't sync private events anymore on shared calendars with z-push
 - Fixed error messages in the task module
 

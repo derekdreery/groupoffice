@@ -268,8 +268,8 @@ GO.email.EmailComposer = function(config) {
 		name : 'subject',
 		anchor : '100%'
 	}));
-
 	this.emailEditor = new GO.base.email.EmailEditorPanel({
+		maxAttachmentsSize:parseInt(GO.settings.config.max_attachment_size),
 		region:'center',
 		listeners:{
 			submitshortcut:function(){
@@ -930,6 +930,11 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		
 		if(!draft && !autoSave && !this.fireEvent('beforesendmail', this))
 			return false;
+		
+		if(this.emailEditor.attachmentsView.maxSizeExceeded()){
+			GO.errorDialog.show(this.emailEditor.attachmentsView.getMaxSizeExceededErrorMsg());
+			return false;
+		}
 		
 		this.saveButton.setDisabled(true);
 		this.sendButton.setDisabled(true);

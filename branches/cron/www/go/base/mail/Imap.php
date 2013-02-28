@@ -1926,7 +1926,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 * @param <type> $max
 	 * @return <type>
 	 */
-	public function get_message_part($uid, $message_part=0, $peek=false, $max=false) {
+	public function get_message_part($uid, $message_part=0, $peek=false, $max=false, &$maxReached=false) {
 		$this->clean($uid, 'uid');
 
 		$peek_str = $peek ? '.PEEK' : '';

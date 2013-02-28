@@ -282,7 +282,15 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				}
 			}, true);
 
-		var re = new RegExp(GO.settings.date_separator+"?Y"+GO.settings.date_separator+"?");
+		// QUICK FIX FOR .(dot) as a date separator.
+		var separator = GO.settings.date_separator;
+		if(separator === "."){
+			separator = '\\.';
+		}
+
+		var re = new RegExp(separator+"?Y"+separator+"?");
+	//	var re = new RegExp(GO.settings.date_separator+"?Y"+GO.settings.date_separator+"?");
+	
 		var dateFormat = 'D '+GO.settings.date_format.replace(re, '');
 
 		var now = new Date();

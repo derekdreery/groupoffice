@@ -776,6 +776,23 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	}
 	
 	
+	protected function actionAbout($params){
+		$response['data']['mailbox_usage']=intval(GO::config()->get_setting('mailbox_usage'));
+		$response['data']['file_storage_usage']=intval(GO::config()->get_setting('file_storage_usage'));
+		$response['data']['database_usage']=intval(GO::config()->get_setting('database_usage'));
+		$response['data']['total_usage']=$response['data']['database_usage']+$response['data']['file_storage_usage']+$response['data']['mailbox_usage'];
+		$response['data']['has_usage']=$response['data']['total_usage']>0;
+		foreach($response['data'] as $key=>$value){
+			if($key!='has_usage')
+				$response['data'][$key]=  GO_Base_Util_Number::formatSize($value);
+		}
+		
+		$response['success']=true;
+		
+		return $response;
+	}
+	
+	
 	 /*
   * Run a cron job every 5 minutes. Add this to /etc/cron.d/groupoffice :
   *

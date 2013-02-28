@@ -29,6 +29,10 @@ class GO_Addressbook_Controller_Site extends GO_Sites_Components_AbstractFrontCo
 		return array('*');
 	}
 	
+	protected function ignoreAclPermissions(){
+		return array('*');
+	}
+	
 	
 	protected function actionContact(){
 		$contact = new GO_Addressbook_Model_Contact();

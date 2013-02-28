@@ -89,6 +89,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		'<tpl if="xssDetected">'+
 		'<div class="go-warning-msg em-blocked"><a id="em-filterxss" href="#" class="normal-link">'+GO.email.lang.xssDetected+'</a></div>'+
 		'</tpl>'+	
+		'</div>'+
 		'</div>';
 		
 		if(GO.calendar){
@@ -134,7 +135,11 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				'</tpl>';
 		}
 	
-		templateStr += '<div id="'+this.bodyId+'" class="message-body go-html-formatted">{htmlbody}</div>';
+		templateStr += '<div id="'+this.bodyId+'" class="message-body go-html-formatted">{htmlbody}'+
+			'<tpl if="body_truncated">'+
+			'<br /><a href="javascript:GO.email.showMessageDialog({uid},\'{[this.addSlashes(values.mailbox)]}\',{account_id},true);" class="normal-link">'+GO.email.lang.clickSeeWholeMessage+'</a>'+
+			'</tpl>'+
+			'</div>';
 		
 		this.template = new Ext.XTemplate(templateStr,{
 			addSlashes : function(str)
@@ -148,7 +153,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		this.template.compile();	
 	},
 	
-	loadMessage : function(uid, mailbox, account_id, password)
+	loadMessage : function(uid, mailbox, account_id, password, no_max_body_size)
 	{		
 		if(uid)
 		{
@@ -166,7 +171,9 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				this.params.password=password;
 			}
 		}
-				
+		
+		this.params['no_max_body_size'] = GO.util.empty(no_max_body_size) ? false : true;
+						
 		this.el.mask(GO.lang.waitMsgLoad);				
 		GO.request({
 			url: "email/message/view",

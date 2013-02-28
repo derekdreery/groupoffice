@@ -8,7 +8,7 @@ GO.cron.CronDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			formControllerUrl: 'core/cron',
 			updateAction : 'update',
 			createAction : 'create',
-			height:360,
+			height:395,
 			width:350,
 			tools: [{
 				id:'help',
@@ -29,6 +29,10 @@ GO.cron.CronDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	 	
 	buildForm : function () {
 				
+		this.checkUsersAndGroupsPanel = new GO.grid.PermissionsPanel({
+			title:GO.cron.lang.usersAndGroups	
+		});
+				
 		this.nameField = new Ext.form.TextField({
 			name: 'name',
 			width:300,
@@ -47,7 +51,8 @@ GO.cron.CronDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			mode:'remote',
 			anchor: '100%%',
 			allowBlank: false,
-			triggerAction: 'all'
+			triggerAction: 'all',
+			reloadOnExpand : true
 		});
 		
 		this.minutesField = new Ext.form.TextField({
@@ -110,7 +115,7 @@ GO.cron.CronDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			anchor: '100%',
 			maxLength: 100,
 			allowBlank:false,
-			fieldLabel: GO.cron.lang.active
+			boxLabel: GO.cron.lang.active
 		});
 		
 		this.runOnceCheckbox = new Ext.ux.form.XCheckbox({
@@ -119,8 +124,25 @@ GO.cron.CronDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			anchor: '100%',
 			maxLength: 100,
 			allowBlank:false,
-			fieldLabel: GO.cron.lang.runonce
+			boxLabel: GO.cron.lang.runonce
 		});
+		
+		this.limitUserGroupsCheckbox = new Ext.ux.form.XCheckbox({
+			name: 'limit_users_groups',
+			width:300,
+			anchor: '100%',
+			maxLength: 100,
+			allowBlank:false,
+			boxLabel: GO.cron.lang.limitUserGroups
+		});
+		
+		this.limitUserGroupsCheckbox.on('check',function(checkbox, value){
+			if(value){
+				this.checkUsersAndGroupsPanel.setDisabled(false);
+			} else {
+				this.checkUsersAndGroupsPanel.setDisabled(true);
+			}
+		},this);
 		
 		this.timeFieldSet = new Ext.form.FieldSet({
 			title: GO.cron.lang.timeFieldSetTitle,
@@ -149,10 +171,35 @@ GO.cron.CronDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 				this.jobCombo,
 				this.timeFieldSet,
 				this.activeCheckbox,
+				this.limitUserGroupsCheckbox,
 				this.runOnceCheckbox
       ]				
 		});
 
+	//	this.parameterPanel = new GO.cron.ParametersPanel();
+	
     this.addPanel(this.propertiesPanel);
+		//this.addPanel(this.parameterPanel);
+		this.addPermissionsPanel(this.checkUsersAndGroupsPanel);
+	},
+	afterLoad : function(remoteModelId, config, action){
+		
+		if(action.result.data.limit_users_groups == '1'){
+			this.checkUsersAndGroupsPanel.setDisabled(false);
+		} else {
+			this.checkUsersAndGroupsPanel.setDisabled(true);
+		}
+		
+//		var params = action.result.data.paramsToSet;
+//				
+//		if(Object.keys(params).length > 0){
+//			this.parameterPanel.setDisabled(false);
+//			this.parameterPanel.buildForm(params);
+//		}else{
+//			this.parameterPanel.setDisabled(true);
+//			this.parameterPanel.reset();
+//		}
+//		
+		
 	}
 });

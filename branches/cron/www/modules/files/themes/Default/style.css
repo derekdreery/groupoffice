@@ -16,7 +16,9 @@ cursor:pointer;
 .go-model-icon-GO_Files_Model_File {
 	background-image: url('images/filenew.png') !important;
 }
-
+.go-model-icon-GO_Files_Model_Folder {
+	background-image: url('images/folder.png') !important;
+}
 
 .btn-files {
 	background-image:url('images/files.png') !important;
