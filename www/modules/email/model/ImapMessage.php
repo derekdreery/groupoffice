@@ -557,7 +557,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 				$a->mime=$part['type'] . '/' . $part['subtype'];
 				
 				$a->index=count($this->attachments);
-				$a->size=$part['size'];
+				$a->size=intval($part['size']);
 				$a->encoding = $part['encoding'];
 				
 				$this->addAttachment($a);
