@@ -26,7 +26,7 @@ class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 		$filename = $user->name.'.pdf';
 		
 		// Start building the PDF file
-		//$pdf = new eventAndTaskPdf($orientation='L'); // LANDSCAPE
+	//$pdf = new GO_Cron_Model_PDF($orientation='L'); // LANDSCAPE
 		$pdf = new GO_Cron_Model_PDF(); // VERTICAL
 		
 		$pdf->setTitle($user->name);
@@ -54,7 +54,7 @@ class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 	 */
 	protected function actionLoad($params) {
 		$model = GO_Base_Cron_CronJob::model()->createOrFindByParams($params);
-
+		
 		$remoteComboFields = array();
 		$this->renderForm($model, $remoteComboFields);
   }
@@ -97,8 +97,7 @@ class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 		$store = new GO_Base_Data_DbStore('GO_Base_Cron_CronJob',$colModel , $params);
 		$store->defaultSort = 'name';
 		
-		$this->renderStore($store);
-		
+		$this->renderStore($store);	
 	}
 	
 	

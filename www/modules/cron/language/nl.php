@@ -22,3 +22,7 @@ $l['monthsExample'] = '(1-12)';
 $l['weekdaysExample'] = '(0-6)';
 
 $l['timeFieldSetTitle'] = 'Tijd';
+
+$l['parameters'] = 'Parameters';
+$l['usersAndGroups'] = 'Gebruikers en groepen';
+$l['limitUserGroups'] = 'Alleen uitvoeren bij geselecteerde gebruikers en groepen';

@@ -25,7 +25,7 @@ modules/users/LookAndFeelPanel.js
 modules/users/PasswordPanel.js
 modules/users/Settings.js
 
-views/Extjs3/javascript/windows/AboutDialog.js
+
 views/Extjs3/javascript/windows/LoginDialog.js
 
 views/Extjs3/javascript/data/JsonStore.js
@@ -134,6 +134,7 @@ views/Extjs3/javascript/windows/UsersInGroup.js
 
 views/Extjs3/javascript/windows/SummaryDialog.js
 views/Extjs3/javascript/windows/TabbedFormDialog.js
+views/Extjs3/javascript/windows/AboutDialog.js
 
 views/Extjs3/javascript/windows/ExportGridDialog.js
 views/Extjs3/javascript/windows/PersonalSettingsDialog.js

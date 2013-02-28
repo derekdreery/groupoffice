@@ -272,42 +272,42 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Get this task as a VObject. This can be turned into a vcalendar file data.
 	 * 
-	 * @return Sabre_VObject_Component 
+	 * @return Sabre\VObject\Component 
 	 */
 	public function toVObject(){
-		$e=new Sabre_VObject_Component('vtodo');
+		$e=new Sabre\VObject\Component('vtodo');
 		$e->uid=$this->uuid;	
 		
-		$dtstamp = new Sabre_VObject_Element_DateTime('dtstamp');
-		$dtstamp->setDateTime(new DateTime(), Sabre_VObject_Element_DateTime::UTC);		
+		$dtstamp = new Sabre\VObject\Property\DateTime('dtstamp');
+		$dtstamp->setDateTime(new DateTime(), Sabre\VObject\Property\DateTime::UTC);		
 		$e->add($dtstamp);
 		
 		$mtimeDateTime = new DateTime('@'.$this->mtime);
-		$lm = new Sabre_VObject_Element_DateTime('LAST-MODIFIED');
-		$lm->setDateTime($mtimeDateTime, Sabre_VObject_Element_DateTime::UTC);		
+		$lm = new Sabre\VObject\Property\DateTime('LAST-MODIFIED');
+		$lm->setDateTime($mtimeDateTime, Sabre\VObject\Property\DateTime::UTC);		
 		$e->add($lm);
 		
 		$ctimeDateTime = new DateTime('@'.$this->mtime);
-		$ct = new Sabre_VObject_Element_DateTime('created');
-		$ct->setDateTime($ctimeDateTime, Sabre_VObject_Element_DateTime::UTC);		
+		$ct = new Sabre\VObject\Property\DateTime('created');
+		$ct->setDateTime($ctimeDateTime, Sabre\VObject\Property\DateTime::UTC);		
 		$e->add($ct);
 		
     $e->summary = $this->name;
 		
 		$e->status = $this->status;
 		
-		$dateType = Sabre_VObject_Element_DateTime::DATE;
+		$dateType = Sabre\VObject\Property\DateTime::DATE;
 		
-		$dtstart = new Sabre_VObject_Element_DateTime('dtstart',$dateType);
+		$dtstart = new Sabre\VObject\Property\DateTime('dtstart',$dateType);
 		$dtstart->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->start_time));		
 		$e->add($dtstart);
 		
-		$due = new Sabre_VObject_Element_DateTime('due',$dateType);
+		$due = new Sabre\VObject\Property\DateTime('due',$dateType);
 		$due->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->due_time));		
 		$e->add($due);
 		
 		if($this->completion_time>0){
-			$completed = new Sabre_VObject_Element_DateTime('completed',Sabre_VObject_Element_DateTime::LOCALTZ);
+			$completed = new Sabre\VObject\Property\DateTime('completed',Sabre\VObject\Property\DateTime::LOCALTZ);
 			$completed->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->completion_time));		
 			$e->add($completed);
 		}
@@ -341,11 +341,11 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Import a task from a VObject 
 	 * 
-	 * @param Sabre_VObject_Component $vobject
+	 * @param Sabre\VObject\Component $vobject
 	 * @param array $attributes Extra attributes to apply to the task. Raw values should be past. No input formatting is applied.
 	 * @return GO_Tasks_Model_Task 
 	 */
-	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array()){
+	public function importVObject(Sabre\VObject\Component $vobject, $attributes=array()){
 		//$event = new GO_Calendar_Model_Event();
 		
 		$this->uuid = (string) $vobject->uid;

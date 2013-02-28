@@ -109,6 +109,7 @@ $l["fileLocked_user_id"]= "Gesperrt durch";
 $l['recentFiles']="Dateien, die in den letzten 7 Tagen verändert wurden";
 $l['bookmarkFolder']="Zu Favoriten hinzufügen";
 $l['bookmarks']="Favoriten";
+$l['bookmarkAlreadyExists']="Der Ordner '%fn' ist schon als Favorit eingetragen.";
 $l['removeBookmark']="Favoriten entfernen";
 $l['removeBookmarkQuestion']="Ordner '%fn' von Ihrer Favoritenliste entfernen?";
 $l['openInBrowser']='Im Browser öffnen';

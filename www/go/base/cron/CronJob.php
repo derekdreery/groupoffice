@@ -27,12 +27,17 @@
  * @property string $weekdays
  * @property string $years
  * @property string $job
+ * @property string $params
+ * @property int $acl_id
+ * @property int $limit_users_groups
  * @property int $nextrun // timestamp of the next run
  * @property int $lastrun // timestamp of the latest run
  * 
  */
 class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 		
+	public $paramsToSet = array();
+	
 	
 	/**
 	 * Returns a static model of itself
@@ -237,6 +242,9 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 		if($this->_prepareRun()){
 			// Run the specified cron file code
 			$cronFile = new $this->job;
+			
+			$cronFile->setParams();
+			
 			$cronFile->run();
 			GO::debug('CRONJOB ('.$this->name.') FINISHED : '.date('d-m-Y H:i:s'));
 			
@@ -254,9 +262,98 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function beforeSave() {
+		
+		if(!$this->limit_users_groups)
+			$this->_removeACLs();
+		
+		$this->params = $this->_paramsToJson();
+		
 		$this->nextrun = $this->_calculateNextRun();
 		GO::debug('CRONJOB ('.$this->name.') NEXTRUN : '.$this->getAttribute('nextrun','formatted'));
 		return parent::beforeSave();
+	}
+	
+	private function _removeACLs(){
+		
+		// TODO: DIT FIXXEN
+		$this->acl_id;
+	}
+	
+	
+	protected function afterLoad() {
+		$this->paramsToSet = $this->_jsonToParams($this->params);
+		return parent::afterLoad();
+	}
+	
+	/**
+	 * Convert the PUBLIC parameters of this object to a Json string
+	 * ($this->params)
+	 * 
+	 * @return string
+	 */
+	private function _paramsToJson(){
+		$propArray = array();
+
+		$publicProperties = $this->_getAdditionalJobProperties();
+		
+		foreach($publicProperties as $property){
+			
+			if(isset($this->paramsToSet) && key_exists($property['name'],$this->paramsToSet))
+				$propArray[$property['name']] = $this->paramsToSet[$property['name']];
+		}
+		
+		return json_encode($propArray);
+	}
+	
+	private function _getAdditionalJobProperties(){
+		
+		$returnProperties = array();
+		
+		$jobReflection = new ReflectionClass($this->job);
+		$parentReflection = $jobReflection->getParentClass();
+
+		$jobProperties = $jobReflection->getProperties(ReflectionProperty::IS_PUBLIC);
+		$parentProperties = $parentReflection->getProperties(ReflectionProperty::IS_PUBLIC);
+		
+		$publicProperties = array_diff($jobProperties, $parentProperties);
+		
+		$defaultProperties = $jobReflection->getDefaultProperties();
+
+		foreach($publicProperties as $property){
+	
+			$returnProperties[] = array(
+				'name'=>$property->name,
+				'defaultValue'=>$defaultProperties[$property->name]
+			);
+		}
+
+		return $returnProperties;
+	}
+	
+	
+	/**
+	 * Convert a Json string to PUBLIC parameters of this object
+	 * ($this->params)
+	 * 
+	 * @param String $jsonString
+	 */
+	private function _jsonToParams($jsonString = ''){
+		
+		$propArray = array();
+		$jsonProperties = json_decode($jsonString);
+		$publicProperties = $this->_getAdditionalJobProperties();
+ 
+		foreach($publicProperties as $property){
+			$propArray[$property['name']] = '';
+			if(!empty($jsonProperties[$property['name']])){
+				$propArray[$property['name']] = $jsonProperties[$property['name']];
+			} else {
+				if(!empty($property['defaultValue']))
+					$propArray[$property['name']] = $property['defaultValue'];
+			}
+		}
+		
+		return $propArray;
 	}
 	
 	/**

@@ -40,5 +40,5 @@ abstract class GO_Base_Cron_AbstractCron extends GO_Base_Model{
 	 * The code that needs to be called when the cron is running
 	 */
 	public abstract function run();
-
+		
 }

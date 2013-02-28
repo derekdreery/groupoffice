@@ -351,7 +351,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 //		}
 //	}
 	
-	public function getHtmlBody($asText=false){		
+	public function getHtmlBody($asText=false,$noMaxBodySize=false){		
 		if(!isset($this->_htmlBody)){
 			$imap = $this->getImapConnection();		
 			$this->_loadBodyParts();
@@ -365,8 +365,13 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 						if(!empty($this->_htmlBody))
 							$this->_htmlBody.= '<br />';
 						
-						$htmlPartStr = $imap->get_message_part_decoded($this->uid, $htmlPart['number'],$htmlPart['encoding'], $htmlPart['charset'],$this->peek,$this->maxBodySize);
+						$maxBodySize = $noMaxBodySize ? false : $this->maxBodySize;
+						
+						$htmlPartStr = $imap->get_message_part_decoded($this->uid, $htmlPart['number'],$htmlPart['encoding'], $htmlPart['charset'],$this->peek,$maxBodySize);
 						$htmlPartStr = GO_Base_Util_String::sanitizeHtml(GO_Base_Util_String::convertLinks($htmlPartStr));
+						
+						$this->_bodyTruncated = $imap->max_read;
+						
 						$this->_htmlBody .= $htmlPartStr;
 					}else //if($this->isAttachment($htmlPart['number']))
 					{
@@ -383,7 +388,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 			}
 
 			if(empty($this->_htmlBody) && !$asText){
-				$this->_htmlBody = $this->getPlainBody(true);			
+				$this->_htmlBody = $this->getPlainBody(true,$noMaxBodySize);			
 			}
 		}else
 		{
@@ -398,7 +403,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		return $this->_htmlBody;
 	}
 	
-	public function getPlainBody($asHtml=false){
+	public function getPlainBody($asHtml=false,$noMaxBodySize=false){
 
 		$inlineImages=array();
 		
@@ -414,8 +419,11 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 
 						if(!empty($this->_plainBody))
 							$this->_plainBody.= "\n";
+						$maxBodySize = $noMaxBodySize ? false : $this->maxBodySize;
 
-						$this->_plainBody .= $imap->get_message_part_decoded($this->uid, $plainPart['number'],$plainPart['encoding'], $plainPart['charset'],$this->peek, $this->maxBodySize);
+						$this->_plainBody .= $imap->get_message_part_decoded($this->uid, $plainPart['number'],$plainPart['encoding'], $plainPart['charset'],$this->peek, $maxBodySize);
+						$this->_bodyTruncated = $imap->max_read;
+						
 					}else
 					{
 						if($asHtml){
@@ -445,7 +453,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		$this->_plainBody = GO_Base_Util_String::normalizeCrlf($this->_plainBody);
 		
 		$this->extractUuencodedAttachments($this->_plainBody);
-		
+				
 		if($asHtml){
 			$body = $this->_plainBody;			
 			$body = GO_Base_Util_String::text_to_html($body);
@@ -458,7 +466,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		}else
 		{
 			if(empty($this->_plainBody)){
-				return $this->getHtmlBody(true);
+				return $this->getHtmlBody(true,$noMaxBodySize);
 			}else
 			{				
 				return $this->_plainBody;
