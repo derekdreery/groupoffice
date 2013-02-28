@@ -23,5 +23,6 @@ if(!empty($GLOBALS['GO_CONFIG']->custom_css_url))
 
 $GLOBALS['GO_EVENTS']->fire_event('head');
 
+//$this is GO_Core_Controller_Auth
 $this->fireEvent('head');
 ?>
