@@ -43,7 +43,7 @@ class GO_Files_FilesModule extends GO_Base_Module{
 			
 		}
 		
-		$folder = GO_Files_Model_Folder::model()->findByPath("log");
+		$folder = GO_Files_Model_Folder::model()->findByPath("log", true);
 		if(!$folder->acl || $folder->acl_id==GO::modules()->files->acl_id){
 			$folder->setNewAcl();
 			$folder->readonly=1;
