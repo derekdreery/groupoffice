@@ -1237,7 +1237,7 @@ class GO_Base_Config {
 		$user_id = GO::user() ? GO::user()->id : 0;
 		$folder = new GO_Base_Fs_Folder($this->orig_tmpdir.$user_id);
 		if($autoCreate)
-			$folder->create();
+			$folder->create(0777);
 		return $folder;
 	}
 	
