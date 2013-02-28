@@ -97,7 +97,7 @@ echo "Setting cache permissions\n\n";
 if(is_dir($config['tmpdir'].'cache'))
 	system('chown -R www-data:www-data '.$config['tmpdir'].'cache');
 
-if(is_dir($config['tmpdir'].'cache'))
+if(is_dir($config['tmpdir'].'diskcache'))
 	system('chown -R www-data:www-data '.$config['tmpdir'].'diskcache');
 
 
