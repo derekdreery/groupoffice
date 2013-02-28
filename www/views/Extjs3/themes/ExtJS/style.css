@@ -202,6 +202,10 @@ line-height:20px;
 	height:16px;	
 }
 
+.go-grid-row-inactive {
+  color: #aaa;
+}
+
 /* Group-Office icon displayed in the top bar */
 .go-app-icon{
 	background: url('images/16x16/go-icon.png');
