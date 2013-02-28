@@ -18,13 +18,13 @@ class email extends db {
 	var $mail;
 
 	public function __on_load_listeners($events) {
-		$events->add_listener('user_delete', __FILE__, 'email', 'user_delete');
-		$events->add_listener('build_search_index', __FILE__, 'email', 'build_search_index');
-		$events->add_listener('save_settings', __FILE__, 'email', 'save_settings');
-		$events->add_listener('check_database', __FILE__, 'email', 'check_database');
-		$events->add_listener('login', __FILE__, 'email', 'login');
-		$events->add_listener('checker', __FILE__, 'email', 'check_mail');
-		$events->add_listener('key_changed', __FILE__, 'email', 'key_changed');
+//		$events->add_listener('user_delete', __FILE__, 'email', 'user_delete');
+//		$events->add_listener('build_search_index', __FILE__, 'email', 'build_search_index');
+//		$events->add_listener('save_settings', __FILE__, 'email', 'save_settings');
+//		$events->add_listener('check_database', __FILE__, 'email', 'check_database');
+//		$events->add_listener('login', __FILE__, 'email', 'login');
+//		$events->add_listener('checker', __FILE__, 'email', 'check_mail');
+//		$events->add_listener('key_changed', __FILE__, 'email', 'key_changed');
 		$events->add_listener('head', __FILE__, 'email', 'head');
 	}
 
@@ -40,94 +40,6 @@ class email extends db {
 		'}</style>';
 	}
 
-	/**
-	 * When a user changes the password the encryption key changes too. We need to
-	 * re-encrypt the e-mail account passwords.
-	 * 
-	 * @param <type> $user_id
-	 * @param <type> $old_key
-	 * @param <type> $new_key
-	 */
-	public static function key_changed($user_id, $old_key, $new_key){
-		global $GO_CONFIG;
-
-		require_once($GLOBALS['GO_CONFIG']->class_path.'cryptastic.class.inc.php');
-
-		$c = new cryptastic();
-		$db = new db();
-		$email = new email();
-	
-		$sql = "SELECT id, password FROM em_accounts WHERE password_encrypted=1 AND user_id=?";
-		$db->query($sql, 'i', $user_id);
-
-		while($account = $db->next_record()){
-			$account['password']=$c->decrypt($account['password'], $old_key);
-			$encrypted = $c->encrypt($account['password'], $new_key);
-			if($encrypted)
-				$account['password']=$encrypted;
-			else
-				$account['password_encrypted']=0;
-
-			$email->_update_account($account);
-		}		
-	}
-
-	public static function check_mail(&$response){
-		global $GO_SECURITY, $GO_MODULES;
-		require_once ($GLOBALS['GO_MODULES']->modules['email']['class_path']."cached_imap.class.inc.php");
-		
-		$imap = new cached_imap();
-		$email = new email();
-		$email2 = new email();
-
-		
-		$count = $email->get_accounts($GLOBALS['GO_SECURITY']->user_id);
-		$response['email_status']=array();
-		while($email->next_record()) {
-			try{
-				$account = $imap->open_account($email->f('id'), 'INBOX', false);			
-
-				if($account) {
-					$inbox = $email2->get_folder($email->f('id'), 'INBOX');
-
-					$unseen =  $imap->get_unseen();
-
-					//$response['email_status'][$inbox['id']]=$account;
-					$response['email_status'][$inbox['id']]['unseen'] = $unseen['count'];
-					$response['email_status'][$inbox['id']]['messages'] = $imap->selected_mailbox['messages'];
-				}
-			}
-			catch(Exception $e){
-				go_debug($e->getMessage());
-			}
-			$imap->disconnect();
-		}
-	}
-
-	public static function login($username, $password, $user, $count_login) {
-		global $GO_SECURITY;
-
-		if($count_login){
-			//clear old cache
-			$db = new db();
-			$sql = "DELETE FROM em_messages_cache WHERE udate<".Date::date_add(time(),-21)." AND account_id IN (SELECT id FROM em_accounts WHERE user_id=".$GLOBALS['GO_SECURITY']->user_id.")";
-			$db->query($sql);
-		}
-	}
-
-	public static function save_settings() {
-
-		global $GO_MODULES, $GO_CONFIG, $GO_SECURITY;
-
-		if($GLOBALS['GO_MODULES']->has_module('email'))
-		{
-			$GLOBALS['GO_CONFIG']->save_setting('email_use_plain_text_markup', isset($_POST['use_html_markup']) ? '0' : '1', $GLOBALS['GO_SECURITY']->user_id);
-			$GLOBALS['GO_CONFIG']->save_setting('email_skip_unknown_recipients', isset($_POST['skip_unknown_recipients']) ? '1' : '0', $GLOBALS['GO_SECURITY']->user_id);
-			$GLOBALS['GO_CONFIG']->save_setting('email_always_request_notification', isset($_POST['always_request_notification']) ? '1' : '0', $GLOBALS['GO_SECURITY']->user_id);
-			$GLOBALS['GO_CONFIG']->save_setting('email_always_respond_to_notifications', isset($_POST['always_respond_to_notifications']) ? '1' : '0', $GLOBALS['GO_SECURITY']->user_id);
-			$GLOBALS['GO_CONFIG']->save_setting('email_font_size', $_POST['font_size'], $GLOBALS['GO_SECURITY']->user_id);
-		}
-	}
 
 	function get_servermanager_mailbox_info($account) {
 		global $GO_CONFIG, $GO_MODULES;

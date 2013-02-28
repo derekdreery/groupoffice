@@ -7,12 +7,14 @@ class GO_EVENTS
 		global $GO_CONFIG;
 
 		if(!defined('NO_EVENTS')){
+			
+			require_once($GO_CONFIG->root_path.'GO.php');
 
 			/*
 			 * Cache listerner in a file because scanning all the modules for
 			 * listeners is a heavy job.
 			 */
-			$cache_file = $GLOBALS['GO_CONFIG']->file_storage_path.'cache/listeners.txt';
+			$cache_file = GO::config()->getCacheFolder()->path().'/listeners.txt';
 			if(!$GLOBALS['GO_CONFIG']->debug && file_exists($cache_file)){
 				$this->listeners = unserialize(file_get_contents($cache_file));
 			}
@@ -21,7 +23,7 @@ class GO_EVENTS
 			{
 				$this->load_listeners();
 				if(!empty($GLOBALS['GO_CONFIG']->db_user)){
-					File::mkdir(dirname($cache_file));
+					//File::mkdir(dirname($cache_file));
 					file_put_contents($cache_file, serialize($this->listeners));
 				}
 			}

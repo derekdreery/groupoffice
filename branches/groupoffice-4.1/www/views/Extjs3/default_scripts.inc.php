@@ -181,11 +181,14 @@ if(GO::user()) {
 ?>
 </script>
 <?php
+
+$cacheFolder = GO::config()->getCacheFolder();
+
 $extjsLang = GO::t('extjs_lang');
 if($extjsLang=='extjs_lang')
 	$extjsLang = GO::language()->getLanguage();
 $file = 'base-'.md5($extjsLang.GO::config()->mtime).'.js';
-$path = GO::config()->file_storage_path.'cache/'.$file;
+$path = $cacheFolder->path().'/'.$file;
 
 
 if(GO::config()->debug || !file_exists($path)) {
@@ -222,7 +225,7 @@ if(GO::config()->debug || !file_exists($path)) {
 //	$dynamic_debug_scripts=array();
 
 	require(GO::config()->root_path.'language/languages.inc.php');
-	$fp=fopen(GO::config()->file_storage_path.'cache/languages.js','w');
+	$fp=fopen($cacheFolder->path().'/languages.js','w');
 	if(!$fp){
 		die('Could not write to cache directory');
 	}
@@ -252,10 +255,10 @@ if(GO::config()->debug || !file_exists($path)) {
 	
 	fclose($fp);
 	if(!GO::config()->debug){
-		$scripts[]=GO::config()->file_storage_path.'cache/languages.js';
+		$scripts[]=$cacheFolder->path().'/languages.js';
 	}else
 	{
-		$dynamic_debug_script=GO::config()->file_storage_path.'cache/languages.js';		
+		$dynamic_debug_script=$cacheFolder->path().'/languages.js';		
 		$scripts[]=GO::url("core/compress", array('file'=>'languages.js', 'mtime'=>filemtime($dynamic_debug_script)));	
 	}
 	
@@ -326,7 +329,7 @@ $modulesCacheStr=md5(implode('-',$modulesCacheStr));
 
 if(count($load_modules)) {
 	
-	$modLangPath =GO::config()->file_storage_path.'cache/'.$settings['language'].'-'.$modulesCacheStr.'-module-languages.js';
+	$modLangPath =$cacheFolder->path().'/'.$settings['language'].'-'.$modulesCacheStr.'-module-languages.js';
 	if(!file_exists($modLangPath) || GO::config()->debug){
 		$fp=fopen($modLangPath,'w');
 		if(!$fp){
@@ -345,7 +348,6 @@ if(count($load_modules)) {
 		$l = $language->getAllLanguage();
 		unset($l['base']);
 		
-//		var_dump($l);
 
 		fwrite($fp, 'if(GO.customfields){Ext.ns("GO.customfields.columns");Ext.ns("GO.customfields.types");}');
 		foreach($l as $module=>$langVars){
@@ -353,7 +355,6 @@ if(count($load_modules)) {
 		}
 		fclose($fp);
 	}
-	//$scripts[]=GO::config()->file_storage_path.'cache/module-languages.js';
 	
 	if(!GO::config()->debug){
 		$scripts[]=$modLangPath;
@@ -361,24 +362,6 @@ if(count($load_modules)) {
 	{		
 		$scripts[]=GO::url("core/compress", array('file'=>basename($modLangPath), 'mtime'=>filemtime($modLangPath)));
 	}
-	
-	//load language first so it can be overridden
-//	foreach($load_modules as $module) {
-//		if($module['read_permission']) {
-//
-//			$module_uri = GO::config()->debug ? $module['url'] : $module['path'];
-//
-//			if(file_exists($module['path'].'language/en.js')) {
-//				$scripts[]=$module_uri.'language/en.js';
-//			}
-//
-//			if($GLOBALS['GO_LANGUAGE']->language!='en' && file_exists($module['path'].'language/'.$GLOBALS['GO_LANGUAGE']->language.'.js')) {
-//				$scripts[]=$module_uri.'language/'.$GLOBALS['GO_LANGUAGE']->language.'.js';
-//			}
-//		}
-//	}
-//
-//	$scripts[]=$root_uri.'javascript/LanguageLoaded.js';
 
 
 	foreach($load_modules as $module) {
@@ -424,7 +407,7 @@ if(count($load_modules)) {
 	//include config file location because in some cases different URL's point to
 	//the same database and this can break things if the settings are cached.
 	$file = $user_id.'-'.md5(GO::config()->mtime.GO::config()->get_config_file().':'.GO::language()->getLanguage().':'.$modulesCacheStr).'.js';
-	$path = GO::config()->file_storage_path.'cache/'.$file;
+	$path = $cacheFolder->path().'/'.$file;
 	
 	
 	if(!GO::config()->debug) {
@@ -440,8 +423,8 @@ if(count($load_modules)) {
 				}
 			}*/
 
-			file_put_contents(GO::config()->file_storage_path.'cache/'.$user_id.'-modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode($GLOBALS['GO_MODULES']->modules)).'");');
-			array_unshift($scripts, GO::config()->file_storage_path.'cache/'.$user_id.'-modules.js');
+			file_put_contents($cacheFolder->path().'/'.$user_id.'-modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode($GLOBALS['GO_MODULES']->modules)).'");');
+			array_unshift($scripts, $cacheFolder->path().'/'.$user_id.'-modules.js');
 
 
 			foreach($scripts as $script) {
@@ -455,9 +438,9 @@ if(count($load_modules)) {
 
 	}else
 	{
-		file_put_contents(GO::config()->file_storage_path.'cache/'.$user_id.'-modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode($GLOBALS['GO_MODULES']->modules)).'");');
+		file_put_contents($cacheFolder->path().'/'.$user_id.'-modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode($GLOBALS['GO_MODULES']->modules)).'");');
 		
-		$url=GO::url("core/compress", array('file'=>$user_id.'-modules.js', 'mtime'=>filemtime(GO::config()->file_storage_path.'cache/'.$user_id.'-modules.js')));		
+		$url=GO::url("core/compress", array('file'=>$user_id.'-modules.js', 'mtime'=>filemtime($cacheFolder->path().'/'.$user_id.'-modules.js')));		
 		array_unshift($scripts, $url);
 		
 	}
@@ -515,7 +498,7 @@ if(count($load_modules)) {
 	$GLOBALS['GO_EVENTS']->fire_event('load_scripts', array(&$GO_SCRIPTS_JS));	
 
 	$filename = $user_id.'-scripts.js';
-	$path = GO::config()->file_storage_path.'cache/'.$filename;
+	$path = $cacheFolder->path().'/'.$filename;
 
 	if($GO_SCRIPTS_JS!=@file_get_contents($path)){
 		file_put_contents($path, $GO_SCRIPTS_JS);
