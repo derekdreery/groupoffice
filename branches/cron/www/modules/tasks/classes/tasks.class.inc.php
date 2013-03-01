@@ -14,19 +14,7 @@
 
 class tasks extends db
 {
-	public function __on_load_listeners($events){
-		$events->add_listener('load_settings', __FILE__, 'tasks', 'load_settings');
-		$events->add_listener('save_settings', __FILE__, 'tasks', 'save_settings');
-		$events->add_listener('user_delete', __FILE__, 'tasks', 'user_delete');
-		$events->add_listener('add_user', __FILE__, 'tasks', 'add_user');
-		$events->add_listener('build_search_index', __FILE__, 'tasks', 'build_search_index');
-		$events->add_listener('check_database', __FILE__, 'tasks', 'check_database');
-		$events->add_listener('load_global_settings', __FILE__, 'tasks','load_global_settings');
-		$events->add_listener('save_global_settings', __FILE__, 'tasks','save_global_settings');
-		$events->add_listener('checker', __FILE__, 'tasks', 'notification_icon');
 
-	}
-	
 	public static function notification_icon(&$response) {
 		global $GO_SECURITY, $GO_MODULES;
 		
@@ -44,137 +32,8 @@ class tasks extends db
 
 	}
 
-	public static function load_global_settings(&$response)
-	{
-		global $GO_CONFIG;
-		$response['data']['task_name_template']=$GLOBALS['GO_CONFIG']->get_setting('task_name_template');
-
-		if(!$response['data']['task_name_template'])
-			$response['data']['task_name_template']='{first_name} {middle_name} {last_name}';
-
-	}
-
-	public static function save_global_settings(&$response)
-	{
-		global $GO_CONFIG;
-		$GLOBALS['GO_CONFIG']->save_setting('task_name_template', $_POST['task_name_template']);
-
-		if(isset($_POST['change_all_task_names']))
-		{
-			$tsk = new tasks();
-			$db = new db();
-
-			$sql = 'SELECT tal.id AS tasklist_id, usr.* FROM ta_tasklists AS tal INNER JOIN ta_settings AS sett ON sett.default_tasklist_id = tal.id INNER JOIN go_users AS usr ON sett.user_id = usr.id';
-			$db->query($sql);
-
-			while($tasklist = $db->next_record())
-			{
-				$ut['id']=$tasklist['tasklist_id'];
-				$ut['name']= String::reformat_name_template($_POST['task_name_template'],$tasklist);
-		
-				$tsk->update_tasklist($ut);
-			}
-		}
-	}
-
-	public static function check_database(){
-		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
-
-		$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
-
-		echo 'Task folders'.$line_break;
-
-		if(isset($GLOBALS['GO_MODULES']->modules['files']))
-		{
-			$ta = new tasks();
-			$db = new db();
-
-			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
-			$files = new files();
-
-			$sql = "SELECT * FROM ta_tasklists";
-			$db->query($sql);
-			while($tasklist = $db->next_record())
-			{
-				try{
-					$files->check_share('tasks/'.$tasklist['name'], $tasklist['user_id'], $tasklist['acl_id'], false);
-				}
-				catch(Exception $e){
-					echo $e->getMessage().$line_break;
-				}
-			}
-
-			$db->query("SELECT c.*,a.name AS tasklist_name,a.acl_id FROM ta_tasks c INNER JOIN ta_tasklists a ON a.id=c.tasklist_id");
-			while($task = $db->next_record())
-			{
-				try{
-					$path = $ta->build_task_files_path($task, array('name'=>$task['tasklist_name']));
-                    echo $path.$line_break;
-					$up_task['files_folder_id']=$files->check_folder_location($task['files_folder_id'], $path);
-
-					if($up_task['files_folder_id']!=$task['files_folder_id']){
-						$up_task['id']=$task['id'];
-						$ta->update_row('ta_tasks', 'id', $up_task);
-					}
-					$files->set_readonly($up_task['files_folder_id']);
-				}
-				catch(Exception $e){
-					echo $e->getMessage().$line_break;
-				}
-			}
-		}
-
-		if(isset($GLOBALS['GO_MODULES']->modules['customfields'])) {
-			$db = new db();
-			echo "Deleting non existing custom field records".$line_break.$line_break;
-			$db->query("delete from cf_12 where link_id not in (select id from ta_tasks);");
-		}
-		echo 'Done'.$line_break.$line_break;
-	}
-
 	
-	public static function load_settings($response)
-	{
-		global $GO_MODULES;
 
-		if($GLOBALS['GO_MODULES']->has_module('tasks'))
-		{
-			$tasks = new tasks();
-			
-			$settings = $tasks->get_settings($_POST['user_id']);
-
-			$tasklist = $tasks->get_tasklist($settings['default_tasklist_id']);
-
-			if($tasklist)
-			{
-				$settings['default_tasklist_id']=$tasklist['id'];
-				$settings['default_tasklist_name']=$tasklist['name'];
-			}
-			$response['data']=array_merge($response['data'], $settings);
-		}
-	}
-
-	public static function save_settings(){
-
-		global $GO_MODULES;
-
-		if($GLOBALS['GO_MODULES']->has_module('tasks'))
-		{
-			$tasks = new tasks();
-			
-			$settings['remind']=isset($_POST['remind']) ? '1' : '0';
-			$settings['user_id']=$_POST['user_id'];
-			if(isset($_POST['reminder_days']))					
-				$settings['reminder_days']=$_POST['reminder_days'];
-				
-			if(isset($_POST['reminder_time']))
-				$settings['reminder_time']=$_POST['reminder_time'];
-
-			$settings['default_tasklist_id']=$_POST['default_tasklist_id'];
-			
-			$tasks->update_settings($settings);
-		}
-	}
 	
 	function get_settings($user_id)
 	{

@@ -161,34 +161,44 @@ margin:5px 2px;
 	background-image:url('images/16x16/attach.png') !important;
 }
 
+
+
 .ml-seen-mail{
 }
 
 .ml-unseen-mail{
-	margin:0px;
-	margin-bottom:4px;
-	font-weight:bold;
+ margin:0px;
+ margin-bottom:4px;
+ font-weight:bold;
+ color:#15428B; 
 }
 
 .ml-seen-from{
-	margin:0px;
-	margin-bottom:4px;
 }
 
 .ml-unseen-from{
 	margin:0px;
 	margin-bottom:4px;
 	font-weight:bold;
-}
-
-.ml-unseen-subject{
-	margin:0px;
-	font-weight:normal;
+	color:#15428B; 
 }
 
 .ml-seen-subject{
 	margin:0px;
+	margin-bottom:4px;
 	font-weight:normal;
+}
+
+.ml-unseen-subject{
+	margin:0px;
+	margin-bottom:4px;
+}
+
+.ml-unseen-row{
+}
+
+.ml-seen-row{
+   background-color:#f6f6f6;
 }
 
 .message-header{

@@ -77,12 +77,14 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
   /**
    * Can be used in actionDisplay like actions
    * @param GO_Base_Db_ActiveRecord $model the model to render display data for
+   * @param array $extraFields the extra fields that should be attached to the data array as key => value
    * @param array $return if the response data gets returned else it will be echoed
    * @return array response data if $return = true
    */
-  public function renderDisplay($model, $return = false) {
+  public function renderDisplay($model, $extraFields=array(), $return = false) {
 	$response = array('data'=>array(),'success'=>true);
-	$response['data'] = $model->getAttributes('html');
+	$response['data'] = array_merge_recursive($extraFields, $model->getAttributes('html'));
+	//$response['data'] = $model->getAttributes('html');
 	//$response['data']['model'] = $model->className();
 	$response['data']['permission_level'] = $model->getPermissionLevel();
 	$response['data']['write_permission'] = GO_Base_Model_Acl::hasPermission($response['data']['permission_level'], GO_Base_Model_Acl::WRITE_PERMISSION);

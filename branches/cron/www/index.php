@@ -15,8 +15,8 @@
 $root = dirname(__FILE__).'/';
 
 //initialize autoloading of library
-require_once($root.'go/GO.php');
-GO::init();
+require_once('GO.php');
+//GO::init();
 
 if(GO::config()->force_ssl && $_SERVER['HTTPS']!="on"){
    header("HTTP/1.1 301 Moved Permanently");

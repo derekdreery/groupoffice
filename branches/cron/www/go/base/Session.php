@@ -127,10 +127,11 @@ class GO_Base_Session extends GO_Base_Observable{
 	/**
 	 * Erases the temporary files directory for the currently logged on user. 
 	 */
-	public function clearUserTempFiles(){
+	public function clearUserTempFiles($recreate=true){
 		if(GO::user()){					
 			GO::config()->getTempFolder(false)->delete();
-			GO::config()->getTempFolder();
+			if($recreate)
+				GO::config()->getTempFolder();
 		}
 	}
 	

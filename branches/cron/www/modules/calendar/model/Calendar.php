@@ -102,12 +102,13 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	 * @return boolean
 	 */
 	public function userHasCreatePermission(){
-		if(GO_Base_Model_Acl::hasPermission($this->getPermissionLevel(),GO_Base_Model_Acl::CREATE_PERMISSION)){
-			return true;
-		}else if(GO::modules()->isInstalled('freebusypermissions')){
+//		if(GO_Base_Model_Acl::hasPermission($this->getPermissionLevel(),GO_Base_Model_Acl::CREATE_PERMISSION)){
+//			return true;
+//		}else 
+		if(GO::modules()->isInstalled('freebusypermissions')){
 			return GO_Freebusypermissions_FreebusypermissionsModule::hasFreebusyAccess(GO::user()->id, $this->user_id);
 		}  else {
-			return false;
+			return true;
 		}
 	}
 	

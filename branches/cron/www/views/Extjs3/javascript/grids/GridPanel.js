@@ -505,7 +505,7 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 		
 		if(Ext.isArray(this.primaryKey) && record) {
 		  for (var j=0;j<this.primaryKey.length;j++)
-			this.editDialog.formPanel.baseParams[this.primaryKey[j]] = record[this.primaryKey[j]];
+			this.editDialog.formPanel.baseParams[this.primaryKey[j]] = record.data[this.primaryKey[j]];
 		}
 		
 		if(this.relatedGridParamName)

@@ -421,12 +421,11 @@ class GO_Base_Config {
 
 	/**
 	 * The path to store temporary files with trailing slash.
-	 * Leave to ../ for installation
 	 *
 	 * @var     string
 	 * @access  public
 	 */
-	var $tmpdir = '/tmp/';
+	var $tmpdir = '/tmp/groupoffice/';
 
 	/**
 	 * The maximum number of users
@@ -927,7 +926,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.1.37';
+	var $version = '4.1.38';
 	
 	/**
 	 * Modification date
@@ -935,7 +934,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20130227';
+	var $mtime = '20130228';
 
 	#group configuration
 	/**
@@ -1074,6 +1073,14 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $orig_tmpdir = '';
+	
+	/**
+	 * Path with trailing slash where cached scripts are generated.
+	 * Defaults to $this->tmpdir/cache/
+	 * 
+	 * @var string 
+	 */
+	var $cachefolder='';
 
 	/**
 	 * Database object
@@ -1226,7 +1233,24 @@ class GO_Base_Config {
 		$user_id = GO::user() ? GO::user()->id : 0;
 		$folder = new GO_Base_Fs_Folder($this->orig_tmpdir.$user_id);
 		if($autoCreate)
-			$folder->create();
+			$folder->create(0777);
+		return $folder;
+	}
+	
+	/**
+	 * Get the cache folder for cached scripts.
+	 * 
+	 * @return \GO_Base_Fs_Folder
+	 */
+	public function getCacheFolder($autoCreate=true){
+		
+		if(empty($this->cachefolder)){
+			$this->cachefolder=$this->orig_tmpdir.'cache/';
+		}
+		
+		$folder = new GO_Base_Fs_Folder($this->cachefolder);
+		if($autoCreate)
+			$folder->create(0777);
 		return $folder;
 	}
 

@@ -107,6 +107,13 @@ function test_system(){
 	$test['fatal']=true;
 
 	$tests[]=$test;
+	
+	$test['name']='PDO support';
+	$test['pass']=  class_exists('PDO');
+	$test['feedback']='Fatal error: The PHP PDO extension is required.';
+	$test['fatal']=true;
+
+	$tests[]=$test;
 
 	$test['name']='Mcrypt support';
 	$test['pass']=extension_loaded('mcrypt');
@@ -180,7 +187,7 @@ function test_system(){
 	$memory_limit = return_bytes(ini_get('memory_limit'));
 	$tests[]=$test;
 	$test['name']='Memory limit';
-	$test['pass']=$memory_limit>=32*1024*1024;
+	$test['pass']=$memory_limit>=64*1024*1024;
 	$test['feedback']='Warning: Your memory limit setting ('.format_size($memory_limit).') is less then 32MB. It\'s recommended to allow at least 32 MB.';
 	$test['fatal']=false;
 

@@ -219,3 +219,9 @@ $l['show_holidays']="Feestdagen tonen";
 
 $l['participant']='Deelnemer';
 $l['clickForAttendance']='Klik hier om uw status voor deelname aan te geven';
+
+
+$l['viewDay']='Dag';
+$l['viewMorning']='Ochtend';
+$l['viewAfternoon']='Middag';
+$l['viewEvening']='Avond';
