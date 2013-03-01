@@ -28,8 +28,6 @@
  * @property string $years
  * @property string $job
  * @property string $params
- * @property int $acl_id
- * @property int $limit_users_groups
  * @property int $nextrun // timestamp of the next run
  * @property int $lastrun // timestamp of the latest run
  * 
@@ -64,6 +62,41 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 	public function primaryKey() {
 		return 'id';
 	}
+	
+	public function relations() {
+		return array(
+				'users' => array('type'=>self::MANY_MANY, 'model'=>'GO_Base_Model_User', 'field'=>'cronjob_id', 'linkModel' => 'GO_Base_Cron_CronUser'),
+				'groups' => array('type'=>self::MANY_MANY, 'model'=>'GO_Base_Model_Group', 'field'=>'cronjob_id', 'linkModel' => 'GO_Base_Cron_CronGroup'),
+		);
+	}
+	
+	/**
+	 * TODO: IMPLEMENT AND RETURN THE STATEMENT
+	 * @return GO_Base_Db_ActiveStatement $stmnt
+	 */
+	public function getAllUsers(){
+		
+		$id = $this->id;
+		
+		$query = "SELECT * FROM `go_users` as `t`
+							WHERE `id` IN (
+								SELECT `id` FROM `go_cron_users` cu 
+								WHERE user_id=`t`.`id` AND `cu`.`cronjob_id`=:cronjob_id
+							)
+							OR `id` IN (
+								SELECT `ug`.`user_id` FROM `go_cron_groups` cg 
+								INNER JOIN `go_users_groups` ug ON `ug`.`group_id`=`cg`.`group_id`
+								WHERE `cg`.`cronjob_id`=:cronjob_id
+							);";
+		$stmnt = GO::getDbConnection()->prepare($query);
+		$stmnt->bindParam("cronjob_id", $id, PDO::PARAM_INT);
+		$stmnt->execute();
+
+		$stmnt->setFetchMode(PDO::FETCH_CLASS, "GO_Base_Model_User",array(false));
+		
+		return $stmnt;
+	}
+	
 	
 	/**
 	 * Validate the inputfields
@@ -243,9 +276,20 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 			// Run the specified cron file code
 			$cronFile = new $this->job;
 			
-			$cronFile->setParams();
+			//$cronFile->setParams();
 			
-			$cronFile->run();
+			if($cronFile->enableUserAndGroupSupport()){
+				
+				$stmnt = $this->getAllUsers();
+				foreach($stmnt as $user){
+					GO::debug('CRONJOB ('.$this->name.') START FOR '.$user->username.' : '.date('d-m-Y H:i:s'));
+					$cronFile->run($this,$user);
+					GO::debug('CRONJOB ('.$this->name.') FINSIHED FOR '.$user->username.' : '.date('d-m-Y H:i:s'));
+				}
+			} else {
+				$cronFile->run($this);
+			}
+			
 			GO::debug('CRONJOB ('.$this->name.') FINISHED : '.date('d-m-Y H:i:s'));
 			
 			if($this->runonce){
@@ -261,10 +305,8 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 		}
 	}
 	
+	
 	protected function beforeSave() {
-		
-		if(!$this->limit_users_groups)
-			$this->_removeACLs();
 		
 		$this->params = $this->_paramsToJson();
 		
@@ -273,11 +315,6 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 		return parent::beforeSave();
 	}
 	
-	private function _removeACLs(){
-		
-		// TODO: DIT FIXXEN
-		$this->acl_id;
-	}
 	
 	
 	protected function afterLoad() {
