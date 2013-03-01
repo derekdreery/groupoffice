@@ -3,7 +3,7 @@ GO.ErrorDialog = function(config) {
 
 	Ext.apply(config, {
 		width : 550,
-		height : 120,
+		height : 220,
 		closeAction : 'hide',
 		plain : true,
 		border : false,
@@ -52,7 +52,7 @@ Ext.extend(GO.ErrorDialog, GO.Window, {
 			error = "No error message given";
 		
 		
-		this.setHeight(120);
+		this.setHeight(130);
 		
 //		if(details)
 //			error += "<br /><br />"+details;
@@ -74,6 +74,7 @@ Ext.extend(GO.ErrorDialog, GO.Window, {
 		if(this.messagePanel.body.isScrollable()){
 			this.setHeight(this.messagePanel.body.dom.scrollHeight);
 			this.autoSize();			
+			console.log(this.messagePanel.body.dom.scrollHeight);
 		}
 		this.center();
 	}

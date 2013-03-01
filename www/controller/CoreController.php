@@ -220,7 +220,10 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		
 		GO::session()->closeWriting();
 		
-		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'cache/'.basename($params['file']));
+		
+		$file = GO::config()->getCacheFolder()->child(basename($params['file']));
+//		
+//		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'cache/'.basename($params['file']));
 
 		$ext = $file->extension();
 

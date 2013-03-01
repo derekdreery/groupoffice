@@ -531,10 +531,24 @@ a.x-monthGrid-cell-day-text:hover{
 	font:normal 11px arial, tahoma, helvetica, sans-serif;
 }
 .x-viewGrid-calendar-name-cell {
-	text-align:right;
-	font-weight:bold;	
+/*	font-weight:bold;	*/
 	padding:6px;
+	white-space: nowrap;
 	background-color:#F0F1F3;
+}
+
+.x-viewGrid-row-allday{
+background-color:#f6f6f6;
+}
+
+.x-viewGrid-row-morning{
+/*	background-color:#f6f6f6;*/
+}
+.x-viewGrid-row-afternoon{
+/*	background-color:#f6f6f6;*/
+}
+.x-viewGrid-row-evening{
+background-color:#f6f6f6;
 }
 
 .x-viewGrid-event-container {

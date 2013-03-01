@@ -48,7 +48,7 @@ if (!$configFile) {
 			GO::config()->file_storage_path = $f->path() . '/';
 
 			$f = new GO_Base_Fs_Folder($_POST['tmpdir']);
-			if (!$f->exists())
+			if (!$f->exists() && !$f->create(0777))
 				GO_Base_Html_Input::setError("tmpdir", "Temporary folder doesn't exist. Please make sure it exists and it must be writable for the webserver user.");
 			elseif(!$f->isWritable())
 				GO_Base_Html_Input::setError("tmpdir", "Temporary folder must be writable for the webserver user.");

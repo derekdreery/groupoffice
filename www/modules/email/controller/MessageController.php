@@ -1176,10 +1176,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 //			}
 //			$subject = (string) $vevent->summary;
 			if(empty($uuid) || strpos($response['htmlbody'], $uuid)===false){
-				if(!$event){
+				//if(!$event){
 					$event = new GO_Calendar_Model_Event();
 					$event->importVObject($vevent, array(), true);
-				}
+				//}
 
 				$response['htmlbody'].= '<div style="border: 1px solid black;margin-top:10px">'.
 								'<div style="font-weight:bold;margin:2px;">'.GO::t('attachedAppointmentInfo','email').'</div>'.

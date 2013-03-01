@@ -472,9 +472,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		
 		$this->quota = $this->config['quota'];
 		
-		GO::config()->save_setting('mailbox_usage', $history->mailbox_usage);
-		GO::config()->save_setting('file_storage_usage', $history->file_storage_usage);
-		GO::config()->save_setting('database_usage', $history->database_usage);
+		
 		
 		$this->_loadFromInstallationDatabase();
 		
@@ -619,7 +617,11 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 			if(isset($oldIgnore))
 				GO::setIgnoreAclPermissions($oldIgnore);
 			throw new Exception($e->getMessage());
-		}
+		}		
+		
+		GO::config()->save_setting('mailbox_usage', $this->mailbox_usage);
+		GO::config()->save_setting('file_storage_usage', $this->file_storage_usage);
+		GO::config()->save_setting('database_usage', $this->database_usage);
 		
 		//reconnect to servermanager database
 		GO::setDbConnection();

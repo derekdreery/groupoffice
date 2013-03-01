@@ -1,3 +1,11 @@
+28-02-2013 4.1.38
+- Repeating exception event creation happened before conflict check which caused invalid duplicates.
+- Don't create mailboxes with . or / chars in them
+- Upgrade process created temp folder with root permissions.
+- Moved cache folder to /tmp/cache and made it a config.php option too
+- Removed lots of old redundant code
+- Forwading mail with multiple attachments always gave a max size exceeded error.
+
 27-02-2013 4.1.37
 - Fixed problem with .(dot) date separator in the calendar headers
 - Refactored free busy info in event dialog

@@ -784,13 +784,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	/**
-	 * Finds a single model by an attribute name and value.
-	 * This function does NOT check permissions! Use find() if you need that.
+	 * Finds models by attribute and value
+	 * This function uses find() to check permissions!
 	 * 
-	 * @param string $attributeName
-	 * @param mixed $value
+	 * @param string $attributeName column name you want to check a value for
+	 * @param mixed $value the value to find (needs to be exact)
 	 * @param GO_Base_Db_FindParams $findParams Extra parameters to send to the find function.
-	 * @return GO_Base_Db_ActiveRecord 
+	 * @return GO_Base_Db_ActiveStatement
 	 */
 	public function findByAttribute($attributeName, $value, $findParams=false){		
 		return $this->findByAttributes(array($attributeName=>$value), $findParams);
@@ -798,7 +798,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	/**
 	 * Finds models by an attribute=>value array.
-	 * This function does NOT check permissions! Use find() if you need that.
+	 * This function uses find() to check permissions!
 	 * 
 	 * @param array $attributes
 	 * @param GO_Base_Db_FindParams $findParams
@@ -3588,6 +3588,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	/**
 	 * Duplicates the current activerecord to a new one.
+	 * 
+	 * Instead of cloning it will create a new instance of the called class
+	 * Copy all the attributes from the original and overwrite the one in the $attibutes parameter
+	 * Unset the primary key if it's not multicolumn and assumably auto_increment
 	 * 
 	 * @param array $attributes Array of attributes that need to be set in 
 	 * the newly created activerecord as KEY => VALUE. 
