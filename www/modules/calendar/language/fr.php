@@ -218,3 +218,8 @@ $l['createPermission']="Créer une autorisation";
 $l['show_holidays']="Montrer les vacances";
 $l['participant']='Participant(s)';
 $l['clickForAttendance']='Cliquez ici pour définir votre statut de présence';
+
+$l['viewDay']='Journée';
+$l['viewMorning']='Matin';
+$l['viewAfternoon']='Après midi';
+$l['viewEvening']='Soir';

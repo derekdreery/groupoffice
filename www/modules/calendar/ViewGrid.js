@@ -221,83 +221,99 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 		}, true);
 		
 		this.gridCells = {};
-        var gridRow =  Ext.DomHelper.append(this.tbody,
-        {
-            tag: 'tr'
-        });
+		
+				
+		//The keys of this array is jsons time_of_day value the value the language
+//    var timeFormat = (GO.settings.time_format === 'g:i a') ? 'ga'  : GO.settings.time_format;
+           
+				
+		var timeOfDay = {
+							'allday': GO.calendar.lang.viewDay,
+              'morning': GO.calendar.lang.viewMorning,
+              'afternoon': GO.calendar.lang.viewAfternoon,
+              'evening': GO.calendar.lang.viewEvening
+            };
+						
 		//for(var calendar_id in this.jsonData)
 		for(var i=0,max=this.jsonData.results.length;i<max;i++)
 		{
+			
+			var gridRow =  Ext.DomHelper.append(this.tbody,
+			{
+					tag: 'tr',
+					cls: 'x-viewGrid-row-allday'
+			});
+
 			var calendar_id=this.jsonData.results[i].view_calendar_id;
+			
+			var cell = Ext.DomHelper.append(gridRow, {
+				tag: 'td', 
+				cls: 'x-viewGrid-calendar-name-cell',
+				rowspan: 4,
+				style:'width:150px'
+			}, true);	
             
+			var link = Ext.DomHelper.append(cell, {
+				tag: 'a', 
+				id: 'view_cal_'+calendar_id,
+				href:'#',
+				cls:'normal-link',
+				html:this.jsonData.results[i].view_calendar_name
+			}, true);
 
-            var cell = Ext.DomHelper.append(gridRow, {
-                tag: 'td', 
-                cls: 'x-viewGrid-calendar-name-cell',
-                rowspan: 3,
-                style:'width:150px'
-            }, true);	
+			link.on('click', function(e, target){			
+				e.preventDefault();
+				var calendar_id = target.id.substring(9);
+
+				var calendar =this.getCalendar(calendar_id);
+
+				this.fireEvent('zoom', {
+					group_id: calendar.group_id,
+					calendar_id: calendar_id,
+					calendar_name:target.innerHTML,
+					title:target.innerHTML
+				});
+			}, this);
+             
+					
+
+			this.gridCells[calendar_id]={};
             
-            var link = Ext.DomHelper.append(cell, {
-                tag: 'a', 
-                id: 'view_cal_'+calendar_id,
-                href:'#',
-                cls:'normal-link',
-                html:this.jsonData.results[i].view_calendar_name
-            }, true);
+			for(var time in timeOfDay) {
+				console.log(time);
+				if(time!='allday'){
+					gridRow =  Ext.DomHelper.append(this.tbody,
+					{
+						tag: 'tr',
+						cls: 'x-viewGrid-row-'+time
+					});
+				}
 
-            link.on('click', function(e, target){			
-                e.preventDefault();
-                var calendar_id = target.id.substring(9);
+				var borderStyle = 'border:0; border-bottom:1px dashed #ddd; border-right:1px solid #ddd;';
+				if(time === 'evening')
+					borderStyle='border-top:0;';
 
-                var calendar =this.getCalendar(calendar_id);
+				Ext.DomHelper.append(gridRow, {
+					tag: 'td', 
+					cls: 'x-viewGrid-calendar-name-cell',
+					style:'width:25px; color: #666; padding: 2px; '+borderStyle,
+					html: '<div style="height:20px">'+ timeOfDay[time]+'</div>'
+				}, true);
 
-                this.fireEvent('zoom', {
-                    group_id: calendar.group_id,
-                    calendar_id: calendar_id,
-                    calendar_name:target.innerHTML,
-                    title:target.innerHTML
-                });
-            }, this);
-            //The keys of this array is jsons time_of_day value the value the language
-            var timeFormat = (GO.settings.time_format === 'g:i a') ? 'ga'  : GO.settings.time_format;
-            var timeOfDay = {
-              'morning': '&nbsp;', //GO.calendar.lang['morning'], 
-              'afternoon': Date.parseDate("12:00","H:i").format(timeFormat), //GO.calendar.lang['afternoon'], 
-              'evening': Date.parseDate("18:00","H:i").format(timeFormat) //GO.calendar.lang['evening']
-            };
-            this.gridCells[calendar_id]={};
-            
-            for(var time in timeOfDay) {
+				for(var day=0;day<this.days;day++)
+				{	
+					var dt = this.startDate.add(Date.DAY, day)
 
-              var borderStyle = 'border:0; border-bottom:1px dashed #ddd; border-right:1px solid #ddd;';
-              if(time === 'evening')
-                borderStyle='border-top:0;';
+					this.gridCells[calendar_id][dt.format('Ymd')+time] = Ext.DomHelper.append(gridRow,{
+						tag: 'td', 
+						id: 'cal'+calendar_id+'_day'+dt.format('Ymd')+'_time'+time, 
+						cls: 'x-viewGrid-cell x-viewGrid-cell-'+time,
+						style:'width:'+columnWidth+'px; '+borderStyle
+					}, true);
 
-              Ext.DomHelper.append(gridRow, {
-                tag: 'td', 
-                cls: 'x-viewGrid-calendar-name-cell',
-                style:'width:25px; color: #666; padding: 2px; '+borderStyle,
-                html: timeOfDay[time]
-              }, true);
-
-              for(var day=0;day<this.days;day++)
-              {	
-                  var dt = this.startDate.add(Date.DAY, day)
-
-                  this.gridCells[calendar_id][dt.format('Ymd')+time] = Ext.DomHelper.append(gridRow,{
-                      tag: 'td', 
-                      id: 'cal'+calendar_id+'_day'+dt.format('Ymd')+'_time'+time, 
-                      cls: 'x-viewGrid-cell x-viewGrid-cell-'+time,
-                      style:'width:'+columnWidth+'px; '+borderStyle
-                  }, true);
-
-              }	
-              gridRow =  Ext.DomHelper.append(this.tbody,
-              {
-                  tag: 'tr'
-              });
-            }
+				}	
+				
+			}
 		}
 		
 		
@@ -605,8 +621,14 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 	getTimeOfDay : function(eventData){
 
 		var hour = eventData.startDate.format('G');
-
-		if(hour >= 0 && hour < 12)
+		var endhour = eventData.endDate.format('G');
+		
+		var date= eventData.startDate.format('Ymd');
+		var enddate = eventData.endDate.format('Ymd');
+		
+		if(date!=enddate || endhour-hour>=6)
+			return 'allday';
+		else if(hour >= 0 && hour < 12)
 			return "morning";
 		else if(hour >= 12 && hour < 18)
 			return "afternoon";
@@ -659,7 +681,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 				var text = '';
 				if(eventData.startDate.format('G')!='0')
 				{
-					text += eventData.startDate.format(GO.settings.time_format)+'&nbsp;';
+					text += eventData.startDate.format(GO.settings.time_format)+'-'+eventData.endDate.format(GO.settings.time_format)+'&nbsp;';
 				}				
 				text += eventData['name'];
 			
@@ -1146,7 +1168,7 @@ Ext.extend(GO.calendar.dd.ViewDropTarget, Ext.dd.DropTarget, {
 	},
     
 	notifyOver : function(dd, e, data){
-		var tdOver = Ext.get(e.getTarget()).findParent('td.x-viewGrid-cell-'+this.getTimeOfDay(data.event), 10, true);
+		var tdOver = Ext.get(e.getTarget()).findParent('td.x-viewGrid-cell-'+this.scope.getTimeOfDay(data.event), 10, true);
          
 		if(tdOver)
 		{
@@ -1164,7 +1186,7 @@ Ext.extend(GO.calendar.dd.ViewDropTarget, Ext.dd.DropTarget, {
 					{
 						if(currentTd)
 						{
-							var nextTd = currentTd.prev('td.x-viewGrid-cell-'+this.getTimeOfDay(data.event));
+							var nextTd = currentTd.prev('td.x-viewGrid-cell-'+this.scope.getTimeOfDay(data.event));
 							currentTd = nextTd;
 						}
 						if(nextTd)
@@ -1193,7 +1215,7 @@ Ext.extend(GO.calendar.dd.ViewDropTarget, Ext.dd.DropTarget, {
 					{
 						if(currentTd)
 						{
-							var nextTd = currentTd.next('td.x-viewGrid-cell-'+this.getTimeOfDay(data.event));
+							var nextTd = currentTd.next('td.x-viewGrid-cell-'+this.scope.getTimeOfDay(data.event));
 							currentTd = nextTd;
 						}
 		        		
