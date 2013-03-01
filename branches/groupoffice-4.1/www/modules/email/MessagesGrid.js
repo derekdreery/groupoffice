@@ -50,11 +50,18 @@ GO.email.MessagesGrid = function(config){
 				renderer:this.renderNorthMessageRow,
 				width:200
 			},{
-				header: GO.lang.strDate,
-				dataIndex: 'date',
+				header: GO.email.lang.dateReceived,
+				dataIndex: 'arrival',
 				width:65,
 				renderer:this.renderNorthMessageRow,
 				align:'right'
+			},{
+				header: GO.email.lang.dateSent,
+				dataIndex: 'date',
+				width:65,
+				renderer:this.renderNorthMessageRow,
+				align:'right',
+				hidden:true
 			},{
 				header: GO.lang.strSize,
 				dataIndex: 'size',
@@ -85,6 +92,7 @@ GO.email.MessagesGrid = function(config){
 		},
 		columns:[
 		{
+			id:'icon',
 			header:"&nbsp;",
 			width:46,
 			dataIndex: 'icon',
@@ -99,18 +107,27 @@ GO.email.MessagesGrid = function(config){
 			id:'message'
 		
 		},{
-			header: GO.lang.strDate,
-			dataIndex: 'date',
-			width:65,
+			id:'arrival',
+			header: GO.email.lang.dateReceived,
+			dataIndex: 'arrival',
+			width:80,
 			align:'right'
 		},{
-				header: GO.lang.strSize,
-				dataIndex: 'size',
-				width:65,
-				align:'right',
-				hidden:true,
-				renderer:Ext.util.Format.fileSize
-			}]
+			id:'date',
+			header: GO.email.lang.dateSent,
+			dataIndex: 'date',
+			width:80,
+			align:'right',
+			hidden:true
+		},{
+			id:'size',
+			header: GO.lang.strSize,
+			dataIndex: 'size',
+			width:65,
+			align:'right',
+			hidden:true,
+			renderer:Ext.util.Format.fileSize
+		}]
 		});
 		config.bbar = new Ext.PagingToolbar({
 			cls: 'go-paging-tb',
