@@ -421,12 +421,11 @@ class GO_Base_Config {
 
 	/**
 	 * The path to store temporary files with trailing slash.
-	 * Leave to ../ for installation
 	 *
 	 * @var     string
 	 * @access  public
 	 */
-	var $tmpdir = '/tmp/';
+	var $tmpdir = '/tmp/groupoffice/';
 
 	/**
 	 * The maximum number of users
@@ -1246,14 +1245,15 @@ class GO_Base_Config {
 	 * 
 	 * @return \GO_Base_Fs_Folder
 	 */
-	public function getCacheFolder(){
+	public function getCacheFolder($autoCreate=true){
 		
 		if(empty($this->cachefolder)){
 			$this->cachefolder=$this->orig_tmpdir.'cache/';
 		}
 		
 		$folder = new GO_Base_Fs_Folder($this->cachefolder);
-		$folder->create();
+		if($autoCreate)
+			$folder->create(0777);
 		return $folder;
 	}
 
