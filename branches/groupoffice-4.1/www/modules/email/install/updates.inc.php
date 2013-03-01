@@ -70,4 +70,6 @@ $updates["201209211112"][]="ALTER TABLE `em_links` CHANGE `link_id` `id` INT( 11
 
 $updates["201212171547"][]="ALTER TABLE  `em_links` CHANGE  `uid`  `uid` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  ''";
 
-$updates["010320131412"][]="delete from go_state where name='em-pnl-west' or name='eml-pnl-north';";
+$updates["201303011412"][]="delete from go_state where name='em-pnl-west' or name='eml-pnl-north';";
+
+$updates["201303011412"][]="delete from go_state where name='em-pnl-west' or name='eml-pnl-north';";
