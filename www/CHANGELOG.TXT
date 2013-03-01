@@ -1,3 +1,17 @@
+01-03-2013 4.1.39
+- Improved calendar view grid
+- Create temp dirs with 777 permissions to avoid permission issues after upgrade
+- Clicking a day number on the month grid goes to the day view. Clicking on 
+  empty space in the cell adds an event.
+- Everybody may create calendar views
+- When freebusy permissions module is not installed users will always save 
+  meeting requests directly in to other user's calendars.
+- Changed style of unread messages in e-mail client.
+- Added date received column next to date sent column and made date received the 
+  default sort column because it is faster on old IMAP servers.
+- Don't validate passwords on user import and fixed error reporting bug.
+- Only last attachment was forwarded if there were duplicate names
+
 28-02-2013 4.1.38
 - Repeating exception event creation happened before conflict check which caused invalid duplicates.
 - Don't create mailboxes with . or / chars in them
