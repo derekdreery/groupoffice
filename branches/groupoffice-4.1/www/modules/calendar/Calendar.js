@@ -1928,13 +1928,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					iconCls: 'btn-add',
 					text: GO.lang.cmdAdd,
 					cls: 'x-btn-text-icon',
-					disabled: !GO.settings.modules.calendar.write_permission,
 					handler: function(){
 						this.viewDialog.show();
 					},
 					scope: this
 				},{
-					disabled: !GO.settings.modules.calendar.write_permission,
 					iconCls: 'btn-delete',
 					text: GO.lang.cmdDelete,
 					cls: 'x-btn-text-icon',

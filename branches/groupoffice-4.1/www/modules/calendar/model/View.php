@@ -56,6 +56,11 @@ class GO_Calendar_Model_View extends GO_Base_Db_ActiveRecord{
 	 public function aclField(){
 		 return 'acl_id';	
 	 }
+	 
+	 protected function getPermissionLevelForNewModel() {
+		 return GO_Base_Model_Acl::MANAGE_PERMISSION;
+	 }
+	 
 
 	/**
 	 * Returns the table name
