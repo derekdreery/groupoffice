@@ -288,3 +288,17 @@ $updates["201302221101"][]="CREATE TABLE IF NOT EXISTS `go_cron` (
   `lastrun` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
+
+
+$updates["201302281100"][]="CREATE TABLE IF NOT EXISTS `go_cron_groups` (
+  `cronjob_id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  PRIMARY KEY (`cronjob_id`,`group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+
+$updates["201302281100"][]="CREATE TABLE IF NOT EXISTS `go_cron_users` (
+  `cronjob_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`cronjob_id`,`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
