@@ -107,6 +107,13 @@ function test_system(){
 	$test['fatal']=true;
 
 	$tests[]=$test;
+	
+	$test['name']='PDO support';
+	$test['pass']=  class_exists('PDO');
+	$test['feedback']='Fatal error: The PHP PDO extension is required.';
+	$test['fatal']=true;
+
+	$tests[]=$test;
 
 	$test['name']='Mcrypt support';
 	$test['pass']=extension_loaded('mcrypt');
