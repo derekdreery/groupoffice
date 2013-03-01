@@ -11,6 +11,7 @@
   default sort column because it is faster on old IMAP servers.
 - Don't validate passwords on user import and fixed error reporting bug.
 - Only last attachment was forwarded if there were duplicate names
+- E-mail account dialog doesn't connect to IMAP if not necessary
 
 28-02-2013 4.1.38
 - Repeating exception event creation happened before conflict check which caused invalid duplicates.
