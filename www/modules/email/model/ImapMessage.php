@@ -197,6 +197,12 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		else
 			$attributes["date"]=date(GO::user()->time_format, $this->udate);		
 		
+		
+		if($this->internal_udate<$dayStart)
+			$attributes["arrival"]=GO_Base_Util_Date::get_timestamp($this->internal_udate, false);
+		else
+			$attributes["arrival"]=date(GO::user()->time_format, $this->internal_udate);		
+		
 		return $attributes;
 	}
 

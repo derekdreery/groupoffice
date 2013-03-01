@@ -13,10 +13,10 @@
  * @property string $subject
  * @property int $uid
  * @property int $size
- * @property string $internal_date
- * @property string $date
- * @property int $udate
- * @property int $internal_udate
+ * @property string $internal_date Date received
+ * @property string $date Date sent
+ * @property int $udate Unix time stamp sent
+ * @property int $internal_udate Unix time stamp received
  * @property string $x_priority 
  * @property string $message_id
  * @property string $content_type
