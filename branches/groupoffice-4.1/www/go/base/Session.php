@@ -344,6 +344,9 @@ class GO_Base_Session extends GO_Base_Observable{
 		//remember user id in session
 		$this->values['user_id']=$user_id;
 		
+		if(!GO::user())
+			throw new Exception("Could not set user with id ".$user_id." in GO_Base_Session::setCurrentUser()!");
+		
 		//for logging
 		GO::session()->values['username']=GO::user()->username;
 	}
