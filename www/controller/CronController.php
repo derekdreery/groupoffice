@@ -18,30 +18,8 @@
 
 class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 
-	protected function actionTest($params) {
-		GO::session()->runAsRoot();
-		$user = GO_Base_Model_User::model()->findByPk(	2131);
-		
-			//Set the PDF filename
-		$filename = $user->name.'.pdf';
-		
-		// Start building the PDF file
-	//$pdf = new GO_Cron_Model_PDF($orientation='L'); // LANDSCAPE
-		$pdf = new GO_Cron_Model_PDF(); // VERTICAL
-		
-		$pdf->setTitle($user->name);
-		$pdf->setSubTitle('Today\'s events and tasks');
-		
-		// Pass the data to the PDF object and let it draw the PDF
-		$pdf->render($user);
-		
-		// Output the pdf
-		return $pdf->Output($filename,'I');
-	}
-	
-	
 	protected function allowGuests() {
-		return array('run','test');
+		return array('run');
 	}
 	
 	//don't check token in this controller
@@ -55,8 +33,12 @@ class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 	protected function actionLoad($params) {
 		$model = GO_Base_Cron_CronJob::model()->createOrFindByParams($params);
 		
+		// Add parameter for checking if the use 
+		$cron = new $model->job();
+		$select = $cron->enableUserAndGroupSupport();
+		
 		$remoteComboFields = array();
-		$this->renderForm($model, $remoteComboFields);
+		$this->renderForm($model, $remoteComboFields,array('select'=>$select));
   }
   
 	/**
@@ -219,7 +201,11 @@ class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 		$cronfiles = $cronJobCollection->getAllCronJobClasses();
 		$response['total'] = count($cronfiles);
 		foreach($cronfiles as $c=>$label){
-			$response['results'][] = array('name'=>$label,'class'=>$c);
+			
+			$cObject = new $c();
+			$userAndGroupSelection = $cObject->enableUserAndGroupSupport();
+						
+			$response['results'][] = array('name'=>$label,'class'=>$c,'selection'=>$userAndGroupSelection);
 		}
 		
 		$response['success'] = true;
