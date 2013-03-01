@@ -28,11 +28,23 @@ GO.cron.CronDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	},
 	 	
 	buildForm : function () {
-				
-		this.checkUsersAndGroupsPanel = new GO.grid.PermissionsPanel({
-			title:GO.cron.lang.usersAndGroups	
-		});
-				
+			
+		this.usersPanel = new GO.base.model.multiselect.panel({
+      title:GO.cron.lang.users,	
+      url:'cron/cronUser',
+      columns:[{header: GO.cron.lang.user, dataIndex: 'name', sortable: true}],
+      fields:['id','name'],
+      model_id:this.remoteModelId
+    });
+		
+		this.groupsPanel = new GO.base.model.multiselect.panel({
+      title:GO.cron.lang.groups,	
+      url:'cron/cronGroup',
+      columns:[{header: GO.cron.lang.group, dataIndex: 'name', sortable: true}],
+      fields:['id','name'],
+      model_id:this.remoteModelId
+    });
+			
 		this.nameField = new Ext.form.TextField({
 			name: 'name',
 			width:300,
@@ -40,19 +52,6 @@ GO.cron.CronDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			maxLength: 100,
 			allowBlank:false,
 			fieldLabel: GO.cron.lang.cronName
-		});
-		
-		this.jobCombo = new GO.form.ComboBox({
-			hiddenName: 'job',
-			fieldLabel: GO.cron.lang.job,
-			store: GO.cron.jobStore,
-			valueField:'class',
-			displayField:'name',
-			mode:'remote',
-			anchor: '100%%',
-			allowBlank: false,
-			triggerAction: 'all',
-			reloadOnExpand : true
 		});
 		
 		this.minutesField = new Ext.form.TextField({
@@ -115,7 +114,8 @@ GO.cron.CronDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			anchor: '100%',
 			maxLength: 100,
 			allowBlank:false,
-			boxLabel: GO.cron.lang.active
+			boxLabel: GO.cron.lang.active,
+			hideLabel:true
 		});
 		
 		this.runOnceCheckbox = new Ext.ux.form.XCheckbox({
@@ -124,25 +124,33 @@ GO.cron.CronDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			anchor: '100%',
 			maxLength: 100,
 			allowBlank:false,
-			boxLabel: GO.cron.lang.runonce
+			boxLabel: GO.cron.lang.runonce,
+			hideLabel:true
 		});
 		
-		this.limitUserGroupsCheckbox = new Ext.ux.form.XCheckbox({
-			name: 'limit_users_groups',
-			width:300,
-			anchor: '100%',
-			maxLength: 100,
-			allowBlank:false,
-			boxLabel: GO.cron.lang.limitUserGroups
+		this.jobCombo = new GO.form.ComboBox({
+			hiddenName: 'job',
+			fieldLabel: GO.cron.lang.job,
+			store: GO.cron.jobStore,
+			valueField:'class',
+			displayField:'name',
+			mode:'remote',
+			anchor: '100%%',
+			allowBlank: false,
+			triggerAction: 'all',
+			reloadOnExpand : true
 		});
 		
-		this.limitUserGroupsCheckbox.on('check',function(checkbox, value){
-			if(value){
-				this.checkUsersAndGroupsPanel.setDisabled(false);
-			} else {
-				this.checkUsersAndGroupsPanel.setDisabled(true);
+		this.jobCombo.on('select',function(combo, record, index ){
+			if(record.data.selection){
+				this.usersPanel.setDisabled(false);
+				this.groupsPanel.setDisabled(false);
+			}else{
+				this.usersPanel.setDisabled(true);
+				this.groupsPanel.setDisabled(true);
 			}
 		},this);
+		
 		
 		this.timeFieldSet = new Ext.form.FieldSet({
 			title: GO.cron.lang.timeFieldSetTitle,
@@ -160,7 +168,7 @@ GO.cron.CronDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 //				this.yearsField
 			]
 		});
-		
+			
 		this.propertiesPanel = new Ext.Panel({
 			title:GO.lang['strProperties'],			
 			cls:'go-form-panel',
@@ -171,7 +179,6 @@ GO.cron.CronDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 				this.jobCombo,
 				this.timeFieldSet,
 				this.activeCheckbox,
-				this.limitUserGroupsCheckbox,
 				this.runOnceCheckbox
       ]				
 		});
@@ -179,15 +186,21 @@ GO.cron.CronDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	//	this.parameterPanel = new GO.cron.ParametersPanel();
 	
     this.addPanel(this.propertiesPanel);
+		this.addPanel(this.usersPanel);
+		this.addPanel(this.groupsPanel);
 		//this.addPanel(this.parameterPanel);
-		this.addPermissionsPanel(this.checkUsersAndGroupsPanel);
 	},
+	
 	afterLoad : function(remoteModelId, config, action){
+		this.usersPanel.setModelId(remoteModelId);
+    this.groupsPanel.setModelId(remoteModelId);
 		
-		if(action.result.data.limit_users_groups == '1'){
-			this.checkUsersAndGroupsPanel.setDisabled(false);
+		if(action.result.data.select){
+			this.usersPanel.setDisabled(false);
+			this.groupsPanel.setDisabled(false);
 		} else {
-			this.checkUsersAndGroupsPanel.setDisabled(true);
+			this.usersPanel.setDisabled(true);
+			this.groupsPanel.setDisabled(true);
 		}
 		
 //		var params = action.result.data.paramsToSet;
@@ -201,5 +214,19 @@ GO.cron.CronDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 //		}
 //		
 		
-	}
+	},
+  afterSubmit: function(action){
+    var noUserSelection = this.usersPanel.disabled;
+		
+    this.usersPanel.setModelId(action.result.id);
+    this.groupsPanel.setModelId(action.result.id);
+		
+		if(!noUserSelection){
+			this.usersPanel.setDisabled(false);
+			this.groupsPanel.setDisabled(false);
+		} else {
+			this.usersPanel.setDisabled(true);
+			this.groupsPanel.setDisabled(true);
+		}
+  }
 });
