@@ -1095,7 +1095,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 							$this->afterImport($model, $attributes, $record);
 							$summarylog->addSuccessful();
 						} else {
-							$summarylog->addError($record[0], implode('<br />', $model->getValidationErrors()));
+							$summarylog->addError($record[0], implode("\n", $model->getValidationErrors()));
 						}
 					}
 					catch(Exception $e){
