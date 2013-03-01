@@ -210,7 +210,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 * @return boolean 
 	 */
 	public function create($permissionsMode=false){
-		
+	
 		if(!$permissionsMode)
 			$permissionsMode=octdec(GO::config()->folder_create_mode);		
 		

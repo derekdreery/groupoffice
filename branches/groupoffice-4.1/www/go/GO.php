@@ -218,29 +218,16 @@ class GO{
 	}
 
 	/**
-	 * Clears the GO::config()->file_storage_path/cache folder. This folder contains mainly cached javascripts.
+	 * Clears the:
+	 * 
+	 * 1. GO::config()->cachedir folder. This folder contains mainly cached javascripts.
+	 * 2. GO_Base_Model objects cached in memory for a single script run
+	 * 3. The permanent cache stored in GO::cache()
+	 * 
 	 */
 	public static function clearCache(){
 		
-		//todo js should be cached in tmpdir
-		$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'cache');
-
-		//make sure it exists
-		$folder->create();
-
-		$items = $folder->ls();
-		foreach($items as $item)
-			$item->delete();
-		
-		
-		$folder = new GO_Base_Fs_Folder(GO::config()->orig_tmpdir.'cache');
-
-		//make sure it exists
-		$folder->create();
-
-		$items = $folder->ls();
-		foreach($items as $item)
-			$item->delete();
+		GO::config()->getCacheFolder(false)->delete();
 		
 		GO::cache()->flush();
 
