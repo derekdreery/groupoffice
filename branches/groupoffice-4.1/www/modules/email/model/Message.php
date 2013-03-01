@@ -134,7 +134,25 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		$this->attributes['from'] = new GO_Base_Mail_EmailRecipients($this->attributes['from']);
 		$this->attributes['reply_to'] = new GO_Base_Mail_EmailRecipients($this->attributes['reply_to']);
 		
-		$this->attributes['x_priority']= isset($this->attributes['x_priority']) ? intval($this->attributes['x_priority']) : 3;
+		
+	$this->attributes['x_priority']= isset($this->attributes['x_priority']) ? strtolower($this->attributes['x_priority']) : 3;
+		switch($this->attributes['x_priority']){
+			case 'high':
+				$this->attributes['x_priority']=1;
+				break;
+			
+			case 'low':
+				$this->attributes['x_priority']=5;
+				break;
+			
+			case 'normal':
+				$this->attributes['x_priority']=3;
+				break;
+			
+			default:
+				$this->attributes['x_priority']= intval($this->attributes['x_priority']);
+				break;
+		}
 	}
 
 	/**
