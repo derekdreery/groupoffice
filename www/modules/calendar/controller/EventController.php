@@ -1304,6 +1304,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		$event = $participant->getParticipantEvent();
 		
+		$event->replyToOrganizer();
+		
 		$this->render('invitation', array('participant'=>$participant, 'event'=>$event));
 	}
 	
