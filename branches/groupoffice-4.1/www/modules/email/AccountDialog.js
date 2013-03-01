@@ -267,12 +267,12 @@ GO.email.AccountDialog = function(config) {
 	});
 
 	this.foldersTab = new Ext.Panel({
-//		listeners:{
-//			show:function(){
-//				
-//				GO.email.subscribedFoldersStore.load();
-//			}
-//		},
+		listeners:{
+			show:function(){
+				if(!GO.email.subscribedFoldersStore.loaded)
+					GO.email.subscribedFoldersStore.load();
+			}
+		},
 		title : GO.email.lang.folders,
 		autoHeight : true,
 		layout : 'form',
@@ -360,7 +360,14 @@ GO.email.AccountDialog = function(config) {
 	//this.permissionsTab.disabled = false;
 	
 	
-	this.filterGrid = new GO.email.FilterGrid();
+	this.filterGrid = new GO.email.FilterGrid({
+		listeners:{
+			show:function(){
+				if(!GO.email.subscribedFoldersStore.loaded)
+					GO.email.subscribedFoldersStore.load();
+			}
+		}
+	});
 
 	var items = [propertiesTab,
 
@@ -523,7 +530,9 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 		if (account_id) {
 			this.loadAccount(account_id);
 			GO.email.subscribedFoldersStore.baseParams.account_id = account_id;
-			GO.email.subscribedFoldersStore.load();
+//			GO.email.subscribedFoldersStore.load();
+
+			GO.email.subscribedFoldersStore.loaded=false;
 		} else {
 
 			this.propertiesPanel.form.reset();
