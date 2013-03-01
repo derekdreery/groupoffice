@@ -377,6 +377,10 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 	 * @return array $response 
 	 */
 	protected function actionImportCsv($params){
+		
+		//allow weak passwords
+		GO::config()->password_validate=false;
+		
 		$summarylog = parent::actionImport($params);
 		return $summarylog->getErrorsJson();
 	}
