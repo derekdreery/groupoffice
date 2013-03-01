@@ -506,15 +506,14 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 			$this->_loadBodyParts();
 			
 			$parts = $imap->find_message_attachments($this->_getStruct(), $this->_bodyPartNumbers);
-			//$parts = $imap->find_message_attachments($this->_getStruct());
+			
+			$uniqueNames = array();
 			
 			foreach ($parts as $part) {
 				//ignore applefile's
 				if($part['subtype']=='applefile')
 					continue;
-				
-			//var_dump($part);
-				
+					
 				$a = new GO_Email_Model_ImapMessageAttachment();
 				$a->setImapParams($this->account, $this->mailbox, $this->uid);
 				
@@ -536,6 +535,14 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 					$a->name = $imap->mime_header_decode($part['name']);
 				}
 				
+				$i=1;
+				$file = new GO_Base_Fs_File($a->name);
+				while(in_array($a->name, $uniqueNames)){
+					$a->name = $file->nameWithoutExtension().' ('.$i.').'.$file->extension();
+					$i++;
+				}
+				$uniqueNames[]=$a->name;
+				
 				$a->disposition = isset($part['disposition']) ? $part['disposition'] : '';
 				$a->number = $part['number'];
 				$a->content_id='';
@@ -550,15 +557,6 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 					$id = $tmp_id;
 					$a->content_id=$id;
 				}
-				
-//				$f = new GO_Base_Fs_File($a->name);
-//				if(($this->createTempFilesForInlineAttachments && (!empty($a->content_id) || $a->disposition=='inline')) || ($this->createTempFilesForAttachments && empty($a->content_id))){
-//					$tmpFile = new GO_Base_Fs_File($this->_getTempDir().$a->name);				
-//					if(!$tmpFile->exists())
-//						$imap->save_to_file($this->uid, $tmpFile->path(),  $part['number'], $part['encoding'], true);
-//					
-//					$a->setTempFile($tmpFile);
-//				}
 							
 				$a->mime=$part['type'] . '/' . $part['subtype'];
 				
