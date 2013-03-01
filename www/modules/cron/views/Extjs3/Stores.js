@@ -23,6 +23,6 @@ GO.cron.jobStore = new GO.data.JsonStore({
 	root: 'results',
 	id: 'name',
 	totalProperty:'total',
-	fields: ['name','class'],
+	fields: ['name','class','selection'],
 	remoteSort: true
 });

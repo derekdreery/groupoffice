@@ -49,3 +49,8 @@ $l['nextrun'] = 'Next run';
 $l['parameters'] = 'Params';
 $l['usersAndGroups'] = 'Users and Groups';
 $l['limitUserGroups'] = 'Limit to selected Users and Groups';
+
+$l['groups'] = 'Groups';
+$l['group'] = 'Group';
+$l['users'] = 'Users';
+$l['user'] = 'user';
