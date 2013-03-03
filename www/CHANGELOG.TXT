@@ -1,3 +1,5 @@
+- Wrapper class for ActiveStatement so that we can use persistent database connections
+
 01-03-2013 4.1.39
 - Improved calendar view grid
 - Create temp dirs with 777 permissions to avoid permission issues after upgrade
