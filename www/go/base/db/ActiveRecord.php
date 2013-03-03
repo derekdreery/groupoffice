@@ -3139,7 +3139,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 						case 'int':
 						case 'tinyint':
 						case 'bigint':
-							$this->_attributes[$column]=intval($this->_attributes[$column]);
+							//must use floatval because of ints greater then 32 bit
+							$this->_attributes[$column]=floatval($this->_attributes[$column]);
 							break;		
 
 						case 'float':
