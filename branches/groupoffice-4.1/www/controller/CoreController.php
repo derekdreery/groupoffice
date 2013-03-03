@@ -780,9 +780,9 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	
 	
 	protected function actionAbout($params){
-		$response['data']['mailbox_usage']=intval(GO::config()->get_setting('mailbox_usage'));
-		$response['data']['file_storage_usage']=intval(GO::config()->get_setting('file_storage_usage'));
-		$response['data']['database_usage']=intval(GO::config()->get_setting('database_usage'));
+		$response['data']['mailbox_usage']=GO::config()->get_setting('mailbox_usage');
+		$response['data']['file_storage_usage']=GO::config()->get_setting('file_storage_usage');
+		$response['data']['database_usage']=GO::config()->get_setting('database_usage');
 		$response['data']['total_usage']=$response['data']['database_usage']+$response['data']['file_storage_usage']+$response['data']['mailbox_usage'];
 		$response['data']['has_usage']=$response['data']['total_usage']>0;
 		foreach($response['data'] as $key=>$value){
