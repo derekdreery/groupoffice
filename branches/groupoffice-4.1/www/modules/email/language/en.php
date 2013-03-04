@@ -247,5 +247,5 @@ $l['copyMailsToRUSure']="Are you sure you want to copy the selected email messag
 $l['selectValidMailFolder']="Please select a valid email folder to copy to.";
 $l['clickSeeWholeMessage']="The actual message is larger than can be shown here. Click here to see the entire message.";
 
-$l['dateReceived']='Date recieved';
+$l['dateReceived']='Date received';
 $l['dateSent']='Date sent';
