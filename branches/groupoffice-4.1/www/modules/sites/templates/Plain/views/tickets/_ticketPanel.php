@@ -36,8 +36,6 @@
 			
 				<table>
 					<tr><td>Name:</td><td><?php echo $ticket->contactName; ?></td></tr>
-					<tr><td>Address:</td><td>-</td></tr>
-					<tr><td>Zip/City:</td><td>-</td></tr>
 					<tr><td>Telephone:</td><td><?php echo $ticket->phone; ?></td></tr>
 					<tr><td>Email:</td><td><?php echo $ticket->email; ?></td></tr>
 				</table>
