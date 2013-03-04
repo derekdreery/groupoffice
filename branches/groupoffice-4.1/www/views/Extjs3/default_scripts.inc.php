@@ -353,13 +353,13 @@ if(count($load_modules)) {
 	 * Modules can add stuff in their scripts.inc.php files.
 	 */
 
-	$GO_SCRIPTS_JS='';
+	$GO_SCRIPTS_JS='GO.customexports={};';
 
 //	require_once(GO::config()->class_path.'export/export_query.class.inc.php');
 //	$eq = new export_query();
 //
 //	$GO_SCRIPTS_JS.=$eq->find_custom_exports();
-
+	
 	
 	foreach($load_modules as $module) {
 		if($module->permissionLevel) {
