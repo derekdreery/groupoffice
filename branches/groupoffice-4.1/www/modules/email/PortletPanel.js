@@ -33,7 +33,7 @@ GO.email.PortletPanel = Ext.extend(Ext.Panel, {
 			root: 'results',
 			totalProperty: 'total',
 			id: 'uid',
-			fields:['uid','icon','flagged','attachments','new','subject','from','sender','size','date', 'priority','answered','forwarded'],
+			fields:['uid','icon','flagged','attachments','new','subject','from','sender','size','date', 'priority','answered','forwarded','arrival'],
 			remoteSort: true
 		});
 		
