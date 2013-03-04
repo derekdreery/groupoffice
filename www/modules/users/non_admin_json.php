@@ -94,44 +94,44 @@ switch($task)
 
 		echo json_encode($response);
 		break;
-	case 'start_module':
-		$records=array();
-		foreach($GLOBALS['GO_MODULES']->modules as $module)
-		{
-			if($module['admin_menu']=='0' &&
-					(($module['read_permission'] && (empty($_POST['user_id']) || $_POST['user_id']==$GLOBALS['GO_SECURITY']->user_id)) ||
-						(!empty($_POST['user_id']) && $GLOBALS['GO_SECURITY']->has_permission($_POST['user_id'], $module['acl_id']))
-					)
-				)
-			{
-				$record = array(
-					'id' => $module['id'],
-					'name' => $module['humanName'] 
-				);
+//	case 'start_module':
+//		$records=array();
+//		foreach($GLOBALS['GO_MODULES']->modules as $module)
+//		{
+//			if($module['admin_menu']=='0' &&
+//					(($module['read_permission'] && (empty($_POST['user_id']) || $_POST['user_id']==$GLOBALS['GO_SECURITY']->user_id)) ||
+//						(!empty($_POST['user_id']) && $GLOBALS['GO_SECURITY']->has_permission($_POST['user_id'], $module['acl_id']))
+//					)
+//				)
+//			{
+//				$record = array(
+//					'id' => $module['id'],
+//					'name' => $module['humanName'] 
+//				);
+//
+//				$records[] = $record;
+//			}
+//		}
+//
+//		echo '{total:'.count($records).',results:'.json_encode($records).'}';
+//		break;
 
-				$records[] = $record;
-			}
-		}
-
-		echo '{total:'.count($records).',results:'.json_encode($records).'}';
-		break;
-
-	case 'themes':
-
-		require_once($GLOBALS['GO_CONFIG']->class_path.'base/theme.class.inc.php');
-		$GO_THEME = new GO_THEME();
-
-
-		$themes = $GLOBALS['GO_THEME']->get_themes();
-		foreach($themes as $theme)
-		{
-			$record = array(
-				'id' => $theme,
-				'theme' => $theme 
-			);
-
-			$records[] = $record;
-		}
-		echo '{total:'.count($records).',results:'.json_encode($records).'}';
-		break;
+//	case 'themes':
+//
+//		require_once($GLOBALS['GO_CONFIG']->class_path.'base/theme.class.inc.php');
+//		$GO_THEME = new GO_THEME();
+//
+//
+//		$themes = $GLOBALS['GO_THEME']->get_themes();
+//		foreach($themes as $theme)
+//		{
+//			$record = array(
+//				'id' => $theme,
+//				'theme' => $theme 
+//			);
+//
+//			$records[] = $record;
+//		}
+//		echo '{total:'.count($records).',results:'.json_encode($records).'}';
+//		break;
 }
