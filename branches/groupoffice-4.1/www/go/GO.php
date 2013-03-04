@@ -425,6 +425,8 @@ class GO{
 					}
 					
 					$fullPath = self::config()->root_path.$file;
+					
+//					echo $fullPath."\n";
 
 					if(!file_exists($fullPath) || is_dir($fullPath)){
 						//throw new Exception('Class '.$orgClassName.' not found! ('.$file.')');
