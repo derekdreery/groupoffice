@@ -313,7 +313,10 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 			cls += "btn-message-forwarded";
 		}else
 		{
-			cls += "btn-message";
+			if(record.data.seen=='1')
+				cls += "btn-message-seen";
+			else
+				cls += "btn-message";
 		}
 		str += '<div class="'+cls+'"></div>';
 		
