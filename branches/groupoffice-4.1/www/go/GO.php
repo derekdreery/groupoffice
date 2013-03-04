@@ -305,6 +305,8 @@ class GO{
 			}else{
 				self::$_modules=GO::session()->values['modulesObject']=new GO_Base_ModuleCollection();
 			}
+			
+//			self::$_modules=new GO_Base_ModuleCollection();
 		}
 		return self::$_modules;
 	}
