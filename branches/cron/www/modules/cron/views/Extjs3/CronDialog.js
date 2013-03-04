@@ -21,7 +21,8 @@ GO.cron.CronDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 					'<tr><td>1,2,3,13,22</td><td>'+GO.cron.lang.exampleFormat5Explanation+'</td></tr>'+
 					'<tr><td>0-4,8-12</td><td>'+GO.cron.lang.exampleFormat6Explanation+'</td></tr>'+
 					'<table>'
-			}]
+			}],
+			select: false
 		});
 		
 		GO.cron.CronDialog.superclass.initComponent.call(this);	
@@ -142,7 +143,7 @@ GO.cron.CronDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		});
 		
 		this.jobCombo.on('select',function(combo, record, index ){
-			if(record.data.selection){
+			if(record.data.selection && this.remoteModelId > 0){
 				this.usersPanel.setDisabled(false);
 				this.groupsPanel.setDisabled(false);
 			}else{
@@ -196,9 +197,11 @@ GO.cron.CronDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
     this.groupsPanel.setModelId(remoteModelId);
 		
 		if(action.result.data.select){
+			this.select = true;
 			this.usersPanel.setDisabled(false);
 			this.groupsPanel.setDisabled(false);
 		} else {
+			this.select = false;
 			this.usersPanel.setDisabled(true);
 			this.groupsPanel.setDisabled(true);
 		}
@@ -216,15 +219,17 @@ GO.cron.CronDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		
 	},
   afterSubmit: function(action){
-    var noUserSelection = this.usersPanel.disabled;
+    var noUserSelection = this.select; //this.usersPanel.disabled;
 		
     this.usersPanel.setModelId(action.result.id);
     this.groupsPanel.setModelId(action.result.id);
 		
 		if(!noUserSelection){
+			this.select = true;
 			this.usersPanel.setDisabled(false);
 			this.groupsPanel.setDisabled(false);
 		} else {
+			this.select = false;
 			this.usersPanel.setDisabled(true);
 			this.groupsPanel.setDisabled(true);
 		}
