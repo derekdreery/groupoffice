@@ -869,4 +869,29 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 			}
 		}
 	}
+	
+	protected function actionThemes($params){
+		$store = new GO_Base_Data_ArrayStore();
+		
+		$view = new GO_Base_View_Extjs3();
+		$themes = $view->getThemeNames();
+		
+		foreach($themes as $theme){
+			$store->addRecord(array('theme'=>$theme));
+		}
+		
+		return $store->getData();
+	}
+	
+	protected function actionModules($params){
+		$store = new GO_Base_Data_ArrayStore();
+		
+		$modules = GO::modules()->getAllModules(true);
+		
+		foreach($modules as $module){
+			$store->addRecord(array('id'=>$module->id,'name'=>$module->moduleManager->name()));
+		}
+		
+		return $store->getData();
+	}
 }

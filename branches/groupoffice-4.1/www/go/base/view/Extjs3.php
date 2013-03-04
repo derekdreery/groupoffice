@@ -4,6 +4,19 @@ class GO_Base_View_Extjs3{
 		return new GO_Base_View_Theme();
 	}
 	
+	public function getThemeNames(){
+		$folder = new GO_Base_Fs_Folder(GO::config()->root_path.'views/Extjs3/themes');
+		$items = $folder->ls();
+		$themes=array();
+		foreach($items as $folder){
+			if($folder->isFolder() && $folder->child('Layout.php')){
+				$themes[] = $folder->name();				
+			}	
+		}
+		
+		return $themes;
+	}
+	
 	public function getName(){
 		return 'Extjs3';
 	}

@@ -30,7 +30,6 @@ GO.dialog.UsersInGroup = function(config){
 	this.store = new GO.data.JsonStore({
     url: GO.url('groups/group/getUsers'),
     baseParams: {id:0},
-   //	url: GO.settings.modules.groups.url+'non_admin_json.php',
     root: 'results',
 		totalProperty: 'total',
 		id: 'id',
