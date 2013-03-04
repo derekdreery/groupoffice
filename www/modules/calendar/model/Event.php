@@ -1860,7 +1860,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @param int $recurrenceTime Export for a specific recurrence time for the recurrence-id
 	 * @throws Exception
 	 */
-	public function replyToOrganizer($recurrenceTime=false, $sendingParticipant=false){
+	public function replyToOrganizer($recurrenceTime=false, $sendingParticipant=false, $includeIcs=true){
 		
 //		if($this->is_organizer)
 //			throw new Exception("Meeting reply can't be send from the organizer's event");
@@ -1898,11 +1898,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 //		if(!$this->getOrganizerEvent()){
 			//organizer is not a Group-Office user with event. We must send a message to him an ICS attachment
+		if($includeIcs){
 			$ics=$this->toICS("REPLY", $sendingParticipant, $recurrenceTime);				
 			$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REPLY"');
 			$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 			$a->setDisposition("inline");
 			$message->attach($a);
+		}
 //		}
 
 		$message->setHtmlAlternateBody($body);
