@@ -1065,6 +1065,8 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 
 		var statusElId = "status_"+this.getFolderNodeId(account_id, mailbox);
 		var statusEl = Ext.get(statusElId);
+		
+	
 
 //		var node = this.treePanel.getNodeById('folder_'+mailbox);
 //		if(node && node.attributes.mailbox=='INBOX')
@@ -1074,6 +1076,9 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 
 		if(statusEl && statusEl.dom)
 		{
+			var folderEl = statusEl.prev();
+			folderEl.dom.className = unseen ? 'ml-folder-unseen' : 'ml-folder-seen';
+			
 			var statusText = statusEl.dom.innerHTML;
 			var current = statusText=='' ? 0 : parseInt(statusText.substring(1, statusText.length-1));
 

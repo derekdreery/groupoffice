@@ -333,9 +333,9 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 						
 			if(!$fetchAllWithSubscribedFlag){				
 				if ($mailbox->unseen > 0) {
-					$text .= '&nbsp;<span class="em-folder-status" id="status_' . $nodeId . '">(' . $mailbox->unseen . ')</span>';
+					$text = '<span class="ml-folder-unseen">'.$mailbox->getDisplayName().'</span>&nbsp;<span class="em-folder-status" id="status_' . $nodeId . '">(' . $mailbox->unseen . ')</span>';
 				} else {
-					$text .= '&nbsp;<span class="em-folder-status" id="status_' . $nodeId . '"></span>';
+					$text = '<span class="ml-folder-seen">'.$mailbox->getDisplayName().'</span>&nbsp;<span class="em-folder-status" id="status_' . $nodeId . '"></span>';
 				}
 			}
 			
