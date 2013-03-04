@@ -48,7 +48,7 @@ class GO_Core_Controller_Settings extends GO_Base_Controller_AbstractController 
 		GO::modules()->callModuleMethod('submitSettings', array(&$this, &$params, &$response, $user), false);
 		
 
-		GO_Base_Session::setCompatibilitySessionVars();
+//		GO_Base_Session::setCompatibilitySessionVars();
 		
 		
 		return $response;
