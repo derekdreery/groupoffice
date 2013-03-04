@@ -11,7 +11,6 @@ $favicon = !empty(GO::config()->favicon) ? GO::config()->favicon : $view->getThe
 <title><?php echo GO::config()->title; ?></title>
 <?php
 $view->addStylesheet($view->getPath().'ext/resources/css/ext-all.css', $view->getUrl().'ext/resources/css/');
-//$view->addStylesheet($view->getPath().'themes/Default/xtheme-groupoffice.css', $view->getUrl().'themes/Default/');
 $view->addStylesheet($view->getPath().'themes/Default/style.css', $view->getUrl().'themes/Default/');
 $view->addStylesheet($view->getPath().'themes/ExtJS/style.css', $view->getUrl().'themes/ExtJS/');
 $view->loadModuleStylesheets();
