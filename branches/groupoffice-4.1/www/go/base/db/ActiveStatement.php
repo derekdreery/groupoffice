@@ -101,16 +101,16 @@ class GO_Base_Db_ActiveStatement implements IteratorAggregate {
 	 * 
 	 * @return GO_Base_Db_ActiveRecord
 	 */
-	public function fetch(){
-		return $this->stmt->fetch();
+	public function fetch($fetch_style=null){
+		return $this->stmt->fetch($fetch_style);
 	}
 	
 	/**
 	 * 
 	 * @return GO_Base_Db_ActiveRecord[]
 	 */
-	public function fetchAll(){
-		return $this->stmt->fetchAll();
+	public function fetchAll($fetch_style=null){
+		return $this->stmt->fetchAll($fetch_style);
 	}
 	
 	public function rowCount() {
