@@ -49,7 +49,8 @@ class GO_Base_Mail_EmailRecipients{
 	 * @return boolean 
 	 */
 	public function hasRecipient($email){
-		return isset($this->_addresses[$email]);
+//		return isset($this->_addresses[$email]);
+		return array_key_exists($email, $this->_addresses);
 	}
 
 	
