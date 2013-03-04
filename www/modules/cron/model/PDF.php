@@ -28,6 +28,9 @@ class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 		$this->AddPage();
 		$this->SetFillColor(255,255,255); // RESET FILL TO WHITE
 
+		$eventsString = GO::t('appointments','calendar');
+		$tasksString = GO::t('tasks','tasks');
+		
 		$textColor = $this->TextColor;
 		$textFont = $this->getFontFamily();
 		
@@ -38,7 +41,7 @@ class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 		$this->SetTextColor(125,162,180);
 		$this->SetFont($this->font,'',$this->_headerFontSize);
 
-		$this->MultiCell(440,$this->_cellheight,'Events',0,'L',1,1);
+		$this->MultiCell(440,$this->_cellheight,$eventsString,0,'L',1,1);
 		
 		$this->SetTextColor($textColor);
 		$this->SetFont($textFont,'',$this->_textFontSize);
@@ -60,7 +63,7 @@ class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 		$this->SetTextColor(125,162,180);
 		$this->SetFont($this->font,'',$this->_headerFontSize);
 
-		$this->MultiCell(440,$this->_cellheight,'Tasks',0,'L',1,1);
+		$this->MultiCell(440,$this->_cellheight,$tasksString,0,'L',1,1);
 		
 		$this->SetTextColor($textColor);
 		$this->SetFont($textFont,'',$this->_textFontSize);
@@ -130,7 +133,7 @@ class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 		$eventEndTime = $eventEnd->format('H:i');
 		
 		$nameString = $event->getAttribute('name', 'html');
-		$nameString = GO_Base_Util_String::enriched_to_html($nameString, true);
+		$nameString = GO_Base_Util_String::text_to_html($nameString, true);
 		
 		$timeString = $eventStartTime.' - '.$eventEndTime;
 		
@@ -152,7 +155,7 @@ class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 	private function _renderTaskRow($task){
 		
 		$nameString = $task->getAttribute('name', 'html');
-		$nameString = GO_Base_Util_String::enriched_to_html($nameString, true);
+		$nameString = GO_Base_Util_String::text_to_html($nameString, true);
 		
 		$this->MultiCell($this->_columnLeftWidth,$this->_cellheight,'--',$this->_border,'L',1,0);
 		$this->MultiCell($this->_columnDescriptionWidth,$this->_cellheight,$nameString,$this->_border,'L',1,1,'','',true,0,true);
