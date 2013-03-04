@@ -1860,7 +1860,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @param int $recurrenceTime Export for a specific recurrence time for the recurrence-id
 	 * @throws Exception
 	 */
-	public function replyToOrganizer($recurrenceTime=false){
+	public function replyToOrganizer($recurrenceTime=false, $sendingParticipant=false){
 		
 //		if($this->is_organizer)
 //			throw new Exception("Meeting reply can't be send from the organizer's event");
@@ -1868,7 +1868,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 		//we need to pass the sending participant to the toIcs function. 
 		//Only the organizer and current participant should be included
-		$sendingParticipant = $this->getParticipantOfCalendar();
+		if(!$sendingParticipant)
+			$sendingParticipant = $this->getParticipantOfCalendar();
 			
 
 		if(!$sendingParticipant)
@@ -1879,12 +1880,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			throw new Exception("Could not find organizer to send message to!");
 
 		$updateReponses = GO::t('updateReponses','calendar');
-		$subject= sprintf($updateReponses[$sendingParticipant->status], $this->user->name, $this->name);
+		$subject= sprintf($updateReponses[$sendingParticipant->status], $sendingParticipant->name, $this->name);
 
 
 		//create e-mail message
 		$message = GO_Base_Mail_Message::newInstance($subject)
-							->setFrom($this->user->email, $this->user->name)
+							->setFrom($sendingParticipant->email, $sendingParticipant->name)
 							->addTo($organizer->email, $organizer->name);
 
 		$body = '<p>'.$subject.': </p>'.$this->toHtml();
