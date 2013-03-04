@@ -724,7 +724,6 @@ class GO_Base_Util_String {
 	 * @return string HTML formated string
 	 */
 	public static function enriched_to_html($enriched, $convert_links=true) {
-		global $GO_CONFIG, $GO_MODULES;
 
 		// We add space at the beginning and end of the string as it will
 		// make some regular expression checks later much easier (so we
@@ -777,8 +776,6 @@ class GO_Base_Util_String {
 		// Now we remove the leading/trailing space we added at the
 		// start.
 		$enriched = preg_replace('/^ (.*) $/s', '\1', $enriched);
-
-		$module = $GLOBALS['GO_MODULES']->modules['email'];
 
 		if($convert_links)
 		{
