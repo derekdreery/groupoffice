@@ -129,6 +129,9 @@ class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 		$eventStartTime = $eventStart->format('H:i');
 		$eventEndTime = $eventEnd->format('H:i');
 		
+		$nameString = $event->getAttribute('name', 'html');
+		$nameString = GO_Base_Util_String::enriched_to_html($nameString, true);
+		
 		$timeString = $eventStartTime.' - '.$eventEndTime;
 		
 		$this->MultiCell($this->_columnLeftWidth,$this->_cellheight,'--',$this->_border,'L',1,0);
@@ -137,7 +140,7 @@ class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 		$this->MultiCell($this->_columnTimeWidth,$this->_cellheight,$timeString,$this->_border,'L',1,0);
 		
 		$this->SetFontSize($this->_textFontSize);
-		$this->MultiCell($this->_columnNameWidth,$this->_cellheight,$event->getAttribute('name', 'html'),$this->_border,'L',1,1,'','',true,0,true);
+		$this->MultiCell($this->_columnNameWidth,$this->_cellheight,$nameString ,$this->_border,'L',1,1,'','',true,0,true);
 		
 		if($event->description){
 			$this->MultiCell($this->_columnLeftWidth,$this->_cellheight,'',$this->_border,'L',1,0);
@@ -147,8 +150,12 @@ class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 	}
 	
 	private function _renderTaskRow($task){
+		
+		$nameString = $task->getAttribute('name', 'html');
+		$nameString = GO_Base_Util_String::enriched_to_html($nameString, true);
+		
 		$this->MultiCell($this->_columnLeftWidth,$this->_cellheight,'--',$this->_border,'L',1,0);
-		$this->MultiCell($this->_columnDescriptionWidth,$this->_cellheight,$task->getAttribute('name', 'html'),$this->_border,'L',1,1,'','',true,0,true);
+		$this->MultiCell($this->_columnDescriptionWidth,$this->_cellheight,$nameString,$this->_border,'L',1,1,'','',true,0,true);
 		
 		if($task->description){
 			$this->MultiCell($this->_columnLeftWidth,$this->_cellheight,'',$this->_border,'L',1,0);
