@@ -303,7 +303,7 @@ class TimeZoneUtil {
     public static $microsoftExchangeMap = array(
         0  => 'UTC',
         31 => 'Africa/Casablanca',
-        2  => 'Europe/Lisbon',
+        2  => 'Europe/Sarajevo',
         1  => 'Europe/London',
         4  => 'Europe/Berlin',
         6  => 'Europe/Prague',
@@ -444,6 +444,7 @@ class TimeZoneUtil {
                     // answer for.
                     if (isset($vtimezone->{'X-MICROSOFT-CDO-TZID'})) {
                         if (isset(self::$microsoftExchangeMap[(int)$vtimezone->{'X-MICROSOFT-CDO-TZID'}->value])) {
+													
                             return new \DateTimeZone(self::$microsoftExchangeMap[(int)$vtimezone->{'X-MICROSOFT-CDO-TZID'}->value]);
                         }
                     }
