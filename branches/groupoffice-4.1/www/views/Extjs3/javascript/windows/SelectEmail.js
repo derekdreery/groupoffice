@@ -89,16 +89,9 @@ GO.dialog.SelectEmail = function(config) {
 
 	if (GO.addressbook) {
 		this.contactsStore = new GO.data.JsonStore({
-			url : GO.settings.modules.addressbook.url + 'json.php',
-			baseParams : {
-				task : 'contacts',
-				no_addressbooks_filter: true
-			},
-			root : 'results',
-			id : 'id',
-			totalProperty:'total',
-			fields : ['id', 'name', 'company_name', 'email',
-			'home_phone', 'work_phone', 'work_fax', 'cellular'],
+			url : GO.url("addressbook/contact/searchEmail"),
+			id : 'email',
+			fields : ['id', 'name',  'email', 'ab_name', 'company_name', "function","department"],
 			remoteSort : true
 		});
 
@@ -142,58 +135,16 @@ GO.dialog.SelectEmail = function(config) {
 		}, this);
 
 		
-		/*
-		this.addressbooksStore = new GO.data.JsonStore({
-			url : GO.settings.modules.addressbook.url + 'json.php',
-			baseParams : {
-				task : 'addressbooks'
-			},
-			id : 'id',
-			root : 'results',
-			fields: ['id', 'name', 'owner', 'user_id', 'acl_id','acl_write','shared_acl','default_iso_adress_format','default_salutation'],
-			totalProperty : 'total',
-			remoteSort : true
-		});
-
-		this.addressbooksGrid = new GO.grid.GridPanel({
-			id : 'select-addressbooks-grid',
-			title : GO.addressbook.lang.addressbooks,
-			paging : true,
-			border : false,
-			store : this.addressbooksStore,
-			view : new Ext.grid.GridView({
-				autoFill : true,
-				forceFit : true
-			}),
-			columns : [{
-				header : GO.lang['strName'],
-				dataIndex : 'name',
-				css : 'white-space:normal;',
-				sortable : true
-			}, {
-				header : GO.lang['strOwner'],
-				dataIndex : 'owner',
-				css : 'white-space:normal;',
-				sortable : true
-			}],
-			sm : new Ext.grid.RowSelectionModel()
-		});
-
-		this.addressbooksGrid.on('show', function() {
-			this.addressbooksStore.load();
-		}, this);
-
-		items.push(this.addressbooksGrid);
-*/
 
 		this.companiesStore = new GO.data.JsonStore({
-			url : GO.settings.modules.addressbook.url + 'json.php',
+			url : GO.url("addressbook/company/store"),
 			baseParams : {
-				task : 'companies'
+				//task : 'companies',
+				require_email:true				
 			},
-			totalProperty:'total',
-			root : 'results',
-			id : 'id',
+//			root : 'results',
+//			id : 'id',
+//			totalProperty : 'total',
 			fields : ['id', 'name', 'city', 'email', 'phone',
 			'homepage', 'address', 'zip'],
 			remoteSort : true
