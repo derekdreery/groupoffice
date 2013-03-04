@@ -24,7 +24,7 @@ class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 	}
 	
 	public function render($user){
-		$this->SetAutoPageBreak(True, 60); // Set the auto pagebreak to 60 pixels from the bottom.
+		//$this->SetAutoPageBreak(True, 60); // Set the auto pagebreak to 60 pixels from the bottom.
 		$this->AddPage();
 		$this->SetFillColor(255,255,255); // RESET FILL TO WHITE
 
