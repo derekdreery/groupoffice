@@ -93,6 +93,15 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 		else
 			return false;
 	}
+	
+	/**
+	 * Get's a unique URI for the calendar. This is used by CalDAV
+	 * 
+	 * @return string
+	 */
+	public function getUri(){
+		return preg_replace('/[^\w-]*/', '', (strtolower(str_replace(' ', '-', $this->name)))).'-'.$this->id;
+	}
 
 	/**
 	 * Check if the current user may create events in this calendar. Here we deviate
