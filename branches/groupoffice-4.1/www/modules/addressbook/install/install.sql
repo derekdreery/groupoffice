@@ -147,7 +147,7 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
   `comment` text,
   `ctime` int(11) NOT NULL DEFAULT '0',
   `mtime` int(11) NOT NULL DEFAULT '0',
-  `salutation` varchar(50) NOT NULL DEFAULT '',
+  `salutation` varchar(100) NOT NULL DEFAULT '',
   `email_allowed` tinyint(1) NOT NULL DEFAULT '1',
   `files_folder_id` int(11) NOT NULL DEFAULT '0',
   `go_user_id` int(11) NOT NULL DEFAULT '0',
