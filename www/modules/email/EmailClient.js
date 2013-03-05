@@ -1062,8 +1062,8 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	{
 		if(!account_id)
 			account_id=this.messagesGrid.store.baseParams.account_id;
-
-		var statusElId = "status_"+this.getFolderNodeId(account_id, mailbox);
+		var nodeId = this.getFolderNodeId(account_id, mailbox);
+		var statusElId = "status_"+nodeId;
 		var statusEl = Ext.get(statusElId);
 		
 	
@@ -1075,9 +1075,13 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 //		}
 
 		if(statusEl && statusEl.dom)
-		{
-			var folderEl = statusEl.prev();
-			folderEl.dom.className = unseen ? 'ml-folder-unseen' : 'ml-folder-seen';
+		{			
+			var node = this.treePanel.getNodeById(nodeId);
+
+			if(unseen)
+				node.getUI().addClass('ml-folder-unseen');
+			else
+				node.getUI().removeClass('ml-folder-unseen');
 			
 			var statusText = statusEl.dom.innerHTML;
 			var current = statusText=='' ? 0 : parseInt(statusText.substring(1, statusText.length-1));
