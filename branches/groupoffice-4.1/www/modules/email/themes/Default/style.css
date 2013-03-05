@@ -166,14 +166,11 @@ margin:5px 2px;
 }
 
 
-.ml-folder-unseen{
+.ml-folder-unseen span{
 	color:#15428B !important; 
 	font-weight:bold !important;
-	padding:0px !important;
 }
-.ml-folder-seen{
-	padding:0px !important;
-}
+
 
 .ml-seen-mail{
 	margin:2px 0px;
