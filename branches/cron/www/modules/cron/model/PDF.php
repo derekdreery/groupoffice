@@ -2,14 +2,12 @@
 
 class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 			
-	private $_cellheight = 15;
-	private $_columnLeftWidth = 13;
-	private	$_columnTimeWidth = 60;
-	private	$_columnNameWidth = 0; //180;
-	private	$_columnDescriptionWidth = 0; //240;
-	private	$_headerFontSize = 12;
-	private $_timeFontSize = 8;
-	private	$_textFontSize = 9;
+	private $_columnLeftWidth = '14';
+	private	$_columnTextWidth = '300';
+	private	$_headerFontSize = '16';
+	private	$_headerFontColor = '#3194D0';
+	private $_timeFontSize = '12';
+	private	$_textFontSize = '14';
 	private $_border = 0;
 		
 	protected $font = 'dejavusans';
@@ -23,11 +21,17 @@ class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 		$this->subtitle = $subtitle;
 	}
 	
+	public function AddPage($orientation = '', $format = '', $keepmargins = false, $tocpage = false) {
+		parent::AddPage($orientation, $format, $keepmargins, $tocpage);
+		$this->SetAutoPageBreak(True, 30);
+		$this->setEqualColumns(2);
+	}
+	
 	public function render($user){
 		//$this->SetAutoPageBreak(True, 60); // Set the auto pagebreak to 60 pixels from the bottom.
+		
 		$this->AddPage();
-		$this->SetFillColor(255,255,255); // RESET FILL TO WHITE
-
+	//	$this->setEqualColumns(2);
 		$eventsString = GO::t('appointments','calendar');
 		$tasksString = GO::t('tasks','tasks');
 		
@@ -38,44 +42,39 @@ class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 		$tasks = $this->_getTasks($user);
 		
 		// RENDER EVENTS
-		$this->SetTextColor(125,162,180);
-		$this->SetFont($this->font,'',$this->_headerFontSize);
+		$html = '';
+		$html .= '<h2 style="color:'.$this->_headerFontColor.';font-size:'.$this->_headerFontSize.'px;">'.$eventsString.'</h2>';
+		$html .= '<br />';
+		
+		$html .= '<table border="'.$this->_border.'">';
 
-		$this->MultiCell(440,$this->_cellheight,$eventsString,0,'L',1,1);
-		
-		$this->SetTextColor($textColor);
-		$this->SetFont($textFont,'',$this->_textFontSize);
-		$this->MultiCell(0,$this->_cellheight,'',0,'L',1,1);
-		
-		$this->setEqualColumns(2);
-		
-		foreach($events as $event){
-			$this->_renderEventRow($event);
+		if(count($events) > 0){
+			foreach($events as $event)
+				$html .= $this->_renderEventRow($event);
+		} else {
+			$html .= '<tr><td width="'.$this->_columnLeftWidth.'">&nbsp;</td><td width="'.$this->_columnTextWidth.'">&nbsp;</td></tr>';
 		}
-		
-		//$this->selectColumn();
-		
-		// 2 empty lines
-		$this->MultiCell(0,$this->_cellheight,'',0,'L',1,1);
-		$this->MultiCell(0,$this->_cellheight,'',0,'L',1,1);
+
+		$html .= '</table>';
+		$html .= '<br /><br /><br />';
 		
 		// RENDER TASKS
-		$this->SetTextColor(125,162,180);
-		$this->SetFont($this->font,'',$this->_headerFontSize);
+		$html .= '<h2 style="color:'.$this->_headerFontColor.';font-size:'.$this->_headerFontSize.'px;">'.$tasksString.'</h2>';
+		$html .= '<br />';
 
-		$this->MultiCell(440,$this->_cellheight,$tasksString,0,'L',1,1);
+		$html .= '<table border="'.$this->_border.'">';
 		
-		$this->SetTextColor($textColor);
-		$this->SetFont($textFont,'',$this->_textFontSize);
-		$this->MultiCell(0,$this->_cellheight,'',0,'L',1,1);
-		
-		//$this->setEqualColumns(2);
-		
-		foreach($tasks as $task){
-			$this->_renderTaskRow($task);
+		if(count($tasks) > 0){
+			foreach($tasks as $task)
+				$html .= $this->_renderTaskRow($task);
+		} else {
+			$html .= '<tr><td width="'.$this->_columnLeftWidth.'">&nbsp;</td><td width="'.$this->_columnTextWidth.'">&nbsp;</td></tr>';
 		}
 		
-		$this->resetColumns();
+		$html .= '</table>';
+			
+		//var_export($html);
+		$this->writeHTML($html, true, false, false, false, 'L');
 	}
 	
 	private function _getEvents($user){
@@ -125,7 +124,9 @@ class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 	}
 	
 	
-	private function _renderEventRow(GO_Calendar_Model_Event $event){
+	private function _renderEventRow(GO_Calendar_Model_Event $event){	
+		
+		$html = '';
 		
 		$eventStart = GO_Base_Util_Date_DateTime::fromUnixtime($event->start_time);
 		$eventEnd = GO_Base_Util_Date_DateTime::fromUnixtime($event->end_time);
@@ -137,34 +138,36 @@ class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 		
 		$timeString = $eventStartTime.' - '.$eventEndTime;
 		
-		$this->MultiCell($this->_columnLeftWidth,$this->_cellheight,'--',$this->_border,'L',1,0);
-		
-		$this->SetFontSize($this->_timeFontSize);
-		$this->MultiCell($this->_columnTimeWidth,$this->_cellheight,$timeString,$this->_border,'L',1,0);
-		
-		$this->SetFontSize($this->_textFontSize);
-		$this->MultiCell($this->_columnNameWidth,$this->_cellheight,$nameString ,$this->_border,'L',1,1,'','',true,0,true);
+		$html .= '<tr><td width="'.$this->_columnLeftWidth.'" style="font-size:'.$this->_textFontSize.'px;">--</td>';
+		$html .= '<td width="'.$this->_columnTextWidth.'"><font style="font-size:'.$this->_timeFontSize.'px;">'.$timeString.'</font> <font style="font-size:'.$this->_textFontSize.'px;">'.$nameString.'</font></td>';
 		
 		if($event->description){
-			$this->MultiCell($this->_columnLeftWidth,$this->_cellheight,'',$this->_border,'L',1,0);
-			$this->MultiCell($this->_columnDescriptionWidth,$this->_cellheight,$event->getAttribute('description', 'html'),$this->_border,'L',1,1,'','',true,0,true);
-		}
-		//$this->MultiCell(0,$this->_cellheight,'',0,'L',1,1);
+			$html .= '</tr><tr><td>&nbsp;</td>';
+			$html .= '<td>'.$event->getAttribute('description', 'html').'</td>';
+		}	
+		
+		$html .='</tr>';
+		
+		return $html;
 	}
 	
 	private function _renderTaskRow($task){
 		
+		$html = '';
+		
 		$nameString = $task->getAttribute('name', 'html');
 		$nameString = GO_Base_Util_String::text_to_html($nameString, true);
 		
-		$this->MultiCell($this->_columnLeftWidth,$this->_cellheight,'--',$this->_border,'L',1,0);
-		$this->MultiCell($this->_columnDescriptionWidth,$this->_cellheight,$nameString,$this->_border,'L',1,1,'','',true,0,true);
+		$html .= '<tr><td width="'.$this->_columnLeftWidth.'" style="font-size:'.$this->_textFontSize.'px;">--</td>';
+		$html .= '<td style="font-size:'.$this->_textFontSize.'px;">'.$nameString.'</td>';
 		
 		if($task->description){
-			$this->MultiCell($this->_columnLeftWidth,$this->_cellheight,'',$this->_border,'L',1,0);
-			
-			$this->MultiCell($this->_columnDescriptionWidth,$this->_cellheight,$task->getAttribute('description', 'html'),$this->_border,'L',1,1,'','',true,0,true);
-		}
-		//$this->MultiCell(0,$this->_cellheight,'',0,'L',1,1);
+			$html .= '</tr><tr><td>&nbsp;</td>';
+			$html .= '<td>'.$task->getAttribute('description', 'html').'</td>';
+		}	
+		
+		$html .='</tr>';
+		
+		return $html;
 	}
 }
