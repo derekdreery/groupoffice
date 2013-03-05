@@ -1,4 +1,6 @@
 - Wrapper class for ActiveStatement so that we can use persistent database connections
+- Old framework not needed for boot anymore
+- Don't delete the user with id=1
 
 01-03-2013 4.1.39
 - Improved calendar view grid
