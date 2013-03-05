@@ -1,3 +1,4 @@
+05-03-2013 4.1.40
 - Wrapper class for ActiveStatement so that we can use persistent database connections
 - Old framework not needed for boot anymore
 - Prevent deletion the user with id=1
