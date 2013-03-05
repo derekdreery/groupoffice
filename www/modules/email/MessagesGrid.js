@@ -50,7 +50,7 @@ GO.email.MessagesGrid = function(config){
 				renderer:this.renderNorthMessageRow,
 				width:200
 			},{
-				header: GO.email.lang.dateReceived,
+				header: GO.lang.strDate,
 				dataIndex: 'arrival',
 				width:65,
 				renderer:this.renderNorthMessageRow,
@@ -108,7 +108,7 @@ GO.email.MessagesGrid = function(config){
 		
 		},{
 			id:'arrival',
-			header: GO.email.lang.dateReceived,
+			header: GO.lang.strDate,
 			dataIndex: 'arrival',
 			width:80,
 			align:'right'
