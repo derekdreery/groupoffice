@@ -1,6 +1,8 @@
 - Wrapper class for ActiveStatement so that we can use persistent database connections
 - Old framework not needed for boot anymore
-- Don't delete the user with id=1
+- Prevent deletion the user with id=1
+- Raised contact salutation field to 100 chars and cut it if it's longer.
+- Unseen messages were not highlighted in e-mail portlet.
 - Billing: optional extra costs line in orders if that is set in the order status. Can be removed manually or overwritten by new extra costs line when status is changed.
 
 01-03-2013 4.1.39
