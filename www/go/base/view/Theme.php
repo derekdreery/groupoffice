@@ -7,7 +7,13 @@ class GO_Base_View_Theme{
 	 * @return string
 	 */
 	public function getName(){
-		return GO::user() ? GO::user()->theme : GO::config()->theme;
+		$theme = GO::user() ? GO::user()->theme : GO::config()->theme;
+		
+		if(!file_exists(GO::config()->root_path.'views/'.GO::view().'/themes/'.$theme)){
+			return 'Default';
+		}  else {
+			return $theme;
+		}
 	}
 	
 	/**
