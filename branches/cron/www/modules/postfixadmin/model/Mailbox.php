@@ -98,6 +98,20 @@ class GO_Postfixadmin_Model_Mailbox extends GO_Base_Db_ActiveRecord {
 
 		return parent::validate();
 	}
+	
+	/**
+	 * Get the filesystem folder with mail data.
+	 * 
+	 * @return \GO_Base_Fs_Folder
+	 */
+	public function getMaildirFolder(){
+		return new GO_Base_Fs_Folder('/home/vmail/'.$this->maildir);
+	}
+	
+	public function cacheUsage(){
+		$this->usage = $this->getMaildirFolder()->calculateSize()/1024;
+		$this->save();
+	}
 
 	private function _checkQuota() {
 		$total_quota = $this->domain->total_quota;

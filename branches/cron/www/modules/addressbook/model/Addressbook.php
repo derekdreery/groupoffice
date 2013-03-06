@@ -57,6 +57,15 @@
 		);
 	}
 	
+	/**
+	 * Get's a unique URI for the calendar. This is used by CalDAV
+	 * 
+	 * @return string
+	 */
+	public function getUri(){
+		return preg_replace('/[^\w-]*/', '', (strtolower(str_replace(' ', '-', $this->name)))).'-'.$this->id;
+	}
+	
 	protected function beforeSave() {
 		
 		if(!isset($this->default_salutation))

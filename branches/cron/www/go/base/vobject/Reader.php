@@ -299,6 +299,8 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 		//workaround for funambol bug		
 		$data = str_replace('EXDATE: ', 'EXDATE:', $data);
 		
+		$options = \Sabre\VObject\Reader::OPTION_FORGIVING + \Sabre\VObject\Reader::OPTION_IGNORE_INVALID_LINES;
+		
 		return parent::read($data, $options);
 	}
 

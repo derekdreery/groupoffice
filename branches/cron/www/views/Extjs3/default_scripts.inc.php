@@ -123,61 +123,19 @@ $scripts[]=$view_root_uri.'javascript/namespaces.js';
 	};
 
 <?php
-
-//some functions require extra security
-
 if(isset(GO::session()->values['security_token'])){	
 	echo 'GO.securityToken="'.GO::session()->values['security_token'].'";';
 }
 
-//if(isset($_REQUEST['after_login_url'])) {
-//	$after_login_url = $_REQUEST['after_login_url'];
-//	
-//}else {
-//	$after_login_url = $_SERVER['PHP_SELF'];
-//
-//	$params = array();
-//	foreach($_GET as $key=>$value) {
-//		if($key!='task' || $value!='logout') {
-//			$params[] =$key.'='.urlencode($value);
-//		}
-//	}
-//
-//	if(count($params)) {
-//		$after_login_url .= '?'.implode('&', $params);
-//	}
-//}
-
-//$_SESSION['GO_SESSION']['after_login_url']=$after_login_url;
-
 if(isset($_REQUEST['SET_LANGUAGE']) && preg_match('/[a-z_]/', $_REQUEST['SET_LANGUAGE']))
 	echo 'GO.loginSelectedLanguage="'.$_REQUEST['SET_LANGUAGE'].'";';
 
-//echo 'GO.afterLoginUrl="'.$after_login_url.'";';
-
-//$fullscreen = isset($_COOKIE['GO_FULLSCREEN']) && $_COOKIE['GO_FULLSCREEN']=='1' ? 'true' : 'false';
-//echo 'GO.fullscreen='.$fullscreen.';';
-
-/*
- * If fullscreen mode is enabled and the user is already logged in we set $popup_groupoffice with the URL to load Group-Office
- * in.
- *
- * In themes/Default/layout.inc.php we handle this var.
- */
-//if(GO::user() && $fullscreen=='true' && !isset($_REQUEST['fullscreen_loaded'])) {
-//	//$popup_groupoffice = isset($_REQUEST['after_login_url']) ? smart_stripslashes($_REQUEST['after_login_url']) : GO::config()->host;
-//	$popup_groupoffice = String::add_params_to_url($popup_groupoffice, 'fullscreen_loaded=true');
-//}
-
 if(GO::user()) {
 	echo 'window.name="'.GO::getId().'";';
-	
-	//echo 'window.name="groupoffice";';
 }else
 {
 	echo 'window.name="groupoffice-login";';
 }
-
 ?>
 </script>
 <?php
@@ -192,37 +150,11 @@ $path = $cacheFolder->path().'/'.$file;
 
 
 if(GO::config()->debug || !file_exists($path)) {
-	
-	//cleanup old cache
-//	require_once(GO::config()->class_path.'filesystem.class.inc');
-//	$fs = new filesystem();
-	/*$files = $fs->get_files_sorted(GO::config()->file_storage_path.'cache');
-	while($file=array_shift($files)) {
-		if(substr($file['name'],0, 7)=='base-'.$GLOBALS['GO_LANGUAGE']->language) {
-			unlink($file['path']);
-		}
-	}*/
 	echo "\n<!-- regenerated script -->\n";
 
-//	$scripts[]=$root_uri.'language/common/en.js';
-//	$scripts[]=$root_uri.'modules/users/language/en.js';
-//
-//	if($GLOBALS['GO_LANGUAGE']->language!='en') {
-//		if(file_exists(GO::config()->root_path.'language/common/'.$GLOBALS['GO_LANGUAGE']->language.'.js')) {
-//			$scripts[]=$root_uri.'language/common/'.$GLOBALS['GO_LANGUAGE']->language.'.js';
-//		}
-//
-		//echo $view_root_uri.'ext/src/locale/ext-lang-'.$extjsLang.'.js';
-		if(file_exists($view_root_path.'ext/src/locale/ext-lang-'.$extjsLang.'.js')) {
-			$scripts[]=$view_root_uri.'ext/src/locale/ext-lang-'.$extjsLang.'.js';
-		}
-//
-//		if(file_exists(GO::config()->root_path.'modules/users/language/'.$GLOBALS['GO_LANGUAGE']->language.'.js')) {
-//			$scripts[]=$root_uri.'modules/users/language/'.$GLOBALS['GO_LANGUAGE']->language.'.js';
-//		}
-//	}
-
-//	$dynamic_debug_scripts=array();
+	if(file_exists($view_root_path.'ext/src/locale/ext-lang-'.$extjsLang.'.js')) {
+		$scripts[]=$view_root_uri.'ext/src/locale/ext-lang-'.$extjsLang.'.js';
+	}
 
 	require(GO::config()->root_path.'language/languages.inc.php');
 	$fp=fopen($cacheFolder->path().'/languages.js','w');
@@ -231,17 +163,9 @@ if(GO::config()->debug || !file_exists($path)) {
 	}
 	fwrite($fp, "GO.Languages=[];\n");
 	
-	
-
-	fwrite($fp, 'Ext.ns("GO.portlets");');
-	
-	
-
-	//fwrite($fp,'GO.Languages.push(["",GO.lang.userSelectedLanguage]);');
 	foreach($languages as $code=>$language) {
 		fwrite($fp,'GO.Languages.push(["'.$code.'","'.$language.'"]);');
-	}
-	
+	}	
 	
 	//Put all lang vars in js
 	$language = new GO_Base_Language();
@@ -304,23 +228,7 @@ foreach($load_modules as $module) {
 }
 
 $scripts=array();
-//$load_modules=array();
-//if(!isset($default_scripts_load_modules)){
-//	if($GLOBALS['GO_SECURITY']->logged_in() && !isset($popup_groupoffice)){
-//		$load_modules=$GLOBALS['GO_MODULES']->modules;
-//	}
-//}else
-//{
-//	foreach($default_scripts_load_modules as $module)
-//	{
-//		$GLOBALS['GO_MODULES']->modules[$module]['read_permission']=true;
-//		$load_modules[]=$GLOBALS['GO_MODULES']->modules[$module];
-//	}
-//}
-
-
-//var_dump($load_modules);
-$modulesCacheStr = array();
+$modulesCacheStr=array();
 foreach($load_modules as $module)
 	if($module->permissionLevel) 
 		$modulesCacheStr[]=$module->id.($module->permissionLevel>GO_Base_Model_Acl::READ_PERMISSION ? '1' : '0');
@@ -413,17 +321,7 @@ if(count($load_modules)) {
 	if(!GO::config()->debug) {
 		if(!file_exists($path)) {
 		
-			//cleanup old cache
-//			require_once(GO::config()->class_path.'filesystem.class.inc');
-//			$fs = new filesystem();
-			/*$files = $fs->get_files_sorted(GO::config()->file_storage_path.'cache');
-			while($file=array_shift($files)) {
-				if(substr($file['name'],0, 1)==$user_id) {
-					unlink($file['path']);
-				}
-			}*/
-
-			file_put_contents($cacheFolder->path().'/'.$user_id.'-modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode($GLOBALS['GO_MODULES']->modules)).'");');
+			file_put_contents($cacheFolder->path().'/'.$user_id.'-modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode($view->exportModules())).'");');
 			array_unshift($scripts, $cacheFolder->path().'/'.$user_id.'-modules.js');
 
 
@@ -438,7 +336,7 @@ if(count($load_modules)) {
 
 	}else
 	{
-		file_put_contents($cacheFolder->path().'/'.$user_id.'-modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode($GLOBALS['GO_MODULES']->modules)).'");');
+		file_put_contents($cacheFolder->path().'/'.$user_id.'-modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode($view->exportModules())).'");');
 		
 		$url=GO::url("core/compress", array('file'=>$user_id.'-modules.js', 'mtime'=>filemtime($cacheFolder->path().'/'.$user_id.'-modules.js')));		
 		array_unshift($scripts, $url);
@@ -454,35 +352,35 @@ if(count($load_modules)) {
 	 * executed when Group-Office loads for the first time.
 	 * Modules can add stuff in their scripts.inc.php files.
 	 */
-
 	$GO_SCRIPTS_JS='';
+	
+	//START FOR BACKWARDS COMPAT. REMOVE WHEN BILLING MODULE IS REFACTORED.	
+	$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'customexports');
+	$ce=array();
+	if($folder->exists()){
 
-//	foreach($load_modules as $module) {
-//		$GLOBALS['GO_LANGUAGE']->require_language_file($module['id']);
-//	}
+		//$GLOBALS['GO_CONFIG']=$GO_CONFIG=GO::config();
 
-	//The checked values is used in the SearchPanel.js for the filter
-//	$types = GO::config()->get_setting('link_type_filter', $user_id);
-//	$types = empty($types) ? array() : explode(',', $types);
-//
-//	$link_types=array();
-//	if(isset($lang['link_type'])){
-//		asort($lang['link_type']);
-//		foreach($lang['link_type'] as $id=>$name) {
-//			$type['id']=$id;
-//			$type['name']=$name;
-//			$type['checked']=in_array($id, $types);
-//			$link_types[] = $type;
-//		}
-//	}
-//
-//	$GO_SCRIPTS_JS .= 'GO.linkTypes='.json_encode($link_types).';';
-//
-	require_once(GO::config()->class_path.'export/export_query.class.inc.php');
-	$eq = new export_query();
+		require_once(GO::config()->root_path.'Group-Office.php');
+		require_once(GO::config()->class_path.'export/export_query.class.inc.php');
 
-	$GO_SCRIPTS_JS.=$eq->find_custom_exports();
+		$files = $folder->ls();
+		while($file = array_shift($files)){
+			require_once($file->path());
+			$names = explode('.', $file->name());
 
+			$cls = new $names[0];
+
+			if(!isset($ce[$cls->query]))
+				$ce[$cls->query]=array();
+
+			$ce[$cls->query][]=array('name'=>$cls->name, 'cls'=>$names[0]);
+		}
+	}
+
+	$GO_SCRIPTS_JS.='GO.customexports='.json_encode($ce).';';
+	//END FOR BACKWARDS COMPAT. REMOVE WHEN BILLING MODULE IS REFACTORED.
+	
 	
 	foreach($load_modules as $module) {
 		if($module->permissionLevel) {
@@ -494,8 +392,6 @@ if(count($load_modules)) {
 			}
 		}
 	}
-
-	$GLOBALS['GO_EVENTS']->fire_event('load_scripts', array(&$GO_SCRIPTS_JS));	
 
 	$filename = $user_id.'-scripts.js';
 	$path = $cacheFolder->path().'/'.$filename;
@@ -511,29 +407,16 @@ if(count($load_modules)) {
 }
 ?>
 <script type="text/javascript">
-
-
-	<?php $GLOBALS['GO_EVENTS']->fire_event('inline_scripts');	?>
-
-	Ext.BLANK_IMAGE_URL = '<?php echo GO::config()->host; ?>views/Extjs3/ext/resources/images/default/s.gif';
-
-	Ext.state.Manager.setProvider(new GO.state.HttpProvider());
-	//Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
-
-
-	//some functions require extra security
-	<?php
-	
-	
-	
-	
-	if(isset(GO::session()->values['security_token']))		
-		echo 'Ext.Ajax.extraParams={security_token:"'.GO::session()->values['security_token'].'"};';
-	?>
+Ext.BLANK_IMAGE_URL = '<?php echo GO::config()->host; ?>views/Extjs3/ext/resources/images/default/s.gif';
+Ext.state.Manager.setProvider(new GO.state.HttpProvider());
+<?php
+if(isset(GO::session()->values['security_token']))		
+	echo 'Ext.Ajax.extraParams={security_token:"'.GO::session()->values['security_token'].'"};';
+?>
 </script>
 <?php
-if(file_exists($GLOBALS['GO_THEME']->theme_path.'MainLayout.js')) {
-	echo '<script src="'.$GLOBALS['GO_THEME']->theme_url.'MainLayout.js" type="text/javascript"></script>';
+if(file_exists($view->getTheme()->getPath().'MainLayout.js')) {
+	echo '<script src="'.$view->getTheme()->getUrl().'MainLayout.js" type="text/javascript"></script>';
 	echo "\n";
 }
 ?>

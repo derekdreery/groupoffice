@@ -229,9 +229,14 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			case 'from':
 				$sortField=$response['sent'] ? GO_Base_Mail_Imap::SORT_TO : GO_Base_Mail_Imap::SORT_FROM;
 				break;
-			case 'date':
-				$sortField=GO_Base_Mail_Imap::SORT_DATE;
+			case 'arrival':
+				$sortField=GO_Base_Mail_Imap::SORT_ARRIVAL; //arrival is faster on older mail servers
 				break;
+			
+			case 'date':
+				$sortField=GO_Base_Mail_Imap::SORT_DATE; //arrival is faster on older mail servers
+				break;
+			
 			case 'subject':
 				$sortField=GO_Base_Mail_Imap::SORT_SUBJECT;
 				break;

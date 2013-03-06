@@ -1,3 +1,29 @@
+06-03-2013 4.1.41
+- In some cases Group-Office didn't load.
+
+05-03-2013 4.1.40
+- Wrapper class for ActiveStatement so that we can use persistent database connections
+- Old framework not needed for boot anymore
+- Prevent deletion the user with id=1
+- Raised contact salutation field to 100 chars and cut it if it's longer.
+- Unseen messages were not highlighted in e-mail portlet.
+- Billing: optional extra costs line in orders if that is set in the order status. Can be removed manually or overwritten by new extra costs line when status is changed.
+
+01-03-2013 4.1.39
+- Improved calendar view grid
+- Create temp dirs with 777 permissions to avoid permission issues after upgrade
+- Clicking a day number on the month grid goes to the day view. Clicking on 
+  empty space in the cell adds an event.
+- Everybody may create calendar views
+- When freebusy permissions module is not installed users will always save 
+  meeting requests directly in to other user's calendars.
+- Changed style of unread messages in e-mail client.
+- Added date received column next to date sent column and made date received the 
+  default sort column because it is faster on old IMAP servers.
+- Don't validate passwords on user import and fixed error reporting bug.
+- Only last attachment was forwarded if there were duplicate names
+- E-mail account dialog doesn't connect to IMAP if not necessary
+
 28-02-2013 4.1.38
 - Repeating exception event creation happened before conflict check which caused invalid duplicates.
 - Don't create mailboxes with . or / chars in them

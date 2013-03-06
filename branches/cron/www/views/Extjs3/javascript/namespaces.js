@@ -30,6 +30,7 @@ Ext.namespace("GO.base.form");
 Ext.namespace("GO.base.upload");
 Ext.namespace("GO.base.tree");
 Ext.namespace("GO.base.util");
+Ext.namespace("GO.portlets");
 
 //An object of functions that open a particular link.
 //the index is the link type and the function gets the id as a parameter
