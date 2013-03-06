@@ -188,7 +188,7 @@ function test_system(){
 	$tests[]=$test;
 	$test['name']='Memory limit';
 	$test['pass']=$memory_limit>=64*1024*1024;
-	$test['feedback']='Warning: Your memory limit setting ('.format_size($memory_limit).') is less then 32MB. It\'s recommended to allow at least 32 MB.';
+	$test['feedback']='Warning: Your memory limit setting ('.format_size($memory_limit).') is less than 64MB. It\'s recommended to allow at least 64 MB.';
 	$test['fatal']=false;
 
 	$tests[]=$test;
