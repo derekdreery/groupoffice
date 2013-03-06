@@ -8,135 +8,115 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id$
+ * @version $Id: File.class.inc.php 7607 2011-06-15 09:17:42Z mschering $
  * @copyright Copyright Intermesh
- * @author Michael de Hart <mdhart@intermesh.nl>
+ * @author Merijn Schering <mschering@intermesh.nl>
  */
 
 /**
- * The note controller provides action for basic crud functionality for the note model
+ * 
+ * The Note controller
+ * 
  */
-class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractJsonController {
-
-  /**
-   * Load data for the display panel on the right of the screen
-   * @param $_REQUEST $params
-   */
-  protected function actionSubmit($params) {
-
-	$model = GO_Notes_Model_Note::model()->createOrFindByParams($params);
-
-	$model->setAttributes($params);
-
-	//BEFORE SUBMIT
-	//TODO: move encrypted logic to note model
-	if (!empty($params['encrypted'])) {
-	  if (!empty($params['userInputPassword1']) || !empty($params['userInputPassword2'])) {
-
-		// User just entered a new password.
-
-		if (empty($params['userInputPassword1']) || empty($params['userInputPassword2']))
-		  throw new Exception(GO::t('badPassword'));
-		if ($params['userInputPassword1'] != $params['userInputPassword2'])
-		  throw new Exception(GO::t('passwordMatchError'));
-		$params['password'] = crypt($params['userInputPassword1']);
-		$params['content'] = GO_Base_Util_Crypt::encrypt($params['content'], $params['userInputPassword1']);
-	  } else if (!empty($params['currentPassword'])) {
-
-		// User just entered the previously set password.
-
-		$params['password'] = crypt($params['currentPassword']);
-		$params['content'] = GO_Base_Util_Crypt::encrypt($params['content'], $params['currentPassword']);
-	  } else {
-		throw new Exception(GO::t('passwordSubmissionError'));
-	  }
-	} else {
-	  $params['password'] = '';
-	}
-	//END BEFORE SUBMIT
-
-	if ($model->save()) {
-	  //AFTER SUBMIT
-	  if (GO::modules()->files) {
-		$f = new GO_Files_Controller_Folder();
-		$response = array(); //never used in processAttachements?
-		$f->processAttachments($response, $model, $params);
-	  }
-	  //END AFTER SUBMIT
-	}
-
-	$this->renderSubmit($model);
-  }
-
-  /**
-   * Action for fetchin a JSON array to be loaded into a ExtJS form
-   * @param array $params the $_REQUEST data
-   * @throws GO_Base_Exception_AccessDenied When no create or write permissions for the loaded model
-   * @throws Exception when the notes decriptiopn password is incorrect
-   */
-  protected function actionLoad($params) {
-
-	//Load or create model
-	$model = GO_Notes_Model_Note::model()->createOrFindByParams($params);
-
-	// BEFORE LOAD: a password is entered to decrypt the content
-	if (isset($params['userInputPassword'])) {
-	  if (!$model->decrypt($params['userInputPassword']))
-		throw new Exception(GO::t('badPassword'));
-	}
-
-	// return render response
-	$remoteComboFields = array('category_id' => '$model->category->name');
+class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelController{
 	
-	//add extra data to response
-	$extraFields = array('encrypted'=>$model->encrypted);
-	if ($model->encrypted)
-	  $extraFields['content'] = GO::t('contentEncrypted');
+	protected $model = 'GO_Notes_Model_Note';
 	
-	$this->renderForm($model, $remoteComboFields, $extraFields);
-  }
-
-  /**
-   * Load a note model from the database and call the renderDisplay function to render the JSON
-   * output for a ExtJS Display Panel
-   * @param array $params the $_REQUEST object
-   * @throws GO_Base_Exception_NotFound when the note model cant be found in database
-   * @throws Exception When the encryption password provided is incorrect
-   */
-  protected function actionDisplay($params) {
-
-	$model = GO_Notes_Model_Note::model()->findByPk($params['id']);
-	if (!$model)
-	  throw new GO_Base_Exception_NotFound();
-
-	// decrypt model if password provided
-	if (isset($params['userInputPassword'])) {
-	  if (!$model->decrypt($params['userInputPassword']))
-		throw new Exception(GO::t('badPassword'));
+	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
+		
+		$multiSel = new GO_Base_Component_MultiSelectGrid(
+						'no-multiselect', 
+						"GO_Notes_Model_Category",$store, $params, true);		
+		
+		$multiSel->addSelectedToFindCriteria($storeParams, 'category_id');
+		$multiSel->setButtonParams($response);
+		$multiSel->setStoreTitle();
+		
+		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
 	}
-	$extraFields = array();
-	if ($model->encrypted)
-	  $extraFields['content'] = GO::t('clickHereToDecrypt');
-	$extraFields['encrypted'] = $model->encrypted;
 
-	$this->renderDisplay($model, $extraFields);
-  }
+	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+		$columnModel->formatColumn('user_name','$model->user->name',array(),'user_id');
+		return parent::formatColumns($columnModel);
+	}
 
-  /**
-   * Render JSON output that can be used by ExtJS GridPanel
-   * @param array $params the $_REQUEST params
-   */
-  protected function actionStore($params) {
-	//Create ColumnModel from model
-	$columnModel = new GO_Base_Data_ColumnModel(GO_Notes_Model_Note::model());
-	$columnModel->formatColumn('user_name', '$model->user->name', array(), 'user_id');
-
-	//Create store
-	$store = new GO_Base_Data_DbStore('GO_Notes_Model_Note', $columnModel, $params);
-	$store->multiSelect('no-multiselect', 'GO_Notes_Model_Category', 'category_id');
-
-	$this->renderStore($store);
-
-  }
-
+	protected function remoteComboFields(){
+		return array('category_id'=>'$model->category->name');
+	}
+	
+	
+	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {		
+		 if(GO::modules()->files){
+			 $f = new GO_Files_Controller_Folder();
+			 $f->processAttachments($response, $model, $params);
+		 }		
+		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
+	}
+	
+	protected function beforeSubmit(&$response, &$model, &$params) {
+		if (!empty($params['encrypted'])) {
+			if (!empty($params['userInputPassword1']) || !empty($params['userInputPassword2'])) {
+				
+				// User just entered a new password.
+				
+				if (empty($params['userInputPassword1']) || empty($params['userInputPassword2']))
+					throw new Exception(GO::t('badPassword'));
+				if ($params['userInputPassword1']!=$params['userInputPassword2'])
+					throw new Exception(GO::t('passwordMatchError'));
+				$params['password'] = crypt($params['userInputPassword1']);
+				$params['content'] = GO_Base_Util_Crypt::encrypt($params['content'],$params['userInputPassword1']);
+				
+			} else if (!empty($params['currentPassword'])) {
+				
+				// User just entered the previously set password.
+				
+				$params['password'] = crypt($params['currentPassword']);
+				$params['content'] = GO_Base_Util_Crypt::encrypt($params['content'],$params['currentPassword']);
+				
+			} else {
+				throw new Exception(GO::t('passwordSubmissionError'));
+			}
+		} else {
+			$params['password'] = '';
+		}
+		return parent::beforeSubmit($response, $model, $params);
+	}
+	
+	protected function beforeLoad(&$response, &$model, &$params) {		
+		if (isset($params['userInputPassword'])) {
+			if (!$model->decrypt($params['userInputPassword']))
+				throw new Exception(GO::t('badPassword'));						
+		}
+	
+		return parent::beforeLoad($response, $model, $params);
+	}
+	
+	protected function afterLoad(&$response, &$model, &$params) {
+		
+		if ($model->encrypted)
+			$response['data']['content'] = GO::t('contentEncrypted');	
+		
+		$response['data']['encrypted']=$model->encrypted;
+		
+		return parent::afterLoad($response, $model, $params);
+	}
+	
+	protected function beforeDisplay(&$response, &$model, &$params) {
+		if (isset($params['userInputPassword'])) {
+			if (!$model->decrypt($params['userInputPassword']))
+				throw new Exception(GO::t('badPassword'));						
+		}
+		
+		return $response;
+	}
+	
+	protected function afterDisplay(&$response, &$model, &$params) {
+		if ($model->encrypted)
+			$response['data']['content'] = GO::t('clickHereToDecrypt');
+		
+		$response['data']['encrypted']=$model->encrypted;
+		
+		return parent::afterDisplay($response, $model, $params);
+	}
 }
+

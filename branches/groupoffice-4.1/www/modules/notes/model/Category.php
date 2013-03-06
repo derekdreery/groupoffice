@@ -23,15 +23,33 @@
  * @property int $user_id
  */
 class GO_Notes_Model_Category extends GO_Base_Model_AbstractUserDefaultModel {
-  
-	public function tableName() { return 'no_categories'; }
+
+	/**
+	 * Returns a static model of itself
+	 * 
+	 * @param String $className
+	 * @return GO_Notes_Model_Category 
+	 */
+	public static function model($className=__CLASS__)
+	{	
+		return parent::model($className);
+	}
 	
-	public function aclField(){ return 'acl_id'; }
+	public function aclField() {
+		return 'acl_id';
+	}
+
+	public function tableName() {
+		return 'no_categories';
+	}
 	
+	public function hasFiles(){
+		return true;
+	}
+
 	public function relations() {
 		return array(
-			'notes' => array('type' => self::HAS_MANY, 'model' => 'GO_Notes_Model_Note', 'field' => 'category_id', 'delete' => true)
-		);
+				'notes' => array('type' => self::HAS_MANY, 'model' => 'GO_Notes_Model_Note', 'field' => 'category_id', 'delete' => true)		);
 	}
 	
 	protected function init() {
