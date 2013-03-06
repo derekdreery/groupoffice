@@ -178,7 +178,7 @@ class eventAndTaskPdf extends GO_Base_Util_Pdf {
 		if($defaultCalendar){
 			$findParams = GO_Base_Db_FindParams::newInstance()
 			->select()
-			->order(array('start_time','name'),'ASC')
+			->order(array('start_time','name'),array('ASC','ASC'))
 			->criteria(GO_Base_Db_FindCriteria::newInstance()
 					->addCondition('calendar_id', $defaultCalendar->id)
 					->addCondition('start_time', $todayStart,'>=')
@@ -207,7 +207,7 @@ class eventAndTaskPdf extends GO_Base_Util_Pdf {
 		if($defaultTasklist){
 			$findParams = GO_Base_Db_FindParams::newInstance()
 			->select()
-			->order(array('start_time','name'),'ASC')
+			->order(array('start_time','name'),array('ASC','ASC'))
 			->criteria(GO_Base_Db_FindCriteria::newInstance()
 					->addCondition('tasklist_id', $defaultTasklist->id)
 					->addCondition('start_time', $todayStart,'>=')
