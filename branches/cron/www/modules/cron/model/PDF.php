@@ -80,7 +80,7 @@ class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 		if($defaultCalendar){
 			$findParams = GO_Base_Db_FindParams::newInstance()
 			->select()
-			->order('start_time','ASC')
+			->order(array('start_time','name'),'ASC')
 			->criteria(GO_Base_Db_FindCriteria::newInstance()
 					->addCondition('calendar_id', $defaultCalendar->id)
 					->addCondition('start_time', $todayStart,'>=')
@@ -109,7 +109,7 @@ class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 		if($defaultTasklist){
 			$findParams = GO_Base_Db_FindParams::newInstance()
 			->select()
-			->order('start_time','ASC')
+			->order(array('start_time','name'),'ASC')
 			->criteria(GO_Base_Db_FindCriteria::newInstance()
 					->addCondition('tasklist_id', $defaultTasklist->id)
 					->addCondition('start_time', $todayStart,'>=')
