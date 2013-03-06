@@ -220,3 +220,7 @@ $l['show_holidays']="Vis høytidsdager";
 $l['participant']='Deltager';
 $l['clickForAttendance']='Klikk her for å angi status for din deltagelse';
 $l['pastAppointments']='Tidligere avtaler';
+$l['viewDay']='Dag';
+$l['viewMorning']='Morgen';
+$l['viewAfternoon']='Ettermiddag';
+$l['viewEvening']='Kveld';

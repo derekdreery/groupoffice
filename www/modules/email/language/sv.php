@@ -239,3 +239,14 @@ $l['cantDeleteSpecialFolder']="Du kan inte radera mapparna Papperskorgen, Utkast
 
 $l['storePassword']='Lagra lösenordet permanent';
 $l['copyingMessages']='Kopierar meddelanden...';
+
+$l['cantMoveSpecialFolder']="Du kan inte flytta på papperskorgen eller mapparna för skickat eller utkast";
+
+$l['copyMailTo']="Kopiera meddelande till...";
+$l['copyMailToTxt']="Välj en mapp att kopiera meddelandte till";
+$l['copyMailToRUSure']="Är du säker på att du vill kopiera det markerade meddelandet till denna mapp?";
+$l['copyMailsToRUSure']="Är du säker på att du vill kopera de markerade meddelandena till denna mapp?";
+$l['selectValidMailFolder']="Vänligen välj en giltig e-postmapp att kopiera till.";
+$l['clickSeeWholeMessage']="Meddelandet är för stort för att visa här. Klicka här för att se hela meddelandet.";
+$l['dateReceived']='Mottaget';
+$l['dateSent']='Skickat';
