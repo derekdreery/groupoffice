@@ -205,3 +205,12 @@ $l['sendNotificationTitle']='Skicka notifiering?';
 $l['sendNotification']='Vill du meddela deltagarna via e-post?';
 $l['openCalendar']='Öppna kalender';
 $l['createPermission']="Skapa behörighet";
+
+$l['pastAppointments']='Tidigare möten';
+$l['show_holidays']="Visa helgdagar";
+$l['participant']='Deltagare';
+$l['clickForAttendance']='Klicka här för att ställa in din närvarostatus';
+$l['viewDay']='Dag';
+$l['viewMorning']='Morgon';
+$l['viewAfternoon']='Eftermiddag';
+$l['viewEvening']='Kväll';

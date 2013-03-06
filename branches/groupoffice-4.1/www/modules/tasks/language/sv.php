@@ -81,3 +81,5 @@ $l["taskStatus"]='Status';
 $l["taskCompletion_time"]='Färdig';
 $l["taskProject_name"]='Projekt';
 $l['taskPercentage_complete']='Procent färdigt';
+
+$l['completedTasks']='Avslutade uppgifter';

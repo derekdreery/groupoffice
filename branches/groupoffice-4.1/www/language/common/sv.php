@@ -594,3 +594,13 @@ $l['month_times'][3]='den tredje';
 $l['month_times'][4]='den fjärde';
 $l['month_times'][5]='den femte';
 $l['sortOrderError']="Du kan tyvärr inte sortera på den kolumnen. Vänligen klicka på en annan kolumnrubrik för sortering.";
+
+$l['cellular2']= 'mobil 2';
+$l['passwordIsWeak']='Det angivna lösenordet är inte tillräckligt säkert. Det ska uppfylla följande regler:';
+$l['passwordMinLength']='Minsta längd är %s';
+$l['passwordRequireUc']='Det måste innehålla minst en VERSAL';
+$l['passwordRequireLc']='Det måste innehålla minst en gemen';
+$l['passwordRequireNum']='Det måste innehålla en siffra';
+$l['passwordRequireSc']='Det måste innehålla ett specialtecken';
+$l['passwordUnique']='Det måste innehålla %s unika tecken';
+$l['maxAttachmentsSizeExceeded']="Den totala storleken på dina bifogade filer ({total}) överskrider tillåtet maximum ({max}).";

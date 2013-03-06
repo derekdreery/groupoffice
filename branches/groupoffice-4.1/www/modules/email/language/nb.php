@@ -239,3 +239,6 @@ $l['copyMailToTxt']="Velg en mappe å kopiere meldingen(e) til";
 $l['copyMailToRUSure']="Er du sikker på at du vil kopiere valgte melding til denne mappen?";
 $l['copyMailsToRUSure']="Er du sikker på at du vil kopiere valgte meldinger til denne mappen?";
 $l['selectValidMailFolder']="Du må velge en gyldig e-postmappe å kopiere meldingen(e) til!";
+$l['clickSeeWholeMessage']="Meldingen er for lang til at den kan vises i sin helhet her. Trykk her hvis du vil se hele meldingen.";
+$l['dateReceived']='Dato mottatt';
+$l['dateSent']='Dato sendt';
