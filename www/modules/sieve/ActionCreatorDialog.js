@@ -239,6 +239,9 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 		this._toggleComponentUse(this.txtMessage,false);
 		this._toggleComponentUse(this.txtDays,false);
 		this.doLayout();
+		
+		if(!GO.email.subscribedFoldersStore.loaded)
+			GO.email.subscribedFoldersStore.load();
 	},
 
 	_transForm : function(type) {
