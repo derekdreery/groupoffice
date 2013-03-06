@@ -2,33 +2,40 @@
 
 class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 			
-	private $_columnLeftWidth = '14';
-	private	$_columnTextWidth = '200';
-	private	$_headerFontSize = '16px';
+	private	$_headerFontSize = '14';
 	private	$_headerFontColor = '#3194D0';
+	private $_nameFontSize = '12';
 	private $_timeFontSize = '12';
-	private	$_textFontSize = '14';
-	private $_border = 1;
-		
+	private $_descriptionFontSize = '12';
 	protected $font = 'dejavusans';
-	protected $font_size=9;
+	protected $font_size=10;
 	
+	/**
+	 * Set the title that will be printed in the header of the PDF document
+	 * 
+	 * @param String $title
+	 */
 	public function setTitle($title){
 		$this->title = $title;
 	}
 	
+	/**
+	 * Set the subtitle that will be printed in the header of the PDF document
+	 * 
+	 * @param String $subtitle
+	 */
 	public function setSubTitle($subtitle){
 		$this->subtitle = $subtitle;
 	}
 	
-
-	
-//	public function AddPage($orientation = '', $format = '', $keepmargins = false, $tocpage = false) {
-//		parent::AddPage($orientation, $format, $keepmargins, $tocpage);
-//		$this->SetAutoPageBreak(True, 34);
-//		$this->setEqualColumns(2);
-//	}
-	
+	/**
+	 * Render the pdf content.
+	 * 
+	 * This will render the events and the tasks of the user that is given with 
+	 * the $user param.
+	 * 
+	 * @param GO_Base_Model_User $user
+	 */
 	public function render($user){
 		$this->AddPage();
 		$this->setEqualColumns(2, ($this->pageWidth/2)-10);
@@ -42,39 +49,28 @@ class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 		$tasks = $this->_getTasks($user);
 		
 		// RENDER EVENTS
-	
 		$this->writeHTML('<h2 style="color:'.$this->_headerFontColor.';font-size:'.$this->_headerFontSize.'px;">'.$eventsString.'</h2>', true, false, false, false, 'L');
 		$this->Ln();
 		
-//		$html = '<table border="'.$this->_border.'">';
-		if(count($events) > 0){
-			foreach($events as $event)
-				$html .= $this->_renderEventRow($event);
-		} else {
-//			$html .= '<tr><td width="'.$this->_columnLeftWidth.'">&nbsp;</td><td width="'.$this->_columnTextWidth.'">&nbsp;</td></tr>';
-		}
-//		$html .= '</table>';
-		$this->writeHTML($html, true, false, false, false, 'L');
-		
-		//$this->Ln();
+		foreach($events as $event)
+			$this->_renderEventRow($event);
+
+		$this->Ln();
 		
 		// RENDER TASKS
 		$this->writeHTML('<h2 style="color:'.$this->_headerFontColor.';font-size:'.$this->_headerFontSize.'px;">'.$tasksString.'</h2>', true, false, false, false, 'L');
 		$this->Ln();
 		
-		$html = '<table border="'.$this->_border.'">';
-		if(count($tasks) > 0){
-			foreach($tasks as $task)
-				$html .= $this->_renderTaskRow($task);
-		} else {
-			$html .= '<tr><td width="'.$this->_columnLeftWidth.'">&nbsp;</td><td width="'.$this->_columnTextWidth.'">&nbsp;</td></tr>';
-		}
-		$html .= '</table>';
-			
-		//var_export($html);
-		$this->writeHTML($html, true, false, false, false, 'L');
+		foreach($tasks as $task)
+			$this->_renderTaskRow($task);
 	}
 	
+	/**
+	 * Get all today's events from the database.
+	 * 
+	 * @param GO_base_Model_User $user
+	 * @return GO_Calendar_Model_Event[]
+	 */
 	private function _getEvents($user){
 		$defaultCalendar = GO_Calendar_Model_Calendar::model()->getDefault($user);		
 		
@@ -98,10 +94,16 @@ class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 		}
 	}
 	
+	/**
+	 * Get all today's tasks from the database.
+	 * 
+	 * @param GO_base_Model_User $user
+	 * @return GO_Tasks_Model_Task[]
+	 */
 	private function _getTasks($user){	
 		$defaultTasklist = GO_Tasks_Model_Tasklist::model()->getDefault($user);
 		
-		$todayStart = strtotime('today')+1;
+		$todayStart = strtotime('today');
 		$todayEnd = strtotime('tomorrow');
 		
 		if($defaultTasklist){
@@ -121,63 +123,45 @@ class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 		}
 	}
 	
-	
+	/**
+	 * Render the event row in the PDF
+	 * 
+	 * @param GO_Calendar_Model_Event $event
+	 */
 	private function _renderEventRow(GO_Calendar_Model_Event $event){	
-		
-		$html = '';
-		
-		$eventStart = GO_Base_Util_Date_DateTime::fromUnixtime($event->start_time);
-		$eventEnd = GO_Base_Util_Date_DateTime::fromUnixtime($event->end_time);
-		$eventStartTime = $eventStart->format('H:i');
-		$eventEndTime = $eventEnd->format('H:i');
-		
-		$nameString = $event->getAttribute('name', 'html');
-		$nameString = GO_Base_Util_String::text_to_html($nameString, true);
-		
-		$timeString = $eventStartTime.' - '.$eventEndTime;
-//		$html .= '<tr><td width="'.$this->_columnLeftWidth.'" style="font-size:'.$this->_textFontSize.'px;">--</td>';
-//		$html .= '<td width="'.$this->_columnTextWidth.'"><font style="font-size:'.$this->_timeFontSize.'px;">'.$timeString.'</font> <font style="font-size:'.$this->_textFontSize.'px;">'.$nameString.'</font></td>';
-//		
-//		if($event->description){
-//			$html .= '</tr><tr><td>&nbsp;</td>';
-//			$html .= '<td>'.$event->getAttribute('description', 'html').'</td>';
-//		}	
-		
-		$html = 
-		'<tcpdf method="stripke" />'.
-		'<b>'.$timeString.' '.$nameString.'</b><br />'.
-						$event->getAttribute('description', 'html').'&nbsp;<br /><hr style="margin-top:10px;" />&nbsp;<br />';
-		
-		
-//		$html .='</tr>';
-		return $html;
-	}
-	
-	protected function stripke(){
-		$oldX = $this->getX();
-		$this->setX($oldX-14);
 
-		$this->write(10, '--');
-		$this->setX($oldX);
+		$html = '';
+		$html .= '<tcpdf method="renderLine" />';
+		$html .= '<b><font style="font-size:'.$this->_timeFontSize.'px">'.GO_Base_Util_Date_DateTime::fromUnixtime($event->start_time)->format('H:i').' - '.GO_Base_Util_Date_DateTime::fromUnixtime($event->end_time)->format('H:i').'</font> <font style="font-size:'.$this->_nameFontSize.'px">'.GO_Base_Util_String::text_to_html($event->getAttribute('name', 'html'), true).'</font></b>';
+		if(!empty($event->description))
+			$html .= 	'<br /><font style="font-size:'.$this->_descriptionFontSize.'px">'.$event->getAttribute('description', 'html').'</font>';
+		
+		$this->writeHTML($html, true, false, false, false, 'L');
 	}
-	
+		
+	/**
+	 * Render the task row in the PDF
+	 * 
+	 * @param GO_Tasks_Model_Task $task
+	 */
 	private function _renderTaskRow($task){
 		
 		$html = '';
-		
-		$nameString = $task->getAttribute('name', 'html');
-		$nameString = GO_Base_Util_String::text_to_html($nameString, true);
-		
-		$html .= '<tr><td width="'.$this->_columnLeftWidth.'" style="font-size:'.$this->_textFontSize.'px;">--</td>';
-		$html .= '<td style="font-size:'.$this->_textFontSize.'px;">'.$nameString.'</td>';
-		
-		if($task->description){
-			$html .= '</tr><tr><td>&nbsp;</td>';
-			$html .= '<td>'.$task->getAttribute('description', 'html').'</td>';
-		}	
-		
-		$html .='</tr>';
-		
-		return $html;
+		$html .= '<tcpdf method="renderLine" />';
+		$html .= '<b><font style="font-size:'.$this->_nameFontSize.'px">'.GO_Base_Util_String::text_to_html($task->getAttribute('name', 'html'),true).'</font></b>';
+		if(!empty($task->description))
+			$html .= 	'<br /><font style="font-size:'.$this->_descriptionFontSize.'px">'.$task->getAttribute('description', 'html').'</font>';
+
+		$this->writeHTML($html, true, false, false, false, 'L');
+	}
+	
+	/**
+	 * Function to render the 2 dashes before the title
+	 */
+	protected function renderLine(){
+		$oldX = $this->getX();
+		$this->setX($oldX-14);
+		$this->write(10, '--');
+		$this->setX($oldX);
 	}
 }
