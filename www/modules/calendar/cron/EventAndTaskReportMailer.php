@@ -1,6 +1,6 @@
 <?php
 
-class GOFS_Cron_EventAndTaskReport extends GO_Base_Cron_AbstractCron {
+class GO_Calendar_Cron_EventAndTaskReportMailer extends GO_Base_Cron_AbstractCron {
 	
 	/**
 	 * Return true or false to enable the selection fo users and groups for 
@@ -20,7 +20,7 @@ class GOFS_Cron_EventAndTaskReport extends GO_Base_Cron_AbstractCron {
 	 * @return String
 	 */
 	public function getLabel(){
-		return GO::t('cronEventAndTaskReportMailer','addressbook');
+		return GO::t('cronEventAndTaskReportMailer','calendar');
 	}
 	
 	/**
@@ -29,7 +29,7 @@ class GOFS_Cron_EventAndTaskReport extends GO_Base_Cron_AbstractCron {
 	 * @return String
 	 */
 	public function getDescription(){
-		return GO::t('cronEventAndTaskReportMailerDescription','addressbook');
+		return GO::t('cronEventAndTaskReportMailerDescription','calendar');
 	}
 	
 	/**
@@ -65,7 +65,7 @@ class GOFS_Cron_EventAndTaskReport extends GO_Base_Cron_AbstractCron {
 		
 		$pdf = new eventAndTaskPdf();
 		$pdf->setTitle($user->name); // Set the title in the header of the PDF
-		$pdf->setSubTitle(GO::t('cronEventAndTaskReportMailerPdfSubtitle','addressbook')); // Set the subtitle in the header of the PDF
+		$pdf->setSubTitle(GO::t('cronEventAndTaskReportMailerPdfSubtitle','calendar')); // Set the subtitle in the header of the PDF
 		$pdf->render($user); // Pass the data to the PDF object and let it draw the PDF
 		
 		return $pdf->Output($filename,'s');// Output the pdf
@@ -80,8 +80,8 @@ class GOFS_Cron_EventAndTaskReport extends GO_Base_Cron_AbstractCron {
 	 */
 	private function _sendEmail(GO_Base_Model_User $user,$pdf){
 		
-		$mailSubject = GO::t('cronEventAndTaskReportMailerSubject','addressbook');
-		$body = GO::t('cronEventAndTaskReportMailerContent','addressbook');
+		$mailSubject = GO::t('cronEventAndTaskReportMailerSubject','calendar');
+		$body = GO::t('cronEventAndTaskReportMailerContent','calendar');
 		
 		$message = GO_Base_Mail_Message::newInstance(
 										$mailSubject
