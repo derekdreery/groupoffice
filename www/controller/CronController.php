@@ -18,32 +18,8 @@
 
 class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 
-	
-	//TODO: REMOVE WHEN TESTING IS DONE
-	protected function actionTest($params) {
-		GO::session()->runAsRoot();
-		$user = GO_Base_Model_User::model()->findByPk(	1);
-		
-			//Set the PDF filename
-		$filename = $user->name.'.pdf';
-		
-		// Start building the PDF file
-		//$pdf = new eventAndTaskPdf($orientation='L'); // LANDSCAPE
-		$pdf = new GO_Cron_Model_PDF(); // VERTICAL
-		
-		$pdf->setTitle($user->name);
-		$pdf->setSubTitle('Today\'s events and tasks');
-		
-		// Pass the data to the PDF object and let it draw the PDF
-		$pdf->render($user);
-		
-		// Output the pdf
-		return $pdf->Output($filename,'I');
-	}
-	
-	
 	protected function allowGuests() {
-		return array('run','test');
+		return array('run');
 	}
 	
 	//don't check token in this controller
