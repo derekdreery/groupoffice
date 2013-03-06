@@ -978,9 +978,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				
 		$summarylog = new GO_Base_Component_SummaryLog();
 		
-		GO::$disableModelCache=true; //for less memory usage
-		ini_set('max_execution_time', '0'); //allow long runs
-		ini_set('memory_limit','512M');
+		GO::$disableModelCache=true; //for less memory usage		
+		GO::setMaxExecutionTime(0);
 		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
 		
 		$attributeIndexMap = isset($params['attributeIndexMap'])
@@ -1095,7 +1094,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 							$this->afterImport($model, $attributes, $record);
 							$summarylog->addSuccessful();
 						} else {
-							$summarylog->addError($record[0], implode('<br />', $model->getValidationErrors()));
+							$summarylog->addError($record[0], implode("\n", $model->getValidationErrors()));
 						}
 					}
 					catch(Exception $e){

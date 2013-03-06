@@ -329,6 +329,17 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		GO::setIgnoreAclPermissions($oldIgnore);
 	}
 	
+	protected function beforeDelete() {
+		if($this->id==1){
+			throw new Exception(GO::t('deletePrimaryAdmin','users'));
+		}elseif($this->id==GO::user()->id){
+			throw new Exception(GO::t('deleteYourself','users'));			
+		}else
+		{
+			return parent::beforeDelete();
+		}
+	}
+	
 	protected function afterDelete() {
 		
 		

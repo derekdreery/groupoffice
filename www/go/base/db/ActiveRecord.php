@@ -1316,6 +1316,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 			throw new Exception($msg);
 		}
+		
+		$AS = new GO_Base_Db_ActiveStatement($result, $this);
 
 		
 		if(!empty($params['calcFoundRows'])){
@@ -1339,22 +1341,21 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			{
 				$foundRows = $result->rowCount();       
       }	
-      $result->foundRows=$foundRows;
+      $AS->foundRows=$foundRows;
 		}
 		
-		//$result->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className());
-		if($fetchObject)
-			$result->setFetchMode(PDO::FETCH_CLASS, $this->className(),array(false));
-		else
-			$result->setFetchMode (PDO::FETCH_ASSOC);
+//		//$result->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className());
+//		if($fetchObject)
+//			$result->setFetchMode(PDO::FETCH_CLASS, $this->className(),array(false));
+//		else
+//			$result->setFetchMode (PDO::FETCH_ASSOC);
     
     //TODO these values should be set on findByPk too.
-    $result->model=$this;
-    $result->findParams=$params;
+    $AS->findParams=$params;
     if(isset($params['relation']))
-      $result->relation=$params['relation'];    
+      $AS->relation=$params['relation'];    
 
-    return $result;		
+    return $AS;		
 	}
 	
 	private function _debugSql($params, $sql){
@@ -2505,6 +2506,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}
 		}
 	}
+	
+	/**
+	 * Reset attribute to it's original value and clear the modified attribute.
+	 * 
+	 * @param string $name
+	 */
+	public function resetAttribute($name){
+		$this->$name = $this->getOldAttributeValue($name);
+		unset($this->_modifiedAttributes[$name]);
+	}
 
 	/**
 	 * Get the old value for a modified attribute.
@@ -3129,7 +3140,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 						case 'int':
 						case 'tinyint':
 						case 'bigint':
-							$this->_attributes[$column]=intval($this->_attributes[$column]);
+							//must use floatval because of ints greater then 32 bit
+							$this->_attributes[$column]=floatval($this->_attributes[$column]);
 							break;		
 
 						case 'float':

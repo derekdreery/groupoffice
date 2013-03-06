@@ -103,11 +103,9 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 		$activeStmt = GO_Postfixadmin_Model_Mailbox::model()->find();
 		
 		while ($mailboxModel = $activeStmt->fetch()) {
-			$folder = new GO_Base_Fs_Folder('/home/vmail/'.$mailboxModel->maildir);
-			echo 'Calculating size of '.$folder->path()."\n";
-			$mailboxModel->usage = $folder->calculateSize()/1024;
+			echo 'Calculating size of '.$mailboxModel->getMaildirFolder()->path()."\n";
+			$mailboxModel->cacheUsage();
 			echo $mailboxModel->usage." kilobytes\n";
-			$mailboxModel->save();
 		}
 
 	}

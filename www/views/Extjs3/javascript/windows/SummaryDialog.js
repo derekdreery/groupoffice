@@ -44,7 +44,7 @@ GO.dialog.SummaryDialog = Ext.extend(GO.Window, {
 								'{name}'+
 							'</td>'+
 							'<td class="summary-log-message">'+
-								'{message}'+
+								'{[Ext.util.Format.nl2br(values.message)]}'+
 							'</td>'+
 						'</tr>'+
 					'</tpl>'+

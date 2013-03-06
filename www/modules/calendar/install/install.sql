@@ -295,3 +295,10 @@ CREATE TABLE IF NOT EXISTS `go_links_cal_events` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
+
+DROP TABLE IF EXISTS `cal_views_groups`;
+CREATE  TABLE IF NOT EXISTS `cal_views_groups` (
+  `view_id` INT NOT NULL ,
+  `group_id` VARCHAR(45) NOT NULL ,
+  PRIMARY KEY (`view_id`, `group_id`) )
+ENGINE = InnoDB;

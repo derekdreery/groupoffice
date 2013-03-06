@@ -137,17 +137,6 @@ GO.reminders.ReminderDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			title:GO.lang.strProperties,
 			bodyStyle:'padding:5px',
 			items:[
-			/*this.selectUser = new GO.form.SelectUser({
-				fieldLabel: GO.lang['strUser'],
-				startBlank:true,
-				anchor: '100%',
-				allowBlank:true
-			})
-			,this.selectGroup = new  GO.form.SelectGroup({
-				name: 'group_id',
-				anchor: '100%',
-				allowBlank:true
-			})*/
 			{
 				xtype: 'textfield',
 				name: 'name',

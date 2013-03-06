@@ -305,6 +305,8 @@ class GO{
 			}else{
 				self::$_modules=GO::session()->values['modulesObject']=new GO_Base_ModuleCollection();
 			}
+			
+//			self::$_modules=new GO_Base_ModuleCollection();
 		}
 		return self::$_modules;
 	}
@@ -434,6 +436,8 @@ class GO{
 					}
 					
 					$fullPath = self::config()->root_path.$file;
+					
+//					echo $fullPath."\n";
 
 					if(!file_exists($fullPath) || is_dir($fullPath)){
 						//throw new Exception('Class '.$orgClassName.' not found! ('.$file.')');

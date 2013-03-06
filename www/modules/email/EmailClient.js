@@ -25,11 +25,11 @@ GO.email.EmailClient = function(config){
 		root: 'results',
 		totalProperty: 'total',
 		id: 'uid',
-		fields:['uid','icon','flagged','has_attachments','seen','subject','from','sender','size','date', 'x_priority','answered','forwarded','account_id','mailbox'],
+		fields:['uid','icon','flagged','has_attachments','seen','subject','from','sender','size','date', 'x_priority','answered','forwarded','account_id','mailbox','arrival'],
 		remoteSort: true
 	});
 
-	this.messagesStore.setDefaultSort('date', 'DESC');
+	this.messagesStore.setDefaultSort('arrival', 'DESC');	
 
 	var messagesAtTop = Ext.state.Manager.get('em-msgs-top');
 	if(messagesAtTop)
@@ -1062,9 +1062,11 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	{
 		if(!account_id)
 			account_id=this.messagesGrid.store.baseParams.account_id;
-
-		var statusElId = "status_"+this.getFolderNodeId(account_id, mailbox);
+		var nodeId = this.getFolderNodeId(account_id, mailbox);
+		var statusElId = "status_"+nodeId;
 		var statusEl = Ext.get(statusElId);
+		
+	
 
 //		var node = this.treePanel.getNodeById('folder_'+mailbox);
 //		if(node && node.attributes.mailbox=='INBOX')
@@ -1073,7 +1075,14 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 //		}
 
 		if(statusEl && statusEl.dom)
-		{
+		{			
+			var node = this.treePanel.getNodeById(nodeId);
+
+			if(unseen)
+				node.getUI().addClass('ml-folder-unseen');
+			else
+				node.getUI().removeClass('ml-folder-unseen');
+			
 			var statusText = statusEl.dom.innerHTML;
 			var current = statusText=='' ? 0 : parseInt(statusText.substring(1, statusText.length-1));
 

@@ -51,10 +51,17 @@ GO.email.MessagesGrid = function(config){
 				width:200
 			},{
 				header: GO.lang.strDate,
-				dataIndex: 'date',
+				dataIndex: 'arrival',
 				width:65,
 				renderer:this.renderNorthMessageRow,
 				align:'right'
+			},{
+				header: GO.email.lang.dateSent,
+				dataIndex: 'date',
+				width:65,
+				renderer:this.renderNorthMessageRow,
+				align:'right',
+				hidden:true
 			},{
 				header: GO.lang.strSize,
 				dataIndex: 'size',
@@ -85,6 +92,7 @@ GO.email.MessagesGrid = function(config){
 		},
 		columns:[
 		{
+			id:'icon',
 			header:"&nbsp;",
 			width:46,
 			dataIndex: 'icon',
@@ -99,18 +107,27 @@ GO.email.MessagesGrid = function(config){
 			id:'message'
 		
 		},{
+			id:'arrival',
 			header: GO.lang.strDate,
-			dataIndex: 'date',
-			width:65,
+			dataIndex: 'arrival',
+			width:80,
 			align:'right'
 		},{
-				header: GO.lang.strSize,
-				dataIndex: 'size',
-				width:65,
-				align:'right',
-				hidden:true,
-				renderer:Ext.util.Format.fileSize
-			}]
+			id:'date',
+			header: GO.email.lang.dateSent,
+			dataIndex: 'date',
+			width:80,
+			align:'right',
+			hidden:true
+		},{
+			id:'size',
+			header: GO.lang.strSize,
+			dataIndex: 'size',
+			width:65,
+			align:'right',
+			hidden:true,
+			renderer:Ext.util.Format.fileSize
+		}]
 		});
 		config.bbar = new Ext.PagingToolbar({
 			cls: 'go-paging-tb',
@@ -296,7 +313,10 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 			cls += "btn-message-forwarded";
 		}else
 		{
-			cls += "btn-message";
+			if(record.data.seen=='1')
+				cls += "btn-message-seen";
+			else
+				cls += "btn-message";
 		}
 		str += '<div class="'+cls+'"></div>';
 		

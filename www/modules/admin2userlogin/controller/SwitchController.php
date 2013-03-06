@@ -11,7 +11,7 @@ class GO_Admin2userlogin_Controller_Switch extends GO_Base_Controller_AbstractCo
 		
 		GO::session()->values=array(); //clear session
 		GO::session()->setCurrentUser($user->id);
-		GO::session()->setCompatibilitySessionVars();
+		//GO::session()->setCompatibilitySessionVars();
 		
 		if($debug)
 			GO::session()->values['debug']=$debug;

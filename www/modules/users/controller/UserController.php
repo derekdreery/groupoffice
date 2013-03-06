@@ -356,8 +356,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		$params['updateFindAttributes'] = 'username';
 		$params['file'] = $_FILES['files']['tmp_name'][0];
 		
-		ini_set('max_execution_time', 360);
-		ini_set('memory_limit', '256M');
+		GO::setMaxExecutionTime(0);
 		
 		if($params['controller']=='GO_Users_Controller_User')
 			$controller = new GO_Users_Controller_User();
@@ -377,6 +376,10 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 	 * @return array $response 
 	 */
 	protected function actionImportCsv($params){
+		
+		//allow weak passwords
+		GO::config()->password_validate=false;
+		
 		$summarylog = parent::actionImport($params);
 		return $summarylog->getErrorsJson();
 	}

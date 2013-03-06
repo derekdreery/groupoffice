@@ -235,9 +235,6 @@ class GO_Base_Session extends GO_Base_Observable{
 				$this->clearUserTempFiles();
 			}
 
-			if(PHP_SAPI!='cli')
-				self::setCompatibilitySessionVars(); // TODO: REMOVE IF SYSTEM IS FULLY REBUILT
-
 			$this->fireEvent('login', array($username, $password, $user));
 			
 			//A PHP variable named “session.use_only_cookies” controls the behaviour
@@ -271,30 +268,6 @@ class GO_Base_Session extends GO_Base_Observable{
 			$log = new GO_Log_Model_Log();			
 			$log->action=$action;						
 			$log->save();
-		}
-	}
-	
-	/**
-	 * TODO: REMOVE IF SYSTEM IS FULLY REBUILDED
-	 */
-	public static function setCompatibilitySessionVars(){
-		
-		if(defined("GO_NO_SESSION"))
-			return true;
-		
-		define('NO_EVENTS',true);
-		
-		if(!defined("CONFIG_FILE"))
-			define("CONFIG_FILE", GO::config()->get_config_file());
-		
-		require_once(GO::config()->root_path.'Group-Office.php');
-		
-		$user = GO_Base_Model_User::model()->findByPk(GO::user()->id); //Using GO::user() could give old data for setting theme
-		if($user != null)
-		{
-			require_once(GO::config()->root_path.'classes/base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
-			$GO_USERS->update_session($user->getAttributes());
 		}
 	}
 	
@@ -343,6 +316,9 @@ class GO_Base_Session extends GO_Base_Observable{
 		
 		//remember user id in session
 		$this->values['user_id']=$user_id;
+		
+		if(!GO::user())
+			throw new Exception("Could not set user with id ".$user_id." in GO_Base_Session::setCurrentUser()!");
 		
 		//for logging
 		GO::session()->values['username']=GO::user()->username;

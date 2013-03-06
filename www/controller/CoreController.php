@@ -780,9 +780,9 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	
 	
 	protected function actionAbout($params){
-		$response['data']['mailbox_usage']=intval(GO::config()->get_setting('mailbox_usage'));
-		$response['data']['file_storage_usage']=intval(GO::config()->get_setting('file_storage_usage'));
-		$response['data']['database_usage']=intval(GO::config()->get_setting('database_usage'));
+		$response['data']['mailbox_usage']=GO::config()->get_setting('mailbox_usage');
+		$response['data']['file_storage_usage']=GO::config()->get_setting('file_storage_usage');
+		$response['data']['database_usage']=GO::config()->get_setting('database_usage');
 		$response['data']['total_usage']=$response['data']['database_usage']+$response['data']['file_storage_usage']+$response['data']['mailbox_usage'];
 		$response['data']['has_usage']=$response['data']['total_usage']>0;
 		foreach($response['data'] as $key=>$value){
@@ -868,5 +868,30 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 				date_default_timezone_set(GO::user()->timezone);
 			}
 		}
+	}
+	
+	protected function actionThemes($params){
+		$store = new GO_Base_Data_ArrayStore();
+		
+		$view = new GO_Base_View_Extjs3();
+		$themes = $view->getThemeNames();
+		
+		foreach($themes as $theme){
+			$store->addRecord(array('theme'=>$theme));
+		}
+		
+		return $store->getData();
+	}
+	
+	protected function actionModules($params){
+		$store = new GO_Base_Data_ArrayStore();
+		
+		$modules = GO::modules()->getAllModules(true);
+		
+		foreach($modules as $module){
+			$store->addRecord(array('id'=>$module->id,'name'=>$module->moduleManager->name()));
+		}
+		
+		return $store->getData();
 	}
 }

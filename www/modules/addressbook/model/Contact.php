@@ -292,6 +292,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			}
 			
 			$this->salutation=$tpl;
+			
+			$this->cutAttributeLength('salutation');
 		}
 	}
 	

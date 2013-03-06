@@ -20,7 +20,7 @@
  * @package GO.base.db
  */
 
-class GO_Base_Db_ActiveStatement extends PDOStatement {
+class GO_Base_Db_ActiveStatement implements IteratorAggregate {
 
   /**
    * The model type this statement result returns.
@@ -28,6 +28,12 @@ class GO_Base_Db_ActiveStatement extends PDOStatement {
    * @var GO_Base_Db_ActiveRecord 
    */
   public $model;
+	
+	/**
+	 *
+	 * @var PDOStatement 
+	 */
+	public $stmt;
   
   /**
    * Parameters  that were passed to GO_BaseDb_activeRecord::find()
@@ -58,9 +64,14 @@ class GO_Base_Db_ActiveStatement extends PDOStatement {
    */
   public $foundRows;
 
-  protected function __construct() {
-    
+  public function __construct(PDOStatement $stmt, GO_Base_Db_ActiveRecord $model) {
+    $this->stmt=$stmt;
+		
+		$this->model=$model;
+		
+		$stmt->setFetchMode(PDO::FETCH_CLASS, $model->className(),array(false));
   }
+	
 	
 	/**
 	 * Calls the specified function on each model that's in the result set of 
@@ -83,6 +94,27 @@ class GO_Base_Db_ActiveStatement extends PDOStatement {
 					echo (string) $e;
 				}
 		}
+	}
+	
+	/**
+	 * Fetch a model from the statement
+	 * 
+	 * @return GO_Base_Db_ActiveRecord
+	 */
+	public function fetch($fetch_style=null){
+		return $this->stmt->fetch($fetch_style);
+	}
+	
+	/**
+	 * 
+	 * @return GO_Base_Db_ActiveRecord[]
+	 */
+	public function fetchAll($fetch_style=null){
+		return $this->stmt->fetchAll($fetch_style);
+	}
+	
+	public function rowCount() {
+		return $this->stmt->rowCount();
 	}
 	
 //	public function foundRows(){
@@ -134,6 +166,15 @@ class GO_Base_Db_ActiveStatement extends PDOStatement {
 		}
 		
 		return $array;
+	}
+	
+	/**
+	 * Making the activefinder iterable
+	 * @return \IteratorIterator 
+	 */
+	public function getIterator()
+	{
+		return $this->stmt;
 	}
 	
 

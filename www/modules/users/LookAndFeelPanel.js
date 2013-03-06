@@ -32,21 +32,14 @@ GO.users.LookAndFeelPanel = function(config)
 	
 	
 	var themesStore = new GO.data.JsonStore({
-		url: GO.settings.modules.users.url+'non_admin_json.php',
-		baseParams: {'task':'themes'},
-		root: 'results',
-		totalProperty: 'total',
+		url: GO.url('core/themes'),
 		fields:['theme'],
-		remoteSort: true
-		
+		remoteSort: true		
 	});
 
 	this.modulesStore = new GO.data.JsonStore({
-		url: GO.settings.modules.users.url+'non_admin_json.php',
-		baseParams: {'task':'start_module', user_id:0},
-		root: 'results',
-		totalProperty: 'total',
-		id: 'id',
+		url: GO.url('core/modules'),
+		baseParams: {user_id:0},
 		fields:['id','name'],
 		remoteSort: true
 	});
