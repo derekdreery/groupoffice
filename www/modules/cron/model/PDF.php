@@ -8,7 +8,7 @@ class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 	private	$_headerFontColor = '#3194D0';
 	private $_timeFontSize = '12';
 	private	$_textFontSize = '14';
-	private $_border = 0;
+	private $_border = 1;
 		
 	protected $font = 'dejavusans';
 	protected $font_size=9;
@@ -23,7 +23,7 @@ class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 	
 	public function AddPage($orientation = '', $format = '', $keepmargins = false, $tocpage = false) {
 		parent::AddPage($orientation, $format, $keepmargins, $tocpage);
-		$this->SetAutoPageBreak(True, 30);
+		$this->SetAutoPageBreak(True, 34);
 		$this->setEqualColumns(2);
 	}
 	
@@ -42,35 +42,33 @@ class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 		$tasks = $this->_getTasks($user);
 		
 		// RENDER EVENTS
-		$html = '';
-		$html .= '<h2 style="color:'.$this->_headerFontColor.';font-size:'.$this->_headerFontSize.'px;">'.$eventsString.'</h2>';
-		$html .= '<br />';
+	
+		$this->writeHTML('<h2 style="color:'.$this->_headerFontColor.';font-size:'.$this->_headerFontSize.'px;">'.$eventsString.'</h2>', true, false, false, false, 'L');
+		$this->Ln();
 		
-		$html .= '<table border="'.$this->_border.'">';
-
+		$html = '<table border="'.$this->_border.'">';
 		if(count($events) > 0){
 			foreach($events as $event)
 				$html .= $this->_renderEventRow($event);
 		} else {
 			$html .= '<tr><td width="'.$this->_columnLeftWidth.'">&nbsp;</td><td width="'.$this->_columnTextWidth.'">&nbsp;</td></tr>';
 		}
-
 		$html .= '</table>';
-		$html .= '<br /><br /><br />';
+		$this->writeHTML($html, true, false, false, false, 'L');
+		
+		$this->Ln();
 		
 		// RENDER TASKS
-		$html .= '<h2 style="color:'.$this->_headerFontColor.';font-size:'.$this->_headerFontSize.'px;">'.$tasksString.'</h2>';
-		$html .= '<br />';
-
-		$html .= '<table border="'.$this->_border.'">';
+		$this->writeHTML('<h2 style="color:'.$this->_headerFontColor.';font-size:'.$this->_headerFontSize.'px;">'.$tasksString.'</h2>', true, false, false, false, 'L');
+		$this->Ln();
 		
+		$html = '<table border="'.$this->_border.'">';
 		if(count($tasks) > 0){
 			foreach($tasks as $task)
 				$html .= $this->_renderTaskRow($task);
 		} else {
 			$html .= '<tr><td width="'.$this->_columnLeftWidth.'">&nbsp;</td><td width="'.$this->_columnTextWidth.'">&nbsp;</td></tr>';
 		}
-		
 		$html .= '</table>';
 			
 		//var_export($html);
@@ -137,7 +135,6 @@ class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 		$nameString = GO_Base_Util_String::text_to_html($nameString, true);
 		
 		$timeString = $eventStartTime.' - '.$eventEndTime;
-		
 		$html .= '<tr><td width="'.$this->_columnLeftWidth.'" style="font-size:'.$this->_textFontSize.'px;">--</td>';
 		$html .= '<td width="'.$this->_columnTextWidth.'"><font style="font-size:'.$this->_timeFontSize.'px;">'.$timeString.'</font> <font style="font-size:'.$this->_textFontSize.'px;">'.$nameString.'</font></td>';
 		
@@ -147,7 +144,6 @@ class GO_Cron_Model_PDF extends GO_Base_Util_Pdf {
 		}	
 		
 		$html .='</tr>';
-		
 		return $html;
 	}
 	
