@@ -282,9 +282,13 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 				
 				$stmnt = $this->getAllUsers();
 				foreach($stmnt as $user){
+					GO::language()->setLanguage($user->language); // Set the users language
+					
 					GO::debug('CRONJOB ('.$this->name.') START FOR '.$user->username.' : '.date('d-m-Y H:i:s'));
 					$cronFile->run($this,$user);
 					GO::debug('CRONJOB ('.$this->name.') FINSIHED FOR '.$user->username.' : '.date('d-m-Y H:i:s'));
+					
+					GO::language()->setLanguage(); // Set the admin language
 				}
 			} else {
 				$cronFile->run($this);
