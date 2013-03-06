@@ -32,6 +32,17 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 	
 	private $_decrypted=false;
 	
+	/**
+	 * Returns a static model of itself
+	 * 
+	 * @param String $className
+	 * @return GO_Notes_Model_Note 
+	 */
+	public static function model($className=__CLASS__)
+	{	
+		return parent::model($className);
+	}
+	
 	protected function init() {
 		
 		$this->columns['name']['required']=true;
@@ -47,8 +58,13 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 	public function aclField(){
 		return 'category.acl_id';	
 	}
+	
 	public function tableName(){
-	  return 'no_notes';
+		return 'no_notes';
+	}
+	
+	public function hasFiles(){
+		return true;
 	}
 	public function hasLinks() {
 		return true;
@@ -59,8 +75,7 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 
 	public function relations(){
 		return array(	
-			'category' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Notes_Model_Category', 'field'=>'category_id'),
-		);
+				'category' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Notes_Model_Category', 'field'=>'category_id'),		);
 	}
 
 
