@@ -678,7 +678,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 		$calendarModels=array();
 		foreach($calendars as $calendarId){
-			// Get the calendar model that is used for these events
+			// Get the calendar model that $calendarIdis used for these events
 			try{
 				$calendar = GO_Calendar_Model_Calendar::model()->findByPk($calendarId);
 				$calendarModels[]=$calendar;
@@ -746,6 +746,14 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		}else
 		{
 			$response['calendar_id']=0;
+			
+			// If the calendars parameter is given then use the first one as $response['calendar_id']
+			if(!empty($params['calendars'])){
+				$calendars = json_decode($params['calendars']);
+				if(is_array($calendars))
+					$response['calendar_id']= $calendars[0];
+			}
+				
 			$response['write_permission']= false;
 //			$response['calendar_name']=$defaultWritableCalendar->name;
 			$response['permission_level']=false;
@@ -758,9 +766,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		//Remove the index from the response array
 		$response['results']= array_values($response['results']);
-		
+
 		$response['success']=true;
-		
+			
 		// If you have clicked on the "print" button
 		if(isset($params['print']))
 			$this->_createPdf($response);

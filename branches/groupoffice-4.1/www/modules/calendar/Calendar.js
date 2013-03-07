@@ -706,8 +706,8 @@ GO.calendar.MainPanel = function(config){
 				urlParams.calendars = Ext.encode(this.calendars);
 
 			var url = GO.url('calendar/event/store',urlParams);
-									
-			document.location=url;
+										
+			window.open(url);
 		},
 		scope: this
 	})
