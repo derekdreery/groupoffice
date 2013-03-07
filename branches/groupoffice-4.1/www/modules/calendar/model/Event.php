@@ -254,6 +254,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 
 		$att['rrule'] = '';
+		$att['repeat_end_time']=0;
 		$att['exception_for_event_id'] = $this->id;
 		$att['exception_date'] = $exceptionDate;
 		
@@ -267,6 +268,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$endTime = new GO_Base_Util_Date_DateTime(date('c', $att['start_time']));
 		$endTime->add($diff);
 		$att['end_time'] = $endTime->format('U');
+		
+		
 		
 		return $this->duplicate($att, false);
 	}
