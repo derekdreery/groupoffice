@@ -412,6 +412,8 @@ Ext.state.Manager.setProvider(new GO.state.HttpProvider());
 <?php
 if(isset(GO::session()->values['security_token']))		
 	echo 'Ext.Ajax.extraParams={security_token:"'.GO::session()->values['security_token'].'"};';
+
+$this->fireEvent('inlinescripts');
 ?>
 </script>
 <?php
