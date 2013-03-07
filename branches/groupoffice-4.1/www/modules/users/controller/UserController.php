@@ -415,6 +415,8 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		$c->setAttributes($attributes);
 		$c->save();
 		
+		$model->checkDefaultModels();
+		
 		return parent::afterImport($model, $attributes, $record);
 	}
 }
