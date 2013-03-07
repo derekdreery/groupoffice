@@ -1458,11 +1458,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	createDaysGrid : function()
 	{
 		
-		this.daysGrid.on("eventResize", function(grid, event, actionData){
+		this.daysGrid.on("eventResize", function(grid, event, actionData, domIds){
 
 			var params = {
-				//task : 'update_grid_event',
-				id : event['event_id'],				
 				duration_end_time : actionData.end_time
 			};
 
@@ -1472,29 +1470,27 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			if(actionData.singleInstance)
 			{				
 				params['exception_date']=actionData.dragDate.format("U");
+				params['exception_for_event_id']=event['event_id'];
+			}else
+			{
+				params.id=event['event_id'];
 			}
   		
-			Ext.Ajax.request({
-				url: GO.url('calendar/event/submit'),
+			GO.request({
+				url: 'calendar/event/submit',
 				params: params,
-				callback: function(options, success, response)
-				{
-					var responseParams = Ext.decode(response.responseText);
-					if(!responseParams.success)
-					{
-						Ext.MessageBox.alert(GO.lang.strError, responseParams.feedback);
-					}else
-					{
-						if(event.repeats && !actionData.singleInstance)
-						{
-							grid.store.reload();
-						}
-						
-						GO.calendar.handleMeetingRequest(responseParams);
-					}
+				success: function(options,  response, result)
+				{					
+//					if(event.repeats && !actionData.singleInstance)
+//					{
+						grid.store.reload();
+//					}else if(result.id)
+//					{
+//						grid.setNewEventId(domIds, result.id);
+//					}
+					GO.calendar.handleMeetingRequest(result);					
 				}
 			});
-    		
 				
 		}, this);
 		
@@ -1707,27 +1703,24 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 //		if(event.has_other_participants)
 //			params.send_invitation=confirm(GO.calendar.lang.sendInvitationUpdate) ? 1 : 0;
 
-		Ext.Ajax.request({
-			url: GO.url('calendar/event/submit'),
+		GO.request({
+			url: 'calendar/event/submit',
 			params: params,
-			callback: function(options, success, response)
+			success: function(options, response, responseParams)
 			{
-				var responseParams = Ext.decode(response.responseText);
-				if(!responseParams.success)
-				{
-					Ext.MessageBox.alert(GO.lang.strError, responseParams.feedback);
-				}else
-				{
-					if(event.repeats && !actionData.singleInstance)
-					{
-						grid.store.reload();
-					}else if(responseParams.new_event_id)
-					{
-						grid.setNewEventId(domIds, responseParams.new_event_id);
-					}
-					
-					GO.calendar.handleMeetingRequest(responseParams);
-				}
+
+//				if(event.repeats && !actionData.singleInstance)
+//				{
+//					grid.store.reload();
+//				}else if(responseParams.id)
+//				{
+//					grid.setNewEventId(domIds, responseParams.id);
+//				}
+				
+				grid.store.reload();
+
+				GO.calendar.handleMeetingRequest(responseParams);
+				
 			}
 		});
 	},
