@@ -111,7 +111,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		
 		$contact = $model->createContact();
 		if($contact){
-			unset($params['addressbook_id'], $params['id']);
+			unset($params['id']);
 			$contact->setAttributes($params);
 			$contact->save();
 		}
