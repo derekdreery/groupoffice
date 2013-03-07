@@ -1420,27 +1420,28 @@ class GO_Base_Config {
 		//example.
 
 		//this used to use HTTP_HOST but that is a client controlled value which can be manipulated and is unsafe.
+		if(empty($this->full_url)){
+			if(isset($_SERVER["SERVER_NAME"])) {
+				if(!isset($_SESSION['GO_SESSION']['full_url']) && isset($_SERVER["SERVER_NAME"])) {
+					$https = (isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == "1")) || !empty($_SERVER["HTTP_X_SSL_REQUEST"]);
+					$_SESSION['GO_SESSION']['full_url'] = 'http';
+					if ($https) {
+						$_SESSION['GO_SESSION']['full_url'] .= "s";
+					}
+					$_SESSION['GO_SESSION']['full_url'] .= "://".$_SERVER["SERVER_NAME"];
+					if ((!$https && $_SERVER["SERVER_PORT"] != "80") || ($https && $_SERVER["SERVER_PORT"] != "443")) 
+						$_SESSION['GO_SESSION']['full_url'] .= ":".$_SERVER["SERVER_PORT"];
 
-		if(isset($_SERVER["SERVER_NAME"])) {
-			if(!isset($_SESSION['GO_SESSION']['full_url']) && isset($_SERVER["SERVER_NAME"])) {
-				$https = (isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == "1")) || !empty($_SERVER["HTTP_X_SSL_REQUEST"]);
-				$_SESSION['GO_SESSION']['full_url'] = 'http';
-				if ($https) {
-					$_SESSION['GO_SESSION']['full_url'] .= "s";
+					$_SESSION['GO_SESSION']['full_url'] .= $this->host;
 				}
-				$_SESSION['GO_SESSION']['full_url'] .= "://".$_SERVER["SERVER_NAME"];
-				if ((!$https && $_SERVER["SERVER_PORT"] != "80") || ($https && $_SERVER["SERVER_PORT"] != "443")) 
-					$_SESSION['GO_SESSION']['full_url'] .= ":".$_SERVER["SERVER_PORT"];
-								
-				$_SESSION['GO_SESSION']['full_url'] .= $this->host;
+				$this->full_url=$_SESSION['GO_SESSION']['full_url'];
+			}else
+			{
+				$_SESSION['GO_SESSION']['full_url']=$this->full_url;
 			}
-			$this->full_url=$_SESSION['GO_SESSION']['full_url'];
-		}else
-		{
-			$_SESSION['GO_SESSION']['full_url']=$this->full_url;
+			if(empty($this->orig_full_url))
+				$this->orig_full_url=$this->full_url;
 		}
-		if(empty($this->orig_full_url))
-			$this->orig_full_url=$this->full_url;
 	}
 
 
