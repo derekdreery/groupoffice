@@ -1481,13 +1481,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				params: params,
 				success: function(options,  response, result)
 				{					
-//					if(event.repeats && !actionData.singleInstance)
-//					{
+					if(event.repeats)
+					{
 						grid.store.reload();
-//					}else if(result.id)
-//					{
-//						grid.setNewEventId(domIds, result.id);
-//					}
+					}
+
 					GO.calendar.handleMeetingRequest(result);					
 				}
 			});
@@ -1716,8 +1714,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 //				{
 //					grid.setNewEventId(domIds, responseParams.id);
 //				}
-				
-				grid.store.reload();
+				if(event.repeats)
+					grid.store.reload();
 
 				GO.calendar.handleMeetingRequest(responseParams);
 				
