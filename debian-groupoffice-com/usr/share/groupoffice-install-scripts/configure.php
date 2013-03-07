@@ -63,7 +63,7 @@ function create_file($file, $tpl, $replacements) {
 	$data = file_get_contents($tpl);
 
 	foreach($replacements as $key=>$value) {
-		$data = str_replace('{'.$key.'}', $value, $data);
+		$data = str_replace('{'.$key.'}', str_replace('\'','\\\'',$value), $data);
 	}
 
 	file_put_contents($file, $data);
