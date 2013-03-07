@@ -11,6 +11,47 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		return 'mschering@intermesh.nl';
 	}
 	
+ // Load the settings for the "Addresslists" tab in the Settings panel
+	public static function loadSettings(&$settingsController, &$params, &$response, $user) {
+
+		$contact = $user->contact;
+		if($contact){
+			
+			$response['data']['email_allowed'] = $contact->email_allowed;
+		
+			$addresslists = $contact->addresslists();
+			foreach($addresslists as $addresslist){
+				$response['data']['addresslist_'.$addresslist->id]=1;
+			}
+			
+		}
+			
+		return parent::loadSettings($settingsController, $params, $response, $user);
+	}
+	
+	// Save the settings for the "Addresslists" tab in the Settings panel
+	public static function submitSettings(&$settingsController, &$params, &$response, $user) {
+		
+		$contact = $user->contact;
+		
+		if($contact){
+		
+			$addresslists = GO_Addressbook_Model_Addresslist::model()->find(GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION));
+			foreach($addresslists as $addresslist){
+				$linkModel = $addresslist->hasManyMany('contacts', $contact->id);
+				$mustHaveLinkModel = isset($params['addresslist_' . $addresslist->id]);
+				if ($linkModel && !$mustHaveLinkModel) {
+					$linkModel->delete();
+				}
+				if (!$linkModel && $mustHaveLinkModel) {
+					$addresslist->addManyMany('contacts',$contact->id);
+				}
+			}	
+		}
+		
+		return parent::submitSettings($settingsController, $params, $response, $user);
+	}
+	
 	/**
 	 * 
 	 * When a user is created, updated or logs in this function will be called.
