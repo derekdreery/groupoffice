@@ -1332,7 +1332,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		var i = this.findAppointment(day, event_dom_id);
 		this.appointments[day][i].size=this.appointments[day][i].getSize();
 
-		this.remoteEvents[event_dom_id].repeats=false;
+//		this.remoteEvents[event_dom_id].repeats=false;
 		this.calculateAppointments(day);
 	},
 
