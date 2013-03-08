@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id$
+ * $Id: EnchantSpell.php 1088 2008-10-07 13:02:06Z mschering $
  *
  * This class was contributed by Michel Weimerskirch.
  *

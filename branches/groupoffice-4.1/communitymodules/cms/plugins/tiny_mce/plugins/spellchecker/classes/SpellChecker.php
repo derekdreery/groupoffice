@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id$
+ * $Id: SpellChecker.php 1088 2008-10-07 13:02:06Z mschering $
  *
  * @author Moxiecode
  * @copyright Copyright © 2004-2007, Moxiecode Systems AB, All rights reserved.
