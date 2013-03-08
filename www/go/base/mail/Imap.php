@@ -715,6 +715,10 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$this->send_command($command);
 		$res = $this->get_response(false, true);
 		$status = $this->check_response($res, true);
+		
+		if(!$status)
+			return false;
+		
 		$uidvalidity = 0;
 		$exists = 0;
 		$uidnext = 0;
@@ -772,17 +776,16 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			}
 		}
 
-		$mailbox=false;
-		if ($status) {
-			$mailbox['name']=$mailbox_name;
-			$mailbox['uidnext'] = $uidnext;
-			$mailbox['uidvalidity'] = $uidvalidity;
-			$mailbox['messages'] = $exists;
-			$mailbox['flags'] = $flags;
-			$mailbox['permanentflags'] = $pflags;
+		$mailbox=array();
+		$mailbox['name']=$mailbox_name;
+		$mailbox['uidnext'] = $uidnext;
+		$mailbox['uidvalidity'] = $uidvalidity;
+		$mailbox['messages'] = $exists;
+		$mailbox['flags'] = $flags;
+		$mailbox['permanentflags'] = $pflags;
 
-			$this->selected_mailbox=$mailbox;
-		}
+		$this->selected_mailbox=$mailbox;
+		
 		return $mailbox;
 	}
 
