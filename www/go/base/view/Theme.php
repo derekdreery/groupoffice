@@ -7,7 +7,7 @@ class GO_Base_View_Theme{
 	 * @return string
 	 */
 	public function getName(){
-		$theme = GO::user() ? GO::user()->theme : GO::config()->theme;
+		$theme = GO::config()->allow_themes && GO::user() ? GO::user()->theme : GO::config()->theme;
 		
 		if(!file_exists(GO::config()->root_path.'views/'.GO::view().'/themes/'.$theme.'/Layout.php')){
 			return 'Default';
