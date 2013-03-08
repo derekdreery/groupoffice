@@ -1255,37 +1255,37 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		}
 	}
 	
-	protected function actionImportIcs($params){
-		
-		$file = new GO_Base_Fs_File($params['file']);
-		$file->convertToUtf8();
-		$data = $file->getContents();
-		
-		//var_dump($data);
-
-		$vcalendar = GO_Base_VObject_Reader::read($data);
-		
-		foreach($vcalendar->vevent as $vevent){
-			$event = new GO_Calendar_Model_Event();
-			$event->importVObject($vevent);
-		}
-	}
+//	protected function actionImportIcs($params){
+//		
+//		$file = new GO_Base_Fs_File($params['file']);
+//		$file->convertToUtf8();
+//		$data = $file->getContents();
+//		
+//		//var_dump($data);
+//
+//		$vcalendar = GO_Base_VObject_Reader::read($data);
+//		
+//		foreach($vcalendar->vevent as $vevent){
+//			$event = new GO_Calendar_Model_Event();
+//			$event->importVObject($vevent);
+//		}
+//	}
 	
-	protected function actionImportVcs($params){
-		
-		$file = new GO_Base_Fs_File($params['file']);
-		
-		$data = $file->getContents();
-		
-		$vcalendar = GO_Base_VObject_Reader::read($data);
-		
-		GO_Base_VObject_Reader::convertICalendarToVCalendar($vcalendar);
-		
-		foreach($vcalendar->vevent as $vevent){
-			$event = new GO_Calendar_Model_Event();
-			$event->importVObject($vevent);		
-		}
-	}
+//	protected function actionImportVcs($params){
+//		
+//		$file = new GO_Base_Fs_File($params['file']);
+//		
+//		$data = $file->getContents();
+//		
+//		$vcalendar = GO_Base_VObject_Reader::read($data);
+//		
+//		GO_Base_VObject_Reader::convertICalendarToVCalendar($vcalendar);
+//		
+//		foreach($vcalendar->vevent as $vevent){
+//			$event = new GO_Calendar_Model_Event();
+//			$event->importVObject($vevent);		
+//		}
+//	}
 
 	public function actionInvitation($params){
 		
