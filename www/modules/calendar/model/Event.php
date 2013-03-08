@@ -1374,11 +1374,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->all_day_event = isset($vobject->dtstart['VALUE']) && $vobject->dtstart['VALUE']=='DATE' ? 1 : 0;
 		}
 		
-		if($dtstart->getTimezone()->getName()=='UTC'){
-			$this->_utcToLocal($dtstart);
-		}
-		if($dtend->getTimezone()->getName()=='UTC'){
-			$this->_utcToLocal($dtend);
+		if($this->all_day_event){
+			if($dtstart->getTimezone()->getName()=='UTC'){
+				$this->_utcToLocal($dtstart);
+			}
+			if($dtend->getTimezone()->getName()=='UTC'){
+				$this->_utcToLocal($dtend);
+			}
 		}
 		
 		
