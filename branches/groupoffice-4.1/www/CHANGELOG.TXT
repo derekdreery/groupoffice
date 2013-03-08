@@ -1,11 +1,12 @@
-4.1.44
-- Exclude noSelect folders from the folder listing in z-push2
-
 08-03-2013 4.1.43
+- Exclude noSelect folders from the folder listing in z-push2
 - Remove auto check mailboxes automatically when they don't exist anymore
 - Removed tinymce and ext source from scripts because they are not used.
 - File creation date is not updated when editing files.
 - All day events import had incorrect time
+- Editing a sieve copy rule filter turned into a move rule
+- Added date and time to e-mail client and dates always have leading zeros now for better alignment.
+- Fixed sorting issue in calendar list view
 
 08-03-2013 4.1.42
 - Updated German

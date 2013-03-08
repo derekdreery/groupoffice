@@ -1,37 +1,11 @@
 Search in subfolders with mail
 
-Bij batch status in billing nieuw item toevoegen. Bv. herinneringskosten. Percentage of bedrag.
-
 
 op ics klikken opent event dialog
 
 link rules email
 
 Totaal rates in ticket export
-
-Testen op win: http://www.group-office.com/forum/viewtopic.php?f=5&t=9065
-
-Unique bool for custom fields
-
-
-Persistent connections
-
-
-PDF in document templates zonder processing
-
-
-BCC en cc in mailto: 
-https://mail.itsam.se/index.php?mail_to=mailto:?bcc=test1@test.se,test2@test.se
-
-
-2e mobile veld bij contacts
-
-BUg: http://www.group-office.com/forum/viewtopic.php?f=6&t=8317
-
-Iedereen mag views aanmaken in agenda
-
-Bug: http://www.group-office.com/forum/viewtopic.php?f=1&t=8409&p=28295#p28295
-
 
 Bij alle omgebouwde modules .php zoeken in *.js files zodat oude php code uiteindelijk weg kan.
 
@@ -58,11 +32,6 @@ resize vcard photo's
 Add max_file_storage setting to servermanager
 
 
-Koba
-
-
-karakter encoding: koi8-r
-
 Document conversion
 
 Product opties bij billing
@@ -72,19 +41,9 @@ Group-Office 100 users 600 euro, 150 users 700 euro etc.
 
 *** Lage prio:
 
-Save all attachments.
-
-Twinfield
-VOIP
-
-Licentie checks per module
-
-Servermanager bestelfunctie
 
 overige modules mvc
 sticky user group that is shared with all items members create
-
-Freebusy support in sabredav 1.6
 
 Feature requests voting system
 
