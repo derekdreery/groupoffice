@@ -52,14 +52,14 @@ GO.email.MessagesGrid = function(config){
 			},{
 				header: GO.lang.strDate,
 				dataIndex: 'arrival',
-				width:65,
-				renderer:this.renderNorthMessageRow,
+				width:120,
+				renderer:this.renderNorthArrival,
 				align:'right'
 			},{
 				header: GO.email.lang.dateSent,
 				dataIndex: 'date',
-				width:65,
-				renderer:this.renderNorthMessageRow,
+				width:120,
+				renderer:this.renderNorthDate,
 				align:'right',
 				hidden:true
 			},{
@@ -109,13 +109,15 @@ GO.email.MessagesGrid = function(config){
 		},{
 			id:'arrival',
 			header: GO.lang.strDate,
-			dataIndex: 'arrival',
+			dataIndex:'arrival',
+			renderer: this.renderArrival,
 			width:80,
 			align:'right'
 		},{
 			id:'date',
 			header: GO.email.lang.dateSent,
-			dataIndex: 'date',
+			dataIndex:'date',
+			renderer: this.renderDate,
 			width:80,
 			align:'right',
 			hidden:true
@@ -299,6 +301,35 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 			return String.format('<div id="sbj_'+record.data['uid']+'" class="ml-seen-from">{0}</div><div class="ml-seen-subject">{1}</div>', value, record.data['subject']);
 		}
 	},
+					
+	renderNorthDate : function(value, p, record){
+		return value+' '+record.data.date_time;
+	},
+					
+	renderNorthArrival : function(value, p, record){
+		return value+' '+record.data.arrival_time;
+	},
+					
+	renderArrival : function(value, p, record){
+		if(record.data['seen']=='0')
+		{
+			return String.format('<div id="arr_'+record.data['uid']+'" class="ml-unseen-from">{0}</div><div class="ml-unseen-subject">{1}</div>', value, record.data['arrival_time']);
+		}else
+		{
+			return String.format('<div id="arr_'+record.data['uid']+'" class="ml-seen-from">{0}</div><div class="ml-seen-subject">{1}</div>', value, record.data['arrival_time']);
+		}
+	},
+					
+	renderDate : function(value, p, record){
+		if(record.data['seen']=='0')
+		{
+			return String.format('<div id="date_'+record.data['uid']+'"  class="ml-unseen-from">{0}</div><div class="ml-unseen-subject">{1}</div>', value, record.data['date_time']);
+		}else
+		{
+			return String.format('<div id="date_'+record.data['uid']+'" class="ml-seen-from">{0}</div><div class="ml-seen-subject">{1}</div>', value, record.data['date_time']);
+		}
+	},
+					
 	renderIcon : function(src, p, record){
 		var str = '';
 
