@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id$
+ * $Id: JSON.php 1088 2008-10-07 13:02:06Z mschering $
  *
  * @package MCManager.utils
  * @author Moxiecode

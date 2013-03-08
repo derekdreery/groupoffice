@@ -1,5 +1,5 @@
 /**
- * $Id$
+ * $Id: editor_plugin_src.js 3038 2009-08-11 09:17:39Z mschering $
  *
  * @author Moxiecode
  * @copyright Copyright © 2004-2008, Moxiecode Systems AB, All rights reserved.
