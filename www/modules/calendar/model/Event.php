@@ -1325,6 +1325,26 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public $importedParticiants=array();
 	
 	
+	private function _UtcToLocal(DateTime $date){
+		//DateTime from SabreDav is date without time in UTC timezone. We store it in the users timezone so we must
+		//add the timezone offset.
+		$timezone = new DateTimeZone(GO::user()->timezone);
+
+		$offset = $timezone->getOffset($date);		
+		$sub = $offset>0;
+		if(!$sub)
+			$offset *= -1;
+
+		$interval = new DateInterval('PT'.$offset.'S');	
+		if(!$sub){
+			$date->add($interval);
+		}else{
+			$date->sub($interval);		
+
+		}
+	}
+	
+	
 	/**
 	 * Import an event from a VObject 
 	 * 
@@ -1349,29 +1369,19 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		//funambol sends this special parameter
 		if((string) $vobject->{"X-FUNAMBOL-ALLDAY"}=="1"){
 			$this->all_day_event=1;
-			$this->end_time-=60;
-			
-			//DateTime from SabreDav is date without time in UTC timezone. We store it in the users timezone so we must
-			//add the timezone offset.
-			$timezone = new DateTimeZone(GO::user()->timezone);
-			
-			$offset = $timezone->getOffset($dtstart);		
-			$sub = $offset>0;
-			if(!$sub)
-				$offset *= -1;
-			
-			$interval = new DateInterval('PT'.$offset.'S');	
-			if(!$sub){
-				$dtstart->add($interval);
-				$dtend->add($interval);
-			}else{
-				$dtstart->sub($interval);			
-				$dtend->sub($interval);
-			}
 		}else
 		{
 			$this->all_day_event = isset($vobject->dtstart['VALUE']) && $vobject->dtstart['VALUE']=='DATE' ? 1 : 0;
 		}
+		
+		if($dtstart->getTimezone()->getName()=='UTC'){
+			$this->_UtcToLocal($dtstart);
+		}
+		if($dtend->getTimezone()->getName()=='UTC'){
+			$this->_UtcToLocal($dtend);
+		}
+		
+		
 		
 		$this->start_time =intval($dtstart->format('U'));	
 		$this->end_time = intval($dtend->format('U'));
