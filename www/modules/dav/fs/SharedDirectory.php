@@ -28,7 +28,7 @@ class GO_Dav_Fs_SharedDirectory extends Sabre\DAV\FS\Directory implements Sabre\
 		$folder = GO_Files_Model_Folder::model()->findShares(GO_Base_Db_FindParams::newInstance()->single()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('name', $name)));
 		
 		if (!$folder)
-			throw new Sabre\DAV\Exception\NotFound('File with name ' . $name . ' could not be located');
+			throw new Sabre\DAV\Exception\NotFound('Shared folder with name ' . $name . ' could not be located');
 
 		return new GO_DAV_FS_Directory($folder->path);
 	}
