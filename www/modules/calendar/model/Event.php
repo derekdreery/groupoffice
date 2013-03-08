@@ -1325,7 +1325,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public $importedParticiants=array();
 	
 	
-	private function _UtcToLocal(DateTime $date){
+	private function _utcToLocal(DateTime $date){
 		//DateTime from SabreDav is date without time in UTC timezone. We store it in the users timezone so we must
 		//add the timezone offset.
 		$timezone = new DateTimeZone(GO::user()->timezone);
@@ -1375,10 +1375,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 		
 		if($dtstart->getTimezone()->getName()=='UTC'){
-			$this->_UtcToLocal($dtstart);
+			$this->_utcToLocal($dtstart);
 		}
 		if($dtend->getTimezone()->getName()=='UTC'){
-			$this->_UtcToLocal($dtend);
+			$this->_utcToLocal($dtend);
 		}
 		
 		
