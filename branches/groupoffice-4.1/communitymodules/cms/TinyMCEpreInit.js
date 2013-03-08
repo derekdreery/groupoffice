@@ -11,7 +11,7 @@
  */
 
 tinyMCEPreInit={
-	base:document.location.protocol+'//'+document.location.host+BaseHref+'views/Extjs3/javascript/tiny_mce',
+	base:document.location.protocol+'//'+document.location.host+BaseHref+'modules/cms/plugins/tiny_mce',
 	suffix:'_src',
 	query:''
 };
