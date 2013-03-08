@@ -3154,7 +3154,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$columns = array_keys($this->columns);
 		
 		foreach($columns as $column){
-			if(isset($this->_attributes[$column]) && isset($this->columns[$column])){
+			if(isset($this->_attributes[$column]) && isset($this->columns[$column]['dbtype'])){
 				switch ($this->columns[$column]['dbtype']) {
 						case 'int':
 						case 'tinyint':
