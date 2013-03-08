@@ -95,13 +95,13 @@ $scripts=array();
 //$scripts[]=$view_root_uri.'javascript/focus.js';
 
 
-//if(GO::config()->debug) {
+if(GO::config()->debug) {
 	$scripts[]=$view_root_uri.'ext/adapter/ext/ext-base-debug.js';
 	$scripts[]=$view_root_uri.'ext/ext-all-debug.js';
-//}else {
-//	$scripts[]=$root_uri.'ext/adapter/ext/ext-base.js';
-//	$scripts[]=$root_uri.'ext/ext-all.js';
-//}
+}else {
+	$scripts[]=$root_uri.'ext/adapter/ext/ext-base.js';
+	$scripts[]=$root_uri.'ext/ext-all.js';
+}
 
 $scripts[]=$view_root_uri.'javascript/namespaces.js';
 ?>
