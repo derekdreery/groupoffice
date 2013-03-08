@@ -1,3 +1,6 @@
+4.1.44
+- Exclude noSelect folders from the folder listing in z-push2
+
 08-03-2013 4.1.43
 - Remove auto check mailboxes automatically when they don't exist anymore
 - Removed tinymce and ext source from scripts because they are not used.
