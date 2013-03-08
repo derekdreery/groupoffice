@@ -1,3 +1,9 @@
+08-03-2013 4.1.43
+- Remove auto check mailboxes automatically when they don't exist anymore
+- Removed tinymce and ext source from scripts because they are not used.
+- File creation date is not updated when editing files.
+- All day events import had incorrect time
+
 08-03-2013 4.1.42
 - Updated German
 - Updated Swedish
