@@ -991,8 +991,8 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $time_formats = array(
-	'G:i',
-	'g:i a'
+	'H:i',
+	'h:i a'
 	);
 
 	/**

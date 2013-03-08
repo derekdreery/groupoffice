@@ -270,3 +270,9 @@ $updates["201210021548"][]="ALTER TABLE `go_holidays` CHANGE `region` `region` V
 $updates["201201150948"][]="ALTER TABLE `go_holidays` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
 $updates["201201150948"][]="ALTER TABLE `go_holidays` CHANGE `region` `region` VARCHAR( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 $updates["201301170847"][]="DELETE FROM go_modules WHERE id='z-push';";
+
+$updates["201303081706"][]="UPDATE go_users SET time_format = replace(time_format,'g:','h:');";
+$updates["201303081706"][]="UPDATE go_users SET time_format = replace(time_format,'G:','H:');";
+
+$updates["201303081706"][]="UPDATE go_users SET time_format = replace(time_format,'g:','h:');";
+$updates["201303081706"][]="UPDATE go_users SET time_format = replace(time_format,'G:','H:');";
