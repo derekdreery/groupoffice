@@ -44,7 +44,7 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		
 		if($contact){
 		
-			$addresslists = GO_Addressbook_Model_Addresslist::model()->find(GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION));
+			$addresslists = GO_Addressbook_Model_Addresslist::model()->find(GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::READ_PERMISSION));
 			foreach($addresslists as $addresslist){
 				$linkModel = $addresslist->hasManyMany('contacts', $contact->id);
 				$mustHaveLinkModel = isset($params['addresslist_' . $addresslist->id]);
