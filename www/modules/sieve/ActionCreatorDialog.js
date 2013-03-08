@@ -118,7 +118,7 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 			this._transForm(record.get('type'));
 			switch (record.get('type')) {
 				case 'fileinto':
-				case 'copyto':
+				case 'fileinto_copy':
 					this.cmbFolder.setValue(record.get('target'));
 					break;
 				case 'redirect':
@@ -165,7 +165,7 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 				_text		= GO.sieve.lang.fileinto+': '+_target;
 				
 				break;
-			case 'copyto':
+			case 'fileinto_copy':
 				_copy		= true;
 				_type		= 'fileinto';
 				_target = this.cmbFolder.getValue();
@@ -247,7 +247,7 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 	_transForm : function(type) {
 		switch (type) {
 			case 'fileinto':
-			case 'copyto':
+			case 'fileinto_copy':
 				this._toggleComponentUse(this.cmbFolder,true);
 				this._toggleComponentUse(this.txtEmailAddressOptional,false);
 				this._toggleComponentUse(this.txtEmailAddress,false);
