@@ -11,11 +11,19 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		return 'mschering@intermesh.nl';
 	}
 	
- // Load the settings for the "Addresslists" tab in the Settings panel
+	// Load the settings for the "Addresslists" tab in the Settings panel
 	public static function loadSettings(&$settingsController, &$params, &$response, $user) {
 
-		$contact = $user->contact;
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->joinCustomFields();
+		
+		$contact = $user->contact($findParams);
 		if($contact){
+			
+			// If there are customfields then load them too in the settings panel
+			$contactCfs = $contact->getCustomfieldsRecord();			
+			if($contactCfs)
+				$response['data'] = array_merge($response['data'],$contactCfs->getAttributes());
 			
 			$response['data']['email_allowed'] = $contact->email_allowed;
 		
