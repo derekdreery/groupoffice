@@ -1,5 +1,5 @@
-modules/cms/form/TinyMCE.js
-modules/cms/form/TinyMCEpreInit.js
+modules/cms/TinyMCE.js
+modules/cms/TinyMCEpreInit.js
 modules/cms/plugins/tiny_mce/tiny_mce.js
 
 modules/cms/SitesDialog.js
