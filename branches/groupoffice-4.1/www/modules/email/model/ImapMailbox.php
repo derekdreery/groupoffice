@@ -275,10 +275,24 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 
 	public function getUnseen(){
 		if(!isset($this->_attributes['unseen'])){
-			$unseen=$this->getAccount()->openImapConnection()->get_unseen($this->name);
+			$unseen=$this->getAccount()->openImapConnection($this->name)->get_unseen();
 			$this->_attributes['unseen']=$unseen['count'];
 		}
 		return $this->_attributes['unseen'];
+	}
+	/**
+	 * Check if this mailbox exists
+	 * @return boolean
+	 */
+	public function exists(){
+		$imap = $this->getAccount()->justConnect();
+		
+		$exists = $imap->select_mailbox($this->name);
+		
+		if(!$exists)
+			$imap->last_error(); //clear the not exist error
+		
+		return $exists;
 	}
 	
 	public function hasAlarm(){

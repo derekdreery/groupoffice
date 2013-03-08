@@ -269,14 +269,25 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		if(empty($mailbox))
 			$mailbox="INBOX";
 		
+		$imap = $this->justConnect();
+		
+		if(!$imap->select_mailbox($mailbox))
+			throw new Exception ("Could not open IMAP mailbox $mailbox\nIMAP error: ".$imap->last_error());
+	
+		return $imap;
+	}
+	
+	/**
+	 * Connect to the IMAP server without selecting a mailbox
+	 * 
+	 * @return GO_Base_Mail_Imap
+	 */
+	public function justConnect(){
 		if(empty($this->_imap)){
 			$this->_imap = new GO_Base_Mail_Imap();
 			$this->_imap->connect($this->host, $this->port, $this->username, $this->decryptPassword(), $this->use_ssl);
-
 		}
-		if(!$this->_imap->select_mailbox($mailbox))
-			throw new Exception ("Could not open IMAP mailbox $mailbox\nIMAP error: ".$this->_imap->last_error());
-	
+
 		return $this->_imap;
 	}
 	
