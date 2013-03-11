@@ -54,7 +54,36 @@ class GO_Base_Cron_CronCollection extends GO_Base_Model {
 			$foundCronJobClasses = array_merge($this->getModuleCronJobClasses($module),$foundCronJobClasses);
 		}
 		
+		$foundCronJobClasses = array_merge($this->getCoreCronJobClasses(),$foundCronJobClasses);
 		$foundCronJobClasses = array_merge($this->getFileStorageCronJobClasses(),$foundCronJobClasses);
+		
+		return $foundCronJobClasses;
+	}
+	
+	public function getCoreCronJobClasses(){
+		$foundCronJobClasses=array();
+		$folderPath = GO::config()->root_path.'go/base/cron';
+		
+		$folder = new GO_Base_Fs_Folder($folderPath);
+		GO::debug("CRONFILE SEARCH IN FOLDER: ".$folder->path());
+		if($folder->exists()){
+			$items = $folder->ls();
+			$reflectionClasses = array();
+			foreach($items as $item){
+				if(is_file($item)){
+					$className = 'GO_Base_Cron_'.$item->nameWithoutExtension();
+					$reflectionClasses[] = new ReflectionClass($className);
+				}
+			}
+			
+			foreach($reflectionClasses as $reflectionClass){
+				if($this->_checkIsCronJobClassFile($reflectionClass)){
+					GO::debug("CRONFILE FOUND: ".$reflectionClass->name);
+					$cronJob = new $reflectionClass->name();
+					$foundCronJobClasses[$reflectionClass->name] = $cronJob->getLabel();
+				}
+			}
+		}
 		
 		return $foundCronJobClasses;
 	}
