@@ -1,3 +1,7 @@
+- Added support_link config option
+- Tasks and contacts clickable in calendar
+- Signed GOTA for 6 months.
+
 08-03-2013 4.1.43
 - Exclude noSelect folders from the folder listing in z-push2
 - Remove auto check mailboxes automatically when they don't exist anymore
