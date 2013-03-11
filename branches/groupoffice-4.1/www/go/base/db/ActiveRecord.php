@@ -2570,6 +2570,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			if(!$model)
 				$model = new GO_Base_Model_SearchCacheRecord();
 			
+			$model->mtime=0;
+			
 			$acl_id =$this->findAclId();
 			
 			//if model doesn't have an acl we use the acl of the module it belongs to.
@@ -2586,7 +2588,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				'module'=>$this->module,
 				'model_name'=>$this->className(),
 				'name' => '',
-				//'link_type'=>$this->modelTypeId(),
 				'description'=>'',		
 				'type'=>$this->localizedName, //deprecated, for backwards compatibilty
 				'keywords'=>$this->getSearchCacheKeywords($this->localizedName),
@@ -2599,19 +2600,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 			if($attr['description']==null)
 				$attr['description']="";
-			
-//			//make sure these attributes are not too long
-//			if(GO_Base_Util_String::length($attr['name'])>100)
-//				$attr['name']=substr($attr['name'], 0, 100);
-//			
-//			if(GO_Base_Util_String::length($attr['description'])>255)
-//				$attr['description']=GO_Base_Util_String::substr($attr['description'], 0, 255);
-			
-			//GO::debug($attr);
 
 			$model->setAttributes($attr, false);
 			$model->cutAttributeLengths();
 			$model->save(true);
+
 			return $model;
 			
 		}
