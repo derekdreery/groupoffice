@@ -1611,62 +1611,62 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	  
 	onDblClick : function(grid, event, actionData){
 		
-		if(event.permission_level<GO.permissionLevels.write)
-			return;
-		
-		if(!event.is_organizer && event.model_name=="GO_Calendar_Model_Event"){
-			// You are not authorised to edit this event because you are not the organizer.
-			// Show message to the user
-			//Ext.Msg.alert(GO.calendar.lang.errorOrganizerOnlyTitle, GO.calendar.lang.errorOrganizerOnly);
-			
-			if(!this.attendanceWindow){
-				this.attendanceWindow = new GO.calendar.AttendanceWindow ();
-				this.attendanceWindow.on('save', function(){
-					this.refresh();
-				}, this);
-			}			
-			this.attendanceWindow.show(event.event_id);
-			if(event.repeats && actionData.singleInstance)
-			{
-				this.attendanceWindow.setExceptionDate(event['startDate'].format("U"));
-			}else
-			{
-				this.attendanceWindow.setExceptionDate(false);
-			}
-			return;
-		}
-
-		if(event.read_only && !event.contact_id && !event.task_id)
-			return false;
-
 	
-		if(event.repeats && actionData.singleInstance)
-		{
-
-			GO.calendar.showEventDialog({
-				exception_date: event['startDate'].format("U"),
-				event_id: event['event_id'],
-				oldDomId : event.domId
-			});
-		}else
-		{		
-			if(event['task_id'])
-			{
+		switch(event.model_name){
+			case "GO_Tasks_Model_Task":
 				GO.tasks.showTaskDialog({
-					task_id : event['task_id']
-				})				
-			}else
-			if(event['model_name']== 'GO_Adressbook_Model_Contact')
-			{			
-				GO.linkHandlers["GO_Adressbook_Model_Contact"].call(this, event['contact_id']);
-			}else
-			if(event['event_id'])
-			{
-				GO.calendar.showEventDialog({
-					event_id: event['event_id'],
-					oldDomId : event.domId
-				});
-			}
+					task_id : event.task_id
+				})	
+			break;
+			
+			case "GO_Adressbook_Model_Contact":
+				GO.linkHandlers["GO_Addressbook_Model_Contact"].call(this, event['contact_id']);
+			break;
+			
+			case "GO_Calendar_Model_Event":
+				if(event.permission_level<GO.permissionLevels.write)
+					return;
+		
+				if(!event.is_organizer){
+					// You are not authorised to edit this event because you are not the organizer.
+					// Show message to the user
+					//Ext.Msg.alert(GO.calendar.lang.errorOrganizerOnlyTitle, GO.calendar.lang.errorOrganizerOnly);
+
+					if(!this.attendanceWindow){
+						this.attendanceWindow = new GO.calendar.AttendanceWindow ();
+						this.attendanceWindow.on('save', function(){
+							this.refresh();
+						}, this);
+					}			
+					this.attendanceWindow.show(event.event_id);
+					if(event.repeats && actionData.singleInstance)
+					{
+						this.attendanceWindow.setExceptionDate(event['startDate'].format("U"));
+					}else
+					{
+						this.attendanceWindow.setExceptionDate(false);
+					}
+					return;
+				}
+
+				if(event.read_only && !event.contact_id && !event.task_id)
+					return false;
+
+				if(event.repeats && actionData.singleInstance)
+				{
+					GO.calendar.showEventDialog({
+						exception_date: event['startDate'].format("U"),
+						event_id: event['event_id'],
+						oldDomId : event.domId
+					});
+				}else
+				{
+					GO.calendar.showEventDialog({
+						event_id: event['event_id'],
+						oldDomId : event.domId
+					});		
+				}
+			break;			
 		}
 	},
     
