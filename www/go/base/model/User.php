@@ -614,8 +614,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			$fromName = GO::config()->title;
 		
 		if(!$fromEmail){
-			$parts = explode('@', GO::config()->webmaster_email);
-			$fromEmail = 'noreply@'.$parts[1];
+			$fromEmail = GO::config()->webmaster_email;
 		}
 
 		$emailBody = GO::t('lost_password_body','base','lostpassword');
