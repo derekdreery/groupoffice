@@ -1022,6 +1022,15 @@ class GO_Base_Config {
 			'en'=>'http://wiki4.group-office.com/wiki/'
 		);
 	
+	/**
+	 * The link or e-mail address in menu help -> support.
+	 * 
+	 * No menu item is generated if left empty.
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $support_link = false;
 	
 	/**
 	 * Relative path to the classes directory with no slash at start and end
@@ -1174,26 +1183,26 @@ class GO_Base_Config {
 			$this->default_thousands_separator=$this->default_decimal_separator == '.' ? ',' : '.';//$lc['thousands_sep'];
 		}
 
-		// path to classes
-		$this->class_path = $this->root_path.$this->class_path.'/';
-
-		// path to themes
-		$this->theme_path = $this->root_path.$this->theme_path.'/';
-
-		// URL to themes
-		$this->theme_url = $this->host.$this->theme_url.'/';
-
-		// path to controls
-		$this->control_path = $this->root_path.$this->control_path.'/';
-
-		// url to controls
-		$this->control_url = $this->host.$this->control_url.'/';
-
-		// path to modules
-		$this->module_path = $this->root_path.$this->module_path.'/';
-
-		// url to user configuration apps
-		$this->configuration_url = $this->host.$this->configuration_url.'/';
+//		// path to classes
+//		$this->class_path = $this->root_path.$this->class_path.'/';
+//
+//		// path to themes
+//		$this->theme_path = $this->root_path.$this->theme_path.'/';
+//
+//		// URL to themes
+//		$this->theme_url = $this->host.$this->theme_url.'/';
+//
+//		// path to controls
+//		$this->control_path = $this->root_path.$this->control_path.'/';
+//
+//		// url to controls
+//		$this->control_url = $this->host.$this->control_url.'/';
+//
+//		// path to modules
+//		$this->module_path = $this->root_path.$this->module_path.'/';
+//
+//		// url to user configuration apps
+//		$this->configuration_url = $this->host.$this->configuration_url.'/';
 
 
 		if($this->debug)
@@ -1222,9 +1231,10 @@ class GO_Base_Config {
 		}
 
 		$this->set_full_url();
-
-
-
+		
+		if(!$this->support_link && $this->isProVersion()){
+			$this->support_link = "https://shop.group-office.com/support";
+		}
 	}
 
 	/**
@@ -1256,6 +1266,16 @@ class GO_Base_Config {
 			$folder->create(0777);
 		return $folder;
 	}
+	
+	/**
+	 * Check if the pro package is available.
+	 * 
+	 * @return boolean
+	 */
+	public function isProVersion(){
+		return is_dir($this->root_path.'modules/professional');
+	}
+	
 
 
 //	function __destruct() {

@@ -81,6 +81,7 @@ $settings['config']['debug']=GO::config()->debug;
 $settings['config']['max_attachment_size']=GO::config()->max_attachment_size;
 $settings['config']['max_file_size']=GO::config()->max_file_size;
 $settings['config']['help_link']=GO::config()->help_link;
+$settings['config']['support_link']=GO::config()->support_link;
 $settings['config']['nav_page_size']=intval(GO::config()->nav_page_size);
 
 $settings['config']['default_country'] = GO::config()->default_country;
@@ -362,7 +363,7 @@ if(count($load_modules)) {
 		//$GLOBALS['GO_CONFIG']=$GO_CONFIG=GO::config();
 
 		require_once(GO::config()->root_path.'Group-Office.php');
-		require_once(GO::config()->class_path.'export/export_query.class.inc.php');
+		require_once(GO::config()->root_path.'classes/export/export_query.class.inc.php');
 
 		$files = $folder->ls();
 		while($file = array_shift($files)){
