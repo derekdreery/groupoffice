@@ -1,8 +1,8 @@
 <?php
-$l['name'] = 'Cron beheren';
-$l['description'] = 'Module om cronjobs in Group-Office te beheren.';
+$l['name'] = 'Geplande systeemtaken';
+$l['description'] = 'Module om systeemtaken in Group-Office te beheren.';
 
-$l['cronManager'] = 'Cron beheren';
+$l['cronManager'] = 'Systeemtaken beheren';
 
 $l['cronName'] = 'Naam';
 $l['minutes'] = 'Minuten';
