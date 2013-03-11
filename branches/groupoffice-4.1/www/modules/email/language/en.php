@@ -249,3 +249,6 @@ $l['clickSeeWholeMessage']="The actual message is larger than can be shown here.
 
 $l['dateReceived']='Date received';
 $l['dateSent']='Date sent';
+
+$l['cronEmailReminders']='Email reminders';
+$l['cronEmailRemindersDescription']='This cron handles the email reminders';

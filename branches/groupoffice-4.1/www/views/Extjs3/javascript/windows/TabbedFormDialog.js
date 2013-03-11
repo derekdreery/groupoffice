@@ -32,6 +32,25 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	 */
 	loadOnNewModel : true,
 	
+	
+	/**
+	 * Use this parameter to create a separate controller action for update and create
+	 * Warning: When setting this parameter you also need to set the "createAction" parameter.
+	 * 
+	 * Example value: 'update'
+	 * 
+	 */
+	updateAction : false,
+	
+	/**
+	 * Use this parameter to create a separate controller action for create and update
+	 * Warning: When setting this parameter you also need to set the "updateAction" parameter.
+	 * 
+	 * Example value: 'create'
+	 * 
+	 */
+	createAction	: false,
+	
 	remoteModelId : 0,
 	
 	titleField : false,
@@ -281,9 +300,28 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		
 	},
 	
+	/*
+	 * Check for updateAction and createAction parameter
+	 */
+	checkSubmitMethod : function(params){
+		if(this.createAction != false && this.updateAction !=false){
+			if(this.remoteModelId == 0){
+				this.submitAction = this.createAction;
+			} else {
+				this.submitAction = this.updateAction;
+			}
+		}
+	},	
+	
 	submitForm : function(hide){
 		
 		var params=this.getSubmitParams();
+		
+		/*
+		 * Check for updateAction and createAction parameter
+		 */
+		this.checkSubmitMethod(params);
+		
 		if(this.beforeSubmit(params)===false)
 			return false;
 		

@@ -1018,9 +1018,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $help_link = array(
-			'en'=>'http://wiki4.group-office.com/wiki/'
-		);
+	var $help_link = 'http://wiki4.group-office.com/wiki/';
 	
 	/**
 	 * The link or e-mail address in menu help -> support.
@@ -1481,7 +1479,7 @@ class GO_Base_Config {
 		if ($setting) {
 			return $setting->value;
 		}
-		return null;
+		return false;
 	}
     
     /**

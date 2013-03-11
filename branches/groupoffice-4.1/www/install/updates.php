@@ -276,3 +276,37 @@ $updates["201303081706"][]="UPDATE go_users SET time_format = replace(time_forma
 
 $updates["201303081706"][]="UPDATE go_users SET time_format = replace(time_format,'g:','h:');";
 $updates["201303081706"][]="UPDATE go_users SET time_format = replace(time_format,'G:','H:');";
+
+$updates["201303111600"][]="DROP TABLE IF EXISTS `go_cron`;";
+$updates["201303111600"][]="CREATE TABLE IF NOT EXISTS `go_cron` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT '1',
+  `minutes` varchar(100) DEFAULT NULL,
+  `hours` varchar(100) DEFAULT NULL,
+  `monthdays` varchar(100) DEFAULT NULL,
+  `months` varchar(100) DEFAULT NULL,
+  `weekdays` varchar(100) DEFAULT NULL,
+  `years` varchar(100) DEFAULT NULL,
+  `job` varchar(255) NOT NULL,
+  `runonce` tinyint(1) NOT NULL DEFAULT '0',
+  `nextrun` int(11) NOT NULL DEFAULT '0',
+  `lastrun` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
+
+
+$updates["201303111600"][]="CREATE TABLE IF NOT EXISTS `go_cron_groups` (
+  `cronjob_id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  PRIMARY KEY (`cronjob_id`,`group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+
+$updates["201303111600"][]="CREATE TABLE IF NOT EXISTS `go_cron_users` (
+  `cronjob_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`cronjob_id`,`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+$updates["201303111600"][]="script:13_insert_system_cron.php";
