@@ -302,3 +302,5 @@ $updates["201302281100"][]="CREATE TABLE IF NOT EXISTS `go_cron_users` (
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`cronjob_id`,`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+$updates["201302281101"][]="script:13_insert_system_cron.php";
