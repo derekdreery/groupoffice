@@ -296,12 +296,6 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 			
 			GO::debug('CRONJOB ('.$this->name.') FINISHED : '.date('d-m-Y H:i:s'));
 			
-			if($this->runonce){
-				GO::debug('CRONJOB ('.$this->name.') HAS RUNONCE OPTION, DISABLING NOW');
-				$this->active = false;
-				$this->save();
-			}
-			
 			return true;
 		} else {
 			GO::debug('CRONJOB ('.$this->name.') FAILED TO RUN : '.date('d-m-Y H:i:s'));
@@ -398,18 +392,18 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 	}
 	
 	/**
-	 * This function needs to be called on the end of the run of this cronjob.
+	 * This function needs to be called at the START of the run of this cronjob.
 	 * It calculates the next run time and sets the last run time.
 	 * 
-	 * @param boolean $save
 	 * @return boolean
 	 */
-	private function _prepareRun($save=true) {
+	private function _prepareRun() {
+		if($this->runonce){
+			GO::debug('CRONJOB ('.$this->name.') HAS RUNONCE OPTION, DISABLING NOW');
+			$this->active = false;
+		}
 		$this->lastrun = time();
-		if($save)
-			return $this->save();
-		else
-			return true;
+		return $this->save();
 	}
 	
 	
