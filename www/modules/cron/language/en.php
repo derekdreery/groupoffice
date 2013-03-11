@@ -1,8 +1,8 @@
 <?php
-$l['name'] = 'Cron manager';
-$l['description'] = 'Module to manage cronjobs inside Group-Office.';
+$l['name'] = 'System task scheduler';
+$l['description'] = 'Module to manage system tasks inside Group-Office.';
 
-$l['cronManager'] = 'Cron manager';
+$l['cronManager'] = 'Manage system tasks';
 
 $l['cronName'] = 'Name';
 $l['minutes'] = 'Minutes';

@@ -51,19 +51,19 @@ GO.cron.CronGrid = Ext.extend(GO.grid.GridPanel,{
 						this.store.load();
 					},
 					scope: this
-				},
-				'-',
-				{
-					itemId:'settings',
-					iconCls: 'btn-settings',
-					text: GO.lang['cmdSettings'],
-					cls: 'x-btn-text-icon',
-					disabled:this.standardTbarDisabled,
-					handler: function(){
-						this.showSettingsDialog();
-					},
-					scope: this
 				}]
+//				'-',
+//				{
+//					itemId:'settings',
+//					iconCls: 'btn-settings',
+//					text: GO.lang['cmdSettings'],
+//					cls: 'x-btn-text-icon',
+//					disabled:this.standardTbarDisabled,
+//					handler: function(){
+//						this.showSettingsDialog();
+//					},
+//					scope: this
+//				}]
 			}),
 			store: GO.cron.cronStore,
 			border: false,
