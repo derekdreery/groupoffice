@@ -223,3 +223,9 @@ $l['viewDay']='Day';
 $l['viewMorning']='Morning';
 $l['viewAfternoon']='Afternoon';
 $l['viewEvening']='Evening';
+
+$l['cronEventAndTaskReportMailer']='Today\'s events and tasks mailer';
+$l['cronEventAndTaskReportMailerDescription']='Send an email with the today\'s events and tasks to every user in the cron';
+$l['cronEventAndTaskReportMailerPdfSubtitle']='Today\'s events and tasks';
+$l['cronEventAndTaskReportMailerSubject']='Today\'s events and tasks';
+$l['cronEventAndTaskReportMailerContent']='You can find a list of today\'s events and tasks in the attached PDF.';

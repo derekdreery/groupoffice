@@ -89,10 +89,20 @@ class GO_Base_Router{
 				$params=$_REQUEST;				
 			}
 		}
-				
+						
 		$r = !empty($params['r']) ?  explode('/', $params['r']): array();		
 		$this->_r=isset($params['r']) ? $params['r'] : "";
-		
+					
+		if(GO::config()->debug || GO::config()->debug_log){
+			$log = '['.date('Y-m-d G:i').'] r=';
+			if(isset($params['r']))
+				$log .= $params['r'];
+			else 
+				$log = 'No r parameter given';				
+
+			GO::debug($log);
+		}
+	
 		$first = isset($r[0]) ? ucfirst($r[0]) : 'Auth';
 
 		if(empty($r[2]) && file_exists(GO::config()->root_path.'controller/'.$first.'Controller.php')){
@@ -133,7 +143,7 @@ class GO_Base_Router{
 			trigger_error("Controller('".$controllerClass."') not found: ".$_SERVER['QUERY_STRING']." ".var_export($_REQUEST, true), E_USER_WARNING);
 			exit();
 		}
-		
+						
 		$this->_controller = new $controllerClass;
 		$this->_controller->run($action, $params);		
 	}

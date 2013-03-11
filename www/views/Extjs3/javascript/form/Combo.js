@@ -23,12 +23,20 @@
 GO.form.ComboBox = Ext.extend(Ext.form.ComboBox, {
 
 	minChars : 3,
+	reloadOnExpand : false,
+
 
 	initComponent : function(){
 
 
 
 		GO.form.ComboBox.superclass.initComponent.call(this);
+
+		if(this.reloadOnExpand){
+			this.on('expand',function(field){
+				field.store.reload();
+			}, this);
+		}
 
 		if(this.remoteText){
 			this.setRemoteText(this.remoteText);

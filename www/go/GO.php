@@ -375,14 +375,12 @@ class GO{
 	 * @param string $className
 	 */
 	public static function autoload($className) {
-
 		if(isset(self::$_classes[$className])){
 			//don't use GO::config()->root_path here because it might not be autoloaded yet causing an infite loop.
 			require(dirname(dirname(__FILE__)) . '/'.self::$_classes[$className]);
 		}else
 		{
 //			echo "Autoloading: ".$className."\n";
-			
 
 			if(substr($className,0,7)=='GO_Base'){
 				$arr = explode('_', $className);
@@ -393,7 +391,18 @@ class GO{
 				$baseClassFile = dirname(dirname(__FILE__)) . '/'.$location;
 				require($baseClassFile);
 
-			}  else {
+			} else if(substr($className,0,4)=='GOFS'){
+						
+				$arr = explode('_', $className);
+				
+				array_shift($arr);
+				
+				$file = array_pop($arr).'.php';
+				$path = strtolower(implode('/', $arr));
+				$location =$path.'/'.$file;
+				$baseClassFile = GO::config()->file_storage_path.'php/'.$location;			
+				require($baseClassFile);
+			} else {
 				//$orgClassName = $className;
 				$forGO = substr($className,0,3)=='GO_';
 
@@ -499,12 +508,7 @@ class GO{
 		if(!defined('GO_LOADED')){ //check if old Group-Office.php was loaded
 
 			if(GO::config()->debug || GO::config()->debug_log){
-				$log = '['.date('Y-m-d G:i').'] r=';
-				if(isset($_REQUEST['r']))
-					$log .= $_REQUEST['r'];
-				else 
-					$log = 'undefined';				
-
+				$log = '['.date('Y-m-d G:i').'] INIT';
 				GO::debug($log);
 			}
 			
@@ -770,6 +774,10 @@ class GO{
 					if ($text == '')
 						$text = '(empty string)';
 
+					
+					if ($text == 'undefined')
+						throw new Exception();
+					
 					//$username=GO::user() ? GO::user()->username : 'nobody';
 
 					//$trace = debug_backtrace();
