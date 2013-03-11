@@ -33,15 +33,17 @@ class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 	protected function actionLoad($params) {
 		$model = GO_Base_Cron_CronJob::model()->createOrFindByParams($params);
 		
+		$remoteComboFields = array();
+		
 		// Add parameter for checking if the use
 		if(!empty($model->job)){
 			$cron = new $model->job();
 			$select = $cron->enableUserAndGroupSupport();
+			$remoteComboFields['job']='"'.$cron->getLabel().'"';
 		} else {
 			$select = false;
 		}
 
-		$remoteComboFields = array();
 		$this->renderForm($model, $remoteComboFields,array('select'=>$select));
   }
   
