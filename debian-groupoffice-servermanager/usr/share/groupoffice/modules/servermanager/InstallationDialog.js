@@ -323,8 +323,7 @@ Ext.extend(GO.servermanager.InstallationDialog, GO.Window,{
 					xtype: 'combo',
 				  name: 'theme',
 					store:  new GO.data.JsonStore({
-						url: GO.settings.modules.users.url+'non_admin_json.php',
-						baseParams: {'task':'themes'},
+						url: GO.url('core/themes'),
 						root: 'results',
 						totalProperty: 'total',
 						fields:['theme'],

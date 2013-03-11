@@ -149,7 +149,7 @@ class GO_Base_Session extends GO_Base_Observable{
 	public function logout() {
 		
 //		$username = isset(self::$username) ? self::$username : 'notloggedin';		
-		$username = GO::user()->username;				
+		$username = GO::user() ? GO::user()->username : 'notloggedin';				
 		
 		GO::debug("Logout called for ".$username);
 

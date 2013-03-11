@@ -1378,8 +1378,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			//sort so that :param1 does not replace :param11 first.
 			arsort($params['bindParams']);			
 			
-			foreach($params['bindParams'] as $key=>$value){
-//				$sql = str_replace(':'.$key, '"'.$value.'"', $sql);
+			foreach($params['bindParams'] as $key=>$value){	
 				$sql = preg_replace('/:'.$key.'[^0-9]/', '"'.$value.'"', $sql);
 			}
 		}
@@ -2732,8 +2731,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$sql .= "INTO `{$this->tableName()}` (`".implode('`,`', $fieldNames)."`) VALUES ".
 					"(:".implode(',:', $fieldNames).")";
 
-		if($this->_debugSql)			
-			$this->_debugSql(array('bindParams'=>$this->_attributes), $sql);		
+		if($this->_debugSql){		
+			$bindParams = array();
+			foreach($fieldNames as  $field){
+				$bindParams[$field]=$this->_attributes[$field];
+			}
+			$this->_debugSql(array('bindParams'=>$bindParams), $sql);		
+		}
 		
 		try{
 			$stmt = $this->getDbConnection()->prepare($sql);
@@ -2785,6 +2789,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$sql = "UPDATE `{$this->tableName()}` SET ".implode(',',$updates)." WHERE ";
 		
+		
+		$bindParams=array();
+		
 		if(is_array($this->primaryKey())){
 			
 			$first=true;
@@ -2797,23 +2804,35 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				$sql .= "`".$field."`=:".$field;
 			}
 			
-		}else
+			$bindParams[$field]=$this->_attributes[$field];
+			
+		}else{
 			$sql .= "`".$this->primaryKey()."`=:".$this->primaryKey();
+			$bindParams[$field]=$this->_attributes[$field];
+		}
 		
-		if($this->_debugSql)
-			$this->_debugSql(array('bindParams'=>$this->_attributes), $sql);
+		
 
 		try{
 			$stmt = $this->getDbConnection()->prepare($sql);
 
 			$pks = is_array($this->primaryKey()) ? $this->primaryKey() : array($this->primaryKey());
-
+			
 			foreach($this->columns as $field => $attr){
 
-				if($this->isModified($field) || in_array($field, $pks))
+				if($this->isModified($field) || in_array($field, $pks)){
+					$bindParams[$field]=$this->_attributes[$field];
 					$stmt->bindParam(':'.$field, $this->_attributes[$field], $attr['type'], empty($attr['length']) ? null : $attr['length']);
+				}
 			}
+			
+			if($this->_debugSql)
+				$this->_debugSql(array('bindParams'=>$bindParams), $sql);
+			
 			$ret = $stmt->execute();
+			if($this->_debugSql){
+				GO::debug("Affected rows: ".$ret);
+			}
 		}catch(Exception $e){
 			$msg = $e->getMessage();
 						
@@ -3135,7 +3154,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$columns = array_keys($this->columns);
 		
 		foreach($columns as $column){
-			if(isset($this->_attributes[$column]) && isset($this->columns[$column])){
+			if(isset($this->_attributes[$column]) && isset($this->columns[$column]['dbtype'])){
 				switch ($this->columns[$column]['dbtype']) {
 						case 'int':
 						case 'tinyint':
@@ -3164,7 +3183,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @see hasAttribute
 	 */
 	public function setAttribute($name,$value, $format=false)
-	{		
+	{			
 		if($this->_loadingFromDatabase){
 			//skip fancy features when loading from the database.
 			$this->_attributes[$name]=$value;			

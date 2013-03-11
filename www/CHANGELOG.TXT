@@ -1,3 +1,30 @@
+08-03-2013 4.1.43
+- Exclude noSelect folders from the folder listing in z-push2
+- Remove auto check mailboxes automatically when they don't exist anymore
+- Removed tinymce and ext source from scripts because they are not used.
+- File creation date is not updated when editing files.
+- All day events import had incorrect time
+- Editing a sieve copy rule filter turned into a move rule
+- Added date and time to e-mail client and dates always have leading zeros now for better alignment.
+- Fixed sorting issue in calendar list view
+
+08-03-2013 4.1.42
+- Updated German
+- Updated Swedish
+- Updated Norwegian
+- Don't sync shared private events
+- Last event of a recurring series could not be edited
+- Escape config values on Debian package installation
+- Restored missing auto groups functionality in servermanager
+- Private exceptions are called private now
+- IMAP auth error reporting fixed
+- Create default addressbooks, calendars etc. for imported users
+- Login message was broken
+- Full URL was always auto detected, even when set in config.php
+- Fixed printing of read-only calendars.
+- Added address book selection when creating new user so the administrator can choose in which address book the user contact will be saved.
+- Added address list selection panel to the settings dialog.
+
 06-03-2013 4.1.41
 - In some cases Group-Office didn't load.
 

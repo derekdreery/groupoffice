@@ -129,7 +129,10 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 			$fh = new GO_Files_Model_FileHandler();
 		
 		$fh->extension=strtolower($model->extension);
-		$fh->cls=$params['handlerCls'];
+		
+		if(isset($params['handlerCls']))
+			$fh->cls=$params['handlerCls'];
+		
 		if(empty($params['handlerCls']))
 			$fh->delete();
 		else

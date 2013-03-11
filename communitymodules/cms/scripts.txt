@@ -1,6 +1,6 @@
-views/Extjs3/javascript/form/TinyMCE.js
-views/Extjs3/javascript/form/TinyMCEpreInit.js
-views/Extjs3/javascript/tiny_mce/tiny_mce.js
+modules/cms/TinyMCE.js
+modules/cms/TinyMCEpreInit.js
+modules/cms/plugins/tiny_mce/tiny_mce.js
 
 modules/cms/SitesDialog.js
 modules/cms/SitesGrid.js

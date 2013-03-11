@@ -352,6 +352,7 @@ try {
 			}
 
 			if (empty($response['data']['config'])) {
+				require($GO_LANGUAGE->get_language_file('cms'));
 				throw new Exception($lang['cms']['template_not_found']);
 			}
 

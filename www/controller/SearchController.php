@@ -77,8 +77,8 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		
 		
 		//if (!empty($matchQuery))
-		if(strpos($params['match'], '*')===false)
-			$params['match']='*'.$params['match'].'*';
+//		if(strpos($params['match'], '*')===false)
+//			$params['match']='*'.$params['match'].'*';
 		
 		$str='+'.preg_replace('/[\s]+/',' +', $params['match']);		
 		

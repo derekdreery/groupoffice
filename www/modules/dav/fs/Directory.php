@@ -57,6 +57,8 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Node implements Sabre\DAV\ICollec
 	 * @return void
 	 */
 	public function createFile($name, $data = null) {
+		
+		\GO::debug("FSD::createFile($name)");
 
 		$folder = $this->_getFolder();
 
@@ -110,7 +112,7 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Node implements Sabre\DAV\ICollec
 	 */
 	public function move($newPath) {
 
-		GO::debug("FSD::move($newPath)");
+		\GO::debug("FSD::move($newPath)");
 
 		if (!is_dir(dirname($newPath)))
 			throw new Exception('Invalid move!');

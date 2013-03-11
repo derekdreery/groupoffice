@@ -521,7 +521,7 @@ class formprocessor{
 		//if(empty($body))
 			//throw new Exception(GO::t(''missingField']);
 
-		require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
+		require_once(GO::config()->root_path.'classses/mail/GoSwift.class.inc.php');
 		$swift = new GoSwift($email, $_POST['subject']);
 		$swift->set_body($body, 'plain');
 		$swift->set_from($from_email, $from_name);

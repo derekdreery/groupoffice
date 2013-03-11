@@ -135,7 +135,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 //	}
 	
 	public function actionImportIcs($params) {
-		ini_set('max_execution_time',300);
+		GO::setMaxExecutionTime(0);
 		
 		GO::session()->closeWriting();
 		GO::$disableModelCache=true;
@@ -162,7 +162,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		$response['feedback'] = sprintf(GO::t('import_success','calendar'), $count);
 		
 		if(count($failed)){
-			$response['feedback'] .= "\n\n".count($failed)." events failed: ".implode('\n', $failed);
+			$response['feedback'] .= "\n\n".count($failed)." events failed: ".implode("\n", $failed);
 		}
 		
 		return $response;

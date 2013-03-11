@@ -22,7 +22,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 	protected function remoteComboFields() {
 		if(GO::modules()->isInstalled('addressbook')){
 			return array(
-//					'addressbook_id' => '$model->contact->addressbook->name',
+					'addressbook_id' => '$model->contact->addressbook->name',
 					'company_id' => '$model->contact->company->name'
 					);
 		}
@@ -52,6 +52,17 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			if ($contact) {
 				$attr = $contact->getAttributes();
 
+				// Set the default addressbook ID to the "Users" addressbook when it is a new User
+				if($model->isNew){
+					$addressbook = GO_Addressbook_Model_Addressbook::model()->getUsersAddressbook();
+					if($addressbook){
+						$attr['addressbook_id'] = $addressbook->id;
+						if(empty($response['remoteComboTexts']))
+							$response['remoteComboTexts'] = array();
+						$response['remoteComboTexts']['addressbook_id'] = $addressbook->name; // Add remote combo text
+					}
+				}
+				
 				$response['data'] = array_merge($attr, $response['data']);
 				
 				if(empty($response['data']['company_id']))
@@ -111,7 +122,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		
 		$contact = $model->createContact();
 		if($contact){
-			unset($params['addressbook_id'], $params['id']);
+			unset($params['id']);
 			$contact->setAttributes($params);
 			$contact->save();
 		}
@@ -403,6 +414,8 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		$c=$model->createContact();
 		$c->setAttributes($attributes);
 		$c->save();
+		
+		$model->checkDefaultModels();
 		
 		return parent::afterImport($model, $attributes, $record);
 	}

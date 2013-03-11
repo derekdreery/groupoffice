@@ -268,11 +268,14 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 						$action['text'] = GO::t('setRead','sieve');
 						break;
 					case 'fileinto':
-						$action['text'] = GO::t('fileinto','sieve').' "'.$action['target'].'"';
+						if(!$action['copy']){
+							$action['text'] = GO::t('fileinto','sieve').' "'.$action['target'].'"';
+						}else{
+							$action['text']=GO::t('copyto','sieve').' "'.$action['target'].'"';
+							$action['type'] = 'fileinto_copy';
+						}
 						break;
-					case 'copyto':
-						$action['text']=GO::t('copyto','sieve').' "'.$action['target'].'"';
-						break;
+					
 					case 'redirect':
 						if (!empty($action['copy'])) {
 							$action['type'] = 'redirect_copy';
