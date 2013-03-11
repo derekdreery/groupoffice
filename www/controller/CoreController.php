@@ -796,79 +796,88 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	}
 	
 	
-	 /*
+ /* MOVED TO CRONFILE IN Email/Cron/EmailReminders.php
+  * 
   * Run a cron job every 5 minutes. Add this to /etc/cron.d/groupoffice :
   *
   STAR/5 * * * * root php /usr/share/groupoffice/groupofficecli.php -c=/path/to/config.php -r=core/cron
   *
   * Replace STAR with a *.
+	*
+	* @DEPRECATED
   */
-	protected function actionCron($params){		
-		
-		$this->requireCli();
-		GO::session()->runAsRoot();
-		
-		$this->_emailReminders();
-		
-		$this->fireEvent("cron");
-	}
+//	protected function actionCron($params){		
+//		
+//		$this->requireCli();
+//		GO::session()->runAsRoot();
+//		
+//		$this->_emailReminders();
+//		
+//		$this->fireEvent("cron");
+//	}
 	
-	private function _emailReminders(){
-		$usersStmt = GO_Base_Model_User::model()->find();
-		while ($userModel = $usersStmt->fetch()) {
-			if ($userModel->mail_reminders==1) {
-				$remindersStmt = GO_Base_Model_Reminder::model()->find(
-					GO_Base_Db_FindParams::newInstance()
-						->joinModel(array(
-							'model' => 'GO_Base_Model_ReminderUser',
-							'localTableAlias' => 't',
-							'localField' => 'id',
-							'foreignField' => 'reminder_id',
-							'tableAlias' => 'ru'								
-						))
-						->criteria(
-							GO_Base_Db_FindCriteria::newInstance()
-								->addCondition('user_id', $userModel->id, '=', 'ru')
-								->addCondition('time', time(), '<', 'ru')
-								->addCondition('mail_sent', '0', '=', 'ru')
-						)
-				);
-
-				while ($reminderModel = $remindersStmt->fetch()) {
-//					$relatedModel = $reminderModel->getRelatedModel();
-					
-//					var_dump($relatedModel->name);
-					
-//					$modelName = $relatedModel ? $relatedModel->localizedName : GO::t('unknown');
-					$subject = GO::t('reminder').': '.$reminderModel->name;
-
-					$time = !empty($reminderModel->vtime) ? $reminderModel->vtime : $reminderModel->time;
-			
-					date_default_timezone_set($userModel->timezone);
-					
-					$body = GO::t('time').': '.date($userModel->completeDateFormat.' '.$userModel->time_format,$time)."\n";
-					$body .= GO::t('name').': '.str_replace('<br />',',',$reminderModel->name)."\n";
-			
-//					date_default_timezone_set(GO::user()->timezone);
-					
-					$message = GO_Base_Mail_Message::newInstance($subject, $body);
-					$message->addFrom(GO::config()->webmaster_email,GO::config()->title);
-					$message->addTo($userModel->email,$userModel->name);
-					GO_Base_Mail_Mailer::newGoInstance()->send($message);
-					
-					$reminderUserModelSend = GO_Base_Model_ReminderUser::model()
-						->findSingleByAttributes(array(
-							'user_id' => $userModel->id,
-							'reminder_id' => $reminderModel->id
-						));
-					$reminderUserModelSend->mail_sent = 1;
-					$reminderUserModelSend->save();
-				}
-				
-				date_default_timezone_set(GO::user()->timezone);
-			}
-		}
-	}
+// 	/**
+// 	 * MOVED TO CRONFILE IN Email/Cron/EmailReminders.php
+// 	 *
+// 	 *
+// 	 *  @DEPRECATED
+// 	 */
+//	private function _emailReminders(){
+//		$usersStmt = GO_Base_Model_User::model()->find();
+//		while ($userModel = $usersStmt->fetch()) {
+//			if ($userModel->mail_reminders==1) {
+//				$remindersStmt = GO_Base_Model_Reminder::model()->find(
+//					GO_Base_Db_FindParams::newInstance()
+//						->joinModel(array(
+//							'model' => 'GO_Base_Model_ReminderUser',
+//							'localTableAlias' => 't',
+//							'localField' => 'id',
+//							'foreignField' => 'reminder_id',
+//							'tableAlias' => 'ru'								
+//						))
+//						->criteria(
+//							GO_Base_Db_FindCriteria::newInstance()
+//								->addCondition('user_id', $userModel->id, '=', 'ru')
+//								->addCondition('time', time(), '<', 'ru')
+//								->addCondition('mail_sent', '0', '=', 'ru')
+//						)
+//				);
+//
+//				while ($reminderModel = $remindersStmt->fetch()) {
+////					$relatedModel = $reminderModel->getRelatedModel();
+//					
+////					var_dump($relatedModel->name);
+//					
+////					$modelName = $relatedModel ? $relatedModel->localizedName : GO::t('unknown');
+//					$subject = GO::t('reminder').': '.$reminderModel->name;
+//
+//					$time = !empty($reminderModel->vtime) ? $reminderModel->vtime : $reminderModel->time;
+//			
+//					date_default_timezone_set($userModel->timezone);
+//					
+//					$body = GO::t('time').': '.date($userModel->completeDateFormat.' '.$userModel->time_format,$time)."\n";
+//					$body .= GO::t('name').': '.str_replace('<br />',',',$reminderModel->name)."\n";
+//			
+////					date_default_timezone_set(GO::user()->timezone);
+//					
+//					$message = GO_Base_Mail_Message::newInstance($subject, $body);
+//					$message->addFrom(GO::config()->webmaster_email,GO::config()->title);
+//					$message->addTo($userModel->email,$userModel->name);
+//					GO_Base_Mail_Mailer::newGoInstance()->send($message);
+//					
+//					$reminderUserModelSend = GO_Base_Model_ReminderUser::model()
+//						->findSingleByAttributes(array(
+//							'user_id' => $userModel->id,
+//							'reminder_id' => $reminderModel->id
+//						));
+//					$reminderUserModelSend->mail_sent = 1;
+//					$reminderUserModelSend->save();
+//				}
+//				
+//				date_default_timezone_set(GO::user()->timezone);
+//			}
+//		}
+//	}
 	
 	protected function actionThemes($params){
 		$store = new GO_Base_Data_ArrayStore();
