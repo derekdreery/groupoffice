@@ -591,19 +591,19 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				$categories[$field->category->id]['fields']=array();
 			}
 			if(!empty($customAttributes[$field->columnName()]) ){
-              if($field->datatype == "GO_Customfields_Customfieldtype_Heading")
-              {
-                $header = array('name'=>$field->name,'value'=>$customAttributes[$field->columnName()]);
-              }
-              if(!empty($header) )
-              {
-                $categories[$field->category->id]['fields'][] = $header;
-                $header = null;
-              }
-              $categories[$field->category->id]['fields'][]=array(
-                  'name'=>$field->name,
-                  'value'=>$customAttributes[$field->columnName()]
-              );				
+				if($field->datatype == "GO_Customfields_Customfieldtype_Heading")
+				{
+					$header = array('name'=>$field->name,'value'=>$customAttributes[$field->columnName()]);
+				}
+				if(!empty($header) )
+				{
+					$categories[$field->category->id]['fields'][] = $header;
+					$header = null;
+				}
+				$categories[$field->category->id]['fields'][]=array(
+						'name'=>$field->name,
+						'value'=>$customAttributes[$field->columnName()]
+				);				
 			}
 		}
 

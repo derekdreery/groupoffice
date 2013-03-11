@@ -649,7 +649,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 			);
 
 			$result = json_decode($response);
-			$mailbox_usage=$result->usage;			
+			$mailbox_usage=$result->usage*1024;			
 		}
 
 		return $mailbox_usage;

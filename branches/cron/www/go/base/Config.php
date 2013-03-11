@@ -926,7 +926,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.1.41';
+	var $version = '4.1.43';
 	
 	/**
 	 * Modification date
@@ -934,7 +934,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20130306';
+	var $mtime = '20130308-1';
 
 	#group configuration
 	/**
@@ -991,8 +991,8 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $time_formats = array(
-	'G:i',
-	'g:i a'
+	'H:i',
+	'h:i a'
 	);
 
 	/**
@@ -1019,6 +1019,16 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $help_link = 'http://wiki4.group-office.com/wiki/';
+	
+	/**
+	 * The link or e-mail address in menu help -> support.
+	 * 
+	 * No menu item is generated if left empty.
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $support_link = false;
 	
 	/**
 	 * Relative path to the classes directory with no slash at start and end
@@ -1171,26 +1181,26 @@ class GO_Base_Config {
 			$this->default_thousands_separator=$this->default_decimal_separator == '.' ? ',' : '.';//$lc['thousands_sep'];
 		}
 
-		// path to classes
-		$this->class_path = $this->root_path.$this->class_path.'/';
-
-		// path to themes
-		$this->theme_path = $this->root_path.$this->theme_path.'/';
-
-		// URL to themes
-		$this->theme_url = $this->host.$this->theme_url.'/';
-
-		// path to controls
-		$this->control_path = $this->root_path.$this->control_path.'/';
-
-		// url to controls
-		$this->control_url = $this->host.$this->control_url.'/';
-
-		// path to modules
-		$this->module_path = $this->root_path.$this->module_path.'/';
-
-		// url to user configuration apps
-		$this->configuration_url = $this->host.$this->configuration_url.'/';
+//		// path to classes
+//		$this->class_path = $this->root_path.$this->class_path.'/';
+//
+//		// path to themes
+//		$this->theme_path = $this->root_path.$this->theme_path.'/';
+//
+//		// URL to themes
+//		$this->theme_url = $this->host.$this->theme_url.'/';
+//
+//		// path to controls
+//		$this->control_path = $this->root_path.$this->control_path.'/';
+//
+//		// url to controls
+//		$this->control_url = $this->host.$this->control_url.'/';
+//
+//		// path to modules
+//		$this->module_path = $this->root_path.$this->module_path.'/';
+//
+//		// url to user configuration apps
+//		$this->configuration_url = $this->host.$this->configuration_url.'/';
 
 
 		if($this->debug)
@@ -1219,9 +1229,10 @@ class GO_Base_Config {
 		}
 
 		$this->set_full_url();
-
-
-
+		
+		if(!$this->support_link && $this->isProVersion()){
+			$this->support_link = "https://shop.group-office.com/support";
+		}
 	}
 
 	/**
@@ -1253,6 +1264,16 @@ class GO_Base_Config {
 			$folder->create(0777);
 		return $folder;
 	}
+	
+	/**
+	 * Check if the pro package is available.
+	 * 
+	 * @return boolean
+	 */
+	public function isProVersion(){
+		return is_dir($this->root_path.'modules/professional');
+	}
+	
 
 
 //	function __destruct() {
@@ -1417,27 +1438,28 @@ class GO_Base_Config {
 		//example.
 
 		//this used to use HTTP_HOST but that is a client controlled value which can be manipulated and is unsafe.
+		if(empty($this->full_url)){
+			if(isset($_SERVER["SERVER_NAME"])) {
+				if(!isset($_SESSION['GO_SESSION']['full_url']) && isset($_SERVER["SERVER_NAME"])) {
+					$https = (isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == "1")) || !empty($_SERVER["HTTP_X_SSL_REQUEST"]);
+					$_SESSION['GO_SESSION']['full_url'] = 'http';
+					if ($https) {
+						$_SESSION['GO_SESSION']['full_url'] .= "s";
+					}
+					$_SESSION['GO_SESSION']['full_url'] .= "://".$_SERVER["SERVER_NAME"];
+					if ((!$https && $_SERVER["SERVER_PORT"] != "80") || ($https && $_SERVER["SERVER_PORT"] != "443")) 
+						$_SESSION['GO_SESSION']['full_url'] .= ":".$_SERVER["SERVER_PORT"];
 
-		if(isset($_SERVER["SERVER_NAME"])) {
-			if(!isset($_SESSION['GO_SESSION']['full_url']) && isset($_SERVER["SERVER_NAME"])) {
-				$https = (isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == "1")) || !empty($_SERVER["HTTP_X_SSL_REQUEST"]);
-				$_SESSION['GO_SESSION']['full_url'] = 'http';
-				if ($https) {
-					$_SESSION['GO_SESSION']['full_url'] .= "s";
+					$_SESSION['GO_SESSION']['full_url'] .= $this->host;
 				}
-				$_SESSION['GO_SESSION']['full_url'] .= "://".$_SERVER["SERVER_NAME"];
-				if ((!$https && $_SERVER["SERVER_PORT"] != "80") || ($https && $_SERVER["SERVER_PORT"] != "443")) 
-					$_SESSION['GO_SESSION']['full_url'] .= ":".$_SERVER["SERVER_PORT"];
-								
-				$_SESSION['GO_SESSION']['full_url'] .= $this->host;
+				$this->full_url=$_SESSION['GO_SESSION']['full_url'];
+			}else
+			{
+				$_SESSION['GO_SESSION']['full_url']=$this->full_url;
 			}
-			$this->full_url=$_SESSION['GO_SESSION']['full_url'];
-		}else
-		{
-			$_SESSION['GO_SESSION']['full_url']=$this->full_url;
+			if(empty($this->orig_full_url))
+				$this->orig_full_url=$this->full_url;
 		}
-		if(empty($this->orig_full_url))
-			$this->orig_full_url=$this->full_url;
 	}
 
 

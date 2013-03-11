@@ -123,3 +123,10 @@ $l['bookmarkAlreadyExists']="Mappen '%fn' har redan en favorit för nuvarande an
 $l['removeBookmark']="Radera favorit";
 $l['removeBookmarkQuestion']="Radera mappen '%fn' från dina favoriter?";
 $l['notInSearchMode']="Kan inte göra detta i sökläget.";
+
+$l['openInBrowser']='Öppna i webläsare';
+$l['selectApplication']="Välj program att öppna filen med...";
+$l['rememberFileHandler']="Kom ihåg mitt val för denna filtyp";
+$l['alwaysAsk']="Fråga alltid";
+$l['openWith']='Öppna med';
+$l['open']='Öppna';

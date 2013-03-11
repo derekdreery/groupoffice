@@ -254,6 +254,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 
 		$att['rrule'] = '';
+		$att['repeat_end_time']=0;
 		$att['exception_for_event_id'] = $this->id;
 		$att['exception_date'] = $exceptionDate;
 		
@@ -267,6 +268,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$endTime = new GO_Base_Util_Date_DateTime(date('c', $att['start_time']));
 		$endTime->add($diff);
 		$att['end_time'] = $endTime->format('U');
+		
+		
 		
 		return $this->duplicate($att, false);
 	}
@@ -1322,6 +1325,26 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public $importedParticiants=array();
 	
 	
+	private function _utcToLocal(DateTime $date){
+		//DateTime from SabreDav is date without time in UTC timezone. We store it in the users timezone so we must
+		//add the timezone offset.
+		$timezone = new DateTimeZone(GO::user()->timezone);
+
+		$offset = $timezone->getOffset($date);		
+		$sub = $offset>0;
+		if(!$sub)
+			$offset *= -1;
+
+		$interval = new DateInterval('PT'.$offset.'S');	
+		if(!$sub){
+			$date->add($interval);
+		}else{
+			$date->sub($interval);		
+
+		}
+	}
+	
+	
 	/**
 	 * Import an event from a VObject 
 	 * 
@@ -1340,21 +1363,44 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if(empty($this->name))
 			$this->name = GO::t('unnamed');
 		
+		$dtstart = $vobject->dtstart ? $vobject->dtstart->getDateTime() : new DateTime();
+		$dtend = $vobject->dtend ? $vobject->dtend->getDateTime() : new DateTime();
+		
+		//funambol sends this special parameter
+		if((string) $vobject->{"X-FUNAMBOL-ALLDAY"}=="1"){
+			$this->all_day_event=1;
+		}else
+		{
+			$this->all_day_event = isset($vobject->dtstart['VALUE']) && $vobject->dtstart['VALUE']=='DATE' ? 1 : 0;
+		}
+		
+		if($this->all_day_event){
+			if($dtstart->getTimezone()->getName()=='UTC'){
+				$this->_utcToLocal($dtstart);
+			}
+			if($dtend->getTimezone()->getName()=='UTC'){
+				$this->_utcToLocal($dtend);
+			}
+		}
+		
+		
+		
+		$this->start_time =intval($dtstart->format('U'));	
+		$this->end_time = intval($dtend->format('U'));
+		
+		if($vobject->duration){
+			$duration = GO_Base_VObject_Reader::parseDuration($vobject->duration);
+			$this->end_time = $this->start_time+$duration;
+		}
+		if($this->end_time<=$this->start_time)
+			$this->end_time=$this->start_time+3600;
+				
+		
 		if($vobject->description)
 			$this->description = (string) $vobject->description;
 		
-		if($vobject->dtstart)
-			$this->start_time =intval($vobject->dtstart->getDateTime()->format('U'));
-		else
-			$this->start_time=time();		
-	
-		if($vobject->dtend)
-			$this->end_time = intval($vobject->dtend->getDateTime()->format('U'));
-		else
-			$this->end_time=$this->start_time+1800;
-		
 		//TODO needs improving
-		if(isset($vobject->dtend['VALUE']) && $vobject->dtend['VALUE']=='DATE')
+		if($this->all_day_event)
 			$this->end_time-=60;
 		
 		if((string) $vobject->rrule != ""){			
@@ -1385,22 +1431,6 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if(isset($vobject->class)){
 			$this->private = strtoupper($vobject->class)!='PUBLIC';
 		}
-		
-		if($vobject->duration){
-			$duration = GO_Base_VObject_Reader::parseDuration($vobject->duration);
-			$this->end_time = $this->start_time+$duration;
-		}
-		
-		$this->all_day_event = isset($vobject->dtstart['VALUE']) && $vobject->dtstart['VALUE']=='DATE' ? 1 : 0;
-		
-		//funambol sends this special parameter
-		if($vobject->{"X-FUNAMBOL-ALLDAY"}=="1"){
-			$this->all_day_event=1;
-			$this->end_time-=60;
-		}
-		
-		if($this->end_time<=$this->start_time)
-			$this->end_time=$this->start_time+3600;
 		
 		if($vobject->valarm && $vobject->valarm->trigger){
 			
@@ -1517,7 +1547,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			if($vobject->organizer)
 				$p = $this->importVObjectAttendee($this, $vobject->organizer, true);
 
-			$calendarParticipantFound=isset($p) && $p->user_id==$this->calendar->user_id;
+			$calendarParticipantFound=!empty($p) && $p->user_id==$this->calendar->user_id;
 			
 			$attendees = $vobject->select('attendee');
 			foreach($attendees as $attendee){

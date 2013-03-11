@@ -25,7 +25,7 @@ GO.email.EmailClient = function(config){
 		root: 'results',
 		totalProperty: 'total',
 		id: 'uid',
-		fields:['uid','icon','flagged','has_attachments','seen','subject','from','sender','size','date', 'x_priority','answered','forwarded','account_id','mailbox','arrival'],
+		fields:['uid','icon','flagged','has_attachments','seen','subject','from','sender','size','date', 'x_priority','answered','forwarded','account_id','mailbox','arrival','arrival_time','date_time'],
 		remoteSort: true
 	});
 

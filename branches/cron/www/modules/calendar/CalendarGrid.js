@@ -1305,7 +1305,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 					}else
 					{
 						this.resizeAppointment(eventEl.el.id, this.clickedDay);
-						this.fireEvent("eventResize", this, event, actionData);
+						this.fireEvent("eventResize", this, event, actionData,[eventEl.el.id]);
 					}
 
 					var timeEl = eventEl.el.select('span.x-calGrid-event-time');
@@ -1332,7 +1332,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		var i = this.findAppointment(day, event_dom_id);
 		this.appointments[day][i].size=this.appointments[day][i].getSize();
 
-		this.remoteEvents[event_dom_id].repeats=false;
+//		this.remoteEvents[event_dom_id].repeats=false;
 		this.calculateAppointments(day);
 	},
 
@@ -1545,6 +1545,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 					if(this.currentFireEvent=="eventResize")
 					{
 						this.resizeAppointment(this.currentRecurringEvent.domId, this.currentRecurringEvent.day);
+						var domIds = [this.currentRecurringEvent.domId];
 					}else if(this.currentFireEvent=='move')
 					{
 						//console.log(event);

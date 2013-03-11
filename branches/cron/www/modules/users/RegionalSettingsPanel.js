@@ -60,8 +60,8 @@ GO.users.RegionalSettingsPanel = function(config)
 	var 	timeFormatData = new Ext.data.SimpleStore({
 		fields: ['id', 'time_format'],		
 		data : [
-		['G:i', GO.users.lang.fullhourformat],
-		['g:i a', GO.users.lang.halfhourformat]
+		['H:i', GO.users.lang.fullhourformat],
+		['h:i a', GO.users.lang.halfhourformat]
 		]
 	});
 

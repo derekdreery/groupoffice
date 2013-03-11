@@ -706,8 +706,8 @@ GO.calendar.MainPanel = function(config){
 				urlParams.calendars = Ext.encode(this.calendars);
 
 			var url = GO.url('calendar/event/store',urlParams);
-									
-			document.location=url;
+										
+			window.open(url);
 		},
 		scope: this
 	})
@@ -1458,11 +1458,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	createDaysGrid : function()
 	{
 		
-		this.daysGrid.on("eventResize", function(grid, event, actionData){
+		this.daysGrid.on("eventResize", function(grid, event, actionData, domIds){
 
 			var params = {
-				//task : 'update_grid_event',
-				id : event['event_id'],				
 				duration_end_time : actionData.end_time
 			};
 
@@ -1472,29 +1470,25 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			if(actionData.singleInstance)
 			{				
 				params['exception_date']=actionData.dragDate.format("U");
+				params['exception_for_event_id']=event['event_id'];
+			}else
+			{
+				params.id=event['event_id'];
 			}
   		
-			Ext.Ajax.request({
-				url: GO.url('calendar/event/submit'),
+			GO.request({
+				url: 'calendar/event/submit',
 				params: params,
-				callback: function(options, success, response)
-				{
-					var responseParams = Ext.decode(response.responseText);
-					if(!responseParams.success)
+				success: function(options,  response, result)
+				{					
+					if(event.repeats)
 					{
-						Ext.MessageBox.alert(GO.lang.strError, responseParams.feedback);
-					}else
-					{
-						if(event.repeats && !actionData.singleInstance)
-						{
-							grid.store.reload();
-						}
-						
-						GO.calendar.handleMeetingRequest(responseParams);
+						grid.store.reload();
 					}
+
+					GO.calendar.handleMeetingRequest(result);					
 				}
 			});
-    		
 				
 		}, this);
 		
@@ -1617,62 +1611,62 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	  
 	onDblClick : function(grid, event, actionData){
 		
-		if(event.permission_level<GO.permissionLevels.write)
-			return;
-		
-		if(!event.is_organizer && event.model_name=="GO_Calendar_Model_Event"){
-			// You are not authorised to edit this event because you are not the organizer.
-			// Show message to the user
-			//Ext.Msg.alert(GO.calendar.lang.errorOrganizerOnlyTitle, GO.calendar.lang.errorOrganizerOnly);
-			
-			if(!this.attendanceWindow){
-				this.attendanceWindow = new GO.calendar.AttendanceWindow ();
-				this.attendanceWindow.on('save', function(){
-					this.refresh();
-				}, this);
-			}			
-			this.attendanceWindow.show(event.event_id);
-			if(event.repeats && actionData.singleInstance)
-			{
-				this.attendanceWindow.setExceptionDate(event['startDate'].format("U"));
-			}else
-			{
-				this.attendanceWindow.setExceptionDate(false);
-			}
-			return;
-		}
-
-		if(event.read_only && !event.contact_id && !event.task_id)
-			return false;
-
 	
-		if(event.repeats && actionData.singleInstance)
-		{
-
-			GO.calendar.showEventDialog({
-				exception_date: event['startDate'].format("U"),
-				event_id: event['event_id'],
-				oldDomId : event.domId
-			});
-		}else
-		{		
-			if(event['task_id'])
-			{
+		switch(event.model_name){
+			case "GO_Tasks_Model_Task":
 				GO.tasks.showTaskDialog({
-					task_id : event['task_id']
-				})				
-			}else
-			if(event['model_name']== 'GO_Adressbook_Model_Contact')
-			{			
-				GO.linkHandlers["GO_Adressbook_Model_Contact"].call(this, event['contact_id']);
-			}else
-			if(event['event_id'])
-			{
-				GO.calendar.showEventDialog({
-					event_id: event['event_id'],
-					oldDomId : event.domId
-				});
-			}
+					task_id : event.task_id
+				})	
+			break;
+			
+			case "GO_Adressbook_Model_Contact":
+				GO.linkHandlers["GO_Addressbook_Model_Contact"].call(this, event['contact_id']);
+			break;
+			
+			case "GO_Calendar_Model_Event":
+				if(event.permission_level<GO.permissionLevels.write)
+					return;
+		
+				if(!event.is_organizer){
+					// You are not authorised to edit this event because you are not the organizer.
+					// Show message to the user
+					//Ext.Msg.alert(GO.calendar.lang.errorOrganizerOnlyTitle, GO.calendar.lang.errorOrganizerOnly);
+
+					if(!this.attendanceWindow){
+						this.attendanceWindow = new GO.calendar.AttendanceWindow ();
+						this.attendanceWindow.on('save', function(){
+							this.refresh();
+						}, this);
+					}			
+					this.attendanceWindow.show(event.event_id);
+					if(event.repeats && actionData.singleInstance)
+					{
+						this.attendanceWindow.setExceptionDate(event['startDate'].format("U"));
+					}else
+					{
+						this.attendanceWindow.setExceptionDate(false);
+					}
+					return;
+				}
+
+				if(event.read_only && !event.contact_id && !event.task_id)
+					return false;
+
+				if(event.repeats && actionData.singleInstance)
+				{
+					GO.calendar.showEventDialog({
+						exception_date: event['startDate'].format("U"),
+						event_id: event['event_id'],
+						oldDomId : event.domId
+					});
+				}else
+				{
+					GO.calendar.showEventDialog({
+						event_id: event['event_id'],
+						oldDomId : event.domId
+					});		
+				}
+			break;			
 		}
 	},
     
@@ -1707,27 +1701,24 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 //		if(event.has_other_participants)
 //			params.send_invitation=confirm(GO.calendar.lang.sendInvitationUpdate) ? 1 : 0;
 
-		Ext.Ajax.request({
-			url: GO.url('calendar/event/submit'),
+		GO.request({
+			url: 'calendar/event/submit',
 			params: params,
-			callback: function(options, success, response)
+			success: function(options, response, responseParams)
 			{
-				var responseParams = Ext.decode(response.responseText);
-				if(!responseParams.success)
-				{
-					Ext.MessageBox.alert(GO.lang.strError, responseParams.feedback);
-				}else
-				{
-					if(event.repeats && !actionData.singleInstance)
-					{
-						grid.store.reload();
-					}else if(responseParams.new_event_id)
-					{
-						grid.setNewEventId(domIds, responseParams.new_event_id);
-					}
-					
-					GO.calendar.handleMeetingRequest(responseParams);
-				}
+
+//				if(event.repeats && !actionData.singleInstance)
+//				{
+//					grid.store.reload();
+//				}else if(responseParams.id)
+//				{
+//					grid.setNewEventId(domIds, responseParams.id);
+//				}
+				if(event.repeats)
+					grid.store.reload();
+
+				GO.calendar.handleMeetingRequest(responseParams);
+				
 			}
 		});
 	},

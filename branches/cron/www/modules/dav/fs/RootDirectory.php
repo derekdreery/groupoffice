@@ -60,7 +60,7 @@ class GO_Dav_Fs_RootDirectory extends Sabre\DAV\FS\Directory implements Sabre\DA
 				if($child->getName()==$name)
 					return $child;
 			}
-			return false;
+			throw new Sabre\DAV\Exception\NotFound("$name not found in the root");
 			
 //			if($name=='Shared')
 //				return new GO_Dav_Fs_SharedDirectory();

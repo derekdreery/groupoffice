@@ -678,7 +678,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 		$calendarModels=array();
 		foreach($calendars as $calendarId){
-			// Get the calendar model that is used for these events
+			// Get the calendar model that $calendarIdis used for these events
 			try{
 				$calendar = GO_Calendar_Model_Calendar::model()->findByPk($calendarId);
 				$calendarModels[]=$calendar;
@@ -746,6 +746,14 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		}else
 		{
 			$response['calendar_id']=0;
+			
+			// If the calendars parameter is given then use the first one as $response['calendar_id']
+			if(!empty($params['calendars'])){
+				$calendars = json_decode($params['calendars']);
+				if(is_array($calendars))
+					$response['calendar_id']= $calendars[0];
+			}
+				
 			$response['write_permission']= false;
 //			$response['calendar_name']=$defaultWritableCalendar->name;
 			$response['permission_level']=false;
@@ -758,9 +766,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		//Remove the index from the response array
 		$response['results']= array_values($response['results']);
-		
+
 		$response['success']=true;
-		
+			
 		// If you have clicked on the "print" button
 		if(isset($params['print']))
 			$this->_createPdf($response);
@@ -842,6 +850,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					'time'=>'00:00',
 					'start_time'=>$startTime,
 					'end_time'=>$endTime,
+					'model_name'=>'GO_Tasks_Model_Task',
 					//'background'=>$calendar->displayColor,
 					'background'=>'EBF1E2',
 					'day'=>$dayString[date('w', ($task->due_time))].' '.GO_Base_Util_Date::get_timestamp($task->due_time,false),
@@ -952,6 +961,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					'time'=>date(GO::user()->time_format, $start_unixtime),												
 					'start_time'=>$contact->upcoming.' 00:00',
 					'end_time'=>$contact->upcoming.' 23:59',
+					'model_name'=>'GO_Adressbook_Model_Contact',
 //					'background'=>$calendar->displayColor,
 					'background'=>'EBF1E2',
 					'day'=>$dayString[date('w', $start_unixtime)].' '.GO_Base_Util_Date::get_timestamp($start_unixtime,false),
@@ -1247,37 +1257,37 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		}
 	}
 	
-	protected function actionImportIcs($params){
-		
-		$file = new GO_Base_Fs_File($params['file']);
-		$file->convertToUtf8();
-		$data = $file->getContents();
-		
-		//var_dump($data);
-
-		$vcalendar = GO_Base_VObject_Reader::read($data);
-		
-		foreach($vcalendar->vevent as $vevent){
-			$event = new GO_Calendar_Model_Event();
-			$event->importVObject($vevent);
-		}
-	}
+//	protected function actionImportIcs($params){
+//		
+//		$file = new GO_Base_Fs_File($params['file']);
+//		$file->convertToUtf8();
+//		$data = $file->getContents();
+//		
+//		//var_dump($data);
+//
+//		$vcalendar = GO_Base_VObject_Reader::read($data);
+//		
+//		foreach($vcalendar->vevent as $vevent){
+//			$event = new GO_Calendar_Model_Event();
+//			$event->importVObject($vevent);
+//		}
+//	}
 	
-	protected function actionImportVcs($params){
-		
-		$file = new GO_Base_Fs_File($params['file']);
-		
-		$data = $file->getContents();
-		
-		$vcalendar = GO_Base_VObject_Reader::read($data);
-		
-		GO_Base_VObject_Reader::convertICalendarToVCalendar($vcalendar);
-		
-		foreach($vcalendar->vevent as $vevent){
-			$event = new GO_Calendar_Model_Event();
-			$event->importVObject($vevent);		
-		}
-	}
+//	protected function actionImportVcs($params){
+//		
+//		$file = new GO_Base_Fs_File($params['file']);
+//		
+//		$data = $file->getContents();
+//		
+//		$vcalendar = GO_Base_VObject_Reader::read($data);
+//		
+//		GO_Base_VObject_Reader::convertICalendarToVCalendar($vcalendar);
+//		
+//		foreach($vcalendar->vevent as $vevent){
+//			$event = new GO_Calendar_Model_Event();
+//			$event->importVObject($vevent);		
+//		}
+//	}
 
 	public function actionInvitation($params){
 		

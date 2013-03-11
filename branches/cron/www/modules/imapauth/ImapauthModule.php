@@ -81,6 +81,10 @@ class GO_Imapauth_ImapauthModule extends GO_Base_Module {
 						}
 					}
 				}
+			}else
+			{
+				//block user from logging in. If we don't throw the exception here normal Group-Office login will continue.
+				throw new Exception(GO::t('badLogin').' (IMAP)');
 			}
 		}
 
