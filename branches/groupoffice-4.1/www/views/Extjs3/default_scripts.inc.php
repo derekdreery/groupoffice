@@ -1,4 +1,4 @@
-<?php
+l<?php
 /**
  * Copyright Intermesh
  *
@@ -20,10 +20,6 @@ $settings['language']=GO::language()->getLanguage();
 $user_id = GO::user() ? GO::user()->id : 0;
 
 $load_modules = GO::modules()->getAllModules(true);
-
-//done in AuthController already
-//if(isset($_REQUEST["SET_LANGUAGE"]))
-//	$settings['language']=$_REQUEST["SET_LANGUAGE"];
 
 $settings['state']=array();
 if(GO::user()) {
