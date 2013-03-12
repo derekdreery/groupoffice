@@ -1,6 +1,11 @@
+- IMPORTANT: New cron / task scheduler system. If you installed manually you must adjust
+  the cron job as descripbed here: http://wiki4.group-office.com/wiki/Manual_install_on_other_Linux,_Windows_or_Mac_systems#Cron_job
+
 - Added support_link config option
 - Tasks and contacts clickable in calendar
 - Signed GOTA for 6 months.
+- ExtJS base translations were missing
+- Updated French
 
 08-03-2013 4.1.43
 - Exclude noSelect folders from the folder listing in z-push2
