@@ -124,13 +124,7 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 	}
 	
 	protected function actionSubmitRules($params) {	
-		$allCriteria			=		json_decode($params['criteria'], true);
-		$allActions		=		json_decode($params['actions'], true);
-		$account_id		=		$params['account_id'];
-		$script_index =		$params['script_index'];
-		$rule_name		=		$params['rule_name'];
-		$script				=		$params['script_name'];
-		$join					=		$params['join']; // allof, anyof, any
+
 
 		try {
 			$this->_sieveConnect($params['account_id']);
@@ -140,9 +134,18 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 			$rule['name'] = $params['rule_name'];
 			$rule['tests'] = json_decode($params['criteria'], true);
 			$rule['actions'] = json_decode($params['actions'], true);
-
+			
+		
 			for($i=0,$c=count($rule['actions']);$i<$c;$i++)
 			{
+				if(strpos($rule['actions'][$i]['type'],'_copy')){
+					$rule['actions'][$i]['copy']=true;
+					$rule['actions'][$i]['type']=str_replace('_copy','',$rule['actions'][$i]['type']);
+//					var_dump($rule['actions'][$i]);
+				}
+				
+				
+				
 				if(isset($rule['actions'][$i]['addresses']) && !is_array($rule['actions'][$i]['addresses'])){
 					if($rule['actions'][$i]['type']=='vacation') {
 						if (!empty(GO::config()->sieve_vacation_subject))
@@ -161,10 +164,10 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 				}
 			}
 
-			if($join == 'allof') {
+			if($params['join'] == 'allof') {
 				$rule['join'] = 1;
 			}
-			else if($join == 'any')
+			else if($params['join'] == 'any')
 			{
 				$rule['join'] = '';
 				$rule['tests'] = array();
@@ -193,11 +196,11 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 			$response['results'] = array();
 
 			// Het script laden
-			$this->_sieve->load($script);
+			$this->_sieve->load($params['script_name']);
 
 			// Het script ophalen en terugzetten
-			if($script_index>-1 && isset($this->_sieve->script->content[$script_index]))
-				$this->_sieve->script->update_rule($script_index,$rule);
+			if($params['script_index']>-1 && isset($this->_sieve->script->content[$params['script_index']]))
+				$this->_sieve->script->update_rule($params['script_index'],$rule);
 			else {
 				$this->_sieve->script->add_rule($rule);
 			}
