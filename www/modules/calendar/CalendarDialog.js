@@ -320,7 +320,13 @@ Ext.extend(GO.calendar.CalendarDialog, GO.Window, {
 
 		if(resource && !this.selectGroup.store.loaded)
 		{
-			this.selectGroup.store.load();
+			this.selectGroup.store.load({
+				callback:function(){
+					this.show(calendar_id, resource);
+				},
+				scope:this
+			});
+			return;
 		}
 
 		this.resource = (resource > 0) ? resource : 0;
