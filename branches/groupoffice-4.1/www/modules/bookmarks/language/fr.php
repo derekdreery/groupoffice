@@ -18,3 +18,5 @@ $l['name']='Marques-pages';
 $l['description']='Un module pour gérer les marques-pages.';
 $l['general']='Géneral';
 $l['googleDescription']="Rechercher sur le web";
+$l['behaveAsModule']='Comportement comme un module (Rechargement navigateur nécessaire)';
+$l['confirmDelete']='Êtes-vous sûr de vouloir supprimer ce signet ?';
