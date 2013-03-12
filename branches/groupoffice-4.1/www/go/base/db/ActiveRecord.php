@@ -108,13 +108,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	protected $insertDelayed=false;
 	
 	private $_loadingFromDatabase=true;
-	
-	/**
-	 * Set this property in the child class too tablename of AR
-	 * @var string
-	 */
-	protected static $tableName = false;
-	
+		
 	/**
 	 *
 	 * @var int Link type of this Model used for the link system. See also the linkTo function
@@ -182,7 +176,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @return string The database table name
 	 */
 	public function tableName(){
-		return static::$tableName;
+		return false;
 	}
 	
 	/**
