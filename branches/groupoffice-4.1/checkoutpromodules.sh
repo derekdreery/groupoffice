@@ -1,5 +1,5 @@
 #!/bin/bash
-REPOROOT=svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/modules-4.1/modules
+REPOROOT=svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-4.1
 
 cd `dirname "$0"`/www/modules
 
