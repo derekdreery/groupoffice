@@ -142,6 +142,9 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 					$rule['actions'][$i]['copy']=true;
 					$rule['actions'][$i]['type']=str_replace('_copy','',$rule['actions'][$i]['type']);
 //					var_dump($rule['actions'][$i]);
+				}else
+				{
+					$rule['actions'][$i]['copy']=false;
 				}
 				
 				
