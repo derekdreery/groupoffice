@@ -57,10 +57,10 @@
 					?>					
 				</div>
 
-				<p> You'll need diskspace for files and or e-mail. It costs € 0.50 per GB per month.</p>
+				<p> You'll need diskspace for files and or e-mail. It costs € 1,- per GB per month.</p>
 
 				<div class="row">
-					<?php echo GO_Sites_Components_Html::label("Amount of diskspace (GB)", 'number_of_users'); ?>
+					<?php echo GO_Sites_Components_Html::label("Amount of diskspace (GB)", 'diskspace'); ?>
 					<?php echo GO_Sites_Components_Html::textField("diskspace", "1"); ?>					
 				</div>
 
