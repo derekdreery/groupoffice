@@ -715,7 +715,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$this->send_command($command);
 		$res = $this->get_response(false, true);
 		$status = $this->check_response($res, true);
-		
+
 		if(!$status)
 			return false;
 		
@@ -732,6 +732,14 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 					}
 				}
 			}
+//			This is only the first unseen uid not very useful
+//			if (in_array('UNSEEN', $vals)) {
+//				foreach ($vals as $i => $v) {
+//					if (intval($v) && isset($vals[($i - 1)]) && $vals[($i - 1)] == 'UNSEEN') {
+//						$unseen = $v;
+//					}
+//				}
+//			}
 			if (in_array('UIDVALIDITY', $vals)) {
 				foreach ($vals as $i => $v) {
 					if (intval($v) && isset($vals[($i - 1)]) && $vals[($i - 1)] == 'UIDVALIDITY') {
@@ -783,7 +791,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$mailbox['messages'] = $exists;
 		$mailbox['flags'] = $flags;
 		$mailbox['permanentflags'] = $pflags;
-
+		
 		$this->selected_mailbox=$mailbox;
 		
 		return $mailbox;
@@ -799,6 +807,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	private $_unseen;
 
 	public function get_unseen($mailbox=false) {
+		
+		if(!$mailbox)
+			$mailbox = $this->selected_mailbox['name'];
 		
 		if(isset($this->_unseen[$mailbox])){
 			return $this->_unseen[$mailbox];
