@@ -1,11 +1,16 @@
+12-03-2013 4.1.44
 - IMPORTANT: New cron / task scheduler system. If you installed manually you must adjust
   the cron job as descripbed here: http://wiki4.group-office.com/wiki/Manual_install_on_other_Linux,_Windows_or_Mac_systems#Cron_job
-
+- e-mail checker could update with wrong number sometimes
 - Added support_link config option
 - Tasks and contacts clickable in calendar
 - Signed GOTA for 6 months.
 - ExtJS base translations were missing
 - Updated French
+- Updating copy sieve rules could delete rule
+- Editing an event in the month grid for the second time without refreshing 
+  loaded an empty dialog.
+- Description missing in caldav.
 
 08-03-2013 4.1.43
 - Exclude noSelect folders from the folder listing in z-push2
