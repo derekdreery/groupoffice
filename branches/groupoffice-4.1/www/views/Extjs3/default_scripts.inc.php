@@ -84,7 +84,7 @@ $settings['config']['default_country'] = GO::config()->default_country;
 
 $settings['show_contact_cf_tabs'] = array();
 
-//if(GO::modules()->addressbook){ // NOT WORKING?
+if(GO::modules()->addressbook){
 	// Add the addresslist tab to the global settings panel
 	$settings['show_addresslist_tab'] = GO::config()->get_setting('globalsettings_show_tab_addresslist');
 	
@@ -97,7 +97,7 @@ $settings['show_contact_cf_tabs'] = array();
 			$settings['show_contact_cf_tabs'][$cfc->id] = true;
 		}
 	}
-//}
+}
 	
 $root_uri = GO::config()->debug ? GO::config()->host : GO::config()->root_path;
 $view_root_uri = $root_uri.'views/Extjs3/';
