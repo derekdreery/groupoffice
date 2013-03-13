@@ -300,10 +300,15 @@ class GO{
 	 */
 	public static function modules() {
 		if (!isset(self::$_modules)) {
-			if(isset(GO::session()->values['modulesObject']) && !isset($GLOBALS['GO_CONFIG'])){
-				self::$_modules=GO::session()->values['modulesObject'];
-			}else{
-				self::$_modules=GO::session()->values['modulesObject']=new GO_Base_ModuleCollection();
+			if(GO::user()){
+				if(isset(GO::session()->values['modulesObject']) && !isset($GLOBALS['GO_CONFIG'])){
+					self::$_modules=GO::session()->values['modulesObject'];
+				}else{
+					self::$_modules=GO::session()->values['modulesObject']=new GO_Base_ModuleCollection();
+				}
+			}else
+			{
+				self::$_modules=new GO_Base_ModuleCollection();
 			}
 			
 //			self::$_modules=new GO_Base_ModuleCollection();
