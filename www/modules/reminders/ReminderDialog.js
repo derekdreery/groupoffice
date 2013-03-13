@@ -161,17 +161,16 @@ GO.reminders.ReminderDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 					xtype: 'datefield',
 					name: 'date',
 					value: new Date()
-				},{
+				},this.timeField = new GO.form.TimeField({
 					xtype:'timefield',
 					increment: 15,
 					format:GO.settings.time_format,
 					name:'time',
-					value:'8:00',
 					width:80,
 					hideLabel:true,
 					autoSelect :true,
 					forceSelection:true
-				}]
+				})]
 			}
 			,{
 				xtype:'combo',
@@ -213,6 +212,13 @@ GO.reminders.ReminderDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			this.usersGrid.setDisabled(true);
 			this.usersStore.baseParams.reminder_id=0;
 			this.usersStore.removeAll();
+		}
+	},
+	
+	afterShowAndLoad : function (remoteModelId, config){
+		if (!(remoteModelId>0)) {
+			var date = new Date();
+			this.timeField.setValue(date.format(GO.settings.time_format));
 		}
 	},
 	
