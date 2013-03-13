@@ -168,7 +168,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 						!GO::config()->disable_security_token_check && 
 //						GO::user() && No longer needed. We only check token when action requires a logged in user
 						!empty($_REQUEST['r']) && 
-						$_REQUEST['security_token']!=GO::session()->values['security_token']
+						(!isset($_REQUEST['security_token']) || $_REQUEST['security_token']!=GO::session()->values['security_token'])
 			){
 			//GO::session()->logout();			
 			throw new GO_Base_Exception_SecurityTokenMismatch();
