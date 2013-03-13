@@ -82,7 +82,23 @@ $settings['config']['nav_page_size']=intval(GO::config()->nav_page_size);
 
 $settings['config']['default_country'] = GO::config()->default_country;
 
+$settings['show_contact_cf_tabs'] = array();
 
+//if(GO::modules()->addressbook){ // NOT WORKING?
+	// Add the addresslist tab to the global settings panel
+	$settings['show_addresslist_tab'] = GO::config()->get_setting('globalsettings_show_tab_addresslist');
+	
+	if(GO::modules()->customfields){
+		$settings['show_contact_cf_tabs'] = array();
+		// Add the contact customfield tabs to the global settings panel
+		$contactClassName = GO_Addressbook_Model_Contact::model()->className();
+		$customfieldsCategories = GO_Customfields_Model_Category::model()->findByModel($contactClassName);
+		foreach($customfieldsCategories as $cfc){
+			$settings['show_contact_cf_tabs'][$cfc->id] = true;
+		}
+	}
+//}
+	
 $root_uri = GO::config()->debug ? GO::config()->host : GO::config()->root_path;
 $view_root_uri = $root_uri.'views/Extjs3/';
 $view_root_path = GO::config()->root_path.'views/Extjs3/';
