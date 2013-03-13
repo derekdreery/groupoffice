@@ -26,7 +26,7 @@ class GO_Reminders_Controller_Reminder extends GO_Base_Controller_AbstractModelC
 		$record['time'] = GO_Base_Util_Date::format_long_date($model->time);
 		return parent::formatStoreRecord($record, $model, $store);
 	}
-	
+		
 	protected function getStoreParams($params) {
 		
 		return GO_Base_Db_FindParams::newInstance()
@@ -47,7 +47,7 @@ class GO_Reminders_Controller_Reminder extends GO_Base_Controller_AbstractModelC
 		}
 		
 		$params['manual'] = 1;
-		$params['vtime']=$params['time']=strtotime(GO_Base_Util_Date::to_input_format($params['date']).' '.$params['time']);
+		$params['vtime']=$params['time']=$params['date'].' '.$params['time'];
 		
 		return parent::beforeSubmit($response, $model, $params);
 	}
@@ -124,15 +124,20 @@ class GO_Reminders_Controller_Reminder extends GO_Base_Controller_AbstractModelC
 			$model->link=$modelType->model_name.':'.$model->model_id;
 			$searchCacheRecord = GO_Base_Model_SearchCacheRecord::model()
 				->findSingleByAttributes( array('model_id' => $model->model_id,'model_type_id' => $model->model_type_id) );
-			$model->link_name = $searchCacheRecord->name;
 			
-			$model->date = date($_SESSION['GO_SESSION']['date_format'], $model->time);
-			$model->time = date($_SESSION['GO_SESSION']['time_format'], $model->time);
+			if ($searchCacheRecord)
+				$model->link_name = $searchCacheRecord->name;
 		}else
 		{
 			$model->link_name = '';
-		}		
+		}			
 		return $response;
+	}
+	
+	protected function afterLoad(&$response, &$model, &$params) {
+		$response['data']['date'] = date(GO::user()->completeDateFormat, $model->time);
+		$response['data']['time'] = date(GO::user()->time_format, $model->time);
+		return parent::afterLoad($response, $model, $params);
 	}
 	
 }
