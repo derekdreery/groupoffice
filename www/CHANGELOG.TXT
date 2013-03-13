@@ -1,6 +1,7 @@
 4.1.45
 - Fixed problem with enabling of users and groups tab in the cron dialog.
 - added options to user administration dialog for selection contact customfields tabs for displaying in the Global settings panel.
+- Updated Croatian
 
 12-03-2013 4.1.44
 - IMPORTANT: New cron / task scheduler system. If you installed manually you must adjust
