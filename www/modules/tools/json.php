@@ -33,8 +33,8 @@ try{
 					$response['results'][]=array('name'=>'Update filesearch index', 'script'=>GO::url('filesearch/filesearch/sync'));
 				}
 
-				if(!empty($GLOBALS['GO_CONFIG']->phpMyAdminUrl))
-					$response['results'][]=array('name'=>'PhpMyAdmin', 'script'=>$GLOBALS['GO_MODULES']->modules['tools']['url'].'phpmyadmin.php');
+//				if(!empty($GLOBALS['GO_CONFIG']->phpMyAdminUrl))
+//					$response['results'][]=array('name'=>'PhpMyAdmin', 'script'=>$GLOBALS['GO_MODULES']->modules['tools']['url'].'phpmyadmin.php');
 
 			break;
 	}
