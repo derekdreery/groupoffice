@@ -401,7 +401,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 
 		for (var i = 0;i<this.scale;i+=this.rowsPerHour)
 		{
-			timeformat = GO.settings.time_format.substr(0,1)=='G' ? 'G:i' : 'g a';
+			timeformat = GO.settings.time_format.substr(0,1)=='H' ? 'G:i' : 'g a';
 			Ext.DomHelper.append(timeCol,
 			{
 				tag: 'div',
