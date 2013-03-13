@@ -203,3 +203,17 @@ $l['sendNotificationTitle']='Pošalji obavjest?';
 $l['sendNotification']='Želite li obavjestiti sudionike putem e-pošte?';
 $l['openCalendar']='Otvori kalendar';
 $l['createPermission']="Stvori dozvolu";
+
+$l['pastAppointments']='Prošli događaji';
+$l['show_holidays']="Prikaži praznike";
+$l['participant']='Sudionik';
+$l['clickForAttendance']='Kliknite ovdje kako biste postavili svoj status prisustvovanja';
+$l['viewDay']='Dan';
+$l['viewMorning']='Jutro';
+$l['viewAfternoon']='Poslije podne';
+$l['viewEvening']='Večer';
+$l['cronEventAndTaskReportMailer']='Slanje današnjih događaja i zadataka';
+$l['cronEventAndTaskReportMailerDescription']='Šalje e-poštu sa današnjim događajima i zadacima svakom korisniku u cron-u';
+$l['cronEventAndTaskReportMailerPdfSubtitle']='Današnji događaji i zadaci';
+$l['cronEventAndTaskReportMailerSubject']='Današnji događaji i zadaci';
+$l['cronEventAndTaskReportMailerContent']='Možete pronaći popis današnjih događaja i zadataka u priloženom PDF-u.';

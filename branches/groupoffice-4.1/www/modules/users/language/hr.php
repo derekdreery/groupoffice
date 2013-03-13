@@ -115,3 +115,8 @@ $l['generatedPasswordIs']='Generirana lozinka je';
 $l['openContact']='Otvori kontakt';
 $l['showProUsers']='Prikaži pro korisnike';
 $l['updateExistingOnImport']='Ažuriraj postojeće korisnike (po korisničkom imenu)';
+
+$l['resetState']="Resetiraj prozore i mreže";
+$l['resetStateConfirm']='Jeste li sigurni da želite resetirati sve mreže stupaca, prozore, veličine okvira itd., na tvorničke postavke?';
+$l['registrationEmail']='E-pošta prijave';
+$l['enabledSettingtabs']='Omogući kartice postavki';
