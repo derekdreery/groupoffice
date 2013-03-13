@@ -1,8 +1,7 @@
 <?php
 
 class GO_Addressbook_AddressbookModule extends GO_Base_Module{
-	
-	
+
 	public function author() {
 		return 'Merijn Schering';
 	}
@@ -31,7 +30,6 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 			foreach($addresslists as $addresslist){
 				$response['data']['addresslist_'.$addresslist->id]=1;
 			}
-			
 		}
 			
 		return parent::loadSettings($settingsController, $params, $response, $user);
