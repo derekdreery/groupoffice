@@ -310,3 +310,8 @@ $updates["201303111600"][]="CREATE TABLE IF NOT EXISTS `go_cron_users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 $updates["201303111600"][]="script:13_insert_system_cron.php";
+
+$updates["201303121400"][]="CREATE TABLE IF NOT EXISTS `go_cf_setting_tabs` (
+  `cf_category_id` int(11) NOT NULL,
+  PRIMARY KEY (`cf_category_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
