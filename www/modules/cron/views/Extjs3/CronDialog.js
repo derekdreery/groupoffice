@@ -144,9 +144,11 @@ GO.cron.CronDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		
 		this.jobCombo.on('select',function(combo, record, index ){
 			if(record.data.selection && this.remoteModelId > 0){
+				this.select = true;
 				this.usersPanel.setDisabled(false);
 				this.groupsPanel.setDisabled(false);
 			}else{
+				this.select = false;
 				this.usersPanel.setDisabled(true);
 				this.groupsPanel.setDisabled(true);
 			}
@@ -195,36 +197,26 @@ GO.cron.CronDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	afterLoad : function(remoteModelId, config, action){
 		this.usersPanel.setModelId(remoteModelId);
     this.groupsPanel.setModelId(remoteModelId);
-		
+
 		if(action.result.data.select){
 			this.select = true;
 			this.usersPanel.setDisabled(false);
 			this.groupsPanel.setDisabled(false);
 		} else {
-			this.select = false;
-			this.usersPanel.setDisabled(true);
-			this.groupsPanel.setDisabled(true);
+			if(!this.select){
+				this.select = false;
+				this.usersPanel.setDisabled(true);
+				this.groupsPanel.setDisabled(true);
+			}
 		}
-		
-//		var params = action.result.data.paramsToSet;
-//				
-//		if(Object.keys(params).length > 0){
-//			this.parameterPanel.setDisabled(false);
-//			this.parameterPanel.buildForm(params);
-//		}else{
-//			this.parameterPanel.setDisabled(true);
-//			this.parameterPanel.reset();
-//		}
-//		
-		
 	},
   afterSubmit: function(action){
     var noUserSelection = this.select; //this.usersPanel.disabled;
 		
     this.usersPanel.setModelId(action.result.id);
     this.groupsPanel.setModelId(action.result.id);
-		
-		if(!noUserSelection){
+
+		if(noUserSelection){
 			this.select = true;
 			this.usersPanel.setDisabled(false);
 			this.groupsPanel.setDisabled(false);
