@@ -233,3 +233,15 @@ $l['winmailNoFiles']="Ovaj winmail privitak ne sadrži niti jednu datoteku.";
 $l['attachedAppointmentInfo']="Priložene informacije o sastanku";
 $l['cantDeleteSpecialFolder']="Nemožete obrisati mapu smeća, poslane pošte ili skica";
 $l['copyingMessages']='Kopiranje poruka...';
+
+$l['cantMoveSpecialFolder']="Ne možete premjestiti mape smeća, poslane pošte i skica";
+$l['copyMailTo']="Kopiraj e-poštu u...";
+$l['copyMailToTxt']="Odaberite mapu u koju želite kopirati e-poštu";
+$l['copyMailToRUSure']="Jeste li sigurni da želite kopirati odabranu poruku e-pošte u ovu mapu?";
+$l['copyMailsToRUSure']="Jeste li sigurni da želite kopirati odabrane poruke e-pošte u ovu mapu?";
+$l['selectValidMailFolder']="Odaberite ispravnu mapu e-pošte u koju želite kopirati.";
+$l['clickSeeWholeMessage']="Poruka je veća nego što može biti prikazano ovdje. Kliknite kako biste vidjeli cijelu poruku.";
+$l['dateReceived']='Datum primitka';
+$l['dateSent']='Datum slanja';
+$l['cronEmailReminders']='Podsjetnici e-pošte';
+$l['cronEmailRemindersDescription']='Ovaj cron upravlja podsjetnicima e-pošte';
