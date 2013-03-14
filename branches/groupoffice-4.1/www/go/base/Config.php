@@ -1150,9 +1150,9 @@ class GO_Base_Config {
 			if(basename($this->host)=='install')
 				$this->host = dirname($this->host);
 
-			//if(substr($this->host,-1) != '/') {
+			if(substr($this->host,-1) != '/') {
 				$this->host .= '/';
-			//}
+			}
 
 			$this->db_host='localhost';
 
