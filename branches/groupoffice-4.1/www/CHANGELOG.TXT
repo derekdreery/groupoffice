@@ -1,4 +1,5 @@
 4.1.45
+- Fixed sending timeregistration approval email when closing week (uses new Swift mailer)
 - Fixed problem with enabling of users and groups tab in the cron dialog.
 - added options to user administration dialog for selection contact customfields tabs for displaying in the Global settings panel.
 - Updated Croatian
