@@ -91,11 +91,16 @@ if(GO::modules()->addressbook){
 	
 	if(GO::modules()->customfields){
 		$settings['show_contact_cf_tabs'] = array();
+		
+		$tabsEnabledStmt = GO_Users_Model_CfSettingTab::model()->find();
+		$tabsEnabled = $tabsEnabledStmt->fetchAll(PDO::FETCH_COLUMN);
+	
 		// Add the contact customfield tabs to the global settings panel
 		$contactClassName = GO_Addressbook_Model_Contact::model()->className();
 		$customfieldsCategories = GO_Customfields_Model_Category::model()->findByModel($contactClassName);
 		foreach($customfieldsCategories as $cfc){
-			$settings['show_contact_cf_tabs'][$cfc->id] = true;
+			if(in_array($cfc->id, $tabsEnabled))
+				$settings['show_contact_cf_tabs'][$cfc->id] = true;
 		}
 	}
 }
