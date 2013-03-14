@@ -81,6 +81,7 @@ $settings['config']['support_link']=GO::config()->support_link;
 $settings['config']['nav_page_size']=intval(GO::config()->nav_page_size);
 
 $settings['config']['default_country'] = GO::config()->default_country;
+$settings['config']['checker_interval'] = (int)GO::config()->checker_interval;
 
 $settings['show_contact_cf_tabs'] = array();
 
