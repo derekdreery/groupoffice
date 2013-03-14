@@ -61,7 +61,7 @@ class GO_Calendar_Cron_EventAndTaskReportMailer extends GO_Base_Cron_AbstractCro
 	 * @return String
 	 */
 	private function _getUserPdf(GO_Base_Model_User $user){
-		$filename = $user->name.'.pdf'; //Set the PDF filename
+		$filename = GO_Base_Fs_File::stripInvalidChars($user->name).'.pdf'; //Set the PDF filename
 		
 		$pdf = new eventAndTaskPdf();
 		$pdf->setTitle($user->name); // Set the title in the header of the PDF

@@ -315,3 +315,11 @@ $updates["201303121400"][]="CREATE TABLE IF NOT EXISTS `go_cf_setting_tabs` (
   `cf_category_id` int(11) NOT NULL,
   PRIMARY KEY (`cf_category_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+$updates["201303140900"][]="ALTER TABLE  `go_cron` CHANGE  `years`  `years` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '*'";
+$updates["201303140900"][]="ALTER TABLE  `go_cron` CHANGE  `weekdays`  `weekdays` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '*'";
+$updates["201303140900"][]="ALTER TABLE  `go_cron` CHANGE  `months`  `months` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '*'";
+$updates["201303140900"][]="ALTER TABLE  `go_cron` CHANGE  `monthdays`  `monthdays` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '*'";
+$updates["201303140900"][]="ALTER TABLE  `go_cron` CHANGE  `hours`  `hours` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '1'";
+$updates["201303140900"][]="ALTER TABLE  `go_cron` CHANGE  `minutes`  `minutes` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '1'";
+$updates["201303140900"][]="UPDATE `go_cron` SET `years` = '*';";

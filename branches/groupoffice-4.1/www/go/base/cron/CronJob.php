@@ -170,6 +170,10 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 	}
 		
 	private function _validateExpression($field){
+			
+		if($this->{$field} == '')
+			return false;
+		
 		return preg_match($this->_getValidationRegex($field), $this->{$field});
 	}
 	
@@ -204,41 +208,24 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 	private function _buildExpression(){
 		$expression = '';
 	
-		if(!empty($this->minutes))
-			$expression .= $this->minutes;
-		else
-			$expression .= '*';
+		$expression .= $this->minutes;
 		$expression .= ' ';
-		
-		if(!empty($this->hours))
-			$expression .= $this->hours;
-		else
-			$expression .= '*';
+		$expression .= $this->hours;
 		$expression .= ' ';
-		
-		if(!empty($this->monthdays))
-			$expression .= $this->monthdays;
-		else
-			$expression .= '*';
+		$expression .= $this->monthdays;
 		$expression .= ' ';
-		
-		if(!empty($this->months))
-			$expression .= $this->months;
-		else
-			$expression .= '*';
+		$expression .= $this->months;
 		$expression .= ' ';
-		if(!empty($this->weekdays))
-			$expression .= $this->weekdays;
-		else
-			$expression .= '*';
-//		$expression .= ' ';
-		
-//		if(!empty($this->years))
-//			$expression .= $this->years;
-//		else
-//			$expression .= '*';
-		
+		$expression .= $this->weekdays;
+		$expression .= ' ';
+		$expression .= $this->years;
+	
 		return $expression;
+	}
+	
+	public function formatInput($column, $value) {
+		$value=trim($value);
+		return parent::formatInput($column, $value);
 	}
 	
 	/**
@@ -365,7 +352,6 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 		return $returnProperties;
 	}
 	
-	
 	/**
 	 * Convert a Json string to PUBLIC parameters of this object
 	 * ($this->params)
@@ -405,7 +391,4 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 		$this->lastrun = time();
 		return $this->save();
 	}
-	
-	
-	
 }
