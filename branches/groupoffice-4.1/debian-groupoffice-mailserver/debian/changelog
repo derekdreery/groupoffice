@@ -1,5 +1,5 @@
-groupoffice-mailserver (4.1.44) fourzero; urgency=low
+groupoffice-mailserver (4.1.45) fourzero; urgency=low
 
   * Changes can be found in /usr/share/groupoffice/CHANGELOG.TXT
 
- -- Merijn Schering <mschering@intermesh.nl>  Tue, 12 Mar 2013 15:49:58 +0100
+ -- Merijn Schering <mschering@intermesh.nl>  Thu, 14 Mar 2013 16:01:18 +0100
