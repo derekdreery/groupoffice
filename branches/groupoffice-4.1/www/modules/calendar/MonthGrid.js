@@ -300,9 +300,10 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 	onAddClick : function(e, target){
 //		var cell = Ext.get(target).findParent('div.cal-monthGrid-cell', 3);
 		var date = Date.parseDate(target.id.substring(1, target.id.length),'Ymd');
-		this.fireEvent('create', this, date);
-		
-		e.stopEvent();
+		if(date){ // in firefox this event somehow also fires on events
+			this.fireEvent('create', this, date);
+			e.stopEvent();
+		}
 	},
 
 	onResize : function(adjWidth, adjHeight, rawWidth, rawHeight){
@@ -744,7 +745,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 
 						this.selectEventElement(eventEl);
 						this.clickedEventId=eventEl.id;
-						
+
 						e.stopEvent();
 					}, this);
 				//}
