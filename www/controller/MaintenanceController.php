@@ -654,7 +654,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		echo "All Done!\n";		
 		
-		if(!$this->isCli()){
+		if(!$this->isCli() && basename($_SERVER['PHP_SELF'])!='upgrade.php'){
 			echo '</pre><br /><br />';
 			echo '<a href="'.GO::config()->host.'">'.GO::t('cmdContinue').'</a>';
 		}
