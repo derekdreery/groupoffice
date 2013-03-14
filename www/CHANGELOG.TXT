@@ -1,10 +1,14 @@
-4.1.45
+14-03-2013 4.1.45
+- Strip unsupported datastore options from synthesis syncml client
 - Added "checker_interval" option for config.php to change to interval for the automatic mail checker
 - Fixed sending timeregistration approval email when closing week (uses new Swift mailer)
 - Fixed problem with enabling of users and groups tab in the cron dialog.
 - added options to user administration dialog for selection contact customfields tabs for displaying in the Global settings panel.
 - Updated Croatian
 - Popup reminders: improved handling of date and time when editing popup reminder.
+- Fixed host config autodetection and time format selection at install time
+- Updated Norwegian
+- Fixed empty event dialog bug in firefox
 
 12-03-2013 4.1.44
 - IMPORTANT: New cron / task scheduler system. If you installed manually you must adjust

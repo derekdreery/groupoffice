@@ -242,3 +242,5 @@ $l['selectValidMailFolder']="Du må velge en gyldig e-postmappe å kopiere meldi
 $l['clickSeeWholeMessage']="Meldingen er for lang til at den kan vises i sin helhet her. Trykk her hvis du vil se hele meldingen.";
 $l['dateReceived']='Dato mottatt';
 $l['dateSent']='Dato sendt';
+$l['cronEmailReminders']='E-post påminnelser';
+$l['cronEmailRemindersDescription']='Denne cron-jobben håndterer e-post påminnelsene';
