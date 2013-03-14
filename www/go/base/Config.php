@@ -1100,7 +1100,12 @@ class GO_Base_Config {
 	 */
 	var $db;
 
-	
+	/**
+	 * Amount of second to wait before the notification/email check will run again
+	 * 
+	 * @var int  
+	 */
+	var $checker_interval=120;
 
 	/**
 	 * Full original URL to reach Group-Office with trailing slash
