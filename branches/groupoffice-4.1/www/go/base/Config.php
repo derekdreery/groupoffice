@@ -926,7 +926,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.1.44';
+	var $version = '4.1.45';
 	
 	/**
 	 * Modification date
@@ -934,7 +934,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '201303012';
+	var $mtime = '201303014';
 
 	#group configuration
 	/**
@@ -1101,7 +1101,8 @@ class GO_Base_Config {
 	var $db;
 
 	/**
-	 * Amount of second to wait before the notification/email check will run again
+	 * The amount of seconds before Group-Office will check for new mail or 
+	 * other notifications.
 	 * 
 	 * @var int  
 	 */
