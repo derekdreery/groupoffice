@@ -1,3 +1,6 @@
+- When adding an email to an existing contact the dialog will find contact without mail address as well
+- The Edit button on the dialog that asks if you when to add an email to an existing contact is renamed to "Merge"
+
 15-03-2013 4.1.46
 - Encode attachment string parts in z-push2 synced emails
 - Fixed bug with showing all contact customfield tabs in the settings dialog
