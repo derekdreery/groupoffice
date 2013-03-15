@@ -1,4 +1,6 @@
-
+4.1.46
+- Encode attachment string parts in z-push2 synced emails
+- Fixed bug with showing all contact customfield tabs in the settings dialog
 - Undefined time in portlet
 - Updated Norwegian and Brasilian Portugese
 - Automatic mail checker will run again
