@@ -41,7 +41,6 @@ $l["completedAt"]='Completado em';
 
 $l['name']='Tarefas';
 $l['description']='Coloque uma descrição aqui';
-$lang['link_type'][12]=$l['task']='Tarefas';
 $l['status']='Status';
 $l['scheduled_call']='Agendar chamada em %s';
 $l['statuses']['NEEDS-ACTION'] = 'Necessita ação';
@@ -85,3 +84,4 @@ $l["active"]='Ativas';
 $l["globalsettings_templatelabel"]='Modelo de tarefa';
 $l["globalsettings_allchangelabel"]='Alterar as já existentes?';
 $l["globalsettings_renameall"]= 'Renomear todas?';
+$l['completedTasks']='Tarefas concluídas';

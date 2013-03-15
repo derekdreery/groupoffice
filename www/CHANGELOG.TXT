@@ -1,3 +1,6 @@
+
+- Undefined time in portlet
+- Updated Norwegian and Brasilian Portugese
 - Automatic mail checker will run again
 
 14-03-2013 4.1.45

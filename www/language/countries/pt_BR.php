@@ -240,7 +240,6 @@ $l['WF'] = 'Wallis and Futuna Islands';
 $l['WS'] = 'Samoa';
 $l['YE'] = 'Yemen';
 $l['YT'] = 'Mayotte';
-$l['YU'] = 'Yugoslavia';
 $l['ZA'] = 'Africa do Sul';
 $l['ZM'] = 'Zambia';
 $l['ZW'] = 'Zimbabwe';
