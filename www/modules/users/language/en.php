@@ -123,4 +123,4 @@ $l['resetState']="Reset windows and grids";
 $l['resetStateConfirm']='Are you sure you want to reset all grid columns, windows, panel sizes etc. to the factory defaults?';
 
 $l['registrationEmail']='Registration Email';
-$l['enabledSettingtabs']='Enabled Settingtabs';
+$l['enabledSettingtabs']='Enabled Setting tabs';
