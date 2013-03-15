@@ -1,3 +1,5 @@
+- Automatic mail checker will run again
+
 14-03-2013 4.1.45
 - Strip unsupported datastore options from synthesis syncml client
 - Added "checker_interval" option for config.php to change to interval for the automatic mail checker
