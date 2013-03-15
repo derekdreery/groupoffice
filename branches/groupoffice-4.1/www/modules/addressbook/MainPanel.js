@@ -694,7 +694,7 @@ GO.addressbook.searchSender = function(sender, name){
 									GO.addressbook.unknownEmailWin.hide();
 								}
 							},{
-								text: GO.lang.cmdEdit,
+								text: GO.lang.merge,
 								handler: function(){
 									if(!GO.email.findContactDialog)
 										GO.email.findContactDialog = new GO.email.FindContactDialog();
