@@ -390,6 +390,7 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 		});
 	},
   
+	// See modules/email/EmailClient.js and search for "GO.checker.registerRequest" for an usage example
 	registerRequest : function(url, params, callback, scope){
 		params.r=url;	
 	
