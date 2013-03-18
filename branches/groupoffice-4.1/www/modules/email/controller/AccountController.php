@@ -340,7 +340,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 							//'expanded' => !count($children),
 			);
 			
-			if ($mailbox->unseen > 0) {
+			if (!$fetchAllWithSubscribedFlag && $mailbox->unseen > 0) {
 				$node['cls'] .= ' ml-folder-unseen';
 			}
 			
