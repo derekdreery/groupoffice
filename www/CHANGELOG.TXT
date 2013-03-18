@@ -1,3 +1,5 @@
+- Fixed subscribing to IMAP folders
+- Removed invalid l char that was displayed on login screen
 - When adding an email to an existing contact the dialog will find contact without mail address as well
 - The Edit button on the dialog that asks if you when to add an email to an existing contact is renamed to "Merge"
 
