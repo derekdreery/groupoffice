@@ -1505,16 +1505,15 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				
 			GO.calendar.showEventDialog({
 				values: formValues,
-				calendar_id: this.calendar_id,
-				calendar_name: this.calendar_name
+				calendar_id: this.calendar_id
 			});
 				
 		}, this);
 			
 		this.monthGrid.on("create", function(grid, date){
-
+		
 			var now = new Date.parseDate(new Date().format("H"), "H");
-			
+		
 			var i = parseInt(new Date().format("i"));
 			if (i > 30) {
 				i = 45;
@@ -1536,8 +1535,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				
 			GO.calendar.showEventDialog({
 				values: formValues,
-				calendar_id: this.calendar_id,
-				calendar_name: this.calendar_name
+				calendar_id: this.calendar_id
 			});
 		}, this);
 		
@@ -1607,6 +1605,43 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			});	  		
 	  		
 		},this);
+		
+		
+		this.viewGrid.on("create", function(grid, date, timeOfDay, calendar_id){
+
+			var formValues={
+				start_date: date,
+				end_date: date
+			};
+			
+			switch(timeOfDay){
+				case 'allday':
+					formValues.all_day_event=true;
+				break;
+				
+				case 'morning':
+					formValues.start_time = new Date.parseDate("08","H").format(GO.settings.time_format);
+					formValues.end_time = new Date.parseDate("09","H").format(GO.settings.time_format);
+				break;
+				
+				case 'afternoon':
+					formValues.start_time = new Date.parseDate("12","H").format(GO.settings.time_format);
+					formValues.end_time = new Date.parseDate("13","H").format(GO.settings.time_format);
+				break;
+				
+				case 'evening':
+					formValues.start_time = Date.parseDate("18","H").format(GO.settings.time_format);
+					formValues.end_time = new Date.parseDate("19","H").format(GO.settings.time_format);
+				break;
+			}
+			
+			
+				
+			GO.calendar.showEventDialog({
+				values: formValues,
+				calendar_id: calendar_id
+			});
+		}, this);
 	},
 	  
 	onDblClick : function(grid, event, actionData){
