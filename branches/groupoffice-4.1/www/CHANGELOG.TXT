@@ -1,3 +1,4 @@
+- Fixed sorting the email folder tree and folder names that only have digits
 - Drag&Drop in billing catalog was fixed
 - Double click on an item in the Select Product Dialog will submit the form (add item to order)
 - Fixed subscribing to IMAP folders
