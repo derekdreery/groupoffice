@@ -154,7 +154,6 @@ class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 //		$currentMinusTime->sub(new DateInterval('PT1H'));
 
 		$findParams = GO_Base_Db_FindParams::newInstance()
-			->calcFoundRows()
 			->criteria(GO_Base_Db_FindCriteria::newInstance()
 				->addCondition('nextrun', $currentTime->getTimestamp(),'<')
 			//	->addCondition('nextrun', $currentMinusTime->getTimestamp(),'>')
@@ -181,7 +180,7 @@ class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 		
 		GO::debug('CRONJOB START');
 		
-		if($cronsToHandle->foundRows == 0)
+		if($cronsToHandle->rowCount() == 0)
 			GO::debug('CRONJOB NONE FOUND');
 		
 		foreach($cronsToHandle as $cron){
