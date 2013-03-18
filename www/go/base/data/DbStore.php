@@ -117,7 +117,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
   /**
    * Create a new store
    * @param string $modelClass the classname of the model to execute the find() method on
-   * @param GO_Base_Data_ColumnModel $columnModel
+   * @param GO_Base_Data_ColumnModel $columnModel the column model object for formatting this store's columns
    * @param array $storeParams the $_POST params to set to this store @see setStoreParams()
    * @param GO_Base_Db_FindParams $findParams extra findParams to be added to the store
    */
