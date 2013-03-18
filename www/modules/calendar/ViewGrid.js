@@ -280,7 +280,6 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 			this.gridCells[calendar_id]={};
             
 			for(var time in timeOfDay) {
-				console.log(time);
 				if(time!='allday'){
 					gridRow =  Ext.DomHelper.append(this.tbody,
 					{
@@ -310,6 +309,9 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 						cls: 'x-viewGrid-cell x-viewGrid-cell-'+time,
 						style:'width:'+columnWidth+'px; '+borderStyle
 					}, true);
+					
+					
+					this.gridCells[calendar_id][dt.format('Ymd')+time].on('click', this.onAddClick, this);
 
 				}	
 				
@@ -707,12 +709,14 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 				
 				
 				
-				event.on('mousedown', function(e, eventEl){
+				event.on('click', function(e, eventEl){
 				
 					eventEl = Ext.get(eventEl).findParent('div.x-viewGrid-event-container', 2, true);
 					
 					this.selectEventElement(eventEl);					
 					this.clickedEventId=eventEl.id;
+					
+					e.stopEvent();
 		
 				}, this);
 				
@@ -735,6 +739,8 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 						});
 					}
 					
+					e.stopEvent();
+					
 				}, this);
 
 				event.on('contextmenu', function(e, eventEl)
@@ -746,6 +752,21 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 		}
 		
 		return domIds;
+	},
+	
+	onAddClick : function(e, target){
+
+		var dateAndTime = target.id.split('_');
+
+		//ID format: cal1_day20130318_timeallday
+		var dateStr = dateAndTime[1].substring(3, dateAndTime[1].length);
+		var timeOfDay = dateAndTime[2].substring(4, dateAndTime[2].length);
+		var date = Date.parseDate(dateStr,'Ymd');
+		var calendar_id = parseInt(dateAndTime[0].substring(3, dateAndTime[0].length));
+		if(date){ // in firefox this event somehow also fires on events
+			this.fireEvent('create', this, date, timeOfDay, calendar_id);
+			e.stopEvent();
+		}
 	},
 
 	removeEventFromArray : function (day, event_id)
