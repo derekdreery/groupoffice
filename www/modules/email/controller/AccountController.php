@@ -387,8 +387,8 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					$sortIndex = 4;
 					break;
 			}
-
-			$nodes[$sortIndex . $mailbox->name] = $node;
+			
+			$nodes[$sortIndex .'-'. $mailbox->name] = $node;
 		}
 		ksort($nodes);
 
