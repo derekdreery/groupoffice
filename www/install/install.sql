@@ -487,3 +487,9 @@ CREATE TABLE IF NOT EXISTS `go_cron_users` (
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`cronjob_id`,`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `go_cf_setting_tabs`;
+CREATE TABLE IF NOT EXISTS `go_cf_setting_tabs` (
+  `cf_category_id` int(11) NOT NULL,
+  PRIMARY KEY (`cf_category_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
