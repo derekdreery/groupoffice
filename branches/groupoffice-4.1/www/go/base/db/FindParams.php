@@ -285,7 +285,13 @@ class GO_Base_Db_FindParams{
 	}
 	
 	/**
-	 * Set tot true to return the number of foundRows in the statement (See class GO_Base_Db_ActiveStatement 
+	 * Set tot true to in combination with a LIMIT option only. This will do an 
+	 * extra calculation of the total number of rows. It will do 
+	 * SELECT SQL_CALC_FOUND_ROWS .. and after the query an extra
+	 * SELECT FOUND_ROWS(). It's very useful for paging grids but for other 
+	 * purposes you probably just want to use rowCount() on the ActiveStatement.
+	 * 
+	 * (See class GO_Base_Db_ActiveStatement 
 	 * 
 	 * @param boolean $value
 	 * @return GO_Base_Db_FindParams 
