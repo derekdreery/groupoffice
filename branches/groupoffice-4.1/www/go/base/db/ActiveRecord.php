@@ -3765,6 +3765,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * Get the extra default attibutes not determined from the database.
 	 * 
 	 * This function can be overridden in the model.
+	 * Example override: 
+	 * $attr = parent::defaultAttributes();
+	 * $attr['time'] = time();
+	 * return $attr;
 	 * 
 	 * @return Array An empty array.
 	 */
