@@ -106,6 +106,7 @@ class GO_Base_Db_ActiveStatement implements IteratorAggregate {
 	}
 	
 	/**
+	 * Get all models from the find result
 	 * 
 	 * @return GO_Base_Db_ActiveRecord[]
 	 */
@@ -113,6 +114,11 @@ class GO_Base_Db_ActiveStatement implements IteratorAggregate {
 		return $this->stmt->fetchAll($fetch_style);
 	}
 	
+	/**
+	 * Count the number of rows in the result
+	 * 
+	 * @return int
+	 */
 	public function rowCount() {
 		return $this->stmt->rowCount();
 	}
