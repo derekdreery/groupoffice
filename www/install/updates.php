@@ -323,3 +323,9 @@ $updates["201303140900"][]="ALTER TABLE  `go_cron` CHANGE  `monthdays`  `monthda
 $updates["201303140900"][]="ALTER TABLE  `go_cron` CHANGE  `hours`  `hours` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '1'";
 $updates["201303140900"][]="ALTER TABLE  `go_cron` CHANGE  `minutes`  `minutes` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '1'";
 $updates["201303140900"][]="UPDATE `go_cron` SET `years` = '*';";
+
+
+$updates["201303181730"][]="CREATE TABLE IF NOT EXISTS `go_cf_setting_tabs` (
+  `cf_category_id` int(11) NOT NULL,
+  PRIMARY KEY (`cf_category_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
