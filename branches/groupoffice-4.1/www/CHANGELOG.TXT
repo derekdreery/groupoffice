@@ -8,6 +8,10 @@
 - Removed invalid l char that was displayed on login screen
 - When adding an email to an existing contact the dialog will find contact without mail address as well
 - The Edit button on the dialog that asks if you when to add an email to an existing contact is renamed to "Merge"
+- Calendar group view grid is clickable to add events
+- Added missing settings tab tables
+- Tickets style matches e-mail now and tickets that were not answered within 24 hours are marked red.
+- Custom fields are Open-Source now
 
 15-03-2013 4.1.46
 - Encode attachment string parts in z-push2 synced emails

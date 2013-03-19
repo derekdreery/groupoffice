@@ -10,7 +10,6 @@ svn co $REPOROOT/professional
 svn co $REPOROOT/projects
 svn co $REPOROOT/webshop
 svn co $REPOROOT/gota
-svn co $REPOROOT/customfields
 svn co $REPOROOT/licenses
 svn co $REPOROOT/hoursapproval
 svn co $REPOROOT/timeregistration
