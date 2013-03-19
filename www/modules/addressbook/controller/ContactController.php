@@ -572,6 +572,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()
 			->ignoreAcl()
+			->select('t.*,c.name AS company_name, a.name AS ab_name')
 			->searchQuery($query,
 							array(
 									"CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)",
@@ -590,7 +591,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			->limit(10);
 		
 		
-		if(!empty($params['joinCompany'])){
+//		if(!empty($params['joinCompany'])){
 			$findParams->joinModel(array(
 				'model'=>'GO_Addressbook_Model_Company',					
 	 			'foreignField'=>'id', //defaults to primary key of the remote model
@@ -599,7 +600,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	 			'type'=>'LEFT' //defaults to INNER,
 	 			
 			));
-		}
+//		}
 		
 		
 		if(!empty($params['addressbook_id'])){		
