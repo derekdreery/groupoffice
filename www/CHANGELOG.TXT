@@ -1,3 +1,4 @@
+- Z-Push2 - Only attach attachments of old mail when forwarding it, not on reply.
 - Moved pspellsupport check to GO.settings instead of GO.Email
 - Fixed category selection in Note synchronization when using Z-Push2
 - Type combo will be loaded correctly when opening ticket dialog for the first time.
