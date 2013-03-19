@@ -74,7 +74,7 @@ class GO_Core_Controller_AclGroup extends GO_Base_Controller_AbstractMultiSelect
 		if (!empty($addKeys)) {
 			// Only admins may edit the set of linked groups.
 			if(!$params['currentUserHasManagePermission'])
-				throw new AccessDeniedException();
+				throw new GO_Base_Exception_AccessDenied();
 		} else {
 			return false;
 		}
@@ -86,7 +86,7 @@ class GO_Core_Controller_AclGroup extends GO_Base_Controller_AbstractMultiSelect
 		if (!empty($delKeys)) {
 			// Only admins may edit the set of linked groups.
 			if(!$params['currentUserHasManagePermission'])
-					throw new AccessDeniedException();
+					throw new GO_Base_Exception_AccessDenied();
 			foreach ($delKeys as $delKey) {
 				if ($delKey==GO::config()->group_root) {
 					throw new Exception(GO::t('dontChangeAdminsPermissions'));
