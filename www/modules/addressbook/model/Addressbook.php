@@ -127,4 +127,22 @@
 			$company->delete();
 		}
 	}
+	
+	/**
+	 * joining on the addressbooks can be very expensive. That's why this 
+	 * session cached useful can be used to optimize addressbook queries.
+	 * 
+	 * @return array
+	 */
+	public function getAllReadableAddressbookIds(){
+		if(!isset(GO::session()->values['addressbook']['readable_addressbook_ids'])){
+			GO::session()->values['addressbook']['readable_addressbook_ids']=array();
+			$stmt = $this->find();
+			while($ab = $stmt->fetch()){
+				GO::session()->values['addressbook']['readable_addressbook_ids'][]=$ab->id;
+			}
+		}
+		
+		return GO::session()->values['addressbook']['readable_addressbook_ids'];
+	}
 }
