@@ -60,15 +60,13 @@ class GO_Calendar_Cron_EventAndTaskReportMailer extends GO_Base_Cron_AbstractCro
 	 * @param GO_Base_Model_User $user
 	 * @return String
 	 */
-	private function _getUserPdf(GO_Base_Model_User $user){
-		$filename = GO_Base_Fs_File::stripInvalidChars($user->name).'.pdf'; //Set the PDF filename
-		
+	private function _getUserPdf(GO_Base_Model_User $user){		
 		$pdf = new eventAndTaskPdf();
 		$pdf->setTitle($user->name); // Set the title in the header of the PDF
 		$pdf->setSubTitle(GO::t('cronEventAndTaskReportMailerPdfSubtitle','calendar')); // Set the subtitle in the header of the PDF
 		$pdf->render($user); // Pass the data to the PDF object and let it draw the PDF
 		
-		return $pdf->Output($filename,'s');// Output the pdf
+		return $pdf->Output('','s');// Output the pdf
 	}
 	
 	/**
@@ -80,6 +78,9 @@ class GO_Calendar_Cron_EventAndTaskReportMailer extends GO_Base_Cron_AbstractCro
 	 */
 	private function _sendEmail(GO_Base_Model_User $user,$pdf){
 		
+		$filename = GO_Base_Fs_File::stripInvalidChars($user->name).'.pdf'; //Set the PDF filename
+		$filename = str_replace(',', '', $filename);
+		
 		$mailSubject = GO::t('cronEventAndTaskReportMailerSubject','calendar');
 		$body = GO::t('cronEventAndTaskReportMailerContent','calendar');
 		
@@ -89,7 +90,7 @@ class GO_Calendar_Cron_EventAndTaskReportMailer extends GO_Base_Cron_AbstractCro
 										->addTo($user->email);
 
 		$message->setHtmlAlternateBody(nl2br($body));
-		$message->attach(Swift_Attachment::newInstance($pdf,$user->name.'.pdf','application/pdf'));
+		$message->attach(Swift_Attachment::newInstance($pdf,$filename,'application/pdf'));
 		GO::debug('CRON SEND MAIL TO: '.$user->email);
 		return GO_Base_Mail_Mailer::newGoInstance()->send($message);
 	}
