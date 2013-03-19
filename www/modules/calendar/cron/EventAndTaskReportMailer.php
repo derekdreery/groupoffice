@@ -178,15 +178,13 @@ class eventAndTaskPdf extends GO_Base_Util_Pdf {
 		if($defaultCalendar){
 			$findParams = GO_Base_Db_FindParams::newInstance()
 			->select()
-			->order(array('start_time','name'),array('ASC','ASC'))
+			//->order(array('start_time','name'),array('ASC','ASC'))
 			->criteria(GO_Base_Db_FindCriteria::newInstance()
 					->addCondition('calendar_id', $defaultCalendar->id)
-					->addCondition('start_time', $todayStart,'>=')
-					->addCondition('start_time', $todayEnd,'<')
 			);
-			$events = GO_Calendar_Model_Event::model()->find($findParams);
+			$events = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams,$todayStart,$todayEnd);
 			
-			return $events->fetchAll();
+			return $events; //->fetchAll();
 		} else {
 			return array();
 		}
@@ -226,13 +224,14 @@ class eventAndTaskPdf extends GO_Base_Util_Pdf {
 	 * 
 	 * @param GO_Calendar_Model_Event $event
 	 */
-	private function _renderEventRow(GO_Calendar_Model_Event $event){	
+	private function _renderEventRow(GO_Calendar_Model_LocalEvent $event){	
 
 		$html = '';
 		$html .= '<tcpdf method="renderLine" />';
-		$html .= '<b><font style="font-size:'.$this->_timeFontSize.'px">'.GO_Base_Util_Date_DateTime::fromUnixtime($event->start_time)->format('H:i').' - '.GO_Base_Util_Date_DateTime::fromUnixtime($event->end_time)->format('H:i').'</font> <font style="font-size:'.$this->_nameFontSize.'px">'.GO_Base_Util_String::text_to_html($event->getAttribute('name', 'html'), true).'</font></b>';
-		if(!empty($event->description))
-			$html .= 	'<br /><font style="font-size:'.$this->_descriptionFontSize.'px">'.$event->getAttribute('description', 'html').'</font>';
+		$html .= '<b><font style="font-size:'.$this->_timeFontSize.'px">'.GO_Base_Util_Date_DateTime::fromUnixtime($event->getAlternateStartTime())->format('H:i').' - '.GO_Base_Util_Date_DateTime::fromUnixtime($event->getAlternateEndTime())->format('H:i').'</font> <font style="font-size:'.$this->_nameFontSize.'px">'.GO_Base_Util_String::text_to_html($event->getName(), true).'</font></b>';
+		$realEvent = $event->getEvent();
+		if(!empty($realEvent->description))
+			$html .= 	'<br /><font style="font-size:'.$this->_descriptionFontSize.'px">'.$realEvent->getAttribute('description', 'html').'</font>';
 		
 		$this->writeHTML($html, true, false, false, false, 'L');
 	}

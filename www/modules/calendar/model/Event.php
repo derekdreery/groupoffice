@@ -745,9 +745,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 
 	/**
-	 * Find events that occur in a given time period. 
-	 * 
-	 * Recurring events are calculated and added to the array.
+	 * Find events that occur in a given time period. They will be sorted on 
+	 * start_time and name. Recurring events are calculated and added to the array.
 	 * 
 	 * @param GO_Base_Db_FindParams $findParams
 	 * @param int $periodStartTime
@@ -774,9 +773,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 	
 	/**
-	 * Find events that occur in a given time period.
+	 * Find events that occur in a given time period. 
 	 * 
-	 * Recurring events are not calculated.
+	 * Recurring events are not calculated. If you need recurring events use
+	 * findCalculatedForPeriod.
 	 * 
 	 * @param GO_Base_Db_FindParams $findParams
 	 * @param int $periodStartTime
@@ -837,7 +837,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$localEvent = new GO_Calendar_Model_LocalEvent($event, $origPeriodStartTime, $origPeriodEndTime);
 		
 		if(!$localEvent->isRepeating()){
-			$this->_calculatedEvents[$event->start_time.'-'.$event->id] = $localEvent;
+			$this->_calculatedEvents[$event->start_time.'-'.$event->name.'-'.$event->id] = $localEvent;
 		} else {
 			$rrule = new GO_Base_Util_Icalendar_Rrule();
 			$rrule->readIcalendarRruleString($localEvent->getEvent()->start_time, $localEvent->getEvent()->rrule, true);
@@ -860,7 +860,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 				if($localEvent->getAlternateStartTime()<$origPeriodEndTime && $localEvent->getAlternateEndTime()>$origPeriodStartTime){
 					if(!$event->hasException($occurenceStartTime))
-						$this->_calculatedEvents[$occurenceStartTime . '-' . $origEventAttr['id']] = $localEvent;
+						$this->_calculatedEvents[$occurenceStartTime.'-'.$origEventAttr['name'].'-'.$origEventAttr['id']] = $localEvent;
 				}
 				
 				$localEvent = new GO_Calendar_Model_LocalEvent($event, $periodStartTime, $periodEndTime);
