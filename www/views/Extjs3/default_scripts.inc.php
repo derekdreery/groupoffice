@@ -54,6 +54,9 @@ if(GO::user()) {
 	$settings['text_separator'] = GO::user()->text_separator;
 	
 }
+
+$settings['pspellSupport']=function_exists('pspell_new');
+	
 //
 //require_once(GO::config()->root_path.'classes/base/theme.class.inc.php');
 //$GLOBALS['GO_THEME'] = new GO_THEME();
