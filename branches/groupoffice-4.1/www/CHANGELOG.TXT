@@ -1,3 +1,4 @@
+- Moved pspellsupport check to GO.settings instead of GO.Email
 - Fixed category selection in Note synchronization when using Z-Push2
 - Type combo will be loaded correctly when opening ticket dialog for the first time.
 - Now recurring events are also shown in the pdf of the daily tas/event mailer.
