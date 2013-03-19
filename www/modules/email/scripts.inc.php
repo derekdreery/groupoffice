@@ -87,15 +87,6 @@ $email_show_bcc = GO::config()->get_setting('email_show_bcc', GO::user()->id);
 $GO_SCRIPTS_JS .='GO.email.showCCfield="'.$email_show_cc.'";'
 		. 'GO.email.showBCCfield="'.$email_show_bcc.'";';
 
-
-$GO_SCRIPTS_JS .= "GO.email.pspellSupport=";
-
-if(function_exists('pspell_new'))
-	$GO_SCRIPTS_JS .= 'true;';
-else
-	$GO_SCRIPTS_JS .= 'false;';
-
-
 $GO_SCRIPTS_JS .= "GO.email.disableAliases=";
 
 if(GO::config()->email_disable_aliases)
