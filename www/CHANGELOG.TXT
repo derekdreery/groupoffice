@@ -1,3 +1,5 @@
+- Now recurring events are also shown in the pdf of the daily tas/event mailer.
+- Fixed filename of pdf in the daily task/event mailer (No commas) 
 - Fixed sorting the email folder tree and folder names that only have digits
 - Drag&Drop in billing catalog was fixed
 - Double click on an item in the Select Product Dialog will submit the form (add item to order)
