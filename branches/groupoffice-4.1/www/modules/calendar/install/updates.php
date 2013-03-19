@@ -207,3 +207,6 @@ $updates['201303051512'][] ="CREATE  TABLE IF NOT EXISTS `cal_views_groups` (
   `group_id` VARCHAR(45) NOT NULL ,
   PRIMARY KEY (`view_id`, `group_id`) )
 ENGINE = InnoDB";
+
+
+$updates['201303191307'][] ="ALTER TABLE `cal_participants` ADD INDEX ( `event_id` , `user_id` ) ;";
