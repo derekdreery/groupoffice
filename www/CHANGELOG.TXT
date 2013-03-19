@@ -1,3 +1,5 @@
+- Searching for projects (to link them) will show the full project path (in case 2 subprojects have the same name)
+- Projects overview grid will have a column path
 - Z-Push2 - Added Delete functions to event/task/contact and note backend
 - Z-Push2 - Only attach attachments of old mail when forwarding it, not on reply.
 - Moved pspellsupport check to GO.settings instead of GO.Email
