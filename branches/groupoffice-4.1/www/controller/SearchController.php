@@ -215,54 +215,61 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		$query = '%'.preg_replace ('/[\s*]+/','%', $params['query']).'%'; 
 		
 		if(GO::modules()->addressbook){
-			$findParams = GO_Base_Db_FindParams::newInstance()
-							->searchQuery($query,array("CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)",'t.email','t.email2','t.email3'))
-							->select('t.*, addressbook.name AS ab_name')
-							->limit(10);
 			
-
-			$criteria = GO_Base_Db_FindCriteria::newInstance()
-							->addCondition("email", "","!=")
-							->addCondition("email2", "","!=",'t',false)
-							->addCondition("email3", "","!=",'t',false);
-
-			$findParams->getCriteria()->mergeWith($criteria);
-							
-			$stmt = GO_Addressbook_Model_Contact::model()->find($findParams);
+			$abs = GO_Addressbook_Model_Addressbook::model()->getAllReadableAddressbookIds();			
 			
+			if(count($abs)){
+				$findParams = GO_Base_Db_FindParams::newInstance()
+								->searchQuery($query,array("CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)",'t.email','t.email2','t.email3'))
+								->select('t.*, addressbook.name AS ab_name')
+								->limit(10);
 
-			while($contact = $stmt->fetch()){
-				$record['name']=$contact->name;
-				$record['contact_id']=$contact->id;
-				$record['user_id']=$contact->go_user_id;
-				if($contact->email!=""){
-					$l = new GO_Base_Mail_EmailRecipients();
-					$l->addRecipient($contact->email, $record['name']);
 
-					$record['info']=htmlspecialchars((string) $l.' ('.sprintf(GO::t('contactFromAddressbook','addressbook'), $contact->ab_name).')', ENT_COMPAT, 'UTF-8');
-					$record['full_email']=htmlspecialchars((string) $l , ENT_COMPAT, 'UTF-8');										
+				$criteria = GO_Base_Db_FindCriteria::newInstance()
+								->addCondition("email", "","!=")
+								->addCondition("email2", "","!=",'t',false)
+								->addCondition("email3", "","!=",'t',false);
 
-					$response['results'][]=$record;
-				}
+				$findParams->getCriteria()
+								->addInCondition('addressbook_id', $abs)
+								->mergeWith($criteria);
 
-				if($contact->email2!=""){
-					$l = new GO_Base_Mail_EmailRecipients();
-					$l->addRecipient($contact->email2, $record['name']);
+				$stmt = GO_Addressbook_Model_Contact::model()->find($findParams);
 
-					$record['info']=htmlspecialchars((string) $l.' ('.sprintf(GO::t('contactFromAddressbook','addressbook'), $contact->ab_name).')', ENT_COMPAT, 'UTF-8');
-					$record['full_email']=htmlspecialchars((string) $l , ENT_COMPAT, 'UTF-8');										
 
-					$response['results'][]=$record;
-				}
+				while($contact = $stmt->fetch()){
+					$record['name']=$contact->name;
+					$record['contact_id']=$contact->id;
+					$record['user_id']=$contact->go_user_id;
+					if($contact->email!=""){
+						$l = new GO_Base_Mail_EmailRecipients();
+						$l->addRecipient($contact->email, $record['name']);
 
-				if($contact->email3!=""){
-					$l = new GO_Base_Mail_EmailRecipients();
-					$l->addRecipient($contact->email3, $record['name']);
+						$record['info']=htmlspecialchars((string) $l.' ('.sprintf(GO::t('contactFromAddressbook','addressbook'), $contact->ab_name).')', ENT_COMPAT, 'UTF-8');
+						$record['full_email']=htmlspecialchars((string) $l , ENT_COMPAT, 'UTF-8');										
 
-					$record['info']=htmlspecialchars((string) $l.' ('.sprintf(GO::t('contactFromAddressbook','addressbook'), $contact->ab_name).')', ENT_COMPAT, 'UTF-8');
-					$record['full_email']=htmlspecialchars((string) $l , ENT_COMPAT, 'UTF-8');										
+						$response['results'][]=$record;
+					}
 
-					$response['results'][]=$record;
+					if($contact->email2!=""){
+						$l = new GO_Base_Mail_EmailRecipients();
+						$l->addRecipient($contact->email2, $record['name']);
+
+						$record['info']=htmlspecialchars((string) $l.' ('.sprintf(GO::t('contactFromAddressbook','addressbook'), $contact->ab_name).')', ENT_COMPAT, 'UTF-8');
+						$record['full_email']=htmlspecialchars((string) $l , ENT_COMPAT, 'UTF-8');										
+
+						$response['results'][]=$record;
+					}
+
+					if($contact->email3!=""){
+						$l = new GO_Base_Mail_EmailRecipients();
+						$l->addRecipient($contact->email3, $record['name']);
+
+						$record['info']=htmlspecialchars((string) $l.' ('.sprintf(GO::t('contactFromAddressbook','addressbook'), $contact->ab_name).')', ENT_COMPAT, 'UTF-8');
+						$record['full_email']=htmlspecialchars((string) $l , ENT_COMPAT, 'UTF-8');										
+
+						$response['results'][]=$record;
+					}
 				}
 			}
 

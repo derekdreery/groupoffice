@@ -571,44 +571,71 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$query = '%'.preg_replace ('/[\s*]+/','%', $params['query']).'%'; 
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()
-						->searchQuery($query,
-										array("CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)",'t.email','t.email2','t.email3'))
-						->joinModel(array(
+			->ignoreAcl()
+			->searchQuery($query,
+							array(
+									"CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)",
+									't.email',
+									't.email2',
+									't.email3',
+									'a.name'))					
+			->joinModel(array(
+				'model'=>'GO_Addressbook_Model_Addressbook',					
+	 			'foreignField'=>'id', //defaults to primary key of the remote model
+	 			'localField'=>'addressbook_id', //defaults to "id"
+	 			'tableAlias'=>'a', //Optional table alias
+	 			'type'=>'INNER' //defaults to INNER,
+	 			
+			))			
+			->limit(10);
+		
+		
+		if(!empty($params['joinCompany'])){
+			$findParams->joinModel(array(
 				'model'=>'GO_Addressbook_Model_Company',					
 	 			'foreignField'=>'id', //defaults to primary key of the remote model
 	 			'localField'=>'company_id', //defaults to "id"
 	 			'tableAlias'=>'c', //Optional table alias
 	 			'type'=>'LEFT' //defaults to INNER,
 	 			
-			))			
-			->select('t.*,c.name AS company_name, addressbook.name AS ab_name')
-			->limit(10);
-		
-		if(!empty($params['addressbook_id']))
-			$findParams->getCriteria ()->addCondition ('addressbook_id', $params['addressbook_id']);
-		
-		if(!empty($params['requireEmail'])){
-			$criteria = GO_Base_Db_FindCriteria::newInstance()
-							->addCondition("email", "","!=")
-							->addCondition("email2", "","!=",'t',false)
-							->addCondition("email3", "","!=",'t',false);
-
-			$findParams->getCriteria()->mergeWith($criteria);
+			));
 		}
 		
-		$stmt = GO_Addressbook_Model_Contact::model()->find($findParams);
 		
-		$user_ids=array();
-		foreach($stmt as $contact){
-			$record =$contact->getAttributes();
-			//$record['name']=$contact->name;
-			$record['cf']=$contact->id.":".$contact->name;
-			
-			$response['results'][]=$record;
-			$response['total']++;			
-			
-			if($contact->go_user_id)
-				$user_ids[]=$contact->go_user_id;
+		if(!empty($params['addressbook_id'])){		
+			$abs= array($params['addressbook_id']);
+		}else
+		{
+			$abs = GO_Addressbook_Model_Addressbook::model()->getAllReadableAddressbookIds();			
+		}
+		
+		if(!empty($abs)){
+		
+			$findParams->getCriteria ()->addInCondition('addressbook_id', $abs);
+				
+			if(!empty($params['requireEmail'])){
+				$criteria = GO_Base_Db_FindCriteria::newInstance()
+								->addCondition("email", "","!=")
+								->addCondition("email2", "","!=",'t',false)
+								->addCondition("email3", "","!=",'t',false);
+
+				$findParams->getCriteria()->mergeWith($criteria);
+			}
+
+			$stmt = GO_Addressbook_Model_Contact::model()->find($findParams);
+
+			$user_ids=array();
+			foreach($stmt as $contact){
+				$record =$contact->getAttributes();
+				//$record['name']=$contact->name;
+				$record['cf']=$contact->id.":".$contact->name;
+
+				$response['results'][]=$record;
+				$response['total']++;			
+
+				if($contact->go_user_id)
+					$user_ids[]=$contact->go_user_id;
+			}
 		}
 		
 		if(count($response['results'])<10 && empty($params['addressbook_id'])) {
