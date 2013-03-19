@@ -113,7 +113,7 @@ class GO_Base_View_Extjs3{
 		}
 
 		//$cssurl = $GLOBALS['GO_CONFIG']->host.'compress.php?file='.basename($relpath);
-		$cssurl = GO::url('core/compress',array('file'=>$cssFile->name()));
+		$cssurl = GO::url('core/compress',array('file'=>$cssFile->name(),'mtime'=>$cssFile->mtime()));
 		
 		return $cssurl;
 		
