@@ -196,12 +196,15 @@ class GO_Base_Util_Date {
 	 * @param int $days
 	 * @param int $months
 	 * @param int $years
+	 * @param int $hours
+	 * @param int $minutes
+	 * @param int $seconds
 	 * @return int
 	 */
-	public static function date_add($time,$days=0,$months=0,$years=0)
+	public static function date_add($time,$days=0,$months=0,$years=0, $hours=0, $minutes=0, $seconds=0)
 	{
 		$date=getdate($time);
-		return mktime($date['hours'],$date['minutes'], $date['seconds'],$date['mon']+$months,$date['mday']+$days,$date['year']+$years);
+		return mktime($date['hours']+$hours,$date['minutes']+$minutes, $date['seconds']+$seconds,$date['mon']+$months,$date['mday']+$days,$date['year']+$years);
 	}
 	
 	
