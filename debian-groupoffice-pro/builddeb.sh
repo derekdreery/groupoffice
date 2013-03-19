@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROMODULES="sync customfields gota caldav documenttemplates savemailas projects professional timeregistration hoursapproval tickets syncml carddav zpushadmin";
+PROMODULES="sync gota caldav documenttemplates savemailas projects professional timeregistration hoursapproval tickets syncml carddav zpushadmin";
 
 # useful: DEBCONF_DEBUG="developer"
 
