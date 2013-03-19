@@ -101,7 +101,7 @@ class GO_Core_Controller_AclUser extends GO_Base_Controller_AbstractMultiSelectM
 		if (!empty($addKeys)) {
 			// Only admins may edit the set of linked users.
 			if(!$params['currentUserHasManagePermission'])
-				throw new AccessDeniedException();
+				throw new GO_Base_Exception_AccessDenied();
 		} else {
 			return false;
 		}
@@ -113,7 +113,7 @@ class GO_Core_Controller_AclUser extends GO_Base_Controller_AbstractMultiSelectM
 		if (!empty($delKeys)) {
 			// Only admins may edit the set of linked users.
 			if(!$params['currentUserHasManagePermission'])
-					throw new AccessDeniedException();
+					throw new GO_Base_Exception_AccessDenied();
 			
 			foreach ($delKeys as $delKey) {
 //				if ($delKey==1)
