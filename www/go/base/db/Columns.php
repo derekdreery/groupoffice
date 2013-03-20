@@ -5,11 +5,28 @@ class GO_Base_Db_Columns{
 	
 	private static $_columns=array();
 	
-	public static function getColumns(GO_Base_Db_ActiveRecord $model) {
-		
-//		$className = $model->className();
+	private static function getCacheKey(GO_Base_Db_ActiveRecord $model){
 		$tableName = $model->tableName();
-		$cacheKey = 'modelColumns_'.$tableName;
+		return 'modelColumns_'.$tableName;		
+	}
+	/**
+	 * Clear the column cache for a particular model.
+	 * 
+	 * @param GO_Base_Db_ActiveRecord $model
+	 */
+	public static function clearCache(GO_Base_Db_ActiveRecord $model){
+		GO::cache()->delete(self::getCacheKey($model));
+	}
+	
+	/**
+	 * Get all columns of a model
+	 * 
+	 * @param GO_Base_Db_ActiveRecord $model
+	 * @return array
+	 */
+	public static function getColumns(GO_Base_Db_ActiveRecord $model) {
+		$tableName = $model->tableName();
+		$cacheKey = self::getCacheKey($model);
 		
 		if(self::$forceLoad){
 			unset(self::$_columns[$tableName]);
