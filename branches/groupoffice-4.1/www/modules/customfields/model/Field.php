@@ -119,8 +119,9 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 	 * GO caches the table schema for performance. We need to clear it 
 	 */
 	private function _clearColumnCache(){
-	  //deleted cached column schema. See GO_Customfields_Model_AbstractCustomFieldsRecord
-		GO::cache()->delete('customfields_'.$this->category->extends_model);
+	  //deleted cached column schema. See GO_Customfields_Model_AbstractCustomFieldsRecord			
+		GO_Base_Db_Columns::clearCache(GO::getModel(GO::getModel($this->category->extends_model)->customfieldsModel()));
+		GO::cache()->delete('customfields_'.$this->category->extends_model);	
 	}
 	
 	
