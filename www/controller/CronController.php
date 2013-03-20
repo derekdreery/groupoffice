@@ -81,6 +81,8 @@ class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 	public function actionStore($params){
 		
 		$colModel = new GO_Base_Data_ColumnModel(GO_Base_Cron_CronJob::model());
+					
+		$colModel->formatColumn('active', '$model->isRunning()?GO::t("running","cron"):$model->active');
 		
 		$store = new GO_Base_Data_DbStore('GO_Base_Cron_CronJob',$colModel , $params);
 		$store->defaultSort = 'name';
@@ -138,7 +140,18 @@ class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 		$this->renderJson($result);
 	}
 	
-	
+	private function _findNextCron(){
+		$currentTime = new GO_Base_Util_Date_DateTime();
+
+		$findParams = GO_Base_Db_FindParams::newInstance()
+			->single()
+			->criteria(GO_Base_Db_FindCriteria::newInstance()
+				->addCondition('nextrun', $currentTime->getTimestamp(),'<')
+				->addCondition('active',true)
+			);
+		
+		return GO_Base_Cron_CronJob::model()->find($findParams);
+	}
 	/**
 	 * This is the function that is called from the server's cron deamon.
 	 * The cron deamon is supposed to call this function every minute.
@@ -148,48 +161,18 @@ class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 	protected function actionRun($params){
 		
 		$this->requireCli();
-
-		$currentTime = new GO_Base_Util_Date_DateTime();
-//		$currentMinusTime = new GO_Base_Util_Date_DateTime();
-//		$currentMinusTime->sub(new DateInterval('PT1H'));
-
-		$findParams = GO_Base_Db_FindParams::newInstance()
-			->criteria(GO_Base_Db_FindCriteria::newInstance()
-				->addCondition('nextrun', $currentTime->getTimestamp(),'<')
-			//	->addCondition('nextrun', $currentMinusTime->getTimestamp(),'>')
-			);
-		
-		$cronsToHandle = GO_Base_Cron_CronJob::model()->find($findParams);
-		
-		//		
-		//		echo 'KLEINER DAN: '.$currentTime->getTimestamp() .' ('.$currentTime->format('d-m-Y H:i').')';
-		//		echo '<br />';
-		//		echo 'GROTER DAN:  '.$currentMinusTime->getTimestamp() .' ('.$currentMinusTime->format('d-m-Y H:i').')';
-		//		echo '<br />';
-		//		
-		//		$crons = GO_Base_Cron_CronJob::model()->find();
-		//		foreach($crons as $c){
-		//			echo $c->name;
-		//			echo ' | ';
-		//			echo 'NEXT RUN : '.$c->nextrun.' ('.date('d-m-Y H:i',$c->nextrun).')';
-		//			echo '<br />';
-		//		}
-		//		
-		//		
-		//		
-		
-		GO::debug('CRONJOB START');
-		
-		if($cronsToHandle->rowCount() == 0)
-			GO::debug('CRONJOB NONE FOUND');
-		
-		foreach($cronsToHandle as $cron){
-			if(!$cron->active){
-				GO::debug('CRONJOB ('.$cron->name.') IS NOT ACTIVATED');
-			} else {
-				$cron->run();
-			}
+		$jobAvailable = false;
+		GO::debug('CRONJOB START (PID:'.getmypid().')');
+		while($cronToHandle = $this->_findNextCron()){
+			$jobAvailable = true;
+			GO::debug('CRONJOB FOUND');
+			$cronToHandle->run();
 		}
+		
+		if(!$jobAvailable)
+			GO::debug('NO CRONJOB FOUND');
+		
+		GO::debug('CRONJOB STOP (PID:'.getmypid().')');
 	}
 
 	/**
