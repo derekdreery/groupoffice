@@ -301,3 +301,6 @@ ADD `database_usage` BIGINT NOT NULL DEFAULT '0',
 ADD `mailbox_usage` BIGINT NOT NULL DEFAULT '0',
 ADD `quota` BIGINT NOT NULL DEFAULT '0',
 ADD `total_logins` BIGINT NOT NULL DEFAULT '0'";
+
+
+$updates["201303201600"][]="script:1_install_cron.php";
