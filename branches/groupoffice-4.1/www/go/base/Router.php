@@ -94,7 +94,7 @@ class GO_Base_Router{
 		$this->_r=isset($params['r']) ? $params['r'] : "";
 					
 		if(GO::config()->debug || GO::config()->debug_log){
-			$log = '['.date('Y-m-d G:i').'] r=';
+			$log = 'Controller route r=';
 			if(isset($params['r']))
 				$log .= $params['r'];
 			else 

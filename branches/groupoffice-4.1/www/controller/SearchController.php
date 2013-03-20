@@ -40,9 +40,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 	}
 	
 	protected function getStoreParams($params) {
-		$storeParams = GO_Base_Db_FindParams::newInstance()
-						//->select('t.model_id,t.model_type_id,model_name,mtime,name')
-						->debugSql();
+		$storeParams = GO_Base_Db_FindParams::newInstance();
 		
 		if(isset($params['model_names'])){
 			$model_names = json_decode($params['model_names'], true);

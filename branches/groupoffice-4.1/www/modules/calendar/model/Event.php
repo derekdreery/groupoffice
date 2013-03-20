@@ -972,12 +972,25 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		if($exceptionDate){
 			//must be an exception and start on the must start on the exceptionTime
-			$exceptionJoinCriteria = GO_Base_Db_FindCriteria::newInstance()
-							->addCondition('id', 'e.exception_event_id','=','t',true,true);
+//			$exceptionJoinCriteria = GO_Base_Db_FindCriteria::newInstance()
+//							->addCondition('id', 'e.exception_event_id','=','t',true,true);
+//			
+//			$params->join(GO_Calendar_Model_Exception::model()->tableName(),$exceptionJoinCriteria,'e');
+//			
+//			$whereCriteria->addCondition('time', $exceptionDate,'=','e');			
 			
-			$params->join(GO_Calendar_Model_Exception::model()->tableName(),$exceptionJoinCriteria,'e');
 			
-			$whereCriteria->addCondition('time', $exceptionDate,'=','e');			
+			$whereCriteria->addCondition('exception_for_event_id', 0,'>');
+			
+			$dayStart = GO_Base_Util_Date::clear_time($exceptionDate);
+			$dayEnd = GO_Base_Util_Date::date_add($dayStart,1);
+			
+			$dateCriteria = GO_Base_Db_FindCriteria::newInstance()
+							->addCondition('start_time', $dayStart, '>=')
+							->addCondition('start_time', $dayEnd, '<','t',false);
+			
+			$whereCriteria->mergeWith($dateCriteria);
+			
 		}else
 		{
 			$whereCriteria->addCondition('exception_for_event_id', 0);
@@ -1618,7 +1631,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		if($isOrganizer)
 			$attributes['status']= GO_Calendar_Model_Participant::STATUS_ACCEPTED;
-		
+	
 		$p= GO_Calendar_Model_Participant::model()
 						->findSingleByAttributes(array('event_id'=>$event->id, 'email'=>$attributes['email']));
 		if(!$p){
@@ -1637,7 +1650,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 					$p->user_id=$user->id;
 			}		
 		}		
-		
+
 		$p->setAttributes($attributes);
 		$p->save();
 		

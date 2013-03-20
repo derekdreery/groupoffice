@@ -18,6 +18,7 @@
 - Added missing settings tab tables
 - Tickets style matches e-mail now and tickets that were not answered within 24 hours are marked red.
 - Custom fields are Open-Source now
+- Addressbook search speed optimizations
 
 15-03-2013 4.1.46
 - Encode attachment string parts in z-push2 synced emails
