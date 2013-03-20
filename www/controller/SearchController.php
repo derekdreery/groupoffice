@@ -173,7 +173,13 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 //			}
 //		}
 		
+		//we'll do a full text search in getStoreParams			
+		$params['match']=$params["query"];
+		unset($params["query"]);
+		
 		$storeParams = $store->getDefaultParams($params)->select("t.*,l.description AS link_description");
+		
+		$storeParams->mergeWith($this->getStoreParams($params));
 		
 		//if(!empty($params['folder_id']))
 		$storeParams->getCriteria ()->addCondition ('folder_id', $params['folder_id'],'=','l');
