@@ -38,6 +38,10 @@ if (!$configFile) {
 			
 			if(empty(GO::config()->title))
 				GO::config()->title='Group-Office';
+			
+			//set this to a default otherwise GO will keep autodetecting values
+			if(empty(GO::config()->db_user))
+				GO::config()->db_user='groupoffice';
 
 			$f = new GO_Base_Fs_Folder($_POST['file_storage_path']);
 			if (!$f->exists())
