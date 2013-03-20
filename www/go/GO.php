@@ -497,6 +497,11 @@ class GO{
 		if(!empty(GO::session()->values['debug']))
 			GO::config()->debug=true;
 		
+		if(GO::config()->debug || GO::config()->debug_log){
+			$log = '['.date('Y-m-d G:i').'] INIT';
+			GO::debug($log);
+		}
+		
 		if(GO::config()->debug)
 			ini_set("display_errors","On");
 		else
@@ -511,11 +516,6 @@ class GO{
 		}
 
 		if(!defined('GO_LOADED')){ //check if old Group-Office.php was loaded
-
-			if(GO::config()->debug || GO::config()->debug_log){
-				$log = '['.date('Y-m-d G:i').'] INIT';
-				GO::debug($log);
-			}
 			
 			self::_undoMagicQuotes();
 

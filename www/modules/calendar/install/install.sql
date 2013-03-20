@@ -163,12 +163,13 @@ CREATE TABLE IF NOT EXISTS `cal_participants` (
   `name` varchar(100) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `user_id` int(11) NOT NULL DEFAULT '0',
-  `status` VARCHAR( 50 ) NOT NULL DEFAULT 'NEEDS-ACTION',
+  `status` varchar(50) NOT NULL DEFAULT 'NEEDS-ACTION',
   `last_modified` varchar(20) NOT NULL DEFAULT '',
   `is_organizer` tinyint(1) NOT NULL DEFAULT '0',
   `role` varchar(100) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`),
+  KEY `event_id` (`event_id`,`user_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
