@@ -331,3 +331,5 @@ $updates["201303181730"][]="CREATE TABLE IF NOT EXISTS `go_cf_setting_tabs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 $updates["201303201500"][]="ALTER TABLE  `go_cron` ADD  `completedat` INT NOT NULL DEFAULT  '0'";
+
+$updates["201303201600"][]="script:14_insert_disk_usage_cron.php";
