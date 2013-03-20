@@ -71,7 +71,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 
 		//Insert default cronjob record for email reminders
 		$cron = new GO_Base_Cron_CronJob();
-
+		
 		$cron->name = 'Email Reminders';
 		$cron->active = true;
 		$cron->runonce = false;
@@ -81,6 +81,20 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 		$cron->months = '*';
 		$cron->weekdays = '*';
 		$cron->job = 'GO_Base_Cron_EmailReminders';
+		
+		$cron->save();
+		
+		$cron = new GO_Base_Cron_CronJob();
+		
+		$cron->name = 'Calculate disk usage';
+		$cron->active = true;
+		$cron->runonce = false;
+		$cron->minutes = '0';
+		$cron->hours = '0';
+		$cron->monthdays = '*';
+		$cron->months = '*';
+		$cron->weekdays = '*';
+		$cron->job = 'GO_Base_Cron_CalculateDiskUsage';		
 
 		$cron->save();
 		

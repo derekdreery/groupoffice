@@ -1,14 +1,4 @@
 <?php
-
-
- /*
-  * Run a cron job every 5 minutes. Add this to /etc/cron.d/groupoffice :
-  *
-  STAR/5 * * * * root php /usr/share/groupoffice/groupofficecli.php -c=/path/to/config.php -r=core/cron
-  *
-  * Replace STAR with a *.
-  */
-
 class GO_Base_Cron_EmailReminders extends GO_Base_Cron_AbstractCron {
 	
 	/**
