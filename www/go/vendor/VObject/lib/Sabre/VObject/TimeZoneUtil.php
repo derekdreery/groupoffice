@@ -409,7 +409,7 @@ class TimeZoneUtil {
 
         // First we will just see if the tzid is a support timezone identifier.
         try {
-            return new \DateTimeZone($tzid);
+            return @ new \DateTimeZone($tzid);
         } catch (\Exception $e) {
         }
 
