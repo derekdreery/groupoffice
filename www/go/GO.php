@@ -567,8 +567,8 @@ class GO{
 		
 		$error = error_get_last();		
 		if($error){			
-			//z-push uses a lot of ugly @fputs etc to suppresss errors. We don't want to log those.
-			if(!isset($GLOBALS['zpush_version']))
+			//Log only fatal errors because other errors should have been logged by the normal error handler
+			if($error['type']==E_ERROR || $error['type']==E_CORE_ERROR || $error['type']==E_COMPILE_ERROR || $error['type']==E_RECOVERABLE_ERROR)
 				self::errorHandler($error['type'], $error['message'], $error['file'], $error['line']);
 		}
 		
