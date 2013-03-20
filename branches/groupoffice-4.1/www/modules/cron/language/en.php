@@ -45,6 +45,9 @@ $l['period'] = 'Period';
 $l['runUpcoming'] = 'Upcoming Cron-Jobs';
 $l['lastrun'] = 'Last run';
 $l['nextrun'] = 'Next run';
+$l['completedat'] = 'Completed at';
+
+$l['running'] = 'Running';
 
 $l['parameters'] = 'Params';
 $l['usersAndGroups'] = 'Users and Groups';
