@@ -2673,8 +2673,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if($this->customfieldsRecord){
 			$keywords .= ','.$this->customfieldsRecord->getSearchCacheKeywords();
 		}
-		
-		return GO_Base_Util_String::substr($keywords,0,255);
+		return $keywords;
 	}
 	
 	protected function beforeSave(){
