@@ -30,6 +30,7 @@
  * @property string $params
  * @property int $nextrun // timestamp of the next run
  * @property int $lastrun // timestamp of the latest run
+ * @property int $completedat // timestamp of the latest run
  * 
  */
 class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
@@ -48,10 +49,20 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 		return parent::model($className);
 	}
 	
+	public function isRunning(){
+		if($this->lastrun > 0 && $this->completedat == 0)
+			return true;
+//		if($this->completedat == 0)
+//			return false;
+		else
+			return $this->lastrun > $this->completedat;
+	}
+	
 	protected function init() {
 		$this->columns['name']['unique']=true;
 		$this->columns['nextrun']['gotype']='unixtimestamp';
 		$this->columns['lastrun']['gotype']='unixtimestamp';
+		$this->columns['completedat']['gotype']='unixtimestamp';
 		return parent::init();
 	}
 	
@@ -234,29 +245,12 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 	 * @return int The next run time (timestamp)
 	 */
 	private function _calculateNextRun(){
-
 		$completeExpression = new GO_Base_Util_Cron($this->_buildExpression());
-//		echo '<hr />';
-//		echo 'Cron name: '.$this->name;
-//		echo '<br />'.'Cron class: '.$this->job;
-//		echo '<br />'.'Expression: '.$completeExpression->getExpression();
-//		echo '<br />'.'Next run is: '.$completeExpression->getNextRunDate()->format('d-m-Y H:i');
-//		echo '<br />'.'Active: ';
-//		if($this->active)
-//			echo 'Yes';
-//		else
-//			echo 'No';
-//		
-//		echo '<hr />';
-//		echo '<br />';
-//		echo '<br />';
-//			$nowPlusOneMinute = new GO_Base_Util_Date_DateTime();
-//			$nowPlusOneMinute->add(DateInterval::createFromDateString('PT1M'));
-		
 		return $completeExpression->getNextRunDate()->getTimestamp();
 	}
 	
 	public function run(){
+		GO::session()->runAsRoot();
 		GO::debug('CRONJOB ('.$this->name.') START : '.date('d-m-Y H:i:s'));
 		
 		if($this->_prepareRun()){
@@ -281,8 +275,8 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 				$cronFile->run($this);
 			}
 			
-			GO::debug('CRONJOB ('.$this->name.') FINISHED : '.date('d-m-Y H:i:s'));
-			
+			$this->_finishRun();
+	
 			return true;
 		} else {
 			GO::debug('CRONJOB ('.$this->name.') FAILED TO RUN : '.date('d-m-Y H:i:s'));
@@ -384,11 +378,25 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 	 * @return boolean
 	 */
 	private function _prepareRun() {
-		if($this->runonce){
-			GO::debug('CRONJOB ('.$this->name.') HAS RUNONCE OPTION, DISABLING NOW');
-			$this->active = false;
-		}
+		
+		$this->active = false;
+		
 		$this->lastrun = time();
 		return $this->save();
 	}
+	
+	private function _finishRun(){
+		if(!$this->runonce){
+			$this->active = true;
+			GO::debug('CRONJOB ('.$this->name.') IS REACTIVATED NOW');
+		} else {
+			GO::debug('CRONJOB ('.$this->name.') HAS RUNONCE OPTION, DISABLING NOW');
+		}
+		
+		$this->completedat = time();
+		$this->save();
+			
+		GO::debug('CRONJOB ('.$this->name.') FINISHED : '.date('d-m-Y H:i:s'));
+	}
+	
 }
