@@ -1,3 +1,4 @@
+20-03-2013 4.1.47
 - Changed cron so it can run multiple cron-jobs next to each other (Starting new job every minute)
 - Searching for projects (to link them) will show the full project path (in case 2 subprojects have the same name)
 - Projects overview grid will have a column path
@@ -6,7 +7,7 @@
 - Moved pspellsupport check to GO.settings instead of GO.Email
 - Fixed category selection in Note synchronization when using Z-Push2
 - Type combo will be loaded correctly when opening ticket dialog for the first time.
-- Now recurring events are also shown in the pdf of the daily tas/event mailer.
+- Now recurring events are also shown in the pdf of the daily task/event mailer.
 - Fixed filename of pdf in the daily task/event mailer (No commas) 
 - Fixed sorting the email folder tree and folder names that only have digits
 - Drag&Drop in billing catalog was fixed
@@ -20,6 +21,9 @@
 - Tickets style matches e-mail now and tickets that were not answered within 24 hours are marked red.
 - Custom fields are Open-Source now
 - Addressbook search speed optimizations
+- Installation always used euro for currency
+- Fixed SQL error after deleting custom field
+- Links were not searched correctly in the links dialog
 
 15-03-2013 4.1.46
 - Encode attachment string parts in z-push2 synced emails
