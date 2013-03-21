@@ -604,3 +604,5 @@ $l['passwordRequireNum']='Det måste innehålla en siffra';
 $l['passwordRequireSc']='Det måste innehålla ett specialtecken';
 $l['passwordUnique']='Det måste innehålla %s unika tecken';
 $l['maxAttachmentsSizeExceeded']="Den totala storleken på dina bifogade filer ({total}) överskrider tillåtet maximum ({max}).";
+
+$l['extjs_lang']='sv_SE';
