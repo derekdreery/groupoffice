@@ -674,18 +674,24 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				if(!GO.util.empty(eventData.status_color))
 					text += '<span class="x-calGrid-event-status" style="background-color:#'+eventData.status_color+';"></span>';				
 
-				if(daySpan==1 || !GO.util.empty(eventData.all_day_event)){
-					if(eventData.startDate.format('G')!='0')
+				if(daySpan==1){
+					if(GO.util.empty(eventData.all_day_event))
 					{
 						text += eventData.startDate.format(GO.settings.time_format)+'&nbsp;';
 					}
 					text += eventData['name'];
 				}else
 				{
-					if(i==0 && eventData.startDate.format('G')!='0'){
-						text += '<div class="cal-arrow-left"></div>'+eventData.startDate.format(GO.settings.time_format)+'&nbsp;'+eventData['name'];
-					}else if(i==daySpan-1 && eventData.endDate.format('G')!='0' ){
-						text += eventData['name']+'&nbsp;'+eventData.endDate.format(GO.settings.time_format)+'<div class="cal-arrow-right"></div>';
+					if(i==0){
+						text += '<div class="cal-arrow-left"></div>'
+						if(GO.util.empty(eventData.all_day_event))
+							text += eventData.startDate.format(GO.settings.time_format)+'&nbsp;';
+						text += eventData['name'];
+					}else if(i==daySpan-1){
+						text += eventData['name']+'&nbsp;';
+						if(GO.util.empty(eventData.all_day_event))
+							text += eventData.endDate.format(GO.settings.time_format);
+						text += '<div class="cal-arrow-right"></div>';
 					}else
 					{
 						text += '<div class="cal-arrows"></div>&nbsp;'+eventData['name'];
