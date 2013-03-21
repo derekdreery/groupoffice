@@ -43,10 +43,15 @@ class GO_Sites_Widgets_Uploader extends GO_Sites_Widgets_Component {
 		GOS::site()->scripts->registerCssFile($assetUrl.'/Uploader/uploader_style.css'); 
 		GOS::site()->scripts->registerScript('UploadComponent', $this->createjs(), GO_Sites_Components_Scripts::POS_READY);
 		
+		$langFile = 'Uploader/plupload/js/i18n/'.GO::language()->getLanguage().'.js';
+		if(file_exists(GO::config()->root_path.'modules/sites/widgets/'.$langFile)){
+			GOS::site()->scripts->registerScriptFile($assetUrl.'/'.$langFile); 
+		}
+		
 		echo '<div id="'.$this->_id.'">Loading upload widget...</div>';
 	}
 	
-	private function createjs(){
+	private function createjs(){	
 		$script = <<<EOD
 
 $(function() {
@@ -60,7 +65,6 @@ $(function() {
 		// unique_names : $this->unique_names,
 		multiple_queues : true,
 		dragdrop : false,
-
 		// Flash settings
 		flash_swf_url : '$this->_swfUrl',
 		// Silverlight settings
