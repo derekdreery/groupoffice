@@ -1,5 +1,6 @@
 - Comments in the EastPanel will not disable the scrollbar and adding from the EastPanel works in all panels
 - Time registration: show all weeks of current year & automatically select current week.
+- Link fixed to unsubscribe from address lists.
 
 20-03-2013 4.1.47
 - Changed cron so it can run multiple cron-jobs next to each other (Starting new job every minute)
