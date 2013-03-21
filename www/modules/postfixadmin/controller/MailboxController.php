@@ -33,13 +33,17 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 		$mailbox = GO_Postfixadmin_Model_Mailbox::model()->findSingleByAttributes(array(
 				"username"=>$params["username"]				
 		));
+
+		$response['success']=true;
 		
 		if($mailbox){
 			$mailbox->password=$params["password"];
-			$mailbox->save();
+			$response['success'] = $mailbox->save()===true;
+			if (!$response['success']) {
+				$validateErrors = $mailbox->getValidationErrors();
+				$response['feedback'] = implode('<br />',$validateErrors);
+			}
 		}
-		
-		$response['success']=true;
 		
 		return $response;
 	}
