@@ -1,3 +1,4 @@
+- When GroupOffice renders the Timer button it checks if it was already running and adjusts the button accordingly
 - Comments in the EastPanel will not disable the scrollbar and adding from the EastPanel works in all panels
 - Time registration: show all weeks of current year & automatically select current week.
 - Link fixed to unsubscribe from address lists.
