@@ -158,8 +158,8 @@ class GO_Sites_Widgets_Form extends GO_Sites_Widgets_Component {
 		if($error!='')
 		{
 			if(!isset($htmlAttributes['class']))
-				$htmlAttributes['class']=$this->errorMessageCss;
-			return self::tag('div',$htmlAttributes,$error);
+				$htmlAttributes['class']=$this->errorCss;
+			return $this->_tag('div',$htmlAttributes,$error);
 		}
 		else
 			return '';
