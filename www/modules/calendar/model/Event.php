@@ -1131,12 +1131,14 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @param string $method REQUEST, REPLY or CANCEL
 	 * @param GO_Calendar_Model_Participant $updateByParticipant The participant that is generating this ICS for a response.
 	 * @param int $recurrenceTime Export for a specific recurrence time for the recurrence-id. 
+	 * @param boolean $includeExdatesForMovedEvents Funambol need EXDATE lines even for appointments that have been moved. CalDAV doesn't need those lines.
+	 * 
 	 * If this event is an occurence and has a exception_for_event_id it will automatically determine this value. 
 	 * This option is only useful for cancelling a single occurence. Because in that case there is no event model for the occurrence. There's just an exception.
 	 * 
 	 * @return Sabre\VObject\Component 
 	 */
-	public function toVObject($method='REQUEST', $updateByParticipant=false, $recurrenceTime=false){
+	public function toVObject($method='REQUEST', $updateByParticipant=false, $recurrenceTime=false,$includeExdatesForMovedEvents=false){
 		$e=new Sabre\VObject\Component('vevent');
 		
 		if(empty($this->uuid)){
@@ -1226,8 +1228,14 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 			$rRule = $this->getRecurrencePattern();
 			$rRule->shiftDays(false);
-			$e->rrule=str_replace('RRULE:','',$rRule->createRrule());					
-			$stmt = $this->exceptions(GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('exception_event_id', 0)));
+			$e->rrule=str_replace('RRULE:','',$rRule->createRrule());			
+			
+			$findParams = GO_Base_Db_FindParams::newInstance();
+			
+			if(!$includeExdatesForMovedEvents)
+				$findParams->getCriteria()->addCondition('exception_event_id', 0);
+			
+			$stmt = $this->exceptions($findParams);
 			while($exception = $stmt->fetch()){
 				$exdate = new Sabre\VObject\Property\DateTime('exdate',Sabre\VObject\Property\DateTime::DATE);
 				$exdate->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($exception->time));		
@@ -1317,7 +1325,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 	public function toVCS(){
 		$c = new GO_Base_VObject_VCalendar();		
-		$vobject = $this->toVObject('');
+		$vobject = $this->toVObject('',false,false,true);
 		$c->add($vobject);		
 		
 		GO_Base_VObject_Reader::convertICalendarToVCalendar($c);
