@@ -575,11 +575,11 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			->select('t.*,c.name AS company_name, a.name AS ab_name')
 			->searchQuery($query,
 							array(
-									"CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)",
+									"CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name, ' ',a.name)",
 									't.email',
 									't.email2',
-									't.email3',
-									'a.name'))					
+									't.email3'
+									))					
 			->joinModel(array(
 				'model'=>'GO_Addressbook_Model_Addressbook',					
 	 			'foreignField'=>'id', //defaults to primary key of the remote model
