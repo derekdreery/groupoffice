@@ -9,7 +9,7 @@
 				<div class="row">
 					<?php $uploader->render(); ?>
 				</div>
-			<?php echo $form->submitButton('Send'); ?>
+			<?php echo $form->submitButton(GO::t('sendMessage','tickets')); ?>
 			<?php echo GO::user()?'<a href="'.$this->createUrl('/tickets/site/ticketlist').'" class="button-to-ticketlist"><input type="button" value="To ticketlist"></button></a>':''; ?>
 			
 			<?php echo !$ticket->isNew?$form->submitButton('Close Ticket',array('name'=>'CloseTicket', 'class'=>'button-close-ticket')):''; ?>
