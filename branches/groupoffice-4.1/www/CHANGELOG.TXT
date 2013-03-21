@@ -1,3 +1,5 @@
+- Comments in the EastPanel will not disable the scrollbar and adding from the EastPanel works in all panels
+
 20-03-2013 4.1.47
 - Changed cron so it can run multiple cron-jobs next to each other (Starting new job every minute)
 - Searching for projects (to link them) will show the full project path (in case 2 subprojects have the same name)
