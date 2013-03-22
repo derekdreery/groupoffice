@@ -325,13 +325,15 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		if(this.beforeSubmit(params)===false)
 			return false;
 		
+		
+		this.getFooterToolbar().setDisabled(true);
 		this.formPanel.form.submit(
 		{
 			url:GO.url(this.formControllerUrl+'/'+this.submitAction),
 			params: params,
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){		
-				
+				this.getFooterToolbar().setDisabled(false);
 				if(action.result[this.remoteModelIdName])
 					this.setRemoteModelId(action.result[this.remoteModelIdName]);
 				
@@ -369,6 +371,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 				this.updateTitle();
 			},		
 			failure: function(form, action) {
+				this.getFooterToolbar().setDisabled(false);
 				if(action.failureType == 'client')
 				{					
 					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strErrorsInForm']);			
