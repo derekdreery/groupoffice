@@ -6,6 +6,7 @@
 - Prevent double submits in dialogs by disabling buttons after click
 - Refresh ticket status counters when changing a ticket status
 - Wrong time format in trial creation dialog of servermanager
+- Search on a 3 letter word didn't find results in some cases.
 
 20-03-2013 4.1.47
 - Changed cron so it can run multiple cron-jobs next to each other (Starting new job every minute)
