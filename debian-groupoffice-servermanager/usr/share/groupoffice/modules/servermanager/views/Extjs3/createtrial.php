@@ -58,7 +58,7 @@ GO_Base_Html_Input::render(array(
 
 $timeFormats = array();
 foreach (GO::config()->time_formats as $format)	
-	$timeFormats[$format] = trim(str_replace(array('G','g','a','i',':'),array('24h ','12h ','',''), $format));
+	$timeFormats[$format] = trim(str_replace(array('H','h','a','i',':'),array('24h ','12h ','',''), $format));
 
 GO_Base_Html_Select::render(array(
 		"required" => true,
