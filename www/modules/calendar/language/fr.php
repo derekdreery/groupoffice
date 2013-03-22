@@ -218,8 +218,12 @@ $l['createPermission']="Créer une autorisation";
 $l['show_holidays']="Montrer les vacances";
 $l['participant']='Participant(s)';
 $l['clickForAttendance']='Cliquez ici pour définir votre statut de présence';
-
 $l['viewDay']='Journée';
-$l['viewMorning']='Matin';
+$l['viewMorning']='Matinée';
 $l['viewAfternoon']='Après midi';
-$l['viewEvening']='Soir';
+$l['viewEvening']='Soirée';
+$l['cronEventAndTaskReportMailer']='Aujourd\'hui, les événements et les tâches à envoyer';
+$l['cronEventAndTaskReportMailerDescription']='Envoyer quotidiennement par courriel les événements et les tâches à chaque utilisateur automatiquement';
+$l['cronEventAndTaskReportMailerPdfSubtitle']='Les évènements et tâches d\'aujourd\'hui';
+$l['cronEventAndTaskReportMailerSubject']='Les évènements et tâches d\'aujourd\'hui';
+$l['cronEventAndTaskReportMailerContent']='Veuillez trouver en attachement de ce courriel le PDF contenant la liste des évènements et tâches.';
