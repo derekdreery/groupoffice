@@ -76,7 +76,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		$subCriteria = GO_Base_Db_FindCriteria::newInstance();
 		
 		if(strlen($params['match'])<4){
-			$subCriteria->addCondition('name', '%'.trim($params['match'],' *%').'%', 'LIKE','t',false);
+			$subCriteria->addCondition('keywords', '%'.trim($params['match'],' *%').'%', 'LIKE','t',false);
 		}else
 		{
 			$str='+'.preg_replace('/[\s]+/',' +', $params['match']);	
