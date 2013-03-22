@@ -1688,7 +1688,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 		}elseif($r[$name]['type']==self::HAS_ONE){			
 			//We can't put this in the related cache because there's no reliable way to check if the situation has changed.
-			$params = array_merge($r[$name]['findParams'], array('relation'=>$name));
+//			$params = array_merge($r[$name]['findParams'], array('relation'=>$name));
+			
+			$params =$r[$name]['findParams']->relation($name);
 			//In a has one to relation ship the primary key of this model is stored in the "field" attribute of the related model.					
 			return empty($this->pk) ? false : GO::getModel($model)->findSingleByAttribute($r[$name]['field'], $this->pk, $params);			
 		}elseif($r[$name]['type']==self::HAS_MANY)
