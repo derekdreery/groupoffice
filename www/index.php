@@ -27,6 +27,10 @@ if(GO::config()->force_ssl && isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']!="on
 if(!GO::user())
 	GO::session()->loginWithCookies();	
 
+//try with HTTP auth
+if(!GO::user() && !empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])){
+	GO::session()->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
+}
 
 
 //check if GO is installed
