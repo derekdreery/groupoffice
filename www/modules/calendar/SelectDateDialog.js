@@ -75,6 +75,9 @@ Ext.extend(GO.calendar.SelectDateDialog, Ext.Window, {
 	},
 	beforeSubmit : function()
 	{
+		delete this.formPanel.form.baseParams.exception_for_event_id ;
+		delete this.formPanel.form.baseParams.exception_date ;
+		
 		// use daylight saving times		
 		this.offset = this.datePicker.getValue().calculateDaysBetweenDates(new Date(this.event.startDate.clearTime()));
 				
@@ -99,8 +102,7 @@ Ext.extend(GO.calendar.SelectDateDialog, Ext.Window, {
 			delete this.formPanel.form.baseParams.duplicate;			
 			
 			if(this.event.repeats && !this.repeats)
-			{//				this.formPanel.form.baseParams.repeats = true;
-//				this.formPanel.form.baseParams.createException = true;
+			{
 				this.formPanel.form.baseParams.exception_for_event_id = this.event.event_id;
 				this.formPanel.form.baseParams.exception_date = this.event.startDate.format("U");
 			}
