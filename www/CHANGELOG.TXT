@@ -1,4 +1,8 @@
-22-03-2013 4.1.48
+24-03-2013 4.1.49
+- Bug in ActiveRecord
+- Move appointment with right click could create a corrupted unremovable appointment
+
+22-03-2013 4.1.48 (Not released)
 - When GroupOffice renders the Timer button it checks if it was already running and adjusts the button accordingly
 - Comments in the EastPanel will not disable the scrollbar and adding from the EastPanel works in all panels
 - Time registration: show all weeks of current year & automatically select current week.
