@@ -1,3 +1,6 @@
+24-03-2013 4.1.50
+- Ticket module kept hanging in the weekend.
+
 24-03-2013 4.1.49
 - Bug in ActiveRecord
 - Move appointment with right click could create a corrupted unremovable appointment
