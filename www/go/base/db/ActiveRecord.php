@@ -2510,6 +2510,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$this->$name = $this->getOldAttributeValue($name);
 		unset($this->_modifiedAttributes[$name]);
 	}
+	
+	/**
+	 * Reset attributes to it's original value and clear the modified attributes.
+	 */
+	public function resetAttributes(){
+		foreach($this->_modifiedAttributes as $name => $oldValue){
+			$this->$name = $oldValue;
+			unset($this->_modifiedAttributes[$name]);
+		}
+	}
 
 	/**
 	 * Get the old value for a modified attribute.
