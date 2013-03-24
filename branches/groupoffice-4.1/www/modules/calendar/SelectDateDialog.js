@@ -101,7 +101,6 @@ Ext.extend(GO.calendar.SelectDateDialog, Ext.Window, {
 			if(this.event.repeats && !this.repeats)
 			{//				this.formPanel.form.baseParams.repeats = true;
 //				this.formPanel.form.baseParams.createException = true;
-
 				this.formPanel.form.baseParams.exception_for_event_id = this.event.event_id;
 				this.formPanel.form.baseParams.exception_date = this.event.startDate.format("U");
 			}
