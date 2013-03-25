@@ -1,3 +1,24 @@
+--
+-- Tabelstructuur voor tabel `cf_si_sites`
+--
+
+DROP TABLE IF EXISTS `cf_si_sites`;
+CREATE TABLE IF NOT EXISTS `cf_si_sites` (
+  `model_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`model_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Tabelstructuur voor tabel `cf_si_content`
+--
+
+DROP TABLE IF EXISTS `cf_si_content`;
+CREATE TABLE IF NOT EXISTS `cf_si_content` (
+  `model_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`model_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
 CREATE  TABLE IF NOT EXISTS `si_sites` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(100) NOT NULL ,
