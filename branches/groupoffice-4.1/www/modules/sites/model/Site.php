@@ -37,6 +37,13 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 		return parent::model($className);
 	}
 	
+	/*
+	 * Attach the customfield model to this model.
+	 */
+	public function customfieldsModel() {
+		return 'GO_Sites_Customfields_Model_Site';
+	}
+	
 	protected function init() {
 		parent::init();
 		

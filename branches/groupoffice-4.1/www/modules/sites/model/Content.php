@@ -38,7 +38,12 @@ class GO_Sites_Model_Content extends GO_Base_Db_ActiveRecord {
 	const STATUS_OFFLINE = 3;
 	const STATUS_DRAFT = 2;
 	
-	
+	/*
+	 * Attach the customfield model to this model.
+	 */
+	public function customfieldsModel() {
+		return 'GO_Sites_Customfields_Model_Content';
+	}
 	
 	public function defaultAttributes()
 	{
