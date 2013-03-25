@@ -1959,6 +1959,21 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		return $att;
 	}
 	
+	/**
+	 * Get a selection of attributes
+	 * 
+	 * @param array $attributeNames
+	 * @param string $outputType
+	 * @return array
+	 */
+	public function getAttributeSelection($attributeNames, $outputType='formatted'){
+		$att=array();
+		foreach($attributeNames as $attName){
+			$att[$attName]=$this->getAttribute($attName, $outputType);
+		}
+		return $att;
+	}
+	
 	private $_magicAttributeNames;
 	
 	private function _getMagicAttributeNames(){
