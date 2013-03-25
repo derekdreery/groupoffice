@@ -1,3 +1,5 @@
+- Ticket dialog will clear the attachments queue after show or load
+
 24-03-2013 4.1.50
 - Ticket module kept hanging in the weekend.
 
