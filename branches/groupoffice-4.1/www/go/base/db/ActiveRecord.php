@@ -4004,9 +4004,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$model->copyLinks($this);
 		
 		//move files.
-		$this->_moveFiles($model);
-		
-		$this->_moveComments($model);
+		if($deleteModel){
+			$this->_moveFiles($model);
+
+			$this->_moveComments($model);
+		}else
+		{
+			$this->_copyFiles($model);
+
+			$this->_copyComments($model);
+		}
 		
 		$this->afterMergeWith($model);
 		
@@ -4014,6 +4021,42 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$model->delete();				
 	}
 	
+	private function _copyComments(GO_Base_Db_ActiveRecord $sourceModel) {
+		if (GO::modules()->isInstalled('comments') && $this->hasLinks()) {
+			$findParams = GO_Base_Db_FindParams::newInstance()
+							->ignoreAcl()
+							->order('id', 'DESC')
+							->select()
+							->criteria(
+							GO_Base_Db_FindCriteria::newInstance()
+							->addCondition('model_id', $sourceModel->id)
+							->addCondition('model_type_id', $sourceModel->modelTypeId())
+			);
+			$stmt = GO_Comments_Model_Comment::model()->find($findParams);
+			while ($comment = $stmt->fetch()) {
+				$comment->duplicate(
+								array(
+										'model_type_id' => $this->modelTypeId(),
+										'model_id' => $this->id
+								)
+				);
+			}
+		}
+	}
+
+	private function _copyFiles(GO_Base_Db_ActiveRecord $sourceModel) {
+		if (!$this->hasFiles()) {
+			return false;
+		}
+
+		$sourceFolder = GO_Files_Model_Folder::model()->findByPk($sourceModel->files_folder_id);
+		if (!$sourceFolder) {
+			return false;
+		}
+
+		$this->filesFolder->copyContentsFrom($sourceFolder);
+	}
+
 	private function _moveComments(GO_Base_Db_ActiveRecord $sourceModel){
 		if(GO::modules()->isInstalled('comments') && $this->hasLinks()){
 			$findParams = GO_Base_Db_FindParams::newInstance()
