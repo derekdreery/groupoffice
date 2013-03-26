@@ -2600,6 +2600,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				
 			$defaultUserId = isset(GO::session()->values['user_id']) ? GO::session()->values['user_id'] : 1;
 			
+			//cache type in default system language.
+			if(GO::user())
+				GO::language()->setLanguage(GO::config()->language);
+							
+			
 			//GO::debug($model);
 			$autoAttr = array(
 				'model_id'=>$this->pk,
@@ -2617,6 +2622,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			);
 			
 			$attr = array_merge($autoAttr, $attr);
+			
+			if(GO::user())
+				GO::language()->setLanguage(GO::user()->language);
 			
 			if($attr['description']==null)
 				$attr['description']="";
