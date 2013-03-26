@@ -1,3 +1,5 @@
+- Config::get_setting() will return null of the config option is not yet in the database
+- DbStore can attach extra PK values for the deletion of records with an PK of multiple columns
 - Ticket dialog will clear the attachments queue after show or load
 
 24-03-2013 4.1.50
