@@ -1,3 +1,6 @@
+- Billing, duplicate order: No more link between original order and duplicate order.
+- Billing, recurring order: Link between original order and recurring order created on status change.
+
 26-03-2013 4.1.51
 - Config::get_setting() will return null of the config option is not yet in the database
 - DbStore can attach extra PK values for the deletion of records with an PK of multiple columns
