@@ -56,6 +56,18 @@ class GO_Base_Cron_CalculateDiskUsage extends GO_Base_Cron_AbstractCron {
 		
 		$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path);
 		GO::config()->save_setting('file_storage_usage', $folder->calculateSize());
+		
+		if(GO::modules()->postfixadmin){
+			
+			$findParams = GO_Base_Db_FindParams::newInstance()
+							->select('sum(`usage`) AS `usage`')
+							->ignoreAcl()
+							->single();
+			
+			$result = GO_Postfixadmin_Model_Mailbox::model()->find($findParams);
+	
+			GO::config()->save_setting('mailbox_usage', $result->usage*1024);
+		}
 
 	}
 	
