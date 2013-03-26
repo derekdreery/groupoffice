@@ -388,8 +388,8 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 		$primaryKeyNames = GO::getModel($this->_modelClass)->primaryKey(); //get the primary key names of the delete model in an array
 		$newPk=array();
 		foreach($primaryKeyNames as $name) {
-		  if(isset($extraPkValue[$name])) //pk is supplied in the extra values
-			$newPk[$name]=$extraPkValue[$name];
+		  if(isset($this->extraDeletePk[$name])) //pk is supplied in the extra values
+			$newPk[$name]=$this->extraDeletePk[$name];
 		  else //it's not set in the extra values so it must be the key passed in the request
 			$newPk[$name]=$modelPk;
 		}
