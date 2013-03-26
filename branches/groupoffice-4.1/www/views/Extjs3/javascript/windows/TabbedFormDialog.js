@@ -305,13 +305,20 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	 */
 	checkSubmitMethod : function(params){
 		if(this.createAction != false && this.updateAction !=false){
-			if(this.remoteModelId == 0){
+			if(this.isNew()){
 				this.submitAction = this.createAction;
 			} else {
 				this.submitAction = this.updateAction;
 			}
 		}
 	},	
+	
+	/*
+	 * Return true when the dialogs data is not loaded from the database
+	 */
+	isNew : function() {
+	  return (this.remoteModelId == 0);
+	},
 	
 	submitForm : function(hide){
 		
