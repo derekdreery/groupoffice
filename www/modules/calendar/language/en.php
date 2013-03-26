@@ -99,6 +99,7 @@ $l["sendInvitationInitial"]='Would you like to send meeting invitations to parti
 $l["sendInvitationUpdate"]='Would you like to send updated meeting information to participants?';
 $l["sendCancellation"]='Would you like to send all the participants a cancelation notice?';
 $l["forthcomingAppointments"]='Forthcoming appointments';
+$l["pastAppointments"]='Past appointments';
 $l["quarterShort"]= 'Q';
 $l["globalsettings_templatelabel"]= 'Template';
 $l["globalsettings_allchangelabel"]= 'Rename all existing';
@@ -215,3 +216,16 @@ $l['openCalendar']='Open calendar';
 $l['createPermission']="Create permission";
 
 $l['show_holidays']="Show holidays";
+$l['participant']='Participant';
+$l['clickForAttendance']='Click here to set your attendance status';
+
+$l['viewDay']='Day';
+$l['viewMorning']='Morning';
+$l['viewAfternoon']='Afternoon';
+$l['viewEvening']='Evening';
+
+$l['cronEventAndTaskReportMailer']='Today\'s events and tasks mailer';
+$l['cronEventAndTaskReportMailerDescription']='Send an email with the today\'s events and tasks to every user in the cron';
+$l['cronEventAndTaskReportMailerPdfSubtitle']='Today\'s events and tasks';
+$l['cronEventAndTaskReportMailerSubject']='Today\'s events and tasks';
+$l['cronEventAndTaskReportMailerContent']='You can find a list of today\'s events and tasks in the attached PDF.';

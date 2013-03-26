@@ -23,9 +23,7 @@ class servermanager extends db {
 	 */
 	var $pro_modules = array('mailings','projects','gota','sync','customfields','billing','tickets');
 
-	public function __on_load_listeners($events) {
-		$events->add_listener('update_user', __FILE__, 'servermanager', 'update_user');
-	}
+	
 
 	public function get_all_config_files($roots){
 		global $GO_CONFIG;

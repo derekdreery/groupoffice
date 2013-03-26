@@ -363,8 +363,9 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	    			iconCls:'btn-help',
 	    			text:GO.lang.strHelpContents,
 	    			handler:function(){	    				
-	    				var win = window.open(GO.settings.config.help_link);
-	    				win.focus();
+//	    				var win = window.open(GO.settings.config.help_link);
+//	    				win.focus();
+							GO.openHelp('');
 	    			},
 	    			scope:this	    			
 	    		}]    		
@@ -382,17 +383,19 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	    			
 	    		});
 				helpMenu.addItem('-');
+				
+			if (GO.settings.config.support_link){
 				helpMenu.addItem({
 	    			iconCls: 'btn-support',
 	    			text: GO.lang.contactSupportDesk,
 	    			handler: function(){
-	    				GO.supportLink=GO.settings.config.webmaster_email;
-	    				if(Ext.form.VTypes.email(GO.supportLink))
+
+	    				if(Ext.form.VTypes.email(GO.settings.config.support_link))
 	    				{
 	    					if(GO.email && GO.settings.modules.email.read_permission)
 	    					{
 	    						GO.email.showComposer({
-										values : {to: GO.supportLink}							
+										values : {to: GO.settings.config.support_link}							
 									});
 	    					}else
 	    					{
@@ -400,12 +403,12 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	    					}
 	    				}else
 	    				{
-	    					window.open(GO.supportLink);
+	    					window.open(GO.settings.config.support_link);
 	    				}
 	    			},
-	    			scope:this
-	    		
+	    			scope:this	    		
 	    		});
+			}
 				helpMenu.addItem({
 	    			iconCls:'btn-report-bug',
 	    			text:GO.lang.strReportBug,

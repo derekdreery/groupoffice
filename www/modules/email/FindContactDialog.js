@@ -13,7 +13,13 @@ GO.email.FindContactDialog = function(config) {
 	config.title=GO.addressbook.lang.contacts;
 
 	this.contactsGrid = new GO.email.ContactsGrid({
-		singleSelect:true
+		singleSelect:true,
+		store: new GO.data.JsonStore({
+		  url : GO.url("addressbook/contact/store"),
+		  id : 'wemail',
+		  fields : ['id', 'name',  'email', 'ab_name', 'company_name', "function","department"],
+		  remoteSort : true
+		})
 	});
 	config.items=[this.contactsGrid];
 

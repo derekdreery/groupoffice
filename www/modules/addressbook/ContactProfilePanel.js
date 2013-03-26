@@ -373,7 +373,7 @@ GO.addressbook.ContactProfilePanel = function(config)
  
 			var leftColItems = [];
 		
-		if(!config.forUser)
+		//if(!config.forUser)
 			leftColItems.push(this.addressbookFieldset);
 		
 		leftColItems.push(this.personalFieldset,this.workFieldset);

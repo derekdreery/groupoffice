@@ -576,3 +576,5 @@ $l['passwordRequireLc']='Det må inneholde en liten bokstav';
 $l['passwordRequireNum']='Det må inneholde et tall';
 $l['passwordRequireSc']='Det må inneholde et spesialtegn';
 $l['passwordUnique']='Det må inneholde minst %s unike tegn';
+$l['cellular2']= 'Mobil 2';
+$l['maxAttachmentsSizeExceeded']="Størrelsen på vedleggene dine er totalt ({total}) og overskrider derfor maksgrensen på ({max}).";

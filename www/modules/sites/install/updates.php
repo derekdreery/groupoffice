@@ -53,3 +53,14 @@ $updates["201211201622"][]="CREATE TABLE IF NOT EXISTS `si_content` (
 $updates["201211271539"][]="ALTER TABLE `si_sites` ADD `base_path` VARCHAR( 100 ) NOT NULL DEFAULT ''";
 
 $updates["201301291408"][]="ALTER TABLE  `si_content` ADD  `sort_order` INT NOT NULL DEFAULT  '0'";
+
+// Add Customfields to the site and content model
+$updates["201303251100"][]="CREATE TABLE IF NOT EXISTS `cf_si_sites` (
+  `model_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`model_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates["201303251100"][]="CREATE TABLE IF NOT EXISTS `cf_si_content` (
+  `model_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`model_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";

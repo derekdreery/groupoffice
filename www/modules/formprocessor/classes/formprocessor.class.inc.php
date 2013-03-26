@@ -322,7 +322,7 @@ class formprocessor{
 						{
 							$fsFile = new GO_Base_Fs_File($file['tmp_name']);
 							$fsFile->move(new GO_Base_Fs_Folder($full_path),$file['name'], false,true);
-							$fsFile->chmod(GO::config()->file_create_mode);
+							$fsFile->setDefaultPermissions();
 			
 							GO_Files_Model_File::importFromFilesystem($fsFile);
 						}
@@ -521,7 +521,7 @@ class formprocessor{
 		//if(empty($body))
 			//throw new Exception(GO::t(''missingField']);
 
-		require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
+		require_once(GO::config()->root_path.'classses/mail/GoSwift.class.inc.php');
 		$swift = new GoSwift($email, $_POST['subject']);
 		$swift->set_body($body, 'plain');
 		$swift->set_from($from_email, $from_name);

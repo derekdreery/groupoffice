@@ -204,3 +204,5 @@ $l['sendNotification']='Möchten Sie die Teilnehmer per E-Mail informieren?';
 $l['openCalendar']='Kalender öffnen';
 $l['attendance']='Teilnahme';
 $l['createPermission']="Direkte Eintragung möglich";
+
+$l['show_holidays']="Feiertage anzeigen";

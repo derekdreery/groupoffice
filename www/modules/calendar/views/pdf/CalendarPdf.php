@@ -94,7 +94,7 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 					$this->Cell($nameColWidth, 20, '', 1, 0, 'L', 1);
 				}
 				for ($i = 0; $i < $maxCells; $i++) {
- 					$label = $this->_days > $maxCells ? $fullDays[date('w', $time)] : $fullDays[date('w', $time)] . ', ' . date(GO::user()->date_format, $time);
+ 					$label = $this->_days > $maxCells ? $fullDays[date('w', $time)] : $fullDays[date('w', $time)] . ', ' . date(GO::user()->completeDateFormat, $time);
 					$this->Cell($cellWidth, 20, $label, 1, 0, 'L', 1);
 					$time = GO_Base_Util_Date::date_add($time, 1);
 				}

@@ -254,3 +254,8 @@ $l['copyMailTo']="Kopieer email naar...";
 $l['copyMailToTxt']="Selecteer een map om de email naartoe te kopiëren";
 $l['copyMailToRUSure']="Weet u zeker dat u het geselecteerde emailbericht wilt kopiëren naar deze mailboxmap?";
 $l['copyMailsToRUSure']="Weet u zeker dat u het geselecteerde emailberichten wilt kopiëren naar deze mailboxmap?";
+$l['selectValidMailFolder']="Selecteert u a.u.b. een geldige email map om naartoe te kopiëren.";
+$l['clickSeeWholeMessage']="Het werkelijke bericht is groter dan hier kan worden weergegeven. Klik hier om het gehele bericht te zien.";
+
+$l['dateReceived']='Datum ontvangen';
+$l['dateSent']='Datum verzonden';

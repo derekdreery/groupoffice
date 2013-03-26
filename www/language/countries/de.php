@@ -70,6 +70,7 @@ $l['FK']='Falklandinseln (Malvinen)';
 $l['FM']='Mikronesien, Föderierte Staaten von';
 $l['FO']='Färöer';
 $l['FR']='Frankreich';
+$l['FX']='Frankreich, ohne Überseegebiete';
 $l['GA']='Gabun';
 $l['GB']='Vereinigtes Königreich';
 $l['GD']='Grenada';

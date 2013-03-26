@@ -124,7 +124,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				$response['success']=false;
 				//can't use <br /> tags in response because this goes wrong with the extjs fileupload hack with an iframe.
 				$response['feedback']=sprintf(GO::t('validationErrorsFound'),strtolower($model->localizedName))."\n\n" . implode("\n", $model->getValidationErrors())."\n";			
-				if(GO_Base_Util_Http::isAjaxRequest(false)){
+				if(empty($_FILES)){ //if you return html when using the extjs iframe file upload hack it throws a json exception
 					$response['feedback']=nl2br($response['feedback']);
 				}
 				
@@ -591,19 +591,19 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				$categories[$field->category->id]['fields']=array();
 			}
 			if(!empty($customAttributes[$field->columnName()]) ){
-              if($field->datatype == "GO_Customfields_Customfieldtype_Heading")
-              {
-                $header = array('name'=>$field->name,'value'=>$customAttributes[$field->columnName()]);
-              }
-              if(!empty($header) )
-              {
-                $categories[$field->category->id]['fields'][] = $header;
-                $header = null;
-              }
-              $categories[$field->category->id]['fields'][]=array(
-                  'name'=>$field->name,
-                  'value'=>$customAttributes[$field->columnName()]
-              );				
+				if($field->datatype == "GO_Customfields_Customfieldtype_Heading")
+				{
+					$header = array('name'=>$field->name,'value'=>$customAttributes[$field->columnName()]);
+				}
+				if(!empty($header) )
+				{
+					$categories[$field->category->id]['fields'][] = $header;
+					$header = null;
+				}
+				$categories[$field->category->id]['fields'][]=array(
+						'name'=>$field->name,
+						'value'=>$customAttributes[$field->columnName()]
+				);				
 			}
 		}
 
@@ -658,6 +658,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	private function _processEventsDisplay($model,$response){
 		$startOfDay = GO_Base_Util_Date::clear_time(time());
 			
+		// Process future events
 		$findParams = GO_Base_Db_FindParams::newInstance()->order('start_time','DESC');
 		$findParams->getCriteria()->addCondition('start_time', $startOfDay, '>=');						
 
@@ -670,9 +671,29 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$columnModel->formatColumn('calendar_name','$model->calendar->name');
 		$columnModel->formatColumn('link_count','$model->countLinks()');
 		$columnModel->formatColumn('link_description','$model->link_description');
+		
+		$columnModel->formatColumn('description','GO_Base_Util_string::cut_string($model->description,500)');
 
 		$data = $store->getData();
 		$response['data']['events']=$data['results'];
+		
+		// Process past events
+		$findParams = GO_Base_Db_FindParams::newInstance()->order('start_time','DESC');
+		$findParams->getCriteria()->addCondition('start_time', $startOfDay, '<');						
+
+		$stmt = GO_Calendar_Model_Event::model()->findLinks($model, $findParams);		
+
+		$store = GO_Base_Data_Store::newInstance(GO_Calendar_Model_Event::model());
+		$store->setStatement($stmt);
+
+		$columnModel = $store->getColumnModel();			
+		$columnModel->formatColumn('calendar_name','$model->calendar->name');
+		$columnModel->formatColumn('link_count','$model->countLinks()');
+		$columnModel->formatColumn('link_description','$model->link_description');
+		$columnModel->formatColumn('description','GO_Base_Util_string::cut_string($model->description,500)');
+
+		$data = $store->getData();
+		$response['data']['past_events']=$data['results'];
 		
 		return $response;
 	}
@@ -714,6 +735,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	private function _processTasksDisplay($model,$response){
 		//$startOfDay = GO_Base_Util_Date::clear_time(time());
 
+		// Process linked tasks that are not completed.
 		$findParams = GO_Base_Db_FindParams::newInstance()->order('due_time','DESC');
 		//$findParams->getCriteria()->addCondition('start_time', $startOfDay, '<=')->addCondition('status', GO_Tasks_Model_Task::STATUS_COMPLETED, '!=');						
 		$findParams->getCriteria()->addCondition('status', GO_Tasks_Model_Task::STATUS_COMPLETED, '!=');						
@@ -728,10 +750,33 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 						->formatColumn('late','$model->due_time<time() ? 1 : 0;')
 						->formatColumn('tasklist_name', '$model->tasklist->name')
 						->formatColumn('link_count','$model->countLinks()')
+						->formatColumn('description','GO_Base_Util_string::cut_string($model->description,500)')
 						->formatColumn('link_description','$model->link_description');		
 
 		$data = $store->getData();
 		$response['data']['tasks']=$data['results'];
+		
+		// Process linked tasks that are completed.
+		$findParams = GO_Base_Db_FindParams::newInstance()->order('due_time','DESC');
+		//$findParams->getCriteria()->addCondition('start_time', $startOfDay, '<=')->addCondition('status', GO_Tasks_Model_Task::STATUS_COMPLETED, '!=');						
+		$findParams->getCriteria()->addCondition('status', GO_Tasks_Model_Task::STATUS_COMPLETED, '=');						
+
+		$stmt = GO_Tasks_Model_Task::model()->findLinks($model, $findParams);		
+
+		$store = GO_Base_Data_Store::newInstance(GO_Tasks_Model_Task::model());
+		$store->setStatement($stmt);
+
+		$store->getColumnModel()
+						->setFormatRecordFunction(array($this, 'formatTaskLinkRecord'))
+						->formatColumn('late','$model->due_time<time() ? 1 : 0;')
+						->formatColumn('tasklist_name', '$model->tasklist->name')
+						->formatColumn('link_count','$model->countLinks()')
+						->formatColumn('description','GO_Base_Util_string::cut_string($model->description,500)')
+						->formatColumn('link_description','$model->link_description');		
+		
+
+		$data = $store->getData();
+		$response['data']['completed_tasks']=$data['results'];
 		
 		return $response;
 	}
@@ -824,17 +869,35 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 */
 	protected function actionExport($params) {	
 		
+		$orientation = false;
+		
+		$showHeader = false;
+  	$humanHeaders = true;
+		$includeHidden = false;
+		
+		if(!empty($params['includeHeaders']))
+			$showHeader = true;
+		
+		if(!empty($params['humanHeaders']))
+			$humanHeaders = false;
+		
+		if(!empty($params['includeHidden']))
+			$includeHidden = true;		
+		
+		$checkboxSettings = array(
+			'export_include_headers'=>$showHeader,
+			'export_human_headers'=>!$humanHeaders,
+			'export_include_hidden'=>$includeHidden
+		);
+		
+		$settings =  GO_Base_Export_Settings::load();
+		$settings->saveFromArray($checkboxSettings);
 		
 		//define('EXPORTING', true);
 		//used by custom fields to format diffently
 		if(GO::modules()->customfields)
 			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=true;
-		
-		
-		$showHeader = false;
-  	$humanHeaders = true;
-		$orientation = false;
-		
+
 		if(!empty($params['exportOrientation']) && ($params['exportOrientation']=="H"))
 			$orientation = 'L'; // Set the orientation to Landscape
 		else
@@ -844,13 +907,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$title = $params['documentTitle'];
 		else
 			$title = GO::session()->values[$params['name']]['name'];
-	
-		if(!empty($params['includeHeaders']))
-			$showHeader = true;
-		
-		if(!empty($params['humanHeaders']))
-			$humanHeaders = false;
-		
+			
 		$findParams = GO::session()->values[$params['name']]['findParams'];
 		$findParams->limit(0); // Let the export handle all found records without a limit
 		$model = GO::getModel(GO::session()->values[$params['name']]['model']);
@@ -921,9 +978,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				
 		$summarylog = new GO_Base_Component_SummaryLog();
 		
-		GO::$disableModelCache=true; //for less memory usage
-		ini_set('max_execution_time', '0'); //allow long runs
-		ini_set('memory_limit','512M');
+		GO::$disableModelCache=true; //for less memory usage		
+		GO::setMaxExecutionTime(0);
 		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
 		
 		$attributeIndexMap = isset($params['attributeIndexMap'])
@@ -1001,10 +1057,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				
 				if($this->beforeImport($params, $model, $attributes, $record)){
 					
-					//Unset some default attributes set in the code
-					$defaultAttributes = $model->defaultAttributes();
-					foreach($defaultAttributes as $column => $value)
-						unset($model->{$column});
+//					//Unset some default attributes set in the code
+//					$defaultAttributes = $model->defaultAttributes();
+//					foreach($defaultAttributes as $column => $value)
+//						unset($model->{$column});
 					
 					$columns = $model->getColumns();
 					foreach($columns as $col=>$attr){
@@ -1035,9 +1091,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 					
 					try{
 						if($model->save()){
+							$this->afterImport($model, $attributes, $record);
 							$summarylog->addSuccessful();
 						} else {
-							$summarylog->addError($record[0], implode('<br />', $model->getValidationErrors()));
+							$summarylog->addError($record[0], implode("\n", $model->getValidationErrors()));
 						}
 					}
 					catch(Exception $e){
@@ -1054,9 +1111,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				//	$summarylog->add();
 				}
 			}
-			
-			
-			$this->afterImport($model, $attributes, $record);
+						
 		} else {
 			//$summarylog->addError('NO FILE FOUND', 'There is no file found that can be imported!');
 		}

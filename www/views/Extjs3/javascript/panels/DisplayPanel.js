@@ -423,13 +423,15 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 				{
 					var index = href.substr(pos+7, href.length);
 					var file = this.data.files[index];
+
 					if(file.extension=='folder')
 					{
 						GO.files.openFolder(this.data.files_folder_id, file.id);
 					}else
 					{
 						if(GO.files){
-							GO.files.openFile({id:file.id});
+							//GO.files.openFile({id:file.id});
+							file.handler.call(this);
 						}else
 						{
 							window.open(GO.url("files/file/download",{id:file.id}));
@@ -477,45 +479,46 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 	
 	afterLoad : function() {
 	
-		if (GO.comments && this.data.comments.length>0)
-			this.newCommentPanel = new Ext.form.FormPanel({			
-				renderTo: 'newCommentForModelDiv_'+this.data.model+'_'+this.data.id,
-				layout: 'form',
-				border: false,
+		if (GO.comments && this.data.comments.length>0) {
+		  this.newCommentPanel = new Ext.form.FormPanel({			
+			  renderTo: 'newCommentForModelDiv_'+this.data.model_name+'_'+this.data.id,
+			  layout: 'form',
+			  border: false,
 
-				items: [this.commentsField = new Ext.form.TextArea({
-					name: 'comments',
-					anchor: '90%',
-					height: 70,
-					hideLabel:true,
-					allowBlank:false,
-					emptyText: GO.comments.lang['newCommentText']
-				}),
+			  items: [this.commentsField = new Ext.form.TextArea({
+				  name: 'comments',
+				  anchor: '90%',
+				  height: 70,
+				  hideLabel:true,
+				  allowBlank:false,
+				  emptyText: GO.comments.lang['newCommentText']
+			  }),
 
-					this.categoriesCB = new GO.comments.CategoriesComboBox(),
-						new Ext.Button({
-							text: GO.lang.cmdAdd,
-							handler: function(){
-								this.newCommentPanel.form.submit({
-									url: GO.url('comments/comment/submit'),
-									params: {
+				  this.categoriesCB = new GO.comments.CategoriesComboBox(),
+					  new Ext.Button({
+						  text: GO.lang.cmdAdd,
+						  handler: function(){
+							  this.newCommentPanel.form.submit({
+								  url: GO.url('comments/comment/submit'),
+								  params: {
 //										comments : this.commentsField.getValue(),
 //										category_id : this.categoriesCB.getValue(),
-										model_id : this.model_id,
-										model_name : this.model_name
-									},
-									success:function(form, action){
-										if (!GO.util.empty(action.result.feedback))
-											Ext.MessageBox.alert('', action.result.feedback);
-										this.load(this.model_id,true);
-									},
-									scope: this
-								});
-							},
-							scope: this
-						})
-				]
-			});
+									  model_id : this.model_id,
+									  model_name : this.model_name
+								  },
+								  success:function(form, action){
+									  if (!GO.util.empty(action.result.feedback))
+										  Ext.MessageBox.alert('', action.result.feedback);
+									  this.load(this.model_id,true);
+								  },
+								  scope: this
+							  });
+						  },
+						  scope: this
+					  })
+			  ]
+		  });
+		}
 		
 	},
 	

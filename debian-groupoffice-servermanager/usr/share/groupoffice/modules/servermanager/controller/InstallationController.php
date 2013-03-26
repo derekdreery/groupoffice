@@ -248,6 +248,88 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 
 		if($return_var!=0)
 			throw new Exception(implode("\n", $output));
+		
+		// Create the groups for this installation that are given in the config file.
+		if(!empty(GO::config()->servermanager_auto_groups)){
+			GO::setDbConnection(
+							$config['db_name'], 
+							$config['db_user'], 
+							$config['db_pass'], 
+							$config['db_host']
+							);
+			
+			foreach(GO::config()->servermanager_auto_groups as $group=>$permissions){
+				$this->_createGroup($group, $permissions);
+			}
+
+			GO::setDbConnection();
+		}
+	}
+	
+	/**
+	 * Create the new group for this installation
+	 * 
+	 * Example array for in the config file.
+	 * 
+	 * $config['servermanager_auto_groups']=array(
+	 *	'Group1'=>array(
+	 *		'modules_read'=>'addressbook,calendar',
+	 *		'modules_manage'=>'tickets'
+	 *	),
+	 *	'Group2'=>array(
+	 *		'modules_read'=>'addressbook',
+	 *		'modules_manage'=>'tickets,calendar'
+	 *	)
+	 * );
+	 * 
+	 * 
+	 * @param string $name The name of the new group
+	 * @param array $permissions Array of permission options for the group
+	 */
+	private function _createGroup($name,$permissions){
+		
+		$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', $name);
+		
+		if(!$group){
+			$group = new GO_Base_Model_Group();
+			$group->name = $name;
+			$group->save();
+		}
+
+		if($group){
+			if(!empty($permissions['modules_read']))
+				$this->_setGroupRights($group,$permissions['modules_read'], 'read');
+			
+			if(!empty($permissions['modules_manage']))
+				$this->_setGroupRights($group,$permissions['modules_manage'],'manage');
+		}
+	}
+	
+	/**
+	 * Set the rights for the created group.
+	 * 
+	 * @param GO_Base_Model_Group $group The group to set the rights for.
+	 * @param string $modules A comma separated string with the module names.
+	 * @param string $type Permission type, possible values: 'read','manage' defaults to 'read'.
+	 */
+	private function _setGroupRights($group,$modules,$type='read'){
+		$modules =  explode(',',$modules);
+		
+		$permission = GO_Base_Model_Acl::READ_PERMISSION;
+		
+		switch($type){
+			case 'manage':		
+				$permission = GO_Base_Model_Acl::MANAGE_PERMISSION;
+			break;
+			case 'read':
+			default:
+				$permission = GO_Base_Model_Acl::READ_PERMISSION;
+		}
+		
+		foreach($modules as $moduleName){
+			if(GO::modules()->$moduleName)
+				GO::modules()->$moduleName->acl->addGroup($group->id,$permission);
+		}
 	}
 	
 	private function _createFolderStructure($config, $installation){
@@ -369,7 +451,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$tmpConfigFile = $this->_createConfig($params, $model);
 				
 		$cmd = 'sudo TERM=dumb '.GO::config()->root_path.
-						'groupofficecli.php -r=servermanager/installation/create'.
+						'groupofficecli.php -q -r=servermanager/installation/create'.
 						' -c='.GO::config()->get_config_file().
 						' --tmp_config='.$tmpConfigFile->path().
 						' --name='.$model->name.	
@@ -585,7 +667,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				continue;
 			}
 			
-			$cmd = GO::config()->root_path.'groupofficecli.php -r=maintenance/upgrade -c="'.$installation->configPath.'"';
+			$cmd = GO::config()->root_path.'groupofficecli.php -q -r=maintenance/upgrade -c="'.$installation->configPath.'"';
 			
 			system($cmd);		
 			
@@ -644,12 +726,53 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			
 			require($installation->configPath);
 			
-			$cmd = GO::config()->root_path.'groupofficecli.php -r="'.$params["route"].'" -c="'.$installation->configPath.'"';
+			$cmd = GO::config()->root_path.'groupofficecli.php -q -r="'.$params["route"].'" -c="'.$installation->configPath.'"';
 			
 			system($cmd);
 						
 			echo "Done\n\n";
 			
+		}
+	}	
+	
+	protected function actionSetAllowed($params){
+		
+		if(!$this->isCli())
+			throw new Exception("This action may only be ran on the command line.");
+		
+		$this->checkRequiredParameters(array('module'), $params);
+		
+		if(!isset($params['allow'])){
+			exit("--allow is required");
+		}
+		
+//		if(!empty($allow)){
+//			exit("--allow is required");
+//		}
+		
+		$allow = !empty($params['allow']);	
+		
+		$stmt = GO_Servermanager_Model_Installation::model()->find();
+		while($installation = $stmt->fetch()){
+			echo "Setting ".$installation->name."\n";
+			$c = $installation->getConfigWithGlobals();
+			if($c){
+				$allowed = explode(',',$c['allowed_modules']);
+				$newAllowed = array();
+				
+				if(!$allow){					
+					foreach($allowed as $module){
+						if($module!=$params['module'])
+							$newAllowed[]=$module;
+					}
+				}else
+				{
+					$allowed[]=$params['module'];
+					$newAllowed = array_unique($allowed);
+				}
+				
+				$installation->setConfigVariable('allowed_modules',implode(',',$newAllowed));
+			}		
 		}
 	}	
 	
@@ -769,7 +892,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			{
 				//run tasks for installation like log rotation and filesearch index update.
 				echo "Running daily tasks for installation\n";
-				$cmd ='/usr/share/groupoffice/groupofficecli.php -r=maintenance/servermanagerReport -c="'.$installation->configPath.'"  2>&1';				
+				$cmd ='/usr/share/groupoffice/groupofficecli.php -q -r=maintenance/servermanagerReport -c="'.$installation->configPath.'"  2>&1';				
 				system($cmd);
 			}
 

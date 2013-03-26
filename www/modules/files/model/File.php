@@ -295,7 +295,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		$this->cutAttributeLength("extension");
 		
 		$this->size = $this->fsFile->size();
-		$this->ctime = $this->fsFile->ctime();
+		//$this->ctime = $this->fsFile->ctime();
 		$this->mtime = $this->fsFile->mtime();
 		
 		$existingFile = $this->folder->hasFile($this->name);
@@ -483,8 +483,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 				
 		$fsFile->move($this->folder->fsFolder,$this->name, $isUploadedFile);
 		
-		$this->mtime=$fsFile->mtime();
-	
+		$this->mtime=$fsFile->mtime();	
 		$this->save();
 	}
 	
@@ -493,7 +492,9 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 //		if(!GO_Files_Model_File::checkQuota(strlen($data)))
 //			throw new GO_Base_Exception_InsufficientDiskSpace();
 		
-		$this->fsFile->putContents($data);
+		$this->fsFile->putContents($data);		
+		$this->mtime=$this->fsFile->mtime();	
+		$this->save();
 	}
 	
 	/**
@@ -536,6 +537,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 			case 'jpeg':
 			case 'png':
 			case 'gif':
+			case 'bmp':
 			case 'xmind':
 
 				return true;
@@ -614,6 +616,55 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function getHandlers(){
+		$handlers=array();
+		$classes = GO_Files_FilesModule::getAllFileHandlers();
+		foreach($classes as $class){
+			/* @var $class ReflectionClass */
+
+			$fileHandler = new $class->name;
+			if($fileHandler->fileIsSupported($this)){
+				$handlers[]= $fileHandler;
+			}
+		}
+		
+		return $handlers;
+	}
+	
+	
+	public static $defaultHandlers;
+	/**
+	 * 
+	 * @return GO_Files_Filehandler_Interface
+	 */
+	public function getDefaultHandler(){
+		
+		$ex = strtolower($this->extension);
+		
+		if(!isset(self::$defaultHandlers[$ex])){
+			$fh = GO_Files_Model_FileHandler::model()->findByPk(
+						array('extension'=>$ex, 'user_id'=>GO::user()->id));
+			
+			if($fh){
+				self::$defaultHandlers[$ex]=new $fh->cls;
+			}else{
+				$classes = GO_Files_FilesModule::getAllFileHandlers();
+				foreach($classes as $class){
+					/* @var $class ReflectionClass */
+
+					$fileHandler = new $class->name;
+					if($fileHandler->isDefault($this)){
+						self::$defaultHandlers[$ex]= $fileHandler;
+						break;
+					}
+				}
+				
+				if(!isset(self::$defaultHandlers[$ex]))
+					self::$defaultHandlers[$ex]=new GO_Files_Filehandler_Download();
+			}
+		}
+		
+		return self::$defaultHandlers[$ex];
+		
 		
 	}
 }

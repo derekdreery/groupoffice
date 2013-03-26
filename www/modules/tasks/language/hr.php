@@ -80,3 +80,4 @@ $l["taskStatus"]='Status';
 $l["taskCompletion_time"]='Završeno';
 $l["taskProject_name"]='Projekt';
 $l['taskPercentage_complete']='Postotak završenosti';
+$l['completedTasks']='Završeni zadaci';

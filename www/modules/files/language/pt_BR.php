@@ -119,3 +119,16 @@ $l["pleaseConfirm"]= 'Por favor confirme';
 $l["applyLimits"]= 'Não mostrar todas as categorias de campos personalizados';
 $l["undef"]= '-';
 $l['files']='Arquivos';
+
+$l['bookmarkFolder']="Adicionar aos favoritos";
+$l['bookmarks']="Favoritos";
+$l['bookmarkAlreadyExists']=" A pasta '%fn' já está nos favoritos do usuário.";
+$l['removeBookmark']="Remover favorito";
+$l['removeBookmarkQuestion']="Remover a pasta '%fn' da sua lista de favoritos?";
+$l['notInSearchMode']="Não é possível realizar esta operação durante o modo de busca.";
+$l['openInBrowser']='Abrir no navegador';
+$l['selectApplication']="Selecionar uma aplicação para abrir este arquivo...";
+$l['rememberFileHandler']="Memorizar decisão para este tipo de aquivo";
+$l['alwaysAsk']="Sempre perguntar";
+$l['openWith']='Abrir com...';
+$l['open']='Abrir';

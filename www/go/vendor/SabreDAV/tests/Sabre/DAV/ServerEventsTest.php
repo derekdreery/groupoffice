@@ -1,10 +1,15 @@
 <?php
 
+namespace Sabre\DAV;
+use Sabre\HTTP;
+
 require_once 'Sabre/DAV/AbstractServer.php';
 
-class Sabre_DAV_ServerEventsTest extends Sabre_DAV_AbstractServer {
+class ServerEventsTest extends AbstractServer {
 
     private $tempPath;
+
+    private $exception;
 
     function testAfterBind() {
 
@@ -29,9 +34,9 @@ class Sabre_DAV_ServerEventsTest extends Sabre_DAV_AbstractServer {
         $this->assertFalse($this->server->createFile('bla','body'));
 
         // Also testing put()
-        $req = new Sabre_HTTP_Request(array(
+        $req = new HTTP\Request(array(
             'REQUEST_METHOD' => 'PUT',
-            'REQUEST_URI' => '/foobar',
+            'REQUEST_URI' => '/barbar',
         ));
 
         $this->server->httpRequest = $req;
@@ -47,5 +52,25 @@ class Sabre_DAV_ServerEventsTest extends Sabre_DAV_AbstractServer {
 
     }
 
+    function testException() {
+
+        $this->server->subscribeEvent('exception', array($this, 'exceptionHandler'));
+
+        $req = new HTTP\Request(array(
+            'REQUEST_METHOD' => 'GET',
+            'REQUEST_URI' => '/not/exisitng',
+        ));
+        $this->server->httpRequest = $req;
+        $this->server->exec();
+
+        $this->assertInstanceOf('Sabre\\DAV\\Exception\\NotFound', $this->exception);
+
+    }
+
+    function exceptionHandler(Exception $exception) {
+
+        $this->exception = $exception;
+
+    }
 
 }

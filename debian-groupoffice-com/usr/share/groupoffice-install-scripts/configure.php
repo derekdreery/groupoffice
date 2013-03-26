@@ -63,7 +63,7 @@ function create_file($file, $tpl, $replacements) {
 	$data = file_get_contents($tpl);
 
 	foreach($replacements as $key=>$value) {
-		$data = str_replace('{'.$key.'}', $value, $data);
+		$data = str_replace('{'.$key.'}', str_replace('\'','\\\'',$value), $data);
 	}
 
 	file_put_contents($file, $data);
@@ -97,15 +97,15 @@ echo "Setting cache permissions\n\n";
 if(is_dir($config['tmpdir'].'cache'))
 	system('chown -R www-data:www-data '.$config['tmpdir'].'cache');
 
-if(is_dir($config['tmpdir'].'cache'))
+if(is_dir($config['tmpdir'].'diskcache'))
 	system('chown -R www-data:www-data '.$config['tmpdir'].'diskcache');
 
 
 system('chown www-data:www-data '.$config['file_storage_path']);
 system('chown www-data:www-data '.$config['file_storage_path'].'*');
 
-if(is_dir($config['file_storage_path'].'cache'))
-	system('chown -R www-data:www-data '.$config['file_storage_path'].'cache');
+if(is_dir($config['tmpdir'].'cache'))
+	system('chown -R www-data:www-data '.$config['tmpdir'].'cache');
 
 if(is_dir($config['file_storage_path'].'log'))
 	system('chown -R www-data:www-data '.$config['file_storage_path'].'log');

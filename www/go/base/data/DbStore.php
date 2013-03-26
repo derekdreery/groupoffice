@@ -89,6 +89,12 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
   protected $_extraFindParams;
   
   /**
+   * Taken from old store to add a value to the primary key to search for
+   * @var array keys and value to attach to the pk to look for when deleting 
+   */
+  public $extraDeletePk=null;
+  
+  /**
    * Will be set for multi select stores @see multiSelect()
    * @var array  attache to response if set
    */
@@ -111,7 +117,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
   /**
    * Create a new store
    * @param string $modelClass the classname of the model to execute the find() method on
-   * @param GO_Base_Data_ColumnModel $columnModel
+   * @param GO_Base_Data_ColumnModel $columnModel the column model object for formatting this store's columns
    * @param array $storeParams the $_POST params to set to this store @see setStoreParams()
    * @param GO_Base_Db_FindParams $findParams extra findParams to be added to the store
    */
@@ -155,7 +161,16 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	  $this->query = $this->_requestParams['query'];
 	
 	if (isset($this->_requestParams['delete_keys'])) // will be deleted just before loading.
-	  $this->_deleteRecords = json_decode($this->_requestParams['delete_keys']);
+	{
+	  $this->_deleteRecords = json_decode($this->_requestParams['delete_keys'], true);
+	  foreach($this->_deleteRecords as $i => $modelPk) {
+		if(is_array($modelPk)) {
+		  foreach($modelPk as $col => $val) //format input columnvalues to database
+			$modelPk[$col] = GO::getModel($this->_modelClass)->formatInput ($col, $val);
+		  $this->_deleteRecords[$i] = $modelPk;
+		}
+	  }
+	}
 	
 	if (!empty($this->_requestParams['advancedQueryData']))
 	  $this->_handleAdvancedQuery($this->_requestParams['advancedQueryData']);
@@ -366,11 +381,20 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
   protected function processDeleteActions() {
 	if (isset($this->_records))
 	  throw new Exception("deleteRecord should be called before loading data. If you run the statement before the deletes then the deleted items will still be in the result.");
-	if(empty($this->_deleteRecords))
-	  return true;
 	
 	$success = true;
 	foreach ($this->_deleteRecords as $modelPk) {
+	  if($this->extraDeletePk!==null) {           
+		$primaryKeyNames = GO::getModel($this->_modelClass)->primaryKey(); //get the primary key names of the delete model in an array
+		$newPk=array();
+		foreach($primaryKeyNames as $name) {
+		  if(isset($this->extraDeletePk[$name])) //pk is supplied in the extra values
+			$newPk[$name]=$this->extraDeletePk[$name];
+		  else //it's not set in the extra values so it must be the key passed in the request
+			$newPk[$name]=$modelPk;
+		}
+		$modelPk=$newPk;
+	  }
 	  $model = GO::getModel($this->_modelClass)->findByPk($modelPk);
 	  if (!empty($model))
 		$success = $success && $model->delete();
@@ -412,7 +436,8 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 
 	$this->_readRequestParams();
 	
-	$this->processDeleteActions();
+	if(!empty($this->_deleteRecords))
+	  $this->response['deleteSuccess'] = $this->processDeleteActions();
 	
 	if (!isset($this->_stmt))
 	  $this->_stmt = $this->createStatement();
@@ -431,6 +456,10 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	$this->response['total']=$this->getTotal();
 	$this->response['results']=$this->_records;
 	return $this->response;
+  }
+  
+  public function getDeleteSuccess() {
+	return isset($this->response['deleteSuccess']) ? $this->response['deleteSuccess'] : null;
   }
   
   /**

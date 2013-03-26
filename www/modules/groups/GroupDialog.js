@@ -28,8 +28,10 @@ GO.groups.GroupDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 
 	setRemoteModelId : function(remoteModelId) {
 		this.userGrid.setGroupId(remoteModelId);
-		if(this.modulePermissionsGrid)
+		if(this.modulePermissionsGrid){
 			this.modulePermissionsGrid.setIdParam(remoteModelId);
+			this.modulePermissionsGrid.setDisabled(!remoteModelId);
+		}
 		
 		GO.groups.GroupDialog.superclass.setRemoteModelId.call(this, remoteModelId);
 	},

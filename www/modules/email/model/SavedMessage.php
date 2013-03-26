@@ -38,6 +38,11 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 		$fullPath = $isTempFile ? GO::config()->tmpdir.$path : GO::config()->file_storage_path.$path;
 		
 		$file = new GO_Base_Fs_File($fullPath);
+		
+		if(!$file->exists()){
+			throw new Exception("E-mail message file does not exist!");
+		}
+		
 		$mimeData = $file->contents();
 		
 		return $this->createFromMimeData($mimeData);

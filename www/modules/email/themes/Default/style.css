@@ -91,6 +91,10 @@ margin:5px 2px;
 	background-image:url('images/16x16/message.png') !important;
 }
 
+.btn-message-seen {
+	background-image:url('images/16x16/readmessage.png') !important;
+}
+
 .btn-message-answered {
 	background-image:url('images/16x16/message_answered.png') !important;
 }
@@ -162,19 +166,49 @@ margin:5px 2px;
 }
 
 
-
-.NewSubject{
-	margin:0px;
-	margin-bottom:4px;
-	font-weight:bold;
+.ml-folder-unseen span{
+	color:#15428B !important; 
+	font-weight:bold !important;
 }
 
-.Subject{
+
+.ml-seen-mail{
+	margin:2px 0px;
+}
+
+.ml-unseen-mail{
+ margin:2px 0px;
+ font-weight:bold;
+ color:#15428B; 
+}
+
+.ml-seen-from{
+}
+
+.ml-unseen-from{
 	margin:0px;
-	margin-bottom:4px;
+	margin-bottom:2px;
+	font-weight:bold;
+	color:#15428B; 
+}
+
+.ml-seen-subject{
+	margin:0px;
+/*	margin-bottom:4px;*/
 	font-weight:normal;
 }
 
+.ml-unseen-subject{
+	margin:0px;
+/*	margin-bottom:4px;*/
+}
+
+.ml-unseen-row{
+}
+
+.ml-seen-row{
+   background-color:#f6f6f6;
+}
 
 .message-header{
 	font-family:tahoma,arial,helvetica,sans-serif;
@@ -341,3 +375,4 @@ margin:5px 2px;
 .email-folder-spam{
 	background-image:url(images/16x16/spam.png) !important;
 }
+

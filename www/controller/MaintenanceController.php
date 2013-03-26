@@ -7,7 +7,7 @@
 class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractController {
 	
 	protected function allowGuests() {
-		return array('upgrade','checkdatabase','servermanagerreport','test','downloadfromshop', 'removeduplicates');
+		return array('upgrade','checkdatabase','servermanagerreport','test','downloadfromshop', 'removeduplicates','buildsearchcache');
 	}
 	
 	//don't check token in this controller
@@ -157,13 +157,15 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	}
 	
 	protected function actionRemoveDuplicates($params){
+				
+		if(!GO::modules()->tools)
+			throw new GO_Base_Exception_AccessDenied();
 		
 		GO::session()->runAsRoot();
 		
-		if(!$this->isCli() && !GO::modules()->tools)
-			throw new GO_Base_Exception_AccessDenied();
-		
 		GO_Base_Fs_File::setAllowDeletes(false);
+		//VERY IMPORTANT:
+		GO_Files_Model_Folder::$deleteInDatabaseOnly=true;
 		
 		$this->lockAction();
 		
@@ -173,85 +175,96 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 				"GO_Calendar_Model_Event"=>array('name', 'start_time', 'end_time', 'calendar_id', 'rrule'),
 				"GO_Tasks_Model_Task"=>array('name', 'start_time', 'due_time', 'tasklist_id', 'rrule', 'user_id'),
 				"GO_Addressbook_Model_Contact"=>array('first_name', 'middle_name', 'last_name', 'addressbook_id', 'company_id', 'email'),
+				"GO_Files_Model_Folder"=>array('name', 'parent_id'),
 				//"GO_Billing_Model_Order"=>array('order_id','book_id','btime')
 			);
 		
+		
+		
 		foreach($checkModels as $modelName=>$checkFields){
 			
-			echo '<h1>'.$modelName.'</h1>';
-			
-			$checkFieldsStr = 't.'.implode(', t.',$checkFields);
-			$findParams = GO_Base_Db_FindParams::newInstance()
-							->ignoreAcl()
-							->select('t.id, count(*) AS n, '.$checkFieldsStr)
-							->group($checkFields)
-							->having('n>1');
+			if(empty($params['model']) || $modelName==$params['model']){
 
-			$stmt1 = GO::getModel($modelName)->find($findParams);
+				echo '<h1>'.$modelName.'</h1>';
 
-			echo '<table border="1">';
-			echo '<tr><td>ID</th><th>'.implode('</th><th>',$checkFields).'</th></tr>';
-
-			$count = 0;
-
-			while($dupModel = $stmt1->fetch()){
-
+				$checkFieldsStr = 't.'.implode(', t.',$checkFields);
 				$findParams = GO_Base_Db_FindParams::newInstance()
-							->ignoreAcl()
-							->select('t.id, '.$checkFieldsStr)
-							->order('id','ASC');
+								->ignoreAcl()
+								->select('t.id, count(*) AS n, '.$checkFieldsStr)
+								->group($checkFields)
+								->having('n>1');
 
-				$criteria=$findParams->getCriteria();
+				$stmt1 = GO::getModel($modelName)->find($findParams);
 
-				foreach($checkFields as $field){
-					$criteria->addCondition($field, $dupModel->getAttribute($field));
-				}							
+				echo '<table border="1">';
+				echo '<tr><td>ID</th><th>'.implode('</th><th>',$checkFields).'</th></tr>';
 
-				$stmt = GO::getModel($modelName)->find($findParams);
+				$count = 0;
 
-				$first = true;
+				while($dupModel = $stmt1->fetch()){
 
-				while($model = $stmt->fetch()){
-					echo '<tr><td>';
-					if(!$first)
-						echo '<span style="color:red">';
-					echo $model->id;
-					if(!$first)
-						echo '</span>';
-					echo '</th>';				
+					$findParams = GO_Base_Db_FindParams::newInstance()
+								->ignoreAcl()
+								->select('t.id, '.$checkFieldsStr)
+								->order('id','ASC');
 
-					foreach($checkFields as $field)
-					{
-						echo '<td>'.$model->getAttribute($field,'html').'</td>';
-					}
+					$criteria=$findParams->getCriteria();
 
-					echo '</tr>';
+					foreach($checkFields as $field){
+						$criteria->addCondition($field, $dupModel->getAttribute($field));
+					}							
 
-					if(!$first){
-						if(!empty($params['delete'])){
-							
-							if($model->countLinks()){
-								echo '<tr><td colspan="99">Skipped delete because model has links</td></tr>';
-							}else
-							{
-								$model->delete();
-							}
+					$stmt = GO::getModel($modelName)->find($findParams);
+
+					$first = true;
+
+					while($model = $stmt->fetch()){
+						echo '<tr><td>';
+						if(!$first)
+							echo '<span style="color:red">';
+						echo $model->id;
+						if(!$first)
+							echo '</span>';
+						echo '</th>';				
+
+						foreach($checkFields as $field)
+						{
+							echo '<td>'.$model->getAttribute($field,'html').'</td>';
 						}
 
-						$count++;
+						echo '</tr>';
+
+						if(!$first){
+							if(!empty($params['delete'])){
+
+								if($model->countLinks()){
+									echo '<tr><td colspan="99">Skipped delete because model has links</td></tr>';
+								}else
+								{
+									$model->delete();
+								}
+							}
+
+							$count++;
+						}
+
+						$first=false;
 					}
+				}	
+					
 
-					$first=false;
-				}
+				echo '</table>';
+
+				echo '<p>Found '.$count.' duplicates</p>';
+				echo '<br /><br /><a href="'.GO::url('maintenance/removeDuplicates', array('delete'=>true, 'model'=>$modelName)).'">Click here to delete the newest duplicates marked in red for model '.$modelName.'.</a>';
+				
 			}
-
-			echo '</table>';
-
-			echo '<p>Found '.$count.' duplicates</p>';
 		}
 		
-		echo '<br /><br /><a href="'.GO::url('maintenance/removeDuplicates', array('delete'=>true)).'">Click here to delete the newest duplicates marked in red.</a>';
-
+		if(empty($params['model']))
+			echo '<br /><br /><a href="'.GO::url('maintenance/removeDuplicates', array('delete'=>true)).'">Click here to delete the newest duplicates marked in red.</a>';
+		else
+			echo '<br /><br /><a href="'.GO::url('maintenance/removeDuplicates').'">Show all models.</a>';
 	}
 	
 	/**
@@ -259,6 +272,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	 * @return array 
 	 */
 	protected function actionBuildSearchCache($params) {
+		
+		if(!$this->isCli() && !GO::modules()->tools && GO::router()->getControllerAction()!='upgrade')
+			throw new GO_Base_Exception_AccessDenied();
 		
 		$this->lockAction();
 		
@@ -309,6 +325,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	protected function actionCheckDatabase($params) {
 		
 
+		if(!$this->isCli() && !GO::modules()->tools)
+			throw new GO_Base_Exception_AccessDenied();
+		
 		$this->run("upgrade",$params);		
 		
 		$this->lockAction();
@@ -372,6 +391,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 
 				$m = GO::getModel($model->getName());
 
+				if($m->checkDatabaseSupported()){		
 					$stmt = $m->find(array(
 							'ignoreAcl'=>true
 					));
@@ -379,6 +399,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 				}
 			}
 		}
+	}
 	
 	private function _checkV3(){
 		
@@ -633,7 +654,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		echo "All Done!\n";		
 		
-		if(!$this->isCli()){
+		if(!$this->isCli() && basename($_SERVER['PHP_SELF'])!='upgrade.php'){
 			echo '</pre><br /><br />';
 			echo '<a href="'.GO::config()->host.'">'.GO::t('cmdContinue').'</a>';
 		}

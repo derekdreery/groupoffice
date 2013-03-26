@@ -108,13 +108,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	protected $insertDelayed=false;
 	
 	private $_loadingFromDatabase=true;
-	
-	/**
-	 * Set this property in the child class too tablename of AR
-	 * @var string
-	 */
-	protected static $tableName = false;
-	
+		
 	/**
 	 *
 	 * @var int Link type of this Model used for the link system. See also the linkTo function
@@ -179,28 +173,27 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * This is defined as a function because it's a only property that can be set
 	 * by child classes.
 	 * 
-	 * @var string The database table name
+	 * @return string The database table name
 	 */
 	public function tableName(){
-		return static::$tableName;
-	}
-	
-	/**
-	 * 
-	 * @return int ACL to check for permissions.
-	 */
-	public function aclField(){
 		return false;
 	}
 	
+	/**
+	 * The name of the column that has the foreignkey the the ACL record
+	 * If column 'acl_id' exists it default to this
+	 * You can use field of a relation separated by a dot (eg: 'category.acl_id')
+	 * @return string ACL to check for permissions.
+	 */
+	public function aclField(){
+		return false; //return isset($this->columns['acl_id']) ? 'acl_id' : false;
+	}
 		
 	/**
-	 * 
-	 * Returns the primary key of the database table of this model
-	 * 
-	 * @var mixed Primary key of database table. Can be a field name string or an array of fieldnames
+	 * Returns the fieldname that contains primary key of the database table of this model
+	 * Can be an array of column names if the PK has more then one column
+	 * @return mixed Primary key of database table. Can be a field name string or an array of fieldnames
 	 */
-		
 	public function primaryKey()
 	{
 		return 'id';
@@ -785,13 +778,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	/**
-	 * Finds a single model by an attribute name and value.
-	 * This function does NOT check permissions! Use find() if you need that.
+	 * Finds models by attribute and value
+	 * This function uses find() to check permissions!
 	 * 
-	 * @param string $attributeName
-	 * @param mixed $value
+	 * @param string $attributeName column name you want to check a value for
+	 * @param mixed $value the value to find (needs to be exact)
 	 * @param GO_Base_Db_FindParams $findParams Extra parameters to send to the find function.
-	 * @return GO_Base_Db_ActiveRecord 
+	 * @return GO_Base_Db_ActiveStatement
 	 */
 	public function findByAttribute($attributeName, $value, $findParams=false){		
 		return $this->findByAttributes(array($attributeName=>$value), $findParams);
@@ -799,7 +792,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	/**
 	 * Finds models by an attribute=>value array.
-	 * This function does NOT check permissions! Use find() if you need that.
+	 * This function uses find() to check permissions!
 	 * 
 	 * @param array $attributes
 	 * @param GO_Base_Db_FindParams $findParams
@@ -930,7 +923,47 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		return "`$tableAlias`.`".implode('`, `'.$tableAlias.'`.`', $fields)."`";
 	}
 	
-
+	/**
+	 * Create or find an ActiveRecord
+	 * when there is no PK supplied a new instance of the called class will be returned
+	 * else it will pass the PK value to findByPk()
+	 * When a multi column key is used it will create when not found
+	 * @param array $params PK or record to search for
+	 * @return GO_Base_Db_ActiveRecord the called class
+	 * @throws GO_Base_Exception_NotFound when no record found with supplied PK
+	 */
+	public function createOrFindByParams($params) {
+	  
+	  $pkColumn= $this->primaryKey();
+	  if(is_array($pkColumn)) { //if primaryKey excists of multiple columns
+		$pk=array();
+		foreach($pkColumn as $column)
+		{
+		  if(isset($params[$column]))
+			$pk[$column] = $this->formatInput($column, $params[$column]);
+		}
+		if (empty($pk))
+		  $model = new static();
+		else {
+		  $model = $this->findByPk($pk);
+		  if (!$model)
+			$model = new static(); 
+		}
+		return $model;
+	  } 
+	  else {
+		$pk = $params[$this->primaryKey()];
+		if (empty($pk))
+		  $model = new static();
+		else {
+		  $model = $this->findByPk($pk);
+		  if (!$model)
+			throw new GO_Base_Exception_NotFound();
+		}
+		return $model;
+	  }
+	}
+	
 	/**
 	 * Find models
 	 * 
@@ -1126,10 +1159,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(!empty($params['searchQuery'])){
 			$sql .= " \nAND (";
 			
-			if(empty($params['searchQueryFields']))
+			if(empty($params['searchQueryFields'])){
 				$fields = $this->getFindSearchQueryParamFields('t',$joinCf);
-			else
+			}else{
 				$fields = $params['searchQueryFields'];
+			}
 			
 			
 			if(empty($fields))
@@ -1146,8 +1180,22 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					$sql .= ' OR ';
 				}
 				$sql .= $field.' LIKE '.$this->getDbConnection()->quote($params['searchQuery'], PDO::PARAM_STR);
-			}			
+			}	
 			
+			if($this->primaryKey()=='id'){
+				//Searc on exact ID match too.
+				$idQuery = trim($params['searchQuery'],'% ');
+				if(intval($idQuery)."" === $idQuery){
+					if($first){
+						$first=false;
+					}else
+					{
+						$sql .= ' OR ';
+					}
+
+					$sql .= 't.id='.intval($idQuery);
+				}									
+			}
 			
 			$sql .= ') ';
 		}
@@ -1262,6 +1310,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 			throw new Exception($msg);
 		}
+		
+		$AS = new GO_Base_Db_ActiveStatement($result, $this);
 
 		
 		if(!empty($params['calcFoundRows'])){
@@ -1285,22 +1335,21 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			{
 				$foundRows = $result->rowCount();       
       }	
-      $result->foundRows=$foundRows;
+      $AS->foundRows=$foundRows;
 		}
 		
-		//$result->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className());
-		if($fetchObject)
-			$result->setFetchMode(PDO::FETCH_CLASS, $this->className(),array(false));
-		else
-			$result->setFetchMode (PDO::FETCH_ASSOC);
+//		//$result->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className());
+//		if($fetchObject)
+//			$result->setFetchMode(PDO::FETCH_CLASS, $this->className(),array(false));
+//		else
+//			$result->setFetchMode (PDO::FETCH_ASSOC);
     
     //TODO these values should be set on findByPk too.
-    $result->model=$this;
-    $result->findParams=$params;
+    $AS->findParams=$params;
     if(isset($params['relation']))
-      $result->relation=$params['relation'];    
+      $AS->relation=$params['relation'];    
 
-    return $result;		
+    return $AS;		
 	}
 	
 	private function _debugSql($params, $sql){
@@ -1323,8 +1372,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			//sort so that :param1 does not replace :param11 first.
 			arsort($params['bindParams']);			
 			
-			foreach($params['bindParams'] as $key=>$value){
-//				$sql = str_replace(':'.$key, '"'.$value.'"', $sql);
+			foreach($params['bindParams'] as $key=>$value){	
 				$sql = preg_replace('/:'.$key.'[^0-9]/', '"'.$value.'"', $sql);
 			}
 		}
@@ -1604,7 +1652,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			return false;
 		
 		if(!isset($r[$name]['findParams']))
-			$r[$name]['findParams']=array();
+			$r[$name]['findParams']=GO_Base_Db_FindParams::newInstance();
 		
 		if($r[$name]['type']==self::BELONGS_TO){
 		
@@ -1640,7 +1688,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 		}elseif($r[$name]['type']==self::HAS_ONE){			
 			//We can't put this in the related cache because there's no reliable way to check if the situation has changed.
-			$params = array_merge($r[$name]['findParams'], array('relation'=>$name));
+	
+			$params =$r[$name]['findParams']->relation($name);
 			//In a has one to relation ship the primary key of this model is stored in the "field" attribute of the related model.					
 			return empty($this->pk) ? false : GO::getModel($model)->findSingleByAttribute($r[$name]['field'], $this->pk, $params);			
 		}elseif($r[$name]['type']==self::HAS_MANY)
@@ -1907,6 +1956,21 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$att[$attName]=$this->$attName;
 		}
 		
+		return $att;
+	}
+	
+	/**
+	 * Get a selection of attributes
+	 * 
+	 * @param array $attributeNames
+	 * @param string $outputType
+	 * @return array
+	 */
+	public function getAttributeSelection($attributeNames, $outputType='formatted'){
+		$att=array();
+		foreach($attributeNames as $attName){
+			$att[$attName]=$this->getAttribute($attName, $outputType);
+		}
 		return $att;
 	}
 	
@@ -2451,6 +2515,26 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}
 		}
 	}
+	
+	/**
+	 * Reset attribute to it's original value and clear the modified attribute.
+	 * 
+	 * @param string $name
+	 */
+	public function resetAttribute($name){
+		$this->$name = $this->getOldAttributeValue($name);
+		unset($this->_modifiedAttributes[$name]);
+	}
+	
+	/**
+	 * Reset attributes to it's original value and clear the modified attributes.
+	 */
+	public function resetAttributes(){
+		foreach($this->_modifiedAttributes as $name => $oldValue){
+			$this->$name = $oldValue;
+			unset($this->_modifiedAttributes[$name]);
+		}
+	}
 
 	/**
 	 * Get the old value for a modified attribute.
@@ -2506,6 +2590,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			if(!$model)
 				$model = new GO_Base_Model_SearchCacheRecord();
 			
+			$model->mtime=0;
+			
 			$acl_id =$this->findAclId();
 			
 			//if model doesn't have an acl we use the acl of the module it belongs to.
@@ -2513,6 +2599,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				$acl_id = GO::modules()->{$this->getModule ()}->acl_id;
 				
 			$defaultUserId = isset(GO::session()->values['user_id']) ? GO::session()->values['user_id'] : 1;
+			
+			//cache type in default system language.
+			if(GO::user())
+				GO::language()->setLanguage(GO::config()->language);
+							
 			
 			//GO::debug($model);
 			$autoAttr = array(
@@ -2522,7 +2613,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				'module'=>$this->module,
 				'model_name'=>$this->className(),
 				'name' => '',
-				//'link_type'=>$this->modelTypeId(),
 				'description'=>'',		
 				'type'=>$this->localizedName, //deprecated, for backwards compatibilty
 				'keywords'=>$this->getSearchCacheKeywords($this->localizedName),
@@ -2533,21 +2623,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 			$attr = array_merge($autoAttr, $attr);
 			
+			if(GO::user())
+				GO::language()->setLanguage(GO::user()->language);
+			
 			if($attr['description']==null)
 				$attr['description']="";
-			
-//			//make sure these attributes are not too long
-//			if(GO_Base_Util_String::length($attr['name'])>100)
-//				$attr['name']=substr($attr['name'], 0, 100);
-//			
-//			if(GO_Base_Util_String::length($attr['description'])>255)
-//				$attr['description']=GO_Base_Util_String::substr($attr['description'], 0, 255);
-			
-			//GO::debug($attr);
 
 			$model->setAttributes($attr, false);
 			$model->cutAttributeLengths();
 			$model->save(true);
+
 			return $model;
 			
 		}
@@ -2622,8 +2707,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if($this->customfieldsRecord){
 			$keywords .= ','.$this->customfieldsRecord->getSearchCacheKeywords();
 		}
-		
-		return GO_Base_Util_String::substr($keywords,0,255);
+		return $keywords;
 	}
 	
 	protected function beforeSave(){
@@ -2667,8 +2751,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$sql .= "INTO `{$this->tableName()}` (`".implode('`,`', $fieldNames)."`) VALUES ".
 					"(:".implode(',:', $fieldNames).")";
 
-		if($this->_debugSql)			
-			$this->_debugSql(array('bindParams'=>$this->_attributes), $sql);		
+		if($this->_debugSql){		
+			$bindParams = array();
+			foreach($fieldNames as  $field){
+				$bindParams[$field]=$this->_attributes[$field];
+			}
+			$this->_debugSql(array('bindParams'=>$bindParams), $sql);		
+		}
 		
 		try{
 			$stmt = $this->getDbConnection()->prepare($sql);
@@ -2720,6 +2809,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$sql = "UPDATE `{$this->tableName()}` SET ".implode(',',$updates)." WHERE ";
 		
+		
+		$bindParams=array();
+		
 		if(is_array($this->primaryKey())){
 			
 			$first=true;
@@ -2732,23 +2824,35 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				$sql .= "`".$field."`=:".$field;
 			}
 			
-		}else
+			$bindParams[$field]=$this->_attributes[$field];
+			
+		}else{
 			$sql .= "`".$this->primaryKey()."`=:".$this->primaryKey();
+			$bindParams[$field]=$this->_attributes[$field];
+		}
 		
-		if($this->_debugSql)
-			$this->_debugSql(array('bindParams'=>$this->_attributes), $sql);
+		
 
 		try{
 			$stmt = $this->getDbConnection()->prepare($sql);
 
 			$pks = is_array($this->primaryKey()) ? $this->primaryKey() : array($this->primaryKey());
-
+			
 			foreach($this->columns as $field => $attr){
 
-				if($this->isModified($field) || in_array($field, $pks))
+				if($this->isModified($field) || in_array($field, $pks)){
+					$bindParams[$field]=$this->_attributes[$field];
 					$stmt->bindParam(':'.$field, $this->_attributes[$field], $attr['type'], empty($attr['length']) ? null : $attr['length']);
+				}
 			}
+			
+			if($this->_debugSql)
+				$this->_debugSql(array('bindParams'=>$bindParams), $sql);
+			
 			$ret = $stmt->execute();
+			if($this->_debugSql){
+				GO::debug("Affected rows: ".$ret);
+			}
 		}catch(Exception $e){
 			$msg = $e->getMessage();
 						
@@ -3070,12 +3174,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$columns = array_keys($this->columns);
 		
 		foreach($columns as $column){
-			if(isset($this->_attributes[$column]) && isset($this->columns[$column])){
+			if(isset($this->_attributes[$column]) && isset($this->columns[$column]['dbtype'])){
 				switch ($this->columns[$column]['dbtype']) {
 						case 'int':
 						case 'tinyint':
 						case 'bigint':
-							$this->_attributes[$column]=intval($this->_attributes[$column]);
+							//must use floatval because of ints greater then 32 bit
+							$this->_attributes[$column]=floatval($this->_attributes[$column]);
 							break;		
 
 						case 'float':
@@ -3098,7 +3203,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @see hasAttribute
 	 */
 	public function setAttribute($name,$value, $format=false)
-	{		
+	{			
 		if($this->_loadingFromDatabase){
 			//skip fancy features when loading from the database.
 			$this->_attributes[$name]=$value;			
@@ -3453,6 +3558,23 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	/**
+	 * Check if it's necessary to run a database check for this model.
+	 * If it has an ACL, Files or an overrided method it returns true.
+	 * @return boolean
+	 */
+	public function checkDatabaseSupported(){
+		
+		if($this->aclField())
+			return true;
+		
+		if($this->hasFiles() && GO::modules()->isInstalled('files'))
+			return true;
+		
+		$class = new GO_Base_Util_ReflectionClass($this->className());
+		return $class->methodIsOverridden('checkDatabase');		
+	}
+	
+	/**
 	 * A function that checks the consistency with the database.
 	 * Generally this is called by r=maintenance/checkDabase
 	 */
@@ -3517,6 +3639,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	/**
 	 * Duplicates the current activerecord to a new one.
+	 * 
+	 * Instead of cloning it will create a new instance of the called class
+	 * Copy all the attributes from the original and overwrite the one in the $attibutes parameter
+	 * Unset the primary key if it's not multicolumn and assumably auto_increment
 	 * 
 	 * @param array $attributes Array of attributes that need to be set in 
 	 * the newly created activerecord as KEY => VALUE. 
@@ -3672,6 +3798,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * Get the extra default attibutes not determined from the database.
 	 * 
 	 * This function can be overridden in the model.
+	 * Example override: 
+	 * $attr = parent::defaultAttributes();
+	 * $attr['time'] = time();
+	 * return $attr;
 	 * 
 	 * @return Array An empty array.
 	 */
@@ -3882,9 +4012,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$model->copyLinks($this);
 		
 		//move files.
-		$this->_moveFiles($model);
-		
-		$this->_moveComments($model);
+		if($deleteModel){
+			$this->_moveFiles($model);
+
+			$this->_moveComments($model);
+		}else
+		{
+			$this->_copyFiles($model);
+
+			$this->_copyComments($model);
+		}
 		
 		$this->afterMergeWith($model);
 		
@@ -3892,6 +4029,42 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$model->delete();				
 	}
 	
+	private function _copyComments(GO_Base_Db_ActiveRecord $sourceModel) {
+		if (GO::modules()->isInstalled('comments') && $this->hasLinks()) {
+			$findParams = GO_Base_Db_FindParams::newInstance()
+							->ignoreAcl()
+							->order('id', 'DESC')
+							->select()
+							->criteria(
+							GO_Base_Db_FindCriteria::newInstance()
+							->addCondition('model_id', $sourceModel->id)
+							->addCondition('model_type_id', $sourceModel->modelTypeId())
+			);
+			$stmt = GO_Comments_Model_Comment::model()->find($findParams);
+			while ($comment = $stmt->fetch()) {
+				$comment->duplicate(
+								array(
+										'model_type_id' => $this->modelTypeId(),
+										'model_id' => $this->id
+								)
+				);
+			}
+		}
+	}
+
+	private function _copyFiles(GO_Base_Db_ActiveRecord $sourceModel) {
+		if (!$this->hasFiles()) {
+			return false;
+		}
+
+		$sourceFolder = GO_Files_Model_Folder::model()->findByPk($sourceModel->files_folder_id);
+		if (!$sourceFolder) {
+			return false;
+		}
+
+		$this->filesFolder->copyContentsFrom($sourceFolder);
+	}
+
 	private function _moveComments(GO_Base_Db_ActiveRecord $sourceModel){
 		if(GO::modules()->isInstalled('comments') && $this->hasLinks()){
 			$findParams = GO_Base_Db_FindParams::newInstance()

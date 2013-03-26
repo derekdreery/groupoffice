@@ -67,6 +67,7 @@ GO.files.OpenFileWindow = Ext.extend(GO.Window, {
 		GO.files.OpenFileWindow.superclass.initComponent.call(this);
 	},
 	show : function(config){	
+		
 
 		Ext.getBody().mask(GO.lang.waitMsgLoad);
 		this.list.store.load({
@@ -81,15 +82,16 @@ GO.files.OpenFileWindow = Ext.extend(GO.Window, {
 				{
 					var record = this.list.store.getAt(0);			
 					eval(record.data.handler);
+
 				}else{				
 					GO.files.OpenFileWindow.superclass.show.call(this);
 					this.rememberCB.setValue(false);
+					
+					this.returnedHandler=true;
 				}
 			},
 			scope:this
-		});
-		
-		
-		
-	}
+		});	
+
+	}	
 });

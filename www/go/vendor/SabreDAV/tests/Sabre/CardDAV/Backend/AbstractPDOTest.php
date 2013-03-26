@@ -1,15 +1,25 @@
 <?php
 
-abstract class Sabre_CardDAV_Backend_AbstractPDOTest extends PHPUnit_Framework_TestCase {
+namespace Sabre\CardDAV\Backend;
 
+use Sabre\CardDAV;
+
+abstract class AbstractPDOTest extends \PHPUnit_Framework_TestCase {
+
+    /**
+     * @var CardDAV\Backend\PDO
+     */
     protected $backend;
 
+    /**
+     * @abstract
+     * @return PDO
+     */
     abstract function getPDO();
 
     public function setUp() {
 
-        $backend = new Sabre_CardDAV_Backend_PDO($this->getPDO());
-        $this->backend = $backend;
+        $this->backend = new PDO($this->getPDO());
 
     }
 
@@ -23,9 +33,9 @@ abstract class Sabre_CardDAV_Backend_AbstractPDOTest extends PHPUnit_Framework_T
                 'uri' => 'book1',
                 'principaluri' => 'principals/user1',
                 '{DAV:}displayname' => 'book1',
-                '{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}addressbook-description' => 'addressbook 1',
+                '{' . CardDAV\Plugin::NS_CARDDAV . '}addressbook-description' => 'addressbook 1',
                 '{http://calendarserver.org/ns/}getctag' => 1,
-                '{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}supported-address-data' => new Sabre_CardDAV_Property_SupportedAddressData(),
+                '{' . CardDAV\Plugin::NS_CARDDAV . '}supported-address-data' => new CardDAV\Property\SupportedAddressData(),
             )
         );
 
@@ -37,7 +47,7 @@ abstract class Sabre_CardDAV_Backend_AbstractPDOTest extends PHPUnit_Framework_T
 
         $result = $this->backend->updateAddressBook(1, array(
             '{DAV:}displayname' => 'updated',
-            '{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}addressbook-description' => 'updated',
+            '{' . CardDAV\Plugin::NS_CARDDAV . '}addressbook-description' => 'updated',
             '{DAV:}foo' => 'bar',
         ));
 
@@ -51,9 +61,9 @@ abstract class Sabre_CardDAV_Backend_AbstractPDOTest extends PHPUnit_Framework_T
                 'uri' => 'book1',
                 'principaluri' => 'principals/user1',
                 '{DAV:}displayname' => 'book1',
-                '{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}addressbook-description' => 'addressbook 1',
+                '{' . CardDAV\Plugin::NS_CARDDAV . '}addressbook-description' => 'addressbook 1',
                 '{http://calendarserver.org/ns/}getctag' => 1,
-                '{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}supported-address-data' => new Sabre_CardDAV_Property_SupportedAddressData(),
+                '{' . CardDAV\Plugin::NS_CARDDAV . '}supported-address-data' => new CardDAV\Property\SupportedAddressData(),
             )
         );
 
@@ -75,9 +85,9 @@ abstract class Sabre_CardDAV_Backend_AbstractPDOTest extends PHPUnit_Framework_T
                 'uri' => 'book1',
                 'principaluri' => 'principals/user1',
                 '{DAV:}displayname' => 'book1',
-                '{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}addressbook-description' => 'addressbook 1',
+                '{' . CardDAV\Plugin::NS_CARDDAV . '}addressbook-description' => 'addressbook 1',
                 '{http://calendarserver.org/ns/}getctag' => 1,
-                '{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}supported-address-data' => new Sabre_CardDAV_Property_SupportedAddressData(),
+                '{' . CardDAV\Plugin::NS_CARDDAV . '}supported-address-data' => new CardDAV\Property\SupportedAddressData(),
             )
         );
 
@@ -90,7 +100,7 @@ abstract class Sabre_CardDAV_Backend_AbstractPDOTest extends PHPUnit_Framework_T
 
         $result = $this->backend->updateAddressBook(1, array(
             '{DAV:}displayname' => 'updated',
-            '{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}addressbook-description' => 'updated',
+            '{' . CardDAV\Plugin::NS_CARDDAV . '}addressbook-description' => 'updated',
         ));
 
         $this->assertTrue($result);
@@ -103,9 +113,9 @@ abstract class Sabre_CardDAV_Backend_AbstractPDOTest extends PHPUnit_Framework_T
                 'uri' => 'book1',
                 'principaluri' => 'principals/user1',
                 '{DAV:}displayname' => 'updated',
-                '{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}addressbook-description' => 'updated',
+                '{' . CardDAV\Plugin::NS_CARDDAV . '}addressbook-description' => 'updated',
                 '{http://calendarserver.org/ns/}getctag' => 2,
-                '{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}supported-address-data' => new Sabre_CardDAV_Property_SupportedAddressData(),
+                '{' . CardDAV\Plugin::NS_CARDDAV . '}supported-address-data' => new CardDAV\Property\SupportedAddressData(),
             )
         );
 
@@ -123,7 +133,7 @@ abstract class Sabre_CardDAV_Backend_AbstractPDOTest extends PHPUnit_Framework_T
     }
 
     /**
-     * @expectedException Sabre_DAV_Exception_BadRequest
+     * @expectedException Sabre\DAV\Exception\BadRequest
      */
     public function testCreateAddressBookUnsupportedProp() {
 
@@ -137,7 +147,7 @@ abstract class Sabre_CardDAV_Backend_AbstractPDOTest extends PHPUnit_Framework_T
 
         $this->backend->createAddressBook('principals/user1','book2', array(
             '{DAV:}displayname' => 'book2',
-            '{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}addressbook-description' => 'addressbook 2',
+            '{' . CardDAV\Plugin::NS_CARDDAV . '}addressbook-description' => 'addressbook 2',
         ));
 
         $expected = array(
@@ -146,18 +156,18 @@ abstract class Sabre_CardDAV_Backend_AbstractPDOTest extends PHPUnit_Framework_T
                 'uri' => 'book1',
                 'principaluri' => 'principals/user1',
                 '{DAV:}displayname' => 'book1',
-                '{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}addressbook-description' => 'addressbook 1',
+                '{' . CardDAV\Plugin::NS_CARDDAV . '}addressbook-description' => 'addressbook 1',
                 '{http://calendarserver.org/ns/}getctag' => 1,
-                '{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}supported-address-data' => new Sabre_CardDAV_Property_SupportedAddressData(),
+                '{' . CardDAV\Plugin::NS_CARDDAV . '}supported-address-data' => new CardDAV\Property\SupportedAddressData(),
             ),
             array(
                 'id' => 2,
                 'uri' => 'book2',
                 'principaluri' => 'principals/user1',
                 '{DAV:}displayname' => 'book2',
-                '{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}addressbook-description' => 'addressbook 2',
+                '{' . CardDAV\Plugin::NS_CARDDAV . '}addressbook-description' => 'addressbook 2',
                 '{http://calendarserver.org/ns/}getctag' => 1,
-                '{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}supported-address-data' => new Sabre_CardDAV_Property_SupportedAddressData(),
+                '{' . CardDAV\Plugin::NS_CARDDAV . '}supported-address-data' => new CardDAV\Property\SupportedAddressData(),
             )
         );
         $result = $this->backend->getAddressBooksForUser('principals/user1');

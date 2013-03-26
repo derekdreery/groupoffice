@@ -113,3 +113,10 @@ $l['bookmarkAlreadyExists']="Direktorij '%fn' već ima favorita za postojećeg k
 $l['removeBookmark']="Ukloni favorita";
 $l['removeBookmarkQuestion']="Ukloni direktorij '%fn' iz popisa favorita?";
 $l['notInSearchMode']="Nije moguće uraditi ovo dok ste u načinu pretraživanja.";
+
+$l['openInBrowser']='Otvori u pregledniku interneta';
+$l['selectApplication']="Odaberite program za otvaranje ove datoteke...";
+$l['rememberFileHandler']="Zapamti moju odluku za ovu vrstu datoteke";
+$l['alwaysAsk']="Uvijek pitaj";
+$l['openWith']='Otvori sa';
+$l['open']='Otvori';

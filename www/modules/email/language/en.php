@@ -69,8 +69,8 @@ $l["enterFolderName"]='Enter the folder name:';
 $l["addFolder"]='Add folder';
 $l["downloadAllAsZip"]='Download all as zipfile';
 $l["body"]='Body';
-$l["recievedBefore"]='Recieved before';
-$l["recievedSince"]='Recieved since';
+$l["recievedBefore"]='Received before';
+$l["recievedSince"]='Received since';
 $l["answered"]='Answered';
 $l["unanswered"]='Unanswered';
 $l["viewed"]='Viewed';
@@ -244,3 +244,11 @@ $l['copyMailTo']="Copy email to...";
 $l['copyMailToTxt']="Select a folder to copy the email to";
 $l['copyMailToRUSure']="Are you sure you want to copy the selected email message to this mailbox folder?";
 $l['copyMailsToRUSure']="Are you sure you want to copy the selected email messages to this mailbox folder?";
+$l['selectValidMailFolder']="Please select a valid email folder to copy to.";
+$l['clickSeeWholeMessage']="The actual message is larger than can be shown here. Click here to see the entire message.";
+
+$l['dateReceived']='Date received';
+$l['dateSent']='Date sent';
+
+$l['cronEmailReminders']='Email reminders';
+$l['cronEmailRemindersDescription']='This cron handles the email reminders';

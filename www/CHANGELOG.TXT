@@ -1,5 +1,212 @@
-4.1.32
+26-03-2013 4.1.51
+- Config::get_setting() will return null of the config option is not yet in the database
+- DbStore can attach extra PK values for the deletion of records with an PK of multiple columns
+- Ticket dialog will clear the attachments queue after show or load
+- Calculate mail usage in About dialog too.
+- Comments and files are copied when you merge an item without deleting the source item.
+- Always cache search results in default system language
+- Hide disabled custom field categories in the display of contacts and companies
+
+24-03-2013 4.1.50
+- Ticket module kept hanging in the weekend.
+
+24-03-2013 4.1.49
+- Bug in ActiveRecord
+- Move appointment with right click could create a corrupted unremovable appointment
+
+22-03-2013 4.1.48 (Not released)
+- When GroupOffice renders the Timer button it checks if it was already running and adjusts the button accordingly
+- Comments in the EastPanel will not disable the scrollbar and adding from the EastPanel works in all panels
+- Time registration: show all weeks of current year & automatically select current week.
+- Link fixed to unsubscribe from address lists.
+- Prevent double submits in dialogs by disabling buttons after click
+- Refresh ticket status counters when changing a ticket status
+- Wrong time format in trial creation dialog of servermanager
+- Search on a 3 letter word didn't find results in some cases.
+
+20-03-2013 4.1.47
+- Changed cron so it can run multiple cron-jobs next to each other (Starting new job every minute)
+- Searching for projects (to link them) will show the full project path (in case 2 subprojects have the same name)
+- Projects overview grid will have a column path
+- Z-Push2 - Added Delete functions to event/task/contact and note backend
+- Z-Push2 - Only attach attachments of old mail when forwarding it, not on reply.
+- Moved pspellsupport check to GO.settings instead of GO.Email
+- Fixed category selection in Note synchronization when using Z-Push2
+- Type combo will be loaded correctly when opening ticket dialog for the first time.
+- Now recurring events are also shown in the pdf of the daily task/event mailer.
+- Fixed filename of pdf in the daily task/event mailer (No commas) 
+- Fixed sorting the email folder tree and folder names that only have digits
+- Drag&Drop in billing catalog was fixed
+- Double click on an item in the Select Product Dialog will submit the form (add item to order)
+- Fixed subscribing to IMAP folders
+- Removed invalid l char that was displayed on login screen
+- When adding an email to an existing contact the dialog will find contact without mail address as well
+- The Edit button on the dialog that asks if you when to add an email to an existing contact is renamed to "Merge"
+- Calendar group view grid is clickable to add events
+- Added missing settings tab tables
+- Tickets style matches e-mail now and tickets that were not answered within 24 hours are marked red.
+- Custom fields are Open-Source now
+- Addressbook search speed optimizations
+- Installation always used euro for currency
+- Fixed SQL error after deleting custom field
+- Links were not searched correctly in the links dialog
+
+15-03-2013 4.1.46
+- Encode attachment string parts in z-push2 synced emails
+- Fixed bug with showing all contact customfield tabs in the settings dialog
+- Undefined time in portlet
+- Updated Norwegian and Brasilian Portugese
+- Automatic mail checker will run again
+
+14-03-2013 4.1.45
+- Strip unsupported datastore options from synthesis syncml client
+- Added "checker_interval" option for config.php to change to interval for the automatic mail checker
+- Fixed sending timeregistration approval email when closing week (uses new Swift mailer)
+- Fixed problem with enabling of users and groups tab in the cron dialog.
+- added options to user administration dialog for selection contact customfields tabs for displaying in the Global settings panel.
+- Updated Croatian
+- Popup reminders: improved handling of date and time when editing popup reminder.
+- Fixed host config autodetection and time format selection at install time
+- Updated Norwegian
+- Fixed empty event dialog bug in firefox
+
+12-03-2013 4.1.44
+- IMPORTANT: New cron / task scheduler system. If you installed manually you must adjust
+  the cron job as descripbed here: http://wiki4.group-office.com/wiki/Manual_install_on_other_Linux,_Windows_or_Mac_systems#Cron_job
+- e-mail checker could update with wrong number sometimes
+- Added support_link config option
+- Tasks and contacts clickable in calendar
+- Signed GOTA for 6 months.
+- ExtJS base translations were missing
+- Updated French
+- Updating copy sieve rules could delete rule
+- Editing an event in the month grid for the second time without refreshing 
+  loaded an empty dialog.
+- Description missing in caldav.
+
+08-03-2013 4.1.43
+- Exclude noSelect folders from the folder listing in z-push2
+- Remove auto check mailboxes automatically when they don't exist anymore
+- Removed tinymce and ext source from scripts because they are not used.
+- File creation date is not updated when editing files.
+- All day events import had incorrect time
+- Editing a sieve copy rule filter turned into a move rule
+- Added date and time to e-mail client and dates always have leading zeros now for better alignment.
+- Fixed sorting issue in calendar list view
+
+08-03-2013 4.1.42
+- Updated German
+- Updated Swedish
+- Updated Norwegian
+- Don't sync shared private events
+- Last event of a recurring series could not be edited
+- Escape config values on Debian package installation
+- Restored missing auto groups functionality in servermanager
+- Private exceptions are called private now
+- IMAP auth error reporting fixed
+- Create default addressbooks, calendars etc. for imported users
+- Login message was broken
+- Full URL was always auto detected, even when set in config.php
+- Fixed printing of read-only calendars.
+- Added address book selection when creating new user so the administrator can choose in which address book the user contact will be saved.
+- Added address list selection panel to the settings dialog.
+
+06-03-2013 4.1.41
+- In some cases Group-Office didn't load.
+
+05-03-2013 4.1.40
+- Wrapper class for ActiveStatement so that we can use persistent database connections
+- Old framework not needed for boot anymore
+- Prevent deletion the user with id=1
+- Raised contact salutation field to 100 chars and cut it if it's longer.
+- Unseen messages were not highlighted in e-mail portlet.
+- Billing: optional extra costs line in orders if that is set in the order status. Can be removed manually or overwritten by new extra costs line when status is changed.
+
+01-03-2013 4.1.39
+- Improved calendar view grid
+- Create temp dirs with 777 permissions to avoid permission issues after upgrade
+- Clicking a day number on the month grid goes to the day view. Clicking on 
+  empty space in the cell adds an event.
+- Everybody may create calendar views
+- When freebusy permissions module is not installed users will always save 
+  meeting requests directly in to other user's calendars.
+- Changed style of unread messages in e-mail client.
+- Added date received column next to date sent column and made date received the 
+  default sort column because it is faster on old IMAP servers.
+- Don't validate passwords on user import and fixed error reporting bug.
+- Only last attachment was forwarded if there were duplicate names
+- E-mail account dialog doesn't connect to IMAP if not necessary
+
+28-02-2013 4.1.38
+- Repeating exception event creation happened before conflict check which caused invalid duplicates.
+- Don't create mailboxes with . or / chars in them
+- Upgrade process created temp folder with root permissions.
+- Moved cache folder to /tmp/cache and made it a config.php option too
+- Removed lots of old redundant code
+- Forwading mail with multiple attachments always gave a max size exceeded error.
+
+27-02-2013 4.1.37
+- Fixed problem with .(dot) date separator in the calendar headers
+- Refactored free busy info in event dialog
+- Show usage in about dialog in servermanager installations
+- Moved private checkbox to first page of event dialog
+- Include time in the error dialog so you can lookup relevant errors in the error log
+- Outlook SyncML error fixed
+- Check if the attachments in the e-mail composer exceed the max_attachment_size config value
+- Fixed event copy with daylight saving. (Events that didn't last a full day where not copied to the correct date selected when copied from a summertime to wintertime date.)
+- Cache folders for searching again. Rebuild search index is required to make current folders show up.
+- Update appointments from icalendar invitation
+
+22-02-2013 4.1.36
+- Fixed caldav problem with tasks
+- Updated German
+- Don't sync private events anymore on shared calendars with z-push
+- Fixed error messages in the task module
+
+20-02-2013 4.1.35
+- Read only calendars work in CalDAV
+- Implemented free busy access check in participants grid
+- limit description of links to 500 chars.
+- Upgraded SabreDAV to 1.8.2
+- All models are searchable by ID
+- Restrict maintenance tasks to command line or tools module access.
+
+15-02-2013 4.1.34
+- File module errors fixed.
+
+14-02-2013 4.1.33
+- Filesearch does not index new files on the fly when opening them because it 
+  can use too many server resources.
+- Filesearch didn't index files with () in the filename.
+- Filesearch supports PDF with scanned image too now.
+- Filesearch OCR language configurable now. See http://wiki4.group-office.com/wiki/Configuration_file#Filesystem_settings
+- Set file mtime when updating with webdav
+- Skip models in the database check that don't really need to be checked.
+- Update English language for email module
+- Show linked past appointments as well as linked future appointments in Display Panel.
+- Show linked completed tasks as well as linked incomplete tasks in Display Panel.
+- Display description of linked tasks and appointments (events) in Display Panel;
+- Don't enable info log automatically. Only log when it's set.
+- Disappearing event in calendar group view
+- Editing recurring event always edited entire series in calendar group view
+- Added -q option to cli to be quiet
+- Send file handler straight away to avoid browser security measures
+
+12-02-2013 4.1.32
+- Remember checkbox values from the export dialog
+- "email_on_new" functionality now contains ticket message in email body.
+- Sort view calendars
 - .ml-unseen-row and .ml-seen-row classes in vertical view of email message list fixed
+- Update Norwegian and German
+- Disabled IMAP message cache because it used a lot of diskspace and performance gain is questionable.
+- Added MS Outlook style to client to fix some strange negative text indents.
+- Set participant status from email
+- Preset appointment name when creating it as a link
+- Re-implemented accept and decline links for external programs
+- Implemented default handlers so people don't have to make a choice
+- Edited ticket messages turned into notes
+- Removed pdf from google drive support
+- octal problem with file_create_mode and folder_create_mode that prevented installation in some cases.
 
 08-02-2013 4.1.31
 - Fix broken e-mail template images

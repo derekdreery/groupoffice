@@ -25,7 +25,7 @@ modules/users/LookAndFeelPanel.js
 modules/users/PasswordPanel.js
 modules/users/Settings.js
 
-views/Extjs3/javascript/windows/AboutDialog.js
+
 views/Extjs3/javascript/windows/LoginDialog.js
 
 views/Extjs3/javascript/data/JsonStore.js
@@ -73,9 +73,7 @@ views/Extjs3/javascript/form/ComboBoxMulti.js
 views/Extjs3/javascript/form/UploadFile.js
 views/Extjs3/javascript/form/PlainField.js
 views/Extjs3/javascript/form/SelectUser.js
-views/Extjs3/javascript/form/SelectGroup.js
 views/Extjs3/javascript/form/SelectCountry.js
-views/Extjs3/javascript/form/SelectAddressFormat.js
 views/Extjs3/javascript/form/FileUploadField.js
 views/Extjs3/javascript/form/TriggerIdField.js
 views/Extjs3/javascript/form/SuperBoxSelect.js
@@ -84,6 +82,7 @@ views/Extjs3/javascript/form/XCheckbox.js
 views/Extjs3/javascript/form/HtmlEditor.js
 views/Extjs3/javascript/form/DateTime.js
 views/Extjs3/javascript/form/DateTimeField.js
+views/Extjs3/javascript/form/TimeField.js
 
 views/Extjs3/javascript/form/HtmlComponent.js
 views/Extjs3/javascript/form/NumberField.js
@@ -133,8 +132,10 @@ views/Extjs3/javascript/windows/UsersInGroup.js
 
 views/Extjs3/javascript/windows/SummaryDialog.js
 views/Extjs3/javascript/windows/TabbedFormDialog.js
+views/Extjs3/javascript/windows/AboutDialog.js
 
 views/Extjs3/javascript/windows/ExportGridDialog.js
+views/Extjs3/javascript/windows/ExportDialog.js
 views/Extjs3/javascript/windows/PersonalSettingsDialog.js
 views/Extjs3/javascript/windows/MergeDialog.js
 

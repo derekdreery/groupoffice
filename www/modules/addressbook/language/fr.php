@@ -1,6 +1,5 @@
 <?php
 
-
 $l["newSearch"]='Nouvelle recherche';
 $l["executeQuery"]='Executer la recherche';
 $l["savedQueries"]='Sauver la recherche';
@@ -120,3 +119,15 @@ $l['incomplete_delete_companies']='Vous n\'avez pas le droit de supprimer toutes
 $l['emailAlreadyExists']='Cette adresse électronique est déjà ajoutée a ce contact';
 $l['emailDoesntExists']='L\'adresse électronique n\'a pas été trouvée';
 $l['imageNotSupported']='Le format de l\'image transférée n\'est pas supporté. Veuillez utiliser une image au format gif, png ou jpg.';
+
+$l['sendingEmailAllowed']= 'Envoi de courriel avec cette adresse de courreil est autorisée';
+$l['enabledMailingGroups']= 'Activation de la liste d\'adresse :';
+$l['noMailingGroups']='Vous n\'avez pas selectionné de liste d\'adresse';
+$l['sentMailings']='Envoyer une lettre d\'information';
+$l['subject']='Sujet';
+$l['status']='Status';
+$l['sent']='Envoyer';
+$l['total']='Total';
+$l['errors']='Erreurs';
+$l['addEntireAddressbook']='Ajouter le carnet d\'adresse en entier';
+$l['selectAddressbook']='Selectionner une carnet d\adresse';

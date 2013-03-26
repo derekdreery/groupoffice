@@ -33,7 +33,8 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 			this.editHandler.defer(200, this);
 		}else
 		{	
-			GO.files.openFile({id:this.data.id});
+			//GO.files.openFile({id:this.data.id});
+			this.data.handler.call(this);
 		}
 	},
 

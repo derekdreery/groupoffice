@@ -315,6 +315,7 @@ class GO_Base_Mail_MimeDecode
                 case 'multipart/digest':
                 case 'multipart/alternative':
                 case 'multipart/related':
+								case 'multipart/relative': // BUGGY ANDROID IMPLEMENTATION
                 case 'multipart/mixed':
                 case 'application/vnd.wap.multipart.related':
                     if(!isset($content_type['other']['boundary'])){

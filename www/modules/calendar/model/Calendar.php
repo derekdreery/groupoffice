@@ -67,7 +67,7 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 										->addCondition('user_id', $userId,'=','s'),
 										's');
 		
-		return $this->find($findParams);		
+		return $this->find($findParams);
 	}
 	
 	
@@ -93,6 +93,15 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 		else
 			return false;
 	}
+	
+	/**
+	 * Get's a unique URI for the calendar. This is used by CalDAV
+	 * 
+	 * @return string
+	 */
+	public function getUri(){
+		return preg_replace('/[^\w-]*/', '', (strtolower(str_replace(' ', '-', $this->name)))).'-'.$this->id;
+	}
 
 	/**
 	 * Check if the current user may create events in this calendar. Here we deviate
@@ -102,12 +111,13 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 	 * @return boolean
 	 */
 	public function userHasCreatePermission(){
-		if(GO_Base_Model_Acl::hasPermission($this->getPermissionLevel(),GO_Base_Model_Acl::CREATE_PERMISSION)){
-			return true;
-		}else if(GO::modules()->isInstalled('freebusypermissions')){
+//		if(GO_Base_Model_Acl::hasPermission($this->getPermissionLevel(),GO_Base_Model_Acl::CREATE_PERMISSION)){
+//			return true;
+//		}else 
+		if(GO::modules()->isInstalled('freebusypermissions')){
 			return GO_Freebusypermissions_FreebusypermissionsModule::hasFreebusyAccess(GO::user()->id, $this->user_id);
 		}  else {
-			return false;
+			return true;
 		}
 	}
 	

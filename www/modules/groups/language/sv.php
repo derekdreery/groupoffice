@@ -20,3 +20,4 @@ $l["groupMembers"]='Gruppmedlemmar';
 $l["managePermissions"]= 'Hantera behörigheter';
 $l['modulePermissions']= 'Modulbehörigheter';
 
+$l['use']='Använd';

@@ -32,6 +32,25 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	 */
 	loadOnNewModel : true,
 	
+	
+	/**
+	 * Use this parameter to create a separate controller action for update and create
+	 * Warning: When setting this parameter you also need to set the "createAction" parameter.
+	 * 
+	 * Example value: 'update'
+	 * 
+	 */
+	updateAction : false,
+	
+	/**
+	 * Use this parameter to create a separate controller action for create and update
+	 * Warning: When setting this parameter you also need to set the "updateAction" parameter.
+	 * 
+	 * Example value: 'create'
+	 * 
+	 */
+	createAction	: false,
+	
 	remoteModelId : 0,
 	
 	titleField : false,
@@ -41,6 +60,15 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	loadAction : 'load',
 	
 	forceTabs : false,
+
+	/**
+	 * This option can be set to create a helplink in the toolbar of this dialog.
+	 * When you want to enable this then pass a string of the correct helplink id.
+	 * 
+	 * Example 'zpushadmin_settings'
+	 *
+	 */
+	helppage : false,
 
 	/**
 	 * The controller will be called with this post parameter.
@@ -105,6 +133,22 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			height:400,
 			closeAction:'hide'
 		});
+		
+		if(this.helppage !== false){
+			if(!this.tools){
+				this.tools=[];
+
+				this.tools.push({
+					id:'help',
+					qtip: GO.lang['help'],
+					handler: function(event, toolEl, panel){
+						GO.openHelp(this.helppage);
+					},
+					scope:this
+				});
+			}
+		}
+		
 		
 		var buttons = [];
 		
@@ -256,19 +300,47 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		
 	},
 	
+	/*
+	 * Check for updateAction and createAction parameter
+	 */
+	checkSubmitMethod : function(params){
+		if(this.createAction != false && this.updateAction !=false){
+			if(this.isNew()){
+				this.submitAction = this.createAction;
+			} else {
+				this.submitAction = this.updateAction;
+			}
+		}
+	},	
+	
+	/*
+	 * Return true when the dialogs data is not loaded from the database
+	 */
+	isNew : function() {
+	  return (this.remoteModelId == 0);
+	},
+	
 	submitForm : function(hide){
 		
 		var params=this.getSubmitParams();
+		
+		/*
+		 * Check for updateAction and createAction parameter
+		 */
+		this.checkSubmitMethod(params);
+		
 		if(this.beforeSubmit(params)===false)
 			return false;
 		
+		
+		this.getFooterToolbar().setDisabled(true);
 		this.formPanel.form.submit(
 		{
 			url:GO.url(this.formControllerUrl+'/'+this.submitAction),
 			params: params,
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){		
-				
+				this.getFooterToolbar().setDisabled(false);
 				if(action.result[this.remoteModelIdName])
 					this.setRemoteModelId(action.result[this.remoteModelIdName]);
 				
@@ -306,6 +378,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 				this.updateTitle();
 			},		
 			failure: function(form, action) {
+				this.getFooterToolbar().setDisabled(false);
 				if(action.failureType == 'client')
 				{					
 					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strErrorsInForm']);			

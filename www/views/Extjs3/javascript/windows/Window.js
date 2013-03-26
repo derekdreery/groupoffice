@@ -1,23 +1,23 @@
 GO.Window = function(config)
-{
-	if(!config)
 	{
-		config={};
-	}
+		if(!config)
+		{
+			config={};
+		}
 	
-	Ext.applyIf(config,{
-		keys:[],
-		maximizable:true,
-		minimizable:true
-	});
+		Ext.applyIf(config,{
+			keys:[],
+			maximizable:true,
+			minimizable:true
+		});
 	
-	GO.Window.superclass.constructor.call(this, config);
-/*
+		GO.Window.superclass.constructor.call(this, config);
+	/*
 	this.on("show",function(window){
 		console.log(window);
 	});
 */
-}
+	}
 
 GO.Window = Ext.extend(Ext.Window,{
 
@@ -25,21 +25,41 @@ GO.Window = Ext.extend(Ext.Window,{
 	
 	addListenerTillHide : function(eventName, fn, scope){
 		this.on(eventName, fn, scope);		
-		this.temporaryListeners.push({eventName:eventName,fn:fn,scope:scope});
+		this.temporaryListeners.push({
+			eventName:eventName,
+			fn:fn,
+			scope:scope
+		});
 	},
 
 	beforeShow : function() {
 		GO.Window.superclass.beforeShow.call(this);
 
+		this.autoSize();
+	},
+
+	// private, we don't want to store the window position remote because
+	//screens may differ later.
+	getState : function(){
+		var s = GO.Window.superclass.getState.call(this);
+
+		delete s.x;
+		delete s.y;
+
+		return s;
+
+	},
+		
+	autoSize : function(){
 		if(GO.viewport){
 
 			var vpH=GO.viewport.getEl().getHeight();
 			var vpW=GO.viewport.getEl().getWidth();
 
-			if (this.height > vpH){
+			if (this.getHeight() > vpH){
 				this.setHeight(vpH);
 			}
-			if(this.width > vpW) {
+			if(this.getWidth() > vpW) {
 				this.setWidth(vpW);
 			}
 
@@ -50,18 +70,6 @@ GO.Window = Ext.extend(Ext.Window,{
 				this.center();
 		}
 	},
-
-	// private, we don't want to store the window position remote because
-	//screens may differ later.
-    getState : function(){
-        var s = GO.Window.superclass.getState.call(this);
-
-		delete s.x;
-		delete s.y;
-
-		return s;
-
-    },
 
 	show : function(){		
 		GO.dialogListeners.apply(this);

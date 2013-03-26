@@ -104,3 +104,17 @@ Vos identifiants sont :
 Nom d\'utilisateur : {username};
 Mot de passe : {password}';
 $l['max_users_reached']='Le nombre maximun d\'utilisateurs a été atteint sur votre système.';
+$l['muteNewMailSound']='Couper le son pour les nouveaux courriels';
+$l['muteReminderSound']='Couper le son pour les rappels';
+$l['showSmilies']='Voir les smilies';
+$l['dashdmy']='Jour-Mois-Année';
+$l['slashmdy']='Mois/Jour/Année';
+$l['dotdmy']='Jour.Mois.Année';
+$l['slashdmy']='Jour/Mois/Année';
+$l['generatePassword']='Générer mot de passe';
+$l['generatedPasswordIs']='Le mot de passe généré est';
+$l['openContact']='Ouvrir contact';
+$l['showProUsers']='Montrer aux utilisateurs pro';
+$l['updateExistingOnImport']='Mettre à jour les utilisateurs existants par nom d\'utilisateur';
+$l['resetState']="Réinitialiser les fenêtres et les grilles";
+$l['resetStateConfirm']='Êtes-vous sûr de vouloir utiliser les paramètres par défauts (les colonnes,les fenêtres, taille des panneaux, ...) ?';

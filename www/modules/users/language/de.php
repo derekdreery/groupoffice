@@ -116,3 +116,6 @@ $l['updateExistingOnImport']='Vorhandene Nutzer aktualisieren (per Nutzername)';
 
 $l['openContact']='Kontakt öffnen';
 $l['showProUsers']='Zeige Professional-Benutzer';
+
+$l['resetState']="Fenster und Spalten zurücksetzen";
+$l['resetStateConfirm']='Sind Sie sicher, dass Sie alle Spalten, Fenster- und Spaltengrößen etc. auf die Werkseinstellungen zurücksetzen wollen?';

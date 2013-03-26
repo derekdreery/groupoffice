@@ -48,28 +48,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$params['end_time'] = $params['end_date'] . ' ' . $end_time;
 		}
 	}
-
-	function beforeSubmit(&$response, &$model, &$params) {
-
-		//when duplicating in the calendar with right click
-		if(!empty($params['duplicate'])){
-			$model = $model->duplicate(array('uuid'=>null));
-			$params['id']=$model->id;
-		}
-
-		if (!empty($params['exception_date'])) {
-			//$params['recurrenceExceptionDate'] is a unixtimestamp. We should return this event with an empty id and the exception date.			
-			//this parameter is sent by the view when it wants to edit a single occurence of a repeating event.
-			$recurringEvent = GO_Calendar_Model_Event::model()->findByPk($params['exception_for_event_id']);
-			$model = $recurringEvent->createExceptionEvent($params['exception_date'], array(), true);
-			unset($params['exception_date']);
-			unset($params['id']);
-		}
-
-//		if (isset($params['subject']))
-//			$params['name'] = $params['subject'];
+	
+	private function _setEventAttributes($model, $params){
 		
-		$this->_changeTimeParams($params);
 
 		//Grid sends move request
 		if (isset($params['offset'])) {
@@ -104,9 +85,39 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 //			$model->reminder = 0;
 
 		$model->setAttributes($params);
+	}
+
+	protected function beforeSubmit(&$response, &$model, &$params) {
+
+		//when duplicating in the calendar with right click
+		if(!empty($params['duplicate'])){
+			$model = $model->duplicate(array('uuid'=>null));
+			$params['id']=$model->id;
+		}
+		
+		$this->_changeTimeParams($params);
+
+		$this->_setEventAttributes($model, $params);
 		
 		if(!$this->_checkConflicts($response, $model, $params)){
 			return false;
+		}
+		
+		
+		if (!empty($params['exception_date'])) {
+			//reset the original attributes other wise create exception can fail
+			$model->resetAttributes();
+			//$params['recurrenceExceptionDate'] is a unixtimestamp. We should return this event with an empty id and the exception date.			
+			//this parameter is sent by the view when it wants to edit a single occurence of a repeating event.
+			$recurringEvent = GO_Calendar_Model_Event::model()->findByPk($params['exception_for_event_id']);
+			$model = $recurringEvent->createExceptionEvent($params['exception_date'], array(), true);
+			unset($params['exception_date']);
+			unset($params['id']);
+			
+			if(!$model)
+				throw new Exception("Could not create exception!");
+			
+			$this->_setEventAttributes($model, $params);
 		}
 				
 		return parent::beforeSubmit($response, $model, $params);
@@ -672,7 +683,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 		$calendarModels=array();
 		foreach($calendars as $calendarId){
-			// Get the calendar model that is used for these events
+			// Get the calendar model that $calendarIdis used for these events
 			try{
 				$calendar = GO_Calendar_Model_Calendar::model()->findByPk($calendarId);
 				$calendarModels[]=$calendar;
@@ -740,6 +751,14 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		}else
 		{
 			$response['calendar_id']=0;
+			
+			// If the calendars parameter is given then use the first one as $response['calendar_id']
+			if(!empty($params['calendars'])){
+				$calendars = json_decode($params['calendars']);
+				if(is_array($calendars))
+					$response['calendar_id']= $calendars[0];
+			}
+				
 			$response['write_permission']= false;
 //			$response['calendar_name']=$defaultWritableCalendar->name;
 			$response['permission_level']=false;
@@ -752,9 +771,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		//Remove the index from the response array
 		$response['results']= array_values($response['results']);
-		
+
 		$response['success']=true;
-		
+			
 		// If you have clicked on the "print" button
 		if(isset($params['print']))
 			$this->_createPdf($response);
@@ -836,6 +855,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					'time'=>'00:00',
 					'start_time'=>$startTime,
 					'end_time'=>$endTime,
+					'model_name'=>'GO_Tasks_Model_Task',
 					//'background'=>$calendar->displayColor,
 					'background'=>'EBF1E2',
 					'day'=>$dayString[date('w', ($task->due_time))].' '.GO_Base_Util_Date::get_timestamp($task->due_time,false),
@@ -946,6 +966,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					'time'=>date(GO::user()->time_format, $start_unixtime),												
 					'start_time'=>$contact->upcoming.' 00:00',
 					'end_time'=>$contact->upcoming.' 23:59',
+					'model_name'=>'GO_Adressbook_Model_Contact',
 //					'background'=>$calendar->displayColor,
 					'background'=>'EBF1E2',
 					'day'=>$dayString[date('w', $start_unixtime)].' '.GO_Base_Util_Date::get_timestamp($start_unixtime,false),
@@ -1066,40 +1087,16 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		return $response;
 	}
 	
-//	/**
-//	 *
-//	 * @param array $params
-//	 * @return Sabre_VObject_Component 
-//	 */
-//	private function _getVObjectFromMail($params){
-//		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
-//		$message = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'],$params['uid']);
-//
-//		$attachments = $message->getAttachments();
-//			
-//		foreach($attachments as $attachment){			
-//			GO::debug($attachment->mime);
-//			if($attachment->mime=='text/calendar' || $attachment->getExtension() == 'ics'){
-//				GO::debug($attachment);
-//				$data = $message->getImapConnection()->get_message_part_decoded($message->uid, $attachment->number, $attachment->encoding);
-//				
-//				$vcalendar = GO_Base_VObject_Reader::read($data);
-//
-//				return $vcalendar->vevent[0];
-//			}
-//		}
-//		return false;
-//	}
 	
 	/**
 	 * Handle's reply from an attendee when the current user is the organizer.
 	 * 
-	 * @param Sabre_VObject_Component $vevent
+	 * @param Sabre\VObject\Component $vevent
 	 * @param type $recurrenceDate
 	 * @return boolean
 	 * @throws GO_Base_Exception_NotFound
 	 */
-	private function _handleIcalendarReply(Sabre_VObject_Component $vevent, $recurrenceDate){
+	private function _handleIcalendarReply(Sabre\VObject\Component $vevent, $recurrenceDate){
 		//find existing event
 		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
 		if(!$masterEvent)
@@ -1127,12 +1124,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	/**
 	 * Handle's a request from an organizer from another externals system
 	 * 
-	 * @param Sabre_VObject_Component $vevent
+	 * @param Sabre\VObject\Component $vevent
 	 * @param type $recurrenceDate
 	 * @return boolean
 	 * @throws GO_Base_Exception_NotFound
 	 */
-	private function _handleIcalendarRequest(Sabre_VObject_Component $vevent, $recurrenceDate, $status){
+	private function _handleIcalendarRequest(Sabre\VObject\Component $vevent, $recurrenceDate){
 		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
 		
 		
@@ -1158,37 +1155,39 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		//import it
 		$event = new GO_Calendar_Model_Event();
-		$event->importVObject($vevent, $importAttributes);
+		$event->importVObject($vevent, $importAttributes,false,true);
 			
 		//notify orgnizer
 		$participant = $event->getParticipantOfCalendar();
 
-		if(!$participant)
-		{
-			//this is a bad situation. The import thould have detected a user for one of the participants.
-			//It uses the E-mail account aliases to determine a user. See GO_Calendar_Model_Event::importVObject
-			$participant = new GO_Calendar_Model_Participant();
-			$participant->event_id=$event->id;
-			$participant->user_id=$event->calendar->user_id;
-			$participant->email=$event->calendar->user->email;			
-		}		
+//		if(!$participant)
+//		{
+//			//this is a bad situation. The import thould have detected a user for one of the participants.
+//			//It uses the E-mail account aliases to determine a user. See GO_Calendar_Model_Event::importVObject
+//			$participant = new GO_Calendar_Model_Participant();
+//			$participant->event_id=$event->id;
+//			$participant->user_id=$event->calendar->user_id;
+//			$participant->email=$event->calendar->user->email;	
+//			$participant->save();
+//		}		
 		
-		if($status)
-				$participant->status=$status;
-			$participant->save();
+//		if($status)
+//				$participant->status=$status;
+//			$participant->save();
 		
-		$event->replyToOrganizer();
+//		$event->replyToOrganizer();
 		
 		
 		$langKey = $eventUpdated ? 'eventUpdatedIn' : 'eventScheduledIn';
 		
+		$response['attendance_event_id']=$event->id;
 		$response['feedback']=sprintf(GO::t($langKey,'calendar'), $event->calendar->name, $participant->statusName);
 		$response['success']=true;
 		
 		return $response;
 	}
 	
-	private function _handleIcalendarCancel(Sabre_VObject_Component $vevent, $recurrenceDate){
+	private function _handleIcalendarCancel(Sabre\VObject\Component $vevent, $recurrenceDate){
 		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
 				
 		//delete existing data		
@@ -1249,8 +1248,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				break;
 			
 			case 'REQUEST':
-				$status = !empty($params['status']) ? $params['status'] : false;
-				return $this->_handleIcalendarRequest($vevent, $recurrenceDate, $status);
+				//$status = !empty($params['status']) ? $params['status'] : false;
+				return $this->_handleIcalendarRequest($vevent, $recurrenceDate);
 				break;
 			
 			case 'CANCEL':
@@ -1261,160 +1260,72 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				throw new Exception("Unsupported method: ".$vcalendar->method);
 				
 		}
-		
-		
-		
-		//find existing event
-		$event = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
-		
-		if($recurrenceDate){
-			$event = 0;
-		}
-
-		$eventUpdated = false;
-		
-		$userIsOrganizer=$vcalendar->method=='REPLY';
-		if($event){
-			
-			$eventUpdated = true;
-
-			$participant = GO_Calendar_Model_Participant::model()
-							->findSingleByAttributes(array('event_id'=>$event->id, 'user_id'=>GO::user()->id));
-			if($participant)
-				$userIsOrganizer = $participant->is_organizer;
-
-			//If the user is not the organizer simply delete the old event and
-			//import the update. If it's the organizer then we must update just the
-			//participant status.
-			if(!$userIsOrganizer)
-				$event->delete();
-		}				
-
-		if($userIsOrganizer)
-		{
-			//because it's the organizer the event should be there. Wheter it's a recurrence or
-			//a normal event.
-			if(!$event)
-				throw new Exception("The event wasn't found in your calendar");
-			
-			$participant = $event->importVObjectAttendee($event, $vevent->attendee);			
-			
-			//todo should we send update to other participants?
-
-		}else
-		{	
-			$importAttributes=array('is_organizer'=>false);
-			if($recurrenceDate){
-				//if a particular recurrence-id was send then we queried for that particular
-				//recurrence. We need to get the master event to add a new exception.
-				$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);				
-				if($masterEvent){
-					$importAttributes=array(
-							'exception_for_event_id'=>$masterEvent->id,
-							'exception_date'=>$recurrenceDate
-					);
-					
-					//old exception might be there. Delete it because it will be recreated by the import.
-					$exception = GO_Calendar_Model_Exception::model()->findSingleByAttributes(array('event_id'=>$masterEvent->id, 'time'=>$recurrenceDate));
-					if($exception)
-						$exception->delete();
-				}
-			}
-			
-			//import it
-			$event = new GO_Calendar_Model_Event();
-//			if(!empty($params['status'])){
-//				$importAttributes['owner_status']=$params['status'];
-//			}
-			$event->importVObject($vevent, $importAttributes);
-			
-			if(!empty($params['status'])){
-				//Update participant status.
-				$participant = $event->getParticipantOfCalendar();
-				
-				if(!$participant)
-				{
-					$participant = new GO_Calendar_Model_Participant();
-					$participant->event_id=$event->id;
-					$participant->user_id=$event->calendar->user_id;
-					$participant->email=$event->calendar->user->email;
-				}
-				$participant->status=$params['status'];
-				$participant->save();
-
-				$event->replyToOrganizer();
-			}
-		}
-		
-		$langKey = $eventUpdated ? 'eventUpdatedIn' : 'eventScheduledIn';
-		
-		$response['feedback']=sprintf(GO::t($langKey,'calendar'), $event->calendar->name, $participant->statusName);
-		$response['success']=true;
-		
-		return $response;
 	}
 	
-	
-	
-	protected function actionImportIcs($params){
-		
-		$file = new GO_Base_Fs_File($params['file']);
-		$file->convertToUtf8();
-		$data = $file->getContents();
-		
-		//var_dump($data);
-
-		$vcalendar = GO_Base_VObject_Reader::read($data);
-		
-		foreach($vcalendar->vevent as $vevent){
-			$event = new GO_Calendar_Model_Event();
-			$event->importVObject($vevent);
-		}
-	}
-	
-	protected function actionImportVcs($params){
-		
-		$file = new GO_Base_Fs_File($params['file']);
-		
-		$data = $file->getContents();
-		
-		$vcalendar = GO_Base_VObject_Reader::read($data);
-		
-		GO_Base_VObject_Reader::convertICalendarToVCalendar($vcalendar);
-		
-		foreach($vcalendar->vevent as $vevent){
-			$event = new GO_Calendar_Model_Event();
-			$event->importVObject($vevent);		
-		}
-	}
-	
-	//TODO Still support this?
-//	public function actionInvitation($params){
+//	protected function actionImportIcs($params){
 //		
-//		$participant = GO_Calendar_Model_Participant::model()->findSingleByAttributes(array(
-//				'event_id'=>$params['id'],
-//				'email'=>$params['email']
-//		));
+//		$file = new GO_Base_Fs_File($params['file']);
+//		$file->convertToUtf8();
+//		$data = $file->getContents();
 //		
-//		if(!$participant){
-//			throw new Exception("Could not find the event");
+//		//var_dump($data);
+//
+//		$vcalendar = GO_Base_VObject_Reader::read($data);
+//		
+//		foreach($vcalendar->vevent as $vevent){
+//			$event = new GO_Calendar_Model_Event();
+//			$event->importVObject($vevent);
 //		}
-//		
-//		if($participant->getSecurityToken()!=$params['participantToken']){
-//			throw new Exception("Invalid request");
-//		}
-//		
-//		if(empty($params['accept']))		
-//			$participant->status=GO_Calendar_Model_Participant::STATUS_DECLINED;
-//		else
-//			$participant->status=GO_Calendar_Model_Participant::STATUS_ACCEPTED;
-//		
-//		//save will be handled by organizer when he get's an email
-//		$participant->save();
-//		
-//		
-//		$this->render('invitation', array('participant'=>$participant, 'event'=>$event));
 //	}
+	
+//	protected function actionImportVcs($params){
+//		
+//		$file = new GO_Base_Fs_File($params['file']);
+//		
+//		$data = $file->getContents();
+//		
+//		$vcalendar = GO_Base_VObject_Reader::read($data);
+//		
+//		GO_Base_VObject_Reader::convertICalendarToVCalendar($vcalendar);
+//		
+//		foreach($vcalendar->vevent as $vevent){
+//			$event = new GO_Calendar_Model_Event();
+//			$event->importVObject($vevent);		
+//		}
+//	}
+
+	public function actionInvitation($params){
+		
+		$participant = GO_Calendar_Model_Participant::model()->findSingleByAttributes(array(
+				'event_id'=>$params['id'],
+				'email'=>$params['email']
+		));
+		
+		if(!$participant){
+			throw new Exception("Could not find the event");
+		}
+		
+		if($participant->getSecurityToken()!=$params['participantToken']){
+			throw new Exception("Invalid request");
+		}
+		
+		if(empty($params['accept']))		
+			$participant->status=GO_Calendar_Model_Participant::STATUS_DECLINED;
+		else
+			$participant->status=GO_Calendar_Model_Participant::STATUS_ACCEPTED;
+		
+		//save will be handled by organizer when he get's an email
+		$participant->save();
+		
+		$event = $participant->getParticipantEvent();
+		if($event){
+			$event->replyToOrganizer();
+		}else {
+			$participant->event->replyToOrganizer(false, $participant, false);
+		}
+		
+		$this->render('invitation', array('participant'=>$participant, 'event'=>$event));
+	}
 	
 	/**
 	 * Get the birthdays of the contacts in the given addressbooks between 

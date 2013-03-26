@@ -168,7 +168,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 						!GO::config()->disable_security_token_check && 
 //						GO::user() && No longer needed. We only check token when action requires a logged in user
 						!empty($_REQUEST['r']) && 
-						$_REQUEST['security_token']!=GO::session()->values['security_token']
+						(!isset($_REQUEST['security_token']) || $_REQUEST['security_token']!=GO::session()->values['security_token'])
 			){
 			//GO::session()->logout();			
 			throw new GO_Base_Exception_SecurityTokenMismatch();
@@ -206,7 +206,13 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * Default headers to send. 
 	 */
 	protected function headers(){
-		header('Content-Type: text/html; charset=UTF-8');
+		//iframe hack for file uploads fails with application/json
+//		if(!empty($_FILES)){
+			header('Content-Type: text/html; charset=UTF-8');
+//		}else
+//		{
+//			header('Content-Type: application/json; charset=UTF-8');
+//		}
 	}
 	
 	/**
@@ -503,16 +509,26 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 */
 	public function getRoute($action=''){
 		$arr = explode('_',get_class($this));
-				
+
 		if($arr[1]!='Core')
-			$route=$arr[1].'/'.$arr[3];				
+			$route=lcfirst($arr[1]).'/'.lcfirst($arr[3]);				
 		else 
-			$route=$arr[3];				
+			$route=lcfirst($arr[3]);				
 		
 		if($action!='')
-			$route .= '/'.$action;
+			$route .= '/'.lcfirst($action);
 		
-		return strtolower($route);
+		return $route;
+		
+//		if($arr[1]!='Core')
+//			$route=$arr[1].'/'.$arr[3];				
+//		else 
+//			$route=$arr[3];				
+//		
+//		if($action!='')
+//			$route .= '/'.$action;
+//		
+//		return strtolower($route);
 	}	
 	
 	/**

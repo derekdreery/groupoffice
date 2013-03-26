@@ -169,13 +169,16 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 									'addresslist_id'=>$mailing->addresslist_id, 
 									'contact_id'=>$contact->id, 
 									'token'=>md5($contact->ctime.$contact->addressbook_id.$contact->firstEmail) //token to check so that users can't unsubscribe other members by guessing id's
-									), true, true);
+									), false, true);
 			
 			$body = str_replace('%unsubscribe_href%', $unsubscribeHref, $bodyWithTags); //curly brackets don't work inside links in browser wysiwyg editors.
 			
-			$body = GO_Addressbook_Model_Template::model()->replaceCustomTags($body,array(				
-				'unsubscribe_link'=>'<a href="'.$unsubscribeHref.'">'.GO::t("unsubscription","addressbook").'</a>'
+			$templateModel = GO_Addressbook_Model_Template::model();
+			$templateModel->htmlSpecialChars = false;
+			$body = $templateModel->replaceCustomTags($body,array(				
+				'unsubscribe_link'=>'<a href="'.$unsubscribeHref.'" target="_blank">'.GO::t("unsubscription","addressbook").'</a>'
 			), true);
+			$templateModel->htmlSpecialChars = true;
 			
 			try{
 				if(!$contact->email_allowed){
@@ -312,7 +315,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			$email = $model->email;
 		}
 		
-		echo "Sending to " . $typestring . " id: " . $model->id . " email: " . $email . "\n";
+		echo '['.GO_Base_Util_Date::get_timestamp(time())."] Sending to " . $typestring . " id: " . $model->id . " email: " . $email . "\n";
 
 		$mailing = GO_Addressbook_Model_SentMailing::model()->findByPk($mailing->id, array(), true, true);
 		if($mailing->status==GO_Addressbook_Model_SentMailing::STATUS_PAUSED)
@@ -332,7 +335,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		}
 		if (!empty($status)) {
 			echo "---------\n";
-			echo "Failed!\n";
+			echo "Failed at ".GO_Base_Util_Date::get_timestamp(time())."\n";
 			echo $status . "\n";
 			echo "---------\n";
 			
