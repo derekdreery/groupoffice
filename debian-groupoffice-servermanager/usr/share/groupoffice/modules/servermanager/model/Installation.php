@@ -128,8 +128,8 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	public function relations() {
 		return array(
 			'histories' => array('type' => self::HAS_MANY, 'model' => 'GO_ServerManager_Model_UsageHistory', 'field' => 'installation_id','delete'=>true),
-			'currentusage'=> array('type' => self::HAS_ONE, 'model' => 'GO_ServerManager_Model_UsageHistory', 'field' => 'installation_id', 'findParams'=>array('order'=>'id','orderDirection'=>'DESC','limit'=>1)),
-			'users' => array('type'=>self::HAS_MANY, 'model'=>'GO_ServerManager_Model_InstallationUser', 'field'=>'installation_id','delete'=>true, 'findParams'=>array('fields'=>'t.*')),
+			'currentusage'=> array('type' => self::HAS_ONE, 'model' => 'GO_ServerManager_Model_UsageHistory', 'field' => 'installation_id', 'findParams'=>GO_Base_Db_FindParams::newInstance()->order('id','DESC')->limit(1)),
+			'users' => array('type'=>self::HAS_MANY, 'model'=>'GO_ServerManager_Model_InstallationUser', 'field'=>'installation_id','delete'=>true, 'findParams'=>  GO_Base_Db_FindParams::newInstance()->select()),
 			'modules' => array('type'=>self::HAS_MANY, 'model'=>'GO_ServerManager_Model_InstallationModule', 'field'=>'installation_id','delete'=>true),
 			'automaticInvoice'=>array('type'=>self::HAS_ONE, 'model'=>'GO_ServerManager_Model_AutomaticInvoice', 'field'=>'installation_id','delete'=>true),
 		);
