@@ -702,36 +702,37 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	}
 	
 	private function _processCommentsDisplay($model,$response){
-		$stmt = GO_Comments_Model_Comment::model()->find(GO_Base_Db_FindParams::newInstance()
-							->limit(5)
-							->select('t.*,cat.name AS categoryName')
-							->order('id','DESC')
-							->joinModel(array(
-								'model' => 'GO_Comments_Model_Category',
-								'localTableAlias' => 't',
-								'localField' => 'category_id',
-								'foreignField' => 'id',
-								'tableAlias' => 'cat',
-								'type' => 'LEFT'
-							))
-							->criteria(GO_Base_Db_FindCriteria::newInstance()
-							        ->addModel(GO_Comments_Model_Comment::model())
-											->addCondition('model_id', $model->id)
-											->addCondition('model_type_id',$model->modelTypeId())
-							));
+		if($model->hasLinks()){
+			$stmt = GO_Comments_Model_Comment::model()->find(GO_Base_Db_FindParams::newInstance()
+								->limit(5)
+								->select('t.*,cat.name AS categoryName')
+								->order('id','DESC')
+								->joinModel(array(
+									'model' => 'GO_Comments_Model_Category',
+									'localTableAlias' => 't',
+									'localField' => 'category_id',
+									'foreignField' => 'id',
+									'tableAlias' => 'cat',
+									'type' => 'LEFT'
+								))
+								->criteria(GO_Base_Db_FindCriteria::newInstance()
+												->addModel(GO_Comments_Model_Comment::model())
+												->addCondition('model_id', $model->id)
+												->addCondition('model_type_id',$model->modelTypeId())
+								));
 
-		$store = GO_Base_Data_Store::newInstance(GO_Comments_Model_Comment::model());			
-		$store->setStatement($stmt);
+			$store = GO_Base_Data_Store::newInstance(GO_Comments_Model_Comment::model());			
+			$store->setStatement($stmt);
 
-		$columnModel = $store->getColumnModel();			
-		$columnModel->formatColumn('user_name','$model->user->name');
+			$columnModel = $store->getColumnModel();			
+			$columnModel->formatColumn('user_name','$model->user->name');
 
-		$data = $store->getData();
-		foreach ($data['results'] as $k => $v) {
-			$data['results'][$k]['categoryName'] = !empty($v['categoryName']) ? $v['categoryName'] : GO::t('noCategory','comments');
+			$data = $store->getData();
+			foreach ($data['results'] as $k => $v) {
+				$data['results'][$k]['categoryName'] = !empty($v['categoryName']) ? $v['categoryName'] : GO::t('noCategory','comments');
+			}
+			$response['data']['comments']=$data['results'];
 		}
-		$response['data']['comments']=$data['results'];
-		
 		return $response;
 	}
 	
