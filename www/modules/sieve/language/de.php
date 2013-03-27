@@ -110,4 +110,9 @@ $l["redirect_copy_to"]= 'Leite Kopie weiter an';
 $l["toFolder"]= 'In Ordner';
 $l['pleaseSelectOne']='Bitte wählen';
 $l['setRead']='Markiere Nachricht als gelesen';
-$l["vacAlsoMailTo"]= 'Abwesenheitsnotiz aktiv für';
+$l["vacAlsoMailTo"]='Abwesenheitsnotiz aktiv für';
+
+$l['vacationStart']='Erster Tag dieser Nachricht';
+$l['vacationEnd']='Letzter Tag dieser Nachricht';
+$l['sieveWarning']='Es wird empfohlen, die Sieve-Filter zu benutzen, falls sie von Ihrem IMAP-Server unterstützt werden. Bitte versuchen Sie es daher zuerst über den Tab \'Sieve-Filter\'.';
+$l['stopEndError']='Am Ende muss \'Regelauswertung abbrechen\' stehen!';

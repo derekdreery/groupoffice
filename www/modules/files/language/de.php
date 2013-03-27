@@ -112,6 +112,7 @@ $l['bookmarks']="Favoriten";
 $l['bookmarkAlreadyExists']="Der Ordner '%fn' ist schon als Favorit eingetragen.";
 $l['removeBookmark']="Favoriten entfernen";
 $l['removeBookmarkQuestion']="Ordner '%fn' von Ihrer Favoritenliste entfernen?";
+$l['notInSearchMode']="'Im Such-Modus nicht möglich.";
 $l['openInBrowser']='Im Browser öffnen';
 $l['selectApplication']="Anwendung zum Öffnen dieser Datei wählen...";
 $l['rememberFileHandler']="Meine Entscheidung für diesen Dateityp merken";

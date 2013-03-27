@@ -543,6 +543,7 @@ $l['queued']="Anstehend";
 $l['uploadQueueEmpty']="Warteschlange für Uploads ist leer";
 $l['logFiles']='Logdateien';
 $l['cliOnly']= "Das Skript kann nur durch das Group-Office Command Line Interface (CLI) ausgeführt werden.";
+$l['unnamed']='Unbenannt';
 
 $l['month_times'][1]='am Ersten';
 $l['month_times'][2]='am Zweiten';
@@ -575,3 +576,5 @@ $l['passwordRequireLc']='Es muss mindestens einen Kleinbuchstaben enthalten';
 $l['passwordRequireNum']='Es muss mindestens eine Zahl enthalten';
 $l['passwordRequireSc']='Es muss mindestens ein Sonderzeichen enthalten';
 $l['passwordUnique']='Es dürfen %s Zeichen nur einmal vorkommen';
+
+$l['maxAttachmentsSizeExceeded']="Die Gesamtgröße der Anhänge ({total}) überschreitet den Maximalwert von ({max}).";

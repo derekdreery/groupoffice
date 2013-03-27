@@ -119,3 +119,6 @@ $l['showProUsers']='Zeige Professional-Benutzer';
 
 $l['resetState']="Fenster und Spalten zurücksetzen";
 $l['resetStateConfirm']='Sind Sie sicher, dass Sie alle Spalten, Fenster- und Spaltengrößen etc. auf die Werkseinstellungen zurücksetzen wollen?';
+
+$l['registrationEmail']='E-Mail Registrierung';
+$l['enabledSettingtabs']='Aktiviere Einstellungs-Tabs';

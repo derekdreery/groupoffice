@@ -34,3 +34,6 @@ $l['enabledCustomFields']='Aktivierte benutzerdefinierte Felder';
 $l['enableSelectedCategories']='Aktiviere, dass nur ausgewählte Kategorien angezeigt werden';
 $l['defaultValidationError']='Feld war nicht korrekt formatiert';
 $l['numberValidationError']='Feld war keine Zahl';
+
+$l['invalidRegex']="Der reguläre Ausdruck ist ungültig.";
+$l['nDecimals'] = 'Anzahl der Nachkommastellen';

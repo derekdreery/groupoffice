@@ -95,6 +95,7 @@ $l["sendInvitationInitial"]='Möchten Sie eine Termineinladung an die Teilnehmer
 $l["sendInvitationUpdate"]='Möchten Sie eine Terminaktualisierung an die Teilnehmer versenden?';
 $l["sendCancellation"]='Möchten Sie eine Terminabsage an die Teilnehmer versenden?';
 $l["forthcomingAppointments"]='Zukünftige Termine';
+$l['pastAppointments']='Vergangene Termine';
 $l["quarterShort"]= 'Q';
 $l["globalsettings_templatelabel"]= 'Vorlage';
 $l["globalsettings_allchangelabel"]= 'Alle vorhandenen umbenennen';
@@ -107,8 +108,8 @@ $l['name']='Kalender';
 $l['description']='Modul zum Verwalten von Terminen';
 $l['groupView']='Gruppenansicht';
 $l['event']='Termin';
-$l['startsAt']='Beginnt am';
-$l['endsAt']='Endet am';
+$l['startsAt']='Beginnt';
+$l['endsAt']='Endet';
 $l['exceptionNoCalendarID']='ACHTUNG: Keine Kalender-ID!';
 $l['allTogether']='Alle zusammen';
 $l['invited']='Sie sind zu folgendem Termin eingeladen';
@@ -206,3 +207,16 @@ $l['attendance']='Teilnahme';
 $l['createPermission']="Direkte Eintragung möglich";
 
 $l['show_holidays']="Feiertage anzeigen";
+$l['participant']='Teilnehmer';
+$l['clickForAttendance']='Hier klicken, um den Teilnahmestatus einzusehen';
+
+$l['viewDay']='Tag';
+$l['viewMorning']='Vormittag';
+$l['viewAfternoon']='Nachmittag';
+$l['viewEvening']='Abend';
+
+$l['cronEventAndTaskReportMailer']='Mailbenachrichtigungseinstellungen für \'Heutige Ereignisse und Aufgaben\'';
+$l['cronEventAndTaskReportMailerDescription']='Eine E-Mail mit den heutigen Ereignissen und Aufgaben an jeden im CronJob eingetragenen Benutzer senden';
+$l['cronEventAndTaskReportMailerPdfSubtitle']='Heutige Ereignisse und Aufgaben';
+$l['cronEventAndTaskReportMailerSubject']='Heutige Ereignisse und Aufgaben';
+$l['cronEventAndTaskReportMailerContent']='Sie finden eine Auflistung der heutigen Ereignisse und Aufgaben in der PDF-Datei im Anhang.';
