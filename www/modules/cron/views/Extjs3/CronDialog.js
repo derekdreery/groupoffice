@@ -212,7 +212,12 @@ GO.cron.CronDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	},
   afterSubmit: function(action){
     var noUserSelection = this.select; //this.usersPanel.disabled;
+		var comboValue = this.jobCombo.getValue();
+		var store = this.jobCombo.getStore();
+		var record = store.getById(comboValue);
 		
+		noUserSelection = record.data.selection;
+
     this.usersPanel.setModelId(action.result.id);
     this.groupsPanel.setModelId(action.result.id);
 

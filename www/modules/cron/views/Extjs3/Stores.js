@@ -21,7 +21,7 @@ GO.cron.periodStore = new GO.data.JsonStore({
 GO.cron.jobStore = new GO.data.JsonStore({
 	url: GO.url('core/cron/availableCronCollection'),		
 	root: 'results',
-	id: 'name',
+	id: 'class',
 	totalProperty:'total',
 	fields: ['name','class','selection'],
 	remoteSort: true
