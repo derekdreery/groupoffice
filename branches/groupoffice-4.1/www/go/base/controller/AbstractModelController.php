@@ -479,90 +479,93 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	
 	private function _processWorkflowDisplay($model,$response){
 
+		
 		$response['data']['workflow']=array();
 			
-		$workflowModelstmnt = GO_Workflow_Model_Model::model()->findByAttributes(array("model_id"=>$model->id,"model_type_id"=>$model->modelTypeId()));
-		
-		while($workflowModel = $workflowModelstmnt->fetch()){
-			
-			$currentStep = $workflowModel->step;
-			
-			$workflowResponse = $workflowModel->getAttributes('html');
+		if($model->hasLinks()){
+			$workflowModelstmnt = GO_Workflow_Model_Model::model()->findByAttributes(array("model_id"=>$model->id,"model_type_id"=>$model->modelTypeId()));
 
-//			$workflowResponse['id'] = $workflowModel->id;
-			$workflowResponse['process_name'] = $workflowModel->process->name;
-//			$workflowResponse['due_time'] = $workflowModel->due_time;
-//			$workflowResponse['shift_due_time'] = $workflowModel->shift_due_time;			
-			
-			$workflowResponse['user'] = !empty($workflowModel->user_id)?$workflowModel->user->name:'';
-			
-			$workflowResponse['approvers'] = array();
-			$workflowResponse['approver_groups'] = array();
-			$workflowResponse['step_id'] = $workflowModel->step_id;
-						
-			if($workflowModel->step_id == '-1'){
-				$workflowResponse['step_progress'] = '';
-				$workflowResponse['step_name'] = GO::t('complete','workflow');
-				$workflowResponse['is_approver']=false;
-				$workflowResponse['step_all_must_approve']=false;
-			}else{
-				$workflowResponse['step_progress'] = $workflowModel->getStepProgress();
-				$workflowResponse['step_name'] = $currentStep->name;
-				$workflowResponse['step_all_must_approve']=$currentStep->all_must_approve;
-				
-				$is_approver = GO_Workflow_Model_RequiredApprover::model()->findByPk(array("user_id"=>GO::user()->id,"process_model_id"=>$workflowModel->id,"approved"=>false));
-				
-				if($is_approver)
-					$workflowResponse['is_approver']=true;
-				else
+			while($workflowModel = $workflowModelstmnt->fetch()){
+
+				$currentStep = $workflowModel->step;
+
+				$workflowResponse = $workflowModel->getAttributes('html');
+
+	//			$workflowResponse['id'] = $workflowModel->id;
+				$workflowResponse['process_name'] = $workflowModel->process->name;
+	//			$workflowResponse['due_time'] = $workflowModel->due_time;
+	//			$workflowResponse['shift_due_time'] = $workflowModel->shift_due_time;			
+
+				$workflowResponse['user'] = !empty($workflowModel->user_id)?$workflowModel->user->name:'';
+
+				$workflowResponse['approvers'] = array();
+				$workflowResponse['approver_groups'] = array();
+				$workflowResponse['step_id'] = $workflowModel->step_id;
+
+				if($workflowModel->step_id == '-1'){
+					$workflowResponse['step_progress'] = '';
+					$workflowResponse['step_name'] = GO::t('complete','workflow');
 					$workflowResponse['is_approver']=false;
-				
-				// Add the approvers of the current step to the response
-				$approversStmnt = $workflowModel->requiredApprovers;
-			
-				while($approver = $approversStmnt->fetch()){
-					$approver_hasapproved = $currentStep->hasApproved($workflowModel->id,$approver->id);
-					$workflowResponse['approvers'][] = array('name'=>$approver->name,'approved'=>$approver_hasapproved,'last'=>'0');
+					$workflowResponse['step_all_must_approve']=false;
+				}else{
+					$workflowResponse['step_progress'] = $workflowModel->getStepProgress();
+					$workflowResponse['step_name'] = $currentStep->name;
+					$workflowResponse['step_all_must_approve']=$currentStep->all_must_approve;
+
+					$is_approver = GO_Workflow_Model_RequiredApprover::model()->findByPk(array("user_id"=>GO::user()->id,"process_model_id"=>$workflowModel->id,"approved"=>false));
+
+					if($is_approver)
+						$workflowResponse['is_approver']=true;
+					else
+						$workflowResponse['is_approver']=false;
+
+					// Add the approvers of the current step to the response
+					$approversStmnt = $workflowModel->requiredApprovers;
+
+					while($approver = $approversStmnt->fetch()){
+						$approver_hasapproved = $currentStep->hasApproved($workflowModel->id,$approver->id);
+						$workflowResponse['approvers'][] = array('name'=>$approver->name,'approved'=>$approver_hasapproved,'last'=>'0');
+					}
+					// Set the last flag for the latest approver in the list
+					$i = count($workflowResponse['approvers'])-1;
+
+					if($i >= 0)
+						$workflowResponse['approvers'][$i]['last'] = "1";
+
+					// Add the approver groups of the current step to the response
+					$approverGroupsStmnt = $currentStep->approverGroups;
+					while($approverGroup = $approverGroupsStmnt->fetch()){
+						$workflowResponse['approver_groups'][] = array('name'=>$approverGroup->name);
+					}
 				}
-				// Set the last flag for the latest approver in the list
-				$i = count($workflowResponse['approvers'])-1;
-				
-				if($i >= 0)
-					$workflowResponse['approvers'][$i]['last'] = "1";
-			
-				// Add the approver groups of the current step to the response
-				$approverGroupsStmnt = $currentStep->approverGroups;
-				while($approverGroup = $approverGroupsStmnt->fetch()){
-					$workflowResponse['approver_groups'][] = array('name'=>$approverGroup->name);
+
+				$workflowResponse['history'] = array();
+				$historiesStmnt = GO_Workflow_Model_StepHistory::model()->findByAttribute('process_model_id',$workflowModel->id, GO_Base_Db_FindParams::newInstance()->select('t.*')->order('ctime','DESC'));
+				while($history = $historiesStmnt->fetch()){
+					GO_Base_Db_ActiveRecord::$attributeOutputMode = 'html';
+
+
+					if($history->step_id == '-1')
+						$step_name = GO::t('complete','workflow');
+					else
+						$step_name = $history->step->name;
+
+					$workflowResponse['history'][] = array(
+							'history_id'=>$history->id,
+							'step_name'=>$step_name,
+							'approver'=>$history->user->name,
+							'ctime'=>$history->ctime,
+							'comment'=>$history->comment,
+							'status'=>$history->status?"1":"0",
+							'status_name'=>$history->status?GO::t('approved','workflow'):GO::t('declined','workflow')
+					);
+
+					GO_Base_Db_ActiveRecord::$attributeOutputMode = 'raw';
+
 				}
+
+				$response['data']['workflow'][] = $workflowResponse;
 			}
-			
-			$workflowResponse['history'] = array();
-			$historiesStmnt = GO_Workflow_Model_StepHistory::model()->findByAttribute('process_model_id',$workflowModel->id, GO_Base_Db_FindParams::newInstance()->select('t.*')->order('ctime','DESC'));
-			while($history = $historiesStmnt->fetch()){
-				GO_Base_Db_ActiveRecord::$attributeOutputMode = 'html';
-				
-				
-				if($history->step_id == '-1')
-					$step_name = GO::t('complete','workflow');
-				else
-					$step_name = $history->step->name;
-					
-				$workflowResponse['history'][] = array(
-						'history_id'=>$history->id,
-						'step_name'=>$step_name,
-						'approver'=>$history->user->name,
-						'ctime'=>$history->ctime,
-						'comment'=>$history->comment,
-						'status'=>$history->status?"1":"0",
-						'status_name'=>$history->status?GO::t('approved','workflow'):GO::t('declined','workflow')
-				);
-				
-				GO_Base_Db_ActiveRecord::$attributeOutputMode = 'raw';
-				
-			}
-			
-			$response['data']['workflow'][] = $workflowResponse;
 		}
 		
 		return $response;
