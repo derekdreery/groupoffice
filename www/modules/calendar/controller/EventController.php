@@ -855,6 +855,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					'time'=>'00:00',
 					'start_time'=>$startTime,
 					'end_time'=>$endTime,
+					'all_day_event'=>1,
 					'model_name'=>'GO_Tasks_Model_Task',
 					//'background'=>$calendar->displayColor,
 					'background'=>'EBF1E2',
@@ -969,6 +970,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					'model_name'=>'GO_Adressbook_Model_Contact',
 //					'background'=>$calendar->displayColor,
 					'background'=>'EBF1E2',
+					'all_day_event'=>1,
 					'day'=>$dayString[date('w', $start_unixtime)].' '.GO_Base_Util_Date::get_timestamp($start_unixtime,false),
 					'read_only'=>true,
 					'contact_id'=>$contact->id
