@@ -1436,8 +1436,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->repeat_end_time = 0;
 		}
 			
-		if($vobject->dtstamp)
-			$this->mtime=intval($vobject->dtstamp->getDateTime()->format('U'));
+		if($vobject->{"last-modified"})
+			$this->mtime=intval($vobject->{"last-modified"}->getDateTime()->format('U'));
 		
 		if($vobject->location)
 			$this->location=(string) $vobject->location;

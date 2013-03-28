@@ -259,3 +259,5 @@ $l['clickSeeWholeMessage']="Het werkelijke bericht is groter dan hier kan worden
 
 $l['dateReceived']='Datum ontvangen';
 $l['dateSent']='Datum verzonden';
+
+$l['appointementAlreadyProcessed']='Dit bericht bevat een afspraak uitnodiging die al verwerkt is.';

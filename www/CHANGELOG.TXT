@@ -1,3 +1,7 @@
+- Appointment invitations could have a confusing "Update event" link.
+- redirect email filters had an input for multiple addresses but this is not supported by sieve
+- Some messages were not displayed because they had body tags in the middle of an html message
+- Show timeout error instead of JsonStore load exception
 - GO will recognize IE10 as Internet Explorer browser isInternetExplorer() will return true
 - Download filenames with UTF-8 character in IE10 will work as expected
 - Reset password was broken
