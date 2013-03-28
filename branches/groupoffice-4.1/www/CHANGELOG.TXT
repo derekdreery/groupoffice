@@ -1,3 +1,5 @@
+28-03-2013 4.1.51
+- Holidays could be generated on the wrong day
 - Appointment invitations could have a confusing "Update event" link.
 - redirect email filters had an input for multiple addresses but this is not supported by sieve
 - Some messages were not displayed because they had body tags in the middle of an html message
@@ -12,8 +14,6 @@
 - Billing, duplicate order: No more link between original order and duplicate order.
 - Billing, recurring order: Link between original order and recurring order created on status change.
 - Updated German language
-
-26-03-2013 4.1.51
 - Config::get_setting() will return null of the config option is not yet in the database
 - DbStore can attach extra PK values for the deletion of records with an PK of multiple columns
 - Ticket dialog will clear the attachments queue after show or load
