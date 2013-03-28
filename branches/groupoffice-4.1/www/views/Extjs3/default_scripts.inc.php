@@ -343,7 +343,7 @@ if(count($load_modules)) {
 	if(!GO::config()->debug) {
 		if(!file_exists($path)) {
 		
-			file_put_contents($cacheFolder->path().'/'.$user_id.'-modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode($view->exportModules())).'");');
+			file_put_contents($cacheFolder->path().'/'.$user_id.'-modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode(GO::view()->exportModules())).'");');
 			array_unshift($scripts, $cacheFolder->path().'/'.$user_id.'-modules.js');
 
 
@@ -358,7 +358,7 @@ if(count($load_modules)) {
 
 	}else
 	{
-		file_put_contents($cacheFolder->path().'/'.$user_id.'-modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode($view->exportModules())).'");');
+		file_put_contents($cacheFolder->path().'/'.$user_id.'-modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode(GO::view()->exportModules())).'");');
 		
 		$url=GO::url("core/compress", array('file'=>$user_id.'-modules.js', 'mtime'=>filemtime($cacheFolder->path().'/'.$user_id.'-modules.js')));		
 		array_unshift($scripts, $url);
@@ -439,8 +439,8 @@ $this->fireEvent('inlinescripts');
 ?>
 </script>
 <?php
-if(file_exists($view->getTheme()->getPath().'MainLayout.js')) {
-	echo '<script src="'.$view->getTheme()->getUrl().'MainLayout.js" type="text/javascript"></script>';
+if(file_exists(GO::view()->getTheme()->getPath().'MainLayout.js')) {
+	echo '<script src="'.GO::view()->getTheme()->getUrl().'MainLayout.js" type="text/javascript"></script>';
 	echo "\n";
 }
 ?>

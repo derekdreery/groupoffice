@@ -43,9 +43,9 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 		$this->loadInit();
 //		$this->render('index');
 		
-		$view = new GO_Base_View_Extjs3();
+//		$view = GO::view();
 		
-		require($view->getTheme()->getPath().'Layout.php');
+		require(GO::view()->getTheme()->getPath().'Layout.php');
 		
 		
 	}
