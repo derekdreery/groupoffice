@@ -839,7 +839,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	markAsRead : function(uid, mailbox, account_id){
 		if(this.messagePanel.uid==uid && this.messagePanel.mailbox==mailbox && this.messagePanel.account_id==account_id){
 				GO.request({
-				url: "email/message/setFlag",
+				url: "email/message/setFlag",				
 				params: {
 					account_id: account_id,
 					mailbox: mailbox,
@@ -1175,6 +1175,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 
 			GO.request({
 				url: "email/message/setFlag",
+				maskEl:this.getEl(),
 				params: {
 					account_id: this.account_id,
 					mailbox: this.mailbox,
