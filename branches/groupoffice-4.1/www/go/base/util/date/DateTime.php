@@ -44,6 +44,18 @@ class GO_Base_Util_Date_DateTime extends DateTime {
 	}
 	
 	/**
+	 * Get the easter date time object with the correct timezone
+	 * @param int $year
+	 * @return GO_Base_Util_Date_DateTime
+	 */
+	public static function getEasterDatetime($year) {
+			$base = new GO_Base_Util_Date_DateTime("$year-03-21");
+			$days = easter_days($year);
+
+			return $base->add(new DateInterval("P{$days}D"));
+	}
+	
+	/**
 	 * Format the datetime to the format given
 	 * If there is no format specified the default user specified format will be used
 	 * @todo fix timezone issue

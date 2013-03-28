@@ -890,7 +890,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 */
 	private function _getHolidayResponseForPeriod($response,$calendar,$startTime,$endTime){
 		$resultCount = 0;
-		$dayString = GO::t('full_days');
+
 		
 		if(!$calendar->user)
 			return $response;
@@ -900,21 +900,10 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 			while($holiday = $holidays->fetch()){ 
 				$resultCount++;
-				$response['results'][$this->_getIndex($response['results'],$holiday->date)] = array(
-					'id'=>$response['count']++,
-					'name'=>htmlspecialchars($holiday->name, ENT_COMPAT, 'UTF-8'),
-					'description'=>'',
-					'time'=>date(GO::user()->time_format, $holiday->date),
-					'all_day_event'=>1,
-					'start_time'=>date('Y-m-d',$holiday->date).' 00:00',
-					'end_time'=>date('Y-m-d',$holiday->date).' 23:59',
-					//'background'=>$calendar->displayColor,
-					'background'=>'f1f1f1',
-					'model_name'=>'',
-					'day'=>$dayString[date('w', $holiday->date)].' '.GO_Base_Util_Date::get_timestamp($holiday->date,false),
-					'read_only'=>true,
-					'calendar_id'=>$calendar->id
-					);
+				$record = $holiday->getJson();
+				$record['calendar_id']=$calendar->id;
+				$record['id']=$response['count']++;
+				$response['results'][$this->_getIndex($response['results'],$holiday->date)] = $record;
 			}
 
 			// Set the count of the holidays
