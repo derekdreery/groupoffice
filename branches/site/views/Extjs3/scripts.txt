@@ -1,0 +1,11 @@
+modules/site/views/Extjs3/ContentDialog.js
+modules/site/views/Extjs3/SiteDialog.js
+
+modules/site/views/Extjs3/ContentPanel.js
+modules/site/views/Extjs3/ContentContextMenu.js
+modules/site/views/Extjs3/SiteContextMenu.js
+modules/site/views/Extjs3/SiteTreePanel.js
+
+modules/site/views/Extjs3/ModuleSettingsDialog.js
+
+modules/site/views/Extjs3/MainPanel.js
