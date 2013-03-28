@@ -212,7 +212,7 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 			if($this->_sieve->save()) {
 				$response['success'] = true;
 			} else {
-				$response['feedback'] = $this->_sieve->error();
+				$response['feedback'] = "Could not save filtering rules. Please check your input";
 				$response['success'] = false;
 			}
 		} catch (Exception $e) {

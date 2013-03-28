@@ -150,8 +150,6 @@ class GO_Sieve_Util_Sieve {
 		
 		$res = $this->sieve->installScript($name, $content);
 		if ($this->_PEAR->isError($res)) {
-			var_dump($res);
-			//var_dump($res);
 			return $this->_set_error(SIEVE_ERROR_INSTALL);
 		}
 
