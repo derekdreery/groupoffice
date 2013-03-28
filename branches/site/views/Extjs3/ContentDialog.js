@@ -11,21 +11,21 @@
  * @author Wesley Smits <wsmits@intermesh.nl>
  */
  
-GO.sites.ContentDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
+GO.site.ContentDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	
-	customFieldType : "GO_Sites_Model_Content",
+	customFieldType : "GO_Site_Model_Content",
 	
 	initComponent : function(){
 		
 		Ext.apply(this, {
 			goDialogId:'content',
-			title:GO.sites.lang.content,
-			formControllerUrl: 'sites/content',
+			title:GO.site.lang.content,
+			formControllerUrl: 'site/content',
 			height:600,
 			width:900
 		});
 		
-		GO.sites.ContentDialog.superclass.initComponent.call(this);	
+		GO.site.ContentDialog.superclass.initComponent.call(this);	
 	},
 	
 	buildForm : function () {
@@ -46,7 +46,7 @@ GO.sites.ContentDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 					anchor: '100%',
 					maxLength: 100,
 					allowBlank:false,
-					fieldLabel: GO.sites.lang.contentTitle
+					fieldLabel: GO.site.lang.contentTitle
 				},{
 					xtype: 'textfield',
 					name: 'slug',
@@ -54,11 +54,11 @@ GO.sites.ContentDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 					anchor: '100%',
 					maxLength: 100,
 					allowBlank:false,
-					fieldLabel: GO.sites.lang.contentSlug
+					fieldLabel: GO.site.lang.contentSlug
 				}]
 			},{
 	  		xtype: 'fieldset',
-	  		title: GO.sites.lang.metaData,
+	  		title: GO.site.lang.metaData,
 	  		autoHeight: true,
 	  		border: true,
 	  		collapsed: false,
@@ -69,7 +69,7 @@ GO.sites.ContentDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 					anchor: '100%',
 					maxLength: 100,
 					allowBlank:true,
-					fieldLabel: GO.sites.lang.contentMeta_description
+					fieldLabel: GO.site.lang.contentMeta_description
 				},{
 					xtype: 'textfield',
 					name: 'keywords',
@@ -77,7 +77,7 @@ GO.sites.ContentDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 					anchor: '100%',
 					maxLength: 100,
 					allowBlank:true,
-					fieldLabel: GO.sites.lang.contentMeta_keywords
+					fieldLabel: GO.site.lang.contentMeta_keywords
 				}]
 			}]
 		});
@@ -85,7 +85,7 @@ GO.sites.ContentDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		this.addPanel(this.propertiesPanel);
 		
 		this.contentPanel = new Ext.Panel({
-			title:GO.sites.lang.contentContent,			
+			title:GO.site.lang.contentContent,			
 			layout:'form',
 			items:[
 					new GO.form.HtmlEditor({
