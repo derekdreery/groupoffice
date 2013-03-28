@@ -333,3 +333,6 @@ $updates["201303181730"][]="CREATE TABLE IF NOT EXISTS `go_cf_setting_tabs` (
 $updates["201303201500"][]="ALTER TABLE  `go_cron` ADD  `completedat` INT NOT NULL DEFAULT  '0'";
 
 $updates["201303201600"][]="script:14_insert_disk_usage_cron.php";
+
+$updates['201303281655'][] ="TRUNCATE TABLE `go_holidays`";
+$updates['201303281655'][] ="ALTER TABLE  `go_holidays` CHANGE  `date`  `date` DATE NOT NULL";

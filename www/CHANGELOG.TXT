@@ -11,6 +11,7 @@
 - TimerButton didn't load time from database on reload the way it should (fixed)
 - Billing, duplicate order: No more link between original order and duplicate order.
 - Billing, recurring order: Link between original order and recurring order created on status change.
+- Updated German language
 
 26-03-2013 4.1.51
 - Config::get_setting() will return null of the config option is not yet in the database

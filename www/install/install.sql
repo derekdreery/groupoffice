@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS `go_groups` (
 DROP TABLE IF EXISTS `go_holidays`;
 CREATE TABLE IF NOT EXISTS `go_holidays` (
   `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
-  `date` int(10) NOT NULL DEFAULT '0',
+   `date` DATE NOT NULL,
   `name` varchar(100) NOT NULL DEFAULT '',
   `region` varchar(10) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
