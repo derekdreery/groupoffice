@@ -476,7 +476,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
    * Call this in the grids that get filterable by other selectable stores
    * @param string $requestParamName That key that will hold the seleted item in go_setting table
    * @param string $selectClassName Name of the related model (eg. GO_Notes_Model_Category)
-   * @param string $foreignKey column name to match the realed models PK (eg. category_id)
+   * @param string $foreignKey column name to match the related models PK (eg. category_id)
    * @param boolean $checkPermissions check Permission for item defaults to true
    */
   public function multiSelect($requestParamName, $selectClassName, $foreignKey, $checkPermissions=true) {
