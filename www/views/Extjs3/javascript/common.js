@@ -83,6 +83,8 @@ GO.url = function(relativeUrl, params){
  * 
  */
 GO.request = function(config){
+	
+	Ext.Ajax.timeout=5000;
 
 	var url = GO.url(config.url);
 	delete config.url;
@@ -98,7 +100,14 @@ GO.request = function(config){
 	
 	var p = Ext.apply({
 		url:url,
-		callback:function(){
+		callback:function(options, success, response){
+			
+//			console.log(response);
+//			
+			if(!success && response.isTimeout){
+				GO.errorDialog.show(GO.lang.errorTimeout);
+			}
+			
 			if(config.maskEl)
 				config.maskEl.unmask();
 		},
