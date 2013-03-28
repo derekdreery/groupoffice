@@ -86,7 +86,8 @@ $this->setPageTitle("Support");
 		<div class="subkader-big-top">
 			<div class="subkader-big-bottom">
 				<div class="subkader-big-center">			
-					<p>You don't have any tickets yet.</p>
+					<?php $this->renderPartial('_filtermenu'); ?>
+					<p>No tickets found</p>
 				</div>
 			</div>
 		</div>
