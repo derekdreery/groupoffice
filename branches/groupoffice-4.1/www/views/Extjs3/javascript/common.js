@@ -84,7 +84,7 @@ GO.url = function(relativeUrl, params){
  */
 GO.request = function(config){
 	
-	Ext.Ajax.timeout=5000;
+//	Ext.Ajax.timeout=5000;
 
 	var url = GO.url(config.url);
 	delete config.url;
