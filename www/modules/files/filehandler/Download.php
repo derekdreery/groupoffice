@@ -18,7 +18,7 @@ class GO_Files_Filehandler_Download implements GO_Files_Filehandler_Interface{
 	}
 	
 	public function getHandler(GO_Files_Model_File $file){
-		return 'window.location.href="'.$file->getDownloadUrl(true).'";';
+		return 'window.location.href="'.$file->getDownloadUrl(true, true).'";';
 	}
 }
 ?>
