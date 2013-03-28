@@ -1183,13 +1183,18 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			if(empty($uuid) || strpos($response['htmlbody'], $uuid)===false){
 				//if(!$event){
 					$event = new GO_Calendar_Model_Event();
-					$event->importVObject($vevent, array(), true);
-				//}
+					try{
+						$event->importVObject($vevent, array(), true);
+					//}
 
-				$response['htmlbody'].= '<div style="border: 1px solid black;margin-top:10px">'.
-								'<div style="font-weight:bold;margin:2px;">'.GO::t('attachedAppointmentInfo','email').'</div>'.
-								$event->toHtml().
-								'</div>';
+					$response['htmlbody'].= '<div style="border: 1px solid black;margin-top:10px">'.
+									'<div style="font-weight:bold;margin:2px;">'.GO::t('attachedAppointmentInfo','email').'</div>'.
+									$event->toHtml().
+									'</div>';
+					}
+					catch(Exception $e){
+						//$response['htmlbody'].= '<div style="border: 1px solid black;margin-top:10px">Could not render event</div>';
+					}
 			}
 		}
 				
