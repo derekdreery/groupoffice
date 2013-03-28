@@ -375,7 +375,8 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 						$maxBodySize = $noMaxBodySize ? false : $this->maxBodySize;
 						
 						$htmlPartStr = $imap->get_message_part_decoded($this->uid, $htmlPart['number'],$htmlPart['encoding'], $htmlPart['charset'],$this->peek,$maxBodySize);
-						$htmlPartStr = GO_Base_Util_String::sanitizeHtml(GO_Base_Util_String::convertLinks($htmlPartStr));
+						$htmlPartStr = GO_Base_Util_String::convertLinks($htmlPartStr);
+						$htmlPartStr = GO_Base_Util_String::sanitizeHtml($htmlPartStr);
 						
 						$this->_bodyTruncated = $imap->max_read;
 						
