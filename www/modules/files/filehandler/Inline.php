@@ -20,7 +20,7 @@ class GO_Files_Filehandler_Inline implements GO_Files_Filehandler_Interface{
 	}
 	
 	public function getHandler(GO_Files_Model_File $file){
-		return 'window.open("'.$file->getDownloadUrl(false).'");';
+		return 'window.open("'.$file->getDownloadUrl(false, true).'");';
 	}
 }
 ?>

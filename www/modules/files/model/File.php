@@ -402,8 +402,8 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @return string 
 	 */
-	public function getDownloadURL($inline=true) {
-		return GO::url('files/file/download', array('id'=>$this->id, 'inline'=>$inline?'false':'true'), false);		
+	public function getDownloadURL($downloadAttachment=true, $relative=false) {
+		return GO::url('files/file/download', array('id'=>$this->id, 'inline'=>$downloadAttachment?'false':'true'), $relative);		
 	}
 
 	
