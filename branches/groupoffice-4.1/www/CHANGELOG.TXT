@@ -1,3 +1,4 @@
+- Reset password was broken
 - removed time before tasks and birthday events in the calendar's month view
 - Cron: enabling the users and group tabs when clicking on apply will now work.
 - MultiSelectGrid will check for an ACL field in the linked model if $checkPermissions is not provided
