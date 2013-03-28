@@ -1,3 +1,5 @@
+- GO will recognize IE10 as Internet Explorer browser isInternetExplorer() will return true
+- Download filenames with UTF-8 character in IE10 will work as expected
 - Reset password was broken
 - removed time before tasks and birthday events in the calendar's month view
 - Cron: enabling the users and group tabs when clicking on apply will now work.
