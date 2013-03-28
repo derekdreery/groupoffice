@@ -1145,6 +1145,13 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			
 			$uuid = (string) $vevent->uid;
 			
+			$alreadyProcessed = false;
+			if($event && $vevent->{"last-modified"}){
+				
+//				throw new Exception($vevent->{"last-modified"}->getDateTime()->format('Ymd G:i').' < '.GO_Base_Util_Date::get_timestamp($event->mtime));
+				$alreadyProcessed=$vevent->{"last-modified"}->getDateTime()->format('U')<=$event->mtime;
+			}
+			
 //			if(!$event || $event->is_organizer){
 				switch($vcalendar->method){
 					case 'CANCEL':					
@@ -1169,9 +1176,11 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 						'email_sender' => $response['sender'],
 						'email' => $imapMessage->account->getDefaultAlias()->email,
 						//'event_declined' => $event && $event->status == 'DECLINED',
-						//'event_id' => $event ? $event->id : 0,
-						'is_update' => $vcalendar->method == 'REPLY' || ($vcalendar->method == 'REQUEST' && $event),
-						'is_invitation' => $vcalendar->method == 'REQUEST' && !$event,
+						'event_id' => $event ? $event->id : 0,
+						'is_organizer'=>$event && $event->is_organizer,
+						'is_processed'=>$alreadyProcessed,
+						'is_update' => !$alreadyProcessed && $vcalendar->method == 'REPLY',// || ($vcalendar->method == 'REQUEST' && $event),
+						'is_invitation' => !$alreadyProcessed && $vcalendar->method == 'REQUEST', //&& !$event,
 						'is_cancellation' => $vcalendar->method == 'CANCEL'
 				);
 //			}elseif($event){

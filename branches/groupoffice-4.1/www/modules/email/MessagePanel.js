@@ -93,9 +93,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		'</div>';
 		
 		if(GO.calendar){
-			templateStr += '<tpl if="!GO.util.empty(values.attendance_event_id)">'+
-			'<div class="message-icalendar"><a class="go-model-icon-GO_Calendar_Model_Event normal-link" style="padding-left:20px;background-repeat:no-repeat;" href="#" class="go-model-icon-GO_Calendar_Model_Event message-icalendar-icon" onclick="GO.email.showAttendanceWindow({attendance_event_id});">'+GO.calendar.lang.clickForAttendance+'</a></div>'+
-			'</tpl>';
+			
 			
 		
 		
@@ -106,6 +104,10 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				
 				
 				'<tpl if="iCalendar.invitation">'+
+				
+				'<tpl if="!GO.util.empty(iCalendar.invitation.is_processed)">'+
+					'<a id="em-icalendar-open" class="go-model-icon-GO_Calendar_Model_Event normal-link" style="padding-left:20px;background-repeat:no-repeat;" href="#" class="go-model-icon-GO_Calendar_Model_Event message-icalendar-icon">'+GO.email.lang.appointementAlreadyProcessed+'</a>'+
+					'</tpl>'+
 					'<tpl if="iCalendar.invitation.is_invitation">'+
 		
 								'<a id="em-icalendar-accept-invitation" class="go-model-icon-GO_Calendar_Model_Event normal-link" style="padding-left:20px;background-repeat:no-repeat;" href="#" class="go-model-icon-GO_Calendar_Model_Event message-icalendar-icon">'+GO.calendar.lang.clickForAttendance+'</a>'+
@@ -357,7 +359,20 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			}, this);
 		}
 		
-		
+		var icalUpdateOpenEl = Ext.get('em-icalendar-open');
+		if(icalUpdateOpenEl)
+		{
+			icalUpdateOpenEl.on('click', function()
+			{
+				if(this.data.iCalendar.invitation.is_organizer){
+					GO.calendar.showEventDialog({event_id:this.data.iCalendar.invitation.event_id})
+				}else
+				{
+					GO.email.showAttendanceWindow(this.data.iCalendar.invitation.event_id);
+				}
+			}, this);
+		}
+
 		this.messageBodyEl = Ext.get(this.bodyId);		
 		this.messageBodyEl.on('click', this.onMessageBodyClick, this);
 		this.messageBodyEl.on('contextmenu', this.onMessageBodyContextMenu, this);

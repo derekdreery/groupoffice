@@ -252,3 +252,5 @@ $l['dateSent']='Date sent';
 
 $l['cronEmailReminders']='Email reminders';
 $l['cronEmailRemindersDescription']='This cron handles the email reminders';
+
+$l['appointementAlreadyProcessed']='This message contains an appointment invitation that was already processed.';

@@ -1057,7 +1057,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	protected function actionDelete($params){
 		
 		$event = GO_Calendar_Model_Event::model()->findByPk($params['id']);
-		
+		if(!$event)
+			throw new GO_Base_Exception_NotFound();
 		
 		if(!isset($params['send_cancel_notice']) && $event->hasOtherParticipants()){
 			return array(
