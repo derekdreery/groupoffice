@@ -70,6 +70,36 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	 * See the parent class for a more detailed description of the relations.
 	 */
 	 public function relations() {
-		 return array();
+		 return array(
+			'children' => array('type' => self::HAS_MANY, 'model' => 'GO_Site_Model_Content', 'field' => 'parent_id', 'delete' => true, GO_Base_Db_FindParams::newInstance()->order('sort_order')),
+			'site'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Site_Model_Site", 'field'=>'site_id'),
+			'parent'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Site_Model_Content", 'field'=>'parent_id')
+		 );
 	 }
+	 
+	 /**
+	  * Get the tree array for the children of the current item
+	  * 
+	  * @return array
+	  */
+	 public function getChildrenTree(){
+		 $tree = array();
+		 $children = $this->children;
+		 
+		 foreach($children as $child){
+			 
+			 $childNode = array(
+				'id' => $child->site_id.'_content_'.$child->id,
+				'site_id'=>$child->site->id, 
+				'iconCls' => 'go-model-icon-GO_Site_Model_Content', 
+				'text' => $child->title,
+				'expanded' => false,
+				'children' => $children
+			);
+			 
+			$tree[] = $childNode;
+		 }
+		 
+		 return $tree;
+	 }	 
 }

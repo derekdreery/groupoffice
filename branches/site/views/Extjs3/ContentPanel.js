@@ -1,112 +1,113 @@
-GO.site.ContentPanel = Ext.extend(GO.grid.GridPanel,{
-
-	editDialogClass:GO.site.ContentDialog,
-	relatedGridParamName:'site_id',
+GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 	
-	load : function(site_id){
-		this.store.baseParams.site_id=site_id;
-		this.store.load();
+	load : function(contentId){
+		this.form.baseParams.id=contentId;
+		this.form.load();
 	},
 	constructor : function(config){
 		config = config || {};
 		
 		config.id='site-content';
-		config.title = GO.site.lang.content;
-		config.layout='fit';
-		config.autoScroll=true;
-		config.split=true;
-		config.store = new GO.data.JsonStore({
-			url: GO.url('site/content/store'),		
-			fields: ['id','title','slug'],
-			baseParams:{
-				site_id:0
-			},
-			remoteSort: true,
-			model:"GO_Site_Model_Content"
+//		config.title = GO.site.lang.content;
+		config.layout='form';
+		config.border = false;
+		config.url = GO.url('site/content/load');
+		config.baseParams = {
+			id:false
+		}
+		
+		config.bodyStyle='padding:5px';
+		config.labelWidth=60;
+		
+		this.reloadButton = new Ext.Button({
+			iconCls: 'btn-refresh',
+			itemId:'refresh',
+			text: GO.site.lang.reload,
+			cls: 'x-btn-text-icon'
+		});
+
+		this.reloadButton.on("click", function(){
+		 // Reload the content
+		 // TODO: check if there are changes in the content, then ask for saving first
+		 this.form.load();
+		},this);
+		
+		this.saveButton = new Ext.Button({
+			iconCls: 'btn-save',
+			itemId:'save',
+			text: GO.site.lang.save,
+			cls: 'x-btn-text-icon'
+		});
+
+		this.saveButton.on("click", function(){
+		 // submit the content
+		 this.form.submit({
+				url:GO.url('site/content/update'),
+				waitMsg:GO.lang['waitMsgSave'],
+				success:function(form, action){
+					this.form.load();
+				},
+				failure: function(form, action) {
+					if(action.failureType == 'client')
+						Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strErrorsInForm']);
+					else
+						Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
+				},
+				scope: this
+			})
+		},this);
+		
+		this.advancedButton = new Ext.Button({
+			iconCls: 'btn-settings',
+			itemId:'advanced',
+			text: GO.site.lang.advanced,
+			cls: 'x-btn-text-icon'
+		});
+		
+		this.advancedButton.on("click", function(){
+		 // Reload the content
+		},this);
+		
+		config.tbar=new Ext.Toolbar({
+			hideBorders:true,
+			items: [
+				this.saveButton,
+				this.reloadButton,
+				this.advancedButton
+			]
+		});
+		
+		this.titleField = new Ext.form.TextField({
+			name: 'title',
+			width:300,
+			maxLength: 255,
+			allowBlank:false,
+			fieldLabel: GO.site.lang.contentTitle
+		});
+		
+		this.slugField = new Ext.form.TextField({
+			name: 'slug',
+			width:300,
+			maxLength: 255,
+			allowBlank:false,
+			fieldLabel: GO.site.lang.contentSlug
 		});
 	
-		config.columns=[
-		{
-			header: GO.site.lang.contentTitle,
-			dataIndex: 'title',
-			sortable: true
-		},
-		{
-			header: GO.site.lang.contentSlug,
-			dataIndex: 'slug',
-			sortable: true			
-		}
+		this.editor = new GO.form.HtmlEditor({
+			hideLabel:true,
+			name: 'content',
+			anchor: '100% -80',
+			allowBlank:true,
+			fieldLabel: GO.site.lang.contentContent
+		});
+				
+		config.items = [
+			this.titleField,
+			this.slugField,
+			this.editor
 		];
-	
-		config.view=new Ext.grid.GridView({
-			autoFill: true,
-			forceFit: true,
-			emptyText: GO.lang['strNoItems']		
-		});
-	
-		config.sm=new Ext.grid.RowSelectionModel();
-		config.loadMask=true;
 		
-		config.standardTbar=true;
-		
-		
-		config.enableDragDrop=true;
-		config.ddGroup='siteContentDD';
-
-
 		GO.site.ContentPanel.superclass.constructor.call(this, config);
-	},
-	
-	afterRender : function(){
-		
-		GO.customfields.CategoriesPanel.superclass.afterRender.call(this);
-		//enable row sorting
-		var DDtarget = new Ext.dd.DropTarget(this.getView().mainBody, 
-		{
-			ddGroup : 'siteContentDD',
-			copy:false,
-			notifyDrop : this.notifyDrop.createDelegate(this)
-		});
-	},
-	
-	notifyDrop : function(dd, e, data)
-	{
-		var sm=this.getSelectionModel();
-		var rows=sm.getSelections();
-		var dragData = dd.getDragData(e);
-		var cindex=dragData.rowIndex;
-		if(cindex=='undefined')
-		{
-			cindex=this.store.data.length-1;
-		}	
-		
-		for(i = 0; i < rows.length; i++) 
-		{								
-			var rowData=this.store.getById(rows[i].id);
-			
-			if(!this.copy){
-				this.store.remove(this.store.getById(rows[i].id));
-			}
-			
-			this.store.insert(cindex,rowData);
-		}
-		
-		//save sort order							
-		var records = [];
-  	for (var i = 0; i < this.store.data.items.length;  i++)
-  	{			    	
-			records.push({id: this.store.data.items[i].get('id'), sort_index : i});
-  	}
-  	
-
-		GO.request({
-			url:'site/content/saveSort',
-			params:{
-				content:Ext.encode(records)
-			}
-		})
-		
 	}
-	
 });
 

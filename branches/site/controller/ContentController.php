@@ -39,5 +39,26 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractModelControl
 		return array('success'=>true);
 	}	
 	
+	protected function actionUpdate($params){
+		$response = array();
+		
+		if(empty($params['id']))
+			Throw new Exception('No ID given!');
+		
+		$model = GO_Site_Model_Content::model()->findByPk($params['id']);
+		
+		if(!$model)
+			Throw new Exception('No content item found with the following id: '.$params['id']);
+		
+		unset($params['id']);
+		
+		$model->setAttributes($params);
+		
+		$response['success'] = $model->save();
+		
+		return $response;
+	}
+	
+	
 }
 ?>

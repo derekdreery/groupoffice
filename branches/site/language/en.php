@@ -3,6 +3,13 @@
 $l["name"] = "The new CMS module";
 $l["description"] = "This is a new CMS module";
 
+$l["content"] = "Content";
+$l["site"] = "Site";
+
+$l["save"] = "Save";
+$l["reload"] = "Reload";
+$l["advanced"] = "Advanced options";
+
 // Language for model: GO_Site_Model_Content
 $l["contentId"] = "ID";
 $l["contentUser_id"] = "User";

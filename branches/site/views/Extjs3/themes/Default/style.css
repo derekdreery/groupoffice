@@ -11,5 +11,9 @@
 }
 
 .go-model-icon-GO_Site_Model_Content{
-	background-image: url('images/doc.png') !important;
+	background-image: url('images/content.png') !important;
+}
+
+.go-icon-layout{
+	background-image: url('images/layout.png') !important;
 }

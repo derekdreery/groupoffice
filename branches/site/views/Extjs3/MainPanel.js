@@ -7,6 +7,9 @@ GO.site.MainPanel = function(config){
 		region:'center',
 		border:true,
 		layout:'card',
+		layoutConfig:{ 
+			layoutOnCardChange:true
+		},
 		items:[
 			new GO.site.ContentPanel(),
 			new Ext.Panel({
@@ -32,9 +35,23 @@ GO.site.MainPanel = function(config){
 		this.centerPanel
 	];
 	
+	this.reloadButton = new Ext.Button({
+		iconCls: 'btn-refresh',
+		itemId:'refresh',
+		//text: GO.site.lang.refresh,
+		cls: 'x-btn-text-icon'
+	});
+	
+	this.reloadButton.on("click", function(){
+		this.rebuildTree();
+	},this);
+	
 	config.tbar=new Ext.Toolbar({
 			cls:'go-head-tb',
-			items: ['-']
+			items: [
+				this.reloadButton,
+				'-'
+			]
 	});
 	
 	GO.site.MainPanel.superclass.constructor.call(this, config);
@@ -43,13 +60,20 @@ GO.site.MainPanel = function(config){
 Ext.extend(GO.site.MainPanel, Ext.Panel,{
 	
 	treeNodeClick: function(node){
+		
+		console.log(node.id);
 		var arr = node.id.split('_');
-		if(arr[0]!='site'){
-			var centerPanelId = 'site-'+arr[0];
-			var item = this.centerPanel.getComponent(centerPanelId);
+		
+		var siteId = arr[0];
+		var type = arr[1];
+		var itemId = arr[2];
+		
+		// Load the content edit panel in the centerpanel
+		if(type == 'content' && !GO.util.empty(itemId)){
+			var panel = this.centerPanel.getComponent('site-'+type);
 				
-			this.centerPanel.getLayout().setActiveItem(item);
-			item.load(arr[1]);
+			this.centerPanel.getLayout().setActiveItem(panel);
+			panel.load(itemId);
 		}
 	},
 

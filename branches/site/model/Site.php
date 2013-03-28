@@ -66,7 +66,10 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 	 * See the parent class for a more detailed description of the relations.
 	 */
 	public function relations() {
-		return array();
+		return array(
+			'content' => array('type' => self::HAS_MANY, 'model' => 'GO_Site_Model_Content', 'field' => 'site_id', 'findParams'=>  GO_Base_Db_FindParams::newInstance()->order('sort_order'),  'delete' => true),
+			'contentNodes' => array('type' => self::HAS_MANY, 'model' => 'GO_Site_Model_Content', 'field' => 'site_id', 'findParams'=> GO_Base_Db_FindParams::newInstance()->order('sort_order')->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('parent_id', null)),  'delete' => true)
+		);
 	}
 
 	public static function launch($siteId = false) {
@@ -92,5 +95,55 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 		
 	}
 	
+	public static function getTreeNodes(){
+		
+		$tree = array();
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->ignoreAcl();
+		
+		$sites = self::model()->find($findParams);
+		
+		foreach($sites as $site){
 
+			// Site node
+			$siteNode = array(
+				'id' => 'site_' . $site->id,
+				'site_id'=>$site->id, 
+				'iconCls' => 'go-model-icon-GO_Site_Model_Site', 
+				'text' => $site->name, 
+				'expanded' => true,
+				'children' => array(
+						array(
+							'id' => $site->id.'_content',
+							'site_id'=>$site->id, 
+							'iconCls' => 'go-icon-layout', 
+							'text' => GO::t('content','site'),
+							'expanded' => true,
+							'children' => $site->loadContentNodes()
+						)
+					)
+			);
+
+			$tree[] = $siteNode;
+		}
+		
+		return $tree;
+	}
+	
+	public function loadContentNodes(){
+		$treeNodes = array();
+		
+		$contentItems = $this->contentNodes;
+			
+		foreach($contentItems as $content){
+			$treeNodes[] = array(
+					'id' => $this->id.'_content_'.$content->id,
+					'site_id'=>$this->id, 
+					'iconCls' => 'go-model-icon-GO_Site_Model_Content', 
+					'text' => $content->title
+			);
+		}
+		
+		return $treeNodes;
+	}
 }
