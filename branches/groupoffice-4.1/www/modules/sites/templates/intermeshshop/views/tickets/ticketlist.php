@@ -11,7 +11,7 @@ $this->setPageTitle("Support");
 				As a user of the Professional version you'll get premium technical support through our ticket system. 
 				A technician will respond within 8 working hours but probably much faster.<br><br>
 				Please check our troubleshooting page before posting your question:<br>
-				<a href="http://www.group-office.com/wiki/Troubleshooting">http://www.group-office.com/wiki/Troubleshooting</a><br>
+				<a href="http://wiki4.group-office.com/wiki/Troubleshooting">http://www.group-office.com/wiki/Troubleshooting</a><br>
 
 				<p>&nbsp;</p>
 				<?php
