@@ -49,6 +49,7 @@ class GO{
 	private static $_lastReportedError=false;
 
 
+	private static $_view;
 	/**
 	 * If you set this to true then all acl's will allow all actions. Useful
 	 * for maintenance scripts.
@@ -236,12 +237,15 @@ class GO{
 
 	/**
 	 *
-	 * @return string Returns the currently selected theme.
+	 * @return GO_Base_View_Extjs3 Returns the currently selected theme.
 	 *
-	 * TODO SHould be changed to theme().
+	 * 
 	 */
 	public static function view(){
-		return isset(GO::session()->values['view']) ? GO::session()->values['view'] : GO::config()->defaultView;
+		if(!isset(self::$_view)){
+			self::$_view = new GO_Base_View_Extjs3();
+		}
+		return self::$_view;//isset(GO::session()->values['view']) ? GO::session()->values['view'] : GO::config()->defaultView;
 	}
 
 	public static function setView($viewName){

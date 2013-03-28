@@ -11,9 +11,7 @@
  * @version $Id: invitation.php 7752 2011-07-26 13:48:43Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-require_once(GO::config()->root_path . "Group-Office.php");
-require_once(GO::config()->root_path . "classes/base/theme.class.inc.php");
-$GO_THEME = new GO_THEME();
+
 
 if (empty($_REQUEST['email'])) {
 	die(GO::t("noEmailGiven"));
@@ -26,19 +24,12 @@ if (empty($_REQUEST['email'])) {
 		die(GO::t("noUserFoundWithEmail"));
 	}
 }
-	?>
-	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-	<html>
-		<head>
-	<?php
-	require($GO_THEME->theme_path . 'default_head.inc.php');
-	require(GO::config()->root_path . 'views/Extjs3/default_scripts.inc.php');
-	?>
-	<script>GO.usertoken="<?php echo $_REQUEST['usertoken']; ?>";</script>
-	<script>GO.email="<?php echo $_REQUEST['email']; ?>";</script>
-	<script type="text/javascript" src="<?php echo GO::config()->host . 'views/Extjs3/javascript/ResetPassword.js'; ?>"></script>
-	</head>
-	<body>
-
-	</body>
-</html>
+	
+require(GO::view()->getTheme()->getPath().'header.php');
+require(GO::config()->root_path.'views/Extjs3/default_scripts.inc.php');
+?>
+<script>GO.usertoken="<?php echo $_REQUEST['usertoken']; ?>";</script>
+<script>GO.email="<?php echo $_REQUEST['email']; ?>";</script>
+<script type="text/javascript" src="<?php echo GO::config()->host . 'views/Extjs3/javascript/ResetPassword.js'; ?>"></script>
+<?php
+require(GO::view()->getTheme()->getPath().'footer.php');

@@ -235,20 +235,20 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		$module = $this->getModule();
 		
 		if(!$module){
-			$file = GO::config()->root_path.'views/'.GO::view().'/'.$viewName.'.php';
+			$file = GO::view()->getPath().$viewName.'.php';
 		}else
 		{
-			$file = $module->path.'views/'.GO::view().'/'.$viewName.'.php';
+			$file = $module->path.'views/'.GO::view()->getName().'/'.$viewName.'.php';
 		}
 		
 		if(file_exists($file)){
 			require($file);
-		}elseif(($file = GO::config()->root_path.'views/'.GO::view().'/'.$viewName.'.php') && file_exists($file))
+		}elseif(($file = GO::config()->root_path.'views/'.GO::view()->getName().'/'.$viewName.'.php') && file_exists($file))
 		{
 			require($file);
 		}else
 		{			
-			$file = GO::config()->root_path.'views/'.GO::view().'/Default.php';			
+			$file = GO::config()->root_path.'views/'.GO::view()->getName().'/Default.php';			
 			require($file);
 		}
 	}

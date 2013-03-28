@@ -41,7 +41,7 @@ class GO_Base_View_Extjs3{
 
 	function addStylesheet($path){
 
-		//echo '<!-- '.$path.' -->'."\n";
+//		echo '<!-- '.$path.' -->'."\n";
 
 //		go_debug('Adding stylesheet: '.$path);
 
@@ -100,11 +100,13 @@ class GO_Base_View_Extjs3{
 
 		$cacheFolder = GO::config()->getCacheFolder();
 		$cssFile = $cacheFolder->createChild($hash.'-'.$this->getTheme()->getName().'-style.css');
+	
 		
 		if(!$cssFile->exists() || GO::config()->debug){
 			$fp = fopen($cssFile->path(), 'w+');
 			foreach($this->_stylesheets as $s){
-
+				
+				
 				$baseurl = str_replace(GO::config()->root_path, GO::config()->host, dirname($s)).'/';
 
 				fputs($fp, $this->_replaceUrl(file_get_contents($s),$baseurl));
