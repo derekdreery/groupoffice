@@ -321,11 +321,12 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 			disabled: true
 		});
 
-		this.txtEmailAddress = new Ext.form.TextArea({
+		this.txtEmailAddress = new Ext.form.TextField({
 			name: 'email',
 			allowBlank:false,
+			vtype:'emailAddress',
 			anchor: '100%',
-			fieldLabel:GO.sieve.lang.addressesLabel,
+			fieldLabel:GO.lang.strEmail,
 			hidden: true,
 			disabled: true
 		});
