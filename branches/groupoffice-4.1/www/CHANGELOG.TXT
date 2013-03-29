@@ -1,4 +1,5 @@
 29-03-2013 4.1.52
+- Fixed multiple bugs in the Z-Push 2 beta implementation
 - Calendar group view print fixed
 - Added "Show all" link to 15 latest links displayed for all items.
 - Added pagination toolbar to search results that doesn't know the total of 
