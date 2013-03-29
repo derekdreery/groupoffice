@@ -452,6 +452,13 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 
 					return;
 				}
+				
+				if(href.indexOf('#showalllinks')>-1){
+					this.loadParams['links_limit']=0;
+					this.reload();
+					delete this.loadParams['links_limit'];
+				
+				}
 
 				if(href.indexOf('#browsefiles')>-1){
 

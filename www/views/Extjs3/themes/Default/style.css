@@ -929,7 +929,8 @@ table.display-panel a:active
 }
 
 .display-panel-browse{
-	margin-top:5px;display:block;
+	margin-top:5px;float:left;
+	margin-right:10px;
 }
 
 .has-links{
