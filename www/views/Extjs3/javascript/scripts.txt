@@ -9,6 +9,7 @@ views/Extjs3/javascript/windows/PasswordDialog.js
 views/Extjs3/javascript/DialogListeners.js
 views/Extjs3/javascript/JsonMenu.js
 views/Extjs3/javascript/SmallPagingToolbar.js
+views/Extjs3/javascript/BlindPagingToolbar.js
 
 views/Extjs3/javascript/buttons/AddButton.js
 views/Extjs3/javascript/buttons/DeleteButton.js

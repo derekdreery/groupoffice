@@ -71,6 +71,14 @@ GO.grid.SearchPanel = function(config){
 	var gridConfig = {
 		border:true,
 		region:'center',
+		bbar:new GO.BlindPagingToolbar({
+			cls: 'go-paging-tb',
+			store: this.store,
+			pageSize: 20,
+			displayInfo: true,
+			displayMsg: GO.lang['displayingItems'],
+			emptyMsg: GO.lang['strNoItems']
+		}),
 		tbar:[
 		GO.lang['strSearch']+': ', ' ',this.searchField,
 		'-',{

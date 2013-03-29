@@ -1,4 +1,6 @@
 28-03-2013 4.1.51
+- Added pagination toolbar to search results that doesn't know the total of 
+  results to keep performance optimal.
 - Holidays could be generated on the wrong day
 - Appointment invitations could have a confusing "Update event" link.
 - redirect email filters had an input for multiple addresses but this is not supported by sieve
