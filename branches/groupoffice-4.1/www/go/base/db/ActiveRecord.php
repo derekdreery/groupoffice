@@ -3071,7 +3071,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		return $this->_getMagicAttribute($name);
 	}
 	
-	private function _getMagicAttribute($name, $triggerError=true){
+	private function _getMagicAttribute($name){
 		if(isset($this->_attributes[$name])){
 			return $this->getAttribute($name, self::$attributeOutputMode);
 		}else{
@@ -3085,12 +3085,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				$r = $this->relations();
 				if(isset($r[$name]))	
 					return $this->_getRelated($name);
-				elseif($triggerError){
-					if(!isset($this->columns[$name]))
-						return null;
-						//trigger_error ("Access to undefined property $name in ".$this->className());
-//					else 
-//						GO::debug("Column $name is NULL in ".$this->className());				
+				else{					
+//					if(!isset($this->columns[$name]))
+					return null;		
 				}
 			}
 		}		
@@ -3145,7 +3142,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	public function __isset($name){
-		$var = $this->_getMagicAttribute($name, false);
+		$var = $this->_getMagicAttribute($name);
 		return isset($var);
 	}
 	
