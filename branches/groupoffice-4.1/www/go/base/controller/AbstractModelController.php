@@ -449,7 +449,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$response = $this->_processCustomFieldsDisplay($model,$response);
 
 		if($model->hasLinks()){
-			$response = $this->_processLinksDisplay($model,$response);
+			$response = $this->_processLinksDisplay($model,$response, isset($params['links_limit']) ? $params['links_limit'] : 15);
 
 			if(!isset($response['data']['events']) && GO::modules()->calendar)
 				$response = $this->_processEventsDisplay($model,$response);
@@ -630,9 +630,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		return $response;
 	}
 	
-	private function _processLinksDisplay($model,$response){
+	private function _processLinksDisplay($model,$response, $limit=15){
 		$findParams = GO_Base_Db_FindParams::newInstance()
-							->limit(15);
+							->limit($limit);
 			
 		$ignoreModelTypes = array();
 		if(GO::modules()->calendar)
