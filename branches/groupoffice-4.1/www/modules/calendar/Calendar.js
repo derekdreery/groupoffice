@@ -705,7 +705,7 @@ GO.calendar.MainPanel = function(config){
 			else
 				urlParams.calendars = Ext.encode(this.calendars);
 
-			var url = GO.url('calendar/event/store',urlParams);
+			var url = GO.util.empty(this.view_id) ? GO.url('calendar/event/store',urlParams) : GO.url('calendar/event/viewStore',urlParams);
 										
 			window.open(url);
 		},
