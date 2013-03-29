@@ -28,7 +28,7 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 		if (empty($params['forContextMenu'])) {
 			$multiSel = new GO_Base_Component_MultiSelectGrid(
 							'addresslist_filter', 
-							"GO_Addressbook_Model_Addresslist",$store, $params);		
+							"GO_Addressbook_Model_Addresslist",$store, $params, false);		
 			$multiSel->formatCheckedColumn();
 		}
 		return parent::beforeStoreStatement($response, $params, $store, $storeParams);

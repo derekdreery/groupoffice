@@ -168,7 +168,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 
 			$addresslistMultiSel = new GO_Base_Component_MultiSelectGrid(
 							'addresslist_filter', 
-							"GO_Addressbook_Model_Addresslist",$store, $params);				
+							"GO_Addressbook_Model_Addresslist",$store, $params, false);				
 
 			if(count($addresslistMultiSel->selectedIds) && !empty($params['addresslist_filters']))
 			{
