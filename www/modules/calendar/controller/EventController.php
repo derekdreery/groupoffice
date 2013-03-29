@@ -594,8 +594,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$view = GO_Calendar_Model_View::model()->findByPk($params['view_id']);
 		if (!$view)
 			throw new GO_Base_Exception_NotFound();
+		
+		$response['title']=$view->name;
+		
+		$print = isset($params['print']);
 
-		unset($params['view_id']);
+		unset($params['view_id'], $params['print']);
 
 		//$calendars = $view->calendars;
 		$calendars=array();
@@ -617,6 +621,11 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				$results[$calendar->id] = $this->actionStore($params);
 		}
 		$response['results'] = array_values($results);
+		
+		
+		// If you have clicked on the "print" button
+		if($print)
+			$this->_createPdf($response, true);
 
 		return $response;
 	}
@@ -1367,9 +1376,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 *  
 	 * @param array $response 
 	 */
-	private function _createPdf($response){
+	private function _createPdf($response, $view=false){
 		$pdf = new GO_Calendar_Views_Pdf_CalendarPdf('L', $unit='mm', $format='A4', $unicode=true, $encoding='UTF-8', $diskcache=false, $pdfa=false);
-		$pdf->setParams($response);
+		$pdf->setParams($response, $view);
 		$pdf->Output(GO_Base_Fs_File::stripInvalidChars($response['title']).'.pdf');
 	}
 	

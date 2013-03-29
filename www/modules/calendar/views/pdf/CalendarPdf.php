@@ -23,18 +23,35 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 	private $_calendar;
 	private $_results;
 	
+	private $_view=false;
+	
 	public $cell_height = 12;
 
-	public function setParams($response) {
-		$this->_start_time = $response['start_time'];
-		$this->_end_time = $response['end_time'];
-		$this->_title = GO_Base_Fs_File::stripInvalidChars($response['title']);
-		$this->_days = ceil(($this->_end_time - $this->_start_time) / 86400);
-		$this->_results = $response['results'];
-		$this->_date_range_text = $this->_days > 1 ? date(GO::user()->completeDateFormat,$this->_start_time) . ' - ' . date(GO::user()->completeDateFormat,$this->_end_time) : date(GO::user()->completeDateFormat,$this->_start_time);
+	public function setParams($response, $view=false) {
 		
-		$this->_loadCurrentCalendar($response['calendar_id']);
-		$this->_processEvents();
+		if(!$view){
+			$responses = array($response);
+		}else
+		{
+			$responses = $response['results'];
+		}
+		
+		
+		$headers=true;
+		foreach($responses as $r){
+			$this->_view=$view;
+			$this->_start_time = $r['start_time'];
+			$this->_end_time = $r['end_time'];
+			$this->_title = GO_Base_Fs_File::stripInvalidChars($r['title']);
+			$this->_days = ceil(($this->_end_time - $this->_start_time) / 86400);
+			$this->_date_range_text = $this->_days > 1 ? date(GO::user()->completeDateFormat,$this->_start_time) . ' - ' . date(GO::user()->completeDateFormat,$this->_end_time) : date(GO::user()->completeDateFormat,$this->_start_time);
+
+			$this->_results = $r['results'];
+			$this->_loadCurrentCalendar($r['calendar_id']);
+			$this->_processEvents(!$view, $headers, $view ? $r['view_calendar_name'] : '');
+			$headers=false;
+		}
+		
 	}
 	
 	public function Header() {
@@ -138,6 +155,11 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 
 					if(empty($event['all_day_event']))
 						$event['name']=date($time_format, strtotime($event['start_time'])).': '.$event['name'];
+					
+					
+					$event['name']=  html_entity_decode($event['name']);
+					$event['description']=  html_entity_decode($event['description']);
+					$event['location']=  html_entity_decode($event['location']);
 
 					//$this->Cell($timeColWidth, $this->cell_height, $time, 0, 0, 'L');
 					//$this->MultiCell($cellWidth-$timeColWidth,$this->cell_height, $event['name'], 0, 1, 0, 1, '', '', true, 0, false, false, 0);
