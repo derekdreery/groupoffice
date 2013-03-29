@@ -131,7 +131,7 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 		}
 		
 		this.store.on('load', function(){
-			this.changed=false;
+//			this.changed=false;
 			
 			if(this.store.reader.jsonData){
 				if(this.store.reader.jsonData.title)
@@ -451,7 +451,7 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 		this.getView().scrollToTopOnLoad=false;
 		GO.deleteItems(deleteItemsConfig);
 		
-		this.changed=true;
+//		this.changed=true;
 	},
 
 	getGridData : function(){
@@ -499,7 +499,7 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 
 			this.editDialog.on('save', function(){   
 				this.store.reload();   
-				this.changed=true;
+//				this.changed=true;
 			}, this);	
 		}
 		
