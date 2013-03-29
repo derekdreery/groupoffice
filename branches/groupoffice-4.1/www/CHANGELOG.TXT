@@ -1,4 +1,6 @@
-28-03-2013 4.1.51
+29-03-2013 4.1.52
+- Calendar group view print fixed
+- Added "Show all" link to 15 latest links displayed for all items.
 - Added pagination toolbar to search results that doesn't know the total of 
   results to keep performance optimal.
 - Holidays could be generated on the wrong day
