@@ -221,7 +221,7 @@ class TimeZoneUtil {
         'Canada Central'         => 'America/Edmonton',
         'Central America'        => 'America/Guatemala',
         'Central'                => 'America/Chicago',
-        'Central Standard Time'  => 'America/Mexico_City',
+//        'Central Standard Time'  => 'America/Mexico_City',
         'Mexico'                 => 'America/Mexico_City',
         'Eastern'                => 'America/New_York',
         'SA Pacific'             => 'America/Bogota',
