@@ -118,6 +118,36 @@ $admin->checkDefaultModels();
 $adminGroup->addUser($admin->id);
 
 
+//Insert default cronjob record for email reminders
+$cron = new GO_Base_Cron_CronJob();
+
+$cron->name = 'Email Reminders';
+$cron->active = true;
+$cron->runonce = false;
+$cron->minutes = '0,5,10,15,20,25,30,35,40,45,50,55'; // Every 5 minutes
+$cron->hours = '*';
+$cron->monthdays = '*';
+$cron->months = '*';
+$cron->weekdays = '*';
+$cron->job = 'GO_Base_Cron_EmailReminders';
+
+$cron->save();
+
+$cron = new GO_Base_Cron_CronJob();
+
+$cron->name = 'Calculate disk usage';
+$cron->active = true;
+$cron->runonce = false;
+$cron->minutes = '0';
+$cron->hours = '0';
+$cron->monthdays = '*';
+$cron->months = '*';
+$cron->weekdays = '*';
+$cron->job = 'GO_Base_Cron_CalculateDiskUsage';		
+
+$cron->save();
+
+
 echo "Database created successfully\n";
 }catch(Exception $e){
 	
