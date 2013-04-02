@@ -45,3 +45,6 @@ $l['groups'] = 'Grupper';
 $l['group'] = 'Gruppe';
 $l['users'] = 'Brukere';
 $l['user'] = 'bruker';
+$l['completedat']= 'Fullført den';
+$l['running']= 'Kjører';
+
