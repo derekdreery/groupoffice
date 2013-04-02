@@ -116,11 +116,11 @@ class GO_LANGUAGE extends db {
 		{
 			$this->language=$_SESSION['GO_SESSION']['language']=$language;
 
-			if(!isset($_COOKIE['GO_LANGUAGE']) || $_COOKIE['GO_LANGUAGE']!=$this->language)
-			{
-				$_COOKIE['GO_LANGUAGE']=$this->language;
-				SetCookie("GO_LANGUAGE",$language,time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),true);
-			}
+//			if(!isset($_COOKIE['GO_LANGUAGE']) || $_COOKIE['GO_LANGUAGE']!=$this->language)
+//			{
+//				$_COOKIE['GO_LANGUAGE']=$this->language;
+//				SetCookie("GO_LANGUAGE",$language,time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),true);
+//			}
 			if(is_object($GO_LANGUAGE))
 				require($GLOBALS['GO_LANGUAGE']->get_base_language_file('common'));
 				
