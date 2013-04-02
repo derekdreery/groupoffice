@@ -123,7 +123,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		
 		
 		
-		if(GO::modules()->customfields && isset($response['data']['customfields']) && !GO_Customfields_Model_DisableCategories::isEnabled("GO_Addressbook_Model_Contact", $model->addresbook_id)){
+		if(GO::modules()->customfields && isset($response['data']['customfields']) && !GO_Customfields_Model_DisableCategories::isEnabled("GO_Addressbook_Model_Contact", $model->addressbook_id)){
 
 			$ids = GO_Customfields_Model_EnabledCategory::model()->getEnabledIds("GO_Addressbook_Model_Contact", $model->addressbook_id);
 			
