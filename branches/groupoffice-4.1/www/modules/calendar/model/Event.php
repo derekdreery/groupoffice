@@ -368,7 +368,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 		
 		//Don't set reminders for the superadmin
-		if($this->calendar->user_id==1 && !GO::config()->debug)
+		if($this->calendar->user_id==1 && GO::user()->id!=1 && !GO::config()->debug)
 			$this->reminder=0;
 		
 		
