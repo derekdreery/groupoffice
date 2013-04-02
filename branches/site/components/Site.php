@@ -106,8 +106,7 @@ class Site {
 		
 		if(!self::$_site)
 			throw new GO_Base_Exception_NotFound('Website for domain '.$_SERVER["SERVER_NAME"].' not found in database');
-		
-		
+				
 		self::router()->runController();
 	}
 	
@@ -115,7 +114,7 @@ class Site {
 	 * 
 	 * @return GO_Site_Components_Language
 	 */
-	public function language() {
+	public static function language() {
 		if (self::$_language == null)
 			self::$_language = new GO_Site_Components_Language(Site::model()->language);
 		return self::$_language;

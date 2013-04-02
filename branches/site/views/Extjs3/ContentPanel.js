@@ -91,7 +91,7 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 			name: 'slug',
 			width:300,
 			maxLength: 255,
-			allowBlank:false,
+			allowBlank:true,
 			fieldLabel: GO.site.lang.contentSlug
 		});
 	
