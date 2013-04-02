@@ -654,6 +654,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$data = $store->getData();
 		$response['data']['links']=$data['results'];	
 		
+		$response['data']['show_all_btn_enabled']=$limit>0 && count($data['results'])==$limit;
+		
 		return $response;
 	}
 	
