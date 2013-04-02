@@ -114,7 +114,6 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 		this.contentDialog.on('hide',function(){
 			this.form.load();
 		},this);
-		
 	}
 });
 

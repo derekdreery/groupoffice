@@ -36,6 +36,12 @@
  * @property int $acl_id
  */
 class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
+	
+	/**
+	 *
+	 * @var GO_Site_Components_Config 
+	 */
+	private $_config;
 
 	/**
 	 * Returns a static model of itself
@@ -72,27 +78,34 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 		);
 	}
 
-	public static function launch($siteId = false) {
-		if (!$siteId)
-			Throw new GO_Base_Exception_NotFound('No site found!');
-
-		$site = self::model()->findByPk($siteId);
+	/**
+	 * Get the config parameters of the site.
+	 * 
+	 * @return GO_Site_Components_Config
+	 */
+	public function getConfig(){
+		if(!isset($this->_config))
+		{
+			$this->_config = new GO_Site_Components_Config($this);
+		}
 		
-		if(!$site)
-			Throw new GO_Base_Exception_NotFound('No site found in the db!');
-		
-		$site->run();
+		return $this->_config;
 	}
 	
-	public function run(){
+	/**
+	 * Return the module that handles the view of the site.
+	 * 
+	 * @return GO_Base_Model_Module
+	 * @throws Exception
+	 */
+	public function getSiteModule(){
 		
-		if($this->module)
-		$config = array();
+		$module = GO::modules()->isInstalled($this->module);		
 		
+		if(!$module)
+			throw new Exception("Module ".$this->module." not found!");
 		
-		echo 'run';
-		
-		
+		return $module;
 	}
 	
 	public static function getTreeNodes(){
