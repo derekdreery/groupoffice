@@ -3155,6 +3155,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function __unset($name)
 	{		
+		unset($this->_modifiedAttributes[$name]);
 		unset($this->_attributes[$name]);		
 	}
 	
