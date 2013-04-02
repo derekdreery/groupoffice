@@ -1,3 +1,10 @@
+02-04-2013 4.1.53
+- $config['allow_profile_edit']=false; flag works again
+- Small Z-Push 2 beta fixes
+- Update Norwegian translation
+- Bug in displaying custom fields
+- Show all links button not shown when it's not needed
+
 29-03-2013 4.1.52
 - Fixed multiple bugs in the Z-Push 2 beta implementation
 - Calendar group view print fixed
