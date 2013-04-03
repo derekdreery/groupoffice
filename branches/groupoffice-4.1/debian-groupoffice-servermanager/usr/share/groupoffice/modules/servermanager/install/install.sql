@@ -73,6 +73,7 @@ ENGINE = InnoDB;
 CREATE  TABLE IF NOT EXISTS `sm_installation_users` (
   `user_id` INT NOT NULL ,
 	`username` VARCHAR(100) NOT NULL,
+  `email` VARCHAR( 255 ) NOT NULL DEFAULT  '',
   `installation_id` INT NOT NULL ,
   `used_modules` TEXT NOT NULL ,
   `ctime` INT NOT NULL ,
