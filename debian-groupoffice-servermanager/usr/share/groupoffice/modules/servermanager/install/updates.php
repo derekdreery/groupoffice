@@ -304,3 +304,5 @@ ADD `total_logins` BIGINT NOT NULL DEFAULT '0'";
 
 
 $updates["201303201600"][]="script:1_install_cron.php";
+
+$updates["201304021023"][]="ALTER TABLE  `sm_installation_users` ADD  `email` VARCHAR( 255 ) NOT NULL DEFAULT  '' AFTER  `username`";
