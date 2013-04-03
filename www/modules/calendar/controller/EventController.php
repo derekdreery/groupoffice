@@ -912,7 +912,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				$record = $holiday->getJson();
 				$record['calendar_id']=$calendar->id;
 				$record['id']=$response['count']++;
-				$response['results'][$this->_getIndex($response['results'],$holiday->date)] = $record;
+				$response['results'][$this->_getIndex($response['results'],strtotime($holiday->date))] = $record;
 			}
 
 			// Set the count of the holidays
