@@ -9,7 +9,7 @@ $this->setPageTitle("New license");
 								<h1>Set license details</h1>
 								
 								<p>Fill in the form with the data that is provided in the gotest.php file.</p>
-<p>Download the gotest.php file <a href="">here</a></p><br>
+<p>Download the gotest.php file <a href="/requirements">here</a></p><br>
 								
 <?php if (!empty($license)): ?>
 <?php echo GO_Sites_Components_Html::form(); ?>
