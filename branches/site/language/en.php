@@ -10,6 +10,14 @@ $l["save"] = "Save";
 $l["reload"] = "Reload";
 $l["advanced"] = "Advanced options";
 
+$l["addContent"] = "Add content";
+
+$l["deleteContent"] = "Delete content";
+$l["deleteContentConfirm"] = "Are you sure that you want to delete this content item";
+
+$l["deleteSite"] = "Delete site";
+$l["deleteSiteConfirm"] = "Are you sure that you want to delete this site";
+
 // Language for model: GO_Site_Model_Content
 $l["contentId"] = "ID";
 $l["contentUser_id"] = "User";

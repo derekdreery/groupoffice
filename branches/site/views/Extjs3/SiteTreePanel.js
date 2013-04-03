@@ -19,9 +19,10 @@ GO.site.SiteTreePanel = function (config){
 			el.unmask();
 	}, this);
 	
-	this.siteContextMenu = new GO.site.SiteContextMenu();
-	this.contentContextMenu = new GO.site.ContentContextMenu();
-
+	this.siteContextMenu = new GO.site.SiteContextMenu({treePanel:this});
+	this.contentContextMenu = new GO.site.ContentContextMenu({treePanel:this});
+	this.contentRootContextMenu = new GO.site.ContentRootContextMenu({treePanel:this});
+	
 	Ext.applyIf(config, {
 		layout:'fit',
 		split:true,
@@ -34,7 +35,7 @@ GO.site.SiteTreePanel = function (config){
 	});
 	
 	GO.site.SiteTreePanel.superclass.constructor.call(this, config);
-	
+
 	// set the root node
 	this.rootNode = new Ext.tree.AsyncTreeNode({
 		draggable:false,
@@ -45,36 +46,79 @@ GO.site.SiteTreePanel = function (config){
 	this.setRootNode(this.rootNode);
 
 	this.on('contextmenu',this.onContextMenu, this);
+	this.on('click',this.onTreeNodeClick, this);
 }
 	
 	
 Ext.extend(GO.site.SiteTreePanel, Ext.tree.TreePanel,{
-//	isSiteNode: function(node){
-//		var id = node.id;
-//		if(id.length < 6){ // If id is smaller than 5 chars then is it a page node.
-//			return false;
-//		}
-//		else if(id.substring(0,5) == 'site_'){
-//			return true;
-//		}
-//		else{
-//			return false;
-//		}
-//	},
-	getRootNode: function(){
-		return this.rootNode;
+
+	// When clicked on a treenode
+	onTreeNodeClick: function(node){
+		
+		node.select();
+		
+		if(this.isSiteNode(node)){
+			// DO NOTHING
+		}else if(this.isRootContentNode(node)){
+			// DO NOTHING
+		}else if(this.isContentNode(node)){
+			this.contentPanel.load(node.attributes.content_id);
+		}
 	},
+	
+	// When right clicked on a treenode
 	onContextMenu: function(node,event){
 		node.select();
-
-//		if(this.isSiteNode(node)){				
+		
+		if(this.isSiteNode(node)){
 //			this.siteContextMenu.setSelected(this,'GO_Site_Model_Site');
 //			this.siteContextMenu.showAt(event.xy);
-//		}
-//			else {
-//				this.contentContextMenu.setSelected(this,'GO_Site_Model_Page');
-//				this.contentContextMenu.showAt(event.xy);
-//			}
+		}else if(this.isRootContentNode(node)){
+			this.contentRootContextMenu.setSelected(this,node,'GO_Site_Model_Content');
+			this.contentRootContextMenu.showAt(event.xy);
+		}else if(this.isContentNode(node)){
+			this.contentContextMenu.setSelected(this,node,'GO_Site_Model_Content');
+			this.contentContextMenu.showAt(event.xy);
+		}
+	},
+	
+	isSiteNode: function(node){
+		var id = node.id;
+		var parts = id.split("_"); // site_{id}
+		var type = parts[0];
+		
+		if(type == 'site')
+			return true;
+		else
+			return false;
+	},
+	
+	isRootContentNode: function(node){
+		var id = node.id;
+		var parts = id.split("_");// {siteID}_content_{id}
+		var type = parts[1];
+		var content_id = parts[2];
+		
+		if(type == 'content' && GO.util.empty(content_id))
+			return true;
+		else
+			return false;
+	},
+	
+	isContentNode: function(node){
+		var id = node.id;
+		var parts = id.split("_");// {siteID}_content_{id}
+		var type = parts[1];
+		var content_id = parts[2];
+		
+		if(type == 'content' && !GO.util.empty(content_id))
+			return true;
+		else
+			return false;
+	},
+
+	getRootNode: function(){
+		return this.rootNode;
 	}
 });
 	

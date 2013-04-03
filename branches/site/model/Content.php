@@ -50,7 +50,11 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 		return parent::model($className);
 	}
 
-
+//	protected function init() {
+//		$this->columns['slug']['unique'] = array('site_id');
+//		parent::init();
+//	}
+	
 	/**
 	 * Enable this function if you want this model to check the acl's automatically.
 	 */
@@ -78,6 +82,53 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	 }
 	 
 	 /**
+	  * Find a content item by it's slug (and siteId)
+	  * 
+	  * @param string $slug
+	  * @param int $siteId
+	  * @return GO_Site_Model_Content
+	  * @throws GO_Base_Exception_NotFound
+	  */
+	 public static function findBySlug($slug, $siteId=false){
+		 
+		 if(!$siteId)
+			$model = self::model()->findSingleByAttribute('slug', $slug);
+		 else
+			$model = self::model()->findSingleByAttributes(array('slug'=>$slug,'site_id'=>$siteId));
+		 
+		 if(!$model)
+			 Throw new GO_Base_Exception_NotFound('There is no page found with the slug: '.$slug);
+		 
+		 return $model;
+	 }
+	 
+	 /**
+	  * Get the slug of the parent to suggest
+	  * 
+	  * @return string
+	  */
+	 public function getParentSlug(){
+		 
+		 if($this->parent)
+			 return $this->parent->slug;
+		 else
+			 return '';
+	 }
+	 
+	 public function cleanSlug(){
+		 //TODO: Clean the slug
+	 }
+	 
+	 protected function beforeSave() {
+		 
+		 $this->cleanSlug();
+		 
+		 return parent::beforeSave();
+	 }
+	 
+	 /**
+	  * # Backend Functionality
+	  * 
 	  * Get the tree array for the children of the current item
 	  * 
 	  * @return array
@@ -90,6 +141,7 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 			 
 			 $childNode = array(
 				'id' => $child->site_id.'_content_'.$child->id,
+				'content_id'=>$child->id,
 				'site_id'=>$child->site->id, 
 				'iconCls' => 'go-model-icon-GO_Site_Model_Content', 
 				'text' => $child->title,

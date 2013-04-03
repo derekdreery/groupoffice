@@ -11,21 +11,15 @@ GO.site.MainPanel = function(config){
 			layoutOnCardChange:true
 		},
 		items:[
-			new GO.site.ContentPanel(),
-			new Ext.Panel({
-				id:'site-menus',
-				html:'menus'
-		})]
+			this.contentPanel = new GO.site.ContentPanel(),
+			]
 	}); 
 	
 	this.treePanel = new GO.site.SiteTreePanel({
 		region:'west',
 		width:300,
 		border:true,
-		listeners:{
-			click:this.treeNodeClick,
-			scope:this
-		}
+		contentPanel:this.contentPanel
 	});
 
 	config.layout='border';
@@ -59,24 +53,6 @@ GO.site.MainPanel = function(config){
 
 Ext.extend(GO.site.MainPanel, Ext.Panel,{
 	
-	treeNodeClick: function(node){
-		
-		console.log(node.id);
-		var arr = node.id.split('_');
-		
-		var siteId = arr[0];
-		var type = arr[1];
-		var itemId = arr[2];
-		
-		// Load the content edit panel in the centerpanel
-		if(type == 'content' && !GO.util.empty(itemId)){
-			var panel = this.centerPanel.getComponent('site-'+type);
-				
-			this.centerPanel.getLayout().setActiveItem(panel);
-			panel.load(itemId);
-		}
-	},
-
 	showSiteDialog: function(site_id){
 		if(!this.siteDialog){
 			this.siteDialog = new GO.site.SiteDialog();

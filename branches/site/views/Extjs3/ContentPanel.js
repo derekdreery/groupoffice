@@ -2,10 +2,37 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 	
 	contentDialog : new GO.site.ContentDialog(),
 	
+	submitAction : 'update',
+	setSiteId : function(siteId){
+		this.form.baseParams.site_id = siteId;
+	},
 	load : function(contentId){
-		this.form.baseParams.id=contentId;
+		this.setContentId(contentId);
+		this.ownerCt.getLayout().setActiveItem(this);
 		this.form.load();
 	},
+	create : function(siteId,parentId){
+		this.setSiteId(siteId);
+		this.setContentId(0, parentId);
+		this.form.baseParams.parent_id = parentId;
+		this.ownerCt.getLayout().setActiveItem(this);
+	},
+	setContentId : function(contentId, parentId){
+		this.form.baseParams.id=contentId;
+		this.reloadButton.setDisabled(!contentId);
+		this.advancedButton.setDisabled(!contentId);
+		
+		delete this.form.baseParams.parent_id;
+		
+		if(!contentId){
+			this.form.reset();
+			this.submitAction = 'create';
+		}else
+		{
+			this.submitAction = 'update';
+		}
+	},
+	
 	constructor : function(config){
 		config = config || {};
 		
@@ -44,10 +71,10 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 		this.saveButton.on("click", function(){
 		 // submit the content
 		 this.form.submit({
-				url:GO.url('site/content/update'),
+				url:GO.url('site/content/'+this.submitAction),
 				waitMsg:GO.lang['waitMsgSave'],
 				success:function(form, action){
-					this.form.load();
+					this.setContentId(action.result.id);
 				},
 				failure: function(form, action) {
 					if(action.failureType == 'client')

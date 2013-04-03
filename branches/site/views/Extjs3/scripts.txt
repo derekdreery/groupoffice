@@ -3,6 +3,7 @@ modules/site/views/Extjs3/SiteDialog.js
 
 modules/site/views/Extjs3/ContentPanel.js
 modules/site/views/Extjs3/ContentContextMenu.js
+modules/site/views/Extjs3/ContentRootContextMenu.js
 modules/site/views/Extjs3/SiteContextMenu.js
 modules/site/views/Extjs3/SiteTreePanel.js
 

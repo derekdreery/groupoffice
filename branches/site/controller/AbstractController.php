@@ -164,15 +164,9 @@ abstract class GO_Site_Controller_Abstract extends GO_Base_Controller_AbstractCo
 	 */
 	public function getTemplateUrl()
 	{
+		$templateUrl = Site::model()->getSiteModule()->moduleManager->path();
 		
-		
-		$template_url = $this->template."/";
-
-		if(file_exists($template_url)) //look in root/[templatename]
-			return GOS::site()->urlManager->getBaseUrl()."/". $template_url;
-		else
-			return GO::config()->host . 'modules/sites/templates/' . $this->template . '/assets/';
-				
+		return $templateUrl;
 //		$template_url = GO::config()->host . 'modules/sites/templates/' . $this->template . '/assets/';
 //		if(file_exists($template_url)) //look in sites module
 //			return $template_url;
@@ -306,7 +300,6 @@ abstract class GO_Site_Controller_Abstract extends GO_Base_Controller_AbstractCo
 				$this->redirect(array($loginpath));
 			}  else {
 				$controller = new GO_Site_Controller_Site();
-				$controller->template = $this->template;
 				$controller->render('error', array('error' => $e));
 			}
 			//$this->render('error', array('error'=>$e));
@@ -322,7 +315,6 @@ abstract class GO_Site_Controller_Abstract extends GO_Base_Controller_AbstractCo
 		catch (Exception $e)
 		{
 			$controller = new GO_Site_Controller_Site();
-			$controller->template = $this->template;
 			$controller->render('error', array('error' => $e));
 		}
 //		catch(Exception $e)

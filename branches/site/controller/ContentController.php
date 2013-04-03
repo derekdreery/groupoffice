@@ -1,6 +1,6 @@
 <?php
 
-class GO_Site_Controller_Content extends GO_Base_Controller_AbstractModelController {
+class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonController {
 
 	protected $model = 'GO_Site_Model_Content';
 	
@@ -39,26 +39,60 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractModelControl
 		return array('success'=>true);
 	}	
 	
+	
+	protected function actionLoad($params){
+		if(empty($params['id']))
+			Throw new Exception('No ID given!');
+		
+		$model = $this->_loadModel($params['id']);
+		
+		$remoteComboFields = array();
+		
+		$this->renderForm($model, $remoteComboFields);
+	}
+	
 	protected function actionUpdate($params){
-		$response = array();
 		
 		if(empty($params['id']))
 			Throw new Exception('No ID given!');
 		
-		$model = GO_Site_Model_Content::model()->findByPk($params['id']);
-		
-		if(!$model)
-			Throw new Exception('No content item found with the following id: '.$params['id']);
-		
-		unset($params['id']);
+		$model = $this->_loadModel($params['id']);
+			
+		unset($params['id']); // unset because it doesn't need to be updated
 		
 		$model->setAttributes($params);
-		
-		$response['success'] = $model->save();
-		
-		return $response;
+		$model->save();
+		$this->renderSubmit($model);
 	}
 	
+	protected function actionCreate($params) {
+		$model = new GO_Site_Model_Content();
+		$model->setAttributes($params);
+		$model->save();
+
+		$this->renderSubmit($model);
+  }
+		
+	protected function actionDelete($params) {
+		if(empty($params['id']))
+			Throw new Exception('No ID given!');
+		
+		$model = $this->_loadModel($params['id']);
+		
+		$response = array();
+		
+		$response['success'] = $model->delete();
+		
+		$this->renderJson($response);
+	}
 	
+	private function _loadModel($id){
+		$model = GO_Site_Model_Content::model()->findByPk($id);
+		
+		if(!$model)
+			Throw new Exception('No content item found with the following id: '.$id);
+		
+		return $model;
+	}
 }
 ?>

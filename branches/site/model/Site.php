@@ -151,7 +151,8 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 		foreach($contentItems as $content){
 			$treeNodes[] = array(
 					'id' => $this->id.'_content_'.$content->id,
-					'site_id'=>$this->id, 
+					'site_id'=>$this->id,
+					'content_id'=>$content->id,
 					'iconCls' => 'go-model-icon-GO_Site_Model_Content', 
 					'text' => $content->title
 			);
