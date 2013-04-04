@@ -1,3 +1,7 @@
+- Sort order wrong for resources in event dialog
+- Holidays were listed at the bottom in calendar list view
+- Updated Swedish
+
 02-04-2013 4.1.53
 - $config['allow_profile_edit']=false; flag works again
 - Small Z-Push 2 beta fixes
