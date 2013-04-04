@@ -332,8 +332,9 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		if(this.beforeSubmit(params)===false)
 			return false;
 		
+		if(!this.formPanel.form.standardSubmit)
+			this.getFooterToolbar().setDisabled(true);
 		
-		this.getFooterToolbar().setDisabled(true);
 		this.formPanel.form.submit(
 		{
 			url:GO.url(this.formControllerUrl+'/'+this.submitAction),
