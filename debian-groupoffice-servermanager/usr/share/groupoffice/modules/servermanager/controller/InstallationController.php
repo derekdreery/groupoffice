@@ -737,8 +737,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 	
 	protected function actionSetAllowed($params){
 		
-		if(!$this->isCli())
-			throw new Exception("This action may only be ran on the command line.");
+		$this->requireCli();
 		
 		$this->checkRequiredParameters(array('module'), $params);
 		
@@ -774,7 +773,36 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				$installation->setConfigVariable('allowed_modules',implode(',',$newAllowed));
 			}		
 		}
-	}	
+	}
+	
+	protected function actionSetConfigValue($params){
+		$this->requireCli();
+		$this->checkRequiredParameters(array('name','value'), $params);
+		$stmt = GO_Servermanager_Model_Installation::model()->find();
+		while($installation = $stmt->fetch()){
+			echo "Setting ".$installation->name." config parameter ".$params['name'].'='.$params['value']."\n";
+			$installation->setConfigVariable($params['name'],$params['value']);
+		}	
+		
+		echo "All done!\n";
+	}
+	
+	protected function actionExecuteQuery($params){
+		$this->requireCli();
+		$this->checkRequiredParameters(array('query'), $params);
+		
+		$stmt = GO_Servermanager_Model_Installation::model()->find();
+		while($installation = $stmt->fetch()){
+			echo "Running query on ".$installation->name."\n";
+			try{
+				$installation->executeQuery($params['query']);
+			}catch(Exception $e){
+				echo "Error: ".$e->getMessage()."\n";
+			}
+		}	
+		
+		echo "All done!\n";
+	}
 	
 	
 	protected function actionRemoveSuspendedAndUnused($params){
