@@ -13,8 +13,8 @@ class GO_Base_Util_Pdf extends TCPDF {
 	protected $font = 'dejavusans';
 	protected $font_size=9;
 	
-	protected $title="Export";
-	protected $subtitle="";
+	public $title="";
+	public $subtitle="";
 	
 	
 	protected function init() {
@@ -66,7 +66,11 @@ class GO_Base_Util_Pdf extends TCPDF {
 
 		$this->SetTextColor(50,135,172);
 		$this->SetFont($this->font,'B',16);
-		$this->Write(16,$this->title);
+		
+		if(!empty($this->title))
+		{
+			$this->Write(16,$this->title);
+		}
 
 		if(!empty($this->subtitle))
 		{
