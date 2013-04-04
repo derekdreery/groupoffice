@@ -131,6 +131,8 @@ class GO_Email_Controller_Folder extends GO_Base_Controller_AbstractController {
 			$response['results'][]=array('name'=>$mailbox->name);
 		}
 		
+		$response['trash'] = $account->trash;
+		
 		return $response;		
 	}
 	
