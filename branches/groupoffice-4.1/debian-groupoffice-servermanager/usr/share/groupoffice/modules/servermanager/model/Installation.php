@@ -632,6 +632,36 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	}
 	
 	/**
+	 * Run raw SQL query on installation database.
+	 * 
+	 * @param string $query
+	 * @return boolean
+	 * @throws Exception
+	 */
+	public function executeQuery($query){
+		try{
+			GO::setDbConnection(
+					$this->config['db_name'], 
+					$this->config['db_user'], 
+					$this->config['db_pass'], 
+					$this->config['db_host']
+				);
+			
+			$ret = GO::getDbConnection()->query($query);
+			
+			//reconnect to servermanager database
+			GO::setDbConnection();
+			
+		}catch(Exception $e){
+			GO::setDbConnection();						
+			throw new Exception($e->getMessage());
+		}		
+		
+		return $ret;
+		
+	}
+	
+	/**
 	 * calculate the size of the mailboxes if they are used.
 	 * @return double the mailbox size in bytes?
 	 */
