@@ -97,7 +97,7 @@ try {
 			function get_node_children($folder_id, $authenticate=false, $expand_folder_ids=array(), $inherit_parent_permissions=true) {
 				global $fs2;
 
-				go_debug("get_node_children($folder_id, $authenticate, $expand_folder_ids, $inherit_parent_permissions)");
+//				go_debug("get_node_children($folder_id, $authenticate, $expand_folder_ids, $inherit_parent_permissions)");
 
 				$files = new files();
 
