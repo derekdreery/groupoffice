@@ -117,11 +117,18 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 
 	
 	protected function beforeSave() {
-		if($this->isModified('password')){
-			$encrypted = GO_Base_Util_Crypt::encrypt($this->password);		
-			if($encrypted){
-				$this->password = $encrypted;
-				$this->password_encrypted=2;//deprecated. remove when email is mvc style.
+		if($this->isModified('password')){	
+			$decrypted = GO_Base_Util_Crypt::decrypt($this->getOldAttributeValue('password'));
+			
+			if($decrypted==$this->password){
+				$this->resetAttribute('password');
+			}else
+			{
+				$encrypted = GO_Base_Util_Crypt::encrypt($this->password);		
+				if($encrypted){
+					$this->password = $encrypted;
+					$this->password_encrypted=2;//deprecated. remove when email is mvc style.
+				}
 			}
 		}
 
@@ -134,10 +141,10 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 				$this->smtp_password = $encrypted;
 		}
 		
-//		if(
-//				($this->isNew || $this->isModified("host") || $this->isModified("port") || $this->isModified("username")  || $this->isModified("password")) 
-//				&& $this->checkImapConnectionOnSave
-//			){
+		if(
+				($this->isNew || $this->isModified("host") || $this->isModified("port") || $this->isModified("username")  || $this->isModified("password")) 
+				&& $this->checkImapConnectionOnSave
+			){
 
 			$imap = $this->openImapConnection();
 			$this->mbroot=$imap->check_mbroot($this->mbroot);
@@ -146,7 +153,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 			$this->_createDefaultFolder('trash');
 			//	$this->_createDefaultFolder('spam');
 			$this->_createDefaultFolder('drafts');	
-//		}
+		}
 		
 		if (empty($this->store_password)) {
 			$this->_session_password = $this->password;
@@ -262,14 +269,25 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		if(empty($mailbox))
 			$mailbox="INBOX";
 		
+		$imap = $this->justConnect();
+		
+		if(!$imap->select_mailbox($mailbox))
+			throw new Exception ("Could not open IMAP mailbox $mailbox\nIMAP error: ".$imap->last_error());
+	
+		return $imap;
+	}
+	
+	/**
+	 * Connect to the IMAP server without selecting a mailbox
+	 * 
+	 * @return GO_Base_Mail_Imap
+	 */
+	public function justConnect(){
 		if(empty($this->_imap)){
 			$this->_imap = new GO_Base_Mail_Imap();
 			$this->_imap->connect($this->host, $this->port, $this->username, $this->decryptPassword(), $this->use_ssl);
-
 		}
-		if(!$this->_imap->select_mailbox($mailbox))
-			throw new Exception ("Could not open IMAP mailbox $mailbox\nIMAP error: ".$this->_imap->last_error());
-	
+
 		return $this->_imap;
 	}
 	

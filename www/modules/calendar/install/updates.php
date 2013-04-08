@@ -200,3 +200,13 @@ $updates["201301251628"][]="script:2_fix_project_calendars.php";
 $updates["201301291507"][]="UPDATE `cal_events` SET `status`='CONFIRMED' WHERE `status`='ACCEPTED';";
 
 $updates["201301311600"][]="ALTER TABLE `cal_calendars` ADD `show_holidays` tinyint(1) NOT NULL DEFAULT '1';";
+
+
+$updates['201303051512'][] ="CREATE  TABLE IF NOT EXISTS `cal_views_groups` (
+  `view_id` INT NOT NULL ,
+  `group_id` VARCHAR(45) NOT NULL ,
+  PRIMARY KEY (`view_id`, `group_id`) )
+ENGINE = InnoDB";
+
+
+$updates['201303191307'][] ="ALTER TABLE `cal_participants` ADD INDEX ( `event_id` , `user_id` ) ;";

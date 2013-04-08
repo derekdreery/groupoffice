@@ -12,7 +12,7 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollection, Sabre_DAV_IQuota {
+class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Node implements Sabre\DAV\ICollection, Sabre\DAV\IQuota {
 
 	protected $_folder;
 	protected $relpath;
@@ -26,7 +26,7 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 		
 		if(!$this->_getFolder()->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION)){
 			GO::debug("DAV: User ".GO::user()->username." doesn't have write permission for ".$this->relpath);
-			throw new Sabre_DAV_Exception_Forbidden ("DAV: User ".GO::user()->username." doesn't have write permission for folder '".$this->relpath.'"');
+			throw new Sabre\DAV\Exception\Forbidden ("DAV: User ".GO::user()->username." doesn't have write permission for folder '".$this->relpath.'"');
 		}
 		parent::__construct($path);
 	}
@@ -41,7 +41,7 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 			$this->_folder = GO_Files_Model_Folder::model()->findByPath($this->relpath);
 
 			if (!$this->_folder) {
-				throw new Sabre_DAV_Exception_NotFound('Folder not found: ' . $this->relpath);
+				throw new Sabre\DAV\Exception\NotFound('Folder not found: ' . $this->relpath);
 			}
 		}
 		return $this->_folder;
@@ -57,11 +57,13 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 	 * @return void
 	 */
 	public function createFile($name, $data = null) {
+		
+		\GO::debug("FSD::createFile($name)");
 
 		$folder = $this->_getFolder();
 
 		if (!$folder->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
-			throw new Sabre_DAV_Exception_Forbidden();
+			throw new Sabre\DAV\Exception\Forbidden();
 
 		$newFile = new GO_Base_Fs_File($this->path . '/' . $name);
 		if($newFile->exists())
@@ -72,7 +74,7 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 		if(!GO_Files_Model_File::checkQuota($newFile->size())){
 			$newFile->delete();
 							
-			throw new Sabre_DAV_Exception_InsufficientStorage();
+			throw new Sabre\DAV\Exception\InsufficientStorage();
 		}
 
 		$folder->addFile($name);
@@ -89,7 +91,7 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 		$folder = $this->_getFolder();
 
 		if (!$folder->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
-			throw new Sabre_DAV_Exception_Forbidden();
+			throw new Sabre\DAV\Exception\Forbidden();
 		
 		$folder->name = $name;
 		$folder->save();
@@ -110,7 +112,7 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 	 */
 	public function move($newPath) {
 
-		GO::debug("FSD::move($newPath)");
+		\GO::debug("FSD::move($newPath)");
 
 		if (!is_dir(dirname($newPath)))
 			throw new Exception('Invalid move!');
@@ -118,7 +120,7 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 		$folder = $this->_getFolder();
 
 		if (!$folder->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
-			throw new Sabre_DAV_Exception_Forbidden();
+			throw new Sabre\DAV\Exception\Forbidden();
 	
 		$destFsFolder = new GO_Base_Fs_Folder($newPath);		
 		
@@ -146,7 +148,7 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 		$folder = $this->_getFolder();
 
 		if (!$folder->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
-			throw new Sabre_DAV_Exception_Forbidden();
+			throw new Sabre\DAV\Exception\Forbidden();
 
 		$folder->addFolder($name);
 	}
@@ -155,8 +157,8 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 	 * Returns a specific child node, referenced by its name
 	 *
 	 * @param string $name
-	 * @throws Sabre_DAV_Exception_NotFound
-	 * @return Sabre_DAV_INode
+	 * @throws Sabre\DAV\Exception\NotFound
+	 * @return Sabre\DAV\INode
 	 */
 	public function getChild($name) {
 
@@ -169,7 +171,7 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 		} else if (file_exists($path)) {
 			return new GO_Dav_Fs_File($this->relpath . '/' . $name);
 		} else {
-			throw new Sabre_DAV_Exception_NotFound('File with name ' . $path . ' could not be located');
+			throw new Sabre\DAV\Exception\NotFound('File with name ' . $path . ' could not be located');
 		}
 	}
 
@@ -187,10 +189,10 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 
 		try {
 			if (!file_exists($path))
-				throw new Sabre_DAV_Exception_NotFound('File with name ' . $path . ' could not be located');
+				throw new Sabre\DAV\Exception\NotFound('File with name ' . $path . ' could not be located');
 
 			return true;
-		} catch (Sabre_DAV_Exception_NotFound $e) {
+		} catch (Sabre\DAV\Exception\NotFound $e) {
 
 			return false;
 		}
@@ -199,7 +201,7 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 	/**
 	 * Returns an array with all the child nodes
 	 *
-	 * @return Sabre_DAV_INode[]
+	 * @return Sabre\DAV\INode[]
 	 */
 	public function getChildren() {
 
@@ -210,7 +212,7 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 		$f = $this->_getFolder();
 
 		if (!$f) {
-			throw new Sabre_DAV_Exception_NotFound("Folder not found in database");
+			throw new Sabre\DAV\Exception\NotFound("Folder not found in database");
 		}
 		
 		$stmt = $f->getSubFolders();
@@ -237,7 +239,7 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 		$folder = $this->_getFolder();
 		
 		if (!$folder->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION))
-			throw new Sabre_DAV_Exception_Forbidden();
+			throw new Sabre\DAV\Exception\Forbidden();
 
 
 		$folder->delete();

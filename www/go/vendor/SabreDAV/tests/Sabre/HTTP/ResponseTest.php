@@ -1,14 +1,19 @@
 <?php
 
+namespace Sabre\HTTP;
+
 require_once 'Sabre/HTTP/ResponseMock.php';
 
-class Sabre_HTTP_ResponseTest extends PHPUnit_Framework_TestCase {
+class ResponseTest extends \PHPUnit_Framework_TestCase {
 
+    /**
+     * @var Sabre\HTTP\ResponseMock
+     */
     private $response;
 
     function setUp() {
 
-        $this->response = new Sabre_HTTP_ResponseMock();
+        $this->response = new ResponseMock();
 
     }
 
@@ -26,6 +31,13 @@ class Sabre_HTTP_ResponseTest extends PHPUnit_Framework_TestCase {
 
 
     }
+    function testSetHeaders() {
+
+        $this->response->setHeaders(array('Content-Type'=>'text/html'));
+        $this->assertEquals('text/html', $this->response->headers['Content-Type']);
+
+
+    }
 
     function testSendStatus() {
 
@@ -37,7 +49,7 @@ class Sabre_HTTP_ResponseTest extends PHPUnit_Framework_TestCase {
     function testSendBody() {
 
         ob_start();
-        $response = new Sabre_HTTP_Response();
+        $response = new Response();
         $response->sendBody('hello');
         $this->assertEquals('hello',ob_get_clean());
 
@@ -49,7 +61,7 @@ class Sabre_HTTP_ResponseTest extends PHPUnit_Framework_TestCase {
         $stream = fopen('php://memory','r+');
         fwrite($stream,'hello');
         rewind($stream);
-        $response = new Sabre_HTTP_Response();
+        $response = new Response();
         $response->sendBody($stream);
         $this->assertEquals('hello',ob_get_clean());
 

@@ -57,6 +57,15 @@
 		);
 	}
 	
+	/**
+	 * Get's a unique URI for the calendar. This is used by CalDAV
+	 * 
+	 * @return string
+	 */
+	public function getUri(){
+		return preg_replace('/[^\w-]*/', '', (strtolower(str_replace(' ', '-', $this->name)))).'-'.$this->id;
+	}
+	
 	protected function beforeSave() {
 		
 		if(!isset($this->default_salutation))
@@ -117,5 +126,23 @@
 		foreach($companies as $company){
 			$company->delete();
 		}
+	}
+	
+	/**
+	 * joining on the addressbooks can be very expensive. That's why this 
+	 * session cached useful can be used to optimize addressbook queries.
+	 * 
+	 * @return array
+	 */
+	public function getAllReadableAddressbookIds(){
+		if(!isset(GO::session()->values['addressbook']['readable_addressbook_ids'])){
+			GO::session()->values['addressbook']['readable_addressbook_ids']=array();
+			$stmt = $this->find();
+			while($ab = $stmt->fetch()){
+				GO::session()->values['addressbook']['readable_addressbook_ids'][]=$ab->id;
+			}
+		}
+		
+		return GO::session()->values['addressbook']['readable_addressbook_ids'];
 	}
 }

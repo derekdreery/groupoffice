@@ -221,6 +221,14 @@ if (get_magic_quotes_gpc() && !class_exists('GO'))
 umask(0);
 
 
+if($GO_SECURITY->user_id && !isset($_SESSION['GO_SESSION']['name'])){
+	require_once(GO::config()->root_path.'classes/base/users.class.inc.php');
+	$GO_USERS = new GO_USERS();
+	$user = $GO_USERS->get_user($GO_SECURITY->user_id);
+	$GO_USERS->update_session($user);
+}
+
+
 //todo this would be the new code:
 
 //if(!class_exists('GO')){

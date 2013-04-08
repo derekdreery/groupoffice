@@ -124,7 +124,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				$response['success']=false;
 				//can't use <br /> tags in response because this goes wrong with the extjs fileupload hack with an iframe.
 				$response['feedback']=sprintf(GO::t('validationErrorsFound'),strtolower($model->localizedName))."\n\n" . implode("\n", $model->getValidationErrors())."\n";			
-				if(GO_Base_Util_Http::isAjaxRequest(false)){
+				if(empty($_FILES)){ //if you return html when using the extjs iframe file upload hack it throws a json exception
 					$response['feedback']=nl2br($response['feedback']);
 				}
 				
@@ -449,7 +449,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$response = $this->_processCustomFieldsDisplay($model,$response);
 
 		if($model->hasLinks()){
-			$response = $this->_processLinksDisplay($model,$response);
+			$response = $this->_processLinksDisplay($model,$response, isset($params['links_limit']) ? $params['links_limit'] : 15);
 
 			if(!isset($response['data']['events']) && GO::modules()->calendar)
 				$response = $this->_processEventsDisplay($model,$response);
@@ -479,90 +479,93 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	
 	private function _processWorkflowDisplay($model,$response){
 
+		
 		$response['data']['workflow']=array();
 			
-		$workflowModelstmnt = GO_Workflow_Model_Model::model()->findByAttributes(array("model_id"=>$model->id,"model_type_id"=>$model->modelTypeId()));
-		
-		while($workflowModel = $workflowModelstmnt->fetch()){
-			
-			$currentStep = $workflowModel->step;
-			
-			$workflowResponse = $workflowModel->getAttributes('html');
+		if($model->hasLinks()){
+			$workflowModelstmnt = GO_Workflow_Model_Model::model()->findByAttributes(array("model_id"=>$model->id,"model_type_id"=>$model->modelTypeId()));
 
-//			$workflowResponse['id'] = $workflowModel->id;
-			$workflowResponse['process_name'] = $workflowModel->process->name;
-//			$workflowResponse['due_time'] = $workflowModel->due_time;
-//			$workflowResponse['shift_due_time'] = $workflowModel->shift_due_time;			
-			
-			$workflowResponse['user'] = !empty($workflowModel->user_id)?$workflowModel->user->name:'';
-			
-			$workflowResponse['approvers'] = array();
-			$workflowResponse['approver_groups'] = array();
-			$workflowResponse['step_id'] = $workflowModel->step_id;
-						
-			if($workflowModel->step_id == '-1'){
-				$workflowResponse['step_progress'] = '';
-				$workflowResponse['step_name'] = GO::t('complete','workflow');
-				$workflowResponse['is_approver']=false;
-				$workflowResponse['step_all_must_approve']=false;
-			}else{
-				$workflowResponse['step_progress'] = $workflowModel->getStepProgress();
-				$workflowResponse['step_name'] = $currentStep->name;
-				$workflowResponse['step_all_must_approve']=$currentStep->all_must_approve;
-				
-				$is_approver = GO_Workflow_Model_RequiredApprover::model()->findByPk(array("user_id"=>GO::user()->id,"process_model_id"=>$workflowModel->id,"approved"=>false));
-				
-				if($is_approver)
-					$workflowResponse['is_approver']=true;
-				else
+			while($workflowModel = $workflowModelstmnt->fetch()){
+
+				$currentStep = $workflowModel->step;
+
+				$workflowResponse = $workflowModel->getAttributes('html');
+
+	//			$workflowResponse['id'] = $workflowModel->id;
+				$workflowResponse['process_name'] = $workflowModel->process->name;
+	//			$workflowResponse['due_time'] = $workflowModel->due_time;
+	//			$workflowResponse['shift_due_time'] = $workflowModel->shift_due_time;			
+
+				$workflowResponse['user'] = !empty($workflowModel->user_id)?$workflowModel->user->name:'';
+
+				$workflowResponse['approvers'] = array();
+				$workflowResponse['approver_groups'] = array();
+				$workflowResponse['step_id'] = $workflowModel->step_id;
+
+				if($workflowModel->step_id == '-1'){
+					$workflowResponse['step_progress'] = '';
+					$workflowResponse['step_name'] = GO::t('complete','workflow');
 					$workflowResponse['is_approver']=false;
-				
-				// Add the approvers of the current step to the response
-				$approversStmnt = $workflowModel->requiredApprovers;
-			
-				while($approver = $approversStmnt->fetch()){
-					$approver_hasapproved = $currentStep->hasApproved($workflowModel->id,$approver->id);
-					$workflowResponse['approvers'][] = array('name'=>$approver->name,'approved'=>$approver_hasapproved,'last'=>'0');
+					$workflowResponse['step_all_must_approve']=false;
+				}else{
+					$workflowResponse['step_progress'] = $workflowModel->getStepProgress();
+					$workflowResponse['step_name'] = $currentStep->name;
+					$workflowResponse['step_all_must_approve']=$currentStep->all_must_approve;
+
+					$is_approver = GO_Workflow_Model_RequiredApprover::model()->findByPk(array("user_id"=>GO::user()->id,"process_model_id"=>$workflowModel->id,"approved"=>false));
+
+					if($is_approver)
+						$workflowResponse['is_approver']=true;
+					else
+						$workflowResponse['is_approver']=false;
+
+					// Add the approvers of the current step to the response
+					$approversStmnt = $workflowModel->requiredApprovers;
+
+					while($approver = $approversStmnt->fetch()){
+						$approver_hasapproved = $currentStep->hasApproved($workflowModel->id,$approver->id);
+						$workflowResponse['approvers'][] = array('name'=>$approver->name,'approved'=>$approver_hasapproved,'last'=>'0');
+					}
+					// Set the last flag for the latest approver in the list
+					$i = count($workflowResponse['approvers'])-1;
+
+					if($i >= 0)
+						$workflowResponse['approvers'][$i]['last'] = "1";
+
+					// Add the approver groups of the current step to the response
+					$approverGroupsStmnt = $currentStep->approverGroups;
+					while($approverGroup = $approverGroupsStmnt->fetch()){
+						$workflowResponse['approver_groups'][] = array('name'=>$approverGroup->name);
+					}
 				}
-				// Set the last flag for the latest approver in the list
-				$i = count($workflowResponse['approvers'])-1;
-				
-				if($i >= 0)
-					$workflowResponse['approvers'][$i]['last'] = "1";
-			
-				// Add the approver groups of the current step to the response
-				$approverGroupsStmnt = $currentStep->approverGroups;
-				while($approverGroup = $approverGroupsStmnt->fetch()){
-					$workflowResponse['approver_groups'][] = array('name'=>$approverGroup->name);
+
+				$workflowResponse['history'] = array();
+				$historiesStmnt = GO_Workflow_Model_StepHistory::model()->findByAttribute('process_model_id',$workflowModel->id, GO_Base_Db_FindParams::newInstance()->select('t.*')->order('ctime','DESC'));
+				while($history = $historiesStmnt->fetch()){
+					GO_Base_Db_ActiveRecord::$attributeOutputMode = 'html';
+
+
+					if($history->step_id == '-1')
+						$step_name = GO::t('complete','workflow');
+					else
+						$step_name = $history->step->name;
+
+					$workflowResponse['history'][] = array(
+							'history_id'=>$history->id,
+							'step_name'=>$step_name,
+							'approver'=>$history->user->name,
+							'ctime'=>$history->ctime,
+							'comment'=>$history->comment,
+							'status'=>$history->status?"1":"0",
+							'status_name'=>$history->status?GO::t('approved','workflow'):GO::t('declined','workflow')
+					);
+
+					GO_Base_Db_ActiveRecord::$attributeOutputMode = 'raw';
+
 				}
+
+				$response['data']['workflow'][] = $workflowResponse;
 			}
-			
-			$workflowResponse['history'] = array();
-			$historiesStmnt = GO_Workflow_Model_StepHistory::model()->findByAttribute('process_model_id',$workflowModel->id, GO_Base_Db_FindParams::newInstance()->select('t.*')->order('ctime','DESC'));
-			while($history = $historiesStmnt->fetch()){
-				GO_Base_Db_ActiveRecord::$attributeOutputMode = 'html';
-				
-				
-				if($history->step_id == '-1')
-					$step_name = GO::t('complete','workflow');
-				else
-					$step_name = $history->step->name;
-					
-				$workflowResponse['history'][] = array(
-						'history_id'=>$history->id,
-						'step_name'=>$step_name,
-						'approver'=>$history->user->name,
-						'ctime'=>$history->ctime,
-						'comment'=>$history->comment,
-						'status'=>$history->status?"1":"0",
-						'status_name'=>$history->status?GO::t('approved','workflow'):GO::t('declined','workflow')
-				);
-				
-				GO_Base_Db_ActiveRecord::$attributeOutputMode = 'raw';
-				
-			}
-			
-			$response['data']['workflow'][] = $workflowResponse;
 		}
 		
 		return $response;
@@ -591,19 +594,19 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				$categories[$field->category->id]['fields']=array();
 			}
 			if(!empty($customAttributes[$field->columnName()]) ){
-              if($field->datatype == "GO_Customfields_Customfieldtype_Heading")
-              {
-                $header = array('name'=>$field->name,'value'=>$customAttributes[$field->columnName()]);
-              }
-              if(!empty($header) )
-              {
-                $categories[$field->category->id]['fields'][] = $header;
-                $header = null;
-              }
-              $categories[$field->category->id]['fields'][]=array(
-                  'name'=>$field->name,
-                  'value'=>$customAttributes[$field->columnName()]
-              );				
+				if($field->datatype == "GO_Customfields_Customfieldtype_Heading")
+				{
+					$header = array('name'=>$field->name,'value'=>$customAttributes[$field->columnName()]);
+				}
+				if(!empty($header) )
+				{
+					$categories[$field->category->id]['fields'][] = $header;
+					$header = null;
+				}
+				$categories[$field->category->id]['fields'][]=array(
+						'name'=>$field->name,
+						'value'=>$customAttributes[$field->columnName()]
+				);				
 			}
 		}
 
@@ -627,9 +630,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		return $response;
 	}
 	
-	private function _processLinksDisplay($model,$response){
+	private function _processLinksDisplay($model,$response, $limit=15){
 		$findParams = GO_Base_Db_FindParams::newInstance()
-							->limit(15);
+							->limit($limit);
 			
 		$ignoreModelTypes = array();
 		if(GO::modules()->calendar)
@@ -651,6 +654,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$data = $store->getData();
 		$response['data']['links']=$data['results'];	
 		
+		$response['data']['show_all_btn_enabled']=$limit>0 && count($data['results'])==$limit;
+		
 		return $response;
 	}
 	
@@ -658,6 +663,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	private function _processEventsDisplay($model,$response){
 		$startOfDay = GO_Base_Util_Date::clear_time(time());
 			
+		// Process future events
 		$findParams = GO_Base_Db_FindParams::newInstance()->order('start_time','DESC');
 		$findParams->getCriteria()->addCondition('start_time', $startOfDay, '>=');						
 
@@ -670,50 +676,72 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$columnModel->formatColumn('calendar_name','$model->calendar->name');
 		$columnModel->formatColumn('link_count','$model->countLinks()');
 		$columnModel->formatColumn('link_description','$model->link_description');
+		
+		$columnModel->formatColumn('description','GO_Base_Util_string::cut_string($model->description,500)');
 
 		$data = $store->getData();
 		$response['data']['events']=$data['results'];
+		
+		// Process past events
+		$findParams = GO_Base_Db_FindParams::newInstance()->order('start_time','DESC');
+		$findParams->getCriteria()->addCondition('start_time', $startOfDay, '<');						
+
+		$stmt = GO_Calendar_Model_Event::model()->findLinks($model, $findParams);		
+
+		$store = GO_Base_Data_Store::newInstance(GO_Calendar_Model_Event::model());
+		$store->setStatement($stmt);
+
+		$columnModel = $store->getColumnModel();			
+		$columnModel->formatColumn('calendar_name','$model->calendar->name');
+		$columnModel->formatColumn('link_count','$model->countLinks()');
+		$columnModel->formatColumn('link_description','$model->link_description');
+		$columnModel->formatColumn('description','GO_Base_Util_string::cut_string($model->description,500)');
+
+		$data = $store->getData();
+		$response['data']['past_events']=$data['results'];
 		
 		return $response;
 	}
 	
 	private function _processCommentsDisplay($model,$response){
-		$stmt = GO_Comments_Model_Comment::model()->find(GO_Base_Db_FindParams::newInstance()
-							->limit(5)
-							->select('t.*,cat.name AS categoryName')
-							->order('id','DESC')
-							->joinModel(array(
-								'model' => 'GO_Comments_Model_Category',
-								'localTableAlias' => 't',
-								'localField' => 'category_id',
-								'foreignField' => 'id',
-								'tableAlias' => 'cat',
-								'type' => 'LEFT'
-							))
-							->criteria(GO_Base_Db_FindCriteria::newInstance()
-							        ->addModel(GO_Comments_Model_Comment::model())
-											->addCondition('model_id', $model->id)
-											->addCondition('model_type_id',$model->modelTypeId())
-							));
+		if($model->hasLinks()){
+			$stmt = GO_Comments_Model_Comment::model()->find(GO_Base_Db_FindParams::newInstance()
+								->limit(5)
+								->select('t.*,cat.name AS categoryName')
+								->order('id','DESC')
+								->joinModel(array(
+									'model' => 'GO_Comments_Model_Category',
+									'localTableAlias' => 't',
+									'localField' => 'category_id',
+									'foreignField' => 'id',
+									'tableAlias' => 'cat',
+									'type' => 'LEFT'
+								))
+								->criteria(GO_Base_Db_FindCriteria::newInstance()
+												->addModel(GO_Comments_Model_Comment::model())
+												->addCondition('model_id', $model->id)
+												->addCondition('model_type_id',$model->modelTypeId())
+								));
 
-		$store = GO_Base_Data_Store::newInstance(GO_Comments_Model_Comment::model());			
-		$store->setStatement($stmt);
+			$store = GO_Base_Data_Store::newInstance(GO_Comments_Model_Comment::model());			
+			$store->setStatement($stmt);
 
-		$columnModel = $store->getColumnModel();			
-		$columnModel->formatColumn('user_name','$model->user->name');
+			$columnModel = $store->getColumnModel();			
+			$columnModel->formatColumn('user_name','$model->user->name');
 
-		$data = $store->getData();
-		foreach ($data['results'] as $k => $v) {
-			$data['results'][$k]['categoryName'] = !empty($v['categoryName']) ? $v['categoryName'] : GO::t('noCategory','comments');
+			$data = $store->getData();
+			foreach ($data['results'] as $k => $v) {
+				$data['results'][$k]['categoryName'] = !empty($v['categoryName']) ? $v['categoryName'] : GO::t('noCategory','comments');
+			}
+			$response['data']['comments']=$data['results'];
 		}
-		$response['data']['comments']=$data['results'];
-		
 		return $response;
 	}
 	
 	private function _processTasksDisplay($model,$response){
 		//$startOfDay = GO_Base_Util_Date::clear_time(time());
 
+		// Process linked tasks that are not completed.
 		$findParams = GO_Base_Db_FindParams::newInstance()->order('due_time','DESC');
 		//$findParams->getCriteria()->addCondition('start_time', $startOfDay, '<=')->addCondition('status', GO_Tasks_Model_Task::STATUS_COMPLETED, '!=');						
 		$findParams->getCriteria()->addCondition('status', GO_Tasks_Model_Task::STATUS_COMPLETED, '!=');						
@@ -728,10 +756,33 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 						->formatColumn('late','$model->due_time<time() ? 1 : 0;')
 						->formatColumn('tasklist_name', '$model->tasklist->name')
 						->formatColumn('link_count','$model->countLinks()')
+						->formatColumn('description','GO_Base_Util_string::cut_string($model->description,500)')
 						->formatColumn('link_description','$model->link_description');		
 
 		$data = $store->getData();
 		$response['data']['tasks']=$data['results'];
+		
+		// Process linked tasks that are completed.
+		$findParams = GO_Base_Db_FindParams::newInstance()->order('due_time','DESC');
+		//$findParams->getCriteria()->addCondition('start_time', $startOfDay, '<=')->addCondition('status', GO_Tasks_Model_Task::STATUS_COMPLETED, '!=');						
+		$findParams->getCriteria()->addCondition('status', GO_Tasks_Model_Task::STATUS_COMPLETED, '=');						
+
+		$stmt = GO_Tasks_Model_Task::model()->findLinks($model, $findParams);		
+
+		$store = GO_Base_Data_Store::newInstance(GO_Tasks_Model_Task::model());
+		$store->setStatement($stmt);
+
+		$store->getColumnModel()
+						->setFormatRecordFunction(array($this, 'formatTaskLinkRecord'))
+						->formatColumn('late','$model->due_time<time() ? 1 : 0;')
+						->formatColumn('tasklist_name', '$model->tasklist->name')
+						->formatColumn('link_count','$model->countLinks()')
+						->formatColumn('description','GO_Base_Util_string::cut_string($model->description,500)')
+						->formatColumn('link_description','$model->link_description');		
+		
+
+		$data = $store->getData();
+		$response['data']['completed_tasks']=$data['results'];
 		
 		return $response;
 	}
@@ -824,17 +875,35 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 */
 	protected function actionExport($params) {	
 		
+		$orientation = false;
+		
+		$showHeader = false;
+  	$humanHeaders = true;
+		$includeHidden = false;
+		
+		if(!empty($params['includeHeaders']))
+			$showHeader = true;
+		
+		if(!empty($params['humanHeaders']))
+			$humanHeaders = false;
+		
+		if(!empty($params['includeHidden']))
+			$includeHidden = true;		
+		
+		$checkboxSettings = array(
+			'export_include_headers'=>$showHeader,
+			'export_human_headers'=>!$humanHeaders,
+			'export_include_hidden'=>$includeHidden
+		);
+		
+		$settings =  GO_Base_Export_Settings::load();
+		$settings->saveFromArray($checkboxSettings);
 		
 		//define('EXPORTING', true);
 		//used by custom fields to format diffently
 		if(GO::modules()->customfields)
 			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=true;
-		
-		
-		$showHeader = false;
-  	$humanHeaders = true;
-		$orientation = false;
-		
+
 		if(!empty($params['exportOrientation']) && ($params['exportOrientation']=="H"))
 			$orientation = 'L'; // Set the orientation to Landscape
 		else
@@ -844,13 +913,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$title = $params['documentTitle'];
 		else
 			$title = GO::session()->values[$params['name']]['name'];
-	
-		if(!empty($params['includeHeaders']))
-			$showHeader = true;
-		
-		if(!empty($params['humanHeaders']))
-			$humanHeaders = false;
-		
+			
 		$findParams = GO::session()->values[$params['name']]['findParams'];
 		$findParams->limit(0); // Let the export handle all found records without a limit
 		$model = GO::getModel(GO::session()->values[$params['name']]['model']);
@@ -921,9 +984,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				
 		$summarylog = new GO_Base_Component_SummaryLog();
 		
-		GO::$disableModelCache=true; //for less memory usage
-		ini_set('max_execution_time', '0'); //allow long runs
-		ini_set('memory_limit','512M');
+		GO::$disableModelCache=true; //for less memory usage		
+		GO::setMaxExecutionTime(0);
 		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
 		
 		$attributeIndexMap = isset($params['attributeIndexMap'])
@@ -1001,10 +1063,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				
 				if($this->beforeImport($params, $model, $attributes, $record)){
 					
-					//Unset some default attributes set in the code
-					$defaultAttributes = $model->defaultAttributes();
-					foreach($defaultAttributes as $column => $value)
-						unset($model->{$column});
+//					//Unset some default attributes set in the code
+//					$defaultAttributes = $model->defaultAttributes();
+//					foreach($defaultAttributes as $column => $value)
+//						unset($model->{$column});
 					
 					$columns = $model->getColumns();
 					foreach($columns as $col=>$attr){
@@ -1035,9 +1097,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 					
 					try{
 						if($model->save()){
+							$this->afterImport($model, $attributes, $record);
 							$summarylog->addSuccessful();
 						} else {
-							$summarylog->addError($record[0], implode('<br />', $model->getValidationErrors()));
+							$summarylog->addError($record[0], implode("\n", $model->getValidationErrors()));
 						}
 					}
 					catch(Exception $e){
@@ -1054,9 +1117,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				//	$summarylog->add();
 				}
 			}
-			
-			
-			$this->afterImport($model, $attributes, $record);
+						
 		} else {
 			//$summarylog->addError('NO FILE FOUND', 'There is no file found that can be imported!');
 		}

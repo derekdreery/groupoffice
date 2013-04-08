@@ -1,9 +1,10 @@
 <?php
 class GO_Files_Filehandler_ImageViewer implements GO_Files_Filehandler_Interface{
 
-	public function supportedExtensions(){
-		return array();
+	public function isDefault(\GO_Files_Model_File $file) {
+		return $file->isImage();
 	}
+	
 	public function getName(){
 		return GO::t('imageViewer','files');
 	}

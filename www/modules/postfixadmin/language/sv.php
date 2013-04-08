@@ -53,3 +53,5 @@ $l['maxAliases']= 'Max alias';
 $l['maxMailboxes']= 'Max brevlådor';
 
 $l['aliasHelp']="För att ange fler mottagare använd en kommaseparerad lista, t ex alias1@domain.com,alias2@domain.com";
+
+$l['usedQuota']='Använd quota';

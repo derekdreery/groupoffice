@@ -41,7 +41,13 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 			GO::config()->language=$params['SET_LANGUAGE'];
 
 		$this->loadInit();
-		$this->render('index');
+//		$this->render('index');
+		
+//		$view = GO::view();
+		
+		require(GO::view()->getTheme()->getPath().'Layout.php');
+		
+		
 	}
 
 	protected function actionSetView($params) {

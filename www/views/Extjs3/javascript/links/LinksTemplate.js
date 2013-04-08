@@ -40,7 +40,13 @@ GO.linksTemplate =
 				'</tr>'+
 				'</tpl>'+
 			'</tpl>'+
-			'<tr><td colspan="4"><a class="display-panel-browse" href="#browselinks">'+GO.lang.browse+'</a></td></tr>'+
+			'<tr><td colspan="4"><a class="display-panel-browse" href="#browselinks">'+GO.lang.browse+'</a>&nbsp;'+
+			
+			'<tpl if="values.show_all_btn_enabled">'+
+				'<a class="display-panel-browse" href="#showalllinks">'+GO.lang.showAll+'</a>'+
+			'</tpl>'+
+			
+			'</td></tr>'+
 
 			'</table>'+
 		'</tpl>';

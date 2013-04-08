@@ -30,10 +30,13 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		if(!empty($rrule)){			
 			$this->_eventstarttime = $eventstarttime;
 			$rrule = str_replace('RRULE:', '', $rrule);
-			if (strpos($rrule, 'FREQ') === false) 
-				$this->_parseRruleIcalendarV1($rrule);
-			else
-				$this->_parseRruleIcalendar($rrule);
+			if (strpos($rrule, 'FREQ') === false){
+				if(!$this->_parseRruleIcalendarV1($rrule))
+					return false;
+			}else{
+				if(!$this->_parseRruleIcalendar($rrule))
+					return false;
+			}
 			
 			if($shiftDaysToLocal)
 				$this->shiftDays(false);
@@ -185,6 +188,10 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		$this->_until=0;
 		//the count or until is always in the last element
 		if ($until = array_pop($expl_rrule)) {
+			
+			if(empty($until))
+				return false;
+			
 			if ($until{0} == '#') {
 				$count = substr($until, 1);
 				if ($count > 0) {
@@ -258,11 +265,17 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 					$this->_bymonth = array_shift($expl_rrule);
 					break;
 
+				default:
 				case 'YD':
 					//Currently not supported by GO
 					return false;
 					break;
 			}
+			
+			return true;
+		}else
+		{
+			return false;
 		}
 	}
 	
@@ -322,6 +335,8 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 				$this->_until=$this->getNextRecurrence();
 			}			
 		}
+		
+		return true;
 	}
 	
 	/**

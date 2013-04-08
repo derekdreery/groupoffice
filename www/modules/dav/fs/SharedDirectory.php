@@ -11,7 +11,7 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-class GO_Dav_Fs_SharedDirectory extends Sabre_DAV_FS_Directory implements Sabre_DAV_ICollection, Sabre_DAV_IQuota {
+class GO_Dav_Fs_SharedDirectory extends Sabre\DAV\FS\Directory implements Sabre\DAV\ICollection, Sabre\DAV\IQuota {
 
 	public function __construct($path='') {		
 		$this->path = $path;
@@ -28,7 +28,7 @@ class GO_Dav_Fs_SharedDirectory extends Sabre_DAV_FS_Directory implements Sabre_
 		$folder = GO_Files_Model_Folder::model()->findShares(GO_Base_Db_FindParams::newInstance()->single()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('name', $name)));
 		
 		if (!$folder)
-			throw new Sabre_DAV_Exception_NotFound('File with name ' . $name . ' could not be located');
+			throw new Sabre\DAV\Exception\NotFound('Shared folder with name ' . $name . ' could not be located');
 
 		return new GO_DAV_FS_Directory($folder->path);
 	}
@@ -36,7 +36,7 @@ class GO_Dav_Fs_SharedDirectory extends Sabre_DAV_FS_Directory implements Sabre_
 	/**
 	 * Returns an array with all the child nodes
 	 *
-	 * @return Sabre_DAV_INode[]
+	 * @return Sabre\DAV\INode[]
 	 */
 	public function getChildren() {
 		GO::debug('Shared::getChildren()');
@@ -63,7 +63,7 @@ class GO_Dav_Fs_SharedDirectory extends Sabre_DAV_FS_Directory implements Sabre_
 	 */
 	public function createFile($name, $data = null) {
 
-		throw new Sabre_DAV_Exception_Forbidden();
+		throw new Sabre\DAV\Exception\Forbidden();
 	}
 
 	/**
@@ -74,7 +74,7 @@ class GO_Dav_Fs_SharedDirectory extends Sabre_DAV_FS_Directory implements Sabre_
 	 */
 	public function createDirectory($name) {
 
-		throw new Sabre_DAV_Exception_Forbidden();
+		throw new Sabre\DAV\Exception\Forbidden();
 	}
 
 	/**
@@ -84,7 +84,7 @@ class GO_Dav_Fs_SharedDirectory extends Sabre_DAV_FS_Directory implements Sabre_
 	 */
 	public function delete() {
 
-		throw new Sabre_DAV_Exception_Forbidden();
+		throw new Sabre\DAV\Exception\Forbidden();
 	}
 
 	/**

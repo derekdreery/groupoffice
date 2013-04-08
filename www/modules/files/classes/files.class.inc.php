@@ -42,21 +42,7 @@ class files extends db {
 		}
 	}
 
-	public static function __on_load_listeners($events) {
-		$events->add_listener('check_database', __FILE__, 'files', 'check_database');
-		$events->add_listener('user_delete', __FILE__, 'files', 'user_delete');
-		//$events->add_listener('add_user', __FILE__, 'files', 'add_user');
-		$events->add_listener('build_search_index', __FILE__, 'files', 'build_search_index');
-//		$events->add_listener('login', __FILE__, 'files', 'login');
-		$events->add_listener('init_customfields_types', __FILE__, 'files', 'init_customfields_types');
-		$events->add_listener('load_file_properties', __FILE__, 'files', 'get_file_cf_category_permissions');
-	}
 
-	public static function init_customfields_types(){
-		global $GO_MODULES, $customfield_types;
-		require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'file_customfield_type.class.inc.php');
-		$customfield_types['file']=new file_customfield_type(array());
-	}
 	
 	/**
 	 * Check if a path is the user's home path
@@ -1751,30 +1737,6 @@ class files extends db {
 	}
 
 
-	public static function check_database() {
-		global $GO_CONFIG, $GO_SECURITY, $GO_MODULES;
-
-		$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
-
-		$fs = new files();
-
-		echo 'Correcting id=0'.$line_break;
-
-		$sql = "SELECT path FROM fs_folders WHERE id=0";
-		$fs->query($sql);
-		$fs2 = new files();
-		while($r = $fs->next_record())
-		{
-			$r['id']=$fs2->nextid('fs_folders');
-			$fs2->update_row('fs_folders', 'path', $r);
-		}
-
-		if(isset($GLOBALS['GO_MODULES']->modules['customfields'])){
-			$db = new db();
-			echo "Deleting non existing custom field records".$line_break.$line_break;
-			$db->query("delete from cf_fs_files where link_id not in (select id from fs_files);");
-		}
-	}
 
 	function crawl($path) {
 		$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";

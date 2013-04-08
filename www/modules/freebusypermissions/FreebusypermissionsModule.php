@@ -10,7 +10,7 @@ class GO_Freebusypermissions_FreebusypermissionsModule extends GO_Base_Module{
 	}
 	
 	public function autoInstall() {
-		return true;
+		return false;
 	}
 	
 	public static function hasFreebusyAccess($request_user_id, $target_user_id){

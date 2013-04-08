@@ -715,6 +715,10 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$this->send_command($command);
 		$res = $this->get_response(false, true);
 		$status = $this->check_response($res, true);
+
+		if(!$status)
+			return false;
+		
 		$uidvalidity = 0;
 		$exists = 0;
 		$uidnext = 0;
@@ -728,6 +732,14 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 					}
 				}
 			}
+//			This is only the first unseen uid not very useful
+//			if (in_array('UNSEEN', $vals)) {
+//				foreach ($vals as $i => $v) {
+//					if (intval($v) && isset($vals[($i - 1)]) && $vals[($i - 1)] == 'UNSEEN') {
+//						$unseen = $v;
+//					}
+//				}
+//			}
 			if (in_array('UIDVALIDITY', $vals)) {
 				foreach ($vals as $i => $v) {
 					if (intval($v) && isset($vals[($i - 1)]) && $vals[($i - 1)] == 'UIDVALIDITY') {
@@ -772,17 +784,16 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			}
 		}
 
-		$mailbox=false;
-		if ($status) {
-			$mailbox['name']=$mailbox_name;
-			$mailbox['uidnext'] = $uidnext;
-			$mailbox['uidvalidity'] = $uidvalidity;
-			$mailbox['messages'] = $exists;
-			$mailbox['flags'] = $flags;
-			$mailbox['permanentflags'] = $pflags;
-
-			$this->selected_mailbox=$mailbox;
-		}
+		$mailbox=array();
+		$mailbox['name']=$mailbox_name;
+		$mailbox['uidnext'] = $uidnext;
+		$mailbox['uidvalidity'] = $uidvalidity;
+		$mailbox['messages'] = $exists;
+		$mailbox['flags'] = $flags;
+		$mailbox['permanentflags'] = $pflags;
+		
+		$this->selected_mailbox=$mailbox;
+		
 		return $mailbox;
 	}
 
@@ -796,6 +807,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	private $_unseen;
 
 	public function get_unseen($mailbox=false) {
+		
+		if(!$mailbox)
+			$mailbox = $this->selected_mailbox['name'];
 		
 		if(isset($this->_unseen[$mailbox])){
 			return $this->_unseen[$mailbox];
@@ -1926,7 +1940,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 * @param <type> $max
 	 * @return <type>
 	 */
-	public function get_message_part($uid, $message_part=0, $peek=false, $max=false) {
+	public function get_message_part($uid, $message_part=0, $peek=false, $max=false, &$maxReached=false) {
 		$this->clean($uid, 'uid');
 
 		$peek_str = $peek ? '.PEEK' : '';

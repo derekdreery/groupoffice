@@ -43,7 +43,7 @@ class GO_Files_FilesModule extends GO_Base_Module{
 			
 		}
 		
-		$folder = GO_Files_Model_Folder::model()->findByPath("log");
+		$folder = GO_Files_Model_Folder::model()->findByPath("log", true);
 		if(!$folder->acl || $folder->acl_id==GO::modules()->files->acl_id){
 			$folder->setNewAcl();
 			$folder->readonly=1;
@@ -77,6 +77,23 @@ class GO_Files_FilesModule extends GO_Base_Module{
 	
 	public function autoInstall() {
 		return true;
+	}
+	
+	private static $fileHandlers;
+	/**
+	 * 
+	 * @return GO_Files_Filehandler_Interface
+	 */
+	public static function getAllFileHandlers(){
+		if(!isset(self::$fileHandlers)){
+			$modules = GO::modules()->getAllModules();
+
+			self::$fileHandlers=array();
+			foreach($modules as $module){
+				self::$fileHandlers = array_merge(self::$fileHandlers, $module->moduleManager->findClasses('filehandler'));
+			}
+		}
+		return self::$fileHandlers;
 	}
 	
 }

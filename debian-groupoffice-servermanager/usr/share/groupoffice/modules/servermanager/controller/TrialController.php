@@ -16,7 +16,9 @@ class GO_Servermanager_Controller_Trial extends GO_Base_Controller_AbstractContr
 		GO::setView('Extjs3');
 		
 		$this->newTrial = GO_ServerManager_Model_NewTrial::model()->findSingleByAttribute('key', $params['key']);
-
+		if(!$this->newTrial)
+			throw new Exception("Sorry, Could not find your trial subscription!");
+		
 		if (GO_Base_Util_Http::isPostRequest()) {
 			
 			//clean up old trial requests that were never

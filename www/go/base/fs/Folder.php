@@ -210,9 +210,9 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 * @return boolean 
 	 */
 	public function create($permissionsMode=false){
-		
+	
 		if(!$permissionsMode)
-			$permissionsMode=GO::config()->folder_create_mode;		
+			$permissionsMode=octdec(GO::config()->folder_create_mode);		
 		
 		if(is_dir($this->path)){
 			
@@ -239,7 +239,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 * Set's default permissions and group ownership
 	 */
 	public function setDefaultPermissions(){
-		chmod($this->path, GO::config()->folder_create_mode);
+		chmod($this->path, octdec(GO::config()->folder_create_mode));
 		if(!empty(GO::config()->file_change_group))
 			chgrp($this->path, GO::config()->file_change_group);
 	}

@@ -117,3 +117,7 @@ $l['generatedPasswordIs']='Det genererte passordet er';
 $l['openContact']='Åpne kontaktperson';
 $l['showProUsers']='Vis pro brukere';
 $l['updateExistingOnImport']='Oppdater eksisterende brukere (med brukernavn)';
+$l['resetState']="Tilbakestille midtpaneler og vinduer";
+$l['resetStateConfirm']='Er du sikker på at du vil tilbakestille alle midtpaneler, vinduer, panelstørrelser osv. til fabrikkinstilling?';
+$l['registrationEmail']='Registrert e-postadresse';
+$l['enabledSettingtabs']='Aktiverte instillingsfaner';

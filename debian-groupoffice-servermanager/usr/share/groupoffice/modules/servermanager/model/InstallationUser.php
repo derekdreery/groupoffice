@@ -68,6 +68,7 @@ class GO_ServerManager_Model_InstallationUser extends GO_Base_Db_ActiveRecord {
 		$this->lastlogin = $user->lastlogin;
 		$this->enabled = $user->enabled;
 		$this->username = $user->username;
+		$this->email = $user->email;
 		$this->ctime = $user->ctime;
 	}
 	

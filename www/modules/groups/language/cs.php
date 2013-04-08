@@ -13,3 +13,9 @@ $l["owner"]= 'Vlastník';
 $l["lblNew"]= 'Název';
 $l["newGroupName"]= 'Zadejte název nové skupiny';
 $l["searchAllUsers"]= 'Hledat ve všech uživatelích';
+
+$l["adminOnly"]= 'Pouze administrátor';
+$l["adminOnlyLabel"]= 'Pouze administrátoři mohou použit tuto skupinu a přidělovat oprávnění.';
+$l["groupMembers"]='Členové skupiny';
+$l["managePermissions"]= 'Upravit oprávnění';
+$l['modulePermissions'] = 'Modul oprávnění';

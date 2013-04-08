@@ -41,11 +41,15 @@ GO.ModuleManager = Ext.extend(function(){
 	readyFunctions : {},
 	
 	
-	addSettingsPanel : function(panelID, panelClass, panelConfig)
+	addSettingsPanel : function(panelID, panelClass, panelConfig, sortPriority)
 	{		
 		this.settingsPanels[panelID] = panelClass;
 		this.settingsPanelConfigs[panelID] = panelConfig;
-		this.settingsSortOrder.push(panelID);
+		
+		if(!sortPriority)
+			this.settingsSortOrder.push(panelID);
+		else
+			this.settingsSortOrder.splice(sortPriority,0,panelID);
 	},
 	
 	getSettingsPanel : function(panelID)
@@ -57,6 +61,9 @@ GO.ModuleManager = Ext.extend(function(){
 	},
 	
 	getAllSettingsPanels : function(){
+		
+		
+		
 		
 		var panels = [];
 		

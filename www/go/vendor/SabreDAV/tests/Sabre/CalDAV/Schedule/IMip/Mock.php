@@ -1,5 +1,7 @@
 <?php
 
+namespace Sabre\CalDAV\Schedule\IMip;
+
 /**
  * iMIP handler.
  *
@@ -12,11 +14,11 @@
  * 
  * @package Sabre
  * @subpackage CalDAV
- * @copyright Copyright (C) 2007-2012 Rooftop Solutions. All rights reserved.
+ * @copyright Copyright (C) 2007-2013 Rooftop Solutions. All rights reserved.
  * @author Evert Pot (http://www.rooftopsolutions.nl/) 
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class Sabre_CalDAV_Schedule_IMip_Mock extends Sabre_CalDAV_Schedule_IMip {
+class Mock extends \Sabre\CalDAV\Schedule\IMip {
 
     protected $emails = array();
 
@@ -48,5 +50,3 @@ class Sabre_CalDAV_Schedule_IMip_Mock extends Sabre_CalDAV_Schedule_IMip {
 
 
 }
-
-?>

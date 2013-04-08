@@ -235,6 +235,22 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		//These parameters are present when a user edits a single occurence of a repeating event
 		params.exception_date=config.exception_date;
 		
+		
+			// if the newMenuButton from another passed a linkTypeId then set this
+		// value in the select link field
+		if (config.link_config) {
+			this.link_config = config.link_config;
+			if (config.link_config.modelNameAndId) {
+				this.selectLinkField.setValue(config.link_config.modelNameAndId);
+				this.selectLinkField.setRemoteText(config.link_config.text);
+			}		
+
+			//if(this.subjectField.getValue()=='')
+				//this.subjectField.setValue(config.link_config.text);
+				
+			params.name=config.link_config.text;
+		}
+		
 
 		//if (config.event_id > 0) {
 			this.formPanel.load({
@@ -302,18 +318,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		
 					
 		
-		// if the newMenuButton from another passed a linkTypeId then set this
-		// value in the select link field
-		if (config.link_config) {
-			this.link_config = config.link_config;
-			if (config.link_config.modelNameAndId) {
-				this.selectLinkField.setValue(config.link_config.modelNameAndId);
-				this.selectLinkField.setRemoteText(config.link_config.text);
-			}		
-
-			if(this.subjectField.getValue()=='')
-				this.subjectField.setValue(config.link_config.text);
-		}
+	
 
 
 		this.fireEvent('show', this);
@@ -534,6 +539,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					repeats : this.formPanel.form.findField('freq')
 					.getValue() !="",
 					'private' : false,
+					model_name:"GO_Calendar_Model_Event",
 					all_day_event:this.formPanel.form.findField('all_day_event').getValue() ? 1 : 0,
 					exception_event_id : this.formPanel.form.baseParams['exception_event_id']
 //					has_other_participants: this.participantsPanel.invitationRequired()
@@ -834,6 +840,16 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		{			
 			this.colorField.setValue(record.data.color);
 		}, this);
+		
+		
+		this.privateCB = new Ext.ux.form.XCheckbox({
+			boxLabel : GO.calendar.lang.privateEvent,
+			name : 'private',
+			checked : false,
+			width : 'auto',
+			labelSeparator : '',
+			hideLabel : true
+		});
 
 		this.propertiesPanel = new Ext.Panel({
 			hideMode : 'offsets',
@@ -863,7 +879,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				xtype : 'compositefield',
 				fieldLabel : GO.calendar.lang.status,
 				items : [
-				this.eventStatus,this.busy
+				this.eventStatus,
+				this.busy,
+				this.privateCB
 				]
 			},
 			this.selectCalendar = new GO.calendar.SelectCalendar({
@@ -893,11 +911,12 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				}
 			}),
 			this.selectCategory,
-			new GO.form.PlainField({
-				fieldLabel: GO.lang.strOwner,
-				value: GO.settings.name,
-				name:'user_name'
-			}),{
+//			new GO.form.PlainField({
+//				fieldLabel: GO.lang.strOwner,
+//				value: GO.settings.name,
+//				name:'user_name'
+//			}),
+			{
 				xtype:'textarea',
 				fieldLabel:GO.lang.strDescription,
 				name : 'description',
@@ -1075,14 +1094,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		this.participantsPanel = new GO.calendar.ParticipantsPanel(this);
 
 
-		this.privateCB = new Ext.ux.form.XCheckbox({
-			boxLabel : GO.calendar.lang.privateEvent,
-			name : 'private',
-			checked : false,
-			width : 'auto',
-			labelSeparator : '',
-			hideLabel : true
-		});
+		
 
 		this.optionsPanel = new Ext.Panel({
 			layout:"form",
@@ -1234,8 +1246,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				/* Line 16 */
 				'FFFFFF', '949494', '808080', '6B6B6B',
 				'545454', '404040', '292929', '000000']
-			}),
-			this.privateCB]
+			})]
 		});
 
 		this.resourcesPanel = new Ext.Panel({

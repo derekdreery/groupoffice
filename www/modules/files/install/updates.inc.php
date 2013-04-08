@@ -148,3 +148,5 @@ $updates["201301281613"][]='CREATE TABLE IF NOT EXISTS `fs_filehandlers` (
   `cls` varchar(100) NOT NULL,
   PRIMARY KEY (`user_id`,`extension`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;';
+
+$updates["201304030859"][]='ALTER TABLE  `fs_files` CHANGE  `size`  `size` BIGINT NOT NULL';

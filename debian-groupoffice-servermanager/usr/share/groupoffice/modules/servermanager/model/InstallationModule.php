@@ -62,10 +62,8 @@ class GO_ServerManager_Model_InstallationModule extends GO_Base_Db_ActiveRecord
 	
 	public function getChecked()
 	{
-		//if($this->installation == null)
-		//	return false;
-		//else
-			return in_array($this->name, $this->installation->getAllowedModules());
+		$allowed = $this->installation->getAllowedModules();
+		return empty($allowed) || in_array($this->name, $allowed);
 	}
 	/**
 	 * Some installation modules should not be shown in the list of available modules

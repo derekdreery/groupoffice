@@ -38,6 +38,23 @@ GO.log = function(v){
 		console.log(v);
 }
 
+GO.openHelp = function(page){
+
+	var language = GO.settings.language;
+	var baseUrl = false;
+	
+	if(typeof GO.settings.config.help_link == 'string'){
+		baseUrl = GO.settings.config.help_link;
+	}else if(typeof GO.settings.config.help_link[language] == 'undefined'){
+		baseUrl = GO.settings.config.help_link.en;
+	}else{
+		baseUrl = GO.settings.config.help_link[language];
+	}
+
+	GO.util.popup({width:1024,height:768,focus:true,url:baseUrl+page,toolbar:"yes",location:"yes",status:"yes",menubar:"yes",target:'gohelp'})
+}
+
+
 GO.util.callToHref = function(phone){
 	phone = phone.replace(/[^0-9+]/g,'');
 	return GO.calltoTemplate.replace('{phone}', phone);
@@ -66,6 +83,8 @@ GO.url = function(relativeUrl, params){
  * 
  */
 GO.request = function(config){
+	
+//	Ext.Ajax.timeout=5000;
 
 	var url = GO.url(config.url);
 	delete config.url;
@@ -81,7 +100,14 @@ GO.request = function(config){
 	
 	var p = Ext.apply({
 		url:url,
-		callback:function(){
+		callback:function(options, success, response){
+			
+//			console.log(response);
+//			
+			if(!success && response.isTimeout){
+				GO.errorDialog.show(GO.lang.errorTimeout);
+			}
+			
 			if(config.maskEl)
 				config.maskEl.unmask();
 		},
@@ -590,6 +616,8 @@ GO.util.popup = function (c)
 			options+=','+key+'='+config[key];
 	}
 	options=options.substring(1, options.length);
+	
+//	console.log(options);
 
 	var popup = window.open(config.url, config.target, options);
 	

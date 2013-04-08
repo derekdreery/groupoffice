@@ -51,10 +51,17 @@ GO.email.MessagesGrid = function(config){
 				width:200
 			},{
 				header: GO.lang.strDate,
-				dataIndex: 'date',
-				width:65,
-				renderer:this.renderNorthMessageRow,
+				dataIndex: 'arrival',
+				width:120,
+				renderer:this.renderNorthArrival,
 				align:'right'
+			},{
+				header: GO.email.lang.dateSent,
+				dataIndex: 'date',
+				width:120,
+				renderer:this.renderNorthDate,
+				align:'right',
+				hidden:true
 			},{
 				header: GO.lang.strSize,
 				dataIndex: 'size',
@@ -85,6 +92,7 @@ GO.email.MessagesGrid = function(config){
 		},
 		columns:[
 		{
+			id:'icon',
 			header:"&nbsp;",
 			width:46,
 			dataIndex: 'icon',
@@ -99,18 +107,29 @@ GO.email.MessagesGrid = function(config){
 			id:'message'
 		
 		},{
+			id:'arrival',
 			header: GO.lang.strDate,
-			dataIndex: 'date',
-			width:65,
+			dataIndex:'arrival',
+			renderer: this.renderArrival,
+			width:80,
 			align:'right'
 		},{
-				header: GO.lang.strSize,
-				dataIndex: 'size',
-				width:65,
-				align:'right',
-				hidden:true,
-				renderer:Ext.util.Format.fileSize
-			}]
+			id:'date',
+			header: GO.email.lang.dateSent,
+			dataIndex:'date',
+			renderer: this.renderDate,
+			width:80,
+			align:'right',
+			hidden:true
+		},{
+			id:'size',
+			header: GO.lang.strSize,
+			dataIndex: 'size',
+			width:65,
+			align:'right',
+			hidden:true,
+			renderer:Ext.util.Format.fileSize
+		}]
 		});
 		config.bbar = new Ext.PagingToolbar({
 			cls: 'go-paging-tb',
@@ -257,31 +276,60 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 	
 	renderNorthMessageRow : function(value, p, record){
 		if(record.data['seen']=='0')
-			return String.format('<div id="sbj_'+record.data['uid']+'" class="NewSubject">{0}</div>', value);
+			return String.format('<div id="sbj_'+record.data['uid']+'" class="ml-unseen-mail">{0}</div>', value);
 		else
-			return String.format('<div id="sbj_'+record.data['uid']+'" class="Subject">{0}</div>', value);
+			return String.format('<div id="sbj_'+record.data['uid']+'" class="ml-seen-mail">{0}</div>', value);
 	},
 	
 	renderMessageSmallRes : function(value, p, record){
 		
 		if(record.data['seen']=='0')
 		{
-			return String.format('<div id="sbj_'+record.data['uid']+'" class="NewSubject">{0}</div>{1}', value, record.data['subject']);
+			return String.format('<div id="sbj_'+record.data['uid']+'" class="ml-unseen-from">{0}</div><div class="ml-unseen-subject">{1}</div>', value, record.data['subject']);
 		}else
 		{
-			return String.format('<div id="sbj_'+record.data['uid']+'" class="Subject">{0}</div>{1}', value, record.data['subject']);
+			return String.format('<div id="sbj_'+record.data['uid']+'" class="ml-seen-from">{0}</div><div class="ml-seen-subject">{1}</div>', value, record.data['subject']);
 		}
 	},
 	
 	renderMessage : function(value, p, record){
 		if(record.data['seen']=='0')
 		{
-			return String.format('<div id="sbj_'+record.data['uid']+'" class="NewSubject">{0}</div>{1}', value, record.data['subject']);
+			return String.format('<div id="sbj_'+record.data['uid']+'" class="ml-unseen-from">{0}</div><div class="ml-unseen-subject">{1}</div>', value, record.data['subject']);
 		}else
 		{
-			return String.format('<div id="sbj_'+record.data['uid']+'" class="Subject">{0}</div>{1}', value, record.data['subject']);
+			return String.format('<div id="sbj_'+record.data['uid']+'" class="ml-seen-from">{0}</div><div class="ml-seen-subject">{1}</div>', value, record.data['subject']);
 		}
 	},
+					
+	renderNorthDate : function(value, p, record){
+		return value+' '+record.data.date_time;
+	},
+					
+	renderNorthArrival : function(value, p, record){
+		return value+' '+record.data.arrival_time;
+	},
+					
+	renderArrival : function(value, p, record){
+		if(record.data['seen']=='0')
+		{
+			return String.format('<div id="arr_'+record.data['uid']+'" class="ml-unseen-from">{0}</div><div class="ml-unseen-subject">{1}</div>', value, record.data['arrival_time']);
+		}else
+		{
+			return String.format('<div id="arr_'+record.data['uid']+'" class="ml-seen-from">{0}</div><div class="ml-seen-subject">{1}</div>', value, record.data['arrival_time']);
+		}
+	},
+					
+	renderDate : function(value, p, record){
+		if(record.data['seen']=='0')
+		{
+			return String.format('<div id="date_'+record.data['uid']+'"  class="ml-unseen-from">{0}</div><div class="ml-unseen-subject">{1}</div>', value, record.data['date_time']);
+		}else
+		{
+			return String.format('<div id="date_'+record.data['uid']+'" class="ml-seen-from">{0}</div><div class="ml-seen-subject">{1}</div>', value, record.data['date_time']);
+		}
+	},
+					
 	renderIcon : function(src, p, record){
 		var str = '';
 
@@ -296,7 +344,10 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 			cls += "btn-message-forwarded";
 		}else
 		{
-			cls += "btn-message";
+			if(record.data.seen=='1')
+				cls += "btn-message-seen";
+			else
+				cls += "btn-message";
 		}
 		str += '<div class="'+cls+'"></div>';
 		

@@ -129,7 +129,8 @@ class GO_Base_Config {
 	var $firephp = false;
 
 	/**
-	 * Info log location. If empty it will be in <file_storage_path>/log/info.log
+	 * Info log location. Disabled when left empty.
+	 * 
 	 * @var bool
 	 */
 	var $info_log = "";
@@ -420,12 +421,11 @@ class GO_Base_Config {
 
 	/**
 	 * The path to store temporary files with trailing slash.
-	 * Leave to ../ for installation
 	 *
 	 * @var     string
 	 * @access  public
 	 */
-	var $tmpdir = '/tmp/';
+	var $tmpdir = '/tmp/groupoffice/';
 
 	/**
 	 * The maximum number of users
@@ -668,14 +668,14 @@ class GO_Base_Config {
 	var $restrict_smtp_hosts = '';
 
 	/**
-	 * The maximum size of e-mail attachments in bytes Group-Office will accept. 
-	 * Note that the php.ini file must be set accordingly (http://www.php.net).
+	 * The maximum summed size of e-mail attachments in a message in bytes 
+	 * Group-Office will accept. 
 	 * 
-	 * @var     string
+	 * @var     int
 	 * @access  public
 	 */
-	var $max_attachment_size = 10000000;
-
+	var $max_attachment_size = 20971520;
+	
 
 	//External programs
 
@@ -926,7 +926,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.1.31';
+	var $version = '4.1.54';
 	
 	/**
 	 * Modification date
@@ -934,7 +934,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20130208';
+	var $mtime = '20130405';
 
 	#group configuration
 	/**
@@ -991,8 +991,8 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $time_formats = array(
-	'G:i',
-	'g:i a'
+	'H:i',
+	'h:i a'
 	);
 
 	/**
@@ -1019,6 +1019,16 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $help_link = 'http://wiki4.group-office.com/wiki/';
+	
+	/**
+	 * The link or e-mail address in menu help -> support.
+	 * 
+	 * No menu item is generated if left empty.
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $support_link = false;
 	
 	/**
 	 * Relative path to the classes directory with no slash at start and end
@@ -1073,6 +1083,14 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $orig_tmpdir = '';
+	
+	/**
+	 * Path with trailing slash where cached scripts are generated.
+	 * Defaults to $this->tmpdir/cache/
+	 * 
+	 * @var string 
+	 */
+	var $cachefolder='';
 
 	/**
 	 * Database object
@@ -1082,7 +1100,13 @@ class GO_Base_Config {
 	 */
 	var $db;
 
-	
+	/**
+	 * The amount of seconds before Group-Office will check for new mail or 
+	 * other notifications.
+	 * 
+	 * @var int  
+	 */
+	var $checker_interval=120;
 
 	/**
 	 * Full original URL to reach Group-Office with trailing slash
@@ -1117,8 +1141,8 @@ class GO_Base_Config {
 			$this->$key=$value;
 		}
 
-		if($this->info_log=="")
-			$this->info_log =$this->file_storage_path.'log/info.log';
+//		if($this->info_log=="")
+//			$this->info_log =$this->file_storage_path.'log/info.log';
 
 		//this can be used in some cases where you don't want the dynamically
 		//determined full URL. This is done in set_full_url below.
@@ -1132,9 +1156,9 @@ class GO_Base_Config {
 			if(basename($this->host)=='install')
 				$this->host = dirname($this->host);
 
-			//if(substr($this->host,-1) != '/') {
+			if(substr($this->host,-1) != '/') {
 				$this->host .= '/';
-			//}
+			}
 
 			$this->db_host='localhost';
 
@@ -1158,31 +1182,31 @@ class GO_Base_Config {
 
 			$lc = localeconv();
 
-			$this->default_currency=empty($lc['currency_symbol']) ? 'â‚¬' : $lc['currency_symbol'];
+			$this->default_currency=empty($lc['currency_symbol']) ? '€' : $lc['currency_symbol'];
 			$this->default_decimal_separator=empty($lc['decimal_point']) ? '.' : $lc['decimal_point'];
 			$this->default_thousands_separator=$this->default_decimal_separator == '.' ? ',' : '.';//$lc['thousands_sep'];
 		}
 
-		// path to classes
-		$this->class_path = $this->root_path.$this->class_path.'/';
-
-		// path to themes
-		$this->theme_path = $this->root_path.$this->theme_path.'/';
-
-		// URL to themes
-		$this->theme_url = $this->host.$this->theme_url.'/';
-
-		// path to controls
-		$this->control_path = $this->root_path.$this->control_path.'/';
-
-		// url to controls
-		$this->control_url = $this->host.$this->control_url.'/';
-
-		// path to modules
-		$this->module_path = $this->root_path.$this->module_path.'/';
-
-		// url to user configuration apps
-		$this->configuration_url = $this->host.$this->configuration_url.'/';
+//		// path to classes
+//		$this->class_path = $this->root_path.$this->class_path.'/';
+//
+//		// path to themes
+//		$this->theme_path = $this->root_path.$this->theme_path.'/';
+//
+//		// URL to themes
+//		$this->theme_url = $this->host.$this->theme_url.'/';
+//
+//		// path to controls
+//		$this->control_path = $this->root_path.$this->control_path.'/';
+//
+//		// url to controls
+//		$this->control_url = $this->host.$this->control_url.'/';
+//
+//		// path to modules
+//		$this->module_path = $this->root_path.$this->module_path.'/';
+//
+//		// url to user configuration apps
+//		$this->configuration_url = $this->host.$this->configuration_url.'/';
 
 
 		if($this->debug)
@@ -1198,22 +1222,23 @@ class GO_Base_Config {
 ////			define('PHP_RUSAGE', $dat["ru_utime.tv_sec"]*1e6+$dat["ru_utime.tv_usec"]);
 //		}
 
-		if(is_string($this->file_create_mode)) {
-			$this->file_create_mode=octdec($this->file_create_mode);
-		}
-
-		if(is_string($this->folder_create_mode)) {
-			$this->folder_create_mode=octdec($this->folder_create_mode);
-		}
+//		if(is_string($this->file_create_mode)) {
+//			$this->file_create_mode=octdec($this->file_create_mode);
+//		}
+//
+//		if(is_string($this->folder_create_mode)) {
+//			$this->folder_create_mode=octdec($this->folder_create_mode);
+//		}
 
 		if($this->debug_log) {
 			$this->log=true;
 		}
 
 		$this->set_full_url();
-
-
-
+		
+		if(!$this->support_link && $this->isProVersion()){
+			$this->support_link = "https://shop.group-office.com/support";
+		}
 	}
 
 	/**
@@ -1225,9 +1250,36 @@ class GO_Base_Config {
 		$user_id = GO::user() ? GO::user()->id : 0;
 		$folder = new GO_Base_Fs_Folder($this->orig_tmpdir.$user_id);
 		if($autoCreate)
-			$folder->create();
+			$folder->create(0777);
 		return $folder;
 	}
+	
+	/**
+	 * Get the cache folder for cached scripts.
+	 * 
+	 * @return \GO_Base_Fs_Folder
+	 */
+	public function getCacheFolder($autoCreate=true){
+		
+		if(empty($this->cachefolder)){
+			$this->cachefolder=$this->orig_tmpdir.'cache/';
+		}
+		
+		$folder = new GO_Base_Fs_Folder($this->cachefolder);
+		if($autoCreate)
+			$folder->create(0777);
+		return $folder;
+	}
+	
+	/**
+	 * Check if the pro package is available.
+	 * 
+	 * @return boolean
+	 */
+	public function isProVersion(){
+		return is_dir($this->root_path.'modules/professional');
+	}
+	
 
 
 //	function __destruct() {
@@ -1392,27 +1444,28 @@ class GO_Base_Config {
 		//example.
 
 		//this used to use HTTP_HOST but that is a client controlled value which can be manipulated and is unsafe.
+		if(empty($this->full_url)){
+			if(isset($_SERVER["SERVER_NAME"])) {
+				if(!isset($_SESSION['GO_SESSION']['full_url']) && isset($_SERVER["SERVER_NAME"])) {
+					$https = (isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == "1")) || !empty($_SERVER["HTTP_X_SSL_REQUEST"]);
+					$_SESSION['GO_SESSION']['full_url'] = 'http';
+					if ($https) {
+						$_SESSION['GO_SESSION']['full_url'] .= "s";
+					}
+					$_SESSION['GO_SESSION']['full_url'] .= "://".$_SERVER["SERVER_NAME"];
+					if ((!$https && $_SERVER["SERVER_PORT"] != "80") || ($https && $_SERVER["SERVER_PORT"] != "443")) 
+						$_SESSION['GO_SESSION']['full_url'] .= ":".$_SERVER["SERVER_PORT"];
 
-		if(isset($_SERVER["SERVER_NAME"])) {
-			if(!isset($_SESSION['GO_SESSION']['full_url']) && isset($_SERVER["SERVER_NAME"])) {
-				$https = (isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == "1")) || !empty($_SERVER["HTTP_X_SSL_REQUEST"]);
-				$_SESSION['GO_SESSION']['full_url'] = 'http';
-				if ($https) {
-					$_SESSION['GO_SESSION']['full_url'] .= "s";
+					$_SESSION['GO_SESSION']['full_url'] .= $this->host;
 				}
-				$_SESSION['GO_SESSION']['full_url'] .= "://".$_SERVER["SERVER_NAME"];
-				if ((!$https && $_SERVER["SERVER_PORT"] != "80") || ($https && $_SERVER["SERVER_PORT"] != "443")) 
-					$_SESSION['GO_SESSION']['full_url'] .= ":".$_SERVER["SERVER_PORT"];
-								
-				$_SESSION['GO_SESSION']['full_url'] .= $this->host;
+				$this->full_url=$_SESSION['GO_SESSION']['full_url'];
+			}else
+			{
+				$_SESSION['GO_SESSION']['full_url']=$this->full_url;
 			}
-			$this->full_url=$_SESSION['GO_SESSION']['full_url'];
-		}else
-		{
-			$_SESSION['GO_SESSION']['full_url']=$this->full_url;
+			if(empty($this->orig_full_url))
+				$this->orig_full_url=$this->full_url;
 		}
-		if(empty($this->orig_full_url))
-			$this->orig_full_url=$this->full_url;
 	}
 
 
@@ -1432,7 +1485,7 @@ class GO_Base_Config {
 		if ($setting) {
 			return $setting->value;
 		}
-		return false;
+		return null;
 	}
     
     /**

@@ -128,8 +128,8 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	public function relations() {
 		return array(
 			'histories' => array('type' => self::HAS_MANY, 'model' => 'GO_ServerManager_Model_UsageHistory', 'field' => 'installation_id','delete'=>true),
-			'currentusage'=> array('type' => self::HAS_ONE, 'model' => 'GO_ServerManager_Model_UsageHistory', 'field' => 'installation_id', 'findParams'=>array('order'=>'id','orderDirection'=>'DESC','limit'=>1)),
-			'users' => array('type'=>self::HAS_MANY, 'model'=>'GO_ServerManager_Model_InstallationUser', 'field'=>'installation_id','delete'=>true, 'findParams'=>array('fields'=>'t.*')),
+			'currentusage'=> array('type' => self::HAS_ONE, 'model' => 'GO_ServerManager_Model_UsageHistory', 'field' => 'installation_id', 'findParams'=>GO_Base_Db_FindParams::newInstance()->order('id','DESC')->limit(1)),
+			'users' => array('type'=>self::HAS_MANY, 'model'=>'GO_ServerManager_Model_InstallationUser', 'field'=>'installation_id','delete'=>true, 'findParams'=>  GO_Base_Db_FindParams::newInstance()->select()),
 			'modules' => array('type'=>self::HAS_MANY, 'model'=>'GO_ServerManager_Model_InstallationModule', 'field'=>'installation_id','delete'=>true),
 			'automaticInvoice'=>array('type'=>self::HAS_ONE, 'model'=>'GO_ServerManager_Model_AutomaticInvoice', 'field'=>'installation_id','delete'=>true),
 		);
@@ -168,10 +168,15 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	public function getAllowedModules()
 	{
 		$allowedModules = array();
-		if(!isset($this->config['allowed_modules']))
-			$this->_config['allowed_modules']="";
+		
+		$c = $this->getConfigWithGlobals();
+//		var_dump($c);
+//		exit();
+	
+		if(!isset($c['allowed_modules']))
+			$c['allowed_modules']="";
 
-		$allowedModules = explode(',', $this->config['allowed_modules']);
+		$allowedModules = explode(',', $c['allowed_modules']);
 		return $allowedModules;
 	}
 	
@@ -253,7 +258,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	 * @return string path to config file
 	 */
 	protected function getConfigPath(){		
-		return '/etc/groupoffice/'.$this->name.'/config.php';
+		return !empty($this->name) ? '/etc/groupoffice/'.$this->name.'/config.php' : false;
 	}
 	
 	/**
@@ -275,7 +280,8 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 			return $this->_config; 
 		else
 		{
-			if(!file_exists($this->configPath)){
+//			var_dump($this->configPath);
+			if(!$this->configPath || !file_exists($this->configPath)){
 				return false;
 			} else {
 				$config=array();
@@ -296,7 +302,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		if(file_exists('/etc/groupoffice/globalconfig.inc.php')){
 			require('/etc/groupoffice/globalconfig.inc.php');
 			if(isset($config))
-				$c = array_merge($config, $c);
+				$c = $c ? array_merge($config, $c) : $config;
 		}
 		
 		return $c;
@@ -449,6 +455,9 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		if(!$this->config)
 			return false;
 		
+		if(!isset($this->config['file_storage_path']))
+			return false;
+		
 		//if(isset($this->config['max_users']))
 			//$this->max_users=$this->config['max_users'];
 		
@@ -463,9 +472,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		
 		$this->quota = $this->config['quota'];
 		
-		GO::config()->save_setting('mailbox_usage', $history->mailbox_usage);
-		GO::config()->save_setting('file_storage_usage', $history->file_storage_usage);
-		GO::config()->save_setting('database_usage', $history->database_usage);
+		
 		
 		$this->_loadFromInstallationDatabase();
 		
@@ -610,7 +617,11 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 			if(isset($oldIgnore))
 				GO::setIgnoreAclPermissions($oldIgnore);
 			throw new Exception($e->getMessage());
-		}
+		}		
+		
+		GO::config()->save_setting('mailbox_usage', $this->mailbox_usage);
+		GO::config()->save_setting('file_storage_usage', $this->file_storage_usage);
+		GO::config()->save_setting('database_usage', $this->database_usage);
 		
 		//reconnect to servermanager database
 		GO::setDbConnection();
@@ -618,6 +629,36 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		//force saving because the modules and users must be saved in aftersave
 		$this->forceSave();
 
+	}
+	
+	/**
+	 * Run raw SQL query on installation database.
+	 * 
+	 * @param string $query
+	 * @return boolean
+	 * @throws Exception
+	 */
+	public function executeQuery($query){
+		try{
+			GO::setDbConnection(
+					$this->config['db_name'], 
+					$this->config['db_user'], 
+					$this->config['db_pass'], 
+					$this->config['db_host']
+				);
+			
+			$ret = GO::getDbConnection()->query($query);
+			
+			//reconnect to servermanager database
+			GO::setDbConnection();
+			
+		}catch(Exception $e){
+			GO::setDbConnection();						
+			throw new Exception($e->getMessage());
+		}		
+		
+		return $ret;
+		
 	}
 	
 	/**
@@ -638,7 +679,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 			);
 
 			$result = json_decode($response);
-			$mailbox_usage=$result->usage;			
+			$mailbox_usage=$result->usage*1024;			
 		}
 
 		return $mailbox_usage;

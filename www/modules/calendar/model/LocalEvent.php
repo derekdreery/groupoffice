@@ -120,7 +120,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 			else
 				$response['time'] =  $this->getFormattedTime();
 		}
-		$response['time_of_day'] = $this->getTimeOfDay();
+//		$response['time_of_day'] = $this->getTimeOfDay();
         
 		$response['status'] = $this->_event->status;
 		$response['username'] = $this->_event->user->getName();
@@ -163,7 +163,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 		$response['status_color'] = $this->_event->getStatusColor();		
 		$response['repeats'] = $this->isRepeating();
 		$response['all_day_event'] = $this->isAllDay();
-		$response['day'] = $dayString[date('w', ($this->_event->start_time))].' '.GO_Base_Util_Date::get_timestamp($this->_event->start_time,false);  // date(implode(GO::user()->date_separator,str_split(GO::user()->date_format,1)), ($eventModel->start_time));
+		$response['day'] = $dayString[date('w', $this->getAlternateStartTime())].' '.GO_Base_Util_Date::get_timestamp($this->getAlternateStartTime(),false);  // date(implode(GO::user()->date_separator,str_split(GO::user()->date_format,1)), ($eventModel->start_time));
 		$response['read_only'] = $this->isReadOnly();
 		$response['model_name'] = $this->_event->className();
 		
@@ -194,25 +194,25 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 	public function getName(){
 		return $this->_displayName;
 	}
-    
-    /**
-     * Get the time of day the event occurs.
-     * If event is not set or there is no start_time we return "FullDay"
-     * @return string (morning|afternoon|evening|fullday)
-     */
-    public function getTimeOfDay()
-    {
-      if(!isset($this->_event) && empty($this->_event->start_time)) 
-        return "fullday";
-      $hour = date('G', $this->_event->start_time); //0 - 23
-      
-      if($hour >= 0 && $hour < 12)
-        return "morning";
-      elseif($hour >= 12 && $hour < 18)
-        return "afternoon";
-      elseif($hour >= 18)
-        return "evening";
-    }
+//    
+//    /**
+//     * Get the time of day the event occurs.
+//     * If event is not set or there is no start_time we return "FullDay"
+//     * @return string (morning|afternoon|evening|fullday)
+//     */
+//    public function getTimeOfDay()
+//    {
+//      if(!isset($this->_event) && empty($this->_event->start_time)) 
+//        return "fullday";
+//      $hour = date('G', $this->_event->start_time); //0 - 23
+//      
+//      if($hour >= 0 && $hour < 12)
+//        return "morning";
+//      elseif($hour >= 12 && $hour < 18)
+//        return "afternoon";
+//      elseif($hour >= 18)
+//        return "evening";
+//    }
 	
 	
 	public function mergeWithEvent($event){

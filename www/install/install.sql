@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS `go_groups` (
 DROP TABLE IF EXISTS `go_holidays`;
 CREATE TABLE IF NOT EXISTS `go_holidays` (
   `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
-  `date` int(10) NOT NULL DEFAULT '0',
+   `date` DATE NOT NULL,
   `name` varchar(100) NOT NULL DEFAULT '',
   `region` varchar(10) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
@@ -440,3 +440,57 @@ CREATE TABLE IF NOT EXISTS `go_advanced_searches` (
 	`model_name` VARCHAR(100) NOT NULL DEFAULT '',
 	PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `go_cron`
+--
+DROP TABLE IF EXISTS `go_cron`;
+CREATE TABLE IF NOT EXISTS `go_cron` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT '1',
+  `minutes` varchar(100) NOT NULL DEFAULT '1',
+  `hours` varchar(100) NOT NULL DEFAULT '1',
+  `monthdays` varchar(100) NOT NULL DEFAULT '*',
+  `months` varchar(100) NOT NULL DEFAULT '*',
+  `weekdays` varchar(100) NOT NULL DEFAULT '*',
+  `years` varchar(100) NOT NULL DEFAULT '*',
+  `job` varchar(255) NOT NULL,
+  `runonce` tinyint(1) NOT NULL DEFAULT '0',
+  `nextrun` int(11) NOT NULL DEFAULT '0',
+  `lastrun` int(11) NOT NULL DEFAULT '0',
+  `completedat` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `go_cron_groups`
+--
+DROP TABLE IF EXISTS `go_cron_groups`;
+CREATE TABLE IF NOT EXISTS `go_cron_groups` (
+  `cronjob_id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  PRIMARY KEY (`cronjob_id`,`group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `go_cron_users`
+--
+DROP TABLE IF EXISTS `go_cron_users`;
+CREATE TABLE IF NOT EXISTS `go_cron_users` (
+  `cronjob_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`cronjob_id`,`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `go_cf_setting_tabs`;
+CREATE TABLE IF NOT EXISTS `go_cf_setting_tabs` (
+  `cf_category_id` int(11) NOT NULL,
+  PRIMARY KEY (`cf_category_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

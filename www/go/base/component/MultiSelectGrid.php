@@ -35,7 +35,7 @@ class GO_Base_Component_MultiSelectGrid {
 	 * readbable addressbooks are used with contacts for example.
 	 * This will disable acl checking for the contacts query which improves performance.
 	 */
-	public function __construct($requestParamName, $modelName, GO_Base_Data_AbstractStore $store, array $requestParams, $checkPermissions=false) {
+	public function __construct($requestParamName, $modelName, GO_Base_Data_AbstractStore $store, array $requestParams, $checkPermissions=null) {
 
 		$this->_requestParamName = $requestParamName;
 		$this->_store = $store;
@@ -44,6 +44,8 @@ class GO_Base_Component_MultiSelectGrid {
 		if(GO::config()->debug && !class_exists($modelName))
 			throw new Exception("Invalid argument \$modelName for GO_Base_Component_MultiSelectGrid. Class $modelName does not exist.");
 		
+		if($checkPermissions===null)
+		  $checkPermissions=(GO::getModel($this->_modelName)->aclField()!=false);
 		$this->_checkPermissions=$checkPermissions;
 		
 		if(empty($requestParams['noMultiSelectFilter']))
@@ -129,7 +131,7 @@ class GO_Base_Component_MultiSelectGrid {
 	 * Add the selected id's to the findCriteria. You use this in the other controller. eg. ContactController and not AddressbookController.
 	 * Should be called in GO_Base_Controller_AbstractModelController::beforeStoreStatement
 	 * Will be callend in GO_Base_Data_DbStore::multiSelect()
-	 * @param GO_Base_Db_FindParams $findParams 
+	 * @param GO_Base_Db_FindParams $findParams (object reference)
 	 * @param string $columnName database column to match keys to
 	 * @param string $tableAlias table alias of the column to match
 	 * @param boolean $useAnd use AND when adding where condition

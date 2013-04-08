@@ -21,7 +21,7 @@ GO.form.HtmlEditor = function(config){
 	var ssScriptPlugin = new Ext.ux.form.HtmlEditor.SubSuperScript();
 	var rmFormatPlugin = new Ext.ux.form.HtmlEditor.RemoveFormat();	
 	
-	if(GO.email.pspellSupport)
+	if(GO.settings.pspellSupport)
 		config.plugins.push(spellcheckInsertPlugin);
 
 	config.plugins.push(

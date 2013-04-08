@@ -17,7 +17,7 @@
  * @author Evert Pot (http://www.rooftopsolutions.nl/) 
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class GO_Base_VObject_VCalendar_Property extends Sabre_VObject_Property {
+class GO_Base_VObject_VCalendar_Property extends Sabre\VObject\Property {
 
 
     /**

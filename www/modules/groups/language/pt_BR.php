@@ -18,3 +18,4 @@ $l["adminOnlyLabel"]= 'Apenas administradores podem usar este grupo para ceder p
 $l["groupMembers"]='Integrantes do Grupo';
 $l["managePermissions"]= 'Gerenciar permissões';
 $l['modulePermissions']= 'Permissões do módulo';
+$l['use']='Usar';

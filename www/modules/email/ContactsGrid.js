@@ -11,6 +11,7 @@ GO.email.ContactsGrid = function(config){
 	config.paging=true;
 	config.border=false;
 
+  if(!config.store)
 	config.store = new GO.data.JsonStore({
 		url : GO.url("addressbook/contact/searchEmail"),
 		id : 'email',

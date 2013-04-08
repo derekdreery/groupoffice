@@ -105,39 +105,18 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					
 					foreach ($checkMailboxArray as $checkMailboxName) {			
 						if(!empty($checkMailboxName)){						
-							
 							$mailbox = new GO_Email_Model_ImapMailbox($account, array('name'=>$checkMailboxName));
-							if(!isset($response['email_status']['has_new']) && $mailbox->hasAlarm()){
-								$response['email_status']['has_new']=true;
-							}
-							$mailbox->snoozeAlarm();
-							
-							$response['email_status']['unseen'][]=array('account_id'=>$account->id,'mailbox'=>$checkMailboxName, 'unseen'=>$mailbox->unseen);
-							$response['email_status']['total_unseen'] += $mailbox->unseen;	
+							if($mailbox->exists()){
+								if(!isset($response['email_status']['has_new']) && $mailbox->hasAlarm()){
+									$response['email_status']['has_new']=true;
+								}
+								$mailbox->snoozeAlarm();
 
-							$existingCheckMailboxArray[] = $checkMailboxName;	
-							
-//							$sessionCacheKey = GO::user()->id.':'.$account->id.':'.$checkMailboxName;
-//
-//							GO::debug("Checking ".$sessionCacheKey);
-//
-//							$unseen = $imap->get_unseen($checkMailboxName);
-//
-//							if (isset($unseen['count'])) {
-//								$cached = GO::cache()->get($sessionCacheKey);
-//
-//								//caching is disabled when debugging.
-//								if(!isset($response['email_status']['has_new']) && $cached != $unseen['count'] && !(GO::cache() instanceof GO_Base_Cache_None)){							
-//									$response['email_status']['has_new']=true;
-//								}  
-//
-//								GO::cache()->set($sessionCacheKey, $unseen['count']);						
-//
-//								$response['email_status']['unseen'][]=array('account_id'=>$account->id,'mailbox'=>$checkMailboxName, 'unseen'=>$unseen['count']);
-//								$response['email_status']['total_unseen'] += $unseen['count'];	
-//
-//								$existingCheckMailboxArray[] = $checkMailboxName;							
-//							}
+								$response['email_status']['unseen'][]=array('account_id'=>$account->id,'mailbox'=>$checkMailboxName, 'unseen'=>$mailbox->unseen);
+								$response['email_status']['total_unseen'] += $mailbox->unseen;	
+
+								$existingCheckMailboxArray[] = $checkMailboxName;	
+							}
 						}
 					}
 					
@@ -356,10 +335,14 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					'expanded' => !$mailbox->haschildren,
 //					'usage'=>'',
 //					'acl_supported'=>false,
-					'cls'=>$mailbox->noselect==1 ? 'em-tree-node-noselect' : null
+					'cls'=>$mailbox->noselect==1 ? 'em-tree-node-noselect' : ""
 							//'children'=>$children,
 							//'expanded' => !count($children),
 			);
+			
+			if (!$fetchAllWithSubscribedFlag && $mailbox->unseen > 0) {
+				$node['cls'] .= ' ml-folder-unseen';
+			}
 			
 //			GO::debug($node);
 			
@@ -404,8 +387,8 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					$sortIndex = 4;
 					break;
 			}
-
-			$nodes[$sortIndex . $mailbox->name] = $node;
+			
+			$nodes[$sortIndex .'-'. $mailbox->name] = $node;
 		}
 		ksort($nodes);
 
@@ -515,13 +498,11 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 		foreach ($srcMessages as $srcMessageInfo) {
 			$srcAccountModel = GO_Email_Model_Account::model()->findByPk($srcMessageInfo->accountId);
 			$srcImapMessage = GO_Email_Model_ImapMessage::model()->findByUid($srcAccountModel, $srcMessageInfo->mailboxPath, $srcMessageInfo->mailUid);
-			$srcMessage = new GO_Base_Mail_Message();
-			$srcMessage->loadMimeMessage($srcImapMessage->getSource());
-
+			
 			$targetAccountModel = GO_Email_Model_Account::model()->findByPk($params['targetAccountId']);
 			$targetImapConnection = $targetAccountModel->openImapConnection($params["targetMailboxPath"]);
 
-			$targetImapConnection->append_message($params['targetMailboxPath'], $srcMessage->toString());
+			$targetImapConnection->append_message($params['targetMailboxPath'], $srcImapMessage->getSource());
 		}
 		
 		return array('success'=>true);

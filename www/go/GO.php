@@ -49,6 +49,7 @@ class GO{
 	private static $_lastReportedError=false;
 
 
+	private static $_view;
 	/**
 	 * If you set this to true then all acl's will allow all actions. Useful
 	 * for maintenance scripts.
@@ -218,29 +219,16 @@ class GO{
 	}
 
 	/**
-	 * Clears the GO::config()->file_storage_path/cache folder. This folder contains mainly cached javascripts.
+	 * Clears the:
+	 * 
+	 * 1. GO::config()->cachedir folder. This folder contains mainly cached javascripts.
+	 * 2. GO_Base_Model objects cached in memory for a single script run
+	 * 3. The permanent cache stored in GO::cache()
+	 * 
 	 */
 	public static function clearCache(){
 		
-		//todo js should be cached in tmpdir
-		$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'cache');
-
-		//make sure it exists
-		$folder->create();
-
-		$items = $folder->ls();
-		foreach($items as $item)
-			$item->delete();
-		
-		
-		$folder = new GO_Base_Fs_Folder(GO::config()->orig_tmpdir.'cache');
-
-		//make sure it exists
-		$folder->create();
-
-		$items = $folder->ls();
-		foreach($items as $item)
-			$item->delete();
+		GO::config()->getCacheFolder(false)->delete();
 		
 		GO::cache()->flush();
 
@@ -249,12 +237,15 @@ class GO{
 
 	/**
 	 *
-	 * @return string Returns the currently selected theme.
+	 * @return GO_Base_View_Extjs3 Returns the currently selected theme.
 	 *
-	 * TODO SHould be changed to theme().
+	 * 
 	 */
 	public static function view(){
-		return isset(GO::session()->values['view']) ? GO::session()->values['view'] : GO::config()->defaultView;
+		if(!isset(self::$_view)){
+			self::$_view = new GO_Base_View_Extjs3();
+		}
+		return self::$_view;//isset(GO::session()->values['view']) ? GO::session()->values['view'] : GO::config()->defaultView;
 	}
 
 	public static function setView($viewName){
@@ -313,11 +304,21 @@ class GO{
 	 */
 	public static function modules() {
 		if (!isset(self::$_modules)) {
-			if(isset(GO::session()->values['modulesObject']) && !isset($GLOBALS['GO_CONFIG'])){
-				self::$_modules=GO::session()->values['modulesObject'];
-			}else{
-				self::$_modules=GO::session()->values['modulesObject']=new GO_Base_ModuleCollection();
-			}
+//			if(GO::user()){
+//			
+//			Caching caused more problems than benefits
+//			
+//				if(isset(GO::session()->values['modulesObject']) && !isset($GLOBALS['GO_CONFIG'])){
+//					self::$_modules=GO::session()->values['modulesObject'];
+//				}else{
+//					self::$_modules=GO::session()->values['modulesObject']=new GO_Base_ModuleCollection();
+//				}
+//			}else
+//			{
+//				self::$_modules=new GO_Base_ModuleCollection();
+//			}
+			
+			self::$_modules=new GO_Base_ModuleCollection();
 		}
 		return self::$_modules;
 	}
@@ -386,30 +387,12 @@ class GO{
 	 * @param string $className
 	 */
 	public static function autoload($className) {
-
 		if(isset(self::$_classes[$className])){
 			//don't use GO::config()->root_path here because it might not be autoloaded yet causing an infite loop.
 			require(dirname(dirname(__FILE__)) . '/'.self::$_classes[$className]);
 		}else
 		{
-//			GO::debug("Autoloading: ".$className);
-			//For SabreDAV
-			if(strpos($className,'Sabre_')===0) {
-        include self::config()->root_path . 'go/vendor/SabreDAV/lib/Sabre/' . str_replace('_','/',substr($className,6)) . '.php';
-				return true;
-			}
-			
-			//Don't interfere with other autoloaders
-			if (0 === strpos($className, 'Swift'))
-			{
-				require_once self::config()->root_path.'go/vendor/swift/lib/classes/Swift.php';
-				//Load the init script to set up dependency injection
-				require_once self::config()->root_path.'go/vendor/swift/lib/swift_init.php';
-
-				$path = self::config()->root_path.'go/vendor/swift/lib/classes/'.str_replace('_', '/', $className).'.php';
-				require_once $path;
-				return true;
-			}
+//			echo "Autoloading: ".$className."\n";
 
 			if(substr($className,0,7)=='GO_Base'){
 				$arr = explode('_', $className);
@@ -420,7 +403,18 @@ class GO{
 				$baseClassFile = dirname(dirname(__FILE__)) . '/'.$location;
 				require($baseClassFile);
 
-			}  else {
+			} else if(substr($className,0,4)=='GOFS'){
+						
+				$arr = explode('_', $className);
+				
+				array_shift($arr);
+				
+				$file = array_pop($arr).'.php';
+				$path = strtolower(implode('/', $arr));
+				$location =$path.'/'.$file;
+				$baseClassFile = GO::config()->file_storage_path.'php/'.$location;			
+				require($baseClassFile);
+			} else {
 				//$orgClassName = $className;
 				$forGO = substr($className,0,3)=='GO_';
 
@@ -454,6 +448,8 @@ class GO{
 					}
 					
 					$fullPath = self::config()->root_path.$file;
+					
+//					echo $fullPath."\n";
 
 					if(!file_exists($fullPath) || is_dir($fullPath)){
 						//throw new Exception('Class '.$orgClassName.' not found! ('.$file.')');
@@ -461,6 +457,22 @@ class GO{
 					}
 					
 					require($fullPath);
+				}elseif(strpos($className,'Sabre\VObject')===0) {
+					$classFile = self::config()->root_path . 'go/vendor/VObject/lib/'.str_replace('\\','/',$className).'.php';
+					require $classFile;
+					return true;
+				}elseif(strpos($className,'Sabre')===0) {
+					require self::config()->root_path . 'go/vendor/SabreDAV/lib/'.str_replace('\\','/',$className). '.php';
+					return true;					
+				}else	if (0 === strpos($className, 'Swift'))
+				{
+					require_once self::config()->root_path.'go/vendor/swift/lib/classes/Swift.php';
+					//Load the init script to set up dependency injection
+					require_once self::config()->root_path.'go/vendor/swift/lib/swift_init.php';
+
+					$path = self::config()->root_path.'go/vendor/swift/lib/classes/'.str_replace('_', '/', $className).'.php';
+					require_once $path;
+					return true;
 				}
 			}
 		}
@@ -492,6 +504,11 @@ class GO{
 		if(!empty(GO::session()->values['debug']))
 			GO::config()->debug=true;
 		
+		if(GO::config()->debug || GO::config()->debug_log){
+			$log = '['.date('Y-m-d G:i').'] INIT';
+			GO::debug($log);
+		}
+		
 		if(GO::config()->debug)
 			ini_set("display_errors","On");
 		else
@@ -506,16 +523,6 @@ class GO{
 		}
 
 		if(!defined('GO_LOADED')){ //check if old Group-Office.php was loaded
-
-			if(GO::config()->debug || GO::config()->debug_log){
-				$log = '['.date('Y-m-d G:i').'] r=';
-				if(isset($_REQUEST['r']))
-					$log .= $_REQUEST['r'];
-				else 
-					$log = 'undefined';				
-
-				GO::debug($log);
-			}
 			
 			self::_undoMagicQuotes();
 
@@ -567,10 +574,14 @@ class GO{
 		
 		$error = error_get_last();		
 		if($error){			
-			//z-push uses a lot of ugly @fputs etc to suppresss errors. We don't want to log those.
-			if(!isset($GLOBALS['zpush_version']))
+			//Log only fatal errors because other errors should have been logged by the normal error handler
+			if($error['type']==E_ERROR || $error['type']==E_CORE_ERROR || $error['type']==E_COMPILE_ERROR || $error['type']==E_RECOVERABLE_ERROR)
 				self::errorHandler($error['type'], $error['message'], $error['file'], $error['line']);
 		}
+		
+		//clear temp files on the command line because we may run as root
+		if(PHP_SAPI=='cli')
+			GO::session()->clearUserTempFiles(false);
 		
 		GO::debug("--------------------\n");
 	}
@@ -706,7 +717,7 @@ class GO{
 
 	public static function infolog($message) {
 
-		if (self::config()->log) {
+		if (!empty(self::config()->info_log)) {
 
 			if (empty(GO::session()->values["logdircheck"])) {
 				$folder = new GO_Base_Fs_Folder(dirname(self::config()->info_log));
@@ -775,6 +786,10 @@ class GO{
 					if ($text == '')
 						$text = '(empty string)';
 
+					
+					if ($text == 'undefined')
+						throw new Exception();
+					
 					//$username=GO::user() ? GO::user()->username : 'nobody';
 
 					//$trace = debug_backtrace();

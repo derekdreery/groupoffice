@@ -1,6 +1,6 @@
 <?php
 
-
+$l["backupmanager"]='Zálohování';
 $l['name']='Zálohování';
 $l['description']='Modul, který umožňuje nastavit zálohování pomocí služby cron';
 $l['save_error']='Problém při ukládání nastavení';
