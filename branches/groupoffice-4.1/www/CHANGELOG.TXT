@@ -1,3 +1,9 @@
+4.1.55
+- Order Dialog in billing is now modal
+- Order Model will check for recurring Orders before Delete
+- Recurred Order without an order_id can no longer be deleted
+- Adding an Order status to an order book will no longer throw an Notice exception
+
 05-04-2013 4.1.54
 - Sort order wrong for resources in event dialog
 - Holidays were listed at the bottom in calendar list view
@@ -28,6 +34,8 @@
 - Reset password was broken
 - removed time before tasks and birthday events in the calendar's month view
 - Cron: enabling the users and group tabs when clicking on apply will now work.
+- Changed labels on the button to add an email address to a new or existing contact in the addressbook
+- Cost price of product dialog of billing will format correctly when loaded
 - MultiSelectGrid will check for an ACL field in the linked model if $checkPermissions is not provided
 - TimerButton didn't load time from database on reload the way it should (fixed)
 - Billing, duplicate order: No more link between original order and duplicate order.
