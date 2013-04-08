@@ -334,7 +334,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	
 	private function _isSubscribed($mailboxName, $flags){
 		
-		if($mailboxName=="INBOX"){
+		if(strtoupper($mailboxName)=="INBOX"){
 			return true;
 			//returning subscribed flag with list-extended doesn't work with public folders.
 			//that's why we disabled this code and use LSUB to determine the subscribtions more reliably.
@@ -439,7 +439,10 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 								$folder = $v;
 						}
 					}
-				}
+				}	
+				
+				if(strtoupper($folder)=='INBOX')
+					$folder='INBOX'; //fix lowercase or mixed case inbox strings
 				
 				if($folder=='dovecot')
 					continue;
