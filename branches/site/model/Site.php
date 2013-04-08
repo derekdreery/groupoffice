@@ -78,6 +78,15 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 		);
 	}
 
+	public function getTemplatePath(){
+		
+		if(empty($this->module))
+			return false;
+		
+		return GO::config()->root_path . 'modules/' . $this->module . '/views/site/';
+	}
+	
+	
 	/**
 	 * Get the config parameters of the site.
 	 * 
@@ -149,11 +158,16 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 		$contentItems = $this->contentNodes;
 			
 		foreach($contentItems as $content){
+			
+			$hasChildren = $content->hasChildren();
+			
 			$treeNodes[] = array(
 					'id' => $this->id.'_content_'.$content->id,
 					'site_id'=>$this->id,
 					'content_id'=>$content->id,
 					'iconCls' => 'go-model-icon-GO_Site_Model_Content', 
+					'expanded' => !$hasChildren,
+					'hasChildren' => $hasChildren,
 					'text' => $content->title
 			);
 		}

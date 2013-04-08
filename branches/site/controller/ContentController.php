@@ -39,6 +39,34 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 		return array('success'=>true);
 	}	
 	
+	protected function actionTemplateStore($params){
+		
+		if(empty($params['siteId']))
+			Throw new Exception('No Site ID given!');
+		
+		$site = GO_Site_Model_Site::model()->findByPk($params['siteId']);
+		
+		if(!$site)
+			Throw new Exception('No site found with the following id: '.$id);
+		
+		$templateFiles = array();
+		
+		$config = new GO_Site_Components_Config($site);
+
+		if($config->templates){			
+			// Read config items and convert to json
+			foreach($config->templates as $path=>$name)
+				$templateFiles[] = array('path'=>$path,'name'=>$name);
+		}
+		
+		$response = array(
+				"success" => true,
+				"results" => $templateFiles,
+				'total' => count($templateFiles)
+		);
+		
+		$this->renderJson($response);
+	}
 	
 	protected function actionLoad($params){
 		if(empty($params['id']))

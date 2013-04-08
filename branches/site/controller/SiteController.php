@@ -4,7 +4,7 @@ class GO_Site_Controller_Site extends GO_Base_Controller_AbstractModelController
 
 	protected $model = 'GO_Site_Model_Site';
 	
-	
+
 	/**
 	 * Redirect to the homepage
 	 * 
@@ -82,5 +82,5 @@ class GO_Site_Controller_Site extends GO_Base_Controller_AbstractModelController
 		}
 		
 		return $response;
-	}
+	}	
 }

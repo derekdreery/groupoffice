@@ -329,8 +329,13 @@ abstract class GO_Site_Controller_Abstract extends GO_Base_Controller_AbstractCo
 	protected function beforeAction()
 	{
 		
+	}	
+	
+	protected function actionContent($params){
+		$content = GO_Site_Model_Content::model()->findBySlug($params['slug']);
+		$this->render($content->template,array('content'=>$content));
 	}
-
+	
 }
 
 ?>

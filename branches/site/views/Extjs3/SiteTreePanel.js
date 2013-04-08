@@ -77,6 +77,7 @@ Ext.extend(GO.site.SiteTreePanel, Ext.tree.TreePanel,{
 			this.contentRootContextMenu.setSelected(this,node,'GO_Site_Model_Content');
 			this.contentRootContextMenu.showAt(event.xy);
 		}else if(this.isContentNode(node)){
+			this.contentPanel.load(node.attributes.content_id); // Load the panel
 			this.contentContextMenu.setSelected(this,node,'GO_Site_Model_Content');
 			this.contentContextMenu.showAt(event.xy);
 		}

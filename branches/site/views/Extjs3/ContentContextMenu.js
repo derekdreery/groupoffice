@@ -24,7 +24,7 @@ GO.site.ContentContextMenu = function(config){
 		scope:this,
 		handler: function()
 		{
-			console.log("Advanced properties");
+			this.treePanel.contentPanel.contentDialog.show(this.selected.attributes.content_id);
 		}
 	});
 	
@@ -77,24 +77,31 @@ Ext.extend(GO.site.ContentContextMenu, Ext.menu.Menu, {
 	},
 	deleteContent : function() {
 		
-		var contentId = this.selected.attributes.content_id;
-		
-		Ext.MessageBox.confirm(GO.site.lang.deleteContent, GO.site.lang.deleteContentConfirm, function(btn){
-			if(btn == 'yes'){
-				GO.request({
-					url: 'site/content/delete',
-					params: {
-						id: contentId
-					},
-					success: function(){
-						GO.mainLayout.getModulePanel('site').rebuildTree();
-					},
-					failure: function(){
-						
-					},
-					scope: this
-				});
+		if(this.selected.attributes.hasChildren){
+			if(!this.errorDialog){
+				this.errorDialog = new GO.ErrorDialog();
 			}
-		});
+			this.errorDialog.show(GO.site.lang.deleteContentHasChildren, GO.site.lang.deleteContent);
+		} else {
+			var contentId = this.selected.attributes.content_id;
+
+			Ext.MessageBox.confirm(GO.site.lang.deleteContent, GO.site.lang.deleteContentConfirm, function(btn){
+				if(btn == 'yes'){
+					GO.request({
+						url: 'site/content/delete',
+						params: {
+							id: contentId
+						},
+						success: function(){
+							GO.mainLayout.getModulePanel('site').rebuildTree();
+						},
+						failure: function(){
+
+						},
+						scope: this
+					});
+				}
+			});
+		}
 	}
 });

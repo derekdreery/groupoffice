@@ -76,9 +76,18 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	 public function relations() {
 		 return array(
 			'children' => array('type' => self::HAS_MANY, 'model' => 'GO_Site_Model_Content', 'field' => 'parent_id', 'delete' => true, GO_Base_Db_FindParams::newInstance()->order('sort_order')),
+			
 			'site'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Site_Model_Site", 'field'=>'site_id'),
 			'parent'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Site_Model_Content", 'field'=>'parent_id')
 		 );
+	 }
+	 
+	 	 
+	 protected function beforeSave() {
+		 
+		 $this->cleanSlug();
+		 
+		 return parent::beforeSave();
 	 }
 	 
 	 /**
@@ -118,12 +127,16 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	 public function cleanSlug(){
 		 //TODO: Clean the slug
 	 }
+
 	 
-	 protected function beforeSave() {
-		 
-		 $this->cleanSlug();
-		 
-		 return parent::beforeSave();
+	 /**
+	  * Check if this content item has children
+	  * 
+	  * @return boolean
+	  */
+	 public function hasChildren(){
+		 $child = $this->children(GO_Base_Db_FindParams::newInstance()->single());
+		 return !empty($child); 
 	 }
 	 
 	 /**
@@ -136,8 +149,10 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	 public function getChildrenTree(){
 		 $tree = array();
 		 $children = $this->children;
-		 
+		 		 	 
 		 foreach($children as $child){
+			 
+			 $hasChildren = $child->hasChildren();
 			 
 			 $childNode = array(
 				'id' => $child->site_id.'_content_'.$child->id,
@@ -145,7 +160,8 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 				'site_id'=>$child->site->id, 
 				'iconCls' => 'go-model-icon-GO_Site_Model_Content', 
 				'text' => $child->title,
-				'expanded' => false,
+				'hasChildren' => $hasChildren,
+				'expanded' => !$hasChildren,
 				'children' => $children
 			);
 			 

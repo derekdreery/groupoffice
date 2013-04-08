@@ -6,6 +6,16 @@ $l["description"] = "This is a new CMS module";
 $l["content"] = "Content";
 $l["site"] = "Site";
 
+$l["meta"] = "Meta";
+$l["metaDescriptionText"] = "Meta tags are a great way for webmasters to provide search engines with information about their sites.";
+
+$l["info"] = "Info";
+$l["infoDescriptionText"] = "Information about this content item";
+
+$l["template"] = "Template";
+$l["defaultChildTemplate"] = "Default child template";
+$l["templateDescriptionText"] = "Choose a template in which you want to view this content item";
+
 $l["save"] = "Save";
 $l["reload"] = "Reload";
 $l["advanced"] = "Advanced options";
@@ -14,6 +24,7 @@ $l["addContent"] = "Add content";
 
 $l["deleteContent"] = "Delete content";
 $l["deleteContentConfirm"] = "Are you sure that you want to delete this content item";
+$l["deleteContentHasChildren"] = "You cannot delete this item because it has subitems. Please delete the subitems first.";
 
 $l["deleteSite"] = "Delete site";
 $l["deleteSiteConfirm"] = "Are you sure that you want to delete this site";
