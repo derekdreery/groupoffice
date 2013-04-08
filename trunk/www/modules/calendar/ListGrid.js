@@ -121,7 +121,8 @@ GO.calendar.ListGrid = function(config)
 		this.startDate=Date.parseDate(date.format(this.dateFormat), this.dateFormat);
 	}
 	
-	this.configuredDate=this.startDate;
+	
+	this.setDate(this.startDate);
 	
 };
 
@@ -279,7 +280,7 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
 		this.periodDisplay = GO.calendar.lang.quarterShort+this.periodDisplay+year;
 		
 		this.startDate=Date.parseDate(dateStr, this.dateFormat);
-		this.endDate = this.nextDate();
+		this.endDate = this.nextDate();		
 		this.setStoreBaseParams();
   	
 		if(load)

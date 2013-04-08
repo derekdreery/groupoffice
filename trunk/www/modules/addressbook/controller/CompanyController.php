@@ -35,6 +35,19 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 					'email' => $contact->email
 			);
 		}
+		
+		
+		if(GO::modules()->customfields && isset($response['data']['customfields']) && GO_Customfields_Model_DisableCategories::isEnabled("GO_Addressbook_Model_Company", $model->addressbook_id)){
+			$ids = GO_Customfields_Model_EnabledCategory::model()->getEnabledIds("GO_Addressbook_Model_Company", $model->addressbook_id);
+			
+			$enabled = array();
+			foreach($response['data']['customfields'] as $cat){
+				if(in_array($cat['id'], $ids)){
+					$enabled[]=$cat;
+				}
+			}
+			$response['data']['customfields']=$enabled;
+		}
 
 		return parent::afterDisplay($response, $model, $params);
 	}
@@ -107,7 +120,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 
 			$addresslistMultiSel = new GO_Base_Component_MultiSelectGrid(
 							'addresslist_filter', 
-							"GO_Addressbook_Model_Addresslist",$store, $params);				
+							"GO_Addressbook_Model_Addresslist",$store, $params, false);				
 
 			if(count($addresslistMultiSel->selectedIds) && !empty($params['addresslist_filters']))
 			{

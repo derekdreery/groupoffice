@@ -43,6 +43,15 @@ class GO_Base_Model_Reminder extends GO_Base_Db_ActiveRecord {
 		return parent::model($className);
 	}
 	
+	protected function init() {
+
+		$this->columns['text']['gotype']='html';
+		$this->columns['time']['gotype']='unixtimestamp';
+		$this->columns['vtime']['gotype']='unixtimestamp';
+		
+		parent::init();
+	}
+	
 	public function relations() {
 		
 		return array('users' => array('type'=>self::MANY_MANY, 'model'=>'GO_Base_Model_User', 'field'=>'reminder_id', 'linkModel' => 'GO_Base_Model_ReminderUser'));
@@ -153,7 +162,10 @@ class GO_Base_Model_Reminder extends GO_Base_Db_ActiveRecord {
 	
 	
 	public function defaultAttributes() {
-		return array('snooze_time'=>7200);
+		return array(
+			'snooze_time'=>7200,
+			'time' => time()
+		);
 	}
 	
 	/**

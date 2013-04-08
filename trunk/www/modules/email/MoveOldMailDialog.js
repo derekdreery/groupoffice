@@ -95,6 +95,11 @@ Ext.extend(GO.email.MoveOldMailDialog, Ext.Window,{
 			})
 			]
 		});
+		
+		this.selectMailbox.store.on('load',function(store,records,options){
+			this.selectMailbox.setValue(this.selectMailbox.store.reader.jsonData['trash']);
+		},this);
+		
 	},
 
 	setNode : function(node) {

@@ -90,7 +90,6 @@ $l['name'] = 'Usuários';
 $l['description'] = 'Módulo de administração; Administra usuários do sistema.';
 $l['deletePrimaryAdmin'] = 'Você não pode apagar o usuário administrador';
 $l['deleteYourself'] = 'Você não pode apagar a si próprio';
-$lang['link_type'][8]=$us_user = 'Usuário';
 $l['error_username']='Você colocou caracteres inválidos no nome';
 $l['error_username_exists']='Desculpe, esse nome já existe';
 $l['error_email_exists']='Desculpe, esse e-mail já está registrado.';
@@ -118,3 +117,8 @@ $l['generatedPasswordIs']='A senha gerada foi';
 $l['openContact']='Abrir contato';
 $l['showProUsers']='Mostrar usuários "pro"';
 $l['updateExistingOnImport']='Atualizar usuários existentes (pelo username)';
+
+$l['resetState']="Reposicionar janelas e grades";
+$l['resetStateConfirm']='Tem certeza que deseja reiniciar a posição de todas as colunas, janelas e painéis para os padrões de fabricação?';
+$l['registrationEmail']='Email de registro';
+$l['enabledSettingtabs']='Habilitar aba de configuração';

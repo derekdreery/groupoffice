@@ -21,9 +21,9 @@ class GO_Addressbook_Export_ExportVCard extends GO_Base_Export_AbstractExport {
 	public static $name = "VCard";
 	public static $useOrientation=false;
 	
-	private function _sendHeaders(){
-		header('Content-Disposition: attachment; filename="'.$this->title.'.vcf"');
-		header('Content-Type: text/x-csv; charset=UTF-8');
+	private function _sendHeaders(){		
+		$file = new GO_Base_Fs_File($this->title.'.vcf');
+		GO_Base_Util_Http::outputDownloadHeaders($file);
 	}
 
 	private function _write($data){

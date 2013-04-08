@@ -571,3 +571,13 @@ $l['month_times'][5]='peti';
 $l['deleteAllItems']='Obriši sve stavke';
 $l['deleteAllItemsAreYouSure']='Jeste li sigurni da želite obrisati sve stavke?';
 $l['sortOrderError']="Ne možete sortirati po tom stupcu. Kliknite na zaglavlje nekog drugog stupca u mreži za sortiranje.";
+
+$l['cellular2']= 'Drugi mobitel';
+$l['passwordIsWeak']='Unesena lozinka nije dovoljno jaka. Lozinka treba biti u skladu sa sljedećim pravilima:';
+$l['passwordMinLength']='Minimalna dužina je %s';
+$l['passwordRequireUc']='Mora sadržavati veliko slovo';
+$l['passwordRequireLc']='Mora sadržavati malo slovo';
+$l['passwordRequireNum']='Mora sadržavati broj';
+$l['passwordRequireSc']='Mora sadržavati posebni znak';
+$l['passwordUnique']='Mora sadržavati %s jedinstvenih znakova';
+$l['maxAttachmentsSizeExceeded']="Ukupna veličina vaših privitaka ({total}) prelazi maksimalno dopušteno ({max}).";

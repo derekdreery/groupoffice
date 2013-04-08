@@ -48,18 +48,17 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 			this.checkOrientation(this.radioGroup.getValue());
 		}, this);
 		
-		this.includeHidden = new Ext.form.Checkbox({
+		this.includeHidden = new Ext.ux.form.XCheckbox({
 			fieldLabel : GO.lang.exportIncludeHidden,
 			name       : 'includeHidden'
 		});
 		
-		this.humanHeaders = new Ext.form.Checkbox({
+		this.humanHeaders = new Ext.ux.form.XCheckbox({
 			fieldLabel : GO.lang.exportHumanHeaders,
-			name       : 'humanHeaders',
-			checked		 : true
+			name       : 'humanHeaders'
 		});
 		
-		this.includeHeaders = new Ext.form.Checkbox({
+		this.includeHeaders = new Ext.ux.form.XCheckbox({
 			fieldLabel  : GO.lang.exportIncludeHeaders,
 			name				: 'includeHeaders'
 		});
@@ -85,7 +84,7 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 			displayField: 'displayText'
 		});
 		
-		this.includeHeaders.setValue(true);
+//		this.includeHeaders.setValue(true);
 		
 		this.hiddenParamsField = new Ext.form.Hidden({
 			name:'params'
@@ -142,7 +141,7 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 		GO.ExportGridDialog.superclass.initComponent.call(this);	
 	},
 	
-	show : function () {
+	show : function(){
 		
 		this.hiddenParamsField.setValue(Ext.encode(this.params));
 		this.hiddenDocumentTitle.setValue(this.documentTitle);
@@ -153,12 +152,22 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 		if(!this.rendered){
 				// Get the available export types for the form
 			GO.request({
-				url: 'export/types',
+				url: 'export/load',
 				params:{
 					exportClassPath:this.exportClassPath
 				},
 				success: function(response, options, result)
 				{
+					
+					if(result.data.includeHeaders)
+						this.includeHeaders.setValue(result.data.includeHeaders);
+					
+					if(result.data.humanHeaders)
+						this.humanHeaders.setValue(result.data.humanHeaders);
+					
+					if(result.data.includeHidden)
+						this.includeHidden.setValue(result.data.includeHidden);
+					
 					var name;
 					var useOrientation;
 					var checked=true;
@@ -256,3 +265,168 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 			this.hide();	
 	}	
 });
+
+
+
+//TODO: CHANGE TO A TABBEDFORM DIALOG. THIS IS NOT WORKING AND NEED TO BE CHECKED
+
+//GO.ExportGridDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
+//
+//	initComponent : function(){
+//		
+//		Ext.apply(this, {
+//			goDialogId:'export',
+//			title:GO.lang['exportDialog'],
+//			//autoHeight:true,
+//			height:400,
+//			width:400,
+//			formControllerUrl : 'export',
+//			enableOkButton : false,
+//			enableApplyButton : false,
+//			buttons:[{ 
+//				text: GO.lang['cmdExport'], 
+//				handler: function(){ 
+//					this.submitForm();
+//				}, 
+//				scope: this 
+//			},{ 
+//				text: GO.lang['cmdClose'], 
+//				handler: function(){ 
+//					this.hide(); 
+//				}, 
+//				scope: this 
+//			}]
+//		});
+//		
+//		GO.ExportGridDialog.superclass.initComponent.call(this);	
+//	},
+//	  
+//	buildForm : function () {
+//		
+//		this.hiddenDocumentTitle = new Ext.form.Hidden({name:'documentTitle'});
+//		this.hiddenName = new Ext.form.Hidden({name:'name'});
+//		this.hiddenUrl = new Ext.form.Hidden({name:'url'});
+//		this.hiddenColumns = new Ext.form.Hidden({name:'columns'});
+//		this.hiddenHeaders = new Ext.form.Hidden({name:'headers'});
+//	
+//		this.radioGroup = new Ext.form.RadioGroup({
+//			fieldLabel : GO.lang['strType'],
+//			name       : 'exportFormat',
+//			columns: 1,
+//			items: []
+//		});
+////		
+////		this.radioGroup.on('change', function(){
+////			this.checkOrientation(this.radioGroup.getValue());
+////		}, this);
+//		
+//		this.includeHidden = new Ext.form.Checkbox({
+//			fieldLabel : GO.lang.exportIncludeHidden,
+//			name       : 'includeHidden'
+//		});
+//		
+//		this.humanHeaders = {
+//			xtype				: 'xcheckbox',
+//			fieldLabel	: GO.lang.exportHumanHeaders,
+//			name				: 'humanHeaders',
+//			checked			: true
+//		};
+//		
+//		this.includeHeaders = {
+//			xtype				: 'xcheckbox',
+//			fieldLabel  : GO.lang.exportIncludeHeaders,
+//			name				: 'includeHeaders'
+//		};
+//		
+//		this.exportOrientation = new Ext.form.ComboBox({
+//			fieldLabel : GO.lang.exportOrientation,
+//			hiddenName: 'exportOrientation',
+//			name: 'exportOrientation',
+//			mode: 'local',
+//			editable:false,
+//			triggerAction:'all',
+//			lazyRender:true,
+//			width: 120,
+//			value:"V",
+//			store: new Ext.data.SimpleStore({
+//				fields: [
+//						'myId',
+//						'displayText'
+//				],
+//				data: [['H', GO.lang.landscape], ['V', GO.lang.portrait]]
+//			}),
+//			valueField: 'myId',
+//			displayField: 'displayText'
+//		});
+//		
+//	//	this.includeHeaders.setValue(true);
+//		
+//		this.hiddenParamsField = new Ext.form.Hidden({
+//			name:'params'
+//		});
+//		
+//		this.propertiesPanel = new Ext.Panel({
+//			title:GO.lang['strProperties'],			
+//			cls:'go-form-panel',
+//			layout:'form',
+//			items:[
+//				this.radioGroup,
+//				this.includeHidden,
+//				this.includeHeaders,
+//				this.humanHeaders,
+//				this.exportOrientation,
+//				this.hiddenDocumentTitle,
+//				this.hiddenName,
+//				this.hiddenUrl,
+//				this.hiddenColumns,
+//				this.hiddenHeaders,
+//				this.hiddenParamsField
+//      ]				
+//		});
+//
+//    this.addPanel(this.propertiesPanel);
+//	},
+//	afterLoad : function(remoteModelId, config, action){
+//		
+//		this.hiddenParamsField.setValue(Ext.encode(this.params));
+//		this.hiddenDocumentTitle.setValue(this.documentTitle);
+//		this.hiddenName.setValue(this.name);
+//		this.hiddenUrl.setValue(this.url);
+//
+//		var name;
+//		var useOrientation;
+//		var checked=true;
+//		for(var clsName in action.result.outputTypes) {
+//			name = action.result.outputTypes[clsName].name;
+//			useOrientation = action.result.outputTypes[clsName].useOrientation;
+//			this.createExportTypeRadio(name, clsName, checked, useOrientation);
+//			checked=false;
+//		}
+//
+//	},
+//	createExportTypeRadio : function(name,clsName, checked, useOrientation) {
+//		var radioButton = new Ext.form.Radio({
+//			  fieldLabel : "",
+//        boxLabel   : name,
+//        name       : 'type',
+//        inputValue : clsName,
+//				value : clsName,
+//				checked: checked,
+//				orientation: useOrientation
+//		});
+//		
+//		this.radioGroup.items.push(radioButton);		
+//		if(checked && !useOrientation)
+//			this.exportOrientation.hide();
+//	},
+//	checkOrientation : function(selectedRadio){
+//
+//		if(!selectedRadio.orientation)
+//			this.exportOrientation.hide();
+//		else
+//			this.exportOrientation.show();
+//		
+//		this.syncShadow();
+//		
+//	}
+//});

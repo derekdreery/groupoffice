@@ -8,5 +8,14 @@ error_reporting($oldLvl);
 
 class GO_Base_Util_Fpdi extends FPDI {
 	
+	/**
+	 * Pass error message in Exception
+	 *
+	 * @param string $msg  Error-Message
+	 */
+	function error($msg) {
+		throw new Exception('<b>FPDI Error:</b> ' . $msg);	
+	}		
+	
 }
 ?>

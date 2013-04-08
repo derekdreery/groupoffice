@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `fs_files` (
   `status_id` int(11) NOT NULL DEFAULT '0',
   `ctime` int(11) NOT NULL DEFAULT '0',
   `mtime` int(11) NOT NULL DEFAULT '0',
-  `size` int(11) NOT NULL,
+  `size` BIGINT NOT NULL,
   `user_id` int(11) NOT NULL,
   `comment` text,
   `extension` varchar(20) NOT NULL,

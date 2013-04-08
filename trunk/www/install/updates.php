@@ -270,3 +270,69 @@ $updates["201210021548"][]="ALTER TABLE `go_holidays` CHANGE `region` `region` V
 $updates["201201150948"][]="ALTER TABLE `go_holidays` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
 $updates["201201150948"][]="ALTER TABLE `go_holidays` CHANGE `region` `region` VARCHAR( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 $updates["201301170847"][]="DELETE FROM go_modules WHERE id='z-push';";
+
+$updates["201303081706"][]="UPDATE go_users SET time_format = replace(time_format,'g:','h:');";
+$updates["201303081706"][]="UPDATE go_users SET time_format = replace(time_format,'G:','H:');";
+
+$updates["201303081706"][]="UPDATE go_users SET time_format = replace(time_format,'g:','h:');";
+$updates["201303081706"][]="UPDATE go_users SET time_format = replace(time_format,'G:','H:');";
+
+$updates["201303111600"][]="DROP TABLE IF EXISTS `go_cron`;";
+$updates["201303111600"][]="CREATE TABLE IF NOT EXISTS `go_cron` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT '1',
+  `minutes` varchar(100) DEFAULT NULL,
+  `hours` varchar(100) DEFAULT NULL,
+  `monthdays` varchar(100) DEFAULT NULL,
+  `months` varchar(100) DEFAULT NULL,
+  `weekdays` varchar(100) DEFAULT NULL,
+  `years` varchar(100) DEFAULT NULL,
+  `job` varchar(255) NOT NULL,
+  `runonce` tinyint(1) NOT NULL DEFAULT '0',
+  `nextrun` int(11) NOT NULL DEFAULT '0',
+  `lastrun` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
+
+
+$updates["201303111600"][]="CREATE TABLE IF NOT EXISTS `go_cron_groups` (
+  `cronjob_id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  PRIMARY KEY (`cronjob_id`,`group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+
+$updates["201303111600"][]="CREATE TABLE IF NOT EXISTS `go_cron_users` (
+  `cronjob_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`cronjob_id`,`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+$updates["201303111600"][]="script:13_insert_system_cron.php";
+
+$updates["201303121400"][]="CREATE TABLE IF NOT EXISTS `go_cf_setting_tabs` (
+  `cf_category_id` int(11) NOT NULL,
+  PRIMARY KEY (`cf_category_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+$updates["201303140900"][]="ALTER TABLE  `go_cron` CHANGE  `years`  `years` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '*'";
+$updates["201303140900"][]="ALTER TABLE  `go_cron` CHANGE  `weekdays`  `weekdays` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '*'";
+$updates["201303140900"][]="ALTER TABLE  `go_cron` CHANGE  `months`  `months` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '*'";
+$updates["201303140900"][]="ALTER TABLE  `go_cron` CHANGE  `monthdays`  `monthdays` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '*'";
+$updates["201303140900"][]="ALTER TABLE  `go_cron` CHANGE  `hours`  `hours` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '1'";
+$updates["201303140900"][]="ALTER TABLE  `go_cron` CHANGE  `minutes`  `minutes` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '1'";
+$updates["201303140900"][]="UPDATE `go_cron` SET `years` = '*';";
+
+
+$updates["201303181730"][]="CREATE TABLE IF NOT EXISTS `go_cf_setting_tabs` (
+  `cf_category_id` int(11) NOT NULL,
+  PRIMARY KEY (`cf_category_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+$updates["201303201500"][]="ALTER TABLE  `go_cron` ADD  `completedat` INT NOT NULL DEFAULT  '0'";
+
+$updates["201303201600"][]="script:14_insert_disk_usage_cron.php";
+
+$updates['201303281655'][] ="TRUNCATE TABLE `go_holidays`";
+$updates['201303281655'][] ="ALTER TABLE  `go_holidays` CHANGE  `date`  `date` DATE NOT NULL";

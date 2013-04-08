@@ -610,3 +610,15 @@ $l['passwordRequireLc']='It must contain a lowercase character';
 $l['passwordRequireNum']='It must contain a number';
 $l['passwordRequireSc']='It must contain a special character';
 $l['passwordUnique']='It must contain %s unique characters';
+
+
+$l['maxAttachmentsSizeExceeded']="The total size of your attachments ({total}) exceeds the maximum ({max}).";
+
+$l['exportScreen']='Currently on screen';
+
+$l['exportAddressbook']="Automatically add missing addressbook entries to";
+$l['exportOrders']='Orders';
+
+$l['errorTimeout']="The request timed out. The server took too long to respond. Please try again.";
+
+$l['showAll']='Show all';

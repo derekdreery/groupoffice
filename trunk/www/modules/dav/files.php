@@ -33,7 +33,7 @@ $root = new GO_Dav_Fs_RootDirectory();
 $tree = new GO_Dav_ObjectTree($root);
 
 // The rootnode needs in turn to be passed to the server class
-$server = new Sabre_DAV_Server($tree);
+$server = new Sabre\DAV\Server($tree);
 $server->debugExceptions=GO::config()->debug;
 
 //baseUri can also be /webdav/ with:
@@ -42,19 +42,19 @@ $baseUri = strpos($_SERVER['REQUEST_URI'],'files.php') ? GO::config()->host.'mod
 $server->setBaseUri($baseUri);
 
 // Support for LOCK and UNLOCK
-$lockBackend = new Sabre_DAV_Locks_Backend_FS(GO::config()->tmpdir);
-$lockPlugin = new Sabre_DAV_Locks_Plugin($lockBackend);
+$lockBackend = new Sabre\DAV\Locks\Backend\FS(GO::config()->tmpdir);
+$lockPlugin = new Sabre\DAV\Locks\Plugin($lockBackend);
 $server->addPlugin($lockPlugin);
 
 // Support for html frontend
-$browser = new Sabre_DAV_Browser_Plugin();
+$browser = new Sabre\DAV\Browser\Plugin();
 $server->addPlugin($browser);
 
-$auth = new Sabre_DAV_Auth_Plugin($authBackend,GO::config()->product_name);
+$auth = new Sabre\DAV\Auth\Plugin($authBackend,GO::config()->product_name);
 $server->addPlugin($auth);
 
 // Temporary file filter
-$tempFF = new Sabre_DAV_TemporaryFileFilterPlugin(GO::config()->tmpdir);
+$tempFF = new Sabre\DAV\TemporaryFileFilterPlugin(GO::config()->tmpdir);
 $server->addPlugin($tempFF);
 
 // And off we go!

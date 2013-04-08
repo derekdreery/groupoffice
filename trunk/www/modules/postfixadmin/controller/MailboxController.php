@@ -33,13 +33,17 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 		$mailbox = GO_Postfixadmin_Model_Mailbox::model()->findSingleByAttributes(array(
 				"username"=>$params["username"]				
 		));
+
+		$response['success']=true;
 		
 		if($mailbox){
 			$mailbox->password=$params["password"];
-			$mailbox->save();
+			$response['success'] = $mailbox->save()===true;
+			if (!$response['success']) {
+				$validateErrors = $mailbox->getValidationErrors();
+				$response['feedback'] = implode('<br />',$validateErrors);
+			}
 		}
-		
-		$response['success']=true;
 		
 		return $response;
 	}
@@ -103,11 +107,9 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 		$activeStmt = GO_Postfixadmin_Model_Mailbox::model()->find();
 		
 		while ($mailboxModel = $activeStmt->fetch()) {
-			$folder = new GO_Base_Fs_Folder('/home/vmail/'.$mailboxModel->maildir);
-			echo 'Calculating size of '.$folder->path()."\n";
-			$mailboxModel->usage = $folder->calculateSize()/1024;
+			echo 'Calculating size of '.$mailboxModel->getMaildirFolder()->path()."\n";
+			$mailboxModel->cacheUsage();
 			echo $mailboxModel->usage." kilobytes\n";
-			$mailboxModel->save();
 		}
 
 	}

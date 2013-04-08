@@ -14,20 +14,25 @@
 
 GO.addressbook.SelectCompany = function(config){
 	
+	if(!config.valueField)
+		config.valueField='id';
+		
+	config.displayField='name_and_name2';
+	
+	if(!config.tpl)
+		config.tpl = '<tpl for="."><div class="x-combo-list-item">{' + config.displayField + '} ({addressbook_name})</div></tpl>';
+
+
 	Ext.apply(this, config);
 	
-	if(!this.valueField)
-		this.valueField='id';
-		
-	this.displayField='name_and_name2';
 
 	if (typeof(config.fields)=='undefined') {
 		config.fields = {
 			columns:[],
-			fields:['id', 'name_and_name2', 'post_address', 'post_address_no', 'post_zip', 'post_city', 'post_state', 'post_country', 'vat_no', 'crn','email','invoice_email','cf']
+			fields:['id', 'name_and_name2', 'post_address', 'post_address_no', 'post_zip', 'post_city', 'post_state', 'post_country', 'vat_no', 'crn','email','invoice_email','cf','addressbook_name']
 		};
 	}
-
+		
 	if(!this.fieldLabel){
 		this.fieldLabel=GO.addressbook.lang.company;
 	}

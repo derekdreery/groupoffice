@@ -143,6 +143,8 @@ class GO_Email_Model_ImapSearchQuery {
 	 */
 	private $_recent = false;
 
+	
+	private $_query;
 	/**
 	 * Add a word to search for in the specific section
 	 * 
@@ -347,7 +349,9 @@ class GO_Email_Model_ImapSearchQuery {
 		$wordString = '';
 		
 		foreach($searchwords as $word=>$operator){
-			$wordString .= $operator.' ';
+			if(!empty($this->_query))
+				$wordString .= $operator.' ';
+			
 			$wordString .= $section.' "'.$word.'" ';
 		}
 		
@@ -361,80 +365,80 @@ class GO_Email_Model_ImapSearchQuery {
 	 */
 	public function getImapSearchQuery(){
 
-		$query = '';
+		$this->_query = '';
 
 		if(!empty($this->_all))
-			$query .= self::FLAG_ALL.' ';
+			$this->_query .= self::FLAG_ALL.' ';
 		
 		if(!empty($this->_from))
-			$query .= $this->_prepareQueryPart($this->_from, self::FROM);
+			$this->_query .= $this->_prepareQueryPart($this->_from, self::FROM);
 		
 		if(!empty($this->_to))
-			$query .= $this->_prepareQueryPart($this->_to, self::TO);
+			$this->_query .= $this->_prepareQueryPart($this->_to, self::TO);
 		
 		if(!empty($this->_bcc))
-			$query .= $this->_prepareQueryPart($this->_bcc, self::BCC);
+			$this->_query .= $this->_prepareQueryPart($this->_bcc, self::BCC);
 		
 		if(!empty($this->_cc))
-			$query .= $this->_prepareQueryPart($this->_cc, self::CC);
+			$this->_query .= $this->_prepareQueryPart($this->_cc, self::CC);
 			
 		if(!empty($this->_body))
-			$query .= $this->_prepareQueryPart($this->_body, self::BODY);
+			$this->_query .= $this->_prepareQueryPart($this->_body, self::BODY);
 		
 		if(!empty($this->_subject))
-			$query .= $this->_prepareQueryPart($this->_subject, self::SUBJECT);
+			$this->_query .= $this->_prepareQueryPart($this->_subject, self::SUBJECT);
 		
 		if(!empty($this->_text))
-			$query .= $this->_prepareQueryPart($this->_text, self::TEXT);
+			$this->_query .= $this->_prepareQueryPart($this->_text, self::TEXT);
 		
 		if(!empty($this->_keyword))
-			$query .= $this->_prepareQueryPart($this->_keyword, self::KEYWORD);
+			$this->_query .= $this->_prepareQueryPart($this->_keyword, self::KEYWORD);
 		
 		if(!empty($this->_unkeyword))
-			$query .= $this->_prepareQueryPart($this->_unkeyword, self::UNKEYWORD);
+			$this->_query .= $this->_prepareQueryPart($this->_unkeyword, self::UNKEYWORD);
 		
 		if(!empty($this->_before))
-			$query .= self::BEFORE.' '.$this->_before.' ';
+			$this->_query .= self::BEFORE.' '.$this->_before.' ';
 		
 		if(!empty($this->_since))
-			$query .= self::SINCE.' '.$this->_since.' ';
+			$this->_query .= self::SINCE.' '.$this->_since.' ';
 		
 		if(!empty($this->_on))
-			$query .= self::ON.' '.$this->_on.' ';
+			$this->_query .= self::ON.' '.$this->_on.' ';
 			
 		if($this->_new)
-			$query .= self::FLAG_NEW.' ';
+			$this->_query .= self::FLAG_NEW.' ';
 		
 		if($this->_recent)
-			$query .= self::FLAG_RECENT.' ';
+			$this->_query .= self::FLAG_RECENT.' ';
 		
 		if($this->_old)
-			$query .= self::FLAG_OLD.' ';
+			$this->_query .= self::FLAG_OLD.' ';
 		
 		if($this->_seen)
-			$query .= self::FLAG_SEEN.' ';
+			$this->_query .= self::FLAG_SEEN.' ';
 		
 		if($this->_unseen)
-			$query .= self::FLAG_UNSEEN.' ';
+			$this->_query .= self::FLAG_UNSEEN.' ';
 		
 		if($this->_deleted)
-			$query .= self::FLAG_DELETED.' ';
+			$this->_query .= self::FLAG_DELETED.' ';
 		
 		if($this->_undeleted)
-			$query .= self::FLAG_UNDELETED.' ';
+			$this->_query .= self::FLAG_UNDELETED.' ';
 		
 		if($this->_answered)
-			$query .= self::FLAG_ANSWERED.' ';
+			$this->_query .= self::FLAG_ANSWERED.' ';
 		
 		if($this->_unanswered)
-			$query .= self::FLAG_UNANSWERED.' ';
+			$this->_query .= self::FLAG_UNANSWERED.' ';
 		
 		if($this->_flagged)
-			$query .= self::FLAG_FLAGGED.' ';
+			$this->_query .= self::FLAG_FLAGGED.' ';
 		
 		if($this->_unflagged)
-			$query .= self::FLAG_UNFLAGGED.' ';
+			$this->_query .= self::FLAG_UNFLAGGED.' ';
 				
-		return $query;
+		return $this->_query;
 	}
 }

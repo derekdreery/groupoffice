@@ -1,45 +1,49 @@
 <?php
 
+namespace Sabre\CardDAV;
+
+use Sabre\DAVACL;
+use Sabre\DAV;
+
+
 /**
  * The Card object represents a single Card from an addressbook
  *
- * @package Sabre
- * @subpackage CardDAV
- * @copyright Copyright (C) 2007-2012 Rooftop Solutions. All rights reserved.
- * @author Evert Pot (http://www.rooftopsolutions.nl/) 
+ * @copyright Copyright (C) 2007-2013 Rooftop Solutions. All rights reserved.
+ * @author Evert Pot (http://www.rooftopsolutions.nl/)
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class Sabre_CardDAV_Card extends Sabre_DAV_File implements Sabre_CardDAV_ICard, Sabre_DAVACL_IACL {
+class Card extends DAV\File implements ICard, DAVACL\IACL {
 
     /**
      * CardDAV backend
      *
-     * @var Sabre_CardDAV_Backend_Abstract
+     * @var Backend\BackendInterface
      */
-    private $carddavBackend;
+    protected $carddavBackend;
 
     /**
      * Array with information about this Card
      *
      * @var array
      */
-    private $cardData;
+    protected $cardData;
 
     /**
      * Array with information about the containing addressbook
      *
      * @var array
      */
-    private $addressBookInfo;
+    protected $addressBookInfo;
 
     /**
      * Constructor
      *
-     * @param Sabre_CardDAV_Backend_Abstract $carddavBackend
+     * @param Backend\BackendInterface $carddavBackend
      * @param array $addressBookInfo
      * @param array $cardData
      */
-    public function __construct(Sabre_CardDAV_Backend_Abstract $carddavBackend,array $addressBookInfo,array $cardData) {
+    public function __construct(Backend\BackendInterface $carddavBackend,array $addressBookInfo,array $cardData) {
 
         $this->carddavBackend = $carddavBackend;
         $this->addressBookInfo = $addressBookInfo;
@@ -78,7 +82,7 @@ class Sabre_CardDAV_Card extends Sabre_DAV_File implements Sabre_CardDAV_ICard, 
      * Updates the VCard-formatted object
      *
      * @param string $cardData
-     * @return void
+     * @return string|null
      */
     public function put($cardData) {
 
@@ -86,7 +90,7 @@ class Sabre_CardDAV_Card extends Sabre_DAV_File implements Sabre_CardDAV_ICard, 
             $cardData = stream_get_contents($cardData);
 
         // Converting to UTF-8, if needed
-        $cardData = Sabre_DAV_StringUtil::ensureUTF8($cardData);
+        $cardData = DAV\StringUtil::ensureUTF8($cardData);
 
         $etag = $this->carddavBackend->updateCard($this->addressBookInfo['id'],$this->cardData['uri'],$cardData);
         $this->cardData['carddata'] = $cardData;
@@ -114,7 +118,7 @@ class Sabre_CardDAV_Card extends Sabre_DAV_File implements Sabre_CardDAV_ICard, 
      */
     public function getContentType() {
 
-        return 'text/x-vcard';
+        return 'text/x-vcard; charset=utf-8';
 
     }
 
@@ -128,7 +132,13 @@ class Sabre_CardDAV_Card extends Sabre_DAV_File implements Sabre_CardDAV_ICard, 
         if (isset($this->cardData['etag'])) {
             return $this->cardData['etag'];
         } else {
-            return '"' . md5($this->get()) . '"';
+            $data = $this->get();
+            if (is_string($data)) {
+                return '"' . md5($data) . '"';
+            } else {
+                // We refuse to calculate the md5 if it's a stream.
+                return null;
+            }
         }
 
     }
@@ -136,7 +146,7 @@ class Sabre_CardDAV_Card extends Sabre_DAV_File implements Sabre_CardDAV_ICard, 
     /**
      * Returns the last modification date as a unix timestamp
      *
-     * @return time
+     * @return int
      */
     public function getLastModified() {
 
@@ -224,7 +234,7 @@ class Sabre_CardDAV_Card extends Sabre_DAV_File implements Sabre_CardDAV_ICard, 
      */
     public function setACL(array $acl) {
 
-        throw new Sabre_DAV_Exception_MethodNotAllowed('Changing ACL is not yet supported');
+        throw new DAV\Exception\MethodNotAllowed('Changing ACL is not yet supported');
 
     }
 
@@ -232,7 +242,7 @@ class Sabre_CardDAV_Card extends Sabre_DAV_File implements Sabre_CardDAV_ICard, 
      * Returns the list of supported privileges for this node.
      *
      * The returned data structure is a list of nested privileges.
-     * See Sabre_DAVACL_Plugin::getDefaultSupportedPrivilegeSet for a simple
+     * See Sabre\DAVACL\Plugin::getDefaultSupportedPrivilegeSet for a simple
      * standard structure.
      *
      * If null is returned from this method, the default privilege set is used,

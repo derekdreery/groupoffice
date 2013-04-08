@@ -155,7 +155,10 @@ class GO_THEME
 	}
 
 	function get_cached_css(){
-		global $GO_CONFIG, $GO_SECURITY, $GO_MODULES;
+		
+		//$cacheFolder
+		
+		require_once($GLOBALS['GO_CONFIG']->root_path.'GO.php');
 
 		$mods='';
 		foreach($GLOBALS['GO_MODULES']->modules as $module) {
@@ -164,14 +167,16 @@ class GO_THEME
 
 		$hash = md5($GLOBALS['GO_CONFIG']->file_storage_path.$GLOBALS['GO_CONFIG']->host.$GLOBALS['GO_CONFIG']->mtime.$mods);
 
-		$relpath= 'cache/'.$hash.'-'.$this->theme.'-style.css';
-		$cssfile = $GLOBALS['GO_CONFIG']->file_storage_path.$relpath;
+		$cacheFolder = GO::config()->getCacheFolder();
+		$cssFile = $cacheFolder->createChild($hash.'-'.$this->theme.'-style.css');
+		
+//		$relpath= $cssFile->stripFileStoragePath();
+//		$cssfile = $GLOBALS['GO_CONFIG']->file_storage_path.$relpath;
 
-		if(!file_exists($cssfile) || $GLOBALS['GO_CONFIG']->debug){
+		if(!$cssFile->exists() || $GLOBALS['GO_CONFIG']->debug){
 
-			File::mkdir($GLOBALS['GO_CONFIG']->file_storage_path.'cache');
-
-			$fp = fopen($cssfile, 'w+');
+			
+			$fp = fopen($cssFile->path(), 'w+');
 			foreach($this->stylesheets as $s){
 
 				$baseurl = str_replace($GLOBALS['GO_CONFIG']->root_path, $GLOBALS['GO_CONFIG']->host, dirname($s)).'/';
@@ -181,7 +186,8 @@ class GO_THEME
 			fclose($fp);
 		}
 
-		$cssurl = $GLOBALS['GO_CONFIG']->host.'compress.php?file='.basename($relpath);
+		//$cssurl = $GLOBALS['GO_CONFIG']->host.'compress.php?file='.basename($relpath);
+		$cssurl = GO::url('core/compress',array('file'=>$cssFile->name()));
 		echo '<link href="'.$cssurl.'" type="text/css" rel="stylesheet" />';
 	}
 	

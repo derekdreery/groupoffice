@@ -1,14 +1,18 @@
 <?php
 
+namespace Sabre\CalDAV;
+use Sabre\HTTP;
+use Sabre\VObject;
+
 /**
  * This unittests is created to find out why recurring events have wrong DTSTART value
  *
  *
- * @copyright Copyright (C) 2007-2012 Rooftop Solutions. All rights reserved.
+ * @copyright Copyright (C) 2007-2013 Rooftop Solutions. All rights reserved.
  * @author Evert Pot (http://www.rooftopsolutions.nl/)
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class Sabre_CalDAV_ExpandEventsDTSTARTandDTENDTest extends Sabre_DAVServerTest {
+class ExpandEventsDTSTARTandDTENDTest extends \Sabre\DAVServerTest {
 
     protected $setupCalDAV = true;
 
@@ -49,7 +53,7 @@ END:VCALENDAR
 
     function testExpand() {
 
-        $request = new Sabre_HTTP_Request(array(
+        $request = new HTTP\Request(array(
             'REQUEST_METHOD' => 'REPORT',
             'HTTP_CONTENT_TYPE' => 'application/xml',
             'REQUEST_URI' => '/calendars/user1/calendar1',
@@ -83,13 +87,13 @@ END:VCALENDAR
         );
         $body = str_replace('&#13;','',$body);
 
-        $vObject = Sabre_VObject_Reader::read($body);
+        $vObject = VObject\Reader::read($body);
 
         // check if DTSTARTs and DTENDs are correct
         foreach ($vObject->VEVENT as $vevent) {
-            /** @var $vevent Sabre_VObject_Component_VEvent */
+            /** @var $vevent Sabre\VObject\Component\VEvent */
             foreach ($vevent->children as $child) {
-                /** @var $child Sabre_VObject_Property */
+                /** @var $child Sabre\VObject\Property */
 
                 if ($child->name == 'DTSTART') {
                     // DTSTART has to be one of three valid values

@@ -49,7 +49,8 @@ class GO_Base_Mail_EmailRecipients{
 	 * @return boolean 
 	 */
 	public function hasRecipient($email){
-		return isset($this->_addresses[$email]);
+//		return isset($this->_addresses[$email]);
+		return array_key_exists($email, $this->_addresses);
 	}
 
 	
@@ -225,6 +226,9 @@ class GO_Base_Mail_EmailRecipients{
 	*/
 	private function _addBuffer()
 	{
+		if(!empty($this->_personal) && empty($this->_buffer)){
+			$this->_buffer = 'noaddress';
+		}
 		if(!empty($this->_buffer))
 		{
 			$this->addRecipient($this->_buffer, $this->_personal);

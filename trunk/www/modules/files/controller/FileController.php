@@ -45,23 +45,30 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		else
 			$response['data']['thumbnail_url'] = "";
 		
+		$response['data']['handler']='startjs:function(){'.$model->getDefaultHandler()->getHandler($model).'}:endjs';
+		
 		try{
 			if(GO::modules()->filesearch){
 				$filesearch = GO_Filesearch_Model_Filesearch::model()->findByPk($model->id);
-				if(!$filesearch){
-					$filesearch = GO_Filesearch_Model_Filesearch::model()->createFromFile($model);
-				}
+//				if(!$filesearch){
+//					$filesearch = GO_Filesearch_Model_Filesearch::model()->createFromFile($model);
+//				}
+				if($filesearch){
+					$response['data']=array_merge($filesearch->getAttributes('formatted'), $response['data']);
+				
 
-				$response['data']=array_merge($filesearch->getAttributes('formatted'), $response['data']);
+					if (!empty($params['query_params'])) {
+						$qp = json_decode($params['query_params'], true);
+						if (isset($qp['content_all'])){
 
-				if (!empty($params['query_params'])) {
-					$qp = json_decode($params['query_params'], true);
-					if (isset($qp['content_all'])){
+							$c = new GO_Filesearch_Controller_Filesearch();
 
-						$c = new GO_Filesearch_Controller_Filesearch();
-
-						$response['data']['text'] = $c->highlightSearchParams($qp, $response['data']['text']);
+							$response['data']['text'] = $c->highlightSearchParams($qp, $response['data']['text']);
+						}
 					}
+				}else
+				{
+					$response['data']['text'] = GO::t('notIndexedYet','filesearch');
 				}
 			}
 		}
@@ -122,7 +129,10 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 			$fh = new GO_Files_Model_FileHandler();
 		
 		$fh->extension=strtolower($model->extension);
-		$fh->cls=$params['handlerCls'];
+		
+		if(isset($params['handlerCls']))
+			$fh->cls=$params['handlerCls'];
+		
 		if(empty($params['handlerCls']))
 			$fh->delete();
 		else
@@ -139,41 +149,26 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		{
 			$file = GO_Files_Model_File::model()->findByPk($params['id'], false, true);
 		}
-		
+
 		if(empty($params['all'])){
-			$fh = GO_Files_Model_FileHandler::model()->findByPk(
-						array('extension'=>strtolower($file->extension), 'user_id'=>GO::user()->id));
+			$fileHandlers = array($file->getDefaultHandler());
 		}else
 		{
-			$fh = false;
+			$fileHandlers = $file->getHandlers();
 		}
-		if($fh){
-			$classes=array(new ReflectionClass($fh->cls));
-		}else{
-			$modules = GO::modules()->getAllModules();
-
-			$classes=array();
-			foreach($modules as $module){
-				$classes = array_merge($classes, $module->moduleManager->findClasses('filehandler'));
-			}
-		}
+//	var_dump($fileHandlers);
 		
 		$store = new GO_Base_Data_ArrayStore();
 		
-		foreach($classes as $class){
-			/* @var $class ReflectionClass */
-			
-			$fileHandler = new $class->name;
-			if($fileHandler->fileIsSupported($file)){
-				$store->addRecord(array(
-						'name'=>$fileHandler->getName(),
-						'handler'=>$fileHandler->getHandler($file),
-						'iconCls'=>$fileHandler->getIconCls(),
-						'cls'=>$class->name,
-						'extension'=>$file->extension
-				));
-			}
-		}
+		foreach($fileHandlers as $fileHandler){	
+			$store->addRecord(array(
+					'name'=>$fileHandler->getName(),
+					'handler'=>$fileHandler->getHandler($file),
+					'iconCls'=>$fileHandler->getIconCls(),
+					'cls'=>  get_class($fileHandler),
+					'extension'=>$file->extension
+			));	
+		}	
 		
 		return $store->getData();		
 	}

@@ -165,6 +165,7 @@ $l["sendInvitationInitial"]='Wilt u uitnodigingen voor de bijeenkomst naar de de
 $l["sendInvitationUpdate"]='Wilt u de vernieuwde informatie over de bijeenkomst naar de deelnemers sturen?';
 $l["sendCancellation"]='Wilt u alle deelnemers een annuleringsbericht sturen?';
 $l["forthcomingAppointments"]='Toekomstige afspraken';
+$l["pastAppointments"]='Oude afspraken';
 $l["quarterShort"]= 'K';
 $l["globalsettings_templatelabel"]= 'Naam template';
 $l["globalsettings_allchangelabel"]= 'Bestaande agenda\'s hernoemen?';
@@ -215,3 +216,12 @@ $l['openCalendar']='Open agenda';
 $l['createPermission']="Toegang aanmaken";
 
 $l['show_holidays']="Feestdagen tonen";
+
+$l['participant']='Deelnemer';
+$l['clickForAttendance']='Klik hier om uw status voor deelname aan te geven';
+
+
+$l['viewDay']='Dag';
+$l['viewMorning']='Ochtend';
+$l['viewAfternoon']='Middag';
+$l['viewEvening']='Avond';

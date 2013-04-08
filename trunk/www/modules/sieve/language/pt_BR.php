@@ -118,3 +118,5 @@ $l['activateFilter']='Ativar este filtro';
 $l['active']='Ativo';
 $l['sieveWarning']="Se seu servidor IMAP suportar filtros sieve, então é recomentado usá-los. Tente a aba 'Filtros Sieve' primeiro.";
 $l['setRead']='Marcar mensagem como lida';
+
+$l['stopEndError']= 'Parar deve estar no final!';

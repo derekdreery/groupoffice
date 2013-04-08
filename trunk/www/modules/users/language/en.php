@@ -121,3 +121,6 @@ $l['showProUsers']='Show pro users';
 $l['updateExistingOnImport']='Update existing users by username';
 $l['resetState']="Reset windows and grids";
 $l['resetStateConfirm']='Are you sure you want to reset all grid columns, windows, panel sizes etc. to the factory defaults?';
+
+$l['registrationEmail']='Registration Email';
+$l['enabledSettingtabs']='Enabled Setting tabs';

@@ -17,7 +17,7 @@ GO.LogoComponent = Ext.extend(Ext.BoxComponent, {
 	}
 });
 
- /**
+/**
  * @class GO.dialog.AboutDialog
  * @extends Ext.Window
  * The Group-Office login dialog window.
@@ -29,51 +29,90 @@ GO.LogoComponent = Ext.extend(Ext.BoxComponent, {
  * @param {Object} config The config object
  */
  
-GO.dialog.AboutDialog = function(config){
+GO.dialog.AboutDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 	
-	Ext.apply(this, config);
+	initComponent : function(){
 
-	if (GO.settings.config.product_name=='Group-Office')
-		var aboutText = GO.lang['about'].replace('{company_name}', 'Intermesh B.V.');
-	else
-		var aboutText = GO.lang['about'].replace('{company_name}', '{product_name}');
+		Ext.apply(this,{
+			modal:false,
+			formControllerUrl:'core',
+			loadAction:'about',
+			layout:'fit',
+			height: 230,
+			width: 480,
+			resizable: false,
+			closeAction:'hide',
+			title:GO.lang.strAbout.replace('{product_name}', GO.settings.config.product_name),
+			buttons: [
+				{				
+					text: GO.lang['cmdClose'],
+					handler: function(){this.hide()},
+					scope:this
+				}
+			]
+    });
+		
+		 
+		GO.dialog.AboutDialog.superclass.initComponent.call(this);
+	},
+	
+	afterLoad : function(remoteModelId, config, action){
+		if(action.result.data.has_usage){
+			this.usageFS.show();
+			this.setHeight(370);
+		}
+	},
 
-	GO.dialog.AboutDialog.superclass.constructor.call(this, {
-		modal:false,
-		layout:'fit',
-		height: 230,
-		width: 480,
-		resizable: false,
-		closeAction:'hide',
-		title:GO.lang.strAbout.replace('{product_name}', GO.settings.config.product_name),
-		items: new Ext.Panel({
+
+	buildForm : function(){
+		
+		if (GO.settings.config.product_name=='Group-Office')
+			var aboutText = GO.lang['about'].replace('{company_name}', 'Intermesh B.V.');
+		else
+			var aboutText = GO.lang['about'].replace('{company_name}', '{product_name}');
+
+		
+		this.addPanel(new Ext.Panel({
 			border:false,
 			padding: '10px',
 			items: [
 				new GO.LogoComponent(),
 				new GO.form.PlainField({
-				hideLabel: true,
-				value: aboutText
+					hideLabel: true,
+					value: aboutText
 					.replace('{version}', GO.settings.config.product_version)
 					.replace('{current_year}', new Date().getFullYear())
 					.replace('{product_name}', GO.settings.config.product_name)
 					.replace('{product_name}', GO.settings.config.product_name)
+				}),
+				this.usageFS = new Ext.form.FieldSet({
+					hidden:true,
+					style:'margin-top:10px',
+					xtype:'fieldset',
+					title:GO.lang.usage_text,
+					items:[
+						new GO.form.PlainField({
+							fieldLabel:GO.lang.files,
+							name:'file_storage_usage'
+						}),
+						new GO.form.PlainField({
+							fieldLabel:GO.lang.database,
+							name:'database_usage'
+						}),
+						new GO.form.PlainField({
+							fieldLabel:GO.lang.email,
+							name:'mailbox_usage'
+						}),
+						new GO.form.PlainField({
+							fieldLabel:GO.lang.total,
+							name:'total_usage'
+						})						
+					]					
 				})
+				
 			],
-//			autoLoad:'about.php',
 			autoScroll:true
-			}),		
-		buttons: [
-			{				
-				text: GO.lang['cmdClose'],
-				handler: function(){this.hide()},
-				scope:this
-			}
-		]
-    });
-};
-
-Ext.extend(GO.dialog.AboutDialog, Ext.Window, {
-	
+		}));
+	}
 });
 

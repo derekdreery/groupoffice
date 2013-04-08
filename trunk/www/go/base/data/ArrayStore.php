@@ -28,7 +28,32 @@ class GO_Base_Data_ArrayStore extends GO_Base_Data_AbstractStore {
 	}
 	
 	public function getRecords() {
-	  return $this->response['results'];
+	  $records = array();
+	  foreach($this->response['results'] as $record)
+	  {
+		if($record && is_a($record, 'GO_Base_Model'))
+			$records[] = $this->_columnModel->formatModel($record);
+	  }
+	  return $records;
+	}
+	
+	/**
+	 * Inserts an array of models to be used by the store.
+	 * This will overwrite all added models by addRecord
+	 * @param array $model an array of GO_Base_Model dirived objects
+	 */
+	public function setRecords($models){
+	  $this->response['results'] = $models;
+	}
+	
+	/**
+	 * Add models to the result response.
+	 * @param GO_Base_Model[] $models array of model objects
+	 */
+	public function addRecords($models) {
+	  if(!isset($this->response['results']))
+		$this->response['results'] = array();
+	  array_merge($this->response['results'], $models);
 	}
 	
 	public function getTotal() {

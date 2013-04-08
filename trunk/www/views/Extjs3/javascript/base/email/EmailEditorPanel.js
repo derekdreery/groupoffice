@@ -96,6 +96,8 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 	
 	originalValue : "",
 	
+	maxAttachmentsSize : 0,
+	
 	afterLoad : function(action){
 		
 		if(action.result.data.inlineAttachments)
@@ -208,13 +210,18 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 
 		config.items.push(this.htmlEditor);
 		config.items.push(this.textEditor);
-		
+//		console.log(this.maxAttachmentsSize);
 		this.attachmentsView = new GO.base.email.EmailEditorAttachmentsView({
 			autoHeight:true,
+			maxSize:config.maxAttachmentsSize,
 			listeners:{
 				render:function(){
 					//reset this element on render of last element.
 					this.setContentTypeHtml(true);
+				},
+				maxsizeexceeded : function(av, maxSize, totalSize){
+					
+					GO.errorDialog.show(av.getMaxSizeExceededErrorMsg());
 				},
 				attachmentschanged:function(av){
 					this.setEditorHeight();

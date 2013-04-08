@@ -33,6 +33,8 @@ class GO_Base_Data_ColumnModel {
 
 	private $_modelFormatType='html';
 	
+	private $_model;
+	
 	/**
 	 * Constructor of the ColumnModel class.
 	 * 
@@ -45,8 +47,10 @@ class GO_Base_Data_ColumnModel {
 	 * @param Array $excludeColumns 
 	 */
 	public function __construct($model=false, $excludeColumns=array(), $includeColumns=array()) {
-		if ($model)
+		if ($model){
 			$this->setColumnsFromModel($model, $excludeColumns, $includeColumns);
+			$this->_model=$model;
+		}
 	}
 
 	/**
@@ -111,6 +115,12 @@ class GO_Base_Data_ColumnModel {
 	 * @return GO_Base_Data_ColumnModel
 	 */
 	public function formatColumn($column, $format, $extraVars=array(), $sortAlias='', $label='') {		
+		
+		
+		if(empty($label) && $existingColumn = $this->getColumn($column)){			
+			$label = $existingColumn->getLabel();
+		}
+		
 		
 		$column = new GO_Base_Data_Column($column, $label);
 		$column->setFormat($format, $extraVars);
@@ -253,7 +263,7 @@ class GO_Base_Data_ColumnModel {
 
 	/**
 	 *
-	 * @param GO_Base_Db_ActiveRecord $model
+	 * @param GO_Base_Model $model
 	 * @return array formatted grid row key value array
 	 */
 	public function formatModel($model) {

@@ -21,6 +21,7 @@ modules/addressbook/AdvancedSearchWindow.js
 modules/addressbook/MainPanel.js
 modules/addressbook/SelectAddressbook.js
 modules/addressbook/SelectAddresslistsPanel.js
+modules/addressbook/views/Extjs3/AddresslistsSettingspanel.js
 
 modules/addressbook/GlobalSettings.js
 modules/addressbook/ContextMenu.js
@@ -40,3 +41,5 @@ modules/addressbook/SexCombobox.js
 modules/addressbook/CustomField.js
 
 modules/addressbook/AddresslistsMultiSelectGrid.js
+
+modules/addressbook/views/Extjs3/Settings.js

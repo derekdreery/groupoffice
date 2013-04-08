@@ -179,6 +179,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 	protected function actionStore($params){
 		
+		GO::session()->closeWriting();
+		
 		if(!isset($params['start']))
 			$params['start']=0;
 		
@@ -227,9 +229,14 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			case 'from':
 				$sortField=$response['sent'] ? GO_Base_Mail_Imap::SORT_TO : GO_Base_Mail_Imap::SORT_FROM;
 				break;
-			case 'date':
-				$sortField=GO_Base_Mail_Imap::SORT_DATE;
+			case 'arrival':
+				$sortField=GO_Base_Mail_Imap::SORT_ARRIVAL; //arrival is faster on older mail servers
 				break;
+			
+			case 'date':
+				$sortField=GO_Base_Mail_Imap::SORT_DATE; //arrival is faster on older mail servers
+				break;
+			
 			case 'subject':
 				$sortField=GO_Base_Mail_Imap::SORT_SUBJECT;
 				break;
@@ -324,7 +331,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	}
 	
 	protected function actionSetFlag($params){
-		
+			
 		GO::session()->closeWriting();
 		
 		$messages = json_decode($params['messages']);
@@ -834,7 +841,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			if($message instanceof GO_Email_Model_ImapMessage)
 				$message->createTempFilesForAttachments(true);
 
-			$oldMessage = $message->toOutputArray(true);
+			$oldMessage = $message->toOutputArray(true,false,true);
 
 			$response['data']['htmlbody'] .= '<br /><br />' .
 							htmlspecialchars($replyText, ENT_QUOTES, 'UTF-8') .
@@ -955,7 +962,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		{
 			$message = GO_Email_Model_SavedMessage::model()->createFromMimeFile($params['path']);
 		}
-
+		
 		return $this->_messageToForwardResponse($params, $message);
 	}
 
@@ -978,7 +985,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$message->createTempFilesForAttachments();
 		}
 
-		$oldMessage = $message->toOutputArray($html);
+		$oldMessage = $message->toOutputArray($html,false,true);
 
 		// Fix for array_merge functions on lines below when the $response['data']['inlineAttachments'] and $response['data']['attachments'] do not exist
 		if(empty($response['data']['inlineAttachments']))
@@ -1039,6 +1046,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		GO::session()->closeWriting();
 
+		$params['no_max_body_size'] = !empty($params['no_max_body_size']) && $params['no_max_body_size']!=='false' ? true : false;
+		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		if(!$account)
 			throw new GO_Base_Exception_NotFound();
@@ -1057,7 +1066,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		$plaintext = !empty($params['plaintext']);
 		
-		$response = $imapMessage->toOutputArray(!$plaintext);
+		$response = $imapMessage->toOutputArray(!$plaintext,false,$params['no_max_body_size']);
+		$response['uid'] = intval($params['uid']);
+		$response['mailbox'] = $params['mailbox'];
+		$response['account_id'] = intval($params['account_id']);
 		
 		if(!$plaintext){
 			
@@ -1130,7 +1142,17 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			//find existing event
 			$event = GO_Calendar_Model_Event::model()->findByUuid((string) $vevent->uid, GO::user()->id, 0);
 //			var_dump($event);
-			if(!$event || $event->is_organizer){
+			
+			$uuid = (string) $vevent->uid;
+			
+			$alreadyProcessed = false;
+			if($event && $vevent->{"last-modified"}){
+				
+//				throw new Exception($vevent->{"last-modified"}->getDateTime()->format('Ymd G:i').' < '.GO_Base_Util_Date::get_timestamp($event->mtime));
+				$alreadyProcessed=$vevent->{"last-modified"}->getDateTime()->format('U')<=$event->mtime;
+			}
+			
+//			if(!$event || $event->is_organizer){
 				switch($vcalendar->method){
 					case 'CANCEL':					
 						$response['iCalendar']['feedback'] = GO::t('iCalendar_event_cancelled', 'email');
@@ -1148,36 +1170,41 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				if($vcalendar->method!='REQUEST' && $vcalendar->method!='PUBLISH' && !$event){
 					$response['iCalendar']['feedback'] = GO::t('iCalendar_event_not_found', 'email');
 				}
-				$uuid = (string) $vevent->uid;
+				
 				$response['iCalendar']['invitation'] = array(
 						'uuid' => $uuid,
 						'email_sender' => $response['sender'],
 						'email' => $imapMessage->account->getDefaultAlias()->email,
 						//'event_declined' => $event && $event->status == 'DECLINED',
-						//'event_id' => $event ? $event->id : 0,
-						'is_update' => $vcalendar->method == 'REPLY',
-						'is_invitation' => $vcalendar->method == 'REQUEST',
+						'event_id' => $event ? $event->id : 0,
+						'is_organizer'=>$event && $event->is_organizer,
+						'is_processed'=>$alreadyProcessed,
+						'is_update' => !$alreadyProcessed && $vcalendar->method == 'REPLY',// || ($vcalendar->method == 'REQUEST' && $event),
+						'is_invitation' => !$alreadyProcessed && $vcalendar->method == 'REQUEST', //&& !$event,
 						'is_cancellation' => $vcalendar->method == 'CANCEL'
 				);
-			}
+//			}elseif($event){
+				
+//			if($event){
+//				$response['attendance_event_id']=$event->id;
+//			}
 //			$subject = (string) $vevent->summary;
 			if(empty($uuid) || strpos($response['htmlbody'], $uuid)===false){
-				if(!$event){
+				//if(!$event){
 					$event = new GO_Calendar_Model_Event();
-					$event->importVObject($vevent, array(), true);
-				}
+					try{
+						$event->importVObject($vevent, array(), true);
+					//}
 
-				$response['htmlbody'].='<div style="border: 1px solid black;margin-top:10px">'.
-								'<div style="font-weight:bold;margin:2px;">'.GO::t('attachedAppointmentInfo','email').'</div>'.
-								$event->toHtml().
-								'</div>';
+					$response['htmlbody'].= '<div style="border: 1px solid black;margin-top:10px">'.
+									'<div style="font-weight:bold;margin:2px;">'.GO::t('attachedAppointmentInfo','email').'</div>'.
+									$event->toHtml().
+									'</div>';
+					}
+					catch(Exception $e){
+						//$response['htmlbody'].= '<div style="border: 1px solid black;margin-top:10px">Could not render event</div>';
+					}
 			}
-			
-//			switch ($vcalendar->method) {
-//				case 'REPLY':
-//
-//					break;
-//			}
 		}
 				
 		return $response;

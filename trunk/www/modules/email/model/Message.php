@@ -13,10 +13,10 @@
  * @property string $subject
  * @property int $uid
  * @property int $size
- * @property string $internal_date
- * @property string $date
- * @property int $udate
- * @property int $internal_udate
+ * @property string $internal_date Date received
+ * @property string $date Date sent
+ * @property int $udate Unix time stamp sent
+ * @property int $internal_udate Unix time stamp received
  * @property string $x_priority 
  * @property string $message_id
  * @property string $content_type
@@ -64,6 +64,13 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	protected $attachments=array();
 	
 	protected $defaultCharset='UTF-8';
+	
+	/**
+	 * True iff the actual message's body is larger than the maximum allowed. See
+	 * also how GO_Base_Mail_Imap::max_read is used.
+	 * @var boolean
+	 */
+	protected $_bodyTruncated;
 	
 	public function __construct() {
 		$this->attributes['to'] = new GO_Base_Mail_EmailRecipients($this->attributes['to']);
@@ -127,7 +134,25 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		$this->attributes['from'] = new GO_Base_Mail_EmailRecipients($this->attributes['from']);
 		$this->attributes['reply_to'] = new GO_Base_Mail_EmailRecipients($this->attributes['reply_to']);
 		
-		$this->attributes['x_priority']= isset($this->attributes['x_priority']) ? intval($this->attributes['x_priority']) : 3;
+		
+	$this->attributes['x_priority']= isset($this->attributes['x_priority']) ? strtolower($this->attributes['x_priority']) : 3;
+		switch($this->attributes['x_priority']){
+			case 'high':
+				$this->attributes['x_priority']=1;
+				break;
+			
+			case 'low':
+				$this->attributes['x_priority']=5;
+				break;
+			
+			case 'normal':
+				$this->attributes['x_priority']=3;
+				break;
+			
+			default:
+				$this->attributes['x_priority']= intval($this->attributes['x_priority']);
+				break;
+		}
 	}
 
 	/**
@@ -262,7 +287,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	 * 
 	 * @return Array
 	 */
-	public function toOutputArray($html=true, $recipientsAsString=false) {
+	public function toOutputArray($html=true, $recipientsAsString=false, $noMaxBodySize=false) {
 
 		$from = $this->from->getAddresses();		
 
@@ -297,15 +322,17 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		$response['zip_of_attachments_url']=$this->getZipOfAttachmentsUrl();
 
 		$response['inlineAttachments'] = array();
-
+		
 		if($html) {
-			$response['htmlbody'] = $this->getHtmlBody();
+			$response['htmlbody'] = $this->getHtmlBody(false,true);
 			$response['subject'] = htmlspecialchars($this->subject,ENT_COMPAT,'UTF-8');
 		} else {
-			$response['plainbody'] =$this->getPlainBody();
+			$response['plainbody'] =$this->getPlainBody(false,$noMaxBodySize);
 			$response['subject'] = $this->subject;
 		}
 
+		$response['body_truncated'] = $this->bodyIsTruncated();
+		
 		$response['smime_signed'] = isset($this->content_type_attributes['smime-type']) && $this->content_type_attributes['smime-type']=='signed-data';	
 
 		$attachments = $this->getAttachments();
@@ -340,6 +367,13 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 
 		return $response;
 	}
-
+	
+	/**
+	 * Returns true iff message body has exceeded maximum size.
+	 * @return boolean
+	 */
+	public function bodyIsTruncated() {
+		return $this->_bodyTruncated;
+	}
 	
 }

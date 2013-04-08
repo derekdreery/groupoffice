@@ -688,13 +688,13 @@ GO.addressbook.searchSender = function(sender, name){
 							height:120,
 							width:400,
 							buttons:[{
-								text: GO.lang.cmdAdd,
+								text: GO.addressbook.lang.newContact,
 								handler: function(){
 									GO.addressbook.showContactDialog(0, {values:GO.addressbook.unknownEmailWin.params});
 									GO.addressbook.unknownEmailWin.hide();
 								}
 							},{
-								text: GO.lang.cmdEdit,
+								text: GO.addressbook.lang.existingContact,
 								handler: function(){
 									if(!GO.email.findContactDialog)
 										GO.email.findContactDialog = new GO.email.FindContactDialog();

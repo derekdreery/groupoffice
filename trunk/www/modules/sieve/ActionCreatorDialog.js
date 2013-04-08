@@ -118,7 +118,7 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 			this._transForm(record.get('type'));
 			switch (record.get('type')) {
 				case 'fileinto':
-				case 'copyto':
+				case 'fileinto_copy':
 					this.cmbFolder.setValue(record.get('target'));
 					break;
 				case 'redirect':
@@ -142,7 +142,6 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 
 	_prepareValuesForStorage : function() {
 		// Build up the data before adding the data to the grid.
-		var _copy = false;
 		var _type = '';
 		var _target = '';
 		var _days = '';
@@ -153,44 +152,37 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 		switch(this.cmbAction.getValue())
 		{
 			case 'set_read':
-				_copy		= false;
 				_type		= 'set_read';
 				_target = '';
 				_text		= GO.sieve.lang.setRead;
 				break;
 			case 'fileinto':
-				_copy		= false;
 				_type		= 'fileinto';
 				_target = this.cmbFolder.getValue();
 				_text		= GO.sieve.lang.fileinto+': '+_target;
 				
 				break;
-			case 'copyto':
-				_copy		= true;
-				_type		= 'fileinto';
+			case 'fileinto_copy':
+				_type		= 'fileinto_copy';
 				_target = this.cmbFolder.getValue();
 				_text		= GO.sieve.lang.copyto+': '+_target;
 				break;
 			case 'redirect':
-				_copy		= false;
 				_type		= 'redirect';
 				_target = this.txtEmailAddress.getValue();
 				_text		= GO.sieve.lang.forwardto+': '+_target;
 				break;
 			case 'redirect_copy':
-				_copy		= true;
-				_type		= 'redirect';
+				_type		= 'redirect_copy';
 				_target = this.txtEmailAddress.getValue();
 				_text		= GO.sieve.lang.sendcopyto+': '+_target;
 				break;
 			case 'reject':
-				_copy		= '';
 				_type		= 'reject';
 				_target = this.txtMessage.getValue();
 				_text		= GO.sieve.lang.reject+': "'+_target+'"';
 				break;
 			case 'vacation':
-				_copy = '';
 				_type = 'vacation';
 				_target = '';
 				_days = this.txtDays.getValue();
@@ -203,13 +195,11 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 				_text = GO.sieve.lang.vacsendevery+' '+_days+' '+GO.sieve.lang.vacsendevery2+'. '+addressesText+GO.sieve.lang.vacationmessage+' "'+_reason+'"';
 				break;
 			case 'discard':
-				_copy		= '';
 				_type		= 'discard';
 				_target = '';
 				_text		= GO.sieve.lang.discard;
 				break;
 			case 'stop':
-				_copy		= '';
 				_type		= 'stop';
 				_target = '';
 				_text		= GO.sieve.lang.stop;
@@ -221,7 +211,6 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 		return {
 			id : this._recordId,
 			type:_type,
-			copy: _copy,
 			target:_target,
 			days: _days,
 			reason: _reason,
@@ -239,12 +228,15 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 		this._toggleComponentUse(this.txtMessage,false);
 		this._toggleComponentUse(this.txtDays,false);
 		this.doLayout();
+		
+		if(!GO.email.subscribedFoldersStore.loaded)
+			GO.email.subscribedFoldersStore.load();
 	},
 
 	_transForm : function(type) {
 		switch (type) {
 			case 'fileinto':
-			case 'copyto':
+			case 'fileinto_copy':
 				this._toggleComponentUse(this.cmbFolder,true);
 				this._toggleComponentUse(this.txtEmailAddressOptional,false);
 				this._toggleComponentUse(this.txtEmailAddress,false);
@@ -329,11 +321,12 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 			disabled: true
 		});
 
-		this.txtEmailAddress = new Ext.form.TextArea({
+		this.txtEmailAddress = new Ext.form.TextField({
 			name: 'email',
 			allowBlank:false,
+			vtype:'emailAddress',
 			anchor: '100%',
-			fieldLabel:GO.sieve.lang.addressesLabel,
+			fieldLabel:GO.lang.strEmail,
 			hidden: true,
 			disabled: true
 		});

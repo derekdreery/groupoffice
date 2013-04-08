@@ -22,11 +22,14 @@ GO.files.FilesContextMenu = function(config)
 	
 	this.openButton = new Ext.menu.Item({
 		text: GO.files.lang.open,
+		iconCls: 'btn-edit',
 		cls: 'x-btn-text-icon',
 		handler: function(){
-			GO.files.openFile({
-				id:this.records[0].data.id
-			});
+//			GO.files.openFile({
+//				id:this.records[0].data.id
+//			});
+
+			this.records[0].data.handler.call(this);
 		},
 		scope: this
 	});
@@ -43,6 +46,7 @@ GO.files.FilesContextMenu = function(config)
 	
 	this.openWithButton = new Ext.menu.Item({
 		text: GO.files.lang.openWith,
+		iconCls: 'btn-edit',
 		cls: 'x-btn-text-icon',
 		handler: function(){
 			GO.files.openFile({

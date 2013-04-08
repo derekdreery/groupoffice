@@ -12,7 +12,7 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-class GO_Dav_Fs_File extends Sabre_DAV_FS_Node implements Sabre_DAV_IFile {
+class GO_Dav_Fs_File extends Sabre\DAV\FS\Node implements Sabre\DAV\IFile {
 
 	protected $folder;
 	protected $write_permission;
@@ -32,15 +32,15 @@ class GO_Dav_Fs_File extends Sabre_DAV_FS_Node implements Sabre_DAV_IFile {
 
 		$this->folder = GO_Files_Model_Folder::model()->findByPath($fsFile->parent()->stripFileStoragePath());
 		if (!GO_Base_Model_Acl::hasPermission($this->folder->getPermissionLevel(), GO_Base_Model_Acl::WRITE_PERMISSION)){
-			throw new Sabre_DAV_Exception_Forbidden("DAV: User ".GO::user()->username." doesn't have write permission for file '".$this->relpath.'"');
+			throw new Sabre\DAV\Exception\Forbidden("DAV: User ".GO::user()->username." doesn't have write permission for file '".$this->relpath.'"');
 		}
 
 		/* if($delete){
 		  if(!$this->files->has_delete_permission($GLOBALS['GO_SECURITY']->user_id, $this->folder))
-		  throw new Sabre_DAV_Exception_Forbidden();
+		  throw new Sabre\DAV\Exception\Forbidden();
 		  }else {
 		  if(!$this->files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $this->folder))
-		  throw new Sabre_DAV_Exception_Forbidden();
+		  throw new Sabre\DAV\Exception\Forbidden();
 		  } */
 	}
 

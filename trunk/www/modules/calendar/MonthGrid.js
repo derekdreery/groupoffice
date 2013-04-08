@@ -259,6 +259,8 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				id: id,
 				cls: cellClass
 			}, true);
+			
+			cell.on('click', this.onAddClick, this);
 
 			var dayLink = Ext.DomHelper.append(cell,{
 				tag: 'a',
@@ -267,7 +269,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				html: dt.format(dateFormat)
 			}, true);
 
-			dayLink.on('click', this.onAddClick, this);
+			dayLink.on('click', this.onDayClick, this);
 
 			this.gridCells[dateStr]=cell;
 		}
@@ -279,17 +281,29 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		var cell = Ext.get(target).findParent('div.cal-monthGrid-cell', 3);
 		var date = Date.parseDate(cell.id.substring(1, cell.id.length),'Ymd');
 		this.fireEvent('changeview', this, 1, date);
+		e.stopEvent();
 	},
 
 	onWeekClick : function(e, target){
 		var date = Date.parseDate(target.id.substring(3, target.id.length),'Ymd');
 		this.fireEvent('changeview', this, 7, date);
+		e.stopEvent();
+	},
+	
+	onDayClick : function(e, target){
+		var cell = Ext.get(target).findParent('div.cal-monthGrid-cell', 3);
+		var date = Date.parseDate(cell.id.substring(1, cell.id.length),'Ymd');
+		this.fireEvent('changeview', this, 1, date);
+		e.stopEvent();
 	},
 
 	onAddClick : function(e, target){
-		var cell = Ext.get(target).findParent('div.cal-monthGrid-cell', 3);
-		var date = Date.parseDate(cell.id.substring(1, cell.id.length),'Ymd');
-		this.fireEvent('create', this, date);
+//		var cell = Ext.get(target).findParent('div.cal-monthGrid-cell', 3);
+		var date = Date.parseDate(target.id.substring(1, target.id.length),'Ymd');
+		if(date){ // in firefox this event somehow also fires on events
+			this.fireEvent('create', this, date);
+			e.stopEvent();
+		}
 	},
 
 	onResize : function(adjWidth, adjHeight, rawWidth, rawHeight){
@@ -660,21 +674,27 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				if(!GO.util.empty(eventData.status_color))
 					text += '<span class="x-calGrid-event-status" style="background-color:#'+eventData.status_color+';"></span>';				
 
-				if(daySpan==1 || !GO.util.empty(eventData.all_day_event)){
-					if(eventData.startDate.format('G')!='0')
+				if(daySpan==1){
+					if(GO.util.empty(eventData.all_day_event))
 					{
 						text += eventData.startDate.format(GO.settings.time_format)+'&nbsp;';
 					}
 					text += eventData['name'];
 				}else
 				{
-					if(i==0 && eventData.startDate.format('G')!='0'){
-						text += '&larr;&nbsp;'+eventData.startDate.format(GO.settings.time_format)+'&nbsp;'+eventData['name'];
-					}else if(i==daySpan-1 && eventData.endDate.format('G')!='0' ){
-						text += '&rarr;&nbsp;'+eventData['name']+'&nbsp;'+eventData.endDate.format(GO.settings.time_format);
+					if(i==0){
+						text += '<div class="cal-arrow-left"></div>'
+						if(GO.util.empty(eventData.all_day_event))
+							text += eventData.startDate.format(GO.settings.time_format)+'&nbsp;';
+						text += eventData['name'];
+					}else if(i==daySpan-1){
+						text += eventData['name']+'&nbsp;';
+						if(GO.util.empty(eventData.all_day_event))
+							text += eventData.endDate.format(GO.settings.time_format);
+						text += '<div class="cal-arrow-right"></div>';
 					}else
 					{
-						text += '&harr;&nbsp;'+eventData['name'];
+						text += '<div class="cal-arrows"></div>&nbsp;'+eventData['name'];
 					}
 				}
 				
@@ -708,7 +728,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 						var domId = this.gridEvents[dateStr][x].id;
 						var existingEvent = this.remoteEvents[domId];
 	//					console.log(d.name+" "+d.startDate+' > '+eventData.name+" "+eventData.startDate);
-						if(existingEvent.name>eventData.name){
+						if(existingEvent && existingEvent.name>eventData.name){
 							eventBefore=Ext.get(domId);
 							break;
 						}
@@ -726,11 +746,13 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 
 				//if(!eventData.read_only)
 				//{
-					event.on('mousedown', function(e, eventEl){
+					event.on('click', function(e, eventEl){
 						eventEl = Ext.get(eventEl).findParent('div.x-calGrid-month-event-container', 2, true);
 
 						this.selectEventElement(eventEl);
 						this.clickedEventId=eventEl.id;
+
+						e.stopEvent();
 					}, this);
 				//}
 
@@ -753,6 +775,8 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 							singleInstance : this.writePermission
 							});
 					}
+					
+					e.stopEvent();
 
 				}, this);
 

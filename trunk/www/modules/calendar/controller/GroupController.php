@@ -34,6 +34,7 @@ class GO_Calendar_Controller_Group extends GO_Base_Controller_AbstractModelContr
 			$calStmt = GO_Calendar_Model_Calendar::model()->find(GO_Base_Db_FindParams::newInstance()
 							->permissionLevel(GO_Base_Model_Acl::READ_PERMISSION)
 							->joinCustomFields()
+							->order('t.name')
 							->criteria(GO_Base_Db_FindCriteria::newInstance()
 										->addCondition('group_id',$group->id)
 										));

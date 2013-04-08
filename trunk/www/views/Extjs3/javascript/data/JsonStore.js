@@ -86,11 +86,15 @@ GO.data.JsonStore = function(config) {
 		}
 		
 	}, this);
-	
-	this.on('loadexception',		
-		function(proxy, store, response, e){
 
-			if(response.status==0)
+
+	
+	this.on('exception',		
+		function( store, type, action, options, response, arg){
+
+			if(response.isTimeout){
+				GO.errorDialog.show(GO.lang.errorTimeout);
+			}else	if(response.status==0)
 			{
 				//silently ignore because auto refreshing jobs often get here somehow??
 				//GO.errorDialog.show(GO.lang.strRequestError, "");

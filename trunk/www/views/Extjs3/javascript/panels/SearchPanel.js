@@ -71,6 +71,14 @@ GO.grid.SearchPanel = function(config){
 	var gridConfig = {
 		border:true,
 		region:'center',
+		bbar:new GO.BlindPagingToolbar({
+			cls: 'go-paging-tb',
+			store: this.store,
+			pageSize: 20,
+			displayInfo: true,
+			displayMsg: GO.lang['displayingItems'],
+			emptyMsg: GO.lang['strNoItems']
+		}),
 		tbar:[
 		GO.lang['strSearch']+': ', ' ',this.searchField,
 		'-',{
@@ -133,16 +141,16 @@ GO.grid.SearchPanel = function(config){
 		sm:new Ext.grid.RowSelectionModel({single:config.singleSelect})
 	};
 	
-	if(config.noOpenLinks)
-	{
+//	if(config.noOpenLinks)
+//	{
 		this.store.baseParams.dont_calculate_total=1;
 		this.store.baseParams.limit=20;
 		this.store.baseParams.start=0;
 		gridConfig.paging=false;
-	}else
-	{
-		gridConfig.paging=true;
-	}
+//	}else
+//	{
+//		gridConfig.paging=true;
+//	}
 		
 	this.searchGrid = new GO.grid.GridPanel(gridConfig);
 	

@@ -66,6 +66,7 @@ $l["cmdFormLabelThousandSeperator"]= 'Tisícinný oddělovač';
 $l["cmdFormLabelDecimalSeperator"]= 'Desetinný oddělovač';
 $l["cmdFormLabelCurrency"]= 'Měna';
 $l["account"]= 'Účet';
+$l["confirmPassword"]= 'Potvrzení hesla';
 $l["companyProfile"]= 'Společnost';
 $l["loginInfo"]= 'Informace o přihlášení';
 $l["changePassword"]= 'Změna hesla';
@@ -104,3 +105,20 @@ $l["firstName"]= 'Křestního jména';
 $l["sendInvitation"]='Poslat pozvánku';
 $l["contactInfo"]='Kontaktní informace';
 $l["popupNotification"]='Zobrazit vyskakovací okno, když se připomínka stane aktivní nebo přijde nový e-mail';
+$l["muteNewMailSound"]='Zakázat zvuky při novém e-mailu';
+$l["muteReminderSound"]='Zakázat zvuky při připomínce';
+$l["showSmilies"]='Zobrazit smajlíky';
+
+$l['dashdmy']='Den-Měsíc-Rok';
+$l['slashmdy']='Měsíc/Den/Rok';
+$l['dotdmy']='Den.Měsíc.Rok';
+$l['slashdmy']='Den/Měsíc/Rok';
+
+$l['generatePassword']='Generovat heslo';
+$l['generatedPasswordIs']='Vygenerováné heslo je';
+
+$l['openContact']='Otevřít kontakt';
+$l['showProUsers']='Zobrazit profesionální uživatele';
+
+$l['updateExistingOnImport']='Upravit existující uživatele (podle uživatelského jména)';
+
