@@ -1399,4 +1399,40 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		return $response;
 	}
+	
+	
+	public function actionDeleteOld($params){
+		$this->requireCli();
+		
+		if(!GO::user()->isAdmin())
+			throw new Exception("You must be admin");
+		
+		$this->checkRequiredParameters(array('date'), $params);
+		
+		$params['date']=strtotime($params['date']);
+		
+		if($params['date']>GO_Base_Util_date::date_add(time(), 0, 0, -1)){
+			throw new Exception("Please give a date at least one year in the past.");
+		}
+		
+		
+		echo "Deleting all events older than ".GO_base_util_date::format($params['date'])."\n";
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->addCondtion('start_time',$params['date'], '<')
+						->addCondtion('repeat_end_time',$params['date'], '<')
+						->addCondtion('repeat_end_time',0, '>');
+		
+		$stmt = GO_Calendar_Model_Event::model()->find($findParams);
+		
+		foreach($stmt as $event){
+			$event->delete();
+			echo '.';
+		}
+		
+		echo "\n";
+		
+		echo "All done!\n";
+		
+	}
 }
