@@ -156,7 +156,7 @@ GO.site.ContentDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 							displayField:'name',
 							mode: 'remote',
 							triggerAction: 'all',
-							allowBlank: false
+							allowBlank: true
 						})
 					]
 				}
@@ -174,5 +174,9 @@ GO.site.ContentDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	
 	setSiteId : function(siteId){
 		this.addBaseParam('site_id', siteId);
+	},
+	
+	focus : function(){
+
 	}
 });

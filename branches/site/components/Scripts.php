@@ -166,27 +166,31 @@ class GO_Site_Components_Scripts
 
 	/**
 	 * Registers a CSS file
-	 * @param string $path Path of the CSS file
+	 * @param string $url Url to the CSS file
 	 * @param string $media media that the CSS file should be applied to. If empty, it means all media types.
 	 * @return GO_Site_Components_Scripts myself for chaining.
 	 */
-	public function registerCssFile($path, $media = '')
+	public function registerCssFile($url, $media = '')
 	{
+//		$url = Site::model()->templateUrl.$url;
+		
 		$this->hasScripts = true;
-		$this->cssFiles[$path] = $media;
+		$this->cssFiles[$url] = $media;
 		return $this;
 	}
 
 	/**
 	 * Register a javascript file
-	 * @param string $path path of the javascript file
+	 * @param string $url url to the javascript file
 	 * @param integer $position (HEAD, BEGIN, END)
 	 * @return GO_Site_Components_Scripts myself for chaining
 	 */
-	public function registerScriptFile($path, $position = self::POS_HEAD)
+	public function registerScriptFile($url, $position = self::POS_HEAD)
 	{
+//		$url = Site::model()->templateUrl.$url;
+		
 		$this->hasScripts = true;
-		$this->scriptFiles[$position][$path] = $path;
+		$this->scriptFiles[$position][$url] = $url;
 		return $this;
 	}
 	

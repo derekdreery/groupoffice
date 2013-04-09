@@ -207,7 +207,7 @@ class GO_Site_Components_UrlManager
 			return $this->_baseUrl;
 		else
 		{
-			$this->_baseUrl = Site::model()->Request()->getBaseUrl();
+			$this->_baseUrl = Site::request()->getBaseUrl();
 			return $this->_baseUrl;
 		}
 	}

@@ -78,14 +78,19 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 		);
 	}
 
-	public function getTemplatePath(){
+	/**
+	 * Get the path to the site's file storage. It is web accessible through an 
+	 * alias /public. This folder contains template files and component assets.
+	 * 
+	 * @return GO_Base_Fs_Folder
+	 */
+	public function getFileStorageFolder(){
 		
-		if(empty($this->module))
-			return false;
+		$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'site/'.$this->id.'/');
+		$folder->create();
 		
-		return GO::config()->root_path . 'modules/' . $this->module . '/views/site/';
+		return $folder;
 	}
-	
 	
 	/**
 	 * Get the config parameters of the site.
@@ -174,4 +179,30 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 		
 		return $treeNodes;
 	}
+	
+	public function getApacheConfig(){
+		return '
+<VirtualHost *:80>
+
+<Directory /var/www/groupoffice-4.1/www/modules/site>
+ Options FollowSymLinks
+ AllowOverride All
+
+				RewriteEngine On
+				RewriteBase /
+
+				RewriteCond %{REQUEST_FILENAME} !-f
+				RewriteCond %{REQUEST_FILENAME} !-d
+				RewriteRule ^(.*)\?*$ index.php/$1 [L,QSA]
+</Directory>
+
+DocumentRoot /var/www/groupoffice-4.1/www/modules/site
+Alias /public /home/groupoffice/site/1/public
+ServerName www.giralisgroep.nl
+#ErrorLog /var/log/apache2/giralis.nl.log
+</VirtualHost>
+		';
+	}
+	
+	
 }

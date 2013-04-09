@@ -1,6 +1,6 @@
 GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 	
-	contentDialog : new GO.site.ContentDialog(),
+	contentDialog : false,
 	
 	submitAction : 'update',
 	setSiteId : function(siteId){
@@ -94,7 +94,8 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 		});
 		
 		this.advancedButton.on("click", function(){
-			this.contentDialog.show(this.form.baseParams.id);
+			this.showContentDialog(this.form.baseParams.id);
+			
 		},this);
 		
 		config.tbar=new Ext.Toolbar({
@@ -138,9 +139,16 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 		
 		GO.site.ContentPanel.superclass.constructor.call(this, config);
 		
-		this.contentDialog.on('hide',function(){
-			this.form.load();
-		},this);
+		
+	},
+	showContentDialog : function(id){
+		if(!this.contentDialog){
+			this.contentDialog = new GO.site.ContentDialog();
+			this.contentDialog.on('hide',function(){
+				this.form.load();
+			},this);
+		}
+		this.contentDialog.show(id);
 	}
 });
 

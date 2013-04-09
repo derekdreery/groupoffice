@@ -16,7 +16,7 @@ class GO_Site_Components_Router{
 	public function runController() {
 		
 		$route = Site::urlManager()->parseUrl(Site::request());
-
+		
 		if (($route = trim($route, '/')) === '')
 			$route = $this->defaultController;
 

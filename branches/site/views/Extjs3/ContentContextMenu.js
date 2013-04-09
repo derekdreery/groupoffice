@@ -24,7 +24,7 @@ GO.site.ContentContextMenu = function(config){
 		scope:this,
 		handler: function()
 		{
-			this.treePanel.contentPanel.contentDialog.show(this.selected.attributes.content_id);
+			this.treePanel.contentPanel.showContentDialog(this.selected.attributes.content_id);
 		}
 	});
 	

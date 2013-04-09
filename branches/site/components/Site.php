@@ -39,6 +39,12 @@ class Site {
 	private static $_scripts;
 	
 	/**
+	 *
+	 * @var GO_Site_Components_Template 
+	 */
+	private static $_template;
+	
+	/**
 	 * Handles string translation for sites 
 	 */
 	public static function t($key)
@@ -95,7 +101,6 @@ class Site {
 	 * @throws GO_Base_Exception_NotFound
 	 */
 	public static function launch() {
-		
 		if(isset($_GET['site_id']))
 			GO::session()->values['sites']['site_id']=$_GET['site_id'];
 		
@@ -139,6 +144,26 @@ class Site {
 		if (self::$_scripts == null)
 			self::$_scripts = new GO_Site_Components_Scripts();
 		return self::$_scripts;
+	}
+	
+	/**
+	 * 
+	 * @return GO_Site_Components_Template
+	 */
+	public static function template(){
+		if (self::$_template == null)
+			self::$_template = new GO_Site_Components_Template();
+		return self::$_template;
+	}
+	
+	/**
+	 * Get URL to a public template file that is accessible with the browser.
+	 * 
+	 * @param string $relativePath
+	 * @return string
+	 */
+	public static function file($relativePath){
+		return self::template()->getUrl().$relativePath;
 	}
 	
 	

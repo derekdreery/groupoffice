@@ -146,34 +146,6 @@ abstract class GO_Site_Controller_Abstract extends GO_Base_Controller_AbstractCo
 			require($_viewFile_);
 	}
 
-	
-//	private function getViewPath($viewName = false)
-//	{
-//		if(isset($viewName) && (substr($viewName, 0, 2) == '//'))
-//			return $this->getTemplatePath() . 'views/';
-//		else
-//			return $this->getTemplatePath() . 'views/' . $this->getModule()->id . '/';
-//	}
-
-	/**
-	 * Returns to url of the template folder.
-	 * Will search in root/{templatename}
-	 * Can be used by Views for inserting css or js files from template folder
-	 * @return string  url to template assets
-	 * @throws GO_Base_Exception_NotFound when the template directory doesn't excists
-	 */
-	public function getTemplateUrl()
-	{
-		$templateUrl = Site::model()->getSiteModule()->moduleManager->path();
-		
-		return $templateUrl;
-//		$template_url = GO::config()->host . 'modules/sites/templates/' . $this->template . '/assets/';
-//		if(file_exists($template_url)) //look in sites module
-//			return $template_url;
-
-		throw new GO_Base_Exception_NotFound('Could not find the template directory '. $template_url);
-	}
-
 	/**
 	 * Returns the path to the viewfile based on the used template and module
 	 * It will search for a template first if not found look in the views/site/ folder
@@ -185,7 +157,7 @@ abstract class GO_Site_Controller_Abstract extends GO_Base_Controller_AbstractCo
 	{	
 		$module = Site::model()->getSiteModule();
 		
-		return $module->moduleManager->path() . '/views/site/' . $viewName . '.php';
+		return $module->moduleManager->path() . 'views/site/' . $viewName . '.php';
 	}
 
 	/**
@@ -197,7 +169,7 @@ abstract class GO_Site_Controller_Abstract extends GO_Base_Controller_AbstractCo
 	{
 		$module = Site::model()->getSiteModule();
 		
-		return $module->moduleManager->path() . '/views/site/layouts/' . $layoutName . '.php';
+		return $module->moduleManager->path() . 'views/site/layouts/' . $layoutName . '.php';
 	}
 
 	/**
@@ -296,11 +268,11 @@ abstract class GO_Site_Controller_Abstract extends GO_Base_Controller_AbstractCo
 			if(!GO::user()){
 				//Path the page you tried to visit into lastPath session for redirecting after login
 				GO::session()->values['sites']['returnUrl'] = Site::request()->getRequestUri();
-				$loginpath = !empty(Site::model()->getSite()->login_url) ? Site::model()->Site()->login_url : '/sites/site/login';
+				$loginpath = 'site/account/login';
 				$this->redirect(array($loginpath));
 			}  else {
-				$controller = new GO_Site_Controller_Site();
-				$controller->render('error', array('error' => $e));
+//				$controller = new GO_Site_Controller_Site();
+				$this->render('error', array('error' => $e));
 			}
 			//$this->render('error', array('error'=>$e));
 		}
@@ -308,19 +280,12 @@ abstract class GO_Site_Controller_Abstract extends GO_Base_Controller_AbstractCo
 			header("HTTP/1.0 404 Not Found");
       header("Status: 404 Not Found");
 			
-			$controller = new GO_Site_Controller_Error();
-			
-			$controller->action404();
+			$this->render('errors/404', array('error' => $e));
 		}
 		catch (Exception $e)
 		{
-			$controller = new GO_Site_Controller_Site();
-			$controller->render('error', array('error' => $e));
+			$this->render('errors/error', array('error' => $e));
 		}
-//		catch(Exception $e)
-//		{
-//			echo $e->getMessage();
-//		}
 	}
 	
 	/**
@@ -331,10 +296,6 @@ abstract class GO_Site_Controller_Abstract extends GO_Base_Controller_AbstractCo
 		
 	}	
 	
-	protected function actionContent($params){
-		$content = GO_Site_Model_Content::model()->findBySlug($params['slug']);
-		$this->render($content->template,array('content'=>$content));
-	}
 	
 }
 

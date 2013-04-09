@@ -127,7 +127,17 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	 public function cleanSlug(){
 		 //TODO: Clean the slug
 	 }
-
+	 
+	 /**
+	  * Get the url to this content item.
+	  * 
+	  * @param string $route parameter can be set when you have "special" 
+	  * controller actions to handle your content
+	  * @return string
+	  */
+	 public function getUrl($route='site/front/content'){
+		 return Site::urlManager()->createUrl($route,array('slug'=>$this->slug));
+	 }
 	 
 	 /**
 	  * Check if this content item has children
