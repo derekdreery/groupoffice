@@ -34,6 +34,7 @@
  * @property String $mod_rewrite_base_path
  * @property String $base_path
  * @property int $acl_id
+ * @property type $files_folder_id
  */
 class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 	
@@ -53,6 +54,13 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 		return parent::model($className);
 	}
 
+	/*
+	 * Attach the customfield model to this model.
+	 */
+	public function customfieldsModel() {
+		return 'GO_Site_Customfields_Model_Site';
+	}
+	
 	/**
 	 * Enable this function if you want this model to check the acl's automatically.
 	 */
@@ -60,6 +68,14 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 		return 'acl_id';
 	}
 
+	public function hasFiles() {
+		return true;
+	}
+	
+	public function buildFilesPath() {
+		return 'site/'.$this->id.'/public/files';
+	}
+	
 	/**
 	 * Returns the table name
 	 */

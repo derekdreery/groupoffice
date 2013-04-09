@@ -50,6 +50,13 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 		return parent::model($className);
 	}
 
+	/*
+	 * Attach the customfield model to this model.
+	 */
+	public function customfieldsModel() {
+		return 'GO_Site_Customfields_Model_Content';
+	}
+	
 //	protected function init() {
 //		$this->columns['slug']['unique'] = array('site_id');
 //		parent::init();

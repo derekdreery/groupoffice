@@ -9,7 +9,14 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 	load : function(contentId){
 		this.setContentId(contentId);
 		this.ownerCt.getLayout().setActiveItem(this);
-		this.form.load();
+		this.form.load({
+			success:function(form, action){
+				if(this.fileBrowseButton){
+					this.fileBrowseButton.setId(action.result.data.site_id);
+				}
+			},
+			scope:this
+		});
 	},
 	create : function(siteId,parentId){
 		this.setSiteId(siteId);
@@ -106,6 +113,12 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 				this.advancedButton
 			]
 		});
+		
+		if (GO.files) {
+			config.tbar.add(this.fileBrowseButton = new GO.files.FileBrowserButton({
+				model_name:"GO_Site_Model_Site"
+			}));
+		}
 		
 		this.titleField = new Ext.form.TextField({
 			name: 'title',
