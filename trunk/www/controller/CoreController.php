@@ -526,7 +526,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 					echo "\n".'"'.$responseIndex.'" : '.ob_get_clean().",\n";
 				}
 			}
-			echo "success:true\n}\n";	
+			echo '"success":true}';	
 	}
 	
 	
