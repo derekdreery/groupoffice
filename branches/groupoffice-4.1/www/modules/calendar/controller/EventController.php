@@ -804,7 +804,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			if($cal->id == $defaultCalendar->id)
 				return $cal;
 			
-			if(empty($calendar) && $cal->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
+			if(empty($calendar) && $cal->checkPermissionLevel(GO_Base_Model_Acl::CREATE_PERMISSION))
 				$calendar = $cal;
 		}
 		
