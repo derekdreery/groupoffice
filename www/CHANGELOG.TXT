@@ -1,4 +1,5 @@
 4.1.55
+- Fixed saving of tasks recurrence to "no recurrence" value
 - Order Dialog in billing is now modal
 - Order Model will check for recurring Orders before Delete
 - Recurred Order without an order_id can no longer be deleted
