@@ -1,4 +1,5 @@
 4.1.55
+- The generated ICS files will have correct daylight saving time set
 - Fixed saving of tasks recurrence to "no recurrence" value
 - Order Dialog in billing is now modal
 - Order Model will check for recurring Orders before Delete
