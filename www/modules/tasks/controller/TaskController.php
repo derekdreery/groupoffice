@@ -80,13 +80,17 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 	}
 
 	protected function beforeSubmit(&$response, &$model, &$params) {
-		
-		if(isset($params['freq']) && !empty($params['freq'])) {
-			$rRule = new GO_Base_Util_Icalendar_Rrule();
-			$rRule->readJsonArray($params);		
-			$model->rrule = $rRule->createRrule();
+					
+		if(isset($params['freq'])){
+			if(!empty($params['freq'])){
+				$rRule = new GO_Base_Util_Icalendar_Rrule();
+				$rRule->readJsonArray($params);		
+				$model->rrule = $rRule->createRrule();
+			} else {
+				$model->rrule = '';
+			}
 		}
-			
+		
 		if(isset($params['remind'])) // Check for a setted reminder
 			$model->reminder= GO_Base_Util_Date::to_unixtime($params['remind_date'].' '.$params['remind_time']);
 		
