@@ -86,7 +86,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	}
 	
 	/**
-	 * Find's meesages in a given mailbox
+	 * Find's messages in a given mailbox
 	 * 
 	 * @param GO_Email_Model_Account $account
 	 * @param string $mailbox

@@ -25,6 +25,7 @@ class GO_Email_Controller_Alias extends GO_Base_Controller_AbstractModelControll
 									"criteria"=>  GO_Base_Db_FindCriteria::newInstance()->addCondition('user_id', GO::user()->id,"=",'sor')
 							))
 							->ignoreAdminGroup()
+							->permissionLevel(GO_Base_Model_Acl::CREATE_PERMISSION)
 							->order(array('order','default'), array('DESC','DESC'));
 		}else
 		{
