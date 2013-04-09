@@ -83,7 +83,7 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 		
 		foreach($this->_results as $event)
 			$this->_insertEvent($event,$cellEvents);
-				
+					
 		if (($this->_days > 1 && $this->_days<60) || !$list) {
 
 			if($headers)
@@ -106,6 +106,8 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 			$this->SetFillColor(248, 248, 248);
 			$time = $this->_start_time;
 
+			// print headers
+			
 			if ($headers) {
 				if (!empty($calendar_name)) {
 					$this->Cell($nameColWidth, 20, '', 1, 0, 'L', 1);
@@ -120,6 +122,8 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 
 			$this->SetFont($this->font, '', $this->font_size);
 
+			// set these variables right after the header
+			
 			$cellStartY = $maxY = $this->getY();
 			$pageStart = $this->PageNo();
 
@@ -138,6 +142,10 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 			}
 
 
+			$biggestPageNo = $pageStart;
+			$nCellsOfLongestColumn = 0;
+			$sizeOfLongestColumn = 0;
+			
 			for ($i = 0; $i < $this->_days; $i++) {
 				$pos = $i - $this->_daysDone;
 				$this->setPage($pageStart);
@@ -149,6 +157,8 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 					$this->setX($tableLeftMargin + ($pos * $cellWidth));
 				}
 
+				$nCellsOfColumn = 0;
+				
 				//while($event = array_shift($cellEvents[$i]))
 				foreach ($cellEvents[$i] as $event) {
 					//$time = $event['all_day_event'] == '1' ? '-' : date($time_format, $event['start_time']);
@@ -158,8 +168,8 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 					
 					
 					$event['name']=  html_entity_decode($event['name']);
-					$event['description']=  html_entity_decode($event['description']);
-					$event['location']=  html_entity_decode($event['location']);
+					$event['description']= !empty($event['description']) ? html_entity_decode($event['description']) : '';
+					$event['location']= !empty($event['location']) ? html_entity_decode($event['location']) : '';
 
 					//$this->Cell($timeColWidth, $this->cell_height, $time, 0, 0, 'L');
 					//$this->MultiCell($cellWidth-$timeColWidth,$this->cell_height, $event['name'], 0, 1, 0, 1, '', '', true, 0, false, false, 0);
@@ -191,7 +201,8 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 
 					$this->SetFillColorArray($event_background_color);
 					
-					$this->MultiCell($cellWidth /*- $timeColWidth*/, $this->cell_height,$event_name, array('B'=>array('width' => 2,'color' => array(255, 255, 255))), 1, 1, 1, '', '', true, 0, false, false, 0);
+					$nCells = $this->MultiCell($cellWidth /*- $timeColWidth*/, $this->cell_height,$event_name, array('B'=>array('width' => 2,'color' => array(255, 255, 255))), 1, 1, 1, '', '', true, 0, false, false, 0);
+					$nCellsOfColumn += $nCells;
 					
 					// $this->MultiCell($cellWidth /*- $timeColWidth*/, $this->cell_height, $event['name'], 'B', 1, 1, 1, '', '', true, 0, false, false, 0);	
 					$this->SetDrawColor(125,165, 65);
@@ -200,7 +211,14 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 					$this->setX($tableLeftMargin + ($pos * $cellWidth));
 				}
 
+				if ($this->pageNo() > $biggestPageNo)
+					$biggestPageNo = $this->pageNo();
 
+				if ($nCellsOfColumn > $nCellsOfLongestColumn) {
+					$nCellsOfLongestColumn = $nCellsOfColumn;
+					$sizeOfLongestColumn = $nCellsOfLongestColumn*($this->cell_height+0.7);
+				}
+				
 				$y = $this->getY();
 				if ($y < $cellStartY) {
 					//went to next page so we must add the page height.
@@ -211,44 +229,68 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 
 
 				$weekCounter++;
-				if ($weekCounter == $maxCells) {
+				if ($weekCounter == $maxCells) { // maxCells is the max number of columns, which can be at most 7.
 					$this->setPage($pageStart);
 
 					$weekCounter = 0;
 					$this->_daysDone+=$maxCells;
 
 					//minimum cell height
-					$cellHeight = $maxY - $cellStartY;
-					if ($cellHeight < $minHeight)
-						$cellHeight = $minHeight;
+						$cellHeight = $sizeOfLongestColumn;// $maxY - $cellStartY;
+						$sizeOfLongestColumn = 0;
+						$nCellsOfLongestColumn = 0;
+						if ($cellHeight < $minHeight)
+							$cellHeight = $minHeight;
 
-					if ($cellHeight + $this->getY() > $this->h - $this->bMargin) {
-						$cellHeight1 = $this->h - $this->getY() - $this->bMargin;
-						$cellHeight2 = $cellHeight - $cellHeight1 - $this->tMargin - $this->bMargin;
+					if ($cellHeight + $this->getY() > $this->h - $this->bMargin) { // If cell height would exceed page's current writable space.
+						
+						do {
 
-						$this->setXY($this->lMargin, $cellStartY);
+							// Set position to upper left corner.
+							if ($this->pageNo()==$pageStart)
+								$this->setXY($this->lMargin, $cellStartY);
+							else
+								$this->setXY($this->lMargin, $this->tMargin);
+								
+							$cellHeightFirstPart = $this->h - $this->getY() - $this->bMargin; // This is the height in the page's writable space that remains from the current position.
+							$cellHeightRemaining = $cellHeight - $cellHeightFirstPart; // The surplus cell height.
+
+							if (!empty($calendar_name)) {
+								$this->Cell($nameColWidth, $cellHeightFirstPart, '', 'LTR', 0); // Draw cell with left-top-right border for the remaining writable space on the page.
+//								$this->setPage($pageStart);
+							}
+							for ($n = 0; $n < $maxCells; $n++) { // For at most 7 times...
+								$this->Cell($cellWidth, $cellHeightFirstPart, '', 'LTR', 0); // ...Draw a cell with left-top-right border for the remaining writable space on the page.
+//								$this->setPage($pageStart);
+							}
+							$this->ln(); // Draw horizontal line.
+
+							$this->addPage();
+							
+							$cellHeight -= $cellHeightFirstPart;
+							
+						} while ($cellHeightRemaining + $this->getY() > $this->h - $this->bMargin);
+						
 						if (!empty($calendar_name)) {
-							$this->Cell($nameColWidth, $cellHeight1, '', 'LTR', 0);
+							$this->Cell($nameColWidth, $cellHeightRemaining, '', 'LBR', 0); // 
+//							$this->setPage($pageStart);
 						}
 						for ($n = 0; $n < $maxCells; $n++) {
-							$this->Cell($cellWidth, $cellHeight1, '', 'LTR', 0);
+							$this->Cell($cellWidth, $cellHeightRemaining, '', 'LBR', 0);
+//							$this->setPage($pageStart);
 						}
 						$this->ln();
-
+						
+					} else { // If the cell height would not exceed the page height:
+						
+						$this->setXY($this->lMargin, $cellStartY); // Set position to top left.
 						if (!empty($calendar_name)) {
-							$this->Cell($nameColWidth, $cellHeight2, '', 'LBR', 0);
+							$this->Cell($nameColWidth, $cellHeight, '', 1, 0); // Draw a cell for the calendar name.
+							$this->setPage($pageStart);
 						}
 						for ($n = 0; $n < $maxCells; $n++) {
-							$this->Cell($cellWidth, $cellHeight2, '', 'LBR', 0);
-						}
-						$this->ln();
-					} else {
-						$this->setXY($this->lMargin, $cellStartY);
-						if (!empty($calendar_name)) {
-							$this->Cell($nameColWidth, $cellHeight, '', 1, 0);
-						}
-						for ($n = 0; $n < $maxCells; $n++) {
-							$this->Cell($cellWidth, $cellHeight, '', 1, 0);
+							$this->Cell($cellWidth, $cellHeight, '', 1, 0); // Draw the remaining cells of the row.
+							$this->setPage($pageStart);
 						}
 						$this->ln();
 					}
@@ -257,6 +299,10 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 					$pageStart = $this->PageNo();
 				}
 			}
+			
+			for ($i=$pageStart; $i<$biggestPageNo; $i++)
+				$this->addPage();
+			
 		}
 		
 		if ($list) {
@@ -317,7 +363,7 @@ class GO_Calendar_Views_Pdf_CalendarPdf extends GO_Base_Util_Pdf {
 						}
 						
 						$this->H4($event['name']);
-
+						
 						if (empty($event['all_day_event'])) {
 							$text = sprintf(GO::t('printTimeFormat','calendar'), $event['start_time'], $event['end_time']);
 						} else {
