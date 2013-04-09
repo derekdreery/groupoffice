@@ -286,7 +286,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * 'unique'=>false //true to enforce a unique value
 	 * 'greater'=>'start_time' //this column must be greater than column start time
 	 * 'greaterorequal'=>'start_time' //this column must be greater or equal to column start time
-	 * 
+	 * 'customfield'=> 'If this is a custom field this is the custom field type object. eg. GO_Customfields_Customfieldtype_Text'
 	 * The validator looks like this:
 	 * 
 	 * function validate ($value){
@@ -2015,6 +2015,20 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	public function getColumns()
 	{
 		return $this->columns;
+	}
+	
+	/**
+	 * Returns a column specification see $this->columns;
+	 * 
+	 * @see GO_Base_Db_ActiveRecord::$columns	
+	 * @return array
+	 */
+	public function getColumn($name)
+	{
+		if(!isset($this->columns[$name]))
+			return false;
+		else
+			return $this->columns[$name];
 	}
 	
 	/**
