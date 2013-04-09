@@ -69,6 +69,12 @@ Ext.extend(GO.site.MainPanel, Ext.Panel,{
 	}
 });
 
+
+
+
+
+
+
 GO.moduleManager.addModule('site', GO.site.MainPanel, {
 	title : GO.site.lang.name,
 	iconCls : 'go-tab-icon-site'

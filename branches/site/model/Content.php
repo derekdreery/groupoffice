@@ -39,16 +39,28 @@
 
 class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 
-	/**
-	 * Returns a static model of itself
-	 * 
-	 * @param String $className
-	 * @return GO_Site_Model_Content
-	 */
-	public static function model($className=__CLASS__)
-	{	
-		return parent::model($className);
+	
+	public function __get($name) {
+		$val = parent::__get($name);
+		
+		if($val === null){
+			$val = $this->getCustomFieldValueByName($name);
+		}
+		
+		return $val;
+		
 	}
+	
+//	/**
+//	 * Returns a static model of itself
+//	 * 
+//	 * @param String $className
+//	 * @return GO_Site_Model_Content
+//	 */
+//	public static function model($className=__CLASS__)
+//	{	
+//		return parent::model($className);
+//	}
 
 	/*
 	 * Attach the customfield model to this model.
@@ -186,5 +198,28 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 		 }
 		 
 		 return $tree;
-	 }	 
+	 }
+	 
+	 public function getCustomFieldValueByName($cfName){
+		$id = $this->getCustomfieldsRecord()->getColIdByName($cfName);
+
+		$column = $this->getCustomfieldsRecord()->getColumn('col_'.$id);
+
+		$type = $column['customfield']->getAttribute('datatype');
+		
+		$value = $this->getCustomfieldsRecord()->{'col_'.$id};
+				
+		switch($type){
+			case 'GO_Site_Customfieldtype_Sitefile':
+				
+				$value = str_replace('site/'.$this->site_id.'/','', $value);
+				
+				
+				return $value;
+
+				break;
+		}
+
+		return false;
+	 }
 }

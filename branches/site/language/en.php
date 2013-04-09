@@ -12,6 +12,10 @@ $l["metaDescriptionText"] = "Meta tags are a great way for webmasters to provide
 $l["info"] = "Info";
 $l["infoDescriptionText"] = "Information about this content item";
 
+
+$l["siteFile"]="Site File";
+$l["siteFile"]="Site Multifile";
+
 $l["template"] = "Template";
 $l["defaultChildTemplate"] = "Default child template";
 $l["templateDescriptionText"] = "Choose a template in which you want to view this content item";

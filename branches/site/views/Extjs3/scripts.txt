@@ -1,3 +1,6 @@
+modules/site/views/Extjs3/SelectFile.js
+modules/site/views/Extjs3/Customfield.js
+
 modules/site/views/Extjs3/ContentDialog.js
 modules/site/views/Extjs3/SiteDialog.js
 

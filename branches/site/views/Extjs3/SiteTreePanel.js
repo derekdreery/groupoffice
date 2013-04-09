@@ -57,6 +57,8 @@ Ext.extend(GO.site.SiteTreePanel, Ext.tree.TreePanel,{
 		
 		node.select();
 		
+		GO.site.currentSiteId = node.attributes.site_id;
+		
 		if(this.isSiteNode(node)){
 			// DO NOTHING
 		}else if(this.isRootContentNode(node)){
