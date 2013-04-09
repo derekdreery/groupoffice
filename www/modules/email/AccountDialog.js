@@ -348,13 +348,14 @@ GO.email.AccountDialog = function(config) {
 	});
 	
 	var levelLabels={};
-	levelLabels[GO.permissionLevels.read]=GO.email.lang.useAccount;
+	levelLabels[GO.permissionLevels.create]=GO.email.lang.useAccount;
 
 	this.permissionsTab = new GO.grid.PermissionsPanel({levels:[
 			GO.permissionLevels.read,
+			GO.permissionLevels.create,
 			GO.permissionLevels.manage
-	],
-	levelLabels:levelLabels
+	  ],
+	  levelLabels:levelLabels
 	});
 
 	//this.permissionsTab.disabled = false;

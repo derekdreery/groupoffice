@@ -213,6 +213,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		$imap = $account->openImapConnection($params["mailbox"]);
 		
+		$response['permission_level'] = $account->getPermissionLevel();
+		
 		$response['unseen']=array();
 		
 		//special folder flags
@@ -253,7 +255,9 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			
 			// TODO: Fix this on the clientside so the user is unable to delete emails with the GUI when he has insufficient rights
 			// Check if the current user has at least Delete permissions for deleting.
-	//		if($account->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION)){
+			if(!$account->checkPermissionLevel(GO_Base_Model_Acl::CREATE_PERMISSION))
+			  $response['deleteFeedback']=GO::t('strUnauthorizedText');
+			else {
 				$uids = json_decode($params['delete_keys']);
 
 				if(!$response['trash'] && !empty($account->trash)) {
@@ -271,9 +275,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 						$response['deleteFeedback']=GO::t('deleteError').":\n\n".$lasterror."\n\n".GO::t('disable_trash_folder','email');
 					}
 				}
-	//		} else {
-	//			$response['deleteFeedback']=GO::t('strUnauthorizedText');
-	//		}
+			}
 		}
 		
 		//make sure we are connected to the right mailbox after move and delete operations
@@ -330,6 +332,17 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		return $response;
 	}
 	
+	/**
+	 * Add a flag to one or multiple messages
+	 * 
+	 * @param array $params
+	 * - int account_id: the id of the GO email account
+	 * - string messages: the json encoded mail messages
+	 * - string mailbox: the mailbox the find the messages in
+	 * - string flag: the flag to set. eg "FLAG"
+	 * - boolean clear: true is the other flags should be removed 
+	 * @return type
+	 */
 	protected function actionSetFlag($params){
 			
 		GO::session()->closeWriting();
@@ -337,7 +350,9 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$messages = json_decode($params['messages']);
 		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
-		/* @var $account GO_Email_Model_Account */
+		
+		if(!$account->checkPermissionLevel(GO_Base_Model_Acl::CREATE_PERMISSION))
+		  throw new GO_Base_Exception_AccessDenied();
 		
 		$imap = $account->openImapConnection($params["mailbox"]);
 
@@ -1533,7 +1548,19 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 //		return $response;
 //	}
 
-	
+	/**
+	 * This action will move imap messages from one folder to another
+	 * 
+	 * @param array $params
+	 * - string messages: json encoded message uid's
+	 * - int total: total messages to be moved
+	 * - int from_account_id: the GO email account id the messages should be moved from
+	 * - int to_account_id: the GO email account id the message should be moved to
+	 * - string from_mailbox: the imap mailbox name to move messages from
+	 * - string to_mailbox: the imap mailbox name to move messages to
+	 * @return array $response
+	 * @throws Exception when moving a message fails
+	 */
 	protected function actionMove($params){
 			$start_time = time();
 			
@@ -1545,6 +1572,12 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			//$from_account = $imap->open_account($params['from_account_id'], $params['from_mailbox']);
 			$from_account=GO_Email_Model_Account::model()->findByPk($params['from_account_id']);
 			$to_account=GO_Email_Model_Account::model()->findByPk($params['to_account_id']);
+			
+			if(!$from_account->checkPermissionLevel(GO_Base_Model_Acl::CREATE_PERMISSION))
+			  throw new GO_Base_Exception_AccessDenied();
+			
+			if(!$to_account->checkPermissionLevel(GO_Base_Model_Acl::CREATE_PERMISSION))
+			  throw new GO_Base_Exception_AccessDenied();
 
 			$imap = $from_account->openImapConnection($params['from_mailbox']);
 			$imap2 = $to_account->openImapConnection($params['to_mailbox']);

@@ -73,3 +73,6 @@ $updates["201212171547"][]="ALTER TABLE  `em_links` CHANGE  `uid`  `uid` VARCHAR
 $updates["201303011412"][]="delete from go_state where name='em-pnl-west' or name='eml-pnl-north';";
 
 $updates["201303011412"][]="delete from go_state where name='em-pnl-west' or name='eml-pnl-north';";
+
+// All acls for email accounts with read permission will be updated to create permissions
+$updates["201304081400"][]="UPDATE go_acl AS a JOIN go_acl_items AS i ON a.acl_id = i.id SET a.`level`='20' WHERE i.description = 'em_accounts.acl_id' AND a.`level` = 10;";

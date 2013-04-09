@@ -248,92 +248,91 @@ GO.email.EmailClient = function(config){
 		});
 	}
 
-	var contextItems = [
-	{
-		text: GO.email.lang.markAsRead,
-		handler: function(){
-			this.flagMessages('Seen', false);
-		},
-		scope:this,
-		multiple:true
-	},
-	{
-		text: GO.email.lang.markAsUnread,
-		handler: function(){
-			this.flagMessages('Seen', true);
-		},
-		scope: this,
-		multiple:true
-	},
-	{
-		text: GO.email.lang.flag,
-		handler: function(){
-			this.flagMessages('Flagged', false);
-		},
-		scope: this,
-		multiple:true
-	},
-	{
-		text: GO.email.lang.unflag,
-		handler: function(){
-			this.flagMessages('Flagged', true);
-		},
-		scope: this,
-		multiple:true
-	},
-	'-',
-	{
-		text: GO.email.lang.viewSource,
-		handler: function(){
+	  var contextItems = [
+	  {
+		  text: GO.email.lang.markAsRead,
+		  handler: function(){
+			  this.flagMessages('Seen', false);
+		  },
+		  scope:this,
+		  multiple:true
+	  },
+	  {
+		  text: GO.email.lang.markAsUnread,
+		  handler: function(){
+			  this.flagMessages('Seen', true);
+		  },
+		  scope: this,
+		  multiple:true
+	  },
+	  {
+		  text: GO.email.lang.flag,
+		  handler: function(){
+			  this.flagMessages('Flagged', false);
+		  },
+		  scope: this,
+		  multiple:true
+	  },
+	  {
+		  text: GO.email.lang.unflag,
+		  handler: function(){
+			  this.flagMessages('Flagged', true);
+		  },
+		  scope: this,
+		  multiple:true
+	  },
+	  '-',
+	  this.contextMenuSource = new Ext.menu.Item ({
+		  text: GO.email.lang.viewSource,
+		  handler: function(){
 
-			var record = this.messagesGrid.selModel.getSelected();
-			if(record)
-			{
-				var win = window.open(GO.url("email/message/source",{account_id:this.account_id,mailbox:this.mailbox,uid:record.data.uid}));
-				win.focus();
-			}
+			  var record = this.messagesGrid.selModel.getSelected();
+			  if(record)
+			  {
+				  var win = window.open(GO.url("email/message/source",{account_id:this.account_id,mailbox:this.mailbox,uid:record.data.uid}));
+				  win.focus();
+			  }
 
-		},
-		scope: this
-	},'-',
-	{
-		iconCls: 'btn-copy',
-		text: GO.email.lang['copyMailTo'],
-		cls: 'x-btn-text-icon',
-		handler: function(a,b,c){
-			var selectedEmails = this.messagesGrid.getSelectionModel().getSelections();
-			this.showCopyMailToDialog(selectedEmails);
-		},
-		scope: this,
-		multiple:true
-	},
-	{
-		iconCls: 'btn-delete',
-		text: GO.lang.cmdDelete,
-		cls: 'x-btn-text-icon',
-		handler: function(){
-			this.messagesGrid.deleteSelected();
-		},
-		scope: this,
-		multiple:true
-	},'-',{
-		iconCls: 'btn-add',
-		text: GO.email.lang.addSendersTo,
-		cls: 'x-btn-text-icon',
-		menu: {
-			items: addSendersItems
-		},
-		multiple:true
-	},{
-		iconCls: 'btn-delete',
-		text: GO.email.lang.deleteSendersFrom,
-		cls: 'x-btn-text-icon',
-		menu: {
-			items: deleteSendersItems
-		},
-		multiple:true
-	}];
-
+		  },
+		  scope: this
+	  }),'-',
+	  this.contextMenuCopyTo = new Ext.menu.Item ({
+		  iconCls: 'btn-copy',
+		  text: GO.email.lang['copyMailTo'],
+		  cls: 'x-btn-text-icon',
+		  handler: function(a,b,c){
+			  var selectedEmails = this.messagesGrid.getSelectionModel().getSelections();
+			  this.showCopyMailToDialog(selectedEmails);
+		  },
+		  scope: this,
+		  multiple:true
+	  }),
+	  {
+		  iconCls: 'btn-delete',
+		  text: GO.lang.cmdDelete,
+		  cls: 'x-btn-text-icon',
+		  handler: function(){
+			  this.messagesGrid.deleteSelected();
+		  },
+		  scope: this,
+		  multiple:true
+	  },'-',{
+		  iconCls: 'btn-add',
+		  text: GO.email.lang.addSendersTo,
+		  cls: 'x-btn-text-icon',
+		  menu: {
+			  items: addSendersItems
+		  },
+		  multiple:true
+	  },{
+		  iconCls: 'btn-delete',
+		  text: GO.email.lang.deleteSendersFrom,
+		  cls: 'x-btn-text-icon',
+		  menu: {
+			  items: deleteSendersItems
+		  },
+		  multiple:true
+	  }];
 
 	if(GO.email.saveAsItems && GO.email.saveAsItems.length)
 	{
@@ -365,6 +364,16 @@ GO.email.EmailClient = function(config){
 		shadow: "frame",
 		minWidth: 180,
 		items: contextItems
+	});
+	
+	this.gridReadOnlyContextMenu = new GO.menu.RecordsContextMenu({
+		shadow: "frame",
+		minWidth: 180,
+		items: [ 
+		  this.contextMenuSource,
+		  '-',
+		  this.contextMenuCopyTo
+		]
 	});
 
 	GO.email.treePanel = this.treePanel = new GO.email.AccountsTree({
@@ -506,7 +515,7 @@ GO.email.EmailClient = function(config){
 		});
 	}
 
-	var tbar =[{
+	var tbar =[this.composerButton = new Ext.Button({
 		iconCls: 'btn-compose',
 		text: GO.email.lang['compose'],
 		cls: 'x-btn-text-icon',
@@ -517,7 +526,7 @@ GO.email.EmailClient = function(config){
 			});
 		},
 		scope: this
-	},{
+	}),this.deleteButton = new Ext.Button({
 		iconCls: 'btn-delete',
 		text: GO.lang.cmdDelete,
 		cls: 'x-btn-text-icon',
@@ -526,7 +535,7 @@ GO.email.EmailClient = function(config){
 			this.messagesGrid.expand();
 		},
 		scope: this
-	},new Ext.Toolbar.Separator(),
+	}),new Ext.Toolbar.Separator(),
 	{
 		iconCls: 'btn-settings',
 		text:GO.lang.administration,
@@ -689,11 +698,15 @@ GO.email.EmailClient = function(config){
 		{
 			//this.messagePanel.uid=record.data['uid'];
 
-			this.replyAllButton.setDisabled(false);
-			this.replyButton.setDisabled(false);
-			this.forwardButton.setDisabled(false);
-			this.printButton.setDisabled(false);
+		var readOnly = this.messagesGrid.store.reader.jsonData.permission_level < GO.permissionLevels.create;
+		
+		this.deleteButton.setDisabled(readOnly);
 
+			this.replyAllButton.setDisabled(readOnly);
+			this.replyButton.setDisabled(readOnly);
+			this.forwardButton.setDisabled(readOnly);
+			this.printButton.setDisabled(readOnly);
+			
 			var record = this.messagesGrid.store.getById(this.messagePanel.uid);
 
 			if(!record.data.seen && data.notification)
@@ -792,7 +805,10 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	{
 		grid.on("rowcontextmenu", function(grid, rowIndex, e) {
 			var coords = e.getXY();
-			this.gridContextMenu.showAt([coords[0], coords[1]], grid.getSelectionModel().getSelections());
+			if(this.messagesGrid.store.reader.jsonData.permission_level <= GO.permissionLevels.read)
+			  this.gridReadOnlyContextMenu.showAt([coords[0], coords[1]], grid.getSelectionModel().getSelections());
+			else
+			  this.gridContextMenu.showAt([coords[0], coords[1]], grid.getSelectionModel().getSelections());
 		},this);
 
 		grid.on('collapse', function(){
@@ -828,7 +844,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 				//this.messagePanel.uid=r.data['uid'];
 				this.messagePanel.loadMessage(r.data.uid, this.mailbox, this.account_id);
 
-				if(!r.data.seen){
+				if(!r.data.seen && this.messagesGrid.store.reader.jsonData.permission_level > GO.permissionLevels.read){
 					//set read with 2 sec delay.
 					this.markAsRead.defer(2000, this, [r.data.uid, this.mailbox, this.account_id]);
 				}

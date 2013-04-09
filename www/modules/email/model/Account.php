@@ -195,6 +195,11 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		
 	private $_mailboxes;
 
+	/**
+	 * Get all mailboxes on the active connection in a namesapce
+	 * 
+	 * @return array All mailboxes
+	 */
 	public function getMailboxes(){
 		if(!isset($this->_mailboxes)){
 			$this->_mailboxes= $this->openImapConnection()->get_folders($this->mbroot);
@@ -204,6 +209,11 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 
 	private $_subscribed;
 
+	/**
+	 * Get the mailboxes the user is subscribed to in a namespace
+	 * 
+	 * @return array Subscribed mailboxes
+	 */
 	public function getSubscribed(){
 		if(!isset($this->_subscribed)){
 			$this->_subscribed= $this->openImapConnection()->get_folders($this->mbroot, true);

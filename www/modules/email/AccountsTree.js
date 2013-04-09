@@ -173,6 +173,10 @@ GO.email.AccountsTree = function(config){
 		
 		if(node.attributes.noselect==1)
 			return false;
+		
+		//no content menu for read only mail accounts
+		if(node.attributes.permission_level < GO.permissionLevels.create)
+		  return false;
 
 		var selModel = this.getSelectionModel();
 		
@@ -202,7 +206,6 @@ GO.email.AccountsTree = function(config){
 	
 	
 	this.on('startdrag', function(tree, node, e){
-		
 		var dragId = GO.util.Base64.decode(node.id);
 		if(dragId.indexOf('account')>-1){
 			tree.dropZone.appendOnly=false;
