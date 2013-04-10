@@ -160,6 +160,10 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 		if (!file_exists($importFile)) {
 			throw new Exception('File was not uploaded!');
 		}
+		
+		$field = GO_Customfields_Model_Field::model()->findByPk($params['field_id']);
+		
+		$sort=1;
 		$csv = new GO_Base_Fs_CsvFile($importFile);
 		while ($record = $csv->getRecord()) {
 
@@ -169,29 +173,34 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 					$parent_id=0;
 
 				if (!empty($record[$i])) {
-					$existingModel = GO_Customfields_Model_FieldTreeSelectOption::model()->findSingle(array(
-							'where'=>'field_id=:field_id AND parent_id=:parent_id AND name=:name',
-							'bindParams'=>array(
-									'field_id'=>$params['field_id'],
-									'parent_id'=>$parent_id,
-									'name'=> $record[$i]
-								)
+					$existingModel = GO_Customfields_Model_FieldTreeSelectOption::model()->findSingleByAttributes(array(							
+						'field_id'=>$params['field_id'],
+						'parent_id'=>$parent_id,
+						'name'=> $record[$i]
 					));					
 					
 					if($existingModel)
 						$parent_id=$existingModel->id;
 					else{
 						$o = new GO_Customfields_Model_FieldTreeSelectOption();
+						
+						$o->checkSlaves=false;
+						
 						$o->field_id = $params['field_id'];
 						$o->name = $record[$i];
 						$o->parent_id=$parent_id;
+						$o->sort=$sort;
 						$o->save();
+						
+						$sort++;
 						
 						$parent_id=$o->id;
 					}
 				}			
 			}
 		}
+		
+		$field->checkTreeSelectSlaves();
 
 		return array('success' => true);
 	}

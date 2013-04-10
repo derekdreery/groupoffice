@@ -170,6 +170,25 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 		return $nestingLevel;
 	}
 	
+	public function checkTreeSelectSlaves(){
+		//We need to create a GO_Customfields_Customfieldtype_TreeselectSlave field for all tree levels
+		$nestingLevel = $this->getTreeSelectNestingLevel();
+
+		for($i=1;$i<$nestingLevel;$i++){
+			$field =GO_Customfields_Model_Field::model()->findSingleByAttributes(array('treemaster_field_id'=>$this->id,'nesting_level'=>$i));
+
+			if(!$field){
+				$field = new GO_Customfields_Model_Field();
+				$field->name=$this->name.' '.$i;
+				$field->datatype='GO_Customfields_Customfieldtype_TreeselectSlave';
+				$field->treemaster_field_id=$this->id;
+				$field->nesting_level=$i;
+				$field->category_id=$this->category_id;
+				$field->save();
+			}				
+		}
+	}
+	
 	protected function beforeSave() {
 		if($this->isNew)
 			$this->sort_index=$this->count();		
