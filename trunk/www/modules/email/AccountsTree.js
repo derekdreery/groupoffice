@@ -34,7 +34,7 @@ GO.email.AccountsTree = function(config){
 	config.loader.on('beforeload', function(loader, node){
 		loader.baseParams.expandedNodes = Ext.encode(this.getExpandedNodes());
 	}, this);
-	
+
 	config.loader.on('load',function(loader,node,response){
 		
 		var result = Ext.decode(response.responseText);
@@ -48,7 +48,7 @@ GO.email.AccountsTree = function(config){
 				this._errorNodes.push(node.attributes);
 			}
 		}
-		
+	  
 //		this._setErrorNodes(Ext.decode(response.responseText));
 		this._nodeId = 0;
 		this._handleFailedIMAPConnections();

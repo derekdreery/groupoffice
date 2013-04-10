@@ -220,12 +220,12 @@ GO.email.MessagesGrid = function(config){
 		delete this.store.baseParams.refresh;
 	};
 	
+	//stop/start drag and drop when store loads when account is readOnly
 	this.store.on('load', function(store, records, options) {
 	  if(store.reader.jsonData.permission_level <= GO.permissionLevels.read)
 		this.getView().dragZone.lock();
 	  else
 		this.getView().dragZone.unlock();;
-	  this.doLayout();
 	}, this);
 
 	this.searchType.on('select', function(combo, record)

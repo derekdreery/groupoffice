@@ -12,7 +12,7 @@
 }
 
 
-.em-tree-node-noselect .x-tree-node-anchor span{
+.em-tree-node-noselect .x-tree-node-anchor span, .em-readonly a span{
 	font-style:italic;
 	color:#666 !important;
 }

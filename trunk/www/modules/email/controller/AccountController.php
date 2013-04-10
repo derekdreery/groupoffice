@@ -232,6 +232,8 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 							//'usage' => "",
 							//"acl_supported"=>false
 					);
+					if($account->getPermissionLevel() <= GO_Base_Model_Acl::READ_PERMISSION)
+					  $node['cls'] = 'em-readonly';
 		
 //					try{						
 //						if($node['expanded']){
@@ -329,6 +331,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 					'account_id' => $mailbox->getAccount()->id,
 					'iconCls' => 'folder-default',
 					'id' => $nodeId,
+					'draggable'=>$mailbox->getAccount()->getPermissionLevel() > GO_Base_Model_Acl::READ_PERMISSION,
 					'permission_level'=>$mailbox->getAccount()->getPermissionLevel(),
 					'noselect' => $mailbox->noselect,
 					'disabled' =>$fetchAllWithSubscribedFlag && $mailbox->noselect,
@@ -502,6 +505,10 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			$srcImapMessage = GO_Email_Model_ImapMessage::model()->findByUid($srcAccountModel, $srcMessageInfo->mailboxPath, $srcMessageInfo->mailUid);
 			
 			$targetAccountModel = GO_Email_Model_Account::model()->findByPk($params['targetAccountId']);
+			
+			if($targetAccountModel->getPermissionLevel() <= GO_Base_Model_Acl::READ_PERMISSION)
+			  throw new GO_Base_Exception_AccessDenied();
+			
 			$targetImapConnection = $targetAccountModel->openImapConnection($params["targetMailboxPath"]);
 
 			$targetImapConnection->append_message($params['targetMailboxPath'], $srcImapMessage->getSource());

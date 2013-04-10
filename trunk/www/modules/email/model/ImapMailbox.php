@@ -161,10 +161,10 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 	}
 
 	/**
-	 * 
+	 * Get all child nodes of mailbox 
 	 * @param boolean $subscribed Only get subscribed folders
 	 * @param boolean $withStatus Get the status of the folder (Unseen and message count)
-	 * @return type
+	 * @return GO_Email_Model_ImapMailbox[] the mailbox folders
 	 */
 	public function getChildren($subscribed=false, $withStatus=true) {
 		if(!isset($this->_children)){
@@ -203,6 +203,9 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 	
 	public function rename($name){
 		
+	  	if($this->getAccount()->getPermissionLevel() <= GO_Base_Model_Acl::READ_PERMISSION)
+		  throw new GO_Base_Exception_AccessDenied();
+	  
 		$parentName = $this->getParentName();
 		$newMailbox = empty($parentName) ? $name : $parentName.$this->delimiter.$name;
 		
@@ -211,17 +214,24 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		return $this->getAccount()->openImapConnection()->rename_folder($this->name, $newMailbox);
 	}
 	
-	public function delete(){		
-		return $this->getAccount()->openImapConnection()->delete_folder($this->name);
+	public function delete(){	
+	  if($this->getAccount()->getPermissionLevel() <= GO_Base_Model_Acl::READ_PERMISSION)
+		 throw new GO_Base_Exception_AccessDenied();
+	  
+	  return $this->getAccount()->openImapConnection()->delete_folder($this->name);
 	}
 	
 	public function truncate(){
+	  if($this->getAccount()->getPermissionLevel() <= GO_Base_Model_Acl::READ_PERMISSION)
+		  throw new GO_Base_Exception_AccessDenied();
 		$imap = $this->getAccount()->openImapConnection($this->name);
 		$sort = $imap->sort_mailbox();
 		return $imap->delete($sort);
 	}
 	
 	public function createChild($name, $subscribe=true){
+	  if($this->getAccount()->getPermissionLevel() <= GO_Base_Model_Acl::READ_PERMISSION)
+		  throw new GO_Base_Exception_AccessDenied();
 		$newMailbox = empty($this->name) ? $name : $this->name.$this->delimiter.$name;
 		
 		if(preg_match('/[.\/]/', $name)){
@@ -234,7 +244,8 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 	}
 	
 	public function move(GO_Email_Model_ImapMailbox $targetMailbox){
-		
+		if($this->getAccount()->getPermissionLevel() <= GO_Base_Model_Acl::READ_PERMISSION)
+		  throw new GO_Base_Exception_AccessDenied();
 		$newMailbox = "";
 		
 		if(!empty($targetMailbox->name))
