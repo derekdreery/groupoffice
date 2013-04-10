@@ -74,7 +74,7 @@ GO.grid.SearchPanel = function(config){
 		bbar:new GO.BlindPagingToolbar({
 			cls: 'go-paging-tb',
 			store: this.store,
-			pageSize: 20,
+			pageSize: GO.settings.max_rows_list,
 			displayInfo: true,
 			displayMsg: GO.lang['displayingItems'],
 			emptyMsg: GO.lang['strNoItems']
