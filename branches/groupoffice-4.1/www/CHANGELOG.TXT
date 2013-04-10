@@ -1,4 +1,5 @@
 4.1.55
+- Address book will load companies and contacts even when the eastpanel is collapsed
 - New action to purge old events from the calendars
 - Incorrect style definitions in html mails
 - added  {prevdate} tag for printing recurring invoices periods
