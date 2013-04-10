@@ -291,3 +291,6 @@ $l['addContactsSuccess']= '%i kontakter har lagts till i adresslistan.';
 
 $l['contactSuffix']= "Suffix";
 $l['contactHomepage']= "Hemsida";
+
+$l['newContact']= "Ny kontakt";
+$l['existingContact']= "Befintlig kontakt";
