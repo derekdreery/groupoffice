@@ -1,10 +1,14 @@
 4.1.55
+- New action to purge old events from the calendars
+- Incorrect style definitions in html mails
+- added  {prevdate} tag for printing recurring invoices periods
 - The generated ICS files will have correct daylight saving time set
 - Fixed saving of tasks recurrence to "no recurrence" value
 - Order Dialog in billing is now modal
 - Order Model will check for recurring Orders before Delete
 - Recurred Order without an order_id can no longer be deleted
 - Adding an Order status to an order book will no longer throw an Notice exception
+- Increased interger size of file size column
 
 05-04-2013 4.1.54
 - Sort order wrong for resources in event dialog

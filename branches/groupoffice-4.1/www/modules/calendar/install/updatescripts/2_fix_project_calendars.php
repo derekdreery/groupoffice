@@ -1,10 +1,12 @@
 <?php
 //require_once('../../../../GO.php');
-//
 //GO::session()->runAsRoot();
 
 $fp = GO_Base_Db_FindParams::newInstance()->ignoreAcl();
-$fp->getCriteria()->addCondition('project_id', 0, '>');
+
+$joinCriteria = GO_Base_Db_FindCriteria::newInstance()->addRawCondition('t.acl_id', 'p.acl_id');
+
+$fp->join('pm_types', $joinCriteria,'p');
 
 $stmt = GO_Calendar_Model_Calendar::model()->find($fp);
 
