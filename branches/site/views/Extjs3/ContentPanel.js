@@ -22,6 +22,30 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 		this.setSiteId(siteId);
 		this.setContentId(0, parentId);
 		this.form.baseParams.parent_id = parentId;
+		
+		this.form.load({
+			success:function(form, action){
+				if(this.fileBrowseButton){
+					this.fileBrowseButton.setId(action.result.data.site_id);
+				}
+				this.titleField.focus();
+			},
+			scope:this
+		});
+		
+		
+		
+//		GO.request({
+//			url: 'site/content/defaultSlug',
+//			params: {
+//				parentId: parentId
+//			},
+//			success: function(response, options, result){
+//				this.parentSlug.setValue(result.defaultslug);
+//			},
+//			scope: this
+//		});
+		
 		this.ownerCt.getLayout().setActiveItem(this);
 	},
 	setContentId : function(contentId, parentId){
@@ -128,13 +152,30 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 			fieldLabel: GO.site.lang.contentTitle
 		});
 		
+		this.parentSlug = new Ext.form.TextField({
+			name: 'parentslug',
+			width:147,
+			maxLength: 255,
+			allowBlank:true,
+			disabled:true
+		});
+		
 		this.slugField = new Ext.form.TextField({
 			name: 'slug',
-			width:300,
+			width:148,
 			maxLength: 255,
 			allowBlank:true,
 			fieldLabel: GO.site.lang.contentSlug
 		});
+	
+		this.completeSlug = new Ext.form.CompositeField({
+			fieldLabel: GO.site.lang.contentSlug,
+			items: [this.parentSlug,this.slugField]
+		});
+	
+		this.titleField.on('change',function(field){
+			this.slugField.setValue(this.formatSlug(field.getValue()));
+		},this);
 	
 		this.editor = new GO.form.HtmlEditor({
 			hideLabel:true,
@@ -146,7 +187,7 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 				
 		config.items = [
 			this.titleField,
-			this.slugField,
+			this.completeSlug,
 			this.editor
 		];
 		
@@ -162,6 +203,14 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 			},this);
 		}
 		this.contentDialog.show(id);
+	},
+	formatSlug : function(slug){
+		
+		slug = slug.toLowerCase();
+		slug = slug.replace(/[^a-z0-9]+/g, '-');
+		slug = slug.replace(/^-|-$/g, '');		
+		
+		return slug;
 	}
 });
 

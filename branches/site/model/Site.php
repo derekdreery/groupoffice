@@ -189,6 +189,7 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 					'iconCls' => 'go-model-icon-GO_Site_Model_Content', 
 					'expanded' => !$hasChildren,
 					'hasChildren' => $hasChildren,
+					'children'=> $hasChildren ? null : array(),
 					'text' => $content->title
 			);
 		}

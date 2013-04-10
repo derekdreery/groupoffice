@@ -17,6 +17,42 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 		exit();
 	}
 	
+	
+	
+	/**
+	 * 
+	 * 
+	 * @param array $params
+	 * @return array
+	 */
+	protected function actionDefaultSlug($params){
+		
+		$response = array();
+		$response['defaultslug']=false;
+		$response['success'] = false;
+		
+		if(empty($params['parentId']))
+			Throw new Exception('No Parent ID given!');
+		
+		$parent = GO_Site_Model_Content::model()->findByPk($params['parentId']);
+		
+		if(!$parent)
+			Throw new Exception('No content item found with the following id: '.$params['parentId']);
+		
+		$response['defaultslug']=$parent->slug.'/';
+		$response['success'] = true;
+		
+		return $response;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	protected function getStoreParams($params) {
 		$fp = GO_Base_Db_FindParams::newInstance()->order('sort_order');
 		
@@ -69,14 +105,24 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 	}
 	
 	protected function actionLoad($params){
-		if(empty($params['id']))
-			Throw new Exception('No ID given!');
+//		if(empty($params['id']))
+//			Throw new Exception('No ID given!');
+//		
+//		$model = $this->_loadModel($params['id']);
 		
-		$model = $this->_loadModel($params['id']);
+		
+		$model= GO_Site_Model_Content::model()->createOrFindByParams($params);
 		
 		$remoteComboFields = array();
 		
-		$this->renderForm($model, $remoteComboFields);
+		$extraFields=array('slug'=>basename($model->slug));
+		
+		if($model->parent)
+			$extraFields['parentslug'] = $model->parent->slug.'/';
+		else
+			$extraFields['parentslug'] = '';
+		
+		$this->renderForm($model, $remoteComboFields, $extraFields);
 	}
 	
 	protected function actionUpdate($params){
@@ -87,8 +133,12 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 		$model = $this->_loadModel($params['id']);
 			
 		unset($params['id']); // unset because it doesn't need to be updated
-		
+				
 		$model->setAttributes($params);
+		
+		if($model->parent)
+			$model->slug = $model->parent->slug.'/'.$model->slug;
+		
 		$model->save();
 		$this->renderSubmit($model);
 	}
@@ -96,6 +146,10 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 	protected function actionCreate($params) {
 		$model = new GO_Site_Model_Content();
 		$model->setAttributes($params);
+		
+		if($model->parent)
+			$model->slug = $model->parent->slug.'/'.$model->slug;
+		
 		$model->save();
 
 		$this->renderSubmit($model);
@@ -119,6 +173,13 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 		
 		if(!$model)
 			Throw new Exception('No content item found with the following id: '.$id);
+		
+//		if($model->parent){
+//			$model->parentslug = $model->parent->slug.'/';
+//			$model->slug = str_replace($model->parentslug, '', $model->slug);
+//		} else {
+//			$model->parentslug = '';
+//		}
 		
 		return $model;
 	}

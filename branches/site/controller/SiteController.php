@@ -18,24 +18,6 @@ class GO_Site_Controller_Site extends GO_Base_Controller_AbstractModelController
 		exit();
 	}
 	
-	
-	/**
-	 * 
-	 * 
-	 * @param array $params
-	 * @return array
-	 */
-	protected function actionTemporarySlug($params){
-		$response = array();
-		
-		
-		// TODO: GET THE CORRECT SLUG
-		
-		$response['success'] = true;
-		
-		return $response;
-	}
-
 	/**
 	 * Build the tree for the backend
 	 * 

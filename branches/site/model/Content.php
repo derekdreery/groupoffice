@@ -102,14 +102,29 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 		 );
 	 }
 	 
+//	 protected function afterLoad() {
+//		 parent::afterLoad();
+//		 
+//		// var_dump('oude slug: '.$this->slug);
+//		 
+//		 if($this->parent){
+//			 
+//			 if(empty($this->slug)){
+//			 
+//				$this->parentslug = $this->parent->slug.'/';
+//				$this->slug = str_replace($this->parentslug, '', $this->slug);
+//				}
+//			if(empty($this->template) && !empty($this->parent->default_child_template))
+//				$this->template = $this->parent->default_child_template;
+//			
+//		} else {
+//			$this->parentslug = '';
+//		}
+//		
+//		//var_dump('nieuwe slug: '.$this->slug);
+//		
+//	 }
 	 	 
-	 protected function beforeSave() {
-		 
-		 $this->cleanSlug();
-		 
-		 return parent::beforeSave();
-	 }
-	 
 	 /**
 	  * Find a content item by it's slug (and siteId)
 	  * 
@@ -132,23 +147,6 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	 }
 	 
 	 /**
-	  * Get the slug of the parent to suggest
-	  * 
-	  * @return string
-	  */
-	 public function getParentSlug(){
-		 
-		 if($this->parent)
-			 return $this->parent->slug;
-		 else
-			 return '';
-	 }
-	 
-	 public function cleanSlug(){
-		 //TODO: Clean the slug
-	 }
-	 
-	 /**
 	  * Get the url to this content item.
 	  * 
 	  * @param string $route parameter can be set when you have "special" 
@@ -156,6 +154,9 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	  * @return string
 	  */
 	 public function getUrl($route='site/front/content'){
+		 
+		// var_dump($this->slug);
+		 
 		 return Site::urlManager()->createUrl($route,array('slug'=>$this->slug));
 	 }
 	 
@@ -192,7 +193,7 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 				'text' => $child->title,
 				'hasChildren' => $hasChildren,
 				'expanded' => !$hasChildren,
-				'children' => $children
+				'children'=> $hasChildren ? null : array(),
 			);
 			 
 			$tree[] = $childNode;
