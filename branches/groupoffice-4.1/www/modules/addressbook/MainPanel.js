@@ -31,9 +31,6 @@ GO.addressbook.MainPanel = function(config)
 		//this.contactsGrid.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
 		this.contactEastPanel.load(r.get('id'));
 	}, this);
-	this.contactsGrid.on("rowdblclick", function(){
-		this.contactEastPanel.editHandler();
-	}, this);
 
 	this.contactsGrid.store.on('load', function(){
 		this.setAdvancedSearchNotification(this.contactsGrid.store);
@@ -62,9 +59,6 @@ GO.addressbook.MainPanel = function(config)
 
 	this.companiesGrid.on("delayedrowselect",function(grid, rowIndex, r){
 		this.companyEastPanel.load(r.get('id'));
-	}, this);
-	this.companiesGrid.on("rowdblclick", function(){
-		this.companyEastPanel.editHandler();
 	}, this);
 
 	if (GO.email) {
