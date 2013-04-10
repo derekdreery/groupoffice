@@ -195,7 +195,7 @@ class GO_Site_Components_UrlRule
 
 		foreach ($this->params as $key => $value)
 		{
-			$tr["<$key>"] = urlencode($params[$key]);
+			$tr["<$key>"] = str_replace('%2F','/',urlencode($params[$key])); //allow slashes in URL parts
 			unset($params[$key]);
 		}
 
