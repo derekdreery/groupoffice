@@ -1564,6 +1564,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$exception->exception_event_id=$this->id;
 				$exception->save();
 			}		
+			
+			
+//			$test = (bool) $vobject->organizer;
+			
+//			var_dump($test);
+//			exit();
+//			
 
 			if($vobject->organizer)
 				$p = $this->importVObjectAttendee($this, $vobject->organizer, true);
@@ -1641,7 +1648,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$attributes['status']= GO_Calendar_Model_Participant::STATUS_ACCEPTED;
 	
 		$p= GO_Calendar_Model_Participant::model()
-						->findSingleByAttributes(array('event_id'=>$event->id, 'email'=>$attributes['email']));
+						->findSingleByAttributes(array('event_id'=>$event->id, 'email'=>$attributes['email'],'is_organizer'=>$isOrganizer));
 		if(!$p){
 			$p = new GO_Calendar_Model_Participant();
 			$p->is_organizer=$isOrganizer;		
