@@ -67,7 +67,7 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 		if(!empty($locale) && $check){
 			$year = date('Y',$startDate);
 						
-			if($force || !$this->checkHolidaysExist($year,$locale))
+		if($force || !$this->checkHolidaysExist($year,$locale))
 				$this->generateHolidays($year,$locale);
 		}
 		
@@ -164,16 +164,10 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 			$year = date('Y');
 		}
 		
-		$in_holidays = array();
-		
-		if(!empty($input_holidays))
-			$in_holidays = $input_holidays;
-
 		$holidays = array();
 		
-		// Prepare the holidays array
-		foreach($in_holidays as $key => $date)
-			$holidays[$key] = $date;
+		if(!empty($input_holidays))
+			$holidays = $input_holidays;
 		
 		// Set the fixed holidays from the holidays file
 		if(isset($holidays['fix'])) {
@@ -221,6 +215,11 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 				$holiday->save();
 			}
 		}
+	}
+	
+	private function get_weekday($day, $month, $year) {
+		$date = getdate(mktime(0, 0, 0, $month, $day, $year));
+		return $date["wday"];
 	}
 	
 	public function getJson(){
