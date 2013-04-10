@@ -933,35 +933,40 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @throws GO_Base_Exception_NotFound when no record found with supplied PK
 	 */
 	public function createOrFindByParams($params) {
-	  
-	  $pkColumn= $this->primaryKey();
-	  if(is_array($pkColumn)) { //if primaryKey excists of multiple columns
-		$pk=array();
-		foreach($pkColumn as $column)
-		{
-		  if(isset($params[$column]))
-			$pk[$column] = $this->formatInput($column, $params[$column]);
+
+		$pkColumn = $this->primaryKey();
+		if (is_array($pkColumn)) { //if primaryKey excists of multiple columns
+			$pk = array();
+			foreach ($pkColumn as $column) {
+				if (isset($params[$column]))
+					$pk[$column] = $this->formatInput($column, $params[$column]);
+			}
+			if (empty($pk))
+				$model = new static();
+			else {
+				$model = $this->findByPk($pk);
+				if (!$model)
+					$model = new static();
+			}
+
+			if ($model->isNew)
+				$model->setAttributes($params);
+
+			return $model;
 		}
-		if (empty($pk))
-		  $model = new static();
 		else {
-		  $model = $this->findByPk($pk);
-		  if (!$model)
-			$model = new static(); 
+			$pk = $params[$this->primaryKey()];
+			if (empty($pk)) {
+				$model = new static();
+				if ($model->isNew)
+					$model->setAttributes($params);
+			}else {
+				$model = $this->findByPk($pk);
+				if (!$model)
+					throw new GO_Base_Exception_NotFound();
+			}
+			return $model;
 		}
-		return $model;
-	  } 
-	  else {
-		$pk = $params[$this->primaryKey()];
-		if (empty($pk))
-		  $model = new static();
-		else {
-		  $model = $this->findByPk($pk);
-		  if (!$model)
-			throw new GO_Base_Exception_NotFound();
-		}
-		return $model;
-	  }
 	}
 	
 	/**
