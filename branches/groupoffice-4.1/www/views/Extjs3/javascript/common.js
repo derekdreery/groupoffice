@@ -55,9 +55,8 @@ GO.openHelp = function(page){
 }
 
 
-GO.util.callToHref = function(phone){
-	phone = phone.replace(/[^0-9+]/g,'');
-	return GO.calltoTemplate.replace('{phone}', phone);
+GO.util.callToLink = function(phone){
+	return '<a onclick="GO.mainLayout.fireEvent(\'callto\', this, \'"+phone+"\');" href="'+GO.calltoTemplate.replace('{phone}', phone.replace(/[^0-9+]/g,''))+'">'+phone+'</a>';
 }
 
 GO.url = function(relativeUrl, params){
