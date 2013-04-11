@@ -168,7 +168,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 								//PHONE							
 								'<tpl if="!GO.util.empty(phone)">'+
 									'<tr>'+
-										'<td class="contactCompanyLabelWidth">' + GO.lang['strPhone'] + ':</td><td><a href="{[GO.util.callToHref(values.phone)]}">{phone}</a></td>'+
+										'<td class="contactCompanyLabelWidth">' + GO.lang['strPhone'] + ':</td><td>{[GO.util.callToLink(values.phone)]}</td>'+
 									'</tr>'+						
 								'</tpl>'+
 
