@@ -2133,7 +2133,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			}
 			$this->send_command($command);
 			$res = $this->get_response();
-			$status = $this->check_response($res);
+			$status = $this->check_response($res, false, false);
 			if (!$status) {
 				return $status;
 			}
