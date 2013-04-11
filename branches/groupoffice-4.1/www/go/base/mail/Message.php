@@ -108,9 +108,21 @@ class GO_Base_Mail_Message extends Swift_Message{
 		$this->_getParts($structure);
 		
 		if($replaceCallback){			
-			array_unshift($replaceCallbackArgs, $this->_loadedBody);			
+				
 			
-			$this->_loadedBody = call_user_func_array($replaceCallback, $replaceCallbackArgs);
+			$bodyStart = strpos($this->_loadedBody, '<body');
+			
+			if($bodyStart){		  
+			
+			  $body = substr($this->_loadedBody, $bodyStart);
+			  array_unshift($replaceCallbackArgs, $body);
+			  $body = call_user_func_array($replaceCallback, $replaceCallbackArgs);
+			  
+			  $this->_loadedBody = substr($this->_loadedBody,0,$bodyStart).$body;
+			}else{
+			  array_unshift($replaceCallbackArgs, $this->_loadedBody);
+			  $this->_loadedBody = call_user_func_array($replaceCallback, $replaceCallbackArgs);
+			}
 		}
 		
 		
