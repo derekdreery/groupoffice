@@ -328,6 +328,10 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	
 	submitForm : function(hide){
 		
+		//for the fast double clickers
+		if(this.getFooterToolbar().disabled)
+			return;
+		
 		var params=this.getSubmitParams();
 		
 		/*
