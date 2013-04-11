@@ -1,4 +1,5 @@
 4.1.55
+- GO_Mail_Message will not replace {variables} in the head of the HTML email template because CSS <style> might use { } characters
 - Address book will load companies and contacts even when the eastpanel is collapsed
 - New action to purge old events from the calendars
 - Incorrect style definitions in html mails
