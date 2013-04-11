@@ -53,6 +53,9 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	
 	remoteModelId : 0,
 	
+	/**
+	 * a value of one of the forms fields that will be used for the title of the dialog
+	 */
 	titleField : false,
 	
 	submitAction : 'submit',
@@ -119,6 +122,9 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	
 	enableCloseButton : true,
 	
+	/**
+	 * The data array in the JSON response after the loadAction is called
+	 */
 	loadData : false,
 	
 	initComponent : function(){
