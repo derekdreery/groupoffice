@@ -1,23 +1,6 @@
 <?php
 
 class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonController {
-
-	protected $model = 'GO_Site_Model_Content';
-	
-	/**
-	 * TODO: fix the action
-	 * @param array $params the $_REQUEST 
-	 */
-	protected function actionRedirectToFront($params){
-		$content = GO_Site_Model_Content::model()->findByPk($params['id']);
-		$site = GO_Site_Model_Site::model()->findByPk($content->site_id);
-		
-		$url = "http://www.".$site->domain."/".$content->getUrl(); 
-		header('Location: '.$url);
-		exit();
-	}
-	
-	
 	
 	/**
 	 * 
@@ -44,36 +27,6 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 		
 		return $response;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	protected function getStoreParams($params) {
-		$fp = GO_Base_Db_FindParams::newInstance()->order('sort_order');
-		
-		$fp->getCriteria()->addCondition('site_id', $params['site_id']);
-		
-		return $fp;
-	}
-	
-	
-	protected function actionSaveSort($params){		
-		$items = json_decode($params['content'], true);
-		$sort = 0;
-		foreach ($items as $item) {
-			$model = GO_Site_Model_Content::model()->findByPk($item['id']);
-			$model->sort_order=$sort;
-			$model->save();
-			$sort++;
-		}		
-		
-		return array('success'=>true);
-	}	
 	
 	protected function actionTemplateStore($params){
 		
@@ -105,22 +58,18 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 	}
 	
 	protected function actionLoad($params){
-//		if(empty($params['id']))
-//			Throw new Exception('No ID given!');
-//		
-//		$model = $this->_loadModel($params['id']);
-		
-		
+
 		$model= GO_Site_Model_Content::model()->createOrFindByParams($params);
 		
 		$remoteComboFields = array();
 		
 		$extraFields=array('slug'=>basename($model->slug));
 		
-		if($model->parent)
-			$extraFields['parentslug'] = $model->parent->slug.'/';
-		else
+		if($model->parent){
+			$extraFields['parentslug'] = $model->parent->slug.'/';			
+		}else{
 			$extraFields['parentslug'] = '';
+		}
 		
 		$this->renderForm($model, $remoteComboFields, $extraFields);
 	}
@@ -136,9 +85,10 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 				
 		$model->setAttributes($params);
 		
-		if($model->parent)
-			$model->slug = $model->parent->slug.'/'.$model->slug;
-		
+		if(isset($params['slug'])){
+			if($model->parent)
+				$model->slug = $model->parent->slug.'/'.$model->slug;
+		}
 		$model->save();
 		$this->renderSubmit($model);
 	}
@@ -146,9 +96,11 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 	protected function actionCreate($params) {
 		$model = new GO_Site_Model_Content();
 		$model->setAttributes($params);
-		
-		if($model->parent)
+				
+		if($model->parent){
 			$model->slug = $model->parent->slug.'/'.$model->slug;
+		}
+		$model->setDefaultTemplate();
 		
 		$model->save();
 

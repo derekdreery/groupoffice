@@ -51,17 +51,6 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 		return $val;
 		
 	}
-	
-//	/**
-//	 * Returns a static model of itself
-//	 * 
-//	 * @param String $className
-//	 * @return GO_Site_Model_Content
-//	 */
-//	public static function model($className=__CLASS__)
-//	{	
-//		return parent::model($className);
-//	}
 
 	/*
 	 * Attach the customfield model to this model.
@@ -76,13 +65,6 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 //	}
 	
 	/**
-	 * Enable this function if you want this model to check the acl's automatically.
-	 */
-	// public function aclField(){
-	//	 return 'acl_id';	
-	// }
-
-	/**
 	 * Returns the table name
 	 */
 	 public function tableName() {
@@ -96,35 +78,11 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	 public function relations() {
 		 return array(
 			'children' => array('type' => self::HAS_MANY, 'model' => 'GO_Site_Model_Content', 'field' => 'parent_id', 'delete' => true, GO_Base_Db_FindParams::newInstance()->order('sort_order')),
-			
 			'site'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Site_Model_Site", 'field'=>'site_id'),
 			'parent'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Site_Model_Content", 'field'=>'parent_id')
 		 );
 	 }
 	 
-//	 protected function afterLoad() {
-//		 parent::afterLoad();
-//		 
-//		// var_dump('oude slug: '.$this->slug);
-//		 
-//		 if($this->parent){
-//			 
-//			 if(empty($this->slug)){
-//			 
-//				$this->parentslug = $this->parent->slug.'/';
-//				$this->slug = str_replace($this->parentslug, '', $this->slug);
-//				}
-//			if(empty($this->template) && !empty($this->parent->default_child_template))
-//				$this->template = $this->parent->default_child_template;
-//			
-//		} else {
-//			$this->parentslug = '';
-//		}
-//		
-//		//var_dump('nieuwe slug: '.$this->slug);
-//		
-//	 }
-	 	 
 	 /**
 	  * Find a content item by it's slug (and siteId)
 	  * 
@@ -170,6 +128,16 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 		 return !empty($child); 
 	 }
 	 
+	 public function setDefaultTemplate() {
+		 if(empty($this->template) && !empty($this->parent->default_child_template)){
+			$this->template = $this->parent->default_child_template;
+		 }else{
+			$config = new GO_Site_Components_Config($this->site);
+			$this->template = $config->getDefaultTemplate();
+		 }
+	 }
+	 
+	 
 	 /**
 	  * # Backend Functionality
 	  * 
@@ -211,20 +179,9 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 			if(!$column)
 				return null;
 
-			$type = $column['customfield']->getAttribute('datatype');
-			
 			$value = $this->getCustomfieldsRecord()->{'col_'.$id};
-			
-			switch($type){
-				case 'GO_Site_Customfieldtype_Sitefile':
-					$value = str_replace('site/'.$this->site_id.'/','', $value);
-					$this->_cf[$cfName]= $value;
-					break;
-				
-				default:
-					$this->_cf[$cfName]=$value;
-					break;
-			}
+
+			$this->_cf[$cfName]=$value;
 
 		}
 

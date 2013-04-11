@@ -22,4 +22,15 @@ class GO_Site_Components_Config{
 		else
 			return null;
 	}
+	
+	public function getDefaultTemplate(){
+		if($this->defaultTemplate)
+			return $this->defaultTemplate;
+		
+		if($this->templates){
+			return $this->templates[0];
+		}
+		
+		return false;
+	}
 }

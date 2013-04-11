@@ -163,8 +163,14 @@ class Site {
 	 * @return string
 	 */
 	public static function file($relativePath){
-		return self::template()->getUrl().$relativePath;
+
+		$referenceString = 'site/'.Site::model()->id.'/';
+	
+		$check = substr_count($relativePath,$referenceString);
+		
+		if($check)
+			return str_replace($referenceString,'', $relativePath);
+		else
+			return self::template()->getUrl().$relativePath;
 	}
-	
-	
 }

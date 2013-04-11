@@ -157,7 +157,11 @@ abstract class GO_Site_Controller_Abstract extends GO_Base_Controller_AbstractCo
 	{	
 		$module = Site::model()->getSiteModule();
 		
-		return $module->moduleManager->path() . 'views/site/' . $viewName . '.php';
+		$file = new GO_Base_Fs_File($module->moduleManager->path() . 'views/site/' . $viewName . '.php');
+		if(!$file->exists())
+			throw new Exception("View '$viewName' not found!");
+		
+		return $file->path();
 	}
 
 	/**
