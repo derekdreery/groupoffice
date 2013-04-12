@@ -753,8 +753,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 							$response['data']['to'], 
 							$response['data']['cc'], 
 							$response['data']['bcc'], 
-							$response['data']['subject'],
-							$response['data']['attachments']
+							$response['data']['subject']
+//							$response['data']['attachments']
 			);
 		}
 	}

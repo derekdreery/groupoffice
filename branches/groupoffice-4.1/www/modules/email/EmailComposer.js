@@ -862,16 +862,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 						if(action.result.sendParams)
 							Ext.apply(this.sendParams, action.result.sendParams);
 						
-						//add attachments to result so emailEditor will set this after form load.
-						action.result.attachments=attachments;
-						
-//						this.emailEditor.hiddenCtField.setValue(ctFieldVal);
-//						this.emailEditor.hiddenInlineImagesField.setValue(inlineImgVal);
-//						this.emailEditor.hiddenAttachmentsField.setValue(attachVal);
-//						this.emailEditor.attachmentsView.store.loadData({results: attachments, total: attachments.length});
-						
-						this.emailEditor.setAttachments(attachmentmentsData);
-						
+						//add existing attachments to result so emailEditor will set this after form load.
+						action.result.data.attachments=attachmentmentsData.concat(action.result.data.attachments);						
 					},
 					scope : this
 				});
