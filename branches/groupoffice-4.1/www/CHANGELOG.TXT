@@ -1,4 +1,5 @@
 4.1.55
+- ActiveRecord->findByAttributes() and ActiveRecord->findSingleByAttributes() will create an IN query when the value is an array
 - Fixed print button for SMIME signed emails 
 - GO_Mail_Message will not replace {variables} in the head of the HTML email template because CSS <style> might use { } characters
 - Address book will load companies and contacts even when the eastpanel is collapsed
