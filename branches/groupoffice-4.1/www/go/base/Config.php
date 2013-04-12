@@ -315,6 +315,11 @@ class GO_Base_Config {
 	 */
 	public $html_editor_font = "font-size:13px; font-family:Arial, Helvetica, sans-serif;";
 
+	/**
+	 * The default font to be used in the generated PDF files.
+	 * @var string 
+	 */
+	public $tcpdf_font = "helvetica";
 
 //	/**
 //	 * Grant read permissions for these modules to new self-registered users.
