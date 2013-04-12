@@ -58,7 +58,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 			throw new GO_Base_Exception_AccessDenied();
 
 		//Init data array
-		$response['data'] = array_merge($extraFields, $model->getAttributes());
+		$response['data'] = array_merge($model->getAttributes(), $extraFields);
 		$response['data']['permission_level'] = $model->getPermissionLevel();
 		$response['data']['write_permission'] = true;
 
