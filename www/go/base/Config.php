@@ -319,7 +319,7 @@ class GO_Base_Config {
 	 * The default font to be used in the generated PDF files.
 	 * @var string 
 	 */
-	public $tcpdf_font = "helvetica";
+	public $tcpdf_font = "dejavusans";
 
 //	/**
 //	 * Grant read permissions for these modules to new self-registered users.
