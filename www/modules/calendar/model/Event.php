@@ -1962,6 +1962,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 			$a->setDisposition("inline");
 			$message->attach($a);
+			
+			//for outlook 2003 compatibility
+			$a2 = Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
+			$a2->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+			$message->attach($a2);
 		}
 //		}
 
@@ -2005,6 +2010,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 				$a->setDisposition("inline");
 				$message->attach($a);
+				
+				//for outlook 2003 compatibility
+				$a2 = Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
+				$a2->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+				$message->attach($a2);
+				
 //			}else{
 			if($participantEvent){
 				$url = GO::createExternalUrl('calendar', 'openCalendar', array(
@@ -2093,6 +2104,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 				$a->setDisposition("inline");
 				$message->attach($a);
+				
+				//for outlook 2003 compatibility
+				$a2 = Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
+				$a2->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+				$message->attach($a2);
 
 				if($participantEvent){
 					$url = GO::createExternalUrl('calendar', 'openCalendar', array(
