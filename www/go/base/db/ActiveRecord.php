@@ -802,8 +802,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$newParams = GO_Base_Db_FindParams::newInstance();
 		$criteria = $newParams->getCriteria()->addModel($this);
 		
-		foreach($attributes as $attributeName=>$value)
-			$criteria->addCondition($attributeName, $value);
+		foreach($attributes as $attributeName=>$value) {
+			if(is_array($value))
+				$criteria->addInCondition($attributeName, $value);
+			else
+				$criteria->addCondition($attributeName, $value);
+		}
 		
 		if($findParams)
 			$newParams->mergeWith ($findParams);
@@ -845,8 +849,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$newParams = GO_Base_Db_FindParams::newInstance();
 		$criteria = $newParams->getCriteria()->addModel($this);
 		
-		foreach($attributes as $attributeName=>$value)
-			$criteria->addCondition($attributeName, $value);
+		foreach($attributes as $attributeName=>$value) {
+			if(is_array($value))
+				$criteria->addInCondition($attributeName, $value);
+			else
+				$criteria->addCondition($attributeName, $value);
+		}
 		
 		if($findParams)
 			$newParams->mergeWith ($findParams);
