@@ -106,7 +106,7 @@ abstract class GO_Base_Fs_Base{
 		$childPath = $this->path.'/'.$filename;
 		if($isFile){
 			return new GO_Base_Fs_File($childPath);
-		} elseif(is_dir($childPath)){
+		} else{
 			return new GO_Base_Fs_Folder($childPath);
 		}
 	}
