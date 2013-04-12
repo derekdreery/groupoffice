@@ -176,22 +176,22 @@ abstract class GO_Site_Controller_Abstract extends GO_Base_Controller_AbstractCo
 		return $module->moduleManager->path() . 'views/site/layouts/' . $layoutName . '.php';
 	}
 
-	/**
-	 * Creates a relative URL for the specified action defined in this controller.
-	 * 
-	 * @param string $route the URL route. 
-	 * @param array $params additional GET parameters (name=>value). Both the name and value will be URL-encoded.
-	 * @return string the constructed URL
-	 */
-	public function createUrl($route, $params = array(), $relative = true)
-	{
-		$relativeUrl = Site::model()->urlManager()->createUrl($route, $params);
-		
-		if (!$relative)
-			return Site::model()->request()->getHostInfo() .$relativeUrl;
-		else
-			return $relativeUrl;
-	}
+//	/**
+//	 * Creates a relative URL for the specified action defined in this controller.
+//	 * 
+//	 * @param string $route the URL route. 
+//	 * @param array $params additional GET parameters (name=>value). Both the name and value will be URL-encoded.
+//	 * @return string the constructed URL
+//	 */
+//	public function createUrl($route, $params = array(), $relative = true)
+//	{
+//		$relativeUrl = Site::urlManager()->createUrl($route, $params);
+//		
+//		if (!$relative)
+//			return Site::model()->request()->getHostInfo() .$relativeUrl;
+//		else
+//			return $relativeUrl;
+//	}
 
 	/**
 	 * Redirect to another page.
@@ -201,8 +201,8 @@ abstract class GO_Site_Controller_Abstract extends GO_Base_Controller_AbstractCo
 	 */
 	protected function redirect($route = '', $params=array(),  $statusCode = 302)
 	{
-		$url = $this->createUrl($route, $params);		
-		Site::model()->request()->redirect($url, true, $statusCode);
+		$url = Site::urlManager()->createUrl($route, $params);		
+		Site::request()->redirect($url, true, $statusCode);
 	}
 
 	/**
@@ -273,7 +273,7 @@ abstract class GO_Site_Controller_Abstract extends GO_Base_Controller_AbstractCo
 				//Path the page you tried to visit into lastPath session for redirecting after login
 				GO::session()->values['sites']['returnUrl'] = Site::request()->getRequestUri();
 				$loginpath = 'site/account/login';
-				$this->redirect(array($loginpath));
+				$this->redirect($loginpath);
 			}  else {
 //				$controller = new GO_Site_Controller_Site();
 				$this->render('error', array('error' => $e));

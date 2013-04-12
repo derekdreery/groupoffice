@@ -17,7 +17,7 @@ class GO_Site_Controller_Site extends GO_Base_Controller_AbstractModelController
 		header("Location: ".$site->getBaseUrl());
 		exit();
 	}
-	
+		
 	/**
 	 * Build the tree for the backend
 	 * 

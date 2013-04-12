@@ -173,4 +173,43 @@ class Site {
 		else
 			return self::template()->getUrl().$relativePath;
 	}
+	
+	
+	/**
+	 * Get Path to a public template file that is accessible with the browser.
+	 * 
+	 * @param string $relativePath
+	 * @return string
+	 */
+	public static function filePath($relativePath){
+
+		$referenceString = 'site/'.Site::model()->id.'/';
+	
+		$check = substr_count($relativePath,$referenceString);
+		
+		if($check)
+			return GO::config()->file_storage_path.$relativePath;
+		else
+			return self::template()->getPath().$relativePath;
+	}
+	
+	
+	/**
+	 * Get a thumbnail URL for user uploaded files. This does not work for template
+	 * images.
+	 * 
+	 * @param string $relativePath
+	 * @param array $thumbParams
+	 * @return string URL to thumbnail
+	 */
+	public static function thumb($relativePath, $thumbParams=array("lw"=>100, "ph"=>100, "zc"=>1)) {
+		
+		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.$relativePath);
+		
+		$thumbParams['filemtime']=$file->mtime();
+		$thumbParams['src']=$relativePath;
+	
+		return Site::urlManager()->createUrl('site/front/thumb', $thumbParams);
+	}
+	
 }

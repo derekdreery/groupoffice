@@ -45,10 +45,7 @@ class GO_Site_Components_Router{
 		}else
 		{
 			//404
-			
 			$controller = new GO_Site_Controller_Site();
-			
-			
 		}
 	}
 	
