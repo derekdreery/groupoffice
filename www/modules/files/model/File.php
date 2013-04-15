@@ -585,7 +585,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	
 	
 	
-	public function findRecent(){
+	public function findRecent($start=false,$limit=false){
 		$storeParams = GO_Base_Db_FindParams::newInstance()->ignoreAcl();	
 
 		
@@ -612,6 +612,11 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		$storeParams->group(array('t.id'))->order('mtime','DESC');
 		
 		$storeParams->getCriteria()->addCondition('mtime', GO_Base_Util_Date::date_add(GO_Base_Util_Date::clear_time(time()),-7),'>');
+		
+		if ($start!==false)
+			$storeParams->start($start);
+		if ($limit!==false)
+			$storeParams->limit($limit);
 				
 		return $this->find($storeParams);
 	}
