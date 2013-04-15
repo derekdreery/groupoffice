@@ -1014,7 +1014,15 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 			if(isset($this->_uuidEvents[$key]))
 			{
-				$this->_uuidEvents[$key]->mergeWithEvent($event);
+				if($event->getEvent()->calendar_id==$this->_uuidEvents[$key]->getEvent()->calendar_id){
+					//this is an erroneous situation. events with the same start time and the same uuid may not appear in the same calendar.
+					//if we merge it then the user can't edit the events anymore.
+					$key+=$event->getEvent()->id;
+					$this->_uuidEvents[$key] = $event;
+				}else
+				{
+					$this->_uuidEvents[$key]->mergeWithEvent($event);
+				}
 			}else{
 				$this->_uuidEvents[$key] = $event;
 			}
