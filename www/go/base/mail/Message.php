@@ -164,6 +164,26 @@ class GO_Base_Mail_Message extends Swift_Message{
 		return false;
 	}
 	
+	/**
+	 * Try to convert the encoding of the email to UTF-8
+	 * 
+	 * @param  stdClass $part
+	 */
+	private function _convertEncoding(&$part){
+		$charset='UTF-8';
+					
+		if(isset($part->ctype_parameters['charset'])){
+			$charset = strtoupper($part->ctype_parameters['charset']);
+		}
+
+		if($charset!='UTF-8'){
+			$part->body = GO_Base_Util_String::to_utf8($part->body, $charset);
+			
+			$part->body = str_ireplace($charset, 'UTF-8', $part->body);
+			
+		}
+	}
+	
 	private function _getParts($structure, $part_number_prefix='')
 	{
 		if (isset($structure->parts))
@@ -181,9 +201,11 @@ class GO_Base_Mail_Message extends Swift_Message{
 					}
 				}
 
-
+				
 				if ($part->ctype_primary == 'text' && ($part->ctype_secondary=='plain' || $part->ctype_secondary=='html') && (!isset($part->disposition) || $part->disposition != 'attachment') && empty($part->d_parameters['filename']))
 				{
+					$this->_convertEncoding($part);
+					
 					if (stripos($part->ctype_secondary,'plain')!==false)
 					{
 						$content_part = nl2br($part->body);
@@ -255,6 +277,8 @@ class GO_Base_Mail_Message extends Swift_Message{
 			}
 		}elseif(isset($structure->body))
 		{
+			
+			$this->_convertEncoding($structure);
 			//convert text to html
 			if (stripos( $structure->ctype_secondary,'plain')!==false)
 			{
