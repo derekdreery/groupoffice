@@ -1195,7 +1195,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 			$exception = $this->recurringEventException(); //get master event from relation
 			if($exception){
-				$recurrenceTime=$exception->time;				
+				$recurrenceTime=$exception->getStartTime();				
 			}
 		}
 		if($recurrenceTime){
@@ -1238,7 +1238,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$stmt = $this->exceptions($findParams);
 			while($exception = $stmt->fetch()){
 				$exdate = new Sabre\VObject\Property\DateTime('exdate',Sabre\VObject\Property\DateTime::DATE);
-				$exdate->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($exception->time));		
+				$dt = GO_Base_Util_Date_DateTime::fromUnixtime($exception->getStartTime());				
+				$exdate->setDateTime($dt);		
 				$e->add($exdate);
 			}
 		}
