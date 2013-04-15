@@ -139,6 +139,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		this.tabPanel = new Ext.TabPanel({
         region:'center',
         titlebar: false,
+				enableTabScroll:true,
         border:false,
         activeTab:'go-module-panel-'+GO.settings.start_module,
         tabPosition:'top',				
