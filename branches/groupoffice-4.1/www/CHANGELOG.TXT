@@ -1,3 +1,6 @@
+4.1.56
+- Start page: Files portlet now has a pagination.
+
 15-04-2013 4.1.55
 - Added encoding check to email body to convert mail encoding to UTF-8.
 - ActiveRecord->findByAttributes() and ActiveRecord->findSingleByAttributes() will create an IN query when the value is an array
