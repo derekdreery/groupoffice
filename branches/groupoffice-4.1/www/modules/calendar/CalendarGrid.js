@@ -846,7 +846,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				//console.log(i);
 				//does it fit in the current display?
 				if(i > -1 && i < this.days){
-					if((startRow || endRow<(this.rowsPerHour*24-1))  && (startRow && i==day || endRow && i==endDay))
+					if(!eventData.all_day_event && (startRow || endRow<(this.rowsPerHour*24-1))  && (startRow && i==day || endRow && i==endDay))
 					{
 						eventData.noResize = i!=endDay;
 
