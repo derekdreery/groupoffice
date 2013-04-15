@@ -1220,11 +1220,13 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			if(!in_array($match[1], $unique)){
 				$props = explode(',',base64_decode($match[1]));
 
-				$tag=array();
-				$tag['server'] = $props[0];
-				$tag['account_id'] = $props[1];
-				$tag['model'] = $props[2];
-				$tag['model_id'] = $props[3];
+				if($props[0]==$_SERVER['SERVER_NAME']){
+					$tag=array();
+	//				$tag['server'] = $props[0];
+					$tag['account_id'] = $props[1];
+					$tag['model'] = $props[2];
+					$tag['model_id'] = $props[3];
+				}
 
 				$tags[]=$tag;
 
@@ -1252,7 +1254,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$tags = $this->_findAutoLinkTags($response['htmlbody']);
 
 			while($tag = array_shift($tags)){
-				if($tag['server']==$_SERVER['SERVER_NAME'] && $imapMessage->account->id == $tag['account_id']){
+				if($imapMessage->account->id == $tag['account_id']){
 					$linkModel = GO::getModel($tag['model'])->findByPk($tag['model_id'],false, true);
 					if($linkModel && $linkModel->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)){
 						GO_Savemailas_Model_LinkedEmail::model()->createFromImapMessage($imapMessage, $linkModel);
