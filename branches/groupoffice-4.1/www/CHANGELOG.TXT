@@ -3,6 +3,7 @@
 - Projects module: more informative error message when new project type can not be saved when saving a new project.
 - Fixed refresh of calendargrid for events that are updated to whole day events
 - Fixed server checking of autolink items when replying email messages
+- Enabled TabScroll for main tabpanel
 
 15-04-2013 4.1.55
 - Added encoding check to email body to convert mail encoding to UTF-8.
