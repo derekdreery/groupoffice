@@ -540,7 +540,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					.getValue() !="",
 					'private' : false,
 					model_name:"GO_Calendar_Model_Event",
-					all_day_event:this.formPanel.form.findField('all_day_event').getValue() ? 1 : 0,
+					all_day_event:this.formPanel.form.findField('all_day_event').getValue() ? true : false,
 					exception_event_id : this.formPanel.form.baseParams['exception_event_id']
 //					has_other_participants: this.participantsPanel.invitationRequired()
 				};
