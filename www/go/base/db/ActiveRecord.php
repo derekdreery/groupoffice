@@ -1982,7 +1982,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	public function getAttributeSelection($attributeNames, $outputType='formatted'){
 		$att=array();
 		foreach($attributeNames as $attName){
-			$att[$attName]=$this->getAttribute($attName, $outputType);
+			if(isset($this->columns[$attName])){
+				$att[$attName]=$this->getAttribute($attName, $outputType);
+			}elseif($this->customfieldsRecord)
+			{
+				$att[$attName]=$this->customfieldsRecord->getAttribute($attName, $outputType);
+			}else
+			{
+				$att[$attName]=null;
+			}
 		}
 		return $att;
 	}
