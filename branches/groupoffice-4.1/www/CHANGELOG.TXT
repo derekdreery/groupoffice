@@ -1,4 +1,4 @@
-4.1.55
+15-04-2013 4.1.55
 - Added encoding check to email body to convert mail encoding to UTF-8.
 - ActiveRecord->findByAttributes() and ActiveRecord->findSingleByAttributes() will create an IN query when the value is an array
 - Fixed print button for SMIME signed emails 
@@ -13,7 +13,9 @@
 - Order Model will check for recurring Orders before Delete
 - Recurred Order without an order_id can no longer be deleted
 - Adding an Order status to an order book will no longer throw an Notice exception
-- Increased interger size of file size column
+- Increased integer size of file size column
+- Calendar exceptions reappeared erroneously in caldav after changing the start time of the main event series.
+- Prevent uneditable merged events in the calendar
 
 05-04-2013 4.1.54
 - Sort order wrong for resources in event dialog
