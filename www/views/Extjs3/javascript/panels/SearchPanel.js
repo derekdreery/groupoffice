@@ -144,7 +144,7 @@ GO.grid.SearchPanel = function(config){
 //	if(config.noOpenLinks)
 //	{
 		this.store.baseParams.dont_calculate_total=1;
-		this.store.baseParams.limit=20;
+		this.store.baseParams.limit=GO.settings.max_rows_list;
 		this.store.baseParams.start=0;
 		gridConfig.paging=false;
 //	}else
