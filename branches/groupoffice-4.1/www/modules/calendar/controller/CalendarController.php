@@ -76,9 +76,10 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		
 		$this->processStoreDelete($store, $params);
 		
+		$store->setDefaultSortOrder(array('g.name','t.name'), array('ASC','ASC'));
+		
 		$findParams = $store->getDefaultParams($params)
-						->join(GO_Calendar_Model_Group::model()->tableName(), GO_Base_Db_FindCriteria::newInstance()->addCondition('group_id', 'g.id', '=', 't', true, true),'g')
-						->order(array('g.name','t.name'))						
+						->join(GO_Calendar_Model_Group::model()->tableName(), GO_Base_Db_FindCriteria::newInstance()->addCondition('group_id', 'g.id', '=', 't', true, true),'g')				
 						->select('t.*,g.name AS group_name')
 						->permissionLevel($params['permissionLevel']);
 		

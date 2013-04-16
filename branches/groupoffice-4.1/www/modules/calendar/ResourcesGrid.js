@@ -15,7 +15,8 @@ GO.calendar.ResourcesGrid = function(config){
 	{
 		header:GO.lang.strName,
 		dataIndex: 'name',
-		id:'name'
+		id:'name',
+		sortable:true
 	},{
 		header:GO.calendar.lang.group,
 		dataIndex: 'group_name',

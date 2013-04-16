@@ -16,6 +16,7 @@ class GO_Calendar_Controller_Group extends GO_Base_Controller_AbstractModelContr
 	protected function actionGroupsWithResources($params){
 		
 		$stmt = GO_Calendar_Model_Group::model()->find(GO_Base_Db_FindParams::newInstance()
+						->order('t.name')
 						->criteria(GO_Base_Db_FindCriteria::newInstance()
 										->addCondition('id',1,'>')));
 		
