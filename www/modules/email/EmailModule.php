@@ -28,6 +28,8 @@ class GO_Email_EmailModule extends GO_Base_Module{
 		$c = new GO_Core_Controller_Auth();
 		$c->addListener('head', 'GO_Email_EmailModule', 'head');
 		
+		GO_Base_Model_User::model()->addListener('delete', "GO_Email_EmailModule", "deleteUser");
+		
 		return parent::initListeners();
 	}
 	public function autoInstall() {
@@ -47,11 +49,8 @@ class GO_Email_EmailModule extends GO_Base_Module{
 	}
 	
 	
-	public static function deleteUser($user) {
-		
+	public static function deleteUser($user) {		
 		GO_Email_Model_Account::model()->deleteByAttribute('user_id', $user->id);
-		
-		return parent::deleteUser($user);
 	}
 	
 	

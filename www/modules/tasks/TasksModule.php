@@ -1,8 +1,8 @@
 <?php
 class GO_Tasks_TasksModule extends GO_Base_Module{
 	public static function initListeners() {
-		//GO_Core_Controller_Settings::model()->addListener('actionLoad', 'GO_Tasks_TasksModule', 'onLoadSettings');		
-		//todo create default tasklist on user create and delete. See notes.
+		
+		GO_Base_Model_User::model()->addListener('delete', "GO_Tasks_TasksModule", "deleteUser");
 	}
 
 	public function autoInstall() {
@@ -44,8 +44,6 @@ class GO_Tasks_TasksModule extends GO_Base_Module{
 	public static function deleteUser($user) {
 		
 		GO_Tasks_Model_PortletTasklist::model()->deleteByAttribute('user_id', $user->id);
-		
-		return parent::deleteUser($user);
 	}
 	
 }
