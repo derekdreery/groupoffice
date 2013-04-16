@@ -1,4 +1,5 @@
 4.1.56
+- Fixed color selection when multiple calendars are viewed in the calendargrid
 - Start page: Files portlet now has a pagination.
 - Projects module: more informative error message when new project type can not be saved when saving a new project.
 - Fixed refresh of calendargrid for events that are updated to whole day events
