@@ -14,12 +14,11 @@ class GO_Smime_SmimeModule extends GO_Base_Module{
 		
 		GO_Email_Model_Account::model()->addListener('delete', "GO_Smime_EventHandlers", "deleteAccount");
 		
+		GO_Base_Model_User::model()->addListener('delete', "GO_Smime_SmimeModule", "deleteUser");
+		
 	}
 	
-	public static function deleteUser($user) {
-		
-		GO_Smime_Model_PublicCertificate::model()->deleteByAttribute('user_id', GO::user()->id);
-		
-		return parent::deleteUser($user);
+	public static function deleteUser($user) {		
+		GO_Smime_Model_PublicCertificate::model()->deleteByAttribute('user_id', $user->id);
 	}
 }

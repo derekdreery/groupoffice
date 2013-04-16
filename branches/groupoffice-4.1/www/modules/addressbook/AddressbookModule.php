@@ -10,6 +10,10 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		return 'mschering@intermesh.nl';
 	}
 	
+	public static function initListeners() {
+		GO_Base_Model_User::model()->addListener('delete', "GO_Addressbook_AddressbookModule", "deleteUser");
+	}
+	
 	// Load the settings for the "Addresslists" tab in the Settings panel
 	public static function loadSettings(&$settingsController, &$params, &$response, $user) {
 

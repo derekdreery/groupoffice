@@ -301,7 +301,8 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		$cacheKey = 'GO_Base_Model_User:'.$this->id;
 		GO::cache()->delete($cacheKey);
 		
-		GO::modules()->callModuleMethod('saveUser', array(&$this, $wasNew));
+		//		deprecated. It's inefficient and can be done with listeners
+		//GO::modules()->callModuleMethod('saveUser', array(&$this, $wasNew));
 
 		return parent::afterSave($wasNew);
 	}
@@ -356,8 +357,8 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		foreach($defaultModels as $model){
 			$model->deleteByAttribute('user_id',$this->id);
 		}
-		
-		GO::modules()->callModuleMethod('deleteUser', array(&$this));
+//		deprecated. It's inefficient and can be done with listeners
+//		GO::modules()->callModuleMethod('deleteUser', array(&$this));
 
 		return parent::afterDelete();
 	}
