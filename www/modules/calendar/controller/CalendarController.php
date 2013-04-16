@@ -201,8 +201,8 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 	private $_colorIndex = 0;
 	
 	public function getCalendarColor($formattedrecord,$model,$controller){
-				
-		if(empty($model->color)){
+		$color = $model->getColor(GO::user()->id);
+		if(empty($color)){
 			if($this->_colorIndex >= count($this->_colors))
 				$this->_colorIndex = 0;
 			
