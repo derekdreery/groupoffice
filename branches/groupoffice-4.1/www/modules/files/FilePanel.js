@@ -202,7 +202,7 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
           '</tpl>'+
 
 					'<tpl if="!GO.util.empty(thumbnail_url)"><tr><td colspan="2">'+
-						'<img src="{thumbnail_url}" />'+
+						'<img src="{thumbnail_url}" style="width:100px;height:100px;" />'+
 					'</td></tr></tpl>'+
 
 					this.extraTemplateProperties +
