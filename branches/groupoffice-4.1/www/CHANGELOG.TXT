@@ -5,6 +5,7 @@
 - Fixed refresh of calendargrid for events that are updated to whole day events
 - Fixed server checking of autolink items when replying email messages
 - Enabled TabScroll for main tabpanel
+- Tasks module: return of "priority low" arrow in tasks grid.
 
 15-04-2013 4.1.55
 - Added encoding check to email body to convert mail encoding to UTF-8.
