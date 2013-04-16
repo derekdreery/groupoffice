@@ -6,6 +6,7 @@
 - Fixed server checking of autolink items when replying email messages
 - Enabled TabScroll for main tabpanel
 - Tasks module: return of "priority low" arrow in tasks grid.
+- Fixed external link function for workflow.
 
 15-04-2013 4.1.55
 - Added encoding check to email body to convert mail encoding to UTF-8.
