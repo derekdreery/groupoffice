@@ -239,7 +239,7 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
 	storeLoaded : false,
 	
 	renderIcon : function(src, p, record) {
-		if(record.data['priority'])
+		if(typeof(record.data['priority'])!='undefined')
 		{
 			if(record.data['priority'] > 1)
 				return '<div class="email-grid-icon btn-high-priority"></div>';
