@@ -62,3 +62,7 @@ $l["siteMod_rewrite"] = "Mod rewrite";
 $l["siteMod_rewrite_base_path"] = "Mod rewrite base path";
 $l["siteBase_path"] = "Base path";
 $l["siteAcl_id"] = "ACL";
+
+
+$l["multifile"] = "Multi File";
+$l["multifileSelectValue"] = "%s file(s)";

@@ -13,17 +13,18 @@ GO.moduleManager.onModuleReady('customfields', function(){
 		}
 	}
 	
-//	GO.customfields.nonGridTypes.push('sitemultifile');
-//	GO.customfields.dataTypes.GO_Site_Customfieldtype_SiteMultifile={
-//		label : GO.site.lang.siteMultiFile,
-//		getFormField : function(customfield, config){
-//			return {
-//				xtype: 'selectfile',
-//       	fieldLabel: customfield.name,
-//        name:customfield.dataname,
-//        anchor:'-20'
-//			}
-//		}
-//	}
+	GO.customfields.nonGridTypes.push('siteselectmultifile');
+	GO.customfields.dataTypes.GO_Site_Customfieldtype_Sitemultifile={
+		label : GO.site.lang.siteMultiFile,
+		getFormField : function(customfield, config){
+			return {
+				xtype: 'siteselectmultifile',
+       	fieldLabel: customfield.name,
+				customfield:customfield, // make customfield available in the object
+        name:customfield.dataname,
+        anchor:'-20'
+			}
+		}
+	}
 
 }, this);

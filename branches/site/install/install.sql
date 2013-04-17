@@ -70,3 +70,16 @@ CREATE TABLE IF NOT EXISTS `cf_site_content` (
   `model_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`model_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `site_multifile_files`
+--
+
+CREATE TABLE IF NOT EXISTS `site_multifile_files` (
+  `model_id` int(11) NOT NULL,
+  `field_id` int(11) NOT NULL,
+  `file_id` int(11) NOT NULL,
+  PRIMARY KEY (`model_id`,`field_id`,`file_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

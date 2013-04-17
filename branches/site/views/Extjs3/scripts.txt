@@ -1,3 +1,7 @@
+modules/site/views/Extjs3/Stores.js
+modules/site/views/Extjs3/MultifileView.js
+modules/site/views/Extjs3/MultifileDialog.js
+modules/site/views/Extjs3/SelectMultiFile.js
 modules/site/views/Extjs3/SelectFile.js
 modules/site/views/Extjs3/Customfield.js
 
