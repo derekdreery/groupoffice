@@ -47,6 +47,7 @@ class GO_Site_Components_Router{
 			//404
 			$controller = new GO_Site_Controller_Site();
 		}
+		return $controller;
 	}
 	
 	/**

@@ -45,6 +45,12 @@ class Site {
 	private static $_template;
 	
 	/**
+	 *
+	 * @var GO_Site_Controller_Abstract
+	 */
+	private static $_controller;
+	
+	/**
 	 * Handles string translation for sites 
 	 */
 	public static function t($key)
@@ -59,6 +65,10 @@ class Site {
 	 */
 	public static function model(){
 		return self::$_site;
+	}
+	
+	public static function controller() {
+		return self::$_controller;
 	}
 	
 	/**
@@ -112,7 +122,7 @@ class Site {
 		if(!self::$_site)
 			throw new GO_Base_Exception_NotFound('Website for domain '.$_SERVER["SERVER_NAME"].' not found in database');
 				
-		self::router()->runController();
+		$this->_controller = self::router()->runController();
 	}
 	
 	/**
