@@ -168,7 +168,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 								//PHONE							
 								'<tpl if="!GO.util.empty(phone)">'+
 									'<tr>'+
-										'<td class="contactCompanyLabelWidth">' + GO.lang['strPhone'] + ':</td><td><a href="{[GO.util.callToHref(values.phone)]}">{phone}</a></td>'+
+										'<td class="contactCompanyLabelWidth">' + GO.lang['strPhone'] + ':</td><td>{[GO.util.callToLink(values.phone)]}</td>'+
 									'</tr>'+						
 								'</tpl>'+
 
@@ -252,11 +252,12 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 					
 					
 					'<tpl if="employees.length">'+
-						'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
+					'{[this.collapsibleSectionHeader("'+GO.addressbook.lang.cmdPanelEmployees+'","employees")]}'+
+						'<table class="display-panel" cellpadding="0" cellspacing="0" border="0" id="employees">'+
 						//LINK DETAILS
-						'<tr>'+
-							'<td colspan="4" class="display-panel-heading">'+GO.addressbook.lang.cmdPanelEmployees+'</td>'+
-						'</tr>'+
+//						'<tr>'+
+//							'<td colspan="4" class="display-panel-heading">'+GO.addressbook.lang.cmdPanelEmployees+'</td>'+
+//						'</tr>'+
 						
 						'<tr>'+
 							'<td width="16" class="display-panel-links-header">&nbsp;</td>'+

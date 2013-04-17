@@ -269,8 +269,8 @@ $l["priority_normal"]='Normal';
 $l["priority_high"]='Hög';
 $l["userSelectedLanguage"]= 'Mitt valda språk';
 $l["orientation"]='Orientering';
-$l["portrait"]='Porträtt';
-$l["landscape"]='Landskap';
+$l["portrait"]='Stående';
+$l["landscape"]='Liggande';
 $l["link"]='Länk';
 $l["savedQueries"]='Sparade frågor';
 $l["searchQueryName"]= 'Namn på sökfråga';
@@ -497,22 +497,22 @@ $l['attributeRequired']='Fältet %s måste anges';
 $l['attributeTooLong']='Fältet %s är längre än maxlängden %s tecken';
 $l['attributeIncorrectFormat']='Fältet %s är felformaterat';
 $l['attributeInvalid']='Fältet %s är ogiltigt';
-$l['operationStopped']='Operationen stoppades.';
+$l['operationStopped']='Körningen stoppades.';
 $l['delimiter']='Avgränsare';
 $l['enclosure']='Inneslutning';
 
 $l['notFound']='Det efterfrågade objektet hittades inte.';
 
-$l['groupofficeDisabled']="<p>Detta konto i {product_name} har blivit avstängt.</p><p>Vänligen kontakta din kontohanterare.</p>";
+$l['groupofficeDisabled']="<p>Detta konto i {product_name} har blivit avstängt.</p><p>Vänligen kontakta din kontoadministratör.</p>";
 
-$l['summarylogImportText']="Försökte imortera {importCount} objekt.";
+$l['summarylogImportText']="Försökte importera {importCount} objekt.";
 $l['summarylogErrorText']="Fel förekom under importen";
 $l['summarylogSuccessText']="Import lyckades";
 
-$l['exportIncludeHidden']= 'Exportera även gömda kolumner';
-$l['exportHumanHeaders']= 'Använd kolumnnamn ifrån databasen som kolumnrubriker';
+$l['exportIncludeHidden']= 'Exportera även dolda kolumner';
+$l['exportHumanHeaders']= 'Använd kolumnnamn från databasen som kolumnrubriker';
 $l['exportIncludeHeaders']= 'Exportera även rubriker';
-$l['exportOrientation']= 'Orientatering';
+$l['exportOrientation']= 'Orientering';
 
 
 $l['remove']="Radera";
@@ -558,10 +558,10 @@ $l['numMaxValue']="Högsta värdet för det här fältet är {0}";
 
 $l['cannotMoveError']="%s objekt kan inte flyttas, du har inte tillräkliga behörigheter.";
 
-$l['queryAnd']= "Och";
-$l['queryOr']= "Eller";
+$l['queryAnd']= "och";
+$l['queryOr']= "eller";
 $l['queryField']= "Fält";
-$l['queryComparator']= "Jämförare";
+$l['queryComparator']= "Komparator";
 $l['queryValue']="Värde";
 $l['queryStartGroup']="Startgrupp";
 $l['cliOnly']= "Detta skript kan bara köras genom Group-Office Command Line Interface (CLI).";
@@ -606,3 +606,9 @@ $l['passwordUnique']='Det måste innehålla %s unika tecken';
 $l['maxAttachmentsSizeExceeded']="Den totala storleken på dina bifogade filer ({total}) överskrider tillåtet maximum ({max}).";
 
 $l['extjs_lang']='sv_SE';
+
+$l['exportScreen']='Visas på skärmen';
+$l['exportAddressbook']="Lägg automatiskt in saknade adressboksposter till";
+$l['exportOrders']='Ordrar';
+$l['errorTimeout']="Förfrågan gjorde timeout. Servern svarade inte inom tidsramen. Försök igen.";
+$l['showAll']='Visa alla';

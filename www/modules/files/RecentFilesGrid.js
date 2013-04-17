@@ -71,6 +71,17 @@ GO.files.RecentFilesGrid = Ext.extend(GO.grid.GridPanel,{
 		
 		config.autoHeight=true;
 		
+		config.bbar = new Ext.PagingToolbar({
+        store: config.store,
+				pageSize: parseInt(GO.settings['max_rows_list']),
+				displayInfo: true,
+				displayMsg: GO.lang['displayingItems'],
+				emptyMsg: GO.lang['strNoItems']
+//        displayInfo: true,
+//        displayMsg: 'Displaying topics {0} - {1} of {2}',
+//        emptyMsg: "No topics to display"
+    });
+		
 		GO.files.RecentFilesGrid.superclass.constructor.call(this,config);
 	
 	}

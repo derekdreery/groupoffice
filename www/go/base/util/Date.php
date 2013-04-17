@@ -119,7 +119,6 @@ class GO_Base_Util_Date {
 	 * @param string $date_format
 	 * @return string
 	 */
-
 	public static function to_input_format($date_string, $date_separator=null, $date_format=null)
 	{
 		if(strpos($date_string,'T')){
@@ -150,8 +149,6 @@ class GO_Base_Util_Date {
 	 * @param String $date_string
 	 * @return int Unix timestamp
 	 */
-
-
 	public static function to_unixtime($date_string) {
 		if(empty($date_string) || $date_string=='0000-00-00')
 		{
@@ -174,7 +171,6 @@ class GO_Base_Util_Date {
 	 * @access public
 	 * @return int unix timestamp
 	 */
-
 	public static function to_db_date($date_string, $with_time = false) {
 		if(empty($date_string))
 		{
@@ -232,9 +228,9 @@ class GO_Base_Util_Date {
 	 * @param int $time Unix timestamp
 	 * @return int 
 	 */
-	public static function clear_time($time){
+	public static function clear_time($time, $newhour=0, $newmin=0, $newsec=0){
 		$date=getdate($time);
-		return mktime(0,0,0,$date['mon'],$date['mday'],$date['year']);
+		return mktime($newhour,$newmin,$newsec,$date['mon'],$date['mday'],$date['year']);
 	}
 
 
@@ -247,7 +243,6 @@ class GO_Base_Util_Date {
 	 * @access public
 	 * @return int unix timestamp
 	 */
-
 	public static function get_dateformat($format, $separator)
 	{
 		$newformat = '';

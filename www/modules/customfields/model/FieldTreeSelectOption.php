@@ -30,6 +30,8 @@
 
 class GO_Customfields_Model_FieldTreeSelectOption extends GO_Base_Db_ActiveRecord{
 		
+	
+	public $checkSlaves=true;
 	/**
 	 * Returns a static model of itself
 	 * 
@@ -52,7 +54,7 @@ class GO_Customfields_Model_FieldTreeSelectOption extends GO_Base_Db_ActiveRecor
 	
 	protected function beforeSave() {
 		
-		if($this->isNew){
+		if($this->isNew && empty($this->sort)){
 			$record = $this->findSingle(array(
 					'fields'=>'MAX(`sort`) AS sort',
 					'where'=>'field_id=:field_id',
@@ -67,28 +69,8 @@ class GO_Customfields_Model_FieldTreeSelectOption extends GO_Base_Db_ActiveRecor
 	
 	protected function afterSave($wasNew) {
 		
-		if($wasNew){
-			
-			//We need to create a GO_Customfields_Customfieldtype_TreeselectSlave field for all tree levels
-			$nestingLevel = $this->field->getTreeSelectNestingLevel();
-			
-			for($i=1;$i<$nestingLevel;$i++){
-				$field =GO_Customfields_Model_Field::model()->findSingle(array(
-						'where'=>'treemaster_field_id=:treemaster_field_id AND nesting_level=:nesting_level',
-						'bindParams'=>array('treemaster_field_id'=>$this->field_id,'nesting_level'=>$i)
-				));
-				
-				if(!$field){
-					$field = new GO_Customfields_Model_Field();
-					$field->name=$this->field->name.' '.$i;
-					$field->datatype='GO_Customfields_Customfieldtype_TreeselectSlave';
-					$field->treemaster_field_id=$this->field_id;
-					$field->nesting_level=$i;
-					$field->category_id=$this->field->category_id;
-					$field->save();
-				}
-				
-			}
+		if($wasNew && $this->checkSlaves){
+			$this->field->checkTreeSelectSlaves();			
 		}
 		
 		return parent::afterSave($wasNew);

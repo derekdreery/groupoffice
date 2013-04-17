@@ -119,3 +119,8 @@ $l['openContact']='Öppna kontakt';
 $l['showProUsers']='Visa pro-användare';
 
 $l['updateExistingOnImport']='Uppdatera existerande användare (efter användarnamn)';
+
+$l['resetState']="Nollställ fönster och rutnät";
+$l['resetStateConfirm']='Är du säker på att du vill nollställa storleken på alla rutnät, fönster, paneler etc till fabriksinställningar?';
+$l['registrationEmail']='E-post med registreringsavisering';
+$l['enabledSettingtabs']='Aktivera inställningsflikar';

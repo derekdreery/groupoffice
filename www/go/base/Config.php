@@ -315,6 +315,11 @@ class GO_Base_Config {
 	 */
 	public $html_editor_font = "font-size:13px; font-family:Arial, Helvetica, sans-serif;";
 
+	/**
+	 * The default font to be used in the generated PDF files.
+	 * @var string 
+	 */
+	public $tcpdf_font = "dejavusans";
 
 //	/**
 //	 * Grant read permissions for these modules to new self-registered users.
@@ -926,7 +931,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.1.54';
+	var $version = '4.1.55';
 	
 	/**
 	 * Modification date
@@ -934,7 +939,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20130405';
+	var $mtime = '20130415';
 
 	#group configuration
 	/**

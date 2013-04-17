@@ -18,7 +18,7 @@ GO.moduleManager.onModuleReady('email',function(){
 			
 			this.printButton.handler=function(){
 				
-				if(this.messagePanel.data.smime_signed){
+				if(this.messagePanel.data.smime_signed && !this.messagePanel.smimeChecked){
 					this.messagePanel.checkCert(true, function(){
 						this.messagePanel.body.print();
 					}, this);
@@ -84,7 +84,7 @@ GO.moduleManager.onModuleReady('email',function(){
 			
 			if(!this.smimeChecked){
 				GO.request({
-					maskEl:this.certPanel.getEl(),
+					maskEl:hideDialog ? this.getEl() : this.certPanel.getEl(),
 					url: "smime/certificate/verify",
 					params:{
 						uid:this.uid,

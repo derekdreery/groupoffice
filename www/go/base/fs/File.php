@@ -292,6 +292,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 			case 'png':
 			case 'gif':
 			case 'xmind':
+			case 'svg':
 
 				return true;
 			default:

@@ -139,21 +139,21 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 										//PHONE							
 										'<tpl if="!GO.util.empty(home_phone)">'+
 											'<tr>'+
-												'<td class="contactCompanyLabelWidth">' + GO.lang['strPhone'] + ':</td><td><a href="{[GO.util.callToHref(values.home_phone)]}">{home_phone}</a></td>'+
+												'<td class="contactCompanyLabelWidth">' + GO.lang['strPhone'] + ':</td><td>{[GO.util.callToLink(values.home_phone)]}</td>'+
 											'</tr>'+						
 										'</tpl>'+
 
 										//CELLULAR							
 										'<tpl if="!GO.util.empty(cellular)">'+
 											'<tr>'+
-												'<td class="contactCompanyLabelWidth">' + GO.lang['strCellular'] + ':</td><td><a href="{[GO.util.callToHref(values.cellular)]}">{cellular}</a></td>'+
+												'<td class="contactCompanyLabelWidth">' + GO.lang['strCellular'] + ':</td><td>{[GO.util.callToLink(values.cellular)]}</td>'+
 											'</tr>'+						
 										'</tpl>'+
 										
 										//CELLULAR2							
 										'<tpl if="!GO.util.empty(cellular2)">'+
 											'<tr>'+
-												'<td class="contactCompanyLabelWidth">' + GO.lang['cellular2'] + ':</td><td><a href="{[GO.util.callToHref(values.cellular2)]}">{cellular2}</a></td>'+
+												'<td class="contactCompanyLabelWidth">' + GO.lang['cellular2'] + ':</td><td>{[GO.util.callToLink(values.cellular2)]}</td>'+
 											'</tr>'+						
 										'</tpl>'+
 										
@@ -177,7 +177,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 										//PHONE WORK							
 										'<tpl if="!GO.util.empty(work_phone)">'+
 											'<tr>'+
-												'<td class="contactCompanyLabelWidth">' + GO.lang['strWorkPhone'] + ':</td><td><a href="{[GO.util.callToHref(values.work_phone)]}">{work_phone}</a></td>'+
+												'<td class="contactCompanyLabelWidth">' + GO.lang['strWorkPhone'] + ':</td><td>{[GO.util.callToLink(values.work_phone)]}</td>'+
 											'</tr>'+						
 										'</tpl>'+
 			

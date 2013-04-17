@@ -1,3 +1,37 @@
+4.1.56
+- Fixed color selection when multiple calendars are viewed in the calendargrid
+- Start page: Files portlet now has a pagination.
+- Projects module: more informative error message when new project type can not be saved when saving a new project.
+- Fixed refresh of calendargrid for events that are updated to whole day events
+- Fixed server checking of autolink items when replying email messages
+- Enabled TabScroll for main tabpanel
+- Tasks module: return of "priority low" arrow in tasks grid.
+- Fixed external link function for workflow.
+
+15-04-2013 4.1.55
+- Added encoding check to email body to convert mail encoding to UTF-8.
+- ActiveRecord->findByAttributes() and ActiveRecord->findSingleByAttributes() will create an IN query when the value is an array
+- Fixed print button for SMIME signed emails 
+- GO_Mail_Message will not replace {variables} in the head of the HTML email template because CSS <style> might use { } characters
+- Address book will load companies and contacts even when the eastpanel is collapsed
+- New action to purge old events from the calendars
+- Incorrect style definitions in html mails
+- added  {prevdate} tag for printing recurring invoices periods
+- The generated ICS files will have correct daylight saving time set
+- Fixed saving of tasks recurrence to "no recurrence" value
+- Order Dialog in billing is now modal
+- Order Model will check for recurring Orders before Delete
+- Recurred Order without an order_id can no longer be deleted
+- Adding an Order status to an order book will no longer throw an Notice exception
+- Increased integer size of file size column
+- Optimized custom fields tree import
+- SVG thumbnail and file handling added
+- Add template attachments after switching template in e-mail composer
+- Include second meeting request attachment for Outlook 2003 compatibility
+- New option to log syncml only for specific users
+- Calendar exceptions reappeared erroneously in caldav after changing the start time of the main event series.
+- Prevent uneditable merged events in the calendar
+
 05-04-2013 4.1.54
 - Sort order wrong for resources in event dialog
 - Holidays were listed at the bottom in calendar list view
@@ -28,6 +62,8 @@
 - Reset password was broken
 - removed time before tasks and birthday events in the calendar's month view
 - Cron: enabling the users and group tabs when clicking on apply will now work.
+- Changed labels on the button to add an email address to a new or existing contact in the addressbook
+- Cost price of product dialog of billing will format correctly when loaded
 - MultiSelectGrid will check for an ACL field in the linked model if $checkPermissions is not provided
 - TimerButton didn't load time from database on reload the way it should (fixed)
 - Billing, duplicate order: No more link between original order and duplicate order.

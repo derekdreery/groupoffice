@@ -3,14 +3,11 @@ class GO_Serverclient_ServerclientModule extends GO_Base_Module{
 	
 	public static function initListeners() {
 		
-		GO_Base_Model_User::model()->addListener("beforesave", "GO_Serverclient_ServerclientModule", "onBeforeSave");
+		GO_Base_Model_User::model()->addListener("save", "GO_Serverclient_ServerclientModule", "saveUser");
 		
 		return parent::initListeners();
 	}
 	
-	public static function onBeforeSave($user){
-		
-	}
 	
 	public static function getDomains(){
 		return empty(GO::config()->serverclient_domains) ? array() : array_map('trim',explode(",", GO::config()->serverclient_domains));

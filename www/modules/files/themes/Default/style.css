@@ -124,6 +124,7 @@ cursor:pointer;
 	width: 100px;
 	background-position:  center center;
 	background-repeat: no-repeat;
+	background-size:100px 100px;
 }
 .fs-thumb-wrap{
 	float: left;

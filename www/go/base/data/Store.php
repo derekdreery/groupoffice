@@ -227,7 +227,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 		if (!is_array($sort))
 			$sort=empty($sort) ? array() : array($sort);
 		
-		if(isset($requestParams['groupBy']))
+		if(!empty($requestParams['groupBy']))
 			array_unshift ($sort, $requestParams['groupBy']);
 
 		if (!is_array($dir))

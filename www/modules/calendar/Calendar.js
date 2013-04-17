@@ -1806,6 +1806,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					url: GO.url("calendar/calendar/calendarsWithGroup")
 				}),
 				groupField:'group_name',
+				remoteSort:true,
+				remoteGroup:true,
 				sortInfo: {
 					field: 'name',
 					direction: 'ASC'
