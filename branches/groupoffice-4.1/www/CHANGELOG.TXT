@@ -24,6 +24,11 @@
 - Recurred Order without an order_id can no longer be deleted
 - Adding an Order status to an order book will no longer throw an Notice exception
 - Increased integer size of file size column
+- Optimized custom fields tree import
+- SVG thumbnail and file handling added
+- Add template attachments after switching template in e-mail composer
+- Include second meeting request attachment for Outlook 2003 compatibility
+- New option to log syncml only for specific users
 - Calendar exceptions reappeared erroneously in caldav after changing the start time of the main event series.
 - Prevent uneditable merged events in the calendar
 
