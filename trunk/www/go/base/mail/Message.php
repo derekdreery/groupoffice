@@ -108,9 +108,21 @@ class GO_Base_Mail_Message extends Swift_Message{
 		$this->_getParts($structure);
 		
 		if($replaceCallback){			
-			array_unshift($replaceCallbackArgs, $this->_loadedBody);			
+				
 			
-			$this->_loadedBody = call_user_func_array($replaceCallback, $replaceCallbackArgs);
+			$bodyStart = strpos($this->_loadedBody, '<body');
+			
+			if($bodyStart){		  
+			
+			  $body = substr($this->_loadedBody, $bodyStart);
+			  array_unshift($replaceCallbackArgs, $body);
+			  $body = call_user_func_array($replaceCallback, $replaceCallbackArgs);
+			  
+			  $this->_loadedBody = substr($this->_loadedBody,0,$bodyStart).$body;
+			}else{
+			  array_unshift($replaceCallbackArgs, $this->_loadedBody);
+			  $this->_loadedBody = call_user_func_array($replaceCallback, $replaceCallbackArgs);
+			}
 		}
 		
 		
@@ -152,6 +164,26 @@ class GO_Base_Mail_Message extends Swift_Message{
 		return false;
 	}
 	
+	/**
+	 * Try to convert the encoding of the email to UTF-8
+	 * 
+	 * @param  stdClass $part
+	 */
+	private function _convertEncoding(&$part){
+		$charset='UTF-8';
+					
+		if(isset($part->ctype_parameters['charset'])){
+			$charset = strtoupper($part->ctype_parameters['charset']);
+		}
+
+		if($charset!='UTF-8'){
+			$part->body = GO_Base_Util_String::to_utf8($part->body, $charset);
+			
+			$part->body = str_ireplace($charset, 'UTF-8', $part->body);
+			
+		}
+	}
+	
 	private function _getParts($structure, $part_number_prefix='')
 	{
 		if (isset($structure->parts))
@@ -169,9 +201,11 @@ class GO_Base_Mail_Message extends Swift_Message{
 					}
 				}
 
-
+				
 				if ($part->ctype_primary == 'text' && ($part->ctype_secondary=='plain' || $part->ctype_secondary=='html') && (!isset($part->disposition) || $part->disposition != 'attachment') && empty($part->d_parameters['filename']))
 				{
+					$this->_convertEncoding($part);
+					
 					if (stripos($part->ctype_secondary,'plain')!==false)
 					{
 						$content_part = nl2br($part->body);
@@ -243,6 +277,8 @@ class GO_Base_Mail_Message extends Swift_Message{
 			}
 		}elseif(isset($structure->body))
 		{
+			
+			$this->_convertEncoding($structure);
 			//convert text to html
 			if (stripos( $structure->ctype_secondary,'plain')!==false)
 			{
@@ -411,7 +447,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 			}
 			$params['htmlbody']=$this->_fixRelativeUrls($params['htmlbody']);
 						
-			$htmlTop = '<html><head><style type="text/css">body,p,td,div,span{'.GO::config()->html_editor_font.'};body{border: 0; margin: 0; padding: {0}px; height: {1}px; cursor: text}body p{margin:0px;}</style></head><body>';
+			$htmlTop = '<html><head><style type="text/css">body,p,td,div,span{'.GO::config()->html_editor_font.'};body p{margin:0px;}</style></head><body>';
 			
 			$htmlBottom = '</body></html>';
 			

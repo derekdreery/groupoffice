@@ -68,3 +68,4 @@ $l['csv'] = 'Comma Separated Values';
 $l['js'] = 'Javascript';
 $l['sql'] = 'SQL database export';
 $l['xmind']='XMind file';
+$l['svg']='Scalable Vector Graphics';

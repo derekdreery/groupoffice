@@ -1,20 +1,24 @@
 <?php
 //require_once('../../../../GO.php');
-//
 //GO::session()->runAsRoot();
 
-$fp = GO_Base_Db_FindParams::newInstance()->ignoreAcl();
-$fp->getCriteria()->addCondition('project_id', 0, '>');
+if(GO::modules()->isInstalled('projects')){
+	$fp = GO_Base_Db_FindParams::newInstance()->ignoreAcl();
 
-$stmt = GO_Calendar_Model_Calendar::model()->find($fp);
+	$joinCriteria = GO_Base_Db_FindCriteria::newInstance()->addRawCondition('t.acl_id', 'p.acl_id');
 
-foreach($stmt as $calendar){
-	
-	echo "Fixing ".$calendar->name."\n";
-	$oldAcl = $calendar->acl;
-	
-	$newAcl = $calendar->setNewAcl();
-	$calendar->save();
-	
-	$oldAcl->copyPermissions($newAcl);
+	$fp->join('pm_types', $joinCriteria,'p');
+
+	$stmt = GO_Calendar_Model_Calendar::model()->find($fp);
+
+	foreach($stmt as $calendar){
+
+		echo "Fixing ".$calendar->name."\n";
+		$oldAcl = $calendar->acl;
+
+		$newAcl = $calendar->setNewAcl();
+		$calendar->save();
+
+		$oldAcl->copyPermissions($newAcl);
+	}
 }

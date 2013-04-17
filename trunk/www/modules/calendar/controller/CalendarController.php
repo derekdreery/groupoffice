@@ -76,9 +76,10 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		
 		$this->processStoreDelete($store, $params);
 		
+		$store->setDefaultSortOrder(array('g.name','t.name'), array('ASC','ASC'));
+		
 		$findParams = $store->getDefaultParams($params)
-						->join(GO_Calendar_Model_Group::model()->tableName(), GO_Base_Db_FindCriteria::newInstance()->addCondition('group_id', 'g.id', '=', 't', true, true),'g')
-						->order(array('g.name','t.name'))						
+						->join(GO_Calendar_Model_Group::model()->tableName(), GO_Base_Db_FindCriteria::newInstance()->addCondition('group_id', 'g.id', '=', 't', true, true),'g')				
 						->select('t.*,g.name AS group_name')
 						->permissionLevel($params['permissionLevel']);
 		
@@ -200,8 +201,8 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 	private $_colorIndex = 0;
 	
 	public function getCalendarColor($formattedrecord,$model,$controller){
-				
-		if(empty($model->color)){
+		$color = $model->getColor(GO::user()->id);
+		if(empty($color)){
 			if($this->_colorIndex >= count($this->_colors))
 				$this->_colorIndex = 0;
 			

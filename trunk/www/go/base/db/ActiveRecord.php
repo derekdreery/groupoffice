@@ -286,7 +286,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * 'unique'=>false //true to enforce a unique value
 	 * 'greater'=>'start_time' //this column must be greater than column start time
 	 * 'greaterorequal'=>'start_time' //this column must be greater or equal to column start time
-	 * 
+	 * 'customfield'=> 'If this is a custom field this is the custom field model GO_Customfields_Model_Field
 	 * The validator looks like this:
 	 * 
 	 * function validate ($value){
@@ -802,8 +802,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$newParams = GO_Base_Db_FindParams::newInstance();
 		$criteria = $newParams->getCriteria()->addModel($this);
 		
-		foreach($attributes as $attributeName=>$value)
-			$criteria->addCondition($attributeName, $value);
+		foreach($attributes as $attributeName=>$value) {
+			if(is_array($value))
+				$criteria->addInCondition($attributeName, $value);
+			else
+				$criteria->addCondition($attributeName, $value);
+		}
 		
 		if($findParams)
 			$newParams->mergeWith ($findParams);
@@ -845,8 +849,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$newParams = GO_Base_Db_FindParams::newInstance();
 		$criteria = $newParams->getCriteria()->addModel($this);
 		
-		foreach($attributes as $attributeName=>$value)
-			$criteria->addCondition($attributeName, $value);
+		foreach($attributes as $attributeName=>$value) {
+			if(is_array($value))
+				$criteria->addInCondition($attributeName, $value);
+			else
+				$criteria->addCondition($attributeName, $value);
+		}
 		
 		if($findParams)
 			$newParams->mergeWith ($findParams);
@@ -933,35 +941,40 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @throws GO_Base_Exception_NotFound when no record found with supplied PK
 	 */
 	public function createOrFindByParams($params) {
-	  
-	  $pkColumn= $this->primaryKey();
-	  if(is_array($pkColumn)) { //if primaryKey excists of multiple columns
-		$pk=array();
-		foreach($pkColumn as $column)
-		{
-		  if(isset($params[$column]))
-			$pk[$column] = $this->formatInput($column, $params[$column]);
+
+		$pkColumn = $this->primaryKey();
+		if (is_array($pkColumn)) { //if primaryKey excists of multiple columns
+			$pk = array();
+			foreach ($pkColumn as $column) {
+				if (isset($params[$column]))
+					$pk[$column] = $this->formatInput($column, $params[$column]);
+			}
+			if (empty($pk))
+				$model = new static();
+			else {
+				$model = $this->findByPk($pk);
+				if (!$model)
+					$model = new static();
+			}
+
+			if ($model->isNew)
+				$model->setAttributes($params);
+
+			return $model;
 		}
-		if (empty($pk))
-		  $model = new static();
 		else {
-		  $model = $this->findByPk($pk);
-		  if (!$model)
-			$model = new static(); 
+			$pk = $params[$this->primaryKey()];
+			if (empty($pk)) {
+				$model = new static();
+				if ($model->isNew)
+					$model->setAttributes($params);
+			}else {
+				$model = $this->findByPk($pk);
+				if (!$model)
+					throw new GO_Base_Exception_NotFound();
+			}
+			return $model;
 		}
-		return $model;
-	  } 
-	  else {
-		$pk = $params[$this->primaryKey()];
-		if (empty($pk))
-		  $model = new static();
-		else {
-		  $model = $this->findByPk($pk);
-		  if (!$model)
-			throw new GO_Base_Exception_NotFound();
-		}
-		return $model;
-	  }
 	}
 	
 	/**
@@ -1969,7 +1982,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	public function getAttributeSelection($attributeNames, $outputType='formatted'){
 		$att=array();
 		foreach($attributeNames as $attName){
-			$att[$attName]=$this->getAttribute($attName, $outputType);
+			if(isset($this->columns[$attName])){
+				$att[$attName]=$this->getAttribute($attName, $outputType);
+			}elseif($this->customfieldsRecord)
+			{
+				$att[$attName]=$this->customfieldsRecord->getAttribute($attName, $outputType);
+			}else
+			{
+				$att[$attName]=null;
+			}
 		}
 		return $att;
 	}
@@ -2015,6 +2036,20 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	public function getColumns()
 	{
 		return $this->columns;
+	}
+	
+	/**
+	 * Returns a column specification see $this->columns;
+	 * 
+	 * @see GO_Base_Db_ActiveRecord::$columns	
+	 * @return array
+	 */
+	public function getColumn($name)
+	{
+		if(!isset($this->columns[$name]))
+			return false;
+		else
+			return $this->columns[$name];
 	}
 	
 	/**

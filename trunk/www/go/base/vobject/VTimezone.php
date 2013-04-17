@@ -74,7 +74,7 @@ class GO_Base_VObject_VTimezone extends Sabre\VObject\Component {
 		$this->add("last-modified", "19870101T000000Z");
 
 		$s = new Sabre\VObject\Component("standard");
-		$s->dtstart = "16010101T000000";
+		$s->dtstart = "19710101T030000";
 		$s->rrule = $STANDARD_RRULE;
 		$s->tzoffsetfrom = $STANDARD_TZOFFSETFROM . "00";
 		$s->tzoffsetto = $STANDARD_TZOFFSETTO . "00";
@@ -82,7 +82,7 @@ class GO_Base_VObject_VTimezone extends Sabre\VObject\Component {
 		$this->add($s);
 
 		$s = new Sabre\VObject\Component("daylight");
-		$s->dtstart = "16010101T000000";
+		$s->dtstart = "19710101T020000";
 		$s->rrule = $DAYLIGHT_RRULE;
 		$s->tzoffsetfrom = $DAYLIGHT_TZOFFSETFROM . "00";
 		$s->tzoffsetto = $DAYLIGHT_TZOFFSETTO . "00";

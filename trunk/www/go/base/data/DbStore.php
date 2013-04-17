@@ -274,7 +274,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 
 		$findParams = GO_Base_Db_FindParams::newInstance()
 						->joinCustomFields()
-						->order($this->sort, $this->direction);
+						->order($sort, $dir);
 
 		if (empty($this->_requestParams['dont_calculate_total'])) {
 			$findParams->calcFoundRows();

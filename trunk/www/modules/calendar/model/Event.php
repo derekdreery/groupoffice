@@ -1195,7 +1195,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 			$exception = $this->recurringEventException(); //get master event from relation
 			if($exception){
-				$recurrenceTime=$exception->time;				
+				$recurrenceTime=$exception->getStartTime();				
 			}
 		}
 		if($recurrenceTime){
@@ -1238,7 +1238,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$stmt = $this->exceptions($findParams);
 			while($exception = $stmt->fetch()){
 				$exdate = new Sabre\VObject\Property\DateTime('exdate',Sabre\VObject\Property\DateTime::DATE);
-				$exdate->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($exception->time));		
+				$dt = GO_Base_Util_Date_DateTime::fromUnixtime($exception->getStartTime());				
+				$exdate->setDateTime($dt);		
 				$e->add($exdate);
 			}
 		}
@@ -1564,6 +1565,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$exception->exception_event_id=$this->id;
 				$exception->save();
 			}		
+			
+			
+//			$test = (bool) $vobject->organizer;
+			
+//			var_dump($test);
+//			exit();
+//			
 
 			if($vobject->organizer)
 				$p = $this->importVObjectAttendee($this, $vobject->organizer, true);
@@ -1641,7 +1649,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$attributes['status']= GO_Calendar_Model_Participant::STATUS_ACCEPTED;
 	
 		$p= GO_Calendar_Model_Participant::model()
-						->findSingleByAttributes(array('event_id'=>$event->id, 'email'=>$attributes['email']));
+						->findSingleByAttributes(array('event_id'=>$event->id, 'email'=>$attributes['email'],'is_organizer'=>$isOrganizer));
 		if(!$p){
 			$p = new GO_Calendar_Model_Participant();
 			$p->is_organizer=$isOrganizer;		
@@ -1955,6 +1963,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 			$a->setDisposition("inline");
 			$message->attach($a);
+			
+			//for outlook 2003 compatibility
+			$a2 = Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
+			$a2->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+			$message->attach($a2);
 		}
 //		}
 
@@ -1998,6 +2011,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 				$a->setDisposition("inline");
 				$message->attach($a);
+				
+				//for outlook 2003 compatibility
+				$a2 = Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
+				$a2->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+				$message->attach($a2);
+				
 //			}else{
 			if($participantEvent){
 				$url = GO::createExternalUrl('calendar', 'openCalendar', array(
@@ -2086,6 +2105,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
 				$a->setDisposition("inline");
 				$message->attach($a);
+				
+				//for outlook 2003 compatibility
+				$a2 = Swift_Attachment::newInstance($ics, 'invite.ics', 'application/ics');
+				$a2->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+				$message->attach($a2);
 
 				if($participantEvent){
 					$url = GO::createExternalUrl('calendar', 'openCalendar', array(

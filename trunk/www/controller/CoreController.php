@@ -269,6 +269,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 
 			switch (strtolower($file->extension())) {
 
+				case 'svg':
 				case 'ico':
 				case 'jpg':
 				case 'jpeg':
