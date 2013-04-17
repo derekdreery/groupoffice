@@ -944,6 +944,11 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		this.scope = scope;
 	},
 
+	/**
+	 * The filter parameter needs to be a comma separated string of file extensions.
+	 * Example: 'jpg,png,xls,xlsx,pdf'
+	 * 
+	 */
 	setFilesFilter : function(filter)
 	{
 		var old_filter = this.gridStore.baseParams['files_filter'];
