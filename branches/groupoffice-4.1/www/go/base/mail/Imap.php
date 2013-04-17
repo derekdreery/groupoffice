@@ -244,6 +244,13 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 */
 	public function has_capability($str){
 		$has = stripos($this->get_capability(), $str)!==false;
+	
+		if(isset(GO::session()->values['imap_disable_capabilites_'.$this->server])){
+			if(!isset(GO::config()->disable_imap_capabilities))
+				GO::config()->disable_imap_capabilities='';
+
+			GO::config()->disable_imap_capabilities.=" ".GO::session()->values['imap_disable_capabilites_'.$this->server];
+		}
 		
 		//We stumbled upon a dovecot server that crashed when sending a command
 		//using LIST-EXTENDED. With this option we can workaround that issue.
@@ -392,6 +399,15 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		
 		$this->send_command($cmd);
 		$result = $this->get_response(false, true);
+		
+		if(!$this->check_response($result, true, false) && $this->has_capability("LIST-EXTENDED")){			
+	
+			//some servers pretend to support list-extended but fail on the commands.
+			//work around by disabling support and try again.
+			GO::session()->values['imap_disable_capabilites_'.$this->server]='LIST-EXTENDED';
+			
+			return $this->list_folders($listSubscribed, $withStatus, $namespace, $pattern, $isRoot);
+		}
 //		GO::debug($result);
 		
 		$delim=false;
