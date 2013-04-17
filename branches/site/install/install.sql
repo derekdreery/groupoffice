@@ -17,9 +17,11 @@ CREATE TABLE IF NOT EXISTS `site_sites` (
   `mod_rewrite_base_path` varchar(50) NOT NULL DEFAULT '/',
   `base_path` varchar(100) NOT NULL DEFAULT '',
   `acl_id` int(11) NOT NULL DEFAULT '0',
+  `language` varchar(10) NOT NULL,
+  `files_folder_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `domain` (`domain`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 
 -- --------------------------------------------------------
@@ -43,9 +45,11 @@ CREATE TABLE IF NOT EXISTS `site_content` (
   `parent_id` int(11) DEFAULT NULL,
   `site_id` int(11) NOT NULL,
   `sort_order` int(11) NOT NULL DEFAULT '0',
+  `template` varchar(255) DEFAULT NULL,
+  `default_child_template` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `slug_UNIQUE` (`slug`,`site_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  UNIQUE KEY `slug` (`slug`,`site_id`)
+) ENGINE=InnoDB;
 
 -- --------------------------------------------------------
 
