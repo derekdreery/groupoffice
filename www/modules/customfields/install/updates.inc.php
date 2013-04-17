@@ -125,3 +125,6 @@ $updates["201205300840"][]="update cf_categories set extends_model='GO_Tickets_M
 $updates["201205311702"][]="update `cf_fields` set height=100 where datatype='GO_Customfields_Customfieldtype_Textarea'";
 
 $updates['201302041130'][]="ALTER TABLE `cf_fields` ADD `number_decimals` tinyint(4) NOT NULL DEFAULT '2'";
+
+
+$updates['201304171600'][]="ALTER TABLE  `cf_fields` CHANGE  `sort_index`  `sort_index` INT NOT NULL DEFAULT  '0'";
