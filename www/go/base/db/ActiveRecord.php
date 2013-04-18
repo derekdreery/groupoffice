@@ -3712,7 +3712,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 		
 		if($this->customFieldsRecord){
-			$copy->customFieldsRecord->setAttributes($this->customFieldsRecord->getAttributes('raw'), false);
+			$cfAtt = $this->customFieldsRecord->getAttributes('raw');
+			unset($cfAtt['model_id']);
+			$copy->customFieldsRecord->setAttributes($cfAtt, false);
 		}
 
 		if($save)
