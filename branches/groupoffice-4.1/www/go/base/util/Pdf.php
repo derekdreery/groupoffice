@@ -142,8 +142,10 @@ class GO_Base_Util_Pdf extends TCPDF {
 	{
 
 		$this->SetFont($this->font,'',14);
+		$this->SetTextColor(125,165, 65);
 		//$this->Cell($this->getPageWidth()-$this->lMargin-$this->rMargin,24, $title,0,1);
 		$this->MultiCell($this->getPageWidth()-$this->lMargin-$this->rMargin,24, $title, 0, 'L', false, '1');
+		$this->setDefaultTextColor();
 		$this->SetFont($this->font,'',$this->font_size);
 	}
 
