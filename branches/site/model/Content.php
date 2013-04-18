@@ -128,6 +128,15 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 		 return !empty($child); 
 	 }
 	 
+	 /**
+	  * Check if this contentitem has a parent
+	  * 
+	  * @return boolean
+	  */
+	 public function hasParent(){
+		 return !empty($this->parent_id);
+	 }
+	 
 	 public function setDefaultTemplate() {
 		 if(empty($this->template) && !empty($this->parent->default_child_template)){
 			$this->template = $this->parent->default_child_template;
@@ -136,7 +145,6 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 			$this->template = $config->getDefaultTemplate();
 		 }
 	 }
-	 
 	 
 	 /**
 	  * # Backend Functionality
