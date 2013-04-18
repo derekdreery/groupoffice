@@ -178,6 +178,8 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 					if (stripos($part->ctype_secondary, 'plain') !== false) {
 						$content_part = nl2br($body);
 					} else {
+						$body = GO_Base_Util_String::convertLinks($body);
+						$body = GO_Base_Util_String::sanitizeHtml($body);
 						$content_part = $body;
 					}
 					$this->_loadedBody .= $content_part;
@@ -246,7 +248,10 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 			if (stripos($structure->ctype_secondary, 'plain') !== false) {
 				$this->extractUuencodedAttachments($text_part);
 				$text_part = nl2br($text_part);
-			} 
+			}else{
+				$text_part = GO_Base_Util_String::convertLinks($text_part);
+				$text_part = GO_Base_Util_String::sanitizeHtml($text_part);
+			}
 			$charset = isset($structure->ctype_parameters['charset']) ? $structure->ctype_parameters['charset'] : 'UTF-8';
 			$text_part = GO_Base_Util_String::clean_utf8($text_part,$charset);
 			$this->_loadedBody .= $text_part;
