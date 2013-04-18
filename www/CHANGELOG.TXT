@@ -1,5 +1,5 @@
 4.1.56
-- MulitSelectGrid can have extra valid value that might not exist in the database
+- MultiSelectGrid can have extra valid value that might not exist in the database
 - MultiSelectGrid is capable of have a store prefix (when selectable store changes)
 - Fixed color selection when multiple calendars are viewed in the calendargrid
 - Start page: Files portlet now has a pagination.
@@ -10,6 +10,11 @@
 - Tasks module: return of "priority low" arrow in tasks grid.
 - Fixed external link function for workflow.
 - Fix incorrect mail encoding specifications from win-nnnn to Windows-nnnn
+- sort index of custom field changed from tinyint to int to fix a sort bug when having over 127 fields
+- Work around if IMAP server fails to respond to LIST-EXTENDED command\
+- Updated Swedish and German translation
+- many many relations were not deleted automatically
+- Deleting addresslist kept multiselect filter enabled for the deleted list
 
 15-04-2013 4.1.55
 - Added encoding check to email body to convert mail encoding to UTF-8.
