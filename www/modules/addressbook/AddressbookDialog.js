@@ -246,6 +246,9 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 				title:GO.addressbook.lang.companyCustomFields
 			});
 			this.addPanel(this.disableCompaniesCategoriesPanel);
+			
+			this.enableBlocksPanel = new GO.customfields.EnableBlocksPanel();
+			this.addPanel(this.enableBlocksPanel);
 		}
 	},
 	
@@ -258,6 +261,7 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 		if(GO.customfields){
 			this.disableContactsCategoriesPanel.setModel(remoteModelId, "GO_Addressbook_Model_Contact");
 			this.disableCompaniesCategoriesPanel.setModel(remoteModelId, "GO_Addressbook_Model_Company");
+			this.enableBlocksPanel.setModel(remoteModelId,"GO_Addressbook_Model_Addressbook");
 		}
 		
 		return GO.addressbook.AddressbookDialog.superclass.setRemoteModelId.call(this, remoteModelId);
