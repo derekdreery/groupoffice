@@ -318,12 +318,13 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 	 * @param value $value The value to set this custom field to.
 	 * @param string $categoryNameString (Optional) The name of the custom field's category.
 	 */
-	public function setValueByName($fieldNameString,$value,$categoryNameString='') {
+	public function setValueByName($fieldNameString,$value,$categoryNameString='', $save=true) {
 		$colId = $this->getColIdByName($fieldNameString, $categoryNameString);
 		if ($colId>0) {
 			$colName = 'col_'.$colId;
 			$this->$colName = $value;
-			$this->save();
+			if($save)
+				$this->save();
 		}
 	}
 	
