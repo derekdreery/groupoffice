@@ -2953,7 +2953,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}
 			
 			//clean up link models for many_many relations
-			if($attr['type']==self::MANY_MANY && !class_exists($attr['linkModel'])){
+			if($attr['type']==self::MANY_MANY){// && class_exists($attr['linkModel'])){
 				$stmt = GO::getModel($attr['linkModel'])->find(
 				 GO_Base_Db_FindParams::newInstance()							
 								->criteria(GO_Base_Db_FindCriteria::newInstance()
