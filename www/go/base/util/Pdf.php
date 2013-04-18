@@ -83,7 +83,7 @@ class GO_Base_Util_Pdf extends TCPDF {
 
 		$this->setY($this->getY()+2.5, false);
 
-		$this->SetFont($this->font,'B',$this->font_size);
+		$this->SetFont($this->font,'',$this->font_size);
 		$this->setDefaultTextColor();
 
 		$this->Cell($this->getPageWidth()-$this->getX()-$this->rMargin,12,  GO_Base_Util_Date::get_timestamp(time()),0,0,'R');
