@@ -19,7 +19,8 @@ GO.site.MainPanel = function(config){
 		region:'west',
 		width:300,
 		border:true,
-		contentPanel:this.contentPanel
+		contentPanel:this.contentPanel,
+		mainPanel:this
 	});
 
 	config.layout='border';
@@ -68,12 +69,6 @@ Ext.extend(GO.site.MainPanel, Ext.Panel,{
 		this.treePanel.getLoader().load(this.treePanel.getRootNode());
 	}
 });
-
-
-
-
-
-
 
 GO.moduleManager.addModule('site', GO.site.MainPanel, {
 	title : GO.site.lang.name,

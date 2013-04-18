@@ -73,8 +73,8 @@ Ext.extend(GO.site.SiteTreePanel, Ext.tree.TreePanel,{
 		node.select();
 		
 		if(this.isSiteNode(node)){
-//			this.siteContextMenu.setSelected(this,'GO_Site_Model_Site');
-//			this.siteContextMenu.showAt(event.xy);
+			this.siteContextMenu.setSelected(this,node,'GO_Site_Model_Site');
+			this.siteContextMenu.showAt(event.xy);
 		}else if(this.isRootContentNode(node)){
 			this.contentRootContextMenu.setSelected(this,node,'GO_Site_Model_Content');
 			this.contentRootContextMenu.showAt(event.xy);

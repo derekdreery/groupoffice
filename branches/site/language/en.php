@@ -12,6 +12,8 @@ $l["metaDescriptionText"] = "Meta tags are a great way for webmasters to provide
 $l["info"] = "Info";
 $l["infoDescriptionText"] = "Information about this content item";
 
+$l["siteOptionsDescriptionText"] = "Information about the options";
+
 
 $l["siteFile"]="Site File";
 $l["siteFile"]="Site Multifile";
@@ -23,6 +25,7 @@ $l["templateDescriptionText"] = "Choose a template in which you want to view thi
 $l["save"] = "Save";
 $l["reload"] = "Reload";
 $l["advanced"] = "Advanced options";
+$l["options"] = "Options";
 
 $l["addContent"] = "Add content";
 
@@ -61,6 +64,7 @@ $l["siteSsl"] = "SSL";
 $l["siteMod_rewrite"] = "Mod rewrite";
 $l["siteMod_rewrite_base_path"] = "Mod rewrite base path";
 $l["siteBase_path"] = "Base path";
+$l["siteLanguage"] = "Language";
 $l["siteAcl_id"] = "ACL";
 
 
