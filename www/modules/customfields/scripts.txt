@@ -14,3 +14,6 @@ modules/customfields/BulkEditDialog.js
 modules/customfields/CategoryFormPanel.js
 modules/customfields/DisableCategoriesPanel.js
 modules/customfields/Functions.js
+modules/customfields/ManageBlockDialog.js
+modules/customfields/ManageBlocksGrid.js
+modules/customfields/EnableBlocksPanel.js
