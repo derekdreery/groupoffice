@@ -24,6 +24,31 @@ Ext.override(Ext.grid.Column,{
 	}	
 })
 
+Ext.override(Ext.data.GroupingStore,{
+	clearGrouping : function(){
+        this.groupField = false;
+
+        if(this.remoteGroup){
+            if(this.baseParams){
+                delete this.baseParams.groupBy;
+                delete this.baseParams.groupDir;
+            }
+            var lo = this.lastOptions;
+            if(lo && lo.params){
+                delete lo.params.groupBy;
+                delete lo.params.groupDir;
+            }
+						
+						//added this to prevent store to request data when state is initalized in the construct
+						if(this.lastOptions)
+							this.reload();
+        }else{
+            this.sort();
+            this.fireEvent('datachanged', this);
+        }
+    }
+});
+
 
 /*testing
 Ext.TaskMgr.start({
