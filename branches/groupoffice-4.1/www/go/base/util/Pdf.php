@@ -57,7 +57,7 @@ class GO_Base_Util_Pdf extends TCPDF {
 		$this->SetY(-20);
 		$pW=$this->getPageWidth();
 		$this->Cell($pW/2, 10, GO::config()->product_name.' '.GO::config()->version, 0, 0, 'L');
-		$this->Cell(($pW/2)-$this->rMargin, 10, sprintf(GO::t('printPage'), $this->getAliasNumPage(), $this->getAliasNbPages()), 0, 0, 'R');
+		$this->Cell(($pW/2), 10, sprintf(GO::t('printPage'), $this->getAliasNumPage(), $this->getAliasNbPages()), 0, 0, 'R');
 	}
 
 	public function Header() {
