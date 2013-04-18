@@ -48,6 +48,16 @@ abstract class GO_Customfields_Customfieldtype_Abstract{
 	}
 	
 	/**
+	 * Can be overridden if you want. For example, if the extended class entails
+	 * companies, return 'GO_Addressbook_Model_Company'. If it entails users,
+	 * return 'GO_Base_Model_User'.
+	 * @return boolean/string
+	 */
+	public static function getModelName() {
+		return false;
+	}
+	
+	/**
 	 * This function is used to format the database value for the interface display
 	 * panel (HTML).
 	 * 

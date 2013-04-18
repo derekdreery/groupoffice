@@ -40,3 +40,22 @@ $l['numberValidationError']='The value must be a number';
 
 $l['invalidRegex']="The regular expression is invalid.";
 $l['nDecimals'] = 'Number of decimals';
+
+$l['block'] = 'Block';
+$l['blocks'] = 'Blocks';
+$l['cfDatatype'] = 'Custom field\'s data type';
+$l['cfUsedIn'] = 'Custom field used in';
+$l['GO_Addressbook_Model_Contact'] = 'Contact';
+$l['GO_Addressbook_Model_Company'] = 'Company';
+$l['GO_Base_Model_User'] = 'User';
+$l['GO_Projects_Model_Project'] = 'Project';
+$l['GO_Addressbook_Customfieldtype_Contact'] = 'Contact';
+$l['GO_Addressbook_Customfieldtype_Company'] = 'Company';
+$l['manageBlocks'] = 'Manage blocks';
+$l['customfieldID'] = 'Custom field ID';
+$l['cfName'] = 'Custom field name';
+$l['customfield'] = 'Custom field';
+$l['enableBlocks'] = 'Enable blocks';
+$l['enabled'] = 'Enabled';
+$l['modelTypeListed'] = 'Listed model type';
+$l['listedUnder'] = 'Listed under';

@@ -125,3 +125,19 @@ $updates["201205300840"][]="update cf_categories set extends_model='GO_Tickets_M
 $updates["201205311702"][]="update `cf_fields` set height=100 where datatype='GO_Customfields_Customfieldtype_Textarea'";
 
 $updates['201302041130'][]="ALTER TABLE `cf_fields` ADD `number_decimals` tinyint(4) NOT NULL DEFAULT '2'";
+
+
+$updates['201304180930'][]="CREATE TABLE IF NOT EXISTS `cf_blocks` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL DEFAULT '',
+	`field_id` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `field_id` (`field_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates['201304180930'][]="CREATE TABLE IF NOT EXISTS `cf_enabled_blocks` (
+	`block_id` int(11) NOT NULL DEFAULT 0,
+	`model_id` int(11) NOT NULL DEFAULT 0,
+  `model_type_name` varchar(100) NOT NULL DEFAULT '',
+  PRIMARY KEY (`block_id`,`model_id`,`model_type_name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";

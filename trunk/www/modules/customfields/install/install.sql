@@ -119,3 +119,22 @@ CREATE TABLE IF NOT EXISTS `cf_tree_select_options` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
+
+DROP TABLE IF EXISTS `cf_blocks`;
+CREATE TABLE IF NOT EXISTS `cf_blocks` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL DEFAULT '',
+	`field_id` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `field_id` (`field_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+DROP TABLE IF EXISTS `cf_enabled_blocks`;
+CREATE TABLE IF NOT EXISTS `cf_enabled_blocks` (
+	`block_id` int(11) NOT NULL DEFAULT 0,
+	`model_id` int(11) NOT NULL DEFAULT 0,
+  `model_type_name` varchar(100) NOT NULL DEFAULT '',
+  PRIMARY KEY (`block_id`,`model_id`,`model_type_name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

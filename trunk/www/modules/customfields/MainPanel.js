@@ -66,8 +66,26 @@ GO.customfields.MainPanel = function(config){
 		html: '<div class="go-important-icon">'+GO.customfields.lang.restart.replace('Group-Office', GO.settings.config.product_name)+'</div>',
 		border: true,
 		split: true,
-		height:30,
-		resizable:false
+		height:55,
+		resizable:false,
+		tbar: [new Ext.Button({
+			iconCls: 'btn-setting',
+			text: GO.customfields.lang['manageBlocks'],
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				if (!GO.customfields.manageBlocksWindow) {
+					GO.customfields.manageBlocksWindow = new GO.Window({
+						title : GO.customfields.lang['manageBlocks'],
+						items: [new GO.customfields.ManageBlocksGrid({layout:'fit',height:490})],
+						width: 800,
+						height: 600,
+						layout: 'fit'
+					});
+				}
+				GO.customfields.manageBlocksWindow.show();
+			},
+			scope: this
+		})]
 	});
 	
 	this.typePanel = new GO.customfields.TypePanel({
@@ -170,6 +188,24 @@ GO.customfields.displayPanelTemplate =
 '</tpl>'+
 '</tpl>';
 
+GO.customfields.displayPanelBlocksTemplate =
+'<tpl if="items_under_blocks">'+'<tpl if="items_under_blocks.length">'+
+	'<tpl for="items_under_blocks">'+
+	'{[this.collapsibleSectionHeader(values.block_name, "block-"+parent.panelId+"-"+values.id, "block-"+values.id)]}'+
+		'<table cellpadding="0" cellspacing="0" border="0" class="display-panel" id="cf-{parent.panelId}-{id}">'+
+			'<tpl for="items">'+
+				'<tr>'+
+				'<td class="table_header_links" style="width=50px;">'+
+					'<div class="display-panel-link-icon go-model-icon-{values.model_name}" ext:qtip="{values.type}">'+'</div>'+
+				'</td>'+
+				'<td class="table_header_links">'+
+					'<a href="#" onclick="GO.linkHandlers[\'{model_name}\'].call(this,{model_id});">{item_name}</a>'+
+				'</td>'+
+				'</tr>'+
+			'</tpl>'+
+		'</table>'+
+	'</tpl>'+
+'</tpl>'+'</tpl>';
 
 
 
