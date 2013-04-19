@@ -5,6 +5,13 @@ class GO_Site_Components_Router{
 	 * @return string the route of the default controller, action or module. Defaults to 'sites/site'.
 	 */
 	public $defaultController = 'sites/site';
+	
+	/**
+	 *
+	 * @var GO_Site_Controller_Abstract
+	 */
+	private $_controller;
+	
 	/**
 	 * Creates a controller instance based on a route.
 	 * The route should contain the controller ID and the action ID.
@@ -40,6 +47,7 @@ class GO_Site_Components_Router{
 			
 			$action = $this->getControllerAction($action_id);
 			$controller = new $className;
+			$this->_controller = $controller;
 			$controller->run($action, $_REQUEST);
 			
 		}else
@@ -47,7 +55,10 @@ class GO_Site_Components_Router{
 			//404
 			$controller = new GO_Site_Controller_Site();
 		}
-		return $controller;
+	}
+	
+	public function getController() {
+		return $this->_controller;
 	}
 	
 	/**
