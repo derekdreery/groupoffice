@@ -106,10 +106,6 @@ class GO_Base_Component_MultiSelectGrid {
 			$this->selectedIds = !empty($selectedPks) ? explode(',', $selectedPks) : array();
 			
 		}
-		
-        //this will validate the selection
-		if($this->_checkPermissions)
-			$this->_validateSelection();
         
 		//add all the allowed models if it's empty. It's faster to find all allowed 
 		//addressbooks then too join the acl table.
@@ -131,10 +127,13 @@ class GO_Base_Component_MultiSelectGrid {
 	 * Use this in the model controller of the selected items. eg. Use in AddressbookController and not in ContactController. 
 	 */
 	public function formatCheckedColumn(){
-		GO::debug($this->selectedIds);
+		
+		//validate selection only when we display the grid
+		$this->_validateSelection();
+		
 		$this->_store->getColumnModel()->
 						formatColumn('checked','in_array($model->id, $multiSelectGrid->selectedIds)', array('multiSelectGrid'=>$this));
-		$this->_save();
+//		$this->_save();
 	}
 
 	/**
@@ -162,7 +161,7 @@ class GO_Base_Component_MultiSelectGrid {
 		if(count($this->selectedIds))
 			$findParams->getCriteria()->addInCondition($columnName, $this->selectedIds, $tableAlias, $useAnd, $useNot);
 		
-		$this->_save();
+//		$this->_save();
 	}
 	
 	/**
@@ -189,6 +188,7 @@ class GO_Base_Component_MultiSelectGrid {
 	 * @return GO_Base_Db_ActiveRecord[] 
 	 */
 	private function _getSelectedModels(){
+//		throw new Exception();
 		if(!isset($this->_models))
 		{			
 			$this->_models=array();
