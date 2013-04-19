@@ -101,6 +101,7 @@ class GO_Base_Component_MultiSelectGrid {
 	private function _setSelectedIds(array $requestParams) {
 		if (isset($requestParams[$this->_requestParamName])) {
 			$this->selectedIds = json_decode($requestParams[$this->_requestParamName], true);
+			$this->_save();
 		} else {
 			$selectedPks = GO::config()->get_setting('ms_' . $this->_requestParamName, GO::session()->values['user_id']);
 			$this->selectedIds = !empty($selectedPks) ? explode(',', $selectedPks) : array();
@@ -223,13 +224,21 @@ class GO_Base_Component_MultiSelectGrid {
 	 * @param string $titleAttribute 
 	 */
 	public function setStoreTitle( $titleAttribute = 'name') {
-		$titleArray = array();
-		$models = $this->_getSelectedModels();
-		foreach ($models as $model) 
-			$titleArray[] = $model->$titleAttribute;
-		
-		if(count($titleArray))
-			$this->_store->setTitle(implode(', ',$titleArray));		
+//		$titleArray = array();
+//		$models = $this->_getSelectedModels();
+//		foreach ($models as $model) 
+//			$titleArray[] = $model->$titleAttribute;
+//		
+//		if(count($titleArray))
+//			$this->_store->setTitle(implode(', ',$titleArray));		
+		$count = count($this->selectedIds);
+		if($count==1){
+			$model = GO::getModel($this->_modelName)->findByPk($this->selectedIds[0]);
+			$this->_store->setTitle($model->name);	
+		}else
+		{
+		$this->_store->setTitle($count.' '.GO::t('multiselectSelected'));		
+		}
 	}
 	
 	/**

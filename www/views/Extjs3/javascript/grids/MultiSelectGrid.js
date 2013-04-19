@@ -92,7 +92,7 @@ GO.grid.MultiSelectGrid = function (config){
 		{
 			//if(records.length){
 				this.relatedStore.baseParams[this.getRequestParam()] = Ext.encode(categories);
-				this.relatedStore.reload();
+				this.relatedStore.load();
 				delete this.relatedStore.baseParams[this.getRequestParam()];
 			//}
 		}, this);
