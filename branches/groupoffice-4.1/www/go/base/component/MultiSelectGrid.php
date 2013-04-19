@@ -116,13 +116,14 @@ class GO_Base_Component_MultiSelectGrid {
 		//That's why this component add's ignoreAcl() to the findParams automatically 
 		//in the addSelectedToFindCriteria() function. The permissions are checked by 
 		//the following query.
-		/*
+		
 		if($this->_checkPermissions && empty($this->selectedIds)){
 			$stmt = GO::getModel($this->_modelName)->find();
 			foreach($stmt as $model){
 				$this->selectedIds[]=$model->pk;
 			}
-		}*/
+			$this->_save();
+		}
 	}
 	
 	/**
@@ -148,10 +149,15 @@ class GO_Base_Component_MultiSelectGrid {
 	 */
 	public function addSelectedToFindCriteria(GO_Base_Db_FindParams &$findParams, $columnName, $tableAlias = 't', $useAnd = true, $useNot = false) {
 	
-		$this->_validateSelection();
+		
 		//ignore here. Permissions are checked in by _setSelectedIds.
-		if($this->_checkPermissions && count($this->selectedIds))
-			$findParams->ignoreAcl();
+		if($this->_checkPermissions){
+			
+//			$this->_validateSelection();
+		
+			if(count($this->selectedIds))
+				$findParams->ignoreAcl();
+		}
 
 		if(count($this->selectedIds))
 			$findParams->getCriteria()->addInCondition($columnName, $this->selectedIds, $tableAlias, $useAnd, $useNot);
