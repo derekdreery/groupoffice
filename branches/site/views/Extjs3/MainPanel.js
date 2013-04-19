@@ -11,7 +11,7 @@ GO.site.MainPanel = function(config){
 			layoutOnCardChange:true
 		},
 		items:[
-			this.contentPanel = new GO.site.ContentPanel(),
+			this.contentPanel = new GO.site.ContentPanel()
 			]
 	}); 
 	
