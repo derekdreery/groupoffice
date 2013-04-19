@@ -4,9 +4,7 @@ class GO_Site_Components_Config{
 	private $_configOptions = array();
 	
 	public function __construct(GO_Site_Model_Site $siteModel) {
-		
-		
-		
+
 		$file = new GO_Base_Fs_File($siteModel->getSiteModule()->moduleManager->path().'siteconfig.php');
 		if($file->exists()){
 			require ($file->path());
@@ -28,7 +26,9 @@ class GO_Site_Components_Config{
 			return $this->defaultTemplate;
 		
 		if($this->templates){
-			return $this->templates[0];
+			
+			$templates = $this->templates;
+			return reset($templates);
 		}
 		
 		return false;
