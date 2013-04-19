@@ -42,6 +42,7 @@ class GO_Site_Customfieldtype_Sitemultifile extends GO_Customfields_Customfieldt
 		$fieldId = $column['customfield']->id;
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()
+				->ignoreAcl()
 				->joinModel(array(
 					'model' => 'GO_Site_Model_MultifileFile',
 					'localTableAlias' => 't',
@@ -53,7 +54,7 @@ class GO_Site_Customfieldtype_Sitemultifile extends GO_Customfields_Customfieldt
 				->addCondition('model_id', $model->model_id,'=','mf')
 				->addCondition('field_id', $fieldId,'=','mf'));
 
-		return GO_Files_Model_File::model()->find($findParams);
+		return GO_Files_Model_File::model()->find($findParams,'false',true);
 	}	
 	
 	public function selectForGrid(){

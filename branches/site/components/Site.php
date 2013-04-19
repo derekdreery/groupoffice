@@ -169,11 +169,11 @@ class Site {
 	public static function file($relativePath){
 
 		$referenceString = 'site/'.Site::model()->id.'/';
-	
+			
 		$check = substr_count($relativePath,$referenceString);
-		
+
 		if($check)
-			return str_replace($referenceString,'', $relativePath);
+			return '/'.str_replace($referenceString,'', $relativePath);	
 		else
 			return self::template()->getUrl().$relativePath;
 	}

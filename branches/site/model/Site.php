@@ -44,6 +44,20 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 	 */
 	private $_config;
 
+	private $_cf=array();	
+	
+	public function __get($name) {
+		$val = parent::__get($name);
+		
+		if($val === null){
+			$val = $this->getCustomFieldValueByName($name);
+		}
+		
+		return $val;
+		
+	}
+	
+	
 	/**
 	 * Returns a static model of itself
 	 * 
@@ -221,5 +235,22 @@ ServerName www.giralisgroep.nl
 		';
 	}
 	
-	
+	public function getCustomFieldValueByName($cfName){
+		 
+		if(!isset($this->_cf[$cfName])){
+			$id = $this->getCustomfieldsRecord()->getColIdByName($cfName);
+
+			$column = $this->getCustomfieldsRecord()->getColumn('col_'.$id);
+			if(!$column)
+				return null;
+
+			$value = $this->getCustomfieldsRecord()->{'col_'.$id};
+
+			$this->_cf[$cfName]=$value;
+
+		}
+
+		return $this->_cf[$cfName];
+	 }
+		
 }
