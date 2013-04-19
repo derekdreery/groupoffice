@@ -1,4 +1,4 @@
-4.1.56
+19-04-2013 4.1.56
 - Fixed internalUrls in emails in linked email window
 - MultiSelectGrid can have extra valid value that might not exist in the database
 - MultiSelectGrid is capable of have a store prefix (when selectable store changes)
