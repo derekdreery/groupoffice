@@ -858,8 +858,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 		$cacheKey = md5(serialize($attributes));
 		
-		GO::debug($cacheKey);
-		GO::debug($attributes);
 		//Use cache so identical findByPk calls are only executed once per script request
 		$cachedModel =  GO::modelCache()->get($this->className(), $cacheKey);
 		if($cachedModel)
