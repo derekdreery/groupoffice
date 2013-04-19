@@ -1,5 +1,5 @@
 <?php
-abstract class GO_Site_Widget_Abstract {
+abstract class GO_Site_Components_Widget {
 	
 	
 	

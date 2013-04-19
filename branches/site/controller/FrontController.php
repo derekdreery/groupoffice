@@ -1,6 +1,6 @@
 <?php
 
-class GO_Site_Controller_Front extends GO_Site_Controller_Abstract {
+class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 	protected function allowGuests() {
 		return array('content','thumb');
 	}

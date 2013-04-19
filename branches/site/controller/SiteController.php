@@ -1,9 +1,6 @@
 <?php
 
-class GO_Site_Controller_Site extends GO_Base_Controller_AbstractModelController {
-
-	protected $model = 'GO_Site_Model_Site';
-	
+class GO_Site_Controller_Site extends GO_Base_Controller_AbstractJsonController {
 
 	/**
 	 * Redirect to the homepage
@@ -17,6 +14,20 @@ class GO_Site_Controller_Site extends GO_Base_Controller_AbstractModelController
 		header("Location: ".$site->getBaseUrl());
 		exit();
 	}
+	
+	protected function actionLoad($params) {
+		$model = GO_Site_Model_Site::model()->createOrFindByParams($params);
+		
+		$this->renderForm($model);
+	}
+	
+	protected function actionSubmit($params) {
+		$model = GO_Site_Model_Site::model()->createOrFindByParams($params);
+		$model->setAttributes($params);
+		$model->save();
+		$this->renderSubmit($model);
+	}
+	
 		
 	/**
 	 * Build the tree for the backend
@@ -63,6 +74,6 @@ class GO_Site_Controller_Site extends GO_Base_Controller_AbstractModelController
 //				break;
 		}
 		
-		return $response;
+		$this->renderJson($response);
 	}	
 }

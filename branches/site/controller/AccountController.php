@@ -1,6 +1,6 @@
 <?php
 
-class GO_Site_Controller_Account extends GO_Site_Controller_Abstract {
+class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 	
 	protected function allowGuests() {
 		return array('register','login','lostpassword','recoverpassword','resetpassword');
@@ -154,18 +154,16 @@ class GO_Site_Controller_Account extends GO_Site_Controller_Abstract {
 		$model = new GO_Base_Model_User();
 		
 		if (GO_Base_Util_Http::isPostRequest()) {
-			
-			
-			
+
 			$model->username = $_POST['User']['username'];
 			
 			$password = $_POST['User']['password'];
 
 			$user = GO::session()->login($model->username, $password);
 			//reset language after login
-			GO::language()->setLanguage(GOS::site()->site->language);
+			GO::language()->setLanguage(Site::model()->language);
 			if (!$user) {
-				GOS::site()->notifier->setMessage('error', GO::t('badLogin')); // set the correct login failure message
+				Site::notifier()->setMessage('error', GO::t('badLogin')); // set the correct login failure message
 			} else {
 				if (!empty($_POST['rememberMe'])) {
 

@@ -28,6 +28,12 @@ class Site {
 	
 	/**
 	 *
+	 * @var GO_Site_Components_Notifier
+	 */
+	private static $_notifier;
+	
+	/**
+	 *
 	 * @var GO_Site_Components_Request
 	 */
 	private static $_request;
@@ -127,6 +133,16 @@ class Site {
 		if (self::$_language == null)
 			self::$_language = new GO_Site_Components_Language(Site::model()->language);
 		return self::$_language;
+	}
+	
+	/**
+	 * 
+	 * @return GO_Site_Components_Notifier
+	 */
+	public static function notifier() {
+		if (self::$_notifier == null)
+			self::$_notifier = new GO_Site_Components_Notifier();
+		return self::$_notifier;
 	}
 	
 	/**
