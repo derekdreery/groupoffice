@@ -323,8 +323,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$this->setAttributes($this->getDefaultAttributes(),false);
 			$this->_loadingFromDatabase=false;
 		}elseif(!$isStaticModel){
-			$this->_castMySqlValues();
+			$this->castMySqlValues();
+			$this->_cacheRelatedAttributes();
 			$this->afterLoad();		
+			
 			$this->_loadingFromDatabase=false;
 		}
 		
@@ -346,8 +348,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	private function _cacheRelatedAttributes(){
 		foreach($this->_attributes as $name=>$value){
 			$arr = explode('@',$name);
-			if(count($arr)>1)
+			if(count($arr)>1){
 				$this->_relatedCache[$arr[0]][$arr[1]]=$value;							
+				unset($this->_attributes[$name]);
+			}
 		}
 	}
 	
@@ -552,33 +556,45 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		GO::modelCache()->remove($this->className());
 	}
 	
-	
-	private function _joinAclTable(){
+	private function _getAclJoinProps(){
 		$arr = explode('.',$this->aclField());
 		if(count($arr)==2){
-			//we need to join a table for the acl field
-			$r= $this->relations();
-			$model = new $r[$arr[0]]['model'];
-			
-			$ret['relation']=$arr[0];
-			$ret['aclField']=$arr[1];
-			$ret['join']="\nINNER JOIN `".$model->tableName().'` '.$ret['relation'].' ON ('.$ret['relation'].'.`'.$model->primaryKey().'`=t.`'.$r[$arr[0]]['field'].'`) ';
-			$ret['fields']='';
-			
+			$r= $this->getRelation($arr[0]);
+
+			return array('table'=>$r['name'], 'relation'=>$r, 'model'=>GO::getModel($r['model']), 'attribute'=>$arr[1]);
+		}else
+		{
+			return array('attribute'=>$this->aclField(), 'table'=>'t');
+		}
+	}
+	
+	
+//	private function _joinAclTable(){
+//		$arr = explode('.',$this->aclField());
+//		if(count($arr)==2){
+//			//we need to join a table for the acl field
+//			$r= $this->getRelation($arr[0]);
+//			$model = GO::getModel($r['model']);
+//			
+//			$ret['relation']=$arr[0];
+//			$ret['aclField']=$arr[1];
+//			$ret['join']="\nINNER JOIN `".$model->tableName().'` '.$ret['relation'].' ON ('.$ret['relation'].'.`'.$model->primaryKey().'`=t.`'.$r['field'].'`) ';
+//			$ret['fields']='';
+//			
 //			$cols = $model->getColumns();
-			
+//			
 //			foreach($cols as $field=>$props){
 //				$ret['fields'].=', '.$ret['relation'].'.`'.$field.'` AS `'.$ret['relation'].'@'.$field.'`';
 //			}
-			$ret['table']=$ret['relation'];
-			
-		}else
-		{
-			return false;
-		}
-		
-		return $ret;
-	}
+//			$ret['table']=$ret['relation'];
+//			
+//		}else
+//		{
+//			return false;
+//		}
+//		
+//		return $ret;
+//	}
 	
 	/**
 	 * Makes an attribute unique in the table by adding a number behind the name.
@@ -841,6 +857,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	public function findSingleByAttributes($attributes, $findParams=false){
 
 		$cacheKey = md5(serialize($attributes));
+		
+		GO::debug($cacheKey);
+		GO::debug($attributes);
 		//Use cache so identical findByPk calls are only executed once per script request
 		$cachedModel =  GO::modelCache()->get($this->className(), $cacheKey);
 		if($cachedModel)
@@ -1030,8 +1049,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}else
 		{
 			$this->_debugSql=!empty(GO::session()->values['debugSql']);
-		}
-		
+		}		
 		
 		if(GO::$ignoreAclPermissions)
 			$params['ignoreAcl']=true;
@@ -1040,16 +1058,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$params['userId']=!empty(GO::session()->values['user_id']) ? GO::session()->values['user_id'] : 1;
 		}
 		
-		$aclJoin['relation']='';
-		$aclJoin['aclField']=$this->aclField();
-		$aclJoin['table']='t';
-		$aclJoin['join']='';
-		$aclJoin['fields']='';
-		
 		if($this->aclField() && (empty($params['ignoreAcl']) || !empty($params['joinAclFieldTable']))){
-			$ret = $this->_joinAclTable();
-			if($ret)
-				$aclJoin=$ret;
+			$aclJoinProps = $this->_getAclJoinProps();
+
+			if(isset($aclJoinProps['relation']))
+				$params['joinRelations'][]=array('name'=>$aclJoinProps['relation']['name'], 'type'=>'INNER');
 		}
 		
 		$sql = "SELECT ";
@@ -1071,16 +1084,29 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$calcFoundRows=false;
 		}
 		
-		$fetchObject= true;
-		if(empty($params['fields'])){
+		if(empty($params['fields']))
 			$params['fields']=$this->getDefaultFindSelectFields(isset($params['limit']) && $params['limit']==1);
-			//$fetchObject= true;
-		}else
-		{
-			//$fetchObject = strpos($params['fields'],'t.*')!==false || strpos($params['fields'],'t.id')!==false;
-		}
+
 		
-		$sql .= $params['fields'].$aclJoin['fields'].' ';
+		$sql .= $params['fields'].' ';
+		
+		$joinRelationSelectFields='';
+		$joinRelationjoins='';
+		if(!empty($params['joinRelations'])){
+			
+			foreach($params['joinRelations'] as $joinRelation){
+				$r = $this->getRelation($joinRelation['name']);
+
+				$model = GO::getModel($r['model']);
+				$joinRelationjoins .= "\n".$joinRelation['type']." JOIN `".$model->tableName().'` '.$joinRelation['name'].' ON ('.$joinRelation['name'].'.`'.$model->primaryKey().'`=t.`'.$r['field'].'`) ';
+
+				$cols = $model->getColumns();
+
+				foreach($cols as $field=>$props){
+					$joinRelationSelectFields .=', '.$joinRelation['name'].'.`'.$field.'` AS `'.$joinRelation['name'].'@'.$field.'`';
+				}
+			}			
+		}
 		
 
 		$joinCf = !empty($params['joinCustomFields']) && $this->customfieldsModel() && GO::modules()->customfields && GO::modules()->customfields->permissionLevel;
@@ -1094,8 +1120,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				$sql .= ", ".$selectFields;
 		}
 		
+		$sql .= $joinRelationSelectFields;		
 		
-		$sql .= "\nFROM `".$this->tableName()."` t ".$aclJoin['join'];
+		$sql .= "\nFROM `".$this->tableName()."` t ".$joinRelationjoins;
 		
 		
 		if (!empty($params['linkModel'])) { //passed in case of a MANY_MANY relation query
@@ -1113,8 +1140,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if($joinCf)			
 			$sql .= "\nLEFT JOIN `".$cfModel->tableName()."` cf ON cf.model_id=t.id ";	
 		  
-		if($this->aclField() && empty($params['ignoreAcl']))
-			$sql .= $this->_appendAclJoin($params, $aclJoin);
+		if(isset($aclJoinProps))
+			$sql .= $this->_appendAclJoin($params, $aclJoinProps);
 			
 		if(isset($params['join']))
 			$sql .= "\n".$params['join'];
@@ -1393,9 +1420,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		GO::debug($sql);				
 	}
 	
-	private function _appendAclJoin($findParams, $aclJoin){		
+	private function _appendAclJoin($findParams, $aclJoinProps){		
 		
-		$sql = "\nINNER JOIN go_acl ON (`".$aclJoin['table']."`.`".$aclJoin['aclField']."` = go_acl.acl_id";
+		
+		
+		$sql = "\nINNER JOIN go_acl ON (`".$aclJoinProps['table']."`.`".$aclJoinProps['attribute']."` = go_acl.acl_id";
 		if(isset($findParams['permissionLevel']) && $findParams['permissionLevel']>GO_Base_Model_Acl::READ_PERMISSION){
 			$sql .= " AND go_acl.level>=".intval($findParams['permissionLevel']);
 		}
@@ -1627,6 +1656,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(!isset($r[$name]))
 			return false;
 		
+		$r[$name]['name']=$name;
+		
 		return $r[$name];
 	}
 		
@@ -1689,7 +1720,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					$attr = $this->_relatedCache[$cacheKey];
 
 					$this->_relatedCache[$cacheKey]=new $model;
-					$this->_relatedCache[$cacheKey]->setAttributes($attr, false);					
+					$this->_relatedCache[$cacheKey]->setAttributes($attr, false);	
+					$this->_relatedCache[$cacheKey]->castMySqlValues();	
+					
 				}				
 				
 			}else
@@ -2346,7 +2379,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 			if(!is_array($this->primaryKey()) && empty($this->pk)){
 				$this->{$this->primaryKey()} = $this->getDbConnection()->lastInsertId();
-				$this->_castMySqlValues(array($this->primaryKey()));
+				$this->castMySqlValues(array($this->primaryKey()));
 			}
 
 			if(!$this->pk)
@@ -3201,7 +3234,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @param array $columns
 	 * @return void
 	 */
-	private function _castMySqlValues($columns=false){
+	public function castMySqlValues($columns=false){
 		
 		if(!$columns)
 			$columns = array_keys($this->columns);
@@ -3214,6 +3247,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 						case 'bigint':
 							//must use floatval because of ints greater then 32 bit
 							$this->_attributes[$column]=floatval($this->_attributes[$column]);
+							
+							GO::debug("Cast: ".$this->className().' '.$column);
 							break;		
 
 						case 'float':
