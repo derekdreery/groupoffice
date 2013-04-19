@@ -34,6 +34,7 @@
  * @property String $mod_rewrite_base_path
  * @property String $base_path
  * @property int $acl_id
+ * @property string $language
  * @property type $files_folder_id
  */
 class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
