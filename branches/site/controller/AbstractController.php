@@ -156,6 +156,9 @@ abstract class GO_Site_Controller_Abstract extends GO_Base_Controller_AbstractCo
 	public function getViewFile($viewName)
 	{	
 		$module = Site::model()->getSiteModule();
+
+		if( substr($viewName, 0,1) != "/")
+			$viewName = '/'.$module->id. '/'.$viewName;	
 		
 		$file = new GO_Base_Fs_File($module->moduleManager->path() . 'views/site/' . $viewName . '.php');
 		if(!$file->exists())
@@ -276,7 +279,7 @@ abstract class GO_Site_Controller_Abstract extends GO_Base_Controller_AbstractCo
 				$this->redirect($loginpath);
 			}  else {
 //				$controller = new GO_Site_Controller_Site();
-				$this->render('error', array('error' => $e));
+				$this->render('/site/error', array('error' => $e));
 			}
 			//$this->render('error', array('error'=>$e));
 		}
@@ -284,11 +287,11 @@ abstract class GO_Site_Controller_Abstract extends GO_Base_Controller_AbstractCo
 			header("HTTP/1.0 404 Not Found");
       header("Status: 404 Not Found");
 			
-			$this->render('errors/404', array('error' => $e));
+			$this->render('/site/404', array('error' => $e));
 		}
 		catch (Exception $e)
 		{
-			$this->render('errors/error', array('error' => $e));
+			$this->render('/site/error', array('error' => $e));
 		}
 	}
 	
