@@ -189,6 +189,21 @@ class GO_Base_Db_FindParams{
 	}
 	
 	/**
+	 * Join a relation in the find query. Relation models are fetched together and
+	 * can be accessed without the need for an extra select query.
+	 * 
+	 * @param string $name
+	 * @param string $type
+	 */
+	public function joinRelation($name, $type='INNER'){
+		
+		if(!isset($this->_params['joinRelations']))
+			$this->_params['joinRelations']=array();
+		
+		$this->_params['joinRelations'][]=array('name'=>$name, 'type'=>$type);
+	}
+	
+	/**
 	 * Check if a table has been joined
 	 * 
 	 * @param string $tableName
