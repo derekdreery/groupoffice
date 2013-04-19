@@ -56,17 +56,6 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 		return $val;
 		
 	}
-	
-	
-	/**
-	 * Returns a static model of itself
-	 * 
-	 * @param String $className
-	 * @return GO_Site_Model_Site
-	 */
-	public static function model($className = __CLASS__) {
-		return parent::model($className);
-	}
 
 	/*
 	 * Attach the customfield model to this model.
