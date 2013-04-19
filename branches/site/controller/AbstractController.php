@@ -157,8 +157,11 @@ abstract class GO_Site_Controller_Abstract extends GO_Base_Controller_AbstractCo
 	{	
 		$module = Site::model()->getSiteModule();
 
-		if( substr($viewName, 0,1) != "/")
-			$viewName = '/'.$module->id. '/'.$viewName;	
+		if( substr($viewName, 0,1) != "/") {
+			$classParts = explode('_',get_class($this));
+			$moduleId = strtolower($classParts[1]);
+			$viewName = '/'.$moduleId. '/'.$viewName;	
+		}
 		
 		$file = new GO_Base_Fs_File($module->moduleManager->path() . 'views/site/' . $viewName . '.php');
 		if(!$file->exists())
