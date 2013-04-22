@@ -54,7 +54,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 			
 			$response['data']['items_under_blocks'] = array();
 			
-			$enabledBlocksStmt = GO_Customfields_Model_EnabledBlock::getEnabledBlocks($model->addressbook_id, 'GO_Addressbook_Model_Addressbook');
+			$enabledBlocksStmt = GO_Customfields_Model_EnabledBlock::getEnabledBlocks($model->addressbook_id, 'GO_Addressbook_Model_Addressbook', $model->className());
 			foreach ($enabledBlocksStmt as $i => $enabledBlockModel) {
 				
 				$items = $enabledBlockModel->block->getItemNames($model->id,$model->name);
