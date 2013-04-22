@@ -39,12 +39,42 @@ class GO_Customfields_Model_EnabledBlock extends GO_Base_Db_ActiveRecord{
 //		parent::init();
 //	}
 
-	public static function getEnabledBlocks($modelId,$modelTypeName) {
+	public static function getEnabledBlocks($modelId,$listedModelTypeName,$listingModelName) {
 		
-		return self::model()->findByAttributes(array(
-			'model_id' => $modelId,
-			'model_type_name' => $modelTypeName
-		));
+		if ($listingModelName=='GO_Addressbook_Model_Contact')
+			$dataType = 'GO_Addressbook_Customfieldtype_Contact';
+		if ($listingModelName=='GO_Addressbook_Model_Company')
+			$dataType = 'GO_Addressbook_Customfieldtype_Company';
+		
+		return self::model()->find(
+				GO_Base_Db_FindParams::newInstance()
+					->joinModel(array(
+						'model'=>'GO_Customfields_Model_Block',
+						'localTableAlias'=>'t',
+						'localField'=>'block_id',
+						'foreignField'=>'id',
+						'tableAlias'=>'b',
+						'type'=>'INNER'
+					))
+					->joinModel(array(
+						'model'=>'GO_Customfields_Model_Field',
+						'localTableAlias'=>'b',
+						'localField'=>'field_id',
+						'foreignField'=>'id',
+						'tableAlias'=>'cf',
+						'type'=>'INNER'
+					))
+					->criteria(
+						GO_Base_Db_FindCriteria::newInstance()
+							->addCondition('model_id', $modelId, '=', 't')
+							->addCondition('model_type_name', $listedModelTypeName, '=', 't')
+							->addCondition('datatype', $dataType, '=', 'cf')
+					)->debugSql()
+			);
+//		->findByAttributes(array(
+//			'model_id' => $modelId,
+//			'model_type_name' => $listedModelTypeName
+//		));
 		
 	}
 	

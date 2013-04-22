@@ -59,7 +59,7 @@ class GO_Customfields_Model_Block extends GO_Base_Db_ActiveRecord{
 		$itemNamesArr = array();
 		
 		foreach ($stmt as $item)
-			$itemNamesArr[] = array('model_id'=>$item->id,'model_name'=>$item->className (),'item_name'=>$item->name);
+			$itemNamesArr[] = array('model_id'=>$item->id,'model_name'=>$item->className(),'item_name'=>$item->name);
 		
 		return $itemNamesArr;
 	}

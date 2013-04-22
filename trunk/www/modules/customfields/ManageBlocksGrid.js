@@ -113,10 +113,6 @@ GO.customfields.ManageBlocksGrid = function(config){
 		this.showManageBlockDialog(record.data.id);
 	}, this);
 
-	this.on('show', function(){
-		this.store.load();
-	}, this);
-
 };
 Ext.extend(GO.customfields.ManageBlocksGrid, GO.grid.GridPanel,{
 	showManageBlockDialog : function(blockId)
