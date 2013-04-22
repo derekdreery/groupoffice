@@ -151,12 +151,12 @@ class GO_Base_Util_Pdf extends TCPDF {
 
 	function H3($title)
 	{
-		$this->SetTextColor(125,165, 65);
+//		$this->SetTextColor(102,102, 102);
 		$this->SetFont($this->font,'B',11);
 //		$this->Cell($this->getPageWidth()-$this->lMargin-$this->rMargin,14, $title,'',1);
 		$this->MultiCell($this->getPageWidth()-$this->lMargin-$this->rMargin,14, $title, '', 'L', false, '1');
 		$this->SetFont($this->font,'',$this->font_size);
-		$this->setDefaultTextColor();
+//		$this->setDefaultTextColor();
 		$this->ln(4);
 	}
 
@@ -174,11 +174,99 @@ class GO_Base_Util_Pdf extends TCPDF {
 
 
 	}
+	
+	private $_headers;
+	
+	public function tableHeaders($columns){
+		$this->_headers=$columns;
+		
+		return $this->tableRow($columns);
+	}
+	
+	
+	public function tableRow($columns){
+		$html = '<tr>';
+		
+		$headerIndex=0;
+		for($i=0;$i<count($columns);$i++){
+			
+			if(isset($this->_headers[$headerIndex])){
+				$columns[$i]->width=$this->_headers[$headerIndex]->width;
+				$columns[$i]->align=$this->_headers[$headerIndex]->align;
+			
+				$headerIndex++;
+				if(isset($columns[$i]->colspan)){
+					for($n=1;$n<$columns[$i]->colspan;$n++){
+						if(isset($this->_headers[$headerIndex]))
+							$columns[$i]->width+=$this->_headers[$headerIndex]->width;
+						
+						$headerIndex++;
+					}
+				}
+			}
+			
+			$html .= $columns[$i]->render();
+		}
+		
+		$html .= '</tr>';
+		
+		return $html;
+	}
+	
 
 	function setDefaultTextColor()
 	{
 		$this->SetTextColor(40,40,40);
 	}
 	
+	
+}
+
+
+class GO_Base_Util_PdfTableColumn{
+	
+	public $width;
+	public $text="";
+	public $align;
+	public $bgcolor;
+	public $colspan;
+	public $extraStyle="";
+	
+	public $isHeader=false;
+	
+	public function __construct($config) {
+		
+		foreach($config as $prop=>$value)
+			$this->$prop = $value;
+		
+		if($this->isHeader && !isset($this->bgcolor)){
+			$this->bgcolor='rgb(248, 248, 248)';
+		}
+	}
+	
+	public function render(){
+		
+		$tag = $this->isHeader ? 'th' : 'td';
+		
+		$html = '<'.$tag.' style="';
+		
+		if(isset($this->width))
+			$html .='width:'.$this->width.'px;';
+		
+		if(isset($this->bgcolor))
+			$html .='background-color:'.$this->bgcolor.';';
+		
+		if(isset($this->align))
+			$html .='text-align:'.$this->align.';';
+		
+		$html .= $this->extraStyle.'"';
+		
+		if(isset($this->colspan))
+			$html .= ' colspan="'.$this->colspan.'"';
+		
+		$html .='>'.$this->text.'</'.$tag.'>';
+		
+		return $html;
+	}
 	
 }
