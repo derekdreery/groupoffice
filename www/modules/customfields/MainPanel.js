@@ -76,11 +76,14 @@ GO.customfields.MainPanel = function(config){
 				if (!GO.customfields.manageBlocksWindow) {
 					GO.customfields.manageBlocksWindow = new GO.Window({
 						title : GO.customfields.lang['manageBlocks'],
-						items: [new GO.customfields.ManageBlocksGrid({layout:'fit',height:490})],
+						items: [this.manageBlocksGrid = new GO.customfields.ManageBlocksGrid({layout:'fit',height:490})],
 						width: 800,
 						height: 600,
 						layout: 'fit'
 					});
+					GO.customfields.manageBlocksWindow.on('show',function(){
+						this.manageBlocksGrid.store.load();
+					},this);
 				}
 				GO.customfields.manageBlocksWindow.show();
 			},
@@ -195,7 +198,7 @@ GO.customfields.displayPanelBlocksTemplate =
 		'<table cellpadding="0" cellspacing="0" border="0" class="display-panel" id="cf-{parent.panelId}-{id}">'+
 			'<tpl for="items">'+
 				'<tr>'+
-				'<td class="table_header_links" style="width=50px;">'+
+				'<td class="table_header_links" style="width:30px;">'+
 					'<div class="display-panel-link-icon go-model-icon-{values.model_name}" ext:qtip="{values.type}">'+'</div>'+
 				'</td>'+
 				'<td class="table_header_links">'+

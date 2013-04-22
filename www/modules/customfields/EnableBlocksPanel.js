@@ -18,7 +18,8 @@ GO.customfields.EnableBlocksPanel = Ext.extend(Ext.Panel, {
 						},
 						success:function(response, options, result){
 							this.loadGridStore();
-						}
+						},
+						scope: this
 					});
 				}
 			}

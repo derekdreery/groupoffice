@@ -73,6 +73,14 @@ GO.customfields.ManageBlockDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			this._updateModelNames(record);
 		}, this);
 
+		this.selectCustomfieldBox.store.on('load', function(){
+			var fieldId = this.selectCustomfieldBox.getValue();
+			if (fieldId > 0)
+				var record = this.selectCustomfieldBox.store.getById(fieldId);
+			if (!GO.util.empty(record))
+				this._updateModelNames(record);
+		}, this);
+
 		this.addPanel(this.propertiesPanel);	
  
 	},
@@ -80,7 +88,7 @@ GO.customfields.ManageBlockDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	afterLoad : function(remoteModelId, config, action){
 		this.selectCustomfieldBox.store.load();
 	},
-	
+
 	_updateModelNames : function(customFieldRecord) {
 		this.datatypeField.setValue(GO.customfields.lang[customFieldRecord.data['datatype']]);
 		this.extendsModelField.setValue(GO.customfields.lang[customFieldRecord.data['extends_model']]);
