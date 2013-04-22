@@ -108,6 +108,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	protected $insertDelayed=false;
 	
 	private $_loadingFromDatabase=true;
+	
+	
+	/**
+	 *
+	 * @var GO_Base_Model_Acl 
+	 */
+	private $_acl=false;
 		
 	/**
 	 *
@@ -1091,9 +1098,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$joinRelationSelectFields='';
 		$joinRelationjoins='';
 		if(!empty($params['joinRelations'])){
-			
+		
 			foreach($params['joinRelations'] as $joinRelation){
 				$r = $this->getRelation($joinRelation['name']);
+				
+				if(!$r)
+					throw new Exception("Can't join non existing relation '".$joinRelation['name'].'"');
 
 				$model = GO::getModel($r['model']);
 				$joinRelationjoins .= "\n".$joinRelation['type']." JOIN `".$model->tableName().'` '.$joinRelation['name'].' ON ('.$joinRelation['name'].'.`'.$model->primaryKey().'`=t.`'.$r['field'].'`) ';
@@ -1645,13 +1655,19 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	private function _relationExists($name){
-		$r= $this->relations();
+		$r= $this->getRelation($name);
 		
-		return isset($r[$name]);		
+		return $r!=false;		
 	}
 	
 	protected function getRelation($name){
-		$r= $this->relations();
+		$r= $this->relations();		
+		
+		if(isset($this->columns['user_id']) && !isset($r['user'])){
+			$r['user']=array('type'=>self::BELONGS_TO, 'model'=>'GO_Base_Model_User', 'field'=>'user_id');
+		}
+		
+		$this->_checkRelations($r);
 		
 		if(!isset($r[$name]))
 			return false;
@@ -1682,25 +1698,23 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	private function _getRelated($name, $extraFindParams=array()){
-		 //$name::findByPk($hit-s)
-		$r= $this->relations();
 		
-		$this->_checkRelations($r);
+		$r = $this->getRelation($name);		
 		
-		if(!isset($r[$name]))
+		if(!$r)
 			return false;
 				
-		$model = $r[$name]['model'];
+		$model = $r['model'];
 		
 		if(!class_exists($model)) //could be a missing module
 			return false;
 		
-		if(!isset($r[$name]['findParams']))
-			$r[$name]['findParams']=GO_Base_Db_FindParams::newInstance();
+		if(!isset($r['findParams']))
+			$r['findParams']=GO_Base_Db_FindParams::newInstance();
 		
-		if($r[$name]['type']==self::BELONGS_TO){
+		if($r['type']==self::BELONGS_TO){
 		
-			$joinAttribute = $r[$name]['field'];
+			$joinAttribute = $r['field'];
 			
 			/**
 			 * Related stuff can be put in the relatedCache array for when a relation is
@@ -1732,18 +1746,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}
 			return $this->_relatedCache[$cacheKey];
 			
-		}elseif($r[$name]['type']==self::HAS_ONE){			
+		}elseif($r['type']==self::HAS_ONE){			
 			//We can't put this in the related cache because there's no reliable way to check if the situation has changed.
 	
-			$params =$r[$name]['findParams']->relation($name);
+			$params =$r['findParams']->relation($name);
 			//In a has one to relation ship the primary key of this model is stored in the "field" attribute of the related model.					
-			return empty($this->pk) ? false : GO::getModel($model)->findSingleByAttribute($r[$name]['field'], $this->pk, $params);			
-		}elseif($r[$name]['type']==self::HAS_MANY)
+			return empty($this->pk) ? false : GO::getModel($model)->findSingleByAttribute($r['field'], $this->pk, $params);			
+		}elseif($r['type']==self::HAS_MANY)
 		{									
-			$remoteFieldThatHoldsMyPk = $r[$name]['field'];
+			$remoteFieldThatHoldsMyPk = $r['field'];
 
 			$findParams = GO_Base_Db_FindParams::newInstance()
-					->mergeWith($r[$name]['findParams'])
+					->mergeWith($r['findParams'])
 					->mergeWith($extraFindParams)					
 					->ignoreAcl()
 					->relation($name);
@@ -1754,15 +1768,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 			$stmt = GO::getModel($model)->find($findParams);
 			return $stmt;		
-		}elseif($r[$name]['type']==self::MANY_MANY)
+		}elseif($r['type']==self::MANY_MANY)
 		{							
 			
 			$findParams = GO_Base_Db_FindParams::newInstance()
 					->mergeWith($extraFindParams)
-					->mergeWith($r[$name]['findParams'])
+					->mergeWith($r['findParams'])
 					->ignoreAcl()
 					->relation($name)
-					->linkModel($r[$name]['linkModel'], $r[$name]['field'], $this->pk);
+					->linkModel($r['linkModel'], $r['field'], $this->pk);
 				
 			$stmt = GO::getModel($model)->find($findParams); // pakt alle records waarvan de ids via de koppeltabel gelinked zijn aan de local id
       return $stmt;		
@@ -3142,8 +3156,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				return $this->$getter();
 			}else
 			{
-				$r = $this->relations();
-				if(isset($r[$name]))	
+				if($this->_relationExists($name))	
 					return $this->_getRelated($name);
 				else{					
 //					if(!isset($this->columns[$name]))
@@ -3578,22 +3591,21 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 	}
 	
-	/**
-	 * Returns the user model if this model has a user_id column.
-	 * 
-	 * @return GO_Base_Model_User 
-	 */
-	public function getUser(){
-		
-		if(!empty($this->user_id)){
-			return GO_Base_Model_User::model()->findByPk($this->user_id, array(), true);
-		}else
-		{
-			return false;
-		}
-	}
+//	/**
+//	 * Returns the user model if this model has a user_id column.
+//	 * 
+//	 * @return GO_Base_Model_User 
+//	 */
+//	public function getUser(){
+//		
+//		if(!empty($this->user_id)){
+//			return GO_Base_Model_User::model()->findByPk($this->user_id, array(), true);
+//		}else
+//		{
+//			return false;
+//		}
+//	}
 	
-	private $_acl=false;
 	
 	/**
 	 * Get's the Acces Control List for this model if it has one.
