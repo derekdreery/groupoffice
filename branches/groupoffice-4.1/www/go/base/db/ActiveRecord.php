@@ -1715,7 +1715,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		{									
 			$remoteFieldThatHoldsMyPk = $r['field'];
 
-			$findParams = GO_Base_Db_FindParams::newInstance()
+			$findParams = GO_Base_Db_FindParams::newInstance();
+			
+			if(isset($extraFindParams))
+					$findParams->mergeWith($extraFindParams);
+			
+			$findParams
 					->mergeWith($r['findParams'])		
 					->ignoreAcl()
 					->relation($name);
