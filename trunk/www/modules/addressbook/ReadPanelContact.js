@@ -260,6 +260,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 				if(GO.customfields)
 				{
 					this.template +=GO.customfields.displayPanelTemplate;
+					this.template +=GO.customfields.displayPanelBlocksTemplate;
 				}
 
 

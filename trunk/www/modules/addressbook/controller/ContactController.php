@@ -137,6 +137,31 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		}
 		
 		
+		if (GO::modules()->isInstalled('customfields')) {
+			
+			$response['data']['items_under_blocks'] = array();
+			
+			$enabledBlocksStmt = GO_Customfields_Model_EnabledBlock::getEnabledBlocks($model->addressbook_id, 'GO_Addressbook_Model_Addressbook', $model->className());
+			foreach ($enabledBlocksStmt as $i => $enabledBlockModel) {
+				
+				$items = $enabledBlockModel->block->getItemNames($model->id,$model->name);
+				
+				$blockedItemsEl = array(
+					'id' => $i,
+					'block_name' => $enabledBlockModel->block->name,
+					'items' => $items
+				);
+
+				$blockedItemsEl['model_name'] = !empty($items[0]) ? $items[0]['model_name'] : '';
+				$modelNameArr = explode('_', $blockedItemsEl['model_name']);
+				$blockedItemsEl['type'] = !empty($modelNameArr[3]) ? $modelNameArr[3] : '';
+				
+				$response['data']['items_under_blocks'][] = $blockedItemsEl;
+			}
+			
+		}
+		
+		
 		return parent::afterDisplay($response, $model, $params);
 	}
 	
