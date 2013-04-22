@@ -1,0 +1,147 @@
+<?php
+
+class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
+	
+	/**
+	 * A prefix for the pager parameter
+	 * @var string 
+	 */
+	protected $requestPrefix = '';
+	
+	/**
+	 * The current page number
+	 * @var int 
+	 */
+	public $currentPage=1;
+	
+	/**
+	 * A store object that is responsable for fetchin results
+	 * 
+	 * @var GO_Base_Data_DbStore 
+	 */
+	protected $store;
+	
+	/**
+	 * The classname for the previous link
+	 * @var string 
+	 */
+	public $previousPageClass = 'previous';
+	
+	/**
+	 * The classname for the previous link
+	 * @var string 
+	 */
+	public $nextPageClass = 'next';
+	
+	/**
+	 * The number of item on 1 page
+	 * If not specified it will take the number from the GO config.php
+	 * @var int 
+	 */
+	protected $pageSize;
+	
+	/**
+	 * the current page nb
+	 * @var int 
+	 */
+	protected $page;
+	
+	protected $pageParam = 'p';
+	
+	
+	/**
+	 * Constructor for the pagination
+	 * 
+	 * @param mixed $dataobject statement or a dbstore for data reading
+	 * @param array $config key value array with config options for widget.
+	 * @param GO_Base_Db_FindParams $findParams Findparams to find the correct models.
+	 */
+	public function __construct($dataobject, $config=array()){		
+
+		foreach($config as $key => $value)
+			$this->{$key} = $value;
+			
+		$pagenb = isset($_GET[$this->pageParam]) ? $_GET[$this->pageParam] : 1;
+			
+		$this->page = $pagenb;
+		
+		if(is_a($dataobject,'GO_Base_Db_ActiveStatement')){
+			$start = $pagenb / $this->pageSize;
+			$params = array('start'=>$start, 'limit'=>$this->pageSize);
+			$dbstore = new GO_Base_Data_DbStore($dataobject->model, new GO_Base_Data_ColumnModel(),$params, $dataobject->findParams);
+			$this->store = $dbstore;
+		}elseif(is_a($dataobject,'GO_Base_Data_DbStore')) {
+			$this->store = $dataobject;
+		} else
+			throw new Exception('Incorrect store type');
+	
+		if(empty($this->pageSize))
+			$this->pageSize = GO::config()->nav_page_size;
+			
+		$this->store->start = $pagenb / $this->pageSize;
+		$this->store->limit = $this->pageSize;
+	}
+	
+	/**
+	 * The current active page
+	 * @return integer
+	 */
+	public function getCurrentPage() {
+		return $this->store->start / $this->store->limit;
+	}
+	
+	/**
+	 * Total item count of all pages
+	 * @return The total items found in the database
+	 */
+	public function getTotalItems() {
+		return $this->store->getTotal();
+	}
+	
+	/**
+	 * Get the total number of pages
+	 * @return int
+	 */
+	public function getPageCount() {
+		return (int)(($this->store->getTotal()+$this->pageSize-1)/$this->pageSize);
+	}
+
+	/**
+	 * The link for the page with the given number
+	 * @param int $pageNum number of page
+	 * @return string URL to page
+	 */
+	private function getPageUrl($pageNum){
+		$params = array_merge($_GET,array($this->requestPrefix.$this->pageParam=>$pageNum));
+		return site::urlManager()->createUrl(Site::router()->getRoute(), $params);
+	}
+	
+	/**
+	 * Render the pagination.
+	 */
+	public function render($return = false){
+
+		$result = '';
+		if($this->currentPage != 1)
+			$result.= '<a class="'.$this->nextPageClass.'" href="'.$this->getPageUrl($this->currentPage-1).'"><</a>';
+
+		for($page=1;$page<=$this->pageCount;$page++)
+			$result.= ($page == $this->currentPage) ? $page : '<a href="'.$this->getPageUrl($page).'">'.$page.'</a>';
+
+		if($this->currentPage != 1)
+			$result.= '<a class="'.$this->previousPageClass.'" href="'.$this->getPageUrl($this->currentPage+1).'">></a>';
+		if($return)
+			return $result;
+		else
+			echo $result;
+	}
+	
+	/**
+	 * get an array of model with item on the current page
+	 * @return array with active records
+	 */
+	public function getItems() {
+		return $this->store->getModels();
+	}
+	
+}
