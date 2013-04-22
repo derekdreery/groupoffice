@@ -70,8 +70,13 @@ class GO_Base_Db_FindParams{
 	public function mergeWith($findParams){
 		if(!$findParams)
 			$findParams=array();
-		elseif(!is_array($findParams))
-			$findParams = $findParams->getParams();
+		elseif(!is_array($findParams)){
+			
+			if($findParams instanceof GO_Base_Db_FindParams)
+				$findParams = $findParams->getParams();
+			else
+				throw new Exception('$findParams must be an instance of GO_Base_Db_FindParams');
+		}
 		
 		
 		if(isset($this->_params['criteriaObject']) && isset($findParams['criteriaObject'])){
