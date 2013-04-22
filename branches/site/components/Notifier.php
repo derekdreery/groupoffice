@@ -17,7 +17,7 @@
  * @version $Id Notifier.php 2012-06-29 16:13:40 mdhart $ 
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
-class GO_Sites_Components_Notifier
+class GO_Site_Components_Notifier
 {
 	/**
 	 * checks if there is a notification message with the given value

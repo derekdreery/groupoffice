@@ -205,9 +205,12 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 	 * @param mixed $url String or array with route and params.
 	 * @param int $statusCode HTTP Status code
 	 */
-	protected function redirect($route = '', $params=array(),  $statusCode = 302)
+	protected function redirect($url = '', $statusCode = 302)
 	{
-		$url = Site::urlManager()->createUrl($route, $params);		
+		if(is_array($url)){
+			$route=isset($url[0]) ? $url[0] : '';
+			$url = Site::urlManager()->createUrl($route, array_splice($url,1));
+		}
 		Site::request()->redirect($url, true, $statusCode);
 	}
 
@@ -224,7 +227,7 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 			return $returnUrl;
 		}
 		else
-			return Site::model()->HomeUrl(); //Homepage
+			return Site::urlManager()->getHomeUrl(); //Homepage
 	}
 	
 	/**
@@ -278,7 +281,7 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 			if(!GO::user()){
 				//Path the page you tried to visit into lastPath session for redirecting after login
 				GO::session()->values['sites']['returnUrl'] = Site::request()->getRequestUri();
-				$loginpath = 'site/account/login';
+				$loginpath = array('site/account/login');
 				$this->redirect($loginpath);
 			}  else {
 //				$controller = new GO_Site_Controller_Site();
@@ -288,7 +291,7 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 		}
 		catch (GO_Base_Exception_NotFound $e){
 			header("HTTP/1.0 404 Not Found");
-      header("Status: 404 Not Found");
+			header("Status: 404 Not Found");
 			
 			$this->render('/site/404', array('error' => $e));
 		}
