@@ -22,16 +22,13 @@ class GO_Site_Components_Router{
 	 */
 	public function runController() {
 
-		if (($this->route = trim($this->route, '/')) === '')
-			$this->route = $this->defaultController;
-
-		$aroute = explode('/', $this->route);
+		$aroute = explode('/', $this->getRoute());
 		$module_id = $aroute[0];
 		if (!isset($aroute[1]))
-			throw new GO_Base_Exception_NotFound('No controller specified in url route ('.$this->route.')');
+			throw new GO_Base_Exception_NotFound('No controller specified in url route ('.$this->getRoute().')');
 		$controller_id = $aroute[1];
 		if (!isset($aroute[2]))
-			throw new GO_Base_Exception_NotFound('No controller action specified in url route ('.$this->route.')');
+			throw new GO_Base_Exception_NotFound('No controller action specified in url route ('.$this->getRoute().')');
 		$action_id = $aroute[2];
 
 		$className = 'GO_' . ucfirst($module_id) . '_Controller_' . ucfirst($controller_id); //TODO: set $module
@@ -53,9 +50,13 @@ class GO_Site_Components_Router{
 	}
 	
 	public function getRoute() {
+		$route = Site::urlManager()->parseUrl(Site::request());
+
+		if (($route = trim($route, '/')) === '')
+			$route = $this->defaultController;
 		if (!Site::urlManager()->caseSensitive)
-			return strtolower($route);
-		return Site::urlManager()->parseUrl(Site::request());
+			$route = strtolower($route);
+		return $route;
 	}
 	
 	public function getController() {
