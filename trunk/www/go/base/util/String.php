@@ -174,7 +174,12 @@ class GO_Base_Util_String {
 			if(substr($from_charset,0,5)=='x-mac')
 				return GO_Base_Util_Charset_Xmac::toUtf8($str, $from_charset);
 			
-				return iconv($from_charset, 'UTF-8//IGNORE', $str);
+			
+			//fix incorrect win-1252 to Windows-1252
+			$from_charset = preg_replace('/win-([0-9]+)/i','Windows-$1', $from_charset);
+			
+			
+			return iconv($from_charset, 'UTF-8//IGNORE', $str);
 		}
 	}
 	
@@ -202,6 +207,9 @@ class GO_Base_Util_String {
 		
 		//must use html_entity_decode here other wise some weird utf8 might be decoded later
 		//$str = html_entity_decode($str, ENT_COMPAT, $source_charset);			
+		
+		//fix incorrect win-1252 to Windows-1252
+		$source_charset = preg_replace('/win-([0-9]+)/i','WINDOWS-$1', $source_charset);
 		
 		//fix for euro signs in windows-1252 encoding. We convert it to iso-8859-15.
 		$source_charset=strtoupper($source_charset);

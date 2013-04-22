@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `cf_fields` (
   `category_id` tinyint(4) NOT NULL DEFAULT '0',
   `name` VARCHAR( 255 ) NOT NULL,
   `datatype` varchar(100) NOT NULL DEFAULT 'GO_Customfields_Customfieldtype_Text',
-  `sort_index` tinyint(4) NOT NULL DEFAULT '0',
+  `sort_index` int(11) NOT NULL DEFAULT '0',
   `function` varchar(255) DEFAULT NULL,
   `required` tinyint(1) NOT NULL DEFAULT '0',
   `validation_regex` varchar(255) NOT NULL DEFAULT '',

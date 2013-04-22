@@ -1003,6 +1003,44 @@ class GO{
 	
 	
 	/**
+	 * Find classes in a folder
+	 *
+	 * @param string $path Relative from $config['file_storage_path'].'php/'
+	 * @return ReflectionClass[]
+	 */
+	public static function findFsClasses($subfolder, $subClassOf=null){
+
+		$classes=array();
+		$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'php/'.$subfolder);
+		if($folder->exists()){
+
+			$items = $folder->ls();
+
+			foreach($items as $item){
+				if($item instanceof GO_Base_Fs_File){
+					$className = 'GOFS_';
+					
+					$subFolders = explode('/', $subfolder);
+					
+					foreach($subFolders as $sf){
+						$className .= ucfirst($sf).'_';
+					}
+					
+					$className .= $item->nameWithoutExtension();
+					
+					$rc = new ReflectionClass($className);
+					
+					if($subClassOf==null || $rc->isSubclassOf($subClassOf))
+						$classes[] = $rc;
+				}
+			}
+		}
+
+		return $classes;
+	}
+	
+	
+	/**
 	 * Checks if Group-Office is already installed. 
 	 * 
 	 * @return boolean

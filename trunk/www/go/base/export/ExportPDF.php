@@ -28,7 +28,7 @@ class GO_Base_Export_ExportPDF extends GO_Base_Export_AbstractExport {
 		if($this->header) {
 			$html .= '<tr nobr="true">';
 			foreach($data as $column)
-				$html .=  "<th>$column</th>";
+				$html .=  "<th style=\"background-color:rgb(248, 248, 248);\">$column</th>";
 			$html .=  "</tr>";
 			$this->header = false;
 		} else {

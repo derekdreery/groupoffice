@@ -87,7 +87,7 @@ GO.form.ColorField =  Ext.extend(function(config){
 	regex: /[a-f0-9]/i,
 
 	//private
-	curColor: 'ffffff',
+	curColor: 'FFFFFF',
 
 	// private
 	validateValue : function(value){
@@ -96,11 +96,11 @@ GO.form.ColorField =  Ext.extend(function(config){
 		}
 		if(value.length<1) {
 			this.el.setStyle({
-				'background-color':'#' + this.defaultColor
+				'background-color':'#FFFFFF'
 			});
 			if(!this.allowBlank) {
 				this.markInvalid(String.format(this.blankText, value));
-				return false
+				return false;
 			}
 			return true;
 		}
@@ -162,7 +162,7 @@ GO.form.ColorField =  Ext.extend(function(config){
 				this.el.setStyle({
 					'text-indent': '-100px'
 				});
-				if(Ext.isIE) {
+				if(Ext.isIE7 || Ext.isIE8 || Ext.isIE9) {	// Check this because in IE10 and later this fix is not needed anymore				
 					this.el.setStyle({
 						'margin-left': '100px'
 					});
