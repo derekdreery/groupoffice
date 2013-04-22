@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS `site_content` (
   `user_id` int(11) NOT NULL,
   `ctime` int(11) NOT NULL DEFAULT '0',
   `mtime` int(11) NOT NULL DEFAULT '0',
+  `ptime` int(11) NOT NULL DEFAULT '0',
   `title` varchar(100) NOT NULL,
   `slug` varchar(100) NOT NULL,
   `meta_title` varchar(100) DEFAULT NULL,

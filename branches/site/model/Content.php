@@ -77,7 +77,7 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	 */
 	 public function relations() {
 		 return array(
-			'children' => array('type' => self::HAS_MANY, 'model' => 'GO_Site_Model_Content', 'field' => 'parent_id', 'delete' => true, GO_Base_Db_FindParams::newInstance()->order('sort_order')),
+			'children' => array('type' => self::HAS_MANY, 'model' => 'GO_Site_Model_Content', 'field' => 'parent_id', 'delete' => true, 'findParams' =>GO_Base_Db_FindParams::newInstance()->order(array('sort_order','ptime'))),
 			'site'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Site_Model_Site", 'field'=>'site_id'),
 			'parent'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Site_Model_Content", 'field'=>'parent_id')
 		 );
@@ -195,4 +195,30 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 
 		return $this->_cf[$cfName];
 	 }
+	 
+	 public function beforeValidate() {
+		 parent::beforeValidate();
+		 if(empty($this->ptime)){
+			 $this->ptime = time();
+		 }
+		 
+	 }
+	 
+	 
+	 /**
+	  * Get a short text from this contentitem
+	  * 
+	  * @param int $length
+	  * @param boolean $cutwords
+	  * @param string $append
+	  * @return string
+	  */
+	 public function getShortText($length=100,$cutwords=false,$append='...'){
+		 
+		 $text = GO_Base_Util_String::html_to_text($this->content);
+		 $text = GO_Base_Util_String::cut_string($text,$length,!$cutwords,$append);
+		 
+		 return $text;
+	 }
+	 
 }
