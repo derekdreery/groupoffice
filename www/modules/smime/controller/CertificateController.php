@@ -127,19 +127,19 @@ class GO_Smime_Controller_Certificate extends GO_Base_Controller_AbstractControl
 		if (!isset($params['account_id']) || $valid) {
 			$response['html'] .= '<table>';
 			$response['html'] .= '<tr><td width="100">' . GO::t('name') . ':</td><td>' . $arr['name'] . '</td></tr>';
-			$response['html'] .= '<tr><td width="100">E-mail:</td><td>' . $email . '</td></tr>';
-			$response['html'] .= '<tr><td>Hash:</td><td>' . $arr['hash'] . '</td></tr>';
-			$response['html'] .= '<tr><td>Serial number:</td><td>' . $arr['serialNumber'] . '</td></tr>';
-			$response['html'] .= '<tr><td>Version:</td><td>' . $arr['version'] . '</td></tr>';
-			$response['html'] .= '<tr><td>Issuer:</td><td>';
+			$response['html'] .= '<tr><td width="100">'.GO::t('email','smime').':</td><td>' . $email . '</td></tr>';
+			$response['html'] .= '<tr><td>'.GO::t('hash','smime').':</td><td>' . $arr['hash'] . '</td></tr>';
+			$response['html'] .= '<tr><td>'.GO::t('serial_number','smime').':</td><td>' . $arr['serialNumber'] . '</td></tr>';
+			$response['html'] .= '<tr><td>'.GO::t('version','smime').':</td><td>' . $arr['version'] . '</td></tr>';
+			$response['html'] .= '<tr><td>'.GO::t('issuer','smime').':</td><td>';
 
 			foreach ($arr['issuer'] as $skey => $svalue) {
 				$response['html'] .= $skey . ':' . $svalue . '; ';
 			}
 
 			$response['html'] .= '</td></tr>';
-			$response['html'] .= '<tr><td>Valid from:</td><td>' . GO_Base_Util_Date::get_timestamp($arr['validFrom_time_t']) . '</td></tr>';
-			$response['html'] .= '<tr><td>Valid to:</td><td>' . GO_Base_Util_Date::get_timestamp($arr['validTo_time_t']) . '</td></tr>';
+			$response['html'] .= '<tr><td>'.GO::t('valid_from','smime').':</td><td>' . GO_Base_Util_Date::get_timestamp($arr['validFrom_time_t']) . '</td></tr>';
+			$response['html'] .= '<tr><td>'.GO::t('valid_to','smime').':</td><td>' . GO_Base_Util_Date::get_timestamp($arr['validTo_time_t']) . '</td></tr>';
 			$response['html'] .= '</table>';
 		}
 
