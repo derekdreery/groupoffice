@@ -1741,7 +1741,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}elseif($r[$name]['type']==self::HAS_MANY)
 		{									
 			$remoteFieldThatHoldsMyPk = $r[$name]['field'];
-			
+
 			$findParams = GO_Base_Db_FindParams::newInstance()
 					->mergeWith($r[$name]['findParams'])
 					->mergeWith($extraFindParams)					
@@ -1751,19 +1751,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$findParams->getCriteria()							
 							->addModel(GO::getModel($model))
 							->addCondition($remoteFieldThatHoldsMyPk, $this->pk);
-			
-//			$findParams = array_merge($extraFindParams,$r[$name]['findParams'],array(
-//					"by"=>array(array($remoteFieldThatHoldsMyPk,$this->pk,'=')),
-//					"ignoreAcl"=>true,
-//          "relation"=>$name
-//			));
-//				
+
 			$stmt = GO::getModel($model)->find($findParams);
 			return $stmt;		
 		}elseif($r[$name]['type']==self::MANY_MANY)
 		{							
-			$localPkField = $r[$name]['field'];
-      $linkModelName = $r[$name]['linkModel']; // name where the local id is linked to the ids of the records in the remote table
 			
 			$findParams = GO_Base_Db_FindParams::newInstance()
 					->mergeWith($extraFindParams)
