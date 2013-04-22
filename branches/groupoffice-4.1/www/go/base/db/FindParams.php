@@ -206,6 +206,8 @@ class GO_Base_Db_FindParams{
 			$this->_params['joinRelations']=array();
 		
 		$this->_params['joinRelations'][]=array('name'=>$name, 'type'=>$type);
+		
+		return $this;
 	}
 	
 	/**
