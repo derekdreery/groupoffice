@@ -30,8 +30,7 @@ $l['decryptionFailed']='SMIME Decryption of this message failed.';
 
 $l["email"]="E-mail";
 $l["hash"]="Hash";
-$l["serial_number"]="E-mail";
-$l["email"]="Serial number";
+$l["serial_number"]="Serial number";
 $l["version"]="Version";
 $l["issuer"]="Issuer";
 $l["valid_to"]="Valid to";
