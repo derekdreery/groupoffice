@@ -21,22 +21,17 @@ class GO_Site_Components_Router{
 	 * @return array the controller instance and the action ID. Null if the controller class does not exist or the route is invalid.
 	 */
 	public function runController() {
-		
-		$route = Site::urlManager()->parseUrl(Site::request());
-		
-		if (($route = trim($route, '/')) === '')
-			$route = $this->defaultController;
 
-		if (!Site::urlManager()->caseSensitive)
-			$route = strtolower($route);
+		if (($this->route = trim($this->route, '/')) === '')
+			$this->route = $this->defaultController;
 
-		$aroute = explode('/', $route);
+		$aroute = explode('/', $this->route);
 		$module_id = $aroute[0];
 		if (!isset($aroute[1]))
-			throw new GO_Base_Exception_NotFound('No controller specified in url route ('.$route.')');
+			throw new GO_Base_Exception_NotFound('No controller specified in url route ('.$this->route.')');
 		$controller_id = $aroute[1];
 		if (!isset($aroute[2]))
-			throw new GO_Base_Exception_NotFound('No controller action specified in url route ('.$route.')');
+			throw new GO_Base_Exception_NotFound('No controller action specified in url route ('.$this->route.')');
 		$action_id = $aroute[2];
 
 		$className = 'GO_' . ucfirst($module_id) . '_Controller_' . ucfirst($controller_id); //TODO: set $module
@@ -55,6 +50,12 @@ class GO_Site_Components_Router{
 			//404
 			$controller = new GO_Site_Controller_Site();
 		}
+	}
+	
+	public function getRoute() {
+		if (!Site::urlManager()->caseSensitive)
+			return strtolower($route);
+		return Site::urlManager()->parseUrl(Site::request());
 	}
 	
 	public function getController() {
