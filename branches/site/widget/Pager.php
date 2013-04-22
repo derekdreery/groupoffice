@@ -50,7 +50,7 @@ class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
 	 * @param array $config key value array with config options for widget.
 	 * @param GO_Base_Db_FindParams $findParams Findparams to find the correct models.
 	 */
-	public function __construct($dataobject, $config=array()){		
+	public function __construct(GO_Base_Data_AbstractStore $store, $config=array()){		
 
 		foreach($config as $key => $value)
 			$this->{$key} = $value;
@@ -58,13 +58,8 @@ class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
 		if(isset($_GET[$this->pageParam]))
 			$this->currentPage = $_GET[$this->pageParam];
 		
-		if(is_a($dataobject,'GO_Base_Db_ActiveStatement')){
-			$this->store = new GO_Base_Data_DbStore($dataobject->model, new GO_Base_Data_ColumnModel(),array(), $dataobject->findParams);;
-		}elseif(is_a($dataobject,'GO_Base_Data_DbStore')) {
-			$this->store = $dataobject;
-		} else
-			throw new Exception('Incorrect store type');
-	
+		$this->store = $store;
+		
 		if(empty($this->pageSize))
 			$this->pageSize = GO::config()->nav_page_size;
 			
