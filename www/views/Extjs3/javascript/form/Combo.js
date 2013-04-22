@@ -53,6 +53,8 @@ GO.form.ComboBox = Ext.extend(Ext.form.ComboBox, {
 	 */
 	setRemoteText : function(text)
 	{
+		
+		
 		//console.log(this.value);
 		if(this.value && text){
 			var r = this.findRecord(this.valueField, this.value);
@@ -85,6 +87,8 @@ GO.form.ComboBox = Ext.extend(Ext.form.ComboBox, {
 				r.set(this.displayField,text);
 			}
 			this.setValue(this.value);
+		}else{
+			this.setRawValue("");
 		}
 	},
 

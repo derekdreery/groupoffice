@@ -3,7 +3,7 @@
 class GO_Base_Component_MultiSelectGrid {
 
 	private $_requestParamName;
-		/**
+	/**
 	 * The selected model ID's
 	 * 
 	 * @var array
@@ -19,6 +19,18 @@ class GO_Base_Component_MultiSelectGrid {
 	
 	
 	private $_checkPermissions=false;
+	
+	/**
+	 * When the store of the multiselectgrid changed it need a unique prefix for saving
+	 * @var string unique store loading id
+	 */
+	private $_requestParamPrefix='';
+	
+	/**
+	 * The extra PK's of related model that might not excist in the database
+	 * @var array valid keys for selection 
+	 */
+	private $_extraPks;
 
 	/**
 	 * A component for a MultiSelectGrid. eg. Select multiple addressbooks to display contacts.
@@ -32,14 +44,17 @@ class GO_Base_Component_MultiSelectGrid {
      * @param GO_Base_Data_AbstractStore $store the store that should be filtered
 	 * @param array $requestParams The request parameters
 	 * @param boolean $checkPermission  Enable permission checking on this model. This makes sure that only 
+	 * @param string $prefix a prefix for the request param that can change every store load
+	 * @param array $extraPks valid pks of models not in hte database
 	 * readbable addressbooks are used with contacts for example.
 	 * This will disable acl checking for the contacts query which improves performance.
 	 */
-	public function __construct($requestParamName, $modelName, GO_Base_Data_AbstractStore $store, array $requestParams, $checkPermissions=null) {
+	public function __construct($requestParamName, $modelName, GO_Base_Data_AbstractStore $store, array $requestParams, $checkPermissions=null, $prefix='', $extraPks=array()) {
 
-		$this->_requestParamName = $requestParamName;
+		$this->_requestParamName = $prefix.$requestParamName;
 		$this->_store = $store;
-		$this->_modelName = $modelName;			
+		$this->_modelName = $modelName;
+		$this->_extraPks = $extraPks;
 		
 		if(GO::config()->debug && !class_exists($modelName))
 			throw new Exception("Invalid argument \$modelName for GO_Base_Component_MultiSelectGrid. Class $modelName does not exist.");
@@ -86,22 +101,12 @@ class GO_Base_Component_MultiSelectGrid {
 	private function _setSelectedIds(array $requestParams) {
 		if (isset($requestParams[$this->_requestParamName])) {
 			$this->selectedIds = json_decode($requestParams[$this->_requestParamName], true);
-            
-            //this will validate the selection
-			if($this->_checkPermissions) //will check if models to filter for aren't deleted as well
-				$this->_validateSelection();
-            
 			$this->_save();
 		} else {
-			$this->selectedIds = GO::config()->get_setting('ms_' . $this->_requestParamName, GO::session()->values['user_id']);
-
-			$this->selectedIds = $this->selectedIds!==false && $this->selectedIds !=""  ? explode(',', $this->selectedIds) : array();
-
-			//this will validate the selection
-			if($this->_checkPermissions)
-				$this->_validateSelection();
+			$selectedPks = GO::config()->get_setting('ms_' . $this->_requestParamName, GO::session()->values['user_id']);
+			$this->selectedIds = !empty($selectedPks) ? explode(',', $selectedPks) : array();
+			
 		}
-        
         
 		//add all the allowed models if it's empty. It's faster to find all allowed 
 		//addressbooks then too join the acl table.
@@ -114,6 +119,7 @@ class GO_Base_Component_MultiSelectGrid {
 			foreach($stmt as $model){
 				$this->selectedIds[]=$model->pk;
 			}
+			$this->_save();
 		}
 	}
 	
@@ -122,15 +128,19 @@ class GO_Base_Component_MultiSelectGrid {
 	 * Use this in the model controller of the selected items. eg. Use in AddressbookController and not in ContactController. 
 	 */
 	public function formatCheckedColumn(){
+		
+		//validate selection only when we display the grid
+		$this->_validateSelection();
+		
 		$this->_store->getColumnModel()->
 						formatColumn('checked','in_array($model->id, $multiSelectGrid->selectedIds)', array('multiSelectGrid'=>$this));
-
+//		$this->_save();
 	}
 
 	/**
 	 * Add the selected id's to the findCriteria. You use this in the other controller. eg. ContactController and not AddressbookController.
 	 * Should be called in GO_Base_Controller_AbstractModelController::beforeStoreStatement
-	 * Will be callend in GO_Base_Data_DbStore::multiSelect()
+	 * Will be called in GO_Base_Data_DbStore::multiSelect()
 	 * @param GO_Base_Db_FindParams $findParams (object reference)
 	 * @param string $columnName database column to match keys to
 	 * @param string $tableAlias table alias of the column to match
@@ -139,12 +149,20 @@ class GO_Base_Component_MultiSelectGrid {
 	 */
 	public function addSelectedToFindCriteria(GO_Base_Db_FindParams &$findParams, $columnName, $tableAlias = 't', $useAnd = true, $useNot = false) {
 	
-		//ignore here. Permissions are checked in by _setSelectedIds.
-		if($this->_checkPermissions && count($this->selectedIds))
-			$findParams->ignoreAcl();
 		
+		//ignore here. Permissions are checked in by _setSelectedIds.
+		if($this->_checkPermissions){
+			
+//			$this->_validateSelection();
+		
+			if(count($this->selectedIds))
+				$findParams->ignoreAcl();
+		}
+
 		if(count($this->selectedIds))
 			$findParams->getCriteria()->addInCondition($columnName, $this->selectedIds, $tableAlias, $useAnd, $useNot);
+		
+//		$this->_save();
 	}
 	
 	/**
@@ -153,7 +171,7 @@ class GO_Base_Component_MultiSelectGrid {
 	 */
 	private function _validateSelection(){
 		$models = $this->_getSelectedModels();
-		
+
 		if(count($models) != count($this->selectedIds)){
 			//one of the selections could not be fetched. This may happen when something is
 			//deleted or a user doesn't have permissions anymore.
@@ -162,7 +180,6 @@ class GO_Base_Component_MultiSelectGrid {
 			foreach($this->_models as $model){
 				$this->selectedIds[]=$model->pk;
 			}
-			$this->_save();
 		}
 	}
 
@@ -172,6 +189,7 @@ class GO_Base_Component_MultiSelectGrid {
 	 * @return GO_Base_Db_ActiveRecord[] 
 	 */
 	private function _getSelectedModels(){
+//		throw new Exception();
 		if(!isset($this->_models))
 		{			
 			$this->_models=array();
@@ -186,7 +204,13 @@ class GO_Base_Component_MultiSelectGrid {
 					//might happen when a user no longer has access to a selected model
 				}
 			}
-	
+			foreach($this->_extraPks as $pk) {
+				if(in_array($pk, $this->selectedIds)) {
+					$model = GO::getModel($this->_modelName);
+					$model->pk = $pk;
+					$this->_models[] = $model;
+				}
+			}
 		}
 		return $this->_models;
 	}
@@ -200,13 +224,21 @@ class GO_Base_Component_MultiSelectGrid {
 	 * @param string $titleAttribute 
 	 */
 	public function setStoreTitle( $titleAttribute = 'name') {
-		$titleArray = array();
-		$models = $this->_getSelectedModels();
-		foreach ($models as $model) 
-			$titleArray[] = $model->$titleAttribute;
-		
-		if(count($titleArray))
-			$this->_store->setTitle(implode(', ',$titleArray));		
+//		$titleArray = array();
+//		$models = $this->_getSelectedModels();
+//		foreach ($models as $model) 
+//			$titleArray[] = $model->$titleAttribute;
+//		
+//		if(count($titleArray))
+//			$this->_store->setTitle(implode(', ',$titleArray));		
+		$count = count($this->selectedIds);
+		if($count==1){
+			$model = GO::getModel($this->_modelName)->findByPk($this->selectedIds[0]);
+			$this->_store->setTitle($model->name);	
+		}else
+		{
+		$this->_store->setTitle($count.' '.GO::t('multiselectSelected'));		
+		}
 	}
 	
 	/**

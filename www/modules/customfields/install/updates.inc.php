@@ -126,6 +126,7 @@ $updates["201205311702"][]="update `cf_fields` set height=100 where datatype='GO
 
 $updates['201302041130'][]="ALTER TABLE `cf_fields` ADD `number_decimals` tinyint(4) NOT NULL DEFAULT '2'";
 
+$updates['201304171600'][]="ALTER TABLE  `cf_fields` CHANGE  `sort_index`  `sort_index` INT NOT NULL DEFAULT  '0'";
 
 $updates['201304180930'][]="CREATE TABLE IF NOT EXISTS `cf_blocks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

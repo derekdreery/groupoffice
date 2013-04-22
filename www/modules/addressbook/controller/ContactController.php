@@ -195,15 +195,17 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 							'addresslist_filter', 
 							"GO_Addressbook_Model_Addresslist",$store, $params, false);				
 
-			if(count($addresslistMultiSel->selectedIds) && !empty($params['addresslist_filters']))
+			if(!empty($params['addresslist_filters']))
 			{
 				$addresslistMultiSel->addSelectedToFindCriteria($storeParams, 'addresslist_id','ac');
 
-				//we need to join the addresslist link model if a filter for the addresslist is enabled.
-				$storeParams->join(GO_Addressbook_Model_AddresslistContact::model()->tableName(),
-								GO_Base_Db_FindCriteria::newInstance()->addCondition('id', 'ac.contact_id', '=', 't', true, true),
-								'ac'
-					);
+				if(count($addresslistMultiSel->selectedIds)){
+					//we need to join the addresslist link model if a filter for the addresslist is enabled.
+					$storeParams->join(GO_Addressbook_Model_AddresslistContact::model()->tableName(),
+									GO_Base_Db_FindCriteria::newInstance()->addCondition('id', 'ac.contact_id', '=', 't', true, true),
+									'ac'
+						);
+				}
 			}
 		}
 		

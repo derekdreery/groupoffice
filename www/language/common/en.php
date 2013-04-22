@@ -622,3 +622,5 @@ $l['exportOrders']='Orders';
 $l['errorTimeout']="The request timed out. The server took too long to respond. Please try again.";
 
 $l['showAll']='Show all';
+
+$l['multiselectSelected']='selected';

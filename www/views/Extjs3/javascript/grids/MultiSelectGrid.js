@@ -91,18 +91,18 @@ GO.grid.MultiSelectGrid = function (config){
 		this.on('change', function(grid, categories, records)
 		{
 			//if(records.length){
-				this.relatedStore.baseParams[this.id] = Ext.encode(categories);
-				this.relatedStore.reload();
-				delete this.relatedStore.baseParams[this.id];
+				this.relatedStore.baseParams[this.getRequestParam()] = Ext.encode(categories);
+				this.relatedStore.load();
+				delete this.relatedStore.baseParams[this.getRequestParam()];
 			//}
 		}, this);
 
 		if(this.autoLoadRelatedStore){
 			this.store.on('load', function()
 			{
-				this.relatedStore.baseParams[this.id] = Ext.encode(this.getSelected());
+				this.relatedStore.baseParams[this.getRequestParam()] = Ext.encode(this.getSelected());
 				this.relatedStore.load();		
-				delete this.relatedStore.baseParams[this.id];
+				delete this.relatedStore.baseParams[this.getRequestParam()];
 			}, this);
 		}
 	}
@@ -127,6 +127,12 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 	lastSelectedIndex : -1,
 
 	selectedAll : false,
+	
+	requestPrefix : '',
+	
+	getRequestParam : function(){
+		return this.requestPrefix+this.id;
+	},
 	
 	getColumns : function (){
 		var columns = [this.checkColumn,{

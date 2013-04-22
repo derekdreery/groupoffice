@@ -70,8 +70,13 @@ class GO_Base_Db_FindParams{
 	public function mergeWith($findParams){
 		if(!$findParams)
 			$findParams=array();
-		elseif(!is_array($findParams))
-			$findParams = $findParams->getParams();
+		elseif(!is_array($findParams)){
+			
+			if($findParams instanceof GO_Base_Db_FindParams)
+				$findParams = $findParams->getParams();
+			else
+				throw new Exception('$findParams must be an instance of GO_Base_Db_FindParams');
+		}
 		
 		
 		if(isset($this->_params['criteriaObject']) && isset($findParams['criteriaObject'])){
@@ -186,6 +191,21 @@ class GO_Base_Db_FindParams{
 		$this->_params['joinedTables'][$tableName]=$tableAlias;		
 		
 		return $this;
+	}
+	
+	/**
+	 * Join a relation in the find query. Relation models are fetched together and
+	 * can be accessed without the need for an extra select query.
+	 * 
+	 * @param string $name
+	 * @param string $type
+	 */
+	public function joinRelation($name, $type='INNER'){
+		
+		if(!isset($this->_params['joinRelations']))
+			$this->_params['joinRelations']=array();
+		
+		$this->_params['joinRelations'][]=array('name'=>$name, 'type'=>$type);
 	}
 	
 	/**

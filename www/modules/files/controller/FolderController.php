@@ -625,6 +625,12 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$findParams = $store->getDefaultParams($params)
 							->limit($fileLimit)
 							->start($fileStart);
+			
+			// Handle the files filter
+			if(!empty($params['files_filter'])){
+				$extensions= explode(',',$params['files_filter']);
+				$findParams->getCriteria()->addInCondition('extension', $extensions);
+			}
 
 			$stmt = $folder->files($findParams);
 			$store->setStatement($stmt);

@@ -163,12 +163,12 @@ GO.addressbook.MainPanel = function(config)
 		if(panel.id=='ab-contacts-grid')
 		{
 			this.contactsGrid.store.load();
-			//delete this.contactsGrid.store.baseParams.books;
+			delete this.contactsGrid.store.baseParams.books;
 		}else
 		{
 			
 			this.companiesGrid.store.load();
-			//delete this.companiesGrid.store.baseParams.books;
+			delete this.companiesGrid.store.baseParams.books;
 		}
 
 		if(records.length)
