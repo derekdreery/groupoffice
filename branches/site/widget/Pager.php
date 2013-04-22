@@ -7,13 +7,7 @@ class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
 	 * @var string 
 	 */
 	protected $requestPrefix = '';
-	
-	/**
-	 * The current page number
-	 * @var int 
-	 */
-	public $currentPage=1;
-	
+
 	/**
 	 * A store object that is responsable for fetchin results
 	 * 
@@ -41,10 +35,10 @@ class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
 	protected $pageSize;
 	
 	/**
-	 * the current page nb
+	 * the current page number
 	 * @var int 
 	 */
-	protected $page;
+	public $currentPage=1;
 	
 	protected $pageParam = 'p';
 	
@@ -52,7 +46,7 @@ class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
 	/**
 	 * Constructor for the pagination
 	 * 
-	 * @param mixed $dataobject statement or a dbstore for data reading
+	 * @param mixed $dataobject an ActiveStatement or a DbStore for data reading
 	 * @param array $config key value array with config options for widget.
 	 * @param GO_Base_Db_FindParams $findParams Findparams to find the correct models.
 	 */
@@ -60,16 +54,12 @@ class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
 
 		foreach($config as $key => $value)
 			$this->{$key} = $value;
-			
-		$pagenb = isset($_GET[$this->pageParam]) ? $_GET[$this->pageParam] : 1;
-			
-		$this->page = $pagenb;
+
+		if(isset($_GET[$this->pageParam]))
+			$this->currentPage = $_GET[$this->pageParam];
 		
 		if(is_a($dataobject,'GO_Base_Db_ActiveStatement')){
-			$start = $pagenb / $this->pageSize;
-			$params = array('start'=>$start, 'limit'=>$this->pageSize);
-			$dbstore = new GO_Base_Data_DbStore($dataobject->model, new GO_Base_Data_ColumnModel(),$params, $dataobject->findParams);
-			$this->store = $dbstore;
+			$this->store = new GO_Base_Data_DbStore($dataobject->model, new GO_Base_Data_ColumnModel(),array(), $dataobject->findParams);;
 		}elseif(is_a($dataobject,'GO_Base_Data_DbStore')) {
 			$this->store = $dataobject;
 		} else
@@ -78,7 +68,7 @@ class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
 		if(empty($this->pageSize))
 			$this->pageSize = GO::config()->nav_page_size;
 			
-		$this->store->start = $pagenb / $this->pageSize;
+		$this->store->start = $this->pageSize * ($this->currentPage-1);
 		$this->store->limit = $this->pageSize;
 	}
 	
