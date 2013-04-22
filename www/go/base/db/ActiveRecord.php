@@ -1697,7 +1697,56 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 	}
 	
-	private function _getRelated($name, $extraFindParams=array()){
+	/**
+	 * Get the findparams object used to query a defined relation.
+	 * 
+	 * @param string $name
+	 * @return GO_Base_Db_FindParams
+	 * @throws Exception
+	 */
+	public function getRelationFindParams($name, $extraFindParams=null){
+		
+		$r = $this->getRelation($name);
+		
+		if(!isset($r['findParams']))
+			$r['findParams']=GO_Base_Db_FindParams::newInstance();
+		
+		if($r['type']==self::HAS_MANY)
+		{									
+			$remoteFieldThatHoldsMyPk = $r['field'];
+
+			$findParams = GO_Base_Db_FindParams::newInstance()
+					->mergeWith($r['findParams'])		
+					->ignoreAcl()
+					->relation($name);
+					
+			$findParams->getCriteria()							
+							->addCondition($remoteFieldThatHoldsMyPk, $this->pk);
+
+
+		}elseif($r['type']==self::MANY_MANY)
+		{							
+			
+			$findParams = GO_Base_Db_FindParams::newInstance();
+			
+			if(isset($extraFindParams))
+					$findParams->mergeWith($extraFindParams);
+			
+			$findParams->mergeWith($r['findParams'])
+					->ignoreAcl()
+					->relation($name)
+					->linkModel($r['linkModel'], $r['field'], $this->pk);
+				
+			
+		}else
+		{
+			throw new Exception("getRelationFindParams not supported for ".$r[$name]['type']);
+		}
+		
+		return $findParams;
+	}
+	
+	private function _getRelated($name, $extraFindParams=null){
 		
 		$r = $this->getRelation($name);		
 		
@@ -1709,8 +1758,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(!class_exists($model)) //could be a missing module
 			return false;
 		
-		if(!isset($r['findParams']))
-			$r['findParams']=GO_Base_Db_FindParams::newInstance();
+		
 		
 		if($r['type']==self::BELONGS_TO){
 		
@@ -1749,36 +1797,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}elseif($r['type']==self::HAS_ONE){			
 			//We can't put this in the related cache because there's no reliable way to check if the situation has changed.
 	
+			if(!isset($r['findParams']))
+				$r['findParams']=GO_Base_Db_FindParams::newInstance();
+			
 			$params =$r['findParams']->relation($name);
 			//In a has one to relation ship the primary key of this model is stored in the "field" attribute of the related model.					
 			return empty($this->pk) ? false : GO::getModel($model)->findSingleByAttribute($r['field'], $this->pk, $params);			
-		}elseif($r['type']==self::HAS_MANY)
-		{									
-			$remoteFieldThatHoldsMyPk = $r['field'];
-
-			$findParams = GO_Base_Db_FindParams::newInstance()
-					->mergeWith($r['findParams'])
-					->mergeWith($extraFindParams)					
-					->ignoreAcl()
-					->relation($name);
-					
-			$findParams->getCriteria()							
-							->addModel(GO::getModel($model))
-							->addCondition($remoteFieldThatHoldsMyPk, $this->pk);
-
-			$stmt = GO::getModel($model)->find($findParams);
-			return $stmt;		
-		}elseif($r['type']==self::MANY_MANY)
-		{							
-			
-			$findParams = GO_Base_Db_FindParams::newInstance()
-					->mergeWith($extraFindParams)
-					->mergeWith($r['findParams'])
-					->ignoreAcl()
-					->relation($name)
-					->linkModel($r['linkModel'], $r['field'], $this->pk);
-				
-			$stmt = GO::getModel($model)->find($findParams); // pakt alle records waarvan de ids via de koppeltabel gelinked zijn aan de local id
+		}else{
+			$findParams = $this->getRelationFindParams($name,$extraFindParams);
+		
+			$stmt = GO::getModel($model)->find($findParams); 
       return $stmt;		
 		}
 	}
