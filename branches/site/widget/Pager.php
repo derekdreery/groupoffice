@@ -118,7 +118,7 @@ class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
 		for($page=1;$page<=$this->pageCount;$page++)
 			$result.= ($page == $this->currentPage) ? $page : '<a href="'.$this->getPageUrl($page).'">'.$page.'</a>';
 
-		if($this->currentPage != 1)
+		if($this->currentPage != $this->pageCount)
 			$result.= '<a class="'.$this->previousPageClass.'" href="'.$this->getPageUrl($this->currentPage+1).'">></a>';
 		if($return)
 			return $result;
@@ -127,7 +127,7 @@ class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
 	}
 	
 	/**
-	 * get an array of model with item on the current page
+	 * get an array of models with item on the current page
 	 * @return array with active records
 	 */
 	public function getItems() {
