@@ -6,7 +6,6 @@ GO.addressbook.CompaniesGrid = function(config){
 	}
 	config.border=false;
 	config.paging=true;
-	config.editDialogClass = GO.addressbook.CompanyDialog;
 	
 	var fields ={
 		fields:['id','name','name2','homepage','email','phone','fax','address','address_no','zip','city','state','country','post_address','post_address_no','post_city','post_state','post_country','post_zip','bank_no','vat_no','invoice_email','ctime','mtime','iban','crn','ab_name'],

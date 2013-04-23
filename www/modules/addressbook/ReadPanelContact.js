@@ -20,7 +20,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 	editGoDialogId : 'contact',
 	
 	editHandler : function(){
-		GO.addressbook.showContactDialog(this.link_id);		
+		GO.addressbook.showContactDialog(this.model_id);		
 	},	
 	
 	initComponent : function(){	
