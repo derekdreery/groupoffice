@@ -1435,8 +1435,12 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 					$message['to']=$this->mime_header_decode($message['to']);
 					$message['reply_to']=$this->mime_header_decode($message['reply_to']);
 					$message['disposition_notification_to']=$this->mime_header_decode($message['disposition_notification_to']);
+					
 					if(isset($message['cc']))
 						$message['cc']=$this->mime_header_decode($message['cc']);
+					
+					if(isset($message['bcc']))
+						$message['bcc']=$this->mime_header_decode($message['bcc']);
 					
 					preg_match("'([^/]*)/([^ ;\n\t]*)'i", $message['content_type'], $ct);
 
