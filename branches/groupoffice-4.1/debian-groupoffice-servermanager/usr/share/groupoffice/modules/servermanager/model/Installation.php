@@ -309,12 +309,15 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	}
 	
 	
-	public function mysqldump($outputDir){
+	public function mysqldump($outputDir, $filename=null){
 		$c = $this->getConfig();
 		
-		$outputFile=rtrim($outputDir,'/')."/".$c['db_name'].".sql";
+		if(!isset($filename))
+			$filename=$c['db_name'].".sql";
+		
+		$outputFile=rtrim($outputDir,'/')."/".$filename;
 	
-		$cmd = "mysqldump --force --opt --user=".$c['db_user']." --password=".$c['db_pass']." --databases ".$c['db_name']." > \"$outputFile\"";
+		$cmd = "mysqldump  --default-character-set=utf8 --force --opt --user=".$c['db_user']." --password=".$c['db_pass']." ".$c['db_name']." > \"$outputFile\"";
 		GO::debug($cmd);
 		exec($cmd, $output,$retVar);
 		

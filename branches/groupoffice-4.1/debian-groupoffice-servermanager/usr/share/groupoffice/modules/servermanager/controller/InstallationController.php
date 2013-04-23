@@ -54,7 +54,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		if(!$trashFolderConfig->exists())
 			throw new Exception($trashFolderConfig->path().' does not exist');
 		
-		echo "Retoring files...\n";
+		echo "Restoring files...\n";
 		$trashFolderGovhosts->move(new GO_Base_Fs_Folder('/home/govhosts'));	
 		$trashFolderConfig->move(new GO_Base_Fs_Folder('/etc/groupoffice'));
 		
@@ -81,6 +81,139 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		$installation->loadUsageData();					
 		
 		echo "Restore done!\n";
+		
+	}
+	
+	public function actionImportMigrated($params){
+		$this->requireCli();
+		
+		$this->checkRequiredParameters(array('source','name'), $params);
+			
+		echo "Restoring files...\n";
+		
+		$sourceFolder = new GO_Base_Fs_Folder($params['source']);
+		
+		$rootFolder = new GO_Base_Fs_Folder('/home/govhosts/'.$params['name']);
+		if($rootFolder->exists()){
+			throw new Exception("Root folder ".$rootFolder->path()." already exists!");
+		}
+		
+		if(!$sourceFolder->move($rootFolder,'data'))
+			throw new Exception("Failed to move ".$sourceFolder->path()." to /home/govhosts");
+		
+		$configFile = $sourceFolder->child('config.php');
+		
+		if(!$configFile->exists())
+			throw new Exception("config.php is missing");
+		
+		
+		$configFolder = new GO_Base_Fs_Folder('/etc/groupoffice/'.$params['name']);
+		if(!$configFolder->create())
+			throw new Exception('Could not create config folder '.$configFolder->path());
+		
+		if($child = $configFolder->child('config.php')){
+			throw new Exception($child->path().' already exists');
+		}
+		
+		$configFile->move($configFolder);
+		
+		
+		$mysqlDump = $sourceFolder->child('database.sql');
+		if(!$mysqlDump->exists())
+			throw new Exception("database.sql is missing");
+		
+
+		exec('chown www-data:www-data -R '.$sourceFolder->path());
+		
+		
+		
+		$installation = new GO_ServerManager_Model_Installation();
+		$installation->ignoreExistingForImport=true;
+		$installation->name=$params['name'];
+
+		require_once('/etc/groupoffice/'.$params['name'].'/config.php');
+		
+		$config['root_path']='/home/govhosts/'.$params['name'].'/groupoffice/';
+		$config['db_name']=$installation->dbName;
+		$config['db_user']=$installation->dbUser;
+		$config['enabled']=true;
+		
+		GO_Base_Util_ConfigEditor::save($configFile, $config);
+		
+		GO::getDbConnection()->query("CREATE DATABASE IF NOT EXISTS `".$config['db_name']."`");	
+		
+		$this->_createDbUser($config);
+		
+		echo "Importing database...\n";
+		$cmd = 'mysql --user='.$config['db_user'].' --password='.$config['db_pass'].' '.$config['db_name'].' < '.$mysqlDump->path();
+		system($cmd, $ret);
+		
+		if($ret!=0)
+			throw new Exception("Importing database failed!");
+		
+		echo "Creating installation in servermanager...\n";
+		
+		$installation->save();
+		$installation->loadUsageData();					
+		
+		echo "Restore done!\n";
+		
+		
+	}
+	
+	
+	public function actionMigrate($params){
+		
+		$this->requireCli();
+		
+		$this->checkRequiredParameters(array('target','name'), $params);
+		
+		$installation = GO_ServerManager_Model_Installation::model()->findSingleByAttribute('name',$params['name']);
+		
+		if($installation->name=='servermanager'){
+			throw new Exception("You can't delete the servermanager installation");
+		}
+		
+		if(!$installation)
+			throw new Exception("Installation ".$params['name']." not found!");
+		
+		if(!$installation->validate())
+			throw new Exception("Installation ".$params['name']." is invalid");
+		
+		$config = $installation->getConfig();
+		
+		echo "Disabling installation\n";
+		
+		$installation->setConfigVariable('enabled','0');
+		
+		$fsFolder = new GO_Base_Fs_Folder($config['file_storage_path']);
+		
+		echo "Dumping database\n";		
+		$installation->mysqldump($fsFolder->path(),'database.sql');
+		echo "Done\n";
+		
+		
+		$configFile = new GO_Base_Fs_File($installation->configPath);
+		if(!$configFile->copy($fsFolder))
+			throw new Exception("Could not move config file to file storage folder");
+					
+
+		$rsyncCommand = 'rsync -r -v -rltD ';
+		
+		if(isset($params['ssh-options']))
+		{
+			$rsyncCommand .= ' -e "'.$params['ssh-options'].'"';
+		}
+		
+		echo "Sending data to ".$params['target']."\n";
+		
+		$rsyncCommand .= $config['file_storage_path'].' '.$params['target'].'/'.$params['name'];
+		system($rsyncCommand, $status);
+		
+		if($status!=0)
+			throw new Exception("Command exitted with failure status ".$status);
+		
+		echo "Done!";
 		
 	}
 	
@@ -590,12 +723,14 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		if(file_exists($model->configPath))
 		{
 			$c = $model->getConfigWithGlobals();
-			$record['quota']=GO_Base_Util_Number::formatSize($c['quota']);
-			$record['enabled']=isset($c['enabled']) ? $c['enabled'] : true;
-			$record['title']=$c['title'];
-			$record['webmaster_email']=$c['webmaster_email'];
-			$record['max_users']=isset($c['max_users']) ? $c['max_users'] : 0;
-			$record['serverclient_domains']=isset($c['serverclient_domains']) ? $c['serverclient_domains'] : '';
+			if(isset($c['title'])){
+				$record['quota']=GO_Base_Util_Number::formatSize($c['quota']);
+				$record['enabled']=isset($c['enabled']) ? $c['enabled'] : true;
+				$record['title']=$c['title'];
+				$record['webmaster_email']=$c['webmaster_email'];
+				$record['max_users']=isset($c['max_users']) ? $c['max_users'] : 0;
+				$record['serverclient_domains']=isset($c['serverclient_domains']) ? $c['serverclient_domains'] : '';
+			}
 		}
 		
 		return parent::formatStoreRecord($record, $model, $store);
