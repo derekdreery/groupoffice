@@ -124,3 +124,10 @@ $l['resetStateConfirm']='Are you sure you want to reset all grid columns, window
 
 $l['registrationEmail']='Registration Email';
 $l['enabledSettingtabs']='Enabled Setting tabs';
+
+
+$l['explanation_cf_settingspanels']='To show the customfield tabs in the settingspanel you need to be sure that the user has at least "Read" access to the customfields module.';
+$l['addresslist_panel'] = 'Addresslist panel';
+$l['show_addresslists_panel'] = 'Show the addresslist panel';
+$l['enabled_cf_tabs'] = 'Enabled custom field tabs';
+$l['addresslist_panel'] = 'Addresslist panel';
