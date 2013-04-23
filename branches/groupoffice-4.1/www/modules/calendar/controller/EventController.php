@@ -616,7 +616,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$results = array();
 		foreach ($calendars as $calendar) {
 			$params['calendars'] = '[' . $calendar->id . ']';
-			$params['events_only']=true;
+		//	$params['events_only']=true;
 			if (!isset($results[$calendar->id]))
 				$results[$calendar->id] = $this->actionStore($params);
 		}
@@ -726,19 +726,19 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				$response['title'] .= $calendar->name.' & ';
 
 				if(!isset($response['comment'])){
-					
 					$response['count']=0;
 					$response['comment']=$calendar->comment;
-			
-					if(empty($params['events_only'])){
-						if($calendar->show_bdays && GO::modules()->addressbook){
-							$response = $this->_getBirthdayResponseForPeriod($response,$calendar,$startTime,$endTime);
-						}
-
-						$response = $this->_getHolidayResponseForPeriod($response,$calendar,$startTime,$endTime);
-
-					}
 				}
+				
+				if(empty($params['events_only'])){
+					if($calendar->show_bdays && GO::modules()->addressbook){
+						$response = $this->_getBirthdayResponseForPeriod($response,$calendar,$startTime,$endTime);
+					}
+
+					$response = $this->_getHolidayResponseForPeriod($response,$calendar,$startTime,$endTime);
+
+				}
+				
 					
 				if(GO::modules()->tasks && empty($params['events_only'])){
 					$response = $this->_getTaskResponseForPeriod($response,$calendar,$startTime,$endTime);
@@ -968,6 +968,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					'model_name'=>'GO_Adressbook_Model_Contact',
 //					'background'=>$calendar->displayColor,
 					'background'=>'EBF1E2',
+					'calendar_id'=>$calendar->id,
 					'all_day_event'=>1,
 					'day'=>$dayString[date('w', $start_unixtime)].' '.GO_Base_Util_Date::get_timestamp($start_unixtime,false),
 					'read_only'=>true,
