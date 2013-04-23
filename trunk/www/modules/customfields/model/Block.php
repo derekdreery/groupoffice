@@ -58,8 +58,12 @@ class GO_Customfields_Model_Block extends GO_Base_Db_ActiveRecord{
 		
 		$itemNamesArr = array();
 		
-		foreach ($stmt as $item)
-			$itemNamesArr[] = array('model_id'=>$item->id,'model_name'=>$item->className(),'item_name'=>$item->name);
+		foreach ($stmt as $item) {
+			$name = $item->className()=='GO_Addressbook_Model_Company' || $item->className()=='GO_Addressbook_Model_Contact'
+				? $item->name.' ('.$item->addressbook->name.')'
+				: $item->name;
+			$itemNamesArr[] = array('model_id'=>$item->id,'model_name'=>$item->className(),'item_name'=>$name);
+		}
 		
 		return $itemNamesArr;
 	}
