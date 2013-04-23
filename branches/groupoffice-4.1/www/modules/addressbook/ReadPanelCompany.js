@@ -20,7 +20,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 	editGoDialogId : 'company',
 	
 	editHandler : function(){
-		GO.addressbook.showCompanyDialog(this.link_id);		
+		GO.addressbook.showCompanyDialog(this.model_id);		
 	},	
 	
 	initComponent : function(){
