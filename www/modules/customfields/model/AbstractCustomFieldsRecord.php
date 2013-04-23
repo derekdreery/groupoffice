@@ -224,6 +224,32 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 //		return $attributes;
 //	}
 	
+	/**
+	 * Get a single attibute raw like in the database or formatted using the \
+	 * Group-Office user preferences.
+	 * 
+	 * @param String $attributeName
+	 * @param String $outputType raw, formatted or html
+	 * @return mixed 
+	 */
+	public function getAttribute($attributeName, $outputType='raw'){
+		if(!isset($this->_attributes[$attributeName]))						
+			return false;
+		
+		if($outputType=='raw'){
+			if(isset($this->columns[$attributeName]['customfield'])){
+				$field = $this->columns[$attributeName]['customfield'];
+				return $field->customfieldtype->formatRawOutput($attributeName, $this->_attributes, $this);	
+			}else
+			{
+				return $this->_attributes[$attributeName];
+			}
+		}else{		
+		
+			return $this->formatAttribute($attributeName, $this->_attributes[$attributeName],$outputType=='html');
+		}
+	}
+	
 	public function formatAttribute($attributeName, $value, $html = false) {
 		
 		if(isset($this->columns[$attributeName]['customfield'])){
