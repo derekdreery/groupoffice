@@ -19,6 +19,7 @@ $acl_level = GO_Base_Model_Acl::getUserPermissionLevel($export_acl_id, GO::user(
 $GO_SCRIPTS_JS .= 'GO.addressbook.exportPermission="'.(($acl_level) ? 1 : 0).'";';
 
 
+if(GO::modules()->customfields)
 $GO_SCRIPTS_JS .=  '
 
 GO.customfields.settingsPanels={
