@@ -70,7 +70,7 @@ class GO_Customfields_Controller_Block extends GO_Base_Controller_AbstractJsonCo
 		else
 			$blockModel = new GO_Customfields_Model_Block();
 		
-		$remoteComboFields = array('field_id' => '"[".GO::t($model->customField->category->extends_model,"customfields")."] ".$model->customField->category->name." : ".$model->customField->name');
+		$remoteComboFields = array('field_id' => '"[".GO::t($model->customField->category->extends_model,"customfields")."] ".$model->customField->category->name." : ".$model->customField->name." (col_".$model->id.")"');
 		
 		$this->renderForm($blockModel,$remoteComboFields);
 		
