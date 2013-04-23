@@ -40,6 +40,9 @@ class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
 	 */
 	public $currentPage=1;
 	
+	
+	protected $currentPageClass = 'current';
+	
 	protected $pageParam = 'p';
 	
 	private $_models;
@@ -113,7 +116,7 @@ class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
 			$result.= '<a class="'.$this->nextPageClass.'" href="'.$this->getPageUrl($this->currentPage-1).'"><</a>';
 
 		for($page=1;$page<=$this->pageCount;$page++)
-			$result.= ($page == $this->currentPage) ? $page : '<a href="'.$this->getPageUrl($page).'">'.$page.'</a>';
+			$result.= ($page == $this->currentPage) ? '<span class="'.$this->currentPageClass.'">'.$page.'</span>' : '<a href="'.$this->getPageUrl($page).'">'.$page.'</a>';
 
 		if($this->currentPage < $this->pageCount)
 			$result.= '<a class="'.$this->previousPageClass.'" href="'.$this->getPageUrl($this->currentPage+1).'">></a>';

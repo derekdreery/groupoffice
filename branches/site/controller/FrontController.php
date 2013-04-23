@@ -2,13 +2,44 @@
 
 class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 	protected function allowGuests() {
-		return array('content','thumb');
+		return array('content','thumb','search');
 	}
 	
 	protected function actionContent($params){
 		$content = GO_Site_Model_Content::model()->findBySlug($params['slug']);
 		$this->render($content->template,array('content'=>$content));
 	}
+	
+	/**
+	 * Search through the site content
+	 * 
+	 * @param array $params
+	 * @throws Exception
+	 */
+	protected function actionSearch($params){
+		
+		if(!isset($params['searchString']))
+			Throw new Exception('No searchstring provided');
+		
+		$searchString = $params['searchString'];
+		
+		
+		$searchParams = GO_Base_Db_FindParams::newInstance()
+						->select('*')
+						->criteria(GO_Base_Db_FindCriteria::newInstance()
+										->addSearchCondition('title', $searchString, false)
+										->addSearchCondition('meta_title', $searchString, false)
+										->addSearchCondition('meta_description', $searchString, false)
+										->addSearchCondition('meta_keywords', $searchString, false)
+										->addSearchCondition('content', $searchString, false)
+							);
+		
+		$columnModel = new GO_Base_Data_ColumnModel();
+		$store = new GO_Base_Data_DbStore('GO_Site_Model_Content',$columnModel,$params,$searchParams);
+	
+		$this->render('search', array('searchResults'=>$store));
+	}
+	
 	
 	
 	protected function actionThumb($params){
