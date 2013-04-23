@@ -1,5 +1,5 @@
 <?php
-class GO_Site_Widgets_Form extends GO_Site_Components_Widget {
+class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 	
 	const ID_PREFIX='go';
 	
@@ -64,6 +64,9 @@ class GO_Site_Widgets_Form extends GO_Site_Components_Widget {
 		return $this->staticLabel($label,$for,$htmlAttributes);
 	}
 	
+	public function passwordField($model,$attribute,$htmlAttributes=array()){
+		return $this->_inputField('password',$model,$attribute,$htmlAttributes);
+	}
 	
 	public function textField($model,$attribute,$htmlAttributes=array()){
 		return $this->_inputField('text',$model,$attribute,$htmlAttributes);
@@ -138,6 +141,12 @@ class GO_Site_Widgets_Form extends GO_Site_Components_Widget {
 	public function submitButton($label='submit',$htmlAttributes=array())
 	{
 		$htmlAttributes['type']='submit';
+		return $this->button($label,$htmlAttributes);
+	}
+	
+	public function resetButton($label='submit',$htmlAttributes=array())
+	{
+		$htmlAttributes['type']='reset';
 		return $this->button($label,$htmlAttributes);
 	}
 	
