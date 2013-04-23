@@ -68,6 +68,10 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 		return $this->_inputField('password',$model,$attribute,$htmlAttributes);
 	}
 	
+	public function checkBox($model,$attribute,$htmlAttributes=array()){
+		return $this->_inputField('checkbox',$model,$attribute,$htmlAttributes);
+	}
+	
 	public function textField($model,$attribute,$htmlAttributes=array()){
 		return $this->_inputField('text',$model,$attribute,$htmlAttributes);
 	}
