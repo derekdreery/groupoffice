@@ -505,7 +505,7 @@ class GO{
 			GO::config()->debug=true;
 		
 		if(GO::config()->debug || GO::config()->debug_log){
-			$log = '['.date('Y-m-d G:i').'] INIT';
+			$log = '['.date('Y-m-d H:i').'] INIT';
 			GO::debug($log);
 		}
 		
