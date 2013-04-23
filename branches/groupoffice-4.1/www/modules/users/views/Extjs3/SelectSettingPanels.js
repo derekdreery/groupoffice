@@ -26,20 +26,20 @@ GO.users.SelectSettingPanels = Ext.extend(Ext.Panel,{
 		this.labelWidth=50;
 		
 		this.items = [];
+		this.items.push(new GO.form.HtmlComponent({html:GO.users.lang.explanation_cf_settingspanels}));
 		
-		this.items.push(new GO.form.HtmlComponent({html:'<br /><h1>'+'Show the addresslist panel'+'</h1>'})); // TODO: in language file
+		this.items.push(new GO.form.HtmlComponent({html:'<br /><h1>'+GO.users.lang.show_addresslists_panel+'</h1>'}));
 		
 		// This item is saved in the GO_settings table as "globalsettings_show_tab_addresslist".
 		this.items.push({
 			xtype:'xcheckbox',
-			boxLabel: 'Addresslist panel', // TODO: in language file
+			boxLabel: GO.users.lang.addresslist_panel,
 			name: 'globalsettings_show_tab_addresslist',
 			hideLabel:true,
 			checked: false
 			});		
 		
-		this.items.push(new GO.form.HtmlComponent({html:'<br /><h1>'+'Enabled custom field tabs'+'</h1>'})); // TODO: in language file
-		
+		this.items.push(new GO.form.HtmlComponent({html:'<br /><h1>'+GO.users.lang.enabled_cf_tabs+'</h1>'}));
 		GO.users.SelectSettingPanels.superclass.initComponent.call(this);
 	},
 	
