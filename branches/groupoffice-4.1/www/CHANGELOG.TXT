@@ -1,4 +1,5 @@
 23-04-2013 4.1.56
+- Added birthdays and holidays to merged calendar views in the calendar (If enabled in the calendars).
 - Calendar color chooser: Fixed IE fix for color picker left margin
 - Fixed internalUrls in emails in linked email window
 - MultiSelectGrid can have extra valid value that might not exist in the database
