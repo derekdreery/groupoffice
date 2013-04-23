@@ -42,6 +42,8 @@ class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
 	
 	protected $pageParam = 'p';
 	
+	private $_models;
+	
 	
 	/**
 	 * Constructor for the pagination
@@ -113,7 +115,7 @@ class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
 		for($page=1;$page<=$this->pageCount;$page++)
 			$result.= ($page == $this->currentPage) ? $page : '<a href="'.$this->getPageUrl($page).'">'.$page.'</a>';
 
-		if($this->currentPage != $this->pageCount)
+		if($this->currentPage < $this->pageCount)
 			$result.= '<a class="'.$this->previousPageClass.'" href="'.$this->getPageUrl($this->currentPage+1).'">></a>';
 		if($return)
 			return $result;
@@ -126,7 +128,9 @@ class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
 	 * @return array with active records
 	 */
 	public function getItems() {
-		return $this->store->getModels();
+		if(empty($this->_models))
+			$this->_models = $this->store->getModels();
+		return $this->_models;
 	}
 	
 }
