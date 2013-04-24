@@ -98,8 +98,10 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			throw new Exception("Root folder ".$rootFolder->path()." already exists!");
 		}
 		
-		if(!$sourceFolder->move($rootFolder,'data'))
-			throw new Exception("Failed to move ".$sourceFolder->path()." to /home/govhosts");
+		$rootFolder->create();
+		$rootFolder->createLink(new GO_Base_Fs_Folder('/usr/share/groupoffice'));
+		
+		$sourceFolder->move($rootFolder,'data');
 		
 		$configFile = $sourceFolder->child('config.php');
 		
@@ -108,8 +110,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		
 		
 		$configFolder = new GO_Base_Fs_Folder('/etc/groupoffice/'.$params['name']);
-		if(!$configFolder->create())
-			throw new Exception('Could not create config folder '.$configFolder->path());
+		$configFolder->create();
 		
 		if($child = $configFolder->child('config.php')){
 			throw new Exception($child->path().' already exists');
@@ -117,14 +118,11 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		
 		$configFile->move($configFolder);
 		
-		
 		$mysqlDump = $sourceFolder->child('database.sql');
 		if(!$mysqlDump->exists())
 			throw new Exception("database.sql is missing");
 		
-
 		exec('chown www-data:www-data -R '.$sourceFolder->path());
-		
 		
 		
 		$installation = new GO_ServerManager_Model_Installation();
@@ -153,7 +151,9 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		
 		echo "Creating installation in servermanager...\n";
 		
-		$installation->save();
+		if(!$installation->save()){
+			throw new Exception("Could not save installation: ".var_export($installation->getValidationErrors(), true));
+		}
 		$installation->loadUsageData();					
 		
 		echo "Restore done!\n";
@@ -194,8 +194,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		
 		
 		$configFile = new GO_Base_Fs_File($installation->configPath);
-		if(!$configFile->copy($fsFolder))
-			throw new Exception("Could not move config file to file storage folder");
+		$configFile->copy($fsFolder);
 					
 
 		$rsyncCommand = 'rsync -r -v -rltD ';
@@ -213,7 +212,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		if($status!=0)
 			throw new Exception("Command exitted with failure status ".$status);
 		
-		echo "Done!";
+		echo "Done!\n";
 		
 	}
 	
