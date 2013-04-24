@@ -20,6 +20,11 @@
 - Deleting addresslist kept multiselect filter enabled for the deleted list
 - Security fix that could cause data loss.
 - Quick edit grid changes if you change the column layout.
+- Only search for links in link field when hitting enter
+- Also decode BCC mime headers
+- Use standard error dialog in e-mail composer so it's scrollable
+- Duplicate company dialog bug
+- Always use double digits for hour in logs
 
 15-04-2013 4.1.55
 - Added encoding check to email body to convert mail encoding to UTF-8.
