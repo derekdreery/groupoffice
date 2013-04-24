@@ -304,16 +304,23 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				foreach ($participants as $p) {
 
 					$participant = false;
-					if (substr($p['id'], 0, 4) != 'new_') {
-						$participant = GO_Calendar_Model_Participant::model()->findByPk($p['id']);
-					}
+//					if (substr($p['id'], 0, 4) != 'new_') {
+//						$participant = GO_Calendar_Model_Participant::model()->findByPk($p['id']);
+//					}
+					//better to search on e-mail so that when creating exception events won't fail
+					$participant = GO_Calendar_Model_Participant::model()->findSingleByAttributes(array(
+							'email'=> $p['email'],
+							'event_id'=>$event->id
+					));
 					if (!$participant)
 						$participant = new GO_Calendar_Model_Participant();
 
 					unset($p['id']);
 					$participant->setAttributes($p);
 					$participant->event_id = $event->id;
-					$participant->save();
+					if(!$participant->save()){
+						throw new Exception("Could not save participant ".var_export($participant->getValidationErrors(), true));
+					}
 					$ids[] = $participant->id;
 
 					$response[]=$participant->toJsonArray($event->start_time, $event->end_time);
