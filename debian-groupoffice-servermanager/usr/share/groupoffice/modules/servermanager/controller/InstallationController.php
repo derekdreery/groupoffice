@@ -233,10 +233,13 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		}
 		
 		if(!$installation)
-			throw new Exception("Installation ".$params['name']." not found!");
+			throw new Exception("Installation ID: ".$params['id']." not found!");
 		
 		if(!$installation->validate())
-			throw new Exception("Installation ".$params['name']." is invalid");
+			throw new Exception("Installation ".$installation->name." is invalid");
+		
+		if(empty($installation->name))
+			throw new Exception("Empty name!");
 		
 		$trashFolderGovhosts = new GO_Base_Fs_Folder('/home/gotrash/govhosts');
 		$trashFolderGovhosts->create();
