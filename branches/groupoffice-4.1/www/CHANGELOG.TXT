@@ -1,3 +1,6 @@
+24-04-2013 4.1.57
+- Problem with custom fields settings tab.
+
 23-04-2013 4.1.56
 - Added birthdays and holidays to merged calendar views in the calendar (If enabled in the calendars).
 - Calendar color chooser: Fixed IE fix for color picker left margin
