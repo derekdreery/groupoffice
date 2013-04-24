@@ -125,7 +125,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 */
 	public function move(GO_Base_Fs_Folder $destinationFolder, $newFolderName=false,$appendNumberToNameIfDestinationExists=false){
 		if(!$this->exists())
-			return false;
+			throw new Exception("Folder '".$this->path()."' does not exist");
 		
 		if(is_link($this->path)){
 			$link = new GO_Base_Fs_File($this->path);
@@ -150,8 +150,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 			return true;
 			
 		$movedFolder = new GO_Base_Fs_Folder($newPath);
-		if(!$movedFolder->create())
-			throw new Exception ("Could not create ".$destinationFolder->path());		
+		$movedFolder->create();
 		
 		$ls = $this->ls(true);
 		foreach($ls as $fsObject){
@@ -228,11 +227,32 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 			
 			return true;
 		}else
-		{
-			GO::debug("Failed to create ".$this->path);
-			
-			return false;
+		{			
+			throw new Exception("Could not create folder ".$this->path);
 		}
+	}
+	
+	/**
+	 * Create a symbolic link in this folder
+	 * 
+	 * @param GO_Base_Fs_Folder $target
+	 * @param string $linkName optional link name. If omitted the name will be the same as the target folder name
+	 * @return GO_Base_Fs_File
+	 * @throws Exception
+	 */
+	public function createLink(GO_Base_Fs_Folder $target, $linkName=null){
+		
+		if(!isset($linkName))
+			$linkName = $target->name ();
+		
+		$link = $this->createChild($linkName, true);
+		if($link->exists())
+			throw new Exception("Path ".$link->path()." already exists");
+		
+		if(link($target->path(), $link->path()))
+			return $link;
+		else
+			throw new Exception("Failed to create link ".$target->path());
 	}
 	
 	/**
