@@ -177,12 +177,18 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 			this.slugField.setValue(this.formatSlug(field.getValue()));
 		},this);
 	
+		var tablePlugin = new Ext.ux.form.HtmlEditor.Table();
+	
 		this.editor = new GO.form.HtmlEditor({
 			hideLabel:true,
 			name: 'content',
 			anchor: '100% -80',
 			allowBlank:true,
-			fieldLabel: GO.site.lang.contentContent
+			fieldLabel: GO.site.lang.contentContent,
+			plugins:[
+				tablePlugin
+			]
+			
 		});
 				
 		config.items = [
