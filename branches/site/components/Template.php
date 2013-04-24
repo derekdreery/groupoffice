@@ -23,7 +23,7 @@ class GO_Site_Components_Template{
 		//when using rewrite we must publish the assets with a symlink
 		if(Site::model()->mod_rewrite){
 			$this->_checkLink();
-			return '/public/assets/';
+			return '/public/assets/template/';
 		}else
 		{
 			return GO::config()->host . 'modules/' . Site::model()->module . '/views/site/assets/';
@@ -34,12 +34,12 @@ class GO_Site_Components_Template{
 		
 		$folder = Site::model()->getFileStorageFolder();
 		
-		$public = $folder->createChild('public',false);
+		$public = $folder->createChild('public/assets',false);
 		$public->create();
 		
-		if(!is_link($public->path().'/assets')){
+		if(!is_link($public->path().'/template')){
 			
-			if(!symlink($this->getPath().'assets',$public->path().'/assets')){
+			if(!symlink($this->getPath().'assets',$public->path().'/template')){
 				throw new Exception("Could not publish template assets. Is the \$config['file_storage_path'] path writable?");
 			}
 		}
