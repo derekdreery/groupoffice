@@ -72,6 +72,100 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 		return $this->_inputField('checkbox',$model,$attribute,$htmlAttributes);
 	}
 	
+	/**
+	 * Render a list of radio buttons same as a dropdown list
+	 * @param GO_Base_Model $model
+	 * @param string $attribute a propertyname of the model
+	 * @param array $data the keys en values of the button as key=>value of the array
+	 * @param array $htmlOptions extra html attributes
+	 * special values are 
+	 * template : {input} {label}, 
+	 * separator: <br\n, 
+	 * uncheckValue  ''
+	 * labelOption array
+	 * @return string the rendered radio buttons
+	 */
+	public function radioButtonList($model,$attribute,$data,$htmlOptions=array())
+	{
+		$htmlOptions = $this->_resolveNameID($model,$attribute,$htmlOptions);
+		$selection=$this->_resolveValue($model,$attribute);
+		if($model->hasValidationErrors($attribute))
+			$this->_addErrorCss($htmlOptions);
+		$name=$htmlOptions['name'];
+		unset($htmlOptions['name']);
+
+		if(array_key_exists('uncheckValue',$htmlOptions))
+		{
+			$uncheck=$htmlOptions['uncheckValue'];
+			unset($htmlOptions['uncheckValue']);
+		}
+		else
+			$uncheck='';
+
+		$hiddenOptions=isset($htmlOptions['id']) ? array('id'=>self::ID_PREFIX.$htmlOptions['id']) : array('id'=>false);
+		$hidden=$uncheck!==null ? $this->staticHiddenField($name,$uncheck,$hiddenOptions) : '';
+		
+		$template=isset($htmlOptions['template'])?$htmlOptions['template']:'{input} {label}';
+		$separator=isset($htmlOptions['separator'])?$htmlOptions['separator']:"\n";
+		unset($htmlOptions['template'],$htmlOptions['separator']);
+
+		$labelOptions=isset($htmlOptions['labelOptions'])?$htmlOptions['labelOptions']:array();
+		unset($htmlOptions['labelOptions']);
+
+		$items=array();
+		$baseID=$this->_getIdByName($name);
+		$id=0;
+		foreach($data as $value=>$label)
+		{
+			$checked=!strcmp($value,$selection);
+			$htmlOptions['value']=$value;
+			$htmlOptions['id']=$baseID.'_'.$id++;
+			$option=$this->staticRadioButton($name,$checked,$htmlOptions);
+			$label=$this->staticLabel($label,$htmlOptions['id'],$labelOptions);
+			$items[]=strtr($template,array('{input}'=>$option,'{label}'=>$label));
+		}
+		return $hidden . $this->_tag('ul',array('id'=>$baseID),implode($separator,$items));
+	}
+	
+	/**
+	 * Render a static radio button field
+	 * @param string $name html name attribute
+	 * @param boolean $checked html checked attribute
+	 * @param array $htmlOptions other ghtml attributes
+	 * @return string the rendered output
+	 */
+	protected function staticRadioButton($name,$checked=false,$htmlOptions=array())
+	{
+		if($checked)
+			$htmlOptions['checked']='checked';
+		else
+			unset($htmlOptions['checked']);
+		$value=isset($htmlOptions['value']) ? $htmlOptions['value'] : 1;
+
+		if(array_key_exists('uncheckValue',$htmlOptions))
+		{
+			$uncheck=$htmlOptions['uncheckValue'];
+			unset($htmlOptions['uncheckValue']);
+		}
+		else
+			$uncheck=null;
+
+		if($uncheck!==null)
+		{
+			// add a hidden field so that if the radio button is not selected, it still submits a value
+			if(isset($htmlOptions['id']) && $htmlOptions['id']!==false)
+				$uncheckOptions=array('id'=>self::ID_PREFIX.$htmlOptions['id']);
+			else
+				$uncheckOptions=array('id'=>false);
+			$hidden=$this->staticHiddenField($name,$uncheck,$uncheckOptions);
+		}
+		else
+			$hidden='';
+
+		// add a hidden field so that if the radio button is not selected, it still submits a value
+		return $hidden . $this->staticInputField('radio',$name,$value,$htmlOptions);
+	}
+	
 	public function textField($model,$attribute,$htmlAttributes=array()){
 		return $this->_inputField('text',$model,$attribute,$htmlAttributes);
 	}
@@ -252,17 +346,17 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 	
 	public function staticHiddenField($name,$value='',$htmlAttributes=array())
 	{
-		return $this->_inputField('hidden',$name,$value,$htmlAttributes);
+		return $this->staticInputField('hidden',$name,$value,$htmlAttributes);
 	}
 	
 	public function staticPasswordField($name,$value='',$htmlAttributes=array())
 	{
-		return $this->_inputField('password',$name,$value,$htmlAttributes);
+		return $this->staticInputField('password',$name,$value,$htmlAttributes);
 	}
 	
 	public function staticFileField($name,$value='',$htmlAttributes=array())
 	{
-		return $this->_inputField('file',$name,$value,$htmlAttributes);
+		return $this->staticInputField('file',$name,$value,$htmlAttributes);
 	}
 	
 	public function staticTextArea($name,$value='',$htmlAttributes=array())
@@ -377,13 +471,26 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 		return $this->_tag('input',$htmlAttributes);
 	}
 	
-	
-	
-	
-	
-	
-	
-	
+	/**
+	 * Renders a static inputfield without a model
+	 * @param string $type html type attribute
+	 * @param string $name html name attribute
+	 * @param string $value html value attribute
+	 * @param array $htmlOptions other html attributes
+	 * @return string the rendered output
+	 */
+	protected function staticInputField($type,$name,$value,$htmlOptions)
+	{
+		$htmlOptions['type']=$type;
+		$htmlOptions['value']=$value;
+		$htmlOptions['name']=$name;
+		if(!isset($htmlOptions['id']))
+			$htmlOptions['id']=$this->_getIdByName($name);
+		else if($htmlOptions['id']===false)
+			unset($htmlOptions['id']);
+		return $this->_tag('input',$htmlOptions);
+	}
+
 	/**
 	 * Generates input name for a model attribute.
 	 * Note, the attribute name may be modified after calling this method if the name
