@@ -50,7 +50,7 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 	public function __get($name) {
 		$val = parent::__get($name);
 		
-		if($val === null){
+		if($val === null && !$this->getColumn($name) && !$this->isNew){
 			$val = $this->getCustomFieldValueByName($name);
 		}
 		
