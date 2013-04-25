@@ -412,7 +412,13 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		
 		$urlParams['filemtime']=$this->mtime;
 		$urlParams['src']=$this->path;
-		return GO::url('core/thumb', $urlParams);
+		
+		if($this->extension=='svg'){
+			return $this->getDownloadURL(false, true);
+		}else
+		{		
+			return GO::url('core/thumb', $urlParams);
+		}
 	}
 	
 	/**

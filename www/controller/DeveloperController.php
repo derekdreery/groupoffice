@@ -152,5 +152,65 @@ END:VCALENDAR';
 		
 		var_dump($event->getAttributes());
 	}
+	
+	
+	protected function actionGrouped($params){
+		
+		$stmt = GO_Base_Model_Grouped::model()->load(
+						'GO_Calendar_Model_Event',
+						'c.name', 
+						'c.name, count(*) AS count',
+						GO_Base_Db_FindParams::newInstance()
+						->joinModel(array(
+								'model'=>'GO_Calendar_Model_Calendar',
+								'localField'=>'calendar_id',
+								'tableAlias'=>'c'
+						))
+						);
+		
+		echo '<pre>';
+		
+		foreach($stmt as $calendar){
+			echo $calendar->name.' : '.$calendar->count."\n";
+		}
+		
+	}
+	
+	protected function actionAddRelation($params){
+		GO_Base_Model_User::model()->addRelation('events', array(
+				'type'=>  GO_Base_Db_ActiveRecord::HAS_MANY, 
+				'model'=>'GO_Calendar_Model_Event', 
+				'field'=>'user_id'				
+		));
+		
+		
+		$stmt = GO::user()->events;
+		
+		foreach($stmt as $event){
+			echo $event->toHtml();
+			echo '<hr>';
+		}
+		
+	}
+	
+	
+	protected function actionGroupRelation($params){
+		GO_Base_Model_User::model()->addRelation('events', array(
+				'type'=>  GO_Base_Db_ActiveRecord::HAS_MANY, 
+				'model'=>'GO_Calendar_Model_Event', 
+				'field'=>'user_id'				
+		));
+		
+		$fp = GO_Base_Db_FindParams::newInstance()->groupRelation('events', 'count(events.id) as eventCount');
+
+				
+		$stmt = GO_Base_Model_User::model()->find($fp);
+		
+		foreach($stmt as $user){
+			echo $user->name.': '.$user->eventCount."<br />";
+			echo '<hr>';
+		}
+		
+	}
 
 }

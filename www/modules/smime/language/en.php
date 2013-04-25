@@ -27,3 +27,11 @@ $l['invalidCert']="The certificate is invalid!";
 $l['validCert']="Valid certificate";
 $l['certEmailMismatch']="Valid certificate but the e-mail of the certificate does not match the sender address of the e-mail.";
 $l['decryptionFailed']='SMIME Decryption of this message failed.';
+
+$l["email"]="E-mail";
+$l["hash"]="Hash";
+$l["serial_number"]="Serial number";
+$l["version"]="Version";
+$l["issuer"]="Issuer";
+$l["valid_to"]="Valid to";
+$l["valid_from"]="Valid from";

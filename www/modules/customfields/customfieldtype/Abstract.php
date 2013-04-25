@@ -23,6 +23,17 @@ abstract class GO_Customfields_Customfieldtype_Abstract{
 	}
 
 	/**
+	 * This function is used when $model->customFieldRecord->att is accessed
+	 * 
+	 * @param string $key Database column 'col_x'
+	 * @param array $attributes Customfield model attributes
+	 * @return Mixed 
+	 */
+	public function formatRawOutput($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model){	
+		return $attributes[$key];
+	}
+
+	/**
 	 * This function is used to format the database value for the interface edit
 	 * form.
 	 * 

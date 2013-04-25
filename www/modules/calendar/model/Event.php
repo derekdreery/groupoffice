@@ -305,7 +305,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$exceptionEvent = $event->getExceptionEvent($exceptionDate);
 			$exceptionEvent->dontSendEmails = $dontSendEmails;
 			$exceptionEvent->setAttributes($attributes);
-			$exceptionEvent->save();
+			if(!$exceptionEvent->save())
+				throw new Exception("Could not create exception: ".var_export($exceptionEvent->getValidationErrors(), true));
 			$event->addException($exceptionDate, $exceptionEvent->id);
 
 			$event->duplicateRelation('participants', $exceptionEvent);

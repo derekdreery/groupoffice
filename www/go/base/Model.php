@@ -29,7 +29,7 @@
  * @package GO.base
  * @abstract
  */
-abstract class GO_Base_Model extends GO_Base_Observable{
+abstract class GO_Base_Model extends GO_Base_Object{
 	
 	protected $_validationErrors = array();
 	

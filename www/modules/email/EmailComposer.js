@@ -1010,7 +1010,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 					if(!autoSave)
 					{
 						var fb = action.result && action.result.feedback ? action.result.feedback : GO.lang.strRequestError;
-						Ext.MessageBox.alert(GO.lang.strError, fb);
+						
+						GO.errorDialog.show(fb);						
 					}
 					this.saveButton.setDisabled(false);
 					this.sendButton.setDisabled(false);

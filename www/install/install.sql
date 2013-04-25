@@ -1,7 +1,5 @@
 ALTER DATABASE CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-
-DROP TABLE IF EXISTS `cf_go_users`;
 CREATE TABLE IF NOT EXISTS `cf_go_users` (
   `model_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`model_id`)
@@ -11,11 +9,6 @@ CREATE TABLE IF NOT EXISTS `cf_go_users` (
 
 
 
---
--- Tabelstructuur voor tabel `go_acl`
---
-
-DROP TABLE IF EXISTS `go_acl`;
 CREATE TABLE IF NOT EXISTS `go_acl` (
   `acl_id` int(11) NOT NULL DEFAULT '0',
   `user_id` int(11) NOT NULL DEFAULT '0',
@@ -27,13 +20,7 @@ CREATE TABLE IF NOT EXISTS `go_acl` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
--- --------------------------------------------------------
 
---
--- Tabelstructuur voor tabel `go_acl_items`
---
-
-DROP TABLE IF EXISTS `go_acl_items`;
 CREATE TABLE IF NOT EXISTS `go_acl_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL DEFAULT '0',
@@ -43,24 +30,14 @@ CREATE TABLE IF NOT EXISTS `go_acl_items` (
 
 -- --------------------------------------------------------
 
---
--- Tabelstructuur voor tabel `go_address_format`
---
 
-DROP TABLE IF EXISTS `go_address_format`;
 CREATE TABLE IF NOT EXISTS `go_address_format` (
   `id` int(11) NOT NULL,
   `format` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
 
---
--- Tabelstructuur voor tabel `go_cache`
---
-
-DROP TABLE IF EXISTS `go_cache`;
 CREATE TABLE IF NOT EXISTS `go_cache` (
   `user_id` int(11) NOT NULL,
   `key` varchar(255) NOT NULL DEFAULT '',
@@ -70,13 +47,7 @@ CREATE TABLE IF NOT EXISTS `go_cache` (
   KEY `mtime` (`mtime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
 
---
--- Tabelstructuur voor tabel `go_countries`
---
-
-DROP TABLE IF EXISTS `go_countries`;
 CREATE TABLE IF NOT EXISTS `go_countries` (
   `id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(64) DEFAULT NULL,
@@ -87,11 +58,6 @@ CREATE TABLE IF NOT EXISTS `go_countries` (
 
 -- --------------------------------------------------------
 
---
--- Tabelstructuur voor tabel `go_db_sequence`
---
-
-DROP TABLE IF EXISTS `go_db_sequence`;
 CREATE TABLE IF NOT EXISTS `go_db_sequence` (
   `seq_name` varchar(50) NOT NULL DEFAULT '',
   `nextid` int(11) NOT NULL DEFAULT '0',
@@ -100,11 +66,6 @@ CREATE TABLE IF NOT EXISTS `go_db_sequence` (
 
 -- --------------------------------------------------------
 
---
--- Tabelstructuur voor tabel `go_groups`
---
-
-DROP TABLE IF EXISTS `go_groups`;
 CREATE TABLE IF NOT EXISTS `go_groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
@@ -116,11 +77,6 @@ CREATE TABLE IF NOT EXISTS `go_groups` (
 
 -- --------------------------------------------------------
 
---
--- Tabelstructuur voor tabel `go_holidays`
---
-
-DROP TABLE IF EXISTS `go_holidays`;
 CREATE TABLE IF NOT EXISTS `go_holidays` (
   `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
    `date` DATE NOT NULL,
@@ -132,11 +88,7 @@ CREATE TABLE IF NOT EXISTS `go_holidays` (
 
 -- --------------------------------------------------------
 
---
--- Tabelstructuur voor tabel `go_links_go_users`
---
 
-DROP TABLE IF EXISTS `go_links_go_users`;
 CREATE TABLE IF NOT EXISTS `go_links_go_users` (
   `id` int(11) NOT NULL,
   `folder_id` int(11) NOT NULL,
@@ -152,11 +104,6 @@ CREATE TABLE IF NOT EXISTS `go_links_go_users` (
 -- --------------------------------------------------------
 
 
---
--- Tabelstructuur voor tabel `go_link_descriptions`
---
-
-DROP TABLE IF EXISTS `go_link_descriptions`;
 CREATE TABLE IF NOT EXISTS `go_link_descriptions` (
   `id` int(11) NOT NULL,
   `description` varchar(100) NOT NULL,
@@ -165,11 +112,6 @@ CREATE TABLE IF NOT EXISTS `go_link_descriptions` (
 
 -- --------------------------------------------------------
 
---
--- Tabelstructuur voor tabel `go_link_folders`
---
-
-DROP TABLE IF EXISTS `go_link_folders`;
 CREATE TABLE IF NOT EXISTS `go_link_folders` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11)  NOT NULL DEFAULT '0',
@@ -183,11 +125,6 @@ CREATE TABLE IF NOT EXISTS `go_link_folders` (
 
 -- --------------------------------------------------------
 
---
--- Tabelstructuur voor tabel `go_log`
---
-
-DROP TABLE IF EXISTS `go_log`;
 CREATE TABLE IF NOT EXISTS `go_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -204,11 +141,6 @@ CREATE TABLE IF NOT EXISTS `go_log` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 -- --------------------------------------------------------
 
---
--- Tabelstructuur voor tabel `go_mail_counter`
---
-
-DROP TABLE IF EXISTS `go_mail_counter`;
 CREATE TABLE IF NOT EXISTS `go_mail_counter` (
   `host` varchar(100) NOT NULL DEFAULT '',
   `date` date NOT NULL,
@@ -219,11 +151,6 @@ CREATE TABLE IF NOT EXISTS `go_mail_counter` (
 
 -- --------------------------------------------------------
 
---
--- Tabelstructuur voor tabel `go_model_types`
---
-
-DROP TABLE IF EXISTS `go_model_types`;
 CREATE TABLE IF NOT EXISTS `go_model_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `model_name` varchar(100) NOT NULL,
@@ -232,11 +159,6 @@ CREATE TABLE IF NOT EXISTS `go_model_types` (
 
 -- --------------------------------------------------------
 
---
--- Tabelstructuur voor tabel `go_modules`
---
-
-DROP TABLE IF EXISTS `go_modules`;
 CREATE TABLE IF NOT EXISTS `go_modules` (
   `id` varchar(20) NOT NULL DEFAULT '',
   `version` int(11) NOT NULL,
@@ -249,11 +171,6 @@ CREATE TABLE IF NOT EXISTS `go_modules` (
 
 -- --------------------------------------------------------
 
---
--- Tabelstructuur voor tabel `go_reminders`
---
-
-DROP TABLE IF EXISTS `go_reminders`;
 CREATE TABLE IF NOT EXISTS `go_reminders` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `model_id` int(11) NOT NULL,
@@ -271,11 +188,7 @@ CREATE TABLE IF NOT EXISTS `go_reminders` (
 
 -- --------------------------------------------------------
 
---
--- Tabelstructuur voor tabel `go_reminders_users`
---
 
-DROP TABLE IF EXISTS `go_reminders_users`;
 CREATE TABLE IF NOT EXISTS `go_reminders_users` (
   `reminder_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -286,11 +199,7 @@ CREATE TABLE IF NOT EXISTS `go_reminders_users` (
 
 -- --------------------------------------------------------
 
---
--- Tabelstructuur voor tabel `go_saved_search_queries`
---
 
-DROP TABLE IF EXISTS `go_saved_search_queries`;
 CREATE TABLE IF NOT EXISTS `go_saved_search_queries` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -303,11 +212,7 @@ CREATE TABLE IF NOT EXISTS `go_saved_search_queries` (
 
 -- --------------------------------------------------------
 
---
--- Tabelstructuur voor tabel `go_search_cache`
---
 
-DROP TABLE IF EXISTS `go_search_cache`;
 CREATE TABLE IF NOT EXISTS `go_search_cache` (
   `user_id` int(11) NOT NULL DEFAULT '0',
   `model_id` int(11) NOT NULL DEFAULT '0',
@@ -328,11 +233,6 @@ CREATE TABLE IF NOT EXISTS `go_search_cache` (
 
 -- --------------------------------------------------------
 
---
--- Tabelstructuur voor tabel `go_search_sync`
---
-
-DROP TABLE IF EXISTS `go_search_sync`;
 CREATE TABLE IF NOT EXISTS `go_search_sync` (
   `user_id` int(11) NOT NULL DEFAULT '0',
   `module` varchar(50) NOT NULL DEFAULT '',
@@ -342,11 +242,7 @@ CREATE TABLE IF NOT EXISTS `go_search_sync` (
 
 -- --------------------------------------------------------
 
---
--- Tabelstructuur voor tabel `go_settings`
---
 
-DROP TABLE IF EXISTS `go_settings`;
 CREATE TABLE IF NOT EXISTS `go_settings` (
   `user_id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(50) NOT NULL DEFAULT '',
@@ -356,11 +252,7 @@ CREATE TABLE IF NOT EXISTS `go_settings` (
 
 -- --------------------------------------------------------
 
---
--- Tabelstructuur voor tabel `go_state`
---
 
-DROP TABLE IF EXISTS `go_state`;
 CREATE TABLE IF NOT EXISTS `go_state` (
   `user_id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL DEFAULT '',
@@ -370,11 +262,7 @@ CREATE TABLE IF NOT EXISTS `go_state` (
 
 -- --------------------------------------------------------
 
---
--- Tabelstructuur voor tabel `go_users`
---
 
-DROP TABLE IF EXISTS `go_users`;
 CREATE TABLE IF NOT EXISTS `go_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL,
@@ -418,20 +306,14 @@ CREATE TABLE IF NOT EXISTS `go_users` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 -- --------------------------------------------------------
 
---
--- Tabelstructuur voor tabel `go_users_groups`
---
 
-DROP TABLE IF EXISTS `go_users_groups`;
 CREATE TABLE IF NOT EXISTS `go_users_groups` (
   `group_id` int(11) NOT NULL DEFAULT '0',
   `user_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`group_id`,`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
 
-DROP TABLE IF EXISTS `go_advanced_searches`;
 CREATE TABLE IF NOT EXISTS `go_advanced_searches` (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(255) NOT NULL DEFAULT '',
@@ -444,10 +326,7 @@ CREATE TABLE IF NOT EXISTS `go_advanced_searches` (
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `go_cron`
---
-DROP TABLE IF EXISTS `go_cron`;
+
 CREATE TABLE IF NOT EXISTS `go_cron` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -468,10 +347,6 @@ CREATE TABLE IF NOT EXISTS `go_cron` (
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `go_cron_groups`
---
-DROP TABLE IF EXISTS `go_cron_groups`;
 CREATE TABLE IF NOT EXISTS `go_cron_groups` (
   `cronjob_id` int(11) NOT NULL,
   `group_id` int(11) NOT NULL,
@@ -480,17 +355,14 @@ CREATE TABLE IF NOT EXISTS `go_cron_groups` (
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `go_cron_users`
---
-DROP TABLE IF EXISTS `go_cron_users`;
+
 CREATE TABLE IF NOT EXISTS `go_cron_users` (
   `cronjob_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`cronjob_id`,`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `go_cf_setting_tabs`;
+
 CREATE TABLE IF NOT EXISTS `go_cf_setting_tabs` (
   `cf_category_id` int(11) NOT NULL,
   PRIMARY KEY (`cf_category_id`)

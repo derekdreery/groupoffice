@@ -4,7 +4,7 @@ GO.addressbook.ContactsGrid = function(config){
 	{
 		config = {};
 	}
-		config.editDialogClass = GO.addressbook.ContactDialog;
+
 	config.paging=true;
 	config.border=false;
 	

@@ -304,16 +304,23 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				foreach ($participants as $p) {
 
 					$participant = false;
-					if (substr($p['id'], 0, 4) != 'new_') {
-						$participant = GO_Calendar_Model_Participant::model()->findByPk($p['id']);
-					}
+//					if (substr($p['id'], 0, 4) != 'new_') {
+//						$participant = GO_Calendar_Model_Participant::model()->findByPk($p['id']);
+//					}
+					//better to search on e-mail so that when creating exception events won't fail
+					$participant = GO_Calendar_Model_Participant::model()->findSingleByAttributes(array(
+							'email'=> $p['email'],
+							'event_id'=>$event->id
+					));
 					if (!$participant)
 						$participant = new GO_Calendar_Model_Participant();
 
 					unset($p['id']);
 					$participant->setAttributes($p);
 					$participant->event_id = $event->id;
-					$participant->save();
+					if(!$participant->save()){
+						throw new Exception("Could not save participant ".var_export($participant->getValidationErrors(), true));
+					}
 					$ids[] = $participant->id;
 
 					$response[]=$participant->toJsonArray($event->start_time, $event->end_time);
@@ -616,7 +623,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$results = array();
 		foreach ($calendars as $calendar) {
 			$params['calendars'] = '[' . $calendar->id . ']';
-			$params['events_only']=true;
+		//	$params['events_only']=true;
 			if (!isset($results[$calendar->id]))
 				$results[$calendar->id] = $this->actionStore($params);
 		}
@@ -726,19 +733,19 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				$response['title'] .= $calendar->name.' & ';
 
 				if(!isset($response['comment'])){
-					
 					$response['count']=0;
 					$response['comment']=$calendar->comment;
-			
-					if(empty($params['events_only'])){
-						if($calendar->show_bdays && GO::modules()->addressbook){
-							$response = $this->_getBirthdayResponseForPeriod($response,$calendar,$startTime,$endTime);
-						}
-
-						$response = $this->_getHolidayResponseForPeriod($response,$calendar,$startTime,$endTime);
-
-					}
 				}
+				
+				if(empty($params['events_only'])){
+					if($calendar->show_bdays && GO::modules()->addressbook){
+						$response = $this->_getBirthdayResponseForPeriod($response,$calendar,$startTime,$endTime);
+					}
+
+					$response = $this->_getHolidayResponseForPeriod($response,$calendar,$startTime,$endTime);
+
+				}
+				
 					
 				if(GO::modules()->tasks && empty($params['events_only'])){
 					$response = $this->_getTaskResponseForPeriod($response,$calendar,$startTime,$endTime);
@@ -968,6 +975,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 					'model_name'=>'GO_Adressbook_Model_Contact',
 //					'background'=>$calendar->displayColor,
 					'background'=>'EBF1E2',
+					'calendar_id'=>$calendar->id,
 					'all_day_event'=>1,
 					'day'=>$dayString[date('w', $start_unixtime)].' '.GO_Base_Util_Date::get_timestamp($start_unixtime,false),
 					'read_only'=>true,
