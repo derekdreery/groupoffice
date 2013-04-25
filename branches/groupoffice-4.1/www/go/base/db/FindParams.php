@@ -211,7 +211,7 @@ class GO_Base_Db_FindParams{
 	}
 	
 	/**
-	 * Join a relation so you can select counts, sums etc of the relation.
+	 * Join a HAS_MANY relation so you can select counts, sums etc of the relation.
 	 * 
 	 * For example select all users with their event counts:
 	 * 
@@ -231,7 +231,7 @@ class GO_Base_Db_FindParams{
 	 *			echo '<hr>';
 	 *		}
 	 * 
-	 * @param string $name Name of the relation
+	 * @param string $name Name of the HAS_MANY relation
 	 * @param string $select The select string to add. eg. count(events.id) AS eventCount Note that 'events' must match the name of the relation
 	 */
 	public function groupRelation($name, $select){
