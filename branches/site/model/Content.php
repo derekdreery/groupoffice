@@ -98,7 +98,8 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 			$model = self::model()->findSingleByAttributes(array('slug'=>$slug,'site_id'=>$siteId));
 		 
 		 if(!$model)
-			 Throw new GO_Base_Exception_NotFound('There is no page found with the slug: '.$slug);
+			 return false;
+			 //Throw new GO_Base_Exception_NotFound('There is no page found with the slug: '.$slug);
 		 
 		 return $model;
 	 }
