@@ -22,6 +22,7 @@
  * @property string $content
  * @property string $name
  * @property int $mtime
+ * @property int $muser_id
  * @property int $ctime
  * @property int $user_id
  * 

@@ -57,6 +57,7 @@ CREATE TABLE IF NOT EXISTS `no_notes` (
   `user_id` int(11) NOT NULL DEFAULT '0',
   `ctime` int(11) NOT NULL DEFAULT '0',
   `mtime` int(11) NOT NULL DEFAULT '0',
+	`muser_id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(100) DEFAULT NULL,
   `content` text,
   `files_folder_id` int(11) NOT NULL DEFAULT '0',
