@@ -59,6 +59,11 @@ abstract class GO_Base_Object extends GO_Base_Observable{
 		}
 	}		
 	
+	public function __isset($name) {
+		$var = $this->__get($name);
+		return isset($var);
+	}
+	
 	/**
 	 * Magic setter that calls set<NAME> functions in objects
 	 * 
