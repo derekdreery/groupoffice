@@ -24,12 +24,15 @@ class GO_Site_Components_Router{
 
 		$aroute = explode('/', $this->getRoute());
 		$module_id = $aroute[0];
-		if (!isset($aroute[1]))
-			throw new GO_Base_Exception_NotFound('No controller specified in url route ('.$this->getRoute().')');
-		$controller_id = $aroute[1];
-		if (!isset($aroute[2]))
-			throw new GO_Base_Exception_NotFound('No controller action specified in url route ('.$this->getRoute().')');
-		$action_id = $aroute[2];
+		if (!isset($aroute[1]) || !isset($aroute[2])){
+			$controller_id = 'front';
+			$action_id = 'content';
+			$module_id='site';
+		}else
+		{
+			$controller_id = $aroute[1];
+			$action_id = $aroute[2];
+		}
 
 		$className = 'GO_' . ucfirst($module_id) . '_Controller_' . ucfirst($controller_id); //TODO: set $module
 		$classFile = GO::config()->root_path . 'modules/' . $module_id . '/controller' . DIRECTORY_SEPARATOR . ucfirst($controller_id) . 'Controller.php';

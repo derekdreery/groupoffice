@@ -6,8 +6,12 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 	}
 	
 	protected function actionContent($params){
-		$content = GO_Site_Model_Content::model()->findBySlug($params['slug']);
-		$this->render($content->template,array('content'=>$content));
+		$content = empty($params['slug']) ? false : GO_Site_Model_Content::model()->findBySlug($params['slug']);
+		
+		if(!$content)
+			$this->render('/site/404');
+		else
+			$this->render($content->template,array('content'=>$content));
 	}
 	
 	/**
