@@ -337,3 +337,5 @@ $updates["201303201600"][]="script:14_insert_disk_usage_cron.php";
 $updates['201303281655'][] ="TRUNCATE TABLE `go_holidays`";
 $updates['201303281655'][] ="ALTER TABLE  `go_holidays` CHANGE  `date`  `date` DATE NOT NULL";
 $updates['201304111000'][] ="TRUNCATE TABLE `go_holidays`";
+
+$updates['201304231330'][]="ALTER TABLE `go_users` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";
