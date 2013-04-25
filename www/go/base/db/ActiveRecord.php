@@ -110,6 +110,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	private $_loadingFromDatabase=true;
 	
 	
+	private static $_addedRelations=array();
+	
+	
 	/**
 	 *
 	 * @var GO_Base_Model_Acl 
@@ -174,6 +177,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function relations(){
 		return array();
+	}
+	
+	/**
+	 * Dynamically add a relation to this ActiveRecord. See the relations() function
+	 * for a description.
+	 * 
+	 * @param array $config @see relations
+	 */
+	public function addRelation($name, $config){
+		self::$_addedRelations[$name]=$config;
 	}
 	
 	/**
@@ -1661,7 +1674,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	protected function getRelation($name){
-		$r= $this->relations();		
+		$r= array_merge($this->relations(), self::$_addedRelations);		
 		
 		if(isset($this->columns['user_id']) && !isset($r['user'])){
 			$r['user']=array('type'=>self::BELONGS_TO, 'model'=>'GO_Base_Model_User', 'field'=>'user_id');
