@@ -210,3 +210,5 @@ ENGINE = InnoDB";
 
 
 $updates['201303191307'][] ="ALTER TABLE `cal_participants` ADD INDEX ( `event_id` , `user_id` ) ;";
+
+$updates['201304231330'][]="ALTER TABLE `cal_events` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";

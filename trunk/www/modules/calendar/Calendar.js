@@ -13,8 +13,11 @@
 
 Ext.ns("GO.calendar.dd");
  
-GO.calendar.formatQtip = function(data)
+GO.calendar.formatQtip = function(data,verbose)
 {
+	if (typeof(verbose)=='undefined')
+		verbose = true;
+	
 	var df = 'Y-m-d H:i';
 	
 	if(!data.startDate)
@@ -25,6 +28,8 @@ GO.calendar.formatQtip = function(data)
 	
 	if(!data.creationDate)
 		data.creationDate = data.ctime ? Date.parseDate(data.ctime, df) : new Date();
+	if(!data.modifyDate)
+		data.modifyDate = data.mtime ? Date.parseDate(data.mtime, df) : new Date();
 	
 	var new_df = GO.settings.time_format;
 	if(data.startDate.format('Ymd')!=data.endDate.format('Ymd'))
@@ -59,8 +64,15 @@ GO.calendar.formatQtip = function(data)
 	{
 		str += '<br />'+GO.lang.strOwner+': '+data.username;
 	}
-	
+
 	str += '<br />'+GO.lang.strCtime+': '+data.creationDate.format(GO.settings.date_format+' '+GO.settings.time_format);
+	if (verbose)
+		str += '<br />'+GO.lang.strMtime+': '+data.modifyDate.format(GO.settings.date_format+' '+GO.settings.time_format);
+		
+	if(verbose && !GO.util.empty(data.musername))
+	{
+		str += '<br />'+GO.lang.mUser+': '+data.musername;
+	}
 	
 	if(data.location!='')
 	{
@@ -349,7 +361,7 @@ GO.calendar.MainPanel = function(config){
 	this.calendarListPanel.add(this.viewsList);
 	this.calendarListPanel.add(this.resourcesList);
 	
-	var storeFields=['id','event_id','name','start_time','end_time','description', 'repeats', 'private','status','location', 'background', 'status_color', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','all_day_event','username','duration', 'link_count', 'has_other_participants','participant_ids','ctime','is_organizer', 'partstatus','model_name','permission_level'];
+	var storeFields=['id','event_id','name','start_time','end_time','description', 'repeats', 'private','status','location', 'background', 'status_color', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','all_day_event','username','duration', 'link_count', 'has_other_participants','participant_ids','ctime','mtime','musername', 'is_organizer', 'partstatus','model_name','permission_level'];
 
 	this.daysGridStore = new GO.data.JsonStore({
 		url:GO.url('calendar/event/store'),

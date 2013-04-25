@@ -44,7 +44,10 @@ GO.calendar.ListGrid = function(config)
 			'calendar_name',
 //			'has_other_participants',
 			'participant_ids',
-			'ctime'
+			'ctime',
+			'mtime',
+			'username',
+			'musername'
 			]
 		}),
 		proxy: new Ext.data.HttpProxy({
@@ -163,7 +166,7 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
 	
 	renderName : function(grid, value, record)
 	{
-		return '<div style="font-weight:bold;">'+record.data.name+'</div>'+GO.calendar.formatQtip(record.data);
+		return '<div style="font-weight:bold;" ext:qtip="'+Ext.util.Format.htmlEncode(GO.calendar.formatQtip(record.data))+'">'+record.data.name+'</div>'+GO.calendar.formatQtip(record.data,false);
 	},
 		
 	afterRender : function()

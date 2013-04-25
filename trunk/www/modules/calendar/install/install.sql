@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS `cal_events` (
   `reminder` int(11) NOT NULL DEFAULT '0',
   `ctime` int(11) NOT NULL DEFAULT '0',
   `mtime` int(11) NOT NULL DEFAULT '0',
+	`muser_id` int(11) NOT NULL DEFAULT '0',
   `busy` tinyint(1) NOT NULL DEFAULT '1',
   `status` varchar(20) NOT NULL DEFAULT 'NEEDS-ACTION',
   `resource_event_id` int(11) NOT NULL DEFAULT '0',
