@@ -44,6 +44,7 @@
  * @property String $bank
  * @property String $bank_no
  * @property int $mtime
+ * @property int $muser_id
  * @property Boolean $mute_sound
  * @property Boolean $mute_reminder_sound
  * @property Boolean $mute_new_mail_sound

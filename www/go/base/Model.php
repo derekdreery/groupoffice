@@ -100,8 +100,9 @@ abstract class GO_Base_Model extends GO_Base_Observable{
 	 * @return mixed 
 	 */
 	public function getValidationError($attribute){
-		if(!empty($this->_validationErrors[$attribute]))
-			return $this->_validationErrors[$attribute];
+		$validationErrors = $this->getValidationErrors();
+		if(!empty($validationErrors[$attribute]))
+			return $validationErrors[$attribute];
 		else
 			return false;
 	}
@@ -123,10 +124,12 @@ abstract class GO_Base_Model extends GO_Base_Observable{
 		*/
 	public function hasValidationErrors($attribute=null)
 	{
+		$validationErrors = $this->getValidationErrors();
+		
 		if ($attribute === null)
-			return $this->_validationErrors !== array();
+			return count($validationErrors)>0;
 		else
-			return isset($this->_validationErrors[$attribute]);
+			return isset($validationErrors[$attribute]);
 	}
 	
 }
