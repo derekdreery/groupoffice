@@ -58,6 +58,16 @@ GO.files.FolderPropertiesDialog = function(config){
 			name: 'mtime'
 		},
 		{
+			xtype: 'plainfield',
+			fieldLabel: GO.lang.createdBy,
+			name: 'username'
+		},
+		{
+			xtype: 'plainfield',
+			fieldLabel: GO.lang.mUser,
+			name: 'musername'
+		},
+		{
 			xtype: 'htmlcomponent',
 			html:'<hr />'
 		},

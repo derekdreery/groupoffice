@@ -24,6 +24,7 @@
  * @property int $status_id
  * @property int $ctime
  * @property int $mtime
+ * @property int $muser_id
  * @property int $size
  * @property int $user_id
  * @property String $comments

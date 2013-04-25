@@ -49,15 +49,17 @@ GO.files.FolderPanel = Ext.extend(GO.DisplayPanel,{
 						'<td>'+GO.lang.strType+':</td>'+
 						'<td>{type}</td>'+
 					'</tr>'+					
-
+					
 					'<tr>'+
-						'<td>'+GO.lang.strCtime+':</td>'+
-						'<td>{ctime}</td>'+
-					'</tr>'+
-
-					'<tr>'+
-						'<td>'+GO.lang.strMtime+':</td>'+
-						'<td>{mtime}</td>'+
+						'<td>'+GO.lang['strCtime']+':</td>'+'<td>{ctime}</td>'+
+					'</tr><tr>'+
+						'<td>'+GO.lang['createdBy']+':</td>'+'<td>{username}</td>'+
+					'</tr><tr>'+
+						'<td>'+GO.lang['strMtime']+':</td>'+'<td>{mtime}</td>'+
+					'</tr><tr>'+
+						'<td>'+GO.lang['mUser']+':</td>'+'<td>'+
+							'<tpl if="muser_id">{musername}</tpl>'+
+							'</td>'+
 					'</tr>'+
 					
 					'<tr>'+
