@@ -1,3 +1,4 @@
+25-04-2013 4.1.58
 - Calendar bug with organizer status and custom fields requirement
 - Deformed thumbnail bug
 - Duplicate holidays bug
