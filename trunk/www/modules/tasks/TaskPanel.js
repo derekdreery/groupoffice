@@ -48,12 +48,19 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 						'<td<tpl if="late"> class="tasks-late"</tpl>>{due_time}</td>'+
 					'</tr>'+
 					'<tr>'+
-						'<td>'+GO.lang.createdBy+':</td>'+
-						'<td>{user_name}</td>'+
-					'</tr>'+
-					'<tr>'+
 						'<td>'+GO.lang.strStatus+':</td>'+
 						'<td>{status_text}</td>'+
+					'</tr>'+
+					'<tr>'+
+						'<td>'+GO.lang['strCtime']+':</td>'+'<td>{ctime}</td>'+
+					'</tr><tr>'+
+						'<td>'+GO.lang['createdBy']+':</td>'+'<td>{username}</td>'+
+					'</tr><tr>'+
+						'<td>'+GO.lang['strMtime']+':</td>'+'<td>{mtime}</td>'+
+					'</tr><tr>'+
+						'<td>'+GO.lang['mUser']+':</td>'+'<td>'+
+							'<tpl if="muser_id">{musername}</tpl>'+
+							'</td>'+
 					'</tr>';
 				
 				if(GO.projects){
