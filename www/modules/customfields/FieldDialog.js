@@ -103,7 +103,7 @@ GO.customfields.FieldDialog = function(config){
 	
 	this.formPanel = new Ext.FormPanel({
 		labelWidth:140,
-	//	autoHeight:true,
+		//	autoHeight:true,
 		anchor:'100%',
 		autoScroll:true,
 		waitMsgTarget:true,
@@ -122,7 +122,7 @@ GO.customfields.FieldDialog = function(config){
 			},
 			plugins:[new Ext.ux.FieldHelp(GO.customfields.lang.multiselectForLastSlaveOnly)]
 		}),
-                this.heightField = new GO.form.NumberField({
+		this.heightField = new GO.form.NumberField({
 			name:'height',
 			decimals:0,
 			width:40,
@@ -154,12 +154,17 @@ GO.customfields.FieldDialog = function(config){
 			name:'required',
 			fieldLabel:GO.customfields.lang.required
 		}),
-                this.hideInGridCB = new Ext.ux.form.XCheckbox({
+		this.hideInGridCB = new Ext.ux.form.XCheckbox({
 			xtype:'xcheckbox',
 			name:'exclude_from_grid',
 			fieldLabel:GO.customfields.lang.excludeFromGrid
 		}),
-                this.regexField = new Ext.form.TextField({
+		this.uniqueCB = new Ext.ux.form.XCheckbox({
+			xtype:'xcheckbox',
+			name:'unique_values',
+			fieldLabel:GO.customfields.lang['uniqueValues']
+		}),
+		this.regexField = new Ext.form.TextField({
 			disabled:true,
 			name:'validation_regex',
 			fieldLabel:GO.customfields.lang.validationRegexp,
@@ -261,7 +266,7 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 
 		this.multiSelectCB.helpTextEl.setDisplayed(newValue=='GO_Customfields_Customfieldtype_TreeselectSlave');
 
-                this.heightField.container.up('div.x-form-item').setDisplayed(newValue=='GO_Customfields_Customfieldtype_Textarea');
+		this.heightField.container.up('div.x-form-item').setDisplayed(newValue=='GO_Customfields_Customfieldtype_Textarea');
 
 		this.optionsGrid.setVisible(newValue=='GO_Customfields_Customfieldtype_Select');
 		if(newValue=='GO_Customfields_Customfieldtype_Select')
@@ -298,10 +303,10 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 		if(field_id>0)
 		{
 			this.formPanel.load({
-//				url : GO.settings.modules.customfields.url+'json.php',
-//				params : {
-//					task: 'field'
-//				},
+				//				url : GO.settings.modules.customfields.url+'json.php',
+				//				params : {
+				//					task: 'field'
+				//				},
 				url:GO.url('customfields/field/load'),				
 				success:function(form, action)
 				{
@@ -347,8 +352,28 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 			this.treeSelectOptions.setFieldId(field_id);
 	},
 	
-	submitForm : function(hide){
-
+//	submitForm : function(hide){
+//
+//		if (this.uniqueCB.getValue()==true) {
+//			Ext.Msg.show({
+//				title: GO.customfields.lang['makeUnique'],
+//				icon: Ext.MessageBox.WARNING,
+//				msg: GO.customfields.lang['makeUniqueRUSure'],
+//				buttons: Ext.Msg.YESNO,
+//				scope:this,
+//				fn: function(btn) {
+//					if (btn=='yes') {
+//						this._submitForm(hide);
+//					}
+//				}
+//			});
+//		} else {
+//			this._submitForm(hide);
+//		}
+//
+//	},
+	
+	submitForm : function(hide) {
 		this.formPanel.form.submit(
 		{
 			//url:GO.settings.modules.customfields.url+'action.php',
@@ -359,9 +384,9 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 			},
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){
-				
+
 				this.fireEvent('save', this);
-				
+
 				if(action.result.id)
 				{
 					this.setFieldId(action.result.id);
@@ -373,7 +398,7 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 				}
 
 				this.lastCategoryId=this.categoryField.getValue();
-				
+
 				this.optionsGrid.store.commitChanges();
 
 			},

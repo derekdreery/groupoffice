@@ -101,6 +101,7 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 					self::$cacheColumns[$this->extendsModel()][$field->columnName()]['customfield']=$field;
 					self::$cacheColumns[$this->extendsModel()][$field->columnName()]['regex']=$field->validation_regex;
 					self::$cacheColumns[$this->extendsModel()][$field->columnName()]['gotype']='customfield';
+					self::$cacheColumns[$this->extendsModel()][$field->columnName()]['unique']=$field->unique_values;
 				}
 
 				GO::cache()->set($cacheKey, array('attributeLabels'=>self::$attributeLabels[$this->extendsModel()], 'columns'=>self::$cacheColumns[$this->extendsModel()]));
@@ -144,8 +145,9 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 //				var_dump($field);
 //				var_dump($this->columns[$field]['customfield']->datatype);
 //				echo '<br />'.$this->$field.'<br />';
-				if(!$this->columns[$field]['customfield']->customfieldType->validate($this->$field))
+				if(!$this->columns[$field]['customfield']->customfieldType->validate($this->$field)) {
 					$this->setValidationError ($field, $this->columns[$field]['customfield']->customfieldType->getValidationError());
+				}
 			}
 		}
 		
@@ -354,4 +356,31 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 		else
 			return false;
 	}
+	
+//	public function save($ignoreAcl=false) {
+//		
+//		try {
+//			return parent::save($ignoreAcl);
+//		} catch (PDOException $e) {
+//			$msg = $e->getMessage();
+//
+//			if (strpos($msg,'SQLSTATE[23000]')!==false) {
+//				
+//				preg_match('/col_(\d+)_unique/', $msg, $cfMatches);
+//				
+//				if (count($cfMatches)>1) {
+//					$cField = GO_Customfields_Model_Field::model()->findByPk($cfMatches[1]);
+//					$cFieldPath = $cField->category->name.':'.$cField->name;
+//					$feedbackString = str_replace('%cf',$cFieldPath,GO::t('duplicateExistsFeedback','customfields'));
+//					throw new Exception($feedbackString);
+//				} else {
+//					throw $e;
+//				}
+//				
+//			} else {
+//				throw $e;
+//			}
+//		}
+//		
+//	}
 }

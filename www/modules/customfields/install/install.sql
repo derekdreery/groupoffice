@@ -64,6 +64,7 @@ CREATE TABLE IF NOT EXISTS `cf_fields` (
   `exclude_from_grid` tinyint(1) NOT NULL DEFAULT '0',
   `height` int(11) NOT NULL DEFAULT '0',
 	`number_decimals` tinyint(4) NOT NULL DEFAULT '2',
+	`unique_values` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `type` (`category_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
