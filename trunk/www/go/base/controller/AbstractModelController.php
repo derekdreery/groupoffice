@@ -438,6 +438,14 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$response['data']['model']=$model->className();
 		$response['data']['permission_level']=$model->getPermissionLevel();
 		$response['data']['write_permission']=GO_Base_Model_Acl::hasPermission($response['data']['permission_level'],GO_Base_Model_Acl::WRITE_PERMISSION);
+		if (!empty($model->ctime))
+			$response['data']['ctime'] = GO_Base_Util_Date::get_timestamp ($model->ctime);
+		if (!empty($model->mtime))
+			$response['data']['mtime'] = GO_Base_Util_Date::get_timestamp ($model->mtime);
+		if (!empty($model->user))
+			$response['data']['username'] = $model->user->name;
+		if (!empty($model->mUser))
+			$response['data']['musername'] = $model->mUser->name;
 
 		$response['data']['customfields']=array();
 		
