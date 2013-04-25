@@ -106,6 +106,7 @@ CREATE TABLE IF NOT EXISTS `ta_tasks` (
   `user_id` int(11) NOT NULL,
   `ctime` int(11) NOT NULL,
   `mtime` int(11) NOT NULL,
+	`muser_id` int(11) NOT NULL DEFAULT '0',
   `start_time` int(11) NOT NULL,
   `due_time` int(11) NOT NULL,
   `completion_time` int(11) NOT NULL DEFAULT '0',

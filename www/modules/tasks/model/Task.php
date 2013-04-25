@@ -22,6 +22,7 @@
  * @property int $user_id
  * @property int $ctime
  * @property int $mtime
+ * @property int $muser_id
  * @property int $start_time
  * @property int $due_time
  * @property int $completion_time
