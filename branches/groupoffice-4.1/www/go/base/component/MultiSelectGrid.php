@@ -104,7 +104,7 @@ class GO_Base_Component_MultiSelectGrid {
 			$this->_save();
 		} else {
 			$selectedPks = GO::config()->get_setting('ms_' . $this->_requestParamName, GO::session()->values['user_id']);
-			$this->selectedIds = !empty($selectedPks) ? explode(',', $selectedPks) : array();
+			$this->selectedIds = empty($selectedPks) && $selectedPks!=='0' ? array() : explode(',', $selectedPks);
 			
 		}
         
