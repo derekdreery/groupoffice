@@ -403,6 +403,7 @@ CREATE TABLE IF NOT EXISTS `go_users` (
   `first_weekday` tinyint(4) NOT NULL DEFAULT '0',
   `sort_name` varchar(20) NOT NULL DEFAULT 'first_name',
   `mtime` int(11) NOT NULL DEFAULT '0',
+	`muser_id` int(11) NOT NULL DEFAULT '0',
   `mute_sound` tinyint(1) NOT NULL DEFAULT '0',
   `mute_reminder_sound` tinyint(1) NOT NULL DEFAULT '0',
   `mute_new_mail_sound` tinyint(1) NOT NULL DEFAULT '0',
