@@ -26,6 +26,7 @@ GO.form.SelectLink = function(config){
 		}
 	});
 
+	config.minChars=100; //disable auto searching because it causes heavy load. Only enter key searches
 	config.forceSelection=true;
 	config.displayField='name_and_type';
 	config.valueField='model_name_and_id',
@@ -34,9 +35,33 @@ GO.form.SelectLink = function(config){
 	config.width=400;
 	config.selectOnFocus=false;
 	config.fieldLabel=GO.lang.cmdLink;
+	config.enableKeyEvents=true
+	
+	
 //	config.pageSize=20;//parseInt(GO.settings['max_rows_list']);
 	GO.form.SelectLink.superclass.constructor.call(this, config);
 	
+	
+	this.on("keypress", function (comboBox, e) {
+			switch(e.getCharCode()) {
+				case e.ENTER:
+					if(this.typing)
+						this.doQuery(this.getRawValue(), true);
+				break;
+
+				case e.ESC:
+				case e.DOWN:
+				case e.UP:				
+				case e.TAB:
+					this.typing=false;
+				break;
+
+				default:
+					this.typing=true;
+					this.collapse();
+				break;
+			}
+	}, this);
 }
 
 Ext.extend(GO.form.SelectLink, GO.form.ComboBoxReset,{

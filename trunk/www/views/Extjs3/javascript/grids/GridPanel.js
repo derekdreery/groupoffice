@@ -183,7 +183,9 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 				scope: this
 			});
 			
-			
+			this.standardTbarConfig = this.standardTbarConfig ? this.standardTbarConfig : {};
+			this.standardTbarConfig.items = this.tbar;
+			this.tbar = new Ext.Toolbar(this.standardTbarConfig);
 		}
 		
 		

@@ -308,20 +308,33 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 		return $c;
 	}
 	
-	
-	public function mysqldump($outputDir){
+	/**
+	 * Create a mysql dump of the installation database.
+	 * 
+	 * @param string $outputDir
+	 * @param string $filename Optional filename. If omitted then $config['db_name'] will be used.
+	 * @return boolean
+	 * @throws Exception
+	 */
+	public function mysqldump($outputDir, $filename=null){
 		$c = $this->getConfig();
 		
-		$outputFile=rtrim($outputDir,'/')."/".$c['db_name'].".sql";
+		if(!isset($filename))
+			$filename=$c['db_name'].".sql";
+		
+		$outputFile=rtrim($outputDir,'/')."/".$filename;
 	
-		$cmd = "mysqldump --force --opt --user=".$c['db_user']." --password=".$c['db_pass']." --databases ".$c['db_name']." > \"$outputFile\"";
+		$cmd = "mysqldump  --default-character-set=utf8 --force --opt --user=".$c['db_user']." --password=".$c['db_pass']." ".$c['db_name']." > \"$outputFile\"";
 		GO::debug($cmd);
 		exec($cmd, $output,$retVar);
 		
 		if($retVar != 0)
 			throw new Exception("Mysqldump error: ".implode("\n", $output));
 		
-		return file_exists($outputFile);
+		if(!file_exists($outputFile))
+			throw new Exception("Could not create MySQL dump");
+		
+		return true;
 	}
 	
 	/**

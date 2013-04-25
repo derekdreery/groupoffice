@@ -505,7 +505,7 @@ class GO{
 			GO::config()->debug=true;
 		
 		if(GO::config()->debug || GO::config()->debug_log){
-			$log = '['.date('Y-m-d G:i').'] INIT';
+			$log = '['.date('Y-m-d H:i').'] INIT';
 			GO::debug($log);
 		}
 		
@@ -636,7 +636,7 @@ class GO{
 					break;
 		}		
 		
-		$errorMsg="[".date("Ymd G:i:s")."] PHP $type: $errstr in $errfile on line $errline";
+		$errorMsg="[".date("Ymd H:i:s")."] PHP $type: $errstr in $errfile on line $errline";
 		
 		$user = isset(GO::session()->values['username']) ? GO::session()->values['username'] : 'notloggedin';
 		$agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
@@ -725,7 +725,7 @@ class GO{
 				GO::session()->values["logdircheck"] = true;
 			}
 
-			$msg = '[' . date('Y-m-d G:i:s') . ']';
+			$msg = '[' . date('Y-m-d H:i:s') . ']';
 
 			if (GO::user()) {
 				$msg .= '[' . self::user()->username . '] ';

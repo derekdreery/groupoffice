@@ -58,4 +58,33 @@ class GO_Users_Model_CfSettingTab extends GO_Base_Db_ActiveRecord{
 	 public function relations() {
 		 return array();
 	 }
+	 
+	 /**
+	  * Get an activestatement witch includes all the customfieldCategories that 
+	  * will be showed in the settings tab.
+	  * 
+	  * @return GO_Base_Db_ActiveStatement
+	  */
+	 public function getSettingTabs(){
+		 		 
+		 $findParams = GO_Base_Db_FindParams::newInstance()
+						 ->ignoreAcl()
+						 ->joinModel(array(
+								'model'=>'GO_Users_Model_CfSettingTab',									
+								'localTableAlias'=>'t', //defaults to "t"
+								'localField'=>'id', //defaults to "id"			
+								'foreignField'=>'cf_category_id', //defaults to primary key of the remote model
+								'tableAlias'=>'cfs', //Optional table alias					
+								'type'=>'INNER' //defaults to INNER,
+						 ))
+						 ->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('extends_model', "GO_Addressbook_Model_Contact"))
+						 ->order('sort_index');
+		 
+		 $stmt = GO_Customfields_Model_Category::model()->find($findParams);
+		 return $stmt;
+	 }
+	 
+	 
+	 
+	 
 }

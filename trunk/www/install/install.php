@@ -1,10 +1,20 @@
 <?php
 require('header.php');
 
+$stmt = GO::getDbConnection()->query("SHOW TABLES");
+$hasTables = $stmt->rowCount()>0;
+
+
 if($_SERVER['REQUEST_METHOD']=="POST"){
 	
 	if(isset($_POST['upgrade'])){
 		redirect('upgrade.php');
+	}
+	
+	
+	if($hasTables){
+		trigger_error("Installation aborted because the database is not empty!", E_USER_ERROR);
+		exit();
 	}
 	
 	if($_POST['password1']!=$_POST['password2'])
@@ -108,8 +118,7 @@ printHead();
 <h1>Installation</h1>
 
 <?php
-$stmt = GO::getDbConnection()->query("SHOW TABLES");
-if($stmt->rowCount()){
+if($hasTables){
 	
 	if(!GO_Base_Db_Utils::tableExists('go_users')){
 		errorMessage("Your database is not empty and doesn't contain a valid ".GO::config()->product_name." database. Please use an empty database for a fresh install.");

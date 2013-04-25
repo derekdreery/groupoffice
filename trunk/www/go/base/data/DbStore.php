@@ -469,6 +469,10 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 		$response = $this->getData();
 		return $response['results'];
 	}
+	
+	public function getModels() {
+		return $this->_stmt->fetchAll();
+	}
 
 	/**
 	 * Select Items that belong to one of the selected Models

@@ -262,11 +262,11 @@ class GO_Base_Module extends GO_Base_Observable {
 		$oldIgnore = GO::setIgnoreAclPermissions();
 		
 		
-		//call deleteUser for each user
-		$stmt = GO_Base_Model_User::model()->find(array('ignoreAcl'=>true));		
-		while($user = $stmt->fetch()){
-			call_user_func(array(get_class($this),'deleteUser'), $user);
-		}
+//		//call deleteUser for each user
+//		$stmt = GO_Base_Model_User::model()->find(array('ignoreAcl'=>true));		
+//		while($user = $stmt->fetch()){
+//			call_user_func(array(get_class($this),'deleteUser'), $user);
+//		}
 		
 		
 		//delete all models from the GO_Base_Model_ModelType table.
