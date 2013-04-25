@@ -59,3 +59,7 @@ $l['enableBlocks'] = 'Enable blocks';
 $l['enabled'] = 'Enabled';
 $l['modelTypeListed'] = 'Listed model type';
 $l['listedUnder'] = 'Listed under';
+$l['uniqueValues'] = 'Unique values';
+$l['makeUnique'] = 'Make custom field values unique';
+//$l['makeUniqueRUSure'] = 'This makes this custom field\'s values unique. If there are any duplicate values already set with this custom field, they will be deleted. Continue?';
+$l['duplicateExistsFeedback'] = 'The value "%val" entered for the field "%cf" already exists in the database. The field value must be unique. Please enter a different value in that field.';

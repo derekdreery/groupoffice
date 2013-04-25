@@ -17,6 +17,7 @@
  * @property string $name
  * @property int $category_id
  * @property int $id
+ * @property boolean $unique_values
  */
 class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 	
@@ -96,21 +97,32 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 		
 		return parent::afterSave($wasNew);
 	}
-	
+		
 	public function alterDatabase($wasNew){
 			$table=$this->category->customfieldsTableName();
-		
+					
 		if($wasNew){
 			$sql = "ALTER TABLE `".$table."` ADD `".$this->columnName()."` ".$this->customfieldtype->fieldSql().";";
 		}else
 		{
 			$sql = "ALTER TABLE `".$table."` CHANGE `".$this->columnName()."` `".$this->columnName()."` ".$this->customfieldtype->fieldSql();
-		}
+		}		
 		//don't be strict in upgrade process
 		GO::getDbConnection()->query("SET sql_mode=''");
 		
 		if(!$this->getDbConnection()->query($sql))
 			throw new Exception("Could not create custom field");
+		
+//		if ($this->isModified('unique_values')) {
+//			
+//			if (!empty($this->unique_values))
+//				$sqlUnique = "ALTER TABLE `".$table."` ADD UNIQUE INDEX ".$this->columnName()."_unique(".$this->columnName().")";
+//			else
+//				$sqlUnique = "ALTER TABLE `".$table."` DROP INDEX ".$this->columnName()."_unique";
+//			
+//			if (!$this->getDbConnection()->query($sqlUnique))
+//				throw new Exception("Could not change custom field uniqueness.");
+//		}
 		
 		$this->_clearColumnCache();
 	}

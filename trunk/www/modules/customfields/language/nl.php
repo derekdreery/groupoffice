@@ -44,3 +44,8 @@ $l["customfields"]= 'Extra velden';
 $l["helpText"]='Helptekst';
 
 $l['nDecimals'] = 'Aantal decimalen';
+
+$l['uniqueValues'] = 'Unieke waarden';
+$l['makeUnique'] = 'Maak extra veldwaarden uniek';
+//$l['makeUniqueRUSure'] = 'Hiermee worden de waarden van dit extra veld uniek gemaakt. Als er waarden zijn die meerdere keren voorkomen bij dit extra veld, dan worden de dubbele waarden op één na verwijderd. Doorgaan?';
+$l['duplicateExistsFeedback'] = 'De waarde "%val" die is ingevuld voor het veld "%cf" bestaat al in de database. De veldwaarde moet uniek zijn. Vul a.u.b. een andere waarde voor dat veld in.';

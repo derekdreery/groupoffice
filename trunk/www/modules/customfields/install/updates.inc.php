@@ -142,3 +142,5 @@ $updates['201304180930'][]="CREATE TABLE IF NOT EXISTS `cf_enabled_blocks` (
   `model_type_name` varchar(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`block_id`,`model_id`,`model_type_name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates['201304241300'][]="ALTER TABLE `cf_fields` ADD `unique_values` TINYINT( 1 ) NOT NULL DEFAULT '0' AFTER `number_decimals`;";
