@@ -124,6 +124,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
         
 		$response['status'] = $this->_event->status;
 		$response['username'] = $this->_event->user->getName();
+		$response['musername'] = !empty($this->_event->mUser) ? $this->_event->mUser->getName() : '';
 		
 //		if($this->_event->status==GO_Calendar_Model_Event::STATUS_CANCELLED){			
 //			$response['name'] .= ' ('.$this->_event->localizedStatus.')';
@@ -145,6 +146,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 		$response['start_time'] = date('Y-m-d H:i', $this->getAlternateStartTime());
 		$response['end_time'] = date('Y-m-d H:i',  $this->getAlternateEndTime());	
 		$response['ctime'] = date('Y-m-d H:i',  $this->_event->ctime);
+		$response['mtime'] = date('Y-m-d H:i',  $this->_event->mtime);
 		$response['event_id'] = $this->_event->id;
 		//$response['has_other_participants'] = $this->hasOtherParticipants();
 		$response['link_count'] = $this->getLinkCount();
