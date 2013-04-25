@@ -389,7 +389,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 							case 'user_id':
 								$this->_attributeLabels[$columnName] = GO::t('strUser');
 								break;
-
+							case 'muser_id':
+								$this->_attributeLabels[$columnName] = GO::t('mUser');
+								break;
+							
 							case 'ctime':
 								$this->_attributeLabels[$columnName] = GO::t('strCtime');
 								break;
@@ -2203,7 +2206,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		return $valid;
 	}
 	
-	private function _validateUniqueColumns(){
+	private function _validateUniqueColumns(){		
 		foreach($this->columns as $field=>$attributes){
 		
 			if(!empty($attributes['unique']) && !empty($this->_attributes[$field])){
@@ -2236,11 +2239,30 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 									->criteria($criteria)
 					);
 
-					if($existing)
-						$this->setValidationError($field, sprintf(GO::t('alreadyExists'),$this->localizedName, $this->_attributes[$field]));
+					if($existing) {
+						
+						$msg = str_replace(array('%cf','%val'),array($this->getAttributeLabel($field), $this->_attributes[$field]),GO::t('duplicateExistsFeedback','customfields'));
+						$this->setValidationError($field, $msg);
+//						$this->setValidationError($field, sprintf(GO::t('alreadyExists'),$this->localizedName, $this->_attributes[$field]));
+					}
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Return all validation errors of this model
+	 * 
+	 * @return array 
+	 */
+	public function getValidationErrors(){
+		
+		$validationErrors = parent::getValidationErrors();
+		if($this->customfieldsRecord){
+			$validationErrors = array_merge($validationErrors, $this->customfieldsRecord->getValidationErrors());
+		}
+		
+		return $validationErrors;
 	}
 	
 
@@ -2307,7 +2329,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			throw new GO_Base_Exception_AccessDenied($msg);
 		}
 		
-		if(!$this->validate()){
+		if(!$this->validate() || ($this->customfieldsRecord && !$this->customfieldsRecord->validate())){
 			return false;
 		}
 	
@@ -2325,6 +2347,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}
 		}
 
+		if (isset($this->_modifiedAttributes['mtime']))
+			$this->muser_id = GO::user()->id;
+		
 		//user id is set by defaultAttributes now.
 		//do not use empty() here for checking the user id because some times it must be 0. eg. go_acl
 //		if(isset($this->columns['user_id']) && !isset($this->user_id)){
@@ -3593,6 +3618,21 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 	}
 	
+	/**
+	 * Returns the modifying user model if this model has a muser_id column.
+	 * 
+	 * @return GO_Base_Model_User 
+	 */
+	public function getMUser(){
+		
+		if(!empty($this->muser_id)){
+			return GO_Base_Model_User::model()->findByPk($this->muser_id, array(), true);
+		}else
+		{
+			return false;
+		}
+	}
+	
 	private $_acl=false;
 	
 	/**
@@ -3849,6 +3889,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		if(isset($this->columns['user_id']))
 			$attr['user_id']=GO::user() ? GO::user()->id : 1;
+		if(isset($this->columns['muser_id']))
+			$attr['muser_id']=GO::user() ? GO::user()->id : 1;
 		
 		return array_merge($attr, $this->defaultAttributes());
 	}
