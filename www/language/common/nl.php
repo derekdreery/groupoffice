@@ -247,6 +247,7 @@ $l["strMale"]= 'Man';
 $l["strFemale"]= 'Vrouw';
 $l["strType"]= 'Type';
 $l["strMtime"]= 'Gewijzigd op';
+$l['mUser']= 'Gewijzigd door';
 $l["strCtime"]= 'Gemaakt op';
 $l["strText"]= 'Tekst';
 $l["strDate"]= 'Datum';

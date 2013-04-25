@@ -86,6 +86,7 @@ $l["url"]= 'URL';
 $l["strMale"]= 'Male';
 $l["strFemale"]= 'Female';
 $l["strMtime"]= 'Modified at';
+$l['mUser']= 'Modified by';
 $l["strCtime"]= 'Created at';
 $l["Atime"]= 'Accessed at';
 $l["strText"]= 'Text';
