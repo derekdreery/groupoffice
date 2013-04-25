@@ -656,7 +656,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 			$fh = GO_Files_Model_FileHandler::model()->findByPk(
 						array('extension'=>$ex, 'user_id'=>GO::user()->id));
 			
-			if($fh){
+			if($fh && class_exists($fh->cls)){
 				self::$defaultHandlers[$ex]=new $fh->cls;
 			}else{
 				$classes = GO_Files_FilesModule::getAllFileHandlers();
