@@ -167,6 +167,7 @@ CREATE TABLE IF NOT EXISTS `em_links` (
   `path` varchar(255) DEFAULT NULL,
   `ctime` int(11) NOT NULL,
   `mtime` int(11) NOT NULL DEFAULT '0',
+	`muser_id` int(11) NOT NULL DEFAULT '0',
   `acl_id` int(11) NOT NULL,
   `uid` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
