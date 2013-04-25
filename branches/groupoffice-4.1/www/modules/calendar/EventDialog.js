@@ -898,7 +898,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					scope:this,
 					change:function(sc, newValue, oldValue){
 						var record = sc.store.getById(newValue);
-						if(record)
+						if(GO.customfields && record)
 							GO.customfields.disableTabs(this.tabPanel, record.data);
 						this.selectCategory.setCalendarId(newValue);
 						this.selectCategory.reset();

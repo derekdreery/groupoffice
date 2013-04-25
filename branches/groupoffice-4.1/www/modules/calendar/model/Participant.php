@@ -481,6 +481,9 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 				$this->user_id = $user->id;
 		}
 		
+		if($this->is_organizer)
+			$this->status=self::STATUS_ACCEPTED;
+		
 		return parent::beforeSave();
 	}
 }
