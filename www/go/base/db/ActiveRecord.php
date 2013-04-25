@@ -183,6 +183,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * Dynamically add a relation to this ActiveRecord. See the relations() function
 	 * for a description.
 	 * 
+	 * Example to add the events relation to a user:
+	 * 
+	 * GO_Base_Model_User::model()->addRelation('events', array(
+	 *		'type'=>  GO_Base_Db_ActiveRecord::HAS_MANY, 
+	 *		'model'=>'GO_Calendar_Model_Event', 
+	 *		'field'=>'user_id'				
+	 *	));
+	 * 
 	 * @param array $config @see relations
 	 */
 	public function addRelation($name, $config){
@@ -1119,15 +1127,34 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					throw new Exception("Can't join non existing relation '".$joinRelation['name'].'"');
 
 				$model = GO::getModel($r['model']);
-				$joinRelationjoins .= "\n".$joinRelation['type']." JOIN `".$model->tableName().'` '.$joinRelation['name'].' ON ('.$joinRelation['name'].'.`'.$model->primaryKey().'`=t.`'.$r['field'].'`) ';
+				$joinRelationjoins .= "\n".$joinRelation['type']." JOIN `".$model->tableName().'` '.$joinRelation['name'].' ON (';
+				
+				switch($r['type']){
+					case self::BELONGS_TO:
+						$joinRelationjoins .= $joinRelation['name'].'.`'.$model->primaryKey().'`=t.`'.$r['field'].'`';
+					break;
+				
+					case self::HAS_ONE:
+					case self::HAS_MANY:
+							$joinRelationjoins .= $joinRelation['name'].'.`'.$r['field'].'`=t.`'.$this->primaryKey().'`';
+						break;
+					
+					default:
+						throw new Exception("The relation type of ".$joinRelation['name']." is not supported by joinRelation or groupRelation");
+						break;
+				}
+				
+				$joinRelationjoins .=') ';
 
 				$cols = $model->getColumns();
 
 				foreach($cols as $field=>$props){
-					$joinRelationSelectFields .=', '.$joinRelation['name'].'.`'.$field.'` AS `'.$joinRelation['name'].'@'.$field.'`';
+					$joinRelationSelectFields .=",\n".$joinRelation['name'].'.`'.$field.'` AS `'.$joinRelation['name'].'@'.$field.'`';
 				}
 			}			
 		}
+		
+		
 		
 
 		$joinCf = !empty($params['joinCustomFields']) && $this->customfieldsModel() && GO::modules()->customfields && GO::modules()->customfields->permissionLevel;
@@ -1142,6 +1169,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}
 		
 		$sql .= $joinRelationSelectFields;		
+		
+		if(!empty($params['groupRelationSelect'])){
+			$sql .= ",\n".$params['groupRelationSelect'];
+		}
 		
 		$sql .= "\nFROM `".$this->tableName()."` t ".$joinRelationjoins;
 		

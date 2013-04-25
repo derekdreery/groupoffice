@@ -192,5 +192,25 @@ END:VCALENDAR';
 		}
 		
 	}
+	
+	
+	protected function actionGroupRelation($params){
+		GO_Base_Model_User::model()->addRelation('events', array(
+				'type'=>  GO_Base_Db_ActiveRecord::HAS_MANY, 
+				'model'=>'GO_Calendar_Model_Event', 
+				'field'=>'user_id'				
+		));
+		
+		$fp = GO_Base_Db_FindParams::newInstance()->groupRelation('events', 'count(events.id) as eventCount');
+
+				
+		$stmt = GO_Base_Model_User::model()->find($fp);
+		
+		foreach($stmt as $user){
+			echo $user->name.': '.$user->eventCount."<br />";
+			echo '<hr>';
+		}
+		
+	}
 
 }
