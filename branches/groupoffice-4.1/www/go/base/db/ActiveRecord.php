@@ -1192,7 +1192,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if($joinCf)			
 			$sql .= "\nLEFT JOIN `".$cfModel->tableName()."` cf ON cf.model_id=t.id ";	
 		  
-		if(isset($aclJoinProps))
+		if(isset($aclJoinProps) && empty($params['ignoreAcl']))
 			$sql .= $this->_appendAclJoin($params, $aclJoinProps);
 			
 		if(isset($params['join']))
