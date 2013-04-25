@@ -326,6 +326,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$response['data']['path'] = $model->path;
 		$response['data']['notify'] = $model->hasNotifyUser(GO::user()->id);
 		$response['data']['is_someones_home_dir'] = $model->isSomeonesHomeFolder();
+		$response['data']['username'] = !empty($model->user) ? $model->user->name : '';
+		$response['data']['musername'] = !empty($model->mUser) ? $model->mUser->name : '';
 		
 		$response['data']['url']=$model->externalUrl;
 

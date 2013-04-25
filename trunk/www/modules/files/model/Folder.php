@@ -33,6 +33,7 @@
  * @property boolean $thumbs Show this folder in thumbnails
  * @property int $ctime
  * @property int $mtime
+ * @property int $muser_id
  * @property boolean $readonly Means this folder is readonly even to the administrator! eg. Home folders may never be edited.
  * @property string $cm_state The stored state of the column model whebn apply state is true
  * @property boolean $apply_state Apply the configured state of the column model to everybody.

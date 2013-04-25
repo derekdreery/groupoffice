@@ -169,6 +169,14 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 						'<td>'+GO.lang.strMtime+':</td>'+
 						'<td>{mtime}</td>'+						
 					'</tr>'+
+
+					'<tr>'+
+						'<td>'+GO.lang['strUser']+':</td>'+'<td>{username}</td>'+
+					'</tr><tr>'+
+						'<td>'+GO.lang['mUser']+':</td>'+'<td>'+
+							'<tpl if="muser_id">{musername}</tpl>'+
+							'</td>'+
+					'</tr>'+
 					
 					'<tpl if="!GO.util.empty(locked_user_name)">'+
 						'<tr>'+
