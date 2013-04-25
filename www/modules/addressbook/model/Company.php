@@ -14,6 +14,7 @@
  * @property int $files_folder_id
  * @property boolean $email_allowed
  * @property int $mtime
+ * @property int $muser_id
  * @property int $ctime
  * @property string $crn Company registration number
  * @property string $iban

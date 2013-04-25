@@ -55,8 +55,17 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 						'<td>'+
 					'</tpl>'+
 					'<table><tr><td>ID:</td><td>{id}</td>'+
-								'<td>'+GO.addressbook.lang.addressbook+':</td><td>{addressbook_name}</td>'+
-								'</tr></table>'+
+						'<td>'+GO.addressbook.lang.addressbook+':</td><td>{addressbook_name}</td>'+'</tr>'+
+						'<tr>'+
+							'<td>'+GO.lang['strCtime']+':</td>'+'<td>{ctime}</td>'+
+							'<td>'+GO.lang['createdBy']+':</td>'+'<td>{username}</td>'+
+						'</tr><tr>'+
+							'<td>'+GO.lang['strMtime']+':</td>'+'<td>{mtime}</td>'+
+							'<td>'+GO.lang['mUser']+':</td>'+'<td>'+
+								'<tpl if="muser_id">{musername}</tpl>'+
+								'</td>'+
+						'</tr>'+
+						'</table>'+
 					'</td>'+
 				'</tr>'+
 				'<tr>'+

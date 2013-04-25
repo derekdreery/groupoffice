@@ -23,6 +23,7 @@
  * @property boolean $email_allowed
  * @property string $salutation
  * @property int $mtime
+ * @property int $muser_id
  * @property int $ctime
  * @property string $comment
  * @property string $address_no
