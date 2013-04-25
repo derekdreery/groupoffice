@@ -488,6 +488,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		$this->saveVersion();
 				
 		$fsFile->move($this->folder->fsFolder,$this->name, $isUploadedFile);
+		$fsFile->setDefaultPermissions();
 		
 		$this->mtime=$fsFile->mtime();	
 		$this->save();
