@@ -18,6 +18,15 @@ class GO_Base_Util_Validate {
 		return $isValid;
 	}
 	
+	/**
+	 * Check if an email adress is in a valid format
+	 *
+	 * @param	string $email E-mail address
+	 * @return bool
+	 */
+	public static function email($email) {
+		return preg_match(GO_Base_Util_String::get_email_validation_regex(), $email);
+	}
 	
 /**
 	* Checks the given Ip if it is an internal one or not (ipv4 and ipv6).

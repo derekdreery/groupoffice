@@ -560,11 +560,11 @@ class GO_Base_Util_String {
 	 * Check if an email adress is in a valid format
 	 *
 	 * @param	string $email E-mail address
-	 * @access public
+	 * @deprecated since version 4.1
 	 * @return bool
 	 */
 	public static function validate_email($email) {
-		return preg_match(GO_Base_Util_String::get_email_validation_regex(), $email);
+		return GO_Base_Util_Validate::email($email);
 	}
 
 	/**
