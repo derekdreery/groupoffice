@@ -1582,15 +1582,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		return $fields;		
 	}
 	
-	/**
-	 * Returns the name of this ActiveRecord derrived class
-	 * 
-	 * @return string Name
-	 */
-	public function className(){
-		return get_class($this);
-	}
-	
 	private function _appendPkSQL($sql, $primaryKey=false){
 		if(!$primaryKey)
 			$primaryKey=$this->pk;
