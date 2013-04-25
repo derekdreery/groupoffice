@@ -67,7 +67,16 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 											'</a>'+
 										'</tpl>'+
 									'</td>'+
-								'</tr>'+					
+								'</tr>'+
+								'<tr>'+
+									'<td>'+GO.lang['strCtime']+':</td>'+'<td>{ctime}</td>'+
+									'<td>'+GO.lang['createdBy']+':</td>'+'<td>{username}</td>'+
+								'</tr><tr>'+
+									'<td>'+GO.lang['strMtime']+':</td>'+'<td>{mtime}</td>'+
+									'<td>'+GO.lang['mUser']+':</td>'+'<td>'+
+										'<tpl if="muser_id">{musername}</tpl>'+
+										'</td>'+
+								'</tr>'+
 							'</table>'+
 						'</td>'+
 						'<tpl if="photo_url">'+
