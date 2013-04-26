@@ -63,4 +63,14 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 	}
 	
 	
+	protected function actionAjaxWidget($params){
+		if(!isset($params['widget_class']))
+			Throw new Exception ('Widget class not given.');
+		
+		$widgetClassName = $params['widget_class'];
+		
+		echo $widgetClassName::getAjaxResponse($params);	
+	}
+	
+	
 }

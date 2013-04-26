@@ -278,6 +278,9 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 		}
 		catch (GO_Base_Exception_AccessDenied $e)
 		{
+			GO::debug($e->getMessage());
+			GO::debug($e->getTraceAsString());
+			
 			if(!GO::user()){
 				//Path the page you tried to visit into lastPath session for redirecting after login
 				GO::session()->values['sites']['returnUrl'] = Site::request()->getRequestUri();

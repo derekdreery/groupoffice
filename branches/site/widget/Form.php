@@ -388,13 +388,13 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 	 */
 	public function beginForm($action=false, $method=false, $htmlAttributes=false)
 	{
-		if(!$action)
+		if(!empty($action))
 			$this->_action = $action;
 		
-		if(!$method)
+		if(!empty($method))
 			$this->_method = $method;
 		
-		if(!$htmlAttributes)
+		if(!empty($htmlAttributes))
 			$this->_htmlAttributes = $htmlAttributes;
 		
 		if(!empty($action))

@@ -46,4 +46,9 @@ abstract class GO_Site_Components_Widget {
 	public function render($return = false){
 		
 	}
+	
+	public static function getAjaxResponse($params){
+		return true;
+	}
+	
 }
