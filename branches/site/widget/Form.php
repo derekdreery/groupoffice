@@ -14,10 +14,14 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 	private $_options = array();
 	private $_count=0;
 	
-	public function __construct($action='', $method='POST', $htmlAttributes = array(), $options=array()) {
+	public function __construct($action='', $method='POST', $htmlAttributes = array(), $options=array(),$return=false) {
 		$this->_options = $options;
+		$this->_action = $action;
+		$this->_method = $method;
+		$this->_htmlAttributes = $htmlAttributes;
 		
-		echo $this->_beginForm($action,$method,$htmlAttributes);		
+		
+		echo $this->beginForm($action,$method,$htmlAttributes);
 	}
 	
 	/**
@@ -382,11 +386,16 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 	 * @return string the generated form tag.
 	 * @see endForm
 	 */
-	private function _beginForm($action, $method, $htmlAttributes)
+	public function beginForm($action=false, $method=false, $htmlAttributes=false)
 	{
-		$this->_action = $action;
-		$this->_method = $method;
-		$this->_htmlAttributes = $htmlAttributes;
+		if(!$action)
+			$this->_action = $action;
+		
+		if(!$method)
+			$this->_method = $method;
+		
+		if(!$htmlAttributes)
+			$this->_htmlAttributes = $htmlAttributes;
 		
 		if(!empty($action))
 			$htmlAttributes['action']=$url=$action;
@@ -443,10 +452,12 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 	}
 	
 	private function _resolveRequired($model,$attribute,$htmlAttributes){
-		if(isset($model->columns[$attribute])){
+
+		if(isset($model->columns) && isset($model->columns[$attribute])){
 			if($model->columns[$attribute]['required'])
 				$htmlAttributes['required'] = true;
 		}
+		
 		return $htmlAttributes;
 	}
 	
