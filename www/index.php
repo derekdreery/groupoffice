@@ -18,10 +18,12 @@ $root = dirname(__FILE__).'/';
 require_once('GO.php');
 //GO::init();
 
-if(GO::config()->force_ssl && isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']!="on"){
-   header("HTTP/1.1 301 Moved Permanently");
-   header("Location: https://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
-   exit();
+if(empty($_REQUEST['r']) && PHP_SAPI!='cli'){	
+	if(GO::config()->force_ssl && !GO_Base_Util_Http::isHttps()){
+		 header("HTTP/1.1 301 Moved Permanently");
+		 header("Location: https://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
+		 exit();
+	}
 }
 
 if(!GO::user())
