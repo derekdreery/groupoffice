@@ -132,6 +132,10 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		require_once('/etc/groupoffice/'.$params['name'].'/config.php');
 		
 		$config['root_path']='/home/govhosts/'.$params['name'].'/groupoffice/';
+		$config['tmpdir']='/tmp/'.$params['name'].'/';
+		$config['file_storage_path']='/home/govhosts/'.$params['name'].'/data/';
+		$config['id']=$params['name'];
+		
 		$config['db_name']=$installation->dbName;
 		$config['db_user']=$installation->dbUser;
 		$config['enabled']=true;
