@@ -35,6 +35,8 @@ class GO_Site_Widget_Contactform_Widget extends GO_Site_Components_Widget {
 	
 	protected function renderForm($contactForm) {
 		$form = new GO_Site_Widget_Form();
+		
+		echo $form->beginForm();
 		foreach($this->fields as $fieldName) {
 			echo $form->textField($contactForm, $fieldName);
 			echo $form->error($contactForm, $fieldName);
