@@ -65,8 +65,13 @@ abstract class GO_Base_Object extends GO_Base_Observable{
 	}		
 	
 	public function __isset($name) {
-		$var = $this->__get($name);
-		return isset($var);
+		$getter = 'get' . $name;
+		if (method_exists($this, $getter)) {
+			// property is not null
+			return $this->$getter() !== null;
+		} else {
+			return false;
+		}
 	}
 	
 	/**
