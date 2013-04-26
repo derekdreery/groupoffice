@@ -1705,8 +1705,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$r['user']=array('type'=>self::BELONGS_TO, 'model'=>'GO_Base_Model_User', 'field'=>'user_id');
 		}
 		
-		if(isset($this->columns['muser_id']) && !isset($r['muser'])){
-			$r['muser']=array('type'=>self::BELONGS_TO, 'model'=>'GO_Base_Model_User', 'field'=>'muser_id');
+		if(isset($this->columns['muser_id']) && !isset($r['mUser'])){
+			$r['mUser']=array('type'=>self::BELONGS_TO, 'model'=>'GO_Base_Model_User', 'field'=>'muser_id');
 		}
 		
 		$this->_checkRelations($r);
