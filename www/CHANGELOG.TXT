@@ -1,3 +1,6 @@
+26-04-2013 4.1.58
+- Can't set property error when replying to e-mails with inline images
+
 25-04-2013 4.1.58
 - Calendar bug with organizer status and custom fields requirement
 - Deformed thumbnail bug
