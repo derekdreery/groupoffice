@@ -189,7 +189,7 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 		$htmlAttributes = $this->_resolveRequired($model, $attribute, $htmlAttributes);
 		$htmlAttributes['name'] = $this->_resolveName($model, $attribute, $htmlAttributes);
 		
-		return $this->staticTextArea($htmlAttributes['name'],$model->getAttribute($attribute),$htmlAttributes);
+		return $this->staticTextArea($htmlAttributes['name'],$model->{$attribute},$htmlAttributes);
 	}
 	
 	/**
