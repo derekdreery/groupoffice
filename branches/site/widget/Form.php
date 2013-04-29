@@ -14,14 +14,11 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 	private $_options = array();
 	private $_count=0;
 	
-	public function __construct($action='', $method='POST', $htmlAttributes = array(), $options=array(),$return=false) {
+	public function __construct($action='', $method='POST', $htmlAttributes = array(), $options=array()) {
 		$this->_options = $options;
 		$this->_action = $action;
 		$this->_method = $method;
 		$this->_htmlAttributes = $htmlAttributes;
-		
-		
-		echo $this->beginForm($action,$method,$htmlAttributes);
 	}
 	
 	/**
@@ -397,10 +394,10 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 		if(!empty($htmlAttributes))
 			$this->_htmlAttributes = $htmlAttributes;
 		
-		if(!empty($action))
-			$htmlAttributes['action']=$url=$action;
+		if(!empty($this->_action))
+			$htmlAttributes['action']=$url=$this->_action;
 		
-		$htmlAttributes['method']=$method;
+		$htmlAttributes['method']=$this->_method;
 		$form=$this->_tag('form',$htmlAttributes,false,false);
 		$hiddens=array();
 		if(!strcasecmp($method,'get') && ($pos=strpos($url,'?'))!==false)
