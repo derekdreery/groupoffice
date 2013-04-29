@@ -1,4 +1,9 @@
 - Force SSL didn't work anymore
+- Hide treeselect slave option
+- Updated Croatian translation
+- Moving in billing catalog didn't refresh grid
+- Markup field in billing dialog showed NaN and did incorrect calculations with some regional settings
+- Added YYYY-MM-DD date format to settings dialog
 
 26-04-2013 4.1.59
 - Can't set property error when replying to e-mails with inline images
