@@ -120,3 +120,8 @@ $l['resetState']="Resetiraj prozore i mreže";
 $l['resetStateConfirm']='Jeste li sigurni da želite resetirati sve mreže stupaca, prozore, veličine okvira itd., na tvorničke postavke?';
 $l['registrationEmail']='E-pošta prijave';
 $l['enabledSettingtabs']='Omogući kartice postavki';
+
+$l['explanation_cf_settingspanels']='Kako biste prikazali kartice prilagođenih polja u ploči postavki morate biti sigurni da korisnik ima barem dozvolu "Čitanje" na modul prilagođena polja.';
+$l['addresslist_panel']= 'Ploča popisa adresa';
+$l['show_addresslists_panel']= 'Prikaži ploču popisa adresa';
+$l['enabled_cf_tabs']= 'Omogući kartice prilagođenih polja';

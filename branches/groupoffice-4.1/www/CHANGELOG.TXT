@@ -1,3 +1,5 @@
+- Force SSL didn't work anymore
+
 26-04-2013 4.1.59
 - Can't set property error when replying to e-mails with inline images
 
