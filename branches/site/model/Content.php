@@ -76,7 +76,7 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	 */
 	 public function relations() {
 		 return array(
-			'children' => array('type' => self::HAS_MANY, 'model' => 'GO_Site_Model_Content', 'field' => 'parent_id', 'delete' => true, 'findParams' =>GO_Base_Db_FindParams::newInstance()->order(array('sort_order','ptime'))),
+			'children' => array('type' => self::HAS_MANY, 'model' => 'GO_Site_Model_Content', 'field' => 'parent_id', 'delete' => true, 'findParams' =>GO_Base_Db_FindParams::newInstance()->select('*')->order(array('sort_order','ptime'))),
 			'site'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Site_Model_Site", 'field'=>'site_id'),
 			'parent'=>array('type'=>self::BELONGS_TO, 'model'=>"GO_Site_Model_Content", 'field'=>'parent_id')
 		 );
