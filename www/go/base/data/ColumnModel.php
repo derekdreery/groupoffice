@@ -43,13 +43,18 @@ class GO_Base_Data_ColumnModel {
 	 * The public parameters and the customfield parameters are also set.
 	 * The $excludeColumns are meant to give up the column names that need to be excluded in the columnModel.
 	 * 
-	 * @param GO_Base_Db_ActiveRecord $model The models where to get the columns from.
+	 * @param string $modelName The models where to get the columns from.
 	 * @param Array $excludeColumns 
 	 */
-	public function __construct($model=false, $excludeColumns=array(), $includeColumns=array()) {
-		if ($model){
-			$this->setColumnsFromModel($model, $excludeColumns, $includeColumns);
-			$this->_model=$model;
+	public function __construct($modelName=false, $excludeColumns=array(), $includeColumns=array()) {
+		if ($modelName){
+			
+			if(is_string($modelName)){
+				$modelName = GO::getModel($modelName);
+			}
+			
+			$this->setColumnsFromModel($modelName, $excludeColumns, $includeColumns);
+			$this->_model=$modelName;
 		}
 	}
 
