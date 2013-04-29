@@ -1,5 +1,5 @@
 <?php
-abstract class GO_Site_Components_Widget {
+abstract class GO_Site_Components_Widget extends GO_Base_Object {
 	
 	/**
 	 * @var integer the counter for generating implicit IDs.
@@ -10,13 +10,11 @@ abstract class GO_Site_Components_Widget {
 	 */
 	private $_id;
 	
-	public function __get($name) {
-		$getter = 'get'.ucfirst($name);
-			
-		if(method_exists($this,$getter))
-			return $this->$getter();
-		else
-			throw new Exception('Call for unexisting property: '. $name);
+	public function __construct($config=array()) {
+		$ref = new ReflectionClass(get_called_class());
+		foreach($config as $key => $value)
+			if($ref->getProperty ($key)->isPublic())
+				$this->{$key}=$value;
 	}
 	
 	/**
