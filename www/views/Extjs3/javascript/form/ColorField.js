@@ -162,7 +162,8 @@ GO.form.ColorField =  Ext.extend(function(config){
 				this.el.setStyle({
 					'text-indent': '-100px'
 				});
-				if(Ext.isIE7 || Ext.isIE8 || Ext.isIE9) {	// Check this because in IE10 and later this fix is not needed anymore				
+					
+				if(Ext.isIE7) {	// Check this because in IE7 this fix is not needed anymore				
 					this.el.setStyle({
 						'margin-left': '100px'
 					});
