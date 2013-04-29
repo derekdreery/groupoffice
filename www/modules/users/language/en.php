@@ -111,6 +111,8 @@ $l['dashdmy']='Day-Month-Year';
 $l['slashmdy']='Month/Day/Year';
 $l['dotdmy']='Day.Month.Year';
 $l['slashdmy']='Day/Month/Year';
+$l['slashymd']='Year-Month-Day';
+$l['dotymd']='Year.Month.Day';
 
 $l['generatePassword']='Generate password';
 $l['generatedPasswordIs']='The generated password is';
