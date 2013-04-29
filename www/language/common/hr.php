@@ -581,3 +581,10 @@ $l['passwordRequireNum']='Mora sadržavati broj';
 $l['passwordRequireSc']='Mora sadržavati posebni znak';
 $l['passwordUnique']='Mora sadržavati %s jedinstvenih znakova';
 $l['maxAttachmentsSizeExceeded']="Ukupna veličina vaših privitaka ({total}) prelazi maksimalno dopušteno ({max}).";
+
+$l['exportScreen']='Trenutno na ekranu';
+$l['exportAddressbook']="Automatski dodaj unose koje nedostaju u adresaru u";
+$l['exportOrders']='Narudžbe';
+$l['errorTimeout']="Zahtjev je istekao. Poslužitelju je bilo potrebno previše vremena za odgovor. Pokušajte ponovno.";
+$l['showAll']='Prikaži sve';
+$l['multiselectSelected']='odabrano';
