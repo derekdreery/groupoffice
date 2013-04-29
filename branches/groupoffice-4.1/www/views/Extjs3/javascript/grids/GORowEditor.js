@@ -16,7 +16,6 @@ GO.grid.RowEditor = Ext.extend(Ext.ux.grid.RowEditor, {
 			}
 		}, this);
 		return dirty;
-	},
-	
+	}	
 	
 });
