@@ -2,7 +2,7 @@
 
 class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 	protected function allowGuests() {
-		return array('content','thumb','search');
+		return array('content','thumb','search','ajaxwidget');
 	}
 	
 	protected function actionContent($params){
@@ -67,9 +67,15 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 		if(!isset($params['widget_class']))
 			Throw new Exception ('Widget class not given.');
 		
+		if(!isset($params['widget_method']))
+			Throw new Exception('Widget method not given.');
+			
 		$widgetClassName = $params['widget_class'];
-		
-		echo $widgetClassName::getAjaxResponse($params);	
+		$widgetMethod = $params['widget_method'];
+				
+		$response = $widgetClassName::$widgetMethod($params);
+
+		echo $response;
 	}
 	
 	
