@@ -64,18 +64,22 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		return parent::model($className);
 	}
 
-//	This breaks 3.7 to 4.x upgrade
-//	protected function getCacheAttributes() {
-//		
-//		$path = $this->path;
-//		
-//		//Don't cache tickets files because there are permissions issues. Everyone has read access to the types but may not see other peoples files.
-//		if(strpos($path, 'tickets/')===0){
-//			return false;
-//		}
-//		
-//		return array('name'=>$this->name, 'description'=>$path);
-//	}
+	protected function getCacheAttributes() {
+
+		//	Otherwise it would break 3.7 to 4.X upgrade
+		if (GO::router()->getControllerRoute()=='maintenance/upgrade') {
+			return false;
+		}
+		
+		$path = $this->path;
+		
+		//Don't cache tickets files because there are permissions issues. Everyone has read access to the types but may not see other peoples files.
+		if(strpos($path, 'tickets/')===0){
+			return false;
+		}
+		
+		return array('name'=>$this->name, 'description'=>$path);
+	}
 	
 	/**
 	 * Enable this function if you want this model to check the acl's automatically.
