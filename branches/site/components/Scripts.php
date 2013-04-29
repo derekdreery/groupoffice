@@ -80,7 +80,7 @@ class GO_Site_Components_Scripts
 		if(isset($this->gapiScripts[self::POS_HEAD]))
 		{
 			foreach ($this->gapiScripts[self::POS_HEAD] as $gapiScript)
-				$html.=GO_Site_Components_HTML::scriptFile($gapiScript) . "\n";
+				$html.=GO_Site_Components_Html::scriptFile($gapiScript) . "\n";
 		}
 		if (isset($this->scriptFiles[self::POS_HEAD]))
 		{
