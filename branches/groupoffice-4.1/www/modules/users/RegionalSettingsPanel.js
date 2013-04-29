@@ -51,7 +51,9 @@ GO.users.RegionalSettingsPanel = function(config)
 		['-:dmY', GO.users.lang.dashdmy],
 		['/:mdY', GO.users.lang.slashmdy],
 		['/:dmY', GO.users.lang.slashdmy],
-		['.:dmY', GO.users.lang.dotdmy]
+		['.:dmY', GO.users.lang.dotdmy],
+		['-:Ymd', GO.users.lang.slashymd],
+		['.:Ymd', GO.users.lang.dotymd]
 		]
 	});
 	
