@@ -58,7 +58,8 @@ abstract class GO_Base_Object extends GO_Base_Observable{
 			if(GO::config()->debug)
 				throw new Exception("Can't get not existing property '$name' in '".$this->className()."'");
 			else{
-				trigger_error("Can't get not existing property '$name' in '".$this->className()."'", E_USER_NOTICE);
+//				TODO Enable this when we're sure all properties exist
+//				trigger_error("Can't get not existing property '$name' in '".$this->className()."'", E_USER_NOTICE);
 				return null;
 			}
 		}
@@ -74,6 +75,7 @@ abstract class GO_Base_Object extends GO_Base_Observable{
 		}
 	}
 	
+
 	/**
 	 * Magic setter that calls set<NAME> functions in objects
 	 * 
@@ -89,11 +91,19 @@ abstract class GO_Base_Object extends GO_Base_Observable{
 			$this->$setter($value);
 		}else
 		{				
+			
+			$getter = 'get' . $name;
+			if(method_exists($this, $getter)){
+				$errorMsg = "Can't set read only property '$name' in '".$this->className()."'";
+			}else {
+				$errorMsg = "Can't set not existing property '$name' in '".$this->className()."'";
+			}
+			
 			if(GO::config()->debug)
-				throw new Exception("Can't set not existing property '$name' in '".$this->className()."'");
+				throw new Exception($errorMsg);
 			else{
-				trigger_error("Can't set not existing property '$name' in '".$this->className()."'", E_USER_NOTICE);
-				return null;
+//				TODO Enable this when we're sure all properties exist
+//				trigger_error($errorMsg, E_USER_NOTICE);
 			}
 		}
 	}

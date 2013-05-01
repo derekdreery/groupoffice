@@ -292,7 +292,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 *
 	 * @return <type> Call $model->joinAclField to check if the aclfield is joined.
 	 */
-	private function getJoinAclField (){
+	protected function getJoinAclField (){
 		return strpos($this->aclField(),'.')!==false;
 	}
 	
@@ -2032,22 +2032,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if($this->_hasCustomfieldValue($attributes) && $this->customfieldsRecord)
 			$this->customfieldsRecord->setAttributes($attributes, $format);
 		
-		//$related=array();
-		
 		if($format)
 			$attributes = $this->formatInputValues($attributes);
 		
-		$relations = $this->relations();
-		
 		foreach($attributes as $key=>$value){
-			//skip setting the primarykey when not new in debug mode when posting multiple models
-			//22-01-2013: Why were we doing this?
-//			if(GO::config()->debug && !$this->isNew && $key == $this->primaryKey())
-//				continue;
 			
-			//don't set a value for a relation. Otherwise getting the relation won't
-			//work anymore.
-			if(!isset($relations[$key]))
+			//only set writable properties. It should either be a column or setter method.
+			if(isset($this->columns[$key]) || method_exists($this, 'set'.$key))
 				$this->$key=$value;			
 		}		
 	}
@@ -3216,22 +3207,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	private function _getMagicAttribute($name){
 		if(isset($this->_attributes[$name])){
 			return $this->getAttribute($name, self::$attributeOutputMode);
-		}else{
-			
-			$getter = 'get'.ucfirst($name);
-			
-			if(method_exists($this,$getter)){
-				return $this->$getter();
-			}else
-			{
-				if($this->_relationExists($name))	
-					return $this->_getRelated($name);
-				else{					
+		}elseif(isset($this->columns[$name])){
+			//it's a db column but it's not set in the attributes array.
+			return null;
+		}elseif($this->_relationExists($name)){
+				return $this->_getRelated($name);
+		}else{					
 //					if(!isset($this->columns[$name]))
-					return null;		
-				}
-			}
-		}		
+//					return null;		
+			return parent::__get($name);
+		}
 	}
 	/**
 	 * Get a single attibute raw like in the database or formatted using the \
@@ -3282,9 +3267,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$this->setAttribute($name,$value);
 	}
 	
-	public function __isset($name){
-		$var = $this->_getMagicAttribute($name);
-		return isset($var);
+	public function __isset($name){		
+		return isset($this->_attributes[$name]) || parent::__isset($name);
 	}
 	
 	/**
@@ -3372,16 +3356,17 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$this->_attributes[$name]=$value;
 			
 		}else{			
-			$setter = 'set'.$name;
-			
-			if(method_exists($this,$setter)){
-				return $this->$setter($value);
-			}else
-			{				
-				$this->_attributes[$name]=$value;				
-			}
+//			$setter = 'set'.$name;
+//			
+//			if(method_exists($this,$setter)){
+//				return $this->$setter($value);
+//			}else
+//			{				
+//				$this->_attributes[$name]=$value;				
+//			}
+			parent::__set($name, $value);
 		}
-
+//
 		return true;
 	}
 	
