@@ -260,21 +260,29 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	/**
 	 * Get the folder model belonging to this model if it supports it.
-	 * If the folder doesn't exist yet it will create it.
 	 * 
+	 * @param $autoCreate If the folder doesn't exist yet it will create it.
 	 * @return GO_Files_Model_Folder
 	 */
-	public function getFilesFolder(){
+	public function getFilesFolder($autoCreate=true){
 	
 		if(!$this->hasFiles())
 			return false;
 		
 		if(!isset($this->_filesFolder)){		
-			$c = new GO_Files_Controller_Folder();
-			$folder_id = $c->checkModelFolder($this, true, true);
+			
+			if($autoCreate){
+				$c = new GO_Files_Controller_Folder();
+				$folder_id = $c->checkModelFolder($this, true, true);
+			}elseif(empty($this->files_folder_id)){
+				return false;
+			}else
+			{
+				$folder_id = $this->files_folder_id;
+			}
 
 			$this->_filesFolder=GO_Files_Model_Folder::model()->findByPk($folder_id);
-			if(!$this->_filesFolder)
+			if(!$this->_filesFolder && $autoCreate)
 				throw new Exception("Could not create files folder for ".$this->className()." ".$this->pk);
 		}
 		return $this->_filesFolder;		
