@@ -268,3 +268,6 @@ $l['addToAddresslist']='Dodaj u popis adresa %s';
 $l['addToAddresslistPrompt']='Dodat ćete odabrane stavke u popis adresa %s. Želite da ove stavke postoje samo u %s?';
 $l['addAddresslistSuccess']='Stavke su uspješno dodane u popis adresa.';
 $l['addContactsSuccess']= '%i kontakta je uspješno dodano u popis adresa.';
+
+$l['newContact']= "Novi kontakt";
+$l['existingContact']= "Postojeći kontakt";

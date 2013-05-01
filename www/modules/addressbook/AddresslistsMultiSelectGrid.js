@@ -7,6 +7,18 @@ GO.addressbook.AddresslistsMultiSelectGrid = function(config) {
 	config.store = GO.addressbook.readableAddresslistsStore;
 	config.allowNoSelection = true;
 	
+	Ext.apply(config, {
+		bbar: new GO.SmallPagingToolbar({
+			items:[this.searchField = new GO.form.SearchField({
+				store: config.store,
+				width:120,
+				emptyText: GO.lang.strSearch
+			})],
+			store:config.store,
+			pageSize:GO.settings.config.nav_page_size
+		})
+	});
+	
 	GO.addressbook.AddresslistsMultiSelectGrid.superclass.constructor.call(this,config);
 	
 };

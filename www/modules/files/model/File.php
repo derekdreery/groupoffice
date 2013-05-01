@@ -45,6 +45,8 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	
 	
 	public static $deleteInDatabaseOnly=false;
+	
+	private $_permissionLevel;
 
 	/**
 	 * Returns a static model of itself
@@ -489,6 +491,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		$this->saveVersion();
 				
 		$fsFile->move($this->folder->fsFolder,$this->name, $isUploadedFile);
+		$fsFile->setDefaultPermissions();
 		
 		$this->mtime=$fsFile->mtime();	
 		$this->save();
@@ -657,7 +660,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 			$fh = GO_Files_Model_FileHandler::model()->findByPk(
 						array('extension'=>$ex, 'user_id'=>GO::user()->id));
 			
-			if($fh){
+			if($fh && class_exists($fh->cls)){
 				self::$defaultHandlers[$ex]=new $fh->cls;
 			}else{
 				$classes = GO_Files_FilesModule::getAllFileHandlers();

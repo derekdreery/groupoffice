@@ -934,7 +934,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 		$this->clean($sort, 'keyword');
 		//$this->clean($filter, 'keyword');
-		$command = 'UID SORT ('.$sort.') US-ASCII '.$filter."\r\n";
+		$command = 'UID SORT ('.$sort.') UTF-8 '.$filter."\r\n";
 		$this->send_command($command);
 		/*if ($this->disable_sort_speedup) {
 			$speedup = false;
@@ -980,8 +980,8 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		 * Sending charset along doesn't work on iMailserver.
 		 * Without seems to work on different servers.
 		 */
-		$charset = '';
-		//$charset =  'CHARSET UTF-8 ';
+		//$charset = '';
+		$charset =  'CHARSET UTF-8 ';
 		
 		$command = 'UID SEARCH '.$charset.$terms."\r\n";
 		$this->send_command($command);

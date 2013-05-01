@@ -26,6 +26,8 @@ class GO_Email_Model_ImapMessageAttachment extends GO_Email_Model_MessageAttachm
 	public $mailbox;
 	public $uid;
 	
+	private $_tmpDir;
+	
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Every child of this class must override it.

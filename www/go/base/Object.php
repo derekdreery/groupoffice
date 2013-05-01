@@ -55,15 +55,27 @@ abstract class GO_Base_Object extends GO_Base_Observable{
 			return $this->$getter();
 		}else
 		{
-			throw new Exception("Can't get not existing property '$name' in '".$this->className()."'");
+			if(GO::config()->debug)
+				throw new Exception("Can't get not existing property '$name' in '".$this->className()."'");
+			else{
+//				TODO Enable this when we're sure all properties exist
+//				trigger_error("Can't get not existing property '$name' in '".$this->className()."'", E_USER_NOTICE);
+				return null;
+			}
 		}
 	}		
 	
 	public function __isset($name) {
-		$var = $this->__get($name);
-		return isset($var);
+		$getter = 'get' . $name;
+		if (method_exists($this, $getter)) {
+			// property is not null
+			return $this->$getter() !== null;
+		} else {
+			return false;
+		}
 	}
 	
+
 	/**
 	 * Magic setter that calls set<NAME> functions in objects
 	 * 
@@ -79,7 +91,20 @@ abstract class GO_Base_Object extends GO_Base_Observable{
 			$this->$setter($value);
 		}else
 		{				
-			throw new Exception("Can't set not existing property '$name' in '".$this->className()."'");
+			
+			$getter = 'get' . $name;
+			if(method_exists($this, $getter)){
+				$errorMsg = "Can't set read only property '$name' in '".$this->className()."'";
+			}else {
+				$errorMsg = "Can't set not existing property '$name' in '".$this->className()."'";
+			}
+			
+			if(GO::config()->debug)
+				throw new Exception($errorMsg);
+			else{
+//				TODO Enable this when we're sure all properties exist
+//				trigger_error($errorMsg, E_USER_NOTICE);
+			}
 		}
 	}
 	

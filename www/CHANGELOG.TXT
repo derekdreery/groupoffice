@@ -1,3 +1,23 @@
+01-05-2013 4.1.60
+- Added pagination to the Addresslist filter and remove limit from addresslist management panel
+- Reverted saving order statuses to old json.php the OrderStatusController is not finished
+- IE7 Didn't load anymore
+- Force SSL didn't work anymore
+- Hide treeselect slave option
+- Updated Croatian translation
+- Moving in billing catalog didn't refresh grid
+- Markup field in billing dialog showed NaN and did incorrect calculations with some regional settings
+- Added YYYY-MM-DD date format to settings dialog
+
+26-04-2013 4.1.59
+- Can't set property error when replying to e-mails with inline images
+
+25-04-2013 4.1.58
+- Calendar bug with organizer status and custom fields requirement
+- Deformed thumbnail bug
+- Duplicate holidays bug
+- Broken counts in addressbook (ACL table was joined when not necessary)
+
 24-04-2013 4.1.57
 - Problem with custom fields settings tab.
 

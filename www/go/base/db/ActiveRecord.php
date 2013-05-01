@@ -260,21 +260,29 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	/**
 	 * Get the folder model belonging to this model if it supports it.
-	 * If the folder doesn't exist yet it will create it.
 	 * 
+	 * @param $autoCreate If the folder doesn't exist yet it will create it.
 	 * @return GO_Files_Model_Folder
 	 */
-	public function getFilesFolder(){
+	public function getFilesFolder($autoCreate=true){
 	
 		if(!$this->hasFiles())
 			return false;
 		
 		if(!isset($this->_filesFolder)){		
-			$c = new GO_Files_Controller_Folder();
-			$folder_id = $c->checkModelFolder($this, true, true);
+			
+			if($autoCreate){
+				$c = new GO_Files_Controller_Folder();
+				$folder_id = $c->checkModelFolder($this, true, true);
+			}elseif(empty($this->files_folder_id)){
+				return false;
+			}else
+			{
+				$folder_id = $this->files_folder_id;
+			}
 
 			$this->_filesFolder=GO_Files_Model_Folder::model()->findByPk($folder_id);
-			if(!$this->_filesFolder)
+			if(!$this->_filesFolder && $autoCreate)
 				throw new Exception("Could not create files folder for ".$this->className()." ".$this->pk);
 		}
 		return $this->_filesFolder;		
@@ -292,7 +300,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 *
 	 * @return <type> Call $model->joinAclField to check if the aclfield is joined.
 	 */
-	private function getJoinAclField (){
+	protected function getJoinAclField (){
 		return strpos($this->aclField(),'.')!==false;
 	}
 	
@@ -1195,7 +1203,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if($joinCf)			
 			$sql .= "\nLEFT JOIN `".$cfModel->tableName()."` cf ON cf.model_id=t.id ";	
 		  
-		if(isset($aclJoinProps))
+		if(isset($aclJoinProps) && empty($params['ignoreAcl']))
 			$sql .= $this->_appendAclJoin($params, $aclJoinProps);
 			
 		if(isset($params['join']))
@@ -2039,22 +2047,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if($this->_hasCustomfieldValue($attributes) && $this->customfieldsRecord)
 			$this->customfieldsRecord->setAttributes($attributes, $format);
 		
-		//$related=array();
-		
 		if($format)
 			$attributes = $this->formatInputValues($attributes);
 		
-		$relations = $this->relations();
-		
 		foreach($attributes as $key=>$value){
-			//skip setting the primarykey when not new in debug mode when posting multiple models
-			//22-01-2013: Why were we doing this?
-//			if(GO::config()->debug && !$this->isNew && $key == $this->primaryKey())
-//				continue;
 			
-			//don't set a value for a relation. Otherwise getting the relation won't
-			//work anymore.
-			if(!isset($relations[$key]))
+			//only set writable properties. It should either be a column or setter method.
+			if(isset($this->columns[$key]) || method_exists($this, 'set'.$key))
 				$this->$key=$value;			
 		}		
 	}
@@ -3245,22 +3244,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	private function _getMagicAttribute($name){
 		if(isset($this->_attributes[$name])){
 			return $this->getAttribute($name, self::$attributeOutputMode);
-		}else{
-			
-			$getter = 'get'.ucfirst($name);
-			
-			if(method_exists($this,$getter)){
-				return $this->$getter();
-			}else
-			{
-				if($this->_relationExists($name))	
-					return $this->_getRelated($name);
-				else{					
+		}elseif(isset($this->columns[$name])){
+			//it's a db column but it's not set in the attributes array.
+			return null;
+		}elseif($this->_relationExists($name)){
+				return $this->_getRelated($name);
+		}else{					
 //					if(!isset($this->columns[$name]))
-					return null;		
-				}
-			}
-		}		
+//					return null;		
+			return parent::__get($name);
+		}
 	}
 	/**
 	 * Get a single attibute raw like in the database or formatted using the \
@@ -3311,9 +3304,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$this->setAttribute($name,$value);
 	}
 	
-	public function __isset($name){
-		$var = $this->_getMagicAttribute($name);
-		return isset($var);
+	public function __isset($name){		
+		return isset($this->_attributes[$name]) || parent::__isset($name);
 	}
 	
 	/**
@@ -3401,16 +3393,17 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$this->_attributes[$name]=$value;
 			
 		}else{			
-			$setter = 'set'.$name;
-			
-			if(method_exists($this,$setter)){
-				return $this->$setter($value);
-			}else
-			{				
-				$this->_attributes[$name]=$value;				
-			}
+//			$setter = 'set'.$name;
+//			
+//			if(method_exists($this,$setter)){
+//				return $this->$setter($value);
+//			}else
+//			{				
+//				$this->_attributes[$name]=$value;				
+//			}
+			parent::__set($name, $value);
 		}
-
+//
 		return true;
 	}
 	
@@ -3981,11 +3974,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @param string $name The name of the reminder
 	 * @param int $time This needs to be an unixtimestamp
 	 * @param int $user_id The user where this reminder belongs to.
+	 * @param int $vtime The time that will be displayed in the reminder
 	 * @return GO_Base_Model_Reminder 
 	 */
-	public function addReminder($name, $time, $user_id){	
+	public function addReminder($name, $time, $user_id, $vtime=null){	
 	
-		$reminder = GO_Base_Model_Reminder::newInstance($name, $time, $this->className(), $this->pk);
+		$reminder = GO_Base_Model_Reminder::newInstance($name, $time, $this->className(), $this->pk, $vtime);
 		$reminder->setForUser($user_id);
 		
 		return $reminder;

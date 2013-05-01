@@ -119,7 +119,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 				$response = $this->_processTasksDisplay($model, $response);
 		}
 
-		if (!isset($response['data']['files']))
+		if (GO::modules()->files && !isset($response['data']['files']))
 			$response = $this->_processFilesDisplay($model, $response);
 
 		if (GO::modules()->comments)

@@ -342,14 +342,21 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 *	a controller manually in another controller and want to capture the output.
 	 */
 	public function run($action='', $params=array(), $render=true, $checkPermissions=true){
-		try {
-			if(empty($action))
-				$this->_action=$action=strtolower($this->defaultAction);
-			else
-				$this->_action=$action=strtolower($action);
-			
-			$this->_currentAction=$action;
-			
+		
+		if(empty($action))
+			$this->_action=$action=strtolower($this->defaultAction);
+		else
+			$this->_action=$action=strtolower($action);
+
+		$this->_currentAction=$action;
+
+
+		$methodName='action'.$action;
+
+		if(!method_exists($this, $methodName))
+			throw new GO_Base_Exception_NotFound();
+		
+		try {	
 			if($checkPermissions && !$this->_checkPermission($action)){
 				throw new GO_Base_Exception_AccessDenied();
 			}
@@ -358,9 +365,6 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			if($ignoreAcl){		
 				$oldIgnore = GO::setIgnoreAclPermissions(true);				
 			}
-			
-
-			$methodName='action'.$action;
 			
 			$module = $this->getModule();
 			

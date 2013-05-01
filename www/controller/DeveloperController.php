@@ -5,6 +5,14 @@ class GO_Core_Controller_Developer extends GO_Base_Controller_AbstractController
 	protected function allowGuests() {
 		return array('testvobject');
 	}
+	
+	protected function init() {
+		
+		if(!GO::config()->debug)
+			throw new Exception("Developer controller can only be accessed in debug mode");
+		
+		return parent::init();
+	}
 
 	public function actionCreateManyUsers($params) {
 		
@@ -145,6 +153,8 @@ END:VALARM
 END:VEVENT
 END:VCALENDAR';
 		
+	
+		
 		$vobject = GO_Base_VObject_Reader::read($ical_str);
 		
 		$event = new GO_Calendar_Model_Event();
@@ -212,5 +222,30 @@ END:VCALENDAR';
 		}
 		
 	}
-
+	
+	
+	protected function actionCreateEvents($params){
+		
+		$now = GO_Base_Util_Date::clear_time(time());
+		
+		for($i=0;$i<30;$i++){
+			$time = GO_Base_Util_Date::date_add($now, -$i);
+			
+			for($n=0;$n<10;$n++){
+				
+				$event = new GO_Calendar_Model_Event();
+				$event->name = 'test '.$n;
+				
+				$event->description = str_repeat('All work and no play, makes Jack a dull boy. ',100);
+				
+				$event->start_time = GO_Base_Util_Date::date_add($time, 0,0,0,$n+7);
+				$event->end_time = GO_Base_Util_Date::date_add($time, 0,0,0,$n+8);
+				
+				$event->save();
+					
+				
+				
+			}			
+		}		
+	}
 }

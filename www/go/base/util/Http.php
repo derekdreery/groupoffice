@@ -76,6 +76,15 @@ class GO_Base_Util_Http {
 		return $b['name'] == 'MSIE';
 	}
 	
+	/**
+	 * Check if this request SSL secured
+	 * 
+	 * @return boolean
+	 */
+	public static function isHttps(){
+		return !empty($_SERVER['HTTPS']) && strcasecmp($_SERVER['HTTPS'],'off');
+	}
+	
 	
 	/**
 	 * Output the right headers for outputting file data to a browser.
