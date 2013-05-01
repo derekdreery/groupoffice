@@ -204,7 +204,8 @@ class GO_Base_Data_Column {
 
 		if (isset($this->_format)) {
 			$result = '';
-			eval('$result=' . $this->_format . ';');
+			if($this->_format!='')
+				eval('$result=' . $this->_format . ';');
 			return $result;
 		} elseif (isset($model->{$this->_dataindex})) {
 		  if($model instanceof GO_Base_Db_ActiveRecord)
