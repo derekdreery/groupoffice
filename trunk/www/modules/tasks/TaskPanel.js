@@ -50,17 +50,6 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 					'<tr>'+
 						'<td>'+GO.lang.strStatus+':</td>'+
 						'<td>{status_text}</td>'+
-					'</tr>'+
-					'<tr>'+
-						'<td>'+GO.lang['strCtime']+':</td>'+'<td>{ctime}</td>'+
-					'</tr><tr>'+
-						'<td>'+GO.lang['createdBy']+':</td>'+'<td>{username}</td>'+
-					'</tr><tr>'+
-						'<td>'+GO.lang['strMtime']+':</td>'+'<td>{mtime}</td>'+
-					'</tr><tr>'+
-						'<td>'+GO.lang['mUser']+':</td>'+'<td>'+
-							'<tpl if="muser_id">{musername}</tpl>'+
-							'</td>'+
 					'</tr>';
 				
 				if(GO.projects){
@@ -117,6 +106,7 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 			this.template += GO.comments.displayPanelTemplate;
 		}
 
+		this.template += GO.createModifyTemplate;
 
 		this.buttons=[this.continueTaskButton = new Ext.Button({
 			text:GO.tasks.lang.continueTask,

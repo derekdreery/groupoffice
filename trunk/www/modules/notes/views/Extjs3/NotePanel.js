@@ -40,17 +40,6 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 						'<td>{id}</td>'+
 					'</tr>'+
 					'<tr>'+
-						'<td>'+GO.lang['strCtime']+':</td>'+'<td>{ctime}</td>'+
-					'</tr><tr>'+
-						'<td>'+GO.lang['createdBy']+':</td>'+'<td>{username}</td>'+
-					'</tr><tr>'+
-						'<td>'+GO.lang['strMtime']+':</td>'+'<td>{mtime}</td>'+
-					'</tr><tr>'+
-						'<td>'+GO.lang['mUser']+':</td>'+'<td>'+
-							'<tpl if="muser_id">{musername}</tpl>'+
-							'</td>'+
-					'</tr>'+
-					'<tr>'+
 						'<tpl if="GO.util.empty(encrypted)">'+
 							'<td colspan="2">{content}</td>'+
 						'</tpl>'+
@@ -87,6 +76,8 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 		{
 			this.template += GO.comments.displayPanelTemplate;
 		}		
+
+		this.template += GO.createModifyTemplate;
 
 		GO.notes.NotePanel.superclass.initComponent.call(this);
 	},

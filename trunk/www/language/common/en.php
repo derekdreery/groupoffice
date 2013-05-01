@@ -625,3 +625,5 @@ $l['errorTimeout']="The request timed out. The server took too long to respond. 
 $l['showAll']='Show all';
 
 $l['multiselectSelected']='selected';
+
+$l['createModify'] = 'Creation and modification';
