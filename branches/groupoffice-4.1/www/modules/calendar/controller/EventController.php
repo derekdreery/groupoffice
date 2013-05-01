@@ -705,6 +705,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			// Get the calendar model that $calendarIdis used for these events
 			try{
 				$calendar = GO_Calendar_Model_Calendar::model()->findByPk($calendarId);
+				if(!$calendar)
+					throw new GO_Base_Exception_NotFound();
+				
 				$calendarModels[]=$calendar;
 				
 				
