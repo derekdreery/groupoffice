@@ -1,4 +1,6 @@
 01-05-2013 4.1.60
+- Added pagination to the Addresslist filter and remove limit from addresslist management panel
+- Reverted saving order statuses to old json.php the OrderStatusController is not finished
 - IE7 Didn't load anymore
 - Force SSL didn't work anymore
 - Hide treeselect slave option
