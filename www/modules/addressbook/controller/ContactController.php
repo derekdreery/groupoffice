@@ -588,7 +588,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		
 		
 		
-		
+		$userContactIds=array();
 		if(empty($params['addressbook_id'])) {
 			$aclJoinCriteria = GO_Base_Db_FindCriteria::newInstance()->addRawCondition('a.acl_id', 'u.acl_id', '=', false);
 
