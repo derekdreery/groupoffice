@@ -270,7 +270,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		
 		//so that path gets resolved again
 		if($name=='parent_id')
-			unset($this->_path);
+			$this->_path=null;
 		
 		return parent::setAttribute($name, $value, $format);
 	}
@@ -297,7 +297,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			
 		} else {
 			
-			unset($this->_path);
+			$this->_path=null;
 			
 			if(!$this->fsFolder->exists()){				
 

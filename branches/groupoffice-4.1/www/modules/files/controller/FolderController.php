@@ -558,7 +558,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$store = GO_Base_Data_Store::newInstance(GO_Files_Model_Folder::model());
 
 		//set sort aliases
-		$store->getColumnModel()->formatColumn('type', '$model->type',array(),'name');
+		$store->getColumnModel()->formatColumn('type', '',array(),'name');
 		$store->getColumnModel()->formatColumn('size', '"-"',array(),'name');
 		$store->getColumnModel()->formatColumn('locked_user_id', '"0"');
 
@@ -617,7 +617,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 			$store->resetResults();
 
-			$store->getColumnModel()->formatColumn('type', '$model->type',array(),'extension');
+			$store->getColumnModel()->formatColumn('type', '',array(),'extension');
 			$store->getColumnModel()->formatColumn('locked', '$model->isLocked()');
 			$store->getColumnModel()->formatColumn('locked_user_id', '$model->locked_user_id');
 			$store->getColumnModel()->formatColumn('folder_id', '$model->folder_id');

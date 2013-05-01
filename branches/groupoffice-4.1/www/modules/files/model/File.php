@@ -44,6 +44,8 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	
 	
 	public static $deleteInDatabaseOnly=false;
+	
+	private $_permissionLevel;
 
 	/**
 	 * Returns a static model of itself
