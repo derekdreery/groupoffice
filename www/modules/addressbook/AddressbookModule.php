@@ -93,7 +93,7 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		$addressbook->setAttributes(array(
 				'user_id' => 1,
 				'name' => GO::t('prospects','addressbook'),
-				'default_iso_address_format' => $default_language,
+//				'default_iso_address_format' => $default_language,
 				'default_salutation' => GO::t('defaultSalutation','addressbook')
 		));
 		$addressbook->save();
@@ -103,7 +103,7 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		$addressbook->setAttributes(array(
 				'user_id' => 1,
 				'name' => GO::t('suppliers','addressbook'),
-				'default_iso_address_format' => $default_language,
+//				'default_iso_address_format' => $default_language,
 				'default_salutation' => GO::t('defaultSalutation','addressbook')
 		));
 		$addressbook->save();
