@@ -153,32 +153,7 @@ END:VALARM
 END:VEVENT
 END:VCALENDAR';
 		
-		
-$ical_str = 'BEGIN:VCALENDAR
-VERSION:1.0
-BEGIN:VEVENT
-X-FUNAMBOL-FOLDER:DEFAULT_FOLDER
-X-FUNAMBOL-ALLDAY:0
-DTSTART:20111017T110000Z
-DTEND:20111017T123000Z
-X-MICROSOFT-CDO-BUSYSTATUS:BUSY
-CATEGORIES:
-DESCRIPTION;ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:=0D=0A=0D=0ASie sind zu einer Netviewer-Sitzung eingeladen.=0D=0A=0D=0A=0D=0AUm ander Sitzung teilzunehmen, klicken Sie hier: =0D=0Ahttps://get.netviewer.com/meet/join.php?sinr=3D548345&sipw=3Dnv64C11402392BE9452FF460=0D=0A=0D=0A=0D=0A=0D=0AAlternativ k=C3=B6nnen Sie das Netviewer-Teilnehmerprogramm auch direkt starten. =0D=0AGeben Sie dann im Eingangsdialog die folgenden Zugangsdaten ein:=0D=0A      Sitzungsnummer:   548345=0D=0A      Sitzungspasswort: Schliersee=0D=0A=0D=0A=0D=0AAn der parallel stattfindenden Telefonkonferenz nehmen Sie wie folgt teil:=0D=0A=0D=0A01803.665511=0D=0A, Raum 983727=0D=0A=0D=0AAgenda:=0D=0A=0D=0A1. Vorstellung der Unternehmen, der Referenzen, des Angebots und R=C3=BCckfragen =0D=0A2. L=C3=B6sungen und Konzept kurz in Folien =0D=0A3. Live-Pr=C3=A4sentation in Kenntnis der Anforderungen UMG (Server-Administration, Client-UseCases, Ausbau in klinischen Systemen, SAP etc.) =0D=0A4. Diskussion=0D=0A=0D=0A
-LOCATION;ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:Netviewer Meeting
-PRIORITY:1
-STATUS:3
-X-MICROSOFT-CDO-REPLYTIME:20111017T064200Z
-SUMMARY;ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:Kopieren: Intarsys-UMG
-CLASS:PUBLIC
-AALARM:
-RRULE:
-X-FUNAMBOL-BILLINGINFO:
-X-FUNAMBOL-COMPANIES:
-X-FUNAMBOL-MILEAGE:
-X-FUNAMBOL-NOAGING:0
-ATTENDEE;STATUS=NEEDS ACTION;ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:\'Heino Kuhlemann\' <heino.kuhlemann@eHealthOpen.com>
-ATTENDEE;STATUS=NEEDS ACTION;ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:\'Markus Schuster/intarsys\' <mschuster@intarsys.de>
-ATTENDEE;STATUS=NEEDS AC';
+	
 		
 		$vobject = GO_Base_VObject_Reader::read($ical_str);
 		
