@@ -3959,6 +3959,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @param string $name The name of the reminder
 	 * @param int $time This needs to be an unixtimestamp
 	 * @param int $user_id The user where this reminder belongs to.
+	 * @param int $vtime The time that will be displayed in the reminder
 	 * @return GO_Base_Model_Reminder 
 	 */
 	public function addReminder($name, $time, $user_id, $vtime=null){	

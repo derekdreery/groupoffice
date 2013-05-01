@@ -64,6 +64,8 @@ class GO_Base_Model_Reminder extends GO_Base_Db_ActiveRecord {
 	 * @param int $time Unix timestamp
 	 * @param string $model_name Optional model name and model id so that the reminder links to the dialog.
 	 * @param int $model_id
+	 * @param int $vtime The time that will be displayed in the reminder
+	 * 
 	 * @return GO_Base_Model_Reminder 
 	 */
 	public static function newInstance($name, $time, $model_name='', $model_id=0, $vtime=null){
