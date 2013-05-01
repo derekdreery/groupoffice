@@ -56,16 +56,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 					'</tpl>'+
 					'<table><tr><td>ID:</td><td>{id}</td>'+
 						'<td>'+GO.addressbook.lang.addressbook+':</td><td>{addressbook_name}</td>'+'</tr>'+
-						'<tr>'+
-							'<td>'+GO.lang['strCtime']+':</td>'+'<td>{ctime}</td>'+
-							'<td>'+GO.lang['createdBy']+':</td>'+'<td>{username}</td>'+
-						'</tr><tr>'+
-							'<td>'+GO.lang['strMtime']+':</td>'+'<td>{mtime}</td>'+
-							'<td>'+GO.lang['mUser']+':</td>'+'<td>'+
-								'<tpl if="muser_id">{musername}</tpl>'+
-								'</td>'+
-						'</tr>'+
-						'</table>'+
+					'</table>'+
 					'</td>'+
 				'</tr>'+
 				'<tr>'+
@@ -303,7 +294,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 				this.template += GO.calendar.EventTemplate;
 
 			this.template +=GO.linksTemplate;
-	    	
+			
 	  Ext.apply(this.templateConfig,{
 		  addSlashes : function(str)
 			{
@@ -434,6 +425,8 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 		{
 			this.template += GO.comments.displayPanelTemplate;
 		}
+				
+		this.template += GO.createModifyTemplate;
 				
 		this.template+='</div>';		
 			
