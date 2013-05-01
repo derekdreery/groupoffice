@@ -3961,9 +3961,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @param int $user_id The user where this reminder belongs to.
 	 * @return GO_Base_Model_Reminder 
 	 */
-	public function addReminder($name, $time, $user_id){	
+	public function addReminder($name, $time, $user_id, $vtime=null){	
 	
-		$reminder = GO_Base_Model_Reminder::newInstance($name, $time, $this->className(), $this->pk);
+		$reminder = GO_Base_Model_Reminder::newInstance($name, $time, $this->className(), $this->pk, $vtime);
 		$reminder->setForUser($user_id);
 		
 		return $reminder;

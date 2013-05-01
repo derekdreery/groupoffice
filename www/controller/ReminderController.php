@@ -63,14 +63,13 @@ class GO_Core_Controller_Reminder extends GO_Base_Controller_AbstractController 
 			$record['model_name']='';
 		}
 		
-		$now = getdate(time());
-		$today = mktime(0,0,0,$now['mon'],$now['mday'], $now['year']);
-
+		$now = GO_Base_Util_Date::clear_time(time());
+		
 		$time = $model->vtime ? $model->vtime: $model->time;
-		if($time == $today) {
-			$record['local_time']=date(GO::user()->date_format,$time);
+		if(GO_Base_Util_Date::clear_time($time) != $now) {
+			$record['local_time']=date(GO::user()->completeDateFormat,$time);
 		}else {
-			$record['local_time']=GO_Base_Util_Date::get_timestamp($time, true);
+			$record['local_time']=date(GO::user()->time_format,$time);
 		}
 		
 		$record['text'] = htmlspecialchars_decode($record['text']);
