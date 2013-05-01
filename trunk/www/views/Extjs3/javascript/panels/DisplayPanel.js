@@ -19,7 +19,7 @@ GO.DisplayPanel=function(config){
 
 	GO.DisplayPanel.superclass.constructor.call(this, config);
 
-	this.addEvents({bodyclick:true,afterbodyclick:true});
+	this.addEvents({bodyclick:true,afterbodyclick:true,afterload:true});
 }
 
 Ext.extend(GO.DisplayPanel, Ext.Panel,{
@@ -526,6 +526,8 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 			  ]
 		  });
 		}
+		
+		this.fireEvent('afterload',this.model_id);
 		
 	},
 	

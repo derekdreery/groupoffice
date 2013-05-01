@@ -202,10 +202,16 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 				$count = 0;
 
 				while($dupModel = $stmt1->fetch()){
+					
+					$select = 't.id';
+					
+					if(GO::getModel($modelName)->hasFiles()){
+						$select .= ', t.files_folder_id';
+					}
 
 					$findParams = GO_Base_Db_FindParams::newInstance()
 								->ignoreAcl()
-								->select('t.id, '.$checkFieldsStr)
+								->select($select.', '.$checkFieldsStr)
 								->order('id','ASC');
 
 					$criteria=$findParams->getCriteria();
@@ -234,13 +240,14 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 
 						echo '</tr>';
 
-						if(!$first){
+						if(!$first){							
 							if(!empty($params['delete'])){
 
 								if($model->countLinks()){
 									echo '<tr><td colspan="99">Skipped delete because model has links</td></tr>';
-								}else
-								{
+								}elseif(($filesFolder = $model->getFilesFolder(false)) && ($filesFolder->hasFileChildren() || $filesFolder->hasFolderChildren())){
+									echo '<tr><td colspan="99">Skipped delete because model has folder or files</td></tr>';
+								}else{									
 									$model->delete();
 								}
 							}

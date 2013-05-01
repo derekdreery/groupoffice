@@ -104,7 +104,7 @@ Ext.extend(GO.base.QuickEditDialog, GO.Window, {
 			remoteSort: true
 		});
 
-		this.rowEditor = new Ext.ux.grid.RowEditor({
+		this.rowEditor = new GO.grid.RowEditor({
 			saveText: GO.lang['cmdApply'],
 			height: '40px'
 		});

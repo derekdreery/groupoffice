@@ -22,8 +22,8 @@
  * @property string $text
  * @property boolean $manual
  * @property int $snooze_time
- * @property int $vtime
- * @property int $time
+ * @property int $vtime This time will be displayed when showing the reminder
+ * @property int $time This is the time the reminder will be displayed
  * @property string $name
  * @property int $user_id
  * @property int $model_type_id
@@ -64,12 +64,15 @@ class GO_Base_Model_Reminder extends GO_Base_Db_ActiveRecord {
 	 * @param int $time Unix timestamp
 	 * @param string $model_name Optional model name and model id so that the reminder links to the dialog.
 	 * @param int $model_id
+	 * @param int $vtime The time that will be displayed in the reminder
+	 * 
 	 * @return GO_Base_Model_Reminder 
 	 */
-	public static function newInstance($name, $time, $model_name='', $model_id=0){
+	public static function newInstance($name, $time, $model_name='', $model_id=0, $vtime=null){
 		$r = new GO_Base_Model_Reminder();
 		$r->name=	GO_Base_Util_String::cut_string($name, 100);
 		$r->time=$time;
+		$r->vtime=$vtime;
 		$r->model_type_id=GO::getModel($model_name)->modelTypeId();
 		$r->model_id=$model_id;
 		$r->save();

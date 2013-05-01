@@ -132,19 +132,39 @@ class GO_Base_Router{
 		
 		if(!class_exists($controllerClass)){
 			header("HTTP/1.0 404 Not Found");
-      header("Status: 404 Not Found");
+			header("Status: 404 Not Found");
 			
+			if(empty($_SERVER['QUERY_STRING']))
+				$_SERVER['QUERY_STRING']="[EMPTY QUERY_STRING]";
+
+			
+			$errorMsg = "Controller('".$controllerClass."') not found: ".$_SERVER['QUERY_STRING']." ".var_export($_REQUEST, true);
+
 			echo '<h1>404 Not found</h1>';
-			echo '<p>Sorry the URL you requested was not found on this server.</p>';
+			echo '<p>'.$errorMsg.'</p>';
+			
+			
+			trigger_error($errorMsg, E_USER_ERROR);
+		}
+		
+		try{
+			$this->_controller = new $controllerClass;
+			$this->_controller->run($action, $params);		
+		}catch(GO_Base_Exception_NotFound $e){
+			header("HTTP/1.0 404 Not Found");
+			header("Status: 404 Not Found");
 			
 			if(empty($_SERVER['QUERY_STRING']))
 				$_SERVER['QUERY_STRING']="[EMPTY QUERY_STRING]";
 			
-			trigger_error("Controller('".$controllerClass."') not found: ".$_SERVER['QUERY_STRING']." ".var_export($_REQUEST, true), E_USER_WARNING);
-			exit();
+			$errorMsg ="Controller action '".$action." not found in controller class '".$controllerClass."': ".$_SERVER['QUERY_STRING']." ".var_export($_REQUEST, true);
+
+			echo '<h1>404 Not found</h1>';
+			echo '<p>'.$errorMsg.'</p>';
+
+			trigger_error($errorMsg, E_USER_ERROR);
 		}
-						
-		$this->_controller = new $controllerClass;
-		$this->_controller->run($action, $params);		
 	}
+	
+
 }

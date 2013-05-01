@@ -433,7 +433,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$nextTime = $rRule->getNextRecurrence();
 				
 				if($nextTime){
-					$event->addReminder($event->name, $nextTime-$event->reminder, $userId);
+					$event->addReminder($event->name, $nextTime-$event->reminder, $userId, $nextTime);
 				}				
 			}			
 		}
@@ -501,7 +501,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$remindTime = $this->start_time-$this->reminder;
 			if($remindTime>time()){
 				$this->deleteReminders();
-				$this->addReminder($this->name, $remindTime, $this->calendar->user_id);
+				$this->addReminder($this->name, $remindTime, $this->calendar->user_id, $this->start_time);
 			}
 		}	
 		

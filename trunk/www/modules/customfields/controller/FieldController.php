@@ -16,7 +16,7 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 
 				foreach ($classes as $class) {
 
-					if ($class->isSubclassOf('GO_Customfields_Customfieldtype_Abstract')) {
+					if ($class->isSubclassOf('GO_Customfields_Customfieldtype_Abstract') && $class->getName()!='GO_Customfields_Customfieldtype_TreeselectSlave') {
 
 						$className = $class->getName();
 						$t = new $className;

@@ -697,11 +697,17 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		// Set the count of the total activated calendars in the response.
 		$response['calendar_count'] = count($calendars);
 
+		$holidaysAdded=false;
+		$bdaysAdded=false;
+		
 		$calendarModels=array();
 		foreach($calendars as $calendarId){
 			// Get the calendar model that $calendarIdis used for these events
 			try{
 				$calendar = GO_Calendar_Model_Calendar::model()->findByPk($calendarId);
+				if(!$calendar)
+					throw new GO_Base_Exception_NotFound();
+				
 				$calendarModels[]=$calendar;
 				
 				
@@ -738,11 +744,15 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				}
 				
 				if(empty($params['events_only'])){
-					if($calendar->show_bdays && GO::modules()->addressbook){
+					if(!$bdaysAdded && $calendar->show_bdays && GO::modules()->addressbook){
+						$bdaysAdded=true;
 						$response = $this->_getBirthdayResponseForPeriod($response,$calendar,$startTime,$endTime);
 					}
 
-					$response = $this->_getHolidayResponseForPeriod($response,$calendar,$startTime,$endTime);
+					if (!$holidaysAdded && !empty($calendar->show_holidays)) {
+						$holidaysAdded=true;
+						$response = $this->_getHolidayResponseForPeriod($response,$calendar,$startTime,$endTime);
+					}
 
 				}
 				
@@ -911,20 +921,20 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		if(!$calendar->user)
 			return $response;
 		
-		if (!empty($calendar->show_holidays)) {
-			$holidays = GO_Base_Model_Holiday::model()->getHolidaysInPeriod($startTime, $endTime, $calendar->user->language);
+		
+		$holidays = GO_Base_Model_Holiday::model()->getHolidaysInPeriod($startTime, $endTime, $calendar->user->language);
 
-			while($holiday = $holidays->fetch()){ 
-				$resultCount++;
-				$record = $holiday->getJson();
-				$record['calendar_id']=$calendar->id;
-				$record['id']=$response['count']++;
-				$response['results'][$this->_getIndex($response['results'],strtotime($holiday->date))] = $record;
-			}
-
-			// Set the count of the holidays
-			$response['count_holidays_only'] = $resultCount;
+		while($holiday = $holidays->fetch()){ 
+			$resultCount++;
+			$record = $holiday->getJson();
+			$record['calendar_id']=$calendar->id;
+			$record['id']=$response['count']++;
+			$response['results'][$this->_getIndex($response['results'],strtotime($holiday->date))] = $record;
 		}
+
+		// Set the count of the holidays
+		$response['count_holidays_only'] = $resultCount;
+
 		
 		return $response;
 	}

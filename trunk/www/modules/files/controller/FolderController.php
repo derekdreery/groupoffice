@@ -560,7 +560,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$store = GO_Base_Data_Store::newInstance(GO_Files_Model_Folder::model());
 
 		//set sort aliases
-		$store->getColumnModel()->formatColumn('type', '$model->type',array(),'name');
+		$store->getColumnModel()->formatColumn('type', '',array(),'name');
 		$store->getColumnModel()->formatColumn('size', '"-"',array(),'name');
 		$store->getColumnModel()->formatColumn('locked_user_id', '"0"');
 
@@ -619,7 +619,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 			$store->resetResults();
 
-			$store->getColumnModel()->formatColumn('type', '$model->type',array(),'extension');
+			$store->getColumnModel()->formatColumn('type', '',array(),'extension');
 			$store->getColumnModel()->formatColumn('locked', '$model->isLocked()');
 			$store->getColumnModel()->formatColumn('locked_user_id', '$model->locked_user_id');
 			$store->getColumnModel()->formatColumn('folder_id', '$model->folder_id');
@@ -1004,12 +1004,12 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		chdir($workingPath);
 
 		for($i=0;$i<count($sources);$i++){
-			$sources[$i]=str_replace($workingFolder->path.'/', '', $sources[$i]);
+			$sources[$i]=  escapeshellarg(str_replace($workingFolder->path.'/', '', $sources[$i]));
 		}
 
 		$archiveFile = new GO_Base_Fs_File(GO::config()->file_storage_path.$destinationFolder->path . '/' . $params['archive_name'] . '.zip');
 
-		$cmd = GO::config()->cmd_zip . ' -r "' . $archiveFile->path() . '" "' . implode('" "', $sources) . '"';
+		$cmd = GO::config()->cmd_zip . ' -r ' . escapeshellarg($archiveFile->path()). ' ' . implode(' ', $sources);
 
 		exec($cmd, $output);
 
@@ -1042,23 +1042,23 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$file = new GO_Base_Fs_File(GO::config()->file_storage_path.$filePath);
 			switch(strtolower($file->extension())) {
 				case 'zip':
-					$cmd = GO::config()->cmd_unzip.' -n "'.$file->path().'"';
+					$cmd = GO::config()->cmd_unzip.' -n '.escapeshellarg($file->path());
 					break;
 				case 'gz':
 				case 'tgz':
-					$cmd = GO::config()->cmd_tar.' zxf "'.$file->path().'"';
+					$cmd = GO::config()->cmd_tar.' zxf '.escapeshellarg($file->path());
 					break;
 
 				case 'tar':
-					$cmd = GO::config()->cmd_tar.' xf "'.$file->path().'"';
+					$cmd = GO::config()->cmd_tar.' xf '.escapeshellarg($file->path());
 					break;
 			}
 		}
 		exec($cmd, $output, $ret);
 
-		if($ret>1)
+		if($ret!=0)
 		{
-			throw new Exception(implode("\n",$output));
+			throw new Exception("Could not decompress\n".implode("\n",$output));
 		}
 
 		$workingFolder->syncFilesystem(true);
