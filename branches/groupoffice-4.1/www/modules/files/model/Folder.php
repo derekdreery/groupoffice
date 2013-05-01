@@ -142,7 +142,11 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			$this->_path = $this->name;
 			$currentFolder = $this;
 			
-			$ids=array($this->id);
+			
+			$ids=array();
+			
+			if(!empty($this->id))
+				$ids[]=$this->id;
 			
 			while ($currentFolder = $currentFolder->parent) {				
 				
@@ -185,13 +189,11 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	
 	
 	private function _checkParentId(){
-		if($this->isModified("parent_id")){
-			$ids=array($this->id);
-			
+		if($this->isModified("parent_id") && !empty($this->id)){
 			$currentFolder=$this;
 			
 			while ($currentFolder = $currentFolder->parent) {				
-				if(in_array($currentFolder->id, $ids)){					
+				if($currentFolder->id==$this->id){					
 					$this->setValidationError ("parent_id", "Can not move folder into this folder because it's a child");
 					break;
 				}
