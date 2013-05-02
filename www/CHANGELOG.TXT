@@ -1,6 +1,12 @@
-01-05-2013 4.1.60
+- MoreData tag wasn't handled by Syncml server which caused problems with Funambol
+  Outlook sync when syncing lots of data.
+- Wrong display of reminder time
+- Use utf-8 charset for searching in IMAP
+- IMAP and LDAP authentication did not log validation errors
 - Added pagination to the Addresslist filter and remove limit from addresslist management panel
 - Reverted saving order statuses to old json.php the OrderStatusController is not finished
+
+01-05-2013 4.1.60
 - IE7 Didn't load anymore
 - Force SSL didn't work anymore
 - Hide treeselect slave option
