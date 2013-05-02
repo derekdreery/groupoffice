@@ -65,7 +65,9 @@ class GO_Imapauth_Authenticator {
 					GO::debug('IMAPAUTH: IMAP password has been changed. Updating Group-Office database');
 
 					$user->password = $this->imapPassword;
-					$user->save();
+					if(!$user->save()){
+						throw new Exception("Could not save user: ".implode("\n", $user->getValidationErrors()));
+					}
 				}
 				$this->user = $user;
 
@@ -109,7 +111,9 @@ class GO_Imapauth_Authenticator {
 				$account->smtp_username = $imapUsername;
 				$account->smtp_password = $password;
 			}
-			$account->save();
+			if(!$account->save()){
+				throw new Exception("Could not save e-mail account: ".implode("\n", $account->getValidationErrors()));				
+			}
 		}
 		
 		return $foundAccount;
@@ -151,6 +155,9 @@ class GO_Imapauth_Authenticator {
 			$model = new GO_Email_Model_Account();
 			$model->setAttributes($account);
 			$model->save();
+			if(!$model->save()){
+				throw new Exception("Could not save e-mail account: ".implode("\n", $model->getValidationErrors()));				
+			}
 			$model->addAlias($user->email, $user->name);
 			
 		}else

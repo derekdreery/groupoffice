@@ -63,7 +63,9 @@ class GO_Imapauth_ImapauthModule extends GO_Base_Module {
 
 						try {
 
-							$user->save();
+							if(!$user->save()){
+								throw new Exception("Could not save user: ".implode("\n", $user->getValidationErrors()));
+							}
 							if (!empty($ia->config['groups']))
 								$user->addToGroups($ia->config['groups']);
 							
