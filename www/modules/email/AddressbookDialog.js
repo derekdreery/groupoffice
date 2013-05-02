@@ -226,6 +226,11 @@ GO.email.AddressbookDialog = function(config) {
 		paging : true,
 		border : false,
 		store : this.userGroupsStore,
+		tbar : [GO.lang['strSearch'] + ': ', ' ',
+			new GO.form.SearchField({
+			store : this.userGroupsStore,
+			width : 320
+		})],
 		view : new Ext.grid.GridView({
 			autoFill : true,
 			forceFit : true
