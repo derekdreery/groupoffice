@@ -1,3 +1,4 @@
+- Added filter bar for groups in Email composer address book
 - MoreData tag wasn't handled by Syncml server which caused problems with Funambol
   Outlook sync when syncing lots of data.
 - Wrong display of reminder time
