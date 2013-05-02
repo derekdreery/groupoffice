@@ -83,7 +83,7 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 		{
 			$module = new GO_Base_Model_Module();
 			$module->id=$moduleId;
-			$module->setAttribute('name',$module->moduleManager->name());			
+			
 			
 			$module->moduleManager->checkDependenciesForInstallation($modules);	
 			
