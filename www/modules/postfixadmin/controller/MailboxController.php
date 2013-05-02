@@ -4,9 +4,6 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 
 	protected $model = 'GO_Postfixadmin_Model_Mailbox';
 	
-	protected function remoteComboFields() {
-		return array('user_id'=>'$model->user->name');
-	}
 	
 	protected function allowGuests() {
 		return array("cacheusage");
