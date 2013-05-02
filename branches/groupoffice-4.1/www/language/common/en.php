@@ -624,3 +624,6 @@ $l['errorTimeout']="The request timed out. The server took too long to respond. 
 $l['showAll']='Show all';
 
 $l['multiselectSelected']='selected';
+
+$l['selectMonthlyDay'] = 'Please select a week day for the monthly recurrence.';
+$l['selectWeekOfMonth'] = 'Please select the number of the week day for the monthly recurrence.';
