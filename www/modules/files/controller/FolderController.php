@@ -142,13 +142,13 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			case 'root':
 				if (!empty($params['root_folder_id'])) {
 					$folder = GO_Files_Model_Folder::model()->findByPk($params['root_folder_id']);
-					$folder->checkFsSync();
+//					$folder->checkFsSync();
 					$node = $this->_folderToNode($folder, $expandFolderIds, true, $showFiles);
 					$response[] = $node;
 				} else {
 					$folder = GO_Files_Model_Folder::model()->findHomeFolder(GO::user());
 
-					$folder->checkFsSync();
+//					$folder->checkFsSync();
 
 					$node = $this->_folderToNode($folder, $expandFolderIds, true, $showFiles);
 					$node['text'] = GO::t('personal', 'files');
@@ -198,7 +198,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 					
 					if(GO::user()->isAdmin()){
 						$logFolder = GO_Files_Model_Folder::model()->findByPath('log', true);
-						$logFolder->syncFilesystem();
+//						$logFolder->syncFilesystem();
 						
 						$node = $this->_folderToNode($logFolder, $expandFolderIds, false, $showFiles);
 						$node['text']=GO::t('logFiles');
@@ -216,10 +216,10 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				if(!$folder)
 					return false;
 				
-				$folder->checkFsSync();
+//				$folder->checkFsSync();
 
 				$stmt = $folder->getSubFolders(GO_Base_Db_FindParams::newInstance()
-							->limit(100)//not so nice hardcoded limit
+							->limit(200)//not so nice hardcoded limit
 							->order('name','ASC'));
 
 				while ($subfolder = $stmt->fetch()) {
