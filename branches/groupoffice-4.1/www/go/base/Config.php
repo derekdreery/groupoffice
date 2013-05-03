@@ -931,7 +931,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.1.60';
+	var $version = '4.1.61';
 	
 	/**
 	 * Modification date
