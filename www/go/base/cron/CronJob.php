@@ -287,7 +287,7 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 	
 	protected function beforeSave() {
 		
-		$this->params = $this->_paramsToJson();
+//		$this->params = $this->_paramsToJson();
 		
 		$this->nextrun = $this->_calculateNextRun();
 		GO::debug('CRONJOB ('.$this->name.') NEXTRUN : '.$this->getAttribute('nextrun','formatted'));
@@ -296,30 +296,30 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 	
 	
 	
-	protected function afterLoad() {
-		$this->paramsToSet = $this->_jsonToParams($this->params);
-		return parent::afterLoad();
-	}
+//	protected function afterLoad() {
+//		$this->paramsToSet = $this->_jsonToParams($this->params);
+//		return parent::afterLoad();
+//	}
 	
-	/**
-	 * Convert the PUBLIC parameters of this object to a Json string
-	 * ($this->params)
-	 * 
-	 * @return string
-	 */
-	private function _paramsToJson(){
-		$propArray = array();
-
-		$publicProperties = $this->_getAdditionalJobProperties();
-		
-		foreach($publicProperties as $property){
-			
-			if(isset($this->paramsToSet) && key_exists($property['name'],$this->paramsToSet))
-				$propArray[$property['name']] = $this->paramsToSet[$property['name']];
-		}
-		
-		return json_encode($propArray);
-	}
+//	/**
+//	 * Convert the PUBLIC parameters of this object to a Json string
+//	 * ($this->params)
+//	 * 
+//	 * @return string
+//	 */
+//	private function _paramsToJson(){
+//		$propArray = array();
+//
+//		$publicProperties = $this->_getAdditionalJobProperties();
+//		
+//		foreach($publicProperties as $property){
+//			
+//			if(isset($this->paramsToSet) && key_exists($property['name'],$this->paramsToSet))
+//				$propArray[$property['name']] = $this->paramsToSet[$property['name']];
+//		}
+//		
+//		return json_encode($propArray);
+//	}
 	
 	private function _getAdditionalJobProperties(){
 		
@@ -346,30 +346,30 @@ class GO_Base_Cron_CronJob extends GO_Base_Db_ActiveRecord {
 		return $returnProperties;
 	}
 	
-	/**
-	 * Convert a Json string to PUBLIC parameters of this object
-	 * ($this->params)
-	 * 
-	 * @param String $jsonString
-	 */
-	private function _jsonToParams($jsonString = ''){
-		
-		$propArray = array();
-		$jsonProperties = json_decode($jsonString);
-		$publicProperties = $this->_getAdditionalJobProperties();
- 
-		foreach($publicProperties as $property){
-			$propArray[$property['name']] = '';
-			if(!empty($jsonProperties[$property['name']])){
-				$propArray[$property['name']] = $jsonProperties[$property['name']];
-			} else {
-				if(!empty($property['defaultValue']))
-					$propArray[$property['name']] = $property['defaultValue'];
-			}
-		}
-		
-		return $propArray;
-	}
+//	/**
+//	 * Convert a Json string to PUBLIC parameters of this object
+//	 * ($this->params)
+//	 * 
+//	 * @param String $jsonString
+//	 */
+//	private function _jsonToParams($jsonString = ''){
+//		
+//		$propArray = array();
+//		$jsonProperties = json_decode($jsonString);
+//		$publicProperties = $this->_getAdditionalJobProperties();
+// 
+//		foreach($publicProperties as $property){
+//			$propArray[$property['name']] = '';
+//			if(!empty($jsonProperties[$property['name']])){
+//				$propArray[$property['name']] = $jsonProperties[$property['name']];
+//			} else {
+//				if(!empty($property['defaultValue']))
+//					$propArray[$property['name']] = $property['defaultValue'];
+//			}
+//		}
+//		
+//		return $propArray;
+//	}
 	
 	/**
 	 * This function needs to be called at the START of the run of this cronjob.
