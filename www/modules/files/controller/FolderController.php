@@ -947,7 +947,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		if ($folder) {
 			$model->files_folder_id = $this->_checkExistingModelFolder($model, $folder, $mustExist);
 
-			if ($saveModel)
+			if ($saveModel && $model->isModified())
 				$model->save(true);
 		}elseif (isset($model->acl_id) || $mustExist) {
 			//this model has an acl_id. So we should create a shared folder with this acl.
@@ -956,7 +956,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			//otherwise it will be created when first accessed.
 			$model->files_folder_id = $this->_createNewModelFolder($model);
 
-			if ($saveModel)
+			if ($saveModel && $model->isModified())
 				$model->save(true);
 		}
 
