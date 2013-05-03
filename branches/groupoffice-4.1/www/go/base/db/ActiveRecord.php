@@ -2047,7 +2047,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		foreach($attributes as $key=>$value){
 			
 			//only set writable properties. It should either be a column or setter method.
-			if(isset($this->columns[$key]) || method_exists($this, 'set'.$key))
+			if(isset($this->columns[$key]) || property_exists($this, $key) || method_exists($this, 'set'.$key))
 				$this->$key=$value;			
 		}		
 	}
