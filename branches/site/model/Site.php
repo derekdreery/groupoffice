@@ -47,15 +47,30 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 
 	private $_cf=array();	
 	
-	public function __get($name) {
-		$val = parent::__get($name);
+	private static $fields;
+	
+	protected function afterLoad() {
 		
-		if($val === null && !$this->getColumn($name) && !$this->isNew){
-			$val = $this->getCustomFieldValueByName($name);
+		//load cf
+		if(!isset(self::$fields)){
+			$fields = GO_Customfields_Model_Field::model()->findByModel('GO_Site_Model_Site', false);
+
+			foreach($fields as $field){
+				self::$fields[$field->name]= $field;
+			}
 		}
+			
 		
-		return $val;
-		
+		return parent::afterLoad();
+	}
+	
+	public function __get($name) {
+		if(isset(self::$fields[$name])){
+			return $this->getCustomFieldValueByName($name);
+		}  else {
+			return parent::__get($name);
+		}
+
 	}
 
 	/*
@@ -225,16 +240,15 @@ ServerName www.giralisgroep.nl
 		';
 	}
 	
-	public function getCustomFieldValueByName($cfName){
+	 public function getCustomFieldValueByName($cfName){
 		 
-		if(!isset($this->_cf[$cfName])){
-			$id = $this->getCustomfieldsRecord()->getColIdByName($cfName);
+		if(!key_exists($cfName, $this->_cf)){
+			
+//			$column = $this->getCustomfieldsRecord()->getColumn(self::$fields[$cfName]->columnName());
+//			if(!$column)
+//				return null;
 
-			$column = $this->getCustomfieldsRecord()->getColumn('col_'.$id);
-			if(!$column)
-				return null;
-
-			$value = $this->getCustomfieldsRecord()->{'col_'.$id};
+			$value = $this->getCustomfieldsRecord()->{self::$fields[$cfName]->columnName()};
 
 			$this->_cf[$cfName]=$value;
 
