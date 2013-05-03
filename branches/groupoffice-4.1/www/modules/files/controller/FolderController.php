@@ -884,7 +884,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				$folder->systemSave = true;
 				$folder->visible = 0;
 				$folder->readonly = 1;
-				$folder->save(true);
+				if($folder->isModified())
+					$folder->save(true);
 			}
 		}else
 		{
@@ -897,7 +898,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$folder->systemSave = true;
 			$folder->visible = 0;
 			$folder->readonly = 1;
-			$folder->save(true);
+			if($folder->isModified())
+				$folder->save(true);
 		}
 
 		return $folder->id;
