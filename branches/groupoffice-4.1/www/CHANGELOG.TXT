@@ -1,5 +1,7 @@
+03-05-2013 4.1.62
 - Optimized shared folder listing by caching the shares.
 - Added mtime to ACL's so we can detect changes.
+- Ticket system did not send mails
 
 03-05-2013 4.1.61
 - Project folders were moving to an invalid folder location
