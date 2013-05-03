@@ -179,7 +179,9 @@ class GO_Ldapauth_Authenticator {
 					GO::debug('LDAPAUTH: Profile updating from LDAP is disabled');
 				}
 
-				$user->save();
+				if(!$user->save()){
+					throw new Exception("Could not save user: ".implode("\n", $user->getValidationErrors()));
+				}
 			} else {
 				GO::debug("LDAPAUTH: Group-Office user does not exist. Attempting to create it.");
 				GO::debug($attr);
@@ -189,7 +191,9 @@ class GO_Ldapauth_Authenticator {
 				$user->cutAttributeLengths();
 				$user->password = $password;
 
-				$user->save();
+				if(!$user->save()){
+					throw new Exception("Could not save user: ".implode("\n", $user->getValidationErrors()));
+				}
 				if (!empty(GO::config()->ldap_groups))
 					$user->addToGroups(explode(',', GO::config()->ldap_groups));
 

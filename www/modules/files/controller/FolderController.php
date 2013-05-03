@@ -12,6 +12,11 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		else
 			return parent::allowGuests();
 	}
+	
+	
+	protected function actionCache($params){
+		GO_Files_Model_SharedRootFolder::model()->rebuildCache(GO::user()->id);
+	}
 
 	protected function actionSyncFilesystem($params){	
 		
@@ -80,8 +85,25 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	}
 
 	private function _buildSharedTree($expandFolderIds){
+		
+		
+		GO_Files_Model_SharedRootFolder::model()->rebuildCache(GO::user()->id);
+		
 		$response=array();
-		$shares =GO_Files_Model_Folder::model()->getTopLevelShares(GO_Base_Db_FindParams::newInstance()->limit(100));
+		
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->joinRelation('sharedRootFolders')
+						->ignoreAcl()
+						->order('name','ASC')
+						->limit(200);
+		
+		$findParams->getCriteria()
+					->addCondition('user_id', GO::user()->id,'=','sharedRootFolders');
+		
+		
+		
+		$shares = GO_Files_Model_Folder::model()->find($findParams);
 		foreach($shares as $folder){
 			$response[]=$this->_folderToNode($folder, $expandFolderIds, false);
 		}
@@ -120,13 +142,13 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			case 'root':
 				if (!empty($params['root_folder_id'])) {
 					$folder = GO_Files_Model_Folder::model()->findByPk($params['root_folder_id']);
-					$folder->checkFsSync();
+//					$folder->checkFsSync();
 					$node = $this->_folderToNode($folder, $expandFolderIds, true, $showFiles);
 					$response[] = $node;
 				} else {
 					$folder = GO_Files_Model_Folder::model()->findHomeFolder(GO::user());
 
-					$folder->checkFsSync();
+//					$folder->checkFsSync();
 
 					$node = $this->_folderToNode($folder, $expandFolderIds, true, $showFiles);
 					$node['text'] = GO::t('personal', 'files');
@@ -176,7 +198,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 					
 					if(GO::user()->isAdmin()){
 						$logFolder = GO_Files_Model_Folder::model()->findByPath('log', true);
-						$logFolder->syncFilesystem();
+//						$logFolder->syncFilesystem();
 						
 						$node = $this->_folderToNode($logFolder, $expandFolderIds, false, $showFiles);
 						$node['text']=GO::t('logFiles');
@@ -194,10 +216,10 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				if(!$folder)
 					return false;
 				
-				$folder->checkFsSync();
+//				$folder->checkFsSync();
 
 				$stmt = $folder->getSubFolders(GO_Base_Db_FindParams::newInstance()
-							->limit(100)//not so nice hardcoded limit
+							->limit(200)//not so nice hardcoded limit
 							->order('name','ASC'));
 
 				while ($subfolder = $stmt->fetch()) {
@@ -497,14 +519,36 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 //      $store->setStatement($stmt);
 //
 //      $response = $store->getData();
+		
+		
+//		$fp = GO_Base_Db_FindParams::newInstance()->limit(100);
+		
+		//$fp = GO_Base_Db_FindParams::newInstance()->calcFoundRows();
+		
+		$cm = new GO_Base_Data_ColumnModel('GO_Files_Model_Folder');
+		$cm->setFormatRecordFunction(array($this, 'formatListRecord'));
+		
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->joinRelation('sharedRootFolders')
+						->ignoreAcl()
+						->order('name','ASC');
+		
+		$findParams->getCriteria()
+					->addCondition('user_id', GO::user()->id,'=','sharedRootFolders');
+		
+		
+		$store = new GO_Base_Data_DbStore('GO_Files_Model_Folder',$cm, $params, $findParams);
+		$response = $store->getData();
 		$response['permission_level']=GO_Base_Model_Acl::READ_PERMISSION;
-		$response['results']=array();
-		$shares =GO_Files_Model_Folder::model()->getTopLevelShares(GO_Base_Db_FindParams::newInstance()->limit(100));
-		foreach($shares as $folder){
-			$record=$folder->getAttributes("html");
-			$record = $this->formatListRecord($record, $folder, false);
-			$response['results'][]=$record;
-		}
+//		$response['results']=array();
+//		$shares =GO_Files_Model_Folder::model()->getTopLevelShares($fp);
+//		foreach($shares as $folder){
+//			$record=$folder->getAttributes("html");
+//			$record = $this->formatListRecord($record, $folder, false);
+//			$response['results'][]=$record;
+//		}
+//		$response['total']=$shares->foundRows;
 		return $response;
 	}
 
@@ -842,7 +886,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				$folder->systemSave = true;
 				$folder->visible = 0;
 				$folder->readonly = 1;
-				$folder->save(true);
+				if($folder->isModified())
+					$folder->save(true);
 			}
 		}else
 		{
@@ -855,7 +900,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$folder->systemSave = true;
 			$folder->visible = 0;
 			$folder->readonly = 1;
-			$folder->save(true);
+			if($folder->isModified())
+				$folder->save(true);
 		}
 
 		return $folder->id;
@@ -903,7 +949,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		if ($folder) {
 			$model->files_folder_id = $this->_checkExistingModelFolder($model, $folder, $mustExist);
 
-			if ($saveModel)
+			if ($saveModel && $model->isModified())
 				$model->save(true);
 		}elseif (isset($model->acl_id) || $mustExist) {
 			//this model has an acl_id. So we should create a shared folder with this acl.
@@ -912,7 +958,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			//otherwise it will be created when first accessed.
 			$model->files_folder_id = $this->_createNewModelFolder($model);
 
-			if ($saveModel)
+			if ($saveModel && $model->isModified())
 				$model->save(true);
 		}
 

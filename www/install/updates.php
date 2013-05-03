@@ -338,4 +338,6 @@ $updates['201303281655'][] ="TRUNCATE TABLE `go_holidays`";
 $updates['201303281655'][] ="ALTER TABLE  `go_holidays` CHANGE  `date`  `date` DATE NOT NULL";
 $updates['201304111000'][] ="TRUNCATE TABLE `go_holidays`";
 
-$updates['201304231330'][]="ALTER TABLE `go_users` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";
+$updates['201305031458'][] = "ALTER TABLE  `go_acl_items` ADD  `mtime` INT NOT NULL DEFAULT  '0'";
+
+$updates['201305031735'][]="ALTER TABLE `go_users` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";

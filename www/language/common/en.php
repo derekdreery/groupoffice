@@ -627,3 +627,6 @@ $l['showAll']='Show all';
 $l['multiselectSelected']='selected';
 
 $l['createModify'] = 'Creation and modification';
+
+$l['selectMonthlyDay'] = 'Please select a week day for the monthly recurrence.';
+$l['selectWeekOfMonth'] = 'Please select the number of the week day for the monthly recurrence.';
