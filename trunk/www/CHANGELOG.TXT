@@ -1,6 +1,22 @@
-01-05-2013 4.1.60
+03-05-2013 4.1.62
+- Optimized shared folder listing by caching the shares.
+- Added mtime to ACL's so we can detect changes.
+- Ticket system did not send mails
+
+03-05-2013 4.1.61
+- Project folders were moving to an invalid folder location
+- Added filter bar for groups in Email composer address book
+- MoreData tag wasn't handled by Syncml server which caused problems with Funambol
+  Outlook sync when syncing lots of data.
+- Wrong display of reminder time
+- Use utf-8 charset for searching in IMAP
+- IMAP and LDAP authentication did not log validation errors
 - Added pagination to the Addresslist filter and remove limit from addresslist management panel
 - Reverted saving order statuses to old json.php the OrderStatusController is not finished
+- E-mail expunges mailbox when loading messages
+- License error when ticket page is used on different domain with CMS
+
+01-05-2013 4.1.60
 - IE7 Didn't load anymore
 - Force SSL didn't work anymore
 - Hide treeselect slave option

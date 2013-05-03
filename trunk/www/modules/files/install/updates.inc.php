@@ -151,5 +151,11 @@ $updates["201301281613"][]='CREATE TABLE IF NOT EXISTS `fs_filehandlers` (
 
 $updates["201304030859"][]='ALTER TABLE  `fs_files` CHANGE  `size`  `size` BIGINT NOT NULL';
 
-$updates['201304231330'][]="ALTER TABLE `fs_files` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";
-$updates['201304231330'][]="ALTER TABLE `fs_folders` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";
+$updates["201305031326"][]='CREATE TABLE IF NOT EXISTS `fs_shared_root_folders` (
+  `user_id` int(11) NOT NULL,
+  `folder_id` int(11) NOT NULL,
+  PRIMARY KEY (`user_id`,`folder_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;';
+
+$updates['201305031726'][]="ALTER TABLE `fs_files` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";
+$updates['201305031726'][]="ALTER TABLE `fs_folders` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";

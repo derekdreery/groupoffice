@@ -595,6 +595,10 @@ $l['sortOrderError']="Sorry, u kunt niet op deze kolom sorteren. Klik aub. op ee
 
 $l['maxAttachmentsSizeExceeded']="De totale bestandsgrootte van uw bijlagen ({total}) is groter het maximum ({max}).";
 
+
 $l['showAll']='Toon alles';
 
 $l['createModify'] = 'Gemaakt en gewijzigd';
+
+$l['selectMonthlyDay'] = 'Kies a.u.b. een weekdag voor de maandelijkse herhaling.';
+$l['selectWeekOfMonth'] = 'Kies a.u.b. het nummer van weekdag van de maand voor de maandelijkse herhaling.';

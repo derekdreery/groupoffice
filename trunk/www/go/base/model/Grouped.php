@@ -28,6 +28,8 @@
 
 class GO_Base_Model_Grouped extends GO_Base_Model {
 
+	
+	private $_attributes=array();
 	/**
 	 * 
 	 * @param string $className
@@ -37,23 +39,29 @@ class GO_Base_Model_Grouped extends GO_Base_Model {
 		return parent::model($className);
 	}
 	
+	public function __set($name, $value) {
+		$this->_attributes[$name]=$value;
+	}
+	
+	public function __get($name) {
+		return $this->_attributes[$name];
+	}
+	
 	/**
 	 * Execute a grouped query and return the statement. This class may be extended
 	 * so you can document loaded properties or implement additional functions.
 	 * 
 	 * @param string $modelName
-	 * @param array $groupBy eg array('t.name')
 	 * @param string $selectFields
 	 * @param GO_Base_Db_FindParams $findParams
 	 * @return GO_Base_Db_ActiveStatement
 	 */
-	public function load($modelName, $groupBy, $selectFields, GO_Base_Db_FindParams $findParams=null){
+	public function load($modelName, $selectFields, GO_Base_Db_FindParams $findParams=null){
 		
 		if(!isset($findParams))
 			$findParams = GO_Base_Db_FindParams::newInstance ();
 		
 		$findParams->ignoreAcl()
-						->group($groupBy)
 						->select($selectFields);
 
 		$stmt = GO::getModel($modelName)->find($findParams);

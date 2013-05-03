@@ -57,4 +57,19 @@ class GO_Base_Model_AclUsersGroups extends GO_Base_Db_ActiveRecord {
 		$attr['user_id'] = 0;
 		return $attr;
 	}
+	
+	public function relations() {
+		return array('aclItem'=>array(
+			"type"=>self::BELONGS_TO,
+			"model"=>"GO_Base_Model_Acl",
+			"field"=>'acl_id'
+		));
+	}
+	
+	protected function afterSave($wasNew) {
+		
+		$this->aclItem->touch();
+		
+		return parent::afterSave($wasNew);
+	}
 }

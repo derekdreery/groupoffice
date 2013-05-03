@@ -51,7 +51,7 @@ class GO_Core_Controller_AclGroup extends GO_Base_Controller_AbstractMultiSelect
 	}
 	
 	protected function formatColumns(GO_Base_Data_ColumnModel $cm) {
-		$cm->formatColumn('manage_permission', '$model->level');
+		$cm->formatColumn('manage_permission', 'isset($model->level) ? $model->level : ""');
 		return parent::formatColumns($cm);
 	}
 	

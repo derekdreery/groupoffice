@@ -126,6 +126,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
                         'files' => array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_File', 'field' => 'folder_id', 'delete' => true),
                         'notifyUsers'=>array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_FolderNotification', 'field' => 'folder_id', 'delete' => true),
                         'preferences'=>array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_FolderPreference', 'field' => 'folder_id', 'delete' => true),
+												'sharedRootFolders'=>array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_SharedRootFolder', 'field' => 'folder_id', 'delete' => true),
 		);
 	}
 	
@@ -944,16 +945,22 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			if(!$mergeFolders){
 				$subfolder->parent_id=$this->id;
 				$subfolder->appendNumberToNameIfExists();
-				$subfolder->save();
+				if(!$subfolder->save()){
+					throw new Exception("Could not save folder ".$subfolder->name." ".implode("\n", $subfolder->getValidationErrors()));
+				}
 			}else
 			{
 				if(($existingFolder = $this->hasFolder($subfolder->name))){
 					$existingFolder->moveContentsFrom($subfolder, true);
-					$subfolder->delete();
+					if(!$subfolder->delete()){
+						throw new Exception("Could not delete folder ".$subfolder->name);
+					}
 				}else
 				{
 					$subfolder->parent_id=$this->id;
-					$subfolder->save();
+					if(!$subfolder->save()){
+						throw new Exception("Could not save folder ".$subfolder->name." ".implode("\n", $subfolder->getValidationErrors()));
+					}
 				}
 			}			
 		}
@@ -963,7 +970,9 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			GO::debug("MOVE ".$file->name);
 			$file->folder_id=$this->id;
 			$file->appendNumberToNameIfExists();
-			$file->save();
+			if(!$file->save()){
+				throw new Exception("Could not save file ".$file->name." ".implode("\n", $file->getValidationErrors()));
+			}
 		}
 	}
 	
@@ -995,52 +1004,43 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		}
 	}
 
-	/**
-	 * Find all shared folders for the current user
-	 * 
-	 * @param GO_Base_Db_FindParams $findParams
-	 * @return GO_Base_Db_ActiveStatement
-	 */
-	public function findShares($findParams=false){
-		
-		if(!$findParams)
-			$findParams = new GO_Base_Db_FindParams();
-				
-		 $findParams->getCriteria()
-					->addModel(GO_Files_Model_Folder::model())
-					->addCondition('visible', 1)
-					->addCondition('user_id', GO::user()->id,'!=');
-		
-		return GO_Files_Model_Folder::model()->find($findParams);
-		
-		
-	}
-	
-	public function getTopLevelShares($findParams=false){
-		
-		$stmt = $this->findShares($findParams);
-		//sort by path and only list top level shares
-		$shares = array();
-		while ($folder = $stmt->fetch()) {
-			$folder->checkFsSync();
-			
-			//sort by path and only list top level shares		
-			$shares[$folder->path]=$folder;
-		}
-		ksort($shares);
-		$response=array();
-		foreach($shares as $path=>$folder){
-			$isSubDir = isset($lastPath) && strpos($path.'/', $lastPath.'/')===0;
-			
-			if(!$isSubDir){
-				$response[$folder->name]=$folder;			
-				$lastPath=$path;
-			}
-		}
-		
-		//now sort on folder name
-		ksort($response);
-		
-		return array_values($response);
-	}
+//	/**
+//	 * Find all shared folders for the current user
+//	 * 
+//	 * @param GO_Base_Db_FindParams $findParams
+//	 * @return GO_Base_Db_ActiveStatement
+//	 */
+//	public function findShares($findParams=false){
+//		
+//		if(!$findParams)
+//			$findParams = new GO_Base_Db_FindParams();
+//				
+//		 $findParams->getCriteria()
+//					->addModel(GO_Files_Model_Folder::model())
+//					->addCondition('visible', 1)
+//					->addCondition('user_id', GO::user()->id,'!=');
+//		
+//		return GO_Files_Model_Folder::model()->find($findParams);
+//		
+//		
+//	}
+//	/**
+//	 * 
+//	 * @param GO_Base_Db_FindParams $findParams
+//	 * @return GO_Base_Db_ActiveStatement
+//	 */
+//	public function getTopLevelShares($findParams=false){
+//		if(!$findParams)
+//			$findParams = new GO_Base_Db_FindParams();
+//		
+//		$findParams
+//						->joinRelation('sharedRootFolders')
+//						->ignoreAcl()
+//						->order('name','ASC');
+//		
+//		$findParams->getCriteria()
+//					->addCondition('user_id', GO::user()->id,'=','sharedRootFolders');
+//				
+//		return $this->find($findParams);
+//	}
 }

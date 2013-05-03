@@ -1099,7 +1099,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$aclJoinProps = $this->_getAclJoinProps();
 
 			if(isset($aclJoinProps['relation']))
-				$params['joinRelations'][]=array('name'=>$aclJoinProps['relation']['name'], 'type'=>'INNER');
+				$params['joinRelations'][$aclJoinProps['relation']['name']]=array('name'=>$aclJoinProps['relation']['name'], 'type'=>'INNER');
 		}
 		
 		$sql = "SELECT ";
@@ -1636,7 +1636,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	public function findByPk($primaryKey, $findParams=false, $ignoreAcl=false, $noCache=false){		
 		
-		//GO::debug($this->className()."::findByPk($primaryKey)");
+//		GO::debug($this->className()."::findByPk($primaryKey)");
 		if(empty($primaryKey))
 			return false;
 		
@@ -1659,6 +1659,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$sql = $this->_appendPkSQL($sql, $primaryKey);
 	
+//		GO::debug("DEBUG SQL: ".var_export($this->_debugSql, true));
 		
 		if($this->_debugSql)
 				GO::debug($sql);
@@ -2053,7 +2054,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		foreach($attributes as $key=>$value){
 			
 			//only set writable properties. It should either be a column or setter method.
-			if(isset($this->columns[$key]) || method_exists($this, 'set'.$key))
+			if(isset($this->columns[$key]) || property_exists($this, $key) || method_exists($this, 'set'.$key))
 				$this->$key=$value;			
 		}		
 	}
@@ -2380,8 +2381,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * Just update the mtime timestamp 
 	 */
 	public function touch(){
-		$this->mtime=time();
-		return $this->_dbUpdate();
+		$time = time();
+		if($this->mtime==$time){
+			return true;
+		}else{
+			$this->mtime=time();
+			return $this->_dbUpdate();
+		}
 	}
 	
 	/**
@@ -3663,6 +3669,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @return GO_Customfields_Model_AbstractCustomFieldsRecord 
 	 */
 	public function getCustomfieldsRecord(){
+		
+//		GO::debug($this->className().'::getCustomfieldsRecord');
 		
 		if($this->customfieldsModel() && GO::modules()->isInstalled('customfields')){			
 			if(!isset($this->_customfieldsRecord)){// && !empty($this->pk)){

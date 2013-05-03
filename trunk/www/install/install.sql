@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS `go_acl_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL DEFAULT '0',
   `description` varchar(50) DEFAULT NULL,
+	`mtime` INT NOT NULL DEFAULT  '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
