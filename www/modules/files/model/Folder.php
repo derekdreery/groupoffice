@@ -943,16 +943,22 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			if(!$mergeFolders){
 				$subfolder->parent_id=$this->id;
 				$subfolder->appendNumberToNameIfExists();
-				$subfolder->save();
+				if(!$subfolder->save()){
+					throw new Exception("Could not save folder ".$subfolder->name." ".implode("\n", $subfolder->getValidationErrors()));
+				}
 			}else
 			{
 				if(($existingFolder = $this->hasFolder($subfolder->name))){
 					$existingFolder->moveContentsFrom($subfolder, true);
-					$subfolder->delete();
+					if(!$subfolder->delete()){
+						throw new Exception("Could not delete folder ".$subfolder->name);
+					}
 				}else
 				{
 					$subfolder->parent_id=$this->id;
-					$subfolder->save();
+					if(!$subfolder->save()){
+						throw new Exception("Could not save folder ".$subfolder->name." ".implode("\n", $subfolder->getValidationErrors()));
+					}
 				}
 			}			
 		}
@@ -962,7 +968,9 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			GO::debug("MOVE ".$file->name);
 			$file->folder_id=$this->id;
 			$file->appendNumberToNameIfExists();
-			$file->save();
+			if(!$file->save()){
+				throw new Exception("Could not save file ".$file->name." ".implode("\n", $file->getValidationErrors()));
+			}
 		}
 	}
 	
