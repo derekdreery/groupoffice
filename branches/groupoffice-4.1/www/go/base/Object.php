@@ -59,7 +59,7 @@ abstract class GO_Base_Object extends GO_Base_Observable{
 				throw new Exception("Can't get not existing property '$name' in '".$this->className()."'");
 			else{
 //				TODO Enable this when we're sure all properties exist
-//				trigger_error("Can't get not existing property '$name' in '".$this->className()."'", E_USER_NOTICE);
+				trigger_error("Can't get not existing property '$name' in '".$this->className()."'", E_USER_NOTICE);
 				return null;
 			}
 		}
@@ -103,7 +103,7 @@ abstract class GO_Base_Object extends GO_Base_Observable{
 				throw new Exception($errorMsg);
 			else{
 //				TODO Enable this when we're sure all properties exist
-//				trigger_error($errorMsg, E_USER_NOTICE);
+				trigger_error($errorMsg, E_USER_NOTICE);
 			}
 		}
 	}
