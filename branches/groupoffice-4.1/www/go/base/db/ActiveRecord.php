@@ -2355,8 +2355,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * Just update the mtime timestamp 
 	 */
 	public function touch(){
-		$this->mtime=time();
-		return $this->_dbUpdate();
+		$time = time();
+		if($this->mtime==$time){
+			return true;
+		}else{
+			$this->mtime=time();
+			return $this->_dbUpdate();
+		}
 	}
 	
 	/**
