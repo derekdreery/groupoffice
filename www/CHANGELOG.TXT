@@ -1,4 +1,5 @@
-- Optimized shared folder listing by caching the shares
+- Optimized shared folder listing by caching the shares.
+- Added mtime to ACL's so we can detect changes.
 
 03-05-2013 4.1.61
 - Project folders were moving to an invalid folder location
