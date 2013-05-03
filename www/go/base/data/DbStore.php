@@ -395,10 +395,11 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 			if (!empty($model))
 				$success = $success && $model->delete();
 		}
-
+		
 		if ($success)
 			$this->_deleteRecords = array();
-
+		else
+			$this->response['feedback'] = GO::t('deleteError') . "<br><br>" . implode("<br>", $model->getValidationErrors()) . "<br>";
 		return $success;
 	}
 
@@ -459,6 +460,10 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 
 	public function getDeleteSuccess() {
 		return isset($this->response['deleteSuccess']) ? $this->response['deleteSuccess'] : null;
+	}
+	
+	public function getFeedBack() {
+		return isset($this->response['feedback']) ? $this->response['feedback'] : null;
 	}
 
 	/**

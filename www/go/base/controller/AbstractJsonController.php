@@ -211,8 +211,11 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 			$response['title'] = $title;
 
 		if ($store instanceof GO_Base_Data_DbStore) {
-			if ($store->getDeleteSuccess() !== null)
+			if ($store->getDeleteSuccess() !== null) {
 				$response['deleteSuccess'] = $store->getDeleteSuccess();
+				if(!$response['deleteSuccess'])
+					$response['deleteFeedback'] = $store->getFeedBack();
+			}
 			$buttonParams = $store->getButtonParams();
 			if (!empty($buttonParams))
 				$response['buttonParams'] = $buttonParams;
