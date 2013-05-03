@@ -12,6 +12,11 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		else
 			return parent::allowGuests();
 	}
+	
+	
+	protected function actionCache($params){
+		GO_Files_Model_SharedRootFolder::model()->rebuildCache(GO::user()->id);
+	}
 
 	protected function actionSyncFilesystem($params){	
 		
@@ -80,8 +85,25 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	}
 
 	private function _buildSharedTree($expandFolderIds){
+		
+		
+		GO_Files_Model_SharedRootFolder::model()->rebuildCache(GO::user()->id);
+		
 		$response=array();
-		$shares =GO_Files_Model_Folder::model()->getTopLevelShares(GO_Base_Db_FindParams::newInstance()->limit(100));
+		
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->joinRelation('sharedRootFolders')
+						->ignoreAcl()
+						->order('name','ASC')
+						->limit(200);
+		
+		$findParams->getCriteria()
+					->addCondition('user_id', GO::user()->id,'=','sharedRootFolders');
+		
+		
+		
+		$shares = GO_Files_Model_Folder::model()->find($findParams);
 		foreach($shares as $folder){
 			$response[]=$this->_folderToNode($folder, $expandFolderIds, false);
 		}
@@ -495,14 +517,36 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 //      $store->setStatement($stmt);
 //
 //      $response = $store->getData();
+		
+		
+//		$fp = GO_Base_Db_FindParams::newInstance()->limit(100);
+		
+		//$fp = GO_Base_Db_FindParams::newInstance()->calcFoundRows();
+		
+		$cm = new GO_Base_Data_ColumnModel('GO_Files_Model_Folder');
+		$cm->setFormatRecordFunction(array($this, 'formatListRecord'));
+		
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->joinRelation('sharedRootFolders')
+						->ignoreAcl()
+						->order('name','ASC');
+		
+		$findParams->getCriteria()
+					->addCondition('user_id', GO::user()->id,'=','sharedRootFolders');
+		
+		
+		$store = new GO_Base_Data_DbStore('GO_Files_Model_Folder',$cm, $params, $findParams);
+		$response = $store->getData();
 		$response['permission_level']=GO_Base_Model_Acl::READ_PERMISSION;
-		$response['results']=array();
-		$shares =GO_Files_Model_Folder::model()->getTopLevelShares(GO_Base_Db_FindParams::newInstance()->limit(100));
-		foreach($shares as $folder){
-			$record=$folder->getAttributes("html");
-			$record = $this->formatListRecord($record, $folder, false);
-			$response['results'][]=$record;
-		}
+//		$response['results']=array();
+//		$shares =GO_Files_Model_Folder::model()->getTopLevelShares($fp);
+//		foreach($shares as $folder){
+//			$record=$folder->getAttributes("html");
+//			$record = $this->formatListRecord($record, $folder, false);
+//			$response['results'][]=$record;
+//		}
+//		$response['total']=$shares->foundRows;
 		return $response;
 	}
 
