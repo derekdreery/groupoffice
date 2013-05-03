@@ -245,4 +245,25 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 		
 		return $arr;
 	}
+	
+	/**
+	 * Get all customfield models that are attached to the given model.
+	 * 
+	 * @param string $modelName
+	 * @param int $permissionLevel Set to false to ignore permissions
+	 * @return GO_Customfields_Model_Field
+	 */
+	public function findByModel($modelName, $permissionLevel=  GO_Base_Model_Acl::READ_PERMISSION){
+		$findParams = GO_Base_Db_FindParams::newInstance()->joinRelation('category')->order('sort_index');
+		
+		if($permissionLevel){
+			$findParams->permissionLevel($permissionLevel);
+		}else
+		{
+			$findParams->ignoreAcl();
+		}
+		
+		$findParams->getCriteria()->addCondition('extends_model', $modelName,'=','category');
+		return $this->find($findParams);
+	}
 }
