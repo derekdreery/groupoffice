@@ -75,5 +75,32 @@ class GO_Site_Controller_Site extends GO_Base_Controller_AbstractJsonController 
 		}
 		
 		$this->renderJson($response);
-	}	
+	}
+	
+	
+	/**
+	 * Rearrange the tree based on the given sorting
+	 * 
+	 * @param array $params
+	 * @return array
+	 */
+	protected function actionTreeSort($params){
+		$sortOrder = json_decode($params['sort_order'], true);
+		$parentId = $params['parent_id'];
+			
+		$order = 0;
+		foreach($sortOrder as $contentId){
+			$content = GO_Site_Model_Content::model()->findByPk($contentId);
+
+			if($content){
+				$content->parent_id = empty($parentId)?null:$parentId;
+				$content->sort_order = $order;
+				if($content->save()){
+					$order++;
+				}
+			}
+		}
+
+		return array("success"=>true);
+	}
 }

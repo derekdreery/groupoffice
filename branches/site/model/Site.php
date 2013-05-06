@@ -177,6 +177,7 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 				'children' => array(
 						array(
 							'id' => $site->id.'_content',
+							'draggable' => false,
 							'site_id'=>$site->id, 
 							'iconCls' => 'go-icon-layout', 
 							'text' => GO::t('content','site'),

@@ -24,6 +24,7 @@ GO.site.SiteTreePanel = function (config){
 	this.contentRootContextMenu = new GO.site.ContentRootContextMenu({treePanel:this});
 	
 	Ext.applyIf(config, {
+		enableDD:true,
 		layout:'fit',
 		split:true,
 		autoScroll:true,
@@ -47,6 +48,7 @@ GO.site.SiteTreePanel = function (config){
 
 	this.on('contextmenu',this.onContextMenu, this);
 	this.on('click',this.onTreeNodeClick, this);
+	this.on('nodedrop',this.onNodeDrop, this);
 }
 	
 	
@@ -122,7 +124,46 @@ Ext.extend(GO.site.SiteTreePanel, Ext.tree.TreePanel,{
 
 	getRootNode: function(){
 		return this.rootNode;
-	}
+	},
+	
+	// e.dropNode:	The node that is moved
+	// e.target:		The node where it is dropped to.
+	onNodeDrop : function(e){
+			
+		if(e.dropNode){			
+			var sortorder = [];
+			var parent = false;
+			var parentId = 0;
+			
+			if(e.point === "append"){ // The node is dropped on an item
+				parent = e.target;
+			}else{ // The node is dropped between two items
+				parent = e.target.parentNode;
+			}
+			
+			if(parent.attributes.content_id)
+					parentId = parent.attributes.content_id;
+
+			var children = parent.childNodes;
+			
+			for(var i=0;i<children.length;i++){
+				if(children[i].attributes.content_id)
+					sortorder.push(children[i].attributes.content_id);
+			}
+			
+			var isDropNodeInArray = sortorder.indexOf(e.dropNode.attributes.content_id);
+			if(isDropNodeInArray === -1)
+				sortorder.push(e.dropNode.attributes.content_id);
+
+			GO.request({
+				url: "site/site/treeSort",
+				params: {
+					parent_id: parentId,
+					sort_order: Ext.encode(sortorder)
+				}
+			});
+		}
+	}	
 });
 	
 	
