@@ -3311,7 +3311,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	public function __isset($name){		
-		return isset($this->_attributes[$name]) || parent::__isset($name);
+		return isset($this->_attributes[$name]) || 
+						isset($this->columns[$name]) || 
+						($this->_relationExists($name) && $this->_getRelated($name)) || 
+						parent::__isset($name);
 	}
 	
 	/**
