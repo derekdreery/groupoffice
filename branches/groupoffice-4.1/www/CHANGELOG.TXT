@@ -1,3 +1,6 @@
+06-05-2013 4.1.63
+- Bug in __isset of ActiveRecord
+
 03-05-2013 4.1.62
 - Optimized shared folder listing by caching the shares.
 - Added mtime to ACL's so we can detect changes.
