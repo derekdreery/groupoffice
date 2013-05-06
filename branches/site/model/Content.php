@@ -236,4 +236,22 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 		 return $text;
 	 }
 	 
+	 
+	 protected function beforeSave() {
+		 
+		 // This check is needed to set the correct slug when the item is dragged/dropped to another parent
+		 if($this->isModified('parent_id') && !$this->isNew){
+			 $slugArray = explode('/',$this->slug);
+			 $ownSlug = array_pop($slugArray);
+			 
+			 if(!empty($this->parent_id))
+				$this->slug = $this->parent->slug.'/'.$ownSlug;
+			 else
+				$this->slug = $ownSlug;
+		 }
+		 
+		 return parent::beforeSave();
+	 }
+	 
+	 
 }
