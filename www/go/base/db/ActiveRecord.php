@@ -1761,13 +1761,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 			$findParams = GO_Base_Db_FindParams::newInstance();
 			
-			if(isset($extraFindParams))
-					$findParams->mergeWith($extraFindParams);
 			
 			$findParams
 					->mergeWith($r['findParams'])		
 					->ignoreAcl()
 					->relation($name);
+			
+			//the extra find params supplied with call are merged last so that you 
+			//can override the defaults.
+			if(isset($extraFindParams))
+					$findParams->mergeWith($extraFindParams);
 					
 			$findParams->getCriteria()							
 							->addCondition($remoteFieldThatHoldsMyPk, $this->pk);
