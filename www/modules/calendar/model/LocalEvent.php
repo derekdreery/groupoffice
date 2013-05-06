@@ -89,12 +89,12 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 		$this->_calendar = $this->_event->calendar;	
 		
 		// If there is no user attached to this event (user_id = 0) then create a temporary user object
-		if(!$event->user){
-			$event->user = new GO_Base_Model_User();
-			$event->user->first_name = GO::t('unknown').' '.GO::t('user');
-		}
+//		if(!$event->user){
+//			$event->user = new GO_Base_Model_User();
+//			$event->user->first_name = GO::t('unknown').' '.GO::t('user');
+//		}
 		
-		$this->_initials[] = $event->user->getShortName();
+		$this->_initials[] = $event->user ? $event->user->getShortName() : '??';
 		$this->_calendarNames[] = $this->_calendar->name;
 	}
 	
@@ -123,7 +123,7 @@ class GO_Calendar_Model_LocalEvent extends GO_Base_Model {
 //		$response['time_of_day'] = $this->getTimeOfDay();
         
 		$response['status'] = $this->_event->status;
-		$response['username'] = $this->_event->user->getName();
+		$response['username'] = $this->_event->user ? $this->_event->user->getName() : GO::t('unknown').' '.GO::t('user');
 		$response['musername'] = !empty($this->_event->mUser) ? $this->_event->mUser->getName() : '';
 		
 //		if($this->_event->status==GO_Calendar_Model_Event::STATUS_CANCELLED){			

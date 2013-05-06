@@ -28,6 +28,11 @@ class GO_Base_Csv_Writer extends GO_Base_Csv_Reader{
 		$this->setFP('w');
 //		foreach ($fields as $k => $field)
 //			$fields[$k] = str_replace(array($this->delimiter,$this->enclosure),array(' ',''),$field);
-		return fputcsv($this->fp, $fields, $this->delimiter, $this->enclosure);
+		if(isset($this->enclosure)){
+			return fputcsv($this->fp, $fields, $this->delimiter, $this->enclosure);
+		}else
+		{
+			return fputcsv($this->fp, $fields, $this->delimiter);
+		}
 	}
 }

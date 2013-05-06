@@ -141,10 +141,12 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 		$usersGroup = $this->hasUser($userId);
 		
 		if($usersGroup){
-			if($level>0)
+			if($level>0){
 				$usersGroup->level=$level;			
-			else
+				return !$usersGroup->isModified() || $usersGroup->save();
+			}else{
 				return $usersGroup->delete();
+			}
 		}else
 		{		
 			if($level==0)
@@ -155,9 +157,8 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 			$usersGroup->group_id = 0;
 			$usersGroup->user_id = $userId;
 			$usersGroup->level = $level;
+			return $usersGroup->save();
 		}
-		
-		return $usersGroup->save();
 
 	}
 
@@ -179,10 +180,12 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 		$usersGroup = $this->hasGroup($groupId);
 		
 		if($usersGroup){
-			if($level>0)
+			if($level>0){
 				$usersGroup->level=$level;			
-			else
+				return !$usersGroup->isModified() || $usersGroup->save();
+			}else{
 				return $usersGroup->delete();
+			}
 		}else
 		{	
 			if($level==0)
@@ -193,9 +196,8 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 			$usersGroup->group_id = $groupId;
 			$usersGroup->user_id = 0;
 			$usersGroup->level = $level;
+			return $usersGroup->save();
 		}
-		
-		return $usersGroup->save();
 	}
 	
 	/**
