@@ -47,5 +47,33 @@ class GO_Base_Util_Cli {
 		}
 		return $out;
 	}
+	
+	/**
+	 * Prompt for user input
+	 * 
+	 * @param string $text
+	 * @return string User input
+	 */
+	public static function passwordPrompt($text){
+		
+		$command = "/usr/bin/env bash -c 'echo OK'";
+		if (rtrim(shell_exec($command)) !== 'OK') {
+			trigger_error("Can't invoke bash to get prompt", E_USER_ERROR);
+		}
+		$command = "/usr/bin/env bash -c 'read -s";
+		
+		$command .= " -p";
+		
+		$command .= " \"";
+		
+		$command .= $text
+						. "\" mypassword && echo \$mypassword'";
+
+		$input =  rtrim(shell_exec($command));
+		
+		echo "\n";
+		
+		return $input;
+	}
 
 }

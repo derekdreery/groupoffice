@@ -29,18 +29,8 @@ if (empty($args['r'])) {
 	"sudo -u www-data php index.php -c=/path/to/config.php -r=maintenance/upgrade --param=value\n\n";
 	exit();
 } elseif (isset($args['u'])) {// && isset($args['p']))
-	$prompt = "Enter password:";
-	$command = "/usr/bin/env bash -c 'echo OK'";
-	if (rtrim(shell_exec($command)) !== 'OK') {
-		trigger_error("Can't invoke bash to get password");
-	}
-	$command = "/usr/bin/env bash -c 'read -s -p \""
-					. $prompt
-					. "\" mypassword && echo \$mypassword'";
 	
-	$password = rtrim(shell_exec($command));
-	
-	echo "\n";
+	$password = GO_Base_Util_Cli::passwordPrompt("Enter password for user ".$args['u'].":");
 
 	$user = GO::session()->login($args['u'], $password);
 	if (!$user) {
