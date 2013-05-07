@@ -1,5 +1,6 @@
 06-05-2013 4.1.63
 - Bug in __isset of ActiveRecord
+- Locale set to "en us" UTF-8 to make functions consistent.
 
 03-05-2013 4.1.62
 - Optimized shared folder listing by caching the shares.
