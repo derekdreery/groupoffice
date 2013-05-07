@@ -248,4 +248,28 @@ END:VCALENDAR';
 			}			
 		}		
 	}
+	
+	protected function actionTest($params){
+		
+		$content = '<html>
+			
+		<site:img id="1" lightbox="1" path="testing">
+		<img src="blabla" />
+		</site:img>
+		
+
+		<site:img id="2" lightbox="0" path="testing2"><img src="blabla2" /></site:img>
+
+		<site:img id="2" lightbox="0" path="testing3"></site:img>
+		
+<p>Paragraph</p>
+';
+		
+		
+		$tags = GO_Base_Util_TagParser::getTags('site:img', $content);
+		
+		var_dump($tags);
+		
+		
+	}
 }
