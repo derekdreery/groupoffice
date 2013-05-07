@@ -234,7 +234,8 @@ class GO_Base_Component_MultiSelectGrid {
 		$count = count($this->selectedIds);
 		if($count==1){
 			$model = GO::getModel($this->_modelName)->findByPk($this->selectedIds[0]);
-			$this->_store->setTitle($model->name);	
+			if (isset($model->name))
+				$this->_store->setTitle($model->name);	
 		}else
 		{
 		$this->_store->setTitle($count.' '.GO::t('multiselectSelected'));		
