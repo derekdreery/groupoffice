@@ -249,10 +249,10 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 		if($link->exists())
 			throw new Exception("Path ".$link->path()." already exists");
 		
-		if(link($target->path(), $link->path()))
+		if(symlink($target->path(), $link->path()))
 			return $link;
 		else
-			throw new Exception("Failed to create link ".$target->path());
+			throw new Exception("Failed to create link ".$link->path()." to ".$target->path());
 	}
 	
 	/**

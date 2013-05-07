@@ -1,3 +1,12 @@
+07-05-2013 4.1.64
+- Fixed conflict checking on resources when an event itself is in a conflict.
+- AbstractSettingsCollection loads more efficiently
+- File browser refresh button syncs database with filesystem for the active 
+  folder and it's direct subfolders.
+- Event with non existing user caused error.
+- Locale set to "en us" UTF-8 to make functions consistent. This fixes a problem
+  with UTF-8 in document templates.
+
 06-05-2013 4.1.63
 - Bug in __isset of ActiveRecord
 

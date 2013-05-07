@@ -198,7 +198,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 	 * @param boolean $return fi true the JSON response will be returned
 	 * @return string generated JSON if $return=true
 	 */
-	public function renderStore(GO_Base_Data_AbstractStore $store, $return = false) {
+	public function renderStore(GO_Base_Data_AbstractStore $store, $return = false, $buttonParams=false) {
 
 		$response = array(
 				"success" => true,
@@ -216,9 +216,11 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 				if(!$response['deleteSuccess'])
 					$response['deleteFeedback'] = $store->getFeedBack();
 			}
-			$buttonParams = $store->getButtonParams();
-			if (!empty($buttonParams))
-				$response['buttonParams'] = $buttonParams;
+			if($buttonParams){
+				$buttonParams = $store->getButtonParams();
+				if (!empty($buttonParams))
+					$response['buttonParams'] = $buttonParams;
+			}
 		}
 		if ($return)
 			return $response;

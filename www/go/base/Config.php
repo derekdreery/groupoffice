@@ -931,7 +931,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.1.63';
+	var $version = '4.1.64';
 	
 	/**
 	 * Modification date
@@ -939,7 +939,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20130506';
+	var $mtime = '20130507';
 
 	#group configuration
 	/**
@@ -1484,13 +1484,41 @@ class GO_Base_Config {
 	 */
 	public function get_setting($name, $user_id=0) {
 		$attributes['name']=$name;
-          $attributes['user_id']=$user_id;
+    $attributes['user_id']=$user_id;
 
 		$setting = GO_Base_Model_Setting::model()->findSingleByAttributes($attributes);
 		if ($setting) {
 			return $setting->value;
 		}
 		return null;
+	}
+	
+	/**
+	 * Get multiple settings at once
+	 * @param array $keys
+	 * @param int $user_id Optional leave empty for global settings
+	 * 
+	 * @return array Key value array('setting name'=>'value');
+	 */
+	public function getSettings($keys, $user_id=0){
+		$findParams = GO_Base_Db_FindParams::newInstance()->select()->debugSql();
+		
+		$findParams->getCriteria()
+						->addCondition('user_id', $user_id)
+						->addInCondition('name', $keys);
+		
+		$stmt = GO_Base_Model_Setting::model()->find($findParams);
+		
+		$return = array();
+		foreach($keys as $key){
+			$return[$key]=null;
+		}
+		
+		foreach($stmt as $setting){			
+			$return[$setting->name]=$setting->value;
+		}
+		
+		return $return;
 	}
     
     /**

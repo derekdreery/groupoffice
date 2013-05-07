@@ -171,9 +171,7 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 		}
 		
 		$attributes = array_merge($attributes, $this->_getUserAttributes());
-		
-		GO::debug($attributes);
-		
+				
 		if(GO::modules()->customfields)
 			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=false;
 		

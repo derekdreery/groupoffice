@@ -491,6 +491,9 @@ class GO{
 		}
 		self::$initialized=true;
 		
+		//set local to en us so functions will behave consistently
+		setlocale(LC_ALL, "en_US.UTF-8");
+		
 		//register our custom error handler here
 		error_reporting(E_ALL | E_STRICT);
 		set_error_handler(array('GO','errorHandler'));
