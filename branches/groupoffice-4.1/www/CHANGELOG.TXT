@@ -1,3 +1,4 @@
+07-05-2013 4.1.64
 - AbstractSettingsCollection loads more efficiently
 - File browser refresh button syncs database with filesystem for the active 
   folder and it's direct subfolders.
