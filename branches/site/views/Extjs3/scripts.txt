@@ -8,6 +8,9 @@ modules/site/views/Extjs3/Customfield.js
 modules/site/views/Extjs3/ContentDialog.js
 modules/site/views/Extjs3/SiteDialog.js
 
+
+modules/site/views/Extjs3/HtmlEditorImageInsert.js
+
 modules/site/views/Extjs3/ContentPanel.js
 modules/site/views/Extjs3/ContentContextMenu.js
 modules/site/views/Extjs3/ContentRootContextMenu.js

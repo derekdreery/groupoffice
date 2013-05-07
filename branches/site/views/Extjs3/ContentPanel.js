@@ -1,5 +1,10 @@
 GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 	
+	
+	// Plugins for the editor
+	editorImageInsertPlugin : false,
+	editorTablePlugin : false,
+	
 	contentDialog : false,
 	
 	submitAction : 'update',
@@ -13,6 +18,7 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 			success:function(form, action){
 				if(this.fileBrowseButton){
 					this.fileBrowseButton.setId(action.result.data.site_id);
+					this.editorImageInsertPlugin.setSiteId(action.result.data.site_id);
 				}
 			},
 			scope:this
@@ -27,6 +33,7 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 			success:function(form, action){
 				if(this.fileBrowseButton){
 					this.fileBrowseButton.setId(action.result.data.site_id);
+					this.editorImageInsertPlugin.setSiteId(action.result.data.site_id);
 				}
 				this.titleField.focus();
 			},
@@ -114,7 +121,7 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 						Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
 				},
 				scope: this
-			})
+			});
 		},this);
 		
 		this.advancedButton = new Ext.Button({
@@ -177,18 +184,14 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 			this.slugField.setValue(this.formatSlug(field.getValue()));
 		},this);
 	
-		var tablePlugin = new Ext.ux.form.HtmlEditor.Table();
-	
+		
 		this.editor = new GO.form.HtmlEditor({
 			hideLabel:true,
 			name: 'content',
 			anchor: '100% -80',
 			allowBlank:true,
 			fieldLabel: GO.site.lang.contentContent,
-			plugins:[
-				tablePlugin
-			]
-			
+			plugins:this.initHtmlEditorPlugins()
 		});
 				
 		config.items = [
@@ -217,6 +220,13 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 		slug = slug.replace(/^-|-$/g, '');		
 		
 		return slug;
+	},
+	initHtmlEditorPlugins : function(htmlEditorConfig) {		
+		// optional image attachment
+		this.editorImageInsertPlugin = new GO.site.HtmlEditorImageInsert();
+		this.editorTablePlugin = new Ext.ux.form.HtmlEditor.Table();
+			
+		return [this.editorImageInsertPlugin,this.editorTablePlugin];
 	}
 });
 

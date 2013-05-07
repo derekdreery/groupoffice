@@ -253,5 +253,35 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 		 return parent::beforeSave();
 	 }
 	 
+	 public function getHtml(){
+		 return self::replaceContentTags($this->content);
+	 }
+	 
+	 public static function replaceContentTags($content=''){
+
+		 $images = GO_Base_Util_TagParser::getTags('site:img', $content);
+		 
+		 foreach($images as $image){
+			 $template = self::processImage($image['params']);
+			 $content = str_replace($image['xml'], $template, $content);
+		 }
+
+		 return $content;
+	 }
+	 
+	 public static function processImage($imageAttr){
+		 
+		 $html = '';
+
+		 if(key_exists('path', $imageAttr))
+			$html .= '<img src="'.Site::file($imageAttr['path']).'" />';
+		 
+		 if(key_exists('a', $imageAttr))
+			 $html .= sprintf('<a href="%s">%s</a>',$imageAttr['a'],$html);
+		 
+		 return $html;
+	 }
+	 
+	 
 	 
 }

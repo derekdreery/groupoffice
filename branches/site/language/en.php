@@ -70,3 +70,6 @@ $l["siteAcl_id"] = "ACL";
 
 $l["multifile"] = "Multi File";
 $l["multifileSelectValue"] = "%s file(s)";
+
+$l["attachFilesPC"]='Add from PC';
+$l["attachFilesGO"]='Add from {product_name}';
