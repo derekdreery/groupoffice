@@ -110,6 +110,9 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	 * @var array 
 	 */
 	protected $_requestParams = array();
+	
+	
+	private $_multiSel;
 
 	// --- Methods ---
 
@@ -488,20 +491,17 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	 * @param boolean $checkPermissions check Permission for item defaults to true
 	 */
 	public function multiSelect($requestParamName, $selectClassName, $foreignKey, $checkPermissions = true) {
-		$multiSel = new GO_Base_Component_MultiSelectGrid(
+		$this->_multiSel = new GO_Base_Component_MultiSelectGrid(
 										$requestParamName,
 										$selectClassName,
 										$this,
 										$this->_requestParams,
 										$checkPermissions
 		);
-		$multiSel->addSelectedToFindCriteria($this->_extraFindParams, $foreignKey);
-		$multiSel->setStoreTitle();
+		$this->_multiSel->addSelectedToFindCriteria($this->_extraFindParams, $foreignKey);
+		$this->_multiSel->setStoreTitle();
 
-		$buttonParams = array();
-		$multiSel->setButtonParams($buttonParams);
-		if (isset($buttonParams['buttonParams']))
-			$this->_buttonParams = $buttonParams['buttonParams'];
+
 	}
 
 	/**
@@ -509,9 +509,9 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	 * @param string $requestParamName
 	 */
 	public function multiSelectable($requestParamName) {
-		$multiSel = new GO_Base_Component_MultiSelectGrid($requestParamName, $this->_modelClass, $this, $this->_requestParams);
-		$multiSel->setFindParamsForDefaultSelection($this->_extraFindParams);
-		$multiSel->formatCheckedColumn();
+		$this->_multiSel = new GO_Base_Component_MultiSelectGrid($requestParamName, $this->_modelClass, $this, $this->_requestParams);
+		$this->_multiSel->setFindParamsForDefaultSelection($this->_extraFindParams);
+		$this->_multiSel->formatCheckedColumn();
 	}
 
 	/**
@@ -519,7 +519,12 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	 * @return array button params
 	 */
 	public function getButtonParams() {
-		return $this->_buttonParams;
+		$buttonParams = array();
+		$this->_multiSel->setButtonParams($buttonParams);
+		if (isset($buttonParams['buttonParams']))
+			return $buttonParams['buttonParams'];
+		else
+			return false;
 	}
 
 }
