@@ -1,4 +1,5 @@
 07-05-2013 4.1.64
+- Fixed conflict checking on resources when an event itself is in a conflict.
 - AbstractSettingsCollection loads more efficiently
 - File browser refresh button syncs database with filesystem for the active 
   folder and it's direct subfolders.
