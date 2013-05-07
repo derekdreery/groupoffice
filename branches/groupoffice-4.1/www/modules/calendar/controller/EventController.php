@@ -1447,7 +1447,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			
 			echo "Deleting...\n";
 			
-			$findParams = GO_Base_Db_FindParams::newInstance();
+			$findParams = GO_Base_Db_FindParams::newInstance()->ignoreAcl();
 
 			$findParams->getCriteria()
 							->addCondition('start_time',$params['date'], '<')
