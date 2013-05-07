@@ -125,16 +125,13 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 	private function _checkConflicts(&$response, GO_Calendar_Model_Event &$event, &$params) {
 		
-		if(!$event->busy)
-			return true;
-		
-		if(empty($params["check_conflicts"]))
-			return true;
-		
 
-		$params['exception_for_event_id']=empty($params['exception_for_event_id']) ? 0 : $params['exception_for_event_id'];
-		if(count($event->getConflictingEvents($params['exception_for_event_id'])))
-			throw new Exception('Ask permission');
+		if(!empty($params["check_conflicts"]) && $event->busy){		
+
+			$params['exception_for_event_id']=empty($params['exception_for_event_id']) ? 0 : $params['exception_for_event_id'];
+			if(count($event->getConflictingEvents($params['exception_for_event_id'])))
+				throw new Exception('Ask permission');
+		}
 //		
 //		/* Check for conflicts with other events in the calendar */		
 //		$findParams = GO_Base_Db_FindParams::newInstance();
@@ -1434,31 +1431,38 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			throw new Exception("You must be admin");
 		
 		$this->checkRequiredParameters(array('date'), $params);
-		
+
 		$params['date']=strtotime($params['date']);
 		
-		if($params['date']>GO_Base_Util_date::date_add(time(), 0, 0, -1)){
+		if($params['date']>GO_Base_Util_Date::date_add(time(), 0, 0, -1)){
 			throw new Exception("Please give a date at least one year in the past.");
 		}
 		
-		
-		echo "Deleting all events older than ".GO_base_util_date::format($params['date'])."\n";
-		
-		$findParams = GO_Base_Db_FindParams::newInstance()
-						->addCondtion('start_time',$params['date'], '<')
-						->addCondtion('repeat_end_time',$params['date'], '<')
-						->addCondtion('repeat_end_time',0, '>');
-		
-		$stmt = GO_Calendar_Model_Event::model()->find($findParams);
-		
-		foreach($stmt as $event){
-			$event->delete();
-			echo '.';
-		}
-		
+		$sure = readline("If you continue all events older than '".GO_Base_Util_Date::get_timestamp($params['date'], false)."' will be deleted. Are you sure? (y/n)");
 		echo "\n";
+		if($sure=='y'){
+			
+			echo "Deleting...\n";
+			
+			$findParams = GO_Base_Db_FindParams::newInstance()->ignoreAcl();
+
+			$findParams->getCriteria()
+							->addCondition('start_time',$params['date'], '<')
+							->addCondition('repeat_end_time',$params['date'], '<');
+
+			$stmt = GO_Calendar_Model_Event::model()->find($findParams);
+
+			foreach($stmt as $event){
+				$event->delete();
+				echo '.';
+			}
+			echo "\n";
 		
-		echo "All done!\n";
+			echo "All done!\n";
+		}else
+		{
+			echo "User aborted\n";
+		}
 		
 	}
 }

@@ -656,4 +656,14 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		}
 		return false;
 	}
+	
+	/**
+	 * Delete the message from the IMAP server
+	 * 
+	 * @return boolean
+	 */
+	public function delete(){
+		return $this->getImapConnection()->delete(array($this->uid));
+						
+	}
 }

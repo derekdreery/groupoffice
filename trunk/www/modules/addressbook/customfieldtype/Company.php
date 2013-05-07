@@ -9,6 +9,10 @@ class GO_Addressbook_Customfieldtype_Company extends GO_Customfields_Customfield
 		return 'GO_Addressbook_Model_Company';
 	}
 	
+	public function includeInSearches() {
+		return true;
+	}
+	
 	public function formatDisplay($key, &$attributes, GO_Customfields_Model_AbstractCustomFieldsRecord $model) {
 		$html="";
 		if(!empty($attributes[$key])) {
