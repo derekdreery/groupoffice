@@ -114,20 +114,12 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 
 	protected function actionTree($params) {
-		//GO::$ignoreAclPermissions=true;
-//      if(empty($params['node']) || $params['node']=='root'){
-//          $folder = GO_Files_Model_Folder::model()->findByPath('users/'.GO::user()->username, true);
-//
-//          $folder->syncFilesystem();
-//      }
-//
 
-
-		//probably not necessary
-//      if(!empty($params['sync_folder_id'])){
-//          $syncFolder = GO_Files_Model_Folder::model()->findByPk($params['sync_folder_id']);
-//          $syncFolder->syncFilesystem();
-//      }
+		//refresh forces sync with db
+		if(!empty($params['sync_folder_id'])){
+				$syncFolder = GO_Files_Model_Folder::model()->findByPk($params['sync_folder_id']);
+				$syncFolder->syncFilesystem();
+		}
 
 		$response = array();
 
