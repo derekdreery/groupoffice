@@ -27,9 +27,17 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 	 * @var int
 	 */
 	private $_userId = 0;
+	
+	/**
+	 * Cache already loaded models in this array.
+	 * 
+	 * @var array 
+	 */
+	private static $_models;
 
 	public function __construct($userId=0) {
 		$this->_userId = $userId;
+		$this->_loadData();
 	}
 	
 	/**
@@ -38,24 +46,32 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 	 * @return GO_Base_Model_AbstractSettingsCollection Description
 	 */
 	public static function load($userId=0){
-		// PHP >= 5.3 only
-//		$class = get_called_class();
-//		$self = new $class($userId);
+
+		$className=  get_called_class();
+		if(isset(self::$_models[$className.':'.$userId])){
+			$model = self::$_models[$className.':'.$userId];			
+		}else
+		{
+			$model=self::$_models[$className.':'.$userId]=new $className($userId);			
+		}	
 		
-		// PHP >= 5.3 only
-		$self = new static($userId);
 		
-		$self->loadData();
-		return $self;
+		return $model;
 	}
 	
-	public function loadData(){
+	private function _loadData(){
 		
 		$properties = $this->_getReflectionClass()->getParentPropertiesDiff();
 		
+		$propertyNames=array();
 		foreach($properties as $property){
-				$key = $property->name;
-				$this->{$key} = GO::config()->get_setting($key,$this->_userId);
+			$propertyNames[] = $property->name;
+		}
+		
+		$values = GO::config()->getSettings($propertyNames,$this->_userId);
+
+		foreach($values as $property=>$value){
+				$this->{$property} = $value;
 		}
 	} 
 	
