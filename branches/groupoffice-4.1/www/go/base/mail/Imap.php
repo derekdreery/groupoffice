@@ -95,8 +95,19 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		if (!is_resource($this->handle)) {
 			throw new Exception('Failed to open socket #'.$errorno.'. '.$errorstr);
 		}
-
-		return $this->authenticate($username, $password);
+		
+		
+		$authed = $this->authenticate($username, $password);
+		
+		if(!$authed)
+			return false;
+		
+//		just testing for gmail
+//		$this->send_command("ENABLE UTF8=ACCEPT\r\n");
+		
+		
+		
+		return true;
 	}
 
 	/**
@@ -980,10 +991,11 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		 * Sending charset along doesn't work on iMailserver.
 		 * Without seems to work on different servers.
 		 */
-		//$charset = '';
-		$charset =  'CHARSET UTF-8 ';
+		$charset = '';
+		//$charset =  'CHARSET UTF-8 ';
+
 		
-		$command = 'UID SEARCH '.$charset.$terms."\r\n";
+		$command = 'UID SEARCH '.$charset.trim($terms)."\r\n";
 		$this->send_command($command);
 		$result = $this->get_response(false, true);
 		$status = $this->check_response($result, true);
