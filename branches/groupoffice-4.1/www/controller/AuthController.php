@@ -26,6 +26,7 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 	}
 
 	private function loadInit() {
+		
 		GO_Base_Observable::cacheListeners();
 
 		//when GO initializes modules need to perform their first run actions.

@@ -42,18 +42,17 @@ class GO_Base_Observable{
 		
 		GO::debug("GO_Base_Observable::cacheListeners");
 		
-		$dir = GO::config()->orig_tmpdir.'cache/listeners/';
+		$cacheFolder = GO::config()->getCacheFolder();
+		$folder = $cacheFolder->createChild('listeners',false);
+		
 		if(GO::config()->debug){
-			$folder = new GO_Base_Fs_Folder($dir);
-			$folder->delete();
-			//exec('rm -Rf '.$dir);
+			$folder->delete();			
 		}
-		$dirExists = is_dir($dir);
-		if(!$dirExists){
-			mkdir($dir, 0777,true);
+		
+		if(!$folder->exists()){
+			$folder->create();
 			
 			GO::modules()->callModuleMethod('initListeners');
-			
 		}
 	}
 	/**

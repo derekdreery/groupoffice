@@ -230,6 +230,9 @@ class GO{
 		
 		GO::config()->getCacheFolder(false)->delete();
 		
+		//rebuild listeners
+		GO_Base_Observable::cacheListeners();		
+		
 		GO::cache()->flush();
 
 		GO_Base_Model::clearCache();
