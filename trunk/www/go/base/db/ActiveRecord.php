@@ -2441,7 +2441,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}
 		}
 
-		if (isset($this->_modifiedAttributes['mtime']))
+		if (isset($this->columns['muser_id']) && isset($this->_modifiedAttributes['mtime']))
 			$this->muser_id = GO::user()->id;
 		
 		//user id is set by defaultAttributes now.
