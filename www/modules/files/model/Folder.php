@@ -63,6 +63,11 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	public static function model($className=__CLASS__) {
 		return parent::model($className);
 	}
+	
+	protected function init() {
+		$this->columns['name']['required']=true;
+		return parent::init();
+	}
 
 	protected function getCacheAttributes() {
 
