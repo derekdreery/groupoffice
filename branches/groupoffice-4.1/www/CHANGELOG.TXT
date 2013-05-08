@@ -1,5 +1,6 @@
 - Fixed for flagged message broken on some IMAP servers
-- Show all tickettypes (without limit) in the ticketmodule tickettype panel
+- Generate listeners immediately after upgrading
+- Show all ticket types (without limit) in the ticket module
 - Workflow module: fix around the use of groups that can approve steps.
 
 07-05-2013 4.1.64
