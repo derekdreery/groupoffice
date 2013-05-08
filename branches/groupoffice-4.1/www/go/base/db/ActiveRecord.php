@@ -3222,7 +3222,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	private function _getMagicAttribute($name){
-		if(isset($this->_attributes[$name])){
+		if(key_exists($name, $this->_attributes)){
 			return $this->getAttribute($name, self::$attributeOutputMode);
 		}elseif(isset($this->columns[$name])){
 			//it's a db column but it's not set in the attributes array.
