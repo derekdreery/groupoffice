@@ -51,7 +51,10 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				$folder->syncFilesystem(true);
 			}
 			catch(Exception $e){
-				echo "<span style='color:red;'>".$e->getMessage()."</span>\n";
+				if (PHP_SAPI != 'cli')
+					echo "<span style='color:red;'>".$e->getMessage()."</span>\n";
+				else
+					echo $e->getMessage()."\n";
 			}
 		}
 
@@ -71,7 +74,10 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 						$folder->delete();
 			}
 			catch(Exception $e){
-				echo "<span style='color:red;'>".$e->getMessage()."</span>\n";
+				if (PHP_SAPI != 'cli')
+					echo "<span style='color:red;'>".$e->getMessage()."</span>\n";
+				else
+					echo $e->getMessage()."\n";
 			}
 		}
 	}
