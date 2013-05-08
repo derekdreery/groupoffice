@@ -276,12 +276,19 @@ abstract class GO_Base_Mail_ImapBase {
 			}
 		} while (substr($result[$n], 0, strlen('A'.$this->command_count)) != 'A'.$this->command_count);
 		
-		if(!empty(GO::session()->values['debugSql']))
-			GO::debug($result);
-		
 		$this->responses[] = $result;
 		if ($chunked) {
+			if(!empty(GO::session()->values['debugSql'])){
+				foreach($chunked_result as $chunks)
+					GO::debug("R: ".implode(" ", $chunks));
+			}
 			$result = $chunked_result;
+		}else
+		{
+			if(!empty(GO::session()->values['debugSql'])){
+				foreach($result as $line)
+					GO::debug("R: ".$line);
+			}
 		}
 
 		//GO::debug($result);
@@ -318,7 +325,7 @@ abstract class GO_Base_Mail_ImapBase {
 		
 
 		if(!empty(GO::session()->values['debugSql']))
-			GO::debug($command);
+			GO::debug("S: ".$command);
 		
 		$this->commands[trim($command)] = GO_Base_Util_Date::getmicrotime();
 	}
