@@ -5,6 +5,7 @@
 - Generate listeners immediately after upgrading
 - Show all ticket types (without limit) in the ticket module
 - Workflow module: fix around the use of groups that can approve steps.
+- Contact photo will be updated every time the contact form is loaded.
 
 07-05-2013 4.1.64
 - Fixed conflict checking on resources when an event itself is in a conflict.
