@@ -59,17 +59,19 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 				
 				$items = $enabledBlockModel->block->getItemNames($model->id,$model->name);
 				
-				$blockedItemsEl = array(
-					'id' => $i,
-					'block_name' => $enabledBlockModel->block->name,
-					'items' => $items
-				);
+				if (!empty($items)) {
+					$blockedItemsEl = array(
+						'id' => $i,
+						'block_name' => $enabledBlockModel->block->name,
+						'items' => $items
+					);
 
-				$blockedItemsEl['model_name'] = !empty($items[0]) ? $items[0]['model_name'] : '';
-				$modelNameArr = explode('_', $blockedItemsEl['model_name']);
-				$blockedItemsEl['type'] = !empty($modelNameArr[3]) ? $modelNameArr[3] : '';
-				
-				$response['data']['items_under_blocks'][] = $blockedItemsEl;
+					$blockedItemsEl['model_name'] = !empty($items[0]) ? $items[0]['model_name'] : '';
+					$modelNameArr = explode('_', $blockedItemsEl['model_name']);
+					$blockedItemsEl['type'] = !empty($modelNameArr[3]) ? $modelNameArr[3] : '';
+
+					$response['data']['items_under_blocks'][] = $blockedItemsEl;
+				}
 			}
 			
 		}
