@@ -381,7 +381,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 		if (isset($this->_records))
 			throw new Exception("deleteRecord should be called before loading data. If you run the statement before the deletes then the deleted items will still be in the result.");
 
-		$success = true;
+		$errors = array();
 		foreach ($this->_deleteRecords as $modelPk) {
 			if ($this->extraDeletePk !== null) {
 				$primaryKeyNames = GO::getModel($this->_modelClass)->primaryKey(); //get the primary key names of the delete model in an array
@@ -395,15 +395,26 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 				$modelPk = $newPk;
 			}
 			$model = GO::getModel($this->_modelClass)->findByPk($modelPk);
-			if (!empty($model))
-				$success = $success && $model->delete();
+			if (!empty($model)){
+				try {
+					$key = is_array($model->pk) ? implode('-', $model->pk) : $model->pk;
+					if(!$model->delete())
+						$errors[$key] = $model->getValidationErrors();
+				} catch (GO_Base_Exception_AccessDenied $e) {
+					$errors[$key] = array('access_denied'=>$e->getMessage());
+				}
+			}
 		}
 		
-		if ($success)
+		if (empty($errors))
 			$this->_deleteRecords = array();
-		else
-			$this->response['feedback'] = GO::t('deleteError') . "<br><br>" . implode("<br>", $model->getValidationErrors()) . "<br>";
-		return $success;
+		else {
+			$error_string = '';
+			foreach($errors as $error)
+				$error_string .= implode("<br>", $error)."<br>";
+			$this->response['feedback'] = str_replace("{count}", count($errors), GO::t('deleteErrors')) . "<br><br>" . $error_string;
+		}
+		return empty($errors);
 	}
 
 	/**
