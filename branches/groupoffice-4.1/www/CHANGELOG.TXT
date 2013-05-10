@@ -1,3 +1,6 @@
+- Added French translation to address book
+- Shared directory is accessible again in webdav server.
+- Running sync file system in the CLI will not print html tags anymore
 - Fixed for flagged message broken on some IMAP servers
 - Generate listeners immediately after upgrading
 - Show all ticket types (without limit) in the ticket module
