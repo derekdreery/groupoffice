@@ -194,8 +194,9 @@ GO.customfields.displayPanelTemplate =
 GO.customfields.displayPanelBlocksTemplate =
 '<tpl if="items_under_blocks">'+'<tpl if="items_under_blocks.length">'+
 	'<tpl for="items_under_blocks">'+
-	'{[this.collapsibleSectionHeader(values.block_name, "block-"+parent.panelId+"-"+values.id, "block-"+values.id)]}'+
-		'<table cellpadding="0" cellspacing="0" border="0" class="display-panel" id="cf-{parent.panelId}-{id}">'+
+	'{[this.collapsibleSectionHeader(values.block_name, "block-"+parent.panelId+"-"+values.id,"block")]}'+
+//	'{[this.collapsibleSectionHeader(values.block_name, "block-"+parent.panelId+"-"+values.id, "block-"+values.id)]}'+
+		'<table cellpadding="0" cellspacing="0" border="0" class="display-panel" id="block-{parent.panelId}-{values.id}">'+
 			'<tpl for="items">'+
 				'<tr>'+
 				'<td class="table_header_links" style="width:30px;">'+
