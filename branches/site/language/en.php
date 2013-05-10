@@ -73,3 +73,32 @@ $l["multifileSelectValue"] = "%s file(s)";
 
 $l["attachFilesPC"]='Add from PC';
 $l["attachFilesGO"]='Add from {product_name}';
+
+$l["imageEditor"]='Customize image';
+
+$l["imgWidth"]='Width';
+$l["imgHeight"]='Height';
+
+$l["dimensions"]='Dimensions';
+$l["alignment"]='Alignment';
+
+$l["imgZoom"]='Zoom';
+$l["imgCrop"]='Crop';
+
+$l["imgAlignmentLeft"]='Left';
+$l["imgAlignmentCenter"]='Center';
+$l["imgAlignmentRight"]='Right';
+$l["imgAlignmentInline"]='Inline';
+
+$l["imgDimensions"]='Dimensions (WxH)';
+
+$l["imgDimensionSmall"]='Small';
+$l["imgDimensionMedium"]='Medium';
+$l["imgDimensionLarge"]='Large';
+$l["imgDimensionCustom"]='Custom';
+$l["imgAlt"]='Alt text';
+
+$l["imageExample"] = "Image example";
+
+$l["notImplementedYet"] = "Not yet implemented";
+$l["otherOptions"] = "Other options";

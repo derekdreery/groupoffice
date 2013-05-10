@@ -21,7 +21,7 @@ GO.site.HtmlEditorImageInsert = function(config) {
 		this.editor = htmlEditor;
 		this.editor.on('render', this.onRender, this);
 	};
-
+	this.imageEditorDialog = false,
 	this.filesFilter='jpg,png,gif,jpeg,bmp';
 	this.addEvents({
 		'insert' : true
@@ -106,43 +106,42 @@ Ext.extend(GO.site.HtmlEditorImageInsert, Ext.util.Observable, {
 		});
 	},
 
-	selectTempImage : function(path)
-	{
-		var token = GO.base.util.MD5(path);
-		
-		this.selectedUrl = GO.url("core/downloadTempFile", {path:path, token: token});
-
-		this.selectedPath = path;	
-		
-
-		var html = '<img src="'+this.selectedUrl+'" border="0" />';
-
-		this.fireEvent('insert', this,  this.selectedPath, true, token);
-		
-		this.menu.hide();
-
-		this.editor.focus();
-		this.editor.insertAtCursor(html);		
-	},
-	
 	selectImage : function(r){	
 		
 		this.selectedRecord = r;
 		this.selectedPath = r.data.path;
-				
-		//filename is added as parameter. This is only for matching the url in the body of the html in GO_Base_Mail_Message::handleEmailFormInput with preg_match.
-		this.selectedUrl = GO.url("files/file/download",{id:r.data.id});
-		
-		var html = '<site:img id="'+r.data.id+'" path="'+this.selectedPath+'" lightbox="1"><img src="'+this.selectedUrl+'" /></site:img>';
-								
-		this.editor.focus();
-			
-		this.editor.insertAtCursor(html);
-		
+	
+		this.showImageEditor(r.data.id,this.selectedPath);
 		GO.selectFileBrowserWindow.hide();
 	},
 	setSiteId : function(site_id){
 		this.id = site_id;
-	}				
+	},
+	showImageEditor : function(id,path){
+		
+		var selectedUrl = GO.url("files/file/download",{id:id});
+		
+		if(!this.imageEditorDialog){
+			this.imageEditorDialog = new GO.site.HtmlEditorImageDialog();
+			
+			this.imageEditorDialog.on('hide', function(){
+			//var html = '<site:img id="'+r.data.id+'" path="'+this.selectedPath+'" lightbox="1"><img src="'+this.selectedUrl+'" /></site:img>';
+			var html = this.imageEditorDialog.getTag();
+			
+			if(html){
+				this.editor.focus();
+				this.editor.insertAtCursor(html);
+			}
+		},this);
+			
+		}
+		
+		var dialogconfig = [];
 
+		dialogconfig.id = id;
+		dialogconfig.path = path;
+		dialogconfig.url = selectedUrl;
+		
+		this.imageEditorDialog.show(dialogconfig);
+	}
 });

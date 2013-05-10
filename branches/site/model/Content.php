@@ -271,13 +271,48 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	 
 	 public static function processImage($imageAttr){
 		 
-		 $html = '';
-
-		 if(key_exists('path', $imageAttr))
-			$html .= '<img src="'.Site::file($imageAttr['path']).'" />';
+		//		if(key_exists('width', $imageAttr)){}
+		//		if(key_exists('height', $imageAttr)){}
+		//		if(key_exists('zoom', $imageAttr)){}
+		//		if(key_exists('crop', $imageAttr)){}
+		//		if(key_exists('alt', $imageAttr)){}
+		//		if(key_exists('a', $imageAttr)){}
+		//		if(key_exists('path', $imageAttr)){}
+		//		if(key_exists('align', $imageAttr)){}		 
 		 
-		 if(key_exists('a', $imageAttr))
-			 $html .= sprintf('<a href="%s">%s</a>',$imageAttr['a'],$html);
+		$html = '';
+		
+		if(key_exists('path', $imageAttr)){
+			if( key_exists('width', $imageAttr) && key_exists('height', $imageAttr)){
+				if(key_exists('crop', $imageAttr))
+					$thumb = Site::thumb($imageAttr['path'],array("lw"=>$imageAttr['width'], "ph"=>$imageAttr['height'], "zc"=>1));
+				else
+					$thumb = Site::thumb($imageAttr['path'],array("lw"=>$imageAttr['width'], "ph"=>$imageAttr['height'], "zc"=>0));
+				
+				$imageAttr['a'] = Site::file($imageAttr['path']); // Create an url to the original image
+				
+			} else {
+				$thumb = Site::file($imageAttr['path']);
+			}
+			
+			$html .= '<img src="'.$thumb.'"';
+			
+			if(key_exists('alt', $imageAttr))
+				$html .= ' alt="'.$imageAttr['alt'].'"';
+			
+			if(key_exists('align', $imageAttr))
+				$html .= ' style="'.$imageAttr['align'].'"';
+			else
+				$html .= ' style="display:inline-block;"';
+			
+			$html .= ' />';
+			
+			if(key_exists('a', $imageAttr))
+			 $html = sprintf('<a href="%s" target="_blank">%s</a>',$imageAttr['a'],$html);
+		}
+		 
+
+
 		 
 		 return $html;
 	 }
