@@ -371,7 +371,10 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 	
 		
 	afterLoad  : function(action){
-		
+		if(!GO.util.empty(action.result.data.photo_url))
+			this.setPhoto(action.result.data.photo_url);
+		else
+			this.setPhoto("");
 	},
 	
 	beforeLoad  : function(){
