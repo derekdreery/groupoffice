@@ -1,4 +1,5 @@
 <?php
+
 class GO_Core_Controller_Developer extends GO_Base_Controller_AbstractController 
 
 	protected function allowGuests() {
