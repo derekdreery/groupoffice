@@ -391,6 +391,11 @@ class GO_Base_Util_String {
 		
 		return $out;
 	}
+	
+	
+	public static function isUtf8($str){
+		return preg_match('!\S!u', $str);
+	}
 
 	/**
 	 * Replace a string within a string once.

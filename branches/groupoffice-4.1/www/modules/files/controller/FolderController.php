@@ -1084,7 +1084,30 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$file = new GO_Base_Fs_File(GO::config()->file_storage_path.$filePath);
 			switch(strtolower($file->extension())) {
 				case 'zip':
+					
+					
+					$folder = GO_Base_Fs_Folder::tempFolder(uniqid());
+					chdir($folder->path());
+					
 					$cmd = GO::config()->cmd_unzip.' -n '.escapeshellarg($file->path());
+				
+					exec($cmd, $output, $ret);
+
+					if($ret!=0)
+					{
+						throw new Exception("Could not decompress\n".implode("\n",$output));
+					}
+					
+					$this->_convertZipEncoding($folder);
+					
+					$items = $folder->ls();
+					
+					foreach($items as $item){
+						$item->move(new GO_Base_Fs_Folder($workingPath));
+					}
+					
+					$folder->delete();
+					
 					break;
 				case 'gz':
 				case 'tgz':
@@ -1096,17 +1119,31 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 					break;
 			}
 		}
-		exec($cmd, $output, $ret);
+		
+		if(isset($cmd)){
+			exec($cmd, $output, $ret);
 
-		if($ret!=0)
-		{
-			throw new Exception("Could not decompress\n".implode("\n",$output));
+			if($ret!=0)
+			{
+				throw new Exception("Could not decompress\n".implode("\n",$output));
+			}
 		}
-
 		$workingFolder->syncFilesystem(true);
 
 		return array('success'=>true);
 
+	}
+	
+	private function _convertZipEncoding(GO_Base_Fs_Folder $folder, $charset='CP850'){
+		$items = $folder->ls();
+		
+		foreach($items as $item){
+			$item->rename(GO_Base_Util_String::clean_utf8($item->name(), $charset));
+			
+			if($item->isFolder()){
+				$this->_convertZipEncoding($item, $charset);
+			}
+		}
 	}
 
 
