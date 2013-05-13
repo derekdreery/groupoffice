@@ -236,6 +236,21 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 		 return $text;
 	 }
 	 
+	 protected function afterSave($wasNew) {
+		 
+		 if($this->isModified('slug') && !$this->hasChildren()){
+			 foreach($this->children as $child){
+					$slugArray = explode('/',$child->slug);
+					$ownSlug = array_pop($slugArray);
+
+					$child->slug = $child->parent->slug.'/'.$ownSlug;
+					$child->save();
+			 }
+		 }
+		
+		 return parent::afterSave($wasNew);
+	 }
+	 
 	 
 	 protected function beforeSave() {
 		 
