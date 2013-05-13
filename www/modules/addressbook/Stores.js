@@ -59,7 +59,8 @@ GO.addressbook.writableAddresslistsStore.on('load', function(){
 GO.addressbook.readableAddresslistsStore = new GO.data.JsonStore({
     url: GO.url("addressbook/addresslist/store"),
     baseParams: {
-        permissionLevel: GO.permissionLevels.read
+        permissionLevel: GO.permissionLevels.read,
+				limit:0
     },
     fields: ['id', 'name', 'user_name','acl_id', 'checked'],
     remoteSort: true
