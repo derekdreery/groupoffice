@@ -3455,6 +3455,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 //			if(!$this->afterLink($model, $isSearchCacheModel, $description, $this_folder_id, $model_folder_id, $linkBack))
 //				return false;
 			
+			if($linkBack){
+				$this->fireEvent('link', array($this, $model, $description, $this_folder_id, $model_folder_id));
+			}
+			
 			return !$linkBack || $model->link($this, $description, $model_folder_id, $this_folder_id, false);
 		}
 	}
