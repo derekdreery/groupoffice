@@ -1096,9 +1096,9 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 //						throw new Exception("Could not decompress\n".implode("\n",$output));
 //					}
 					
-					$file = new ZipArchive;
-					$file->open($file->path());
-					$file->extractTo($folder->path());
+					$zip = new ZipArchive;
+					$zip->open($file->path());
+					$zip->extractTo($folder->path());
 					
 					
 					$this->_convertZipEncoding($folder);
