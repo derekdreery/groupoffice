@@ -1032,40 +1032,70 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 	protected function actionCompress($params) {
 
-		if (!GO_Base_Util_Common::isWindows())
-			putenv('LANG=en_US.UTF-8');
+		
 
 		$sources = json_decode($params['compress_sources'], true);
 
 
 		$workingFolder = GO_Files_Model_Folder::model()->findByPk($params['working_folder_id']);
 		$destinationFolder = GO_Files_Model_Folder::model()->findByPk($params['destination_folder_id']);
-
-
-		$workingPath = GO::config()->file_storage_path.$workingFolder->path;
-		chdir($workingPath);
-
-		for($i=0;$i<count($sources);$i++){
-			$sources[$i]=  escapeshellarg(str_replace($workingFolder->path.'/', '', $sources[$i]));
-		}
-
 		$archiveFile = new GO_Base_Fs_File(GO::config()->file_storage_path.$destinationFolder->path . '/' . $params['archive_name'] . '.zip');
 
-		$cmd = GO::config()->cmd_zip . ' -r ' . escapeshellarg($archiveFile->path()). ' ' . implode(' ', $sources);
+		if(class_exists("ZipArchive")){
+			$zip = new ZipArchive();
+			$zip->open($archiveFile->path(), ZIPARCHIVE::CREATE);
+			for($i=0;$i<count($sources);$i++){
+				if(is_dir(GO::config()->file_storage_path.$sources[$i])){		
+					$this->_zipDir(GO::config()->file_storage_path.$sources[$i], $zip, '/'.str_replace($workingFolder->path.'/', '', $sources[$i]).'/');
+				}else
+				{
+					$zip->addFile(GO::config()->file_storage_path.$sources[$i],iconv('UTF-8','CP850',str_replace($workingFolder->path.'/', '', $sources[$i])));
+				}
+			}
+			$zip->close();
+		}else
+		{
+			if (!GO_Base_Util_Common::isWindows())
+				putenv('LANG=en_US.UTF-8');
+		
+			$workingPath = GO::config()->file_storage_path.$workingFolder->path;
+			chdir($workingPath);
 
-		exec($cmd, $output);
+			for($i=0;$i<count($sources);$i++){
+				$sources[$i]=  escapeshellarg(str_replace($workingFolder->path.'/', '', $sources[$i]));
+			}
+			
+			$cmd = GO::config()->cmd_zip . ' -r ' . escapeshellarg($archiveFile->path()). ' ' . implode(' ', $sources);
 
-		if (!$archiveFile->exists()) {
-			throw new Exception('Command failed: ' . $cmd . "<br /><br />" . implode("<br />", $output));
+			exec($cmd, $output);
+
+			if (!$archiveFile->exists()) {
+				throw new Exception('Command failed: ' . $cmd . "<br /><br />" . implode("<br />", $output));
+			}			
 		}
-
+		
 		GO_Files_Model_File::importFromFilesystem($archiveFile);
 
 		$response['success']=true;
 
 		return $response;
 	}
-
+	private function _zipDir($dir, $zip, $relative_path = '/') {
+    $dir = rtrim($dir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+		if ($handle = opendir($dir)) {
+				while (false !== ($file = readdir($handle))) {
+						if ($file === '.' || $file === '..') {
+								continue;
+						}
+						if (is_file($dir . $file)) {
+								$zip->addFile($dir . $file, trim(iconv('UTF-8','CP850',$relative_path.$file),'/'));
+						} elseif (is_dir($dir . $file)) {
+								$this->_zipDir($dir . $file, $zip, $relative_path . $file.'/');
+						}
+				}
+		}
+		closedir($handle);
+	}
 
 	protected function actionDecompress($params){
 		if (!GO_Base_Util_Common::isWindows())
@@ -1083,25 +1113,25 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		while ($filePath = array_shift($sources)) {
 			$file = new GO_Base_Fs_File(GO::config()->file_storage_path.$filePath);
 			switch(strtolower($file->extension())) {
-				case 'zip':
-					
+				case 'zip':					
 					
 					$folder = GO_Base_Fs_Folder::tempFolder(uniqid());
 					
-//					chdir($folder->path());					
-//					$cmd = GO::config()->cmd_unzip.' -n '.escapeshellarg($file->path());
-//					exec($cmd, $output, $ret);
-//					if($ret!=0)
-//					{
-//						throw new Exception("Could not decompress\n".implode("\n",$output));
-//					}
-					
-					$zip = new ZipArchive;
-					$zip->open($file->path());
-					$zip->extractTo($folder->path());
-					
-					
-					$this->_convertZipEncoding($folder);
+					if(class_exists("ZipArchive")){
+						$zip = new ZipArchive;
+						$zip->open($file->path());
+						$zip->extractTo($folder->path());									
+						$this->_convertZipEncoding($folder);
+					}else
+					{
+						chdir($folder->path());					
+						$cmd = GO::config()->cmd_unzip.' -n '.escapeshellarg($file->path());
+						exec($cmd, $output, $ret);
+						if($ret!=0)
+						{
+							throw new Exception("Could not decompress\n".implode("\n",$output));
+						}
+					}
 					
 					$items = $folder->ls();
 					
