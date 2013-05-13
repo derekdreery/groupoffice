@@ -1179,7 +1179,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			
 			if(!GO_Base_Util_String::isUtf8($item->name()))
 				$item->rename(GO_Base_Util_String::clean_utf8($item->name(), $charset));
-			
+
 			if($item->isFolder()){
 				$this->_convertZipEncoding($item, $charset);
 			}
