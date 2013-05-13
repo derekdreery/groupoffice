@@ -324,7 +324,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		$response['inlineAttachments'] = array();
 		
 		if($html) {
-			$response['htmlbody'] = $this->getHtmlBody(false,true);
+			$response['htmlbody'] = $this->getHtmlBody(false,$noMaxBodySize);
 			$response['subject'] = htmlspecialchars($this->subject,ENT_COMPAT,'UTF-8');
 		} else {
 			$response['plainbody'] =$this->getPlainBody(false,$noMaxBodySize);
