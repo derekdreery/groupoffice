@@ -41,7 +41,7 @@ abstract class GO_Site_Components_Widget extends GO_Base_Object {
 	/**
 	 * The render function to render this widget 
 	 */
-	public function render($return = false){
+	public function render(){
 		
 	}
 	
