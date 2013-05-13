@@ -238,7 +238,7 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	 
 	 protected function afterSave($wasNew) {
 		 
-		 if($this->isModified('slug') && !$this->hasChildren()){
+		 if($this->isModified('slug') && $this->hasChildren()){
 			 foreach($this->children as $child){
 					$slugArray = explode('/',$child->slug);
 					$ownSlug = array_pop($slugArray);
