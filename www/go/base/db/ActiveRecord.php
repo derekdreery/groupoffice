@@ -3833,8 +3833,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$copy->customFieldsRecord->setAttributes($cfAtt, false);
 		}
 
-		if($save)
-			$copy->save($ignoreAclPermissions);
+		if($save){
+			if(!$copy->save($ignoreAclPermissions)){
+				throw new Exception("Could not save duplicate: ".implode("\n",$copy->getValidationErrors()));
+							
+			}
+		}
 		
 		if(!$this->afterDuplicate($copy)){
 			$copy->delete(true);
