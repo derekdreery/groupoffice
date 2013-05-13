@@ -1112,22 +1112,27 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				case 'gz':
 				case 'tgz':
 					$cmd = GO::config()->cmd_tar.' zxf '.escapeshellarg($file->path());
+					exec($cmd, $output, $ret);
+
+					if($ret!=0)
+					{
+						throw new Exception("Could not decompress\n".implode("\n",$output));
+					}
 					break;
 
 				case 'tar':
 					$cmd = GO::config()->cmd_tar.' xf '.escapeshellarg($file->path());
+					
+					exec($cmd, $output, $ret);
+
+					if($ret!=0)
+					{
+						throw new Exception("Could not decompress\n".implode("\n",$output));
+					}
 					break;
 			}
 		}
 		
-		if(isset($cmd)){
-			exec($cmd, $output, $ret);
-
-			if($ret!=0)
-			{
-				throw new Exception("Could not decompress\n".implode("\n",$output));
-			}
-		}
 		$workingFolder->syncFilesystem(true);
 
 		return array('success'=>true);
@@ -1138,7 +1143,9 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$items = $folder->ls();
 		
 		foreach($items as $item){
-			$item->rename(GO_Base_Util_String::clean_utf8($item->name(), $charset));
+			
+			if(!GO_Base_Util_String::isUtf8($item->name()))
+				$item->rename(GO_Base_Util_String::clean_utf8($item->name(), $charset));
 			
 			if($item->isFolder()){
 				$this->_convertZipEncoding($item, $charset);
