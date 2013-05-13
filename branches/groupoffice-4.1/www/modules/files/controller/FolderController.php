@@ -1087,16 +1087,19 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 					
 					
 					$folder = GO_Base_Fs_Folder::tempFolder(uniqid());
-					chdir($folder->path());
 					
-					$cmd = GO::config()->cmd_unzip.' -n '.escapeshellarg($file->path());
-				
-					exec($cmd, $output, $ret);
-
-					if($ret!=0)
-					{
-						throw new Exception("Could not decompress\n".implode("\n",$output));
-					}
+//					chdir($folder->path());					
+//					$cmd = GO::config()->cmd_unzip.' -n '.escapeshellarg($file->path());
+//					exec($cmd, $output, $ret);
+//					if($ret!=0)
+//					{
+//						throw new Exception("Could not decompress\n".implode("\n",$output));
+//					}
+					
+					$file = new ZipArchive;
+					$file->open($file->path());
+					$file->extractTo($folder->path());
+					
 					
 					$this->_convertZipEncoding($folder);
 					
