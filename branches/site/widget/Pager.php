@@ -109,7 +109,7 @@ class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
 	/**
 	 * Render the pagination.
 	 */
-	public function render($return = false){
+	public function render(){
 
 		$result = '';
 		if($this->currentPage != 1)
@@ -120,10 +120,7 @@ class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
 
 		if($this->currentPage < $this->pageCount)
 			$result.= '<a class="'.$this->previousPageClass.'" href="'.$this->getPageUrl($this->currentPage+1).'">></a>';
-		if($return)
-			return $result;
-		else
-			echo $result;
+		return $result;
 	}
 	
 	/**
