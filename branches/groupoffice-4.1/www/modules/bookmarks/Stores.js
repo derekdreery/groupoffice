@@ -19,12 +19,10 @@ GO.bookmarks.groupingStore = new Ext.data.GroupingStore({
 			id: "id",
 		fields: ['id','category_id','category_name','user_id','name','content','description','logo','open_extern','permissionLevel','public_icon','thumb','behave_as_module']
 		}),
+		url : GO.url('bookmarks/bookmark/store'),
 		baseParams: {
-			task:'get_bookmarks'
+			limit:0
 		},
-		proxy: new Ext.data.HttpProxy({
-			url : GO.url('bookmarks/bookmark/store')
-		}),
 		groupField:'category_name',
 		sortInfo: {
 			field: 'name',
@@ -54,6 +52,7 @@ GO.bookmarks.writableCategoriesStore = new GO.data.JsonStore({
 GO.bookmarks.comboCategoriesStore = new GO.data.JsonStore({
 	    url : GO.url('bookmarks/category/store'),
 	    baseParams: {
+				limit:0
 	    	},
 	    fields: ['id','user_name','acl_id','name'],
 	    remoteSort: true
