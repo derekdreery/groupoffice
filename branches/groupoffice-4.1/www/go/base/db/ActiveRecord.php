@@ -2050,8 +2050,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		foreach($attributes as $key=>$value){
 			
 			//only set writable properties. It should either be a column or setter method.
-			if(isset($this->columns[$key]) || property_exists($this, $key) || method_exists($this, 'set'.$key))
+			if(isset($this->columns[$key]) || property_exists($this, $key) || method_exists($this, 'set'.$key)){
 				$this->$key=$value;			
+			}
 		}		
 	}
 	
@@ -2397,7 +2398,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			throw new GO_Base_Exception_AccessDenied($msg);
 		}
 		
-		if(!$this->validate()){
+		if(!$this->validate() || ($this->customfieldsRecord && !$this->customfieldsRecord->validate())){
 			return false;
 		}
 	
@@ -2527,6 +2528,20 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$this->_modifiedAttributes = array();
 
 		return true;
+	}
+	
+	/**
+	 * Return all validation errors of this record and if it has an customfield, 
+	 * then it also gets the validation errors of that record.
+	 * 
+	 * @return array 
+	 */
+	public function getValidationErrors(){
+		
+		if($this->customfieldsRecord)
+			$this->_validationErrors = array_merge($this->customfieldsRecord->getValidationErrors(),$this->_validationErrors);
+		
+		return $this->_validationErrors;
 	}
 	
 	/**
