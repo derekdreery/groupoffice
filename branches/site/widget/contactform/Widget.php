@@ -1,49 +1,49 @@
 <?php
 class GO_Site_Widget_Contactform_Widget extends GO_Site_Components_Widget {
 
-	/**
-	 * @var string send to
-	 */
-	public $receipt;
+	public $receipt;						//send to email
+	public $emailFieldOptions=array();		//html attributes for email field
+	public $messageFieldOptions=array();	//html attributes for message field
+	public $fieldSeparator = '';			//html between input fields
+	public $submitButtonText = 'Send';		//text in submit button
 	
-	/**
-	 * @var string name from
-	 */
-	public $name="Website guest";
+	protected $formModel;
+	protected $form;
 	
-	/**
-	 * @var array rendered field eg posible: (name, email)
-	 */
-	public $fields = array('email');
-	
-	public function render($return=false)
-	{
-		$contactForm = new GO_Site_Widget_ContactForm_ContactForm();
-		$contactForm->receipt = isset($this->receipt) ? $this->receipt : GO::config()->webmaster_email;
-		$contactForm->name = GO::user() ? GO::user()->name : $this->name;
-		if(isset($_POST['ContactForm'])) {
-			$contactForm->email=$_POST['ContactForm']['email'];
-			$contactForm->message=$_POST['ContactForm']['message'];
-			if($contactForm->send()) {
-				echo "Send successfull"; 
-				return;
-			} else
-				echo "Error sending message";
-		}
-		$this->renderForm($contactForm);
+	public function init() {
+		$this->formModel = new GO_Site_Widget_ContactForm_ContactForm();
+		$this->formModel->receipt = isset($this->receipt) ? $this->receipt : GO::config()->webmaster_email;
+		$this->formModel->name = GO::user() ? GO::user()->name : 'Website Guest';
+
+		$this->form = new GO_Site_Widget_Form();
 	}
 	
-	protected function renderForm($contactForm) {
-		$form = new GO_Site_Widget_Form();
-		
-		echo $form->beginForm();
-		foreach($this->fields as $fieldName) {
-			echo $form->textField($contactForm, $fieldName);
-			echo $form->error($contactForm, $fieldName);
+	public function render()
+	{
+		$result = '';
+		if(isset($_POST['ContactForm']) ) {
+			$this->formModel->email=$_POST['ContactForm']['email'];
+			$this->formModel->message=$_POST['ContactForm']['message'];
+			if($this->formModel->send()) {
+				return "Send successfull"; 
+			} else
+				$result .= "Error sending message";
 		}
-		echo $form->textArea($contactForm, 'message', array('rows'=>"4",'cols'=>"50"));
-		echo $form->error($contactForm, 'message');
-		echo $form->submitButton('Send');
-		echo $form->endForm();
+
+		
+		$result .= $this->form->beginForm();
+
+		$result .= $this->form->textField($this->formModel, 'email', $this->emailFieldOptions);
+		$result .= $this->form->error($this->formModel, 'email');
+		$result .= $this->fieldSeparator;
+
+		$result .= $this->form->textArea($this->formModel, 'message', $this->messageFieldOptions);
+		$result .= $this->form->error($this->formModel, 'message');
+		$result .= $this->fieldSeparator;
+
+		$result .=$this->form->submitButton($this->submitButtonText);
+		$result .= $this->form->endForm();
+
+		return $result;
 	}
 }
