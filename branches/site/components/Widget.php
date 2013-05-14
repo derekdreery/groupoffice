@@ -15,6 +15,12 @@ abstract class GO_Site_Components_Widget extends GO_Base_Object {
 		foreach($config as $key => $value)
 			if($ref->getProperty ($key)->isPublic())
 				$this->{$key}=$value;
+				
+		$this->init();
+	}
+	
+	protected function init() {
+		
 	}
 	
 	/**
@@ -41,9 +47,7 @@ abstract class GO_Site_Components_Widget extends GO_Base_Object {
 	/**
 	 * The render function to render this widget 
 	 */
-	public function render(){
-		
-	}
+	abstract public function render();
 	
 	public static function getAjaxResponse($params){
 		return true;
