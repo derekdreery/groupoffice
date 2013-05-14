@@ -69,6 +69,9 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		
 		$this->columns['start_time']['gotype']='unixdate';
 		$this->columns['due_time']['gotype']='unixdate';
+		
+		$this->columns['due_time']['greaterorequal']='start_time';
+		
 		$this->columns['completion_time']['gotype']='unixdate';
 		$this->columns['repeat_end_time']['gotype']='unixdate';
 		$this->columns['reminder']['gotype']='unixtimestamp';
