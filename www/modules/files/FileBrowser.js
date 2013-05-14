@@ -1789,9 +1789,13 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	
 	updateLocation : function(){
 		var activeNode = this.treePanel.getNodeById(this.folder_id);
+		
 		if(activeNode)
-		{
-			this.treePanel.getSelectionModel().select(activeNode);
+		{			
+			var selectedNode = this.treePanel.getSelectionModel().getSelectedNodes();
+			if((!selectedNode.length || activeNode.id!=selectedNode[0].id))
+				this.treePanel.getSelectionModel().select(activeNode);
+			
 			var path = new String();
 			path = activeNode.getPath('text');
 			path = path.substring(2);
