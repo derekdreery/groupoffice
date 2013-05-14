@@ -1,43 +1,30 @@
 <?php
 class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 	
-	const ID_PREFIX='go';
-	
 	public $errorCss='error';
 	public $requiredCss='required';
 	public $beforeRequiredLabel='';
 	public $afterRequiredLabel=' <span class="required">*</span>';
 	
-	private $_action = '';
-	private $_method = 'POST';
-	private $_htmlAttributes = array();
-	private $_options = array();
-	private $_count=0;
+	protected $action = ''; //form action [use createUrl()]
+	protected $method = 'POST'; //form method [POST or GET] defaults to post
+	protected $htmlAttributes = array(); //extra html attributes for form tag
 	
-	public function __construct($action='', $method='POST', $htmlAttributes = array(), $options=array()) {
-		$this->_options = $options;
-		$this->_action = $action;
-		$this->_method = $method;
-		$this->_htmlAttributes = $htmlAttributes;
-	}
+	/**
+	 * Should not be used for rendering a form
+	 * Use beginForm() to render the starting tag instead
+	 * @return string with detailed error if used anyway
+	 */
+	public function render(){ return "use beginForm() instead of render()"; }
 	
 	/**
 	 * Generates a label tag for a model attribute.
 	 * The label text is the attribute label and the label is associated with
 	 * the input for the attribute (see {@link CModel::getAttributeLabel}.
 	 * If the attribute has input error, the label's CSS class will be appended with {@link errorCss}.
-	 * @param CModel $model the data model
+	 * @param GO_Base_Model $model the data model
 	 * @param string $attribute the attribute
 	 * @param array $htmlAttributes additional HTML attributes. The following special options are recognized:
-	 * <ul>
-	 * <li>required: if this is set and is true, the label will be styled
-	 * with CSS class 'required' (customizable with CHtml::$requiredCss),
-	 * and be decorated with {@link CHtml::beforeRequiredLabel} and
-	 * {@link CHtml::afterRequiredLabel}.</li>
-	 * <li>label: this specifies the label to be displayed. If this is not set,
-	 * {@link CModel::getAttributeLabel} will be called to get the label for display.
-	 * If the label is specified as false, no label will be rendered.</li>
-	 * </ul>
 	 * @return string the generated label tag
 	 */
 	public function label($model,$attribute,$htmlAttributes=array())
@@ -67,6 +54,10 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 	
 	public function passwordField($model,$attribute,$htmlAttributes=array()){
 		return $this->_inputField('password',$model,$attribute,$htmlAttributes);
+	}
+	
+	public function emailField($model,$attribute,$htmlAttributes=array()){
+		return $this->_inputField('email',$model,$attribute,$htmlAttributes);
 	}
 	
 	public function checkBox($model,$attribute,$htmlAttributes=array()){
@@ -336,7 +327,7 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 		if(!isset($htmlAttributes['name']))
 		{
 			if(!array_key_exists('name',$htmlAttributes))
-				$htmlAttributes['name']=self::ID_PREFIX.$this->_count++;
+				$htmlAttributes['name']=$this->id;
 		}
 		if(!isset($htmlAttributes['type']))
 			$htmlAttributes['type']='button';
