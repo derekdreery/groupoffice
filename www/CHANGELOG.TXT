@@ -1,3 +1,6 @@
+- Remember size state of east panel in Files module across user sessions.
+- Remember size state of west panel in Address Book module across user sessions.
+
 13-05-2013 4.1.65
 - Optimzed SQL query to lookup e-mail addresses.
 - Support foreign characters in ZIP files.
