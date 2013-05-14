@@ -71,6 +71,23 @@ $l["siteAcl_id"] = "ACL";
 $l["multifile"] = "Multi File";
 $l["multifileSelectValue"] = "%s file(s)";
 
+// Frontend language
+$l['login'] = 'Login';
+$l['register'] = 'Register';
+$l['signUp'] = 'Sign up';
+$l['forgotPassword'] = 'Forgot password?';
+$l['passwordChanged'] = 'Password changed';
+$l['changePassword'] = 'Change password';
+$l['changePasswordText'] = 'Use the below form to change your password';
+$l['alreadySignedupText'] = 'If you already have a username and password use this form to login.';
+$l['forgotPasswordText'] = 'Fill in your email address in the form below, and you\'ll recieve a link to recover your password within minuts.';
+$l['submit'] = 'Submit';
+$l['noemail'] = 'No email given!';
+$l['invalidusertoken'] = 'The provided usertoken is not valid!';
+$l['invaliduser'] = 'No user found with the given email address!';
+$l['recoverEmailSent'] = 'An email with recover instructions is send to the following email address:';
+$l['resetPasswordSuccess'] = 'Your password is successfully reset.';
+
 $l["attachFilesPC"]='Add from PC';
 $l["attachFilesGO"]='Add from {product_name}';
 
