@@ -73,23 +73,23 @@ class GO_Site_Components_Scripts
 	{
 		$html = '';
 		foreach ($this->metaTags as $meta)
-			$html.=GO_Site_Components_Html::metaTag($meta['content'], null, null, $meta) . "\n";
+			$html.=self::metaTag($meta['content'], null, null, $meta) . "\n";
 		foreach ($this->cssFiles as $url => $media)
-			$html.=GO_Site_Components_Html::cssFile($url, $media) . "\n";
+			$html.=self::cssFile($url, $media) . "\n";
 
 		if(isset($this->gapiScripts[self::POS_HEAD]))
 		{
 			foreach ($this->gapiScripts[self::POS_HEAD] as $gapiScript)
-				$html.=GO_Site_Components_Html::scriptFile($gapiScript) . "\n";
+				$html.=self::scriptFile($gapiScript) . "\n";
 		}
 		if (isset($this->scriptFiles[self::POS_HEAD]))
 		{
 			foreach ($this->scriptFiles[self::POS_HEAD] as $scriptFile)
-				$html.=GO_Site_Components_Html::scriptFile($scriptFile) . "\n";
+				$html.=self::scriptFile($scriptFile) . "\n";
 		}
 
 		if (isset($this->scripts[self::POS_HEAD]))
-			$html.=GO_Site_Components_Html::script(implode("\n", $this->scripts[self::POS_HEAD])) . "\n";
+			$html.=self::script(implode("\n", $this->scripts[self::POS_HEAD])) . "\n";
 
 
 		if ($html !== '')
@@ -113,10 +113,10 @@ class GO_Site_Components_Scripts
 		if (isset($this->scriptFiles[self::POS_BEGIN]))
 		{
 			foreach ($this->scriptFiles[self::POS_BEGIN] as $scriptFile)
-				$html.=GO_Site_Components_Html::scriptFile($scriptFile) . "\n";
+				$html.=self::scriptFile($scriptFile) . "\n";
 		}
 		if (isset($this->scripts[self::POS_BEGIN]))
-			$html.=GO_Site_Components_Html::script(implode("\n", $this->scripts[self::POS_BEGIN])) . "\n";
+			$html.=self::script(implode("\n", $this->scripts[self::POS_BEGIN])) . "\n";
 
 		if ($html !== '')
 		{
@@ -145,7 +145,7 @@ class GO_Site_Components_Scripts
 		if (isset($this->scriptFiles[self::POS_END]))
 		{
 			foreach ($this->scriptFiles[self::POS_END] as $scriptFile)
-				$html.=GO_Site_Components_Html::scriptFile($scriptFile) . "\n";
+				$html.=self::scriptFile($scriptFile) . "\n";
 		}
 		$scripts = isset($this->scripts[self::POS_END]) ? $this->scripts[self::POS_END] : array();
 		if (isset($this->scripts[self::POS_READY]))
@@ -156,7 +156,7 @@ class GO_Site_Components_Scripts
 				$scripts[] = implode("\n", $this->scripts[self::POS_READY]);
 		}
 		if (!empty($scripts))
-			$html.=GO_Site_Components_Html::script(implode("\n", $scripts)) . "\n";
+			$html.=self::script(implode("\n", $scripts)) . "\n";
 
 		if ($fullPage)
 			$output = str_replace('<###end###>', $html, $output);
@@ -256,7 +256,39 @@ class GO_Site_Components_Scripts
 		$this->metaTags[serialize($options)] = $options;
 		return $this;
 	}
+	
+	//helper for generating script tags
+	
+	protected static function cssFile($url,$media='')
+	{
+		if($media!=='')
+			$media=' media="'.$media.'"';
+		return '<link rel="stylesheet" type="text/css" href="'.htmlspecialchars($url,ENT_QUOTES,'UTF-8').'"'.$media.' />';
+	}
+	
+	protected static function script($text)
+	{
+		return "<script type=\"text/javascript\">\n/*<![CDATA[*/\n{$text}\n/*]]>*/\n</script>";
+	}
 
+	protected static function scriptFile($url)
+	{
+		return '<script type="text/javascript" src="'.htmlspecialchars($url,ENT_QUOTES,'UTF-8').'"></script>';
+	}
+	
+	protected static function metaTag($content,$name=null,$httpEquiv=null,$options=array())
+	{
+		if($name!==null)
+			$options['name']=$name;
+		if($httpEquiv!==null)
+			$options['http-equiv']=$httpEquiv;
+		$options['content']=$content;
+		
+		$html = '<meta';
+		foreach($options as $name=>$value)
+			$html .= ' ' . $name . '="' . $value . '"';
+		return $html.' />';
+	}
 }
 
 ?>
