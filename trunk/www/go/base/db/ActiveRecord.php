@@ -2433,7 +2433,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		*/
 //GO::debug($this->mtime);
 		
-		if($this->dbUpdateRequired()){
+		if($this->dbUpdateRequired() || ($this->_customfieldsRecord && $this->_customfieldsRecord->isModified())){
 			if(isset($this->columns['mtime']) && (!$this->isModified('mtime') || empty($this->mtime)))//Don't update if mtime was manually set.
 				$this->mtime=time();
 			if(isset($this->columns['ctime']) && empty($this->ctime)){
