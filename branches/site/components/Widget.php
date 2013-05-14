@@ -6,6 +6,7 @@ abstract class GO_Site_Components_Widget extends GO_Base_Object {
 	 */
 	private static $_counter=0;
 	/**
+	 * Id will be set automaticaly is setId() is never called
 	 * @var string id of the widget.
 	 */
 	private $_id;
@@ -19,6 +20,11 @@ abstract class GO_Site_Components_Widget extends GO_Base_Object {
 		$this->init();
 	}
 	
+	/**
+	 * Overwrite this for initial widget setup before rendering anything
+	 * Do not overwrite the constructor because it will lose it functionality
+	 * to set the default option as a config array
+	 */
 	protected function init() {
 		
 	}
