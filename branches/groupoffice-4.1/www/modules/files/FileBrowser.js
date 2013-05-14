@@ -715,7 +715,8 @@ GO.files.FileBrowser = function(config){
 		collapsible:true,
 		hideCollapseTool:true,
 		split:true,
-		border:false
+		border:false,
+		id: 'fs-east-panel-',
 	});
 
 
