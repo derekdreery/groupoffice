@@ -377,18 +377,18 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 	public function beginForm($action=false, $method=false, $htmlAttributes=false)
 	{
 		if(!empty($action))
-			$this->_action = $action;
+			$this->action = $action;
 		
 		if(!empty($method))
-			$this->_method = $method;
+			$this->method = $method;
 		
 		if(!empty($htmlAttributes))
-			$this->_htmlAttributes = $htmlAttributes;
+			$this->htmlAttributes = $htmlAttributes;
 		
-		if(!empty($this->_action))
-			$htmlAttributes['action']=$url=$this->_action;
+		if(!empty($this->action))
+			$htmlAttributes['action']=$url=$this->action;
 		
-		$htmlAttributes['method']=$this->_method;
+		$htmlAttributes['method']=$this->method;
 		$form=$this->_tag('form',$htmlAttributes,false,false);
 		$hiddens=array();
 		if(!strcasecmp($method,'get') && ($pos=strpos($url,'?'))!==false)
