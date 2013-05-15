@@ -1,3 +1,5 @@
+- Remember state of several grids in the Email Composer's Address Book dialog.
+
 14-05-2013 4.1.66
 - Only first 30 bookmarks shown
 - Don't delete types with projects
