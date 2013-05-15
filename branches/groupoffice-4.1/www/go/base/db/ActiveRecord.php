@@ -2634,7 +2634,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	/**
-	 * Set a new ACL for this model
+	 * Set a new ACL for this model. You need to save the model after calling this
+	 * function.
 	 * 
 	 * @param string $user_id
 	 * @return \GO_Base_Model_Acl
