@@ -68,6 +68,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	/**
 	 * Call a method of a module class. eg. GO_Notes_NotesModule::firstRun
 	 * 
+	 * @deprecated Preferrably use events with listeners because it has better performance
 	 * @param string $method
 	 * @param array $params 
 	 */
@@ -78,7 +79,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 		
 		foreach($modules as $module)
 		{	
-			if($this->_isAllowed($module->id)){
+//			if($this->_isAllowed($module->id)){
 				$file = $module->path.ucfirst($module->id).'Module.php';
 				//todo load listeners
 				if(file_exists($file)){
@@ -92,7 +93,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 						//$object->$method($params);
 					}
 				}
-			}
+//			}
 		}
 		
 		GO::setIgnoreAclPermissions($oldIgnore);
