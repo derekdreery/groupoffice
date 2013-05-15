@@ -486,4 +486,15 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 		
 		return parent::beforeSave();
 	}
+	
+	/**
+	 * Set properties from contact
+	 * 
+	 * @param GO_Addressbook_Model_Contact $contact
+	 */
+	public function setContact(GO_Addressbook_Model_Contact $contact){
+		$this->user_id=$contact->go_user_id;
+		$this->email=$contact->email;
+		$this->name=$contact->name;		
+	}
 }
