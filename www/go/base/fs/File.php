@@ -371,7 +371,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 * Copy a file to another folder.
 	 * 
 	 * @param GO_Base_Fs_Folder $destinationFolder 
-	 * @return boolean
+	 * @return GO_Base_Fs_File
 	 */
 	public function copy(GO_Base_Fs_Folder $destinationFolder, $newFileName=false){
 		
@@ -393,7 +393,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		if(GO::config()->file_change_group)
 			chgrp($newPath, GO::config()->file_change_group);
 						
-		return true;
+		return new GO_Base_Fs_File($newPath);
 	}
 	
 	/**

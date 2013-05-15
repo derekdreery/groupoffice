@@ -168,7 +168,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 * Copy a folder to another folder.
 	 * 
 	 * @param GO_Base_Fs_Folder $destinationFolder 
-	 * @return boolean
+	 * @return GO_Base_Fs_Folder
 	 */
 	public function copy($destinationFolder, $newFolderName=false){
 		$this->_validateSrcAndDestPath($destinationFolder->path(), $this->path());
