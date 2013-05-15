@@ -3496,6 +3496,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 //	}
 	
 	private function _linkExists($model){		
+		
 		if($model->className()=="GO_Base_Model_SearchCacheRecord"){
 			$model_id = $model->model_id;
 			$model_type_id = $model->model_type_id;
@@ -3505,11 +3506,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$model_type_id = $model->modelTypeId();
 		}
 		
+		if(!$model_id)
+			return false;
+		
 		$table = $this->className()=="GO_Base_Model_SearchCacheRecord" ? GO::getModel($this->model_name)->model()->tableName() : $this->tableName();		
 		$this_id = $this->className()=="GO_Base_Model_SearchCacheRecord" ? $this->model_id : $this->id;
 		
 		$sql = "SELECT count(*) FROM `go_links_$table` WHERE ".
-			"`id`=".intval($this_id)." AND model_type_id=".$model_type_id." AND `model_id`=".$model_id;
+			"`id`=".intval($this_id)." AND model_type_id=".$model_type_id." AND `model_id`=".intval($model_id);
 		$stmt = $this->getDbConnection()->query($sql);
 		return $stmt->fetchColumn(0) > 0;		
 	}
