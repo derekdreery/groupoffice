@@ -103,4 +103,16 @@ class GO_Files_FilesModule extends GO_Base_Module{
 		return self::$fileHandlers;
 	}
 	
+	public function install() {
+			
+		parent::install();
+		
+		$admin = GO_Base_Model_User::model()->findByPk(1);
+		
+		$folder = GO_Files_Model_Folder::model()->findByPath('users/'.$admin->username.'/Public', true);
+		$acl = $folder->setNewAcl();
+		$acl->addGroup(GO::config()->group_everyone, GO_Base_Model_Acl::DELETE_PERMISSION);
+		$folder->save();
+	}
+	
 }
