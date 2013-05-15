@@ -325,13 +325,18 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 			if(key_exists('a', $imageAttr))
 			 $html = sprintf('<a href="%s" target="_blank">%s</a>',$imageAttr['a'],$html);
 		}
-		 
-
-
-		 
 		 return $html;
 	 }
 	 
-	 
-	 
+	 /**
+	  * Get the meta title of this content item.
+	  * 
+	  * @return string
+	  */
+	 public function getMetaTitle(){
+		 if(!empty($this->meta_title))
+			 return $this->meta_title;
+		else
+			return $this->title;
+	 }	 
 }
