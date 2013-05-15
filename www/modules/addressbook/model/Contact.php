@@ -313,6 +313,9 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 * @param String $srcFileName The source image file name.
 	 */
 	public function setPhoto($srcFileName){
+		
+		if(!$this->id)
+			throw new Exception("Contact must be saved before you can set a photo");
 
 		$destination = GO::config()->file_storage_path.'contacts/contact_photos/'.$this->id.'.jpg';
 		
