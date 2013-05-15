@@ -827,8 +827,4 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 		}
 		return $model;
 	}
-	
-	
-	
-	
 }
