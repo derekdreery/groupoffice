@@ -361,7 +361,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		//if this is not the organizer event it may only be modified by the organizer
 		if(!$this->_isImport && !$this->isNew && $this->isModified(array("name","start_time","end_time","location","description","calendar_id","rrule","repeat_end_time"))){		
 			$organizerEvent = $this->getOrganizerEvent();
-			if($organizerEvent && $organizerEvent->user_id!=GO::user()->id || !$organizerEvent && !$this->is_organizer){
+			if($organizerEvent && !$organizerEvent->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION) || !$organizerEvent && !$this->is_organizer){
 				GO::debug($this->getModifiedAttributes());
 				GO::debug($this->_attributes);
 				throw new GO_Base_Exception_AccessDenied();
