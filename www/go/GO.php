@@ -228,10 +228,7 @@ class GO{
 	 */
 	public static function clearCache(){
 		
-		GO::config()->getCacheFolder(false)->delete();
-		
-		//rebuild listeners
-		GO_Base_Observable::cacheListeners();		
+		GO::config()->getCacheFolder(false)->delete();		
 		
 		GO::cache()->flush();
 
