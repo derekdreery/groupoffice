@@ -8,10 +8,16 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 	protected function actionContent($params){
 		$content = empty($params['slug']) ? false : GO_Site_Model_Content::model()->findBySlug($params['slug']);
 		
-		if(!$content)
+		if(!$content){
 			$this->render('/site/404');
-		else
+		}else{
+			
+			$this->setPageTitle($content->metaTitle);
+			Site::scripts()->registerMetaTag($content->meta_description, 'description');
+			Site::scripts()->registerMetaTag($content->meta_keywords, 'keywords');
+			
 			$this->render($content->template,array('content'=>$content));
+		}
 	}
 	
 	/**
