@@ -6,6 +6,17 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 		if(!GO::user()->isAdmin())
 			throw new GO_Base_Exception_AccessDenied();
 	
+		
+		$category = GO_Customfields_Model_Category::model()->createIfNotExists("GO_Addressbook_Model_Contact", "Demo Custom fields");
+		
+		$types = GO_Customfields_CustomfieldsModule::getCustomfieldTypes();
+		foreach($types as $t){
+			GO_Customfields_Model_Field::model()->createIfNotExists($category->id, $t['type'],array(
+					'datatype'=>$t['className'],
+					'helptext'=>($t['className']=="GO_Customfields_Customfieldtype_Text" ? "Some help text for this field" : "")
+					));
+		}
+		
 
 
 		$addressbook = GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('name', GO::t('customers', 'addressbook'));
@@ -20,7 +31,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$addressbook->save();
 			$addressbook->acl->addGroup(GO::config()->group_internal, GO_Base_Model_Acl::WRITE_PERMISSION);
 		}
-
+		
 		$company = GO_Addressbook_Model_Company::model()->findSingleByAttribute('email', 'info@smith.demo');
 		if (!$company) {
 			$company = new GO_Addressbook_Model_Company();
@@ -147,7 +158,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$dt->save();
 		}
 
-
+		GO::config()->password_validate=false;
 
 		$elmer = GO_Base_Model_User::model()->findSingleByAttribute('username', 'elmer');
 		if (!$elmer) {
@@ -156,11 +167,14 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$elmer->first_name = 'Elmer';
 			$elmer->last_name = 'Fudd';
 			$elmer->email = 'elmer@acmerpp.demo';
+			$elmer->password='demo';
 			if ($elmer->save()) {
 				$this->_setUserContact($elmer);
 				$elmer->checkDefaultModels();
 			}
 		}
+		
+
 
 
 		$demo = GO_Base_Model_User::model()->findSingleByAttribute('username', 'demo');
@@ -170,6 +184,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$demo->first_name = 'Demo';
 			$demo->last_name = 'User';
 			$demo->email = 'demo@acmerpp.demo';
+			$demo->password='demo';
 			if ($demo->save()) {
 				$this->_setUserContact($demo);
 				$demo->checkDefaultModels();
@@ -184,6 +199,8 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$linda->first_name = 'Linda';
 			$linda->last_name = 'Smith';
 			$linda->email = 'linda@acmerpp.demo';
+			$linda->password='demo';
+							
 			if ($linda->save()) {
 				$this->_setUserContact($linda);
 				$linda->checkDefaultModels();
@@ -264,6 +281,22 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 
 				$john->link($event);
 			}
+			
+			
+			$view = new GO_Calendar_Model_View();
+			$view->name=GO::t('group_everyone');
+			$view->save();			
+			$view->addManyMany('groups', GO::config()->group_everyone);
+			
+			
+			$view = new GO_Calendar_Model_View();
+			$view->name=GO::t('group_everyone').' ('.GO::t('merge', 'calendar').')';
+			$view->merge=true;
+			$view->owncolor=true;
+			$view->save();			
+			$view->addManyMany('groups', GO::config()->group_everyone);
+			
+			
 		}
 		
 		if(GO::modules()->tasks){			
