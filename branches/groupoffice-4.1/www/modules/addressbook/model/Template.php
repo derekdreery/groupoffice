@@ -242,6 +242,8 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	
 	private function _parse($content, $attributes, $leaveEmptyTags){
 		
+		$attributes = array_merge($this->_defaultTags, $attributes);
+		
 		if($this->htmlSpecialChars){
 			foreach($attributes as $key=>$value)
 				$attributes[$key]=htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
