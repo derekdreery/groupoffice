@@ -205,13 +205,16 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	 * @param string $number
 	 * @return array See getAttachments 
 	 */
-	public function &getAttachment($number){
-		$att =& $this->getAttachments();
-		if(isset($att[$number])){
+	public function getAttachment($number){
+		$att = $this->getAttachments();
+		if(!isset($att[$number]))
+			return false;
+		else
 			return $att[$number];
-		}else{
-			throw new Exception("Attachment number $number not found");
-		}
+//			false}else{
+//			//throw new Exception("Attachment number $number not found");
+//			return ;
+//		}
 	}
 	
 	
