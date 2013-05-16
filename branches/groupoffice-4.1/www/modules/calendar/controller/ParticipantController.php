@@ -48,7 +48,7 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 		
 		$calendar = GO_Calendar_Model_Calendar::model()->findByPk($params['calendar_id']);		
 		
-		$user = $calendar->user_id=1 ? GO::user() : $calendar->user;
+		$user = $calendar->user_id==1 ? GO::user() : $calendar->user;
 		
 		$participant = new GO_Calendar_Model_Participant();
 		$participant->user_id=$user->id;

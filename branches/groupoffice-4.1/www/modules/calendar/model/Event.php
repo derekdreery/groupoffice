@@ -1783,7 +1783,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public function getDefaultOrganizerParticipant(){
 		$calendar = $this->calendar;
 		
-		$user = $calendar->user_id=1 ? GO::user() : $calendar->user;
+		$user = $calendar->user_id==1 ? GO::user() : $calendar->user;
 		
 		$participant = new GO_Calendar_Model_Participant();
 		$participant->event_id=$this->id;
