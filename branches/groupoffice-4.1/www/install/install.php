@@ -118,8 +118,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 
 		$cron->save();
 		
-		//make sure exiting logins are killed
-		GO::session()->logout();
+		
 		
 		redirect('finished.php');
 	}

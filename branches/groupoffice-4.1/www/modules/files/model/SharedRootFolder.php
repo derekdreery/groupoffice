@@ -84,9 +84,9 @@ class GO_Files_Model_SharedRootFolder extends GO_Base_Db_ActiveRecord {
 		return $group->fetch()->mtime;		
 	}
 
-	public function rebuildCache($user_id) {
+	public function rebuildCache($user_id, $force=false) {
 		
-		$lastBuildTime = GO::config()->get_setting('files_shared_cache_ctime', $user_id);
+		$lastBuildTime = $force ? 0 : GO::config()->get_setting('files_shared_cache_ctime', $user_id);
 		if(!$lastBuildTime || $this->_getLastMtime($user_id)>$lastBuildTime){	
 
 			GO::debug("Rebuilding shared cache");
