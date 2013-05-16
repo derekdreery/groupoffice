@@ -1774,18 +1774,22 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 	
 	/**
-	 * Get the default participant model for a new event
+	 * Get the default participant model for a new event.
+	 * The default is the calendar owner except if the owner is admin. In that
+	 * case it will default to the logged in user.
 	 * 
 	 * @return \GO_Calendar_Model_Participant
 	 */
 	public function getDefaultOrganizerParticipant(){
 		$calendar = $this->calendar;
 		
+		$user = $calendar->user_id=1 ? GO::user() : $calendar->user;
+		
 		$participant = new GO_Calendar_Model_Participant();
 		$participant->event_id=$this->id;
-		$participant->user_id=$calendar->user_id;
-		$participant->name=$calendar->user->name;
-		$participant->email=$calendar->user->email;
+		$participant->user_id=$user->id;
+		$participant->name=$user->name;
+		$participant->email=$user->email;
 		$participant->status=GO_Calendar_Model_Participant::STATUS_ACCEPTED;
 		$participant->is_organizer=1;
 		
