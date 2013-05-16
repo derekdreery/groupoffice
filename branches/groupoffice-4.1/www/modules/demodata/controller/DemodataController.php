@@ -660,14 +660,119 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 		}
 		
 		
+		if(GO::modules()->projects){
+			
+			$templates = GO_Projects_Model_Template::model()->find();
+			
+			$folderTemplate = $templates->fetch();
+			$projectTemplate = $templates->fetch();
+			
+			$status = GO_Projects_Model_Status::model()->findSingle();
+			
+			$type = GO_Projects_Model_Type::model()->findSingleByAttribute('name', 'Demo');
+			if(!$type){
+				$type = new GO_Projects_Model_Type();
+				$type->name='Demo';
+				if(!$type->save())
+				{
+					var_dump($type->getValidationErrors());
+					exit();
+				}
+				$type->acl->addGroup(GO::config()->group_internal, GO_Base_Model_Acl::WRITE_PERMISSION);
+			}
+			
+			
+			$folderProject = GO_Projects_Model_Project::model()->findSingleByAttribute('name','Demo');
+			if(!$folderProject){
+				$folderProject = new GO_Projects_Model_Project();
+				$folderProject->name='Demo';
+				$folderProject->description='Just a placeholder for sub projects.';
+				$folderProject->template_id=$folderTemplate->id;
+				$folderProject->type_id=$type->id;
+				$folderProject->status_id=$status->id;
+				if(!$folderProject->save()){
+						var_dump($folderProject->getValidationErrors());
+					exit();
+				}
+				
+			}
+			
+			
+			$rocketProject = GO_Projects_Model_Project::model()->findSingleByAttribute('name','Develop Rocket 2000');
+			if(!$rocketProject){
+				$rocketProject = new GO_Projects_Model_Project();
+				$rocketProject->type_id=$type->id;
+				$rocketProject->status_id=$status->id;
+				$rocketProject->name='[001] Develop Rocket 2000';
+				$rocketProject->description='Better range and accuracy';
+				$rocketProject->template_id=$projectTemplate->id;
+				$rocketProject->parent_project_id=$folderProject->id;
+				$rocketProject->start_time=time();
+				$rocketProject->due_time=GO_Base_Util_Date::date_add(time(),0,1);
+				$rocketProject->company_id=$acme->id;
+				$rocketProject->contact_id=$wile->id;
+				$rocketProject->save();
+			}
+			
+			$launcherProject = GO_Projects_Model_Project::model()->findSingleByAttribute('name','Develop Rocket 2000');
+			if(!$launcherProject){
+				$launcherProject = new GO_Projects_Model_Project();
+				$launcherProject->type_id=$type->id;
+				$launcherProject->status_id=$status->id;
+				$launcherProject->name='[001] Develop Rocket Launcher';
+				$launcherProject->description='Better range and accuracy';
+				$launcherProject->template_id=$projectTemplate->id;
+				$launcherProject->parent_project_id=$folderProject->id;
+				$launcherProject->start_time=time();
+				$launcherProject->due_time=GO_Base_Util_Date::date_add(time(),0,1);
+				$launcherProject->company_id=$acme->id;
+				$launcherProject->contact_id=$wile->id;
+				$launcherProject->save();
+			}
+			
+		}
+		
+		if(GO::modules()->bookmarks){
+			$category = GO_Bookmarks_Model_Category::model()->findSingleByAttribute('name', GO::t('general','bookmarks'));
+			
+			if(!$category){
+				$category = new GO_Bookmarks_Model_Category();
+				$category->name=GO::t('general','bookmarks');		
+				$category->save();
+				$category->acl->addGroup(GO::config()->group_internal, GO_Base_Model_Acl::READ_PERMISSION);
+			}
+			
+			$bookmark = new GO_Bookmarks_Model_Bookmark();
+			$bookmark->category_id=$category->id;
+			$bookmark->name='Google Search';
+			$bookmark->content='http://www.google.com';
+			$bookmark->logo='icons/viewmag.png';
+			$bookmark->public_icon=true;
+			$bookmark->description='Search the web';
+			$bookmark->open_extern=true;
+			$bookmark->save();
+			
+			
+			$bookmark = new GO_Bookmarks_Model_Bookmark();
+			$bookmark->category_id=$category->id;
+			$bookmark->name='Wikipedia';
+			$bookmark->content='http://www.wikipedia.com';
+			$bookmark->logo='icons/agt_web.png';
+			$bookmark->public_icon=true;
+			$bookmark->description='Search the web';
+			$bookmark->behave_as_module=true;
+			$bookmark->save();
+		}
+		
 		if(GO::modules()->demodata)
 			GO::modules()->demodata->delete();
 		
 		
 		//login as demo		
-		GO::session()->logout();
-		GO::session()->setCurrentUser($demo->id);
-
+		
+//		GO::session()->restart();
+//		GO::session()->setCurrentUser($demo->id);
+//
 //		$this->redirect();
 		
 		
