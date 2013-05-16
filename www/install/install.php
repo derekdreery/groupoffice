@@ -83,6 +83,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 		//module code here because we need the user and the module for this
 		if(GO::modules()->files){
 			$folder = GO_Files_Model_Folder::model()->findByPath('users/'.$admin->username.'/Public', true);
+			$folder->visible=true;
 			$acl = $folder->setNewAcl();
 			$acl->addGroup(GO::config()->group_everyone, GO_Base_Model_Acl::DELETE_PERMISSION);
 			$folder->save();
@@ -116,6 +117,9 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 		$cron->job = 'GO_Base_Cron_CalculateDiskUsage';		
 
 		$cron->save();
+		
+		//make sure exiting logins are killed
+		GO::session()->logout();
 		
 		redirect('finished.php');
 	}
