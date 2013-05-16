@@ -392,9 +392,14 @@ class GO_Base_Util_String {
 		return $out;
 	}
 	
-	
+	/**
+	 * Check if string has UTF8 characters
+	 * 
+	 * @param string $str
+	 * @return boolean
+	 */
 	public static function isUtf8($str){
-		return preg_match('!\S!u', $str);
+		return strlen($str) != strlen(utf8_decode($str));
 	}
 
 	/**
