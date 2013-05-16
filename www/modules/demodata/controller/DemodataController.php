@@ -7,14 +7,25 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			throw new GO_Base_Exception_AccessDenied();
 	
 		
-		$category = GO_Customfields_Model_Category::model()->createIfNotExists("GO_Addressbook_Model_Contact", "Demo Custom fields");
-		
-		$types = GO_Customfields_CustomfieldsModule::getCustomfieldTypes();
-		foreach($types as $t){
-			GO_Customfields_Model_Field::model()->createIfNotExists($category->id, $t['type'],array(
-					'datatype'=>$t['className'],
-					'helptext'=>($t['className']=="GO_Customfields_Customfieldtype_Text" ? "Some help text for this field" : "")
-					));
+		if(GO::modules()->customfields){
+			$customfieldModels = GO_Customfields_CustomfieldsModule::getCustomfieldModels();
+
+			
+			$types = GO_Customfields_CustomfieldsModule::getCustomfieldTypes();
+			
+			foreach($customfieldModels as $model){
+			
+//				echo $model->getName(),'<br />';
+				$category = GO_Customfields_Model_Category::model()->createIfNotExists(GO::getModel($model->getName())->extendsModel(), "Demo Custom fields");
+				$category->acl->addGroup(GO::config()->group_internal, GO_Base_Model_Acl::WRITE_PERMISSION);
+				
+				foreach($types as $t){
+					GO_Customfields_Model_Field::model()->createIfNotExists($category->id, $t['type'],array(
+							'datatype'=>$t['className'],
+							'helptext'=>($t['className']=="GO_Customfields_Customfieldtype_Text" ? "Some help text for this field" : "")
+							));
+				}
+			}
 		}
 		
 
@@ -339,6 +350,40 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 				//share view
 				$view->acl->addGroup(GO::config()->group_internal);
 			}
+			
+			
+			//resource groups
+			$resourceGroup = GO_Calendar_Model_Group::model()->findSingleByAttribute('name', "Meeting rooms");
+			if(!$resourceGroup){
+				$resourceGroup = new GO_Calendar_Model_Group();
+				$resourceGroup->name="Meeting rooms";
+				$resourceGroup->save();
+				
+				//$resourceGroup->acl->addGroup(GO::config()->group_internal);
+								
+			}
+			
+			$resourceCalendar = GO_Calendar_Model_Calendar::model()->findSingleByAttribute('name', 'Road Runner Room');
+			if(!$resourceCalendar){
+				$resourceCalendar = new GO_Calendar_Model_Calendar();
+				$resourceCalendar->group_id=$resourceGroup->id;
+				$resourceCalendar->name='Road Runner Room';
+				$resourceCalendar->save();
+				$resourceCalendar->acl->addGroup(GO::config()->group_internal);
+			}
+			
+			$resourceCalendar = GO_Calendar_Model_Calendar::model()->findSingleByAttribute('name', 'Don Coyote Room');
+			if(!$resourceCalendar){
+				$resourceCalendar = new GO_Calendar_Model_Calendar();
+				$resourceCalendar->group_id=$resourceGroup->id;
+				$resourceCalendar->name='Don Coyote Room';
+				$resourceCalendar->save();
+				$resourceCalendar->acl->addGroup(GO::config()->group_internal);
+			}
+			
+			
+			//setup elmer as a resource admin
+			$resourceGroup->addManyMany('admins', $elmer->id);
 			
 			
 		}
@@ -764,18 +809,64 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			$bookmark->save();
 		}
 		
+		if(GO::modules()->postfixadmin){
+			
+			
+			$domainModel= GO_Postfixadmin_Model_Domain::model()->findSingleByAttribute('domain', 'acmerpp.demo');
+			if(!$domainModel){
+				$domainModel = new GO_Postfixadmin_Model_Domain();
+				$domainModel->domain='acmerpp.demo';
+				$domainModel->save();
+			}
+				
+			$this->_createMailbox($domainModel, $demo);
+			$this->_createMailbox($domainModel, $elmer);
+			$this->_createMailbox($domainModel, $linda);
+			
+			
+		}
+		
 		if(GO::modules()->demodata)
 			GO::modules()->demodata->delete();
 		
 		
-		//login as demo		
+		//login as demo				
+		GO::session()->restart();
+		GO::session()->setCurrentUser($demo->id);
+
+		$this->redirect();
 		
-//		GO::session()->restart();
-//		GO::session()->setCurrentUser($demo->id);
-//
-//		$this->redirect();
 		
-		
+	}
+	
+	
+	private function _createMailbox($domainModel, $demo){
+		$demoMailbox = GO_Postfixadmin_Model_Mailbox::model()->findSingleByAttribute('username', $demo->email);
+		if(!$demoMailbox){
+			$demoMailbox = new GO_Postfixadmin_Model_Mailbox();
+			$demoMailbox->domain_id=$domainModel->id;
+			$demoMailbox->username=$demo->email;
+			$demoMailbox->password='demo';
+			$demoMailbox->name=$demo->name;
+			$demoMailbox->save();				
+		}			
+
+		$accountModel = GO_Email_Model_Account::model()->findSingleByAttribute('username', $demoMailbox->username);
+		if(!$accountModel){
+			$accountModel = new GO_Email_Model_Account();
+			$accountModel->user_id=$demo->id;
+			$accountModel->checkImapConnectionOnSave=false;
+			$accountModel->host = 'localhost';
+			$accountModel->port = 143;
+
+			$accountModel->username = $demoMailbox->username;
+			$accountModel->password = 'demo';
+
+			$accountModel->smtp_host = "localhost";
+			$accountModel->smtp_port = 25;
+			$accountModel->save();
+			$accountModel->addAlias($accountModel->username, $demoMailbox->name);			
+		}
 	}
 
 	private function _setUserContact($user) {
