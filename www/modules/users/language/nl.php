@@ -122,3 +122,12 @@ $l['generatedPasswordIs']='Het gegenereerde wachtwoord is';
 $l['updateExistingOnImport']='Werk bestaande gebruikers bij op basis van username';
 $l['resetState']="Reset vensters en tabellen";
 $l['resetStateConfirm']='Weet u zeker dat u alle vensters, tabelkollomen en paneelafmetingen wilt terugzetten naar de fabrieksinstellingen?';
+
+$l['slashymd']='Jaar-Maand-Dag';
+$l['dotymd']='Jaar.Maand.Dag';
+$l['registrationEmail']='Registratie E-mail';
+$l['enabledSettingtabs']='Ingeschakkelde instellingen tabs';
+$l['explanation_cf_settingspanels']='To show the customfield tabs in the settingspanel you need to be sure that the user has at least "Read" access to the customfields module.';
+$l['addresslist_panel']= 'Addresslijsten paneel';
+$l['show_addresslists_panel']= 'Toon addresslijsten paneel';
+$l['enabled_cf_tabs']= 'Ingeschakelde extra velden';
