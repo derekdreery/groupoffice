@@ -211,12 +211,15 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 					array('Meet Wile', 12),
 					array('MT Meeting', 14)
 			);
+			
+			//start on tuesday.
+			$time = GO_Base_Util_Date::date_add(GO_Base_Util_Date::get_last_sunday(time()),2);
 
 			foreach ($events as $e) {
 				$event = new GO_Calendar_Model_Event();
 				$event->name = $e[0];
 				$event->location = "ACME NY Office";
-				$event->start_time = GO_Base_Util_Date::clear_time(time(), $e[1]);
+				$event->start_time = GO_Base_Util_Date::clear_time($time, $e[1]);
 				$event->end_time = $event->start_time + 3600;
 				$event->user_id = $demo->id;
 				$event->calendar_id = GO_Calendar_Model_Calendar::model()->getDefault($demo)->id;
@@ -255,6 +258,42 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 				$event = new GO_Calendar_Model_Event();
 				$event->name = $e[0];
 				$event->location = "ACME NY Office";
+				$event->start_time = GO_Base_Util_Date::date_add(GO_Base_Util_Date::clear_time($time, $e[1]), 1);
+				$event->end_time = $event->start_time + 3600;
+				$event->user_id = $linda->id;
+				$event->calendar_id = GO_Calendar_Model_Calendar::model()->getDefault($linda)->id;
+				$event->save();
+
+				$participant = new GO_Calendar_Model_Participant();
+				$participant->is_organizer = true;
+				$participant->setContact($linda->createContact());
+				$event->addParticipant($participant);
+
+
+				$participant = new GO_Calendar_Model_Participant();
+				$participant->setContact($demo->createContact());
+				$event->addParticipant($participant);
+
+
+				$participant = new GO_Calendar_Model_Participant();
+				$participant->setContact($john);
+				$event->addParticipant($participant);
+
+				$john->link($event);
+			}
+			
+			
+			
+			$events = array(
+					array('Rocket testing', 8),
+					array('Blast impact test', 15),
+					array('Test range extender', 19)
+			);
+
+			foreach ($events as $e) {
+				$event = new GO_Calendar_Model_Event();
+				$event->name = $e[0];
+				$event->location = "ACME Testing fields";
 				$event->start_time = GO_Base_Util_Date::date_add(GO_Base_Util_Date::clear_time(time(), $e[1]), 1);
 				$event->end_time = $event->start_time + 3600;
 				$event->user_id = $linda->id;
@@ -585,9 +624,51 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 		}
 		
 		
-		GO::modules()->demodata->delete();
+		if(GO::modules()->summary){
+			$announcement = new GO_Summary_Model_Announcement();
+			$announcement->title="Welcome to ".GO::config()->product_name;
+			$announcement->content='This is a demo announcements that administrators can set.<br />Have a look around.<br /><br />We hope you\'ll enjoy Group-Office as much as we do!';
+			
+			$announcement->save();
+		}
+		
+		
+		if(GO::modules()->files){
+			
+			$demoHome = GO_Files_Model_Folder::model()->findHomeFolder($demo);
+			$file = new GO_Base_Fs_File(GO::modules()->files->path.'install/templates/empty.docx');
+			$copy = $file->copy($demoHome->fsFolder);
+			
+			$file = new GO_Base_Fs_File(GO::modules()->files->path.'install/templates/empty.odt');
+			$copy = $file->copy($demoHome->fsFolder);
+			
+			
+			$file = new GO_Base_Fs_File(GO::modules()->addressbook->path . 'install/Demo letter.docx');
+			$copy = $file->copy($demoHome->fsFolder);
+			
+			
+			$file = new GO_Base_Fs_File(GO::modules()->addressbook->path . 'install/wecoyote.png');
+			$copy = $file->copy($demoHome->fsFolder);
+			
+			$file = new GO_Base_Fs_File(GO::modules()->addressbook->path . 'install/noperson.jpg');
+			$copy = $file->copy($demoHome->fsFolder);
+			
+			//add files to db.
+			$demoHome->syncFilesystem();
+			
+			
+		}
+		
+		
+		if(GO::modules()->demodata)
+			GO::modules()->demodata->delete();
+		
+		
+		//login as demo		
+		GO::session()->logout();
+		GO::session()->setCurrentUser($demo->id);
 
-		$this->redirect();
+//		$this->redirect();
 		
 		
 	}

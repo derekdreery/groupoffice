@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `fs_folders` (
   `visible` BOOLEAN NOT NULL DEFAULT '0',
   `acl_id` int(11) NOT NULL DEFAULT '0',
   `comment` text,
-  `thumbs` BOOLEAN NOT NULL DEFAULT '0',
+  `thumbs` BOOLEAN NOT NULL DEFAULT '1',
   `ctime` int(11) NOT NULL,
   `mtime` int(11) NOT NULL,
   `readonly` BOOLEAN NOT NULL DEFAULT '0',

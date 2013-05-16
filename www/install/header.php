@@ -1,6 +1,13 @@
 <?php
-define('GO_NO_SESSION',true);
+if(!isset($logout))
+	define('GO_NO_SESSION',true);
+
 require(dirname(dirname(__FILE__)).'/GO.php');
+
+if(isset($logout)){
+	//make sure exiting logins are killed
+	GO::session()->logout();
+}
 
 function redirect($url){
 	header('Location: '.$url);

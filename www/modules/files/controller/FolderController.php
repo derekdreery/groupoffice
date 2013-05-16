@@ -123,9 +123,16 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		//refresh forces sync with db
 		if(!empty($params['sync_folder_id'])){
+			if($params['sync_folder_id']=="shared"){
+				GO_Files_Model_SharedRootFolder::model()->rebuildCache(GO::user()->id, true);
+			}else
+			{
+				
+			
 				$syncFolder = GO_Files_Model_Folder::model()->findByPk($params['sync_folder_id']);
 				if($syncFolder)
 					$syncFolder->syncFilesystem();
+			}
 		}
 
 		$response = array();
@@ -579,7 +586,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		if($folderPreference)
 			$response['thumbs']=$folderPreference->thumbs;
 		else
-			$response['thumbs']=0;
+			$response['thumbs']=1;
 
 		$response['parent_id'] = $folder->parent_id;
 
