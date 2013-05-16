@@ -43,6 +43,7 @@ class GO_Site_Customfieldtype_Sitemultifile extends GO_Customfields_Customfieldt
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()
 				->ignoreAcl()
+				->order('mf.order')
 				->joinModel(array(
 					'model' => 'GO_Site_Model_MultifileFile',
 					'localTableAlias' => 't',
