@@ -37,6 +37,10 @@ class GO_Freebusypermissions_Model_FreeBusyAcl extends GO_Base_Db_ActiveRecord{
 	{	
 		return parent::model($className);
 	}
+	
+	public function primaryKey() {
+		return array('user_id','acl_id');
+	}
 
 
 	/**
