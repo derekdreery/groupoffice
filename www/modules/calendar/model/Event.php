@@ -374,7 +374,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		
 		if($this->isResource()){
-			if($this->status=='ACCEPTED'){
+			if($this->status=='CONFIRMED'){
 				$this->background='CCFFCC';
 			}else
 			{
