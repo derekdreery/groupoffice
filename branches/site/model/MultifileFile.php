@@ -24,6 +24,7 @@
  * @property int $model_id
  * @property int $field_id
  * @property int $file_id
+ * @property int $order
  */
 
 class GO_Site_Model_MultifileFile extends GO_Base_Db_ActiveRecord{
@@ -39,7 +40,6 @@ class GO_Site_Model_MultifileFile extends GO_Base_Db_ActiveRecord{
 		 return array('model_id','field_id','file_id');
 	 }
 	 
-
 	/**
 	 * Here you can define the relations of this model with other models.
 	 * See the parent class for a more detailed description of the relations.

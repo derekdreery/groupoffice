@@ -29,8 +29,9 @@ class GO_Site_Controller_Multifile extends GO_Base_Controller_AbstractJsonContro
 			}
 		}
 		
-		$findParams = GO_Base_Db_FindParams::newInstance();
+		$findParams = GO_Base_Db_FindParams::newInstance()->select('t.*,mf.order,mf.model_id,mf.field_id');
 		$findParams->ignoreAcl();
+		$findParams->order('mf.order');
 		$findParams->joinModel(array(
 			'model' => 'GO_Site_Model_MultifileFile',
 			'localTableAlias' => 't',
@@ -74,9 +75,34 @@ class GO_Site_Controller_Multifile extends GO_Base_Controller_AbstractJsonContro
 		
 		return $this->renderSubmit($model);
 	}
-	
-//	public function actionDelete($params){
-//
-//	}
-//	
+
+	/**
+	 * Save the sort of the multifiles
+	 * 
+	 * @param array $params
+	 * @throws GO_Base_Exception
+	 */
+	public function actionSaveSort($params){
+
+		if(!isset($params['sort']))
+			Throw new GO_Base_Exception('Failed to save the sort.');
+		
+		$sortOrder = json_decode($params['sort']);
+		
+		foreach($sortOrder as $order){
+			$file = GO_Site_Model_MultifileFile::model()->findByPk(array(
+				'model_id' => $order->model_id,
+				'field_id' => $order->field_id,
+				'file_id' => $order->file_id
+			));
+			
+			if(!$file)
+				continue;
+			
+			$file->order = $order->sort_index;
+			$file->save();
+		}
+		
+		$this->renderJson(array('success'=>true));
+	}
 }

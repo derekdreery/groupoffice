@@ -34,7 +34,32 @@ GO.site.MultifileView = Ext.extend(Ext.DataView,{
 			overClass:'fs-view-over',
 			selectedClass:'fs-view-selected',
 			itemSelector:'div.fs-thumb-wrap',
-			emptyText: 'No images to display'
+			emptyText: 'No images to display',
+			plugins: new net.drasill.plugins.SortableDataView({
+				listeners: {
+					drop : function(origIdx,lastIdx, record){
+
+						//save sort order							
+						var records = [];
+						for (var i = 0; i < this.store.data.items.length;  i++){
+							records.push({
+								file_id: this.store.data.items[i].get('id'), 
+								sort_index : i,
+								model_id : this.store.data.items[i].get('model_id'),
+								field_id : this.store.data.items[i].get('field_id')
+							});
+						}
+						
+						GO.request({
+							url:'site/multifile/saveSort',
+							params:{
+								sort:Ext.encode(records)
+							}
+						});
+					},
+					scope:this
+				}
+			})
 		});
 		
 		GO.site.MultifileView.superclass.initComponent.call(this);
