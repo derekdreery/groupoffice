@@ -103,6 +103,7 @@ GO.files.FolderPropertiesDialog = function(config){
 	
 	this.tabPanel =new Ext.TabPanel({
 		activeTab: 0,
+		enableTabScroll:true,
 		deferredRender:false,
 		border:false,
 		anchor:'100% 100%',
@@ -113,6 +114,15 @@ GO.files.FolderPropertiesDialog = function(config){
 	if(GO.customfields){
 		this.disableCategoriesPanel = new GO.customfields.DisableCategoriesPanel();
 		this.tabPanel.add(this.disableCategoriesPanel);
+		
+		
+		if(GO.customfields && GO.customfields.types["GO_Files_Model_Folder"])
+		{
+			for(var i=0;i<GO.customfields.types["GO_Files_Model_Folder"].panels.length;i++)
+			{
+				this.tabPanel.add(GO.customfields.types["GO_Files_Model_Folder"].panels[i]);
+			}
+		}
 	}
 
 //	if(GO.workflow)
@@ -134,7 +144,7 @@ GO.files.FolderPropertiesDialog = function(config){
 	GO.files.FolderPropertiesDialog.superclass.constructor.call(this,{
 		title:GO.lang['strProperties'],
 		layout:'fit',
-		width:500,
+		width:600,
 		height:440,
 		closeAction:'hide',
 		items:this.formPanel,
