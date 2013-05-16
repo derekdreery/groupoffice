@@ -70,4 +70,6 @@ $updates["201201121400"][]="ALTER TABLE `ta_tasklists` DROP `acl_write`";
 
 $updates["201204231436"][]="ALTER TABLE `ta_tasks` DROP `project_name`;";
 
-$updates['201304231330'][]="ALTER TABLE `ta_tasks` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";
+$updates["201305141646"][]="update ta_tasks set mtime=unix_timestamp(), due_time=start_time where due_time<start_time;";
+
+$updates['201305151646'][]="ALTER TABLE `ta_tasks` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";

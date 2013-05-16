@@ -109,37 +109,6 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		$addressbook->save();
 		$addressbook->acl->addGroup(GO::config()->group_internal,GO_Base_Model_Acl::WRITE_PERMISSION);
 
-		if(GO::config()->product_name=="Group-Office"){
-			$company = new GO_Addressbook_Model_Company();
-			$company->setAttributes(array(
-				'addressbook_id' => $addressbook->id,
-				'name' => 'Intermesh BV',
-				'address' => 'Zuid Willemsvaart',
-				'address_no' => '35',
-				'zip' => '5211 SB',
-				'city' => '\'s-Hertogenbosch',
-				'state' => 'Noord-Brabant',
-				'country' => 'NL',
-				'iso_address_format' => $default_language,
-				'post_address' => 'Zuid Willemsvaart',
-				'post_address_no' => '35',
-				'post_zip' => '5211 SB',
-				'post_city' => '\'s-Hertogenbosch',
-				'post_state' => 'Noord-Brabant',
-				'post_country' => 'NL',
-				'post_iso_address_format' => $default_language,
-				'phone' => '+31 (0) 73 - 644 55 08',
-				'fax' => '+31 (0) 84 738 03 70',
-				'email' => 'info@intermesh.nl',
-				'homepage' => 'http://www.intermesh.nl',
-				'bank_no' => '',
-				'vat_no' => 'NL 1502.03.871.B01',
-				'user_id' => 1,
-				'comment' => ''
-			));
-			$company->save();
-		}
-
 		if (!is_dir(GO::config()->file_storage_path.'contacts/contact_photos'))
 			mkdir(GO::config()->file_storage_path.'contacts/contact_photos',0755, true);
 
@@ -172,11 +141,24 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		$template->setAttributes(array(
 			'content' => $message->toString(),
 			'name' => GO::t('default'),
-			'type' => '0',
+			'type' => GO_Addressbook_Model_Template::TYPE_EMAIL,
 			'user_id' => 1
 		));
 		$template->save();
 		$template->acl->addGroup(GO::config()->group_internal);
+		
+		
+		$dt = GO_Addressbook_Model_Template::model()->findSingleByAttribute('name', 'Letter');
+		if (!$dt) {
+			$dt = new GO_Addressbook_Model_Template();	
+			$dt->type = GO_Addressbook_Model_Template::TYPE_DOCUMENT;
+			$dt->content = file_get_contents(GO::modules()->addressbook->path . 'install/letter_template.docx');
+			$dt->extension = 'docx';
+			$dt->name = 'Letter';
+			$dt->save();
+			
+			$dt->acl->addGroup(GO::config()->group_internal);
+		}
 	}
 	
 	
@@ -193,4 +175,5 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		
 		return parent::checkDatabase($response);
 	}
+
 }

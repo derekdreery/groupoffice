@@ -103,4 +103,23 @@ class GO_Files_FilesModule extends GO_Base_Module{
 		return self::$fileHandlers;
 	}
 	
+	public function install() {
+		parent::install();
+		
+		$template = new GO_files_Model_Template();
+		$template->name=GO::t('wordtextdoc','files');
+		$template->content = file_get_contents(GO::modules()->files->path.'install/templates/empty.docx');
+		$template->extension='docx';
+		$template->save();	
+		$template->acl->addGroup(GO::config()->group_internal, GO_Base_Model_Acl::READ_PERMISSION);
+		
+		
+		$template = new GO_files_Model_Template();
+		$template->name=GO::t('ootextdoc','files');
+		$template->content = file_get_contents(GO::modules()->files->path.'install/templates/empty.odt');
+		$template->extension='odt';
+		$template->save();	
+		$template->acl->addGroup(GO::config()->group_internal, GO_Base_Model_Acl::READ_PERMISSION);
+	}
+	
 }

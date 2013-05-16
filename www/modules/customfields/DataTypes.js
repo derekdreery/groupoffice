@@ -353,19 +353,7 @@ GO.customfields.dataTypes={
 		label : 'Heading',
 		getFormField : function(customfield, config){
 			return new GO.form.HtmlComponent(Ext.apply({
-				html: "<h1 class=\"cf-heading\">"+customfield.name+"</h1>",
-				// Added because otherwise you get an JS error about this function does not exist for this element
-				reset : function(){ 
-					return this;
-				},
-				// Added because otherwise you get an JS error about this function does not exist for this element
-				clearInvalid : function(){ 
-					return this;
-				},
-				// Added because otherwise you get an JS error about this function does not exist for this element
-				validate : function(){
-					return true; // True because a heading is always valid
-				}
+				html: "<h1 class=\"cf-heading\">"+customfield.name+"</h1>"
 			}, config));
 		}
 	},

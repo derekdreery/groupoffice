@@ -259,7 +259,8 @@ GO.addressbook.MainPanel = function(config)
 			region:'west',
 			width:180,
 			split:true,
-			items:[this.addressbooksGrid,this.mailingsFilterPanel]
+			items:[this.addressbooksGrid,this.mailingsFilterPanel],
+			id: 'ab-west-panel'
 		});
 		config.items= [
 		this.searchPanel,

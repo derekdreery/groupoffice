@@ -24,7 +24,9 @@ GO.form.ComboBoxMulti = function(config){
     // this option will interfere will expected operation
     config.typeAhead = false;
     // these options customize behavior
-    config.minChars = 2;
+    config.minChars = 3;
+		config.queryDelay=500;
+		
     config.hideTrigger = true;
     config.defaultAutoCreate = {
         tag: "textarea",

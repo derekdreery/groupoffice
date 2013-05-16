@@ -449,23 +449,4 @@ class GO_Base_Module extends GO_Base_Observable {
 	 */
 	public static function submitSettings(&$settingsController, &$params, &$response, $user){		
 	}
-	
-//	/**
-//	 * Called when a user is deleted
-//	 *
-//	 * @param GO_Base_Model_User $user
-//	 */
-//	public static function deleteUser($user){
-//		
-//	}
-//	
-//	/**
-//	 * Called when a user is saved
-//	 *
-//	 * @param GO_Base_Model_User $user
-//	 * @param boolean $wasNew 
-//	 */
-//	public static function saveUser($user, $wasNew){
-//		
-//	}
 }

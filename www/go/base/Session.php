@@ -33,6 +33,11 @@ class GO_Base_Session extends GO_Base_Observable{
 		$this->start();
 	}
 	
+	public function restart(){
+		$this->values=array();
+		$this->start();
+	}
+	
 	public function start(){
 		//start session
 		
@@ -51,7 +56,7 @@ class GO_Base_Session extends GO_Base_Observable{
 				ini_set('session.use_only_cookies',1);
 								
 				session_name('groupoffice');
-				session_start();
+				session_start();				
 			}
 			//GO::debug causes endless loop
 			//GO::debug("Started session");
@@ -154,7 +159,7 @@ class GO_Base_Session extends GO_Base_Observable{
 		GO::debug("Logout called for ".$username);
 
 		$old_session = $_SESSION;
-		unset($_SESSION);
+		$_SESSION=array();
 		$this->values=&$_SESSION;
 		
 		if (ini_get("session.use_cookies") && !headers_sent()) {
@@ -169,10 +174,8 @@ class GO_Base_Session extends GO_Base_Observable{
 		if(!headers_sent()){
 			$this->_unsetRemindLoginCookies();
 		}
-		
-		if(!headers_sent() && !defined("GO_NO_SESSION")){
-			session_start();
-		}
+		//start new session
+		$this->start();
 
 		$this->fireEvent('logout', array($old_session));
 		

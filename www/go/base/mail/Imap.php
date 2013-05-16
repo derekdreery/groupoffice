@@ -95,8 +95,19 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		if (!is_resource($this->handle)) {
 			throw new Exception('Failed to open socket #'.$errorno.'. '.$errorstr);
 		}
-
-		return $this->authenticate($username, $password);
+		
+		
+		$authed = $this->authenticate($username, $password);
+		
+		if(!$authed)
+			return false;
+		
+//		just testing for gmail
+//		$this->send_command("ENABLE UTF8=ACCEPT\r\n");
+		
+		
+		
+		return true;
 	}
 
 	/**
@@ -929,12 +940,15 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		}
 	}
 
-	private function server_side_sort($sort, $reverse, $filter) {
+	private function server_side_sort($sort, $reverse, $filter, $forceAscii=false) {
 		GO::debug("server_side_sort($sort, $reverse, $filter)");
 
 		$this->clean($sort, 'keyword');
 		//$this->clean($filter, 'keyword');
-		$command = 'UID SORT ('.$sort.') UTF-8 '.$filter."\r\n";
+		
+		$charset = $forceAscii || !GO_Base_Util_String::isUtf8($filter) ? 'US-ASCII' : 'UTF-8';
+		
+		$command = 'UID SORT ('.$sort.') '.$charset.' '.$filter."\r\n";
 		$this->send_command($command);
 		/*if ($this->disable_sort_speedup) {
 			$speedup = false;
@@ -944,6 +958,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		//}
 		$res = $this->get_response(false, true, 8192, $speedup);
 		$status = $this->check_response($res, true);
+		if(!$status && stripos($this->last_error(), 'utf')){
+			return $this->server_side_sort($sort, $reverse, $filter, true);
+		}
 		$uids = array();
 		foreach ($res as $vals) {
 			if ($vals[0] == '*' && strtoupper($vals[1]) == 'SORT') {
@@ -980,10 +997,11 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		 * Sending charset along doesn't work on iMailserver.
 		 * Without seems to work on different servers.
 		 */
-		//$charset = '';
-		$charset =  'CHARSET UTF-8 ';
+		$charset = '';
+		//$charset =  'CHARSET UTF-8 ';
+
 		
-		$command = 'UID SEARCH '.$charset.$terms."\r\n";
+		$command = 'UID SEARCH '.$charset.trim($terms)."\r\n";
 		$this->send_command($command);
 		$result = $this->get_response(false, true);
 		$status = $this->check_response($result, true);

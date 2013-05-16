@@ -72,7 +72,8 @@ GO.sites.ContentPanel = Ext.extend(GO.grid.GridPanel,{
 	
 	afterRender : function(){
 		
-		GO.customfields.CategoriesPanel.superclass.afterRender.call(this);
+//		GO.customfields.CategoriesPanel.superclass.afterRender.call(this);
+		GO.sites.ContentPanel.superclass.afterRender.call(this);
 		//enable row sorting
 		var DDtarget = new Ext.dd.DropTarget(this.getView().mainBody, 
 		{

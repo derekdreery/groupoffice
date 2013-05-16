@@ -73,4 +73,22 @@ class GO_Tasks_Model_Tasklist extends GO_Base_Model_AbstractUserDefaultModel {
 			$task->delete();
 		}
 	}
+	
+	/**
+	 * 
+	 * @param \GO_Base_Model_User $user
+	 * @return GO_Tasks_Model_Tasklist
+	 */
+	public function getDefault(\GO_Base_Model_User $user, &$createdNew=false) {
+		$default = parent::getDefault($user, $createdNew);
+	
+		if($createdNew){
+			$pt = new GO_Tasks_Model_PortletTasklist();
+			$pt->user_id=$user->id;
+			$pt->tasklist_id=$default->id;
+			$pt->save();
+		}
+	
+		return $default;
+	}
 }

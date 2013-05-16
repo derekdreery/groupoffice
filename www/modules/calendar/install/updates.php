@@ -208,7 +208,8 @@ $updates['201303051512'][] ="CREATE  TABLE IF NOT EXISTS `cal_views_groups` (
   PRIMARY KEY (`view_id`, `group_id`) )
 ENGINE = InnoDB";
 
-
 $updates['201303191307'][] ="ALTER TABLE `cal_participants` ADD INDEX ( `event_id` , `user_id` ) ;";
 
-$updates['201304231330'][]="ALTER TABLE `cal_events` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";
+$updates["201305141646"][]="update cal_events set mtime=unix_timestamp(), end_time=start_time+3600 where end_time<start_time;";
+
+$updates['201305161646'][]="ALTER TABLE `cal_events` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";

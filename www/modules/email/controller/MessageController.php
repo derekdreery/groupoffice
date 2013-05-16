@@ -1244,9 +1244,9 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 					$tag['account_id'] = $props[1];
 					$tag['model'] = $props[2];
 					$tag['model_id'] = $props[3];
+					
+					$tags[]=$tag;
 				}
-
-				$tags[]=$tag;
 
 				$unique[]=$match[1];
 			}

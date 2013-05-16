@@ -601,4 +601,19 @@ $l['showAll']='Toon alles';
 $l['createModify'] = 'Gemaakt en gewijzigd';
 
 $l['selectMonthlyDay'] = 'Kies a.u.b. een weekdag voor de maandelijkse herhaling.';
+
 $l['selectWeekOfMonth'] = 'Kies a.u.b. het nummer van weekdag van de maand voor de maandelijkse herhaling.';
+
+
+$l['passwordIsWeak']='Het wachtwoord wat u heeft ingevoerd is te zwak. Het moet voldoen aan de volgende regels:';
+$l['passwordMinLength']='De minimale lengte is %s';
+$l['passwordRequireUc']='Het moet tenminste één hoofdletter bevatten';
+$l['passwordRequireLc']='Het moet tenminste één kleine letter bevatten';
+$l['passwordRequireNum']='Het moet tenminste één nummer bevatten';
+$l['passwordRequireSc']='Het moet een speciaal karakter bevatten';
+$l['passwordUnique']='Het moet tenminste %s unieke karakters bevatten';
+$l['exportScreen']='Op huidig scherm';
+$l['exportAddressbook']="Voeg automatisch ontbrekende adresboek regels toe aan:";
+$l['exportOrders']='Orders';
+$l['errorTimeout']="Er is een timeout opgetreden bij het verzoek naar de server. Probeer het opnieuw aub.";
+$l['multiselectSelected']='geselecteerd';

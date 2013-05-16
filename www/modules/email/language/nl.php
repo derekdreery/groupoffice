@@ -261,3 +261,7 @@ $l['dateReceived']='Datum ontvangen';
 $l['dateSent']='Datum verzonden';
 
 $l['appointementAlreadyProcessed']='Dit bericht bevat een afspraak uitnodiging die al verwerkt is.';
+
+
+$l['FileToComputer']='Opslaan op computer';
+$l['FileInGO']='Opslaan in {product_name}';

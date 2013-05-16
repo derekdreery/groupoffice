@@ -6,25 +6,9 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 
 	protected function actionTypes($params) {
 
-		$response['results'] = array();
+		$response['results'] = GO_Customfields_CustomfieldsModule::getCustomfieldTypes();
+		$response['success']=true;
 
-		$modules = GO::modules()->getAllModules();
-			
-		while ($module=array_shift($modules)) {
-			if ($module->moduleManager) {
-				$classes = $module->moduleManager->findClasses('customfieldtype');
-
-				foreach ($classes as $class) {
-
-					if ($class->isSubclassOf('GO_Customfields_Customfieldtype_Abstract') && $class->getName()!='GO_Customfields_Customfieldtype_TreeselectSlave') {
-
-						$className = $class->getName();
-						$t = new $className;
-						$response['results'][] = array('className' => $className, 'type' => $t->name());
-					}
-				}
-			}
-		}
 		return $response;
 	}
 

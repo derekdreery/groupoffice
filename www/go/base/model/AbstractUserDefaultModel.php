@@ -88,7 +88,7 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 	 * @param GO_Base_Model_User $user
 	 * @return GO_Base_Model_AbstractUserDefaultModel 
 	 */
-	public function getDefault(GO_Base_Model_User $user) {	
+	public function getDefault(GO_Base_Model_User $user, &$createdNew=false) {	
 		
 			
 		if(!$user)
@@ -127,6 +127,8 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 			$oldIgnore = GO::setIgnoreAclPermissions(true);		
 			$defaultModel->save();			
 			GO::setIgnoreAclPermissions($oldIgnore);
+			
+			$createdNew=true;
 		}
 
 		if ($settingsModelName) {
