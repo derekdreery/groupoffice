@@ -2,6 +2,9 @@
 - Added demo data module so new users can have a better first experience.
 - Remember state of several grids in the Email Composer's Address Book dialog.
 - Added SortableDataView object so a dataview can be sorted
+- Fix for IMAP servers that dont support utf8
+- Changed default event organizer. The default is the calendar owner except if 
+  the owner is admin. In that case it will default to the logged in user.
 
 14-05-2013 4.1.66
 - Only first 30 bookmarks shown
