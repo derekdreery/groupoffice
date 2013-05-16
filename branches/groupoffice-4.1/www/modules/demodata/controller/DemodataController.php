@@ -148,15 +148,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 		}
 
 
-		$dt = GO_Addressbook_Model_Template::model()->findSingleByAttribute('name', 'Letter');
-		if (!$dt) {
-			$dt = new GO_Addressbook_Model_Template();
-			$dt->type = GO_Addressbook_Model_Template::TYPE_DOCUMENT;
-			$dt->content = file_get_contents(GO::modules()->addressbook->path . 'install/letter_template.docx');
-			$dt->extension = 'docx';
-			$dt->name = 'Letter';
-			$dt->save();
-		}
+		
 
 		GO::config()->password_validate=false;
 
@@ -285,16 +277,16 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			
 			$view = new GO_Calendar_Model_View();
 			$view->name=GO::t('group_everyone');
-			$view->save();			
-			$view->addManyMany('groups', GO::config()->group_everyone);
+			if($view->save())
+				$view->addManyMany('groups', GO::config()->group_everyone);
 			
 			
 			$view = new GO_Calendar_Model_View();
 			$view->name=GO::t('group_everyone').' ('.GO::t('merge', 'calendar').')';
 			$view->merge=true;
 			$view->owncolor=true;
-			$view->save();			
-			$view->addManyMany('groups', GO::config()->group_everyone);
+			if($view->save())
+				$view->addManyMany('groups', GO::config()->group_everyone);
 			
 			
 		}
@@ -406,6 +398,11 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			
 			$books = GO_Billing_Model_Book::model()->find();
 			foreach($books as $book){			
+				
+				//give demo access
+				$book->acl->addUser($demo->id, GO_Base_Model_Acl::WRITE_PERMISSION);
+				
+				
 				$order = new GO_Billing_Model_Order();
 				$order->book_id=$book->id;
 				$order->btime=time();
@@ -435,10 +432,143 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 				$status = $book->statuses(GO_Base_Db_FindParams::newInstance()->single());
 				$order->status_id=$status->id;
 				$order->syncItems();
+			}			
+		}
+		
+		if(GO::modules()->tickets){	
+			$ticket = new GO_Tickets_Model_Ticket();
+			$ticket->subject='Malfunctioning rockets';
+			$ticket->setFromContact($wile);
+			if(!$ticket->save()){
+				var_dump($ticket->getValidationErrors());
+				exit();
+			}
+			
+			$message = new GO_Tickets_Model_Message();
+			$message->sendEmail=false;
+			$message->content="My rocket always circles back right at me? How do I aim right?";
+			$message->is_note=false;			
+			$message->user_id=0;
+			$ticket->addMessage($message);
+			
+			//elmer picks up the ticket
+			$ticket->agent_id=$elmer->id;
+			$ticket->save();
+			
+			//make elmer and demo a ticket agent
+			$ticket->type->acl->addUser($elmer->id, GO_Base_Model_Acl::MANAGE_PERMISSION);
+			$ticket->type->acl->addUser($demo->id, GO_Base_Model_Acl::MANAGE_PERMISSION);
+			
+			
+			$message = new GO_Tickets_Model_Message();
+			$message->sendEmail=false;
+			$message->content="Haha, good thing he doesn't know Accelleratii Incredibus designed this rocket and he can't read this note.";
+			$message->is_note=true;		
+			$message->user_id=$elmer->id;
+			$ticket->addMessage($message);
+			
+			
+			$message = new GO_Tickets_Model_Message();
+			$message->sendEmail=false;
+			$message->content="Gee I don't know how that can happen. I'll send you some new ones!";
+			$message->is_note=false;			
+			$message->status_id=GO_Tickets_Model_Ticket::STATUS_CLOSED;
+			$message->has_status=true;
+			$message->user_id=$elmer->id;
+			$ticket->addMessage($message);			
+			
+			
+			
+			
+			
+			$ticket = new GO_Tickets_Model_Ticket();
+			$ticket->subject='Can I speed up my rockets?';
+			$ticket->setFromContact($wile);
+			$ticket->ctime=$ticket->mtime=GO_Base_Util_Date::date_add(time(), -2);
+			
+			if(!$ticket->save()){
+				var_dump($ticket->getValidationErrors());
+				exit();
+			}
+			
+			$message = new GO_Tickets_Model_Message();
+			$message->sendEmail=false;
+			$message->content="The rockets are too slow to hit my fast moving target. Is there a way to speed them up?";
+			$message->is_note=false;			
+			$message->user_id=0;
+			$message->ctime=$message->mtime=GO_Base_Util_Date::date_add(time(), -2);
+			$ticket->addMessage($message);
+			
+			//elmer picks up the ticket
+//			$ticket->agent_id=$elmer->id;
+//			$ticket->save();
+			
+		
+			
+			
+			$message = new GO_Tickets_Model_Message();
+			$message->sendEmail=false;
+			$message->content="Please respond faster. Can't you see this ticket is marked in red?";
+			$message->is_note=false;			
+			$message->user_id=0;
+			$ticket->addMessage($message);	
+			
+		}
+		
+		
+		if(GO::modules()->notes){
+			
+			$category = GO_Notes_Model_Category::model()->findSingleByAttribute('name', GO::t('general','notes'));
+			
+			if(!$category){
+				$category = new GO_Notes_Model_Category();
+				$category->name=GO::t('general','notes');
+				$category->save();
+				$category->acl->addGroup(GO::config()->group_everyone, GO_Base_Model_Acl::READ_PERMISSION);
 			}
 			
 			
+			$note = new GO_Notes_Model_Note();
+			$note->user_id=$elmer->id;			
 			
+			//$category = GO_Notes_Model_Category::model()->getDefault($elmer);
+			
+			$note->category_id=$category->id;
+			
+			$note->name="Laws and rules";
+			$note->content='As in other cartoons, the Road Runner and the coyote follow the laws of cartoon physics. For example, the Road Runner has the ability to enter the painted image of a cave, while the coyote cannot (unless there is an opening through which he can fall). Sometimes, however, this is reversed, and the Road Runner can burst through a painting of a broken bridge and continue on his way, while the Coyote will instead enter the mirage painting and fall down the precipice of the cliff where the bridge is out. Sometimes the coyote is allowed to hang in midair until he realizes that he is about to plummet into a chasm (a process occasionally referred to elsewhere as Road-Runnering or Wile E. Coyote moment). The coyote can overtake rocks (or cannons) which fall earlier than he does, and end up being squashed by them. If a chase sequence happens upon a cliff, the Road Runner is not affected by gravity, whereas the Coyote will realize his error eventually and fall to the ground below. A chase sequence that happens upon railroad tracks will always result in the Coyote being run over by a train. If the Coyote uses an explosive (for instance, dynamite) that is triggered by a mechanism that is supposed to force the explosive in a forward motion toward its target, the actual mechanism itself will always shoot forward, leaving the explosive behind to detonate in the Coyote\'s face. Similarly, a complex apparatus that is supposed to propel an object like a boulder or steel ball forward, or trigger a trap, will not work on the Road Runner, but always will on the Coyote. For instance, the Road Runner can jump up and down on the trigger of a large animal trap and eat bird seed off from it, going completely unharmed and not setting off the trap; when the Coyote places the tiniest droplet of oil on the trigger, the trap snaps shut on him without fail. At certain times, the Coyote may don an exquisite Acme costume or propulsion device that briefly allows him to catch up to the Road Runner. This will always result in him losing track of his proximity to large cliffs or walls, and the Road Runner will dart around an extremely sharp turn on a cliff, but the Coyote will rocket right over the edge and fall to the ground.
+
+In his book Chuck Amuck: The Life and Times Of An Animated Cartoonist,[13] Chuck Jones claimed that he and the artists behind the Road Runner and Wile E. cartoons adhered to some simple but strict rules:
+
+The Road Runner cannot harm the Coyote except by going "beep, beep."
+No outside force can harm the Coyote — only his own ineptitude or the failure of Acme products. Trains and trucks were the exception from time to time.
+The Coyote could stop anytime — if he were not a fanatic. (Repeat: "A fanatic is one who redoubles his effort when he has forgotten his aim." — George Santayana).
+Dialogue must never be used, except "beep, beep" and yowling in pain. (This rule, however, was violated in some cartoons.)
+The Road Runner must stay on the road — for no other reason than that he\'s a roadrunner. This rule was broken in Beep, Beep, in a sequence where Wile E. chased the Road Runner into a cactus mine. And also in Fastest with the Mostestwhen Coyote lures Road Runner to the edge of a cliff.
+All action must be confined to the natural environment of the two characters — the southwest American desert.
+All (or at least almost all) tools, weapons, or mechanical conveniences must be obtained from the Acme Corporation. There were sometimes exceptions when the Coyote obtained other items from the desert such as boulders to use in his attempts.
+Whenever possible, make gravity the Coyote\'s greatest enemy (e.g., falling off a cliff).
+The Coyote is always more humiliated than harmed by his failures.
+The audience\'s sympathy must remain with the Coyote.
+The Coyote is not allowed to catch or eat the Road Runner, unless he escapes from the grasp. (The robot that the Coyote created in The Solid Tin Coyote caught the Road Runner so this does not break this rule. The Coyote does catch the Road Runner in Soup or Sonic but is too small to eat him. There is also two CGI shorts on The Looney Tunes Show were he caught the bird, but was not able to eat him because the Road Runner got away in both shorts.)';
+			
+			$note->save();
+			$note->link($john);
+			
+			
+			$note = new GO_Notes_Model_Note();
+			$note->user_id=$demo->id;			
+			
+			$note->category_id=$category->id;
+			
+			$note->name="Wile E. Coyote and Bugs Bunny";
+			$note->content='Wile E. Coyote has also unsuccessfully attempted to catch and eat Bugs Bunny in another series of cartoons. In these cartoons, the coyote takes on the guise of a self-described "super genius" and speaks with a smooth, generic upper-class accent provided by Mel Blanc. While he is incredibly intelligent, he is limited by technology and his own short-sighted arrogance, and is thus often easily outsmarted, a somewhat physical symbolism of "street smarts" besting "book smarts".
+
+In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed pills" — even stands in for Road Runner, who has "sprained a giblet", and carries out the duties of outsmarting the hungry scavenger. That is the only Bugs Bunny/Wile E. Coyote short in which the coyote does not speak. As usual Wile E. Coyote ends up falling down a canyon. In a later, made-for-TV short, which had a young Elmer Fudd chasing a young Bugs Bunny, Elmer also falls down a canyon. On the way down he is overtaken by Wile E. Coyote who shows a sign telling Elmer to get out of the way for someone who is more experienced in falling.';
+			
+			$note->save();
+			
+			$note->link($wile);
 		}
 		
 		
