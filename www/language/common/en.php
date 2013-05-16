@@ -605,11 +605,11 @@ $l['sortOrderError']="Sorry, you can't sort on that column. Please click on anot
 
 $l['passwordIsWeak']='The entered password is not strong enough. It should comply to the following rules:';
 $l['passwordMinLength']='The minimum length is %s';
-$l['passwordRequireUc']='It must contain an uppercase character';
-$l['passwordRequireLc']='It must contain a lowercase character';
-$l['passwordRequireNum']='It must contain a number';
-$l['passwordRequireSc']='It must contain a special character';
-$l['passwordUnique']='It must contain %s unique characters';
+$l['passwordRequireUc']='It must contain at least one uppercase character';
+$l['passwordRequireLc']='It must contain at least one lowercase character';
+$l['passwordRequireNum']='It must contain at least one a number';
+$l['passwordRequireSc']='It must contain at least one special character';
+$l['passwordUnique']='It must contain at least %s unique characters';
 
 
 $l['maxAttachmentsSizeExceeded']="The total size of your attachments ({total}) exceeds the maximum ({max}).";
