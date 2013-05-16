@@ -1,10 +1,19 @@
 <?php
 class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractController {
+	
+	protected function allowGuests() {
+		return array('create');
+	}
 
 	protected function actionCreate($params){
 		
-		if(!GO::user()->isAdmin())
+		
+		if($this->isCli()){
+			GO::session()->runAsRoot();
+		}elseif(!GO::user()->isAdmin())
+		{
 			throw new GO_Base_Exception_AccessDenied();
+		}
 	
 		
 		if(GO::modules()->customfields){
@@ -837,12 +846,13 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 		if(GO::modules()->demodata)
 			GO::modules()->demodata->delete();
 		
-		
-		//login as demo				
-		GO::session()->restart();
-		GO::session()->setCurrentUser($demo->id);
+		if(!$this->isCli()){
+			//login as demo				
+			GO::session()->restart();
+			GO::session()->setCurrentUser($demo->id);
 
-		$this->redirect();
+			$this->redirect();
+		}
 		
 		
 	}
