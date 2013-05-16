@@ -795,7 +795,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				scope:this,
 				change:function(cb, newValue){
 					if(this.formPanel.form.baseParams['group_id']>1){
-						if(newValue=='ACCEPTED'){
+						if(newValue=='CONFIRMED'){
 							this.colorField.setValue('CCFFCC');
 						}else
 						{
