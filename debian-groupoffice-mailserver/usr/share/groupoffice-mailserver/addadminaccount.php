@@ -26,7 +26,7 @@ try {
 
 					$accountModel->username = 'admin@' . $domain;
 					$accountModel->password = 'admin';
-					$accountModel->name=GO::user()->name;
+//					$accountModel->name=GO::user()->name;
 
 					$accountModel->smtp_host = GO::config()->serverclient_smtp_host;
 					$accountModel->smtp_port = GO::config()->serverclient_smtp_port;
