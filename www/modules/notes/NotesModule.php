@@ -63,4 +63,13 @@ class GO_Notes_NotesModule extends GO_Base_Module{
 		
 		return $category;
 	}
+	
+	public function install() {
+		parent::install();
+		
+		$category = new GO_Notes_Model_Category();
+		$category->name=GO::t('general','notes');
+		$category->save();
+		$category->acl->addGroup(GO::config()->group_everyone, GO_Base_Model_Acl::READ_PERMISSION);
+	}
 }
