@@ -19,11 +19,19 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 				$category = GO_Customfields_Model_Category::model()->createIfNotExists(GO::getModel($model->getName())->extendsModel(), "Demo Custom fields");
 				$category->acl->addGroup(GO::config()->group_internal, GO_Base_Model_Acl::WRITE_PERMISSION);
 				
-				foreach($types as $t){
-					GO_Customfields_Model_Field::model()->createIfNotExists($category->id, $t['type'],array(
-							'datatype'=>$t['className'],
-							'helptext'=>($t['className']=="GO_Customfields_Customfieldtype_Text" ? "Some help text for this field" : "")
-							));
+				if(strpos(GO::getModel($model->getName())->extendsModel(), 'Addresbook_')){
+					foreach($types as $t){
+						GO_Customfields_Model_Field::model()->createIfNotExists($category->id, $t['type'],array(
+								'datatype'=>$t['className'],
+								'helptext'=>($t['className']=="GO_Customfields_Customfieldtype_Text" ? "Some help text for this field" : "")
+								));
+					}
+				}else
+				{
+					GO_Customfields_Model_Field::model()->createIfNotExists($category->id, "Custom",array(
+								'datatype'=>"GO_Customfields_Customfieldtype_Text",
+								'helptext'=>"Some help text for this field"
+								));
 				}
 			}
 		}
