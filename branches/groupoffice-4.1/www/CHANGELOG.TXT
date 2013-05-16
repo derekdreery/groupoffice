@@ -1,3 +1,5 @@
+16-05-2013 4.1.67
+- Added demo data module so new users can have a better first experience.
 - Remember state of several grids in the Email Composer's Address Book dialog.
 - Added SortableDataView object so a dataview can be sorted
 
