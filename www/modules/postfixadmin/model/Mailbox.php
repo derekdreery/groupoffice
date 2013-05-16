@@ -84,7 +84,7 @@ class GO_Postfixadmin_Model_Mailbox extends GO_Base_Db_ActiveRecord {
 	
 	public function defaultAttributes() {
 		$attr = parent::defaultAttributes();
-		$attr['quota']=1024*1024*10;//10 GB of quota per domain by default.
+		$attr['quota']=1024*1024*1;//10 GB of quota per domain by default.
 		return $attr;
 	}
 
