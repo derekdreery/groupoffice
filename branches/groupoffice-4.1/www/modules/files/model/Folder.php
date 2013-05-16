@@ -68,6 +68,10 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		$this->columns['name']['required']=true;
 		return parent::init();
 	}
+	
+	public function customfieldsModel() {
+		return "GO_Files_Customfields_Model_Folder";
+	}
 
 	protected function getCacheAttributes() {
 
