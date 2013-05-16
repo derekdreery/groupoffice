@@ -2560,20 +2560,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	/**
-	 * Return all validation errors of this record and if it has an customfield, 
-	 * then it also gets the validation errors of that record.
-	 * 
-	 * @return array 
-	 */
-	public function getValidationErrors(){
-		
-		if($this->customfieldsRecord)
-			$this->_validationErrors = array_merge($this->customfieldsRecord->getValidationErrors(),$this->_validationErrors);
-		
-		return $this->_validationErrors;
-	}
-	
-	/**
 	 * Get the message for the log module. Returns the contents of the first text column by default.
 	 * 
 	 * @return string 
