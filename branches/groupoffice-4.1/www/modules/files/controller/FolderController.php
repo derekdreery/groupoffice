@@ -124,7 +124,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		//refresh forces sync with db
 		if(!empty($params['sync_folder_id'])){
 				$syncFolder = GO_Files_Model_Folder::model()->findByPk($params['sync_folder_id']);
-				$syncFolder->syncFilesystem();
+				if($syncFolder)
+					$syncFolder->syncFilesystem();
 		}
 
 		$response = array();
