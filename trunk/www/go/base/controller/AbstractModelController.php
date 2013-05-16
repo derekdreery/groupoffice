@@ -191,7 +191,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		$response = $this->beforeLoad($response, $model, $params);
 
-		$response['data'] = $model->getAttributes();
+		$response['data'] = !empty($response['data']) ? array_merge($response['data'],$model->getAttributes()) : $model->getAttributes();
 		$response['data']['permission_level']=$model->getPermissionLevel();
 		$response['data']['write_permission']=true;
 			

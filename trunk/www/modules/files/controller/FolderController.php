@@ -51,7 +51,10 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				$folder->syncFilesystem(true);
 			}
 			catch(Exception $e){
-				echo "<span style='color:red;'>".$e->getMessage()."</span>\n";
+				if (PHP_SAPI != 'cli')
+					echo "<span style='color:red;'>".$e->getMessage()."</span>\n";
+				else
+					echo $e->getMessage()."\n";
 			}
 		}
 
@@ -71,7 +74,10 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 						$folder->delete();
 			}
 			catch(Exception $e){
-				echo "<span style='color:red;'>".$e->getMessage()."</span>\n";
+				if (PHP_SAPI != 'cli')
+					echo "<span style='color:red;'>".$e->getMessage()."</span>\n";
+				else
+					echo $e->getMessage()."\n";
 			}
 		}
 	}
@@ -117,8 +123,16 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		//refresh forces sync with db
 		if(!empty($params['sync_folder_id'])){
+			if($params['sync_folder_id']=="shared"){
+				GO_Files_Model_SharedRootFolder::model()->rebuildCache(GO::user()->id, true);
+			}else
+			{
+				
+			
 				$syncFolder = GO_Files_Model_Folder::model()->findByPk($params['sync_folder_id']);
-				$syncFolder->syncFilesystem();
+				if($syncFolder)
+					$syncFolder->syncFilesystem();
+			}
 		}
 
 		$response = array();
@@ -574,7 +588,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		if($folderPreference)
 			$response['thumbs']=$folderPreference->thumbs;
 		else
-			$response['thumbs']=0;
+			$response['thumbs']=1;
 
 		$response['parent_id'] = $folder->parent_id;
 
@@ -1028,40 +1042,80 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 	protected function actionCompress($params) {
 
-		if (!GO_Base_Util_Common::isWindows())
-			putenv('LANG=en_US.UTF-8');
+		
 
 		$sources = json_decode($params['compress_sources'], true);
 
 
 		$workingFolder = GO_Files_Model_Folder::model()->findByPk($params['working_folder_id']);
 		$destinationFolder = GO_Files_Model_Folder::model()->findByPk($params['destination_folder_id']);
-
-
-		$workingPath = GO::config()->file_storage_path.$workingFolder->path;
-		chdir($workingPath);
-
-		for($i=0;$i<count($sources);$i++){
-			$sources[$i]=  escapeshellarg(str_replace($workingFolder->path.'/', '', $sources[$i]));
-		}
-
 		$archiveFile = new GO_Base_Fs_File(GO::config()->file_storage_path.$destinationFolder->path . '/' . $params['archive_name'] . '.zip');
 
-		$cmd = GO::config()->cmd_zip . ' -r ' . escapeshellarg($archiveFile->path()). ' ' . implode(' ', $sources);
+		if(class_exists("ZipArchive") && empty($params['utf8'])){
+			$zip = new ZipArchive();
+			$zip->open($archiveFile->path(), ZIPARCHIVE::CREATE);
+			for($i=0;$i<count($sources);$i++){
+				if(is_dir(GO::config()->file_storage_path.$sources[$i])){		
+					$this->_zipDir(GO::config()->file_storage_path.$sources[$i], $zip, str_replace($workingFolder->path.'/', '', $sources[$i]).'/',!empty($params['utf8']));
+				}else
+				{
+					$name = str_replace($workingFolder->path.'/', '', $sources[$i]);
+					if(empty($params['utf8'])){
+						$name=iconv('UTF-8','CP850',$name);
+					}
+					$zip->addFile(GO::config()->file_storage_path.$sources[$i],$name);
+				}
+			}
+			$zip->close();
+		}else
+		{
+		$archiveFile = new GO_Base_Fs_File(GO::config()->file_storage_path.$destinationFolder->path . '/' . $params['archive_name'] . '.shell.zip');
+	
+			if (!GO_Base_Util_Common::isWindows())
+				putenv('LANG=en_US.UTF-8');
+		
+			$workingPath = GO::config()->file_storage_path.$workingFolder->path;
+			chdir($workingPath);
 
-		exec($cmd, $output);
+			for($i=0;$i<count($sources);$i++){
+				$sources[$i]=  '"'.str_replace($workingFolder->path.'/', '', $sources[$i]).'"';
+			}
+			
+			$cmd = GO::config()->cmd_zip . ' -r ' . escapeshellarg($archiveFile->path()). ' ' . implode(' ', $sources);
 
-		if (!$archiveFile->exists()) {
-			throw new Exception('Command failed: ' . $cmd . "<br /><br />" . implode("<br />", $output));
+			exec($cmd, $output);
+
+			if (!$archiveFile->exists()) {
+				throw new Exception('Command failed: ' . $cmd . "<br /><br />" . implode("<br />", $output));
+			}			
 		}
-
+		
 		GO_Files_Model_File::importFromFilesystem($archiveFile);
 
 		$response['success']=true;
 
 		return $response;
 	}
-
+	private function _zipDir($dir, $zip, $relative_path, $utf8) {
+		$dir = rtrim($dir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+		if ($handle = opendir($dir)) {
+			while (false !== ($file = readdir($handle))) {
+				if ($file === '.' || $file === '..') {
+					continue;
+				}
+				if (is_file($dir . $file)) {
+					$name = $relative_path . $file;
+					if(!$utf8){
+						$name = iconv('UTF-8', 'CP850', $name);
+					}
+					$zip->addFile($dir . $file, $name);
+				} elseif (is_dir($dir . $file)) {
+					$this->_zipDir($dir . $file, $zip, $relative_path . $file . '/', $utf8);
+				}
+			}
+		}
+		closedir($handle);
+	}
 
 	protected function actionDecompress($params){
 		if (!GO_Base_Util_Common::isWindows())
@@ -1079,30 +1133,77 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		while ($filePath = array_shift($sources)) {
 			$file = new GO_Base_Fs_File(GO::config()->file_storage_path.$filePath);
 			switch(strtolower($file->extension())) {
-				case 'zip':
-					$cmd = GO::config()->cmd_unzip.' -n '.escapeshellarg($file->path());
+				case 'zip':					
+					
+					$folder = GO_Base_Fs_Folder::tempFolder(uniqid());
+					
+					if(class_exists("ZipArchive")){
+						$zip = new ZipArchive;
+						$zip->open($file->path());
+						$zip->extractTo($folder->path());									
+						$this->_convertZipEncoding($folder);
+					}else
+					{
+						chdir($folder->path());					
+						$cmd = GO::config()->cmd_unzip.' -n '.escapeshellarg($file->path());
+						exec($cmd, $output, $ret);
+						if($ret!=0)
+						{
+							throw new Exception("Could not decompress\n".implode("\n",$output));
+						}
+					}
+					
+					$items = $folder->ls();
+					
+					foreach($items as $item){
+						$item->move(new GO_Base_Fs_Folder($workingPath));
+					}
+					
+					$folder->delete();
+					
 					break;
 				case 'gz':
 				case 'tgz':
 					$cmd = GO::config()->cmd_tar.' zxf '.escapeshellarg($file->path());
+					exec($cmd, $output, $ret);
+
+					if($ret!=0)
+					{
+						throw new Exception("Could not decompress\n".implode("\n",$output));
+					}
 					break;
 
 				case 'tar':
 					$cmd = GO::config()->cmd_tar.' xf '.escapeshellarg($file->path());
+					
+					exec($cmd, $output, $ret);
+
+					if($ret!=0)
+					{
+						throw new Exception("Could not decompress\n".implode("\n",$output));
+					}
 					break;
 			}
 		}
-		exec($cmd, $output, $ret);
-
-		if($ret!=0)
-		{
-			throw new Exception("Could not decompress\n".implode("\n",$output));
-		}
-
+		
 		$workingFolder->syncFilesystem(true);
 
 		return array('success'=>true);
 
+	}
+	
+	private function _convertZipEncoding(GO_Base_Fs_Folder $folder, $charset='CP850'){
+		$items = $folder->ls();
+		
+		foreach($items as $item){
+			
+			if(!GO_Base_Util_String::isUtf8($item->name()))
+				$item->rename(GO_Base_Util_String::clean_utf8($item->name(), $charset));
+
+			if($item->isFolder()){
+				$this->_convertZipEncoding($item, $charset);
+			}
+		}
 	}
 
 

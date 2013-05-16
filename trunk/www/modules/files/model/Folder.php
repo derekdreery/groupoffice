@@ -64,6 +64,15 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	public static function model($className=__CLASS__) {
 		return parent::model($className);
 	}
+	
+	protected function init() {
+		$this->columns['name']['required']=true;
+		return parent::init();
+	}
+	
+	public function customfieldsModel() {
+		return "GO_Files_Customfields_Model_Folder";
+	}
 
 	protected function getCacheAttributes() {
 
@@ -1004,43 +1013,43 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		}
 	}
 
-//	/**
-//	 * Find all shared folders for the current user
-//	 * 
-//	 * @param GO_Base_Db_FindParams $findParams
-//	 * @return GO_Base_Db_ActiveStatement
-//	 */
-//	public function findShares($findParams=false){
-//		
-//		if(!$findParams)
-//			$findParams = new GO_Base_Db_FindParams();
-//				
-//		 $findParams->getCriteria()
-//					->addModel(GO_Files_Model_Folder::model())
-//					->addCondition('visible', 1)
-//					->addCondition('user_id', GO::user()->id,'!=');
-//		
-//		return GO_Files_Model_Folder::model()->find($findParams);
-//		
-//		
-//	}
-//	/**
-//	 * 
-//	 * @param GO_Base_Db_FindParams $findParams
-//	 * @return GO_Base_Db_ActiveStatement
-//	 */
-//	public function getTopLevelShares($findParams=false){
-//		if(!$findParams)
-//			$findParams = new GO_Base_Db_FindParams();
-//		
-//		$findParams
-//						->joinRelation('sharedRootFolders')
-//						->ignoreAcl()
-//						->order('name','ASC');
-//		
-//		$findParams->getCriteria()
-//					->addCondition('user_id', GO::user()->id,'=','sharedRootFolders');
-//				
-//		return $this->find($findParams);
-//	}
+	/**
+	 * Find all shared folders for the current user
+	 * 
+	 * @param GO_Base_Db_FindParams $findParams
+	 * @return GO_Base_Db_ActiveStatement
+	 */
+	public function findShares($findParams=false){
+		
+		if(!$findParams)
+			$findParams = new GO_Base_Db_FindParams();
+				
+		 $findParams->getCriteria()
+					->addModel(GO_Files_Model_Folder::model())
+					->addCondition('visible', 1)
+					->addCondition('user_id', GO::user()->id,'!=');
+		
+		return GO_Files_Model_Folder::model()->find($findParams);
+		
+		
+	}
+	/**
+	 * 
+	 * @param GO_Base_Db_FindParams $findParams
+	 * @return GO_Base_Db_ActiveStatement
+	 */
+	public function getTopLevelShares($findParams=false){
+		if(!$findParams)
+			$findParams = new GO_Base_Db_FindParams();
+		
+		$findParams->joinRelation('sharedRootFolders')
+			->ignoreAcl()
+			->order('name','ASC')
+			->limit(200);
+		
+		$findParams->getCriteria()
+					->addCondition('user_id', GO::user()->id,'=','sharedRootFolders');
+				
+		return $this->find($findParams);
+	}
 }

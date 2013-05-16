@@ -39,7 +39,8 @@ GO.email.AddressbookDialog = function(config) {
 	
 	if (GO.addressbook) {
 		this.contactsGrid = new GO.email.ContactsGrid({
-			title:GO.addressbook.lang.contacts
+			title:GO.addressbook.lang.contacts,
+			id: 'em-contacts-grid-tab'
 		});
 
 //		this.contactsGrid.on('show', function() {			
@@ -79,6 +80,7 @@ GO.email.AddressbookDialog = function(config) {
 
 		this.companyGrid = new GO.grid.GridPanel({
 			title : GO.addressbook.lang.companies,
+			id: 'em-companies-grid-tab',
 			paging : true,
 			border : false,
 			store : this.companiesStore,
@@ -142,6 +144,7 @@ GO.email.AddressbookDialog = function(config) {
 
 	this.usersGrid = new GO.grid.GridPanel({
 		title : GO.addressbook.lang.users,
+		id: 'em-users-grid-tab',
 		paging : true,
 		border : false,
 		store : this.usersStore,
@@ -181,6 +184,7 @@ GO.email.AddressbookDialog = function(config) {
 	if (GO.addressbook) {
 		this.mailingsGrid = new GO.grid.GridPanel({
 			title : GO.addressbook.lang.cmdPanelMailings,
+			id: 'em-addresslists-grid-tab',
 			paging : false,
 			border : false,
 			store : GO.addressbook.readableAddresslistsStore,
@@ -223,6 +227,7 @@ GO.email.AddressbookDialog = function(config) {
 
 	this.userGroupsGrid = new GO.grid.GridPanel({
 		title : GO.email.lang.groups,
+			id: 'em-usergroups-grid-tab',
 		paging : true,
 		border : false,
 		store : this.userGroupsStore,

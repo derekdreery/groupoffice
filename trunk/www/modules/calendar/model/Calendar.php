@@ -143,4 +143,23 @@ class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel 
 			$event->delete();
 		}
 	}
+	
+	
+	/**
+	 * 
+	 * @param \GO_Base_Model_User $user
+	 * @return GO_Tasks_Model_Tasklist
+	 */
+	public function getDefault(\GO_Base_Model_User $user, &$createdNew=false) {
+		$default = parent::getDefault($user, $createdNew);
+	
+		if($createdNew){
+			$pt = new GO_Calendar_Model_PortletCalendar();
+			$pt->user_id=$user->id;
+			$pt->calendar_id=$default->id;
+			$pt->save();
+		}
+	
+		return $default;
+	}
 }

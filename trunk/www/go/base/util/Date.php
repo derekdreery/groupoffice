@@ -20,7 +20,7 @@
  */
 
 class GO_Base_Util_Date {
-	
+
 
 	public static function roundQuarters($time) {
 		$date = getdate($time);
@@ -39,29 +39,20 @@ class GO_Base_Util_Date {
 	 * @return <type> boolean
 	 */
 	public static function is_on_free_day($time, $region=false) {
-		
-		$weekday = date('w', $time);
-		if($weekday==6 || $weekday==0) {
-			return true;
-		}else {
 
-//			global $GO_CONFIG, $GO_LANGUAGE;
-//			
-//			$date = getdate($time);
-//
-//			$day_start = mktime(0,0,0,$date['mon'], $date['mday'], $date['year']);
-//			$day_end =  mktime(0,0,0,$date['mon'], $date['mday']+1, $date['year']);
-//
-//			require_once(GO::config()->class_path.'holidays.class.inc.php');
-//			$holidays = new holidays();
-//
-//			$region=$region ? $region : GO::config()->language;
-//
-//			$hd = new holidays();
-//			$count = $hd->get_holidays_for_period($region, $day_start, $day_end);
-//			if($count) {
-//				return true;
-//			}
+		$weekday = date('w', $time);
+		if ($weekday==6 || $weekday==0) {
+			return true;
+		} else {
+			$startDate = date('d.m.Y', $time);
+			$endDate = date('d.m.Y', $time);
+
+			$region = $region ? $region : GO::config()->language;
+
+			$hstmt = GO_Base_Model_Holiday::model()->getHolidaysInPeriod($startDate, $endDate, $region);
+			if ($hstmt->rowCount()) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -91,7 +82,7 @@ class GO_Base_Util_Date {
 		// Convert dates to Julian Days
 		$start_date = gregoriantojd($start["mon"], $start["mday"], $start["year"]);
 		$end_date = gregoriantojd($end["mon"], $end["mday"], $end["year"]);
-		
+
 		return $end_date-$start_date;
 		// Return difference
 		//return round(($end_date - $start_date), 0);
@@ -99,7 +90,7 @@ class GO_Base_Util_Date {
 
 
 	public static function format_long_date($time,$add_time=true){
-		
+
 		$days = GO::t('full_days');
 		$months = GO::t('months');
 		$str  = $days[date('w', $time)].' '.date('d', $time).' '.$months[date('n', $time)].' ';
@@ -108,7 +99,7 @@ class GO_Base_Util_Date {
 		else
 			return $str.date('Y', $time);
 	}
-	
+
 
 	/**
 	 * Reformat a date string formatted by Group-Office user preference to a string
@@ -125,7 +116,7 @@ class GO_Base_Util_Date {
 			return $date_string;
 		}
 		$date_string = trim($date_string);
-		
+
 //		if(!isset($date_format)){
 //			$date_format=GO::user() ? GO::user()->completeDateFormat : GO::config()->default_date_format;
 //		}
@@ -133,17 +124,17 @@ class GO_Base_Util_Date {
 //		if(!isset($date_separator)){
 //			$date_separator=GO::user() ? GO::user()->date_separator : GO::config()->default_date_separator;
 //		}
-		
+
 		if(GO::user()->date_format=='mdY')
 			$date_string = str_replace(array('-','.'),array('/','/'),$date_string);
 		else
 			$date_string = str_replace(array('/','.'),array('-','-'),$date_string);
-		
+
 		return $date_string;
 	}
 
 	/**
-	 * Takes a date string formatted by Group-Office user preference and turns it 
+	 * Takes a date string formatted by Group-Office user preference and turns it
 	 * into a unix timestamp.
 	 *
 	 * @param String $date_string
@@ -154,9 +145,9 @@ class GO_Base_Util_Date {
 		{
 			return 0;
 		}
-		
-		//$time = strtotime(GO_Base_Util_Date::to_input_format($date_string));			
-		//return $time;		
+
+		//$time = strtotime(GO_Base_Util_Date::to_input_format($date_string));
+		//return $time;
 		$date = new DateTime(GO_Base_Util_Date::to_input_format($date_string));
 		return intval($date->format("U"));
 	}
@@ -202,8 +193,8 @@ class GO_Base_Util_Date {
 		$date=getdate($time);
 		return mktime($date['hours']+$hours,$date['minutes']+$minutes, $date['seconds']+$seconds,$date['mon']+$months,$date['mday']+$days,$date['year']+$years);
 	}
-	
-	
+
+
 	/**
 	 * Add a period to a unix timestamp
 	 *
@@ -220,13 +211,13 @@ class GO_Base_Util_Date {
 		$date=getdate($time);
 		return mktime($date['hours']+$hours,$date['minutes']+$minutes, $date['seconds']+$seconds,$date['mon']+$months,$date['mday']+$days,$date['year']+$years);
 	}
-	
-	
+
+
 	/**
 	 * Remove the time from a unix timestamp so it will return the start of a day.
-	 * 
+	 *
 	 * @param int $time Unix timestamp
-	 * @return int 
+	 * @return int
 	 */
 	public static function clear_time($time, $newhour=0, $newmin=0, $newsec=0){
 		$date=getdate($time);
@@ -272,7 +263,7 @@ class GO_Base_Util_Date {
 		$utime = intval($utime);
 		if($utime<1)
 			return '';
-			
+
 		return GO_Base_Util_Date::format('@'.$utime, $with_time);
 	}
 
@@ -293,7 +284,7 @@ class GO_Base_Util_Date {
 				$d->setTimezone($tz);
 			}
 		}*/
-		
+
 		$completeDateFormat = GO::user() ? GO::user()->completeDateFormat : GO::config()->getCompleteDateFormat();
 		$timeFormat = GO::user() ? GO::user()->time_format : GO::config()->default_time_format;
 
@@ -313,19 +304,19 @@ class GO_Base_Util_Date {
 		return $d->getOffset()/3600;
 	}
 
-		
+
 	public static function get_last_sunday($time)
 	{
-		$date = getdate($time);		
+		$date = getdate($time);
 		return mktime(0,0,0,$date['mon'],$date['mday']-$date['wday'], $date['year']);
 	}
-	
+
 	/**
 	 * Convert a date formatted according to icalendar 2.0 specs to a unix timestamp.
-	 * 
+	 *
 	 * @param String $date
 	 * @param GO_Base_Util_Icalendar_Timezone $icalendarTimezone
-	 * @return int Unix timestamp 
+	 * @return int Unix timestamp
 	 */
 	public static function parseIcalDate($date, $icalendarTimezone=false) {
 		$date=trim($date);
@@ -349,9 +340,9 @@ class GO_Base_Util_Date {
 			return mktime($hour, $min, $sec, $month, $day , $year);
 		}
 	}
-	
+
 	public static function getNextSaturday($unixTime) {
 		$lastSunday = self::get_last_sunday($unixTime);
 		return self::date_add($lastSunday,6);
-	}		
+	}
 }

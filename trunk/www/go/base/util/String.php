@@ -76,7 +76,6 @@ class GO_Base_Util_String {
 				"YU", "YA", "'", "'", "I", "I", "E", "Ue", "ue", "Oe", "oe", "Ae", "ae", "ss");
 		$string = preg_replace($rus, $lat, $string);
 
-		setlocale(LC_ALL, 'en_US.UTF8');
 		return iconv("UTF-8", "US-ASCII//TRANSLIT", $string);
 		//return preg_replace('/[^a-zA-Z0-9 ,-:_]+/','',$string);
 	}
@@ -391,6 +390,16 @@ class GO_Base_Util_String {
 		}
 		
 		return $out;
+	}
+	
+	/**
+	 * Check if string has UTF8 characters
+	 * 
+	 * @param string $str
+	 * @return boolean
+	 */
+	public static function isUtf8($str){
+		return strlen($str) != strlen(utf8_decode($str));
 	}
 
 	/**

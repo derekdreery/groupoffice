@@ -361,7 +361,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		//if this is not the organizer event it may only be modified by the organizer
 		if(!$this->_isImport && !$this->isNew && $this->isModified(array("name","start_time","end_time","location","description","calendar_id","rrule","repeat_end_time"))){		
 			$organizerEvent = $this->getOrganizerEvent();
-			if($organizerEvent && $organizerEvent->user_id!=GO::user()->id || !$organizerEvent && !$this->is_organizer){
+			if($organizerEvent && !$organizerEvent->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION) || !$organizerEvent && !$this->is_organizer){
 				GO::debug($this->getModifiedAttributes());
 				GO::debug($this->_attributes);
 				throw new GO_Base_Exception_AccessDenied();
@@ -374,7 +374,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		
 		if($this->isResource()){
-			if($this->status=='ACCEPTED'){
+			if($this->status=='CONFIRMED'){
 				$this->background='CCFFCC';
 			}else
 			{
@@ -1774,18 +1774,22 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 	
 	/**
-	 * Get the default participant model for a new event
+	 * Get the default participant model for a new event.
+	 * The default is the calendar owner except if the owner is admin. In that
+	 * case it will default to the logged in user.
 	 * 
 	 * @return \GO_Calendar_Model_Participant
 	 */
 	public function getDefaultOrganizerParticipant(){
 		$calendar = $this->calendar;
 		
+		$user = $calendar->user_id==1 ? GO::user() : $calendar->user;
+		
 		$participant = new GO_Calendar_Model_Participant();
 		$participant->event_id=$this->id;
-		$participant->user_id=$calendar->user_id;
-		$participant->name=$calendar->user->name;
-		$participant->email=$calendar->user->email;
+		$participant->user_id=$user->id;
+		$participant->name=$user->name;
+		$participant->email=$user->email;
 		$participant->status=GO_Calendar_Model_Participant::STATUS_ACCEPTED;
 		$participant->is_organizer=1;
 		

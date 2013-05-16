@@ -2057,8 +2057,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		foreach($attributes as $key=>$value){
 			
 			//only set writable properties. It should either be a column or setter method.
-			if(isset($this->columns[$key]) || property_exists($this, $key) || method_exists($this, 'set'.$key))
+			if(isset($this->columns[$key]) || property_exists($this, $key) || method_exists($this, 'set'.$key)){
 				$this->$key=$value;			
+			}
 		}		
 	}
 	
@@ -2418,7 +2419,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			throw new GO_Base_Exception_AccessDenied($msg);
 		}
 		
-		if(!$this->isNew && $this->_aclModified() && !$this->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION)){
+		if(!$ignoreAcl && !$this->isNew && $this->_aclModified() && !$this->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION)){
 			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : sprintf(GO::t('cannotMoveError'),'this');
 			throw new GO_Base_Exception_AccessDenied($msg);
 		}
@@ -2559,6 +2560,20 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	/**
+	 * Return all validation errors of this record and if it has an customfield, 
+	 * then it also gets the validation errors of that record.
+	 * 
+	 * @return array 
+	 */
+	public function getValidationErrors(){
+		
+		if($this->customfieldsRecord)
+			$this->_validationErrors = array_merge($this->customfieldsRecord->getValidationErrors(),$this->_validationErrors);
+		
+		return $this->_validationErrors;
+	}
+	
+	/**
 	 * Get the message for the log module. Returns the contents of the first text column by default.
 	 * 
 	 * @return string 
@@ -2648,7 +2663,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	/**
-	 * Set a new ACL for this model
+	 * Set a new ACL for this model. You need to save the model after calling this
+	 * function.
 	 * 
 	 * @param string $user_id
 	 * @return \GO_Base_Model_Acl
@@ -3251,7 +3267,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	private function _getMagicAttribute($name){
-		if(isset($this->_attributes[$name])){
+		if(key_exists($name, $this->_attributes)){
 			return $this->getAttribute($name, self::$attributeOutputMode);
 		}elseif(isset($this->columns[$name])){
 			//it's a db column but it's not set in the attributes array.
@@ -3484,6 +3500,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 //			if(!$this->afterLink($model, $isSearchCacheModel, $description, $this_folder_id, $model_folder_id, $linkBack))
 //				return false;
 			
+			if($linkBack){
+				$this->fireEvent('link', array($this, $model, $description, $this_folder_id, $model_folder_id));
+			}
+			
 			return !$linkBack || $model->link($this, $description, $model_folder_id, $this_folder_id, false);
 		}
 	}
@@ -3506,6 +3526,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 //	}
 	
 	private function _linkExists($model){		
+		
 		if($model->className()=="GO_Base_Model_SearchCacheRecord"){
 			$model_id = $model->model_id;
 			$model_type_id = $model->model_type_id;
@@ -3515,11 +3536,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$model_type_id = $model->modelTypeId();
 		}
 		
+		if(!$model_id)
+			return false;
+		
 		$table = $this->className()=="GO_Base_Model_SearchCacheRecord" ? GO::getModel($this->model_name)->model()->tableName() : $this->tableName();		
 		$this_id = $this->className()=="GO_Base_Model_SearchCacheRecord" ? $this->model_id : $this->id;
 		
 		$sql = "SELECT count(*) FROM `go_links_$table` WHERE ".
-			"`id`=".intval($this_id)." AND model_type_id=".$model_type_id." AND `model_id`=".$model_id;
+			"`id`=".intval($this_id)." AND model_type_id=".$model_type_id." AND `model_id`=".intval($model_id);
 		$stmt = $this->getDbConnection()->query($sql);
 		return $stmt->fetchColumn(0) > 0;		
 	}
@@ -3842,8 +3866,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$copy->customFieldsRecord->setAttributes($cfAtt, false);
 		}
 
-		if($save)
-			$copy->save($ignoreAclPermissions);
+		if($save){
+			if(!$copy->save($ignoreAclPermissions)){
+				throw new Exception("Could not save duplicate: ".implode("\n",$copy->getValidationErrors()));
+							
+			}
+		}
 		
 		if(!$this->afterDuplicate($copy)){
 			$copy->delete(true);

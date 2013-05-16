@@ -45,7 +45,7 @@ class GO_Dav_Fs_SharedDirectory extends Sabre\DAV\FS\Directory implements Sabre\
 		$shares =GO_Files_Model_Folder::model()->getTopLevelShares(GO_Base_Db_FindParams::newInstance()->limit(100));
 
 		$nodes = array();
-		while($folder = array_shift($shares)){
+		foreach($shares as $folder){
 			$nodes[]=new GO_DAV_FS_Directory($folder->path);
 		}
 

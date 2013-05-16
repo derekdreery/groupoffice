@@ -374,7 +374,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 						
 						$maxBodySize = $noMaxBodySize ? false : $this->maxBodySize;
 						
-						$htmlPartStr = $imap->get_message_part_decoded($this->uid, $htmlPart['number'],$htmlPart['encoding'], $htmlPart['charset'],$this->peek,$maxBodySize);
+						$htmlPartStr = $imap->get_message_part_decoded($this->uid, $htmlPart['number'],$htmlPart['encoding'], $htmlPart['charset'],$this->peek,false);
 						$htmlPartStr = GO_Base_Util_String::convertLinks($htmlPartStr);
 						$htmlPartStr = GO_Base_Util_String::sanitizeHtml($htmlPartStr);
 						
@@ -383,9 +383,11 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 						$this->_htmlBody .= $htmlPartStr;
 					}else //if($this->isAttachment($htmlPart['number']))
 					{
-						$attachment =& $this->getAttachment($htmlPart['number']);
-						$attachment->content_id='go-autogen-'.$htmlPart['number'];
-						$this->_htmlBody .= '<img alt="'.$htmlPart['name'].'" src="cid:'.$attachment->content_id.'" style="display:block;margin:10px 0;" />';
+						$attachment = $this->getAttachment($htmlPart['number']);
+						if($attachment){
+							$attachment->content_id='go-autogen-'.$htmlPart['number'];
+							$this->_htmlBody .= '<img alt="'.$htmlPart['name'].'" src="cid:'.$attachment->content_id.'" style="display:block;margin:10px 0;" />';
+						}
 					}
 //					else
 //					{
@@ -438,9 +440,11 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 							//we have to put in this tag and replace it after we convert the text to html. Otherwise this html get's convert into htmlspecialchars.
 							$this->_plainBody.='{inline_'.count($inlineImages).'}';
 							
-							$attachment =& $this->getAttachment($plainPart['number']);
-							$attachment->content_id='go-autogen-'.$plainPart['number'];
-							$inlineImages[]='<img alt="'.$plainPart['name'].'" src="cid:'.$attachment->content_id.'" style="display:block;margin:10px 0;" />';
+							$attachment = $this->getAttachment($plainPart['number']);
+							if($attachment){
+								$attachment->content_id='go-autogen-'.$plainPart['number'];
+								$inlineImages[]='<img alt="'.$plainPart['name'].'" src="cid:'.$attachment->content_id.'" style="display:block;margin:10px 0;" />';
+							}
 						}
 					}
 				}			
@@ -450,9 +454,11 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 			foreach($this->_plainParts['parts'] as $plainPart){
 				if($plainPart['type']!='text'){					
 					if($asHtml){					
-						$attachment =& $this->getAttachment($plainPart['number']);
-						$attachment->content_id='go-autogen-'.$plainPart['number'];
-						$inlineImages[]='<img alt="'.$plainPart['name'].'" src="cid:'.$attachment->content_id.'" style="display:block;margin:10px 0;" />';
+						$attachment = $this->getAttachment($plainPart['number']);
+						if($attachment){
+							$attachment->content_id='go-autogen-'.$plainPart['number'];
+							$inlineImages[]='<img alt="'.$plainPart['name'].'" src="cid:'.$attachment->content_id.'" style="display:block;margin:10px 0;" />';
+						}
 					}
 				}
 			}

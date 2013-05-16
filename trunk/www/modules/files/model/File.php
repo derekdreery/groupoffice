@@ -150,6 +150,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 
 	protected function init() {
 		$this->columns['expire_time']['gotype'] = 'unixdate';
+		$this->columns['name']['required']=true;
 		parent::init();
 	}
 	

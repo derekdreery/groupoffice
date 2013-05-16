@@ -1,5 +1,8 @@
 <?php
+$logout=true;
 require('header.php');
+
+
 
 printHead()
 ?>

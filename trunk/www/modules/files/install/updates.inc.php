@@ -157,5 +157,9 @@ $updates["201305031326"][]='CREATE TABLE IF NOT EXISTS `fs_shared_root_folders` 
   PRIMARY KEY (`user_id`,`folder_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;';
 
-$updates['201305031726'][]="ALTER TABLE `fs_files` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";
-$updates['201305031726'][]="ALTER TABLE `fs_folders` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";
+
+$updates["201305161114"][]="ALTER TABLE  `fs_folders` CHANGE  `thumbs`  `thumbs` TINYINT( 1 ) NOT NULL DEFAULT  '1'";
+
+$updates['201305161114'][]="ALTER TABLE `fs_files` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";
+$updates['201305161114'][]="ALTER TABLE `fs_folders` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";
+

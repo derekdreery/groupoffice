@@ -715,7 +715,8 @@ GO.files.FileBrowser = function(config){
 		collapsible:true,
 		hideCollapseTool:true,
 		split:true,
-		border:false
+		border:false,
+		id: 'fs-east-panel'
 	});
 
 
@@ -1162,7 +1163,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
             }
 	},
 
-	onCompress : function(records, filename)
+	onCompress : function(records, filename, utf8)
 	{
 
             if (GO.util.empty(this.gridStore.baseParams['query'])) {
@@ -1184,15 +1185,21 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 		if(!filename || filename == '')
 		{
-			Ext.Msg.prompt(GO.files.lang.enterName, GO.files.lang.pleaseEnterNameArchive,
-				function(id, filename){
-					if(id=='ok'){
-						this.onCompress(records, filename);
+			if(!this.compressDialog){
+				this.compressDialog = new GO.files.CompressDialog ({
+					scope:this,
+					handler:function(win, filename, utf8){
+						this.onCompress(records, filename, utf8);
 					}
-				},this);
+				});
+			}
+			
+			this.compressDialog.show();
+			
 		}else
 		{
 			params.archive_name=filename;
+			params.utf8=utf8 ? '1' : '0';
 			params.compress_sources=Ext.encode(params.compress_sources);
 			var store = this.getActiveGridStore();
 
@@ -1782,9 +1789,13 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	
 	updateLocation : function(){
 		var activeNode = this.treePanel.getNodeById(this.folder_id);
+		
 		if(activeNode)
-		{
-			this.treePanel.getSelectionModel().select(activeNode);
+		{			
+			var selectedNode = this.treePanel.getSelectionModel().getSelectedNodes();
+			if((!selectedNode.length || activeNode.id!=selectedNode[0].id))
+				this.treePanel.getSelectionModel().select(activeNode);
+			
 			var path = new String();
 			path = activeNode.getPath('text');
 			path = path.substring(2);

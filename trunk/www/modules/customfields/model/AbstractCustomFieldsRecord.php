@@ -102,6 +102,7 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 					self::$cacheColumns[$this->extendsModel()][$field->columnName()]['regex']=$field->validation_regex;
 					self::$cacheColumns[$this->extendsModel()][$field->columnName()]['gotype']='customfield';
 					self::$cacheColumns[$this->extendsModel()][$field->columnName()]['unique']=$field->unique_values;
+					self::$cacheColumns[$this->extendsModel()][$field->columnName()]['required']=$field->required;
 				}
 
 				GO::cache()->set($cacheKey, array('attributeLabels'=>self::$attributeLabels[$this->extendsModel()], 'columns'=>self::$cacheColumns[$this->extendsModel()]));
@@ -235,7 +236,7 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 	 * @return mixed 
 	 */
 	public function getAttribute($attributeName, $outputType='raw'){
-		if(!isset($this->_attributes[$attributeName]))						
+		if(!key_exists($attributeName, $this->_attributes))						
 			return false;
 		
 		if($outputType=='raw'){
