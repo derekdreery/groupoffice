@@ -855,7 +855,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 		if(!$accountModel){
 			$accountModel = new GO_Email_Model_Account();
 			$accountModel->user_id=$demo->id;
-			$accountModel->checkImapConnectionOnSave=false;
+//			$accountModel->checkImapConnectionOnSave=false;
 			$accountModel->host = 'localhost';
 			$accountModel->port = 143;
 
