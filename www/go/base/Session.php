@@ -33,6 +33,11 @@ class GO_Base_Session extends GO_Base_Observable{
 		$this->start();
 	}
 	
+	public function restart(){
+		$this->values=array();
+		$this->start();
+	}
+	
 	public function start(){
 		//start session
 		
@@ -51,7 +56,7 @@ class GO_Base_Session extends GO_Base_Observable{
 				ini_set('session.use_only_cookies',1);
 								
 				session_name('groupoffice');
-				session_start();
+				session_start();				
 			}
 			//GO::debug causes endless loop
 			//GO::debug("Started session");
