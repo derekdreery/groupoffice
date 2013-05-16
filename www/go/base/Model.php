@@ -39,7 +39,7 @@ abstract class GO_Base_Model extends GO_Base_Object{
 	 * Returns the static model of the specified AR class.
 	 * Every child of this class must override it.
 	 * 
-	 * @return GO_Base_Db_ActiveRecord the static model class
+	 * @return static the static model class
 	 */
 	public static function model($className=null)
 	{		
@@ -52,6 +52,10 @@ abstract class GO_Base_Model extends GO_Base_Object{
 			$model=self::$_models[$className]=new $className(false, true);			
 		}
 		return $model;
+	}
+	
+	public function getAttributeLabel($attribute) {
+		return ucfirst($attribute);
 	}
 	
 	/**
@@ -96,37 +100,40 @@ abstract class GO_Base_Model extends GO_Base_Object{
 	 * Get the validationError for the given attribute
 	 * If the attribute has no error then fals will be returned
 	 * 
-	 * @param string $attribute
+	 * @param string $key
 	 * @return mixed 
 	 */
-	public function getValidationError($attribute){
-		if(!empty($this->_validationErrors[$attribute]))
-			return $this->_validationErrors[$attribute];
+	public function getValidationError($key){
+		if(!empty($this->_validationErrors[$key]))
+			return $this->_validationErrors[$key];
 		else
 			return false;
 	}
 	
 	/**
 	 * Set a validation error for the given field.
+	 * If the error key is equal to a model attribute name, the view can render 
+	 * an error on the associated form field.
+	 * The key for an error must be unique.
 	 * 
-	 * @param string $attribute Set to 'form' for a general form error.
+	 * @param string $key 
 	 * @param string $message 
 	 */
-	protected function setValidationError($attribute, $message) {
-		$this->_validationErrors[$attribute] = $message;
+	protected function setValidationError($key, $message) {
+		$this->_validationErrors[$key] = $message;
 	}
 	
 	/**
 		* Returns a value indicating whether there is any validation error.
-		* @param string $attribute attribute name. Use null to check all attributes.
+		* @param string $key attribute name. Use null to check all attributes.
 		* @return boolean whether there is any error.
 		*/
-	public function hasValidationErrors($attribute=null)
+	public function hasValidationErrors($key=null)
 	{
-		if ($attribute === null)
+		if ($key === null)
 			return $this->_validationErrors !== array();
 		else
-			return isset($this->_validationErrors[$attribute]);
+			return isset($this->_validationErrors[$key]);
 	}
 	
 }
