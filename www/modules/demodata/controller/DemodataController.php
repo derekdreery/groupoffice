@@ -200,6 +200,11 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 		}
 
 		if (GO::modules()->calendar) {
+			
+			//share calendars
+			GO_Calendar_Model_Calendar::model()->getDefault($demo)->acl->addGroup(GO::config()->group_internal, GO_Base_Model_Acl::READ_PERMISSION);
+			GO_Calendar_Model_Calendar::model()->getDefault($elmer)->acl->addGroup(GO::config()->group_internal,GO_Base_Model_Acl::READ_PERMISSION);
+			GO_Calendar_Model_Calendar::model()->getDefault($linda)->acl->addGroup(GO::config()->group_internal,GO_Base_Model_Acl::READ_PERMISSION);
 
 			$events = array(
 					array('Project meeting', 10),
@@ -238,7 +243,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 				$wile->link($event);
 			}
 
-
+			
 
 			$events = array(
 					array('Project meeting', 11),
@@ -277,16 +282,24 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			
 			$view = new GO_Calendar_Model_View();
 			$view->name=GO::t('group_everyone');
-			if($view->save())
+			if($view->save()){
 				$view->addManyMany('groups', GO::config()->group_everyone);
+			
+				//share view
+				$view->acl->addGroup(GO::config()->group_internal);
+			}
 			
 			
 			$view = new GO_Calendar_Model_View();
 			$view->name=GO::t('group_everyone').' ('.GO::t('merge', 'calendar').')';
 			$view->merge=true;
 			$view->owncolor=true;
-			if($view->save())
+			if($view->save()){
 				$view->addManyMany('groups', GO::config()->group_everyone);
+			
+				//share view
+				$view->acl->addGroup(GO::config()->group_internal);
+			}
 			
 			
 		}
