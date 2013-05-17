@@ -1,3 +1,7 @@
+17-05-2013 4.1.68
+- Demo data for linked e-mails
+- Keep contact and users in sync
+- Select first e-mail template as default for new users
 - Possible to export tickets without manage permission on the ticket module
 
 16-05-2013 4.1.67
