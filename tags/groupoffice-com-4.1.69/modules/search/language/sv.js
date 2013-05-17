@@ -1,0 +1,1 @@
+GO.search.lang.title = 'Sök';
