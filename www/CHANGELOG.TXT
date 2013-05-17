@@ -1,3 +1,5 @@
+- Added default sort to the select document template grid and enabled name column sort
+
 17-05-2013 4.1.68
 - Demo data for linked e-mails
 - Keep contact and users in sync
