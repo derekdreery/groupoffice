@@ -45,6 +45,8 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 	 */
 	private $_config;
 
+	private $_treeState;
+	
 	private $_cf=array();	
 	
 	private static $fields;
@@ -181,7 +183,7 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 							'site_id'=>$site->id, 
 							'iconCls' => 'go-icon-layout', 
 							'text' => GO::t('content','site'),
-							'expanded' => true,
+							'expanded' => self::isExpandedNode('site_' . $site->id),
 							'children' => $site->loadContentNodes()
 						)
 					)
@@ -207,9 +209,10 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 					'site_id'=>$this->id,
 					'content_id'=>$content->id,
 					'iconCls' => 'go-model-icon-GO_Site_Model_Content', 
-					'expanded' => !$hasChildren,
+					//'expanded' => !$hasChildren,
+					'expanded' => self::isExpandedNode($this->id.'_content_'.$content->id),
 					'hasChildren' => $hasChildren,
-					'children'=> $hasChildren ? null : array(),
+					'children'=> $hasChildren ? $content->getChildrenTree() : array(),
 					'text' => $content->title
 			);
 		}
@@ -241,21 +244,38 @@ ServerName www.giralisgroep.nl
 		';
 	}
 	
-	 public function getCustomFieldValueByName($cfName){
-		 
-		if(!key_exists($cfName, $this->_cf)){
-			
+	 public function getCustomFieldValueByName($cfName) {
+
+		if (!key_exists($cfName, $this->_cf)) {
+
 //			$column = $this->getCustomfieldsRecord()->getColumn(self::$fields[$cfName]->columnName());
 //			if(!$column)
 //				return null;
 
 			$value = $this->getCustomfieldsRecord()->{self::$fields[$cfName]->columnName()};
 
-			$this->_cf[$cfName]=$value;
-
+			$this->_cf[$cfName] = $value;
 		}
 
 		return $this->_cf[$cfName];
-	 }
+	}
+
+	public static function isExpandedNode($nodeId) {
+		$state = GO::config()->get_setting("site_tree_state", GO::user()->id);
+
+		if (empty($state)) {
+			$decoded = base64_decode($nodeId);
+
+			if (stristr($decoded, 'root') || stristr($decoded, 'content'))
+				return true;
+			else
+				return false;
+		}
+
+		$treeState = json_decode($state);
 		
+
+		return in_array($nodeId, $treeState);
+	}
+
 }

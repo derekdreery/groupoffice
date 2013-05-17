@@ -4,7 +4,7 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 	// Plugins for the editor
 	editorImageInsertPlugin : false,
 	editorTablePlugin : false,
-	
+	parentPanel : false,
 	contentDialog : false,
 	
 	submitAction : 'update',
@@ -68,7 +68,7 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 		}else
 		{
 			this.submitAction = 'update';
-		}
+		}		
 	},
 	
 	constructor : function(config){
@@ -113,6 +113,7 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 				waitMsg:GO.lang['waitMsgSave'],
 				success:function(form, action){
 					this.setContentId(action.result.id);
+					this.parentPanel.rebuildTree(true); // Rebuild the tree after submit
 				},
 				failure: function(form, action) {
 					if(action.failureType == 'client')

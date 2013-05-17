@@ -1,7 +1,7 @@
 <?php
 
 class GO_Site_Controller_Site extends GO_Base_Controller_AbstractJsonController {
-
+	
 	/**
 	 * Redirect to the homepage
 	 * 
@@ -103,4 +103,15 @@ class GO_Site_Controller_Site extends GO_Base_Controller_AbstractJsonController 
 
 		return array("success"=>true);
 	}
+	
+	/**
+	 * Save the state of the tree
+	 * 
+	 * @param array $params
+	 * @return array
+	 */
+	protected function actionSaveTreeState($params) {
+		$response['success'] = GO::config()->save_setting("site_tree_state", $params['expandedNodes'], GO::user()->id);
+		return $response;
+	}	
 }

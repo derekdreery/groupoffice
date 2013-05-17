@@ -32,7 +32,7 @@ GO.site.SiteTreePanel = function (config){
 		animate:true,
 		rootVisible:false,
 		containerScroll: true,
-		selModel:new Ext.tree.MultiSelectionModel()		
+		selModel:new Ext.tree.DefaultSelectionModel()
 	});
 	
 	GO.site.SiteTreePanel.superclass.constructor.call(this, config);
@@ -44,7 +44,30 @@ GO.site.SiteTreePanel = function (config){
 		iconCls : 'folder-default'
 	});
 
+	this.rootNode.on("beforeload", function(){
+		//stop state saving when loading entire tree
+		this.disableStateSave();
+	}, this);
+
 	this.setRootNode(this.rootNode);
+	
+	this.on('collapsenode', function(node)
+	{		
+		if(this.saveTreeState && node.childNodes.length)
+			this.updateState();		
+	},this);
+
+	this.on('expandnode', function(node)
+	{		
+		if(node.id!="root" && this.saveTreeState && node.childNodes.length)
+			this.updateState();
+		
+		
+		//if root node is expanded then we are done loading the entire tree. After that we must start saving states
+		if(node.id=="root"){			
+			this.enableStateSave();
+		}
+	},this);
 
 	this.on('contextmenu',this.onContextMenu, this);
 	this.on('click',this.onTreeNodeClick, this);
@@ -53,6 +76,9 @@ GO.site.SiteTreePanel = function (config){
 	
 	
 Ext.extend(GO.site.SiteTreePanel, Ext.tree.TreePanel,{
+
+	saveTreeState : false,
+	loadingDone : false,
 
 	// When clicked on a treenode
 	onTreeNodeClick: function(node){
@@ -163,7 +189,46 @@ Ext.extend(GO.site.SiteTreePanel, Ext.tree.TreePanel,{
 				}
 			});
 		}
-	}	
+	},
+	getExpandedNodes : function(){
+		var expanded = new Array();
+		this.getRootNode().cascade(function(n){
+			if(n.expanded){
+			expanded.push(n.attributes.id);
+			}
+		});
+		
+		return expanded;
+	},
+					
+	enableStateSave : function(){
+		if(Ext.Ajax.isLoading(this.getLoader().transId)){
+			this.enableStateSave.defer(100, this);
+			this.loadingDone=false;
+		}else
+		{
+			if(!this.loadingDone){
+				this.loadingDone=true;
+				this.enableStateSave.defer(100, this);
+			}else{
+				this.saveTreeState=true;
+			}
+		}
+	},
+	
+	disableStateSave : function(){
+		this.loadingDone=false;
+		this.saveTreeState=false;
+	},
+	
+	updateState : function(){
+		GO.request({
+			url:"site/site/saveTreeState",
+			params:{
+				expandedNodes:Ext.encode(this.getExpandedNodes())
+			}
+		});
+	}					
 });
 	
 	

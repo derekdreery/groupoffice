@@ -11,7 +11,9 @@ GO.site.MainPanel = function(config){
 			layoutOnCardChange:true
 		},
 		items:[
-			this.contentPanel = new GO.site.ContentPanel()
+			this.contentPanel = new GO.site.ContentPanel({
+				parentPanel:this
+			})
 			]
 	}); 
 	
@@ -65,8 +67,13 @@ Ext.extend(GO.site.MainPanel, Ext.Panel,{
 		this.siteDialog.show(site_id);
 	},
 
-	rebuildTree: function(){
+	rebuildTree: function(select){
+		
+		var selectedNode = this.treePanel.getSelectionModel().getSelectedNode();
 		this.treePanel.getLoader().load(this.treePanel.getRootNode());
+		
+		if(select)
+			this.treePanel.getSelectionModel().select(selectedNode); 
 	}
 });
 
