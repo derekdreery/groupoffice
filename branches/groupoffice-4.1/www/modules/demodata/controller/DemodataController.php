@@ -176,6 +176,7 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 		}
 
 
+		$internalUserGroup = GO_Base_Model_Group::model()->findByPk(GO::config()->group_internal);
 		
 
 		GO::config()->password_validate=false;
@@ -189,6 +190,10 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$elmer->email = 'elmer@acmerpp.demo';
 			$elmer->password='demo';
 			if ($elmer->save()) {
+				
+				//make sure he's member of the internal group.
+				$internalUserGroup->addUser($elmer->id);
+				
 				$this->_setUserContact($elmer);
 				$elmer->checkDefaultModels();
 			}
@@ -206,6 +211,10 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$demo->email = 'demo@acmerpp.demo';
 			$demo->password='demo';
 			if ($demo->save()) {
+				
+				//make sure he's member of the internal group.
+				$internalUserGroup->addUser($demo->id);
+				
 				$this->_setUserContact($demo);
 				$demo->checkDefaultModels();
 			}
@@ -222,6 +231,10 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$linda->password='demo';
 							
 			if ($linda->save()) {
+				
+				//make sure she's member of the internal group.
+				$internalUserGroup->addUser($linda->id);
+				
 				$this->_setUserContact($linda);
 				$linda->checkDefaultModels();
 			}
