@@ -295,7 +295,8 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			$this->_setVisibility();
 		}		
 		
-		$this->createContact();
+		if($this->isNew || $this->isModified(array('first_name','middle_name','last_name','email')))
+			$this->createContact();
 		
 		//remove cache for GO::user() calls.
 		$cacheKey = 'GO_Base_Model_User:'.$this->id;
@@ -545,7 +546,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 					$contact->email = $this->email;
 					
 					if($contact->isModified())
-						$contact->save();
+						$contact->save(true);
 					
 					return $contact;
 				}
@@ -561,7 +562,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 				$contact->middle_name = $this->middle_name;
 				$contact->last_name = $this->last_name;
 				$contact->email = $this->email;
-				$contact->save();
+				$contact->save(true);
 			}			
 			return $contact;
 		}else
