@@ -856,6 +856,24 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			
 		}
 		
+		if(GO::modules()->savemailas){
+			//link some demo mails
+			$mimeFile = new GO_Base_Fs_File(GO::modules()->savemailas->path.'install/demo.eml');			
+			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $wile);
+			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $john);
+			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $rocketProject);
+			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $launcherProject);
+			
+			$mimeFile = new GO_Base_Fs_File(GO::modules()->savemailas->path.'install/demo2.eml');
+			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $wile);
+			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $john);
+			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $rocketProject);
+			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $launcherProject);
+		}
+		
+		//useful for other modules to create stuff
+		$this->fireEvent('demodata', array('users'=>array('demo'=>$demo, 'linda'=>$linda, 'elmer'=>$elmer)));
+		
 		if(GO::modules()->demodata)
 			GO::modules()->demodata->delete();
 		
@@ -865,9 +883,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			GO::session()->setCurrentUser($demo->id);
 
 			$this->redirect();
-		}
-		
-		
+		}		
 	}
 	
 	
