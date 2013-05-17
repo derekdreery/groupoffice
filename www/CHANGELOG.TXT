@@ -1,3 +1,6 @@
+17-05-2013 4.1.69
+- Updated Norwegian
+- Fix for "This is not a recurring event" error
 - Added default sort to the select document template grid and enabled name column sort
 
 17-05-2013 4.1.68
