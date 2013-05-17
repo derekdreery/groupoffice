@@ -82,7 +82,7 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 		$this->_defaultTemplate = GO_Addressbook_Model_DefaultTemplate::model()->findByPk(GO::user()->id);
 		if(!$this->_defaultTemplate){
 			$this->_defaultTemplate= new GO_Addressbook_Model_DefaultTemplate();
-			$this->_defaultTemplate->user_id=GO::user()->id;
+			$this->_defaultTemplate->save();
 		}
 		
 		if(isset($params['default_template_id']))
