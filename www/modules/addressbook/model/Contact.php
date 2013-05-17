@@ -304,6 +304,14 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$company->save();
 		}
 		
+		if($this->isModified(array('first_name','middle_name','last_name','email')) && $this->goUser){
+			$this->goUser->first_name = $this->first_name;
+			$this->goUser->middle_name = $this->middle_name;
+			$this->goUser->last_name = $this->last_name;
+			$this->goUser->email = $this->email;
+			$this->goUser->save(true);
+		}
+		
 		return parent::afterSave($wasNew);
 	}
 	
