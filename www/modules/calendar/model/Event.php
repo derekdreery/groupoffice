@@ -233,7 +233,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public function addException($date, $exception_event_id=0) {
 		
 		if(!$this->isRecurring())
-			throw new Exception("This is not a recurring event");
+			throw new Exception("Can't add exception to non recurring event ".$this->id);
 		
 		if(!$this->hasException($date)){
 			$exception = new GO_Calendar_Model_Exception();
@@ -289,6 +289,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @return GO_Calendar_Model_Event
 	 */
 	public function createExceptionEvent($exceptionDate, $attributes=array(), $dontSendEmails=false){
+		
+		
+		if(!$this->isRecurring()){
+			throw new Exception("Can't create exception event for non recurring event ".$this->id);
+		}
+		
 		$oldIgnore = GO::setIgnoreAclPermissions();
 		$returnEvent = false;
 		if($this->isResource())
@@ -299,6 +305,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$resources = array();
 		
 		foreach($stmt as $event){
+			
+			//workaround for old events that don't have the exception ID set. In this case
+			//getRelatedParticipantEvents fails. This won't happen with new events
+			if(!$event->isRecurring())
+				continue;
 			
 			GO::debug("Creating exception for related participant event ".$event->name." (".$event->id.")");
 			
