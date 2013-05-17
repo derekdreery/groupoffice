@@ -45,7 +45,7 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 			text: GO.files.lang.normalSize,
 			iconCls: 'fs-btn-normal-size',
 			handler: function(){
-				this.imgEl.setSize(this.originalImgSize.width, this.originalImgSize.height);
+				this.loadImage(this.currentImgIndex, true);
 			},
 			scope: this
 		}),
@@ -75,7 +75,7 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 		this.loadImage(index);		
 	},
 		
-	loadImage : function(index)
+	loadImage : function(index, fullSize)
 	{
 		this.body.mask(GO.lang.waitMsgLoad);
 		
@@ -90,7 +90,7 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 		this.originalImgSize=false;
 		this.imgEl = this.body.createChild({
 			tag:'img',
-			src: this.viewerImages[index].src,
+			src: fullSize ? this.viewerImages[index].download_path : this.viewerImages[index].src,
 			cls:'fs-img-viewer'
 		});
 
@@ -99,7 +99,12 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 
 		this.imgEl.initDD(null);
 		
-		this.syncImgSize();
+		this.syncImgSize(fullSize);
+		
+		
+		
+		
+		
 		if(this.viewerImages.length==1){
 			this.previousButton.hide();
 			this.nextButton.hide();
@@ -113,13 +118,13 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 		}
 	},
 	
-	syncImgSize : function(){	
+	syncImgSize : function(fullSize){	
 		
 		if(this.imgEl)
 		{
 			if(!this.imgEl.dom.complete)
 			{
-				this.syncImgSize.defer(100, this);
+				this.syncImgSize.defer(100, this, [fullSize]);
 			}else
 			{			
 				var imgSize = this.imgEl.getSize();
@@ -144,7 +149,7 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 					h=h*ratio
 				}
 
-				if(w!=this.originalImgSize.width || h!=this.originalImgSize.height){
+				if(!fullSize && (w!=this.originalImgSize.width || h!=this.originalImgSize.height)){
 					this.normalSizeBtn.setDisabled(false);
 					this.fitImageBtn.setDisabled(false);
 
@@ -155,14 +160,18 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 					
 				}else
 				{
-					this.normalSizeBtn.setDisabled(true);
-					this.fitImageBtn.setDisabled(true);
+					this.normalSizeBtn.setDisabled(!fullSize);
+					this.fitImageBtn.setDisabled(!fullSize);
 				}
 
 				if(h<bodySize.height){
 					var topMargin = (bodySize.height-h)/2;
 					this.imgEl.setStyle('margin-top', topMargin+'px');
 				}
+				
+//				if(fullSize){
+//					this.imgEl.setSize(this.originalImgSize.width, this.originalImgSize.height);
+//				}
 				
 				this.body.unmask();
 			}
