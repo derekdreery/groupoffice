@@ -460,8 +460,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		GO::clearCache();
 		
-		//rebuild listeners
-		GO_Base_Observable::cacheListeners();		
+		
 		
 		GO_Base_Db_Columns::$forceLoad=true;
 				
@@ -625,7 +624,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		//in some exceptions alowed deletes is still on false here.
 		GO_Base_Fs_File::setAllowDeletes(true);
 		GO::clearCache();
-		
+		//rebuild listeners
+		GO_Base_Observable::cacheListeners();		
 		if($v3){
 			
 //			if(GO::modules()->isInstalled('projects') && GO::modules()->isInstalled('files')){
