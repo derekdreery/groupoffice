@@ -16,7 +16,7 @@ $l["siteOptionsDescriptionText"] = "Information about the options";
 
 
 $l["siteFile"]="Site File";
-$l["siteFile"]="Site Multifile";
+$l["siteMultiFile"]="Site Multifile";
 
 $l["template"] = "Template";
 $l["defaultChildTemplate"] = "Default child template";
@@ -80,7 +80,7 @@ $l['passwordChanged'] = 'Password changed';
 $l['changePassword'] = 'Change password';
 $l['changePasswordText'] = 'Use the below form to change your password';
 $l['alreadySignedupText'] = 'If you already have a username and password use this form to login.';
-$l['forgotPasswordText'] = 'Fill in your email address in the form below, and you\'ll recieve a link to recover your password within minuts.';
+$l['forgotPasswordText'] = 'Fill in your email address in the form below, and you\'ll recieve a link to recover your password within minutes.';
 $l['submit'] = 'Submit';
 $l['noemail'] = 'No email given!';
 $l['invalidusertoken'] = 'The provided usertoken is not valid!';
