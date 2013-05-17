@@ -3,6 +3,7 @@
 - Keep contact and users in sync
 - Select first e-mail template as default for new users
 - Possible to export tickets without manage permission on the ticket module
+- ImageViewer does not resize image when clicking "Normal size".
 
 16-05-2013 4.1.67
 - Added demo data module so new users can have a better first experience.
