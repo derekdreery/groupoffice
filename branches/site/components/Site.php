@@ -49,7 +49,19 @@ class Site {
 	 * @var GO_Site_Components_Template 
 	 */
 	private static $_template;
+	
+	/**
+	 *
+	 * @var GO_Site_Components_AssetManager
+	 */
+	private static $_assetManager;
 
+	/**
+	 *
+	 * @var GO_Site_Components_Config
+	 */
+	private static $_config;
+	
 	/**
 	 * Handles string translation for sites 
 	 */
@@ -81,6 +93,16 @@ class Site {
 			self::$_router = new GO_Site_Components_Router ();
 		
 		return self::$_router;
+	}
+	
+	/**
+	 * Return the config component
+	 * @return GO_Site_Components_Config
+	 */
+	public static function config() {
+		if(!isset(self::$_config))
+			self::$_config = new GO_Site_Components_Config(self::model());
+		return self::$_config;
 	}
 	
 	/**
@@ -177,6 +199,16 @@ class Site {
 	}
 	
 	/**
+	 * 
+	 * @return GO_Site_Components_AssetManager
+	 */
+	public static function assetManager(){
+		if (self::$_assetManager == null)
+			self::$_assetManager = new GO_Site_Components_AssetManager();
+		return self::$_assetManager;
+	}
+	
+	/**
 	 * Get URL to a public template file that is accessible with the browser.
 	 * 
 	 * @param string $relativePath
@@ -207,10 +239,10 @@ class Site {
 	
 		$check = substr_count($relativePath,$referenceString);
 		
-		if($check)
+		//if($check)
 			return GO::config()->file_storage_path.$relativePath;
-		else
-			return self::template()->getPath().$relativePath;
+		//else
+		//	return self::template()->getPath().$relativePath;
 	}
 	
 	

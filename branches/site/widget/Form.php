@@ -94,7 +94,7 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 		else
 			$uncheck='';
 
-		$hiddenOptions=isset($htmlOptions['id']) ? array('id'=>self::ID_PREFIX.$htmlOptions['id']) : array('id'=>false);
+		$hiddenOptions=isset($htmlOptions['id']) ? array('id'=>$htmlOptions['id']) : array('id'=>false);
 		$hidden=$uncheck!==null ? $this->staticHiddenField($name,$uncheck,$hiddenOptions) : '';
 		
 		$template=isset($htmlOptions['template'])?$htmlOptions['template']:'{input} {label}';

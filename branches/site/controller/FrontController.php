@@ -2,7 +2,7 @@
 
 class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 	protected function allowGuests() {
-		return array('content','thumb','search','ajaxwidget');
+		return array('content','thumb','search','ajaxwidget', 'sitemap');
 	}
 	
 	protected function actionContent($params){
@@ -50,8 +50,24 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 		$this->render('search', array('searchResults'=>$store));
 	}
 	
+	/**
+	 * Will select all content item from a website and pass them to the sitemap template
+	 * @param array $params [empty]
+	 */
+	protected function actionSitemap($params) {
+		$sitemap = GO_Site_Model_Content::getTreeNodes(2);
+		
+		$this->render('sitemap', array('sitemap'=>$sitemap));
+	}
 	
-	
+	/**
+	 * This will copy a file in the files module to a public accessable folder
+	 * 
+	 * @param array $params
+	 * - stromg src: path the the file relative the the sites public storage folder.
+	 * @return the rsult of the thumb action on the core controller
+	 * @throws GO_Base_Exception_AccessDenied when unable to create the folder?
+	 */
 	protected function actionThumb($params){
 			
 		$rootFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'site/'.Site::model()->id);
@@ -68,7 +84,15 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 		return $c->run('thumb', $params, true, false);
 	}
 	
-	
+	/**
+	 * Post to this action to execute a function inside a widget
+	 * Using an AJAX call this the controller action
+	 * 
+	 * @param array $params
+	 * - string widget_class eg. 'GO_Site_Widget_Plupload_Widget'
+	 * - string widget_method name of the widgets static method eg. 'upload'
+	 * @throws Exception when not all required parameters are supplied
+	 */
 	protected function actionAjaxWidget($params){
 		if(!isset($params['widget_class']))
 			Throw new Exception ('Widget class not given.');
@@ -83,6 +107,5 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 
 		echo $response;
 	}
-	
 	
 }
