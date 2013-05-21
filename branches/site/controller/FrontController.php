@@ -16,6 +16,13 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 			Site::scripts()->registerMetaTag($content->meta_description, 'description');
 			Site::scripts()->registerMetaTag($content->meta_keywords, 'keywords');
 			
+			// Check if the template is not empty
+			if(empty($content->template)) {
+				$defaultTemplate = Site::config()->getDefaultTemplate();
+				if(!empty($defaultTemplate))
+					$content->template = $defaultTemplate;
+			}
+			
 			$this->render($content->template,array('content'=>$content));
 		}
 	}
