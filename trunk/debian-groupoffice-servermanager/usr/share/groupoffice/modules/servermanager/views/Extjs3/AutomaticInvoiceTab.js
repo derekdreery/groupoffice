@@ -6,7 +6,7 @@
  * 
  * If you have questions write an e-mail to info@intermesh.nl
  * 
- * @version $Id: AutomaticInvoicePanel.js 10380 2012-10-03 11:33:49Z mdhart $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Michael de Hart <mdhart@intermesh.nl>
  */

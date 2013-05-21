@@ -6,7 +6,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: CriteriumGrid.js 0000 2010-12-29 08:56:17 wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Wesley Smits <wsmits@intermesh.nl>
  * @author WilmarVB <wilmar@intermesh.nl>

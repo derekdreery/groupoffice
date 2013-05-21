@@ -6,7 +6,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: SieveDialog.js 9261 2010-12-15 10:37:31Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Wesley Smits <wsmits@intermesh.nl>
  * @author WilmarVB <wilmar@intermesh.nl>
