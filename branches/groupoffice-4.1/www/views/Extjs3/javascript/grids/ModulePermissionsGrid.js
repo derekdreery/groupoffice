@@ -6,7 +6,7 @@
  * 
  * If you have questions write an e-mail to info@intermesh.nl
  * 
- * @version $Id: ModulePermissionsGrid.js 8116 2011-09-20 15:14:08Z wilmar1980 $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Wilmar van Beusekom <wilmar@intermesh.nl>
  */

@@ -7,7 +7,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: en.js 7708 2011-07-06 14:13:04Z wilmar1980 $
+ * @version $Id$
  * @author Dat Pham <datpx@fab.vn> +84907382345
  */
 
