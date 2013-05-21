@@ -66,7 +66,7 @@ class GO_Customfields_Model_Block extends GO_Base_Db_ActiveRecord{
 		}
 		
 		usort($itemNamesArr,function($a,$b) {
-			return $a['model_name']>=$b['model_name'] ? 1 : -1;
+			return $a['item_name']>=$b['item_name'] ? 1 : -1;
 		});
 		
 		return $itemNamesArr;
