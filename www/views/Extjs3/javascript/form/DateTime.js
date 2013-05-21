@@ -9,7 +9,7 @@
  * @author      Ing. Jozef Sakáloš
  * @copyright (c) 2008, Ing. Jozef Sakáloš
  * @version   2.0
- * @revision  $Id: Ext.ux.form.DateTime.js 813 2010-01-29 23:32:36Z jozo $
+ * @revision  $Id$
  *
  * @license Ext.ux.form.DateTime is licensed under the terms of
  * the Open Source LGPL 3.0 license.  Commercial use is permitted to the extent

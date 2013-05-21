@@ -30,7 +30,8 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 	/**
 	 * Reads a MIME file and creates a SavedMessage model from it.
 	 * 
-	 * @param string $path Where the MIME file is stored
+	 * @param string $path Relative path from file_storage_path or tmpdir where the MIME file is stored
+	 * @param bookean $isTempFile Indicates if path it relative from tmpdir or file_storage_path
 	 * @return GO_Email_Model_SavedMessage
 	 */
 	public function createFromMimeFile($path, $isTempFile=false) {

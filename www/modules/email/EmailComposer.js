@@ -863,7 +863,10 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 							Ext.apply(this.sendParams, action.result.sendParams);
 						
 						//add existing attachments to result so emailEditor will set this after form load.
-						action.result.data.attachments=attachmentmentsData.concat(action.result.data.attachments);						
+						if(action.result.data.attachments)
+							attachmentmentsData=attachmentmentsData.concat(action.result.data.attachments);						
+						
+						action.result.data.attachments=attachmentmentsData;
 					},
 					scope : this
 				});

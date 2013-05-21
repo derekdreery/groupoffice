@@ -14,5 +14,9 @@ class GO_Customcss_CustomcssModule extends GO_Base_Module {
 		if (file_exists(GO::config()->file_storage_path . 'customcss/style.css'))
 			echo '<style>' . file_get_contents(GO::config()->file_storage_path . 'customcss/style.css') . '</style>' . "\n";
 	}
+	
+	public function adminModule() {
+		return true;
+	}
 
 }

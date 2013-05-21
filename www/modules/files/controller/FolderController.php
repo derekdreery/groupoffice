@@ -588,7 +588,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		if($folderPreference)
 			$response['thumbs']=$folderPreference->thumbs;
 		else
-			$response['thumbs']=1;
+			$response['thumbs']=0;
 
 		$response['parent_id'] = $folder->parent_id;
 

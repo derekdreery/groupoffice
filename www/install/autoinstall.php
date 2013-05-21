@@ -113,9 +113,20 @@ GO::config()->password_validate=false;
 
 $admin->save();
 
+$adminGroup->addUser($admin->id);
+
 $admin->checkDefaultModels();
 
-$adminGroup->addUser($admin->id);
+
+
+//module code here because we need the user and the module for this
+if(GO::modules()->files){
+	$folder = GO_Files_Model_Folder::model()->findByPath('users/'.$admin->username.'/Public', true);
+	$folder->visible=true;
+	$acl = $folder->setNewAcl();
+	$acl->addGroup(GO::config()->group_everyone, GO_Base_Model_Acl::DELETE_PERMISSION);
+	$folder->save();
+}
 
 
 //Insert default cronjob record for email reminders

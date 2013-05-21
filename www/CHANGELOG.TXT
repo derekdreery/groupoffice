@@ -1,3 +1,18 @@
+- Show maximum upload size.
+- Reverted file thumbnail view by default
+
+17-05-2013 4.1.69
+- Updated Norwegian
+- Fix for "This is not a recurring event" error
+- Added default sort to the select document template grid and enabled name column sort
+
+17-05-2013 4.1.68
+- Demo data for linked e-mails
+- Keep contact and users in sync
+- Select first e-mail template as default for new users
+- Possible to export tickets without manage permission on the ticket module
+- ImageViewer does not resize image when clicking "Normal size".
+
 16-05-2013 4.1.67
 - Added demo data module so new users can have a better first experience.
 - Remember state of several grids in the Email Composer's Address Book dialog.
