@@ -1,3 +1,5 @@
+- Template parser will not see {tag} with white spaces between { and } as tag to be replaced.
+- The HTML email message CSS part will add style with new line characters to disable tag parsing
 - Show maximum upload size.
 - Reverted file thumbnail view by default
 
