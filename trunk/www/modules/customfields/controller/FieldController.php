@@ -95,6 +95,7 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 		$columnModel->formatColumn('category_name', '$model->category->name');
 		$columnModel->formatColumn('column_name', '$model->columnName()');
 		$columnModel->formatColumn('type', '$model->customfieldtype->name()');
+		$columnModel->formatColumn('unique_values', '$model->unique_values ? GO::t("cmdYes") : GO::t("cmdNo")');
 		return parent::formatColumns($columnModel);
 	}
 

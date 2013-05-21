@@ -19,7 +19,8 @@ GO.customfields.TypePanel = Ext.extend(GO.grid.GridPanel, {
 				'required',
 		    'category_name',
 		    'category_id',
-				'column_name'
+				'column_name',
+				'unique_values'
 		    ]}),
 		    
 	  		baseParams: {
@@ -59,6 +60,10 @@ GO.customfields.TypePanel = Ext.extend(GO.grid.GridPanel, {
 				{
 					header:'Database name',
 					dataIndex: 'column_name'
+				},
+				{
+					header:GO.customfields.lang['uniqueValues'],
+					dataIndex: 'unique_values'
 				}];
 	 this.view= new Ext.grid.GroupingView({
 				autoFill:true,
