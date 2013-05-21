@@ -1135,16 +1135,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					throw new Exception("Can't join non existing relation '".$joinRelation['name'].'"');
 
 				$model = GO::getModel($r['model']);
-				$joinRelationjoins .= "\n".$joinRelation['type']." JOIN `".$model->tableName().'` '.$joinRelation['name'].' ON (';
+				$joinRelationjoins .= "\n".$joinRelation['type']." JOIN `".$model->tableName().'` `'.$joinRelation['name'].'` ON (';
 				
 				switch($r['type']){
 					case self::BELONGS_TO:
-						$joinRelationjoins .= $joinRelation['name'].'.`'.$model->primaryKey().'`=t.`'.$r['field'].'`';
+						$joinRelationjoins .= '`'.$joinRelation['name'].'`.`'.$model->primaryKey().'`=t.`'.$r['field'].'`';
 					break;
 				
 					case self::HAS_ONE:
 					case self::HAS_MANY:
-							$joinRelationjoins .= $joinRelation['name'].'.`'.$r['field'].'`=t.`'.$this->primaryKey().'`';
+							$joinRelationjoins .= '`'.$joinRelation['name'].'`.`'.$r['field'].'`=t.`'.$this->primaryKey().'`';
 						break;
 					
 					default:
@@ -1154,10 +1154,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				
 				$joinRelationjoins .=') ';
 
-				$cols = $model->getColumns();
+				//if a diffent fetch class is passed then we should not join the relational fields because it makes no sense.
+				//GO_Base_Model_Grouped does this for example.
+				if(empty($params['fetchClass'])){
+					$cols = $model->getColumns();
 
-				foreach($cols as $field=>$props){
-					$joinRelationSelectFields .=",\n".$joinRelation['name'].'.`'.$field.'` AS `'.$joinRelation['name'].'@'.$field.'`';
+					foreach($cols as $field=>$props){
+						$joinRelationSelectFields .=",\n`".$joinRelation['name'].'`.`'.$field.'` AS `'.$joinRelation['name'].'@'.$field.'`';
+					}
 				}
 			}			
 		}
@@ -1450,6 +1454,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
     $AS->findParams=$params;
     if(isset($params['relation']))
       $AS->relation=$params['relation'];    
+		
+		
+		if(!empty($params['fetchClass'])){
+			$AS->stmt->setFetchMode(PDO::FETCH_CLASS, $params['fetchClass']);
+		}
 
     return $AS;		
 	}
