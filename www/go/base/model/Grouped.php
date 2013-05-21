@@ -62,11 +62,11 @@ class GO_Base_Model_Grouped extends GO_Base_Model {
 			$findParams = GO_Base_Db_FindParams::newInstance ();
 		
 		$findParams->ignoreAcl()
-						->select($selectFields);
+						->select($selectFields)
+						->fetchClass(get_class($this));
 
 		$stmt = GO::getModel($modelName)->find($findParams);
-		$stmt->stmt->setFetchMode(PDO::FETCH_CLASS, get_class($this));
-
+		
 		return $stmt;
 	}
 
