@@ -101,7 +101,9 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 					self::$cacheColumns[$this->extendsModel()][$field->columnName()]['customfield']=$field;
 					self::$cacheColumns[$this->extendsModel()][$field->columnName()]['regex']=$field->validation_regex;
 					self::$cacheColumns[$this->extendsModel()][$field->columnName()]['gotype']='customfield';
-					self::$cacheColumns[$this->extendsModel()][$field->columnName()]['required']=$field->required;
+					
+					//Don't validate required on the server side because customfields tabs can be disabled.
+					//self::$cacheColumns[$this->extendsModel()][$field->columnName()]['required']=$field->required;
 				}
 
 				GO::cache()->set($cacheKey, array('attributeLabels'=>self::$attributeLabels[$this->extendsModel()], 'columns'=>self::$cacheColumns[$this->extendsModel()]));
