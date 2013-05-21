@@ -389,6 +389,7 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 			uploadItems.push(new GO.base.upload.PluploadMenuItem({
 					text:GO.lang.upload,
 					upload_config: {
+						max_file_size: Math.floor(this.maxAttachmentsSize/1048576)+'mb',
 						listeners: {
 							scope:this,
 							uploadcomplete: function(uploadpanel, success, failures) {

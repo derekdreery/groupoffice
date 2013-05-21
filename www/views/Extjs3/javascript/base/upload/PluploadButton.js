@@ -14,9 +14,13 @@ GO.base.upload.PluploadButton = Ext.extend(Ext.Button, {
 		});
 
 		this.uploadpanel = new GO.base.upload.PluploadPanel(config.upload_config);
+		
+		var title = config.window_title || config.text || 'Upload files';
+		
+		title += " ("+GO.lang.strMax+": "+this.uploadpanel.max_file_size+")";
 
 		this.window = new GO.Window({ 
-			title: config.window_title || config.text || 'Upload files',
+			title: title,
 			width: config.window_width || 640, 
 			height: config.window_height || 380, 
 			layout: 'fit', 
