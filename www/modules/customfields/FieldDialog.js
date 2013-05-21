@@ -7,7 +7,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: FieldDialog.js 15118 2013-02-06 08:28:18Z wvbeusekom $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 

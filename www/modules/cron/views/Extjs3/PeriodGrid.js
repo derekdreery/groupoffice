@@ -6,7 +6,7 @@
  * 
  * If you have questions write an e-mail to info@intermesh.nl
  * 
- * @version $Id: CronGrid.js 10767 2012-06-12 13:31:03Z wsmits $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Wesley Smits <wsmits@intermesh.nl>
  */

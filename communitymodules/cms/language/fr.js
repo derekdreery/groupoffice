@@ -8,7 +8,7 @@
 // If you have questions write an e-mail to info@intermesh.nl
 //
 // @copyright Copyright Intermesh
-// @version $Id: fr.js 8196 2011-09-30 06:16:32Z mschering $
+// @version $Id$
 // @author Merijn Schering <mschering@intermesh.nl>
 //
 // French Translation

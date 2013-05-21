@@ -1,3 +1,6 @@
+- Show maximum upload size.
+- Reverted file thumbnail view by default
+
 17-05-2013 4.1.69
 - Updated Norwegian
 - Fix for "This is not a recurring event" error
