@@ -177,7 +177,7 @@ class GO_Base_Util_TemplateParser
 		$content = $this->_replaceTags($content);
 		
 		if(!$leaveEmptyTags){
-			$content = preg_replace('/{([^}]*)}/U','',$content);
+			$content = preg_replace('/{([^\s}]*)}/U','',$content);
 			//$content = preg_replace('/%([^%]*)%/U','',$content); //breaks email templates!
 		}		
 		return $content;
