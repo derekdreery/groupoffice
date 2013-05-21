@@ -196,6 +196,10 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 				
 				$this->_setUserContact($elmer);
 				$elmer->checkDefaultModels();
+			}else
+			{
+				var_dump($elmer->getValidationErrors());
+				exit();
 			}
 		}
 		
@@ -217,6 +221,10 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 				
 				$this->_setUserContact($demo);
 				$demo->checkDefaultModels();
+			}else
+			{
+				var_dump($demo->getValidationErrors());
+				exit();
 			}
 		}
 
@@ -237,6 +245,10 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 				
 				$this->_setUserContact($linda);
 				$linda->checkDefaultModels();
+			}else
+			{
+				var_dump($linda->getValidationErrors());
+				exit();
 			}
 		}
 
