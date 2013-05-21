@@ -229,6 +229,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	private $_relatedCache;
 	
+	private $_joinRelationAttr;
+	
 	protected $_attributes=array();
 	
 	private $_modifiedAttributes=array();
@@ -385,7 +387,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		foreach($this->_attributes as $name=>$value){
 			$arr = explode('@',$name);
 			if(count($arr)>1){
-				$this->_relatedCache[$arr[0]][$arr[1]]=$value;							
+				
+				$cur = &$this->_joinRelationAttr;
+				
+				foreach($arr as $part){
+					$cur =& $cur[$part];
+					//$this->_relatedCache[$arr[0]][$arr[1]]=$value;							
+				}
+				$cur = $value;
+				
 				unset($this->_attributes[$name]);
 			}
 		}
@@ -1127,41 +1137,144 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$joinRelationSelectFields='';
 		$joinRelationjoins='';
 		if(!empty($params['joinRelations'])){
+			/*
+			 * Relational attributes are fetch as relationname@attribute or
+			 * 
+			 * relation1@relation2@attribute.
+			 * 
+			 * In the ActiveRecord constructor these attributes are filtered into a relatedCache array.
+			 * 
+			 * example query with joinRelation('order.book') on a GO_Billing_Model_Item:
+			 * 
+			 * SELECT `t`.`id`, `t`.`order_id`, `t`.`product_id`, `t`.`unit_cost`, `t`.`unit_price`, `t`.`unit_list`, `t`.`unit_total`, `t`.`amount`, `t`.`vat`, `t`.`discount`, `t`.`sort_order`, `t`.`cost_code`, `t`.`markup`, `t`.`order_at_supplier`, `t`.`order_at_supplier_company_id`, `t`.`amount_delivered`, `t`.`unit`, `t`.`item_group_id`, `t`.`extra_cost_status_id` ,
+`order`.`id` AS `order@id`,
+`order`.`project_id` AS `order@project_id`,
+`order`.`status_id` AS `order@status_id`,
+`order`.`book_id` AS `order@book_id`,
+`order`.`language_id` AS `order@language_id`,
+`order`.`user_id` AS `order@user_id`,
+`order`.`order_id` AS `order@order_id`,
+`order`.`po_id` AS `order@po_id`,
+`order`.`company_id` AS `order@company_id`,
+`order`.`contact_id` AS `order@contact_id`,
+`order`.`ctime` AS `order@ctime`,
+`order`.`mtime` AS `order@mtime`,
+`order`.`btime` AS `order@btime`,
+`order`.`ptime` AS `order@ptime`,
+`order`.`costs` AS `order@costs`,
+`order`.`subtotal` AS `order@subtotal`,
+`order`.`vat` AS `order@vat`,
+`order`.`total` AS `order@total`,
+`order`.`authcode` AS `order@authcode`,
+`order`.`frontpage_text` AS `order@frontpage_text`,
+`order`.`customer_name` AS `order@customer_name`,
+`order`.`customer_to` AS `order@customer_to`,
+`order`.`customer_salutation` AS `order@customer_salutation`,
+`order`.`customer_contact_name` AS `order@customer_contact_name`,
+`order`.`customer_address` AS `order@customer_address`,
+`order`.`customer_address_no` AS `order@customer_address_no`,
+`order`.`customer_zip` AS `order@customer_zip`,
+`order`.`customer_city` AS `order@customer_city`,
+`order`.`customer_state` AS `order@customer_state`,
+`order`.`customer_country` AS `order@customer_country`,
+`order`.`customer_vat_no` AS `order@customer_vat_no`,
+`order`.`customer_crn` AS `order@customer_crn`,
+`order`.`customer_email` AS `order@customer_email`,
+`order`.`customer_extra` AS `order@customer_extra`,
+`order`.`webshop_id` AS `order@webshop_id`,
+`order`.`recur_type` AS `order@recur_type`,
+`order`.`payment_method` AS `order@payment_method`,
+`order`.`recurred_order_id` AS `order@recurred_order_id`,
+`order`.`reference` AS `order@reference`,
+`order`.`order_bonus_points` AS `order@order_bonus_points`,
+`order`.`pagebreak` AS `order@pagebreak`,
+`order`.`files_folder_id` AS `order@files_folder_id`,
+`order`.`cost_code` AS `order@cost_code`,
+`order`.`for_warehouse` AS `order@for_warehouse`,
+`order`.`dtime` AS `order@dtime`,
+`book`.`id` AS `order@book@id`,
+`book`.`user_id` AS `order@book@user_id`,
+`book`.`name` AS `order@book@name`,
+`book`.`acl_id` AS `order@book@acl_id`,
+`book`.`order_id_prefix` AS `order@book@order_id_prefix`,
+`book`.`show_statuses` AS `order@book@show_statuses`,
+`book`.`next_id` AS `order@book@next_id`,
+`book`.`default_vat` AS `order@book@default_vat`,
+`book`.`currency` AS `order@book@currency`,
+`book`.`order_csv_template` AS `order@book@order_csv_template`,
+`book`.`item_csv_template` AS `order@book@item_csv_template`,
+`book`.`country` AS `order@book@country`,
+`book`.`bcc` AS `order@book@bcc`,
+`book`.`call_after_days` AS `order@book@call_after_days`,
+`book`.`sender_email` AS `order@book@sender_email`,
+`book`.`sender_name` AS `order@book@sender_name`,
+`book`.`is_purchase_orders_book` AS `order@book@is_purchase_orders_book`,
+`book`.`backorder_status_id` AS `order@book@backorder_status_id`,
+`book`.`delivered_status_id` AS `order@book@delivered_status_id`,
+`book`.`reversal_status_id` AS `order@book@reversal_status_id`,
+`book`.`addressbook_id` AS `order@book@addressbook_id`,
+`book`.`files_folder_id` AS `order@book@files_folder_id`,
+`book`.`import_status_id` AS `order@book@import_status_id`,
+`book`.`import_notify_customer` AS `order@book@import_notify_customer`,
+`book`.`import_duplicate_to_book` AS `order@book@import_duplicate_to_book`,
+`book`.`import_duplicate_status_id` AS `order@book@import_duplicate_status_id`
+FROM `bs_items` t 
+INNER JOIN `bs_orders` `order` ON (`order`.`id`=`t`.`order_id`) 
+INNER JOIN `bs_books` `book` ON (`book`.`id`=`order`.`book_id`) 
+WHERE 1 
+AND `t`.`product_id` = "426" AND `order`.`btime` < "1369143782" AND `order`.`btime` > "0"
+ORDER BY `book`.`name` ASC ,`order`.`btime` DESC 
+			 * 
+			 */
 		
 			foreach($params['joinRelations'] as $joinRelation){
-				$r = $this->getRelation($joinRelation['name']);
 				
-				if(!$r)
-					throw new Exception("Can't join non existing relation '".$joinRelation['name'].'"');
-
-				$model = GO::getModel($r['model']);
-				$joinRelationjoins .= "\n".$joinRelation['type']." JOIN `".$model->tableName().'` `'.$joinRelation['name'].'` ON (';
+				$names = explode('.', $joinRelation['name']);
+				$relationModel = $this;
+				$relationAlias='t';
+				$attributePrefix = '';
 				
-				switch($r['type']){
-					case self::BELONGS_TO:
-						$joinRelationjoins .= '`'.$joinRelation['name'].'`.`'.$model->primaryKey().'`=t.`'.$r['field'].'`';
-					break;
-				
-					case self::HAS_ONE:
-					case self::HAS_MANY:
-							$joinRelationjoins .= '`'.$joinRelation['name'].'`.`'.$r['field'].'`=t.`'.$this->primaryKey().'`';
-						break;
+				foreach($names as $name){
+					$r = $relationModel->getRelation($name);
 					
-					default:
-						throw new Exception("The relation type of ".$joinRelation['name']." is not supported by joinRelation or groupRelation");
+					$attributePrefix.=$name.'@';
+
+					if(!$r)
+						throw new Exception("Can't join non existing relation '".$name.'"');
+
+					$model = GO::getModel($r['model']);
+					$joinRelationjoins .= "\n".$joinRelation['type']." JOIN `".$model->tableName().'` `'.$name.'` ON (';
+
+					switch($r['type']){
+						case self::BELONGS_TO:
+							$joinRelationjoins .= '`'.$name.'`.`'.$model->primaryKey().'`=`'.$relationAlias.'`.`'.$r['field'].'`';
 						break;
-				}
-				
-				$joinRelationjoins .=') ';
 
-				//if a diffent fetch class is passed then we should not join the relational fields because it makes no sense.
-				//GO_Base_Model_Grouped does this for example.
-				if(empty($params['fetchClass'])){
-					$cols = $model->getColumns();
+						case self::HAS_ONE:
+						case self::HAS_MANY:
+								$joinRelationjoins .= '`'.$name.'`.`'.$r['field'].'`=t.`'.$this->primaryKey().'`';
+							break;
 
-					foreach($cols as $field=>$props){
-						$joinRelationSelectFields .=",\n`".$joinRelation['name'].'`.`'.$field.'` AS `'.$joinRelation['name'].'@'.$field.'`';
+						default:
+							throw new Exception("The relation type of ".$name." is not supported by joinRelation or groupRelation");
+							break;
 					}
+					
+					$joinRelationjoins .=') ';
+					
+					//if a diffent fetch class is passed then we should not join the relational fields because it makes no sense.
+					//GO_Base_Model_Grouped does this for example.
+					if(empty($params['fetchClass'])){
+						$cols = $model->getColumns();
+
+						foreach($cols as $field=>$props){
+							$joinRelationSelectFields .=",\n`".$name.'`.`'.$field.'` AS `'.$attributePrefix.$field.'`';
+						}
+					}
+					
+					$relationModel=$model;
+					$relationAlias=$name;
+				
 				}
 			}			
 		}
@@ -1837,21 +1950,20 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			//append join attribute so cache is void automatically when this attribute changes.
 			$cacheKey = $name.':'.(isset($this->_attributes[$joinAttribute]) ? $this->_attributes[$joinAttribute] : 0);
 				
-			if(isset($this->_relatedCache[$cacheKey])){			
-
-				if(is_array($this->_relatedCache[$cacheKey])){
-					$attr = $this->_relatedCache[$cacheKey];
-
-					$this->_relatedCache[$cacheKey]=new $model;
-					$this->_relatedCache[$cacheKey]->setAttributes($attr, false);	
-					$this->_relatedCache[$cacheKey]->castMySqlValues();	
-					
-				}				
+			if(isset($this->_joinRelationAttr[$name])){
 				
-			}else
-			{	
+				$attr = $this->_joinRelationAttr[$name];
+				
+				$this->_relatedCache[$cacheKey]=new $model;
+				$this->_relatedCache[$cacheKey]->setAttributes($attr, false);
+				$this->_relatedCache[$cacheKey]->castMySqlValues();	
+				
+				unset($this->_joinRelationAttr[$cacheKey]);
+				
+			}elseif(!isset($this->_joinRelationAttr[$cacheKey]))
+			{
 				//In a belongs to relationship the primary key of the remote model is stored in this model in the attribute "field".
-				$this->_relatedCache[$cacheKey] = !empty($this->_attributes[$joinAttribute]) ? GO::getModel($model)->findByPk($this->_attributes[$joinAttribute], array('relation'=>$name), true) : false;
+				$this->_relatedCache[$cacheKey] = !empty($this->_attributes[$joinAttribute]) ? GO::getModel($model)->findByPk($this->_attributes[$joinAttribute], array('relation'=>$name), true) : null;
 			}
 			return $this->_relatedCache[$cacheKey];
 			
@@ -2061,6 +2173,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			//only set writable properties. It should either be a column or setter method.
 			if(isset($this->columns[$key]) || property_exists($this, $key) || method_exists($this, 'set'.$key)){
 				$this->$key=$value;			
+			}elseif(is_array($value) && $this->getRelation($key)){
+				$this->_joinRelationAttr[$key]=$value;
 			}
 		}		
 	}
