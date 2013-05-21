@@ -447,7 +447,18 @@ class GO_Base_Mail_Message extends Swift_Message{
 			}
 			$params['htmlbody']=$this->_fixRelativeUrls($params['htmlbody']);
 						
-			$htmlTop = '<html><head><style type="text/css">body,p,td,div,span{'.GO::config()->html_editor_font.'};body p{margin:0px;}</style></head><body>';
+			$htmlTop = '<html>
+<head>
+<style type="text/css">
+body,p,td,div,span{
+	'.GO::config()->html_editor_font.'
+};
+body p{
+	margin:0px;
+}
+</style>
+</head>
+<body>';
 			
 			$htmlBottom = '</body></html>';
 			
