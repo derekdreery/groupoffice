@@ -1,7 +1,13 @@
+22-05-2013 4.1.70
 - Template parser will not see {tag} with white spaces between { and } as tag to be replaced.
 - The HTML email message CSS part will add style with new line characters to disable tag parsing
 - Show maximum upload size.
 - Reverted file thumbnail view by default
+- Sales per month report for billing products
+- Required custom fields are not validated server side to prevent errors when 
+  hiding custom fields in the interface
+- Don't use store reload but load to prevent delete to repeat after editing a rule
+- Disappearing file panel bug
 
 17-05-2013 4.1.69
 - Updated Norwegian
