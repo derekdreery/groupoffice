@@ -3383,8 +3383,9 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 * @return mixed 
 	 */
 	public function getAttribute($attributeName, $outputType='raw'){
-		if(!isset($this->_attributes[$attributeName]))						
-			return false;
+		if(!isset($this->_attributes[$attributeName])){					
+			return null;
+		}
 		
 		return $outputType=='raw' ?  $this->_attributes[$attributeName] : $this->formatAttribute($attributeName, $this->_attributes[$attributeName],$outputType=='html');
 	}
