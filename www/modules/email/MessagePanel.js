@@ -36,60 +36,60 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		this.bodyId = Ext.id();
 		this.attachmentsId = Ext.id();
 				
-		var templateStr = '<div class="message-header">'+
-		'<table class="message-header-table">'+
-		'<tr><td style="width:70px"><b>'+GO.email.lang.from+'</b></td>'+			
-		'<td>: {from} &lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{sender}\', \'{[this.addSlashes(values.from)]}\');">{sender}</a>&gt;</td></tr>'+
-		'<tr><td><b>'+GO.email.lang.subject+'</b></td><td>: {subject}</td></tr>'+
-		'<tr><td><b>'+GO.lang.strDate+'</b></td><td>: {date}</td></tr>'+
-		//'<tr><td><b>'+GO.lang.strSize+'</b></td><td>: {size}</td></tr>'+
-		'<tr><td><b>'+GO.email.lang.to+'</b></td><td>: '+
-		'<tpl for="to">'+
-		'{personal} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.personal)]}\');">{email}</a>&gt;; </tpl>'+	
-		'</tpl>'+
-		'</td></tr>'+
-		'<tpl if="cc.length">'+
-		'<tr><td><b>'+GO.email.lang.cc+'</b></td><td>: '+
-		'<tpl for="cc">'+
-		'{personal} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.personal)]}\');">{email}</a>&gt;; </tpl>'+	
-		'</tpl>'+
-		'</td></tr>'+
-		'</tpl>'+
-		'<tpl if="bcc.length">'+
-		'<tr><td><b>'+GO.email.lang.bcc+'</b></td><td>: '+
-		'<tpl for="bcc">'+
-		'{personal} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.name)]}\');">{email}</a>&gt;; </tpl>'+	
-		'</tpl>'+
-		'</td></tr>'+
-		'</tpl>'+
-		'</table>'+
-		'<tpl if="attachments.length">'+
-		'<table style="padding-top:5px;">'+
-		'<tr><td><b>'+GO.email.lang.attachments+':</b></td></tr><tr><td id="'+this.attachmentsId+'">'+
-		'<tpl for="attachments">'+
-			'<tpl if="extension==\'vcf\'">';
-			if (GO.addressbook)
-				templateStr += '<a class="filetype-link filetype-{extension}" id="'+this.attachmentsId+'_{[xindex-1]}" href="javascript:GO.email.readVCard(\'{url}&importVCard=1\');">{name} ({human_size})</a> ';
-			else
-				templateStr += '<a class="filetype-link filetype-{extension}" id="'+this.attachmentsId+'_{[xindex-1]}" href="#">{name} ({human_size})</a> ';
-			templateStr += '</tpl>'+
-			'<tpl if="extension!=\'vcf\'">'+
-			'<a class="filetype-link filetype-{extension}" id="'+this.attachmentsId+'_{[xindex-1]}" href="#">{name} ({human_size})</a> '+
+		var templateStr = 
+		'<div class="message-header">'+
+			'<table class="message-header-table">'+
+			'<tr><td style="width:70px"><b>'+GO.email.lang.from+'</b></td>'+			
+			'<td>: {from} &lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{sender}\', \'{[this.addSlashes(values.from)]}\');">{sender}</a>&gt;</td></tr>'+
+			'<tr><td><b>'+GO.email.lang.subject+'</b></td><td>: {subject}</td></tr>'+
+			'<tr><td><b>'+GO.lang.strDate+'</b></td><td>: {date}</td></tr>'+
+			//'<tr><td><b>'+GO.lang.strSize+'</b></td><td>: {size}</td></tr>'+
+			'<tr><td><b>'+GO.email.lang.to+'</b></td><td>: '+
+			'<tpl for="to">'+
+			'{personal} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.personal)]}\');">{email}</a>&gt;; </tpl>'+	
 			'</tpl>'+
-		'</tpl>'+
-		'<tpl if="attachments.length&gt;1 && zip_of_attachments_url!=\'\'">'+
-		'<a class="filetype-link filetype-zip" href="{zip_of_attachments_url}" target="_blank">'+GO.email.lang.downloadAllAsZip+'</a>'+
-		'</tpl>'+
-		'</td></tr>'+
-		'</table>'+
-		'</tpl>'+
-		'<tpl if="blocked_images&gt;0">'+
-		'<div class="go-warning-msg em-blocked">'+GO.email.lang.blocked+' <a id="em-unblock" href="#" class="normal-link">'+GO.email.lang.unblock+'</a></div>'+
-		'</tpl>'+			
-		'<tpl if="xssDetected">'+
-		'<div class="go-warning-msg em-blocked"><a id="em-filterxss" href="#" class="normal-link">'+GO.email.lang.xssDetected+'</a></div>'+
-		'</tpl>'+	
-		'</div>'+
+			'</td></tr>'+
+			'<tpl if="cc.length">'+
+			'<tr><td><b>'+GO.email.lang.cc+'</b></td><td>: '+
+			'<tpl for="cc">'+
+			'{personal} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.personal)]}\');">{email}</a>&gt;; </tpl>'+	
+			'</tpl>'+
+			'</td></tr>'+
+			'</tpl>'+
+			'<tpl if="bcc.length">'+
+			'<tr><td><b>'+GO.email.lang.bcc+'</b></td><td>: '+
+			'<tpl for="bcc">'+
+			'{personal} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.name)]}\');">{email}</a>&gt;; </tpl>'+	
+			'</tpl>'+
+			'</td></tr>'+
+			'</tpl>'+
+			'</table>'+
+			'<tpl if="attachments.length">'+
+			'<table style="padding-top:5px;">'+
+			'<tr><td><b>'+GO.email.lang.attachments+':</b></td></tr><tr><td id="'+this.attachmentsId+'">'+
+			'<tpl for="attachments">'+
+				'<tpl if="extension==\'vcf\'">';
+				if (GO.addressbook)
+					templateStr += '<a class="filetype-link filetype-{extension}" id="'+this.attachmentsId+'_{[xindex-1]}" href="javascript:GO.email.readVCard(\'{url}&importVCard=1\');">{name} ({human_size})</a> ';
+				else
+					templateStr += '<a class="filetype-link filetype-{extension}" id="'+this.attachmentsId+'_{[xindex-1]}" href="#">{name} ({human_size})</a> ';
+				templateStr += '</tpl>'+
+				'<tpl if="extension!=\'vcf\'">'+
+				'<a class="filetype-link filetype-{extension}" id="'+this.attachmentsId+'_{[xindex-1]}" href="#">{name} ({human_size})</a> '+
+				'</tpl>'+
+			'</tpl>'+
+			'<tpl if="attachments.length&gt;1 && zip_of_attachments_url!=\'\'">'+
+			'<a class="filetype-link filetype-zip" href="{zip_of_attachments_url}" target="_blank">'+GO.email.lang.downloadAllAsZip+'</a>'+
+			'</tpl>'+
+			'</td></tr>'+
+			'</table>'+
+			'</tpl>'+
+			'<tpl if="blocked_images&gt;0">'+
+			'<div class="go-warning-msg em-blocked">'+GO.email.lang.blocked+' <a id="em-unblock" href="#" class="normal-link">'+GO.email.lang.unblock+'</a></div>'+
+			'</tpl>'+			
+			'<tpl if="xssDetected">'+
+			'<div class="go-warning-msg em-blocked"><a id="em-filterxss" href="#" class="normal-link">'+GO.email.lang.xssDetected+'</a></div>'+
+			'</tpl>'+	
 		'</div>';
 		
 		if(GO.calendar){
@@ -381,9 +381,9 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		{
 			this.attachmentsEl = Ext.get(this.attachmentsId);			
 			this.attachmentsEl.on('click', this.openAttachment, this);
-			
 			if(this.attachmentContextMenu)
 			{			
+				this.attachmentContextMenu.messagePanel = this;
 				this.attachmentsEl.on('contextmenu', this.onAttachmentContextMenu, this);
 			}
 		}
