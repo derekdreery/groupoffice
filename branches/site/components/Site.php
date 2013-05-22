@@ -1,5 +1,24 @@
 <?php
+/*
+ * Copyright Intermesh BV
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ */
 
+/**
+ * The Site Launcher Object.
+ * The static methods inside this object can be used in all the
+ * Models, Views and Controllers that are runned by the site's index.php
+ *
+ * @package GO.modules.site.components
+ * @copyright Copyright Intermesh
+ * @version $Id$ 
+ * @author Wesley Smits <wsmits@intermesh.nl> 
+ * @author Michael de Hart <mdehart@intermesh.nl> 
+ */
 class Site {
 	
 	/**
@@ -71,7 +90,7 @@ class Site {
 	}
 	
 	/**
-	 * Get the site model.
+	 * Get the site model fro the database.
 	 * 
 	 * @return GO_Site_Model_Site
 	 */
@@ -96,7 +115,7 @@ class Site {
 	}
 	
 	/**
-	 * Return the config component
+	 * Return the config component with all parameter as defined in siteconfig.php
 	 * @return GO_Site_Components_Config
 	 */
 	public static function config() {
@@ -106,7 +125,7 @@ class Site {
 	}
 	
 	/**
-	 * Get the url manager for this site
+	 * Get the url manager for this site for createUrl()
 	 * 
 	 * @return GO_Site_Components_UrlManager
 	 */
@@ -158,7 +177,9 @@ class Site {
 	}
 	
 	/**
-	 * 
+	 * Adds notification messages to the rendered page.
+	 * The message is deleted from the session after it is displayed for the first time
+	 * In most cases you want ti use it inside if(Notifier::hasMessage($key))
 	 * @return GO_Site_Components_Notifier
 	 */
 	public static function notifier() {
@@ -168,7 +189,7 @@ class Site {
 	}
 	
 	/**
-	 * 
+	 * Request object for finding requestUri, basePath, HostIno
 	 * @return GO_Site_Components_Request
 	 */
 	public static function request() {
@@ -179,7 +200,8 @@ class Site {
 	
 	
 	/**
-	 * 
+	 * Component for adding scripts css en meta tags to the head of the rendered result.
+	 * use the POS_ constants to define where the scripts should be added
 	 * @return GO_Site_Components_Scripts
 	 */
 	public static function scripts() {
