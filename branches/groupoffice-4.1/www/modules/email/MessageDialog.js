@@ -6,7 +6,8 @@ GO.email.MessageDialog = function(config){
 	}
 
 	this.messagePanel = new GO.email.MessagePanel({
-		autoScroll:true
+		autoScroll:true,
+		attachmentContextMenu: new GO.email.AttachmentContextMenu()
 	});
 
 	this.toolbar =[
@@ -109,9 +110,11 @@ GO.email.showMessageDialog = function(uid,mailbox,account_id,no_max_body_size) {
 	// no_max_body must be boolean. If true, the email body is not truncated when
 	// it exceeds the maximum size.
 	
-	if (!GO.email.messageDialog)
+	if (!GO.email.messageDialog){
 		GO.email.messageDialog = new GO.email.MessageDialog();
-	
+		GO.email.messageDialog.messagePanel.on('attachmentClicked', GO.email.openAttachment, this);
+	}
+
 	GO.email.messageDialog.show(uid,mailbox,account_id,no_max_body_size);
 	
 }
