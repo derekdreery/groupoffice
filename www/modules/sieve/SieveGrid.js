@@ -98,7 +98,7 @@ GO.sieve.SieveGrid = function(config){
 
 	this.sieveDialog = new GO.sieve.SieveDialog();
 	this.sieveDialog.on('hide', function(panel){
-		this.store.reload();
+		this.store.load();
 	}, this);
 
 	config.enableDragDrop=true;
