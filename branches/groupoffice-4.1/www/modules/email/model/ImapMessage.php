@@ -544,7 +544,10 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 				}
 				
 				$i=1;
-				$file = new GO_Base_Fs_File($a->name);
+				
+				$fileName = !empty($a->name) ? $a->name : GO::t('noname','email');
+				
+				$file = new GO_Base_Fs_File($fileName);
 				while(in_array($a->name, $uniqueNames)){
 					$a->name = $file->nameWithoutExtension().' ('.$i.').'.$file->extension();
 					$i++;

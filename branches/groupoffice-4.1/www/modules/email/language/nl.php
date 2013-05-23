@@ -265,3 +265,5 @@ $l['appointementAlreadyProcessed']='Dit bericht bevat een afspraak uitnodiging d
 
 $l['FileToComputer']='Opslaan op computer';
 $l['FileInGO']='Opslaan in {product_name}';
+
+$l['noname'] = 'geennaam';
