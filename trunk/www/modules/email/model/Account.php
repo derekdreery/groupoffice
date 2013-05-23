@@ -164,7 +164,6 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		if (empty($this->store_smtp_password)) {
 			$this->_session_smtp_password = $this->smtp_password;
 			$this->smtp_password = '';
-			$this->smtp_encrypted = 0;
 		}
 		
 		return parent::beforeSave();

@@ -48,13 +48,8 @@ GO.email.PortletPanel = Ext.extend(Ext.Panel, {
 		{
 			var record = grid.getStore().getAt(rowIndex);
 
-			if(!GO.email.messagePortletDialog)
-			{
-				GO.email.messagePortletDialog = new GO.email.MessageDialog({});
-			}
+			GO.email.showMessageDialog(record.id, record.store.baseParams.mailbox, record.store.baseParams.account_id);
 			
-			GO.email.messagePortletDialog.show(record.id, record.store.baseParams.mailbox, record.store.baseParams.account_id);
-		
 		}, this);
 		
 		this.folderStore.on('load', function()

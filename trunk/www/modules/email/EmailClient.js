@@ -671,9 +671,7 @@ GO.email.EmailClient = function(config){
 		autoScroll:true,
 		titlebar: false,
 		border:true,
-		attachmentContextMenu: new GO.email.AttachmentContextMenu({
-			emailClient:this
-		})
+		attachmentContextMenu: new GO.email.AttachmentContextMenu()
 	});
 
 	config.items=[
@@ -741,7 +739,7 @@ GO.email.EmailClient = function(config){
 //		win.focus();
 //	}, this);
 
-	this.messagePanel.on('attachmentClicked', this.openAttachment, this);
+	this.messagePanel.on('attachmentClicked', GO.email.openAttachment, this);
 	//this.messagePanel.on('zipOfAttachmentsClicked', this.openZipOfAttachments, this);
 
 
@@ -904,132 +902,6 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 //		}
 //
 //	},
-
-	saveAttachment : function(attachment)
-	{
-		if(!GO.files.saveAsDialog)
-		{
-			GO.files.saveAsDialog = new GO.files.SaveAsDialog();
-		}
-		GO.files.saveAsDialog.show({
-			filename: attachment.name,
-			handler:function(dialog, folder_id, filename){
-
-				GO.request({
-					maskEl:dialog.el,
-					url: 'email/message/saveAttachment',
-					params:{
-						//task:'save_attachment',
-						uid: this.messagePanel.uid,
-						mailbox: this.mailbox,
-						number: attachment.number,
-						encoding: attachment.encoding,
-						type: attachment.type,
-						subtype: attachment.subtype,
-						account_id: this.account_id,
-						uuencoded_partnumber: attachment.uuencoded_partnumber,
-						folder_id: folder_id,
-						filename: filename,
-						charset:attachment.charset,
-						sender:this.messagePanel.data.sender,
-						filepath:this.messagePanel.data.path//smime message are cached on disk
-					},
-					success: function(options, response, result)
-					{
-						dialog.hide();
-					},
-					scope:this
-				});
-			},
-			scope:this
-		});
-	},
-
-	openAttachment :  function(attachment, panel, forceDownload)
-	{
-		if(!attachment)
-			return false;
-
-		var params = {
-			action:'attachment',
-			account_id: this.account_id,
-			mailbox: this.mailbox,
-			uid: this.messagePanel.uid,
-			number: attachment.number,
-			uuencoded_partnumber: attachment.uuencoded_partnumber,
-			encoding: attachment.encoding,
-			type: attachment.type,
-			subtype: attachment.subtype,
-			filename:attachment.name,
-			charset:attachment.charset,
-			sender:this.messagePanel.data.sender, //for gnupg and smime,
-			filepath:this.messagePanel.data.path ? this.messagePanel.data.path : '' //In some cases encrypted messages are temporary stored on disk so the handlers must use that to fetch the data.
-		}
-
-		var url_params = '?';
-		for(var name in params){
-			url_params+= name+'='+encodeURIComponent(params[name])+'&';
-		}
-		url_params = url_params.substring(0,url_params.length-1);
-
-		if(!forceDownload && attachment.mime=='message/rfc822')
-		{
-			GO.email.showMessageAttachment(0, params);
-		}else
-		{
-			switch(attachment.extension)
-			{
-				case 'png':
-				case 'bmp':
-				case 'png':
-				case 'gif':
-				case 'jpg':
-				case 'jpeg':
-
-					if(GO.files && !forceDownload)
-					{
-						if(!this.imageViewer)
-						{
-							this.imageViewer = new GO.files.ImageViewer({
-								closeAction:'hide'
-							});
-						}
-
-						var index = 0;
-						var images = Array();
-						if(panel)
-						{
-							for (var i = 0; i < panel.data.attachments.length;  i++)
-							{
-								var r = panel.data.attachments[i];
-								var ext = GO.util.getFileExtension(r.name);
-
-								if(ext=='jpg' || ext=='png' || ext=='gif' || ext=='bmp' || ext=='jpeg')
-								{
-									images.push({
-										name: r.name,
-										src: r.url+'&inline=0'
-									});
-								}
-								if(r.name==attachment.name)
-								{
-									index=images.length-1;
-								}
-							}
-							this.imageViewer.show(images, index);
-							break;
-						}
-					}
-
-				default:
-					if(forceDownload)
-						attachment.url+='&inline=0';
-					if (attachment.extension!='vcf'||forceDownload)
-						window.open(attachment.url);
-					break;
-			}
-		}
-	},
 
 	showComposer : function(values)
 	{
@@ -1450,6 +1322,137 @@ GO.email.aliasesStore = new GO.data.JsonStore({
 	fields: ['id','account_id', 'from', 'name','email','html_signature', 'plain_signature'],
 	remoteSort: true
 });
+
+
+
+GO.email.saveAttachment = function(attachment,panel)
+	{
+		if(!GO.files.saveAsDialog)
+		{
+			GO.files.saveAsDialog = new GO.files.SaveAsDialog();
+		}
+		GO.files.saveAsDialog.show({
+			filename: attachment.name,
+			handler:function(dialog, folder_id, filename){
+
+				GO.request({
+					maskEl:dialog.el,
+					url: 'email/message/saveAttachment',
+					params:{
+						//task:'save_attachment',
+						uid: panel.uid,
+						mailbox: panel.mailbox,
+						number: attachment.number,
+						encoding: attachment.encoding,
+						type: attachment.type,
+						subtype: attachment.subtype,
+						account_id: panel.account_id,
+						uuencoded_partnumber: attachment.uuencoded_partnumber,
+						folder_id: folder_id,
+						filename: filename,
+						charset:attachment.charset,
+						sender:panel.data.sender,
+						filepath:panel.data.path//smime message are cached on disk
+					},
+					success: function(options, response, result)
+					{
+						dialog.hide();
+					},
+					scope:this
+				});
+			},
+			scope:this
+		});
+	}
+
+GO.email.openAttachment = function(attachment, panel, forceDownload)
+	{
+		if(!panel)
+			return false;
+		
+		if(!attachment)
+			return false;
+
+		var params = {
+			action:'attachment',
+			account_id: panel.account_id,
+			mailbox: panel.mailbox,
+			uid: panel.uid,
+			number: attachment.number,
+			uuencoded_partnumber: attachment.uuencoded_partnumber,
+			encoding: attachment.encoding,
+			type: attachment.type,
+			subtype: attachment.subtype,
+			filename:attachment.name,
+			charset:attachment.charset,
+			sender:panel.data.sender, //for gnupg and smime,
+			filepath:panel.data.path ? panel.data.path : '' //In some cases encrypted messages are temporary stored on disk so the handlers must use that to fetch the data.
+		}
+
+		var url_params = '?';
+		for(var name in params){
+			url_params+= name+'='+encodeURIComponent(params[name])+'&';
+		}
+		url_params = url_params.substring(0,url_params.length-1);
+
+		if(!forceDownload && attachment.mime=='message/rfc822')
+		{
+			GO.email.showMessageAttachment(0, params);
+		}else
+		{
+			switch(attachment.extension)
+			{
+				case 'png':
+				case 'bmp':
+				case 'png':
+				case 'gif':
+				case 'jpg':
+				case 'jpeg':
+
+					if(GO.files && !forceDownload)
+					{
+						if(!this.imageViewer)
+						{
+							this.imageViewer = new GO.files.ImageViewer({
+								closeAction:'hide'
+							});
+						}
+
+						var index = 0;
+						var images = Array();
+						if(panel)
+						{
+							for (var i = 0; i < panel.data.attachments.length;  i++)
+							{
+								var r = panel.data.attachments[i];
+								var ext = GO.util.getFileExtension(r.name);
+
+								if(ext=='jpg' || ext=='png' || ext=='gif' || ext=='bmp' || ext=='jpeg')
+								{
+									images.push({
+										name: r.name,
+										src: r.url+'&inline=0'
+									});
+								}
+								if(r.name==attachment.name)
+								{
+									index=images.length-1;
+								}
+							}
+							this.imageViewer.show(images, index);
+							break;
+						}
+					}
+
+				default:
+					if(forceDownload)
+						attachment.url+='&inline=0';
+					if (attachment.extension!='vcf'||forceDownload)
+						window.open(attachment.url);
+					break;
+			}
+		}
+	};
 
 
 

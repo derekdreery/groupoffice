@@ -14,9 +14,8 @@
 GO.email.AttachmentContextMenu = function(config)
 {
 	if(!config)
-	{
 		config = {};
-	}
+	
 	config['shadow']='frame';
 	config['minWidth']=180;
 	
@@ -25,9 +24,9 @@ GO.email.AttachmentContextMenu = function(config)
 					text: GO.lang.download,
 					cls: 'x-btn-text-icon',
 					handler: function(){						
-						this.emailClient.openAttachment(
+						GO.email.openAttachment(
 							this.attachment,
-							this.emailClient.messagePanel,
+							this.messagePanel,
 							true);
 					},
 					scope: this
@@ -40,7 +39,7 @@ GO.email.AttachmentContextMenu = function(config)
 					text: GO.lang.cmdSave,
 					cls: 'x-btn-text-icon',
 					handler: function(){
-						this.emailClient.saveAttachment(this.attachment);
+						GO.email.saveAttachment(this.attachment,this.messagePanel);
 					},
 					scope: this
 				});

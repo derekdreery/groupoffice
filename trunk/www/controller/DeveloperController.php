@@ -272,4 +272,25 @@ END:VCALENDAR';
 		
 		
 	}
+	
+	
+	protected function actionJoinRelation($params){
+		$product = GO_Billing_Model_Product::model()->findByPk(426	);
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->order(array('book.name', 'order.btime'),array('ASC','DESC'))
+						->joinRelation('order.book');
+		
+		$findParams->getCriteria()
+						->addCondition('product_id', $product->id)
+						->addCondition('btime', time(), '<', 'order')
+						->addCondition('btime', 0, '>', 'order');
+		
+		$stmt = GO_Billing_Model_Item::model()->find($findParams);
+		
+		$item = $stmt->fetch();
+		
+		//no queries needed to get this value
+		echo $item->order->book->name;
+	}
 }
