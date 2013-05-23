@@ -51,4 +51,21 @@ class GO_Addressbook_Model_Addresslist extends GO_Base_Db_ActiveRecord {
 		return 'ab_addresslists';
 	}
 	
+	/**
+	 * Add a contact to this addresslist
+	 * 
+	 * @param GO_Addressbook_Model_Contact $contact
+	 */
+	public function addContact($contact){
+		$this->addManyMany('contacts', $contact->id);
+	}
+	
+	/**
+	 * Add a company to this addresslist
+	 * 
+	 * @param GO_Addressbook_Model_Company $company
+	 */
+	public function addCompany($company){
+		$this->addManyMany('companies', $company->id);
+	}
 }

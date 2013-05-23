@@ -550,4 +550,15 @@ class GO_Base_Db_FindParams{
 		return $this;
 	}
 	
+	
+	/**
+	 * Limit the number of models returned
+	 * 
+	 * @param int $limit
+	 * @return GO_Base_Db_FindParams 
+	 */
+	public function fetchClass($className=null){
+		$this->_params['fetchClass']=$className;
+		return $this;
+	}
 }
