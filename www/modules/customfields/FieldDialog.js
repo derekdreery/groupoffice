@@ -113,7 +113,7 @@ GO.customfields.FieldDialog = function(config){
 		items: [
 		this.nameField,
 		this.typeField,
-		this.multiSelectCB = new Ext.form.Checkbox({
+		this.multiSelectCB = new Ext.ux.form.XCheckbox({
 			name:'multiselect',
 			fieldLabel:GO.customfields.lang.multiselect,
 			listeners:{
