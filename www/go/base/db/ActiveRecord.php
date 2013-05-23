@@ -113,6 +113,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	private static $_addedRelations=array();
 	
 	
+	private $_customfieldsRecord;
+	
 	/**
 	 *
 	 * @var GO_Base_Model_Acl 
@@ -2521,7 +2523,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			throw new GO_Base_Exception_AccessDenied($msg);
 		}
 		
-		if(!$this->validate() || ($this->customfieldsRecord && !$this->customfieldsRecord->validate())){
+		//use private customfields record so it's accessed only when accessed before
+		if(!$this->validate() || (isset($this->_customfieldsRecord) && !$this->_customfieldsRecord->validate())){
 			return false;
 		}
 	
@@ -2617,12 +2620,12 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 				return false;
 		}
 
-
-		if ($this->customfieldsRecord){
+		//use private customfields record so it's accessed only when accessed before
+		if (isset($this->_customfieldsRecord)){
 			//id is not set if this is a new record so we make sure it's set here.
-			$this->customfieldsRecord->model_id=$this->id;
+			$this->_customfieldsRecord->model_id=$this->id;
 			
-			$this->customfieldsRecord->save();
+			$this->_customfieldsRecord->save();
 			
 //			if($this->customfieldsRecord->save())
 //				$this->touch(); // If the customfieldsRecord is saved then set the mtime of this record.
@@ -3765,7 +3768,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		return true;
 	}	
 	
-	private $_customfieldsRecord;
+	
 	
 	/**
 	 *
