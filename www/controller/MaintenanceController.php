@@ -176,6 +176,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 				"GO_Tasks_Model_Task"=>array('name', 'start_time', 'due_time', 'tasklist_id', 'rrule', 'user_id'),
 				"GO_Addressbook_Model_Contact"=>array('first_name', 'middle_name', 'last_name', 'addressbook_id', 'company_id', 'email'),
 				"GO_Files_Model_Folder"=>array('name', 'parent_id'),
+//				"GO_Calendar_Model_Participant"=>array('event_id', 'email'),
 				//"GO_Billing_Model_Order"=>array('order_id','book_id','btime')
 			);
 		
@@ -243,7 +244,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 						if(!$first){							
 							if(!empty($params['delete'])){
 
-								if($model->countLinks()){
+								if($model->hasLinks() && $model->countLinks()){
 									echo '<tr><td colspan="99">Skipped delete because model has links</td></tr>';
 								}elseif(($filesFolder = $model->getFilesFolder(false)) && ($filesFolder->hasFileChildren() || $filesFolder->hasFolderChildren())){
 									echo '<tr><td colspan="99">Skipped delete because model has folder or files</td></tr>';
