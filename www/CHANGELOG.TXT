@@ -1,3 +1,5 @@
+- Added supported models for Customfields so only the supported models can be chosen in the type selectbox.
+
 22-05-2013 4.1.70
 - Template parser will not see {tag} with white spaces between { and } as tag to be replaced.
 - The HTML email message CSS part will add style with new line characters to disable tag parsing
