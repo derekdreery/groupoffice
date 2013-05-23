@@ -200,6 +200,7 @@ GO.customfields.TypePanel = Ext.extend(GO.grid.GridPanel, {
 	setLinkType : function(extends_model)
 	{
 		this.setDisabled(false);
+		this.fieldDialog.setExtendModel(extends_model);
 		this.store.baseParams.extends_model=extends_model;
 		GO.customfields.categoriesStore.baseParams.extends_model=extends_model;
 		GO.customfields.categoriesStore.load();
