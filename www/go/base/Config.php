@@ -1501,7 +1501,7 @@ class GO_Base_Config {
 	 * @return array Key value array('setting name'=>'value');
 	 */
 	public function getSettings($keys, $user_id=0){
-		$findParams = GO_Base_Db_FindParams::newInstance()->select()->debugSql();
+		$findParams = GO_Base_Db_FindParams::newInstance()->select();
 		
 		$findParams->getCriteria()
 						->addCondition('user_id', $user_id)
