@@ -851,12 +851,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if(!$localEvent->isRepeating()){
 			$this->_calculatedEvents[$event->start_time.'-'.$event->name.'-'.$event->id] = $localEvent;
 		} else {
+			
+			GO::debug("Calculating recurrences for event: ".$event->id);
 			$rrule = new GO_Base_Util_Icalendar_Rrule();
 			$rrule->readIcalendarRruleString($localEvent->getEvent()->start_time, $localEvent->getEvent()->rrule, true);
 			$rrule->setRecurpositionStartTime($periodStartTime);
 
 			$origEventAttr = $localEvent->getEvent()->getAttributes('formatted');
-
 			while ($occurenceStartTime = $rrule->getNextRecurrence(false,$periodEndTime)) {				
 				if ($occurenceStartTime > $localEvent->getPeriodEndTime())
 					break;
