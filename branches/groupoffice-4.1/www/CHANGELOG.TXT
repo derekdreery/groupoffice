@@ -1,5 +1,6 @@
 - Added supported models for Customfields so only the supported models can be chosen in the type selectbox.
 - Added query to remove duplicate participants in the cal_participants table. (Also adds "unique" on the event_id and email column)
+- Received email attachments without a name will receive a default name.
 
 22-05-2013 4.1.70
 - Template parser will not see {tag} with white spaces between { and } as tag to be replaced.
