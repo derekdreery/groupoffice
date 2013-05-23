@@ -34,8 +34,8 @@
  	
  	if(!state)
  	{
- 		this.activePortlets=['portlet-announcements', 'portlet-tasks', 'portlet-calendar','portlet-note','portlet-files'];
- 		state=[{id:'portlet-announcements', col:0},{id:'portlet-tasks', col:0},{id:'portlet-files', col:0},{id:'portlet-calendar', col:1},{id:'portlet-note', col:1}];
+ 		this.activePortlets=['portlet-announcements', 'portlet-tasks', 'portlet-calendar','portlet-note'];
+ 		state=[{id:'portlet-announcements', col:0},{id:'portlet-tasks', col:0},{id:'portlet-calendar', col:1},{id:'portlet-note', col:1}];
  	}
  	this.activePortlets=[];
  	for(var i=0;i<state.length;i++)
