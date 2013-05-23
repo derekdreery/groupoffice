@@ -62,8 +62,17 @@ class GO_Site_Customfieldtype_Sitemultifile extends GO_Customfields_Customfieldt
 		return false;
 	}
 	
-	
-	
-	
-
+	/**
+	 * Function to enable this customfield type for some models only.
+	 * When no modeltype is given then this customfield will work on all models.
+	 * Otherwise it will only be available for the given modeltypes.
+	 * 
+	 * Example:
+	 *	return array('GO_Site_Model_Content','GO_Site_Model_Site');
+	 *  
+	 * @return array
+	 */
+	public function supportedModels(){
+		return array('GO_Site_Model_Content','GO_Site_Model_Site');
+	}
 }
