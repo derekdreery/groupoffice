@@ -6,7 +6,7 @@ class GO_Customfields_CustomfieldsModule extends GO_Base_Module {
 		return true;
 	}
 
-	public static function getCustomfieldTypes() {
+	public static function getCustomfieldTypes($extendModel=false) {
 
 		$types = array();
 
@@ -22,7 +22,17 @@ class GO_Customfields_CustomfieldsModule extends GO_Base_Module {
 
 						$className = $class->getName();
 						$t = new $className;
-						$types[] = array('className' => $className, 'type' => $t->name());
+						
+						if(!empty($extendModel)){
+							
+							$supportedModels = $t->supportedModels();
+							
+							if(empty($supportedModels) || in_array($extendModel, $supportedModels))					
+								$types[] = array('className' => $className, 'type' => $t->name());
+						
+						} else {
+							$types[] = array('className' => $className, 'type' => $t->name());
+						}
 					}
 				}
 			}
