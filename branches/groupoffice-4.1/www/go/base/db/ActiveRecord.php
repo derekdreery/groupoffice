@@ -1922,6 +1922,13 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		return $findParams;
 	}
 	
+	
+	private function _getRelatedCacheKey($relation){
+		//append join attribute so cache is void automatically when this attribute changes.
+		return $relation['name'].':'.(isset($this->_attributes[$relation['field']]) ? $this->_attributes[$relation['field']] : 0);
+			
+	}
+	
 	private function _getRelated($name, $extraFindParams=null){
 		
 		$r = $this->getRelation($name);		
@@ -1950,7 +1957,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			 */
 			
 			//append join attribute so cache is void automatically when this attribute changes.
-			$cacheKey = $name.':'.(isset($this->_attributes[$joinAttribute]) ? $this->_attributes[$joinAttribute] : 0);
+			$cacheKey = $this->_getRelatedCacheKey($r);
 				
 			if(isset($this->_joinRelationAttr[$name])){
 				
@@ -1962,7 +1969,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 				
 				unset($this->_joinRelationAttr[$cacheKey]);
 				
-			}elseif(!isset($this->_joinRelationAttr[$cacheKey]))
+			}elseif(!isset($this->_relatedCache[$cacheKey]))
 			{
 				//In a belongs to relationship the primary key of the remote model is stored in this model in the attribute "field".
 				$this->_relatedCache[$cacheKey] = !empty($this->_attributes[$joinAttribute]) ? GO::getModel($model)->findByPk($this->_attributes[$joinAttribute], array('relation'=>$name), true) : null;
@@ -3518,18 +3525,32 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			
 			$this->_attributes[$name]=$value;
 			
-		}else{			
-//			$setter = 'set'.$name;
-//			
-//			if(method_exists($this,$setter)){
-//				return $this->$setter($value);
-//			}else
-//			{				
-//				$this->_attributes[$name]=$value;				
-//			}
-			parent::__set($name, $value);
+		}else{
+			
+			
+			if($r = $this->getRelation($name)){
+				if($r['type']==self::BELONGS_TO || $r['type']==self::HAS_ONE){
+					
+					if($value instanceof GO_Base_Db_ActiveRecord){				
+						
+						$cacheKey = $this->_getRelatedCacheKey($r);
+						
+						GO::debug($cacheKey);
+						$this->_relatedCache[$cacheKey]=$value;
+					}else
+					{
+						throw new Exception("Value for relation '".$name."' must be a GO_Base_Db_ActiveRecord '".  gettype($value)."' was given");
+					}
+				}else
+				{
+					throw new Exception("Can't set one to many relation!");
+				}
+			}else
+			{
+				parent::__set($name, $value);	
+			}
 		}
-//
+
 		return true;
 	}
 	
