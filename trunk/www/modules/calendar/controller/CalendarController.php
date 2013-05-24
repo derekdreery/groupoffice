@@ -176,12 +176,15 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 	* @return array 
 	*/	
 	public function actionLoadColors($params){
-		$store = GO_Base_Data_Store::newInstance(GO_Calendar_Model_Calendar ::model());
-
+		$store = GO_Base_Data_Store::newInstance(GO_Calendar_Model_Calendar::model());
+		
 		$findParams = $store->getDefaultParams($params)
-						->join(GO_Calendar_Model_CalendarUserColor::model()->tableName(), GO_Base_Db_FindCriteria::newInstance()->addCondition('id', 'col.calendar_id', '=', 't', true, true),'col','LEFT')
-						->order(array('t.name'))						
+						->join(GO_Calendar_Model_CalendarUserColor::model()->tableName(), GO_Base_Db_FindCriteria::newInstance()
+										->addCondition('id', 'col.calendar_id', '=', 't', true, true)->addCondition('user_id', GO::user()->id, '=','col'),'col','LEFT')
+						->order(array('t.name'))	
 						->select('col.*,name,id');
+		
+		$findParams->getCriteria()->addCondition('group_id', 1);
 		
 		$stmt = GO_Calendar_Model_Calendar::model()->find($findParams);
 		
@@ -201,8 +204,11 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 	private $_colorIndex = 0;
 	
 	public function getCalendarColor($formattedrecord,$model,$controller){
-		$color = $model->getColor(GO::user()->id);
-		if(empty($color)){
+
+//		if(empty($formattedrecord->color))
+//			$color = false;
+		//$color = $model->getColor(GO::user()->id);
+		if(empty($formattedrecord['color'])){
 			if($this->_colorIndex >= count($this->_colors))
 				$this->_colorIndex = 0;
 			

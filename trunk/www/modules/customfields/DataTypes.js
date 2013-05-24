@@ -212,13 +212,15 @@ GO.customfields.dataTypes={
 
 			var f = GO.customfields.dataTypes.GO_Customfields_Customfieldtype_Text.getFormField(customfield, config);
 
+			var isMaster = customfield.nesting_level==0;
+
 			var store = new GO.data.JsonStore({
 				//url: GO.settings.modules.customfields.url+'json.php',
 				url: GO.url('customfields/fieldTreeSelectOption/store'),
 				baseParams: {
 					//'task': 'tree_select_options_combo',
 					'field_id' : treemaster_field_id,
-					parent_id:0
+					parent_id: (isMaster) ? 0 : -1
 				},
 				root: 'results',
 				totalProperty: 'total',
@@ -247,17 +249,20 @@ GO.customfields.dataTypes={
 						scope:this,
 						select:function(combo, record, index){
 							var nextNestingLevel=combo.nesting_level+1;
-
+							var formPanel = combo.findParentByType('form');
 							while(GO.customfields.slaves[combo.treemaster_field_id][nextNestingLevel]){								
-								var formPanel = combo.findParentByType('form');
+								
 								var field = formPanel.form.findField(GO.customfields.slaves[combo.treemaster_field_id][nextNestingLevel]);
 								if(!field)
 									field = formPanel.form.findField(GO.customfields.slaves[combo.treemaster_field_id][nextNestingLevel]+'[]');
 
-								field.store.baseParams.parent_id=record.id;
+								if(nextNestingLevel==combo.nesting_level+1) //is first upcoming slave
+									field.store.baseParams.parent_id=record.id;
+								else
+									field.store.baseParams.parent_id = -1;
 								field.lastQuery = null;
 								field.clearValue();
-
+								
 								nextNestingLevel++;
 							}							
 						},
@@ -282,7 +287,7 @@ GO.customfields.dataTypes={
 												var nextNestingLevel=field.nesting_level+1;
 												if(GO.customfields.slaves[field.treemaster_field_id][nextNestingLevel]){
 
-													var nextField = formPanel.form.findField(GO.customfields.slaves[field.treemaster_field_id][nextNestingLevel]);
+													nextField = formPanel.form.findField(GO.customfields.slaves[field.treemaster_field_id][nextNestingLevel]);
 													if(!nextField)
 														nextField = formPanel.form.findField(GO.customfields.slaves[field.treemaster_field_id][nextNestingLevel]+'[]');
 												}
@@ -297,15 +302,20 @@ GO.customfields.dataTypes={
 
 															if(nextField)
 																nextField.store.baseParams.parent_id=v[0];
-
 															field.setRawValue(v[1]);
 														}
-													}/*else
-													{
-														//superboxselect
-														nextField.store.baseParams.parent_id=v;
-													}*/
+													}
+												}else
+												{
+													//empty value
+													if(field.nesting_level==0) // is master												
+														field.store.baseParams.parent_id=0;
+													else
+														field.store.baseParams.parent_id= -1;
+													field.clearValue();
 												}
+												field.lastQuery = null;
+												
 											}
 											
 										});
@@ -317,6 +327,8 @@ GO.customfields.dataTypes={
 				}, config);
 			}else
 			{
+				//if (combo.nesting_level!=0)
+					store.baseParams.parent_id=-1;
 				//only the last slave can be a multiselect combo
 				return Ext.apply(f, {
 					allowAddNewData:true,

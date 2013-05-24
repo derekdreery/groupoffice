@@ -113,6 +113,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	private static $_addedRelations=array();
 	
 	
+	private $_customfieldsRecord;
+	
 	/**
 	 *
 	 * @var GO_Base_Model_Acl 
@@ -1927,6 +1929,13 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		return $findParams;
 	}
 	
+	
+	private function _getRelatedCacheKey($relation){
+		//append join attribute so cache is void automatically when this attribute changes.
+		return $relation['name'].':'.(isset($this->_attributes[$relation['field']]) ? $this->_attributes[$relation['field']] : 0);
+			
+	}
+	
 	private function _getRelated($name, $extraFindParams=null){
 		
 		$r = $this->getRelation($name);		
@@ -1955,7 +1964,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			 */
 			
 			//append join attribute so cache is void automatically when this attribute changes.
-			$cacheKey = $name.':'.(isset($this->_attributes[$joinAttribute]) ? $this->_attributes[$joinAttribute] : 0);
+			$cacheKey = $this->_getRelatedCacheKey($r);
 				
 			if(isset($this->_joinRelationAttr[$name])){
 				
@@ -1967,7 +1976,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 				
 				unset($this->_joinRelationAttr[$cacheKey]);
 				
-			}elseif(!isset($this->_joinRelationAttr[$cacheKey]))
+			}elseif(!isset($this->_relatedCache[$cacheKey]))
 			{
 				//In a belongs to relationship the primary key of the remote model is stored in this model in the attribute "field".
 				$this->_relatedCache[$cacheKey] = !empty($this->_attributes[$joinAttribute]) ? GO::getModel($model)->findByPk($this->_attributes[$joinAttribute], array('relation'=>$name), true) : null;
@@ -2547,7 +2556,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			throw new GO_Base_Exception_AccessDenied($msg);
 		}
 		
-		if(!$this->validate() || ($this->customfieldsRecord && !$this->customfieldsRecord->validate())){
+		//use private customfields record so it's accessed only when accessed before
+		if(!$this->validate() || (isset($this->_customfieldsRecord) && !$this->_customfieldsRecord->validate())){
 			return false;
 		}
 	
@@ -2646,12 +2656,12 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 				return false;
 		}
 
-
-		if ($this->customfieldsRecord){
+		//use private customfields record so it's accessed only when accessed before
+		if (isset($this->_customfieldsRecord)){
 			//id is not set if this is a new record so we make sure it's set here.
-			$this->customfieldsRecord->model_id=$this->id;
+			$this->_customfieldsRecord->model_id=$this->id;
 			
-			$this->customfieldsRecord->save();
+			$this->_customfieldsRecord->save();
 			
 //			if($this->customfieldsRecord->save())
 //				$this->touch(); // If the customfieldsRecord is saved then set the mtime of this record.
@@ -3493,8 +3503,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	
 	
 	/**
-	 * Sets the named attribute value.
+	 * Sets the named attribute value. It can also set BELONGS_TO and HAS_ONE 
+	 * relations if you pass a GO_Base_Db_ActiveRecord
+	 * 
 	 * You may also use $this->AttributeName to set the attribute value.
+	 * 
 	 * @param string $name the attribute name
 	 * @param mixed $value the attribute value.
 	 * @return boolean whether the attribute exists and the assignment is conducted successfully
@@ -3530,18 +3543,30 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			
 			$this->_attributes[$name]=$value;
 			
-		}else{			
-//			$setter = 'set'.$name;
-//			
-//			if(method_exists($this,$setter)){
-//				return $this->$setter($value);
-//			}else
-//			{				
-//				$this->_attributes[$name]=$value;				
-//			}
-			parent::__set($name, $value);
+		}else{
+			
+			
+			if($r = $this->getRelation($name)){
+				if($r['type']==self::BELONGS_TO || $r['type']==self::HAS_ONE){
+					
+					if($value instanceof GO_Base_Db_ActiveRecord){				
+						
+						$cacheKey = $this->_getRelatedCacheKey($r);
+						$this->_relatedCache[$cacheKey]=$value;
+					}else
+					{
+						throw new Exception("Value for relation '".$name."' must be a GO_Base_Db_ActiveRecord '".  gettype($value)."' was given");
+					}
+				}else
+				{
+					throw new Exception("Can't set one to many relation!");
+				}
+			}else
+			{
+				parent::__set($name, $value);	
+			}
 		}
-//
+
 		return true;
 	}
 	
@@ -3780,7 +3805,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		return true;
 	}	
 	
-	private $_customfieldsRecord;
+	
 	
 	/**
 	 *
