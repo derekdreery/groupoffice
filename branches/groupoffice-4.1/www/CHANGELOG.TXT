@@ -1,3 +1,5 @@
+- In ticket email templates, {contact:salutation} uses the ticket contact's set salutation.
+
 24-05-2013 4.1.71
 - relational query cache didn't work
 - Added supported models for Customfields so only the supported models can be chosen in the type selectbox.
