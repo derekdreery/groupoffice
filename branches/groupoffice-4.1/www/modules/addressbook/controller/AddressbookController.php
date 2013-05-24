@@ -198,6 +198,9 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 	
 	public function actionRemoveDuplicates($params){
 		
+		GO::setMaxExecutionTime(300);
+		GO::setMemoryLimit(1024);
+		
 		$this->render('externalHeader');
 		
 		$addressbook = GO_Addressbook_Model_Addressbook::model()->findByPk($params['addressbook_id']);
