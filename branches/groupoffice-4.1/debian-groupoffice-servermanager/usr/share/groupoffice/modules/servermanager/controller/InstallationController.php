@@ -635,8 +635,10 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			$model->setAutoInvoice($autoInvoice);
 		}
 		
-		if(isset($params['modules']))
+		if(isset($params['modules'])){
 			$model->setModules( json_decode($params['modules'], true) );
+			unset($params['modules']);
+		}
 		
 		return parent::beforeSubmit($response, $model, $params);
 	}
