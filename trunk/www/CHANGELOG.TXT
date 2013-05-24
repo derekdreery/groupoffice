@@ -1,3 +1,5 @@
+- Added selection for holiday file to the settings->regional settings panel and to the user dialog in the user module.
+
 24-05-2013 4.1.71
 - relational query cache didn't work
 - Added supported models for Customfields so only the supported models can be chosen in the type selectbox.
