@@ -194,7 +194,25 @@ var dateFormat = GO.settings.date_format.substring(0,1)+GO.settings.date_format.
 					selectOnFocus: true,
 					forceSelection: true,
 					value: GO.settings.first_weekday
-				})]
+				}),
+				this.holidaysetCombo = new GO.form.ComboBox({
+					fieldLabel: GO.users.lang['cmdFormLabelHolidaySet'],
+					name: 'holidayset',
+					store:  new GO.data.JsonStore({
+						url: GO.url("core/holidays"),
+						fields: ['filename', 'label'],
+						remoteSort: true
+					}),
+					displayField:'label',
+					valueField: 'filename',
+					hiddenName:'holidayset',
+					mode:'remote',
+					triggerAction:'all',
+					editable: false,
+					selectOnFocus:true,
+					forceSelection: true
+//					value: GO.settings.language
+				}),]
 			}]
 	},{
 			items: [{

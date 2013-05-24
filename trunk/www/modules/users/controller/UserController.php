@@ -23,7 +23,8 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		if(GO::modules()->isInstalled('addressbook')){
 			return array(
 					'addressbook_id' => '$model->contact->addressbook->name',
-					'company_id' => '$model->contact->company->name'
+					'company_id' => '$model->contact->company->name',
+					'holidayset'=> 'GO::t($model->holidayset)'
 					);
 		}
 	}
