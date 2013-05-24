@@ -104,34 +104,34 @@ class GO_Base_Util_Number {
 		}
 		return $size;
 	}
-//	
-//	/**
-//	 * Return size in MB. Value can be 1G, 1M, 1K or a size in bytes.
-//	 * @param mixed $value
-//	 * @return int
-//	 */
-//	public static function configSizeToMB($value){
-//		$value=trim($value);
-//		$lastchar = substr($value, -1);
-//		
-//		switch($lastchar){
-//			case 'M':
-//				return substr($value,0,-1);
-//				break;
-//			
-//			case 'G':
-//				return substr($value,0,-1)*1024;
-//				break;
-//			
-//			case 'K':
-//				return substr($value,0,-1)/1024;
-//				break;
-//			
-//			default:
-//				//assume bytes
-//				return $value/1024/1024;
-//				break;
-//		}
-//	}
+	
+	/**
+	 * Return size in MB. Value can be 1G, 1M, 1K or a size in bytes.
+	 * @param mixed $value
+	 * @return int
+	 */
+	public static function configSizeToMB($value){
+		$value=trim($value);
+		$lastchar = substr($value, -1);
+		
+		switch($lastchar){
+			case 'M':
+				return substr($value,0,-1);
+				break;
+			
+			case 'G':
+				return substr($value,0,-1)*1024;
+				break;
+			
+			case 'K':
+				return substr($value,0,-1)/1024;
+				break;
+			
+			default:
+				//assume bytes
+				return $value/1024/1024;
+				break;
+		}
+	}
 }
 ?>

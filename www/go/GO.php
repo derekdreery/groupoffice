@@ -68,6 +68,9 @@ class GO{
 	
 	/**
 	 * Set the max execution time only if the current max execution time is lower than the given value.
+	 * 
+	 * Note: this may be blocked by the suhosin PHP module
+	 * 
 	 * @param int $seconds
 	 * @return boolean
 	 */
@@ -75,6 +78,25 @@ class GO{
 		$max = ini_get("max_execution_time");
 		if($max != 0 && ($seconds==0 || $seconds>$max)){
 			return ini_set("max_execution_time", $seconds);
+		}else
+		{
+			return true;
+		}
+	}
+	
+	/**
+	 * Set the memory limit in MB if the given value is higher then the current limit.
+	 * 
+	 * Note: this may be blocked by the suhosin PHP module
+	 * 
+	 * @param int $mb
+	 * @return boolean
+	 */
+	public static function setMemoryLimit($mb){
+		$max = GO_Base_Util_Number::configSizeToMB(ini_get("memory_limit"));
+
+		if($mb>$max){
+			return ini_set("memory_limit", $mb.'M');
 		}else
 		{
 			return true;
