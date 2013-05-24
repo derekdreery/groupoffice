@@ -2006,6 +2006,15 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			if($participant->is_organizer)
 				continue;
 
+			
+			// Set the language of the email to the language of the participant.
+			$language = false;
+			if(!empty($participant->user_id)){
+				$user = GO_Base_Model_User::model()->findByPk($participant->user_id);
+				
+				if($user)
+					GO::language()->setLanguage($user->language);
+			}
 
 			$subject =  GO::t('cancellation','calendar').': '.$this->name;
 
@@ -2045,6 +2054,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 			$message->setHtmlAlternateBody($body);
 
+			// Set back the original language
+			if($language !== false)
+				GO::language()->setLanguage($language);
+			
 			GO_Base_Mail_Mailer::newGoInstance()->send($message);
 		}
 
@@ -2072,6 +2085,14 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				if($participant->is_organizer)
 					continue;
 				
+				// Set the language of the email to the language of the participant.
+				$language = false;
+				if(!empty($participant->user_id)){
+					$user = GO_Base_Model_User::model()->findByPk($participant->user_id);
+
+					if($user)
+						GO::language()->setLanguage($user->language);
+				}
 
 				//if participant status is pending then send a new inviation subject. Otherwise send it as update
 				if($participant->status == GO_Calendar_Model_Participant::STATUS_PENDING){
@@ -2138,6 +2159,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				
 				$message->setHtmlAlternateBody($body);
 
+				// Set back the original language
+				if($language !== false)
+					GO::language()->setLanguage($language);
+			
 				GO_Base_Mail_Mailer::newGoInstance()->send($message);
 			}
 			
