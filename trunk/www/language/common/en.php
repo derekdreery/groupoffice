@@ -630,3 +630,6 @@ $l['createModify'] = 'Creation and modification';
 
 $l['selectMonthlyDay'] = 'Please select a week day for the monthly recurrence.';
 $l['selectWeekOfMonth'] = 'Please select the number of the week day for the monthly recurrence.';
+
+$l['removeDuplicates']='Remove duplicates';
+$l['removeDuplicatesAreYouSure']='Are you sure Remove duplicates';

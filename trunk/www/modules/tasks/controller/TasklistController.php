@@ -93,4 +93,122 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 		
 		return $response;
 	}
+	
+	
+	public function actionRemoveDuplicates($params){
+		
+		GO::setMaxExecutionTime(300);
+		GO::setMemoryLimit(1024);
+		
+		$this->render('externalHeader');
+		
+		$tasklist = GO_Tasks_Model_Tasklist::model()->findByPk($params['tasklist_id']);
+		
+		if(!$tasklist)
+			throw new GO_Base_Exception_NotFound();
+		
+		GO_Base_Fs_File::setAllowDeletes(false);
+		//VERY IMPORTANT:
+		GO_Files_Model_Folder::$deleteInDatabaseOnly=true;
+		
+		
+		GO::session()->closeWriting(); //close writing otherwise concurrent requests are blocked.
+		
+		$checkModels = array(
+				"GO_Tasks_Model_Task"=>array('name', 'start_time', 'due_time', 'rrule', 'user_id', 'tasklist_id'),
+			);		
+		
+		foreach($checkModels as $modelName=>$checkFields){
+			
+			if(empty($params['model']) || $modelName==$params['model']){
+
+				echo '<h1>'.GO::t('removeDuplicates').'</h1>';
+
+				$checkFieldsStr = 't.'.implode(', t.',$checkFields);
+				$findParams = GO_Base_Db_FindParams::newInstance()
+								->ignoreAcl()
+								->select('t.id, count(*) AS n, '.$checkFieldsStr)
+								->group($checkFields)
+								->having('n>1');
+				
+				$findParams->getCriteria()->addCondition('tasklist_id', $tasklist->id);
+
+				$stmt1 = GO::getModel($modelName)->find($findParams);
+
+				echo '<table border="1">';
+				echo '<tr><td>ID</th><th>'.implode('</th><th>',$checkFields).'</th></tr>';
+
+				$count = 0;
+
+				while($dupModel = $stmt1->fetch()){
+					
+					$select = 't.id';
+					
+					if(GO::getModel($modelName)->hasFiles()){
+						$select .= ', t.files_folder_id';
+					}
+
+					$findParams = GO_Base_Db_FindParams::newInstance()
+								->ignoreAcl()
+								->select($select.', '.$checkFieldsStr)
+								->order('id','ASC');
+					
+					$findParams->getCriteria()->addCondition('tasklist_id', $tasklist->id);
+
+					foreach($checkFields as $field){
+						$findParams->getCriteria()->addCondition($field, $dupModel->getAttribute($field));
+					}							
+
+					$stmt = GO::getModel($modelName)->find($findParams);
+
+					$first = true;
+
+					while($model = $stmt->fetch()){
+						echo '<tr><td>';
+						if(!$first)
+							echo '<span style="color:red">';
+						echo $model->id;
+						if(!$first)
+							echo '</span>';
+						echo '</th>';				
+
+						foreach($checkFields as $field)
+						{
+							echo '<td>'.$model->getAttribute($field,'html').'</td>';
+						}
+
+						echo '</tr>';
+
+						if(!$first){							
+							if(!empty($params['delete'])){
+
+								if($model->hasLinks() && $model->countLinks()){
+									echo '<tr><td colspan="99">Skipped delete because model has links</td></tr>';
+								}elseif(($filesFolder = $model->getFilesFolder(false)) && ($filesFolder->hasFileChildren() || $filesFolder->hasFolderChildren())){
+									echo '<tr><td colspan="99">Skipped delete because model has folder or files</td></tr>';
+								}else{									
+									$model->delete();
+								}
+							}
+
+							$count++;
+						}
+
+						$first=false;
+					}
+				}	
+					
+
+				echo '</table>';
+
+				echo '<p>Found '.$count.' duplicates</p>';
+				echo '<br /><br /><a href="'.GO::url('tasks/tasklist/removeDuplicates', array('delete'=>true, 'tasklist_id'=>$tasklist->id)).'">Click here to delete the newest duplicates marked in red.</a>';
+				
+			}
+		}
+		
+		$this->render('externalFooter');
+		
+		
+	}
 }
