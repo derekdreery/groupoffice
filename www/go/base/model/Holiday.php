@@ -25,6 +25,20 @@
 class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 
 	/**
+	 * The mapping for the holiday files
+	 * 
+	 * [ countryCode | localeFile ]
+	 * 
+	 * @var array
+	 */
+	public static $mapping = array(
+			'at'=>'de-at',
+			'ch'=>'de-ch',
+			'au'=>'en-au',
+			'uk'=>'en_UK'
+	);
+
+	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
@@ -144,6 +158,24 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 	}
 	
 	/**
+	 * Get all the available holiday files
+	 * 
+	 * @return array key => label
+	 */
+	public static function getAvailableHolidayFiles(){
+		$holidays = array();
+		$folderPath = GO::config()->root_path.'language/holidays/';
+		$folder = new GO_Base_Fs_Folder($folderPath);
+		
+		$children = $folder->ls();
+		foreach($children as $child){
+			$holidays[] = array('filename'=>$child->nameWithoutExtension(),'label'=>GO::t($child->nameWithoutExtension()));
+		}
+		
+		return $holidays;
+	}	
+	
+	/**
 	 * Generate the holidays from the holidays file for the given year and locale.
 	 * 
 	 * @param string $year
@@ -239,5 +271,37 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 			'read_only'=>true
 			);
 	}
+	
+	
+	/**
+	 * Get the holiday locale from the $countryCode that is provided.
+	 * 
+	 * If no match can be found then the self::$systemDefaultLocale variable is used.
+	 * 
+	 * @param string $countryCode
+	 * @return mixed the locale for the holidays or false when none found
+	 */
+	public static function localeFromCountry($countryCode){
+
+		if(key_exists($countryCode,self::$mapping))
+			$countryCode = self::$mapping[$countryCode];
+		else if(key_exists(strtolower($countryCode),self::$mapping))
+			$countryCode = self::$mapping[strtolower($countryCode)];
+		
+		$languageFolderPath = GO::config()->root_path.'language/holidays/';
+		
+		$file = new GO_Base_Fs_File($languageFolderPath.$countryCode.'.php');
+		
+		if($file->exists()){
+			return $countryCode;
+		}else{
+			$file = new GO_Base_Fs_File($languageFolderPath.strtolower($countryCode).'.php');
+			if($file->exists())
+				return strtolower($countryCode);
+		}
+		
+		return false;
+	}
+	
 	
 }

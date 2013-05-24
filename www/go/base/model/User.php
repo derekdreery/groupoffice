@@ -55,6 +55,7 @@
  * @property int $mail_reminders
  * @property int $popup_reminders
  * @property int $contact_id
+ * @property String $holidayset
  * 
  * @property $completeDateFormat
  * @property string $date_separator
@@ -253,6 +254,20 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	
 	protected function beforeSave(){
 		
+		if($this->isNew){
+			$holiday = GO_Base_Model_Holiday::localeFromCountry($_POST['language']);
+			
+		if($holiday !== false)
+			$this->holidayset = $holiday; 
+		}
+		
+		if(!$this->isNew && empty($this->holidayset)){
+			$holiday = GO_Base_Model_Holiday::localeFromCountry($this->contact->country);
+
+			if($holiday !== false)
+				$this->holidayset = $holiday; 
+		}
+				
 		if($this->isModified('password') && !empty($this->password)){
 			$this->_unencryptedPassword=$this->password;
 			$this->password=crypt($this->password);
@@ -263,7 +278,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		
 		return parent::beforeSave();
 	}	
-	
+		
 	/**
 	 * When the password was just modified. You can call this function to get the
 	 * plain text password.
