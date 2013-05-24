@@ -303,6 +303,9 @@ PRODID:-//Intermesh//NONSGML ".GO::config()->product_name." ".GO::config()->vers
 		
 		$this->render('externalHeader');
 		
+		GO::setMaxExecutionTime(300);
+		GO::setMemoryLimit(1024);
+		
 		$calendar = GO_Calendar_Model_Calendar::model()->findByPk($params['calendar_id']);
 		
 		if(!$calendar)

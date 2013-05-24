@@ -97,6 +97,9 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 	
 	public function actionRemoveDuplicates($params){
 		
+		GO::setMaxExecutionTime(300);
+		GO::setMemoryLimit(1024);
+		
 		$this->render('externalHeader');
 		
 		$tasklist = GO_Tasks_Model_Tasklist::model()->findByPk($params['tasklist_id']);
