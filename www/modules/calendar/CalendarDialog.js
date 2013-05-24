@@ -131,7 +131,7 @@ GO.calendar.CalendarDialog = function(config)
 			},
 			scope:this
 		})
-		,{
+		,this.deleteAllItemsButton = new Ext.Button({
 				style:'margin-top:10px',
 				xtype:'button',
 				text:GO.lang.deleteAllItems,
@@ -158,7 +158,18 @@ GO.calendar.CalendarDialog = function(config)
 					});
 				},
 				scope:this
-			}
+			}),
+			this.removeDuplicatesButton =new Ext.Button({
+				style:'margin-top:10px',
+				xtype:'button',
+				text:GO.lang.removeDuplicates,
+				handler:function(){
+					
+					window.open(GO.url('calendar/calendar/removeDuplicates',{calendar_id:this.calendar_id}))
+					
+				},
+				scope:this
+			})
 		])
 
 	this.readPermissionsTab = new GO.grid.PermissionsPanel({	
@@ -334,6 +345,9 @@ Ext.extend(GO.calendar.CalendarDialog, GO.Window, {
 		var title = (this.resource) ? GO.calendar.lang.resource : GO.calendar.lang.calendar;
 		this.setTitle(title);
 
+		this.removeDuplicatesButton.setDisabled(!calendar_id);
+		this.deleteAllItemsButton.setDisabled(!calendar_id);
+
 		if(calendar_id > 0)
 		{
 			if(calendar_id!=this.calendar_id)
@@ -347,6 +361,9 @@ Ext.extend(GO.calendar.CalendarDialog, GO.Window, {
 		{
 			this.calendar_id=0;
 			this.formPanel.form.reset();
+			
+			
+			
 
 			if(resource){
 				this.selectGroup.selectFirst();

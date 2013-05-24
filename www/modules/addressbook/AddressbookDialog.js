@@ -100,7 +100,7 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 			},{
 				xtype:'panel',
 				border:false,
-				items:{
+				items:[this.deleteAllItemsButton = new Ext.Button({
 					xtype:'button',
 					text:GO.lang.deleteAllItems,
 					handler:function(){
@@ -126,7 +126,18 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 						});
 					},
 					scope:this
-				}
+				}),
+				this.removeDuplicatesButton =new Ext.Button({
+					style:'margin-top:10px',
+					xtype:'button',
+					text:GO.lang.removeDuplicates,
+					handler:function(){
+
+						window.open(GO.url('addressbook/addressbook/removeDuplicates',{addressbook_id:this.remoteModelId}))
+
+					},
+					scope:this
+				})]
 			}
 			]
 		});
@@ -259,6 +270,9 @@ GO.addressbook.AddressbookDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 			this.disableContactsCategoriesPanel.setModel(remoteModelId, "GO_Addressbook_Model_Contact");
 			this.disableCompaniesCategoriesPanel.setModel(remoteModelId, "GO_Addressbook_Model_Company");
 		}
+		
+		this.removeDuplicatesButton.setDisabled(!remoteModelId);
+		this.deleteAllItemsButton.setDisabled(!remoteModelId);
 		
 		return GO.addressbook.AddressbookDialog.superclass.setRemoteModelId.call(this, remoteModelId);
 	}
