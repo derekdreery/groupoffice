@@ -80,6 +80,23 @@ class GO{
 			return true;
 		}
 	}
+	
+	/**
+	 * Set the memory limit in MB if the given value is higher then the current limit.
+	 * 
+	 * @param int $mb
+	 * @return boolean
+	 */
+	public static function setMemoryLimit($mb){
+		$max = GO_Base_Util_Number::configSizeToMB(ini_get("memory_limit"));
+
+		if($mb>$max){
+			return ini_set("memory_limit", $mb.'M');
+		}else
+		{
+			return true;
+		}
+	}
 
 	/**
 	 * Get a unique ID for Group-Office. It's mainly used for the javascript window id.
