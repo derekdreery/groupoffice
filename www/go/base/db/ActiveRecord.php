@@ -3488,8 +3488,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	
 	
 	/**
-	 * Sets the named attribute value.
+	 * Sets the named attribute value. It can also set BELONGS_TO and HAS_ONE 
+	 * relations if you pass a GO_Base_Db_ActiveRecord
+	 * 
 	 * You may also use $this->AttributeName to set the attribute value.
+	 * 
 	 * @param string $name the attribute name
 	 * @param mixed $value the attribute value.
 	 * @return boolean whether the attribute exists and the assignment is conducted successfully
@@ -3534,8 +3537,6 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 					if($value instanceof GO_Base_Db_ActiveRecord){				
 						
 						$cacheKey = $this->_getRelatedCacheKey($r);
-						
-						GO::debug($cacheKey);
 						$this->_relatedCache[$cacheKey]=$value;
 					}else
 					{
