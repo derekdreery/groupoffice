@@ -38,7 +38,7 @@ GO.tasks.TasklistDialog = function(config)
 				},
 				scope:this
 			}),
-			{
+			this.deleteAllItemsButton = new Ext.Button({
 				style:'margin-top:10px',
 				xtype:'button',
 				text:GO.lang.deleteAllItems,
@@ -65,7 +65,18 @@ GO.tasks.TasklistDialog = function(config)
 					});
 				},
 				scope:this
-			}
+			}),
+			this.removeDuplicatesButton =new Ext.Button({
+				style:'margin-top:10px',
+				xtype:'button',
+				text:GO.lang.removeDuplicates,
+				handler:function(){
+					
+					window.open(GO.url('tasks/tasklist/removeDuplicates',{tasklist_id:this.tasklist_id}))
+					
+				},
+				scope:this
+			})
 		]
 	});
 
@@ -190,6 +201,10 @@ Ext.extend(GO.tasks.TasklistDialog, Ext.Window, {
 			this.render(Ext.getBody());
 			
 		this.propertiesTab.show();
+		
+		
+		this.removeDuplicatesButton.setDisabled(!tasklist_id);
+		this.deleteAllItemsButton.setDisabled(!tasklist_id);
 			
 		if(tasklist_id > 0)
 		{
