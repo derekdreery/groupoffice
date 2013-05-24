@@ -60,7 +60,7 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	protected function init() {
 		$this->columns['content']['required']=true;
 		
-		$this->addDefaultTag('contact:salutation', GO::t('default_salutation_unknown'));
+//		$this->addDefaultTag('contact:salutation', GO::t('default_salutation_unknown'));
 		$this->addDefaultTag('salutation', GO::t('default_salutation_unknown'));
 		$this->addDefaultTag('date', GO_Base_Util_Date::get_timestamp(time(), false));
 		
