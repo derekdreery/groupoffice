@@ -212,6 +212,17 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		$store->setStatement (GO_Base_Model_Group::model()->find($findParams));
 		return $store->getData();
 	}
+	
+	/**
+	 * Get the holidayfiles that are available groups
+	 */
+	protected function actionHolidays($params) {
+		$available = GO_Base_Model_Holiday::getAvailableHolidayFiles();
+		
+		$store = new GO_Base_Data_ArrayStore();
+		$store->setRecords($available);
+		return $store->getData();
+	}
 
 	/**
 	 * Todo replace compress.php with this action

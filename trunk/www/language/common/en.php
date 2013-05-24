@@ -633,3 +633,19 @@ $l['selectWeekOfMonth'] = 'Please select the number of the week day for the mont
 
 $l['removeDuplicates']='Remove duplicates';
 $l['removeDuplicatesAreYouSure']='Are you sure Remove duplicates';
+
+$l['cs'] = 'CS';
+$l['de-at'] = 'AT';
+$l['de-ch'] = 'CH';
+$l['de'] = 'Germany';
+$l['en-au'] = 'Autralia';
+$l['en'] = 'English';
+$l['en_UK'] = 'United Kingdom';
+$l['fr'] = 'French';
+$l['hr'] = 'Croatia';
+$l['it'] = 'Italy';
+$l['ja'] = 'Japan';
+$l['nb'] = 'NB';
+$l['nl'] = 'Dutch';
+$l['pt'] = 'Portugal';
+$l['sv'] = 'Svenska';
