@@ -133,3 +133,5 @@ $l['addresslist_panel'] = 'Addresslist panel';
 $l['show_addresslists_panel'] = 'Show the addresslist panel';
 $l['enabled_cf_tabs'] = 'Enabled custom field tabs';
 $l['addresslist_panel'] = 'Addresslist panel';
+
+$l['cmdFormLabelHolidaySet'] = 'Bank holidays';

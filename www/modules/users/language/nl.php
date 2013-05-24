@@ -131,3 +131,5 @@ $l['explanation_cf_settingspanels']='To show the customfield tabs in the setting
 $l['addresslist_panel']= 'Addresslijsten paneel';
 $l['show_addresslists_panel']= 'Toon addresslijsten paneel';
 $l['enabled_cf_tabs']= 'Ingeschakelde extra velden';
+
+$l['cmdFormLabelHolidaySet'] = 'Vakantiedagen';

@@ -21,6 +21,9 @@ class GO_Users_UsersModule extends GO_Base_Module{
 		$company = GO_Addressbook_Model_Company::model()->findByPk($response['data']['company_id'], false, true);
 		if($company)
 			$response['data']['company_name']=$company->name;
+		
+		$response['remoteComboTexts']['holidayset']=GO::t($user->holidayset);
+		
 		return parent::loadSettings($settingsController, $params, $response, $user);
 	}
 }
