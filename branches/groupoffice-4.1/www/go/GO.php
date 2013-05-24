@@ -68,6 +68,9 @@ class GO{
 	
 	/**
 	 * Set the max execution time only if the current max execution time is lower than the given value.
+	 * 
+	 * Note: this may be blocked by the suhosin PHP module
+	 * 
 	 * @param int $seconds
 	 * @return boolean
 	 */
@@ -83,6 +86,8 @@ class GO{
 	
 	/**
 	 * Set the memory limit in MB if the given value is higher then the current limit.
+	 * 
+	 * Note: this may be blocked by the suhosin PHP module
 	 * 
 	 * @param int $mb
 	 * @return boolean
