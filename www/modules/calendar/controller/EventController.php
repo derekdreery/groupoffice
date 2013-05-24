@@ -915,11 +915,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$resultCount = 0;
 
 		
-		if(!$calendar->user)
+		if(!$calendar->user && empty($calendar->user->holidayset))
 			return $response;
 		
 		
-		$holidays = GO_Base_Model_Holiday::model()->getHolidaysInPeriod($startTime, $endTime, $calendar->user->language);
+		//$holidays = GO_Base_Model_Holiday::model()->getHolidaysInPeriod($startTime, $endTime, $calendar->user->language);
+		$holidays = GO_Base_Model_Holiday::model()->getHolidaysInPeriod($startTime, $endTime, $calendar->user->holidayset);
 
 		while($holiday = $holidays->fetch()){ 
 			$resultCount++;
