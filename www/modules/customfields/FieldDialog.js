@@ -15,9 +15,9 @@
 GO.customfields.FieldDialog = function(config){	
 	
 	if(!config)
-	{
 		config={};
-	}	
+	
+	this.extendModel = false;
 	
 	this.nameField = new Ext.form.TextField({
 		name: 'name',
@@ -42,7 +42,7 @@ GO.customfields.FieldDialog = function(config){
 		forceSelection: true
 	});
 	
-	this.typeField = new Ext.form.ComboBox({
+	this.typeField = new GO.form.ComboBox({
 		fieldLabel: GO.lang.strType,
 		hiddenName:'datatype',
 		anchor:'-20',
@@ -52,11 +52,13 @@ GO.customfields.FieldDialog = function(config){
 				field:'text',
 				direction:'ASC'
 			},
-			url:GO.url('customfields/field/types')
+			url:GO.url('customfields/field/types'),
+			baseParams:{extend_model:this.extendModel}
 		}),
 		value:'GO_Customfields_Customfieldtype_Text',
 		valueField:'className',
 		displayField:'type',
+		allowBlank:false,
 		typeAhead: true,
 		mode: 'local',
 		triggerAction: 'all',
@@ -111,7 +113,7 @@ GO.customfields.FieldDialog = function(config){
 		items: [
 		this.nameField,
 		this.typeField,
-		this.multiSelectCB = new Ext.form.Checkbox({
+		this.multiSelectCB = new Ext.ux.form.XCheckbox({
 			name:'multiselect',
 			fieldLabel:GO.customfields.lang.multiselect,
 			listeners:{
@@ -285,11 +287,12 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 		if(!this.typeField.store.loaded){
 			this.typeField.store.load({
 				callback:function(){
-					this.show(field_id);					
+					this.typeField.setValue("GO_Customfields_Customfieldtype_Text");
+//					this.show(field_id);					
 				},
 				scope:this
 			});
-			return;
+//			return;
 		}
 		
 		if(!this.rendered){
@@ -341,6 +344,16 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 		this.formPanel.baseParams['category_id']=category_id;
 		
 	},
+	
+	setExtendModel : function(extend_model){
+		
+		if(extend_model!=this.extendModel){
+			this.typeField.store.loaded=false;
+			this.extendModel = extend_model;
+			this.typeField.store.baseParams.extend_model = this.extendModel;
+		}
+	},
+					
 	setFieldId : function(field_id)
 	{		
 		this.formPanel.form.baseParams['id']=field_id;

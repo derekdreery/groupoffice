@@ -6,7 +6,10 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 
 	protected function actionTypes($params) {
 
-		$response['results'] = GO_Customfields_CustomfieldsModule::getCustomfieldTypes();
+		if(isset($params['extend_model']))
+			$response['results'] = GO_Customfields_CustomfieldsModule::getCustomfieldTypes($params['extend_model']);
+		else
+			$response['results'] = GO_Customfields_CustomfieldsModule::getCustomfieldTypes();
 		$response['success']=true;
 
 		return $response;
