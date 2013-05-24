@@ -195,7 +195,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 			$module = new $moduleClass;
 
 			$installationModule = new GO_ServerManager_Model_InstallationModule();
-			$installationModule->installation_id = $this->id;
+			$installationModule->installation_id = $this->id;			
 			$installationModule->installation = $this;
 			$installationModule->name = $module->id();
 			
