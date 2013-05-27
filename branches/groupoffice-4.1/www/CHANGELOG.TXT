@@ -1,5 +1,6 @@
 - In ticket email templates, {contact:salutation} uses the ticket contact's set salutation.
 - Fixed renderer for texts in grids
+- Fixed comments response in actionDisplay for displaypanels
 
 24-05-2013 4.1.71
 - relational query cache didn't work
