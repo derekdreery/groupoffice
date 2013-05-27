@@ -99,11 +99,15 @@ class GO_Site_Components_AssetManager
 	 */
 	public function setBasePath($value)
 	{
-		$basePath= GO::config()->file_storage_path.'site/'.Site::model()->id.'/'.$value;
-		if(is_dir($basePath) && is_writable($basePath))
-			$this->_basePath=$basePath;
+		if(Site::model()->mod_rewrite)
+			$basePath= new GO_Base_Fs_Folder(GO::config()->file_storage_path.'site/'.Site::model()->id.'/'.$value);
 		else
-			throw new Exception('Assets.basePath "'.$basePath.'/' .$value.'" is invalid. Please make sure the directory exists and is writable by the Web server process.');
+			$basePath= new GO_Base_Fs_Folder(GO::config()->root_path.'modules/site/public/'.Site::model()->id);
+					
+		if($basePath->create())
+			$this->_basePath=$basePath->path();
+		else
+			throw new Exception('Assets.basePath "'.$basePath.'" is invalid. Please make sure the directory exists and is writable by the Web server process.');
 	}
 
 	/**
@@ -114,7 +118,10 @@ class GO_Site_Components_AssetManager
 	{
 		if($this->_baseUrl===null)
 		{
-			$this->setBaseUrl(Site::urlManager()->getBaseUrl().'/'.self::DEFAULT_BASEPATH);
+			if(Site::model()->mod_rewrite)
+				$this->setBaseUrl(Site::urlManager()->getBaseUrl().'/'.self::DEFAULT_BASEPATH);
+			else
+				$this->setBaseUrl(GO::config()->host.'modules/site/public/'.Site::model()->id);
 		}
 		return $this->_baseUrl;
 	}
@@ -198,6 +205,7 @@ class GO_Site_Components_AssetManager
 				else if(!is_dir($dstDir))
 				{
 					$dstF = new GO_Base_Fs_Folder($dstDir);
+
 					$folder = new GO_Base_Fs_Folder($src);
 					$folder->copy($dstF);
 				}
