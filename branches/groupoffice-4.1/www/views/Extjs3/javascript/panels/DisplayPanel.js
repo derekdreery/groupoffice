@@ -85,19 +85,21 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 			this.newMenuButton.menu.add(this.newOODoc);		
 		}
 		
-		tbar.push(this.linkBrowseButton = new Ext.Button({
-			iconCls: 'btn-link', 
-			cls: 'x-btn-text-icon', 
-			text: GO.lang.cmdBrowseLinks,
-			handler: function(){
-				if(!GO.linkBrowser){
-					GO.linkBrowser = new GO.LinkBrowser();
-				}
-				GO.linkBrowser.show({model_id: this.data.id,model_name: this.model_name,folder_id: "0"});
-				GO.linkBrowser.on('hide', this.reload, this,{single:true});
-			},
-			scope: this
-		}));
+		if (!this.noLinkBrowser) {
+			tbar.push(this.linkBrowseButton = new Ext.Button({
+				iconCls: 'btn-link', 
+				cls: 'x-btn-text-icon', 
+				text: GO.lang.cmdBrowseLinks,
+				handler: function(){
+					if(!GO.linkBrowser){
+						GO.linkBrowser = new GO.LinkBrowser();
+					}
+					GO.linkBrowser.show({model_id: this.data.id,model_name: this.model_name,folder_id: "0"});
+					GO.linkBrowser.on('hide', this.reload, this,{single:true});
+				},
+				scope: this
+			}));
+		}
 		
 		if(GO.files && !this.noFileBrowser)
 		{
