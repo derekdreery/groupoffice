@@ -368,3 +368,5 @@ $updates['201301111135'][]="ALTER TABLE `ab_addressbooks` CHANGE `name` `name` V
 $updates['201302040945'][]="ALTER TABLE `ab_contacts` ADD `cellular2` varchar(30) NOT NULL DEFAULT '' ";
 
 $updates['201303051525'][]="ALTER TABLE  `ab_contacts` CHANGE  `salutation`  `salutation` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  ''";
+
+$updates['201305271400'][]="ALTER TABLE `ab_default_email_templates` CHANGE `template_id` `template_id` INT( 11 ) NOT NULL DEFAULT '0';";
