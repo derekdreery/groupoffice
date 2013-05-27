@@ -13,3 +13,5 @@ $l["tools"]='เครื่องมือดูแลระบบ';
 $l["description"]='เลือกเพื่อทำการตรวจสอบ.';//Click on one of the scripts below to execute it;
 $l["scripts"]='สคริปต์';
 $l["scriptOutput"]='สคริปต์ส่งออก';
+
+$l['resetState']='รีเซ็ตค่าของวินโดวส์, กริดส์ และอื่นๆ';
