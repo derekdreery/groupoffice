@@ -65,3 +65,6 @@ $l['fla'] = 'Macromedia Flash Document (Source)';
 $l['ai'] = 'Adobe Illustrator file';
 $l['eml'] = 'E-mail message';
 $l['csv'] = 'Comma Separated Values';
+$l['js']= 'Javascript';
+$l['sql']= 'SQL database export';
+$l['xmind']='XMind file';
