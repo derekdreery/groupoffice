@@ -45,7 +45,7 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 		else
 			$label=$model->getAttributeLabel($attribute);
 		if($model->hasValidationErrors($attribute))
-			$this->_addErrorCss($htmlAttributes);
+			$htmlAttributes = $this->_addErrorCss($htmlAttributes);
 		
 		$htmlAttributes = $this->_resolveRequired($model, $attribute, $htmlAttributes);
 		
