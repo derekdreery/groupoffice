@@ -709,7 +709,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$response['data']['past_events']=$data['results'];
 		
 		return $response;
-	}
+	}	
 	
 	private function _processCommentsDisplay($model,$response){
 		if($model->hasLinks()){
@@ -742,6 +742,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				$data['results'][$k]['categoryName'] = !empty($v['categoryName']) ? $v['categoryName'] : GO::t('noCategory','comments');
 			}
 			$response['data']['comments']=$data['results'];
+		} else {
+			$response['data']['comments'] = array();
 		}
 		return $response;
 	}

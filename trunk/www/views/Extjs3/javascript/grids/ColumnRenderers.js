@@ -38,6 +38,10 @@ GO.grid.ColumnRenderers = {
 	 * 
 	 */
 	Text : function(val, meta, record, rowIndex, columnIndex, store){
+		
+		if(!val)
+			return '';
+		
 		var maxLength = 10;
 		var cutWholeWords = true;
 		var showTooltip = true;
