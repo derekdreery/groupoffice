@@ -31,10 +31,21 @@ class GO_Base_Util_Image {
 			$this->load_success=$this->load($filename);
 	}
 	
+	/**
+	 * See IMAGETYPE GD PHP contants
+	 * 
+	 * @return int
+	 */
 	public function getImageType(){
 		return $this->image_type;
 	}
-
+	
+	/**
+	 * Load an image file
+	 * 
+	 * @param string $filename
+	 * @return boolean
+	 */
 	public function load($filename) {
 		$image_info = getimagesize($filename);
 		$this->image_type = $image_info[2];
@@ -53,6 +64,9 @@ class GO_Base_Util_Image {
 		return true;
 	}
 
+	/**
+	 * Set a transparent background for GIF or PNG images
+	 */
 	private function transperancy() {
 		if ($this->image_type == IMAGETYPE_GIF || $this->image_type == IMAGETYPE_PNG) {
 			$trnprt_indx = imagecolortransparent($this->original_image);
@@ -90,6 +104,11 @@ class GO_Base_Util_Image {
 		}
 	}
 
+	/**
+	 * Output image to browser
+	 * 
+	 * @param int $image_type
+	 */
 	public function output($image_type=false) {
 		if (!$image_type)
 			$image_type = $this->image_type;
@@ -107,6 +126,15 @@ class GO_Base_Util_Image {
 		return isset($this->resized_image) ? $this->resized_image :$this->original_image;
 	}
 
+	/**
+	 * Save the imaage to a file
+	 * 
+	 * @param string $filename
+	 * @param int $image_type
+	 * @param int $compression
+	 * @param oct $permissions file permissions
+	 * @return boolean
+	 */
 	public function save($filename, $image_type=false, $compression=85, $permissions=null) {
 		
 		if(isset($this->resized_image) || $image_type!=$this->image_type){
@@ -139,14 +167,28 @@ class GO_Base_Util_Image {
 		
 	}
 
+	/**
+	 * Get the width in pixels
+	 * 
+	 * @return int
+	 */
 	public function getWidth() {
 		return imagesx($this->original_image);
 	}
 
+	/**
+	 * Get the height in pixels
+	 * @return int
+	 */
 	public function getHeight() {
 		return imagesy($this->original_image);
 	}
 
+	/**
+	 * Returns true if this is a landscape image
+	 * 
+	 * @return boolean
+	 */
 	public function landscape() {
 		return $this->getWidth() > $this->getHeight();
 	}
@@ -157,18 +199,34 @@ class GO_Base_Util_Image {
 		$this->resize($width, $height);
 	}
 
+	/**
+	 * Resize to given width keeping aspect ration
+	 * 
+	 * @param int $width
+	 */
 	public function resizeToWidth($width) {
 		$ratio = $width / $this->getWidth();
 		$height = $this->getheight() * $ratio;
 		$this->resize($width, $height);
 	}
 
+	/**
+	 * Scale image to given scale factor
+	 * 
+	 * @param int $scale eg. 0.5
+	 */
 	public function scale($scale) {
 		$width = $this->getWidth() * $scale / 100;
 		$height = $this->getheight() * $scale / 100;
 		$this->resize($width, $height);
 	}
 
+	/**
+	 * Resize image
+	 * 
+	 * @param int $width
+	 * @param int $height
+	 */
 	public function resize($width, $height) {
 		$current_width = $this->getWidth();
 		$current_height = $this->getHeight();
@@ -180,6 +238,13 @@ class GO_Base_Util_Image {
 		imagecopyresampled($this->resized_image, $this->original_image, 0, 0, 0, 0, $width, $height, $current_width, $current_height);
 	}
 
+	/**
+	 * Zoom th image to fir the given height and width. Image aspect ratio is used 
+	 * but if the image goes out of bounds then crop these parts.
+	 * 
+	 * @param int $thumbnail_width
+	 * @param int $thumbnail_height
+	 */
 	public function zoomcrop($thumbnail_width, $thumbnail_height) { //$imgSrc is a FILE - Returns an image resource.
 		$width_orig = $this->getWidth();
 		$height_orig = $this->getHeight();
