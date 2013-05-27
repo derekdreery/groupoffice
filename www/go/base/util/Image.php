@@ -237,6 +237,25 @@ class GO_Base_Util_Image {
 
 		imagecopyresampled($this->resized_image, $this->original_image, 0, 0, 0, 0, $width, $height, $current_width, $current_height);
 	}
+	
+	/**
+	 * Resize the image to fit a box while keeping aspect ratio.
+	 * 
+	 * @param int $width
+	 * @param int $height
+	 * @param boolean $enlarge Enlarge image if it's smaller then the box
+	 */
+	public function fitBox($width, $height, $enlarge=false){
+		if($this->landscape()){
+			
+			if($width<$this->getWidth() || $enlarge)			
+				$this->resizeToWidth($width);
+		}else
+		{
+			if($height<$this->getHeight() || $enlarge)			
+				$this->resizeToHeight($height);
+		}
+	}
 
 	/**
 	 * Zoom th image to fir the given height and width. Image aspect ratio is used 
