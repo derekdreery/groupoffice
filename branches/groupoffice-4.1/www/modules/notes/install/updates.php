@@ -33,3 +33,5 @@ $updates["201112221547"][]="CREATE TABLE IF NOT EXISTS `cf_no_notes` (
 $updates["201207191545"][]="ALTER TABLE `no_notes` ADD `password` varchar(255) DEFAULT '';";
 
 $updates["201301111137"][]="ALTER TABLE `no_categories` CHANGE `name` `name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ";
+
+$updates["201109230000"][]="ALTER TABLE `no_categories` CHANGE `files_folder_id` INT NOT NULL DEFAULT '0';";
