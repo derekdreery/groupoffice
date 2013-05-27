@@ -316,53 +316,123 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		return parent::afterSave($wasNew);
 	}
 	
+//	/**
+//	 * Set the photo
+//	 * 
+//	 * @param String $srcFileName The source image file name.
+//	 */
+//	public function setPhoto($srcFileName){
+//		
+//		if(!$this->id)
+//			throw new Exception("Contact must be saved before you can set a photo");
+//
+//		$destination = GO::config()->file_storage_path.'contacts/contact_photos/'.$this->id.'.jpg';
+//		
+//		if(empty($srcFileName))
+//		{
+//			$file = new GO_Base_Fs_File($this->_getPhotoPath());
+//			return !$file->exists() || $file->delete();
+//		}else
+//		{		
+//
+//			$f = new GO_Base_Fs_Folder(dirname($this->_getPhotoPath()));
+//			$f->create();
+//
+//
+//			$img = new GO_Base_Util_Image();
+//			if(!$img->load($srcFileName)){
+//				throw new Exception(GO::t('imageNotSupported','addressbook'));
+//			}
+//
+//			$img->zoomcrop(90,120);
+//			if(!$img->save($destination, IMAGETYPE_JPEG))
+//				throw new Exception("Could not save photo at ".$destination." from ".$srcFileName);
+//		}
+//	}
+	
+//	private function _getPhotoPath(){
+//		return GO::config()->file_storage_path.'contacts/contact_photos/'.$this->id.'.jpg';
+//	}
+//	
+//	protected function getPhoto(){
+//		if(file_exists($this->_getPhotoPath()))
+//			return $this->_getPhotoPath();
+//		else
+//			return '';
+//	}
+	
 	/**
-	 * Set the photo
+	 * Get the photo file object. It always returns a file even though it doesn't
+	 * exist. Use $contact->photoFile->exists() to detect that.
 	 * 
-	 * @param String $srcFileName The source image file name.
+	 * @return \GO_Base_Fs_File
 	 */
-	public function setPhoto($srcFileName){
+	public function getPhotoFile(){
+		return new GO_Base_Fs_File(GO::config()->file_storage_path.$this->photo);
+	}
+	
+	/**
+	 * Get the URL to the original photo.
+	 * 
+	 * @return string
+	 */
+	public function getPhotoURL(){
+		return $this->photoFile->exists() 
+						? GO::url('addressbook/contact/photo', array('id'=>$this->id,'mtime'=>$this->photoFile->mtime())) 
+						: GO::config()->host.'modules/addressbook/themes/Default/images/unknown-person.png';
+	}
+	
+	public function getPhotoThumbURL($urlParams=array("w"=>90, "h"=>120, "zc"=>1)) {
 		
-		if(!$this->id)
-			throw new Exception("Contact must be saved before you can set a photo");
-
-		$destination = GO::config()->file_storage_path.'contacts/contact_photos/'.$this->id.'.jpg';
-		
-		if(empty($srcFileName))
-		{
-			$file = new GO_Base_Fs_File($this->_getPhotoPath());
-			return !$file->exists() || $file->delete();
+		if($this->getPhotoFile()->exists()){
+			$urlParams['filemtime']=$this->getPhotoFile()->mtime();
+			$urlParams['src']=$this->getPhotoFile()->stripFileStoragePath();
+			return GO::url('core/thumb', $urlParams);	
 		}else
-		{		
-
-			$f = new GO_Base_Fs_Folder(dirname($this->_getPhotoPath()));
-			$f->create();
-
-
-			$img = new GO_Base_Util_Image();
-			if(!$img->load($srcFileName)){
-				throw new Exception(GO::t('imageNotSupported','addressbook'));
-			}
-
-			$img->zoomcrop(90,120);
-			if(!$img->save($destination, IMAGETYPE_JPEG))
-				throw new Exception("Could not save photo at ".$destination." from ".$srcFileName);
+		{
+			return GO::config()->host.'modules/addressbook/themes/Default/images/unknown-person.png';
 		}
+		
+		
 	}
 	
-	private function _getPhotoPath(){
-		return GO::config()->file_storage_path.'contacts/contact_photos/'.$this->id.'.jpg';
-	}
 	
-	protected function getPhoto(){
-		if(file_exists($this->_getPhotoPath()))
-			return $this->_getPhotoPath();
-		else
-			return '';
-	}
+	/**
+	 * Set new photo file. The file will be converted into JPEG and resized to fit
+	 * a 480x640 pixel box
+	 * 
+	 * @param GO_Base_Fs_File $file
+	 */
+	public function setPhoto(GO_Base_Fs_File $file){
+		
+		
+		$this->getPhotoFile()->delete();
+				
+		$photoPath = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'addressbook/photos/'.$this->addressbook_id.'/');
+		$photoPath->create();		
+		
+		
+//		if(strtolower($file->extension())!='jpg'){
+		$filename = $photoPath->path().'/'.$this->id.'.jpg';
+		$img = new GO_Base_Util_Image();
+		if(!$img->load($file->path())){
+			throw new Exception(GO::t('imageNotSupported','addressbook'));
+		}
+		
+		//resize it to small image so we don't get in trouble with sync clients
+		$img->fitBox(480,640);
+		
+		if(!$img->save($filename, IMAGETYPE_JPEG)){
+			throw new Exception("Could not save photo!");
+		}
+		$file = new GO_Base_Fs_File($filename);
+//		}else
+//		{		
+//			$file->move($photoPath, $this->id.'.'.strtolower($file->extension()));
+//		}
 	
-	protected function getPhotoURL(){
-		return $this->photo ? GO::url('addressbook/contact/photo', array('id'=>$this->id,'mtime'=>filemtime($this->photo))) : '';
+		
+		$this->photo=$file->stripFileStoragePath();
 	}
 	
 	/**
@@ -630,7 +700,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$this->save();
 		
 		if (!empty($photoFile))
-			$this->setPhoto($photoFile->path());
+			$this->setPhoto($photoFile);
 		
 //		foreach ($remainingVcardProps as $prop) {
 //			if (!empty($this->id) && substr($prop['name'],0,2)=='X-') {
@@ -831,8 +901,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		$e->rev=gmdate("Y-m-d\TH:m:s\Z", $this->mtime);
 		
 		
-		if($this->photo){
-			$p = new Sabre\VObject\Property('photo', base64_encode(file_get_contents($this->photo)));
+		if($this->getPhotoFile()->exists()){
+			$p = new Sabre\VObject\Property('photo', base64_encode($this->getPhotoFile()->getContents()));
 			$p->add('type','jpeg');
 			$p->add('encoding','b');
 			$e->add($p);	

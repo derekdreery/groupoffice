@@ -32,7 +32,7 @@ GO.addressbook.ContactDialog = function(config)
 			var now = new Date();
 			if (this.el)
 				this.el.set({
-					src: GO.util.empty(url) ? Ext.BLANK_IMAGE_URL : url+'&mtime='+now.format('U')
+					src: GO.util.empty(url) ? Ext.BLANK_IMAGE_URL : url
 				});
 			this.setVisible(true);
 		}
