@@ -38,18 +38,16 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		if(!empty($params['delete_photo'])){
 			$model->photo='';
 		}
-		
 		if (isset($_FILES['image']['tmp_name'][0]) && is_uploaded_file($_FILES['image']['tmp_name'][0])) {
-			$f = new GO_Base_Fs_Folder(GO::config()->tmpdir);
-			$f->create();
+		
 			
-			$destinationFile = new GO_Base_Fs_File(GO::config()->tmpdir . $_FILES['image']['name'][0]);
+			$destinationFile = new GO_Base_Fs_File(GO::config()->getTempFolder()->path().'/'.$_FILES['image']['name'][0]);
 			
 			move_uploaded_file($_FILES['image']['tmp_name'][0], $destinationFile->path());
 			
-			$model->photo = $destinationFile->path();
-
-			$response['photo_url'] = $model->photoURL;
+			$model->setPhoto($destinationFile);
+			$model->save();
+			$response['photo_url'] = $model->photoThumbURL;
 		}
 		
 		
@@ -74,7 +72,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		if (GO::modules()->customfields)
 			$response['customfields'] = GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Addressbook_Model_Contact", $model->addressbook_id);
 		
-		$response['data']['photo_url']=$model->photoURL;		
+		$response['data']['photo_url']=$model->photoThumbURL;		
 		
 		$stmt = $model->addresslists();
 		while($addresslist = $stmt->fetch()){
@@ -93,18 +91,19 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	
 	
 	protected function actionPhoto($params){
-		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'contacts/contact_photos/'.$params['id'].'.jpg');
-		if(!$file->exists())
-			exit("No photo set");		
-		GO_Base_Util_Http::outputDownloadHeaders($file, true, false);
-		$file->output();
+		
+		$contact = GO_Addressbook_Model_Contact::model()->findByPk($params['id']);
+		
+		GO_Base_Util_Http::outputDownloadHeaders($contact->getPhotoFile(), true, false);
+		$contact->getPhotoFile()->output();
 	}
 	
 
 	protected function afterDisplay(&$response, &$model, &$params) {
 			
 		$response['data']['name']=$model->name;
-		$response['data']['photo_url']=$model->photoURL;
+		$response['data']['photo_url']=$model->photoThumbURL;
+		$response['data']['original_photo_url']=$model->photoURL;
 		$response['data']['addressbook_name']=$model->addressbook->name;
 		
 		$company = $model->company();

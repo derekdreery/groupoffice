@@ -371,3 +371,6 @@ $updates['201303051525'][]="ALTER TABLE  `ab_contacts` CHANGE  `salutation`  `sa
 
 $updates['201304231330'][]="ALTER TABLE `ab_contacts` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";
 $updates['201304231330'][]="ALTER TABLE `ab_companies` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";
+
+$updates['201305271506'][]="ALTER TABLE  `ab_contacts` ADD  `photo` VARCHAR( 255 ) NOT NULL";
+$updates['201305271506'][]="update ab_contacts set photo=concat('contacts/contact_photos/',id,'.jpg');";
