@@ -7,6 +7,7 @@
 - Better output of showing mailbox usages in Postfixadmin cron script.
 - Better way of creating ZIP archive of e-mail attachments so that foreign characters will work on Windows
 - Invalid event reminder property could prevent ActiveSync from syncing events.
+- Removeduplicate functions in tasks, addressbooks and calendars are  now translatable
 
 24-05-2013 4.1.71
 - relational query cache didn't work
