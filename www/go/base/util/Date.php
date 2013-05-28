@@ -50,7 +50,7 @@ class GO_Base_Util_Date {
 			$region = $region ? $region : GO::config()->language;
 
 			$hstmt = GO_Base_Model_Holiday::model()->getHolidaysInPeriod($startDate, $endDate, $region);
-			if ($hstmt->rowCount()) {
+			if ($hstmt && $hstmt->rowCount()) {
 				return true;
 			}
 		}

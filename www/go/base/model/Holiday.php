@@ -75,6 +75,13 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 	 */
 	public function getHolidaysInPeriod($startDate,$endDate,$locale=false,$check=true,$force=false){
 		
+		if(empty($locale)){		
+			$locale = GO_Base_Model_Holiday::localeFromCountry(GO::user()->createContact()->country);
+			if(!$locale)
+				return false;
+		}
+		
+		
 		$startDate = strtotime($startDate);
 		$endDate = strtotime($endDate);
 		
@@ -88,9 +95,8 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 		$findCriteria = GO_Base_Db_FindCriteria::newInstance()
 						->addCondition('date', date('Y-m-d',$startDate),'>=')
 						->addCondition('date', date('Y-m-d',$endDate), '<=');	
-		
-		if(!empty($locale))
-			$findCriteria->addCondition('region', $locale);
+					
+		$findCriteria->addCondition('region', $locale);
 			
 		$findParams = GO_Base_Db_FindParams::newInstance()
 						->criteria($findCriteria);
@@ -169,10 +175,11 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 		
 		$children = $folder->ls();
 		foreach($children as $child){
-			$holidays[] = array('filename'=>$child->nameWithoutExtension(),'label'=>GO::t($child->nameWithoutExtension()));
+			$label = GO::t($child->nameWithoutExtension());
+			$holidays[$label] = array('filename'=>$child->nameWithoutExtension(),'label'=>$label);
 		}
-		
-		return $holidays;
+		ksort($holidays);
+		return array_values($holidays);
 	}	
 	
 	/**

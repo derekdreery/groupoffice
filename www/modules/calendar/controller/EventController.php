@@ -922,12 +922,14 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		//$holidays = GO_Base_Model_Holiday::model()->getHolidaysInPeriod($startTime, $endTime, $calendar->user->language);
 		$holidays = GO_Base_Model_Holiday::model()->getHolidaysInPeriod($startTime, $endTime, $calendar->user->holidayset);
 
-		while($holiday = $holidays->fetch()){ 
-			$resultCount++;
-			$record = $holiday->getJson();
-			$record['calendar_id']=$calendar->id;
-			$record['id']=$response['count']++;
-			$response['results'][$this->_getIndex($response['results'],strtotime($holiday->date))] = $record;
+		if($holidays){
+			while($holiday = $holidays->fetch()){ 
+				$resultCount++;
+				$record = $holiday->getJson();
+				$record['calendar_id']=$calendar->id;
+				$record['id']=$response['count']++;
+				$response['results'][$this->_getIndex($response['results'],strtotime($holiday->date))] = $record;
+			}
 		}
 
 		// Set the count of the holidays

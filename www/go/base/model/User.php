@@ -262,7 +262,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		}
 		
 		if(!$this->isNew && empty($this->holidayset)){
-			$holiday = GO_Base_Model_Holiday::localeFromCountry($this->contact->country);
+			$holiday = GO_Base_Model_Holiday::localeFromCountry($this->createContact()->country);
 
 			if($holiday !== false)
 				$this->holidayset = $holiday; 
