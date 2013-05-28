@@ -48,6 +48,19 @@ abstract class GO_Base_Fs_Base{
 		$this->path .= '/'.self::utf8Basename($path);
 	}
 	
+	/**
+	 * Create a folder or file from a path string
+	 * 
+	 * @param string $path
+	 * @return GO_Base_Fs_File|GO_Base_Fs_Folder
+	 */
+	public static function createFromPath($path){
+		if(is_file($path))
+			return new GO_Base_Fs_File($path);
+		else
+			return new GO_Base_Fs_Folder ($path);
+	}
+	
 	
 	/**
 	 * Get the parent folder object
