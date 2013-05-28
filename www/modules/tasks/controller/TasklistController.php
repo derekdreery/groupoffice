@@ -183,9 +183,9 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 							if(!empty($params['delete'])){
 
 								if($model->hasLinks() && $model->countLinks()){
-									echo '<tr><td colspan="99">Skipped delete because model has links</td></tr>';
+									echo '<tr><td colspan="99">'.GO::t('skippedDeleteHasLinks').'</td></tr>';
 								}elseif(($filesFolder = $model->getFilesFolder(false)) && ($filesFolder->hasFileChildren() || $filesFolder->hasFolderChildren())){
-									echo '<tr><td colspan="99">Skipped delete because model has folder or files</td></tr>';
+									echo '<tr><td colspan="99">'.GO::t('skippedDeleteHasFiles').'</td></tr>';
 								}else{									
 									$model->delete();
 								}
@@ -201,8 +201,8 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 
 				echo '</table>';
 
-				echo '<p>Found '.$count.' duplicates</p>';
-				echo '<br /><br /><a href="'.GO::url('tasks/tasklist/removeDuplicates', array('delete'=>true, 'tasklist_id'=>$tasklist->id)).'">Click here to delete the newest duplicates marked in red.</a>';
+				echo '<p>'.sprintf(GO::t('foundDuplicates'),$count).'</p>';
+				echo '<br /><br /><a href="'.GO::url('tasks/tasklist/removeDuplicates', array('delete'=>true, 'tasklist_id'=>$tasklist->id)).'">'.GO::t('clickToDeleteDuplicates').'</a>';
 				
 			}
 		}

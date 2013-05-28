@@ -387,9 +387,9 @@ PRODID:-//Intermesh//NONSGML ".GO::config()->product_name." ".GO::config()->vers
 							if(!empty($params['delete'])){
 
 								if($model->hasLinks() && $model->countLinks()){
-									echo '<tr><td colspan="99">Skipped delete because model has links</td></tr>';
+									echo '<tr><td colspan="99">'.GO::t('skippedDeleteHasLinks').'</td></tr>';
 								}elseif(($filesFolder = $model->getFilesFolder(false)) && ($filesFolder->hasFileChildren() || $filesFolder->hasFolderChildren())){
-									echo '<tr><td colspan="99">Skipped delete because model has folder or files</td></tr>';
+									echo '<tr><td colspan="99">'.GO::t('skippedDeleteHasFiles').'</td></tr>';
 								}else{									
 									$model->delete();
 								}
@@ -405,8 +405,8 @@ PRODID:-//Intermesh//NONSGML ".GO::config()->product_name." ".GO::config()->vers
 
 				echo '</table>';
 
-				echo '<p>Found '.$count.' duplicates</p>';
-				echo '<br /><br /><a href="'.GO::url('calendar/calendar/removeDuplicates', array('delete'=>true, 'calendar_id'=>$calendar->id)).'">Click here to delete the newest duplicates marked in red.</a>';
+				echo '<p>'.sprintf(GO::t('foundDuplicates'),$count).'</p>';
+				echo '<br /><br /><a href="'.GO::url('calendar/calendar/removeDuplicates', array('delete'=>true, 'calendar_id'=>$calendar->id)).'">'.GO::t('clickToDeleteDuplicates').'</a>';
 				
 			}
 		}
