@@ -6,6 +6,7 @@
 - ZpushAdmin: renamed comments into comment because comments was a reserved parameter in GO
 - Better output of showing mailbox usages in Postfixadmin cron script.
 - Better way of creating ZIP archive of e-mail attachments so that foreign characters will work on Windows
+- Invalid event reminder property could prevent ActiveSync from syncing events.
 
 24-05-2013 4.1.71
 - relational query cache didn't work
