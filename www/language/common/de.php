@@ -578,3 +578,20 @@ $l['passwordRequireSc']='Es muss mindestens ein Sonderzeichen enthalten';
 $l['passwordUnique']='Es dürfen %s Zeichen nur einmal vorkommen';
 
 $l['maxAttachmentsSizeExceeded']="Die Gesamtgröße der Anhänge ({total}) überschreitet den Maximalwert von ({max}).";
+
+$l['exportScreen']='Aktuelle Anzeige';
+
+$l['exportAddressbook']="Automatisch fehlende Adressbucheinträge hinzufügen zu";
+$l['exportOrders']='Reihenfolge';
+
+$l['errorTimeout']="Ihre Anfrage endete in einem Timeout. Der Server brauchte zu lange zum Antworten. Bitte versuchen Sie es erneut.";
+
+$l['showAll']='Alle anzeigen';
+
+$l['multiselectSelected']='Ausgewählt';
+
+$l['selectMonthlyDay'] = 'Bitte einen Wochentag für die monatliche Wiederholung auswählen.';
+$l['selectWeekOfMonth'] = 'Bitte den Turnus für den Wochentag für die monatliche Wiederholung auswählen.';
+
+$l['removeDuplicates']='Doppelte Einträge entfernen';
+$l['removeDuplicatesAreYouSure']='Sind Sie sicher, dass Sie alle doppelten Einträge entfernen wollen?';

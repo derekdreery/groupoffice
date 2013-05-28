@@ -93,7 +93,8 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 			
 			//ignore acl because members may use groups even without permissions
 			$group = GO_Base_Model_Group::model()->findByPk($groupId, false, true);
-			
+
+
 			if($group){
 				$users = $group->users(GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('email', '','!=')));
 				while($user = $users->fetch())				
