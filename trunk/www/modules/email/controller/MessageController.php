@@ -1119,15 +1119,17 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	
 	private function _getContact(GO_Email_Model_ImapMessage $imapMessage,$params, $response){
 		$response['sender_contact_id']=0;		
-//		if(!empty($params['get_contact_id']) && GO::modules()->addressbook && ($contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($response['sender']))) {
-//			$response['sender_contact_id']=$contact->id;
-//			$response['contact_name']=$contact->name;			
-//		}
-		
-		$contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($response['sender']);
+
+		$contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($response['sender'], GO_Base_Db_FindParams::newInstance()->limit(10));
 		if(!empty($contact)){
 			$response['sender_contact_id']=$contact->id;
 			$response['contact_name']=$contact->name;			
+			$response['contact_thumb_url']=$contact->getPhotoThumbURL();
+		}else
+		{
+			$response['sender_contact_id']=0;
+			$response['contact_name']="";			
+			$response['contact_thumb_url']=GO::config()->host.'modules/addressbook/themes/Default/images/unknown-person.png';
 		}
 		return $response;
 	}
