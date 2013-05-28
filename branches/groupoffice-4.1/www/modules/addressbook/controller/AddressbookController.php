@@ -284,9 +284,9 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 							if(!empty($params['delete'])){
 
 								if($model->hasLinks() && $model->countLinks()){
-									echo '<tr><td colspan="99">Skipped delete because model has links</td></tr>';
+									echo '<tr><td colspan="99">'.GO::t('skippedDeleteHasLinks').'</td></tr>';
 								}elseif(($filesFolder = $model->getFilesFolder(false)) && ($filesFolder->hasFileChildren() || $filesFolder->hasFolderChildren())){
-									echo '<tr><td colspan="99">Skipped delete because model has folder or files</td></tr>';
+									echo '<tr><td colspan="99">'.GO::t('skippedDeleteHasFiles').'</td></tr>';
 								}else{									
 									$model->delete();
 								}
@@ -302,8 +302,8 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 
 				echo '</table>';
 
-				echo '<p>Found '.$count.' duplicates</p>';
-				echo '<br /><br /><a href="'.GO::url('addressbook/addressbook/removeDuplicates', array('delete'=>true, 'addressbook_id'=>$addressbook->id)).'">Click here to delete the newest duplicates marked in red.</a>';
+				echo '<p>'.sprintf(GO::t('foundDuplicates'),$count).'</p>';
+				echo '<br /><br /><a href="'.GO::url('addressbook/addressbook/removeDuplicates', array('delete'=>true, 'addressbook_id'=>$addressbook->id)).'">'.GO::t('clickToDeleteDuplicates').'</a>';
 				
 			}
 		}
