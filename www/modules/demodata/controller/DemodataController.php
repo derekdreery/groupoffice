@@ -108,7 +108,8 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$john->state = 'Noord-Holland';
 			$john->country = 'NL';
 			$john->save();
-			$john->setPhoto(GO::modules()->addressbook->path . 'install/noperson.jpg');
+			$john->setPhoto(new GO_Base_Fs_File(GO::modules()->addressbook->path . 'install/noperson.jpg'));
+			$john->save();
 		}
 
 		$acme = GO_Addressbook_Model_Company::model()->findSingleByAttribute('email', 'info@acme.demo');
@@ -163,7 +164,8 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$wile->country = 'US';
 
 			$wile->save();
-			$wile->setPhoto(GO::modules()->addressbook->path . 'install/wecoyote.png');
+			$wile->setPhoto(new GO_Base_Fs_File(GO::modules()->addressbook->path . 'install/wecoyote.png'));
+			$wile->save();
 
 			$wile->addComment("Wile E. Coyote (also known simply as \"The Coyote\") and The Road Runner are a duo of cartoon characters from a series of Looney Tunes and Merrie Melodies cartoons. The characters (a coyote and Greater Roadrunner) were created by animation director Chuck Jones in 1948 for Warner Bros., while the template for their adventures was the work of writer Michael Maltese. The characters star in a long-running series of theatrical cartoon shorts (the first 16 of which were written by Maltese) and occasional made-for-television cartoons.");
 
