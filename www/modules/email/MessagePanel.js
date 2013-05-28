@@ -35,12 +35,23 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		
 		this.bodyId = Ext.id();
 		this.attachmentsId = Ext.id();
+		
+		this.contactImageId = Ext.id();
 				
 		var templateStr = 
 		'<div class="message-header">'+
 			'<table class="message-header-table">'+
-			'<tr><td style="width:70px"><b>'+GO.email.lang.from+'</b></td>'+			
-			'<td>: {from} &lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{sender}\', \'{[this.addSlashes(values.from)]}\');">{sender}</a>&gt;</td></tr>'+
+			'<tr>'+
+			
+			'<td rowspan="99"><img id="'+this.contactImageId+'" src="{contact_thumb_url}" style="height:60px;border:1px solid #d0d0d0;margin-right:10px;cursor:pointer" /></td>'+
+			
+			
+			'<td style="width:70px"><b>'+GO.email.lang.from+'</b></td>'+
+
+			'<td>: {from} &lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{sender}\', \'{[this.addSlashes(values.from)]}\');">{sender}</a>&gt;</td>'+
+			
+			
+			'</tr>'+
 			'<tr><td><b>'+GO.email.lang.subject+'</b></td><td>: {subject}</td></tr>'+
 			'<tr><td><b>'+GO.lang.strDate+'</b></td><td>: {date}</td></tr>'+
 			//'<tr><td><b>'+GO.lang.strSize+'</b></td><td>: {size}</td></tr>'+
@@ -144,6 +155,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			'</div>';
 		
 		this.template = new Ext.XTemplate(templateStr,{
+			
 			addSlashes : function(str)
 			{
 				str = GO.util.html_entity_decode(str, 'ENT_QUOTES');
@@ -153,6 +165,14 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 
 		});		
 		this.template.compile();	
+	},
+	
+	lookupContact : function(){
+		if(this.data.sender_contact_id){
+			GO.linkHandlers["GO_Addressbook_Model_Contact"].call(this, this.data.sender_contact_id);
+		}else{
+			GO.addressbook.searchSender(this.data.sender, this.data.from);
+		}
 	},
 	
 	loadMessage : function(uid, mailbox, account_id, password, no_max_body_size)
@@ -257,6 +277,11 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		this.data=false;
 		this.uid=0;
 		
+		if(this.contactImageEl)
+		{
+			this.contactImageEl.removeAllListeners();
+		}
+		
 		if(this.messageBodyEl)
 		{
 			this.messageBodyEl.removeAllListeners();
@@ -293,6 +318,11 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		if(this.unblockEl)
 		{
 			this.unblockEl.removeAllListeners();
+		}
+		
+		if(this.contactImageEl)
+		{
+			this.contactImageEl.removeAllListeners();
 		}
 		
 		this.template.overwrite(this.body, data);		
@@ -387,6 +417,10 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				this.attachmentsEl.on('contextmenu', this.onAttachmentContextMenu, this);
 			}
 		}
+		
+		
+		this.contactImageEl = Ext.get(this.contactImageId);		
+		this.contactImageEl.on('click', this.lookupContact, this);
 		
 		this.body.scrollTo('top',0);
 		

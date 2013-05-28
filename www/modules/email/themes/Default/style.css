@@ -215,7 +215,8 @@ margin:5px 2px;
 	font-size:12px;
 	background-color: #cfdce0;
 	border-bottom:1px solid #d0d0d0;
-	padding-left: 5px;
+	padding-left: 10px;
+	padding-top:5px;
 }
 
 .message-header a{
