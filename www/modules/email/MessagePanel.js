@@ -37,6 +37,10 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		this.attachmentsId = Ext.id();
 		
 		this.contactImageId = Ext.id();
+		
+		this.linkMessageId = Ext.id();
+		
+	
 				
 		var templateStr = 
 		'<div class="message-header">'+
@@ -48,7 +52,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			
 			'<td style="width:70px"><b>'+GO.email.lang.from+'</b></td>'+
 
-			'<td>: {from} &lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{sender}\', \'{[this.addSlashes(values.from)]}\');">{sender}</a>&gt;</td>'+
+			'<td>: {from} &lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{sender}\', \'{[this.addSlashes(values.from)]}\');">{sender}</a>&gt;<span id="'+this.linkMessageId+'" class="em-contact-link"></span></td>'+
 			
 			
 			'</tr>'+
@@ -424,6 +428,43 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		
 		this.body.scrollTo('top',0);
 		
+		if(GO.savemailas && this.data.sender_contact_id){
+			this.linkMessageCB = new Ext.form.Checkbox({
+				name:'link',
+				boxLabel:GO.savemailas.lang.linkToContact,
+				hideLabel:true,
+				renderTo:this.linkMessageId,
+				checked:this.data.linked_message_id>0,
+				listeners:{
+					scope:this,
+					check:function(cb, checked){
+						if(checked){
+							GO.request({
+								url:'savemailas/linkedEmail/linkContact',
+								params:{
+									account_id:this.account_id,
+									mailbox:this.mailbox,
+									uid:this.uid,
+									contact_id:this.data.sender_contact_id								
+								},
+								maskEl:Ext.getBody()
+							});
+						}else{
+							GO.request({
+								url:'core/unlink',
+								params:{
+									model_name1:'GO_Addressbook_Model_Contact',
+									id1:this.data.sender_contact_id,
+									model_name2:'GO_Savemailas_Model_LinkedEmail',
+									id2:this.data.linked_message_id
+								},
+								maskEl:Ext.getBody()
+							});
+						}
+					}
+				}
+			});
+		}		
 	},
 	
 	onAttachmentContextMenu : function (e, target){

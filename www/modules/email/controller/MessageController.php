@@ -560,7 +560,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$tag = '';
 		if (!empty($params['link'])) {
 			$linkProps = explode(':', $params['link']);
-			$model = GO::getModel($linkProps[0])->findByPk($linkProps[1]);
+			//$model = GO::getModel($linkProps[0])->findByPk($linkProps[1]);
 
 			$tag = "[link:".base64_encode($_SERVER['SERVER_NAME'].','.$account->id.','.$linkProps[0].','.$linkProps[1])."]";
 		}
@@ -916,6 +916,23 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$response['sendParams']['reply_uid'] = $message->uid;
 			$response['sendParams']['reply_mailbox'] = $params['mailbox'];
 			$response['sendParams']['reply_account_id'] = $params['account_id'];
+			
+			
+			if(GO::modules()->savemailas){
+				
+				$contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($oldMessage['sender']);
+				if($contact){
+					
+					
+					$linkedMessage = GO_Savemailas_Model_LinkedEmail::model()->findByImapMessage($message, $contact);
+					
+					
+					if($linkedMessage){
+						$response['data']['link_text']=$contact->name;
+						$response['data']['link_value']=$contact->className().':'.$contact->id;
+					}
+				}
+			}
 		}
 
 		$this->_keepHeaders($response, $params);
@@ -1120,11 +1137,18 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	private function _getContact(GO_Email_Model_ImapMessage $imapMessage,$params, $response){
 		$response['sender_contact_id']=0;		
 
-		$contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($response['sender'], GO_Base_Db_FindParams::newInstance()->limit(10));
+		$contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($response['sender']);
 		if(!empty($contact)){
 			$response['sender_contact_id']=$contact->id;
 			$response['contact_name']=$contact->name;			
 			$response['contact_thumb_url']=$contact->getPhotoThumbURL();
+			
+			if(GO::modules()->savemailas){
+				
+				$linkedMessage = GO_Savemailas_Model_LinkedEmail::model()->findByImapMessage($imapMessage, $contact);
+				$response['linked_message_id']=$linkedMessage ? $linkedMessage->id : 0;
+			}
+			
 		}else
 		{
 			$response['sender_contact_id']=0;
