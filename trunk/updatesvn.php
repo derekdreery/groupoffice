@@ -14,7 +14,6 @@ foreach($output as $module){
 	if(substr($module,-1)=='/'){ //check if it's a directory
 				
 		if(is_dir($module)){
-			$svnCmd = is_dir($module) ? 'up' : 'co';
 			echo "UPDATE ".rtrim($module,'/')."\n";
 		
 			$cmd = 'svn up '.$module;
