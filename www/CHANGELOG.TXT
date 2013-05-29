@@ -6,6 +6,8 @@
 - Mail can be shared read only
 - Send the invitation emails in the language of the participant if the participant is a known user of GO.
 - Added selection for holiday file to the settings->regional settings panel and to the user dialog in the user module.
+- Workflow: history can be appended to PDF files.
+- Workflow: Files can be copied to a directory
 
 - Fixed Thai translation
 - Updated German translation
