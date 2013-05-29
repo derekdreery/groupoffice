@@ -322,3 +322,8 @@ $l['contactUuid']='UUID';
 
 $l['companyCtime']= "Datum gemaakt";
 $l['companyMtime']= "Datum gewijzigd";
+
+$l['searchForImages']='Zoek afbeeldingen';
+$l['downloadPhotoUrl']='Download foto URL';
+$l['orBrowseComputer']='of upload vanaf uw computer';
+$l['currentImage']='Huidige afbeelding';

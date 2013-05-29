@@ -35,22 +35,6 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
 		
-		if(!empty($params['delete_photo'])){
-			$model->photo='';
-		}
-		if (isset($_FILES['image']['tmp_name'][0]) && is_uploaded_file($_FILES['image']['tmp_name'][0])) {
-		
-			
-			$destinationFile = new GO_Base_Fs_File(GO::config()->getTempFolder()->path().'/'.$_FILES['image']['name'][0]);
-			
-			move_uploaded_file($_FILES['image']['tmp_name'][0], $destinationFile->path());
-			
-			$model->setPhoto($destinationFile);
-			$model->save();
-			$response['photo_url'] = $model->photoThumbURL;
-		}
-		
-		
 		$stmt = GO_Addressbook_Model_Addresslist::model()->find(GO_Base_Db_FindParams::newInstance()->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION));
 		while($addresslist = $stmt->fetch()){
 			$linkModel = $addresslist->hasManyMany('contacts', $model->id);
@@ -62,6 +46,35 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 				$addresslist->addManyMany('contacts',$model->id);
 			}
 		}		
+		
+		
+		if(!empty($params['delete_photo'])){
+			$model->removePhoto();
+			$model->save();
+		}
+		if (isset($_FILES['image']['tmp_name'][0]) && is_uploaded_file($_FILES['image']['tmp_name'][0])) {
+		
+			
+			$destinationFile = new GO_Base_Fs_File(GO::config()->getTempFolder()->path().'/'.$_FILES['image']['name'][0]);
+			
+			move_uploaded_file($_FILES['image']['tmp_name'][0], $destinationFile->path());
+			
+			$model->setPhoto($destinationFile);
+			$model->save();
+			$response['photo_url'] = $model->photoThumbURL;
+		}elseif(!empty($params['download_photo_url'])){
+			
+			$file = GO_Base_Fs_File::tempFile();	
+			$c = new GO_Base_Util_HttpClient();
+			
+			if(!$c->downloadFile($params['download_photo_url'], $file))
+				throw new Exception("Could not download photo from: '".$params['download_photo_url']."'");
+						
+			$model->setPhoto($file);
+			$model->save();					
+			
+		}
+		
 		
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}

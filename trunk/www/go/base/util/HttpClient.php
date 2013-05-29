@@ -24,6 +24,10 @@ class GO_Base_Util_HttpClient{
 	private $_curl;
 	private $_cookieFile;
 	
+	private $_lastDownloadUrl;
+	
+	public $lastHeaders=array();
+	
 	/**
 	 * Key value array of params that will be sent with each request.
 	 * 
@@ -93,7 +97,7 @@ class GO_Base_Util_HttpClient{
 		return $response;		
 	}	
 	
-	public $lastHeaders=array();
+	
 	
 	
 	public function readHeader($ch, $header){
@@ -115,16 +119,16 @@ class GO_Base_Util_HttpClient{
 	}
 	
 	public function getLastDownloadedFilename(){
-		if(!isset($this->lastHeaders['Content-Disposition'])){
-			return false;
-		}
 		
-		//echo $this->lastHeaders['Content-Disposition']."\n";
+		if(isset($this->lastHeaders['Content-Disposition']) && preg_match('/filename="(.*)"/', $this->lastHeaders['Content-Disposition'], $matches))
+			return $matches[1];
 		
-		if(!preg_match('/filename="(.*)"/', $this->lastHeaders['Content-Disposition'], $matches))
-			return false;
+		$filename = GO_Base_Fs_File::utf8Basename($this->_lastDownloadUrl);
 		
-		return $matches[1];
+		if(!empty($filename))
+			return $filename;
+		
+		return false;
 		
 	}
 	
@@ -137,6 +141,8 @@ class GO_Base_Util_HttpClient{
 	 * @return boolean
 	 */
 	public function downloadFile($url, GO_Base_Fs_File $outputFile, $params=array()){
+		
+		$this->_lastDownloadUrl = $url;
 		
 		$this->_initRequest($url, $params);
 		

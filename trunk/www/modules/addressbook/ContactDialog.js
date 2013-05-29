@@ -24,6 +24,7 @@ GO.addressbook.ContactDialog = function(config)
 	GO.addressbook.ContactPhoto = Ext.extend(Ext.BoxComponent, {
 		autoEl : {
 				tag: 'img',
+				cls:'ab-photo',
 				src:Ext.BLANK_IMAGE_URL
 			},
 	
@@ -60,9 +61,38 @@ GO.addressbook.ContactDialog = function(config)
 		border:false,
 		cls : 'go-form-panel',		
 		autoScroll:true,
-		items:[	this.uploadFile,
-		this.contactPhoto
-		,this.deleteImageCB
+		labelAlign:'top',
+		items:[	{
+				style:'margin-bottom:15px',
+				xtype:'button',
+				text:GO.addressbook.lang.searchForImages,
+				scope:this,
+				handler:function(){
+					var f= this.formPanel.form;
+					var name = f.findField('first_name').getValue()+' '+f.findField('last_name').getValue();
+					var sUrl = 'http://www.google.com/search?tbm=isch&q="'+encodeURIComponent(name)+'"';
+					window.open(sUrl);
+				}
+			},
+			{
+				
+				xtype:'textfield',
+				fieldLabel:GO.addressbook.lang.downloadPhotoUrl,
+				name:'download_photo_url',
+				anchor:'100%'
+			},{
+				style:'margin-top:15px;margin-bottom:10px;',
+				html:GO.addressbook.lang.orBrowseComputer+':',
+				xtype:'htmlcomponent'
+			},
+			this.uploadFile,
+			{
+				style:'margin-top:15px',
+				html:GO.addressbook.lang.currentImage+':',
+				xtype:'htmlcomponent'
+			},
+			this.contactPhoto,
+			this.deleteImageCB
 		]
 	});
 
