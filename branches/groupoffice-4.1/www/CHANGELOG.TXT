@@ -1,3 +1,4 @@
+29-05-2013 4.1.72
 - Fixed Thai translation
 - Updated German translation
 - In ticket email templates, {contact:salutation} uses the ticket contact's set salutation.
