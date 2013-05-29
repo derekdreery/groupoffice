@@ -809,7 +809,12 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 							Ext.apply(this.sendParams, action.result.sendParams);
 						
 						this.afterShowAndLoad(config);
-
+						
+						if(action.result.data.link_value){
+							this.selectLinkField.setValue(action.result.data.link_value);
+							this.selectLinkField.setRemoteText(action.result.data.link_text);
+						}
+						
 						this.fireEvent('dialog_ready', this);
 					},
 					scope : this

@@ -377,3 +377,11 @@ margin:5px 2px;
 	background-image:url(images/16x16/spam.png) !important;
 }
 
+.em-contact-link{
+	 float:right;
+	 margin-left:10px;
+}
+
+.em-contact-link .x-form-check-wrap{
+	line-height:inherit !important;
+}
