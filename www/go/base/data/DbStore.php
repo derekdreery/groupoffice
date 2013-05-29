@@ -94,10 +94,10 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	public $extraDeletePk = null;
 
 	/**
-	 * Will be set for multi select stores @see multiSelect()
-	 * @var array  attache to response if set
+	 * Set this property to files if deleting records is not allowed for the store object
+	 * @var boolean
 	 */
-	private $_buttonParams;
+	public $allow_delete = true;
 
 	/**
 	 * the primary key of the record that should be delete just before loading the store data
@@ -162,7 +162,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 		if (isset($this->_requestParams['query']))
 			$this->query = $this->_requestParams['query'];
 
-		if (isset($this->_requestParams['delete_keys'])) { // will be deleted just before loading.
+		if (isset($this->_requestParams['delete_keys']) && $this->allow_delete) { // will be deleted just before loading.
 			$this->_deleteRecords = json_decode($this->_requestParams['delete_keys'], true);
 			foreach ($this->_deleteRecords as $i => $modelPk) {
 				if (is_array($modelPk)) {
