@@ -114,6 +114,14 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		return $response;
 	}
 	
+	protected function actionUnlink($params){
+		$linkedModel1 = GO::getModel($params['model_name1'])->findByPk($params['id1']);				
+		$linkedModel2 = GO::getModel($params['model_name2'])->findByPk($params['id2']);			
+		$linkedModel1->unlink($linkedModel2);	
+		
+		return array('success'=>true);
+	}
+	
 	protected function actionUpdateLink($params){
 		$model1 = GO::getModel($params['model_name1'])->findByPk($params['model_id1']);
 		$model2 = GO::getModel($params['model_name2'])->findByPk($params['model_id2']);
