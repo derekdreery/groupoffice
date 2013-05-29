@@ -8,7 +8,8 @@
 - Better way of creating ZIP archive of e-mail attachments so that foreign characters will work on Windows
 - Invalid event reminder property could prevent ActiveSync from syncing events.
 - Removeduplicate functions in tasks, addressbooks and calendars are  now translatable
-- config['locale_all'] in config.php for Group-Office locale setting, example values are: "en_US.UTF-8" or "nb_NO.UTF-8".
+- $config['locale_all'] in config.php for Group-Office locale setting, example values are: "en_US.UTF-8" or "nb_NO.UTF-8".
+- $config['tcpdf_font_size'] in config.php for font size in PDF exports, default is "9"
 
 24-05-2013 4.1.71
 - relational query cache didn't work
