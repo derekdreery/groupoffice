@@ -310,6 +310,7 @@ $l['passwordMatchError']='The passwords didn\'t match';
 $l['accessDenied']='Access denied';
 $l['saveError']='Error while saving the data';
 $l['deleteError']='Error while deleting the data';
+$l['deleteErrors']='Errors occured while trying to delete {count} records';
 $l['selectError']='Error trying to read the data';
 $l['missingField'] = 'You didn\'t fill in all the required fields.';
 $l['invalidEmailError']='The e-mail address was invalid';
