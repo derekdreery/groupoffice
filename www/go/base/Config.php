@@ -1122,6 +1122,23 @@ class GO_Base_Config {
 	var $orig_full_url = '';
 
 	/**
+	 * Full URL to the Group-Office assets folder with trailing slash
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $assets_url = '';
+	
+	/**
+	 * Full Path to the Group-Office assets folder with trailing slash
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $assets_path = '';
+	
+	
+	/**
 	 * Constructor. Initialises all public variables.
 	 *
 	 * @access public
