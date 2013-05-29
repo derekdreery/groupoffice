@@ -2576,7 +2576,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		}
 
 		if (isset($this->columns['muser_id']) && isset($this->_modifiedAttributes['mtime']))
-			$this->muser_id = GO::user()->id;
+			$this->muser_id=GO::user() ? GO::user()->id : 1;
 		
 		//user id is set by defaultAttributes now.
 		//do not use empty() here for checking the user id because some times it must be 0. eg. go_acl
