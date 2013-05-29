@@ -1,3 +1,4 @@
+- Easy link checkbox to link e-mail conversations to a contact directly
 - Contact photo's are shown in e-mail and can be set much more easily with download URL's.
 - Custom field blocks feature
 - Models show last modified by username
