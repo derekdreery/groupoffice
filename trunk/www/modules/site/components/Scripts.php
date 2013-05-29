@@ -33,6 +33,7 @@ class GO_Site_Components_Scripts
 
 	public $scriptMap = array();
 	protected $cssFiles = array();
+	protected $css = array();
 	protected $scriptFiles = array();
 	protected $gapiScripts = array();
 	protected $scripts = array();
@@ -77,6 +78,9 @@ class GO_Site_Components_Scripts
 		foreach ($this->cssFiles as $url => $media)
 			$html.=self::cssFile($url, $media) . "\n";
 
+		foreach($this->css as $css)
+			$html.=self::css($css[0],$css[1])."\n";
+				
 		if(isset($this->gapiScripts[self::POS_HEAD]))
 		{
 			foreach ($this->gapiScripts[self::POS_HEAD] as $gapiScript)
@@ -234,7 +238,19 @@ class GO_Site_Components_Scripts
 		//	$this->registerCoreScript('jquery');
 		return $this;
 	}
-
+/**
+	 * Registers a piece of CSS code.
+	 * @param string $id ID that uniquely identifies this piece of CSS code
+	 * @param string $css the CSS code
+	 * @param string $media media that the CSS code should be applied to. If empty, it means all media types.
+	 * @return CClientScript the CClientScript object itself (to support method chaining, available since version 1.1.5).
+	 */
+	public function registerCss($id,$css,$media='')
+	{
+		$this->hasScripts=true;
+		$this->css[$id]=array($css,$media);
+		return $this;
+	}
 	/**
 	 * Registers a meta tag that will be inserted in the head section before title element
 	 * $this->registerMetaTag('example', 'description', null, array('lang' => 'en'))
@@ -269,6 +285,20 @@ class GO_Site_Components_Scripts
 	protected static function script($text)
 	{
 		return "<script type=\"text/javascript\">\n/*<![CDATA[*/\n{$text}\n/*]]>*/\n</script>";
+	}
+	
+	
+	/**
+	 * Encloses the given CSS content with a CSS tag.
+	 * @param string $text the CSS content
+	 * @param string $media the media that this CSS should apply to.
+	 * @return string the CSS properly enclosed
+	 */
+	public static function css($text,$media='')
+	{
+		if($media!=='')
+			$media=' media="'.$media.'"';
+		return "<style type=\"text/css\"{$media}>\n/*<![CDATA[*/\n{$text}\n/*]]>*/\n</style>";
 	}
 
 	protected static function scriptFile($url)

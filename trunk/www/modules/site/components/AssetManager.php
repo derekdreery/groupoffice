@@ -86,9 +86,8 @@ class GO_Site_Components_AssetManager
 	public function getBasePath()
 	{
 		if($this->_basePath===null)
-		{
 			$this->setBasePath(self::DEFAULT_BASEPATH);
-		}
+		
 		return $this->_basePath;
 	}
 
@@ -102,7 +101,7 @@ class GO_Site_Components_AssetManager
 		if(Site::model()->mod_rewrite)
 			$basePath= new GO_Base_Fs_Folder(GO::config()->file_storage_path.'site/'.Site::model()->id.'/'.$value);
 		else
-			$basePath= new GO_Base_Fs_Folder(GO::config()->root_path.'modules/site/public/'.Site::model()->id);
+			$basePath= new GO_Base_Fs_Folder(GO::config()->assets_path.'site/'.Site::model()->id.'/');
 					
 		if($basePath->create())
 			$this->_basePath=$basePath->path();
@@ -121,7 +120,8 @@ class GO_Site_Components_AssetManager
 			if(Site::model()->mod_rewrite)
 				$this->setBaseUrl(Site::urlManager()->getBaseUrl().'/'.self::DEFAULT_BASEPATH);
 			else
-				$this->setBaseUrl(GO::config()->host.'modules/site/public/'.Site::model()->id);
+				$this->setBaseUrl(GO::config()->assets_url.'site/'.Site::model()->id);
+			//	$this->setBaseUrl(GO::config()->host.'modules/site/public/'.Site::model()->id);
 		}
 		return $this->_baseUrl;
 	}
