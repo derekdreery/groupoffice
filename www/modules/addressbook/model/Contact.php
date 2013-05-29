@@ -368,6 +368,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 * @return \GO_Base_Fs_File
 	 */
 	public function getPhotoFile(){
+		if(empty($this->photo))
+			$this->photo=$this->id.'.jpg';
 		return new GO_Base_Fs_File(GO::config()->file_storage_path.$this->photo);
 	}
 	
@@ -433,6 +435,12 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	
 		
 		$this->photo=$file->stripFileStoragePath();
+	}
+	
+	
+	public function removePhoto(){
+		$this->getPhotoFile()->delete();
+		$this->photo="";
 	}
 	
 	/**

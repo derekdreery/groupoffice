@@ -285,3 +285,8 @@ $l['addToAddresslistPrompt']='You are about to add the selected items to the add
 $l['addAddresslistSuccess']='The items have been successfully added to the address list.';
 
 $l['addContactsSuccess'] = '%i contacts have been succesfully added to the address list.';
+
+$l['searchForImages']='Search for images';
+$l['downloadPhotoUrl']='Download photo URL';
+$l['orBrowseComputer']='or upload from your computer';
+$l['currentImage']='Current image';
