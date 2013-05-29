@@ -513,8 +513,9 @@ class GO{
 		}
 		self::$initialized=true;
 		
-		//set local to en us so functions will behave consistently
-		setlocale(LC_ALL, "en_US.UTF-8");
+		//set local to utf-8 so functions will behave consistently
+		if ( !empty(GO::config()->locale_all) )
+			setlocale(LC_ALL, GO::config()->locale_all);
 		
 		//register our custom error handler here
 		error_reporting(E_ALL | E_STRICT);
