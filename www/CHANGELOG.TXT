@@ -1,3 +1,4 @@
+- Contact photo's are shown in e-mail and can be set much more easily with download URL's.
 - Custom field blocks feature
 - Models show last modified by username
 - In tickets a mail can also be send automatically when a ticket was just claimed
