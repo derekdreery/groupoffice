@@ -8,7 +8,7 @@
 class GO_Site_Widget_Plupload_Widget extends GO_Site_Components_Widget {
 	
 	public $max_file_size; //The maximun filesize of a single file [defaults to GO::config()->max_file_size]
-	public $chunk_size = '10mb'; //Large files will be chunked to this size
+	public $chunk_size = '2mb'; //Large files will be chunked to this size
 	public $runtimes = 'html5,gears,flash,browserplus,html4'; //Runtimes to be used on order of try and fail
 	private $_uploadTarget; //Upload target to post $_FILES to defaults to sites/site/plupload
 	
