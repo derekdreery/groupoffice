@@ -262,15 +262,20 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		return true;
 	}
 	
+	public function setSubscribed($value){
+		if($value)
+			$this->_attributes['subscribed'] =  $this->getAccount()->openImapConnection()->subscribe($this->name);
+		else
+			$this->_attributes['subscribed'] = !$this->getAccount()->openImapConnection()->unsubscribe($this->name);
+	}
+	
 	public function subscribe(){
-		$this->subscribed = $this->getAccount()->openImapConnection()->subscribe($this->name);
-		
+		$this->subscribed=true;
 		return $this->subscribed;
 	}
 	
 	public function unsubscribe(){
-		$this->subscribed = !$this->getAccount()->openImapConnection()->unsubscribe($this->name);
-		
+		$this->subscribed=false;
 		return !$this->subscribed;
 	}
 	

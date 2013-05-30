@@ -630,7 +630,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		if (!empty(GO::modules()->files) && $model->hasFiles() && $response['data']['files_folder_id']>0) {
 
 			$fc = new GO_Files_Controller_Folder();
-			$listResponse = $fc->run("list",array('folder_id'=>$response['data']['files_folder_id'], "limit"=>20,"sort"=>'mtime',"dir"=>'DESC'),false. false);
+			$listResponse = $fc->run("list",array('skip_fs_sync'=>true, 'folder_id'=>$response['data']['files_folder_id'], "limit"=>20,"sort"=>'mtime',"dir"=>'DESC'),false. false);
 			$response['data']['files'] = $listResponse['results'];
 		} else {
 			$response['data']['files'] = array();

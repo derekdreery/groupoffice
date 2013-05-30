@@ -38,6 +38,10 @@ class GO_Base_Util_Pdf extends TCPDF {
 		if (!empty(GO::config()->tcpdf_font)) {
 			$this->font = GO::config()->tcpdf_font;
 		}
+		
+		if (!empty(GO::config()->tcpdf_font_size)) {
+			$this->font_size = GO::config()->tcpdf_font_size;
+		}
 
 		$this->SetFont($this->font,'',$this->font_size);
 
