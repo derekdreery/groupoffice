@@ -497,46 +497,6 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	}
 	
 	/**
-	 * Executes a method of an object with the supplied named parameters.
-	 * This method is internally used.
-	 * @param ReflectionMethod $method the method reflection
-	 * @param array $params the named parameters
-	 * @return boolean whether the named parameters are valid
-	 * @since 4.0
-	 */
-//	protected function runWithParams($method, $params)
-//	{
-//		$ps=array();
-//		foreach($method->getParameters() as $i=>$param)
-//		{
-//			$name=$param->getName();
-//			if(isset($params[$name]))
-//			{
-//				if($param->isArray())
-//					$ps[]=is_array($params[$name]) ? $params[$name] : array($params[$name]);
-//				else if(!is_array($params[$name]))
-//					$ps[]=$params[$name];
-//				else
-//					return false;
-//			}
-//			else if($param->isDefaultValueAvailable())
-//				$ps[]=$param->getDefaultValue();
-//			else
-//				return false;
-//		}
-//		$method->invokeArgs($this,$ps);
-//		return true;
-//	}
-	
-	/**
-	 * This default action should be overrriden
-	 * Abstract controller should not have any actions
-	 */
-	//protected function actionIndex($params){
-	//	
-	//}
-	
-	/**
 	 * Redirect the browser.
 	 * 
 	 * @param string $path 
