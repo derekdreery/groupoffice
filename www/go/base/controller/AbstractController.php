@@ -454,6 +454,20 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		}
 	}
 	
+	/**
+	 * Calls the controller action with it's parameters. We used to pass all
+	 * $_REQUEST args or CLI args as an array to the methods. If you declare the
+	 * function as actionMethod($params) this will still work for backwards 
+	 * compatibility.
+	 * 
+	 * If you declare it as actionMethod($test1, $test2, $hasDefault=true) then
+	 * the named parameters will be taken from the $_REQUEST args.
+	 * 
+	 * @param string $methodName
+	 * @param array $params
+	 * @return mixed Action method return value
+	 * @throws Exception If a required parameter is missing from the $_REQUEST args
+	 */
 	protected function callActionMethod($methodName, $params){
 		
 		$method = new ReflectionMethod($this, $methodName);
