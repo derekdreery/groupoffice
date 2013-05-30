@@ -386,9 +386,9 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			//Unset some system parameters not intended for the controller action.
 			unset($params['security_token'], $params['r']);
 			
-			$this->beforeRun($action, $params, $render);
-
-			$response =  $this->$methodName($params);
+			$this->beforeRun($action, $params, $render);			
+			
+			$response =  $this->_callActionMethod($methodName, $params);
 			
 			$this->afterRun($action, $params, $render);
 			
@@ -452,6 +452,34 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 
 			$this->render('Exception', $response);
 		}
+	}
+	
+	private function _callActionMethod($methodName, $params){
+		
+		$method = new ReflectionMethod($this, $methodName);
+		
+		$rParams = $method->getParameters();
+		
+//		$param = new ReflectionParameter();
+		if(count($rParams)==0){
+			return $this->$methodName();
+		}elseif(count($rParams)==1 && $rParams[0]->getName()=='params'){
+			//backward compatibility mode. Just call the function with all the params in an array.
+			return $this->$methodName($params);
+		}else
+		{			
+			//call method with all parameters from the $_REQUEST object.
+			$methodArgs = array();
+			foreach($rParams as $param){
+				if(!isset($params[$param->getName()]) && !$param->isOptional())
+					throw new Exception("Missing argument '".$param->getName()."' for action method '".get_class ($this)."->".$methodName."'");
+				
+				$methodArgs[]=isset($params[$param->getName()]) ? $params[$param->getName()] : $param->getDefaultValue();
+				
+			}
+			return call_user_func_array(array($this, $methodName),$methodArgs);
+		}
+		
 	}
 	
 	/**
