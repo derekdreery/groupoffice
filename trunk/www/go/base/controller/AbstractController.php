@@ -486,7 +486,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			$methodArgs = array();
 			foreach($rParams as $param){
 				if(!isset($params[$param->getName()]) && !$param->isOptional())
-					throw new Exception("Missing argument '".$param->getName()."' for action method '".get_class ($this)."->".$methodName."'");
+					throw new GO_Base_Exception_MissingParameter("Missing argument '".$param->getName()."' for action method '".get_class ($this)."->".$methodName."'");
 				
 				$methodArgs[]=isset($params[$param->getName()]) ? $params[$param->getName()] : $param->getDefaultValue();
 				
