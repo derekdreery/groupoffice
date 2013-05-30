@@ -388,7 +388,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			
 			$this->beforeRun($action, $params, $render);			
 			
-			$response =  $this->_callActionMethod($methodName, $params);
+			$response =  $this->callActionMethod($methodName, $params);
 			
 			$this->afterRun($action, $params, $render);
 			
@@ -454,7 +454,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		}
 	}
 	
-	private function _callActionMethod($methodName, $params){
+	protected function callActionMethod($methodName, $params){
 		
 		$method = new ReflectionMethod($this, $methodName);
 		
