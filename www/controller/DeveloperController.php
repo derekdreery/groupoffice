@@ -293,4 +293,15 @@ END:VCALENDAR';
 		//no queries needed to get this value
 		echo $item->order->book->name;
 	}
+	
+	
+	protected function actionTestParams($test1,$test2,$hasDefault=true){
+		
+		var_dump($test1);
+		
+		var_dump($test2);
+		
+		var_dump($hasDefault);
+		
+	}
 }
