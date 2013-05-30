@@ -576,7 +576,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		$response['permission_level']=$folder->permissionLevel;//$folder->readonly ? GO_Base_Model_Acl::READ_PERMISSION : $folder->permissionLevel;
 
-		$folder->checkFsSync();
+		if(empty($params['skip_fs_sync']))
+			$folder->checkFsSync();
 
 		//useful information for the view.
 		$response['path'] = $folder->path;
