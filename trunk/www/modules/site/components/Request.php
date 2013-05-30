@@ -155,7 +155,7 @@ class GO_Site_Components_Request
 			else
 				throw new Exception('Request is unable to determine the entry script URL.');
 		}
-		return $this->_scriptUrl;
+		return $this->_scriptUrl.'/index.php';
 	}
 
 	public function getHostInfo()
