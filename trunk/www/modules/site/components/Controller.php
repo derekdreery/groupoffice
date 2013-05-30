@@ -270,14 +270,17 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 			$this->beforeAction();
 			
 			$methodName = 'action' . $action;
-			$this->$methodName($_REQUEST);
+			//$this->$methodName($_REQUEST);
+			$this->callActionMethod($methodName, $params);
 			
 			//restore old value for acl permissions if this method was allowed for guests.
 			if(isset($oldIgnore))
 				GO::setIgnoreAclPermissions($oldIgnore);
 		}
-		catch (GO_Base_Exception_AccessDenied $e)
-		{
+		catch (GO_Base_Exception_MissingParameter $e){
+			$this->render('/site/404', array('error' => $e));
+		}
+		catch (GO_Base_Exception_AccessDenied $e){
 			GO::debug($e->getMessage());
 			GO::debug($e->getTraceAsString());
 			
@@ -293,12 +296,9 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 			//$this->render('error', array('error'=>$e));
 		}
 		catch (GO_Base_Exception_NotFound $e){
-			
-			
 			$this->render('/site/404', array('error' => $e));
 		}
-		catch (Exception $e)
-		{
+		catch (Exception $e){
 			$this->render('/site/error', array('error' => $e));
 		}
 	}
