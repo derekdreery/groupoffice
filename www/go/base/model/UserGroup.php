@@ -40,6 +40,11 @@ class GO_Base_Model_UserGroup extends GO_Base_Db_ActiveRecord {
 		return 'go_users_groups';
 	}
   
+	public function relations() {
+		return array(
+				'group' => array('type' => self::BELONGS_TO, 'model' => 'GO_Base_Model_Group', 'field' => 'group_id'),
+		);
+	}
   public function primaryKey() {
     return array('user_id','group_id');
   }

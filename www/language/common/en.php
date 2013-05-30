@@ -311,6 +311,7 @@ $l['passwordMatchError']='The passwords didn\'t match';
 $l['accessDenied']='Access denied';
 $l['saveError']='Error while saving the data';
 $l['deleteError']='Error while deleting the data';
+$l['deleteErrors']='Errors occured while trying to delete {count} records';
 $l['selectError']='Error trying to read the data';
 $l['missingField'] = 'You didn\'t fill in all the required fields.';
 $l['invalidEmailError']='The e-mail address was invalid';
@@ -632,7 +633,6 @@ $l['selectMonthlyDay'] = 'Please select a week day for the monthly recurrence.';
 $l['selectWeekOfMonth'] = 'Please select the number of the week day for the monthly recurrence.';
 
 $l['removeDuplicates']='Remove duplicates';
-$l['removeDuplicatesAreYouSure']='Are you sure Remove duplicates';
 
 $l['cs'] = 'Czech';
 $l['de-at'] = 'Austria';
@@ -649,3 +649,10 @@ $l['nb'] = 'Norwegian';
 $l['nl'] = 'Dutch';
 $l['pt'] = 'Portugal';
 $l['sv'] = 'Svenska';
+
+$l['removeDuplicatesAreYouSure']='Are you sure Remove duplicates';
+
+$l['skippedDeleteHasLinks']='Skipped delete because model has links';
+$l['skippedDeleteHasFiles']='Skipped delete because model has folder or files';
+$l['foundDuplicates']='Found %s duplicates.';
+$l['clickToDeleteDuplicates']='Click here to delete the newest duplicates marked in red.';
