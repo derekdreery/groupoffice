@@ -139,7 +139,8 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 
 	protected function actionImportTreeSelectOptions($params) {
 
-		$importFile = GO::config()->tmpdir . 'selectoptionsimport.csv';
+		$importFile = GO::config()->getTempFolder() . 'selectoptionsimport.csv';
+		
 		if (is_uploaded_file($_FILES['importfile']['tmp_name'][0])) {
 			move_uploaded_file($_FILES['importfile']['tmp_name'][0], $importFile);
 		}
