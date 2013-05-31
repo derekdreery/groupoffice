@@ -1,0 +1,29 @@
+.external-ticket-page .plupload_add{text-align:center; width: 100px; display:block; cursor:pointer; border:1px solid #000; padding:5px; margin:5px 0px; font-size: 12px; text-decoration: none; color:#000;}
+
+#close-ticket-button {background-color: #FF9999; float:right;}
+#close-ticket-button:hover {background-color: #FF8888;}
+
+#submit-ticket-button {background-color: #99FF99; width:100px!important;}
+#submit-ticket-button:hover {background-color: #88FF88;}
+
+#back-to-overview-button {background-color: #9999FF;float:left;}
+#back-to-overview-button:hover {background-color: #8888FF;}
+
+#new-ticket-button {background-color: #99FF99;}
+#new-ticket-button:hover {background-color: #88FF88;}
+
+.external-ticket-page .table-ticketlist tr td {padding:5px;}
+.external-ticket-page .table-ticketlist tr td a{text-decoration: underline; color:#000; cursor:pointer;}
+.external-ticket-page .table-ticketlist tr td a:hover{}
+.external-ticket-page .table-ticketlist tr.odd{background-color: #ddd;}
+.external-ticket-page .table-ticketlist tr.even{background-color: #ccc;}
+
+.external-ticket-page .table-ticketmessages tr td {padding:5px;}
+.external-ticket-page .table-ticketmessages tr td a{text-decoration: underline; color:#000; cursor:pointer;}
+.external-ticket-page .table-ticketmessages tr td a:hover{}
+.external-ticket-page .table-ticketmessages tr td .ticketmessage-name {font-weight: bold;}
+.external-ticket-page .table-ticketmessages tr td .ticketmessage-time {margin: 0px 5px;}
+.external-ticket-page .table-ticketmessages tr td .ticketmessage-message {}
+.external-ticket-page .table-ticketmessages tr td .ticketmessage-files {font-weight: bold;}
+.external-ticket-page .table-ticketmessages tr.odd{background-color: #ddd;}
+.external-ticket-page .table-ticketmessages tr.even{background-color: #ccc;}
