@@ -2105,3 +2105,7 @@ box-sizing: border-box;
 .cellbg-red{
 	background-color: #FFCCCC;
 }
+
+.go-module-title-tbar{
+	display:none;
+}
