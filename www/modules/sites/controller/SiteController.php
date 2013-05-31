@@ -301,14 +301,14 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 			}
 		}
 
-		$company->post_address_is_address = false;
-	
-		if($company->address==$company->post_address && 
-			 $company->address_no==$company->post_address_no &&
-			 $company->city==$company->post_city
-			){
-			 $company->post_address_is_address = true;
-		}				
+////		$company->post_address_is_address = false;
+//	
+//		if($company->address==$company->post_address && 
+//			 $company->address_no==$company->post_address_no &&
+//			 $company->city==$company->post_city
+//			){
+////			 $company->post_address_is_address = true;
+//		}				
 		
 		//clear values for form	
 		$user->password="";
