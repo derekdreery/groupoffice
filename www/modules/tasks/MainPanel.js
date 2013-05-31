@@ -29,7 +29,8 @@ GO.tasks.MainPanel = function(config){
 		store: this.taskListsStore,
 		title: GO.tasks.lang.tasklists,	
 		relatedStore: this.gridPanel.store,
-		autoLoadRelatedStore:false
+		autoLoadRelatedStore:false,
+		split:true
 	});
 
 	this.taskListsPanel.on('drop', function(type)
@@ -118,7 +119,8 @@ GO.tasks.MainPanel = function(config){
 		loadMask:true,
 		height:150,
 		allowNoSelection:true,
-		store:GO.tasks.categoriesStore
+		store:GO.tasks.categoriesStore,
+		split:true
 	});
 	this.categoriesPanel.on('change', function(grid, categories, records)
 	{
