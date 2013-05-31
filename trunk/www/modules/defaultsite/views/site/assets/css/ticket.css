@@ -1,7 +1,7 @@
 .external-ticket-page .plupload_add{text-align:center; width: 100px; display:block; cursor:pointer; border:1px solid #000; padding:5px; margin:5px 0px; font-size: 12px; text-decoration: none; color:#000;}
 
-#close-ticket-button {background-color: #FF9999; float:right;}
-#close-ticket-button:hover {background-color: #FF8888;}
+#close-ticket-button { font-family: arial; font-size: 12px; background-color: inherit; display: inline-block; border:0px; cursor: pointer; color:blue;text-decoration: underline; padding:0px; margin: 0px;}
+#close-ticket-button:hover {text-decoration: underline;}
 
 #submit-ticket-button {background-color: #99FF99; width:100px!important;}
 #submit-ticket-button:hover {background-color: #88FF88;}

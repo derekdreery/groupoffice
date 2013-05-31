@@ -58,9 +58,6 @@
 			<?php if(GO::user()): ?>
 				<a id="back-to-overview-button"  class="button" href="<?php echo Site::urlManager()->createUrl('tickets/externalpage/ticketlist'); ?>"><?php echo GO::t('ticketBackToList','defaultsite'); ?></a>			
 			<?php endif; ?>
-			<?php if(!$ticket->isNew && !$ticket->isClosed()): ?>
-				<a id="close-ticket-button"  class="button"><?php echo GO::t('ticketCloseTicket','defaultsite'); ?></a>									
-			<?php endif; ?>
 			<div class="clear"></div>
 		</div>
 		

@@ -5,7 +5,7 @@
 		
 		<h2><?php echo GO::t('ticket','defaultsite').' '. $ticket->ticket_number; ?></h2>
 		
-		<h3><?php echo GO::t('ticketContactInfo','defaultsite'); ?></h3>
+<!--		<h3><?php echo GO::t('ticketContactInfo','defaultsite'); ?></h3>
 		
 		<table class="table-contactinformation">
 			<tr>
@@ -29,7 +29,7 @@
 				<td><?php echo $ticket->phone; ?></td>
 			</tr>
 		</table>
-		
+		-->
 		<h3><?php echo GO::t('ticketInfo','defaultsite'); ?></h3>
 		
 		<table class="table-ticketinformation">
@@ -43,7 +43,16 @@
 			</tr>
 			<tr>
 				<td><?php echo GO::t('ticketStatus','defaultsite'); ?></td>
-				<td><?php echo $ticket->status_id?$ticket->getStatusName():GO::t('ticketStatusOpen','defaultsite'); ?></td>
+				<td>
+					<?php if(!$ticket->isNew && !$ticket->isClosed()): ?>
+						<form method="POST">
+							<input type="hidden" value="close" name="close" />
+							<?php echo $ticket->status_id?$ticket->getStatusName():GO::t('ticketStatusOpen','defaultsite'); ?> [<input title="<?php echo GO::t('ticketCloseTicketTooltip','defaultsite'); ?>" type="submit" id="close-ticket-button"  class="" value="<?php echo GO::t('ticketCloseTicket','defaultsite'); ?>" />]
+						</form>
+					<?php else: ?>
+						<?php echo $ticket->status_id?$ticket->getStatusName():GO::t('ticketStatusOpen','defaultsite'); ?>
+					<?php  endif; ?>
+				</td>
 			</tr>
 			<tr>
 				<td><?php echo GO::t('ticketPriority','defaultsite'); ?></td>
@@ -53,18 +62,22 @@
 				<td><?php echo GO::t('ticketDate','defaultsite'); ?></td>
 				<td><?php echo $ticket->getAttribute("ctime","formatted"); ?></td>
 			</tr>
+			<tr>
+				<td><?php echo GO::t('ticketAgent','defaultsite'); ?></td>
+				<td><?php echo $ticket->agent?$ticket->agent->name:''; ?></td>
+			</tr>
 		</table>
 
 		<div class="button-bar">
 			<?php if(GO::user()): ?>
 				<a id="back-to-overview-button" href="<?php echo Site::urlManager()->createUrl('tickets/externalpage/ticketlist'); ?>" class="button"><?php echo GO::t('ticketBackToList','defaultsite'); ?></a>
 			<?php endif; ?>
-			<?php if(!$ticket->isNew && !$ticket->isClosed()): ?>
-			<form method="POST">
+			<?php // if(!$ticket->isNew && !$ticket->isClosed()): ?>
+<!--			<form method="POST">
 				<input type="hidden" value="close" name="close" />
 				<input type="submit" id="close-ticket-button"  class="button" value="<?php echo GO::t('ticketCloseTicket','defaultsite'); ?>" />
-			</form>
-			<?php endif; ?>
+			</form>-->
+			<?php // endif; ?>
 				<div class="clear"></div>
 		</div>
 			
@@ -88,7 +101,7 @@
 					<?php endif; ?>
 
 				<?php if($message->has_status): ?>
-					<strong>Status</strong>: <?php echo GO_Tickets_Model_Status::getName($message->status_id); ?>
+					<p><strong>Status</strong>: <?php echo GO_Tickets_Model_Status::getName($message->status_id); ?></p>
 				<?php endif; ?>
 				</td>
 			</tr>
