@@ -39,12 +39,12 @@ $l["ticketAddComment"] = 'Add Comment';
 
 $l["ticket"] = 'Ticket';
 $l["ticketYourMessage"] = 'Your message';
-$l["ticketCloseTicket"] = 'Close Ticket';
+$l["ticketCloseTicket"] = 'Close';
+$l["ticketCloseTicketTooltip"] = 'Close this ticket. You cannot respond to this ticket anymore when you have closed it.';
 $l["ticketNewTicket"] = 'New Ticket';
 $l["ticketContactInfo"] = 'Contact Info';
 $l["ticketInfo"] = 'Ticket information';
 $l["ticketBackToList"] = 'Back to Overview';
-
 
 $l["contactDetails"] = 'Contact Details';
 $l["companyDetails"] = 'Company Details';
