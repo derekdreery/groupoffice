@@ -285,7 +285,7 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 			if(!empty($_POST['Company']['postAddressIsEqual']))
 				$company->setPostAddressFromVisitAddress();
 			
-			if(!GOS::site()->notifier->hasMessage('error') && $user->validate() && $contact->validate() && $company->validate())
+			if(!GOS::site()->notifier->hasMessage('error') && $user->validate() && $contact->validate(true) && $company->validate())
 			{	
 				GO::setIgnoreAclPermissions(); //allow guest to create user
 				
@@ -300,15 +300,6 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 				GOS::site()->notifier->setMessage('error', "Please check the form for errors");
 			}
 		}
-
-////		$company->post_address_is_address = false;
-//	
-//		if($company->address==$company->post_address && 
-//			 $company->address_no==$company->post_address_no &&
-//			 $company->city==$company->post_city
-//			){
-////			 $company->post_address_is_address = true;
-//		}				
 		
 		//clear values for form	
 		$user->password="";

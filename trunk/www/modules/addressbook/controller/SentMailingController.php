@@ -15,6 +15,9 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		return array("batchsend","unsubscribe");
 	}
 	
+	protected function ignoreAclPermissions() {
+		return array('unsubscribe');
+	}
 	
 	/**
 	 * This function is made specially to convert paramaters from the EmailComposer
