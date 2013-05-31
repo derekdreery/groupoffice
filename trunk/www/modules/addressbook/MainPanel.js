@@ -264,6 +264,13 @@ GO.addressbook.MainPanel = function(config)
 //	}
 
 	var tbar=[
+		
+	
+	{
+		xtype:'htmlcomponent',
+		html:GO.addressbook.lang.name,
+		cls:'go-module-title-tbar'
+	},
 	{
 		iconCls: 'btn-addressbook-add-contact',
 		text: GO.addressbook.lang['btnAddContact'],
