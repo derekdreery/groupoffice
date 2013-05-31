@@ -2363,7 +2363,12 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		if(!isset($this->columns[$columnName]))
 			throw new Exception("Column $columnName is unknown");
 		$this->columns[$columnName][$ruleName]=$value;
+		
+		$this->_runTimeValidationRules[$columnName]=true;
 	}
+	
+	private $_runTimeValidationRules=array();
+	
 	/**
 	 * Validates all attributes of this model
 	 * 
@@ -2371,12 +2376,25 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 * @return boolean 
 	 */
 	
-	public function validate($modifiedOnly=true){
+	public function validate(){
 				
 		//foreach($this->columns as $field=>$attributes){
 		$this->beforeValidate();
 		
-		$fieldsToCheck = $this->isNew || !$modifiedOnly ? array_keys($this->columns) : array_keys($this->getModifiedAttributes());
+		if($this->isNew){
+			//validate all columns
+			$fieldsToCheck = array_keys($this->columns);
+		}else
+		{
+			//validate modified columns
+			$fieldsToCheck = array_keys($this->getModifiedAttributes());
+			
+			//validate columns with validation rules that were added by controllers
+			//with setValidateionRule
+			if(!empty($this->_runTimeValidationRules)){
+				$fieldsToCheck= array_unique(array_merge(array_keys($this->_runTimeValidationRules)));
+			}
+		}
 		
 		foreach($fieldsToCheck as $field){
 			
