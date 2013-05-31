@@ -2363,23 +2363,20 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		if(!isset($this->columns[$columnName]))
 			throw new Exception("Column $columnName is unknown");
 		$this->columns[$columnName][$ruleName]=$value;
-		
-		//set modified because otherwise it might not revalidate.
-		$this->_modifiedAttributes[$columnName]=$this->$columnName;
 	}
 	/**
 	 * Validates all attributes of this model
 	 * 
-	 * @todo Implement unique fields. eg. Name of addresbook must be unique
+	 * @param boolean $modifiedOnly By default only modified columns are validated on existing models
 	 * @return boolean 
 	 */
 	
-	public function validate(){
+	public function validate($modifiedOnly=true){
 				
 		//foreach($this->columns as $field=>$attributes){
 		$this->beforeValidate();
 		
-		$fieldsToCheck = $this->isNew ? array_keys($this->columns) : array_keys($this->getModifiedAttributes());
+		$fieldsToCheck = $this->isNew || !$modifiedOnly ? array_keys($this->columns) : array_keys($this->getModifiedAttributes());
 		
 		foreach($fieldsToCheck as $field){
 			
