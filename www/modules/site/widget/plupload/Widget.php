@@ -20,24 +20,32 @@ class GO_Site_Widget_Plupload_Widget extends GO_Site_Components_Widget {
 	private $_swfUrl = '/plupload/js/plupload.flash.swf';
 		
 	public function init() {
-		$this->_uploadTarget = Site::urlManager()->createUrl('site/front/ajaxWidget', array('widget_method'=>'upload', 'widget_class'=>$this->className()));
-		
-		if(empty($this->max_file_size))
-			$this->max_file_size = GO::config()->max_file_size;
-		
-		Site::scripts()->registerGapiScript('jquery');
-		Site::scripts()->registerGapiScript('jquery-ui');
-		
-		$assetUrl = Site::assetManager()->publish(GO::config()->root_path.'modules/site/widget/plupload/assets');
-		$this->_swfUrl = $assetUrl.'/assets/js/plupload.flash.swf';
-		
-		Site::scripts()->registerCssFile($assetUrl.'/assets/style.css');
-		Site::scripts()->registerScriptFile($assetUrl.'/assets/js/plupload.full.js');
-		Site::scripts()->registerScriptFile($assetUrl.'/assets/js/jquery.plupload.queue/jquery.plupload.queue.js'); 
-		
-		$langFile = '/assets/js/i18n/'.GO::language()->getLanguage().'.js';
-		if(file_exists(Site::assetManager()->getBasePath().$langFile)){
-			Site::scripts()->registerScriptFile($assetUrl.$langFile); 
+		try{
+			$this->_uploadTarget = Site::urlManager()->createUrl('site/front/ajaxWidget', array('widget_method'=>'upload', 'widget_class'=>$this->className()));
+
+			if(empty($this->max_file_size))
+				$this->max_file_size = GO::config()->max_file_size;
+
+			Site::scripts()->registerGapiScript('jquery');
+			Site::scripts()->registerGapiScript('jquery-ui');
+
+			$assetUrl = Site::assetManager()->publish(GO::config()->root_path.'modules/site/widget/plupload/assets');
+
+			$this->_swfUrl = $assetUrl.'/assets/js/plupload.flash.swf';
+
+			Site::scripts()->registerCssFile($assetUrl.'/assets/style.css');
+			Site::scripts()->registerScriptFile($assetUrl.'/assets/js/plupload.full.js');
+			Site::scripts()->registerScriptFile($assetUrl.'/assets/js/jquery.plupload.queue/jquery.plupload.queue.js'); 
+
+			$langFile = '/assets/js/i18n/'.GO::language()->getLanguage().'.js';
+			if(file_exists(Site::assetManager()->getBasePath().$langFile)){
+				Site::scripts()->registerScriptFile($assetUrl.$langFile); 
+			}
+		}
+		catch(Exception $e){
+			echo '<h2 style="color:red;">AN ERROR HAS OCCURED</h2>';
+			//echo '<p style="color:red;">'.$e->getMessage().'</p>';
+			echo '<p style="color:red;">Please check if the folder( <b>'.GO::config()->assets_path.'</b> ) is writable for the webserver.<br />This path is also configurable in the Group-Office <b>config.php</b> file.<br />Please check the options: <b>assets_path</b> and <b>assets_url</b></p>';
 		}
 	}
 	
