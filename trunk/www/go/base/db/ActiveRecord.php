@@ -2372,7 +2372,6 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	/**
 	 * Validates all attributes of this model
 	 * 
-	 * @param boolean $modifiedOnly By default only modified columns are validated on existing models
 	 * @return boolean 
 	 */
 	
