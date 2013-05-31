@@ -285,7 +285,7 @@ class GO_Sites_Controller_Site extends GO_Sites_Components_AbstractFrontControll
 			if(!empty($_POST['Company']['postAddressIsEqual']))
 				$company->setPostAddressFromVisitAddress();
 			
-			if(!GOS::site()->notifier->hasMessage('error') && $user->validate() && $contact->validate() && $company->validate())
+			if(!GOS::site()->notifier->hasMessage('error') && $user->validate() && $contact->validate(true) && $company->validate())
 			{	
 				GO::setIgnoreAclPermissions(); //allow guest to create user
 				
