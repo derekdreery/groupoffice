@@ -23,12 +23,14 @@ GO.addressbook.MainPanel = function(config)
 	this.contactsGrid = new GO.addressbook.ContactsGrid({
 		layout: 'fit',
 		region: 'center',
-		id: 'ab-contacts-grid-panel'
+		id: 'ab-contacts-grid',
+		title: GO.addressbook.lang.contacts
 	});
     this.contactsGrid.applyAddresslistFilters();
 
 	this.contactsGrid.on("delayedrowselect",function(grid, rowIndex, r){
-		//this.contactsGrid.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
+		
+		this.displayCardPanel.getLayout().setActiveItem(this.contactEastPanel);
 		this.contactEastPanel.load(r.get('id'));
 	}, this);
 	this.contactsGrid.on("rowdblclick", function(){
@@ -56,12 +58,16 @@ GO.addressbook.MainPanel = function(config)
 	this.companiesGrid = new GO.addressbook.CompaniesGrid({
 		layout: 'fit',
 		region: 'center',
-		id: 'ab-company-grid-panel'
+		id: 'ab-company-grid',
+		title: GO.addressbook.lang.companies
 	});
     this.companiesGrid.applyAddresslistFilters();
 
 	this.companiesGrid.on("delayedrowselect",function(grid, rowIndex, r){
+		
+		this.displayCardPanel.getLayout().setActiveItem(this.companyEastPanel);
 		this.companyEastPanel.load(r.get('id'));
+		
 	}, this);
 	this.companiesGrid.on("rowdblclick", function(){
 		this.companyEastPanel.editHandler();
@@ -98,54 +104,21 @@ GO.addressbook.MainPanel = function(config)
 	}, this);
 
 	this.contactEastPanel = new GO.addressbook.ContactReadPanel({
-		id:'ab-contact-panel',
-		region : 'east',
-//		title: GO.addressbook.lang['cmdPanelContact'],
-		width:420,
-		collapseMode:'mini',
-		collapsible:true,
-		hideCollapseTool:true,
-		split:true
+		id:'ab-contact-panel'		
 	});
 
 	this.companyEastPanel = new GO.addressbook.CompanyReadPanel({
-		id:'ab-company-panel',
-		region : 'east',
-//		title: GO.addressbook.lang['cmdPanelCompany'],
-		width:420,
-		collapseMode:'mini',
-		collapsible:true,
-		hideCollapseTool:true,
-		split:true
+		id:'ab-company-panel'
 	});
 
-	this.contactsPanel = new Ext.Panel({
-		id: 'ab-contacts-grid',
-		title: GO.addressbook.lang.contacts,
-		layout: 'border',
-		items:[
-		this.contactsGrid,
-		this.contactEastPanel
-		]
-	});
-	this.contactsPanel.on("show", function(){
+
+	this.contactsGrid.on("show", function(){
 		this.setAdvancedSearchNotification(this.contactsGrid.store);
 		this.addressbooksGrid.setType('contact');
 	}, this);
 
-	this.companyPanel = new Ext.Panel({
-		id: 'ab-company-grid',
-		title: GO.addressbook.lang.companies,
-		layout: 'border',
-		items:[
-		this.companiesGrid,
-		this.companyEastPanel
-		]
-	});
 
-	//this.companyPanel.on("show",this.companiesGrid.onGridShow, this.companiesGrid);
-
-	this.companyPanel.on("show", function(){
+	this.companiesGrid.on("show", function(){
 		this.setAdvancedSearchNotification(this.companiesGrid.store);
 		this.addressbooksGrid.setType('company');
 	}, this);
@@ -223,8 +196,21 @@ GO.addressbook.MainPanel = function(config)
 			}
 		},
 		items: [
-		this.contactsPanel,
-		this.companyPanel
+		this.contactsGrid,
+		this.companiesGrid
+		]
+	});
+	
+	
+	this.displayCardPanel = new Ext.Panel({
+		region:'east',		
+		layout:'card',
+		width:500,
+		id:'ab-east-panel',
+		split:true,
+		items:[
+			this.contactEastPanel,
+			this.companyEastPanel
 		]
 	});
 
@@ -257,7 +243,7 @@ GO.addressbook.MainPanel = function(config)
 			layout:'border',
 			border:false,
 			region:'west',
-			width:180,
+			width:200,
 			split:true,
 			items:[this.addressbooksGrid,this.mailingsFilterPanel],
 			id: 'ab-west-panel'
@@ -265,7 +251,8 @@ GO.addressbook.MainPanel = function(config)
 		config.items= [
 		this.searchPanel,
 		westPanel,
-		this.tabPanel
+		this.tabPanel,
+		this.displayCardPanel
 		];
 //	}else
 //	{
