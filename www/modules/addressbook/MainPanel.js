@@ -104,11 +104,13 @@ GO.addressbook.MainPanel = function(config)
 	}, this);
 
 	this.contactEastPanel = new GO.addressbook.ContactReadPanel({
-		id:'ab-contact-panel'		
+		id:'ab-contact-panel',
+		border:false
 	});
 
 	this.companyEastPanel = new GO.addressbook.CompanyReadPanel({
-		id:'ab-company-panel'
+		id:'ab-company-panel',
+		border:false
 	});
 
 
