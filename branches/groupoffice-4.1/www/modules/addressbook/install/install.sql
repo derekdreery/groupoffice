@@ -170,7 +170,7 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
 DROP TABLE IF EXISTS `ab_default_email_templates`;
 CREATE TABLE IF NOT EXISTS `ab_default_email_templates` (
   `user_id` int(11) NOT NULL,
-  `template_id` int(11) NOT NULL,
+  `template_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`user_id`),
   KEY `template_id` (`template_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
