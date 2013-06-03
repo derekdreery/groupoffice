@@ -41,8 +41,8 @@ $l["ticket"] = 'Ticket';
 $l["ticketYourMessage"] = 'Uw bericht';
 $l["ticketCloseTicket"] = 'Sluiten';
 $l["ticketCloseTicketTooltip"] = 'Sluit deze ticket. U kunt niet meer op deze ticket reageren zodra hij gesloten is.';
-$l["ticketNewTicket"] = 'Nieuwe Ticket';
-$l["ticketContactInfo"] = 'Contact informatie';
+$l["ticketNewTicket"] = 'Nieuw ticket';
+$l["ticketContactInfo"] = 'Contactgegevens';
 $l["ticketInfo"] = 'Ticket informatie';
 $l["ticketBackToList"] = 'Terug naar overzicht';
 
