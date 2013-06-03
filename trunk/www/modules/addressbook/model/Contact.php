@@ -1033,7 +1033,35 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		return $diff->y;
 	}
 	
-	
-	
+	/**
+	 * Get all user contacts that a given user is authorized to see
+	 * 
+	 * @param int $user_id
+	 * @param GO_Base_Db_FindParams $findParams
+	 * @return GO_Addressbook_Model_Contact Statement
+	 */
+	public function findUsers($user_id, GO_Base_Db_FindParams $findParams=null){
+		$aclJoinCriteria = GO_Base_Db_FindCriteria::newInstance()
+						->addRawCondition('a.acl_id', 'goUser.acl_id', '=', false);
+
+		$aclWhereCriteria = GO_Base_Db_FindCriteria::newInstance()
+				->addCondition('user_id', $user_id, '=', 'a', false)
+				->addInCondition("group_id", GO_Base_Model_User::getGroupIds($user_id), "a", false);
+
+		$fp = GO_Base_Db_FindParams::newInstance()				
+				->group('t.id')
+				->ignoreAcl()
+				->joinRelation('goUser')							
+				->join(GO_Base_Model_AclUsersGroups::model()->tableName(), $aclJoinCriteria, 'a', 'INNER');
+
+		$fp->getCriteria()
+						->mergeWith($aclWhereCriteria);
+		
+		
+		if(isset($findParams))
+			$fp->mergeWith ($findParams);
+		
+		return GO_Addressbook_Model_Contact::model()->find($fp);
+	}
 	
 }
