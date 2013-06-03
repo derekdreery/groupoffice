@@ -3,7 +3,14 @@
 <div class="external-ticket-page newticket ticket">
 	<div class="wrapper">
 		
+			<?php if(GO::user()): ?>
+				&lt;&lt;&nbsp;<a id="back-to-overview-button" href="<?php echo Site::urlManager()->createUrl('tickets/externalpage/ticketlist'); ?>"><?php echo GO::t('ticketBackToList','defaultsite'); ?></a>			
+			<?php endif; ?>
+
+		
 		<h2><?php echo GO::t('ticketNewTicket','defaultsite'); ?></h2>
+		
+
 		
 		<?php $form = new GO_Site_Widget_Form(); ?>
 		<?php echo $form->beginForm(false,false,array('enctype'=>'multipart/form-data')); ?>
@@ -54,12 +61,6 @@
 			</tr>
 		</table>
 		
-		<div class="button-bar">
-			<?php if(GO::user()): ?>
-				<a id="back-to-overview-button"  class="button" href="<?php echo Site::urlManager()->createUrl('tickets/externalpage/ticketlist'); ?>"><?php echo GO::t('ticketBackToList','defaultsite'); ?></a>			
-			<?php endif; ?>
-			<div class="clear"></div>
-		</div>
 		
 		<?php if(!$ticket->isClosed()): ?>
 		

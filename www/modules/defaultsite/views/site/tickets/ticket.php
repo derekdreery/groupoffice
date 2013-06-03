@@ -3,6 +3,10 @@
 <div class="external-ticket-page ticket">
 	<div class="wrapper">
 		
+		<?php if(GO::user()): ?>
+				&lt;&lt;&nbsp;<a id="back-to-overview-button" href="<?php echo Site::urlManager()->createUrl('tickets/externalpage/ticketlist'); ?>"><?php echo GO::t('ticketBackToList','defaultsite'); ?></a>			
+		<?php endif; ?>
+		
 		<h2><?php echo GO::t('ticket','defaultsite').' '. $ticket->ticket_number; ?></h2>
 		
 <!--		<h3><?php echo GO::t('ticketContactInfo','defaultsite'); ?></h3>
@@ -68,18 +72,6 @@
 			</tr>
 		</table>
 
-		<div class="button-bar">
-			<?php if(GO::user()): ?>
-				<a id="back-to-overview-button" href="<?php echo Site::urlManager()->createUrl('tickets/externalpage/ticketlist'); ?>" class="button"><?php echo GO::t('ticketBackToList','defaultsite'); ?></a>
-			<?php endif; ?>
-			<?php // if(!$ticket->isNew && !$ticket->isClosed()): ?>
-<!--			<form method="POST">
-				<input type="hidden" value="close" name="close" />
-				<input type="submit" id="close-ticket-button"  class="button" value="<?php echo GO::t('ticketCloseTicket','defaultsite'); ?>" />
-			</form>-->
-			<?php // endif; ?>
-				<div class="clear"></div>
-		</div>
 			
 		<h3><?php echo GO::t('ticketDiscussion','defaultsite'); ?></h3>
 		
