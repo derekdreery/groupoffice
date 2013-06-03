@@ -270,8 +270,8 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 			$this->beforeAction();
 			
 			$methodName = 'action' . $action;
-			//$this->$methodName($_REQUEST);
-			$this->callActionMethod($methodName, $params);
+			$this->$methodName($_REQUEST);
+			//$this->callActionMethod($methodName, $params);
 			
 			//restore old value for acl permissions if this method was allowed for guests.
 			if(isset($oldIgnore))
