@@ -7,7 +7,7 @@ table td {padding:0px;}
 table td:first-child{width:100px; height:24px}
 table th {text-align: left;}
 
-input[type=text] {
+input[type=text],input[type=password] {
 	border:1px solid #aaa; 
 	padding:1px;
 	margin:2px;
