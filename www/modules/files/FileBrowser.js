@@ -1353,6 +1353,11 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	onDownloadLink : function(records,email){
 
 		this.emailDownloadLink=email;
+		
+		var ids = [];
+		for(var i=0; i<records.length; i++)
+			ids.push(records[i].data.id);
+		
 		this.file_data = records[0].data;
 
 		if (!this.expireDateWindow) {
@@ -1381,7 +1386,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 					GO.email.showComposer({
 						loadUrl:GO.url('files/file/emailDownloadLink'),
 						loadParams:{
-							id:this.file_data.id,
+							ids: Ext.encode(ids),
 							expire_time: parseInt(date.setDate(date.getDate())/1000)
 						}
 					});
