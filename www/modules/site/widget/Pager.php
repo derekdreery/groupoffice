@@ -13,7 +13,7 @@ class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
 	 * 
 	 * @var GO_Base_Data_DbStore 
 	 */
-	protected $store;
+	public $store;
 	
 	/**
 	 * The classname for the previous link
@@ -47,27 +47,16 @@ class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
 	
 	private $_models;
 	
-	
-	/**
-	 * Constructor for the pagination
-	 * 
-	 * @param mixed $dataobject an ActiveStatement or a DbStore for data reading
-	 * @param array $config key value array with config options for widget.
-	 * @param GO_Base_Db_FindParams $findParams Findparams to find the correct models.
-	 */
-	public function __construct(GO_Base_Data_AbstractStore $store, $config=array()){		
-
-		foreach($config as $key => $value)
-			$this->{$key} = $value;
-
+	public function init() {
 		if(isset($_GET[$this->pageParam]))
 			$this->currentPage = $_GET[$this->pageParam];
-		
-		$this->store = $store;
 		
 		if(empty($this->pageSize))
 			$this->pageSize = GO::config()->nav_page_size;
 			
+		if(!($this->store instanceof GO_Base_Data_DbStore))
+			throw new Exception('store needs to be an instance of GO_Base_Data_Store');
+		
 		$this->store->start = $this->pageSize * ($this->currentPage-1);
 		$this->store->limit = $this->pageSize;
 	}

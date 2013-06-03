@@ -35,16 +35,6 @@ class GO_Site_Components_Request
 			exit();
 	}
 
-	public function getIsAjaxRequest()
-	{
-		return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
-	}
-
-	public function getIsPostRequest()
-	{
-		return isset($_SERVER['REQUEST_METHOD']) && !strcasecmp($_SERVER['REQUEST_METHOD'], 'POST');
-	}
-
 	public function getPathInfo()
 	{
 		if ($this->_pathInfo === null)

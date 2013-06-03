@@ -2,7 +2,7 @@
 /**
  * Example usage:
  * 
- * $pluploader = new GO_Site_Widgets_Plupload_Widget(array('uploadTarget'=>Site::urlManager('/')));
+ * $pluploader = new GO_Site_Widgets_Plupload_Widget();
  * echo $pluploader->render();
  */
 class GO_Site_Widget_Plupload_Widget extends GO_Site_Components_Widget {
