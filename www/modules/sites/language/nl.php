@@ -18,7 +18,7 @@
  * @author Michael de Hart <mdehart@intermesh.nl> 
  */
 $l = array(
-		'name'=>'Websites',
+		'name'=>'Websites (oud)',
 		'description'=>'Een module voor het beheren van websites',
 		
 		'noemail'=>'Geen email adres opgegeven!',

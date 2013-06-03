@@ -1,7 +1,7 @@
 <?php
 // English language file for sites module
 $l = array(
-		'name'=>'Websites',
+		'name'=>'Websites (Deprecated)',
 		'description'=>'A module to maintain websites and content',
 		
 		'noemail'=>'No email given!',
