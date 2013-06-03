@@ -8,7 +8,21 @@ GO.addressbook.SelectAddressbookWindow = Ext.extend(Ext.Window, {
 		this.title=GO.addressbook.lang.selectAddressbook;
 		
 		this.list = new GO.grid.SimpleSelectList({
-				store: GO.addressbook.readableAddressbooksStore 
+			store : new GO.data.JsonStore({
+					url: GO.url('addressbook/addressbook/store'),
+					baseParams: {
+						'permissionLevel' : GO.permissionLevels.read,
+						start:0,
+						limit:0
+
+						},
+					root: 'results', 
+					totalProperty: 'total', 
+					id: 'id',
+					fields: GO.addressbook.addressbooksStoreFields,
+					remoteSort: true
+				})
+				//store: GO.addressbook.readableAddressbooksStore 
 			});
 		
 		this.list.on('click', function(dataview, index){			
@@ -20,6 +34,9 @@ GO.addressbook.SelectAddressbookWindow = Ext.extend(Ext.Window, {
 				
 		}, this);
 		
+		this.on('show', function(){
+			this.list.store.load();
+		}, this);
 		
 		this.title= GO.addressbook.lang.selectAddressbook;
 		this.layout='fit';
