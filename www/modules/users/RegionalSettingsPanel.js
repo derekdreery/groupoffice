@@ -212,7 +212,7 @@ var dateFormat = GO.settings.date_format.substring(0,1)+GO.settings.date_format.
 					selectOnFocus:true,
 					forceSelection: true
 //					value: GO.settings.language
-				}),]
+				})]
 			}]
 	},{
 			items: [{
