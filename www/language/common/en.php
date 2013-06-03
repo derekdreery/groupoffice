@@ -630,7 +630,7 @@ $l['selectMonthlyDay'] = 'Please select a week day for the monthly recurrence.';
 $l['selectWeekOfMonth'] = 'Please select the number of the week day for the monthly recurrence.';
 
 $l['removeDuplicates']='Remove duplicates';
-$l['removeDuplicatesAreYouSure']='Are you sure Remove duplicates';
+$l['removeDuplicatesAreYouSure']='Are you sure you want to remove duplicates?';
 
 $l['skippedDeleteHasLinks']='Skipped delete because model has links';
 $l['skippedDeleteHasFiles']='Skipped delete because model has folder or files';
