@@ -217,7 +217,7 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 			}
 			unset($htmlAttributes['required']);
 		}
-		return $this->_tag('label',$htmlAttributes,$label);
+		return $this->_tag('label',$htmlAttributes,$label.':');
 	}
 	
 	/**
