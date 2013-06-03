@@ -629,26 +629,11 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		
 		$userContactIds=array();
 		if(empty($params['addressbook_id'])) {
-			$aclJoinCriteria = GO_Base_Db_FindCriteria::newInstance()->addRawCondition('a.acl_id', 'u.acl_id', '=', false);
-
-			$aclWhereCriteria = GO_Base_Db_FindCriteria::newInstance()
-					->addCondition('user_id', GO::user()->id, '=', 'a', false)
-					->addInCondition("group_id", GO_Base_Model_User::getGroupIds(GO::user()->id), "a", false);
-
 			$findParams = GO_Base_Db_FindParams::newInstance()
 					->searchQuery($query,
 									array("CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)",'t.email','t.email2','t.email3'))
 					->select('t.*, "'.addslashes(GO::t('strUser')).'" AS ab_name,c.name AS company_name')
-					->group('t.id')
 					->limit(10)
-					->ignoreAcl()
-					->joinModel(array(
-						'model'=>'GO_Base_Model_User',
-						'localTableAlias'=>'t',
-						'localField'=>'go_user_id',
-						'foreignField'=>'id',
-						'tableAlias'=>'u'
-					))
 					->joinModel(array(
 						'model'=>'GO_Addressbook_Model_Company',					
 						'foreignField'=>'id', //defaults to primary key of the remote model
@@ -656,12 +641,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 						'tableAlias'=>'c', //Optional table alias
 						'type'=>'LEFT' //defaults to INNER,
 
-					))			
-					->join(GO_Base_Model_AclUsersGroups::model()->tableName(), $aclJoinCriteria, 'a', 'INNER');
-			
-			$findParams->getCriteria()
-							->mergeWith($aclWhereCriteria);
-			
+					));
 			
 			if(!empty($params['requireEmail'])){
 				$criteria = GO_Base_Db_FindCriteria::newInstance()
@@ -672,7 +652,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 				$findParams->getCriteria()->mergeWith($criteria);
 			}
 			
-			$stmt = GO_Addressbook_Model_Contact::model()->find($findParams);
+			$stmt = GO_Addressbook_Model_Contact::model()->findUsers(GO::user()->id, $findParams);
 			
 			$userContactIds=array();
 		
@@ -718,7 +698,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 					'type'=>'INNER' //defaults to INNER,
 
 				))			
-				->limit(10);
+				->limit(10-count($response['results']));
 
 
 	//		if(!empty($params['joinCompany'])){
