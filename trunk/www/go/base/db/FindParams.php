@@ -84,11 +84,15 @@ class GO_Base_Db_FindParams{
 			unset($findParams['criteriaObject']);
 		}
 		
-//		if(isset($this->_params['joinRelations']) && isset($findParams['joinRelations'])){
-//			$findParams['joinRelations'] = array_merge($this->_params['joinRelations'], $findParams['joinRelations']);
-//		}
+		
+		if(isset($this->_params['join']) && isset($findParams['join'])){
+			$findParams['join']=$this->_params['join']."\n".$findParams['join'];
+		}
+	
 		
 		$this->_params = array_merge($this->_params, $findParams);
+		
+		
 		return $this;
 	}
 	
