@@ -10,7 +10,7 @@ class GO_Site_Widget_Plupload_Widget extends GO_Site_Components_Widget {
 	public $max_file_size; //The maximun filesize of a single file [defaults to GO::config()->max_file_size]
 	public $chunk_size = '2mb'; //Large files will be chunked to this size
 	public $runtimes = 'html5,gears,flash,browserplus,html4'; //Runtimes to be used on order of try and fail
-	private $_uploadTarget; //Upload target to post $_FILES to defaults to sites/site/plupload
+	public $uploadTarget; //Upload target to post $_FILES to defaults to sites/site/plupload
 	
 	public $resizeImages = false; //resize images on upload
 	public $resizeWidth = 320; //if resizeImages is true se this width
@@ -21,7 +21,7 @@ class GO_Site_Widget_Plupload_Widget extends GO_Site_Components_Widget {
 		
 	public function init() {
 		try{
-			$this->_uploadTarget = Site::urlManager()->createUrl('site/front/ajaxWidget', array('widget_method'=>'upload', 'widget_class'=>$this->className()));
+			$this->uploadTarget = Site::urlManager()->createUrl('site/front/ajaxWidget', array('widget_method'=>'upload', 'widget_class'=>$this->className()));
 
 			if(empty($this->max_file_size))
 				$this->max_file_size = GO::config()->max_file_size;
@@ -65,7 +65,7 @@ class GO_Site_Widget_Plupload_Widget extends GO_Site_Components_Widget {
 
 			$("#$this->id").pluploadQueue({
 				runtimes : '$this->runtimes',
-				url : '$this->_uploadTarget',
+				url : '$this->uploadTarget',
 				max_file_size : '$this->max_file_size',
 				chunk_size : '$this->chunk_size',
 				multiple_queues : true,
