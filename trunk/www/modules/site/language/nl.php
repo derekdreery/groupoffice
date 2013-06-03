@@ -1,6 +1,6 @@
 <?php
 
-$l["name"] = "De nieuwe CMS module";
+$l["name"] = "Website beheer";
 $l["description"] = "Dit is de nieuwe CMS module";
 
 $l["content"] = "Content";
