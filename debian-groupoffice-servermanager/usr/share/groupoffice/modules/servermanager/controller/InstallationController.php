@@ -810,10 +810,9 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				continue;
 			}
 			
-			$cmd = GO::config()->root_path.'groupofficecli.php -q -r=maintenance/upgrade -c="'.$installation->configPath.'"';
+			$cmd = 'sudo -u www-data '.GO::config()->root_path.'groupofficecli.php -q -r=maintenance/upgrade -c="'.$installation->configPath.'"';
 			
-			system($cmd);		
-			
+			system($cmd);			
 			echo "Done\n\n";
 			
 		}
