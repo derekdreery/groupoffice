@@ -123,6 +123,10 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	enableCloseButton : true,
 	
 	/**
+	 * Indicates if the form is currenty loading
+	 */
+	loading : false,
+	/**
 	 * The data array in the JSON response after the loadAction is called
 	 */
 	loadData : false,
@@ -413,6 +417,9 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	
 	show : function (remoteModelId, config) {
 		
+		
+		this.loading=true;
+		
 		config = config || {};
 				
 		if(!config.loadParams)
@@ -466,11 +473,14 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 					this.formPanel.form.clearInvalid();
 					
 					this.updateTitle();
+					
+					this.loading=false;
 				},
 				failure:function(form, action)
 				{
+					this.loading=false;
 					GO.errorDialog.show(action.result.feedback);
-				},
+				},				
 				scope: this				
 			});
 		} else {
@@ -482,6 +492,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			GO.dialog.TabbedFormDialog.superclass.show.call(this);
 			
 			this.afterShowAndLoad(remoteModelId, config);
+			
+			this.loading=false;
 		}
 		
 		//if the newMenuButton from another passed a linkTypeId then set this value in the select link field
@@ -555,6 +567,9 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	 * eg. Addressbook dialog showing contacts would have this value set to addressbook_id
 	 */
 	addPanel : function(panel, relatedGridParamName){
+		
+		panel.tabbedFormDialog=this;
+		
 		this._panels.push(panel);
 		
 		if(relatedGridParamName){		
