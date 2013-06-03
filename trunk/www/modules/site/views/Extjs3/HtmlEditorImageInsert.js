@@ -51,38 +51,12 @@ Ext.extend(GO.site.HtmlEditorImageInsert, Ext.util.Observable, {
 			text:GO.lang.insertImage
 		};
 		element.overflowText=GO.lang.insertImage;
-		
-		this.uploadForm = new GO.UploadPCForm({
-//			url: GO.url('core/upload'),
-			addText: GO.site.lang.attachFilesPC
-		});
-
-		this.uploadForm.on('upload', function(e, files)
-		{
-			this.selectTempImage(files[0]);
-		},this);
-
-		var menuItems = [
-		this.uploadForm
-		];
 
 		if(GO.files){
-			menuItems.push({
-				iconCls:'btn-groupoffice',
-				text : GO.site.lang.attachFilesGO.replace('{product_name}', GO.settings.config.product_name),
-				handler : function()
-				{
-					this.showFileBrowser();
-				},
-				scope : this
-			});
+			element.handler = function(){
+				this.showFileBrowser();
+			};
 		}
-
-		this.menu = element.menu = new Ext.menu.Menu({
-			items:menuItems
-		});
-		
-		
 		this.editor.tb.add(element);
 	},
 	
