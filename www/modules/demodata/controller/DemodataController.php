@@ -718,7 +718,9 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			$announcement->title="Welcome to ".GO::config()->product_name;
 			$announcement->content='This is a demo announcements that administrators can set.<br />Have a look around.<br /><br />We hope you\'ll enjoy Group-Office as much as we do!';
 			
-			$announcement->save();
+			if($announcement->save()){			
+				$announcement->acl->addGroup(GO::config()->group_everyone);
+			}
 		}
 		
 		
