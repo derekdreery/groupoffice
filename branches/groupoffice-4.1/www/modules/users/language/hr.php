@@ -125,3 +125,6 @@ $l['explanation_cf_settingspanels']='Kako biste prikazali kartice prilagođenih 
 $l['addresslist_panel']= 'Ploča popisa adresa';
 $l['show_addresslists_panel']= 'Prikaži ploču popisa adresa';
 $l['enabled_cf_tabs']= 'Omogući kartice prilagođenih polja';
+
+$l['slashymd']='Godina-Mjesec-Dan';
+$l['dotymd']='Godina.Mjesec.Dan';
