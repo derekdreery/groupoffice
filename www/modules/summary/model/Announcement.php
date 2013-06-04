@@ -31,6 +31,10 @@ class GO_Summary_Model_Announcement extends GO_Base_Db_ActiveRecord {
 		return 'su_announcements';
 	}
 	
+	public function aclField(){
+		return 'acl_id';
+	}
+	
 	protected function init() {
 		$this->columns['content']['gotype']='html';
 		$this->columns['due_time']['gotype']='unixdate';

@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS `su_announcements`;
 CREATE TABLE IF NOT EXISTS `su_announcements` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL default '0',
+  `acl_id` int(11) NOT NULL,
   `due_time` int(11) NOT NULL default '0',
   `ctime` int(11) NOT NULL default '0',
   `mtime` int(11) NOT NULL default '0',
