@@ -82,7 +82,8 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 					$response['success']=true;
 				}else{
 					$response['success']=false;
-					$response['feedback']="Something went wrong with changing the users password";
+					$response['feedback']=nl2br(implode("<br />", $user->getValidationErrors())."\n");			
+			
 				}
 			}else{
 				$response['success']=false;

@@ -1,4 +1,5 @@
-
+- Send multiple download links at once
+- Permissions on start page announcements so visibility can be controlled
 - Easy link checkbox to link e-mail conversations to a contact directly
 - Contact photo's are shown in e-mail and can be set much more easily with download URL's.
 - Custom field blocks feature
@@ -9,7 +10,14 @@
 - Added selection for holiday file to the settings->regional settings panel and to the user dialog in the user module.
 - Workflow: history can be appended to PDF files.
 - Workflow: Files can be copied to a directory
+- Holidays region can be selected per user in the settings dialog.
 
+04-06-2013 4.1.73
+- Apache alias defaults to z-push2 now. Be careful with upgrading 
+  /etc/apache2/conf.d/groupoffice.conf if you still use z-push 1.5!
+- Able to select out of more than 50 address books to add to address list.
+- Updated Croatian
+- SQL error in notes Upgrade.
 
 29-05-2013 4.1.72
 - Fixed Thai translation

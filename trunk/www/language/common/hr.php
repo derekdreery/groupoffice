@@ -588,3 +588,8 @@ $l['exportOrders']='Narudžbe';
 $l['errorTimeout']="Zahtjev je istekao. Poslužitelju je bilo potrebno previše vremena za odgovor. Pokušajte ponovno.";
 $l['showAll']='Prikaži sve';
 $l['multiselectSelected']='odabrano';
+
+$l['selectMonthlyDay']= 'Odaberite dan u tjednu za mjesečno ponavljanje.';
+$l['selectWeekOfMonth']= 'Odaberite broj dana u tjednu za mjesečno ponavljanje.';
+$l['removeDuplicates']='Ukloni kopije';
+$l['removeDuplicatesAreYouSure']='Jeste li sigurni da želite ukloniti kopije?';
