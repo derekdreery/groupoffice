@@ -222,7 +222,7 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 }
 
 .x-tab-panel .x-tab-panel-body-top {
-	padding: 10px;
+	padding: 0;
 }
 
 .x-tab-panel .x-grid3-scroller{
@@ -318,4 +318,41 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 
 .x-grid-panel .x-panel-body {
 	padding: 0 !important;
+}
+
+.x-panel-bbar .x-toolbar, .x-panel-tbar .x-toolbar {
+	padding: 0 0 10px 0;
+}
+
+.go-moduletabs-body .x-panel .x-btn-text{
+	color: #fff;
+}
+
+.go-moduletabs-body #ab-east-panel .x-panel .x-btn-text, .go-moduletabs-body #ti-ticket-panel .x-btn-text{
+	color: #000;
+}
+
+#ab-east-panel .x-btn-text, #ti-ticket-panel .x-btn-text{
+	background: none !important;
+	height: 12px;
+}
+
+#ab-east-panel .x-panel-body .x-panel-body{
+	padding: 0;
+}
+
+.go-moduletabs-body #ab-east-panel .x-panel .x-btn{
+	border: 1px solid #009bcb;	
+	margin-right: 5px;
+}
+
+.go-moduletabs-body #ab-east-panel .x-btn-text-icon .x-btn-icon-small-left .x-btn-text {
+	font-size: 10px;
+	font-weight: 600;
+	padding: 0 5px;
+	text-transform: uppercase;
+}
+
+#go-module-panel-addressbook .x-panel-bbar .x-toolbar, #go-module-panel-addressbook .x-panel-tbar .x-toolbar{
+	padding: 0;
 }

@@ -283,9 +283,7 @@ body{
 	background-color:#f1f1f1;
 }
 
-td{
-	font: 11px tahoma,arial,helvetica,sans-serif;
-}
+
 
 table.about td{
 	font-size:12px;
@@ -841,8 +839,7 @@ table.display-panel{
 }
 
 table.display-panel td{
-	padding:3px;
-	vertical-align:top;
+	line-height: 20px;
 }
 
 table.display-panel a:link,
@@ -856,14 +853,12 @@ table.display-panel a:active
 .display-panel-heading, .collapsible-display-panel-header
 {
 	/*width: 100%;*/
-	height:16px;
-	line-height: 16px;
-	font-size: 11px;
+	height:20px;
+	line-height: 20px;
 	font-weight: bold;
-	letter-spacing:0.5px;
 	color:#333333;
-	background-color: #ebebeb;
-	border-top:1px solid #acbbc0;
+	border-bottom: 2px solid #000;
+	padding-top: 10px;
 }
 .collapsible-display-panel-header{
 	padding:2px;
@@ -2142,5 +2137,15 @@ body.ext-ie6 .x-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em
 
 #ab-contacts-grid-panel .x-panel-body .x-grid3{
 	padding: 0 !important;
+}
 
+.go-module-title-tbar{
+	color: #fff;
+	display: block;
+	font: 24px Helvetica, Arial, sans-serif !important;
+	margin-right: 10px;
+}
+
+.x-panel-body {
+	padding: 10px;
 }
