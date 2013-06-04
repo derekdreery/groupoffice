@@ -106,7 +106,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 		}
 		
 		$this->setAttributes($attributes);
-
+		
 		$this->_getParts($structure);
 		
 		//$this->_loadedBody=  GO_Base_Util_String::clean_utf8($this->_loadedBody);
@@ -153,12 +153,13 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 //	}
 
 	private function _getParts($structure, $part_number_prefix='') {
+				
 		if (isset($structure->parts)) {
 			$structure->ctype_primary = strtolower($structure->ctype_primary);
 			$structure->ctype_secondary = strtolower($structure->ctype_secondary);
 			//$part_number=0;
 			foreach ($structure->parts as $part_number => $part) {
-				
+			
 				$part->ctype_primary = strtolower($part->ctype_primary);
 				$part->ctype_secondary = strtolower($part->ctype_secondary);
 				
@@ -171,19 +172,18 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 					}
 				}
 
-
 				if ($part->ctype_primary == 'text' && ($part->ctype_secondary == 'plain' || $part->ctype_secondary == 'html') && (!isset($part->disposition) || $part->disposition != 'attachment') && empty($part->d_parameters['filename'])) {
 					$charset = isset($part->ctype_parameters['charset']) ? $part->ctype_parameters['charset'] : 'UTF-8';
 					$body = GO_Base_Util_String::clean_utf8($part->body, $charset);
 					
 					if (stripos($part->ctype_secondary, 'plain') !== false) {
-						$content_part = nl2br($body);
+						$body = nl2br($body);
 					} else {
 						$body = GO_Base_Util_String::convertLinks($body);
 						$body = GO_Base_Util_String::sanitizeHtml($body);
-						$content_part = $body;
+						$body = $body;
 					}
-					$this->_loadedBody .= $content_part;
+					$this->_loadedBody .= $body;
 				} elseif ($part->ctype_primary == 'multipart') {
 					
 				} else {
@@ -242,9 +242,9 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 					$this->_getParts($part, $part_number_prefix . $part_number . '.');
 				}
 			}
-		} elseif (isset($structure->body)) {
-			
-			$text_part = $structure->body;			
+		} elseif (isset($structure->body)) {			
+			$charset = isset($structure->ctype_parameters['charset']) ? $structure->ctype_parameters['charset'] : 'UTF-8';
+			$text_part = GO_Base_Util_String::clean_utf8( $structure->body,$charset);
 			//convert text to html
 			if (stripos($structure->ctype_secondary, 'plain') !== false) {
 				$this->extractUuencodedAttachments($text_part);
@@ -253,8 +253,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_ComposerMessage {
 				$text_part = GO_Base_Util_String::convertLinks($text_part);
 				$text_part = GO_Base_Util_String::sanitizeHtml($text_part);
 			}
-			$charset = isset($structure->ctype_parameters['charset']) ? $structure->ctype_parameters['charset'] : 'UTF-8';
-			$text_part = GO_Base_Util_String::clean_utf8($text_part,$charset);
+			
 			$this->_loadedBody .= $text_part;
 		}
 	}
