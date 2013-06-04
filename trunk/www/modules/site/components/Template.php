@@ -20,26 +20,16 @@ class GO_Site_Components_Template{
 	 * @return string
 	 */
 	public function getUrl(){
-		//when using rewrite we must publish the assets with a symlink
-		if(Site::model()->mod_rewrite){
-			$this->_checkLink();
-			return '/public/assets/template/';
-		}else
-		{
-			return GO::config()->host . 'modules/' . Site::model()->module . '/views/site/assets/';
-		}
+		$this->_checkLink();
+		return Site::assetManager()->getBaseUrl().'/template/';
 	}
 	
 	private function _checkLink() {
 		
-		$folder = Site::model()->getFileStorageFolder();
-		
-		$public = $folder->createChild('public/assets',false);
-		$public->create();
-		
-		if(!is_link($public->path().'/template')){
+		$folder = new GO_Base_Fs_Folder(Site::assetManager()->getBasePath());
+		if(!is_link($folder->path().'/template')){
 			
-			if(!symlink($this->getPath().'assets',$public->path().'/template')){
+			if(!symlink($this->getPath().'assets',$folder->path().'/template')){
 				throw new Exception("Could not publish template assets. Is the \$config['file_storage_path'] path writable?");
 			}
 		}

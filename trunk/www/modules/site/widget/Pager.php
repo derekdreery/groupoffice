@@ -1,7 +1,7 @@
 <?php
 
 class GO_Site_Widget_Pager extends GO_Site_Components_Widget {
-	
+
 	/**
 	 * A prefix for the pager parameter
 	 * @var string 

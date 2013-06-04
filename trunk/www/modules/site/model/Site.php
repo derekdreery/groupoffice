@@ -93,9 +93,7 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 		return true;
 	}
 	
-	public function buildFilesPath() {
-		return 'site/'.$this->id.'/public/files';
-	}
+	
 	
 	/**
 	 * Returns the table name
@@ -115,19 +113,19 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 		);
 	}
 
-	/**
-	 * Get the path to the site's file storage. It is web accessible through an 
-	 * alias /public. This folder contains template files and component assets.
-	 * 
-	 * @return GO_Base_Fs_Folder
-	 */
-	public function getFileStorageFolder(){
-		
-		$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'site/'.$this->id.'/');
-		$folder->create();
-		
-		return $folder;
-	}
+//	/**
+//	 * Get the path to the site's file storage. It is web accessible through an 
+//	 * alias /public. This folder contains template files and component assets.
+//	 * 
+//	 * @return GO_Base_Fs_Folder
+//	 */
+//	public function getFileStorageFolder(){
+//		
+//		$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'site/'.$this->id.'/');
+//		$folder->create();
+//		
+//		return $folder;
+//	}
 	
 	/**
 	 * Get the config parameters of the site.
@@ -276,6 +274,18 @@ ServerName www.giralisgroep.nl
 		
 
 		return in_array($nodeId, $treeState);
+	}
+	
+	public function buildFilesPath() {
+		return 'public/site/'.$this->id.'/files';
+	}
+	
+	public function getPublicUrl(){
+		return GO::config()->host.'public/site/'.$this->id.'/';
+	}
+	
+	public function getPublicPath(){
+		return GO::config()->file_storage_path.'public/site/'.$this->id.'/';
 	}
 
 }

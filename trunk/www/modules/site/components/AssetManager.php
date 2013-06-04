@@ -30,10 +30,6 @@
 class GO_Site_Components_AssetManager
 {
 	/**
-	 * Default web accessible base path for storing private files
-	 */
-	const DEFAULT_BASEPATH='public/assets';
-	/**
 	 * @var boolean whether to use symbolic link to publish asset files. Defaults to false, meaning
 	 * asset files are copied to public folders. Using symbolic links has the benefit that the published
 	 * assets will always be consistent with the source assets. This is especially useful during development.
@@ -85,29 +81,16 @@ class GO_Site_Components_AssetManager
 	 */
 	public function getBasePath()
 	{
-		if($this->_basePath===null)
-			$this->setBasePath(self::DEFAULT_BASEPATH);
+		if($this->_basePath===null){
+			$basePath= new GO_Base_Fs_Folder(Site::model()->getPublicPath().'assets');					
+			$basePath->create();
+			
+			$this->_basePath=$basePath->path();
+		}
 		
 		return $this->_basePath;
 	}
 
-	/**
-	 * Sets the root directory storing published asset files.
-	 * @param string $value the root directory storing published asset files
-	 * @throws Exception if the base path is invalid
-	 */
-	public function setBasePath($value)
-	{
-		if(Site::model()->mod_rewrite)
-			$basePath= new GO_Base_Fs_Folder(GO::config()->file_storage_path.'site/'.Site::model()->id.'/'.$value);
-		else
-			$basePath= new GO_Base_Fs_Folder(GO::config()->assets_path.'site/'.Site::model()->id.'/');
-					
-		if($basePath->create())
-			$this->_basePath=$basePath->path();
-		else
-			throw new Exception('Assets.basePath "'.$basePath.'" is invalid. Please make sure the directory exists and is writable by the Web server process.');
-	}
 
 	/**
 	 * @return string the base url that the published asset files can be accessed.
@@ -117,23 +100,12 @@ class GO_Site_Components_AssetManager
 	{
 		if($this->_baseUrl===null)
 		{
-			if(Site::model()->mod_rewrite)
-				$this->setBaseUrl(Site::urlManager()->getBaseUrl().'/'.self::DEFAULT_BASEPATH);
-			else
-				$this->setBaseUrl(GO::config()->assets_url.'site/'.Site::model()->id);
-			//	$this->setBaseUrl(GO::config()->host.'modules/site/public/'.Site::model()->id);
+			$this->_baseUrl=Site::model()->getPublicUrl().'assets';
 		}
 		return $this->_baseUrl;
 	}
 
-	/**
-	 * @param string $value the base url that the published asset files can be accessed
-	 */
-	public function setBaseUrl($value)
-	{
-		$this->_baseUrl=rtrim($value,'/');
-	}
-
+	
 	/**
 	 * Publishes a file or a directory.
 	 * This method will copy the specified asset to a web accessible directory

@@ -7,9 +7,10 @@
 
 		<a id="new-ticket-button" href="<?php echo Site::urlManager()->createUrl('tickets/externalpage/newticket'); ?>" class="button"><?php echo GO::t('ticketNewTicket','defaultsite'); ?></a>
 				
-		<?php $pager = new GO_Site_Widget_Pager($ticketstore, array(
+		<?php $pager = new GO_Site_Widget_Pager(array(
 			'previousPageClass'=>'pagination-arrow-right',
 			'nextPageClass'=>'pagination-arrow-left',
+			'store'=>$ticketstore
 			)); 
 		?>
 				

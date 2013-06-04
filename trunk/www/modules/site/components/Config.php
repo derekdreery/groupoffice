@@ -27,8 +27,8 @@ class GO_Site_Components_Config{
 		
 		if($this->templates){
 			
-			$templates = $this->templates;
-			return reset($templates);
+			$templates = array_keys($this->templates);
+			return array_shift($templates);
 		}
 		
 		return false;
