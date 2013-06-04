@@ -1,3 +1,5 @@
+- Apache alias defaults to z-push2 now. Be careful with upgrading 
+  /etc/apache2/conf.d/groupoffice.conf if you still use z-push 1.5!
 - Able to select out of more than 50 address books to add to address list.
 
 29-05-2013 4.1.72
