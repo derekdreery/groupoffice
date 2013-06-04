@@ -257,20 +257,22 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 	 */
 	protected function actionEmailDownloadLink($params){
 
+		$files = GO_Files_Model_File::model()->findByAttribute('id', json_decode($params['ids']));
+		
 		$html=$params['content_type']=='html';
 		$bodyindex = $html ? 'htmlbody' : 'plainbody';
 		$lb = $html ? '<br />' : "\n";
-		$text = $html ? GO::t('clickHereToDownload', "files").$lb : GO::t('copyPasteToDownload', "files").$lb;
-		
-		$files = GO_Files_Model_File::model()->findByAttribute('id', json_decode($params['ids']));
+		$text = $html ? GO::t('clickHereToDownload', "files") : GO::t('copyPasteToDownload', "files");
+
+		$linktext = $html ? "<ul>" : $lb;
 		
 		foreach($files as $file) {
-
 			$url = $file->getEmailDownloadURL($html,GO_Base_Util_Date::date_add($params['expire_time'],1));
-			$text .= $html ?  '<a href="'.$url.'">'.$file->name.'</a>'.$lb : "\n".$url;
+			$linktext .= $html ?  '<li><a href="'.$url.'">'.$file->name.'</a></li>'.$lb : $url.$lb;
 		}
-		
-		$text .= ' ('.GO::t('possibleUntil','files').' '.GO_Base_Util_Date::get_timestamp(GO_Base_Util_Date::date_add($file->expire_time,-1), false).')'.$lb.$lb;
+		$linktext .= $html ? "</ul>" : "\n";
+		$text .= ' ('.GO::t('possibleUntil','files').' '.GO_Base_Util_Date::get_timestamp(GO_Base_Util_Date::date_add($file->expire_time,-1), false).')'.$lb;
+		$text .= $linktext;
 		
 		if($params['template_id'] && ($template = GO_Addressbook_Model_Template::model()->findByPk($params['template_id']))){
 			$message = GO_Email_Model_SavedMessage::model()->createFromMimeData($template->content);
