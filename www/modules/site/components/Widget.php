@@ -12,7 +12,7 @@ abstract class GO_Site_Components_Widget extends GO_Base_Object {
 	private $_id;
 	
 	public function __construct($config=array()) {
-		$ref = new ReflectionClass(get_called_class());
+		$ref = new ReflectionClass($this);
 		foreach($config as $key => $value)
 			if($ref->getProperty ($key)->isPublic())
 				$this->{$key}=$value;

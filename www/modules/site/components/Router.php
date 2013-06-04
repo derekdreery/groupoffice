@@ -35,11 +35,11 @@ class GO_Site_Components_Router{
 		}
 
 		$className = 'GO_' . ucfirst($module_id) . '_Controller_' . ucfirst($controller_id); //TODO: set $module
-		$classFile = GO::config()->root_path . 'modules/' . $module_id . '/controller' . DIRECTORY_SEPARATOR . ucfirst($controller_id) . 'Controller.php';
+		//$classFile = GO::config()->root_path . 'modules/' . $module_id . '/controller' . DIRECTORY_SEPARATOR . ucfirst($controller_id) . 'Controller.php';
 
 		if (class_exists($className)) {
 			//if (is_subclass_of($className, 'GO_Site_Components_AbstractFrontController')) {
-			
+						
 			$action = $this->getControllerAction($action_id);
 			$controller = new $className;
 			$this->_controller = $controller;
@@ -48,7 +48,7 @@ class GO_Site_Components_Router{
 		}else
 		{
 			//404
-			$controller = new GO_Site_Controller_Site();
+			echo "404 not found (".$className.")";
 		}
 	}
 	

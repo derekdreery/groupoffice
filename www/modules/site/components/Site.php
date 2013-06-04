@@ -168,7 +168,7 @@ class Site {
 		}
 		
 		self::$_site=GO::session()->values['sites']['site'];
-				
+
 		self::router()->runController();
 	}
 	
@@ -242,16 +242,16 @@ class Site {
 	 * @param string $relativePath
 	 * @return string
 	 */
-	public static function file($relativePath){
+	public static function file($relativePath, $template=true){
 
-		$referenceString = 'site/'.Site::model()->id.'/';
+		if(!$template){			
+			$folder = new GO_Base_Fs_Folder(Site::model()->getPublicPath());
 			
-		$check = substr_count($relativePath,$referenceString);
-
-		if($check)
-			return '/'.str_replace($referenceString,'', $relativePath);	
-		else
+			$relativePath=str_replace($folder->stripFileStoragePath().'/files/', '', $relativePath);
+			return Site::model()->getPublicUrl().'files/'.$relativePath;	
+		}else{
 			return self::template()->getUrl().$relativePath;
+		}
 	}
 	
 	
@@ -261,16 +261,13 @@ class Site {
 	 * @param string $relativePath
 	 * @return string
 	 */
-	public static function filePath($relativePath){
-
-		$referenceString = 'site/'.Site::model()->id.'/';
-	
-		$check = substr_count($relativePath,$referenceString);
-		
-		//if($check)
-			return GO::config()->file_storage_path.$relativePath;
-		//else
-		//	return self::template()->getPath().$relativePath;
+	public static function filePath($relativePath, $template=true){
+		if(!$template){
+			return Site::model()->getPublicPath().'/files/'.$relativePath;
+		}else
+		{
+			return self::template()->getPath().$relativePath;
+		}
 	}
 	
 	
