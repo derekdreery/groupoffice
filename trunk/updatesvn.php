@@ -6,7 +6,9 @@ exec('svn ls '.$root, $output, $ret);
 if($ret!=0)
 	exit(var_dump($output));
 
-$wd = dirname(__FILE__).'/www/modules';
+$go_root = file_exists('GO.php') ? dirname(__FILE__) : dirname(__FILE__).'/www';
+
+$wd = $go_root.'/modules';
 chdir($wd);
 
 foreach($output as $module){
