@@ -96,6 +96,8 @@ var myStore = new Ext.data.Store({
 var T = Ext.Toolbar;
 
 GO.BlindPagingToolbar = Ext.extend(Ext.Toolbar, {
+
+    cls : 'go-paging-tb go-paging-tb-blind',
     /**
      * @cfg {Ext.data.Store} store
      * The {@link Ext.data.Store} the paging toolbar should use as its data source (required).
