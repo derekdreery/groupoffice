@@ -96,6 +96,7 @@ var myStore = new Ext.data.Store({
 var T = Ext.Toolbar;
 
 GO.SmallPagingToolbar = Ext.extend(Ext.Toolbar, {
+	cls : 'go-paging-tb go-paging-tb-small',
     /**
      * @cfg {Ext.data.Store} store
      * The {@link Ext.data.Store} the paging toolbar should use as its data source (required).

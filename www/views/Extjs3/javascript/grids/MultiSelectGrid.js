@@ -49,9 +49,11 @@ GO.grid.MultiSelectGrid = function (config){
 			emptyText: GO.lang['strNoItems']
 		})
 	});
+
+	config.cls = 'go-multiselect-grid';
 	
 	if(!config.showHeaders)
-		config.cls='go-grid3-hide-headers';
+		config.cls +=' go-grid3-hide-headers';
 	
 	if(config.extraColumns)
 		config.columns = config.columns.concat(config.extraColumns);
