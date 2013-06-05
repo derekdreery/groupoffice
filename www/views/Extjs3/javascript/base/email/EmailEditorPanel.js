@@ -44,6 +44,9 @@ GO.base.email.EmailEditorPanel = function(config){
 	//Ext.apply(this, config);	
 	
 	config.htmlEditorConfig = config.htmlEditorConfig || {};
+	
+	if(!config.maxAttachmentsSize)
+		config.maxAttachmentsSize=GO.settings.config.max_attachment_size;
 			
 	this.buildForm(config);
 	
@@ -211,6 +214,9 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 		config.items.push(this.htmlEditor);
 		config.items.push(this.textEditor);
 //		console.log(this.maxAttachmentsSize);
+
+		
+
 		this.attachmentsView = new GO.base.email.EmailEditorAttachmentsView({
 			autoHeight:true,
 			maxSize:config.maxAttachmentsSize,
