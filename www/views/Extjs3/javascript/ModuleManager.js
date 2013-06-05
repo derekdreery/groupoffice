@@ -81,6 +81,9 @@ GO.ModuleManager = Ext.extend(function(){
 		{
 			panelConfig.moduleName = moduleName;
 			panelConfig.id='go-module-panel-'+panelConfig.moduleName;
+
+			if(!panelConfig.cls)
+				panelConfig.cls = 'go-module-panel';
 			
 			this.modulePanels[moduleName] = panelClass;
 			this.panelConfigs[moduleName] = panelConfig;
