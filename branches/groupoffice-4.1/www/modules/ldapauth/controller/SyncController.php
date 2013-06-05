@@ -2,7 +2,7 @@
 class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 	
 	protected function allowGuests() {
-		return array("users", "lookupuser");
+		return array("users", "lookupuser","groups");
 	}
 	
 	
@@ -25,7 +25,7 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 	
 	/**
 	 * 
-	 * php /var/www/groupoffice-4.0/www/groupofficecli.php -r=ldapauth/sync/users --delete=1 --max_delete_percentage=34 --dry=1
+	 * php groupofficecli.php -r=ldapauth/sync/users --delete=1 --max_delete_percentage=34 --dry=1
 	 * 
 	 * @param type $params
 	 * @throws Exception
@@ -72,6 +72,9 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 					$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $attr['username']);
 				}
 				
+				if(!$dryRun)
+					$this->fireEvent("ldapsyncuser", array($user, $record));
+				
 				echo "Synced ".$username."\n";
 			} catch(Exception $e){
 				echo "ERROR:\n";
@@ -81,8 +84,7 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 				var_dump($record->getAttributes());
 			}
 			
-			if(!$dryRun)
-				$this->fireEvent("ldapsyncuser", array($user, $record));
+			
 			
 			if($user)
 				$usersInLDAP[]=$user->id;
@@ -114,6 +116,154 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 					echo "Deleting ".$user->username."\n";
 					if(!$dryRun)
 						$user->delete();
+				}
+			}			
+		}
+		
+		echo "Done\n\n";
+		
+		//var_dump($attr);
+		
+	}
+	
+	
+	
+	/**
+	 * 
+	 * php groupofficecli.php -r=ldapauth/sync/groups --delete=1 --max_delete_percentage=34 --dry=1
+	 * 
+	 * @param type $params
+	 * @throws Exception
+	 */
+	protected function actionGroups($params){
+		
+		
+		$this->requireCli();		
+		GO::session()->runAsRoot();
+		
+		$dryRun = !empty($params['dry']);
+		
+		if($dryRun)
+			echo "Dry run enabled.\n\n";
+	
+		$ldapConn = GO_Base_Ldap_Connection::getDefault();
+		
+		if(empty(GO::config()->ldap_groupsdn))
+			throw new Exception('$config[\'ldap_groupsdn\'] is not set!');
+		
+		$result = $ldapConn->search(GO::config()->ldap_groupsdn, 'cn=*');
+		
+//		$record = $result->fetch();
+//		$attr = $record->getAttributes();
+		
+//		var_dump($attr);
+//		exit();
+//		
+		//keep an array of groups that exist in ldap. This array will be used later for deletes.
+		//admin group is not in ldap but should not be removed.
+		$groupsInLDAP = array(GO::config()->group_root, GO::config()->group_everyone, GO::config()->group_internal);
+				
+		$i=0;
+		while($record = $result->fetch()){
+			$i++;
+			
+			try{
+				$groupname = $record->cn[0];
+				
+				if(empty($groupname)){
+					throw new Exception("Empty group name in LDAP record!");
+				}
+			
+				$group = GO_Base_Model_Group::model()->findSingleByAttribute('name', $groupname);
+				if(!$group){
+
+					echo "Creating group '".$groupname."'\n";
+
+					$group = new GO_Base_Model_Group();
+					$group->name = $groupname;
+					if(!$dryRun && !$group->save()){
+						echo "Error saving group: ".implode("\n", $group->getValidationErrors());
+					}
+				}else
+				{
+					echo "Group '".$groupname."' exists\n";
+				}
+				
+				$usersInGroup = array();
+				
+				foreach($record->memberuid as $username){
+					$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $username);
+					if(!$user){
+						echo "Error: user '".$username."' does not exist in Group-Office\n";
+					}else
+					{
+						echo "Adding user '$username'\n";
+						if(!$dryRun)
+							$group->addUser($user->id);
+						
+						$usersInGroup[]=$user->id;
+					}
+				}
+				
+				echo "Removing users from group\n";
+				
+				$findParams = GO_Base_Db_FindParams::newInstance();				
+				$findParams->getCriteria()->addInCondition('user_id', $usersInGroup, 
+								'link_t', true, true);				
+				$usersToRemove = $group->users($findParams);
+				foreach($usersToRemove as $user){
+					echo "Removing user '".$user->username."'\n";
+					
+					if(!$dryRun)
+						$group->removeUser ($user->id);
+				}
+				
+				
+				if(!$dryRun){				
+					$this->fireEvent("ldapsyncgroup", array($group, $record));
+				}
+				
+				echo "Synced ".$groupname."\n";
+			} catch(Exception $e){
+				echo "ERROR:\n";
+				echo (string) $e;
+				
+				echo "LDAP record:";
+				var_dump($record->getAttributes());
+			}
+			
+			
+			
+			if($group)
+				$groupsInLDAP[]=$group->id;
+			
+//			if($i==100)
+//				exit("Reached 100. Exitting");
+		}
+		
+		
+		
+		$stmt = GO_Base_Model_Group::model()->find();
+		
+		$totalInGO = $stmt->rowCount();
+		$totalInLDAP = count($groupsInLDAP);
+		
+		echo "Groups in Group-Office: ".$totalInGO."\n";
+		echo "Groups in LDAP: ".$totalInLDAP."\n";
+		
+		if(!empty($params['delete'])){
+			$percentageToDelete = round((1-$totalInLDAP/$totalInGO)*100);
+			
+			$maxDeletePercentage = isset($params['max_delete_percentage']) ? intval($params['max_delete_percentage']) : 5;
+
+			if($percentageToDelete>$maxDeletePercentage)
+				die("Delete Aborted because script was about to delete more then $maxDeletePercentage% of the groups (".$percentageToDelete."%, ".($totalInGO-$totalInLDAP)." groups)\n");
+
+			while($group = $stmt->fetch()){
+				if(!in_array($group->id, $groupsInLDAP)){
+					echo "Deleting ".$group->name."\n";
+					if(!$dryRun)
+						$group->delete();
 				}
 			}			
 		}
