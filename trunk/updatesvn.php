@@ -35,7 +35,7 @@ foreach($output as $module){
 
 echo "Updating SF.net working copy\n";
 
-chdir(dirname(__FILE__));
+chdir($go_root);
 system("svn up");
 
 echo "All done!\n";
