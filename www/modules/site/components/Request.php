@@ -48,16 +48,16 @@ class GO_Site_Components_Request
 
 			$scriptUrl = $this->getScriptUrl();
 			$baseUrl = $this->getBaseUrl();
-			/*
-			  if(strpos($pathInfo,$scriptUrl)===0)
-			  $pathInfo=substr($pathInfo,strlen($scriptUrl));
-			  else if($baseUrl==='' || strpos($pathInfo,$baseUrl)===0)
-			  $pathInfo=substr($pathInfo,strlen($baseUrl));
-			  else if(strpos($_SERVER['PHP_SELF'],$scriptUrl)===0)
-			  $pathInfo=substr($_SERVER['PHP_SELF'],strlen($scriptUrl));
-			  else
-			  throw new Exception('HttpRequest is unable to determine the path info of the request.');
-			 */
+
+			if (strpos($pathInfo, $scriptUrl) === 0)
+				$pathInfo = substr($pathInfo, strlen($scriptUrl));
+			else if ($baseUrl === '' || strpos($pathInfo, $baseUrl) === 0)
+				$pathInfo = substr($pathInfo, strlen($baseUrl));
+			else if (strpos($_SERVER['PHP_SELF'], $scriptUrl) === 0)
+				$pathInfo = substr($_SERVER['PHP_SELF'], strlen($scriptUrl));
+			else
+				throw new Exception('HttpRequest is unable to determine the path info of the request.');
+
 //echo $pathInfo;
 			$this->_pathInfo = trim($pathInfo, '/');
 		}

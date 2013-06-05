@@ -208,6 +208,10 @@ class GO_Site_Components_UrlManager
 		else
 		{
 			$this->_baseUrl = Site::request()->getBaseUrl();
+			
+			if($this->showScriptName && $this->_urlFormat===self::GET_FORMAT)
+				$this->_baseUrl.='/index.php';
+			
 			return $this->_baseUrl;
 		}
 	}
