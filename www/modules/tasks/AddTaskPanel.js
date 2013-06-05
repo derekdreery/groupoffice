@@ -50,7 +50,7 @@ GO.tasks.AddTaskPanel = function(config){
 		border:false,
 		//baseCls:'x-border-layout-ct',
 		bodyStyle:'padding:1px 2px',
-		height:26,
+		//height:26,
 		items:[{
 			anchor:'100%',
 			xtype:'compositefield',			

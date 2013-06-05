@@ -204,7 +204,7 @@ GO.tasks.MainPanel = function(config){
 			region:'center',
 			border:false,
 			layout:'border',
-			items:[this.gridPanel, this.addTaskPanel]
+			items:[ this.addTaskPanel,this.gridPanel]
 		},
 	this.taskPanel
 	];
