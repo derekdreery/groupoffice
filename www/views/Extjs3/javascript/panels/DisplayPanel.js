@@ -26,6 +26,8 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 	link_id : 0, //for backwards comaptibility
 	model_id: 0,
 	model_name : "",
+
+	cls : 'go-display-panel',
 	
 	isDisplayPanel : true,
 	
