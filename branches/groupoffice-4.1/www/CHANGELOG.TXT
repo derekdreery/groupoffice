@@ -1,3 +1,5 @@
+- Projects module: show fields in project east panel according to its project template. E.g., if 'manager' is not enabled in the template, it is not displayed.
+
 04-06-2013 4.1.73
 - Apache alias defaults to z-push2 now. Be careful with upgrading 
   /etc/apache2/conf.d/groupoffice.conf if you still use z-push 1.5!
