@@ -1533,6 +1533,7 @@ GO.email.showAddressMenu = function(e, email, name)
 }
 
 GO.newMenuItems.push({
+	itemId : 'email',
 	text: GO.email.lang.email,
 	iconCls: 'go-model-icon-GO_Email_Model_ImapMessage',
 	handler:function(item, e){
@@ -1544,6 +1545,7 @@ GO.newMenuItems.push({
 		GO.email.showComposer(taskShowConfig);
 	}
 },{
+	itemId : 'email-files',
 	text: GO.email.lang.emailFiles,
 	iconCls: 'em-btn-email-files',
 	handler:function(item, e){
@@ -1584,7 +1586,12 @@ GO.email.getTaskShowConfig = function(item) {
 	var taskShowConfig = {};
 
 	if (Ext.isDefined(item)) {
-		taskShowConfig = item.parentMenu.taskShowConfig || {};
+		
+		if(item.itemId && item.parentMenu.showConfigs[item.itemId]){
+			taskShowConfig = item.parentMenu.showConfigs[item.itemId];
+		}else{		
+			taskShowConfig = item.parentMenu.taskShowConfig || {};
+		}
 		taskShowConfig.link_config=item.parentMenu.link_config
 	}
 
