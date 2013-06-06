@@ -12,11 +12,16 @@
  */
  GO.NewMenuButton = Ext.extend(Ext.Button, {
 	panel : false,
+	/**
+		* Set different show config objects per menu item.
+		*/
+	showConfigs : {},
 	initComponent : function(){
 		
 		this.menu = new Ext.menu.Menu({				
 				items:GO.newMenuItems,
-				panel:this.panel
+				panel:this.panel,
+				showConfigs : this.showConfigs
 			});
 		this.text=GO.lang.cmdNew;
 		this.iconCls='btn-add';			
