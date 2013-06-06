@@ -1,4 +1,4 @@
-
+- Tickets can only be deleted by users who have write or manage persmissions on the ticket system.
 - Send multiple download links at once
 - Permissions on start page announcements so visibility can be controlled
 - Easy link checkbox to link e-mail conversations to a contact directly
