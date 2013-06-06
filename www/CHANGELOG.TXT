@@ -1,3 +1,4 @@
+
 - Send multiple download links at once
 - Permissions on start page announcements so visibility can be controlled
 - Easy link checkbox to link e-mail conversations to a contact directly
@@ -11,6 +12,10 @@
 - Workflow: history can be appended to PDF files.
 - Workflow: Files can be copied to a directory
 - Holidays region can be selected per user in the settings dialog.
+
+
+
+- Projects module: show fields in project east panel according to its project template. E.g., if 'manager' is not enabled in the template, it is not displayed.
 
 04-06-2013 4.1.73
 - Apache alias defaults to z-push2 now. Be careful with upgrading 
