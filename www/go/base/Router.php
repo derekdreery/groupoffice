@@ -143,8 +143,8 @@ class GO_Base_Router{
 			echo '<h1>404 Not found</h1>';
 			echo '<p>'.$errorMsg.'</p>';
 			
-			
-			trigger_error($errorMsg, E_USER_ERROR);
+			if(GO::config()->debug)
+				trigger_error($errorMsg, E_USER_ERROR);
 		}
 		
 		try{
@@ -162,7 +162,8 @@ class GO_Base_Router{
 			echo '<h1>404 Not found</h1>';
 			echo '<p>'.$errorMsg.'</p>';
 
-			trigger_error($errorMsg, E_USER_ERROR);
+			if(GO::config()->debug)
+				trigger_error($errorMsg, E_USER_ERROR);
 		}
 	}
 	
