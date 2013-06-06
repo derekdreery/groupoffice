@@ -891,7 +891,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		while($installation = $stmt->fetch()){
 			echo "Setting ".$installation->name."\n";
 			$c = $installation->getConfigWithGlobals();
-			if($c){
+			if($c && !empty($c['allowed_modules'])){
 				$allowed = explode(',',$c['allowed_modules']);
 				$newAllowed = array();
 				
