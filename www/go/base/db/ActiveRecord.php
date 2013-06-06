@@ -2869,17 +2869,6 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	}
 	
 	/**
-	 * Get the name of the module that this model belongs to.
-	 * 
-	 * @return string 
-	 */
-	public function getModule(){
-		$arr = explode('_', $this->className());
-		
-		return strtolower($arr[1]);
-	}
-	
-	/**
 	 * Put this model in the go_search_cache table as a GO_Base_Model_SearchCacheRecord so it's searchable and linkable.
 	 * Generally you don't need to do this. It's called from the save function automatically when getCacheAttributes is overridden.
 	 * This method is only public so that the maintenance script can access it to rebuid the search cache.
