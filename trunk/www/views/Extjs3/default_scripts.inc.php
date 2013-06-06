@@ -70,6 +70,8 @@ $settings['config']['host']=GO::config()->host;
 $settings['config']['title']=GO::config()->title;
 $settings['config']['webmaster_email']=GO::config()->webmaster_email;
 
+$settings['config']['full_url']=GO::config()->full_url;
+
 $settings['config']['allow_password_change']=GO::config()->allow_password_change;
 $settings['config']['allow_themes']=GO::config()->allow_themes;
 $settings['config']['allow_profile_edit']=GO::config()->allow_profile_edit;
