@@ -246,7 +246,7 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		if(!$success)
 			return false;
 		
-		$this->name = $newMailbox;
+		$this->_attributes['name'] = $newMailbox;
 		
 		return true;
 	}
