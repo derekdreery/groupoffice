@@ -545,10 +545,14 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 					GO_Base_Db_ActiveRecord::$attributeOutputMode = 'html';
 
 
-					if($history->step_id == '-1')
+					if($history->step_id == '-1'){
 						$step_name = GO::t('complete','workflow');
-					else
-						$step_name = $history->step->name;
+					}else{
+						if($history->step)
+							$step_name = $history->step->name;
+						else
+							$step_name = GO::t('stepDeleted','workflow');
+					}
 
 					$workflowResponse['history'][] = array(
 							'history_id'=>$history->id,
