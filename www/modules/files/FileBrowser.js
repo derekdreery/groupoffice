@@ -1166,57 +1166,59 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	onCompress : function(records, filename, utf8)
 	{
 
-            if (GO.util.empty(this.gridStore.baseParams['query'])) {
+    if (GO.util.empty(this.gridStore.baseParams['query'])) {
 
-		var params = {
-			compress_sources: [],
-			working_folder_id:this.folder_id,
-			destination_folder_id:this.folder_id
-		};
+			var params = {
+				compress_sources: [],
+				working_folder_id:this.folder_id,
+				destination_folder_id:this.folder_id
+			};
 
-		for(var i=0;i<records.length;i++)
-		{
-			if(records[i].data.parent_id)//for tree
-				params.working_folder_id=records[i].data.parent_id;
+			for(var i=0;i<records.length;i++)
+			{
+				if(records[i].data.parent_id)//for tree
+					params.working_folder_id=records[i].data.parent_id;
 
-			params.compress_sources.push(records[i].data.path);
-		}
+				params.compress_sources.push(records[i].data.path);
+			}
+			
 
+			if(!filename || filename == '')
+			{
+				this.compressRecords = records;
+				
+				if(!this.compressDialog){
+					this.compressDialog = new GO.files.CompressDialog ({
+						scope:this,
+						handler:function(win, filename, utf8){
+							this.onCompress(this.compressRecords, filename, utf8);
+						}
+					});
+				}
 
-		if(!filename || filename == '')
-		{
-			if(!this.compressDialog){
-				this.compressDialog = new GO.files.CompressDialog ({
-					scope:this,
-					handler:function(win, filename, utf8){
-						this.onCompress(records, filename, utf8);
+				this.compressDialog.show();
+
+			}else
+			{
+				params.archive_name=filename;
+				params.utf8=utf8 ? '1' : '0';
+				params.compress_sources=Ext.encode(params.compress_sources);
+				var store = this.getActiveGridStore();
+
+				GO.request({
+					timeout:300000,
+					maskEl:this.getEl(),
+					url:'files/folder/compress',
+					params:params,
+					success:function(){
+						store.load();
 					}
 				});
 			}
-			
-			this.compressDialog.show();
-			
-		}else
-		{
-			params.archive_name=filename;
-			params.utf8=utf8 ? '1' : '0';
-			params.compress_sources=Ext.encode(params.compress_sources);
-			var store = this.getActiveGridStore();
 
-			GO.request({
-				timeout:300000,
-				maskEl:this.getEl(),
-				url:'files/folder/compress',
-				params:params,
-				success:function(){
-					store.load();
-				}
-			});
+		} else {
+				Ext.MessageBox.alert('', GO.files.lang['notInSearchMode']);
 		}
-
-            } else {
-                Ext.MessageBox.alert('', GO.files.lang['notInSearchMode']);
-            }
 
 	},
 

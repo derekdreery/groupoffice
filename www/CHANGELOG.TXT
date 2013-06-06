@@ -1,3 +1,7 @@
+- Unable to upload attachments to e-mail templates
+- Added LDAP group synchronization
+- Sort file templates alphabetically
+- ZIP empty folders broken
 - Projects module: show fields in project east panel according to its project template. E.g., if 'manager' is not enabled in the template, it is not displayed.
 
 04-06-2013 4.1.73
