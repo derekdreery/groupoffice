@@ -617,3 +617,4 @@ $l['exportAddressbook']="Voeg automatisch ontbrekende adresboek regels toe aan:"
 $l['exportOrders']='Orders';
 $l['errorTimeout']="Er is een timeout opgetreden bij het verzoek naar de server. Probeer het opnieuw aub.";
 $l['multiselectSelected']='geselecteerd';
+$l['folderUpload']='Mappen (Java required)';

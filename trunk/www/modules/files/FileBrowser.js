@@ -466,7 +466,7 @@ GO.files.FileBrowser = function(config){
 	tbar.push(this.newButton);
 
 	this.uploadItem = new GO.base.upload.PluploadMenuItem({
-		text: GO.lang.smallUpload,
+		text: GO.files.lang.files,
 		upload_config: {
 			listeners: {
 				scope:this,
@@ -494,7 +494,7 @@ GO.files.FileBrowser = function(config){
 
 	this.jUploadItem = new Ext.menu.Item({
 		iconCls: 'btn-upload',
-		text : GO.lang.largeUpload,
+		text : GO.lang.folderUpload,
 		handler : function() {
                     if ( GO.util.empty(this.gridStore.baseParams['query']) ) {
 			GO.currentFilesStore=this.gridStore;
