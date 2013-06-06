@@ -968,31 +968,14 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 */
 	public function findSingleByEmail($email){
 		
-		
-		//		 $criteria = GO_Base_Db_FindCriteria::newInstance()
-		//         ->addCondition('email',$email)
-		//         ->addCondition('email2', $email,'=','t',false)
-		//         ->addCondition('email3', $email,'=','t',false);
-		//
-		//      return GO_Addressbook_Model_Contact::model()->find(GO_Base_Db_FindParams::newInstance()->single()->criteria($criteria));
-
-		
-		// TODO: Dit is een workaround omdat de ACL check op addressbook vanuit dit model het blijkbaar niet goed doet.
-		$addressbooks = GO_Addressbook_Model_Addressbook::model()->find();
-		
-		$addressbookListing =array();
-		while($addr = $addressbooks->fetch()){
-			$addressbookListing[] = $addr->id;
-		}
-		
 		$criteria = GO_Base_Db_FindCriteria::newInstance()
-			->addInCondition('addressbook_id', $addressbookListing)
 			->addCondition('email',$email)
 			->addCondition('email2', $email,'=','t',false)
 			->addCondition('email3', $email,'=','t',false);
 			
-
-		return GO_Addressbook_Model_Contact::model()->findSingle(GO_Base_Db_FindParams::newInstance()->criteria($criteria));		
+		$fp = GO_Base_Db_FindParams::newInstance()->criteria($criteria)->limit(1);
+		$stmt = GO_Addressbook_Model_Contact::model()->find($fp);
+		return $stmt->fetch();
 	}
 	
 	protected function afterMergeWith(GO_Base_Db_ActiveRecord $model) {
