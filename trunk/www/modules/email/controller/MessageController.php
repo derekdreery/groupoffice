@@ -496,6 +496,9 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 	}
 
 	protected function actionSave($params) {
+		
+		GO::session()->closeWriting();
+		
 		$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);
 		$account = GO_Email_Model_Account::model()->findByPk($alias->account_id);
 

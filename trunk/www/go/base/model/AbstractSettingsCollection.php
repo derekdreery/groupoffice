@@ -59,19 +59,27 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 		return $model;
 	}
 	
+	/**
+	 * All settings of this model will have this prefix.
+	 * @return string
+	 */
+	protected function myPrefix() {		
+		return $this->getModule().'_';
+	}
+	
 	private function _loadData(){
 		
 		$properties = $this->_getReflectionClass()->getParentPropertiesDiff();
 		
 		$propertyNames=array();
 		foreach($properties as $property){
-			$propertyNames[] = $property->name;
+			$propertyNames[] = $this->myPrefix().$property->name;
 		}
 		
 		$values = GO::config()->getSettings($propertyNames,$this->_userId);
 
 		foreach($values as $property=>$value){
-				$this->{$property} = $value;
+			$this->{substr($property,strlen($this->myPrefix()))} = $value;
 		}
 	} 
 	
@@ -96,11 +104,11 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 		
 		$properties = $this->_getReflectionClass()->getParentPropertiesDiff();
 		$success = true;
-		foreach($properties as $property){
+		foreach($properties as $property){				
 			$key = $property->name;
 			$value = $this->{$key};
 
-			$success = $success && GO::config()->save_setting($key, $value, $this->_userId);			
+			$success = $success && GO::config()->save_setting($this->myPrefix().$key, $value, $this->_userId);			
 		}
 		return $success;
 	}
@@ -122,7 +130,7 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 	public function saveFromArray($data){
 		
 		$properties = $this->_getReflectionClass()->getParentPropertiesDiff();
-		
+				
 		foreach($properties as $property){
 			$key = $property->name;
 			if(key_exists($key, $data))

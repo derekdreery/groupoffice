@@ -80,6 +80,8 @@ class GO_Postfixadmin_Model_Domain extends GO_Base_Db_ActiveRecord {
 		$this->columns['domain']['unique']=true;
 		$this->columns['total_quota']['gotype']='number';
 		$this->columns['default_quota']['gotype']='number';
+		$this->columns['max_aliases']['gotype']='number';
+		$this->columns['max_mailboxes']['gotype']='number';
 		return parent::init();
 	}
 		
