@@ -1050,17 +1050,21 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$destinationFolder = GO_Files_Model_Folder::model()->findByPk($params['destination_folder_id']);
 		$archiveFile = new GO_Base_Fs_File(GO::config()->file_storage_path.$destinationFolder->path . '/' . $params['archive_name'] . '.zip');
 		
+		if($archiveFile->exists())
+			throw new Exception(sprintf(GO::t('filenameExists','files'), $archiveFile->stripFileStoragePath()));
+		
 		$sourceObjects = array();
 		for($i=0;$i<count($sources);$i++){			
 			$path = GO::config()->file_storage_path.$sources[$i];			
 			$sourceObjects[]=GO_Base_Fs_Base::createFromPath($path);
 		}
 		
-		GO_Base_Fs_Zip::create($archiveFile, $workingFolder->fsFolder, $sourceObjects);
-
-		GO_Files_Model_File::importFromFilesystem($archiveFile);
-
-		$response['success']=true;
+		if(GO_Base_Fs_Zip::create($archiveFile, $workingFolder->fsFolder, $sourceObjects)){
+			GO_Files_Model_File::importFromFilesystem($archiveFile);
+			$response['success']=true;
+		}  else {
+			throw new Exception("ZIP creation failed");
+		}
 
 		return $response;
 	}

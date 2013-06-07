@@ -1954,21 +1954,58 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	/**
 	 * Get's a message part and returned in binary form or UTF-8 charset.
 	 * 
-	 * @param <type> $uid
-	 * @param <type> $part_no
-	 * @param <type> $encoding
-	 * @param <type> $charset
-	 * @param <type> $peek
-	 * @return <type>
+	 * @param int $uid
+	 * @param string $part_no
+	 * @param stirng $encoding
+	 * @param string $charset
+	 * @param boolean $peek
+	 * @return string
 	 */
 
-	public function get_message_part_decoded($uid, $part_no, $encoding, $charset=false, $peek=false, $max=false) {
+	public function get_message_part_decoded($uid, $part_no, $encoding, $charset=false, $peek=false, $cutofflength=false) {
 		GO::debug("get_message_part_decoded($uid, $part_no, $encoding, $charset)");
-		return $this->decode_message_part(
-						$this->get_message_part($uid, $part_no, $peek, $max),
-						$encoding,
-						$charset
-		);
+		
+		$str = '';
+		$this->get_message_part_start($uid, $part_no, $peek);	
+		
+		while ($line = $this->get_message_part_line()) {
+			switch (strtolower($encoding)) {
+				case 'base64':
+					$str .= base64_decode($line);
+					break;
+				case 'quoted-printable':
+					$str .= quoted_printable_decode($line);
+					break;
+				default:
+					$str .= $line;
+					break;
+			}
+			
+			if($cutofflength && strlen($line)>$cutofflength){
+				break;
+			}	
+		}
+		
+		if($charset){
+
+			//some clients don't send the charset.
+			if($charset=='us-ascii')
+				$charset = 'windows-1252';
+			
+			$str = GO_Base_Util_String::clean_utf8($str, $charset);
+			if($charset != 'utf-8') {
+				$str = str_replace($charset, 'utf-8', $str);
+			}
+		}
+		
+		return $str;
+		
+		
+//		return $this->decode_message_part(
+//						$this->get_message_part($uid, $part_no, $peek, $max),
+//						$encoding,
+//						$charset
+//		);
 	}
 
 

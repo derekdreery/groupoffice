@@ -55,6 +55,19 @@ abstract class GO_Base_Model extends GO_Base_Object{
 	}
 	
 	/**
+	 * Get the name in lowercase of the module that this model belongs to.
+	 * 
+	 * returns 'base' if it belongs to the core library of Group-Office.
+	 * 
+	 * @return string 
+	 */
+	public function getModule(){
+		$arr = explode('_', $this->className());
+		
+		return strtolower($arr[1]);
+	}
+	
+	/**
 	 * Returns the attribute labels.
 	 *
 	 * Attribute labels are mainly used for display purpose. For example, given an attribute

@@ -38,6 +38,8 @@ class GO_Base_Fs_Zip {
 	public static function create(GO_Base_Fs_File $archiveFile, GO_Base_Fs_Folder $workingFolder, $sources, $utf8=false) {
 	
 		if (class_exists("ZipArchive") && !$utf8) {
+		
+			GO::debug("Using PHP ZipArchive");
 			$zip = new ZipArchive();
 			$zip->open($archiveFile->path(), ZIPARCHIVE::CREATE);
 			for ($i = 0; $i < count($sources); $i++) {
@@ -46,11 +48,21 @@ class GO_Base_Fs_Zip {
 				} else {
 					$name = str_replace($workingFolder->path() . '/', '', $sources[$i]->path());
 					$name = iconv('UTF-8', 'CP850', $name);
+					GO::debug("Add file: ".$sources[$i]->path());
 					$zip->addFile($sources[$i]->path(), $name);
 				}
 			}
-			$zip->close();
+			
+			
+			if(!$zip->close() || !$archiveFile->exists()){
+				throw new Exception($zip->getStatusString());
+			}else
+			{
+				return true;
+			}
 		} else {
+			
+			GO::debug("Using zip exec");
 		
 			if (!GO_Base_Util_Common::isWindows())
 				putenv('LANG=en_US.UTF-8');
@@ -69,21 +81,33 @@ class GO_Base_Fs_Zip {
 			if ($ret!=0 || !$archiveFile->exists()) {
 				throw new Exception('Command failed: ' . $cmd . "<br /><br />" . implode("<br />", $output));
 			}
+			
+			return true;
 		}
 	}
 
-	private static function _zipDir(GO_Base_Fs_Folder $dir, $zip, $relative_path, $utf8) {
+	private static function _zipDir(GO_Base_Fs_Folder $dir, ZipArchive $zip, $relative_path) {
 		
 		$items = $dir->ls();
-		foreach($items as $item){
-			if ($item->isFile()) {
-				$name = $relative_path . $item->name();
-				$name = iconv('UTF-8', 'CP850', $name);
-
-				$zip->addFile($dir . $item->name(), $name);
-			} else{
-				$this->_zipDir($item . $item->name(), $zip, $relative_path . $item->name() . '/');
+		if(count($items)){
+			foreach($items as $item){
+				if ($item->isFile()) {
+					$name = $relative_path . $item->name();
+					$name = iconv('UTF-8', 'CP850', $name);
+					
+					
+					GO::debug("Add file: ".$name);
+					
+					$zip->addFile($dir->path().'/'.$item->name(), $name);
+				} else{
+					self::_zipDir($item, $zip, $relative_path . $item->name() . '/');
+				}
 			}
+		}  else {
+			GO::debug("Add empty dir: ".$relative_path);
+			if(!$zip->addEmptyDir(rtrim($relative_path,'/')))
+				throw new Exception("Could not add emty directory ".$relative_path);
+							
 		}
 		
 	}

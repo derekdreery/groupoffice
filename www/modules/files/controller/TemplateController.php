@@ -44,6 +44,10 @@ class GO_files_Controller_Template extends GO_Base_Controller_AbstractModelContr
 		return array('content');
 	}
 	
+	protected function beforeStore(&$response, &$params, &$store) {
+		$store->setDefaultSortOrder('name','ASC');
+		return parent::beforeStore($response, $params, $store);
+	}
 	
 	protected function actionDownload($params){
 		$template = GO_Files_Model_Template::model()->findByPk($params['id']);

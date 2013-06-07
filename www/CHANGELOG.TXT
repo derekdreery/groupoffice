@@ -14,8 +14,17 @@
 - Holidays region can be selected per user in the settings dialog.
 
 
-
+07-06-2013 4.1.74
+- Added config option "zpush2_max_attachmentsize". Maximum syncable attachment 
+  size in bytes (default 10MB). If you set this too high you'll get a 
+  memory_limit exhausted error and sync will fail completely.
+- Updated Thai translations
+- Unable to upload attachments to e-mail templates
+- Added LDAP group synchronization
+- Sort file templates alphabetically
+- ZIP empty folders broken
 - Projects module: show fields in project east panel according to its project template. E.g., if 'manager' is not enabled in the template, it is not displayed.
+- Orders can be deleted again except if read only flag is set for status
 
 04-06-2013 4.1.73
 - Apache alias defaults to z-push2 now. Be careful with upgrading 
