@@ -1,3 +1,4 @@
+- Updated Thai translations
 - Unable to upload attachments to e-mail templates
 - Added LDAP group synchronization
 - Sort file templates alphabetically
