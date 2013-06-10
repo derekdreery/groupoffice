@@ -275,6 +275,19 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		foreach($action as $a)
 			$this->requiredPermissionLevels[$a]=array('aclId'=>$aclId, 'requiredPermissionLevel'=>$requiredPermissionLevel);
 	}
+	
+	
+	protected function httpAuth(){
+		if (!isset($_SERVER['PHP_AUTH_USER']) && !GO_Base_Util_Http::isAjaxRequest()) {
+			header('WWW-Authenticate: Basic realm="'.GO::config()->product_name.'"');
+			header('HTTP/1.0 401 Unauthorized');
+			
+			
+			throw new GO_Base_Exception_AccessDenied();
+			exit;
+		}
+	}
+	
 	/**
 	 * Checks if a user is logged in, if the user has permission to the module and if the user has access to a specific action.
 	 * 
@@ -287,8 +300,11 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		
 		if(!in_array($action, $allowGuests) && !in_array('*', $allowGuests)){			
 			//check for logged in user
-			if(!GO::user())
-				return false;			
+			if(!GO::user()){
+				$this->httpAuth();
+				
+				return false;	
+			}
 			
 			$this->checkSecurityToken();
 			
