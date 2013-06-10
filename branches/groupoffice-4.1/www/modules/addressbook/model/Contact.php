@@ -69,6 +69,9 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 * @var string 
 	 */
 	public $company_name;
+	
+	
+	public $skip_user_update=false;
 	/**
 	 * Returns a static model of itself
 	 * 
@@ -304,12 +307,14 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$company->save();
 		}
 		
-		if($this->isModified(array('first_name','middle_name','last_name','email')) && $this->goUser){
+		if(!$this->skip_user_update &&  $this->isModified(array('first_name','middle_name','last_name','email')) && $this->goUser){
 			$this->goUser->first_name = $this->first_name;
 			$this->goUser->middle_name = $this->middle_name;
 			$this->goUser->last_name = $this->last_name;
 			$this->goUser->email = $this->email;
-			$this->goUser->save(true);
+			$this->goUser->skip_contact_update=true;
+			if($this->goUser->isModified())
+				$this->goUser->save(true);
 		}
 		
 		return parent::afterSave($wasNew);
