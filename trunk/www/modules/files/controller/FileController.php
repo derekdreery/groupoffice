@@ -210,6 +210,9 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 				throw new Exception(GO::t('downloadLinkExpired', 'files'));				
 		}else
 		{
+			if(!GO::user())
+				$this->httpAuth();
+				
 			if(!$file->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
 				throw new GO_Base_Exception_AccessDenied();
 		}
