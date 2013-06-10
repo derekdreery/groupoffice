@@ -12,7 +12,8 @@
 - Workflow: history can be appended to PDF files.
 - Workflow: Files can be copied to a directory
 - Holidays region can be selected per user in the settings dialog.
-
+- Billing catalog, import products: added address book field for newly imported supplier companies.
+- Upgraded to Extjs 3.4.1.1
 
 07-06-2013 4.1.74
 - Added config option "zpush2_max_attachmentsize". Maximum syncable attachment 

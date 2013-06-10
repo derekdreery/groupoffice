@@ -106,7 +106,7 @@ class GO_Postfixadmin_Controller_Mailbox extends GO_Base_Controller_AbstractMode
 		while ($mailboxModel = $activeStmt->fetch()) {
 			echo 'Calculating size of '.$mailboxModel->getMaildirFolder()->path()."\n";
 			$mailboxModel->cacheUsage();
-			echo GO_Base_Util_Number::formatSize($mailboxModel->usage*1024);
+			echo GO_Base_Util_Number::formatSize($mailboxModel->usage*1024)."\n";
 		}
 
 	}

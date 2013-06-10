@@ -70,6 +70,9 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	public $generatedRandomPassword = false;
 	public $passwordConfirm;
 	
+	
+	public $skip_contact_update=false;
+	
 	/**
 	 * This variable will be set when the password is modified.
 	 * 
@@ -312,7 +315,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			$this->_setVisibility();
 		}		
 		
-		if($this->isNew || $this->isModified(array('first_name','middle_name','last_name','email')))
+		if(!$this->skip_contact_update && ($this->isNew || $this->isModified(array('first_name','middle_name','last_name','email'))))
 			$this->createContact();
 		
 		//remove cache for GO::user() calls.
@@ -576,13 +579,19 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 				$contact = new GO_Addressbook_Model_Contact();
 				$addressbook = GO_Addressbook_Model_Addressbook::model()->getUsersAddressbook();
 				$contact->go_user_id = $this->id;
-				$contact->addressbook_id = $addressbook->id;
-				$contact->first_name = $this->first_name;
-				$contact->middle_name = $this->middle_name;
-				$contact->last_name = $this->last_name;
-				$contact->email = $this->email;
-				$contact->save(true);
+				$contact->addressbook_id = $addressbook->id;				
 			}			
+			
+			$contact->first_name = $this->first_name;
+			$contact->middle_name = $this->middle_name;
+			$contact->last_name = $this->last_name;
+			$contact->email = $this->email;
+
+			if($contact->isNew || $contact->isModified()){
+				$contact->skip_user_update=true;
+				$contact->save(true);
+			}
+			
 			return $contact;
 		}else
 		{
