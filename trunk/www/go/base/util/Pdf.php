@@ -10,7 +10,7 @@ class GO_Base_Util_Pdf extends TCPDF {
 		$this->init();
 	}
 	
-	protected $font = 'dejavusans';
+	protected $font = 'freesans';
 	protected $font_size=9;
 	
 	public $title="";
@@ -26,7 +26,7 @@ class GO_Base_Util_Pdf extends TCPDF {
 		$this->SetFillColor(248, 248, 248);
 		$this->SetTextColor(0,0,0);
 		
-		$this->AliasNbPages();
+		$this->getAliasNbPages();
 
 		$this->setJPEGQuality(100);
 		$this->SetMargins(30,60,30);

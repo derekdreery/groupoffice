@@ -1,3 +1,5 @@
+- Upgrade TCPDF and changed default font to freesans because of display problem on iPad
+- HTTP Authentication for requests
 - Tickets can only be deleted by users who have write or manage persmissions on the ticket system.
 - Send multiple download links at once
 - Permissions on start page announcements so visibility can be controlled
