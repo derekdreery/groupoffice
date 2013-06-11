@@ -1,3 +1,4 @@
+- Fixed bug with not recognized email-address in the SMIME certificate
 - Billing catalog, import products: added address book field for newly imported supplier companies.
 
 07-06-2013 4.1.74
