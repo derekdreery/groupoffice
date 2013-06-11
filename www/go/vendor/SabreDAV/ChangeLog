@@ -1,3 +1,17 @@
+1.8.5-stable (2013-04-11)
+	* The zip release ships with sabre/vobject 2.0.7.
+	* Includes changes from version 1.7.7.
+
+1.8.4-stable (2013-04-08)
+	* The zip release ships with sabre/vobject 2.0.7.
+	* Includes changes from version 1.7.6.
+
+1.8.3-stable (2013-03-01)
+	* The zip release ships with sabre/vobject 2.0.6.
+	* Includes changes from version 1.7.5.
+	* Fixed: organizer email-address for shared calendars is now prefixed with
+	  mailto:, as it should.
+
 1.8.2-stable (2013-01-19)
 	* The zip release ships with sabre/vobject 2.0.5.
 	* Includes changes from version 1.7.4.
@@ -26,6 +40,26 @@
 	  calendar.
 	* Added: The Proxy principal classes now both implement an interface, for
 	  greater flexiblity.
+
+1.7.7-stable (2013-04-11)
+	* The zip release ships with sabre/vobject 2.0.7.
+	* Fixed: Assets in the browser plugins were not being served on windows
+	  machines.
+
+1.7.6-stable (2013-04-08)
+	* The zip release ships with sabre/vobject 2.0.7.
+	* Fixed: vcardurl in database schema can now hold 255 characters instead
+	  of 80 (which is often way to small).
+	* Fixed: The browser plugin potentially allowed people to open any
+	  arbitrary file on windows servers (CVE-2013-1939).
+
+1.7.5-stable (2013-03-01)
+	* The zip release ships with sabre/vobject 2.0.6.
+	* Change: No longer advertising support for 4.0 vcards. iOS and OS X
+	  address book don't handle this well, and just advertising 3.0 support
+	  seems like the most logical course of action.
+	* Added: ->setVerifyPeers to Sabre_DAV_Client (greatly resisting against
+	  it, don't use this..).
 
 1.7.4-stable (2013-01-19)
 	* The zip release ships with sabre/vobject 2.0.5.
@@ -151,6 +185,23 @@ github now.
 	  requested.
 	* Fixed: Postfixing slash on {DAV:}owner properties.
 	* Fixed: Several embarrassing spelling mistakes in docblocks.
+
+1.6.9-stable (2013-04-11)
+	* Fixed: Assets in the browser plugins were not being served on windows
+	  machines.
+
+1.6.8-stable (2013-04-08)
+	* Fixed: vcardurl in database schema can now hold 255 characters instead
+	  of 80 (which is often way to small).
+	* Fixed: The browser plugin potentially allowed people to open any
+	  arbitrary file on windows servers. (CVE-2013-1939).
+
+1.6.7-stable (2013-03-01)
+	* Change: No longer advertising support for 4.0 vcards. iOS and OS X
+	  address book don't handle this well, and just advertising 3.0 support
+	  seems like the most logical course of action.
+	* Added: ->setVerifyPeers to Sabre_DAV_Client (greatly resisting against
+	  it, don't use this..).
 
 1.6.6-stable (2013-01-19)
 	* Fixed: Backported a fix for broken XML serialization in error responses.
