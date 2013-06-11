@@ -64,7 +64,7 @@ class GO_Base_Fs_CsvFile extends GO_Base_Fs_File{
 	 * @return int The length of the written string, or false on failure.
 	 */
 	public function putRecord($fields){
-		$this->_setCSV('w+');		
+		$this->_setCSV('a+');		
 		return $this->_csv->putRecord($fields);
 	}
 	
