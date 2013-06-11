@@ -26,10 +26,7 @@ foreach($output as $module){
 		}	
 		
 
-		exec($cmd, $output, $ret);
-
-		if($ret!=0)
-			exit(var_dump($output));
+		system($cmd, $ret);
 	}
 }
 
