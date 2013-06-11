@@ -699,6 +699,9 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 			unset($response['data']['to'], $response['data']['cc'], $response['data']['bcc'], $response['data']['subject']);
 
+			$defaultTags = array(
+					'contact:salutation'=>GO::t('default_salutation_unknown')
+			);
 			//keep template tags for mailings to addresslists
 			if (empty($params['addresslist_id'])) {
 				//if contact_id is not set but email is check if there's contact info available
@@ -722,9 +725,12 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 					if ($contact) {
 						$response['data']['htmlbody'] = GO_Addressbook_Model_Template::model()->replaceContactTags($response['data']['htmlbody'], $contact);
 					} else {
+	
+						$response['data']['htmlbody'] = GO_Addressbook_Model_Template::model()->replaceCustomTags($response['data']['htmlbody'],$defaultTags, true);
 						$response['data']['htmlbody'] = GO_Addressbook_Model_Template::model()->replaceUserTags($response['data']['htmlbody']);
 					}
 				} else {
+					$response['data']['htmlbody'] = GO_Addressbook_Model_Template::model()->replaceCustomTags($response['data']['htmlbody'],$defaultTags, true);
 					$response['data']['htmlbody'] = GO_Addressbook_Model_Template::model()->replaceUserTags($response['data']['htmlbody']);
 				}
 			}
