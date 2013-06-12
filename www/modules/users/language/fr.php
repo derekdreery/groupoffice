@@ -1,6 +1,5 @@
 <?php
 
-
 $l["cmdCheckColumnRead"]= 'Lecture';
 $l["cmdCheckColumnWrite"]= 'Ecriture';
 $l["cmdHeaderColumnName"]= 'Nom du module';
@@ -118,3 +117,13 @@ $l['showProUsers']='Montrer aux utilisateurs pro';
 $l['updateExistingOnImport']='Mettre à jour les utilisateurs existants par nom d\'utilisateur';
 $l['resetState']="Réinitialiser les fenêtres et les grilles";
 $l['resetStateConfirm']='Êtes-vous sûr de vouloir utiliser les paramètres par défauts (les colonnes,les fenêtres, taille des panneaux, ...) ?';
+
+$l['slashymd']='Année-Mois-Jour';
+$l['dotymd']='Année.Mois.Jour';
+$l['registrationEmail']='Enregistrement Courriel';
+$l['enabledSettingtabs']='Onglets paramètre sont activés';
+$l['explanation_cf_settingspanels']='Pour afficher les onglets "Champs personnsalisés" dans le panneau de configuration, vous devez être sûr que l\'utilisateur dispose d\'au moins un accès "lecture" pour le module "Champs personnsalisés"';
+$l['addresslist_panel']= 'Panneau de la liste d\'adresses';
+$l['show_addresslists_panel']= 'Afficher le panneau de liste d\'adresses';
+$l['enabled_cf_tabs']= 'Activer l\'onglet "Champs personnalisés"'; 
+
