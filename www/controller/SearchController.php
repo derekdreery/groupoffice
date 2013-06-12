@@ -31,8 +31,8 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		}else
 		{
 			//we'll do a full text search in getStoreParams			
-			$params['match']=$params["query"];
-			unset($params["query"]);
+//			$params['match']=$params["query"];
+//			unset($params["query"]);
 		}
 	
 		
@@ -73,17 +73,17 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		
 		$storeParams->getCriteria()->addInCondition('model_type_id', $types);
 		
-		$subCriteria = GO_Base_Db_FindCriteria::newInstance();
-		
-		if(strlen($params['match'])<4){
-			$subCriteria->addCondition('keywords', '%'.trim($params['match'],' *%').'%', 'LIKE','t',false);
-		}else
-		{
-			$str='+'.preg_replace('/[\s]+/',' +', $params['match']);	
-			$subCriteria->addMatchCondition(array('keywords'), $str);
-		}
-		
-		$storeParams->getCriteria()->mergeWith($subCriteria);
+//		$subCriteria = GO_Base_Db_FindCriteria::newInstance();
+//		
+//		if(strlen($params['match'])<4){
+//			$subCriteria->addCondition('keywords', '%'.trim($params['match'],' *%').'%', 'LIKE','t',false);
+//		}else
+//		{
+//			$str='+'.preg_replace('/[\s]+/',' +', $params['match']);	
+//			$subCriteria->addMatchCondition(array('keywords'), $str);
+//		}
+//		
+//		$storeParams->getCriteria()->mergeWith($subCriteria);
 		
 		return $storeParams;
 	}
