@@ -1,3 +1,6 @@
+12-06-2013 4.1.76
+- Exception in tickets
+
 12-06-2013 4.1.75
 - Activity log was removed after two weeks. Only one day every two weeks was saved.
 - Fixed bug with not recognized email-address in the SMIME certificate
