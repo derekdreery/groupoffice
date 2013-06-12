@@ -25,7 +25,7 @@ class GO_Base_Csv_Writer extends GO_Base_Csv_Reader{
 	 * @return int The length of the written string, or false on failure.
 	 */
 	public function putRecord($fields){
-		$this->setFP('w');
+		$this->setFP('a+');
 //		foreach ($fields as $k => $field)
 //			$fields[$k] = str_replace(array($this->delimiter,$this->enclosure),array(' ',''),$field);
 		if(isset($this->enclosure)){

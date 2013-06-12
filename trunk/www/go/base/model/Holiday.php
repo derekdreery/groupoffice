@@ -149,8 +149,8 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 		$endYear   = mktime(23, 59, 59, 12, 31, $year);
 		
 		$findCriteria = GO_Base_Db_FindCriteria::newInstance()
-					->addCondition('date', $startYear,'>=')
-					->addCondition('date', $endYear, '<=')
+					->addCondition('date', date('Y-m-d', $startYear),'>=')
+					->addCondition('date',  date('Y-m-d', $endYear), '<=')
 					->addCondition('region', $locale);
 
 		$findParams = GO_Base_Db_FindParams::newInstance()
@@ -250,6 +250,18 @@ class GO_Base_Model_Holiday extends GO_Base_Db_ActiveRecord {
 				$holiday = new GO_Base_Model_Holiday();
 				$holiday->name = $name;
 				$holiday->date = date('Y-m-d',$date);
+				$holiday->region = $locale;
+				$holiday->save();
+			}
+		}
+		
+		if(isset($holidays['fn'])) {
+	
+			foreach($holidays['fn'] as $def) {
+			
+				$holiday = new GO_Base_Model_Holiday();
+				$holiday->name = $def[0];
+				$holiday->date = call_user_func($def[1], $year);
 				$holiday->region = $locale;
 				$holiday->save();
 			}

@@ -1,4 +1,6 @@
-- Upgrade TCPDF and changed default font to freesans because of display problem on iPad
+
+- Upgrade TCPDF to 6.0.020 and changed default font to freesans because of display problem on iPad
+- Upgraded SabreDAV to version 1.8.5
 - HTTP Authentication for requests
 - Tickets can only be deleted by users who have write or manage persmissions on the ticket system.
 - Send multiple download links at once
@@ -14,8 +16,13 @@
 - Workflow: history can be appended to PDF files.
 - Workflow: Files can be copied to a directory
 - Holidays region can be selected per user in the settings dialog.
-- Billing catalog, import products: added address book field for newly imported supplier companies.
 - Upgraded to Extjs 3.4.1.1
+
+12-06-2013 4.1.75
+- Activity log was removed after two weeks. Only one day every two weeks was saved.
+- Fixed bug with not recognized email-address in the SMIME certificate
+- Billing catalog, import products: added address book field for newly imported supplier companies.
+- Removal of billing orders possible even if it has a number.
 
 07-06-2013 4.1.74
 - Added config option "zpush2_max_attachmentsize". Maximum syncable attachment 

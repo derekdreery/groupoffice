@@ -307,9 +307,22 @@ class GO_Base_Util_Date {
 
 	public static function get_last_sunday($time)
 	{
-		$date = getdate($time);
-		return mktime(0,0,0,$date['mon'],$date['mday']-$date['wday'], $date['year']);
+		return self::get_last_weekday($time,0);
 	}
+	
+	/**
+	 * Get the last weekday since a given time.
+	 * 
+	 * @param int $time
+	 * @param int $weekday Relative day from sunday 0-6. 0 is sunday, 6 is saturday
+	 * @return type
+	 */
+	public static function get_last_weekday($time, $weekday)
+	{
+		$date = getdate($time);
+		return mktime(0,0,0,$date['mon'],$date['mday']-$date['wday']+$weekday, $date['year']);
+	}
+
 
 	/**
 	 * Convert a date formatted according to icalendar 2.0 specs to a unix timestamp.

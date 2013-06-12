@@ -173,13 +173,48 @@ class GO_Base_Util_String {
 			if(substr($from_charset,0,5)=='x-mac')
 				return GO_Base_Util_Charset_Xmac::toUtf8($str, $from_charset);
 			
-			
-			//fix incorrect win-1252 to Windows-1252
-			$from_charset = preg_replace('/win-([0-9]+)/i','Windows-$1', $from_charset);
-			
+			$from_charset = self::fixCharset($from_charset);
+
 			
 			return iconv($from_charset, 'UTF-8//IGNORE', $str);
 		}
+	}
+	
+/**
+	 * Makes charset name suitable for decoding cycles
+	 *
+	 * ks_c_5601_1987, x-euc-* and x-windows-* charsets are supported
+	 * since 1.4.6 and 1.5.1.
+	 *
+	 * @since 1.4.4 and 1.5.0
+	 * @param string $charset Name of charset
+	 * @return string $charset Adjusted name of charset
+	 */
+	public static function fixCharset($charset) {
+	
+		$charset = preg_replace('/win-([0-9]+)/i','windows-$1', $charset);
+		
+		$charset=strtolower($charset);
+
+
+		// OE ks_c_5601_1987 > cp949
+		$charset = str_replace('ks_c_5601-1987', 'cp949', $charset);
+		// Moz x-euc-tw > euc-tw
+		$charset = str_replace('x_euc', 'euc', $charset);
+		// Moz x-windows-949 > cp949
+		$charset = str_replace('x-windows-', 'cp', $charset);
+
+		// windows-125x and cp125x charsets
+		$charset = str_replace('windows-', 'cp', $charset);
+
+		// ibm > cp
+		$charset = str_replace('ibm', 'cp', $charset);
+
+		// iso-8859-8-i -> iso-8859-8
+		// use same cycle until I'll find differences
+		$charset = str_replace('iso-8859-8-i', 'iso-8859-8', $charset);
+
+		return $charset;
 	}
 	
 //	public static function stripInvalidUtf8($utf8string){
@@ -222,6 +257,9 @@ class GO_Base_Util_String {
 		//Does not always work. We suppress the:
 		//Notice:  iconv() [function.iconv]: Detected an illegal character in input string in /var/www/community/trunk/www/classes/String.class.inc.php on line 31		
 		$old_lvl = error_reporting (E_ALL ^ E_NOTICE);
+		
+		$source_charset = self::fixCharset($source_charset);
+		
 		$c = iconv($source_charset, 'UTF-8//IGNORE', $str);
 		error_reporting ($old_lvl);
 		if(!empty($c))
@@ -235,6 +273,7 @@ class GO_Base_Util_String {
 			{
 				$from_charset = "ISO-8859-1";
 			}
+			$from_charset=strtolower($from_charset);
 			
 			if($from_charset!=$source_charset)
 				$str=self::clean_utf8($str, $from_charset);
