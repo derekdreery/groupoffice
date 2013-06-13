@@ -1,0 +1,10 @@
+GO.modules.lang.cmdSaveChanges = 'Guardar cambios';
+GO.modules.lang.cmdInstall = 'Instalar';
+GO.modules.lang.cmdUninstall = 'desinstalar';
+GO.modules.lang.cmdAvailableModules = 'Módulos disponibles';
+GO.modules.lang.cmdModuleName = 'Nombre del módulo';
+GO.modules.lang.cmdModuleDescription = 'Descripción';
+GO.modules.lang.cmdModulesCannotBeDeleted = 'El módulo "Módulos" no se puede borrar!.';
+GO.modules.lang.cmdGridColumnModuleName= 'Nombre del módulo';
+GO.modules.lang.cmdUninstallMessage= 'ATENCIÓN! Toda la informacón de este módulo será borrada! ¿Esta seguro de querer desinstalar el modulo "{0}"?';
+GO.modules.lang.modules='Módulos';
