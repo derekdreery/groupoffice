@@ -25,7 +25,7 @@ class cms_output extends cms {
 			
 
 			$path = $this->build_path($file['folder_id'], true, $this->site['root_folder_id']);
-
+			$path = substr($path,-1)=='/' ? $path : $path.'/';
 			$url = $this->site['rewrite_base'].$path.$this->special_encode($file['name']);
 			if(!empty($querystring)){
 				$url .= '?'.$querystring;
