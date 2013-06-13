@@ -674,6 +674,20 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$settings->alternative_url = GO::config()->full_url.'modules/site/index.php?r=tickets/externalpage/ticket';
 			$settings->save();
 			
+			
+			if(GO::modules()->summary){
+				$newTicketUrl = GO::config()->full_url.'modules/site/index.php?r=tickets/externalpage/newTicket';
+								
+				$announcement = new GO_Summary_Model_Announcement();
+				$announcement->title="Submit support ticket";
+				$announcement->content='Anyone can submit tickets to the support system here:'.
+								'<br /><br /><a href="'.$newTicketUrl.'">'.$newTicketUrl.'</a><br /><br />Anonymous ticket posting can be disabled in the ticket module settings.';
+
+				if($announcement->save()){			
+					$announcement->acl->addGroup(GO::config()->group_everyone);
+				}
+			}
+			
 		}
 		
 		
@@ -809,7 +823,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			}
 			
 			
-			$rocketProject = GO_Projects_Model_Project::model()->findSingleByAttribute('name','Develop Rocket 2000');
+			$rocketProject = GO_Projects_Model_Project::model()->findSingleByAttribute('name','[001] Develop Rocket 2000');
 			if(!$rocketProject){
 				$rocketProject = new GO_Projects_Model_Project();
 				$rocketProject->type_id=$type->id;
@@ -825,7 +839,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 				$rocketProject->save();
 			}
 			
-			$launcherProject = GO_Projects_Model_Project::model()->findSingleByAttribute('name','Develop Rocket 2000');
+			$launcherProject = GO_Projects_Model_Project::model()->findSingleByAttribute('name','[001] Develop Rocket Launcher');
 			if(!$launcherProject){
 				$launcherProject = new GO_Projects_Model_Project();
 				$launcherProject->type_id=$type->id;
