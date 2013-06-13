@@ -54,7 +54,7 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 				'total' => count($templateFiles)
 		);
 		
-		$this->renderJson($response);
+		echo $this->renderJson($response);
 	}
 	
 	protected function actionLoad($params){
@@ -71,7 +71,7 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 			$extraFields['parentslug'] = '';
 		}
 		
-		$this->renderForm($model, $remoteComboFields, $extraFields);
+		echo $this->renderForm($model, $remoteComboFields, $extraFields);
 	}
 	
 	protected function actionUpdate($params){
@@ -90,7 +90,7 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 				$model->slug = $model->parent->slug.'/'.$model->slug;
 		}
 		$model->save();
-		$this->renderSubmit($model);
+		echo $this->renderSubmit($model);
 	}
 	
 	protected function actionCreate($params) {
@@ -104,7 +104,7 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 		
 		$model->save();
 
-		$this->renderSubmit($model);
+		echo $this->renderSubmit($model);
   }
 		
 	protected function actionDelete($params) {
@@ -117,7 +117,7 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 		
 		$response['success'] = $model->delete();
 		
-		$this->renderJson($response);
+		echo $this->renderJson($response);
 	}
 	
 	private function _loadModel($id){

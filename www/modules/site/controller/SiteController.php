@@ -18,14 +18,14 @@ class GO_Site_Controller_Site extends GO_Base_Controller_AbstractJsonController 
 	protected function actionLoad($params) {
 		$model = GO_Site_Model_Site::model()->createOrFindByParams($params);
 		
-		$this->renderForm($model);
+		echo $this->renderForm($model);
 	}
 	
 	protected function actionSubmit($params) {
 		$model = GO_Site_Model_Site::model()->createOrFindByParams($params);
 		$model->setAttributes($params);
 		$model->save();
-		$this->renderSubmit($model);
+		echo $this->renderSubmit($model);
 	}
 	
 		
@@ -74,7 +74,7 @@ class GO_Site_Controller_Site extends GO_Base_Controller_AbstractJsonController 
 //				break;
 		}
 		
-		$this->renderJson($response);
+		echo $this->renderJson($response);
 	}
 	
 	
