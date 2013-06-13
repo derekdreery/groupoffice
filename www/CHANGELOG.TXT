@@ -10,7 +10,7 @@
 - Custom field blocks feature
 - Models show last modified by username
 - In tickets a mail can also be send automatically when a ticket was just claimed
-- Mail can be shared read only
+- Mail accounts can be shared read only
 - Send the invitation emails in the language of the participant if the participant is a known user of GO.
 - Added selection for holiday file to the settings->regional settings panel and to the user dialog in the user module.
 - Workflow: history can be appended to PDF files.
@@ -18,6 +18,7 @@
 - Holidays region can be selected per user in the settings dialog.
 - Upgraded to Extjs 3.4.1.1
 - Tickets can be created by sending an e-mail
+- Ticket types can be grouped
 - Anonymous ticket posting is very simple to setup now.
 
 13-06-2013 4.1.77
