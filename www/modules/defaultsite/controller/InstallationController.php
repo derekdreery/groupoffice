@@ -22,6 +22,6 @@ class GO_Defaultsite_Controller_Installation extends GO_Base_Controller_Abstract
 			$response['feedback'] = GO::t('installsiteerror','defaultsite');
 		}
 
-		$this->renderJson($response);
+		echo $this->renderJson($response);
 	}
 }
