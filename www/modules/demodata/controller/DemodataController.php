@@ -884,7 +884,7 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			$bookmark->content='http://www.wikipedia.com';
 			$bookmark->logo='icons/agt_web.png';
 			$bookmark->public_icon=true;
-			$bookmark->description='Search the web';
+			$bookmark->description='The Free Encyclopedia';
 			$bookmark->behave_as_module=true;
 			$bookmark->save();
 		}
@@ -911,14 +911,18 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			$mimeFile = new GO_Base_Fs_File(GO::modules()->savemailas->path.'install/demo.eml');			
 			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $wile);
 			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $john);
-			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $rocketProject);
-			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $launcherProject);
+			if(GO::modules()->projects){
+				GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $rocketProject);
+				GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $launcherProject);
+			}
 			
 			$mimeFile = new GO_Base_Fs_File(GO::modules()->savemailas->path.'install/demo2.eml');
 			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $wile);
 			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $john);
-			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $rocketProject);
-			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $launcherProject);
+			if(GO::modules()->projects){
+				GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $rocketProject);
+				GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $launcherProject);
+			}
 		}
 		
 		//useful for other modules to create stuff
