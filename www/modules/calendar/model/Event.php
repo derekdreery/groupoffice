@@ -1229,9 +1229,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			//end time is 23:59 on the last day.
 			$end_time = GO_Base_Util_Date::clear_time($this->end_time);
 			
-			//if it's only a single day occurence then the end day should be the same
+			//if it's only a single all day occurence then the end day should be the same
 			//as the start day for the iOS devices.
-			//if it lasts more than one day we should add one day.			
+			//if it lasts more than one day we should add one day.	
 			if($this->start_time!=$end_time){
 				$end_time = GO_Base_Util_Date::date_add($end_time,1);
 			}			
