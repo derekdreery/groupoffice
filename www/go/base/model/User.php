@@ -259,7 +259,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	protected function beforeSave(){
 		
 		if($this->isNew){
-			$holiday = GO_Base_Model_Holiday::localeFromCountry($_POST['language']);
+			$holiday = GO_Base_Model_Holiday::localeFromCountry($this->language);
 			
 		if($holiday !== false)
 			$this->holidayset = $holiday; 
