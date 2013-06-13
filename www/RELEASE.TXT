@@ -1,3 +1,22 @@
+2013/06/13 4.2.0
+Version 4.2 comes with a lot of small feature enhancements such as:
+
+Various
+- Send multiple download links at once
+- Permissions on start page announcements so visibility can be controlled
+
+E-mail and contacts:
+- Easy link checkbox to link e-mail conversations to a contact directly
+- Contact photo's are shown in e-mail and can be set much more easily with download URL's.
+- Mail can be shared read only
+
+Tickets
+- Tickets can be created by sending an e-mail
+- Anonymous ticket posting is very simple to setup now.
+- In tickets a mail can also be send automatically when a ticket was just claimed
+
+Enjoy Group-Office 4.2!
+
 2012/11/30 4.1.0
 We're proud to announce version 4.1! This version comes with an enhanced calendar.
 The invitation system has been greatly improved. Now events are scheduled directly

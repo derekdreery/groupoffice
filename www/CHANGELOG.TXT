@@ -1,3 +1,4 @@
+13-06-2013 4.2.0
 - Upgrade TCPDF to 6.0.020 and changed default font to freesans because of display problem on iPad
 - Upgraded SabreDAV to version 1.8.5
 - HTTP Authentication for requests
@@ -16,6 +17,8 @@
 - Workflow: Files can be copied to a directory
 - Holidays region can be selected per user in the settings dialog.
 - Upgraded to Extjs 3.4.1.1
+- Tickets can be created by sending an e-mail
+- Anonymous ticket posting is very simple to setup now.
 
 13-06-2013 4.1.77
 - If it's only a single all day occurrence then the end day should be the same
