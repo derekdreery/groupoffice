@@ -8,7 +8,7 @@ Various
 E-mail and contacts:
 - Easy link checkbox to link e-mail conversations to a contact directly
 - Contact photo's are shown in e-mail and can be set much more easily with download URL's.
-- Mail can be shared read only
+- Mail accounts can be shared read only
 
 Tickets
 - Tickets can be created by sending an e-mail
