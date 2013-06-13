@@ -39,7 +39,7 @@ class GO_Customfields_Controller_BlockField extends GO_Base_Controller_AbstractJ
 		
 		$store = new GO_Base_Data_DbStore('GO_Customfields_Model_Field', $columnModel, $params, $findParams);
 
-		$this->renderStore($store);
+		echo $this->renderStore($store);
 		
 	}
 	
