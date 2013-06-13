@@ -638,10 +638,8 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	 */
 	public function getSource(){
 		$imap = $this->getImapConnection();
-		$header = $imap->get_message_part($this->uid, 'HEADER', true) . "\r\n\r\n";
-		$body = $imap->get_message_part($this->uid, 'TEXT', true);
-		
-		return $header.$body;
+		$str = $imap->get_message_part($this->uid, 'HEADER', true) . "\r\n\r\n".$imap->get_message_part($this->uid, 'TEXT', true);
+		return $str;
 	}
 	
 	/**

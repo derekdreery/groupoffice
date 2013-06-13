@@ -1200,7 +1200,8 @@ class GO_Base_Util_String {
 		//$regexp="/<a.+?href=([\"']?)".str_replace('/','\\/', GO::config()->full_url)."(.+?)>/i";
 		//$html = preg_replace($regexp, "<a target=$1main$1 class=$1blue$1 href=$1".GO::config()->host."$2$3>", $html);
 
-		$html =str_replace(GO::config()->full_url, GO::config()->host, $html);
+		//Following line breaks links on mobile phones
+		//$html =str_replace(GO::config()->full_url, GO::config()->host, $html);
 		
 		return $html;
 	}

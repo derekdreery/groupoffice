@@ -2019,40 +2019,47 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 * @return <type>
 	 */
 	public function get_message_part($uid, $message_part=0, $peek=false, $max=false, &$maxReached=false) {
-		$this->clean($uid, 'uid');
-
-		$peek_str = $peek ? '.PEEK' : '';
-
-		if (empty($message_part)) {
-			$command = "UID FETCH $uid BODY".$peek_str."[]\r\n";
-		}
-		else {
-			//$this->clean($message_part, 'msg_part');
-			$command = "UID FETCH $uid BODY".$peek_str."[$message_part]\r\n";
-		}
-		$this->send_command($command);
-
-		$result = $this->get_response($max, true);
+//		$this->clean($uid, 'uid');
+//
+//		$peek_str = $peek ? '.PEEK' : '';
+//
+//		if (empty($message_part)) {
+//			$command = "UID FETCH $uid BODY".$peek_str."[]\r\n";
+//		}
+//		else {
+//			//$this->clean($message_part, 'msg_part');
+//			$command = "UID FETCH $uid BODY".$peek_str."[$message_part]\r\n";
+//		}
+//		$this->send_command($command);
+//
+//		$result = $this->get_response($max, true);
+//		
+//		$status = $this->check_response($result, true, false);
+//		
+//		$res = '';
+//		foreach ($result as $vals) {			
+//			if ($vals[0] != '*') {
+//				continue;
+//			}
+//			$search = true;
+//			foreach ($vals as $v) {
+//				if ($v != ']' && !$search) {
+//					$res = trim(preg_replace("/\s*\)$/", '', $v));
+//					break 2;
+//				}
+//				if (stristr(strtoupper($v), 'BODY')) {
+//					$search = false;
+//				}
+//			}
+//		}
+//		return $res;
 		
-		$status = $this->check_response($result, true, false);
-		
-		$res = '';
-		foreach ($result as $vals) {			
-			if ($vals[0] != '*') {
-				continue;
-			}
-			$search = true;
-			foreach ($vals as $v) {
-				if ($v != ']' && !$search) {
-					$res = trim(preg_replace("/\s*\)$/", '', $v));
-					break 2;
-				}
-				if (stristr(strtoupper($v), 'BODY')) {
-					$search = false;
-				}
-			}
+		$str = '';
+		$this->get_message_part_start($uid,$message_part, $peek);
+		while ($line = $this->get_message_part_line()) {
+			$str .= $line;
 		}
-		return $res;
+		return $str;
 	}
 
 	/**
