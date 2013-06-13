@@ -851,6 +851,12 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			hideLabel : true
 		});
 
+		this.privateCB.on('change',function(checkbox,newValue){
+			if (newValue) {
+				Ext.MessageBox.alert('',GO.calendar.lang['eventPrivateChecked']);
+			}
+		},this);
+
 		this.propertiesPanel = new Ext.Panel({
 			hideMode : 'offsets',
 			title : GO.lang.strProperties,
