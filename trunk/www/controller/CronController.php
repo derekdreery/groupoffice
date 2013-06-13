@@ -44,7 +44,7 @@ class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 			$select = false;
 		}
 
-		$this->renderForm($model, $remoteComboFields,array('select'=>$select));
+		echo $this->renderForm($model, $remoteComboFields,array('select'=>$select));
   }
   
 	/**
@@ -57,7 +57,7 @@ class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 		$model->setAttributes($params);
 		$model->save();
 
-		$this->renderSubmit($model);
+		echo $this->renderSubmit($model);
   }
 	
 	/**
@@ -70,7 +70,7 @@ class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 		$model->setAttributes($params);
 		$model->save();
 
-		$this->renderSubmit($model);
+		echo $this->renderSubmit($model);
   }
 
 	/**
@@ -87,7 +87,7 @@ class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 		$store = new GO_Base_Data_DbStore('GO_Base_Cron_CronJob',$colModel , $params);
 		$store->defaultSort = 'name';
 		
-		$this->renderStore($store);	
+		echo $this->renderStore($store);	
 	}
 	
 	
@@ -132,12 +132,12 @@ class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 		$store = new GO_Base_Data_DbStore('GO_Base_Cron_CronJob',$colModel , $params, $findParams);
 		$store->defaultSort = 'nextrun';
 		
-		$result = $this->renderStore($store,true);
+		$result = $this->renderStore($store);
 		
 		$result['from'] = $from->format('d-m-Y H:i');
 		$result['till'] = $till->format('d-m-Y H:i');
 		
-		$this->renderJson($result);
+		echo $result;
 	}
 	
 	private function _findNextCron(){
