@@ -50,13 +50,13 @@ class GO_Site_Controller_Multifile extends GO_Base_Controller_AbstractJsonContro
 		
 		$store = new GO_Base_Data_DbStore('GO_Files_Model_File',$columnModel,$params,$findParams);
 
-		$response = $this->renderStore($store,true);
+		$response = $this->renderStore($store);
 		
 		if(isset($deleteSuccess) && $deleteSuccess){
 			$response['deleteSuccess']=true;
 		}
 		
-		return $response;
+		echo $response;
 	}
 	
 	public function getThumbURL($urlParams=array("lw"=>100, "ph"=>100, "zc"=>1)) {
@@ -73,7 +73,7 @@ class GO_Site_Controller_Multifile extends GO_Base_Controller_AbstractJsonContro
 		$model->setAttributes($params);
 		$model->save();
 		
-		return $this->renderSubmit($model);
+		echo $this->renderSubmit($model);
 	}
 
 	/**
@@ -103,6 +103,6 @@ class GO_Site_Controller_Multifile extends GO_Base_Controller_AbstractJsonContro
 			$file->save();
 		}
 		
-		$this->renderJson(array('success'=>true));
+		echo $this->renderJson(array('success'=>true));
 	}
 }
