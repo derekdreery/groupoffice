@@ -616,28 +616,28 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 			}
 		}
 		
-		if(isset($params['enable_invoicing']) && $params['enable_invoicing']=='on')
-		{
-			if($model->automaticInvoice != null)
-				$autoInvoice = $model->automaticInvoice;
-			else
-				$autoInvoice = new GO_ServerManager_Model_AutomaticInvoice();
-			
-			$autoInvoice->setAttributes($params);
-			
-			$autoInvoice->enable_invoicing = true;
-			$model->setAutoInvoice($autoInvoice);
-		}
-		elseif($model->automaticInvoice != null) //turn off if exists
-		{
-			$autoInvoice = $model->automaticInvoice;
-			$autoInvoice->enable_invoicing = false;
-			$model->setAutoInvoice($autoInvoice);
-		}
+//		if(isset($params['enable_invoicing']) && $params['enable_invoicing']=='on')
+//		{
+//			if($model->automaticInvoice != null)
+//				$autoInvoice = $model->automaticInvoice;
+//			else
+//				$autoInvoice = new GO_ServerManager_Model_AutomaticInvoice();
+//			
+//			$autoInvoice->setAttributes($params);
+//			
+//			$autoInvoice->enable_invoicing = true;
+//			$model->setAutoInvoice($autoInvoice);
+//		}
+//		elseif($model->automaticInvoice != null) //turn off if exists
+//		{
+//			$autoInvoice = $model->automaticInvoice;
+//			$autoInvoice->enable_invoicing = false;
+//			$model->setAutoInvoice($autoInvoice);
+//		}
 		
 		if(isset($params['modules'])){
-			$model->setModules( json_decode($params['modules'], true) );
-			unset($params['modules']);
+			$model->setAvailableModules( json_decode($params['modules'], true) );
+			//unset($params['modules']);
 		}
 		
 		return parent::beforeSubmit($response, $model, $params);
