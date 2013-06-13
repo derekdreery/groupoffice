@@ -220,7 +220,7 @@ class GO_ServerManager_Model_Installation extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @param array $modules array of module name strings
 	 */
-	public function setModules($modules)
+	public function setAvailableModules($modules)
 	{
 		if(!isset($this->_modules)) //load modules from database if not done yet
 		{
