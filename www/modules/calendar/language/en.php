@@ -229,3 +229,4 @@ $l['cronEventAndTaskReportMailerDescription']='Send an email with the today\'s e
 $l['cronEventAndTaskReportMailerPdfSubtitle']='Today\'s events and tasks';
 $l['cronEventAndTaskReportMailerSubject']='Today\'s events and tasks';
 $l['cronEventAndTaskReportMailerContent']='You can find a list of today\'s events and tasks in the attached PDF.';
+$l['eventPrivateChecked'] = 'Note that if the event is marked as private, the files of this event are still accessible by users who have permissions to this event\'s calendar.';
