@@ -1,0 +1,7 @@
+.go-module-icon-sites , .go-menu-icon-sites , .go-tab-icon-sites {
+	background-image:url('images/sites.png') !important;
+}
+
+.no-pages{
+	background-image: url('images/doc.png') !important;
+}
