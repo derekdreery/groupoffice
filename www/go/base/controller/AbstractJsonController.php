@@ -22,25 +22,15 @@
 abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Controller_AbstractController {
 
 	/**
-	 * Start rendering the json output for extJS
-	 * @param array $data the data that need to be rendered as json
+	 * @deprecated
+	 * Get a Json object from the response data
+	 * @param array $data
+	 * @return GO_Base_Data_JsonResponse response object
 	 */
 	public function renderJson($data) {
-		$this->setHeaders();
-		
-		$string =  json_encode($data);
-
-		if(strpos($string,'startjs:')!==false){
-			preg_match_all('/"startjs:(.*?):endjs"/usi', $string, $matches, PREG_SET_ORDER);
-
-			for($i=0;$i<count($matches);$i++){
-				$string = str_replace($matches[$i][0], stripslashes(str_replace(array('\t','\n'),'',$matches[$i][1])), $string);
-			}
-		}
-
-		echo $string;
+		return new GO_Base_Data_JsonResponse($data);
 	}
-
+	
 	/**
 	 * Render JSON response for forms
 	 * @param GO_Base_Db_ActiveRecord $model the AWR to renerated the JSON form data for
@@ -56,11 +46,10 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 	 * A relation for this must be defined. See ActiveRecord->relations.
 	 * @see GO_Base_Controller_AbstractModelController::remoteComboFields()
 	 * @param array $extraFields the extra fields that should be attached to the data array as key => value
-	 * @param boolean $return defaults to false, if true the JSON data is returned as string
-	 * @return string JSON render when $return=true
+	 * @return GO_Base_Data_JsonResponse Response object
 	 * @throws GO_Base_Exception_AccessDenied
 	 */
-	public function renderForm($model, $remoteComboFields = array(), $extraFields = array(), $return = false) {
+	public function renderForm($model, $remoteComboFields = array(), $extraFields = array()) {
 
 		$response = array('data' => array(), 'success' => true);
 
@@ -80,19 +69,16 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 		if (!empty($remoteComboFields))
 			$response = $this->_loadComboTexts($model, $remoteComboFields, $response);
 
-		if ($return)
-			return $response;
-		$this->renderJson($response);
+		return new GO_Base_Data_JsonResponse($response);
 	}
 
 	/**
 	 * Can be used in actionDisplay like actions
 	 * @param GO_Base_Db_ActiveRecord $model the model to render display data for
 	 * @param array $extraFields the extra fields that should be attached to the data array as key => value
-	 * @param array $return if the response data gets returned else it will be echoed
-	 * @return array response data if $return = true
+	 * @return GO_Base_Data_JsonResponse Response object
 	 */
-	public function renderDisplay($model, $extraFields = array(), $return = false) {
+	public function renderDisplay($model, $extraFields = array()) {
 		$response = array('data' => array(), 'success' => true);
 		$response['data'] = array_merge_recursive($extraFields, $model->getAttributes('html'));
 		//$response['data'] = $model->getAttributes('html');
@@ -125,18 +111,15 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 		if (GO::modules()->comments)
 			$response = $this->_processCommentsDisplay($model, $response);
 
-		if ($return)
-			return $response;
-		$this->renderJson($response);
+		return new GO_Base_Data_JsonResponse($response);
 	}
 
 	/**
 	 * Render the JSON outbut for a submit action to be used by ExtJS Form submit
 	 * @param GO_Base_Db_ActiveRecord $model
-	 * @param boolean $return true if the output should be returned as an array
-	 * @return array The JSON out as php array if $return parameter is true
+	 * @return GO_Base_Data_JsonResponse Response object
 	 */
-	public function renderSubmit($model, $return = false) {
+	public function renderSubmit($model) {
 
 		$response = array('feedback' => '', 'success' => true);
 		//$ret = $this->beforeSubmit($response, $model, $params);
@@ -187,16 +170,15 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 			$response['validationErrors'] = $model->getValidationErrors();
 		}
 
-		if ($return)
-			return $response;
-		$this->renderJson($response);
+		return new GO_Base_Data_JsonResponse($response);
 	}
 
 	/**
-	 * 
+	 * Renders DbStore object to a valid JSON response
 	 * @param GO_Base_Date_JsonStore $store I JsonStore object to get JSON from
-	 * @param boolean $return fi true the JSON response will be returned
-	 * @return string generated JSON if $return=true
+	 * @deprecated boolean $return still here for buttonParams (should button params be set in DbStore
+	 * @param mixed $buttonParams ???
+	 * @return GO_Base_Data_JsonResponse Response object
 	 */
 	public function renderStore(GO_Base_Data_AbstractStore $store, $return = false, $buttonParams=false) {
 
@@ -222,22 +204,60 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 					$response['buttonParams'] = $buttonParams;
 			}
 		}
-		if ($return)
-			return $response;
-		$this->renderJson($response);
+
+		return new GO_Base_Data_JsonResponse($response);
 	}
-
+	
 	/**
-	 * Render the headers of the generated response
-	 * If headers are not set already. Set them to application/json
+	 * 
+	 * @param GO_Base_Data_AbstractStore $store
+	 * @param type $params
 	 */
-	protected function setHeaders() {
-		if (headers_sent())
-			return;
+	protected function renderExport(GO_Base_Data_AbstractStore $store, $params) {
+		//define('EXPORTING', true);
+		//used by custom fields to format diffently
+		if(GO::modules()->customfields)
+			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=true;
+		
+		$checkboxSettings = array(
+			'export_include_headers'=>!empty($params['includeHeaders']),
+			'export_human_headers'=>empty($params['humanHeaders']),
+			'export_include_hidden'=>!empty($params['includeHidden'])
+		);
+		
+		$settings =  GO_Base_Export_Settings::load();
+		$settings->saveFromArray($checkboxSettings);
+		
+		if(!empty($params['exportOrientation']) && ($params['exportOrientation']=="H"))
+			$orientation = 'L'; // Set the orientation to Landscape
+		else
+			$orientation = 'P'; // Set the orientation to Portrait
+		
+		
+		if(!empty($params['columns'])) {
+			$columnModel = $store->getColumnModel();
+			$includeColumns = explode(',',$params['columns']);
+			foreach($includeColumns as $incColumn){
+				if(!$columnModel->getColumn($incColumn))
+					$columnModel->addColumn (new GO_Base_Data_Column($incColumn,$incColumn));
+			}
+				
+			$columnModel->sort($includeColumns);
+			
+			foreach($columnModel->getColumns() as $c){
+				if(!in_array($c->getDataIndex(), $includeColumns))
+					$columnModel->removeColumn($c->getDataIndex());
+			}
+		}
+		
+		if(!empty($params['type'])){
+			//temporary fix for compatibility with AbsractModelController
+			$params['type']=str_replace('GO_Base_Export', 'GO_Base_Storeexport', $params['type']);
+			$export = new $params['type']($store, $settings->export_include_headers, $settings->export_human_headers, $params['documentTitle'], $orientation);
+		}else
+			$export = new GO_Base_Storeexport_ExportCSV($store, $settings->export_include_headers, $settings->export_human_headers, $params['documentTitle'], $orientation); // The default Export is the CSV outputter.
 
-		header('Cache-Control: no-cache, must-revalidate, post-check=0, pre-check=0'); //prevent caching
-		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); //resolves problem with IE GET requests
-		header('Content-type: application/json; charset=UTF-8'); //tell the browser we are returning json
+		$export->output();
 	}
 
 	public function run($action = '', $params = array(), $render = true, $checkPermissions = true) {
@@ -245,8 +265,8 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 			$action = $this->defaultAction;
 
 		$this->fireEvent($action, array(
-				&$this,
-				&$params
+			&$this,
+			&$params
 		));
 
 		$response = parent::run($action, $params, $render, $checkPermissions);
@@ -560,52 +580,5 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 
 		return $record;
 	}
-	
-	
-	protected function renderExport(GO_Base_Data_DbStore $store, $params){
-		//define('EXPORTING', true);
-		//used by custom fields to format diffently
-		if(GO::modules()->customfields)
-			GO_Customfields_Model_AbstractCustomFieldsRecord::$formatForExport=true;
-		
-		$checkboxSettings = array(
-			'export_include_headers'=>!empty($params['includeHeaders']),
-			'export_human_headers'=>empty($params['humanHeaders']),
-			'export_include_hidden'=>!empty($params['includeHidden'])
-		);
-		
-		$settings =  GO_Base_Export_Settings::load();
-		$settings->saveFromArray($checkboxSettings);
-		
-		if(!empty($params['exportOrientation']) && ($params['exportOrientation']=="H"))
-			$orientation = 'L'; // Set the orientation to Landscape
-		else
-			$orientation = 'P'; // Set the orientation to Portrait
-		
-		
-		if(!empty($params['columns'])) {
-			$columnModel = $store->getColumnModel();
-			$includeColumns = explode(',',$params['columns']);
-			foreach($includeColumns as $incColumn){
-				if(!$columnModel->getColumn($incColumn))
-					$columnModel->addColumn (new GO_Base_Data_Column($incColumn,$incColumn));
-			}
-				
-			$columnModel->sort($includeColumns);
-			
-			foreach($columnModel->getColumns() as $c){
-				if(!in_array($c->getDataIndex(), $includeColumns))
-					$columnModel->removeColumn($c->getDataIndex());
-			}
-		}
-		
-		if(!empty($params['type'])){
-			//temporary fix for compatibility with AbsractModelController
-			$params['type']=str_replace('GO_Base_Export', 'GO_Base_Storeexport', $params['type']);
-			$export = new $params['type']($store, $settings->export_include_headers, $settings->export_human_headers, $params['documentTitle'], $orientation);
-		}else
-			$export = new GO_Base_Storeexport_ExportCSV($store, $settings->export_include_headers, $settings->export_human_headers, $params['documentTitle'], $orientation); // The default Export is the CSV outputter.
 
-		$export->output();
-	}
 }
