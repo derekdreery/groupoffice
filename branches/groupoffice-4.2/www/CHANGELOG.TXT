@@ -1,4 +1,4 @@
-13-06-2013 4.2.0
+13-06-2013 4.2.1
 - Upgrade TCPDF to 6.0.020 and changed default font to freesans because of display problem on iPad
 - Upgraded SabreDAV to version 1.8.5
 - HTTP Authentication for requests
