@@ -153,6 +153,7 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
   `email_allowed` tinyint(1) NOT NULL DEFAULT '1',
   `files_folder_id` int(11) NOT NULL DEFAULT '0',
   `go_user_id` int(11) NOT NULL DEFAULT '0',
+	`photo` VARCHAR( 255 ) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `addressbook_id` (`addressbook_id`),
   KEY `email` (`email`),

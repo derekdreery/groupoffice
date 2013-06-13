@@ -654,6 +654,26 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			$message->user_id=0;
 			$ticket->addMessage($message);	
 			
+			
+			if(!GO::modules()->isInstalled('site') && GO::modules()->isAvailable('site')){
+				$module = new GO_Base_Model_Module();
+				$module->id='site';			
+				$module->save();
+			}
+			
+			if(!GO::modules()->isInstalled('defaultsite') && GO::modules()->isAvailable('defaultsite')){
+				$module = new GO_Base_Model_Module();
+				$module->id='defaultsite';			
+				$module->save();
+			}
+			
+			$settings = GO_Tickets_Model_Settings::model()->findModel();
+			$settings->enable_external_page=true;
+			$settings->use_alternative_url=true;
+			$settings->allow_anonymous=true;
+			$settings->alternative_url = GO::config()->full_url.'modules/site/index.php?r=tickets/externalpage/ticket';
+			$settings->save();
+			
 		}
 		
 		
