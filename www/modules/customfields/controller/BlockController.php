@@ -45,7 +45,7 @@ class GO_Customfields_Controller_Block extends GO_Base_Controller_AbstractJsonCo
 		
 		$store = new GO_Base_Data_DbStore('GO_Customfields_Model_Block', $columnModel, $params, $findParams);
 
-		$this->renderStore($store);
+		echo $this->renderStore($store);
 		
 	}
 	
@@ -59,7 +59,7 @@ class GO_Customfields_Controller_Block extends GO_Base_Controller_AbstractJsonCo
 		$blockModel->setAttributes($params);
 		$blockModel->save();
 		
-		$this->renderSubmit($blockModel);
+		echo $this->renderSubmit($blockModel);
 		
 	}
 	
@@ -72,7 +72,7 @@ class GO_Customfields_Controller_Block extends GO_Base_Controller_AbstractJsonCo
 		
 		$remoteComboFields = array('field_id' => '"[".GO::t($model->customField->category->extends_model,"customfields")."] ".$model->customField->category->name." : ".$model->customField->name." (col_".$model->id.")"');
 		
-		$this->renderForm($blockModel,$remoteComboFields);
+		echo $this->renderForm($blockModel,$remoteComboFields);
 		
 	}
 
@@ -133,7 +133,7 @@ class GO_Customfields_Controller_Block extends GO_Base_Controller_AbstractJsonCo
 		
 		$store = new GO_Base_Data_DbStore('GO_Customfields_Model_Block', $columnModel, $params, $findParams);
 
-		$this->renderStore($store);
+		echo $this->renderStore($store);
 		
 	}
 	
@@ -164,7 +164,7 @@ class GO_Customfields_Controller_Block extends GO_Base_Controller_AbstractJsonCo
 				$response['success'] = $enableBlockModel->delete();
 		}
 		
-		$this->renderJson($response);
+		echo $this->renderJson($response);
 		
 	}
 	
