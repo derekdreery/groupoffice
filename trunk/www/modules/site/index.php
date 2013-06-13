@@ -1,12 +1,16 @@
 <?php
 /*
- * Copy this file to the document root 
+ * 1. Create a symlink or alias to $config['file_storage_path'].'public/' in
+ *    the document root
  * 
- * Change require(dirname(__FILE__).'/../../GO.php'); to point to the correct location.
+ * 2. Copy this file to the document root * 
  * 
- * Add this to a .htaccess file or to 
- * the VirtualHost file to enable pretty URL's.
  * 
+ * 3. Change $go = dirname(__FILE__).'/../../GO.php'; to point to the correct 
+ *    location.
+ * 
+ * 4. Add this to a .htaccess file or to the VirtualHost file to enable pretty 
+ *    URL's:
  * 
 RewriteEngine On
 
@@ -15,6 +19,8 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)\?*$ index.php/$1 [L,QSA]
 
  */
+
+
 //If the config.php file can't be found add this to the Apache configuration:
 //SetEnv GO_CONFIG /etc/groupoffice/config.php
 

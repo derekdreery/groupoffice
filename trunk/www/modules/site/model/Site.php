@@ -281,7 +281,7 @@ ServerName www.giralisgroep.nl
 	}
 	
 	public function getPublicUrl(){
-		return GO::config()->host.'public/site/'.$this->id.'/';
+		return '/public/site/'.$this->id.'/';
 	}
 	
 	public function getPublicPath(){
