@@ -64,6 +64,22 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 		return $modules;		
 	}
 	
+	/**
+	 * Check if a module is available
+	 * 
+	 * @param string $moduleId
+	 * @return boolean
+	 */
+	public function isAvailable($moduleId){
+		$folder = new GO_Base_Fs_Folder(GO::config()->root_path.'modules/'.$moduleId);
+		if($folder->exists()){
+			$ucfirst = ucfirst($folder->name());
+			$moduleClass = $folder->path().'/'.$ucfirst.'Module.php';
+			
+			return file_exists($moduleClass);
+		}
+	}
+	
 
 	/**
 	 * Call a method of a module class. eg. GO_Notes_NotesModule::firstRun
