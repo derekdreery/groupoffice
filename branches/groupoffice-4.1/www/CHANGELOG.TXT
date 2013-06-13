@@ -1,3 +1,10 @@
+13-06-2013 4.1.77
+- If it's only a single all day occurrence then the end day should be the same
+	as the start day for the iOS devices. If it lasts more than one day we should 
+  add one day.	
+- Log rotation broken
+- Create installation broken in servermanager
+
 12-06-2013 4.1.76
 - Exception in tickets
 
