@@ -406,7 +406,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	}
 	
 	
-	
+	private $_folderCache=array();
 
 	/**
 	 * Find a folder by path relative to GO::config()->file_storage_path
@@ -430,29 +430,40 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		$parent_id = 0;
 		while ($folderName = array_shift($parts)) {
 			
-			$findParams = GO_Base_Db_FindParams::newInstance();
-			$findParams->getCriteria()
-							->addCondition('parent_id', $parent_id)
-							->addBindParameter(':name', $folderName)
-							->addRawCondition('t.name COLLATE utf8_bin', ':name'); //use utf8_bin for case sensivitiy and special characters.
+			$cacheKey = $parent_id.'/'.$folderName;
 			
-			$folder = $this->findSingle($findParams);
-			if (!$folder) {
-				if (!$autoCreate)
-					return false;
+			
+			if(!isset($this->_folderCache[$cacheKey])){
 
-				$folder = new GO_Files_Model_Folder();
-				$folder->setAttributes($autoCreateAttributes);
-				$folder->name = $folderName;
-				$folder->parent_id = $parent_id;
-				$folder->save();					
-			}elseif(!empty($autoCreateAttributes))
+				$findParams = GO_Base_Db_FindParams::newInstance();
+				$findParams->getCriteria()
+								->addCondition('parent_id', $parent_id)
+								->addBindParameter(':name', $folderName)
+								->addRawCondition('t.name COLLATE utf8_bin', ':name'); //use utf8_bin for case sensivitiy and special characters.
+
+				$folder = $this->findSingle($findParams);
+				if (!$folder) {
+					if (!$autoCreate)
+						return false;
+
+					$folder = new GO_Files_Model_Folder();
+					$folder->setAttributes($autoCreateAttributes);
+					$folder->name = $folderName;
+					$folder->parent_id = $parent_id;
+					$folder->save();					
+				}elseif(!empty($autoCreateAttributes))
+				{
+					//should not apply it to existing folders. this leads to unexpected results.
+	//				$folder->setAttributes($autoCreateAttributes);
+	//				$folder->save();	
+				}
+
+				$this->_folderCache[$cacheKey]=$folder;
+			}else
 			{
-				//should not apply it to existing folders. this leads to unexpected results.
-//				$folder->setAttributes($autoCreateAttributes);
-//				$folder->save();	
+				$folder = $this->_folderCache[$cacheKey];
 			}
-
+			
 			$parent_id = $folder->id;
 		}
 		
@@ -1019,25 +1030,40 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	}
 
 	/**
-	 * Find all shared folders for the current user
 	 * 
-	 * @param GO_Base_Db_FindParams $findParams
-	 * @return GO_Base_Db_ActiveStatement
+	 * @param string $name
+	 * @return GO_Files_Model_Folder
 	 */
-	public function findShares($findParams=false){
+	public function getTopLevelShare($folderName){
 		
-		if(!$findParams)
-			$findParams = new GO_Base_Db_FindParams();
-				
-		 $findParams->getCriteria()
-					->addModel(GO_Files_Model_Folder::model())
-					->addCondition('visible', 1)
-					->addCondition('user_id', GO::user()->id,'!=');
+		GO::debug("getTopLevelShare($folderName)");
 		
-		return GO_Files_Model_Folder::model()->find($findParams);
+		if(!isset($this->_folderCache['Shared/'.$folderName])){
+			$findParams = GO_Base_Db_FindParams::newInstance();
+
+			$findParams->joinRelation('sharedRootFolders')
+				->ignoreAcl()
+				->order('name','ASC')
+				->single();
+
+			$findParams->getCriteria()
+						->addCondition('user_id', GO::user()->id,'=','sharedRootFolders')
+						->addBindParameter(':name', $folderName)
+						->addRawCondition('t.name COLLATE utf8_bin', ':name'); //use utf8_bin for case sensivitiy and special characters.
+
+			$folder=$this->find($findParams);
+			
+			$this->_folderCache['Shared/'.$folderName]=$folder;
+			
+			//for findByPath
+			if($folder)
+				$this->_folderCache[$folder->parent_id.'/'.$folderName]=$folder;
+			
+		}
 		
-		
+		return $folder;
 	}
+	
 	/**
 	 * 
 	 * @param GO_Base_Db_FindParams $findParams

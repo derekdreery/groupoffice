@@ -29,6 +29,8 @@ class GO_Base_Session extends GO_Base_Observable{
 	
 	public $values;
 	
+	private $_user;
+	
 	public function __construct(){
 		$this->start();
 	}
@@ -186,6 +188,36 @@ class GO_Base_Session extends GO_Base_Observable{
 	}
 	
 	/**
+	 * Get the logged in user
+	 *
+	 * @return GO_Base_Model_User The logged in user model
+	 */
+	public function user(){
+		if(empty($this->values['user_id'])){
+			return false;
+		}else{		
+			
+			//also check if the user_id matches because GO::session()->runAsRoot() may haver changed it.
+			if(empty($this->_user) || $this->_user->id!=$this->values['user_id']){
+				
+//				$cacheKey = 'GO_Base_Model_User:'.GO::session()->values['user_id'];
+//				$cachedUser = GO::cache()->get($cacheKey);
+//				
+//				if($cachedUser){
+////					GO::debug("Returned cached user");
+//					self::$_user=$cachedUser;
+//				}else
+//				{
+					$this->_user = GO_Base_Model_User::model()->findByPk($this->values['user_id'], array(), true);
+//					GO::cache()->set($cacheKey, self::$_user);
+//				}
+			}
+
+			return $this->_user;
+		}
+	}
+	
+	/**
 	 * Logs a user in.
 	 * 
 	 * @param string $username
@@ -226,6 +258,7 @@ class GO_Base_Session extends GO_Base_Observable{
 			return false;
 		}else
 		{			
+			$this->_user=$user;
 			$this->setCurrentUser($user->id);
 			
 			GO::language()->setLanguage($user->language);
@@ -261,6 +294,8 @@ class GO_Base_Session extends GO_Base_Observable{
 				$this->_log(GO_Log_Model_Log::ACTION_LOGIN);
 			
 			GO::session()->values['countLogin']=$countLogin;
+			
+			
 			
 			return $user;
 		}		
@@ -309,16 +344,23 @@ class GO_Base_Session extends GO_Base_Observable{
 	
 	/**
 	 * Sets current user for the entire session. Use it wisely!
-	 * @param int $user_id
+	 * @param int/GO_Base_Model_User $user_id
 	 */
 	public function setCurrentUser($user_id) {
 		
 //		if(GO::modules()->isInstalled("log"))
 //			GO_Log_Model_Log::create ("setcurrentuser", "Set user ID to $user_id");
 	
+		if($user_id  instanceof GO_Base_Model_User){
+			$this->_user=$user_id;
+			$this->values['user_id']=$user_id->id;
+		}else
+		{
+			//remember user id in session
+			$this->values['user_id']=$user_id;
+		}
 		
-		//remember user id in session
-		$this->values['user_id']=$user_id;
+		
 		
 		if(!GO::user())
 			throw new Exception("Could not set user with id ".$user_id." in GO_Base_Session::setCurrentUser()!");
