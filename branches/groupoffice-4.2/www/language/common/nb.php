@@ -609,3 +609,5 @@ $l['skippedDeleteHasLinks']='Ikke slettet fordi elementet har lenker';
 $l['skippedDeleteHasFiles']='Ikke slettet fordi elementet har filer eller mapper';
 $l['foundDuplicates']='Funnet %s duplikater.';
 $l['clickToDeleteDuplicates']='Klikk her for å slette de nyeste duplikatene merket med rødt.';
+$l['deleteErrors']='Det oppstod feil under forsøk på å slette {count} elementer';
+$l['folderUpload']='Mapper (krever Java)';

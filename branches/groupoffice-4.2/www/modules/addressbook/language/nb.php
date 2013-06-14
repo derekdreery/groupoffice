@@ -274,3 +274,7 @@ $l['contactSuffix']= "Suffiks";
 $l['contactHomepage']= "Nettsted";
 $l['newContact']= "Ny person";
 $l['existingContact']= "Eksisterende person";
+$l['searchForImages']='Bildesøk på nettet';
+$l['downloadPhotoUrl']='Last ned bilde fra URL';
+$l['orBrowseComputer']='eller last opp fra din egen datamaskin';
+$l['currentImage']='Gjeldende bilde';
