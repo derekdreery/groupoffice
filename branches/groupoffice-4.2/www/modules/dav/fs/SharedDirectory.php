@@ -25,7 +25,7 @@ class GO_Dav_Fs_SharedDirectory extends Sabre\DAV\FS\Directory implements Sabre\
 
 		GO::debug('Shared::getChild('.$name.')');
 		
-		$folder = GO_Files_Model_Folder::model()->findShares(GO_Base_Db_FindParams::newInstance()->single()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('name', $name)));
+		$folder = GO_Files_Model_Folder::model()->getTopLevelShare($name);
 		
 		if (!$folder)
 			throw new Sabre\DAV\Exception\NotFound('Shared folder with name ' . $name . ' could not be located');
@@ -40,8 +40,7 @@ class GO_Dav_Fs_SharedDirectory extends Sabre\DAV\FS\Directory implements Sabre\
 	 */
 	public function getChildren() {
 		GO::debug('Shared::getChildren()');
-		//$stmt = GO_Files_Model_Folder::model()->findShares();
-		
+
 		$shares =GO_Files_Model_Folder::model()->getTopLevelShares(GO_Base_Db_FindParams::newInstance()->limit(100));
 
 		$nodes = array();

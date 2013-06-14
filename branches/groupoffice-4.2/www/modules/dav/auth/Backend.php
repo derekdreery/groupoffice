@@ -14,7 +14,7 @@
  */
 class GO_Dav_Auth_Backend extends Sabre\DAV\Auth\Backend\AbstractDigest {
 	
-	private $_user_id;
+	private $_user;
 	
 	public function getDigestHash($realm, $username) {
 		$user = GO_Base_Model_User::model()->findSingleByAttribute("username", $username);
@@ -22,14 +22,14 @@ class GO_Dav_Auth_Backend extends Sabre\DAV\Auth\Backend\AbstractDigest {
 		if(!$user)
 			return null;
 		else{	
-			$this->_user_id=$user->id;
+			$this->_user=$user;
 			return $user->digest;
 		}
 	}	
 	
 	public function authenticate(\Sabre\DAV\Server $server, $realm) {		
 		if(parent::authenticate($server, $realm)){
-			GO::session()->setCurrentUser($this->_user_id);
+			GO::session()->setCurrentUser($this->_user);
 			return true;
 		}
 	}
