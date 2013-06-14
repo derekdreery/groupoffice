@@ -1,4 +1,6 @@
-- Calendar module: Notification about files of a private event, once the checkbox 'Private' has been clicked.
+- Improved WebDAV performance
+- Calendar module: Notification about files of a private event, once the 
+  checkbox 'Private' has been clicked.
 
 13-06-2013 4.2.1
 - Upgrade TCPDF to 6.0.020 and changed default font to freesans because of display problem on iPad
