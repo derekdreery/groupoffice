@@ -2146,7 +2146,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			$imap_part_id='TEXT';
 		}
 
-		$size = $this->get_message_part_start($uid,$imap_part_id);
+		$size = $this->get_message_part_start($uid,$imap_part_id, $peek);
 		
 		if(!$size)
 			return false;
