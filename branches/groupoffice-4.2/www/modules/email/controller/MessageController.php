@@ -1460,6 +1460,23 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			}
 		}
 	}
+
+//	Z-push testing
+//	public function actionAttachment($uid, $number, $encoding, $account_id, $mailbox, $filename){
+//		
+//		$file = new GO_Base_Fs_File($filename);
+//		GO_Base_Util_Http::outputDownloadHeaders($file,true,true);
+//		
+//		$account = GO_Email_Model_Account::model()->findByPk($account_id);
+//		$imap = $account->openImapConnection($mailbox);
+//		include_once('modules/z-push2/backend/go/GoImapStreamWrapper.php');
+//		
+//		$fp = GoImapStreamWrapper::Open($imap, $uid, $number, $encoding);
+//		
+//		while($line = fgets($fp)){
+//			echo $line;
+//		}
+//	}
 	
 	
 	protected function actionTnefAttachmentFromTempFile($params){
