@@ -69,7 +69,14 @@ GO.addressbook.ContactDialog = function(config)
 				scope:this,
 				handler:function(){
 					var f= this.formPanel.form;
-					var name = f.findField('first_name').getValue()+' '+f.findField('last_name').getValue();
+					var mn = f.findField('middle_name').getValue();
+					
+					if(mn)
+						mn = ' '+mn+' ';
+					else
+						mn = ' ';
+					
+					var name = f.findField('first_name').getValue()+mn+f.findField('last_name').getValue();
 					var sUrl = 'http://www.google.com/search?tbm=isch&q="'+encodeURIComponent(name)+'"';
 					window.open(sUrl);
 				}
