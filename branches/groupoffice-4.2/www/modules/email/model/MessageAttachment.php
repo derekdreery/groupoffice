@@ -149,11 +149,28 @@ class GO_Email_Model_MessageAttachment extends GO_Base_Model{
 	}	
 	
 	/**
+	 * Estimates base64 decoded data size by multiplying with 3/4. Padding can't
+	 * be used because we don't have the data.
+	 * 
+	 * @return int
+	 */
+	public function getEstimatedSize(){
+		switch($this->encoding){
+			case 'base64':
+				return ceil($this->size*0.75);
+				break;
+			default:
+				return $this->size;
+				break;
+		}
+	}
+	
+	/**
 	 * Get the size formatted. eg. 128 kb
 	 * @return string 
 	 */
 	public function getHumanSize(){
-		return GO_Base_Util_Number::formatSize($this->size);
+		return GO_Base_Util_Number::formatSize($this->getEstimatedSize());
 	}
 	
 	/**
