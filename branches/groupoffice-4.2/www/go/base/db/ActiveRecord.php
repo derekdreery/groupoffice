@@ -959,7 +959,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$cacheKey = md5(serialize($params));
 		//Use cache so identical findByPk calls are only executed once per script request
-		$cachedModel =  GO::modelCache()->get($this->className(), $cacheKey);
+		$cachedModel = empty($params['disableModelCache']) ? GO::modelCache()->get($this->className(), $cacheKey) : false;
 		if($cachedModel)
 			return $cachedModel;
 				
@@ -1099,7 +1099,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		{
 			$this->_debugSql=!empty(GO::session()->values['debugSql']);
 		}		
-		
+//		$this->_debugSql=true;
 		if(GO::$ignoreAclPermissions)
 			$params['ignoreAcl']=true;
 		
