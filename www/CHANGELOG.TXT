@@ -1,3 +1,7 @@
+- Updated German
+- Z-push 1.5 fix that it gave errors when there were no items to sync.
+
+
 13-06-2013 4.1.77
 - If it's only a single all day occurrence then the end day should be the same
 	as the start day for the iOS devices. If it lasts more than one day we should 
