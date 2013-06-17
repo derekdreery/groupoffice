@@ -27,3 +27,11 @@ $l['invalidCert']="Das Zertifikat ist ungültig!";
 $l['validCert']="Gültiges Zertifikat";
 $l['certEmailMismatch']="Gültiges Zertifikat, aber die Absenderadresse stimmt nicht mit der E-Mailadresse des Zertifikates überein.";
 $l['decryptionFailed']='SMIME-Entschlüsselung dieser Nachricht fehlgeschlagen.';
+
+$l["email"]="E-Mail";
+$l["hash"]="Hash-Wert";
+$l["serial_number"]="Seriennummer";
+$l["version"]="Version";
+$l["issuer"]="Ausgestellt durch";
+$l["valid_to"]="Gültig bis";
+$l["valid_from"]="Gültig ab";
