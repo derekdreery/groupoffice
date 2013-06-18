@@ -360,14 +360,7 @@ GO.email.AccountDialog = function(config) {
 	//this.permissionsTab.disabled = false;
 	
 	
-	this.filterGrid = new GO.email.FilterGrid({
-		listeners:{
-			show:function(){
-				if(!GO.email.subscribedFoldersStore.loaded)
-					GO.email.subscribedFoldersStore.load();
-			}
-		}
-	});
+	this.filterGrid = new GO.email.FilterGrid();
 
 	var items = [propertiesTab,
 
