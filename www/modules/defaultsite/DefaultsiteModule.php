@@ -24,7 +24,7 @@ class GO_Defaultsite_DefaultsiteModule extends GO_Base_Module {
 				$siteProperties = array(
 					//'id'=>'', ID IS AUTO INCREMENT
 					'name'=>GO::t('name','defaultsite'),
-					'user_id'=>GO::user()->id,
+					'user_id'=>1,
 					//'mtime'=>'', AUTOMATIC
 					//'ctime'=>'', AUTOMATIC
 					'domain'=>'*',
