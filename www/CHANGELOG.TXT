@@ -1,6 +1,10 @@
+18-06-2013 4.2.2
 - Improved WebDAV performance
 - Calendar module: Notification about files of a private event, once the 
   checkbox 'Private' has been clicked.
+- Better memory management in z-push 2 backend. Raised default max attachment 
+  size to 100MB.
+- Optimized Z-Push 2 ping process with ChangesSink
 
 13-06-2013 4.2.1
 - Upgrade TCPDF to 6.0.020 and changed default font to freesans because of display problem on iPad
@@ -24,6 +28,13 @@
 - Tickets can be created by sending an e-mail
 - Ticket types can be grouped
 - Anonymous ticket posting is very simple to setup now.
+
+13-06-2013 4.1.78
+- Updated German
+- Z-push 1.5 fix that it gave errors when there were no items to sync.
+- Fix for creating new users with LDAP
+- e-mail (non sieve) filter grid didn't reload
+- Recurring events could have one extra day when synchronized
 
 13-06-2013 4.1.77
 - If it's only a single all day occurrence then the end day should be the same

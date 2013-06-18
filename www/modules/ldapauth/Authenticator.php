@@ -212,6 +212,7 @@ class GO_Ldapauth_Authenticator {
 			GO::debug('LDAPAUTH: updating user contact');
 			$contact->setAttributes($attributes);
 			$contact->cutAttributeLengths();
+			$contact->skip_user_update=true;
 
 			if (!empty($attributes['company'])) {
 				$company = GO_Addressbook_Model_Company::model()->findSingleByAttributes(array(
