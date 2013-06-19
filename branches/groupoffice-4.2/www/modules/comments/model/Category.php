@@ -14,6 +14,8 @@
  * @version $Id: example.php 7607 20120101Z <<USERNAME>> $
  * @copyright Copyright Intermesh BV.
  * @author WilmarVB wilmar@intermesh.nl
+ * @property int $id
+ * @property string $name
  */
 
 class GO_Comments_Model_Category extends GO_Base_Db_ActiveRecord{

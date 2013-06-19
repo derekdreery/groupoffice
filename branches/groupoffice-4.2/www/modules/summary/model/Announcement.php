@@ -14,6 +14,7 @@
  * @property int $mtime
  * @property string $title
  * @property string $content
+ * @property int $acl_id
  */
 
 class GO_Summary_Model_Announcement extends GO_Base_Db_ActiveRecord {

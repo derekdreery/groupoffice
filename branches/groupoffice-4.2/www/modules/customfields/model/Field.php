@@ -18,6 +18,7 @@
  * @property int $category_id
  * @property int $id
  * @property boolean $unique_values
+ * @property int $number_decimals
  */
 class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 	

@@ -39,6 +39,7 @@
  * @property string $uuid
  * 
  * @property GO_Calendar_Model_Participant $participants
+ * @property int $muser_id
  * 
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>

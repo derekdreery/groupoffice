@@ -42,6 +42,7 @@
  * 
  * @property int $sieve_port
  * @property boolean $sieve_tls
+ * @property boolean $sieve_usetls
  */
 class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	
