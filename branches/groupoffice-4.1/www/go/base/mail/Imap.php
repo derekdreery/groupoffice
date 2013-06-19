@@ -2088,13 +2088,14 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		if (preg_match("/\{(\d+)\}\r\n/", $result, $matches)) {
 			$size = $matches[1];
 		}
-		
-		$this->last_line=false;
-		
+
 		if(!$size)
 			return false;
 
-		$this->last_line=fgets($this->handle);
+		$this->message_part_size=$size;
+		$this->message_part_read=0;
+		
+		GO::debug("Part size: ".$size);
 		return $size;
 	}
 	/**
@@ -2103,22 +2104,21 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 * @return <type>
 	 */
 	public function get_message_part_line() {
-		if (!$this->last_line) {
-			$res = false;
-		}else
-		{
-			$res = $this->last_line;
-			$this->last_line = fgets($this->handle,1024);
+		
+		$line=false;
+		$leftOver = $this->message_part_size-$this->message_part_read;
+		if($leftOver>0){
+			$blockSize = $leftOver>1024 ? 1024 : $leftOver;
 
-			if ($this->check_response(array($this->last_line), false, false)) {
-				$this->last_line = false;
-
-				if(substr(rtrim($res),-1, 1)==')')
-					$res = substr(rtrim($res),0,-1);
-			}
+			$line = fgets($this->handle,$blockSize);
+			$this->message_part_read+=strlen($line);
+		}			
+		if(!$line){
+			//read and check left over response.
+			$response=$this->get_response();
+			$this->check_response($response);
 		}
-
-		return $res;
+		return $line;
 	}
 
 	public function save_to_file($uid, $path, $imap_part_id=-1, $encoding='', $peek=false){
