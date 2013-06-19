@@ -1,3 +1,6 @@
+#### 4.1.79
+- Project types can be removed again
+
 13-06-2013 4.1.78
 - Updated German
 - Z-push 1.5 fix that it gave errors when there were no items to sync.
