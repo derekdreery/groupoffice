@@ -79,6 +79,10 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 		$values = GO::config()->getSettings($propertyNames,$this->_userId);
 
 		foreach($values as $property=>$value){
+			
+			if(substr($value,0,11)=='serialized:'){
+				$value = unserialize(substr($value,11));
+			}
 			$this->{substr($property,strlen($this->myPrefix()))} = $value;
 		}
 	} 
@@ -107,6 +111,9 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 		foreach($properties as $property){				
 			$key = $property->name;
 			$value = $this->{$key};
+			
+			if(is_array($value) || is_object($value))
+				$value = 'serialized:'.serialize ($value);
 
 			$success = $success && GO::config()->save_setting($this->myPrefix().$key, $value, $this->_userId);			
 		}
