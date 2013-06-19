@@ -1,4 +1,6 @@
-#### 4.1.79
+19-06-2013 4.1.79
+- Fix for SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry when accepting appointemnts
+- Fix for invalid IMAP part reading. UID could be appended.
 - Project types can be removed again
 
 13-06-2013 4.1.78
