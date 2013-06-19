@@ -31,6 +31,7 @@
  * @property int $parent_id
  * @property int $site_id
  * @property GO_Sites_Model_Site $site
+ * @property int $sort_order
  */
 class GO_Sites_Model_Content extends GO_Base_Db_ActiveRecord {
 	

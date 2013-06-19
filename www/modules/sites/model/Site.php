@@ -30,6 +30,8 @@
  * @property int $ctime
  * @property int $user_id
  * @property string $language
+ * @property string $reset_password_path
+ * @property string $lost_password_path
  */
 class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 	

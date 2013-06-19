@@ -27,6 +27,7 @@
  * @property int $model_type_id
  * @property int $model_id
  * @property int $id
+ * @property int $category_id
  */
 
 class GO_Comments_Model_Comment extends GO_Base_Db_ActiveRecord{
