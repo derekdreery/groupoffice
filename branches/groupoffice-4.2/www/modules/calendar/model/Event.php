@@ -1669,7 +1669,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$attributes['status']= GO_Calendar_Model_Participant::STATUS_ACCEPTED;
 	
 		$p= GO_Calendar_Model_Participant::model()
-						->findSingleByAttributes(array('event_id'=>$event->id, 'email'=>$attributes['email'],'is_organizer'=>$isOrganizer));
+						->findSingleByAttributes(array('event_id'=>$event->id, 'email'=>$attributes['email']));
 		if(!$p){
 			$p = new GO_Calendar_Model_Participant();
 			$p->is_organizer=$isOrganizer;		
@@ -1685,7 +1685,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				if($user)
 					$p->user_id=$user->id;
 			}		
-		}		
+		}else
+		{
+			//the organizer might be added as a participant too. We don't want to 
+			//import that a second time but we shouldn't update the is_organizer flag if
+			//we found an existing participant.
+			unset($attributes['is_organizer']);
+		}
 
 		$p->setAttributes($attributes);
 		$p->save();

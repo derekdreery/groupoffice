@@ -1,3 +1,6 @@
+19-06-2013 4.2.3
+- Fixes from 4.1.79
+
 18-06-2013 4.2.2
 - Improved WebDAV performance
 - Calendar module: Notification about files of a private event, once the 
@@ -28,6 +31,11 @@
 - Tickets can be created by sending an e-mail
 - Ticket types can be grouped
 - Anonymous ticket posting is very simple to setup now.
+
+19-06-2013 4.1.79
+- Fix for SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry when accepting appointemnts
+- Fix for invalid IMAP part reading. UID could be appended.
+- Project types can be removed again
 
 13-06-2013 4.1.78
 - Updated German
