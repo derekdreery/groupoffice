@@ -2494,8 +2494,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	public function getValidationErrors(){
 		
 		$validationErrors = parent::getValidationErrors();
-		if($this->customfieldsRecord){
-			$validationErrors = array_merge($validationErrors, $this->customfieldsRecord->getValidationErrors());
+		if($this->_customfieldsRecord){
+			$validationErrors = array_merge($validationErrors, $this->_customfieldsRecord->getValidationErrors());
 		}
 		
 		return $validationErrors;
@@ -2531,12 +2531,14 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 * Just update the mtime timestamp 
 	 */
 	public function touch(){
-		$time = time();
-		if($this->mtime==$time){
-			return true;
-		}else{
-			$this->mtime=time();
-			return $this->_dbUpdate();
+		if (isset ($this->mtime)) {
+			$time = time();
+			if($this->mtime==$time){
+				return true;
+			}else{
+				$this->mtime=time();
+				return $this->_dbUpdate();
+			}
 		}
 	}
 	
