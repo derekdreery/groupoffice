@@ -151,6 +151,8 @@ $l["crn"]='Společnost Reg. číslo';
 $l["iban"]='IBAN';
 $l["unknownEmail"]= 'Neznámá e-mailová adresa';
 $l["strUnknownEmail"]= 'Tato e-mailová adresa je neznámá. Opravdu ji chcete přidat k novému kontaktu, přiřadit ke stávajícímu nebo zrušit?';
+$l["newContact"] = "Nový kontakt";
+$l["existingContact"] = "Existující kontakt";
 
 $l["globalsettings_templatelabel"]= 'Šablona';
 $l["globalsettings_allchangelabel"]= 'Změnit vše?';
@@ -202,8 +204,6 @@ $l["viewLog"]='Zobrazit záznam';
 $l["viewMessage"]='Zobrazit zprávu';
 $l["pauseMailing"]='Pozastavit odesílání';
 $l["resumeMailing"]='Pokračovat v odesílání';
-
-$l["copyingMessages"]='Kopírování zpráv...';
 
 $l["companyId"] = "ID";
 $l["companyUser_id"] = "Uživatel";
@@ -270,6 +270,8 @@ $l["contactSalutation"] = "Oslovení";
 $l["contactEmail_allowed"] = "Zprávy jsou povolené";
 $l["contactFiles_folder_id"] = "Složka";
 $l["contactGo_user_id"] = "Uživatel";
+$l["contactSuffix"] = "Přípona";
+$l["contactHomepage"] = "WWW stránka";
 
 $l['mailingStatus'][0]="Čeká na start";
 $l['mailingStatus'][1]="Probíhá";

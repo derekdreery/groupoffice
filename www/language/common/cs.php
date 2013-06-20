@@ -31,6 +31,7 @@ $l['passwordMatchError']='Hesla se neshodují';
 $l['accessDenied']='Přístup zamítnut';
 $l['saveError']='Chyba při ukládání dat';
 $l['deleteError']='Chyba při vymazávání dat';
+$l['deleteErrors']='Chyba při vymazávání {count} záznamů';
 $l['selectError']='Chyba při pokusu o čtení dat';
 $l['missingField'] = 'Nevyplnili jste všechna povinná pole.';
 $l['invalidEmailError']='E-mailová adresa není správná';
@@ -77,6 +78,7 @@ $l['email'] = 'E-mail';
 $l['phone'] = 'Telefon';
 $l['workphone'] = 'Telefon (pracovní)';
 $l['cellular'] = 'Mobil';
+$l['cellular2'] = '2. mobil';
 $l['company'] = 'Společnost';
 $l['department'] = 'Oddělení';
 $l['function'] = 'Funkce';
@@ -557,6 +559,13 @@ $l["unused"]='Nepoužité';
 $l["attributeGreater"]="Pole '%s' musí být větší než '%s'";
 $l["attributeGreaterOrEqual"]="Pole '%s' musí být větší nebo rovno než '%s'";
 
+$l['userFirst_name']='Křestní jméno';
+$l['userMiddle_name']='Prostřední jméno';
+$l['userLast_name']='Příjmení';
+$l['userPassword']='Heslo';
+$l['userEmail']='E-mailová adresa';
+$l['userUsername']='Uživatelské jméno';
+
 $l["failedImportItems"]="Selhání importu položek";
 
 $l["birthdayFormatMustBe"]="Narozeniny musí být v následujícím formátu";
@@ -592,3 +601,53 @@ $l['sir']='Pan';
 $l['madam']='Paní';
 $l['exportDialog']='Export';
 $l['logFiles']='Soubory pro záznam';
+
+$l['and']='a';
+$l['repeats'] = 'Opakovat vždy %s';
+$l['repeats_at'] = 'Opakovat %s v %s';//eg. Repeats every month at the first monday;
+$l['repeats_at_not_every'] = 'Opakovat %s %s v %s';//eg. Repeats every 2 weeks at monday;
+$l['repeats_not_every'] = 'Opakovat %s %s';
+$l['until']='do'; ;
+
+$l['month_times'][1]='první';
+$l['month_times'][2]='druhý';
+$l['month_times'][3]='třetí';
+$l['month_times'][4]='čtvrtý';
+$l['month_times'][5]='pátý';
+
+$l['deleteAllItems']='Smazat všechny položky';
+$l['deleteAllItemsAreYouSure']='Opravdu chcete smazat všechny položky?';
+$l['sortOrderError']="Bohužel podle tohoto sloupce nelze řadit. Prosím, klikněte na hlavičku jiného sloupce v mřížce pro řazení.";
+
+$l['passwordIsWeak']='Zadané heslo není příliš bezpečné. Mělo by splňovat následující podmínky:';
+$l['passwordMinLength']='Minimální délka: %s';
+$l['passwordRequireUc']='Musí obsahovat velké písmeno';
+$l['passwordRequireLc']='Musí obsahovat malé písmeno';
+$l['passwordRequireNum']='Musí obsahovat číslo';
+$l['passwordRequireSc']='Musí obsahovat speciální znak';
+$l['passwordUnique']='Musí obsahovat %s jedinečných znaků';
+
+$l['maxAttachmentsSizeExceeded']="Celková velikost všech Vaših příloh ({total}) překročila maximální limit ({max}).";
+
+$l['exportScreen']='Momentálně co je na obrazovce';
+
+$l['exportAddressbook']="Automaticky přidat chybějící položky do";
+$l['exportOrders']='Objednávky';
+
+$l['errorTimeout']="The request timed out. The server took too long to respond. Please try again.";
+
+$l['showAll']='Zobrazit vše';
+
+$l['multiselectSelected']='označené';
+
+$l['selectMonthlyDay'] = 'Prosím vyberte den v týdnu pro měsíční opakování.';
+$l['selectWeekOfMonth'] = 'Prosím vyberte číslo dne v týdnu pro měsíční opakování.';
+
+$l['removeDuplicates']='Smazat duplicity';
+$l['removeDuplicatesAreYouSure']='Opravdu chcete smazat duplicity?';
+
+$l['skippedDeleteHasLinks']='Přeskočeno smazání, protože model obsahuje odkazy';
+$l['skippedDeleteHasFiles']='Přeskočeno smazání protože model obsahuje složku nebo soubory';
+$l['foundDuplicates']='Nalezeno %s duplicit.';
+$l['clickToDeleteDuplicates']='Klikněte zde pro smazání nejnovější duplicit, které jsou označeny červeně.';
+$l['folderUpload']='Složky (potřebná Java)';

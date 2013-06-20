@@ -5,7 +5,6 @@ $l['name'] = 'Uživatelé';
 $l['description'] = 'Administrátorské prostředí pro úpravu uživatelů.';
 $l['deletePrimaryAdmin'] = 'Nemůžete smazat hlavního administrátora';
 $l['deleteYourself'] = 'Nemůžete smazat svůj účet';
-$lang['link_type'][8]=$us_user = 'Uživatel';
 $l['error_username']='Byly použity nevhodné znaky v uživatelském jménu';
 $l['error_username_exists']='Omlouváme se, ale toto uživatelské jméno již existuje';
 $l['error_email_exists']='Omlouváme se, ale tato emailová adresa již v systému existuje. Pokud jste zapomněli své heslo, můžete si ho nechat znovu poslat.';
@@ -113,6 +112,8 @@ $l['dashdmy']='Den-Měsíc-Rok';
 $l['slashmdy']='Měsíc/Den/Rok';
 $l['dotdmy']='Den.Měsíc.Rok';
 $l['slashdmy']='Den/Měsíc/Rok';
+$l['slashymd']='Rok-Měsíc-Den';
+$l['dotymd']='Rok.Měsíc.Den';
 
 $l['generatePassword']='Generovat heslo';
 $l['generatedPasswordIs']='Vygenerováné heslo je';
@@ -121,4 +122,14 @@ $l['openContact']='Otevřít kontakt';
 $l['showProUsers']='Zobrazit profesionální uživatele';
 
 $l['updateExistingOnImport']='Upravit existující uživatele (podle uživatelského jména)';
+$l['resetState']="Obnovit pozice oken a mřížek";
+$l['resetStateConfirm']='Opravdu chcete vrátit pozice všech oken, sloupců, velikost panelů atp. do původního nastavení?';
+
+$l['registrationEmail']='Registrační e-mail';
+$l['enabledSettingtabs']='Povolit záložku nastavení';
+
+$l['explanation_cf_settingspanels']='To show the customfield tabs in the settingspanel you need to be sure that the user has at least "Read" access to the customfields module.';
+$l['addresslist_panel'] = 'Seznam adresářů';
+$l['show_addresslists_panel'] = 'Zobrazit seznam adresářů';
+$l['enabled_cf_tabs'] = 'Povolit záložky vlastních oblastí';
 

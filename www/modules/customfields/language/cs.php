@@ -43,3 +43,4 @@ $l['defaultValidationError']='Hodnota nemá správný formát';
 $l['numberValidationError']='Hodnota musí být číslo';
 
 $l['invalidRegex']="Regulérní výraz byl zadán špatně.";
+$l['nDecimals'] = 'Desetinné číslo';

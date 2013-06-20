@@ -3,7 +3,6 @@
 
 $l['name']='Úkoly';
 $l['description']='Můžete zaznamenávat důležité akce.';
-$lang['link_type'][12]=$l['task']='Úkol';
 $l['status']='Stav';
 $l['scheduled_call']='Plánované připomenutí %s';
 $l['statuses']['NEEDS-ACTION'] = 'Vyžaduje akci';
@@ -66,6 +65,7 @@ $l["selectAllTasklists"]='Vybrat všechny přehledy úkolů';
 $l["globalCategory"]='Globální kategorie';
 $l["showFutureTasks"]='Zobrazit nadcházející úkoly';
 $l["incompleteTasks"]='Nedokončené úkoly';
+$l['completedTasks']='Dokončené úkoly';
 $l["dueInSevenDays"]='Za posledních 7 dnů';
 $l["overDue"]='Vypršelé';
 $l["futureTasks"]='Nadcházející';
