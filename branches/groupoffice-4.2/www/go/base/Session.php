@@ -333,13 +333,14 @@ class GO_Base_Session extends GO_Base_Observable{
 	 */
 	public function runAs($id){
 		//Close session writing so that the user won't stay root in browser sessions.
-		
-		$debug = !empty(GO::session()->values['debug']);
-		$debugSql = !empty(GO::session()->values['debugSql']);
-		
-		GO::session()->closeWriting();
-		GO::session()->values=array('debug'=>$debug, 'debugSql'=>$debugSql);
-		GO::session()->setCurrentUser($id);
+		if(!isset($this->values['user_id']) || $id!=$this->values['user_id']){
+			$debug = !empty(GO::session()->values['debug']);
+			$debugSql = !empty(GO::session()->values['debugSql']);
+
+			GO::session()->closeWriting();
+			GO::session()->values=array('debug'=>$debug, 'debugSql'=>$debugSql);
+			GO::session()->setCurrentUser($id);
+		}
 	}
 	
 	/**
