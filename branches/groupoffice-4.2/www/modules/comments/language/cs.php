@@ -17,3 +17,4 @@ $l['noCategory']='Žádná kategorie';
 $l['newCommentText']='Vložte nový komentář ...';
 
 $l['readMore']="Číst dále";
+$l['enableReadMore']="Povolit odkaz pro číst dále";

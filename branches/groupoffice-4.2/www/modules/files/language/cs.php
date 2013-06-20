@@ -117,3 +117,19 @@ $l['notificationEmailSubject'] = 'Změny ve složce';
 
 $l['downloadLinkExpired'] = "Omlouváme se, ale odkaz pro stažení již vypršel";
 $l['recentFiles']="Soubory změněny v posledních 7 dnech";
+
+$l['bookmarkFolder']="Přidat do oblíbených";
+$l['bookmarks']="Oblíbené";
+$l['bookmarkAlreadyExists']="Složka '%fn' již existuje v oblíbených u aktuálního uživatele.";
+$l['removeBookmark']="Smazat z oblíbených";
+$l['removeBookmarkQuestion']="Opravdu chcete smazat složu '%fn' z oblíbených?";
+$l['notInSearchMode']="Tuto akci nelze provést ve vyhledávacím režimu.";
+
+$l['openInBrowser']='Otevřít v prolížeči';
+
+$l['selectApplication']="Vyberte aplikaci pro otevření tohoto souboru...";
+$l['rememberFileHandler']="Zapamatovat nastavení pro tento typ souboru";
+$l['alwaysAsk']="Vždy se zeptat";
+$l['openWith']='Otevřít pomocí...';
+
+$l['open']='Otevřít';

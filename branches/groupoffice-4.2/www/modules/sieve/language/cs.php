@@ -28,7 +28,7 @@ $l["filterset"]= 'Sada filtrů:';
 $l["days"]= 'Odpověz každý x den';
 $l["sendToAddresses"]='Poslat e-mail na následující adresy';
 $l["addressesLabel"]= 'Poslat e-mail na následující adresy (odděleno čárkou)';
-$l["addressesLabelOptional"]= '(volitelné) Odpovídat také na tyto aliasy (odděleno čárkou)';
+$l["addressesLabelOptional"]= '(volitelné) Pošli mail na následující adresy (Pošli mail na následující adresy)';
 $l["reason"]= 'Zpráva';
 $l["allfollowingrules"]= 'které odpovídají následujícím podmínkám';
 $l["somefollowingrules"]= 'které odpovídají jedné z následujících podmínek';
@@ -117,3 +117,5 @@ $l['active']='Aktivní';
 
 $l['sieveWarning']="Pokud Váš poštovní server podporuje sieve filtry, doporučujeme jeho použití.";
 $l['setRead']='Označit jako přečtené';
+
+$l['stopEndError'] = 'Pro ukončení je potřebná akce Konec!';

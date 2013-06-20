@@ -9,7 +9,7 @@ $l['startsAt']='Od';
 $l['endsAt']='Do';
 $l['exceptionNoCalendarID'] = 'CHYBA: Kalendář nemá ID!';
 $l['appointment'] = 'Činnost: ';
-$l['allTogether'] = 'Všechny dohromady';
+$l['allTogether'] = 'Všichni dohromady';
 $l['location']='Místo';
 $l['invited']='Jste pozváni na následující akce';
 $l['acccept_question']='Chcete přijmout tuto akci?';
@@ -26,17 +26,12 @@ $l['statuses']['DELEGATED'] = 'Delegovaný';
 $l['statuses']['COMPLETED'] = 'Dokončený';
 $l['statuses']['IN-PROCESS'] = 'V procesu';
 $l['statuses']['CONFIRMED'] = 'Potvrzený';
+$l['statuses']['CANCELLED'] = 'Zrušený';
 $l['accept_mail_subject'] = 'Pozvánka pro \'%s\' byla přijata';
 $l['accept_mail_body'] = '%s přijal vaše pozvání na:';
 $l['decline_mail_subject'] = 'Pozvánka na \'%s\' byla odtmítnuta';
 $l['decline_mail_body'] = '%s nepřijal vaše pozvání na:';
 $l['location']='Místo';
-$l['and']='a';
-$l['repeats'] = 'Opakovat vždy %s';
-$l['repeats_at'] = 'Opakovat %s v %s';//eg. Repeats every month at the first monday;
-$l['repeats_at_not_every'] = 'Opakovat %s %s v %s';//eg. Repeats every 2 weeks at monday;
-$l['repeats_not_every'] = 'Opakovat %s %s';
-$l['until']='do'; ;
 $l['not_invited']='Nebyli jste pozváni na tuto akci. Budete se muset přihlásit jako jiný uživatel.';
 $l['accept_title']='Přijat';
 $l['accept_confirm']='Autor bude obeznámen o Vašem přijmutí akce';
@@ -68,11 +63,6 @@ $l['birthday_name']='Narozeniny: {NAME}';
 $l['birthday_desc']='{NAME} oslavil dnes {AGE}';
 $l['unauthorized_participants_write']='Nemáte dostatečná oprávnění k naplánování událostí pro následující uživatele:<br /><br />{NAMES}<br /><br />Můžete poslat pozvánku, aby mohli událost přijmout a naplánovat.';
 $l['noCalSelected'] = 'Nebyly vybráný kalendáře pro tento přehled. Vyberte alespoň jeden kalendář v Administraci.';
-$l['month_times'][1]='první';
-$l['month_times'][2]='druhý';
-$l['month_times'][3]='třetí';
-$l['month_times'][4]='čtvrtý';
-$l['month_times'][5]='pátý';
 $l['rightClickToCopy']='Klikněte pravým tlačítkem pro zkopírování odkazu';
 $l['invitation']='Pozvánka';
 $l['invitation_update']='Změna pozvánky';
@@ -117,6 +107,7 @@ $l["weeks"]= 'Týdny';
 $l["monthsByDate"]= 'Měsíce podle data';
 $l["monthsByDay"]= 'Měsíce podle dnů';
 $l["years"]= 'Roky';
+$l["months"]= 'Měsíce';
 $l["atDays"]= 'V dny';
 $l["noReminder"]= 'Nepřipomínat';
 $l["reminder"]='Připomínání';
@@ -183,6 +174,7 @@ $l["sendInvitationInitial"]='Chcete všem účastníkům poslat oznámení?';
 $l["sendInvitationUpdate"]='Chcete všem účastníkům poslat oznámení o úpravě?';
 $l["sendCancellation"]='Chcete všem účastníkům poslat oznámení o zrušení?';
 $l["forthcomingAppointments"]='Nadcházející události';
+$l["pastAppointments"]='Minulé události';
 $l["quarterShort"]= 'Q';
 
 $l["globalsettings_templatelabel"]= 'Šablona';
@@ -199,10 +191,49 @@ $l['eventScheduledIn']='Událost byla naplánována do Vašeho kalendáře s ná
 $l['eventDeclined']="Událost byla odmítnuta.";
 $l['eventUpdatedIn']='Událost v kalendáři %s byla změněna se stavem %s';
 
-$l['updateReponses'][1]='%s přijal událost %s';
-$l['updateReponses'][2]='%s odmítnul událost %s';
-$l['updateReponses'][3]='%s označil událost %s jako předběžnou';
+$l['updateReponses']["ACCEPTED"]='%s přijal událost %s';
+$l['updateReponses']["DECLINED"]='%s odmítnul událost %s';
+$l['updateReponses']["TENTATIVE"]='%s označil událost %s jako předběžnou';
 
 $l['directUrl']='Přímá URL';
+
+$l['errorOrganizerOnly'] = 'Nemáte oprávnění upravovat tuto událost, protože nejste organizátor.';
+$l['errorOrganizerOnlyTitle'] = 'Nejste organizátor';
 $l['cantRemoveOrganizer']="Nemůžete odstranit organizátora";
 $l['calendarColor']='Barva kalendáře';
+$l['eventDeleted']="Událost byla smazána z Vašeho kalendáře";
+
+$l['attendance']='Účast';
+$l['organizer']='Organizátor';
+$l['notifyOrganizer']="Informovat organizátora o mém rozhodnutí pomocí e-mailové zprávy";
+
+$l['iWillAttend']="Zúčastním se";
+$l['iMightAttend']="Mohl bych se zúčastnit";
+$l['iWillNotAttend']="Nezúčastním se";
+$l['iWillDecideLater']="Ještě jsem se nerozhodnul";
+
+$l['eventUpdated']="Následující událost byla upravena organizátorem";
+
+$l['notifyCancelParticipants']='Odeslat účastníkům oznámení o zrušení?';
+$l['notifyCancelOrganizer']='Odeslat organizátorovi oznámení o Vaší neúčasti pomocí e-mailové zprávy?';
+$l['notifyParticipants']='Informovat účastníky?';
+$l['sendNotificationTitle']='Odeslaz oznámení?';
+$l['sendNotification']='Odeslat oznámení účastníkům pomocí e-mailové zprávy?';
+
+$l['openCalendar']='Otevřít kalendář';
+$l['createPermission']="Právo zápisu";
+
+$l['show_holidays']="Zobrazit prázdniny";
+$l['participant']='Účastník';
+$l['clickForAttendance']='Klikněte zde pro Váš stav o účasti';
+
+$l['viewDay']='Den';
+$l['viewMorning']='Dopoledne';
+$l['viewAfternoon']='Odpoledne';
+$l['viewEvening']='Večer';
+
+$l['cronEventAndTaskReportMailer']='E-mailový klient pro dnešní události a úkoly';
+$l['cronEventAndTaskReportMailerDescription']='Každému uživateli v cronu se odešle e-mailová zpráva s dnešními událostmi a úkoly';
+$l['cronEventAndTaskReportMailerPdfSubtitle']='Dnešní události a úkoly';
+$l['cronEventAndTaskReportMailerSubject']='Dnešní události a úkoly';
+$l['cronEventAndTaskReportMailerContent']='V přiloženém PDF soubory naleznete seznam dnešních událostí a úkolů.';

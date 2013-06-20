@@ -19,3 +19,4 @@ $l["adminOnlyLabel"]= 'Pouze administrátoři mohou použit tuto skupinu a přid
 $l["groupMembers"]='Členové skupiny';
 $l["managePermissions"]= 'Upravit oprávnění';
 $l['modulePermissions'] = 'Modul oprávnění';
+$l['use']='Použít';
