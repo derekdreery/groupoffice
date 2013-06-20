@@ -415,7 +415,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * @param boolean $autoCreate True to auto create the folders. ACL's will be ignored.
 	 * @return GO_Files_Model_Folder 
 	 */
-	public function findByPath($relpath, $autoCreate=false, $autoCreateAttributes=array()) {
+	public function findByPath($relpath, $autoCreate=false, $autoCreateAttributes=array(), $caseSensitive=true) {
 		
 
 		$oldIgnoreAcl = GO::$ignoreAclPermissions;
@@ -434,12 +434,14 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			
 			
 			if(!isset($this->_folderCache[$cacheKey])){
+				
+				$col = $caseSensitive ? 't.name COLLATE utf8_bin' : 't.name';
 
 				$findParams = GO_Base_Db_FindParams::newInstance();
 				$findParams->getCriteria()
 								->addCondition('parent_id', $parent_id)
 								->addBindParameter(':name', $folderName)
-								->addRawCondition('t.name COLLATE utf8_bin', ':name'); //use utf8_bin for case sensivitiy and special characters.
+								->addRawCondition($col, ':name'); //use utf8_bin for case sensivitiy and special characters.
 
 				$folder = $this->findSingle($findParams);
 				if (!$folder) {
@@ -767,13 +769,13 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * @param String $filename
 	 * @return GO_Files_Model_File 
 	 */
-	public function hasFile($filename){		
-		
+	public function hasFile($filename, $caseSensitive=true){		
+		$col = $caseSensitive ? 't.name COLLATE utf8_bin' : 't.name';
 		$findParams = GO_Base_Db_FindParams::newInstance()
 						->single();
 		$findParams->getCriteria()							
 							->addBindParameter(':name', $filename)
-							->addRawCondition('t.name COLLATE utf8_bin', ':name'); //use utf8_bin for case sensivitiy and special characters.
+							->addRawCondition($col, ':name'); //use utf8_bin for case sensivitiy and special characters.
 		
 		return $this->files($findParams);
 	}
@@ -1082,5 +1084,20 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 					->addCondition('user_id', GO::user()->id,'=','sharedRootFolders');
 				
 		return $this->find($findParams);
+	}
+	
+	/**
+	 * Empty the folder
+	 */
+	public function removeChildren(){
+		$stmt = $this->folders();
+		while($subfolder = $stmt->fetch()){
+			$subfolder->delete();
+		}
+		
+		$stmt = $this->files();
+		while($file = $stmt->fetch()){
+			$file->delete();
+		}
 	}
 }
