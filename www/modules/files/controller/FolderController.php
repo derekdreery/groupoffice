@@ -919,7 +919,10 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		//GO::debug("Create new model folder ".$model->className()."(ID:".$model->id.")");
 
 		$folder = GO_Files_Model_Folder::model()->findByPath($model->buildFilesPath(),true, array('acl_id'=>$model->findAclId(),'readonly'=>1));
-
+		
+		if(!$folder){
+			throw new Exception("Failed to create folder ".$model->buildFilesPath());
+		}
 //      if (!empty($model->acl_id))
 //          $folder->acl_id = $model->acl_id;
 

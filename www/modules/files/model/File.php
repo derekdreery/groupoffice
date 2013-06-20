@@ -525,13 +525,13 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	 * @param string $relpath Relative path from GO::config()->file_storage_path
 	 * @return GO_Files_Model_File 
 	 */
-	public function findByPath($relpath){
-		$folder = GO_Files_Model_Folder::model()->findByPath(dirname($relpath));
+	public function findByPath($relpath,$caseSensitive=true){
+		$folder = GO_Files_Model_Folder::model()->findByPath(dirname($relpath),false,array(),$caseSensitive);
 		if(!$folder)
 			return false;
 		else
 		{
-			return $folder->hasFile(GO_Base_Fs_File::utf8Basename($relpath));
+			return $folder->hasFile(GO_Base_Fs_File::utf8Basename($relpath),$caseSensitive);
 		}
 		
 	}
