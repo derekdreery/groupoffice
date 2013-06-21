@@ -246,7 +246,7 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 	{
 		
 		var config = config || {};
-		
+	
 		if(!this.rendered)
 		{
 			this.render(Ext.getBody());
@@ -325,7 +325,11 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 //				GO.addressbook.ContactDialog.superclass.show.call(this);
 //			}
 			//var abRecord = this.personalPanel.formAddressBooks.store.getById(this.personalPanel.formAddressBooks.getValue());
-			this.tabPanel.setActiveTab(0);
+			
+			if(config.activeTab)
+				this.tabPanel.setActiveTab(config.activeTab);
+			else
+				this.tabPanel.setActiveTab(0);
 		}
 
 	},
