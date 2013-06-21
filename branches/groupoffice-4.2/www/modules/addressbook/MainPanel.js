@@ -616,7 +616,7 @@ GO.addressbook.showContactDialog = function(contact_id, config){
 		GO.addressbook.contactDialog.on(GO.addressbook.contactDialogListeners);
 		delete GO.addressbook.contactDialogListeners;
 	}
-
+		
 	GO.addressbook.contactDialog.show(contact_id, config);
 }
 
