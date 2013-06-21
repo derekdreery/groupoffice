@@ -520,7 +520,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$response['success'] = $response['sendParams']['draft_uid'] > 0;
 		}
 		
-		if(!$imap->append_message($account->drafts, $message->toString(), "\Seen")){
+		if(!$imap->append_message($account->drafts, $message, "\Seen")){
 			$response['success'] = false;
 			$response['feedback']=$imap->last_error();
 		}
@@ -652,7 +652,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				GO::debug("Sent");
 				//if a sent items folder is set in the account then save it to the imap folder
 				$imap = $account->openImapConnection($account->sent);
-				if(!$imap->append_message($account->sent, $message->toString(), "\Seen")){
+				if(!$imap->append_message($account->sent, $message, "\Seen")){
 					$response['success']=false;
 					$response['feedback'].='Failed to save send item to '.$account->sent;
 				}

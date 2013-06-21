@@ -2497,7 +2497,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 * @return <type>
 	 */
 	public function append_feed($string) {
-		return fwrite($this->handle, $string."\r\n");
+		return fwrite($this->handle, $string);		
 	}
 
 	/**
@@ -2529,21 +2529,47 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	/**
 	 * Append a message to a mailbox
 	 * 
-	 * @param <type> $mailbox
-	 * @param <type> $data
-	 * @param <type> $flags See set_message_flag
-	 * @return <type>
+	 * @param string $mailbox
+	 * @param string|Swift_Message $data
+	 * @param string $flags See set_message_flag
+	 * @return boolean
 	 */
 	public function append_message($mailbox, $data, $flags=""){
 
-		GO::debug("imap::append_message($mailbox, data, $flags);");
 
-		if(!$this->append_start($mailbox, strlen($data), $flags))
-			return false;
+		if($data instanceof Swift_Message){
+			
+			$tmpfile = GO_Base_Fs_File::tempFile();
 
-		if(!$this->append_feed($data))
-			return false;
+			$is = new Swift_ByteStream_FileByteStream($tmpfile->path(), true);
+			$data->toByteStream($is);			
 
+			unset($data);
+			
+
+			if(!$this->append_start($mailbox, $tmpfile->size(), $flags))
+				return false;
+			
+			$fp = fopen($tmpfile->path(), 'r');
+			
+			while($line = fgets($fp, 1024)){
+				if(!$this->append_feed($line))
+					return false;
+			}			
+			
+			fclose($fp);
+			$tmpfile->delete();
+		}else
+		{			
+			if(!$this->append_start($mailbox, strlen($data), $flags))
+				return false;
+
+			if(!$this->append_feed($data))
+				return false;
+		}
+		
+		$this->append_feed("\r\n");
+		
 		return $this->append_end();
 	}
 
