@@ -1,0 +1,258 @@
+<?php
+
+/*
+ * Copyright Intermesh BV
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ */
+
+/**
+ * Component used for rendering client script like css and javascript into the views
+ *
+ * @package GO.modules.sites.components
+ * @copyright Copyright Intermesh
+ * @version $Id ClientScript.php 2012-06-06 16:41:34 mdhart $ 
+ * @author Michael de Hart <mdehart@intermesh.nl> 
+ */
+class GO_Sites_Components_Scripts
+{
+
+	const POS_HEAD = 1; //Render script in head section before title tag
+	const POS_BEGIN = 2; //Render script at beginning of body section
+	const POS_END = 3; //Render script at the end of body section
+	const POS_READY = 4; //Render script inside windows jquery ready function at end of body
+
+	/**
+	 * array the mapping between script files name and script URLs
+	 * has javascript files and css files
+	 * @var type 
+	 */
+
+	public $scriptMap = array();
+	protected $cssFiles = array();
+	protected $scriptFiles = array();
+	protected $gapiScripts = array();
+	protected $scripts = array();
+	protected $metaTags = array();
+	protected $hasScripts = false;
+	private $_baseUrl;
+
+	/**
+	 * Cleans all registered scripts.
+	 */
+	public function reset()
+	{
+		$this->hasScripts = false;
+		$this->cssFiles = array();
+		$this->css = array();
+		$this->scriptFiles = array();
+		$this->scripts = array();
+		$this->metaTags = array();
+
+		$this->recordCachingAction('clientScript', 'reset', array());
+	}
+
+	public function render(&$output)
+	{
+		if (!$this->hasScripts)
+			return;
+
+		$this->renderHead($output);
+		$this->renderBodyBegin($output);
+		$this->renderBodyEnd($output);
+	}
+
+	/**
+	 * Inserts the scripts in the head section.
+	 * @param string $output the output to be inserted with scripts.
+	 */
+	public function renderHead(&$output)
+	{
+		$html = '';
+		foreach ($this->metaTags as $meta)
+			$html.=GO_Sites_Components_Html::metaTag($meta['content'], null, null, $meta) . "\n";
+		foreach ($this->cssFiles as $url => $media)
+			$html.=GO_Sites_Components_Html::cssFile($url, $media) . "\n";
+
+		if(isset($this->gapiScripts[self::POS_HEAD]))
+		{
+			foreach ($this->gapiScripts[self::POS_HEAD] as $gapiScript)
+				$html.=GO_Sites_Components_HTML::scriptFile($gapiScript) . "\n";
+		}
+		if (isset($this->scriptFiles[self::POS_HEAD]))
+		{
+			foreach ($this->scriptFiles[self::POS_HEAD] as $scriptFile)
+				$html.=GO_Sites_Components_Html::scriptFile($scriptFile) . "\n";
+		}
+
+		if (isset($this->scripts[self::POS_HEAD]))
+			$html.=GO_Sites_Components_Html::script(implode("\n", $this->scripts[self::POS_HEAD])) . "\n";
+
+
+		if ($html !== '')
+		{
+			$count = 0;
+			$output = preg_replace('/(<title\b[^>]*>|<\\/head\s*>)/is', '<###head###>$1', $output, 1, $count);
+			if ($count)
+				$output = str_replace('<###head###>', $html, $output);
+			else
+				$output = $html . $output;
+		}
+	}
+
+	/**
+	 * Inserts the scripts at the beginning of the body section.
+	 * @param string $output the output to be inserted with scripts.
+	 */
+	public function renderBodyBegin(&$output)
+	{
+		$html = '';
+		if (isset($this->scriptFiles[self::POS_BEGIN]))
+		{
+			foreach ($this->scriptFiles[self::POS_BEGIN] as $scriptFile)
+				$html.=GO_Sites_Components_Html::scriptFile($scriptFile) . "\n";
+		}
+		if (isset($this->scripts[self::POS_BEGIN]))
+			$html.=GO_Sites_Components_Html::script(implode("\n", $this->scripts[self::POS_BEGIN])) . "\n";
+
+		if ($html !== '')
+		{
+			$count = 0;
+			$output = preg_replace('/(<body\b[^>]*>)/is', '$1<###begin###>', $output, 1, $count);
+			if ($count)
+				$output = str_replace('<###begin###>', $html, $output);
+			else
+				$output = $html . $output;
+		}
+	}
+
+	/**
+	 * Inserts the scripts at the end of the body section.
+	 * @param string $output the output to be inserted with scripts.
+	 */
+	public function renderBodyEnd(&$output)
+	{
+		if (!isset($this->scriptFiles[self::POS_END]) && !isset($this->scripts[self::POS_END])
+						&& !isset($this->scripts[self::POS_READY]) )
+			return;
+
+		$fullPage = 0;
+		$output = preg_replace('/(<\\/body\s*>)/is', '<###end###>$1', $output, 1, $fullPage);
+		$html = '';
+		if (isset($this->scriptFiles[self::POS_END]))
+		{
+			foreach ($this->scriptFiles[self::POS_END] as $scriptFile)
+				$html.=GO_Sites_Components_Html::scriptFile($scriptFile) . "\n";
+		}
+		$scripts = isset($this->scripts[self::POS_END]) ? $this->scripts[self::POS_END] : array();
+		if (isset($this->scripts[self::POS_READY]))
+		{
+			if ($fullPage)
+				$scripts[] = "jQuery(function($) {\n" . implode("\n", $this->scripts[self::POS_READY]) . "\n});";
+			else
+				$scripts[] = implode("\n", $this->scripts[self::POS_READY]);
+		}
+		if (!empty($scripts))
+			$html.=GO_Sites_Components_Html::script(implode("\n", $scripts)) . "\n";
+
+		if ($fullPage)
+			$output = str_replace('<###end###>', $html, $output);
+		else
+			$output = $output . $html;
+	}
+
+	/**
+	 * Registers a CSS file
+	 * @param string $url URL of the CSS file
+	 * @param string $media media that the CSS file should be applied to. If empty, it means all media types.
+	 * @return GO_Sites_Components_Scripts myself for chaining.
+	 */
+	public function registerCssFile($url, $media = '')
+	{
+		$this->hasScripts = true;
+		$this->cssFiles[$url] = $media;
+		return $this;
+	}
+
+	/**
+	 * Register a javascript file
+	 * @param string $url url of the javascript file
+	 * @param integer $position (HEAD, BEGIN, END)
+	 * @return GO_Sites_Components_Scripts myself for chaining
+	 */
+	public function registerScriptFile($url, $position = self::POS_HEAD)
+	{
+		$this->hasScripts = true;
+		$this->scriptFiles[$position][$url] = $url;
+		return $this;
+	}
+	
+	/**
+	 * Register a google api script
+	 * @param string $package can be jquery or jquery-ui
+	 * @param integer $position where to add the scriptfile
+	 * @return GO_Sites_Components_Scripts myself for chaining
+	 */
+	public function registerGapiScript($package, $position = self::POS_HEAD)
+	{
+		switch($package)
+		{
+			case 'jquery':
+				$this->gapiScripts[$position][$package] = 'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js';
+				break;
+			case 'jquery-ui':
+				$this->gapiScripts[$position][$package] = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js';
+				break;
+			default:
+				throw new Exception('unknown GapiScript');
+				break;
+		}
+		$this->hasScripts = true;
+		return $this;
+	}
+
+	/**
+	 * Reguster a ouece if havascript
+	 * @param string $id unique identifier for the piece of code
+	 * @param string $script the javascript code
+	 * @param int $position position code shoudl be inserted (HEAD, BEGIN, END, READY)
+	 * @return GO_Sites_Components_Scripts myself for chaining
+	 */
+	public function registerScript($id, $script, $position = self::POS_READY)
+	{
+		$this->hasScripts = true;
+		$this->scripts[$position][$id] = $script;
+		//TODO: check if jquery is loaded when adding script to POS_READY
+		//if ($position === self::POS_READY)
+		//	$this->registerCoreScript('jquery');
+		return $this;
+	}
+
+	/**
+	 * Registers a meta tag that will be inserted in the head section before title element
+	 * $this->registerMetaTag('example', 'description', null, array('lang' => 'en'))
+	 * 
+	 * @param string $content content attribute of metatag
+	 * @param string $name name attribute of metatag
+	 * @param string $httpEquiv httpequiv attribute of metatage
+	 * @param array $options other option in name-value pair for metatag
+	 * @return GO_Sites_Components_Scripts mysql for chaining
+	 */
+	public function registerMetaTag($content, $name = null, $httpEquiv = null, $options = array())
+	{
+		$this->hasScripts = true;
+		if ($name !== null)
+			$options['name'] = $name;
+		if ($httpEquiv !== null)
+			$options['http-equiv'] = $httpEquiv;
+		$options['content'] = $content;
+		$this->metaTags[serialize($options)] = $options;
+		return $this;
+	}
+
+}
+
+?>
