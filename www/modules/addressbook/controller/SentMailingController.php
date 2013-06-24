@@ -284,7 +284,9 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 					throw new Exception("Invalid token!");
 				
 				$contact->email_allowed=0;
-				$contact->save();				
+				$contact->save();					
+				
+				GO_Base_Mail_AdminNotifier::sendMail("Unsubscribe: ".$contact->email, "Contact :".$contact->email. " unsubscribed from receiving newsletters");
 			}else
 			{
 				if($params['contact_id']){
@@ -294,7 +296,9 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 						throw new Exception("Invalid token!");
 
 					$company->email_allowed=0;
-					$company->save();				
+					$company->save();
+					
+					GO_Base_Mail_AdminNotifier::sendMail("Unsubscribe: ".$company->email, "Company ".$contact->email. " unsubscribed from receiving newsletters");
 				}
 			}
 			
