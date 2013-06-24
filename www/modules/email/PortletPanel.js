@@ -112,6 +112,14 @@ GO.email.PortletPanel = Ext.extend(Ext.Panel, {
 
 					},this);
 
+					Ext.TaskMgr.start({
+						run: function(){
+							this.messagesGrid.store.load();
+						},
+						scope:this,
+						interval:60*15*1000
+					});
+
 					this.tabPanel.add(panel);
 				}				
 			}
