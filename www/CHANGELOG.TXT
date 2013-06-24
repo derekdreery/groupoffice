@@ -1,5 +1,7 @@
+19-06-2013 4.2.4
 - Better memory management with sending mails.
 - Updated czech language
+- Fix from zoom in in on the calendar in chrome where a lot of "More.." links where shown
 
 19-06-2013 4.2.3
 - Fixes from 4.1.79
@@ -34,6 +36,9 @@
 - Tickets can be created by sending an e-mail
 - Ticket types can be grouped
 - Anonymous ticket posting is very simple to setup now.
+
+4.1.80
+- Fix from zoom in in on the calendar in chrome where a lot of "More.." links where shown
 
 19-06-2013 4.1.79
 - Fix for SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry when accepting appointemnts

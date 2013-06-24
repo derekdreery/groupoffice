@@ -354,7 +354,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 
 		for(var i in this.gridCells)
 		{
-			if(this.gridCells[i].dom.scrollHeight>this.gridCells[i].dom.clientHeight)
+			if(this.gridCells[i].dom.scrollHeight>this.gridCells[i].dom.clientHeight+1) //+1 is for rounding issues on chrome
 			{
 				var el = Ext.DomHelper.append(this.gridCells[i],
 				{
