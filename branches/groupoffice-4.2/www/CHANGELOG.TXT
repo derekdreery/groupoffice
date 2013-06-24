@@ -1,4 +1,4 @@
-19-06-2013 4.2.4
+24-06-2013 4.2.4
 - Better memory management with sending mails.
 - Updated czech language
 - Fix from zoom in in on the calendar in chrome where a lot of "More.." links where shown
