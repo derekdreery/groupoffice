@@ -1,4 +1,5 @@
 4.2.5
+- Enabled sorting tickets by ticket agent (responsible).
 - Added an option to the email account dialog (properties panel) to choose  if clicked emails will automatically be marked as read or not.
 - Billing: Added field to set the length of the order number. (how many 000 that are in front of the orderno)
 - Added dropbox module
