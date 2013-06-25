@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROMODULES="workflow filesearch scanbox googledrive";
+PROMODULES="workflow filesearch";
 
 # useful: DEBCONF_DEBUG="developer"
 

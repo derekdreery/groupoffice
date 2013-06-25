@@ -1,3 +1,7 @@
+24-06-2013 4.2.5
+- Added dropbox module
+- Moved scanbox and googledrive module to pro package
+
 24-06-2013 4.2.4
 - Better memory management with sending mails.
 - Updated czech language
