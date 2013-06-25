@@ -1,6 +1,4 @@
 <?php
-
-
 $l["exportHiddenColumns"]='Exporter les colonnes cachées';
 $l["searchQuery"]='Requête de recherche';
 $l["pleaseApplyFirst"]='Veuillez tout d\'abord sauvegarder en cliquant sur \'Appliquer\'';
@@ -577,3 +575,21 @@ $l['passwordRequireNum']='Il doit contenir un nombre';
 $l['passwordRequireSc']='Il doit contenir un caractère spécial';
 $l['passwordUnique']='Il doit contenir %s des caractères uniques';
 $l['maxAttachmentsSizeExceeded']="La taille totale de vos pièces jointes ({total}) dépasse le maximum ({max}).";
+
+$l['deleteErrors']='Des erreurs sont survenues lors de la tentative de supprimer les enregistrements {count}';
+$l['gridMissingParams']= 'S\'il vous plaît laisser l\'administrateur de {product_name}, la fenêtre que vous avez tenter d\'ouvrir contient paramètres, ces derniers n\"ont pas été reçus';
+$l['exportScreen']='Actuellement à l\'écran';
+$l['exportAddressbook']="Ajouter automatiquement au carnet d\'adresses les entrées manquantes à";
+$l['exportOrders']='Commandes';
+$l['errorTimeout']="La requête a expiré. Le serveur a pris trop de temps à répondre. S\'il vous plaît essayer à nouveau.";
+$l['showAll']='Tout afficher';
+$l['multiselectSelected']='sélectionné';
+$l['selectMonthlyDay']= 'S\'il vous plaît, sélectionner un jour de la semaine pour la récurrence mensuelle.';
+$l['selectWeekOfMonth']= 'S\'il vous plaît sélectionner le numéro du jour de la semaine pour la récurrence mensuelle.';
+$l['removeDuplicates']='Supprimer les doublons';
+$l['removeDuplicatesAreYouSure']='Etes-vous sûr que vous voulez supprimer les doublons ?';
+$l['skippedDeleteHasLinks']='Ignorer la suppression parce que le modèle a des liens';
+$l['skippedDeleteHasFiles']='Ignorer la suppression parce que le modèle possède un dossier ou des fichiers';
+$l['foundDuplicates']='Le duplicata %s trouvé.';
+$l['clickToDeleteDuplicates']='Cliquez ici pour supprimer le dernier doublons marqué en rouge.';
+$l['folderUpload']='Dossiers (Java requis)';
