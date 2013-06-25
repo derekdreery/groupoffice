@@ -56,7 +56,13 @@ GO.openHelp = function(page){
 
 
 GO.util.callToLink = function(phone){
-	return '<a onclick="GO.mainLayout.fireEvent(\'callto\', \''+phone+'\');" href="'+GO.calltoTemplate.replace('{phone}', phone.replace(/[^0-9+]/g,''))+'">'+phone+'</a>';
+	var ahref = GO.calltoTemplate.replace('{phone}', phone.replace(/[^0-9+]/g,''));
+	alert('test');
+	if (Ext.isGecko && Ext.isWindows) {
+
+	 ahref = ahref.replace('tel:', 'callto:'); //Firefox on windows used callto: for prodo
+	}
+	return '<a onclick="GO.mainLayout.fireEvent(\'callto\', \''+phone+'\');" href="'+ahref+'">'+phone+'</a>';
 }
 
 GO.url = function(relativeUrl, params){
