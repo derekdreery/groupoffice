@@ -24,7 +24,7 @@ class GO_Email_Controller_Folder extends GO_Base_Controller_AbstractController {
 		$response['success'] = $mailbox->rename($params["name"]);
 		
 		if(!$response['success'])
-			$response['feedback']="Failed to rename ".$params['mailbox']." to ".$params['name'];
+			$response['feedback']="Failed to rename ".$params['mailbox']." to ".$params['name']."<br /><br />".$account->getImapConnection()->last_error();
 		
 		
 		return $response;
@@ -100,7 +100,7 @@ class GO_Email_Controller_Folder extends GO_Base_Controller_AbstractController {
 		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 				
-		$sourceMailbox = new GO_Email_Model_ImapMailbox($account, array("name"=>$params["sourceMailbox"]));
+		$sourceMailbox = new GO_Email_Model_ImapMailbox($account, array("name"=>$params["sourceMailbox"]."123"));
 		
 		if($sourceMailbox->isSpecial())
 			throw new Exception(GO::t("cantMoveSpecialFolder","email"));
@@ -110,7 +110,7 @@ class GO_Email_Controller_Folder extends GO_Base_Controller_AbstractController {
 		
 		$response['success'] = $sourceMailbox->move($targetMailbox);
 		if(!$response['success'])
-			$response['feedback']="Could not move folder $sourceMailbox to $targetMailbox";
+			$response['feedback']="Could not move folder $sourceMailbox to $targetMailbox.<br /><br />".$account->getImapConnection()->last_error();
 		
 		
 		return $response;
