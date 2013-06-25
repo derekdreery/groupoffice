@@ -17,7 +17,7 @@ GO.addressbook.ContactDialog = function(config)
 	config = config || {};
 
 	this.goDialogId = 'contact';
-	
+	this.originalPhotoUrl = Ext.BLANK_IMAGE_URL;
 
 	this.personalPanel = new GO.addressbook.ContactProfilePanel();
 
@@ -54,6 +54,15 @@ GO.addressbook.ContactDialog = function(config)
 		inputName : 'image',
 		max: 1
 	})
+
+	this.fullImageButton = new Ext.Button({
+			text:GO.addressbook.lang.downloadFullImage,
+			disabled:false,
+			handler:function(){
+				window.open(this.originalPhotoUrl,'_blank');
+			},
+			scope:this
+		});
 
 	this.photoPanel = new Ext.Panel({
 		title : GO.addressbook.lang.photo,
@@ -99,7 +108,8 @@ GO.addressbook.ContactDialog = function(config)
 				xtype:'htmlcomponent'
 			},
 			this.contactPhoto,
-			this.deleteImageCB
+			this.deleteImageCB,
+			this.fullImageButton
 		]
 	});
 
@@ -368,6 +378,8 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 					this.formPanel.form.findField('company_id').setRemoteText(action.result.remoteComboTexts.company_id);
 					if(!GO.util.empty(action.result.data.photo_url))
 						this.setPhoto(action.result.data.photo_url);
+					if(!GO.util.empty(action.result.data.original_photo_url))
+						this.setOriginalPhoto(action.result.data.original_photo_url);
 
 					if(GO.customfields)
 						GO.customfields.disableTabs(this.tabPanel, action.result);	
@@ -411,7 +423,12 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 	},
 	
 		
-	afterLoad  : function(action){
+	afterLoad  : function(action){		
+		if(!GO.util.empty(action.result.data.original_photo_url))
+			this.setOriginalPhoto(action.result.data.original_photo_url);
+		else
+			this.setOriginalPhoto("");
+		
 		if(!GO.util.empty(action.result.data.photo_url))
 			this.setPhoto(action.result.data.photo_url);
 		else
@@ -449,6 +466,12 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 					this.setPhoto(action.result.photo_url);
 				else
 					this.setPhoto("");
+				
+				if(!GO.util.empty(action.result.original_photo_url))
+					this.setOriginalPhoto(action.result.original_photo_url);
+				else
+					this.setOriginalPhoto("");				
+				
 				if (hide)
 				{
 					this.hide();
@@ -465,7 +488,9 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 			scope: this
 		});
 	},
-
+	setOriginalPhoto : function(url){
+		this.originalPhotoUrl = url;
+	},
 	setPhoto : function(url)
 	{
 		this.contactPhoto.setPhotoSrc(url);

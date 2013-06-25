@@ -62,6 +62,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			$model->setPhoto($destinationFile);
 			$model->save();
 			$response['photo_url'] = $model->photoThumbURL;
+			$response['original_photo_url'] = $model->photoURL;
 		}elseif(!empty($params['download_photo_url'])){
 			
 			$file = GO_Base_Fs_File::tempFile();	
@@ -72,7 +73,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 						
 			$model->setPhoto($file);
 			$model->save();					
-			
+			$response['photo_url'] = $model->photoThumbURL;
+			$response['original_photo_url'] = $model->photoURL;
 		}
 		
 		
@@ -86,6 +88,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			$response['customfields'] = GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Addressbook_Model_Contact", $model->addressbook_id);
 		
 		$response['data']['photo_url']=$model->photoThumbURL;		
+		$response['data']['original_photo_url']=$model->photoURL;
 		
 		$stmt = $model->addresslists();
 		while($addresslist = $stmt->fetch()){
