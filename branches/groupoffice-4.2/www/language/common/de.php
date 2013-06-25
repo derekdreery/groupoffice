@@ -160,6 +160,7 @@ $l["url"]='URL';
 $l["strMale"]='Männlich';
 $l["strFemale"]='Weiblich';
 $l["strMtime"]='Geändert am';
+$l['mUser']= 'Geändert von';
 $l["strCtime"]='Erstellt am';
 $l["Atime"]='Zugriff am';
 $l["strText"]='Text';
@@ -596,6 +597,8 @@ $l['showAll']='Alle anzeigen';
 
 $l['multiselectSelected']='Ausgewählt';
 
+$l['createModify'] = 'Erstellung und Änderung';
+
 $l['selectMonthlyDay'] = 'Bitte einen Wochentag für die monatliche Wiederholung auswählen.';
 $l['selectWeekOfMonth'] = 'Bitte den Turnus für den Wochentag für die monatliche Wiederholung auswählen.';
 
@@ -608,3 +611,19 @@ $l['removeDuplicates']='Doppelte Einträge entfernen';
 $l['removeDuplicatesAreYouSure']='Sind Sie sicher, dass Sie alle doppelten Einträge entfernen wollen?';
 
 $l['folderUpload']='Ordner (benötigt Java)';
+
+$l['cs'] = 'Tschechien';
+$l['de-at'] = 'Österreich';
+$l['de-ch'] = 'Schweiz';
+$l['de'] = 'Deutschland';
+$l['en-au'] = 'Australien';
+$l['en'] = 'U.S.A.';
+$l['en_UK'] = 'United Kingdom';
+$l['fr'] = 'Frankreich';
+$l['hr'] = 'Kroatien';
+$l['it'] = 'Italien';
+$l['ja'] = 'Japan';
+$l['nb'] = 'Norwegen';
+$l['nl'] = 'Niederlande';
+$l['pt'] = 'Portugal';
+$l['sv'] = 'Schweden';
