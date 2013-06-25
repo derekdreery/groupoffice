@@ -129,3 +129,5 @@ $l['explanation_cf_settingspanels']='Um den Tab für die Zusatzfelder in den Ein
 $l['addresslist_panel']= 'Adresslistenelemnt';
 $l['show_addresslists_panel']= 'Adresslistenelement anzeigen';
 $l['enabled_cf_tabs']= 'Aktivierte Zusatzfelder Tabs';
+
+$l['cmdFormLabelHolidaySet'] = 'Feiertage';
