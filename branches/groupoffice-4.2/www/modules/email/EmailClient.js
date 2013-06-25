@@ -694,6 +694,9 @@ GO.email.EmailClient = function(config){
 			this.messagePanel.uid=0;
 		}else
 		{
+			this.messagePanel.do_not_mark_as_read = 0;
+			if(!GO.util.empty(data.do_not_mark_as_read))
+				this.messagePanel.do_not_mark_as_read = data.do_not_mark_as_read;
 			//this.messagePanel.uid=record.data['uid'];
 
 		var readOnly = this.messagesGrid.store.reader.jsonData.permission_level < GO.permissionLevels.create;
@@ -850,8 +853,8 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		}, this);
 	},
 
-	markAsRead : function(uid, mailbox, account_id){
-		if(this.messagePanel.uid==uid && this.messagePanel.mailbox==mailbox && this.messagePanel.account_id==account_id){
+	markAsRead : function(uid, mailbox, account_id){		
+		if(this.messagePanel.uid==uid && this.messagePanel.mailbox==mailbox && this.messagePanel.account_id==account_id && !this.messagePanel.do_not_mark_as_read){
 				GO.request({
 				url: "email/message/setFlag",				
 				params: {

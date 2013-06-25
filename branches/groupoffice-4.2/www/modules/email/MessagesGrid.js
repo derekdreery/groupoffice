@@ -225,7 +225,7 @@ GO.email.MessagesGrid = function(config){
 	  if(store.reader.jsonData.permission_level <= GO.permissionLevels.read)
 		this.getView().dragZone.lock();
 	  else
-		this.getView().dragZone.unlock();;
+		this.getView().dragZone.unlock();
 	}, this);
 
 	this.searchType.on('select', function(combo, record)

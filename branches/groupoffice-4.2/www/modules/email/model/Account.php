@@ -32,6 +32,7 @@
  * @property string $username
  * @property boolean $novalidate_cert
  * @property boolean $use_ssl
+ * @property boolean $do_not_mark_as_read
  * @property int $port
  * @property string $host
  * @property string $type

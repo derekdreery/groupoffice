@@ -1114,6 +1114,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$response['uid'] = intval($params['uid']);
 		$response['mailbox'] = $params['mailbox'];
 		$response['account_id'] = intval($params['account_id']);
+		$response['do_not_mark_as_read'] = $account->do_not_mark_as_read;
 		
 		if(!$plaintext){
 			
