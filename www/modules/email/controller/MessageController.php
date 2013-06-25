@@ -1544,7 +1544,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$header = $imap->get_message_part($params['uid'], 'HEADER', true) . "\r\n\r\n";
 		$size = $imap->get_message_part_start($params['uid'], 'TEXT', true);
 
-		header('Content-Length: ' . strlen($header) . $size);
+		header('Content-Length: ' . (strlen($header) + $size));
 
 		echo $header;
 		while ($line = $imap->get_message_part_line())
