@@ -80,3 +80,5 @@ $updates["201304081400"][]="UPDATE go_acl AS a JOIN go_acl_items AS i ON a.acl_i
 $updates['201304231330'][]="ALTER TABLE `em_links` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";
 
 $updates['201306251122'][]="ALTER TABLE  `em_accounts` ADD  `do_not_mark_as_read` BOOLEAN NOT NULL DEFAULT FALSE";
+
+$updates['201306251600'][]="ALTER TABLE `em_links` CHANGE `time` `time` INT( 11 ) NOT NULL DEFAULT '0';";
