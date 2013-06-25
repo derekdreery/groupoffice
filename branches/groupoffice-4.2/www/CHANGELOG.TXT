@@ -1,5 +1,6 @@
 4.2.6
 - Added an option to the email account dialog (properties panel) to choose  if clicked emails will automatically be marked as read or not.
+- Billing: Added field to set the length of the order number. (how many 000 that are in front of the orderno)
 
 24-06-2013 4.2.5
 - Added dropbox module
