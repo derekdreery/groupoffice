@@ -1,10 +1,11 @@
-4.2.6
+4.2.5
 - Added an option to the email account dialog (properties panel) to choose  if clicked emails will automatically be marked as read or not.
 - Billing: Added field to set the length of the order number. (how many 000 that are in front of the orderno)
-
-24-06-2013 4.2.5
 - Added dropbox module
 - Moved scanbox and googledrive module to pro package
+- Updated French and German translation
+- Fixed incorrect content length header on downloading message source
+- better way of stripping non utf8 characters
 
 24-06-2013 4.2.4
 - Better memory management with sending mails.
