@@ -288,11 +288,11 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 			this.typeField.store.load({
 				callback:function(){
 					this.typeField.setValue("GO_Customfields_Customfieldtype_Text");
-//					this.show(field_id);					
+					this.show(field_id);					
 				},
 				scope:this
 			});
-//			return;
+			return;
 		}
 		
 		if(!this.rendered){
