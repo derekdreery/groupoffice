@@ -23,6 +23,10 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 	background: none;
 }
 
+.x-tab-strip-top .x-tab-right {
+	padding: 0 5px;
+}
+
 .x-tab-strip .x-tab-strip-active span.x-tab-strip-text {
 	color: #fff;
 	font-weight: normal;
@@ -71,6 +75,7 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 .x-btn-noicon .x-btn-small .x-btn-text {
 	height: auto;
 	text-transform: uppercase;
+	font-weight: 600;
 }
 
 .x-btn button {
@@ -78,7 +83,7 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 	font-weight: 400;
 	}
 
-.x-form-text, textarea.x-form-field{
+.x-window .x-form-text, .x-window textarea.x-form-field, .go-border-center .x-form-text, .go-border-center textarea.x-form-field{
 	background: #e5f5f9 none;
 	border: 1px solid #11a2cd;
 	color: #000;
@@ -141,7 +146,7 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 }
 
 .x-grid3-row-over {
-	background: #e6f5fa none;
+	background: #e6f5fa none !important;
 }
 
 .x-tool {
@@ -183,10 +188,6 @@ ul.x-tab-strip .x-tab-strip-active {
 .x-panel-body ul.x-tab-strip-top {
 	border-bottom: 1px solid #009bcb !important;
 	margin: 10px 10px 0 10px;
-}
-
-.x-grid3-row td, .x-grid3-summary-row td {
-	vertical-align: text-top;
 }
 
 .x-grid3-cell-inner, .x-grid3-hd-inner {
@@ -241,11 +242,6 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 	margin: 0; 
 }
 
-.ext-strict .ext-webkit .x-small-editor .x-form-text, .x-form-text {
-	height: 12px !important;
-	padding: 0;
-}
-
 .x-item-disabled .x-tbar-page-next {
 	background-image: url(/images/extjs/grid/page-next-disabled.gif) !important;
 }
@@ -267,9 +263,13 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 }
 
 .x-small-editor .x-form-field-wrap .x-form-trigger {
-	height: 13px;
-	border: none;
-	vertical-align: middle;
+	border-bottom: 1px solid #009bc9;
+}
+
+.x-form-field-wrap .x-form-trigger {
+	background-image: url(/images/extjs/form/trigger.gif);
+	border-bottom: 1px solid #009bc9;
+	height: 19px;
 }
 
 .x-item-disabled .x-tbar-page-last {
@@ -289,6 +289,7 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 }
 
 .x-panel-noborder .x-panel-bbar-noborder .x-toolbar {
+	background: #fff;
 	border: none;
 }
 
@@ -314,11 +315,11 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 }
 
 .x-panel-noborder .x-panel-body-noborder{
-	padding: 10px;
+	padding: 0;
 }
 
 .x-grid-panel .x-panel-body {
-	padding: 0 !important;
+	padding: 10px !important;
 }
 
 .x-panel-bbar .x-toolbar, .x-panel-tbar .x-toolbar {
@@ -329,8 +330,13 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 	color: #fff;
 }
 
-.go-moduletabs-body .go-display-panel .x-btn-text{
+.go-moduletabs-body .go-border-center .x-btn-text {
 	color: #000;
+}
+
+.go-moduletabs-body .go-display-panel .x-btn-text{
+	color: #000 !important;
+	font-weight: 600;
 }
 
 .go-display-panel .x-btn-text{
@@ -377,3 +383,162 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 .x-panel-footer{
 	background: #fff;
 }
+
+.tasks-late td, a.tasks-late, td.tasks-late {
+	color: #f83a1b;
+}
+
+.x-btn-icon .x-btn-small .x-btn-text{
+	height: 20px;
+	width: 20px;
+}
+
+.x-form-field-wrap .x-form-search-trigger {
+	background-image: url(/images/extjs/form/search-trigger.png);
+}
+
+.x-grid-group-hd {
+	border-bottom: 1px solid #000;
+}
+
+.x-grid-group-hd div.x-grid-group-title {
+	color: #000;
+	font-weight: normal;
+}
+
+thead .x-grid3-hd-inner{
+	font-weight: 600;
+}
+
+.display-panel-heading, .collapsible-display-panel-headerm .display-panel-heading, .collapsible-display-panel-header div{
+	font-weight: 600;
+}
+
+.x-grid3-row-selected {
+	background-color: #e5f5f9 !important;
+}
+
+.x-tree-node .x-tree-selected {
+	background-color: #e5f5f9;
+}
+
+.x-grid3-row td, .x-grid3-summary-row td{
+	vertical-align: middle
+}
+
+.go-display-panel .btn-refresh {
+	background: url(images/extjs/grid/refresh-noborder.gif) no-repeat !important;
+	width: 14px !important;
+}
+
+.go-display-panel .btn-print {
+	background: url(images/extjs/grid/print-noborder.gif) no-repeat !important;
+	width: 14px !important;
+}
+
+.x-item-disabled * {
+	color: #fff !important;
+}
+
+.x-window .x-window-tbar .x-btn-text, #go-module-panel-customfields .go-border-center .x-panel-tbar .x-btn-text, #go-module-panel-calendar .go-border-west .go-border-center .x-panel-tbar .x-btn-text, #go-module-panel-filesearch .go-border-center .x-panel-tbar .x-btn-text {
+	background: none !important;
+	font-size: 10px;
+	font-weight: 600;
+	padding: 0 5px;
+	text-transform: uppercase;
+} 
+
+.x-window .x-btn, #go-module-panel-customfields .go-border-center .x-panel-tbar .x-btn, #go-module-panel-calendar .go-border-west .go-border-center .x-panel-tbar .x-btn, #go-module-panel-filesearch .go-border-center .x-panel-tbar .x-btn {
+	border: 1px solid #009bcb;
+	margin-right: 5px;
+}
+
+#go-module-panel-calendar .cal-display-panel .x-toolbar .x-btn-text{
+	height: 20px;
+	margin: 0 5px;
+}
+
+.x-btn-mc em.x-btn-arrow {
+	background-image: url(/images/button/arrow.gif);
+}
+
+.x-window-tl, .x-window-tr, .x-window-tc, .x-window-bl, .x-window-br, .x-window-bc  {
+	background-image: none;
+}
+
+.x-window{
+	background-color: #fff;
+	border: 1px solid #2b9bc9;
+}
+.x-window-ml, .x-window-mr {
+	background-image: none;
+	}
+
+.x-window-header-text{
+	color: #000;
+	font-weight: 600;s
+	}
+
+.x-window .x-panel-body ul.x-tab-strip-top{
+	margin: 0;
+}
+
+.x-window .x-btn-text{
+	color: #000;
+}
+
+.x-window-tl {
+	padding-left: 15px;
+}
+
+.x-window-tr {
+	padding-right: 15px;
+}
+
+.x-window-tc{
+	padding-top: 5px;
+}
+
+.x-menu {
+	background-color: #fff;
+	background-image: none;
+}
+
+.x-menu-floating {
+	border-color: #2b9bc9;
+}
+
+.x-menu-item-active{
+	background-color: #e6f5fa;
+	background-image: none;
+	border-color: #fff;
+}
+
+.x-window-mc{
+	border-color: #fff;
+}
+
+.x-window .x-toolbar {
+	background-color: #fff;
+	padding: 0 10px;
+}
+
+.x-window .x-item-disabled *{
+	color: #000 !important;
+}
+
+.x-html-editor-wrap {
+	border-color: #fff;
+}
+
+.x-html-editor-wrap iframe{
+	border-color: #2b9bc9;
+}
+
+.x-box-tl, .x-box-tr, .x-box-tc, .x-box-br, .x-box-bl, .x-box-bc, .x-box-ml, .x-box-mr, .x-box-mc  {
+	background: #fff none !important
+}
+
+/* .ext-l-mask, .ext-l-mask .msg{
+
+} */

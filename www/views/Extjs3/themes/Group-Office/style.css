@@ -185,15 +185,15 @@ color:#15428B;
 	position:absolute;
 	left:40%;
 	top:40%;
-	border:1px solid #9c9f9d;
+	border:1px solid #2a9ac9;
 	padding:2px;
-	background:#d1d8db;
+	background:#fff;
 	width:300px;
 	text-align:center;
 	z-index:20001;
 }
 #loading .loading-indicator{
-	border:1px solid #c1d1d6;
+	border:1px solid #fff;
 	color:#666;
 	background:white url('images/groupoffice.gif') 20px 10px no-repeat;
 	font:bold 12px "Lucida Sans Unicode","Lucida Grande","Mukti Narrow", sans-serif;
@@ -280,7 +280,7 @@ body{
 	/*font:normal 10px "Lucida Sans Unicode","Lucida Grande","Mukti Narrow", sans-serif;*/
 	font: 11px arial,helvetica,sans-serif;
 	color:#000;
-	background-color:#f1f1f1;
+	background-color:#2a9ac9;
 }
 
 
@@ -632,8 +632,8 @@ and about screen. Please leave the about screen logo original!
 */
 .go-app-logo, .go-about-logo{
 	background: url('images/groupoffice.gif');
-	width:200px;
-	height:40px;
+	width:217px;
+	height:47px;
 	background-repeat:no-repeat;
 	margin-top: 10px;
 	margin-bottom: 20px;
@@ -658,13 +658,6 @@ and about screen. Please leave the about screen logo original!
 	padding-bottom:3px;
 	padding-right:0;
 }
-
-/* font were inconsistent in Ext. No problem on Windows but in Linux it was because Tahoma doesn't exists. */
-.x-toolbar td, .x-toolbar span, .x-toolbar input, .x-toolbar div, .x-toolbar select, .x-toolbar label {
-	font-family:tahoma,arial,helvetica,sans-serif;
-	/*color:#e4eff4;*/
-}
-
 
 /*.Otherwise checkboxes were scrolling*/
 .ext-gecko .x-window-body .x-form-item{
@@ -821,14 +814,13 @@ hr{
 }
 
 .go-select-list .go-view-over{
-    background-color:#ebf1e2;
-    border:1px solid #ebf1e2;
+    background-color:#e6f5fa;
+    border: none;
 }
 
 .go-select-list .go-view-selected{
-	background-color:#ebf1e2;
- 	border:1px solid #669900;
-	padding: 4px;
+	background-color: #e6f5fa;
+ 	border: none;
 	
 }
 
@@ -2131,7 +2123,7 @@ body.ext-ie6 .x-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em
 	margin-top: 1px;
 }
 
-.x-panel-body .x-grid3, .x-form, .go-paging-tb{
+.x-form, .go-paging-tb{
 	padding: 10px !important;
 }
 
@@ -2148,4 +2140,27 @@ body.ext-ie6 .x-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em
 
 .x-panel-body {
 	padding: 10px;
+}
+
+ #go-module-panel-files .go-border-north{
+ 	background: #fff;
+ }
+ 
+ #go-module-panel-calendar .go-border-west .x-btn-text{
+ 	color: #000;
+ 	text-transform: none;
+ 	font-size: 12px;
+ 	font-weight: 600;
+ }
+
+#go-module-panel-calendar .go-border-west span{
+	font-weight: 12px;
+}
+
+#go-powered-by, #go-powered-by a{
+	color: #fff;
+}
+
+#loading-mask{
+	background-color: #2a9ac9 !important;
 }
