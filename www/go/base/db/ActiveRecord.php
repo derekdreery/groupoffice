@@ -3590,7 +3590,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		if(!$this->hasLinks() && !$isSearchCacheModel)
 			throw new Exception("Links not supported by ".$this->className ());
 		
-		if($this->_linkExists($model))
+		if($this->linkExists($model))
 			return true;
 		
 		if($model instanceof GO_Base_Model_SearchCacheRecord){
@@ -3665,7 +3665,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 //		return true;
 //	}
 	
-	private function _linkExists($model){		
+	public function linkExists(GO_Base_Db_ActiveRecord $model){		
 		
 		if($model->className()=="GO_Base_Model_SearchCacheRecord"){
 			$model_id = $model->model_id;
