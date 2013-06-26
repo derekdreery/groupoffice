@@ -1,3 +1,6 @@
+
+- VoIP will rewrite tel: links to callto: in Firefox in Windows
+
 13-06-2013 4.2.0
 - Upgrade TCPDF to 6.0.020 and changed default font to freesans because of display problem on iPad
 - Upgraded SabreDAV to version 1.8.5
