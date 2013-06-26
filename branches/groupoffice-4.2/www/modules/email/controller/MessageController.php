@@ -1129,7 +1129,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			}
 		}
 		
-		$response = $this->_getContact($imapMessage, $params, $response);
+		$response = $this->_getContactInfo($imapMessage, $params, $response);
 
 		$this->fireEvent('view', array(
 				&$this,
@@ -1144,26 +1144,40 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		return $response;
 	}
 	
-	private function _getContact(GO_Email_Model_ImapMessage $imapMessage,$params, $response){
-		$response['sender_contact_id']=0;		
-
+	private function _getContactInfo(GO_Email_Model_ImapMessage $imapMessage,$params, $response){
+		$response['sender_contact_id']=0;
+		$response['sender_company_id']=0;
+		$response['allow_quicklink']=1;
+		$response['contact_name']="";			
+		$response['contact_thumb_url']=GO::config()->host.'modules/addressbook/themes/Default/images/unknown-person.png';
+		
+		$useQL = GO::config()->allow_quicklink;
+		$response['allow_quicklink']=$useQL?1:0;
+		if(!$useQL)
+			return $response;
+	
 		$contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($response['sender']);
 		if(!empty($contact)){
 			$response['sender_contact_id']=$contact->id;
-			$response['contact_name']=$contact->name;			
+			$response['contact_name']=$contact->name.' ('.$contact->addressbook->name.')';
 			$response['contact_thumb_url']=$contact->getPhotoThumbURL();
 			
-			if(GO::modules()->savemailas){
-				
-				$linkedMessage = GO_Savemailas_Model_LinkedEmail::model()->findByImapMessage($imapMessage, $contact);
-				$response['linked_message_id']=$linkedMessage ? $linkedMessage->id : 0;
+			$company = $contact->company;
+			if(!empty($company)){
+				$response['sender_company_id']=$company->id;
+				$response['company_name']=$company->name.' ('.$company->addressbook->name.')';
 			}
 			
-		}else
-		{
-			$response['sender_contact_id']=0;
-			$response['contact_name']="";			
-			$response['contact_thumb_url']=GO::config()->host.'modules/addressbook/themes/Default/images/unknown-person.png';
+			if(GO::modules()->savemailas){
+				$contactLinkedMessage = GO_Savemailas_Model_LinkedEmail::model()->findByImapMessage($imapMessage, $contact);
+				$contactLinkedMessage->link($contactLinkedMessage);
+				$response['contact_linked_message_id']=$contactLinkedMessage->linkExists($contact) ? $contactLinkedMessage->id : 0;
+				
+				if(!empty($company)){
+					$companyLinkedMessage = GO_Savemailas_Model_LinkedEmail::model()->findByImapMessage($imapMessage, $company);
+					$response['company_linked_message_id']=$companyLinkedMessage->linkExists($company) ? $companyLinkedMessage->id : 0;
+				}				
+			}
 		}
 		return $response;
 	}

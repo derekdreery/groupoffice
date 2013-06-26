@@ -431,10 +431,10 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		if(GO.savemailas && this.data.sender_contact_id){
 			this.linkMessageCB = new Ext.form.Checkbox({
 				name:'link',
-				boxLabel:GO.savemailas.lang.linkToContact,
+				boxLabel:GO.savemailas.lang.linkToContact.replace('%s', this.data.contact_name),
 				hideLabel:true,
 				renderTo:this.linkMessageId,
-				checked:this.data.linked_message_id>0,
+				checked:this.data.contact_linked_message_id>0,
 				listeners:{
 					scope:this,
 					check:function(cb, checked){
@@ -456,7 +456,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 									model_name1:'GO_Addressbook_Model_Contact',
 									id1:this.data.sender_contact_id,
 									model_name2:'GO_Savemailas_Model_LinkedEmail',
-									id2:this.data.linked_message_id
+									id2:this.data.contact_linked_message_id
 								},
 								maskEl:Ext.getBody()
 							});
@@ -464,7 +464,46 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 					}
 				}
 			});
-		}		
+		}
+		
+		if(GO.savemailas && this.data.sender_company_id){
+			this.linkCompanyMessageCB = new Ext.form.Checkbox({
+				name:'link',
+				boxLabel:GO.savemailas.lang.linkToCompany.replace('%s', this.data.company_name),
+				hideLabel:true,
+				renderTo:this.linkMessageId,
+				checked:this.data.company_linked_message_id>0,
+				listeners:{
+					scope:this,
+					check:function(cb, checked){
+						if(checked){
+							GO.request({
+								url:'savemailas/linkedEmail/linkCompany',
+								params:{
+									account_id:this.account_id,
+									mailbox:this.mailbox,
+									uid:this.uid,
+									company_id:this.data.sender_company_id								
+								},
+								maskEl:Ext.getBody()
+							});
+						}else{
+							GO.request({
+								url:'core/unlink',
+								params:{
+									model_name1:'GO_Addressbook_Model_Company',
+									id1:this.data.sender_company_id,
+									model_name2:'GO_Savemailas_Model_LinkedEmail',
+									id2:this.data.company_linked_message_id
+								},
+								maskEl:Ext.getBody()
+							});
+						}
+					}
+				}
+			});
+		}
+		
 	},
 	
 	onAttachmentContextMenu : function (e, target){
