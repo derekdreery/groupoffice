@@ -1170,12 +1170,11 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			
 			if(GO::modules()->savemailas){
 				$contactLinkedMessage = GO_Savemailas_Model_LinkedEmail::model()->findByImapMessage($imapMessage, $contact);
-				$contactLinkedMessage->link($contactLinkedMessage);
-				$response['contact_linked_message_id']=$contactLinkedMessage->linkExists($contact) ? $contactLinkedMessage->id : 0;
+				$response['contact_linked_message_id']=$contactLinkedMessage && $contactLinkedMessage->linkExists($contact) ? $contactLinkedMessage->id : 0;
 				
 				if(!empty($company)){
 					$companyLinkedMessage = GO_Savemailas_Model_LinkedEmail::model()->findByImapMessage($imapMessage, $company);
-					$response['company_linked_message_id']=$companyLinkedMessage->linkExists($company) ? $companyLinkedMessage->id : 0;
+					$response['company_linked_message_id']=$companyLinkedMessage && $companyLinkedMessage->linkExists($company) ? $companyLinkedMessage->id : 0;
 				}				
 			}
 		}
