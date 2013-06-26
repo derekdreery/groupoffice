@@ -1137,6 +1137,14 @@ class GO_Base_Config {
 	 */
 	var $assets_path = '';
 	
+	/**
+	 * Enables the quicklink option in the message panel of an email message.
+	 * [] Link email conversation to contact
+	 * [] Link email conversation to company 
+	 * 
+	 * @var Boolean 
+	 */
+	var $allow_quicklink = true;	
 	
 	/**
 	 * Constructor. Initialises all public variables.
