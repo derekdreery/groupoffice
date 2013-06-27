@@ -57,7 +57,7 @@ GO.openHelp = function(page){
 
 GO.util.callToLink = function(phone){
 	var ahref = GO.calltoTemplate.replace('{phone}', phone.replace(/[^0-9+]/g,''));
-	alert('test');
+
 	if (Ext.isGecko && Ext.isWindows) {
 
 	 ahref = ahref.replace('tel:', 'callto:'); //Firefox on windows used callto: for prodo
