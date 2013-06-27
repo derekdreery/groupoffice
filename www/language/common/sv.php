@@ -612,3 +612,34 @@ $l['exportAddressbook']="Lägg automatiskt in saknade adressboksposter till";
 $l['exportOrders']='Ordrar';
 $l['errorTimeout']="Förfrågan gjorde timeout. Servern svarade inte inom tidsramen. Försök igen.";
 $l['showAll']='Visa alla';
+
+$l['multiselectSelected']='valda';
+$l['selectMonthlyDay']= 'Välj en veckodag för månadsvis upprepning.';
+$l['selectWeekOfMonth']= 'Välj numret på veckodagen för månadsvis upprepning.';
+
+$l['mUser']= 'Ändrat av';
+$l['deleteErrors']='Fel inträffade vid försök till borttagning av {count} poster';
+$l['createModify']= 'Skapande och förändring';
+$l['removeDuplicates']='Radera dubletter';
+$l['cs']= 'Tjeckiska';
+$l['de-at']= 'Österrikiska';
+$l['de-ch']= 'Schweiziska';
+$l['de']= 'Tyska';
+$l['en-au']= 'Australiensisk engelska';
+$l['en']= 'Engelska';
+$l['en_UK']= 'Brittisk engelska';
+$l['fr']= 'Franska';
+$l['hr']= 'Kroatiska';
+$l['it']= 'Italienska';
+$l['ja']= 'Japanska';
+$l['nb']= 'Norska';
+$l['nl']= 'Nederländska';
+$l['pt']= 'Portugisiska';
+$l['sv']= 'Svenska';
+
+$l['removeDuplicatesAreYouSure']='Är du säker på att du vill radera dubletter?';
+$l['skippedDeleteHasLinks']='Hoppade över radering eftersom modellen har länkar';
+$l['skippedDeleteHasFiles']='Hoppase över radering eftersom modellen har mappar eller filer';
+$l['foundDuplicates']='Hittade %s dubletter.';
+$l['clickToDeleteDuplicates']='Klicka här för att radera de nyaste dubletterna markerade i rött.';
+$l['folderUpload']='Mappars (kräver Java)';

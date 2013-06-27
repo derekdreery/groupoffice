@@ -220,3 +220,4 @@ $l['cronEventAndTaskReportMailerDescription']='Skicka e-post med dagens kalender
 $l['cronEventAndTaskReportMailerPdfSubtitle']='Dagens kalenderhändelser och uppgifter';
 $l['cronEventAndTaskReportMailerSubject']='Dagens kalenderhändelser och uppgifter';
 $l['cronEventAndTaskReportMailerContent']='En lista över dagens kalenderhändelser och uppgifter finns i den bifogade PDF-filen.';
+$l['eventPrivateChecked']= 'Notera att även om denna händelse är markerad som privat så kommer filerna tillhörande händelsen ändå att vara åtkomliga för användare som har behörighet till händelsens kalender.';
