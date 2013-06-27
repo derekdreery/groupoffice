@@ -9,6 +9,7 @@
 - Updated French and German translation
 - Fixed incorrect content length header on downloading message source
 - better way of stripping non utf8 characters
+- Billing: Enabled tags for contact and company in order PDF template.
 
 24-06-2013 4.2.4
 - Better memory management with sending mails.
