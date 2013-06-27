@@ -254,3 +254,6 @@ $l['dateSent']='Skickat';
 $l['cronEmailReminders']='Påminnelser via e-post';
 $l['cronEmailRemindersDescription']='Denna cron hanterar påminnelser via e-post';
 $l['appointementAlreadyProcessed']='Detta meddelande innehåller en mötesinbjudan';
+
+$l['noname']= 'Inget namn';
+$l['doNotMarkAsRead']= 'Markera inte mail som lästa automatiskt';

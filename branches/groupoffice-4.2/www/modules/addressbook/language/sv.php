@@ -294,3 +294,10 @@ $l['contactHomepage']= "Hemsida";
 
 $l['newContact']= "Ny kontakt";
 $l['existingContact']= "Befintlig kontakt";
+
+$l['searchForImages']='Sök efter bilder';
+$l['downloadPhotoUrl']='Ladda ner foto ifrån web-adress';
+$l['orBrowseComputer']='eller ladda upp ifrån din dator';
+$l['currentImage']='Nuvarande bild';
+
+$l['downloadFullImage']='Hämta hela bilden';
