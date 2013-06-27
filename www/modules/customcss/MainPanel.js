@@ -22,6 +22,10 @@ GO.customcss.MainPanel = function(config){
 	config.tbar=new Ext.Toolbar({
 		cls:'go-head-tb',
 		items:[{
+		        xtype:'htmlcomponent',
+		        html:GO.customcss.lang.name,
+		        cls:'go-module-title-tbar'
+		},{
 				iconCls:'btn-save',
 				text:GO.lang.cmdSave,
 				handler:function(){

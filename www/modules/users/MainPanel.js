@@ -76,7 +76,11 @@ GO.users.MainPanel = function(config)
 		    	
 	config.tbar = new Ext.Toolbar({		
 			cls:'go-head-tb',
-			items: [
+			items: [{
+		      	 	xtype:'htmlcomponent',
+				html:GO.users.lang.name,
+				cls:'go-module-title-tbar'
+			},
 		  	{
 		  		iconCls: 'btn-add', 
 		  		text: GO.lang['cmdAdd'], 

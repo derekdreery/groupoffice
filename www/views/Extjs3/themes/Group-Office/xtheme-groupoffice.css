@@ -158,7 +158,7 @@ ul.x-tab-strip-top {
 	border: none;
 }
 
-.x-panel-body .x-tab-strip span.x-tab-strip-text, .x-panel-body .x-tab-strip .x-tab-strip-active span.x-tab-strip-text {
+.x-panel-body .x-tab-strip span.x-tab-strip-text, .x-panel-body .x-tab-strip .x-tab-strip-active span.x-tab-strip-text,.x-window .x-tab-strip span.x-tab-strip-text, .x-window .x-tab-strip .x-tab-strip-active span.x-tab-strip-text {
 	color: #000;
 	font-weight: 600;
 	padding: 2px 5px 1px;
@@ -448,7 +448,7 @@ thead .x-grid3-hd-inner{
 	text-transform: uppercase;
 } 
 
-.x-window .x-btn, #go-module-panel-customfields .go-border-center .x-panel-tbar .x-btn, #go-module-panel-calendar .go-border-west .go-border-center .x-panel-tbar .x-btn, #go-module-panel-filesearch .go-border-center .x-panel-tbar .x-btn {
+.x-window-tbar .x-btn, .x-window-footer .x-btn, #go-module-panel-customfields .go-border-center .x-panel-tbar .x-btn, #go-module-panel-calendar .go-border-west .go-border-center .x-panel-tbar .x-btn, #go-module-panel-filesearch .go-border-center .x-panel-tbar .x-btn {
 	border: 1px solid #009bcb;
 	margin-right: 5px;
 }

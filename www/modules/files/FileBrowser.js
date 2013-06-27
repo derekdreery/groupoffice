@@ -364,7 +364,10 @@ GO.files.FileBrowser = function(config){
 		plain:true,
                 layout: 'form',
 //		cls:'go-files-location-panel',
-                split:false,
+		resizable:false,
+                split:true,
+		minSize:40,
+		maxSize:40,
 //		height:40,
 		forceLayout:true,
                 padding: '5px',
@@ -461,7 +464,11 @@ GO.files.FileBrowser = function(config){
 		scope: this
 	});
 
-	var tbar = [];
+	var tbar = [{
+	      	 	xtype:'htmlcomponent',
+			html:GO.files.lang.name,
+			cls:'go-module-title-tbar'
+		}];
 
 	tbar.push(this.newButton);
 

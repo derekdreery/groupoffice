@@ -96,7 +96,8 @@ GO.calendar.MainPanel = function(config){
 
 	this.datePicker = new Ext.DatePicker({
 		cls:'cal-date-picker',
-		showToday:false
+		showToday:false,
+		internalRender:true
 	});
 	
 	this.datePicker.on("select", function(datePicker, DateObj){
@@ -530,7 +531,7 @@ GO.calendar.MainPanel = function(config){
 			text:'Calendar'
 		}),'-',{
 			iconCls: 'btn-left-arrow',
-			text: GO.lang.cmdPrevious,
+			//text: GO.lang.cmdPrevious,
 			cls: 'x-btn-text-icon',
 			handler: function(){
 							
@@ -556,7 +557,7 @@ GO.calendar.MainPanel = function(config){
 			cls:'cal-period'
 		}),{
 			iconCls: 'btn-right-arrow',
-			text: GO.lang.cmdNext,
+			//text: GO.lang.cmdNext,
 			cls: 'x-btn-text-icon',
 			handler: function(){
 				/*var displayDate = this.getActivePanel().startDate;
@@ -582,6 +583,10 @@ GO.calendar.MainPanel = function(config){
 
 						
 	var tbar = [{
+	      	 	xtype:'htmlcomponent',
+			html:GO.calendar.lang.name,
+			cls:'go-module-title-tbar'
+		},{
 		iconCls: 'btn-add',
 		text: GO.lang['cmdAdd'],
 		cls: 'x-btn-text-icon',
@@ -744,8 +749,8 @@ GO.calendar.MainPanel = function(config){
 			titlebar: false,
 			autoScroll:false,
 			//closeOnTab: true,
-			width: 210,
-			split:true,
+			width: 230,
+			//split:true,
 			layout:'border',
 			border:false,
 			//plain:true,
@@ -753,7 +758,7 @@ GO.calendar.MainPanel = function(config){
 			new Ext.Panel({
 				region:'north',
 				border:true,
-				height:160,
+				height:226,
 				split:true,
 				baseCls:'x-plain',
 				items:this.datePicker

@@ -85,6 +85,10 @@ GO.notes.MainPanel = function(config){
 	config.tbar=new Ext.Toolbar({
 		cls:'go-head-tb',
 		items: [{
+	      	 	xtype:'htmlcomponent',
+			html:GO.notes.lang.name,
+			cls:'go-module-title-tbar'
+		},{
 			grid: this.centerPanel,
 			xtype:'addbutton',
 			handler: function(b){
