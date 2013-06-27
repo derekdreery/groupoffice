@@ -290,3 +290,6 @@ $l['searchForImages']='Search for images';
 $l['downloadPhotoUrl']='Download photo URL';
 $l['orBrowseComputer']='or upload from your computer';
 $l['currentImage']='Current image';
+
+$l['upcomingBirthdays'] = "Upcoming birthdays";
+$l['age'] = "Age";

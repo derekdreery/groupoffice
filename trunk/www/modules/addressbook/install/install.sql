@@ -361,3 +361,14 @@ CREATE TABLE IF NOT EXISTS `ab_contacts_vcard_props` (
   PRIMARY KEY (`id`),
 	KEY `contact_id` (`contact_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+
+--
+-- Tabelstructuur voor tabel `ab_portlet_birthdays`
+--
+DROP TABLE IF EXISTS `ab_portlet_birthdays`;
+CREATE TABLE IF NOT EXISTS `ab_portlet_birthdays` (
+  `user_id` int(11) NOT NULL,
+  `addressbook_id` int(11) NOT NULL,
+  PRIMARY KEY (`user_id`,`addressbook_id`)
+) ENGINE=InnoDB;

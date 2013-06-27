@@ -375,3 +375,9 @@ $updates['201304231330'][]="ALTER TABLE `ab_companies` ADD `muser_id` int(11) NO
 
 $updates['201305271506'][]="ALTER TABLE  `ab_contacts` ADD  `photo` VARCHAR( 255 ) NOT NULL";
 $updates['201305271506'][]="update ab_contacts set photo=concat('contacts/contact_photos/',id,'.jpg');";
+
+$updates['201306181002'][]="CREATE TABLE IF NOT EXISTS `ab_portlet_birthdays` (
+  `user_id` int(11) NOT NULL,
+  `addressbook_id` int(11) NOT NULL,
+  PRIMARY KEY (`user_id`,`addressbook_id`)
+) ENGINE=InnoDB;";

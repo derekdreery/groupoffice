@@ -327,3 +327,5 @@ $l['searchForImages']='Zoek afbeeldingen';
 $l['downloadPhotoUrl']='Download foto URL';
 $l['orBrowseComputer']='of upload vanaf uw computer';
 $l['currentImage']='Huidige afbeelding';
+
+$l['age'] = "Leeftijd";

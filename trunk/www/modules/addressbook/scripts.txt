@@ -43,3 +43,4 @@ modules/addressbook/CustomField.js
 modules/addressbook/AddresslistsMultiSelectGrid.js
 
 modules/addressbook/views/Extjs3/Settings.js
+modules/addressbook/views/Extjs3/BirthdaysPortlet.js
