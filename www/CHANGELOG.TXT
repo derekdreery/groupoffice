@@ -1,4 +1,4 @@
-4.2.5
+27-06-2013 4.2.5
 - Added support for quick linking Company to email and updated the displayed text for quicklinks.
 - Added a config option to disable the quicklinking in emails. ($config['allow_quicklink'])
 - Enabled sorting tickets by ticket agent (responsible).
