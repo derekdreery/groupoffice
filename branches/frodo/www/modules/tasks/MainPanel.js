@@ -212,6 +212,10 @@ GO.tasks.MainPanel = function(config){
 	config.tbar=new Ext.Toolbar({
 			cls:'go-head-tb',
 			items: [{
+		      	 	xtype:'htmlcomponent',
+				html:GO.tasks.lang.name,
+				cls:'go-module-title-tbar'
+			},{
 				grid: this.gridPanel,
 				xtype:'addbutton',
 				handler: function(b){

@@ -125,6 +125,10 @@
   }
 
   var tbarItems = [{
+	 	xtype:'htmlcomponent',
+		html:GO.summary.lang.name,
+		cls:'go-module-title-tbar'
+	},{
   	text: GO.lang['cmdAdd'],
   	iconCls:'btn-add',
   	handler: this.showAvailablePortlets,
