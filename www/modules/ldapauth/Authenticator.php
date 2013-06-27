@@ -292,6 +292,9 @@ class GO_Ldapauth_Authenticator {
 		
 		//sometimes users mapped the password. Unset it here to make sure the hash is not used for password in the user.
 		unset($userAttributes['password']);
+		
+		//make sure there's no id
+		unset($userAttributes['id']);
 
 		return $userAttributes;
 	}
