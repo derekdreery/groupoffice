@@ -52,8 +52,8 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			
 			'<td style="width:70px"><b>'+GO.email.lang.from+'</b></td>'+
 
-			'<td>: {from} &lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{sender}\', \'{[this.addSlashes(values.from)]}\');">{sender}</a>&gt;<span id="'+this.linkMessageId+'" class="em-contact-link"></span></td>'+
-			
+			'<td>: {from} &lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{sender}\', \'{[this.addSlashes(values.from)]}\');">{sender}</a>&gt;</td>'+
+//			'<td rowspan="99"><span id="'+this.linkMessageId+'" class="em-contact-link"></span></td>'+
 			
 			'</tr>'+
 			'<tr><td><b>'+GO.email.lang.subject+'</b></td><td>: {subject}</td></tr>'+
@@ -79,8 +79,10 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			'</td></tr>'+
 			'</tpl>'+
 			'</table>'+
+			'<div class="em-contact-link-container"><span id="'+this.linkMessageId+'" class="em-contact-link"></span></div>'+
 			'<tpl if="attachments.length">'+
-			'<table style="padding-top:5px;">'+
+			'<div style="clear:both;"></div>'+
+			'<table>'+
 			'<tr><td><b>'+GO.email.lang.attachments+':</b></td></tr><tr><td id="'+this.attachmentsId+'">'+
 			'<tpl for="attachments">'+
 				'<tpl if="extension==\'vcf\'">';
@@ -99,6 +101,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			'</td></tr>'+
 			'</table>'+
 			'</tpl>'+
+			'<div style="clear:both;"></div>'+
 			'<tpl if="blocked_images&gt;0">'+
 			'<div class="go-warning-msg em-blocked">'+GO.email.lang.blocked+' <a id="em-unblock" href="#" class="normal-link">'+GO.email.lang.unblock+'</a></div>'+
 			'</tpl>'+			

@@ -229,8 +229,14 @@ margin:5px 2px;
 	text-decoration: underline;	
 }
 
+.message-header-table{
+	float:left;
+	margin-right: 10px;
+	margin-bottom: 5px;
+}
+
 .message-header-table td{
-	vertical-align:top;	
+	vertical-align:top;
 }
 
 .message-icalendar{
@@ -377,9 +383,14 @@ margin:5px 2px;
 	background-image:url(images/16x16/spam.png) !important;
 }
 
+.em-contact-link-container{
+	float:left;
+}
+
 .em-contact-link{
 	 float:right;
-	 margin-left:10px;
+	 margin-left:2px;
+	 margin-bottom:2px;
 }
 
 .em-contact-link .x-form-check-wrap{
