@@ -1,3 +1,7 @@
+4.2.6
+- Fixed display of contact photo in email when quicklink is disabled
+
+
 27-06-2013 4.2.5
 - Added support for quick linking Company to email and updated the displayed text for quicklinks.
 - Added a config option to disable the quicklinking in emails. ($config['allow_quicklink'])
