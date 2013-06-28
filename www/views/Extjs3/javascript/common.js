@@ -55,14 +55,14 @@ GO.openHelp = function(page){
 }
 
 
-GO.util.callToLink = function(phone){
+GO.util.callToLink = function(phone,model_type,model_id){
 	var ahref = GO.calltoTemplate.replace('{phone}', phone.replace(/[^0-9+]/g,''));
 
 	if (Ext.isGecko && Ext.isWindows) {
 
 	 ahref = ahref.replace('tel:', 'callto:'); //Firefox on windows used callto: for prodo
 	}
-	return '<a onclick="GO.mainLayout.fireEvent(\'callto\', \''+phone+'\');" href="'+ahref+'">'+phone+'</a>';
+	return '<a onclick="GO.mainLayout.fireEvent(\'callto\', \''+phone+'\',\''+model_type+'\',\''+model_id+'\');" href="'+ahref+'">'+phone+'</a>';
 }
 
 GO.url = function(relativeUrl, params){
