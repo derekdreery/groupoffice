@@ -649,7 +649,7 @@ $l['nb'] = 'Norwegian';
 $l['nl'] = 'Dutch';
 $l['pt'] = 'Portugal';
 $l['sv'] = 'Svenska';
-
+$l['th'] = 'Thailand';
 
 $l['removeDuplicatesAreYouSure']='Are you sure you want to remove duplicates?';
 
