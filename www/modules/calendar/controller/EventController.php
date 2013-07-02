@@ -851,14 +851,16 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$taskFindCriteria = GO_Base_Db_FindCriteria::newInstance()
 							->addCondition('due_time', strtotime($startTime),'>=')
 							->addCondition('due_time', strtotime($endTime), '<=');
+			
+			// Remove tasks that are completed ???
+			//$taskFindCriteria->addCondition('percentage_complete', 100, '<');
 
 		
 			$taskFindCriteria->addInCondition('tasklist_id', array_keys($lists));
 	
 
 			$taskFindParams = GO_Base_Db_FindParams::newInstance()
-							->criteria($taskFindCriteria)
-							->debugSql();
+							->criteria($taskFindCriteria);
 
 			$tasks = GO_Tasks_Model_Task::model()->find($taskFindParams);
 
@@ -868,12 +870,14 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				$endTime = date('Y-m-d',$task->due_time).' 23:59';
 
 				$resultCount++;
+
 				
+				$taskname = $task->name.' ('.$task->percentage_complete.'%)';
 
 				$response['results'][$this->_getIndex($response['results'], $task->due_time).'task'.$task->id] = array(
 					'id'=>$response['count']++,
 					'link_count'=>$task->countLinks(),
-					'name'=>$task->name,
+					'name'=>$taskname,
 					'description'=>$lists[$task->tasklist_id],
 					'time'=>'00:00',
 					'start_time'=>$startTime,
