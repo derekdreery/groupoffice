@@ -1,5 +1,6 @@
 4.2.6
 - Fixed display of contact photo in email when quicklink is disabled
+- Users can only add bookmark categories when they have write permission on the bookmark module.
 
 
 27-06-2013 4.2.5
