@@ -2,6 +2,7 @@
 - Fixed display of contact photo in email when quicklink is disabled
 - Users can only add bookmark categories when they have write permission on the bookmark module.
 - Users can only add views when they have write permission on the calendar module.
+- Added percentage complete for tasks in calendar
 
 27-06-2013 4.2.5
 - Added support for quick linking Company to email and updated the displayed text for quicklinks.
