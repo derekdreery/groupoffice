@@ -1,5 +1,7 @@
 4.1.80
 - Fix from zoom in in on the calendar in chrome where a lot of "More.." links where shown
+- Users can only add bookmark categories when they have write permission on the bookmark module.
+- Users can only add views in the calendar module when they have write permission on the calendar module.
 
 19-06-2013 4.1.79
 - Fix for SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry when accepting appointemnts
