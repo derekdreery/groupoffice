@@ -368,9 +368,13 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		GO_Base_Util_ConfigEditor::save($configFile, $existingConfig);
 		$configFile->chown('root');
 		$configFile->chgrp('www-data');
-		$configFile->chmod(0640);		
+		
+		//autoinstall.php writes to config.php so temporarily allow this.
+		$configFile->chmod(0660);		
 		
 		$this->_createDatabase($params,$installation, $existingConfig);		
+		
+		$configFile->chmod(0640);		
 		
 	}
 	
