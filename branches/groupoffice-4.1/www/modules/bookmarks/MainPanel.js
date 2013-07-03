@@ -142,6 +142,7 @@ GO.bookmarks.MainPanel = function(config){
 			iconCls: 'no-btn-categories',
 			text: GO.bookmarks.lang.administrateCategories,
 			cls: 'x-btn-text-icon',
+			hidden: !GO.settings.modules.bookmarks.write_permission,
 			handler: function(){
 				if(!this.categoriesDialog)
 				{
