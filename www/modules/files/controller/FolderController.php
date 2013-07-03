@@ -38,7 +38,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			
 			foreach($bFolders as $folder){		
 					if($folder->isFolder() && $folder->name()!='notifications'){
-						$folders[]=$folder->name();
+						$folders[]='billing/'.$folder->name();
 					}
 			}		
 		}
