@@ -1,4 +1,5 @@
 4.2.6
+- Disabled the delete key in the tickets dialog if the user has no manage permission on the module.
 - Fixed display of contact photo in email when quicklink is disabled
 - Users can only add bookmark categories when they have write permission on the bookmark module.
 - Users can only add views when they have write permission on the calendar module.
