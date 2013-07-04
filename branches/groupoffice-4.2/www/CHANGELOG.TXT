@@ -5,6 +5,7 @@
 - Users can only add views when they have write permission on the calendar module.
 - Added percentage complete for tasks in calendar
 - For the calendar properties window: Show "None" in the Caldav Tasklist selection when tasklist_id is 0
+- Email Sieve: Fix to always use custom response subject when $config['sieve_vacation_subject'] is enabled in config.php .
 - Fixed problem with rights of the config.php file when creating a new installation in the servermanager
 - Email: Change label of "show unread" button when activated.
 
