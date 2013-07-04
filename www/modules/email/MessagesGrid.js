@@ -251,6 +251,9 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 		if(GO.email.messagesGrid.store.baseParams['unread'] != undefined)
 		{
 			this.showUnreadButton.toggle(GO.email.messagesGrid.store.baseParams['unread']);
+			this.showUnreadButton.setText(GO.email.lang.showAll);
+		} else {
+			this.showUnreadButton.setText(GO.email.lang.showUnread);
 		}
 
 		if(!GO.email.search_type)
@@ -279,6 +282,11 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 	{
 		GO.email.messagesGrid.store.baseParams['unread']=pressed ? 1 : 0;
                 
+		if(pressed)
+			item.setText(GO.email.lang.showAll);
+		else
+			item.setText(GO.email.lang.showUnread);
+								
 		GO.email.messagesGrid.store.load();
 	},
 	
