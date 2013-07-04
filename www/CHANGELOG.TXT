@@ -6,6 +6,7 @@
 - Added percentage complete for tasks in calendar
 - For the calendar properties window: Show "None" in the Caldav Tasklist selection when tasklist_id is 0
 - Fixed problem with rights of the config.php file when creating a new installation in the servermanager
+- Email: Change label of "show unread" button when activated.
 
 27-06-2013 4.2.5
 - Added support for quick linking Company to email and updated the displayed text for quicklinks.
