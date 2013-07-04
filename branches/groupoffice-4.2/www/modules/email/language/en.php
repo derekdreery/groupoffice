@@ -257,3 +257,4 @@ $l['appointementAlreadyProcessed']='This message contains an appointment invitat
 
 $l['noname'] = 'noname';
 $l['doNotMarkAsRead'] = 'Do not automatically mark emails as read';
+$l["showAll"]='Show all';

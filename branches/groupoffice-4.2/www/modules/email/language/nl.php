@@ -269,3 +269,4 @@ $l['FileInGO']='Opslaan in {product_name}';
 $l['noname'] = 'geennaam';
 
 $l['doNotMarkAsRead'] = 'Markeer berichten niet automatisch als gelezen';
+$l["showAll"]='Toon alles';
