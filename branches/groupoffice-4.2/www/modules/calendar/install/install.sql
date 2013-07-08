@@ -18,15 +18,16 @@ CREATE TABLE IF NOT EXISTS `cal_calendars` (
   `public` tinyint(1) NOT NULL DEFAULT '0',
   `shared_acl` tinyint(1) NOT NULL DEFAULT '0',
   `show_bdays` tinyint(1) NOT NULL DEFAULT '0',
+  `show_completed_tasks` tinyint(1) NOT NULL DEFAULT '1',
   `comment` varchar(255) NOT NULL DEFAULT '',
   `project_id` int(11) NOT NULL DEFAULT '0',
   `tasklist_id` int(11) NOT NULL DEFAULT '0',
   `files_folder_id` int(11) NOT NULL DEFAULT '0',
-	`show_holidays` tinyint(1) NOT NULL DEFAULT '1',
+  `show_holidays` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `group_id` (`group_id`),
   KEY `project_id` (`project_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 

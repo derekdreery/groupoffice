@@ -225,3 +225,5 @@ $l['viewDay']='Dag';
 $l['viewMorning']='Ochtend';
 $l['viewAfternoon']='Middag';
 $l['viewEvening']='Avond';
+
+$l['show_completed_tasks'] = "Toon afgeronde taken";
