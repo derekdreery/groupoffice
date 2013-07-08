@@ -22,6 +22,7 @@
  * @property boolean $public
  * @property boolean $shared_acl
  * @property boolean $show_bdays
+ * @property boolean $show_completed_tasks
  * @property string $comment
  * @property int $project_id
  * @property int $tasklist_id

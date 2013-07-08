@@ -64,6 +64,12 @@ GO.calendar.CalendarDialog = function(config)
 			boxLabel:GO.calendar.lang.show_holidays,
 			hideLabel:true
 		},{
+			xtype:'xcheckbox',
+			name:'show_completed_tasks',
+			boxLabel:GO.calendar.lang.show_completed_tasks,
+			hideLabel:true,
+			hidden: !GO.tasks
+		},{
 			xtype:'textarea',
 			fieldLabel:GO.lang.strComment,
 			name:'comment',

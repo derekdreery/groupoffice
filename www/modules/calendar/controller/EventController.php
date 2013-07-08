@@ -852,10 +852,10 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 							->addCondition('due_time', strtotime($startTime),'>=')
 							->addCondition('due_time', strtotime($endTime), '<=');
 			
-			// Remove tasks that are completed ???
-			//$taskFindCriteria->addCondition('percentage_complete', 100, '<');
+			// Remove tasks that are completed
+			if(!$calendar->show_completed_tasks)
+				$taskFindCriteria->addCondition('percentage_complete', 100, '<');
 
-		
 			$taskFindCriteria->addInCondition('tasklist_id', array_keys($lists));
 	
 

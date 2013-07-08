@@ -213,3 +213,5 @@ $updates['201303191307'][] ="ALTER TABLE `cal_participants` ADD INDEX ( `event_i
 $updates["201305141646"][]="update cal_events set mtime=unix_timestamp(), end_time=start_time+3600 where end_time<start_time;";
 $updates["201305231136"][]="ALTER IGNORE TABLE cal_participants ADD UNIQUE(event_id,email );";
 $updates['201305241136'][]="ALTER TABLE `cal_events` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";
+
+$updates['201307081131'][]="ALTER TABLE  `cal_calendars` ADD  `show_completed_tasks` BOOLEAN NOT NULL DEFAULT TRUE AFTER  `show_bdays`";
