@@ -985,15 +985,19 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 		
 		if($exceptionDate){
-			//must be an exception and start on the must start on the exceptionTime
+//			//must be an exception and start on the must start on the exceptionTime
 //			$exceptionJoinCriteria = GO_Base_Db_FindCriteria::newInstance()
 //							->addCondition('id', 'e.exception_event_id','=','t',true,true);
 //			
 //			$params->join(GO_Calendar_Model_Exception::model()->tableName(),$exceptionJoinCriteria,'e');
 //			
-//			$whereCriteria->addCondition('time', $exceptionDate,'=','e');			
+//			$dayStart = GO_Base_Util_Date::clear_time($exceptionDate);
+//			$dayEnd = GO_Base_Util_Date::date_add($dayStart,1);	
+//			$whereCriteria = GO_Base_Db_FindCriteria::newInstance()
+//							->addCondition('time', $dayStart, '>=')
+//							->addCondition('time', $dayEnd, '<','t',false);
 			
-			
+			//the code below only find exceptions on the same day which is wrong
 			$whereCriteria->addCondition('exception_for_event_id', 0,'>');
 			
 			$dayStart = GO_Base_Util_Date::clear_time($exceptionDate);
