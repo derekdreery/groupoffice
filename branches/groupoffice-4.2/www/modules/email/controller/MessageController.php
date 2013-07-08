@@ -1457,6 +1457,12 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		if(isset($params['inline']) && $params['inline'] == 0)
 			$inline = false;	
+		
+		//to work around office crap: http://support.microsoft.com/kb/2019105/en-us		
+		//never use inline on IE with office documents because it will prompt for authentication.
+		if(GO_Base_Util_Http::isInternetExplorer() && strlen($file->extension())==4 && substr($file->extension(),-1)=='x'){
+			$inline=false;
+		}
 
 		GO_Base_Util_Http::outputDownloadHeaders($file,$inline,true);
 
