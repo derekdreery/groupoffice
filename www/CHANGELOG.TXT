@@ -1,4 +1,4 @@
-4.2.6
+08-07-2013 4.2.6
 - Replace {autoid} tag on apply in project dialog
 - Disabled the delete key in the tickets dialog if the user has no manage permission on the module.
 - Fixed display of contact photo in email when quicklink is disabled
