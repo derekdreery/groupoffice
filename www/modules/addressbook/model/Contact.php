@@ -412,6 +412,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 */
 	public function setPhoto(GO_Base_Fs_File $file){
 		
+		if($this->isNew)
+			Throw new Exception("Cannot save a photo on a new contact that is not yet saved.");
 		
 		$this->getPhotoFile()->delete();
 				
