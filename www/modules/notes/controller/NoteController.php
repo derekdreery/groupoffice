@@ -26,7 +26,7 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 		
 		$multiSel = new GO_Base_Component_MultiSelectGrid(
 						'no-multiselect', 
-						"GO_Notes_Model_Category",$store, $params, true);		
+						"GO_Notes_Model_Category",$store, $params, true);
 		
 		$multiSel->addSelectedToFindCriteria($storeParams, 'category_id');
 		$multiSel->setButtonParams($response);
@@ -45,7 +45,7 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 	}
 	
 	
-	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {		
+	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
 		 if(GO::modules()->files){
 			 $f = new GO_Files_Controller_Folder();
 			 $f->processAttachments($response, $model, $params);
@@ -60,7 +60,7 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 				// User just entered a new password.
 				
 				if (empty($params['userInputPassword1']) || empty($params['userInputPassword2']))
-					throw new Exception(GO::t('badPassword'));
+					throw new GO_Base_Exception_BadPassword();
 				if ($params['userInputPassword1']!=$params['userInputPassword2'])
 					throw new Exception(GO::t('passwordMatchError'));
 				$params['password'] = crypt($params['userInputPassword1']);
@@ -82,10 +82,11 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 		return parent::beforeSubmit($response, $model, $params);
 	}
 	
-	protected function beforeLoad(&$response, &$model, &$params) {		
+	protected function beforeLoad(&$response, &$model, &$params) {
 		if (isset($params['userInputPassword'])) {
-			if (!$model->decrypt($params['userInputPassword']))
-				throw new Exception(GO::t('badPassword'));						
+			if (!$model->decrypt($params['userInputPassword'])) {
+				throw new GO_Base_Exception_BadPassword();
+			}
 		}
 	
 		return parent::beforeLoad($response, $model, $params);
@@ -94,7 +95,7 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 	protected function afterLoad(&$response, &$model, &$params) {
 		
 		if ($model->encrypted)
-			$response['data']['content'] = GO::t('contentEncrypted');	
+			$response['data']['content'] = GO::t('contentEncrypted');
 		
 		$response['data']['encrypted']=$model->encrypted;
 		
@@ -103,8 +104,9 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 	
 	protected function beforeDisplay(&$response, &$model, &$params) {
 		if (isset($params['userInputPassword'])) {
-			if (!$model->decrypt($params['userInputPassword']))
-				throw new Exception(GO::t('badPassword'));						
+			if (!$model->decrypt($params['userInputPassword'])) {
+				throw new GO_Base_Exception_BadPassword();
+			}
 		}
 		
 		return $response;
