@@ -75,12 +75,11 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 .x-btn-noicon .x-btn-small .x-btn-text {
 	height: auto;
 	text-transform: uppercase;
-	font-weight: 600;
+	font-weight: bold;
 }
 
 .x-btn button {
 	font: 10px Helvetica, Arial, sans-serif;
-	font-weight: 400;
 	}
 
 .x-window .x-form-text, .x-window textarea.x-form-field, .go-border-center .x-form-text, .go-border-center textarea.x-form-field{
@@ -119,7 +118,7 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 
 .x-panel-header-text {
 	white-space: nowrap;
-	font-weight: 600;
+	font-weight: bold;
 	font-size: 12px;
 }
 
@@ -160,7 +159,7 @@ ul.x-tab-strip-top {
 
 .x-panel-body .x-tab-strip span.x-tab-strip-text, .x-panel-body .x-tab-strip .x-tab-strip-active span.x-tab-strip-text,.x-window .x-tab-strip span.x-tab-strip-text, .x-window .x-tab-strip .x-tab-strip-active span.x-tab-strip-text {
 	color: #000;
-	font-weight: 600;
+	font-weight: bold;
 	padding: 2px 5px 1px;
 }
 
@@ -216,11 +215,12 @@ ul.x-tab-strip {
 }
 
 td.x-grid3-hd-over .x-grid3-hd-inner, td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-menu-open .x-grid3-hd-inner, .x-grid3-hd-btn {
-	background: none;
+	background-image: url(/images/extjs/grid/grid3-hd-btn.gif);
 }
 
 td.x-grid3-hd-over, .x-grid3-hd-row td {
 	border: none !important;
+	padding-right: 5px;
 }
 
 .x-tab-panel .x-tab-panel-body-top {
@@ -259,7 +259,7 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 }
 
 .x-form-field-wrap .x-form-clear-trigger {
-	background-image: url(/images/extjs/form/clear-trigger.gif);
+	background-image: url(/images/extjs/form/clear-trigger.gif) !important;
 }
 
 .x-small-editor .x-form-field-wrap .x-form-trigger {
@@ -336,10 +336,10 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 
 .go-moduletabs-body .go-display-panel .x-btn-text{
 	color: #000 !important;
-	font-weight: 600;
+	font-weight: bold;
 }
 
-.go-display-panel .x-btn-text{
+.go-display-panel .x-btn-text, .x-window .x-panel-tbar .x-btn-text{
 	background: none !important;
 	height: 12px !important;
 }
@@ -348,15 +348,15 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 	padding: 0;
 }
 
-.go-moduletabs-body .go-display-panel .x-btn{
+.go-moduletabs-body .go-display-panel .x-btn, .x-window .x-panel-tbar .x-btn{
 	border: 1px solid #009bcb;	
 	margin-right: 5px;
 }
 
-.go-moduletabs-body .go-display-panel .x-btn-text-icon .x-btn-icon-small-left .x-btn-text {
-	font-size: 10px;
-	font-weight: 600;
-	padding: 0 5px;
+.go-moduletabs-body .go-display-panel .x-btn-text-icon .x-btn-icon-small-left .x-btn-text, .x-date-bottom .x-btn-text, .x-window .x-btn-text {
+	font-size: 10px !important;
+	font-weight: bold;
+	padding: 0 5px !important;
 	text-transform: uppercase;
 }
 
@@ -407,11 +407,11 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 }
 
 thead .x-grid3-hd-inner{
-	font-weight: 600;
+	font-weight: bold;
 }
 
 .display-panel-heading, .collapsible-display-panel-headerm .display-panel-heading, .collapsible-display-panel-header div{
-	font-weight: 600;
+	font-weight: bold;
 }
 
 .x-grid3-row-selected {
@@ -440,15 +440,15 @@ thead .x-grid3-hd-inner{
 	color: #fff !important;
 }
 
-.x-window .x-window-tbar .x-btn-text, #go-module-panel-customfields .go-border-center .x-panel-tbar .x-btn-text, #go-module-panel-calendar .go-border-west .go-border-center .x-panel-tbar .x-btn-text, #go-module-panel-filesearch .go-border-center .x-panel-tbar .x-btn-text {
+.x-window .x-window-tbar .x-btn-text, #go-module-panel-customfields .go-border-center .x-panel-tbar .x-btn-text, #go-module-panel-calendar .go-border-west .go-border-center .x-panel-tbar .x-btn-text, #go-module-panel-filesearch .go-border-center .x-panel-tbar .x-btn-text, .x-date-bottom {
 	background: none !important;
 	font-size: 10px;
-	font-weight: 600;
+	font-weight: bold;
 	padding: 0 5px;
 	text-transform: uppercase;
 } 
 
-.x-window-tbar .x-btn, .x-window-footer .x-btn, #go-module-panel-customfields .go-border-center .x-panel-tbar .x-btn, #go-module-panel-calendar .go-border-west .go-border-center .x-panel-tbar .x-btn, #go-module-panel-filesearch .go-border-center .x-panel-tbar .x-btn {
+.x-window-tbar .x-btn, .x-window-footer .x-btn, #go-module-panel-customfields .go-border-center .x-panel-tbar .x-btn, #go-module-panel-calendar .go-border-west .go-border-center .x-panel-tbar .x-btn, #go-module-panel-filesearch .go-border-center .x-panel-tbar .x-btn, .x-date-bottom {
 	border: 1px solid #009bcb;
 	margin-right: 5px;
 }
@@ -458,7 +458,7 @@ thead .x-grid3-hd-inner{
 	margin: 0 5px;
 }
 
-.x-btn-mc em.x-btn-arrow {
+.go-head-tb .x-btn-mc em.x-btn-arrow {
 	background-image: url(/images/button/arrow.gif);
 }
 
@@ -476,7 +476,7 @@ thead .x-grid3-hd-inner{
 
 .x-window-header-text{
 	color: #000;
-	font-weight: 600;s
+	font-weight: bold;s
 	}
 
 .x-window .x-panel-body ul.x-tab-strip-top{
@@ -539,6 +539,55 @@ thead .x-grid3-hd-inner{
 	background: #fff none !important
 }
 
-/* .ext-l-mask, .ext-l-mask .msg{
+.sort-asc .x-grid3-sort-icon {
+	background-image: url(/images/extjs/grid/sort_asc.gif);
+}
 
-} */
+.sort-desc .x-grid3-sort-icon {
+	background-image: url(/images/extjs/grid/sort_desc.gif);
+}
+
+textarea.x-item-disabled{
+	background: #eee !important;
+	border: 1px solid #999 !important;
+}
+
+.x-panel-tl, .x-panel-tc, .x-panel-tr, .x-panel-ml, .x-panel-mr, .x-panel-bl, .x-panel-br, .x-panel-bc {
+	background: none !important;
+	border: none !important;
+}
+
+.x-portlet{
+	background: #fff;
+	border: 1px solid #2b9bc9;
+}
+
+.x-panel-tl .x-panel-header {
+	color: #000;
+}
+
+.x-date-middle .x-btn .x-btn-text {
+	color: #000;
+	font-size: 12px;
+	text-transform: none;
+}
+
+.ext-webkit table.x-date-inner {
+	padding: 5px 0;
+}
+
+.x-date-bottom .x-btn-text{
+	color: #000;
+}
+
+.x-date-middle .x-btn-mc em.x-btn-arrow {
+	background-image: url(/images/extjs/toolbar/btn-arrow.gif);
+}
+
+
+.x-toolbar .x-item-disabled {
+	cursor: default;
+	opacity: .4;
+	-moz-opacity: .4;
+	filter: alpha(opacity=40);
+}

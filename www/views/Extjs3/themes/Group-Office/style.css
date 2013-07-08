@@ -54,8 +54,9 @@
 	background:none !important;
 }
 
-.go-colored-table .even{
-	background-color:#f1f1f1 !important;
+.go-colored-table .even {
+	background-color: none !important; 
+	border-top: 1px solid #000;
 }
 
 .x-date-weeknumber{
@@ -2163,4 +2164,25 @@ body.ext-ie6 .x-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em
 
 #loading-mask{
 	background-color: #2a9ac9 !important;
+}
+
+
+
+
+ 
+
+ #go-module-panel-summary .x-panel-header-text{
+ 	padding: 6px 6px 0 6px;
+ }
+
+#go-module-panel-summary #portlet-announcements .x-grid3-row {
+	padding: 10px 0;
+}
+
+#go-module-panel-summary .x-grid-panel .x-panel-body{
+	padding: 4px 10px !important;
+}
+
+.x-grid3-row-body .description {
+	padding: 0 !important; 
 }
