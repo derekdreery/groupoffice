@@ -605,6 +605,7 @@ $l['nb']= 'Norge';
 $l['nl']= 'Nederland';
 $l['pt']= 'Portugal';
 $l['sv']= 'Sverige';
+$l['th']= 'Thailand';
 $l['skippedDeleteHasLinks']='Ikke slettet fordi elementet har lenker';
 $l['skippedDeleteHasFiles']='Ikke slettet fordi elementet har filer eller mapper';
 $l['foundDuplicates']='Funnet %s duplikater.';

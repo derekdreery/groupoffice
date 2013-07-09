@@ -246,3 +246,5 @@ $l['cronEmailReminders']='E-post påminnelser';
 $l['cronEmailRemindersDescription']='Denne cron-jobben håndterer e-post påminnelsene';
 $l['appointementAlreadyProcessed']='Denne meldingen inneholder en invitasjon som allerede er behandlet.';
 $l['noname']= 'uten_navn';
+$l['doNotMarkAsRead']= 'Ikke sett e-poster som lest automatisk';
+$l['showAll']='Vis alle';
