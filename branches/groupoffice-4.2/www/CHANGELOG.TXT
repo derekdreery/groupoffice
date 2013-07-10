@@ -17,6 +17,7 @@
   never use inline on IE with office documents because it will prompt for authentication.
 - Timeregistration: Added toggle button so the grid can be displayed next to the form instead of underneath it.
 - ZPush: Fixed Grey appointments on iphone
+- SaveMailAs module: Email contact/company linking. Fix to not show sender company, when the current user has permissions to see the sender contact, but not the sender company.
 
 
 27-06-2013 4.2.5
