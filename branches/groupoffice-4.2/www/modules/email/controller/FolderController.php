@@ -100,7 +100,7 @@ class GO_Email_Controller_Folder extends GO_Base_Controller_AbstractController {
 		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 				
-		$sourceMailbox = new GO_Email_Model_ImapMailbox($account, array("name"=>$params["sourceMailbox"]."123"));
+		$sourceMailbox = new GO_Email_Model_ImapMailbox($account, array("name"=>$params["sourceMailbox"]));
 		
 		if($sourceMailbox->isSpecial())
 			throw new Exception(GO::t("cantMoveSpecialFolder","email"));
