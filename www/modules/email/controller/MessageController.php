@@ -1164,7 +1164,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 
 				$company = $contact->company;
-				if(!empty($company) && GO_Base_Model_Acl::getUserPermissionLevel($company->addressbook->acl_id)>=GO_Base_Model_Acl::READ_PERMISSION){
+				if(!empty($company) && GO_Base_Model_Acl::getUserPermissionLevel($company->addressbook->acl_id)>=GO_Base_Model_Acl::WRITE_PERMISSION){
 					$response['sender_company_id']=$company->id;
 					$response['company_name']=$company->name.' ('.$company->addressbook->name.')';
 				}
