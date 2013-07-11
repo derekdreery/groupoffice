@@ -159,19 +159,35 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 			
 			$dt->acl->addGroup(GO::config()->group_internal);
 		}
+		
+		
+		$this->setFolderPermissions();
+		
 	}
 	
-	
-	public function checkDatabase(&$response) {
-		
+	private function setFolderPermissions(){
 		if(GO::modules()->isInstalled('files')){
 			$folder = GO_Files_Model_Folder::model()->findByPath('addressbook', true);
 			if($folder){
 				$folder->acl_id=GO::modules()->addressbook->acl_id;
 				$folder->readonly=1;
 				$folder->save();
-			}
+			}			
+			
+			$folder = GO_Files_Model_Folder::model()->findByPath('addressbook/photos', true);
+			if($folder && !$folder->acl_id){
+				$folder->setNewAcl(1);
+				$folder->readonly=1;
+				$folder->save();
+			}			
 		}
+		
+	}
+	
+	
+	public function checkDatabase(&$response) {
+		
+		$this->setFolderPermissions();
 		
 		return parent::checkDatabase($response);
 	}
