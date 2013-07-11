@@ -165,7 +165,7 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		
 	}
 	
-	private function setFolderPermissions(){
+	public function setFolderPermissions(){
 		if(GO::modules()->isInstalled('files')){
 			$folder = GO_Files_Model_Folder::model()->findByPath('addressbook', true);
 			if($folder){

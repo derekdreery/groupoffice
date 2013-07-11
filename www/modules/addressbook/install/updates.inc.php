@@ -375,3 +375,5 @@ $updates['201304231330'][]="ALTER TABLE `ab_companies` ADD `muser_id` int(11) NO
 
 $updates['201305271506'][]="ALTER TABLE  `ab_contacts` ADD  `photo` VARCHAR( 255 ) NOT NULL";
 $updates['201305271506'][]="update ab_contacts set photo=concat('contacts/contact_photos/',id,'.jpg');";
+
+$updates['201307111403'][]="script:4_set_photo_permissions.php";
