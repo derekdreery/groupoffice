@@ -107,8 +107,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	
 	
 	protected function actionPhoto($params){
-		//TODO remove permission skip
-		$contact = GO_Addressbook_Model_Contact::model()->findByPk($params['id'],false, true);
+		//fetching contact will check read permission
+		$contact = GO_Addressbook_Model_Contact::model()->findByPk($params['id']);
 		
 		GO_Base_Util_Http::outputDownloadHeaders($contact->getPhotoFile(), true, false);
 		$contact->getPhotoFile()->output();
