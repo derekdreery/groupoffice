@@ -2108,15 +2108,25 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$line=false;
 		$leftOver = $this->message_part_size-$this->message_part_read;
 		if($leftOver>0){
-			$blockSize = $leftOver>1024 ? 1024 : $leftOver;
-
+			
+			//reading exact length doesn't work if the last char is just one char somehow.
+			//we cut the left over later with substr.
+			$blockSize = 1024;//$leftOver>1024 ? 1024 : $leftOver;			
 			$line = fgets($this->handle,$blockSize);
-			$this->message_part_read+=strlen($line);
+			$this->message_part_read+=strlen($line);			
 		}			
-		if(!$line){
+		
+		if ($this->message_part_size < $this->message_part_read) {
+			
+			$line = substr($line, 0, ($this->message_part_read-$this->message_part_size)*-1);			
+		}
+		
+		if($line===false){
+			
 			//read and check left over response.
 			$response=$this->get_response();
 			$this->check_response($response);
+			
 		}
 		return $line;
 	}
