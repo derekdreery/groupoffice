@@ -222,3 +222,5 @@ $l['cronEventAndTaskReportMailerSubject']='Heutige Ereignisse und Aufgaben';
 $l['cronEventAndTaskReportMailerContent']='Sie finden eine Auflistung der heutigen Ereignisse und Aufgaben in der PDF-Datei im Anhang.';
 
 $l['eventPrivateChecked'] = 'Bitte beachten Sie, dass die Nutzer, für die Sie diesen Kalender freigegeben haben, auch dann noch Zugriff auf die dem Termin angehängten Dateien haben, wenn der Termin auf \"Privat\" gestellt wurde.';
+
+$l['show_completed_tasks'] = "Zeige abgeschlossene Aufgaben";

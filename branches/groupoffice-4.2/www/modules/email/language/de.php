@@ -248,3 +248,5 @@ $l['cronEmailReminders']='E-Mail-Erinnerungen';
 $l['appointementAlreadyProcessed']='Diese Nachricht beinhaltet eine Termineinladung, die bereits bearbeitet wurde.';
 
 $l['noname'] = 'namenlos';
+$l['doNotMarkAsRead'] = 'E-Mails nicht automatisch als gelesen markieren';
+$l["showAll"]='Alle anzeigen';

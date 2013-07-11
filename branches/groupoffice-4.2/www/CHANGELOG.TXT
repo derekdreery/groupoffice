@@ -1,3 +1,6 @@
+- Hide contact photos folder from file manager
+- Some attachments missing 1 byte.
+
 08-07-2013 4.2.6
 - Replace {autoid} tag on apply in project dialog
 - Disabled the delete key in the tickets dialog if the user has no manage permission on the module.
