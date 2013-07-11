@@ -627,3 +627,4 @@ $l['nb'] = 'Norwegen';
 $l['nl'] = 'Niederlande';
 $l['pt'] = 'Portugal';
 $l['sv'] = 'Schweden';
+$l['th'] = 'Thailand';
