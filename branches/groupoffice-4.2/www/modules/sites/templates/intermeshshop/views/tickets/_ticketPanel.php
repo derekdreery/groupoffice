@@ -55,7 +55,7 @@
 		<?php if ($ticket->agent): ?>
 		
 			<?php if (!empty($ticket->agent->contact->photoURL)): ?>
-				<div class="ticket-agent-photo"><img src="<?php echo $ticket->agent->contact->photoURL; ?>"></div>
+		<div class="ticket-agent-photo"><img src="<?php echo GO::url('tickets/site/getagentpicture',array('agent_contact_id'=>$ticket->agent->contact->id));?>"></div>
 			<?php endif; ?>	
 		
 			<div class="ticket-agent-text"><?php echo $ticket->agent->name; ?></div>
