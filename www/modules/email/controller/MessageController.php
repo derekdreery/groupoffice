@@ -1206,10 +1206,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$vevent = $vcalendar->vevent[0];
 
 			//is this an update for a specific recurrence?
-			//$recurrenceDate = isset($vevent->{"recurrence-id"}) ? $vevent->{"recurrence-id"}->getDateTime()->format('U') : 0;
+			$recurrenceDate = isset($vevent->{"recurrence-id"}) ? $vevent->{"recurrence-id"}->getDateTime()->format('U') : 0;
 
 			//find existing event
-			$event = GO_Calendar_Model_Event::model()->findByUuid((string) $vevent->uid, GO::user()->id, 0);
+			$event = GO_Calendar_Model_Event::model()->findByUuid((string) $vevent->uid, GO::user()->id, $recurrenceDate);
 //			var_dump($event);
 			
 			$uuid = (string) $vevent->uid;
@@ -1465,8 +1465,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		}
 
 		GO_Base_Util_Http::outputDownloadHeaders($file,$inline,true);
-
-		$imap = $account->openImapConnection($params['mailbox']);
+		
+		$imap = $account->openImapConnection($params['mailbox']);		
 		$imap->get_message_part_start($params['uid'], $params['number']);
 		while ($line = $imap->get_message_part_line()) {
 			switch (strtolower($params['encoding'])) {
