@@ -245,7 +245,8 @@ GO.addressbook.MainPanel = function(config)
 		}, this);
 
 		var westPanel = new Ext.Panel({
-			layout:'border',
+			layout:'accordion',
+			layoutConfig:{hideCollapseTool:true},
 			border:false,
 			region:'west',
 			width:200,
