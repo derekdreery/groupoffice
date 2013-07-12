@@ -244,7 +244,7 @@ GO.addressbook.MainPanel = function(config)
 			}
 		}, this);
 
-		var westPanel = new Ext.Panel({
+		this.westPanel = new Ext.Panel({
 			layout:'accordion',
 			layoutConfig:{hideCollapseTool:true},
 			border:false,
@@ -256,7 +256,7 @@ GO.addressbook.MainPanel = function(config)
 		});
 		config.items= [
 		this.searchPanel,
-		westPanel,
+		this.westPanel,
 		this.tabPanel,
 		this.displayCardPanel
 		];
