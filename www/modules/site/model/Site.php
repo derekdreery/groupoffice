@@ -70,6 +70,10 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 		}
 	}
 	
+	/**
+	 * Site model is cached in the session so we need to reload the static variables
+	 * on wake up.
+	 */
 	public function __wakeup() {
 		parent::__wakeup();
 		
