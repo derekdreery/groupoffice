@@ -373,6 +373,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$this->_modifiedAttributes=array();
 	}
 	
+	public function __wakeup() {
+		
+	}
+	
 	/**
 	 * This function is called after the model is constructed by a find query
 	 */
