@@ -53,6 +53,13 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 	
 	protected function afterLoad() {
 		
+		$this->_loadFields();
+			
+		
+		return parent::afterLoad();
+	}
+	
+	private function _loadFields(){
 		//load cf
 		if(!isset(self::$fields)){
 			$fields = GO_Customfields_Model_Field::model()->findByModel('GO_Site_Model_Site', false);
@@ -61,9 +68,12 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 				self::$fields[$field->name]= $field;
 			}
 		}
-			
+	}
+	
+	public function __wakeup() {
+		parent::__wakeup();
 		
-		return parent::afterLoad();
+		$this->_loadFields();
 	}
 	
 	public function __get($name) {
