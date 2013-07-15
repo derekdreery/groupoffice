@@ -169,9 +169,17 @@ GO.tasks.TasksPanel = function(config)
 			remoteGroup:true,
 			remoteSort:true
 		});
-
+		
 		config.store.on('load', function()
 		{
+			if(config.store.reader.jsonData.buttonParams) {
+				if(config.store.reader.jsonData.buttonParams.permissionLevel < 40)
+					this.deleteSelected = function(){ /*nop*/ }; //disable grid delete action when no permissions
+				else
+					this.deleteSelected = GO.grid.GridPanel.prototype.deleteSelected;
+			} else
+				this.deleteSelected = function(){ /*nop*/ };
+			
 			if(config.store.reader.jsonData.feedback)
 			{
 				alert(config.store.reader.jsonData.feedback);
