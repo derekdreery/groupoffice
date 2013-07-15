@@ -1,3 +1,4 @@
+- Delete keyboard shortcut disabled in tasks grid if deleting is not allowed for one of the selected tasklists
 - Hide contact photos folder from file manager
 - Some attachments missing 1 byte.
 
