@@ -23,4 +23,13 @@ class GO_Base_Util_Array {
 
 		return $array1;
 	}
+	
+	public static function caseInsensitiveSort(&$array) {
+		if (version_compare(PHP_VERSION, "5.4") > -1) {
+			return ksort($array, SORT_STRING | SORT_FLAG_CASE);
+		} else {
+			return uksort($array, 'strcasecmp');
+		}
+	}
+
 }
