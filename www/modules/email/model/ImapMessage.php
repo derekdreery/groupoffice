@@ -98,15 +98,26 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	 * @return array
 	 */
 	public function find(GO_Email_Model_Account $account, $mailbox="INBOX", $start=0, $limit=50, $sortField=GO_Base_Mail_Imap::SORT_DATE , $descending=true, $query='ALL'){
+		/** @var $imap GO_Base_Mail_Imap */
 		$imap = $account->openImapConnection($mailbox);
 		$headersSet = $imap->get_message_headers_set($start, $limit, $sortField , $descending, $query);
 		$results=array();
 		foreach($headersSet as $uid=>$headers){
 			$message = GO_Email_Model_ImapMessage::model()->createFromHeaders(
-							$account, $mailbox, $headers);			
-		
+							$account, $mailbox, $headers);	
+			
 			$results[]=$message;
 		}
+		//find recursive in subfolders
+		$delim = $imap->get_mailbox_delimiter();
+		$children = $imap->get_folders($mailbox.$delim);
+		foreach($children as $child) {
+			$subfolder = $child['name'];
+			if($subfolder!=$mailbox){
+				$results = array_merge($results, $this->find($account, $subfolder, $start, $limit, $sortField, $descending, $query));
+			}
+		}
+		
 		
 		return $results;
 		
