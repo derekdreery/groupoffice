@@ -1,4 +1,4 @@
-
+- Added recursive search for Imap folders
 - VoIP will rewrite tel: links to callto: in Firefox in Windows
 
 13-06-2013 4.2.0
