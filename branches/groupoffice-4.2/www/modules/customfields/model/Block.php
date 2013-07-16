@@ -52,7 +52,7 @@ class GO_Customfields_Model_Block extends GO_Base_Db_ActiveRecord{
 				)
 				->criteria(
 					GO_Base_Db_FindCriteria::newInstance()
-						->addCondition('col_'.$this->field_id, $forModelId.':'.$forModelName, '=', 'cf')
+						->addCondition('col_'.$this->field_id, $forModelId.':%', 'LIKE', 'cf')
 				)
 		);
 		
