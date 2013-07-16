@@ -1,6 +1,7 @@
 - Delete keyboard shortcut disabled in tasks grid if deleting is not allowed for one of the selected tasklists
 - Hide contact photos folder from file manager
 - Some attachments missing 1 byte.
+- Customfield blocks: will still work after changing the containing contact's/company's name.
 
 08-07-2013 4.2.6
 - Replace {autoid} tag on apply in project dialog
