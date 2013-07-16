@@ -2,6 +2,7 @@
 - Hide contact photos folder from file manager
 - Some attachments missing 1 byte.
 - Customfield blocks: will still work after changing the containing contact's/company's name.
+- Address Book: More debugging possibilities when sending mails using the Newsletter feature.
 
 08-07-2013 4.2.6
 - Replace {autoid} tag on apply in project dialog
