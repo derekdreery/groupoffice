@@ -2324,6 +2324,35 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	}
 	
 	/**
+	 * Check when the permissions level was before moving the object to a differend
+	 * related ACL object eg. moving contact to different addressbook
+	 * @param int $level permissio nlevel to check for
+	 * @return boolean if the user has the specified level
+	 * @throws Exception if the ACL is not found
+	 */
+	public function checkOldPermissionLevel($level) {
+		
+		$arr = explode('.', $this->aclField());
+		$relation = array_shift($arr);
+		$r = $this->getRelation($relation);
+		$aclFKfield = $r['field'];
+		
+		$newValue = $this->{$aclFKfield};
+		$this->{$aclFKfield} = $this->getOldAttributeValue($aclFKfield);
+		
+		//$result = $this->checkPermissionLevel($level);
+		$acl_id = $this->findAclId();
+		if(!$acl_id)
+			throw new Exception("Could not find ACL for ".$this->className()." with pk: ".$this->pk);
+		$result = GO_Base_Model_Acl::getUserPermissionLevel($acl_id)>=$level;
+		//end checkpermission level
+		
+		$this->{$aclFKfield} = $newValue;
+		
+		return $result;
+	}
+	
+	/**
 		* Returns a value indicating whether the attribute is required.
 		* This is determined by checking if the attribute is associated with a
 		* {@link CRequiredValidator} validation rule in the current {@link scenario}.
@@ -2571,7 +2600,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			throw new GO_Base_Exception_AccessDenied($msg);
 		}
 		
-		if(!$ignoreAcl && !$this->isNew && $this->_aclModified() && !$this->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION)){
+		// when foreignkey to acl field changes check PermissionLevel of origional related ACL object as well
+		if(!$ignoreAcl && !$this->isNew && $this->_aclModified() && !$this->checkOldPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION)){
 			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : sprintf(GO::t('cannotMoveError'),'this');
 			throw new GO_Base_Exception_AccessDenied($msg);
 		}
