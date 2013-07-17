@@ -281,8 +281,11 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			}
 		}
 		
+		
 		//make sure we are connected to the right mailbox after move and delete operations
 //		$imap = $account->openImapConnection($params["mailbox"]);
+		
+		$searchRecursive = isset($params['searchRecursive']) ? $params['searchRecursive']=='true' : false;
 		
 		$messages = GO_Email_Model_ImapMessage::model()->find(
 						$account, 
@@ -291,7 +294,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 						$params['limit'], 
 						$sortField , 
 						$params['dir']!='ASC', 
-						$query);
+						$query,
+						$searchRecursive);
 		
 		$response["results"]=array();
 		foreach($messages as $message){

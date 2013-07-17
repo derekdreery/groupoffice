@@ -111,10 +111,13 @@ GO.email.SearchDialog = function(config){
 						editable: false,
 						selectOnFocus:true,
 						forceSelection: true
-					})
+					}),
+					{
+						xtype: 'xcheckbox',
+						fieldLabel: GO.email.lang['searchRecursive'],
+						name: 'searchRecursive'
+					}
 					]
-				
-				
 				});
 				
 				
@@ -180,6 +183,7 @@ GO.email.SearchDialog = function(config){
 
 			this.hasSearch = true;
 			config.store.baseParams['query']=this.buildQuery();
+			config.store.baseParams['searchRecursive']=this.formPanel.form.findField('searchRecursive').getValue();
 			config.store.load();
 
 			this.dialog.hide();					

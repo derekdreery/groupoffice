@@ -267,3 +267,4 @@ $l['FileToComputer']='Opslaan op computer';
 $l['FileInGO']='Opslaan in {product_name}';
 
 $l['noname'] = 'geennaam';
+$l['searchRecursive'] = 'Recursief zoeken';
