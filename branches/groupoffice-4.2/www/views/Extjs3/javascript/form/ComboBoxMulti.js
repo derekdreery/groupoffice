@@ -34,9 +34,9 @@ GO.form.ComboBoxMulti = function(config){
     };
     
     GO.form.ComboBoxMulti.superclass.constructor.call(this, config);
-    
-    this.on('focus', function(){this.focused=true;}, this);
-    this.on('blur', function(){this.focused=false;}, this);
+   
+//    this.on('focus', function(){this.focused=true;}, this);
+//    this.on('blur', function(){this.focused=false;}, this);
 };
 
 Ext.extend(GO.form.ComboBoxMulti, GO.form.ComboBox, {
@@ -145,9 +145,10 @@ Ext.extend(GO.form.ComboBoxMulti, GO.form.ComboBox, {
     },
     
     initQuery: function(){
-    	if(this.focused)
-			{
-        this.doQuery(this.sep ? this.getActiveEntry() : this.getRawValue());
-			}
+			if(this.getEl().id === document.activeElement.id)
+				this.doQuery(this.sep ? this.getActiveEntry() : this.getRawValue());
+			
+//    	if(this.focused)
+//        this.doQuery(this.sep ? this.getActiveEntry() : this.getRawValue());
     }
 });
