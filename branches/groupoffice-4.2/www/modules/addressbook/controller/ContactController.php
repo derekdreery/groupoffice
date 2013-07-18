@@ -631,7 +631,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		
 		
 		$userContactIds=array();
-		if(empty($params['addressbook_id'])) {
+		if(empty($params['addressbook_id']) && empty($params['no_user_contacts'])) {
 			$findParams = GO_Base_Db_FindParams::newInstance()
 					->searchQuery($query,
 									array("CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)",'t.email','t.email2','t.email3'))
