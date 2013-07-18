@@ -249,7 +249,7 @@ class GO_Base_Util_String {
 		$source_charset=strtoupper($source_charset);
 		if($source_charset=='ISO-8859-1' || $source_charset=='ISO-8859-15' || $source_charset=='WINDOWS-1252')
 			$str = str_replace("\x80","€", $str);
-
+		
 		// UNICODE IS NOT A VALID CHARSET SO WE USE THE UTF-8 
 		if($source_charset == 'UNICODE')
 			$source_charset = 'UTF-8';
@@ -257,6 +257,8 @@ class GO_Base_Util_String {
 		//Does not always work. We suppress the:
 		//Notice:  iconv() [function.iconv]: Detected an illegal character in input string in /var/www/community/trunk/www/classes/String.class.inc.php on line 31		
 		$old_lvl = error_reporting (E_ALL ^ E_NOTICE);
+		
+		$str = str_replace("€","&euro;", $str);
 		
 		$source_charset = self::fixCharset($source_charset);
 		
@@ -278,11 +280,7 @@ class GO_Base_Util_String {
 			if($from_charset!=$source_charset)
 				$str=self::clean_utf8($str, $from_charset);
 		}
-		
-		
-
-		
-		
+							
 		//Check if preg validates it as UTF8
 		if(preg_match('/^.{1}/us', $str)){
 			
@@ -302,7 +300,7 @@ class GO_Base_Util_String {
 | .                                 # anything else
 /x
 END;
-				
+		
 			return preg_replace($regex, '$1', $str);
 		
 //		//Not valid still so we are going to validate each utf byte sequence with
