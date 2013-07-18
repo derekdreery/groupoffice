@@ -1,3 +1,4 @@
+- Fixed euro character encoding problem in emails
 - When changing th FK of the relation the contains the ACL field (eg contanct <--> addressbook) the old permission level will be checked as well
 - Delete keyboard shortcut disabled in tasks grid if deleting is not allowed for one of the selected tasklists
 - Hide contact photos folder from file manager
