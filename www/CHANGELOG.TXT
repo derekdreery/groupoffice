@@ -1,10 +1,13 @@
+19-07-2013 4.2.7
 - Fixed euro character encoding problem in emails
 - When changing th FK of the relation the contains the ACL field (eg contanct <--> addressbook) the old permission level will be checked as well
 - Delete keyboard shortcut disabled in tasks grid if deleting is not allowed for one of the selected tasklists
 - Hide contact photos folder from file manager
 - Some attachments missing 1 byte.
+- 123 error when moving folders in e-mail
 - Customfield blocks: will still work after changing the containing contact's/company's name.
 - Address Book: More debugging possibilities when sending mails using the Newsletter feature.
+- Some recurring event exceptions couldn't be accepted through e-mail
 
 08-07-2013 4.2.6
 - Replace {autoid} tag on apply in project dialog
