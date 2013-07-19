@@ -2,4 +2,4 @@ groupoffice-billing (4.2.7) fourzero; urgency=low
 
   * Changes can be found in /usr/share/groupoffice/CHANGELOG.TXT
 
- -- Merijn Schering <mschering@intermesh.nl>  Fri, 19 Jul 2013 10:54:41 +0200
+ -- Merijn Schering <mschering@intermesh.nl>  Fri, 19 Jul 2013 11:01:24 +0200
