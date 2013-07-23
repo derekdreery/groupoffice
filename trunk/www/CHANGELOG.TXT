@@ -1,7 +1,74 @@
 - Added recursive search for Imap folders
 - VoIP will rewrite tel: links to callto: in Firefox in Windows
 
-13-06-2013 4.2.0
+
+4.2.8
+- Added BIC number to company fields of the addressbook module
+- The paste-from-word button in the wisywig editor is translated and Dutch and German translation was added
+
+19-07-2013 4.2.7
+- Fixed euro character encoding problem in emails
+- When changing th FK of the relation the contains the ACL field (eg contanct <--> addressbook) the old permission level will be checked as well
+- Delete keyboard shortcut disabled in tasks grid if deleting is not allowed for one of the selected tasklists
+- Hide contact photos folder from file manager
+- Some attachments missing 1 byte.
+- 123 error when moving folders in e-mail
+- Customfield blocks: will still work after changing the containing contact's/company's name.
+- Address Book: More debugging possibilities when sending mails using the Newsletter feature.
+- Some recurring event exceptions couldn't be accepted through e-mail
+
+08-07-2013 4.2.6
+- Replace {autoid} tag on apply in project dialog
+- Disabled the delete key in the tickets dialog if the user has no manage permission on the module.
+- Fixed display of contact photo in email when quicklink is disabled
+- Users can only add bookmark categories when they have write permission on the bookmark module.
+- Users can only add views when they have write permission on the calendar module.
+- Added percentage complete for tasks in calendar
+- For the calendar properties window: Show "None" in the Caldav Tasklist selection when tasklist_id is 0
+- Email Sieve: Fix to always use custom response subject when $config['sieve_vacation_subject'] is enabled in config.php .
+- Fixed problem with rights of the config.php file when creating a new installation in the servermanager
+- Email: Change label of "show unread" button when activated.
+- Billing: Removed total and costcode from the order displaypanel because of too much data that is displayed
+- Z-Push Admin: Added searchbar to devicesGrid
+- Calendar/Tasks: Added checkbox in calendar settings to choose if you want to display completed tasks in the calendar or not.
+- Zpush-admin: Show used AS version also in the Grid
+- to work around office login prompt: http://support.microsoft.com/kb/2019105/en-us 
+  never use inline on IE with office documents because it will prompt for authentication.
+- Timeregistration: Added toggle button so the grid can be displayed next to the form instead of underneath it.
+- ZPush: Fixed Grey appointments on iphone
+- SaveMailAs module: Email contact/company linking. Fix to not show sender company, when the current user has permissions to see the sender contact, but not the sender company.
+
+
+27-06-2013 4.2.5
+- Added support for quick linking Company to email and updated the displayed text for quicklinks.
+- Added a config option to disable the quicklinking in emails. ($config['allow_quicklink'])
+- Enabled sorting tickets by ticket agent (responsible).
+- Added an option to the email account dialog (properties panel) to choose  if clicked emails will automatically be marked as read or not.
+- Billing: Added field to set the length of the order number. (how many 000 that are in front of the orderno)
+- Added dropbox module
+- Moved scanbox and googledrive module to pro package
+- Updated French and German translation
+- Fixed incorrect content length header on downloading message source
+- better way of stripping non utf8 characters
+- Billing: Enabled tags for contact and company in order PDF template.
+
+24-06-2013 4.2.4
+- Better memory management with sending mails.
+- Updated czech language
+- Fix from zoom in in on the calendar in chrome where a lot of "More.." links where shown
+
+19-06-2013 4.2.3
+- Fixes from 4.1.79
+
+18-06-2013 4.2.2
+- Improved WebDAV performance
+- Calendar module: Notification about files of a private event, once the 
+  checkbox 'Private' has been clicked.
+- Better memory management in z-push 2 backend. Raised default max attachment 
+  size to 100MB.
+- Optimized Z-Push 2 ping process with ChangesSink
+
+13-06-2013 4.2.1
 - Upgrade TCPDF to 6.0.020 and changed default font to freesans because of display problem on iPad
 - Upgraded SabreDAV to version 1.8.5
 - HTTP Authentication for requests
@@ -23,6 +90,21 @@
 - Tickets can be created by sending an e-mail
 - Ticket types can be grouped
 - Anonymous ticket posting is very simple to setup now.
+
+4.1.80
+- Fix from zoom in in on the calendar in chrome where a lot of "More.." links where shown
+
+19-06-2013 4.1.79
+- Fix for SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry when accepting appointemnts
+- Fix for invalid IMAP part reading. UID could be appended.
+- Project types can be removed again
+
+13-06-2013 4.1.78
+- Updated German
+- Z-push 1.5 fix that it gave errors when there were no items to sync.
+- Fix for creating new users with LDAP
+- e-mail (non sieve) filter grid didn't reload
+- Recurring events could have one extra day when synchronized
 
 13-06-2013 4.1.77
 - If it's only a single all day occurrence then the end day should be the same

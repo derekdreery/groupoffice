@@ -402,8 +402,9 @@ class GO_Base_Db_FindParams{
 	 * @param boolean $value
 	 * @return GO_Base_Db_FindParams 
 	 */
-	public function single($value=true){
+	public function single($value=true, $disableModelCache=false){
 		$this->_params['single']=$value;
+		$this->_params['disableModelCache']=$disableModelCache;
 		return $this;
 	}
 	

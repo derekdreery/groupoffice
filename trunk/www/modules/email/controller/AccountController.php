@@ -25,6 +25,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 
 		$findParams = GO_Base_Db_FindParams::newInstance()
 						->select("t.*,a.email, a.name")
+						->searchFields(array('a.email','a.name','t.host'))
 						->joinModel(array(
 				'tableAlias' => 'a',
 				'model' => 'GO_Email_Model_Alias',
@@ -395,7 +396,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 			
 			$nodes[$sortIndex .'-'. $mailbox->name] = $node;
 		}
-		ksort($nodes);
+		GO_Base_Util_Array::caseInsensitiveSort($nodes);
 
 		return array_values($nodes);
 	}

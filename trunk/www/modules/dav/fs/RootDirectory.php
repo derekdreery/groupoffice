@@ -53,21 +53,26 @@ class GO_Dav_Fs_RootDirectory extends Sabre\DAV\FS\Directory implements Sabre\DA
      */
     public function getChild($name) {
 			
-			$children = $this->getChildren();
-			
-			foreach($children as $child)
-			{
-				if($child->getName()==$name)
-					return $child;
+			switch($name){
+				case GO::user()->username:
+					return new GO_Dav_Fs_Directory('users/' . GO::user()->username);
+					break;
+				
+				case 'Shared':
+						return new GO_Dav_Fs_SharedDirectory();
+					break;
+				case 'projects':
+					if(GO::modules()->projects)
+						return new GO_Dav_Fs_Directory('projects');
+					break;
+					
+				case 'addressbook':
+					if(GO::modules()->addressbook)
+						return new GO_Dav_Fs_Directory('addressbook');
+					break;
 			}
-			throw new Sabre\DAV\Exception\NotFound("$name not found in the root");
 			
-//			if($name=='Shared')
-//				return new GO_Dav_Fs_SharedDirectory();
-//			elseif($name==GO::user()->username)
-//				return new GO_Dav_Fs_Directory('users/' . GO::user()->username);
-//			else
-//				return false;
+			throw new Sabre\DAV\Exception\NotFound("$name not found in the root");
 		}
 
 	/**

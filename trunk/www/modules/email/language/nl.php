@@ -266,5 +266,10 @@ $l['appointementAlreadyProcessed']='Dit bericht bevat een afspraak uitnodiging d
 $l['FileToComputer']='Opslaan op computer';
 $l['FileInGO']='Opslaan in {product_name}';
 
-$l['noname'] = 'geennaam';
+
+$l['doNotMarkAsRead'] = 'Markeer berichten niet automatisch als gelezen';
+$l["showAll"]='Toon alles';
+
+				
+$l['noname'] = 'geen naam';
 $l['searchRecursive'] = 'Recursief zoeken';

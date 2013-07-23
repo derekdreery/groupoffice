@@ -48,6 +48,9 @@ class GO_Base_Cron_EmailReminders extends GO_Base_Cron_AbstractCron {
 		GO::session()->runAsRoot();
 		$usersStmt = GO_Base_Model_User::model()->findByAttribute('mail_reminders', 1);
 		while ($userModel = $usersStmt->fetch()) {
+			
+			GO::debug("Sending mail reminders to ".$userModel->username);
+			
 			$remindersStmt = GO_Base_Model_Reminder::model()->find(
 				GO_Base_Db_FindParams::newInstance()
 					->joinModel(array(
@@ -85,7 +88,10 @@ class GO_Base_Cron_EmailReminders extends GO_Base_Cron_AbstractCron {
 				$message = GO_Base_Mail_Message::newInstance($subject, $body);
 				$message->addFrom(GO::config()->webmaster_email,GO::config()->title);
 				$message->addTo($userModel->email,$userModel->name);
-				GO_Base_Mail_Mailer::newGoInstance()->send($message);
+				GO_Base_Mail_Mailer::newGoInstance()->send($message, $failedRecipients);
+				
+				if(!empty($failedRecipients))
+					trigger_error ("Reminder mail failed for recipient: ".implode(',', $failedRecipients), E_USER_NOTICE);
 
 				$reminderUserModelSend = GO_Base_Model_ReminderUser::model()
 					->findSingleByAttributes(array(

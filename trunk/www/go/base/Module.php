@@ -268,6 +268,15 @@ class GO_Base_Module extends GO_Base_Observable {
 //			call_user_func(array(get_class($this),'deleteUser'), $user);
 //		}
 		
+		//Uninstall cron jobs for this module
+		$cronClasses = $this->findClasses('cron');
+		foreach($cronClasses as $class){
+			
+			$jobs = GO_Base_Cron_CronJob::model()->findByAttribute('job', $class->getName());
+			foreach($jobs as $job)
+				$job->delete();			
+		}
+		
 		
 		//delete all models from the GO_Base_Model_ModelType table.
 		//They are used for faster linking and search cache. Each linkable model is mapped to an id in this table.

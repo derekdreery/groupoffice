@@ -187,9 +187,19 @@ GO.email.AccountDialog = function(config) {
 		scope : this
 	})
 
+	this.doNotMarkAsReadCbx = new Ext.ux.form.XCheckbox({
+		boxLabel: GO.email.lang.doNotMarkAsRead,
+		fieldLabel: '',
+		checked:false,
+		name: 'do_not_mark_as_read',
+		allowBlank: true
+	});
+	properties_items.push(this.doNotMarkAsReadCbx);
+
+
 	if(GO.settings.modules.email.write_permission || !GO.email.disableAliases)
 		properties_items.push(this.aliasesButton);
-
+	
 	var propertiesTab = {
 		title : GO.lang.strProperties,
 		layout : 'form',
@@ -361,14 +371,7 @@ GO.email.AccountDialog = function(config) {
 	//this.permissionsTab.disabled = false;
 	
 	
-	this.filterGrid = new GO.email.FilterGrid({
-		listeners:{
-			show:function(){
-				if(!GO.email.subscribedFoldersStore.loaded)
-					GO.email.subscribedFoldersStore.load();
-			}
-		}
-	});
+	this.filterGrid = new GO.email.FilterGrid();
 
 	var items = [propertiesTab,
 

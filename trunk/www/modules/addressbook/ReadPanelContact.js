@@ -71,10 +71,18 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 							'</table>'+
 						'</td>'+
 						'<tpl if="photo_url">'+
-							'<td rowspan="2" align="right">' +							
-								'<a href="{original_photo_url}" target="_blank">'+
-								'<img src="{photo_url}" class="ab-photo" />' +
-								'</a>'+
+							'<td rowspan="2" align="right">' +
+							
+								'<tpl if="write_permission">'+
+									'<img src="{photo_url}" class="ab-photo" style="cursor:pointer;" onClick="GO.addressbook.showContactDialog({id}, \\{activeTab:1\\} );"/>' +
+								'</tpl>'+
+								
+								'<tpl if="!write_permission">'+
+									'<a href="{original_photo_url}" target="_blank">'+
+									'<img src="{photo_url}" class="ab-photo" />' +
+									'</a>'+
+								'</tpl>'+
+								
 							'</td>' +
 						'</tpl>'+
 					'</tr>' +

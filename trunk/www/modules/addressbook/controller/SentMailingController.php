@@ -57,22 +57,29 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 
 				$message = GO_Base_Mail_Message::newInstance();
 				$message->handleEmailFormInput($params); // insert the inline and regular attachments in the MIME message
-				
+
 				$mailing['alias_id'] = $params['alias_id'];
 				$mailing['subject'] = $params['subject'];
 				$mailing['addresslist_id'] = $params['addresslist_id'];
 				$mailing['message_path'] =  'mailings/' . GO::user()->id . '_' . date('Ymd_Gis') . '.eml';
-	
+
 				$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'mailings');
 				$folder->create();
 
 				// Write message MIME source to message path
 				file_put_contents(GO::config()->file_storage_path.$mailing['message_path'], $message->toString());
 
+				GO::debug('===== MAILING PARAMS =====');
+				GO::debug(var_export($mailing,true));
+
 				$sentMailing = new GO_Addressbook_Model_SentMailing();
 				$sentMailing->setAttributes($mailing);
-				$sentMailing->save();				
-				
+				if (!$sentMailing->save()) {
+								GO::debug('===== VALIDATION ERRORS =====');
+								GO::debug('Could not create new mailing:<br />'.implode('<br />',$sentMailing->getValidationErrors()));
+								throw new Exception('Could not create new mailing:<br />'.implode('<br />',$sentMailing->getValidationErrors()).'<br />MAILING PARAMS:<br />'.var_export($mailing,true));
+				}       
+
 				$this->_launchBatchSend($sentMailing->id);
 
 				$response['success'] = true;
@@ -95,10 +102,17 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 			$cmd .= ' 2>&1 &';
 
 		file_put_contents($log, GO_Base_Util_Date::get_timestamp(time()) . "\r\n" . $cmd . "\r\n\r\n", FILE_APPEND);
-		if (GO_Base_Util_Common::isWindows())
+		if (GO_Base_Util_Common::isWindows()) {
 			pclose(popen("start /B " . $cmd, "r"));
-		else
-			exec($cmd);
+		} else {
+			exec($cmd,$outputarr,$returnvar);
+			GO::debug('===== CMD =====');
+			GO::debug($cmd);
+			GO::debug('===== OUTPUT ARR =====');
+			GO::debug(var_export($outputarr,true));
+			GO::debug('===== RETURN VAR =====');
+			GO::debug(var_export($returnvar,true));
+		}
 	}
 
 	protected function actionBatchSend($params) {
@@ -284,7 +298,9 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 					throw new Exception("Invalid token!");
 				
 				$contact->email_allowed=0;
-				$contact->save();				
+				$contact->save();					
+				
+				GO_Base_Mail_AdminNotifier::sendMail("Unsubscribe: ".$contact->email, "Contact ".$contact->email. " unsubscribed from receiving newsletters");
 			}else
 			{
 				if($params['contact_id']){
@@ -294,7 +310,9 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 						throw new Exception("Invalid token!");
 
 					$company->email_allowed=0;
-					$company->save();				
+					$company->save();
+					
+					GO_Base_Mail_AdminNotifier::sendMail("Unsubscribe: ".$company->email, "Company ".$contact->email. " unsubscribed from receiving newsletters");
 				}
 			}
 			

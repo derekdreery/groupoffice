@@ -171,7 +171,6 @@ class GO_Base_Component_MultiSelectGrid {
 	 */
 	private function _validateSelection(){
 		$models = $this->_getSelectedModels();
-
 		if(count($models) != count($this->selectedIds)){
 			//one of the selections could not be fetched. This may happen when something is
 			//deleted or a user doesn't have permissions anymore.
@@ -180,6 +179,7 @@ class GO_Base_Component_MultiSelectGrid {
 			foreach($this->_models as $model){
 				$this->selectedIds[]=$model->pk;
 			}
+			$this->_save();			
 		}
 	}
 

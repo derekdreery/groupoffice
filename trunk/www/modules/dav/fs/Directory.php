@@ -24,10 +24,10 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Node implements Sabre\DAV\ICollec
 		$this->relpath = $path;
 		$path = GO::config()->file_storage_path . $path;
 		
-		if(!$this->_getFolder()->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION)){
-			GO::debug("DAV: User ".GO::user()->username." doesn't have write permission for ".$this->relpath);
-			throw new Sabre\DAV\Exception\Forbidden ("DAV: User ".GO::user()->username." doesn't have write permission for folder '".$this->relpath.'"');
-		}
+		//		if(!$this->_getFolder()->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION)){
+//			GO::debug("DAV: User ".GO::user()->username." doesn't have write permission for ".$this->relpath);
+//			throw new Sabre\DAV\Exception\Forbidden ("DAV: User ".GO::user()->username." doesn't have write permission for folder '".$this->relpath.'"');
+//		}
 		parent::__construct($path);
 	}
 
@@ -210,7 +210,7 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Node implements Sabre\DAV\ICollec
 		//foreach(scandir($this->path) as $node) if($node!='.' && $node!='..') $nodes[] = $this->getChild($node);
 
 		$f = $this->_getFolder();
-
+		
 		if (!$f) {
 			throw new Sabre\DAV\Exception\NotFound("Folder not found in database");
 		}

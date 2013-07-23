@@ -62,6 +62,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			$model->setPhoto($destinationFile);
 			$model->save();
 			$response['photo_url'] = $model->photoThumbURL;
+			$response['original_photo_url'] = $model->photoURL;
 		}elseif(!empty($params['download_photo_url'])){
 			
 			$file = GO_Base_Fs_File::tempFile();	
@@ -72,7 +73,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 						
 			$model->setPhoto($file);
 			$model->save();					
-			
+			$response['photo_url'] = $model->photoThumbURL;
+			$response['original_photo_url'] = $model->photoURL;
 		}
 		
 		
@@ -86,6 +88,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			$response['customfields'] = GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Addressbook_Model_Contact", $model->addressbook_id);
 		
 		$response['data']['photo_url']=$model->photoThumbURL;		
+		$response['data']['original_photo_url']=$model->photoURL;
 		
 		$stmt = $model->addresslists();
 		while($addresslist = $stmt->fetch()){
@@ -104,8 +107,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	
 	
 	protected function actionPhoto($params){
-		//TODO remove permission skip
-		$contact = GO_Addressbook_Model_Contact::model()->findByPk($params['id'],false, true);
+		//fetching contact will check read permission
+		$contact = GO_Addressbook_Model_Contact::model()->findByPk($params['id']);
 		
 		GO_Base_Util_Http::outputDownloadHeaders($contact->getPhotoFile(), true, false);
 		$contact->getPhotoFile()->output();
@@ -628,7 +631,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		
 		
 		$userContactIds=array();
-		if(empty($params['addressbook_id'])) {
+		if(empty($params['addressbook_id']) && empty($params['no_user_contacts'])) {
 			$findParams = GO_Base_Db_FindParams::newInstance()
 					->searchQuery($query,
 									array("CONCAT(t.first_name,' ',t.middle_name,' ',t.last_name)",'t.email','t.email2','t.email3'))

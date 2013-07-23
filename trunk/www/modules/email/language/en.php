@@ -255,5 +255,8 @@ $l['cronEmailRemindersDescription']='This cron handles the email reminders';
 
 $l['appointementAlreadyProcessed']='This message contains an appointment invitation that was already processed.';
 
-$l['noname'] = 'noname';
+$l['doNotMarkAsRead'] = 'Do not automatically mark emails as read';
+$l["showAll"]='Show all';
+
+$l['noname'] = 'no name';
 $l['searchRecursive'] = 'Search recursive';

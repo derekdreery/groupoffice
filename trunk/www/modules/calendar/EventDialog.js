@@ -112,6 +112,13 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			tbar.push(this.fileBrowseButton = new GO.files.FileBrowserButton({
 				model_name:"GO_Calendar_Model_Event"
 			}));
+			
+			this.fileBrowseButton.on('click',function(){
+			if (this.privateCB.getValue() && !GO.files.privateWarned) {
+				GO.files.privateWarned=true;
+				alert(GO.calendar.lang['eventPrivateChecked']);
+			}
+		},this);
 		}
 
 		this.win = new GO.Window({
@@ -850,6 +857,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			labelSeparator : '',
 			hideLabel : true
 		});
+		
 
 		this.propertiesPanel = new Ext.Panel({
 			hideMode : 'offsets',

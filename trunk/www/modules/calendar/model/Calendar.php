@@ -11,6 +11,23 @@
  * @version $Id: File.class.inc.php 7607 2011-06-15 09:17:42Z mschering $
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
+ * @property int $group_id
+ * @property int $user_id
+ * @property int $acl_id
+ * @property string $name
+ * @property int $start_hour
+ * @property int $end_hour
+ * @property string $background
+ * @property int $time_interval
+ * @property boolean $public
+ * @property boolean $shared_acl
+ * @property boolean $show_bdays
+ * @property boolean $show_completed_tasks
+ * @property string $comment
+ * @property int $project_id
+ * @property int $tasklist_id
+ * @property int $files_folder_id
+ * @property boolean $show_holidays
  */
 
 class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel {

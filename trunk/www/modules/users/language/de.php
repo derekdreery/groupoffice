@@ -110,6 +110,8 @@ $l['dashdmy']='Tag-Monat-Jahr';
 $l['slashmdy']='Monat/Tag/Jahr';
 $l['dotdmy']='Tag.Monat.Jahr';
 $l['slashdmy']='Tag/Monat/Jahr';
+$l['slashymd']='Jahr-Monat-Tag';
+$l['dotymd']='Jahr.Monat.Tag';
 $l['generatePassword']='Erzeuge Kennwort';
 $l['generatedPasswordIs']='Das zeugte Kennwort lautet';
 $l['updateExistingOnImport']='Vorhandene Nutzer aktualisieren (per Nutzername)';
@@ -122,3 +124,10 @@ $l['resetStateConfirm']='Sind Sie sicher, dass Sie alle Spalten, Fenster- und Sp
 
 $l['registrationEmail']='E-Mail Registrierung';
 $l['enabledSettingtabs']='Aktiviere Einstellungs-Tabs';
+
+$l['explanation_cf_settingspanels']='Um den Tab für die Zusatzfelder in den Einstellung anzuzeigen, muss sichergestellt sein, dass der Nutzer mindestens Leserechte auf das Zusatzfelder-Modul hat.';
+$l['addresslist_panel']= 'Adresslistenelemnt';
+$l['show_addresslists_panel']= 'Adresslistenelement anzeigen';
+$l['enabled_cf_tabs']= 'Aktivierte Zusatzfelder Tabs';
+
+$l['cmdFormLabelHolidaySet'] = 'Feiertage';

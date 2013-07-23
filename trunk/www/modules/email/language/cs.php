@@ -3,7 +3,6 @@
 
 $l['name'] = 'E-mail';
 $l['description'] = 'Webový e-mailový klient. Každý uživatel může  posílat a přijímat e-maily nebo přeposílat.';
-$lang['link_type'][9]='E-mail';
 $l['feedbackNoReciepent'] = 'Nezadali jste příjemce';
 $l['feedbackSMTPProblem'] = 'Došlo k problému při komunikaci s SMTP: ';
 $l['feedbackUnexpectedError'] = 'Došlo k nečekanému problému s úpravou emailu: ';
@@ -145,7 +144,8 @@ $l["priority"]='Priorita';
 $l["read"]='Přečtené';
 $l["NA"]='Neznámé';
 $l["emptyFolder"]='Vyprázdnit složku';
-$l["emptyFolderConfirm"]='Jste si jisti, že chcete vymazat obsah složky \'{name}\'?';
+$l["emptyFolderConfirm"]='Opravdu chcete vymazat obsah této složky \'{name}\'?';
+$l["markFolderReadConfirm"]='Opravdu chcete označit všechny zprávy v této složce \'{name}\' jako přečtené?';
 $l["addUnknownRecipients"]='Přidat neznámého příjemce';
 $l["addUnknownRecipientsText"]='Právě jste poslali email na jednoho nebo více příjemců, kteří nejsou ve Vašem adresáři. Kliknutím na jméno můžete dotyčného přidat do adresáře nebo zavřít toto okno';
 $l["addUnknownSenders"]='Přidat neznámého odesílatele';
@@ -245,6 +245,27 @@ $l['mailbox']='Poštovní schránka';
 $l['checkUnseen']='Automaticky kontrolovat nové zprávy v této složce';
 $l['noEmailFolders'] = 'Žádné složky nebyly přidány.';
 
+$l['storePassword']='Uložit heslo natrvalo';
 $l['sieveNote']='Některé funkce nejsou podporovány. Prosím zkontrolujte manuál.';
 $l['winmailNoFiles']="Tato winmail příloha neobsahuje žádné soubory.";
 $l['attachedAppointmentInfo']="Připojené informace o událostech";
+$l['cantDeleteSpecialFolder']="Nemůžete smazat složku koše, odeslaných zpráv nebo šablon";
+$l["copyingMessages"]='Kopírování zpráv...';
+$l['cantMoveSpecialFolder']="Nemůžete přesunout složku koše, odeslaných zpráv nebo šablon";
+
+$l['copyMailTo']="Kopírovat e-mail do...";
+$l['copyMailToTxt']="Vyberte složku pro zkopírování e-mailové zprávy";
+$l['copyMailToRUSure']="Opravdu chcete označenou e-mailovou zprávu zkopírovat do této složky?";
+$l['copyMailsToRUSure']="Opravdu chcete označené e-mailové zprávy zkopírovat do této složky?";
+$l['selectValidMailFolder']="Prosím vyberte platnou složku pro zkopírování.";
+$l['clickSeeWholeMessage']="Aktuální zpráva je větší než by zde mohla být zobrazena. Klikněte prosím sem pro její celé zobrazení.";
+
+$l['dateReceived']='Datum přijetí';
+$l['dateSent']='Datum odeslání';
+
+$l['cronEmailReminders']='E-mailové připomínky';
+$l['cronEmailRemindersDescription']='Tento cron zpracováva e-mailové připomínky';
+
+$l['appointementAlreadyProcessed']='Tato zpráva obsahuje pozvánku k události, která již proběhla.';
+
+$l['noname'] = 'neznámý';

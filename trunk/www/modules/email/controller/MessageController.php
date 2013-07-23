@@ -524,7 +524,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$response['success'] = $response['sendParams']['draft_uid'] > 0;
 		}
 		
-		if(!$imap->append_message($account->drafts, $message->toString(), "\Seen")){
+		if(!$imap->append_message($account->drafts, $message, "\Seen")){
 			$response['success'] = false;
 			$response['feedback']=$imap->last_error();
 		}
@@ -656,7 +656,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				GO::debug("Sent");
 				//if a sent items folder is set in the account then save it to the imap folder
 				$imap = $account->openImapConnection($account->sent);
-				if(!$imap->append_message($account->sent, $message->toString(), "\Seen")){
+				if(!$imap->append_message($account->sent, $message, "\Seen")){
 					$response['success']=false;
 					$response['feedback'].='Failed to save send item to '.$account->sent;
 				}
@@ -840,7 +840,12 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		if(!empty($params['uid'])){
 			$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+			if(!$account)
+				throw new GO_Base_Exception_NotFound();
+			
 			$message = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
+			if(!$message)
+				throw new GO_Base_Exception_NotFound();
 		}else
 		{
 			$account=false;
@@ -1118,6 +1123,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$response['uid'] = intval($params['uid']);
 		$response['mailbox'] = $params['mailbox'];
 		$response['account_id'] = intval($params['account_id']);
+		$response['do_not_mark_as_read'] = $account->do_not_mark_as_read;
 		
 		if(!$plaintext){
 			
@@ -1132,7 +1138,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			}
 		}
 		
-		$response = $this->_getContact($imapMessage, $params, $response);
+		$response = $this->_getContactInfo($imapMessage, $params, $response);
 
 		$this->fireEvent('view', array(
 				&$this,
@@ -1147,26 +1153,41 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		return $response;
 	}
 	
-	private function _getContact(GO_Email_Model_ImapMessage $imapMessage,$params, $response){
-		$response['sender_contact_id']=0;		
-
+	private function _getContactInfo(GO_Email_Model_ImapMessage $imapMessage,$params, $response){
+		$response['sender_contact_id']=0;
+		$response['sender_company_id']=0;
+		$response['allow_quicklink']=1;
+		$response['contact_name']="";			
+		$response['contact_thumb_url']=GO::config()->host.'modules/addressbook/themes/Default/images/unknown-person.png';
+		
+		$useQL = GO::config()->allow_quicklink;
+		$response['allow_quicklink']=$useQL?1:0;
+	
 		$contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($response['sender']);
 		if(!empty($contact)){
-			$response['sender_contact_id']=$contact->id;
-			$response['contact_name']=$contact->name;			
 			$response['contact_thumb_url']=$contact->getPhotoThumbURL();
 			
-			if(GO::modules()->savemailas){
-				
-				$linkedMessage = GO_Savemailas_Model_LinkedEmail::model()->findByImapMessage($imapMessage, $contact);
-				$response['linked_message_id']=$linkedMessage ? $linkedMessage->id : 0;
+			if($useQL){
+				$response['sender_contact_id']=$contact->id;
+				$response['contact_name']=$contact->name.' ('.$contact->addressbook->name.')';
+
+
+				$company = $contact->company;
+				if(!empty($company) && GO_Base_Model_Acl::getUserPermissionLevel($company->addressbook->acl_id)>=GO_Base_Model_Acl::WRITE_PERMISSION){
+					$response['sender_company_id']=$company->id;
+					$response['company_name']=$company->name.' ('.$company->addressbook->name.')';
+				}
+
+				if(GO::modules()->savemailas){
+					$contactLinkedMessage = GO_Savemailas_Model_LinkedEmail::model()->findByImapMessage($imapMessage, $contact);
+					$response['contact_linked_message_id']=$contactLinkedMessage && $contactLinkedMessage->linkExists($contact) ? $contactLinkedMessage->id : 0;
+
+					if(!empty($company)){
+						$companyLinkedMessage = GO_Savemailas_Model_LinkedEmail::model()->findByImapMessage($imapMessage, $company);
+						$response['company_linked_message_id']=$companyLinkedMessage && $companyLinkedMessage->linkExists($company) ? $companyLinkedMessage->id : 0;
+					}				
+				}
 			}
-			
-		}else
-		{
-			$response['sender_contact_id']=0;
-			$response['contact_name']="";			
-			$response['contact_thumb_url']=GO::config()->host.'modules/addressbook/themes/Default/images/unknown-person.png';
 		}
 		return $response;
 	}
@@ -1194,10 +1215,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$vevent = $vcalendar->vevent[0];
 
 			//is this an update for a specific recurrence?
-			//$recurrenceDate = isset($vevent->{"recurrence-id"}) ? $vevent->{"recurrence-id"}->getDateTime()->format('U') : 0;
+			$recurrenceDate = isset($vevent->{"recurrence-id"}) ? $vevent->{"recurrence-id"}->getDateTime()->format('U') : 0;
 
 			//find existing event
-			$event = GO_Calendar_Model_Event::model()->findByUuid((string) $vevent->uid, GO::user()->id, 0);
+			$event = GO_Calendar_Model_Event::model()->findByUuid((string) $vevent->uid, GO::user()->id, $recurrenceDate);
 //			var_dump($event);
 			
 			$uuid = (string) $vevent->uid;
@@ -1431,6 +1452,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 	public function actionAttachment($params) {
 		
+		GO::session()->closeWriting();
+		
 		$file = new GO_Base_Fs_File($params['filename']);
 		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
@@ -1443,10 +1466,16 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		if(isset($params['inline']) && $params['inline'] == 0)
 			$inline = false;	
+		
+		//to work around office crap: http://support.microsoft.com/kb/2019105/en-us		
+		//never use inline on IE with office documents because it will prompt for authentication.
+		if(GO_Base_Util_Http::isInternetExplorer() && strlen($file->extension())==4 && substr($file->extension(),-1)=='x'){
+			$inline=false;
+		}
 
 		GO_Base_Util_Http::outputDownloadHeaders($file,$inline,true);
-
-		$imap = $account->openImapConnection($params['mailbox']);
+		
+		$imap = $account->openImapConnection($params['mailbox']);		
 		$imap->get_message_part_start($params['uid'], $params['number']);
 		while ($line = $imap->get_message_part_line()) {
 			switch (strtolower($params['encoding'])) {
@@ -1462,6 +1491,23 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			}
 		}
 	}
+
+//	Z-push testing
+//	public function actionAttachment($uid, $number, $encoding, $account_id, $mailbox, $filename){
+//		
+//		$file = new GO_Base_Fs_File($filename);
+//		GO_Base_Util_Http::outputDownloadHeaders($file,true,true);
+//		
+//		$account = GO_Email_Model_Account::model()->findByPk($account_id);
+//		$imap = $account->openImapConnection($mailbox);
+//		include_once('modules/z-push2/backend/go/GoImapStreamWrapper.php');
+//		
+//		$fp = GoImapStreamWrapper::Open($imap, $uid, $number, $encoding);
+//		
+//		while($line = fgets($fp)){
+//			echo $line;
+//		}
+//	}
 	
 	
 	protected function actionTnefAttachmentFromTempFile($params){
@@ -1528,7 +1574,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$header = $imap->get_message_part($params['uid'], 'HEADER', true) . "\r\n\r\n";
 		$size = $imap->get_message_part_start($params['uid'], 'TEXT', true);
 
-		header('Content-Length: ' . strlen($header) . $size);
+		header('Content-Length: ' . (strlen($header) + $size));
 
 		echo $header;
 		while ($line = $imap->get_message_part_line())

@@ -422,6 +422,7 @@ $l["firebugWarning"]="De Firebug Add-on vertraagd deze applicatie. Gebruik het a
 $l["indent"]='Inspringen';
 $l["outdent"]='Uitspringen';
 $l["removeFormatting"]='Verwijder opmaak';
+$l["pasteFromWord"]='Verwijderd opmaak uit teksten geplakt vanuit Word of andere Rich Text applicaties';
 $l["insertHorizontalRule"]='Horizontale lijn invoegen';
 $l["insertHRtext"]='Voer de breedte in procenten van de lijn in gevolgd door het % teken aan het einde, of stel een vaste breedte in zonder het procent teken.';
 $l["cmdInsert"]='Invoegen';

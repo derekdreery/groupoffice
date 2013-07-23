@@ -146,16 +146,14 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 				{
 					$rule['actions'][$i]['copy']=false;
 				}
-				
-				
-				
-				if(isset($rule['actions'][$i]['addresses']) && !is_array($rule['actions'][$i]['addresses'])){
+								
+				if(!empty($rule['actions'][$i]['addresses'])) { // && !is_array($rule['actions'][$i]['addresses'])){
 					if($rule['actions'][$i]['type']=='vacation') {
 						if (!empty(GO::config()->sieve_vacation_subject))
 							$rule['actions'][$i]['subject']=GO::config()->sieve_vacation_subject;
 					}
 
-					$rule['actions'][$i]['addresses']=explode(',',$rule['actions'][$i]['addresses']);
+					$rule['actions'][$i]['addresses']= is_array($rule['actions'][$i]['addresses']) ? $rule['actions'][$i]['addresses'] : explode(',',$rule['actions'][$i]['addresses']);
 					$rule['actions'][$i]['addresses']=array_map('trim', $rule['actions'][$i]['addresses']);
 				} else {
 					unset($rule['actions'][$i]['vacationStart']);

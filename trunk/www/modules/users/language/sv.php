@@ -124,3 +124,12 @@ $l['resetState']="Nollställ fönster och rutnät";
 $l['resetStateConfirm']='Är du säker på att du vill nollställa storleken på alla rutnät, fönster, paneler etc till fabriksinställningar?';
 $l['registrationEmail']='E-post med registreringsavisering';
 $l['enabledSettingtabs']='Aktivera inställningsflikar';
+
+$l['explanation_cf_settingspanels']='För att visa egna fält i inställningspanelen måste du försäkra dig om att användaren åtminstone har läsbehörighet till modulen egna fält.';
+$l['addresslist_panel']= 'Adresslist-panel';
+$l['show_addresslists_panel']= 'Visa adresslist-panelen';
+$l['enabled_cf_tabs']= 'Aktivera fliken egna fält';
+
+$l['slashymd']='År-Månad-Dag';
+$l['dotymd']='År.Månad.Dag';
+$l['cmdFormLabelHolidaySet']= 'Helgdagar';
