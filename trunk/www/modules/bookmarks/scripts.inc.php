@@ -9,5 +9,5 @@ while($bookmark = $stmt->fetch()){
 	} else {
 		$name = $bookmark->name;
 	}
-	$GO_SCRIPTS_JS .= 'GO.moduleManager.addModule(\'bookmarks-id-' . $bookmark->id . '\', GO.panel.IFrameComponent, {title : \'' . GO_Base_Util_String::escape_javascript($name) . '\', url : \'' . GO_Base_Util_String::escape_javascript($bookmark->content) . '\'});';
+	$GO_SCRIPTS_JS .= 'GO.moduleManager.addModule(\'bookmarks-id-' . $bookmark->id . '\', GO.panel.IFrameComponent, {title : \'' . GO_Base_Util_String::escape_javascript($name) . '\', url : \'' . GO_Base_Util_String::escape_javascript($bookmark->content) . '\',iconCls: \'go-tab-icon-bookmarks\'});';
 }

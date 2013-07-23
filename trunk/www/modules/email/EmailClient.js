@@ -515,7 +515,11 @@ GO.email.EmailClient = function(config){
 		});
 	}
 
-	var tbar =[this.composerButton = new Ext.Button({
+	var tbar =[{
+	      	 	xtype:'htmlcomponent',
+			html:GO.email.lang.name,
+			cls:'go-module-title-tbar'
+		},this.composerButton = new Ext.Button({
 		iconCls: 'btn-compose',
 		text: GO.email.lang['compose'],
 		cls: 'x-btn-text-icon',

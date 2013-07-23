@@ -15,6 +15,19 @@
  *When upgrading extjs don't forget to check htmleditor overrides in E-mail composer
  */
 
+Ext.override(Ext.Panel,{
+	initComponent : Ext.Panel.prototype.initComponent.createSequence(function(){
+		if(this.region){
+			if(this.cls)
+				this.cls += ' ';
+			else
+				this.cls = '';
+			
+			this.cls += 'go-border-'+this.region;
+		}
+	})
+});
+
 Ext.override(Ext.grid.Column,{
 	renderer:function(value, metaData, record, rowIndex, colIndex, store){
 		//console.log(this);

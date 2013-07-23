@@ -16,7 +16,7 @@ GO.tasks.ContinueTaskDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	initComponent : function(){
 		
 		Ext.apply(this, {
-			autoHeight:true,
+			//autoHeight:true,
 			goDialogId:'task',
 			title:GO.tasks.lang.continueTask,
 			formControllerUrl: 'tasks/task'
@@ -41,6 +41,7 @@ GO.tasks.ContinueTaskDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		var eight = Date.parseDate(tomorrow.format('Y-m-d')+' 08:00', 'Y-m-d G:i' );
 
 		this.datePicker = new Ext.DatePicker({
+					internalRender:true,
 					xtype:'datepicker',
 					name:'due_time',
 					format: GO.settings.date_format,
