@@ -67,28 +67,8 @@ GO.customfields.MainPanel = function(config){
 		border: true,
 		split: true,
 		height:55,
-		resizable:false,
-		tbar: [new Ext.Button({
-			iconCls: 'btn-setting',
-			text: GO.customfields.lang['manageBlocks'],
-			cls: 'x-btn-text-icon',
-			handler: function(){
-				if (!GO.customfields.manageBlocksWindow) {
-					GO.customfields.manageBlocksWindow = new GO.Window({
-						title : GO.customfields.lang['manageBlocks'],
-						items: [this.manageBlocksGrid = new GO.customfields.ManageBlocksGrid({layout:'fit',height:490})],
-						width: 800,
-						height: 600,
-						layout: 'fit'
-					});
-					GO.customfields.manageBlocksWindow.on('show',function(){
-						this.manageBlocksGrid.store.load();
-					},this);
-				}
-				GO.customfields.manageBlocksWindow.show();
-			},
-			scope: this
-		})]
+		resizable:false
+		
 	});
 	
 	this.typePanel = new GO.customfields.TypePanel({
@@ -138,6 +118,35 @@ GO.customfields.MainPanel = function(config){
 	this.navPanel,
 	this.typePanel
 	];	
+
+	config.tbar=new Ext.Toolbar({
+		cls:'go-head-tb',
+		items:[{
+                xtype:'htmlcomponent',
+                html:GO.customfields.lang.name,
+                cls:'go-module-title-tbar'
+        },new Ext.Button({
+			iconCls: 'btn-setting',
+			text: GO.customfields.lang['manageBlocks'],
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				if (!GO.customfields.manageBlocksWindow) {
+					GO.customfields.manageBlocksWindow = new GO.Window({
+						title : GO.customfields.lang['manageBlocks'],
+						items: [this.manageBlocksGrid = new GO.customfields.ManageBlocksGrid({layout:'fit',height:490})],
+						width: 800,
+						height: 600,
+						layout: 'fit'
+					});
+					GO.customfields.manageBlocksWindow.on('show',function(){
+						this.manageBlocksGrid.store.load();
+					},this);
+				}
+				GO.customfields.manageBlocksWindow.show();
+			},
+			scope: this
+		})]
+	});
 	
 	config.layout='border';
 	GO.customfields.MainPanel.superclass.constructor.call(this, config);

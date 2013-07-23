@@ -25,6 +25,14 @@ GO.cron.MainPanel = function(config){
 //		this.devicePanel
 	];	
 	
+
+	config.tbar = new Ext.Toolbar({		
+		cls:'go-head-tb',
+		items: [{
+	      	 	xtype:'htmlcomponent',
+			html:GO.cron.lang.name,
+			cls:'go-module-title-tbar'
+		});
 	config.layout='border';
 
 	GO.cron.MainPanel.superclass.constructor.call(this, config);	

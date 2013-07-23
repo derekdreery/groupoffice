@@ -207,7 +207,7 @@ GO.addressbook.MainPanel = function(config)
 	this.displayCardPanel = new Ext.Panel({
 		region:'east',		
 		layout:'card',
-			layoutConfig:{
+		layoutConfig:{
 			layoutOnCardChange :true
 		},
 		width:500,

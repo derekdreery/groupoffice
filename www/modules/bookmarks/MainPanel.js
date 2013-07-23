@@ -112,7 +112,12 @@ GO.bookmarks.MainPanel = function(config){
 
 	config.tbar=new Ext.Toolbar({
 		cls:'go-head-tb',
-		items: [
+		items: [{
+                xtype:'htmlcomponent',
+                html:GO.bookmarks.lang.name,
+                cls:'go-module-title-tbar'
+        },
+
 		{  //  bookmark toevoegen
 			iconCls: 'btn-add',
 			text: GO.lang['cmdAdd'],
