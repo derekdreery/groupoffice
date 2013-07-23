@@ -357,6 +357,7 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 	margin-right: 5px;
 }
 
+
 .go-moduletabs-body .go-display-panel .x-btn-text-icon .x-btn-icon-small-left .x-btn-text, .x-date-bottom .x-btn-text, .x-window .x-btn-text {
 	font-size: 10px !important;
 	font-weight: bold;
@@ -369,7 +370,7 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 }
 
 .x-panel-body{
-	padding: 0 !important;
+	/*padding: 0 !important;*/
 }
 
 .go-display-panel .x-panel-body{
@@ -612,4 +613,14 @@ textarea.x-item-disabled{
 
 a.x-menu-item{
 	padding: 3px 21px 3px 6px;
+}
+
+
+
+.x-html-editor-tb .x-btn{
+	border:0 !important;
+}
+.x-html-editor-tb .x-btn-icon .x-btn-small .x-btn-text {
+height: 16px;
+width: 16px;
 }
