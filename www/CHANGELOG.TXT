@@ -1,3 +1,6 @@
+4.2.8
+- Added BIC number to company fields of the addressbook module
+
 19-07-2013 4.2.7
 - Fixed euro character encoding problem in emails
 - When changing th FK of the relation the contains the ACL field (eg contanct <--> addressbook) the old permission level will be checked as well
