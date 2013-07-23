@@ -248,6 +248,7 @@ $l["firebugWarning"]="The Firebug Add-on is known to slow down this application.
 $l["indent"]='Indent Text';
 $l["outdent"]='Outdent Text';
 $l["removeFormatting"]='Remove Formatting';
+$l["pasteFromWord"]='Cleans text pasted from Word or other Rich Text applications';
 $l["insertHorizontalRule"]='Insert Horizontal Rule';
 $l["insertHRtext"]='Enter the width of the Rule in percentage<br/> followed by the % sign at the end, or to<br/> set a fixed width ommit the % symbol.';
 $l["cmdInsert"]='Insert';
