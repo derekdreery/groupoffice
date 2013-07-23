@@ -320,6 +320,7 @@ $l["firebugWarning"]="Die Firebug-Erweiterung verlangsamt diese Anwendung nachwe
 $l["indent"]='Einzug vergrößern';
 $l["outdent"]='Einzug verkleinern';
 $l["removeFormatting"]='Formatierung entfernen';
+$l["pasteFromWord"]='Bereinigt Text, der aus Word oder einer anderen Rich-Text-Applikation eingefügt wurde';
 $l["insertHorizontalRule"]='Horizontale Linie einfügen';
 $l["insertHRtext"]='Geben Sie die Weite der Linie entweder<br/>prozentual, also inkl. % Zeichen,<br/>oder als feste Größe (ohne %) an.';
 $l["cmdInsert"]='Einfügen';
