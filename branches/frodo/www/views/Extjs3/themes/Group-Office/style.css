@@ -162,12 +162,12 @@
 
 
 .menu-title{
-padding:10px 0px 3px 3px !important;
-font-weight:bold;
-background: #F0F0F0 !important;
-border-bottom: 1px solid #9c9f9d;
-display:block;
-color:#15428B;
+	padding:10px 0px 3px 3px !important;
+	font-weight:bold;
+	background: none !important;
+	border-bottom: 2px solid #000;
+	display:block;
+	color:#000;
 }
 
 .go_logo{
