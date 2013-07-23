@@ -836,7 +836,12 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		if(!empty($params['uid'])){
 			$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
+			if(!$account)
+				throw new GO_Base_Exception_NotFound();
+			
 			$message = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
+			if(!$message)
+				throw new GO_Base_Exception_NotFound();
 		}else
 		{
 			$account=false;
