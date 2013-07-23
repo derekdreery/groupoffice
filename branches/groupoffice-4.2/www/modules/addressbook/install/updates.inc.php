@@ -377,3 +377,5 @@ $updates['201305271506'][]="ALTER TABLE  `ab_contacts` ADD  `photo` VARCHAR( 255
 $updates['201305271506'][]="update ab_contacts set photo=concat('contacts/contact_photos/',id,'.jpg');";
 
 $updates['201307111403'][]="script:4_set_photo_permissions.php";
+
+$updates['201307221000'][]="ALTER TABLE  `ab_companies` ADD  `bank_bic` VARCHAR( 11 ) NOT NULL DEFAULT '' AFTER `bank_no` ;";

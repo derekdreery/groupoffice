@@ -134,6 +134,11 @@ GO.addressbook.CompaniesGrid = function(config){
 			hidden:true,
 			id: 'bank_no'
 		},{
+			header: GO.addressbook.lang['bankBicNo'],
+			dataIndex: 'bank_bic',
+			hidden:true,
+			id: 'bank_bic'
+		},{
 			header: GO.addressbook.lang.iban,
 			dataIndex: 'iban',
 			hidden:true,
