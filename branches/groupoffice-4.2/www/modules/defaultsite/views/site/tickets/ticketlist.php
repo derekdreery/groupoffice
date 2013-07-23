@@ -18,7 +18,7 @@
 		
 		<span id="ticket-filter"><?php echo GO::t('ticketFilter','defaultsite'); ?>
 			<select onchange="window.location = this.options[this.selectedIndex].value;">
-				<option>Select one</option>
+				<option><?php echo GO::t('selectOne','defaultsite'); ?></option>
 				<option value="<?php echo Site::urlManager()->createUrl('tickets/externalpage/ticketlist',array('filter'=>'all')); ?>"><?php echo GO::t('ticketFilterAll','defaultsite'); ?></option>
 				<option value="<?php echo Site::urlManager()->createUrl('tickets/externalpage/ticketlist',array('filter'=>'openprogress')); ?>"><?php echo GO::t('ticketFilterOpenInProgress','defaultsite'); ?></option>
 				<option value="<?php echo Site::urlManager()->createUrl('tickets/externalpage/ticketlist',array('filter'=>'open')); ?>"><?php echo GO::t('ticketFilterOpen','defaultsite'); ?></option>

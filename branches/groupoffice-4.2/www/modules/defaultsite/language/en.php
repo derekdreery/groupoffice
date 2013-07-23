@@ -70,3 +70,5 @@ $l['ticketCreatedTitle']="We recieved your ticket";
 $l['ticketCreatedText']="Thank you, we recieved your ticket and we will keep you informed about the status per e-mail.";
 
 $l['gotoTicket']="Go to ticket";
+
+$l['selectOne']="Select one";
