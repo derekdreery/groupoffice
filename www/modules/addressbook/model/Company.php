@@ -20,6 +20,7 @@
  * @property string $iban
  * @property string $vat_no
  * @property string $bank_no
+ * @property string $bank_bic
  * @property string $comment
  * @property string $homepage
  * @property string $email

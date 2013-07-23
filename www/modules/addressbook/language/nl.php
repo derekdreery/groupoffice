@@ -62,6 +62,7 @@ $l["cmdLInkFieldset"]= 'Links';
 $l["cmdCompanyDetailsFor"]= 'Details voor';
 $l["cmdPanelCompany"]= 'Bedrijfsgegevens';
 $l["cmdFormLabelBankNo"]= 'Bankrekeningnummer';
+$l['bankBicNo'] = 'BIC-nummer';
 $l["cmdFormLabelVatNo"]= 'BTW-nummer';
 $l["cmdFormLabelInvoiceEmail"]= 'Factuuremail';
 $l["cmdFieldsetCompanyDetails"]= 'Bedrijfsgegevens';
