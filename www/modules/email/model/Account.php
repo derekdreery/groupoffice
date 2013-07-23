@@ -32,6 +32,7 @@
  * @property string $username
  * @property boolean $novalidate_cert
  * @property boolean $use_ssl
+ * @property boolean $do_not_mark_as_read
  * @property int $port
  * @property string $host
  * @property string $type
@@ -42,6 +43,7 @@
  * 
  * @property int $sieve_port
  * @property boolean $sieve_tls
+ * @property boolean $sieve_usetls
  */
 class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	
@@ -295,6 +297,9 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		if(empty($this->_imap)){
 			$this->_imap = new GO_Base_Mail_Imap();
 			$this->_imap->connect($this->host, $this->port, $this->username, $this->decryptPassword(), $this->use_ssl);
+		}else
+		{
+			$this->_imap->checkConnection();
 		}
 
 		return $this->_imap;

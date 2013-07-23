@@ -38,6 +38,17 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 					return false;
 			}
 			
+			if($this->_until){
+				$this->_until = GO_Base_Util_Date::date_add(
+							GO_Base_Util_Date::clear_time($this->_until),
+							0,
+							0,
+							0,
+							23,//date('H', $this->_eventstarttime), 
+							59//date('i', $this->_eventstarttime)
+							);
+			}
+			
 			if($shiftDaysToLocal)
 				$this->shiftDays(false);
 		}
@@ -54,7 +65,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		if($parameters['freq']=='MONTHLY_DATE')
 			$parameters['freq']='MONTHLY';
 		$parameters['eventstarttime'] = isset($json['eventstarttime'])?strtotime($json['eventstarttime']):strtotime($json['start_time']);
-		$parameters['until'] = empty($json['repeat_forever']) && isset($json['until']) ? GO_Base_Util_Date::to_unixtime($json['until'].' '.date('G', $parameters['eventstarttime']).':'.date('i', $parameters['eventstarttime'])) : 0;
+		$parameters['until'] = empty($json['repeat_forever']) && isset($json['until']) ? GO_Base_Util_Date::to_unixtime($json['until'].' 23:59') : 0; //date('G', $parameters['eventstarttime']).':'.date('i', $parameters['eventstarttime'])) : 0;
 		$parameters['bymonth'] = isset($json['bymonth'])?$json['bymonth']:'';
 		$parameters['bymonthday'] = isset($json['bymonthday'])?$json['bymonthday']:'';
 		
@@ -167,8 +178,8 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		}
 			
 		if ($this->_until>0)
-		{
-			$rrule .= " ".date('Ymd\THis', GO_Base_Util_Date::date_add($this->_until, 1));
+		{			
+			$rrule .= " ".date('Ymd\THis', $this->_until);
 		}else
 		{
 			$rrule .= " #0";

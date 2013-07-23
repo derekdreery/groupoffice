@@ -212,6 +212,7 @@ class GO_Ldapauth_Authenticator {
 			GO::debug('LDAPAUTH: updating user contact');
 			$contact->setAttributes($attributes);
 			$contact->cutAttributeLengths();
+			$contact->skip_user_update=true;
 
 			if (!empty($attributes['company'])) {
 				$company = GO_Addressbook_Model_Company::model()->findSingleByAttributes(array(
@@ -291,6 +292,9 @@ class GO_Ldapauth_Authenticator {
 		
 		//sometimes users mapped the password. Unset it here to make sure the hash is not used for password in the user.
 		unset($userAttributes['password']);
+		
+		//make sure there's no id
+		unset($userAttributes['id']);
 
 		return $userAttributes;
 	}

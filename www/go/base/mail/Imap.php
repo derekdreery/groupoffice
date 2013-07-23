@@ -579,7 +579,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			}
 		}
 
-		ksort($folders);
+		GO_Base_Util_Array::caseInsensitiveSort($folders);
 		
 //		GO::debug($folders);
 
@@ -2088,13 +2088,14 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		if (preg_match("/\{(\d+)\}\r\n/", $result, $matches)) {
 			$size = $matches[1];
 		}
-		
-		$this->last_line=false;
-		
+
 		if(!$size)
 			return false;
 
-		$this->last_line=fgets($this->handle);
+		$this->message_part_size=$size;
+		$this->message_part_read=0;
+		
+		GO::debug("Part size: ".$size);
 		return $size;
 	}
 	/**
@@ -2103,22 +2104,31 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 * @return <type>
 	 */
 	public function get_message_part_line() {
-		if (!$this->last_line) {
-			$res = false;
-		}else
-		{
-			$res = $this->last_line;
-			$this->last_line = fgets($this->handle,1024);
-
-			if ($this->check_response(array($this->last_line), false, false)) {
-				$this->last_line = false;
-
-				if(substr(rtrim($res),-1, 1)==')')
-					$res = substr(rtrim($res),0,-1);
-			}
+		
+		$line=false;
+		$leftOver = $this->message_part_size-$this->message_part_read;
+		if($leftOver>0){
+			
+			//reading exact length doesn't work if the last char is just one char somehow.
+			//we cut the left over later with substr.
+			$blockSize = 1024;//$leftOver>1024 ? 1024 : $leftOver;			
+			$line = fgets($this->handle,$blockSize);
+			$this->message_part_read+=strlen($line);			
+		}			
+		
+		if ($this->message_part_size < $this->message_part_read) {
+			
+			$line = substr($line, 0, ($this->message_part_read-$this->message_part_size)*-1);			
 		}
-
-		return $res;
+		
+		if($line===false){
+			
+			//read and check left over response.
+			$response=$this->get_response();
+			$this->check_response($response);
+			
+		}
+		return $line;
 	}
 
 	public function save_to_file($uid, $path, $imap_part_id=-1, $encoding='', $peek=false){
@@ -2146,7 +2156,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			$imap_part_id='TEXT';
 		}
 
-		$size = $this->get_message_part_start($uid,$imap_part_id);
+		$size = $this->get_message_part_start($uid,$imap_part_id, $peek);
 		
 		if(!$size)
 			return false;
@@ -2497,7 +2507,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 * @return <type>
 	 */
 	public function append_feed($string) {
-		return fwrite($this->handle, $string."\r\n");
+		return fwrite($this->handle, $string);		
 	}
 
 	/**
@@ -2529,21 +2539,47 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	/**
 	 * Append a message to a mailbox
 	 * 
-	 * @param <type> $mailbox
-	 * @param <type> $data
-	 * @param <type> $flags See set_message_flag
-	 * @return <type>
+	 * @param string $mailbox
+	 * @param string|Swift_Message $data
+	 * @param string $flags See set_message_flag
+	 * @return boolean
 	 */
 	public function append_message($mailbox, $data, $flags=""){
 
-		GO::debug("imap::append_message($mailbox, data, $flags);");
 
-		if(!$this->append_start($mailbox, strlen($data), $flags))
-			return false;
+		if($data instanceof Swift_Message){
+			
+			$tmpfile = GO_Base_Fs_File::tempFile();
 
-		if(!$this->append_feed($data))
-			return false;
+			$is = new Swift_ByteStream_FileByteStream($tmpfile->path(), true);
+			$data->toByteStream($is);			
 
+			unset($data);
+			
+
+			if(!$this->append_start($mailbox, $tmpfile->size(), $flags))
+				return false;
+			
+			$fp = fopen($tmpfile->path(), 'r');
+			
+			while($line = fgets($fp, 1024)){
+				if(!$this->append_feed($line))
+					return false;
+			}			
+			
+			fclose($fp);
+			$tmpfile->delete();
+		}else
+		{			
+			if(!$this->append_start($mailbox, strlen($data), $flags))
+				return false;
+
+			if(!$this->append_feed($data))
+				return false;
+		}
+		
+		$this->append_feed("\r\n");
+		
 		return $this->append_end();
 	}
 

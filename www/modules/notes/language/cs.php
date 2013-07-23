@@ -13,7 +13,6 @@ $l['multipleCategoriesSelected']='Vybráno více kategorií';
 
 $l["category"]="Kategorie";
 $l["categories"]="Kategorie";
-$l["note"]="Poznámka";
 $l["notes"]="Poznámky";
 $l["category_id"]="Kategorie";
 $l["content"]="Obsah";

@@ -282,28 +282,7 @@ class GO{
 	 * @return GO_Base_Model_User The logged in user model
 	 */
 	public static function user(){
-		if(empty(GO::session()->values['user_id'])){
-			return false;
-		}else{		
-			
-			//also check if the user_id matches because GO::session()->runAsRoot() may haver changed it.
-			if(empty(self::$_user) || self::$_user->id!=GO::session()->values['user_id']){
-				
-//				$cacheKey = 'GO_Base_Model_User:'.GO::session()->values['user_id'];
-//				$cachedUser = GO::cache()->get($cacheKey);
-//				
-//				if($cachedUser){
-////					GO::debug("Returned cached user");
-//					self::$_user=$cachedUser;
-//				}else
-//				{
-					self::$_user = GO_Base_Model_User::model()->findByPk(GO::session()->values['user_id'], array(), true);
-//					GO::cache()->set($cacheKey, self::$_user);
-//				}
-			}
-
-			return self::$_user;
-		}
+		return self::session()->user();
 	}
 
 	/**

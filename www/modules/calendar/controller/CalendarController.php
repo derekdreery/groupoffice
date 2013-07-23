@@ -47,7 +47,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 	protected function remoteComboFields() {
 		return array(
 				'user_id'=>'$model->user->name',
-				'tasklist_id' => '$model->tasklist->name'
+				'tasklist_id' => '$model->tasklist?$model->tasklist->name:""'
 		);
 	}
 	
@@ -58,6 +58,10 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 			'group_id'=>$response['data']['group_id'])
 				));
 
+		// Show "None" in the Caldav Tasklist selection when tasklist_id is 0
+		if(empty($response['data']['tasklist_id']))
+				$response['data']['tasklist_id'] = "";
+		
 		$response['data']['url']='<a class="normal-link" target="_blank" href="'.$url.'">'.GO::t('rightClickToCopy','calendar').'</a>';
 		$response['data']['ics_url']='<a class="normal-link" target="_blank" href="'.GO::url("calendar/calendar/exportIcs", array("calendar_id"=>$response['data']['id'],"months_in_past"=>1)).'">'.GO::t('rightClickToCopy','calendar').'</a>';
 

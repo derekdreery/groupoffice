@@ -244,8 +244,9 @@ GO.addressbook.MainPanel = function(config)
 			}
 		}, this);
 
-		var westPanel = new Ext.Panel({
-			layout:'border',
+		this.westPanel = new Ext.Panel({
+			layout:'accordion',
+			layoutConfig:{hideCollapseTool:true},
 			border:false,
 			region:'west',
 			width:200,
@@ -255,7 +256,7 @@ GO.addressbook.MainPanel = function(config)
 		});
 		config.items= [
 		this.searchPanel,
-		westPanel,
+		this.westPanel,
 		this.tabPanel,
 		this.displayCardPanel
 		];
@@ -616,7 +617,7 @@ GO.addressbook.showContactDialog = function(contact_id, config){
 		GO.addressbook.contactDialog.on(GO.addressbook.contactDialogListeners);
 		delete GO.addressbook.contactDialogListeners;
 	}
-
+		
 	GO.addressbook.contactDialog.show(contact_id, config);
 }
 

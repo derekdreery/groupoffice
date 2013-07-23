@@ -189,6 +189,12 @@ GO.addressbook.CompanyProfilePanel = function(config)
 		name: 'bank_no'
 	});	
 	
+	this.formBankBIC = new Ext.form.TextField(
+	{
+		fieldLabel: GO.addressbook.lang['bankBicNo'],
+		name: 'bank_bic'
+	});	
+
 	this.formVatNo = new Ext.form.TextField(
 	{
 		fieldLabel: GO.addressbook.lang['cmdFormLabelVatNo'],
@@ -247,6 +253,7 @@ GO.addressbook.CompanyProfilePanel = function(config)
 			this.formEmail,
 			this.formHomepage,
 			this.formBankNo,
+			this.formBankBIC,
 			{
 				xtype:'textfield',
 				fieldLabel:GO.addressbook.lang.iban,

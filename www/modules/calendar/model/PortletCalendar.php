@@ -18,6 +18,7 @@
  *
  * @property int $user_id
  * @property int $tasklist_id
+ * @property int $calendar_id
  */
 
 class GO_Calendar_Model_PortletCalendar extends GO_Base_Db_ActiveRecord {

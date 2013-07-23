@@ -39,6 +39,7 @@
  * @property string $uuid
  * 
  * @property GO_Calendar_Model_Participant $participants
+ * @property int $muser_id
  * 
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
@@ -702,27 +703,44 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Finds a specific occurence for a date.
 	 * 
-	 * @param int $startTime
+	 * @param int $exceptionDate
 	 * @return GO_Calendar_Model_Event
 	 * @throws Exception
 	 */
-	public function findException($startTime){
-		
-		if($this->exception_for_event_id!=0)
+	public function findException($exceptionDate) {
+
+		if ($this->exception_for_event_id != 0)
 			throw new Exception("This is not a master event");
-			
-		$startOfDay = GO_Base_Util_Date::clear_time($startTime);
+
+		$startOfDay = GO_Base_Util_Date::clear_time($exceptionDate);
 		$endOfDay = GO_Base_Util_Date::date_add($startOfDay, 1);
-		
+
 		$findParams = GO_Base_Db_FindParams::newInstance();
-		
-		$findParams->getCriteria()
+
+
+
+		//must be an exception and start on the must start on the exceptionTime
+		$exceptionJoinCriteria = GO_Base_Db_FindCriteria::newInstance()
+						->addCondition('id', 'e.exception_event_id', '=', 't', true, true);
+
+		$findParams->join(GO_Calendar_Model_Exception::model()->tableName(), $exceptionJoinCriteria, 'e');
+
+//			$dayStart = GO_Base_Util_Date::clear_time($exceptionDate);
+//			$dayEnd = GO_Base_Util_Date::date_add($dayStart,1);	
+		$whereCriteria = GO_Base_Db_FindCriteria::newInstance()
 						->addCondition('exception_for_event_id', $this->id)
-						->addCondition('start_time', $startOfDay,'>=')
-						->addCondition('end_time', $endOfDay,'<=');
-						
-		$event = GO_Calendar_Model_Event::model()->findSingle($findParams);
+						->addCondition('time', $startOfDay, '>=', 'e')
+						->addCondition('time', $endOfDay, '<', 'e');
+		$findParams->criteria($whereCriteria);
+//		$findParams->getCriteria()
+//						->addCondition('exception_for_event_id', $this->id)
+//						->addCondition('start_time', $startOfDay,'>=')
+//						->addCondition('end_time', $endOfDay,'<=');
+
+		$findParams->debugSql();
 		
+		$event = GO_Calendar_Model_Event::model()->findSingle($findParams);
+
 		return $event;
 	}
 	
@@ -985,24 +1003,28 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		if($exceptionDate){
 			//must be an exception and start on the must start on the exceptionTime
-//			$exceptionJoinCriteria = GO_Base_Db_FindCriteria::newInstance()
-//							->addCondition('id', 'e.exception_event_id','=','t',true,true);
-//			
-//			$params->join(GO_Calendar_Model_Exception::model()->tableName(),$exceptionJoinCriteria,'e');
-//			
-//			$whereCriteria->addCondition('time', $exceptionDate,'=','e');			
+			$exceptionJoinCriteria = GO_Base_Db_FindCriteria::newInstance()
+							->addCondition('id', 'e.exception_event_id','=','t',true,true);
 			
-			
-			$whereCriteria->addCondition('exception_for_event_id', 0,'>');
+			$params->join(GO_Calendar_Model_Exception::model()->tableName(),$exceptionJoinCriteria,'e');
 			
 			$dayStart = GO_Base_Util_Date::clear_time($exceptionDate);
-			$dayEnd = GO_Base_Util_Date::date_add($dayStart,1);
+			$dayEnd = GO_Base_Util_Date::date_add($dayStart,1);	
+			$whereCriteria 
+							->addCondition('time', $dayStart, '>=','e')
+							->addCondition('time', $dayEnd, '<','e',false);
 			
-			$dateCriteria = GO_Base_Db_FindCriteria::newInstance()
-							->addCondition('start_time', $dayStart, '>=')
-							->addCondition('start_time', $dayEnd, '<','t',false);
-			
-			$whereCriteria->mergeWith($dateCriteria);
+//			//the code below only find exceptions on the same day which is wrong
+//			$whereCriteria->addCondition('exception_for_event_id', 0,'>');
+//			
+//			$dayStart = GO_Base_Util_Date::clear_time($exceptionDate);
+//			$dayEnd = GO_Base_Util_Date::date_add($dayStart,1);
+//			
+//			$dateCriteria = GO_Base_Db_FindCriteria::newInstance()
+//							->addCondition('start_time', $dayStart, '>=')
+//							->addCondition('start_time', $dayEnd, '<','t',false);
+//			
+//			$whereCriteria->mergeWith($dateCriteria);
 			
 		}else
 		{
@@ -1225,17 +1247,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$e->add($dtstart);
 		
 		if($this->all_day_event){
-			
-			//end time is 23:59 on the last day.
-			$end_time = GO_Base_Util_Date::clear_time($this->end_time);
-			
-			//if it's only a single all day occurrence then the end day should be the same
-			//as the start day for the iOS devices.
-			//if it lasts more than one day we should add one day.	
-			if($this->start_time!=$end_time){
-				$end_time = GO_Base_Util_Date::date_add($end_time,1);
-			}			
-			
+			$end_time = GO_Base_Util_Date::clear_time($this->end_time);			
+			$end_time = GO_Base_Util_Date::date_add($end_time,1);			
 		}else{
 			$end_time = $this->end_time;
 		}
@@ -1513,6 +1526,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$recurrenceTime=$firstMatch->getDateTime()->format('U');
 			
 			$whereCriteria = GO_Base_Db_FindCriteria::newInstance()
+							->addCondition('calendar_id', $this->calendar_id,'=','ev')
 							->addCondition('uuid', $this->uuid,'=','ev')
 							->addCondition('time', $recurrenceTime,'=','t');
 			
@@ -1529,13 +1543,17 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			if($exception){
 				$this->exception_for_event_id=$exception->event_id;
 			}else
-			{
+			{				
 				//exception was not found for this recurrence. Find the recurring series and add the exception.
 				$recurringEvent = GO_Calendar_Model_Event::model()->findByUuid($this->uuid, 0, $this->calendar_id);
 				if($recurringEvent){
 					//aftersave will create GO_Calendar_Model_Exception
 					$this->exception_for_event_id=$recurringEvent->id;
-					$this->exception_date=strtotime(date('Y-m-d', $this->start_time).' '.date('G:i', $recurringEvent->start_time));
+					
+					//will be saved later
+					$exception = new GO_Calendar_Model_Exception();
+					$exception->time=$recurrenceTime;
+					$exception->event_id=$recurringEvent->id;
 				}
 			}			
 		}
@@ -1678,7 +1696,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$attributes['status']= GO_Calendar_Model_Participant::STATUS_ACCEPTED;
 	
 		$p= GO_Calendar_Model_Participant::model()
-						->findSingleByAttributes(array('event_id'=>$event->id, 'email'=>$attributes['email'],'is_organizer'=>$isOrganizer));
+						->findSingleByAttributes(array('event_id'=>$event->id, 'email'=>$attributes['email']));
 		if(!$p){
 			$p = new GO_Calendar_Model_Participant();
 			$p->is_organizer=$isOrganizer;		
@@ -1694,7 +1712,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				if($user)
 					$p->user_id=$user->id;
 			}		
-		}		
+		}else
+		{
+			//the organizer might be added as a participant too. We don't want to 
+			//import that a second time but we shouldn't update the is_organizer flag if
+			//we found an existing participant.
+			unset($attributes['is_organizer']);
+		}
 
 		$p->setAttributes($attributes);
 		$p->save();

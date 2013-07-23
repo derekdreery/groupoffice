@@ -89,6 +89,7 @@ CREATE TABLE IF NOT EXISTS `ab_companies` (
   `homepage` varchar(100) DEFAULT '',
   `comment` text,
   `bank_no` varchar(50) DEFAULT '',
+	`bank_bic` varchar(11) DEFAULT '',
   `vat_no` varchar(30) DEFAULT '',
 	`invoice_email` varchar(75) DEFAULT '',
   `ctime` int(11) NOT NULL DEFAULT '0',

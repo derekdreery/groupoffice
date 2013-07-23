@@ -373,6 +373,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$this->_modifiedAttributes=array();
 	}
 	
+	public function __wakeup() {
+		
+	}
+	
 	/**
 	 * This function is called after the model is constructed by a find query
 	 */
@@ -959,7 +963,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$cacheKey = md5(serialize($params));
 		//Use cache so identical findByPk calls are only executed once per script request
-		$cachedModel =  GO::modelCache()->get($this->className(), $cacheKey);
+		$cachedModel = empty($params['disableModelCache']) ? GO::modelCache()->get($this->className(), $cacheKey) : false;
 		if($cachedModel)
 			return $cachedModel;
 				
@@ -1099,7 +1103,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		{
 			$this->_debugSql=!empty(GO::session()->values['debugSql']);
 		}		
-		
+//		$this->_debugSql=true;
 		if(GO::$ignoreAclPermissions)
 			$params['ignoreAcl']=true;
 		
@@ -2320,6 +2324,35 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	}
 	
 	/**
+	 * Check when the permissions level was before moving the object to a differend
+	 * related ACL object eg. moving contact to different addressbook
+	 * @param int $level permissio nlevel to check for
+	 * @return boolean if the user has the specified level
+	 * @throws Exception if the ACL is not found
+	 */
+	public function checkOldPermissionLevel($level) {
+		
+		$arr = explode('.', $this->aclField());
+		$relation = array_shift($arr);
+		$r = $this->getRelation($relation);
+		$aclFKfield = $r['field'];
+		
+		$newValue = $this->{$aclFKfield};
+		$this->{$aclFKfield} = $this->getOldAttributeValue($aclFKfield);
+		
+		//$result = $this->checkPermissionLevel($level);
+		$acl_id = $this->findAclId();
+		if(!$acl_id)
+			throw new Exception("Could not find ACL for ".$this->className()." with pk: ".$this->pk);
+		$result = GO_Base_Model_Acl::getUserPermissionLevel($acl_id)>=$level;
+		//end checkpermission level
+		
+		$this->{$aclFKfield} = $newValue;
+		
+		return $result;
+	}
+	
+	/**
 		* Returns a value indicating whether the attribute is required.
 		* This is determined by checking if the attribute is associated with a
 		* {@link CRequiredValidator} validation rule in the current {@link scenario}.
@@ -2494,8 +2527,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	public function getValidationErrors(){
 		
 		$validationErrors = parent::getValidationErrors();
-		if($this->customfieldsRecord){
-			$validationErrors = array_merge($validationErrors, $this->customfieldsRecord->getValidationErrors());
+		if($this->_customfieldsRecord){
+			$validationErrors = array_merge($validationErrors, $this->_customfieldsRecord->getValidationErrors());
 		}
 		
 		return $validationErrors;
@@ -2531,12 +2564,14 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 * Just update the mtime timestamp 
 	 */
 	public function touch(){
-		$time = time();
-		if($this->mtime==$time){
-			return true;
-		}else{
-			$this->mtime=time();
-			return $this->_dbUpdate();
+		if (isset ($this->mtime)) {
+			$time = time();
+			if($this->mtime==$time){
+				return true;
+			}else{
+				$this->mtime=time();
+				return $this->_dbUpdate();
+			}
 		}
 	}
 	
@@ -2565,7 +2600,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			throw new GO_Base_Exception_AccessDenied($msg);
 		}
 		
-		if(!$ignoreAcl && !$this->isNew && $this->_aclModified() && !$this->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION)){
+		// when foreignkey to acl field changes check PermissionLevel of origional related ACL object as well
+		if(!$ignoreAcl && !$this->isNew && $this->_aclModified() && !$this->checkOldPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION)){
 			$msg = GO::config()->debug ? $this->className().' pk: '.var_export($this->pk, true) : sprintf(GO::t('cannotMoveError'),'this');
 			throw new GO_Base_Exception_AccessDenied($msg);
 		}
@@ -3588,7 +3624,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		if(!$this->hasLinks() && !$isSearchCacheModel)
 			throw new Exception("Links not supported by ".$this->className ());
 		
-		if($this->_linkExists($model))
+		if($this->linkExists($model))
 			return true;
 		
 		if($model instanceof GO_Base_Model_SearchCacheRecord){
@@ -3663,7 +3699,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 //		return true;
 //	}
 	
-	private function _linkExists($model){		
+	public function linkExists(GO_Base_Db_ActiveRecord $model){		
 		
 		if($model->className()=="GO_Base_Model_SearchCacheRecord"){
 			$model_id = $model->model_id;

@@ -229,3 +229,5 @@ $l['cronEventAndTaskReportMailerDescription']='Send en e-post med dagens avtaler
 $l['cronEventAndTaskReportMailerPdfSubtitle']='Dagens avtaler og oppgaver';
 $l['cronEventAndTaskReportMailerSubject']='Dagens avtaler og oppgaver';
 $l['cronEventAndTaskReportMailerContent']='Se vedlagte PDF for en oversikt over dagens avtaler og oppgaver.';
+$l['eventPrivateChecked']= 'Husk at selv om du merker hendelsen som privat så kan eventuelle filer du lagrer på avtalen åpnes av alle som har leserettigheter til kalenderen.';
+$l['show_completed_tasks']= "Vis fullførte oppgaver";

@@ -227,6 +227,7 @@ GO.playAlarm = function(){
 
 GO.util.nl2br = function (v)
 {
+	v+="";
 	return v.replace(/\n/g, '<br />');
 }
 

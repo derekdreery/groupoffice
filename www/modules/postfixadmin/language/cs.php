@@ -63,3 +63,5 @@ $l["cache"]="Paměť";
 $l["domain"]="Doména";
 $l["usage"]="Použito";
 $l["defaultQuota"]='Výchozí kvóta (MB)';
+$l['aliasHelp']="Pro vícenásobné příjemce použijte jako oddělovač čárku např. prezdivka1@domena.cz,prezdivka2@domena.cz";
+$l['usedQuota']='Použitá kvóta';

@@ -45,14 +45,11 @@ GO.email.FilterGrid = Ext.extend(GO.grid.GridPanel,{
 			sm : new Ext.grid.RowSelectionModel(),
 			listeners:{
 				scope:this,
-				show:function(){
-					this.store.load();
-//					if(GO.sieve && !this.sieveWarningShown){
-//						this.sieveWarningShown=true;
-//						alert(GO.sieve.lang.sieveWarning);
-//					}
-					
-					
+				show:function(){					
+					if(!GO.email.subscribedFoldersStore.loaded)
+						GO.email.subscribedFoldersStore.load();
+
+					this.store.load();					
 				},
 				render:function(){
 					//enable row sorting

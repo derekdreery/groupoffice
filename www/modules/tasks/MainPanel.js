@@ -178,11 +178,25 @@ GO.tasks.MainPanel = function(config){
 		width:400,
 		border:true
 	});
-	
 
-			
+	this.accordionPanel = new Ext.Panel({
+		region:'center',
+		titlebar: false,
+		autoScroll:false,
+//		closeOnTab: true,
+		resizable:true,
+//		layout:'border',
+		layoutConfig:{hideCollapseTool:true},
+		layout:'accordion',
+		baseCls: 'x-plain',
+		items:[
+			this.taskListsPanel,
+			this.categoriesPanel
+		]
+	});
+
 	config.layout='border';
-	config.items=[	
+	config.items=[
 		new Ext.Panel({
 			region:'west',
 			titlebar: false,
@@ -194,9 +208,8 @@ GO.tasks.MainPanel = function(config){
 			layout:'border',
 			baseCls: 'x-plain',
 			items:[
-			this.taskListsPanel,
-			filterPanel,
-			this.categoriesPanel
+				filterPanel,
+				this.accordionPanel,
 			]
 		}),
 		{

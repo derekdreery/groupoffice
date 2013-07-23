@@ -186,3 +186,5 @@ views/Extjs3/javascript/debug.js
 
 views/Extjs3/javascript/grids/GORowEditor.js
 views/Extjs3/javascript/SortableDataView.js
+
+views/Extjs3/javascript/panels/AccordeonPanel.js

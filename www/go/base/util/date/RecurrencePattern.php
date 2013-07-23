@@ -166,7 +166,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 			$func = '_getNextRecurrence'.ucfirst($this->_freq);		
 			$next=call_user_func(array($this, $func),$startTime);
 		}
-		if(empty($this->_until) || $next<GO_Base_Util_Date::date_add(GO_Base_Util_Date::clear_time($this->_until),1)){
+		if(empty($this->_until) || $next<=$this->_until){
 			
 			//check next recurrence from one day later
 			$this->_recurPositionStartTime=$next+1;//GO_Base_Util_Date::date_add($next,1);

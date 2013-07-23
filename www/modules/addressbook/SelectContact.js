@@ -32,7 +32,8 @@ GO.addressbook.SelectContact = function(config){
 	    url: GO.url("addressbook/contact/selectContact"),
 	    baseParams: {	    	
 				addressbook_id : config.addressbook_id,
-				requireEmail: config.requireEmail ? '1' : '0'
+				requireEmail: config.requireEmail ? '1' : '0',
+				no_user_contacts: config.noUserContacts ? '1' : '0'
 			},
 	    totalProperty:'total',	    
       fields: fields.fields,

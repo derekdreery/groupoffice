@@ -10,6 +10,9 @@
  *
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl
+ * @property int $user_id
+ * @property string $extension
+ * @property string $cls
  */
 
 class GO_Files_Model_FileHandler extends GO_Base_Db_ActiveRecord {

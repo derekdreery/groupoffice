@@ -676,15 +676,23 @@ class GO_Demodata_Controller_Demodata extends GO_Base_Controller_AbstractControl
 			
 			
 			if(GO::modules()->summary){
-				$newTicketUrl = GO::config()->full_url.'modules/site/index.php?r=tickets/externalpage/newTicket';
-								
-				$announcement = new GO_Summary_Model_Announcement();
-				$announcement->title="Submit support ticket";
-				$announcement->content='Anyone can submit tickets to the support system here:'.
-								'<br /><br /><a href="'.$newTicketUrl.'">'.$newTicketUrl.'</a><br /><br />Anonymous ticket posting can be disabled in the ticket module settings.';
+				
+				$title = "Submit support ticket";
+			
+				$announcement = GO_Summary_Model_Announcement::model()->findSingleByAttribute('title',$title);
+				if(!$announcement){
 
-				if($announcement->save()){			
-					$announcement->acl->addGroup(GO::config()->group_everyone);
+
+					$newTicketUrl = GO::config()->full_url.'modules/site/index.php?r=tickets/externalpage/newTicket';
+
+					$announcement = new GO_Summary_Model_Announcement();
+					$announcement->title=$title;
+					$announcement->content='Anyone can submit tickets to the support system here:'.
+									'<br /><br /><a href="'.$newTicketUrl.'">'.$newTicketUrl.'</a><br /><br />Anonymous ticket posting can be disabled in the ticket module settings.';
+
+					if($announcement->save()){			
+						$announcement->acl->addGroup(GO::config()->group_everyone);
+					}
 				}
 			}
 			
@@ -748,12 +756,17 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 		
 		
 		if(GO::modules()->summary){
-			$announcement = new GO_Summary_Model_Announcement();
-			$announcement->title="Welcome to ".GO::config()->product_name;
-			$announcement->content='This is a demo announcements that administrators can set.<br />Have a look around.<br /><br />We hope you\'ll enjoy Group-Office as much as we do!';
+			$title = "Welcome to ".GO::config()->product_name;
 			
-			if($announcement->save()){			
-				$announcement->acl->addGroup(GO::config()->group_everyone);
+			$announcement = GO_Summary_Model_Announcement::model()->findSingleByAttribute('title',$title);
+			if(!$announcement){
+				$announcement = new GO_Summary_Model_Announcement();
+				$announcement->title=$title;
+				$announcement->content='This is a demo announcements that administrators can set.<br />Have a look around.<br /><br />We hope you\'ll enjoy Group-Office as much as we do!';
+
+				if($announcement->save()){			
+					$announcement->acl->addGroup(GO::config()->group_everyone);
+				}
 			}
 		}
 		
@@ -866,27 +879,33 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 				$category->save();
 				$category->acl->addGroup(GO::config()->group_internal, GO_Base_Model_Acl::READ_PERMISSION);
 			}
+			$bookmark = GO_Bookmarks_Model_Bookmark::model()->findSingleByAttribute('name', 'Google Search');
+
+			if(!$bookmark){
+				$bookmark = new GO_Bookmarks_Model_Bookmark();
+				$bookmark->category_id=$category->id;
+				$bookmark->name='Google Search';
+				$bookmark->content='http://www.google.com';
+				$bookmark->logo='icons/viewmag.png';
+				$bookmark->public_icon=true;
+				$bookmark->description='Search the web';
+				$bookmark->open_extern=true;
+				$bookmark->save();
+			}
 			
-			$bookmark = new GO_Bookmarks_Model_Bookmark();
-			$bookmark->category_id=$category->id;
-			$bookmark->name='Google Search';
-			$bookmark->content='http://www.google.com';
-			$bookmark->logo='icons/viewmag.png';
-			$bookmark->public_icon=true;
-			$bookmark->description='Search the web';
-			$bookmark->open_extern=true;
-			$bookmark->save();
-			
-			
-			$bookmark = new GO_Bookmarks_Model_Bookmark();
-			$bookmark->category_id=$category->id;
-			$bookmark->name='Wikipedia';
-			$bookmark->content='http://www.wikipedia.com';
-			$bookmark->logo='icons/agt_web.png';
-			$bookmark->public_icon=true;
-			$bookmark->description='Search the web';
-			$bookmark->behave_as_module=true;
-			$bookmark->save();
+			$bookmark = GO_Bookmarks_Model_Bookmark::model()->findSingleByAttribute('name', 'Wikipedia');
+
+			if(!$bookmark){
+				$bookmark = new GO_Bookmarks_Model_Bookmark();
+				$bookmark->category_id=$category->id;
+				$bookmark->name='Wikipedia';
+				$bookmark->content='http://www.wikipedia.com';
+				$bookmark->logo='icons/agt_web.png';
+				$bookmark->public_icon=true;
+				$bookmark->description='The Free Encyclopedia';
+				$bookmark->behave_as_module=true;
+				$bookmark->save();
+			}
 		}
 		
 		if(GO::modules()->postfixadmin){
@@ -911,14 +930,18 @@ In one short (Hare-Breadth Hurry, 1963), Bugs Bunny — with the help of "speed 
 			$mimeFile = new GO_Base_Fs_File(GO::modules()->savemailas->path.'install/demo.eml');			
 			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $wile);
 			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $john);
-			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $rocketProject);
-			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $launcherProject);
+			if(GO::modules()->projects){
+				GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $rocketProject);
+				GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $launcherProject);
+			}
 			
 			$mimeFile = new GO_Base_Fs_File(GO::modules()->savemailas->path.'install/demo2.eml');
 			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $wile);
 			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $john);
-			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $rocketProject);
-			GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $launcherProject);
+			if(GO::modules()->projects){
+				GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $rocketProject);
+				GO_Savemailas_Model_LinkedEmail::model()->createFromMimeFile($mimeFile, $launcherProject);
+			}
 		}
 		
 		//useful for other modules to create stuff

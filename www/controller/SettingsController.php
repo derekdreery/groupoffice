@@ -16,7 +16,7 @@ class GO_Core_Controller_Settings extends GO_Base_Controller_AbstractController 
 		if (!empty($params["password"]) || !empty($params["passwordConfirm"])) {
 			
 			if(!$user->checkPassword($params['current_password']))
-				throw new Exception(GO::t('badPassword'));
+				throw new GO_Base_Exception_BadPassword();
 			
 //			if ($params["password"] != $params["passwordConfirm"]) {
 //				throw new Exception(GO::t('error_match_pass', 'users'));

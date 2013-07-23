@@ -34,6 +34,6 @@ $updates["201207191545"][]="ALTER TABLE `no_notes` ADD `password` varchar(255) D
 
 $updates["201301111137"][]="ALTER TABLE `no_categories` CHANGE `name` `name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ";
 
-$updates["201301111137"][]="ALTER TABLE `no_categories` CHANGE `files_folder_id` INT(11) NOT NULL DEFAULT '0';";
+$updates["201301111137"][]="ALTER TABLE  `no_categories` CHANGE  `files_folder_id`  `files_folder_id` INT( 11 ) NOT NULL DEFAULT  '0'";
 
 $updates['201304231330'][]="ALTER TABLE `no_notes` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";

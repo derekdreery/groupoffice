@@ -931,7 +931,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.2.0';
+	var $version = '4.2.7';
 	
 	/**
 	 * Modification date
@@ -939,7 +939,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20130613';
+	var $mtime = '20130708';
 
 	#group configuration
 	/**
@@ -1137,6 +1137,14 @@ class GO_Base_Config {
 	 */
 	var $assets_path = '';
 	
+	/**
+	 * Enables the quicklink option in the message panel of an email message.
+	 * [] Link email conversation to contact
+	 * [] Link email conversation to company 
+	 * 
+	 * @var Boolean 
+	 */
+	var $allow_quicklink = true;	
 	
 	/**
 	 * Constructor. Initialises all public variables.
