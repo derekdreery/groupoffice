@@ -625,7 +625,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		if (!this.rendered) {
 			
 			var requests = {				
-				aliases:{r:'email/alias/store'}
+				aliases:{r:'email/alias/store','limit':0}
 			};
 			
 			if(GO.addressbook){
