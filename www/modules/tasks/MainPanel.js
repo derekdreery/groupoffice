@@ -209,7 +209,7 @@ GO.tasks.MainPanel = function(config){
 			baseCls: 'x-plain',
 			items:[
 				filterPanel,
-				this.accordionPanel,
+				this.accordionPanel
 			]
 		}),
 		{
