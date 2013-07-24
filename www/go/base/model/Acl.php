@@ -472,4 +472,48 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 		
 		return parent::checkDatabase();
 	}
+	
+	/**
+	 * 
+	 * /!\ Be careful when using this!
+	 * 
+	 * Makes sure that this ACL's permissions are only the manage permissions for
+	 * the admin user and admin group. Other permissions will be deleted.
+	 */
+	public function clear(){
+		
+		if (!GO::user()->isAdmin())
+			throw new AccessDeniedException();
+		
+		$adminUserRecordExists = false;
+		$adminGroupRecordExists = false;
+		
+		foreach ($this->records as $aclRecord) {
+			
+			if ($aclRecord->user_id==1) {
+				$adminUserRecordExists=true;
+			} elseif ($aclRecord->group_id==GO::config()->group_root) {
+				$adminGroupRecordExists=true;
+			} else {
+				$aclRecord->delete();
+			}
+			
+		}
+
+		if (!$adminUserRecordExists) {
+			$aclRecord = new GO_Base_Model_AclUsersGroups();
+			$aclRecord->acl_id = $this->id;
+			$aclRecord->user_id = 1;
+			$aclRecord->level = GO_Base_Model_Acl::MANAGE_PERMISSION;
+			$aclRecord->save();
+		}
+		if (!$adminGroupRecordExists) {
+			$aclRecord = new GO_Base_Model_AclUsersGroups();
+			$aclRecord->acl_id = $this->id;
+			$aclRecord->group_id = GO::config()->group_root;
+			$aclRecord->level = GO_Base_Model_Acl::MANAGE_PERMISSION;
+			$aclRecord->save();
+		}
+		
+	}
 }
