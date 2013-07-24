@@ -565,7 +565,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 					$workflowResponse['history'][] = array(
 							'history_id'=>$history->id,
 							'step_name'=>$step_name,
-							'approver'=>$history->user->name,
+							'approver'=>$history->user?$history->user->name:'',
 							'ctime'=>$history->ctime,
 							'comment'=>$history->comment,
 							'status'=>$history->status?"1":"0",
