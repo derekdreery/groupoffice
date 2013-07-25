@@ -1,6 +1,7 @@
-4.2.8
+25-07-2013 4.2.8
 - Added BIC number to company fields of the addressbook module
 - The paste-from-word button in the wisywig editor is translated and Dutch and German translation was added
+- IE 10 Comma problem
 
 19-07-2013 4.2.7
 - Fixed euro character encoding problem in emails
