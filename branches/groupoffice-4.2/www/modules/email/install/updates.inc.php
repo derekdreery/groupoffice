@@ -75,7 +75,7 @@ $updates["201303011412"][]="delete from go_state where name='em-pnl-west' or nam
 $updates["201303011412"][]="delete from go_state where name='em-pnl-west' or name='eml-pnl-north';";
 
 // All acls for email accounts with read permission will be updated to create permissions
-$updates["201304081400"][]="UPDATE go_acl AS a JOIN go_acl_items AS i ON a.acl_id = i.id SET a.`level`='20' WHERE i.description = 'em_accounts.acl_id' AND a.`level` = 10;";
+$updates["201304081400"][]="UPDATE go_acl SET level=20 WHERE level = 10 AND acl_id IN (select acl_id from em_accounts) AND user_id>0;";
 
 $updates['201304231330'][]="ALTER TABLE `em_links` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";
 
