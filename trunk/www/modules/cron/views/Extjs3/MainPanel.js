@@ -32,7 +32,9 @@ GO.cron.MainPanel = function(config){
 	      	 	xtype:'htmlcomponent',
 			html:GO.cron.lang.name,
 			cls:'go-module-title-tbar'
-		});
+		}]
+	});
+	
 	config.layout='border';
 
 	GO.cron.MainPanel.superclass.constructor.call(this, config);	
