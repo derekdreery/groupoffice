@@ -205,10 +205,6 @@ ul.x-tab-strip .x-tab-strip-active {
 	margin-bottom: 0;
 }
 
-ul.x-tab-strip {
-	width: auto;
-}
-
 .x-grid3-header {
 	background: #fff none !important;
 	border-bottom: 2px solid #000;
@@ -626,4 +622,26 @@ a.x-menu-item{
 
 .go-head-tb .x-btn-pressed{
 	background: #278bb5;
+}
+
+a.x-menu-check-item {
+	padding: 3px 21px 3px 24px;
+}
+
+.ext-strict .x-menu-check-item .x-menu-item-icon{
+	display: block;
+}
+
+.x-menu-item-checked .x-menu-group-item .x-menu-item-icon{
+	background-image: url(images/extjs/menu/group-checked.gif);
+}
+
+.x-tab-scroller-right {
+	background-image: url(images/extjs/tabs/scroll-right.gif);
+	border-bottom-color: #2b9bc9;
+}
+
+.x-tab-scroller-left {
+	background-image: url(images/extjs/tabs/scroll-left.gif);
+	border-bottom-color: #2b9bc9;
 }
