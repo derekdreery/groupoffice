@@ -2166,11 +2166,6 @@ body.ext-ie6 .x-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em
 	background-color: #2a9ac9 !important;
 }
 
-
-
-
- 
-
  #go-module-panel-summary .x-panel-header-text{
  	padding: 6px 6px 0 6px;
  }
@@ -2185,4 +2180,8 @@ body.ext-ie6 .x-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em
 
 .x-grid3-row-body .description {
 	padding: 0 !important; 
+}
+
+.x-btn-pressed{
+	background: #d6ecf6;
 }
