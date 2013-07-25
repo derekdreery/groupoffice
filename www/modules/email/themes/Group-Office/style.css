@@ -228,6 +228,12 @@ margin:5px 2px;
 	vertical-align:top;	
 }
 
+.message-header-table{
+	float:left;
+	margin-right: 10px;
+	margin-bottom: 5px;
+}
+
 .message-icalendar{
 	background-color:#EBF0F2;
 	border-bottom:1px solid #d0d0d0;
