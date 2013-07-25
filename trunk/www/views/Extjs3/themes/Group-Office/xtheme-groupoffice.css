@@ -301,8 +301,8 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 	background-image: url(/images/extjs/grid/refresh.gif) !important;
 }
 
-.x-panel-body{
-	border: none;
+.x-panel-body, .x-toolbar{
+	border: none !important;
 }
 
 .x-grid-empty{
