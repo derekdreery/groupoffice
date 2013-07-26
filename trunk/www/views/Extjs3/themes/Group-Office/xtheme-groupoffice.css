@@ -242,7 +242,7 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 	border-bottom: 1px solid white;	
 }
 
-#portlet-announcements .x-grid3-row td{
+.x-portlet .x-grid3-row td{
 	border-bottom: 1px solid white;	
 }
 
