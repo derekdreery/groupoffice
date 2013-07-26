@@ -64,7 +64,7 @@ GO.addressbook.SelectCompanyDialog = function(config){
 		layout:'border',
 		border:false,
 		region:'west',
-		width:180,
+		width:230,
 		split:true,
 		items:[this.addressbooksGrid,this.mailingsFilterPanel]
 	});

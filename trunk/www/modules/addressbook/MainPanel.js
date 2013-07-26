@@ -249,7 +249,7 @@ GO.addressbook.MainPanel = function(config)
 			layoutConfig:{hideCollapseTool:true},
 			border:false,
 			region:'west',
-			width:200,
+			width:230,
 			split:true,
 			items:[this.addressbooksGrid,this.mailingsFilterPanel],
 			id: 'ab-west-panel'

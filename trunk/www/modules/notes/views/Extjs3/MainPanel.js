@@ -31,7 +31,7 @@ GO.notes.MainPanel = function(config){
 		title:GO.notes.lang.categories,
 		loadMask:true,
 		store: GO.notes.readableCategoriesStore,
-		width: 210,
+		width: 230,
 		split:true,
 		allowNoSelection:true,
 		collapsible:true,

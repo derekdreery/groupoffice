@@ -202,7 +202,7 @@ GO.tasks.MainPanel = function(config){
 			titlebar: false,
 			autoScroll:false,
 			closeOnTab: true,
-			width: 210,
+			width: 230,
 			split:true,
 			resizable:true,
 			layout:'border',
