@@ -1264,28 +1264,29 @@ GO.mainLayout.onReady(function(){
 
 
 
+
 	//GO.checker is not available in some screens like accept invitation from calendar
 	if(true){
 		//create notify icon
-		var notificationArea = Ext.get('notification-area');
-		if(notificationArea)
-		{
-			GO.email.notificationEl = notificationArea.createChild({
-				id: 'ml-notify',
-				tag:'a',
-				href:'#',
-				style:'display:none'
-			});
-			GO.email.notificationEl.on('click', function(){
-				GO.mainLayout.openModule('email');
-			}, this);
-		}
+//		var notificationArea = Ext.get('notification-area');
+//		if(notificationArea)
+//		{
+//			GO.email.notificationEl = notificationArea.createChild({
+//				id: 'ml-notify',
+//				tag:'a',
+//				href:'#',
+//				style:'display:none'
+//			});
+//			GO.email.notificationEl.on('click', function(){
+//				GO.mainLayout.openModule('email');
+//			}, this);
+//		}
 
 			//register a new request to the checker. It will poll unseen tickets every two minutes
 		GO.checker.registerRequest("email/account/checkUnseen",{},function(checker, result, data){
 
 				var ep = GO.mainLayout.getModulePanel('email');
-
+				
 			//	var totalUnseen = result.email_status.total_unseen;
 				if(ep){
 					for(var i=0;i<result.email_status.unseen.length;i++)
@@ -1307,7 +1308,7 @@ GO.mainLayout.onReady(function(){
 					}
 
 //					if(!ep || !ep.isVisible()){
-						GO.email.notificationEl.setDisplayed(true);
+//						GO.email.notificationEl.setDisplayed(true);
 						
 						data.popup=true;
 						
@@ -1315,8 +1316,12 @@ GO.mainLayout.onReady(function(){
 							data.alarm=true;
 //					}
 
-					GO.email.notificationEl.update(result.email_status.total_unseen);
+					//GO.email.notificationEl.update(result.email_status.total_unseen);
+					
+					
 				}
+				
+				GO.mainLayout.setNotification('email',result.email_status.total_unseen,'green');
 		});
 
 
