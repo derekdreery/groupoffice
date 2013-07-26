@@ -532,12 +532,34 @@ thead .x-grid3-hd-inner{
 	color: #000 !important;
 }
 
-.x-html-editor-wrap {
+/*.x-html-editor-wrap {
 	border-color: #fff;
 }
 
 .x-html-editor-wrap iframe{
 	border-color: #2b9bc9;
+}*/
+
+.x-html-editor-wrap{
+	border-color: #2b9bc9;
+}
+
+
+.x-html-editor-wrap textarea{
+	background-color:white !important;
+}
+
+.x-html-editor-tb .x-btn{
+	border:0 !important;
+}
+
+.x-html-editor-tb .x-btn-icon .x-btn-small .x-btn-text {
+	height: 16px;
+	width: 16px;
+}
+
+.x-html-editor-tb{
+	border-bottom:1px solid #2b9bc9;
 }
 
 .x-box-tl, .x-box-tr, .x-box-tc, .x-box-br, .x-box-bl, .x-box-bc, .x-box-ml, .x-box-mr, .x-box-mc  {
@@ -611,14 +633,7 @@ a.x-menu-item{
 	padding: 3px 21px 3px 6px;
 }
 
-.x-html-editor-tb .x-btn{
-	border:0 !important;
-}
 
-.x-html-editor-tb .x-btn-icon .x-btn-small .x-btn-text {
-	height: 16px;
-	width: 16px;
-}
 
 .go-head-tb .x-btn-pressed{
 	background: #278bb5;
