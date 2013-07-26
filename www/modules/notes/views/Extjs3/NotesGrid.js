@@ -89,50 +89,7 @@ GO.notes.NotesGrid = function(config){
 };
 
 
-//GO.notes.NotesGrid = Ext.extend(GO.grid.LiveGridPanel,{
-//	
-//	initComponent : function() {
-//
-//		var store = new GO.data.LiveStore({
-//			url: GO.url('notes/note/store'),		
-//			fields: ['id','category_id','user_name','ctime','mtime','name','content'],
-//			model:"GO_Notes_Model_Note"
-//			
-//		});
-//		
-//		this.searchField = new GO.form.SearchField({
-//			store: store,
-//			width:320
-//		})
-//		
-//		Ext.apply(this,{
-//			title : GO.notes.lang.notes,
-//			tbar : [GO.lang['strSearch'] + ':', this.searchField],
-//			store : store,
-//			//paging : true,
-//			columns : [
-//			{
-//				header: GO.lang.strName,
-//				dataIndex: 'name',
-//				sortable: true
-//			},{
-//				header: GO.lang.strOwner,
-//				dataIndex: 'user_name',
-//				sortable: false,
-//				hidden:true
-//			},{
-//				header: GO.lang.strCtime,
-//				dataIndex: 'ctime',
-//				hidden:true,
-//				sortable: true
-//			},{
-//				header: GO.lang.strMtime,
-//				dataIndex: 'mtime',
-//				sortable: true
-//			}]
-//		});
-//		
-//		GO.notes.NotesGrid.superclass.initComponent.call(this);
-//	}
-//
-//});
+Ext.extend(GO.notes.NotesGrid, GO.grid.GridPanel,{
+	
+
+	});
