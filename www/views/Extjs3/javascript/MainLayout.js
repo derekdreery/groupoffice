@@ -549,6 +549,21 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 
 		return panel;
 	},
+	
+	setNotification : function(moduleName, number, color){
+		var panel = this.initModule(moduleName);
+		var el = Ext.get(this.tabPanel.getTabEl(panel));
+		var text = el.child('.x-tab-strip-text');
+		var notEl = text.child('.go-tab-notification')
+		
+		if(!notEl){
+			text.dom.innerHTML += ' <div class="go-tab-notification" style="background-color:'+color+'">'+number+'</div>';
+		}else
+		{
+			notEl.dom.innerHTML = number;
+		}
+
+	},
 
 	openModule : function(moduleName){
 
