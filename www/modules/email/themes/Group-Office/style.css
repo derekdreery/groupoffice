@@ -391,3 +391,7 @@ margin:5px 2px;
 .ml-seen-row{
    background: none;
 }
+
+#em-pnl-west .x-grid3-row td{
+	border-bottom: 1px solid #000;	
+}
