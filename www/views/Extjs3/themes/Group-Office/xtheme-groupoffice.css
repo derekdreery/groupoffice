@@ -83,7 +83,7 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 	}
 
 .x-window .x-form-text, .x-window textarea.x-form-field, .go-border-center .x-form-text, .go-border-center textarea.x-form-field{
-	background: #e5f5f9 none;
+	background-color: #e5f5f9;
 	border: 1px solid #11a2cd;
 	color: #000;
 	margin: 0; 
@@ -411,7 +411,7 @@ thead .x-grid3-hd-inner{
 	font-weight: bold;
 }
 
-.display-panel-heading, .collapsible-display-panel-headerm .display-panel-heading, .collapsible-display-panel-header div{
+.display-panel-heading, .collapsible-display-panel-headerm .display-panel-heading, .collapsible-display-panel-header div, .display-panel-heading div{
 	font-weight: bold;
 }
 
@@ -618,7 +618,15 @@ textarea.x-item-disabled{
 	filter: alpha(opacity=40);
 }
 .x-form-text, textarea.x-form-field {
-	background-image: none;
+	background: #e5f5f9 none;
+}
+
+.x-form-invalid, textarea.x-form-invalid {
+background-color: #e5f5f9;
+background-image: url(../../ext/resources/images/default/grid/invalid_line.gif);
+background-repeat: repeat-x;
+background-position: bottom;
+border-color: #c30 !important;
 }
 
 .x-panel-dd-spacer{
