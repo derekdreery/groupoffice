@@ -749,7 +749,7 @@ GO.calendar.MainPanel = function(config){
 			titlebar: false,
 			autoScroll:false,
 			//closeOnTab: true,
-			width: 220,
+			width: 230,
 			split:true,
 			layout:'border',
 			border:false,
