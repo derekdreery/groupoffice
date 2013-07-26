@@ -441,6 +441,10 @@ thead .x-grid3-hd-inner{
 	color: #f1f1 !important;
 }
 
+.go-head-tb .x-item-disabled *{
+	color: #fff !important;
+}
+
 .x-window .x-window-tbar .x-btn-text, #go-module-panel-customfields .go-border-center .x-panel-tbar .x-btn-text, #go-module-panel-calendar .go-border-west .go-border-center .x-panel-tbar .x-btn-text, #go-module-panel-filesearch .go-border-center .x-panel-tbar .x-btn-text, .x-date-bottom {
 	background: none !important;
 	font-size: 10px;
