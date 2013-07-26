@@ -235,8 +235,15 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 	padding: 0;
 }
 
-.x-tab-panel .x-grid3-row td, .x-tab-panel .x-grid3-summary-row td {
+.x-grid3-row td, .x-grid3-summary-row td {
 	border-bottom: 1px solid #000;	
+}
+.go-border-west .x-grid3-row td, .go-border-west .x-grid3-summary-row td,.go-border-east .x-grid3-row td, .go-border-east .x-grid3-summary-row td {
+	border-bottom: 1px solid white;	
+}
+
+#portlet-announcements .x-grid3-row td{
+	border-bottom: 1px solid white;	
 }
 
 .ab-search-form-panel .x-form-text, .ab-search-form-panel textarea.x-form-field {
