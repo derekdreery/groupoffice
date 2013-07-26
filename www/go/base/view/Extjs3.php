@@ -103,16 +103,26 @@ class GO_Base_View_Extjs3{
 	
 		
 		if(!$cssFile->exists() || GO::config()->debug){
-			$fp = fopen($cssFile->path(), 'w+');
+			$css = '';
+			//$fp = fopen($cssFile->path(), 'w+');
 			foreach($this->_stylesheets as $s){
 				
 				
 				$baseurl = str_replace(GO::config()->root_path, GO::config()->host, dirname($s)).'/';
-
-				fputs($fp, $this->_replaceUrl(file_get_contents($s),$baseurl));
+				$css .= $this->_replaceUrl(file_get_contents($s),$baseurl);
+				//fputs($fp, $this->_replaceUrl(file_get_contents($s),$baseurl));
 			}
-			fclose($fp);
+			//fclose($fp);
+			
+			if(GO::config()->minify){
+				$cssMin = new GO_Base_Util_Minify_CSSMin();
+				$css = $cssMin->run($css);
+			}
+			
+			$cssFile->putContents($css);
 		}
+		
+		
 
 		//$cssurl = $GLOBALS['GO_CONFIG']->host.'compress.php?file='.basename($relpath);
 		$cssurl = GO::url('core/compress',array('file'=>$cssFile->name(),'mtime'=>$cssFile->mtime()));

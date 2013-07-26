@@ -1146,6 +1146,15 @@ class GO_Base_Config {
 	 */
 	var $allow_quicklink = true;	
 	
+	
+	/**
+	 * EXPERIMENTAL! Minifies JS and CSS on the fly.
+	 * Doesn't seem to make much difference when gzip is used.
+	 * 
+	 * @var boolean 
+	 */
+	public $minify = false;
+	
 	/**
 	 * Constructor. Initialises all public variables.
 	 *

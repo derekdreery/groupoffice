@@ -12,7 +12,6 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-
 $settings['state_index'] = 'go';
 
 $settings['language']=GO::language()->getLanguage();
@@ -219,9 +218,17 @@ if(GO::config()->debug || !file_exists($path)) {
 	}
 	
 	if(!GO::config()->debug) {
+		$js='';
 		foreach($scripts as $script) {
-			file_put_contents($path,"\n\n".file_get_contents($script),FILE_APPEND);
+			//file_put_contents($path,"\n\n".file_get_contents($script),FILE_APPEND);
+			$js .= "\n\n".file_get_contents($script);
 		}
+		
+		if(GO::config()->minify){
+			$js = GO_Base_Util_Minify_JSMin::minify($js);
+		}
+		
+		file_put_contents($path, $js,FILE_APPEND);
 	}
 }
 
@@ -345,14 +352,25 @@ if(count($load_modules)) {
 	if(!GO::config()->debug) {
 		if(!file_exists($path)) {
 		
+			$js='';
 			file_put_contents($cacheFolder->path().'/'.$user_id.'-modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode(GO::view()->exportModules())).'");');
 			array_unshift($scripts, $cacheFolder->path().'/'.$user_id.'-modules.js');
 
 
 			foreach($scripts as $script) {
-				file_put_contents($path,"\n\n".file_get_contents($script),FILE_APPEND);
+				//file_put_contents($path,"\n\n".file_get_contents($script),FILE_APPEND);
+				$js .= "\n\n".file_get_contents($script);
 			}
+			
+			if(GO::config()->minify){
+				$js = GO_Base_Util_Minify_JSMin::minify($js);
+			}
+			
+			file_put_contents($path, $js,FILE_APPEND);
 		}
+		
+		
+		
 		
 		$url=GO::url("core/compress", array('file'=>$file, 'mtime'=>filemtime($path)));
 
