@@ -887,14 +887,14 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	afterRender : function(){
 		GO.email.EmailClient.superclass.afterRender.call(this);
 
-		GO.email.notificationEl.setDisplayed(false);
+//		GO.email.notificationEl.setDisplayed(false);
 
 		this.body.mask(GO.lang.waitMsgLoad);
 	},
 
 	onShow : function(){
 
-		GO.email.notificationEl.setDisplayed(false);
+//		GO.email.notificationEl.setDisplayed(false);
 
 		GO.email.EmailClient.superclass.onShow.call(this);
 	},
