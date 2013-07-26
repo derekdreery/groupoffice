@@ -552,16 +552,24 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	
 	setNotification : function(moduleName, number, color){
 		var panel = this.initModule(moduleName);
-		var el = Ext.get(this.tabPanel.getTabEl(panel));
-		var text = el.child('.x-tab-strip-text');
-		var notEl = text.child('.go-tab-notification')
+//		var el = Ext.get(this.tabPanel.getTabEl(panel));
+//		var text = el.child('.x-tab-strip-text');
+//		var notEl = text.child('.go-tab-notification')
 		
-		if(!notEl){
-			text.dom.innerHTML += ' <div class="go-tab-notification" style="background-color:'+color+'">'+number+'</div>';
-		}else
-		{
-			notEl.dom.innerHTML = number;
+//		if(!notEl){
+//			text.dom.innerHTML += ' <div class="go-tab-notification" style="background-color:'+color+'">'+number+'</div>';
+//		}else
+//		{
+//			notEl.dom.innerHTML = number;
+//		}
+
+		if(!panel.origTitle){
+			panel.origTitle=panel.title;
 		}
+
+		var newTitle = number ? panel.origTitle+' <div class="go-tab-notification" style="background-color:'+color+'">'+number+'</div>' : panel.origTitle;
+
+		panel.setTitle(newTitle);
 
 	},
 
