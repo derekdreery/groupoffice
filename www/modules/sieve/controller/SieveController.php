@@ -50,7 +50,7 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 
 		$response['active']=$this->_sieve->get_active($params['account_id']);
 		$all_scripts = $this->_sieve->get_scripts();
-
+		
 		$response['results'] = array();
 		foreach($all_scripts as $script)
 		{
@@ -63,7 +63,7 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 
 			$response['results'][]=array('value'=>$script,'name'=>$name, 'active'=>$script == $response['active']);
 		}
-
+		
 		$response['success'] = true;
 
 		return $response;
@@ -113,11 +113,14 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 					$i['script_name']=$scriptName;
 					$i['active']= !$item['disabled'];
 
-					$response['results'][]=$i;
+					$response['results'][$item['name']]=$i;
 				}
 				$index++;
 			}
 		}
+		
+		ksort($response['results']);		
+		$response['results']=array_values($response['results']);
 
 		$response['success']=true;
 		return $response;
@@ -135,6 +138,13 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 			$rule['tests'] = json_decode($params['criteria'], true);
 			$rule['actions'] = json_decode($params['actions'], true);
 			
+			for($i=0,$c=count($rule['tests']);$i<$c;$i++)
+			{
+				//GO::debug("TEST: ".$rule['tests'][$i]['arg1']);
+				if(preg_match('/[^a-z_\-_0-9]/i',$rule['tests'][$i]['arg1'])){
+					throw new Exception("Invalid value ".$rule['tests'][$i]['arg1']);
+				}
+			}
 		
 			for($i=0,$c=count($rule['actions']);$i<$c;$i++)
 			{
@@ -146,6 +156,7 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 				{
 					$rule['actions'][$i]['copy']=false;
 				}
+				
 								
 				if(!empty($rule['actions'][$i]['addresses'])) { // && !is_array($rule['actions'][$i]['addresses'])){
 					if($rule['actions'][$i]['type']=='vacation') {
@@ -210,7 +221,7 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 			if($this->_sieve->save()) {
 				$response['success'] = true;
 			} else {
-				$response['feedback'] = "Could not save filtering rules. Please check your input";
+				$response['feedback'] = "Could not save filtering rules. Please check your input.";
 				$response['success'] = false;
 			}
 		} catch (Exception $e) {

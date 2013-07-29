@@ -318,9 +318,8 @@ Ext.extend(GO.sieve.ConditionPanel, Ext.FormPanel,{
 			this.txtCondition.setValue(first);
 			this.rgSize.setValue(last);
 		}
-
 		if(record.data.arg1 != 'Subject' && record.data.arg1 != 'From' && record.data.arg1 != 'To' && record.data.arg1 != 'size' && record.data.test != 'size' && record.data.arg1 != 'X-Spam-Flag')
-		{
+		{			
 			this.cmbField.setValue('custom');
 			this.txtCustom.setValue(record.data.arg1);
 		}

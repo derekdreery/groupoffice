@@ -78,7 +78,7 @@ GO.sieve.SieveGrid = function(config){
 		fields: fields.fields,
 		remoteSort: true
 	});
-	config.paging=true;
+	config.paging=false;
 	var columnModel =  new Ext.grid.ColumnModel({
 		defaults:{
 			sortable:true,
