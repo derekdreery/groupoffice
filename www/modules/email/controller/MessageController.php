@@ -75,7 +75,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		if (count($filters)) {
 			$imap = $account->openImapConnection($mailbox);
 
-			$messages = GO_Email_Model_ImapMessage::model()->find($account, $mailbox,0, 0, GO_Base_Mail_Imap::SORT_ARRIVAL, false, "UNSEEN");
+			$messages = GO_Email_Model_ImapMessage::model()->find($account, $mailbox,0, 100, GO_Base_Mail_Imap::SORT_ARRIVAL, false, "UNSEEN");
 			if(count($messages)){
 				while ($filter = array_shift($filters)) {
 					$matches = array();
