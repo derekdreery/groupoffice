@@ -1222,8 +1222,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$alreadyProcessed = false;
 			if($event && $vevent->{"last-modified"}){
 				
-//				throw new Exception($vevent->{"last-modified"}->getDateTime()->format('Ymd G:i').' < '.GO_Base_Util_Date::get_timestamp($event->mtime));
-				$alreadyProcessed=$vevent->{"last-modified"}->getDateTime()->format('U')<=$event->mtime;
+//				throw new Exception(GO_Base_Util_Date::get_timestamp($vevent->{"last-modified"}->getDateTime()->format('U')).' < '.GO_Base_Util_Date::get_timestamp($event->mtime));
+				$alreadyProcessed=$vevent->{"last-modified"}->getDateTime()->format('U')<$event->mtime;
 			}
 			
 //			if(!$event || $event->is_organizer){
