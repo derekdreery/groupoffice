@@ -1,3 +1,14 @@
+29-07-2013 4.2.9
+- support for z-push without storing passwords
+- Disconnect button for Dropbox
+- Z-push 2 fixes for LG phones
+- Z-push admin shows more info
+- Fixed Notice:  Undefined index: sort in /usr/share/groupoffice/modules/tickets/controller/TicketController.php on line 54
+- custom header valdiation for sieve rules
+- Try to use z-push password when e-mail password is not stored in db
+- Smaller contact pictures so it won't break sync
+- Fixed caldav problem when accepting an invitation by mail before it was synced to TB.
+
 25-07-2013 4.2.8
 - Added BIC number to company fields of the addressbook module
 - The paste-from-word button in the wisywig editor is translated and Dutch and German translation was added
