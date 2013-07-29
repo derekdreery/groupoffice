@@ -932,9 +932,11 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 
 			var days = [];
 
+			var deleted =false;
 			var ids = this.getRelatedDomElements(domId);
 			if(ids)
 			{
+				deleted =true;
 				for(var i=0;i<ids.length;i++)
 				{
 					var el = Ext.get(ids[i]);
@@ -959,6 +961,11 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				for(var i=0,max=days.length;i<max;i++)
 					this.calculateAppointments(days[i]);
 			}
+			
+			return deleted;
+		}else
+		{
+			return false;
 		}
 	},
 
