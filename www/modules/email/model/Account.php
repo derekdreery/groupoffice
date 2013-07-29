@@ -249,20 +249,18 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	
 
 	public function decryptPassword(){
-		//return $this->password_encrypted==2 ? GO_Base_Util_Crypt::decrypt($this->password) : $this->password;
 		if (!empty(GO::session()->values['emailModule']['accountPasswords'][$this->id])) {
 			$decrypted = GO_Base_Util_Crypt::decrypt(GO::session()->values['emailModule']['accountPasswords'][$this->id]);
 		} else {
 			
 			//support for z-push without storing passwords
-			if (!$this->store_password &&
-					empty( $this->password ) &&
-					method_exists( 'Request', 'GetAuthPassword' )) {
-				 //error_log( "[" . $this->username . "]" );
-				 $this->password = Request::GetAuthPassword();
+			if (empty($this->password) &&	method_exists('Request','GetAuthPassword') && Request::GetAuthUser()==$this->username) {
+				
+				$decrypted = Request::GetAuthPassword();
+			}else
+			{			
+				$decrypted = GO_Base_Util_Crypt::decrypt($this->password);
 			}
-			
-			$decrypted = GO_Base_Util_Crypt::decrypt($this->password);
 		}
 		
 		return $decrypted ? $decrypted : $this->password;
@@ -272,7 +270,15 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		if (!empty(GO::session()->values['emailModule']['smtpPasswords'][$this->id])) {
 			$decrypted = GO_Base_Util_Crypt::decrypt(GO::session()->values['emailModule']['smtpPasswords'][$this->id]);
 		} else {
-			$decrypted = GO_Base_Util_Crypt::decrypt($this->smtp_password);
+			
+			//support for z-push without storing passwords
+			if (empty($this->smtp_password) &&	method_exists('Request','GetAuthPassword') && Request::GetAuthUser()==$this->smtp_username) {
+				
+				$decrypted = Request::GetAuthPassword();
+			}else
+			{			
+				$decrypted = GO_Base_Util_Crypt::decrypt($this->smtp_password);
+			}
 		}
 		
 		return $decrypted ? $decrypted : $this->smtp_password;
