@@ -47,6 +47,12 @@ class GO_Base_Util_Image {
 	 * @return boolean
 	 */
 	public function load($filename) {
+		
+		if(!function_exists("imagecreatefromjpeg")){
+			trigger_error("Can't resize image because the PHP GD extension is not installed", E_USER_WARNING);
+			return false;
+		}
+		
 		$image_info = getimagesize($filename);
 		$this->image_type = $image_info[2];
 		
