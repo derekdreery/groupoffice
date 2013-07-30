@@ -26,12 +26,12 @@ class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 	protected function checkSecurityToken(){}
 	
 	/**
-	 * Load the Cronjob model
+	 * Update a Cronjob model
 	 * 
-	 * @param array $params
+	 * @param int $id
 	 */
-	protected function actionLoad($params) {
-		$model = GO_Base_Cron_CronJob::model()->createOrFindByParams($params);
+  protected function actionUpdate($id) {
+		$model = GO_Base_Cron_CronJob::model()->findByPk($id);
 		
 		$remoteComboFields = array();
 		
@@ -43,34 +43,31 @@ class GO_Core_Controller_Cron extends GO_Base_Controller_AbstractJsonController{
 		} else {
 			$select = false;
 		}
-
-		echo $this->renderForm($model, $remoteComboFields,array('select'=>$select));
-  }
-  
-	/**
-	 * Update a Cronjob model
-	 * 
-	 * @param array $params
-	 */
-  protected function actionUpdate($params) {
-		$model = GO_Base_Cron_CronJob::model()->findByPk($params['id']);
-		$model->setAttributes($params);
-		$model->save();
-
-		echo $this->renderSubmit($model);
+		
+		if(GO_Base_Util_Http::isPostRequest()) {
+			$model->setAttributes($_POST);
+			$model->save();
+			echo $this->renderSubmit($model);
+		} else {
+			echo $this->renderForm($model, $remoteComboFields,array('select'=>$select));
+		}
+		
   }
 	
 	/**
 	 * Create a new Cronjob model
-	 * 
-	 * @param array $params
 	 */
-	protected function actionCreate($params) {
+	protected function actionCreate() {
+		
 		$model = new GO_Base_Cron_CronJob();
-		$model->setAttributes($params);
-		$model->save();
-
-		echo $this->renderSubmit($model);
+		
+		if(GO_Base_Util_Http::isPostRequest()) {
+			$model->setAttributes($_POST);
+			$model->save();
+			echo $this->renderSubmit($model);
+		}else {
+			echo $this->renderForm($model, array(),array('select'=>false));
+		}
   }
 
 	/**

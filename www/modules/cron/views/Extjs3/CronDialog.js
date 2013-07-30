@@ -214,12 +214,18 @@ GO.cron.CronDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
     var noUserSelection = this.select; //this.usersPanel.disabled;
 		var comboValue = this.jobCombo.getValue();
 		var store = this.jobCombo.getStore();
-		var record = store.getById(comboValue);
+		if(!store.loaded){
+			store.load(function() {
+				var record = store.getById(comboValue);
+				noUserSelection = record.data.selection;
+			});
+		} else {
+			var record = store.getById(comboValue);
+			noUserSelection = record.data.selection;
+		}
 		
-		noUserSelection = record.data.selection;
-
-    this.usersPanel.setModelId(action.result.id);
-    this.groupsPanel.setModelId(action.result.id);
+		this.usersPanel.setModelId(action.result.id);
+		this.groupsPanel.setModelId(action.result.id);
 
 		if(noUserSelection){
 			this.select = true;
