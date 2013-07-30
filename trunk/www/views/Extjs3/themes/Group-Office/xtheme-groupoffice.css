@@ -102,7 +102,7 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 }
 
 .x-btn-noicon .x-btn-small .x-btn-text{
-	height: 12px;
+/*	height: 12px;*/
 	padding: 0 6px;
 }
 
@@ -144,9 +144,9 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 	background-image: url(/images/extjs/menu/checked.gif);
 }
 
-.x-grid3-row {
+/*.x-grid3-row {
 	border: none;
-}
+}*/
 
 .x-grid3-row-over {
 	background: #e6f5fa none !important;
@@ -239,14 +239,15 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 	padding: 0;
 }
 
-.x-grid3-row td, .x-grid3-summary-row td {
+.x-grid3-row, .x-grid3-summary-row {
+	border:none;
 	border-bottom: 1px solid #000;	
 }
-.go-border-west .x-grid3-row td, .go-border-west .x-grid3-summary-row td,.go-border-east .x-grid3-row td, .go-border-east .x-grid3-summary-row td {
+.go-border-west .x-grid3-row, .go-border-west .x-grid3-summary-row,.go-border-east .x-grid3-row, .go-border-east .x-grid3-summary-row {
 	border-bottom: 1px solid white;	
 }
 
-.x-portlet .x-grid3-row td{
+.x-portlet .x-grid3-row{
 	border-bottom: 1px solid white;	
 }
 
@@ -460,6 +461,10 @@ thead .x-grid3-hd-inner{
 	color: #fff !important;
 }
 
+.go-head-tb .xtb-text{
+	color: #fff !important;
+}
+
 .x-window .x-window-tbar .x-btn-text, #go-module-panel-customfields .go-border-center .x-panel-tbar .x-btn-text, #go-module-panel-calendar .go-border-west .go-border-center .x-panel-tbar .x-btn-text, #go-module-panel-filesearch .go-border-center .x-panel-tbar .x-btn-text, .x-date-bottom {
 	background: none !important;
 	font-size: 10px;
@@ -475,6 +480,11 @@ thead .x-grid3-hd-inner{
 
 body.x-body-masked .x-window-plain .x-window-mc {
 background-color: #fff;
+}
+
+.x-window-plain .x-window-mc {
+background-color:#fff;
+border-color: #fff;
 }
 
 .go-paging-tb .x-btn{

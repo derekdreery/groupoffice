@@ -758,7 +758,7 @@ GO.calendar.MainPanel = function(config){
 			new Ext.Panel({
 				region:'north',
 				border:true,
-				height:226,
+				height:210,
 				split:true,
 				baseCls:'x-plain',
 				items:this.datePicker
