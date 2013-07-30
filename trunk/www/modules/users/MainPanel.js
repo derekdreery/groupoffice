@@ -129,15 +129,16 @@ GO.users.MainPanel = function(config)
 					this.settingsDialog.show();
 				},
 				scope:this
-			},{
-				enableToggle:true,
-				text:GO.users.lang.showProUsers,
-				toggleHandler:function(btn, pressed){
-					this.store.baseParams.show_licensed=pressed ? 1 : 0;
-					this.store.load();
-				},
-				scope:this
 			},
+//			{
+//				enableToggle:true,
+//				text:GO.users.lang.showProUsers,
+//				toggleHandler:function(btn, pressed){
+//					this.store.baseParams.show_licensed=pressed ? 1 : 0;
+//					this.store.load();
+//				},
+//				scope:this
+//			},
 				'-',
 		         GO.lang['strSearch']+':',
 		        this.searchField
