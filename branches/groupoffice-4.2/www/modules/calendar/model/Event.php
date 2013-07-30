@@ -877,10 +877,16 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			//we need to start searching for the next occurrence at the period start
 			//time minus the duration of the event in days rounded up. Because an 
 			//occurrence may start before the period but end in it.
-			$rrule->setRecurpositionStartTime(GO_Base_Util_Date::date_add($periodStartTime,-ceil(($event->end_time-$event->start_time/86400))));
+			$rrule->setRecurpositionStartTime(GO_Base_Util_Date::date_add($periodStartTime,-ceil(( ($event->end_time-$event->start_time) /86400))));
 
+//			var_dump('=====');
+//			var_dump(GO_Base_Util_Date::get_timestamp(GO_Base_Util_Date::date_add($periodStartTime,-ceil(( ($event->end_time-$event->start_time) /86400)))));
+			
 			$origEventAttr = $localEvent->getEvent()->getAttributes('formatted');
-			while ($occurenceStartTime = $rrule->getNextRecurrence(false,$periodEndTime)) {				
+			while ($occurenceStartTime = $rrule->getNextRecurrence(false,$periodEndTime)) {	
+				
+//				var_dump(GO_Base_Util_Date::get_timestamp($occurenceStartTime));
+				
 				if ($occurenceStartTime > $localEvent->getPeriodEndTime())
 					break;
 
