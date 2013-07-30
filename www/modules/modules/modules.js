@@ -35,7 +35,12 @@ GO.modules.MainPanel = function(config) {
 
 	config.tbar = new Ext.Toolbar({
 		cls : 'go-head-tb',
-		items : [{
+		items : [
+		{
+		   	xtype:'htmlcomponent',
+				html:GO.modules.lang.name,
+				cls:'go-module-title-tbar'
+		},{
 			iconCls : 'btn-add',
 			text : GO.modules.lang['cmdInstall'],
 			cls : 'x-btn-text-icon',
@@ -187,7 +192,7 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 				minHeight : 300,
 				height : 400,
 				width : 600,
-				plain : true,
+				border:false,
 				closeAction : 'hide',
 				title : GO.modules.lang['cmdAvailableModules'],
 				items : grid,
