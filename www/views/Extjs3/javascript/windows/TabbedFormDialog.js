@@ -313,12 +313,12 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	/*
 	 * Check for updateAction and createAction parameter
 	 */
-	checkSubmitMethod : function(params){
+	checkSubmitMethod : function(){
 		if(this.createAction != false && this.updateAction !=false){
 			if(this.isNew()){
-				this.submitAction = this.createAction;
+				this.submitAction = this.loadAction = this.createAction;
 			} else {
-				this.submitAction = this.updateAction;
+				this.submitAction = this.loadAction = this.updateAction;
 			}
 		}
 	},	
@@ -337,12 +337,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			return;
 		
 		var params=this.getSubmitParams();
-		
-		/*
-		 * Check for updateAction and createAction parameter
-		 */
-		this.checkSubmitMethod(params);
-		
+
 		if(this.beforeSubmit(params)===false)
 			return false;
 		
@@ -448,12 +443,16 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			
 		this.setRemoteModelId(remoteModelId);
 		
+		//set dialog in new or edit mode
+		this.checkSubmitMethod();
+		
 		if(remoteModelId || this.loadOnNewModel)
 		{
 			
 			this.formPanel.load({
 				params:config.loadParams,
 				url:GO.url(this.formControllerUrl+'/'+this.loadAction),
+				method: 'GET',
 				success:function(form, action)
 				{					
 					this.setRemoteComboTexts(action);
