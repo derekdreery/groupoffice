@@ -691,3 +691,8 @@ a.x-menu-check-item {
 	background-image: url(images/extjs/tabs/scroll-left.gif);
 	border-bottom-color: #2b9bc9;
 }
+
+.go-display-panel .x-toolbar-more-icon {
+	background-image: url(images/extjs/toolbar/more.gif)!important;
+	width: 12px !important;
+}
