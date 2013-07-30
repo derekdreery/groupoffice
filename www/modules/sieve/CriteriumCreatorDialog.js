@@ -120,6 +120,7 @@ Ext.extend(GO.sieve.CriteriumCreatorDialog, GO.Window,{
 						this.cmbField.setValue('custom');
 					this._transForm(this.cmbField.getValue());
 					this.txtCriterium.setValue(record.get('arg2'));
+					this.txtCustom.setValue(record.get('arg1'));
 					this._setOperatorField(record);
 					break;
 			}
@@ -172,6 +173,7 @@ Ext.extend(GO.sieve.CriteriumCreatorDialog, GO.Window,{
 			case 'From':
 			case 'To':
 			case 'Subject':
+//			case 'body':
 				this._toggleFieldUse(this.txtCustom,false);
 				this._toggleFieldUse(this.cmbOperator,true);
 				this._toggleFieldUse(this.txtCriterium,!(this.cmbOperator.getValue() == 'exists' || this.cmbOperator.getValue() == 'notexists'));

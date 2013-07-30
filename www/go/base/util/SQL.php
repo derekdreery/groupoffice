@@ -32,7 +32,7 @@ class GO_Base_Util_SQL {
 			while (!feof($handle)) {
 				$buffer = trim(fgets($handle, 4096));
 				if ($buffer != '' && substr($buffer, 0, 1) != '#' && substr($buffer, 0, 1) != '-') {
-					$sql .= $buffer;
+					$sql .= $buffer."\n";
 				}
 			}
 			fclose($handle);

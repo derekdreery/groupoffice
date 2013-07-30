@@ -53,7 +53,7 @@ class GO_Ldapauth_Authenticator {
 
 	public function authenticate($username, $password) {
 
-		$oldIgnoreAcl = GO::setIgnoreAclPermissions(true);
+		
 
 		$mapping = $this->_getMapping();
 
@@ -62,6 +62,8 @@ class GO_Ldapauth_Authenticator {
 							"required values is not set: \$config['ldap_host'] and \$config['ldap_peopledn'].");
 			return false;
 		}
+		
+		
 
 //		$ldapConn = new GO_Base_Ldap_Connection(GO::config()->ldap_host, GO::config()->ldap_port, !empty(GO::config()->ldap_tls));
 //
@@ -112,9 +114,12 @@ class GO_Ldapauth_Authenticator {
 			//return false;
 		} else {
 			GO::debug("LDAPAUTH: LDAP authentication SUCCESS for " . $username);
+			
+			$oldIgnoreAcl = GO::setIgnoreAclPermissions(true);
 
 			$user = $this->syncUserWithLdapRecord($record, $password);
 			if(!$user){
+				GO::setIgnoreAclPermissions($oldIgnoreAcl);
 				return false;
 			}
 

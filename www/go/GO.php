@@ -60,6 +60,9 @@ class GO{
 	 * @return boolean Old value
 	 */
 	public static function setIgnoreAclPermissions($ignore=true){
+		
+		GO::debug("setIgnoreAclPermissions");
+		
 		$oldValue = GO::$ignoreAclPermissions;
 		GO::$ignoreAclPermissions=$ignore;
 

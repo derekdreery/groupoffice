@@ -120,3 +120,5 @@ $l['sieveWarning']="If your IMAP server supports sieve filters. It's recommended
 $l['setRead']='Mark message as read';
 
 $l['stopEndError'] = 'Stop needs to be on the end!';
+
+$l['body']='Body';

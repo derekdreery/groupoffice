@@ -64,3 +64,5 @@ $l['lostPassword'] = 'Wachtwoord vergeten?';
 $l['alreadySignedupText']='Heeft u al een gebruikersnaam en wachtwoord? Gebruik dan dir formulier om in te loggen.';
 $l['forgotPasswordText']='Vul in het onderstaande formulier uw email-adres in en u ontvangt binnen enkele minuten een email met instructies om uw wachtwoord opnieuw in the stellen.';
 $l['registerformText']="Vul het onderstaande formulier in en klik op 'Ok' om te registreren. De velden met een * zijn verplichte velden.";
+
+$l['selectOne']='Maak een keuze';
