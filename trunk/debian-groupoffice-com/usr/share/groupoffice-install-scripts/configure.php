@@ -111,7 +111,7 @@ if(file_exists($config['file_storage_path'].'key.txt'))
 	system('chown www-data:www-data '.$config['file_storage_path'].'key.txt');
 
 //create symlink for site module public files
-if(file_exists('/var/www/public'))
+if(!file_exists('/var/www/public'))
 	system('ln -s '.$config['file_storage_path'].'public /var/www/public');
 
 echo "Done!\n\n";

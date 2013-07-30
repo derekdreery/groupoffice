@@ -88,7 +88,7 @@ class GO_Base_Mail_EmailRecipients{
 	public function getAddress(){
 		reset($this->_addresses);
 		$each = each($this->_addresses);
-		return array('email'=>$each['key'], 'personal'=>empty($each['value']) ? $each['key'] : $each['value']);
+		return $each ? array('email'=>$each['key'], 'personal'=>empty($each['value']) ? $each['key'] : $each['value']) : false;
 	}
 	
 //	public function getEmail($index=0){
@@ -101,17 +101,36 @@ class GO_Base_Mail_EmailRecipients{
 	
 	public function __toString() {
 		$str = '';
-		foreach($this->_addresses as $email=>$personal){
-			if(!empty($personal)){
-				$str .= '"'.$personal.'" <'.$email.'>, ';
-			}else
-			{
-				$str .= $email.', ';
-			}
-		}
-		
+		foreach($this->_addresses as $email=>$personal){			
+			$str .= $this->_formatAddress($email, $personal).', ';			
+		}		
 		return rtrim($str,', ');
-	}	
+	}
+	
+	/**
+	 * Get an array of formatted address:
+	 * 
+	 * $a[] = '"John Doe" <john@domain.com>';
+	 * 
+	 * @return array
+	 */
+	public function getArray(){
+		$array = array();
+		foreach($this->_addresses as $email=>$personal){			
+			$array[] = $this->_formatAddress($email, $personal);			
+		}		
+		return $array;
+	}
+	
+	
+	private function _formatAddress($email, $personal){
+		if(!empty($personal)){
+			return '"'.$personal.'" <'.$email.'>';
+		}else
+		{
+			return $email;
+		}
+	}
 	
 	/**
 	* The array of parsed addresses

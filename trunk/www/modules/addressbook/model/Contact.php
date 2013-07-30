@@ -429,7 +429,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		}
 		
 		//resize it to small image so we don't get in trouble with sync clients
-		$img->fitBox(480,640);
+		$img->fitBox(240,320);
 		
 		if(!$img->save($filename, IMAGETYPE_JPEG)){
 			throw new Exception("Could not save photo!");

@@ -75,7 +75,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		if (count($filters)) {
 			$imap = $account->openImapConnection($mailbox);
 
-			$messages = GO_Email_Model_ImapMessage::model()->find($account, $mailbox,0, 0, GO_Base_Mail_Imap::SORT_ARRIVAL, false, "UNSEEN");
+			$messages = GO_Email_Model_ImapMessage::model()->find($account, $mailbox,0, 100, GO_Base_Mail_Imap::SORT_ARRIVAL, false, "UNSEEN");
 			if(count($messages)){
 				while ($filter = array_shift($filters)) {
 					$matches = array();
@@ -1226,8 +1226,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$alreadyProcessed = false;
 			if($event && $vevent->{"last-modified"}){
 				
-//				throw new Exception($vevent->{"last-modified"}->getDateTime()->format('Ymd G:i').' < '.GO_Base_Util_Date::get_timestamp($event->mtime));
-				$alreadyProcessed=$vevent->{"last-modified"}->getDateTime()->format('U')<=$event->mtime;
+//				throw new Exception(GO_Base_Util_Date::get_timestamp($vevent->{"last-modified"}->getDateTime()->format('U')).' < '.GO_Base_Util_Date::get_timestamp($event->mtime));
+				$alreadyProcessed=$vevent->{"last-modified"}->getDateTime()->format('U')<$event->mtime;
 			}
 			
 //			if(!$event || $event->is_organizer){

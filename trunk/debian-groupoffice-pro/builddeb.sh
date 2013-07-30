@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROMODULES="sync gota caldav documenttemplates savemailas projects professional timeregistration hoursapproval tickets syncml carddav zpushadmin";
+PROMODULES="sync gota caldav documenttemplates savemailas projects professional timeregistration hoursapproval tickets syncml carddav zpushadmin dropbox googledrive scanbox";
 
 # useful: DEBCONF_DEBUG="developer"
 
@@ -52,7 +52,7 @@ cd groupoffice-pro-$VERSION
 if [ "$1" == "send" ]; then
 	debuild -rfakeroot
 	cd ..
-	scp *.deb mschering@imfoss.nl:/var/www/groupoffice/repos.groupoffice.eu/groupoffice/poolfourone/main/
+	scp *.deb mschering@imfoss.nl:/var/www/groupoffice/repos.groupoffice.eu/groupoffice/poolfourtwo/main/
 
 	#ssh mschering@imfoss.nl "dpkg-scanpackages /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary /dev/null | gzip -9c > /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary/Packages.gz"
 else

@@ -132,8 +132,13 @@ class GO_Sieve_Util_Sieve {
 		if (!$script)
 			$script = '/* empty script */';
 
-		if ($this->_PEAR->isError($this->sieve->installScript($name, $script, true)))
+		$res = $this->sieve->installScript($name, $script, true);
+		if ($this->_PEAR->isError($res)){
+			
+			GO::debug("ERROR: ".$res);
+			
 			return $this->_set_error(SIEVE_ERROR_INSTALL);
+		}
 
 		return true;
 	}
