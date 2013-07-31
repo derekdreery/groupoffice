@@ -816,12 +816,12 @@ hr{
 
 .go-select-list .go-view-over{
     background-color:#e6f5fa;
-    border: none;
+    border: 1px solid #e6f5fa;
 }
 
 .go-select-list .go-view-selected{
 	background-color: #e6f5fa;
- 	border: none;
+ 	border: 1px solid #e6f5fa;;
 	
 }
 
