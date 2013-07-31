@@ -159,22 +159,28 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 			{
 				if($child instanceof Sabre\VObject\Component){				
 					
-					for($i=0;$i<count($child->children);$i++){
-						$property = $child->children[$i];
-						if((string) $property->value==""){
-							GO_Syncml_Server::debug("Unsetting: ".$property->name);
-							array_splice($child->children, $i, 1);
-							$i--;
-						}
-						
-						if(isset($property['ENCODING']) && strtoupper($property['ENCODING'])=='QUOTED-PRINTABLE'){
-							$value = quoted_printable_decode($property->value);
-							$value = str_replace("\r","",$value);
-
-							$property->setValue($value);				
-							unset($property['ENCODING']);
-						}
-					}
+//					for($i=0;$i<count($child->children);$i++){
+//						$property = $child->children[$i];
+//						if((string) $property->getValue()==""){
+//							GO_Syncml_Server::debug("Unsetting: ".$property->name);
+//							array_splice($child->children, $i, 1);
+//							$i--;
+//						}
+//						
+//						
+//						GO_Syncml_Server::debug("Prop: ".$property->name);
+//						
+//						if(isset($property['ENCODING']) && strtoupper($property['ENCODING'])=='QUOTED-PRINTABLE'){
+//							
+//							GO_Syncml_Server::debug("decode");
+//							
+//							$value = quoted_printable_decode($property->getValue());
+//							$value = str_replace("\r","",$value);
+//
+//							$property->setValue($value);				
+//							unset($property['ENCODING']);
+//						}
+//					}
 					
 					if(isset($child->rrule) && (string) $child->rrule!=''){
 						$rrule = new GO_Base_Util_Icalendar_Rrule();
@@ -230,29 +236,38 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 			$vobject->version='3.0';
 			foreach($vobject->children() as $property)
 			{
-				if(isset($property['ENCODING']) && strtoupper($property['ENCODING'])=='QUOTED-PRINTABLE'){
-					$value = quoted_printable_decode($property->value);
-					$value = str_replace("\r","",$value);
-//					GO::debug($value);
-//					$value = GO_Base_Util_String::to_utf8($value);
-					$property->setValue($value);				
-					unset($property['ENCODING']);
-				}
+//				if(isset($property['ENCODING']) && strtoupper($property['ENCODING'])=='QUOTED-PRINTABLE'){
+//					$value = quoted_printable_decode($property->getValue());
+//					$value = str_replace("\r","",$value);
+////					GO::debug($value);
+////					$value = GO_Base_Util_String::to_utf8($value);
+//					$property->setValue($value);				
+//					unset($property['ENCODING']);
+//				}
 				
 				//vcard 2.1 is read as EMAIL;INTERNET=;HOME=:mschering@intermesh.nl
 				//We must correct that into EMAIL;TYPE=INTERNET,HOME:mschering@intermesh.nl
 				//$param = new Sabre_VObject_Parameter();
-				if($property->name=='EMAIL' || $property->name=='TEL' || $property->name=='ADR'){
-					$types = array();
-					foreach ($property->parameters as $param){
-						if(empty($param->value)){
-							$types[]=$param->name;
-							unset($property[$param->name]);
-						}
-					}
-					if(count($types))
-						$property->add(new GO_Base_VObject_Parameter('TYPE', implode(',', $types)));					
-				}
+				
+				
+//				if($property->name=='EMAIL' || $property->name=='TEL' || $property->name=='ADR'){
+////					GO_Syncml_Server::debug($property->);
+//					
+//					$types = array();
+//					foreach ($property->parameters as $param){
+//						
+//						GO_Syncml_Server::debug($param->name);
+//						if(empty($param->value)){
+//							$types[]=$param->name;
+//							unset($property[$param->name]);
+//						}
+//					}
+//					
+//						
+//					
+//					if(count($types))
+//						$property->type=implode(',', $types);					
+//				}
 				
 				if($property->name=='BDAY' && !empty($property->value) && !strpos($property->value, '-')){
 					$property->value = substr($property->value,0,4).'-'.substr($property->value,4,2).'-'.substr($property->value,6,2);
@@ -274,7 +289,7 @@ class GO_Base_VObject_Reader extends Sabre\VObject\Reader{
 			$value=str_replace("\n",'=0D=0A',$value);			
 		
 			if($value != $oldValue){
-				$newProp = new GO_Base_VObject_VCalendar_Property($propName, $value);							
+				$newProp = $vobject->add($propName, $value);							
 				$vobject->$propName->add('ENCODING','QUOTED-PRINTABLE');
 				foreach($vobject->$propName->parameters as $param){
 					$newProp->add($param);
