@@ -9,13 +9,13 @@
         {
             "name": "Evert Pot",
             "email": "evert@rooftopsolutions.nl",
-            "homepage" : "http://www.rooftopsolutions.nl/",
+            "homepage" : "http://evertpot.com/",
             "role" : "Developer"
         }
     ],
     "require": {
         "php": ">=5.3.1",
-        "sabre/vobject" : "2.0.*",
+        "sabre/vobject" : "~2.1.0",
         "ext-dom": "*",
         "ext-pcre": "*",
         "ext-spl": "*",
