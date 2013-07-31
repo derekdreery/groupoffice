@@ -1184,7 +1184,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @return Sabre\VObject\Component 
 	 */
 	public function toVObject($method='REQUEST', $updateByParticipant=false, $recurrenceTime=false,$includeExdatesForMovedEvents=false){
-		$e=new Sabre\VObject\Component('vevent');
+		
+		$calendar = new Sabre\VObject\Component\VCalendar();
+		 
+		$e=$calendar->createComponent('VEVENT');
 		
 		if(empty($this->uuid)){
 			$this->uuid = GO_Base_Util_UUID::create('event', $this->id);
@@ -1196,23 +1199,16 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if(isset($this->sequence))
 			$e->sequence=$this->sequence;
 		
-		$dtstamp = new Sabre\VObject\Property\DateTime('dtstamp');
-		$dtstamp->setDateTime(new DateTime(), Sabre\VObject\Property\DateTime::UTC);		
-		//$dtstamp->offsetUnset('VALUE');
-		$e->add($dtstamp);
+		$e->add('dtstamp', new DateTime("now", new DateTimeZone('UTC')));
 		
 		$mtimeDateTime = new DateTime('@'.$this->mtime);
-		$lm = new Sabre\VObject\Property\DateTime('LAST-MODIFIED');
-		$lm->setDateTime($mtimeDateTime, Sabre\VObject\Property\DateTime::UTC);		
-		//$lm->offsetUnset('VALUE');
-		$e->add($lm);
-		
+		$mtimeDateTime->setTimezone(new DateTimeZone('UTC'));		
+		$e->add('LAST-MODIFIED', $mtimeDateTime);
+				
 		$ctimeDateTime = new DateTime('@'.$this->mtime);
-		$ct = new Sabre\VObject\Property\DateTime('created');
-		$ct->setDateTime($ctimeDateTime, Sabre\VObject\Property\DateTime::UTC);		
-		//$ct->offsetUnset('VALUE');
-		$e->add($ct);
-		
+		$ctimeDateTime->setTimezone(new DateTimeZone('UTC'));
+		$e->add('created', $ctimeDateTime);
+	
     $e->summary = (string) $this->name;
 		
 //		switch($this->owner_status){
@@ -1230,7 +1226,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$e->status = $this->status;
 		
 		
-		$dateType = $this->all_day_event ? Sabre\VObject\Property\DateTime::DATE : Sabre\VObject\Property\DateTime::LOCALTZ;
+		$dateType = $this->all_day_event ? "DATE" : "DATETIME";
 		
 		if($this->all_day_event)
 			$e->{"X-FUNAMBOL-ALLDAY"}=1;
@@ -1244,17 +1240,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			}
 		}
 		if($recurrenceTime){
-			$recurrenceId =new Sabre\VObject\Property\DateTime("recurrence-id",$dateType);
-			$dt = GO_Base_Util_Date_DateTime::fromUnixtime($recurrenceTime);
-			$recurrenceId->setDateTime($dt);
-			$e->add($recurrenceId);
+			$dt = GO_Base_Util_Date_DateTime::fromUnixtime($recurrenceTime);			
+			$e->add('recurrence-id', $dt, array('type'=>$dateType));
 		}
+	
 		
+		$e->add('dtstart', GO_Base_Util_Date_DateTime::fromUnixtime($this->start_time), array('type'=>$dateType));
 		
-		$dtstart = new Sabre\VObject\Property\DateTime('dtstart',$dateType);
-		$dtstart->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->start_time), $dateType);		
-		//$dtstart->offsetUnset('VALUE');
-		$e->add($dtstart);
 		
 		if($this->all_day_event){
 			$end_time = GO_Base_Util_Date::clear_time($this->end_time);			
@@ -1263,12 +1255,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$end_time = $this->end_time;
 		}
 		
-		
-		
-		$dtend = new Sabre\VObject\Property\DateTime('dtend',$dateType);
-		$dtend->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($end_time), $dateType);		
-		//$dtend->offsetUnset('VALUE');
-		$e->add($dtend);
+		$e->add('dtend', GO_Base_Util_Date_DateTime::fromUnixtime($end_time), array('type'=>$dateType));
 
 		if(!empty($this->description))
 			$e->description=$this->description;
@@ -1289,10 +1276,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 			$stmt = $this->exceptions($findParams);
 			while($exception = $stmt->fetch()){
-				$exdate = new Sabre\VObject\Property\DateTime('exdate',Sabre\VObject\Property\DateTime::DATE);
+//				$exdate = new Sabre\VObject\Property\DateTime('exdate',Sabre\VObject\Property\DateTime::DATE);
 				$dt = GO_Base_Util_Date_DateTime::fromUnixtime($exception->getStartTime());				
-				$exdate->setDateTime($dt);		
-				$e->add($exdate);
+//				$exdate->setDateTime($dt);		
+				$e->add('exdate',$dt, array('type'=>'DATE'));
 			}
 		}
 		
@@ -1301,21 +1288,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		while($participant=$stmt->fetch()){
 			
 			if($participant->is_organizer || $method=='REQUEST' || ($updateByParticipant && $updateByParticipant->id==$participant->id)){
-				//var_dump($participant->email);
-				if($participant->is_organizer){
-					$p = new Sabre\VObject\Property('organizer','mailto:'.$participant->email);				
-				}else
-				{
-					$p = new Sabre\VObject\Property('attendee','mailto:'.$participant->email);				
-				}
-				$p['CN']=$participant->name;
-				$p['RSVP']="true";
-				$p['PARTSTAT']=$this->_exportVObjectStatus($participant->status);
-	
 				//If this is a meeting REQUEST then we must send all participants.
 				//For a CANCEL or REPLY we must send the organizer and the current user.
-			
-				$e->add($p);
+				$e->add($participant->is_organizer ? 'organizer' : 'attendee', 'mailto:'.$participant->email, array(
+						'cn'=>$participant->name,
+						'rsvp'=>'true',
+						'partstat'=>$this->_exportVObjectStatus($participant->status)
+				));
 			}
 		}
 		
@@ -1332,13 +1311,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 //TRIGGER;VALUE=DURATION:-PT5M
 //DESCRIPTION:Default Mozilla Description
 //END:VALARM
-			$a=new Sabre\VObject\Component('valarm');
-			$a->action='DISPLAY';
-			$trigger = new Sabre\VObject\Property('trigger','-PT'.($this->reminder/60).'M');
-			$trigger['VALUE']='DURATION';
-			$a->add($trigger);
-			$a->description="Alarm";
-			
+			$a=$calendar->createComponent('VALARM');
+			$a->action='DISPLAY';			
+			$a->add('trigger','-PT'.($this->reminder/60).'M', array('value'=>'DURATION'));			
+			$a->description="Alarm";			
 			$e->add($a);
 						
 			//for funambol compatibility, the GO_Base_VObject_Reader class use this to convert it to a vcalendar 1.0 aalarm tag.
@@ -1514,8 +1490,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}elseif($vobject->aalarm){ //funambol sends old vcalendar 1.0 format
 			$aalarm = explode(';', (string) $vobject->aalarm);
 			if(isset($aalarm[0])) {				
-				$p = Sabre\VObject\Property\DateTime::parseData($aalarm[0]);
-				$this->reminder = $this->start_time-$p[1]->format('U');
+				$p = Sabre\VObject\DateTimeParser::parse($aalarm[0]);
+				$this->reminder = $this->start_time-$p->format('U');
 			}
 		
 		}else
@@ -1664,13 +1640,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 			if($vobject->exdate){
 				if (strpos($vobject->exdate,';')!==false) {
-					$timesArr = explode(';',$vobject->exdate->value);
+					$timesArr = explode(';',$vobject->exdate->getValue());
 					$exDateTimes = array();
 					foreach ($timesArr as $time) {
-						list(
-								$dateType,
-								$dateTime
-						) =  Sabre\VObject\Property\DateTime::parseData($time,$vobject->exdate);
+						$dateTime = Sabre\VObject\DateTimeParser::parse($time);
 						$this->addException($dateTime->format('U'));
 					}
 				} else {

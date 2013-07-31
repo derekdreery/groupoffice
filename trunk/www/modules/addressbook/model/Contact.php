@@ -494,13 +494,13 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		foreach ($vobject->children as $vobjProp) {
 			switch ($vobjProp->name) {
 				case 'PHOTO':					
-					if(!empty($vobjProp->value)){
+					if($vobjProp->getValue()){
 						$photoFile = GO_Base_Fs_File::tempFile('','jpg');
-						$photoFile->putContents(base64_decode($vobjProp->value));
+						$photoFile->putContents(base64_decode($vobjProp->getValue()));
 					}
 					break;
 				case 'N':
-					$nameArr = explode(';',$vobjProp->value);
+					$nameArr = explode(';',$vobjProp->getValue());
 					if(isset($nameArr[0]))
 						$attributes['last_name'] = $nameArr[0];
 					if(isset($nameArr[1]))
@@ -514,8 +514,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 					break;
 				case 'ORG':
 					$companyAttributes['name'] =  null;
-					if (!empty($vobjProp->value)) {
-						$compNameArr = explode(';',$vobjProp->value);
+					if ($vobjProp->getValue()) {
+						$compNameArr = explode(';',$vobjProp->getValue());
 						if (!empty($compNameArr[0]))
 							$companyAttributes['name'] = $compNameArr[0];
 						if (!empty($compNameArr[1]))
@@ -525,42 +525,43 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 					}
 					break;
 //				case 'TITLE':
-//					$attributes['title'] = !empty($vobjProp->value) ? $vobjProp->value : null;
+//					$attributes['title'] = $vobjProp->getValue() ? $vobjProp->getValue() : null;
 //					break;
 				case 'TEL':
-					if(!empty($vobjProp->value)){
+					if($vobjProp->getValue()){
 						$types = array();
 						foreach ($vobjProp->parameters as $param) {
 							if ($param->name=='TYPE')
-								$types = explode(',',strtolower($param->value));							
+								$types = explode(',',strtolower($param->getValue()));							
 						}
+						GO_Syncml_Server::debug($types);
 						if(in_array('work',$types) && ( in_array('voice',$types) || count($types)==1 ) ) {
-							$attributes['work_phone'] = $vobjProp->value;
-							$companyAttributes['phone'] = $vobjProp->value;
+							$attributes['work_phone'] = $vobjProp->getValue();
+							$companyAttributes['phone'] = $vobjProp->getValue();
 						}
 						if(in_array('cell',$types) && ( in_array('voice',$types) || count($types)==1 ) ) {
 							if (empty($attributes['cellular']))
-								$attributes['cellular'] = $vobjProp->value;
+								$attributes['cellular'] = $vobjProp->getValue();
 							elseif (empty($attributes['cellular2']))
-								$attributes['cellular2'] = $vobjProp->value;
+								$attributes['cellular2'] = $vobjProp->getValue();
 						}
 						if(in_array('fax',$types) && in_array('home',$types))
-							$attributes['fax'] = $vobjProp->value;
+							$attributes['fax'] = $vobjProp->getValue();
 						if(in_array('fax',$types) && in_array('work',$types)) {
-							$companyAttributes['fax'] = $vobjProp->value;
-							$attributes['work_fax'] = $vobjProp->value;
+							$companyAttributes['fax'] = $vobjProp->getValue();
+							$attributes['work_fax'] = $vobjProp->getValue();
 						}
 						if(in_array('home',$types) && ( in_array('voice',$types) || count($types)==1 ) )
-							$attributes['home_phone'] = $vobjProp->value;
+							$attributes['home_phone'] = $vobjProp->getValue();
 					}
 //					foreach ($vobjProp->parameters as $param) {
 //						if ($param['name']=='TYPE') {
 //							switch (susbstr($param['value'],0,4)) {
 //								case 'work':
-//									$attributes['work_phone'] = $vobjProp->value;
+//									$attributes['work_phone'] = $vobjProp->getValue();
 //									break;
 //								default:
-//									$attributes['home_phone'] = $vobjProp->value;
+//									$attributes['home_phone'] = $vobjProp->getValue();
 //									break;
 //							}
 //						}
@@ -570,17 +571,16 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 				case 'ADR':
 					$types = array();
 					
-					
+					GO_Syncml_Server::debug("VALUE: ".$vobjProp->getValue());
 					
 					
 					foreach ($vobjProp->parameters as $param) {
 						if ($param->name=='TYPE')
-							$types = explode(',',strtolower($param->value));						
+							$types = explode(',',strtolower($param->getValue()));			
 					}
 					
-					
 					if(in_array('work',$types)) {
-						$addrArr = explode(';',$vobjProp->value);
+						$addrArr = explode(';',$vobjProp->getValue());
 						if(isset($addrArr[2]))
 							$companyAttributes['address'] = $addrArr[2];
 						if(isset($addrArr[3]))
@@ -593,7 +593,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 							$companyAttributes['country'] = $addrArr[6];
 					}
 					if(in_array('home',$types)) {
-						$addrArr = explode(';',$vobjProp->value);
+						$addrArr = explode(';',$vobjProp->getValue());
 						if(isset($addrArr[2]))
 							$attributes['address'] = $addrArr[2];
 						if(isset($addrArr[3]))
@@ -609,7 +609,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 					
 					
 					if(empty($types)){
-						$addrArr = explode(';',$vobjProp->value);
+						$addrArr = explode(';',$vobjProp->getValue());
 						if(isset($addrArr[2]))
 							$companyAttributes['post_address'] = $addrArr[2];
 						if(isset($addrArr[3]))
@@ -625,31 +625,31 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 				case 'EMAIL':
 //					foreach ($vobjProp->parameters as $param) {
 //						if ($param->name=='TYPE')
-//							$types = explode(',',strtolower($param->value));
+//							$types = explode(',',strtolower($param->getValue()));
 //						else
 //							$types = array();
 //					}
 //					if(in_array('pref',$types)) {
-//						$attributes['email'] = $vobjProp->value;
+//						$attributes['email'] = $vobjProp->getValue();
 //					} elseif(in_array('home',$types)) {
-//						$attributes['email2'] = $vobjProp->value;
+//						$attributes['email2'] = $vobjProp->getValue();
 //					} elseif(in_array('work',$types)) {
-//						$attributes['email3'] = $vobjProp->value;
+//						$attributes['email3'] = $vobjProp->getValue();
 //					} else {
-//						$attributes['email'] = $vobjProp->value;
+//						$attributes['email'] = $vobjProp->getValue();
 //					}
-					if(!empty($vobjProp->value))
-						$emails[]=$vobjProp->value;
+					if($vobjProp->getValue())
+						$emails[]=$vobjProp->getValue();
 					break;
 				case 'TITLE':
-					$attributes['function'] = $vobjProp->value;
+					$attributes['function'] = $vobjProp->getValue();
 					break;
 				case 'BDAY':
-					if(!empty($vobjProp->value))
-						$attributes['birthday'] = substr($vobjProp->value,0,4).'-'.substr($vobjProp->value,5,2).'-'.substr($vobjProp->value,8,2);
+					if($vobjProp->getValue())
+						$attributes['birthday'] = substr($vobjProp->getValue(),0,4).'-'.substr($vobjProp->getValue(),5,2).'-'.substr($vobjProp->getValue(),8,2);
 					break;				
 				case 'NOTE':
-					$attributes['comment'] = $vobjProp->value;
+					$attributes['comment'] = $vobjProp->getValue();
 					break;
 				case 'VERSION':
 				case 'LAST-MODIFIED':
@@ -659,7 +659,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 					foreach ($vobjProp->parameters as $param) {
 						$paramsArr[] = $param->serialize();
 					}
-//					$remainingVcardProps[] = array('name' => $vobjProp->name, 'parameters'=>implode(';',$paramsArr), 'value'=>$vobjProp->value);					
+//					$remainingVcardProps[] = array('name' => $vobjProp->name, 'parameters'=>implode(';',$paramsArr), 'value'=>$vobjProp->getValue());					
 					break;
 			}
 		}
@@ -819,7 +819,9 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 * @return Sabre_VObject_Component 
 	 */
 	public function toVObject(){
-		$e=new Sabre\VObject\Component('vcard');
+		
+		
+		$e=new Sabre\VObject\Component\VCard();
 					
 		$e->add('VERSION','3.0');
 		$e->prodid='-//Intermesh//NONSGML Group-Office '.GO::config()->version.'//EN';		
@@ -830,79 +832,105 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		}
 		
 		$e->uid=$this->uuid;
-		$e->add('N',$this->last_name.";".$this->first_name.";".$this->middle_name.';'.$this->title.';'.$this->suffix);
+		$e->add('N',array($this->last_name,$this->first_name,$this->middle_name,$this->title,$this->suffix));
 		$e->add('FN',$this->name);
 		
 		if (!empty($this->email)) {
-			$p = new Sabre\VObject\Property('EMAIL',$this->email);
-			$p->add(new GO_Base_VObject_Parameter('TYPE','INTERNET'));
-			$e->add($p);
+//			$p = new Sabre\VObject\Property('EMAIL',$this->email);
+//			$p->add(new GO_Base_VObject_Parameter('TYPE','INTERNET'));
+//			$e->add($p);
+			$e->add('email'.$this->email, array('type'=>array('INTERNET')));
+			
 		}
 		if (!empty($this->email2)) {
-			$p = new Sabre\VObject\Property('EMAIL',$this->email2);
-			$p->add(new GO_Base_VObject_Parameter('TYPE','HOME,INTERNET'));
-			$e->add($p);
+//			$p = new Sabre\VObject\Property('EMAIL',$this->email2);
+//			$p->add(new GO_Base_VObject_Parameter('TYPE','HOME,INTERNET'));
+//			$e->add($p);
+			
+			$e->add('email'.$this->email2, array('type'=>array('HOME','INTERNET')));
 		}
 		if (!empty($this->email3)) {
-			$p = new Sabre\VObject\Property('EMAIL',$this->email3);
-			$p->add(new GO_Base_VObject_Parameter('TYPE','WORK,INTERNET'));
-			$e->add($p);
+//			$p = new Sabre\VObject\Property('EMAIL',$this->email3);
+//			$p->add(new GO_Base_VObject_Parameter('TYPE','WORK,INTERNET'));
+//			$e->add($p);
+			
+			$e->add('email'.$this->email3, array('type'=>array('WORK','INTERNET')));
 		}
 		
 		if (!empty($this->function))
 			$e->add('TITLE',$this->function);
 		
 		if (!empty($this->home_phone)) {
-			$p = new Sabre\VObject\Property('TEL',$this->home_phone);
-			$p->add(new GO_Base_VObject_Parameter('TYPE','HOME,VOICE'));
-			$e->add($p);	
+//			$p = new Sabre\VObject\Property('TEL',$this->home_phone);
+//			$p->add(new GO_Base_VObject_Parameter('TYPE','HOME,VOICE'));
+//			$e->add($p);
+			
+			$e->add('TEL',$this->home_phone, array('type'=>array('HOME','VOICE')));
 		}
 		if (!empty($this->work_phone)) {
-			$p = new Sabre\VObject\Property('TEL',$this->work_phone);
-			$p->add(new GO_Base_VObject_Parameter('TYPE','WORK,VOICE'));
-			$e->add($p);	
+//			$p = new Sabre\VObject\Property('TEL',$this->work_phone);
+//			$p->add(new GO_Base_VObject_Parameter('TYPE','WORK,VOICE'));
+//			$e->add($p);	
+			
+			$e->add('TEL',$this->work_phone, array('type'=>array('WORK','VOICE')));
 		}
 		if (!empty($this->work_fax)) {
-			$p = new Sabre\VObject\Property('TEL',$this->work_fax);
-			$p->add(new GO_Base_VObject_Parameter('TYPE','WORK,FAX'));
-			$e->add($p);	
+//			$p = new Sabre\VObject\Property('TEL',$this->work_fax);
+//			$p->add(new GO_Base_VObject_Parameter('TYPE','WORK,FAX'));
+//			$e->add($p);	
+			
+			$e->add('TEL',$this->work_fax, array('type'=>array('WORK','FAX')));
 		}
 		if (!empty($this->fax)) {
-			$p = new Sabre\VObject\Property('TEL',$this->fax);
-			$p->add(new GO_Base_VObject_Parameter('TYPE','HOME,FAX'));
-			$e->add($p);	
+//			$p = new Sabre\VObject\Property('TEL',$this->fax);
+//			$p->add(new GO_Base_VObject_Parameter('TYPE','HOME,FAX'));
+//			$e->add($p);	
+			
+			$e->add('TEL',$this->fax, array('type'=>array('HOME','FAX')));
 		}
 		if (!empty($this->cellular)) {
-			$p = new Sabre\VObject\Property('TEL',$this->cellular);
-			$p->add(new GO_Base_VObject_Parameter('TYPE','CELL,VOICE'));
-			$e->add($p);	
+//			$p = new Sabre\VObject\Property('TEL',$this->cellular);
+//			$p->add(new GO_Base_VObject_Parameter('TYPE','CELL,VOICE'));
+//			$e->add($p);	
+			
+			$e->add('TEL',$this->cellular, array('type'=>array('CELL','VOICE')));
 		}
 		if (!empty($this->cellular2)) {
-			$p = new Sabre\VObject\Property('TEL',$this->cellular2);
-			$p->add(new GO_Base_VObject_Parameter('TYPE','CELL,VOICE'));
-			$e->add($p);	
+//			$p = new Sabre\VObject\Property('TEL',$this->cellular2);
+//			$p->add(new GO_Base_VObject_Parameter('TYPE','CELL,VOICE'));
+//			$e->add($p);	
+			
+			$e->add('TEL',$this->cellular2, array('type'=>array('CELL','VOICE')));
 		}
 		if (!empty($this->birthday)) {
 			$e->add('BDAY',$this->birthday);
 		}
 		
 		if (!empty($this->company)) {
-			$e->add('ORG',$this->company->name.';'.$this->department.';'.$this->company->name2);
-			$p = new Sabre\VObject\Property('ADR',';;'.$this->company->address.' '.$this->company->address_no.';'.
-				$this->company->city.';'.$this->company->state.';'.$this->company->zip.';'.$this->company->country);
-			$p->add('TYPE','WORK');
-			$e->add($p);
+//			$e->add('ORG',$this->company->name,$this->department,$this->company->name2);
+//			$p = new Sabre\VObject\Property('ADR',';;'.$this->company->address.' '.$this->company->address_no,
+//				$this->company->city,$this->company->state,$this->company->zip,$this->company->country);
+//			$p->add('TYPE','WORK');
+//			$e->add($p);
 			
+			$e->add('ORG',array($this->company->name,$this->department,$this->company->name2));
+			$e->add('ADR',array('','',$this->company->address.' '.$this->company->address_no,$this->company->city,$this->company->state,$this->company->zip,$this->company->country),array('type'=>'work'));
 			
-			$p = new Sabre\VObject\Property('ADR',';;'.$this->company->post_address.' '.$this->company->post_address_no.';'.
-				$this->company->post_city.';'.$this->company->post_state.';'.$this->company->post_zip.';'.$this->company->post_country);
-			$e->add($p);
+//			$p = new Sabre\VObject\Property('ADR',';;'.$this->company->post_address.' '.$this->company->post_address_no,
+//				$this->company->post_city,$this->company->post_state,$this->company->post_zip,$this->company->post_country);
+//			$e->add($p);
+			$e->add('ADR',array('','',$this->company->post_address.' '.$this->company->post_address_no,
+				$this->company->post_city,$this->company->post_state,$this->company->post_zip,$this->company->post_country),array('type'=>'work'));
+			
 		}
 		
-		$p = new Sabre\VObject\Property('ADR',';;'.$this->address.' '.$this->address_no.';'.
-			$this->city.';'.$this->state.';'.$this->zip.';'.$this->country);
-		$p->add('TYPE','HOME');
-		$e->add($p);
+//		$p = new Sabre\VObject\Property('ADR',';;'.$this->address.' '.$this->address_no,
+//			$this->city,$this->state,$this->zip,$this->country);
+//		$p->add('TYPE','HOME');
+//		$e->add($p);
+//		
+		$e->add('ADR',array('','',$this->address.' '.$this->address_no,
+			$this->city,$this->state,$this->zip,$this->country),array('type'=>'work'));
 		
 		if(!empty($this->comment)){
 			$e->note=$this->comment;
@@ -917,10 +945,12 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		
 		
 		if($this->getPhotoFile()->exists()){
-			$p = new Sabre\VObject\Property('photo', base64_encode($this->getPhotoFile()->getContents()));
-			$p->add('type','jpeg');
-			$p->add('encoding','b');
-			$e->add($p);	
+//			$p = new Sabre\VObject\Property('photo', base64_encode($this->getPhotoFile()->getContents()));
+//			$p->add('type','jpeg');
+//			$p->add('encoding','b');
+//			$e->add($p);	
+			
+			$e->add('photo', base64_encode($this->getPhotoFile()->getContents()),array('type'=>'jpeg','encoding'=>'b'));	
 		}
 		
 //		$propModels = $this->vcardProperties->fetchAll(PDO::FETCH_ASSOC);
@@ -935,7 +965,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 //
 //						$param = new GO_Base_VObject_Parameter($paramStringArr[0]);
 //						if (!empty($paramStringArr[1]))
-//							$param->value = $paramStringArr[1];
+//							$param->getValue() = $paramStringArr[1];
 //						$p->add($param);
 //					}
 //				}

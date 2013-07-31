@@ -279,41 +279,51 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	 * @return Sabre\VObject\Component 
 	 */
 	public function toVObject(){
-		$e=new Sabre\VObject\Component('vtodo');
+		
+		$calendar = new Sabre\VObject\Component\VCalendar();
+		$e=$calendar->createComponent('VTODO');
+		
 		$e->uid=$this->uuid;	
 		
-		$dtstamp = new Sabre\VObject\Property\DateTime('dtstamp');
-		$dtstamp->setDateTime(new DateTime(), Sabre\VObject\Property\DateTime::UTC);		
-		$e->add($dtstamp);
+		$e->add('dtstamp', new DateTime("now", new DateTimeZone('UTC')));
 		
 		$mtimeDateTime = new DateTime('@'.$this->mtime);
-		$lm = new Sabre\VObject\Property\DateTime('LAST-MODIFIED');
-		$lm->setDateTime($mtimeDateTime, Sabre\VObject\Property\DateTime::UTC);		
-		$e->add($lm);
-		
+		$mtimeDateTime->setTimezone(new DateTimeZone('UTC'));		
+		$e->add('LAST-MODIFIED', $mtimeDateTime);
+				
 		$ctimeDateTime = new DateTime('@'.$this->mtime);
-		$ct = new Sabre\VObject\Property\DateTime('created');
-		$ct->setDateTime($ctimeDateTime, Sabre\VObject\Property\DateTime::UTC);		
-		$e->add($ct);
+		$ctimeDateTime->setTimezone(new DateTimeZone('UTC'));
+		$e->add('created', $ctimeDateTime);
 		
     $e->summary = $this->name;
 		
 		$e->status = $this->status;
 		
-		$dateType = Sabre\VObject\Property\DateTime::DATE;
+		$dateType = "DATE";
 		
-		$dtstart = new Sabre\VObject\Property\DateTime('dtstart',$dateType);
-		$dtstart->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->start_time));		
-		$e->add($dtstart);
+//		$dtstart = new Sabre\VObject\Property\DateTime('dtstart',$dateType);
+//		$dtstart->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->start_time));		
+//		$e->add($dtstart);
+//		
+		$e->add('dtstart', GO_Base_Util_Date_DateTime::fromUnixtime($this->start_time), array('type'=>$dateType));
 		
-		$due = new Sabre\VObject\Property\DateTime('due',$dateType);
-		$due->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->due_time));		
-		$e->add($due);
+		
+		
+//		$due = new Sabre\VObject\Property\DateTime('due',$dateType);
+//		$due->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->due_time));		
+//		$e->add($due);
+		
+		$e->add('due', GO_Base_Util_Date_DateTime::fromUnixtime($this->due_time), array('type'=>$dateType));
+		
+		
 		
 		if($this->completion_time>0){
-			$completed = new Sabre\VObject\Property\DateTime('completed',Sabre\VObject\Property\DateTime::LOCALTZ);
-			$completed->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->completion_time));		
-			$e->add($completed);
+//			$completed = new Sabre\VObject\Property\DateTime('completed',Sabre\VObject\Property\DateTime::LOCALTZ);
+//			$completed->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->completion_time));		
+//			$e->add($completed);
+			
+			$e->add('completed', GO_Base_Util_Date_DateTime::fromUnixtime($this->completion_time), array('type'=>$dateType));
+		
 		}
 		
 		if(!empty($this->description))
