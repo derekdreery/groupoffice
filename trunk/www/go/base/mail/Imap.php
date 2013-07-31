@@ -1962,22 +1962,62 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 * @return string
 	 */
 
-	public function get_message_part_decoded($uid, $part_no, $encoding, $charset=false, $peek=false, $cutofflength=false) {
+	public function get_message_part_decoded($uid, $part_no, $encoding, $charset=false, $peek=false, $cutofflength=false, $fp=false) {
 		GO::debug("get_message_part_decoded($uid, $part_no, $encoding, $charset)");
 		
 		$str = '';
 		$this->get_message_part_start($uid, $part_no, $peek);	
 		
+		
+		$leftOver='';
+		
 		while ($line = $this->get_message_part_line()) {
+			
 			switch (strtolower($encoding)) {
 				case 'base64':
-					$str .= base64_decode($line);
+					
+					if(strlen($line) % 4 == 0){
+						if(!$fp){
+							$str .= base64_decode($line);
+						}  else {
+							fputs($fp, base64_decode($line));
+						}
+					}else{
+						$line = trim($leftOver.$line);
+
+						$buffer = "";					
+						while(strlen($line)>4){
+							$buffer .= substr($line, 0, 4);
+							$line = substr($line, 4);
+						}
+
+						if(!$fp){
+							$str .= base64_decode($buffer);
+						}  else {
+							fputs($fp, base64_decode($buffer));
+						}
+
+						if(strlen($line)){
+							$leftOver = $line;
+						}else
+						{
+							$leftOver = "";
+						}
+					}
 					break;
 				case 'quoted-printable':
-					$str .= quoted_printable_decode($line);
+					if(!$fp){
+						$str .= quoted_printable_decode($line);
+					}else{
+						fputs($fp, quoted_printable_decode($line));
+					}
 					break;
-				default:
-					$str .= $line;
+				default:					
+					if(!$fp){
+						$str .= $line;
+					}else{
+						fputs($fp, $line);
+					}
 					break;
 			}
 			
@@ -1985,6 +2025,8 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				break;
 			}	
 		}
+		
+		
 		
 		if($charset){
 
@@ -1998,11 +2040,11 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			}
 		}
 		
-		return $str;
+		return $fp ? true : $str;
 		
 		
 //		return $this->decode_message_part(
-//						$this->get_message_part($uid, $part_no, $peek, $max),
+//						$this->get_message_part($uid, $part_no, $peek, $cutofflength),
 //						$encoding,
 //						$charset
 //		);
@@ -2155,25 +2197,28 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			
 			$imap_part_id='TEXT';
 		}
-
-		$size = $this->get_message_part_start($uid,$imap_part_id, $peek);
 		
-		if(!$size)
-			return false;
+		
+		$this->get_message_part_decoded($uid, $imap_part_id, $encoding, false, false, false, $fp);
 
-		while($line = $this->get_message_part_line()){
-			switch(strtolower($encoding)) {
-				case 'base64':
-					$line=base64_decode($line);
-					break;
-				case 'quoted-printable':
-					$line= quoted_printable_decode($line);
-					break;
-			}
-						
-			if($line != "" && !fputs($fp, $line))
-				return false;
-		}
+//		$size = $this->get_message_part_start($uid,$imap_part_id, $peek);
+//		
+//		if(!$size)
+//			return false;
+//
+//		while($line = $this->get_message_part_line()){
+//			switch(strtolower($encoding)) {
+//				case 'base64':
+//					$line=base64_decode($line);
+//					break;
+//				case 'quoted-printable':
+//					$line= quoted_printable_decode($line);
+//					break;
+//			}
+//						
+//			if($line != "" && !fputs($fp, $line))
+//				return false;
+//		}
 
 		fclose($fp);
 

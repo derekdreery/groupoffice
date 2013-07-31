@@ -1,6 +1,10 @@
+<<<<<<< .working
 - Added recursive search for Imap folders
 - VoIP will rewrite tel: links to callto: in Firefox in Windows
 
+
+- Check if base64 encoded strings can be divided by 4 if decoded line by line to 
+  avoid corrupted mails.
 
 29-07-2013 4.2.9
 - support for z-push without storing passwords

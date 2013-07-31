@@ -1475,21 +1475,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 		GO_Base_Util_Http::outputDownloadHeaders($file,$inline,true);
 		
-		$imap = $account->openImapConnection($params['mailbox']);		
-		$imap->get_message_part_start($params['uid'], $params['number']);
-		while ($line = $imap->get_message_part_line()) {
-			switch (strtolower($params['encoding'])) {
-				case 'base64':
-					echo base64_decode($line);
-					break;
-				case 'quoted-printable':
-					echo quoted_printable_decode($line);
-					break;
-				default:
-					echo $line;
-					break;
-			}
-		}
+		$imap = $account->openImapConnection($params['mailbox']);				
+		$fp =fopen("php://output",'w');
+		$imap->get_message_part_decoded($params['uid'], $params['number'], $params['encoding'], false, false, false, $fp);
+		fclose($fp);
 	}
 
 //	Z-push testing
