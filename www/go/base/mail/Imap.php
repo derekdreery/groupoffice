@@ -2026,6 +2026,14 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			}	
 		}
 		
+		if(!empty($leftOver))
+		{
+			if(!$fp){
+				$str .= base64_decode($leftOver);
+			}  else {
+				fputs($fp, base64_decode($leftOver));
+			}
+		}
 		
 		
 		if($charset){
