@@ -237,11 +237,11 @@
 #headerLeft{
 	float: left;
 	padding: 20px;
-	width: 60%;
+	/*width: 60%;*/
 }
 #headerRight {
 	float: right;
-	padding: 20px;
+	padding: 20px 20px 20px 0px;
 	height: 46px;
 }
 
