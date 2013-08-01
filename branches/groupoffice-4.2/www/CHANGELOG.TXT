@@ -1,3 +1,4 @@
+- Address Book module: It is now possible to export all hidden fields into CSV, HTML and PDF.
 - Check if base64 encoded strings can be divided by 4 if decoded line by line to 
   avoid corrupted mails.
 
