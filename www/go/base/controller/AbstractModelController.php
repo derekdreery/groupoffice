@@ -941,7 +941,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$this->beforeStore($response, $params, $store);
 		$this->prepareStore($store);
 		
-		$storeParams = $store->getDefaultParams($params)->mergeWith($this->getStoreParams($params));
+		$storeParams = $store->getDefaultParams($params)->mergeWith($this->getStoreParams($params));		
 		$this->beforeStoreStatement($response, $params, $store, $storeParams);
 		
 		$this->afterStore($response, $params, $store, $storeParams);
@@ -950,13 +950,14 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$this->formatColumns($columnModel);		
 		
 		
-		if(!empty($params['columns'])) {
+		if(!$includeHidden && !empty($params['columns'])) {
 			$includeColumns = explode(',',$params['columns']);
+			
 			foreach($includeColumns as $incColumn){
 				if(!$columnModel->getColumn($incColumn))
 					$columnModel->addColumn (new GO_Base_Data_Column($incColumn,$incColumn));
 			}
-				
+			
 			$columnModel->sort($includeColumns);
 			
 			foreach($columnModel->getColumns() as $c){
@@ -967,6 +968,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$extraParams = empty($params['params']) ? array() : json_decode($params['params'], true);
 
 		$this->beforeExport($store, $columnModel,$model, $findParams, $showHeader, $humanHeaders, $title, $orientation, $extraParams);
+
+		if ($includeHidden) {
+			$select = $storeParams->getParam('fields');
+			$findParams->select('t.*,cf.*,'.$select);
+		}
 		
 		if(!empty($params['type']))
 			$export = new $params['type']($store, $columnModel,$model, $findParams, $showHeader, $humanHeaders, $title, $orientation, $extraParams);
