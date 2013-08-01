@@ -125,7 +125,7 @@ class GO_Base_Util_Date {
 //			$date_separator=GO::user() ? GO::user()->date_separator : GO::config()->default_date_separator;
 //		}
 
-		if(GO::user()->date_format=='mdY')
+		if(GO::user() && GO::user()->date_format=='mdY')
 			$date_string = str_replace(array('-','.'),array('/','/'),$date_string);
 		else
 			$date_string = str_replace(array('/','.'),array('-','-'),$date_string);
