@@ -32,6 +32,6 @@
 #close-ticket-button { font-family: arial; font-size: 12px; background-color: inherit; display: inline; border:0px; cursor: pointer; color:blue;text-decoration: underline; padding:0px; margin: 0px;}
 #close-ticket-button:hover {text-decoration: underline;}
 
-#submit-ticket-button { width:100px!important;}
+#submit-ticket-button { width:120px!important;}
 
 #back-to-overview-button {}
