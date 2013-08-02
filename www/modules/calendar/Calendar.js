@@ -1249,7 +1249,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			else
 				this.displayType=this.lastCalendarDisplayType;
 		}
-
+	
 		var saveState = config.days && config.days!=this.state.days || config.displayType && config.displayType!=this.state.displayType;
 
 		this.state.displayType=this.displayType;
@@ -1400,6 +1400,10 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			this.saveState();
 		}		
 		
+		this.clearGrids(config);
+	},
+	
+	clearGrids : function(config){
 		var selectGrid, clearGrids=[];
 		if(this.view_id>0){
 			selectGrid = this.viewsList;
@@ -1416,14 +1420,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			this.viewsList.getSelectionModel().clearSelections();
 			
 			if(this.group_id==1){
-				if(this.project_id>0){
-					clearGrids.push(this.calendarList);
-					selectGrid = this.projectCalendarsList;
-				}else {
-					if(this.projectCalendarsList)
-						clearGrids.push(this.projectCalendarsList);
-					selectGrid = this.calendarList;
-				}
+				
+				selectGrid = this.calendarList;				
 				this.resourcesList.getSelectionModel().clearSelections();
 
 				selectGrid.expand();
@@ -1433,9 +1431,6 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			}else
 			{
 				clearGrids.push(this.calendarList);
-				if(this.projectCalendarsList)
-					clearGrids.push(this.projectCalendarsList);
-
 				selectGrid = this.resourcesList;
 
 				var records=[];
