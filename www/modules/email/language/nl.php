@@ -272,4 +272,8 @@ $l["showAll"]='Toon alles';
 
 				
 $l['noname'] = 'geen naam';
+
+$l['searchIn'] = 'Zoeken in';
 $l['searchRecursive'] = 'Recursief zoeken';
+$l['currentFolder'] = 'Huidige map';
+$l['allFolders'] = 'Alle mappen';
