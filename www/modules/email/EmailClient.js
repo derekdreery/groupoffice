@@ -811,7 +811,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	{
 		grid.on("rowcontextmenu", function(grid, rowIndex, e) {
 			var coords = e.getXY();
-			if(this.messagesGrid.store.reader.jsonData.permission_level <= GO.permissionLevels.read)
+			if(this.messagesGrid.store.reader.jsonData.permission_level <= GO.permissionLevels.read || this.messagesGrid.store.reader.jsonData.multipleFolders)
 			  this.gridReadOnlyContextMenu.showAt([coords[0], coords[1]], grid.getSelectionModel().getSelections());
 			else
 			  this.gridContextMenu.showAt([coords[0], coords[1]], grid.getSelectionModel().getSelections());
