@@ -226,7 +226,10 @@ GO.addressbook.MainPanel = function(config)
 //	{
 
 		this.mailingsFilterPanel= new GO.addressbook.AddresslistsMultiSelectGrid({
-			id: 'ab-mailingsfilter-panel'
+			id: 'ab-mailingsfilter-panel',
+			region:'south',
+			split:true,
+			height:400
 		});
 
 		this.mailingsFilterPanel.on('change', function(grid, addresslist_filter){
@@ -243,20 +246,29 @@ GO.addressbook.MainPanel = function(config)
 				//delete this.companiesGrid.store.baseParams.addresslist_filter;
 			}
 		}, this);
-
+	
 		this.westPanel = new Ext.Panel({
 			layout:'accordion',
 			layoutConfig:{hideCollapseTool:true},
 			border:false,
-			region:'west',
-			width:200,
-			split:true,
-			items:[this.addressbooksGrid,this.mailingsFilterPanel],
+			region:'center',
+			height:200,
+			items:[this.addressbooksGrid],
 			id: 'ab-west-panel'
 		});
+		
+		
+		this.westPanelContainer = new Ext.Panel({
+			region:'west',
+			layout:'border',
+			width:215,
+			split:true,
+			items: [this.mailingsFilterPanel, this.westPanel]			
+		});
+		
 		config.items= [
 		this.searchPanel,
-		this.westPanel,
+		this.westPanelContainer,
 		this.tabPanel,
 		this.displayCardPanel
 		];
