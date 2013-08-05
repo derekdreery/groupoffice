@@ -116,3 +116,5 @@ $l['vacationStart']='Erster Tag dieser Nachricht';
 $l['vacationEnd']='Letzter Tag dieser Nachricht';
 $l['sieveWarning']='Es wird empfohlen, die Sieve-Filter zu benutzen, falls sie von Ihrem IMAP-Server unterstützt werden. Bitte versuchen Sie es daher zuerst über den Tab \'Sieve-Filter\'.';
 $l['stopEndError']='Am Ende muss \'Regelauswertung abbrechen\' stehen!';
+
+$l['body']='Body';
