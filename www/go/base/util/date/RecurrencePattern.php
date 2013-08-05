@@ -91,6 +91,21 @@ class GO_Base_Util_Date_RecurrencePattern{
 		}		
 	}
 	
+	
+	public function __isset($name) {
+		$getter = '_get'.ucfirst($name);
+		if(method_exists($this, $getter)){
+			return $this->$getter($name)!=null;			
+		}else
+		{
+			$var = '_'.strtolower($name);		
+			if(property_exists($this, $var))
+				return isset($this->$var);
+			else
+				return false;
+		}		
+	}
+	
 	public function getParams(){
 		return array(
 				'interval' => $this->_interval,
