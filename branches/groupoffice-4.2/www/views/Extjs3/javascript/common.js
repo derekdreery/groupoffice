@@ -308,6 +308,11 @@ GO.deleteItems = function(config)
 	}
 
 	if(config.noConfirmation || confirm(strConfirm)){
+		
+		if(config.maskEl){
+			config.maskEl.mask(GO.lang.cmdDelete);
+		}
+		
 		if(config.store)
 		{
 			//add the parameters
@@ -326,6 +331,10 @@ GO.deleteItems = function(config)
 			config.store.load({
 				params: params,
 				callback: function(){
+					
+					if(config.maskEl)
+						config.maskEl.unmask();	
+					
 					var callback;
 					if(!this.reader.jsonData.deleteSuccess)
 					{
@@ -382,6 +391,9 @@ GO.deleteItems = function(config)
 				params: config.params,
 				callback: function(options, success, response)
 				{
+					if(config.maskEl)
+						config.maskEl.unmask();	
+					
 					var callback;
 					
 					var responseParams = Ext.decode(response.responseText);
