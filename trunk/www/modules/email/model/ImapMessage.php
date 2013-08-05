@@ -95,13 +95,27 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 	 * @param sring $sortField See constants in GO_Base_Mail_Imap::SORT_*
 	 * @param boolean $descending Sort descending
 	 * @param string $query
+	 * @param string $searchIn In what folder(s) are we searching ('current', 'all', 'recursive')
 	 * @return array
 	 */
-	public function find(GO_Email_Model_Account $account, $mailbox="INBOX", $start=0, $limit=50, $sortField=GO_Base_Mail_Imap::SORT_DATE , $descending=true, $query='ALL', $recursive=false){
+	public function find(GO_Email_Model_Account $account, $mailbox="INBOX", $start=0, $limit=50, $sortField=GO_Base_Mail_Imap::SORT_DATE , $descending=true, $query='ALL', $searchIn='current'){
+		
+		$results=array();
+		if($searchIn=="all") {
+			foreach ($account->getRootMailboxes(true) as $mailbox) {
+			
+				//only search visable mailboxes not subscriptions
+				if(!$mailbox->isVisible())
+					continue;
+
+				$results = array_merge($results, $this->find($account, $mailbox->name, $start, $limit, $sortField, $descending, $query, 'recursive'));
+			}
+			return $results;
+		}
+		
 		/** @var $imap GO_Base_Mail_Imap */
 		$imap = $account->openImapConnection($mailbox);
 		$headersSet = $imap->get_message_headers_set($start, $limit, $sortField , $descending, $query);
-		$results=array();
 		foreach($headersSet as $uid=>$headers){
 			$message = GO_Email_Model_ImapMessage::model()->createFromHeaders(
 							$account, $mailbox, $headers);	
@@ -109,13 +123,13 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 			$results[]=$message;
 		}
 		//find recursive in subfolders
-		if($recursive) {
+		if($searchIn==='recursive') {
 			$delim = $imap->get_mailbox_delimiter();
 			$children = $imap->get_folders($mailbox.$delim);
 			foreach($children as $child) {
 				$subfolder = $child['name'];
 				if($subfolder!=$mailbox){
-					$results = array_merge($results, $this->find($account, $subfolder, $start, $limit, $sortField, $descending, $query, $recursive));
+					$results = array_merge($results, $this->find($account, $subfolder, $start, $limit, $sortField, $descending, $query, 'recursive'));
 				}
 			}
 		}

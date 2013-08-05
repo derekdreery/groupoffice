@@ -254,9 +254,11 @@ $l['cronEmailReminders']='Email reminders';
 $l['cronEmailRemindersDescription']='This cron handles the email reminders';
 
 $l['appointementAlreadyProcessed']='This message contains an appointment invitation that was already processed.';
-
 $l['doNotMarkAsRead'] = 'Do not automatically mark emails as read';
 $l["showAll"]='Show all';
 
 $l['noname'] = 'no name';
+$l['searchIn'] = 'Search in';
 $l['searchRecursive'] = 'Search recursive';
+$l['currentFolder'] = 'Current folder';
+$l['allFolders'] = 'All folders';

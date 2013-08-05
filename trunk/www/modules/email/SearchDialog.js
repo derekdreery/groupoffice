@@ -111,11 +111,29 @@ GO.email.SearchDialog = function(config){
 						editable: false,
 						selectOnFocus:true,
 						forceSelection: true
-					}),
-					{
-						xtype: 'xcheckbox',
-						fieldLabel: GO.email.lang['searchRecursive'],
-						name: 'searchRecursive'
+					}),{
+						xtype: 'radiogroup',
+						//hideLabel: true,
+						name: 'searchInGroup',
+						fieldLabel: GO.email.lang['searchIn'],
+						itemCls: 'x-check-group-alt',
+						columns: 1,
+						items: [
+							{
+								boxLabel: GO.email.lang['currentFolder'],
+								name: 'searchIn',
+								inputValue: 'current',
+								checked: true
+							},{
+								boxLabel: GO.email.lang['searchRecursive'],
+								name: 'searchIn',
+								inputValue: 'recursive'
+							},{
+								boxLabel: GO.email.lang['allFolders'],
+								name: 'searchIn',
+								inputValue: 'all'
+							}
+						]	
 					}
 					]
 				});
@@ -183,7 +201,8 @@ GO.email.SearchDialog = function(config){
 
 			this.hasSearch = true;
 			config.store.baseParams['query']=this.buildQuery();
-			config.store.baseParams['searchRecursive']=this.formPanel.form.findField('searchRecursive').getValue();
+			//console.log(this.formPanel.form.findField('searchInGroup').getValue());
+			config.store.baseParams['searchIn']=this.formPanel.form.findField('searchInGroup').getValue().inputValue;
 			config.store.load();
 
 			this.dialog.hide();					
