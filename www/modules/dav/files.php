@@ -41,8 +41,15 @@ $server->debugExceptions=GO::config()->debug;
 $baseUri = strpos($_SERVER['REQUEST_URI'],'files.php') ? GO::config()->host.'modules/dav/files.php/' : '/webdav/';
 $server->setBaseUri($baseUri);
 
+
+$tmpDir = GO::config()->getTempFolder()->createChild('dav',false);
+
+
+$locksDir = $tmpDir->createChild('locksdb', false);
+$locksDir->create();
+
 // Support for LOCK and UNLOCK
-$lockBackend = new Sabre\DAV\Locks\Backend\FS(GO::config()->tmpdir);
+$lockBackend = new Sabre\DAV\Locks\Backend\FS($locksDir->path());
 $lockPlugin = new Sabre\DAV\Locks\Plugin($lockBackend);
 $server->addPlugin($lockPlugin);
 
@@ -50,11 +57,14 @@ $server->addPlugin($lockPlugin);
 $browser = new Sabre\DAV\Browser\Plugin();
 $server->addPlugin($browser);
 
+// Automatically guess (some) contenttypes, based on extesion
+$server->addPlugin(new \Sabre\DAV\Browser\GuessContentType());
+
 $auth = new Sabre\DAV\Auth\Plugin($authBackend,GO::config()->product_name);
 $server->addPlugin($auth);
 
 // Temporary file filter
-$tempFF = new Sabre\DAV\TemporaryFileFilterPlugin(GO::config()->tmpdir);
+$tempFF = new Sabre\DAV\TemporaryFileFilterPlugin($tmpDir->path());
 $server->addPlugin($tempFF);
 
 // And off we go!

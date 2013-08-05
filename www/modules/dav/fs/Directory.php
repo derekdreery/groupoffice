@@ -69,6 +69,7 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Node implements Sabre\DAV\ICollec
 		if($newFile->exists())
 			throw new Exception("File already exists!");
 		
+
 		$newFile->putContents($data);
 		
 		if(!GO_Files_Model_File::checkQuota($newFile->size())){
@@ -145,6 +146,8 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Node implements Sabre\DAV\ICollec
 	 */
 	public function createDirectory($name) {
 
+		GO::debug("FSD:createDirectory($this->relpath.'/'.$name)");
+		
 		$folder = $this->_getFolder();
 
 		if (!$folder->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
@@ -184,8 +187,12 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Node implements Sabre\DAV\ICollec
 	 * @return bool
 	 */
 	public function childExists($name) {
+		
+		
 
 		$path = $this->path . '/' . $name;
+		
+		GO::debug("FSD:childExists($path)");
 
 		try {
 			if (!file_exists($path))
@@ -205,7 +212,7 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Node implements Sabre\DAV\ICollec
 	 */
 	public function getChildren() {
 
-		//GO::debug('FSD::getChildren');
+		GO::debug('FSD::getChildren ('.$this->relpath.')');
 		$nodes = array();
 		//foreach(scandir($this->path) as $node) if($node!='.' && $node!='..') $nodes[] = $this->getChild($node);
 
@@ -235,6 +242,8 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Node implements Sabre\DAV\ICollec
 	 * @return void
 	 */
 	public function delete() {
+		
+		GO::debug('FSD::delete('.$this->relpath.')');
 
 		$folder = $this->_getFolder();
 		
