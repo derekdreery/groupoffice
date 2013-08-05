@@ -1207,12 +1207,18 @@ END;
 //		Don't strip new lines or it will mess up <pre> tags
 //		$html = str_replace("\r", '', $html);
 //		$html = str_replace("\n",' ', $html);
+//		
+		//strip line breaks inside html tags
+		$html = preg_replace_callback('/<[^>]+>/sm',function($matches){
+			$replacement = str_replace("\r", '', $matches[0]);
+			return str_replace("\n",'  ', $replacement);
+		}, $html);
 
-		$regexp="/<a[^>]*href=([\"']?)(http|https|ftp|bf2)(:\/\/)(.+?)>/i";
+		$regexp="/<a[^>]*href=\s*([\"']?)(http|https|ftp|bf2)(:\/\/)(.+?)>/i";
 		$html = preg_replace($regexp, "<a target=$1_blank$1 class=$1blue$1 href=$1$2$3$4>", $html);
 		
 		if(!empty($baseUrl)){
-			$regexp="/<a[^>]*href=('|\")(?![a-z]+:)/i";
+			$regexp="/<a[^>]*href=\s*('|\")(?![a-z]+:)/i";
 			$html = preg_replace($regexp, "<a target=$1_blank$1 class=$1blue$1 href=$1".$baseUrl, $html);
 		}
 
