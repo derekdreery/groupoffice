@@ -1,3 +1,4 @@
+05-08-2013 4.2.10
 - Moved address list filter from accordion to separate panel underneath the accordion panel.
 - Fixed imap import for tickets when no subject is given in the email.
 - Address Book module: It is now possible to export all hidden fields into CSV, HTML and PDF.
@@ -9,7 +10,7 @@
 - Removed publicly visible version number
 - Updated German
 - Copy e-mail with drag and drop when holding ctrl key
-
+- Option to convert old office files in Google Drive module
 
 29-07-2013 4.2.9
 - support for z-push without storing passwords
