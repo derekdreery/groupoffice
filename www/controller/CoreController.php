@@ -705,14 +705,26 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	}
 	
 	
-	protected function actionAbout($params){
+	protected function actionAbout($params){	
+		$response['data']['about']=GO::t('about');
+		
+		if(GO::config()->product_name=='Group-Office')
+			$response['data']['about']=str_replace('{company_name}', 'Intermesh B.V.', $response['data']['about']);
+		else
+			$response['data']['about']=str_replace('{company_name}', GO::config()->product_name, $response['data']['about']);
+		
+		$response['data']['about']=str_replace('{version}', GO::config()->version, $response['data']['about']);
+		$response['data']['about']=str_replace('{current_year}', date('Y'), $response['data']['about']);
+		$response['data']['about']=str_replace('{product_name}', GO::config()->product_name, $response['data']['about']);
+
+		
 		$response['data']['mailbox_usage']=GO::config()->get_setting('mailbox_usage');
 		$response['data']['file_storage_usage']=GO::config()->get_setting('file_storage_usage');
 		$response['data']['database_usage']=GO::config()->get_setting('database_usage');
 		$response['data']['total_usage']=$response['data']['database_usage']+$response['data']['file_storage_usage']+$response['data']['mailbox_usage'];
 		$response['data']['has_usage']=$response['data']['total_usage']>0;
 		foreach($response['data'] as $key=>$value){
-			if($key!='has_usage')
+			if($key!='has_usage' && $key!='about')
 				$response['data'][$key]=  GO_Base_Util_Number::formatSize($value);
 		}
 		
