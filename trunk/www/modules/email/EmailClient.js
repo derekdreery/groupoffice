@@ -126,6 +126,7 @@ GO.email.EmailClient = function(config){
 		{
 			this.messagesGrid.resetSearch();
 			delete(this.messagesGrid.store.baseParams['query']);
+			delete(this.messagesGrid.store.baseParams['searchIn']);
 		}
 
 	}, this);
@@ -571,6 +572,7 @@ GO.email.EmailClient = function(config){
 		handler: function(){
 			this.searchDialog.hasSearch = false;
 			this.messagesGrid.store.baseParams['query']='';
+			this.messagesGrid.store.baseParams['searchIn']='';
 			this.messagesGrid.store.load({
 				params:{
 					start:0
@@ -704,7 +706,7 @@ GO.email.EmailClient = function(config){
 				this.messagePanel.do_not_mark_as_read = data.do_not_mark_as_read;
 			//this.messagePanel.uid=record.data['uid'];
 
-		var readOnly = this.messagesGrid.store.reader.jsonData.permission_level < GO.permissionLevels.create;
+		var readOnly = this.messagesGrid.store.reader.jsonData.permission_level < GO.permissionLevels.create || this.messagesGrid.store.reader.multipleFolders;
 		
 		this.deleteButton.setDisabled(readOnly);
 
