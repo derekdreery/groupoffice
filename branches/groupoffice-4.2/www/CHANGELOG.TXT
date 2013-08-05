@@ -1,7 +1,13 @@
+4.2.10
 - Fixed imap import for tickets when no subject is given in the email.
 - Address Book module: It is now possible to export all hidden fields into CSV, HTML and PDF.
 - Check if base64 encoded strings can be divided by 4 if decoded line by line to 
   avoid corrupted mails.
+- 3rd contact e-mail showed up with email nr 2.
+- Removing contact photo error
+- Mask sticked when canceling folder delete in e-mail
+- Removed publicly visible version number
+
 
 29-07-2013 4.2.9
 - support for z-push without storing passwords

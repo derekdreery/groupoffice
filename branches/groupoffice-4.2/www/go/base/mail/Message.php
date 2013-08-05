@@ -30,8 +30,8 @@ class GO_Base_Mail_Message extends Swift_Message{
 		
 		$headers = $this->getHeaders();
 
-		$headers->addTextHeader("X-Mailer", "Group-Office ".GO::config()->version);
-		$headers->addTextHeader("X-MimeOLE", "Produced by Group-Office ".GO::config()->version);
+		$headers->addTextHeader("X-Mailer", GO::config()->product_name);
+		$headers->addTextHeader("X-MimeOLE", "Produced by ".GO::config()->product_name);
 		$remoteAddr = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'cli';
 		$headers->addTextHeader("X-Remote-Addr", "[".$remoteAddr."]");
 	}
