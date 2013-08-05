@@ -73,6 +73,9 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	
 	
 	public $skip_user_update=false;
+	
+	
+	private $_photoFile;
 	/**
 	 * Returns a static model of itself
 	 * 
@@ -230,8 +233,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function afterDelete() {
-		if($this->photo)
-			unlink($this->photo);
+		if($this->getPhotoFile()->exists())
+			$this->getPhotoFile()->delete();
 		
 		return parent::afterDelete();
 	}
@@ -373,9 +376,14 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 * @return \GO_Base_Fs_File
 	 */
 	public function getPhotoFile(){
-		if(empty($this->photo))
-			$this->photo=$this->id.'.jpg';
-		return new GO_Base_Fs_File(GO::config()->file_storage_path.$this->photo);
+		if(!isset($_photoFile)){
+			if(empty($this->photo))
+				$this->photo=$this->id.'.jpg';
+		
+			$this->_photoFile = new GO_Base_Fs_File(GO::config()->file_storage_path.$this->photo);
+		}
+		
+		return $this->_photoFile;
 	}
 	
 	/**
