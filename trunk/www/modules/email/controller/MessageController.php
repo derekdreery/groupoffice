@@ -301,7 +301,9 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 				
 			$record = $message->getAttributes(true);
 			$record['account_id']=$account->id;
-			$record['mailbox']=$params["mailbox"];
+			
+			if(!isset($record['mailbox']))
+				$record['mailbox']=$params["mailbox"];
 			
 			if($response['sent'] || $response['drafts']){				
 				$addresses = $message->to->getAddresses();
@@ -1105,7 +1107,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			throw new GO_Base_Exception_NotFound();
 		
 		$imapMessage = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
-		
+
 		if(!$imapMessage)
 			throw new GO_Base_Exception_NotFound();
 		

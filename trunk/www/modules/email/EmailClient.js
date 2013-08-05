@@ -289,7 +289,8 @@ GO.email.EmailClient = function(config){
 			  var record = this.messagesGrid.selModel.getSelected();
 			  if(record)
 			  {
-				  var win = window.open(GO.url("email/message/source",{account_id:this.account_id,mailbox:this.mailbox,uid:record.data.uid}));
+				  //var win = window.open(GO.url("email/message/source",{account_id:this.account_id,mailbox:this.mailbox,uid:record.data.uid}));
+				  var win = window.open(GO.url("email/message/source",{account_id:this.account_id,mailbox:record.data.mailbox,uid:record.data.uid}));
 				  win.focus();
 			  }
 
@@ -847,11 +848,13 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 			if(r.data['uid']!=this.messagePanel.uid)
 			{
 				//this.messagePanel.uid=r.data['uid'];
-				this.messagePanel.loadMessage(r.data.uid, this.mailbox, this.account_id);
+				//this.messagePanel.loadMessage(r.data.uid, this.mailbox, this.account_id);
+				this.messagePanel.loadMessage(r.data.uid, r.data['mailbox'], this.account_id);
 
 				if(!r.data.seen && this.messagesGrid.store.reader.jsonData.permission_level > GO.permissionLevels.read){
 					//set read with 2 sec delay.
-					this.markAsRead.defer(2000, this, [r.data.uid, this.mailbox, this.account_id]);
+					//this.markAsRead.defer(2000, this, [r.data.uid, this.mailbox, this.account_id]);
+					this.markAsRead.defer(2000, this, [r.data.uid, r.data['mailbox'], this.account_id]);
 				}
 			}
 		}, this);
