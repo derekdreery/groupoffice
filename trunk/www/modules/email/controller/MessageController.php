@@ -282,9 +282,12 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		//make sure we are connected to the right mailbox after move and delete operations
 //		$imap = $account->openImapConnection($params["mailbox"]);
 		
+		$response['multipleFolders']=false;
 		$searchIn = 'current'; //default to current if not set
-		if(isset($params['searchIn']) && in_array($params['searchIn'], array('all', 'current', 'recursive')))
+		if(isset($params['searchIn']) && in_array($params['searchIn'], array('all', 'current', 'recursive'))) {
 				$searchIn = $params['searchIn'];
+				$response['multipleFolders'] = true;
+		}
 		
 		$messages = GO_Email_Model_ImapMessage::model()->find(
 						$account, 
