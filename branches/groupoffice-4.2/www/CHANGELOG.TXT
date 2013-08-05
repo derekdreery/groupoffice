@@ -7,6 +7,8 @@
 - Removing contact photo error
 - Mask sticked when canceling folder delete in e-mail
 - Removed publicly visible version number
+- Updated German
+- Copy e-mail with drag and drop when holding ctrl key
 
 
 29-07-2013 4.2.9
