@@ -1,9 +1,22 @@
 - Added recursive search for Imap folders
 - VoIP will rewrite tel: links to callto: in Firefox in Windows
+- Updated VObject to 3.1
+- Updated Sabredav to 1.8.6
+- Fixed "Show unread" /  "Show all" button state in the email module when switching message panel position.
 
-
+05-08-2013 4.2.10
+- Moved address list filter from accordion to separate panel underneath the accordion panel.
+- Fixed imap import for tickets when no subject is given in the email.
+- Address Book module: It is now possible to export all hidden fields into CSV, HTML and PDF.
 - Check if base64 encoded strings can be divided by 4 if decoded line by line to 
   avoid corrupted mails.
+- 3rd contact e-mail showed up with email nr 2.
+- Removing contact photo error
+- Mask sticked when canceling folder delete in e-mail
+- Removed publicly visible version number
+- Updated German
+- Copy e-mail with drag and drop when holding ctrl key
+- Option to convert old office files in Google Drive module
 
 29-07-2013 4.2.9
 - support for z-push without storing passwords

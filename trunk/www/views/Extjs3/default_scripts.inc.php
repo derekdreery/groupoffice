@@ -64,10 +64,13 @@ $settings['pspellSupport']=function_exists('pspell_new');
 //$settings['config']['theme_url']=GO::user()->theme;
 $settings['config']['theme']=GO::config()->theme;
 $settings['config']['product_name']=GO::config()->product_name;
-$settings['config']['product_version']=GO::config()->version;
+
 $settings['config']['host']=GO::config()->host;
 $settings['config']['title']=GO::config()->title;
-$settings['config']['webmaster_email']=GO::config()->webmaster_email;
+
+//these were removed for security reasons
+//$settings['config']['product_version']=GO::config()->version;
+//$settings['config']['webmaster_email']=GO::config()->webmaster_email;
 
 $settings['config']['full_url']=GO::config()->full_url;
 

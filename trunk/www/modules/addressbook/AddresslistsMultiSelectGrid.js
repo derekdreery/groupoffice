@@ -1,13 +1,16 @@
 GO.addressbook.AddresslistsMultiSelectGrid = function(config) {
 	var config = config || {};
 	
-	config.region = 'center';
 	config.title = GO.addressbook.lang.filterMailings;
 	config.loadMask = true;
 	config.store = GO.addressbook.readableAddresslistsStore;
 	config.allowNoSelection = true;
 	
-	Ext.apply(config, {
+	Ext.applyIf(config,{
+		region:'center'
+	});
+	
+	Ext.apply(config, {		
 		bbar: new GO.SmallPagingToolbar({
 			items:[this.searchField = new GO.form.SearchField({
 				store: config.store,

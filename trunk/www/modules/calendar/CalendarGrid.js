@@ -1045,8 +1045,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		//var snap = this.getSnap();
 		var text = '';
 
-		if(!GO.util.empty(eventData.status_color))
-			text += '<span class="x-calGrid-event-status" style="background-color:#'+eventData.status_color+';"></span>';
+//		if(!GO.util.empty(eventData.status_color))
+//			text += '<span class="x-calGrid-event-status" style="background-color:#'+eventData.status_color+';"></span>';
 
 		if(startDay!=endDay)
 		{
@@ -1159,8 +1159,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 	{
 		var text = '';
 
-		if(!GO.util.empty(eventData.status_color))
-			text += '<span class="x-calGrid-event-status" style="background-color:#'+eventData.status_color+';"></span>';
+//		if(!GO.util.empty(eventData.status_color))
+//			text += '<span class="x-calGrid-event-status" style="background-color:#'+eventData.status_color+';"></span>';
                 
 		text += '<span class="x-calGrid-event-time';
 
