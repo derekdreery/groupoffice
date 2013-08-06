@@ -1,3 +1,5 @@
+- Fixed "Show unread" /  "Show all" button state in the email module when switching message panel position.
+
 05-08-2013 4.2.10
 - Moved address list filter from accordion to separate panel underneath the accordion panel.
 - Fixed imap import for tickets when no subject is given in the email.
