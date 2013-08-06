@@ -791,15 +791,17 @@ GO.email.EmailClient = function(config){
 Ext.extend(GO.email.EmailClient, Ext.Panel,{
 
 
-	moveGrid : function(){
+	moveGrid : function(){	
 		if(this.topMessagesGrid.isVisible())
 		{
 			this.messagesGrid=this.leftMessagesGrid;
+			this.messagesGrid.showUnreadButton.setText(this.topMessagesGrid.showUnreadButton.text);
 			this.topMessagesGrid.hide();
 
 		}else
 		{
 			this.messagesGrid=this.topMessagesGrid;
+			this.messagesGrid.showUnreadButton.setText(this.leftMessagesGrid.showUnreadButton.text);
 			this.leftMessagesGrid.hide();
 		}
 		//this.messagesGridContainer.add(this.messagesGrid);

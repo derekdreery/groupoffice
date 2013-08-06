@@ -381,6 +381,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 			$l = new GO_Base_Mail_EmailRecipients();
 			$l->addRecipient($contact->email3, $record['name']);
 
+			$record['info'] = htmlspecialchars((string) $l . ' (' . sprintf(GO::t('contactFromAddressbook', 'addressbook'), $contact->addressbook->name) . ')', ENT_COMPAT, 'UTF-8');
 			if (!empty($contact->department))
 				$record['info'].=' (' . htmlspecialchars($contact->department, ENT_COMPAT, 'UTF-8') . ')';
 			$record['full_email'] = htmlspecialchars((string) $l, ENT_COMPAT, 'UTF-8');

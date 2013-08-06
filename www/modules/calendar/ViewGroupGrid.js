@@ -28,7 +28,7 @@ GO.calendar.ViewGroupGrid = Ext.extend(GO.grid.GridPanel,{
 				show:function(){
 					this.store.load();
 				},
-				scope:this,
+				scope:this
 			},
 			cm:new Ext.grid.ColumnModel({
 				defaults:{
@@ -48,5 +48,5 @@ GO.calendar.ViewGroupGrid = Ext.extend(GO.grid.GridPanel,{
 		});
 		
 		GO.calendar.ViewGroupGrid.superclass.initComponent.call(this);		
-	},
+	}
 });

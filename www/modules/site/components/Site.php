@@ -168,6 +168,9 @@ class Site {
 		}
 		
 		self::$_site=GO::session()->values['sites']['site'];
+		
+		if(!empty(self::model()->language))
+			GO::language()->setLanguage(self::model()->language);
 
 		self::router()->runController();
 	}
@@ -177,8 +180,9 @@ class Site {
 	 * @return GO_Site_Components_Language
 	 */
 	public static function language() {
-		if (self::$_language == null)
+		if (self::$_language == null){
 			self::$_language = new GO_Site_Components_Language(Site::model()->language);
+		}
 		return self::$_language;
 	}
 	

@@ -908,7 +908,8 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 							->addRawCondition('a.acl_id', 't.acl_id','=', false);
 			
 			$aclWhereCriteria = GO_Base_Db_FindCriteria::newInstance()
-							->addRawCondition('a.acl_id', 'NULL','IS', false)
+							//->addRawCondition('a.acl_id', 'NULL','IS', false)
+							->addCondition('acl_id', 0,'=','t',false)
 							->addCondition('user_id', GO::user()->id,'=','a', false)
 							->addInCondition("group_id", GO_Base_Model_User::getGroupIds(GO::user()->id),"a", false);
 			

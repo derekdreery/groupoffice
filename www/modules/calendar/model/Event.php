@@ -841,7 +841,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 					->mergeWith(
 									GO_Base_Db_FindCriteria::newInstance()
 										->addModel(GO_Calendar_Model_Event::model())					
-										->addCondition('repeat_end_time', $periodStartTime, '>=')
+//										->addCondition('repeat_end_time', $periodStartTime, '>=')
+										->addRawCondition('`t`.`repeat_end_time`', '('.intval($periodStartTime).'-(`t`.`end_time`-`t`.`start_time`))', '>=', true)
 										->addCondition('repeat_end_time', 0,'=','t',false))
 					->addCondition('start_time', $periodStartTime, '<');
 		

@@ -149,8 +149,11 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 			$password = $_POST['User']['password'];
 
 			$user = GO::session()->login($model->username, $password);
+			
 			//reset language after login
-			GO::language()->setLanguage(Site::model()->language);
+			if(!empty(self::model()->language))
+				GO::language()->setLanguage(Site::model()->language);
+			
 			if (!$user) {
 				Site::notifier()->setMessage('error', GO::t('badLogin')); // set the correct login failure message
 			} else {

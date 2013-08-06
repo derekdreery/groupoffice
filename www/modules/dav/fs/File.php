@@ -51,13 +51,15 @@ class GO_Dav_Fs_File extends Sabre\DAV\FS\Node implements Sabre\DAV\IFile {
 	 * @return void
 	 */
 	public function put($data) {
+		
+		GO::debug("DAVFile:put( ".$this->relpath.")");
 		$this->checkWritePermission();
 		
 		$file = GO_Files_Model_File::model()->findByPath($this->relpath);
 		$file->saveVersion();
 		$file->putContents($data);
 
-		//file_put_contents($this->path, $data);
+//		file_put_contents($this->path, $data);
 
 		//GO_Files_Model_File::model()->findByPath($this->relpath);
 
@@ -71,6 +73,8 @@ class GO_Dav_Fs_File extends Sabre\DAV\FS\Node implements Sabre\DAV\IFile {
 	 * @return void
 	 */
 	public function setName($name) {
+		
+		GO::debug("DAVFile::setName($name)");
 		$this->checkWritePermission();
 
 		parent::setName($name);
@@ -96,7 +100,7 @@ class GO_Dav_Fs_File extends Sabre\DAV\FS\Node implements Sabre\DAV\IFile {
 	public function move($newPath) {
 		$this->checkWritePermission();
 
-		GO::debug('FSFile::move(' . $this->path . ' -> ' . $newPath . ')');
+		GO::debug('DAVFile::move(' . $this->path . ' -> ' . $newPath . ')');
 		
 		$destFsFolder = new GO_Base_Fs_Folder(dirname($newPath));		
 		$destFolder = GO_Files_Model_Folder::model()->findByPath($destFsFolder->stripFileStoragePath());

@@ -64,26 +64,15 @@ GO.dialog.AboutDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 	},
 
 
-	buildForm : function(){
-		
-		if (GO.settings.config.product_name=='Group-Office')
-			var aboutText = GO.lang['about'].replace('{company_name}', 'Intermesh B.V.');
-		else
-			var aboutText = GO.lang['about'].replace('{company_name}', '{product_name}');
-
-		
+	buildForm : function(){		
 		this.addPanel(new Ext.Panel({
 			border:false,
 			padding: '10px',
 			items: [
 				new GO.LogoComponent(),
 				new GO.form.PlainField({
-					hideLabel: true,
-					value: aboutText
-					.replace('{version}', GO.settings.config.product_version)
-					.replace('{current_year}', new Date().getFullYear())
-					.replace('{product_name}', GO.settings.config.product_name)
-					.replace('{product_name}', GO.settings.config.product_name)
+					name:'about',
+					hideLabel: true					
 				}),
 				this.usageFS = new Ext.form.FieldSet({
 					hidden:true,

@@ -228,6 +228,13 @@ GO.email.AccountsTree = function(config){
 			{
 				
 				var firstDraggedMessage = s[0].data;
+			
+				if(e.rawEvent.ctrlKey){
+					return this.copyDroppedNodes(e);
+				}
+					
+					
+				
 
 				if(firstDraggedMessage["account_id"] != e.target.attributes['account_id'])
 				{
@@ -580,6 +587,38 @@ Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {
 			this.imapLoginFailedDialog.show();
 		}
 	
+	},
+	
+	
+	copyDroppedNodes : function(e){
+		
+		
+		var srcMessages=[];
+		for (var i=0; i<e.data.selections.length;i++) {
+			srcMessages.push({
+				accountId :e.data.selections[i].data.account_id,
+				mailboxPath : e.data.selections[i].data.mailbox,
+				mailUid : e.data.selections[i].data.uid
+			});
+		}
+		
+		var params = {
+			targetAccountId:e.target.attributes['account_id'],
+			targetMailboxPath:e.target.attributes['mailbox'],
+			srcMessages: Ext.encode(srcMessages)
+		}
+
+		GO.request({
+			maskEl:GO.mainLayout.getModulePanel('email').getEl(),
+			timeout:300000,
+			url:"email/account/copyMailTo",
+			params:params,
+			success:function(options, response, result){
+				this.mainPanel.messagesGrid.store.load();		
+			},
+			scope:this
+		});
+					
 	}
 
 //	_setErrorNodes : function (nodes) {
