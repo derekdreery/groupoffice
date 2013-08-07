@@ -59,6 +59,15 @@
 				<td><?php echo $form->label($ticket, 'priority',array('label'=>GO::t('ticketPriority','defaultsite'))); ?></td>
 				<td><?php echo $form->checkBox($ticket, 'priority'); ?></td>
 			</tr>
+			
+			<!--			
+			Example on how to add a custom field
+			<tr>
+				<td><?php // echo $form->label($ticket->customfieldsRecord, 'col_58'); ?></td>
+				<td><?php // echo $form->textField($ticket->customfieldsRecord, 'col_58'); ?></td>
+			</tr>
+			-->
+			
 		</table>
 		
 		
