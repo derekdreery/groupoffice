@@ -41,12 +41,6 @@ class Site {
 	
 	/**
 	 *
-	 * @var GO_Site_Components_Language
-	 */
-	private static $_language;
-	
-	/**
-	 *
 	 * @var GO_Site_Components_Notifier
 	 */
 	private static $_notifier;
@@ -80,14 +74,6 @@ class Site {
 	 * @var GO_Site_Components_Config
 	 */
 	private static $_config;
-	
-	/**
-	 * Handles string translation for sites 
-	 */
-	public static function t($key)
-	{
-		return self::language()->getTranslation($key);
-	}
 	
 	/**
 	 * Get the site model fro the database.
@@ -175,17 +161,7 @@ class Site {
 		self::router()->runController();
 	}
 	
-	/**
-	 * 
-	 * @return GO_Site_Components_Language
-	 */
-	public static function language() {
-		if (self::$_language == null){
-			self::$_language = new GO_Site_Components_Language(Site::model()->language);
-		}
-		return self::$_language;
-	}
-	
+
 	/**
 	 * Adds notification messages to the rendered page.
 	 * The message is deleted from the session after it is displayed for the first time
