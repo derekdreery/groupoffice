@@ -158,6 +158,9 @@ class GO_Base_Util_Validate {
 		$wsdl = GO::config()->root_path.'go/vendor/wsdl/checkVatService.wsdl';
 
 		$vies = new SoapClient($wsdl);
+		
+		//lower the timeout becuase it can hang too long
+		ini_set("default_socket_timeout", 5);
 
 		/**
 			var_dump($vies->__getFunctions());
