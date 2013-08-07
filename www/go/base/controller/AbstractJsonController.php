@@ -68,6 +68,13 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 
 		if (!empty($remoteComboFields))
 			$response = $this->_loadComboTexts($model, $remoteComboFields, $response);
+		
+		$this->fireEvent('form', array(
+				&$this,
+				&$response,
+				&$model,
+				&$remoteComboFields
+		));
 
 		return new GO_Base_Data_JsonResponse($response);
 	}
@@ -133,33 +140,14 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 				$response[$model->aclField()] = $model->{$model->aclField()};
 
 			//TODO: move the link saving to the model someday
-			if (!empty($params['link']) && $model->hasLinks()) {
+			if (!empty($_POST['link']) && $model->hasLinks()) {
 				//a link is sent like  GO_Notes_Model_Note:1
 				//where 1 is the id of the model
-				$linkProps = explode(':', $params['link']);
+				$linkProps = explode(':', $_POST['link']);
 				$linkModel = GO::getModel($linkProps[0])->findByPk($linkProps[1]);
 				$model->link($linkModel);
 			}
-			//TODO: move the file saving to the model someday
-			if (!empty($_FILES['importFiles'])) {
-
-				$attachments = $_FILES['importFiles'];
-				$count = count($attachments['name']);
-
-				$params['enclosure'] = $params['importEnclosure'];
-				$params['delimiter'] = $params['importDelimiter'];
-
-				for ($i = 0; $i < $count; $i++) {
-					if (is_uploaded_file($attachments['tmp_name'][$i])) {
-						$params['file'] = $attachments['tmp_name'][$i];
-						//$params['model'] = $params['importModel'];
-
-						$controller = new $params['importController'];
-
-						$controller->run("import", $params, false);
-					}
-				}
-			}
+			
 		} else { // model was not saved
 			$response['success'] = false;
 			//can't use <br /> tags in response because this goes wrong with the extjs fileupload hack with an iframe.
@@ -169,6 +157,12 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 			}
 			$response['validationErrors'] = $model->getValidationErrors();
 		}
+		
+		$this->fireEvent('submit', array(
+					&$this,
+					&$response,
+					&$model
+			));
 
 		return new GO_Base_Data_JsonResponse($response);
 	}
@@ -264,10 +258,10 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 		if (empty($action))
 			$action = $this->defaultAction;
 
-		$this->fireEvent($action, array(
-			&$this,
-			&$params
-		));
+//		$this->fireEvent($action, array(
+//			&$this,
+//			&$params
+//		));
 
 		$response = parent::run($action, $params, $render, $checkPermissions);
 
