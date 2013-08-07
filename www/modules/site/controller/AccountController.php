@@ -151,7 +151,7 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 			$user = GO::session()->login($model->username, $password);
 			
 			//reset language after login
-			if(!empty(self::model()->language))
+			if(!empty(Site::model()->language))
 				GO::language()->setLanguage(Site::model()->language);
 			
 			if (!$user) {
