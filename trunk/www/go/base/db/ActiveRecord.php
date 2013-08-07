@@ -3490,7 +3490,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	
 	public function __isset($name){		
 		return isset($this->_attributes[$name]) || 
-						isset($this->columns[$name]) || 
+						//isset($this->columns[$name]) || MS: removed this because it returns true when attribute is null. This might break something but it shouldn't return true.
 						($this->_relationExists($name) && $this->_getRelated($name)) || 
 						parent::__isset($name);
 	}
