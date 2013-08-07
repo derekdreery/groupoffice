@@ -70,6 +70,15 @@
 				<td><?php echo GO::t('ticketAgent','defaultsite'); ?></td>
 				<td><?php echo $ticket->agent?$ticket->agent->name:''; ?></td>
 			</tr>
+			
+<!--			
+			Example for adding custom field.
+			<tr>
+				<td><?php //echo $ticket->getCustomfieldsRecord()->getAttributeLabelWithoutCategoryName('col_58'); ?></td>
+				<td><?php //echo $ticket->getCustomfieldsRecord()->col_58; ?></td>
+			</tr>
+-->
+			
 		</table>
 
 			
