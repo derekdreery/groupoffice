@@ -578,9 +578,8 @@ Ext.extend(GO.servermanager.InstallationDialog, GO.Window,{
 				if(this.store.baseParams.installation_id!=installation_id){
 					this.store.baseParams.installation_id=installation_id;
 					this.store.removeAll();
-					
+					this.store.loaded=false;
 				}
-				this.store.loaded=false;
 			}
 		});
 		
