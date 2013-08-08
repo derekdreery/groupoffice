@@ -287,7 +287,7 @@ class GO_Base_Session extends GO_Base_Observable{
 			//the application to identify a valid authenticated session. This is possible in PHP by
 			//using the session_regenerate_id() function.
 
-			if(PHP_SAPI!='cli')
+			if(PHP_SAPI!='cli' && !defined('GO_NO_SESSION'))
 				session_regenerate_id();
 			
 			if($countLogin)
