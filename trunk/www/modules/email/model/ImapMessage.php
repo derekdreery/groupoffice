@@ -102,10 +102,10 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		
 		$results=array();
 		if($searchIn=="all") {
-			foreach ($account->getRootMailboxes(true) as $mailbox) {
+			foreach ($account->getRootMailboxes(false, true) as $mailbox) {
 			
 				//only search visable mailboxes not subscriptions
-				if(!$mailbox->isVisible())
+				if(!$mailbox->isVisible() || $mailbox->noselect)
 					continue;
 
 				$results = array_merge($results, $this->find($account, $mailbox->name, $start, $limit, $sortField, $descending, $query, 'recursive'));
@@ -122,15 +122,20 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 			
 			$results[]=$message;
 		}
+		GO::debug($mailbox);
 		//find recursive in subfolders
 		if($searchIn==='recursive') {
-			$delim = $imap->get_mailbox_delimiter();
-			$children = $imap->get_folders($mailbox.$delim);
+			
+			$mailboxObj = new GO_Email_Model_ImapMailbox($account, array('name'=>$mailbox));
+			
+			$children = $mailboxObj->getChildren(true, false);
 			foreach($children as $child) {
-				$subfolder = $child['name'];
-				if($subfolder!=$mailbox){
-					$results = array_merge($results, $this->find($account, $subfolder, $start, $limit, $sortField, $descending, $query, 'recursive'));
-				}
+				
+				//only search visible mailboxes not subscriptions
+				if(!$child->isVisible() || $child->noselect)
+					continue;
+
+				$results = array_merge($results, $this->find($account, $child->name, $start, $limit, $sortField, $descending, $query, 'recursive'));
 			}
 		}
 		

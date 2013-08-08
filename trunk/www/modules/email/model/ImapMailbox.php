@@ -54,7 +54,7 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		if(method_exists($this, $getter))
 			return $this->$getter();			
 		
-		return $this->_attributes[$name];
+		return isset($this->_attributes[$name]) ? $this->_attributes[$name] : null;
 	}
 	
 	public function getHasChildren($asSubscribedMailbox=false){
@@ -91,7 +91,7 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 		
 		//todo make compatible with servers that can't return subscribed flag
 		
-		return $this->_attributes['subscribed'];
+		return !empty($this->_attributes['subscribed']);
 		
 	}
 	
