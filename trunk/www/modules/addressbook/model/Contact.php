@@ -539,10 +539,11 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 					if($vobjProp->getValue()){
 						$types = array();
 						foreach ($vobjProp->parameters as $param) {
-							if ($param->name=='TYPE')
+							if ($param->name=='TYPE'){
 								$types = explode(',',strtolower($param->getValue()));							
+							}
 						}
-						GO_Syncml_Server::debug($types);
+						
 						if(in_array('work',$types) && ( in_array('voice',$types) || count($types)==1 ) ) {
 							$attributes['work_phone'] = $vobjProp->getValue();
 							$companyAttributes['phone'] = $vobjProp->getValue();
@@ -830,8 +831,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		
 		
 		$e=new Sabre\VObject\Component\VCard();
-					
-		$e->add('VERSION','3.0');
+				
 		$e->prodid='-//Intermesh//NONSGML Group-Office '.GO::config()->version.'//EN';		
 		
 		if(empty($this->uuid)){
@@ -847,7 +847,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 //			$p = new Sabre\VObject\Property('EMAIL',$this->email);
 //			$p->add(new GO_Base_VObject_Parameter('TYPE','INTERNET'));
 //			$e->add($p);
-			$e->add('email'.$this->email, array('type'=>array('INTERNET')));
+			$e->add('email',$this->email, array('type'=>array('INTERNET')));
 			
 		}
 		if (!empty($this->email2)) {
@@ -855,14 +855,14 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 //			$p->add(new GO_Base_VObject_Parameter('TYPE','HOME,INTERNET'));
 //			$e->add($p);
 			
-			$e->add('email'.$this->email2, array('type'=>array('HOME','INTERNET')));
+			$e->add('email',$this->email2, array('type'=>array('HOME','INTERNET')));
 		}
 		if (!empty($this->email3)) {
 //			$p = new Sabre\VObject\Property('EMAIL',$this->email3);
 //			$p->add(new GO_Base_VObject_Parameter('TYPE','WORK,INTERNET'));
 //			$e->add($p);
 			
-			$e->add('email'.$this->email3, array('type'=>array('WORK','INTERNET')));
+			$e->add('email',$this->email3, array('type'=>array('WORK','INTERNET')));
 		}
 		
 		if (!empty($this->function))
