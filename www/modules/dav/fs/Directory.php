@@ -12,7 +12,7 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Node implements Sabre\DAV\ICollection, Sabre\DAV\IQuota {
+class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Directory{
 
 	protected $_folder;
 	protected $relpath;
@@ -254,17 +254,17 @@ class GO_Dav_Fs_Directory extends Sabre\DAV\FS\Node implements Sabre\DAV\ICollec
 		$folder->delete();
 	}
 
-	/**
-	 * Returns available diskspace information
-	 *
-	 * @return array
-	 */
-	public function getQuotaInfo() {
-
-		return array(
-				disk_total_space($this->path) - disk_free_space($this->path),
-				disk_free_space($this->path)
-		);
-	}
+//	/**
+//	 * Returns available diskspace information
+//	 *
+//	 * @return array
+//	 */
+//	public function getQuotaInfo() {
+//
+//		return array(
+//				disk_total_space($this->path) - disk_free_space($this->path),
+//				disk_free_space($this->path)
+//		);
+//	}
 
 }
