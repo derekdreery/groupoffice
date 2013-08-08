@@ -12,11 +12,12 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-// settings
-require('../../GO.php');
-
 //session writing doesn't make any sense because
 define("GO_NO_SESSION", true);
+
+
+// settings
+require('../../GO.php');
 
 //require_once GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/autoload.php';
 
