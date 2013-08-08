@@ -154,9 +154,7 @@ class GO_Dav_Fs_File extends Sabre\DAV\FS\File {
 	 * @return mixed
 	 */
 	public function getETag() {
-//		return '"' . md5_file($this->path) . '"';
-		
-		return null;
+		return '"' . md5_file($this->path) . '"';
 	}
 
 	/**
@@ -168,11 +166,10 @@ class GO_Dav_Fs_File extends Sabre\DAV\FS\File {
 	 */
 	public function getContentType() {
 		
-//		$fsFile = new GO_Base_Fs_File($this->path);
-//
-//		return $fsFile->mimeType();
-		
-		return null;
+		$fsFile = new GO_Base_Fs_File($this->path);
+
+		return $fsFile->mimeType();	
+
 	}
 
 }
