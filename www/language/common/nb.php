@@ -612,3 +612,4 @@ $l['foundDuplicates']='Funnet %s duplikater.';
 $l['clickToDeleteDuplicates']='Klikk her for å slette de nyeste duplikatene merket med rødt.';
 $l['deleteErrors']='Det oppstod feil under forsøk på å slette {count} elementer';
 $l['folderUpload']='Mapper (krever Java)';
+$l['pasteFromWord']='Renser tekst som er limt inn fra Word eller andre RTF-programmer';
