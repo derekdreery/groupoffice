@@ -2143,9 +2143,10 @@ box-sizing: border-box;
 	background-color:green;
 	color:white;
 	height:12px;
-	width:20px;
+	min-width:12x;
+	padding:0px 3px;
 	line-height:12px;
 	text-align:center;
 	border-radius:2px;
-	font-size:9px;
+	font-size:10px;
 }
