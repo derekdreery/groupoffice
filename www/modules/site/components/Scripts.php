@@ -155,7 +155,7 @@ class GO_Site_Components_Scripts
 		if (isset($this->scripts[self::POS_READY]))
 		{
 			if ($fullPage)
-				$scripts[] = "jQuery(function($) {\n" . implode("\n", $this->scripts[self::POS_READY]) . "\n});";
+				$scripts[] = "jQuery(document).ready(function($) {\n" . implode("\n", $this->scripts[self::POS_READY]) . "\n});";
 			else
 				$scripts[] = implode("\n", $this->scripts[self::POS_READY]);
 		}
