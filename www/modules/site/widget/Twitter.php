@@ -253,7 +253,7 @@ http://t.co/zy3JDoVTEC"
   }
  * @var type 
  */
-	public $template = '<li>
+	public $template = '<div>
 	<a id="twitter-account-name" href="https://twitter.com/{user:screen_name}">@{user:screen_name}</a>
 	<p class="tweet">{text}</p>
 	<p class="interact">
@@ -261,7 +261,7 @@ http://t.co/zy3JDoVTEC"
 	<a href="https://twitter.com/intent/retweet?tweet_id={id}" class="twitter_retweet_icon">Retweet</a>
 	<a href="https://twitter.com/intent/favorite?tweet_id={id}" class="twitter_fav_icon">Favorite</a>
 	</p>
-	</li>';
+	</div>';
 	
 	public function render() {
 
