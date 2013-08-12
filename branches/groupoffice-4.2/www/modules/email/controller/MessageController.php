@@ -934,7 +934,9 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			
 			if(GO::modules()->savemailas){
 				
-				$contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($oldMessage['sender']);
+				$from = $message->from->getAddress();
+				
+				$contact = GO_Addressbook_Model_Contact::model()->findSingleByEmail($from['email']);
 				if($contact){
 					
 					
