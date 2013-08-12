@@ -60,6 +60,7 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 		$store = GO_Base_Data_Store::newInstance(GO_Addressbook_Model_Contact::model());
 
 		$store->getColumnModel()->formatColumn('name', '$model->name', array(), array('first_name', 'last_name'));
+		$store->getColumnModel()->formatColumn('company_name', '$model->company->name', array(), 'company_id');
 
 		$store->processDeleteActions($params, "GO_Addressbook_Model_AddresslistContact", array('addresslist_id' => $params['addresslist_id']));
 
