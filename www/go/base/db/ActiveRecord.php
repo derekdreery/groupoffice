@@ -2711,7 +2711,12 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			//id is not set if this is a new record so we make sure it's set here.
 			$this->_customfieldsRecord->model_id=$this->id;
 			
-			$this->_customfieldsRecord->save();
+			//check if other fields than model_id were modified.
+			$modified = $this->_customfieldsRecord->getModifiedAttributes();
+			unset($modified['model_id']);			
+			
+			if(count($modified))
+				$this->_customfieldsRecord->save();
 			
 //			if($this->customfieldsRecord->save())
 //				$this->touch(); // If the customfieldsRecord is saved then set the mtime of this record.
@@ -2829,6 +2834,14 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 */
 	public function getModifiedAttributes(){
 		return $this->_modifiedAttributes;
+	}
+	
+	/**
+	 * Reset modified attributes information. Useful when setting properties but
+	 * avoid a save to the database.
+	 */
+	public function clearModifiedAttributes(){
+		$this->_modifiedAttributes=array();
 	}
 	
 	/**
@@ -3860,6 +3873,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 
 			$this->_customfieldsRecord = new $model;
 			$this->_customfieldsRecord->setAttributes($customattr,false);
+			$this->_customfieldsRecord->clearModifiedAttributes();
 		}
 		
 		
@@ -3872,7 +3886,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	 * 
 	 * @return GO_Customfields_Model_AbstractCustomFieldsRecord 
 	 */
-	public function getCustomfieldsRecord(){
+	public function getCustomfieldsRecord($createIfNotExists=true){
 		
 //		GO::debug($this->className().'::getCustomfieldsRecord');
 		
@@ -3884,6 +3898,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 					//doesn't exist yet. Return a new one
 					$this->_customfieldsRecord = new $customFieldModelName;
 					$this->_customfieldsRecord->model_id=$this->pk;
+					$this->_customfieldsRecord->clearModifiedAttributes();
 				}
 			}
 			return $this->_customfieldsRecord;
