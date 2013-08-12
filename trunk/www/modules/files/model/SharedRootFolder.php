@@ -118,6 +118,11 @@ class GO_Files_Model_SharedRootFolder extends GO_Base_Db_ActiveRecord {
 			}
 			
 			GO::config()->save_setting('files_shared_cache_ctime',time(), $user_id);
+			
+			return time();
+		}else
+		{
+			return $lastBuildTime;
 		}
 	}
 

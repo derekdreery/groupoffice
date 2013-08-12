@@ -113,14 +113,15 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 					$i['script_name']=$scriptName;
 					$i['active']= !$item['disabled'];
 
-					$response['results'][$item['name']]=$i;
+//					$response['results'][$item['name']]=$i;
+					$response['results'][]=$i;
 				}
 				$index++;
 			}
 		}
 		
-		ksort($response['results']);		
-		$response['results']=array_values($response['results']);
+//		ksort($response['results']);		
+//		$response['results']=array_values($response['results']);
 
 		$response['success']=true;
 		return $response;
@@ -216,12 +217,12 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 			else {
 				$this->_sieve->script->add_rule($rule);
 			}
-
+			
 			// Het script opslaan
 			if($this->_sieve->save()) {
 				$response['success'] = true;
 			} else {
-				$response['feedback'] = "Could not save filtering rules. Please check your input.";
+				$response['feedback'] = "Could not save filtering rules. Please check your input.<br />".$this->_sieve->error();
 				$response['success'] = false;
 			}
 		} catch (Exception $e) {
