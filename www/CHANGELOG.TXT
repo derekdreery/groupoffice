@@ -1,3 +1,4 @@
+- Project cached attributes are changed to display useful text in the link dialog
 - In the ticket email, added links to files that are attached to a new ticket message.
 - Fixed "Show unread" /  "Show all" button state in the email module when switching message panel position.
 
