@@ -60,8 +60,10 @@ class GO_Ldapauth_Controller_Sync extends GO_Base_Controller_AbstractController{
 					$user = $la->syncUserWithLdapRecord($record);
 					if(!$user)
 					{
-						echo "Failed syncing user. Enable and check debug log for more info.";
-						echo "Failed LDAP record: ".var_export($record->getAttributes(), true)."\n";
+						//could be expluded from LDAP.
+						
+//						echo "Failed syncing user. Enable and check debug log for more info.";
+//						echo "Failed LDAP record: ".var_export($record->getAttributes(), true)."\n";
 						continue;
 					}
 					$username = $user->username;
