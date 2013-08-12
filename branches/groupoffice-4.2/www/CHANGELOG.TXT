@@ -1,6 +1,7 @@
 - Project cached attributes are changed to display useful text in the link dialog
 - In the ticket email, added links to files that are attached to a new ticket message.
 - Fixed "Show unread" /  "Show all" button state in the email module when switching message panel position.
+- Address Book module: List company name along side contacts in Address List contacts grid.
 
 05-08-2013 4.2.10
 - Moved address list filter from accordion to separate panel underneath the accordion panel.
