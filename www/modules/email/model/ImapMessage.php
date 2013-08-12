@@ -186,6 +186,10 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_ComposerMessage {
 		}		
 	}
 	
+	public function clearMessagesCache(){
+		$this->_cache=array();
+	}
+	
 //	public function __destruct() {
 //		if($this->cacheOnDestruct){
 //			$cacheKey=$this->cacheOnDestruct;

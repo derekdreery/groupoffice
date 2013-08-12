@@ -162,6 +162,15 @@ abstract class GO_Customfields_Model_AbstractCustomFieldsRecord extends GO_Base_
 		return self::$attributeLabels[$this->extendsModel()];
 	}
 	
+	public function getAttributeLabelWithoutCategoryName($attribute) {
+		$label = parent::getAttributeLabel($attribute);
+		$pos = strpos($label,':');
+		if($pos){
+			$label=substr($label, $pos+1);
+		}
+		return $label;
+	}
+	
 	/**
 	 * Copy custom fields if the label matches. Eg.:
 	 * A company and an invoice model have a field with label "Customer No.:".

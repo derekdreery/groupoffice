@@ -42,8 +42,13 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 				return '';
 			unset($htmlAttributes['label']);
 		}
-		else
-			$label=$model->getAttributeLabel($attribute);
+		else{
+			if($model instanceof GO_Customfields_Model_AbstractCustomFieldsRecord){
+				$label=$model->getAttributeLabelWithoutCategoryName($attribute);
+			} else {
+				$label=$model->getAttributeLabel($attribute);
+			}
+		}
 		if($model->hasValidationErrors($attribute))
 			$htmlAttributes = $this->_addErrorCss($htmlAttributes);
 		

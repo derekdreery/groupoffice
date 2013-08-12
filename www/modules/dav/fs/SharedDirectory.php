@@ -11,12 +11,11 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-class GO_Dav_Fs_SharedDirectory extends Sabre\DAV\FS\Directory implements Sabre\DAV\ICollection, Sabre\DAV\IQuota {
+class GO_Dav_Fs_SharedDirectory extends Sabre\DAV\FS\Directory {
 
-	public function __construct($path='') {		
-		$this->path = $path;
+	public function __construct($path='') {
+		parent::__construct("Shared");
 	}
-
 	public function getName() {
 		return 'Shared';
 	}
@@ -105,8 +104,8 @@ class GO_Dav_Fs_SharedDirectory extends Sabre\DAV\FS\Directory implements Sabre\
 	 * @return int
 	 */
 	public function getLastModified() {
-
-		return false;
+		//checks the folders and returns build time
+		return GO_Files_Model_SharedRootFolder::model()->rebuildCache(GO::user()->id, false);
 	}
 
 }

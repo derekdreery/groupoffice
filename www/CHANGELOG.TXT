@@ -2,6 +2,11 @@
 - VoIP will rewrite tel: links to callto: in Firefox in Windows
 - Updated VObject to 3.1
 - Updated Sabredav to 1.8.6
+
+
+
+
+- In the ticket email, added links to files that are attached to a new ticket message.
 - Fixed "Show unread" /  "Show all" button state in the email module when switching message panel position.
 
 05-08-2013 4.2.10

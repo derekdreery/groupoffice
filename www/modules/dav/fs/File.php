@@ -12,7 +12,7 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-class GO_Dav_Fs_File extends Sabre\DAV\FS\Node implements Sabre\DAV\IFile {
+class GO_Dav_Fs_File extends Sabre\DAV\FS\File {
 
 	protected $folder;
 	protected $write_permission;
@@ -55,13 +55,12 @@ class GO_Dav_Fs_File extends Sabre\DAV\FS\Node implements Sabre\DAV\IFile {
 		GO::debug("DAVFile:put( ".$this->relpath.")");
 		$this->checkWritePermission();
 		
-		$file = GO_Files_Model_File::model()->findByPath($this->relpath);
-		$file->saveVersion();
-		$file->putContents($data);
+//		$file = GO_Files_Model_File::model()->findByPath($this->relpath);
+//		$file->saveVersion();
+//		$file->putContents($data);
 
-//		file_put_contents($this->path, $data);
-
-		//GO_Files_Model_File::model()->findByPath($this->relpath);
+		file_put_contents($this->path, $data);
+		GO_Files_Model_File::model()->findByPath($this->relpath);
 
 		//GO::debug('ADDED FILE WITH WEBDAV -> FILE_ID: ' . $file_id);
 	}
@@ -169,7 +168,8 @@ class GO_Dav_Fs_File extends Sabre\DAV\FS\Node implements Sabre\DAV\IFile {
 		
 		$fsFile = new GO_Base_Fs_File($this->path);
 
-		return $fsFile->mimeType();
+		return $fsFile->mimeType();	
+
 	}
 
 }

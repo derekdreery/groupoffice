@@ -11,17 +11,14 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-class GO_Dav_Fs_RootDirectory extends Sabre\DAV\FS\Directory implements Sabre\DAV\ICollection, Sabre\DAV\IQuota {
+class GO_Dav_Fs_RootDirectory extends Sabre\DAV\FS\Directory{
 
-	public function __construct($path='') {		
-		$this->path = $path;
+	public function __construct($path="") {
+		parent::__construct(GO::config()->file_storage_path);
 	}
-
 	public function getName() {
-		return 'root';
-	}
-
-	
+		return "root";
+	}	
 
 	/**
 	 * Returns an array with all the child nodes
@@ -130,7 +127,7 @@ class GO_Dav_Fs_RootDirectory extends Sabre\DAV\FS\Directory implements Sabre\DA
 	 */
 	public function getLastModified() {
 
-		return false;
+		return filemtime(GO::config()->file_storage_path);
 	}
 
 }

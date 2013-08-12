@@ -279,3 +279,4 @@ $l['downloadPhotoUrl']='Last ned bilde fra URL';
 $l['orBrowseComputer']='eller last opp fra din egen datamaskin';
 $l['currentImage']='Gjeldende bilde';
 $l['downloadFullImage']='Last ned bilde';
+$l['bankBicNo']= 'SWIFT-adresse';
