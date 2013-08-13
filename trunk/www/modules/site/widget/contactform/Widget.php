@@ -6,9 +6,13 @@ class GO_Site_Widget_Contactform_Widget extends GO_Site_Components_Widget {
 	public $messageFieldOptions=array();	//html attributes for message field
 	public $fieldSeparator = '';			//html between input fields
 	public $submitButtonText = 'Send';		//text in submit button
+	public $successText = "Thank you! Your message was sent successfully.";
 	
 	protected $formModel;
 	protected $form;
+	
+	
+	public $sentSuccess=false;
 	
 	public function init() {
 		$this->formModel = new GO_Site_Widget_ContactForm_ContactForm();
@@ -25,7 +29,8 @@ class GO_Site_Widget_Contactform_Widget extends GO_Site_Components_Widget {
 			$this->formModel->email=$_POST['ContactForm']['email'];
 			$this->formModel->message=$_POST['ContactForm']['message'];
 			if($this->formModel->send()) {
-				return "Send successfull"; 
+				$this->sentSuccess=true;
+				return $this->successText; 
 			} else
 				$result .= "Error sending message";
 		}
