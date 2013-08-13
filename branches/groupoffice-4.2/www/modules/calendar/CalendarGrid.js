@@ -1097,8 +1097,11 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 					this.selectEventElement(eventEl);
 
 					this.clickedEventId=eventEl.id;
-					this.eventMouseUp=false;
-					this.startAllDayEventDrag(e, eventEl.id);
+					
+					if(e.button === 0){ // 0 = left mouse button (2 = right mousebutton)
+						this.eventMouseUp=false;
+						this.startAllDayEventDrag(e, eventEl.id);
+					}
 
 				}, this);
 			}
