@@ -1,3 +1,5 @@
+trunk
+- New theme
 - Added recursive search for Imap folders
 - VoIP will rewrite tel: links to callto: in Firefox in Windows
 - Updated VObject to 3.1
@@ -5,9 +7,14 @@
 
 
 
-
+13-08-2013 4.2.11
+- Fixed duplicate entry error on installer.
+- Fixed problem with downloading attachments on old Android phones with ActiveSync.
+- Disabled session_start() for webdav to fix Mac Finder issue with uploads
+- Project cached attributes are changed to display useful text in the link dialog
 - In the ticket email, added links to files that are attached to a new ticket message.
 - Fixed "Show unread" /  "Show all" button state in the email module when switching message panel position.
+- Address Book module: List company name along side contacts in Address List contacts grid.
 
 05-08-2013 4.2.10
 - Moved address list filter from accordion to separate panel underneath the accordion panel.
