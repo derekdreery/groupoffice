@@ -16,6 +16,7 @@ class GO_Ldapauth_Authenticator {
 			$this->_mapping = $mapping;
 		} else {
 			$this->_mapping = array(
+					'exclude' => new GO_Ldapauth_Mapping_Constant(false),
 					'enabled' => new GO_Ldapauth_Mapping_Constant('1'),
 					'username' => 'uid',
 					//'password' => 'userpassword',
@@ -147,6 +148,15 @@ class GO_Ldapauth_Authenticator {
 		
 
 		$attr = $this->getUserAttributes($record);
+		
+		if(!empty($attr['exclude'])){
+			GO::debug("LDAPAUTH: User is excluded from LDAP by mapping!");
+			
+			return false;
+		}
+		
+		unset($attr['exclude']);
+		
 		try {
 			$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $attr['username']);
 			if ($user) {
