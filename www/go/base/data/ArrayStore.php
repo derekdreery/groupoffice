@@ -21,6 +21,11 @@
 class GO_Base_Data_ArrayStore extends GO_Base_Data_AbstractStore {
 
 	
+	public function __construct($columnModel = false, $data=array()) {
+		parent::__construct($columnModel);
+		$this->response['results'] = $data;
+	}
+	
 	public function getData() {
 		$this->response['success']=true;
 		$this->response['total']=$this->getTotal();
@@ -33,6 +38,8 @@ class GO_Base_Data_ArrayStore extends GO_Base_Data_AbstractStore {
 	  {
 		if($record && is_a($record, 'GO_Base_Model'))
 			$records[] = $this->_columnModel->formatModel($record);
+		elseif(is_array($record))
+			$records[]=$record;
 	  }
 	  return $records;
 	}
