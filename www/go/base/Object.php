@@ -102,7 +102,6 @@ abstract class GO_Base_Object extends GO_Base_Observable{
 			if(GO::config()->debug)
 				throw new Exception($errorMsg);
 			else{
-//				TODO Enable this when we're sure all properties exist
 				trigger_error($errorMsg, E_USER_NOTICE);
 			}
 		}
