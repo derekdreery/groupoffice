@@ -723,3 +723,7 @@ a.x-menu-check-item {
 .go-head-tb {
 	padding: 0px 0px 10px !important;
 }
+
+.x-form{
+	padding: 10px !important;
+}
