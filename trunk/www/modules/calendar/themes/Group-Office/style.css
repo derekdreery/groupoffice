@@ -24,7 +24,7 @@
 
 .cal-period .x-panel-body{
 	/*background-color:transparent !important;*/
-	padding:0 20px 0 20px;
+	padding:0 20px 0 20px !important;
 	color:#000;
 }
 

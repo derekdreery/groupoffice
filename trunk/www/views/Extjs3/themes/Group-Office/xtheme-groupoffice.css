@@ -192,7 +192,7 @@ ul.x-tab-strip .x-tab-strip-active {
 	border: none;
 }
 
-.x-panel-body ul.x-tab-strip-top {
+.x-panel-body ul.x-tab-strip-top, .x-window ul.x-tab-strip-top  {
 	border-bottom: 1px solid #009bcb !important;
 	margin: 10px 10px 0 10px;
 }
@@ -364,13 +364,13 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 	padding: 0;
 }
 
-.go-moduletabs-body .go-display-panel .x-btn, .x-window .x-panel-tbar .x-btn{
+.go-white-bg .x-btn, .go-moduletabs-body .go-display-panel .x-btn, .x-window .x-panel-tbar .x-btn{
 	border: 1px solid #009bcb;	
 	margin-right: 5px;
 }
 
 
-.go-moduletabs-body .go-display-panel .x-btn-text-icon .x-btn-icon-small-left .x-btn-text, .x-date-bottom .x-btn-text, .x-window .x-btn-text {
+.go-white-bg .x-btn-text, .go-moduletabs-body .go-display-panel .x-btn-text-icon .x-btn-icon-small-left .x-btn-text, .x-date-bottom .x-btn-text, .x-window .x-btn-text {
 	font-size: 10px !important;
 	font-weight: bold;
 	padding: 0 5px !important;
@@ -379,6 +379,10 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 
 #go-module-panel-addressbook .x-panel-bbar .x-toolbar, #go-module-panel-addressbook .x-panel-tbar .x-toolbar{
 	padding: 0;
+}
+
+.go-white-bg button{
+	background-image: none !important;
 }
 
 .x-panel-body{
