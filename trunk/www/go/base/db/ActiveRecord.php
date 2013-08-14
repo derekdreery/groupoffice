@@ -362,6 +362,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if($this->isNew){
 			$this->setAttributes($this->getDefaultAttributes(),false);
 			$this->_loadingFromDatabase=false;
+			$this->afterCreate();
 		}elseif(!$isStaticModel){
 			$this->castMySqlValues();
 			$this->_cacheRelatedAttributes();
@@ -383,6 +384,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	protected function afterLoad(){
 		
 	}
+	
+		/**
+	 * This function is called after a new model is constructed
+	 */
+	protected function afterCreate(){
+		
+	}
+	
 	
 	/**
 	 * When a model is joined on a find action and we need it for permissions, We 
@@ -2192,7 +2201,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			
 			//only set writable properties. It should either be a column or setter method.
 			if(isset($this->columns[$key]) || property_exists($this, $key) || method_exists($this, 'set'.$key)){
-				$this->$key=$value;			
+				$this->$key=$value;
 			}elseif(is_array($value) && $this->getRelation($key)){
 				$this->_joinRelationAttr[$key]=$value;
 			}

@@ -72,9 +72,9 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 	background: none;
 }
 
-.x-panel-body .x-border-panel .x-btn {
+/*.x-panel-body .x-border-panel .x-btn {
 	border: 1px solid #fff;
-}
+}*/
 
 .x-btn-noicon .x-btn-small .x-btn-text {
 	height: auto;
@@ -129,7 +129,7 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 .x-panel-body .x-toolbar{
 	background: #fff none;
 	border: none;
-	padding: 10px !important;
+/*	padding: 10px !important;*/
 }
 
 .x-toolbar-ct {
@@ -335,7 +335,7 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 }
 
 .x-grid-panel .x-panel-body {
-	padding: 10px !important;
+	padding: 10px 10px 0px 10px !important;
 }
 
 .x-panel-bbar .x-toolbar, .x-panel-tbar .x-toolbar {
@@ -350,7 +350,7 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 	color: #000;
 }
 
-.go-moduletabs-body .go-display-panel .x-btn-text{
+.x-panel-footer .x-btn-text,.go-moduletabs-body .go-display-panel .x-btn-text{
 	color: #000 !important;
 	font-weight: bold;
 }
@@ -465,15 +465,16 @@ thead .x-grid3-hd-inner{
 	color: #fff !important;
 }
 
-.x-window .x-window-tbar .x-btn-text, #go-module-panel-customfields .go-border-center .x-panel-tbar .x-btn-text, #go-module-panel-calendar .go-border-west .go-border-center .x-panel-tbar .x-btn-text, #go-module-panel-filesearch .go-border-center .x-panel-tbar .x-btn-text, .x-date-bottom {
+.x-panel-footer .x-btn-text, .x-window .x-window-tbar .x-btn-text, #go-module-panel-customfields .go-border-center .x-panel-tbar .x-btn-text, #go-module-panel-calendar .go-border-west .go-border-center .x-panel-tbar .x-btn-text, #go-module-panel-filesearch .go-border-center .x-panel-tbar .x-btn-text, .x-date-bottom {
 	background: none !important;
 	font-size: 10px;
 	font-weight: bold;
 	padding: 0 5px;
 	text-transform: uppercase;
+	color:black;
 } 
 
-.x-window .x-panel-bwrap .x-btn, .x-window-tbar .x-btn, .x-window-footer .x-btn, #go-module-panel-customfields .go-border-center .x-panel-tbar .x-btn, #go-module-panel-calendar .go-border-west .go-border-center .x-panel-tbar .x-btn, #go-module-panel-filesearch .go-border-center .x-panel-tbar .x-btn, .x-date-bottom {
+.x-panel-footer .x-btn, .x-window .x-panel-bwrap .x-btn, .x-window-tbar .x-btn, .x-window-footer .x-btn, #go-module-panel-customfields .go-border-center .x-panel-tbar .x-btn, #go-module-panel-calendar .go-border-west .go-border-center .x-panel-tbar .x-btn, #go-module-panel-filesearch .go-border-center .x-panel-tbar .x-btn, .x-date-bottom {
 	border: 1px solid #009bcb;
 	margin-right: 5px;
 }
@@ -705,4 +706,16 @@ a.x-menu-check-item {
 .go-display-panel .x-toolbar-more-icon {
 	background-image: url(images/extjs/toolbar/more.gif)!important;
 	width: 12px !important;
+}
+
+.x-toolbar{
+	padding: 10px 10px 0px 10px !important;
+}
+
+.go-paging-tb{
+	padding: 0px 10px 10px 10px !important;
+}
+
+.go-head-tb {
+	padding: 0px 0px 10px !important;
 }

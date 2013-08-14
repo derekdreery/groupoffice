@@ -45,6 +45,9 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 	
 	private static $fields;
 	
+	public $parentslug;
+	public $baseslug;
+	
 	protected function afterLoad() {
 		
 		//load cf
@@ -55,9 +58,34 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 				self::$fields[$field->name]= $field;
 			}
 		}
-			
+		
+	
+		$this->_loadSlug();
 		
 		return parent::afterLoad();
+	}
+	
+//	protected function afterCreate() {
+//		$this->_loadSlug();
+//		return parent::afterCreate();
+//	}
+	
+	private function _loadSlug(){
+		
+		if($this->isNew && $this->parent){
+			$this->parentslug=$this->parent->slug.'/';
+			$this->baseslug="";
+		}  else {
+			
+		
+			if(($pos = strrpos($this->slug, "/"))){
+				$this->parentslug=substr($this->slug,0, $pos+1);
+			}else {
+				$this->parentslug="";
+			}
+		
+			$this->baseslug=basename($this->slug);
+		}
 	}
 	
 	public function __get($name) {
@@ -68,7 +96,8 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 		}
 
 	}
-
+	
+	
 	/*
 	 * Attach the customfield model to this model.
 	 */
@@ -254,19 +283,27 @@ class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
 		 return parent::afterSave($wasNew);
 	 }
 	 
+	 public function setAttribute($name, $value, $format = false) {
+		 
+		 parent::setAttribute($name, $value, $format);
+		 
+		 if($name=='parent_id'){
+			 $this->_loadSlug();
+		 }
+		 
+	 }
+	 
 	 
 	 protected function beforeSave() {
 		 
 		 // This check is needed to set the correct slug when the item is dragged/dropped to another parent
-		 if($this->isModified('parent_id') && !$this->isNew){
-			 $slugArray = explode('/',$this->slug);
-			 $ownSlug = array_pop($slugArray);
+//		 if($this->isModified('parent_id') && !$this->isNew){
 			 
 			 if(!empty($this->parent_id))
-				$this->slug = $this->parent->slug.'/'.$ownSlug;
+				$this->slug = $this->parent->slug.'/'.$this->baseslug;
 			 else
-				$this->slug = $ownSlug;
-		 }
+				$this->slug = $this->baseslug;
+//		 }
 		 
 		 return parent::beforeSave();
 	 }

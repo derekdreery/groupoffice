@@ -57,22 +57,13 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 		echo $this->renderJson($response);
 	}
 	
-	protected function actionLoad($params){
-
-		$model= GO_Site_Model_Content::model()->createOrFindByParams($params);
-		
-		$remoteComboFields = array();
-		
-		$extraFields=array('slug'=>basename($model->slug));
-		
-		if($model->parent){
-			$extraFields['parentslug'] = $model->parent->slug.'/';			
-		}else{
-			$extraFields['parentslug'] = '';
-		}
-		
-		echo $this->renderForm($model, $remoteComboFields, $extraFields);
-	}
+//	protected function actionLoad($params){
+//
+//		$model= GO_Site_Model_Content::model()->createOrFindByParams($params);
+//		
+//		
+//		echo $this->renderForm($model, $remoteComboFields, $extraFields);
+//	}
 	
 	protected function actionUpdate($params){
 		
@@ -85,26 +76,31 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 				
 		$model->setAttributes($params);
 		
-		if(isset($params['slug'])){
-			if($model->parent)
-				$model->slug = $model->parent->slug.'/'.$model->slug;
+		
+		if(GO_Base_Util_Http::isPostRequest()){	
+			
+			
+			$model->save();
+			echo $this->renderSubmit($model);
+		}  else {
+			$remoteComboFields = array();
+		
+			echo $this->renderForm($model, $remoteComboFields);
 		}
-		$model->save();
-		echo $this->renderSubmit($model);
 	}
 	
 	protected function actionCreate($params) {
 		$model = new GO_Site_Model_Content();
 		$model->setAttributes($params);
 				
-		if($model->parent){
-			$model->slug = $model->parent->slug.'/'.$model->slug;
-		}
 		$model->setDefaultTemplate();
-		
-		$model->save();
 
-		echo $this->renderSubmit($model);
+		if(GO_Base_Util_Http::isPostRequest()){
+			$model->save();
+			echo $this->renderSubmit($model);
+		}  else {
+			echo $this->renderForm($model);
+		}
   }
 		
 	protected function actionDelete($params) {
@@ -125,14 +121,7 @@ class GO_Site_Controller_Content extends GO_Base_Controller_AbstractJsonControll
 		
 		if(!$model)
 			Throw new Exception('No content item found with the following id: '.$id);
-		
-//		if($model->parent){
-//			$model->parentslug = $model->parent->slug.'/';
-//			$model->slug = str_replace($model->parentslug, '', $model->slug);
-//		} else {
-//			$model->parentslug = '';
-//		}
-		
+
 		return $model;
 	}
 }

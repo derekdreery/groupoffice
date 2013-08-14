@@ -15,6 +15,8 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 		this.setContentId(contentId);
 		this.ownerCt.getLayout().setActiveItem(this);
 		this.form.load({
+			method:'GET',
+			url:GO.url('site/content/update'),
 			success:function(form, action){
 				if(this.fileBrowseButton){
 					this.fileBrowseButton.setId(action.result.data.site_id);
@@ -30,6 +32,8 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 		this.form.baseParams.parent_id = parentId;
 		
 		this.form.load({
+			method:'GET',
+			url:GO.url('site/content/create'),
 			success:function(form, action){
 				if(this.fileBrowseButton){
 					this.fileBrowseButton.setId(action.result.data.site_id);
@@ -78,7 +82,7 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 //		config.title = GO.site.lang.content;
 		config.layout='form';
 		config.border = false;
-		config.url = GO.url('site/content/load');
+		config.url = GO.url('site/content/update');
 		config.baseParams = {
 			id:false
 		}
@@ -169,7 +173,7 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 		});
 		
 		this.slugField = new Ext.form.TextField({
-			name: 'slug',
+			name: 'baseslug',
 			width:148,
 			maxLength: 255,
 			allowBlank:true,
