@@ -201,7 +201,7 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 						
 						'<tr>'+
             '<td>'+GO.files.lang.downloadUrl+':</td>'+
-            '<td><a href="{download_link}" target="_blank">{download_link}</a>'+
+            '<td><a href="{download_link}" target="_blank">'+GO.files.lang.rightClickToCopy+'</a>'+
 						//'<tpl if="unlock_allowed">'+
 							' <span class="fs-deleteDL" style="cursor:pointer;text-decoration:underline;">['+GO.files.lang.deletedDownloadLink+']</span>'+
 						//'</tpl>'+

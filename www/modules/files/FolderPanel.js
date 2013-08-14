@@ -64,7 +64,7 @@ GO.files.FolderPanel = Ext.extend(GO.DisplayPanel,{
 					
 					'<tr>'+
 						'<td>URL:</td>'+
-						'<td><a target="_blank" href="{url}">{url}</a></td>'+
+						'<td><a target="_blank" href="{url}">'+GO.files.lang.rightClickToCopy+'</a></td>'+
 					'</tr>'+
 
 					'<tpl if="!GO.util.empty(comment)">'+

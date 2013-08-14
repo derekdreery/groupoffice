@@ -131,3 +131,5 @@ $l['alwaysAsk']="Always ask";
 $l['openWith']='Open with';
 
 $l['open']='Open';
+
+$l['rightClickToCopy']='Right click to copy';
