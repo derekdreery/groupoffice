@@ -278,9 +278,8 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 	background-image: url(/images/extjs/form/clear-trigger.gif) !important;
 }
 
-.x-small-editor .x-form-field-wrap .x-form-trigger {
-	border-bottom: 1px solid #009bc9;
-}
+
+
 
 .x-form-field-wrap .x-form-trigger {
 	background-image: url(/images/extjs/form/trigger.gif);
@@ -364,13 +363,13 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 	padding: 0;
 }
 
-.go-white-bg .x-btn, .go-moduletabs-body .go-display-panel .x-btn, .x-window .x-panel-tbar .x-btn{
+.go-white-bg  .x-panel-tbar .x-btn, .go-moduletabs-body .go-display-panel .x-btn, .x-window .x-panel-tbar .x-btn{
 	border: 1px solid #009bcb;	
 	margin-right: 5px;
 }
 
 
-.go-white-bg .x-btn-text, .go-moduletabs-body .go-display-panel .x-btn-text-icon .x-btn-icon-small-left .x-btn-text, .x-date-bottom .x-btn-text, .x-window .x-btn-text {
+.go-white-bg  .x-panel-tbar  .x-btn-text, .go-moduletabs-body .go-display-panel .x-btn-text-icon .x-btn-icon-small-left .x-btn-text, .x-date-bottom .x-btn-text, .x-window .x-btn-text {
 	font-size: 10px !important;
 	font-weight: bold;
 	padding: 0 5px !important;
@@ -381,7 +380,7 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 	padding: 0;
 }
 
-.go-white-bg button{
+.go-white-bg .x-panel-tbar button{
 	background-image: none !important;
 }
 
@@ -726,4 +725,12 @@ a.x-menu-check-item {
 
 .x-form{
 	padding: 10px !important;
+}
+
+
+.x-small-editor .x-form-field-wrap .x-form-trigger {
+	border-bottom: 1px solid #009bc9;
+}
+.x-html-editor-tb .x-small-editor{
+	padding:2px !important;
 }
