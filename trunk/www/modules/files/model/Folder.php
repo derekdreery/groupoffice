@@ -320,6 +320,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			if(!$this->fsFolder->exists()){				
 
 				if($this->isModified('parent_id')){
+					GO_Files_Model_Folder::model()->clearFolderCache();
 					//file will be moved so we need the old folder path.
 					$oldFolderId = $this->getOldAttributeValue('parent_id');
 					$oldFolder = GO_Files_Model_Folder::model()->findByPk($oldFolderId, false, true);				
@@ -352,6 +353,9 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 				
 				//if the filesystem folder is missing check if we need to move it when the name or parent folder changes.
 				if($this->isModified('name')){
+					
+					GO_Files_Model_Folder::model()->clearFolderCache();
+					
 					GO::debug("Renaming from ".$this->getOldAttributeValue('name')." to ".$this->name);
 
 					$oldFsFolder = new GO_Base_Fs_Folder(dirname($this->fsFolder->path()).'/'.$this->getOldAttributeValue('name'));
@@ -408,6 +412,9 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	
 	private $_folderCache=array();
 
+	public function clearFolderCache(){
+		$this->_folderCache=array();
+	}
 	/**
 	 * Find a folder by path relative to GO::config()->file_storage_path
 	 * 

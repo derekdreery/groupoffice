@@ -815,6 +815,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		$currentPath = $folder->path;
 		$newPath = $model->buildFilesPath();
+		
 
 		if(!$newPath)
 			return false;
@@ -838,7 +839,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			//for example:
 			//projects/Name must be moved into projects/Name/Name
 			//then we temporarily move it to a temp name
-			if($destinationFolder->id==$folder->id){
+			if($destinationFolder->id==$folder->id || $destinationFolder->fsFolder->isSubFolderOf($folder->fsFolder)){
 				GO::debug("Destination folder is the same!");
 				$folder->name=uniqid();
 				$folder->systemSave=true;
@@ -850,6 +851,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 				$destinationFolder = GO_Files_Model_Folder::model()->findByPath(
 							dirname($newPath), true);
+				
 
 				GO::debug("Now moving to:".$destinationFolder->fsFolder->path());
 
@@ -894,7 +896,9 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				$folder->visible = 0;
 				$folder->readonly = 1;
 				if($folder->isModified())
-					$folder->save(true);
+					if(!$folder->save(true)){
+						throw new Exception(var_export($folder->getValidationErrors(), true));
+					}
 			}
 		}else
 		{
