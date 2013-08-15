@@ -1,0 +1,12 @@
+#!/bin/sh
+set -e
+
+if [ -e /usr/share/groupoffice/modules/z-push/backend/GObackend.php ]; then
+	cp /usr/share/groupoffice/modules/sync/z-push/backend/GObackend.php /usr/share/groupoffice/modules/z-push/backend/GObackend.php
+fi
+
+if [ -e /usr/share/groupoffice/modules/z-push2/backend/go ]; then
+	cp -R /usr/share/groupoffice/modules/sync/z-push2/backend/go /usr/share/groupoffice/modules/z-push2/backend/
+fi
+
+exit 0
