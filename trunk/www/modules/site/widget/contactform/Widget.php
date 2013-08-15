@@ -7,7 +7,7 @@ class GO_Site_Widget_Contactform_Widget extends GO_Site_Components_Widget {
 	public $fieldSeparator = '';			//html between input fields
 	public $submitButtonText = 'Send';		//text in submit button
 	public $successText = "Thank you! Your message was sent successfully.";
-	
+	public $submitButtonOptions=array();
 	protected $formModel;
 	protected $form;
 	
@@ -46,7 +46,7 @@ class GO_Site_Widget_Contactform_Widget extends GO_Site_Components_Widget {
 		$result .= $this->form->error($this->formModel, 'message');
 		$result .= $this->fieldSeparator;
 
-		$result .=$this->form->submitButton($this->submitButtonText);
+		$result .=$this->form->submitButton($this->submitButtonText, $this->submitButtonOptions);
 		$result .= $this->form->endForm();
 
 		return $result;
