@@ -1,6 +1,6 @@
 #!/usr/bin/php
 <?php
-$root = 'svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-4.2';
+$root = 'svn+ssh://svn@svn.intermesh.nl/groupoffice-pro/branches/modules-5.0';
 exec('svn ls '.$root, $output, $ret);
 
 if($ret!=0)
