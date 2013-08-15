@@ -1,5 +1,6 @@
 - Added a check for empty "name" property in an email part to determine if it is a mail body or an attachment
 - Added check for (left)mousebutton in onmousedown event in the calendarGrid so the dragevent will not be fired when doing a right click
+- Billing module, duplicate order: duplicate window --> default no link to original, no duplicate window --> default link to original.
 
 13-08-2013 4.2.11
 - Fixed duplicate entry error on installer.
