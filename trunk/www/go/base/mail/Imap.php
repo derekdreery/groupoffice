@@ -1753,7 +1753,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 					$vals['number'] = $id;
 					//GO::debug($vals);
 
-					if ($vals['type'] == $type && $subtype == $vals['subtype'] && $vals['disposition']!='attachment') {
+					if ($vals['type'] == $type && $subtype == $vals['subtype'] && $vals['disposition']!='attachment' && empty($vals['name'])) {
 
 						$parts['text_found']=true;
 						$parts['parts'][] = $vals;

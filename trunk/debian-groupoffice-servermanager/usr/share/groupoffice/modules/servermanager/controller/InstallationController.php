@@ -368,10 +368,11 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 		GO_Base_Util_ConfigEditor::save($configFile, $existingConfig);
 		$configFile->chown('root');
 		$configFile->chgrp('www-data');
-		$configFile->chmod(0640);		
+		$configFile->chmod(0660);		
 		
 		$this->_createDatabase($params,$installation, $existingConfig);		
 		
+		$configFile->chmod(0640);		
 	}
 	
 	private function _createDatabaseContent($params, $installation, $config){
@@ -485,6 +486,8 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 				
 		$tmpFolder = new GO_Base_Fs_Folder('/tmp/'.$installation->name);
 		$tmpFolder->create(0777);
+		$tmpFolder->chown('www-data');
+		$tmpFolder->chgrp('www-data');
 		
 		$configFolder = new GO_Base_Fs_Folder('/etc/groupoffice/'.$installation->name);
 		$configFolder->create(0755);

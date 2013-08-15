@@ -338,6 +338,10 @@ class formprocessor{
 						$cfFields[$k]=$v;
 
 				$contactCfModel = GO_Addressbook_Customfields_Model_Contact::model()->findByPk($contactId);
+				if (!$contactCfModel) {
+					$contactCfModel = new GO_Addressbook_Customfields_Model_Contact();
+					$contactCfModel->model_id = $contactId;
+				}
 				$contactCfModel->setAttributes($cfFields);
 				$contactCfModel->save();
 			}
