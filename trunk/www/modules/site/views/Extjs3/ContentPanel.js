@@ -87,7 +87,7 @@ GO.site.ContentPanel = Ext.extend(Ext.form.FormPanel,{
 			id:false
 		}
 		
-		config.bodyStyle='padding:5px';
+//		config.bodyStyle='padding:5px';
 		config.labelWidth=60;
 		
 		this.reloadButton = new Ext.Button({

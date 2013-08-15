@@ -12,6 +12,7 @@ GO.site.MainPanel = function(config){
 		},
 		items:[
 			this.contentPanel = new GO.site.ContentPanel({
+				cls:'go-white-bg',
 				parentPanel:this
 			})
 			]
@@ -35,7 +36,7 @@ GO.site.MainPanel = function(config){
 	this.reloadButton = new Ext.Button({
 		iconCls: 'btn-refresh',
 		itemId:'refresh',
-		//text: GO.site.lang.refresh,
+		text: GO.lang.cmdRefresh,
 		cls: 'x-btn-text-icon'
 	});
 	
@@ -45,9 +46,11 @@ GO.site.MainPanel = function(config){
 	
 	config.tbar=new Ext.Toolbar({
 			cls:'go-head-tb',
-			items: [
-				this.reloadButton,
-				'-'
+			items: [{
+	    xtype:'htmlcomponent',
+			html:GO.site.lang.name,
+			cls:'go-module-title-tbar'
+		},this.reloadButton
 			]
 	});
 	
