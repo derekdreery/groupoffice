@@ -687,7 +687,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 				}				
 				text += eventData['name'];
 			
-				var cls = "x-viewGrid-event-container";
+				var cls = "x-viewGrid-event-container  cal-event-partstatus-"+eventData.partstatus;
 
 				if(eventData.link_count>0){
 					cls +=' cal-has-links'
