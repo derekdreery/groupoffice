@@ -342,3 +342,5 @@ $updates['201305031458'][] = "ALTER TABLE  `go_acl_items` ADD  `mtime` INT NOT N
 
 $updates['201305031735'][]="ALTER TABLE `go_users` ADD `muser_id` int(11) NOT NULL DEFAULT '0';";
 $updates['201305240933'][]="ALTER TABLE `go_users` ADD `holidayset` VARCHAR( 10 ) NULL ";
+
+$updates['201308151229'][]="UPDATE go_users SET theme='Group-Office' WHERE theme='Default' or theme='ExtJS';";

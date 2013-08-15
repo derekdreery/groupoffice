@@ -256,7 +256,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $theme = 'Default';
+	var $theme = 'Group-Office';
 
 	/**
 	 * Default theme
@@ -931,7 +931,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '4.2.12';
+	var $version = '5.0.0';
 	
 	/**
 	 * Modification date
