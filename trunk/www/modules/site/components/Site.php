@@ -139,22 +139,15 @@ class Site {
 	 */
 	public static function launch() {
 		
-		if(empty(GO::session()->values['sites']['site']) || GO::config()->debug){
-			if(!empty(GO::session()->values['sites']['site_id']))
-				GO::session()->values['sites']['site'] = GO_Site_Model_Site::model()->findByPk(GO::session()->values['sites']['site_id']);
-			else
-				GO::session()->values['sites']['site'] = GO_Site_Model_Site::model()->findSingleByAttribute('domain', $_SERVER["SERVER_NAME"]); // Find the website model from its domainname
 
-			if(!GO::session()->values['sites']['site']){
-				GO::session()->values['sites']['site'] = GO_Site_Model_Site::model()->findSingleByAttribute('domain', '*'); // Find the website model from its domainname
-			}
+		self::$_site=GO_Site_Model_Site::model()->findSingleByAttribute('domain', $_SERVER["SERVER_NAME"]); // Find the website model from its domainname
 
-			if(!GO::session()->values['sites']['site'])
-				throw new GO_Base_Exception_NotFound('Website for domain '.$_SERVER["SERVER_NAME"].' not found in database');
-		}
-		
-		self::$_site=GO::session()->values['sites']['site'];
-		
+		if(!self::$_site)
+			self::$_site=GO_Site_Model_Site::model()->findSingleByAttribute('domain', '*'); // Find the website model from its domainname
+
+		if(!self::$_site)
+			throw new GO_Base_Exception_NotFound('Website for domain '.$_SERVER["SERVER_NAME"].' not found in database');
+	
 		if(!empty(self::model()->language))
 			GO::language()->setLanguage(self::model()->language);
 
