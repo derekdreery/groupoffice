@@ -163,6 +163,30 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 		return $hidden . $this->staticInputField('radio',$name,$value,$htmlOptions);
 	}
 	
+	public function dateField($model,$attribute,$htmlAttributes=array()){
+		
+		$currentUser = GO::user();		
+		$dateFormatArr = array();
+		$goDateFormat = !empty($currentUser) ? $currentUser->date_format : GO::config()->default_date_format;
+		$goDateSeparator = !empty($currentUser) ? $currentUser->date_separator : GO::config()->default_date_separator;
+		
+		for ($i=0;$i<3;$i++) {
+			if ($goDateFormat[$i]=='Y')
+				$dateFormatArr[] = 'yy';
+			else
+				$dateFormatArr[] = $goDateFormat[$i].$goDateFormat[$i];
+		}
+		
+		Site::scripts()->registerGapiScript('jquery');
+		Site::scripts()->registerGapiScript('jquery-ui');
+		Site::scripts()->registerCssFile('http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css');
+		Site::scripts()->registerScript('datepicker', '$(function() {
+$( "#datepicker" ).datepicker({ dateFormat: "'.implode($goDateSeparator,$dateFormatArr).'" });
+});');
+		$htmlAttributes['id'] = 'datepicker';
+		return $this->_inputField('text',$model,$attribute,$htmlAttributes);
+	}
+	
 	public function textField($model,$attribute,$htmlAttributes=array()){
 		return $this->_inputField('text',$model,$attribute,$htmlAttributes);
 	}
