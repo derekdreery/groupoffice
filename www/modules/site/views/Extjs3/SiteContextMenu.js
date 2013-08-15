@@ -10,7 +10,7 @@ GO.site.SiteContextMenu = function(config){
 		text: GO.lang.strView,
 		cls: 'x-btn-text-icon',
 		handler:function(){
-//			window.open(GO.url('site/site/redirectToFront', {id: this.selected[0].attributes.site_id}));			
+			window.open(GO.config.settings.host+'modules/site/index.php?site_id='+this.selected.attributes.site_id);			
 		},
 		scope:this
 	});

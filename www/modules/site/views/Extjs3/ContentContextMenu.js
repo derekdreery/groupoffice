@@ -5,16 +5,16 @@ GO.site.ContentContextMenu = function(config){
 
 	config.items=[];
 	
-	this.actionView = new Ext.menu.Item({
-		iconCls: 'btn-view',
-		text: GO.lang.strView,
-		cls: 'x-btn-text-icon',
-		handler:function(){
-			console.log("View");
+//	this.actionView = new Ext.menu.Item({
+//		iconCls: 'btn-view',
+//		text: GO.lang.strView,
+//		cls: 'x-btn-text-icon',
+//		handler:function(){
+////			console.log("View");
 //			window.open(GO.url('site/content/redirectToFront', {id: this.selected[0].id}));			
-		},
-		scope:this
-	});
+//		},
+//		scope:this
+//	});
 
 	
 	this.actionAdvanced = new Ext.menu.Item({
@@ -50,7 +50,7 @@ GO.site.ContentContextMenu = function(config){
 		}
 	});
 	
-	config.items.push(this.actionView);
+//	config.items.push(this.actionView);
 	config.items.push(this.actionAdvanced);
 	config.items.push(this.actionAdd);
 	config.items.push(this.actionDelete);
