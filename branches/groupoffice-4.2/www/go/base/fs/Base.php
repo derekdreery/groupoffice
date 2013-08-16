@@ -30,6 +30,9 @@ abstract class GO_Base_Fs_Base{
 	 * @throws Exception
 	 */
 	public function __construct($path) {
+		
+//		GO::debug("FS construct $path");
+		
 		if(empty($path))
 			throw new Exception("Path may not be empty in GO_Base_Fs_Base");
 		
