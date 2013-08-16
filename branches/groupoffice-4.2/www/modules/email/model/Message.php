@@ -220,55 +220,43 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	
 	protected function extractUuencodedAttachments(&$body)
 	{
-		$body = str_replace("\r", '', $body);
-		$regex = "/(begin ([0-7]{3}) (.+))\n(.+)\nend/Us";
+//		$body = str_replace("\r", '', $body);
+		
+		if(($pos = strpos($body, 'begin '))===false)
+			return;
+		
+		$regex = "/(begin ([0-7]{3}) (.+))\n/";
+		
+		$atts = substr($body,$pos);
+		$body = substr($body,0, $pos);
 
-		preg_match_all($regex, $body, $matches);
+		preg_match_all($regex, $atts, $matches, PREG_OFFSET_CAPTURE);
 
-    
-    for ($i = 0; $i < count($matches[3]); $i++) {
+//		throw new E$attxception(var_export($matches, true));
+
+	
+    for ($i = 0, $count = count($matches[3]); $i < $count; $i++) {
 //			$boundary	= $matches[1][$i];
 //			$fileperm	= $matches[2][$i];
-			$filename	= trim($matches[3][$i]);
-
+			$filename	= trim($matches[3][$i][0]);
+			$offset = $matches[3][$i][1]+strlen($matches[3][$i][0])+1;
+			
+			$endpos = strpos($atts,'end',$offset)-$offset-1;
+			
+			$att = str_replace(array("\r"),"",substr($atts, $offset, $endpos));
+			$atts = substr($atts, $endpos);
 			//$size = strlen($matches[4][$i]);
 
 			$file = GO_Base_Fs_File::tempFile($filename);
-			$file->putContents(convert_uudecode($matches[4][$i]));
+			$file->putContents(convert_uudecode($att));
+//			$file->putContents($att);
 			
 			$a = GO_Email_Model_MessageAttachment::model()->createFromTempFile($file);
 			$a->number = "UU".$i;
 			$this->addAttachment($a);
-			
-//			$this->attachments["UU".$i]=array(
-//				"url"=>GO::url('core/downloadTempFile', array('path'=>$file->stripTempPath())),
-//				'name'=>$filename,
-//				"content_id"=>"",
-//				"mime"=>$file->mimeType(),
-//				'disposition'=>'attachment',
-//				'encoding'=>'',
-//				"tmp_file"=>$file->path(),
-//				"index"=>-1,				
-//				'size'=>$file->size(),
-//				'human_size'=>$file->humanSize(),
-//				"extension"=>$file->extension()
-//			);
     }
-		
-    //remove it from the body.
-    $body = preg_replace($regex, "", $body);
 	}
 
-//	/** 
-//	 * Return the URL to display the attachment
-//	 * 
-//	 * @param array $attachment See getAttachments
-//	 * @return string 
-//	 */
-//	protected function getAttachmentUrl($attachment) {
-//		return '';
-//	}
-//	
 	private function _convertRecipientArray($r){
 		$new = array();
 		foreach($r as $email=>$personal)
@@ -325,7 +313,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		$response['zip_of_attachments_url']=$this->getZipOfAttachmentsUrl();
 
 		$response['inlineAttachments'] = array();
-		
+
 		if($html) {
 			$response['htmlbody'] = $this->getHtmlBody(false,$noMaxBodySize);
 			$response['subject'] = htmlspecialchars($this->subject,ENT_COMPAT,'UTF-8');
