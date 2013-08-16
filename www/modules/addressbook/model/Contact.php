@@ -376,7 +376,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 * @return \GO_Base_Fs_File
 	 */
 	public function getPhotoFile(){
-		if(!isset($_photoFile)){
+		if(!isset($this->_photoFile)){
 			if(empty($this->photo))
 				$this->photo=$this->id.'.jpg';
 		
