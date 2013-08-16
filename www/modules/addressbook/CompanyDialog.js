@@ -19,6 +19,101 @@ GO.addressbook.CompanyDialog = function(config)
 	
 	this.personalPanel = new GO.addressbook.CompanyProfilePanel();	    
 		    
+	
+				
+	GO.addressbook.CompanyPhoto = Ext.extend(Ext.BoxComponent, {
+		autoEl : {
+				tag: 'img',
+				cls:'ab-photo',
+				src:Ext.BLANK_IMAGE_URL
+			},
+	
+		setPhotoSrc : function(url)
+		{
+			if (this.el)
+				this.el.set({
+					src: GO.util.empty(url) ? Ext.BLANK_IMAGE_URL : url
+				});
+			this.setVisible(true);
+		}
+	});
+
+	this.companyPhoto = new GO.addressbook.CompanyPhoto();
+
+	this.deleteImageCB = new Ext.form.Checkbox({
+		boxLabel: GO.addressbook.lang.deleteImage,
+		labelSeparator: '',
+		name: 'delete_photo',
+		allowBlank: true,
+		hideLabel:true,
+		disabled:true
+	});
+
+	this.uploadFile = new GO.form.UploadFile({
+		inputName : 'image',
+		max: 1
+	})
+
+	this.fullImageButton = new Ext.Button({
+			text:GO.addressbook.lang.downloadFullImage,
+			disabled:false,
+			handler:function(){
+				window.open(this.originalPhotoUrl,'_blank');
+			},
+			scope:this
+		});
+
+	this.photoPanel = new Ext.Panel({
+		title : GO.addressbook.lang.photo,
+		layout: 'form',
+		border:false,
+		cls : 'go-form-panel',		
+		autoScroll:true,
+		labelAlign:'top',
+		items:[	{
+				style:'margin-bottom:15px',
+				xtype:'button',
+				text:GO.addressbook.lang.searchForImages,
+				scope:this,
+				handler:function(){
+					var f= this.companyForm.form;
+					var n2 = f.findField('name2').getValue();
+					
+					if(n2)
+						n2 = ' '+n2;
+					else
+						n2 = '';
+					
+					var name = f.findField('name').getValue()+n2;
+					var sUrl = 'http://www.google.com/search?tbm=isch&q="'+encodeURIComponent(name)+'"';
+					window.open(sUrl);
+				}
+			},
+			{
+				
+				xtype:'textfield',
+				fieldLabel:GO.addressbook.lang.downloadPhotoUrl,
+				name:'download_photo_url',
+				anchor:'100%'
+			},{
+				style:'margin-top:15px;margin-bottom:10px;',
+				html:GO.addressbook.lang.orBrowseComputer+':',
+				xtype:'htmlcomponent'
+			},
+			this.uploadFile,
+			{
+				style:'margin-top:15px',
+				html:GO.addressbook.lang.currentImage+':',
+				xtype:'htmlcomponent'
+			},
+			this.companyPhoto,
+			this.deleteImageCB,
+			this.fullImageButton
+		]
+	});
+	
+				
+				
 	this.commentPanel = new Ext.Panel({
 		title: GO.addressbook.lang['cmdPanelComments'], 
 		layout: 'fit',
@@ -42,6 +137,7 @@ GO.addressbook.CompanyDialog = function(config)
   
 	var items = [
 	this.personalPanel,
+	this.photoPanel,
 	this.commentPanel];
 	      	
 	this.selectAddresslistsPanel = new GO.addressbook.SelectAddresslistsPanel();
@@ -58,6 +154,7 @@ GO.addressbook.CompanyDialog = function(config)
 	}	
 	
 	this.companyForm = new Ext.FormPanel({
+		fileUpload : true,
 		waitMsgTarget:true,		
 		border: false,
 		baseParams: {},
@@ -328,6 +425,11 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 				this.personalPanel.setCompanyId(action.result.data['id']);
 				this.moveEmployeesButton.setDisabled(false);
 				
+				if(!GO.util.empty(action.result.data.photo_url))
+					this.setPhoto(action.result.data.photo_url);
+				if(!GO.util.empty(action.result.data.original_photo_url))
+					this.setOriginalPhoto(action.result.data.original_photo_url);
+				
 				if(GO.customfields)
 					GO.customfields.disableTabs(this.tabPanel, action.result);	
 				
@@ -379,7 +481,19 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 				}				
 				this.fireEvent('save', this, this.company_id);
 				
+				this.uploadFile.clearQueue();
+				
 				GO.dialog.TabbedFormDialog.prototype.refreshActiveDisplayPanels.call(this);
+				
+				if(!GO.util.empty(action.result.photo_url))
+					this.setPhoto(action.result.photo_url);
+				else
+					this.setPhoto("");
+				
+				if(!GO.util.empty(action.result.original_photo_url))
+					this.setOriginalPhoto(action.result.original_photo_url);
+				else
+					this.setOriginalPhoto("");	
 				
 				if (hide)
 				{
@@ -397,5 +511,16 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 			},
 			scope: this
 		});			
+	},
+	
+	setOriginalPhoto : function(url){
+		this.originalPhotoUrl = url;
+	},
+	setPhoto : function(url)
+	{
+		this.companyPhoto.setPhotoSrc(url);
+		this.deleteImageCB.setValue(false);
+		this.deleteImageCB.setDisabled(url=='');
 	}
+	
 });

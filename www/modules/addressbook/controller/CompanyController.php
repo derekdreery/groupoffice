@@ -12,6 +12,9 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 
 	protected function afterDisplay(&$response, &$model, &$params) {
 
+		$response['data']['photo_url']=$model->photoThumbURL;
+		$response['data']['original_photo_url']=$model->photoURL;
+		
 		$response['data']['addressbook_name'] = $model->addressbook->name;
 
 		$response['data']['google_maps_link'] = GO_Base_Util_Common::googleMapsLink(
@@ -104,6 +107,9 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		if (GO::modules()->customfields)
 			$response['customfields'] = GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Addressbook_Model_Company", $model->addressbook_id);
 
+		$response['data']['photo_url']=$model->photoThumbURL;		
+		$response['data']['original_photo_url']=$model->photoURL;
+		
 		$stmt = $model->addresslists();
 		while ($addresslist = $stmt->fetch()) {
 			$response['data']['addresslist_' . $addresslist->id] = 1;
@@ -130,8 +136,50 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 			}
 		}
 
+		
+		if(!empty($params['delete_photo'])){
+			$model->removePhoto();
+			$model->save();
+		}
+		
+		if (isset($_FILES['image']['tmp_name'][0]) && is_uploaded_file($_FILES['image']['tmp_name'][0])) {
+		
+			
+			$destinationFile = new GO_Base_Fs_File(GO::config()->getTempFolder()->path().'/'.$_FILES['image']['name'][0]);
+			
+			move_uploaded_file($_FILES['image']['tmp_name'][0], $destinationFile->path());
+			
+			$model->setPhoto($destinationFile);
+			$model->save();
+			$response['photo_url'] = $model->photoThumbURL;
+			$response['original_photo_url'] = $model->photoURL;
+		}elseif(!empty($params['download_photo_url'])){
+			
+			$file = GO_Base_Fs_File::tempFile();	
+			$c = new GO_Base_Util_HttpClient();
+			
+			if(!$c->downloadFile($params['download_photo_url'], $file))
+				throw new Exception("Could not download photo from: '".$params['download_photo_url']."'");
+						
+			$model->setPhoto($file);
+			$model->save();					
+			$response['photo_url'] = $model->photoThumbURL;
+			$response['original_photo_url'] = $model->photoURL;
+		}
+		
+		
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}
+	
+	
+	protected function actionPhoto($params){
+		//fetching contact will check read permission
+		$company = GO_Addressbook_Model_Company::model()->findByPk($params['id']);
+		
+		GO_Base_Util_Http::outputDownloadHeaders($company->getPhotoFile(), true, false);
+		$company->getPhotoFile()->output();
+	}
+	
 	
 	protected function beforeStoreStatement(array &$response, array &$params, GO_Base_Data_AbstractStore &$store, GO_Base_Db_FindParams $storeParams) {
 		
