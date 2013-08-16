@@ -199,6 +199,20 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 	}
 	
 	
+	public function setFolderPermissions2(){
+		if(GO::modules()->isInstalled('files')){
+			GO_Base_Fs_Folder::createFromPath(GO::config()->file_storage_path.'company_photos');
+			$folderModel = GO_Files_Model_Folder::model()->findByPath('company_photos', true);
+			if($folderModel && !$folderModel->acl_id){
+				$folderModel->setNewAcl(1);
+				$folderModel->readonly=1;
+				$folderModel->save();
+			}			
+		}
+		
+	}
+	
+	
 	public function checkDatabase(&$response) {
 		
 		$this->setFolderPermissions();

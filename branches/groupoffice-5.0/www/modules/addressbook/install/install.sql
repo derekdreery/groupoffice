@@ -99,6 +99,7 @@ CREATE TABLE IF NOT EXISTS `ab_companies` (
   `files_folder_id` int(11) NOT NULL DEFAULT '0',
   `crn` varchar(50) DEFAULT '',
   `iban` varchar(100) DEFAULT '',
+	`photo` VARCHAR( 255 ) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `addressbook_id` (`addressbook_id`),
   KEY `addressbook_id_2` (`addressbook_id`),

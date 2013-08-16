@@ -385,3 +385,7 @@ $updates['201307231600'][]="CREATE TABLE IF NOT EXISTS `ab_portlet_birthdays` (
   `addressbook_id` int(11) NOT NULL,
   PRIMARY KEY (`user_id`,`addressbook_id`)
 ) ENGINE=InnoDB;";
+
+$updates['201308161215'][]="ALTER TABLE  `ab_companies` ADD  `photo` VARCHAR( 255 ) NOT NULL";
+$updates['201308161215'][]="update ab_contacts set photo=concat('contacts/contact_photos/',id,'.jpg');";
+$updates['201308161215'][]="script:5_set_photo_permissions_2.php";

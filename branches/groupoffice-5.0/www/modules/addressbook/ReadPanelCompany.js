@@ -30,7 +30,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 			this.template = '<div>'+
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
 				'<tr>'+
-						'<td colspan="2" class="display-panel-heading">'+GO.addressbook.lang.company+': {name}</td>'+
+						'<td colspan="3" class="display-panel-heading">'+GO.addressbook.lang.company+': {name}</td>'+
 				'</tr>'+
 					/*'<tr>'+
 						'<tpl if="this.isCompanySecondColumn(values)">'+
@@ -55,17 +55,36 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 						'<td>'+
 					'</tpl>'+
 					'<table><tr><td>ID:</td><td>{id}</td>'+
-						'<td>'+GO.addressbook.lang.addressbook+':</td><td>{addressbook_name}</td>'+'</tr>'+
+						'<td colspan="2">'+GO.addressbook.lang.addressbook+':</td><td>{addressbook_name}</td>'+'</tr>'+
 					'</table>'+
 					'</td>'+
+					
+					
+					'<tpl if="photo_url">'+
+						'<td rowspan="2" align="right">' +
+
+							'<tpl if="write_permission">'+
+								'<img src="{photo_url}" class="ab-photo" style="cursor:pointer;" onClick="GO.addressbook.showContactDialog({id}, \\{activeTab:1\\} );"/>' +
+							'</tpl>'+
+
+							'<tpl if="!write_permission">'+
+								'<a href="{original_photo_url}" target="_blank">'+
+								'<img src="{photo_url}" class="ab-photo" />' +
+								'</a>'+
+							'</tpl>'+
+
+						'</td>' +
+					'</tpl>'+
+					
+					
 				'</tr>'+
 				'<tr>'+
 					'<tpl if="this.isCompanySecondColumn(values)">'+
-						'<td colspan="2" valign="top" class="display-panel-heading">'+
+						'<td colspan="3" valign="top" class="display-panel-heading">'+
 					'</tpl>'+
 
 					'<tpl if="this.isCompanySecondColumn(values) == false">'+
-						'<td valign="top" class="display-panel-heading">'+
+						'<td colspan="2" valign="top" class="display-panel-heading">'+
 					'</tpl>'+
 
 					GO.addressbook.lang['cmdFieldsetContact']+
@@ -115,17 +134,17 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 					// CONTACT DETAILS+ 2e KOLOM
 					'<tpl if="this.isAddressPost(values)">'+
 						'<tpl if="this.isAddressVisit(values)">'+
-							'<td valign="top" class="contactCompanyDetailsPanelKolom">'+
+							'<td colspan="2" valign="top" class="contactCompanyDetailsPanelKolom">'+
 						'</tpl>'+
 
 						'<tpl if="this.isAddressVisit(values) == false">'+
-							'<td colspan="2" valign="top" class="contactCompanyDetailsPanelKolom100">'+
+							'<td colspan="3" valign="top" class="contactCompanyDetailsPanelKolom100">'+
 						'</tpl>'+
 
 							'<table cellpadding="0" cellspacing="0" border="0">'+
 
 								'<tr>'+
-									'<td colspan="2" class="readPanelSubHeading">' + GO.addressbook.lang['cmdFieldsetPostAddress'] + '</td>'+
+									'<td colspan="3" class="readPanelSubHeading">' + GO.addressbook.lang['cmdFieldsetPostAddress'] + '</td>'+
 								'</tr>'+
 
 								// LEGE REGEL
@@ -199,7 +218,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 						
 						'<tpl if="this.isBankVat(values)">'+
 							// COMPANY DETAILS+ 2e KOLOM
-							'<td valign="top" class="contactCompanyDetailsPanelKolom">'+
+							'<td colspan="2" valign="top" class="contactCompanyDetailsPanelKolom">'+
 								'<table cellpadding="0" cellspacing="0" border="0">'+												
 									
 									//BANK_NO

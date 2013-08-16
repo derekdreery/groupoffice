@@ -10,7 +10,7 @@
  *
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
- * @author Wilmar van Beusekom <wilmar@intermesh.nl>
+ * @author WilmarVB <wilmar@intermesh.nl>
  * @property int $files_folder_id
  * @property boolean $email_allowed
  * @property int $mtime
@@ -45,6 +45,9 @@
  * @property int $id
  * @property int $link_id
  * @property string $invoice_email
+ * 
+ * @property String $photo Full path to photo
+ * @property String $photoURL URL to photo
  */
 
 class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
@@ -55,6 +58,9 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 	 * @var boolean
 	 */
 	public $checkVatNumber=false;
+	
+
+	private $_photoFile;
 	
 	/**
 	 * Returns a static model of itself
@@ -270,4 +276,93 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 						);
 	}
 
+	
+	public function removePhoto(){
+		$this->getPhotoFile()->delete();
+		$this->photo="";
+	}
+	
+	/**
+	 * Set new photo file. The file will be converted into JPEG and resized to fit
+	 * a 480x640 pixel box
+	 * 
+	 * @param GO_Base_Fs_File $file
+	 */
+	public function setPhoto(GO_Base_Fs_File $file){
+		
+		if($this->isNew)
+			throw new Exception("Cannot save a photo on a new company that is not yet saved.");
+		
+		$this->getPhotoFile()->delete();
+				
+		$photoPath = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'company_photos/'.$this->addressbook_id.'/');
+		$photoPath->create();		
+		
+		
+//		if(strtolower($file->extension())!='jpg'){
+		$filename = $photoPath->path().'/'.$this->id.'.jpg';
+		$img = new GO_Base_Util_Image();
+		if(!$img->load($file->path())){
+			throw new Exception(GO::t('imageNotSupported','addressbook'));
+		}
+		
+		//resize it to small image so we don't get in trouble with sync clients
+		$img->fitBox(240,320);
+		
+		if(!$img->save($filename, IMAGETYPE_JPEG)){
+			throw new Exception("Could not save photo!");
+		}
+		$file = new GO_Base_Fs_File($filename);
+//		}else
+//		{		
+//			$file->move($photoPath, $this->id.'.'.strtolower($file->extension()));
+//		}
+	
+		
+		$this->photo=$file->stripFileStoragePath();
+		
+	}
+	
+	/**
+	 * Get the photo file object. It always returns a file even though it doesn't
+	 * exist. Use $contact->photoFile->exists() to detect that.
+	 * 
+	 * @return \GO_Base_Fs_File
+	 */
+	public function getPhotoFile(){
+		if(!isset($_photoFile)){
+			if(empty($this->photo))
+				$this->photo=$this->id.'.jpg';
+		
+			$this->_photoFile = new GO_Base_Fs_File(GO::config()->file_storage_path.$this->photo);
+		}
+		
+		return $this->_photoFile;
+	}
+	
+	/**
+	 * Get the URL to the original photo.
+	 * 
+	 * @return string
+	 */
+	public function getPhotoURL(){
+		return $this->photoFile->exists() 
+						? GO::url('addressbook/company/photo', array('id'=>$this->id,'mtime'=>$this->photoFile->mtime())) 
+						: GO::config()->host.'modules/addressbook/themes/Default/images/unknown-person.png';
+	}
+	
+	public function getPhotoThumbURL($urlParams=array("w"=>90, "h"=>120, "zc"=>1)) {
+		
+		if($this->getPhotoFile()->exists()){
+			$urlParams['filemtime']=$this->getPhotoFile()->mtime();
+			$urlParams['src']=$this->getPhotoFile()->stripFileStoragePath();
+			return GO::url('core/thumb', $urlParams);	
+		}else
+		{
+			return GO::config()->host.'modules/addressbook/themes/Default/images/unknown-person.png';
+		}
+		
+		
+	}
+	
 }
