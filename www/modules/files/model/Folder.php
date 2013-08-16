@@ -701,8 +701,8 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		if($this->mtime < $this->fsFolder->mtime()){
 			GO::debug("Filesystem folder ".$this->path." is not in sync with database. Will sync now.");
 			$this->syncFilesystem ();
-//			$this->mtime=$this->fsFolder->mtime();
-//			$this->save();
+			$this->mtime=$this->fsFolder->mtime();
+			$this->save();
 		}
 	}
 	
@@ -891,7 +891,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 				'lw'=>100,
 				'ph'=>100,
 				'zc'=>1,
-				'filemtime'=>$this->fsFolder->mtime()
+				'filemtime'=>$this->mtime
 				);
 		
 		return GO::url('core/thumb', $params);

@@ -282,11 +282,10 @@ class GO_Base_Util_String {
 		}
 							
 		//Check if preg validates it as UTF8
-		if(preg_match('/^.{1}/us', $str)){
+		if(function_exists('mb_check_encoding') && mb_check_encoding($str,'utf8')){
 			
 			return $str;
-		}
-		
+		}else{
 		//remove non utf8. taken from http://stackoverflow.com/questions/1401317/remove-non-utf8-characters-from-string
 				$regex = <<<'END'
 /
@@ -302,7 +301,8 @@ class GO_Base_Util_String {
 END;
 		
 			return preg_replace($regex, '$1', $str);
-		
+			
+		}
 //		//Not valid still so we are going to validate each utf byte sequence with
 //		//help from Henri Sivonen http://hsivonen.iki.fi/php-utf8/
 //		
