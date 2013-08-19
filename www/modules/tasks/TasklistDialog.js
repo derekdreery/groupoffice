@@ -160,7 +160,7 @@ GO.tasks.TasklistDialog = function(config)
 					title: GO.tasks.lang.tasklist,
 					layout:'fit',
 					modal:false,
-					height:500,
+					height:600,
 					width:440,
 					closeAction:'hide',
 					items: this.tabPanel,

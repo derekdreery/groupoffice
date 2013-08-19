@@ -17,7 +17,7 @@ GO.customfields.CategoryDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		Ext.apply(this, {
 			title:GO.customfields.lang.category,
 			formControllerUrl: 'customfields/category',
-			height:440
+			height:600
 		});
 		
 		GO.customfields.CategoryDialog.superclass.initComponent.call(this);	

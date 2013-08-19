@@ -10,7 +10,7 @@ GO.modules.ModulePermissionsWindow = Ext.extend(GO.Window,{
 			title : GO.lang['strPermissions'],
 			layout : 'fit',
 			modal : false,
-			height : 500,
+			height : 600,
 			width : 440,
 			modal:true,
 			closable:false,
