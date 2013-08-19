@@ -60,6 +60,11 @@ class GO_Base_Language{
 			$this->_langIso=$isoCode;
 		}
 		
+		//validate given language string
+		if(!preg_match('/^[a-z_-]+$/i', $this->_langIso)){
+			throw new Exception("Invalid language iso code given (".$this->_langIso);
+		}
+		
 		if($oldIso!=$this->_langIso)
 			$this->_lang=array();
 		
