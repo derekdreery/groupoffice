@@ -321,12 +321,12 @@ function test_system(){
 	$tests[]=$test;
 	
 	
-	$test['name']='APC Cache';
-	$test['pass']=  extension_loaded('apc');
-	$test['feedback']='Warning: APC is not present. You will get better performance with this extension.';
-	$test['fatal']=false;
-
-	$tests[]=$test;
+//	$test['name']='APC Cache';
+//	$test['pass']=  extension_loaded('apc');
+//	$test['feedback']='Warning: APC is not present. You will get better performance with this extension.';
+//	$test['fatal']=false;
+//
+//	$tests[]=$test;
 
 	
 	
