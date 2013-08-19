@@ -16,7 +16,8 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	initComponent : function(){
 		
 		Ext.apply(this, {
-			autoHeight:true,
+//			autoHeight:true,
+			height:540,
 			goDialogId:'task',
 			title:GO.tasks.lang.scheduleCall,
 			formControllerUrl: 'tasks/task'
@@ -56,7 +57,6 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 				this.formPanel.baseParams.remind_date=this.formPanel.baseParams.due_time=DateObj.format(GO.settings.date_format);	
 		},this);
 		this.propertiesPanel = new Ext.Panel({
-			autoHeight:true,
 			border: false,
 //			baseParams: {date: tomorrow.format(GO.settings.date_format), name: 'TEST'},			
 			cls:'go-form-panel',
@@ -64,7 +64,7 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			waitMsgTarget:true,			
 			items:[{
 					items:this.datePicker,
-					width:220,
+					width:240,
 					style:'margin:auto;'
 				},new GO.form.HtmlComponent({html:'<br />'}),{
 					xtype:'timefield',
