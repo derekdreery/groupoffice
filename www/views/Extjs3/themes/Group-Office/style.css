@@ -2194,3 +2194,14 @@ body.ext-ie6 .x-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em
 .go-tab-notification{
 	display:inline-block;background-color:green;color:white;border-radius:9px;height:20px;width:20px;line-height:20px;text-align:center;
 }
+
+.go-permissions-panel .x-panel-header{
+	padding: 10px 10px 0 0px;
+	margin-left: 10px;
+	border-bottom: 2px solid black;
+}
+
+.go-permissions-panel .x-panel-header-text{
+	font-size: 13px !important;
+	line-height: 20px;
+}

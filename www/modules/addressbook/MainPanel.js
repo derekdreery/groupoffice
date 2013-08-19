@@ -227,9 +227,9 @@ GO.addressbook.MainPanel = function(config)
 
 		this.mailingsFilterPanel= new GO.addressbook.AddresslistsMultiSelectGrid({
 			id: 'ab-mailingsfilter-panel',
-			region:'south',
-			split:true,
-			height:400
+			region:'center',
+			split:true
+			
 		});
 
 		this.mailingsFilterPanel.on('change', function(grid, addresslist_filter){
@@ -251,8 +251,9 @@ GO.addressbook.MainPanel = function(config)
 			layout:'accordion',
 			layoutConfig:{hideCollapseTool:true},
 			border:false,
-			region:'center',
+			region:'north',
 			height:200,
+			split:true,
 			items:[this.addressbooksGrid],
 			id: 'ab-west-panel'
 		});
@@ -352,7 +353,29 @@ GO.addressbook.MainPanel = function(config)
 			this.manageDialog.show();
 		},
 		scope: this
-	}];
+	},{
+	iconCls: "btn-search",
+		handler: function()
+		{
+			if(!this.advancedSearchWindow)
+			{
+				this.advancedSearchWindow = GO.addressbook.advancedSearchWindow = new GO.addressbook.AdvancedSearchWindow();
+//						this.advancedSearchWindow.on('ok', function(win){
+//							this.fireEvent('queryChange', {
+//								advancedQuery:GO.addressbook.searchQueryPanel.queryField.getValue()
+//								});
+//						}, this);
+			}
+			var type = this.tabPanel.getActiveTab().id=='ab-contacts-grid' ? 'contacts' : 'companies';
+			this.advancedSearchWindow.show({
+				dataType : type,
+				masterPanel : GO.mainLayout.getModulePanel('addressbook')
+			});
+		},
+		text: GO.addressbook.lang.advancedSearch,
+		scope: this
+	}
+		];
 
 	if(GO.addressbook.exportPermission == '1')
 	{
