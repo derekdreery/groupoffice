@@ -61,7 +61,6 @@ GO.addressbook.SearchPanel = function(config)
 				data : alphabetStoreData
 			}),
 			tpl: tpl,
-			autoHeight:true,
 			singleSelect: true,
 			cls: 'alphabet-view',
 			overClass:'alphabet-view-over',
@@ -106,7 +105,8 @@ GO.addressbook.SearchPanel = function(config)
 			items: this.alphabetView
 		},{
 			items: this.queryField
-		},
+		}
+		,
 		{
 			items: new Ext.Button({
 				handler: function()
@@ -116,28 +116,6 @@ GO.addressbook.SearchPanel = function(config)
 					this.fireQueryEvent();
 				},
 				text: GO.lang.strSearch,
-				scope: this
-			})
-		},{
-			items: new Ext.Button({
-				handler: function()
-				{
-					if(!this.advancedSearchWindow)
-					{
-						this.advancedSearchWindow = GO.addressbook.advancedSearchWindow = new GO.addressbook.AdvancedSearchWindow();
-//						this.advancedSearchWindow.on('ok', function(win){
-//							this.fireEvent('queryChange', {
-//								advancedQuery:GO.addressbook.searchQueryPanel.queryField.getValue()
-//								});
-//						}, this);
-					}
-					var type = this.ab.tabPanel.getActiveTab().id=='ab-contacts-grid' ? 'contacts' : 'companies';
-					this.advancedSearchWindow.show({
-						dataType : type,
-						masterPanel : GO.mainLayout.getModulePanel('addressbook')
-					});
-				},
-				text: GO.addressbook.lang.advancedSearch,
 				scope: this
 			})
 		},{
