@@ -1,4 +1,6 @@
-15-08-2013 4.2.12
+19-08-2013 4.2.12
+- Fixed security vulnerability
+- Minimized disk access in files module
 - Detect company employees for document templates as well so they don't need to be linked
 - Added participant status to view grid.
 - Added a check for empty "name" property in an email part to determine if it is a mail body or an attachment
