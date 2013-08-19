@@ -19,7 +19,7 @@ GO.summary.AnnouncementDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 			layout: 'fit',
 			title: GO.summary.lang['announcement'],
 			width: 700,
-			height: 500,
+			height: 600,
 			resizable: false,
 			formControllerUrl: 'summary/announcement'
 		});

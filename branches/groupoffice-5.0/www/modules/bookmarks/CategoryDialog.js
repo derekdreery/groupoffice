@@ -18,7 +18,7 @@ GO.bookmarks.CategoryDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			titleField:'name',
 			title:GO.bookmarks.lang.category,
 			formControllerUrl: 'bookmarks/category',
-			height:440,
+			height:600,
 			width:500
 		});
 		
