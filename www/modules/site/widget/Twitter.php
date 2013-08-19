@@ -66,6 +66,15 @@ class GO_Site_Widget_Twitter extends GO_Site_Components_Widget {
 	public $userTimeLine=true;
 	
 	
+	/**
+	 * Tweets are cached to improve page load speed. 
+	 * Cache lifetime in seconds. Set to 0 to disable.
+	 * 
+	 * @var int 
+	 */
+	public $cacheLifeTime=3600;
+	
+	
 //	public $template = "<li><a id=\"twitter-account-name\" href=\"https://twitter.com/{user:screen_name}\">@{user:screen_name}</a>{text}</li>\n";
 /**
  *["created_at"]=>
@@ -268,23 +277,27 @@ http://t.co/zy3JDoVTEC"
 
 		require_once(GO::modules()->site->path.'widget/twitter/codebird.php');
 
-
-	
-		//Get authenticated
-		\Codebird\Codebird::setConsumerKey($this->consumerKey, $this->consumerSecret);
+		$cacheKey = $this->consumerKey.':'.$this->accessToken.':'.$this->userTimeLine.':'.$this->retweets;
 		
-		$cb = \Codebird\Codebird::getInstance();
-		$cb->setToken($this->accessToken, $this->accessTokenSecret);
+		if(!$this->cacheLifeTime || !($tweets = GO::cache()->get($cacheKey))){	
+			//Get authenticated
+			\Codebird\Codebird::setConsumerKey($this->consumerKey, $this->consumerSecret);
 
-		//These are our params passed in
-		$params = array(
-				'screen_name' => $this->screenName,
-				'count' => $this->limit,
-				'rts' => $this->retweets,
-		);
+			$cb = \Codebird\Codebird::getInstance();
+			$cb->setToken($this->accessToken, $this->accessTokenSecret);
 
-		//tweets returned by Twitter	
-		$tweets = $this->userTimeLine ? (array) $cb->statuses_userTimeline($params) : (array) $cb->statuses_homeTimeline($params);
+			//These are our params passed in
+			$params = array(
+					'screen_name' => $this->screenName,
+					'count' => $this->limit,
+					'rts' => $this->retweets,
+			);
+
+			//tweets returned by Twitter	
+			$tweets = $this->userTimeLine ? (array) $cb->statuses_userTimeline($params) : (array) $cb->statuses_homeTimeline($params);
+			
+			GO::cache()->set($cacheKey, $tweets,$this->cacheLifeTime);
+		}
 //var_dump($tweets);
 		$html = '';
 		foreach($tweets as $tweet){
