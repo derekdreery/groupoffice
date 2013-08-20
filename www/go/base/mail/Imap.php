@@ -1974,16 +1974,18 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			while ($line = $this->get_message_part_line()) {
 
 				switch (strtolower($encoding)) {
-					case 'base64':
-
+					case 'base64':						
+						$line = trim($leftOver.$line);
+						$leftOver = "";
+						
 						if(strlen($line) % 4 == 0){
+							
 							if(!$fp){
 								$str .= base64_decode($line);
 							}  else {
 								fputs($fp, base64_decode($line));
 							}
-						}else{
-							$line = trim($leftOver.$line);
+						}else{						
 
 							$buffer = "";					
 							while(strlen($line)>4){
@@ -1999,9 +2001,6 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 							if(strlen($line)){
 								$leftOver = $line;
-							}else
-							{
-								$leftOver = "";
 							}
 						}
 						break;
@@ -2028,6 +2027,8 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 			if(!empty($leftOver))
 			{
+				GO::debug($leftOver);
+				
 				if(!$fp){
 					$str .= base64_decode($leftOver);
 				}  else {
