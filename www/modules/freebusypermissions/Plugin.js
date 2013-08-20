@@ -12,7 +12,7 @@ GO.moduleManager.onModuleReady('calendar',function(){
 				},
 				this.freebusyPermissionsPanel = new GO.grid.PermissionsPanel({
 					hideLevel:true,
-					height:600
+					height:200
 				})
 				]
 			})
