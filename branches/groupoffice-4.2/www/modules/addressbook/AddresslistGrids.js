@@ -156,6 +156,8 @@ GO.addressbook.createAddresslistGrids = function(){
 		config.sm=new Ext.grid.RowSelectionModel();
 		config.loadMask=true;
 
+		config.paging = true;
+
 		GO.addressbook.AddresslistContactsGrid.superclass.constructor.call(this, config);
 
 	}, GO.grid.GridPanel, {

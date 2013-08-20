@@ -9,7 +9,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @author Wilmar van Beusekom <wilmar@intermesh.nl>
+ * @author WilmarVB <wilmar@intermesh.nl>
  */
 
 class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractModelController {
@@ -31,7 +31,8 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 							"GO_Addressbook_Model_Addresslist",$store, $params, false);		
 			$multiSel->formatCheckedColumn();
 		}
-		return parent::beforeStoreStatement($response, $params, $store, $storeParams);
+		
+		$storeParams->getCriteria()->addCondition('level', $params['permissionLevel'],'>=','go_acl');
 	}
 
 	public function formatStoreRecord($record, $model, $store) {
