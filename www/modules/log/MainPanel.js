@@ -78,7 +78,11 @@ GO.log.MainPanel = function(config) {
 		width : 320
 	});
 		
-	config.tbar=new Ext.Toolbar({items:[GO.lang['strSearch'] + ':', this.searchField,'-',{
+	config.tbar=new Ext.Toolbar({items:[{
+	    xtype:'htmlcomponent',
+			html:GO.log.lang.name,
+			cls:'go-module-title-tbar'
+		},{
 			iconCls: 'btn-export',
 			text: GO.lang.cmdExport,
 			cls: 'x-btn-text-icon',
@@ -97,7 +101,7 @@ GO.log.MainPanel = function(config) {
 
 			},
 			scope: this
-		}], cls:'go-head-tb'});
+		},'-',GO.lang['strSearch'] + ':', this.searchField], cls:'go-head-tb'});
 			
 	GO.log.MainPanel.superclass.constructor.call(this, config);
 };
