@@ -1485,6 +1485,8 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$fp =fopen("php://output",'w');
 		$imap->get_message_part_decoded($params['uid'], $params['number'], $params['encoding'], false, false, false, $fp);
 		fclose($fp);
+		
+//		echo base64_decode($imap->get_message_part($params['uid'], $params['number']));
 	}
 
 //	Z-push testing
