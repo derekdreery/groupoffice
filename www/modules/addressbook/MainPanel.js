@@ -546,7 +546,7 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 //					companies:{r:"addressbook/company/store"},
 					addressbooks:{r:"addressbook/addressbook/store", limit: GO.settings.config.nav_page_size},
 					writable_addresslists:{r:"addressbook/addresslist/store",permissionLevel: GO.permissionLevels.write, limit: 0},
-					readable_addresslists:{r:"addressbook/addresslist/store",permissionLevel: GO.permissionLevels.read, limit: GO.settings.config.nav_page_size}
+					readable_addresslists:{r:"addressbook/addresslist/store",permissionLevel: GO.permissionLevels.read, limit: 0}
 				})
 			},
 			success: function(options, response, result)
