@@ -179,7 +179,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 	protected function actionStore($params){
 		
-		GO::session()->closeWriting();
+//		GO::session()->closeWriting(); //Don't do this because we cache values in the sessions
 		
 		if(!isset($params['start']))
 			$params['start']=0;
