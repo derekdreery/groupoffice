@@ -300,22 +300,22 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 		
 		
 //		if(strtolower($file->extension())!='jpg'){
-		$filename = $photoPath->path().'/'.$this->id.'.jpg';
-		$img = new GO_Base_Util_Image();
-		if(!$img->load($file->path())){
-			throw new Exception(GO::t('imageNotSupported','addressbook'));
-		}
-		
-		//resize it to small image so we don't get in trouble with sync clients
-		$img->fitBox(240,320);
-		
-		if(!$img->save($filename, IMAGETYPE_JPEG)){
-			throw new Exception("Could not save photo!");
-		}
-		$file = new GO_Base_Fs_File($filename);
+//		$filename = $photoPath->path().'/'.$this->id.'.jpg';
+//		$img = new GO_Base_Util_Image();
+//		if(!$img->load($file->path())){
+//			throw new Exception(GO::t('imageNotSupported','addressbook'));
+//		}
+//		
+//		//resize it to small image so we don't get in trouble with sync clients
+//		$img->fitBox(240,320);
+//		
+//		if(!$img->save($filename, IMAGETYPE_JPEG)){
+//			throw new Exception("Could not save photo!");
+//		}
+//		$file = new GO_Base_Fs_File($filename);
 //		}else
 //		{		
-//			$file->move($photoPath, $this->id.'.'.strtolower($file->extension()));
+			$file->move($photoPath, $this->id.'.'.strtolower($file->extension()));
 //		}
 	
 		
