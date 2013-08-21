@@ -206,6 +206,19 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			if (stristr($response, 'A'.$this->command_count.' OK')) {
 				$authed = true;
 				$this->state = 'authed';
+				
+				
+				//some imap servers like dovecot respond with the capability after login.
+				//Set this in the session so we don't need to do an extra capability command.
+				if(($startpos = strpos($response, 'CAPABILITY'))!==false){
+					GO::debug("Use capability from login");					
+					$endpos=  strpos($response, ']', $startpos);
+					if($endpos){
+						$capability = substr($response, $startpos, $endpos-$startpos);
+						GO::session()->values['GO_IMAP'][$this->server]['imap_capability']=$capability;
+					}
+					
+				}
 			}else
 			{
 //				if(!GO::config()->debug)
@@ -229,6 +242,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 */
 
 	public function get_capability() {
+		//Cache capability in the session so this command is not used repeatedly
 		if (isset(GO::session()->values['GO_IMAP'][$this->server]['imap_capability'])) {
 			$this->capability=GO::session()->values['GO_IMAP'][$this->server]['imap_capability'];
 		}else {
@@ -240,9 +254,6 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			}
 			$this->capability = GO::session()->values['GO_IMAP'][$this->server]['imap_capability'] = implode(' ', $response);			
 		}
-		
-//		GO::debug('IMAP capability: '.$this->capability);
-		
 		return $this->capability;
 	}
 	
