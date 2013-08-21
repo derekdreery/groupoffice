@@ -12,7 +12,8 @@ GO.tasks.TasksPanel = function(config)
 			width: 30,
 			hideInExport:true,
 			header: '<div class="tasks-complete-icon"></div>',
-			sortable:false
+			sortable:false,
+			groupable:false
 		});
 
 		this.checkColumn.on('change', function(record, checked){
@@ -35,16 +36,18 @@ GO.tasks.TasksPanel = function(config)
 		var fields ={
 			fields:['id', 'icon', 'name','completed','due_time', 'late', 'description', 'status', 'ctime', 'mtime', 'start_time', 'completion_time','disabled','tasklist_name','category_name','priority','project_name','percentage_complete','user_name'],
 			columns:[this.checkColumn,{
-					id:'icon',
+				id:'icon',
 				header:"&nbsp;",
 				width:23,
 				dataIndex: 'icon',
 				renderer: this.renderIcon,
 				hideable:false,
 				fixed: true,
-				sortable:false
+				sortable:false,
+				groupable:false
 			},{
 				id:'name',
+				width:200,
 				header:GO.lang['strName'],
 				dataIndex: 'name',
 				renderer:function(value, p, record){
@@ -57,35 +60,38 @@ GO.tasks.TasksPanel = function(config)
 			},{
 				header:GO.tasks.lang.tasklist,
 				dataIndex: 'tasklist_name',
-				width:60
+				width:60,
+				hidden:true,
+				groupable:true
 			},{
 				header:GO.tasks.lang.category,
 				dataIndex: 'category_name',
 				width:150,
-				sortable:false
+				sortable:false,
+				groupable:true
 			},
-//			{
-//				header:GO.lang.priority,
-//				dataIndex: 'priority',
-//				width:70,
-//				hidden:true,
-//				renderer : function(value, cell, record) {
-//					var str = '';
-//					switch(value)
-//					{
-//						case '0':
-//							str = GO.lang.priority_low;
-//							break;
-//						case '1':
-//							str = GO.lang.priority_normal;
-//							break;
-//						case '2':
-//							str = GO.lang.priority_high;
-//							break;
-//					}
-//					return str;
-//				}
-//			}
+			{
+				header:GO.lang.priority,
+				dataIndex: 'priority',
+				width:70,
+				hidden:false,
+				renderer : function(value, cell, record) {
+					var str = '';
+					switch(value)
+					{
+						case 0:
+							str = GO.lang.priority_low;
+							break;
+						case 1:
+							str = GO.lang.priority_normal;
+							break;
+						case 2:
+							str = GO.lang.priority_high;
+							break;
+					}
+					return str;
+				}
+			},
 			{
 				header:GO.tasks.lang.dueDate,
 				dataIndex: 'due_time',
@@ -104,6 +110,7 @@ GO.tasks.TasksPanel = function(config)
 				header: GO.lang.strStatus,
 				dataIndex: 'status',
 				width:110,
+				groupable:true,
 				renderer:function(value, p, record){
 					return GO.tasks.lang.statuses[value];
 				}
@@ -205,7 +212,8 @@ GO.tasks.TasksPanel = function(config)
 
 		var columnModel =  new Ext.grid.ColumnModel({
 			defaults:{
-				sortable:true
+				sortable:true,
+				groupable:false
 			},
 			columns:fields.columns
 		});
@@ -214,12 +222,6 @@ GO.tasks.TasksPanel = function(config)
 
 		config.paging=true,
 		config.plugins=this.checkColumn;
-		config.autoExpandColumn='name';
-		config.autoExpandMax=2500;
-		config.enableColumnHide=true;
-		config.enableColumnMove=true;
-		config.autoScroll=true;
-
 
 		this.searchField = new GO.form.SearchField({
 			store: config.store,
