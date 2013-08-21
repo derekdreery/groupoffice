@@ -1465,9 +1465,10 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		if(isset($params['inline']) && $params['inline'] == 0)
 			$inline = false;	
 		
-		//to work around office crap: http://support.microsoft.com/kb/2019105/en-us		
+		//to work around office bug: http://support.microsoft.com/kb/2019105/en-us		
 		//never use inline on IE with office documents because it will prompt for authentication.
-		if(GO_Base_Util_Http::isInternetExplorer() && strlen($file->extension())==4 && substr($file->extension(),-1)=='x'){
+		$officeExtensions = array('doc','dot','docx','dotx','docm','dotm','xls','xlt','xla','xlsx','xltx','xlsm','xltm','xlam','xlsb','ppt','pot','pps','ppa','pptx','potx','ppsx','ppam','pptm','potm','ppsm');
+		if(GO_Base_Util_Http::isInternetExplorer() && in_array($file->extension(), $officeExtensions)){
 			$inline=false;
 		}
 
