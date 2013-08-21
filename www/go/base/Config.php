@@ -1023,7 +1023,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $help_link = 'http://wiki4.group-office.com/wiki/';
+	var $help_link = 'https://www.group-office.com/wiki/';
 	
 	/**
 	 * The link or e-mail address in menu help -> support.
