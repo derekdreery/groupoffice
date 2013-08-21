@@ -1,3 +1,6 @@
+- Get capability from IMAP login command
+- Query unseen messages only when modseq changes
+
 19-08-2013 4.2.12
 - Bug in attachment download
 - Fixed security vulnerability
