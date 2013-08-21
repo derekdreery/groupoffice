@@ -2274,9 +2274,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			}
 
 			if($clear) {
-				$command = "UID STORE $uid_string -FLAGS ($flags)\r\n";
+				$command = "UID STORE $uid_string -FLAGS.SILENT ($flags)\r\n";
 			}else {
-				$command = "UID STORE $uid_string +FLAGS ($flags)\r\n";
+				$command = "UID STORE $uid_string +FLAGS.SILENT ($flags)\r\n";
 			}
 			$this->send_command($command);
 			$res = $this->get_response();
