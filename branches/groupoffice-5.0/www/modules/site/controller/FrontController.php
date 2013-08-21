@@ -9,6 +9,10 @@ class GO_Site_Controller_Front extends GO_Site_Components_Controller {
 		$content = empty($params['slug']) ? false : GO_Site_Model_Content::model()->findBySlug($params['slug']);
 		
 		if(!$content){
+			
+			header("HTTP/1.0 404 Not Found");
+      header("Status: 404 Not Found");
+			
 			$this->render('/site/404');
 		}else{
 			

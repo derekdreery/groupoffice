@@ -47,7 +47,9 @@ class GO_Site_Components_Router{
 			
 		}else
 		{
-			//404
+			header("HTTP/1.0 404 Not Found");
+      header("Status: 404 Not Found");
+			
 			echo "404 not found (".$className.")";
 		}
 	}
