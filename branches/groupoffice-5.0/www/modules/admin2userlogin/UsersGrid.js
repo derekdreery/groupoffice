@@ -77,7 +77,11 @@ GO.admin2userlogin.UsersGrid = function(config){
 	
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.tbar = new Ext.Toolbar({
-		items:[GO.lang['strSearch']+': ', ' ',this.searchField],
+		items:[{
+		xtype:'htmlcomponent',
+		html:GO.admin2userlogin.lang.name,
+		cls:'go-module-title-tbar'
+	},GO.lang['strSearch']+': ', ' ',this.searchField],
 		cls:'go-head-tb'
 	});
 	config.loadMask=true;
