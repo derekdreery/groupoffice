@@ -453,11 +453,15 @@ thead .x-grid3-hd-inner{
 .go-display-panel .btn-refresh {
 	background: url(images/extjs/grid/refresh-noborder.gif) no-repeat !important;
 	width: 14px !important;
+	overflow:hidden;
+	text-indent: 100px;
 }
 
 .go-display-panel .btn-print {
 	background: url(images/extjs/grid/print-noborder.gif) no-repeat !important;
 	width: 14px !important;
+	overflow:hidden;
+	text-indent: 100px;
 }
 
 .x-item-disabled * {
