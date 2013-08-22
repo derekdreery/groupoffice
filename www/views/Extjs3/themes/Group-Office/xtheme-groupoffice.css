@@ -742,3 +742,17 @@ a.x-menu-check-item {
 .x-html-editor-tb .x-small-editor{
 	padding:2px !important;
 }
+
+.ext-el-mask-msg{
+	background:white !important;
+	border:1px solid #009cc5;
+}
+
+.ext-el-mask-msg div {
+background: none;
+border: none;
+padding:10px 20px;
+
+color:#666;
+font: 13px helvetica;
+}
