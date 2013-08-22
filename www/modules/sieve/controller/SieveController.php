@@ -348,7 +348,7 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 		
 		$this->_sieveConnect($params['account_id']);
 
-		$script = $this->_sieve->get_script($params['script_name']);
+		//$script = $this->_sieve->get_script($params['script_name']);
 		$sort_order = json_decode($params['sort_order'], true);
 
 		$this->_sieve->load($this->_sieve->get_active($params['account_id']));
@@ -364,7 +364,7 @@ class GO_Sieve_Controller_Sieve extends GO_Base_Controller_AbstractModelControll
 			//kopie toevoegen
 			$this->_sieve->script->add_rule($temp);
 		}
-
+		
 		//oude verwijderen
 		for($i=0;$i < $count; $i++)
 		{
