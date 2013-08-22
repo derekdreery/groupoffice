@@ -113,13 +113,15 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		tbar.push('-');
 		tbar.push({            
 	      iconCls: "btn-refresh",
-	      tooltip:GO.lang.cmdRefresh,      
+	      text:GO.lang.cmdRefresh,      
+				tooltip:GO.lang.cmdRefresh,      
 	      handler: this.reload,
 	      scope:this
 	  });
 	  tbar.push({            
 	      iconCls: "btn-print",
-	      tooltip:GO.lang.cmdPrint,
+	      text:GO.lang.cmdPrint,
+				tooltip:GO.lang.cmdPrint,      
 	 			handler: function(){
 					this.body.print({title:this.getTitle()});
 				},
