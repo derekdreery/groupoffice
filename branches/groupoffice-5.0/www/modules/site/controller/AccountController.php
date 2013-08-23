@@ -11,6 +11,9 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 	 * Only if attributes are provided by the POST request shall the model be saved
 	 */
 	public function actionRegister() {
+		
+		GO::config()->password_validate=false;
+		
 		$user = new GO_Base_Model_User();		
 		$contact = new GO_Addressbook_Model_Contact();
 				
@@ -199,6 +202,8 @@ class GO_Site_Controller_Account extends GO_Site_Components_Controller {
 		
 //		$user->setValidationRule('passwordConfirm', 'required', false);
 		$user->setValidationRule('password', 'required', false);
+		
+		GO::config()->password_validate=false;
 		
 		if($contact->company)
 			$company = $contact->company;
