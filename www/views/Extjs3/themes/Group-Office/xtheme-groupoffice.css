@@ -245,7 +245,7 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 
 .x-grid3-row, .x-grid3-summary-row {
 	border:none;
-	border-bottom: 1px solid #000;	
+	border-bottom: 1px solid #666;	
 }
 .go-border-west .x-grid3-row, .go-border-west .x-grid3-summary-row,.go-border-east .x-grid3-row, .go-border-east .x-grid3-summary-row {
 	border-bottom: 1px solid white;	
