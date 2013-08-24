@@ -293,7 +293,7 @@ http://t.co/zy3JDoVTEC"
 			$params = array(
 					'screen_name' => $this->screenName,
 					'count' => $this->limit,
-					'rts' => $this->retweets,
+					'include_rts' => $this->retweets,
 					'exclude_replies'=>$this->exclude_replies
 			);
 
