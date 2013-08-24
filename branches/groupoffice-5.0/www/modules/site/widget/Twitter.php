@@ -9,6 +9,9 @@ class GO_Site_Widget_Twitter extends GO_Site_Components_Widget {
 	 */
 	public $retweets="false";
 	
+	
+	public $exclude_replies="true";
+	
 	/**
 	 * Number of tweets
 	 * @var int  
@@ -291,6 +294,7 @@ http://t.co/zy3JDoVTEC"
 					'screen_name' => $this->screenName,
 					'count' => $this->limit,
 					'rts' => $this->retweets,
+					'exclude_replies'=>$this->exclude_replies
 			);
 
 			//tweets returned by Twitter	
