@@ -96,8 +96,18 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		}
 		
 		$this->_changeTimeParams($params);
-
+		
 		$this->_setEventAttributes($model, $params);
+		
+		if(empty($params['exception_date']) && !empty($params['offset'])){
+			//don't move recurring events that are set on weekdays by whole days
+			if($model->isRecurring() && date('dmY', $model->start_time)!=date('dmY', $model->getOldAttributeValue('start_time'))){
+				$rrule = $model->getRecurrencePattern();
+				if(!empty($rrule->byday)){
+					throw new Exception(GO::t('cantMoveRecurringByDay', 'calendar'));
+				}
+			}
+		}
 		
 		if(!$this->_checkConflicts($response, $model, $params)){
 			return false;
