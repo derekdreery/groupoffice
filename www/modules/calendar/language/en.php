@@ -233,3 +233,4 @@ $l['eventPrivateChecked'] = 'Note that if the event is marked as private, the fi
 
 $l['show_completed_tasks'] = "Show completed tasks";
 $l['showStatuses']='Show event statuses in views';
+$l['cantMoveRecurringByDay']="Sorry, you can't move events that recur on weekdays to other days like this. Please open the event and adjust the recurrence properties.";
