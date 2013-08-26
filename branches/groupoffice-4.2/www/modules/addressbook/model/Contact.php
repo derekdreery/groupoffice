@@ -722,7 +722,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		if (!empty($saveToDb))
 			$this->save();
 		
-		if (!empty($photoFile))
+		if (!empty($photoFile) && $saveToDb)
 			$this->setPhoto($photoFile);
 		
 //		foreach ($remainingVcardProps as $prop) {
