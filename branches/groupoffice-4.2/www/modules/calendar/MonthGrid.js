@@ -671,8 +671,8 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 			if(col)
 			{
 				var text = '';
-//				if(!GO.util.empty(eventData.status_color))
-//					text += '<span class="x-calGrid-event-status" style="background-color:#'+eventData.status_color+';"></span>';				
+				if(GO.calendar.showStatuses && !GO.util.empty(eventData.status_color))
+					text += '<span class="x-calGrid-event-status" style="background-color:#'+eventData.status_color+';"></span>';				
 
 				if(daySpan==1){
 					if(GO.util.empty(eventData.all_day_event))
