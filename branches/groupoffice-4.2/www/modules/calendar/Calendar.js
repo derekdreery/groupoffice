@@ -1747,7 +1747,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		GO.request({
 			url: 'calendar/event/submit',
 			params: params,
-			success: function(options, response, responseParams)
+			success: function(response, options, result)
 			{
 
 //				if(event.repeats && !actionData.singleInstance)
@@ -1760,9 +1760,13 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				if(event.repeats)
 					grid.store.reload();
 
-				GO.calendar.handleMeetingRequest(responseParams);
+				GO.calendar.handleMeetingRequest(result);
 				
+			},
+			fail : function(response, options, result){
+				grid.store.reload();
 			}
+			
 		});
 	},
 
