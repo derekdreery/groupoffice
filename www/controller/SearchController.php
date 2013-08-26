@@ -14,7 +14,8 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 					$key = explode(':',$key);
 
 					$linkedModel = GO::getModel($key[0])->findByPk($key[1]);				
-					$linkedModel->delete();				
+					if($linkedModel)
+						$linkedModel->delete();				
 				}
 				unset($params['delete_keys']);
 				$response['deleteSuccess']=true;
