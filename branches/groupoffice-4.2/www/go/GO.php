@@ -352,8 +352,8 @@ class GO{
 	public static function cache(){
 
 		if (!isset(self::$_cache)) {
-//			if(GO::config()->debug || !GO::isInstalled())
-			if(!GO::isInstalled())
+			if(GO::config()->debug || !GO::isInstalled())
+//			if(!GO::isInstalled())
 				self::$_cache=new GO_Base_Cache_None();
 //			Disable apc cache temporarily because it seems to cause the random logouts
 //			elseif(function_exists("apc_store"))
