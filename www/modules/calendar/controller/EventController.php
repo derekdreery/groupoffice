@@ -1170,7 +1170,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			//if no recurring instance was given delete the master event
 			if($masterEvent)
 				$masterEvent->delete();
-		}  else 
+		}  else if($masterEvent)
 		{
 			
 			$exceptionEvent = $masterEvent->findException($recurrenceDate);			
