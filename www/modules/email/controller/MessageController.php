@@ -179,7 +179,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 
 	protected function actionStore($params){
 		
-		$this->checkRequiredParameters(array('account_id', 'mailbox'), $params);
+		$this->checkRequiredParameters(array('account_id'), $params);
 		
 //		GO::session()->closeWriting(); //Don't do this because we cache values in the sessions
 		
