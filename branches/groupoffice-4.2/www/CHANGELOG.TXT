@@ -1,6 +1,11 @@
+27-08-2013 4.2.13
+- Z-push 2 did not close DB connection while pinging.
 - Internet Explorer will never open email attachments inline for MS Office mime types.
 - Get capability from IMAP login command
 - Query unseen messages only when modseq changes
+- Option to show event status in views
+- Bug in reminder calculation
+- Refuse to move events to other weekdays when they recur by weekday
 
 19-08-2013 4.2.12
 - Bug in attachment download
