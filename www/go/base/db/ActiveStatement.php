@@ -21,7 +21,7 @@
  */
 
 class GO_Base_Db_ActiveStatement implements IteratorAggregate {
-
+	
   /**
    * The model type this statement result returns.
    * 
@@ -63,6 +63,10 @@ class GO_Base_Db_ActiveStatement implements IteratorAggregate {
    * @var int 
    */
   public $foundRows;
+	
+//	public $id;
+//	public static $idCount=0;
+//	public static $aliveStmts=array();
 
   public function __construct(PDOStatement $stmt, GO_Base_Db_ActiveRecord $model) {
     $this->stmt=$stmt;
@@ -70,7 +74,16 @@ class GO_Base_Db_ActiveStatement implements IteratorAggregate {
 		$this->model=$model;
 		
 		$stmt->setFetchMode(PDO::FETCH_CLASS, $model->className(),array(false));
+		
+//		$this->id=self::$idCount++;
+//		
+//		ZLog::Write(LOGLEVEL_DEBUG, $stmt->queryString);
+//		self::$aliveStmts[$this->id]=$stmt->queryString;
   }
+	
+//	public function __destruct() {
+//		unset(self::$aliveStmts[$this->id]);
+//	}
 	
 	
 	/**

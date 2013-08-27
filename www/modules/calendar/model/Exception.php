@@ -66,8 +66,10 @@ class GO_Calendar_Model_Exception extends GO_Base_Db_ActiveRecord {
 
 	protected function afterSave($wasNew) {
 
-		if ($this->mainevent)
+		if ($this->mainevent){
 			$this->mainevent->touch();
+			$this->mainevent->setReminder();
+		}
 
 		return parent::afterSave($wasNew);
 	}

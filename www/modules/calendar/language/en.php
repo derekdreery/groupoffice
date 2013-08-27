@@ -232,3 +232,5 @@ $l['cronEventAndTaskReportMailerContent']='You can find a list of today\'s event
 $l['eventPrivateChecked'] = 'Note that if the event is marked as private, the files of this event are still accessible by users who have permissions to this event\'s calendar.';
 
 $l['show_completed_tasks'] = "Show completed tasks";
+$l['showStatuses']='Show event statuses in views';
+$l['cantMoveRecurringByDay']="Sorry, you can't move events that recur on weekdays to other days like this. Please open the event and adjust the recurrence properties.";

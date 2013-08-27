@@ -2330,6 +2330,10 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 * @return <type>
 	 */
 	public function copy($uids, $mailbox) {
+		
+		if(empty($mailbox))
+			$mailbox='INBOX';
+		
 		$this->clean($mailbox, 'mailbox');
 
 		$uid_string = implode(',',$uids);
@@ -2349,6 +2353,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 * @return <type>
 	 */
 	public function move($uids, $mailbox, $expunge=true) {
+		
+		if(empty($mailbox))
+			$mailbox='INBOX';
 
 		if(!in_array($mailbox, $this->touched_folders)) {
 			$this->touched_folders[]=$mailbox;
