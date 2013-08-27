@@ -1967,7 +1967,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				tbar: [{					
 					iconCls: 'btn-add',
 					text: GO.lang.cmdAdd,
-					disabled: !GO.settings.modules.calendar.write_permission,
+//					disabled: !GO.settings.modules.calendar.write_permission,
 					cls: 'x-btn-text-icon',
 					handler: function(){
 						this.viewDialog.show();
@@ -1976,7 +1976,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				},{
 					iconCls: 'btn-delete',
 					text: GO.lang.cmdDelete,
-					disabled: !GO.settings.modules.calendar.write_permission,
+//					disabled: !GO.settings.modules.calendar.write_permission,
 					cls: 'x-btn-text-icon',
 					handler: function(){
 						this.viewsGrid.deleteSelected();
