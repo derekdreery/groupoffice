@@ -186,7 +186,7 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractModelContro
 	}
 
 	public function actionTree($params) {
-//		GO::session()->closeWriting(); //Don't do this because we cache values in the sessions
+		GO::session()->closeWriting();
 		
 
 		$response = array();

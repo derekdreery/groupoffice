@@ -409,7 +409,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 	protected function afterDelete() {
 
-		$this->deleteReminders();
+		$this->deleteReminders();		
 		
 		if($this->is_organizer){
 			$stmt = $this->getRelatedParticipantEvents();
@@ -438,16 +438,43 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		if($reminder->model_type_id==GO_Calendar_Model_Event::model()->modelTypeId()){			
 			$event = GO_Calendar_Model_Event::model()->findByPk($reminder->model_id);
-			if($event && $event->isRecurring() && $event->reminder>0){
-				$rRule = new GO_Base_Util_Icalendar_Rrule();
-				$rRule->readIcalendarRruleString($event->start_time, $event->rrule);				
-				$rRule->setRecurpositionStartTime(time()+$event->reminder);
-				$nextTime = $rRule->getNextRecurrence();
-				
-				if($nextTime){
-					$event->addReminder($event->name, $nextTime-$event->reminder, $userId, $nextTime);
-				}				
+			if($event && ($nextTime = $event->getNextReminderTime())){
+				$event->addReminder($event->name, $nextTime-$event->reminder, $userId, $nextTime);								
 			}			
+		}
+	}
+	
+	/**
+	 * Get the next reminder time of this event
+	 * 
+	 * @return int
+	 */
+	public function getNextReminderTime(){
+		
+		if($this->reminder==0)
+			return false;
+	
+		if($this->isRecurring()){
+			
+			$rRule = $this->getRecurrencePattern();
+			$rRule->setRecurpositionStartTime(time()+$this->reminder);
+			$nextTime = $rRule->getNextRecurrence();
+			
+			while($nextTime && $this->hasException($nextTime)){
+				$nextTime = $rRule->getNextRecurrence();
+			}
+			
+			if($nextTime){				
+				return $nextTime-$this->reminder;
+			}else
+				return false;
+				
+		}  else {
+			$nextTime = $this->start_time-$this->reminder;
+			if($nextTime>time())
+				return $nextTime;
+			else
+				return false;
 		}
 	}
 	
@@ -509,13 +536,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$this->_updateResourceEvents();
 		}
 
-		if($this->reminder>0){
-			$remindTime = $this->start_time-$this->reminder;
-			if($remindTime>time()){
-				$this->deleteReminders();
-				$this->addReminder($this->name, $remindTime, $this->calendar->user_id, $this->start_time);
-			}
-		}	
+		$this->setReminder();
 		
 		//update events that belong to this organizer event
 		if($this->is_organizer && !$wasNew && !$this->isResource()){
@@ -551,6 +572,17 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 
 		return parent::afterSave($wasNew);
+	}
+	
+	public function setReminder(){
+		if($this->reminder>0){
+			$remindTime = $this->getNextReminderTime();
+			
+			if($remindTime){
+				$this->deleteReminders();
+				$this->addReminder($this->name, $remindTime, $this->calendar->user_id, $remindTime+$this->reminder);
+			}
+		}	
 	}
 	
 	/**

@@ -101,4 +101,7 @@ if(GO::user() && !GO::user()->mute_sound)
 <?php
 } 
 
+
+
+
 require(GO::view()->getTheme()->getPath().'footer.php');

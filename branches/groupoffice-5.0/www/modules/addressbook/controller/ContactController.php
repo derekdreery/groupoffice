@@ -506,26 +506,12 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	}
 	
 	protected function actionHandleAttachedVCard($params) {
-		$outString = '';
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		$imap = $account->openImapConnection($params['mailbox']);
-		$imap->get_message_part_start($params['uid'], $params['number']);
-		while ($line = $imap->get_message_part_line()) {
-			switch (strtolower($params['encoding'])) {
-				case 'base64':
-					$outString .= base64_decode($line);
-					break;
-				case 'quoted-printable':
-					$outString .= quoted_printable_decode($line);
-					break;
-				default:
-					$outString .= $line;
-					break;
-			}
-		}		
-		$tmpFile = new GO_Base_Fs_File(GO::config()->tmpdir.$params['filename']);
-		$tmpFile->tempFile(GO::config()->tmpdir.$params['filename'],'vcf');
-		$tmpFile->putContents($outString);
+		
+		$tmpFile =GO_Base_Fs_File::tempFile($params['filename'], 'vcf');
+		$imap->save_to_file($params['uid'], $tmpFile->path(), $params['number'], $params['encoding']);
+				
 		$abController = new GO_Addressbook_Controller_Contact();
 		$response = $abController->run('importVCard', array('file'=>$tmpFile->path(),'readOnly'=>true), false, true);
 		echo json_encode($response);
@@ -569,7 +555,6 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$file->convertToUtf8();
 
 		$data = "BEGIN:ADDRESSBOOK\n".$file->getContents()."\nEND:ADDRESSBOOK";
-		GO::debug($data);
 		
 		$vaddressbook = GO_Base_VObject_Reader::read($data);
 		
@@ -581,8 +566,6 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		foreach($vaddressbook->vcard as $vObject) {
 			$nr++;
 			GO_Base_VObject_Reader::convertVCard21ToVCard30($vObject);
-			GO::debug($vObject->serialize());
-			
 			$contact = new GO_Addressbook_Model_Contact();
 			try {
 				if ($contact->importVObject($vObject, $params, !$readOnly))
@@ -590,7 +573,6 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 				if ($readOnly)
 					$contactsAttr[] = $contact->getAttributes('formatted');
 			} catch (Exception $e) {
-				var_dump($e->getMessage());
 				$summaryLog->addError($nr, $e->getMessage());
 			}
 		}
