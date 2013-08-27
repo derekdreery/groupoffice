@@ -1,3 +1,7 @@
+27-08-2013 4.2.14
+- Everybody may create calendar views
+- Corrected mistake in 4.2.13 release
+
 27-08-2013 4.2.13
 - Z-push 2 did not close DB connection while pinging.
 - Internet Explorer will never open email attachments inline for MS Office mime types.
