@@ -1137,9 +1137,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 * @return boolean
 	 * @throws GO_Base_Exception_NotFound
 	 */
-	private function _handleIcalendarReply(Sabre\VObject\Component $vevent, $recurrenceDate){
+	private function _handleIcalendarReply(Sabre\VObject\Component $vevent, $recurrenceDate, GO_Email_Model_Account $account){
 		//find existing event
-		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
+		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, $account->user_id);
 		if(!$masterEvent)
 			throw new GO_Base_Exception_NotFound();
 		
@@ -1170,8 +1170,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 * @return boolean
 	 * @throws GO_Base_Exception_NotFound
 	 */
-	private function _handleIcalendarRequest(Sabre\VObject\Component $vevent, $recurrenceDate){
-		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
+	private function _handleIcalendarRequest(Sabre\VObject\Component $vevent, $recurrenceDate, GO_Email_Model_Account $account){
+		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, $account->user_id);
 		
 		
 		
@@ -1231,8 +1231,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		return $response;
 	}
 	
-	private function _handleIcalendarCancel(Sabre\VObject\Component $vevent, $recurrenceDate){
-		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
+	private function _handleIcalendarCancel(Sabre\VObject\Component $vevent, $recurrenceDate,GO_Email_Model_Account $account){
+		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, $account->user_id);
 				
 		//delete existing data		
 		if(!$recurrenceDate){
@@ -1288,16 +1288,16 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		switch($vcalendar->method){
 			case 'REPLY':
-				return $this->_handleIcalendarReply($vevent, $recurrenceDate);
+				return $this->_handleIcalendarReply($vevent, $recurrenceDate, $account);
 				break;
 			
 			case 'REQUEST':
 				//$status = !empty($params['status']) ? $params['status'] : false;
-				return $this->_handleIcalendarRequest($vevent, $recurrenceDate);
+				return $this->_handleIcalendarRequest($vevent, $recurrenceDate, $account);
 				break;
 			
 			case 'CANCEL':
-				return $this->_handleIcalendarCancel($vevent, $recurrenceDate);
+				return $this->_handleIcalendarCancel($vevent, $recurrenceDate, $account);
 				break;
 			
 			default:
