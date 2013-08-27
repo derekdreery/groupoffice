@@ -304,4 +304,16 @@ END:VCALENDAR';
 		var_dump($hasDefault);
 		
 	}
+	
+	
+	protected function actionTestDbClose(){
+		
+//		GO::unsetDbConnection();
+		
+		$stmt = GO_Base_Model_User::model()->find();
+		sleep(10);
+		
+		echo "Done";
+		
+	}
 }
