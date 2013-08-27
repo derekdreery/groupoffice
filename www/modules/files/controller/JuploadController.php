@@ -106,6 +106,9 @@ class GO_Files_Controller_Jupload extends GO_Base_Controller_AbstractController 
 					}
 				} else {
 					$files = GO_Base_Fs_File::moveUploadedFiles($uploadedFile, $tmpFolder);
+					if(!$files)
+						throw new Exception("No file received");
+					
 					$file = $files[0];
 				}
 				$subdir = false;
