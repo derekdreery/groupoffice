@@ -1218,7 +1218,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$recurrenceDate = isset($vevent->{"recurrence-id"}) ? $vevent->{"recurrence-id"}->getDateTime()->format('U') : 0;
 
 			//find existing event
-			$event = GO_Calendar_Model_Event::model()->findByUuid((string) $vevent->uid, GO::user()->id, $recurrenceDate);
+			$event = GO_Calendar_Model_Event::model()->findByUuid((string) $vevent->uid, $imapMessage->account->user_id, $recurrenceDate);
 //			var_dump($event);
 			
 			$uuid = (string) $vevent->uid;
