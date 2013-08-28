@@ -438,7 +438,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	
 	protected function beforeDisplay(&$response, &$model, &$params) {
 		
-		if($model->private && $model->user_id != GO::user()->id)
+		if($model->isPrivate(GO::user()) && $model->user_id != GO::user()->id && $model->calendar->user_id!=GO::user()->id)
 			throw new GO_Base_Exception_AccessDenied();
 		
 		return parent::beforeDisplay($response, $model, $params);
@@ -454,7 +454,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	protected function beforeLoad(&$response, &$model, &$params) {
 		
 	
-		if($model->private && $model->user_id != GO::user()->id)
+		if($model->isPrivate(GO::user()) && $model->user_id != GO::user()->id && $model->calendar->user_id!=GO::user()->id)
 			throw new GO_Base_Exception_AccessDenied();
 	
 		if (!empty($params['exception_date'])) {
