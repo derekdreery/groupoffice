@@ -857,7 +857,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	
 	private $_unseen;
 
-	public function get_unseen($mailbox=false) {
+	public function get_unseen($mailbox=false, $nocache=false) {
 		
 		if(!$mailbox)
 			$mailbox = $this->selected_mailbox['name'];
@@ -872,17 +872,21 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			}
 		}
 		
-		//GO::debug(GO::session()->values['GO_IMAP'][$this->server][$mailbox]);
-		//get from session cache
-		if(isset(GO::session()->values['GO_IMAP'][$this->server][$mailbox]) && !empty(GO::session()->values['GO_IMAP'][$this->server][$mailbox]['highestmodseq'])){
-			if(GO::session()->values['GO_IMAP'][$this->server][$mailbox]['uidvalidity']==$this->selected_mailbox['uidvalidity'] && GO::session()->values['GO_IMAP'][$this->server][$mailbox]['highestmodseq']==$this->selected_mailbox['highestmodseq']){
-				
-				GO::debug("Returning unseen from cache");
-							
-				
-				return GO::session()->values['GO_IMAP'][$this->server][$mailbox];
-			}
-		}
+//		GO::debug(GO::session()->values['GO_IMAP'][$this->server][$mailbox]);
+//		GO::debug($this->selected_mailbox['uidvalidity']);
+//		GO::debug($this->selected_mailbox['highestmodseq']);
+//		//get from session cache
+//		if(isset(GO::session()->values['GO_IMAP'][$this->server][$mailbox]) && !empty(GO::session()->values['GO_IMAP'][$this->server][$mailbox]['highestmodseq'])){
+//			if(GO::session()->values['GO_IMAP'][$this->server][$mailbox]['uidvalidity']==$this->selected_mailbox['uidvalidity'] && GO::session()->values['GO_IMAP'][$this->server][$mailbox]['highestmodseq']==$this->selected_mailbox['highestmodseq']){
+//				
+//				GO::debug("Returning unseen from cache");
+//							
+//				
+//				return GO::session()->values['GO_IMAP'][$this->server][$mailbox];
+//			}
+//		}
+//		
+//		GO::debug("Getting unseen");
 
 		#some servers don't seem to support brackets
 		#$command = "UID SEARCH (UNSEEN) ALL\r\n";
@@ -909,8 +913,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 		$this->selected_mailbox['unseen']=$unseen;
 
-		//GO::debug($unseen);
-		$this->_unseen[$mailbox]=GO::session()->values['GO_IMAP'][$this->server][$mailbox]=array('count'=>$unseen, 'uids'=>$uids, 'uidvalidity'=>$this->selected_mailbox['uidvalidity'], 'highestmodseq'=>$this->selected_mailbox['highestmodseq']);
+		
+//		$this->_unseen[$mailbox]=GO::session()->values['GO_IMAP'][$this->server][$mailbox]=array('count'=>$unseen, 'uids'=>$uids, 'uidvalidity'=>$this->selected_mailbox['uidvalidity'], 'highestmodseq'=>$this->selected_mailbox['highestmodseq']);
+		$this->_unseen[$mailbox]=array('count'=>$unseen, 'uids'=>$uids);
 		
 		
 		return $this->_unseen[$mailbox];
@@ -2319,6 +2324,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				return $status;
 			}
 		}
+		
 		return $status;
 	}
 
@@ -2341,6 +2347,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		$command = "UID COPY $uid_string \"".$this->utf7_encode($mailbox)."\"\r\n";
 		$this->send_command($command);
 		$res = $this->get_response();
+		
 		return $this->check_response($res);
 	}
 

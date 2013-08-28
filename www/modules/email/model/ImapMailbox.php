@@ -291,8 +291,12 @@ class GO_Email_Model_ImapMailbox extends GO_Base_Model {
 
 	public function getUnseen(){
 		if(!isset($this->_attributes['unseen'])){
-			$unseen=$this->getAccount()->openImapConnection($this->name)->get_unseen();
-			$this->_attributes['unseen']=$unseen['count'];
+			if(!$this->noselect){
+				$unseen=$this->getAccount()->openImapConnection($this->name)->get_unseen();
+				$this->_attributes['unseen']=$unseen['count'];
+			}  else {
+				$this->_attributes['unseen']=0;
+			}
 		}
 		return $this->_attributes['unseen'];
 	}
