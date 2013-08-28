@@ -79,11 +79,12 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 		$values = GO::config()->getSettings($propertyNames,$this->_userId);
 
 		foreach($values as $property=>$value){
-			
-			if(substr($value,0,11)=='serialized:'){
-				$value = unserialize(substr($value,11));
+			if(isset($value)){
+				if(substr($value,0,11)=='serialized:'){
+					$value = unserialize(substr($value,11));
+				}
+				$this->{substr($property,strlen($this->myPrefix()))} = $value;
 			}
-			$this->{substr($property,strlen($this->myPrefix()))} = $value;
 		}
 	} 
 	
