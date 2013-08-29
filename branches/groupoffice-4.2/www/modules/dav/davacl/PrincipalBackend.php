@@ -113,6 +113,8 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre\DAVACL\PrincipalBackend\Ba
 //            $result[] = $row['uri'];
 //        }
 //        return $result;
+			
+			return array();
     
     }
 
