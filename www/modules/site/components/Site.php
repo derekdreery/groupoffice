@@ -231,6 +231,17 @@ class Site {
 	
 	
 	/**
+	 * Check if a template or asset exists
+	 * 
+	 * @param string $relativePath
+	 * @return string
+	 */
+	public static function fileExists($relativePath, $template=true){
+		return file_exists(self::filePath($relativePath, $template));
+	}
+	
+	
+	/**
 	 * Get Path to a public template file that is accessible with the browser.
 	 * 
 	 * @param string $relativePath
