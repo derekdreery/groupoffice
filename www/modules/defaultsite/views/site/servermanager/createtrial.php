@@ -68,6 +68,13 @@ GO_Base_Html_Select::render(array(
 		'options' => $timeFormats
 ));
 
+GO_Base_Html_Select::render(array(
+		"required" => true,
+		'label' => 'First weekday',
+		'value' => GO::config()->default_first_weekday,
+		'name' => "first_weekday",
+		'options' => array('0'=>'Sunday','1'=>'Monday')
+));
 
 GO_Base_Html_Input::render(array(
 		"required" => true,
