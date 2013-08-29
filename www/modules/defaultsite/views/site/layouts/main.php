@@ -6,7 +6,11 @@
 	
 		<title>Group Office - <?php echo Site::controller()->getPageTitle(); ?></title>
 		<link rel="shortcut icon" type="image/x-icon" href="<?php echo Site::template()->getUrl(); ?>favicon.ico">
-		<link rel="stylesheet" href="<?php echo Site::template()->getUrl(); ?>/css/site.css">
+		<link rel="stylesheet" href="<?php echo Site::template()->getUrl(); ?>css/site.css">
+		
+		<?php if(Site::fileExists('style.css', false)){ ?>
+		<link rel="stylesheet" href="<?php echo Site::file('style.css', false); ?>">
+		<?php } ?>
 	
 	</head>
 
