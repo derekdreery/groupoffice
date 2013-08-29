@@ -130,7 +130,7 @@ class GO_Servermanager_Controller_Trial extends GO_Site_Components_Controller {
 		$config['default_date_separator'] = $params['default_date_separator'];
 		$config['default_thousands_separator'] = $params['default_thousands_separator'];
 		$config['default_decimal_separator'] = $params['default_decimal_separator'];
-		//$config['first_weekday'] = $params['first_weekday'];
+		$config['first_weekday'] = $params['first_weekday'];
 		
 
 		if (intval($config['max_users']) < 1)
