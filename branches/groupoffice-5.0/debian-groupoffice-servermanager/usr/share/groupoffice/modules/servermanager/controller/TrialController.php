@@ -1,11 +1,48 @@
 <?php
 
-class GO_Servermanager_Controller_Trial extends GO_Base_Controller_AbstractController {
+class GO_Servermanager_Controller_Trial extends GO_Site_Components_Controller {
 
 	protected $newTrial;
 	
 	public function allowGuests() {
-		return array('create');
+		return array('create', 'newtrial','emailsent');
+	}
+	
+		/**
+	 * Render a page for creating new trail installation
+	 * @throws Exception calling when trails are disabled in config when no wildcard domain is specified
+	 */
+	protected function actionNewTrial(){
+		
+		if(empty(GO::config()->servermanager_trials_enabled))
+			throw new Exception("Trials are not enabled. Set \$config['servermanager_trials_enabled']=true;");
+		
+		if(!isset(GO::config()->servermanager_wildcard_domain))
+			throw new Exception("\$config['servermanager_wildcard_domain']='example.com'; is not defined in /etc/groupoffice/config.php");
+		
+		
+		$newTrial =  new GO_ServerManager_Model_NewTrial();
+		
+		if (GO_Base_Util_Http::isPostRequest()) {
+		
+			$newTrial->setAttributes($_POST['NewTrial']);
+			if($newTrial->validate())
+			{	
+				$newTrial->save();
+
+				$tplStr = file_get_contents(GO::config()->root_path.'modules/defaultsite/views/site/servermanager/emails/trial.txt');
+				$newTrial->sendMail($tplStr);
+
+				$this->redirect(array('servermanager/trial/emailsent','key'=>$newTrial->key));
+			}
+		}		
+		
+		$this->render('newtrial', array('model' => $newTrial));
+	}
+	
+	public function actionEmailSent(){
+		$newTrial = GO_ServerManager_Model_NewTrial::model()->findSingleByAttribute('key', $_REQUEST['key']);
+		$this->render('emailsent', array('model' => $newTrial));
 	}
 
 	public function actionCreate($params) {
@@ -13,8 +50,7 @@ class GO_Servermanager_Controller_Trial extends GO_Base_Controller_AbstractContr
 		if(empty(GO::config()->servermanager_trials_enabled))
 			throw new Exception("Trials are not enabled. Set \$config['servermanager_trials_enabled']=true;");
 
-		GO::setView('Extjs3');
-		
+	
 		$this->newTrial = GO_ServerManager_Model_NewTrial::model()->findSingleByAttribute('key', $params['key']);
 		if(!$this->newTrial)
 			throw new Exception("Sorry, Could not find your trial subscription!");

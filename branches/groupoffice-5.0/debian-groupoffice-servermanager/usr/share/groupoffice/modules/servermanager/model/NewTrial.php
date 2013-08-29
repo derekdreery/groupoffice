@@ -20,7 +20,7 @@
 /**
  * The GO_ServerManager_Model_Installation model
  *
-
+ * @property string name
  * @property string $title
  * @property string $first_name
  * @property string $last_name
@@ -111,11 +111,14 @@ class GO_ServerManager_Model_NewTrial extends GO_Base_Db_ActiveRecord {
 		
 		$protocol = empty(GO::config()->servermanager_ssl) ? 'http' : 'https';
 		$url = $protocol.'://'.$this->name.'.'.GO::config()->servermanager_wildcard_domain;
+
+		$link = GO::config()->full_url.'modules/site/index.php?r=servermanager/trial/create&security_token='.GO::session()->values['security_token'].'&key='.$this->key;
 		
 		$tplStr = str_replace('{product_name}', GO::config()->product_name, $tplStr);
 		$tplStr = str_replace('{url}', $url, $tplStr);
 		$tplStr = str_replace('{name}', $this->first_name.' '.$this->last_name, $tplStr);
-		$tplStr = str_replace('{link}',GO::url("servermanager/trial/create", array('key'=>$this->key), false, false), $tplStr);
+//		$tplStr = str_replace('{link}',GO::url("servermanager/trial/create", array('key'=>$this->key), false, false), $tplStr);
+		$tplStr = str_replace('{link}',$link, $tplStr);
 		$tplStr = str_replace('{password}', $this->password, $tplStr);
 			
 		$pos = strpos($tplStr,"\n");
