@@ -574,7 +574,7 @@ class GO_Servermanager_Controller_Installation extends GO_Base_Controller_Abstra
 
 			$response['data']['quota'] = GO_Base_Util_Number::localize($c['quota']/1024/1024/1024); //in gigabytes
 			$response['data']['restrict_smtp_hosts'] = $c['restrict_smtp_hosts'];
-			$response['data']['serverclient_domains'] = $c['serverclient_domains'];
+			$response['data']['serverclient_domains'] = isset($c['serverclient_domains']) ? $c['serverclient_domains'] : '';
 		}
 		
 //		if($model->automaticInvoice == null)
