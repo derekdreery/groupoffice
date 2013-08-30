@@ -1,3 +1,5 @@
+- Removed unseen caching.
+
 27-08-2013 4.2.14
 - Everybody may create calendar views
 - Corrected mistake in 4.2.13 release
