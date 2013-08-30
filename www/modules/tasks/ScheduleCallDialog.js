@@ -53,7 +53,7 @@ GO.tasks.ScheduleCallDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		this.datePicker.setValue(tomorrow);
 		
 		this.datePicker.on("select", function(datePicker, DateObj){						
-				this.formPanel.baseParams.remind_date=this.formPanel.baseParams.due_time=DateObj.format(GO.settings.date_format);	
+				this.formPanel.baseParams.remind_date=this.formPanel.baseParams.start_time=this.formPanel.baseParams.due_time=DateObj.format(GO.settings.date_format);	
 		},this);
 		this.propertiesPanel = new Ext.Panel({
 			autoHeight:true,
