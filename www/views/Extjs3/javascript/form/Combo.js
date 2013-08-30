@@ -88,7 +88,7 @@ GO.form.ComboBox = Ext.extend(Ext.form.ComboBox, {
 			}
 			this.setValue(this.value);
 		}else{
-			this.setRawValue("");
+			this.clearValue();
 		}
 	},
 
