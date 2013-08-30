@@ -2275,31 +2275,13 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	}
 
 	/**
-	 * Set or clear flags of an UID range. Flags can be:
-	 * 
-	 * \Seen
-	 * \Answered
-	 * \Flagged
-	 * \Deleted
-	 * $Forwarded
-	 *
-	 * @param <type> $uids
-	 * @param <type> $flags
-	 * @param <type> $clear
-	 * @return <type>
+	 * Runs $command multiple times, with $uids split up in chunks of 500 UIDs
+	 * for each run of $command.
+	 * @param string $command IMAP command
+	 * @param array $uids Array of UIDs
+	 * @param boolean $trackErrors passed as third argument to $this->check_response()
+	 * @return boolean
 	 */
-	public function set_message_flag($uids, $flags, $clear=false) {
-		$status=false;
-
-		if($clear)
-			$command = "UID STORE %s -FLAGS.SILENT ($flags)\r\n";
-		else
-			$command = "UID STORE %s +FLAGS.SILENT ($flags)\r\n";
-
-		$status = $this->_runInChunks($command,$uids,false);
-		return $status;
-	}
-	
 	private function _runInChunks($command, $uids, $trackErrors=true){
 		$status=false;
 		$uid_strings = array();
@@ -2333,7 +2315,33 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		
 		return $status;
 	}
+	
+	/**
+	 * Set or clear flags of an UID range. Flags can be:
+	 * 
+	 * \Seen
+	 * \Answered
+	 * \Flagged
+	 * \Deleted
+	 * $Forwarded
+	 *
+	 * @param <type> $uids
+	 * @param <type> $flags
+	 * @param <type> $clear
+	 * @return <type>
+	 */
+	public function set_message_flag($uids, $flags, $clear=false) {
+		$status=false;
 
+		if($clear)
+			$command = "UID STORE %s -FLAGS.SILENT ($flags)\r\n";
+		else
+			$command = "UID STORE %s +FLAGS.SILENT ($flags)\r\n";
+
+		$status = $this->_runInChunks($command,$uids,false);
+		return $status;
+	}
+	
 	/**
 	 * Copy a message from the currently selected mailbox to another mailbox
 	 *
