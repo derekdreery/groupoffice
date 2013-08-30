@@ -1,4 +1,7 @@
-- Removed unseen caching.
+30-08-2013 4.2.15
+- Removed unseen caching. Broke checker.
+- Update Norwegian, German and Swedish translation
+- Could not find relational ACL error in billing module
 
 27-08-2013 4.2.14
 - Everybody may create calendar views
