@@ -239,6 +239,7 @@ $l["contactGo_user_id"]= "Benutzer";
 $l['contactSuffix']= "Suffix";
 $l['status']='Status';
 $l['templateAlreadyExists']= 'Die Vorlage, die Sie anlegen möchten, existiert bereits';
+$l['mailingAlreadyExists'] = 'Die Adressliste, die Sie anlegen möchten, existiert bereits';
 $l['greet']='Mit freundlichen Grüßen';
 $l['unsubscription']='Klicken Sie hier, um sich aus der Adressliste auszutragen.';
 $l['r_u_sure']= 'Sind Sie sicher, dass Sie sich aus der Adressliste austragen möchten?';

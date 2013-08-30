@@ -2346,8 +2346,13 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		$r = $this->getRelation($relation);
 		$aclFKfield = $r['field'];
 		
+		$oldValue = $this->getOldAttributeValue($aclFKfield);
+		
+		if(empty($oldValue))
+			return true;
+		
 		$newValue = $this->{$aclFKfield};
-		$this->{$aclFKfield} = $this->getOldAttributeValue($aclFKfield);
+		$this->{$aclFKfield} = $oldValue;
 		
 		//$result = $this->checkPermissionLevel($level);
 		$acl_id = $this->findAclId();

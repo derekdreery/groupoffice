@@ -964,6 +964,19 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				if(!in_array($c->getDataIndex(), $includeColumns))
 					$columnModel->removeColumn($c->getDataIndex());
 			}
+		} elseif ($includeHidden) {
+			
+			$columnOrder = array();
+			$colNames = $model->getColumns();
+			$cfRecord = $model->getCustomfieldsRecord(false);
+			if ($cfRecord) {
+				$cfColNames = $cfRecord->getColumns();
+				unset($cfColNames['model_id']);
+				$colNames = array_merge($colNames,$cfColNames);
+			}
+			foreach ($colNames as $colName=>$record)
+				$columnOrder[] = $colName;
+			$columnModel->sort($columnOrder);
 		}
 		$extraParams = empty($params['params']) ? array() : json_decode($params['params'], true);
 
