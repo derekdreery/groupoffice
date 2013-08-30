@@ -221,3 +221,8 @@ $l['cronEventAndTaskReportMailerPdfSubtitle']='Dagens kalenderhändelser och upp
 $l['cronEventAndTaskReportMailerSubject']='Dagens kalenderhändelser och uppgifter';
 $l['cronEventAndTaskReportMailerContent']='En lista över dagens kalenderhändelser och uppgifter finns i den bifogade PDF-filen.';
 $l['eventPrivateChecked']= 'Notera att även om denna händelse är markerad som privat så kommer filerna tillhörande händelsen ändå att vara åtkomliga för användare som har behörighet till händelsens kalender.';
+
+$l['show_completed_tasks']= "Visa avslutade händelser";
+
+$l['showStatuses']='Visa status för händelser i vyer';
+$l['cantMoveRecurringByDay']="Du kan inte flytta händelser som repeteras på veckodagar på detta sätt. Vänligen öppna händelsen och justera inställningarna för upprepning.";

@@ -121,3 +121,5 @@ $l['sieveWarning']="Om din IMAP-server har stöd för sieve-filter är det rekom
 $l['setRead']='Markera meddelandet som läst';
 
 $l['stopEndError']= 'Åtgärden \"Stanna\" måste vara sist i ordningen!';
+
+$l['body']='Brödtext';
