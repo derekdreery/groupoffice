@@ -2290,13 +2290,25 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 */
 	public function set_message_flag($uids, $flags, $clear=false) {
 		$status=false;
+
+		if($clear)
+			$command = "UID STORE %s -FLAGS.SILENT ($flags)\r\n";
+		else
+			$command = "UID STORE %s +FLAGS.SILENT ($flags)\r\n";
+
+		$status = $this->_runInChunks($command,$uids,false);
+		return $status;
+	}
+	
+	private function _runInChunks($command, $uids, $trackErrors=true){
+		$status=false;
 		$uid_strings = array();
 		if (empty($uids))
 			return true;
 			
 		if (count($uids) > 500) {
 			while (count($uids) > 500) {
-				$uid_strings[] = implode(',', array_splice($uids, 0, 500));
+				$uid_strings[] = implode(',', array_splice($uids, 0, 2));
 			}
 			if (count($uids)) {
 				$uid_strings[] = implode(',', $uids);
@@ -2305,21 +2317,15 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		else {
 			$uid_strings[] = implode(',', $uids);
 		}
-
 		
 		foreach ($uid_strings as $uid_string) {
 			if ($uid_string) {
 				$this->clean($uid_string, 'uid_list');
 			}
-
-			if($clear) {
-				$command = "UID STORE $uid_string -FLAGS.SILENT ($flags)\r\n";
-			}else {
-				$command = "UID STORE $uid_string +FLAGS.SILENT ($flags)\r\n";
-			}
-			$this->send_command($command);
+			$theCommand = sprintf($command,$uid_string);
+			$this->send_command($theCommand);
 			$res = $this->get_response();
-			$status = $this->check_response($res, false, false);
+			$status = $this->check_response($res, false, $trackErrors);
 			if (!$status) {
 				return $status;
 			}
@@ -2344,11 +2350,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 		$uid_string = implode(',',$uids);
 
-		$command = "UID COPY $uid_string \"".$this->utf7_encode($mailbox)."\"\r\n";
-		$this->send_command($command);
-		$res = $this->get_response();
-		
-		return $this->check_response($res);
+		$command = "UID COPY %s \"".$this->utf7_encode($mailbox)."\"\r\n";
+		$status = $this->_runInChunks($command, $uids);
+		return $status;
 	}
 
 	/**
