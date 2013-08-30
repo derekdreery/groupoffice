@@ -224,3 +224,5 @@ $l['cronEventAndTaskReportMailerContent']='Sie finden eine Auflistung der heutig
 $l['eventPrivateChecked'] = 'Bitte beachten Sie, dass die Nutzer, für die Sie diesen Kalender freigegeben haben, auch dann noch Zugriff auf die dem Termin angehängten Dateien haben, wenn der Termin auf \"Privat\" gestellt wurde.';
 
 $l['show_completed_tasks'] = "Zeige abgeschlossene Aufgaben";
+$l['showStatuses']='Termin-Status in der Kalenderansicht mit anzeigen';
+$l['cantMoveRecurringByDay']="Es ist leider nicht möglich, Termine, die sich an Wochentagen wiederholen, auf einen anderen Tag zu verschieben. Bitte direkt die Wiederholung im Termin bearbeiten.";

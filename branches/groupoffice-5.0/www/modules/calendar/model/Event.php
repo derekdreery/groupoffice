@@ -626,6 +626,20 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		return $this->isModified("start_time") || $this->isModified("end_time") || $this->isModified("name") || $this->isModified("location") || $this->isModified('status');
 	}
 	
+	/**
+	 * Is this a private event for the current user. If the event or the calendar
+	 * is owned by the current user it will not be displayed as private.
+	 * 
+	 * @param GO_Base_Model_User $user
+	 */
+	public function isPrivate(GO_Base_Model_User $user=null){
+		if(!isset($user))
+			$user=GO::user();
+		
+		return $this->private && 
+			($user->id != $this->user_id) && 
+			$user->id!=$this->calendar->user_id;	
+	}
 	
 	/**
 	 * Events may have related resource events that must be updated aftersave

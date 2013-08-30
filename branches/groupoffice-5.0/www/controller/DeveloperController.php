@@ -316,4 +316,22 @@ END:VCALENDAR';
 		echo "Done";
 		
 	}
+	
+	
+	protected function actionDefaultVat(){
+		
+		$order = GO_Billing_Model_Order::model()->findSingle();
+		
+		$item = new GO_Billing_Model_Item();
+		$item->description="test";
+		$item->amount=1;
+		$item->unit_price=10;
+		$item->order_id=$order->id;
+		$item->save();
+		
+		$order->syncItems();
+		
+		echo $order->order_id;
+		
+	}
 }
