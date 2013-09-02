@@ -219,42 +219,51 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	
 	
 	protected function extractUuencodedAttachments(&$body)
-	{
+ {
 //		$body = str_replace("\r", '', $body);
-		
-		if(($pos = strpos($body, 'begin '))===false)
-			return;
-		
-		$regex = "/(begin ([0-7]{3}) (.+))\n/";
-		
-		$atts = substr($body,$pos);
-		$body = substr($body,0, $pos);
 
-		preg_match_all($regex, $atts, $matches, PREG_OFFSET_CAPTURE);
+		if (($pos = strpos($body, "\nbegin ")) === false)
+			return;
+
+		$regex = "/(begin ([0-7]{3}) (.+))\n/";
+
+		
+
+		if (preg_match_all($regex, $body, $matches, PREG_OFFSET_CAPTURE)) {
 
 //		throw new E$attxception(var_export($matches, true));
+//			$body = substr($body, 0, $pos);
 
-	
-    for ($i = 0, $count = count($matches[3]); $i < $count; $i++) {
+			for ($i = 0, $count = count($matches[3]); $i < $count; $i++) {
 //			$boundary	= $matches[1][$i];
 //			$fileperm	= $matches[2][$i];
-			$filename	= trim($matches[3][$i][0]);
-			$offset = $matches[3][$i][1]+strlen($matches[3][$i][0])+1;
-			
-			$endpos = strpos($atts,'end',$offset)-$offset-1;
-			
-			$att = str_replace(array("\r"),"",substr($atts, $offset, $endpos));
-			$atts = substr($atts, $endpos);
-			//$size = strlen($matches[4][$i]);
+				$filename = trim($matches[3][$i][0]);
+				$offset = $matches[3][$i][1] + strlen($matches[3][$i][0]) + 1;
 
-			$file = GO_Base_Fs_File::tempFile($filename);
-			$file->putContents(convert_uudecode($att));
-//			$file->putContents($att);
+				$endpos = strpos($body, 'end', $offset) - $offset - 1;
+				
+				
+				if($endpos){
+					
+					if(!isset($startPosAtts))
+						$startPosAtts=$offset;
+
+					$att = str_replace(array("\r"), "", substr($body, $offset, $endpos));
+
+					//$size = strlen($matches[4][$i]);
+
+					$file = GO_Base_Fs_File::tempFile($filename);
+					$file->putContents(convert_uudecode($att));
+	//			$file->putContents($att);
+
+					$a = GO_Email_Model_MessageAttachment::model()->createFromTempFile($file);
+					$a->number = "UU" . $i;
+					$this->addAttachment($a);
+				}
+			}
 			
-			$a = GO_Email_Model_MessageAttachment::model()->createFromTempFile($file);
-			$a->number = "UU".$i;
-			$this->addAttachment($a);
-    }
+			$body = substr($body, 0, $startPosAtts);
+		}
 	}
 
 	private function _convertRecipientArray($r){
