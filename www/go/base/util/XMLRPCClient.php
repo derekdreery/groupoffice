@@ -5,6 +5,9 @@
 class GO_Base_Util_XMLRPCClient
 {
 	
+	private $_user;
+	private $_pass;
+	
 	private $_curlErrorCodes=array(
 1 => 'CURLE_UNSUPPORTED_PROTOCOL', 
 2 => 'CURLE_FAILED_INIT', 
@@ -129,7 +132,8 @@ class GO_Base_Util_XMLRPCClient
 						curl_setopt($this->curl_hdl, CURLOPT_SSL_VERIFYHOST, false);
 						
 
-//						curl_setopt($this->curl_hdl, CURLOPT_USERPWD, "user:pass");
+						if(isset($this->_user))
+							curl_setopt($this->curl_hdl, CURLOPT_USERPWD, $this->_user.":".$this->_pass);
 						
         }
 
@@ -148,4 +152,15 @@ class GO_Base_Util_XMLRPCClient
 
         return $result;
     }
+		
+		/**
+		 * Set HTTP Basic Authorization credentials for Curl option CURLOPT_USERPWD
+		 * 
+		 * @param string $user
+		 * @param string $pass
+		 */
+		public function setAuthentication($user, $pass){
+			$this->_user=$user;
+			$this->_pass=$pass;
+		}
 }
