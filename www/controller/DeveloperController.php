@@ -334,4 +334,19 @@ END:VCALENDAR';
 		echo $order->order_id;
 		
 	}
+	
+	protected function actionCall(){
+		
+		$company = "firm833";
+		$user=1000;
+		$pincode=9246;
+				
+		$uri = "https://$company+$user:$pincode@firm833.cp.voipro.nl:7088/RPC2";
+
+		$rpc = new GO_Base_Util_XMLRPCClient($uri);
+		
+		$result = $rpc->makecall(1002, "firm833", "+31736445508");
+
+		var_dump($result);
+	}
 }
