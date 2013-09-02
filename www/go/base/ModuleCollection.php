@@ -182,4 +182,23 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 		
 		return $modules;
 	}
+	
+	/**
+	 * Find all classes in a folder of all modules.
+	 * 
+	 * For example findClassses("model") finds all models.
+	 * 
+	 * @param string $subfolder
+	 * @return ReflectionClass array
+	 */
+	public function findClasses($subfolder){
+		
+		$classes =array();
+		$modules = $this->getAllModules();
+		
+		foreach($modules as $module)
+			$classes = array_merge($classes, $module->moduleManager->findClasses($subfolder));
+		
+		return $classes;
+	}
 }

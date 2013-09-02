@@ -349,4 +349,13 @@ END:VCALENDAR';
 
 		var_dump($result);
 	}
+	
+	
+	protected function actionRpcHello(){
+		$rpc = new GO_Base_Util_XMLRPCClient('http://localhost/groupoffice/rpc.php');
+		
+		$response = $rpc->voipro_call_connected(1,2,3,4, 5);
+		
+		var_dump($response);
+	}
 }
