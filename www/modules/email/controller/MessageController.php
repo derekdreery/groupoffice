@@ -1462,7 +1462,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		GO::session()->closeWriting();
 		
-		$file = new GO_Base_Fs_File($params['filename']);
+		$file = new GO_Base_Fs_File('/dummypath/'.$params['filename']);
 		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);
 		//$imapMessage = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'], $params['uid']);
