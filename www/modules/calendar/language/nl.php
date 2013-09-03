@@ -219,7 +219,7 @@ $l['createPermission']="Toegang aanmaken";
 $l['show_holidays']="Feestdagen tonen";
 
 $l['participant']='Deelnemer';
-$l['clickForAttendance']='Klik hier om uw status voor deelname aan te geven';
+$l['clickForAttendance']='Geef aan of u deelneemt aan deze afspraak';
 
 
 $l['viewDay']='Dag';
