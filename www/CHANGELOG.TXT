@@ -1,4 +1,5 @@
  -09-2013 4.2.16
+- Changed the default sort of the project templates store so it uses the "name" instead of the "id" to sort.
 - Fixed bug where email got cut of on the word begin
 - Cut of encoded strings on the end of email attachement names
 
