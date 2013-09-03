@@ -133,6 +133,8 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 			$this->_extraFindParams = $findParams;
 		else
 			$this->_extraFindParams = GO_Base_Db_FindParams::newInstance();
+		
+		$this->_readRequestParams();
 	}
 
 	/**
@@ -240,6 +242,8 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	 * @return GO_Base_Db_ActiveStatement the PDO statement
 	 */
 	protected function createStatement() {
+	
+		
 		$params = $this->createFindParams();
 		$modelFinder = GO::getModel($this->_modelClass);
 		return $modelFinder->find($params);
@@ -448,7 +452,7 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 	 */
 	public function getData() {
 
-		$this->_readRequestParams();
+		
 
 		if (!empty($this->_deleteRecords))
 			$this->response['deleteSuccess'] = $this->processDeleteActions();
