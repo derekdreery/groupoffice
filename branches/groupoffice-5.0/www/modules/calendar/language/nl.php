@@ -63,9 +63,10 @@ $l['rightClickToCopy']='Gebruik de rechtermuisknop om de koppelingslocatie te ko
 $l['invitation']='Uitnodiging';
 $l['invitation_update']='Bijgewerkte uitnodiging';
 $l['cancellation']='Annulering';
-$l['cancelMessage']='De voglende afspraak waar u voor uitgenodigd bent is geannuleerd.';
+$l['cancelMessage']='De volgende afspraak waar u voor uitgenodigd bent is geannuleerd';
 $l['non_selected'] = 'in niet-geselecteerde agenda';
-$l['linkIfCalendarNotSupported']='Gebruik onderstaande links alleen wanneer uw mail programma geen agenda functies ondersteund.';$l["appointment"]= 'Afspraak';
+$l['linkIfCalendarNotSupported']='Gebruik onderstaande links alleen wanneer uw mail programma geen agenda functies ondersteunt.';
+$l["appointment"]= 'Afspraak';
 $l["appointments"]= 'Afspraken';
 $l["recurrence"]= 'Herhaling';
 $l["options"]= 'Opties';
@@ -218,7 +219,7 @@ $l['createPermission']="Toegang aanmaken";
 $l['show_holidays']="Feestdagen tonen";
 
 $l['participant']='Deelnemer';
-$l['clickForAttendance']='Klik hier om uw status voor deelname aan te geven';
+$l['clickForAttendance']='Geef aan of u deelneemt aan deze afspraak';
 
 
 $l['viewDay']='Dag';

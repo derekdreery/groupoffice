@@ -226,7 +226,21 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			if($model->hasOtherParticipants())// && isset($modifiedAttributes['start_time']))
 			{			
 				$response['isNewEvent']=$isNewEvent;
-				$response['askForMeetingRequest']=true;
+				
+				if($isNewEvent){
+					$response['askForMeetingRequest']=true;
+				}else
+				{
+					//only ask to send email if a relevant attribute has been altered
+					$attr = $model->getRelevantMeetingAttributes();				
+					foreach($modifiedAttributes as $key=>$value){
+						if(in_array($key, $attr)){
+
+							$response['askForMeetingRequest']=true;
+							break;
+						}
+					}
+				}
 			}
 		}
 		
@@ -1171,9 +1185,10 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	 * @throws GO_Base_Exception_NotFound
 	 */
 	private function _handleIcalendarRequest(Sabre\VObject\Component $vevent, $recurrenceDate, GO_Email_Model_Account $account){
-		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, $account->user_id);
 		
+		$settings = GO_Calendar_Model_Settings::model()->getDefault($account->user);
 		
+		$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, 0, $settings->calendar_id);		
 		
 		//delete existing data		
 		if(!$recurrenceDate){
@@ -1195,7 +1210,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		$eventUpdated=!$recurrenceDate && $masterEvent || $recurrenceDate && !empty($exceptionEvent);
 		
-		$importAttributes=array('is_organizer'=>false);
+		$importAttributes=array('is_organizer'=>false,'calendar_id'=>$settings->calendar_id);
 		
 		//import it
 		$event = new GO_Calendar_Model_Event();
