@@ -183,7 +183,7 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 		
 		var autodata = [			
 		['{date}',GO.lang['strDate']],
-		['{salutation}',GO.lang['strSalutation']],
+		['{contact:salutation}',GO.lang['strSalutation']],
 		['{contact:first_name}',GO.lang['strFirstName']],
 		['{contact:middle_name}',GO.lang['strMiddleName']],
 		['{contact:last_name}',GO.lang['strLastName']],
