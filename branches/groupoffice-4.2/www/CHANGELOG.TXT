@@ -1,3 +1,7 @@
+ -09-2013 4.2.16
+- Fixed bug where email got cut of on the word begin
+- Cut of encoded strings on the end of email attachement names
+
 30-08-2013 4.2.15
 - Removed unseen caching. Broke checker.
 - Update Norwegian, German and Swedish translation
