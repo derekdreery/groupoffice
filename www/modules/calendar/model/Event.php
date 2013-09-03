@@ -361,6 +361,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}		
 		return parent::validate();
 	}
+	
+	public function getRelevantMeetingAttributes(){
+		return array("name","start_time","end_time","location","description","calendar_id","rrule","repeat_end_time");
+	}
 
 	protected function beforeSave() {
 		
@@ -371,7 +375,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 		
 		//if this is not the organizer event it may only be modified by the organizer
-		if(!$this->_isImport && !$this->isNew && $this->isModified(array("name","start_time","end_time","location","description","calendar_id","rrule","repeat_end_time"))){		
+		if(!$this->_isImport && !$this->isNew && $this->isModified($this->getRelevantMeetingAttributes())){		
 			$organizerEvent = $this->getOrganizerEvent();
 			if($organizerEvent && !$organizerEvent->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION) || !$organizerEvent && !$this->is_organizer){
 				GO::debug($this->getModifiedAttributes());
