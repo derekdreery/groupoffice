@@ -27,17 +27,22 @@ class GO_Base_Mail_ImapBodyStruct extends GO_Base_Mail_ImapBase {
 			$res['subtype'] = strtolower(trim(array_shift($vals)));
 			if ($vals[0] == '(') {
 				array_shift($vals);
+				$break=false;
 				while($vals[0] != ')') {
 					if (isset($vals[0]) && isset($vals[1])) {
 
 						$key = strtolower($vals[0]);
+						
+						if($key==='name') //Only take first part for filename
+							$break=true;
+						
 						$starpos=strpos($key, '*');
 						if($starpos){
 							$key = substr($key, 0, $starpos);
 							if(!isset($res[$key]))
 								$res[$key]='';
-
-							$res[$key].= $vals[1];
+							if(!$break) //dont append when key = name
+								$res[$key].= $vals[1];
 						}else
 						{
 							$res[$key] = $vals[1];
