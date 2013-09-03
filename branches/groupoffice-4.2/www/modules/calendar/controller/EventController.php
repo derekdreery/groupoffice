@@ -226,7 +226,21 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			if($model->hasOtherParticipants())// && isset($modifiedAttributes['start_time']))
 			{			
 				$response['isNewEvent']=$isNewEvent;
-				$response['askForMeetingRequest']=true;
+				
+				if($isNewEvent){
+					$response['askForMeetingRequest']=true;
+				}else
+				{
+					//only ask to send email if a relevant attribute has been altered
+					$attr = $model->getRelevantMeetingAttributes();				
+					foreach($modifiedAttributes as $key=>$value){
+						if(in_array($key, $attr)){
+
+							$response['askForMeetingRequest']=true;
+							break;
+						}
+					}
+				}
 			}
 		}
 		
