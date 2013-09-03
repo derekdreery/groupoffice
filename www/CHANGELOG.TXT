@@ -1,7 +1,10 @@
- -09-2013 4.2.16
+03-11-2013 4.2.16
+- IMip handler for CalDAV to support apple invitations better.
+- Don't ask to notify event participants when nothing relevant has been changed
+- Disable address books collapsing when favorites is not installed
 - Changed the default sort of the project templates store so it uses the "name" instead of the "id" to sort.
 - Fixed bug where email got cut of on the word begin
-- Cut of encoded strings on the end of email attachement names
+- Cut of encoded strings on the end of email attachment names
 
 30-08-2013 4.2.15
 - Removed unseen caching. Broke checker.
