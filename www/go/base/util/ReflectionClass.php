@@ -2,6 +2,8 @@
 
 class GO_Base_Util_ReflectionClass extends ReflectionClass {
 
+	
+	private $_overriddenMethods;
 	/**
 	 * Determine which properties are of the childs class. 
 	 * Return them as an array.
@@ -30,29 +32,30 @@ class GO_Base_Util_ReflectionClass extends ReflectionClass {
 	 * @return array
 	 */
 	public function getOverriddenMethods() {
+		if(!isset($this->_overriddenMethods)){
+			$this->_overriddenMethods = array();
 
-		$methods = array();
+			if (!$parentClass = $this->getParentClass())
+				return $this->_overriddenMethods;
 
-		if (!$parentClass = $this->getParentClass())
-			return $methods;
+			//find all public and protected methods in ParentClass
+			$parentMethods = $parentClass->getMethods(
+							ReflectionMethod::IS_PUBLIC ^ ReflectionMethod::IS_PROTECTED
+			);
 
-		//find all public and protected methods in ParentClass
-		$parentMethods = $parentClass->getMethods(
-						ReflectionMethod::IS_PUBLIC ^ ReflectionMethod::IS_PROTECTED
-		);
-		
-		//find all parentmethods that were redeclared in ChildClass
-		foreach ($parentMethods as $parentMethod) {
-			$declaringClass = $this->getMethod($parentMethod->getName())
-							->getDeclaringClass()
-							->getName();
+			//find all parentmethods that were redeclared in ChildClass
+			foreach ($parentMethods as $parentMethod) {
+				$declaringClass = $this->getMethod($parentMethod->getName())
+								->getDeclaringClass()
+								->getName();
 
-			if ($declaringClass === $this->getName()) {
-				$methods[]=$parentMethod->getName(); // print the method name
+				if ($declaringClass === $this->getName()) {
+					$this->_overriddenMethods[]=$parentMethod->getName(); // print the method name
+				}
 			}
 		}
 		
-		return $methods;
+		return $this->_overriddenMethods;
 	}
 	
 	/**
