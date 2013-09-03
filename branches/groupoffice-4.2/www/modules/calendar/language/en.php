@@ -217,7 +217,7 @@ $l['createPermission']="Create permission";
 
 $l['show_holidays']="Show holidays";
 $l['participant']='Participant';
-$l['clickForAttendance']='Click here to set your attendance status';
+$l['clickForAttendance']='Indicate whether you participate in this event';
 
 $l['viewDay']='Day';
 $l['viewMorning']='Morning';
