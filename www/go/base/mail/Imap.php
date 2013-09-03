@@ -2275,6 +2275,48 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	}
 
 	/**
+	 * Runs $command multiple times, with $uids split up in chunks of 500 UIDs
+	 * for each run of $command.
+	 * @param string $command IMAP command
+	 * @param array $uids Array of UIDs
+	 * @param boolean $trackErrors passed as third argument to $this->check_response()
+	 * @return boolean
+	 */
+	private function _runInChunks($command, $uids, $trackErrors=true){
+		$status=false;
+		$uid_strings = array();
+		if (empty($uids))
+			return true;
+			
+		if (count($uids) > 500) {
+			while (count($uids) > 500) {
+				$uid_strings[] = implode(',', array_splice($uids, 0, 2));
+			}
+			if (count($uids)) {
+				$uid_strings[] = implode(',', $uids);
+			}
+		}
+		else {
+			$uid_strings[] = implode(',', $uids);
+		}
+		
+		foreach ($uid_strings as $uid_string) {
+			if ($uid_string) {
+				$this->clean($uid_string, 'uid_list');
+			}
+			$theCommand = sprintf($command,$uid_string);
+			$this->send_command($theCommand);
+			$res = $this->get_response();
+			$status = $this->check_response($res, false, $trackErrors);
+			if (!$status) {
+				return $status;
+			}
+		}
+		
+		return $status;
+	}
+	
+	/**
 	 * Set or clear flags of an UID range. Flags can be:
 	 * 
 	 * \Seen
@@ -2290,44 +2332,16 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 */
 	public function set_message_flag($uids, $flags, $clear=false) {
 		$status=false;
-		$uid_strings = array();
-		if (empty($uids))
-			return true;
-			
-		if (count($uids) > 500) {
-			while (count($uids) > 500) {
-				$uid_strings[] = implode(',', array_splice($uids, 0, 500));
-			}
-			if (count($uids)) {
-				$uid_strings[] = implode(',', $uids);
-			}
-		}
-		else {
-			$uid_strings[] = implode(',', $uids);
-		}
 
-		
-		foreach ($uid_strings as $uid_string) {
-			if ($uid_string) {
-				$this->clean($uid_string, 'uid_list');
-			}
+		if($clear)
+			$command = "UID STORE %s -FLAGS.SILENT ($flags)\r\n";
+		else
+			$command = "UID STORE %s +FLAGS.SILENT ($flags)\r\n";
 
-			if($clear) {
-				$command = "UID STORE $uid_string -FLAGS.SILENT ($flags)\r\n";
-			}else {
-				$command = "UID STORE $uid_string +FLAGS.SILENT ($flags)\r\n";
-			}
-			$this->send_command($command);
-			$res = $this->get_response();
-			$status = $this->check_response($res, false, false);
-			if (!$status) {
-				return $status;
-			}
-		}
-		
+		$status = $this->_runInChunks($command,$uids,false);
 		return $status;
 	}
-
+	
 	/**
 	 * Copy a message from the currently selected mailbox to another mailbox
 	 *
@@ -2344,11 +2358,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 		$uid_string = implode(',',$uids);
 
-		$command = "UID COPY $uid_string \"".$this->utf7_encode($mailbox)."\"\r\n";
-		$this->send_command($command);
-		$res = $this->get_response();
-		
-		return $this->check_response($res);
+		$command = "UID COPY %s \"".$this->utf7_encode($mailbox)."\"\r\n";
+		$status = $this->_runInChunks($command, $uids);
+		return $status;
 	}
 
 	/**

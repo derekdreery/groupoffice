@@ -215,7 +215,7 @@ function test_system(){
 		$xml2wbxml = whereis('xml2wbxml') ? whereis('xml2wbxml') : '/usr/bin/xml2wbxml';
 	}
 	$test['pass']=@is_executable($wbxml2xml) && @is_executable($xml2wbxml);
-	$test['feedback']='Warning: libwbxml2 is not installed. Synchronization will not work!';
+	$test['feedback']='Warning: libwbxml2 is not installed. SyncML sync will not work!';
 	$test['fatal']=false;
 
 	$tests[]=$test;

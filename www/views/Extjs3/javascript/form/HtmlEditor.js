@@ -56,9 +56,36 @@ Ext.extend(GO.form.HtmlEditor,Ext.form.HtmlEditor, {
 	syncValue: function(){
 		//In BasicForm.js this method is called by EXT
 		// When using the editor in sourceEdit then it may not call the syncValue function
-		if(!this.sourceEditMode)
+		if(!this.sourceEditMode){			
 			GO.form.HtmlEditor.superclass.syncValue.call(this);
+		}
 	},	
+
+//	urlify : function () {
+//		
+//		var inputText = this.getEditorBody().innerHTML;
+//		var replacedText, replacePattern1, replacePattern2, replacePattern3;
+//
+////		//URLs starting with http://, https://, or ftp://
+////		replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+////		replacedText = inputText.replace(replacePattern1, '<a href="$1" target="_blank">$1</a>');
+////
+////		//URLs starting with "www." (without // before it, or it'd re-link the ones done above).
+////		replacePattern2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+////		replacedText = replacedText.replace(replacePattern2, '$1<a href="http://$2" target="_blank">$2</a>');
+////
+////		//Change email addresses to mailto:: links.
+////		replacePattern3 = /(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})/gim;
+////		replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>');
+//
+//	replacedText = inputText.replace(/(?:^|[^\>])((ftp|http|https|file):\/\/[\S]+(\b|$))/gim, '<a href="http://$1">$1</a>');
+//
+//		
+//		this.getEditorBody().innerHTML=replacedText;
+//		
+//		console.log(this.getEditorBody().innerHTML);
+//		
+//	},
 	onFirstFocus : function(){
 		this.activated = true;
 		this.disableItems(this.readOnly);
@@ -101,17 +128,17 @@ Ext.extend(GO.form.HtmlEditor,Ext.form.HtmlEditor, {
 						this.deferFocus();
 					}
 				}else if(k == e.ENTER){
-			//                    r = doc.selection.createRange();
-			//                    if(r){
-			//                        var target = r.parentElement();
-			//                        if(!target || target.tagName.toLowerCase() != 'li'){
-			//                            e.stopEvent();
-			//                            r.pasteHTML('<br />');
-			//                            r.collapse(false);
-			//                            r.select();
-			//                        }
-			//                    }
-			}
+				//                    r = doc.selection.createRange();
+				//                    if(r){
+				//                        var target = r.parentElement();
+				//                        if(!target || target.tagName.toLowerCase() != 'li'){
+				//                            e.stopEvent();
+				//                            r.pasteHTML('<br />');
+				//                            r.collapse(false);
+				//                            r.select();
+				//                        }
+				//                    }
+				}
 			};
 		}else if(Ext.isOpera){
 			return function(e){
@@ -146,34 +173,42 @@ Ext.extend(GO.form.HtmlEditor,Ext.form.HtmlEditor, {
 		}
 	}(),
         
-    //Overwritten to fix font size bug in chrome
-    adjustFont: function(btn){
-        var adjust = btn.getItemId() == 'increasefontsize' ? 1 : -1,
-            doc = this.getDoc(),
-            v = parseInt(doc.queryCommandValue('FontSize') || 2, 10);
-        if(Ext.isAir){
+	//Overwritten to fix font size bug in chrome
+	adjustFont: function(btn){
+		var adjust = btn.getItemId() == 'increasefontsize' ? 1 : -1,
+		doc = this.getDoc(),
+		v = parseInt(doc.queryCommandValue('FontSize') || 2, 10);
+		if(Ext.isAir){
             
             
-            if(v <= 10){
-                v = 1 + adjust;
-            }else if(v <= 13){
-                v = 2 + adjust;
-            }else if(v <= 16){
-                v = 3 + adjust;
-            }else if(v <= 18){
-                v = 4 + adjust;
-            }else if(v <= 24){
-                v = 5 + adjust;
-            }else {
-                v = 6 + adjust;
-            }
-            v = v.constrain(1, 6);
-        }else{
-            v = Math.max(1, v+adjust);
-        }
-        this.execCmd('FontSize', v);
-    },      
+			if(v <= 10){
+				v = 1 + adjust;
+			}else if(v <= 13){
+				v = 2 + adjust;
+			}else if(v <= 16){
+				v = 3 + adjust;
+			}else if(v <= 18){
+				v = 4 + adjust;
+			}else if(v <= 24){
+				v = 5 + adjust;
+			}else {
+				v = 6 + adjust;
+			}
+			v = v.constrain(1, 6);
+		}else{
+			v = Math.max(1, v+adjust);
+		}
+		this.execCmd('FontSize', v);
+	},      
           
+	// private
+//	onEditorEvent : function(e){
+//		this.updateToolbar();
+////		console.log(e);
+//		
+//		if(e.keyCode==32 || e.keyCode==12)
+//			this.urlify();
+//	},
 	updateToolbar: function(){
 
 		/*
@@ -222,6 +257,7 @@ Ext.extend(GO.form.HtmlEditor,Ext.form.HtmlEditor, {
 		//the editor iframe it thinks it has lost the focus.
 		GO.hasFocus=true;
 
+		
 	//this.syncValue();
 	}
 		

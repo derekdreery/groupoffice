@@ -258,6 +258,14 @@ GO.addressbook.MainPanel = function(config)
 			id: 'ab-west-panel'
 		});
 		
+		//This is an accordion panel only for the favorites module. If there's only
+		//one item then this will disable the collapsing.
+		this.addressbooksGrid.on('beforecollapse',function(){
+			if(this.westPanel.items.getCount()==1){
+				return false;
+			}
+		}, this);
+		
 		
 		this.westPanelContainer = new Ext.Panel({
 			region:'west',
