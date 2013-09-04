@@ -206,7 +206,7 @@ ul.x-tab-strip .x-tab-strip-active {
 }
 
 .x-grid3-hd-inner {
-	padding:0px;
+	padding: 0 2px 0px 2px
 }
 
 .x-grid3-check-col, .x-grid3-check-col-on{
@@ -232,7 +232,7 @@ td.x-grid3-hd-over .x-grid3-hd-inner, td.sort-desc .x-grid3-hd-inner, td.sort-as
 
 td.x-grid3-hd-over, .x-grid3-hd-row td {
 	border: none !important;
-	padding-right: 5px;
+/*	padding-right: 5px;*/
 }
 
 .x-tab-panel .x-tab-panel-body-top {
