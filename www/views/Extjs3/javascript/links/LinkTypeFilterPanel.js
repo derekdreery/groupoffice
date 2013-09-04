@@ -10,9 +10,9 @@ GO.LinkTypeFilterPanel = function(config)
 	config.split=true;
 	config.resizable=true;
 	config.autoScroll=true;
-	config.collapsible=true;
+	config.collapsible=false;
 	//config.header=false;
-	config.collapseMode='mini';
+//	config.collapseMode='mini';
 	config.allowNoSelection=true;
 	
 	if(!config.title)

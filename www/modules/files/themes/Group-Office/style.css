@@ -203,3 +203,16 @@ cursor:pointer;
 	padding-left:24px !important;	
 	background-position: 0px 4px;
 }
+.fs-filebrowser{
+	padding:10px;
+}
+
+
+/*.fs-filebrowser .x-border-layout-ct{
+	background-color:#2a9ac9;
+}*/
+
+
+.fs-filebrowser .go-border-north{
+	background-color:#fff;
+}

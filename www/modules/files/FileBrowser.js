@@ -822,6 +822,8 @@ GO.files.FileBrowser = function(config){
 }
 
 Ext.extend(GO.files.FileBrowser, Ext.Panel,{
+	
+	cls: 'fs-filebrowser',
 
 	fileClickHandler : false,
 	scope : this,
