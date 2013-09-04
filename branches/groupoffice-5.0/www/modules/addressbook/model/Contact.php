@@ -1009,6 +1009,32 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 * Find contacts by e-mail address
 	 * 
 	 * @param string $email
+	 * @param GO_Base_Db_FindParams $findParams Optional
+	 * @return GO_Base_Db_ActiveStatement 
+	 */
+	public function findByPhoneNumber($number, $findParams = false){
+		
+		
+		$number=  '%'.substr($number,-9);
+		
+		if(!$findParams)
+			$findParams = GO_Base_Db_FindParams::newInstance();
+		
+		$findParams->debugSql();
+		
+		$findParams->getCriteria()->mergeWith(GO_Base_Db_FindCriteria::newInstance()
+										->addCondition('home_phone', $number, 'LIKE', 't', false)
+										->addCondition('work_phone', $number, 'LIKE', 't', false)
+										->addCondition('cellular', $number, 'LIKE', 't', false)
+		);
+
+		return GO_Addressbook_Model_Contact::model()->find($findParams);		
+	}
+	
+	/**
+	 * Find contacts by e-mail address
+	 * 
+	 * @param string $email
 	 * @return GO_Base_Db_ActiveStatement 
 	 */
 	public function findSingleByEmail($email){

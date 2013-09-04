@@ -358,10 +358,7 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 	font-weight: bold;
 }
 
-.go-display-panel .x-btn-text, .x-window .x-panel-tbar .x-btn-text{
-	background: none !important;
-	height: 12px !important;
-}
+
 
 .go-display-panel .x-panel-body .x-panel-body{
 	padding: 0;
@@ -450,19 +447,7 @@ thead .x-grid3-hd-inner{
 	vertical-align: middle
 }
 
-.go-display-panel .btn-refresh {
-	background: url(images/extjs/grid/refresh-noborder.gif) no-repeat !important;
-	width: 14px !important;
-	overflow:hidden;
-	text-indent: 100px;
-}
 
-.go-display-panel .btn-print {
-	background: url(images/extjs/grid/print-noborder.gif) no-repeat !important;
-	width: 14px !important;
-	overflow:hidden;
-	text-indent: 100px;
-}
 
 .x-item-disabled * {
 	color: #f1f1 !important;
@@ -512,7 +497,7 @@ border-color: #fff;
 	margin: 0 5px;
 }
 
-.go-head-tb .x-btn-mc em.x-btn-arrow {
+.go-moduletabs .go-head-tb .x-btn-mc em.x-btn-arrow {
 	background-image: url(/images/button/arrow.gif);
 }
 
@@ -759,4 +744,33 @@ padding:10px 20px;
 
 color:#666;
 font: 13px helvetica;
+}
+
+.x-layout-collapsed{
+	background-color:#2a9ac9;
+	border-color:#2a9ac9;
+}
+
+.go-display-panel .x-btn-text, .x-window .x-panel-tbar .x-btn-text{
+	background: none !important;
+	height: 12px !important;
+}
+
+.go-display-panel  .x-panel-tbar .btn-refresh {
+	background: url(images/extjs/grid/refresh-noborder.gif) no-repeat !important;
+	width: 14px !important;
+	overflow:hidden;
+	text-indent: 100px;
+}
+
+.go-display-panel  .x-panel-tbar .btn-print {
+	background: url(images/extjs/grid/print-noborder.gif) no-repeat !important;
+	width: 14px !important;
+	overflow:hidden;
+	text-indent: 100px;
+}
+
+
+.x-window .x-border-layout-ct{
+	background-color:#2a9ac9 !important;
 }

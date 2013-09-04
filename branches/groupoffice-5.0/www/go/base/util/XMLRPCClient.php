@@ -116,7 +116,7 @@ class GO_Base_Util_XMLRPCClient
     public function __call($method, $params)
     {
         $xml = xmlrpc_encode_request($method, $params);
-
+//throw new Exception(var_export($xml, true));
         if ($this->curl_hdl === null)
         {
             // Create cURL resource
