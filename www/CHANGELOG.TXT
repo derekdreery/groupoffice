@@ -1,4 +1,5 @@
 4.2.17
+- Fixed default date / time problem on task reminder.
 - Sieve: Rules table is refreshed after every single rearrangement.
 
 03-11-2013 4.2.16
