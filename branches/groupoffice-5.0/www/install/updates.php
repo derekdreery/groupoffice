@@ -344,3 +344,15 @@ $updates['201305031735'][]="ALTER TABLE `go_users` ADD `muser_id` int(11) NOT NU
 $updates['201305240933'][]="ALTER TABLE `go_users` ADD `holidayset` VARCHAR( 10 ) NULL ";
 
 $updates['201308151229'][]="UPDATE go_users SET theme='Group-Office' WHERE theme='Default' or theme='ExtJS';";
+
+$updates['201309051015'][]="CREATE TABLE IF NOT EXISTS `go_working_weeks` (
+	`user_id` int(11) NOT NULL DEFAULT '0',
+	`mo_work_hours` int(2) NOT NULL DEFAULT '0',
+	`tu_work_hours` int(2) NOT NULL DEFAULT '0',
+	`we_work_hours` int(2) NOT NULL DEFAULT '0',
+	`th_work_hours` int(2) NOT NULL DEFAULT '0',
+	`fr_work_hours` int(2) NOT NULL DEFAULT '0',
+	`sa_work_hours` int(2) NOT NULL DEFAULT '0',
+	`su_work_hours` int(2) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
