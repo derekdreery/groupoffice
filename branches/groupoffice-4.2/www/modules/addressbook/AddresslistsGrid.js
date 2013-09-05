@@ -54,7 +54,7 @@ GO.addressbook.AddresslistsGrid = function(config)
 			emptyText: GO.lang.strSearch
 		})
 	];
-	config.paging=false;
+	config.paging=true;
 	//	config.id= 'ab-mailings-grid';
 	//config.store=GO.addressbook.writableAddresslistsStore;
 
