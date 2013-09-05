@@ -69,7 +69,7 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 	
 	private function _loadData(){
 		
-		$properties = $this->_getReflectionClass()->getParentPropertiesDiff();
+		$properties = $this->_getReflectionClass()->getParentPropertiesDiff(ReflectionProperty::IS_PUBLIC);
 		
 		$propertyNames=array();
 		foreach($properties as $property){
@@ -107,7 +107,7 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 		if(!$this->validate())
 			return false;
 		
-		$properties = $this->_getReflectionClass()->getParentPropertiesDiff();
+		$properties = $this->_getReflectionClass()->getParentPropertiesDiff(ReflectionProperty::IS_PUBLIC);
 		$success = true;
 		foreach($properties as $property){				
 			$key = $property->name;
@@ -137,7 +137,7 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 	 */
 	public function saveFromArray($data){
 		
-		$properties = $this->_getReflectionClass()->getParentPropertiesDiff();
+		$properties = $this->_getReflectionClass()->getParentPropertiesDiff(ReflectionProperty::IS_PUBLIC);
 				
 		foreach($properties as $property){
 			$key = $property->name;
@@ -165,7 +165,7 @@ abstract class GO_Base_Model_AbstractSettingsCollection extends GO_Base_Model {
 	public function getArray(){
 		
 		$data = array();
-		$properties = $this->_getReflectionClass()->getParentPropertiesDiff();
+		$properties = $this->_getReflectionClass()->getParentPropertiesDiff(ReflectionProperty::IS_PUBLIC);
 		
 		foreach($properties as $property){
 			$key = $property->name;	  

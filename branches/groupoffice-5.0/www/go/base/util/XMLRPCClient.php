@@ -131,6 +131,8 @@ class GO_Base_Util_XMLRPCClient
 						curl_setopt($this->curl_hdl, CURLOPT_SSL_VERIFYPEER, false);
 						curl_setopt($this->curl_hdl, CURLOPT_SSL_VERIFYHOST, false);
 						
+						curl_setopt($this->curl_hdl, CURLOPT_TIMEOUT, 10);
+						
 
 						if(isset($this->_user))
 							curl_setopt($this->curl_hdl, CURLOPT_USERPWD, $this->_user.":".$this->_pass);

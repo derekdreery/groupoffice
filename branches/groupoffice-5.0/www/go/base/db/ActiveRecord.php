@@ -2053,6 +2053,16 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 					
 					return $value;
 					break;
+					
+				case 'phone':
+					
+					//if it contains alpha chars then leave it alone.
+					if(preg_match('/[a-z]+/i', $value)){
+						return $value;
+					}else{
+						return trim(preg_replace('/[\s-_\(\)]+/','', $value));
+					}
+					break;
 				case 'boolean':
 					$ret= empty($value) || $value==="false" ? 0 : 1; 
 					return $ret;
@@ -2152,6 +2162,22 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			case 'html':
 				return $value;
 				break;
+			
+			case 'phone':
+				if($html){
+					if(!preg_match('/[a-z]+/i', $value)){						
+						if(  preg_match( '/^(\+\d{2})(\d{2})(\d{3})(\d{4})$/', $value,  $matches ) )
+						{
+							return $matches[1] . ' ' .$matches[2] . ' ' . $matches[3].' ' . $matches[4];
+						}elseif(preg_match( '/^(\d*)(\d{3})(\d{4})$/', $value,  $matches)){
+							return '('.$matches[1] . ') ' .$matches[2] . ' ' . $matches[3];								
+						}	
+					}
+				}
+				return $value;
+				
+				break;
+			
 			default:
 				if($this->columns[$attributeName]['dbtype']=='int')
 					return $value;
