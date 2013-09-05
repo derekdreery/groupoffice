@@ -116,6 +116,12 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		$this->columns['email2']['regex']=GO_Base_Util_String::get_email_validation_regex();
 		$this->columns['email3']['regex']=GO_Base_Util_String::get_email_validation_regex();
 		
+		$this->columns['home_phone']['gotype']='phone';
+		$this->columns['work_phone']['gotype']='phone';
+		$this->columns['cellular']['gotype']='phone';
+		$this->columns['fax']['gotype']='phone';
+		$this->columns['work_fax']['gotype']='phone';
+		
 		return parent::init();
 	}
 	
