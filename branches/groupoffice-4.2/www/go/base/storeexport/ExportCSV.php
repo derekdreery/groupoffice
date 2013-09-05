@@ -23,6 +23,13 @@ class GO_Base_Storeexport_ExportCSV extends GO_Base_Storeexport_AbstractExport {
 	public static $name = "CSV";
 	public static $useOrientation=false;
 	
+	/**
+	 * Here you can add extra data(lines) that will be parsed after the store data
+	 * 
+	 * @var array 
+	 */
+	private $_lines = false;
+	
 	private function _sendHeaders(){		
 		$file = new GO_Base_Fs_File($this->title.'.csv');
 		GO_Base_Util_Http::outputDownloadHeaders($file);
@@ -63,6 +70,22 @@ class GO_Base_Storeexport_ExportCSV extends GO_Base_Storeexport_AbstractExport {
 			$record = $this->prepareRecord($record);
 			$this->_write($record);
 		}
+		
+		// If extra lines given, then add them to the .csv file
+		if($this->_lines !== false){
+			foreach($this->_lines as $record){
+				$record = $this->prepareRecord($record);
+				$this->_write($record);
+			}
+		}
 	}
-
+	
+	/**
+	 * Add extra lines to the end of the document
+	 * 
+	 * @param array $lines key value array
+	 */
+	public function addLines($lines){
+		$this->_lines = $lines;
+	}
 }
