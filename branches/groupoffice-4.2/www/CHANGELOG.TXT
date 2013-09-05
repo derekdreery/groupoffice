@@ -1,4 +1,5 @@
 4.2.17
+- Addressbook: Added pagination to the "Administration"->"Addresslists" grid
 - Fixed default date / time problem on task reminder.
 - Sieve: Rules table is refreshed after every single rearrangement.
 
