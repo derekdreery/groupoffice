@@ -73,8 +73,19 @@ function login_groupoffice(&$username, &$password)
 	}
 }
 
+function groupoffice_unserializesession($data) {
+	$vars = preg_split('/([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff^|]*)\|/',
+									$data, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+	for ($i = 0; isset($vars[$i]); $i++)
+		$result[$vars[$i++]] = unserialize($vars[$i]);
+	return $result;
+}
+
+
 function autologin_groupoffice()
 {
+	$user_id=false;
+	
 	if(isset($_REQUEST['goauth']))
 	{
 		$file = base64_decode($_REQUEST['goauth']);
@@ -82,8 +93,19 @@ function autologin_groupoffice()
 		//$_SESSION['groupoffice_to_phpbb_session_file']=$file;
 
 		$user_id = intval(file_get_contents($file));
+	}elseif(isset($_COOKIE['groupoffice'])){
+		$fname = session_save_path() . "/sess_" . $_COOKIE['groupoffice'];
+		if (file_exists($fname)) {
+			$data = file_get_contents($fname);
+			$data = groupoffice_unserializesession($data);
+			
+			if(isset($data['GO_SESSION']['user_id']))
+				$user_id=$data['GO_SESSION']['user_id'];
+		}
+	}
 		//unlink($file);
 			
+	if($user_id){
 		$gorow = user_row_groupoffice('', '', $user_id);
 
 		if($gorow)
