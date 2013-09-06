@@ -405,12 +405,36 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			return GO::url('core/thumb', $urlParams);	
 		}else
 		{
-			return GO::config()->host.'modules/addressbook/themes/Default/images/unknown-person.png';
+// TODO: Finish the implementation of gravatar (Scaling gravatar image etc..)
+//			$hash = $this->_getGravatarHash();
+//			if(!empty($hash))
+//				return 'http://www.gravatar.com/avatar/'.$hash.'.jpg?s='.$urlParams['h'].'&d=mm';
+//			else			
+				return GO::config()->host.'modules/addressbook/themes/Default/images/unknown-person.png';
 		}
-		
-		
 	}
 	
+// TODO: Finish the implementation of gravatar (Scaling gravatar image etc..)
+//	/**
+//	 * Get the hash to request the gravatar image
+//	 * 
+//	 * @return mixed Hash/Boolean
+//	 */
+//	private function _getGravatarHash(){
+//		
+//		$gravatarEmail = false;
+//		
+//		if(!empty($this->email))
+//			$gravatarEmail = $this->email;
+//		else if(!empty($this->email2))
+//			$gravatarEmail = $this->email2;
+//		else if(!empty($this->email3))
+//			$gravatarEmail = $this->email3;
+//		else
+//			return false;	
+//		
+//		return md5(strtolower(trim($gravatarEmail)));
+//	}
 	
 	/**
 	 * Set new photo file. The file will be converted into JPEG and resized to fit
