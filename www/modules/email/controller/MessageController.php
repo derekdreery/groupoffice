@@ -1478,7 +1478,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		$imap = $account->openImapConnection($params['mailbox']);				
 		$fp =fopen("php://output",'w');
-		$imap->get_message_part_decoded($params['uid'], $params['number'], $params['encoding'], false, false, false, $fp);
+		$imap->get_message_part_decoded($params['uid'], $params['number'], $params['encoding'], false, true, false, $fp);
 		fclose($fp);
 		
 //		echo base64_decode($imap->get_message_part($params['uid'], $params['number']));
@@ -1538,7 +1538,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
 		$imap = $account->openImapConnection($params['mailbox']);
 		
-		$response['success'] = $imap->save_to_file($params['uid'], $file->path(), $params['number'], $params['encoding']);
+		$response['success'] = $imap->save_to_file($params['uid'], $file->path(), $params['number'], $params['encoding'], true);
 		
 		if(!$folder->hasFile($file->name()))
 			$folder->addFile($file->name());
