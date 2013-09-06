@@ -70,7 +70,7 @@ function login_groupoffice(&$username, &$password,  $ip = '', $browser = '', $fo
 //				'error_msg'	=> 'LOGIN_ERROR_USERNAME',
 //				'user_row'	=> array('user_id' => ANONYMOUS),
 //		);
-		
+		//fallback to regular Phpbb db auth.
 		require_once(dirname(__FILE__).'/auth_db.php');
 		return login_db($username, $password, $ip, $browser, $forwarded_for);
 	}
