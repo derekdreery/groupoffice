@@ -4,7 +4,7 @@
  *
  * @return array containing the user row or empty if no auto login should take place
  */
-function login_groupoffice(&$username, &$password)
+function login_groupoffice(&$username, &$password,  $ip = '', $browser = '', $forwarded_for = '')
 {
 	global $db;
 	
@@ -65,11 +65,13 @@ function login_groupoffice(&$username, &$password)
 
 	}else
 	{
-		return array(
-				'status'	=> LOGIN_ERROR_USERNAME,
-				'error_msg'	=> 'LOGIN_ERROR_USERNAME',
-				'user_row'	=> array('user_id' => ANONYMOUS),
-		);
+//		return array(
+//				'status'	=> LOGIN_ERROR_USERNAME,
+//				'error_msg'	=> 'LOGIN_ERROR_USERNAME',
+//				'user_row'	=> array('user_id' => ANONYMOUS),
+//		);
+		
+		return login_db($username, $password, $ip, $browser, $forwarded_for);
 	}
 }
 
@@ -244,23 +246,23 @@ function acp_groupoffice(&$new)
 	$tpl = '
 
 	<dl>
-		<dt><label for="groupoffice_server">Database server:</label><br /><span></span></dt>
+		<dt><label for="groupoffice_server">Group-Office DB server:</label><br /><span></span></dt>
 		<dd><input type="text" id="groupoffice_server" size="40" name="config[groupoffice_server]" value="' . $new['groupoffice_server'] . '" /></dd>
 	</dl>
 	<dl>
-		<dt><label for="groupoffice_server">Database name:</label><br /><span></span></dt>
+		<dt><label for="groupoffice_server">Group-Office DB name:</label><br /><span></span></dt>
 		<dd><input type="text" id="groupoffice_server" size="40" name="config[groupoffice_database]" value="' . $new['groupoffice_database'] . '" /></dd>
 	</dl>
 	<dl>
-		<dt><label for="groupoffice_server">Database user:</label><br /><span></span></dt>
+		<dt><label for="groupoffice_server">Group-Office DB user:</label><br /><span></span></dt>
 		<dd><input type="text" id="groupoffice_server" size="40" name="config[groupoffice_user]" value="' . $new['groupoffice_user'] . '" /></dd>
 	</dl>
 	<dl>
-		<dt><label for="groupoffice_server">Database password:</label><br /><span></span></dt>
+		<dt><label for="groupoffice_server">Group-Office DB password:</label><br /><span></span></dt>
 		<dd><input type="password" id="groupoffice_server" size="40" name="config[groupoffice_pass]" value="' . $new['groupoffice_pass'] . '" /></dd>
 	</dl>
 	<dl>
-		<dt><label for="groupoffice_server">Database port:</label><br /><span></span></dt>
+		<dt><label for="groupoffice_server">Group-Office DB port:</label><br /><span></span></dt>
 		<dd><input type="text" id="groupoffice_server" size="40" name="config[groupoffice_port]" value="' . $new['groupoffice_port'] . '" /></dd>
 	</dl>
 		';
