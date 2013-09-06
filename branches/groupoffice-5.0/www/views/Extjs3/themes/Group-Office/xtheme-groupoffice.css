@@ -498,7 +498,7 @@ border-color: #fff;
 }
 
 .go-moduletabs .go-head-tb .x-btn-mc em.x-btn-arrow {
-	background-image: url(/images/button/arrow.gif);
+	background-image: url(images/button/arrow.gif);
 }
 
 .x-window-tl, .x-window-tr, .x-window-tc, .x-window-bl, .x-window-br, .x-window-bc  {
@@ -768,6 +768,10 @@ font: 13px helvetica;
 	width: 14px !important;
 	overflow:hidden;
 	text-indent: 100px;
+}
+
+.go-display-panel .x-panel-tbar .x-toolbar-more-icon {
+background-image: url(images/extjs/toolbar/more.gif)!important;
 }
 
 
