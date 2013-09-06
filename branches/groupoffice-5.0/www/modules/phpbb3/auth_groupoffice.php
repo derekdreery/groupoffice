@@ -71,6 +71,7 @@ function login_groupoffice(&$username, &$password,  $ip = '', $browser = '', $fo
 //				'user_row'	=> array('user_id' => ANONYMOUS),
 //		);
 		
+		require_once(dirname(__FILE__).'/auth_db.php');
 		return login_db($username, $password, $ip, $browser, $forwarded_for);
 	}
 }
