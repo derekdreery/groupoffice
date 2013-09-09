@@ -11,7 +11,7 @@ class GO_Ldapauth_LdapauthModule extends GO_Base_Module{
 		GO::debug("LDAPAUTH: Active");
 		
 		$lh = new GO_Ldapauth_Authenticator();
-		$lh->authenticate($username, $password);
+		return $lh->authenticate($username, $password);
 	}
 	
 }

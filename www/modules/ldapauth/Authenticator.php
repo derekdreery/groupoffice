@@ -109,10 +109,10 @@ class GO_Ldapauth_Authenticator {
 				$str .= 'unknown';
 			GO::infolog($str);
 			
-			//block user from logging in. If we don't throw the exception here normal Group-Office login will continue.
-			throw new Exception(GO::t('badLogin').' (LDAP)');
+			//Don't throw exception because this won't be catched by cookie login.
+//			throw new Exception(GO::t('badLogin').' (LDAP)');
 			
-			//return false;
+			return false;
 		} else {
 			GO::debug("LDAPAUTH: LDAP authentication SUCCESS for " . $username);
 			
