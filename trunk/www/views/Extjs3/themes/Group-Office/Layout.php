@@ -30,7 +30,7 @@ if(GO::user())
 	?>
 	<div id="mainNorthPanel">
 		<div id="headerLeft">
-			<div id="logo"></div>
+			<div id="gologo"></div>
 			<div id="logged-in-as"><?php echo GO::t('loggedInAs').' '.htmlspecialchars(GO::user()->name); ?></div>
 		</div>
 		<div id="headerRight">
