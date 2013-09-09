@@ -22,6 +22,17 @@ GO.panel.IFrameComponent = Ext.extend(Ext.BoxComponent, {
      		
        this.el = ct.createChild({tag: 'iframe', id: this.id, frameBorder: 0, src: this.url, name:this.name});
      },
+		 
+		 reloadOnShow : false,
+		 
+		 onShow : function(){
+			 
+			 if(this.reloadOnShow){
+				this.getEl().dom.contentWindow.location=this.url;
+			 }
+			 
+			 GO.panel.IFrameComponent.superclass.onShow.call(this);
+		 },
      
      setUrl : function(url){
      	this.el.set({src:url});
