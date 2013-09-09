@@ -1,4 +1,4 @@
-4.2.17
+09-09-2013 4.2.17
 - Root Addressbook and Project folder read only in files module
 - Peek when viewing attachments
 - SMIME certificated grid will reload on show.
@@ -11,7 +11,7 @@
 - Photo was not saved on vcard import
 - Refuse to move events to other weekdays when they recur by weekday also in month view
 
-03-11-2013 4.2.16
+03-09-2013 4.2.16
 - IMip handler for CalDAV to support apple invitations better.
 - Don't ask to notify event participants when nothing relevant has been changed
 - Disable address books collapsing when favorites is not installed
