@@ -746,8 +746,13 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		if (!empty($saveToDb))
 			$this->save();
 		
-		if (!empty($photoFile) && $saveToDb)
+		
+		if (!empty($photoFile) && $saveToDb){			
 			$this->setPhoto($photoFile);
+			$this->save();
+		}
+		
+		
 		
 //		foreach ($remainingVcardProps as $prop) {
 //			if (!empty($this->id) && substr($prop['name'],0,2)=='X-') {
