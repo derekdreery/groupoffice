@@ -204,8 +204,9 @@ cursor:pointer;
 	background-position: 0px 4px;
 }
 .fs-filebrowser{
-	padding:10px;
+	border:10px solid white;
 }
+
 
 
 /*.fs-filebrowser .x-border-layout-ct{
