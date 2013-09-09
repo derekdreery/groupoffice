@@ -1,4 +1,5 @@
 4.2.17
+- Root Addressbook and Project folder read only in files module
 - Peek when viewing attachments
 - SMIME certificated grid will reload on show.
 - Fixed owner that was not showing up in the administration->tickettypes grid of the ticket module.
