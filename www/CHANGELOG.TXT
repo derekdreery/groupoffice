@@ -8,6 +8,8 @@
 - Sieve: Rules table is refreshed after every single rearrangement.
 - New LDAP parameter to create mailboxes with the serverclient
 - Charset conversion bug in zip attachments
+- Photo was not saved on vcard import
+- Refuse to move events to other weekdays when they recur by weekday also in month view
 
 03-11-2013 4.2.16
 - IMip handler for CalDAV to support apple invitations better.
