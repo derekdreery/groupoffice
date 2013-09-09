@@ -220,7 +220,7 @@
 .go-header-toolbar{
 	background:transparant!important;
 }
-#logo{
+#gologo{
 	float:left;
 	background: url('images/go_logo.gif')  no-repeat;
 	height: 46px;
@@ -1043,6 +1043,10 @@ table.display-panel a:active
 
 .go-icon-exclamation .x-grid3-cell-inner{
 	background: url('images/16x16/exclamation.png') no-repeat !important;
+	padding-left:22px !important;
+}
+.go-icon-print .x-grid3-cell-inner{
+	background: url('images/16x16/print.png') no-repeat !important;
 	padding-left:22px !important;
 }
 
