@@ -266,8 +266,10 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	protected function afterSave($wasNew) {
 
 		if($wasNew){
-			$this->addGroup(GO::config()->group_root, GO_Base_Model_Acl::MANAGE_PERMISSION);
-			$this->addUser($this->user_id, GO_Base_Model_Acl::MANAGE_PERMISSION);
+			if($this->description!='readonly'){
+				$this->addGroup(GO::config()->group_root, GO_Base_Model_Acl::MANAGE_PERMISSION);
+				$this->addUser($this->user_id, GO_Base_Model_Acl::MANAGE_PERMISSION);
+			}
 		}elseif($this->isModified('user_id')){
 			$this->addUser($this->user_id, GO_Base_Model_Acl::MANAGE_PERMISSION);
 		}
@@ -467,8 +469,10 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 		if(empty($this->description))
 			$this->description='unknown';
 		
-		$this->addGroup(GO::config()->group_root, GO_Base_Model_Acl::MANAGE_PERMISSION);
-		$this->addUser($this->user_id, GO_Base_Model_Acl::MANAGE_PERMISSION);
+		if($this->description!='readonly'){
+			$this->addGroup(GO::config()->group_root, GO_Base_Model_Acl::MANAGE_PERMISSION);
+			$this->addUser($this->user_id, GO_Base_Model_Acl::MANAGE_PERMISSION);
+		}
 		
 		return parent::checkDatabase();
 	}
@@ -500,20 +504,43 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 			
 		}
 
-		if (!$adminUserRecordExists) {
-			$aclRecord = new GO_Base_Model_AclUsersGroups();
-			$aclRecord->acl_id = $this->id;
-			$aclRecord->user_id = 1;
-			$aclRecord->level = GO_Base_Model_Acl::MANAGE_PERMISSION;
-			$aclRecord->save();
-		}
-		if (!$adminGroupRecordExists) {
-			$aclRecord = new GO_Base_Model_AclUsersGroups();
-			$aclRecord->acl_id = $this->id;
-			$aclRecord->group_id = GO::config()->group_root;
-			$aclRecord->level = GO_Base_Model_Acl::MANAGE_PERMISSION;
-			$aclRecord->save();
+		if($this->description!='readonly'){
+			if (!$adminUserRecordExists) {
+				$aclRecord = new GO_Base_Model_AclUsersGroups();
+				$aclRecord->acl_id = $this->id;
+				$aclRecord->user_id = 1;
+				$aclRecord->level = GO_Base_Model_Acl::MANAGE_PERMISSION;
+				$aclRecord->save();
+			}
+			if (!$adminGroupRecordExists) {
+				$aclRecord = new GO_Base_Model_AclUsersGroups();
+				$aclRecord->acl_id = $this->id;
+				$aclRecord->group_id = GO::config()->group_root;
+				$aclRecord->level = GO_Base_Model_Acl::MANAGE_PERMISSION;
+				$aclRecord->save();
+			}
+		}		
+	}
+	
+	/**
+	 * Get the ACL that can be used to make things read only for everyone.
+	 * 
+	 * @return \GO_Base_Model_Acl
+	 */
+	public function getReadOnlyAcl(){
+		$acl_id = GO::config()->get_setting('readonly_acl_id');
+		
+		$acl = GO_Base_Model_Acl::model()->findByPk($acl_id);
+		
+		if(!$acl){
+			$acl = new GO_Base_Model_Acl();
+			$acl->description='readonly';
+			$acl->save();
+			
+			$acl->addGroup(GO::config()->group_everyone, GO_Base_Model_Acl::READ_PERMISSION);			
+			GO::config()->save_setting('readonly_acl_id', $acl->id);
 		}
 		
+		return $acl;
 	}
 }
