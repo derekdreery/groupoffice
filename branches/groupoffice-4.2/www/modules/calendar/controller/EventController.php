@@ -99,7 +99,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		$this->_setEventAttributes($model, $params);
 		
-		if(empty($params['exception_date']) && !empty($params['offset'])){
+		if(empty($params['exception_date']) && (!empty($params['offset']) || !empty($params['offset_days']))){
 			//don't move recurring events that are set on weekdays by whole days
 			if($model->isRecurring() && date('dmY', $model->start_time)!=date('dmY', $model->getOldAttributeValue('start_time'))){
 				$rrule = $model->getRecurrencePattern();
