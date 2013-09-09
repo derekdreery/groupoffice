@@ -1,4 +1,5 @@
 4.2.17
+- SMIME certificated grid will reload on show.
 - Fixed owner that was not showing up in the administration->tickettypes grid of the ticket module.
 - Addressbook: Added pagination to the "Administration"->"Addresslists" grid
 - Fixed default date / time problem on task reminder.
