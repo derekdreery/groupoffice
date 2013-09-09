@@ -23,7 +23,14 @@ GO.addressbook.AddresslistsGrid = function(config)
 	config.layout= 'fit';
 	config.border=false;
 	
-	config.store=GO.addressbook.writableAddresslistsStore;
+	config.store=new GO.data.JsonStore({
+			url: GO.url("addressbook/addresslist/store"),
+			baseParams: {
+					permissionLevel: GO.permissionLevels.write
+			},
+			fields: ['id', 'name', 'user_name','acl_id'],
+			remoteSort: true
+	});
 	
 	config.tbar=[
 	{
@@ -107,7 +114,9 @@ Ext.extend(GO.addressbook.AddresslistsGrid, GO.grid.GridPanel,{
 
 		this.mailingDialog = new GO.addressbook.MailingDialog();
 		this.mailingDialog.on('save', function(){
-			this.store.reload();
+			this.store.load();
+			
+			GO.addressbook.writableAddresslistsStore.load();
 		}, this);
 
 	}
