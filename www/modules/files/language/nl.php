@@ -132,3 +132,5 @@ $l['alwaysAsk']="Altijd vragen";
 $l['openWith']='Open met';
 
 $l['open']='Openen';
+
+$l['rightClickToCopy']='Klik met de rechtermuis knop om te kopiëren';
