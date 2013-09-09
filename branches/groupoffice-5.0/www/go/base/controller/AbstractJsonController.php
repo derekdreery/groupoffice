@@ -251,6 +251,9 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 		}else
 			$export = new GO_Base_Storeexport_ExportCSV($store, $settings->export_include_headers, $settings->export_human_headers, $params['documentTitle'], $orientation); // The default Export is the CSV outputter.
 
+		if(isset($params['extraLines']))
+			$export->addLines($params['extraLines']);
+		
 		$export->output();
 	}
 

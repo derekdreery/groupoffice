@@ -931,7 +931,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '5.0.2';
+	var $version = '5.0.3';
 	
 	/**
 	 * Modification date
@@ -939,7 +939,7 @@ class GO_Base_Config {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20130903';
+	var $mtime = '20130909';
 
 	#group configuration
 	/**

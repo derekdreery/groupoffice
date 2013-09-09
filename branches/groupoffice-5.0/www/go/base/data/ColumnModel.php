@@ -182,6 +182,11 @@ class GO_Base_Data_ColumnModel {
 		return $this->_columns[$dataindex];
 	}
 	
+	/**
+	 * Sort columns in the given order
+	 * 
+	 * @param array $columnNames Eg. array('id','name','age');
+	 */
 	public function sort($columnNames){
 		
 		

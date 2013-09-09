@@ -242,8 +242,10 @@ $l['dateReceived']='Date de réception';
 $l['dateSent']='Date d\'envoie';
 $l['cronEmailReminders']='Rappels par courrier électronique';
 $l['cronEmailRemindersDescription']='Ce système gère les rappels par courriel automatique';
-
 $l['ignoreSentFolder']='L\'enregistrement du message est identique à celui déjà enregistré.';
 $l['clickSeeWholeMessage']='Le message est plus grand que ce qui est réellement visible. Cliquez ici afin de le voir en entier.';
 $l['appointementAlreadyProcessed']='Ce message contient une invitation à un rendez-vous qui a déjà été traité.';
 $l['noname']= 'Pas de nom';
+$l['doNotMarkAsRead']='Ne pas marquer automatiquement les e-mails comme lus';
+$l['showAll']='Afficher tout';
+

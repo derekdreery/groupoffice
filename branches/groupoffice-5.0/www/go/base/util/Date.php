@@ -358,4 +358,19 @@ class GO_Base_Util_Date {
 		$lastSunday = self::get_last_sunday($unixTime);
 		return self::date_add($lastSunday,6);
 	}
+	
+	/**
+	 * Check if the current week is an even week or not
+	 * 
+	 * @param $timeStamp A timestamp to get the weeknumber from. Default: false
+	 * 
+	 * @return boolean
+	 */
+	public static function isEvenWeek($timeStamp=false){
+		
+		if(!$timeStamp)
+			$timeStamp = time();
+		
+		return date('W',$timeStamp)%2===0;
+	}
 }

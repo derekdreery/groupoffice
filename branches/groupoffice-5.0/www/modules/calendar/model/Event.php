@@ -2184,7 +2184,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 									->addTo($participant->email, $participant->name);
 				
 
-				//check if we have a Group-Office event. If so, we can handle accepting and declining in Group-Office. Otherwise we'll use ICS calendar objects by mail
+				//check if we have a Group-Office event. If so, we can handle accepting 
+				//and declining in Group-Office. Otherwise we'll use ICS calendar objects by mail
 				$participantEvent = $participant->getParticipantEvent();
 				
 				$body = '<p>'.$bodyLine.': </p>'.$this->toHtml();			
@@ -2196,10 +2197,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$acceptUrl = GO::url("calendar/event/invitation",array("id"=>$this->id,'accept'=>1,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
 				$declineUrl = GO::url("calendar/event/invitation",array("id"=>$this->id,'accept'=>0,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
 
-				if($participantEvent){	
+//				if($participantEvent){	
 					//hide confusing buttons if user has a GO event.
 					$body .= '<div class="go-hidden">';
-				}
+//				}
 				$body .= 
 					
 						'<p><br /><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
@@ -2208,9 +2209,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 						'&nbsp;|&nbsp;' .
 						'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
 				
-				if($participantEvent){	
+//				if($participantEvent){	
 					$body .= '</div>';
-				}
+//				}
 
 				$ics=$this->toICS("REQUEST");				
 				$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($this->name) . '.ics', 'text/calendar; METHOD="REQUEST"');

@@ -55,6 +55,8 @@ class GO_Serverclient_ServerclientModule extends GO_Base_Module{
 		$username = str_replace('@'.$domain, '', $user->username);
 
 		GO::debug("SERVERCLIENT: Adding mailbox for " . $username . '@' . $domain);
+		
+		$alias = strpos($user->email,'@'.$domain) ? $user->email : '';
 
 		//domain is, for example "intermesh .dev ".
 		$url = GO::config()->serverclient_server_url . "?r=postfixadmin/mailbox/submit";
@@ -62,6 +64,7 @@ class GO_Serverclient_ServerclientModule extends GO_Base_Module{
 				"r" => "postfixadmin/mailbox/submit",
 				"name" => $user->name,
 				"username" => $username,
+				"alias"=>$alias,
 				"password" => $user->getUnencryptedPassword(),
 				"password2" => $user->getUnencryptedPassword(),
 				"domain" => $domain
@@ -140,7 +143,15 @@ class GO_Serverclient_ServerclientModule extends GO_Base_Module{
 			$accountModel->smtp_username=GO::config()->serverclient_smtp_username;
 			$accountModel->smtp_password=GO::config()->serverclient_smtp_password;
 			$accountModel->save();
-			$accountModel->addAlias($user->email, $user->name);
+			
+			$alias = strpos($user->email, '@'.$domainName) ? $user->email : $accountModel->username;
+			
+			if(!strpos($alias, '@')){
+				$alias .= '@'.$domainName;
+			}
+			
+			
+			$accountModel->addAlias($alias, $user->name);
 		}
 	}
 }

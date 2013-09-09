@@ -169,7 +169,7 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		if(GO::modules()->isInstalled('files')){
 			$folder = GO_Files_Model_Folder::model()->findByPath('addressbook', true);
 			if($folder){
-				$folder->acl_id=GO::modules()->addressbook->acl_id;
+				$folder->acl_id=GO_Base_Model_Acl::model()->getReadOnlyAcl()->id;
 				$folder->readonly=1;
 				$folder->save();
 			}			
