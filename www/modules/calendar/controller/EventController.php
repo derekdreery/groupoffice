@@ -99,7 +99,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		$this->_setEventAttributes($model, $params);
 		
-		if(empty($params['exception_date']) && !empty($params['offset'])){
+		if(empty($params['exception_date']) && (!empty($params['offset']) || !empty($params['offset_days']))){
 			//don't move recurring events that are set on weekdays by whole days
 			if($model->isRecurring() && date('dmY', $model->start_time)!=date('dmY', $model->getOldAttributeValue('start_time'))){
 				$rrule = $model->getRecurrencePattern();
@@ -361,94 +361,94 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		return $response;
 	}
-	/**
-	 *
-	 * @param type $newParticipantIds
-	 * @param type $event
-	 * @param type $isNewEvent
-	 * @param type $modifiedAttributes
-	 * @param type $method
-	 * @param GO_Calendar_Model_Participant $sendingParticipant 
-	 */
-	private function _sendInvitation($newParticipantIds, $event, $isNewEvent, $modifiedAttributes, $method='REQUEST', $sendingParticipant=false) {
-
-		
-			$stmt = $event->participants();
-
-			while ($participant = $stmt->fetch()) {		
-				
-				$shouldSend = ($method=='REQUEST' && !$participant->is_organizer) || 
-					($method=='REPLY' && $participant->is_organizer) || 
-					($method=='CANCEL' && !$participant->is_organizer);
-									
-				if($shouldSend){
-					if($isNewEvent){
-						$subject = GO::t('invitation', 'calendar').': '.$event->name;
-					}elseif($sendingParticipant)
-					{							
-						$updateReponses = GO::t('updateReponses','calendar');
-						$subject= sprintf($updateReponses[$sendingParticipant->status], $sendingParticipant->name, $event->name);
-					}elseif($method == 'CANCEL')
-					{
-						$subject = GO::t('cancellation','calendar').': '.$event->name;
-					}else
-					{
-						$subject = GO::t('invitation_update', 'calendar').': '.$event->name;
-					}
-
-
-					$acceptUrl = GO::url("calendar/event/invitation",array("id"=>$event->id,'accept'=>1,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
-					$declineUrl = GO::url("calendar/event/invitation",array("id"=>$event->id,'accept'=>0,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
-
-					if($method=='REQUEST' && $isNewEvent){
-						$body = '<p>' . GO::t('invited', 'calendar') . '</p>' .
-										$event->toHtml() .
-										'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
-										'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
-										'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
-										'&nbsp;|&nbsp;' .
-										'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
-					}elseif($method=='CANCEL') {
-						$body = '<p>' . GO::t('cancelMessage', 'calendar') . '</p>' .
-										$event->toHtml();
-					}else // on update event
-					{
-						$body = '<p>' . GO::t('invitation_update', 'calendar') . '</p>' .
-										$event->toHtml() .
-										'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
-										'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
-										'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
-										'&nbsp;|&nbsp;' .
-										'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
-					}
-
-					$fromEmail = GO::user() ? GO::user()->email : $sendingParticipant->email;
-					$fromName = GO::user() ? GO::user()->name : $sendingParticipant->name;
-
-					
-					$toEm = $participant->email;
-          $toName = $participant->name;
-
-          GO::debug("SEND EVENT INVITATION FROM: ".$fromEmail."(".$fromName.") TO: ".$toEm."(".$toName.")");
-
-					$message = GO_Base_Mail_Message::newInstance($subject)
-									->setFrom($fromEmail, $fromName)
-									->addTo($participant->email, $participant->name);
-
-					$ics=$event->toICS($method, $sendingParticipant);
-
-					$message->setHtmlAlternateBody($body);
-					//$message->setBody($body, 'text/html','UTF-8');
-					$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($event->name) . '.ics', 'text/calendar; METHOD="'.$method.'"');
-					$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
-					$a->setDisposition("inline");
-					$message->attach($a);
-					GO_Base_Mail_Mailer::newGoInstance()->send($message);
-				}
-				
-			
-		}
-	}
+//	/**
+//	 *
+//	 * @param type $newParticipantIds
+//	 * @param type $event
+//	 * @param type $isNewEvent
+//	 * @param type $modifiedAttributes
+//	 * @param type $method
+//	 * @param GO_Calendar_Model_Participant $sendingParticipant 
+//	 */
+//	private function _sendInvitation($newParticipantIds, $event, $isNewEvent, $modifiedAttributes, $method='REQUEST', $sendingParticipant=false) {
+//
+//		
+//			$stmt = $event->participants();
+//
+//			while ($participant = $stmt->fetch()) {		
+//				
+//				$shouldSend = ($method=='REQUEST' && !$participant->is_organizer) || 
+//					($method=='REPLY' && $participant->is_organizer) || 
+//					($method=='CANCEL' && !$participant->is_organizer);
+//									
+//				if($shouldSend){
+//					if($isNewEvent){
+//						$subject = GO::t('invitation', 'calendar').': '.$event->name;
+//					}elseif($sendingParticipant)
+//					{							
+//						$updateReponses = GO::t('updateReponses','calendar');
+//						$subject= sprintf($updateReponses[$sendingParticipant->status], $sendingParticipant->name, $event->name);
+//					}elseif($method == 'CANCEL')
+//					{
+//						$subject = GO::t('cancellation','calendar').': '.$event->name;
+//					}else
+//					{
+//						$subject = GO::t('invitation_update', 'calendar').': '.$event->name;
+//					}
+//
+//
+//					$acceptUrl = GO::url("calendar/event/invitation",array("id"=>$event->id,'accept'=>1,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
+//					$declineUrl = GO::url("calendar/event/invitation",array("id"=>$event->id,'accept'=>0,'email'=>$participant->email,'participantToken'=>$participant->getSecurityToken()),false);
+//
+//					if($method=='REQUEST' && $isNewEvent){
+//						$body = '<p>' . GO::t('invited', 'calendar') . '</p>' .
+//										$event->toHtml() .
+//										'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
+//										'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
+//										'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
+//										'&nbsp;|&nbsp;' .
+//										'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
+//					}elseif($method=='CANCEL') {
+//						$body = '<p>' . GO::t('cancelMessage', 'calendar') . '</p>' .
+//										$event->toHtml();
+//					}else // on update event
+//					{
+//						$body = '<p>' . GO::t('invitation_update', 'calendar') . '</p>' .
+//										$event->toHtml() .
+//										'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
+//										'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
+//										'<a href="'.$acceptUrl.'">'.GO::t('accept', 'calendar') . '</a>' .
+//										'&nbsp;|&nbsp;' .
+//										'<a href="'.$declineUrl.'">'.GO::t('decline', 'calendar') . '</a>';
+//					}
+//
+//					$fromEmail = GO::user() ? GO::user()->email : $sendingParticipant->email;
+//					$fromName = GO::user() ? GO::user()->name : $sendingParticipant->name;
+//
+//					
+//					$toEm = $participant->email;
+//          $toName = $participant->name;
+//
+//          GO::debug("SEND EVENT INVITATION FROM: ".$fromEmail."(".$fromName.") TO: ".$toEm."(".$toName.")");
+//
+//					$message = GO_Base_Mail_Message::newInstance($subject)
+//									->setFrom($fromEmail, $fromName)
+//									->addTo($participant->email, $participant->name);
+//
+//					$ics=$event->toICS($method, $sendingParticipant);
+//
+//					$message->setHtmlAlternateBody($body);
+//					//$message->setBody($body, 'text/html','UTF-8');
+//					$a = Swift_Attachment::newInstance($ics, GO_Base_Fs_File::stripInvalidChars($event->name) . '.ics', 'text/calendar; METHOD="'.$method.'"');
+//					$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+//					$a->setDisposition("inline");
+//					$message->attach($a);
+//					GO_Base_Mail_Mailer::newGoInstance()->send($message);
+//				}
+//				
+//			
+//		}
+//	}
 	
 	protected function beforeDisplay(&$response, &$model, &$params) {
 		

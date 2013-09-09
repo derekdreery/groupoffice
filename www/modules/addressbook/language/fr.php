@@ -276,3 +276,9 @@ $l['addToAddresslistPrompt']='Vous êtes sur le point d\'ajouter les éléments 
 $l['addAddresslistSuccess']='Les articles ont été ajoutés avec succès à la liste d\'adresses.';
 $l['addContactsSuccess']= '%i contacts ont été ajouté avec succès à la liste d\'adresses.'; 
 
+$l['bankBicNo']= 'Numéro BIC de banque';
+$l['searchForImages']='Recherche d\'images';
+$l['downloadPhotoUrl']='URL de téléchargement de photo';
+$l['orBrowseComputer']='ou envoie depuis votre l\'ordinateur';
+$l['currentImage']='Image actuelle';
+$l['downloadFullImage']='Télécharger l\'image complète';

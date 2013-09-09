@@ -64,6 +64,12 @@ class GO_Smime_Controller_Certificate extends GO_Base_Controller_AbstractControl
 			//Command line:
 			//openssl smime -verify -in msg.txt
 			$valid = openssl_pkcs7_verify($srcFile->path(), null, $pubCertFile->path(), $this->_getRootCertificates());
+			
+			//Adding the PKCS7_NOVERIFY flag was used for testing some messages that could not be verified by openssl but did in Mozilla thunderbird.
+			//Error msg: error:21075075:PKCS7 routines:PKCS7_verify:certificate verify error
+			//
+//			$valid = openssl_pkcs7_verify($srcFile->path(), PKCS7_NOVERIFY, $pubCertFile->path(), $this->_getRootCertificates());
+//			throw new Exception($srcFile->path());
 			$srcFile->delete();
 
 			if ($valid) {

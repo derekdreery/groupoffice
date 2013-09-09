@@ -1,3 +1,7 @@
+09-09-2013 5.0.3
+- Small theme fixes
+- Fixes from 4.2.17
+
 20-08-2013 5.0.1 (beta)
 - Small theme fixes
 - Fixes from 4.2.12
@@ -12,7 +16,20 @@
 - Projects module: 'show in tree' check box for project statuses.
 
 
-03-11-2013 4.2.16
+09-09-2013 4.2.17
+- Root Addressbook and Project folder read only in files module
+- Peek when viewing attachments
+- SMIME certificated grid will reload on show.
+- Fixed owner that was not showing up in the administration->tickettypes grid of the ticket module.
+- Addressbook: Added pagination to the "Administration"->"Addresslists" grid
+- Fixed default date / time problem on task reminder.
+- Sieve: Rules table is refreshed after every single rearrangement.
+- New LDAP parameter to create mailboxes with the serverclient
+- Charset conversion bug in zip attachments
+- Photo was not saved on vcard import
+- Refuse to move events to other weekdays when they recur by weekday also in month view
+
+03-09-2013 4.2.16
 - IMip handler for CalDAV to support apple invitations better.
 - Don't ask to notify event participants when nothing relevant has been changed
 - Disable address books collapsing when favorites is not installed
