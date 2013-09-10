@@ -29,11 +29,11 @@ if(GO::user())
 {
 	?>
 	<div id="mainNorthPanel">
-		<div id="headerLeft">
-			<div id="logo"></div>
-			<div id="logged-in-as"><?php echo GO::t('loggedInAs').' '.htmlspecialchars(GO::user()->name); ?></div>
+		<div id="go-header-left">
+			<div id="go-logo"></div>
+			<div id="go-logged-in-as"><?php echo GO::t('loggedInAs').' '.htmlspecialchars(GO::user()->name); ?></div>
 		</div>
-		<div id="headerRight">
+		<div id="go-header-right">
 			
 			<div id="secondary-menu">
 				<span id="notification-area">				

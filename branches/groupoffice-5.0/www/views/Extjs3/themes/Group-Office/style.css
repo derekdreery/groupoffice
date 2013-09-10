@@ -220,7 +220,7 @@
 .go-header-toolbar{
 	background:transparant!important;
 }
-#logo{
+#go-logo{
 	float:left;
 	background: url('images/go_logo.gif')  no-repeat;
 	height: 46px;
@@ -229,17 +229,17 @@
 	width: 214px;
 }
 
-#logged-in-as{
+#go-logged-in-as{
 	float: left;
 	margin-top: 15px;
 }
 
-#headerLeft{
+#go-header-left{
 	float: left;
 	padding: 20px;
 	/*width: 60%;*/
 }
-#headerRight {
+#go-header-right{
 	float: right;
 	padding: 20px 20px 20px 0px;
 	height: 46px;
