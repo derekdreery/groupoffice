@@ -38,7 +38,8 @@ class GO_Base_Export_ExportCSV extends GO_Base_Export_AbstractExport {
 	public function output(){
 		$this->_sendHeaders();
 		
-		
+		//override default HTML output
+		$this->store->getColumnModel()->setModelFormatType('formatted');
 		
 		if($this->header){
 			if($this->humanHeaders){
