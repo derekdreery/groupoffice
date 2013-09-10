@@ -221,3 +221,7 @@ td.table_header_links
 	border:1px solid #d0d0d0;
 	margin:5px;
 }
+
+.ab-search-form-panel .x-form-empty-field{
+color: #f1f1f1 !important;
+}
