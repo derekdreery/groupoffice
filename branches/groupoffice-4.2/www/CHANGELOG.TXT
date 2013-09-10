@@ -1,3 +1,4 @@
+- Export contacts/tickets/projects/etc: CSV exports will now have no more '<br />' tags.
 - Export contacts/tickets/projects/etc: fixed bug (one comma too many in MySQL query) and added 'max execution time=0'.
 
 10-09-2013 4.2.18
