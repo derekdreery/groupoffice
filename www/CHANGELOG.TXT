@@ -1,3 +1,6 @@
+10-09-2013 5.0.4
+- Build error: pro modules missing.
+
 09-09-2013 5.0.3
 - Small theme fixes
 - Fixes from 4.2.17
