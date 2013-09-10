@@ -69,7 +69,7 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 }
 
 .x-window .x-tab-panel{
-	padding-top:10px;
+	/*padding-top:10px;*/
 }
 
 .x-btn-tl, .x-btn-tr, .x-btn-tc, .x-btn-ml, .x-btn-mr, .x-btn-mc, .x-btn-bl, .x-btn-br, .x-btn-bc {
@@ -523,7 +523,7 @@ border-color: #fff;
 }
 
 .x-window .x-panel-body ul.x-tab-strip-top{
-	margin: 0;
+	margin: 10px 0 0 0;
 }
 
 .x-window .x-btn-text{

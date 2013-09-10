@@ -1,3 +1,9 @@
+2013/09/10 5.0.5
+Group-Office 5.0 was completely redesigned. It was time to modernize the 
+interface. I think we succeeded in making it very pleasing to the eye and easy
+to use. Apart from the interface updates we've also updated all third party 
+libraries.
+
 2013/06/13 4.2.0
 Version 4.2 comes with a lot of small feature enhancements such as:
 
