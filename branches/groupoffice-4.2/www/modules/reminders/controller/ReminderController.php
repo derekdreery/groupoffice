@@ -121,15 +121,15 @@ class GO_Reminders_Controller_Reminder extends GO_Base_Controller_AbstractModelC
 		if($model->model_id>0){
 			$modelType = GO_Base_Model_ModelType::model()->findByPk($model->model_type_id);
 			
-			$model->link=$modelType->model_name.':'.$model->model_id;
+			$response['data']['link']=$modelType->model_name.':'.$model->model_id;
 			$searchCacheRecord = GO_Base_Model_SearchCacheRecord::model()
 				->findSingleByAttributes( array('model_id' => $model->model_id,'model_type_id' => $model->model_type_id) );
 			
 			if ($searchCacheRecord)
-				$model->link_name = $searchCacheRecord->name;
+				$response['data']['link_name'] = $searchCacheRecord->name;
 		}else
 		{
-			$model->link_name = '';
+			$response['data']['link_name'] = '';
 		}			
 		return $response;
 	}
