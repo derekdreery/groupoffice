@@ -86,7 +86,7 @@
 		
 		<table class="table-ticketmessages">
 			
-			<?php foreach($ticket->messages as $i => $message): ?>
+			<?php foreach($messages as $i => $message): ?>
 			<tr class="<?php echo($i%2)?'even':'odd'; ?>">
 				<td>
 					<span class="ticketmessage-name"><?php echo $message->posterName; ?></span><span class="ticketmessage-time"><?php echo $message->getAttribute("ctime","formatted"); ?></span>

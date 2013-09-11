@@ -1,3 +1,7 @@
+11-09-2013 5.0.5
+- Fixes from 4.2.19
+- Layout issues
+
 10-09-2013 5.0.4
 - Build error: pro modules missing.
 
@@ -18,6 +22,12 @@
 - Address Book module: photos functionality for companies.
 - Projects module: 'show in tree' check box for project statuses.
 
+
+- Export contacts/tickets/projects/etc: CSV exports will now have no more '<br />' tags.
+- Export contacts/tickets/projects/etc: fixed bug (one comma too many in MySQL query) and added 'max execution time=0'.
+
+10-09-2013 4.2.18
+- Package build error. Pro modules missing.
 
 09-09-2013 4.2.17
 - Root Addressbook and Project folder read only in files module

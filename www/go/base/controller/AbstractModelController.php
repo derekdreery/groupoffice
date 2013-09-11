@@ -889,6 +889,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 */
 	protected function actionExport($params) {	
 		
+		GO::setMaxExecutionTime(0);
+		
 		$orientation = false;
 		
 		$showHeader = false;
@@ -984,7 +986,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		if ($includeHidden) {
 			$select = $storeParams->getParam('fields');
-			$findParams->select('t.*,cf.*,'.$select);
+			$select = trim($select);
+			if (!empty($select) && substr($select,0,1)!=',')
+				$select = ','.$select;
+						
+			$findParams->select('t.*,cf.*'.$select);
 		}
 		
 		if(!empty($params['type']))
