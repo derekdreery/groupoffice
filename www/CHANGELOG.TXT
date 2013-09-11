@@ -1,4 +1,6 @@
 11-09-2013 4.2.19
+- Z-Push 2 performance issue. There was a wrong check on changes on the calendar. 
+  This query was slow and caused all devices to sync when anybody made a change in the calendar.
 - Upgraded PEAR net_sieve page to 1.3.2
 - LDAP Auth module blocked login when not configured.
 - Export contacts/tickets/projects/etc: CSV exports will now have no more '<br />' tags.
