@@ -478,8 +478,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$this->fireEvent('display', array(
 				&$this,
 				&$response,
-				&$model,
-				&$params
+				&$model
 		));
 
 		return $response;
