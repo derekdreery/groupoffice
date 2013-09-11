@@ -10,13 +10,13 @@
  
 /**
  * @property int $user_id
- * @property int $mo_work_hours
- * @property int $tu_work_hours
- * @property int $we_work_hours
- * @property int $th_work_hours
- * @property int $fr_work_hours
- * @property int $sa_work_hours
- * @property int $su_work_hours
+ * @property double $mo_work_hours
+ * @property double $tu_work_hours
+ * @property double $we_work_hours
+ * @property double $th_work_hours
+ * @property double $fr_work_hours
+ * @property double $sa_work_hours
+ * @property double $su_work_hours
  */
 
 class GO_Base_Model_WorkingWeek extends GO_Base_Db_ActiveRecord {
