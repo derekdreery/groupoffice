@@ -10,7 +10,7 @@ GO.addressbook.BirthdaysPanel = function(config)
 		var reader = new Ext.data.JsonReader({
 			totalProperty: 'total',
 			root: 'results',
-			fields:['addressbook_id', 'name','birthday','age'],
+			fields:['addressbook_id','photo_url', 'name','birthday','age'],
 			id: 'name'
 		});
 	
@@ -40,6 +40,12 @@ GO.addressbook.BirthdaysPanel = function(config)
 		config.enableColumnMove=false;
 		config.columns=[
 		{
+			header: '',
+			dataIndex: 'photo_url',
+			renderer: function (value, metaData, record) {
+				return '<img src="'+value+'" height="50"/>';
+			}
+		},{
 			id:'birthday-portlet-name-col',
 			header:GO.lang['strName'],
 			dataIndex: 'name',
