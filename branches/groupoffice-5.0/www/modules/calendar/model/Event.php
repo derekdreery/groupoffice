@@ -1242,7 +1242,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		if(empty($this->uuid)){
 			$this->uuid = GO_Base_Util_UUID::create('event', $this->id);
-			$this->save();
+			$this->save(true);
 		}
 			
 		$e->uid=$this->uuid;		

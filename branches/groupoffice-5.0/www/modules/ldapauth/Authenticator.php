@@ -61,7 +61,7 @@ class GO_Ldapauth_Authenticator {
 		if (empty(GO::config()->ldap_host) || empty(GO::config()->ldap_peopledn)) {
 			GO::debug("LDAPAUTH: Aborting because one or more of the following " .
 							"required values is not set: \$config['ldap_host'] and \$config['ldap_peopledn'].");
-			return false;
+			return true;
 		}
 		
 		
