@@ -367,3 +367,10 @@ $updates['201309111400'][]="UPDATE go_working_weeks SET tu_work_hours=8 WHERE tu
 $updates['201309111400'][]="UPDATE go_working_weeks SET we_work_hours=8 WHERE we_work_hours=0;";
 $updates['201309111400'][]="UPDATE go_working_weeks SET th_work_hours=8 WHERE th_work_hours=0;";
 $updates['201309111400'][]="UPDATE go_working_weeks SET fr_work_hours=8 WHERE fr_work_hours=0;";
+$updates['201309111700'][]="ALTER TABLE `go_working_weeks` CHANGE `mo_work_hours` `mo_work_hours` DOUBLE NOT NULL DEFAULT '8',
+CHANGE `tu_work_hours` `tu_work_hours` DOUBLE NOT NULL DEFAULT '8',
+CHANGE `we_work_hours` `we_work_hours` DOUBLE NOT NULL DEFAULT '8',
+CHANGE `th_work_hours` `th_work_hours` DOUBLE NOT NULL DEFAULT '8',
+CHANGE `fr_work_hours` `fr_work_hours` DOUBLE NOT NULL DEFAULT '8',
+CHANGE `sa_work_hours` `sa_work_hours` DOUBLE NOT NULL DEFAULT '0',
+CHANGE `su_work_hours` `su_work_hours` DOUBLE NOT NULL DEFAULT '0';";
