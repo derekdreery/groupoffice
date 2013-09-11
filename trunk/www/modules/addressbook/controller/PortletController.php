@@ -157,7 +157,7 @@ class GO_Addressbook_Controller_Portlet extends GO_Base_Controller_AbstractMulti
 		$end = date('Y-m-d',$next_month);
 		//GO::debug($start);
 		
-		$select = "t.id, birthday, first_name, middle_name, last_name, addressbook_id,"
+		$select = "t.id, birthday, first_name, middle_name, last_name, addressbook_id, photo, "
 			."IF (STR_TO_DATE(CONCAT(YEAR('$start'),'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e') >= '$start', "
 			."STR_TO_DATE(CONCAT(YEAR('$start'),'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e') , "
 			."STR_TO_DATE(CONCAT(YEAR('$start')+1,'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e')) "
@@ -185,9 +185,12 @@ class GO_Addressbook_Controller_Portlet extends GO_Base_Controller_AbstractMulti
 			->having($having)
 			->order('upcoming');
 		
+		
+		//$response['data']['original_photo_url']=$model->photoURL;
 		$columnModel = new GO_Base_Data_ColumnModel('GO_Addressbook_Model_Contact');
 		$columnModel->formatColumn('addressbook_id', '$model->addressbook->name');
 		$columnModel->formatColumn('birthday', '$model->upcoming');
+		$columnModel->formatColumn('photo_url', '$model->getPhotoThumbURL()');
 		$columnModel->formatColumn('age', '($model->upcoming != date("Y-m-d")) ? $model->age+1 : $model->age');
 		
 		$store = new GO_Base_Data_DbStore('GO_Addressbook_Model_Contact', $columnModel, $_POST, $findParams);
