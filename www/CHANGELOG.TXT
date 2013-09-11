@@ -1,5 +1,9 @@
+11-09-2013 4.2.19
+- Upgraded PEAR net_sieve page to 1.3.2
+- LDAP Auth module blocked login when not configured.
 - Export contacts/tickets/projects/etc: CSV exports will now have no more '<br />' tags.
 - Export contacts/tickets/projects/etc: fixed bug (one comma too many in MySQL query) and added 'max execution time=0'.
+- DAV tables cleaned up
 
 10-09-2013 4.2.18
 - Package build error. Pro modules missing.
