@@ -356,3 +356,14 @@ $updates['201309051015'][]="CREATE TABLE IF NOT EXISTS `go_working_weeks` (
 	`su_work_hours` int(2) NOT NULL DEFAULT '0',
   PRIMARY KEY (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates['201309111400'][]="ALTER TABLE `go_working_weeks` CHANGE `mo_work_hours` `mo_work_hours` INT( 2 ) NOT NULL DEFAULT '8',
+CHANGE `tu_work_hours` `tu_work_hours` INT( 2 ) NOT NULL DEFAULT '8',
+CHANGE `we_work_hours` `we_work_hours` INT( 2 ) NOT NULL DEFAULT '8',
+CHANGE `th_work_hours` `th_work_hours` INT( 2 ) NOT NULL DEFAULT '8',
+CHANGE `fr_work_hours` `fr_work_hours` INT( 2 ) NOT NULL DEFAULT '8'";
+$updates['201309111400'][]="UPDATE go_working_weeks SET mo_work_hours=8 WHERE mo_work_hours=0;";
+$updates['201309111400'][]="UPDATE go_working_weeks SET tu_work_hours=8 WHERE tu_work_hours=0;";
+$updates['201309111400'][]="UPDATE go_working_weeks SET we_work_hours=8 WHERE we_work_hours=0;";
+$updates['201309111400'][]="UPDATE go_working_weeks SET th_work_hours=8 WHERE th_work_hours=0;";
+$updates['201309111400'][]="UPDATE go_working_weeks SET fr_work_hours=8 WHERE fr_work_hours=0;";
