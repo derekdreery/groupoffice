@@ -377,12 +377,12 @@ CREATE TABLE IF NOT EXISTS `go_cf_setting_tabs` (
 DROP TABLE IF EXISTS `go_working_weeks`;
 CREATE TABLE IF NOT EXISTS `go_working_weeks` (
 	`user_id` int(11) NOT NULL DEFAULT '0',
-	`mo_work_hours` int(2) NOT NULL DEFAULT '8',
-	`tu_work_hours` int(2) NOT NULL DEFAULT '8',
-	`we_work_hours` int(2) NOT NULL DEFAULT '8',
-	`th_work_hours` int(2) NOT NULL DEFAULT '8',
-	`fr_work_hours` int(2) NOT NULL DEFAULT '8',
-	`sa_work_hours` int(2) NOT NULL DEFAULT '0',
-	`su_work_hours` int(2) NOT NULL DEFAULT '0',
+	`mo_work_hours` DOUBLE NOT NULL DEFAULT '8',
+	`tu_work_hours` DOUBLE NOT NULL DEFAULT '8',
+	`we_work_hours` DOUBLE NOT NULL DEFAULT '8',
+	`th_work_hours` DOUBLE NOT NULL DEFAULT '8',
+	`fr_work_hours` DOUBLE NOT NULL DEFAULT '8',
+	`sa_work_hours` DOUBLE NOT NULL DEFAULT '0',
+	`su_work_hours` DOUBLE NOT NULL DEFAULT '0',
   PRIMARY KEY (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
