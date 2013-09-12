@@ -43,13 +43,13 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		if(!$errorFile->exists())
 			$errorFile->touch(true);
 		
-		$debugLog = nl2br(str_replace('['.GO::user()->username.'] ','',$debugFile->tail(300)));
+		$debugLog = nl2br(str_replace('['.GO::user()->username.'] ','',  htmlspecialchars($debugFile->tail(300))));
 		$debugLog = str_replace('--------------------','<hr />', $debugLog);
 		
 		return array(
 				'success'=>true, 
 				'debugLog'=>$debugLog,
-				'errorLog'=>str_replace('----------------','<hr />', nl2br($errorFile->tail(300)))
+				'errorLog'=>str_replace('----------------','<hr />', nl2br(htmlspecialchars($errorFile->tail(300))))
 				);
 	}
 	
