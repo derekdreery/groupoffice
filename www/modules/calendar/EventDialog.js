@@ -250,12 +250,14 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			if (config.link_config.modelNameAndId) {
 				this.selectLinkField.setValue(config.link_config.modelNameAndId);
 				this.selectLinkField.setRemoteText(config.link_config.text);
+				
+				params.linkModelNameAndId= config.link_config.modelNameAndId;
 			}		
 
 			//if(this.subjectField.getValue()=='')
 				//this.subjectField.setValue(config.link_config.text);
 				
-			params.name=config.link_config.text;
+			params.name=config.link_config.text;			
 		}
 		
 

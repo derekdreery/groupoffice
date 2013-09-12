@@ -525,6 +525,22 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$participantModel = $model->getDefaultOrganizerParticipant();
 
 			$response['participants']=array('results'=>array($participantModel->toJsonArray($model->start_time, $model->end_time)),'total'=>1,'success'=>true);
+			
+			if(!empty($params['linkModelNameAndId'])){
+				$arr = explode(':', $params['linkModelNameAndId']);
+				
+				if($arr[0]=='GO_Addressbook_Model_Contact'){
+					$contact = GO_Addressbook_Model_Contact::model()->findByPk($arr[1]);
+					
+					if($contact){
+						$participantModel = new GO_Calendar_Model_Participant();
+						$participantModel->setContact($contact);
+						
+						$response['participants']['results'][]=$participantModel->toJsonArray($model->start_time, $model->end_time);
+						$response['participants']['total']=2;
+					}
+				}
+			}
 		}else
 		{
 			$particsStmt = GO_Calendar_Model_Participant::model()->findByAttribute('event_id',$params['id']);
