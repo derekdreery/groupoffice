@@ -241,6 +241,9 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	
 	protected function beforeSave() {
 		
+		if(!empty($this->homepage))
+			$this->homepage = GO_Base_Util_Http::checkUrlForHttp($this->homepage);
+		
 		$this->_autoSalutation();
 		
 		if (strtolower($this->sex)==strtolower(GO::t('female','addressbook')))
