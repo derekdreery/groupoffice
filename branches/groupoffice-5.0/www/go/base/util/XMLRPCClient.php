@@ -116,7 +116,7 @@ class GO_Base_Util_XMLRPCClient
     public function __call($method, $params)
     {
         $xml = xmlrpc_encode_request($method, $params);
-GO::debug($xml);
+//GO::debug($xml);
         if ($this->curl_hdl === null)
         {
             // Create cURL resource
@@ -149,9 +149,8 @@ GO::debug($xml);
 				if($errorNo){
 					throw new Exception($this->_curlErrorCodes[$errorNo]);
 				}
-
+//GO::debug($response);
         $result = xmlrpc_decode_request($response, $method);
-GO::debug($result);
         return $result;
     }
 		
