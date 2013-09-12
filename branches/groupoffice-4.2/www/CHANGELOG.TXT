@@ -1,3 +1,6 @@
+4.2.20
+- Added sorting on category in the tasks grid.
+
 11-09-2013 4.2.19
 - Z-Push 2 performance issue. There was a wrong check on changes on the calendar. 
   This query was slow and caused all devices to sync when anybody made a change in the calendar.
