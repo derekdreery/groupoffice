@@ -174,7 +174,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		
 		$columnModel->formatColumn('completed','$model->status=="COMPLETED" ? 1 : 0');
 //		$columnModel->formatColumn('status', '$l["statuses[\'".$model->status."\']"');
-		$columnModel->formatColumn('category_name','$model->category->name',array(),'category_id');
+		//$columnModel->formatColumn('category_name','$model->category->name',array(),'category_id');
 		$columnModel->formatColumn('tasklist_name','$model->tasklist_name');
 		$columnModel->formatColumn('late','$model->isLate();');
 		$columnModel->formatColumn('user_name','$model->user->name');
@@ -201,18 +201,27 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 			->criteria(GO_Base_Db_FindCriteria::newInstance()
 				->addModel(GO_Tasks_Model_Task::model(),'t')
 					)										
-			->select('t.*, tl.name AS tasklist_name')
+			//->select('t.*, tl.name AS tasklist_name')
+			->select('t.*, tl.name AS tasklist_name, cat.name AS category_name')
 			->joinModel(array(
 					'model'=>'GO_Tasks_Model_Tasklist',					
 					'localField'=>'tasklist_id',
 					'tableAlias'=>'tl', //Optional table alias
 			));
 		
-	
+		
+		$storeParams->joinModel(array(
+					'type'=>'LEFT',
+					'model'=>'GO_Tasks_Model_Category',					
+					'localField'=>'category_id',
+					'tableAlias'=>'cat', //Optional table alias
+			));
+		
 		$storeParams = $this->checkFilterParams($params['show'],$storeParams);
 		
 		if(GO::modules()->projects){
-			$storeParams->select("t.*, tl.name AS tasklist_name,p.name AS project_name");
+		//	$storeParams->select("t.*, tl.name AS tasklist_name,p.name AS project_name");
+			$storeParams->select("t.*, tl.name AS tasklist_name,p.name AS project_name, cat.name AS category_name");
 			$storeParams->joinModel(array('model'=>'GO_Projects_Model_Project', 'foreignField'=>'id', 'localField'=>'project_id', 'tableAlias'=>'p',  'type'=>'LEFT' ));
 		}
 		

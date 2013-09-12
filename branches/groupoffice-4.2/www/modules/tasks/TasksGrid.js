@@ -67,7 +67,7 @@ GO.tasks.TasksPanel = function(config)
 				header:GO.tasks.lang.category,
 				dataIndex: 'category_name',
 				width:150,
-				sortable:false,
+				sortable:true,
 				groupable:true
 			},
 			{
