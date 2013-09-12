@@ -1874,6 +1874,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$participant = new GO_Calendar_Model_Participant();
 		$participant->event_id=$this->id;
 		$participant->user_id=$user->id;
+		
+		$contact = $user->createContact();
+		
+		if($contact)
+			$participant->contact_id=$contact->id;
+		
 		$participant->name=$user->name;
 		$participant->email=$user->email;
 		$participant->status=GO_Calendar_Model_Participant::STATUS_ACCEPTED;
