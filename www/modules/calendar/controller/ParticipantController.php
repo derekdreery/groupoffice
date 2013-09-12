@@ -88,6 +88,7 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 			$contact=GO_Addressbook_Model_Contact::model()->findByPk($contact_id);
 
 			$participant = new GO_Calendar_Model_Participant();
+			$participant->contact_id=$contact->id;
 			if(($user = $contact->goUser)){				
 				$participant->user_id=$user->id;
 				$participant->name=$user->name;
@@ -138,6 +139,10 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 			$participant->name=$user->name;
 			$participant->email=$user->email;
 			$participant->is_organizer=!empty($params['is_organizer']);
+			
+			$contact = $user->createContact();
+			if($contact)
+				$participant->contact_id=$contact->id;
 
 			$store->addRecord($participant->toJsonArray($params['start_time'], $params['end_time']));
 		}

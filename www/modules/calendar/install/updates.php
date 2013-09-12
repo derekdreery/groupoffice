@@ -219,3 +219,4 @@ $updates['201307081131'][]="ALTER TABLE  `cal_calendars` ADD  `show_completed_ta
 $updates['201307081131'][]="update cal_events set rrule='' where rrule='RRULE';";
 
 $updates['201308261102'][]="ALTER TABLE  `cal_settings` ADD  `show_statuses` BOOLEAN NOT NULL DEFAULT TRUE";
+$updates['201309121148'][]="ALTER TABLE  `cal_participants` ADD  `contact_id` INT NOT NULL DEFAULT  '0' AFTER  `user_id`";
