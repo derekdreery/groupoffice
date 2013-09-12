@@ -235,8 +235,12 @@ td.x-grid3-hd-over .x-grid3-hd-inner, td.sort-desc .x-grid3-hd-inner, td.sort-as
 }
 
 td.x-grid3-hd-over, .x-grid3-hd-row td {
-	border: none !important;
-/*	padding-right: 5px;*/
+	border-color:white;
+	padding-right: 5px;
+}
+
+td.x-grid3-hd-over{
+	border-right:2px solid gray;
 }
 
 .x-tab-panel .x-tab-panel-body-top {
@@ -781,4 +785,8 @@ background-image: url(images/extjs/toolbar/more.gif)!important;
 
 .x-window .x-border-layout-ct{
 	background-color:#2a9ac9 !important;
+}
+
+.x-panel-noborder .x-panel-header-noborder {
+	border-bottom-color:white;
 }
