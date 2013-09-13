@@ -5,7 +5,7 @@ $l["ticketLastname"] = 'Nom';
 $l["ticketEmail"] = 'Email';
 $l["ticketPhone"] = 'Téléphone';
 
-$l["ticketSubject"] = 'Sujet';
+$l["ticketSubject"] = 'Objet';
 
 $l['submit'] = 'Envoyer le message';
 
