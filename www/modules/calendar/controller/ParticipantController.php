@@ -290,7 +290,7 @@ class GO_Calendar_Controller_Participant extends GO_Base_Controller_AbstractMode
 
 		foreach ($merged_free_busy as $min => $busy) {
 			$participant['freebusy'][] = array(
-					'time' => date($_SESSION['GO_SESSION']['time_format'], mktime(0, $min)),
+					'time' => date(GO::user()->time_format, mktime(0, $min)),
 					'busy' => $busy);
 		}
 
