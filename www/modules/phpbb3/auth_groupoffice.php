@@ -31,7 +31,7 @@ function login_groupoffice(&$username, &$password,  $ip = '', $browser = '', $fo
 	{
 		$sql = 'SELECT user_id, username, user_password, user_passchg, user_email, user_type
 			FROM ' . USERS_TABLE . "
-			WHERE username = '" . $db->sql_escape($username) . "'";
+			WHERE username_clean = '" . $db->sql_escape(utf8_clean_string($username)) . "'";
 		$result = $db->sql_query($sql);
 		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
@@ -116,7 +116,7 @@ function autologin_groupoffice()
 			global $db;
 		
 			$sql = 'SELECT * FROM ' . USERS_TABLE . "
-			WHERE username = '" . $db->sql_escape($gorow['username']) . "'";
+			WHERE username_clean = '" . $db->sql_escape(utf8_clean_string($gorow['username'])) . "'";
 			$result = $db->sql_query($sql);
 			$row = $db->sql_fetchrow($result);
 			$db->sql_freeresult($result);
