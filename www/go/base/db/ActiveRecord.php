@@ -2273,6 +2273,8 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		foreach($attributeNames as $attName){
 			if(isset($this->columns[$attName])){
 				$att[$attName]=$this->getAttribute($attName, $outputType);
+			}elseif($this->hasAttribute($attName)){			
+				$att[$attName]=$this->$attName;			
 			}elseif($this->customfieldsRecord)
 			{
 				$att[$attName]=$this->customfieldsRecord->getAttribute($attName, $outputType);
@@ -3546,6 +3548,25 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 						//isset($this->columns[$name]) || MS: removed this because it returns true when attribute is null. This might break something but it shouldn't return true.
 						($this->_relationExists($name) && $this->_getRelated($name)) || 
 						parent::__isset($name);
+	}
+	
+	/**
+	 * Check if this model has a named attribute
+	 * @param string $name
+	 * @return boolean
+	 */
+	public function hasAttribute($name){
+		
+		if(isset($this->columns[$name]))
+			return true;
+		
+		if($this->_relationExists($name))
+			return true;
+		
+		if(method_exists($this, 'get'.$name))
+			return true;
+		
+		return false;
 	}
 	
 	/**
