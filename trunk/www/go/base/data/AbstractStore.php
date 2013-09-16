@@ -79,6 +79,14 @@ abstract class GO_Base_Data_AbstractStore {
 	}
 	
 	/**
+	 * Overwrite to add summary functionality to the store
+	 * @return boolean
+	 */
+	public function getSummary() {
+		return false;
+	}
+	
+	/**
 	 * DEPRICATED
 	 * Return an array with all the records and the total number of rows in the store.
 	 * 

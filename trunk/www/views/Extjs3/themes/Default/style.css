@@ -1049,8 +1049,10 @@ table.display-panel a:active
 	background: url('images/16x16/exclamation.png') no-repeat !important;
 	padding-left:22px !important;
 }
-
-
+.go-icon-print .x-grid3-cell-inner{
+	background: url('images/16x16/print.png') no-repeat !important;
+	padding-left:22px !important;
+}
 
 /*IE somtimes clipped first form field somehow*/
 .x-fieldset-body{
