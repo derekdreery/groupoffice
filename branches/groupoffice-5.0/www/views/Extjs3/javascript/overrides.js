@@ -394,3 +394,56 @@ Ext.apply(Ext.form.VTypes, {
     emailAddressMask: /[a-z0-9_\.\-@\+]/i
 });
 
+
+
+Ext.override(
+	Ext.grid.GridView,{
+		/**
+     * @private
+     * Renders the header row using the 'header' template. Does not inject the HTML into the DOM, just
+     * returns a string.
+     * @return {String} Rendered header row
+     */
+    renderHeaders : function() {
+        var colModel   = this.cm,
+            templates  = this.templates,
+            headerTpl  = templates.hcell,
+            properties = {},
+            colCount   = colModel.getColumnCount(),
+            last       = colCount - 1,
+            cells      = [],
+            i, cssCls;
+        
+        for (i = 0; i < colCount; i++) {
+            if (i == 0) {
+                cssCls = 'x-grid3-cell-first ';
+            } else {
+                cssCls = i == last ? 'x-grid3-cell-last ' : '';
+            }
+            
+            properties = {
+                id     : colModel.getColumnId(i),
+                value  : colModel.getColumnHeader(i) || '',
+                style  : this.getColumnStyle(i, true),
+                css    : cssCls,
+                tooltip: this.getColumnTooltip(i)
+            };
+            
+						//disable padding right in GO theme because it looks ugly
+            if (GO.settings.theme!='Group-Office' && colModel.config[i].align == 'right') {
+                properties.istyle = 'padding-right: 16px;';
+            } else {
+                delete properties.istyle;
+            }
+            
+            cells[i] = headerTpl.apply(properties);
+        }
+        
+        return templates.header.apply({
+            cells : cells.join(""),
+            tstyle: String.format("width: {0};", this.getTotalWidth())
+        });
+    }
+	}
+
+);

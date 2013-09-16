@@ -79,6 +79,36 @@ class GO_Base_Observable{
 	
 	}	
 	
+//	/**
+//	 * Attach a listner
+//	 * TODO: Is this a better way????
+//	 
+//	 IN THE MODULE ADD THIS TO ATTACH A LISTENER:
+//	 
+//  public static function initListeners() {
+//		GO_Base_Controller_AbstractModelController::attachListener("display", "GO_Lists_ListsModule", "displayResponse");
+//	}
+//	 
+//	 * 
+//	 * @param type $eventName
+//	 * @param type $listenerClass
+//	 * @param type $staticListenerFunction
+//	 */	
+//	public static function attachListener($eventName,$listenerClass, $staticListenerFunction){
+//		GO::debug("addListener($eventName,$listenerClass, $staticListenerFunction)");
+//		
+//		$line = '$listeners["'.$eventName.'"][]=array("'.$listenerClass.'", "'.$staticListenerFunction.'");'."\n";
+//		
+//		$dir = GO::config()->orig_tmpdir.'cache/listeners/';
+//		$file = $dir.get_called_class().'.php';
+//		
+//		if(!file_exists($file))
+//			file_put_contents($file, "<?php\n", FILE_APPEND);	
+//		
+//		file_put_contents($file, $line, FILE_APPEND);	
+//	}
+	
+	
 	/**
 	 * Remove a listener function to this object
 	 * 
@@ -101,12 +131,15 @@ class GO_Base_Observable{
 		
 		$className = get_class($this);		
 		
+//		do{
+		
 		if(!isset(self::$listeners[$className])){
 			
 			//listeners array will be loaded from a file. Because addListener is only called once when there is no cache.
 			$listeners=array();
 			
 			$cacheFile = GO::config()->orig_tmpdir.'cache/listeners/'.get_class($this).'.php';
+//			$cacheFile = GO::config()->orig_tmpdir.'cache/listeners/'.$className.'.php';
 			if(file_exists($cacheFile))
 				require($cacheFile);
 			
@@ -126,7 +159,8 @@ class GO_Base_Observable{
 				}
 			}
 		}
-		
+//		}
+//		while($className = get_parent_class($className));
 		return true;
 	}
 
