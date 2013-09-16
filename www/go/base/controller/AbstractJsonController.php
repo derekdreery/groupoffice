@@ -181,6 +181,8 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 				"results" => $store->getRecords(),
 				'total' => $store->getTotal()
 		);
+		if($summary = $store->getSummary())
+			$response['summary'] = $summary;
 
 		$title = $store->getTitle();
 		if (!empty($title))
