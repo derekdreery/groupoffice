@@ -426,6 +426,46 @@ Ext.grid.GridSummary.Calculations = {
 	}
 }
 
+Ext.grid.JsonSummary = Ext.extend(Ext.grid.GridSummary, {
+	calculate : function(rs, cs){
+		var json = this.grid.store.reader.jsonData;
+		var data = {}, r, c, cfg = this.cm.config, cf;
+		for(var j = 0, jlen = rs.length; j < jlen; j++){
+			r = rs[j];
+			for(var i = 0, len = cs.length; i < len; i++){
+				c = cs[i];
+				cf = cfg[i];
+				if(json && json.summary){
+					data[c.name]  = json.summary[c.name];
+				}
+			}
+		}
+		return data || Ext.grid.JsonSummary.superclass.calculate.call(this, rs, cs);
+    },
+	renderSummary : function(o, cs){
+		cs = cs || this.view.getColumnData();
+		var cfg = this.cm.config;
+
+		var buf = [], c, p = {}, cf, last = cs.length-1;
+		for(var i = 0, len = cs.length; i < len; i++){
+			c = cs[i];
+			cf = cfg[i];
+			p.id = c.id;
+			p.style = c.style;
+			p.css = i == 0 ? 'x-grid3-cell-first ' : (i == last ? 'x-grid3-cell-last ' : '');
+
+			p.value = (cf.summaryRenderer || c.renderer)(o.data[c.name], p, o);
+
+			if(p.value == undefined || p.value === "") p.value = "-";
+			buf[buf.length] = this.cellTpl.apply(p);
+		}
+
+		return this.rowTpl.apply({
+			tstyle: 'width:'+this.view.getTotalWidth()+';',
+			cells: buf.join('')
+		});
+	}
+});
 
 Ext.grid.HybridSummary = Ext.extend(Ext.grid.GroupSummary, {
     calculate : function(rs, cs){

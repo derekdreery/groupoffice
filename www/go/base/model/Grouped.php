@@ -24,20 +24,12 @@
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl> 
  * 
+ * @method GO_Base_Model_Grouped model()
  */
-
 class GO_Base_Model_Grouped extends GO_Base_Model {
 
 	
 	private $_attributes=array();
-	/**
-	 * 
-	 * @param string $className
-	 * @return GO_Base_Model_Grouped
-	 */
-	public static function model($className = null) {
-		return parent::model($className);
-	}
 	
 	public function __set($name, $value) {
 		$this->_attributes[$name]=$value;

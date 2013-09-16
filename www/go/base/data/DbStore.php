@@ -444,6 +444,23 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 			$this->_stmt = $this->createStatement();
 		return isset($this->_stmt->foundRows) ? $this->_stmt->foundRows : $this->_stmt->rowCount();
 	}
+	
+	/**
+	 * If there are summarizeColumn provided select and format them
+	 * Otherwise this returns false
+	 * @return GO_Base_Model a formatted summary
+	 */
+	public function getSummary() {
+		$summarySelect = $this->_columnModel->getSummarySelect();
+		if($summarySelect===false)
+			return false;
+		
+		$sumParams = GO_Base_Db_FindParams::newInstance()->single()->select($summarySelect)->criteria($this->_extraFindParams->getCriteria());
+		
+		$sumRecord = GO::getModel($this->_modelClass)->find($sumParams);
+		if($sumRecord)
+			return $this->_columnModel->formatSummary($sumRecord);
+	}
 
 	/**
 	 * Returns the formatted data for an ExtJS grid.
@@ -472,6 +489,8 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 
 		$this->response['success'] = true;
 		$this->response['total'] = $this->getTotal();
+		if($summary = $this->getSummary())
+			$this->response['summary'] = $summary;
 		$this->response['results'] = $this->_records;
 		return $this->response;
 	}
