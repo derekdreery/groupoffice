@@ -36,6 +36,20 @@ class GO_Base_Data_ColumnModel {
 	private $_model;
 	
 	/**
+	 * Will hold the summarization details
+	 * The Store can use this the add summary detail to the response
+	 * @var array key value pairs with: columnName, config
+	 * @see summarizeColumn()  
+	 */
+	private $_summarizedColumns = array();
+	
+	const SUMMARY_SUM = 'SUM';
+	const SUMMARY_COUNT = 'COUNT';
+	const SUMMARY_MAX = 'MAX';
+	const SUMMARY_MIN = 'MIN';
+	const SUMMARY_AVERAGE = 'AVG';
+	
+	/**
 	 * Constructor of the ColumnModel class.
 	 * 
 	 * Use this to constructor a new ColumnModel. You can give two parameters.
@@ -57,7 +71,7 @@ class GO_Base_Data_ColumnModel {
 			$this->_model=$modelName;
 		}
 	}
-
+	
 	/**
 	 * Add a model to the ColumnModel class.
 	 * 
@@ -142,6 +156,58 @@ class GO_Base_Data_ColumnModel {
 //		}
 		
 		return $this;
+	}
+	
+	/**
+	 * Add a summary to the store
+	 * formatColumn will format the summary the same way as the rest of the column
+	 * 
+	 * @param string $fieldName the database field you want to sum
+	 * @param string $type constant of self::SUMMARY_*
+	 * @param string $as columnName
+	 */
+	public function summarizeColumn($fieldName, $type, $as=null) {
+		
+		if($as===null)
+			$as = $fieldName;
+		$this->_summarizedColumns[$as] = array('type'=>$type, 'fieldName'=>$fieldName);
+	}
+	
+	/**
+	 * Retrun the select part of the summary query
+	 * @return boolean
+	 */
+	public function getSummarySelect() {
+		if(empty($this->_summarizedColumns))
+			return false;
+		
+		$result = '';
+		foreach($this->_summarizedColumns as $col => $config) {
+			$field = $config['fieldName'];
+			$type = $config['type'];
+			$result.="$type($field) AS $field, ";
+			if($col!=$field)
+				$result.="$type($field) AS $col, ";
+		}
+		return substr($result, 0, -2);
+	}
+	
+	public function getSummarizedColumns() {
+		return array_keys($this->_summarizedColumns);
+	}
+	
+	/**
+	 * 
+	 * @param type $model
+	 * @return array key values for summary
+	 */
+	public function formatSummary($model) {
+		$result = array();
+		foreach($this->getSummarizedColumns() as $field){
+			if($col = $this->getColumn($field))
+				$result[$field] = $col->render($model);
+		}
+		return $result;
 	}
 	
 	/**
