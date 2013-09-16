@@ -537,8 +537,12 @@ border-color: #fff;
 	font-weight: bold;
 }
 
+.x-window .x-tab-panel-header{
+	margin-top:10px;
+}
+
 .x-window .x-panel-body ul.x-tab-strip-top{
-	margin: 10px 0 0 0;
+	margin: 0px 0 0 0;
 }
 
 .x-window .x-btn-text{
