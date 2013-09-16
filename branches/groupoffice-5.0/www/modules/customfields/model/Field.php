@@ -155,9 +155,13 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 		GO::getDbConnection()->query("SET sql_mode=''");	
 		
 		$sql = "ALTER TABLE `".$this->category->customfieldsTableName()."` DROP `".$this->columnName()."`";
-		if(!$this->getDbConnection()->query($sql))
-			return false;
 		
+		try{
+			$this->getDbConnection()->query($sql);
+		}catch(Exception $e){
+			trigger_error("Dropping custom field column failed with error: ".$e->getMessage());
+		}
+			
 		$this->_clearColumnCache();
 		
 		return parent::afterDelete();
