@@ -443,6 +443,20 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 			if (count($category['fields']))
 				$response['data']['customfields'][] = $category;
 		}
+		
+		if(isset($response['data']['customfields']) && method_exists($model, 'getCfCategoryFK') && GO_Customfields_Model_DisableCategories::isEnabled($model->className(), $model->cfCategoryFK)){
+
+			$ids = GO_Customfields_Model_EnabledCategory::model()->getEnabledIds($model->className(), $model->cfCategoryFK);
+			
+			$enabled = array();
+			foreach($response['data']['customfields'] as $cat){
+				if(in_array($cat['id'], $ids)){
+					$enabled[]=$cat;
+				}
+			}
+			$response['data']['customfields']=$enabled;
+
+		}
 
 		return $response;
 	}

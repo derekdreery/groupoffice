@@ -1,3 +1,5 @@
+- Appointment participants are linked automatically to the contacts
+
 11-09-2013 5.0.5
 - Fixes from 4.2.19
 - Layout issues

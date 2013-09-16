@@ -210,7 +210,7 @@ ul.x-tab-strip .x-tab-strip-active {
 }
 
 .x-grid3-hd-inner {
-	padding: 0 2px 0px 2px
+	padding: 2px;
 }
 
 .x-grid3-check-col, .x-grid3-check-col-on{
@@ -224,24 +224,35 @@ ul.x-tab-strip .x-tab-strip-active {
 .x-grid3-header {
 	background: #fff none !important;
 	border-bottom: 2px solid #000;
+	/*border-top: 1px solid #ddd;*/
 }
 
-.x-grid3-hd-over{
+/*.x-grid3-hd-over{
 	background: #fff none !important;
-}
+}*/
 
 td.x-grid3-hd-over .x-grid3-hd-inner, td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-menu-open .x-grid3-hd-inner, .x-grid3-hd-btn {
 	background-image: url(/images/extjs/grid/grid3-hd-btn.gif);
+	/*background-color:#f1f1f1 !important;*/
 }
+
+/*td.x-grid3-hd-over, td.sort-desc, td.sort-asc, td.x-grid3-hd-menu-open {
+	
+border-left: 1px solid #ddd;
+}*/
+	
 
 td.x-grid3-hd-over, .x-grid3-hd-row td {
 	border-color:white;
-	padding-right: 5px;
+	/*background-color:#f1f1f1;*/
+	/*padding-right: 5px;*/
+	/*border-right:1px solid white;*/
 }
 
-td.x-grid3-hd-over{
-	border-right:2px solid gray;
-}
+/*td.x-grid3-hd-over{
+	
+	background: #f1f1f1 none !important;
+}*/
 
 .x-tab-panel .x-tab-panel-body-top {
 	padding: 0;
@@ -683,6 +694,13 @@ a.x-menu-item{
 	padding: 3px 21px 3px 6px;
 }
 
+#startMenu  a.x-menu-item{
+	padding: 3px 21px 3px 27px;
+}
+
+#startMenu .x-menu-item-icon{
+	display: block;
+}
 
 
 .go-head-tb .x-btn-pressed{

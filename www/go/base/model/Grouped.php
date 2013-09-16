@@ -52,18 +52,20 @@ class GO_Base_Model_Grouped extends GO_Base_Model {
 	 * so you can document loaded properties or implement additional functions.
 	 * 
 	 * @param string $modelName
+	 * @param array $groupBy eg array('t.name')
 	 * @param string $selectFields
 	 * @param GO_Base_Db_FindParams $findParams
 	 * @return GO_Base_Db_ActiveStatement
 	 */
-	public function load($modelName, $selectFields, GO_Base_Db_FindParams $findParams=null){
+	public function load($modelName, $groupBy, $selectFields, GO_Base_Db_FindParams $findParams=null){
 		
 		if(!isset($findParams))
 			$findParams = GO_Base_Db_FindParams::newInstance ();
 		
 		$findParams->ignoreAcl()
-						->select($selectFields)
-						->fetchClass(get_class($this));
+				->select($selectFields)
+				->group($groupBy)
+				->fetchClass(get_class($this));
 
 		$stmt = GO::getModel($modelName)->find($findParams);
 		

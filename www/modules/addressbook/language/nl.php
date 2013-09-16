@@ -329,4 +329,5 @@ $l['downloadPhotoUrl']='Download foto URL';
 $l['orBrowseComputer']='of upload vanaf uw computer';
 $l['currentImage']='Huidige afbeelding';
 
+$l['upcomingBirthdays'] = "Verjaardagen";
 $l['age'] = "Leeftijd";
