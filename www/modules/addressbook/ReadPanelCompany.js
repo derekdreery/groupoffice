@@ -27,7 +27,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 		
 		this.loadUrl = ("addressbook/company/display");
  
-			this.template = '<div>'+
+			this.template = ''+
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
 				'<tr>'+
 						'<td colspan="2" class="display-panel-heading">'+GO.addressbook.lang.company+': {name}</td>'+
@@ -428,7 +428,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 				
 		this.template += GO.createModifyTemplate;
 				
-		this.template+='</div>';		
+//		this.template+='</div>';		
 			
 		GO.addressbook.CompanyReadPanel.superclass.initComponent.call(this);
 		
