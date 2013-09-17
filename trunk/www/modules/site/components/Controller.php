@@ -229,6 +229,17 @@ abstract class GO_Site_Components_Controller extends GO_Base_Controller_Abstract
 		else
 			return Site::urlManager()->getHomeUrl(); //Homepage
 	}
+	/**
+	 * Return to this url its return value can be used in redirect()
+	 * @param type $url
+	 */
+	public function setReturnUrl($url) {
+		if(is_array($url)){
+			$route=isset($url[0]) ? $url[0] : '';
+			$url = Site::urlManager()->createUrl($route, array_splice($url,1));
+		}
+		GO::session()->values['sites']['returnUrl'] = $url;
+	}
 	
 	/**
 	 * Checks if a user is logged in, if the user has permission to the module and if the user has access to a specific action.
