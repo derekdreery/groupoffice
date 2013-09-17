@@ -37,6 +37,8 @@
  * @property int $sort_order
  * @property int $ptime
  * @property string $default_child_template
+ * 
+ * @method GO_Site_Model_Content model()
  */
 
 class GO_Site_Model_Content extends GO_Base_Db_ActiveRecord{
