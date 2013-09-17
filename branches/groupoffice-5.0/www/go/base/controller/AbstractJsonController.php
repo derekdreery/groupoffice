@@ -182,30 +182,32 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 	 */
 	public function renderStore(GO_Base_Data_AbstractStore $store, $return = false, $buttonParams=false) {
 
-		$response = array(
-				"success" => true,
-				"results" => $store->getRecords(),
-				'total' => $store->getTotal()
-		);
-		if($summary = $store->getSummary())
-			$response['summary'] = $summary;
+//		$response = array(
+//				"success" => true,
+//				"results" => $store->getRecords(),
+//				'total' => $store->getTotal()
+//		);
+//		if($summary = $store->getSummary())
+//			$response['summary'] = $summary;
+		
+		$response=$store->getData();
 
 		$title = $store->getTitle();
 		if (!empty($title))
 			$response['title'] = $title;
 
-		if ($store instanceof GO_Base_Data_DbStore) {
-			if ($store->getDeleteSuccess() !== null) {
-				$response['deleteSuccess'] = $store->getDeleteSuccess();
-				if(!$response['deleteSuccess'])
-					$response['deleteFeedback'] = $store->getFeedBack();
-			}
-			if($buttonParams){
-				$buttonParams = $store->getButtonParams();
-				if (!empty($buttonParams))
-					$response['buttonParams'] = $buttonParams;
-			}
-		}
+//		if ($store instanceof GO_Base_Data_DbStore) {
+//			if ($store->getDeleteSuccess() !== null) {
+//				$response['deleteSuccess'] = $store->getDeleteSuccess();
+//				if(!$response['deleteSuccess'])
+//					$response['deleteFeedback'] = $store->getFeedBack();
+//			}
+//			if($buttonParams){
+//				$buttonParams = $store->getButtonParams();
+//				if (!empty($buttonParams))
+//					$response['buttonParams'] = $buttonParams;
+//			}
+//		}
 
 		return new GO_Base_Data_JsonResponse($response);
 	}
@@ -452,7 +454,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 				$response['data']['customfields'][] = $category;
 		}
 		
-		if(isset($response['data']['customfields']) && method_exists($model, 'getDisabledCustomFieldsCategoriesField') && GO_Customfields_Model_DisableCategories::isEnabled($model->className(), $model->cfCategoryFK)){
+		if(isset($response['data']['customfields']) && method_exists($model, 'getDisabledCustomFieldsCategoriesField') && GO_Customfields_Model_DisableCategories::isEnabled($model->className(), $model->disabledCustomFieldsCategoriesField)){
 
 			$ids = GO_Customfields_Model_EnabledCategory::model()->getEnabledIds($model->className(), $model->getDisabledCustomFieldsCategoriesField());
 			

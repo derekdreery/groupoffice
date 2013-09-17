@@ -967,8 +967,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(!is_array($findParams))
 			$findParams = $findParams->getParams();
 		
-		$defaultParams=array('limit'=>1,'ignoreAcl'=>true);
-		$params = array_merge($defaultParams, $findParams);
+		$defaultParams=array('limit'=>1, 'start'=>0,'ignoreAcl'=>true);
+		$params = array_merge($findParams,$defaultParams);
 		
 		$cacheKey = md5(serialize($params));
 		//Use cache so identical findByPk calls are only executed once per script request

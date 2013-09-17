@@ -455,7 +455,10 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 		if($summarySelect===false)
 			return false;
 		
-		$sumParams = GO_Base_Db_FindParams::newInstance()->single()->select($summarySelect)->criteria($this->_extraFindParams->getCriteria());
+//		$sumParams = GO_Base_Db_FindParams::newInstance()->single()->select($summarySelect)->criteria($this->_extraFindParams->getCriteria());
+		
+		$findParams = $this->createFindParams();
+		$sumParams = $findParams->single()->select($summarySelect);
 		
 		$sumRecord = GO::getModel($this->_modelClass)->find($sumParams);
 		if($sumRecord)
@@ -483,15 +486,15 @@ class GO_Base_Data_DbStore extends GO_Base_Data_AbstractStore {
 		if (empty($columns))
 			throw new Exception('No columns given for this store');
 
-		$this->_records = array();
-		while ($record = $this->nextRecord())
-			$this->_records[] = $record;
+		if(!isset($this->response['results']))
+			$this->response['results']=array();
 
 		$this->response['success'] = true;
 		$this->response['total'] = $this->getTotal();
 		if($summary = $this->getSummary())
 			$this->response['summary'] = $summary;
-		$this->response['results'] = $this->_records;
+		while ($record = $this->nextRecord())
+			$this->response['results'][] = $record;
 		return $this->response;
 	}
 
