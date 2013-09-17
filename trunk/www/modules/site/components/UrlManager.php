@@ -221,7 +221,7 @@ class GO_Site_Components_UrlManager
 			$url = Site::model()->ssl ? 'https://' : 'http://';
 			$url .= Site::model()->domain.rtrim($this->getBaseUrl(),'/');
 		}  else {
-			$url = GO::config()->full_url.'modules/site/index.php?site_id='.Site::model()->id;
+			$url = GO::config()->full_url;
 		}
 		return $url;
 	}
