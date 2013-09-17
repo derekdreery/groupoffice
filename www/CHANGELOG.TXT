@@ -33,6 +33,8 @@
 - Projects module: 'show in tree' check box for project statuses.
 
 
+17-09-2013 4.2.21
+- Export contacts/projects/etc.: custom fields not exported if current user has no access to custom fields module.
 
 17-09-2013 4.2.20
 - Added sorting on category in the tasks grid.
