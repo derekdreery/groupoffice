@@ -1,4 +1,6 @@
+- Icons back in start menu
 - Appointment participants are linked automatically to the contacts
+- Rates in CSV export
 
 11-09-2013 5.0.5
 - Fixes from 4.2.19
@@ -24,6 +26,12 @@
 - Address Book module: photos functionality for companies.
 - Projects module: 'show in tree' check box for project statuses.
 
+
+
+17-09-2013 4.2.20
+- Added sorting on category in the tasks grid.
+- Bug in imapauth auto account creation
+- CRLF Bug in calendar export
 
 11-09-2013 4.2.19
 - Z-Push 2 performance issue. There was a wrong check on changes on the calendar. 

@@ -16,7 +16,7 @@ $l["ticketCreated"] = "Erstellt";
 $l["ticketDate"] = "Datum";
 $l["ticketType"] = "Typ";
 $l["ticketStatus"] = "Status";
-$l["Ticketnummer"] = "Ticket-Nr.";
+$l["ticketNumber"] = "Ticket-Nr.";
 $l["ticketAgent"] = "Agenten";
 $l["ticketStatusOpen"] = "Open";
   

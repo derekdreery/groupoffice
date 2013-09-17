@@ -274,8 +274,8 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		
 		GO_Base_Util_Http::outputDownloadHeaders(new GO_Base_FS_File($calendar->name.'.ics'));
 
-		
 		echo "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Intermesh//NONSGML ".GO::config()->product_name." ".GO::config()->version."//EN\r\n";
+
 		$t = new GO_Base_VObject_VTimezone();
 		echo $t->serialize();
 		
