@@ -13,6 +13,17 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			return parent::allowGuests();
 	}
 	
+	protected function actionGetURL($path){
+		
+		if (substr($path,0,1)=='/')
+			$path = substr($path,1);
+		if (substr($path,-1,1)=='/')
+			$path = substr($path,0,-1);
+		
+		$folderModel = GO_Files_Model_Folder::model()->findByPath($path,true);
+		
+		return array('success'=>true,'url'=>  GO_Base_Util_Http::addParamsToUrl($folderModel->getExternalURL(),array('GOSID'=>session_id(), 'security_token'=>GO::session()->values['security_token'])));
+	}
 	
 	protected function actionCache($params){
 		GO_Files_Model_SharedRootFolder::model()->rebuildCache(GO::user()->id);

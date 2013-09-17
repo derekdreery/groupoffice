@@ -57,8 +57,18 @@ class GO_Base_Session extends GO_Base_Observable{
 				//Avoid session id in url's to prevent session hijacking.
 				ini_set('session.use_only_cookies',1);
 								
+				if(isset($_REQUEST['GOSID'])){
+					session_id($_REQUEST['GOSID']);				
+				}
+								
 				session_name('groupoffice');
 				session_start();				
+			
+				if(isset($_REQUEST['GOSID'])){
+					if(!isset($_REQUEST['security_token']) || $_SESSION['GO_SESSION']['security_token']!=$_REQUEST['security_token']){
+						throw new GO_Base_Exception_SecurityTokenMismatch();
+					}
+				}		
 			}
 			//GO::debug causes endless loop
 			//GO::debug("Started session");

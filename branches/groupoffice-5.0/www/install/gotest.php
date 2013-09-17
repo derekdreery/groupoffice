@@ -109,8 +109,8 @@ function test_system(){
 	$tests[]=$test;
 	
 	$test['name']='PDO support';
-	$test['pass']=  class_exists('PDO');
-	$test['feedback']='Fatal error: The PHP PDO extension is required.';
+	$test['pass']=  class_exists('PDO') && extension_loaded('pdo_mysql');
+	$test['feedback']='Fatal error: The PHP PDO extension with MySQL support is required.';
 	$test['fatal']=true;
 
 	$tests[]=$test;
@@ -318,17 +318,7 @@ function test_system(){
 	$test['feedback']='Fatal error: zend.ze1_compatibility_mode is enabled. '.$product_name.' can\'t run with this setting enabled';
 	$test['fatal']=true;
 
-	$tests[]=$test;
-	
-	
-//	$test['name']='APC Cache';
-//	$test['pass']=  extension_loaded('apc');
-//	$test['feedback']='Warning: APC is not present. You will get better performance with this extension.';
-//	$test['fatal']=false;
-//
-//	$tests[]=$test;
-
-	
+	$tests[]=$test;	
 	
 	if(class_exists("GO") && !empty(GO::config()->title))
 	{		
