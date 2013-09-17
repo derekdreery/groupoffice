@@ -1,4 +1,4 @@
-4.2.20
+17-09-2013 4.2.20
 - Added sorting on category in the tasks grid.
 - Bug in imapauth auto account creation
 - CRLF Bug in calendar export
