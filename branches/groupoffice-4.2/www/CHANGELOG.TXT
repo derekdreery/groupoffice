@@ -1,5 +1,7 @@
 4.2.20
 - Added sorting on category in the tasks grid.
+- Bug in imapauth auto account creation
+- CRLF Bug in calendar export
 
 11-09-2013 4.2.19
 - Z-Push 2 performance issue. There was a wrong check on changes on the calendar. 
