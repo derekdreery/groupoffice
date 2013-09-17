@@ -275,10 +275,8 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		GO_Base_Util_Http::outputDownloadHeaders(new GO_Base_FS_File($calendar->name.'.ics'));
 
 		
-		echo "BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Intermesh//NONSGML ".GO::config()->product_name." ".GO::config()->version."//EN
-";
+		echo "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Intermesh//NONSGML ".GO::config()->product_name." ".GO::config()->version."//EN\r\n";
+		
 		$t = new GO_Base_VObject_VTimezone();
 		echo $t->serialize();
 		
@@ -287,7 +285,7 @@ PRODID:-//Intermesh//NONSGML ".GO::config()->product_name." ".GO::config()->vers
 			echo $v->serialize();
 		}
 		
-		echo "END:VCALENDAR\n";
+		echo "END:VCALENDAR\r\n";
 	}	
 	
 	public function actionTruncate($params){
