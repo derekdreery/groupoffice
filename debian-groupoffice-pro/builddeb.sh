@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROMODULES="sync gota caldav documenttemplates savemailas projects professional timeregistration hoursapproval tickets syncml carddav zpushadmin dropbox googledrive scanbox";
+PROMODULES="sync gota caldav documenttemplates savemailas projects professional timeregistration hoursapproval tickets syncml carddav zpushadmin dropbox googledrive scanbox leavedays";
 
 # useful: DEBCONF_DEBUG="developer"
 
