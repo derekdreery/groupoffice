@@ -453,8 +453,10 @@ class GO_Site_Widget_Form extends GO_Site_Components_Widget {
 	private function _resolveRequired($model,$attribute,$htmlAttributes){
 
 		if(isset($model->columns) && isset($model->columns[$attribute])){
-			if($model->columns[$attribute]['required'])
+			if($model->columns[$attribute]['required'] && !isset($htmlAttributes['required']))
 				$htmlAttributes['required'] = true;
+			else if(isset($htmlAttributes['required']) && !$htmlAttributes['required'])
+				unset($htmlAttributes['required']);
 		}
 		
 		return $htmlAttributes;
