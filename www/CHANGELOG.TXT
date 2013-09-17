@@ -1,3 +1,6 @@
+17-09-2013 5.0.7
+- Added holidays module
+
 17-09-2013 5.0.6
 - Icons back in start menu
 - Appointment participants are linked automatically to the contacts
