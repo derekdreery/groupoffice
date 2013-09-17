@@ -302,9 +302,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * @param GO_Base_Db_ActiveRecord $model
 	 * @return array The grid record data
 	 */
-	protected function getStoreColumnModel() {
+	protected function getStoreColumnModel($withCustomfields=true) {
 		$cm =  new GO_Base_Data_ColumnModel();
-		$cm->setColumnsFromModel(GO::getModel($this->model), $this->getStoreExcludeColumns());	
+		$cm->setColumnsFromModel(GO::getModel($this->model), $this->getStoreExcludeColumns(),array(),$withCustomfields);	
 		return $cm;
 	}
 	
@@ -969,11 +969,13 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			
 			$columnOrder = array();
 			$colNames = $model->getColumns();
-			$cfRecord = $model->getCustomfieldsRecord(false);
-			if ($cfRecord) {
-				$cfColNames = $cfRecord->getColumns();
-				unset($cfColNames['model_id']);
-				$colNames = array_merge($colNames,$cfColNames);
+			if (GO::modules()->customfields) {
+				$cfRecord = $model->getCustomfieldsRecord(false);
+				if ($cfRecord) {
+					$cfColNames = $cfRecord->getColumns();
+					unset($cfColNames['model_id']);
+					$colNames = array_merge($colNames,$cfColNames);
+				}
 			}
 			foreach ($colNames as $colName=>$record)
 				$columnOrder[] = $colName;
@@ -989,7 +991,12 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			if (!empty($select) && substr($select,0,1)!=',')
 				$select = ','.$select;
 						
-			$findParams->select('t.*,cf.*'.$select);
+			if (GO::modules()->customfields)
+				$select = 't.*,cf.*'.$select;
+			else
+				$select = 't.*'.$select;
+
+			$findParams->select($select);
 		}
 		
 		if(!empty($params['type']))
