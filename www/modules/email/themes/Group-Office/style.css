@@ -61,7 +61,7 @@ margin:5px 2px;
 }*/
 
 .go-model-icon-GO_Email_Model_ImapMessage, .go-model-icon-GO_Savemailas_Model_LinkedEmail {
-	background-image: url('images/16x16/message.png') !important;
+	background-image: url('images/email.png') !important;
 	width:16px;
 	height:16px;
 }
@@ -71,7 +71,7 @@ margin:5px 2px;
 }
 
 .go-module-icon-email , .go-menu-icon-email{
-	background-image: url('images/16x16/message.png') !important;
+	background-image: url('images/email.png') !important;
 }
 
 .go-tab-icon-email {
