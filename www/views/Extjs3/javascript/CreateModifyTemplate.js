@@ -7,6 +7,6 @@ GO.createModifyTemplate =
 			'<td width="80">'+GO.lang['strMtime']+':</td>'+'<td>{mtime}</td>'+
 		'</tr><tr>'+
 			'<td width="120" style="vertical-align:top;">'+GO.lang['createdBy']+':</td>'+'<td style="padding-right:2px">{username}</td>'+
-			'<td width="120" style="vertical-align:top;">'+GO.lang['mUser']+':</td>'+'<td>{musername}</tpl></td>'+
+			'<td width="120" style="vertical-align:top;">'+GO.lang['mUser']+':</td>'+'<td>{musername}</td>'+
 		'</tr>'+
 	'</table>';
