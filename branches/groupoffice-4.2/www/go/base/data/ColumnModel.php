@@ -84,7 +84,7 @@ class GO_Base_Data_ColumnModel {
 				}
 			}
 
-			if ($model->customfieldsRecord) {
+			if (GO::modules()->customfields && $model->customfieldsRecord) {
 				$cfAttributes = array_keys($model->customfieldsRecord->columns);
 				array_shift($cfAttributes); //remove model_id column
 
