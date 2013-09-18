@@ -190,6 +190,8 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 				delete this.collapsedLinkId;
 			}
 		}, this);
+		
+		this.addEvents({commentAdded:true});
 	},
 	
 	modifyTemplate : function(){
@@ -277,6 +279,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 					model_id:this.data.id,
 					model_name:this.model_name,
 					text: this.getLinkName(),
+					action_date: GO.util.empty(this.actionDate) ? "" : this.actionDate, // Actopm date is used in Contacts with Comments module
 					callback:this.reload,
 					scope:this
 				});
@@ -298,6 +301,13 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		
 		data.model_name=data.model_name=this.model_name;
 		data.panelId=this.getId();
+		
+		// Action date is used in Contacts with Comments module.
+		if (!GO.util.empty(data['action_date']))
+			this.actionDate = data['action_date'];
+		else
+			this.actionDate = '';
+		
 		this.data=data;
 		
 		this.updateToolbar();
@@ -490,7 +500,15 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		}		
 	},
 	
-	afterLoad : function() {
+	_commentsWithActionDate : false,
+	
+	_toggleActionDate : function() {
+		this._commentsWithActionDate = this.model_name == 'GO_Addressbook_Model_Contact';
+		this.actionDateField.setDisabled(!this._commentsWithActionDate);
+		this.actionDateField.setVisible(this._commentsWithActionDate);
+	},
+	
+	afterLoad : function(loadResponseData) {
 	
 		if (GO.comments && this.data.comments.length>0) {
 		  this.newCommentPanel = new Ext.form.FormPanel({			
@@ -506,8 +524,13 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 				  allowBlank:false,
 				  emptyText: GO.comments.lang['newCommentText']
 			  }),
-
-				  this.categoriesCB = new GO.comments.CategoriesComboBox(),
+				this.categoriesCB = new GO.comments.CategoriesComboBox(),
+				this.actionDateField = new Ext.form.DateField({
+					name: 'action_date',
+					fieldLabel: GO.comments.lang['actionDate'],
+					format : GO.settings['date_format'],
+					disabled: true
+				}),
 					  new Ext.Button({
 						  text: GO.lang.cmdAdd,
 						  handler: function(){
@@ -516,6 +539,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 								  params: {
 //										comments : this.commentsField.getValue(),
 //										category_id : this.categoriesCB.getValue(),
+										withActionDate: this._commentsWithActionDate,
 									  model_id : this.model_id,
 									  model_name : this.model_name
 								  },
@@ -523,6 +547,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 									  if (!GO.util.empty(action.result.feedback))
 										  Ext.MessageBox.alert('', action.result.feedback);
 									  this.load(this.model_id,true);
+										this.fireEvent('commentAdded');
 								  },
 								  scope: this
 							  });
@@ -531,6 +556,13 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 					  })
 			  ]
 		  });
+			
+			this._toggleActionDate();
+			if (!GO.util.empty(loadResponseData['action_date']))
+				this.actionDateField.setValue(loadResponseData['action_date']);
+			else
+				this.actionDateField.setValue();
+			
 		}
 		
 		this.fireEvent('afterload',this.model_id);
@@ -564,7 +596,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 					
 					this.stopLoading.defer(300, this);
 					
-					this.afterLoad();
+					this.afterLoad(result.data);
 				},
 				scope: this			
 			});
