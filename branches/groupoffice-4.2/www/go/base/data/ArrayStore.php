@@ -33,6 +33,8 @@ class GO_Base_Data_ArrayStore extends GO_Base_Data_AbstractStore {
 	  {
 		if($record && is_a($record, 'GO_Base_Model'))
 			$records[] = $this->_columnModel->formatModel($record);
+	  elseif(is_array($record))
+			$records[]=$record;
 	  }
 	  return $records;
 	}
