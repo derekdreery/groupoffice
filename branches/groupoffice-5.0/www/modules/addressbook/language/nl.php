@@ -331,3 +331,7 @@ $l['currentImage']='Huidige afbeelding';
 
 $l['upcomingBirthdays'] = "Verjaardagen";
 $l['age'] = "Leeftijd";
+
+$l['actionDate']='Actiedatum';
+$l['selectCurrentActions']='Toon actieve';
+$l['showActieveToolTip']='Toon alleen contacten met actuele actiedatum.';

@@ -54,7 +54,8 @@
  * @property int $addressbook_id
  * @property int $user_id
  * @property int $id
- * @property int $age;
+ * @property int $age
+ * @property int $action_date
  * 
  * @property string $firstEmail Automatically returns the first filled in e-mail address.
  * @property GO_Addressbook_Model_Addressbook $addressbook
@@ -121,6 +122,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		$this->columns['cellular']['gotype']='phone';
 		$this->columns['fax']['gotype']='phone';
 		$this->columns['work_fax']['gotype']='phone';
+		
+		$this->columns['action_date']['gotype'] = 'unixtimestamp';
 		
 		return parent::init();
 	}
@@ -1154,6 +1157,12 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$fp->mergeWith ($findParams);
 		
 		return GO_Addressbook_Model_Contact::model()->find($fp);
+	}
+
+	public function getActionDate() {
+		
+		return GO_Base_Util_Date::get_timestamp($this->action_date,false);
+		
 	}
 	
 }
