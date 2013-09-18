@@ -78,9 +78,9 @@ GO.comments.CommentsGrid = function(config){
 			text: GO.lang['cmdAdd'],
 			cls: 'x-btn-text-icon',
 			handler: function(){
-				GO.comments.showCommentDialog();
-				GO.comments.commentDialog.formPanel.baseParams.model_id=this.store.baseParams.model_id;
- 		 		GO.comments.commentDialog.formPanel.baseParams.model_name=this.store.baseParams.model_name;
+				GO.comments.showCommentDialog(0,{model_name:this.store.baseParams['model_name'],model_id:this.store.baseParams.model_id,action_date:this.actionDate});
+//				GO.comments.commentDialog.formPanel.baseParams.model_id=this.store.baseParams.model_id;
+// 		 		GO.comments.commentDialog.formPanel.baseParams.model_name=this.store.baseParams.model_name;
 			},
 			scope: this
 		},{
@@ -99,12 +99,14 @@ GO.comments.CommentsGrid = function(config){
 		if(this.writePermission)
 		{
 			var record = grid.getStore().getAt(rowIndex);			
-			GO.comments.showCommentDialog(record.data.id, {model_name:this.store.baseParams.model_name});
+			GO.comments.showCommentDialog(record.data.id, {model_name:this.store.baseParams.model_name,model_id:this.store.baseParams.model_id,action_date:this.actionDate});
 		}
 	}, this);
 };
 Ext.extend(GO.comments.CommentsGrid, GO.grid.GridPanel,{
 	writePermission : false,
+	
+	actionDate: false,
 	
 	setWritePermission : function(writePermission){
 		this.writePermission=writePermission;

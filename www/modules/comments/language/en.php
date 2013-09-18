@@ -13,3 +13,5 @@ $l['newCommentText']='Enter new comment here ...';
 
 $l['readMore']="Read more";
 $l['enableReadMore']="Enable read more links";
+
+$l['actionDate']='Action date';
