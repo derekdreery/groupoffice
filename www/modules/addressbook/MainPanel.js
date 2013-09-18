@@ -108,6 +108,10 @@ GO.addressbook.MainPanel = function(config)
 		border:false
 	});
 
+	this.contactEastPanel.on('commentAdded',function(){
+		this.contactsGrid.store.load();
+	},this);
+
 	this.companyEastPanel = new GO.addressbook.CompanyReadPanel({
 		id:'ab-company-panel',
 		border:false

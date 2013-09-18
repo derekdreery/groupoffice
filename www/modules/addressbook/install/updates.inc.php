@@ -388,3 +388,5 @@ $updates['201307231600'][]="CREATE TABLE IF NOT EXISTS `ab_portlet_birthdays` (
 
 $updates['201308161215'][]="ALTER TABLE  `ab_companies` ADD  `photo` VARCHAR( 255 ) NOT NULL";
 $updates['201308161215'][]="script:5_set_photo_permissions_2.php";
+
+$updates['201309161020'][]="ALTER TABLE `ab_contacts` ADD `action_date` INT( 11 ) NOT NULL DEFAULT '0';";

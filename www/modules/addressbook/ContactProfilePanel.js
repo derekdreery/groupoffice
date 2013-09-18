@@ -371,12 +371,29 @@ GO.addressbook.ContactProfilePanel = function(config)
 			items: [this.formCompany,this.formDepartment,this.formFunction]
 		});
  
+		this.actionDateFieldset = new Ext.form.FieldSet({
+			autoHeight: true,
+			collapsed: false,
+			defaults: {
+				border: false,
+				anchor: '100%'
+			},
+			items: [
+				this.formActionDateField = new Ext.form.DateField({
+					name : 'action_date',
+					format : GO.settings['date_format'],
+					allowBlank : true,
+					fieldLabel: GO.addressbook.lang['actionDate']
+				})
+			]
+		});
+ 
 			var leftColItems = [];
 		
 		//if(!config.forUser)
 			leftColItems.push(this.addressbookFieldset);
 		
-		leftColItems.push(this.personalFieldset,this.workFieldset);
+		leftColItems.push(this.personalFieldset,this.workFieldset,this.actionDateFieldset);
 		
 	
 		this.title= GO.addressbook.lang['cmdPanelContact'];

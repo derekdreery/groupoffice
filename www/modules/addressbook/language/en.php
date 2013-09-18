@@ -296,3 +296,6 @@ $l['downloadFullImage']='Download full image';
 
 $l['upcomingBirthdays'] = "Upcoming birthdays";
 $l['age'] = "Age";
+$l['actionDate']='Action date';
+$l['selectCurrentActions']='Show active';
+$l['showActieveToolTip']='Show only contacts that have a current action date.';

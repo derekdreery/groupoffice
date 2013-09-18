@@ -90,6 +90,9 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$response['data']['photo_url']=$model->photoThumbURL;		
 		$response['data']['original_photo_url']=$model->photoURL;
 		
+		if ($model->action_date > 0)
+			$response['data']['action_date'] = GO_Base_Util_Date::get_timestamp($model->action_date,false);
+		
 		$stmt = $model->addresslists();
 		while($addresslist = $stmt->fetch()){
 			$response['data']['addresslist_'.$addresslist->id]=1;
@@ -136,7 +139,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		
 		$response['data']['formatted_address']=nl2br($model->getFormattedAddress());
 		
-		
+		$response['data']['action_date']=GO_Base_Util_Date::get_timestamp($model->action_date,false);
 		
 		if(GO::modules()->customfields && isset($response['data']['customfields']) && GO_Customfields_Model_DisableCategories::isEnabled("GO_Addressbook_Model_Contact", $model->addressbook_id)){
 
@@ -191,6 +194,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$columnModel->formatColumn('company_name','$model->company_name', array(),'', GO::t('company','addressbook'));
 		$columnModel->formatColumn('ab_name','$model->ab_name', array(),'', GO::t('addressbook','addressbook'));
 		$columnModel->formatColumn('age', '$model->age', array(), 'birthday');
+		$columnModel->formatColumn('action_date', '$model->getActionDate()', array(), 'action_date');
 		
 		$columnModel->formatColumn('cf', '$model->id.":".$model->name');//special field used by custom fields. They need an id an value in one.)
 		return parent::formatColumns($columnModel);
@@ -223,6 +227,12 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 									'ac'
 						);
 				}
+			}
+			
+			if (!empty($params['onlyCurrentActions'])) {
+				$storeParams->getCriteria()
+					->addCondition('action_date', 0, '>', 't')
+					->addCondition('action_date', time(), '<=', 't');
 			}
 		}
 		
