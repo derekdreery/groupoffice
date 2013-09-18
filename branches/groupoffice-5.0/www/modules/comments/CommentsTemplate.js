@@ -22,7 +22,7 @@ GO.comments.displayPanelTemplate =
 					'</tr>'+
 				'</tpl>'+
 
-				'<tr><td colspan="4"><a class="display-panel-browse" href="#" onclick="GO.comments.browseComments({id}, \'{model_name}\');">'+GO.lang.browse+'</a></td></tr>'+
+				'<tr><td colspan="4"><a class="display-panel-browse" href="#" onclick="GO.comments.browseComments({id}, \'{model_name}\',\'{action_date}\');">'+GO.lang.browse+'</a></td></tr>'+
 
 			'</table>'+
 	'</tpl>';
