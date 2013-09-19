@@ -89,10 +89,10 @@ class GO_Base_Util_Date {
 	}
 
 
-	public static function format_long_date($time,$add_time=true){
+	public static function format_long_date($time,$add_time=true,$full_day_names=false,$full_month_names=false){
 
-		$days = GO::t('full_days');
-		$months = GO::t('months');
+		$days = $full_day_names ? GO::t('full_days') : GO::t('short_days');
+		$months = $full_month_names ? GO::t('months') : GO::t('short_months');
 		$str  = $days[date('w', $time)].' '.date('d', $time).' '.$months[date('n', $time)].' ';
 		if ($add_time)
 			return $str.date('Y - '.GO::user()->time_format, $time);
