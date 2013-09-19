@@ -231,9 +231,14 @@ ul.x-tab-strip .x-tab-strip-active {
 	background: #fff none !important;
 }*/
 
-td.x-grid3-hd-over .x-grid3-hd-inner, td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-menu-open .x-grid3-hd-inner, .x-grid3-hd-btn {
+.x-grid3-hd-btn {
 	background-image: url(/images/extjs/grid/grid3-hd-btn.gif);
 	/*background-color:#f1f1f1 !important;*/
+	
+}
+
+td.x-grid3-hd-over .x-grid3-hd-inner, td.x-grid3-hd-menu-open .x-grid3-hd-inner, td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner{
+	background:none !important;
 }
 
 /*td.x-grid3-hd-over, td.sort-desc, td.sort-asc, td.x-grid3-hd-menu-open {
@@ -400,6 +405,7 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 	padding: 0 5px !important;
 	text-transform: uppercase;
 	color: #000 !important;
+	height: 12px !important;
 }
 
 #go-module-panel-addressbook .x-panel-bbar .x-toolbar, #go-module-panel-addressbook .x-panel-tbar .x-toolbar{
