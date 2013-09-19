@@ -836,6 +836,7 @@ hr{
 
 table.display-panel{
 	width:100%;
+	border-collapse:collapse;
 }
 
 table.display-panel td{
