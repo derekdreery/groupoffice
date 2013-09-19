@@ -36,7 +36,7 @@ class GO_Base_Model_Grouped extends GO_Base_Model {
 	}
 	
 	public function __get($name) {
-		return $this->_attributes[$name];
+		return isset($this->_attributes[$name]) ? $this->_attributes[$name] : parent::__get($name);
 	}
 	
 	/**
@@ -62,6 +62,24 @@ class GO_Base_Model_Grouped extends GO_Base_Model {
 		$stmt = GO::getModel($modelName)->find($findParams);
 		
 		return $stmt;
+	}
+	
+	public function getAttributes(){
+		
+		$a = $this->_attributes;
+		
+		$r = new ReflectionObject($this);
+		$publicProperties = $r->getProperties(ReflectionProperty::IS_PUBLIC);
+		foreach($publicProperties as $prop){
+			//$att[$prop->getName()]=$prop->getValue($this);
+			//$prop = new ReflectionProperty();
+			if(!$prop->isStatic()) {
+				//$this->_magicAttributeNames[]=$prop->getName();
+				$a[$prop->getName()]=$this->{$prop->getName()};
+			}
+		}
+		
+		return $a;
 	}
 
 }
