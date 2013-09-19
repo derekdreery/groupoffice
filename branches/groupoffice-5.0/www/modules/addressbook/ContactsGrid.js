@@ -111,7 +111,8 @@ GO.addressbook.ContactsGrid = function(config){
 		{
 			header: GO.lang['cellular2'],
 			dataIndex: 'cellular2',
-			width: 100
+			width: 100,
+			hidden:true
 		},
 		{
 			header: GO.lang['strFax'],
@@ -181,7 +182,6 @@ GO.addressbook.ContactsGrid = function(config){
 		},{
 			header: GO.addressbook.lang['actionDate'],
 			dataIndex:'action_date',
-			hidden:true,
 			width:80
 		}
 		]
