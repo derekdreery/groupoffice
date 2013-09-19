@@ -15,8 +15,13 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 		return $response;
 	}
 
+	protected function afterLoad(&$response, &$model, &$params) {
+		$response['data']['hasLength'] = $model->hasLength();
+		return parent::afterLoad($response, $model, $params);
+	}
+	
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
-
+							
 		if ($model->datatype == 'GO_Customfields_Customfieldtype_Select') {
 
 			//select_options
@@ -54,6 +59,26 @@ class GO_Customfields_Controller_Field extends GO_Base_Controller_AbstractModelC
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}
 
+	protected function actionSubmit($params) {
+		
+		try {
+			return parent::actionSubmit($params);
+		} catch (PDOException $e) {
+			$msg = $e->getMessage();
+			if (strpos($msg,'SQLSTATE[42000]')===0 && strpos($msg,'1118')>14) {
+				$catModel = GO_Customfields_Model_Category::model()->findByPk($params['category_id']);
+				throw new Exception(sprintf(GO::t('tooManyCustomfields','customfields'),  GO::t($catModel->extends_model,'customfields')));
+			} else if (strpos($msg,'SQLSTATE[42000]')===0 && strpos($msg,'1074')>14) {
+				preg_match('/(max = ([0-9]+))/',$msg,$matches);
+				$str = !empty($matches[2]) ? $matches[2] : '';
+				throw new Exception(sprintf(GO::t('customfieldTooLarge','customfields'),$str));
+			} else {
+				throw $e;
+			}
+		}
+		
+	}
+	
 	protected function actionSelectOptions($params) {
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()->order('sort_order');

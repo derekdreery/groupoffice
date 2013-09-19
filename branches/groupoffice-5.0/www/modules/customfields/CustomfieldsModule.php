@@ -28,10 +28,10 @@ class GO_Customfields_CustomfieldsModule extends GO_Base_Module {
 							$supportedModels = $t->supportedModels();
 							
 							if(empty($supportedModels) || in_array($extendModel, $supportedModels))					
-								$types[] = array('className' => $className, 'type' => $t->name());
+								$types[] = array('className' => $className, 'type' => $t->name(), 'hasLength' => $t->hasLength());
 						
 						} else {
-							$types[] = array('className' => $className, 'type' => $t->name());
+							$types[] = array('className' => $className, 'type' => $t->name(), 'hasLength' => $t->hasLength());
 						}
 					}
 				}
