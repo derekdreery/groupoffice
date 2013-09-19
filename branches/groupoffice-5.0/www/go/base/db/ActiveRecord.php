@@ -1270,7 +1270,15 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 
 						case self::HAS_ONE:
 						case self::HAS_MANY:
+							if(is_array($r['field'])){
+								$conditions = array();
+								foreach($r['field'] as $my=>$foreign){
+									$conditions[]= '`'.$name.'`.`'.$foreign.'`=t.`'.$my.'`';
+								}
+								$joinRelationjoins .= implode(' AND ', $conditions);
+							}else{
 								$joinRelationjoins .= '`'.$name.'`.`'.$r['field'].'`=t.`'.$this->primaryKey().'`';
+							}
 							break;
 
 						default:
@@ -1901,23 +1909,33 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 		
 		if($r['type']==self::HAS_MANY)
 		{									
-			$remoteFieldThatHoldsMyPk = $r['field'];
+			
 
 			$findParams = GO_Base_Db_FindParams::newInstance();
 			
 			
 			$findParams
 					->mergeWith($r['findParams'])		
-					->ignoreAcl()
+					->ignoreAcl()->debugSql()
 					->relation($name);
 			
 			//the extra find params supplied with call are merged last so that you 
 			//can override the defaults.
 			if(isset($extraFindParams))
 					$findParams->mergeWith($extraFindParams);
-					
-			$findParams->getCriteria()							
-							->addCondition($remoteFieldThatHoldsMyPk, $this->pk);
+			
+			
+			if(is_array($r['field'])){
+				foreach($r['field'] as $my=>$foreign){
+						$findParams->getCriteria()							
+								->addCondition($my, $this->$foreign);
+				}
+			}else{
+				$remoteFieldThatHoldsMyPk = $r['field'];
+
+				$findParams->getCriteria()							
+								->addCondition($remoteFieldThatHoldsMyPk, $this->pk);
+			}
 
 
 		}elseif($r['type']==self::MANY_MANY)
@@ -1945,6 +1963,10 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 	
 	private function _getRelatedCacheKey($relation){
 		//append join attribute so cache is void automatically when this attribute changes.
+		
+		if(is_array($relation['field']))
+			$relation['field']=implode(',', $relation['field']);
+		
 		return $relation['name'].':'.(isset($this->_attributes[$relation['field']]) ? $this->_attributes[$relation['field']] : 0);
 			
 	}
