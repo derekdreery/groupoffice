@@ -520,7 +520,7 @@ class GO{
 		
 		if(GO::config()->debug)
 			ini_set("display_errors","On");
-		else
+		elseif(PHP_SAPI!='cli')
 			ini_set("display_errors","Off");
 
 		date_default_timezone_set(GO::user() ? GO::user()->timezone : GO::config()->default_timezone);
