@@ -65,6 +65,7 @@ CREATE TABLE IF NOT EXISTS `cf_fields` (
   `height` int(11) NOT NULL DEFAULT '0',
 	`number_decimals` tinyint(4) NOT NULL DEFAULT '2',
 	`unique_values` tinyint(1) NOT NULL DEFAULT '0',
+	`max_length` INT( 5 ) NOT NULL DEFAULT '50',
   PRIMARY KEY (`id`),
   KEY `type` (`category_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

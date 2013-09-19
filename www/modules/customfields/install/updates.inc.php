@@ -144,3 +144,6 @@ $updates['201304180930'][]="CREATE TABLE IF NOT EXISTS `cf_enabled_blocks` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
 $updates['201304241300'][]="ALTER TABLE `cf_fields` ADD `unique_values` TINYINT( 1 ) NOT NULL DEFAULT '0' AFTER `number_decimals`;";
+
+$updates['201309181440'][]="ALTER TABLE `cf_fields` ADD `max_length` INT( 5 ) NOT NULL DEFAULT '50';";
+$updates['201309191000'][]="UPDATE `cf_fields` SET max_length=255;";

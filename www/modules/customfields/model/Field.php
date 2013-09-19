@@ -19,6 +19,7 @@
  * @property int $id
  * @property boolean $unique_values
  * @property int $number_decimals
+ * @property int $max_length
  */
 class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 	
@@ -65,6 +66,7 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 //		$this->columns['height']['gotype']='number';
 		
 		$this->columns['name']['required']=true;
+		$this->columns['max_length']['gotype']='number';
 		
 		parent::init();
 	}
@@ -103,10 +105,16 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 			$table=$this->category->customfieldsTableName();
 					
 		if($wasNew){
-			$sql = "ALTER TABLE `".$table."` ADD `".$this->columnName()."` ".$this->customfieldtype->fieldSql().";";
+			if ($this->hasLength())
+				$sql = "ALTER TABLE `".$table."` ADD `".$this->columnName()."` ".str_replace('%MAX_LENGTH',$this->max_length,$this->customfieldtype->fieldSql()).";";
+			else
+				$sql = "ALTER TABLE `".$table."` ADD `".$this->columnName()."` ".$this->customfieldtype->fieldSql().";";
 		}else
 		{
-			$sql = "ALTER TABLE `".$table."` CHANGE `".$this->columnName()."` `".$this->columnName()."` ".$this->customfieldtype->fieldSql();
+			if ($this->hasLength())
+				$sql = "ALTER TABLE `".$table."` CHANGE `".$this->columnName()."` `".$this->columnName()."` ".str_replace('%MAX_LENGTH',$this->max_length,$this->customfieldtype->fieldSql());
+			else
+				$sql = "ALTER TABLE `".$table."` CHANGE `".$this->columnName()."` `".$this->columnName()."` ".$this->customfieldtype->fieldSql();
 		}		
 		//don't be strict in upgrade process
 		GO::getDbConnection()->query("SET sql_mode=''");
@@ -137,6 +145,9 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 		GO::cache()->delete('customfields_'.$this->category->extends_model);	
 	}
 	
+	public function hasLength() {
+		return $this->customfieldtype->hasLength();
+	}
 	
 	protected function getCustomfieldtype(){
 		

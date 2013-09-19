@@ -47,7 +47,7 @@ GO.customfields.FieldDialog = function(config){
 		hiddenName:'datatype',
 		anchor:'-20',
 		store: new GO.data.JsonStore({
-			fields: ['className', 'type'],			
+			fields: ['className', 'type','hasLength'],			
 			sortInfo : {
 				field:'text',
 				direction:'ASC'
@@ -66,14 +66,29 @@ GO.customfields.FieldDialog = function(config){
 		selectOnFocus:true,
 		forceSelection: true
 	});
-    
+    		
 	this.typeField.on('GO_Customfields_Customfieldtype_Select', function(combo, record, index){
 		this.typeChange(combo, record.data.value);
 	}, this);
    
 	this.typeField.on('change', this.typeChange, this);
-    
-  
+	
+	
+	this.maxLengthField = new GO.form.NumberField({
+		name: 'max_length',
+		value: 50,
+		fieldLabel: GO.customfields.lang['maxLength'],
+		minValue: 0,
+//		maxValue: 255,
+		decimals: 0,
+		disabled: true
+	});
+	
+	this.typeField.on('select', function(combo,record,index){
+		this.maxLengthField.setDisabled(!record.data['hasLength']);
+		this.maxLengthField.setVisible(record.data['hasLength']);
+	}, this);
+	
 	this.functionField = new Ext.form.TextField({
 		name: 'function',
 		anchor:'-20',
@@ -113,6 +128,7 @@ GO.customfields.FieldDialog = function(config){
 		items: [
 		this.nameField,
 		this.typeField,
+		this.maxLengthField,
 		this.multiSelectCB = new Ext.ux.form.XCheckbox({
 			name:'multiselect',
 			fieldLabel:GO.customfields.lang.multiselect,
@@ -196,7 +212,7 @@ GO.customfields.FieldDialog = function(config){
 	config.modal=false;
 	config.resizable=true;
 	config.width=500;
-	config.height=400;
+	config.height=420;
 	//config.autoHeight=true;
 	config.closeAction='hide';
 	config.title= GO.lang.field;					
@@ -242,7 +258,7 @@ GO.customfields.FieldDialog = function(config){
 Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 
 	typeChange : function(combo, newValue)
-	{		
+	{	
 		this.helptextField.setDisabled(newValue=='GO_Customfields_Customfieldtype_Infotext');
 		this.requiredCB.setDisabled(newValue=='GO_Customfields_Customfieldtype_Infotext');
 		this.decimalsField.setDisabled(newValue!='GO_Customfields_Customfieldtype_Number');
@@ -315,6 +331,9 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 				{
 					this.typeChange(this.typeField, this.typeField.getValue());
 					GO.customfields.FieldDialog.superclass.show.call(this);
+					var response = Ext.decode(action.response.responseText);
+					this.maxLengthField.setDisabled(!response.data['hasLength']);
+					this.maxLengthField.setVisible(response.data['hasLength']);
 				},
 				failure:function(form, action)
 				{
@@ -335,6 +354,8 @@ Ext.extend(GO.customfields.FieldDialog, Ext.Window,{
 				this.categoryField.selectFirst();
 			
 			this.typeChange(this.typeField, 'GO_Customfields_Customfieldtype_Text');
+			this.maxLengthField.setDisabled(false);
+			this.maxLengthField.setVisible(true);
 			GO.customfields.FieldDialog.superclass.show.call(this);
 		}
 	},
