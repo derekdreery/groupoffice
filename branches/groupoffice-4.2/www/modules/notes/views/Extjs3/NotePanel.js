@@ -76,6 +76,9 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 		{
 			this.template += GO.comments.displayPanelTemplate;
 		}		
+		
+		if(GO.lists)
+			this.template += GO.lists.ListTemplate;
 
 		this.template += GO.createModifyTemplate;
 
