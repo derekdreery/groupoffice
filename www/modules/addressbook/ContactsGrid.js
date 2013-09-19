@@ -182,7 +182,7 @@ GO.addressbook.ContactsGrid = function(config){
 		},{
 			header: GO.addressbook.lang['actionDate'],
 			dataIndex:'action_date',
-			width:80
+			width:100
 		}
 		]
 	}

@@ -117,7 +117,6 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 .x-btn-text-icon .x-btn-icon-small-left .x-btn-text{
 	font-size: 12px;
 }
-
 .x-panel-header {
 	background: #fff none;
 	border: none;
@@ -389,7 +388,7 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 	padding: 0;
 }
 
-.go-border-center .x-panel-tbar .x-btn, .go-multiselect-grid  .x-panel-tbar .x-btn, .go-white-bg  .x-panel-tbar .x-btn, .go-moduletabs-body .go-display-panel .x-btn, .x-window .x-panel-tbar .x-btn{
+.go-multiselect-grid  .x-panel-tbar .x-btn, .go-white-bg  .x-panel-tbar .x-btn, .go-moduletabs-body .go-display-panel .x-btn, .x-window .x-panel-tbar .x-btn{
 	border: 1px solid #009bcb;	
 	margin-right: 5px;
 }
@@ -404,7 +403,10 @@ td.x-grid3-hd-over, .x-grid3-hd-row td {
 	font-weight: bold;
 	padding: 0 5px !important;
 	text-transform: uppercase;
-	color: #000 !important;
+	color: #000 !important;	
+}
+
+.go-white-bg  .x-btn-text{
 	height: 12px !important;
 }
 
@@ -823,4 +825,9 @@ background-image: url(images/extjs/toolbar/more.gif)!important;
 
 .x-panel-noborder .x-panel-header-noborder {
 	border-bottom-color:white;
+}
+
+.x-panel-collapsed .x-accordion-hd{
+	background:#f1f1f1 !important;
+	padding: 10px;
 }

@@ -57,11 +57,11 @@ GO.tasks.MainPanel = function(config){
 	}, this);
 				
 	var filterPanel = new Ext.form.FormPanel({
-		//title:GO.tasks.lang.filter,
-		height:162,
+		title:GO.tasks.lang.filter,
+		height:170,
 //		id:'ta-filter-form',
 //		stateId:'ta-filter-form',
-		cls:'go-form-panel',
+//		cls:'go-form-panel',
 		waitMsgTarget:true,
 		region:'north',
 		border:true,
