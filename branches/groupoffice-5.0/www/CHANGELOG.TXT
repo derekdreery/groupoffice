@@ -1,3 +1,4 @@
+
 - Custom field text field length can be set. Max row length error is handled 
   when maximum is reached.
 - Small layout tweaks

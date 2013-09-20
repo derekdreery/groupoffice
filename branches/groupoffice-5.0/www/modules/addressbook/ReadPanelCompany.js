@@ -278,6 +278,9 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 						'</table>'+
 					'</tpl>';
 
+			if(GO.lists)
+				this.template += GO.lists.ListTemplate;
+
 			if(GO.customfields)
 			{
 				this.template +=GO.customfields.displayPanelTemplate;
