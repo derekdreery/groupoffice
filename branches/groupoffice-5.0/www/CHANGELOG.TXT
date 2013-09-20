@@ -1,3 +1,9 @@
+- Custom field text field length can be set. Max row length error is handled 
+  when maximum is reached.
+- Small layout tweaks
+- Contacts is extended with an Action date that can be filtered on. It can be 
+  set when you add a comment too.
+
 17-09-2013 5.0.7
 - Added holidays module
 

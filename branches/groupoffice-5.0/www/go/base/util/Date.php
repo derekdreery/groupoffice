@@ -30,6 +30,31 @@ class GO_Base_Util_Date {
 
 		return $time;
 	}
+	
+	public static function timeStringToMinutes($timeStr){
+		$parts = explode(':', $timeStr);
+		
+		$hours = intval($parts[0]);
+		
+		if(isset($parts[1])){
+			$minutes = intval($parts[1]);
+		}else
+		{
+			$minutes=0;
+		}
+		
+		return $hours*60+$minutes;
+	}
+	
+	public static function minutesToTimeString($minutes){
+		$hours = floor($minutes/60);
+		$minutes = $minutes % 60;
+		
+		if(strlen($minutes)==1)
+			$minutes = '0'.$minutes;
+		
+		return $hours.':'.$minutes;
+	}
 
 	/**
 	 * Returns true if the time is a holiday or in the weekend

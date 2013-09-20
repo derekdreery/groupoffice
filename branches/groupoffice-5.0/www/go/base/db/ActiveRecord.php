@@ -1044,7 +1044,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			return $model;
 		}
 		else {
-			$pk = $params[$this->primaryKey()];
+			$pk = isset($params[$this->primaryKey()]) ? $params[$this->primaryKey()] : null;
 			if (empty($pk)) {
 				$model = new static();
 				if ($model->isNew)
