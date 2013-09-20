@@ -67,6 +67,7 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 		
 		$this->columns['name']['required']=true;
 		$this->columns['max_length']['gotype']='number';
+		$this->columns['max_length']['decimals']=0;
 		
 		parent::init();
 	}
