@@ -120,6 +120,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		$this->columns['home_phone']['gotype']='phone';
 		$this->columns['work_phone']['gotype']='phone';
 		$this->columns['cellular']['gotype']='phone';
+		$this->columns['cellular2']['gotype']='phone';
 		$this->columns['fax']['gotype']='phone';
 		$this->columns['work_fax']['gotype']='phone';
 		
@@ -1067,6 +1068,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 										->addCondition('home_phone', $number, 'LIKE', 't', false)
 										->addCondition('work_phone', $number, 'LIKE', 't', false)
 										->addCondition('cellular', $number, 'LIKE', 't', false)
+										->addCondition('cellular2', $number, 'LIKE', 't', false)
 		);
 
 		return GO_Addressbook_Model_Contact::model()->find($findParams);		
