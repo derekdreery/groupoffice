@@ -49,8 +49,8 @@ GO.tasks.AddTaskPanel = function(config){
 	config = Ext.apply(config, {
 		border:false,
 		//baseCls:'x-border-layout-ct',
-		bodyStyle:'padding:1px 2px',
-		//height:26,
+		cls:'ta-add-task-panel',
+		height:40,
 		items:[{
 			anchor:'100%',
 			xtype:'compositefield',			

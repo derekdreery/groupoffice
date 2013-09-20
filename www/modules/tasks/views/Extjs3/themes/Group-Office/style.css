@@ -57,3 +57,8 @@
 	width:16px;
 	height:16px;
 }
+
+
+.ta-add-task-panel .x-panel-body{
+	padding:10px !important;
+}
