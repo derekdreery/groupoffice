@@ -118,6 +118,9 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 		if (GO::modules()->comments)
 			$response = $this->_processCommentsDisplay($model, $response);
 		
+		if (GO::modules()->lists)
+			$response = GO_Lists_ListsModule::displayResponse($model, $response);
+
 		$this->fireEvent('display', array(
 				&$this,
 				&$response,

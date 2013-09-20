@@ -104,6 +104,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			if($model->isRecurring() && date('dmY', $model->start_time)!=date('dmY', $model->getOldAttributeValue('start_time'))){
 				$rrule = $model->getRecurrencePattern();
 				if(!empty($rrule->byday)){
+					if (!empty($params['duplicate']))
+						$model->delete();
 					throw new Exception(GO::t('cantMoveRecurringByDay', 'calendar'));
 				}
 			}
