@@ -67,7 +67,7 @@ GO.sieve.ActionCreatorDialog = function(config){
 	config.border=false;
 	config.layout= 'fit';
 	config.height=400;
-	config.width=480;
+	config.width=550;
 	config.baseParams={
 		task : 'addAction',
 		account_id : 0,
@@ -336,7 +336,7 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 			allowBlank:false,
 //			hideLabel:true,
 			anchor:'100%',
-			height:80,
+			height:200,
 			fieldLabel:GO.sieve.lang.reason,
 //			listeners:{
 //				scope:this,
@@ -361,7 +361,6 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 		});
 			
 		this.formPanel = new Ext.form.FormPanel({
-			bodyStyle: 'padding: 5px;',
 			layout: 'form',
 			border:false,
 			items: [
