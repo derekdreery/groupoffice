@@ -20,7 +20,7 @@ GO.addressbook.MainPanel = function(config)
 		config={};
 	}
 
-	this.contactsGrid = new GO.addressbook.ContactsGrid({
+	GO.addressbook.contactsGrid = this.contactsGrid = new GO.addressbook.ContactsGrid({
 		layout: 'fit',
 		region: 'center',
 		id: 'ab-contacts-grid',
