@@ -143,6 +143,11 @@ Ext.extend(GO.comments.CommentDialog, Ext.Window,{
 				{					
 					this.link_config.callback.call(this);					
 				}
+								
+				if (!GO.util.empty(this.formPanel.baseParams['model_name']) && this.formPanel.baseParams['model_name']=='GO_Addressbook_Model_Contact' && !GO.util.empty(GO.addressbook.contactsGrid)) {
+					GO.addressbook.contactsGrid.store.load();
+				}
+				
 				this.fireEvent('save', this);				
 			},		
 			failure: function(form, action) {
