@@ -471,7 +471,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		if (GO::modules()->comments)
 			$response = $this->_processCommentsDisplay($model,$response);
-			
+		
+		if (GO::modules()->lists)
+			$response = GO_Lists_ListsModule::displayResponse($model, $response);
 		
 		$response = $this->afterDisplay($response, $model, $params);
 		
