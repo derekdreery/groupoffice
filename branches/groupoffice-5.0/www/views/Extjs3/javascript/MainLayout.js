@@ -301,7 +301,6 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 				adminMenuItems.push(menuItemConfig);
 			}
 		}
-		console.log(items);
 		
 		if(adminMenuItems.length){
 
