@@ -335,3 +335,7 @@ $l['age'] = "Leeftijd";
 $l['actionDate']='Actiedatum';
 $l['selectCurrentActions']='Toon actieve';
 $l['showActieveToolTip']='Toon alleen contacten met actuele actiedatum.';
+$l['linkedinUrl'] = 'LinkedIn URL';
+$l['facebookUrl'] = 'Facebook URL';
+$l['twitterUrl'] = 'Twitter URL';
+$l['cmdPanelSocialMedia'] = 'Sociale media';

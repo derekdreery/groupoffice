@@ -62,6 +62,9 @@
  * @property GO_Addressbook_Model_Company $company
  * @property string $homepage
  * @property string $uuid
+ * @property string $url_linkedin
+ * @property string $url_facebook
+ * @property string $url_twitter
  */
 class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		
@@ -278,7 +281,18 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$this->company_id=$company->id;			
 		}
 				
+		$this->_prefixSocialMediaLinks();
+		
 		return parent::beforeSave();
+	}
+	
+	private function _prefixSocialMediaLinks() {
+		if ($this->isModified('url_linkedin') && !empty($this->url_linkedin) && strpos($this->url_linkedin,'http')!==0)
+			$this->url_linkedin = 'http://'.$this->url_linkedin;
+		if ($this->isModified('url_linkedin') && !empty($this->url_facebook) && strpos($this->url_facebook,'http')!==0)
+			$this->url_facebook = 'http://'.$this->url_facebook;
+		if ($this->isModified('url_linkedin') && !empty($this->url_twitter) && strpos($this->url_twitter,'http')!==0)
+			$this->url_twitter = 'http://'.$this->url_twitter;
 	}
 	
 	protected function afterDbInsert() {

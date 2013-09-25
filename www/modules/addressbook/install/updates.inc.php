@@ -390,3 +390,7 @@ $updates['201308161215'][]="ALTER TABLE  `ab_companies` ADD  `photo` VARCHAR( 25
 $updates['201308161215'][]="script:5_set_photo_permissions_2.php";
 
 $updates['201309161020'][]="ALTER TABLE `ab_contacts` ADD `action_date` INT( 11 ) NOT NULL DEFAULT '0';";
+
+$updates['201309250930'][]="ALTER TABLE `ab_contacts` ADD `url_linkedin` VARCHAR( 100 ) NULL DEFAULT NULL ,
+ADD `url_facebook` VARCHAR( 100 ) NULL DEFAULT NULL ,
+ADD `url_twitter` VARCHAR( 100 ) NULL DEFAULT NULL;";
