@@ -274,7 +274,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 
 		this.state = Ext.state.Manager.get('open-modules');
 
-		
+
 		for(var i=0;i<allPanels.length;i++){
 
 			if(this.state && this.state.indexOf(allPanels[i].moduleName)>-1)
@@ -301,6 +301,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 				adminMenuItems.push(menuItemConfig);
 			}
 		}
+		console.log(items);
 		
 		if(adminMenuItems.length){
 
@@ -525,10 +526,18 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		if(!this.tabPanel.items.map[panelId])
 		{
 			panel = GO.moduleManager.getPanel(moduleName);
+			
+			//Find the correct tab order for the tabpanel
+			var volgorde = GO.moduleManager.getAllPanelConfigs(),
+				order=this.tabPanel.items.length;
+			for(var i=0;i<volgorde.length; i++)
+				if(volgorde[i].id == panelId)
+					order=i;
+			
                         if(panel)
                         {
                                 panel.id = panelId;
-                                this.tabPanel.add(panel);
+                                this.tabPanel.insert(order, panel);
 
                                 /*if(!this.hintShown)
                                 {
