@@ -1,3 +1,4 @@
+- Calendar module: icons for private events and events with reminder(s).
 - Modules tabstrip will always be in the order of the modules module.
 - Address Book module: social media links for contacts.
 - Custom field text field length can be set. Max row length error is handled 
