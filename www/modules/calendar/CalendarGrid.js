@@ -1068,6 +1068,11 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				cls +=' cal-has-links'
 			}
 			
+			if (eventData.private)
+				text += '<span class="cal-is-private"></span>';
+			if (eventData.has_reminder==1)
+				text += '<span class="cal-has-reminders"></span>';
+			
 			var event = Ext.DomHelper.append(this.allDayColumns[i],
 			{
 				tag: 'div',
@@ -1079,7 +1084,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				"ext:qtitle":eventData.name,
 				tabindex:0//tabindex is needed for focussing and events
 			}, true);
-
+			
 			//add the event to the appointments array
 			if(typeof(this.allDayAppointments[i])=='undefined')
 			{
@@ -1170,13 +1175,18 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		if(eventData.link_count>0){
 			text +=' cal-has-links'
 		}
-
+		
 		text += '">'+eventData.startDate.format(GO.settings.time_format)+"</span>&nbsp;"+eventData.name;
 
 		if(eventData.location!='')
 		{
 			text += ' @ '+eventData.location;
 		}
+
+		if (eventData.private)
+			text += '<span class="cal-is-private"></span>';
+		if (eventData.has_reminder==1)
+			text += '<span class="cal-has-reminders"></span>';
 
 		var domId = this.lastDomId = eventData.domId = Ext.id();
 		this.registerEvent(domId, eventData);

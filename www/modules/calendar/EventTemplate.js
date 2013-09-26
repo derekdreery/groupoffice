@@ -16,7 +16,7 @@ GO.calendar.EventTemplate =
 			'<tpl for="events">'+
 				'<tr class="display-panel-link">'+
 					'<td style="padding-right:0px !important;" {[xindex % 2 === 0 ? "class=\\\"display-panel-link-even\\\"" : ""]}><div class="display-panel-link-icon go-model-icon-GO_Calendar_Model_Event"></div></td>'+
-					'<td style="padding-right:0px !important;padding-left:0px !important;" {[xindex % 2 === 0 ? "class=\\\"display-panel-link-even\\\"" : ""]}><div class="display-panel-has-links <tpl if="link_count&gt;1">has-links</tpl>"></div></td>'+
+					'<td style="padding-right:0px !important;padding-left:0px !important;" {[xindex % 2 === 0 ? "class=\\\"display-panel-link-even\\\"" : ""]}><div class="display-panel-has-links <tpl if="link_count&gt;1">has-links</tpl> <tpl if="reminder_count&gt;0">has-reminders</tpl>"></div></td>'+
 					'<td {[xindex % 2 === 0 ? "class=\\\"display-panel-link-even\\\"" : ""]}><a href="#" onclick="GO.linkHandlers[\'GO_Calendar_Model_Event\'].call(this, {id});">{name}</a></td>'+
 					'<td {[xindex % 2 === 0 ? "class=\\\"display-panel-link-even\\\"" : ""]}>{start_time}</td>'+
 					'<td {[xindex % 2 === 0 ? "class=\\\"display-panel-link-even\\\"" : ""]}>{calendar_name}</td>'+

@@ -118,6 +118,26 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public function hasLinks() {
 		return true;
 	}
+//
+//	public function countLinks() {
+//		$sql = "SELECT count(*) FROM `go_links_$table` WHERE ".
+//			"`id`=".intval($this_id).";";
+//		$stmt = $this->getDbConnection()->query($sql);
+//		return !empty($stmt) ? $stmt->rowCount() : 0;
+//	}
+	
+	public function countReminders() {
+		
+		$modelTypeModel = GO_Base_Model_ModelType::model()->findSingleByAttribute('model_name',$this->className());
+		
+		$stmt = GO_Base_Model_Reminder::model()->findByAttributes(array(
+			'model_id' => $this->id,
+			'model_type_id'=> $modelTypeModel->id
+		));
+		
+		return !empty($stmt) ? $stmt->rowCount() : 0;
+		
+	}
 	
 	public function defaultAttributes() {
 		
