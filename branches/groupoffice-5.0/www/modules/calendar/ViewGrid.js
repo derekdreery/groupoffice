@@ -693,6 +693,11 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 					cls +=' cal-has-links'
 				}
 
+				if (eventData.private)
+					text += '<span class="cal-is-private"></span>';
+				if (eventData.has_reminder==1)
+					text += '<span class="cal-has-reminders"></span>';
+
 				var event = Ext.DomHelper.append(col,
 				{
 					tag: 'div',

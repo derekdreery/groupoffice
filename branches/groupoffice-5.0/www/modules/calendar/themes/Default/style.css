@@ -3,6 +3,18 @@
 	padding-left:10px !important;
 }
 
+.cal-has-reminders{
+	background:url(../../../../views/Extjs3/themes/Default/images/reminder.ico) no-repeat 0 1px;
+	padding-left:16px !important;
+	margin-left: 3px;
+}
+
+.cal-is-private{
+	background:url(../../../../views/Extjs3/themes/Default/images/16x16/lock.png) no-repeat 0 1px;
+	padding-left:16px !important;
+	margin-left: 3px;
+}
+
 .cal-comment{
 	white-space:normal !important;
 }
