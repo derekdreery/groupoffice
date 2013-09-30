@@ -81,8 +81,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 		$cc = isset($structure->headers['cc']) && strpos($structure->headers['cc'],'undisclosed')===false ? $structure->headers['cc'] : '';
 		$bcc = isset($structure->headers['bcc']) && strpos($structure->headers['bcc'],'undisclosed')===false ? $structure->headers['bcc'] : '';
 		
-		//workaround activesync problem where 'mailto:' is included in the mail address.
-		
+		//workaround activesync problem where 'mailto:' is included in the mail address.		
 		$to = str_replace('mailto:','', $to);
 		$cc = str_replace('mailto:','', $cc);
 		$bcc = str_replace('mailto:','', $bcc);
