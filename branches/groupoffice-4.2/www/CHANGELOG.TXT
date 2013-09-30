@@ -1,3 +1,7 @@
+4.2.22
+- Fixed problem with getting "due time is smaller that start time" error  if you complete a task with a recurrence.
+- Added dependency check in sites module for the customfields module to be installed.
+
 17-09-2013 4.2.21
 - Export contacts/projects/etc.: custom fields not exported if current user has no access to custom fields module.
 
