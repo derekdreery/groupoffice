@@ -276,7 +276,7 @@ class GO_Ldapauth_Authenticator {
 				return false;
 			}
 			
-			if(empty($config->create_email_account)){
+			if(empty($config['create_email_account'])){
 				GO::debug('LDAPAUTH: E-mail account creation disabled for domain: ' . $domain);
 				return false;
 			}
