@@ -131,9 +131,9 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 		$this->columns['email']['regex']=GO_Base_Util_String::get_email_validation_regex();
 		$this->columns['invoice_email']['regex']=GO_Base_Util_String::get_email_validation_regex();
 		
-		
-		$this->columns['phone']['gotype']='phone';
-		$this->columns['fax']['gotype']='phone';
+//		
+//		$this->columns['phone']['gotype']='phone';
+//		$this->columns['fax']['gotype']='phone';
 		
 		return parent::init();
 	}
