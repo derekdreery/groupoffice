@@ -103,7 +103,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 
 		if(isset($structure->headers['from'])){
 			
-			$fromList = new GO_Base_Mail_EmailRecipients($structure->headers['from']);
+			$fromList = new GO_Base_Mail_EmailRecipients(str_replace('mailto:','',$structure->headers['from']));
 			$from =$fromList->getAddress();
 		
 			if($from)
