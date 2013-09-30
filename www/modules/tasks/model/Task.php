@@ -204,12 +204,13 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 
 			$rrule = new GO_Base_Util_Icalendar_Rrule();
 			$rrule->readIcalendarRruleString($this->due_time, $this->rrule, true);
-			
+		
 			$this->duplicate(array(
 				'completion_time'=>0,
 				'start_time'=>time(),
-				'due_time'=>$rrule->getNextRecurrence($this->due_time+1),
-				'status'=>GO_Tasks_Model_Task::STATUS_NEEDS_ACTION
+				'due_time'=>$rrule->getNextRecurrence(time()),
+				'status'=>GO_Tasks_Model_Task::STATUS_NEEDS_ACTION,
+				'percentage_complete'=>0
 			));
 		}
 	}
