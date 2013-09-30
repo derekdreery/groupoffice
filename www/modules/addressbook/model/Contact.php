@@ -120,12 +120,12 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		$this->columns['email2']['regex']=GO_Base_Util_String::get_email_validation_regex();
 		$this->columns['email3']['regex']=GO_Base_Util_String::get_email_validation_regex();
 		
-		$this->columns['home_phone']['gotype']='phone';
-		$this->columns['work_phone']['gotype']='phone';
-		$this->columns['cellular']['gotype']='phone';
-		$this->columns['cellular2']['gotype']='phone';
-		$this->columns['fax']['gotype']='phone';
-		$this->columns['work_fax']['gotype']='phone';
+//		$this->columns['home_phone']['gotype']='phone';
+//		$this->columns['work_phone']['gotype']='phone';
+//		$this->columns['cellular']['gotype']='phone';
+//		$this->columns['cellular2']['gotype']='phone';
+//		$this->columns['fax']['gotype']='phone';
+//		$this->columns['work_fax']['gotype']='phone';
 		
 		$this->columns['action_date']['gotype'] = 'unixtimestamp';
 		
@@ -1015,7 +1015,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 //			$e->add($p);	
 			
 			$e->add('photo', base64_encode($this->getPhotoFile()->getContents()),array('type'=>'jpeg','encoding'=>'b'));	
-		}
+		}  
 		
 //		$propModels = $this->vcardProperties->fetchAll(PDO::FETCH_ASSOC);
 //		
