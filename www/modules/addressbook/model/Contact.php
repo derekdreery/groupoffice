@@ -555,7 +555,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 				case 'PHOTO':					
 					if($vobjProp->getValue()){
 						$photoFile = GO_Base_Fs_File::tempFile('','jpg');
-						$photoFile->putContents(base64_decode($vobjProp->getValue()));
+						$photoFile->putContents($vobjProp->getValue());
 					}
 					break;
 				case 'N':
