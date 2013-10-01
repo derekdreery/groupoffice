@@ -127,6 +127,7 @@ Ext.extend(GO.sieve.ActionCreatorDialog, GO.Window,{
 					break;
 				case 'reject':
 					this.txtMessage.setValue(record.get('value'));
+					this.txtMessage.setValue(record.get('target'));
 					break;
 				case 'vacation':
 					this.txtEmailAddressOptional.setValue(record.get('addresses'));
