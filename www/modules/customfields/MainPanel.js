@@ -182,8 +182,13 @@ GO.customfields.displayPanelTemplate =
 '</tpl>'+
 '<tpl if="value && value.length">'+
 '<tr>'+
-'<td>{name}:</td>'+										
-'<td>{value}</td>'+
+'<td>{name}:</td>'+
+
+'<td'+
+'<tpl if="datatype && datatype==\'GO_Customfields_Customfieldtype_Number\'">'+
+	' style="text-align:right;"'+
+'</tpl>'+
+'>{value}</td>'+
 '</tr>'+
 '</tpl>'+
 '</tpl>'+
