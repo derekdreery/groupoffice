@@ -618,6 +618,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				}
 				$categories[$field->category->id]['fields'][]=array(
 						'name'=>$field->name,
+						'datatype'=>$field->datatype,
 						'value'=>$customAttributes[$field->columnName()]
 				);				
 			}
