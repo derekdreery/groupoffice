@@ -105,17 +105,13 @@ class GO_Customfields_Model_Field extends GO_Base_Db_ActiveRecord{
 	public function alterDatabase($wasNew){
 			$table=$this->category->customfieldsTableName();
 					
-		if($wasNew){
-			if ($this->hasLength())
-				$sql = "ALTER TABLE `".$table."` ADD `".$this->columnName()."` ".str_replace('%MAX_LENGTH',$this->max_length,$this->customfieldtype->fieldSql()).";";
-			else
-				$sql = "ALTER TABLE `".$table."` ADD `".$this->columnName()."` ".$this->customfieldtype->fieldSql().";";
+		if($wasNew){			
+			$sql = "ALTER TABLE `".$table."` ADD `".$this->columnName()."` ".str_replace('%MAX_LENGTH',$this->max_length,$this->customfieldtype->fieldSql()).";";
+			
 		}else
 		{
-			if ($this->hasLength())
-				$sql = "ALTER TABLE `".$table."` CHANGE `".$this->columnName()."` `".$this->columnName()."` ".str_replace('%MAX_LENGTH',$this->max_length,$this->customfieldtype->fieldSql());
-			else
-				$sql = "ALTER TABLE `".$table."` CHANGE `".$this->columnName()."` `".$this->columnName()."` ".$this->customfieldtype->fieldSql();
+			$sql = "ALTER TABLE `".$table."` CHANGE `".$this->columnName()."` `".$this->columnName()."` ".str_replace('%MAX_LENGTH',$this->max_length,$this->customfieldtype->fieldSql());
+			
 		}		
 		//don't be strict in upgrade process
 		GO::getDbConnection()->query("SET sql_mode=''");

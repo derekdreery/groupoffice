@@ -8,6 +8,8 @@ abstract class GO_Customfields_Customfieldtype_Abstract{
 	 */
 	protected $field;
 	
+	protected $maxLength=255;
+	
 	public function __construct($field=false){
 		if($field)
 			$this->field=$field;
