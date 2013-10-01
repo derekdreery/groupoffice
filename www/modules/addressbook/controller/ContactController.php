@@ -547,6 +547,16 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	}
 	
 	
+	private function createStream($data) {
+
+			$stream = fopen('php://memory','r+');
+			fwrite($stream, $data);
+			rewind($stream);
+			return $stream;
+
+	}
+	
+	
 	protected function actionImportVCard($params){
 		
 		$summaryLog = new GO_Base_Component_SummaryLog();
@@ -563,17 +573,16 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		
 		$file = new GO_Base_Fs_File($params['file']);
 		$file->convertToUtf8();
+		
+		$options = \Sabre\VObject\Reader::OPTION_FORGIVING + \Sabre\VObject\Reader::OPTION_IGNORE_INVALID_LINES;
+		$vcards = new Sabre\VObject\Splitter\VCard(fopen($file->path(),'r+'), $options);
 
-		$data = "BEGIN:ADDRESSBOOK\n".$file->getContents()."\nEND:ADDRESSBOOK";
-		
-		$vaddressbook = GO_Base_VObject_Reader::read($data);
-		
-//		GO::debug($vObjectsArray);
+
 		unset($params['file']);
 		$nr=0;
 		if ($readOnly)
 			$contactsAttr = array();
-		foreach($vaddressbook->vcard as $vObject) {
+		while($vObject=$vcards->getNext()) {
 			$nr++;
 			GO_Base_VObject_Reader::convertVCard21ToVCard30($vObject);
 			$contact = new GO_Addressbook_Model_Contact();
