@@ -58,7 +58,7 @@ class GO_Postfixadmin_Model_Mailbox extends GO_Base_Db_ActiveRecord {
 		$this->maildir = $this->domain->domain . '/' . $parts[0] . '/';
 		return parent::beforeSave();
 	}
-
+/* See ticket #201307437
 	protected function afterSave($wasNew) {
 		if (!empty($wasNew)) {
 			// Create alias
@@ -75,7 +75,7 @@ class GO_Postfixadmin_Model_Mailbox extends GO_Base_Db_ActiveRecord {
 		}
 		return parent::afterSave($wasNew);
 	}
-
+*/
 //	public function defaultAttributes() {
 //		$attr = parent::defaultAttributes();
 //		$attr['quota']=$this->domain->default_quota;
