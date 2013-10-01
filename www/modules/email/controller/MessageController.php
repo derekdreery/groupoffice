@@ -286,7 +286,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 		$response['multipleFolders']=false;
 		$searchIn = 'current'; //default to current if not set
-		if(isset($params['searchIn']) && in_array($params['searchIn'], array('all', 'current', 'recursive'))) {
+		if(isset($params['searchIn']) && in_array($params['searchIn'], array('all', 'recursive'))) {
 				$searchIn = $params['searchIn'];
 				$response['multipleFolders'] = true;
 		}
