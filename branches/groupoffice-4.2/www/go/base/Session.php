@@ -82,16 +82,6 @@ class GO_Base_Session extends GO_Base_Observable{
 			//$this->_log("security_token");
 			$this->values['security_token']=GO_Base_Util_String::randomPassword(20,'a-z,A-Z,1-9');				
 		}
-		
-//		if (GO::config()->session_inactivity_timeout > 0) {
-//			$now = time();
-//			if (isset($_SESSION['last_activity']) && $_SESSION['last_activity'] + GO::config()->session_inactivity_timeout < $now) {
-//				$GLOBALS['GO_SECURITY']->logout();
-//			} elseif ($_POST['task'] != 'checker') {//don't update on the automatic checker function that runs every 2 mins.
-//				$_SESSION['last_activity'] = $now;
-//			}
-//		}
-
 	}
 	
 	/**
