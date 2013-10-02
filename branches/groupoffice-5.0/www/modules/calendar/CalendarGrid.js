@@ -1065,9 +1065,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			var cls = "x-calGrid-all-day-event-container cal-event-partstatus-"+eventData.partstatus;
 
 			if(eventData.link_count>0){
-				cls +=' cal-has-links'
-			}
-			
+				text +='<span class="cal-has-links"></span>';
+			}			
 			if (eventData["private_enabled"])
 				text += '<span class="cal-is-private"></span>';
 			if (eventData.has_reminder==1)
@@ -1175,9 +1174,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
                 
 		text += '<span class="x-calGrid-event-time';
 
-		if(eventData.link_count>0){
-			text +=' cal-has-links'
-		}
+	
 		
 		text += '">'+eventData.startDate.format(GO.settings.time_format)+"</span>&nbsp;"+eventData.name;
 
@@ -1186,6 +1183,9 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			text += ' @ '+eventData.location;
 		}
 
+		if(eventData.link_count>0){
+				text +='<span class="cal-has-links"></span>';
+			}
 		if (eventData["private_enabled"])
 			text += '<span class="cal-is-private"></span>';
 		if (eventData.has_reminder==1)

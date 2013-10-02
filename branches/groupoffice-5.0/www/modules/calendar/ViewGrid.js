@@ -689,10 +689,13 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 			
 				var cls = "x-viewGrid-event-container  cal-event-partstatus-"+eventData.partstatus;
 
-				if(eventData.link_count>0){
-					cls +=' cal-has-links'
-				}
+//				if(eventData.link_count>0){
+//					cls +=' cal-has-links'
+//				}
 
+				if(eventData.link_count>0){
+					text +='<span class="cal-has-links"></span>';
+				}
 				if (eventData["private_enabled"])
 					text += '<span class="cal-is-private"></span>';
 				if (eventData.has_reminder==1)
