@@ -1,6 +1,14 @@
-4.2.22
+02-10-2013 4.2.22
+- Add redirects for Caldav and carddav service discovery so that iOS7 works.
+- Module access is checked now for WebDAV, CalDAV and CardDAV
+- Updating e-mail accounts with LDAP auth failed.
+- Workaround ActiveSync problem where 'mailto:' is included in the mail address.
+- Fixed disappearing file browser button when making display panel very small
+- odt should not be renamed by google drive module
 - Fixed problem with getting "due time is smaller that start time" error  if you complete a task with a recurrence.
 - Added dependency check in sites module for the customfields module to be installed.
+- Signed GOTA
+- session_inactivity_timeout was reimplemented
 
 17-09-2013 4.2.21
 - Export contacts/projects/etc.: custom fields not exported if current user has no access to custom fields module.
