@@ -4,15 +4,20 @@
 }
 
 .cal-has-reminders{
-	background:url(../../../../views/Extjs3/themes/Default/images/reminder.ico) no-repeat 0 1px;
+	background:url(images/16x16/reminder.png) no-repeat 0 1px;
 	padding-left:16px !important;
-	margin-left: 3px;
+/*	margin-left: 3px;*/
 }
 
 .cal-is-private{
-	background:url(../../../../views/Extjs3/themes/Default/images/16x16/lock.png) no-repeat 0 1px;
+	background:url(images/16x16/private.png) no-repeat 0 1px;
 	padding-left:16px !important;
-	margin-left: 3px;
+	/*margin-left: 3px;*/
+}
+.cal-recurring{
+	background:url(images/16x16/recurring.png) no-repeat 0 1px;
+	padding-left:16px !important;
+	/*margin-left: 3px;*/
 }
 
 .cal-comment{

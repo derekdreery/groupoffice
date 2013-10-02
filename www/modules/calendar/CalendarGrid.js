@@ -1068,10 +1068,13 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				cls +=' cal-has-links'
 			}
 			
-			if (eventData.private)
+			if (eventData["private_enabled"])
 				text += '<span class="cal-is-private"></span>';
 			if (eventData.has_reminder==1)
 				text += '<span class="cal-has-reminders"></span>';
+			
+			if (eventData.repeats)
+				text += '<span class="cal-recurring"></span>';
 			
 			var event = Ext.DomHelper.append(this.allDayColumns[i],
 			{
@@ -1183,10 +1186,12 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			text += ' @ '+eventData.location;
 		}
 
-		if (eventData.private)
+		if (eventData["private_enabled"])
 			text += '<span class="cal-is-private"></span>';
 		if (eventData.has_reminder==1)
 			text += '<span class="cal-has-reminders"></span>';
+		if (eventData.repeats)
+				text += '<span class="cal-recurring"></span>';
 
 		var domId = this.lastDomId = eventData.domId = Ext.id();
 		this.registerEvent(domId, eventData);

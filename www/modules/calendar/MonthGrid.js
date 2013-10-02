@@ -704,10 +704,12 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 					cls +=' cal-has-links'
 				}
 
-				if (eventData.private)
+				if (eventData["private_enabled"])
 					text += '<span class="cal-is-private"></span>';
 				if (eventData.has_reminder==1)
 					text += '<span class="cal-has-reminders"></span>';
+				if (eventData.repeats)
+					text += '<span class="cal-recurring"></span>';
 				
 				var domCfg = {
 					tag: 'div',
