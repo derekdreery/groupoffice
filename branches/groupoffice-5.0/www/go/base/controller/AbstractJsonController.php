@@ -447,6 +447,7 @@ abstract class GO_Base_Controller_AbstractJsonController extends GO_Base_Control
 				}
 				$categories[$field->category->id]['fields'][] = array(
 						'name' => $field->name,
+						'datatype'=>$field->datatype,
 						'value' => $customAttributes[$field->columnName()]
 				);
 			}

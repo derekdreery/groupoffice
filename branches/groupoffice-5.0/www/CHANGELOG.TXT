@@ -1,4 +1,7 @@
-- Calendar module: icons for private events and events with reminder(s).
+02-10-2013 5.0.8
+- Remove auto phone formatting until matured
+- Double decode of binary vcard data
+- Calendar module: icons for private, recurring and events with reminder(s).
 - Modules tabstrip will always be in the order of the modules module.
 - Address Book module: social media links for contacts.
 - Custom field text field length can be set. Max row length error is handled 
@@ -6,6 +9,9 @@
 - Small layout tweaks
 - Contacts is extended with an Action date that can be filtered on. It can be 
   set when you add a comment too.
+- load reject message in sieve dialog
+- Fixed context menu when searching in e-mail
+- Fixes of 4.2.22
 
 17-09-2013 5.0.7
 - Added holidays module
@@ -41,6 +47,10 @@
 - Address Book module: photos functionality for companies.
 - Projects module: 'show in tree' check box for project statuses.
 
+
+02-10-2013 4.2.22
+- Fixed problem with getting "due time is smaller that start time" error  if you complete a task with a recurrence.
+- Added dependency check in sites module for the customfields module to be installed.
 
 17-09-2013 4.2.21
 - Export contacts/projects/etc.: custom fields not exported if current user has no access to custom fields module.
