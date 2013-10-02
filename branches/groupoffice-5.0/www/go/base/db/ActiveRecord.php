@@ -2201,7 +2201,7 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 				break;
 			
 			default:
-				if($this->columns[$attributeName]['dbtype']=='int')
+				if(substr($this->columns[$attributeName]['dbtype'],-3)=='int')
 					return $value;
 				else 
 					return $html ? htmlspecialchars($value, ENT_COMPAT,'UTF-8') : $value;
