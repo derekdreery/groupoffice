@@ -37,5 +37,34 @@ class GO_Base_Model_WorkingWeek extends GO_Base_Db_ActiveRecord {
 	public function tableName() {
 		return 'go_working_weeks';
 	}
+	
+	public function getHoursForDay($time){
+		
+		switch(date('w', $time)){
+			case 0:
+				return $this->su_work_hours;
+				break;
+			case 1:
+				return $this->mo_work_hours;
+				break;
+			case 2:
+				return $this->tu_work_hours;
+				break;
+			case 3:
+				return $this->we_work_hours;
+				break;
+			case 4:
+				return $this->th_work_hours;
+				break;
+			case 5:
+				return $this->fr_work_hours;
+				break;
+			case 6:
+				return $this->sa_work_hours;
+				break;
+			
+		}
+		
+	}
 
 }
