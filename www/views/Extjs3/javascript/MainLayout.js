@@ -31,7 +31,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	ready : false,
 	
 //	fullscreenPopup : false,
-
+	
 	state : false,
 
 	stateSaveScheduled : false,
@@ -118,7 +118,28 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	
 	fireReady : function(){
 		this.fireEvent('ready', this);
-	 	this.ready=true;		
+	 	this.ready=true;
+		this.initLogoutTimer(GO.settings.config['session_inactivity_timeout']);
+	},
+	
+	/**
+	 * Set a timer that will automatically logout when no mouseclicks of keypresses
+	 * @see fireReady
+	 */
+	initLogoutTimer: function(seconds) { 
+		if(seconds==0) 
+			return;
+		var ms = seconds*1000;
+		var delay = (function(){
+			var timer = 0;
+			return function(ms){
+			  clearTimeout (timer);
+			  timer = setTimeout(function() { window.location = GO.url('core/auth/logout'); }, ms);
+			};
+		  })();
+		window.addEventListener('keyup', function() {delay(ms)});
+		window.addEventListener('click', function() {delay(ms)});
+		delay(ms);
 	},
 
 	getOpenModules : function(){

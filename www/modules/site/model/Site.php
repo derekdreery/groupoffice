@@ -61,7 +61,7 @@ class GO_Site_Model_Site extends GO_Base_Db_ActiveRecord {
 	
 	private function _loadFields(){
 		//load cf
-		if(!isset(self::$fields)){
+		if(!isset(self::$fields) && GO::modules()->isInstalled('customfields')){
 			$fields = GO_Customfields_Model_Field::model()->findByModel('GO_Site_Model_Site', false);
 
 			foreach($fields as $field){

@@ -302,7 +302,16 @@ GO.customfields.dataTypes={
 
 															if(nextField)
 																nextField.store.baseParams.parent_id=v[0];
-															field.setRawValue(v[1]);
+															
+															// Check if the value has colons in it, then put them back
+															var vl = v[1];
+															if(v.length>2){
+																for(var i=2;i<v.length;i++){
+																	vl = vl+':'+v[i];
+																}
+															}
+															
+															field.setRawValue(vl);
 														}
 													}
 												}else
