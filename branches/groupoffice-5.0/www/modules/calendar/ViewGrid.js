@@ -652,7 +652,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 		//get unix timestamps
 		var eventStartTime = eventStartDay.format('U');
 		var eventEndTime = eventEndDay.format('U');
-		
+			
 		//ceil required because of DST changes!
 		var daySpan = Math.round((eventEndTime-eventStartTime)/86400)+1;
 		
@@ -693,10 +693,12 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 					cls +=' cal-has-links'
 				}
 
-				if (eventData.private)
+				if (eventData["private_enabled"])
 					text += '<span class="cal-is-private"></span>';
 				if (eventData.has_reminder==1)
 					text += '<span class="cal-has-reminders"></span>';
+				if (eventData.repeats)
+					text += '<span class="cal-recurring"></span>';
 
 				var event = Ext.DomHelper.append(col,
 				{
