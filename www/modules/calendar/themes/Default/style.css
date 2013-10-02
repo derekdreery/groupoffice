@@ -1,5 +1,5 @@
 .cal-has-links{
-	background:url(../../../../views/Extjs3/themes/Default/images/attach.gif) no-repeat center center;
+	background:url(../../../../views/Extjs3/themes/Default/images/attach.gif) no-repeat center 3px;
 	padding:8px !important;
 	float:right;
 }
