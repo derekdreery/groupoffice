@@ -631,8 +631,6 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 				case 'ADR':
 					$types = array();
 					
-					GO_Syncml_Server::debug("VALUE: ".$vobjProp->getValue());
-					
 					
 					foreach ($vobjProp->parameters as $param) {
 						if ($param->name=='TYPE')
