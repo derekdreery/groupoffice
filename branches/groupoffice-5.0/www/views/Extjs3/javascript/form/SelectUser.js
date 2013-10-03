@@ -65,6 +65,7 @@ GO.form.SelectUser = function(config){
 }
 
 Ext.extend(GO.form.SelectUser, GO.form.ComboBoxReset,{
+	fieldLabel:GO.lang.strUser,
 	setRemoteValue : function(user_id, name)
 	{
 		this.setValue(user_id);
