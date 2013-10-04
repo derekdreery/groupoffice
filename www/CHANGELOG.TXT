@@ -1,3 +1,5 @@
+- Customfields of a ticket will appear above the messages in the eastpanel
+
 02-10-2013 5.0.8
 - Remove auto phone formatting until matured
 - Double decode of binary vcard data
