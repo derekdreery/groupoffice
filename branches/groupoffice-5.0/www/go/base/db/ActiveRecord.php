@@ -1052,7 +1052,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}else {
 				$model = $this->findByPk($pk);
 				if (!$model)
-					throw new GO_Base_Exception_NotFound();
+					$model = new static();
 			}
 			return $model;
 		}
