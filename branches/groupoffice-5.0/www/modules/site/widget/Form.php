@@ -783,7 +783,7 @@ $( "#datepicker" ).datepicker({ dateFormat: "'.implode($goDateSeparator,$dateFor
 				$dummy=array('options'=>$options);
 				if(isset($htmlAttributes['encode']))
 					$dummy['encode']=$htmlAttributes['encode'];
-				$content.=self::listOptions($selection,$value,$dummy);
+				$content.=$this->_listOptions($selection,$value,$dummy);
 				$content.='</optgroup>'."\n";
 			}
 			else
