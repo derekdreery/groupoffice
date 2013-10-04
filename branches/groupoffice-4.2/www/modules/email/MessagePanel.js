@@ -19,12 +19,12 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 	mailbox:  "",
 	
 	account_id: 0,
-
+	
 	initComponent : function(){
 		
 		GO.email.MessagePanel.superclass.initComponent.call(this);
 		
-		
+		this.attachmentContextMenu = new GO.email.AttachmentContextMenu();
 		this.addEvents({
 			attachmentClicked : true,
 			linkClicked : true,
@@ -416,7 +416,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		
 		if(data.attachments.length)
 		{
-			this.attachmentsEl = Ext.get(this.attachmentsId);			
+			this.attachmentsEl = Ext.get(this.attachmentsId);	
 			this.attachmentsEl.on('click', this.openAttachment, this);
 			if(this.attachmentContextMenu)
 			{			
