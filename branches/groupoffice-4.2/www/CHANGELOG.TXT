@@ -1,5 +1,8 @@
-xx-10-2013 4.2.23
+07-10-2013 4.2.23
 - Fixed the Attachment Context menu on the Email dialog when clicking a .eml attachment
+- Signed GOTA with real code siging certificate
+- Handle missing models in search
+- Disabled session_inactivity_timeout because it breaks IE when enabled.
 
 02-10-2013 4.2.22
 - Add redirects for Caldav and carddav service discovery so that iOS7 works.
