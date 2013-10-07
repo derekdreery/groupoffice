@@ -16,7 +16,7 @@ GO.smime.PublicCertsGrid = function(config){
 		root: 'results',
 		id: 'id',
 		totalProperty:'total',
-		fields: ['id','email'],
+		fields: ['id','email']
 		//autoLoad:true
 	});
 	

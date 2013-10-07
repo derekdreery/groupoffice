@@ -57,7 +57,7 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 	lastSelectedIndex : false,
 	currentSelectedIndex : false,
 	primaryKey : 'id', //Set this value if your record has a PK of multiple columns (eg ['user_id','project_id'])
-	editDialogConfig:{},
+	editDialogConfig:null,
 	
 	initComponent : function(){
 		
