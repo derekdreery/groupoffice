@@ -47,7 +47,8 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 			$model_names = json_decode($params['model_names'], true);
 			$types = array();
 			foreach($model_names as $model_name){
-				$types[]=GO::getModel($model_name)->modelTypeId();
+				if(class_exists($model_name))
+					$types[]=GO::getModel($model_name)->modelTypeId();
 			}
 			if(count($types))
 			$storeParams->getCriteria()->addInCondition('model_type_id', $types);
@@ -93,10 +94,12 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		$types=array();
 		$stmt = GO_Base_Model_ModelType::model()->find();
 		while($modelType = $stmt->fetch()){
-			$model = GO::getModel($modelType->model_name);
-			$module = $modelType->model_name == "GO_Base_Model_User" ? "users" : $model->module;
-			if(GO::modules()->{$module})
-				$types[]=$modelType->id;
+			if(class_exists($modelType->model_name)){
+				$model = GO::getModel($modelType->model_name);
+				$module = $modelType->model_name == "GO_Base_Model_User" ? "users" : $model->module;
+				if(GO::modules()->{$module})
+					$types[]=$modelType->id;
+			}
 		}
 		return $types;
 
@@ -118,12 +121,17 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		
 		$types=array();
 		while($modelType = $stmt->fetch()){
-			$model = GO::getModel($modelType->model_name);
-			
-			$module = $modelType->model_name == "GO_Base_Model_User" ? "users" : $model->module;
-			
-			if(GO::modules()->{$module})
-				$types[$model->localizedName]=array('id'=>$modelType->id, 'model_name'=>$modelType->model_name, 'name'=>$model->localizedName, 'checked'=>in_array($modelType->id,$typesArr));
+			if(class_exists($modelType->model_name)){
+				$model = GO::getModel($modelType->model_name);
+
+				$module = $modelType->model_name == "GO_Base_Model_User" ? "users" : $model->module;
+
+				if(GO::modules()->{$module})
+					$types[$model->localizedName]=array('id'=>$modelType->id, 'model_name'=>$modelType->model_name, 'name'=>$model->localizedName, 'checked'=>in_array($modelType->id,$typesArr));
+			}else
+			{
+				GO::debug("Missing class ".$modelType->model_name);
+			}
 		}
 		
 		ksort($types);
