@@ -66,5 +66,45 @@ class GO_Base_Model_WorkingWeek extends GO_Base_Db_ActiveRecord {
 		}
 		
 	}
+	
+//	private $_leftOverHours=0;
+	
+	public function getNextDate($startDate, $workingHours, &$leftOverHours=0){
+		$hoursForDay = $this->getHoursForDay($startDate);
+
+		GO::debug('getNextDate('.date('Ymd',$startDate).', '.$workingHours.')');
+		
+//		GO::debug("Left: ".$this->_leftOverHours);
+		
+		GO::debug("Hours for day: ".$hoursForDay);
+
+//		$workingHours+=$this->_leftOverHours;
+		
+		$workingHours -= $hoursForDay;
+		
+		
+		GO::debug($workingHours);
+		
+		if($workingHours>=0){
+
+			for($i=0;$i<7;$i++){
+				$startDate=GO_Base_Util_Date::date_add($startDate,1);
+				$hoursForDay = $this->getHoursForDay($startDate);
+				
+				$workingHours-=$hoursForDay;
+				if($workingHours<0){
+					
+					break;
+				}
+			}
+		}
+		
+//		$this->_leftOverHours=$hoursForDay - $workingHours*-1;
+		
+		$leftOverHours=$hoursForDay - $workingHours*-1;
+		
+		
+		return $startDate;
+	}
 
 }
