@@ -1,6 +1,6 @@
 07-10-2013 4.2.23
 - Fixed the Attachment Context menu on the Email dialog when clicking a .eml attachment
-- Signed GOTA with real code siging certificate
+- Signed GOTA with real code signing certificate
 - Handle missing models in search
 - Files: Fixed path display when using the "up" button
 - Disabled session_inactivity_timeout because it breaks IE when enabled.
