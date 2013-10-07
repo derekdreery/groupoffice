@@ -141,6 +141,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 	 * Set the HTML body and automatically create an alternate text body
 	 * 
 	 * @param String $htmlBody 
+	 * @return GO_Base_Mail_Message
 	 */
 	public function setHtmlAlternateBody($htmlBody){
 	
@@ -150,6 +151,8 @@ class GO_Base_Mail_Message extends Swift_Message{
 		//add text version of the HTML body
 		$htmlToText = new GO_Base_Util_Html2Text($htmlBody);
 		$this->addPart($htmlToText->get_text(), 'text/plain','UTF-8');
+		
+		return $this;
 	}
 	
 	/**
