@@ -400,10 +400,12 @@ GO.files.FileBrowser = function(config){
 		text: GO.lang.up,
 		cls: 'x-btn-text-icon',
 		handler: function(){
-                    if (GO.util.empty(this.gridStore.baseParams['query']))
-                        this.setFolderID(this.parentID);
-                    else
-                        Ext.MessageBox.alert('',GO.files.lang['notInSearchMode']);
+			if (GO.util.empty(this.gridStore.baseParams['query'])){
+					this.setFolderID(this.parentID);
+					this.updateLocation();
+			}else{
+					Ext.MessageBox.alert('',GO.files.lang['notInSearchMode']);
+			}
 		},
 		scope: this,
 		disabled:true
@@ -1764,7 +1766,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 	setFolderID : function(id, expand)
 	{
-      
+    
     this.fireEvent('beforeFolderIdSet');
       
 		this.folder_id = id;
@@ -1804,8 +1806,10 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				this.treePanel.getSelectionModel().select(activeNode);
 			
 			var path = new String();
+			
 			path = activeNode.getPath('text');
 			path = path.substring(2);
+			
 			this.locationTextField.setValue(path);
 		}
 	},
