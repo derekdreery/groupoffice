@@ -30,6 +30,8 @@ GO.grid.SearchPanel = function(config){
   	
 	config.iconCls='go-search-icon-tab';
 	config.layout='border';
+	
+	config.cls='go-white-bg';
 
 	this.filterPanel = new GO.LinkTypeFilterPanel({
 		region:'west',		
