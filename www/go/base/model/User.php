@@ -139,8 +139,18 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			'contact' => array('type' => self::HAS_ONE, 'model' => 'GO_Addressbook_Model_Contact', 'field' => 'go_user_id'),
 			'reminders' => array('type'=>self::MANY_MANY, 'model'=>'GO_Base_Model_Reminder', 'field'=>'user_id', 'linkModel' => 'GO_Base_Model_ReminderUser'),
 			'groups' => array('type'=>self::MANY_MANY, 'model'=>'GO_Base_Model_Group', 'field'=>'user_id', 'linkModel' => 'GO_Base_Model_UserGroup'),
-			'workingWeek' => array('type' => self::HAS_ONE, 'model' => 'GO_Base_Model_WorkingWeek', 'field' => 'user_id')
+			'_workingWeek' => array('type' => self::HAS_ONE, 'model' => 'GO_Base_Model_WorkingWeek', 'field' => 'user_id')
 		);
+	}
+	
+	public function getWorkingWeek(){
+		$ww = $this->_workingWeek;
+		if(!$ww){
+			$ww = new GO_Base_Model_WorkingWeek();
+			$ww->user_id=$this->id;
+			$ww->save();
+		}
+		return $ww;
 	}
 	
 	protected function getLocalizedName() {
