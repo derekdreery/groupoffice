@@ -2065,7 +2065,11 @@ ORDER BY `book`.`name` ASC ,`order`.`btime` DESC
 			switch($this->columns[$column]['gotype']){
 				case 'unixdate':
 				case 'unixtimestamp':
-					return  GO_Base_Util_Date::to_unixtime($value);
+					if($this->columns[$column]['null'] && ($value=="" || $value==null))
+						return null;
+					else
+						return  GO_Base_Util_Date::to_unixtime($value);
+					
 					break;			
 				case 'number':
 					$value= GO_Base_Util_Number::unlocalize($value);
